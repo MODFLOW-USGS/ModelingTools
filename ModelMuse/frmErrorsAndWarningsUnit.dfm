@@ -6,7 +6,6 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
   ClientWidth = 472
   OnResize = FormResize
   ExplicitWidth = 484
-  ExplicitHeight = 273
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -15,13 +14,13 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 192
+    ExplicitTop = 193
     ExplicitWidth = 468
     DesignSize = (
       472
       41)
     object btnClose: TBitBtn
-      Left = 370
+      Left = 366
       Top = 4
       Width = 89
       Height = 33
@@ -29,10 +28,9 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
-      ExplicitLeft = 366
     end
     object btnHelp: TBitBtn
-      Left = 275
+      Left = 271
       Top = 4
       Width = 89
       Height = 33
@@ -41,7 +39,6 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 271
     end
     object btnSave: TButton
       Left = 88

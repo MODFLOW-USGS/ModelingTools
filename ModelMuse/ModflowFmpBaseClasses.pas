@@ -56,7 +56,6 @@ type
     function BoundaryFormulaCount: integer; override;
   published
     property OwhmValue: string read GetOwhmValue write SetOwhmValue;
-
   end;
 
   // @name is used to define list properties for MODFLOW OWHM version 2.
@@ -72,6 +71,12 @@ type
       write SetItem;  default;
     function First: TOwhmItem;
  end;
+
+  TCustomOneFarmItem = class(TOwhmItem)
+  protected
+    class function DefaultFormula: string; override;
+  end;
+
 
 implementation
 
@@ -333,6 +338,13 @@ begin
   begin
     BoundaryFormula[Index] := DefaultFormula;
   end;
+end;
+
+{ TCustomOneFarmItem }
+
+class function TCustomOneFarmItem.DefaultFormula: string;
+begin
+  result := '1';
 end;
 
 end.

@@ -372,12 +372,51 @@ type
     property First: TFarmEfficienciesItem read GetFirst;
   end;
 
-  TDefaultScenarioItem = class(TOwhmItem)
+  TDeficiencyScenarioItem = class(TOwhmItem)
   protected
     class function DefaultFormula: string; override;
   end;
 
-  TDefaultScenarioCollection = class(TOwhmCollection)
+  TDeficiencyScenarioCollection = class(TOwhmCollection)
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  end;
+
+  TWaterSourceItem = class(TCustomDefaultFormulaItem)
+  const
+    GWPosition = 0;
+    SWPosition = 1;
+    NRDPosition = 2;
+  protected
+    class function DefaultFormula: string; override;
+    // See @link(BoundaryFormula).
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
+    function BoundaryFormulaCount: integer; override;
+  published
+    property Groundwater: string index GWPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property SurfaceWater: string index SWPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property NonRoutedDelivery: string index NRDPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+  end;
+
+  TWaterSourceCollection = class(TCustomFarmCollection)
+  private
+    function GetItem(Index: Integer): TWaterSourceItem;
+    procedure SetItem(Index: Integer; const Value: TWaterSourceItem);
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  public
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+    property Items[Index: Integer]: TWaterSourceItem read GetItem
+      write SetItem;  default;
+    function First: TWaterSourceItem;
+  end;
+
+  TBareRunoffFractionCollection = class(TOwhmCollection)
   protected
     class function ItemClass: TBoundaryItemClass; override;
   end;
@@ -397,7 +436,9 @@ type
     FFarmIrrigationEfficiencyImprovementCollection: TFarmEfficiencyCollection;
     FAddedDemandRunoffSplitCollection: TFarmEfficiencyCollection;
     FIrrigationUniformity: TFarmEfficiencyCollection;
-    FDefaultScenario: TDefaultScenarioCollection;
+    FDeficiencyScenario: TDeficiencyScenarioCollection;
+    FWaterSource: TWaterSourceCollection;
+    FBareRunoffFraction: TBareRunoffFractionCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -423,7 +464,9 @@ type
     procedure SetAddedDemandRunoffSplitCollection(
       const Value: TFarmEfficiencyCollection);
     procedure SetIrrigationUniformity(const Value: TFarmEfficiencyCollection);
-    procedure SetDefaultScenario(const Value: TDefaultScenarioCollection);
+    procedure SetDeficiencyScenario(const Value: TDeficiencyScenarioCollection);
+    procedure SetWaterSource(const Value: TWaterSourceCollection);
+    procedure SetBareRunoffFraction(const Value: TBareRunoffFractionCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -493,8 +536,20 @@ type
       stored False
     {$ENDIF}
       ;
-      property DefaultScenario: TDefaultScenarioCollection read FDefaultScenario
-        write SetDefaultScenario
+      property DeficiencyScenario: TDeficiencyScenarioCollection
+        read FDeficiencyScenario write SetDeficiencyScenario
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property WaterSource: TWaterSourceCollection read FWaterSource
+        write SetWaterSource
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property BareRunoffFraction: TBareRunoffFractionCollection
+        read FBareRunoffFraction write SetBareRunoffFraction
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1233,7 +1288,9 @@ begin
     FarmIrrigationEfficiencyImprovementCollection := SourceFarm.FarmIrrigationEfficiencyImprovementCollection;
     AddedDemandRunoffSplitCollection := SourceFarm.AddedDemandRunoffSplitCollection;
     IrrigationUniformity := SourceFarm.IrrigationUniformity;
-    DefaultScenario := SourceFarm.DefaultScenario;
+    DeficiencyScenario := SourceFarm.DeficiencyScenario;
+    WaterSource := SourceFarm.WaterSource;
+    BareRunoffFraction := SourceFarm.BareRunoffFraction;
   end
   else
   begin
@@ -1282,12 +1339,16 @@ begin
   FFarmIrrigationEfficiencyImprovementCollection := TFarmEfficiencyCollection.Create(LocalModel);
   FAddedDemandRunoffSplitCollection := TFarmEfficiencyCollection.Create(LocalModel);
   FIrrigationUniformity := TFarmEfficiencyCollection.Create(LocalModel);
-  FDefaultScenario := TDefaultScenarioCollection.Create(LocalModel);
+  FDeficiencyScenario := TDeficiencyScenarioCollection.Create(LocalModel);
+  FWaterSource := TWaterSourceCollection.Create(LocalModel);
+  FBareRunoffFraction := TBareRunoffFractionCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
-  FDefaultScenario.Free;
+  FBareRunoffFraction.Free;
+  FWaterSource.Free;
+  FDeficiencyScenario.Free;
   FIrrigationUniformity.Free;
   FAddedDemandRunoffSplitCollection.Free;
   FFarmIrrigationEfficiencyImprovementCollection.Free;
@@ -1353,7 +1414,9 @@ begin
         SourceFarm.AddedDemandRunoffSplitCollection)
       and IrrigationUniformity.IsSame(
         SourceFarm.IrrigationUniformity)
-      and DefaultScenario.IsSame(SourceFarm.DefaultScenario)
+      and DeficiencyScenario.IsSame(SourceFarm.DeficiencyScenario)
+      and WaterSource.IsSame(SourceFarm.WaterSource)
+      and BareRunoffFraction.IsSame(SourceFarm.BareRunoffFraction)
   end;
 
 end;
@@ -1362,6 +1425,12 @@ procedure TFarm.SetAddedDemandRunoffSplitCollection(
   const Value: TFarmEfficiencyCollection);
 begin
   FAddedDemandRunoffSplitCollection.Assign(Value);
+end;
+
+procedure TFarm.SetBareRunoffFraction(
+  const Value: TBareRunoffFractionCollection);
+begin
+  FBareRunoffFraction.Assign(Value);
 end;
 
 procedure TFarm.SetCurrentFarmEfficiencyCollection(
@@ -1381,9 +1450,9 @@ begin
   end;
 end;
 
-procedure TFarm.SetDefaultScenario(const Value: TDefaultScenarioCollection);
+procedure TFarm.SetDeficiencyScenario(const Value: TDeficiencyScenarioCollection);
 begin
-  FDefaultScenario.Assign(Value);
+  FDeficiencyScenario.Assign(Value);
 end;
 
 procedure TFarm.SetDeliveryParamCollection(
@@ -1459,6 +1528,11 @@ begin
   FWaterRights.Assign(Value);
 end;
 
+procedure TFarm.SetWaterSource(const Value: TWaterSourceCollection);
+begin
+  FWaterSource.Assign(Value);
+end;
+
 procedure TFarm.UpdateTimes(Times: TRealList; StartTestTime,
   EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean);
 var
@@ -1492,45 +1566,41 @@ begin
       StartRangeExtended, EndRangeExtended);
   end;
 
+  {$IFDEF OWHMV2}
   for EffIndex := 0 to FarmIrrigationEfficiencyCollection.Count - 1 do
   begin
     EfficiencyCol := FarmIrrigationEfficiencyCollection[EffIndex].CropEfficiency;
-  {$IFDEF OWHMV2}
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
-  {$ENDIF}
   end;
 
   for EffIndex := 0 to FarmIrrigationEfficiencyImprovementCollection.Count - 1 do
   begin
     EfficiencyCol := FarmIrrigationEfficiencyImprovementCollection[EffIndex].CropEfficiency;
-  {$IFDEF OWHMV2}
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
-  {$ENDIF}
   end;
 
   for EffIndex := 0 to AddedDemandRunoffSplitCollection.Count - 1 do
   begin
     EfficiencyCol := AddedDemandRunoffSplitCollection[EffIndex].CropEfficiency;
-  {$IFDEF OWHMV2}
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
-  {$ENDIF}
   end;
 
   for EffIndex := 0 to IrrigationUniformity.Count - 1 do
   begin
     EfficiencyCol := IrrigationUniformity[EffIndex].CropEfficiency;
-  {$IFDEF OWHMV2}
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
-  {$ENDIF}
   end;
 
-  {$IFDEF OWHMV2}
-    AddBoundaryTimes(DefaultScenario, Times, StartTestTime, EndTestTime,
-      StartRangeExtended, EndRangeExtended);
+  AddBoundaryTimes(DeficiencyScenario, Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  AddBoundaryTimes(WaterSource, Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  AddBoundaryTimes(BareRunoffFraction, Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
   {$ENDIF}
 end;
 
@@ -2096,16 +2166,80 @@ end;
 
 { TDefaultScenarioItem }
 
-class function TDefaultScenarioItem.DefaultFormula: string;
+class function TDeficiencyScenarioItem.DefaultFormula: string;
 begin
   result := '1';
 end;
 
 { TDefaultScenarioCollection }
 
-class function TDefaultScenarioCollection.ItemClass: TBoundaryItemClass;
+class function TDeficiencyScenarioCollection.ItemClass: TBoundaryItemClass;
 begin
-  result := TDefaultScenarioItem;
+  result := TDeficiencyScenarioItem;
+end;
+
+{ TWaterSourceItem }
+
+function TWaterSourceItem.BoundaryFormulaCount: integer;
+begin
+  result :=3;
+end;
+
+class function TWaterSourceItem.DefaultFormula: string;
+begin
+  result := 'False';
+end;
+
+function TWaterSourceItem.GetBoundaryFormula(Index: integer): string;
+begin
+  Result := FFormulaObjects[Index].Formula;
+  ResetItemObserver(Index);
+end;
+
+procedure TWaterSourceItem.SetBoundaryFormula(Index: integer;
+  const Value: string);
+begin
+  if FFormulaObjects[Index].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, Index, FFormulaObjects[Index]);
+  end;
+end;
+
+{ TWaterSourceCollection }
+
+function TWaterSourceCollection.First: TWaterSourceItem;
+begin
+  result := inherited First as TWaterSourceItem;
+end;
+
+function TWaterSourceCollection.GetItem(Index: Integer): TWaterSourceItem;
+begin
+  result := inherited Items[Index] as TWaterSourceItem;
+end;
+
+function TWaterSourceCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+begin
+  result := (AnOrderedCollection is TWaterSourceCollection)
+    and inherited IsSame(AnOrderedCollection);
+end;
+
+class function TWaterSourceCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TWaterSourceItem;
+end;
+
+procedure TWaterSourceCollection.SetItem(Index: Integer;
+  const Value: TWaterSourceItem);
+begin
+  inherited Items[Index] := Value;
+end;
+
+{ TBareRunoffFractionCollection }
+
+class function TBareRunoffFractionCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TCustomOneFarmItem;
 end;
 
 end.

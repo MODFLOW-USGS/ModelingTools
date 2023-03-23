@@ -155,7 +155,7 @@ begin
     GetFarmProperty(FarmProcess4.EfficiencyImprovement, Ord(frEfficiencyImprove));
     GetFarmProperty(FarmProcess4.DeficiencyScenario, Ord(frDeficiency));
     rdgFarms.ItemIndex[Ord(fcOther), Ord(frDeficiency)] := Ord(FarmProcess4.ProrateDeficiency);
-    GetFarmProperty(FarmProcess4.Watersource, Ord(frWaterSource));
+    GetFarmProperty(FarmProcess4.WaterSource, Ord(frWaterSource));
     GetFarmProperty(FarmProcess4.Bare_Runoff_Fraction, Ord(frBareRunoffFraction));
     GetFarmProperty(FarmProcess4.Bare_Precipitation_Consumption_Fraction, Ord(frBarePrecip));
     GetFarmProperty(FarmProcess4.Added_Demand_Runoff_Split, Ord(frAddedDemandSplit));
@@ -350,7 +350,7 @@ begin
   SetFarmProperty(FarmProcess4.EfficiencyImprovement, frEfficiencyImprove);
   SetFarmProperty(FarmProcess4.DeficiencyScenario, frDeficiency);
   FarmProcess4.ProrateDeficiency := TProrateDeficiencyOption(rdgFarms.ItemIndex[Ord(fcOther), Ord(frDeficiency)]);
-  SetFarmProperty(FarmProcess4.Watersource, frWaterSource);
+  SetFarmProperty(FarmProcess4.WaterSource, frWaterSource);
   SetFarmProperty(FarmProcess4.Bare_Runoff_Fraction, frBareRunoffFraction);
   SetFarmProperty(FarmProcess4.Bare_Precipitation_Consumption_Fraction, frBarePrecip);
   SetFarmProperty(FarmProcess4.Added_Demand_Runoff_Split, frAddedDemandSplit);

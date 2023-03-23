@@ -5178,7 +5178,7 @@ Type
     property ProrateDeficiency: TProrateDeficiencyOption read FProrateDeficiency
       write SetProrateDeficiency;
     // WATERSOURCE
-    property Watersource: TFarmProperty read FWatersource write SetWatersource;
+    property WaterSource: TFarmProperty read FWatersource write SetWatersource;
     // BARE_RUNOFF_FRACTION
     property Bare_Runoff_Fraction: TFarmProperty read FBare_Runoff_Fraction
       write SetBare_Runoff_Fraction;
@@ -25223,7 +25223,7 @@ begin
     EfficiencyImprovement := FarmSource.EfficiencyImprovement;
     DeficiencyScenario := FarmSource.DeficiencyScenario;
     ProrateDeficiency := FarmSource.ProrateDeficiency;
-    Watersource := FarmSource.Watersource;
+    WaterSource := FarmSource.WaterSource;
     Bare_Runoff_Fraction := FarmSource.Bare_Runoff_Fraction;
     Bare_Precipitation_Consumption_Fraction :=
       FarmSource.Bare_Precipitation_Consumption_Fraction;

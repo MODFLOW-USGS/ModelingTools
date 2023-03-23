@@ -244,8 +244,8 @@ begin
   end;
   SalinityFlush.SalinityFlushPrints := PrintOptions;
 
-  seExpressionLength.AsInteger := SalinityFlush.ExpressionLength;
-  rdeExpressionMin.RealValue := SalinityFlush.ExpressionMin;
+  SalinityFlush.ExpressionLength := seExpressionLength.AsInteger;
+  SalinityFlush.ExpressionMin := rdeExpressionMin.RealValue;
 
   SetFarmProperty(SalinityFlush.FarmSaltConcentrationsChoice, sfrFarmSaltConcentrations);
   SetFarmProperty(SalinityFlush.FarmIrrigationUniformityChoice, sfrFarmIrrigationUniformity);

@@ -39,6 +39,12 @@ type
     frameAddedDemandRunoffSplit: TframeFormulaGrid;
     tabIrrigationUniformity: TTabSheet;
     frameIrrigationUniformity: TframeFormulaGrid;
+    tabDeficiencyScenario: TTabSheet;
+    frameDeficiencyScenario: TframeFormulaGrid;
+    tabWaterSource: TTabSheet;
+    frameWaterSource: TframeFormulaGrid;
+    tabBareRunoffFractions: TTabSheet;
+    frameBareRunoffFractions: TframeFormulaGrid;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -97,15 +103,15 @@ type
       Sender: TObject);
     procedure frameFormulaGridEfficiencyImprovementGridButtonClick(
       Sender: TObject; ACol, ARow: Integer);
-    procedure frameFormulaGrid1edFormulaChange(Sender: TObject);
-    procedure frameFormulaGrid1GridSetEditText(Sender: TObject; ACol,
-      ARow: Integer; const Value: string);
+    procedure frameAddedDemandRunoffSplitedFormulaChange(Sender: TObject);
     procedure frameAddedDemandRunoffSplitsbAddClick(Sender: TObject);
     procedure frameAddedDemandRunoffSplitsbInsertClick(Sender: TObject);
     procedure frameAddedDemandRunoffSplitsbDeleteClick(Sender: TObject);
     procedure frameAddedDemandRunoffSplitseNumberChange(Sender: TObject);
     procedure frameAddedDemandRunoffSplitGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameAddedDemandRunoffSplitGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
     procedure frameIrrigationUniformitysbAddClick(Sender: TObject);
     procedure frameIrrigationUniformitysbDeleteClick(Sender: TObject);
     procedure frameIrrigationUniformitysbInsertClick(Sender: TObject);
@@ -115,6 +121,33 @@ type
       ARow: Integer; const Value: string);
     procedure frameIrrigationUniformityGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameDeficiencyScenarioGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameDeficiencyScenarioGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure frameDeficiencyScenarioseNumberChange(Sender: TObject);
+    procedure frameDeficiencyScenariosbAddClick(Sender: TObject);
+    procedure frameDeficiencyScenariosbInsertClick(Sender: TObject);
+    procedure frameDeficiencyScenariosbDeleteClick(Sender: TObject);
+    procedure frameDeficiencyScenarioedFormulaChange(Sender: TObject);
+    procedure frameWaterSourceGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure frameWaterSourceGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameWaterSourceseNumberChange(Sender: TObject);
+    procedure frameWaterSourceedFormulaChange(Sender: TObject);
+    procedure frameWaterSourcesbAddClick(Sender: TObject);
+    procedure frameWaterSourcesbInsertClick(Sender: TObject);
+    procedure frameWaterSourcesbDeleteClick(Sender: TObject);
+    procedure frameBareRunoffFractionsGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure frameBareRunoffFractionsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameBareRunoffFractionsedFormulaChange(Sender: TObject);
+    procedure frameBareRunoffFractionsseNumberChange(Sender: TObject);
+    procedure frameBareRunoffFractionssbAddClick(Sender: TObject);
+    procedure frameBareRunoffFractionssbInsertClick(Sender: TObject);
+    procedure frameBareRunoffFractionssbDeleteClick(Sender: TObject);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -126,10 +159,17 @@ type
     FEfficiencyImprovementChanged: Boolean;
     FAddedDemandRunoffSplitChanged: Boolean;
     FIrrigationUniformityChanged: Boolean;
+    FDeficiencyScenarioChanged: Boolean;
+    FWaterSourceChanged: Boolean;
+    FBareRunoffFractionsChanged: Boolean;
     procedure GetCropEffForFirstFarm(FirstFarm: TFarm);
     procedure GetCropEffImproveForFirstFarm(FirstFarm: TFarm);
     procedure GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
     procedure GetIrrigationUniformityForFirstFarm(FirstFarm: TFarm);
+    procedure GetDeficiencyScenarioForFirstFarm(FirstFarm: TFarm);
+    procedure GetWaterSourceForFirstFarm(FirstFarm: TFarm);
+    procedure GetBareRunoffFractonForFirstFarm(FirstFarm: TFarm);
+
     procedure GetCostsForFirstFarm(FirstFarm: TFarm);
     procedure GetWaterRightsForFirstFarm(FirstFarm: TFarm);
     procedure GetGwAllotmentForFirstFarm(FirstFarm: TFarm);
@@ -143,19 +183,36 @@ type
       IrrigationTypes: TIrrigationCollection);
     procedure SetIrrigationUniformity(Farm: TFarm;
       IrrigationTypes: TIrrigationCollection);
+    procedure SetDeficiencyScenario(Farm: TFarm);
+    procedure SetWaterSource(Farm: TFarm);
+    procedure SetBareRunoffFractions(Farm: TFarm);
+
     procedure SetFarmCosts(Farm: TFarm);
     procedure SetWaterRights(Farm: TFarm);
     procedure SetGwAllotment(Farm: TFarm);
+
     procedure Change(Sender: TObject);
     property Changing: Boolean read FChanging write FChanging;
     procedure DoChange;
+
     procedure EditFormula(Grid: TRbwDataGrid4; ACol, ARow: Integer);
-    procedure SetAnEfficiencyCollection(EfficiencyCollection: TFarmEfficiencyCollection;
+    procedure SetAnEfficiencyCollection(
+      EfficiencyCollection: TFarmEfficiencyCollection;
       AFrame: TframeFormulaGrid; IrrigationTypes: TIrrigationCollection);
     procedure InitializeEfficiencyCollectionFrame(
       StartTimes, EndTimes: TStringList; IrrigationTypes: TIrrigationCollection;
       AFrame: TframeFormulaGrid; CaptionFormatString: string);
-    procedure GetAnEfficiencyCollection(AFarm: TFarm; AFrame: TframeFormulaGrid; EfficiencyCollection: TFarmEfficiencyCollection);
+    procedure InitializeSingleValueFrame(StartTimes, EndTimes: TStringList;
+      AFrame: TframeFormulaGrid; ValueCaption: string);
+
+    procedure InitializeDeficiencyScenarioFrame(StartTimes, EndTimes: TStringList);
+    procedure InitializeWaterSourceFrame(StartTimes, EndTimes: TStringList;
+      AFrame: TframeFormulaGrid; ValueCaptions: array of string);
+    procedure InitializeBareRunoffFractionsFrame(StartTimes, EndTimes: TStringList);
+
+    procedure GetAnEfficiencyCollection(AFarm: TFarm; AFrame: TframeFormulaGrid;
+      EfficiencyCollection: TFarmEfficiencyCollection);
+    procedure UpdateEndTime(Sender: TObject; ACol: Integer; ARow: Integer);
     { Private declarations }
   public
     procedure InitializeControls;
@@ -174,7 +231,8 @@ uses
   GoPhastTypes, frmGoPhastUnit,
   ModflowTimeUnit, Generics.Collections, ScreenObjectUnit, DataSetUnit,
   PhastModelUnit, ModflowPackagesUnit, ModflowPackageSelectionUnit,
-  ModflowFmpAllotmentUnit, frmFormulaUnit, frmConvertChoiceUnit;
+  ModflowFmpAllotmentUnit, frmFormulaUnit, frmConvertChoiceUnit,
+  ModflowFmpBaseClasses;
 
 resourcestring
   StrGWBaseMaintenance = 'GW base maintenance costs / volume (GWCost1)';
@@ -196,6 +254,10 @@ type
     wccGWCost3, wccGWCost4, wccSWCost1, wccSWCost2, wccSWCost3, wccSWCost4);
   TWaterRightsCallColumns = (wrccStartTime, wrccEndTime, wrccCall);
   TGwAllocationColumns = (gacStartTime, gacEndTime, gacAllotment);
+  TDeficiencyColumns = (dcStartTime, dcEndTime, dcValue);
+  TWaterSourceColumns = (wscStartTime, wscEndTime, wscGroundwater,
+    wscSurfaceWater, wscNonRouted);
+  TBareRunoffFractionsColumns = (brfcStartTime, brfcEndTime, brfcValue);
 
 {$R *.dfm}
 
@@ -225,10 +287,17 @@ var
   ValidTypes: TRbwDataTypes;
   RequiredType: TRbwDataType;
 begin
-  if Grid = frameFormulaGridEfficiencyImprovement.Grid then
+
+  if (Grid = frameFormulaGridEfficiencyImprovement.Grid)
+    or (Grid = frameWaterSource.Grid) then
   begin
     ValidTypes := [rdtBoolean];
     RequiredType := rdtBoolean;
+  end
+  else if Grid = frameDeficiencyScenario.Grid then
+  begin
+    ValidTypes := [rdtInteger];
+    RequiredType := rdtInteger;
   end
   else
   begin
@@ -324,6 +393,8 @@ var
   FarmProcess: TFarmProcess;
   Packages: TModflowPackages;
   SfrPackage: TSfrPackageSelection;
+  FarmProcess4: TFarmProcess4;
+  SalinityFlush: TFarmProcess4SalinityFlush;
 begin
   Changing := True;
   FrameLoaded := False;
@@ -344,6 +415,9 @@ begin
     Enabled := True;
     Packages := frmGoPhast.PhastModel.ModflowPackages;
     FarmProcess := Packages.FarmProcess;
+    FarmProcess4 := Packages.FarmProcess4;
+    SalinityFlush := Packages.FarmSalinityFlush;
+
     tabCosts.TabVisible :=
       (FarmProcess.DeficiencyPolicy in
       [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool])
@@ -366,6 +440,9 @@ begin
       frameFormulaGridEfficiencyImprovement.Grid.BeginUpdate;
       frameAddedDemandRunoffSplit.Grid.BeginUpdate;
       frameIrrigationUniformity.Grid.BeginUpdate;
+      frameDeficiencyScenario.Grid.BeginUpdate;
+      frameWaterSource.Grid.BeginUpdate;
+      frameBareRunoffFractions.Grid.BeginUpdate;
       try
         ClearGrid(frameFormulaGridCrops.Grid);
         ClearGrid(frameFormulaGridCosts.Grid);
@@ -374,15 +451,23 @@ begin
         ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
         ClearGrid(frameAddedDemandRunoffSplit.Grid);
         ClearGrid(frameIrrigationUniformity.Grid);
+        ClearGrid(frameDeficiencyScenario.Grid);
+        ClearGrid(frameWaterSource.Grid);
+        ClearGrid(frameBareRunoffFractions.Grid);
 
         FirstFarm := FarmList[0];
         GetCropEffForFirstFarm(FirstFarm);
         GetCropEffImproveForFirstFarm(FirstFarm);
         GetAddedDemandRunoffSplitForFirstFarm(FirstFarm);
         GetIrrigationUniformityForFirstFarm(FirstFarm);
+        GetDeficiencyScenarioForFirstFarm(FirstFarm);
+        GetWaterSourceForFirstFarm(FirstFarm);
+        GetBareRunoffFractonForFirstFarm(FirstFarm);
+
         GetCostsForFirstFarm(FirstFarm);
         GetWaterRightsForFirstFarm(FirstFarm);
         GetGwAllotmentForFirstFarm(FirstFarm);
+
         if FarmList.Count = 1 then
         begin
           seFarmId.AsInteger := FirstFarm.FarmId;
@@ -482,6 +567,42 @@ begin
           end;
         end;
 
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.DeficiencyScenario.IsSame(
+            FirstFarm.DeficiencyScenario) then
+          begin
+            ClearGrid(frameDeficiencyScenario.Grid);
+            frameDeficiencyScenario.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.WaterSource.IsSame(
+            FirstFarm.WaterSource) then
+          begin
+            ClearGrid(frameWaterSource.Grid);
+            frameWaterSource.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.BareRunoffFraction.IsSame(
+            FirstFarm.BareRunoffFraction) then
+          begin
+            ClearGrid(frameBareRunoffFractions.Grid);
+            frameBareRunoffFractions.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
       finally
         frameFormulaGridCrops.Grid.EndUpdate;
         frameFormulaGridEfficiencyImprovement.Grid.EndUpdate;
@@ -490,12 +611,37 @@ begin
         frameGW_Allocation.Grid.EndUpdate;
         frameAddedDemandRunoffSplit.Grid.EndUpdate;
         frameIrrigationUniformity.Grid.EndUpdate;
+        frameDeficiencyScenario.Grid.EndUpdate;
+        frameWaterSource.Grid.EndUpdate;
+        frameBareRunoffFractions.Grid.EndUpdate;
       end;
 
       frameFormulaGridDiversion.GetData(FarmList, dtDiversion);
       frameFormulaGridReturnFlow.GetData(FarmList, dtReturnFlow);
 
       frameDelivery.GetData(FarmList);
+
+      tabEfficiencyImprovement.TabVisible := FarmProcess4.IsSelected
+        and (FarmProcess4.EfficiencyImprovement.FarmOption <> foNotUsed)
+        and (FarmProcess4.EfficiencyImprovement.ArrayList = alList);
+
+      tabAddedDemandRunoffSplit.TabVisible := FarmProcess4.IsSelected
+        and (FarmProcess4.Added_Demand_Runoff_Split.FarmOption <> foNotUsed)
+        and (FarmProcess4.Added_Demand_Runoff_Split.ArrayList = alList);
+
+      tabIrrigationUniformity.TabVisible := FarmProcess4.IsSelected
+        and SalinityFlush.IsSelected
+        and (SalinityFlush.FarmIrrigationUniformityChoice.FarmOption <> foNotUsed);
+
+      tabDeficiencyScenario.TabVisible := FarmProcess4.IsSelected
+        and (FarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed);
+
+      tabWaterSource.TabVisible := FarmProcess4.IsSelected
+        and (FarmProcess4.WaterSource.FarmOption <> foNotUsed);
+
+      tabBareRunoffFractions.TabVisible := FarmProcess4.IsSelected
+        and (FarmProcess4.Bare_Runoff_Fraction.FarmOption <> foNotUsed)
+        and (FarmProcess4.Bare_Runoff_Fraction.ArrayList = alList);
 
     finally
       FChangedCrops := False;
@@ -506,10 +652,38 @@ begin
       FEfficiencyImprovementChanged := False;
       FAddedDemandRunoffSplitChanged := False;
       FIrrigationUniformityChanged := False;
+      FDeficiencyScenarioChanged := False;
+      FWaterSourceChanged := False;
+      FBareRunoffFractionsChanged := False;
     end;
   finally
     Changing := False;
     FrameLoaded := True;
+  end;
+end;
+
+procedure TframeFarm.GetDeficiencyScenarioForFirstFarm(FirstFarm: TFarm);
+var
+  AFarm: TFarm;
+  Frame: TframeFormulaGrid;
+  Grid: TRbwDataGrid4;
+  DeficiencyScenario: TDeficiencyScenarioCollection;
+  ATimeItem: TOwhmItem;
+  TimeIndex: Integer;
+begin
+  AFarm := FirstFarm;
+  Frame := frameDeficiencyScenario;
+  Grid := Frame.Grid;
+  DeficiencyScenario := AFarm.DeficiencyScenario;
+
+  Frame.seNumber.AsInteger := DeficiencyScenario.Count;
+  Frame.seNumber.OnChange(Frame.seNumber);
+  for TimeIndex := 0 to DeficiencyScenario.Count - 1 do
+  begin
+    ATimeItem := DeficiencyScenario[TimeIndex];
+    Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
+    Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
+    Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.OwhmValue;
   end;
 end;
 
@@ -546,6 +720,16 @@ begin
   EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
 end;
 
+procedure TframeFarm.frameAddedDemandRunoffSplitGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameAddedDemandRunoffSplit.Grid, ACol, ARow);
+  DoChange;
+  FAddedDemandRunoffSplitChanged := True;
+end;
+
 procedure TframeFarm.frameAddedDemandRunoffSplitsbAddClick(Sender: TObject);
 begin
   inherited;
@@ -578,6 +762,119 @@ begin
   DoChange
 end;
 
+procedure TframeFarm.frameBareRunoffFractionsedFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameBareRunoffFractions.edFormulaChange(Sender);
+  DoChange;
+  FBareRunoffFractionsChanged := True;
+end;
+
+procedure TframeFarm.frameBareRunoffFractionsGridButtonClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameBareRunoffFractionsGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  DoChange;
+  UpdateEndTime(Sender, ACol, ARow);
+  FBareRunoffFractionsChanged := True;
+end;
+
+procedure TframeFarm.frameBareRunoffFractionssbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameBareRunoffFractions.sbAddClick(Sender);
+  DoChange;
+  FBareRunoffFractionsChanged := True;
+end;
+
+procedure TframeFarm.frameBareRunoffFractionssbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameBareRunoffFractions.sbDeleteClick(Sender);
+  DoChange;
+  FBareRunoffFractionsChanged := True;
+end;
+
+procedure TframeFarm.frameBareRunoffFractionssbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameBareRunoffFractions.sbInsertClick(Sender);
+  DoChange;
+  FBareRunoffFractionsChanged := True;
+end;
+
+procedure TframeFarm.frameBareRunoffFractionsseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameBareRunoffFractions.seNumberChange(Sender);
+  DoChange;
+  FBareRunoffFractionsChanged := True;
+end;
+
+procedure TframeFarm.frameDeficiencyScenarioedFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameDeficiencyScenario.edFormulaChange(Sender);
+  DoChange;
+  FDeficiencyScenarioChanged := True;
+end;
+
+procedure TframeFarm.frameDeficiencyScenarioGridButtonClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameDeficiencyScenarioGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameDeficiencyScenario.Grid, ACol, ARow);
+  DoChange;
+  FDeficiencyScenarioChanged := True;
+end;
+
+procedure TframeFarm.frameDeficiencyScenariosbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameDeficiencyScenario.sbAddClick(Sender);
+  DoChange;
+  FDeficiencyScenarioChanged := True;
+end;
+
+procedure TframeFarm.frameDeficiencyScenariosbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameDeficiencyScenario.sbDeleteClick(Sender);
+  DoChange;
+  FDeficiencyScenarioChanged := True;
+end;
+
+procedure TframeFarm.frameDeficiencyScenariosbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameDeficiencyScenario.sbInsertClick(Sender);
+  DoChange;
+  FDeficiencyScenarioChanged := True;
+end;
+
+procedure TframeFarm.frameDeficiencyScenarioseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameDeficiencyScenario.seNumberChange(Sender);
+  DoChange;
+  FDeficiencyScenarioChanged := True;
+end;
+
 procedure TframeFarm.frameDeliveryGridButtonClick(Sender: TObject; ACol,
   ARow: Integer);
 begin
@@ -590,23 +887,15 @@ procedure TframeFarm.frameDeliveryGridSetEditText(Sender: TObject;
 begin
   inherited;
   frameDelivery.GridSetEditText(Sender, ACol, ARow, Value);
-  UpdateNextTimeCell(frameDelivery.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameDelivery.Grid, ACol, ARow);
 
 end;
 
-procedure TframeFarm.frameFormulaGrid1edFormulaChange(Sender: TObject);
+procedure TframeFarm.frameAddedDemandRunoffSplitedFormulaChange(Sender: TObject);
 begin
   inherited;
   frameAddedDemandRunoffSplit.edFormulaChange(Sender);
-  FAddedDemandRunoffSplitChanged := True;
-end;
-
-procedure TframeFarm.frameFormulaGrid1GridSetEditText(Sender: TObject; ACol,
-  ARow: Integer; const Value: string);
-begin
-  inherited;
-  UpdateNextTimeCell(frameAddedDemandRunoffSplit.Grid, ACol, ARow);
-  DoChange;
   FAddedDemandRunoffSplitChanged := True;
 end;
 
@@ -630,7 +919,8 @@ procedure TframeFarm.frameFormulaGridCostsGridSetEditText(
 begin
   inherited;
   FChangedCosts := True;
-  UpdateNextTimeCell(frameFormulaGridCosts.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameFormulaGridCosts.Grid, ACol, ARow);
   DoChange;
 end;
 
@@ -690,7 +980,8 @@ procedure TframeFarm.frameFormulaGridCropsGridSetEditText(
 begin
   inherited;
   FChangedCrops := True;
-  UpdateNextTimeCell(frameFormulaGridCrops.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameFormulaGridCrops.Grid, ACol, ARow);
   DoChange;
 end;
 
@@ -735,7 +1026,8 @@ procedure TframeFarm.frameFormulaGridDiversionGridSetEditText(
 begin
   inherited;
   frameFormulaGridDiversion.GridSetEditText(Sender, ACol, ARow, Value);
-  UpdateNextTimeCell(frameFormulaGridDiversion.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameFormulaGridDiversion.Grid, ACol, ARow);
 
 end;
 
@@ -759,7 +1051,8 @@ procedure TframeFarm.frameFormulaGridEfficiencyImprovementGridSetEditText(
 begin
   inherited;
   FEfficiencyImprovementChanged := True;
-  UpdateNextTimeCell(frameFormulaGridEfficiencyImprovement.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameFormulaGridEfficiencyImprovement.Grid, ACol, ARow);
   DoChange;
 end;
 
@@ -804,7 +1097,8 @@ procedure TframeFarm.frameFormulaGridReturnFlowGridSetEditText(
 begin
   inherited;
   frameFormulaGridReturnFlow.GridSetEditText(Sender, ACol, ARow, Value);
-  UpdateNextTimeCell(frameFormulaGridReturnFlow.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameFormulaGridReturnFlow.Grid, ACol, ARow);
 end;
 
 procedure TframeFarm.frameFormulaGridWaterRightsedFormulaChange(
@@ -827,7 +1121,8 @@ procedure TframeFarm.frameFormulaGridWaterRightsGridSetEditText(
 begin
   inherited;
   FChangedWaterRights := True;
-  UpdateNextTimeCell(frameFormulaGridWaterRights.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameFormulaGridWaterRights.Grid, ACol, ARow);
   DoChange;
 end;
 
@@ -886,7 +1181,8 @@ procedure TframeFarm.frameGW_AllocationGridSetEditText(Sender: TObject; ACol,
 begin
   inherited;
   FChangedAllotment := True;
-  UpdateNextTimeCell(frameGW_Allocation.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameGW_Allocation.Grid, ACol, ARow);
   DoChange;
 end;
 
@@ -941,7 +1237,8 @@ procedure TframeFarm.frameIrrigationUniformityGridSetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-  UpdateNextTimeCell(frameIrrigationUniformity.Grid, ACol, ARow);
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameIrrigationUniformity.Grid, ACol, ARow);
   DoChange;
   FIrrigationUniformityChanged := True;
 end;
@@ -977,6 +1274,64 @@ begin
   frameIrrigationUniformity.seNumberChange(Sender);
   FIrrigationUniformityChanged := True;
   DoChange
+end;
+
+procedure TframeFarm.frameWaterSourceedFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameWaterSource.edFormulaChange(Sender);
+  DoChange;
+  FWaterSourceChanged := True;
+end;
+
+procedure TframeFarm.frameWaterSourceGridButtonClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameWaterSourceGridSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameWaterSource.Grid, ACol, ARow);
+  DoChange;
+  FWaterSourceChanged := True;
+
+end;
+
+procedure TframeFarm.frameWaterSourcesbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameWaterSource.sbAddClick(Sender);
+  DoChange;
+  FWaterSourceChanged := True;
+end;
+
+procedure TframeFarm.frameWaterSourcesbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameWaterSource.sbDeleteClick(Sender);
+  DoChange;
+  FWaterSourceChanged := True;
+end;
+
+procedure TframeFarm.frameWaterSourcesbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameWaterSource.sbInsertClick(Sender);
+  DoChange;
+  FWaterSourceChanged := True;
+end;
+
+procedure TframeFarm.frameWaterSourceseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameWaterSource.seNumberChange(Sender);
+  DoChange;
+  FWaterSourceChanged := True;
 end;
 
 procedure TframeFarm.GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
@@ -1078,6 +1433,41 @@ begin
     Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
     Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.WaterRights;
   end;
+end;
+
+procedure TframeFarm.GetWaterSourceForFirstFarm(FirstFarm: TFarm);
+var
+  AFarm: TFarm;
+  Frame: TframeFormulaGrid;
+  Grid: TRbwDataGrid4;
+//  ATimeItem: TOwhmItem;
+  TimeIndex: Integer;
+  WaterSource: TWaterSourceCollection;
+  ATimeItem: TWaterSourceItem;
+begin
+  AFarm := FirstFarm;
+  Frame := frameWaterSource;
+  Grid := Frame.Grid;
+  WaterSource := AFarm.WaterSource;
+
+  Frame.seNumber.AsInteger := WaterSource.Count;
+  Frame.seNumber.OnChange(Frame.seNumber);
+  for TimeIndex := 0 to WaterSource.Count - 1 do
+  begin
+    ATimeItem := WaterSource[TimeIndex];
+    Grid.Cells[Ord(wscStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
+    Grid.Cells[Ord(wscEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
+    Grid.Cells[Ord(wscGroundwater), TimeIndex+1] := ATimeItem.Groundwater;
+    Grid.Cells[Ord(wscSurfaceWater), TimeIndex+1] := ATimeItem.SurfaceWater;
+    Grid.Cells[Ord(wscNonRouted), TimeIndex+1] := ATimeItem.NonRoutedDelivery;
+  end;
+end;
+
+procedure TframeFarm.InitializeBareRunoffFractionsFrame(StartTimes,
+  EndTimes: TStringList);
+begin
+  InitializeSingleValueFrame(StartTimes, EndTimes,
+    frameBareRunoffFractions, 'Bare Runoff Fraction');
 end;
 
 procedure TframeFarm.InitializeControls;
@@ -1206,6 +1596,14 @@ begin
       IrrigationTypes, frameIrrigationUniformity,
       '%s irrigation uniformity');
 
+    InitializeDeficiencyScenarioFrame(StartTimes, EndTimes);
+
+    InitializeWaterSourceFrame(StartTimes, EndTimes,
+      frameWaterSource,
+      ['Use Groundwater', 'Use Surface Water', 'Use Non-Routed Deliveries']);
+
+    InitializeBareRunoffFractionsFrame(StartTimes, EndTimes);
+
     Grid := frameFormulaGridCosts.Grid;
     ClearGrid(Grid);
     Grid.BeginUpdate;
@@ -1294,6 +1692,44 @@ begin
   end;
 end;
 
+procedure TframeFarm.InitializeDeficiencyScenarioFrame(StartTimes,
+  EndTimes: TStringList);
+begin
+  InitializeSingleValueFrame(StartTimes, EndTimes,
+    frameDeficiencyScenario, 'Deficiency Scenario');
+end;
+
+procedure TframeFarm.InitializeSingleValueFrame(StartTimes,
+  EndTimes: TStringList; AFrame: TframeFormulaGrid;
+  ValueCaption: string);
+var
+  Grid: TRbwDataGrid4;
+begin
+  Grid := AFrame.Grid;
+  Grid.ColCount := 3;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[Ord(dcStartTime), 0] := StrStartingTime;
+    Grid.Cells[Ord(dcEndTime), 0] := StrEndingTime;
+    Grid.Columns[Ord(dcStartTime)].PickList := StartTimes;
+    Grid.Columns[Ord(dcEndTime)].PickList := EndTimes;
+    Grid.Columns[Ord(dcStartTime)].ComboUsed := True;
+    Grid.Columns[Ord(dcEndTime)].ComboUsed := True;
+    Grid.Columns[Ord(dcStartTime)].WordWrapCaptions := True;
+    Grid.Columns[Ord(dcEndTime)].WordWrapCaptions := True;
+
+    Grid.Cells[Ord(dcValue), 0] := ValueCaption;
+    Grid.Columns[Ord(dcValue)].UseButton := True;
+    Grid.Columns[Ord(dcValue)].ButtonCaption := StrF;
+    Grid.Columns[Ord(dcValue)].ButtonWidth := 35;
+    Grid.Columns[Ord(dcValue)].WordWrapCaptions := True;
+    Grid.Columns[Ord(dcValue)].AutoAdjustColWidths := True;
+    Grid.Columns[Ord(dcValue)].AutoAdjustRowHeights := True;
+  finally
+    Grid.EndUpdate;
+  end
+end;
+
 procedure TframeFarm.seFarmIdChange(Sender: TObject);
 begin
   inherited;
@@ -1372,6 +1808,42 @@ begin
     end;
   end;
 
+  if FDeficiencyScenarioChanged then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetDeficiencyScenario(Farm);
+      end;
+    end;
+  end;
+
+  if FWaterSourceChanged then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetWaterSource(Farm);
+      end;
+    end;
+  end;
+
+  if FBareRunoffFractionsChanged then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetBareRunoffFractions(Farm);
+      end;
+    end;
+  end;
+
   if FChangedCosts then
   begin
     for index := 0 to FarmList.Count - 1 do
@@ -1419,6 +1891,80 @@ begin
   end;
 end;
 
+procedure TframeFarm.UpdateEndTime(Sender: TObject; ACol: Integer; ARow: Integer);
+var
+  Grid: TRbwDataGrid4;
+  ItemIndex: Integer;
+begin
+  if Sender is TRbwDataGrid4 then
+  begin
+    Grid := TRbwDataGrid4(Sender);
+    if (ACol = 0) and (ARow >= Grid.FixedRows) and (Grid.Cells[1, ARow] = '') then
+    begin
+      ItemIndex := Grid.ItemIndex[ACol, ARow];
+      if ItemIndex >= 0 then
+      begin
+        Grid.ItemIndex[1, ARow] := ItemIndex;
+      end;
+    end;
+  end;
+end;
+
+procedure TframeFarm.SetDeficiencyScenario(Farm: TFarm);
+var
+  AFrame: TframeFormulaGrid;
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  StartTimes: TList<Double>;
+  EndTimes: TList<Double>;
+  Rows: TGenericIntegerList;
+  DeficiencyItem: TOwhmItem;
+  StartTime: double;
+  EndTime: double;
+  ARow: Integer;
+begin
+  AFrame := frameDeficiencyScenario;
+  Grid := AFrame.Grid;
+  StartTimes := TList<Double>.Create;
+  EndTimes := TList<Double>.Create;
+  Rows := TGenericIntegerList.Create;
+  try
+    for RowIndex := 1 to AFrame.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Grid.Cells[Ord(dcStartTime), RowIndex], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(dcEndTime), RowIndex], EndTime) then
+      begin
+        Rows.Add(RowIndex);
+        StartTimes.Add(StartTime);
+        EndTimes.Add(EndTime);
+      end;
+    end;
+    for RowIndex := 0 to Rows.Count - 1 do
+    begin
+      ARow := Rows[RowIndex];
+      if RowIndex < Farm.DeficiencyScenario.Count then
+      begin
+        DeficiencyItem := Farm.DeficiencyScenario[RowIndex];
+      end
+      else
+      begin
+        DeficiencyItem := Farm.DeficiencyScenario.Add as TOwhmItem;
+      end;
+      DeficiencyItem.OwhmValue := Grid.Cells[Ord(dcValue),ARow];
+      DeficiencyItem.StartTime := StartTimes[RowIndex];
+      DeficiencyItem.EndTime := EndTimes[RowIndex];
+    end;
+    while Farm.DeficiencyScenario.Count > StartTimes.Count do
+    begin
+      Farm.DeficiencyScenario.Last.Free;
+    end;
+  finally
+    Rows.Free;
+    StartTimes.Free;
+    EndTimes.Free;
+  end;
+end;
+
 procedure TframeFarm.GetAnEfficiencyCollection(AFarm: TFarm;
   AFrame: TframeFormulaGrid; EfficiencyCollection: TFarmEfficiencyCollection);
 var
@@ -1452,6 +1998,31 @@ begin
         Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex + 1] := TimeItem.Efficiency;
       end;
     end;
+  end;
+end;
+
+procedure TframeFarm.GetBareRunoffFractonForFirstFarm(FirstFarm: TFarm);
+var
+  AFarm: TFarm;
+  Frame: TframeFormulaGrid;
+  Grid: TRbwDataGrid4;
+  ATimeItem: TOwhmItem;
+  TimeIndex: Integer;
+  BareRunoffFraction: TBareRunoffFractionCollection;
+begin
+  AFarm := FirstFarm;
+  Frame := frameBareRunoffFractions;
+  Grid := Frame.Grid;
+  BareRunoffFraction := AFarm.BareRunoffFraction;
+
+  Frame.seNumber.AsInteger := BareRunoffFraction.Count;
+  Frame.seNumber.OnChange(Frame.seNumber);
+  for TimeIndex := 0 to BareRunoffFraction.Count - 1 do
+  begin
+    ATimeItem := BareRunoffFraction[TimeIndex];
+    Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
+    Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
+    Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.OwhmValue;
   end;
 end;
 
@@ -1500,6 +2071,40 @@ begin
     Grid.EndUpdate;
   end;
   AFrame.LayoutMultiRowEditControls;
+end;
+
+procedure TframeFarm.InitializeWaterSourceFrame(StartTimes,
+  EndTimes: TStringList; AFrame: TframeFormulaGrid; ValueCaptions: array of string);
+var
+  Grid: TRbwDataGrid4;
+  Index: TWaterSourceColumns;
+begin
+  Grid := AFrame.Grid;
+  Grid.ColCount := 5;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[Ord(wscStartTime), 0] := StrStartingTime;
+    Grid.Cells[Ord(wscEndTime), 0] := StrEndingTime;
+    Grid.Columns[Ord(wscStartTime)].PickList := StartTimes;
+    Grid.Columns[Ord(wscEndTime)].PickList := EndTimes;
+    Grid.Columns[Ord(wscStartTime)].ComboUsed := True;
+    Grid.Columns[Ord(wscEndTime)].ComboUsed := True;
+    Grid.Columns[Ord(wscStartTime)].WordWrapCaptions := True;
+    Grid.Columns[Ord(wscEndTime)].WordWrapCaptions := True;
+
+    for Index := wscGroundwater to wscNonRouted do
+    begin
+      Grid.Cells[Ord(Index), 0] := ValueCaptions[Ord(Index)-2];
+      Grid.Columns[Ord(Index)].UseButton := True;
+      Grid.Columns[Ord(Index)].ButtonCaption := StrF;
+      Grid.Columns[Ord(Index)].ButtonWidth := 35;
+      Grid.Columns[Ord(Index)].WordWrapCaptions := True;
+      Grid.Columns[Ord(Index)].AutoAdjustColWidths := True;
+      Grid.Columns[Ord(Index)].AutoAdjustRowHeights := True;
+    end;
+  finally
+    Grid.EndUpdate;
+  end
 end;
 
 procedure TframeFarm.SetAddedDemandRunoffSplit(Farm: TFarm;
@@ -1579,6 +2184,61 @@ begin
   end;
 end;
 
+procedure TframeFarm.SetBareRunoffFractions(Farm: TFarm);
+var
+  AFrame: TframeFormulaGrid;
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  StartTimes: TList<Double>;
+  EndTimes: TList<Double>;
+  Rows: TGenericIntegerList;
+  OwhmItem: TOwhmItem;
+  StartTime: double;
+  EndTime: double;
+  ARow: Integer;
+begin
+  AFrame := frameBareRunoffFractions;
+  Grid := AFrame.Grid;
+  StartTimes := TList<Double>.Create;
+  EndTimes := TList<Double>.Create;
+  Rows := TGenericIntegerList.Create;
+  try
+    for RowIndex := 1 to AFrame.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Grid.Cells[Ord(dcStartTime), RowIndex], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(dcEndTime), RowIndex], EndTime) then
+      begin
+        Rows.Add(RowIndex);
+        StartTimes.Add(StartTime);
+        EndTimes.Add(EndTime);
+      end;
+    end;
+    for RowIndex := 0 to Rows.Count - 1 do
+    begin
+      ARow := Rows[RowIndex];
+      if RowIndex < Farm.BareRunoffFraction.Count then
+      begin
+        OwhmItem := Farm.BareRunoffFraction[RowIndex];
+      end
+      else
+      begin
+        OwhmItem := Farm.BareRunoffFraction.Add as TOwhmItem;
+      end;
+      OwhmItem.OwhmValue := Grid.Cells[Ord(dcValue),ARow];
+      OwhmItem.StartTime := StartTimes[RowIndex];
+      OwhmItem.EndTime := EndTimes[RowIndex];
+    end;
+    while Farm.BareRunoffFraction.Count > StartTimes.Count do
+    begin
+      Farm.BareRunoffFraction.Last.Free;
+    end;
+  finally
+    Rows.Free;
+    StartTimes.Free;
+    EndTimes.Free;
+  end;
+end;
+
 procedure TframeFarm.SetWaterRights(Farm: TFarm);
 var
   Grid: TRbwDataGrid4;
@@ -1613,6 +2273,63 @@ begin
   while WaterRights.Count > Count do
   begin
     WaterRights.Last.Free;
+  end;
+end;
+
+procedure TframeFarm.SetWaterSource(Farm: TFarm);
+var
+  AFrame: TframeFormulaGrid;
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  StartTimes: TList<Double>;
+  EndTimes: TList<Double>;
+  Rows: TGenericIntegerList;
+  StartTime: double;
+  EndTime: double;
+  ARow: Integer;
+  WaterSourceItem: TWaterSourceItem;
+begin
+  AFrame := frameWaterSource;
+  Grid := AFrame.Grid;
+  StartTimes := TList<Double>.Create;
+  EndTimes := TList<Double>.Create;
+  Rows := TGenericIntegerList.Create;
+  try
+    for RowIndex := 1 to AFrame.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex], EndTime) then
+      begin
+        Rows.Add(RowIndex);
+        StartTimes.Add(StartTime);
+        EndTimes.Add(EndTime);
+      end;
+    end;
+    for RowIndex := 0 to Rows.Count - 1 do
+    begin
+      ARow := Rows[RowIndex];
+      if RowIndex < Farm.WaterSource.Count then
+      begin
+        WaterSourceItem := Farm.WaterSource[RowIndex];
+      end
+      else
+      begin
+        WaterSourceItem := Farm.WaterSource.Add as TWaterSourceItem;
+      end;
+      WaterSourceItem.StartTime := StartTimes[RowIndex];
+      WaterSourceItem.EndTime := EndTimes[RowIndex];
+      WaterSourceItem.Groundwater := Grid.Cells[Ord(wscGroundwater), ARow];
+      WaterSourceItem.SurfaceWater := Grid.Cells[Ord(wscSurfaceWater), ARow];
+      WaterSourceItem.NonRoutedDelivery := Grid.Cells[Ord(wscNonRouted), ARow];
+    end;
+    while Farm.WaterSource.Count > StartTimes.Count do
+    begin
+      Farm.WaterSource.Last.Free;
+    end;
+  finally
+    Rows.Free;
+    StartTimes.Free;
+    EndTimes.Free;
   end;
 end;
 

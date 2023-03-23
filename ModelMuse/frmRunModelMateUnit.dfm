@@ -11,8 +11,6 @@ object frmRunModelMate: TfrmRunModelMate
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
-  PixelsPerInch = 96
   TextHeight = 13
   object cbOpen: TCheckBox
     Left = 8

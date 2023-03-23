@@ -14,7 +14,7 @@ inherited frmGridValue: TfrmGridValue
     513)
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 448
+    Left = 444
     Top = 473
     Width = 89
     Height = 33
@@ -23,11 +23,10 @@ inherited frmGridValue: TfrmGridValue
     NumGlyphs = 2
     TabOrder = 1
     OnClick = btnHelpClick
-    ExplicitLeft = 444
     ExplicitTop = 472
   end
   object btnClose: TBitBtn
-    Left = 545
+    Left = 541
     Top = 473
     Width = 89
     Height = 33
@@ -35,7 +34,6 @@ inherited frmGridValue: TfrmGridValue
     Kind = bkClose
     NumGlyphs = 2
     TabOrder = 2
-    ExplicitLeft = 541
     ExplicitTop = 472
   end
   object pnlTabs: TPanel
@@ -351,8 +349,8 @@ inherited frmGridValue: TfrmGridValue
         Height = 26
         Tree.Left = 0
         Tree.Top = 0
-        Tree.Width = 624
-        Tree.Height = 441
+        Tree.Width = 628
+        Tree.Height = 442
         Tree.Align = alClient
         Tree.Colors.BorderColor = 15987699
         Tree.Colors.DisabledColor = clGray
@@ -799,11 +797,10 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 371
+            Width = 103
             Height = 18
             Align = alTop
             Caption = 'SWR Reaches'
-            ExplicitWidth = 103
           end
           object rdgSwrReaches: TRbwDataGrid4
             Left = 1
@@ -935,11 +932,10 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 371
+            Width = 111
             Height = 18
             Align = alTop
             Caption = 'SWR Structures'
-            ExplicitWidth = 111
           end
           object rdgSwrStructures: TRbwDataGrid4
             Left = 1

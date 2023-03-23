@@ -199,8 +199,6 @@ object frameCustomColor: TframeCustomColor
         Tree.OnMouseDown = virttreecomboDataSetsTreeMouseDown
         Tree.Touch.InteractiveGestures = [igPan, igPressAndTap]
         Tree.Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-        Tree.ExplicitWidth = 200
-        Tree.ExplicitHeight = 100
         Tree.Columns = <>
         DropDownHeight = 207
         Enabled = True

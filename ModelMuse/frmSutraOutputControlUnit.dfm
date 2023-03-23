@@ -4,8 +4,8 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
   Caption = 'SUTRA Output Control'
   ClientHeight = 438
   ClientWidth = 722
-  ExplicitWidth = 740
-  ExplicitHeight = 485
+  ExplicitWidth = 734
+  ExplicitHeight = 476
   TextHeight = 18
   object spl1: TSplitter
     Left = 136
@@ -23,12 +23,16 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
     ActivePage = jvspNodEle
     PropagateEnable = False
     Align = alClient
+    ExplicitWidth = 577
+    ExplicitHeight = 387
     object jvspListing: TJvStandardPage
       Left = 0
       Top = 0
       Width = 581
       Height = 388
       Caption = 'jvspListing'
+      ExplicitWidth = 577
+      ExplicitHeight = 387
       DesignSize = (
         581
         388)
@@ -50,7 +54,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       object chklstOptions: TCheckListBox
         Left = 6
         Top = 48
-        Width = 572
+        Width = 568
         Height = 206
         Anchors = [akLeft, akTop, akRight]
         ItemHeight = 18
@@ -68,6 +72,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
           'Write a summary of simulation progress to the screen (CSCRN)'
           'Pause for a user response at the end of the simulation (CPAUSE)')
         TabOrder = 1
+        ExplicitWidth = 564
       end
     end
     object jvspNodEle: TJvStandardPage
@@ -76,6 +81,8 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Width = 581
       Height = 388
       Caption = 'jvspNodEle'
+      ExplicitWidth = 577
+      ExplicitHeight = 387
       DesignSize = (
         581
         388)
@@ -107,7 +114,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       object clbNcol: TCheckListBox
         Left = 6
         Top = 69
-        Width = 572
+        Width = 568
         Height = 260
         Anchors = [akLeft, akTop, akRight]
         DoubleBuffered = False
@@ -126,6 +133,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
         ParentDoubleBuffered = False
         ScrollWidth = 332
         TabOrder = 1
+        ExplicitWidth = 564
       end
     end
     object jvspObsBound: TJvStandardPage
@@ -291,6 +299,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
     TabOrder = 0
     OnCustomDrawItem = jvpltvNavigatorCustomDrawItem
     Items.Links = {00000000}
+    ExplicitHeight = 387
   end
   object pnlBottom: TPanel
     Left = 0
@@ -300,11 +309,13 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 387
+    ExplicitWidth = 718
     DesignSize = (
       722
       50)
     object btnCancel: TBitBtn
-      Left = 612
+      Left = 608
       Top = 7
       Width = 91
       Height = 33
@@ -312,9 +323,10 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 612
     end
     object btnOK: TBitBtn
-      Left = 515
+      Left = 511
       Top = 7
       Width = 91
       Height = 33
@@ -323,9 +335,10 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 515
     end
     object btnHelp: TBitBtn
-      Left = 418
+      Left = 414
       Top = 7
       Width = 91
       Height = 33
@@ -334,6 +347,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 418
     end
   end
 end

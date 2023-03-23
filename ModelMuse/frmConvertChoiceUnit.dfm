@@ -1,23 +1,20 @@
 inherited frmConvertChoice: TfrmConvertChoice
   Left = 565
   Top = 340
-  Width = 367
-  Height = 257
   HelpType = htKeyword
   HelpKeyword = 'Data_Type_Problem_Dialog_Box'
-  VertScrollBar.Range = 0
   ActiveControl = rgChoice
   Caption = 'Data Type Problem'
+  ClientHeight = 235
   Position = poDesigned
-  ExplicitWidth = 367
-  ExplicitHeight = 257
+  ExplicitHeight = 273
   PixelsPerInch = 120
   TextHeight = 18
   object rgChoice: TRadioGroup
     Left = 0
     Top = 113
-    Width = 349
-    Height = 58
+    Width = 426
+    Height = 81
     Align = alClient
     Caption = 'What do you want to do?'
     ItemIndex = 0
@@ -30,8 +27,8 @@ inherited frmConvertChoice: TfrmConvertChoice
   end
   object pnlButton: TPanel
     Left = 0
-    Top = 171
-    Width = 349
+    Top = 194
+    Width = 426
     Height = 41
     Align = alBottom
     ParentColor = True
@@ -71,7 +68,7 @@ inherited frmConvertChoice: TfrmConvertChoice
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 349
+    Width = 426
     Height = 113
     Align = alTop
     ParentColor = True

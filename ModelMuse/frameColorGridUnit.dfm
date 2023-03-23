@@ -56,7 +56,6 @@ inherited frameColorGrid: TframeColorGrid
         ExplicitLeft = 10
         ExplicitTop = 315
         ExplicitWidth = 309
-        ExplicitHeight = 23
       end
       inherited seCycles: TJvSpinEdit
         Left = 457
@@ -186,9 +185,6 @@ inherited frameColorGrid: TframeColorGrid
         inherited lblColorLegendRows: TLabel
           Top = 376
           ExplicitTop = 376
-        end
-        inherited comboMethod: TComboBox
-          ExplicitHeight = 23
         end
         inherited seLegendRows: TJvSpinEdit
           Top = 395

@@ -21,7 +21,6 @@ inherited frmFarm: TfrmFarm
     inherited pcMain: TJvgPageControl
       Width = 574
       Height = 421
-      ActivePage = frameFarm.tabAddedDemandRunoffSplit
       Font.Pitch = fpVariable
       OnChange = frameFarmpcMainChange
       ExplicitWidth = 570
@@ -63,55 +62,43 @@ inherited frmFarm: TfrmFarm
         end
       end
       inherited tabEfficiencyImprovement: TTabSheet
-        ExplicitWidth = 566
-        ExplicitHeight = 371
         inherited frameFormulaGridEfficiencyImprovement: TframeFormulaGrid
-          Width = 566
-          Height = 371
           ExplicitWidth = 566
-          ExplicitHeight = 371
+          ExplicitHeight = 361
           inherited Panel: TPanel
-            Top = 330
-            Width = 566
-            ExplicitTop = 330
+            ExplicitTop = 320
             ExplicitWidth = 566
           end
           inherited Grid: TRbwDataGrid4
-            Width = 566
-            Height = 273
             ExplicitWidth = 566
-            ExplicitHeight = 273
+            ExplicitHeight = 263
           end
           inherited pnlTop: TPanel
-            Width = 566
             ExplicitWidth = 566
           end
         end
       end
       inherited tabAddedDemandRunoffSplit: TTabSheet
-        ExplicitWidth = 566
-        ExplicitHeight = 371
         inherited frameAddedDemandRunoffSplit: TframeFormulaGrid
-          Width = 566
-          Height = 371
-          ExplicitLeft = 0
-          ExplicitTop = 0
+          ExplicitWidth = 562
+          ExplicitHeight = 360
           inherited Panel: TPanel
-            Top = 330
-            Width = 566
+            ExplicitTop = 319
+            ExplicitWidth = 562
             inherited sbAdd: TSpeedButton
-              Left = 295
+              Left = 293
+              ExplicitLeft = 295
             end
             inherited sbInsert: TSpeedButton
-              Left = 350
+              Left = 348
+              ExplicitLeft = 350
             end
             inherited sbDelete: TSpeedButton
-              Left = 405
+              Left = 402
+              ExplicitLeft = 405
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 566
-            Height = 273
             ColCount = 3
             Columns = <
               item
@@ -186,23 +173,70 @@ inherited frmFarm: TfrmFarm
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
+            ExplicitWidth = 562
+            ExplicitHeight = 262
+          end
+          inherited pnlTop: TPanel
+            ExplicitWidth = 562
+          end
+        end
+      end
+      inherited tabIrrigationUniformity: TTabSheet
+        inherited frameIrrigationUniformity: TframeFormulaGrid
+          ExplicitWidth = 566
+          ExplicitHeight = 361
+          inherited Panel: TPanel
+            ExplicitTop = 320
+            ExplicitWidth = 566
+          end
+          inherited Grid: TRbwDataGrid4
+            ExplicitWidth = 566
+            ExplicitHeight = 263
+          end
+          inherited pnlTop: TPanel
+            ExplicitWidth = 566
+          end
+        end
+      end
+      inherited tabDeficiencyScenario: TTabSheet
+        ExplicitWidth = 566
+        ExplicitHeight = 361
+        inherited frameDeficiencyScenario: TframeFormulaGrid
+          Width = 566
+          Height = 361
+          ExplicitWidth = 562
+          ExplicitHeight = 360
+          inherited Panel: TPanel
+            Top = 320
+            Width = 566
+            ExplicitTop = 319
+            ExplicitWidth = 562
+            inherited sbAdd: TSpeedButton
+              Left = 299
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 355
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 410
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 566
+            Height = 263
+            ExplicitTop = 57
+            ExplicitWidth = 562
+            ExplicitHeight = 262
           end
           inherited pnlTop: TPanel
             Width = 566
+            ExplicitWidth = 562
           end
         end
       end
       inherited tabCosts: TTabSheet
-        ExplicitWidth = 566
-        ExplicitHeight = 371
         inherited frameFormulaGridCosts: TframeFormulaGrid
-          Width = 566
-          Height = 371
-          ExplicitWidth = 562
-          ExplicitHeight = 370
           inherited Panel: TPanel
-            Top = 329
-            Width = 566
             ExplicitTop = 328
             ExplicitWidth = 562
             inherited sbAdd: TSpeedButton
@@ -219,14 +253,9 @@ inherited frmFarm: TfrmFarm
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 566
-            Height = 272
             OnSetEditText = frameFormulaGridCostsGridSetEditText
-            ExplicitWidth = 562
-            ExplicitHeight = 271
           end
           inherited pnlTop: TPanel
-            Width = 566
             ExplicitWidth = 562
             inherited edFormula: TLabeledEdit
               EditLabel.ExplicitHeight = 18
@@ -516,7 +545,7 @@ inherited frmFarm: TfrmFarm
       759
       41)
     object btnHelp: TBitBtn
-      Left = 410
+      Left = 402
       Top = 4
       Width = 108
       Height = 33
@@ -525,10 +554,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 406
+      ExplicitLeft = 398
     end
     object btnOK: TBitBtn
-      Left = 524
+      Left = 516
       Top = 4
       Width = 108
       Height = 33
@@ -537,10 +566,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 520
+      ExplicitLeft = 512
     end
     object btnCancel: TBitBtn
-      Left = 638
+      Left = 630
       Top = 4
       Width = 108
       Height = 33
@@ -548,7 +577,7 @@ inherited frmFarm: TfrmFarm
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 634
+      ExplicitLeft = 626
     end
   end
 end

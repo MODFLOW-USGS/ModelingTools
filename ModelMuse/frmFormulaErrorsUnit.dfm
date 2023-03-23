@@ -10,8 +10,8 @@ inherited frmFormulaErrors: TfrmFormulaErrors
   Font.Height = 19
   FormStyle = fsStayOnTop
   OnResize = FormResize
-  ExplicitWidth = 556
-  ExplicitHeight = 264
+  ExplicitWidth = 550
+  ExplicitHeight = 257
   PixelsPerInch = 120
   TextHeight = 19
   object pnlBottom: TPanel
@@ -22,13 +22,13 @@ inherited frmFormulaErrors: TfrmFormulaErrors
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 181
-    ExplicitWidth = 424
+    ExplicitTop = 173
+    ExplicitWidth = 534
     DesignSize = (
       538
       45)
     object btnClose: TBitBtn
-      Left = 441
+      Left = 437
       Top = 6
       Width = 83
       Height = 33
@@ -51,7 +51,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       OnClick = btnCopyClick
     end
     object btnHelp: TBitBtn
-      Left = 352
+      Left = 348
       Top = 6
       Width = 83
       Height = 33
@@ -96,13 +96,11 @@ inherited frmFormulaErrors: TfrmFormulaErrors
     object Label1: TLabel
       Left = 1
       Top = 1
-      Width = 536
-      Height = 63
+      Width = 459
+      Height = 19
       Align = alClient
       Caption = 'The following formulas were invalid. They may have been reset.'
       WordWrap = True
-      ExplicitWidth = 459
-      ExplicitHeight = 19
     end
   end
   object sgErrors: TRbwDataGrid4
@@ -128,6 +126,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -151,6 +150,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -174,6 +174,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -197,6 +198,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

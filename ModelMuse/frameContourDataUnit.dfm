@@ -69,7 +69,6 @@ inherited frameContourData: TframeContourData
         TabOrder = 12
         ExplicitTop = 344
         ExplicitWidth = 471
-        ExplicitHeight = 23
       end
       inherited seCycles: TJvSpinEdit
         Left = 482
@@ -276,9 +275,6 @@ inherited frameContourData: TframeContourData
         inherited lblColorLegendRows: TLabel
           Top = 412
           ExplicitTop = 410
-        end
-        inherited comboMethod: TComboBox
-          ExplicitHeight = 23
         end
         inherited seLegendRows: TJvSpinEdit
           Top = 433

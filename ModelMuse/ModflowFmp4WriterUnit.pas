@@ -20,7 +20,8 @@ type
     wlIrrigation, wlRootDepth, wlGwRootInteraction, wlTranspirationFraction,
     wlEvaporationIrrigationFraction, wlFractionOfPrecipToSurfaceWater,
     wlFractionOfIrrigToSurfaceWater, wlAddedDemand, wlCropHasSalinityDemand,
-    wlAddedDemandRunoffSplit, wlIrrigationUniformity, wlDeficiencyScenario);
+    wlAddedDemandRunoffSplit, wlIrrigationUniformity, wlDeficiencyScenario,
+    wlWaterSource);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -129,6 +130,7 @@ type
     FNWBS: Integer;
     FIrrigationUniformityFileStream: TFileStream;
     FDeficiencyScenarioFileStream: TFileStream;
+    FWaterSourceFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -144,34 +146,56 @@ type
     procedure WriteFileInternal;
     procedure EvaluateAll;
 
+    // WBS
+    // WBS_NAME
+    procedure WriteFarmNames;
+
+    // LOCATION
     procedure EvaluateFarmID;
     procedure WriteFarmLocation;
 
-    procedure EvaluateCropID;
-    procedure WriteLandUseLocation;
+    // EFFICIENCY
+    procedure EvaluateEfficiency;
+    procedure WriteEfficiency;
 
+    // EFFICIENCY_IMPROVEMENT
+    procedure EvaluateEfficiencyImprovement;
+    procedure WriteEfficiencyImprovement;
+
+    // DEFFICIENCY_SCENARIO
+    procedure WriteDeficiencyScenario;
+
+    // PRORATE_DEFICIENCY
+    procedure WriteProrateDeficiency;
+
+    // WATERSOURCE
+    procedure WriteWaterSource;
+
+    // BARE_RUNOFF_FRACTION
+    procedure EvaluateBareRunoffFraction;
+    procedure WriteBareRunoffFraction;
+
+    // BARE_PRECIPITATON_CONSUMPTION_FRACTION
+    procedure EvaluateBarePrecipitationConsumptionFraction;
+    procedure WriteBarePrecipitationConsumptionFraction;
+
+    // ADDED_DEMAND_RUNOFF_SPLIT
+    procedure EvaluateAddedDemandRunoffSplit;
+    procedure WriteAddedDemandRunoffSplit;
+
+
+    // ADDED_CROP_DEMAND FLUX
+    procedure WriteAddedCropDemandFlux; // finish list.
+
+    // ADDED_CROP_DEMAND Rate
+    procedure WriteAddedCropDemandRate; // finish list.
+
+    // climate
     procedure EvaluateReferenceET;
     procedure WriteRefET;
 
     procedure EvaluatePrecip;
     procedure WritePrecipitation;
-
-    procedure EvaluateEfficiency;
-    procedure WriteEfficiency;
-
-    procedure EvaluateEfficiencyImprovement;
-    procedure WriteEfficiencyImprovement;
-
-    procedure WriteDeficiencyScenario;
-
-    procedure EvaluateBareRunoffFraction;
-    procedure WriteBareRunoffFraction;
-
-    procedure EvaluateBarePrecipitationConsumptionFraction;
-    procedure WriteBarePrecipitationConsumptionFraction;
-
-    procedure EvaluateAddedDemandRunoffSplit;
-    procedure WriteAddedDemandRunoffSplit;
 
     procedure EvaluateBareEvap;
     procedure WriteBareEvap;
@@ -182,50 +206,70 @@ type
     procedure EvaluatePrecipPotConsumption;
     procedure WritePrecipPotConsumption;
 
+    // Surface water
     procedure EvaluateNrdInfilLocation;
     procedure WriteNrdInfilLocation;
 
+    // Land use
+    // LOCATION
+    procedure EvaluateCropID;
+    procedure WriteLandUseLocation;
+
+    // LAND_USE_AREA_FRACTION
     procedure EvaluateLandUseAreaFraction;
-    procedure WriteLandUseAreaFraction;
+    procedure WriteLandUseAreaFraction; // finish list
 
+    procedure WriteLandUsePrintOptions;
+
+    // CROP_COEFFICIENT
     procedure EvaluateCropCoefficient;
-    procedure WriteCropCoefficient;
+    procedure WriteCropCoefficient;  // finish list
 
+    // CONSUMPTIVE_USE
     procedure EvaluateConsumptiveUse;
-    procedure WriteConsumptiveUse;
+    procedure WriteConsumptiveUse;  // finish list
 
+    // IRRIGATION
     procedure EvaluateIrrigation;
     procedure WriteIrrigation;
 
+    // ROOT_DEPTH
     procedure EvaluateRootDepth;
-    procedure WriteRootDepth;
+    procedure WriteRootDepth; // finish list
 
-    procedure WriteGroundwaterRootInteraction;
+    // GROUNDWATER_ROOT_INTERACTION
+    procedure WriteGroundwaterRootInteraction; // finish list
 
+    // TRANSPIRATION_FRACTION
     procedure EvaluateTranspirationFraction;
-    procedure WriteTranspirationFraction;
+    procedure WriteTranspirationFraction; // finish list
 
+    // EVAPORATION_IRRIGATION_FRACTION
     procedure EvaluateEvaporationIrrigationFraction;
     procedure WriteEvaporationIrrigationFraction;
 
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     procedure EvaluateFractionOfPrecipToSurfaceWater;
-    procedure WriteFractionOfPrecipToSurfaceWater;
+    procedure WriteFractionOfPrecipToSurfaceWater; // finish list
 
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION
     procedure EvaluateFractionOfIrrigToSurfaceWater;
     procedure WriteFractionOfIrrigToSurfaceWater;
 
+    // ADDED_DEMAND
     procedure EvaluateAddedDemand;
-    procedure WriteAddedDemand;
+    procedure WriteAddedDemand; // finish list
 
+    // Salinity flush
     procedure WriteIrrigationUniformity;
 
     procedure EvaluateCropHasSalinityDemand;
-    procedure WriteCropHasSalinityDemand;
+    procedure WriteCropHasSalinityDemand; // finish list
 
+    // soil
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
     procedure WriteSurfaceK;
-    procedure WriteLandUsePrintOptions;
 
     procedure FreeFileStreams;
     // wbs location
@@ -258,7 +302,6 @@ type
     procedure WriteScaleFactorsAndID(RequiredValues: TRequiredValues;
       UnitConversionScaleFactor: string; ExternalScaleFileName: string);
     procedure WriteLandUseOption;
-    procedure WriteFarmNames;
     procedure WriteSalinityFlushPrintOptions;
     procedure WriteExpressionVariableNearZero;
   protected
@@ -542,8 +585,22 @@ var
   FarmIndex: Integer;
   AFarm: TFarm;
   InnerFarmIndex: Integer;
-  Formula: string;
   DSItem: TOwhmItem;
+  procedure WriteDeficiencyScenarioItem(AFarm: TFarm; DSItem: TOwhmItem);
+  var
+    Formula: string;
+  begin
+    if DSItem <> nil then
+    begin
+      Formula := DSItem.OwhmValue;
+      WriteIntegerValueFromGlobalFormula(Formula, AFarm,
+        'Invalid deficiency scenario formula in ' + AFarm.FarmName);
+    end
+    else
+    begin
+      WriteInteger(1);
+    end;
+  end;
 begin
   if FFarmProcess4.DeficiencyScenario.FarmOption = foNotUsed then
   begin
@@ -607,18 +664,8 @@ begin
             Assert(FarmID = AFarm.FarmId);
             WriteInteger(AFarm.FarmId);
 
-            DSItem := AFarm.DefaultScenario.ItemByStartTime(StartTime) as TOwhmItem;
-
-            if DSItem <> nil then
-            begin
-              Formula := DSItem.OwhmValue;
-              WriteIntegerValueFromGlobalFormula(Formula,
-                AFarm, AFarm.FarmName);
-            end
-            else
-            begin
-              WriteInteger(1);
-            end;
+            DSItem := AFarm.DeficiencyScenario.ItemByStartTime(StartTime) as TOwhmItem;
+            WriteDeficiencyScenarioItem(AFarm, DSItem);
 
             Inc(FarmID);
             NewLine;
@@ -642,18 +689,15 @@ begin
           Assert(FarmID = AFarm.FarmId);
           WriteInteger(AFarm.FarmId);
 
-          DSItem := AFarm.DefaultScenario.First;
-
-          if DSItem <> nil then
+          if AFarm.DeficiencyScenario.Count > 0 then
           begin
-            Formula := DSItem.OwhmValue;
-            WriteIntegerValueFromGlobalFormula(Formula,
-              AFarm, AFarm.FarmName);
+            DSItem := AFarm.DeficiencyScenario.First;
           end
           else
           begin
-            WriteInteger(1);
+            DSItem := nil;
           end;
+          WriteDeficiencyScenarioItem(AFarm, DSItem);
 
           Inc(FarmID);
           NewLine;
@@ -1014,6 +1058,8 @@ begin
   FreeAndNil(FAddedDemandRunoffSplitFileStream);
   FreeAndNil(FIrrigationUniformityFileStream);
   FreeAndNil(FDeficiencyScenarioFileStream);
+  FreeAndNil(FWaterSourceFileStream);
+
 end;
 
 function TModflowFmp4Writer.GetBoundary(
@@ -1334,6 +1380,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlWaterSource:
+      begin
+        result := ChangeFileExt(FBaseName, '.WATERSOURCE');
+        if FWaterSourceFileStream = nil then
+        begin
+          FWaterSourceFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1500,6 +1555,7 @@ begin
       end;
     wlIrrigationUniformity: ;
     wlDeficiencyScenario: ;
+    wlWaterSource: ;
     else Assert(False);
   end;
 end;
@@ -1552,6 +1608,7 @@ begin
     wlAddedDemandRunoffSplit: result := FAddedDemandRunoffSplit;
     wlIrrigationUniformity: ;
     wlDeficiencyScenario: ;
+    wlWaterSource: ;
     else Assert(False)
   end;
 end;
@@ -1598,10 +1655,34 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.WriteProrateDeficiency;
+begin
+  if (FFarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed) then
+  begin
+    WriteString('  PRORATE_DEFICIENCY ');
+    case FFarmProcess4.ProrateDeficiency of
+      pdoByDemand:
+        begin
+          WriteString('ByDEMAND');
+        end;
+      pdoAverage:
+        begin
+          WriteString('ByAVERAGE');
+        end;
+    else
+      begin
+        Assert(False);
+      end;
+    end;
+    NewLine;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteExpressionVariableNearZero;
 begin
   WriteString('  EXPRESSION_VARIABLE_NEARZERO');
   WriteFloat(FSalinityFlush.ExpressionMin);
+  NewLine;
 end;
 
 procedure TModflowFmp4Writer.WriteSalinityFlushPrintOptions;
@@ -2366,11 +2447,42 @@ var
   StartTime: Double;
   ACrop: TCropItem;
   IrregationItem: TCropIrrigationItem;
-  Formula: string;
   IrrigationTypes: TIrrigationCollection;
   IrrIndex: Integer;
   IrrigationType: TIrrigationItem;
   EvapFracItem: TEvapFractionItem;
+  procedure WriteIrrigationItem(ACrop: TCropItem; IrregationItem: TCropIrrigationItem);
+  var
+    Formula: string;
+  begin
+    if IrregationItem <> nil then
+    begin
+      Formula := IrregationItem.SurfaceWaterLossFractionIrrigation;
+      WriteFloatValueFromGlobalFormula(Formula, ACrop,
+        'Invalid Surface Water Loss Fraction Irrigation in crop ' + ACrop.CropName);
+    end
+    else
+    begin
+      WriteFloat(0.0);
+    end;
+    NewLine;
+  end;
+  procedure WriteEvapFractItem(IrrigationType: TIrrigationItem; EvapFracItem: TEvapFractionItem);
+  var
+    Formula: string;
+  begin
+    if EvapFracItem <> nil then
+    begin
+      Formula := EvapFracItem.SurfaceWaterLossFractionIrrigation;
+      WriteFloatValueFromGlobalFormula(Formula, IrrigationType,
+        'Invalid Surface Water Loss Fraction Irrigation in irrigation type ' + IrrigationType.Name);
+    end
+    else
+    begin
+      WriteFloat(0.0);
+    end;
+    NewLine;
+  end;
 begin
   if FLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foNotUsed then
   begin
@@ -2471,18 +2583,7 @@ begin
                 WriteInteger(CropIndex+1);
                 IrregationItem := ACrop.IrrigationCollection.
                   ItemByStartTime(StartTime) as TCropIrrigationItem;
-
-                if IrregationItem <> nil then
-                begin
-                  Formula := IrregationItem.SurfaceWaterLossFractionIrrigation;
-                  WriteFloatValueFromGlobalFormula(Formula,
-                    ACrop, ACrop.CropName);
-                end
-                else
-                begin
-                  WriteFloat(0.0);
-                end;
-                NewLine;
+                WriteIrrigationItem(ACrop, IrregationItem);
               end;
             end;
           end
@@ -2495,15 +2596,12 @@ begin
               if ACrop.IrrigationCollection.Count > 0 then
               begin
                 IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
-                Formula := IrregationItem.SurfaceWaterLossFractionIrrigation;
-                WriteFloatValueFromGlobalFormula(Formula,
-                  ACrop, ACrop.CropName);
               end
               else
               begin
-                WriteFloat(0.0);
+                IrregationItem := nil;
               end;
-              NewLine;
+              WriteIrrigationItem(ACrop, IrregationItem);
             end;
           end;
         end
@@ -2524,18 +2622,7 @@ begin
                 WriteInteger(IrrIndex+1);
                 EvapFracItem := IrrigationType.EvapFraction.
                   ItemByStartTime(StartTime) as TEvapFractionItem;
-
-                if EvapFracItem <> nil then
-                begin
-                  Formula := EvapFracItem.SurfaceWaterLossFractionIrrigation;
-                  WriteFloatValueFromGlobalFormula(Formula,
-                    IrrigationType, IrrigationType.Name);
-                end
-                else
-                begin
-                  WriteFloat(0.0);
-                end;
-                NewLine;
+                WriteEvapFractItem(IrrigationType, EvapFracItem);
               end;
             end;
           end
@@ -2548,15 +2635,13 @@ begin
               if IrrigationType.EvapFraction.Count > 0 then
               begin
                 EvapFracItem := IrrigationType.EvapFraction.First as TEvapFractionItem;
-                Formula := EvapFracItem.SurfaceWaterLossFractionIrrigation;
-                WriteFloatValueFromGlobalFormula(Formula,
-                  IrrigationType, IrrigationType.Name);
               end
               else
               begin
-                WriteFloat(0.0);
+                EvapFracItem := nil;
               end;
               NewLine;
+              WriteEvapFractItem(IrrigationType, EvapFracItem);
             end;
           end;
         end;
@@ -2721,6 +2806,16 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.WriteAddedCropDemandFlux;
+begin
+
+end;
+
+procedure TModflowFmp4Writer.WriteAddedCropDemandRate;
+begin
+
+end;
+
 procedure TModflowFmp4Writer.WriteAddedDemand;
 var
   AFileName: string;
@@ -2813,7 +2908,23 @@ var
   IrrIndex: Integer;
   OFE: TFarmEfficienciesItem;
   OfeItem: TCropEfficiencyItem;
-  Formula: string;
+  procedure WriteItem(AFarm: TFarm; IrrIndex: Integer; OfeItem: TCropEfficiencyItem);
+  var
+    Formula: string;
+  begin
+    if OfeItem <> nil then
+    begin
+      Formula := OfeItem.Efficiency;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid Added Demand Runoff Split for %0:s in irrigation type %1:s.',
+        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]));
+    end
+    else
+    begin
+      WriteFloat(0.1);
+    end;
+  end;
+
 begin
   if FFarmProcess4.Added_Demand_Runoff_Split.FarmOption = foNotUsed then
   begin
@@ -2893,17 +3004,7 @@ begin
                 OFE := AFarm.AddedDemandRunoffSplitCollection[IrrIndex];
                 OfeItem := OFE.CropEfficiency.
                   ItemByStartTime(StartTime) as TCropEfficiencyItem;
-
-                if OfeItem <> nil then
-                begin
-                  Formula := OfeItem.Efficiency;
-                  WriteFloatValueFromGlobalFormula(Formula,
-                    AFarm, IrrigationTypes[IrrIndex].Name);
-                end
-                else
-                begin
-                  WriteFloat(0.1);
-                end;
+                WriteItem(AFarm, IrrIndex, OfeItem);
               end;
               Inc(FarmID);
               NewLine;
@@ -2938,14 +3039,12 @@ begin
               if OFE.CropEfficiency.Count > 0 then
               begin
                 OfeItem := OFE.CropEfficiency.First;
-                Formula := OfeItem.Efficiency;
-                WriteFloatValueFromGlobalFormula(Formula,
-                  AFarm, IrrigationTypes[IrrIndex].Name);
               end
               else
               begin
-                WriteFloat(0.1);
+                OfeItem := nil;
               end;
+              WriteItem(AFarm, IrrIndex, OfeItem);
             end;
             Inc(FarmID);
             NewLine;
@@ -3014,36 +3113,54 @@ begin
 
   AFileName := GetFileStreamName(wlBarePrecipitationConsumptionFraction);
 
-  if (FFarmProcess4.Bare_Precipitation_Consumption_Fraction.ArrayList = alArray) then
-  begin
-    RequiredValues.WriteLocation := wlBarePrecipitationConsumptionFraction;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
-    RequiredValues.ErrorID := 'FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
-    RequiredValues.ID := 'BARE_PRECIPITATION_CONSUMPTION_FRACTION';
-    RequiredValues.StaticDataName := KBarePrecipitationConsumptionFraction;
-    RequiredValues.WriteTransientData :=
-      (FFarmProcess4.Bare_Precipitation_Consumption_Fraction.FarmOption = foTransient);
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.CheckError := StrInvalidPrecipConsumpRunoff;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FFarmProcess4.Bare_Precipitation_Consumption_Fraction;
+  RequiredValues.WriteLocation := wlBarePrecipitationConsumptionFraction;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
+  RequiredValues.ErrorID := 'FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION';
+  RequiredValues.ID := 'BARE_PRECIPITATION_CONSUMPTION_FRACTION';
+  RequiredValues.StaticDataName := KBarePrecipitationConsumptionFraction;
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.Bare_Precipitation_Consumption_Fraction.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := StrInvalidPrecipConsumpRunoff;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FFarmProcess4.Bare_Precipitation_Consumption_Fraction;
 
-    WriteFmpArrayData(AFileName, RequiredValues);
-  end
-  else
-  begin
-
-  end;
+  WriteFmpArrayData(AFileName, RequiredValues);
 end;
 
 procedure TModflowFmp4Writer.WriteBareRunoffFraction;
 var
   AFileName: string;
   RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  OwhmItem: TOwhmItem;
+  procedure WriteItem(AFarm: TFarm; Item: TOwhmItem);
+  var
+    Formula: string;
+  begin
+    if Item <> nil then
+    begin
+      Formula := Item.OwhmValue;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        'Invalid bare runoff fraction formula in ' + AFarm.FarmName);
+    end
+    else
+    begin
+      WriteInteger(1);
+    end;
+  end;
 begin
   if FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foNotUsed then
   begin
@@ -3052,28 +3169,111 @@ begin
 
   AFileName := GetFileStreamName(wlBareRunoffFraction);
 
+  RequiredValues.WriteLocation := wlBareRunoffFraction;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: BARE_RUNOFF_FRACTION';
+  RequiredValues.ErrorID := 'FMP WBS: BARE_RUNOFF_FRACTION';
+  RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
+  RequiredValues.StaticDataName := KBareRunoffFraction;
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := StrInvalidBareRunoff;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FFarmProcess4.Bare_Runoff_Fraction;
+
   if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlBareRunoffFraction;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP WBS: BARE_RUNOFF_FRACTION';
-    RequiredValues.ErrorID := 'FMP WBS: BARE_RUNOFF_FRACTION';
-    RequiredValues.ID := 'BARE_RUNOFF_FRACTION';
-    RequiredValues.StaticDataName := KBareRunoffFraction;
-    RequiredValues.WriteTransientData :=
-      (FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foTransient);
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.CheckError := StrInvalidBareRunoff;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FFarmProcess4.Bare_Runoff_Fraction;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
   begin
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsAndID(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+    if ExternalFileName = '' then
+    begin
+      if RequiredValues.WriteTransientData then
+      begin
+        WriteString('TRANSIENT LIST DATAFILE ');
+      end
+      else
+      begin
+        WriteString('STATIC LIST DATAFILE ');
+      end;
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        if RequiredValues.WriteTransientData then
+        begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            FarmID := 1;
+            for FarmIndex := 0 to Model.Farms.Count - 1 do
+            begin
+              AFarm := Model.Farms[FarmIndex];
+              for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+              begin
+                WriteInteger(FarmID);
+                WriteInteger(1);
+                Inc(FarmID);
+                NewLine;
+              end;
+              Assert(FarmID = AFarm.FarmId);
+              WriteInteger(AFarm.FarmId);
+
+              OwhmItem := AFarm.BareRunoffFraction.ItemByStartTime(StartTime) as TOwhmItem;
+              WriteItem(AFarm, OwhmItem);
+
+              Inc(FarmID);
+              NewLine;
+            end;
+          end;
+        end
+        else
+        begin
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              WriteInteger(1);
+              Inc(FarmID);
+              NewLine;
+            end;
+
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            if AFarm.BareRunoffFraction.Count > 0 then
+            begin
+              OwhmItem := AFarm.BareRunoffFraction.First;
+            end
+            else
+            begin
+              OwhmItem := nil;
+            end;
+            WriteItem(AFarm, OwhmItem);
+
+            Inc(FarmID);
+            NewLine;
+          end;
+
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
 
   end;
 end;
@@ -3434,9 +3634,25 @@ var
   InnerFarmIndex: Integer;
   IrrIndex: Integer;
   OfeItem: TCropEfficiencyItem;
-  Formula: string;
   TimeIndex: Integer;
   StartTime: Double;
+  procedure WriteOnFarmEfficiency(
+    AFarm: TFarm; IrrIndex: Integer; OfeItem: TCropEfficiencyItem);
+  var
+    Formula: string;
+  begin
+    if OfeItem <> nil then
+    begin
+      Formula := OfeItem.Efficiency;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid efficiency for %0:s in irrigation type %1:s.',
+        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]));
+    end
+    else
+    begin
+      WriteFloat(1);
+    end;
+  end;
 begin
   if FFarmProcess4.EfficiencyOptions.FarmOption = foNotUsed then
   begin
@@ -3517,17 +3733,7 @@ begin
                 OFE := AFarm.FarmIrrigationEfficiencyCollection[IrrIndex];
                 OfeItem := OFE.CropEfficiency.
                   ItemByStartTime(StartTime) as TCropEfficiencyItem;
-
-                if OfeItem <> nil then
-                begin
-                  Formula := OfeItem.Efficiency;
-                  WriteFloatValueFromGlobalFormula(Formula,
-                    AFarm, IrrigationTypes[IrrIndex].Name);
-                end
-                else
-                begin
-                  WriteFloat(1);
-                end;
+                WriteOnFarmEfficiency(AFarm, IrrIndex, OfeItem);
               end;
               Inc(FarmID);
               NewLine;
@@ -3562,14 +3768,12 @@ begin
               if OFE.CropEfficiency.Count > 0 then
               begin
                 OfeItem := OFE.CropEfficiency.First;
-                Formula := OfeItem.Efficiency;
-                WriteFloatValueFromGlobalFormula(Formula,
-                  AFarm, IrrigationTypes[IrrIndex].Name);
               end
               else
               begin
-                WriteFloat(1);
+                OfeItem := nil;
               end;
+              WriteOnFarmEfficiency(AFarm, IrrIndex, OfeItem);
             end;
             Inc(FarmID);
             NewLine;
@@ -3601,7 +3805,22 @@ var
   IrrIndex: Integer;
   OFE: TFarmEfficienciesItem;
   OfeItem: TCropEfficiencyItem;
-  Formula: string;
+  procedure WriteFarmEfficiencyItem(AFarm: TFarm; IrrIndex: Integer; OfeItem: TCropEfficiencyItem);
+  var
+    Formula: string;
+  begin
+    if OfeItem <> nil then
+    begin
+      Formula := OfeItem.Efficiency;
+      WriteBooleanValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid efficiency improvement for %0:s in irrigation type %1:s.',
+        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]));
+    end
+    else
+    begin
+      WriteInteger(0);
+    end;
+  end;
 begin
   if FFarmProcess4.EfficiencyImprovement.FarmOption = foNotUsed then
   begin
@@ -3681,17 +3900,7 @@ begin
                 OFE := AFarm.FarmIrrigationEfficiencyImprovementCollection[IrrIndex];
                 OfeItem := OFE.CropEfficiency.
                   ItemByStartTime(StartTime) as TCropEfficiencyItem;
-
-                if OfeItem <> nil then
-                begin
-                  Formula := OfeItem.Efficiency;
-                  WriteBooleanValueFromGlobalFormula(Formula,
-                    AFarm, IrrigationTypes[IrrIndex].Name);
-                end
-                else
-                begin
-                  WriteInteger(0);
-                end;
+                WriteFarmEfficiencyItem(AFarm, IrrIndex, OfeItem);
               end;
               Inc(FarmID);
               NewLine;
@@ -3726,14 +3935,12 @@ begin
               if OFE.CropEfficiency.Count > 0 then
               begin
                 OfeItem := OFE.CropEfficiency.First;
-                Formula := OfeItem.Efficiency;
-                WriteBooleanValueFromGlobalFormula(Formula,
-                  AFarm, IrrigationTypes[IrrIndex].Name);
               end
               else
               begin
-                WriteInteger(0);
+                OfeItem := nil;
               end;
+              WriteFarmEfficiencyItem(AFarm, IrrIndex, OfeItem);
             end;
             Inc(FarmID);
             NewLine;
@@ -3765,6 +3972,22 @@ var
   IrrIndex: Integer;
   EvapFracItem: TEvapFractionItem;
   IrrigationType: TIrrigationItem;
+  procedure WriteEvapIrrigationItem(ACrop: TCropItem; IrregationItem: TCropIrrigationItem);
+  var
+    Formula: string;
+  begin
+    if IrregationItem <> nil then
+    begin
+      Formula := IrregationItem.EvapIrrigateFraction;
+      WriteFloatValueFromGlobalFormula(Formula, ACrop,
+        'Invalid Evaporation Irrigation Fraction in ' + ACrop.CropName);
+    end
+    else
+    begin
+      WriteFloat(0.0);
+    end;
+    NewLine;
+  end;
 begin
   if FLandUse.EvapIrrigationFraction.FarmOption = foNotUsed then
   begin
@@ -3865,18 +4088,7 @@ begin
                 WriteInteger(CropIndex+1);
                 IrregationItem := ACrop.IrrigationCollection.
                   ItemByStartTime(StartTime) as TCropIrrigationItem;
-
-                if IrregationItem <> nil then
-                begin
-                  Formula := IrregationItem.EvapIrrigateFraction;
-                  WriteFloatValueFromGlobalFormula(Formula,
-                    ACrop, ACrop.CropName);
-                end
-                else
-                begin
-                  WriteFloat(0.0);
-                end;
-                NewLine;
+                WriteEvapIrrigationItem(ACrop, IrregationItem);
               end;
             end;
           end
@@ -3889,15 +4101,13 @@ begin
               if ACrop.IrrigationCollection.Count > 0 then
               begin
                 IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
-                Formula := IrregationItem.EvapIrrigateFraction;
-                WriteFloatValueFromGlobalFormula(Formula,
-                  ACrop, ACrop.CropName);
               end
               else
               begin
-                WriteFloat(0.0);
+                IrregationItem := nil;
               end;
               NewLine;
+              WriteEvapIrrigationItem(ACrop, IrregationItem);
             end;
           end;
         end
@@ -4361,7 +4571,22 @@ var
   StartTime: Double;
   ACrop: TCropItem;
   IrregationItem: TCropIrrigationItem;
-  Formula: string;
+  procedure WriteIrrigationItem(ACrop: TCropItem; IrregationItem: TCropIrrigationItem);
+  var
+    Formula: string;
+  begin
+    if IrregationItem <> nil then
+    begin
+      Formula := IrregationItem.Irrigation;
+      WriteIntegerValueFromGlobalFormula(Formula, ACrop,
+        'Invalid Irrigation formula in ' + ACrop.CropName);
+    end
+    else
+    begin
+      WriteInteger(0);
+    end;
+    NewLine;
+  end;
 begin
   if FLandUse.Irrigation.FarmOption = foNotUsed then
   begin
@@ -4451,18 +4676,7 @@ begin
               WriteInteger(CropIndex+1);
               IrregationItem := ACrop.IrrigationCollection.
                 ItemByStartTime(StartTime) as TCropIrrigationItem;
-
-              if IrregationItem <> nil then
-              begin
-                Formula := IrregationItem.Irrigation;
-                WriteIntegerValueFromGlobalFormula(Formula,
-                  ACrop, ACrop.CropName);
-              end
-              else
-              begin
-                WriteInteger(0);
-              end;
-              NewLine;
+              WriteIrrigationItem(ACrop, IrregationItem);
             end;
           end;
         end
@@ -4475,15 +4689,12 @@ begin
             if ACrop.IrrigationCollection.Count > 0 then
             begin
               IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
-              Formula := IrregationItem.Irrigation;
-              WriteIntegerValueFromGlobalFormula(Formula,
-                ACrop, ACrop.CropName);
             end
             else
             begin
-              WriteInteger(0);
+              IrregationItem := nil;
             end;
-            NewLine;
+            WriteIrrigationItem(ACrop, IrregationItem);
           end;
         end;
       finally
@@ -4508,9 +4719,24 @@ var
   InnerFarmIndex: Integer;
   IrrIndex: Integer;
   OfeItem: TCropEfficiencyItem;
-  Formula: string;
   TimeIndex: Integer;
   StartTime: Double;
+  procedure WriteItem(AFarm: TFarm; IrrIndex: Integer; OfeItem: TCropEfficiencyItem);
+  var
+    Formula: string;
+  begin
+    if OfeItem <> nil then
+    begin
+      Formula := OfeItem.Efficiency;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid irrigation uniformity for farm %0:s in irrigation type %1:s.',
+        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]));
+    end
+    else
+    begin
+      WriteFloat(1);
+    end;
+  end;
 begin
   if FSalinityFlush.FarmIrrigationUniformityChoice.FarmOption = foNotUsed then
   begin
@@ -4585,17 +4811,7 @@ begin
               OFE := AFarm.IrrigationUniformity[IrrIndex];
               OfeItem := OFE.CropEfficiency.
                 ItemByStartTime(StartTime) as TCropEfficiencyItem;
-
-              if OfeItem <> nil then
-              begin
-                Formula := OfeItem.Efficiency;
-                WriteFloatValueFromGlobalFormula(Formula,
-                  AFarm, IrrigationTypes[IrrIndex].Name);
-              end
-              else
-              begin
-                WriteFloat(1);
-              end;
+              WriteItem(AFarm, IrrIndex, OfeItem);
             end;
             Inc(FarmID);
             NewLine;
@@ -4628,14 +4844,12 @@ begin
             if OFE.CropEfficiency.Count > 0 then
             begin
               OfeItem := OFE.CropEfficiency.First;
-              Formula := OfeItem.Efficiency;
-              WriteFloatValueFromGlobalFormula(Formula,
-                AFarm, IrrigationTypes[IrrIndex].Name);
             end
             else
             begin
-              WriteFloat(1);
+              OfeItem := nil;
             end;
+            WriteItem(AFarm, IrrIndex, OfeItem);
           end;
           Inc(FarmID);
           NewLine;
@@ -5519,6 +5733,11 @@ begin
           Assert(FDeficiencyScenarioFileStream <> nil);
           FDeficiencyScenarioFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlWaterSource:
+        begin
+          Assert(FWaterSourceFileStream <> nil);
+          FWaterSourceFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -5637,39 +5856,165 @@ begin
   WriteEfficiency;
   WriteEfficiencyImprovement;
   WriteDeficiencyScenario;
+  WriteProrateDeficiency;
 
-  if (FFarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed) then
-  begin
-    WriteString('  PRORATE_DEFICIENCY ');
-    case FFarmProcess4.ProrateDeficiency of
-      pdoByDemand:
-        begin
-          WriteString('ByDEMAND')
-        end;
-      pdoAverage:
-        begin
-          WriteString('ByAVERAGE')
-        end;
-      else
-        begin
-          Assert(False);
-        end;
-    end;
-    NewLine;
-  end;
+  WriteWaterSource;
 
-  // Water Source
-
-  WriteBareRunoffFraction;  // List
+  WriteBareRunoffFraction;
   WriteBarePrecipitationConsumptionFraction;
   WriteAddedDemandRunoffSplit;
 
+  WriteAddedCropDemandFlux;
+  WriteAddedCropDemandRate;
   // Added Crop Demand Flux
   // Added Crop Demand Rate
 
   WriteString('END WATER_BALANCE_SUBREGION');
   NewLine;
   NewLine;
+end;
+
+procedure TModflowFmp4Writer.WriteWaterSource;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  WaterSourceItem: TWaterSourceItem;
+  procedure WriteWaterSourceItem(AFarm: TFarm; WaterSourceItem: TWaterSourceItem);
+  var
+    Formula: string;
+  begin
+    if WaterSourceItem <> nil then
+    begin
+      Formula := WaterSourceItem.GroundWater;
+      WriteBooleanValueFromGlobalFormula(Formula, AFarm,
+        'Groundwater Water Source in ' + AFarm.FarmName);
+      Formula := WaterSourceItem.SurfaceWater;
+      WriteBooleanValueFromGlobalFormula(Formula, AFarm,
+        'Surface-Water Water Source in ' + AFarm.FarmName);
+      Formula := WaterSourceItem.NonRoutedDelivery;
+      WriteBooleanValueFromGlobalFormula(Formula, AFarm,
+        'Non-Rounted Delivery Water Source in ' + AFarm.FarmName);
+    end
+    else
+    begin
+      WriteInteger(0);
+      WriteInteger(0);
+      WriteInteger(0);
+    end;
+  end;
+begin
+  if FFarmProcess4.WaterSource.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  AFileName := GetFileStreamName(wlWaterSource);
+
+  RequiredValues.WriteLocation := wlWaterSource;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: WATERSOURCE';
+  RequiredValues.ErrorID := 'FMP WBS: WATERSOURCE';
+  RequiredValues.ID := 'WATERSOURCE';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.WaterSource.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := 'Invalid Water Source value';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FFarmProcess4.WaterSource;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsAndID(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+  if ExternalFileName = '' then
+  begin
+    if RequiredValues.WriteTransientData then
+    begin
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              WriteInteger(0);
+              WriteInteger(0);
+              WriteInteger(0);
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            WaterSourceItem := AFarm.WaterSource.ItemByStartTime(StartTime) as TWaterSourceItem;
+            WriteWaterSourceItem(AFarm, WaterSourceItem);
+
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          WaterSourceItem := AFarm.WaterSource.First;
+          WriteWaterSourceItem(AFarm, WaterSourceItem);
+
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
 end;
 
 end.

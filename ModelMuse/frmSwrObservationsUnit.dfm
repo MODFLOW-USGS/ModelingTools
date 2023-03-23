@@ -5,9 +5,8 @@ inherited frmSwrObservations: TfrmSwrObservations
   ClientHeight = 351
   ClientWidth = 630
   OnResize = FormResize
-  ExplicitWidth = 648
-  ExplicitHeight = 398
-  PixelsPerInch = 96
+  ExplicitWidth = 642
+  ExplicitHeight = 389
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -16,11 +15,13 @@ inherited frmSwrObservations: TfrmSwrObservations
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 308
+    ExplicitWidth = 626
     DesignSize = (
       630
       42)
     object btnHelp: TBitBtn
-      Left = 359
+      Left = 355
       Top = 6
       Width = 83
       Height = 33
@@ -28,9 +29,10 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 359
     end
     object btnOK: TBitBtn
-      Left = 448
+      Left = 444
       Top = 6
       Width = 83
       Height = 33
@@ -39,9 +41,10 @@ inherited frmSwrObservations: TfrmSwrObservations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 448
     end
     object btnCancel: TBitBtn
-      Left = 537
+      Left = 533
       Top = 6
       Width = 83
       Height = 33
@@ -49,6 +52,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 537
     end
   end
   inline frameObservations: TframeGrid
@@ -63,7 +67,7 @@ inherited frmSwrObservations: TfrmSwrObservations
     ExplicitHeight = 268
     inherited Panel: TPanel
       Top = 227
-      Width = 630
+      Width = 634
       ExplicitTop = 227
       ExplicitWidth = 630
       inherited lbNumber: TLabel
@@ -90,7 +94,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 630
+      Width = 634
       Height = 227
       ColCount = 6
       OnMouseUp = frameObservationsGridMouseUp
@@ -273,6 +277,7 @@ inherited frmSwrObservations: TfrmSwrObservations
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 626
     object comboType: TJvImageComboBox
       Left = 64
       Top = 7

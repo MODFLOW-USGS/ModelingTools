@@ -3,102 +3,87 @@ object frmRunModflow: TfrmRunModflow
   Top = 0
   BorderStyle = bsNone
   Caption = 'frmRunModflow'
-  ClientHeight = 238
-  ClientWidth = 459
+  ClientHeight = 190
+  ClientWidth = 367
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -14
+  Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   DesignSize = (
-    459
-    238)
-  PixelsPerInch = 120
-  TextHeight = 17
+    367
+    190)
+  TextHeight = 13
   object lblBasicComments: TLabel
-    Left = 8
-    Top = 103
-    Width = 132
-    Height = 17
+    Left = 6
+    Top = 82
+    Width = 103
+    Height = 13
+    Margins.Left = 2
+    Margins.Top = 2
+    Margins.Right = 2
+    Margins.Bottom = 2
     Caption = 'Description of Project'
   end
   object cbRun: TCheckBox
-    Left = 10
-    Top = 10
-    Width = 134
-    Height = 23
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Left = 8
+    Top = 8
+    Width = 107
+    Height = 18
     Caption = 'Execute model'
     Checked = True
     State = cbChecked
     TabOrder = 0
   end
   object comboModelSelection: TComboBox
-    Left = 136
-    Top = 8
-    Width = 315
-    Height = 25
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Left = 109
+    Top = 6
+    Width = 252
+    Height = 21
     Style = csDropDownList
     TabOrder = 1
   end
   object cbModpath: TCheckBox
-    Left = 10
-    Top = 43
-    Width = 211
-    Height = 22
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Left = 8
+    Top = 34
+    Width = 169
+    Height = 18
     Caption = 'Export MODPATH input'
     Checked = True
     State = cbChecked
     TabOrder = 2
   end
   object cbForceCBF: TCheckBox
-    Left = 218
-    Top = 43
-    Width = 248
-    Height = 22
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Left = 174
+    Top = 34
+    Width = 199
+    Height = 18
     Caption = 'Create new composite budget file'
     TabOrder = 3
   end
   object cbExportZoneBudget: TCheckBox
-    Left = 10
-    Top = 73
-    Width = 211
-    Height = 22
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Left = 8
+    Top = 58
+    Width = 169
+    Height = 18
     Caption = 'Export ZONEBUDGET input'
     Checked = True
     State = cbChecked
     TabOrder = 4
   end
   object memoComments: TMemo
-    Left = 8
-    Top = 123
-    Width = 443
-    Height = 107
+    Left = 6
+    Top = 98
+    Width = 355
+    Height = 86
+    Margins.Left = 2
+    Margins.Top = 2
+    Margins.Right = 2
+    Margins.Bottom = 2
     Anchors = [akLeft, akTop, akRight, akBottom]
     ScrollBars = ssBoth
     TabOrder = 5
     WordWrap = False
-    ExplicitWidth = 645
   end
 end
