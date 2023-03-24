@@ -8688,7 +8688,7 @@ var
 //  LayersToExport: array of Integer;
   CurrentLayer: Integer;
   LayerIndex: Integer;
-  Extension: string;
+//  Extension: string;
   FileName: TFileName;
   procedure ExportShapeFile(const FileName: string; Layer: Integer = -1);
   begin
@@ -13704,7 +13704,7 @@ begin
             Exit;
           end;
         end;
-        PilotPointsUsed := False;
+//        PilotPointsUsed := False;
         for ParamIndex := 0 to PhastModel.ModflowSteadyParameters.Count - 1 do
         begin
           AParam := PhastModel.ModflowSteadyParameters[ParamIndex];

@@ -4,10 +4,48 @@ interface
 
 uses
   OrderedCollectionUnit, ModflowBoundaryUnit, SysUtils, Classes,
-  ModflowFmpBaseClasses;
+  ModflowFmpBaseClasses, GoPhastTypes;
 
 type
   TSoilType = (stSandyLoam, stSilt, stSiltyClay, stOther);
+  TSoilMethod = (smConstant, smInterpolate, smStep, smNearest);
+
+  TLookupItem = class(TPhastCollectionItem)
+  private
+    FStoredLookupValue: TRealStorage;
+    FStoredReturnValue: TRealStorage;
+    function GetLookupValue: double;
+    function GetReturnValue: double;
+    procedure SetLookupValue(const Value: double);
+    procedure SetReturnValue(const Value: double);
+    procedure SetStoredLookupValue(const Value: TRealStorage);
+    procedure SetStoredReturnValue(const Value: TRealStorage);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    property LookupValue: double read GetLookupValue write SetLookupValue;
+    property ReturnValue: double read GetReturnValue write SetReturnValue;
+    function IsSame(OtherItem: TLookupItem): Boolean;
+  published
+    property StoredLookupValue: TRealStorage read FStoredLookupValue
+      write SetStoredLookupValue;
+    property StoredReturnValue: TRealStorage read FStoredReturnValue
+      write SetStoredReturnValue;
+  end;
+
+  TLookUpTable = class(TPhastCollection)
+  private
+    FMethod: TSoilMethod;
+    procedure SetMethod(const Value: TSoilMethod);
+    function GetItem(Index: Integer): TLookupItem;
+    procedure SetItem(Index: Integer; const Value: TLookupItem);
+  public
+    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    property Items[Index: Integer]:TLookupItem  read GetItem write SetItem; default;
+  published
+    property Method: TSoilMethod read FMethod write SetMethod;
+  end;
 
   TSoilItem = class(TCustomZeroFarmItem)
   private
@@ -18,23 +56,26 @@ type
     CCoeffPosition = 3;
     DCoeffPosition = 4;
     ECoeffPosition = 5;
+    SurfVKPosition = 6;
     var
     FSoilName: string;
     FSoilType: TSoilType;
-    function GetACoeff: string;
-    function GetBCoeff: string;
-    function GetCapillaryFringe: string;
-    function GetCCoeff: string;
-    function GetDCoeff: string;
-    function GetECoeff: string;
-    procedure SetACoeff(const Value: string);
-    procedure SetBCoeff(const Value: string);
-    procedure SetCapillaryFringe(const Value: string);
-    procedure SetCCoeff(const Value: string);
-    procedure SetDCoeff(const Value: string);
-    procedure SetECoeff(const Value: string);
+//    function GetCapillaryFringe: string;
+//    function GetACoeff: string;
+//    function GetBCoeff: string;
+//    function GetCCoeff: string;
+//    function GetDCoeff: string;
+//    function GetECoeff: string;
+//    procedure SetCapillaryFringe(const Value: string);
+//    procedure SetACoeff(const Value: string);
+//    procedure SetBCoeff(const Value: string);
+//    procedure SetCCoeff(const Value: string);
+//    procedure SetDCoeff(const Value: string);
+//    procedure SetECoeff(const Value: string);
+    FLookUpTable: TLookUpTable;
     procedure SetSoilName(Value: string);
     procedure SetSoilType(const Value: TSoilType);
+    procedure SetLookUpTable(const Value: TLookUpTable);
   protected
     // See @link(BoundaryFormula).
     function GetBoundaryFormula(Index: integer): string; override;
@@ -46,18 +87,43 @@ type
     procedure SetIndex(Value: Integer); override;
   public
     procedure Assign(Source: TPersistent); override;
+    constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
-
   published
     property SoilName: string read FSoilName write SetSoilName;
     property SoilType: TSoilType read FSoilType write SetSoilType;
-    property CapillaryFringe: string read GetCapillaryFringe write SetCapillaryFringe;
-    property ACoeff: string read GetACoeff write SetACoeff;
-    property BCoeff: string read GetBCoeff write SetBCoeff;
-    property CCoeff: string read GetCCoeff write SetCCoeff;
-    property DCoeff: string read GetDCoeff write SetDCoeff;
-    property ECoeff: string read GetECoeff write SetECoeff;
+    property CapillaryFringe: string index CapillaryFringePosition
+      read GetBoundaryFormula write SetBoundaryFormula;
+    property ACoeff: string index ACoeffPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property BCoeff: string index BCoeffPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property CCoeff: string index CCoeffPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property DCoeff: string index DCoeffPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property ECoeff: string index ECoeffPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property SurfVK: string index SurfVKPosition read GetBoundaryFormula
+      write SetBoundaryFormula
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property LookUpTable: TLookUpTable read FLookUpTable write SetLookUpTable
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
   end;
+
+//    CapillaryFringePosition =  0;
+//    ACoeffPosition = 1;
+//    BCoeffPosition = 2;
+//    CCoeffPosition = 3;
+//    DCoeffPosition = 4;
+//    ECoeffPosition = 5;
+
 
   TSoilRecord = record
     SoilID: integer;
@@ -90,19 +156,10 @@ implementation
 
 uses
   PhastModelUnit, ModflowPackageSelectionUnit, RbwParser, frmFormulaErrorsUnit,
-  GoPhastTypes, LockedGlobalVariableChangers;
+  LockedGlobalVariableChangers;
 
 resourcestring
   StrSoilVariable = 'Soil Variable';
-
-//const
-//  CapillaryFringePosition =  0;
-//  ACoeffPosition = 1;
-//  BCoeffPosition = 2;
-//  CCoeffPosition = 3;
-//  DCoeffPosition = 4;
-//  ECoeffPosition = 5;
-
 
 { TSoilItem }
 
@@ -121,15 +178,20 @@ end;
 
 function TSoilItem.BoundaryFormulaCount: integer;
 begin
-  result := 6
+  result := 7
+end;
+
+constructor TSoilItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FLookUpTable := TLookUpTable.Create(OnInvalidateModelEvent);
 end;
 
 destructor TSoilItem.Destroy;
 var
-//  LocalModel: TPhastModel;
-//  Position: integer;
   Unlocker: TDefineGlobalIntegerObject;
 begin
+  FLookUpTable.Free;
   if (Model <> nil) and (SoilName <> '')  then
   begin
     if ([csLoading, csDestroying] * Model.ComponentState) = [] then
@@ -142,70 +204,67 @@ begin
         Unlocker.Free;
       end;
     end;
-//    LocalModel := Model as TPhastModel;
-//    Position := LocalModel.GlobalVariables.IndexOfVariable(SoilName);
-//    if Position >= 0 then
-//    begin
-//      LocalModel.GlobalVariables.Delete(Position);
-//    end;
   end;
   inherited;
 end;
 
-function TSoilItem.GetACoeff: string;
-begin
-  Result := FFormulaObjects[ACoeffPosition].Formula;
-  ResetItemObserver(ACoeffPosition);
-end;
-
-function TSoilItem.GetBCoeff: string;
-begin
-  Result := FFormulaObjects[BCoeffPosition].Formula;
-  ResetItemObserver(BCoeffPosition);
-end;
+//function TSoilItem.GetACoeff: string;
+//begin
+//  Result := FFormulaObjects[ACoeffPosition].Formula;
+//  ResetItemObserver(ACoeffPosition);
+//end;
+//
+//function TSoilItem.GetBCoeff: string;
+//begin
+//  Result := FFormulaObjects[BCoeffPosition].Formula;
+//  ResetItemObserver(BCoeffPosition);
+//end;
 
 function TSoilItem.GetBoundaryFormula(Index: integer): string;
 begin
-  case Index of
-    CapillaryFringePosition:
-      result := CapillaryFringe;
-    ACoeffPosition:
-      result := ACoeff;
-    BCoeffPosition:
-      result := BCoeff;
-    CCoeffPosition:
-      result := CCoeff;
-    DCoeffPosition:
-      result := DCoeff;
-    ECoeffPosition:
-      result := ECoeff;
-    else Assert(False);
-  end;
+  Result := FFormulaObjects[Index].Formula;
+  ResetItemObserver(Index);
+
+//  case Index of
+//    CapillaryFringePosition:
+//      result := CapillaryFringe;
+//    ACoeffPosition:
+//      result := ACoeff;
+//    BCoeffPosition:
+//      result := BCoeff;
+//    CCoeffPosition:
+//      result := CCoeff;
+//    DCoeffPosition:
+//      result := DCoeff;
+//    ECoeffPosition:
+//      result := ECoeff;
+//    else Assert(False);
+//  end;
 end;
 
-function TSoilItem.GetCapillaryFringe: string;
-begin
-  Result := FFormulaObjects[CapillaryFringePosition].Formula;
-  ResetItemObserver(CapillaryFringePosition);
-end;
-
-function TSoilItem.GetCCoeff: string;
-begin
-  Result := FFormulaObjects[CCoeffPosition].Formula;
-  ResetItemObserver(CCoeffPosition);
-end;
-
-function TSoilItem.GetDCoeff: string;
-begin
-  Result := FFormulaObjects[DCoeffPosition].Formula;
-  ResetItemObserver(DCoeffPosition);
-end;
-
-function TSoilItem.GetECoeff: string;
-begin
-  Result := FFormulaObjects[ECoeffPosition].Formula;
-  ResetItemObserver(ECoeffPosition);
-end;
+//function TSoilItem.GetCapillaryFringe: string;
+//begin
+//  Result := FFormulaObjects[CapillaryFringePosition].Formula;
+//  ResetItemObserver(CapillaryFringePosition);
+//end;
+//
+//function TSoilItem.GetCCoeff: string;
+//begin
+//  Result := FFormulaObjects[CCoeffPosition].Formula;
+//  ResetItemObserver(CCoeffPosition);
+//end;
+//
+//function TSoilItem.GetDCoeff: string;
+//begin
+//  Result := FFormulaObjects[DCoeffPosition].Formula;
+//  ResetItemObserver(DCoeffPosition);
+//end;
+//
+//function TSoilItem.GetECoeff: string;
+//begin
+//  Result := FFormulaObjects[ECoeffPosition].Formula;
+//  ResetItemObserver(ECoeffPosition);
+//end;
 
 function TSoilItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
@@ -220,78 +279,82 @@ begin
   end;
 end;
 
-procedure TSoilItem.SetACoeff(const Value: string);
-begin
-  if FFormulaObjects[ACoeffPosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, ACoeffPosition, FFormulaObjects[ACoeffPosition]);
-  end;
-end;
-
-procedure TSoilItem.SetBCoeff(const Value: string);
-begin
-  if FFormulaObjects[BCoeffPosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, BCoeffPosition, FFormulaObjects[BCoeffPosition]);
-  end;
-end;
+//procedure TSoilItem.SetACoeff(const Value: string);
+//begin
+//  if FFormulaObjects[ACoeffPosition].Formula <> Value then
+//  begin
+//    UpdateFormulaBlocks(Value, ACoeffPosition, FFormulaObjects[ACoeffPosition]);
+//  end;
+//end;
+//
+//procedure TSoilItem.SetBCoeff(const Value: string);
+//begin
+//  if FFormulaObjects[BCoeffPosition].Formula <> Value then
+//  begin
+//    UpdateFormulaBlocks(Value, BCoeffPosition, FFormulaObjects[BCoeffPosition]);
+//  end;
+//end;
 
 procedure TSoilItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
-  case Index of
-    CapillaryFringePosition:
-      CapillaryFringe := Value;
-    ACoeffPosition:
-      ACoeff := Value;
-    BCoeffPosition:
-      BCoeff := Value;
-    CCoeffPosition:
-      CCoeff := Value;
-    DCoeffPosition:
-      DCoeff := Value;
-    ECoeffPosition:
-      ECoeff := Value;
-    else Assert(False);
+  if FFormulaObjects[Index].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, Index, FFormulaObjects[Index]);
   end;
+//  case Index of
+//    CapillaryFringePosition:
+//      CapillaryFringe := Value;
+//    ACoeffPosition:
+//      ACoeff := Value;
+//    BCoeffPosition:
+//      BCoeff := Value;
+//    CCoeffPosition:
+//      CCoeff := Value;
+//    DCoeffPosition:
+//      DCoeff := Value;
+//    ECoeffPosition:
+//      ECoeff := Value;
+//    else Assert(False);
+//  end;
 end;
 
-procedure TSoilItem.SetCapillaryFringe(const Value: string);
-begin
-  if FFormulaObjects[CapillaryFringePosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, CapillaryFringePosition, FFormulaObjects[CapillaryFringePosition]);
-  end;
-end;
-
-procedure TSoilItem.SetCCoeff(const Value: string);
-begin
-  if FFormulaObjects[CCoeffPosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, CCoeffPosition, FFormulaObjects[CCoeffPosition]);
-  end;
-end;
-
-procedure TSoilItem.SetDCoeff(const Value: string);
-begin
-  if FFormulaObjects[DCoeffPosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, DCoeffPosition, FFormulaObjects[DCoeffPosition]);
-  end;
-end;
-
-procedure TSoilItem.SetECoeff(const Value: string);
-begin
-  if FFormulaObjects[ECoeffPosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, ECoeffPosition, FFormulaObjects[ECoeffPosition]);
-  end;
-end;
+//procedure TSoilItem.SetCapillaryFringe(const Value: string);
+//begin
+//  if FFormulaObjects[CapillaryFringePosition].Formula <> Value then
+//  begin
+//    UpdateFormulaBlocks(Value, CapillaryFringePosition, FFormulaObjects[CapillaryFringePosition]);
+//  end;
+//end;
+//
+//procedure TSoilItem.SetCCoeff(const Value: string);
+//begin
+//  if FFormulaObjects[CCoeffPosition].Formula <> Value then
+//  begin
+//    UpdateFormulaBlocks(Value, CCoeffPosition, FFormulaObjects[CCoeffPosition]);
+//  end;
+//end;
+//
+//procedure TSoilItem.SetDCoeff(const Value: string);
+//begin
+//  if FFormulaObjects[DCoeffPosition].Formula <> Value then
+//  begin
+//    UpdateFormulaBlocks(Value, DCoeffPosition, FFormulaObjects[DCoeffPosition]);
+//  end;
+//end;
+//
+//procedure TSoilItem.SetECoeff(const Value: string);
+//begin
+//  if FFormulaObjects[ECoeffPosition].Formula <> Value then
+//  begin
+//    UpdateFormulaBlocks(Value, ECoeffPosition, FFormulaObjects[ECoeffPosition]);
+//  end;
+//end;
 
 procedure TSoilItem.SetIndex(Value: Integer);
 var
   ChangeGlobals: TDefineGlobalIntegerObject;
 begin
-  if {(Index <> Value) and} (Model <> nil) and (FSoilName <> '') then
+  if (Model <> nil) and (FSoilName <> '') then
   begin
     ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FSoilName, FSoilName,
       StrSoilVariable);
@@ -303,6 +366,11 @@ begin
   end;
   inherited;
 
+end;
+
+procedure TSoilItem.SetLookUpTable(const Value: TLookUpTable);
+begin
+  FLookUpTable.Assign(Value);
 end;
 
 procedure TSoilItem.SetSoilName(Value: string);
@@ -534,6 +602,102 @@ end;
 procedure TSoilCollection.SetItems(Index: Integer; const Value: TSoilItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+{ TLookupItem }
+
+procedure TLookupItem.Assign(Source: TPersistent);
+var
+  LuSource: TLookupItem;
+begin
+  if Source is TLookupItem then
+  begin
+    LuSource := TLookupItem(Source);
+    LookupValue := LuSource.LookupValue;
+    ReturnValue := LuSource.ReturnValue;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TLookupItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FStoredLookupValue := TRealStorage.Create(OnInvalidateModel);
+  FStoredReturnValue := TRealStorage.Create(OnInvalidateModel);
+  LookupValue := 0;
+  ReturnValue := 0;
+end;
+
+destructor TLookupItem.Destroy;
+begin
+  FStoredLookupValue.Free;
+  FStoredReturnValue.Free;
+  inherited;
+end;
+
+function TLookupItem.GetLookupValue: double;
+begin
+  result := StoredLookupValue.Value;
+end;
+
+function TLookupItem.GetReturnValue: double;
+begin
+  result := StoredReturnValue.Value;
+end;
+
+function TLookupItem.IsSame(OtherItem: TLookupItem): Boolean;
+begin
+  result := (LookupValue = OtherItem.LookupValue)
+    and (ReturnValue = OtherItem.ReturnValue)
+end;
+
+procedure TLookupItem.SetLookupValue(const Value: double);
+begin
+  StoredLookupValue.Value := Value;
+end;
+
+procedure TLookupItem.SetReturnValue(const Value: double);
+begin
+  StoredReturnValue.Value := Value;
+end;
+
+procedure TLookupItem.SetStoredLookupValue(const Value: TRealStorage);
+begin
+  FStoredLookupValue := Value;
+end;
+
+procedure TLookupItem.SetStoredReturnValue(const Value: TRealStorage);
+begin
+  FStoredReturnValue := Value;
+end;
+
+{ TLookUpTable }
+
+constructor TLookUpTable.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TLookupItem, InvalidateModelEvent);
+end;
+
+function TLookUpTable.GetItem(Index: Integer): TLookupItem;
+begin
+  result := inherited Items[index] as TLookupItem;
+end;
+
+procedure TLookUpTable.SetItem(Index: Integer; const Value: TLookupItem);
+begin
+  inherited Items[index] := Value;
+end;
+
+procedure TLookUpTable.SetMethod(const Value: TSoilMethod);
+begin
+  if FMethod <> Value then
+  begin
+    FMethod := Value;
+    InvalidateModel;
+  end;
 end;
 
 end.

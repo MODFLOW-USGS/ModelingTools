@@ -3854,8 +3854,11 @@ var
   // UpdateCellVariables stores the values of variables for DataSet
   // at the current location.  These may then be used in UpdateDataSet.
   begin
-    CellAnnotation := DataSet.Annotation[LayerIndex, RowIndex, ColIndex]
-      + '; t = ' + FloatToStr(Times[Index]);
+    if Times <> nil then
+    begin
+      CellAnnotation := DataSet.Annotation[LayerIndex, RowIndex, ColIndex]
+        + '; t = ' + FloatToStr(Times[Index]);
+    end;
     DataSet.Annotation[LayerIndex, RowIndex, ColIndex] := CellAnnotation;
     CellInterpolation := DataSet.IsInterpolatedCell[LayerIndex, RowIndex,
       ColIndex];

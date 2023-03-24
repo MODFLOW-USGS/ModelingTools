@@ -5197,12 +5197,20 @@ Type
       write SeAdded_Crop_Demand_Rate;
   end;
 
+  TPrecipPotConsum = (ppcLength, ppcFraction);
+
   TFarmProcess4Soil = class(TCustomFarm4)
   private
     FSurfVertK: TFarmProperty;
     FCapFringe: TFarmProperty;
+    FEffPrecipTable: TFarmProperty;
+    FEffPrecipTableOption: TPrecipPotConsum;
+    FCoefficient: TFarmProperty;
     procedure SetCapFringe(const Value: TFarmProperty);
     procedure SetSurfVertK(const Value: TFarmProperty);
+    procedure SetCoefficient(const Value: TFarmProperty);
+    procedure SetEffPrecipTable(const Value: TFarmProperty);
+    procedure SetEffPrecipTableOption(const Value: TPrecipPotConsum);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel);
@@ -5213,12 +5221,18 @@ Type
   published
     // CAPILLARY_FRINGE
     property CapFringe: TFarmProperty read FCapFringe write SetCapFringe;
+    // COEFFICIENT
+    property Coefficient: TFarmProperty read FCoefficient write SetCoefficient;
     // SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY
     property SurfVertK: TFarmProperty read FSurfVertK write SetSurfVertK;
+    // EFFECTIVE_PRECIPITATION_TABLE
+    property EffPrecipTable: TFarmProperty read FEffPrecipTable
+      write SetEffPrecipTable;
+    property EffPrecipTableOption: TPrecipPotConsum read FEffPrecipTableOption
+      write SetEffPrecipTableOption;
   end;
 
   TDirectRechargeOption = (droFlux, droRate);
-  TPrecipPotConsum = (ppcLength, ppcFraction);
 
   TFarmProcess4Climate = class(TCustomFarm4)
   private
@@ -29204,6 +29218,9 @@ begin
     Soil := TFarmProcess4Soil(Source);
     CapFringe := Soil.CapFringe;
     SurfVertK := Soil.SurfVertK;
+    Coefficient := Soil.Coefficient;
+    EffPrecipTable := Soil.EffPrecipTable;
+    EffPrecipTableOption := Soil.EffPrecipTableOption;
   end;
   inherited;
 end;
@@ -29232,12 +29249,16 @@ begin
 
   FCapFringe := TFarmProperty.Create(InvalidateEvent);
   FSurfVertK := TFarmProperty.Create(InvalidateEvent);
+  FCoefficient := TFarmProperty.Create(InvalidateEvent);
+  FEffPrecipTable := TFarmProperty.Create(InvalidateEvent);
 
   InitializeVariables;
 end;
 
 destructor TFarmProcess4Soil.Destroy;
 begin
+  FEffPrecipTable.Free;
+  FCoefficient.Free;
   FCapFringe.Free;
   FSurfVertK.Free;
   inherited;
@@ -29246,14 +29267,37 @@ end;
 procedure TFarmProcess4Soil.InitializeVariables;
 begin
   inherited;
+  FEffPrecipTable.Initialize;
   FCapFringe.Initialize;
   FSurfVertK.Initialize;
+  FCoefficient.Initialize;
+  FEffPrecipTableOption := ppcLength;
 end;
 
 procedure TFarmProcess4Soil.SetCapFringe(const Value: TFarmProperty);
 begin
   FCapFringe.Assign(Value);
 //  SetArrayListProperty(FCapFringeArrayList, Value);
+end;
+
+procedure TFarmProcess4Soil.SetCoefficient(const Value: TFarmProperty);
+begin
+  FCoefficient.Assign(Value);
+end;
+
+procedure TFarmProcess4Soil.SetEffPrecipTable(const Value: TFarmProperty);
+begin
+  FEffPrecipTable.Assign(Value);
+end;
+
+procedure TFarmProcess4Soil.SetEffPrecipTableOption(
+  const Value: TPrecipPotConsum);
+begin
+  if FEffPrecipTableOption <> Value then
+  begin
+    FEffPrecipTableOption := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TFarmProcess4Soil.SetSurfVertK(const Value: TFarmProperty);

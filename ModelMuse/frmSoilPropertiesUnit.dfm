@@ -3,15 +3,15 @@ inherited frmSoilProperties: TfrmSoilProperties
   HelpKeyword = 'Farm_Soil_Properties_Dialog_Bo'
   Caption = 'Farm Soil Properties'
   ClientHeight = 305
-  ClientWidth = 681
+  ClientWidth = 788
   OnResize = FormResize
-  ExplicitWidth = 693
+  ExplicitWidth = 800
   ExplicitHeight = 343
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
     Top = 261
-    Width = 681
+    Width = 788
     Height = 44
     Align = alBottom
     ParentColor = True
@@ -51,7 +51,7 @@ inherited frmSoilProperties: TfrmSoilProperties
   inline frameSoils: TframeFormulaGrid
     Left = 0
     Top = 0
-    Width = 681
+    Width = 788
     Height = 261
     Align = alClient
     TabOrder = 0
@@ -59,7 +59,7 @@ inherited frmSoilProperties: TfrmSoilProperties
     ExplicitHeight = 260
     inherited Panel: TPanel
       Top = 220
-      Width = 681
+      Width = 788
       ExplicitTop = 219
       ExplicitWidth = 677
       inherited lbNumber: TLabel
@@ -70,15 +70,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 356
+        Left = 409
         ExplicitLeft = 316
       end
       inherited sbInsert: TSpeedButton
-        Left = 422
+        Left = 485
         ExplicitLeft = 374
       end
       inherited sbDelete: TSpeedButton
-        Left = 486
+        Left = 557
         ExplicitLeft = 432
       end
       inherited seNumber: TJvSpinEdit
@@ -88,9 +88,9 @@ inherited frmSoilProperties: TfrmSoilProperties
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 681
+      Width = 788
       Height = 163
-      ColCount = 9
+      ColCount = 10
       FixedCols = 1
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor]
       OnMouseUp = frameSoilsGridMouseUp
@@ -153,6 +153,30 @@ inherited frmSoilProperties: TfrmSoilProperties
           AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -11
+          ButtonFont.Name = 'Tahoma'
+          ButtonFont.Style = []
+          ButtonUsed = True
+          ButtonWidth = 35
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = False
+          Format = rcf4String
+          LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
+          WordWrapCaptions = True
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+          AutoAdjustColWidths = False
+        end
+        item
+          AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
+          ButtonCaption = 'F()'
+          ButtonFont.Charset = ANSI_CHARSET
           ButtonFont.Color = clWindowText
           ButtonFont.Height = -11
           ButtonFont.Name = 'Tahoma'
@@ -325,7 +349,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       ExplicitHeight = 162
     end
     inherited pnlTop: TPanel
-      Width = 681
+      Width = 788
       ExplicitWidth = 677
       inherited edFormula: TLabeledEdit
         Height = 26

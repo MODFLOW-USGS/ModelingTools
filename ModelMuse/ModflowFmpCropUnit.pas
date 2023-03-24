@@ -1863,8 +1863,6 @@ begin
     Position := LocalModel.GlobalVariables.IndexOfVariable(CropName);
     if Position >= 0 then
     begin
-//      LocalModel.GlobalVariables.Delete(Position);
-
       if (not (csDestroying in LocalModel.ComponentState))
         and (not LocalModel.Clearing) then
       begin
@@ -1875,6 +1873,34 @@ begin
           for CropEffIndex := 0 to AFarm.FarmEfficiencyCollection.Count - 1 do
           begin
             AFarmEff := AFarm.FarmEfficiencyCollection[CropEffIndex];
+            if AFarmEff.CropEfficiency.CropName = FCropName then
+            begin
+              AFarmEff.Free;
+              break;
+            end;
+          end;
+        end;
+
+        for FarmIndex := 0 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[FarmIndex];
+          for CropEffIndex := 0 to AFarm.AddedCropDemandFlux.Count - 1 do
+          begin
+            AFarmEff := AFarm.AddedCropDemandFlux[CropEffIndex];
+            if AFarmEff.CropEfficiency.CropName = FCropName then
+            begin
+              AFarmEff.Free;
+              break;
+            end;
+          end;
+        end;
+
+        for FarmIndex := 0 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[FarmIndex];
+          for CropEffIndex := 0 to AFarm.AddedCropDemandRate.Count - 1 do
+          begin
+            AFarmEff := AFarm.AddedCropDemandRate[CropEffIndex];
             if AFarmEff.CropEfficiency.CropName = FCropName then
             begin
               AFarmEff.Free;
@@ -2511,6 +2537,52 @@ begin
             for CropEffIndex := 0 to AFarm.FarmEfficiencyCollection.Count - 1 do
             begin
               AFarmEff := AFarm.FarmEfficiencyCollection[CropEffIndex];
+              if AFarmEff.CropEfficiency.CropName = FCropName then
+              begin
+                AFarmEff.CropEfficiency.CropName := Value;
+                break;
+              end;
+            end;
+          end;
+        end;
+
+        for FarmIndex := 0 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[FarmIndex];
+          if FCropName = '' then
+          begin
+            AFarmEff := AFarm.AddedCropDemandFlux.Add;
+            AFarmEff.CropEfficiency.CropName := Value;
+            AFarmEff.Index := index;
+          end
+          else
+          begin
+            for CropEffIndex := 0 to AFarm.AddedCropDemandFlux.Count - 1 do
+            begin
+              AFarmEff := AFarm.AddedCropDemandFlux[CropEffIndex];
+              if AFarmEff.CropEfficiency.CropName = FCropName then
+              begin
+                AFarmEff.CropEfficiency.CropName := Value;
+                break;
+              end;
+            end;
+          end;
+        end;
+
+        for FarmIndex := 0 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[FarmIndex];
+          if FCropName = '' then
+          begin
+            AFarmEff := AFarm.AddedCropDemandRate.Add;
+            AFarmEff.CropEfficiency.CropName := Value;
+            AFarmEff.Index := index;
+          end
+          else
+          begin
+            for CropEffIndex := 0 to AFarm.AddedCropDemandRate.Count - 1 do
+            begin
+              AFarmEff := AFarm.AddedCropDemandRate[CropEffIndex];
               if AFarmEff.CropEfficiency.CropName = FCropName then
               begin
                 AFarmEff.CropEfficiency.CropName := Value;

@@ -7,7 +7,8 @@ uses
   System.Classes, System.Contnrs, Vcl.Forms, System.SysUtils,
   CustomModflowWriterUnit, PhastModelUnit, ModflowFmpWellUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, ScreenObjectUnit, ModflowBoundaryUnit, RbwParser,
-  DataSetUnit, OrderedCollectionUnit, GoPhastTypes, ModflowBoundaryDisplayUnit;
+  DataSetUnit, OrderedCollectionUnit, GoPhastTypes, ModflowBoundaryDisplayUnit,
+  ModflowFmpSoilUnit;
 
 type
   TWriteLocation = (wlMain, wlOpenClose, wlOFE, wlCID, wlFID, wlRoot, wlCropUse, wlETR,
@@ -21,7 +22,8 @@ type
     wlEvaporationIrrigationFraction, wlFractionOfPrecipToSurfaceWater,
     wlFractionOfIrrigToSurfaceWater, wlAddedDemand, wlCropHasSalinityDemand,
     wlAddedDemandRunoffSplit, wlIrrigationUniformity, wlDeficiencyScenario,
-    wlWaterSource);
+    wlWaterSource, wlAddedCropDemandFlux, wlAddedCropDemandRate,
+    wlPrecipicationTable);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -131,6 +133,10 @@ type
     FIrrigationUniformityFileStream: TFileStream;
     FDeficiencyScenarioFileStream: TFileStream;
     FWaterSourceFileStream: TFileStream;
+    FAddedCropDemandFluxFileStream: TFileStream;
+    FAddedCropDemandRateFileStream: TFileStream;
+    FFmpSoils: TSoilCollection;
+    FEffectivPrecipitationTableFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -185,10 +191,17 @@ type
 
 
     // ADDED_CROP_DEMAND FLUX
-    procedure WriteAddedCropDemandFlux; // finish list.
+    procedure WriteAddedCropDemandFlux;
 
     // ADDED_CROP_DEMAND Rate
-    procedure WriteAddedCropDemandRate; // finish list.
+    procedure WriteAddedCropDemandRate;
+
+    // soil
+    procedure WriteCapillaryFringe;
+    procedure WriteSoilID;
+    procedure WriteSoilCoefficient; // finish
+    procedure WriteSurfaceK;
+    procedure WriteEffectivePrecipitationTable; // finish
 
     // climate
     procedure EvaluateReferenceET;
@@ -266,11 +279,6 @@ type
     procedure EvaluateCropHasSalinityDemand;
     procedure WriteCropHasSalinityDemand; // finish list
 
-    // soil
-    procedure WriteCapillaryFringe;
-    procedure WriteSoilID;
-    procedure WriteSurfaceK;
-
     procedure FreeFileStreams;
     // wbs location
 //    procedure WriteDataSet26(TimeIndex: Integer);
@@ -299,7 +307,7 @@ type
     procedure GetScaleFactorsAndExternalFile(RequiredValues: TRequiredValues;
       var UnitConversionScaleFactor: string; var ExternalFileName: string;
       var ExternalScaleFileName: string);
-    procedure WriteScaleFactorsAndID(RequiredValues: TRequiredValues;
+    procedure WriteScaleFactorsID_andOption(RequiredValues: TRequiredValues;
       UnitConversionScaleFactor: string; ExternalScaleFileName: string);
     procedure WriteLandUseOption;
     procedure WriteSalinityFlushPrintOptions;
@@ -570,6 +578,7 @@ begin
   FSurfaceWater4 := Model.ModflowPackages.FarmSurfaceWater4;
   FSoils := Model.ModflowPackages.FarmSoil4;
   FSalinityFlush := Model.ModflowPackages.FarmSalinityFlush;
+  FFmpSoils := Model.FmpSoils;
 end;
 
 procedure TModflowFmp4Writer.WriteDeficiencyScenario;
@@ -607,8 +616,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlDeficiencyScenario);
-
   RequiredValues.WriteLocation := wlDeficiencyScenario;
   RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtInteger;
@@ -625,20 +632,32 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.DeficiencyScenario;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlDeficiencyScenario);
+  end;
+
   GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
     ExternalFileName, ExternalScaleFileName);
-  WriteScaleFactorsAndID(RequiredValues,
+  WriteScaleFactorsID_andOption(RequiredValues,
     UnitConversionScaleFactor, ExternalScaleFileName);
-  if ExternalFileName = '' then
+
+  if RequiredValues.WriteTransientData then
   begin
-    if RequiredValues.WriteTransientData then
-    begin
-      WriteString('TRANSIENT LIST DATAFILE ');
-    end
-    else
-    begin
-      WriteString('STATIC LIST DATAFILE ');
-    end;
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
     try
@@ -1059,6 +1078,9 @@ begin
   FreeAndNil(FIrrigationUniformityFileStream);
   FreeAndNil(FDeficiencyScenarioFileStream);
   FreeAndNil(FWaterSourceFileStream);
+  FreeAndNil(FAddedCropDemandFluxFileStream);
+  FreeAndNil(FAddedCropDemandRateFileStream);
+  FreeAndNil(FEffectivPrecipitationTableFileStream);
 
 end;
 
@@ -1389,6 +1411,33 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlAddedCropDemandFlux:
+      begin
+        result := ChangeFileExt(FBaseName, '.ADDED_CROP_DEMAND_FLUX');
+        if FAddedCropDemandFluxFileStream = nil then
+        begin
+          FAddedCropDemandFluxFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlAddedCropDemandRate:
+      begin
+        result := ChangeFileExt(FBaseName, '.ADDED_CROP_DEMAND_RATE');
+        if FAddedCropDemandRateFileStream = nil then
+        begin
+          FAddedCropDemandRateFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlPrecipicationTable:
+      begin
+        result := ChangeFileExt(FBaseName, '.EFFECTIVE_PRECIPITATION_TABLE');
+        if FEffectivPrecipitationTableFileStream = nil then
+        begin
+          FEffectivPrecipitationTableFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
 end;
@@ -1556,6 +1605,9 @@ begin
     wlIrrigationUniformity: ;
     wlDeficiencyScenario: ;
     wlWaterSource: ;
+    wlAddedCropDemandFlux: ;
+    wlAddedCropDemandRate: ;
+    wlPrecipicationTable: ;
     else Assert(False);
   end;
 end;
@@ -1609,6 +1661,9 @@ begin
     wlIrrigationUniformity: ;
     wlDeficiencyScenario: ;
     wlWaterSource: ;
+    wlAddedCropDemandFlux: ;
+    wlAddedCropDemandRate: ;
+    wlPrecipicationTable: ;
     else Assert(False)
   end;
 end;
@@ -1898,7 +1953,7 @@ begin
   end;
 end;
 
-procedure TModflowFmp4Writer.WriteScaleFactorsAndID(
+procedure TModflowFmp4Writer.WriteScaleFactorsID_andOption(
   RequiredValues: TRequiredValues; UnitConversionScaleFactor: string;
   ExternalScaleFileName: string);
 begin
@@ -1916,6 +1971,8 @@ begin
   end;
   WriteString('  ');
   WriteString(RequiredValues.ID);
+  WriteString(' ');
+  WriteString(RequiredValues.Option);
   WriteString(' ');
 end;
 
@@ -2354,18 +2411,21 @@ begin
 
   if RequiredValues.WriteTransientData then
   begin
-    WriteString('  ');
-    WriteString(RequiredValues.ID);
-    WriteString(' ');
-    if RequiredValues.Option <> '' then
-    begin
-      WriteString(RequiredValues.Option + ' ');
-    end;
+    WriteScaleFactorsID_andOption(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+//    WriteString('  ');
+//    WriteString(RequiredValues.ID);
+//    WriteString(' ');
+//    if RequiredValues.Option <> '' then
+//    begin
+//      WriteString(RequiredValues.Option + ' ');
+//    end;
     WriteString('TRANSIENT ARRAY DATAFILE ');
     if ExternalFileName <> '' then
     begin
-      WriteString(ExternalFileName);
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
       NewLine;
+      Exit;
     end
     else
     begin
@@ -2376,15 +2436,22 @@ begin
   end
   else
   begin
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
 
-    if RequiredValues.Option <> '' then
+//    if RequiredValues.Option <> '' then
+//    begin
+//      WriteString(RequiredValues.Option + ' ');
+//    end;
+//    DataArray := nil;
+    if ExternalFileName <> '' then
     begin
-      WriteString(RequiredValues.Option + ' ');
-    end;
-    DataArray := nil;
-    if ExternalFileName = '' then
+      WriteString('STATIC ARRAY DATAFILE ');
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
     begin
       DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
       Assert(DataArray <> nil);
@@ -2489,8 +2556,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlFractionOfIrrigToSurfaceWater);
-
   RequiredValues.WriteLocation := wlFractionOfIrrigToSurfaceWater;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -2514,6 +2579,11 @@ begin
     RequiredValues.Option := 'BY_CROP ';
   end;
   RequiredValues.FarmProperty := FLandUse.FractionOfIrrigationToSurfaceWater;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlFractionOfIrrigToSurfaceWater);
+  end;
 
   if (FLandUse.FractionOfIrrigationToSurfaceWater.ArrayList = alArray) then
   begin
@@ -2549,19 +2619,26 @@ begin
   begin
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-    WriteString(RequiredValues.Option);
-    if ExternalFileName = '' then
+//    WriteString(RequiredValues.Option);
+
+    if RequiredValues.WriteTransientData then
     begin
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteString('TRANSIENT LIST DATAFILE ');
-      end
-      else
-      begin
-        WriteString('STATIC LIST DATAFILE ');
-      end;
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+    end
+    else
+    begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
       try
@@ -2664,26 +2741,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlFractionOfPrecipToSurfaceWater);
+  RequiredValues.WriteLocation := wlFractionOfPrecipToSurfaceWater;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
+  RequiredValues.ErrorID := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
+  RequiredValues.ID := 'SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
+  RequiredValues.StaticDataName := KFractionOfPrecipToSurfaceWater;
+  RequiredValues.WriteTransientData :=
+    (FLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Fraction of Unconsumed Precip. to Surface Water value';
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.FractionOfPrecipToSurfaceWater;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlFractionOfPrecipToSurfaceWater);
+  end;
 
   if (FLandUse.FractionOfPrecipToSurfaceWater.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlFractionOfPrecipToSurfaceWater;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
-    RequiredValues.ErrorID := 'FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
-    RequiredValues.ID := 'SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
-    RequiredValues.StaticDataName := KFractionOfPrecipToSurfaceWater;
-    RequiredValues.WriteTransientData :=
-      (FLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Fraction of Unconsumed Precip. to Surface Water value';
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FLandUse.FractionOfPrecipToSurfaceWater;
-
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -2807,13 +2887,343 @@ begin
 end;
 
 procedure TModflowFmp4Writer.WriteAddedCropDemandFlux;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  OfeItem: TCropEfficiencyItem;
+  CropIndex: Integer;
+  FmpCrops: TCropCollection;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  OFE: TFarmEfficienciesItem;
+  procedure WriteItem(AFarm: TFarm; CropIndex: Integer; OfeItem: TCropEfficiencyItem);
+  var
+    Formula: string;
+    ACrop: TCropItem;
+  begin
+    if OfeItem <> nil then
+    begin
+      ACrop := FmpCrops[CropIndex];
+      Formula := OfeItem.Efficiency;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid Added Crop Demand Flux in Farm %0:s for crop %1:s.',
+        [AFarm.FarmName, ACrop.CropName]));
+    end
+    else
+    begin
+      WriteFloat(RequiredValues.DefaultValue);
+    end;
+  end;
 begin
+  if FFarmProcess4.Added_Crop_Demand_Flux.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
 
+  RequiredValues.WriteLocation := wlAddedCropDemandFlux;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: : ADDED_CROP_DEMAND';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_CROP_DEMAND';
+  RequiredValues.ID := 'ADDED_CROP_DEMAND';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.Added_Crop_Demand_Flux.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Added_Crop_Demand Flux value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := 'FLUX ';
+  RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Flux;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlAddedCropDemandFlux);
+  end;
+
+  FmpCrops := Model.FmpCrops;
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+//    WriteString(RequiredValues.Option);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for CropIndex := 0 to FmpCrops.Count - 1 do
+              begin
+                WriteFloat(RequiredValues.DefaultValue);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(AFarm.AddedCropDemandFlux.Count
+              = FmpCrops.Count);
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+            for CropIndex := 0 to AFarm.AddedCropDemandFlux.Count - 1 do
+            begin
+              OFE := AFarm.AddedCropDemandFlux[CropIndex];
+              OfeItem := OFE.CropEfficiency.
+                ItemByStartTime(StartTime) as TCropEfficiencyItem;
+              WriteItem(AFarm, CropIndex, OfeItem);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for CropIndex := 0 to FmpCrops.Count - 1 do
+            begin
+              WriteFloat(RequiredValues.DefaultValue);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+          Assert(AFarm.AddedCropDemandFlux.Count
+            = FmpCrops.Count);
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+          for CropIndex := 0 to AFarm.AddedCropDemandFlux.Count - 1 do
+          begin
+            OFE := AFarm.AddedCropDemandFlux[CropIndex];
+            if OFE.CropEfficiency.Count > 0 then
+            begin
+              OfeItem := OFE.CropEfficiency.First;
+            end
+            else
+            begin
+              OfeItem := nil;
+            end;
+            WriteItem(AFarm, CropIndex, OfeItem);
+          end;
+          Inc(FarmID);
+          NewLine;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteAddedCropDemandRate;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  OfeItem: TCropEfficiencyItem;
+  CropIndex: Integer;
+  FmpCrops: TCropCollection;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  OFE: TFarmEfficienciesItem;
+  procedure WriteItem(AFarm: TFarm; CropIndex: Integer; OfeItem: TCropEfficiencyItem);
+  var
+    Formula: string;
+    ACrop: TCropItem;
+  begin
+    if OfeItem <> nil then
+    begin
+      ACrop := FmpCrops[CropIndex];
+      Formula := OfeItem.Efficiency;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid Added Crop Demand Rate in Farm %0:s for crop %1:s.',
+        [AFarm.FarmName, ACrop.CropName]));
+    end
+    else
+    begin
+      WriteFloat(RequiredValues.DefaultValue);
+    end;
+  end;
 begin
+  if FFarmProcess4.Added_Crop_Demand_Rate.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
 
+  RequiredValues.WriteLocation := wlAddedCropDemandRate;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: : ADDED_CROP_DEMAND';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_CROP_DEMAND';
+  RequiredValues.ID := 'ADDED_CROP_DEMAND';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.Added_Crop_Demand_Rate.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Added_Crop_Demand rate value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := 'RATE ';
+  RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Rate;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlAddedCropDemandRate);
+  end;
+
+  FmpCrops := Model.FmpCrops;
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+//    WriteString(RequiredValues.Option);
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for CropIndex := 0 to FmpCrops.Count - 1 do
+              begin
+                WriteFloat(RequiredValues.DefaultValue);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(AFarm.AddedCropDemandRate.Count
+              = FmpCrops.Count);
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+            for CropIndex := 0 to AFarm.AddedCropDemandRate.Count - 1 do
+            begin
+              OFE := AFarm.AddedCropDemandRate[CropIndex];
+              OfeItem := OFE.CropEfficiency.
+                ItemByStartTime(StartTime) as TCropEfficiencyItem;
+              WriteItem(AFarm, CropIndex, OfeItem);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for CropIndex := 0 to FmpCrops.Count - 1 do
+            begin
+              WriteFloat(RequiredValues.DefaultValue);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+          Assert(AFarm.AddedCropDemandRate.Count
+            = FmpCrops.Count);
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+          for CropIndex := 0 to AFarm.AddedCropDemandRate.Count - 1 do
+          begin
+            OFE := AFarm.AddedCropDemandRate[CropIndex];
+            if OFE.CropEfficiency.Count > 0 then
+            begin
+              OfeItem := OFE.CropEfficiency.First;
+            end
+            else
+            begin
+              OfeItem := nil;
+            end;
+            WriteItem(AFarm, CropIndex, OfeItem);
+          end;
+          Inc(FarmID);
+          NewLine;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteAddedDemand;
@@ -2828,35 +3238,38 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlAddedDemand);
+  RequiredValues.WriteLocation := wlAddedDemand;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: ADDED_DEMAND';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_DEMAND';
+  RequiredValues.ID := 'ADDED_DEMAND';
+  RequiredValues.StaticDataName := KAddedDemand;
+  RequiredValues.WriteTransientData :=
+    (FLandUse.AddedDemand.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Added Demand value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  case FLandUse.AddedDemandOption of
+    doLength:
+      begin
+        RequiredValues.Option := 'LENGTH';
+      end;
+    doRate:
+      begin
+        RequiredValues.Option := 'RATE';
+      end;
+  end;
+  RequiredValues.FarmProperty := FLandUse.AddedDemand;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlAddedDemand);
+  end;
 
   if (FLandUse.AddedDemand.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlAddedDemand;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: ADDED_DEMAND';
-    RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_DEMAND';
-    RequiredValues.ID := 'ADDED_DEMAND';
-    RequiredValues.StaticDataName := KAddedDemand;
-    RequiredValues.WriteTransientData :=
-      (FLandUse.AddedDemand.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Added Demand value';
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    case FLandUse.AddedDemandOption of
-      doLength:
-        begin
-          RequiredValues.Option := 'LENGTH';
-        end;
-      doRate:
-        begin
-          RequiredValues.Option := 'RATE';
-        end;
-    end;
-    RequiredValues.FarmProperty := FLandUse.AddedDemand;
-
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -2931,8 +3344,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlAddedDemandRunoffSplit);
-
   RequiredValues.WriteLocation := wlAddedDemandRunoffSplit;
   RequiredValues.DefaultValue := 0.1;
   RequiredValues.DataType := rdtDouble;
@@ -2949,6 +3360,11 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.Added_Demand_Runoff_Split;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlAddedDemandRunoffSplit);
+  end;
+
   if (FFarmProcess4.Added_Demand_Runoff_Split.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
@@ -2958,18 +3374,26 @@ begin
     IrrigationTypes := Model.IrrigationTypes;
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-    if ExternalFileName = '' then
+
+    if RequiredValues.WriteTransientData then
     begin
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteString('TRANSIENT LIST DATAFILE ');
-      end
-      else
-      begin
-        WriteString('STATIC LIST DATAFILE ');
-      end;
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
       try
@@ -3073,26 +3497,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlBareEvap);
+  RequiredValues.WriteLocation := wlBareEvap;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
+  RequiredValues.ErrorID := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
+  RequiredValues.ID := 'POTENTIAL_EVAPORATION_BARE';
+  RequiredValues.StaticDataName := KPotential_Evap_Bare;
+  RequiredValues.WriteTransientData :=
+    (FClimatePackage.Potential_Evaporation_Bare.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := StrInvalidPotentialEv;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FClimatePackage.Potential_Evaporation_Bare;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlBareEvap);
+  end;
 
   if (FClimatePackage.Potential_Evaporation_Bare.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlBareEvap;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
-    RequiredValues.ErrorID := 'FMP CLIMATE: POTENTIAL_EVAPORATION_BARE';
-    RequiredValues.ID := 'POTENTIAL_EVAPORATION_BARE';
-    RequiredValues.StaticDataName := KPotential_Evap_Bare;
-    RequiredValues.WriteTransientData :=
-      (FClimatePackage.Potential_Evaporation_Bare.FarmOption = foTransient);
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.CheckError := StrInvalidPotentialEv;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FClimatePackage.Potential_Evaporation_Bare;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
@@ -3111,8 +3538,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlBarePrecipitationConsumptionFraction);
-
   RequiredValues.WriteLocation := wlBarePrecipitationConsumptionFraction;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -3128,6 +3553,11 @@ begin
   RequiredValues.CheckError := StrInvalidPrecipConsumpRunoff;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.Bare_Precipitation_Consumption_Fraction;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlBarePrecipitationConsumptionFraction);
+  end;
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -3167,8 +3597,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlBareRunoffFraction);
-
   RequiredValues.WriteLocation := wlBareRunoffFraction;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -3185,6 +3613,11 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.Bare_Runoff_Fraction;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlBareRunoffFraction);
+  end;
+
   if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
@@ -3193,18 +3626,24 @@ begin
   begin
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-    if ExternalFileName = '' then
+    if RequiredValues.WriteTransientData then
     begin
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteString('TRANSIENT LIST DATAFILE ');
-      end
-      else
-      begin
-        WriteString('STATIC LIST DATAFILE ');
-      end;
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
       try
@@ -3282,36 +3721,76 @@ procedure TModflowFmp4Writer.WriteCapillaryFringe;
 var
   AFileName: string;
   RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  Formula: string;
+  SoilIndex: Integer;
+  SoilID: Integer;
+  ASoil: TSoilItem;
 begin
   if FSoil4.CapFringe.FarmOption = foNotUsed then
   begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlCapillaryFringe);
+  RequiredValues.WriteLocation := wlCapillaryFringe;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SOIL: CAPILLARY_FRINGE';
+  RequiredValues.ErrorID := 'FMP SOIL: CAPILLARY_FRINGE';
+  RequiredValues.ID := 'CAPILLARY_FRINGE';
+  RequiredValues.StaticDataName := KCapillary_Fringe;
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := StrInvalidCapillaryFringe;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSoil4.CapFringe;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlCapillaryFringe);
+  end;
 
   if (FSoil4.CapFringe.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlCapillaryFringe;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP SOIL: CAPILLARY_FRINGE';
-    RequiredValues.ErrorID := 'FMP SOIL: CAPILLARY_FRINGE';
-    RequiredValues.ID := 'CAPILLARY_FRINGE';
-    RequiredValues.StaticDataName := KCapillary_Fringe;
-    RequiredValues.WriteTransientData := False;
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.CheckError := StrInvalidCapillaryFringe;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FSoil4.CapFringe;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
   begin
-
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsID_andOption(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+    WriteString('STATIC LIST DATAFILE ');
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        for SoilIndex := 0 to FFmpSoils.Count - 1 do
+        begin
+          ASoil := FFmpSoils[SoilIndex];
+          SoilID := SoilIndex + 1;
+          WriteInteger(SoilID);
+          Formula := ASoil.CapillaryFringe;
+          WriteFloatValueFromGlobalFormula(Formula, ASoil,
+            'Invalid formula for capillary fringe in soil ' + ASoil.SoilName);
+          NewLine;
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
   end;
 end;
 
@@ -3392,26 +3871,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlConsumptiveUse);
+  RequiredValues.WriteLocation := wlConsumptiveUse;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: CONSUMPTIVE_USE';
+  RequiredValues.ErrorID := 'FMP LAND_USE: CONSUMPTIVE_USE';
+  RequiredValues.ID := 'CONSUMPTIVE_USE';
+  RequiredValues.StaticDataName := KConsumptiveUse;
+  RequiredValues.WriteTransientData :=
+    (FLandUse.ConsumptiveUse.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Consumptive Use value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.ConsumptiveUse;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlConsumptiveUse);
+  end;
 
   if (FLandUse.ConsumptiveUse.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlConsumptiveUse;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: CONSUMPTIVE_USE';
-    RequiredValues.ErrorID := 'FMP LAND_USE: CONSUMPTIVE_USE';
-    RequiredValues.ID := 'CONSUMPTIVE_USE';
-    RequiredValues.StaticDataName := KConsumptiveUse;
-    RequiredValues.WriteTransientData :=
-      (FLandUse.ConsumptiveUse.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Consumptive Use value';
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FLandUse.ConsumptiveUse;
-
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -3458,26 +3940,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlCropCoefficient);
+  RequiredValues.WriteLocation := wlCropCoefficient;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: CROP_COEFFICIENT';
+  RequiredValues.ErrorID := 'FMP LAND_USE: CROP_COEFFICIENT';
+  RequiredValues.ID := 'CROP_COEFFICIENT';
+  RequiredValues.StaticDataName := KCropCoefficient;
+  RequiredValues.WriteTransientData :=
+    (FLandUse.CropCoeff.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Crop Coefficient value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.CropCoeff;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlCropCoefficient);
+  end;
 
   if (FLandUse.CropCoeff.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlCropCoefficient;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: CROP_COEFFICIENT';
-    RequiredValues.ErrorID := 'FMP LAND_USE: CROP_COEFFICIENT';
-    RequiredValues.ID := 'CROP_COEFFICIENT';
-    RequiredValues.StaticDataName := KCropCoefficient;
-    RequiredValues.WriteTransientData :=
-      (FLandUse.CropCoeff.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Crop Coefficient value';
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FLandUse.CropCoeff;
-
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -3524,26 +4009,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlCropHasSalinityDemand);
+  RequiredValues.WriteLocation := wlCropHasSalinityDemand;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtBoolean;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND';
+  RequiredValues.ErrorID := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND';
+  RequiredValues.ID := 'CROP_HAS_SALINITY_DEMAND';
+  RequiredValues.StaticDataName := KCropHasSalinityDemand;
+  RequiredValues.WriteTransientData :=
+    (FSalinityFlush.CropSalinityDemandChoice.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Crop has Irrigation Demand value';
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSalinityFlush.CropSalinityDemandChoice;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlCropHasSalinityDemand);
+  end;
 
   if (FSalinityFlush.CropSalinityDemandChoice.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlCropHasSalinityDemand;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtBoolean;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND';
-    RequiredValues.ErrorID := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND';
-    RequiredValues.ID := 'CROP_HAS_SALINITY_DEMAND';
-    RequiredValues.StaticDataName := KCropHasSalinityDemand;
-    RequiredValues.WriteTransientData :=
-      (FSalinityFlush.CropSalinityDemandChoice.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Crop has Irrigation Demand value';
-    RequiredValues.CheckProcedure := nil;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FSalinityFlush.CropSalinityDemandChoice;
-
     if FSalinityFlush.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -3588,34 +4076,152 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlDirectRecharge);
+  RequiredValues.WriteLocation := wlDirectRecharge;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP CLIMATE: DIRECT_RECHARGE';
+  RequiredValues.ErrorID := 'FMP CLIMATE: DIRECT_RECHARGE';
+  RequiredValues.ID := 'DIRECT_RECHARGE';
+  RequiredValues.StaticDataName := KDirectRecharge;
+  RequiredValues.WriteTransientData :=
+    (FClimatePackage.Direct_Recharge.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError :=  'Invalid Direct Recharge value';
+  case FClimatePackage.DirectRechargeOption of
+    droFlux: RequiredValues.Option := 'FLUX';
+    droRate: RequiredValues.Option := 'RATE';
+  end;
+  RequiredValues.FarmProperty := FClimatePackage.Direct_Recharge;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlDirectRecharge);
+  end;
 
   if (FClimatePackage.Direct_Recharge.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlDirectRecharge;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP CLIMATE: DIRECT_RECHARGE';
-    RequiredValues.ErrorID := 'FMP CLIMATE: DIRECT_RECHARGE';
-    RequiredValues.ID := 'DIRECT_RECHARGE';
-    RequiredValues.StaticDataName := KDirectRecharge;
-    RequiredValues.WriteTransientData :=
-      (FClimatePackage.Direct_Recharge.FarmOption = foTransient);
-    RequiredValues.CheckProcedure := nil;
-    RequiredValues.CheckError :=  'Invalid Direct Recharge value';
-    case FClimatePackage.DirectRechargeOption of
-      droFlux: RequiredValues.Option := 'FLUX';
-      droRate: RequiredValues.Option := 'RATE';
-    end;
-    RequiredValues.FarmProperty := FClimatePackage.Direct_Recharge;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
   begin
     Assert(False);
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteEffectivePrecipitationTable;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  Formula: string;
+  SoilIndex: Integer;
+  SoilID: Integer;
+  LookUpTable: TLookUpTable;
+  Item: TLookupItem;
+  ItemIndex: Integer;
+begin
+  if FSoil4.CapFringe.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlPrecipicationTable;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SOIL: EFFECTIVE_PRECIPITATION_TABLE';
+  RequiredValues.ErrorID := 'FMP SOIL: EFFECTIVE_PRECIPITATION_TABLE';
+  RequiredValues.ID := 'EFFECTIVE_PRECIPITATION_TABLE';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := 'Invalid precipitation value';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSoil4.EffPrecipTable;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlPrecipicationTable);
+  end;
+
+  begin
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsID_andOption(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+    WriteString('STATIC LIST DATAFILE ');
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        for SoilIndex := 0 to FFmpSoils.Count - 1 do
+        begin
+          LookUpTable := FFmpSoils[SoilIndex].LookUpTable;
+          SoilID := SoilIndex + 1;
+          WriteInteger(SoilID);
+          if LookUpTable.Method = smConstant then
+          begin
+            WriteString(' CONSTANT');
+            if LookUpTable.Count > 0 then
+            begin
+              Item := LookUpTable.First as TLookupItem;
+              WriteFloat(Item.ReturnValue);
+            end
+            else
+            begin
+              WriteFloat(0);
+            end;
+            NewLine;
+          end
+          else
+          begin
+            case LookUpTable.Method of
+              smInterpolate:
+                begin
+                  WriteString(' INTERPOLATE');
+                end;
+              smStep:
+                begin
+                  WriteString(' STEP_FUNCTION');
+                end;
+              smNearest:
+                begin
+                  WriteString(' NEAREST');
+                end;
+              else
+                Assert(False);
+            end;
+            WriteInteger(LookUpTable.Count);
+            WriteString(' INTERNAL');
+            NewLine;
+            for ItemIndex := 0 to LookUpTable.Count - 1 do
+            begin
+              Item := LookUpTable[ItemIndex];
+              WriteFloat(Item.LookupValue);
+              WriteFloat(Item.ReturnValue);
+              NewLine;
+            end;
+          end;
+
+          NewLine;
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
   end;
 end;
 
@@ -3659,8 +4265,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlEfficiency);
-
   RequiredValues.WriteLocation := wlEfficiency;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -3677,6 +4281,11 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.EfficiencyOptions;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlEfficiency);
+  end;
+
   if (FFarmProcess4.EfficiencyOptions.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
@@ -3686,18 +4295,26 @@ begin
     IrrigationTypes := Model.IrrigationTypes;
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-    if ExternalFileName = '' then
+
+    if RequiredValues.WriteTransientData then
     begin
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteString('TRANSIENT LIST DATAFILE ');
-      end
-      else
-      begin
-        WriteString('STATIC LIST DATAFILE ');
-      end;
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
       try
@@ -3827,8 +4444,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlEfficiencyImprovement);
-
   RequiredValues.WriteLocation := wlEfficiencyImprovement;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtInteger;
@@ -3845,6 +4460,11 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.EfficiencyImprovement;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlEfficiencyImprovement);
+  end;
+
   if (FFarmProcess4.EfficiencyImprovement.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
@@ -3854,18 +4474,26 @@ begin
     IrrigationTypes := Model.IrrigationTypes;
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-    if ExternalFileName = '' then
+
+    if RequiredValues.WriteTransientData then
     begin
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteString('TRANSIENT LIST DATAFILE ');
-      end
-      else
-      begin
-        WriteString('STATIC LIST DATAFILE ');
-      end;
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
       try
@@ -3994,8 +4622,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlEvaporationIrrigationFraction);
-
   RequiredValues.WriteLocation := wlEvaporationIrrigationFraction;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -4019,6 +4645,11 @@ begin
     RequiredValues.Option := 'BY_CROP ';
   end;
   RequiredValues.FarmProperty := FLandUse.EvapIrrigationFraction;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlEvaporationIrrigationFraction);
+  end;
 
   if (FLandUse.EvapIrrigationFraction.ArrayList = alArray) then
   begin
@@ -4054,19 +4685,27 @@ begin
   begin
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-    WriteString(RequiredValues.Option);
-    if ExternalFileName = '' then
+//    WriteString(RequiredValues.Option);
+
+    if RequiredValues.WriteTransientData then
     begin
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteString('TRANSIENT LIST DATAFILE ');
-      end
-      else
-      begin
-        WriteString('STATIC LIST DATAFILE ');
-      end;
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
       try
@@ -4176,25 +4815,25 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
 begin
+  RequiredValues.WriteLocation := wlCID;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: Location';
+  RequiredValues.ErrorID := 'FMP LAND_USE: Location';
+  RequiredValues.ID := 'LOCATION';
+  RequiredValues.StaticDataName := KLand_Use_ID;
+  RequiredValues.WriteTransientData := FLandUse.CropLocation = rstTransient;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := StrInvalidCropIDInF;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
+
   AFileName := GetFileStreamName(wlCID);
 
   if FLandUse.LandUseOption = luoSingle then
   begin
-    RequiredValues.WriteLocation := wlCID;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtInteger;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: Location';
-    RequiredValues.ErrorID := 'FMP LAND_USE: Location';
-    RequiredValues.ID := 'LOCATION';
-    RequiredValues.StaticDataName := KLand_Use_ID;
-    RequiredValues.WriteTransientData := FLandUse.CropLocation = rstTransient;
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.CheckError := StrInvalidCropIDInF;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := nil;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end;
 end;
@@ -4209,26 +4848,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlNrdInfilLoc);
+  RequiredValues.WriteLocation := wlNrdInfilLoc;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
+  RequiredValues.ErrorID := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
+  RequiredValues.ID := 'NRD_INFILTRATION_LOCATION';
+  RequiredValues.StaticDataName := KNRD_Infiltration_Location;
+  RequiredValues.WriteTransientData :=
+    (FSurfaceWater4.Nrd_Infiltration_Location.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Non-Routed Delivery Infiltration Location value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrGETen;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSurfaceWater4.Nrd_Infiltration_Location;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlNrdInfilLoc);
+  end;
 
   if (FSurfaceWater4.Nrd_Infiltration_Location.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlNrdInfilLoc;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtInteger;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
-    RequiredValues.ErrorID := 'FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION';
-    RequiredValues.ID := 'NRD_INFILTRATION_LOCATION';
-    RequiredValues.StaticDataName := KNRD_Infiltration_Location;
-    RequiredValues.WriteTransientData :=
-      (FSurfaceWater4.Nrd_Infiltration_Location.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Non-Routed Delivery Infiltration Location value';
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrGETen;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FSurfaceWater4.Nrd_Infiltration_Location;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
@@ -4297,26 +4939,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlTranspirationFraction);
+  RequiredValues.WriteLocation := wlTranspirationFraction;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: TRANSPIRATION_FRACTION';
+  RequiredValues.ErrorID := 'FMP LAND_USE: TRANSPIRATION_FRACTION';
+  RequiredValues.ID := 'TRANSPIRATION_FRACTION';
+  RequiredValues.StaticDataName := KTranspirationFraction;
+  RequiredValues.WriteTransientData :=
+    (FLandUse.TranspirationFraction.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Transpiration Fraction value';
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.TranspirationFraction;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlTranspirationFraction);
+  end;
 
   if (FLandUse.TranspirationFraction.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlTranspirationFraction;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: TRANSPIRATION_FRACTION';
-    RequiredValues.ErrorID := 'FMP LAND_USE: TRANSPIRATION_FRACTION';
-    RequiredValues.ID := 'TRANSPIRATION_FRACTION';
-    RequiredValues.StaticDataName := KTranspirationFraction;
-    RequiredValues.WriteTransientData :=
-      (FLandUse.TranspirationFraction.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Transpiration Fraction value';
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FLandUse.TranspirationFraction;
-
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -4361,8 +5006,6 @@ begin
     Assert(False);
   end;
 
-  AFileName := GetFileStreamName(wlFID);
-
   RequiredValues.WriteLocation := wlFID;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtInteger;
@@ -4376,7 +5019,12 @@ begin
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.CheckError := StrInvalidFarmID;
   RequiredValues.Option := '';
-  RequiredValues.FarmProperty := nil;
+  RequiredValues.FarmProperty := FFarmProcess4.Farms;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlFID);
+  end;
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -4514,24 +5162,28 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlGwRootInteraction);
+  RequiredValues.WriteLocation := wlGwRootInteraction;
+  RequiredValues.DefaultValue := 5;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: GROUNDWATER_ROOT_INTERACTION';
+  RequiredValues.ErrorID := 'FMP LAND_USE: GROUNDWATER_ROOT_INTERACTION';
+  RequiredValues.ID := 'GROUNDWATER_ROOT_INTERACTION';
+  RequiredValues.StaticDataName := KGWRootInteraction;
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckError :=  'Invalid Groundwater Root Interaction value';
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndFive;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.GroundwaterRootInteraction;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlGwRootInteraction);
+  end;
 
   if (FLandUse.GroundwaterRootInteraction.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlGwRootInteraction;
-    RequiredValues.DefaultValue := 5;
-    RequiredValues.DataType := rdtInteger;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: GROUNDWATER_ROOT_INTERACTION';
-    RequiredValues.ErrorID := 'FMP LAND_USE: GROUNDWATER_ROOT_INTERACTION';
-    RequiredValues.ID := 'GROUNDWATER_ROOT_INTERACTION';
-    RequiredValues.StaticDataName := KGWRootInteraction;
-    RequiredValues.WriteTransientData := False;
-    RequiredValues.CheckError :=  'Invalid Groundwater Root Interaction value';
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndFive;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FLandUse.GroundwaterRootInteraction;
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -4593,8 +5245,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlIrrigation);
-
   RequiredValues.WriteLocation := wlIrrigation;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtInteger;
@@ -4610,6 +5260,11 @@ begin
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.Irrigation;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlIrrigation);
+  end;
 
   if (FLandUse.Irrigation.ArrayList = alArray) then
   begin
@@ -4645,18 +5300,26 @@ begin
   begin
     GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
       ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-    if ExternalFileName = '' then
+
+    if RequiredValues.WriteTransientData then
     begin
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteString('TRANSIENT LIST DATAFILE ');
-      end
-      else
-      begin
-        WriteString('STATIC LIST DATAFILE ');
-      end;
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
       try
@@ -4743,8 +5406,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlIrrigationUniformity);
-
   RequiredValues.WriteLocation := wlIrrigationUniformity;
   RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtDouble;
@@ -4761,21 +5422,34 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FSalinityFlush.FarmIrrigationUniformityChoice;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlIrrigationUniformity);
+  end;
+
   IrrigationTypes := Model.IrrigationTypes;
   GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
     ExternalFileName, ExternalScaleFileName);
-  WriteScaleFactorsAndID(RequiredValues,
+  WriteScaleFactorsID_andOption(RequiredValues,
     UnitConversionScaleFactor, ExternalScaleFileName);
-  if ExternalFileName = '' then
+
+  if RequiredValues.WriteTransientData then
   begin
-    if RequiredValues.WriteTransientData then
-    begin
-      WriteString('TRANSIENT LIST DATAFILE ');
-    end
-    else
-    begin
-      WriteString('STATIC LIST DATAFILE ');
-    end;
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
     try
@@ -4910,25 +5584,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlLandUseAreaFraction);
+  RequiredValues.WriteLocation := wlLandUseAreaFraction;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
+  RequiredValues.ErrorID := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
+  RequiredValues.ID := 'LAND_USE_AREA_FRACTION';
+  RequiredValues.StaticDataName := KLandUseAreaFraction;
+  RequiredValues.WriteTransientData :=
+    (FLandUse.LandUseFraction.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Land Use Area Fraction value';
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.LandUseFraction;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlLandUseAreaFraction);
+  end;
 
   if (FLandUse.LandUseFraction.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlLandUseAreaFraction;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
-    RequiredValues.ErrorID := 'FMP LAND_USE: LAND_USE_AREA_FRACTION';
-    RequiredValues.ID := 'LAND_USE_AREA_FRACTION';
-    RequiredValues.StaticDataName := KLandUseAreaFraction;
-    RequiredValues.WriteTransientData :=
-      (FLandUse.LandUseFraction.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Land Use Area Fraction value';
-    RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FLandUse.LandUseFraction;
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -4984,19 +5662,20 @@ begin
   end
   else
   begin
-    WriteScaleFactorsAndID(RequiredValues,
+    WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
 
-    if RequiredValues.Option <> '' then
-    begin
-      WriteString(RequiredValues.Option + ' ');
-    end;
+//    if RequiredValues.Option <> '' then
+//    begin
+//      WriteString(RequiredValues.Option + ' ');
+//    end;
 
     if ExternalFileName <> '' then
     begin
       WriteString('STATIC ARRAY DATAFILE ');
-      WriteString(ExternalFileName);
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
       NewLine;
+      Exit;
     end
     else
     begin
@@ -5267,8 +5946,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlPFLX);
-
   RequiredValues.WriteLocation := wlPFLX;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -5284,6 +5961,11 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FClimatePackage.Precipitation;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlPFLX);
+  end;
+
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
 
@@ -5297,22 +5979,26 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlPrecipPotConsumption);
+  RequiredValues.WriteLocation := wlPrecipPotConsumption;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
+  RequiredValues.ErrorID := 'FMP CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
+  RequiredValues.ID := 'PRECIPITATION_POTENTIAL_CONSUMPTION';
+  RequiredValues.StaticDataName := KPrecipPotConsumption;
+  RequiredValues.WriteTransientData :=
+    (FClimatePackage.Precipitation_Potential_Consumption.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Precipitation Potential Consumption value';
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlPrecipPotConsumption);
+  end;
 
   if (FClimatePackage.Precipitation_Potential_Consumption.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlPrecipPotConsumption;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
-    RequiredValues.ErrorID := 'FMP CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION';
-    RequiredValues.ID := 'PRECIPITATION_POTENTIAL_CONSUMPTION';
-    RequiredValues.StaticDataName := KPrecipPotConsumption;
-    RequiredValues.WriteTransientData :=
-      (FClimatePackage.Precipitation_Potential_Consumption.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Precipitation Potential Consumption value';
     case FClimatePackage.PrecipPotConsum of
       ppcLength:
       begin
@@ -5345,8 +6031,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlETR);
-
   RequiredValues.WriteLocation := wlETR;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -5360,7 +6044,12 @@ begin
   RequiredValues.CheckProcedure := nil;
   RequiredValues.CheckError := '';
   RequiredValues.Option := '';
-  RequiredValues.FarmProperty := nil;
+  RequiredValues.FarmProperty := FClimatePackage.ReferenceET;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlETR);
+  end;
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -5377,26 +6066,29 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlRootDepth);
+  RequiredValues.WriteLocation := wlRootDepth;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: ROOT_DEPTH';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ROOT_DEPTH';
+  RequiredValues.ID := 'ROOT_DEPTH';
+  RequiredValues.StaticDataName := KRootDepth;
+  RequiredValues.WriteTransientData :=
+    (FLandUse.RootDepth.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Root Depth value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.RootDepth;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlRootDepth);
+  end;
 
   if (FLandUse.RootDepth.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlRootDepth;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP LAND_USE: ROOT_DEPTH';
-    RequiredValues.ErrorID := 'FMP LAND_USE: ROOT_DEPTH';
-    RequiredValues.ID := 'ROOT_DEPTH';
-    RequiredValues.StaticDataName := KRootDepth;
-    RequiredValues.WriteTransientData :=
-      (FLandUse.RootDepth.FarmOption = foTransient);
-    RequiredValues.CheckError :=  'Invalid Root Depth value';
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FLandUse.RootDepth;
-
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
@@ -5469,11 +6161,18 @@ begin
 
   WriteCapillaryFringe;
   WriteSoilID;
+  WriteSoilCoefficient;
   WriteSurfaceK;
+  WriteEffectivePrecipitationTable;
 
   WriteString('END SOIL');
   NewLine;
   NewLine;
+end;
+
+procedure TModflowFmp4Writer.WriteSoilCoefficient;
+begin
+
 end;
 
 procedure TModflowFmp4Writer.WriteSoilID;
@@ -5485,8 +6184,6 @@ begin
   begin
     Exit;
   end;
-
-  AFileName := GetFileStreamName(wlSoilID);
 
   RequiredValues.WriteLocation := wlSoilID;
   RequiredValues.DefaultValue := 0;
@@ -5502,6 +6199,8 @@ begin
   RequiredValues.CheckError := 'Invalid Soil ID value';
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := nil;
+
+  AFileName := GetFileStreamName(wlSoilID);
 
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
@@ -5738,6 +6437,21 @@ begin
           Assert(FWaterSourceFileStream <> nil);
           FWaterSourceFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlAddedCropDemandFlux:
+        begin
+          Assert(FAddedCropDemandFluxFileStream <> nil);
+          FAddedCropDemandFluxFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlAddedCropDemandRate:
+        begin
+          Assert(FAddedCropDemandRateFileStream <> nil);
+          FAddedCropDemandRateFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlPrecipicationTable:
+        begin
+          Assert(FEffectivPrecipitationTableFileStream <> nil);
+          FEffectivPrecipitationTableFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -5753,36 +6467,76 @@ procedure TModflowFmp4Writer.WriteSurfaceK;
 var
   AFileName: string;
   RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  SoilIndex: Integer;
+  ASoil: TSoilItem;
+  SoilID: Integer;
+  Formula: string;
 begin
   if FSoil4.SurfVertK.FarmOption = foNotUsed then
   begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlSurfaceK);
+  RequiredValues.WriteLocation := wlSurfaceK;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
+  RequiredValues.ErrorID := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
+  RequiredValues.ID := 'SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
+  RequiredValues.StaticDataName := KSurfaceK;
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := 'Invalid Surface Vertical K value';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSoil4.SurfVertK;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlSurfaceK);
+  end;
 
   if (FSoil4.SurfVertK.ArrayList = alArray) then
   begin
-    RequiredValues.WriteLocation := wlSurfaceK;
-    RequiredValues.DefaultValue := 0;
-    RequiredValues.DataType := rdtDouble;
-    RequiredValues.DataTypeIndex := 0;
-    RequiredValues.MaxDataTypeIndex := 0;
-    RequiredValues.Comment := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
-    RequiredValues.ErrorID := 'FMP SOIL: SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
-    RequiredValues.ID := 'SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY';
-    RequiredValues.StaticDataName := KSurfaceK;
-    RequiredValues.WriteTransientData := False;
-    RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-    RequiredValues.CheckError := 'Invalid Surface Vertical K value';
-    RequiredValues.Option := '';
-    RequiredValues.FarmProperty := FSoil4.SurfVertK;
-
     WriteFmpArrayData(AFileName, RequiredValues);
   end
   else
   begin
-
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsID_andOption(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+    WriteString('STATIC LIST DATAFILE ');
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        for SoilIndex := 0 to FFmpSoils.Count - 1 do
+        begin
+          ASoil := FFmpSoils[SoilIndex];
+          SoilID := SoilIndex + 1;
+          WriteInteger(SoilID);
+          Formula := ASoil.SurfVK;
+          WriteFloatValueFromGlobalFormula(Formula, ASoil,
+            'Invalid formula for surface vertical hydraulic conductivity in soil ' + ASoil.SoilName);
+          NewLine;
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
   end;
 end;
 
@@ -5917,8 +6671,6 @@ begin
     Exit;
   end;
 
-  AFileName := GetFileStreamName(wlWaterSource);
-
   RequiredValues.WriteLocation := wlWaterSource;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtInteger;
@@ -5935,20 +6687,33 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.WaterSource;
 
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlWaterSource);
+  end;
+
   GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
     ExternalFileName, ExternalScaleFileName);
-  WriteScaleFactorsAndID(RequiredValues,
+  WriteScaleFactorsID_andOption(RequiredValues,
     UnitConversionScaleFactor, ExternalScaleFileName);
-  if ExternalFileName = '' then
+
+  if RequiredValues.WriteTransientData then
   begin
-    if RequiredValues.WriteTransientData then
-    begin
-      WriteString('TRANSIENT LIST DATAFILE ');
-    end
-    else
-    begin
-      WriteString('STATIC LIST DATAFILE ');
-    end;
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
     try

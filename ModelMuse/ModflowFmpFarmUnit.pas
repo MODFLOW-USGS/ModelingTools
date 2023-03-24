@@ -439,6 +439,8 @@ type
     FDeficiencyScenario: TDeficiencyScenarioCollection;
     FWaterSource: TWaterSourceCollection;
     FBareRunoffFraction: TBareRunoffFractionCollection;
+    FAddedCropDemandRate: TFarmEfficiencyCollection;
+    FAddedCropDemandFlux: TFarmEfficiencyCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -467,6 +469,8 @@ type
     procedure SetDeficiencyScenario(const Value: TDeficiencyScenarioCollection);
     procedure SetWaterSource(const Value: TWaterSourceCollection);
     procedure SetBareRunoffFraction(const Value: TBareRunoffFractionCollection);
+    procedure SetAddedCropDemandFlux(const Value: TFarmEfficiencyCollection);
+    procedure SetAddedCropDemandRate(const Value: TFarmEfficiencyCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -550,6 +554,18 @@ type
       ;
       property BareRunoffFraction: TBareRunoffFractionCollection
         read FBareRunoffFraction write SetBareRunoffFraction
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property AddedCropDemandFlux: TFarmEfficiencyCollection
+        read FAddedCropDemandFlux write SetAddedCropDemandFlux
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property AddedCropDemandRate: TFarmEfficiencyCollection
+        read FAddedCropDemandRate write SetAddedCropDemandRate
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1291,6 +1307,8 @@ begin
     DeficiencyScenario := SourceFarm.DeficiencyScenario;
     WaterSource := SourceFarm.WaterSource;
     BareRunoffFraction := SourceFarm.BareRunoffFraction;
+    AddedCropDemandFlux := SourceFarm.AddedCropDemandFlux;
+    AddedCropDemandRate := SourceFarm.AddedCropDemandRate;
   end
   else
   begin
@@ -1342,10 +1360,14 @@ begin
   FDeficiencyScenario := TDeficiencyScenarioCollection.Create(LocalModel);
   FWaterSource := TWaterSourceCollection.Create(LocalModel);
   FBareRunoffFraction := TBareRunoffFractionCollection.Create(LocalModel);
+  FAddedCropDemandFlux := TFarmEfficiencyCollection.Create(LocalModel);
+  FAddedCropDemandRate := TFarmEfficiencyCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FAddedCropDemandFlux.Free;
+  FAddedCropDemandRate.Free;
   FBareRunoffFraction.Free;
   FWaterSource.Free;
   FDeficiencyScenario.Free;
@@ -1417,8 +1439,20 @@ begin
       and DeficiencyScenario.IsSame(SourceFarm.DeficiencyScenario)
       and WaterSource.IsSame(SourceFarm.WaterSource)
       and BareRunoffFraction.IsSame(SourceFarm.BareRunoffFraction)
+      and AddedCropDemandFlux.IsSame(SourceFarm.AddedCropDemandFlux)
+      and AddedCropDemandRate.IsSame(SourceFarm.AddedCropDemandRate)
   end;
 
+end;
+
+procedure TFarm.SetAddedCropDemandFlux(const Value: TFarmEfficiencyCollection);
+begin
+  FAddedCropDemandFlux.Assign(Value);
+end;
+
+procedure TFarm.SetAddedCropDemandRate(const Value: TFarmEfficiencyCollection);
+begin
+  FAddedCropDemandRate.Assign(Value);
 end;
 
 procedure TFarm.SetAddedDemandRunoffSplitCollection(
@@ -1601,6 +1635,20 @@ begin
     StartRangeExtended, EndRangeExtended);
   AddBoundaryTimes(BareRunoffFraction, Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
+
+  for EffIndex := 0 to AddedCropDemandFlux.Count - 1 do
+  begin
+    EfficiencyCol := AddedCropDemandFlux[EffIndex].CropEfficiency;
+    AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
+      StartRangeExtended, EndRangeExtended);
+  end;
+
+  for EffIndex := 0 to AddedCropDemandRate.Count - 1 do
+  begin
+    EfficiencyCol := AddedCropDemandRate[EffIndex].CropEfficiency;
+    AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
+      StartRangeExtended, EndRangeExtended);
+  end;
   {$ENDIF}
 end;
 

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T12:57:31.817-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-24T15:35:26.681-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SOIL</title>
   <body>
     <header>
@@ -62,7 +62,7 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 1 &#160;SILTYCLAY</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 2 &#160;0.320149668 &#160; -0.328586793 &#160; 2.851921250 &#160; 1.3027 &#160; -2.0416 &#160;# Read &quot;A, B, C, D, and E&quot;, which these values happen to be equivalent to the keyword &quot;SILT&quot;</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; 3 &#160;SANDYLOAM</para>
-          <para styleclass="Normal">oil coefficients used in the analytical, pseudo steady-state soil-moisture, soil-stress concept (analytical root response) land-use calculation. Required if LAND_USE block specifies ROOT_PRESSURE.</para>
+          <para styleclass="Normal">Soil coefficients used in the analytical, pseudo steady-state soil-moisture, soil-stress concept (analytical root response) land-use calculation. Required if LAND_USE block specifies ROOT_PRESSURE.</para>
           <para styleclass="Normal">List Style reads for each record one of the following secondary keywords: </para>
           <para styleclass="Normal">SILT, SILTYCLAY, SANDYLOAM, and SAND </para>
           <para styleclass="Normal">or five FLOAT numbers that represent the coefficients A, B, C, D, and E defined in appendix 6. </para>

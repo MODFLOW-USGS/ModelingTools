@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabCrops
+    ActivePage = tabAddedCropDemandRate
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -676,11 +676,13 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 192
-        ExplicitTop = 80
+        ExplicitWidth = 577
+        ExplicitHeight = 332
         inherited Panel: TPanel
           Top = 291
           Width = 577
+          ExplicitTop = 291
+          ExplicitWidth = 577
           inherited lbNumber: TLabel
             Width = 45
             Height = 16
@@ -690,14 +692,17 @@ inherited frameFarm: TframeFarm
           inherited sbAdd: TSpeedButton
             Left = 301
             OnClick = frameBareRunoffFractionssbAddClick
+            ExplicitLeft = 301
           end
           inherited sbInsert: TSpeedButton
             Left = 357
             OnClick = frameBareRunoffFractionssbInsertClick
+            ExplicitLeft = 357
           end
           inherited sbDelete: TSpeedButton
             Left = 413
             OnClick = frameBareRunoffFractionssbDeleteClick
+            ExplicitLeft = 413
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -710,9 +715,12 @@ inherited frameFarm: TframeFarm
           Height = 234
           OnSetEditText = frameBareRunoffFractionsGridSetEditText
           OnButtonClick = frameBareRunoffFractionsGridButtonClick
+          ExplicitWidth = 577
+          ExplicitHeight = 234
         end
         inherited pnlTop: TPanel
           Width = 577
+          ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
             EditLabel.Width = 47
@@ -722,6 +730,145 @@ inherited frameFarm: TframeFarm
             EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
             OnChange = frameBareRunoffFractionsedFormulaChange
+            ExplicitHeight = 24
+          end
+        end
+      end
+    end
+    object tabAddedCropDemandFlux: TTabSheet
+      Caption = 'Added Crop Demand Flux'
+      ImageIndex = 13
+      inline frameAddedCropDemandFlux: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 332
+        Align = alClient
+        TabOrder = 0
+        ExplicitWidth = 577
+        ExplicitHeight = 332
+        inherited Panel: TPanel
+          Top = 291
+          Width = 577
+          ExplicitTop = 291
+          ExplicitWidth = 577
+          inherited lbNumber: TLabel
+            Width = 45
+            Height = 16
+            ExplicitWidth = 45
+            ExplicitHeight = 16
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 301
+            OnClick = frameAddedCropDemandFluxsbAddClick
+            ExplicitLeft = 301
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 357
+            OnClick = frameAddedCropDemandFluxsbInsertClick
+            ExplicitLeft = 357
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 413
+            OnClick = frameAddedCropDemandFluxsbDeleteClick
+            ExplicitLeft = 413
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 24
+            OnChange = frameAddedCropDemandFluxseNumberChange
+            ExplicitHeight = 24
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 577
+          Height = 234
+          OnSetEditText = frameAddedCropDemandFluxGridSetEditText
+          OnButtonClick = frameAddedCropDemandFluxGridButtonClick
+          ExplicitLeft = 3
+          ExplicitWidth = 577
+          ExplicitHeight = 234
+        end
+        inherited pnlTop: TPanel
+          Width = 577
+          ExplicitWidth = 577
+          inherited edFormula: TLabeledEdit
+            Height = 24
+            EditLabel.Width = 47
+            EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitHeight = 16
+            OnChange = frameAddedCropDemandFluxedFormulaChange
+            ExplicitHeight = 24
+          end
+        end
+      end
+    end
+    object tabAddedCropDemandRate: TTabSheet
+      Caption = 'Added Crop Demand Rate'
+      ImageIndex = 14
+      inline frameAddedCropDemandRate: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 332
+        Align = alClient
+        TabOrder = 0
+        ExplicitWidth = 577
+        ExplicitHeight = 332
+        inherited Panel: TPanel
+          Top = 291
+          Width = 577
+          ExplicitTop = 291
+          ExplicitWidth = 577
+          inherited lbNumber: TLabel
+            Width = 45
+            Height = 16
+            ExplicitWidth = 45
+            ExplicitHeight = 16
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 301
+            OnClick = frameAddedCropDemandRatesbAddClick
+            ExplicitLeft = 301
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 357
+            OnClick = frameAddedCropDemandRatesbInsertClick
+            ExplicitLeft = 357
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 413
+            OnClick = frameAddedCropDemandRatesbDeleteClick
+            ExplicitLeft = 413
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 24
+            OnChange = frameAddedCropDemandRateseNumberChange
+            ExplicitHeight = 24
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 577
+          Height = 234
+          OnSetEditText = frameAddedCropDemandRateGridSetEditText
+          OnButtonClick = frameAddedCropDemandRateGridButtonClick
+          ExplicitWidth = 577
+          ExplicitHeight = 234
+        end
+        inherited pnlTop: TPanel
+          Width = 577
+          ExplicitWidth = 577
+          inherited edFormula: TLabeledEdit
+            Height = 24
+            EditLabel.Width = 47
+            EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitHeight = 16
+            OnChange = frameAddedCropDemandRateedFormulaChange
             ExplicitHeight = 24
           end
         end

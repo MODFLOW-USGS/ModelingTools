@@ -45,6 +45,10 @@ type
     frameWaterSource: TframeFormulaGrid;
     tabBareRunoffFractions: TTabSheet;
     frameBareRunoffFractions: TframeFormulaGrid;
+    tabAddedCropDemandFlux: TTabSheet;
+    tabAddedCropDemandRate: TTabSheet;
+    frameAddedCropDemandFlux: TframeFormulaGrid;
+    frameAddedCropDemandRate: TframeFormulaGrid;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -148,6 +152,24 @@ type
     procedure frameBareRunoffFractionssbAddClick(Sender: TObject);
     procedure frameBareRunoffFractionssbInsertClick(Sender: TObject);
     procedure frameBareRunoffFractionssbDeleteClick(Sender: TObject);
+    procedure frameAddedCropDemandFluxGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure frameAddedCropDemandFluxGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameAddedCropDemandFluxseNumberChange(Sender: TObject);
+    procedure frameAddedCropDemandFluxedFormulaChange(Sender: TObject);
+    procedure frameAddedCropDemandFluxsbAddClick(Sender: TObject);
+    procedure frameAddedCropDemandFluxsbInsertClick(Sender: TObject);
+    procedure frameAddedCropDemandFluxsbDeleteClick(Sender: TObject);
+    procedure frameAddedCropDemandRateGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure frameAddedCropDemandRateGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameAddedCropDemandRateedFormulaChange(Sender: TObject);
+    procedure frameAddedCropDemandRateseNumberChange(Sender: TObject);
+    procedure frameAddedCropDemandRatesbAddClick(Sender: TObject);
+    procedure frameAddedCropDemandRatesbInsertClick(Sender: TObject);
+    procedure frameAddedCropDemandRatesbDeleteClick(Sender: TObject);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -162,6 +184,8 @@ type
     FDeficiencyScenarioChanged: Boolean;
     FWaterSourceChanged: Boolean;
     FBareRunoffFractionsChanged: Boolean;
+    FAddedCropDemandFluxChanged: Boolean;
+    FAddedCropDemandRateChanged: Boolean;
     procedure GetCropEffForFirstFarm(FirstFarm: TFarm);
     procedure GetCropEffImproveForFirstFarm(FirstFarm: TFarm);
     procedure GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
@@ -169,6 +193,8 @@ type
     procedure GetDeficiencyScenarioForFirstFarm(FirstFarm: TFarm);
     procedure GetWaterSourceForFirstFarm(FirstFarm: TFarm);
     procedure GetBareRunoffFractonForFirstFarm(FirstFarm: TFarm);
+    procedure GetAddedCropDemandFluxForFirstFarm(FirstFarm: TFarm);
+    procedure GetAddedCropDemandRateForFirstFarm(FirstFarm: TFarm);
 
     procedure GetCostsForFirstFarm(FirstFarm: TFarm);
     procedure GetWaterRightsForFirstFarm(FirstFarm: TFarm);
@@ -186,6 +212,8 @@ type
     procedure SetDeficiencyScenario(Farm: TFarm);
     procedure SetWaterSource(Farm: TFarm);
     procedure SetBareRunoffFractions(Farm: TFarm);
+    procedure SetAddedCropDemandFlux(Farm: TFarm);
+    procedure SetAddedCropDemandRate(Farm: TFarm);
 
     procedure SetFarmCosts(Farm: TFarm);
     procedure SetWaterRights(Farm: TFarm);
@@ -209,10 +237,20 @@ type
     procedure InitializeWaterSourceFrame(StartTimes, EndTimes: TStringList;
       AFrame: TframeFormulaGrid; ValueCaptions: array of string);
     procedure InitializeBareRunoffFractionsFrame(StartTimes, EndTimes: TStringList);
+    procedure InitializeEfficiencyCollectionByCropFrame(
+      StartTimes, EndTimes: TStringList; Crops: TCropCollection;
+      AFrame: TframeFormulaGrid; CaptionFormatString: string);
+    procedure InitializeAddedCropDemandFluxFrame(StartTimes, EndTimes: TStringList);
+    procedure InitializeAddedCropDemandRateFrame(StartTimes, EndTimes: TStringList);
 
     procedure GetAnEfficiencyCollection(AFarm: TFarm; AFrame: TframeFormulaGrid;
       EfficiencyCollection: TFarmEfficiencyCollection);
     procedure UpdateEndTime(Sender: TObject; ACol: Integer; ARow: Integer);
+    procedure GetMaxTimeAndCountForEfficiencyCollection(
+      AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection;
+      var MaxTimeCount: Integer; var MaxIndex: Integer);
+    procedure GetEfficienyDataForFirstFarm(AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection);
+    procedure SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection; AFrame: TframeFormulaGrid);
     { Private declarations }
   public
     procedure InitializeControls;
@@ -409,6 +447,11 @@ begin
       ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
       ClearGrid(frameAddedDemandRunoffSplit.Grid);
       ClearGrid(frameIrrigationUniformity.Grid);
+      ClearGrid(frameDeficiencyScenario.Grid);
+      ClearGrid(frameWaterSource.Grid);
+      ClearGrid(frameBareRunoffFractions.Grid);
+      ClearGrid(frameAddedCropDemandFlux.Grid);
+      ClearGrid(frameAddedCropDemandRate.Grid);
       Enabled := False;
       Exit;
     end;
@@ -443,6 +486,8 @@ begin
       frameDeficiencyScenario.Grid.BeginUpdate;
       frameWaterSource.Grid.BeginUpdate;
       frameBareRunoffFractions.Grid.BeginUpdate;
+      frameAddedCropDemandFlux.Grid.BeginUpdate;
+      frameAddedCropDemandRate.Grid.BeginUpdate;
       try
         ClearGrid(frameFormulaGridCrops.Grid);
         ClearGrid(frameFormulaGridCosts.Grid);
@@ -454,6 +499,8 @@ begin
         ClearGrid(frameDeficiencyScenario.Grid);
         ClearGrid(frameWaterSource.Grid);
         ClearGrid(frameBareRunoffFractions.Grid);
+        ClearGrid(frameAddedCropDemandFlux.Grid);
+        ClearGrid(frameAddedCropDemandRate.Grid);
 
         FirstFarm := FarmList[0];
         GetCropEffForFirstFarm(FirstFarm);
@@ -463,6 +510,8 @@ begin
         GetDeficiencyScenarioForFirstFarm(FirstFarm);
         GetWaterSourceForFirstFarm(FirstFarm);
         GetBareRunoffFractonForFirstFarm(FirstFarm);
+        GetAddedCropDemandFluxForFirstFarm(FirstFarm);
+        GetAddedCropDemandRateForFirstFarm(FirstFarm);
 
         GetCostsForFirstFarm(FirstFarm);
         GetWaterRightsForFirstFarm(FirstFarm);
@@ -603,6 +652,30 @@ begin
           end;
         end;
 
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.AddedCropDemandFlux.IsSame(
+            FirstFarm.AddedCropDemandFlux) then
+          begin
+            ClearGrid(frameAddedCropDemandFlux.Grid);
+            frameAddedCropDemandFlux.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.AddedCropDemandRate.IsSame(
+            FirstFarm.AddedCropDemandRate) then
+          begin
+            ClearGrid(frameAddedCropDemandRate.Grid);
+            frameAddedCropDemandRate.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
       finally
         frameFormulaGridCrops.Grid.EndUpdate;
         frameFormulaGridEfficiencyImprovement.Grid.EndUpdate;
@@ -614,6 +687,8 @@ begin
         frameDeficiencyScenario.Grid.EndUpdate;
         frameWaterSource.Grid.EndUpdate;
         frameBareRunoffFractions.Grid.EndUpdate;
+        frameAddedCropDemandFlux.Grid.EndUpdate;
+        frameAddedCropDemandRate.Grid.EndUpdate;
       end;
 
       frameFormulaGridDiversion.GetData(FarmList, dtDiversion);
@@ -643,6 +718,13 @@ begin
         and (FarmProcess4.Bare_Runoff_Fraction.FarmOption <> foNotUsed)
         and (FarmProcess4.Bare_Runoff_Fraction.ArrayList = alList);
 
+      tabAddedCropDemandFlux.TabVisible := FarmProcess4.IsSelected
+        and (FarmProcess4.Added_Crop_Demand_Flux.FarmOption <> foNotUsed);
+
+      tabAddedCropDemandRate.TabVisible := FarmProcess4.IsSelected
+        and (FarmProcess4.Added_Crop_Demand_Rate.FarmOption <> foNotUsed);
+
+
     finally
       FChangedCrops := False;
       FChangedCosts := False;
@@ -655,6 +737,8 @@ begin
       FDeficiencyScenarioChanged := False;
       FWaterSourceChanged := False;
       FBareRunoffFractionsChanged := False;
+      FAddedCropDemandFluxChanged := False;
+      FAddedCropDemandRateChanged := False;
     end;
   finally
     Changing := False;
@@ -890,6 +974,118 @@ begin
   UpdateEndTime(Sender, ACol, ARow);
 //  UpdateNextTimeCell(frameDelivery.Grid, ACol, ARow);
 
+end;
+
+procedure TframeFarm.frameAddedCropDemandFluxedFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandFlux.edFormulaChange(Sender);
+  DoChange;
+  FAddedCropDemandFluxChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandFluxGridButtonClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameAddedCropDemandFluxGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  DoChange;
+  UpdateEndTime(Sender, ACol, ARow);
+  FAddedCropDemandFluxChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandFluxsbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandFlux.sbAddClick(Sender);
+  DoChange;
+  FAddedCropDemandFluxChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandFluxsbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandFlux.sbDeleteClick(Sender);
+  DoChange;
+  FAddedCropDemandFluxChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandFluxsbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandFlux.sbInsertClick(Sender);
+  DoChange;
+  FAddedCropDemandFluxChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandFluxseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandFlux.seNumberChange(Sender);
+  DoChange;
+  FAddedCropDemandFluxChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandRateedFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandRate.edFormulaChange(Sender);
+  DoChange;
+  FAddedCropDemandRateChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandRateGridButtonClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameAddedCropDemandRateGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  DoChange;
+  UpdateEndTime(Sender, ACol, ARow);
+  FAddedCropDemandRateChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandRatesbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandRate.sbAddClick(Sender);
+  DoChange;
+  FAddedCropDemandRateChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandRatesbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandRate.sbDeleteClick(Sender);
+  DoChange;
+  FAddedCropDemandRateChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandRatesbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandRate.sbInsertClick(Sender);
+  DoChange;
+  FAddedCropDemandRateChanged := True;
+end;
+
+procedure TframeFarm.frameAddedCropDemandRateseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameAddedCropDemandRate.seNumberChange(Sender);
+  DoChange;
+  FAddedCropDemandRateChanged := True;
 end;
 
 procedure TframeFarm.frameAddedDemandRunoffSplitedFormulaChange(Sender: TObject);
@@ -1334,6 +1530,16 @@ begin
   FWaterSourceChanged := True;
 end;
 
+procedure TframeFarm.GetAddedCropDemandFluxForFirstFarm(FirstFarm: TFarm);
+begin
+  GetEfficienyDataForFirstFarm(frameAddedCropDemandFlux, FirstFarm.AddedCropDemandFlux);
+end;
+
+procedure TframeFarm.GetAddedCropDemandRateForFirstFarm(FirstFarm: TFarm);
+begin
+  GetEfficienyDataForFirstFarm(frameAddedCropDemandRate, FirstFarm.AddedCropDemandRate);
+end;
+
 procedure TframeFarm.GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
 begin
   GetAnEfficiencyCollection(FirstFarm, frameAddedDemandRunoffSplit,
@@ -1461,6 +1667,22 @@ begin
     Grid.Cells[Ord(wscSurfaceWater), TimeIndex+1] := ATimeItem.SurfaceWater;
     Grid.Cells[Ord(wscNonRouted), TimeIndex+1] := ATimeItem.NonRoutedDelivery;
   end;
+end;
+
+procedure TframeFarm.InitializeAddedCropDemandFluxFrame(StartTimes,
+  EndTimes: TStringList);
+begin
+  InitializeEfficiencyCollectionByCropFrame(
+    StartTimes, EndTimes, frmGoPhast.PhastModel.FmpCrops,
+    frameAddedCropDemandFlux, 'Added Crop Demand Flux (L/T) %s');
+end;
+
+procedure TframeFarm.InitializeAddedCropDemandRateFrame(StartTimes,
+  EndTimes: TStringList);
+begin
+  InitializeEfficiencyCollectionByCropFrame(
+    StartTimes, EndTimes, frmGoPhast.PhastModel.FmpCrops,
+    frameAddedCropDemandRate, 'Added Crop Demand Rate (L^3/T) %s');
 end;
 
 procedure TframeFarm.InitializeBareRunoffFractionsFrame(StartTimes,
@@ -1603,6 +1825,8 @@ begin
       ['Use Groundwater', 'Use Surface Water', 'Use Non-Routed Deliveries']);
 
     InitializeBareRunoffFractionsFrame(StartTimes, EndTimes);
+    InitializeAddedCropDemandFluxFrame(StartTimes, EndTimes);
+    InitializeAddedCropDemandRateFrame(StartTimes, EndTimes);
 
     Grid := frameFormulaGridCosts.Grid;
     ClearGrid(Grid);
@@ -1844,6 +2068,30 @@ begin
     end;
   end;
 
+  if FAddedCropDemandFluxChanged then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetAddedCropDemandFlux(Farm);
+      end;
+    end;
+  end;
+
+  if FAddedCropDemandRateChanged then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetAddedCropDemandRate(Farm);
+      end;
+    end;
+  end;
+
   if FChangedCosts then
   begin
     for index := 0 to FarmList.Count - 1 do
@@ -1888,6 +2136,135 @@ begin
   if {FarmCreated or} frameDelivery.DataChanged then
   begin
     frameDelivery.SetData(FarmList);
+  end;
+end;
+
+procedure TframeFarm.SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection; AFrame: TframeFormulaGrid);
+var
+  Crops: TCropCollection;
+  CropIndex: Integer;
+  EfficienciesItem: TFarmEfficienciesItem;
+  StartTimes: System.Generics.Collections.TList<Double>;
+  EndTimes: System.Generics.Collections.TList<Double>;
+  Rows: TGenericIntegerList;
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  StartTime: Double;
+  EndTime: Double;
+  CropEfficiency: TCropEfficiencyCollection;
+  ColIndex: Integer;
+  ARow: Integer;
+  EfficiencyItem: TCropEfficiencyItem;
+begin
+  Crops := frmGoPhast.PhastModel.FmpCrops;
+  begin
+    for CropIndex := EfficiencyCollection.Count to Crops.Count - 1 do
+    begin
+      EfficienciesItem := EfficiencyCollection.Add;
+      EfficienciesItem.CropEfficiency.CropName := Crops[CropIndex].CropName;
+    end;
+    while EfficiencyCollection.Count > Crops.Count do
+    begin
+      EfficiencyCollection.Last.Free;
+    end;
+  end;
+  StartTimes := TList<Double>.Create;
+  EndTimes := TList<Double>.Create;
+  Rows := TGenericIntegerList.Create;
+  try
+    Grid := AFrame.Grid;
+    for RowIndex := 1 to AFrame.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex], StartTime) and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex], EndTime) then
+      begin
+        Rows.Add(RowIndex);
+        StartTimes.Add(StartTime);
+        EndTimes.Add(EndTime);
+      end;
+    end;
+    for CropIndex := 0 to EfficiencyCollection.Count - 1 do
+    begin
+      EfficienciesItem := EfficiencyCollection[CropIndex];
+      CropEfficiency := EfficienciesItem.CropEfficiency;
+      while CropEfficiency.Count > Rows.Count do
+      begin
+        CropEfficiency.Last.Free;
+      end;
+      while CropEfficiency.Count < Rows.Count do
+      begin
+        CropEfficiency.Add;
+      end;
+      ColIndex := CropIndex + Ord(ccCrop);
+      for RowIndex := 0 to Rows.Count - 1 do
+      begin
+        ARow := Rows[RowIndex];
+        EfficiencyItem := CropEfficiency[RowIndex];
+        EfficiencyItem.StartTime := StartTimes[RowIndex];
+        EfficiencyItem.EndTime := EndTimes[RowIndex];
+        EfficiencyItem.Efficiency := Grid.Cells[ColIndex, ARow];
+      end;
+    end;
+  finally
+    StartTimes.Free;
+    EndTimes.Free;
+    Rows.Free;
+  end;
+end;
+
+procedure TframeFarm.GetEfficienyDataForFirstFarm(AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection);
+var
+  MaxTimeCount: Integer;
+  MaxIndex: Integer;
+  FarmEff: TFarmEfficienciesItem;
+  Grid: TRbwDataGrid4;
+  TimeIndex: Integer;
+  TimeItem: TCropEfficiencyItem;
+  CropIndex: Integer;
+begin
+  GetMaxTimeAndCountForEfficiencyCollection(AFrame, EffCollection, MaxTimeCount, MaxIndex);
+  AFrame.seNumber.AsInteger := MaxTimeCount;
+  AFrame.seNumber.OnChange(AFrame.seNumber);
+  if MaxIndex >= 0 then
+  begin
+    FarmEff := EffCollection[MaxIndex];
+    Grid := AFrame.Grid;
+    for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
+    begin
+      TimeItem := FarmEff.CropEfficiency[TimeIndex];
+      Grid.Cells[Ord(ccStartTime), TimeIndex + 1] := FloatToStr(TimeItem.StartTime);
+      Grid.Cells[Ord(ccEndTime), TimeIndex + 1] := FloatToStr(TimeItem.EndTime);
+    end;
+    for CropIndex := 0 to EffCollection.Count - 1 do
+    begin
+      FarmEff := EffCollection[CropIndex];
+      for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
+      begin
+        TimeItem := FarmEff.CropEfficiency[TimeIndex];
+        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex + 1] := TimeItem.Efficiency;
+      end;
+    end;
+  end;
+end;
+
+procedure TframeFarm.GetMaxTimeAndCountForEfficiencyCollection(
+  AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection;
+  var MaxTimeCount: Integer; var MaxIndex: Integer);
+var
+  CropIndex: Integer;
+  FarmEff: TFarmEfficienciesItem;
+begin
+  Assert(AFrame.Grid.ColCount = EffCollection.Count + 2);
+  MaxTimeCount := 0;
+  Assert(EffCollection.Count > 0);
+  MaxIndex := -1;
+  for CropIndex := 0 to EffCollection.Count - 1 do
+  begin
+    FarmEff := EffCollection[CropIndex];
+    if MaxTimeCount <= FarmEff.CropEfficiency.Count then
+    begin
+      MaxTimeCount := FarmEff.CropEfficiency.Count;
+      MaxIndex := CropIndex;
+    end;
   end;
 end;
 
@@ -2026,6 +2403,52 @@ begin
   end;
 end;
 
+procedure TframeFarm.InitializeEfficiencyCollectionByCropFrame(StartTimes,
+  EndTimes: TStringList; Crops: TCropCollection; AFrame: TframeFormulaGrid;
+  CaptionFormatString: string);
+var
+  CropIndex: Integer;
+  Grid: TRbwDataGrid4;
+  ACrop: TCropItem;
+begin
+  Grid := AFrame.Grid;
+  Grid.ColCount := Crops.Count + 2;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[Ord(ccStartTime), 0] := StrStartingTime;
+    Grid.Cells[Ord(ccEndTime), 0] := StrEndingTime;
+    Grid.Columns[Ord(ccStartTime)].PickList := StartTimes;
+    Grid.Columns[Ord(ccEndTime)].PickList := EndTimes;
+    Grid.Columns[Ord(ccStartTime)].ComboUsed := True;
+    Grid.Columns[Ord(ccEndTime)].ComboUsed := True;
+    Grid.Columns[Ord(ccStartTime)].WordWrapCaptions := True;
+    Grid.Columns[Ord(ccEndTime)].WordWrapCaptions := True;
+    for CropIndex := 0 to Crops.Count - 1 do
+    begin
+      ACrop := Crops[CropIndex];
+      Grid.Cells[Ord(ccCrop) + CropIndex, 0] := Format(CaptionFormatString, [ACrop.CropName]);
+      Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
+      Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
+      Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustRowHeights := True;
+    end;
+  finally
+    Grid.EndUpdate;
+  end;
+  Grid.BeginUpdate;
+  try
+    for CropIndex := 0 to Crops.Count - 1 do
+    begin
+      Grid.Columns[Ord(ccCrop) + CropIndex].AutoAdjustColWidths := False;
+    end;
+  finally
+    Grid.EndUpdate;
+  end;
+  AFrame.LayoutMultiRowEditControls;
+end;
+
 procedure TframeFarm.InitializeEfficiencyCollectionFrame
   (StartTimes, EndTimes: TStringList; IrrigationTypes: TIrrigationCollection;
   AFrame: TframeFormulaGrid; CaptionFormatString: string);
@@ -2105,6 +2528,19 @@ begin
   finally
     Grid.EndUpdate;
   end
+end;
+
+procedure TframeFarm.SetAddedCropDemandFlux(Farm: TFarm);
+var
+  EfficiencyCollection: TFarmEfficiencyCollection;
+  AFrame: TframeFormulaGrid;
+begin
+  SetAddedCropDemand(Farm.AddedCropDemandFlux, frameAddedCropDemandFlux);
+end;
+
+procedure TframeFarm.SetAddedCropDemandRate(Farm: TFarm);
+begin
+  SetAddedCropDemand(Farm.AddedCropDemandRate, frameAddedCropDemandRate);
 end;
 
 procedure TframeFarm.SetAddedDemandRunoffSplit(Farm: TFarm;
@@ -2520,22 +2956,13 @@ end;
 procedure TframeFarm.GetMaxTimeAndCountForCrops(
   var MaxIndex: Integer; var MaxTimeCount: Integer; AFarm: TFarm);
 var
-  FarmEff: TFarmEfficienciesItem;
-  CropIndex: Integer;
+  AFrame: TframeFormulaGrid;
+  EffCollection: TFarmEfficiencyCollection;
 begin
-  MaxTimeCount := 0;
-  Assert(frameFormulaGridCrops.Grid.ColCount = AFarm.CurrentFarmEfficiencyCollection.Count + 2);
-  Assert(AFarm.CurrentFarmEfficiencyCollection.Count > 0);
-  MaxIndex := -1;
-  for CropIndex := 0 to AFarm.CurrentFarmEfficiencyCollection.Count - 1 do
-  begin
-    FarmEff := AFarm.CurrentFarmEfficiencyCollection[CropIndex];
-    if MaxTimeCount <= FarmEff.CropEfficiency.Count then
-    begin
-      MaxTimeCount := FarmEff.CropEfficiency.Count;
-      MaxIndex := CropIndex;
-    end;
-  end;
+  AFrame := frameFormulaGridCrops;
+  EffCollection := AFarm.CurrentFarmEfficiencyCollection;
+  GetMaxTimeAndCountForEfficiencyCollection(AFrame, EffCollection,
+    MaxTimeCount, MaxIndex);
 end;
 
 end.

@@ -84,11 +84,12 @@ resourcestring
   StrCCoeff = 'C-Coeff';
   StrDCoeff = 'D-Coeff';
   StrECoeff = 'E-Coeff';
+  StrSurficalVerticalK = 'Surfical Vertical K';
 
 {$R *.dfm}
 
 type
-  TSoilColumns = (scID, scName, scCapFringe, scSoiltype, scACoeff, scBCoeff,
+  TSoilColumns = (scID, scName, scCapFringe, scSurfKv, scSoiltype, scACoeff, scBCoeff,
     scCCoeff, scDCoeff, scECoeff);
 
 { TfrmSoilProperties }
@@ -354,6 +355,7 @@ begin
       Grid.Cells[ord(scID), ItemIndex+1] := IntToStr(ItemIndex+1);
       Grid.Cells[ord(scName), ItemIndex+1] := ASoil.SoilName;
       Grid.Cells[ord(scCapFringe), ItemIndex+1] := ASoil.CapillaryFringe;
+      Grid.Cells[ord(scSurfKv), ItemIndex+1] := ASoil.SurfVK;
       Grid.ItemIndex[ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType);
       Grid.Cells[ord(scACoeff), ItemIndex+1] := ASoil.ACoeff;
       Grid.Cells[ord(scBCoeff), ItemIndex+1] := ASoil.BCoeff;
@@ -383,7 +385,8 @@ procedure TfrmSoilProperties.IsValidCell(Sender: TObject; ACol, ARow: Integer;
   var ValidCell: Boolean);
 begin
   ValidCell := (ARow >= 1)
-    and ((ACol = Ord(scCapFringe)) or (ACol >= Ord(scACoeff)));
+    and ((ACol = Ord(scCapFringe)) or (ACol = Ord(scSurfKv))
+     or (ACol >= Ord(scACoeff)));
 end;
 
 procedure TfrmSoilProperties.LayoutMultiRowEditControls;
@@ -418,6 +421,7 @@ begin
       ASoil := FSoils[Count];
       ASoil.SoilName := Grid.Cells[ord(scName), RowIndex];
       ASoil.CapillaryFringe := Grid.Cells[ord(scCapFringe), RowIndex];
+      ASoil.SurfVK := Grid.Cells[ord(scSurfKv), RowIndex];
       ASoil.SoilType := TSoilType(Grid.ItemIndex[ord(scSoiltype), RowIndex]);
       ASoil.ACoeff := Grid.Cells[ord(scACoeff), RowIndex];
       ASoil.BCoeff := Grid.Cells[ord(scBCoeff), RowIndex];
@@ -457,6 +461,7 @@ begin
     frameSoils.Grid.Cells[Ord(scID), 0] := StrSoilID;
     frameSoils.Grid.Cells[Ord(scName), 0] := StrSoilName;
     frameSoils.Grid.Cells[Ord(scCapFringe), 0] := StrCapillaryFringeCa;
+    frameSoils.Grid.Cells[Ord(scSurfKv), 0] := StrSurficalVerticalK;
     frameSoils.Grid.Cells[Ord(scSoiltype), 0] := StrSoilType;
     frameSoils.Grid.Cells[Ord(scACoeff), 0] := StrACoeff;
     frameSoils.Grid.Cells[Ord(scBCoeff), 0] := StrBCoeff;
