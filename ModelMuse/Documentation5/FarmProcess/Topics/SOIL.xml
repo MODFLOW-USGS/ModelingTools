@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-03-24T15:35:26.681-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-24T17:55:08.486-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SOIL</title>
   <body>
     <header>
@@ -103,8 +103,8 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;from 0 to 1 of the precipitation that is available for consumption.</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;That is the the fraction times precipitation is the effective precipitation.</para>
           <para styleclass="Normal"></para>
-          <para styleclass="Normal">Precipitation that is not available for consumption becomes either runoff or deep percolation</para>
-          <para styleclass="Normal">Precipitation that is &#160; &#160; available for consumption, but is not consumed as ET becomes either runoff or deep percolation</para>
+          <para styleclass="Normal">Precipitation that <text style="font-weight:bold;">is</text>&#32;<text style="font-weight:bold;">not</text> available for consumption becomes either runoff or deep percolation</para>
+          <para styleclass="Normal">Precipitation that <text style="font-weight:bold;">is</text> available for consumption, but is not consumed as ET becomes either runoff or deep percolation</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal">Reads NSOIL Lookup Tables that specify the relationship between PRECIPITATION and effective precipitation. </para>
           <para styleclass="Normal">This is applied as a limitation on the potential consumption of precipitation by the landscape to satisfy evaporation and transpiration. Precipitation that is beyond limit becomes runoff or deep percolation. </para>
