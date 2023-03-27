@@ -433,6 +433,7 @@ var
   SfrPackage: TSfrPackageSelection;
   FarmProcess4: TFarmProcess4;
   SalinityFlush: TFarmProcess4SalinityFlush;
+  FarmSurfaceWater4: TFarmProcess4SurfaceWater;
 begin
   Changing := True;
   FrameLoaded := False;
@@ -460,6 +461,7 @@ begin
     FarmProcess := Packages.FarmProcess;
     FarmProcess4 := Packages.FarmProcess4;
     SalinityFlush := Packages.FarmSalinityFlush;
+    FarmSurfaceWater4 := Packages.FarmSurfaceWater4;
 
     tabCosts.TabVisible :=
       (FarmProcess.DeficiencyPolicy in
@@ -694,7 +696,10 @@ begin
       frameFormulaGridDiversion.GetData(FarmList, dtDiversion);
       frameFormulaGridReturnFlow.GetData(FarmList, dtReturnFlow);
 
-      frameDelivery.GetData(FarmList);
+      frameDelivery.GetData_OwhmV1(FarmList);
+      tabNonRoutedDelivery.tavVisible := FarmProcess.IsSelected
+        or (FarmProcess4.IsSelected and FarmSurfaceWater4.IsSelected
+        and (FarmSurfaceWater4.Non_Routed_Delivery <> foNotUsed));
 
       tabEfficiencyImprovement.TabVisible := FarmProcess4.IsSelected
         and (FarmProcess4.EfficiencyImprovement.FarmOption <> foNotUsed)
@@ -2135,7 +2140,7 @@ begin
   end;
   if {FarmCreated or} frameDelivery.DataChanged then
   begin
-    frameDelivery.SetData(FarmList);
+    frameDelivery.SetData_OwhmV1(FarmList);
   end;
 end;
 

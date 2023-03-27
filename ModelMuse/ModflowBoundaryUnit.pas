@@ -2531,21 +2531,24 @@ var
   Item1: TCustomBoundaryItem;
 begin
   inherited;
-  List := TList.Create;
-  try
-    for Index := 0 to Count - 1 do
-    begin
-      List.Add(Items[Index]);
+  if ShouldDeleteItemsWithZeroDuration then
+  begin
+    List := TList.Create;
+    try
+      for Index := 0 to Count - 1 do
+      begin
+        List.Add(Items[Index]);
+      end;
+      List.Sort(SortBoundaryItems);
+      for Index := 0 to List.Count - 1 do
+      begin
+        Item1 := List[Index];
+        Item1.Index := Index;
+      end;
+      DeleteItemsWithZeroDuration;
+    finally
+      List.Free;
     end;
-    List.Sort(SortBoundaryItems);
-    for Index := 0 to List.Count - 1 do
-    begin
-      Item1 := List[Index];
-      Item1.Index := Index;
-    end;
-    DeleteItemsWithZeroDuration;
-  finally
-    List.Free;
   end;
 end;
 

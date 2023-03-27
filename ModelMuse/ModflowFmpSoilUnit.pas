@@ -7,42 +7,42 @@ uses
   ModflowFmpBaseClasses, GoPhastTypes;
 
 type
-  TSoilType = (stSandyLoam, stSilt, stSiltyClay, stOther);
+  TSoilType = (stSand, stSandyLoam, stSilt, stSiltyClay, stOther);
   TSoilMethod = (smConstant, smInterpolate, smStep, smNearest);
 
-  TLookupItem = class(TPhastCollectionItem)
+  TLookupItem = class(TCustomZeroFarmItem)
   private
-    FStoredLookupValue: TRealStorage;
-    FStoredReturnValue: TRealStorage;
-    function GetLookupValue: double;
-    function GetReturnValue: double;
-    procedure SetLookupValue(const Value: double);
-    procedure SetReturnValue(const Value: double);
-    procedure SetStoredLookupValue(const Value: TRealStorage);
-    procedure SetStoredReturnValue(const Value: TRealStorage);
+    const
+    LookupPosition = 0;
+    ReturnPostion  = 1;
+    // See @link(BoundaryFormula).
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
+    function BoundaryFormulaCount: integer; override;
+    protected
   public
-    constructor Create(Collection: TCollection); override;
-    destructor Destroy; override;
+//    constructor Create(Collection: TCollection); override;
     procedure Assign(Source: TPersistent); override;
-    property LookupValue: double read GetLookupValue write SetLookupValue;
-    property ReturnValue: double read GetReturnValue write SetReturnValue;
-    function IsSame(OtherItem: TLookupItem): Boolean;
+    function IsSame(OtherItem: TOrderedItem): Boolean; override;
   published
-    property StoredLookupValue: TRealStorage read FStoredLookupValue
-      write SetStoredLookupValue;
-    property StoredReturnValue: TRealStorage read FStoredReturnValue
-      write SetStoredReturnValue;
+    property LookupValue: string index LookupPosition read GetBoundaryFormula write SetBoundaryFormula;
+    property ReturnValue: string index ReturnPostion read GetBoundaryFormula write SetBoundaryFormula;
   end;
 
-  TLookUpTable = class(TPhastCollection)
+  TLookUpTable = class(TCustomFarmCollection)
   private
     FMethod: TSoilMethod;
     procedure SetMethod(const Value: TSoilMethod);
     function GetItem(Index: Integer): TLookupItem;
     procedure SetItem(Index: Integer; const Value: TLookupItem);
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
-    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    procedure Assign(Source: TPersistent); override;
     property Items[Index: Integer]:TLookupItem  read GetItem write SetItem; default;
+    function IsSame(OtherTable: TOrderedCollection): Boolean; override;
   published
     property Method: TSoilMethod read FMethod write SetMethod;
   end;
@@ -60,18 +60,6 @@ type
     var
     FSoilName: string;
     FSoilType: TSoilType;
-//    function GetCapillaryFringe: string;
-//    function GetACoeff: string;
-//    function GetBCoeff: string;
-//    function GetCCoeff: string;
-//    function GetDCoeff: string;
-//    function GetECoeff: string;
-//    procedure SetCapillaryFringe(const Value: string);
-//    procedure SetACoeff(const Value: string);
-//    procedure SetBCoeff(const Value: string);
-//    procedure SetCCoeff(const Value: string);
-//    procedure SetDCoeff(const Value: string);
-//    procedure SetECoeff(const Value: string);
     FLookUpTable: TLookUpTable;
     procedure SetSoilName(Value: string);
     procedure SetSoilType(const Value: TSoilType);
@@ -116,14 +104,6 @@ type
     {$ENDIF}
       ;
   end;
-
-//    CapillaryFringePosition =  0;
-//    ACoeffPosition = 1;
-//    BCoeffPosition = 2;
-//    CCoeffPosition = 3;
-//    DCoeffPosition = 4;
-//    ECoeffPosition = 5;
-
 
   TSoilRecord = record
     SoilID: integer;
@@ -172,6 +152,7 @@ begin
     SourceItem := TSoilItem(Source);
     SoilName := SourceItem.SoilName;
     SoilType := SourceItem.SoilType;
+    LookUpTable := SourceItem.LookUpTable;
   end;
   inherited;
 end;
@@ -184,7 +165,7 @@ end;
 constructor TSoilItem.Create(Collection: TCollection);
 begin
   inherited;
-  FLookUpTable := TLookUpTable.Create(OnInvalidateModelEvent);
+  FLookUpTable := TLookUpTable.Create(Model);
 end;
 
 destructor TSoilItem.Destroy;
@@ -276,6 +257,7 @@ begin
     OtherItem := TSoilItem(AnotherItem);
     result := (SoilName = OtherItem.SoilName)
       and (SoilType = OtherItem.SoilType)
+      and (LookUpTable.IsSame(OtherItem.LookUpTable));
   end;
 end;
 
@@ -622,68 +604,75 @@ begin
   end;
 end;
 
-constructor TLookupItem.Create(Collection: TCollection);
+function TLookupItem.BoundaryFormulaCount: integer;
 begin
-  inherited;
-  FStoredLookupValue := TRealStorage.Create(OnInvalidateModel);
-  FStoredReturnValue := TRealStorage.Create(OnInvalidateModel);
-  LookupValue := 0;
-  ReturnValue := 0;
+  result := 2;
 end;
 
-destructor TLookupItem.Destroy;
+//constructor TLookupItem.Create(Collection: TCollection);
+//begin
+//  inherited;
+////  FStoredLookupValue := TRealStorage.Create(OnInvalidateModel);
+////  FStoredReturnValue := TRealStorage.Create(OnInvalidateModel);
+//  LookupValue := 0;
+//  ReturnValue := 0;
+//end;
+
+function TLookupItem.GetBoundaryFormula(Index: integer): string;
 begin
-  FStoredLookupValue.Free;
-  FStoredReturnValue.Free;
-  inherited;
+  Result := FFormulaObjects[Index].Formula;
+  ResetItemObserver(Index);
 end;
 
-function TLookupItem.GetLookupValue: double;
+function TLookupItem.IsSame(OtherItem: TOrderedItem): Boolean;
 begin
-  result := StoredLookupValue.Value;
+  result := (OtherItem is TLookupItem) and inherited;
+
+//  (LookupValue = OtherItem.LookupValue)
+//    and (ReturnValue = OtherItem.ReturnValue)
 end;
 
-function TLookupItem.GetReturnValue: double;
+procedure TLookupItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
-  result := StoredReturnValue.Value;
-end;
-
-function TLookupItem.IsSame(OtherItem: TLookupItem): Boolean;
-begin
-  result := (LookupValue = OtherItem.LookupValue)
-    and (ReturnValue = OtherItem.ReturnValue)
-end;
-
-procedure TLookupItem.SetLookupValue(const Value: double);
-begin
-  StoredLookupValue.Value := Value;
-end;
-
-procedure TLookupItem.SetReturnValue(const Value: double);
-begin
-  StoredReturnValue.Value := Value;
-end;
-
-procedure TLookupItem.SetStoredLookupValue(const Value: TRealStorage);
-begin
-  FStoredLookupValue := Value;
-end;
-
-procedure TLookupItem.SetStoredReturnValue(const Value: TRealStorage);
-begin
-  FStoredReturnValue := Value;
+  if FFormulaObjects[Index].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, Index, FFormulaObjects[Index]);
+  end;
 end;
 
 { TLookUpTable }
 
-constructor TLookUpTable.Create(InvalidateModelEvent: TNotifyEvent);
+//constructor TLookUpTable.Create(Model: TBaseModel);
+//begin
+//  inherited Create(TLookupItem, Model);
+//end;
+
+procedure TLookUpTable.Assign(Source: TPersistent);
 begin
-  inherited Create(TLookupItem, InvalidateModelEvent);
+  if Source is TLookUpTable then
+  begin
+    Method := TLookUpTable(Source).Method;
+  end;
+  inherited;
 end;
 
 function TLookUpTable.GetItem(Index: Integer): TLookupItem;
 begin
   result := inherited Items[index] as TLookupItem;
+end;
+
+function TLookUpTable.IsSame(OtherTable: TOrderedCollection): Boolean;
+var
+  index: Integer;
+begin
+  result := (OtherTable is TLookUpTable)
+    and (Method = TLookUpTable(OtherTable).Method)
+    and inherited IsSame(OtherTable);
+end;
+
+class function TLookUpTable.ItemClass: TBoundaryItemClass;
+begin
+  result := TLookupItem;
 end;
 
 procedure TLookUpTable.SetItem(Index: Integer; const Value: TLookupItem);
@@ -698,6 +687,11 @@ begin
     FMethod := Value;
     InvalidateModel;
   end;
+end;
+
+function TLookUpTable.ShouldDeleteItemsWithZeroDuration: Boolean;
+begin
+  result := False;
 end;
 
 end.

@@ -7,7 +7,7 @@ uses
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, frameGridUnit,
   frameFormulaGridUnit, StdCtrls, Buttons, ExtCtrls,
   ModflowFmpSoilUnit, UndoItems, Grids, RbwParser, RbwDataGrid4,
-  GoPhastTypes;
+  GoPhastTypes, frameSoilEffectivePrecipUnit;
 
 type
   TUndoSoils = class(TCustomUndo)
@@ -32,6 +32,8 @@ type
     frameSoils: TframeFormulaGrid;
     comboSoilType: TComboBox;
     rbwprsrGlobal: TRbwParser;
+    splitterSoil: TSplitter;
+    frameSoilEffectivePrecip: TframeSoilEffectivePrecip;
     procedure FormDestroy(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
@@ -48,8 +50,10 @@ type
     procedure frameSoilsGridButtonClick(Sender: TObject; ACol, ARow: Integer);
     procedure frameSoilsGridRowMoved(Sender: TObject; FromIndex,
       ToIndex: Integer);
+    procedure frameSoilEffectivePrecipGridExit(Sender: TObject);
   private
     FSoils: TSoilCollection;
+    FLookUpTable: TLookUpTable;
     procedure SetGridCaptions;
     procedure GetData;
     procedure SetData;
@@ -60,6 +64,8 @@ type
       const ACol, ARow: integer; Formula: string;
       const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
     procedure GetGlobalVariables;
+    procedure GetLookUpTableProperties;
+    procedure SetLookUpTableProperties;
     { Private declarations }
   public
     { Public declarations }
@@ -71,7 +77,8 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit;
+  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit,
+  ModflowPackageSelectionUnit;
 
 resourcestring
   StrErrorInFormulaS = 'Error in formula: %s';
@@ -91,6 +98,10 @@ resourcestring
 type
   TSoilColumns = (scID, scName, scCapFringe, scSurfKv, scSoiltype, scACoeff, scBCoeff,
     scCCoeff, scDCoeff, scECoeff);
+
+var
+  Owhm1SoilTypes: TStringList;
+  Owhm2SoilTypes: TStringList;
 
 { TfrmSoilProperties }
 
@@ -198,6 +209,15 @@ begin
   LayoutMultiRowEditControls;
 end;
 
+procedure TfrmSoilProperties.frameSoilEffectivePrecipGridExit(Sender: TObject);
+begin
+  inherited;
+  if FLookUpTable <> nil then
+  begin
+    SetLookUpTableProperties;
+  end;
+end;
+
 procedure TfrmSoilProperties.frameSoilsGridButtonClick(Sender: TObject; ACol,
   ARow: Integer);
 var
@@ -295,11 +315,33 @@ end;
 
 procedure TfrmSoilProperties.frameSoilsGridSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
+var
+  SoilIndex: Integer;
+  ASoil: TSoilItem;
 begin
   inherited;
   if (ARow >= 1) and (ACol >= Ord(scACoeff)) then
   begin
     CanSelect := frameSoils.Grid.ItemIndex[ord(scSoiltype), ARow] = Ord(stOther);
+  end;
+  if (ARow >= frameSoils.Grid.FixedRows) and not frameSoils.Grid.Drawing then
+  begin
+    SoilIndex := ARow - 1;
+    while SoilIndex >= FSoils.Count do
+    begin
+      FSoils.Add;
+    end;
+    if FLookUpTable <> nil then
+    begin
+      SetLookUpTableProperties;
+    end;
+
+    ASoil := FSoils[SoilIndex];
+    FLookUpTable := ASoil.LookUpTable;
+    GetLookUpTableProperties;
+    frameSoilEffectivePrecip.Enabled := True;
+    frameSoilEffectivePrecip.lblSoil.Caption :=
+      'Soil: ' + frameSoils.Grid.Cells[Ord(scName), ARow];
   end;
 end;
 
@@ -310,6 +352,8 @@ begin
   if (ACol = Ord(scName)) and (Value <> '') then
   begin
     frameSoils.seNumber.asInteger := frameSoils.Grid.RowCount-1;
+    frameSoilEffectivePrecip.lblSoil.Caption :=
+      'Soil: ' + frameSoils.Grid.Cells[Ord(scName), ARow];
   end;
   if (ACol = Ord(scSoiltype)) and (ARow >= frameSoils.Grid.FixedRows) then
   begin
@@ -334,10 +378,27 @@ var
   Grid: TRbwDataGrid4;
   ItemIndex: Integer;
   ASoil: TSoilItem;
+  FarmSoil4: TFarmProcess4Soil;
+  Dummy: Boolean;
 begin
   GetGlobalVariables;
   FSoils := TSoilCollection.Create(nil);
   FSoils.Assign(frmGoPhast.PhastModel.FmpSoils);
+
+//    Owhm1SoilTypes := TStringList.Create;
+//  Owhm2SoilTypes := TStringList.Create;
+//  TSoilColumns = (scID, scName, scCapFringe, scSurfKv, scSoiltype, scACoeff, scBCoeff,
+//    scCCoeff, scDCoeff, scECoeff);
+
+  if frmGoPhast.ModelSelection = msModflowFmp then
+  begin
+    frameSoils.Grid.Columns[Ord(scSoiltype)].PickList := Owhm1SoilTypes;
+  end
+  else
+  begin
+    Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
+    frameSoils.Grid.Columns[Ord(scSoiltype)].PickList := Owhm2SoilTypes;
+  end;
 
   frameSoils.seNumber.AsInteger := FSoils.Count;
   frameSoils.seNumber.OnChange(frameSoils.seNumber);
@@ -356,12 +417,50 @@ begin
       Grid.Cells[ord(scName), ItemIndex+1] := ASoil.SoilName;
       Grid.Cells[ord(scCapFringe), ItemIndex+1] := ASoil.CapillaryFringe;
       Grid.Cells[ord(scSurfKv), ItemIndex+1] := ASoil.SurfVK;
-      Grid.ItemIndex[ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType);
+      if frmGoPhast.ModelSelection = msModflowFmp then
+      begin
+        Grid.ItemIndex[Ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType)-1;
+      end
+      else
+      begin
+        Grid.ItemIndex[Ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType);
+      end;
       Grid.Cells[ord(scACoeff), ItemIndex+1] := ASoil.ACoeff;
       Grid.Cells[ord(scBCoeff), ItemIndex+1] := ASoil.BCoeff;
       Grid.Cells[ord(scCCoeff), ItemIndex+1] := ASoil.CCoeff;
       Grid.Cells[ord(scDCoeff), ItemIndex+1] := ASoil.DCoeff;
       Grid.Cells[ord(scECoeff), ItemIndex+1] := ASoil.ECoeff;
+    end;
+  finally
+    Grid.EndUpdate;
+  end;
+
+  Dummy := True;
+  frameSoilsGridSelectCell(Grid, Ord(scName), 1, Dummy);
+
+  FarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
+  frameSoilEffectivePrecip.Visible :=
+    (frmGoPhast.ModelSelection = msModflowOwhm2)
+    and (FarmSoil4.EffPrecipTable.FarmOption <> foNotUsed);
+  splitterSoil.Visible := frameSoilEffectivePrecip.Visible;
+  if not frameSoilEffectivePrecip.Visible then
+  begin
+    frameSoils.Align := alClient;
+  end;
+
+  Grid := frameSoilEffectivePrecip.Grid;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[0,0] := 'Precipitation Rate';
+
+    FarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
+    if FarmSoil4.EffPrecipTableOption = ppcLength then
+    begin
+      Grid.Cells[1,0] := 'Effective Precipitation (L)';
+    end
+    else
+    begin
+      Grid.Cells[1,0] := 'Effective Precipitation Fraction';
     end;
   finally
     Grid.EndUpdate;
@@ -378,6 +477,32 @@ begin
     frmGoPhast.PhastModel.RefreshGlobalVariables(CompilerList);
   finally
     CompilerList.Free;
+  end;
+end;
+
+procedure TfrmSoilProperties.GetLookUpTableProperties;
+var
+  ItemIndex: Integer;
+  Grid: TRbwDataGrid4;
+  Item: TLookupItem;
+begin
+  if frameSoilEffectivePrecip.Visible then
+  begin
+    Grid := frameSoilEffectivePrecip.Grid;
+    ClearGrid(Grid);
+    frameSoilEffectivePrecip.comboInterpolation.ItemIndex := Ord(FLookUpTable.Method);
+    frameSoilEffectivePrecip.seNumber.AsInteger := FLookUpTable.Count;
+    Grid.BeginUpdate;
+    try
+      for ItemIndex := 0 to FLookUpTable.Count - 1 do
+      begin
+        Item := FLookUpTable[ItemIndex];
+        Grid.Cells[0, ItemIndex+1] := Item.LookupValue;
+        Grid.Cells[1, ItemIndex+1] := Item.ReturnValue;
+      end;
+    finally
+      Grid.EndUpdate;
+    end;
   end;
 end;
 
@@ -406,6 +531,7 @@ var
   Grid: TRbwDataGrid4;
   ASoil: TSoilItem;
   Index: Integer;
+  ItemIndex: Integer;
 begin
   Count := 0;
   Grid := frameSoils.Grid;
@@ -422,7 +548,18 @@ begin
       ASoil.SoilName := Grid.Cells[ord(scName), RowIndex];
       ASoil.CapillaryFringe := Grid.Cells[ord(scCapFringe), RowIndex];
       ASoil.SurfVK := Grid.Cells[ord(scSurfKv), RowIndex];
-      ASoil.SoilType := TSoilType(Grid.ItemIndex[ord(scSoiltype), RowIndex]);
+      ItemIndex := Grid.ItemIndex[ord(scSoiltype), RowIndex];
+      if ItemIndex >= 0 then
+      begin
+        if frmGoPhast.ModelSelection = msModflowFmp then
+        begin
+          ASoil.SoilType := TSoilType(ItemIndex+1);
+        end
+        else
+        begin
+          ASoil.SoilType := TSoilType(ItemIndex);
+        end;
+      end;
       ASoil.ACoeff := Grid.Cells[ord(scACoeff), RowIndex];
       ASoil.BCoeff := Grid.Cells[ord(scBCoeff), RowIndex];
       ASoil.CCoeff := Grid.Cells[ord(scCCoeff), RowIndex];
@@ -481,6 +618,36 @@ begin
   end;
 end;
 
+procedure TfrmSoilProperties.SetLookUpTableProperties;
+var
+  Grid: TRbwDataGrid4;
+  ItemIndex: Integer;
+  Item: TLookupItem;
+begin
+  if frameSoilEffectivePrecip.Visible then
+  begin
+    if frameSoilEffectivePrecip.comboInterpolation.ItemIndex >= 0 then
+    begin
+      FLookUpTable.Method := TSoilMethod(frameSoilEffectivePrecip.comboInterpolation.ItemIndex);
+    end;
+    while FLookUpTable.Count < frameSoilEffectivePrecip.seNumber.AsInteger do
+    begin
+      FLookUpTable.Add;
+    end;
+    while FLookUpTable.Count > frameSoilEffectivePrecip.seNumber.AsInteger do
+    begin
+      FLookUpTable.Last.Free;
+    end;
+    Grid := frameSoilEffectivePrecip.Grid;
+    for ItemIndex := 0 to FLookUpTable.Count - 1 do
+    begin
+      Item := FLookUpTable[ItemIndex];
+      Item.LookupValue := Grid.Cells[0, ItemIndex+1];
+      Item.ReturnValue := Grid.Cells[1, ItemIndex+1];
+    end;
+  end;
+end;
+
 { TUndoSoils }
 
 constructor TUndoSoils.Create(var NewSoils: TSoilCollection);
@@ -514,5 +681,25 @@ begin
   frmGoPhast.PhastModel.FmpSoils := FOldSoils;
   frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
 end;
+
+initialization
+
+  Owhm1SoilTypes := TStringList.Create;
+  Owhm2SoilTypes := TStringList.Create;
+
+  Owhm1SoilTypes.Add('Sandy Loam');
+  Owhm1SoilTypes.Add('Silt');
+  Owhm1SoilTypes.Add('Silty Clay');
+  Owhm1SoilTypes.Add('Other');
+
+  Owhm2SoilTypes.Add('Sand');
+  Owhm2SoilTypes.Add('Sandy Loam');
+  Owhm2SoilTypes.Add('Silt');
+  Owhm2SoilTypes.Add('Silty Clay');
+  Owhm2SoilTypes.Add('Other');
+
+finalization
+  Owhm1SoilTypes.Free;
+  Owhm2SoilTypes.Free;
 
 end.

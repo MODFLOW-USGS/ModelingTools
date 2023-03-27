@@ -196,6 +196,9 @@ type
   TNonRoutedDeliveryType = (nrdtFarmDemand, nrdtDischarged, nrdtStored,
     nrdtVirtualFarm);
 
+  TNonRoutedDeliveryTypeOwhm2 = (nrdt2FarmDemand, nrdt2Discharged, nrdt2Stored,
+    nrdt2Infiltrate);
+
   //Data Set 33
   TNonRoutedDeliveryParameterItem = class(TCustomZeroFarmItem)
   private
@@ -205,7 +208,10 @@ type
     VirtualFarmPosition = 2;
   var
     FNonRoutedDeliveryType: TNonRoutedDeliveryType;
+    FNonRoutedDeliveryTypeOwhm2: TNonRoutedDeliveryTypeOwhm2;
     procedure SetNonRoutedDeliveryType(const Value: TNonRoutedDeliveryType);
+    procedure SetNonRoutedDeliveryTypeOwhm2(
+      const Value: TNonRoutedDeliveryTypeOwhm2);
     function GetRank: string;
     function GetVolume: string;
     procedure SetRank(const Value: string);
@@ -227,6 +233,8 @@ type
     property VirtualFarm: string read GetVirtualFarm write SetVirtualFarm;
     property NonRoutedDeliveryType: TNonRoutedDeliveryType
       read FNonRoutedDeliveryType write SetNonRoutedDeliveryType;
+    property NonRoutedDeliveryTypeOwhm2: TNonRoutedDeliveryTypeOwhm2
+      read FNonRoutedDeliveryTypeOwhm2 write SetNonRoutedDeliveryTypeOwhm2;
   end;
 
   //Data Set 33
@@ -886,11 +894,14 @@ end;
 { TNonRoutedDeliveryParameterItem }
 
 procedure TNonRoutedDeliveryParameterItem.Assign(Source: TPersistent);
+var
+  OtherItem: TNonRoutedDeliveryParameterItem;
 begin
   if Source is TNonRoutedDeliveryParameterItem then
   begin
-    NonRoutedDeliveryType :=
-      TNonRoutedDeliveryParameterItem(Source).NonRoutedDeliveryType;
+    OtherItem := TNonRoutedDeliveryParameterItem(Source);
+    NonRoutedDeliveryType := OtherItem.NonRoutedDeliveryType;
+    NonRoutedDeliveryTypeOwhm2 := OtherItem.NonRoutedDeliveryTypeOwhm2;
   end;
   inherited;
 
@@ -935,11 +946,15 @@ end;
 
 function TNonRoutedDeliveryParameterItem.IsSame(
   AnotherItem: TOrderedItem): boolean;
+var
+  OtherItem: TNonRoutedDeliveryParameterItem;
 begin
   Result := (AnotherItem is TNonRoutedDeliveryParameterItem) and inherited;
   if result then
   begin
-    result := NonRoutedDeliveryType = TNonRoutedDeliveryParameterItem(AnotherItem).NonRoutedDeliveryType
+    OtherItem := TNonRoutedDeliveryParameterItem(AnotherItem);
+    result :=( NonRoutedDeliveryType = OtherItem.NonRoutedDeliveryType)
+      and (NonRoutedDeliveryTypeOwhm2 = OtherItem.NonRoutedDeliveryTypeOwhm2);
   end;
 end;
 
@@ -963,6 +978,16 @@ begin
   if FNonRoutedDeliveryType <> Value then
   begin
     FNonRoutedDeliveryType := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TNonRoutedDeliveryParameterItem.SetNonRoutedDeliveryTypeOwhm2(
+  const Value: TNonRoutedDeliveryTypeOwhm2);
+begin
+  if FNonRoutedDeliveryTypeOwhm2 <> Value then
+  begin
+    FNonRoutedDeliveryTypeOwhm2 := Value;
     InvalidateModel;
   end;
 end;

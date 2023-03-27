@@ -19,7 +19,6 @@ type
     procedure GridSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
     procedure seNumberChange(Sender: TObject);
-    procedure lblNumberOfDeliveryTypesClick(Sender: TObject);
     procedure sbInsertClick(Sender: TObject);
     procedure sbDeleteClick(Sender: TObject);
     procedure edFormulaChange(Sender: TObject);
@@ -28,6 +27,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure GridSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
+    procedure sbAddClick(Sender: TObject);
   private
     FChanged: boolean;
     FOnChange: TNotifyEvent;
@@ -41,8 +41,8 @@ type
     property DataChanged: Boolean read FChanged;
     procedure InitializeControls;
     // ScreenObjectList contains only objects that define farms.
-    procedure GetData(FarmList: TFarmList);
-    procedure SetData(FarmList: TFarmList);
+    procedure GetData_OwhmV1(FarmList: TFarmList);
+    procedure SetData_OwhmV1(FarmList: TFarmList);
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
     procedure LayoutMultiRowEditControls; override;
     { Public declarations }
@@ -50,7 +50,7 @@ type
 
 type
   TDeliveryTimeColumns = (dtcStart, dtcEnd);
-  TDeliveryColumns = (dcVolume, dcRank, dcHowUsed, dcVirtualFarm);
+  TDeliveryColumns_Owhmv1 = (dcVolume, dcRank, dcHowUsed, dcVirtualFarm);
 
 var
   frameDeliveryGrid: TframeDeliveryGrid;
@@ -72,7 +72,10 @@ resourcestring
   StrVirtualFarmNumber = 'Virtual farm number (NRDU)';
 
 const
-  DeliveryColumns = Ord(High(TDeliveryColumns))+1;
+  DeliveryColumns = Ord(High(TDeliveryColumns_Owhmv1))+1;
+var
+  PickListOwhmV1: TStringList;
+  PickListOwhmV2: TStringList;
 
 {$R *.dfm}
 
@@ -139,7 +142,7 @@ begin
 end;
 
 
-procedure TframeDeliveryGrid.GetData(FarmList: TFarmList);
+procedure TframeDeliveryGrid.GetData_OwhmV1(FarmList: TFarmList);
 var
   ObjectIndex: Integer;
   AFarm: TFarm;
@@ -149,7 +152,17 @@ var
   OuterIndex: Integer;
   TimeIndex: Integer;
   TimeItem: TNonRoutedDeliveryParameterItem;
+  ModelSelection: TModelSelection;
 begin
+  ModelSelection := frmGoPhast.ModelSelection;
+  if ModelSelection = msModflowFmp then
+  begin
+    comboHowUsed.Items := PickListOwhmV1;
+  end
+  else
+  begin
+    comboHowUsed.Items := PickListOwhmV2;
+  end;
   Changing := True;
   try
     Assert(FarmList.Count > 0);
@@ -201,8 +214,18 @@ begin
           Grid.Cells[Ord(dtcEnd), TimeIndex+1] := FloatToStr(TimeItem.EndTime);
           Grid.Cells[Ord(dcVolume) + OuterIndex*DeliveryColumns + 2, TimeIndex+1] := TimeItem.Volume;
           Grid.Cells[Ord(dcRank) + OuterIndex*DeliveryColumns + 2, TimeIndex+1] := TimeItem.Rank;
-          Grid.ItemIndex[Ord(dcHowUsed) + OuterIndex*DeliveryColumns + 2, TimeIndex+1] := Ord(TimeItem.NonRoutedDeliveryType);
-          Grid.Cells[Ord(dcVirtualFarm) + OuterIndex*DeliveryColumns + 2, TimeIndex+1] := TimeItem.VirtualFarm;
+          if ModelSelection = msModflowFmp then
+          begin
+            Grid.ItemIndex[Ord(dcHowUsed) + OuterIndex*DeliveryColumns + 2,
+              TimeIndex+1] := Ord(TimeItem.NonRoutedDeliveryType);
+          end
+          else
+          begin
+            Grid.ItemIndex[Ord(dcHowUsed) + OuterIndex*DeliveryColumns + 2,
+              TimeIndex+1] := Ord(TimeItem.NonRoutedDeliveryTypeOwhm2);
+          end;
+          Grid.Cells[Ord(dcVirtualFarm) + OuterIndex*DeliveryColumns + 2,
+            TimeIndex+1] := TimeItem.VirtualFarm;
         end;
       end;
     finally
@@ -248,13 +271,13 @@ end;
 procedure TframeDeliveryGrid.GridSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 var
-  ColumnType: TDeliveryColumns;
+  ColumnType: TDeliveryColumns_Owhmv1;
   DelivType: TNonRoutedDeliveryType;
 begin
   inherited;
   if ACol >= 2 then
   begin
-    ColumnType := TDeliveryColumns((ACol-2) mod DeliveryColumns);
+    ColumnType := TDeliveryColumns_Owhmv1((ACol-2) mod DeliveryColumns);
     if ColumnType = dcVirtualFarm then
     begin
       DelivType := TNonRoutedDeliveryType(Grid.ItemIndex[ACol-1,ARow]);
@@ -271,11 +294,10 @@ begin
   DoChange;
 end;
 
-procedure TframeDeliveryGrid.lblNumberOfDeliveryTypesClick(Sender: TObject);
+procedure TframeDeliveryGrid.sbAddClick(Sender: TObject);
 begin
   inherited;
   DoChange;
-//  FChanged := True;
 end;
 
 procedure TframeDeliveryGrid.sbDeleteClick(Sender: TObject);
@@ -305,26 +327,34 @@ var
   PickList: TStringList;
   PriorColCount: Integer;
   ColIndex: Integer;
-  ColumnType: TDeliveryColumns;
+  ColumnType: TDeliveryColumns_Owhmv1;
 begin
   inherited;
   PriorColCount := Grid.ColCount;
   Assert(PriorColCount >= 2);
   Grid.ColCount := seNumberOfDeliveryTypes.AsInteger * DeliveryColumns + 2;
 
-  PickList := TStringList.Create;
+//  PickList := TStringList.Create;
   try
-    PickList.Add(StrOnlyTheAmountRequ);
-    PickList.Add(StrSurplusDischargedT);
-    PickList.Add(StrSurplusStoredInGr);
-    PickList.Add(StrVirtualFarm0);
+    if frmGoPhast.ModelSelection = msModflowFmp then
+    begin
+      PickList := PickListOwhmV1;
+    end
+    else
+    begin
+      PickList := PickListOwhmV2;
+    end;
+//    PickList.Add(StrOnlyTheAmountRequ);
+//    PickList.Add(StrSurplusDischargedT);
+//    PickList.Add(StrSurplusStoredInGr);
+//    PickList.Add(StrVirtualFarm0);
     comboHowUsed.Items := PickList;
 
     Grid.BeginUpdate;
     try
       for ColIndex := PriorColCount to Grid.ColCount - 1 do
       begin
-        ColumnType := TDeliveryColumns((ColIndex-2) mod DeliveryColumns);
+        ColumnType := TDeliveryColumns_Owhmv1((ColIndex-2) mod DeliveryColumns);
         case ColumnType of
           dcVolume:
             begin
@@ -349,7 +379,14 @@ begin
             end;
           dcVirtualFarm:
             begin
-              Grid.Cells[ColIndex,0] := StrVirtualFarmNumber;
+              if  frmGoPhast.ModelSelection = msModflowFmp then
+              begin
+                Grid.Cells[ColIndex,0] := StrVirtualFarmNumber;
+              end
+              else
+              begin
+               Grid.Cells[ColIndex,0] := 'Infiltration Location';
+              end;
               Grid.Columns[ColIndex].ButtonUsed := True;
               Grid.Columns[ColIndex].ButtonCaption := StrF;
               Grid.Columns[ColIndex].ButtonWidth := 35;
@@ -366,7 +403,7 @@ begin
       Grid.EndUpdate;
     end;
   finally
-    PickList.Free;
+//    PickList.Free;
   end;
 
   for ColIndex := PriorColCount to Grid.ColCount - 1 do
@@ -379,7 +416,7 @@ begin
 //  FChanged := True;
 end;
 
-procedure TframeDeliveryGrid.SetData(FarmList: TFarmList);
+procedure TframeDeliveryGrid.SetData_OwhmV1(FarmList: TFarmList);
 var
   index: Integer;
   Farm: TFarm;
@@ -395,7 +432,9 @@ var
   ARow: Integer;
   ColStart: Integer;
   DeliveryTimeItem: TNonRoutedDeliveryParameterItem;
+  ModelSelection: TModelSelection;
 begin
+  ModelSelection := frmGoPhast.ModelSelection;
   for index := 0 to FarmList.Count - 1 do
   begin
     Farm := FarmList[index];
@@ -443,11 +482,23 @@ begin
             DeliveryTimeItem.EndTime := EndTimes[RowIndex];
             DeliveryTimeItem.Volume := Grid.Cells[ColStart + Ord(dcVolume),ARow];
             DeliveryTimeItem.Rank := Grid.Cells[ColStart + Ord(dcRank),ARow];
-            DeliveryTimeItem.NonRoutedDeliveryType :=
-              TNonRoutedDeliveryType(Max(0, Grid.ItemIndex[ColStart + Ord(dcHowUsed),ARow]));
-            if DeliveryTimeItem.NonRoutedDeliveryType = nrdtVirtualFarm then
+            if ModelSelection = msModflowFmp then
             begin
-              DeliveryTimeItem.VirtualFarm := Grid.Cells[ColStart + Ord(dcVirtualFarm),ARow];
+              DeliveryTimeItem.NonRoutedDeliveryType :=
+                TNonRoutedDeliveryType(Max(0, Grid.ItemIndex[ColStart + Ord(dcHowUsed),ARow]));
+              if DeliveryTimeItem.NonRoutedDeliveryType = nrdtVirtualFarm then
+              begin
+                DeliveryTimeItem.VirtualFarm := Grid.Cells[ColStart + Ord(dcVirtualFarm),ARow];
+              end;
+            end
+            else
+            begin
+              DeliveryTimeItem.NonRoutedDeliveryTypeOwhm2 :=
+                TNonRoutedDeliveryTypeOwhm2(Max(0, Grid.ItemIndex[ColStart + Ord(dcHowUsed),ARow]));
+              if DeliveryTimeItem.NonRoutedDeliveryTypeOwhm2 = nrdt2Infiltrate then
+              begin
+                DeliveryTimeItem.VirtualFarm := Grid.Cells[ColStart + Ord(dcVirtualFarm),ARow];
+              end;
             end;
           end;
           while DeliveryItem.DeliveryParam.Count > Rows.Count do
@@ -460,7 +511,6 @@ begin
         EndTimes.Free;
         Rows.Free;
       end;
-
     end;
   end;
 end;
@@ -513,6 +563,25 @@ begin
   LayoutControls(Grid, comboHowUsed, lblHowUsed,
     Column);
 end;
+
+initialization
+
+  PickListOwhmV1 := TStringList.Create;
+  PickListOwhmV1.Add(StrOnlyTheAmountRequ);
+  PickListOwhmV1.Add(StrSurplusDischargedT);
+  PickListOwhmV1.Add(StrSurplusStoredInGr);
+  PickListOwhmV1.Add(StrVirtualFarm0);
+
+  PickListOwhmV2 := TStringList.Create;
+  PickListOwhmV2.Add(StrOnlyTheAmountRequ);
+  PickListOwhmV2.Add(StrSurplusDischargedT);
+  PickListOwhmV2.Add(StrSurplusStoredInGr);
+  PickListOwhmV2.Add('Infiltration Location');
+
+finalization
+
+  PickListOwhmV1.Free;
+  PickListOwhmV2.Free;
 
 end.
 

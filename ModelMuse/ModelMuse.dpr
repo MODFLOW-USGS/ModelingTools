@@ -837,7 +837,8 @@ uses
   frameScreenObjectFmp4CropHasSalinityRequirementUnit in 'frameScreenObjectFmp4CropHasSalinityRequirementUnit.pas' {frameScreenObjectFmp4CropHasSalinityRequirement: TFrame},
   frameScreenObjectMultCropHasSalinityDemandUnit in 'frameScreenObjectMultCropHasSalinityDemandUnit.pas' {frameScreenObjectMultCropHasSalinityDemand: TFrame},
   ModflowFmp4AddedDemandRunoffSplitUnit in 'ModflowFmp4AddedDemandRunoffSplitUnit.pas',
-  frameScreenObjectAddedDemandRunoffSplitUnit in 'frameScreenObjectAddedDemandRunoffSplitUnit.pas' {frameScreenObjectAddedDemandRunoffSplit: TFrame};
+  frameScreenObjectAddedDemandRunoffSplitUnit in 'frameScreenObjectAddedDemandRunoffSplitUnit.pas' {frameScreenObjectAddedDemandRunoffSplit: TFrame},
+  frameSoilEffectivePrecipUnit in 'frameSoilEffectivePrecipUnit.pas' {frameSoilEffectivePrecip: TFrame};
 
 {$R *.res}
 

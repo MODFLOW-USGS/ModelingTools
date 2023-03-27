@@ -1,49 +1,48 @@
 inherited frameDeliveryGrid: TframeDeliveryGrid
-  Width = 393
+  Width = 476
   Height = 210
-  ExplicitWidth = 393
+  ExplicitWidth = 476
   ExplicitHeight = 210
   inherited Panel: TPanel
     Top = 169
-    Width = 393
+    Width = 476
     ExplicitTop = 169
     ExplicitWidth = 393
     DesignSize = (
-      393
+      476
       41)
     inherited sbAdd: TSpeedButton
-      Left = 282
+      Left = 344
       ExplicitLeft = 282
     end
     inherited sbInsert: TSpeedButton
-      Left = 320
+      Left = 390
       ExplicitLeft = 320
     end
     inherited sbDelete: TSpeedButton
-      Left = 358
+      Left = 436
       ExplicitLeft = 358
     end
     object lblNumberOfDeliveryTypes: TLabel [4]
       Left = 247
       Top = 6
-      Width = 44
+      Width = 82
       Height = 60
       Caption = 'Number of delivery types'
       WordWrap = True
-      OnClick = lblNumberOfDeliveryTypesClick
     end
     object seNumberOfDeliveryTypes: TJvSpinEdit
       Left = 176
       Top = 6
       Width = 65
-      Height = 21
+      Height = 23
       CheckMinValue = True
       TabOrder = 1
       OnChange = seNumberOfDeliveryTypesChange
     end
   end
   inherited Grid: TRbwDataGrid4
-    Width = 393
+    Width = 476
     Height = 112
     ColCount = 2
     OnSelectCell = GridSelectCell
@@ -101,7 +100,7 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
     ExplicitHeight = 112
   end
   inherited pnlTop: TPanel
-    Width = 393
+    Width = 476
     ExplicitWidth = 393
     object lblHowUsed: TLabel [0]
       Left = 255

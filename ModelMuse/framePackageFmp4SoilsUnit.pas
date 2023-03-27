@@ -10,10 +10,12 @@ uses
 type
   TSoilColumns = (scName, scFrequency, scArrayList, scScaleFactor,
     scExternalFile, scScaleExternal);
-  TSoilRows =  (srName, srCapFringe, srSurfK);
+  TSoilRows =  (srName, srCapFringe, srCoefficient, srSurfK, srEffPrecip);
 
   TframePackageFmp4Soils = class(TframePackage)
     rdgSoils: TRbwDataGrid4;
+    comboEffPrecipOption: TComboBox;
+    lblLookupTableOption: TLabel;
     procedure rdgSoilsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
   private
@@ -39,6 +41,8 @@ resourcestring
   StrCapillaryFringe = 'Capillary fringe';
   StrSurfaceK = 'Surface K';
   StrUse = 'Use';
+  StrCoefficient = 'Coefficient';
+  StrEffectivePrecipitat = 'Effective Precipitation Table';
 
 {$R *.dfm}
 
@@ -61,10 +65,13 @@ begin
   rdgSoils.BeginUpdate;
   try
     GetFarmProperty(SoilPkg.CapFringe, Ord(srCapFringe));
+    GetFarmProperty(SoilPkg.Coefficient, Ord(srCoefficient));
     GetFarmProperty(SoilPkg.SurfVertK, Ord(srSurfK));
+    GetFarmProperty(SoilPkg.EffPrecipTable, Ord(srEffPrecip));
   finally
     rdgSoils.EndUpdate;
   end;
+  comboEffPrecipOption.ItemIndex := Ord(SoilPkg.EffPrecipTableOption);
 end;
 
 procedure TframePackageFmp4Soils.InitializeGrid;
@@ -74,7 +81,9 @@ begin
     rdgSoils.FixedCols := 1;
 
     rdgSoils.Cells[Ord(scName), Ord(srCapFringe)] := StrCapillaryFringe;
+    rdgSoils.Cells[Ord(scName), Ord(srCoefficient)] := StrCoefficient;
     rdgSoils.Cells[Ord(scName), Ord(srSurfK)] := StrSurfaceK;
+    rdgSoils.Cells[Ord(scName), Ord(srEffPrecip)] := StrEffectivePrecipitat;
 
     rdgSoils.Cells[Ord(scFrequency), Ord(srName)] := StrUse;
     rdgSoils.Cells[Ord(scArrayList), Ord(srName)] := StrArrayOrList;
@@ -101,7 +110,11 @@ begin
   if ARow > 0 then
   begin
     SoilColumn := TSoilColumns(ACol);
-    if SoilColumn in [scScaleFactor, scExternalFile, scScaleExternal] then
+    if ARow in [Ord(srCoefficient), Ord(srEffPrecip)] then
+    begin
+      CanSelect := ACol = Ord(scFrequency);
+    end
+    else if SoilColumn in [scScaleFactor, scExternalFile, scScaleExternal] then
     begin
       CanSelect := rdgSoils.ItemIndex[Ord(scFrequency), ARow] > 0;
     end;
@@ -134,7 +147,10 @@ begin
   inherited;
   SoilPkg := Package as TFarmProcess4Soil;
   SetFarmProperty(SoilPkg.CapFringe, srCapFringe);
+  SetFarmProperty(SoilPkg.Coefficient, srCoefficient);
   SetFarmProperty(SoilPkg.SurfVertK, srSurfK);
+  SetFarmProperty(SoilPkg.EffPrecipTable, srEffPrecip);
+  SoilPkg.EffPrecipTableOption := TPrecipPotConsum(comboEffPrecipOption.ItemIndex);
 end;
 
 end.

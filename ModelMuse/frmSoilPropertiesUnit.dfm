@@ -2,15 +2,24 @@ inherited frmSoilProperties: TfrmSoilProperties
   HelpType = htKeyword
   HelpKeyword = 'Farm_Soil_Properties_Dialog_Bo'
   Caption = 'Farm Soil Properties'
-  ClientHeight = 305
+  ClientHeight = 562
   ClientWidth = 788
   OnResize = FormResize
   ExplicitWidth = 800
-  ExplicitHeight = 343
+  ExplicitHeight = 600
   TextHeight = 18
+  object splitterSoil: TSplitter
+    Left = 0
+    Top = 256
+    Width = 788
+    Height = 5
+    Cursor = crVSplit
+    Align = alTop
+    ExplicitTop = 200
+  end
   object pnlBottom: TPanel
     Left = 0
-    Top = 261
+    Top = 518
     Width = 788
     Height = 44
     Align = alBottom
@@ -52,13 +61,13 @@ inherited frmSoilProperties: TfrmSoilProperties
     Left = 0
     Top = 0
     Width = 788
-    Height = 261
-    Align = alClient
+    Height = 256
+    Align = alTop
     TabOrder = 0
-    ExplicitWidth = 677
-    ExplicitHeight = 260
+    ExplicitWidth = 788
+    ExplicitHeight = 256
     inherited Panel: TPanel
-      Top = 220
+      Top = 215
       Width = 788
       ExplicitTop = 219
       ExplicitWidth = 677
@@ -89,7 +98,7 @@ inherited frmSoilProperties: TfrmSoilProperties
     end
     inherited Grid: TRbwDataGrid4
       Width = 788
-      Height = 163
+      Height = 158
       ColCount = 10
       FixedCols = 1
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor]
@@ -215,6 +224,7 @@ inherited frmSoilProperties: TfrmSoilProperties
           MaxLength = 0
           ParentButtonFont = False
           PickList.Strings = (
+            'Sand'
             'Sandy Loam'
             'Silt'
             'Silty Clay'
@@ -371,6 +381,73 @@ inherited frmSoilProperties: TfrmSoilProperties
     Enabled = False
     TabOrder = 1
     OnChange = comboSoilTypeChange
+  end
+  inline frameSoilEffectivePrecip: TframeSoilEffectivePrecip
+    Left = 0
+    Top = 261
+    Width = 788
+    Height = 257
+    Align = alClient
+    Enabled = False
+    TabOrder = 3
+    ExplicitLeft = 208
+    ExplicitTop = 163
+    inherited Panel: TPanel
+      Top = 216
+      Width = 788
+      DesignSize = (
+        788
+        41)
+      inherited lbNumber: TLabel
+        Width = 55
+        Height = 18
+        ExplicitWidth = 55
+        ExplicitHeight = 18
+      end
+      inherited sbAdd: TSpeedButton
+        Left = 630
+      end
+      inherited sbInsert: TSpeedButton
+        Left = 677
+      end
+      inherited sbDelete: TSpeedButton
+        Left = 725
+      end
+      inherited lblMethod: TLabel
+        Width = 52
+        Height = 18
+        ExplicitWidth = 52
+        ExplicitHeight = 18
+      end
+      inherited comboInterpolation: TComboBox
+        Height = 26
+      end
+    end
+    inherited Grid: TRbwDataGrid4
+      Width = 788
+      Height = 135
+      OnExit = frameSoilEffectivePrecipGridExit
+      OnButtonClick = frameSoilsGridButtonClick
+      ExplicitTop = 57
+    end
+    inherited pnlTop: TPanel
+      Width = 788
+      ExplicitWidth = 788
+      inherited lblSoil: TLabel
+        Width = 27
+        Height = 18
+        ExplicitWidth = 27
+        ExplicitHeight = 18
+      end
+      inherited edFormula: TLabeledEdit
+        Height = 26
+        EditLabel.Width = 57
+        EditLabel.Height = 18
+        EditLabel.ExplicitTop = 31
+        EditLabel.ExplicitHeight = 18
+        ExplicitHeight = 26
+      end
+    end
   end
   object rbwprsrGlobal: TRbwParser
     Left = 112

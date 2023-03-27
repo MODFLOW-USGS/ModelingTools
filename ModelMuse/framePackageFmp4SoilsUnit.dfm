@@ -4,7 +4,18 @@ inherited framePackageFmp4Soils: TframePackageFmp4Soils
   DesignSize = (
     422
     323)
-  object rdgSoils: TRbwDataGrid4 [3]
+  object lblLookupTableOption: TLabel [2]
+    Left = 168
+    Top = 131
+    Width = 153
+    Height = 15
+    Caption = 'Effective precipitation option'
+  end
+  inherited memoComments: TMemo
+    Height = 60
+    ExplicitHeight = 60
+  end
+  object rdgSoils: TRbwDataGrid4 [4]
     Left = 0
     Top = 157
     Width = 422
@@ -14,7 +25,6 @@ inherited framePackageFmp4Soils: TframePackageFmp4Soils
     ColCount = 6
     Enabled = False
     FixedCols = 1
-    RowCount = 3
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
     TabOrder = 1
     OnSelectCell = rdgSoilsSelectCell
@@ -185,6 +195,17 @@ inherited framePackageFmp4Soils: TframePackageFmp4Soils
       64
       64
       64)
+  end
+  object comboEffPrecipOption: TComboBox [5]
+    Left = 17
+    Top = 128
+    Width = 145
+    Height = 23
+    Style = csDropDownList
+    TabOrder = 2
+    Items.Strings = (
+      'By Length'
+      'By Fraction')
   end
   inherited rcSelectionController: TRbwController
     ControlList = <

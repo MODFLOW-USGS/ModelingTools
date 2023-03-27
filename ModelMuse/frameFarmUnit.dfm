@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabAddedCropDemandRate
+    ActivePage = tabNonRoutedDelivery
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -784,7 +784,6 @@ inherited frameFarm: TframeFarm
           Height = 234
           OnSetEditText = frameAddedCropDemandFluxGridSetEditText
           OnButtonClick = frameAddedCropDemandFluxGridButtonClick
-          ExplicitLeft = 3
           ExplicitWidth = 577
           ExplicitHeight = 234
         end
@@ -1501,6 +1500,9 @@ inherited frameFarm: TframeFarm
           ExplicitTop = 282
           ExplicitWidth = 577
           ExplicitHeight = 50
+          DesignSize = (
+            577
+            50)
           inherited lbNumber: TLabel
             Top = 6
             Width = 46
@@ -1530,10 +1532,8 @@ inherited frameFarm: TframeFarm
             ExplicitTop = 10
           end
           inherited lblNumberOfDeliveryTypes: TLabel
-            Width = 82
             Height = 32
             Caption = 'Number of delivery types '
-            ExplicitWidth = 82
             ExplicitHeight = 32
           end
           inherited seNumber: TJvSpinEdit

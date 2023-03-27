@@ -1,4 +1,4 @@
-{@name writes the FMP input file for MODFLOW-OWHM version 2.}
+﻿{@name writes the FMP input file for MODFLOW-OWHM version 2.}
 unit ModflowFmp4WriterUnit;
 
 interface
@@ -23,7 +23,7 @@ type
     wlFractionOfIrrigToSurfaceWater, wlAddedDemand, wlCropHasSalinityDemand,
     wlAddedDemandRunoffSplit, wlIrrigationUniformity, wlDeficiencyScenario,
     wlWaterSource, wlAddedCropDemandFlux, wlAddedCropDemandRate,
-    wlPrecipicationTable);
+    wlPrecipicationTable, wlSoilCoefficient);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -137,6 +137,7 @@ type
     FAddedCropDemandRateFileStream: TFileStream;
     FFmpSoils: TSoilCollection;
     FEffectivPrecipitationTableFileStream: TFileStream;
+    FEffectivCoefficientTableFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -199,9 +200,9 @@ type
     // soil
     procedure WriteCapillaryFringe;
     procedure WriteSoilID;
-    procedure WriteSoilCoefficient; // finish
+    procedure WriteSoilCoefficient;
     procedure WriteSurfaceK;
-    procedure WriteEffectivePrecipitationTable; // finish
+    procedure WriteEffectivePrecipitationTable;
 
     // climate
     procedure EvaluateReferenceET;
@@ -275,6 +276,7 @@ type
 
     // Salinity flush
     procedure WriteIrrigationUniformity;
+    procedure WriteSalinityFlushPrintOptions;
 
     procedure EvaluateCropHasSalinityDemand;
     procedure WriteCropHasSalinityDemand; // finish list
@@ -310,7 +312,6 @@ type
     procedure WriteScaleFactorsID_andOption(RequiredValues: TRequiredValues;
       UnitConversionScaleFactor: string; ExternalScaleFileName: string);
     procedure WriteLandUseOption;
-    procedure WriteSalinityFlushPrintOptions;
     procedure WriteExpressionVariableNearZero;
   protected
     class function Extension: string; override;
@@ -1081,6 +1082,8 @@ begin
   FreeAndNil(FAddedCropDemandFluxFileStream);
   FreeAndNil(FAddedCropDemandRateFileStream);
   FreeAndNil(FEffectivPrecipitationTableFileStream);
+  FreeAndNil(FEffectivCoefficientTableFileStream);
+
 
 end;
 
@@ -1104,7 +1107,7 @@ begin
       end;
     wlCID:
       begin
-        RESULT := ChangeFileExt(FBaseName, '.CID');
+        RESULT := ChangeFileExt(FBaseName, '.cid');
         if FCID_FileStream = nil then
         begin
           FCID_FileStream := TFileStream.Create(RESULT,
@@ -1113,7 +1116,7 @@ begin
       end;
     wlFID:
       begin
-        RESULT := ChangeFileExt(FBaseName, '.FID');
+        RESULT := ChangeFileExt(FBaseName, '.fid');
         if FFID_FileStream = nil then
         begin
           FFID_FileStream := TFileStream.Create(RESULT,
@@ -1128,7 +1131,7 @@ begin
       end;
     wlETR:
       begin
-        result := ChangeFileExt(FBaseName, '.ETR');
+        result := ChangeFileExt(FBaseName, '.etr');
         if FETR_FileStream = nil then
         begin
           FETR_FileStream := TFileStream.Create(result,
@@ -1143,7 +1146,7 @@ begin
       end;
     wlPFLX:
       begin
-        result := ChangeFileExt(FBaseName, '.PFLX');
+        result := ChangeFileExt(FBaseName, '.pflx');
         if FPFLX_FileStream = nil then
         begin
           FPFLX_FileStream := TFileStream.Create(result,
@@ -1170,7 +1173,7 @@ begin
       end;
     wlEfficiency:
       begin
-        result := ChangeFileExt(FBaseName, '.EFFICIENCY');
+        result := ChangeFileExt(FBaseName, '.efficiency');
         if FEFFICIENCY_FileStream = nil then
         begin
           FEFFICIENCY_FileStream := TFileStream.Create(result,
@@ -1179,7 +1182,7 @@ begin
       end;
     wlEfficiencyImprovement:
       begin
-        result := ChangeFileExt(FBaseName, '.EFFICIENCY_IMPROVEMENT');
+        result := ChangeFileExt(FBaseName, '.efficiency_improvement');
         if FEFFICIENCY_IMPROVEMENT_FileStream = nil then
         begin
           FEFFICIENCY_IMPROVEMENT_FileStream := TFileStream.Create(result,
@@ -1188,7 +1191,7 @@ begin
       end;
     wlBareRunoffFraction:
       begin
-        result := ChangeFileExt(FBaseName, '.BARE_RUNOFF_FRACTION');
+        result := ChangeFileExt(FBaseName, '.bare_runoff_fraction');
         if FBARE_RUNOFF_FRACTION_FileStream = nil then
         begin
           FBARE_RUNOFF_FRACTION_FileStream := TFileStream.Create(result,
@@ -1197,7 +1200,7 @@ begin
       end;
     wlBarePrecipitationConsumptionFraction:
       begin
-        result := ChangeFileExt(FBaseName, '.BARE_PRECIPITATION_CONSUMPTION_FRACTION');
+        result := ChangeFileExt(FBaseName, '.bare_precipitation_consumption_fraction');
         if FBarePrecipitationConsumptionFractionFileStream = nil then
         begin
           FBarePrecipitationConsumptionFractionFileStream := TFileStream.Create(result,
@@ -1206,7 +1209,7 @@ begin
       end;
     wlCapillaryFringe:
       begin
-        result := ChangeFileExt(FBaseName, '.CAPILLARY_FRINGE');
+        result := ChangeFileExt(FBaseName, '.capillary_fringe');
         if FCapillaryFringeFileStream = nil then
         begin
           FCapillaryFringeFileStream := TFileStream.Create(result,
@@ -1215,7 +1218,7 @@ begin
       end;
     wlSoilID:
       begin
-        result := ChangeFileExt(FBaseName, '.SOIL_ID');
+        result := ChangeFileExt(FBaseName, '.soil_id');
         if FSoilIdStream = nil then
         begin
           FSoilIdStream := TFileStream.Create(result,
@@ -1224,7 +1227,7 @@ begin
       end;
     wlSurfaceK:
       begin
-        result := ChangeFileExt(FBaseName, '.SURFACE_VERTICAL_HYDRAULIC_CONDUCTIVITY');
+        result := ChangeFileExt(FBaseName, '.surface_vertical_hydraulic_conductivity');
         if FSurfaceKFileStream = nil then
         begin
           FSurfaceKFileStream := TFileStream.Create(result,
@@ -1233,7 +1236,7 @@ begin
       end;
     wlBareEvap:
       begin
-        result := ChangeFileExt(FBaseName, '.POTENTIAL_EVAPORATION_BARE');
+        result := ChangeFileExt(FBaseName, '.potential_evaporation_bare');
         if FEvapBareFileStream = nil then
         begin
           FEvapBareFileStream := TFileStream.Create(result,
@@ -1242,7 +1245,7 @@ begin
       end;
     wlDirectRecharge:
       begin
-        result := ChangeFileExt(FBaseName, '.DIRECT_RECHARGE');
+        result := ChangeFileExt(FBaseName, '.direct_recharge');
         if FDirectRechargeFileStream = nil then
         begin
           FDirectRechargeFileStream := TFileStream.Create(result,
@@ -1251,7 +1254,7 @@ begin
       end;
     wlPrecipPotConsumption:
       begin
-        result := ChangeFileExt(FBaseName, '.PRECIPITATION_POTENTIAL_CONSUMPTION');
+        result := ChangeFileExt(FBaseName, '.precipitation_potential_consumption');
         if FPrecipPotConsumptionFileStream = nil then
         begin
           FPrecipPotConsumptionFileStream := TFileStream.Create(result,
@@ -1260,7 +1263,7 @@ begin
       end;
     wlNrdInfilLoc:
       begin
-        result := ChangeFileExt(FBaseName, '.NRD_INFILTRATION_LOCATION');
+        result := ChangeFileExt(FBaseName, '.nrd_infiltration_location');
         if FNrdInfilLocationFileStream = nil then
         begin
           FNrdInfilLocationFileStream := TFileStream.Create(result,
@@ -1269,7 +1272,7 @@ begin
       end;
     wlLandUseAreaFraction:
       begin
-        result := ChangeFileExt(FBaseName, '.LAND_USE_AREA_FRACTION');
+        result := ChangeFileExt(FBaseName, '.land_use_area_fraction');
         if FLandUseAreaFractionFileStream = nil then
         begin
           FLandUseAreaFractionFileStream := TFileStream.Create(result,
@@ -1278,7 +1281,7 @@ begin
       end;
     wlCropCoefficient:
       begin
-        result := ChangeFileExt(FBaseName, '.CROP_COEFFICIENT');
+        result := ChangeFileExt(FBaseName, '.crop_coefficient');
         if FCropcoefficientFileStream = nil then
         begin
           FCropcoefficientFileStream := TFileStream.Create(result,
@@ -1287,7 +1290,7 @@ begin
       end;
     wlConsumptiveUse:
       begin
-        result := ChangeFileExt(FBaseName, '.CONSUMPTIVE_USE');
+        result := ChangeFileExt(FBaseName, '.consumptive_use');
         if FConsumptiveUseFileStream = nil then
         begin
           FConsumptiveUseFileStream := TFileStream.Create(result,
@@ -1296,7 +1299,7 @@ begin
       end;
     wlIrrigation:
       begin
-        result := ChangeFileExt(FBaseName, '.IRRIGATION');
+        result := ChangeFileExt(FBaseName, '.irrigation');
         if FIrrigationFileStream = nil then
         begin
           FIrrigationFileStream := TFileStream.Create(result,
@@ -1305,7 +1308,7 @@ begin
       end;
     wlRootDepth:
       begin
-        result := ChangeFileExt(FBaseName, '.ROOT_DEPTH');
+        result := ChangeFileExt(FBaseName, '.root_depth');
         if FRootDepthFileStream = nil then
         begin
           FRootDepthFileStream := TFileStream.Create(result,
@@ -1314,7 +1317,7 @@ begin
       end;
     wlGwRootInteraction:
       begin
-        result := ChangeFileExt(FBaseName, '.GROUNDWATER_ROOT_INTERACTION');
+        result := ChangeFileExt(FBaseName, '.groundwater_root_interaction');
         if FGwRootInteractionStream = nil then
         begin
           FGwRootInteractionStream := TFileStream.Create(result,
@@ -1323,7 +1326,7 @@ begin
       end;
     wlTranspirationFraction:
       begin
-        result := ChangeFileExt(FBaseName, '.TRANSPIRATION_FRACTION');
+        result := ChangeFileExt(FBaseName, '.transpiration_fraction');
         if FTranspirationFractionFileStream = nil then
         begin
           FTranspirationFractionFileStream := TFileStream.Create(result,
@@ -1332,7 +1335,7 @@ begin
       end;
     wlEvaporationIrrigationFraction:
       begin
-        result := ChangeFileExt(FBaseName, '.EVAPORATION_IRRIGATION_FRACTION');
+        result := ChangeFileExt(FBaseName, '.evaporation_irrigation_fraction');
         if FEvaporationIrrigationFractionFileStream = nil then
         begin
           FEvaporationIrrigationFractionFileStream := TFileStream.Create(result,
@@ -1341,7 +1344,7 @@ begin
       end;
     wlFractionOfPrecipToSurfaceWater:
       begin
-        result := ChangeFileExt(FBaseName, '.SURFACEWATER_LOSS_FRACTION_PRECIPITATION');
+        result := ChangeFileExt(FBaseName, '.surfacewater_loss_fraction_precipitation');
         if FFractionOfPrecipToSurfaceWaterFileStream = nil then
         begin
           FFractionOfPrecipToSurfaceWaterFileStream := TFileStream.Create(result,
@@ -1350,7 +1353,7 @@ begin
       end;
     wlFractionOfIrrigToSurfaceWater:
       begin
-        result := ChangeFileExt(FBaseName, '.SURFACEWATER_LOSS_FRACTION_IRRIGATION');
+        result := ChangeFileExt(FBaseName, '.surfacewater_loss_fraction_irrigation');
         if FFractionOfIrrigToSurfaceWaterFileStream = nil then
         begin
           FFractionOfIrrigToSurfaceWaterFileStream := TFileStream.Create(result,
@@ -1359,7 +1362,7 @@ begin
       end;
     wlAddedDemand:
       begin
-        result := ChangeFileExt(FBaseName, '.ADDED_DEMAND');
+        result := ChangeFileExt(FBaseName, '.added_demand');
         if FAddedDemandFileStream = nil then
         begin
           FAddedDemandFileStream := TFileStream.Create(result,
@@ -1368,7 +1371,7 @@ begin
       end;
     wlCropHasSalinityDemand:
       begin
-        result := ChangeFileExt(FBaseName, '.CROP_HAS_SALINITY_DEMAND');
+        result := ChangeFileExt(FBaseName, '.crop_has_salinity_demand');
         if FCropHasSalinityDemandFileStream = nil then
         begin
           FCropHasSalinityDemandFileStream := TFileStream.Create(result,
@@ -1377,7 +1380,7 @@ begin
       end;
     wlAddedDemandRunoffSplit:
       begin
-        result := ChangeFileExt(FBaseName, '.ADDED_DEMAND_RUNOFF_SPLIT');
+        result := ChangeFileExt(FBaseName, '.added_demand_runoff_split');
         if FAddedDemandRunoffSplitFileStream = nil then
         begin
           FAddedDemandRunoffSplitFileStream := TFileStream.Create(result,
@@ -1386,7 +1389,7 @@ begin
       end;
     wlIrrigationUniformity:
       begin
-        result := ChangeFileExt(FBaseName, '.WBS_IRRIGATION_UNIFORMITY');
+        result := ChangeFileExt(FBaseName, '.wbs_irrigation_uniformity');
         if FIrrigationUniformityFileStream = nil then
         begin
           FIrrigationUniformityFileStream := TFileStream.Create(result,
@@ -1395,7 +1398,7 @@ begin
       end;
     wlDeficiencyScenario:
       begin
-        result := ChangeFileExt(FBaseName, '.DEFICIENCY_SCENARIO');
+        result := ChangeFileExt(FBaseName, '.deficiency_scenario');
         if FDeficiencyScenarioFileStream = nil then
         begin
           FDeficiencyScenarioFileStream := TFileStream.Create(result,
@@ -1404,7 +1407,7 @@ begin
       end;
     wlWaterSource:
       begin
-        result := ChangeFileExt(FBaseName, '.WATERSOURCE');
+        result := ChangeFileExt(FBaseName, '.watersource');
         if FWaterSourceFileStream = nil then
         begin
           FWaterSourceFileStream := TFileStream.Create(result,
@@ -1413,7 +1416,7 @@ begin
       end;
     wlAddedCropDemandFlux:
       begin
-        result := ChangeFileExt(FBaseName, '.ADDED_CROP_DEMAND_FLUX');
+        result := ChangeFileExt(FBaseName, '.added_crop_demand_flux');
         if FAddedCropDemandFluxFileStream = nil then
         begin
           FAddedCropDemandFluxFileStream := TFileStream.Create(result,
@@ -1422,7 +1425,7 @@ begin
       end;
     wlAddedCropDemandRate:
       begin
-        result := ChangeFileExt(FBaseName, '.ADDED_CROP_DEMAND_RATE');
+        result := ChangeFileExt(FBaseName, '.added_crop_demand_rate');
         if FAddedCropDemandRateFileStream = nil then
         begin
           FAddedCropDemandRateFileStream := TFileStream.Create(result,
@@ -1431,10 +1434,19 @@ begin
       end;
     wlPrecipicationTable:
       begin
-        result := ChangeFileExt(FBaseName, '.EFFECTIVE_PRECIPITATION_TABLE');
+        result := ChangeFileExt(FBaseName, '.effective_precipitation_table');
         if FEffectivPrecipitationTableFileStream = nil then
         begin
           FEffectivPrecipitationTableFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlSoilCoefficient:
+      begin
+        result := ChangeFileExt(FBaseName, '.coefficient');
+        if FEffectivCoefficientTableFileStream = nil then
+        begin
+          FEffectivCoefficientTableFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
         end;
       end;
@@ -1608,6 +1620,7 @@ begin
     wlAddedCropDemandFlux: ;
     wlAddedCropDemandRate: ;
     wlPrecipicationTable: ;
+    wlSoilCoefficient: ;
     else Assert(False);
   end;
 end;
@@ -1664,6 +1677,7 @@ begin
     wlAddedCropDemandFlux: ;
     wlAddedCropDemandRate: ;
     wlPrecipicationTable: ;
+    wlSoilCoefficient: ;
     else Assert(False)
   end;
 end;
@@ -1758,16 +1772,16 @@ begin
     case PrintOption of
       sfpPrintByFarm:
         begin
-          WriteString('  PRINT BYFARM ');
-          OutputFile := ChangeFileExt(FInputFileName, '.Salinity_Flush_Irrigation_By_Farm');
+          WriteString('  PRINT BYWBS ');
+          OutputFile := ChangeFileExt(FInputFileName, '.Salinity_Flush_Irrigation_By_WBS');
           WriteString(ExtractFileName(OutputFile));
           Model.AddModelOutputFile(OutputFile);
           NewLine;
         end;
       sfpPrintByFarmByCrop:
         begin
-          WriteString('  PRINT BYFARM_BYCROP ');
-          OutputFile := ChangeFileExt(FInputFileName, '.Salinity_Flush_Irrigation_By_Farm_By_Crop');
+          WriteString('  PRINT BYWBS_BYCROP ');
+          OutputFile := ChangeFileExt(FInputFileName, '.Salinity_Flush_Irrigation_By_WBS_By_Crop');
           WriteString(ExtractFileName(OutputFile));
           Model.AddModelOutputFile(OutputFile);
           NewLine;
@@ -4123,6 +4137,7 @@ var
   LookUpTable: TLookUpTable;
   Item: TLookupItem;
   ItemIndex: Integer;
+  ASoil: TSoilItem;
 begin
   if FSoil4.CapFringe.FarmOption = foNotUsed then
   begin
@@ -4141,7 +4156,18 @@ begin
   RequiredValues.WriteTransientData := False;
   RequiredValues.CheckProcedure := nil;
   RequiredValues.CheckError := 'Invalid precipitation value';
-  RequiredValues.Option := '';
+  case FSoil4.EffPrecipTableOption of
+    ppcLength:
+      begin
+        RequiredValues.Option := 'BY_LENGTH';
+      end;
+    ppcFraction:
+      begin
+        RequiredValues.Option := 'BY_FRACTION';
+      end;
+    else
+      Assert(False);
+  end;
   RequiredValues.FarmProperty := FSoil4.EffPrecipTable;
 
   if RequiredValues.FarmProperty.ExternalFileName = '' then
@@ -4169,7 +4195,8 @@ begin
         FWriteLocation := RequiredValues.WriteLocation;
         for SoilIndex := 0 to FFmpSoils.Count - 1 do
         begin
-          LookUpTable := FFmpSoils[SoilIndex].LookUpTable;
+          ASoil := FFmpSoils[SoilIndex];
+          LookUpTable := ASoil.LookUpTable;
           SoilID := SoilIndex + 1;
           WriteInteger(SoilID);
           if LookUpTable.Method = smConstant then
@@ -4178,7 +4205,9 @@ begin
             if LookUpTable.Count > 0 then
             begin
               Item := LookUpTable.First as TLookupItem;
-              WriteFloat(Item.ReturnValue);
+              Formula := Item.ReturnValue;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula Effective precipitation return value in soil ' + ASoil.SoilName);
             end
             else
             begin
@@ -4210,8 +4239,13 @@ begin
             for ItemIndex := 0 to LookUpTable.Count - 1 do
             begin
               Item := LookUpTable[ItemIndex];
-              WriteFloat(Item.LookupValue);
-              WriteFloat(Item.ReturnValue);
+              Formula := Item.LookupValue;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula Effective precipitation look-up value in soil ' + ASoil.SoilName);
+
+              Formula := Item.ReturnValue;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula Effective precipitation return value in soil ' + ASoil.SoilName);
               NewLine;
             end;
           end;
@@ -6171,8 +6205,115 @@ begin
 end;
 
 procedure TModflowFmp4Writer.WriteSoilCoefficient;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  Formula: string;
+  SoilIndex: Integer;
+  SoilID: Integer;
+  ASoil: TSoilItem;
 begin
+  if FSoil4.Coefficient.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
 
+  RequiredValues.WriteLocation := wlSoilCoefficient;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SOIL: COEFFICIENT';
+  RequiredValues.ErrorID := 'FMP SOIL: COEFFICIENT';
+  RequiredValues.ID := 'COEFFICIENT';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := 'Invalid soil coefficient value';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSoil4.Coefficient;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlSoilCoefficient);
+  end;
+
+//  if (FSoil4.Coefficient.ArrayList = alArray) then
+//  begin
+//    WriteFmpArrayData(AFileName, RequiredValues);
+//  end
+//  else
+//  begin
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsID_andOption(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+    WriteString('STATIC LIST DATAFILE ');
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        for SoilIndex := 0 to FFmpSoils.Count - 1 do
+        begin
+          ASoil := FFmpSoils[SoilIndex];
+          SoilID := SoilIndex + 1;
+          WriteInteger(SoilID);
+          case ASoil.SoilType of
+            stSand:
+              begin
+                WriteString(' SAND')
+              end;
+            stSandyLoam:
+              begin
+                WriteString(' SANDYLOAM')
+              end;
+            stSilt:
+              begin
+                WriteString(' SILT')
+              end;
+            stSiltyClay:
+              begin
+                WriteString(' SILTYCLAY')
+              end;
+            stOther:
+              begin
+                Formula := ASoil.ACoeff;
+                WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                  'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
+                Formula := ASoil.BCoeff;
+                WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                  'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
+                Formula := ASoil.CCoeff;
+                WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                  'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
+                Formula := ASoil.DCoeff;
+                WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                  'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
+                Formula := ASoil.ECoeff;
+                WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                  'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
+              end;
+            else
+              Assert(False)
+          end;
+          NewLine;
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
+//  end;
 end;
 
 procedure TModflowFmp4Writer.WriteSoilID;
@@ -6451,6 +6592,11 @@ begin
         begin
           Assert(FEffectivPrecipitationTableFileStream <> nil);
           FEffectivPrecipitationTableFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlSoilCoefficient:
+        begin
+          Assert(FEffectivCoefficientTableFileStream <> nil);
+          FEffectivCoefficientTableFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);
