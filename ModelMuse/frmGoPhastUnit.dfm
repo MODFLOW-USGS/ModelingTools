@@ -17,8 +17,8 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   OnResize = FormResize
-  ExplicitWidth = 796
-  ExplicitHeight = 621
+  ExplicitWidth = 800
+  ExplicitHeight = 622
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
@@ -77,7 +77,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
       inherited pnlTop: TPanel
         Width = 545
-        ExplicitWidth = 541
+        ExplicitWidth = 545
         inherited rulHorizontal: TRbwRuler
           Width = 496
           ExplicitLeft = 49
@@ -93,11 +93,12 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 494
         Image32.Height = 140
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 494
         Image32.ExplicitHeight = 140
-        ExplicitWidth = 492
-        ExplicitHeight = 141
+        ExplicitWidth = 496
+        ExplicitHeight = 142
       end
       inherited OrderMenu: TPopupMenu
         Left = 80
@@ -159,12 +160,13 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 178
         Image32.Height = 140
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
         Image32.ExplicitHeight = 140
         ExplicitLeft = 0
         ExplicitWidth = 180
-        ExplicitHeight = 141
+        ExplicitHeight = 142
       end
       inherited OrderMenu: TPopupMenu
         Left = 48
@@ -221,7 +223,7 @@ inherited frmGoPhast: TfrmGoPhast
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 79
-        ExplicitWidth = 541
+        ExplicitWidth = 545
         inherited ModelCube: TRbwModelCube
           Hint = 
             'Click to change row|Click to change the selected row forward or ' +
@@ -250,11 +252,12 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 494
         Image32.Height = 77
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 494
         Image32.ExplicitHeight = 77
         ExplicitTop = 0
-        ExplicitWidth = 492
+        ExplicitWidth = 496
         ExplicitHeight = 79
       end
     end
@@ -269,7 +272,7 @@ inherited frmGoPhast: TfrmGoPhast
       ParentDoubleBuffered = False
       TabOrder = 1
       TabStop = True
-      ExplicitLeft = 551
+      ExplicitLeft = 555
       ExplicitWidth = 229
       ExplicitHeight = 133
       inherited glWidModelView: TGLWidget
@@ -305,8 +308,6 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = sbMainMouseMove
     OnMouseUp = sbMainMouseUp
     OnDrawPanel = sbMainDrawPanel
-    ExplicitTop = 534
-    ExplicitWidth = 780
   end
   object cbControlBar: TControlBar
     Left = 0
@@ -320,7 +321,6 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitWidth = 780
     object tbarEdit: TToolBar
       Left = 152
       Top = 34
@@ -672,7 +672,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 465
+      Left = 208
       Top = 130
       Width = 212
       Height = 28
@@ -774,7 +774,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 208
+      Left = 433
       Top = 130
       Width = 244
       Height = 28
@@ -2159,12 +2159,12 @@ inherited frmGoPhast: TfrmGoPhast
         Caption = '&Farm Process'
         GroupIndex = 1
         Hint = 'Farm process dialog boxes'
-        object miFarmCrops: TMenuItem
-          Action = acFarmCrops
-          GroupIndex = 1
-        end
         object IrrigationTypes1: TMenuItem
           Action = acFarmIrrigationTypes
+          GroupIndex = 1
+        end
+        object miFarmCrops: TMenuItem
+          Action = acFarmCrops
           GroupIndex = 1
         end
         object FarmSoils1: TMenuItem

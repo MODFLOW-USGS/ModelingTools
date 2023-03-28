@@ -202,6 +202,8 @@ resourcestring
   StrErrorInFarmD = 'Error in Farm %d.';
   StrTheFormulaShouldReal = 'The formula should result in a real number';
   StrTheFormulaShouldR = 'The formula should result in a Boolean';
+  StrThePriorityForNon = 'The priority rank (NRDR) for non routed delivery is less than ' +
+  'or equal to zero for the following farms';
 
 implementation
 
@@ -316,8 +318,6 @@ resourcestring
   StrTheEvaporationFrac = 'The evaporation fraction, has not been defined fo' +
   'r the following crops at the following times.';
   StrCrop0sTime = 'Crop = %0:s; Time = %1:g';
-  StrThePriorityForNon = 'The priority rank (NRDR) for non routed delivery is less than ' +
-  'or equal to zero for the following farms';
   StrTheSpecifiedRootin = 'The specified rooting depth must be greater than ' +
   'zero. That isn''t true for the following crops.';
 //  StrIRRFLInTheFarmPr = 'IRRFL in the Farm Process must be equal to 0 if the' +

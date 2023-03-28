@@ -100,7 +100,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, ModflowFmpCropUnit, GoPhastTypes;
+  frmGoPhastUnit, ModflowFmpCropUnit, GoPhastTypes, ModflowFmpIrrigationUnit;
 
 {$R *.dfm}
 
@@ -409,6 +409,9 @@ var
   Crops: TCropCollection;
   EfficiencyItem: TFarmEfficienciesItem;
   ACrop: TCropItem;
+  IrrigationTypes: TIrrigationCollection;
+  IrrIndex: Integer;
+  IrrigationItem: TIrrigationItem;
 begin
   result := FFarms.Add;
   result.FarmId := FFarms.Count;
@@ -416,8 +419,33 @@ begin
   for CropIndex := 0 to Crops.Count - 1 do
   begin
     ACrop := Crops[CropIndex];
+
     EfficiencyItem := result.FarmEfficiencyCollection.Add;
     EfficiencyItem.CropEfficiency.CropName := ACrop.CropName;
+
+    EfficiencyItem := result.AddedCropDemandFlux.Add;
+    EfficiencyItem.CropEfficiency.CropName := ACrop.CropName;
+
+    EfficiencyItem := result.AddedCropDemandRate.Add;
+    EfficiencyItem.CropEfficiency.CropName := ACrop.CropName;
+  end;
+
+  IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
+  for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+  begin
+    IrrigationItem := IrrigationTypes[IrrIndex];
+
+    EfficiencyItem := result.FarmIrrigationEfficiencyCollection.Add;
+    EfficiencyItem.CropEfficiency.CropName := IrrigationItem.Name;
+
+    EfficiencyItem := result.FarmIrrigationEfficiencyImprovementCollection.Add;
+    EfficiencyItem.CropEfficiency.CropName := IrrigationItem.Name;
+
+    EfficiencyItem := result.AddedDemandRunoffSplitCollection.Add;
+    EfficiencyItem.CropEfficiency.CropName := IrrigationItem.Name;
+
+    EfficiencyItem := result.IrrigationUniformity.Add;
+    EfficiencyItem.CropEfficiency.CropName := IrrigationItem.Name;
   end;
 end;
 

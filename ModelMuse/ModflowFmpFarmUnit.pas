@@ -1611,9 +1611,9 @@ begin
   AddBoundaryTimes(FGwAllotment, Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
 
-  for EffIndex := 0 to FFarmEfficiencyCollection.Count - 1 do
+  for EffIndex := 0 to FarmEfficiencyCollection.Count - 1 do
   begin
-    EfficiencyCol := FFarmEfficiencyCollection[EffIndex].CropEfficiency;
+    EfficiencyCol := FarmEfficiencyCollection[EffIndex].CropEfficiency;
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
   end;

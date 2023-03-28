@@ -239,7 +239,7 @@ inherited frameFarm: TframeFarm
           Width = 185
           Height = 24
           EditLabel.Width = 66
-          EditLabel.Height = 24
+          EditLabel.Height = 16
           EditLabel.Caption = 'Farm name'
           LabelPosition = lpRight
           TabOrder = 2
@@ -1532,9 +1532,11 @@ inherited frameFarm: TframeFarm
             ExplicitTop = 10
           end
           inherited lblNumberOfDeliveryTypes: TLabel
-            Height = 32
+            Width = 64
+            Height = 48
             Caption = 'Number of delivery types '
-            ExplicitHeight = 32
+            ExplicitWidth = 64
+            ExplicitHeight = 48
           end
           inherited seNumber: TJvSpinEdit
             Height = 24

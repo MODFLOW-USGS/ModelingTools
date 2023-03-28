@@ -4289,6 +4289,7 @@ that affects the model output should also have a comment. }
     procedure FixScreenObjectNames;
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections); override;
     function GetMf6TimesSeries: TTimesSeriesCollections; override;
+    procedure UpdateFarmProperties;
 //    procedure FixGwtModel;
     //    function GetPilotPoint(Index: Integer): TPoint2D;
 //    function GetPilotPointSpacing: double;
@@ -20973,6 +20974,7 @@ end;
 procedure TPhastModel.SetFarms(const Value: TFarmCollection);
 begin
   FFarms.Assign(Value);
+//  FFmpCrops.UpdateFarmProperties;
 end;
 
 procedure TPhastModel.SetFileName(const Value: string);
@@ -22285,14 +22287,10 @@ begin
   FreeAndNil(FSortedObjectList);
 end;
 
-//procedure TPhastModel.FixGwtModel;
-//begin
-//  if ModflowPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt then
-//  begin
-//    ModflowPackages.GwtProcess.IsSelected := ModflowPackages.Mt3dBasic.IsSelected;
-//    ModflowPackages.Mt3dBasic.Mt3dVersion :=  mvUSGS
-//  end;
-//end;
+procedure TPhastModel.UpdateFarmProperties;
+begin
+  FmpCrops.UpdateFarmProperties;
+end;
 
 procedure TPhastModel.FixOldModel;
 var
@@ -22332,12 +22330,9 @@ var
   Position: Integer;
   UnsatNodeDataArray: TDataArray;
   UnsatElementDataArray: TDataArray;
-//  ModflowSwiObservations: TSwiObsBoundary;
-//  StressPeriodIndex: Integer;
-//  StressPeriod: TModflowStressPeriod;
-//  Mt3dStressPeriod: TMt3dmsTimeItem;
 begin
-//  FixGwtModel;
+  UpdateFarmProperties;
+
   FixScreenObjectNames;
   RenameOldVerticalLeakance;
   FixSpecifyingGridByThreeDObjects;

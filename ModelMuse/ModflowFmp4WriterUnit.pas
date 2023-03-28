@@ -65,8 +65,8 @@ type
     FClimatePackage: TFarmProcess4Climate;
     FLandUse: TFarmProcess4LandUse;
     FSurfaceWater4: TFarmProcess4SurfaceWater;
-    FSoils: TFarmProcess4Soil;
     FSalinityFlush: TFarmProcess4SalinityFlush;
+    FSoil4: TFarmProcess4Soil;
 
     FACtiveSurfaceCells: array of array of boolean;
     FWriteLocation: TWriteLocation;
@@ -108,7 +108,6 @@ type
     FEFFICIENCY_IMPROVEMENT_FileStream: TFileStream;
     FBARE_RUNOFF_FRACTION_FileStream: TFileStream;
     FBarePrecipitationConsumptionFractionFileStream: TFileStream;
-    FSoil4: TFarmProcess4Soil;
     FCapillaryFringeFileStream: TFileStream;
     FSoilIdStream: TFileStream;
     FSurfaceKFileStream: TFileStream;
@@ -138,6 +137,8 @@ type
     FFmpSoils: TSoilCollection;
     FEffectivPrecipitationTableFileStream: TFileStream;
     FEffectivCoefficientTableFileStream: TFileStream;
+    FNonRoutedDeliveryFileStream: TFileStream;
+    FNrdTypes: Integer;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -221,8 +222,14 @@ type
     procedure WritePrecipPotConsumption;
 
     // Surface water
+    // NON_ROUTED_DELIVERY
+    procedure WriteNonRoutedDelivery;
+
+    // NRD_INFILTRATION_LOCATION
     procedure EvaluateNrdInfilLocation;
     procedure WriteNrdInfilLocation;
+
+    procedure PrintSurfaceWaterOutputOptions;
 
     // Land use
     // LOCATION
@@ -397,6 +404,12 @@ resourcestring
   StrInvalidCapillaryFringe = 'Invalid Capillary Fringe value';
   StrInvalidPotentialEv = 'Invalid Potential Evaporation Bare value';
   StrStressPeriodD = 'Stress Period %d';
+  StrNonRoutedDeliverie = 'Non-Routed Deliveries enabled but not used';
+  StrInTheMODFLOWPacka = 'In the MODFLOW Packages and Programs dialog box, i' +
+  'n the Surface Water section of the Farm processs, non routed deliveries a' +
+  're enabled but none have been defined in the Farms dialog box.';
+  StrNonroutedDelivery = 'Non-routed delivery infiltration locations must be' +
+  ' greater than or equal to 10.';
 
 { TModflowFmp4Writer }
 
@@ -577,7 +590,6 @@ begin
   FLandUse := Model.ModflowPackages.FarmLandUse;
   FSoil4 := Model.ModflowPackages.FarmSoil4;
   FSurfaceWater4 := Model.ModflowPackages.FarmSurfaceWater4;
-  FSoils := Model.ModflowPackages.FarmSoil4;
   FSalinityFlush := Model.ModflowPackages.FarmSalinityFlush;
   FFmpSoils := Model.FmpSoils;
 end;
@@ -1083,7 +1095,7 @@ begin
   FreeAndNil(FAddedCropDemandRateFileStream);
   FreeAndNil(FEffectivPrecipitationTableFileStream);
   FreeAndNil(FEffectivCoefficientTableFileStream);
-
+  FreeAndNil(FNonRoutedDeliveryFileStream);
 
 end;
 
@@ -1161,6 +1173,12 @@ begin
       end;
     wlDeliveries:
       begin
+        result := ChangeFileExt(FBaseName, '.non_routed_delivery');
+        if FNonRoutedDeliveryFileStream = nil then
+        begin
+          FNonRoutedDeliveryFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
       end;
     wlSemiRouteDeliv:
       begin
@@ -1691,6 +1709,66 @@ function TModflowFmp4Writer.ParameterType: TParameterType;
 begin
   result := ptUndefined;
   Assert(False);
+end;
+
+procedure TModflowFmp4Writer.PrintSurfaceWaterOutputOptions;
+var
+  PrintOption: TSurfaceWaterPrint;
+  OutputFile: string;
+begin
+  for PrintOption in FSurfaceWater4.SurfaceWaterPrints do
+  begin
+    case PrintOption of
+      swpPrint_Sfr_Delivery:
+        begin
+          WriteString('  PRINT SFR_DELIVERY ');
+          OutputFile := ChangeFileExt(FInputFileName, '.SFR_Delivery');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      swpPrint_Sfr_Delivery_By_Wbs:
+        begin
+          WriteString('  PRINT SFR_DELIVERY_BY_WBS ');
+          OutputFile := ChangeFileExt(FInputFileName, '.SFR_DeliveryByWBS');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      swpPrint_Sfr_Return:
+        begin
+          WriteString('  PRINT SFR_RETURN ');
+          OutputFile := ChangeFileExt(FInputFileName, '.SFR_Return');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      swpPrint_Sfr_Srr_Only:
+        begin
+          WriteString('  PRINT SFR_SRR_ONLY ');
+          OutputFile := ChangeFileExt(FInputFileName, '.SFR_SRR_Only');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      swpPrint_Nrd:
+        begin
+          WriteString('  PRINT NRD ');
+          OutputFile := ChangeFileExt(FInputFileName, '.Non_Routed_Deliveries');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      swpPrint_Nrd_By_Wbs:
+        begin
+          WriteString('  PRINT NRD_BY_WBS ');
+          OutputFile := ChangeFileExt(FInputFileName, '.Non_Routed_Deliveries_By_WBS');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+    end;
+  end;
 end;
 
 procedure TModflowFmp4Writer.RemoveErrorAndWarningMessages;
@@ -2731,7 +2809,6 @@ begin
               begin
                 EvapFracItem := nil;
               end;
-              NewLine;
               WriteEvapFractItem(IrrigationType, EvapFracItem);
             end;
           end;
@@ -4872,6 +4949,266 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteNonRoutedDelivery;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: double;
+  DeliveryIndex: Integer;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  ADeliveryCollection: TNonRoutedDeliveryParameterCollection;
+  ADeliveryItem: TNonRoutedDeliveryParameterItem;
+begin
+  if (FSurfaceWater4.Non_Routed_Delivery.FarmOption = foNotUsed) then
+  begin
+    Exit;
+  end;
+
+  if (FNrdTypes = 0) then
+  begin
+    frmErrorsAndWarnings.AddWarning(Model, StrNonRoutedDeliverie,
+      StrInTheMODFLOWPacka)
+  end;
+
+  RequiredValues.WriteLocation := wlDeliveries;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SURFACE_WATER: NON_ROUTED_DELIVERY';
+  RequiredValues.ErrorID := 'FMP SURFACE_WATER: NON_ROUTED_DELIVERY';
+  RequiredValues.ID := 'NON_ROUTED_DELIVERY';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FSurfaceWater4.Non_Routed_Delivery.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := 'Invalid non-routed delivery value';
+  case FSurfaceWater4.NRDOption of
+    nrdoRate:
+      begin
+        RequiredValues.Option := 'RATE ';
+      end;
+    nrdoVolume:
+      begin
+        RequiredValues.Option := 'VOLUME ';
+      end;
+  end;
+
+  RequiredValues.FarmProperty := FSurfaceWater4.Non_Routed_Delivery;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlDeliveries);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for DeliveryIndex := 0 to FNrdTypes - 1 do
+              begin
+                WriteFloatCondensed(0);
+                WriteFreeInteger(DeliveryIndex+1);
+                WriteFreeInteger(0);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            for DeliveryIndex := 0 to AFarm.DeliveryParamCollection.Count - 1 do
+            begin
+              ADeliveryCollection := AFarm.DeliveryParamCollection
+                [DeliveryIndex].DeliveryParam;
+              ADeliveryItem := ADeliveryCollection.ItemByStartTime(StartTime)
+                 as TNonRoutedDeliveryParameterItem;
+              WriteFloatValueFromGlobalFormula(ADeliveryItem.Volume ,
+                AFarm, 'NRDV');
+              WriteIntegerValueFromGlobalFormula(ADeliveryItem.Rank ,
+                AFarm, 'NRDR',
+                procedure (Value: integer)
+                begin
+                  if Value <= 0 then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrThePriorityForNon,
+                      AFarm.FarmName);
+                  end;
+                end);
+              case ADeliveryItem.NonRoutedDeliveryTypeOwhm2 of
+                nrdt2FarmDemand:
+                  begin
+                    WriteInteger(0);
+                  end;
+                nrdt2Discharged:
+                  begin
+                    WriteInteger(1);
+                  end;
+                nrdt2Stored:
+                  begin
+                    WriteInteger(2);
+                  end;
+                nrdt2Infiltrate:
+                  begin
+                    WriteIntegerValueFromGlobalFormula(ADeliveryItem.VirtualFarm ,
+                      AFarm, 'NRDU',
+                      procedure (Value: integer)
+                      begin
+                        if Value < 10 then
+                        begin
+                          frmErrorsAndWarnings.AddError(Model, StrNonroutedDelivery,
+                            AFarm.FarmName);
+                        end;
+                      end);
+                  end;
+                else
+                  begin
+                    Assert(False);
+                  end;
+              end;
+            end;
+            for DeliveryIndex := AFarm.DeliveryParamCollection.Count to FNrdTypes - 1 do
+            begin
+              WriteFloatCondensed(0);
+              WriteFreeInteger(DeliveryIndex+1);
+              WriteFreeInteger(0);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for DeliveryIndex := 0 to FNrdTypes - 1 do
+            begin
+              WriteFloatCondensed(0);
+              WriteFreeInteger(DeliveryIndex+1);
+              WriteFreeInteger(0);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          for DeliveryIndex := 0 to AFarm.DeliveryParamCollection.Count - 1 do
+          begin
+            ADeliveryCollection := AFarm.DeliveryParamCollection
+              [DeliveryIndex].DeliveryParam;
+            ADeliveryItem := ADeliveryCollection.First
+               as TNonRoutedDeliveryParameterItem;
+            WriteFloatValueFromGlobalFormula(ADeliveryItem.Volume ,
+              AFarm, 'NRDV');
+            WriteIntegerValueFromGlobalFormula(ADeliveryItem.Rank ,
+              AFarm, 'NRDR',
+              procedure (Value: integer)
+              begin
+                if Value <= 0 then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrThePriorityForNon,
+                    AFarm.FarmName);
+                end;
+              end);
+            case ADeliveryItem.NonRoutedDeliveryTypeOwhm2 of
+              nrdt2FarmDemand:
+                begin
+                  WriteInteger(0);
+                end;
+              nrdt2Discharged:
+                begin
+                  WriteInteger(1);
+                end;
+              nrdt2Stored:
+                begin
+                  WriteInteger(2);
+                end;
+              nrdt2Infiltrate:
+                begin
+                  WriteIntegerValueFromGlobalFormula(ADeliveryItem.VirtualFarm ,
+                    AFarm, 'NRDU',
+                    procedure (Value: integer)
+                    begin
+                      if Value < 10 then
+                      begin
+                        frmErrorsAndWarnings.AddError(Model, StrNonroutedDelivery,
+                          AFarm.FarmName);
+                      end;
+                    end);
+                end;
+              else
+                begin
+                  Assert(False);
+                end;
+            end;
+          end;
+          for DeliveryIndex := AFarm.DeliveryParamCollection.Count to FNrdTypes - 1 do
+          begin
+            WriteFloatCondensed(0);
+            WriteFreeInteger(DeliveryIndex+1);
+            WriteFreeInteger(0);
+          end;
+
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteNrdInfilLocation;
 var
   AFileName: string;
@@ -5150,6 +5487,9 @@ begin
 end;
 
 procedure TModflowFmp4Writer.WriteGobalDimension;
+var
+  FarmIndex: Integer;
+  AFarm: TFarm;
 begin
   WriteString('BEGIN GLOBAL DIMENSION');
   NewLine;
@@ -5161,11 +5501,18 @@ begin
   NewLine;
 
   WriteString('  NCROP');
-  WriteInteger(Model.FmpCrops.Count);
+  if FLandUse.IsSelected then
+  begin
+    WriteInteger(Model.FmpCrops.Count);
+  end
+  else
+  begin
+    WriteInteger(0);
+  end;
   NewLine;
 
   WriteString('  NSOIL');
-  if Model.ModflowPackages.FarmSoil4.IsSelected then
+  if FSoil4.IsSelected then
   begin
     WriteInteger(Model.FmpSoils.Count);
   end
@@ -5177,6 +5524,23 @@ begin
 
   WriteString('  NIRRIGATE');
   WriteInteger(Model.IrrigationTypes.Count);
+  NewLine;
+
+  FNrdTypes := 0;
+  if FSurfaceWater4.IsSelected
+    and (FSurfaceWater4.Non_Routed_Delivery.FarmOption <> foNotUsed) then
+  begin
+    for FarmIndex := 0 to Model.Farms.Count - 1 do
+    begin
+      AFarm := Model.Farms[FarmIndex];
+      if AFarm.DeliveryParamCollection.Count > FNrdTypes then
+      begin
+        FNrdTypes := AFarm.DeliveryParamCollection.Count;
+      end;
+    end;
+  end;
+  WriteString('  NRD_TYPES');
+  WriteInteger(FNrdTypes);
   NewLine;
 
   WriteString('END');
@@ -6421,9 +6785,8 @@ begin
         end;
       wlDeliveries:
         begin
-          Assert(False);
-//          Assert(FDeliveries_FileStream <> nil);
-//          FDeliveries_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+          Assert(FNonRoutedDeliveryFileStream <> nil);
+          FNonRoutedDeliveryFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlSemiRouteDeliv:
         begin
@@ -6693,7 +7056,9 @@ begin
     WriteString('BEGIN SURFACE_WATER');
     NewLine;
 
+    WriteNonRoutedDelivery;
     WriteNrdInfilLocation;
+    PrintSurfaceWaterOutputOptions;
 
     WriteString('END SURFACE_WATER');
     NewLine;
@@ -6802,7 +7167,7 @@ var
         'Surface-Water Water Source in ' + AFarm.FarmName);
       Formula := WaterSourceItem.NonRoutedDelivery;
       WriteBooleanValueFromGlobalFormula(Formula, AFarm,
-        'Non-Rounted Delivery Water Source in ' + AFarm.FarmName);
+        'Non-Routed Delivery Water Source in ' + AFarm.FarmName);
     end
     else
     begin

@@ -465,6 +465,7 @@ type
     procedure SetFallow(const Value: string);
     procedure UpdateAllDataArrays;
     procedure SetIrrigationCollection(const Value: TFmp4IrrigationCollection);
+    procedure UpdateFarmProperties;
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -644,6 +645,7 @@ type
     property Items[Index: Integer]: TCropItem read GetItems write SetItems; default;
     procedure EvaluateCrops;
     procedure UpdateAllDataArrays;
+    procedure UpdateFarmProperties;
   end;
 
 implementation
@@ -3139,6 +3141,78 @@ begin
   end;
 end;
 
+procedure TCropItem.UpdateFarmProperties;
+var
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  FoundItem: Boolean;
+  CropEffIndex: Integer;
+  AFarmEff: TFarmEfficienciesItem;
+  Farms: TFarmCollection;
+begin
+  if Model <> nil then
+  begin
+    Farms := (Model as TCustomModel).Farms;
+    for FarmIndex := 0 to Farms.Count - 1 do
+    begin
+      AFarm := Farms[FarmIndex];
+      FoundItem := False;
+      begin
+        for CropEffIndex := 0 to AFarm.FarmEfficiencyCollection.Count - 1 do
+        begin
+          AFarmEff := AFarm.FarmEfficiencyCollection[CropEffIndex];
+          if AFarmEff.CropEfficiency.CropName = FCropName then
+          begin
+            FoundItem := True;
+            break;
+          end;
+        end;
+      end;
+      if not FoundItem then
+      begin
+        AFarmEff := AFarm.FarmEfficiencyCollection.Add;
+        AFarmEff.CropEfficiency.CropName := FCropName;
+      end;
+
+      FoundItem := False;
+      begin
+        for CropEffIndex := 0 to AFarm.AddedCropDemandFlux.Count - 1 do
+        begin
+          AFarmEff := AFarm.AddedCropDemandFlux[CropEffIndex];
+          if AFarmEff.CropEfficiency.CropName = FCropName then
+          begin
+            FoundItem := True;
+            break;
+          end;
+        end;
+      end;
+      if not FoundItem then
+      begin
+        AFarmEff := AFarm.AddedCropDemandFlux.Add;
+        AFarmEff.CropEfficiency.CropName := FCropName;
+      end;
+
+      FoundItem := False;
+      begin
+        for CropEffIndex := 0 to AFarm.AddedCropDemandRate.Count - 1 do
+        begin
+          AFarmEff := AFarm.AddedCropDemandRate[CropEffIndex];
+          if AFarmEff.CropEfficiency.CropName = FCropName then
+          begin
+            FoundItem := True;
+            break;
+          end;
+        end;
+      end;
+      if not FoundItem then
+      begin
+        AFarmEff := AFarm.AddedCropDemandRate.Add;
+        AFarmEff.CropEfficiency.CropName := FCropName;
+      end;
+    end;
+  end;
+end;
+
 procedure TCropItem.UpdateTimes(Times: TRealList; StartTestTime,
   EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean);
 begin
@@ -3658,6 +3732,16 @@ begin
   for index := 0 to Count - 1 do
   begin
     Items[index].UpdateAllDataArrays;
+  end;
+end;
+
+procedure TCropCollection.UpdateFarmProperties;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].UpdateFarmProperties;
   end;
 end;
 

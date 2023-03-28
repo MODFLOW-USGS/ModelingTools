@@ -249,8 +249,10 @@ type
     procedure GetMaxTimeAndCountForEfficiencyCollection(
       AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection;
       var MaxTimeCount: Integer; var MaxIndex: Integer);
-    procedure GetEfficienyDataForFirstFarm(AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection);
-    procedure SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection; AFrame: TframeFormulaGrid);
+    procedure GetEfficienyDataForFirstFarm(AFrame: TframeFormulaGrid;
+      EffCollection: TFarmEfficiencyCollection);
+    procedure SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection;
+      AFrame: TframeFormulaGrid);
     { Private declarations }
   public
     procedure InitializeControls;
@@ -326,6 +328,8 @@ var
   RequiredType: TRbwDataType;
 begin
 
+  ValidTypes := [rdtDouble, rdtInteger];
+  RequiredType := rdtDouble;
   if (Grid = frameFormulaGridEfficiencyImprovement.Grid)
     or (Grid = frameWaterSource.Grid) then
   begin
@@ -337,11 +341,15 @@ begin
     ValidTypes := [rdtInteger];
     RequiredType := rdtInteger;
   end
-  else
+  else if Grid = frameDelivery.Grid then
   begin
-    ValidTypes := [rdtDouble, rdtInteger];
-    RequiredType := rdtDouble;
+    if ((ACol -2) mod 4) = 1 then
+    begin
+      ValidTypes := [rdtInteger];
+      RequiredType := rdtInteger;
+    end;
   end;
+
   AFormula := Grid.Cells[ACol, ARow];
   if AFormula = '' then
   begin
@@ -697,9 +705,9 @@ begin
       frameFormulaGridReturnFlow.GetData(FarmList, dtReturnFlow);
 
       frameDelivery.GetData_OwhmV1(FarmList);
-      tabNonRoutedDelivery.tavVisible := FarmProcess.IsSelected
+      tabNonRoutedDelivery.tabVisible := FarmProcess.IsSelected
         or (FarmProcess4.IsSelected and FarmSurfaceWater4.IsSelected
-        and (FarmSurfaceWater4.Non_Routed_Delivery <> foNotUsed));
+        and (FarmSurfaceWater4.Non_Routed_Delivery.FarmOption <> foNotUsed));
 
       tabEfficiencyImprovement.TabVisible := FarmProcess4.IsSelected
         and (FarmProcess4.EfficiencyImprovement.FarmOption <> foNotUsed)
@@ -1720,7 +1728,8 @@ begin
   tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected;
   tabReturnFlowLocation.TabVisible := tabDiversionLocation.TabVisible;
 
-  tabGW_Allocation.TabVisible := frmGoPhast.PhastModel.ModflowPackages.FarmProcess.GroundwaterAllotmentsUsed;
+  tabGW_Allocation.TabVisible := frmGoPhast.PhastModel.ModflowPackages.
+    FarmProcess.GroundwaterAllotmentsUsed;
 
   pcMain.ActivePageIndex := 0;
   StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
@@ -2260,7 +2269,7 @@ var
 begin
   Assert(AFrame.Grid.ColCount = EffCollection.Count + 2);
   MaxTimeCount := 0;
-  Assert(EffCollection.Count > 0);
+//  Assert(EffCollection.Count > 0);
   MaxIndex := -1;
   for CropIndex := 0 to EffCollection.Count - 1 do
   begin

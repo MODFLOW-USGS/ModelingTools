@@ -908,8 +908,8 @@ begin
     ErrorValues.Add('ERROR REPORT');
     // MODFLOW-OWHM v2
     ErrorValues.Add('THE FOLLOWING COMMENTS WERE PASSED TO THE ERROR ROUTINE');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
+    ErrorValues.Add('The following comments were passed to the error routine');
+//    ErrorValues.Add('FILE_IO_ERROR');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
@@ -1109,8 +1109,8 @@ begin
     WarningValues.Add('WARNING REPORT');
     WarningValues.Add('MOVER PACKAGE REQUIRES AT LEAST TWO OUTER ITERATIONS');
     WarningValues.Add('MATRIX IS SEVERELY NON-DIAGONALLY DOMINANT');
-//    WarningValues.Add('aaa');
-//    WarningValues.Add('aaa');
+    WarningValues.Add('THE FOLLOWING COMMENTS WERE PASSED TO THE WARNING ROUTINE');
+    WarningValues.Add('The following comments were passed to the warning routine');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
