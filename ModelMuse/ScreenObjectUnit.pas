@@ -19401,6 +19401,10 @@ begin
   begin
     ModflowBoundaries.ReplaceGUID;
   end;
+  if SutraBoundaries <> nil then
+  begin
+    SutraBoundaries.ReplaceGUID;
+  end;
 end;
 
 procedure TScreenObject.InitilizeVariablesWithNilDataSet(
@@ -45190,6 +45194,10 @@ begin
   if Modflow6Obs <> nil then
   begin
     Modflow6Obs.ReplaceGUID;
+  end;
+  if ModflowHeadObservations <> nil then
+  begin
+    ModflowHeadObservations.ReplaceGUID;
   end;
 end;
 

@@ -4,11 +4,15 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
   DesignSize = (
     422
     450)
+  inherited memoComments: TMemo
+    Height = 60
+    ExplicitHeight = 60
+  end
   object cpnlgrp1: TCategoryPanelGroup [3]
     Left = 0
-    Top = 157
+    Top = 128
     Width = 422
-    Height = 293
+    Height = 322
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -19,20 +23,22 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlSurfaceWater: TCategoryPanel
-      Top = 244
-      Height = 290
+      Top = 60
+      Height = 318
       Caption = 'Surface Water'
       TabOrder = 0
+      ExplicitTop = 72
+      ExplicitWidth = 397
       object rdgSurfaceWater: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 399
-        Height = 264
+        Width = 395
+        Height = 294
         Align = alClient
         ColCount = 6
         Enabled = False
         FixedCols = 1
-        RowCount = 7
+        RowCount = 9
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
         OnSelectCell = rdgSurfaceWaterSelectCell
@@ -200,11 +206,14 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 153
-      Height = 91
+      Top = 30
+      Height = 30
       Caption = 'Options'
+      Collapsed = True
       Enabled = False
       TabOrder = 1
+      ExplicitWidth = 397
+      ExpandedHeight = 91
       object lblSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE: TLabel
         Left = 173
         Top = 12
@@ -238,9 +247,12 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
     end
     object cpnlPrint: TCategoryPanel
       Top = 0
-      Height = 153
+      Height = 30
       Caption = 'Print'
+      Collapsed = True
       TabOrder = 2
+      ExplicitWidth = 397
+      ExpandedHeight = 153
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
@@ -248,7 +260,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
         Height = 127
         Align = alClient
         Enabled = False
-        ItemHeight = 15
+        ItemHeight = 17
         Items.Strings = (
           'PRINT SFR_DELIVERY'
           'PRINT SFR_DELIVERY_BY_WBS'

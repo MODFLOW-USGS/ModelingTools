@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabNonRoutedDelivery
+    ActivePage = tabNoReturnFlow
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -59,18 +59,21 @@ inherited frameFarm: TframeFarm
         Align = alClient
         TabOrder = 1
         ExplicitTop = 65
-        ExplicitWidth = 577
-        ExplicitHeight = 267
+        ExplicitWidth = 578
+        ExplicitHeight = 269
         inherited Panel: TPanel
           Top = 226
           Width = 577
-          ExplicitTop = 226
-          ExplicitWidth = 577
+          ExplicitTop = 228
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 95
+            Width = 107
             Height = 16
             Caption = 'Number of times'
-            ExplicitWidth = 95
+            ExplicitWidth = 107
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -82,15 +85,17 @@ inherited frameFarm: TframeFarm
           end
           inherited sbInsert: TSpeedButton
             Left = 489
+            Width = 24
             OnClick = frameFormulaGridCropssbInsertClick
             ExplicitLeft = 490
+            ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
-            Left = 544
-            Width = 21
+            Left = 545
+            Width = 20
             OnClick = frameFormulaGridCropssbDeleteClick
-            ExplicitLeft = 545
-            ExplicitWidth = 21
+            ExplicitLeft = 546
+            ExplicitWidth = 20
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -188,13 +193,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridCropsedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -207,10 +216,11 @@ inherited frameFarm: TframeFarm
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 578
         object lblFarmId: TLabel
           Left = 130
           Top = 34
-          Width = 79
+          Width = 85
           Height = 16
           Caption = 'Farm ID (FID)'
         end
@@ -238,8 +248,8 @@ inherited frameFarm: TframeFarm
           Top = 31
           Width = 185
           Height = 24
-          EditLabel.Width = 66
-          EditLabel.Height = 16
+          EditLabel.Width = 73
+          EditLabel.Height = 24
           EditLabel.Caption = 'Farm name'
           LabelPosition = lpRight
           TabOrder = 2
@@ -258,17 +268,20 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -379,13 +392,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridEfficiencyImprovementedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -401,17 +418,20 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -448,12 +468,16 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -469,17 +493,20 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -516,13 +543,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameIrrigationUniformityedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -538,17 +569,20 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -585,13 +619,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameDeficiencyScenarioedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -607,17 +645,20 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -654,13 +695,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameWaterSourceedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -676,33 +721,36 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
             Left = 301
             OnClick = frameBareRunoffFractionssbAddClick
-            ExplicitLeft = 301
+            ExplicitLeft = 302
           end
           inherited sbInsert: TSpeedButton
             Left = 357
             OnClick = frameBareRunoffFractionssbInsertClick
-            ExplicitLeft = 357
+            ExplicitLeft = 358
           end
           inherited sbDelete: TSpeedButton
             Left = 413
             OnClick = frameBareRunoffFractionssbDeleteClick
-            ExplicitLeft = 413
+            ExplicitLeft = 414
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -723,13 +771,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameBareRunoffFractionsedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -745,33 +797,36 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
             Left = 301
             OnClick = frameAddedCropDemandFluxsbAddClick
-            ExplicitLeft = 301
+            ExplicitLeft = 302
           end
           inherited sbInsert: TSpeedButton
             Left = 357
             OnClick = frameAddedCropDemandFluxsbInsertClick
-            ExplicitLeft = 357
+            ExplicitLeft = 358
           end
           inherited sbDelete: TSpeedButton
             Left = 413
             OnClick = frameAddedCropDemandFluxsbDeleteClick
-            ExplicitLeft = 413
+            ExplicitLeft = 414
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -792,13 +847,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameAddedCropDemandFluxedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -814,33 +873,36 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 291
           Width = 577
-          ExplicitTop = 291
-          ExplicitWidth = 577
+          ExplicitTop = 293
+          ExplicitWidth = 578
+          DesignSize = (
+            577
+            41)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
             Left = 301
             OnClick = frameAddedCropDemandRatesbAddClick
-            ExplicitLeft = 301
+            ExplicitLeft = 302
           end
           inherited sbInsert: TSpeedButton
             Left = 357
             OnClick = frameAddedCropDemandRatesbInsertClick
-            ExplicitLeft = 357
+            ExplicitLeft = 358
           end
           inherited sbDelete: TSpeedButton
             Left = 413
             OnClick = frameAddedCropDemandRatesbDeleteClick
-            ExplicitLeft = 413
+            ExplicitLeft = 414
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -861,13 +923,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameAddedCropDemandRateedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -885,38 +951,45 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 290
           Width = 577
           Height = 42
-          ExplicitTop = 290
-          ExplicitWidth = 577
+          ExplicitTop = 292
+          ExplicitWidth = 578
           ExplicitHeight = 42
+          DesignSize = (
+            577
+            42)
           inherited lbNumber: TLabel
-            Width = 95
+            Width = 107
             Height = 16
             Caption = 'Number of times'
-            ExplicitWidth = 95
+            ExplicitWidth = 107
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
             Left = 433
+            Width = 24
             OnClick = frameFormulaGridCostssbAddClick
             ExplicitLeft = 434
+            ExplicitWidth = 24
           end
           inherited sbInsert: TSpeedButton
             Left = 489
+            Width = 24
             OnClick = frameFormulaGridCostssbInsertClick
             ExplicitLeft = 490
+            ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
-            Left = 544
-            Width = 21
+            Left = 545
+            Width = 20
             OnClick = frameFormulaGridCostssbDeleteClick
-            ExplicitLeft = 545
-            ExplicitWidth = 21
+            ExplicitLeft = 546
+            ExplicitWidth = 20
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -1179,13 +1252,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridCostsedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -1203,17 +1280,19 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 290
           Height = 42
-          ExplicitTop = 290
+          ExplicitTop = 292
+          ExplicitWidth = 578
           ExplicitHeight = 42
           inherited lbNumber: TLabel
-            Width = 99
+            Width = 111
             Height = 16
             Caption = 'Number of times '
-            ExplicitWidth = 99
+            ExplicitWidth = 111
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -1228,15 +1307,15 @@ inherited frameFarm: TframeFarm
             ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
-            Left = 540
-            Width = 21
-            ExplicitLeft = 541
-            ExplicitWidth = 21
+            Left = 541
+            Width = 20
+            ExplicitLeft = 542
+            ExplicitWidth = 20
           end
           inherited lblLocationMethod: TLabel
-            Width = 94
+            Width = 107
             Height = 16
-            ExplicitWidth = 94
+            ExplicitWidth = 107
             ExplicitHeight = 16
           end
           inherited seNumber: TJvSpinEdit
@@ -1251,53 +1330,59 @@ inherited frameFarm: TframeFarm
         inherited Grid: TRbwDataGrid4
           Height = 233
           OnSetEditText = frameFormulaGridDiversionGridSetEditText
-          ExplicitHeight = 233
+          ExplicitWidth = 578
+          ExplicitHeight = 235
         end
         inherited pnlTop: TPanel
+          ExplicitWidth = 578
           inherited lblSfrObjects: TLabel
-            Width = 37
+            Width = 41
             Height = 16
-            ExplicitWidth = 37
+            ExplicitWidth = 41
             ExplicitHeight = 16
           end
           inherited lblPositionChoice: TLabel
-            Width = 84
+            Width = 99
             Height = 16
-            ExplicitWidth = 84
+            ExplicitWidth = 99
             ExplicitHeight = 16
           end
           inherited lblVertexNumber: TLabel
-            Width = 37
+            Width = 41
             Height = 16
-            ExplicitWidth = 37
+            ExplicitWidth = 41
             ExplicitHeight = 16
           end
           inherited lblX: TLabel
-            Width = 8
+            Width = 9
             Height = 16
-            ExplicitWidth = 8
+            ExplicitWidth = 9
             ExplicitHeight = 16
           end
           inherited lblY: TLabel
+            Width = 10
             Height = 16
+            ExplicitWidth = 10
             ExplicitHeight = 16
           end
           inherited lblRow: TLabel
-            Width = 25
+            Width = 28
             Height = 16
-            ExplicitWidth = 25
+            ExplicitWidth = 28
             ExplicitHeight = 16
           end
           inherited lblCol: TLabel
+            Width = 49
             Height = 16
+            ExplicitWidth = 49
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 51
+            EditLabel.Width = 57
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
-            EditLabel.ExplicitWidth = 51
+            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 16
             ExplicitHeight = 24
           end
@@ -1329,6 +1414,10 @@ inherited frameFarm: TframeFarm
             Height = 24
             ExplicitHeight = 24
           end
+          inherited comboChoice: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
         end
       end
     end
@@ -1344,17 +1433,19 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 290
           Height = 42
-          ExplicitTop = 290
+          ExplicitTop = 292
+          ExplicitWidth = 578
           ExplicitHeight = 42
           inherited lbNumber: TLabel
-            Width = 99
+            Width = 111
             Height = 16
             Caption = 'Number of times '
-            ExplicitWidth = 99
+            ExplicitWidth = 111
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -1369,15 +1460,15 @@ inherited frameFarm: TframeFarm
             ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
-            Left = 540
-            Width = 21
-            ExplicitLeft = 541
-            ExplicitWidth = 21
+            Left = 541
+            Width = 20
+            ExplicitLeft = 542
+            ExplicitWidth = 20
           end
           inherited lblLocationMethod: TLabel
-            Width = 94
+            Width = 107
             Height = 16
-            ExplicitWidth = 94
+            ExplicitWidth = 107
             ExplicitHeight = 16
           end
           inherited seNumber: TJvSpinEdit
@@ -1401,50 +1492,55 @@ inherited frameFarm: TframeFarm
             64)
         end
         inherited pnlTop: TPanel
+          ExplicitWidth = 578
           inherited lblSfrObjects: TLabel
-            Width = 37
+            Width = 41
             Height = 16
-            ExplicitWidth = 37
+            ExplicitWidth = 41
             ExplicitHeight = 16
           end
           inherited lblPositionChoice: TLabel
-            Width = 84
+            Width = 99
             Height = 16
-            ExplicitWidth = 84
+            ExplicitWidth = 99
             ExplicitHeight = 16
           end
           inherited lblVertexNumber: TLabel
-            Width = 37
+            Width = 41
             Height = 16
-            ExplicitWidth = 37
+            ExplicitWidth = 41
             ExplicitHeight = 16
           end
           inherited lblX: TLabel
-            Width = 8
+            Width = 9
             Height = 16
-            ExplicitWidth = 8
+            ExplicitWidth = 9
             ExplicitHeight = 16
           end
           inherited lblY: TLabel
+            Width = 10
             Height = 16
+            ExplicitWidth = 10
             ExplicitHeight = 16
           end
           inherited lblRow: TLabel
-            Width = 25
+            Width = 28
             Height = 16
-            ExplicitWidth = 25
+            ExplicitWidth = 28
             ExplicitHeight = 16
           end
           inherited lblCol: TLabel
+            Width = 49
             Height = 16
+            ExplicitWidth = 49
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 51
+            EditLabel.Width = 57
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
-            EditLabel.ExplicitWidth = 51
+            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 16
             ExplicitHeight = 24
           end
@@ -1476,6 +1572,10 @@ inherited frameFarm: TframeFarm
             Height = 24
             ExplicitHeight = 24
           end
+          inherited comboChoice: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
         end
       end
     end
@@ -1491,52 +1591,58 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 282
           Width = 577
           Height = 50
-          ExplicitTop = 282
-          ExplicitWidth = 577
+          ExplicitTop = 284
+          ExplicitWidth = 578
           ExplicitHeight = 50
           DesignSize = (
             577
             50)
           inherited lbNumber: TLabel
             Top = 6
-            Width = 46
-            Height = 32
+            Width = 51
+            Height = 48
             Caption = 'Number of times'
             WordWrap = True
             ExplicitTop = 6
-            ExplicitWidth = 46
-            ExplicitHeight = 32
+            ExplicitWidth = 51
+            ExplicitHeight = 48
           end
           inherited sbAdd: TSpeedButton
             Left = 433
             Top = 10
+            Width = 24
             ExplicitLeft = 434
             ExplicitTop = 10
+            ExplicitWidth = 24
           end
           inherited sbInsert: TSpeedButton
             Left = 489
             Top = 10
+            Width = 24
             ExplicitLeft = 490
             ExplicitTop = 10
+            ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
             Left = 545
             Top = 10
+            Width = 24
             ExplicitLeft = 546
             ExplicitTop = 10
+            ExplicitWidth = 24
           end
           inherited lblNumberOfDeliveryTypes: TLabel
-            Width = 64
-            Height = 48
+            Width = 57
+            Height = 64
             Caption = 'Number of delivery types '
-            ExplicitWidth = 64
-            ExplicitHeight = 48
+            ExplicitWidth = 57
+            ExplicitHeight = 64
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -1601,30 +1707,34 @@ inherited frameFarm: TframeFarm
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 577
-          ExplicitHeight = 225
+          ExplicitWidth = 578
+          ExplicitHeight = 227
         end
         inherited pnlTop: TPanel
           Width = 577
-          ExplicitWidth = 577
+          ExplicitWidth = 578
           inherited lblHowUsed: TLabel
-            Width = 56
+            Width = 64
             Height = 16
-            ExplicitWidth = 56
+            ExplicitWidth = 64
             ExplicitHeight = 16
           end
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 51
+            EditLabel.Width = 57
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 51
+            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 16
             ExplicitHeight = 24
           end
           inherited comboHowUsed: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
             Height = 24
             ExplicitHeight = 24
           end
@@ -1643,38 +1753,45 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 290
           Width = 577
           Height = 42
-          ExplicitTop = 290
-          ExplicitWidth = 577
+          ExplicitTop = 292
+          ExplicitWidth = 578
           ExplicitHeight = 42
+          DesignSize = (
+            577
+            42)
           inherited lbNumber: TLabel
-            Width = 99
+            Width = 111
             Height = 16
             Caption = 'Number of times '
-            ExplicitWidth = 99
+            ExplicitWidth = 111
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
             Left = 433
+            Width = 24
             OnClick = frameFormulaGridWaterRightssbAddClick
             ExplicitLeft = 434
+            ExplicitWidth = 24
           end
           inherited sbInsert: TSpeedButton
             Left = 489
+            Width = 24
             OnClick = frameFormulaGridWaterRightssbInsertClick
             ExplicitLeft = 490
+            ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
-            Left = 544
-            Width = 21
+            Left = 545
+            Width = 20
             OnClick = frameFormulaGridWaterRightssbDeleteClick
-            ExplicitLeft = 545
-            ExplicitWidth = 21
+            ExplicitLeft = 546
+            ExplicitWidth = 20
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -1769,14 +1886,17 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 51
+            EditLabel.Width = 57
             EditLabel.Height = 16
             EditLabel.Caption = 'Formula '
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 51
             EditLabel.ExplicitHeight = 16
             OnChange = frameFormulaGridWaterRightsedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
             ExplicitHeight = 24
           end
         end
@@ -1794,19 +1914,22 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 577
-        ExplicitHeight = 332
+        ExplicitWidth = 578
+        ExplicitHeight = 334
         inherited Panel: TPanel
           Top = 290
           Width = 577
           Height = 42
-          ExplicitTop = 290
-          ExplicitWidth = 577
+          ExplicitTop = 292
+          ExplicitWidth = 578
           ExplicitHeight = 42
+          DesignSize = (
+            577
+            42)
           inherited lbNumber: TLabel
-            Width = 45
+            Width = 51
             Height = 16
-            ExplicitWidth = 45
+            ExplicitWidth = 51
             ExplicitHeight = 16
           end
           inherited sbAdd: TSpeedButton
@@ -1917,13 +2040,168 @@ inherited frameFarm: TframeFarm
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
-            EditLabel.Width = 47
+            EditLabel.Width = 53
             EditLabel.Height = 16
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 11
-            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitWidth = 53
             EditLabel.ExplicitHeight = 16
             OnChange = frameGW_AllocationedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+        end
+      end
+    end
+    object tabNoReturnFlow: TTabSheet
+      Caption = 'No Return Flow'
+      ImageIndex = 15
+      inline frameNoReturnFlow: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 332
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 40
+        ExplicitTop = 24
+        inherited Panel: TPanel
+          Top = 291
+          Width = 577
+          ExplicitWidth = 447
+          inherited lbNumber: TLabel
+            Width = 51
+            Height = 16
+            ExplicitWidth = 51
+            ExplicitHeight = 16
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 301
+            OnClick = frameNoReturnFlowsbAddClick
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 357
+            OnClick = frameNoReturnFlowsbInsertClick
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 412
+            OnClick = frameNoReturnFlowsbDeleteClick
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 24
+            OnChange = frameNoReturnFlowseNumberChange
+            ExplicitHeight = 24
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 577
+          Height = 234
+          ColCount = 3
+          OnSetEditText = frameNoReturnFlowGridSetEditText
+          Columns = <
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = True
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = True
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              PickList.Strings = (
+                'Return flow allowed'
+                'Only deep percolation')
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = False
+            end>
+          ExplicitTop = 58
+          ExplicitWidth = 577
+          ExplicitHeight = 234
+        end
+        inherited pnlTop: TPanel
+          Width = 577
+          ExplicitWidth = 447
+          inherited edFormula: TLabeledEdit
+            Height = 24
+            EditLabel.Width = 53
+            EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 53
+            EditLabel.ExplicitHeight = 16
+            Visible = False
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
+            Visible = True
+            OnChange = frameNoReturnFlowcomboChoiceChange
+            Items.Strings = (
+              'Return flow allowed'
+              'Only deep percolation')
             ExplicitHeight = 24
           end
         end

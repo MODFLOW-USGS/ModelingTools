@@ -26,8 +26,8 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
     object lblNumberOfDeliveryTypes: TLabel [4]
       Left = 247
       Top = 6
-      Width = 82
-      Height = 60
+      Width = 72
+      Height = 30
       Caption = 'Number of delivery types'
       WordWrap = True
     end

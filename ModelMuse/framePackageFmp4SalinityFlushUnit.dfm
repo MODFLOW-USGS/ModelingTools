@@ -35,7 +35,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Height = 92
         Align = alClient
         Enabled = False
-        ItemHeight = 17
+        ItemHeight = 15
         Items.Strings = (
           'PRINT BYFARM'
           'PRINT BYFARM_BYCROP'
@@ -273,8 +273,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 401
-        ExplicitHeight = 227
+        ExplicitWidth = 395
       end
     end
   end

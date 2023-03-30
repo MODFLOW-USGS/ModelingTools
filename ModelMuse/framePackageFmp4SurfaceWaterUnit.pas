@@ -12,7 +12,7 @@ type
   TSurfaceWaterColumns = (sfcName, sfcFrequency, sfcOption, sfcSfac, sfcFile,
     sfcSfacFile);
   TSurfaceWaterRows = (sfrName, sfrNonRoutDel, sfrNrdInfil, sfrSrd,
-    sfrSemiLower, sfrSemiUpper, sfrReturnChoic);
+    sfrSemiLower, sfrSemiUpper, sfrNoReturn, sfrSemiReturn, sfrFullReturn);
 
   TframePackageFmp4SurfaceWater = class(TframePackage)
     cpnlgrp1: TCategoryPanelGroup;
@@ -51,6 +51,7 @@ uses
 
 var
   RateVolume: TStringList;
+  ReturnOptions: TStringList;
 
 procedure TframePackageFmp4SurfaceWater.GetData(
   Package: TModflowPackageSelection);
@@ -106,12 +107,17 @@ begin
   rdgSurfaceWater.BeginUpdate;
   try
     GetFarmProperty(SurfWatPackage.Non_Routed_Delivery, Ord(sfrNonRoutDel));
-    rdgSurfaceWater.ItemIndex[Ord(sfcOption), Ord(sfrNonRoutDel)] := Ord(SurfWatPackage.NRDOption);
+    rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrNonRoutDel)] :=
+      RateVolume[Ord(SurfWatPackage.NRDOption)];
     GetFarmProperty(SurfWatPackage.Nrd_Infiltration_Location, Ord(sfrNrdInfil));
     GetFarmProperty(SurfWatPackage.Semi_Routed_Delivery, Ord(sfrSrd));
     GetFarmProperty(SurfWatPackage.SemiRoutedDeliveryLowerLimit, Ord(sfrSemiLower));
     GetFarmProperty(SurfWatPackage.SemiRoutedDeliveryUpperLimit, Ord(sfrSemiUpper));
-    GetFarmProperty(SurfWatPackage.ReturnChoice, Ord(sfrReturnChoic));
+    GetFarmProperty(SurfWatPackage.NoReturnFlow, Ord(sfrNoReturn));
+    GetFarmProperty(SurfWatPackage.SemiRoutedReturn, Ord(sfrSemiReturn));
+    GetFarmProperty(SurfWatPackage.RoutedReturn, Ord(sfrFullReturn));
+    rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrFullReturn)] :=
+      ReturnOptions[Ord(SurfWatPackage.ReturnOption)];
   finally
     rdgSurfaceWater.EndUpdate;
   end;
@@ -137,7 +143,9 @@ begin
     rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrSrd)] := 'Semi-routed deliveries';
     rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrSemiLower)] := 'SRD lower-limit';
     rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrSemiUpper)] := 'SRD upper-limit';
-    rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrReturnChoic)] := 'Return flow specification';
+    rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrNoReturn)] := 'No return flow choice';
+    rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrSemiReturn)] := 'Semi-routed return';
+    rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrFullReturn)] := 'Routed return';
 
   finally
     rdgSurfaceWater.EndUpdate;
@@ -154,11 +162,25 @@ end;
 
 procedure TframePackageFmp4SurfaceWater.rdgSurfaceWaterSelectCell(
   Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  Column: TRbwColumn4;
 begin
   inherited;
   if ACol = Ord(sfcOption) then
   begin
-    CanSelect := ARow = Ord(sfrNonRoutDel);
+    CanSelect := ARow in [Ord(sfrNonRoutDel), Ord(sfrFullReturn)];
+    if CanSelect then
+    begin
+      Column := rdgSurfaceWater.Columns[ACol];
+      if ARow = Ord(sfrNonRoutDel) then
+      begin
+        Column.PickList := RateVolume;
+      end
+      else
+      begin
+        Column.PickList := ReturnOptions;
+      end;
+    end;
   end;
   if ARow = Ord(sfrNrdInfil) then
   begin
@@ -234,13 +256,21 @@ begin
   end;
 
   SetFarmProperty(SurfWatPackage.Non_Routed_Delivery, sfrNonRoutDel);
-  SurfWatPackage.NRDOption := TNRDOption(rdgSurfaceWater.ItemIndex[Ord(sfcOption), Ord(sfrNonRoutDel)]);
+  SurfWatPackage.NRDOption := TNRDOption(RateVolume.IndexOf(
+    rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrNonRoutDel)]));
 
   SetFarmProperty(SurfWatPackage.Nrd_Infiltration_Location, sfrNrdInfil);
   SetFarmProperty(SurfWatPackage.Semi_Routed_Delivery, sfrSrd);
   SetFarmProperty(SurfWatPackage.SemiRoutedDeliveryLowerLimit, sfrSemiLower);
   SetFarmProperty(SurfWatPackage.SemiRoutedDeliveryUpperLimit, sfrSemiUpper);
-  SetFarmProperty(SurfWatPackage.ReturnChoice, sfrReturnChoic);
+//  SetFarmProperty(SurfWatPackage.ReturnChoice, sfrReturnChoic);
+
+  SetFarmProperty(SurfWatPackage.NoReturnFlow, sfrNoReturn);
+  SetFarmProperty(SurfWatPackage.SemiRoutedReturn, sfrSemiReturn);
+  SetFarmProperty(SurfWatPackage.RoutedReturn, sfrFullReturn);
+  SurfWatPackage.ReturnOption := TReturnOption(ReturnOptions.IndexOf(
+    rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrFullReturn)]));
+
 
   SurfWatPackage.Semi_Routed_Delivery_Closure_Tolerance := rdeSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE.RealValue;
   cbRebuild_Fully_Routed_Return.Checked := SurfWatPackage.Rebuild_Fully_Routed_Return;
@@ -251,7 +281,12 @@ initialization
   RateVolume.Add('Rate');
   RateVolume.Add('Volume');
 
+  ReturnOptions := TStringList.Create;
+  ReturnOptions.Add('Non-Diversions');
+  ReturnOptions.Add('Any');
+
 finalization
   RateVolume.Free;
+  ReturnOptions.Free;
 
 end.

@@ -84,6 +84,7 @@ type
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
     property ScreenObject: TObject read GetScreenObject;
+    procedure ReplaceGUID;
   public
     property HeadChange: Double read GetHeadChange write SetHeadChange;
     property Name: string read GetName write SetName;
@@ -141,6 +142,7 @@ type
 //    FScreenObject: TObject;
     function GetHobItems(Index: integer): THobItem;
     function GetObservationHeads(AModel: TBaseModel): TObservationTimeList;
+    procedure ReplaceGUID;
   protected
     procedure InvalidateModel; override;
   public
@@ -234,6 +236,7 @@ type
     property CellLists[Index: integer]: TObsCellList read GetCellList;
     property CellListCount: integer read GetCellListCount;
     procedure RemoveModelLink(AModel: TBaseModel);
+    procedure ReplaceGUID;
   published
     // @name stores the MODFLOW boundaries that are NOT
     // associated with parameters.
@@ -475,6 +478,11 @@ begin
   Values.RemoveModelLink(AModel);
 end;
 
+procedure THobBoundary.ReplaceGUID;
+begin
+  Values.ReplaceGUID;
+end;
+
 procedure THobBoundary.SetMultiObsMethod(const Value: TMultiObsMethod);
 begin
   if FMultiObsMethod <> Value then
@@ -707,6 +715,16 @@ begin
     result := E_NOINTERFACE;
 end;
 
+procedure THobItem.ReplaceGUID;
+var
+  MyGuid: TGUID;
+begin
+  if CreateGUID(MyGuid) = 0 then
+  begin
+    GUID := GUIDToString(MyGuid);
+  end;
+end;
+
 procedure THobItem.SetHeadChange(const Value: Double);
 var
   LocalCollection: THobCollection;
@@ -906,6 +924,16 @@ end;
 procedure THobCollection.RemoveModelLink(AModel: TBaseModel);
 begin
   FObsTimesModelLinkList.RemoveLink(AModel);
+end;
+
+procedure THobCollection.ReplaceGUID;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    HobItems[Index].ReplaceGUID;
+  end;
 end;
 
 { TObservationTimeList }

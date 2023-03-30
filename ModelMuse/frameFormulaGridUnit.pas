@@ -14,6 +14,7 @@ type
     pnlTop: TPanel;
     edFormula: TLabeledEdit;
     cbMultiCheck: TCheckBox;
+    comboChoice: TComboBox;
     procedure edFormulaChange(Sender: TObject);
     procedure GridColSize(Sender: TObject; ACol, PriorWidth: Integer);
     procedure GridHorizontalScroll(Sender: TObject);
@@ -21,21 +22,47 @@ type
     procedure GridMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure cbMultiCheckClick(Sender: TObject);
+    procedure comboChoiceChange(Sender: TObject);
   private
     FFirstFormulaColumn: Integer;
     FOnValidCell: TValidCellEvent;
     FFirstCheckColumn: Integer;
     FOnValidCheckCell: TValidCellEvent;
+    FFirstChoiceColumn: Integer;
+    FOnValidChoiceCell: TValidCellEvent;
+    procedure AssignNewTextToMultipleCells(NewText: string);
     { Private declarations }
   public
     procedure LayoutMultiRowEditControls; virtual;
+    // When @link(edFormula) is used to assign the same formula to multiple
+    // cells, @name is the first column in the grid that will be potential
+    // targets for the change.
     property FirstFormulaColumn: Integer read FFirstFormulaColumn
       write FFirstFormulaColumn;
+    // When @link(cbMultiCheck) is used to assign the same formula to multiple
+    // cells, @name is the first column in the grid that will be potential
+    // targets for the change.
     property FirstCheckColumn: Integer read FFirstCheckColumn
       write FFirstCheckColumn;
+    // When @link(comboChoice) is used to assign the same formula to multiple
+    // cells, @name is the first column in the grid that will be potential
+    // targets for the change.
+    property FirstChoiceColumn: Integer read FFirstChoiceColumn
+      write FFirstChoiceColumn;
+    // When @link(edFormula) is used to assign the same formula to multiple
+    // cells, @name can be used to detect whether or not a particular cell
+    // is a valid target for the change.
     property OnValidCell: TValidCellEvent read FOnValidCell write FOnValidCell;
+    // When @link(cbMultiCheck) is used to assign the same formula to multiple
+    // cells, @name can be used to detect whether or not a particular cell
+    // is a valid target for the change.
     property OnValidCheckCell: TValidCellEvent read FOnValidCheckCell
       write FOnValidCheckCell;
+    // When @link(comboChoice) is used to assign the same formula to multiple
+    // cells, @name can be used to detect whether or not a particular cell
+    // is a valid target for the change.
+    property OnValidChoiceCell: TValidCellEvent read FOnValidChoiceCell
+      write FOnValidChoiceCell;
     { Public declarations }
   end;
 
@@ -88,49 +115,14 @@ begin
   end
 end;
 
-procedure TframeFormulaGrid.edFormulaChange(Sender: TObject);
-var
-  ColIndex: Integer;
-  RowIndex: Integer;
-  TempOptions: TGridOptions;
-  ValidCell: Boolean;
+procedure TframeFormulaGrid.comboChoiceChange(Sender: TObject);
 begin
-  Grid.BeginUpdate;
-  try
-    for RowIndex := Grid.FixedRows to
-      Grid.RowCount - 1 do
-    begin
-      for ColIndex := FirstFormulaColumn to Grid.ColCount - 1 do
-      begin
-        if Grid.IsSelectedCell(ColIndex, RowIndex) then
-        begin
-          ValidCell := True;
-          if Assigned (OnValidCell) then
-          begin
-            OnValidCell(Grid, ColIndex, RowIndex, ValidCell);
-          end;
-          if ValidCell then
-          begin
-            Grid.Cells[ColIndex, RowIndex] := edFormula.Text;
-            if Assigned(Grid.OnSetEditText) then
-            begin
-              Grid.OnSetEditText(
-                Grid,ColIndex,RowIndex, edFormula.Text);
-            end;
-          end;
-        end;
-      end;
-    end;
-  finally
-    Grid.EndUpdate
-  end;
-  TempOptions := Grid.Options;
-  try
-    Grid.Options := [goEditing, goAlwaysShowEditor];
-    Grid.UpdateEditor;
-  finally
-    Grid.Options := TempOptions;
-  end;
+  AssignNewTextToMultipleCells(comboChoice.Text);
+end;
+
+procedure TframeFormulaGrid.edFormulaChange(Sender: TObject);
+begin
+  AssignNewTextToMultipleCells(edFormula.Text);
 end;
 
 procedure TframeFormulaGrid.FrameResize(Sender: TObject);
@@ -190,6 +182,7 @@ begin
     end;
     edFormula.Enabled := ShouldEnable;
   end;
+
   if cbMultiCheck.Visible then
   begin
     ShouldEnable := False;
@@ -220,7 +213,39 @@ begin
       end;
     end;
     cbMultiCheck.Enabled := ShouldEnable;
-  end
+  end;
+
+  if comboChoice.Visible then
+  begin
+    ShouldEnable := False;
+    for RowIndex := Grid.FixedRows to Grid.RowCount -1 do
+    begin
+      for ColIndex := FirstChoiceColumn to Grid.ColCount - 1 do
+      begin
+        ShouldEnable := Grid.IsSelectedCell(ColIndex,RowIndex);
+        if ShouldEnable then
+        begin
+          if Assigned(OnValidChoiceCell) then
+          begin
+            OnValidChoiceCell(self, ColIndex, RowIndex, ShouldEnable);
+            if ShouldEnable then
+            begin
+              Break;
+            end;
+          end
+          else
+          begin
+            break;
+          end;
+        end;
+      end;
+      if ShouldEnable then
+      begin
+        break;
+      end;
+    end;
+    comboChoice.Enabled := ShouldEnable;
+  end;
 end;
 
 procedure TframeFormulaGrid.LayoutMultiRowEditControls;
@@ -273,6 +298,69 @@ begin
     end;
     LayoutControls(Grid, cbMultiCheck, nil,
       Column);
+  end;
+  if comboChoice.Visible then
+  begin
+    Column := Max(FirstChoiceColumn,Grid.LeftCol);
+    if Assigned(OnValidChoiceCell) then
+    begin
+      Row := 1;
+      for ColIndex := Column to Grid.ColCount - 1 do
+      begin
+        ValidCell := True;
+        OnValidChoiceCell(self, ColIndex,Row,ValidCell);
+        if ValidCell then
+        begin
+          Column := ColIndex;
+          break;
+        end;
+      end;
+    end;
+    LayoutControls(Grid, comboChoice, nil,
+      Column);
+  end;
+end;
+
+procedure TframeFormulaGrid.AssignNewTextToMultipleCells(NewText: string);
+var
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ValidCell: Boolean;
+  TempOptions: TGridOptions;
+begin
+  Grid.BeginUpdate;
+  try
+    for RowIndex := Grid.FixedRows to Grid.RowCount - 1 do
+    begin
+      for ColIndex := FirstFormulaColumn to Grid.ColCount - 1 do
+      begin
+        if Grid.IsSelectedCell(ColIndex, RowIndex) then
+        begin
+          ValidCell := True;
+          if Assigned(OnValidCell) then
+          begin
+            OnValidCell(Grid, ColIndex, RowIndex, ValidCell);
+          end;
+          if ValidCell then
+          begin
+            Grid.Cells[ColIndex, RowIndex] := NewText;
+            if Assigned(Grid.OnSetEditText) then
+            begin
+              Grid.OnSetEditText(Grid, ColIndex, RowIndex, NewText);
+            end;
+          end;
+        end;
+      end;
+    end;
+  finally
+    Grid.EndUpdate;
+  end;
+  TempOptions := Grid.Options;
+  try
+    Grid.Options := [goEditing, goAlwaysShowEditor];
+    Grid.UpdateEditor;
+  finally
+    Grid.Options := TempOptions;
   end;
 end;
 

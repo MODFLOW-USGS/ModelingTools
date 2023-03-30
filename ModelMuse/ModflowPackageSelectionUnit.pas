@@ -5348,6 +5348,7 @@ Type
     swpPrint_Nrd_By_Wbs);
   TSurfaceWaterPrints = set of TSurfaceWaterPrint;
   TNRDOption = (nrdoRate, nrdoVolume);
+  TReturnOption = (roNonDiversion, foAny);
 
   TFarmProcess4SurfaceWater = class(TCustomFarm4)
   private
@@ -5362,6 +5363,10 @@ Type
     FSemiRoutedDeliveryUpperLimit: TFarmProperty;
     FNRDOption: TNRDOption;
     FMfFmp4NrdInfilLocation: TModflowBoundaryDisplayTimeList;
+    FRoutedReturn: TFarmProperty;
+    FReturnOption: TReturnOption;
+    FNoReturnFlow: TFarmProperty;
+    FSemiRoutedReturn: TFarmProperty;
     procedure SetNon_Routed_Delivery(const Value: TFarmProperty);
     procedure SetNrd_Infiltration_Location(const Value: TFarmProperty);
     procedure SetRebuild_Fully_Routed_Return(const Value: Boolean);
@@ -5380,6 +5385,10 @@ Type
     procedure InitializeNrdInfilLocationDisplay(Sender: TObject);
     procedure GetNrdInfilLocationUseList(Sender: TObject; NewUseList: TStringList);
     procedure InvalidateNrdInfilLocation(Sender: TObject);
+    procedure SetReturnOption(const Value: TReturnOption);
+    procedure SetNoReturnFlow(const Value: TFarmProperty);
+    procedure SetRoutedReturn(const Value: TFarmProperty);
+    procedure SetSemiRoutedReturn(const Value: TFarmProperty);
 
   public
     procedure Assign(Source: TPersistent); override;
@@ -5405,34 +5414,51 @@ Type
     property Non_Routed_Delivery: TFarmProperty read FNon_Routed_Delivery
       write SetNon_Routed_Delivery;
     property NRDOption: TNRDOption read FNRDOption write SetNRDOption;
+
     // NRD_INFILTRATION_LOCATION
     // no scale factors
     property Nrd_Infiltration_Location: TFarmProperty
       read FNrd_Infiltration_Location write SetNrd_Infiltration_Location;
+
     {PRINT SFR_DELIVERY, PRINT SFR_DELIVERY_BY_WBS, PRINT SFR_RETURN,
      PRINT SFR_SRR_ONLY, PRINT NRD, PRINT NRD_BY_WBS}
     property SurfaceWaterPrints: TSurfaceWaterPrints read FSurfaceWaterPrints
       write SetSurfaceWaterPrints;
+
     // SEMI_ROUTED_DELIVERY_LOWER_LIMIT and SEMI_ROUTED_DELIVERY_UPPER_LIMIT
     // Can use scale factors
     property Semi_Routed_Delivery: TFarmProperty read FSemi_Routed_Delivery
       write SetSemi_Routed_Delivery;
+
     // SEMI_ROUTED_DELIVERY_LOWER_LIMIT
     // Can use scale factors
     property SemiRoutedDeliveryLowerLimit: TFarmProperty
       read FSemiRoutedDeliveryLowerLimit write SetSemiRoutedDeliveryLowerLimit;
+
     // SEMI_ROUTED_DELIVERY_UPPER_LIMIT
     // Can use scale factors
     property SemiRoutedDeliveryUpperLimit: TFarmProperty
       read FSemiRoutedDeliveryUpperLimit write SetSemiRoutedDeliveryUpperLimit;
+
     // SEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE
     property StoredSemi_Routed_Delivery_Closure_Tolerance: TRealStorage
       read FStoredSemi_Routed_Delivery_Closure_Tolerance
       write SetStoredSemi_Routed_Delivery_Closure_Tolerance;
+
+
+    // NO_RETURN_FLOW
+    property NoReturnFlow: TFarmProperty read FNoReturnFlow write SetNoReturnFlow;
+    // SEMI_ROUTED_RETURN
+    property SemiRoutedReturn: TFarmProperty read FSemiRoutedReturn write SetSemiRoutedReturn;
+    // ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH
+    property RoutedReturn: TFarmProperty read FRoutedReturn write SetRoutedReturn;
+    // ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH
+    property ReturnOption: TReturnOption read FReturnOption write SetReturnOption;
+
     // NO_RETURN_FLOW, SEMI_ROUTED_RETURN,
     // ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH
     // no scale factors
-    property ReturnChoice: TFarmProperty read FReturnChoice write SetReturnChoice;
+    property ReturnChoice: TFarmProperty read FReturnChoice write SetReturnChoice stored False;
     // REBUILD_FULLY_ROUTED_RETURN
     property Rebuild_Fully_Routed_Return: Boolean
       read FRebuild_Fully_Routed_Return write SetRebuild_Fully_Routed_Return;
@@ -26501,6 +26527,10 @@ begin
     ReturnChoice := SurfaceWater.ReturnChoice;
     Rebuild_Fully_Routed_Return := SurfaceWater.Rebuild_Fully_Routed_Return;
     NRDOption := SurfaceWater.NRDOption;
+    NoReturnFlow := SurfaceWater.NoReturnFlow;
+    SemiRoutedReturn := SurfaceWater.SemiRoutedReturn;
+    RoutedReturn := SurfaceWater.RoutedReturn;
+    ReturnOption := SurfaceWater.ReturnOption;
   end;
   inherited;
 end;
@@ -26528,6 +26558,9 @@ begin
   FNon_Routed_Delivery := TFarmProperty.Create(InvalidateEvent);
   FSemi_Routed_Delivery := TFarmProperty.Create(InvalidateEvent);
   FReturnChoice := TFarmProperty.Create(InvalidateEvent);
+  FRoutedReturn := TFarmProperty.Create(InvalidateEvent);
+  FNoReturnFlow := TFarmProperty.Create(InvalidateEvent);
+  FSemiRoutedReturn := TFarmProperty.Create(InvalidateEvent);
 
   if Model <> nil then
   begin
@@ -26559,6 +26592,9 @@ begin
   FNon_Routed_Delivery.Free;
   FSemi_Routed_Delivery.Free;
   FReturnChoice.Free;
+  FRoutedReturn.Free;
+  FNoReturnFlow.Free;
+  FSemiRoutedReturn.Free;
 
   FStoredSemi_Routed_Delivery_Closure_Tolerance.Free;
   inherited;
@@ -26611,11 +26647,15 @@ begin
   FNon_Routed_Delivery.Initialize;
   FSemi_Routed_Delivery.Initialize;
   FReturnChoice.Initialize;
+  FRoutedReturn.Initialize;
+  FNoReturnFlow.Initialize;
+  FSemiRoutedReturn.Initialize;
 
   Semi_Routed_Delivery_Closure_Tolerance := 0.02;
   FSurfaceWaterPrints := [];
   FRebuild_Fully_Routed_Return := False;
   FNRDOption := nrdoRate;
+  FReturnOption := roNonDiversion;
 end;
 
 procedure TFarmProcess4SurfaceWater.InvalidateNrdInfilLocation(Sender: TObject);
@@ -26634,10 +26674,25 @@ begin
   InvalidateModel;
 end;
 
+procedure TFarmProcess4SurfaceWater.SetReturnOption(
+  const Value: TReturnOption);
+begin
+  if FReturnOption <> Value then
+  begin
+    FReturnOption := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TFarmProcess4SurfaceWater.SetNon_Routed_Delivery(
   const Value: TFarmProperty);
 begin
   FNon_Routed_Delivery.Assign(Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetNoReturnFlow(const Value: TFarmProperty);
+begin
+  FNoReturnFlow.Assign(Value);
 end;
 
 procedure TFarmProcess4SurfaceWater.SetNRDOption(const Value: TNRDOption);
@@ -26666,6 +26721,11 @@ begin
   FReturnChoice.Assign(Value);
 end;
 
+procedure TFarmProcess4SurfaceWater.SetRoutedReturn(const Value: TFarmProperty);
+begin
+  FRoutedReturn.Assign(Value);
+end;
+
 procedure TFarmProcess4SurfaceWater.SetSemi_Routed_Delivery(
   const Value: TFarmProperty);
 begin
@@ -26688,6 +26748,12 @@ procedure TFarmProcess4SurfaceWater.SetSemiRoutedDeliveryUpperLimit(
   const Value: TFarmProperty);
 begin
   FSemiRoutedDeliveryUpperLimit.Assign(Value);
+end;
+
+procedure TFarmProcess4SurfaceWater.SetSemiRoutedReturn(
+  const Value: TFarmProperty);
+begin
+  FSemiRoutedReturn.Assign(Value);
 end;
 
 procedure TFarmProcess4SurfaceWater.SetStoredSemi_Routed_Delivery_Closure_Tolerance(

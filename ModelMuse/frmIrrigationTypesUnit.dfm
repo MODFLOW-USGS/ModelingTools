@@ -2,8 +2,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
   Caption = 'Irrigation Types'
   ClientHeight = 433
   ClientWidth = 499
-  ExplicitWidth = 515
-  ExplicitHeight = 472
+  ExplicitWidth = 511
+  ExplicitHeight = 471
   TextHeight = 18
   object splitterMain: TJvNetscapeSplitter
     Left = 105
@@ -25,11 +25,13 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     Align = alBottom
     ParentColor = True
     TabOrder = 0
+    ExplicitTop = 375
+    ExplicitWidth = 493
     DesignSize = (
       499
       49)
     object btnCancel: TBitBtn
-      Left = 390
+      Left = 384
       Top = 6
       Width = 83
       Height = 33
@@ -37,9 +39,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 390
     end
     object btnOK: TBitBtn
-      Left = 301
+      Left = 295
       Top = 6
       Width = 83
       Height = 33
@@ -48,9 +51,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 301
     end
     object btnHelp: TBitBtn
-      Left = 212
+      Left = 206
       Top = 6
       Width = 83
       Height = 33
@@ -58,6 +62,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 212
     end
   end
   object jvpltvMain: TJvPageListTreeView
@@ -75,6 +80,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     OnChange = jvpltvMainChange
     OnCustomDrawItem = jvpltvMainCustomDrawItem
     Items.Links = {00000000}
+    ExplicitHeight = 375
   end
   object jvplMain: TJvPageList
     Left = 115
@@ -93,7 +99,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       inline frameIrrigationTypes: TframeGrid
         Left = 0
         Top = 0
-        Width = 384
+        Width = 390
         Height = 384
         Align = alClient
         TabOrder = 0
@@ -101,7 +107,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         ExplicitHeight = 384
         inherited Panel: TPanel
           Top = 343
-          Width = 384
+          Width = 390
           ExplicitTop = 343
           ExplicitWidth = 384
           inherited lbNumber: TLabel
@@ -130,7 +136,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 384
+          Width = 390
           Height = 343
           ColCount = 2
           DefaultColWidth = 65

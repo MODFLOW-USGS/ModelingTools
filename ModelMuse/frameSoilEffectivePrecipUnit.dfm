@@ -103,9 +103,9 @@ inherited frameSoilEffectivePrecip: TframeSoilEffectivePrecip
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    ExplicitTop = 59
-    ExplicitWidth = 483
-    ExplicitHeight = 196
+    ExplicitTop = 81
+    ExplicitWidth = 636
+    ExplicitHeight = 172
   end
   inherited pnlTop: TPanel
     Width = 636

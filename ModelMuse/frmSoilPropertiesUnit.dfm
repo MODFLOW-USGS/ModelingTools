@@ -68,7 +68,7 @@ inherited frmSoilProperties: TfrmSoilProperties
     ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 215
-      Width = 788
+      Width = 792
       ExplicitTop = 219
       ExplicitWidth = 677
       inherited lbNumber: TLabel
@@ -97,7 +97,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 788
+      Width = 792
       Height = 158
       ColCount = 10
       FixedCols = 1
@@ -359,7 +359,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       ExplicitHeight = 162
     end
     inherited pnlTop: TPanel
-      Width = 788
+      Width = 792
       ExplicitWidth = 677
       inherited edFormula: TLabeledEdit
         Height = 26
@@ -390,11 +390,14 @@ inherited frmSoilProperties: TfrmSoilProperties
     Align = alClient
     Enabled = False
     TabOrder = 3
-    ExplicitLeft = 208
-    ExplicitTop = 163
+    ExplicitTop = 261
+    ExplicitWidth = 784
+    ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 216
       Width = 788
+      ExplicitTop = 215
+      ExplicitWidth = 784
       DesignSize = (
         788
         41)
@@ -405,13 +408,16 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 630
+        Left = 627
+        ExplicitLeft = 630
       end
       inherited sbInsert: TSpeedButton
-        Left = 677
+        Left = 673
+        ExplicitLeft = 677
       end
       inherited sbDelete: TSpeedButton
-        Left = 725
+        Left = 722
+        ExplicitLeft = 725
       end
       inherited lblMethod: TLabel
         Width = 52
@@ -421,6 +427,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       end
       inherited comboInterpolation: TComboBox
         Height = 26
+        ExplicitHeight = 26
       end
     end
     inherited Grid: TRbwDataGrid4
@@ -428,7 +435,8 @@ inherited frmSoilProperties: TfrmSoilProperties
       Height = 135
       OnExit = frameSoilEffectivePrecipGridExit
       OnButtonClick = frameSoilsGridButtonClick
-      ExplicitTop = 57
+      ExplicitWidth = 784
+      ExplicitHeight = 134
     end
     inherited pnlTop: TPanel
       Width = 788
@@ -444,6 +452,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         EditLabel.Width = 57
         EditLabel.Height = 18
         EditLabel.ExplicitTop = 31
+        EditLabel.ExplicitWidth = 57
         EditLabel.ExplicitHeight = 18
         ExplicitHeight = 26
       end

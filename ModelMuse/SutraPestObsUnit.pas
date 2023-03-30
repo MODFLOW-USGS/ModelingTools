@@ -53,6 +53,7 @@ type
     function HasNonLakeBoundary: Boolean;
     function HasLakeBoundary: Boolean;
     property ScheduleName: string read FScheduleName write FScheduleName;
+    procedure ReplaceGUID;
   end;
 
   TCustomFluxObsItem = class(TCustomSutraObsItem);
@@ -529,6 +530,16 @@ begin
       result := True;
       Exit;
     end;
+  end;
+end;
+
+procedure TSutraStateObservations.ReplaceGUID;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].ReplaceGUID;
   end;
 end;
 

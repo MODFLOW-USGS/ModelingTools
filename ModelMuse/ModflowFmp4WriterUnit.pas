@@ -23,7 +23,7 @@ type
     wlFractionOfIrrigToSurfaceWater, wlAddedDemand, wlCropHasSalinityDemand,
     wlAddedDemandRunoffSplit, wlIrrigationUniformity, wlDeficiencyScenario,
     wlWaterSource, wlAddedCropDemandFlux, wlAddedCropDemandRate,
-    wlPrecipicationTable, wlSoilCoefficient);
+    wlPrecipicationTable, wlSoilCoefficient, wlNoReturnFlow);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -139,6 +139,7 @@ type
     FEffectivCoefficientTableFileStream: TFileStream;
     FNonRoutedDeliveryFileStream: TFileStream;
     FNrdTypes: Integer;
+    FNoReturnFlowFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -230,6 +231,11 @@ type
     procedure WriteNrdInfilLocation;
 
     procedure PrintSurfaceWaterOutputOptions;
+
+    procedure WriteNoReturnFlow; // finish
+    procedure WriteSemiRoutedReturn; // finish
+    procedure WriteFullReturn; // finish
+    procedure WriteRebuildFullyRoutedReturn;
 
     // Land use
     // LOCATION
@@ -1096,6 +1102,7 @@ begin
   FreeAndNil(FEffectivPrecipitationTableFileStream);
   FreeAndNil(FEffectivCoefficientTableFileStream);
   FreeAndNil(FNonRoutedDeliveryFileStream);
+  FreeAndNil(FNoReturnFlowFileStream);
 
 end;
 
@@ -1468,7 +1475,20 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlNoReturnFlow:
+      begin
+        result := ChangeFileExt(FBaseName, '.non_return_flow');
+        if FNoReturnFlowFileStream = nil then
+        begin
+          FNoReturnFlowFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
+  end;
+  if result <> '' then
+  begin
+    Model.ModelInputFiles.Add(result);
   end;
 end;
 
@@ -1639,6 +1659,7 @@ begin
     wlAddedCropDemandRate: ;
     wlPrecipicationTable: ;
     wlSoilCoefficient: ;
+    wlNoReturnFlow: ;
     else Assert(False);
   end;
 end;
@@ -1696,6 +1717,7 @@ begin
     wlAddedCropDemandRate: ;
     wlPrecipicationTable: ;
     wlSoilCoefficient: ;
+    wlNoReturnFlow: ;
     else Assert(False)
   end;
 end;
@@ -2066,6 +2088,11 @@ begin
   WriteString(' ');
   WriteString(RequiredValues.Option);
   WriteString(' ');
+end;
+
+procedure TModflowFmp4Writer.WriteSemiRoutedReturn;
+begin
+
 end;
 
 procedure TModflowFmp4Writer.GetScaleFactorsAndExternalFile(
@@ -2887,6 +2914,11 @@ begin
   begin
     Assert(False);
   end;
+end;
+
+procedure TModflowFmp4Writer.WriteFullReturn;
+begin
+
 end;
 
 procedure TModflowFmp4Writer.EvaluateTransientArrayData(WriteLocation: TWriteLocation);
@@ -5209,6 +5241,140 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteNoReturnFlow;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: double;
+  DeliveryIndex: Integer;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  ADeliveryItem: TNoReturnItem;
+begin
+  if (FSurfaceWater4.NoReturnFlow.FarmOption = foNotUsed) then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlNoReturnFlow;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtInteger;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SURFACE_WATER: NO_RETURN_FLOW';
+  RequiredValues.ErrorID := 'FMP SURFACE_WATER: NO_RETURN_FLOW';
+  RequiredValues.ID := 'NO_RETURN_FLOW';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FSurfaceWater4.NoReturnFlow.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := 'Invalid no return flow value';
+  RequiredValues.Option := '';
+
+  RequiredValues.FarmProperty := FSurfaceWater4.NoReturnFlow;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlNoReturnFlow);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              WriteFreeInteger(0);
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            ADeliveryItem := AFarm.NoReturnFlow.ItemByStartTime(StartTime)
+               as TNoReturnItem;
+            WriteInteger(Ord(ADeliveryItem.NoReturnOption));
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            WriteInteger(0);
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          if AFarm.NoReturnFlow.Count > 0 then
+          begin
+            ADeliveryItem := AFarm.NoReturnFlow.First
+               as TNoReturnItem;
+            WriteInteger(Ord(ADeliveryItem.NoReturnOption));
+          end
+          else
+          begin
+            WriteInteger(0);
+          end;
+
+          Inc(FarmID);
+          NewLine;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteNrdInfilLocation;
 var
   AFileName: string;
@@ -6419,6 +6585,15 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteRebuildFullyRoutedReturn;
+begin
+  if FSurfaceWater4.Rebuild_Fully_Routed_Return then
+  begin
+    WriteString('  REBUILD_FULLY_ROUTED_RETURN');
+    NewLine;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteRefET;
 var
   AFileName: string;
@@ -6961,6 +7136,11 @@ begin
           Assert(FEffectivCoefficientTableFileStream <> nil);
           FEffectivCoefficientTableFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlNoReturnFlow:
+        begin
+          Assert(FNoReturnFlowFileStream <> nil);
+          FNoReturnFlowFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -7059,6 +7239,10 @@ begin
     WriteNonRoutedDelivery;
     WriteNrdInfilLocation;
     PrintSurfaceWaterOutputOptions;
+    WriteNoReturnFlow;
+    WriteSemiRoutedReturn;
+    WriteFullReturn;
+    WriteRebuildFullyRoutedReturn;
 
     WriteString('END SURFACE_WATER');
     NewLine;

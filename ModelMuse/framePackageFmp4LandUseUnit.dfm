@@ -13,7 +13,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     Top = 111
     Width = 422
     Height = 405
-    VertScrollBar.Position = 401
+    VertScrollBar.Position = 360
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -24,15 +24,16 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlDataSets: TCategoryPanel
-      Top = -57
-      Height = 550
+      Top = -18
+      Height = 548
       Caption = 'Land Use Data Sets'
       TabOrder = 0
+      ExplicitWidth = 397
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 399
-        Height = 524
+        Height = 522
         Align = alClient
         ColCount = 7
         Enabled = False
@@ -225,13 +226,16 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 395
+        ExplicitHeight = 524
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = -172
-      Height = 115
+      Top = -132
+      Height = 114
       Caption = 'Land Use Options'
       TabOrder = 1
+      ExplicitWidth = 397
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
@@ -297,18 +301,19 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = -401
-      Height = 229
+      Top = -360
+      Height = 228
       Caption = 'Print'
       TabOrder = 2
+      ExplicitWidth = 397
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
         Width = 399
-        Height = 162
+        Height = 161
         Align = alClient
         Enabled = False
-        ItemHeight = 15
+        ItemHeight = 17
         Items.Strings = (
           'PRINT BYWBS'
           'PRINT BYWBS_BYCROP'
@@ -319,14 +324,16 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
           'PRINT ET_BYWBS_BYCROP'
           'PRINT ROW_COLUMN')
         TabOrder = 0
+        ExplicitWidth = 395
       end
       object pnl2: TPanel
         Left = 0
-        Top = 162
+        Top = 161
         Width = 399
         Height = 41
         Align = alBottom
         TabOrder = 1
+        ExplicitWidth = 395
         object lblSpecifyCrops: TLabel
           Left = 164
           Top = 8

@@ -43,6 +43,7 @@ type
 //    procedure ResetObserversUptodate;
     procedure Changed;
     procedure Loaded;
+    procedure ReplaceGUID;
   published
     property FluidSource: TSutraFluidBoundary read FFluidSource
       write SetFluidSource;
@@ -171,6 +172,11 @@ begin
 //  begin
 //    FSutraStateObs.Loaded;
 //  end;
+end;
+
+procedure TSutraBoundaries.ReplaceGUID;
+begin
+  SutraStateObs.ReplaceGUID;
 end;
 
 //procedure TSutraBoundaries.ResetObserversUptodate;

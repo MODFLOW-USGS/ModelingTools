@@ -49,6 +49,8 @@ type
     tabAddedCropDemandRate: TTabSheet;
     frameAddedCropDemandFlux: TframeFormulaGrid;
     frameAddedCropDemandRate: TframeFormulaGrid;
+    tabNoReturnFlow: TTabSheet;
+    frameNoReturnFlow: TframeFormulaGrid;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -170,6 +172,13 @@ type
     procedure frameAddedCropDemandRatesbAddClick(Sender: TObject);
     procedure frameAddedCropDemandRatesbInsertClick(Sender: TObject);
     procedure frameAddedCropDemandRatesbDeleteClick(Sender: TObject);
+    procedure frameNoReturnFlowcomboChoiceChange(Sender: TObject);
+    procedure frameNoReturnFlowGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameNoReturnFlowseNumberChange(Sender: TObject);
+    procedure frameNoReturnFlowsbAddClick(Sender: TObject);
+    procedure frameNoReturnFlowsbInsertClick(Sender: TObject);
+    procedure frameNoReturnFlowsbDeleteClick(Sender: TObject);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -186,6 +195,7 @@ type
     FBareRunoffFractionsChanged: Boolean;
     FAddedCropDemandFluxChanged: Boolean;
     FAddedCropDemandRateChanged: Boolean;
+    FNoReturnFlowChanged: Boolean;
     procedure GetCropEffForFirstFarm(FirstFarm: TFarm);
     procedure GetCropEffImproveForFirstFarm(FirstFarm: TFarm);
     procedure GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
@@ -195,6 +205,7 @@ type
     procedure GetBareRunoffFractonForFirstFarm(FirstFarm: TFarm);
     procedure GetAddedCropDemandFluxForFirstFarm(FirstFarm: TFarm);
     procedure GetAddedCropDemandRateForFirstFarm(FirstFarm: TFarm);
+    procedure GetNoReturnFlowFirstFarm(FirstFarm: TFarm);
 
     procedure GetCostsForFirstFarm(FirstFarm: TFarm);
     procedure GetWaterRightsForFirstFarm(FirstFarm: TFarm);
@@ -214,6 +225,7 @@ type
     procedure SetBareRunoffFractions(Farm: TFarm);
     procedure SetAddedCropDemandFlux(Farm: TFarm);
     procedure SetAddedCropDemandRate(Farm: TFarm);
+    procedure SetNoReturnFlow(Farm: TFarm);
 
     procedure SetFarmCosts(Farm: TFarm);
     procedure SetWaterRights(Farm: TFarm);
@@ -253,6 +265,7 @@ type
       EffCollection: TFarmEfficiencyCollection);
     procedure SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection;
       AFrame: TframeFormulaGrid);
+
     { Private declarations }
   public
     procedure InitializeControls;
@@ -298,6 +311,7 @@ type
   TWaterSourceColumns = (wscStartTime, wscEndTime, wscGroundwater,
     wscSurfaceWater, wscNonRouted);
   TBareRunoffFractionsColumns = (brfcStartTime, brfcEndTime, brfcValue);
+  TNoReturnFlowColumns = (nrfcStartTime, nrfcEndTime, nrfcValue);
 
 {$R *.dfm}
 
@@ -477,10 +491,12 @@ begin
       and (FarmProcess.DeficiencyPolicy in
       [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool]);
 
+    tabNoReturnFlow.TabVisible := FarmSurfaceWater4.IsSelected
+      and (FarmSurfaceWater4.NoReturnFlow.FarmOption <> foNotUsed);
 
     SfrPackage := Packages.SfrPackage;
-    tabDiversionLocation.TabVisible := SfrPackage.IsSelected;
-    tabReturnFlowLocation.TabVisible := SfrPackage.IsSelected;
+//    tabDiversionLocation.TabVisible := SfrPackage.IsSelected;
+//    tabReturnFlowLocation.TabVisible := SfrPackage.IsSelected;
 
     tabWaterRights.TabVisible :=
       FarmProcess.SurfaceWaterAllotment = swaPriorWithCalls;
@@ -498,6 +514,7 @@ begin
       frameBareRunoffFractions.Grid.BeginUpdate;
       frameAddedCropDemandFlux.Grid.BeginUpdate;
       frameAddedCropDemandRate.Grid.BeginUpdate;
+      frameNoReturnFlow.Grid.BeginUpdate;
       try
         ClearGrid(frameFormulaGridCrops.Grid);
         ClearGrid(frameFormulaGridCosts.Grid);
@@ -511,6 +528,7 @@ begin
         ClearGrid(frameBareRunoffFractions.Grid);
         ClearGrid(frameAddedCropDemandFlux.Grid);
         ClearGrid(frameAddedCropDemandRate.Grid);
+        ClearGrid(frameNoReturnFlow.Grid);
 
         FirstFarm := FarmList[0];
         GetCropEffForFirstFarm(FirstFarm);
@@ -522,6 +540,7 @@ begin
         GetBareRunoffFractonForFirstFarm(FirstFarm);
         GetAddedCropDemandFluxForFirstFarm(FirstFarm);
         GetAddedCropDemandRateForFirstFarm(FirstFarm);
+        GetNoReturnFlowFirstFarm(FirstFarm);
 
         GetCostsForFirstFarm(FirstFarm);
         GetWaterRightsForFirstFarm(FirstFarm);
@@ -686,6 +705,18 @@ begin
           end;
         end;
 
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.NoReturnFlow.IsSame(
+            FirstFarm.NoReturnFlow) then
+          begin
+            ClearGrid(frameNoReturnFlow.Grid);
+            frameNoReturnFlow.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
       finally
         frameFormulaGridCrops.Grid.EndUpdate;
         frameFormulaGridEfficiencyImprovement.Grid.EndUpdate;
@@ -699,6 +730,7 @@ begin
         frameBareRunoffFractions.Grid.EndUpdate;
         frameAddedCropDemandFlux.Grid.EndUpdate;
         frameAddedCropDemandRate.Grid.EndUpdate;
+        frameNoReturnFlow.Grid.EndUpdate;
       end;
 
       frameFormulaGridDiversion.GetData(FarmList, dtDiversion);
@@ -752,6 +784,7 @@ begin
       FBareRunoffFractionsChanged := False;
       FAddedCropDemandFluxChanged := False;
       FAddedCropDemandRateChanged := False;
+      FNoReturnFlowChanged := False;
     end;
   finally
     Changing := False;
@@ -1485,6 +1518,54 @@ begin
   DoChange
 end;
 
+procedure TframeFarm.frameNoReturnFlowcomboChoiceChange(Sender: TObject);
+begin
+  inherited;
+  frameNoReturnFlow.comboChoiceChange(Sender);
+  FNoReturnFlowChanged := True;
+  DoChange;
+end;
+
+procedure TframeFarm.frameNoReturnFlowGridSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  FNoReturnFlowChanged := True;
+  DoChange;
+end;
+
+procedure TframeFarm.frameNoReturnFlowsbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameNoReturnFlow.sbAddClick(Sender);
+  FNoReturnFlowChanged := True;
+  DoChange;
+end;
+
+procedure TframeFarm.frameNoReturnFlowsbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameNoReturnFlow.sbDeleteClick(Sender);
+  FNoReturnFlowChanged := True;
+  DoChange;
+end;
+
+procedure TframeFarm.frameNoReturnFlowsbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameNoReturnFlow.sbInsertClick(Sender);
+  FNoReturnFlowChanged := True;
+  DoChange;
+end;
+
+procedure TframeFarm.frameNoReturnFlowseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameNoReturnFlow.seNumberChange(Sender);
+  FNoReturnFlowChanged := True;
+  DoChange;
+end;
+
 procedure TframeFarm.frameWaterSourceedFormulaChange(Sender: TObject);
 begin
   inherited;
@@ -1717,6 +1798,7 @@ var
   ColIndex: Integer;
   IrrigationType: TIrrigationItem;
   IrrigationTypes: TIrrigationCollection;
+  Packages: TModflowPackages;
 begin
   seFarmId.AsInteger := 0;
   edFarmName.Text := '';
@@ -1725,8 +1807,25 @@ begin
   frameFormulaGridReturnFlow.OnChange := Change;
   frameDelivery.OnChange := Change;
 
-  tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected;
-  tabReturnFlowLocation.TabVisible := tabDiversionLocation.TabVisible;
+  Packages := frmGoPhast.PhastModel.ModflowPackages;
+
+  if frmGoPhast.ModelSelection = msModflowFmp then
+  begin
+    tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected;
+    tabReturnFlowLocation.TabVisible := tabDiversionLocation.TabVisible;
+  end
+  else
+  begin
+  {$IFDEF OWHMV2}
+    Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
+  {$ENDIF}
+    tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
+      and Packages.FarmSurfaceWater4.IsSelected and
+      (Packages.FarmSurfaceWater4.Semi_Routed_Delivery.FarmOption <> foNotUsed);
+//    tabReturnFlowLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
+//      and Packages.FarmSurfaceWater4.IsSelected and
+//      (Packages.FarmSurfaceWater4.s .Semi_Routed_Delivery.FarmOption <> foNotUsed);
+  end;
 
   tabGW_Allocation.TabVisible := frmGoPhast.PhastModel.ModflowPackages.
     FarmProcess.GroundwaterAllotmentsUsed;
@@ -1841,6 +1940,12 @@ begin
     InitializeBareRunoffFractionsFrame(StartTimes, EndTimes);
     InitializeAddedCropDemandFluxFrame(StartTimes, EndTimes);
     InitializeAddedCropDemandRateFrame(StartTimes, EndTimes);
+
+    InitializeSingleValueFrame(StartTimes, EndTimes,
+      frameNoReturnFlow, 'Runoff Choice');
+    frameNoReturnFlow.FirstChoiceColumn := 2;
+    frameNoReturnFlow.LayoutMultiRowEditControls;
+    frameNoReturnFlow.Grid.Columns[Ord(nrfcValue)].ComboUsed := True;
 
     Grid := frameFormulaGridCosts.Grid;
     ClearGrid(Grid);
@@ -2128,6 +2233,7 @@ begin
       end;
     end;
   end;
+
   if FChangedAllotment then
   begin
     for index := 0 to FarmList.Count - 1 do
@@ -2150,6 +2256,18 @@ begin
   if {FarmCreated or} frameDelivery.DataChanged then
   begin
     frameDelivery.SetData_OwhmV1(FarmList);
+  end;
+
+  if FNoReturnFlowChanged then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetNoReturnFlow(Farm);
+      end;
+    end;
   end;
 end;
 
@@ -2279,6 +2397,25 @@ begin
       MaxTimeCount := FarmEff.CropEfficiency.Count;
       MaxIndex := CropIndex;
     end;
+  end;
+end;
+
+procedure TframeFarm.GetNoReturnFlowFirstFarm(FirstFarm: TFarm);
+var
+  Index: Integer;
+  Grid: TRbwDataGrid4;
+  Row: Integer;
+  Item: TNoReturnItem;
+begin
+  frameNoReturnFlow.seNumber.AsInteger := FirstFarm.NoReturnFlow.Count;
+  Grid :=  frameNoReturnFlow.Grid;
+  for Index := 0 to FirstFarm.NoReturnFlow.Count - 1 do
+  begin
+    Row := Index + 1;
+    Item := FirstFarm.NoReturnFlow[Index] as TNoReturnItem;
+    Grid.RealValue[Ord(nrfcStartTime), Row] := Item.StartTime;
+    Grid.RealValue[Ord(nrfcEndTime), Row] := Item.EndTime;
+    Grid.ItemIndex[Ord(nrfcValue), Row] := Ord(Item.NoReturnOption);
   end;
 end;
 
@@ -2871,6 +3008,40 @@ procedure TframeFarm.SetIrrigationUniformity(Farm: TFarm;
 begin
   SetAnEfficiencyCollection(Farm.IrrigationUniformity,
     frameIrrigationUniformity, IrrigationTypes);
+end;
+
+procedure TframeFarm.SetNoReturnFlow(Farm: TFarm);
+var
+  Grid: TRbwDataGrid4;
+  StartTime: Double;
+  EndTime: Double;
+  ItemCount: Integer;
+  Item: TNoReturnItem;
+  RowIndex: Integer;
+begin
+  Grid := frameNoReturnFlow.Grid;
+  for RowIndex := 1 to frameNoReturnFlow.Grid.RowCount - 1 do
+  begin
+    ItemCount := 0;
+    if TryStrToFloat(Grid.Cells[Ord(nrfcStartTime), RowIndex], StartTime)
+      and TryStrToFloat(Grid.Cells[Ord(nrfcEndTime), RowIndex], EndTime)
+      and (Grid.ItemIndex[Ord(nrfcValue), RowIndex] >= 0) then
+    begin
+      if ItemCount < Farm.NoReturnFlow.Count then
+      begin
+        Item := Farm.NoReturnFlow[ItemCount] as TNoReturnItem;
+      end
+      else
+      begin
+        Item := Farm.NoReturnFlow.Add as TNoReturnItem;
+      end;
+      Item.StartTime := StartTime;
+      Item.EndTime := EndTime;
+      Item.NoReturnOption := TNoReturnOption(Grid.ItemIndex[Ord(nrfcValue), RowIndex]);
+      Inc(ItemCount);
+    end;
+    Farm.NoReturnFlow.Count := ItemCount;
+  end;
 end;
 
 procedure TframeFarm.SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection;

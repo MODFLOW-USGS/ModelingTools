@@ -760,7 +760,8 @@ type
   public
     constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
-    property Items[Index: Integer]: TGwtBoundaryStatusItem read GetItems write SetItems; default;
+    property Items[Index: Integer]: TGwtBoundaryStatusItem read GetItems
+      write SetItems; default;
     function IsSame(OtherCollection: TGwtBoundaryStatusCollection): Boolean;
     property Count: Integer read GetCount write SetCount;
   end;

@@ -429,6 +429,39 @@ type
     class function ItemClass: TBoundaryItemClass; override;
   end;
 
+  TNoReturnOption = (nroReturnToStream, nroDeepPercolation);
+
+  TNoReturnItem = class(TCustomModflowBoundaryItem)
+  private
+    FNoReturnOption: TNoReturnOption;
+    procedure SetNoReturnOption(const Value: TNoReturnOption);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    procedure AssignObserverEvents(Collection: TCollection); override;
+    procedure CreateFormulaObjects; override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure RemoveFormulaObjects; override;
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string);
+      override;
+    function BoundaryFormulaCount: integer; override;
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property NoReturnOption: TNoReturnOption read FNoReturnOption write SetNoReturnOption;
+  end;
+
+  TNoReturnCollection = class(TCustomFarmCollection)
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+//  public
+//    constructor Create(Model: TBaseModel);
+  end;
+
+//  TPhastCollectionItem      constructor Create(ItemClass: TCollectionItemClass; InvalidateModelEvent: TNotifyEvent);
+//TPhastCollection
+
   TFarm = class(TOrderedItem)
   private
     FFarmId: Integer;
@@ -449,6 +482,7 @@ type
     FBareRunoffFraction: TBareRunoffFractionCollection;
     FAddedCropDemandRate: TFarmEfficiencyCollection;
     FAddedCropDemandFlux: TFarmEfficiencyCollection;
+    FNoReturnFlow: TNoReturnCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -479,6 +513,7 @@ type
     procedure SetBareRunoffFraction(const Value: TBareRunoffFractionCollection);
     procedure SetAddedCropDemandFlux(const Value: TFarmEfficiencyCollection);
     procedure SetAddedCropDemandRate(const Value: TFarmEfficiencyCollection);
+    procedure SetNoReturnFlow(const Value: TNoReturnCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -500,7 +535,8 @@ type
     // FMP data sets 19 or 35.
     property FarmCostsCollection: TFarmCostsCollection read FFarmCostsCollection
       write SetFarmCostsCollection;
-    //Data Sets 20a and 37a
+    //Data Sets 20a and 37a OWHM version 1
+    // SEMI_ROUTED_DELIVERY OWHM version 2
     property SemiRoutedDeliveries: TSemiRoutedDeliveriesAndReturnFlowCollection
       read FSemiRoutedDeliveries write SetSemiRoutedDeliveries;
     //Data Sets 20b and 37b
@@ -574,6 +610,12 @@ type
       ;
       property AddedCropDemandRate: TFarmEfficiencyCollection
         read FAddedCropDemandRate write SetAddedCropDemandRate
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property NoReturnFlow: TNoReturnCollection read FNoReturnFlow
+        write SetNoReturnFlow
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1334,6 +1376,7 @@ begin
     BareRunoffFraction := SourceFarm.BareRunoffFraction;
     AddedCropDemandFlux := SourceFarm.AddedCropDemandFlux;
     AddedCropDemandRate := SourceFarm.AddedCropDemandRate;
+    NoReturnFlow := SourceFarm.NoReturnFlow;
   end
   else
   begin
@@ -1359,17 +1402,18 @@ end;
 constructor TFarm.Create(Collection: TCollection);
 var
   LocalModel: TBaseModel;
+  InvalidateEvent: TNotifyEvent;
 begin
-//  if Model = nil then
-//  begin
-//    InvalidateEvent := nil;
-//  end
-//  else
-//  begin
-//    InvalidateEvent := Model.Invalidate
-//  end;
   inherited Create(Collection);
   LocalModel := Model;
+  if LocalModel = nil then
+  begin
+    InvalidateEvent := nil;
+  end
+  else
+  begin
+    InvalidateEvent := LocalModel.Invalidate
+  end;
   FFarmEfficiencyCollection := TFarmEfficiencyCollection.Create(LocalModel);
   FWaterRights := TWaterRightsCollection.Create(LocalModel);
   FSemiRoutedDeliveries := TSemiRoutedDeliveriesAndReturnFlowCollection.Create(LocalModel);
@@ -1387,10 +1431,12 @@ begin
   FBareRunoffFraction := TBareRunoffFractionCollection.Create(LocalModel);
   FAddedCropDemandFlux := TFarmEfficiencyCollection.Create(LocalModel);
   FAddedCropDemandRate := TFarmEfficiencyCollection.Create(LocalModel);
+  FNoReturnFlow := TNoReturnCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FNoReturnFlow.Free;
   FAddedCropDemandFlux.Free;
   FAddedCropDemandRate.Free;
   FBareRunoffFraction.Free;
@@ -1466,6 +1512,7 @@ begin
       and BareRunoffFraction.IsSame(SourceFarm.BareRunoffFraction)
       and AddedCropDemandFlux.IsSame(SourceFarm.AddedCropDemandFlux)
       and AddedCropDemandRate.IsSame(SourceFarm.AddedCropDemandRate)
+      and NoReturnFlow.IsSame(SourceFarm.NoReturnFlow)
   end;
 
 end;
@@ -1567,6 +1614,11 @@ end;
 procedure TFarm.SetIrrigationUniformity(const Value: TFarmEfficiencyCollection);
 begin
   FIrrigationUniformity.Assign(Value);
+end;
+
+procedure TFarm.SetNoReturnFlow(const Value: TNoReturnCollection);
+begin
+  FNoReturnFlow.Assign(Value);
 end;
 
 procedure TFarm.SetSemiRoutedDeliveries(
@@ -2313,6 +2365,84 @@ end;
 class function TBareRunoffFractionCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TCustomOneFarmItem;
+end;
+
+{ TNoReturnItem }
+
+procedure TNoReturnItem.Assign(Source: TPersistent);
+begin
+  if Source is TNoReturnItem then
+  begin
+    NoReturnOption := TNoReturnItem(Source).NoReturnOption;
+  end;
+  inherited;
+end;
+
+procedure TNoReturnItem.AssignObserverEvents(Collection: TCollection);
+begin
+  inherited;
+
+end;
+
+function TNoReturnItem.BoundaryFormulaCount: integer;
+begin
+  result := 0;
+end;
+
+procedure TNoReturnItem.CreateFormulaObjects;
+begin
+  inherited;
+
+end;
+
+function TNoReturnItem.GetBoundaryFormula(Index: integer): string;
+begin
+  result := '';
+end;
+
+procedure TNoReturnItem.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  inherited;
+
+end;
+
+function TNoReturnItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  result := (AnotherItem is TNoReturnItem)
+    and (NoReturnOption = TNoReturnItem(AnotherItem).NoReturnOption);
+end;
+
+procedure TNoReturnItem.RemoveFormulaObjects;
+begin
+  inherited;
+
+end;
+
+procedure TNoReturnItem.SetBoundaryFormula(Index: integer; const Value: string);
+begin
+  inherited;
+
+end;
+
+procedure TNoReturnItem.SetNoReturnOption(const Value: TNoReturnOption);
+begin
+  if FNoReturnOption <> Value then
+  begin
+    FNoReturnOption := Value;
+    InvalidateModel;
+  end;
+end;
+
+{ TNoReturnCollection }
+
+//constructor TNoReturnCollection.Create(Model: TBaseModel);
+//begin
+//  inherited Create(nil, Model, nil);
+//end;
+
+class function TNoReturnCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TNoReturnItem
 end;
 
 end.

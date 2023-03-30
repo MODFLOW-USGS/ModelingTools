@@ -11059,13 +11059,18 @@ const
 //                ModelMuse can now export contours for multiple layers.
 //    '5.1.1.20' Bug fix: Fixed exporting grid data for boundary conditions
 //                to Shapefiles.
+//    '5.1.1.21  Bug fix: When pasting objects from the clipboard into
+//                ModelMuse, the unique identifier of HOB observations and
+//                SUTRA state calibration observations are now reassigned to
+//                prevent potential conflicts with existing calibration
+//                observations.
 
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.20';
+  IIModelVersion = '5.1.1.21';
 
 function IModelVersion: string;
 begin
