@@ -159,6 +159,11 @@ type
   //Data Sets 20 and 34
   TSemiRoutedDeliveriesAndRunoffItem = class(TCustomZeroFarmItem)
   private
+    const
+      FracPosition = 0;
+      LowerLimitPosition = 1;
+      UpperLimitPostion = 2;
+    var
     FLinkedStream: TSfrDiversion;
     procedure SetLinkedStream(const Value: TSfrDiversion);
   protected
@@ -175,6 +180,12 @@ type
     procedure Loaded;
   published
     property LinkedStream: TSfrDiversion read FLinkedStream write SetLinkedStream;
+    property Frac: string index FracPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property LowerLimit: string index LowerLimitPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
+    property UpperLimit: string index UpperLimitPostion
+      read GetBoundaryFormula write SetBoundaryFormula;
   end;
 
   //Data Sets 20 and 34
@@ -191,6 +202,37 @@ type
     property Items[Index: Integer]: TSemiRoutedDeliveriesAndRunoffItem
       read GetItem write SetItem; default;
     procedure Loaded;
+  end;
+
+  TSrCollList = TList<TSemiRoutedDeliveriesAndReturnFlowCollection>;
+
+  TMultiSrdItem = class(TOrderedItem)
+  private
+    FSemiRouted: TSemiRoutedDeliveriesAndReturnFlowCollection;
+    FName: string;
+    procedure SetSemiRouted(
+      const Value: TSemiRoutedDeliveriesAndReturnFlowCollection);
+    procedure SetName(const Value: string);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+     constructor Create(Collection: TCollection); override;
+     destructor Destroy; override;
+     procedure Assign(Source: TPersistent); override;
+  published
+    property Name: string read FName write SetName;
+    property SemiRouted: TSemiRoutedDeliveriesAndReturnFlowCollection
+      read FSemiRouted write SetSemiRouted;
+  end;
+
+  TMultiSrdCollection = class(TOrderedCollection)
+  private
+    FModel: TBaseModel;
+    function GetItem(Index: Integer): TMultiSrdItem;
+    procedure SetItem(Index: Integer; const Value: TMultiSrdItem);
+  public
+    constructor Create(Model: TBaseModel);
+    property Items[Index: Integer]: TMultiSrdItem read GetItem write SetItem; default;
   end;
 
   TNonRoutedDeliveryType = (nrdtFarmDemand, nrdtDischarged, nrdtStored,
@@ -483,6 +525,7 @@ type
     FAddedCropDemandRate: TFarmEfficiencyCollection;
     FAddedCropDemandFlux: TFarmEfficiencyCollection;
     FNoReturnFlow: TNoReturnCollection;
+    FMultiSrd: TMultiSrdCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -514,6 +557,7 @@ type
     procedure SetAddedCropDemandFlux(const Value: TFarmEfficiencyCollection);
     procedure SetAddedCropDemandRate(const Value: TFarmEfficiencyCollection);
     procedure SetNoReturnFlow(const Value: TNoReturnCollection);
+    procedure SetMultiSrd(const Value: TMultiSrdCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -616,6 +660,11 @@ type
       ;
       property NoReturnFlow: TNoReturnCollection read FNoReturnFlow
         write SetNoReturnFlow
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property MultiSrd: TMultiSrdCollection read FMultiSrd write SetMultiSrd
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -847,7 +896,7 @@ end;
 
 function TSemiRoutedDeliveriesAndRunoffItem.BoundaryFormulaCount: integer;
 begin
-  result := 0;
+  result := 3;
 end;
 
 constructor TSemiRoutedDeliveriesAndRunoffItem.Create(Collection: TCollection);
@@ -865,7 +914,10 @@ end;
 function TSemiRoutedDeliveriesAndRunoffItem.GetBoundaryFormula(
   Index: integer): string;
 begin
-  Assert(False);
+  Assert(Index >= 0);
+  Assert(Index < BoundaryFormulaCount);
+  Result := FFormulaObjects[Index].Formula;
+  ResetItemObserver(Index);
 end;
 
 function TSemiRoutedDeliveriesAndRunoffItem.IsSame(
@@ -888,7 +940,12 @@ end;
 procedure TSemiRoutedDeliveriesAndRunoffItem.SetBoundaryFormula(Index: integer;
   const Value: string);
 begin
-  Assert(False);
+  Assert(Index >= 0);
+  Assert(Index < BoundaryFormulaCount);
+  if FFormulaObjects[Index].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, Index, FFormulaObjects[Index]);
+  end;
 end;
 
 procedure TSemiRoutedDeliveriesAndRunoffItem.SetLinkedStream(
@@ -1377,6 +1434,7 @@ begin
     AddedCropDemandFlux := SourceFarm.AddedCropDemandFlux;
     AddedCropDemandRate := SourceFarm.AddedCropDemandRate;
     NoReturnFlow := SourceFarm.NoReturnFlow;
+    MultiSrd := SourceFarm.MultiSrd;
   end
   else
   begin
@@ -1432,10 +1490,12 @@ begin
   FAddedCropDemandFlux := TFarmEfficiencyCollection.Create(LocalModel);
   FAddedCropDemandRate := TFarmEfficiencyCollection.Create(LocalModel);
   FNoReturnFlow := TNoReturnCollection.Create(LocalModel);
+  FMultiSrd := TMultiSrdCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FMultiSrd.Free;
   FNoReturnFlow.Free;
   FAddedCropDemandFlux.Free;
   FAddedCropDemandRate.Free;
@@ -1513,6 +1573,8 @@ begin
       and AddedCropDemandFlux.IsSame(SourceFarm.AddedCropDemandFlux)
       and AddedCropDemandRate.IsSame(SourceFarm.AddedCropDemandRate)
       and NoReturnFlow.IsSame(SourceFarm.NoReturnFlow)
+      and MultiSrd.IsSame(SourceFarm.MultiSrd)
+
   end;
 
 end;
@@ -1614,6 +1676,11 @@ end;
 procedure TFarm.SetIrrigationUniformity(const Value: TFarmEfficiencyCollection);
 begin
   FIrrigationUniformity.Assign(Value);
+end;
+
+procedure TFarm.SetMultiSrd(const Value: TMultiSrdCollection);
+begin
+  FMultiSrd.Assign(Value);
 end;
 
 procedure TFarm.SetNoReturnFlow(const Value: TNoReturnCollection);
@@ -2016,16 +2083,6 @@ var
       result.Column := Grid.GetContainingColumn(APoint.X)+1;
       result.Row := Grid.GetContainingRow(APoint.Y)+1;
       result.Layer := 0;
-//      if (result.Column >= 0) and (result.Row >= 0) then
-//      begin
-//        GetLayerFromZ(Z, Result, Grid, Model);
-//      end
-//      else
-//      begin
-//        result.Row := 1;
-//        result.Column := 1;
-//        result.Layer := 0;
-//      end;
     end
     else
     begin
@@ -2077,8 +2134,6 @@ begin
             else
               Assert(False);
           end;
-//          X := APoint.x;
-//          Y := APoint.y;
           result := LocationToCell;
         end;
       end;
@@ -2086,7 +2141,6 @@ begin
       begin
         APoint.X := DiversionLocation.X;
         APoint.Y := DiversionLocation.Y;
-//        Z := DiversionLocation.Z;
         result := LocationToCell;
       end;
     rtCell:
@@ -2435,14 +2489,83 @@ end;
 
 { TNoReturnCollection }
 
-//constructor TNoReturnCollection.Create(Model: TBaseModel);
-//begin
-//  inherited Create(nil, Model, nil);
-//end;
-
 class function TNoReturnCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TNoReturnItem
+end;
+
+{ TMultiSrdItem }
+
+procedure TMultiSrdItem.Assign(Source: TPersistent);
+begin
+  if Source is TMultiSrdItem then
+  begin
+    SemiRouted := TMultiSrdItem(Source).SemiRouted;
+    InvalidateModel;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TMultiSrdItem.Create(Collection: TCollection);
+var
+  SrdCollection: TMultiSrdCollection;
+begin
+  inherited;
+  SrdCollection := Collection as TMultiSrdCollection;
+  FSemiRouted := TSemiRoutedDeliveriesAndReturnFlowCollection.
+    Create(SrdCollection.FModel);
+end;
+
+destructor TMultiSrdItem.Destroy;
+begin
+  FSemiRouted.Free;
+  inherited;
+end;
+
+function TMultiSrdItem.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  OtherItem: TMultiSrdItem;
+begin
+  result := (AnotherItem is TMultiSrdItem);
+  if result then
+  begin
+    OtherItem := TMultiSrdItem(AnotherItem);
+    result := SemiRouted.IsSame(OtherItem.SemiRouted
+      and (Name = OtherItem.Name);
+  end;
+end;
+
+procedure TMultiSrdItem.SetName(const Value: string);
+begin
+  SetCaseSensitiveStringProperty(FName, Value);
+end;
+
+procedure TMultiSrdItem.SetSemiRouted(
+  const Value: TSemiRoutedDeliveriesAndReturnFlowCollection);
+begin
+  FSemiRouted.Assign(Value);
+end;
+
+{ TMultiSrdCollection }
+
+constructor TMultiSrdCollection.Create(Model: TBaseModel);
+begin
+  FModel := Model;
+  inherited Create(TMultiSrdItem, Model);
+end;
+
+function TMultiSrdCollection.GetItem(Index: Integer): TMultiSrdItem;
+begin
+  result := inherited Items[index] as TMultiSrdItem
+end;
+
+procedure TMultiSrdCollection.SetItem(Index: Integer;
+  const Value: TMultiSrdItem);
+begin
+  inherited Items[index] := Value;
 end;
 
 end.

@@ -58,6 +58,7 @@ var
   StaticTransient: TStringlist;
   DontUseStaticTransient: TStringlist;
   DontUseStatic: TStringlist;
+  DontUse_Use: TStringList;
 
 implementation
 
@@ -301,17 +302,22 @@ initialization
   StaticTransient.Add('Transient');
 
   DontUseStaticTransient := TStringlist.Create;
-  DontUseStaticTransient.Add('don''t use');
+  DontUseStaticTransient.Add('Don''t use');
   DontUseStaticTransient.Add('Static');
   DontUseStaticTransient.Add('Transient');
 
   DontUseStatic := TStringlist.Create;
-  DontUseStatic.Add('don''t use');
+  DontUseStatic.Add('Don''t use');
   DontUseStatic.Add('Static');
+
+  DontUse_Use := TStringList.Create;
+  DontUse_Use.Add('Don''t use');
+  DontUse_Use.Add('Use');
 
 finalization
   StaticTransient.Free;
   DontUseStaticTransient.Free;
   DontUseStatic.Free;
+  DontUse_Use.Free;
 
 end.

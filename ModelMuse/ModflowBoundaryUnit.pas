@@ -2652,11 +2652,6 @@ begin
   result := inherited Items[Index] as TCustomBoundaryItem
 end;
 
-//function TCustomNonSpatialBoundColl.GetScreenObject: TObject;
-//begin
-//  result := ScreenObject;
-//end;
-
 function TCustomNonSpatialBoundColl.QueryInterface(const IID: TGUID;
   out Obj): HResult;
 begin

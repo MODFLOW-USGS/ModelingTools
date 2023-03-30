@@ -51,9 +51,12 @@ type
     FChanged: boolean;
     FOnChange: TNotifyEvent;
     FChanging: Boolean;
+    FLowerLimitCol: Integer;
+    FUpperLimitCol: Integer;
+    FLowerLimitUsed: Boolean;
+    FUpperLimitUsed: Boolean;
     property Changing: Boolean read FChanging write FChanging;
     procedure DoChange;
-//    procedure ClearGrid(Grid: TRbwDataGrid4);
     { Private declarations }
   public
     property DataChanged: Boolean read FChanged;
@@ -61,7 +64,11 @@ type
     // ScreenObjectList contains only objects that define farms.
     procedure GetData(FarmList: TFarmList;
       DiversionType: TDiversionType);
+    procedure GetDataFromListOfSemiRoutedLists(SrList: TSrCollList;
+      DiversionType: TDiversionType);
     procedure SetData(FarmList: TFarmList; DiversionType: TDiversionType);
+    procedure SetDataForListOfSemiRoutedLists(SrList: TSrCollList;
+      DiversionType: TDiversionType);
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
     procedure LayoutMultiRowEditControls; override;
     { Public declarations }
@@ -75,37 +82,24 @@ implementation
 uses
   ModflowDrtUnit, frmGoPhastUnit, ModflowGridUnit,
   GoPhastTypes, ModflowTimeUnit, PhastModelUnit, ScreenObjectUnit,
-  ModflowSfrUnit, frmCustomGoPhastUnit, ModflowSwrReachUnit;
+  ModflowSfrUnit, frmCustomGoPhastUnit, ModflowSwrReachUnit,
+  ModflowPackagesUnit, ModflowPackageSelectionUnit;
 
 resourcestring
   StrObjectName = 'Option or object name';
   StrPositionChoice = 'Position choice';
   StrVertexNumber = 'Vertex number';
-//  StrFirstVertex = 'First vertex';
-//  StrAMiddleVertex = 'A middle vertex';
-//  StrLastVertex = 'Last vertex';
+  StrFraction = 'Fraction';
+  StrLowerLimit = 'Lower Limit';
+  StrUpperLimit = 'Upper Limit';
 
 type
   TDiversionTimeColumns = (dtcStart, dtcEnd);
-  TDiversionObjectColumns = (docObject, docChoice, docVertex);
-  TDiversionLocationColumns = (dlcX, dlcY);
-  TDiversionCellColumns = (dccRow, dccColumn);
+  TDiversionObjectColumns = (docObject, docChoice, docVertex, docFraction, docLowerLimit, docUpperLimit);
+  TDiversionLocationColumns = (dlcX, dlcY, dlFraction, dlLowerLimit, dlUpperLimit);
+  TDiversionCellColumns = (dccRow, dccColumn, dccFraction, dccLowerLimit, dccUpperLimit);
 
 {$R *.dfm}
-
-//procedure TframeFarmDiversion.ClearGrid(Grid: TRbwDataGrid4);
-//var
-//  RowIndex: Integer;
-//  ColIndex: Integer;
-//begin
-//  for RowIndex := Grid.FixedRows to Grid.RowCount - 1 do
-//  begin
-//    for ColIndex := Grid.FixedCols to Grid.ColCount - 1 do
-//    begin
-//      Grid.Cells[ColIndex,RowIndex] := ''
-//    end;
-//  end;
-//end;
 
 procedure TframeFarmDiversion.comboMethodChange(Sender: TObject);
 const
@@ -118,15 +112,16 @@ var
   ModflowGrid: TModflowGrid;
   ColIndex: Integer;
   RowIndex: Integer;
+  ModelSelection: TModelSelection;
 begin
   inherited;
-//  FChanged := True;
+  ModelSelection := frmGoPhast.ModelSelection;
   Grid.BeginUpdate;
   try
-    if Ord(docVertex)+2 < Grid.ColCount then
-    begin
-      Grid.Columns[Ord(docVertex)+2].CheckMin := False;
-    end;
+//    if Ord(docVertex)+2 < Grid.ColCount then
+//    begin
+//      Grid.Columns[Ord(docVertex)+2].CheckMin := False;
+//    end;
     if comboMethod.ItemIndex >= 0 then
     begin
       DiversionChoice := TReturnChoice(comboMethod.ItemIndex+1);
@@ -135,7 +130,14 @@ begin
           begin
             Grid.ColWidths[Ord(docObject)+2] := RequiredWidthForObjectOption;
 
-            Grid.ColCount := Ord(docVertex)+3;
+            if ModelSelection = msModflowFmp then
+            begin
+              Grid.ColCount := Ord(docVertex)+3;
+            end
+            else
+            begin
+              Grid.ColCount := Ord(docUpperLimit)+3;
+            end;
             Grid.Columns[Ord(docVertex)+2].WordWrapCaptions := True;
 
             Grid.Cells[Ord(docObject)+2, 0] := StrObjectName;
@@ -157,10 +159,35 @@ begin
 
             Grid.Columns[Ord(docVertex)+2].CheckMin := True;
             Grid.Columns[Ord(docVertex)+2].Min := 1;
+
+          {$IFDEF OWHMV2}
+            if frmGoPhast.ModelSelection = msModflowOwhm2 then
+            begin
+              for ColIndex := Ord(docFraction)+2 to Ord(docUpperLimit)+2 do
+              begin
+                if ColIndex < Grid.ColCount then
+                begin
+                  Grid.Columns[ColIndex].Format := rcf4String;
+                end;
+              end;
+              Grid.Cells[Ord(docFraction)+2, 0] := StrFraction;
+              Grid.Cells[Ord(docLowerLimit)+2, 0] := StrLowerLimit;
+              Grid.Cells[Ord(docUpperLimit)+2, 0] := StrUpperLimit;
+            end;
+          {$ENDIF}
+            FLowerLimitCol := Ord(docLowerLimit)+2;
+            FUpperLimitCol := Ord(docUpperLimit)+2;
           end;
         rtLocation:
           begin
-            Grid.ColCount := Ord(dlcY)+3;
+            if ModelSelection = msModflowFmp then
+            begin
+              Grid.ColCount := Ord(dlcY)+3;
+            end
+            else
+            begin
+              Grid.ColCount := Ord(dlUpperLimit)+3;
+            end;
             Grid.Cells[Ord(dlcX)+2, 0] := StrX;
             Grid.Cells[Ord(dlcY)+2, 0] := StrY;
             Grid.Columns[Ord(dlcX)+2].Format := rcf4Real;
@@ -173,10 +200,34 @@ begin
             Grid.Columns[Ord(docChoice)+2].LimitToList := False;
             Grid.Columns[Ord(docObject)+2].ComboUsed := False;
             Grid.Columns[Ord(docChoice)+2].ComboUsed := False;
+          {$IFDEF OWHMV2}
+            if frmGoPhast.ModelSelection = msModflowOwhm2 then
+            begin
+              for ColIndex := Ord(dlFraction)+2 to Ord(dlUpperLimit)+2 do
+              begin
+                if ColIndex < Grid.ColCount then
+                begin
+                  Grid.Columns[ColIndex].Format := rcf4String;
+                end;
+              end;
+              Grid.Cells[Ord(dlFraction)+2, 0] := StrFraction;
+              Grid.Cells[Ord(dlLowerLimit)+2, 0] := StrLowerLimit;
+              Grid.Cells[Ord(dlUpperLimit)+2, 0] := StrUpperLimit;
+            end;
+            FLowerLimitCol := Ord(dlLowerLimit)+2;
+            FUpperLimitCol := Ord(dlUpperLimit)+2;
+          {$ENDIF}
           end;
         rtCell:
           begin
-            Grid.ColCount := Ord(dccColumn)+3;
+            if ModelSelection = msModflowFmp then
+            begin
+              Grid.ColCount := Ord(dccColumn)+3;
+            end
+            else
+            begin
+              Grid.ColCount := Ord(dccUpperLimit)+3;
+            end;
             Grid.Cells[Ord(dccRow)+2, 0] := StrRow;
             Grid.Cells[Ord(dccColumn)+2, 0] := StrColumn;
             Grid.Columns[Ord(dccRow)+2].Format := rcf4Integer;
@@ -194,6 +245,23 @@ begin
             Grid.Columns[Ord(docChoice)+2].LimitToList := False;
             Grid.Columns[Ord(docObject)+2].ComboUsed := False;
             Grid.Columns[Ord(docChoice)+2].ComboUsed := False;
+          {$IFDEF OWHMV2}
+            if frmGoPhast.ModelSelection = msModflowOwhm2 then
+            begin
+              for ColIndex := Ord(dccFraction)+2 to Ord(dccUpperLimit)+2 do
+              begin
+                if ColIndex < Grid.ColCount then
+                begin
+                  Grid.Columns[ColIndex].Format := rcf4String;
+                end;
+              end;
+              Grid.Cells[Ord(dccFraction)+2, 0] := StrFraction;
+              Grid.Cells[Ord(dccLowerLimit)+2, 0] := StrLowerLimit;
+              Grid.Cells[Ord(dccUpperLimit)+2, 0] := StrUpperLimit;
+            end;
+          {$ENDIF}
+            FLowerLimitCol := Ord(dccLowerLimit)+2;
+            FUpperLimitCol := Ord(dccUpperLimit)+2;
           end;
         else
           Assert(False);
@@ -249,130 +317,31 @@ procedure TframeFarmDiversion.GetData(
 var
   FirstFarm: TFarm;
   DelivReturns: TSemiRoutedDeliveriesAndReturnFlowCollection;
-  AnItem: TSemiRoutedDeliveriesAndRunoffItem;
-  ItemIndex: Integer;
-  LinkedStream: TSfrDiversion;
-  DiversionObject: TSfrDiversionObject;
-  DiversionLocation: TReturnLocation;
-  DiversionCell: TReturnCell;
-  ObjectIndex: Integer;
   AFarm: TFarm;
-  FirstDelivReturns: TSemiRoutedDeliveriesAndReturnFlowCollection;
+  SrList: TSrCollList;
 begin
-  Assert(FarmList.Count > 0);
-  Changing := True;
-  Grid.BeginUpdate;
+  SrList := TSrCollList.Create;
   try
-    ClearGrid;
-    FirstFarm := FarmList[0];
-    DelivReturns := nil;
-    case DiversionType of
-      dtDiversion:
-        begin
-          DelivReturns := FirstFarm.SemiRoutedDeliveries
-        end;
-      dtReturnFlow:
-        begin
-          DelivReturns := FirstFarm.SemiRoutedReturnFlow
-        end;
-      else Assert(False);
-    end;
-    FirstDelivReturns := DelivReturns;
-    if DelivReturns.Count > 0 then
+    for Index := 0 to FarmList.Count - 1 do
     begin
-      seNumber.AsInteger := DelivReturns.Count;
-      seNumber.OnChange(seNumber);
-      AnItem := DelivReturns[0];
-      comboMethod.ItemIndex := Ord(AnItem.LinkedStream.DiversionChoice)-1;
-      for ItemIndex := 0 to DelivReturns.Count - 1 do
-      begin
-        AnItem := DelivReturns[ItemIndex];
-        LinkedStream := AnItem.LinkedStream;
-        Grid.Cells[Ord(dtcStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-        Grid.Cells[Ord(dtcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
-        case LinkedStream.DiversionChoice of
-          rtObject:
-            begin
-              DiversionObject := LinkedStream.DiversionObject;
-              if DiversionObject.ScreenObject = nil then
-              begin
-                Grid.ItemIndex[Ord(docObject)+2, ItemIndex+1] := 0
-              end
-              else
-              begin
-                Grid.Cells[Ord(docObject)+2, ItemIndex+1] :=
-                  DiversionObject.ObjectName;
-              end;
-              Grid.ItemIndex[Ord(docChoice)+2, ItemIndex+1] :=
-                Ord(DiversionObject.DiversionPosition);
-              if DiversionObject.DiversionPosition = dpMiddle then
-              begin
-                Grid.Cells[Ord(docVertex)+2, ItemIndex+1] :=
-                  IntToStr(DiversionObject.DiversionVertex);
-              end
-              else
-              begin
-                Grid.Cells[Ord(docVertex)+2, ItemIndex+1] := '';
-              end;
-            end;
-          rtLocation:
-            begin
-              DiversionLocation := LinkedStream.DiversionLocation;
-              Grid.Cells[Ord(dlcX)+2, ItemIndex+1] :=
-                FloatToStr(DiversionLocation.X);
-              Grid.Cells[Ord(dlcY)+2, ItemIndex+1] :=
-                FloatToStr(DiversionLocation.Y);
-
-            end;
-          rtCell:
-            begin
-              DiversionCell := LinkedStream.DiversionCell;
-              Grid.Cells[Ord(dccRow)+2, ItemIndex+1] :=
-                IntToStr(DiversionCell.Row);
-              Grid.Cells[Ord(dccColumn)+2, ItemIndex+1] :=
-                IntToStr(DiversionCell.Col);
-            end;
-          else
-            Assert(False);
-        end;
+      AFarm := FarmList[Index];
+      case DiversionType of
+        dtDiversion:
+          begin
+            DelivReturns := AFarm.SemiRoutedDeliveries
+          end;
+        dtReturnFlow:
+          begin
+            DelivReturns := AFarm.SemiRoutedReturnFlow
+          end;
+        else
+          Assert(False);
       end;
-
-      for ObjectIndex := 1 to FarmList.Count - 1 do
-      begin
-        AFarm := FarmList[ObjectIndex];
-        case DiversionType of
-          dtDiversion:
-            begin
-              DelivReturns := AFarm.SemiRoutedDeliveries
-            end;
-          dtReturnFlow:
-            begin
-              DelivReturns := AFarm.SemiRoutedReturnFlow
-            end;
-          else
-            Assert(False);
-        end;
-        if not FirstDelivReturns.IsSame(DelivReturns) then
-        begin
-          ClearGrid;
-          seNumber.AsInteger := 0;
-          seNumber.OnChange(seNumber);
-          comboMethod.ItemIndex := 0;
-          break;
-        end;
-      end;
-    end
-    else
-    begin
-      ClearGrid;
-      seNumber.AsInteger := 0;
-      seNumber.OnChange(seNumber);
-      comboMethod.ItemIndex := 0;
+      SrList.Add(DelivReturns);
     end;
+    GetDataFromListOfSemiRoutedLists(SrList, DiversionType);
   finally
-    Grid.EndUpdate;
-    FChanged := False;
-    Changing := False;
+    SrList.Free;
   end;
 end;
 
@@ -461,6 +430,17 @@ begin
       end;
     end;
   end;
+  if (ARow >= 1) then
+  begin
+    if ACol = FLowerLimitCol then
+    begin
+      CanSelect := FLowerLimitUsed;
+    end;
+    if ACol = FUpperLimitCol then
+    begin
+      CanSelect := FUpperLimitUsed;
+    end;
+  end;
 end;
 
 procedure TframeFarmDiversion.GridSetEditText(Sender: TObject; ACol,
@@ -533,6 +513,248 @@ begin
   end;
 end;
 
+procedure TframeFarmDiversion.SetDataForListOfSemiRoutedLists(SrList: TSrCollList;
+  DiversionType: TDiversionType);
+var
+  ModelSelection: TModelSelection;
+  index: Integer;
+  Count: Integer;
+  TimeIndex: Integer;
+  StartTime: Double;
+  EndTime: Double;
+  DelivRetItem: TSemiRoutedDeliveriesAndRunoffItem;
+  LinkedStream: TSfrDiversion;
+  DiversionObject: TSfrDiversionObject;
+  GridItemIndex: Integer;
+  DiversionLocation: TReturnLocation;
+  DiversionCell: TReturnCell;
+  DelivReturn: TSemiRoutedDeliveriesAndReturnFlowCollection;
+begin
+  ModelSelection := frmGoPhast.ModelSelection;
+  for index := 0 to SrList.Count - 1 do
+  begin
+    DelivReturn := SrList[index];
+    Count := 0;
+    for TimeIndex := 1 to seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Grid.Cells[Ord(dtcStart), TimeIndex], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(dtcEnd), TimeIndex], EndTime) then
+      begin
+        if Count < DelivReturn.Count then
+        begin
+          DelivRetItem := DelivReturn[Count];
+        end
+        else
+        begin
+          DelivRetItem := DelivReturn.Add;
+        end;
+        Inc(Count);
+        DelivRetItem.StartTime := StartTime;
+        DelivRetItem.EndTime := EndTime;
+        LinkedStream := DelivRetItem.LinkedStream;
+        Assert(comboMethod.ItemIndex >= 0);
+        LinkedStream.DiversionChoice := TReturnChoice(comboMethod.ItemIndex + 1);
+        case LinkedStream.DiversionChoice of
+          rtObject:
+            begin
+              DiversionObject := LinkedStream.DiversionObject;
+              GridItemIndex := Grid.ItemIndex[Ord(docObject) + 2, TimeIndex];
+              if GridItemIndex >= 0 then
+              begin
+                DiversionObject.ScreenObject :=
+                  Grid.Columns[Ord(docObject) + 2].PickList.Objects[GridItemIndex];
+              end
+              else
+              begin
+                DiversionObject.ScreenObject := nil;
+              end;
+              DiversionObject.DiversionPosition :=
+                TDiversionPosition(Grid.ItemIndex[Ord(docChoice) + 2, TimeIndex]);
+              if DiversionObject.DiversionPosition = dpMiddle then
+              begin
+                DiversionObject.DiversionVertex :=
+                  StrToIntDef(Grid.Cells[Ord(docVertex) + 2, TimeIndex], 1);
+              end;
+              if ModelSelection = msModflowOwhm2 then
+              begin
+                DelivRetItem.Frac := Grid.Cells[Ord(docFraction) + 2, TimeIndex];
+                if DiversionType = dtDiversion then
+                begin
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(docLowerLimit) + 2, TimeIndex];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(docUpperLimit) + 2, TimeIndex];
+                end;
+              end;
+            end;
+          rtLocation:
+            begin
+              DiversionLocation := LinkedStream.DiversionLocation;
+              DiversionLocation.X := StrToFloatDef(Grid.Cells[Ord(dlcX) + 2, TimeIndex], 0);
+              DiversionLocation.Y := StrToFloatDef(Grid.Cells[Ord(dlcY) + 2, TimeIndex], 0);
+              DiversionLocation.Z := 0;
+              if ModelSelection = msModflowOwhm2 then
+              begin
+                DelivRetItem.Frac := Grid.Cells[Ord(dlFraction) + 2, TimeIndex];
+                if DiversionType = dtDiversion then
+                begin
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dlLowerLimit) + 2, TimeIndex];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dlUpperLimit) + 2, TimeIndex];
+                end;
+              end;
+            end;
+          rtCell:
+            begin
+              DiversionCell := LinkedStream.DiversionCell;
+              DiversionCell.Row := StrToIntDef(Grid.Cells[Ord(dccRow) + 2, TimeIndex], 1);
+              DiversionCell.Col := StrToIntDef(Grid.Cells[Ord(dccColumn) + 2, TimeIndex], 1);
+              DiversionCell.Lay := 0;
+              if ModelSelection = msModflowOwhm2 then
+              begin
+                DelivRetItem.Frac := Grid.Cells[Ord(dccFraction) + 2, TimeIndex];
+                if DiversionType = dtDiversion then
+                begin
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dccLowerLimit) + 2, TimeIndex];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dccUpperLimit) + 2, TimeIndex];
+                end;
+              end;
+            end;
+        else
+          Assert(False);
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TframeFarmDiversion.GetDataFromListOfSemiRoutedLists(
+  SrList: TSrCollList; DiversionType: TDiversionType);
+var
+  ModelSelection: TModelSelection;
+  Packages: TModflowPackages;
+  FirstDelivReturns: TSemiRoutedDeliveriesAndReturnFlowCollection;
+  AnItem: TSemiRoutedDeliveriesAndRunoffItem;
+  ItemIndex: Integer;
+  LinkedStream: TSfrDiversion;
+  DiversionObject: TSfrDiversionObject;
+  DiversionLocation: TReturnLocation;
+  DiversionCell: TReturnCell;
+  ObjectIndex: Integer;
+  DelivReturns: TSemiRoutedDeliveriesAndReturnFlowCollection;
+begin
+  ModelSelection := frmGoPhast.ModelSelection;
+  Packages := frmGoPhast.PhastModel.ModflowPackages;
+  FLowerLimitUsed := Packages.FarmSurfaceWater4.SemiRoutedDeliveryLowerLimit.FarmOption <> foNotUsed;
+  FUpperLimitUsed := Packages.FarmSurfaceWater4.SemiRoutedDeliveryUpperLimit.FarmOption <> foNotUsed;
+  Assert(SrList.Count > 0);
+  Changing := True;
+  Grid.BeginUpdate;
+  try
+    ClearGrid;
+    DelivReturns := SrList[0];
+    FirstDelivReturns := DelivReturns;
+    if DelivReturns.Count > 0 then
+    begin
+      seNumber.AsInteger := DelivReturns.Count;
+      seNumber.OnChange(seNumber);
+      AnItem := DelivReturns[0];
+      comboMethod.ItemIndex := Ord(AnItem.LinkedStream.DiversionChoice) - 1;
+      for ItemIndex := 0 to DelivReturns.Count - 1 do
+      begin
+        AnItem := DelivReturns[ItemIndex];
+        LinkedStream := AnItem.LinkedStream;
+        Grid.Cells[Ord(dtcStart), ItemIndex + 1] := FloatToStr(AnItem.StartTime);
+        Grid.Cells[Ord(dtcEnd), ItemIndex + 1] := FloatToStr(AnItem.EndTime);
+        case LinkedStream.DiversionChoice of
+          rtObject:
+            begin
+              DiversionObject := LinkedStream.DiversionObject;
+              if DiversionObject.ScreenObject = nil then
+              begin
+                Grid.ItemIndex[Ord(docObject) + 2, ItemIndex + 1] := 0;
+              end
+              else
+              begin
+                Grid.Cells[Ord(docObject) + 2, ItemIndex + 1] := DiversionObject.ObjectName;
+              end;
+              Grid.ItemIndex[Ord(docChoice) + 2, ItemIndex + 1] := Ord(DiversionObject.DiversionPosition);
+              if DiversionObject.DiversionPosition = dpMiddle then
+              begin
+                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1] := IntToStr(DiversionObject.DiversionVertex);
+              end
+              else
+              begin
+                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1] := '';
+              end;
+              if ModelSelection = msModflowOwhm2 then
+              begin
+                Grid.Cells[Ord(docFraction) + 2, ItemIndex + 1] := AnItem.Frac;
+                if DiversionType = dtDiversion then
+                begin
+                  Grid.Cells[Ord(docLowerLimit) + 2, ItemIndex + 1] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(docUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
+                end;
+              end;
+            end;
+          rtLocation:
+            begin
+              DiversionLocation := LinkedStream.DiversionLocation;
+              Grid.Cells[Ord(dlcX) + 2, ItemIndex + 1] := FloatToStr(DiversionLocation.X);
+              Grid.Cells[Ord(dlcY) + 2, ItemIndex + 1] := FloatToStr(DiversionLocation.Y);
+              if ModelSelection = msModflowOwhm2 then
+              begin
+                Grid.Cells[Ord(dlFraction) + 2, ItemIndex + 1] := AnItem.Frac;
+                if DiversionType = dtDiversion then
+                begin
+                  Grid.Cells[Ord(dlLowerLimit) + 2, ItemIndex + 1] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(dlUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
+                end;
+              end;
+            end;
+          rtCell:
+            begin
+              DiversionCell := LinkedStream.DiversionCell;
+              Grid.Cells[Ord(dccRow) + 2, ItemIndex + 1] := IntToStr(DiversionCell.Row);
+              Grid.Cells[Ord(dccColumn) + 2, ItemIndex + 1] := IntToStr(DiversionCell.Col);
+              if ModelSelection = msModflowOwhm2 then
+              begin
+                Grid.Cells[Ord(dccFraction) + 2, ItemIndex + 1] := AnItem.Frac;
+                if DiversionType = dtDiversion then
+                begin
+                  Grid.Cells[Ord(dccLowerLimit) + 2, ItemIndex + 1] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(dccUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
+                end;
+              end;
+            end;
+        else
+          Assert(False);
+        end;
+      end;
+      for ObjectIndex := 1 to SrList.Count - 1 do
+      begin
+        DelivReturns := SrList[ObjectIndex];
+        if not FirstDelivReturns.IsSame(DelivReturns) then
+        begin
+          ClearGrid;
+          seNumber.AsInteger := 0;
+          seNumber.OnChange(seNumber);
+          comboMethod.ItemIndex := 0;
+          break;
+        end;
+      end;
+    end
+    else
+    begin
+      ClearGrid;
+      seNumber.AsInteger := 0;
+      seNumber.OnChange(seNumber);
+      comboMethod.ItemIndex := 0;
+    end;
+  finally
+    Grid.EndUpdate;
+    FChanged := False;
+    Changing := False;
+  end;
+end;
+
 procedure TframeFarmDiversion.rdeColChange(Sender: TObject);
 begin
   inherited;
@@ -592,101 +814,36 @@ end;
 procedure TframeFarmDiversion.SetData(FarmList: TFarmList;
   DiversionType: TDiversionType);
 var
-  index: Integer;
   Farm: TFarm;
   DelivReturn: TSemiRoutedDeliveriesAndReturnFlowCollection;
-  Count: Integer;
-  TimeIndex: Integer;
-  StartTime: double;
-  EndTime: double;
-  DelivRetItem: TSemiRoutedDeliveriesAndRunoffItem;
-  LinkedStream: TSfrDiversion;
-  DiversionObject: TSfrDiversionObject;
-  DiversionLocation: TReturnLocation;
-  DiversionCell: TReturnCell;
-  GridItemIndex: Integer;
+  SrList: TSrCollList;
+  FarmIndex: Integer;
 begin
-  for index := 0 to FarmList.Count - 1 do
-  begin
-    Farm := FarmList[index];
-    if Farm <> nil then
+  SrList := TSrCollList.Create;
+  try
+    for FarmIndex := 0 to FarmList.Count - 1 do
     begin
-      DelivReturn := nil;
-      case DiversionType of
-        dtDiversion:
-          begin
-            DelivReturn := Farm.SemiRoutedDeliveries;
-          end;
-        dtReturnFlow:
-          begin
-            DelivReturn := Farm.SemiRoutedReturnFlow;
-          end;
-        else Assert(False);
-      end;
-      Count := 0;
-      for TimeIndex := 1 to seNumber.AsInteger do
+      Farm := FarmList[FarmIndex];
+      if Farm <> nil then
       begin
-        if TryStrToFloat(Grid.Cells[Ord(dtcStart), TimeIndex], StartTime)
-          and TryStrToFloat(Grid.Cells[Ord(dtcEnd), TimeIndex], EndTime) then
-        begin
-          if Count < DelivReturn.Count then
-          begin
-            DelivRetItem := DelivReturn[Count];
-          end
-          else
-          begin
-            DelivRetItem := DelivReturn.Add;
-          end;
-          Inc(Count);
-          DelivRetItem.StartTime := StartTime;
-          DelivRetItem.EndTime := EndTime;
-          LinkedStream := DelivRetItem.LinkedStream;
-          Assert(comboMethod.ItemIndex >= 0);
-          LinkedStream.DiversionChoice := TReturnChoice(comboMethod.ItemIndex+1);
-          case LinkedStream.DiversionChoice of
-            rtObject:
-              begin
-                DiversionObject := LinkedStream.DiversionObject;
-                GridItemIndex := Grid.ItemIndex[Ord(docObject)+2,TimeIndex];
-                if GridItemIndex >= 0 then
-                begin
-                  DiversionObject.ScreenObject := Grid.Columns[Ord(docObject)+2].PickList.Objects[GridItemIndex];
-                end
-                else
-                begin
-                  DiversionObject.ScreenObject := nil;
-                end;
-                DiversionObject.DiversionPosition :=
-                  TDiversionPosition(Grid.ItemIndex[Ord(docChoice)+2,TimeIndex]);
-                if DiversionObject.DiversionPosition = dpMiddle then
-                begin
-                  DiversionObject.DiversionVertex :=
-                    StrToIntDef(Grid.Cells[Ord(docVertex)+2,TimeIndex], 1);
-                end;
-              end;
-            rtLocation:
-              begin
-                DiversionLocation := LinkedStream.DiversionLocation;
-                DiversionLocation.X :=
-                  StrToFloatDef(Grid.Cells[Ord(dlcX)+2,TimeIndex], 0);
-                DiversionLocation.Y :=
-                  StrToFloatDef(Grid.Cells[Ord(dlcY)+2,TimeIndex], 0);
-                DiversionLocation.Z := 0;
-              end;
-            rtCell:
-              begin
-                DiversionCell := LinkedStream.DiversionCell;
-                DiversionCell.Row :=
-                  StrToIntDef(Grid.Cells[Ord(dccRow)+2,TimeIndex], 1);
-                DiversionCell.Col :=
-                  StrToIntDef(Grid.Cells[Ord(dccColumn)+2,TimeIndex], 1);
-                DiversionCell.Lay := 0;
-              end;
-            else Assert(False);
-          end;
+        DelivReturn := nil;
+        case DiversionType of
+          dtDiversion:
+            begin
+              DelivReturn := Farm.SemiRoutedDeliveries;
+            end;
+          dtReturnFlow:
+            begin
+              DelivReturn := Farm.SemiRoutedReturnFlow;
+            end;
+          else Assert(False);
         end;
+        SrList.Add(DelivReturn);
       end;
     end;
+    SetDataForListOfSemiRoutedLists(SrList, DiversionType);
+  finally
+    SrList.Free;
   end;
 end;
 
@@ -726,15 +883,22 @@ begin
         end;
       end;
     end;
-
   finally
     comboSfrObjects.Items.EndUpdate
   end;
+
   Grid.BeginUpdate;
   try
     ClearGrid;
     FirstFormulaColumn := Succ(Ord(dtcEnd));
-    Grid.ColCount := 5;
+    if frmGoPhast.ModelSelection = msModflowFmp then
+    begin
+      Grid.ColCount := 5;
+    end
+    else
+    begin
+      Grid.ColCount := 8;
+    end;
     for ColIndex := 0 to Grid.ColCount - 1 do
     begin
       Grid.Columns[ColIndex].AutoAdjustColWidths := True;

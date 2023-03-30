@@ -13,6 +13,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
     Top = 128
     Width = 422
     Height = 322
+    VertScrollBar.Position = 60
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -23,17 +24,15 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlSurfaceWater: TCategoryPanel
-      Top = 60
+      Top = 0
       Height = 318
       Caption = 'Surface Water'
       TabOrder = 0
-      ExplicitTop = 72
-      ExplicitWidth = 397
       object rdgSurfaceWater: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 395
-        Height = 294
+        Width = 399
+        Height = 292
         Align = alClient
         ColCount = 6
         Enabled = False
@@ -206,13 +205,12 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 30
+      Top = -30
       Height = 30
       Caption = 'Options'
       Collapsed = True
       Enabled = False
       TabOrder = 1
-      ExplicitWidth = 397
       ExpandedHeight = 91
       object lblSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE: TLabel
         Left = 173
@@ -246,12 +244,11 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = 0
+      Top = -60
       Height = 30
       Caption = 'Print'
       Collapsed = True
       TabOrder = 2
-      ExplicitWidth = 397
       ExpandedHeight = 153
       object clbPrint: TCheckListBox
         Left = 0

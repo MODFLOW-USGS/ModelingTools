@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-14T14:31:46.821-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-30T12:31:18.204-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SURFACE_WATER</title>
   <body>
     <header>
@@ -129,12 +129,12 @@
           <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160;then water is removed from the SRD in the order they are specified.</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; &#160;For Example with <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link> = 5, the following defines the delivery location for WBS 5 and 6:</para>
-          <para styleclass="Normal"> &#160; &#160; &#160;ISRD, WBS_ID, SEGMENT, REACH, [FRAC]</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 1 &#160; &#160; 5 &#160; &#160; 3 &#160; &#160; &#160; &#160; 2 &#160; &#160; 0.7 &#160; # WBS 5 attempts to meet 70% of demand from SEG 3, &#160;RCH 2 -- If not enough flow, then deficit is shifted to other SRD&apos;s that WBS 5 is associated with.</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 2 &#160; &#160; 5 &#160; &#160; 14 &#160; &#160; &#160; &#160;2 &#160; &#160; 0.3 &#160; # WBS 5 attempts to meet 30% of demand from SEG 14, RCH 2 -- If not enough flow, then deficit is shifted to other SRD&apos;s that WBS 5 is associated with.</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 3 &#160; &#160; 6 &#160; &#160; 10 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160; # No FRAC indicates WBS 6 demand is first satisfied with SEG 10, RCH 2 because it is defined first</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 4 &#160; &#160; 6 &#160; &#160; 18 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160; # No FRAC indicates WBS 6 demand is satisfied with SEG 18, RCH 2 if SEG 10, RCH 2 does not satisfy demand</para>
-          <para styleclass="Normal"> &#160; &#160; &#160; &#160; 5 &#160; &#160; 0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # ISRD is ignored and not applied to any WBS</para>
+          <para styleclass="Normal"><text style="font-family:&apos;Arial monospaced for SAP&apos;;"> &#160; &#160; &#160;ISRD, WBS_ID, SEGMENT, REACH, [FRAC]</text></para>
+          <para styleclass="Normal"><text style="font-family:&apos;Arial monospaced for SAP&apos;;"> &#160; &#160; &#160; &#160; 1 &#160; &#160; 5 &#160; &#160; 3 &#160; &#160; &#160; &#160; 2 &#160; &#160; 0.7 &#160; # WBS 5 attempts to meet 70% of demand from SEG 3, &#160;RCH 2 -- If not enough flow, then deficit is shifted to other SRD&apos;s that WBS 5 is associated with.</text></para>
+          <para styleclass="Normal"><text style="font-family:&apos;Arial monospaced for SAP&apos;;"> &#160; &#160; &#160; &#160; 2 &#160; &#160; 5 &#160; &#160; 14 &#160; &#160; &#160; &#160;2 &#160; &#160; 0.3 &#160; # WBS 5 attempts to meet 30% of demand from SEG 14, RCH 2 -- If not enough flow, then deficit is shifted to other SRD&apos;s that WBS 5 is associated with.</text></para>
+          <para styleclass="Normal"><text style="font-family:&apos;Arial monospaced for SAP&apos;;"> &#160; &#160; &#160; &#160; 3 &#160; &#160; 6 &#160; &#160; 10 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160; # No FRAC indicates WBS 6 demand is first satisfied with SEG 10, RCH 2 because it is defined first</text></para>
+          <para styleclass="Normal"><text style="font-family:&apos;Arial monospaced for SAP&apos;;"> &#160; &#160; &#160; &#160; 4 &#160; &#160; 6 &#160; &#160; 18 &#160; &#160; &#160; &#160;2 &#160; &#160; &#160; &#160; &#160; # No FRAC indicates WBS 6 demand is satisfied with SEG 18, RCH 2 if SEG 10, RCH 2 does not satisfy demand</text></para>
+          <para styleclass="Normal"><text style="font-family:&apos;Arial monospaced for SAP&apos;;"> &#160; &#160; &#160; &#160; 5 &#160; &#160; 0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # ISRD is ignored and not applied to any WBS</text></para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> &#160; &#160; &#160;Where WBS 5 has approximately 70% of its demand supplied by Segment 3, Reach 2 and 30% from Segment 14, Reach 2</para>
           <para styleclass="Normal"> &#160; &#160; &#160; &#160;If either SRD can not meet the requested demand then the deficit is shifted to the other.</para>

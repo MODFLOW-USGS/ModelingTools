@@ -12,26 +12,26 @@ inherited frameFarmDiversion: TframeFarmDiversion
       577
       41)
     inherited sbAdd: TSpeedButton
-      Left = 480
-      ExplicitLeft = 480
+      Left = 448
+      ExplicitLeft = 448
     end
     inherited sbInsert: TSpeedButton
-      Left = 509
-      ExplicitLeft = 509
+      Left = 477
+      ExplicitLeft = 477
     end
     inherited sbDelete: TSpeedButton
-      Left = 538
-      ExplicitLeft = 377
+      Left = 506
+      ExplicitLeft = 506
     end
     object lblLocationMethod: TLabel [4]
-      Left = 232
+      Left = 200
       Top = 9
       Width = 91
       Height = 15
       Caption = 'Location method'
     end
     object comboMethod: TComboBox
-      Left = 360
+      Left = 328
       Top = 6
       Width = 105
       Height = 23
@@ -246,17 +246,14 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Top = 27
       Width = 49
       EditLabel.ExplicitLeft = 8
-      EditLabel.ExplicitTop = 8
-      EditLabel.ExplicitWidth = 50
+      EditLabel.ExplicitTop = 9
+      EditLabel.ExplicitWidth = 44
       Visible = False
       ExplicitLeft = 8
       ExplicitTop = 27
       ExplicitWidth = 49
     end
-    inherited cbMultiCheck: TCheckBox
-      TabOrder = 8
-    end
-    object comboSfrObjects: TComboBox
+    object comboSfrObjects: TComboBox [8]
       Left = 40
       Top = 27
       Width = 65
@@ -266,7 +263,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       TabOrder = 1
       OnChange = comboSfrObjectsChange
     end
-    object comboPositionChoice: TComboBox
+    object comboPositionChoice: TComboBox [9]
       Left = 80
       Top = 27
       Width = 65
@@ -280,7 +277,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
         'A middle vertex'
         'Last vertex')
     end
-    object rdeVertexNumber: TRbwDataEntry
+    object rdeVertexNumber: TRbwDataEntry [10]
       Left = 118
       Top = 27
       Width = 51
@@ -296,7 +293,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeX: TRbwDataEntry
+    object rdeX: TRbwDataEntry [11]
       Left = 151
       Top = 27
       Width = 51
@@ -312,7 +309,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeY: TRbwDataEntry
+    object rdeY: TRbwDataEntry [12]
       Left = 175
       Top = 27
       Width = 51
@@ -328,7 +325,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeRow: TRbwDataEntry
+    object rdeRow: TRbwDataEntry [13]
       Left = 232
       Top = 27
       Width = 51
@@ -344,7 +341,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeCol: TRbwDataEntry
+    object rdeCol: TRbwDataEntry [14]
       Left = 289
       Top = 27
       Width = 51
@@ -359,6 +356,12 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Min = 1.000000000000000000
       CheckMin = True
       ChangeDisabledColor = True
+    end
+    inherited cbMultiCheck: TCheckBox
+      TabOrder = 8
+    end
+    inherited comboChoice: TComboBox
+      TabOrder = 9
     end
   end
 end

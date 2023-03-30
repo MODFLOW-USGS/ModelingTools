@@ -11582,17 +11582,21 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 591
           Height = 412
+          VertScrollBar.Position = 553
           ExplicitWidth = 591
           ExplicitHeight = 412
           inherited cpnlWaterBalanceRegions: TCategoryPanel
+            Top = 104
+            ExplicitTop = 104
             ExplicitWidth = 570
             inherited rdgFarms: TRbwDataGrid4
               Width = 568
               FixedCols = 0
-              ExplicitWidth = 564
+              ExplicitWidth = 568
             end
           end
           inherited cpnlOptions: TCategoryPanel
+            Top = -19
             ExplicitWidth = 570
             inherited cbWellField: TCheckBox
               Height = 37
@@ -11600,6 +11604,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlMnw2: TCategoryPanel
+            Top = -261
+            ExplicitTop = -276
             ExplicitWidth = 570
             inherited lblQClose: TLabel
               Width = 409
@@ -11621,6 +11627,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOutput: TCategoryPanel
+            Top = -553
+            ExplicitTop = -568
             ExplicitWidth = 570
             inherited clbPrint: TCheckListBox
               Width = 568
@@ -11847,13 +11855,12 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 591
           ExplicitHeight = 387
           inherited cpnlSurfaceWater: TCategoryPanel
-            ExplicitTop = 60
             ExplicitWidth = 587
             inherited rdgSurfaceWater: TRbwDataGrid4
               Width = 585
-              Height = 292
               FixedCols = 0
               ExplicitWidth = 585
+              ExplicitHeight = 294
             end
           end
           inherited cpnlOptions: TCategoryPanel

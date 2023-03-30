@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabNoReturnFlow
+    ActivePage = tabDiversionLocation
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1313,8 +1313,10 @@ inherited frameFarm: TframeFarm
             ExplicitWidth = 20
           end
           inherited lblLocationMethod: TLabel
+            Left = 208
             Width = 107
             Height = 16
+            ExplicitLeft = 208
             ExplicitWidth = 107
             ExplicitHeight = 16
           end
@@ -1323,18 +1325,21 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited comboMethod: TComboBox
+            Left = 336
             Height = 24
+            ExplicitLeft = 336
             ExplicitHeight = 24
           end
         end
         inherited Grid: TRbwDataGrid4
           Height = 233
           OnSetEditText = frameFormulaGridDiversionGridSetEditText
+          OnButtonClick = frameFormulaGridDiversionGridButtonClick
           ExplicitWidth = 578
           ExplicitHeight = 235
         end
         inherited pnlTop: TPanel
-          ExplicitWidth = 578
+          ExplicitTop = -6
           inherited lblSfrObjects: TLabel
             Width = 41
             Height = 16

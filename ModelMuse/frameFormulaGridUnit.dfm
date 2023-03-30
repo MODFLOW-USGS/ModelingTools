@@ -9,16 +9,23 @@ inherited frameFormulaGrid: TframeFormulaGrid
     Width = 447
     TabOrder = 2
     ExplicitTop = 123
+    ExplicitWidth = 447
+    DesignSize = (
+      447
+      41)
     inherited sbAdd: TSpeedButton
       Left = 231
       Hint = 'Add row|Add a row below the bottom row.'
+      ExplicitLeft = 231
     end
     inherited sbInsert: TSpeedButton
       Left = 274
       Hint = 'Insert row|Insert a row above the selected row.'
+      ExplicitLeft = 274
     end
     inherited sbDelete: TSpeedButton
       Left = 317
+      ExplicitLeft = 317
     end
     inherited seNumber: TJvSpinEdit
       Height = 23
@@ -35,6 +42,7 @@ inherited frameFormulaGrid: TframeFormulaGrid
     OnColSize = GridColSize
     OnHorizontalScroll = GridHorizontalScroll
     ExplicitTop = 57
+    ExplicitWidth = 447
     ExplicitHeight = 66
   end
   object pnlTop: TPanel
@@ -45,7 +53,6 @@ inherited frameFormulaGrid: TframeFormulaGrid
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 301
     object edFormula: TLabeledEdit
       Left = 128
       Top = 30

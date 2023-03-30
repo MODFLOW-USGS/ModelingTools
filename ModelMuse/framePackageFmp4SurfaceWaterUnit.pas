@@ -64,10 +64,7 @@ var
   begin
     CanSelect := True;
     rdgSurfaceWaterSelectCell(rdgSurfaceWater, Ord(sfcFrequency), ARow, CanSelect);
-    if CanSelect then
-    begin
-      rdgSurfaceWater.ItemIndex[Ord(sfcFrequency), ARow] := Ord(FarmProperty.FarmOption);
-    end;
+    rdgSurfaceWater.ItemIndex[Ord(sfcFrequency), ARow] := Ord(FarmProperty.FarmOption);
 
     CanSelect := True;
     rdgSurfaceWaterSelectCell(rdgSurfaceWater, Ord(sfcSfac), ARow, CanSelect);
@@ -169,7 +166,7 @@ begin
   if ACol = Ord(sfcOption) then
   begin
     CanSelect := ARow in [Ord(sfrNonRoutDel), Ord(sfrFullReturn)];
-    if CanSelect then
+    if CanSelect and not rdgSurfaceWater.Drawing then
     begin
       Column := rdgSurfaceWater.Columns[ACol];
       if ARow = Ord(sfrNonRoutDel) then
@@ -191,6 +188,26 @@ begin
     if ACol = Ord(sfcFile) then
     begin
       CanSelect := rdgSurfaceWater.ItemIndex[Ord(sfcFrequency), ARow] > 0;
+    end;
+  end;
+  if (ACol = Ord(sfcFrequency)) then
+  begin
+    if ARow in [Ord(sfrSemiLower), Ord(sfrSemiUpper)] then
+    begin
+      CanSelect := DontUseStaticTransient.IndexOf(
+        rdgSurfaceWater.Cells[ACol, Ord(sfrSrd)])  > 0;
+    end;
+    if not rdgSurfaceWater.Drawing then
+    begin
+      Column := rdgSurfaceWater.Columns[ACol];
+      if ARow in [Ord(sfrFullReturn), Ord(sfrSemiLower), Ord(sfrSemiUpper)] then
+      begin
+        Column.PickList := DontUse_Use;
+      end
+      else
+      begin
+        Column.PickList := DontUseStaticTransient;
+      end;
     end;
   end;
 end;

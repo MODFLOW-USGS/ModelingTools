@@ -179,6 +179,8 @@ type
     procedure frameNoReturnFlowsbAddClick(Sender: TObject);
     procedure frameNoReturnFlowsbInsertClick(Sender: TObject);
     procedure frameNoReturnFlowsbDeleteClick(Sender: TObject);
+    procedure frameFormulaGridDiversionGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -1263,6 +1265,13 @@ begin
   DoChange;
 end;
 
+procedure TframeFarm.frameFormulaGridDiversionGridButtonClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
 procedure TframeFarm.frameFormulaGridDiversionGridSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
@@ -1822,9 +1831,9 @@ begin
     tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
       and Packages.FarmSurfaceWater4.IsSelected and
       (Packages.FarmSurfaceWater4.Semi_Routed_Delivery.FarmOption <> foNotUsed);
-//    tabReturnFlowLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
-//      and Packages.FarmSurfaceWater4.IsSelected and
-//      (Packages.FarmSurfaceWater4.s .Semi_Routed_Delivery.FarmOption <> foNotUsed);
+    tabReturnFlowLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
+      and Packages.FarmSurfaceWater4.IsSelected and
+      (Packages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed);
   end;
 
   tabGW_Allocation.TabVisible := frmGoPhast.PhastModel.ModflowPackages.
