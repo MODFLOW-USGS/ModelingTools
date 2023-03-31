@@ -59,7 +59,7 @@ uses
 
 resourcestring
   StrLocation = 'Location';
-  StrProrateDeficiency = 'Prorate Deficiency';
+  KeyWord = 'Key Word';
   StrEfficiency = 'Efficiency';
   StrEfficiencyImproveme = 'Efficiency_Improvement';
   StrDeficiencyScenario = 'Deficiency_Scenario';
@@ -175,7 +175,7 @@ begin
 
     rdgFarms.Cells[Ord(fcTransient), Ord(frName)] := StrFrequency;
     rdgFarms.Cells[Ord(fcArray), Ord(frName)] := StrArrayOrList;
-    rdgFarms.Cells[Ord(fcOther), Ord(frName)] := StrProrateDeficiency;
+    rdgFarms.Cells[Ord(fcOther), Ord(frName)] := KeyWord;
     rdgFarms.Cells[Ord(fcSFac), Ord(frName)] := StrUnitConversionScal;
     rdgFarms.Cells[Ord(fcExternal), Ord(frName)] := StrExternallyGenerated;
     rdgFarms.Cells[Ord(fcExternalSFac), Ord(frName)] := StrExternallyGeneratedSfac;

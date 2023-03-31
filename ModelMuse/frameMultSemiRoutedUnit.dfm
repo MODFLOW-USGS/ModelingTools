@@ -4,6 +4,12 @@ object frameMultSemiRouted: TframeMultSemiRouted
   Width = 640
   Height = 480
   TabOrder = 0
+  object Splitter1: TSplitter
+    Left = 121
+    Top = 0
+    Width = 5
+    Height = 439
+  end
   object pnlBottom: TPanel
     Left = 0
     Top = 439
@@ -22,12 +28,13 @@ object frameMultSemiRouted: TframeMultSemiRouted
       Caption = 'Number'
     end
     object sbAdd: TSpeedButton
-      Left = 534
+      Left = 529
       Top = 6
       Width = 23
       Height = 22
       Hint = 'Add row|Add a row below the bottom row.'
       Anchors = []
+      Enabled = False
       Glyph.Data = {
         F6000000424DF600000000000000760000002800000010000000100000000100
         0400000000008000000000000000000000001000000000000000000000000000
@@ -39,6 +46,7 @@ object frameMultSemiRouted: TframeMultSemiRouted
         FF0FFFFF0FFFFFFFFF0FFFFF00000000000FFFFFFFFFFFFFFFFF}
       ParentShowHint = False
       ShowHint = True
+      OnClick = sbAddClick
     end
     object sbDelete: TSpeedButton
       Left = 598
@@ -76,6 +84,7 @@ object frameMultSemiRouted: TframeMultSemiRouted
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       ParentShowHint = False
       ShowHint = True
+      OnClick = sbDeleteClick
     end
     object seNumber: TJvSpinEdit
       Left = 8
@@ -83,14 +92,15 @@ object frameMultSemiRouted: TframeMultSemiRouted
       Width = 65
       Height = 23
       CheckMinValue = True
+      Enabled = False
       TabOrder = 0
       OnChange = seNumberChange
     end
   end
   object Panel1: TPanel
-    Left = 121
+    Left = 126
     Top = 0
-    Width = 519
+    Width = 514
     Height = 439
     Align = alClient
     Caption = 'Panel1'
@@ -101,7 +111,7 @@ object frameMultSemiRouted: TframeMultSemiRouted
     object pnlName: TPanel
       Left = 1
       Top = 1
-      Width = 517
+      Width = 512
       Height = 41
       Align = alTop
       TabOrder = 0
@@ -121,43 +131,39 @@ object frameMultSemiRouted: TframeMultSemiRouted
         Width = 121
         Height = 23
         TabOrder = 0
+        OnChange = edSemiRouteNameChange
       end
     end
     inline frameFarmDiversions: TframeFarmDiversion
       Left = 1
       Top = 42
-      Width = 517
+      Width = 512
       Height = 396
       Align = alClient
+      Enabled = False
       TabOrder = 1
       ExplicitWidth = 517
       ExplicitHeight = 238
       inherited Panel: TPanel
         Top = 355
-        Width = 517
+        Width = 512
         ExplicitTop = 197
         ExplicitWidth = 517
-        inherited sbAdd: TSpeedButton
-          Left = 429
-          ExplicitLeft = 431
+        inherited lblLocationMethod: TLabel
+          Visible = False
         end
-        inherited sbInsert: TSpeedButton
-          Left = 455
-          ExplicitLeft = 457
-        end
-        inherited sbDelete: TSpeedButton
-          Left = 481
-          ExplicitLeft = 483
+        inherited comboMethod: TComboBox
+          Visible = False
         end
       end
       inherited Grid: TRbwDataGrid4
-        Width = 517
+        Width = 512
         Height = 298
-        ExplicitWidth = 517
-        ExplicitHeight = 140
+        ExplicitWidth = 512
+        ExplicitHeight = 298
       end
       inherited pnlTop: TPanel
-        Width = 517
+        Width = 512
         ExplicitWidth = 517
       end
     end
@@ -185,6 +191,7 @@ object frameMultSemiRouted: TframeMultSemiRouted
       item
         Control = sbAdd
       end>
+    Enabled = False
     Left = 80
     Top = 24
   end

@@ -40,8 +40,8 @@ uses
   GoPhastTypes;
 
 resourcestring
-  StrUse = 'Use';
-  StrOption = 'Option';
+  StrUse = 'Frequency';
+  StrKeyWord = 'Key Word';
   StrPrecipitation = 'Precipitation';
   StrReferenceET = 'Reference ET';
   StrPotentialETRateOf = 'Potential ET rate of bare soil';
@@ -115,7 +115,7 @@ begin
 
     rdgClimate.FixedCols := 1;
     rdgClimate.Cells[Ord(ccFrequency), Ord(crName)] := StrUse;
-    rdgClimate.Cells[Ord(ccOther), Ord(crName)] := StrOption;
+    rdgClimate.Cells[Ord(ccOther), Ord(crName)] := StrKeyWord;
     rdgClimate.Cells[Ord(ccScaleFactor), Ord(crName)] := StrUnitConversionScal;
     rdgClimate.Cells[Ord(ccExternalFile), Ord(crName)] := StrExternallyGenerated;
     rdgClimate.Cells[Ord(ccScaleExternal), Ord(crName)] := StrExternallyGeneratedSfac;

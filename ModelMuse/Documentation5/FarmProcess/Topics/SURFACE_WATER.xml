@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-03-30T12:31:18.204-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-03-31T12:20:17.410-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SURFACE_WATER</title>
   <body>
     <header>
@@ -183,8 +183,8 @@
           <para styleclass="Normal"> &#160; *** If SEMI_ROUTED_DELIVERY_UPPER_LIMIT is NOT specified, it is set to 1E100 &#160;--No upper limit</para>
           <para styleclass="Normal"></para>
           <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
-            <li styleclass="Normal">SEMI_ROUTED_DELIVERY_LOWER_LIMIT Optional, reads NSFR_DELIV records that define the lower limit for each SEMI_ROUTED_DELIVERY in [L3/T]. Only flow greater than the lower limit is available for delivery. Analogous to an SFR flood-control type diversion (IPRIOR = –3). If this keyword is not specified, then the default value is a lower limit of 0.0—that is any flow present is available for delivery.</li>
-            <li styleclass="Normal">SEMI_ROUTED_DELIVERY_UPPER_LIMIT Optional, reads NSFR_DELIV records that define the upper limit for each SEMI_ROUTED_DELIVERY in [L3/T]. The delivery only has access to water flow up to this upper limit. Analogous to an SFR specified-diversion flow (IPRIOR = 0). If this keyword is not specified, then the default value is an upper limit of 1E100.</li>
+            <li styleclass="Normal">SEMI_ROUTED_DELIVERY_LOWER_LIMIT Optional, reads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link> records that define the lower limit for each SEMI_ROUTED_DELIVERY in [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. Only flow greater than the lower limit is available for delivery. Analogous to an SFR flood-control type diversion (IPRIOR = –3). If this keyword is not specified, then the default value is a lower limit of 0.0—that is any flow present is available for delivery.</li>
+            <li styleclass="Normal">SEMI_ROUTED_DELIVERY_UPPER_LIMIT Optional, reads <link displaytype="text" defaultstyle="true" type="topiclink" href="GLOBAL-DIMENSION" anchor="NSFR_DELIV">NSFR_DELIV</link> records that define the upper limit for each SEMI_ROUTED_DELIVERY in [L<text style="font-size:7pt; vertical-align:super;">3</text>/T]. The delivery only has access to water flow up to this upper limit. Analogous to an SFR specified-diversion flow (IPRIOR = 0). If this keyword is not specified, then the default value is an upper limit of 1E100.</li>
           </list>
         </td>
       </tr>

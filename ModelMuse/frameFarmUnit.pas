@@ -8,7 +8,8 @@ uses
   Mask, JvExMask, JvSpin, ExtCtrls, ComCtrls, frameGridUnit,
   frameFormulaGridUnit, JvgPage, frameDeliveryGridUnit, frameFarmDiversionUnit,
   UndoItemsScreenObjects, ModflowFmpFarmUnit, RbwDataGrid4, ModflowFmpCropUnit,
-  ClassificationUnit, RbwParser, ModflowFmpIrrigationUnit;
+  ClassificationUnit, RbwParser, ModflowFmpIrrigationUnit,
+  frameMultSemiRoutedUnit;
 
 type
   TframeFarm = class(TframeScreenObject)
@@ -51,6 +52,10 @@ type
     frameAddedCropDemandRate: TframeFormulaGrid;
     tabNoReturnFlow: TTabSheet;
     frameNoReturnFlow: TframeFormulaGrid;
+    tabDiversionsOwhm2: TTabSheet;
+    frameDiversionsOwhm2: TframeMultSemiRouted;
+    tabReturnFlowOwhm2: TTabSheet;
+    frameReturnFlowsOwhm2: TframeMultSemiRouted;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -497,8 +502,6 @@ begin
       and (FarmSurfaceWater4.NoReturnFlow.FarmOption <> foNotUsed);
 
     SfrPackage := Packages.SfrPackage;
-//    tabDiversionLocation.TabVisible := SfrPackage.IsSelected;
-//    tabReturnFlowLocation.TabVisible := SfrPackage.IsSelected;
 
     tabWaterRights.TabVisible :=
       FarmProcess.SurfaceWaterAllotment = swaPriorWithCalls;
@@ -742,6 +745,9 @@ begin
       tabNonRoutedDelivery.tabVisible := FarmProcess.IsSelected
         or (FarmProcess4.IsSelected and FarmSurfaceWater4.IsSelected
         and (FarmSurfaceWater4.Non_Routed_Delivery.FarmOption <> foNotUsed));
+
+      frameDiversionsOwhm2.GetData(FarmList, dtDiversion);
+      frameReturnFlowsOwhm2.GetData(FarmList, dtReturnFlow);
 
       tabEfficiencyImprovement.TabVisible := FarmProcess4.IsSelected
         and (FarmProcess4.EfficiencyImprovement.FarmOption <> foNotUsed)
@@ -1818,23 +1824,28 @@ begin
 
   Packages := frmGoPhast.PhastModel.ModflowPackages;
 
-  if frmGoPhast.ModelSelection = msModflowFmp then
-  begin
-    tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected;
-    tabReturnFlowLocation.TabVisible := tabDiversionLocation.TabVisible;
-  end
-  else
-  begin
-  {$IFDEF OWHMV2}
-    Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
-  {$ENDIF}
-    tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
-      and Packages.FarmSurfaceWater4.IsSelected and
-      (Packages.FarmSurfaceWater4.Semi_Routed_Delivery.FarmOption <> foNotUsed);
-    tabReturnFlowLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
-      and Packages.FarmSurfaceWater4.IsSelected and
-      (Packages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed);
-  end;
+  tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
+    and (frmGoPhast.ModelSelection = msModflowFmp);
+  tabReturnFlowLocation.TabVisible := tabDiversionLocation.TabVisible;
+
+{$IFDEF OWHMV2}
+  tabDiversionsOwhm2.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+    and frmGoPhast.PhastModel.SfrIsSelected
+    and Packages.FarmSurfaceWater4.IsSelected and
+    (Packages.FarmSurfaceWater4.Semi_Routed_Delivery.FarmOption <> foNotUsed);
+  tabReturnFlowOwhm2.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+    and frmGoPhast.PhastModel.SfrIsSelected
+    and Packages.FarmSurfaceWater4.IsSelected and
+    (Packages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed);
+{$ELSE}
+  tabDiversionsOwhm2.TabVisible := False;
+  tabReturnFlowOwhm.TabVisible := False;
+{$ENDIF}
+//    tabReturnFlowLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
+//      and Packages.FarmSurfaceWater4.IsSelected and
+//      (Packages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed);
+  frameDiversionsOwhm2.InitializeControls;
+  frameReturnFlowsOwhm2.InitializeControls;
 
   tabGW_Allocation.TabVisible := frmGoPhast.PhastModel.ModflowPackages.
     FarmProcess.GroundwaterAllotmentsUsed;
@@ -2266,6 +2277,9 @@ begin
   begin
     frameDelivery.SetData_OwhmV1(FarmList);
   end;
+
+  frameDiversionsOwhm2.SetData(FarmList, dtDiversion);
+  frameReturnFlowsOwhm2.SetData(FarmList, dtReturnFlow);
 
   if FNoReturnFlowChanged then
   begin

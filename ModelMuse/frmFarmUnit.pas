@@ -43,6 +43,7 @@ type
     sbDeleteUnit: TSpeedButton;
     seFarms: TJvSpinEdit;
     lblFarmCount: TLabel;
+    Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);

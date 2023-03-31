@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frameFormulaGridUnit, ExtCtrls,
   Grids, RbwDataGrid4, StdCtrls, Mask, JvExMask, JvSpin, Buttons,
-  UndoItemsScreenObjects, ArgusDataEntry, ModflowFmpFarmUnit;
+  UndoItemsScreenObjects, ArgusDataEntry, ModflowFmpFarmUnit, RbwController;
 
 type
   TDiversionType = (dtDiversion, dtReturnFlow);
@@ -315,16 +315,17 @@ end;
 procedure TframeFarmDiversion.GetData(
   FarmList: TFarmList; DiversionType: TDiversionType);
 var
-  FirstFarm: TFarm;
   DelivReturns: TSemiRoutedDeliveriesAndReturnFlowCollection;
   AFarm: TFarm;
   SrList: TSrCollList;
+  Index: Integer;
 begin
   SrList := TSrCollList.Create;
   try
     for Index := 0 to FarmList.Count - 1 do
     begin
       AFarm := FarmList[Index];
+      DelivReturns := nil;
       case DiversionType of
         dtDiversion:
           begin
@@ -421,12 +422,12 @@ begin
     begin
       if (ACol = Ord(docVertex)+2) then
       begin
-        CanSelect := (Grid.ItemIndex[Ord(docObject)+2,ARow] > 0)
+        CanSelect := (Grid.Objects[Ord(docObject)+2,ARow] <> nil)
           and (Grid.ItemIndex[Ord(docChoice)+2,ARow] = Ord(dpMiddle));
       end
       else if (ACol = Ord(docChoice)+2) then
       begin
-        CanSelect := (Grid.ItemIndex[Ord(docObject)+2,ARow] > 0);
+        CanSelect := (Grid.Objects[Ord(docObject)+2,ARow] <> nil);
       end;
     end;
   end;
@@ -445,8 +446,23 @@ end;
 
 procedure TframeFarmDiversion.GridSetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
+var
+  ItemIndex: Integer;
 begin
   inherited;
+  if (ARow >= 1) and (comboMethod.ItemIndex = Ord(rtObject)-1)
+    and (ACol - 2 = Ord(docObject)) then
+  begin
+    ItemIndex  := Grid.ItemIndex[ACol, ARow];
+    if ItemIndex >= 0 then
+    begin
+      Grid.Objects[ACol, ARow] := comboSfrObjects.Items.Objects[ItemIndex];
+    end
+    else
+    begin
+      Grid.Objects[ACol, ARow] := nil;
+    end;
+  end;
   if (ARow >= 1) and (comboMethod.ItemIndex = Ord(rtObject)-1)
     and (TDiversionObjectColumns(ACol-2) in [docObject, docChoice]) then
   begin
@@ -675,6 +691,7 @@ begin
               begin
                 Grid.Cells[Ord(docObject) + 2, ItemIndex + 1] := DiversionObject.ObjectName;
               end;
+              Grid.Objects[Ord(docObject) + 2, ItemIndex + 1] := DiversionObject.ScreenObject;
               Grid.ItemIndex[Ord(docChoice) + 2, ItemIndex + 1] := Ord(DiversionObject.DiversionPosition);
               if DiversionObject.DiversionPosition = dpMiddle then
               begin
@@ -863,7 +880,10 @@ begin
     if frmGoPhast.PhastModel.SfrIsSelected or frmGoPhast.PhastModel.SwrIsSelected then
     begin
       LocalModel := frmGoPhast.PhastModel;
-      comboSfrObjects.Items.Add('prorate over segments option');
+      if LocalModel.ModelSelection = msModflowFmp then
+      begin
+        comboSfrObjects.Items.Add('prorate over segments option');
+      end;
       for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
       begin
         AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
@@ -931,5 +951,9 @@ begin
 
   LayoutMultiRowEditControls;
 end;
+
+initialization
+
+RegisterClass(TframeFarmDiversion);
 
 end.

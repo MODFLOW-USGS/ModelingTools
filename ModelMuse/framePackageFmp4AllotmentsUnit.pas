@@ -71,7 +71,7 @@ begin
     rdgAllotments.FixedCols := 1;
 
     rdgAllotments.Cells[Ord(acFrequency), Ord(arName)] := StrFrequency;
-    rdgAllotments.Cells[Ord(acOption), Ord(arName)] := 'Option';
+    rdgAllotments.Cells[Ord(acOption), Ord(arName)] := 'Key Word';
     rdgAllotments.Cells[Ord(asSFAC), Ord(arName)] := StrUnitConversionScal;
     rdgAllotments.Cells[Ord(acExtFile), Ord(arName)] := StrExternallyGenerated;
     rdgAllotments.Cells[Ord(acExtSfacFile), Ord(arName)] := StrExternallyGeneratedSfac;
@@ -98,8 +98,6 @@ var
     result := TFarmOption(rdgAllotments.ItemIndex[Ord(acFrequency), Ord(ARow)]);
   end;
   procedure SetFarmProperty(FarmProperty: TFarmProperty; ARow: TAllotmentRows);
-  var
-    CanSelect: Boolean;
   begin
       FarmProperty.FarmOption := RowToFarmOption(ARow);
       FarmProperty.UnitConversionScaleFactor :=

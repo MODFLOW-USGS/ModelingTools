@@ -130,7 +130,7 @@ begin
     rdgSurfaceWater.FixedCols := 1;
 
     rdgSurfaceWater.Cells[Ord(sfcFrequency), Ord(sfrName)] := StrFrequency;
-    rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrName)] := 'Option';
+    rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrName)] := 'Key Word';
     rdgSurfaceWater.Cells[Ord(sfcSfac), Ord(sfrName)] := StrUnitConversionScal;
     rdgSurfaceWater.Cells[Ord(sfcFile), Ord(sfrName)] := StrExternallyGenerated;
     rdgSurfaceWater.Cells[Ord(sfcSfacFile), Ord(sfrName)] := StrExternallyGeneratedSfac;

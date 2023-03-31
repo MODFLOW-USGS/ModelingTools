@@ -24,28 +24,35 @@ type
     edSemiRouteName: TEdit;
     lblSemiRouteName: TLabel;
     Controller: TRbwController;
+    Splitter1: TSplitter;
     procedure tvSRCollectionsChange(Sender: TObject; Node: TTreeNode);
     procedure seNumberChange(Sender: TObject);
+    procedure sbAddClick(Sender: TObject);
+    procedure sbDeleteClick(Sender: TObject);
+    procedure edSemiRouteNameChange(Sender: TObject);
   private
     FSrItem: TMultiSrdItem;
     FFarm: TFarm;
     FDiversionType: TDiversionType;
+//  TSrCollList = TList<TSemiRoutedDeliveriesAndReturnFlowCollection>;
     FSrList: TSrCollList;
     FSfrNode: TTreeNode;
     FFarmNode: TTreeNode;
+    function GetMultiSrd(AFarm: TFarm): TMultiSrdCollection;
     { Private declarations }
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure InitializeControls;
-    // ScreenObjectList contains only objects that define farms.
-    procedure GetData(FarmList: TFarmList;
-      DiversionType: TDiversionType);
+    procedure GetData(FarmList: TFarmList; DiversionType: TDiversionType);
     procedure SetData(FarmList: TFarmList; DiversionType: TDiversionType);
     { Public declarations }
   end;
 
 implementation
+
+uses
+  System.Generics.Collections;
 
 {$R *.dfm}
 
@@ -63,6 +70,16 @@ begin
   inherited;
 end;
 
+procedure TframeMultSemiRouted.edSemiRouteNameChange(Sender: TObject);
+begin
+  if FSrItem <> nil then
+  begin
+    FSrItem.Name := edSemiRouteName.Text;
+    Assert(FSfrNode <> nil);
+    FSfrNode.Text := FSrItem.Name;
+  end;
+end;
+
 procedure TframeMultSemiRouted.GetData(FarmList: TFarmList;
   DiversionType: TDiversionType);
 var
@@ -73,27 +90,39 @@ var
   SRCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
   FarmNode: TTreeNode;
   SRItem: TMultiSrdItem;
+  MultiSrd: TMultiSrdCollection;
 begin
+  tvSRCollections.Items.Clear;
   FDiversionType := DiversionType;
-//  SrList := TSrCollList.Create;
-//  try
-    FarmNode := nil;
-    for FarmIndex := 0 to FarmList.Count - 1 do
+  FarmNode := nil;
+  for FarmIndex := 0 to FarmList.Count - 1 do
+  begin
+    AFarm := FarmList[FarmIndex];
+    FarmNode := tvSRCollections.Items.AddObject(FarmNode, AFarm.FarmName, AFarm);
+    MultiSrd := GetMultiSrd(AFarm);
+
+    for SRIndex := 0 to MultiSrd.Count - 1 do
     begin
-      AFarm := FarmList[FarmIndex];
-      FarmNode := tvSRCollections.Items.AddObject(FarmNode, AFarm.FarmName, AFarm);
-      for  SRIndex := 0 to AFarm.MultiSrd.Count - 1 do
-      begin
-        SRItem := AFarm.MultiSrd[SRIndex];
-        SRCollection := AFarm.MultiSrd[SRIndex].SemiRouted;
-        tvSRCollections.Items.AddChildObject(FarmNode, SRItem.Name, SRItem);
-//        SRNode.Data := SRCollection;
-//        SrList.Add(SRCollection);
-      end;
+      SRItem := MultiSrd[SRIndex];
+      SRCollection := MultiSrd[SRIndex].SemiRouted;
+      tvSRCollections.Items.AddChildObject(FarmNode, SRItem.Name, SRItem);
     end;
-//  finally
-//    SrList.Free;
-//  end;
+  end;
+end;
+
+function TframeMultSemiRouted.GetMultiSrd(AFarm: TFarm): TMultiSrdCollection;
+begin
+  result := nil;
+  case FDiversionType of
+    dtDiversion:
+      begin
+        result := AFarm.MultiSrDeliveries;
+      end;
+    dtReturnFlow:
+      begin
+        result := AFarm.MultiSrReturns;
+      end;
+  end;
 end;
 
 procedure TframeMultSemiRouted.InitializeControls;
@@ -101,10 +130,75 @@ begin
   frameFarmDiversions.InitializeControls
 end;
 
-procedure TframeMultSemiRouted.seNumberChange(Sender: TObject);
+procedure TframeMultSemiRouted.sbAddClick(Sender: TObject);
+var
+  AFarm: TFarm;
+  MultiSrd: TMultiSrdCollection;
+  ANode: TTreeNode;
 begin
-  if FSfrNode <> nil then
+  seNumber.AsInteger := seNumber.AsInteger + 1;
+  seNumberChange(nil);
+end;
+
+procedure TframeMultSemiRouted.sbDeleteClick(Sender: TObject);
+var
+  SrdItem: TMultiSrdItem;
+  NodeIndex: Integer;
+  ANode: TTreeNode;
+  NodeList: TList<TTreeNode>;
+  AnObject: TObject;
+begin
+  NodeList := TList<TTreeNode>.Create;
+  try
+    for NodeIndex := 0 to tvSRCollections.Items.Count - 1 do
+    begin
+      ANode := tvSRCollections.Items[NodeIndex];
+      if ANode.Selected then
+      begin
+        AnObject := ANode.Data;
+        if AnObject is TMultiSrdItem then
+        begin
+          NodeList.Add(ANode);
+        end;
+      end;
+    end;
+    for NodeIndex := 0 to NodeList.Count - 1 do
+    begin
+      ANode := NodeList[NodeIndex];
+      AnObject := ANode.Data;
+      AnObject.Free;
+      tvSRCollections.Items.Delete(ANode);
+    end;
+  finally
+    NodeList.Free;
+  end;
+end;
+
+procedure TframeMultSemiRouted.seNumberChange(Sender: TObject);
+var
+  AFarm: TFarm;
+  MultiSrd: TMultiSrdCollection;
+  ANode: TTreeNode;
+  Item: TMultiSrdItem;
+begin
+  if (FFarmNode <> nil) then
   begin
+    AFarm := FFarmNode.Data;
+    MultiSrd := GetMultiSrd(AFarm);
+    Assert(seNumber.AsInteger >= 0);
+    MultiSrd.Count := seNumber.AsInteger;
+    while MultiSrd.Count > FFarmNode.Count do
+    begin
+      Item := MultiSrd[FFarmNode.Count];
+      Item.Name := 'Item ' + IntToStr(FFarmNode.Count+1);
+      tvSRCollections.Items.AddChildObject(FFarmNode, Item.Name, Item);
+      FFarmNode.Expanded := True;
+    end;
+    while MultiSrd.Count < FFarmNode.Count do
+    begin
+      ANode := tvSRCollections.Items[FFarmNode.AbsoluteIndex + FFarmNode.Count];
+      tvSRCollections.Items.Delete(ANode);
+    end;
   end;
 end;
 
@@ -117,15 +211,17 @@ procedure TframeMultSemiRouted.tvSRCollectionsChange(Sender: TObject;
   Node: TTreeNode);
 var
   AnObject: TObject;
-  SrList: TSrCollList;
   ANode: TTreeNode;
   SfrNode: TTreeNode;
+  Index: Integer;
+  SrItem: TMultiSrdItem;
 begin
   if FSrList.Count >= 0 then
   begin
-    frameFarmDiversions.SetDataForListOfSemiRoutedLists(SrList, FDiversionType);
+    frameFarmDiversions.SetDataForListOfSemiRoutedLists(FSrList, FDiversionType);
   end;
 
+  frameFarmDiversions.Enabled := False;
   FFarm := nil;
   FSrItem := nil;
   FSfrNode := Nil;
@@ -133,40 +229,54 @@ begin
   Controller.Enabled := False;
   if tvSRCollections.SelectionCount = 1 then
   begin
-    AnObject := tvSRCollections.Selected.Data
+    AnObject := tvSRCollections.Selected.Data;
     if AnObject is TFarm then
     begin
       FFarm := TFarm(AnObject);
       FFarmNode := tvSRCollections.Selected;
       Controller.Enabled := True;
+      seNumber.AsInteger := FFarmNode.Count;
       Exit;
     end;
   end;
 
-
+  FSrList.Clear;
   if tvSRCollections.SelectionCount >= 1 then
   begin
-    FSrList.Clear;
+    SfrNode := nil;
     SrItem := nil;
     for Index := 0 to tvSRCollections.Items.Count - 1 do
     begin
       ANode := tvSRCollections.Items[Index];
-      AnObject := ANode.Data;
-      if AnObject is TMultiSrdItem then
+      if ANode.Selected then
       begin
-        SfrNode := ANode;
-        SrItem := TMultiSrdItem(AnObject);
-        SrList.Add((AnObject as TMultiSrdItem).SemiRouted);
+        AnObject := ANode.Data;
+        if AnObject is TMultiSrdItem then
+        begin
+          SfrNode := ANode;
+          SrItem := TMultiSrdItem(AnObject);
+          FSrList.Add((AnObject as TMultiSrdItem).SemiRouted);
+        end;
       end;
     end;
-    if SrList.Count = 1 then
+    if FSrList.Count = 1 then
     begin
       FSfrNode := SfrNode;
       FSrItem := SrItem;
       edSemiRouteName.Enabled := True;
     end;
-    frameFarmDiversions.GetDataFromListOfSemiRoutedLists(SrList, FDiversionType);
+    if FSrItem <> nil then
+    begin
+      edSemiRouteName.Text := FSrItem.Name;
+    end
+    else
+    begin
+      edSemiRouteName.Text := '';
+    end;
+    frameFarmDiversions.GetDataFromListOfSemiRoutedLists(FSrList, FDiversionType);
   end;
+  frameFarmDiversions.Enabled := FSrList.Count >= 1;
+
 end;
 
 end.

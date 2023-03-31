@@ -5425,7 +5425,7 @@ Type
     property SurfaceWaterPrints: TSurfaceWaterPrints read FSurfaceWaterPrints
       write SetSurfaceWaterPrints;
 
-    // SEMI_ROUTED_DELIVERY_LOWER_LIMIT and SEMI_ROUTED_DELIVERY_UPPER_LIMIT
+    // SEMI_ROUTED_DELIVERY
     // Can use scale factors
     property Semi_Routed_Delivery: TFarmProperty read FSemi_Routed_Delivery
       write SetSemi_Routed_Delivery;

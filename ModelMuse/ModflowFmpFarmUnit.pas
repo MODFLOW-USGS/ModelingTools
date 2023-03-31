@@ -526,6 +526,7 @@ type
     FAddedCropDemandFlux: TFarmEfficiencyCollection;
     FNoReturnFlow: TNoReturnCollection;
     FMultiSrd: TMultiSrdCollection;
+    FMultiSrReturns: TMultiSrdCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -558,6 +559,7 @@ type
     procedure SetAddedCropDemandRate(const Value: TFarmEfficiencyCollection);
     procedure SetNoReturnFlow(const Value: TNoReturnCollection);
     procedure SetMultiSrd(const Value: TMultiSrdCollection);
+    procedure SetMultiSrReturns(const Value: TMultiSrdCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -664,7 +666,15 @@ type
       stored False
     {$ENDIF}
       ;
-      property MultiSrd: TMultiSrdCollection read FMultiSrd write SetMultiSrd
+      // SEMI_ROUTED_DELIVERY
+      property MultiSrDeliveries: TMultiSrdCollection read FMultiSrd write SetMultiSrd
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      // SEMI_ROUTED_RETURN
+      property MultiSrReturns: TMultiSrdCollection read FMultiSrReturns
+        write SetMultiSrReturns
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1434,7 +1444,8 @@ begin
     AddedCropDemandFlux := SourceFarm.AddedCropDemandFlux;
     AddedCropDemandRate := SourceFarm.AddedCropDemandRate;
     NoReturnFlow := SourceFarm.NoReturnFlow;
-    MultiSrd := SourceFarm.MultiSrd;
+    MultiSrDeliveries := SourceFarm.MultiSrDeliveries;
+    MultiSrReturns := SourceFarm.MultiSrReturns;
   end
   else
   begin
@@ -1491,10 +1502,12 @@ begin
   FAddedCropDemandRate := TFarmEfficiencyCollection.Create(LocalModel);
   FNoReturnFlow := TNoReturnCollection.Create(LocalModel);
   FMultiSrd := TMultiSrdCollection.Create(LocalModel);
+  FMultiSrReturns := TMultiSrdCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FMultiSrReturns.Free;
   FMultiSrd.Free;
   FNoReturnFlow.Free;
   FAddedCropDemandFlux.Free;
@@ -1573,8 +1586,8 @@ begin
       and AddedCropDemandFlux.IsSame(SourceFarm.AddedCropDemandFlux)
       and AddedCropDemandRate.IsSame(SourceFarm.AddedCropDemandRate)
       and NoReturnFlow.IsSame(SourceFarm.NoReturnFlow)
-      and MultiSrd.IsSame(SourceFarm.MultiSrd)
-
+      and MultiSrDeliveries.IsSame(SourceFarm.MultiSrDeliveries)
+      and MultiSrReturns.IsSame(SourceFarm.MultiSrReturns)
   end;
 
 end;
@@ -1681,6 +1694,11 @@ end;
 procedure TFarm.SetMultiSrd(const Value: TMultiSrdCollection);
 begin
   FMultiSrd.Assign(Value);
+end;
+
+procedure TFarm.SetMultiSrReturns(const Value: TMultiSrdCollection);
+begin
+  FMultiSrReturns.Assign(Value);
 end;
 
 procedure TFarm.SetNoReturnFlow(const Value: TNoReturnCollection);
@@ -2217,6 +2235,11 @@ begin
         end;
         PriorSegment := ASegment;
       end;
+      if (Result.Segment > 0) and (Result.Reach = 0)
+        and (DiversionObject.DiversionPosition = dpEnd) then
+      begin
+        Result.Reach := ReachNumber;
+      end;
     end;
   end;
 end;
@@ -2497,10 +2520,14 @@ end;
 { TMultiSrdItem }
 
 procedure TMultiSrdItem.Assign(Source: TPersistent);
+var
+  OtherItem: TMultiSrdItem;
 begin
   if Source is TMultiSrdItem then
   begin
-    SemiRouted := TMultiSrdItem(Source).SemiRouted;
+    OtherItem := TMultiSrdItem(Source);
+    SemiRouted := OtherItem.SemiRouted;
+    Name := OtherItem.Name;
     InvalidateModel;
   end
   else
@@ -2533,7 +2560,7 @@ begin
   if result then
   begin
     OtherItem := TMultiSrdItem(AnotherItem);
-    result := SemiRouted.IsSame(OtherItem.SemiRouted
+    result := SemiRouted.IsSame(OtherItem.SemiRouted)
       and (Name = OtherItem.Name);
   end;
 end;

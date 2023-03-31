@@ -75,7 +75,7 @@ resourcestring
   StrNoCropMeansBareS = 'No crop means bare soil';
   StrETIrrigFracCorr = 'ET irrig. frac. correction';
   StrGroundwaterRootInt = 'Groundwater Root Interaction';
-  StrOption = 'Option';
+  StrOption = 'Key Word';
 
 var
   ByCropIrrigate: TStringList;
