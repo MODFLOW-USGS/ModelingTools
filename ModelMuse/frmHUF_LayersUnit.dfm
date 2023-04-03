@@ -4,8 +4,8 @@ inherited frmHUF_Layers: TfrmHUF_Layers
   Caption = 'MODFLOW Hydrogeologic Units'
   ClientHeight = 353
   ClientWidth = 525
-  ExplicitWidth = 541
-  ExplicitHeight = 392
+  ExplicitWidth = 537
+  ExplicitHeight = 391
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 137
@@ -22,6 +22,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
     Height = 312
     Align = alLeft
     TabOrder = 0
+    ExplicitHeight = 311
     object GridPanel1: TGridPanel
       Left = 1
       Top = 279
@@ -59,6 +60,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
           Value = 100.000000000000000000
         end>
       TabOrder = 1
+      ExplicitTop = 278
       DesignSize = (
         135
         32)
@@ -164,6 +166,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       ReadOnly = True
       TabOrder = 0
       OnChange = tvHufLayersChange
+      ExplicitHeight = 277
     end
   end
   object pcMain: TPageControl
@@ -175,6 +178,8 @@ inherited frmHUF_Layers: TfrmHUF_Layers
     Align = alClient
     TabOrder = 1
     OnChange = pcMainChange
+    ExplicitWidth = 379
+    ExplicitHeight = 311
     object Properties: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Properties_TabHUF'
@@ -192,13 +197,14 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       object lblHorizontalAnisotropy: TLabel
         Left = 3
         Top = 65
-        Width = 327
+        Width = 323
         Height = 36
         Anchors = [akLeft, akTop, akRight]
         Caption = 
           'Ratio of hydraulic conductivity along columns to hydraulic condu' +
           'ctivity along rows (HGUHANI)  '
         WordWrap = True
+        ExplicitWidth = 327
       end
       object lblVK_Method: TLabel
         Left = 3
@@ -248,7 +254,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       object comboVK_Method: TJvImageComboBox
         Left = 3
         Top = 176
-        Width = 369
+        Width = 365
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -424,6 +430,8 @@ inherited frmHUF_Layers: TfrmHUF_Layers
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 371
+        ExplicitHeight = 278
       end
     end
     object tabPrint: TTabSheet
@@ -441,7 +449,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       object clbItemsToPrint: TCheckListBox
         Left = 0
         Top = 35
-        Width = 375
+        Width = 379
         Height = 244
         Align = alBottom
         Anchors = [akLeft, akTop, akRight, akBottom]
@@ -570,11 +578,13 @@ inherited frmHUF_Layers: TfrmHUF_Layers
     Height = 41
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 311
+    ExplicitWidth = 521
     DesignSize = (
       525
       41)
     object btnHelp: TBitBtn
-      Left = 184
+      Left = 180
       Top = 4
       Width = 108
       Height = 33
@@ -583,9 +593,10 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 176
     end
     object btnOK: TBitBtn
-      Left = 298
+      Left = 294
       Top = 4
       Width = 108
       Height = 33
@@ -594,9 +605,10 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 290
     end
     object btnCancel: TBitBtn
-      Left = 412
+      Left = 408
       Top = 4
       Width = 108
       Height = 33
@@ -604,6 +616,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 404
     end
   end
 end

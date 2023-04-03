@@ -4,9 +4,8 @@ inherited frmChildModels: TfrmChildModels
   Caption = 'Child Models'
   ClientHeight = 547
   ClientWidth = 471
-  ExplicitWidth = 487
-  ExplicitHeight = 586
-  PixelsPerInch = 96
+  ExplicitWidth = 483
+  ExplicitHeight = 585
   TextHeight = 18
   object Panel1: TPanel
     Left = 0
@@ -15,6 +14,7 @@ inherited frmChildModels: TfrmChildModels
     Height = 456
     Align = alLeft
     TabOrder = 0
+    ExplicitHeight = 455
     object tvChildModels: TTreeView
       Left = 1
       Top = 1
@@ -26,6 +26,7 @@ inherited frmChildModels: TfrmChildModels
       TabOrder = 0
       OnChange = tvChildModelsChange
       OnChanging = tvChildModelsChanging
+      ExplicitHeight = 412
     end
     object Panel3: TPanel
       Left = 1
@@ -34,6 +35,7 @@ inherited frmChildModels: TfrmChildModels
       Height = 41
       Align = alBottom
       TabOrder = 1
+      ExplicitTop = 413
       object btnAdd: TSpeedButton
         Left = 23
         Top = 6
@@ -105,6 +107,8 @@ inherited frmChildModels: TfrmChildModels
     ActivePage = tabDiscretization
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 354
+    ExplicitHeight = 455
     object tabBasic: TTabSheet
       Caption = 'Basic'
       DesignSize = (
@@ -137,19 +141,21 @@ inherited frmChildModels: TfrmChildModels
       object edModelName: TLabeledEdit
         Left = 4
         Top = 32
-        Width = 343
+        Width = 339
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         EditLabel.Width = 126
         EditLabel.Height = 18
         EditLabel.Caption = 'Child model name'
         TabOrder = 0
+        Text = ''
         OnChange = edModelNameChange
+        ExplicitWidth = 343
       end
       object comboBottomUnit: TComboBox
         Left = 3
         Top = 85
-        Width = 344
+        Width = 340
         Height = 26
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
@@ -184,7 +190,7 @@ inherited frmChildModels: TfrmChildModels
       object rgStartingHeads: TRadioGroup
         Left = 3
         Top = 248
-        Width = 344
+        Width = 340
         Height = 49
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Starting heads (ISHFLG)'
@@ -195,6 +201,7 @@ inherited frmChildModels: TfrmChildModels
           'Parent model')
         TabOrder = 4
         OnClick = rgStartingHeadsClick
+        ExplicitWidth = 344
       end
     end
     object tabDiscretization: TTabSheet
@@ -298,6 +305,8 @@ inherited frmChildModels: TfrmChildModels
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 346
+        ExplicitHeight = 395
         RowHeights = (
           24
           24
@@ -313,6 +322,7 @@ inherited frmChildModels: TfrmChildModels
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 346
         object rdeDiscretization: TRbwDataEntry
           Left = 136
           Top = -1
@@ -340,11 +350,12 @@ inherited frmChildModels: TfrmChildModels
       object lblMaxIterations: TLabel
         Left = 3
         Top = 63
-        Width = 324
+        Width = 320
         Height = 36
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Maximum number of LGR iterations in two-way coupling (MXLGRITER)'
         WordWrap = True
+        ExplicitWidth = 324
       end
       object lblRelaxHeads: TLabel
         Left = 3
@@ -388,7 +399,7 @@ inherited frmChildModels: TfrmChildModels
       object rgPrintIterations: TRadioGroup
         Left = 0
         Top = 134
-        Width = 347
+        Width = 343
         Height = 81
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Print maximum head and flux change (IOUTLGR)'
@@ -398,6 +409,7 @@ inherited frmChildModels: TfrmChildModels
           'Don'#39't print')
         TabOrder = 2
         OnClick = rgPrintIterationsClick
+        ExplicitWidth = 347
       end
       object rdeRelaxHeads: TRbwDataEntry
         Left = 3
@@ -456,7 +468,7 @@ inherited frmChildModels: TfrmChildModels
       object rgCouplingMethod: TRadioGroup
         Left = 3
         Top = 3
-        Width = 344
+        Width = 340
         Height = 54
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Coupling method (MXLGRITER)'
@@ -465,6 +477,7 @@ inherited frmChildModels: TfrmChildModels
           'Two way')
         TabOrder = 0
         OnClick = rgCouplingMethodClick
+        ExplicitWidth = 344
       end
     end
   end
@@ -475,11 +488,13 @@ inherited frmChildModels: TfrmChildModels
     Height = 91
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 455
+    ExplicitWidth = 467
     DesignSize = (
       471
       91)
     object btnHelp: TBitBtn
-      Left = 120
+      Left = 116
       Top = 47
       Width = 108
       Height = 33
@@ -488,9 +503,10 @@ inherited frmChildModels: TfrmChildModels
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 112
     end
     object btnOK: TBitBtn
-      Left = 234
+      Left = 230
       Top = 47
       Width = 108
       Height = 33
@@ -499,9 +515,10 @@ inherited frmChildModels: TfrmChildModels
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
+      ExplicitLeft = 226
     end
     object btnCancel: TBitBtn
-      Left = 348
+      Left = 344
       Top = 47
       Width = 108
       Height = 33
@@ -509,6 +526,7 @@ inherited frmChildModels: TfrmChildModels
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
+      ExplicitLeft = 340
     end
     object cbSaveBFH: TCheckBox
       Left = 1

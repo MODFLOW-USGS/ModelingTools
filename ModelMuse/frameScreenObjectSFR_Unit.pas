@@ -7,10 +7,10 @@ uses System.UITypes,
   GR32, // TBitmap32, and TFloatRect are declared in GR32.
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, ArgusDataEntry, Grids, RbwDataGrid4,
-  Mask, JvExMask, JvSpin, frameFlowTableUnit, JvPageList, JvExControls,
+  Mask, JvExMask, JvSpin, frameFlowTableUnit, JvExControls,
   frameCrossSectionUnit, Buttons, ZoomBox2, JvExStdCtrls, JvCombobox,
   JvListComb, RbwParser, UndoItemsScreenObjects, ModflowSfrUnit, JvToolEdit,
-  GoPhastTypes, JvPageListTreeView, frameScreenObjectUnit, frameGridUnit,
+  GoPhastTypes, frameScreenObjectUnit, frameGridUnit,
   GrayTabs, framePestObsUnit;
 
 type

@@ -9,7 +9,7 @@ interface
 
 uses
   SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, ComCtrls, Spin, Mask,
+  Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, Mask,
   JvExMask, JvSpin;
 
 type

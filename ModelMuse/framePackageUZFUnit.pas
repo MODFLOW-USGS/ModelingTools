@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, framePackageLayerChoiceUnit, RbwController, StdCtrls, ExtCtrls,
-  ArgusDataEntry, framePackageTransientLayerChoiceUnit,
+  ArgusDataEntry,
   ModflowPackageSelectionUnit, CheckLst;
 
 type

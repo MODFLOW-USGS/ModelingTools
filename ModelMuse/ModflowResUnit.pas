@@ -2,9 +2,9 @@ unit ModflowResUnit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
+uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes;
 
 type
   TResRecord = record
@@ -199,7 +199,7 @@ type
 
 implementation
 
-uses RbwParser, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles, 
+uses RbwParser, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
   frmGoPhastUnit;
 
 resourcestring

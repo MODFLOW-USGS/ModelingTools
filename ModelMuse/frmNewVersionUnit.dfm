@@ -2,8 +2,8 @@ inherited frmNewVersion: TfrmNewVersion
   Caption = 'New Version'
   ClientHeight = 171
   ClientWidth = 354
-  ExplicitWidth = 370
-  ExplicitHeight = 210
+  ExplicitWidth = 366
+  ExplicitHeight = 209
   TextHeight = 18
   object Image1: TImage
     Left = 8

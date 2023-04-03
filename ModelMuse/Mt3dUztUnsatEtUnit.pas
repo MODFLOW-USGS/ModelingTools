@@ -3,10 +3,10 @@ unit Mt3dUztUnsatEtUnit;
 interface
 
 uses
-  Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes, IntListUnit,
-  ModflowMnw2Unit, Mt3dmsChemUnit;
+  Windows, SysUtils, Classes, OrderedCollectionUnit,
+  ModflowBoundaryUnit, ModflowCellUnit,
+  SubscriptionUnit, RbwParser, GoPhastTypes,
+  Mt3dmsChemUnit;
 
 type
   // @name represents an MT3DMS concentration point source for one time interval.
@@ -59,7 +59,7 @@ implementation
 
 uses
   Mt3dmsChemSpeciesUnit, PhastModelUnit, frmGoPhastUnit, ModflowTimeUnit,
-  AbstractGridUnit, ScreenObjectUnit, ModflowPackagesUnit;
+  ScreenObjectUnit;
 
 resourcestring
   StrUnsatEtConcentration = ' unsaturated ET concentration';

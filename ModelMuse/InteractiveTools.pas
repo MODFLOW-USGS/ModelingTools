@@ -1272,10 +1272,10 @@ const
 
 implementation
 
-uses Math, CursorsFoiledAgain, GR32_Polygons, frmGoPhastUnit, frmSubdivideUnit,
-  frmSetSpacingUnit, frmScreenObjectPropertiesUnit, BigCanvasMethods,
-  LayerStructureUnit, DataSetUnit, Contnrs, frmPointValuesUnit,
-  Dialogs, frmFishnetElementPropertiesUnit, MeshRenumbering, GR32_Backends,
+uses Math, CursorsFoiledAgain, GR32_Polygons, frmGoPhastUnit,
+  frmScreenObjectPropertiesUnit, BigCanvasMethods,
+  DataSetUnit, Contnrs, frmPointValuesUnit,
+  Dialogs, frmFishnetElementPropertiesUnit, GR32_Backends,
   frmNodeLocationUnit, MeshRenumberingTypes;
 
 resourcestring

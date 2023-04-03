@@ -7,8 +7,8 @@ uses
   Controls, Forms, Dialogs, frameScreenObjectUnit, StdCtrls,
   Mask, JvExMask, JvSpin, ExtCtrls, ComCtrls, frameGridUnit,
   frameFormulaGridUnit, JvgPage, frameDeliveryGridUnit, frameFarmDiversionUnit,
-  UndoItemsScreenObjects, ModflowFmpFarmUnit, RbwDataGrid4, ModflowFmpCropUnit,
-  ClassificationUnit, RbwParser, ModflowFmpIrrigationUnit,
+  ModflowFmpFarmUnit, RbwDataGrid4, ModflowFmpCropUnit,
+  RbwParser, ModflowFmpIrrigationUnit,
   frameMultSemiRoutedUnit;
 
 type
@@ -303,7 +303,7 @@ implementation
 
 uses
   GoPhastTypes, frmGoPhastUnit,
-  ModflowTimeUnit, Generics.Collections, ScreenObjectUnit, DataSetUnit,
+  ModflowTimeUnit, Generics.Collections,
   PhastModelUnit, ModflowPackagesUnit, ModflowPackageSelectionUnit,
   ModflowFmpAllotmentUnit, frmFormulaUnit, frmConvertChoiceUnit,
   ModflowFmpBaseClasses;

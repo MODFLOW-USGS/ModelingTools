@@ -5,8 +5,8 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
   ClientHeight = 398
   ClientWidth = 485
   OnClose = FormClose
-  ExplicitWidth = 503
-  ExplicitHeight = 443
+  ExplicitWidth = 497
+  ExplicitHeight = 436
   PixelsPerInch = 120
   TextHeight = 18
   object pnlButtons: TPanel
@@ -17,11 +17,13 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
     Align = alBottom
     ParentColor = True
     TabOrder = 0
+    ExplicitTop = 356
+    ExplicitWidth = 481
     DesignSize = (
       485
       41)
     object btnOK: TBitBtn
-      Left = 152
+      Left = 148
       Top = 2
       Width = 220
       Height = 33
@@ -49,9 +51,10 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 144
     end
     object btnCancel: TBitBtn
-      Left = 378
+      Left = 374
       Top = 2
       Width = 91
       Height = 33
@@ -59,9 +62,10 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 370
     end
     object btnHelp: TBitBtn
-      Left = 55
+      Left = 51
       Top = 2
       Width = 91
       Height = 33
@@ -70,6 +74,7 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 47
     end
   end
   inline frameTimeGrid: TframeGrid
@@ -80,13 +85,13 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
     Align = alClient
     TabOrder = 1
     ExplicitTop = 65
-    ExplicitWidth = 485
-    ExplicitHeight = 292
+    ExplicitWidth = 481
+    ExplicitHeight = 291
     inherited Panel: TPanel
       Top = 251
       Width = 485
-      ExplicitTop = 251
-      ExplicitWidth = 485
+      ExplicitTop = 250
+      ExplicitWidth = 481
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -94,15 +99,15 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 252
+        Left = 250
         ExplicitLeft = 252
       end
       inherited sbInsert: TSpeedButton
-        Left = 298
+        Left = 296
         ExplicitLeft = 298
       end
       inherited sbDelete: TSpeedButton
-        Left = 345
+        Left = 342
         ExplicitLeft = 345
       end
       inherited seNumber: TJvSpinEdit
@@ -118,6 +123,7 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -141,6 +147,7 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -162,8 +169,8 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 485
-      ExplicitHeight = 251
+      ExplicitWidth = 481
+      ExplicitHeight = 250
     end
   end
   object pnlTop: TPanel
@@ -173,6 +180,7 @@ inherited frmTimeUnitsConverter: TfrmTimeUnitsConverter
     Height = 65
     Align = alTop
     TabOrder = 2
+    ExplicitWidth = 481
     object lblInputUnits: TLabel
       Left = 8
       Top = 7

@@ -7,8 +7,8 @@ inherited frmUnits: TfrmUnits
   Caption = 'PHAST Title and Units'
   ClientHeight = 632
   ClientWidth = 723
-  ExplicitWidth = 741
-  ExplicitHeight = 677
+  ExplicitWidth = 735
+  ExplicitHeight = 670
   PixelsPerInch = 120
   TextHeight = 18
   object lblTitle: TLabel
@@ -173,12 +173,13 @@ inherited frmUnits: TfrmUnits
   object memoTitle: TMemo
     Left = 8
     Top = 40
-    Width = 710
+    Width = 706
     Height = 104
     Anchors = [akLeft, akTop, akRight]
     ScrollBars = ssBoth
     TabOrder = 0
     WordWrap = False
+    ExplicitWidth = 702
   end
   object btnOK: TBitBtn
     Left = 528
@@ -208,6 +209,7 @@ inherited frmUnits: TfrmUnits
     NumGlyphs = 2
     TabOrder = 21
     OnClick = btnOKClick
+    ExplicitTop = 589
   end
   object btnCancel: TBitBtn
     Left = 624
@@ -218,6 +220,7 @@ inherited frmUnits: TfrmUnits
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 22
+    ExplicitTop = 589
   end
   object comboTimeUnits: TComboBox
     Left = 328
@@ -233,6 +236,7 @@ inherited frmUnits: TfrmUnits
       'hours'
       'days'
       'years')
+    ExplicitTop = 149
   end
   object comboHorizGridUnits: TComboBox
     Left = 328
@@ -250,6 +254,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 180
   end
   object comboVertGridUnits: TComboBox
     Left = 328
@@ -267,6 +272,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 211
   end
   object comboHeadUnits: TComboBox
     Left = 328
@@ -284,6 +290,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 242
   end
   object comboHydraulicCondLengthUnits: TComboBox
     Left = 328
@@ -301,6 +308,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 273
   end
   object comboHydraulicCondTimeUnits: TComboBox
     Left = 541
@@ -316,6 +324,7 @@ inherited frmUnits: TfrmUnits
       'hour'
       'day'
       'year')
+    ExplicitTop = 273
   end
   object comboSpecificStorageUnits: TComboBox
     Left = 328
@@ -333,6 +342,7 @@ inherited frmUnits: TfrmUnits
       '1/centimeters'
       '1/meters'
       '1/kilometers')
+    ExplicitTop = 304
   end
   object comboDispersivityUnits: TComboBox
     Left = 328
@@ -350,6 +360,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 335
   end
   object comboFluxLengthUnits: TComboBox
     Left = 328
@@ -367,6 +378,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 366
   end
   object comboFluxTimeUnits: TComboBox
     Left = 541
@@ -382,6 +394,7 @@ inherited frmUnits: TfrmUnits
       'hour'
       'day'
       'year')
+    ExplicitTop = 366
   end
   object comboLeakyHydCondLengthUnits: TComboBox
     Left = 328
@@ -399,6 +412,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 397
   end
   object comboLeakyHydCondTimeUnits: TComboBox
     Left = 541
@@ -414,6 +428,7 @@ inherited frmUnits: TfrmUnits
       'hour'
       'day'
       'year')
+    ExplicitTop = 397
   end
   object comboLeakyThicknessUnits: TComboBox
     Left = 328
@@ -431,6 +446,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 428
   end
   object comboWellDiameterUnits: TComboBox
     Left = 328
@@ -448,6 +464,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 459
   end
   object comboWellFlowVolumeUnits: TComboBox
     Left = 328
@@ -467,6 +484,7 @@ inherited frmUnits: TfrmUnits
       'centimeters^3'
       'meters^3'
       'kilometers^3')
+    ExplicitTop = 490
   end
   object comboWellFlowTimeUnits: TComboBox
     Left = 541
@@ -482,6 +500,7 @@ inherited frmUnits: TfrmUnits
       'hour'
       'day'
       'year')
+    ExplicitTop = 490
   end
   object comboRiverHydCondLengthUnits: TComboBox
     Left = 328
@@ -499,6 +518,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 521
   end
   object comboRiverHydCondTimeUnits: TComboBox
     Left = 541
@@ -514,6 +534,7 @@ inherited frmUnits: TfrmUnits
       'hour'
       'day'
       'year')
+    ExplicitTop = 521
   end
   object comboRiverThicknessUnits: TComboBox
     Left = 328
@@ -531,6 +552,7 @@ inherited frmUnits: TfrmUnits
       'centimeters'
       'meters'
       'kilometers')
+    ExplicitTop = 552
   end
   object btnHelp: TBitBtn
     Left = 433
@@ -543,5 +565,6 @@ inherited frmUnits: TfrmUnits
     NumGlyphs = 2
     TabOrder = 20
     OnClick = btnHelpClick
+    ExplicitTop = 589
   end
 end

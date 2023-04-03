@@ -143,7 +143,7 @@ implementation
 uses ClassificationUnit, PhastModelUnit, FastGEO,
   ConvexHullUnit, GPC_Classes, gpc, RbwParser, StrUtils,
   frmErrorsAndWarningsUnit, GIS_Functions, ModelMuseUtilities, frmGoPhastUnit,
-  GoPhastTypes, frameCustomColorUnit, ModflowTimeUnit,
+  GoPhastTypes, ModflowTimeUnit,
   Generics.Collections, ModflowWellUnit, ModflowBoundaryUnit,
   ModflowGhbUnit, ModflowDrnUnit, ModflowDrtUnit, ModflowRivUnit,
   ModflowConstantHeadBoundaryUnit, ModflowEvtUnit, ModflowEtsUnit,

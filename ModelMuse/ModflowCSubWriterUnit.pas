@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
-  PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed,
+  PhastModelUnit, DataSetUnit, ModflowCSubInterbed,
   System.Classes, ModflowCellUnit, ModflowCsubUnit, GoPhastTypes,
   System.Generics.Collections, ScreenObjectUnit, ModflowBoundaryDisplayUnit,
   Modflow6ObsUnit;
@@ -66,7 +66,7 @@ implementation
 
 uses
   frmProgressUnit, frmErrorsAndWarningsUnit,
-  Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit, PestParamRoots;
+  Vcl.Forms, Modflow6ObsWriterUnit, PestParamRoots;
 
 resourcestring
   StrNoTransientCSUBDa = 'No Transient CSUB data defined';

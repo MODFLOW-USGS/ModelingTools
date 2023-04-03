@@ -4,9 +4,8 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
   Caption = 'MODFLOW Output Control'
   ClientHeight = 403
   ClientWidth = 604
-  ExplicitWidth = 620
-  ExplicitHeight = 442
-  PixelsPerInch = 96
+  ExplicitWidth = 616
+  ExplicitHeight = 441
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121
@@ -27,11 +26,13 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
     Height = 41
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 361
+    ExplicitWidth = 600
     DesignSize = (
       604
       41)
     object btnHelp: TBitBtn
-      Left = 340
+      Left = 336
       Top = 6
       Width = 82
       Height = 27
@@ -40,9 +41,10 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 332
     end
     object btnOK: TBitBtn
-      Left = 428
+      Left = 424
       Top = 6
       Width = 82
       Height = 27
@@ -51,9 +53,10 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 420
     end
     object btnCancel: TBitBtn
-      Left = 516
+      Left = 512
       Top = 6
       Width = 83
       Height = 27
@@ -61,6 +64,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 508
     end
   end
   object pltrPageNavigator: TJvPageListTreeView
@@ -89,6 +93,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       044D00540033004400240000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
       FF00000000000000000103470057005400}
     Items.Links = {06000000000000000100000002000000030000000400000000000000}
+    ExplicitHeight = 361
   end
   object jvPages: TJvPageList
     Left = 131
@@ -161,10 +166,11 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       object memoComments: TMemo
         Left = 6
         Top = 168
-        Width = 464
+        Width = 460
         Height = 188
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 4
+        ExplicitWidth = 464
       end
       object cbPrintObservations: TCheckBox
         Left = 6
@@ -253,9 +259,15 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
           Caption = 'Listing file format (IHEDFM)'
           ExplicitWidth = 192
         end
+        inherited comboP: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboREdit: TJvImageComboBox
+          ItemIndex = -1
+        end
         inherited comboFrequency: TJvImageComboBox
           Left = 22
-          Width = 448
+          Width = 444
           Anchors = [akLeft, akTop, akRight]
           DroppedWidth = 448
           Items = <
@@ -270,7 +282,16 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
               Text = 'Last time step of each N'#39'th stress period'
             end>
           ExplicitLeft = 22
-          ExplicitWidth = 448
+          ExplicitWidth = 444
+        end
+        inherited comboPrintStyle: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboPrintFormat: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboSaveType: TJvImageComboBox
+          ItemIndex = -1
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -347,8 +368,14 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
           Caption = 'Listing file format (IDDNFM)'
           ExplicitWidth = 193
         end
+        inherited comboP: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboREdit: TJvImageComboBox
+          ItemIndex = -1
+        end
         inherited comboFrequency: TJvImageComboBox
-          Width = 448
+          Width = 444
           Anchors = [akLeft, akTop, akRight]
           DroppedWidth = 448
           Items = <
@@ -362,7 +389,16 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
               Indent = 0
               Text = 'Last time step of each N'#39'th stress period'
             end>
-          ExplicitWidth = 448
+          ExplicitWidth = 444
+        end
+        inherited comboPrintStyle: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboPrintFormat: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboSaveType: TJvImageComboBox
+          ItemIndex = -1
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -461,7 +497,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       object comboFrequency: TJvImageComboBox
         Left = 16
         Top = 77
-        Width = 448
+        Width = 444
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -683,8 +719,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       HelpType = htKeyword
       HelpKeyword = 'Head_and_Drawdown_Panes'
       Caption = 'jvspGwt'
-      ExplicitWidth = 173
-      ExplicitHeight = 160
       inline frameGWT: TframeOutputControl
         Left = 0
         Top = 0
@@ -700,8 +734,8 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         ParentFont = False
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 173
-        ExplicitHeight = 160
+        ExplicitWidth = 473
+        ExplicitHeight = 362
         inherited lblOutputType: TLabel
           Width = 158
           Caption = 'Groundwater Transport'
@@ -709,6 +743,24 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         end
         inherited lblDot: TLabel
           Font.Pitch = fpVariable
+        end
+        inherited comboP: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboREdit: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboFrequency: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboPrintStyle: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboPrintFormat: TJvImageComboBox
+          ItemIndex = -1
+        end
+        inherited comboSaveType: TJvImageComboBox
+          ItemIndex = -1
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <

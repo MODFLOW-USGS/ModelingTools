@@ -25,13 +25,13 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     Align = alBottom
     ParentColor = True
     TabOrder = 0
-    ExplicitTop = 375
-    ExplicitWidth = 493
+    ExplicitTop = 383
+    ExplicitWidth = 495
     DesignSize = (
       499
       49)
     object btnCancel: TBitBtn
-      Left = 384
+      Left = 380
       Top = 6
       Width = 83
       Height = 33
@@ -39,10 +39,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 390
+      ExplicitLeft = 376
     end
     object btnOK: TBitBtn
-      Left = 295
+      Left = 291
       Top = 6
       Width = 83
       Height = 33
@@ -51,10 +51,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 301
+      ExplicitLeft = 287
     end
     object btnHelp: TBitBtn
-      Left = 206
+      Left = 202
       Top = 6
       Width = 83
       Height = 33
@@ -62,7 +62,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 212
+      ExplicitLeft = 198
     end
   end
   object jvpltvMain: TJvPageListTreeView
@@ -80,7 +80,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     OnChange = jvpltvMainChange
     OnCustomDrawItem = jvpltvMainCustomDrawItem
     Items.Links = {00000000}
-    ExplicitHeight = 375
+    ExplicitHeight = 383
   end
   object jvplMain: TJvPageList
     Left = 115
@@ -90,6 +90,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     ActivePage = jvspEvapFraction
     PropagateEnable = False
     Align = alClient
+    ExplicitWidth = 380
+    ExplicitHeight = 383
     object jvspIrrigationTypes: TJvStandardPage
       Left = 0
       Top = 0
@@ -99,7 +101,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       inline frameIrrigationTypes: TframeGrid
         Left = 0
         Top = 0
-        Width = 390
+        Width = 388
         Height = 384
         Align = alClient
         TabOrder = 0
@@ -107,7 +109,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         ExplicitHeight = 384
         inherited Panel: TPanel
           Top = 343
-          Width = 390
+          Width = 388
           ExplicitTop = 343
           ExplicitWidth = 384
           inherited lbNumber: TLabel
@@ -136,7 +138,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 390
+          Width = 388
           Height = 343
           ColCount = 2
           DefaultColWidth = 65
@@ -202,6 +204,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Width = 384
       Height = 384
       Caption = 'jvspEvapFraction'
+      ExplicitWidth = 380
+      ExplicitHeight = 383
       inline frameEvaporationFractions: TframeFormulaGrid
         Left = 0
         Top = 0
@@ -209,13 +213,13 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         Height = 384
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 384
-        ExplicitHeight = 384
+        ExplicitWidth = 380
+        ExplicitHeight = 383
         inherited Panel: TPanel
           Top = 343
           Width = 384
-          ExplicitTop = 343
-          ExplicitWidth = 384
+          ExplicitTop = 342
+          ExplicitWidth = 380
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -223,15 +227,15 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 197
+            Left = 195
             ExplicitLeft = 197
           end
           inherited sbInsert: TSpeedButton
-            Left = 234
+            Left = 232
             ExplicitLeft = 234
           end
           inherited sbDelete: TSpeedButton
-            Left = 271
+            Left = 268
             ExplicitLeft = 271
           end
           inherited seNumber: TJvSpinEdit
@@ -245,12 +249,12 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
           OnEndUpdate = frameEvaporationFractionsGridEndUpdate
-          ExplicitWidth = 384
-          ExplicitHeight = 286
+          ExplicitWidth = 380
+          ExplicitHeight = 285
         end
         inherited pnlTop: TPanel
           Width = 384
-          ExplicitWidth = 384
+          ExplicitWidth = 380
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -258,6 +262,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
             EditLabel.ExplicitHeight = 18
+            ExplicitHeight = 26
+          end
+          inherited comboChoice: TComboBox
+            Height = 26
             ExplicitHeight = 26
           end
         end

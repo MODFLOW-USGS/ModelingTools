@@ -2,7 +2,7 @@ unit ModflowFmp4EfficiencyUnit;
 
 interface
 
-uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit;
+uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit;
 
 type
   TFmp4EfficiencyTimeListLink  = class(TFmp4TimeListLink)

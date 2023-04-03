@@ -329,7 +329,7 @@ type
 
 implementation
 
-uses Contnrs, frmGoPhastUnit, PhastModelUnit;
+uses Contnrs, frmGoPhastUnit;
 
 type
   // TZoneList is an expandable array of TCustomPhastZones.

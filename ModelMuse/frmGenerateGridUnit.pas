@@ -78,8 +78,7 @@ implementation
 
 {$R *.dfm}
 
-uses Math, frmGoPhastUnit, GridGeneration, GoPhastTypes, ScreenObjectUnit,
-  ModflowIrregularMeshUnit, UndoItems;
+uses Math, frmGoPhastUnit, GridGeneration, GoPhastTypes, ScreenObjectUnit;
 
 procedure TfrmGenerateGrid.cbSpecifyGridAngleClick(Sender: TObject);
 begin

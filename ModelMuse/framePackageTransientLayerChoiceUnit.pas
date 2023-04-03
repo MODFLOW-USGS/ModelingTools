@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, framePackageUnit, framePackageLayerChoiceUnit, StdCtrls, JvExStdCtrls, JvCheckBox, ExtCtrls,
+  Dialogs, framePackageUnit, framePackageLayerChoiceUnit, StdCtrls, ExtCtrls,
   ModflowPackageSelectionUnit, RbwController;
 
 type

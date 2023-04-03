@@ -3,8 +3,8 @@ unit ModflowConstantHeadBoundaryUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes,
+  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
 type
@@ -364,8 +364,8 @@ resourcestring
 
 implementation
 
-uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
-  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit,
+uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
+  frmGoPhastUnit, GIS_Functions,
   frmErrorsAndWarningsUnit;
 
 resourcestring

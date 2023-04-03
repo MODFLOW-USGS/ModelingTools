@@ -99,7 +99,6 @@ object frameFlowTable: TframeFlowTable
         AutoAdjustColWidths = False
       end>
     WordWrapRowCaptions = False
-    ExplicitHeight = 171
   end
   object pnl1: TPanel
     Left = 0
@@ -177,7 +176,7 @@ object frameFlowTable: TframeFlowTable
       Left = 11
       Top = 6
       Width = 57
-      Height = 21
+      Height = 23
       ButtonKind = bkClassic
       MaxValue = 2147483647.000000000000000000
       MinValue = 2.000000000000000000

@@ -1182,11 +1182,11 @@ procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
 
 implementation
 
-uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit,
+uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
-  GIS_Functions, IntListUnit, ModflowCellUnit, frmProgressUnit, Dialogs,
-  EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
-  CustomModflowWriterUnit, ModelMuseUtilities, Modflow6TimeSeriesUnit;
+  GIS_Functions, IntListUnit, frmProgressUnit, Dialogs,
+  SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
+  CustomModflowWriterUnit, Modflow6TimeSeriesUnit;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';

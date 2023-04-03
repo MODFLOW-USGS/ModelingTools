@@ -21,8 +21,7 @@ type
 
 implementation
 
-uses
-  System.IOUtils;
+
 
 { TModflowGwtSsmWriter }
 

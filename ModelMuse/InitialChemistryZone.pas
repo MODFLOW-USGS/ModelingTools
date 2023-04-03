@@ -6,7 +6,7 @@ unit InitialChemistryZone;
 
 interface
 
-uses System.Types, SysUtils, Classes, GoPhastTypes, DataSetUnit, PhastDataSets,
+uses System.Types, SysUtils, Classes, GoPhastTypes, DataSetUnit,
   ZoneUnit;
 
 type
@@ -109,7 +109,7 @@ type
 
 implementation
 
-uses Contnrs, frmGoPhastUnit, PhastModelUnit;
+uses frmGoPhastUnit, PhastModelUnit;
 
 { TInitialChemistryDataSets }
 

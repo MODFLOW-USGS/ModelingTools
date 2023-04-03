@@ -11,7 +11,7 @@ procedure ImportSutraMeshFromFile(const AFileName: string; GmshExag: double = 1;
 implementation
 
 uses
-  IOUtils, frmGoPhastUnit, ModelMuseUtilities, UndoItems, Dialogs,
+  IOUtils, frmGoPhastUnit, UndoItems, Dialogs,
   QuadTreeClass, PhastModelUnit, ScreenObjectUnit, Math, ZoomBox2,
   GoPhastTypes, frmErrorsAndWarningsUnit, System.Generics.Collections;
 

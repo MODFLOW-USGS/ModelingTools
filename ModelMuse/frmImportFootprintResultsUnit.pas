@@ -56,7 +56,7 @@ uses
   GoPhastTypes, System.IOUtils, UndoItems, AbstractGridUnit,
   ValueArrayStorageUnit, GIS_Functions, frmImportShapefileUnit,
   FootprintGridUnit, frmDisplayDataUnit, frmGridValueUnit, Undo,
-  FootprintPropertiesUnit, frmUpdateDataSetsUnit;
+  FootprintPropertiesUnit;
 
 {$R *.dfm}
 

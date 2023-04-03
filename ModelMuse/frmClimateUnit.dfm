@@ -4,9 +4,8 @@ inherited frmClimate: TfrmClimate
   Caption = 'Farm Climate'
   ClientHeight = 275
   ClientWidth = 599
-  ExplicitWidth = 615
-  ExplicitHeight = 314
-  PixelsPerInch = 96
+  ExplicitWidth = 611
+  ExplicitHeight = 313
   TextHeight = 18
   inline frameClimate: TframeFormulaGrid
     Left = 0
@@ -15,13 +14,13 @@ inherited frmClimate: TfrmClimate
     Height = 231
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 599
-    ExplicitHeight = 231
+    ExplicitWidth = 595
+    ExplicitHeight = 230
     inherited Panel: TPanel
       Top = 190
       Width = 599
-      ExplicitTop = 190
-      ExplicitWidth = 599
+      ExplicitTop = 189
+      ExplicitWidth = 595
       inherited lbNumber: TLabel
         Width = 168
         Height = 18
@@ -30,15 +29,15 @@ inherited frmClimate: TfrmClimate
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 363
+        Left = 360
         ExplicitLeft = 363
       end
       inherited sbInsert: TSpeedButton
-        Left = 392
+        Left = 390
         ExplicitLeft = 312
       end
       inherited sbDelete: TSpeedButton
-        Left = 429
+        Left = 426
         ExplicitLeft = 432
       end
       inherited seNumber: TJvSpinEdit
@@ -197,19 +196,23 @@ inherited frmClimate: TfrmClimate
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitWidth = 599
-      ExplicitHeight = 133
+      ExplicitWidth = 595
+      ExplicitHeight = 132
     end
     inherited pnlTop: TPanel
       Width = 599
-      ExplicitWidth = 599
+      ExplicitWidth = 595
       inherited edFormula: TLabeledEdit
         Height = 26
         EditLabel.Width = 57
         EditLabel.Height = 18
+        EditLabel.ExplicitLeft = 128
         EditLabel.ExplicitTop = 9
-        EditLabel.ExplicitWidth = 57
         EditLabel.ExplicitHeight = 18
+        ExplicitHeight = 26
+      end
+      inherited comboChoice: TComboBox
+        Height = 26
         ExplicitHeight = 26
       end
     end
@@ -222,6 +225,8 @@ inherited frmClimate: TfrmClimate
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 230
+    ExplicitWidth = 595
     object btnCancel: TBitBtn
       Left = 502
       Top = 6

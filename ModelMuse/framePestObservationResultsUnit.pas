@@ -12,7 +12,7 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
   Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids, RbwDataGrid4, JvSpin, JvExControls,
   JvColorBox, JvColorButton, frameDisplayLimitUnit, Vcl.Mask, JvExMask,
-  JvToolEdit, QuadTreeClass, ObsInterfaceUnit, PestObservationResults,
+  JvToolEdit, QuadTreeClass, PestObservationResults,
   frmCustomGoPhastUnit, System.Generics.Collections, UndoItems,
   ScreenObjectUnit, System.Generics.Defaults, Vcl.CheckLst;
 
@@ -146,7 +146,7 @@ type
 implementation
 
 uses
-  PestObsUnit, frmGoPhastUnit, UndoItemsScreenObjects, frmGoToUnit, xygraph,
+  frmGoPhastUnit, UndoItemsScreenObjects, frmGoToUnit, xygraph,
   System.Math, Contnrs, xycommon;
 
 type

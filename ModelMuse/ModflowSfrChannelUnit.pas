@@ -100,7 +100,7 @@ resourcestring
 
 implementation
 
-uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
+uses ScreenObjectUnit, PhastModelUnit,
   ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit,
   frmGoPhastUnit;
 

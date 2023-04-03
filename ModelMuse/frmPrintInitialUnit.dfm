@@ -7,8 +7,8 @@ inherited frmPrintInitial: TfrmPrintInitial
   Caption = 'PHAST Print Initial Conditions'
   ClientHeight = 334
   ClientWidth = 598
-  ExplicitWidth = 616
-  ExplicitHeight = 379
+  ExplicitWidth = 610
+  ExplicitHeight = 372
   PixelsPerInch = 120
   TextHeight = 18
   object cbBoundaryConditions: TCheckBox

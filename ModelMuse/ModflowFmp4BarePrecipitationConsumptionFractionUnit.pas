@@ -2,7 +2,7 @@ unit ModflowFmp4BarePrecipitationConsumptionFractionUnit;
 
 interface
 
-uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit;
+uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit;
 
 type
   TFmp4BarePrecipitationConsumptionFractionTimeListLink  = class(TFmp4TimeListLink)

@@ -27,9 +27,8 @@ implementation
 
 uses ModpathMainFileWriterUnit, ModflowDiscretizationWriterUnit,
   ModpathStartingLocationsWriter, ModflowPackageSelectionUnit,
-  ModflowOutputControlUnit, frmErrorsAndWarningsUnit, frmGoPhastUnit,
-  ArchiveNodeInterface, GoPhastTypes, ModflowTDisWriterUnit,
-  ModpathGridMetaDataWriterUnit;
+  ModflowOutputControlUnit, frmErrorsAndWarningsUnit,
+  ArchiveNodeInterface, GoPhastTypes, ModflowTDisWriterUnit;
 
 resourcestring
   CbfFileExistsError = 'The following MODFLOW input or output files are '

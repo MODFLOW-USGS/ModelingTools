@@ -7,8 +7,8 @@ inherited frmSteadyFlow: TfrmSteadyFlow
   Caption = 'PHAST Steady Flow'
   ClientHeight = 250
   ClientWidth = 609
-  ExplicitWidth = 627
-  ExplicitHeight = 295
+  ExplicitWidth = 621
+  ExplicitHeight = 288
   PixelsPerInch = 120
   TextHeight = 18
   object lblHeadTolerance: TLabel

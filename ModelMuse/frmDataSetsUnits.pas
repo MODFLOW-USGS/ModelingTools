@@ -10,7 +10,7 @@ interface
 
 uses System.UITypes,
   Windows, SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  frmCustomGoPhastUnit, Buttons, ExtCtrls, Grids, RbwDataGrid4, RbwParser,
+  frmCustomGoPhastUnit, Buttons, ExtCtrls, RbwDataGrid4, RbwParser,
   DataSetUnit, Contnrs, GoPhastTypes, framePhastInterpolationUnit, ComCtrls,
   UndoItems, PhastDataSets, ArgusDataEntry, JvExStdCtrls, JvCombobox,
   JvListComb, RbwEdit, ClassificationUnit, JvExComCtrls, JvComCtrls;
@@ -430,9 +430,9 @@ var
 implementation
 
 uses frmGoPhastUnit, frmFormulaUnit, frmConvertChoiceUnit, InterpolationUnit,
-  GIS_Functions, PhastModelUnit, frmShowHideObjectsUnit, GlobalVariablesUnit,
-  StrUtils, OrderedCollectionUnit, HufDefinition, LayerStructureUnit,
-  SubscriptionUnit, Menus, frmSelectResultToImportUnit, SutraOptionsUnit;
+  GIS_Functions, PhastModelUnit, GlobalVariablesUnit,
+  OrderedCollectionUnit, HufDefinition, LayerStructureUnit,
+  SubscriptionUnit, Menus, SutraOptionsUnit;
 
 resourcestring
   StrNone = 'none';

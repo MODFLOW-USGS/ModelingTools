@@ -5,11 +5,11 @@ interface
 uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, ExtCtrls, Buttons, Grids,
-  Mask, JvExMask, JvSpin, JvExStdCtrls, JvCombobox, VirtualTrees,
+  Mask, JvExMask, JvSpin, VirtualTrees,
   DataSetUnit, RbwDataGrid4, Contnrs, DrawTextUnit,
   InPlaceEditUnit, Types, LegendUnit, GR32, RbwRuler, ExtDlgs, ComCtrls,
   DisplaySettingsUnit, JvExExtCtrls, JvNetscapeSplitter, Menus,
-  JvToolEdit, JvExButtons, JvBitBtn, PhastModelUnit;
+  JvExButtons, JvBitBtn, PhastModelUnit;
 
 type
   TfrmExportImage = class(TfrmCustomGoPhast)

@@ -46,7 +46,7 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes, DataSetUnit, frmProgressUnit,
+  GoPhastTypes, DataSetUnit, frmProgressUnit,
   frmErrorsAndWarningsUnit;
 
 resourcestring

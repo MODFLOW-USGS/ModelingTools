@@ -284,7 +284,7 @@ implementation
 uses
   PhastModelUnit, frmGoPhastUnit, ScreenObjectUnit,
   ModflowTimeUnit, GIS_Functions,
-  frmFormulaErrorsUnit, System.Math;
+  frmFormulaErrorsUnit;
 
 resourcestring
   StrFHBHeads = 'FHB Heads';

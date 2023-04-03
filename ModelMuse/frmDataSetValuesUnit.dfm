@@ -4,8 +4,8 @@ inherited frmDataSetValues: TfrmDataSetValues
   Caption = 'Data Set Values'
   ClientHeight = 304
   ClientWidth = 548
-  ExplicitWidth = 564
-  ExplicitHeight = 343
+  ExplicitWidth = 560
+  ExplicitHeight = 342
   TextHeight = 18
   object Panel1: TPanel
     Left = 0
@@ -14,6 +14,8 @@ inherited frmDataSetValues: TfrmDataSetValues
     Height = 144
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 159
+    ExplicitWidth = 544
     DesignSize = (
       548
       144)
@@ -32,7 +34,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       Caption = 'Model'
     end
     object btnClose: TBitBtn
-      Left = 459
+      Left = 455
       Top = 108
       Width = 75
       Height = 25
@@ -40,9 +42,10 @@ inherited frmDataSetValues: TfrmDataSetValues
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 6
+      ExplicitLeft = 451
     end
     object btnHelp: TBitBtn
-      Left = 459
+      Left = 455
       Top = 76
       Width = 75
       Height = 25
@@ -51,9 +54,10 @@ inherited frmDataSetValues: TfrmDataSetValues
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnHelpClick
+      ExplicitLeft = 451
     end
     object btnCopy: TButton
-      Left = 459
+      Left = 455
       Top = 45
       Width = 75
       Height = 25
@@ -62,27 +66,46 @@ inherited frmDataSetValues: TfrmDataSetValues
       Enabled = False
       TabOrder = 2
       OnClick = btnCopyClick
+      ExplicitLeft = 451
     end
     object comboModel: TComboBox
       Left = 81
       Top = 43
-      Width = 356
+      Width = 352
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       OnChange = comboModelChange
+      ExplicitWidth = 348
     end
     object treecomboDataSets: TRbwStringTreeCombo
       Left = 81
       Top = 75
-      Width = 356
+      Width = 352
       Height = 26
       Tree.Left = 0
       Tree.Top = 0
       Tree.Width = 624
       Tree.Height = 441
       Tree.Align = alClient
+      Tree.Colors.BorderColor = 15987699
+      Tree.Colors.DisabledColor = clGray
+      Tree.Colors.DropMarkColor = 15385233
+      Tree.Colors.DropTargetColor = 15385233
+      Tree.Colors.DropTargetBorderColor = 15385233
+      Tree.Colors.FocusedSelectionColor = 15385233
+      Tree.Colors.FocusedSelectionBorderColor = 15385233
+      Tree.Colors.GridLineColor = 15987699
+      Tree.Colors.HeaderHotColor = clBlack
+      Tree.Colors.HotColor = clBlack
+      Tree.Colors.SelectionRectangleBlendColor = 15385233
+      Tree.Colors.SelectionRectangleBorderColor = 15385233
+      Tree.Colors.SelectionTextColor = clBlack
+      Tree.Colors.TreeLineColor = 9471874
+      Tree.Colors.UnfocusedColor = clGray
+      Tree.Colors.UnfocusedSelectionColor = clWhite
+      Tree.Colors.UnfocusedSelectionBorderColor = clWhite
       Tree.DefaultNodeHeight = 20
       Tree.Header.AutoSizeIndex = 0
       Tree.Header.MainColumn = -1
@@ -119,6 +142,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       NumGlyphs = 2
       TabOrder = 3
       OnChange = treecomboDataSetsChange
+      ExplicitWidth = 348
     end
     object comboOrientation: TComboBox
       Left = 81
@@ -137,7 +161,7 @@ inherited frmDataSetValues: TfrmDataSetValues
         'Column')
     end
     object btnSave: TButton
-      Left = 459
+      Left = 455
       Top = 13
       Width = 75
       Height = 25
@@ -146,6 +170,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       Enabled = False
       TabOrder = 0
       OnClick = btnSaveClick
+      ExplicitLeft = 451
     end
     object cbIncludeCaptions: TCheckBox
       Left = 168
@@ -165,6 +190,8 @@ inherited frmDataSetValues: TfrmDataSetValues
     Height = 160
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 447
+    ExplicitHeight = 159
   end
   object Panel2: TPanel
     Left = 0
@@ -174,6 +201,7 @@ inherited frmDataSetValues: TfrmDataSetValues
     Align = alLeft
     Caption = 'Panel2'
     TabOrder = 0
+    ExplicitHeight = 159
     object lblLayer: TLabel
       AlignWithMargins = True
       Left = 4
@@ -196,6 +224,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       Background.Visible = False
       TabOrder = 0
       OnMouseUp = lbLayersMouseUp
+      ExplicitHeight = 133
     end
   end
   object dlgSave: TSaveDialog

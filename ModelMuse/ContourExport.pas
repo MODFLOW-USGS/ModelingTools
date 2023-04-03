@@ -77,9 +77,9 @@ procedure GlobalInitializeEpsilon(var Epsilon: Real; ModelGrid: TCustomModelGrid
 implementation
 
 uses
-  frmGoPhastUnit, Contnrs, Math,
+  frmGoPhastUnit, Math,
   frmExportShapefileUnit, RbwParser, ModelMuseUtilities,
-  LineStorage, SutraMeshUnit, ScreenObjectUnit, UndoItemsScreenObjects;
+  LineStorage, SutraMeshUnit;
 
 procedure GlobalImportSegments(Sender: TObject;
   const Segments: TLine2DArray; Epsilon: Real;

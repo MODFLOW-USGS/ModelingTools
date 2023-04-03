@@ -7,7 +7,7 @@ uses System.UITypes,
   Dialogs, frmCustomGoPhastUnit, ComCtrls, ExtCtrls, StdCtrls, Buttons, Grids,
   RbwDataGrid4, ArgusDataEntry, GoPhastTypes, LayerStructureUnit, ImgList,
   JvExStdCtrls, JvCombobox, JvListComb, UndoItems, RbwController, RbwEdit,
-  RequiredDataSetsUndoUnit, JvCheckBox, Mask, JvExMask, JvSpin,
+  RequiredDataSetsUndoUnit, JvCheckBox, JvSpin,
   frameSubBedsUnit, ModflowSubsidenceDefUnit, frameDiscretizationUnit,
   System.ImageList, GrayTabs, Character;
 
@@ -166,8 +166,8 @@ resourcestring
 
 implementation
 
-uses Math, RealListUnit, CursorsFoiledAgain, frmGoPhastUnit,
-  ModflowPackagesUnit, frmErrorsAndWarningsUnit, PhastModelUnit, Contnrs;
+uses Math, RealListUnit, frmGoPhastUnit,
+  ModflowPackagesUnit, PhastModelUnit, Contnrs;
 
 resourcestring
   StrChangeLayerStructu = 'change layer structure';

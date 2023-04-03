@@ -5,7 +5,7 @@ interface
 uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, Mask, JvExMask, JvToolEdit,
-  ArgusDataEntry, ComCtrls, JvPageList, JvExControls, Vcl.ExtCtrls, StrUtils,
+  ArgusDataEntry, ComCtrls, JvPageList, JvExControls, Vcl.ExtCtrls,
   SubPolygonUnit, Modflow2005ImporterUnit, GrayTabs, GoPhastTypes;
 
 type
@@ -85,7 +85,7 @@ implementation
 
 uses JclSysUtils, frmShowHideObjectsUnit,
   frmDisplayDataUnit, ModelMuseUtilities, frmConsoleLinesUnit,
-  Generics.Collections, System.SysConst, ConvertSensUnit, ShapefileUnit,
+  Generics.Collections, ConvertSensUnit, ShapefileUnit,
   System.IOUtils, TempFiles;
 
 resourcestring

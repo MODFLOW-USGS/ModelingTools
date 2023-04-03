@@ -63,8 +63,7 @@ type
 
 implementation
 
-uses
-  PhastModelUnit;
+
 
 { TTimeSeries }
 

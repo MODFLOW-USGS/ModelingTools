@@ -2,7 +2,7 @@ unit ModflowSfr6Unit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowCellUnit,
+uses Windows, ZLib, SysUtils, Classes, ModflowCellUnit,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, GoPhastTypes,
   System.Generics.Collections, SubscriptionUnit, RbwParser, Mt3dmsChemUnit,
   GwtStatusUnit;

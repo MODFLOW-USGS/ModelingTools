@@ -3,8 +3,8 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
   HelpKeyword = 'Import_SUTRA_Feature_Modified_'
   Caption = 'Import SUTRA Feature Modified by PEST'
   ClientHeight = 297
-  ExplicitHeight = 336
-  PixelsPerInch = 96
+  ExplicitWidth = 438
+  ExplicitHeight = 335
   TextHeight = 18
   object lblModelFeatureFile: TLabel
     Left = 8
@@ -23,7 +23,7 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
   object fedModelFeatureFile: TJvFilenameEdit
     Left = 8
     Top = 32
-    Width = 408
+    Width = 404
     Height = 26
     Filter = 
       'SUTRA input files (*.inp, sutra.fil,*.sutra.fil)|*.inp;sutra.fil' +
@@ -32,20 +32,23 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
     TabOrder = 0
     Text = ''
     OnChange = fedModelFeatureFileChange
+    ExplicitWidth = 400
   end
   object pnlBottom: TPanel
     Left = 0
     Top = 256
-    Width = 424
+    Width = 426
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 255
+    ExplicitWidth = 422
     DesignSize = (
-      424
+      426
       41)
     object btnCancel: TBitBtn
-      Left = 324
+      Left = 320
       Top = 2
       Width = 91
       Height = 33
@@ -53,9 +56,10 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 316
     end
     object btnOK: TBitBtn
-      Left = 228
+      Left = 224
       Top = 2
       Width = 91
       Height = 33
@@ -65,9 +69,10 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 220
     end
     object btnHelp: TBitBtn
-      Left = 131
+      Left = 127
       Top = 2
       Width = 91
       Height = 33
@@ -76,14 +81,14 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 123
     end
   end
   object clbFeatures: TCheckListBox
     Left = 8
     Top = 64
-    Width = 408
+    Width = 404
     Height = 121
-    OnClickCheck = clbFeaturesClickCheck
     Anchors = [akLeft, akTop, akRight]
     ItemHeight = 18
     Items.Strings = (
@@ -94,6 +99,8 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
       'Generalized Pressure Boundary'
       'Generalized Mass or Energy Boundary')
     TabOrder = 2
+    OnClickCheck = clbFeaturesClickCheck
+    ExplicitWidth = 400
   end
   object seTimeStep: TJvSpinEdit
     Left = 8

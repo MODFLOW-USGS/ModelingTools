@@ -240,7 +240,7 @@ uses Math, RbwParser, BigCanvasMethods, PhastModelUnit,
   SysUtils, frmGoPhastUnit, frmDisplayDataUnit,
   LineStorage, TriCP_Routines, RealListUnit,
   CalCompRoutines, SubPolygonUnit, SutraMeshUnit,
-  IntListUnit, RegularTriMeshUnit, TriangulateMeshUnit;
+  RegularTriMeshUnit, TriangulateMeshUnit;
 
 resourcestring
   StrErrorAttemptingTo = 'Error attempting to log transform %g';

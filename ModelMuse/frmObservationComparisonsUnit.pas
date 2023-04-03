@@ -90,8 +90,8 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, ScreenObjectUnit, ModflowMnw2Unit, frmErrorsAndWarningsUnit,
-  ModflowLakUnit, ModflowSfrUnit, SutraPestObsUnit, PestObsGroupUnit;
+  frmGoPhastUnit, ScreenObjectUnit,
+  SutraPestObsUnit, PestObsGroupUnit;
 
 resourcestring
   StrObject0sObse = 'Object: "%0:s"; Observation name: "%1:s".';

@@ -47,7 +47,7 @@ type
 implementation
 
 uses
-  System.SysUtils, System.Character, System.AnsiStrings, System.IOUtils;
+  System.SysUtils, System.AnsiStrings, System.IOUtils;
 
 //uses
 //  PhastModelUnit, ModflowTimeUnit;

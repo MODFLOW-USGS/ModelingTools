@@ -10,7 +10,7 @@ unit CalCompRoutines;
 
 interface
 
-uses TriPackRoutines, GoPhastTypes, SubPolygonUnit;
+uses GoPhastTypes, SubPolygonUnit;
 
 type
   // @name is a type of procedure used to display a contour plot.

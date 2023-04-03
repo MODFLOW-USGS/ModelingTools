@@ -31,7 +31,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       Caption = 'Number of shapes ='
     end
     object btnCancel: TBitBtn
-      Left = 619
+      Left = 615
       Top = 2
       Width = 115
       Height = 33
@@ -39,10 +39,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 631
+      ExplicitLeft = 611
     end
     object btnOK: TBitBtn
-      Left = 498
+      Left = 494
       Top = 2
       Width = 115
       Height = 33
@@ -69,10 +69,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 510
+      ExplicitLeft = 490
     end
     object btnHelp: TBitBtn
-      Left = 377
+      Left = 373
       Top = 2
       Width = 115
       Height = 33
@@ -81,7 +81,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 389
+      ExplicitLeft = 369
     end
   end
   object pcImportShape: TPageControl
@@ -196,7 +196,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edImportCriterion: TEdit
         Left = 152
         Top = 151
-        Width = 467
+        Width = 463
         Height = 26
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -275,7 +275,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         OnClick = rgEvaluatedAtClick
       end
       object btnImportCriterion: TButton
-        Left = 625
+        Left = 621
         Top = 148
         Width = 90
         Height = 33
@@ -303,7 +303,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edZ: TRbwEdit
         Left = 206
         Top = 351
-        Width = 418
+        Width = 414
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         Color = clBtnFace
@@ -316,7 +316,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edHighZ: TRbwEdit
         Left = 206
         Top = 384
-        Width = 418
+        Width = 414
         Height = 26
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -330,7 +330,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edLowZ: TRbwEdit
         Left = 206
         Top = 417
-        Width = 418
+        Width = 414
         Height = 26
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -342,7 +342,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         ExplicitWidth = 430
       end
       object btnZ: TButton
-        Left = 630
+        Left = 626
         Top = 349
         Width = 90
         Height = 30
@@ -354,7 +354,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         ExplicitLeft = 642
       end
       object btnHighZ: TButton
-        Left = 630
+        Left = 626
         Top = 382
         Width = 90
         Height = 30
@@ -366,7 +366,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         ExplicitLeft = 642
       end
       object btnLowZ: TButton
-        Left = 630
+        Left = 626
         Top = 415
         Width = 90
         Height = 30
@@ -380,7 +380,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object memoMultipleParts: TMemo
         Left = 432
         Top = 181
-        Width = 283
+        Width = 279
         Height = 114
         Anchors = [akLeft, akTop, akRight]
         ScrollBars = ssVertical
@@ -522,13 +522,13 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         Height = 521
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 763
-        ExplicitHeight = 522
+        ExplicitWidth = 755
+        ExplicitHeight = 520
         inherited Panel: TPanel
-          Top = 481
-          Width = 763
-          ExplicitTop = 481
-          ExplicitWidth = 763
+          Top = 480
+          Width = 759
+          ExplicitTop = 479
+          ExplicitWidth = 755
           inherited lbNumber: TLabel
             Width = 142
             Height = 18
@@ -537,21 +537,21 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 500
+            Left = 498
             Hint = 
               'Add space for CSV file|Add space for CSV file after the last CSV' +
               ' file.'
             ExplicitLeft = 500
           end
           inherited sbInsert: TSpeedButton
-            Left = 529
+            Left = 526
             Hint = 
               'Insert space for CSV file|Insert a space for a CSV file above th' +
               'e selected CSV file.'
             ExplicitLeft = 529
           end
           inherited sbDelete: TSpeedButton
-            Left = 558
+            Left = 555
             Hint = 'Delete CSV file|Delete the selected CSV file.'
             ExplicitLeft = 565
           end
@@ -561,8 +561,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 763
-          Height = 481
+          Width = 759
+          Height = 480
           OnButtonClick = frameGrid1GridButtonClick
           OnEndUpdate = frameCSVGridEndUpdate
           Columns = <
@@ -590,8 +590,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 763
-          ExplicitHeight = 481
+          ExplicitWidth = 755
+          ExplicitHeight = 479
           ColWidths = (
             717)
           RowHeights = (
@@ -840,7 +840,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object pnlBoundaryCondition: TPanel
         Left = 0
         Top = 0
-        Width = 759
+        Width = 763
         Height = 521
         Align = alClient
         TabOrder = 0
@@ -849,7 +849,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         object splitterBoundary: TSplitter
           Left = 1
           Top = 250
-          Width = 757
+          Width = 761
           Height = 5
           Cursor = crVSplit
           Align = alBottom
@@ -859,7 +859,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         object pnlBoundaryControls: TPanel
           Left = 1
           Top = 1
-          Width = 757
+          Width = 761
           Height = 41
           Align = alTop
           TabOrder = 0
@@ -1049,15 +1049,14 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           object jvspNone: TJvStandardPage
             Left = 0
             Top = 0
-            Width = 757
+            Width = 761
             Height = 265
             Caption = 'jvspNone'
-            ExplicitWidth = 761
           end
           object jvspPhastSpecifiedHead: TJvStandardPage
             Left = 0
             Top = 0
-            Width = 757
+            Width = 761
             Height = 265
             Caption = 'jvspPhastSpecifiedHead'
             ExplicitWidth = 753
@@ -1471,7 +1470,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pcSFR: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 761
               Height = 265
               ActivePage = tabSfrBasic
               Align = alClient
@@ -2049,7 +2048,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pcMnw2: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 761
               Height = 265
               ActivePage = tabBasic
               Align = alClient
@@ -2623,7 +2622,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pgcSfrMf6: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 761
               Height = 265
               ActivePage = tabSfrMf6Properties
               Align = alClient
@@ -2956,7 +2955,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pgcModflowMAW: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 761
               Height = 265
               ActivePage = tabMawBasic
               Align = alClient

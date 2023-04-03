@@ -4,9 +4,8 @@ inherited frmFarmAllotment: TfrmFarmAllotment
   Caption = 'Farm Allotment'
   ClientHeight = 330
   ClientWidth = 398
-  ExplicitWidth = 414
-  ExplicitHeight = 369
-  PixelsPerInch = 96
+  ExplicitWidth = 410
+  ExplicitHeight = 368
   TextHeight = 18
   inline frameAllotment: TframeFormulaGrid
     Left = 0
@@ -15,13 +14,13 @@ inherited frmFarmAllotment: TfrmFarmAllotment
     Height = 286
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 398
-    ExplicitHeight = 286
+    ExplicitWidth = 394
+    ExplicitHeight = 285
     inherited Panel: TPanel
       Top = 245
       Width = 398
-      ExplicitTop = 245
-      ExplicitWidth = 398
+      ExplicitTop = 244
+      ExplicitWidth = 394
       inherited lbNumber: TLabel
         Width = 180
         Height = 18
@@ -30,15 +29,15 @@ inherited frmFarmAllotment: TfrmFarmAllotment
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 305
+        Left = 302
         ExplicitLeft = 305
       end
       inherited sbInsert: TSpeedButton
-        Left = 334
+        Left = 330
         ExplicitLeft = 334
       end
       inherited sbDelete: TSpeedButton
-        Left = 363
+        Left = 360
         ExplicitLeft = 363
       end
       inherited seNumber: TJvSpinEdit
@@ -125,19 +124,23 @@ inherited frmFarmAllotment: TfrmFarmAllotment
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitWidth = 398
-      ExplicitHeight = 188
+      ExplicitWidth = 394
+      ExplicitHeight = 187
     end
     inherited pnlTop: TPanel
       Width = 398
-      ExplicitWidth = 398
+      ExplicitWidth = 394
       inherited edFormula: TLabeledEdit
         Height = 26
         EditLabel.Width = 57
         EditLabel.Height = 18
+        EditLabel.ExplicitLeft = 128
         EditLabel.ExplicitTop = 9
-        EditLabel.ExplicitWidth = 57
         EditLabel.ExplicitHeight = 18
+        ExplicitHeight = 26
+      end
+      inherited comboChoice: TComboBox
+        Height = 26
         ExplicitHeight = 26
       end
     end
@@ -150,6 +153,8 @@ inherited frmFarmAllotment: TfrmFarmAllotment
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 285
+    ExplicitWidth = 394
     object btnCancel: TBitBtn
       Left = 295
       Top = 6

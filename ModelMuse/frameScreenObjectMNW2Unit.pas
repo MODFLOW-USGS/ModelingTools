@@ -6,9 +6,9 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls, RbwEdit, ArgusDataEntry, JvExStdCtrls,
   JvCombobox, JvListComb, ComCtrls, Mask, JvExMask, JvSpin, Grids, RbwDataGrid4,
-  ModflowMnw2Unit, UndoItemsScreenObjects, JvToolEdit, JvExComCtrls, JvComCtrls,
-  frameLocationMethodUnit, frameScreenObjectUnit, GrayTabs, frameGridUnit,
-  System.Generics.Collections, PestObsUnit, framePestObsUnit;
+  ModflowMnw2Unit, UndoItemsScreenObjects, JvToolEdit,
+  frameLocationMethodUnit, frameScreenObjectUnit, GrayTabs,
+  System.Generics.Collections, framePestObsUnit;
 
 type
   // This type is used in this unit and in frmImportShapefileUnit.

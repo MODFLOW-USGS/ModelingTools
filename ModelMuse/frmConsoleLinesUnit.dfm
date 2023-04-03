@@ -2,9 +2,8 @@ inherited frmConsoleLines: TfrmConsoleLines
   Caption = 'Console Lines'
   ClientHeight = 363
   ClientWidth = 588
-  ExplicitWidth = 604
+  ExplicitWidth = 600
   ExplicitHeight = 401
-  PixelsPerInch = 96
   TextHeight = 18
   object memoConsoleLines: TMemo
     Left = 0
@@ -14,8 +13,8 @@ inherited frmConsoleLines: TfrmConsoleLines
     Align = alClient
     ScrollBars = ssBoth
     TabOrder = 1
-    ExplicitTop = 57
-    ExplicitHeight = 265
+    ExplicitWidth = 584
+    ExplicitHeight = 232
   end
   object pnlBottom: TPanel
     Left = 0
@@ -24,6 +23,8 @@ inherited frmConsoleLines: TfrmConsoleLines
     Height = 41
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 321
+    ExplicitWidth = 584
     object btnClose: TBitBtn
       Left = 509
       Top = 6
@@ -41,6 +42,7 @@ inherited frmConsoleLines: TfrmConsoleLines
     Height = 89
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 584
     object lblMessage: TLabel
       AlignWithMargins = True
       Left = 4

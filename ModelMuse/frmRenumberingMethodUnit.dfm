@@ -4,7 +4,8 @@ inherited frmRenumberingMethod: TfrmRenumberingMethod
   Caption = 'Mesh Renumbering Method'
   ClientHeight = 253
   ClientWidth = 302
-  ExplicitHeight = 298
+  ExplicitWidth = 314
+  ExplicitHeight = 291
   PixelsPerInch = 120
   TextHeight = 18
   object rgMethod: TRadioGroup

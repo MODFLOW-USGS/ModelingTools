@@ -916,7 +916,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit,
   GIS_Functions, ModflowTimeUnit, DataSetUnit, ModflowMnw2Unit,
-  ModelMuseUtilities, ModflowMvrUnit;
+  ModflowMvrUnit;
 
 const MawObName: array[TMawOb] of string = ('Head', 'FromMvr', 'FlowRate',
   'FlowRateCells', 'PumpRate', 'RateToMvr',

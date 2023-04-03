@@ -5,7 +5,7 @@ interface
 uses
   System.AnsiStrings, System.SysUtils, System.Classes, GoPhastTypes,
   OrderedCollectionUnit, Modflow6TimeSeriesUnit, Generics.Collections,
-  System.IOUtils, System.Character, RealListUnit;
+  System.IOUtils, RealListUnit;
 
 type
   TCacheDictionary<K,V> = class(TDictionary<K, V>)

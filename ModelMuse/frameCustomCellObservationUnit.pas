@@ -3,9 +3,9 @@ unit frameCustomCellObservationUnit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, Grids, RbwDataGrid4, Mask, JvExMask, JvSpin,
-  JvExStdCtrls, JvCombobox, JvListComb, ArgusDataEntry, ComCtrls, JvExComCtrls,
+  ArgusDataEntry, ComCtrls, JvExComCtrls,
   JvComCtrls;
 
 type

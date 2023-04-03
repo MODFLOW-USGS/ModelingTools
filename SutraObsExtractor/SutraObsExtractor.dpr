@@ -8,6 +8,11 @@ program SutraObsExtractor;
 {#BACKUP SutraObsExtractor.lpi}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   Classes,
   System.SysUtils,
   sutrainputfilereader in 'sutrainputfilereader.pas',

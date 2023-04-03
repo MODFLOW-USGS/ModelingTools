@@ -26,7 +26,7 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
     Left = 8
     Top = 64
     Width = 208
-    Height = 21
+    Height = 23
     TabOrder = 2
     OnExit = edHYDLBLExit
   end
@@ -60,8 +60,6 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
         'Head (HD)'
         'Drawdown (DD)')
       TabOrder = 0
-      ExplicitTop = 15
-      ExplicitHeight = 93
     end
   end
   object gbSubsidence: TGroupBox
@@ -104,7 +102,6 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
         'Instantaneous compaction (CP)'
         'Instantaneous subsidence (SB)')
       TabOrder = 0
-      ExplicitTop = 15
     end
     object comboLayerGroup: TJvImageComboBox
       Left = 2
@@ -168,8 +165,6 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
         'Streamflow into or out of aquifer (SA)')
       TabOrder = 0
       OnClickCheck = clbSFRClickCheck
-      ExplicitTop = 15
-      ExplicitHeight = 93
     end
   end
 end

@@ -4,22 +4,24 @@ inherited frmFileTypes: TfrmFileTypes
   Caption = 'File Types'
   ClientWidth = 829
   OnClose = FormClose
-  ExplicitWidth = 845
-  PixelsPerInch = 96
+  ExplicitWidth = 841
+  ExplicitHeight = 272
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 185
+    Top = 193
     Width = 829
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 0
+    ExplicitTop = 192
+    ExplicitWidth = 825
     DesignSize = (
       829
       41)
     object btnClose: TBitBtn
-      Left = 737
+      Left = 733
       Top = 4
       Width = 89
       Height = 33
@@ -27,9 +29,10 @@ inherited frmFileTypes: TfrmFileTypes
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
+      ExplicitLeft = 729
     end
     object btnHelp: TBitBtn
-      Left = 644
+      Left = 640
       Top = 4
       Width = 89
       Height = 33
@@ -38,13 +41,14 @@ inherited frmFileTypes: TfrmFileTypes
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 636
     end
   end
   object rdgFileTypes: TRbwDataGrid4
     Left = 0
     Top = 0
     Width = 829
-    Height = 185
+    Height = 193
     Align = alClient
     ColCount = 3
     FixedCols = 0
@@ -133,6 +137,8 @@ inherited frmFileTypes: TfrmFileTypes
         AutoAdjustColWidths = False
       end>
     WordWrapRowCaptions = False
+    ExplicitWidth = 825
+    ExplicitHeight = 192
     ColWidths = (
       64
       64

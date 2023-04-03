@@ -4,9 +4,8 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
   Caption = 'Contaminant Treatment Systems'
   ClientHeight = 395
   ClientWidth = 753
-  ExplicitWidth = 769
-  ExplicitHeight = 434
-  PixelsPerInch = 96
+  ExplicitWidth = 765
+  ExplicitHeight = 433
   TextHeight = 18
   object splttr1: TJvNetscapeSplitter
     Left = 121
@@ -30,6 +29,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Indent = 19
     TabOrder = 0
     OnChange = tvTreatmentSystemsChange
+    ExplicitHeight = 353
   end
   object pnlBottom: TPanel
     Left = 0
@@ -40,11 +40,13 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
+    ExplicitTop = 353
+    ExplicitWidth = 749
     DesignSize = (
       753
       41)
     object btnHelp: TBitBtn
-      Left = 472
+      Left = 468
       Top = 6
       Width = 87
       Height = 27
@@ -53,9 +55,10 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
+      ExplicitLeft = 464
     end
     object btnCancelBtn: TBitBtn
-      Left = 658
+      Left = 654
       Top = 6
       Width = 87
       Height = 27
@@ -63,9 +66,10 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 650
     end
     object btnOkBtn: TBitBtn
-      Left = 565
+      Left = 561
       Top = 6
       Width = 87
       Height = 27
@@ -74,6 +78,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOkBtnClick
+      ExplicitLeft = 557
     end
     object btnDeleteSystem: TButton
       Left = 88
@@ -107,6 +112,8 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     ParentShowHint = False
     ShowHint = False
     TabOrder = 2
+    ExplicitWidth = 618
+    ExplicitHeight = 353
     object pcMain: TPageControl
       Left = 1
       Top = 42
@@ -122,6 +129,8 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       ParentShowHint = False
       ShowHint = False
       TabOrder = 0
+      ExplicitWidth = 616
+      ExplicitHeight = 310
       object tabWells: TTabSheet
         Caption = 'Wells'
         ParentShowHint = False
@@ -129,7 +138,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
         inline frameWells: TframeGrid
           Left = 0
           Top = 0
-          Width = 612
+          Width = 616
           Height = 278
           Align = alClient
           ParentShowHint = False
@@ -139,7 +148,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           ExplicitHeight = 278
           inherited Panel: TPanel
             Top = 237
-            Width = 612
+            Width = 616
             ParentShowHint = False
             ExplicitTop = 237
             ExplicitWidth = 612
@@ -175,7 +184,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 612
+            Width = 616
             Height = 237
             ColCount = 4
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
@@ -293,6 +302,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           Height = 41
           Align = alTop
           TabOrder = 0
+          ExplicitWidth = 608
           object lblTreatmentLevel: TLabel
             Left = 263
             Top = 17
@@ -322,13 +332,13 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           Align = alClient
           TabOrder = 1
           ExplicitTop = 41
-          ExplicitWidth = 612
-          ExplicitHeight = 237
+          ExplicitWidth = 608
+          ExplicitHeight = 236
           inherited Panel: TPanel
             Top = 196
             Width = 612
-            ExplicitTop = 196
-            ExplicitWidth = 612
+            ExplicitTop = 195
+            ExplicitWidth = 608
             inherited lbNumber: TLabel
               Width = 114
               Height = 18
@@ -337,21 +347,21 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               ExplicitHeight = 18
             end
             inherited sbAdd: TSpeedButton
-              Left = 320
+              Left = 318
               Hint = 
                 'Add time period row|Add a time period row at the end of the tabl' +
                 'e.'
               ExplicitLeft = 304
             end
             inherited sbInsert: TSpeedButton
-              Left = 379
+              Left = 377
               Hint = 
                 'Insert time period row|Insert a time period row above the select' +
                 'ed row.'
               ExplicitLeft = 360
             end
             inherited sbDelete: TSpeedButton
-              Left = 438
+              Left = 435
               Hint = 'Delete time period row|Delete the selected time period row'
               ExplicitLeft = 416
             end
@@ -469,9 +479,8 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            ExplicitLeft = 1
-            ExplicitWidth = 612
-            ExplicitHeight = 196
+            ExplicitWidth = 608
+            ExplicitHeight = 195
             ColWidths = (
               64
               64
@@ -518,10 +527,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           object pnl2: TPanel
             Left = 1
             Top = 1
-            Width = 479
+            Width = 483
             Height = 41
             Align = alTop
             TabOrder = 0
+            ExplicitWidth = 479
             object cbUseDefaultOptions: TCheckBox
               Left = 8
               Top = 8
@@ -535,7 +545,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           inline frameIndividualWellOptions: TframeGrid
             Left = 1
             Top = 42
-            Width = 479
+            Width = 483
             Height = 235
             Align = alClient
             TabOrder = 1
@@ -545,7 +555,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             ExplicitHeight = 235
             inherited Panel: TPanel
               Top = 194
-              Width = 479
+              Width = 483
               ExplicitTop = 194
               ExplicitWidth = 479
               inherited lbNumber: TLabel
@@ -580,7 +590,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
             end
             inherited Grid: TRbwDataGrid4
-              Width = 479
+              Width = 483
               Height = 194
               ColCount = 4
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
@@ -706,7 +716,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
         inline frameExternalFlows: TframeGrid
           Left = 0
           Top = 0
-          Width = 612
+          Width = 616
           Height = 278
           Align = alClient
           TabOrder = 0
@@ -714,7 +724,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           ExplicitHeight = 278
           inherited Panel: TPanel
             Top = 237
-            Width = 612
+            Width = 616
             ExplicitTop = 237
             ExplicitWidth = 612
             inherited lbNumber: TLabel
@@ -749,7 +759,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 612
+            Width = 616
             Height = 237
             ColCount = 5
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
@@ -887,7 +897,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
         inline frameMaxConc: TframeGrid
           Left = 0
           Top = 0
-          Width = 612
+          Width = 616
           Height = 278
           Align = alClient
           TabOrder = 0
@@ -895,7 +905,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           ExplicitHeight = 278
           inherited Panel: TPanel
             Top = 237
-            Width = 612
+            Width = 616
             ExplicitTop = 237
             ExplicitWidth = 612
             inherited lbNumber: TLabel
@@ -930,7 +940,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 612
+            Width = 616
             Height = 237
             ColCount = 3
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
@@ -1022,17 +1032,19 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Height = 41
       Align = alTop
       TabOrder = 1
+      ExplicitWidth = 616
       object edSystemName: TLabeledEdit
         Left = 5
         Top = 8
         Width = 276
         Height = 26
         EditLabel.Width = 95
-        EditLabel.Height = 18
+        EditLabel.Height = 26
         EditLabel.Caption = 'System name'
         Enabled = False
         LabelPosition = lpRight
         TabOrder = 0
+        Text = ''
         OnChange = edSystemNameChange
       end
     end

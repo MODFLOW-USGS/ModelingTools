@@ -231,7 +231,7 @@ implementation
 
 uses RTLConsts, Math, ModflowDiscretizationWriterUnit,
   frmErrorsAndWarningsUnit, Mt3dmsBtnWriterUnit, Mt3dmsTimesUnit,
-  ModflowPackageSelectionUnit, PhastModelUnit, ModelMuseUtilities,
+  ModflowPackageSelectionUnit, PhastModelUnit,
   frmGoPhastUnit;
 
 resourcestring

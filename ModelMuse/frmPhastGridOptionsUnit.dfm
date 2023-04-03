@@ -7,8 +7,8 @@ inherited frmPhastGridOptions: TfrmPhastGridOptions
   Caption = 'PHAST Grid Options'
   ClientHeight = 269
   ClientWidth = 294
-  ExplicitWidth = 312
-  ExplicitHeight = 314
+  ExplicitWidth = 306
+  ExplicitHeight = 307
   PixelsPerInch = 120
   TextHeight = 18
   object lblChemistrDimensions: TLabel
@@ -21,7 +21,7 @@ inherited frmPhastGridOptions: TfrmPhastGridOptions
   object clbChemistryDimensions: TCheckListBox
     Left = 8
     Top = 32
-    Width = 278
+    Width = 274
     Height = 81
     Anchors = [akLeft, akTop, akRight]
     ItemHeight = 18
@@ -30,11 +30,12 @@ inherited frmPhastGridOptions: TfrmPhastGridOptions
       'Y'
       'Z')
     TabOrder = 0
+    ExplicitWidth = 270
   end
   object rgPrintOrientation: TRadioGroup
     Left = 8
     Top = 120
-    Width = 278
+    Width = 274
     Height = 105
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Print orientation'
@@ -43,6 +44,7 @@ inherited frmPhastGridOptions: TfrmPhastGridOptions
       'XY'
       'XZ')
     TabOrder = 1
+    ExplicitWidth = 270
   end
   object btnOK: TBitBtn
     Left = 104

@@ -1223,7 +1223,7 @@ type
 implementation
 
 uses
-  Contnrs, frmGoPhastUnit, ZoomBox2, ModflowGridUnit, BigCanvasMethods,
+  frmGoPhastUnit, ZoomBox2, ModflowGridUnit, BigCanvasMethods,
   ModelMuseUtilities, frmExportShapefileUnit,
   ShapefileUnit, AbstractGridUnit, Dialogs, System.Math, PhastModelUnit,
   ModflowIrregularMeshUnit, LayerStructureUnit;

@@ -7,8 +7,8 @@ inherited frmGoTo: TfrmGoTo
   Caption = 'Go To'
   ClientHeight = 319
   ClientWidth = 293
-  ExplicitWidth = 309
-  ExplicitHeight = 358
+  ExplicitWidth = 305
+  ExplicitHeight = 357
   TextHeight = 18
   object pcMain: TPageControl
     Left = 0
@@ -19,8 +19,8 @@ inherited frmGoTo: TfrmGoTo
     Align = alClient
     TabOrder = 0
     OnChange = pcMainChange
-    ExplicitWidth = 297
-    ExplicitHeight = 238
+    ExplicitWidth = 289
+    ExplicitHeight = 236
     object tabPosition: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'The_Position_Tab'
@@ -29,7 +29,7 @@ inherited frmGoTo: TfrmGoTo
         285
         204)
       object lblX: TLabel
-        Left = 259
+        Left = 255
         Top = 11
         Width = 11
         Height = 18
@@ -38,7 +38,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblY: TLabel
-        Left = 259
+        Left = 255
         Top = 52
         Width = 9
         Height = 18
@@ -47,7 +47,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblZ: TLabel
-        Left = 259
+        Left = 255
         Top = 92
         Width = 9
         Height = 18
@@ -56,7 +56,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblXPrime: TLabel
-        Left = 259
+        Left = 255
         Top = 132
         Width = 14
         Height = 18
@@ -65,7 +65,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblYPrime: TLabel
-        Left = 259
+        Left = 255
         Top = 172
         Width = 12
         Height = 18
@@ -76,7 +76,7 @@ inherited frmGoTo: TfrmGoTo
       object rdeX: TRbwDataEntry
         Left = 8
         Top = 8
-        Width = 243
+        Width = 239
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -89,7 +89,7 @@ inherited frmGoTo: TfrmGoTo
       object rdeY: TRbwDataEntry
         Left = 8
         Top = 48
-        Width = 243
+        Width = 239
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -102,7 +102,7 @@ inherited frmGoTo: TfrmGoTo
       object rdeZ: TRbwDataEntry
         Left = 8
         Top = 88
-        Width = 243
+        Width = 239
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -115,7 +115,7 @@ inherited frmGoTo: TfrmGoTo
       object rdeXPrime: TRbwDataEntry
         Left = 8
         Top = 128
-        Width = 243
+        Width = 239
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -128,7 +128,7 @@ inherited frmGoTo: TfrmGoTo
       object rdeYPrime: TRbwDataEntry
         Left = 8
         Top = 168
-        Width = 243
+        Width = 239
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -148,7 +148,7 @@ inherited frmGoTo: TfrmGoTo
         285
         204)
       object lblCol: TLabel
-        Left = 224
+        Left = 220
         Top = 41
         Width = 53
         Height = 18
@@ -157,7 +157,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object lblRow: TLabel
-        Left = 224
+        Left = 220
         Top = 73
         Width = 31
         Height = 18
@@ -166,7 +166,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object lblLay: TLabel
-        Left = 224
+        Left = 220
         Top = 105
         Width = 39
         Height = 18
@@ -175,7 +175,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object lblModel: TLabel
-        Left = 224
+        Left = 220
         Top = 12
         Width = 43
         Height = 18
@@ -184,7 +184,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object seCol: TJvSpinEdit
-        Left = 6
+        Left = 2
         Top = 42
         Width = 212
         Height = 26
@@ -197,7 +197,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 14
       end
       object seRow: TJvSpinEdit
-        Left = 6
+        Left = 2
         Top = 72
         Width = 212
         Height = 26
@@ -210,7 +210,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 14
       end
       object seLayer: TJvSpinEdit
-        Left = 6
+        Left = 2
         Top = 104
         Width = 212
         Height = 26
@@ -225,7 +225,7 @@ inherited frmGoTo: TfrmGoTo
       object comboModel: TComboBox
         Left = 3
         Top = 9
-        Width = 215
+        Width = 211
         Height = 26
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
@@ -276,7 +276,7 @@ inherited frmGoTo: TfrmGoTo
         285
         204)
       object lblDisvCell: TLabel
-        Left = 224
+        Left = 220
         Top = 6
         Width = 27
         Height = 18
@@ -285,7 +285,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 232
       end
       object lblDisvLayer: TLabel
-        Left = 224
+        Left = 220
         Top = 38
         Width = 39
         Height = 18
@@ -294,7 +294,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 232
       end
       object seDisvLayer: TJvSpinEdit
-        Left = 6
+        Left = 2
         Top = 35
         Width = 212
         Height = 26
@@ -304,10 +304,10 @@ inherited frmGoTo: TfrmGoTo
         Value = 1.000000000000000000
         Anchors = [akTop, akRight]
         TabOrder = 0
-        ExplicitLeft = 14
+        ExplicitLeft = -2
       end
       object seDisvCell: TJvSpinEdit
-        Left = 6
+        Left = 2
         Top = 3
         Width = 212
         Height = 26
@@ -317,7 +317,7 @@ inherited frmGoTo: TfrmGoTo
         Value = 1.000000000000000000
         Anchors = [akTop, akRight]
         TabOrder = 1
-        ExplicitLeft = 14
+        ExplicitLeft = -2
       end
     end
     object tabObject: TTabSheet
@@ -386,8 +386,8 @@ inherited frmGoTo: TfrmGoTo
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 238
-    ExplicitWidth = 297
+    ExplicitTop = 236
+    ExplicitWidth = 289
     object btnCancel: TBitBtn
       Left = 197
       Top = 40

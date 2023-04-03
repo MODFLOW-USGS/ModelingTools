@@ -7,8 +7,8 @@ inherited frmHintDelay: TfrmHintDelay
   Caption = 'Hint Display Time'
   ClientHeight = 88
   ClientWidth = 321
-  ExplicitWidth = 339
-  ExplicitHeight = 133
+  ExplicitWidth = 333
+  ExplicitHeight = 126
   PixelsPerInch = 120
   TextHeight = 18
   object lblHintDisplayTime: TLabel

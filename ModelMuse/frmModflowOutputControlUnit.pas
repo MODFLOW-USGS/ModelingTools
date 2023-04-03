@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ExtCtrls, JvPageList,
-  JvExControls, JvComponent, ComCtrls, JvExComCtrls, JvPageListTreeView,
+  JvExControls, ComCtrls, JvExComCtrls, JvPageListTreeView,
   JvExStdCtrls, JvCheckBox, JvExExtCtrls, JvRadioGroup, frameOutputControlUnit,
   ArgusDataEntry, Mask, JvExMask, JvSpin, JvCombobox, JvListComb,
-  JvNetscapeSplitter, Grids, RbwDataGrid4, frameGridUnit, UndoItems,
+  JvNetscapeSplitter, RbwDataGrid4, frameGridUnit, UndoItems,
   ModflowOutputControlUnit;
 
 type

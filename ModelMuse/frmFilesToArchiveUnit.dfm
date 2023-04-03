@@ -29,7 +29,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       OnLinkClick = JvLinkLabel1LinkClick
     end
     object btnCancel: TBitBtn
-      Left = 529
+      Left = 525
       Top = 30
       Width = 83
       Height = 32
@@ -37,10 +37,10 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 5
-      ExplicitLeft = 525
+      ExplicitLeft = 521
     end
     object btnOK: TBitBtn
-      Left = 440
+      Left = 436
       Top = 30
       Width = 83
       Height = 32
@@ -49,10 +49,10 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
-      ExplicitLeft = 436
+      ExplicitLeft = 432
     end
     object btnHelp: TBitBtn
-      Left = 353
+      Left = 349
       Top = 30
       Width = 81
       Height = 32
@@ -61,7 +61,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 349
+      ExplicitLeft = 345
     end
     object btnArchive: TButton
       Left = 8

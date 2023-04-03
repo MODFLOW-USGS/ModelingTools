@@ -13,9 +13,9 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       46)
     inherited seNumberOfTimes: TJvSpinEdit
       Top = 12
-      Height = 28
+      Height = 23
       ExplicitTop = 12
-      ExplicitHeight = 28
+      ExplicitHeight = 23
     end
     inherited btnDelete: TBitBtn
       Left = 394
@@ -197,7 +197,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 112
         DesignSize = (
           474
           46)
@@ -284,7 +283,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Height = 117
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 112
         object pnlPrecipFormula: TPanel
           Left = 1
           Top = 1
@@ -428,7 +426,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 112
         DesignSize = (
           474
           46)
@@ -515,7 +512,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Height = 117
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 112
         object pnlFormulaRunoff: TPanel
           Left = 1
           Top = 1
@@ -659,7 +655,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 112
         DesignSize = (
           474
           46)
@@ -746,7 +741,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Height = 117
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 112
         object pnlFormulaConstConc: TPanel
           Left = 1
           Top = 1

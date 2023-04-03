@@ -3,7 +3,8 @@ inherited frmImportVertexValues: TfrmImportVertexValues
   HelpKeyword = 'Import-Vertex-Values-Dialog-Bo'
   Caption = 'Import Vertex Values'
   ClientWidth = 697
-  ExplicitWidth = 713
+  ExplicitWidth = 709
+  ExplicitHeight = 272
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 113
@@ -19,12 +20,13 @@ inherited frmImportVertexValues: TfrmImportVertexValues
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 426
+    ExplicitTop = 192
+    ExplicitWidth = 693
     DesignSize = (
       697
       41)
     object btnHelp: TBitBtn
-      Left = 352
+      Left = 348
       Top = 4
       Width = 108
       Height = 33
@@ -33,10 +35,10 @@ inherited frmImportVertexValues: TfrmImportVertexValues
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 81
+      ExplicitLeft = 344
     end
     object btnOK: TBitBtn
-      Left = 466
+      Left = 462
       Top = 4
       Width = 108
       Height = 33
@@ -44,10 +46,10 @@ inherited frmImportVertexValues: TfrmImportVertexValues
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 195
+      ExplicitLeft = 458
     end
     object btnCancel: TBitBtn
-      Left = 580
+      Left = 576
       Top = 4
       Width = 108
       Height = 33
@@ -55,7 +57,7 @@ inherited frmImportVertexValues: TfrmImportVertexValues
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 309
+      ExplicitLeft = 572
     end
   end
   object Panel1: TPanel
@@ -66,6 +68,7 @@ inherited frmImportVertexValues: TfrmImportVertexValues
     Align = alLeft
     Caption = 'Panel1'
     TabOrder = 1
+    ExplicitHeight = 192
     object memoKeys: TMemo
       Left = 1
       Top = 25
@@ -74,7 +77,7 @@ inherited frmImportVertexValues: TfrmImportVertexValues
       Align = alClient
       TabOrder = 0
       OnChange = memoKeysChange
-      ExplicitTop = 24
+      ExplicitHeight = 166
     end
     object Panel2: TPanel
       Left = 1
@@ -94,13 +97,13 @@ inherited frmImportVertexValues: TfrmImportVertexValues
     Align = alClient
     TabOrder = 2
     ExplicitLeft = 118
-    ExplicitWidth = 308
-    ExplicitHeight = 193
+    ExplicitWidth = 575
+    ExplicitHeight = 192
     inherited Panel: TPanel
       Top = 152
       Width = 579
-      ExplicitTop = 152
-      ExplicitWidth = 308
+      ExplicitTop = 151
+      ExplicitWidth = 575
       inherited lbNumber: TLabel
         Width = 120
         Height = 18
@@ -109,15 +112,15 @@ inherited frmImportVertexValues: TfrmImportVertexValues
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 416
+        Left = 413
         ExplicitLeft = 262
       end
       inherited sbInsert: TSpeedButton
-        Left = 472
+        Left = 468
         ExplicitLeft = 298
       end
       inherited sbDelete: TSpeedButton
-        Left = 527
+        Left = 524
         ExplicitLeft = 333
       end
       inherited seNumber: TJvSpinEdit
@@ -178,8 +181,8 @@ inherited frmImportVertexValues: TfrmImportVertexValues
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 308
-      ExplicitHeight = 152
+      ExplicitWidth = 575
+      ExplicitHeight = 151
     end
   end
 end

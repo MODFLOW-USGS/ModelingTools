@@ -36,7 +36,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes, ModflowRipPlantGroupsUnit, frmCustomGoPhastUnit,
+  frmGoPhastUnit, GoPhastTypes, ModflowRipPlantGroupsUnit,
   ModflowRipUnit, ScreenObjectUnit, System.Generics.Collections;
 
 resourcestring

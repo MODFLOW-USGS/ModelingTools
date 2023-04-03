@@ -9,7 +9,7 @@ interface
 uses System.UITypes,
   Windows, SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
   Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, ExtCtrls,
-  Grids, IntListUnit, ScreenObjectUnit, DXF_Structs, DXF_read, DXF_Utils,
+  ScreenObjectUnit, DXF_Structs, DXF_Utils,
   frmImportShapefileUnit, frmCustomImportSimpleFileUnit;
 
 type
@@ -54,8 +54,8 @@ type
 
 implementation
 
-uses frmGoPhastUnit, GoPhastTypes, DataSetUnit, 
-  RbwParser, UndoItems, frmProgressUnit, frmDataSetsUnits, ModelMuseUtilities, FastGEO,
+uses frmGoPhastUnit, GoPhastTypes, DataSetUnit,
+  RbwParser, UndoItems, frmProgressUnit, ModelMuseUtilities, FastGEO,
   ValueArrayStorageUnit, GIS_Functions;
 
 resourcestring

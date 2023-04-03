@@ -13,12 +13,12 @@ interface
 
 uses
   System.UITypes, OrderedCollectionUnit, EdgeDisplayUnit, CommDlg, RbwDataGrid4,
-  Spin, Windows, Forms,
+  Windows, Forms,
   SysUtils, Types,
-  Classes, Graphics, Controls, Dialogs, StdCtrls, Grids, HtmlHelpViewer,
-  JvSpin, VirtualTrees, DataSetUnit, ClassificationUnit, GLWin32Viewer,
-  RbwStringTreeCombo, Mask, JvExMask, Generics.Collections, JvExStdCtrls,
-  JvCombobox, JvListComb, Vcl.ExtCtrls;
+  Classes, Graphics, Controls, Dialogs, StdCtrls, Grids,
+  VirtualTrees, DataSetUnit, ClassificationUnit, GLWin32Viewer,
+  RbwStringTreeCombo, Generics.Collections,
+  JvListComb, Vcl.ExtCtrls;
 
 type
   EAbortingImport = class(Exception);
@@ -246,8 +246,8 @@ resourcestring
 
 implementation
 
-uses SubscriptionUnit, GoPhastTypes, ModflowPackagesUnit,
-  frmGoPhastUnit, PhastModelUnit, ModflowPackageSelectionUnit,
+uses SubscriptionUnit, GoPhastTypes,
+  frmGoPhastUnit, PhastModelUnit,
   frameCustomColorUnit, JvRollOut, Messages, ShellAPI, RbwInternetUtilities,
   frmUpdateDataSetsUnit;
 

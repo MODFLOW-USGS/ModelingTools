@@ -26,7 +26,7 @@ type
 implementation
 
 uses
-  frameModflow6TimeSeriesUnit, GoPhastTypes, ModflowParameterUnit,
+  GoPhastTypes, ModflowParameterUnit,
   Modflow6TimeSeriesUnit;
 
 { TMf6TimeSeriesWriter }

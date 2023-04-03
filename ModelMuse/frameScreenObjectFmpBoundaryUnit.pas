@@ -43,7 +43,7 @@ var
 implementation
 
 uses
-  GoPhastTypes, ModflowTimeUnit, frmGoPhastUnit;
+  GoPhastTypes;
 
 {$R *.dfm}
 

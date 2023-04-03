@@ -8,6 +8,11 @@ program Mf6ObsExtractor ;
 {#BACKUP Mf6ObsExtractor.lpi}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   Classes,
   System.SysUtils,
   custominputreader in 'custominputreader.pas',

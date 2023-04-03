@@ -4,9 +4,8 @@ inherited frmPhastLocation: TfrmPhastLocation
   Caption = 'PHAST Program Location'
   ClientHeight = 131
   ClientWidth = 947
-  ExplicitWidth = 963
-  ExplicitHeight = 170
-  PixelsPerInch = 96
+  ExplicitWidth = 959
+  ExplicitHeight = 169
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -15,12 +14,13 @@ inherited frmPhastLocation: TfrmPhastLocation
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitWidth = 496
+    ExplicitTop = 89
+    ExplicitWidth = 943
     DesignSize = (
       947
       41)
     object btnHelp: TBitBtn
-      Left = 683
+      Left = 679
       Top = 6
       Width = 82
       Height = 27
@@ -29,10 +29,10 @@ inherited frmPhastLocation: TfrmPhastLocation
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 232
+      ExplicitLeft = 675
     end
     object btnOK: TBitBtn
-      Left = 771
+      Left = 767
       Top = 6
       Width = 82
       Height = 27
@@ -41,10 +41,10 @@ inherited frmPhastLocation: TfrmPhastLocation
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 320
+      ExplicitLeft = 763
     end
     object btnCancel: TBitBtn
-      Left = 859
+      Left = 855
       Top = 6
       Width = 83
       Height = 27
@@ -52,7 +52,7 @@ inherited frmPhastLocation: TfrmPhastLocation
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 408
+      ExplicitLeft = 851
     end
   end
   object Panel1: TPanel
@@ -62,7 +62,8 @@ inherited frmPhastLocation: TfrmPhastLocation
     Height = 90
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 496
+    ExplicitWidth = 943
+    ExplicitHeight = 89
     DesignSize = (
       947
       90)
@@ -88,14 +89,14 @@ inherited frmPhastLocation: TfrmPhastLocation
     object fedPhast: TJvFilenameEdit
       Left = 16
       Top = 40
-      Width = 912
+      Width = 908
       Height = 26
       Filter = 'Batch Files (*.bat)|*.bat|All files (*.*)|*.*'
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       Text = ''
       OnChange = fedPhastChange
-      ExplicitWidth = 461
+      ExplicitWidth = 904
     end
   end
 end

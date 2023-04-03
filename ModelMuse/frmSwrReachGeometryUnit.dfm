@@ -4,9 +4,8 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
   Caption = 'SWR Reach Geometry'
   ClientHeight = 555
   ClientWidth = 782
-  ExplicitWidth = 798
-  ExplicitHeight = 594
-  PixelsPerInch = 96
+  ExplicitWidth = 794
+  ExplicitHeight = 593
   TextHeight = 18
   object splttrMain: TJvNetscapeSplitter
     Left = 0
@@ -29,11 +28,13 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 512
+    ExplicitWidth = 778
     DesignSize = (
       782
       42)
     object btnHelp: TBitBtn
-      Left = 511
+      Left = 507
       Top = 6
       Width = 83
       Height = 33
@@ -41,9 +42,10 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 503
     end
     object btnOK: TBitBtn
-      Left = 600
+      Left = 596
       Top = 6
       Width = 83
       Height = 33
@@ -52,9 +54,10 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 592
     end
     object btnCancel: TBitBtn
-      Left = 689
+      Left = 685
       Top = 6
       Width = 83
       Height = 33
@@ -62,6 +65,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 681
     end
   end
   object jvplGeometry: TJvPageList
@@ -72,6 +76,8 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
     ActivePage = jvspTable
     PropagateEnable = False
     Align = alBottom
+    ExplicitTop = 362
+    ExplicitWidth = 778
     object jvspCrossSection: TJvStandardPage
       Left = 0
       Top = 0
@@ -81,7 +87,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
       inline frameCrossSection: TframePlotGrid
         Left = 0
         Top = 0
-        Width = 782
+        Width = 786
         Height = 150
         Align = alClient
         TabOrder = 0
@@ -89,7 +95,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
         ExplicitHeight = 150
         inherited pbPlot: TPaintBox
           Left = 326
-          Width = 456
+          Width = 460
           Height = 109
           OnPaint = frameCrossSectionpbPlotPaint
           ExplicitLeft = 326
@@ -104,7 +110,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
         end
         inherited Panel: TPanel
           Top = 109
-          Width = 782
+          Width = 786
           ExplicitTop = 109
           ExplicitWidth = 782
           inherited lbNumber: TLabel
@@ -140,9 +146,11 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
           Height = 109
           ColCount = 2
           OnSetEditText = frameCrossSectionGridSetEditText
+          OnEndUpdate = frameCrossSectionGridEndUpdate
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -166,6 +174,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -187,7 +196,6 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = frameCrossSectionGridEndUpdate
           ExplicitWidth = 321
           ExplicitHeight = 109
         end
@@ -199,6 +207,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
       Width = 782
       Height = 150
       Caption = 'jvspTable'
+      ExplicitWidth = 778
       inline frameTable: TframePlotGrid
         Left = 0
         Top = 0
@@ -206,7 +215,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
         Height = 150
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 782
+        ExplicitWidth = 778
         ExplicitHeight = 150
         inherited pbPlot: TPaintBox
           Left = 454
@@ -227,7 +236,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
           Top = 109
           Width = 782
           ExplicitTop = 109
-          ExplicitWidth = 782
+          ExplicitWidth = 778
           inherited lbNumber: TLabel
             Width = 146
             Height = 18
@@ -236,17 +245,17 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 231
+            Left = 230
             OnClick = frameTablesbAddClick
             ExplicitLeft = 231
           end
           inherited sbInsert: TSpeedButton
-            Left = 260
+            Left = 258
             OnClick = frameTablesbInsertClick
             ExplicitLeft = 260
           end
           inherited sbDelete: TSpeedButton
-            Left = 289
+            Left = 288
             OnClick = frameTablesbDeleteClick
             ExplicitLeft = 289
           end
@@ -262,9 +271,11 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
           ColCount = 5
           OnSelectCell = frameTableGridSelectCell
           OnSetEditText = frameTableGridSetEditText
+          OnEndUpdate = frameTableGridEndUpdate
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -288,6 +299,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -311,6 +323,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -334,6 +347,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -357,6 +371,7 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -378,7 +393,6 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          OnEndUpdate = frameTableGridEndUpdate
           ExplicitWidth = 449
           ExplicitHeight = 109
         end
@@ -398,13 +412,13 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
     Height = 353
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 782
-    ExplicitHeight = 353
+    ExplicitWidth = 778
+    ExplicitHeight = 352
     inherited Panel: TPanel
       Top = 312
       Width = 782
-      ExplicitTop = 312
-      ExplicitWidth = 782
+      ExplicitTop = 311
+      ExplicitWidth = 778
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -412,21 +426,21 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 231
+        Left = 230
         Top = 3
         OnClick = frameGeometrysbAddClick
         ExplicitLeft = 231
         ExplicitTop = 3
       end
       inherited sbInsert: TSpeedButton
-        Left = 260
+        Left = 258
         Top = 3
         OnClick = frameGeometrysbInsertClick
         ExplicitLeft = 260
         ExplicitTop = 3
       end
       inherited sbDelete: TSpeedButton
-        Left = 289
+        Left = 288
         Top = 3
         OnClick = frameGeometrysbDeleteClick
         ExplicitLeft = 289
@@ -448,8 +462,8 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
       OnBeforeDrawCell = frameGeometryGridBeforeDrawCell
       OnEndUpdate = frameGeometryGridEndUpdate
       ExplicitTop = 40
-      ExplicitWidth = 776
-      ExplicitHeight = 269
+      ExplicitWidth = 772
+      ExplicitHeight = 268
     end
     inherited comboType: TJvImageComboBox
       Height = 28

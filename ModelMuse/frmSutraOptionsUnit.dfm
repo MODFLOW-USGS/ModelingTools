@@ -4,8 +4,8 @@ inherited frmSutraOptions: TfrmSutraOptions
   Caption = 'SUTRA Options'
   ClientHeight = 562
   ClientWidth = 784
-  ExplicitWidth = 802
-  ExplicitHeight = 609
+  ExplicitWidth = 796
+  ExplicitHeight = 600
   TextHeight = 18
   object splttrVertical: TJvNetscapeSplitter
     Left = 179
@@ -27,6 +27,8 @@ inherited frmSutraOptions: TfrmSutraOptions
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 511
+    ExplicitWidth = 780
     DesignSize = (
       784
       50)
@@ -42,7 +44,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       Caption = 'Number of regions'
     end
     object btnCancel: TBitBtn
-      Left = 674
+      Left = 670
       Top = 7
       Width = 91
       Height = 33
@@ -50,9 +52,10 @@ inherited frmSutraOptions: TfrmSutraOptions
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 666
     end
     object btnOK: TBitBtn
-      Left = 577
+      Left = 573
       Top = 6
       Width = 91
       Height = 33
@@ -61,9 +64,10 @@ inherited frmSutraOptions: TfrmSutraOptions
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 569
     end
     object btnHelp: TBitBtn
-      Left = 480
+      Left = 476
       Top = 7
       Width = 91
       Height = 33
@@ -72,6 +76,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 472
     end
     object seRegionCount: TJvSpinEdit
       Left = 14
@@ -124,6 +129,8 @@ inherited frmSutraOptions: TfrmSutraOptions
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
+    ExplicitWidth = 591
+    ExplicitHeight = 511
     object jvspConfiguration: TJvStandardPage
       Left = 0
       Top = 0
@@ -131,6 +138,8 @@ inherited frmSutraOptions: TfrmSutraOptions
       Height = 512
       HelpType = htKeyword
       HelpKeyword = 'Configuration_Pane'
+      ExplicitWidth = 591
+      ExplicitHeight = 511
       DesignSize = (
         595
         512)
@@ -173,7 +182,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgSaturation: TRadioGroup
         Left = 263
         Top = 147
-        Width = 319
+        Width = 315
         Height = 96
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -183,6 +192,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           'Unsaturated')
         TabOrder = 5
         OnClick = rgSaturationClick
+        ExplicitWidth = 311
       end
       object rgTransport: TRadioGroup
         Left = 6
@@ -202,7 +212,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgSimulationType: TRadioGroup
         Left = 6
         Top = 249
-        Width = 576
+        Width = 572
         Height = 105
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Simulation type (CSSFLO, CSSTRA)'
@@ -212,6 +222,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           'Steady-state flow, transient transport'
           'Transient flow, transient transport')
         TabOrder = 6
+        ExplicitWidth = 568
       end
       object rdeGravX: TRbwDataEntry
         Left = 6
@@ -290,14 +301,12 @@ inherited frmSutraOptions: TfrmSutraOptions
           AlignWithMargins = True
           Left = 4
           Top = 4
-          Width = 587
-          Height = 41
+          Width = 458
+          Height = 36
           Align = alClient
           Caption = 
             'The first 80 characters of the first two lines are TITLE1 and TI' +
             'TLE2.'#13#10'The remaining lines will be treated as comments.'
-          ExplicitWidth = 458
-          ExplicitHeight = 36
         end
       end
     end
@@ -336,7 +345,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgStartType: TRadioGroup
         Left = 6
         Top = 3
-        Width = 578
+        Width = 574
         Height = 78
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Starting type (CREAD)'
@@ -346,11 +355,12 @@ inherited frmSutraOptions: TfrmSutraOptions
           'Warm start (start from restart file)')
         TabOrder = 0
         OnClick = rgStartTypeClick
+        ExplicitWidth = 578
       end
       object fedRestartFile: TJvFilenameEdit
         Left = 6
         Top = 143
-        Width = 578
+        Width = 574
         Height = 26
         DefaultExt = '.rst'
         Filter = 'Restart Files (*.rst)|*.rst|All files (*.*)|*.*'
@@ -359,6 +369,7 @@ inherited frmSutraOptions: TfrmSutraOptions
         TabOrder = 2
         Text = ''
         OnChange = fedRestartFileChange
+        ExplicitWidth = 578
       end
       object seRestartFrequency: TJvSpinEdit
         Left = 6
@@ -392,7 +403,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object fedRestartInitialConditions: TJvFilenameEdit
         Left = 6
         Top = 358
-        Width = 578
+        Width = 574
         Height = 26
         DefaultExt = '.rst'
         Filter = 'Restart Files (*.rst)|*.rst|All files (*.*)|*.*'
@@ -401,6 +412,7 @@ inherited frmSutraOptions: TfrmSutraOptions
         TabOrder = 4
         Text = ''
         OnChange = fedRestartInitialConditionsChange
+        ExplicitWidth = 578
       end
     end
     object jvspNumericalControls: TJvStandardPage
@@ -590,7 +602,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgPressureSolution: TRadioGroup
         Left = 6
         Top = 3
-        Width = 586
+        Width = 582
         Height = 105
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Pressure solution solver (CSOLVP)'
@@ -601,6 +613,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           'ILU-preconditioned orthomin (ORTHOMIN)')
         TabOrder = 0
         OnClick = rgPressureSolutionClick
+        ExplicitWidth = 586
       end
       object seMaxPressureIterations: TJvSpinEdit
         Left = 6
@@ -624,7 +637,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgUSolutionMethod: TRadioGroup
         Left = 6
         Top = 207
-        Width = 586
+        Width = 582
         Height = 90
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Transport solution solver (CSOLVU)'
@@ -634,6 +647,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           'ILU-preconditioned orthomin (ORTHOMIN)')
         TabOrder = 3
         OnClick = rgUSolutionMethodClick
+        ExplicitWidth = 586
       end
       object seMaxTransportIterations: TJvSpinEdit
         Left = 6
@@ -1667,6 +1681,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       FF000000000200000000000000011149006E0069007400690061006C0043006F
       006E0064006900740069006F006E007300}
     Items.Links = {03000000000000000100000002000000}
+    ExplicitHeight = 511
   end
   object rcLakes: TRbwController
     ControlList = <

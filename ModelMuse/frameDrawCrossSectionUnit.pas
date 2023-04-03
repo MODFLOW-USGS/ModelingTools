@@ -7,7 +7,7 @@ uses
   Graphics, Controls, Forms, Dialogs, VirtualTrees, Buttons,
   StdCtrls, DataSetUnit, GoPhastTypes, JvExControls, JvColorBox,
   JvColorButton, Generics.Collections, CheckLst, JvExCheckLst,
-  JvCheckListBox, ExtCtrls, Vcl.Samples.Spin, Vcl.Mask, JvExMask, JvSpin;
+  JvCheckListBox, ExtCtrls, Vcl.Mask, JvExMask, JvSpin;
 
 type
   TframeDrawCrossSection = class(TFrame)

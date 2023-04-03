@@ -33,7 +33,7 @@ procedure Regress2DPointsExpanded(Const PointData: TPoint2DArray;
 implementation
 
 uses
-  System.Math, JmFloatVector, JmFloatMatrix;
+  JmFloatVector, JmFloatMatrix;
 
 procedure Regression(PointData: T2D_DynDoubleArray; const ZValues: TDynDoubleArray;
   var Coefficients: TDynDoubleArray);

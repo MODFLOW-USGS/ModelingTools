@@ -36,7 +36,7 @@ inherited frmSelectedObjects: TfrmSelectedObjects
       426
       46)
     object btnClose: TBitBtn
-      Left = 106
+      Left = 102
       Top = 6
       Width = 89
       Height = 33
@@ -44,10 +44,10 @@ inherited frmSelectedObjects: TfrmSelectedObjects
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 102
+      ExplicitLeft = 98
     end
     object btnHelp: TBitBtn
-      Left = 11
+      Left = 7
       Top = 6
       Width = 89
       Height = 33
@@ -56,7 +56,7 @@ inherited frmSelectedObjects: TfrmSelectedObjects
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 7
+      ExplicitLeft = 3
     end
   end
 end

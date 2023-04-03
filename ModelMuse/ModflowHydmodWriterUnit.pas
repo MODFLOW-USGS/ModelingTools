@@ -64,7 +64,7 @@ type
 implementation
 
 uses
-  frmModflowNameFileUnit, ModflowUnitNumbers, ScreenObjectUnit,
+  ModflowUnitNumbers, ScreenObjectUnit,
   GoPhastTypes, frmProgressUnit, frmErrorsAndWarningsUnit, FastGEO, Forms,
   frmGoPhastUnit;
 

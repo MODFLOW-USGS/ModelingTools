@@ -4,7 +4,7 @@ interface
 
 uses Classes, GoPhastTypes, ColorSchemes, DataSetUnit, ValueArrayStorageUnit,
   Math, Graphics, SysUtils, EdgeDisplayUnit, Types, SubscriptionUnit,
-  ContourUnit, PathlineReader;
+  PathlineReader;
 
 type
   TLegendType = (ltColor, ltContour, ltEndpoints);

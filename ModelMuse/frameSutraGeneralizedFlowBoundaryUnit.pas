@@ -69,7 +69,7 @@ implementation
 uses
   SutraBoundaryUnit, SutraBoundariesUnit, SutraTimeScheduleUnit,
   AdjustSutraBoundaryValuesUnit, ScreenObjectUnit, System.Generics.Collections,
-  frmGoPhastUnit, frmErrorsAndWarningsUnit, GoPhastTypes, frmCustomGoPhastUnit,
+  GoPhastTypes, frmCustomGoPhastUnit,
   SutraOptionsUnit;
 
 resourcestring

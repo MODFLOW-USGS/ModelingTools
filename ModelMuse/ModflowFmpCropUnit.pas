@@ -651,7 +651,7 @@ type
 implementation
 
 uses
-  ScreenObjectUnit, frmGoPhastUnit, frmErrorsAndWarningsUnit,
+  frmGoPhastUnit, frmErrorsAndWarningsUnit,
   RbwParser, frmFormulaErrorsUnit, PhastModelUnit, ModflowPackageSelectionUnit,
   GlobalVariablesUnit, LockedGlobalVariableChangers, UpdateDataArrayUnit;
 

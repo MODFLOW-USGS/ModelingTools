@@ -82,8 +82,8 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ScreenObjectUnit,
   SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
-  SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit, ModflowParameterUnit,
-  ModelMuseUtilities, ModflowCellUnit;
+  SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit,
+  ModflowCellUnit;
 
 resourcestring
   StrGeneralizedflowBou = 'generalized-flow boundary condition';

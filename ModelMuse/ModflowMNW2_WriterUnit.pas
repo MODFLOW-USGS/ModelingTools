@@ -104,7 +104,7 @@ implementation
 uses
   ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit, GoPhastTypes,
   ModflowTimeUnit, ModflowBoundaryUnit, frmFormulaErrorsUnit, Math, Forms,
-  DataSetUnit, ObservationComparisonsUnit, ModelMuseUtilities, AbstractGridUnit,
+  DataSetUnit, AbstractGridUnit,
   ModflowParameterUnit;
 
 resourcestring

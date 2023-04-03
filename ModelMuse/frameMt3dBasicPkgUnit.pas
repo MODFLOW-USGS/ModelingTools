@@ -70,7 +70,7 @@ var
 implementation
 
 uses
-  PhastModelUnit, Grids, frmGoPhastUnit, GoPhastTypes;
+  PhastModelUnit, Grids, GoPhastTypes;
 
 {$R *.dfm}
 

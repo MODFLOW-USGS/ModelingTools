@@ -11,8 +11,8 @@ interface
 uses
   System.UITypes, SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, frmCustomGoPhastUnit, Grids, RbwDataGrid4, ExtCtrls,
-  Buttons, ComCtrls, UndoItems, TimeUnit, Spin, Mask, JvExMask, JvSpin,
-  ArgusDataEntry; 
+  Buttons, UndoItems, TimeUnit, Mask, JvExMask, JvSpin,
+  ArgusDataEntry;
 
 type
   {@abstract(@name is used to edit frmGoPhast.Model.@link(TPhastModel.Times).)}

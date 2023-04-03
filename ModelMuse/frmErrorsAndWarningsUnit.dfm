@@ -20,7 +20,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       472
       41)
     object btnClose: TBitBtn
-      Left = 366
+      Left = 358
       Top = 4
       Width = 89
       Height = 33
@@ -28,9 +28,10 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 354
     end
     object btnHelp: TBitBtn
-      Left = 271
+      Left = 263
       Top = 4
       Width = 89
       Height = 33
@@ -39,6 +40,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 259
     end
     object btnSave: TButton
       Left = 88
@@ -104,7 +106,6 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
     OnMeasureItem = vstWarningsAndErrorsMeasureItem
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-    ExplicitHeight = 193
     Columns = <
       item
         Position = 0

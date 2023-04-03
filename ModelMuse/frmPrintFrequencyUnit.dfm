@@ -6,9 +6,8 @@ inherited frmPrintFrequency: TfrmPrintFrequency
   Caption = 'PHAST Print Frequency'
   ClientHeight = 516
   ClientWidth = 606
-  ExplicitWidth = 622
-  ExplicitHeight = 555
-  PixelsPerInch = 96
+  ExplicitWidth = 618
+  ExplicitHeight = 554
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -18,8 +17,8 @@ inherited frmPrintFrequency: TfrmPrintFrequency
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 148
-    ExplicitWidth = 424
+    ExplicitTop = 437
+    ExplicitWidth = 602
     DesignSize = (
       606
       78)
@@ -51,7 +50,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       OnClick = btnDeleteClick
     end
     object btnOK: TBitBtn
-      Left = 414
+      Left = 410
       Top = 36
       Width = 91
       Height = 33
@@ -60,9 +59,10 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
+      ExplicitLeft = 406
     end
     object btnCancel: TBitBtn
-      Left = 511
+      Left = 507
       Top = 36
       Width = 91
       Height = 33
@@ -70,6 +70,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 5
+      ExplicitLeft = 503
     end
     object cbSaveFinalHeads: TCheckBox
       Left = 8
@@ -80,7 +81,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       TabOrder = 6
     end
     object btnHelp: TBitBtn
-      Left = 317
+      Left = 313
       Top = 36
       Width = 91
       Height = 33
@@ -89,6 +90,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 309
     end
   end
   object rdgPrintFrequency: TRbwDataGrid4
@@ -121,6 +123,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -145,6 +148,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -169,6 +173,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -193,6 +198,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -225,8 +231,8 @@ inherited frmPrintFrequency: TfrmPrintFrequency
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 424
-    ExplicitHeight = 107
+    ExplicitWidth = 602
+    ExplicitHeight = 396
     ColWidths = (
       64
       64
@@ -263,7 +269,7 @@ inherited frmPrintFrequency: TfrmPrintFrequency
     Height = 41
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 424
+    ExplicitWidth = 602
     object rdeTime: TRbwDataEntry
       Left = 136
       Top = 10

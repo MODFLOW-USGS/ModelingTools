@@ -3,9 +3,8 @@ inherited frmHelpVersion: TfrmHelpVersion
   ClientHeight = 149
   ClientWidth = 383
   OnClose = FormClose
-  ExplicitWidth = 401
-  ExplicitHeight = 194
-  PixelsPerInch = 96
+  ExplicitWidth = 395
+  ExplicitHeight = 187
   TextHeight = 18
   object rgHelpVersion: TRadioGroup
     Left = 0
@@ -22,6 +21,8 @@ inherited frmHelpVersion: TfrmHelpVersion
       'Online (any operating system)')
     TabOrder = 0
     WordWrap = True
+    ExplicitWidth = 379
+    ExplicitHeight = 107
   end
   object pnl1: TPanel
     Left = 0
@@ -31,18 +32,15 @@ inherited frmHelpVersion: TfrmHelpVersion
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 136
-    ExplicitTop = 192
-    ExplicitWidth = 185
+    ExplicitTop = 107
+    ExplicitWidth = 379
     object btnClose: TBitBtn
       Left = 256
       Top = 6
       Width = 75
       Height = 27
-      DoubleBuffered = True
       Kind = bkClose
       NumGlyphs = 2
-      ParentDoubleBuffered = False
       TabOrder = 0
     end
   end

@@ -29,8 +29,8 @@ implementation
 
 uses
   frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit, GoPhastTypes,
-  ModflowOptionsUnit, ModflowOutputControlUnit, PhastModelUnit,
-  System.SysUtils, PlProcUnit, PestParamRoots;
+  ModflowOptionsUnit, PhastModelUnit,
+  System.SysUtils, PestParamRoots;
 
 resourcestring
   StrWritingNPFPackage = 'Writing NPF Package input.';

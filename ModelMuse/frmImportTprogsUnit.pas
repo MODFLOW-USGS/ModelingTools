@@ -68,7 +68,7 @@ implementation
 
 {$R *.dfm}
 
-uses frmGoPhastUnit, Contnrs, ClassificationUnit, RbwParser,
+uses frmGoPhastUnit, RbwParser,
   AbstractGridUnit, IOUtils, PhastModelUnit, InterpolationUnit,
   ScreenObjectUnit, ValueArrayStorageUnit, UndoItems, ModelMuseUtilities,
   GIS_Functions, SutraMeshUnit;

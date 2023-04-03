@@ -7,7 +7,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Grids, RbwDataGrid4, Generics.Collections,
-  ModflowSfrChannelUnit, UndoItemsScreenObjects, Math;
+  ModflowSfrChannelUnit, UndoItemsScreenObjects;
 
 type
   // @name represents the columns of @link(TframeCrossSection.dg8Point)

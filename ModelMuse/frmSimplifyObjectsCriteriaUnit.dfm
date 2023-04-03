@@ -4,9 +4,8 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
   Caption = 'Criteria for Simplifying Objects'
   ClientHeight = 198
   ClientWidth = 416
-  ExplicitWidth = 432
-  ExplicitHeight = 237
-  PixelsPerInch = 96
+  ExplicitWidth = 428
+  ExplicitHeight = 236
   TextHeight = 18
   object lblAngle: TLabel
     Left = 8
@@ -59,13 +58,13 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 185
-    ExplicitWidth = 356
+    ExplicitTop = 156
+    ExplicitWidth = 412
     DesignSize = (
       416
       41)
     object btnHelp: TBitBtn
-      Left = 151
+      Left = 147
       Top = 4
       Width = 82
       Height = 33
@@ -73,10 +72,10 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 91
+      ExplicitLeft = 143
     end
     object btnOK: TBitBtn
-      Left = 239
+      Left = 235
       Top = 4
       Width = 82
       Height = 33
@@ -85,10 +84,10 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 179
+      ExplicitLeft = 231
     end
     object btnCancel: TBitBtn
-      Left = 327
+      Left = 323
       Top = 4
       Width = 82
       Height = 33
@@ -96,7 +95,7 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 267
+      ExplicitLeft = 319
     end
   end
 end

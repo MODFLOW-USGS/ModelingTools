@@ -8,7 +8,7 @@ uses System.UITypes,
   SutraOptionsUnit, SutraMeshUnit, ComCtrls, JvExComCtrls,
   JvPageListTreeView, JvPageList, JvExControls, Mask, JvExMask, JvToolEdit,
   JvSpin, JvEditorCommon, JvEditor, ArgusDataEntry, RequiredDataSetsUndoUnit,
-  JvExExtCtrls, JvNetscapeSplitter, Vcl.ImgList, RbwController,
+  JvExExtCtrls, JvNetscapeSplitter, RbwController,
   frameSutraRegionalPropertyUnit, System.Generics.Collections;
 
 type

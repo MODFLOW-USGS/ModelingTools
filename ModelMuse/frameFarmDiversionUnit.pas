@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frameFormulaGridUnit, ExtCtrls,
   Grids, RbwDataGrid4, StdCtrls, Mask, JvExMask, JvSpin, Buttons,
-  UndoItemsScreenObjects, ArgusDataEntry, ModflowFmpFarmUnit, RbwController;
+  ArgusDataEntry, ModflowFmpFarmUnit, RbwController;
 
 type
   TDiversionType = (dtDiversion, dtReturnFlow);

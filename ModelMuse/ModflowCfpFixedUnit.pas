@@ -3,7 +3,7 @@ unit ModflowCfpFixedUnit;
 interface
 
 uses Classes, RbwParser, GoPhastTypes, ModflowBoundaryUnit, SubscriptionUnit,
-  FormulaManagerUnit, Contnrs, SysUtils;
+  FormulaManagerUnit, SysUtils;
 
 type
 
@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, frmGoPhastUnit, ScreenObjectUnit, DataSetUnit;
+  PhastModelUnit, DataSetUnit;
 
 const
   FixedHeadPosition = 0;

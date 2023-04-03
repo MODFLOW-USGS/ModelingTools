@@ -5,7 +5,7 @@ unit ActiveZone;
 
 interface
 
-uses SysUtils, Classes, GoPhastTypes, DataSetUnit, PhastDataSets, ZoneUnit;
+uses SysUtils, Classes, GoPhastTypes, DataSetUnit, ZoneUnit;
 
 type
   {@abstract(@name represents an individual active area zone.)
@@ -49,7 +49,7 @@ type
 
 implementation
 
-uses Contnrs, frmGoPhastUnit, PhastModelUnit;
+uses frmGoPhastUnit, PhastModelUnit;
 
 type
   {@abstract(@name stores and initializes the @link(DataSetUnit.TDataArray)s

@@ -7,7 +7,7 @@ uses
   Forms, Classes, ModflowBoundaryDisplayUnit, GoPhastTypes,
   PhastModelUnit, Generics.Collections, ModflowSwrReachUnit,
   ScreenObjectUnit, FastGEO, ModflowSwrStructureUnit, SwrReachObjectUnit,
-  ModflowSwrObsUnit, IntListUnit;
+  ModflowSwrObsUnit;
 
 type
   TStructureList = TList<TStructure>;

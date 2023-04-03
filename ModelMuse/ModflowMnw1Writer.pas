@@ -38,7 +38,7 @@ implementation
 
 uses
   frmErrorsAndWarningsUnit, frmProgressUnit, ScreenObjectUnit,
-  Contnrs, ModflowUnitNumbers, GoPhastTypes, ModflowTimeUnit,
+  ModflowUnitNumbers, GoPhastTypes, ModflowTimeUnit,
   SysUtils, ModflowCellUnit, DataSetUnit;
 
 resourcestring

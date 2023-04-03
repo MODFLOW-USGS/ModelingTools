@@ -3,7 +3,7 @@ unit SutraGeneralFlowNodesUnit;
 interface
 
 uses
-  SutraGeneralBoundaryUnit, GoPhastTypes;
+  GoPhastTypes;
 
 type
    TValueAndAnnotation = record

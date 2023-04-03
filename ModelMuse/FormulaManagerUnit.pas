@@ -102,8 +102,8 @@ implementation
 uses
   frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModflowBoundaryUnit,
   ModflowSfrTable, SubscriptionUnit, GIS_Functions,
-  PhastModelUnit, Math, ModflowHfbUnit, Mt3dmsChemUnit,
-  ModflowRipPlantGroupsUnit, ModflowMvrUnit, Modflow6ObsUnit;
+  PhastModelUnit, Math, Mt3dmsChemUnit,
+  ModflowMvrUnit, Modflow6ObsUnit;
 
 { TFormulaObject }
 

@@ -150,7 +150,7 @@ type
 
 implementation
 
-uses Contnrs, frmGoPhastUnit, PhastModelUnit;
+uses frmGoPhastUnit, PhastModelUnit;
 
 { TSpecifiedHeadDataSets }
 

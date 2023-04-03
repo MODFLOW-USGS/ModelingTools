@@ -7,8 +7,8 @@ inherited frmChemistryOptions: TfrmChemistryOptions
   Caption = 'PHAST Chemistry Options'
   ClientHeight = 313
   ClientWidth = 297
-  ExplicitWidth = 315
-  ExplicitHeight = 358
+  ExplicitWidth = 309
+  ExplicitHeight = 351
   PixelsPerInch = 120
   TextHeight = 18
   object lblDiffusivity: TLabel

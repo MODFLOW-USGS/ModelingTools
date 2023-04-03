@@ -2,7 +2,7 @@ unit ModflowFmp4RootDepthUnit;
 
 interface
 
-uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit,
+uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit,
   ModflowFmp4LandUseBoundaryUnit, GoPhastTypes;
 
 type

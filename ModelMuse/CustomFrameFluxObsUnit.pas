@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, RbwDataGrid4, StdCtrls, FluxObservationUnit;
+  Dialogs, Grids, RbwDataGrid4, StdCtrls;
 
 type
   // @name is a frame that is used to define the flux observation data
@@ -32,7 +32,7 @@ implementation
 
 {$R *.dfm}
 
-uses Math, ScreenObjectUnit, frmCustomGoPhastUnit;
+uses frmCustomGoPhastUnit;
 
 { TCustomframeFluxObs }
 

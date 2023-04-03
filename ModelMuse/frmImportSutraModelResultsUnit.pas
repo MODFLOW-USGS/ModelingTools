@@ -160,8 +160,7 @@ uses
   UndoItems, FastGEO, GIS_Functions,
   RbwParser, PhastModelUnit, frmSelectResultToImportUnit,
   ValueArrayStorageUnit, Math, frmDisplayDataUnit, frmGridValueUnit,
-  VectorDisplayUnit, IOUtils, frmUpdateDataSetsUnit, SubscriptionUnit,
-  ModelMuseUtilities;
+  VectorDisplayUnit, IOUtils, SubscriptionUnit;
 
 {$R *.dfm}
 

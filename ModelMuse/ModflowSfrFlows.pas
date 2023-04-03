@@ -2,7 +2,7 @@ unit ModflowSfrFlows;
 
 interface
 
-uses SysUtils, Classes, RbwParser, OrderedCollectionUnit, ModflowCellUnit,
+uses SysUtils, Classes, RbwParser, OrderedCollectionUnit,
   ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit, GoPhastTypes;
 
 type
@@ -110,10 +110,9 @@ type
 
 implementation
 
-uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
+uses ScreenObjectUnit, PhastModelUnit,
   ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit,
-  frmGoPhastUnit, ModflowSfrChannelUnit, ModflowParameterUnit,
-  ModelMuseUtilities;
+  frmGoPhastUnit, ModflowSfrChannelUnit, ModflowParameterUnit;
 
 resourcestring
   StrFlowForTheSFRPa = '(flow for the SFR package)';

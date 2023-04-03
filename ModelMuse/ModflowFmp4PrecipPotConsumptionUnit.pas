@@ -2,7 +2,7 @@ unit ModflowFmp4PrecipPotConsumptionUnit;
 
 interface
 
-uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit;
+uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit;
 
 type
   TFmp4PrecipPotConsumptionTimeListLink  = class(TFmp4TimeListLink)

@@ -3,7 +3,7 @@ unit ModflowLakMf6WriterUnit;
 interface
 
 uses SysUtils, Classes, PhastModelUnit, CustomModflowWriterUnit,
-  ModflowPackageSelectionUnit, ModflowTimeUnit, ModflowLakUnit,
+  ModflowPackageSelectionUnit, ModflowTimeUnit,
   ScreenObjectUnit, System.Generics.Collections, ModflowCellUnit,
   ModflowLakMf6Unit, Modflow6ObsUnit, GoPhastTypes, GwtStatusUnit;
 
@@ -260,12 +260,12 @@ const
 implementation
 
 uses
-  ModflowOptionsUnit, frmProgressUnit, SparseDataSets,
-  SparseArrayUnit, frmErrorsAndWarningsUnit, DataSetUnit,
+  ModflowOptionsUnit, frmProgressUnit,
+  frmErrorsAndWarningsUnit, DataSetUnit,
   ModflowIrregularMeshUnit, AbstractGridUnit, RealListUnit, RbwParser,
   frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
   FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit,
-  ModflowParameterUnit, ModelMuseUtilities, Modflow6TimeSeriesUnit,
+  ModflowParameterUnit, Modflow6TimeSeriesUnit,
   Mt3dmsChemSpeciesUnit, frmGoPhastUnit, Mt3dmsChemUnit;
 
 resourcestring

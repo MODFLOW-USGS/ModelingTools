@@ -4,9 +4,8 @@ inherited frmImportTprogs: TfrmImportTprogs
   Caption = 'Import T-PROGS File'
   ClientHeight = 429
   ClientWidth = 579
-  ExplicitWidth = 595
-  ExplicitHeight = 468
-  PixelsPerInch = 96
+  ExplicitWidth = 591
+  ExplicitHeight = 467
   TextHeight = 18
   object lblTprogs: TLabel
     Left = 8
@@ -67,12 +66,13 @@ inherited frmImportTprogs: TfrmImportTprogs
   object fedTprogs: TJvFilenameEdit
     Left = 8
     Top = 32
-    Width = 563
+    Width = 559
     Height = 26
     Filter = 'T-PROGS file (*.bgr)|*.bgr|All files (*.*)|*.*'
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
     Text = ''
+    ExplicitWidth = 555
   end
   object rdeXOrigin: TRbwDataEntry
     Left = 8
@@ -155,7 +155,7 @@ inherited frmImportTprogs: TfrmImportTprogs
     ChangeDisabledColor = True
   end
   object btnHelp: TBitBtn
-    Left = 312
+    Left = 308
     Top = 389
     Width = 83
     Height = 33
@@ -164,9 +164,10 @@ inherited frmImportTprogs: TfrmImportTprogs
     NumGlyphs = 2
     TabOrder = 12
     OnClick = btnHelpClick
+    ExplicitLeft = 304
   end
   object btnOK: TBitBtn
-    Left = 401
+    Left = 397
     Top = 389
     Width = 83
     Height = 33
@@ -175,9 +176,10 @@ inherited frmImportTprogs: TfrmImportTprogs
     NumGlyphs = 2
     TabOrder = 13
     OnClick = btnOKClick
+    ExplicitLeft = 393
   end
   object btnCancel: TBitBtn
-    Left = 488
+    Left = 484
     Top = 389
     Width = 83
     Height = 33
@@ -185,6 +187,7 @@ inherited frmImportTprogs: TfrmImportTprogs
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 14
+    ExplicitLeft = 480
   end
   object cbVisible: TCheckBox
     Left = 176

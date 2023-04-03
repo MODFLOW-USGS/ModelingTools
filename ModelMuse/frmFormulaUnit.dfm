@@ -55,6 +55,7 @@ inherited frmFormula: TfrmFormula
       Align = alBottom
       ParentColor = True
       TabOrder = 2
+      ExplicitTop = 191
       object gbLogicalOperators: TGroupBox
         Left = 8
         Top = 6
@@ -540,7 +541,7 @@ inherited frmFormula: TfrmFormula
       769
       41)
     object btnCancel: TBitBtn
-      Left = 661
+      Left = 657
       Top = 6
       Width = 91
       Height = 33
@@ -548,10 +549,10 @@ inherited frmFormula: TfrmFormula
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 665
+      ExplicitLeft = 653
     end
     object btnOK: TBitBtn
-      Left = 564
+      Left = 560
       Top = 6
       Width = 91
       Height = 33
@@ -560,10 +561,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 568
+      ExplicitLeft = 556
     end
     object btnHelp: TBitBtn
-      Left = 469
+      Left = 465
       Top = 4
       Width = 91
       Height = 33
@@ -572,10 +573,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 473
+      ExplicitLeft = 461
     end
     object btnFunctionHelp: TBitBtn
-      Left = 299
+      Left = 295
       Top = 4
       Width = 163
       Height = 33
@@ -604,7 +605,7 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnFunctionHelpClick
-      ExplicitLeft = 303
+      ExplicitLeft = 291
     end
   end
   object pnlRight: TPanel
@@ -626,16 +627,19 @@ inherited frmFormula: TfrmFormula
       Align = alTop
       ParentColor = True
       TabOrder = 0
+      ExplicitWidth = 221
       object lbltems: TLabel
         AlignWithMargins = True
         Left = 4
         Top = 4
-        Width = 193
-        Height = 16
+        Width = 217
+        Height = 33
         Align = alClient
         Alignment = taCenter
         Caption = 'Double-click to insert into formula'
         WordWrap = True
+        ExplicitWidth = 193
+        ExplicitHeight = 16
       end
     end
     object tvItems: TTreeView

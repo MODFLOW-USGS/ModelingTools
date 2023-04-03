@@ -8,9 +8,8 @@ inherited frmColors: TfrmColors
   ClientHeight = 175
   ClientWidth = 294
   FormStyle = fsStayOnTop
-  OnHide = FormHide
-  ExplicitWidth = 312
-  ExplicitHeight = 220
+  ExplicitWidth = 306
+  ExplicitHeight = 213
   PixelsPerInch = 120
   TextHeight = 18
   object lblAmbient: TLabel

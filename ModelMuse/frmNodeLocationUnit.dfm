@@ -22,7 +22,7 @@ inherited frmNodeLocation: TfrmNodeLocation
       399
       41)
     object btnHelp: TBitBtn
-      Left = 54
+      Left = 50
       Top = 4
       Width = 108
       Height = 33
@@ -31,10 +31,10 @@ inherited frmNodeLocation: TfrmNodeLocation
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 50
+      ExplicitLeft = 46
     end
     object btnOK: TBitBtn
-      Left = 168
+      Left = 164
       Top = 4
       Width = 108
       Height = 33
@@ -43,10 +43,10 @@ inherited frmNodeLocation: TfrmNodeLocation
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 164
+      ExplicitLeft = 160
     end
     object btnCancel: TBitBtn
-      Left = 282
+      Left = 278
       Top = 4
       Width = 108
       Height = 33
@@ -54,7 +54,7 @@ inherited frmNodeLocation: TfrmNodeLocation
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 278
+      ExplicitLeft = 274
     end
   end
   object rdgNodes: TRbwDataGrid4

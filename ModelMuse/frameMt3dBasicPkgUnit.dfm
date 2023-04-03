@@ -87,7 +87,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
           Left = 98
           Top = 22
           Width = 71
-          Height = 28
+          Height = 23
           MaxValue = 2147483647.000000000000000000
           MinValue = 1.000000000000000000
           Value = 1.000000000000000000
@@ -97,7 +97,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
           Left = 241
           Top = 21
           Width = 71
-          Height = 28
+          Height = 23
           MaxValue = 2147483647.000000000000000000
           MinValue = 1.000000000000000000
           Value = 1.000000000000000000
@@ -107,7 +107,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
           Left = 408
           Top = 21
           Width = 71
-          Height = 28
+          Height = 23
           MaxValue = 2147483647.000000000000000000
           MinValue = 1.000000000000000000
           Value = 1.000000000000000000
@@ -130,9 +130,9 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Left = 12
         Top = 51
         Width = 50
-        Height = 28
+        Height = 23
         EditLabel.Width = 99
-        EditLabel.Height = 28
+        EditLabel.Height = 23
         EditLabel.Caption = 'Mass unit (MUNIT)'
         Enabled = False
         LabelPosition = lpRight
@@ -238,7 +238,6 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
         Options = [fboExcludeGlyphs, fboHotTrack, fboWordWrap]
         ChangeGlyphColor.FromColor = clBlack
         ChangeGlyphColor.ToColor = clWhite
-        ExplicitHeight = 277
       end
     end
   end

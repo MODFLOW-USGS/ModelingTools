@@ -6,9 +6,9 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.ExtCtrls,
   JvExExtCtrls, JvNetscapeSplitter, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Buttons,
-  JvExStdCtrls, JvListBox, frameGridUnit, Mt3dCtsSystemUnit, UndoItems,
+  frameGridUnit, Mt3dCtsSystemUnit, UndoItems,
   RbwController, RbwDataGrid4, GoPhastTypes, RbwParser, System.UITypes,
-  Vcl.Grids;
+  Vcl.Grids, Vcl.Mask;
 
 type
   TCstWellColumns = (cwcStartTime, cwcEndTime, cwcExtractionWells, cwcInjectionWells);

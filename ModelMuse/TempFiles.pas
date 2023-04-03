@@ -40,7 +40,7 @@ function MemoryUsed(out FileCount: integer): Int64;
 
 implementation
 
-uses RTLConsts, Contnrs, Forms, TlHelp32, Vcl.Dialogs;
+uses Contnrs, Forms, TlHelp32, Vcl.Dialogs;
 
 resourcestring
   StrErrorSavingTempora = 'Error saving temporary file. The error was "%s". ' +

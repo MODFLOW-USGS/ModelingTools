@@ -6,7 +6,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes;
 
 type
   {
@@ -660,9 +660,9 @@ const
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
-  frmErrorsAndWarningsUnit, ModflowParameterUnit, ModelMuseUtilities,
-  CustomModflowWriterUnit, ModflowUzfUnit;
+  ModflowTransientListParameterUnit, frmGoPhastUnit,
+  frmErrorsAndWarningsUnit,
+  ModflowUzfUnit;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';

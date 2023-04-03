@@ -2,10 +2,10 @@ unit ModflowGwtSpecifiedConcUnit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes,
-  RealListUnit, System.Generics.Collections, Mt3dmsChemSpeciesUnit;
+uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
+  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  SubscriptionUnit, RbwParser, GoPhastTypes,
+  System.Generics.Collections, Mt3dmsChemSpeciesUnit;
 
 type
   {
@@ -265,9 +265,8 @@ const
 
 implementation
 
-uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
-  frmGoPhastUnit, GIS_Functions, frmErrorsAndWarningsUnit,
-  ModflowTimeSeriesUnit, ModflowMvrUnit, frmFormulaErrorsUnit;
+uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
+  frmGoPhastUnit, GIS_Functions, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrCNCSpecifiedConcen = 'CNC Specified Concentration';

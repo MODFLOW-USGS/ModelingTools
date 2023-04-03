@@ -50,7 +50,7 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, ModflowPackagesUnit, LayerStructureUnit,
+  frmGoPhastUnit, LayerStructureUnit,
   ModflowSubsidenceDefUnit, ScreenObjectUnit, GoPhastTypes, ModflowHydmodUnit;
 
 {$R *.dfm}

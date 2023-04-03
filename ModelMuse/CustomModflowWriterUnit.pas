@@ -1224,7 +1224,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   System.Generics.Defaults, ArchiveNodeInterface, ModflowOptionsUnit,
   Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
   ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit,
-  framePestObsCaptionedUnit, PestObsExtractorInputWriterUnit,
+  PestObsExtractorInputWriterUnit,
   System.AnsiStrings, ModflowMf6TimeSeriesWriterUnit, ModflowFmpWriterUnit;
 
 resourcestring

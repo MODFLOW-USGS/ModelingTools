@@ -2,17 +2,18 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
   HelpType = htKeyword
   HelpKeyword = 'Edit_Selected_Wells_Dialog_Box'
   Caption = 'Edit Selected Wells'
-  PixelsPerInch = 96
+  ExplicitWidth = 438
+  ExplicitHeight = 272
   TextHeight = 18
   inline frameWells: TframeAvailableObjects
     Left = 0
     Top = 0
-    Width = 424
-    Height = 185
+    Width = 426
+    Height = 193
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 424
-    ExplicitHeight = 185
+    ExplicitWidth = 422
+    ExplicitHeight = 192
     inherited lblSrcObjects: TLabel
       Width = 148
       Height = 18
@@ -38,17 +39,19 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 185
-    Width = 424
+    Top = 193
+    Width = 426
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 192
+    ExplicitWidth = 422
     DesignSize = (
-      424
+      426
       41)
     object btnHelp: TBitBtn
-      Left = 143
+      Left = 139
       Top = 6
       Width = 87
       Height = 27
@@ -56,9 +59,10 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 135
     end
     object btnCancelBtn: TBitBtn
-      Left = 329
+      Left = 325
       Top = 6
       Width = 87
       Height = 27
@@ -66,9 +70,10 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 321
     end
     object btnOkBtn: TBitBtn
-      Left = 236
+      Left = 232
       Top = 6
       Width = 87
       Height = 27
@@ -76,6 +81,7 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
+      ExplicitLeft = 228
     end
   end
 end

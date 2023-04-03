@@ -6,8 +6,8 @@ inherited frmVerticalExaggeration: TfrmVerticalExaggeration
   ActiveControl = rdeVerticalExaggeration
   Caption = 'Vertical Exaggeration'
   ClientHeight = 88
-  ExplicitWidth = 442
-  ExplicitHeight = 133
+  ExplicitWidth = 438
+  ExplicitHeight = 126
   PixelsPerInch = 120
   TextHeight = 18
   object lblVerticalExaggeration: TLabel

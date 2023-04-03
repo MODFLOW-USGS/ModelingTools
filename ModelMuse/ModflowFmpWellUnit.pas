@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes;
+  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  SubscriptionUnit, RbwParser, GoPhastTypes;
 
 type
   TFmpWellRecord = record
@@ -276,7 +276,7 @@ resourcestring
 implementation
 
 uses
-  ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
+  ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
   frmGoPhastUnit, GIS_Functions, ModflowPackageSelectionUnit,
   frmErrorsAndWarningsUnit;
 

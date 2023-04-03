@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
   JvExStdCtrls, JvCombobox, JvListComb, frameGridUnit, Vcl.ExtCtrls,
-  GoPhastTypes, UndoItemsScreenObjects, RbwDataGrid4, Vcl.Mask, JvExMask, JvSpin,
+  GoPhastTypes, UndoItemsScreenObjects, RbwDataGrid4, JvSpin,
   ArgusDataEntry;
 
 type

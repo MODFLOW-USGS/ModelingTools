@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frameCustomCellObservationUnit, ExtCtrls, Grids, RbwDataGrid4,
   StdCtrls, Mask, JvExMask, JvSpin, ArgusDataEntry, ComCtrls, JvExComCtrls,
-  JvComCtrls, UndoItemsScreenObjects, JvExStdCtrls, JvCombobox, JvListComb;
+  JvComCtrls, UndoItemsScreenObjects;
 
 type
   TframeConcentrationObservation = class(TframeCustomCellObservation)

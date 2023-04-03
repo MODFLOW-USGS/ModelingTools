@@ -16,7 +16,7 @@ uses
   GR32, // TBitmap32, and TFloatRect are declared in GR32.
   SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, frmCustomGoPhastUnit, Buttons, AbstractGridUnit,
-  ComCtrls, InteractiveTools, GoPhastTypes, Spin, Mask, JvExMask, JvSpin;
+  InteractiveTools, GoPhastTypes, Mask, JvExMask, JvSpin;
 
 type
   {@abstract(@name is used in conjunction with @link(TSubdivideGridTool)

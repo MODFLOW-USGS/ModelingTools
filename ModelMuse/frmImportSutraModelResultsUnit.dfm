@@ -4,9 +4,8 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
   Caption = 'Import SUTRA Model Results'
   ClientHeight = 491
   ClientWidth = 417
-  ExplicitWidth = 433
-  ExplicitHeight = 530
-  PixelsPerInch = 96
+  ExplicitWidth = 429
+  ExplicitHeight = 529
   TextHeight = 18
   object lblTimeStepsToImport: TLabel
     Left = 223
@@ -25,12 +24,14 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
   object chklstTimeStepsToImport: TCheckListBox
     Left = 223
     Top = 29
-    Width = 186
+    Width = 182
     Height = 314
     Anchors = [akLeft, akTop, akRight, akBottom]
     ItemHeight = 18
     TabOrder = 1
     OnClick = chklstTimeStepsToImportClick
+    ExplicitWidth = 178
+    ExplicitHeight = 313
   end
   object chklstDataToImport: TCheckListBox
     Left = 8
@@ -53,6 +54,7 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
       'Z Darcy velocity')
     TabOrder = 0
     OnClick = chklstDataToImportClick
+    ExplicitHeight = 210
   end
   object pnlBottom: TPanel
     Left = 0
@@ -62,6 +64,8 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 6
+    ExplicitTop = 349
+    ExplicitWidth = 413
     DesignSize = (
       417
       141)
@@ -73,7 +77,7 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
       Caption = 'Color or contour mesh'
     end
     object btnHelp: TBitBtn
-      Left = 150
+      Left = 146
       Top = 103
       Width = 82
       Height = 30
@@ -82,9 +86,10 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
+      ExplicitLeft = 142
     end
     object btnOK: TBitBtn
-      Left = 238
+      Left = 234
       Top = 103
       Width = 82
       Height = 30
@@ -93,9 +98,10 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOKClick
+      ExplicitLeft = 230
     end
     object btnCancel: TBitBtn
-      Left = 326
+      Left = 322
       Top = 103
       Width = 83
       Height = 30
@@ -103,11 +109,12 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 318
     end
     object rgDisplayChoice: TRadioGroup
       Left = 8
       Top = 2
-      Width = 401
+      Width = 397
       Height = 42
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Display choice'
@@ -118,15 +125,17 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
         'Contour mesh'
         'Neither')
       TabOrder = 0
+      ExplicitWidth = 393
     end
     object comboColorMesh: TComboBox
       Left = 8
       Top = 71
-      Width = 401
+      Width = 397
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
+      ExplicitWidth = 393
     end
   end
   object btnSelectAll: TButton
@@ -139,6 +148,7 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 2
     WordWrap = True
     OnClick = btnSelectAllClick
+    ExplicitTop = 245
   end
   object btnSelectNone: TButton
     Left = 8
@@ -150,6 +160,7 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 4
     WordWrap = True
     OnClick = btnSelectNoneClick
+    ExplicitTop = 296
   end
   object btnSelectAllTimes: TButton
     Left = 113
@@ -161,6 +172,7 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 3
     WordWrap = True
     OnClick = btnSelectAllTimesClick
+    ExplicitTop = 245
   end
   object btnDeselectAllTimes: TButton
     Left = 113
@@ -172,6 +184,7 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     TabOrder = 5
     WordWrap = True
     OnClick = btnDeselectAllTimesClick
+    ExplicitTop = 296
   end
   object dlgOpenSutraFile: TJvOpenDialog
     DefaultExt = '.nod'

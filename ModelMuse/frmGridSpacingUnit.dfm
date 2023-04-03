@@ -10,9 +10,8 @@ inherited frmGridSpacing: TfrmGridSpacing
   KeyPreview = True
   Position = poOwnerFormCenter
   OnKeyPress = FormKeyPress
-  ExplicitWidth = 477
-  ExplicitHeight = 492
-  PixelsPerInch = 96
+  ExplicitWidth = 473
+  ExplicitHeight = 491
   TextHeight = 18
   object pcSubdivide: TPageControl
     Left = 0
@@ -22,16 +21,19 @@ inherited frmGridSpacing: TfrmGridSpacing
     ActivePage = tabLayers
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 457
+    ExplicitHeight = 282
     object tabColumns: TTabSheet
       Caption = 'Columns (X'#39')'
       object pnlColumns: TPanel
         Left = 0
         Top = 169
-        Width = 453
+        Width = 457
         Height = 81
         Align = alBottom
         ParentColor = True
         TabOrder = 1
+        ExplicitWidth = 453
         DesignSize = (
           453
           81)
@@ -50,7 +52,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Caption = 'Default spacing'
         end
         object rdeSpacingColumns: TRbwDataEntry
-          Left = 346
+          Left = 342
           Top = 40
           Width = 102
           Height = 28
@@ -63,7 +65,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           ChangeDisabledColor = True
         end
         object seColumns: TJvSpinEdit
-          Left = 346
+          Left = 342
           Top = 9
           Width = 102
           Height = 26
@@ -72,6 +74,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Anchors = [akTop, akRight]
           TabOrder = 0
           OnChange = seColumnsChange
+          ExplicitLeft = 346
         end
       end
       object dgColumns: TRbwDataGrid4
@@ -163,11 +166,12 @@ inherited frmGridSpacing: TfrmGridSpacing
       object pnlRows: TPanel
         Left = 0
         Top = 169
-        Width = 453
+        Width = 457
         Height = 81
         Align = alBottom
         ParentColor = True
         TabOrder = 1
+        ExplicitWidth = 453
         DesignSize = (
           453
           81)
@@ -186,7 +190,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Caption = 'Default spacing'
         end
         object rdeSpacingRows: TRbwDataEntry
-          Left = 346
+          Left = 342
           Top = 40
           Width = 102
           Height = 28
@@ -199,7 +203,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           ChangeDisabledColor = True
         end
         object seRows: TJvSpinEdit
-          Left = 346
+          Left = 342
           Top = 9
           Width = 102
           Height = 26
@@ -208,6 +212,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Anchors = [akTop, akRight]
           TabOrder = 0
           OnChange = seRowsChange
+          ExplicitLeft = 346
         end
       end
       object dgRows: TRbwDataGrid4
@@ -304,6 +309,8 @@ inherited frmGridSpacing: TfrmGridSpacing
         Align = alBottom
         ParentColor = True
         TabOrder = 1
+        ExplicitTop = 168
+        ExplicitWidth = 449
         DesignSize = (
           453
           81)
@@ -322,7 +329,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Caption = 'Default spacing'
         end
         object rdeSpacingLayers: TRbwDataEntry
-          Left = 346
+          Left = 342
           Top = 40
           Width = 102
           Height = 28
@@ -333,9 +340,10 @@ inherited frmGridSpacing: TfrmGridSpacing
           DataType = dtReal
           Max = 1.000000000000000000
           ChangeDisabledColor = True
+          ExplicitLeft = 338
         end
         object seLayers: TJvSpinEdit
-          Left = 346
+          Left = 342
           Top = 9
           Width = 102
           Height = 26
@@ -344,6 +352,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Anchors = [akTop, akRight]
           TabOrder = 0
           OnChange = seLayersChange
+          ExplicitLeft = 338
         end
       end
       object dgLayers: TRbwDataGrid4
@@ -421,6 +430,8 @@ inherited frmGridSpacing: TfrmGridSpacing
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 449
+        ExplicitHeight = 168
         RowHeights = (
           24
           24
@@ -438,11 +449,13 @@ inherited frmGridSpacing: TfrmGridSpacing
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 411
+    ExplicitWidth = 457
     DesignSize = (
       461
       41)
     object btnCancel: TBitBtn
-      Left = 361
+      Left = 357
       Top = 2
       Width = 91
       Height = 33
@@ -450,9 +463,10 @@ inherited frmGridSpacing: TfrmGridSpacing
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 353
     end
     object btnOK: TBitBtn
-      Left = 264
+      Left = 260
       Top = 2
       Width = 91
       Height = 33
@@ -461,9 +475,10 @@ inherited frmGridSpacing: TfrmGridSpacing
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 256
     end
     object btnHelp: TBitBtn
-      Left = 168
+      Left = 164
       Top = 2
       Width = 91
       Height = 33
@@ -472,6 +487,7 @@ inherited frmGridSpacing: TfrmGridSpacing
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 160
     end
   end
   object pnlDescribe: TPanel
@@ -482,13 +498,14 @@ inherited frmGridSpacing: TfrmGridSpacing
     Align = alTop
     ParentColor = True
     TabOrder = 0
+    ExplicitWidth = 457
     DesignSize = (
       461
       129)
     object lblDescribe: TLabel
       Left = 8
       Top = 8
-      Width = 444
+      Width = 440
       Height = 54
       Anchors = [akLeft, akTop, akRight]
       Caption = 
@@ -499,7 +516,7 @@ inherited frmGridSpacing: TfrmGridSpacing
       ExplicitWidth = 422
     end
     object lblModel: TLabel
-      Left = 409
+      Left = 405
       Top = 100
       Width = 43
       Height = 18
@@ -510,12 +527,13 @@ inherited frmGridSpacing: TfrmGridSpacing
     object comboModel: TComboBox
       Left = 8
       Top = 97
-      Width = 395
+      Width = 391
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       OnChange = comboModelChange
+      ExplicitWidth = 387
     end
   end
 end

@@ -5,9 +5,8 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
   ClientHeight = 377
   ClientWidth = 782
   OnResize = FormResize
-  ExplicitWidth = 800
-  ExplicitHeight = 424
-  PixelsPerInch = 96
+  ExplicitWidth = 794
+  ExplicitHeight = 415
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -16,11 +15,13 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 334
+    ExplicitWidth = 778
     DesignSize = (
       782
       42)
     object btnHelp: TBitBtn
-      Left = 511
+      Left = 507
       Top = 6
       Width = 83
       Height = 33
@@ -28,9 +29,10 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 503
     end
     object btnOK: TBitBtn
-      Left = 600
+      Left = 596
       Top = 6
       Width = 83
       Height = 33
@@ -39,9 +41,10 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 592
     end
     object btnCancel: TBitBtn
-      Left = 689
+      Left = 685
       Top = 6
       Width = 83
       Height = 33
@@ -49,6 +52,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 681
     end
   end
   inline frameTabFiles: TframeGrid
@@ -59,13 +63,13 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
     Align = alClient
     TabOrder = 1
     ExplicitTop = 41
-    ExplicitWidth = 782
-    ExplicitHeight = 294
+    ExplicitWidth = 778
+    ExplicitHeight = 293
     inherited Panel: TPanel
       Top = 253
       Width = 782
-      ExplicitTop = 253
-      ExplicitWidth = 782
+      ExplicitTop = 252
+      ExplicitWidth = 778
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -73,15 +77,15 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 414
+        Left = 412
         ExplicitLeft = 219
       end
       inherited sbInsert: TSpeedButton
-        Left = 487
+        Left = 485
         ExplicitLeft = 259
       end
       inherited sbDelete: TSpeedButton
-        Left = 562
+        Left = 559
         ExplicitLeft = 300
       end
       inherited seNumber: TJvSpinEdit
@@ -293,8 +297,8 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 782
-      ExplicitHeight = 253
+      ExplicitWidth = 778
+      ExplicitHeight = 252
       ColWidths = (
         25
         75
@@ -312,6 +316,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
     Height = 41
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 778
     object comboType: TJvImageComboBox
       Left = 48
       Top = 7

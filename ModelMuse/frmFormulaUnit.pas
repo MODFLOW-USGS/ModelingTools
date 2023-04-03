@@ -280,7 +280,7 @@ var
 
 implementation
 
-uses Contnrs, GIS_Functions, IntListUnit, frmGoPhastUnit, GlobalVariablesUnit,
+uses Contnrs, GIS_Functions, IntListUnit, frmGoPhastUnit,
   PhastModelUnit, DataSetUnit, Modflow6TimeSeriesCollectionsUnit,
   Modflow6TimeSeriesUnit;
 

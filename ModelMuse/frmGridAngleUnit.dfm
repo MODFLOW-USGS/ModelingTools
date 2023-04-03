@@ -7,9 +7,8 @@ inherited frmGridAngle: TfrmGridAngle
   Caption = 'Grid Angle'
   ClientHeight = 92
   ClientWidth = 341
-  ExplicitWidth = 357
+  ExplicitWidth = 353
   ExplicitHeight = 130
-  PixelsPerInch = 96
   TextHeight = 18
   object lblGridAngle: TLabel
     Left = 8

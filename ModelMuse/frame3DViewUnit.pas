@@ -111,7 +111,7 @@ implementation
 {$R *.dfm}
 
 uses frmGoPhastUnit, CursorsFoiledAgain, Math, frmColorsUnit,
-  PhastModelUnit, AbstractGridUnit, SutraMeshUnit, GoPhastTypes,
+  PhastModelUnit, AbstractGridUnit, GoPhastTypes,
   VectorDisplayUnit, DrawMeshTypesUnit;
 
 resourcestring

@@ -2,7 +2,7 @@ unit ModflowBoundaryDisplayUnit;
 
 interface
 
-uses Windows, SysUtils, Classes, DataSetUnit, SparseDataSets, ZLib,
+uses Windows, SysUtils, Classes, DataSetUnit,
   GoPhastTypes, System.Generics.Collections, RealListUnit;
 
 type
@@ -68,9 +68,9 @@ type
 
 implementation
 
-uses SparseArrayUnit, PhastModelUnit, frmGoPhastUnit,
+uses PhastModelUnit,
   ModflowTimeUnit, SubscriptionUnit, ScreenObjectUnit,
-  ModflowHobUnit, TempFiles, IntListUnit, CustomModflowWriterUnit, 
+  ModflowHobUnit,
   frmProgressUnit, Mt3dmsTobUnit;
 
 { TModflowBoundaryDisplayDataArray }

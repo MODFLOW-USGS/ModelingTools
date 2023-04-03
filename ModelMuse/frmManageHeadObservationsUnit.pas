@@ -6,7 +6,7 @@ uses System.UITypes, System.Types,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ExtCtrls, Grids,
   RbwDataGrid4, ComCtrls, ScreenObjectUnit, ModflowHobUnit, GoPhastTypes,
-  UndoItemsScreenObjects, ArgusDataEntry, Mask, JvExMask, JvToolEdit, GrayTabs;
+  UndoItemsScreenObjects, ArgusDataEntry, GrayTabs;
 
 type
   TFilterRow = (frLabel, frName, frObsPred, frITT, frObjName, frValue, frTime,

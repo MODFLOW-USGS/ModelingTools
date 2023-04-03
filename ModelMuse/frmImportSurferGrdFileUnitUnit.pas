@@ -4,7 +4,7 @@ interface
 
 uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, frmCustomGoPhastUnit, frmCustomImportSimpleFileUnit, StdCtrls,
+  Dialogs, frmCustomImportSimpleFileUnit, StdCtrls,
   Buttons, ExtCtrls, Grids, RbwDataGrid4, SurferGridFileReaderUnit,
   frmImportShapefileUnit, FastGEO, AbstractGridUnit,
   GoPhastTypes, MeshRenumberingTypes;

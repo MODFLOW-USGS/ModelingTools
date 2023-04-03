@@ -49,7 +49,7 @@ type
 
 implementation
 
-uses Math, frmGoPhastUnit, UndoItems, AbstractGridUnit;
+uses frmGoPhastUnit, UndoItems;
 
 resourcestring
   StrTheVerticalExagger = 'The Vertical exaggeration must be a positive numb' +

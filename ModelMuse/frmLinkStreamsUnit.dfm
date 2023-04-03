@@ -4,9 +4,8 @@ inherited frmLinkStreams: TfrmLinkStreams
   Caption = 'Link Streams'
   ClientHeight = 308
   ClientWidth = 246
-  ExplicitWidth = 262
+  ExplicitWidth = 258
   ExplicitHeight = 346
-  PixelsPerInch = 96
   TextHeight = 18
   object lblTolerance: TLabel
     Left = 7

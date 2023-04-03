@@ -6,9 +6,9 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, framePackageUnit, Grids,
   RbwDataGrid4, RbwController, StdCtrls, ModflowPackageSelectionUnit, ExtCtrls,
-  ComCtrls, frameRadioGridUnit, JvPageList, JvNavigationPane,
+  ComCtrls, frameRadioGridUnit, JvPageList,
   JvExControls, JvExComCtrls, JvPageListTreeView, JvExExtCtrls,
-  JvNetscapeSplitter, JvExStdCtrls, JvCombobox, JvListComb, ArgusDataEntry;
+  JvNetscapeSplitter, ArgusDataEntry;
 
 type
   TframePkgFarm = class(TframePackage)
@@ -109,7 +109,7 @@ var
 implementation
 
 uses
-  GoPhastTypes, ModelMuseUtilities;
+  GoPhastTypes;
 
 resourcestring
   StrConstant = 'Delivery varies with groundwater level';

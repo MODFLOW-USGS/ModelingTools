@@ -2,7 +2,7 @@ unit ModflowHfbUnit;
 
 interface
 
-uses ZLib, Classes, Contnrs, SysUtils, RbwParser, GoPhastTypes,
+uses ZLib, Classes, SysUtils, RbwParser, GoPhastTypes,
   ModflowBoundaryUnit, SubscriptionUnit, FormulaManagerUnit,
   OrderedCollectionUnit, ModflowCellUnit, RealListUnit;
 

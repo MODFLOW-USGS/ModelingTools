@@ -8,8 +8,8 @@ inherited frmTimeControl: TfrmTimeControl
   ClientWidth = 396
   KeyPreview = True
   OnKeyDown = FormKeyDown
-  ExplicitWidth = 414
-  ExplicitHeight = 293
+  ExplicitWidth = 408
+  ExplicitHeight = 286
   PixelsPerInch = 120
   TextHeight = 18
   object pnlBottom: TPanel
@@ -20,6 +20,8 @@ inherited frmTimeControl: TfrmTimeControl
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 141
+    ExplicitWidth = 392
     DesignSize = (
       396
       106)
@@ -50,7 +52,7 @@ inherited frmTimeControl: TfrmTimeControl
       OnChange = seTimeCountChange
     end
     object btnOK: TBitBtn
-      Left = 199
+      Left = 195
       Top = 64
       Width = 89
       Height = 33
@@ -59,9 +61,10 @@ inherited frmTimeControl: TfrmTimeControl
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
+      ExplicitLeft = 191
     end
     object btnCancel: TBitBtn
-      Left = 295
+      Left = 291
       Top = 64
       Width = 89
       Height = 33
@@ -69,9 +72,10 @@ inherited frmTimeControl: TfrmTimeControl
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
+      ExplicitLeft = 287
     end
     object btnHelp: TBitBtn
-      Left = 103
+      Left = 99
       Top = 64
       Width = 89
       Height = 33
@@ -81,6 +85,7 @@ inherited frmTimeControl: TfrmTimeControl
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 95
     end
     object rdeStartTime: TRbwDataEntry
       Left = 5
@@ -128,6 +133,7 @@ inherited frmTimeControl: TfrmTimeControl
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -152,6 +158,7 @@ inherited frmTimeControl: TfrmTimeControl
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -176,6 +183,7 @@ inherited frmTimeControl: TfrmTimeControl
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -199,6 +207,8 @@ inherited frmTimeControl: TfrmTimeControl
         AutoAdjustColWidths = False
       end>
     WordWrapRowCaptions = False
+    ExplicitWidth = 392
+    ExplicitHeight = 108
     ColWidths = (
       180
       180
@@ -215,6 +225,7 @@ inherited frmTimeControl: TfrmTimeControl
     Align = alTop
     ParentColor = True
     TabOrder = 2
+    ExplicitWidth = 392
     object rdeLength: TRbwDataEntry
       Left = 136
       Top = 6

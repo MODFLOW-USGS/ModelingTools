@@ -7,8 +7,8 @@ interface
 
 uses
   SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, frmCustomGoPhastUnit, ComCtrls, Grids, RbwDataGrid4,  
-  Buttons, ExtCtrls, Clipbrd, GoPhastTypes, ArgusDataEntry, Spin, Mask,
+  StdCtrls, frmCustomGoPhastUnit, ComCtrls, Grids, RbwDataGrid4,
+  Buttons, ExtCtrls, Clipbrd, GoPhastTypes, ArgusDataEntry, Mask,
   JvExMask, JvSpin, PhastModelUnit, GrayTabs;
 
 type

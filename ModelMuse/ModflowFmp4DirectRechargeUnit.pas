@@ -2,7 +2,7 @@ unit ModflowFmp4DirectRechargeUnit;
 
 interface
 
-uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit;
+uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit;
 
 type
   TFmp4DirectRechargeTimeListLink  = class(TFmp4TimeListLink)

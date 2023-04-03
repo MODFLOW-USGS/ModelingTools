@@ -4,8 +4,8 @@ inherited frmModflowNameFile: TfrmModflowNameFile
   Caption = 'MODFLOW Name File'
   ClientHeight = 346
   ClientWidth = 520
-  ExplicitWidth = 536
-  ExplicitHeight = 385
+  ExplicitWidth = 532
+  ExplicitHeight = 384
   TextHeight = 18
   object pnlMain: TPanel
     Left = 0
@@ -14,6 +14,8 @@ inherited frmModflowNameFile: TfrmModflowNameFile
     Height = 305
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 516
+    ExplicitHeight = 304
     DesignSize = (
       520
       305)
@@ -30,33 +32,39 @@ inherited frmModflowNameFile: TfrmModflowNameFile
     object memoLines: TMemo
       Left = 8
       Top = 72
-      Width = 504
+      Width = 500
       Height = 138
       Anchors = [akLeft, akTop, akRight, akBottom]
       ScrollBars = ssBoth
       TabOrder = 0
       WordWrap = False
+      ExplicitWidth = 496
+      ExplicitHeight = 137
     end
     object cbFlowPackage: TCheckBox
       Left = 8
       Top = 216
-      Width = 504
+      Width = 500
       Height = 17
       Anchors = [akLeft, akRight, akBottom]
       Caption = 'Flow package other than BCF6, LPF, HUF2, or UPW included'
       TabOrder = 1
+      ExplicitTop = 215
+      ExplicitWidth = 496
     end
     object cbSolvers: TCheckBox
       Left = 8
       Top = 239
-      Width = 504
+      Width = 500
       Height = 17
       Anchors = [akLeft, akRight, akBottom]
       Caption = 'Solver other than PCG, PCGN, GMG, SIP, DE4, or NWT included'
       TabOrder = 2
+      ExplicitTop = 238
+      ExplicitWidth = 496
     end
     object btnHelp: TBitBtn
-      Left = 254
+      Left = 250
       Top = 260
       Width = 82
       Height = 34
@@ -65,9 +73,11 @@ inherited frmModflowNameFile: TfrmModflowNameFile
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 246
+      ExplicitTop = 259
     end
     object btnOK: TBitBtn
-      Left = 342
+      Left = 338
       Top = 260
       Width = 82
       Height = 34
@@ -76,9 +86,11 @@ inherited frmModflowNameFile: TfrmModflowNameFile
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
+      ExplicitLeft = 334
+      ExplicitTop = 259
     end
     object btnCancel: TBitBtn
-      Left = 430
+      Left = 426
       Top = 260
       Width = 82
       Height = 34
@@ -86,6 +98,8 @@ inherited frmModflowNameFile: TfrmModflowNameFile
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 5
+      ExplicitLeft = 422
+      ExplicitTop = 259
     end
     object btnFileTypes: TButton
       Left = 8
@@ -96,6 +110,7 @@ inherited frmModflowNameFile: TfrmModflowNameFile
       Caption = 'Show file types'
       TabOrder = 6
       OnClick = btnFileTypesClick
+      ExplicitTop = 261
     end
   end
   object pnlModel: TPanel
@@ -105,11 +120,12 @@ inherited frmModflowNameFile: TfrmModflowNameFile
     Height = 41
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 516
     DesignSize = (
       520
       41)
     object lblModel: TLabel
-      Left = 469
+      Left = 465
       Top = 11
       Width = 43
       Height = 18
@@ -120,12 +136,13 @@ inherited frmModflowNameFile: TfrmModflowNameFile
     object comboModel: TComboBox
       Left = 8
       Top = 8
-      Width = 455
+      Width = 451
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       OnChange = comboModelChange
+      ExplicitWidth = 447
     end
   end
 end

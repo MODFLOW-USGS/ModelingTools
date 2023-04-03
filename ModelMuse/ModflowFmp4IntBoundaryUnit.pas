@@ -3,9 +3,9 @@ unit ModflowFmp4IntBoundaryUnit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
+uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes;
 
 type
   {
@@ -205,7 +205,7 @@ type
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
+  frmGoPhastUnit,
   AbstractGridUnit;
 
 const

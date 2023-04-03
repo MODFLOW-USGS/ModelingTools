@@ -85,8 +85,8 @@ type
 
 implementation
 
-uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit, GoPhastTypes, 
+uses ScreenObjectUnit, PhastModelUnit,
+  ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit, GoPhastTypes,
   frmGoPhastUnit, ModflowSfrChannelUnit;
 
 resourcestring

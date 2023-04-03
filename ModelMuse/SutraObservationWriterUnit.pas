@@ -76,9 +76,9 @@ type
 implementation
 
 uses
-  ScreenObjectUnit, SparseDataSets, OctTreeClass,
+  ScreenObjectUnit, OctTreeClass,
   SutraMeshUnit, SutraOutputControlUnit, SutraFileWriterUnit, SutraPestObsUnit,
-  SutraOptionsUnit, PestPropertiesUnit;
+  PestPropertiesUnit;
 
 { TSutraObservationWriter }
 

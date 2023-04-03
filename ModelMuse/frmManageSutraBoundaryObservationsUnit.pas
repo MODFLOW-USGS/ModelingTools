@@ -5,8 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
-  JvExStdCtrls, JvListBox, JvCombobox, JvListComb, ArgusDataEntry, Vcl.Mask,
-  JvExMask, JvSpin, Vcl.Grids, RbwDataGrid4, JvExComCtrls, JvComCtrls, JvEdit,
+  JvExStdCtrls, JvListBox, ArgusDataEntry,
+  RbwDataGrid4, JvExComCtrls, JvComCtrls, JvEdit,
   Vcl.ComCtrls, RbwParser, Vcl.Buttons, Vcl.ExtCtrls, Vcl.Menus, JvExExtCtrls,
   JvNetscapeSplitter, framePestObsUnit, FluxObservationUnit, SutraPestObsUnit,
   ScreenObjectUnit, JvBoxProcs, UndoItems, System.UITypes, System.Types;

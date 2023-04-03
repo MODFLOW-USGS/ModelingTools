@@ -2,7 +2,7 @@ unit ModflowFmp4NrdInfilLocationUnit;
 
 interface
 
-uses ModflowFmp4IntBoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit;
+uses ModflowFmp4IntBoundaryUnit, ModflowBoundaryUnit;
 
 type
   TFmp4NrdInfilLocationTimeListLink  = class(TFmp4IntTimeListLink)

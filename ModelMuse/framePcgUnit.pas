@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, framePackageUnit, StdCtrls, ArgusDataEntry, JvExStdCtrls, JvCheckBox,
-  ModflowPackageSelectionUnit, JvCombobox, JvListComb, RbwController, ExtCtrls;
+  Dialogs, framePackageUnit, StdCtrls, ArgusDataEntry, JvExStdCtrls,
+  ModflowPackageSelectionUnit, JvCombobox, JvListComb, RbwController;
 
 type
   TframePCG = class(TframePackage)

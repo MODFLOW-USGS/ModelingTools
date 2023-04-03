@@ -2,9 +2,8 @@ inherited frmWorldFileType: TfrmWorldFileType
   Caption = 'World File Type'
   ClientHeight = 180
   ClientWidth = 318
-  ExplicitWidth = 326
-  ExplicitHeight = 214
-  PixelsPerInch = 96
+  ExplicitWidth = 330
+  ExplicitHeight = 218
   TextHeight = 18
   object lblQuestion: TLabel
     Left = 8
@@ -53,7 +52,8 @@ inherited frmWorldFileType: TfrmWorldFileType
     Top = 144
     Width = 81
     Height = 28
-    TabOrder = 2
     Kind = bkClose
+    NumGlyphs = 2
+    TabOrder = 2
   end
 end

@@ -13,7 +13,7 @@ unit MeshRenumbering;
 interface
 
 uses
-  Generics.Collections, Generics.Defaults, FastGEO, MeshRenumberingTypes;
+  Generics.Collections, Generics.Defaults, MeshRenumberingTypes;
 
 procedure RenumberMesh(Mesh: IMesh);
 

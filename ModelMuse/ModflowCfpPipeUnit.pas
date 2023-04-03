@@ -3,7 +3,7 @@ unit ModflowCfpPipeUnit;
 interface
 
 uses Classes, RbwParser, GoPhastTypes, ModflowBoundaryUnit, SubscriptionUnit,
-  FormulaManagerUnit, Contnrs, SysUtils;
+  FormulaManagerUnit, SysUtils;
 
 type
   // @name controls data set 25 in CFP
@@ -104,7 +104,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, frmGoPhastUnit, ScreenObjectUnit, DataSetUnit;
+  PhastModelUnit, DataSetUnit;
 
 const
   DiameterPosition = 0;

@@ -10,7 +10,7 @@ uses
   frameModpathTimeSeriesDisplayUnit, frameModpathEndpointDisplayUnit,
   frameCustomColorUnit, frameColorGridUnit, frameContourDataUnit,
   frameVectorsUnit, frameDrawCrossSectionUnit, frameSwrReachConnectionsUnit,
-  frameSwrObsDisplayUnit, Mask, JvExMask, JvSpin,
+  frameSwrObsDisplayUnit,
   framePestObservationResultsUnit;
 
 type
@@ -100,7 +100,7 @@ procedure UpdateFrmDisplayData(Force: boolean = false);
 implementation
 
 uses
-  frmGoPhastUnit, PhastModelUnit, GoPhastTypes, ModflowPackagesUnit,
+  frmGoPhastUnit, PhastModelUnit, GoPhastTypes,
   PestPropertiesUnit;
 
 resourcestring

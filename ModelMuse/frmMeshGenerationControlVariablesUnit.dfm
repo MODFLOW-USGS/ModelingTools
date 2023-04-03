@@ -4,9 +4,8 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
   Caption = 'Mesh Generation Control Variables'
   ClientHeight = 401
   ClientWidth = 415
-  ExplicitWidth = 431
-  ExplicitHeight = 440
-  PixelsPerInch = 96
+  ExplicitWidth = 427
+  ExplicitHeight = 439
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -15,6 +14,8 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
     Height = 45
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 355
+    ExplicitWidth = 411
     object btnHelp: TBitBtn
       Left = 127
       Top = 6
@@ -63,6 +64,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 411
     object rgMethod: TRadioGroup
       Left = 0
       Top = 0
@@ -78,6 +80,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
         'Geompack++')
       TabOrder = 0
       OnClick = rgMethodClick
+      ExplicitWidth = 411
     end
     object rgRenumberingMethod: TRadioGroup
       Left = 0
@@ -92,6 +95,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
         'Cuthill and McKee (1969)'
         'Sloan and Randolph (1983)')
       TabOrder = 1
+      ExplicitWidth = 411
     end
   end
   object jvplMesh: TJvPageList
@@ -102,6 +106,8 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
     ActivePage = jvspGmsh
     PropagateEnable = False
     Align = alClient
+    ExplicitWidth = 411
+    ExplicitHeight = 210
     object jvspFishnet: TJvStandardPage
       Left = 0
       Top = 0
@@ -190,6 +196,8 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
       Top = 0
       Width = 415
       Height = 211
+      ExplicitWidth = 411
+      ExplicitHeight = 210
       DesignSize = (
         415
         211)
@@ -211,7 +219,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
       object fedGmsh: TJvFilenameEdit
         Left = 9
         Top = 30
-        Width = 403
+        Width = 399
         Height = 26
         Filter = 
           'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -220,6 +228,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
         TabOrder = 0
         Text = ''
         OnChange = fedGmshChange
+        ExplicitWidth = 395
       end
     end
     object jvspGeomPack: TJvStandardPage
@@ -231,7 +240,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
       object rrdgGeompackOptions: TRbwRowDataGrid
         Left = 0
         Top = 65
-        Width = 415
+        Width = 419
         Height = 146
         Align = alClient
         ColCount = 2
@@ -617,6 +626,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
             CaseSensitivePicklist = False
             CheckStyle = csCheck
           end>
+        ExplicitWidth = 415
         ColWidths = (
           64
           168)
@@ -624,10 +634,11 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
       object pnlGeompack: TPanel
         Left = 0
         Top = 0
-        Width = 415
+        Width = 419
         Height = 65
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 415
         DesignSize = (
           415
           65)
@@ -651,7 +662,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
         object fedGeompack: TJvFilenameEdit
           Left = 6
           Top = 31
-          Width = 403
+          Width = 399
           Height = 26
           Filter = 
             'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -660,6 +671,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
           TabOrder = 0
           Text = ''
           OnChange = fedGeompackChange
+          ExplicitWidth = 403
         end
       end
     end

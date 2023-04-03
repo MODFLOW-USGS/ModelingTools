@@ -14,18 +14,18 @@ inherited frmSearch: TfrmSearch
     ExplicitWidth = 410
     ExplicitHeight = 56
     inherited btnClose: TBitBtn
-      Left = 317
+      Left = 313
       Top = 16
       TabOrder = 2
-      ExplicitLeft = 313
+      ExplicitLeft = 309
       ExplicitTop = 16
     end
     inherited btnHelp: TBitBtn
-      Left = 224
+      Left = 220
       Top = 16
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 220
+      ExplicitLeft = 216
       ExplicitTop = 16
     end
     object rgDirecton: TRadioGroup

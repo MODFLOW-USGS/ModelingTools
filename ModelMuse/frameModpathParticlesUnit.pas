@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, GLScene, GLObjects, GLWin32Viewer, StdCtrls, GLGeomObjects,
   OctTreeClass, Grids, RbwDataGrid4, ExtCtrls, Mask, JvExMask, JvSpin,
-  JvExStdCtrls, JvGroupBox, ComCtrls, Buttons, JvPageList, JvExControls,
+  JvExStdCtrls, JvGroupBox, Buttons, JvPageList, JvExControls,
   ModpathParticleUnit, ModflowPackageSelectionUnit, GLCoordinates,
   GLCrossPlatform, GLVectorTypes,
 {$IF CompilerVersion < 23}
@@ -126,7 +126,7 @@ implementation
 
 {$R *.dfm}
 
-uses Contnrs, Math;
+
 
 resourcestring
   StrN = 'N';

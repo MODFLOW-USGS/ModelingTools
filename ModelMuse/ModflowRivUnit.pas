@@ -3,8 +3,8 @@ unit ModflowRivUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
-  OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes,
+  OrderedCollectionUnit, ModflowCellUnit, FormulaManagerUnit,
+  SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
 type
@@ -462,8 +462,8 @@ resourcestring
 
 implementation
 
-uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
-  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit, ModflowMvrUnit,
+uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
+  frmGoPhastUnit, GIS_Functions, ModflowMvrUnit,
   frmErrorsAndWarningsUnit;
 
 { TRivItem }

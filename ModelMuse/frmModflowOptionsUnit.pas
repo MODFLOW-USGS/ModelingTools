@@ -6,8 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, JvExStdCtrls, JvCheckBox, JvCombobox,
   ExtCtrls, ArgusDataEntry, ComCtrls, Buttons, ModflowOptionsUnit, UndoItems,
-  JvListComb, Mask, JvExMask, JvSpin, JvExControls, JvComponent, JvXPCore,
-  JvXPCheckCtrls, RbwController, RequiredDataSetsUndoUnit, JvToolEdit,
+  JvListComb, Mask, JvExMask, JvSpin, JvExControls,
+  RbwController, RequiredDataSetsUndoUnit, JvToolEdit,
   PhastModelUnit, GrayTabs;
 
 type
@@ -160,8 +160,8 @@ var
 
 implementation
 
-uses frmGoPhastUnit, frmErrorsAndWarningsUnit, 
-  LayerStructureUnit, TimeUnit, GoPhastTypes;
+uses frmGoPhastUnit,
+  GoPhastTypes;
 
 resourcestring
   StrGeneralOptions = 'general options';

@@ -3,24 +3,24 @@ inherited frmSwrVertexNumbers: TfrmSwrVertexNumbers
   HelpKeyword = 'SWR_Vertex_Numbers_Dialog_Box'
   Caption = 'SWR Reach Numbers'
   ClientWidth = 356
-  ExplicitWidth = 374
-  ExplicitHeight = 271
+  ExplicitWidth = 368
+  ExplicitHeight = 272
   PixelsPerInch = 120
   TextHeight = 18
   inline frameVertexNumbers: TframeGrid
     Left = 0
     Top = 0
     Width = 356
-    Height = 184
+    Height = 192
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 424
-    ExplicitHeight = 184
+    ExplicitWidth = 352
+    ExplicitHeight = 191
     inherited Panel: TPanel
-      Top = 143
+      Top = 151
       Width = 356
-      ExplicitTop = 143
-      ExplicitWidth = 424
+      ExplicitTop = 150
+      ExplicitWidth = 352
       inherited lbNumber: TLabel
         Width = 132
         Height = 18
@@ -29,15 +29,15 @@ inherited frmSwrVertexNumbers: TfrmSwrVertexNumbers
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 254
+        Left = 251
         ExplicitLeft = 254
       end
       inherited sbInsert: TSpeedButton
-        Left = 283
+        Left = 279
         ExplicitLeft = 220
       end
       inherited sbDelete: TSpeedButton
-        Left = 312
+        Left = 309
         ExplicitLeft = 312
       end
       inherited seNumber: TJvSpinEdit
@@ -47,10 +47,11 @@ inherited frmSwrVertexNumbers: TfrmSwrVertexNumbers
     end
     inherited Grid: TRbwDataGrid4
       Width = 356
-      Height = 143
+      Height = 151
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -74,59 +75,54 @@ inherited frmSwrVertexNumbers: TfrmSwrVertexNumbers
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 424
-      ExplicitHeight = 143
+      ExplicitWidth = 352
+      ExplicitHeight = 150
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 184
+    Top = 192
     Width = 356
     Height = 42
     Align = alBottom
     TabOrder = 1
-    ExplicitWidth = 424
+    ExplicitTop = 191
+    ExplicitWidth = 352
     DesignSize = (
       356
       42)
     object btnHelp: TBitBtn
-      Left = 85
+      Left = 81
       Top = 6
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
-      DoubleBuffered = True
       Kind = bkHelp
       NumGlyphs = 2
-      ParentDoubleBuffered = False
       TabOrder = 0
-      ExplicitLeft = 153
+      ExplicitLeft = 77
     end
     object btnOK: TBitBtn
-      Left = 174
+      Left = 170
       Top = 6
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
-      DoubleBuffered = True
       Kind = bkOK
       NumGlyphs = 2
-      ParentDoubleBuffered = False
       TabOrder = 1
-      ExplicitLeft = 242
+      ExplicitLeft = 166
     end
     object btnCancel: TBitBtn
-      Left = 263
+      Left = 259
       Top = 6
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
-      DoubleBuffered = True
       Kind = bkCancel
       NumGlyphs = 2
-      ParentDoubleBuffered = False
       TabOrder = 2
-      ExplicitLeft = 331
+      ExplicitLeft = 255
     end
   end
 end

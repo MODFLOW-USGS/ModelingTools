@@ -67,7 +67,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       OnClick = rgViewDirectionClick
     end
     object btnOK: TBitBtn
-      Left = 583
+      Left = 579
       Top = 87
       Width = 91
       Height = 33
@@ -96,10 +96,10 @@ inherited frmImportBitmap: TfrmImportBitmap
       NumGlyphs = 2
       TabOrder = 7
       OnClick = btnOKClick
-      ExplicitLeft = 579
+      ExplicitLeft = 575
     end
     object btnCancel: TBitBtn
-      Left = 680
+      Left = 676
       Top = 87
       Width = 91
       Height = 33
@@ -107,7 +107,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 8
-      ExplicitLeft = 676
+      ExplicitLeft = 672
     end
     object edName: TEdit
       Left = 322
@@ -118,7 +118,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       TabOrder = 4
     end
     object btnHelp: TBitBtn
-      Left = 488
+      Left = 484
       Top = 87
       Width = 91
       Height = 33
@@ -127,7 +127,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       NumGlyphs = 2
       TabOrder = 6
       OnClick = btnHelpClick
-      ExplicitLeft = 484
+      ExplicitLeft = 480
     end
     object cbVisible: TCheckBox
       Left = 280

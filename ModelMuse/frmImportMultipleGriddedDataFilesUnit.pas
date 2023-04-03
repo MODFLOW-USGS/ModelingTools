@@ -46,7 +46,7 @@ implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit, GoPhastTypes, RbwParser,
-  ScreenObjectUnit, AbstractGridUnit, UndoItems, FastGEO, IOUtils,
+  ScreenObjectUnit, AbstractGridUnit, UndoItems, FastGEO,
   ValueArrayStorageUnit, GIS_Functions, MeshRenumberingTypes;
 
 resourcestring

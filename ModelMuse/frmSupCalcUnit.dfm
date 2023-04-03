@@ -4,9 +4,8 @@ inherited frmSupCalc: TfrmSupCalc
   Caption = 'SUPCALC Options'
   ClientHeight = 287
   ClientWidth = 369
-  ExplicitWidth = 385
-  ExplicitHeight = 326
-  PixelsPerInch = 96
+  ExplicitWidth = 381
+  ExplicitHeight = 325
   TextHeight = 18
   object lblPestFileName: TLabel
     Left = 8
@@ -25,7 +24,7 @@ inherited frmSupCalc: TfrmSupCalc
   object fedPestControlFile: TJvFilenameEdit
     Left = 8
     Top = 32
-    Width = 353
+    Width = 349
     Height = 26
     DefaultExt = '.pst'
     Filter = 'Pest Control File (*.pst)|*.pst'
@@ -33,6 +32,7 @@ inherited frmSupCalc: TfrmSupCalc
     TabOrder = 0
     Text = ''
     OnChange = fedPestControlFileChange
+    ExplicitWidth = 345
   end
   object rgSuperParameterCalculation: TRadioGroup
     Left = 8

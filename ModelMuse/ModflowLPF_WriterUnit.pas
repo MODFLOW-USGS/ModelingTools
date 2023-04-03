@@ -67,7 +67,7 @@ resourcestring
 
 implementation
 
-uses ModflowUnitNumbers, ModflowOutputControlUnit,
+uses ModflowUnitNumbers,
   frmErrorsAndWarningsUnit, frmProgressUnit, Forms, PestParamRoots;
 
 resourcestring

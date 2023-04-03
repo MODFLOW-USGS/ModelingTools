@@ -711,7 +711,7 @@ implementation
 
 uses
   ScreenObjectUnit, FastGEO, PhastModelUnit, ModflowGridUnit,
-  ModflowFmpCropUnit, frmGoPhastUnit;
+  frmGoPhastUnit;
 
 { TFarmCostsItem }
 

@@ -3,36 +3,36 @@ inherited frmSelectObjectsForEditing: TfrmSelectObjectsForEditing
   HelpKeyword = 'Select_Objects_for_Editing'
   Caption = 'Select Objects for Editing or Deletion'
   ClientWidth = 547
-  ExplicitWidth = 563
-  ExplicitHeight = 240
+  ExplicitWidth = 559
+  ExplicitHeight = 449
   PixelsPerInch = 120
   TextHeight = 18
   inherited pnlBottom: TPanel
-    Top = 328
+    Top = 325
     Width = 547
     Height = 86
     TabOrder = 2
-    ExplicitTop = 328
-    ExplicitWidth = 547
+    ExplicitTop = 324
+    ExplicitWidth = 543
     ExplicitHeight = 86
     inherited btnClose: TBitBtn
-      Left = 449
+      Left = 445
       Top = 46
       Kind = bkCancel
       TabOrder = 6
-      ExplicitLeft = 449
+      ExplicitLeft = 441
       ExplicitTop = 46
     end
     inherited btnHelp: TBitBtn
-      Left = 2
+      Left = -2
       Top = 46
       TabOrder = 2
       OnClick = btnHelpClick
-      ExplicitLeft = 2
+      ExplicitLeft = -6
       ExplicitTop = 46
     end
     object btnOK: TBitBtn
-      Left = 192
+      Left = 188
       Top = 46
       Width = 89
       Height = 33
@@ -42,9 +42,10 @@ inherited frmSelectObjectsForEditing: TfrmSelectObjectsForEditing
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
+      ExplicitLeft = 184
     end
     object btnDelete: TBitBtn
-      Left = 97
+      Left = 93
       Top = 46
       Width = 89
       Height = 33
@@ -73,9 +74,10 @@ inherited frmSelectObjectsForEditing: TfrmSelectObjectsForEditing
       ModalResult = 1
       TabOrder = 3
       OnClick = btnDeleteClick
+      ExplicitLeft = 89
     end
     object btnEditFeature: TButton
-      Left = 287
+      Left = 283
       Top = 46
       Width = 156
       Height = 33
@@ -84,6 +86,7 @@ inherited frmSelectObjectsForEditing: TfrmSelectObjectsForEditing
       ModalResult = 8
       TabOrder = 5
       OnClick = btnEditFeatureClick
+      ExplicitLeft = 279
     end
     object btnCheckSelected: TButton
       Left = 2
@@ -105,15 +108,14 @@ inherited frmSelectObjectsForEditing: TfrmSelectObjectsForEditing
   inherited vstObjects: TVirtualStringTree
     Top = 57
     Width = 547
-    Height = 271
+    Height = 268
     PopupMenu = pmChangeStates
     TabOrder = 1
     TreeOptions.SelectionOptions = [toMultiSelect]
     OnChecked = vstObjectsChecked
-    ExplicitLeft = -8
     ExplicitTop = 57
     ExplicitWidth = 547
-    ExplicitHeight = 311
+    ExplicitHeight = 268
   end
   object rgViewDirection: TRadioGroup
     Left = 0
@@ -130,8 +132,7 @@ inherited frmSelectObjectsForEditing: TfrmSelectObjectsForEditing
       'Side')
     TabOrder = 0
     OnClick = rgViewDirectionClick
-    ExplicitLeft = -8
-    ExplicitTop = 8
+    ExplicitWidth = 543
   end
   object pmChangeStates: TPopupMenu
     Left = 304

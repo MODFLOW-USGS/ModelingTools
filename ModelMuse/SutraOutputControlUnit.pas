@@ -92,8 +92,7 @@ type
 
 implementation
 
-uses
-  frmSutraOutputControlUnit;
+
 
 { TSutraOutputControl }
 

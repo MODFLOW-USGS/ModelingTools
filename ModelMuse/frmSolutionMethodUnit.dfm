@@ -7,8 +7,8 @@ inherited frmSolutionMethod: TfrmSolutionMethod
   Caption = 'PHAST Solution Method'
   ClientHeight = 373
   ClientWidth = 327
-  ExplicitWidth = 345
-  ExplicitHeight = 418
+  ExplicitWidth = 339
+  ExplicitHeight = 411
   PixelsPerInch = 120
   TextHeight = 18
   object lblSpaceDifferencing: TLabel

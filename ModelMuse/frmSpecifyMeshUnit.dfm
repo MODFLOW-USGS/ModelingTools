@@ -4,9 +4,8 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
   Caption = 'Specify Two-Dimensional Mesh'
   ClientHeight = 362
   ClientWidth = 503
-  ExplicitWidth = 521
-  ExplicitHeight = 407
-  PixelsPerInch = 96
+  ExplicitWidth = 515
+  ExplicitHeight = 400
   TextHeight = 18
   object pgcMeshDesign: TPageControl
     Left = 0
@@ -17,12 +16,10 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
     Align = alClient
     TabOrder = 0
     OnChange = pgcMeshDesignChange
+    ExplicitWidth = 499
+    ExplicitHeight = 311
     object tabNodes: TTabSheet
       Caption = 'Nodes'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameNodes: TframeGrid
         Left = 0
         Top = 0
@@ -30,13 +27,13 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
         Height = 279
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 495
-        ExplicitHeight = 279
+        ExplicitWidth = 491
+        ExplicitHeight = 278
         inherited Panel: TPanel
           Top = 238
           Width = 495
-          ExplicitTop = 238
-          ExplicitWidth = 495
+          ExplicitTop = 237
+          ExplicitWidth = 491
           inherited lbNumber: TLabel
             Width = 119
             Height = 18
@@ -45,15 +42,15 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 236
+            Left = 234
             ExplicitLeft = 236
           end
           inherited sbInsert: TSpeedButton
-            Left = 265
+            Left = 263
             ExplicitLeft = 265
           end
           inherited sbDelete: TSpeedButton
-            Left = 294
+            Left = 291
             ExplicitLeft = 294
           end
           inherited seNumber: TJvSpinEdit
@@ -70,6 +67,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -93,6 +91,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -116,6 +115,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -137,22 +137,18 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
               CheckStyle = csCheck
               AutoAdjustColWidths = False
             end>
-          ExplicitWidth = 495
-          ExplicitHeight = 238
+          ExplicitWidth = 491
+          ExplicitHeight = 237
         end
       end
     end
     object tabElements: TTabSheet
       Caption = 'Elements'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameElements: TframeGrid
         Left = 0
         Top = 0
-        Width = 495
+        Width = 499
         Height = 279
         Align = alClient
         TabOrder = 0
@@ -160,7 +156,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
         ExplicitHeight = 279
         inherited Panel: TPanel
           Top = 238
-          Width = 495
+          Width = 499
           ExplicitTop = 238
           ExplicitWidth = 495
           inherited lbNumber: TLabel
@@ -189,7 +185,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 495
+          Width = 499
           Height = 238
           ColCount = 5
           FixedCols = 1
@@ -198,6 +194,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -221,6 +218,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -244,6 +242,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -267,6 +266,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -290,6 +290,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -325,11 +326,13 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 311
+    ExplicitWidth = 499
     DesignSize = (
       503
       50)
     object btnCancel: TBitBtn
-      Left = 393
+      Left = 389
       Top = 7
       Width = 91
       Height = 33
@@ -337,9 +340,10 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 385
     end
     object btnOK: TBitBtn
-      Left = 296
+      Left = 292
       Top = 6
       Width = 91
       Height = 33
@@ -348,9 +352,10 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnOKClick
+      ExplicitLeft = 288
     end
     object btnHelp: TBitBtn
-      Left = 199
+      Left = 195
       Top = 7
       Width = 91
       Height = 33
@@ -359,6 +364,7 @@ inherited frmSpecifyMesh: TfrmSpecifyMesh
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 191
     end
   end
 end

@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ComCtrls, RbwRuler, Spin, ArgusDataEntry, Mask, JvExMask, JvSpin;
+  StdCtrls, RbwRuler, ArgusDataEntry, Mask, JvExMask, JvSpin;
 
 type
   {@abstract(@name is used to edit the display format of a TRbwRuler.)

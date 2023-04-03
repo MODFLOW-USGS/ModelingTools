@@ -3,7 +3,7 @@ unit Mt3dSftUnit;
 interface
 
 uses ModflowCellUnit, Mt3dmsChemUnit, System.Classes, ModflowBoundaryUnit,
-  GoPhastTypes, FormulaManagerUnit, SubscriptionUnit,
+  GoPhastTypes, SubscriptionUnit,
   System.Generics.Collections, System.SysUtils, System.ZLib, DataSetUnit;
 
 type

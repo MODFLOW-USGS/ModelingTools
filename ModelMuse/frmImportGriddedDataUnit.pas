@@ -9,7 +9,7 @@ uses
   JvExControls, ComCtrls, StdCtrls, Buttons, Mask, FastGEO, JvExMask, JvSpin,
   DataSetUnit, ScreenObjectUnit, ValueArrayStorageUnit, GoPhastTypes,
   UndoItemsScreenObjects, JvLabel, VirtualTrees, SsButtonEd, RbwStringTreeCombo,
-  JvExStdCtrls, JvCombobox, JvListComb, GrayTabs;
+  GrayTabs;
 
 type
   TfrmImportGriddedData = class(TfrmCustomGoPhast)
@@ -166,7 +166,7 @@ implementation
 
 uses
   Contnrs, RbwParser, frmGoPhastUnit, ClassificationUnit,PhastModelUnit,
-  UndoItems, GIS_Functions, frmShowHideObjectsUnit, Clipbrd, SutraMeshUnit;
+  UndoItems, GIS_Functions, Clipbrd, SutraMeshUnit;
 
 resourcestring
   StrImportGriddedData = 'import gridded data';

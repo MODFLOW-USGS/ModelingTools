@@ -15,6 +15,7 @@ inherited frmLayersToExport: TfrmLayersToExport
     Enabled = False
     ItemHeight = 18
     TabOrder = 0
+    ExplicitHeight = 178
   end
   object rgLayersToExport: TRadioGroup
     Left = 8
@@ -39,12 +40,12 @@ inherited frmLayersToExport: TfrmLayersToExport
     BevelOuter = bvNone
     TabOrder = 2
     ExplicitTop = 192
-    ExplicitWidth = 352
+    ExplicitWidth = 377
     DesignSize = (
       381
       41)
     object btnHelp: TBitBtn
-      Left = 28
+      Left = 24
       Top = 4
       Width = 108
       Height = 33
@@ -53,10 +54,10 @@ inherited frmLayersToExport: TfrmLayersToExport
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = -1
+      ExplicitLeft = 20
     end
     object btnOK: TBitBtn
-      Left = 142
+      Left = 138
       Top = 4
       Width = 108
       Height = 33
@@ -64,10 +65,10 @@ inherited frmLayersToExport: TfrmLayersToExport
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 113
+      ExplicitLeft = 134
     end
     object btnCancel: TBitBtn
-      Left = 256
+      Left = 252
       Top = 4
       Width = 108
       Height = 33
@@ -75,7 +76,7 @@ inherited frmLayersToExport: TfrmLayersToExport
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 227
+      ExplicitLeft = 248
     end
   end
   object rgExportAs: TRadioGroup

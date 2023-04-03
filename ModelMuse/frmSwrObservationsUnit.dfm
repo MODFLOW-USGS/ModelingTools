@@ -21,7 +21,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       630
       42)
     object btnHelp: TBitBtn
-      Left = 355
+      Left = 351
       Top = 6
       Width = 83
       Height = 33
@@ -29,10 +29,10 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 359
+      ExplicitLeft = 347
     end
     object btnOK: TBitBtn
-      Left = 444
+      Left = 440
       Top = 6
       Width = 83
       Height = 33
@@ -41,10 +41,10 @@ inherited frmSwrObservations: TfrmSwrObservations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 448
+      ExplicitLeft = 436
     end
     object btnCancel: TBitBtn
-      Left = 533
+      Left = 529
       Top = 6
       Width = 83
       Height = 33
@@ -52,7 +52,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 537
+      ExplicitLeft = 525
     end
   end
   inline frameObservations: TframeGrid
@@ -63,13 +63,13 @@ inherited frmSwrObservations: TfrmSwrObservations
     Align = alClient
     TabOrder = 1
     ExplicitTop = 41
-    ExplicitWidth = 630
-    ExplicitHeight = 268
+    ExplicitWidth = 626
+    ExplicitHeight = 267
     inherited Panel: TPanel
       Top = 227
-      Width = 634
-      ExplicitTop = 227
-      ExplicitWidth = 630
+      Width = 630
+      ExplicitTop = 226
+      ExplicitWidth = 626
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -77,15 +77,15 @@ inherited frmSwrObservations: TfrmSwrObservations
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 330
+        Left = 328
         ExplicitLeft = 219
       end
       inherited sbInsert: TSpeedButton
-        Left = 389
+        Left = 387
         ExplicitLeft = 259
       end
       inherited sbDelete: TSpeedButton
-        Left = 451
+        Left = 448
         ExplicitLeft = 300
       end
       inherited seNumber: TJvSpinEdit
@@ -94,7 +94,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 634
+      Width = 630
       Height = 227
       ColCount = 6
       OnMouseUp = frameObservationsGridMouseUp
@@ -258,8 +258,8 @@ inherited frmSwrObservations: TfrmSwrObservations
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 630
-      ExplicitHeight = 227
+      ExplicitWidth = 626
+      ExplicitHeight = 226
       ColWidths = (
         64
         119

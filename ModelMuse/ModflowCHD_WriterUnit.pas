@@ -2,7 +2,7 @@ unit ModflowCHD_WriterUnit;
 
 interface
 
-uses SysUtils, Classes, Contnrs, RbwParser, CustomModflowWriterUnit,
+uses SysUtils, Classes, RbwParser, CustomModflowWriterUnit,
   PhastModelUnit, ModflowConstantHeadBoundaryUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowPackageSelectionUnit, ModflowCellUnit,
   OrderedCollectionUnit, FluxObservationUnit, GoPhastTypes, Modflow6ObsUnit;
@@ -62,9 +62,9 @@ type
 
 implementation
 
-uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
-  ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  ModflowGridUnit, Forms, DataSetUnit, Mt3dmsChemSpeciesUnit,
+uses frmErrorsAndWarningsUnit,
+  ModflowUnitNumbers, frmProgressUnit,
+  ModflowGridUnit, Forms, Mt3dmsChemSpeciesUnit,
   PestPropertiesUnit;
 
 resourcestring

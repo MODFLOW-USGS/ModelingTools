@@ -2,7 +2,7 @@ unit ModflowLakUnit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
+uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit, FormulaManagerUnit,
   SubscriptionUnit, GoPhastTypes, PestObsUnit;
 
@@ -488,7 +488,7 @@ const
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, TempFiles,
+
   frmFormulaErrorsUnit, frmGoPhastUnit, ModflowParameterUnit;
 
 resourcestring

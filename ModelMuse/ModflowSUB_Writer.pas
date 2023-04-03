@@ -5,7 +5,7 @@ interface
 uses
   Classes, CustomModflowWriterUnit, ModflowPackageSelectionUnit, UnitList,
   IntListUnit, PhastModelUnit, SysUtils, ModflowSubsidenceDefUnit,
-  ModflowSwiWriterUnit, InterpolatedObsCellUnit, System.Generics.Collections,
+  InterpolatedObsCellUnit, System.Generics.Collections,
   DataSetUnit;
 
 type

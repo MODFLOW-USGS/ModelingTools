@@ -568,7 +568,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Height = 217
         PropagateEnable = False
         Align = alClient
-        ExplicitHeight = 219
       end
     end
   end

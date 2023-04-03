@@ -7,8 +7,8 @@ inherited frmImportDistributedData: TfrmImportDistributedData
   ClientHeight = 356
   ClientWidth = 468
   OnResize = FormResize
-  ExplicitWidth = 486
-  ExplicitHeight = 401
+  ExplicitWidth = 480
+  ExplicitHeight = 394
   PixelsPerInch = 120
   TextHeight = 18
   object pnlTop: TPanel
@@ -19,6 +19,7 @@ inherited frmImportDistributedData: TfrmImportDistributedData
     Align = alTop
     ParentColor = True
     TabOrder = 0
+    ExplicitWidth = 464
     object lblLowerX: TLabel
       Left = 8
       Top = 12
@@ -164,11 +165,13 @@ inherited frmImportDistributedData: TfrmImportDistributedData
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 314
+    ExplicitWidth = 464
     DesignSize = (
       468
       41)
     object btnOK: TBitBtn
-      Left = 265
+      Left = 261
       Top = 4
       Width = 89
       Height = 33
@@ -197,9 +200,10 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 257
     end
     object btnCancel: TBitBtn
-      Left = 361
+      Left = 357
       Top = 4
       Width = 91
       Height = 33
@@ -207,9 +211,10 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 353
     end
     object btnHelp: TBitBtn
-      Left = 169
+      Left = 165
       Top = 4
       Width = 89
       Height = 33
@@ -218,6 +223,7 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 161
     end
   end
   object dgDataSets: TRbwDataGrid4
@@ -243,6 +249,7 @@ inherited frmImportDistributedData: TfrmImportDistributedData
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -266,6 +273,7 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'Browse'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clBlack
@@ -289,6 +297,8 @@ inherited frmImportDistributedData: TfrmImportDistributedData
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ExplicitWidth = 464
+    ExplicitHeight = 145
     ColWidths = (
       100
       100)

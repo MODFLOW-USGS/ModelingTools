@@ -137,12 +137,10 @@ type
 
 implementation
 
-uses
   {$IFDEF DEBUG}
-    frmGoPhastUnit,
+uses
+  frmGoPhastUnit;
   {$ENDIF}
-
-Contnrs;
 
 constructor TObserver.Create(AnOwner: TComponent);
 begin

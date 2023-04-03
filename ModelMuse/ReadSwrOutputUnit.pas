@@ -118,7 +118,7 @@ procedure ReadSwrObsData(const FileName: string;
 implementation
 
 uses
-  IOUtils, ModelMuseUtilities, Dialogs;
+  IOUtils, Dialogs;
 
 resourcestring
   StrTheFileContainsNo = 'The file contains no observations';

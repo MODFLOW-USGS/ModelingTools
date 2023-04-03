@@ -2,7 +2,7 @@ unit ModflowFmp4BareRunoffFractionUnit;
 
 interface
 
-uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit;
+uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit;
 
 type
   TFmp4BareRunoffFractionTimeListLink  = class(TFmp4TimeListLink)

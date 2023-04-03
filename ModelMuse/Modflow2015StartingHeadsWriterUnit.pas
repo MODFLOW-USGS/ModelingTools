@@ -2,7 +2,7 @@ unit Modflow2015StartingHeadsWriterUnit;
 
 interface
 
-uses SysUtils, PhastModelUnit, DataSetUnit, CustomModflowWriterUnit,
+uses SysUtils, PhastModelUnit, CustomModflowWriterUnit,
   ModflowBasicWriterUnit, Vcl.Forms;
 
 type

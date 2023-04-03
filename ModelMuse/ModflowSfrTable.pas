@@ -2,7 +2,7 @@ unit ModflowSfrTable;
 
 interface
 
-uses SysUtils, Classes, RbwParser, GoPhastTypes, OrderedCollectionUnit, ModflowCellUnit,
+uses SysUtils, Classes, RbwParser, GoPhastTypes, OrderedCollectionUnit,
   ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit;
 
 type
@@ -139,8 +139,8 @@ procedure TableRowRestoreSubscription(Sender: TObject; Subject: TObject;
 
 implementation
 
-uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit, 
+uses Contnrs, ScreenObjectUnit, PhastModelUnit,
+  ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit,
   frmGoPhastUnit, ModflowSfrChannelUnit;
 
 resourcestring

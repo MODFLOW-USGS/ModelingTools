@@ -4,9 +4,8 @@ inherited frmScaleRotateMove: TfrmScaleRotateMove
   Caption = 'Scale, Rotate, and Move Objects'
   ClientHeight = 243
   ClientWidth = 623
-  ExplicitWidth = 631
-  ExplicitHeight = 277
-  PixelsPerInch = 96
+  ExplicitWidth = 635
+  ExplicitHeight = 281
   TextHeight = 18
   object gbScale: TJvGroupBox
     Left = 8
@@ -181,10 +180,8 @@ inherited frmScaleRotateMove: TfrmScaleRotateMove
     Top = 200
     Width = 91
     Height = 33
-    DoubleBuffered = True
     Kind = bkHelp
     NumGlyphs = 2
-    ParentDoubleBuffered = False
     TabOrder = 3
     OnClick = btnHelpClick
   end
@@ -193,11 +190,9 @@ inherited frmScaleRotateMove: TfrmScaleRotateMove
     Top = 200
     Width = 91
     Height = 33
-    DoubleBuffered = True
     Enabled = False
     Kind = bkOK
     NumGlyphs = 2
-    ParentDoubleBuffered = False
     TabOrder = 4
     OnClick = btnOKClick
   end
@@ -206,10 +201,8 @@ inherited frmScaleRotateMove: TfrmScaleRotateMove
     Top = 200
     Width = 91
     Height = 33
-    DoubleBuffered = True
     Kind = bkCancel
     NumGlyphs = 2
-    ParentDoubleBuffered = False
     TabOrder = 5
   end
   object gbCenter: TGroupBox

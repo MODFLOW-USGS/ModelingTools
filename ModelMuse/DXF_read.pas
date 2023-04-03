@@ -28,7 +28,7 @@ interface
 
 uses
 {$IFDEF CLX}
-  SysUtils, QControls, QComCtrls,QDialogs, Classes,DXF_Structs,DXF_Utils,Math;
+  SysUtils, QControls, QComCtrls,QDialogs, Classes,DXF_Structs,DXF_Utils;
 {$ELSE}
   Windows,SysUtils,Controls, StdCtrls,ComCtrls,Dialogs,Classes,Graphics,
   DXF_structs,DXF_Utils,Math, System.UITypes;

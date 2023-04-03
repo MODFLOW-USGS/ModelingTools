@@ -5,21 +5,24 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
   HelpKeyword = 'Show_or_Hide_Bitmaps_Dialog_Box'
   Caption = 'Show or Hide Images'
   ClientWidth = 467
-  ExplicitWidth = 485
+  ExplicitWidth = 479
+  ExplicitHeight = 272
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 181
+    Top = 189
     Width = 467
     Height = 45
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 188
+    ExplicitWidth = 463
     DesignSize = (
       467
       45)
     object btnClose: TBitBtn
-      Left = 367
+      Left = 363
       Top = 6
       Width = 83
       Height = 33
@@ -27,9 +30,10 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 359
     end
     object btnHelp: TBitBtn
-      Left = 278
+      Left = 274
       Top = 6
       Width = 83
       Height = 33
@@ -38,6 +42,7 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 270
     end
     object btnShowAll: TButton
       Left = 8
@@ -71,7 +76,7 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
     Left = 0
     Top = 0
     Width = 467
-    Height = 181
+    Height = 189
     Align = alClient
     ColCount = 2
     FixedCols = 1
@@ -139,6 +144,8 @@ inherited frmShowHideBitmaps: TfrmShowHideBitmaps
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ExplicitWidth = 463
+    ExplicitHeight = 188
     ColWidths = (
       27
       64)

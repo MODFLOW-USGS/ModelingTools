@@ -4,10 +4,8 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   Caption = 'SUTRA Program Location'
   ClientHeight = 308
   ClientWidth = 992
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 1010
-  ExplicitHeight = 355
+  ExplicitWidth = 1004
+  ExplicitHeight = 346
   TextHeight = 18
   object htlblSutra22: TJvHTLabel
     Left = 105
@@ -76,7 +74,7 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   object fedSutra22: TJvFilenameEdit
     Left = 16
     Top = 38
-    Width = 967
+    Width = 963
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -85,6 +83,7 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 0
     Text = ''
     OnChange = fedSutra22Change
+    ExplicitWidth = 959
   end
   object pnlBottom: TPanel
     Left = 0
@@ -94,12 +93,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 204
+    ExplicitTop = 266
+    ExplicitWidth = 988
     DesignSize = (
       992
       41)
     object btnHelp: TBitBtn
-      Left = 728
+      Left = 724
       Top = 6
       Width = 82
       Height = 27
@@ -109,9 +109,10 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 720
     end
     object btnOK: TBitBtn
-      Left = 816
+      Left = 812
       Top = 6
       Width = 82
       Height = 27
@@ -120,9 +121,10 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 808
     end
     object btnCancel: TBitBtn
-      Left = 904
+      Left = 900
       Top = 6
       Width = 83
       Height = 27
@@ -130,12 +132,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 896
     end
   end
   object fedTextEditor: TJvFilenameEdit
     Left = 16
     Top = 198
-    Width = 967
+    Width = 963
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -144,11 +147,12 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 1
     Text = ''
     OnChange = fedTextEditorChange
+    ExplicitWidth = 959
   end
   object fedSutra30: TJvFilenameEdit
     Left = 16
     Top = 97
-    Width = 967
+    Width = 963
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -157,11 +161,12 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 3
     Text = ''
     OnChange = fedSutra30Change
+    ExplicitWidth = 959
   end
   object fedSutra40: TJvFilenameEdit
     Left = 16
     Top = 150
-    Width = 967
+    Width = 963
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -170,5 +175,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 4
     Text = ''
     OnChange = fedSutra40Change
+    ExplicitWidth = 959
   end
 end

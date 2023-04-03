@@ -26,7 +26,7 @@ interface
 
 uses System.UITypes,
   Types, Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
-  JvListBox, JvCtrls, JvComponent, JvExStdCtrls, JvExComCtrls, ComCtrls,
+  JvListBox, JvExStdCtrls, JvExComCtrls, ComCtrls,
   JvComCtrls, frmCustomGoPhastUnit, Buttons, Mask, JvExMask, JvSpin, Grids,
   RbwDataGrid4, JvEdit, JvExExtCtrls, JvNetscapeSplitter, UndoItems,
   ModflowPackageSelectionUnit, FluxObservationUnit, RbwParser, JvCombobox,

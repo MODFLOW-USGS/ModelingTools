@@ -10,7 +10,7 @@ inherited framePackageSub: TframePackageSub
   inherited memoComments: TMemo
     Width = 564
     Height = 51
-    ExplicitWidth = 413
+    ExplicitWidth = 564
     ExplicitHeight = 51
   end
   object pcSub: TPageControl [3]
@@ -22,8 +22,6 @@ inherited framePackageSub: TframePackageSub
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
-    ExplicitWidth = 444
-    ExplicitHeight = 306
     object tabControls: TTabSheet
       Caption = 'Controls'
       DesignSize = (
@@ -887,7 +885,7 @@ inherited framePackageSub: TframePackageSub
         Left = 12
         Top = 328
         Width = 57
-        Height = 21
+        Height = 23
         ButtonKind = bkClassic
         Value = 1.000000000000000000
         Enabled = False

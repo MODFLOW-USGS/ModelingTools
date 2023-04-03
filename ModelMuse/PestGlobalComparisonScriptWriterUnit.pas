@@ -21,8 +21,8 @@ resourcestring
 implementation
 
 uses
-  PestObsUnit, ObservationComparisonsUnit, ScreenObjectUnit, GoPhastTypes,
-  frmErrorsAndWarningsUnit, ModelMuseUtilities, ObsInterfaceUnit;
+  PestObsUnit, ObservationComparisonsUnit, GoPhastTypes,
+  frmErrorsAndWarningsUnit, ObsInterfaceUnit;
 
 { TGlobalComparisonScriptWriter }
 

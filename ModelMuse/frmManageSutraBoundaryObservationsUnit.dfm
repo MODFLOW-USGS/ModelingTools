@@ -6,9 +6,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
   ClientWidth = 784
   OnKeyDown = FormKeyDown
   OnResize = FormResize
-  ExplicitWidth = 800
-  ExplicitHeight = 600
-  PixelsPerInch = 96
+  ExplicitWidth = 796
+  ExplicitHeight = 599
   TextHeight = 18
   object spltr1: TJvNetscapeSplitter
     Left = 165
@@ -30,11 +29,13 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     Height = 41
     Align = alBottom
     TabOrder = 0
+    ExplicitTop = 519
+    ExplicitWidth = 780
     DesignSize = (
       784
       41)
     object btnHelp: TBitBtn
-      Left = 503
+      Left = 499
       Top = 6
       Width = 87
       Height = 27
@@ -43,9 +44,10 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
+      ExplicitLeft = 495
     end
     object btnCancel: TBitBtn
-      Left = 689
+      Left = 685
       Top = 6
       Width = 87
       Height = 27
@@ -53,9 +55,10 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 681
     end
     object btnOk: TBitBtn
-      Left = 596
+      Left = 592
       Top = 6
       Width = 87
       Height = 27
@@ -64,6 +67,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOkClick
+      ExplicitLeft = 588
     end
     object btnDeleteObservation: TButton
       Left = 88
@@ -98,6 +102,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     ReadOnly = True
     TabOrder = 1
     OnChange = tvFluxObservationsChange
+    ExplicitHeight = 519
   end
   object pnlMain: TPanel
     Left = 175
@@ -107,6 +112,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 605
+    ExplicitHeight = 519
     object pnlTop: TPanel
       Left = 0
       Top = 0
@@ -114,6 +121,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       Height = 65
       Align = alTop
       TabOrder = 0
+      ExplicitWidth = 605
       object lblObservationName: TLabel
         Left = 6
         Top = 6
@@ -165,6 +173,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       Align = alClient
       Enabled = False
       TabOrder = 1
+      ExplicitWidth = 605
+      ExplicitHeight = 454
       object tabObservationsTimes: TTabSheet
         Caption = 'Observation times and values'
         inline frameSutraFluxObs: TframePestObs
@@ -174,8 +184,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           Height = 422
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 601
-          ExplicitHeight = 422
+          ExplicitWidth = 597
+          ExplicitHeight = 421
           inherited splObservations: TSplitter
             Top = 245
             Width = 601
@@ -186,20 +196,20 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           inherited grpDirectObs: TGroupBox
             Width = 601
             Height = 245
-            ExplicitWidth = 601
-            ExplicitHeight = 245
+            ExplicitWidth = 597
+            ExplicitHeight = 244
             inherited frameObservations: TframeGrid
               Top = 20
               Width = 597
               Height = 223
               ExplicitTop = 20
-              ExplicitWidth = 597
-              ExplicitHeight = 223
+              ExplicitWidth = 593
+              ExplicitHeight = 222
               inherited Panel: TPanel
                 Top = 191
                 Width = 597
-                ExplicitTop = 191
-                ExplicitWidth = 597
+                ExplicitTop = 190
+                ExplicitWidth = 593
                 inherited lbNumber: TLabel
                   Width = 208
                   Height = 18
@@ -214,28 +224,28 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
               inherited Grid: TRbwDataGrid4
                 Width = 597
                 Height = 191
-                ExplicitWidth = 597
-                ExplicitHeight = 191
+                ExplicitWidth = 593
+                ExplicitHeight = 190
               end
             end
           end
           inherited grpObsComparisons: TGroupBox
             Top = 250
             Width = 601
-            ExplicitTop = 250
-            ExplicitWidth = 601
+            ExplicitTop = 249
+            ExplicitWidth = 597
             inherited frameObsComparisons: TframeGrid
               Top = 20
               Width = 597
               Height = 150
               ExplicitTop = 20
-              ExplicitWidth = 597
+              ExplicitWidth = 593
               ExplicitHeight = 150
               inherited Panel: TPanel
                 Top = 115
                 Width = 597
                 ExplicitTop = 115
-                ExplicitWidth = 597
+                ExplicitWidth = 593
                 inherited lbNumber: TLabel
                   Width = 251
                   Height = 18
@@ -250,7 +260,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
               inherited Grid: TRbwDataGrid4
                 Width = 597
                 Height = 115
-                ExplicitWidth = 597
+                ExplicitWidth = 593
                 ExplicitHeight = 115
               end
             end
@@ -410,15 +420,16 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         object edFactorFormula: TJvEdit
           Left = 61
           Top = 392
-          Width = 436
+          Width = 432
           Height = 26
           Anchors = [akLeft, akRight, akBottom]
           TabOrder = 7
           Text = ''
           OnChange = edFactorFormulaChange
+          ExplicitWidth = 436
         end
         object btnFactorFormula: TButton
-          Left = 502
+          Left = 498
           Top = 390
           Width = 90
           Height = 30
@@ -427,6 +438,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           Enabled = False
           TabOrder = 6
           OnClick = btnFactorFormulaClick
+          ExplicitLeft = 502
         end
       end
     end

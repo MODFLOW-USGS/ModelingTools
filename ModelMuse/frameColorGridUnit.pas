@@ -60,7 +60,7 @@ uses
   frmGoPhastUnit, ColorSchemes, frmFormulaErrorsUnit,
   frmErrorsAndWarningsUnit, frmCustomGoPhastUnit, PhastModelUnit, GoPhastTypes,
   RbwParser, frmProgressUnit, LegendUnit, Contnrs, RealListUnit,
-  ClassificationUnit, SutraMeshUnit, ModflowHfbDisplayUnit, ModelMuseUtilities;
+  ClassificationUnit, SutraMeshUnit, ModflowHfbDisplayUnit;
 
 resourcestring
   StrProgress = 'Progress';

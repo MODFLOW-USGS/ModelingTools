@@ -61,7 +61,7 @@ type
 implementation
 
 uses
-  frmErrorsAndWarningsUnit, DataSetUnit, Contnrs, Mt3dmsChemUnit,
+  frmErrorsAndWarningsUnit, DataSetUnit, Contnrs,
   SubscriptionUnit, GlobalVariablesUnit, GIS_Functions, frmFormulaErrorsUnit,
   ModflowUnitNumbers, frmProgressUnit, Math, ModflowBoundaryUnit;
 

@@ -272,8 +272,8 @@ uses
   AbstractGridUnit, MeshRenumberingTypes, GoPhastTypes, FastGEO,
   ModflowIrregularMeshUnit, ModflowUnitNumbers, frmErrorsAndWarningsUnit,
   ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowUzfWriterUnit, PestHeadObsWeightsUnit, ModflowCsubUnit, System.Math,
-  FluxObservationUnit, PestPropertiesUnit;
+  PestHeadObsWeightsUnit, ModflowCsubUnit, System.Math,
+  PestPropertiesUnit;
 
 resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +

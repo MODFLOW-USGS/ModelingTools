@@ -81,7 +81,7 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, PhastModelUnit, GlobalVariablesUnit, RbwParser;
+  frmGoPhastUnit, PhastModelUnit, RbwParser;
 
 { TCustomFarmItem }
 

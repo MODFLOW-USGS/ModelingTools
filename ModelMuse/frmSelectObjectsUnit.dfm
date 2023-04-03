@@ -7,8 +7,8 @@ inherited frmSelectObjects: TfrmSelectObjects
   Caption = 'Select Objects by Name'
   ClientHeight = 375
   ClientWidth = 345
-  ExplicitWidth = 363
-  ExplicitHeight = 422
+  ExplicitWidth = 357
+  ExplicitHeight = 413
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -18,6 +18,8 @@ inherited frmSelectObjects: TfrmSelectObjects
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 191
+    ExplicitWidth = 341
     object lblCount: TLabel
       Left = 8
       Top = 6
@@ -118,6 +120,8 @@ inherited frmSelectObjects: TfrmSelectObjects
     ActivePage = tabSide
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 341
+    ExplicitHeight = 191
     object tabTop: TTabSheet
       Caption = 'Top'
       object lvTop: TListView
@@ -178,6 +182,8 @@ inherited frmSelectObjects: TfrmSelectObjects
         ViewStyle = vsReport
         OnChange = lvTopChange
         OnDblClick = lvTopDblClick
+        ExplicitWidth = 333
+        ExplicitHeight = 158
       end
     end
   end

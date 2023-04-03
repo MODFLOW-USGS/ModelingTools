@@ -145,7 +145,7 @@ type
 
 implementation
 
-uses frmGoPhastUnit, frameViewUnit, ScreenObjectUnit, PhastModelUnit,
+uses frmGoPhastUnit, frameViewUnit, PhastModelUnit,
   SutraMeshUnit, FastGEO, UndoItems, DrawMeshTypesUnit, MeshRenumberingTypes;
 
 //resourcestring

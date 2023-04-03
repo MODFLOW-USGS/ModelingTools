@@ -128,7 +128,7 @@ implementation
 {$R *.dfm}
 
 uses frmGoPhastUnit, GoPhastTypes, frmCustomGoPhastUnit, System.Math,
-  ScreenObjectUnit, ModflowSfr6Unit, PhastModelUnit, DataSetUnit,
+  ScreenObjectUnit, ModflowSfr6Unit, PhastModelUnit,
   Mt3dmsChemSpeciesUnit;
 
 resourcestring

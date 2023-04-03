@@ -3,7 +3,7 @@ unit AdjustSutraBoundaryValuesUnit;
 interface
 
 uses
-  SutraBoundariesUnit, GoPhastTypes, SutraTimeScheduleUnit, SutraBoundaryUnit,
+  GoPhastTypes, SutraTimeScheduleUnit,
   ModflowBoundaryUnit;
 
 procedure AdjustBoundaryValues(ASchedule: TSutraTimeSchedule;

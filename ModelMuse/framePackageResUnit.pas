@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, framePackageTransientLayerChoiceUnit, Mask, JvExMask, JvSpin, StdCtrls,
-  ExtCtrls, JvExStdCtrls, JvCheckBox, ModflowPackageSelectionUnit, RbwController;
+  ExtCtrls, ModflowPackageSelectionUnit, RbwController;
 
 type
   TframePackageRes = class(TframePackageTransientLayerChoice)

@@ -1123,7 +1123,7 @@ implementation
 uses
   frmGoPhastUnit, BigCanvasMethods, PhastModelUnit, SysUtils, Math,
   Dialogs, LayerStructureUnit, RbwParser, GR32_Polygons, SolidGeom,
-  OctTreeClass, ScreenObjectUnit, Contnrs,
+  OctTreeClass, Contnrs,
   ContourUnit, GR32_Backends, ConvexHullUnit, ModelMuseUtilities,
   CuthillMcKeeRenumbering;
 

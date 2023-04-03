@@ -156,8 +156,7 @@ type
 
 implementation
 
-uses GR32_Polygons, RealListUnit, frmGoPhastUnit, BigCanvasMethods, 
-  ContourUnit;
+uses GR32_Polygons, RealListUnit, frmGoPhastUnit, BigCanvasMethods;
 
 resourcestring
   StrLayerThicknessesMu = 'Layer thicknesses must be greater than or equal t' +

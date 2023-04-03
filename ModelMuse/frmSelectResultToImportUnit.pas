@@ -312,10 +312,10 @@ implementation
 
 uses Math, frmGoPhastUnit, RbwParser,
   GIS_Functions, ValueArrayStorageUnit, ModelMuseUtilities,
-  frmUpdateDataSetsUnit, UndoItemsScreenObjects,
+  UndoItemsScreenObjects,
   InterpolationUnit, HufDefinition, ModflowTimeUnit,
-  frmGridValueUnit, shlobj, activex, AnsiStrings, frmDisplayDataUnit,
-  Mt3dmsChemSpeciesUnit, frmExportImageUnit, IOUtils,
+  frmGridValueUnit, AnsiStrings, frmDisplayDataUnit,
+  Mt3dmsChemSpeciesUnit, IOUtils,
   SwrReachObjectUnit, frmProgressUnit, Generics.Collections,
   frmBudgetPrecisionQueryUnit, ModflowBoundaryDisplayUnit, VectorDisplayUnit;
 

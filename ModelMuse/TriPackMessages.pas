@@ -8,7 +8,7 @@ unit TriPackMessages;
 
 interface
 
-uses SysUtils, StdCtrls;
+uses SysUtils;
 
 
 // TRPRNT Messages

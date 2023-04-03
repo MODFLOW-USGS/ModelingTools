@@ -53,7 +53,7 @@ implementation
 
 uses
   frmErrorsAndWarningsUnit, LayerStructureUnit, ModflowPackagesUnit, Forms,
-  frmProgressUnit, GoPhastTypes, ArchiveNodeInterface, ModflowGridUnit;
+  frmProgressUnit, GoPhastTypes, ModflowGridUnit;
 
 resourcestring
   StrUndefinedLengthUni = 'Undefined length units';

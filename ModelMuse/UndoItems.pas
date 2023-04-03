@@ -986,7 +986,7 @@ implementation
 uses SysUtils, Math, frmGoPhastUnit, InteractiveTools, frmSubdivideUnit,
   frmGoToUnit, frmShowHideObjectsUnit,
   frmGridValueUnit, PhastModelUnit, frmDisplayDataUnit, frmCustomGoPhastUnit,
-  frmMeshInformationUnit, frmSelectResultToImportUnit, ScreenObjectUnit;
+  frmMeshInformationUnit, ScreenObjectUnit;
 
 resourcestring
   StrDeleteRow0dAt = 'delete row %0:d at %1:g.';

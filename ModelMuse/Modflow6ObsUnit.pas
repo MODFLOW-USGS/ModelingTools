@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, GoPhastTypes, System.SysUtils, ModflowMawUnit,
   ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowCsubUnit, PestObsUnit, FormulaManagerUnit, System.Generics.Collections;
+  ModflowCsubUnit, PestObsUnit, System.Generics.Collections;
 
 type
   TGwFlowOb = (gfoNearestNeighbor, gfoAllNeighbors, gfoAbove, gfoBelow);
@@ -315,7 +315,7 @@ procedure GlobalRestoreMf6CalibrationObsSubscription(Sender: TObject; Subject: T
 implementation
 
 uses
-  System.Character, frmGoPhastUnit, RbwParser;
+  System.Character, RbwParser;
 
 const
   ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',

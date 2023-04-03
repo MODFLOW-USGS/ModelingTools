@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, PhastModelUnit, SysUtils,
-  Generics.Collections, SutraOptionsUnit, System.IOUtils;
+  Generics.Collections, System.IOUtils;
 
 type
   TSutraFileType = (sftInp, sftIcs, sftLst, sftRst, sftNod, sftEle,

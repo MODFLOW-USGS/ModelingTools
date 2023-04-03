@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameCustomGwtBoundaryUnit, Vcl.Grids,
   RbwDataGrid4, ArgusDataEntry, Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, JvExMask,
-  JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects, ScreenObjectUnit,
+  JvSpin, Vcl.ExtCtrls, ScreenObjectUnit,
   ModflowGwtSpecifiedConcUnit;
 
 type
@@ -25,8 +25,7 @@ var
 implementation
 
 uses
-  GoPhastTypes, frmGoPhastUnit, ModflowTimeUnit,
-  frmCustomGoPhastUnit;
+  GoPhastTypes;
 
 resourcestring
   StrSpecifiedConcentrat = 'Specified Concentration';

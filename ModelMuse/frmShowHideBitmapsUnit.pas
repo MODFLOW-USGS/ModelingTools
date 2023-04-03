@@ -7,7 +7,7 @@ interface
 
 uses  Windows,
   SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, ExtCtrls, CheckLst,
+  Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, ExtCtrls,
   Vcl.Grids, RbwDataGrid4;
 
 type

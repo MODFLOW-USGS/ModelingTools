@@ -7,8 +7,8 @@ inherited frmSmoothGrid: TfrmSmoothGrid
   Caption = 'Smooth Grid'
   ClientHeight = 114
   ClientWidth = 315
-  ExplicitWidth = 333
-  ExplicitHeight = 159
+  ExplicitWidth = 327
+  ExplicitHeight = 152
   PixelsPerInch = 120
   TextHeight = 18
   object lblCriterion: TLabel

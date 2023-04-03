@@ -4,8 +4,8 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   Caption = 'Edit Feature Formula'
   ClientHeight = 499
   ClientWidth = 601
-  ExplicitWidth = 617
-  ExplicitHeight = 538
+  ExplicitWidth = 613
+  ExplicitHeight = 537
   TextHeight = 18
   object spl1: TSplitter
     Left = 256
@@ -23,11 +23,13 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     Height = 34
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 464
+    ExplicitWidth = 597
     DesignSize = (
       601
       34)
     object btnCancel: TBitBtn
-      Left = 513
+      Left = 509
       Top = 2
       Width = 83
       Height = 27
@@ -35,9 +37,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 505
     end
     object btnOK: TBitBtn
-      Left = 425
+      Left = 421
       Top = 2
       Width = 82
       Height = 27
@@ -65,9 +68,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 417
     end
     object btnHelp: TBitBtn
-      Left = 337
+      Left = 333
       Top = 2
       Width = 82
       Height = 27
@@ -76,6 +80,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 329
     end
   end
   object pnlTop: TPanel
@@ -85,6 +90,8 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     Height = 465
     Align = alRight
     TabOrder = 1
+    ExplicitLeft = 260
+    ExplicitHeight = 464
     object memoFormula: TMemo
       Left = 1
       Top = 162
@@ -93,6 +100,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Align = alClient
       TabOrder = 1
       OnChange = memoFormulaChange
+      ExplicitHeight = 301
     end
     object pnlControls: TPanel
       Left = 1
@@ -177,5 +185,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     TabOrder = 0
     OnChange = tvFeaturesChange
     OnHint = tvFeaturesHint
+    ExplicitWidth = 252
+    ExplicitHeight = 464
   end
 end

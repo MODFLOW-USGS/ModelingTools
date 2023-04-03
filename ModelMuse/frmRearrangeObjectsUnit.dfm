@@ -6,9 +6,8 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
   Caption = 'Rearrange Objects'
   ClientHeight = 400
   ClientWidth = 428
-  ExplicitWidth = 444
-  ExplicitHeight = 439
-  PixelsPerInch = 96
+  ExplicitWidth = 440
+  ExplicitHeight = 438
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -18,11 +17,13 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 300
+    ExplicitWidth = 424
     DesignSize = (
       428
       99)
     object btnCancel: TBitBtn
-      Left = 329
+      Left = 325
       Top = 55
       Width = 91
       Height = 33
@@ -30,9 +31,10 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
+      ExplicitLeft = 321
     end
     object btnOK: TBitBtn
-      Left = 232
+      Left = 228
       Top = 55
       Width = 91
       Height = 33
@@ -41,9 +43,10 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
+      ExplicitLeft = 224
     end
     object btnHelp: TBitBtn
-      Left = 135
+      Left = 131
       Top = 55
       Width = 91
       Height = 33
@@ -52,11 +55,12 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 127
     end
     object rgShow: TRadioGroup
       Left = 8
       Top = 6
-      Width = 412
+      Width = 408
       Height = 43
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Show'
@@ -68,6 +72,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
         'Selected')
       TabOrder = 0
       OnClick = rgShowClick
+      ExplicitWidth = 404
     end
   end
   object pnlInstructions: TPanel
@@ -78,13 +83,14 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
     Align = alTop
     ParentColor = True
     TabOrder = 0
+    ExplicitWidth = 424
     DesignSize = (
       428
       105)
     object lblInstructions: TLabel
       Left = 8
       Top = 0
-      Width = 370
+      Width = 366
       Height = 90
       Anchors = [akLeft, akTop, akRight]
       Caption = 
@@ -92,6 +98,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
         'ition.  You can also type a new name for an object.'#13#10#13#10'Objects a' +
         're listed from back to front.'
       WordWrap = True
+      ExplicitWidth = 370
     end
   end
   object sgObjects: TRbwDataGrid4
@@ -124,6 +131,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -147,6 +155,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -170,6 +179,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -194,6 +204,8 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ExplicitWidth = 424
+    ExplicitHeight = 195
     RowHeights = (
       61
       24

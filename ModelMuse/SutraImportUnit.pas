@@ -17,7 +17,7 @@ implementation
 
 uses
   System.IOUtils, frmGoPhastUnit, PhastModelUnit, GoPhastTypes,
-  ModelMuseUtilities, ScreenObjectUnit, SutraMeshUnit, UndoItems, DataSetUnit,
+  ScreenObjectUnit, SutraMeshUnit, UndoItems, DataSetUnit,
   ValueArrayStorageUnit, RbwParser, frmProgressUnit, GIS_Functions, FastGEO;
 
 resourcestring

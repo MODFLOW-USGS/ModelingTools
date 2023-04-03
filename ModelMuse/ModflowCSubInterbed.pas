@@ -81,7 +81,7 @@ implementation
 
 uses
   PhastModelUnit, GlobalVariablesUnit, frmGoPhastUnit,
-  ModflowPackagesUnit, ModflowPackageSelectionUnit, ScreenObjectUnit;
+  ModflowPackagesUnit, ModflowPackageSelectionUnit;
 
 const
   KDelayKv = 'DelayKv';

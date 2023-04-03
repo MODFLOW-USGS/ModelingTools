@@ -3,7 +3,8 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
   HelpKeyword = 'Import_Footprint_Results'
   Caption = 'Import WellFootprint Results'
   ClientHeight = 230
-  ExplicitHeight = 269
+  ExplicitWidth = 438
+  ExplicitHeight = 268
   TextHeight = 18
   object lblColorMesh: TLabel
     Left = 8
@@ -54,7 +55,7 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     TabOrder = 2
   end
   object btnHelp: TBitBtn
-    Left = 150
+    Left = 146
     Top = 188
     Width = 82
     Height = 30
@@ -63,9 +64,10 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     NumGlyphs = 2
     TabOrder = 3
     OnClick = btnHelpClick
+    ExplicitLeft = 142
   end
   object btnOK: TBitBtn
-    Left = 238
+    Left = 234
     Top = 188
     Width = 82
     Height = 30
@@ -74,9 +76,10 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     NumGlyphs = 2
     TabOrder = 4
     OnClick = btnOKClick
+    ExplicitLeft = 230
   end
   object btnCancel: TBitBtn
-    Left = 326
+    Left = 322
     Top = 188
     Width = 83
     Height = 30
@@ -84,6 +87,7 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 5
+    ExplicitLeft = 318
   end
   object dlgOpenFootprintFile: TJvOpenDialog
     DefaultExt = '.nod'

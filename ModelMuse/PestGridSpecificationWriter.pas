@@ -25,7 +25,7 @@ type
 implementation
 
 uses
-  FastGEO, ModelMuseUtilities, GoPhastTypes;
+  FastGEO, GoPhastTypes;
 
 { TPestGridSpecificationWriter }
 

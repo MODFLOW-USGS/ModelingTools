@@ -14,7 +14,7 @@ inherited frmGridValue: TfrmGridValue
     513)
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 440
+    Left = 436
     Top = 473
     Width = 89
     Height = 33
@@ -23,11 +23,11 @@ inherited frmGridValue: TfrmGridValue
     NumGlyphs = 2
     TabOrder = 1
     OnClick = btnHelpClick
-    ExplicitLeft = 436
+    ExplicitLeft = 432
     ExplicitTop = 472
   end
   object btnClose: TBitBtn
-    Left = 537
+    Left = 533
     Top = 473
     Width = 89
     Height = 33
@@ -35,7 +35,7 @@ inherited frmGridValue: TfrmGridValue
     Kind = bkClose
     NumGlyphs = 2
     TabOrder = 2
-    ExplicitLeft = 533
+    ExplicitLeft = 529
     ExplicitTop = 472
   end
   object pnlTabs: TPanel

@@ -68,7 +68,7 @@ implementation
 
 uses
   ModflowTimeUnit, frmErrorsAndWarningsUnit,
-  ModelMuseUtilities, frmGoPhastUnit, Math, FastGEO,
+  frmGoPhastUnit, Math, FastGEO,
   GoPhastTypes;
 
 resourcestring

@@ -26,7 +26,7 @@ function NewObjectObserverlist: IObjectObserverlist;
 
 implementation
 
-uses Sysutils, Contnrs, SyncObjs, ObserverProxyU;
+uses Sysutils, SyncObjs, ObserverProxyU;
 
 type
   TListOpKind = (lokAdd, lokChange, lokRemove);

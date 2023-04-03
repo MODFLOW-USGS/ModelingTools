@@ -80,8 +80,7 @@ var
 implementation
 
 uses
-  GoPhastTypes, frmCustomGoPhastUnit, frmGoPhastUnit, ModflowTimeUnit,
-  ModelMuseUtilities;
+  GoPhastTypes, frmCustomGoPhastUnit, frmGoPhastUnit, ModflowTimeUnit;
 
 resourcestring
   StrPrintSubsidenceIf = 'Print subsidence (Ifm1, Ifl1)';

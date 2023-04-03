@@ -82,7 +82,7 @@ uses
   PhastModelUnit, ModflowBoundaryDisplayUnit,
   frmErrorsAndWarningsUnit, frmGoPhastUnit, ScreenObjectUnit, FootprintBoundary,
   RbwParser, AbstractGridUnit, GIS_Functions, System.SysUtils, System.Math,
-  QuadTreeClass, frmCustomGoPhastUnit, frmFootprintPropertiesUnit,
+  QuadTreeClass,
   System.UITypes, Vcl.Dialogs;
 
 resourcestring

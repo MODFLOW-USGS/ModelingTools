@@ -4,8 +4,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
   Caption = 'Comparison Observations'
   ClientHeight = 312
   ClientWidth = 784
-  ExplicitWidth = 802
-  ExplicitHeight = 359
+  ExplicitWidth = 796
+  ExplicitHeight = 350
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -14,11 +14,13 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 35
     Align = alBottom
     TabOrder = 0
+    ExplicitTop = 276
+    ExplicitWidth = 780
     DesignSize = (
       784
       35)
     object btnCancel: TBitBtn
-      Left = 696
+      Left = 692
       Top = 2
       Width = 83
       Height = 27
@@ -26,9 +28,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 688
     end
     object btnOK: TBitBtn
-      Left = 608
+      Left = 604
       Top = 2
       Width = 82
       Height = 27
@@ -37,9 +40,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 600
     end
     object btnHelp: TBitBtn
-      Left = 520
+      Left = 516
       Top = 6
       Width = 82
       Height = 27
@@ -48,6 +52,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 512
     end
   end
   object treecomboInPlaceEditor: TRbwStringTreeCombo
@@ -57,8 +62,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 26
     Tree.Left = 0
     Tree.Top = 0
-    Tree.Width = 622
-    Tree.Height = 433
+    Tree.Width = 624
+    Tree.Height = 441
     Tree.Align = alClient
     Tree.Colors.BorderColor = 15987699
     Tree.Colors.DisabledColor = clGray
@@ -123,13 +128,13 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 277
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 784
-    ExplicitHeight = 277
+    ExplicitWidth = 780
+    ExplicitHeight = 276
     inherited Panel: TPanel
       Top = 236
       Width = 784
-      ExplicitTop = 236
-      ExplicitWidth = 784
+      ExplicitTop = 235
+      ExplicitWidth = 780
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -137,15 +142,15 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 412
+        Left = 410
         ExplicitLeft = 312
       end
       inherited sbInsert: TSpeedButton
-        Left = 490
+        Left = 488
         ExplicitLeft = 370
       end
       inherited sbDelete: TSpeedButton
-        Left = 564
+        Left = 561
         ExplicitLeft = 427
       end
       inherited seNumber: TJvSpinEdit
@@ -330,8 +335,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 784
-      ExplicitHeight = 236
+      ExplicitWidth = 780
+      ExplicitHeight = 235
     end
   end
 end

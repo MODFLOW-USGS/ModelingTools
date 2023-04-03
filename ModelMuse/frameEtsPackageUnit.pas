@@ -6,8 +6,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, framePackageTransientLayerChoiceUnit, StdCtrls, ExtCtrls, JvExStdCtrls,
-  JvCheckBox, Mask, JvExMask, JvSpin, ModflowPackageSelectionUnit, RbwController;
+  Dialogs, framePackageTransientLayerChoiceUnit, StdCtrls, ExtCtrls,
+  Mask, JvExMask, JvSpin, ModflowPackageSelectionUnit, RbwController;
 
 type
   {@name is a frame used to define the input for the

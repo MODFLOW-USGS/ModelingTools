@@ -5,10 +5,10 @@ unit frameFlowTableUnit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Grids, RbwDataGrid4, StdCtrls, Mask, JvExMask, JvSpin, Buttons,
   ModflowSfrTable, Generics.Collections, UndoItemsScreenObjects,
-  Math, Vcl.ExtCtrls;
+  Vcl.ExtCtrls;
 
 type
   // @name identifies the columns in @link(TframeFlowTable.dgSfrTable

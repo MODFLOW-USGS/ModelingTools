@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, frmCustomGoPhastUnit, ExtCtrls, StdCtrls, JvExStdCtrls, JvHtControls,
+  Dialogs, frmCustomGoPhastUnit, ExtCtrls, StdCtrls, JvHtControls,
   Buttons;
 
 type

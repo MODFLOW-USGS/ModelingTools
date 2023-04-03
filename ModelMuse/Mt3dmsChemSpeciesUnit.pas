@@ -3,7 +3,7 @@ unit Mt3dmsChemSpeciesUnit;
 interface
 
 uses
-  OrderedCollectionUnit, ModflowBoundaryDisplayUnit, DataSetUnit, Classes,
+  OrderedCollectionUnit, DataSetUnit, Classes,
   GoPhastTypes;
 
 type
@@ -233,7 +233,7 @@ uses
   PhastModelUnit, RbwParser, SysUtils, ModflowPackageSelectionUnit,
   frmGoPhastUnit, ScreenObjectUnit, Mt3dmsChemUnit, Mt3dmsTobUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit,
-  frameMt3dLktPkgUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowPackagesUnit,
+  Mt3dLktUnit, Mt3dSftUnit, ModflowPackagesUnit,
   ModflowGwtSpecifiedConcUnit, UpdateDataArrayUnit;
 
 const

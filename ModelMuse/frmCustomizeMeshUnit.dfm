@@ -4,9 +4,8 @@ inherited frmCustomizeMesh: TfrmCustomizeMesh
   Caption = 'Customize SUTRA Mesh'
   ClientHeight = 222
   ClientWidth = 400
-  ExplicitWidth = 418
-  ExplicitHeight = 267
-  PixelsPerInch = 96
+  ExplicitWidth = 412
+  ExplicitHeight = 260
   TextHeight = 18
   object cbShowNodeNumbers: TCheckBox
     Left = 16

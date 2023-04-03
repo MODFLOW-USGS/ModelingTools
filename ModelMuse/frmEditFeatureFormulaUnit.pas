@@ -121,10 +121,10 @@ implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, GoPhastTypes, ModflowPackagesUnit,
-  ModflowConstantHeadBoundaryUnit, RbwParser, ModflowMnw2Unit,
+  RbwParser, ModflowMnw2Unit,
   ModflowCfpFixedUnit, ModflowCfpPipeUnit, frmFormulaUnit, DataSetUnit,
   ModflowStrUnit, RealListUnit, SutraBoundariesUnit, ModflowMawUnit,
-  Modflow6TimeSeriesUnit, ModflowUzfMf6Unit;
+  Modflow6TimeSeriesUnit;
 
 resourcestring
   StrNoObjectsOfTheSe = 'No objects of the selected type were selected for e' +

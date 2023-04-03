@@ -87,7 +87,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, SutraMeshUnit, AbstractGridUnit;
+  PhastModelUnit, AbstractGridUnit;
 
 { TGeoRef }
 

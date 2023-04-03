@@ -6,7 +6,7 @@ uses
   {$IF CompilerVersion >= 23} System.UITypes, {$IFEND} Windows, Messages,
   SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, JvExStdCtrls, JvCombobox,
-  JvListComb, PhastModelUnit, UndoItems, DisplaySettingsUnit, Mask,
+  PhastModelUnit, UndoItems, DisplaySettingsUnit, Mask,
   JvExMask, JvSpin;
 
 type

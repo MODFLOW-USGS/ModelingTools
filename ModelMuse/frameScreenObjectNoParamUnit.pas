@@ -5,8 +5,8 @@ interface
 
 uses
   System.UITypes, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  StdCtrls, Dialogs, Grids, Math, RbwDataGrid4, JvExControls, JvComponent,
-  JvxCheckListBox, ExtCtrls, Buttons, Mask, JvExMask, JvSpin, ArgusDataEntry,
+  StdCtrls, Dialogs, Grids, Math, RbwDataGrid4, JvExControls,
+  ExtCtrls, Buttons, Mask, JvExMask, JvSpin, ArgusDataEntry,
   ModflowBoundaryUnit, frameScreenObjectUnit, Vcl.ComCtrls, GoPhastTypes;
 
 type
@@ -138,7 +138,7 @@ type
 
 implementation
 
-uses OrderedCollectionUnit, frmGoPhastUnit, ModflowTimeUnit,
+uses frmGoPhastUnit, ModflowTimeUnit,
   frmCustomGoPhastUnit;
 
 resourcestring

@@ -8,12 +8,11 @@ inherited frmSetSpacing: TfrmSetSpacing
   ClientHeight = 241
   ClientWidth = 606
   OnClose = FormClose
-  ExplicitWidth = 614
-  ExplicitHeight = 275
-  PixelsPerInch = 96
+  ExplicitWidth = 618
+  ExplicitHeight = 279
   TextHeight = 18
   object btnCancel: TBitBtn
-    Left = 503
+    Left = 499
     Top = 200
     Width = 91
     Height = 33
@@ -21,9 +20,10 @@ inherited frmSetSpacing: TfrmSetSpacing
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 5
+    ExplicitLeft = 495
   end
   object btnOK: TBitBtn
-    Left = 406
+    Left = 402
     Top = 200
     Width = 91
     Height = 33
@@ -33,9 +33,10 @@ inherited frmSetSpacing: TfrmSetSpacing
     NumGlyphs = 2
     TabOrder = 4
     OnClick = btnOKClick
+    ExplicitLeft = 398
   end
   object btnHelp: TBitBtn
-    Left = 309
+    Left = 305
     Top = 200
     Width = 91
     Height = 33
@@ -44,6 +45,7 @@ inherited frmSetSpacing: TfrmSetSpacing
     NumGlyphs = 2
     TabOrder = 3
     OnClick = btnHelpClick
+    ExplicitLeft = 301
   end
   object gbColumns: TGroupBox
     Left = 8

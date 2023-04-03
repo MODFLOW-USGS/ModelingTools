@@ -10,9 +10,9 @@ interface
 
 uses
   SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, frmCustomGoPhastUnit, Buttons, 
-  Grids, RbwDataGrid4, Contnrs, PrintFrequency,
-  ExtCtrls, UndoItems, ArgusDataEntry, JvExStdCtrls, JvCombobox, JvListComb;   
+  StdCtrls, frmCustomGoPhastUnit, Buttons,
+  Grids, RbwDataGrid4, PrintFrequency,
+  ExtCtrls, UndoItems, ArgusDataEntry, JvExStdCtrls, JvCombobox, JvListComb;
 
 type
   {@abstract(@name is used to edit

@@ -104,7 +104,7 @@ type
 implementation
 
 uses
-  IOUtils, ModelMuseUtilities;
+  IOUtils;
 
 resourcestring
   StrUnableToReadHeade = 'Unable to read header of "%s". Check that the file' +

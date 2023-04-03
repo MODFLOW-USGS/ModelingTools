@@ -4,7 +4,7 @@ interface
 
 uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, frmCustomGoPhastUnit, JvExControls, JvgHoleShape, StdCtrls,
+  Dialogs, frmCustomGoPhastUnit, JvExControls, StdCtrls,
   ArgusDataEntry, Mask, JvExMask, JvSpin, ExtCtrls, Buttons;
 
 type

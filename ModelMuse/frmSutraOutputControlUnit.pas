@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, ComCtrls,
   JvExComCtrls, JvPageListTreeView, JvExControls, JvPageList, StdCtrls,
-  Mask, JvExMask, JvSpin, CheckLst, JvExCheckLst, JvCheckListBox,
+  Mask, JvExMask, JvSpin, CheckLst,
   Buttons, ExtCtrls, UndoItems, SutraOutputControlUnit;
 
 type

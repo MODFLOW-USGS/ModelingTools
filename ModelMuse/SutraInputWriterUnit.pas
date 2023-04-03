@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, PhastModelUnit, JclAnsiStrings, SutraOptionsUnit,
   SutraMeshUnit, SutraOutputControlUnit, Generics.Collections,
-  Generics.Defaults, IntListUnit, SysUtils, Classes, GoPhastTypes,
+  Generics.Defaults, SysUtils, Classes, GoPhastTypes,
   SutraGeneralFlowNodesUnit;
 
 type

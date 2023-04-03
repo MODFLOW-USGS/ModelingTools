@@ -25,8 +25,8 @@ inherited frmSoilProperties: TfrmSoilProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 260
-    ExplicitWidth = 677
+    ExplicitTop = 517
+    ExplicitWidth = 784
     object btnCancel: TBitBtn
       Left = 586
       Top = 6
@@ -64,13 +64,13 @@ inherited frmSoilProperties: TfrmSoilProperties
     Height = 256
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 788
+    ExplicitWidth = 784
     ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 215
-      Width = 792
-      ExplicitTop = 219
-      ExplicitWidth = 677
+      Width = 788
+      ExplicitTop = 215
+      ExplicitWidth = 784
       inherited lbNumber: TLabel
         Width = 108
         Height = 18
@@ -79,15 +79,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 409
+        Left = 407
         ExplicitLeft = 316
       end
       inherited sbInsert: TSpeedButton
-        Left = 485
+        Left = 483
         ExplicitLeft = 374
       end
       inherited sbDelete: TSpeedButton
-        Left = 557
+        Left = 554
         ExplicitLeft = 432
       end
       inherited seNumber: TJvSpinEdit
@@ -97,7 +97,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 792
+      Width = 788
       Height = 158
       ColCount = 10
       FixedCols = 1
@@ -355,12 +355,12 @@ inherited frmSoilProperties: TfrmSoilProperties
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitWidth = 677
-      ExplicitHeight = 162
+      ExplicitWidth = 784
+      ExplicitHeight = 158
     end
     inherited pnlTop: TPanel
-      Width = 792
-      ExplicitWidth = 677
+      Width = 788
+      ExplicitWidth = 784
       inherited edFormula: TLabeledEdit
         Height = 26
         EditLabel.Width = 57
@@ -368,6 +368,10 @@ inherited frmSoilProperties: TfrmSoilProperties
         EditLabel.ExplicitLeft = 128
         EditLabel.ExplicitTop = 9
         EditLabel.ExplicitHeight = 18
+        ExplicitHeight = 26
+      end
+      inherited comboChoice: TComboBox
+        Height = 26
         ExplicitHeight = 26
       end
     end
@@ -408,15 +412,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 627
+        Left = 624
         ExplicitLeft = 630
       end
       inherited sbInsert: TSpeedButton
-        Left = 673
+        Left = 669
         ExplicitLeft = 677
       end
       inherited sbDelete: TSpeedButton
-        Left = 722
+        Left = 719
         ExplicitLeft = 725
       end
       inherited lblMethod: TLabel
@@ -424,6 +428,10 @@ inherited frmSoilProperties: TfrmSoilProperties
         Height = 18
         ExplicitWidth = 52
         ExplicitHeight = 18
+      end
+      inherited seNumber: TJvSpinEdit
+        Height = 26
+        ExplicitHeight = 26
       end
       inherited comboInterpolation: TComboBox
         Height = 26
@@ -440,7 +448,7 @@ inherited frmSoilProperties: TfrmSoilProperties
     end
     inherited pnlTop: TPanel
       Width = 788
-      ExplicitWidth = 788
+      ExplicitWidth = 784
       inherited lblSoil: TLabel
         Width = 27
         Height = 18
@@ -454,6 +462,10 @@ inherited frmSoilProperties: TfrmSoilProperties
         EditLabel.ExplicitTop = 31
         EditLabel.ExplicitWidth = 57
         EditLabel.ExplicitHeight = 18
+        ExplicitHeight = 26
+      end
+      inherited comboChoice: TComboBox
+        Height = 26
         ExplicitHeight = 26
       end
     end

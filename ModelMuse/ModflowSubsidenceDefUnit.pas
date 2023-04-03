@@ -4,7 +4,7 @@ interface
 
 uses
   Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils, PestObsUnit,
-  System.Generics.Collections, ModflowCellUnit, InterpolatedObsCellUnit;
+  System.Generics.Collections, InterpolatedObsCellUnit;
 
 type
   TUseLayerNumberItem = class(TOrderedItem)
@@ -425,7 +425,7 @@ const
 implementation
 
 uses
-  PhastModelUnit, DataSetUnit, RbwParser, IntListUnit,
+  PhastModelUnit, DataSetUnit, RbwParser,
   ModflowPackageSelectionUnit, ModflowPackagesUnit, ScreenObjectUnit,
   frmGoPhastUnit, LayerStructureUnit;
 

@@ -4,7 +4,7 @@ interface
 
 uses System.Types, Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes, IntListUnit,
+  SubscriptionUnit, RbwParser, GoPhastTypes, IntListUnit,
   ModflowMnw2Unit;
 
 const
@@ -384,7 +384,7 @@ procedure Mt3dmsStringValueRestoreSubscription(Sender: TObject; Subject: TObject
 
 implementation
 
-uses ScreenObjectUnit, ModflowTimeUnit, TempFiles,
+uses ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions, Mt3dmsChemSpeciesUnit,
   ModflowPackageSelectionUnit, ModflowPackagesUnit, PhastModelUnit,
   AbstractGridUnit, Mt3dCtsSystemUnit;

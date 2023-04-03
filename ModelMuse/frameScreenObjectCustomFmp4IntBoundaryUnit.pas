@@ -41,7 +41,7 @@ var
 implementation
 
 uses
-  ScreenObjectUnit, ModflowBoundaryUnit, GoPhastTypes;
+  ModflowBoundaryUnit, GoPhastTypes;
 
 {$R *.dfm}
 

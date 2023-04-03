@@ -2,7 +2,7 @@ unit ModflowMultiplierZoneWriterUnit;
 
 interface
 
-uses LayerStructureUnit, Classes, PhastModelUnit, SysUtils, HufDefinition,
+uses Classes, PhastModelUnit, SysUtils, HufDefinition,
   CustomModflowWriterUnit, ModflowParameterUnit, DataSetUnit, GoPhastTypes,
   ModflowPackageSelectionUnit;
 
@@ -94,8 +94,7 @@ type
 implementation
 
 uses OrderedCollectionUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
-  frmGoPhastUnit, frmErrorsAndWarningsUnit, System.IOUtils,
-  PestParamRoots;
+  frmErrorsAndWarningsUnit, System.IOUtils;
 
 resourcestring
   StrWritingSPackageI = 'Writing %s Package input.';

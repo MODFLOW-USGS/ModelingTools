@@ -5,8 +5,8 @@ inherited frmSelectColRowLayer: TfrmSelectColRowLayer
   Caption = 'Select Column, Row, and Layer'
   ClientHeight = 152
   ClientWidth = 324
-  ExplicitWidth = 342
-  ExplicitHeight = 197
+  ExplicitWidth = 336
+  ExplicitHeight = 190
   PixelsPerInch = 120
   TextHeight = 18
   object lblCol: TLabel

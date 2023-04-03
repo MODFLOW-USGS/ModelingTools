@@ -5,9 +5,8 @@ inherited frmSwrStructures: TfrmSwrStructures
   ClientHeight = 555
   ClientWidth = 782
   OnResize = FormResize
-  ExplicitWidth = 800
-  ExplicitHeight = 602
-  PixelsPerInch = 96
+  ExplicitWidth = 794
+  ExplicitHeight = 593
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -16,11 +15,13 @@ inherited frmSwrStructures: TfrmSwrStructures
     Height = 42
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 512
+    ExplicitWidth = 778
     DesignSize = (
       782
       42)
     object btnHelp: TBitBtn
-      Left = 511
+      Left = 507
       Top = 6
       Width = 83
       Height = 33
@@ -28,9 +29,10 @@ inherited frmSwrStructures: TfrmSwrStructures
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 503
     end
     object btnOK: TBitBtn
-      Left = 600
+      Left = 596
       Top = 6
       Width = 83
       Height = 33
@@ -39,9 +41,10 @@ inherited frmSwrStructures: TfrmSwrStructures
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 592
     end
     object btnCancel: TBitBtn
-      Left = 689
+      Left = 685
       Top = 6
       Width = 83
       Height = 33
@@ -49,6 +52,7 @@ inherited frmSwrStructures: TfrmSwrStructures
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 681
     end
   end
   object pcStructures: TPageControl
@@ -59,12 +63,10 @@ inherited frmSwrStructures: TfrmSwrStructures
     ActivePage = tabTiming
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 778
+    ExplicitHeight = 512
     object tabStructureDefinition: TTabSheet
       Caption = 'Structure Definition'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splttrMain: TJvNetscapeSplitter
         Left = 0
         Top = 272
@@ -383,7 +385,7 @@ inherited frmSwrStructures: TfrmSwrStructures
           inline frameStageDischarge: TframePlotGrid
             Left = 0
             Top = 0
-            Width = 774
+            Width = 778
             Height = 198
             Align = alClient
             TabOrder = 0
@@ -391,7 +393,7 @@ inherited frmSwrStructures: TfrmSwrStructures
             ExplicitHeight = 198
             inherited pbPlot: TPaintBox
               Left = 283
-              Width = 491
+              Width = 495
               Height = 157
               OnPaint = frameStageDischargepbPlotPaint
               ExplicitLeft = 284
@@ -407,7 +409,7 @@ inherited frmSwrStructures: TfrmSwrStructures
             end
             inherited Panel: TPanel
               Top = 157
-              Width = 774
+              Width = 778
               ExplicitTop = 157
               ExplicitWidth = 774
               inherited lbNumber: TLabel
@@ -978,7 +980,7 @@ inherited frmSwrStructures: TfrmSwrStructures
           object rdgSmoothing: TRbwDataGrid4
             Left = 0
             Top = 0
-            Width = 774
+            Width = 778
             Height = 198
             Align = alClient
             ColCount = 3
@@ -1073,6 +1075,7 @@ inherited frmSwrStructures: TfrmSwrStructures
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 774
             ColWidths = (
               64
               193
@@ -1181,10 +1184,6 @@ inherited frmSwrStructures: TfrmSwrStructures
     object tabTiming: TTabSheet
       Caption = 'Timing'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameTiming: TframeFormulaGrid
         Left = 0
         Top = 0
@@ -1192,13 +1191,13 @@ inherited frmSwrStructures: TfrmSwrStructures
         Height = 480
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 774
-        ExplicitHeight = 480
+        ExplicitWidth = 770
+        ExplicitHeight = 479
         inherited Panel: TPanel
           Top = 439
           Width = 774
-          ExplicitTop = 439
-          ExplicitWidth = 774
+          ExplicitTop = 438
+          ExplicitWidth = 770
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -1206,16 +1205,16 @@ inherited frmSwrStructures: TfrmSwrStructures
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 408
+            Left = 406
             ExplicitLeft = 408
           end
           inherited sbInsert: TSpeedButton
-            Left = 483
+            Left = 481
             OnClick = frameTimingsbInsertClick
             ExplicitLeft = 483
           end
           inherited sbDelete: TSpeedButton
-            Left = 557
+            Left = 554
             OnClick = frameTimingsbDeleteClick
             ExplicitLeft = 557
           end
@@ -1282,20 +1281,20 @@ inherited frmSwrStructures: TfrmSwrStructures
               AutoAdjustColWidths = True
             end>
           ExplicitTop = 25
-          ExplicitWidth = 774
-          ExplicitHeight = 414
+          ExplicitWidth = 770
+          ExplicitHeight = 413
         end
         inherited pnlTop: TPanel
           Width = 774
           Height = 25
-          ExplicitWidth = 774
+          ExplicitWidth = 770
           ExplicitHeight = 25
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
             EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 9
-            EditLabel.ExplicitWidth = 57
             EditLabel.ExplicitHeight = 18
             TabOrder = 1
             Visible = False
@@ -1308,6 +1307,10 @@ inherited frmSwrStructures: TfrmSwrStructures
             TabOrder = 0
             Visible = True
             ExplicitTop = 0
+          end
+          inherited comboChoice: TComboBox
+            Height = 26
+            ExplicitHeight = 26
           end
         end
       end

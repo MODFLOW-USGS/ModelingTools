@@ -9,7 +9,7 @@ uses
   JvExComCtrls, JvPageListTreeView, StdCtrls, Buttons, frameGridUnit,
   PhastModelUnit, ModflowFmpCropUnit, RbwDataGrid4, GoPhastTypes, RbwParser,
   ModflowPackageSelectionUnit, UndoItems, frameFormulaGridUnit,
-  ModflowFmpFarmUnit, ScreenObjectUnit;
+  ModflowFmpFarmUnit;
 
 type
   TUndoCrops = class(TCustomUndo)
@@ -134,7 +134,7 @@ var
 implementation
 
 uses
-  frmGoToUnit,
+
   frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit, ModflowTimeUnit;
 
 resourcestring

@@ -121,7 +121,7 @@ function NearlyTheSame(const Loc1, Loc2: TPointd; Epsilon: extended)
 
 implementation
 
-Uses Math, VertexUnit, SegmentUnit, IntListUnit, RealListUnit, SolidUnit,
+Uses Math, IntListUnit, RealListUnit, SolidUnit,
   doublePolyhedronUnit;
 
 function NearlyTheSame(const X, Y, Epsilon: extended): boolean;

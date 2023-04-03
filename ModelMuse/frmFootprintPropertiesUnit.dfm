@@ -4,9 +4,8 @@ inherited frmFootprintProperties: TfrmFootprintProperties
   Caption = 'WellFootprint Properties'
   ClientHeight = 262
   ClientWidth = 468
-  ExplicitWidth = 484
+  ExplicitWidth = 480
   ExplicitHeight = 300
-  PixelsPerInch = 96
   TextHeight = 18
   object pnl1: TPanel
     Left = 0
@@ -15,11 +14,13 @@ inherited frmFootprintProperties: TfrmFootprintProperties
     Height = 41
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 220
+    ExplicitWidth = 464
     DesignSize = (
       468
       41)
     object btnHelp: TBitBtn
-      Left = 127
+      Left = 123
       Top = 4
       Width = 108
       Height = 33
@@ -28,9 +29,10 @@ inherited frmFootprintProperties: TfrmFootprintProperties
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 119
     end
     object btnOK: TBitBtn
-      Left = 241
+      Left = 237
       Top = 4
       Width = 108
       Height = 33
@@ -39,9 +41,10 @@ inherited frmFootprintProperties: TfrmFootprintProperties
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 233
     end
     object btnCancel: TBitBtn
-      Left = 355
+      Left = 351
       Top = 4
       Width = 108
       Height = 33
@@ -49,6 +52,7 @@ inherited frmFootprintProperties: TfrmFootprintProperties
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 347
     end
   end
   object pnlMain: TPanel
@@ -58,6 +62,8 @@ inherited frmFootprintProperties: TfrmFootprintProperties
     Height = 221
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 464
+    ExplicitHeight = 220
     object lblClosureCriterion: TLabel
       Left = 16
       Top = 82

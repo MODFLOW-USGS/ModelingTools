@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, GoPhastTypes,
   ModflowDrnUnit, ModflowGridUnit, FormulaManagerUnit, SubscriptionUnit,
-  SparseDataSets, RbwParser;
+  RbwParser;
 
 type
   TReturnChoice = (rtNone, rtObject, rtLocation, rtCell);
@@ -404,8 +404,8 @@ const
 
 implementation
 
-uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, FastGEO, GIS_Functions,
-  TempFiles, frmGoPhastUnit;
+uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, GIS_Functions,
+  frmGoPhastUnit;
 
 resourcestring
   StrReturnFraction = 'Return fraction';

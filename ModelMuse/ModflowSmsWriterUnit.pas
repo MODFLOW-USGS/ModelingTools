@@ -33,7 +33,7 @@ type
 
 implementation
 
-uses ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit;
+uses frmProgressUnit, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrIMSSolverProblem = 'IMS solver problem: INNER_DVCLOSE >= OUTER_DVCLOSE';

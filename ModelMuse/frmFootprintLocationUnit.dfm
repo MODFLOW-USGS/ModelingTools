@@ -4,9 +4,8 @@ inherited frmFootprintLocation: TfrmFootprintLocation
   Caption = 'WellFootprint Program Location'
   ClientHeight = 175
   ClientWidth = 604
-  ExplicitWidth = 620
+  ExplicitWidth = 616
   ExplicitHeight = 213
-  PixelsPerInch = 96
   TextHeight = 18
   object htlblSutra22: TJvHTLabel
     Left = 121
@@ -16,6 +15,7 @@ inherited frmFootprintLocation: TfrmFootprintLocation
     Caption = 
       '<a href="https://doi.org/10.5066/F70C4TQ8">https://doi.org/10.50' +
       '66/F70C4TQ8</a>'
+    SuperSubScriptRatio = 0.666666666666666600
   end
   object lblFootprint: TLabel
     Left = 16
@@ -34,7 +34,7 @@ inherited frmFootprintLocation: TfrmFootprintLocation
   object fedFootprint: TJvFilenameEdit
     Left = 16
     Top = 41
-    Width = 580
+    Width = 576
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -43,6 +43,7 @@ inherited frmFootprintLocation: TfrmFootprintLocation
     TabOrder = 0
     Text = ''
     OnChange = fedFootprintChange
+    ExplicitWidth = 572
   end
   object pnlBottom: TPanel
     Left = 0
@@ -52,11 +53,13 @@ inherited frmFootprintLocation: TfrmFootprintLocation
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 133
+    ExplicitWidth = 600
     DesignSize = (
       604
       41)
     object btnHelp: TBitBtn
-      Left = 340
+      Left = 336
       Top = 6
       Width = 82
       Height = 27
@@ -66,9 +69,10 @@ inherited frmFootprintLocation: TfrmFootprintLocation
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 332
     end
     object btnOK: TBitBtn
-      Left = 428
+      Left = 424
       Top = 6
       Width = 82
       Height = 27
@@ -77,9 +81,10 @@ inherited frmFootprintLocation: TfrmFootprintLocation
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 420
     end
     object btnCancel: TBitBtn
-      Left = 516
+      Left = 512
       Top = 6
       Width = 83
       Height = 27
@@ -87,12 +92,13 @@ inherited frmFootprintLocation: TfrmFootprintLocation
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 508
     end
   end
   object fedTextEditor: TJvFilenameEdit
     Left = 16
     Top = 94
-    Width = 580
+    Width = 576
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -101,5 +107,6 @@ inherited frmFootprintLocation: TfrmFootprintLocation
     TabOrder = 1
     Text = ''
     OnChange = fedTextEditorChange
+    ExplicitWidth = 572
   end
 end

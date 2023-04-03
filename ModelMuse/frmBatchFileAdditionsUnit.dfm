@@ -4,8 +4,8 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
   Caption = 'Batch File Additions'
   ClientHeight = 459
   ClientWidth = 328
-  ExplicitWidth = 344
-  ExplicitHeight = 498
+  ExplicitWidth = 340
+  ExplicitHeight = 497
   PixelsPerInch = 120
   TextHeight = 18
   object Panel1: TPanel
@@ -15,6 +15,8 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
     Height = 41
     Align = alBottom
     TabOrder = 0
+    ExplicitTop = 417
+    ExplicitWidth = 324
     object btnHelp: TBitBtn
       Left = 38
       Top = 4
@@ -71,6 +73,8 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
     Height = 354
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 324
+    ExplicitHeight = 353
     object Splitter1: TSplitter
       Left = 1
       Top = 169
@@ -92,8 +96,8 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
       TabStop = True
       ExplicitLeft = 1
       ExplicitTop = 174
-      ExplicitWidth = 326
-      ExplicitHeight = 179
+      ExplicitWidth = 322
+      ExplicitHeight = 178
       inherited lblLines: TLabel
         Width = 249
         Height = 18
@@ -104,8 +108,8 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
       inherited memoLines: TMemo
         Width = 326
         Height = 147
-        ExplicitWidth = 326
-        ExplicitHeight = 147
+        ExplicitWidth = 322
+        ExplicitHeight = 146
       end
     end
     inline frameBatchFileBefore: TframeBatchFileLines
@@ -118,7 +122,7 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
       TabStop = True
       ExplicitLeft = 1
       ExplicitTop = 1
-      ExplicitWidth = 326
+      ExplicitWidth = 322
       ExplicitHeight = 168
       inherited lblLines: TLabel
         Width = 263
@@ -130,7 +134,7 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
       inherited memoLines: TMemo
         Width = 326
         Height = 136
-        ExplicitWidth = 326
+        ExplicitWidth = 322
         ExplicitHeight = 136
       end
     end
@@ -143,6 +147,7 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 324
     DesignSize = (
       328
       64)
@@ -156,12 +161,13 @@ inherited frmBatchFileAdditions: TfrmBatchFileAdditions
     object comboModel: TComboBox
       Left = 8
       Top = 32
-      Width = 319
+      Width = 315
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       OnChange = comboModelChange
+      ExplicitWidth = 311
     end
   end
 end

@@ -228,7 +228,7 @@ resourcestring
 implementation
 
 uses
-  System.Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit, FastGEO,
+  ScreenObjectUnit, PhastModelUnit, ModflowGridUnit, FastGEO,
   frmErrorsAndWarningsUnit, RealListUnit;
 
 resourcestring

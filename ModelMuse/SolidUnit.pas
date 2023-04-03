@@ -64,7 +64,7 @@ type
 
 implementation
 
-uses doublePolyhedronUnit, SolidGeom;
+uses SolidGeom;
 
 // array of weights used for Gaussian quadrature
 const

@@ -3,8 +3,8 @@ unit ModflowWellUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes,
+  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit, RealListUnit, System.Generics.Collections;
 
 type
@@ -321,9 +321,9 @@ const
 
 implementation
 
-uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
+uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
   frmGoPhastUnit, GIS_Functions, frmErrorsAndWarningsUnit,
-  ModflowTimeSeriesUnit, ModflowMvrUnit, frmFormulaErrorsUnit;
+  ModflowMvrUnit;
 
 resourcestring
   StrPumpingRateMultip = ' pumping rate multiplier';

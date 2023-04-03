@@ -52,14 +52,13 @@ inherited frameSutraLake: TframeSutraLake
     BevelOuter = bvNone
     Caption = 'Lake'
     TabOrder = 0
-    ExplicitWidth = 358
   end
   object btnedInitialStage: TButtonedEdit
     AlignWithMargins = True
     Left = 8
     Top = 57
     Width = 565
-    Height = 21
+    Height = 23
     Margins.Left = 8
     Anchors = [akLeft, akTop, akRight]
     Images = ilLakeButton
@@ -69,14 +68,13 @@ inherited frameSutraLake: TframeSutraLake
     RightButton.PressedImageIndex = 2
     RightButton.Visible = True
     TabOrder = 1
-    ExplicitWidth = 337
   end
   object btnedInitialU: TButtonedEdit
     AlignWithMargins = True
     Left = 8
     Top = 126
     Width = 565
-    Height = 21
+    Height = 23
     Margins.Left = 8
     Anchors = [akLeft, akTop, akRight]
     Images = ilLakeButton
@@ -86,14 +84,13 @@ inherited frameSutraLake: TframeSutraLake
     RightButton.PressedImageIndex = 2
     RightButton.Visible = True
     TabOrder = 2
-    ExplicitWidth = 337
   end
   object btnedFractionRechargeDiverted: TButtonedEdit
     AlignWithMargins = True
     Left = 8
     Top = 195
     Width = 565
-    Height = 21
+    Height = 23
     Margins.Left = 8
     Anchors = [akLeft, akTop, akRight]
     Images = ilLakeButton
@@ -103,14 +100,13 @@ inherited frameSutraLake: TframeSutraLake
     RightButton.PressedImageIndex = 2
     RightButton.Visible = True
     TabOrder = 3
-    ExplicitWidth = 337
   end
   object btnedFractionDischargeDiverted: TButtonedEdit
     AlignWithMargins = True
     Left = 8
     Top = 265
     Width = 565
-    Height = 21
+    Height = 23
     Margins.Left = 8
     Anchors = [akLeft, akTop, akRight]
     Images = ilLakeButton
@@ -120,7 +116,6 @@ inherited frameSutraLake: TframeSutraLake
     RightButton.PressedImageIndex = 2
     RightButton.Visible = True
     TabOrder = 4
-    ExplicitWidth = 337
   end
   object ilLakeButton: TImageList
     Height = 24

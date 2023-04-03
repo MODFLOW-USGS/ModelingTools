@@ -4,12 +4,11 @@ inherited frmSutraAngle: TfrmSutraAngle
   Caption = 'SUTRA/DISV Cross Section'
   ClientHeight = 272
   ClientWidth = 368
-  ExplicitWidth = 384
-  ExplicitHeight = 311
-  PixelsPerInch = 96
+  ExplicitWidth = 380
+  ExplicitHeight = 310
   TextHeight = 18
   object lblAngle: TLabel
-    Left = 301
+    Left = 297
     Top = 75
     Width = 40
     Height = 18
@@ -20,7 +19,7 @@ inherited frmSutraAngle: TfrmSutraAngle
   object seAngle: TJvSpinEdit
     Left = 8
     Top = 72
-    Width = 287
+    Width = 283
     Height = 26
     Decimal = 5
     MaxValue = 90.000000000000000000
@@ -31,6 +30,7 @@ inherited frmSutraAngle: TfrmSutraAngle
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
     OnChange = seAngleChange
+    ExplicitWidth = 279
   end
   object pnlBottom: TPanel
     Left = 0
@@ -39,11 +39,13 @@ inherited frmSutraAngle: TfrmSutraAngle
     Height = 41
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 230
+    ExplicitWidth = 364
     DesignSize = (
       368
       41)
     object btnHelp: TBitBtn
-      Left = 104
+      Left = 100
       Top = 6
       Width = 82
       Height = 27
@@ -52,9 +54,10 @@ inherited frmSutraAngle: TfrmSutraAngle
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 96
     end
     object btnOK: TBitBtn
-      Left = 192
+      Left = 188
       Top = 6
       Width = 82
       Height = 27
@@ -63,9 +66,10 @@ inherited frmSutraAngle: TfrmSutraAngle
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 184
     end
     object btnCancel: TBitBtn
-      Left = 280
+      Left = 276
       Top = 6
       Width = 83
       Height = 27
@@ -73,12 +77,13 @@ inherited frmSutraAngle: TfrmSutraAngle
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 272
     end
   end
   object rgSpecify: TRadioGroup
     Left = 8
     Top = 8
-    Width = 352
+    Width = 348
     Height = 49
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Specify'
@@ -89,11 +94,12 @@ inherited frmSutraAngle: TfrmSutraAngle
       'End points')
     TabOrder = 0
     OnClick = rgSpecifyClick
+    ExplicitWidth = 344
   end
   object rdgEndPoints: TRbwDataGrid4
     Left = 8
     Top = 110
-    Width = 352
+    Width = 348
     Height = 113
     Anchors = [akLeft, akTop, akRight, akBottom]
     ColCount = 3
@@ -110,11 +116,13 @@ inherited frmSutraAngle: TfrmSutraAngle
     AutoIncreaseRowCount = False
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
+    OnEndUpdate = rdgEndPointsEndUpdate
     ColorRangeSelection = True
     ColorSelectedRow = False
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -138,6 +146,7 @@ inherited frmSutraAngle: TfrmSutraAngle
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -161,6 +170,7 @@ inherited frmSutraAngle: TfrmSutraAngle
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -182,7 +192,8 @@ inherited frmSutraAngle: TfrmSutraAngle
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    OnEndUpdate = rdgEndPointsEndUpdate
     WordWrapRowCaptions = False
+    ExplicitWidth = 344
+    ExplicitHeight = 112
   end
 end

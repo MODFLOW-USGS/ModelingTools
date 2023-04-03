@@ -27,7 +27,7 @@ uses
   System.UITypes, ZLib, PhastDataSets,
   Windows, // Windows is included to allow AnsiCompareText to be inlined.
   GR32, // defines TBitmap32.
-  GR32_Polygons, Types, SysUtils, Classes, SyncObjs, Graphics, Dialogs,
+  GR32_Polygons, Types, SysUtils, Classes, Graphics, Dialogs,
   Controls, OpenGL, ZoomBox2, AbstractGridUnit, PhastGridUnit, SelectUnit,
   UndoItems, DataSetUnit, Contnrs, RbwParser, FastGEO, GoPhastTypes,
   SubscriptionUnit, SparseDataSets, ModflowConstantHeadBoundaryUnit,
@@ -39,7 +39,7 @@ uses
   ModflowHfbUnit, ModpathParticleUnit, GPC_Classes, ModflowGageUnit,
   FormulaManagerUnit, ModflowMnw2Unit, ModflowHydmodUnit, Mt3dmsChemUnit,
   Mt3dmsTobUnit, SutraBoundariesUnit, SutraMeshUnit, SubPolygonUnit,
-  ModflowStrUnit, ModflowFhbUnit, ModflowFmpFarmUnit, ModflowFmpWellUnit,
+  ModflowStrUnit, ModflowFhbUnit, ModflowFmpWellUnit,
   ModflowFmpPrecipitationUnit, ModflowFmpEvapUnit, ModflowFmpCropSpatialUnit,
   ModflowCfpPipeUnit, ModflowCfpFixedUnit, ModflowCfpRechargeUnit,
   ModflowSwrUnit, ModflowSwrDirectRunoffUnit, ModflowSwrReachUnit,
@@ -5835,7 +5835,7 @@ implementation
 uses Math, UndoItemsScreenObjects, BigCanvasMethods,
   GIS_Functions, frmFormulaErrorsUnit, SparseArrayUnit, ModelMuseUtilities,
   InteractiveTools, PhastModelUnit, CountObjectsUnit, GlobalVariablesUnit,
-  IntListUnit, frmGoPhastUnit, IsosurfaceUnit, TempFiles, LayerStructureUnit,
+  frmGoPhastUnit, IsosurfaceUnit, LayerStructureUnit,
   gpc, frmGridValueUnit, frmErrorsAndWarningsUnit,
   frmScreenObjectPropertiesUnit, OctTreeClass,
   ModflowIrregularMeshUnit;

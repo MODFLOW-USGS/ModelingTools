@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes,
+  SubscriptionUnit, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
 type
@@ -447,9 +447,9 @@ const
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  frmGoPhastUnit, TempFiles,
-  AbstractGridUnit, ModflowIrregularMeshUnit, ModflowTimeSeriesUnit,
-  ModflowParameterUnit, ModelMuseUtilities, CustomModflowWriterUnit,
+  frmGoPhastUnit,
+
+
   System.Generics.Collections;
 
 resourcestring

@@ -5,7 +5,7 @@ unit SelectUnit;
 interface
 
 uses
-  GR32_Layers, // TPositionedLayer is declared in GR32_Layers.
+  // TPositionedLayer is declared in GR32_Layers.
   GR32, // TBitmap32, and TFloatRect are declared in GR32.
   Types, SysUtils, Math, Graphics, Classes, Contnrs, GoPhastTypes, FastGEO,
   ZoomBox2;

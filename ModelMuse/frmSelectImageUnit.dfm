@@ -6,9 +6,8 @@ inherited frmSelectImage: TfrmSelectImage
   ActiveControl = comboBitmaps
   Caption = 'Select image'
   ClientHeight = 129
-  OldCreateOrder = True
-  ExplicitWidth = 442
-  ExplicitHeight = 174
+  ExplicitWidth = 438
+  ExplicitHeight = 167
   PixelsPerInch = 120
   TextHeight = 18
   object lblSelect: TLabel

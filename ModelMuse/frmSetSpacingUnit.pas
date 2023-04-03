@@ -12,12 +12,12 @@ unit frmSetSpacingUnit;
 interface
 
 uses
-  GR32_Layers, // TPositionedLayer is declared in GR32_Layers.
+  // TPositionedLayer is declared in GR32_Layers.
   GR32, // TBitmap32, and TFloatRect are declared in GR32.
   SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, frmCustomGoPhastUnit, ComCtrls,
+  Dialogs, StdCtrls, frmCustomGoPhastUnit,
   Buttons, InteractiveTools, AbstractGridUnit, GoPhastTypes,
-  ArgusDataEntry, Spin, Mask, JvExMask, JvSpin;
+  ArgusDataEntry, Mask, JvExMask, JvSpin;
 
 type
   {@abstract(@name is used to change the size of the columns, rows,

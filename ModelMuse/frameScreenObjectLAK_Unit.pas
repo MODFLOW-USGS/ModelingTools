@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frameScreenObjectNoParamUnit, Grids, RbwDataGrid4, StdCtrls,
   ArgusDataEntry, Buttons, Mask, JvExMask, JvSpin, ExtCtrls, ComCtrls,
-  JvToolEdit, GrayTabs, frameGridUnit, framePestObsUnit;
+  JvToolEdit, GrayTabs, framePestObsUnit;
 
 type
   TBathColumn = (bcStage, bcVolume, bcSurfaceArea);

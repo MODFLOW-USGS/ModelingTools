@@ -120,7 +120,6 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 77
         DesignSize = (
           312
           46)
@@ -207,7 +206,6 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
         Height = 75
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 77
         object pnl3: TPanel
           Left = 1
           Top = 1

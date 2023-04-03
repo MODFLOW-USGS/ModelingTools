@@ -999,15 +999,15 @@ type
 implementation
 
 uses Math, frmGoPhastUnit, frmSelectedObjectsUnit, frmShowHideObjectsUnit,
-  InteractiveTools, PhastDataSets, DataSetUnit, CountObjectsUnit, 
-  ModflowSfrReachUnit, frmErrorsAndWarningsUnit, IntListUnit,
-  frmSelectResultToImportUnit, SutraMeshUnit, DisplaySettingsUnit,
-  ModflowHfbUnit, ModflowTimeUnit, FluxObservationUnit, 
+  InteractiveTools, PhastDataSets, DataSetUnit,
+  ModflowSfrReachUnit, frmErrorsAndWarningsUnit,
+  SutraMeshUnit, DisplaySettingsUnit,
+  ModflowHfbUnit, ModflowTimeUnit, FluxObservationUnit,
   LayerStructureUnit, ModflowCSubInterbed, ModflowSubsidenceDefUnit,
   ModflowCsubUnit, MeshRenumberingTypes, ModflowPackagesUnit,
   OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowFhbUnit,
-  ModflowWellUnit, framePackageMf6ObsUnit, Modflow6ObsUnit;
+  ModflowWellUnit, Modflow6ObsUnit;
 
 resourcestring
   StrChangeSelection = 'change selection';

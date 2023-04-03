@@ -54,7 +54,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       object chklstOptions: TCheckListBox
         Left = 6
         Top = 48
-        Width = 568
+        Width = 564
         Height = 206
         Anchors = [akLeft, akTop, akRight]
         ItemHeight = 18
@@ -72,7 +72,6 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
           'Write a summary of simulation progress to the screen (CSCRN)'
           'Pause for a user response at the end of the simulation (CPAUSE)')
         TabOrder = 1
-        ExplicitWidth = 564
       end
     end
     object jvspNodEle: TJvStandardPage
@@ -114,7 +113,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       object clbNcol: TCheckListBox
         Left = 6
         Top = 69
-        Width = 568
+        Width = 564
         Height = 260
         Anchors = [akLeft, akTop, akRight]
         DoubleBuffered = False
@@ -133,7 +132,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
         ParentDoubleBuffered = False
         ScrollWidth = 332
         TabOrder = 1
-        ExplicitWidth = 564
+        ExplicitWidth = 560
       end
     end
     object jvspObsBound: TJvStandardPage
@@ -315,7 +314,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       722
       50)
     object btnCancel: TBitBtn
-      Left = 608
+      Left = 604
       Top = 7
       Width = 91
       Height = 33
@@ -323,10 +322,10 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 612
+      ExplicitLeft = 600
     end
     object btnOK: TBitBtn
-      Left = 511
+      Left = 507
       Top = 7
       Width = 91
       Height = 33
@@ -335,10 +334,10 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 515
+      ExplicitLeft = 503
     end
     object btnHelp: TBitBtn
-      Left = 414
+      Left = 410
       Top = 7
       Width = 91
       Height = 33
@@ -347,7 +346,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 418
+      ExplicitLeft = 406
     end
   end
 end

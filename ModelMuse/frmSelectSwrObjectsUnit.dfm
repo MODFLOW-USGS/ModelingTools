@@ -4,8 +4,8 @@ inherited frmSelectSwrObjects: TfrmSelectSwrObjects
   Caption = 'Select SWR Objects'
   ClientWidth = 440
   OnResize = FormResize
-  ExplicitWidth = 458
-  ExplicitHeight = 271
+  ExplicitWidth = 452
+  ExplicitHeight = 272
   PixelsPerInch = 120
   TextHeight = 18
   object btnAddScreenObject: TSpeedButton
@@ -72,16 +72,18 @@ inherited frmSelectSwrObjects: TfrmSelectSwrObjects
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 184
+    Top = 192
     Width = 440
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 191
+    ExplicitWidth = 436
     DesignSize = (
       440
       42)
     object btnHelp: TBitBtn
-      Left = 169
+      Left = 165
       Top = 6
       Width = 83
       Height = 33
@@ -89,9 +91,10 @@ inherited frmSelectSwrObjects: TfrmSelectSwrObjects
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 161
     end
     object btnOK: TBitBtn
-      Left = 258
+      Left = 254
       Top = 6
       Width = 83
       Height = 33
@@ -99,9 +102,10 @@ inherited frmSelectSwrObjects: TfrmSelectSwrObjects
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
+      ExplicitLeft = 250
     end
     object btnCancel: TBitBtn
-      Left = 347
+      Left = 343
       Top = 6
       Width = 83
       Height = 33
@@ -109,6 +113,7 @@ inherited frmSelectSwrObjects: TfrmSelectSwrObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 339
     end
   end
   object vstAvailableObjects: TVirtualStringTree
@@ -116,23 +121,35 @@ inherited frmSelectSwrObjects: TfrmSelectSwrObjects
     Left = 3
     Top = 40
     Width = 200
-    Height = 141
+    Height = 149
     Margins.Top = 40
     Align = alLeft
+    Colors.BorderColor = 15987699
+    Colors.DisabledColor = clGray
+    Colors.DropMarkColor = 15385233
+    Colors.DropTargetColor = 15385233
+    Colors.DropTargetBorderColor = 15385233
+    Colors.FocusedSelectionColor = 15385233
+    Colors.FocusedSelectionBorderColor = 15385233
+    Colors.GridLineColor = 15987699
+    Colors.HeaderHotColor = clBlack
+    Colors.HotColor = clBlack
+    Colors.SelectionRectangleBlendColor = 15385233
+    Colors.SelectionRectangleBorderColor = 15385233
+    Colors.SelectionTextColor = clBlack
+    Colors.TreeLineColor = 9471874
+    Colors.UnfocusedColor = clGray
+    Colors.UnfocusedSelectionColor = clWhite
+    Colors.UnfocusedSelectionBorderColor = clWhite
     Header.AutoSizeIndex = 0
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -13
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.MainColumn = -1
     TabOrder = 0
     TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
     OnGetText = vstAvailableObjectsGetText
     OnGetNodeDataSize = vstAvailableObjectsGetNodeDataSize
     OnInitNode = vstAvailableObjectsInitNode
-    ExplicitTop = 32
-    ExplicitHeight = 149
+    Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
     Columns = <>
   end
   object vstSelectedObjects: TVirtualStringTree
@@ -140,23 +157,35 @@ inherited frmSelectSwrObjects: TfrmSelectSwrObjects
     Left = 237
     Top = 40
     Width = 200
-    Height = 141
+    Height = 149
     Margins.Top = 40
     Align = alRight
+    Colors.BorderColor = 15987699
+    Colors.DisabledColor = clGray
+    Colors.DropMarkColor = 15385233
+    Colors.DropTargetColor = 15385233
+    Colors.DropTargetBorderColor = 15385233
+    Colors.FocusedSelectionColor = 15385233
+    Colors.FocusedSelectionBorderColor = 15385233
+    Colors.GridLineColor = 15987699
+    Colors.HeaderHotColor = clBlack
+    Colors.HotColor = clBlack
+    Colors.SelectionRectangleBlendColor = 15385233
+    Colors.SelectionRectangleBorderColor = 15385233
+    Colors.SelectionTextColor = clBlack
+    Colors.TreeLineColor = 9471874
+    Colors.UnfocusedColor = clGray
+    Colors.UnfocusedSelectionColor = clWhite
+    Colors.UnfocusedSelectionBorderColor = clWhite
     Header.AutoSizeIndex = 0
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -13
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.MainColumn = -1
     TabOrder = 1
     TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
     OnGetText = vstAvailableObjectsGetText
     OnGetNodeDataSize = vstAvailableObjectsGetNodeDataSize
     OnInitNode = vstSelectedObjectsInitNode
-    ExplicitTop = 3
-    ExplicitHeight = 178
+    Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
     Columns = <>
   end
 end

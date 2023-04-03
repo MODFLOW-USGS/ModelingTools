@@ -3,8 +3,8 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
   HelpKeyword = 'Import_MODFLOW_6_Feature_Modif'
   Caption = 'Import MODFLOW 6 Feature Modified by PEST'
   ClientHeight = 174
-  ExplicitHeight = 213
-  PixelsPerInch = 96
+  ExplicitWidth = 438
+  ExplicitHeight = 212
   TextHeight = 18
   object lblModelFeatureFile: TLabel
     Left = 8
@@ -23,7 +23,7 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
   object fedModelFeatureFile: TJvFilenameEdit
     Left = 8
     Top = 32
-    Width = 408
+    Width = 404
     Height = 26
     Filter = 
       'MODFLOW 6 Feature files|*.chd; *.wel;*.drn;*.riv;*.ghb;*.rch;*.e' +
@@ -31,6 +31,7 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
     Text = ''
+    ExplicitWidth = 400
   end
   object seStressPeriod: TJvSpinEdit
     Left = 8
@@ -45,16 +46,18 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
   object pnlBottom: TPanel
     Left = 0
     Top = 133
-    Width = 424
+    Width = 426
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 132
+    ExplicitWidth = 422
     DesignSize = (
-      424
+      426
       41)
     object btnCancel: TBitBtn
-      Left = 324
+      Left = 320
       Top = 2
       Width = 91
       Height = 33
@@ -62,9 +65,10 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 316
     end
     object btnOK: TBitBtn
-      Left = 227
+      Left = 223
       Top = 2
       Width = 91
       Height = 33
@@ -73,9 +77,10 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 219
     end
     object btnHelp: TBitBtn
-      Left = 130
+      Left = 126
       Top = 2
       Width = 91
       Height = 33
@@ -84,6 +89,7 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 122
     end
   end
 end

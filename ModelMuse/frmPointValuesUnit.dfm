@@ -3,17 +3,18 @@ inherited frmPointValues: TfrmPointValues
   HelpKeyword = 'Vertex_Values_Dialog_Box'
   Caption = 'Vertex Values'
   ClientWidth = 367
-  ExplicitWidth = 383
-  PixelsPerInch = 96
+  ExplicitWidth = 379
+  ExplicitHeight = 272
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 184
+    Top = 192
     Width = 367
     Height = 42
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 190
+    ExplicitTop = 191
+    ExplicitWidth = 363
     object btnHelp: TBitBtn
       Left = 97
       Top = 6
@@ -57,7 +58,7 @@ inherited frmPointValues: TfrmPointValues
     Left = 0
     Top = 0
     Width = 367
-    Height = 184
+    Height = 192
     Align = alClient
     ColCount = 2
     FixedCols = 0
@@ -75,10 +76,12 @@ inherited frmPointValues: TfrmPointValues
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
     OnButtonClick = rdgValuesButtonClick
+    OnEndUpdate = rdgValuesEndUpdate
     ColorRangeSelection = False
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -102,6 +105,7 @@ inherited frmPointValues: TfrmPointValues
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -123,7 +127,8 @@ inherited frmPointValues: TfrmPointValues
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    OnEndUpdate = rdgValuesEndUpdate
     WordWrapRowCaptions = False
+    ExplicitWidth = 363
+    ExplicitHeight = 191
   end
 end

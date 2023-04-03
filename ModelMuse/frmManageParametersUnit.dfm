@@ -4,8 +4,8 @@ inherited frmManageParameters: TfrmManageParameters
   Caption = 'Manage Parameters'
   ClientHeight = 560
   ClientWidth = 780
-  ExplicitWidth = 796
-  ExplicitHeight = 599
+  ExplicitWidth = 792
+  ExplicitHeight = 598
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -15,11 +15,13 @@ inherited frmManageParameters: TfrmManageParameters
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 515
+    ExplicitWidth = 776
     DesignSize = (
       780
       44)
     object btnOK: TBitBtn
-      Left = 602
+      Left = 598
       Top = 6
       Width = 82
       Height = 33
@@ -29,10 +31,10 @@ inherited frmManageParameters: TfrmManageParameters
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 610
+      ExplicitLeft = 594
     end
     object btnCancel: TBitBtn
-      Left = 690
+      Left = 686
       Top = 6
       Width = 82
       Height = 33
@@ -41,10 +43,10 @@ inherited frmManageParameters: TfrmManageParameters
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 698
+      ExplicitLeft = 682
     end
     object btnHelp: TBitBtn
-      Left = 514
+      Left = 510
       Top = 6
       Width = 82
       Height = 33
@@ -53,7 +55,7 @@ inherited frmManageParameters: TfrmManageParameters
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 522
+      ExplicitLeft = 506
     end
     object btnImportPval: TButton
       Left = 12
@@ -73,6 +75,8 @@ inherited frmManageParameters: TfrmManageParameters
     ActivePage = tabParameters
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 776
+    ExplicitHeight = 515
     object tabParameters: TTabSheet
       Caption = 'Parameters'
       object pnlParameters: TPanel
@@ -83,6 +87,8 @@ inherited frmManageParameters: TfrmManageParameters
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitTop = 441
+        ExplicitWidth = 768
         DesignSize = (
           772
           41)
@@ -94,7 +100,7 @@ inherited frmManageParameters: TfrmManageParameters
           Caption = 'Number of parameters'
         end
         object btnDelete: TBitBtn
-          Left = 686
+          Left = 682
           Top = 6
           Width = 82
           Height = 33
@@ -130,7 +136,7 @@ inherited frmManageParameters: TfrmManageParameters
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
           TabOrder = 0
           OnClick = btnDeleteClick
-          ExplicitLeft = 694
+          ExplicitLeft = 678
         end
         object seNumberOfParameters: TJvSpinEdit
           Left = 8
@@ -562,8 +568,8 @@ inherited frmManageParameters: TfrmManageParameters
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 776
-        ExplicitHeight = 443
+        ExplicitWidth = 768
+        ExplicitHeight = 441
       end
     end
     object tabParameterGroups: TTabSheet
@@ -572,15 +578,15 @@ inherited frmManageParameters: TfrmManageParameters
       inline frameParameterGroups: TframeGrid
         Left = 0
         Top = 0
-        Width = 780
-        Height = 484
+        Width = 776
+        Height = 483
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 776
         ExplicitHeight = 484
         inherited Panel: TPanel
-          Top = 443
-          Width = 780
+          Top = 442
+          Width = 776
           ExplicitTop = 443
           ExplicitWidth = 776
           inherited lbNumber: TLabel
@@ -611,8 +617,8 @@ inherited frmManageParameters: TfrmManageParameters
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 780
-          Height = 443
+          Width = 776
+          Height = 442
           ColCount = 12
           OnSelectCell = frameParameterGroupsGridSelectCell
           OnSetEditText = frameParameterGroupsGridSetEditText
@@ -958,7 +964,7 @@ inherited frmManageParameters: TfrmManageParameters
       object tvTiedParameters: TTreeView
         Left = 0
         Top = 0
-        Width = 772
+        Width = 776
         Height = 483
         Align = alClient
         DragMode = dmAutomatic

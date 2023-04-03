@@ -7,7 +7,7 @@ interface
 
 uses
   System.UITypes, SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, frmCustomGoPhastUnit, ComCtrls, Buttons, ExtCtrls, Grids,
+  Dialogs, StdCtrls, frmCustomGoPhastUnit, ComCtrls, Buttons, ExtCtrls,
   GrayTabs;
 
 { TODO : Consider using a two panel selector (Tidwell pattern 13). }  

@@ -223,7 +223,7 @@ type
 
 implementation
 
-uses GLTexture, OctTreeClass;
+uses OctTreeClass;
 { TParticles }
 
 procedure TParticles.Assign(Source: TPersistent);

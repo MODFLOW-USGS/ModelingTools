@@ -4,7 +4,7 @@ interface
 
 uses System.UITypes,
   Winapi.Windows, CustomModflowWriterUnit, ModflowPackageSelectionUnit, System.Classes,
-  GoPhastTypes, System.Contnrs, PhastModelUnit, System.Generics.Collections,
+  GoPhastTypes, PhastModelUnit, System.Generics.Collections,
   ModflowRipUnit, ModflowCellUnit, System.SysUtils, RbwParser,
   ModflowRipPlantGroupsUnit, ModflowBoundaryDisplayUnit, Vcl.Dialogs;
 

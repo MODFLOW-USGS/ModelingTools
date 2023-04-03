@@ -17,7 +17,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, GoPhastTypes, SutraMeshUnit;
+  GoPhastTypes;
 
 { TSutraBoundaryDisplayDataArray }
 

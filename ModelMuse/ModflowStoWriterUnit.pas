@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  ModflowOutputControlUnit, GoPhastTypes, frmProgressUnit, DataSetUnit,
+  GoPhastTypes, frmProgressUnit, DataSetUnit,
   PhastModelUnit, ModflowTimeUnit, PestParamRoots;
 
 { TStoPackageWriter }

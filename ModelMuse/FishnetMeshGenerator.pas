@@ -4,8 +4,7 @@ interface
 
 uses
   Windows, Generics.Collections, Classes, GoPhastTypes, FastGEO, GR32, ZoomBox2,
-  SysUtils, Types, Graphics, GR32_Backends, UndoItems, LayerStructureUnit,
-  OrderedCollectionUnit;
+  SysUtils, Types, Graphics, GR32_Backends, UndoItems, LayerStructureUnit;
 
 type
   TFishnetMeshGenerator = class;

@@ -41,7 +41,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, UndoItems, InteractiveTools, FastGEO, SutraMeshUnit,
+  frmGoPhastUnit, UndoItems, InteractiveTools, FastGEO,
   DrawMeshTypesUnit;
 
 resourcestring

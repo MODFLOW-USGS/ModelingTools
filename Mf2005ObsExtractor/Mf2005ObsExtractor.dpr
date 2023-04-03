@@ -8,6 +8,11 @@ program Mf2005ObsExtractor;
 {#BACKUP Mf2005ObsExtractor.lpi}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   Classes,
   System.SysUtils,
   obextractortypes in 'obextractortypes.pas',

@@ -3,9 +3,8 @@ inherited frmUpdateDataSets: TfrmUpdateDataSets
   ClientHeight = 189
   ClientWidth = 423
   Font.Height = -21
-  ExplicitWidth = 439
-  ExplicitHeight = 228
-  PixelsPerInch = 96
+  ExplicitWidth = 435
+  ExplicitHeight = 227
   TextHeight = 24
   object Label1: TLabel
     Left = 16

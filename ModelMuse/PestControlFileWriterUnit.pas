@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, System.SysUtils, PestObsUnit, GoPhastTypes,
   PhastModelUnit, ObsInterfaceUnit, OrderedCollectionUnit, System.Classes,
-  RealListUnit, System.StrUtils;
+  RealListUnit;
 
 type
   TPestControlFileWriter = class(TCustomFileWriter)
@@ -67,9 +67,9 @@ uses
   PestPropertiesUnit, ModflowParameterUnit,
   PestParamGroupsUnit, PestObsGroupUnit, frmGoPhastUnit,
   PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit,
-  ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
-  ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
-  ModflowPackagesUnit, DataSetUnit, PilotPointDataUnit, System.Math,
+
+
+  DataSetUnit, PilotPointDataUnit, System.Math,
   QuadTreeClass, PointCollectionUnit, System.Generics.Collections, FastGEO,
   System.Generics.Defaults, System.IOUtils, PilotPointCovarinceFileWriterUnit;
 

@@ -2,7 +2,7 @@ unit ModflowGageUnit;
 
 interface
 
-uses Classes, GoPhastTypes, ModflowBoundaryUnit, SysUtils, ModflowSfrUnit;
+uses Classes, GoPhastTypes, SysUtils, ModflowSfrUnit;
 
 Type
   TStreamGage = class(TGoPhastPersistent)

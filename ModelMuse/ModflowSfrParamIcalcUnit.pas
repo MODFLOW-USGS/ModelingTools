@@ -2,8 +2,7 @@ unit ModflowSfrParamIcalcUnit;
 
 interface
 
-uses Classes, Math, GoPhastTypes, OrderedCollectionUnit, ModflowBoundaryUnit,
-  SubscriptionUnit;
+uses Classes, Math, GoPhastTypes, OrderedCollectionUnit, ModflowBoundaryUnit;
 
 type
   TSfrParamIcalcItem = class(TCustomModflowBoundaryItem)

@@ -55,7 +55,7 @@ function GenGridErrorMessage: string;
 
 implementation
 
-uses frmGoPhastUnit, ScreenObjectUnit, AbstractGridUnit, GoPhastTypes, Math,
+uses frmGoPhastUnit, ScreenObjectUnit, AbstractGridUnit, GoPhastTypes,
   Contnrs, RealListUnit, frmGoToUnit, frmSmoothGridUnit, UndoItems, FastGEO,
   SysUtils, System.Generics.Collections;
 

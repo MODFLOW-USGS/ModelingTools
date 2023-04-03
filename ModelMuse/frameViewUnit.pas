@@ -12,11 +12,11 @@ interface
 
 uses System.UITypes,
   Windows, SysUtils, Types, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, RbwRuler, StdCtrls, SyncObjs,
+  ExtCtrls, RbwRuler,
   AbstractGridUnit,
   GR32_Layers, // TPositionedLayer is declared in GR32_Layers.
   GR32, // TBitmap32, and TFloatRect are declared in GR32.
-  ScreenObjectUnit, SelectUnit, UndoItems, Menus, RbwModelCube,
+  ScreenObjectUnit, Menus, RbwModelCube,
   DataSetUnit, FastGEO, GoPhastTypes, ZoomBox2, PhastDataSets,
   CompressedImageUnit, ColRowLayerChangeUnit;
 
@@ -581,14 +581,14 @@ implementation
 
 {$R *.dfm}
 
-uses GR32_Polygons, frmGoPhastUnit, CursorsFoiledAgain, Math, RbwParser,
-  frmScreenObjectPropertiesUnit, UndoItemsScreenObjects, frmGridAngleUnit,
-  InteractiveTools, frmSetSpacingUnit, frmSubdivideUnit, BigCanvasMethods,
+uses GR32_Polygons, frmGoPhastUnit, Math, RbwParser,
+  UndoItemsScreenObjects,
+  InteractiveTools, BigCanvasMethods,
   frmRulerOptionsUnit, PhastModelUnit, frmGridValueUnit, EdgeDisplayUnit,
-  CustomModflowWriterUnit, frmProgressUnit, SutraMeshUnit, frmDisplayDataUnit,
+  SutraMeshUnit, frmDisplayDataUnit,
   frmCustomGoPhastUnit, VectorDisplayUnit, Generics.Collections,
   DrawMeshTypesUnit, MeshRenumberingTypes, ModelMuseUtilities,
-  PestPropertiesUnit, ModflowGridUnit;
+  ModflowGridUnit;
 
 resourcestring
   StrTheSImageCanNo = 'The %s  image can not be shown at this magnification.' +

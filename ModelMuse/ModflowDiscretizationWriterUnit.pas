@@ -41,8 +41,8 @@ resourcestring
 
 implementation
 
-uses ModflowUnitNumbers, frmProgressUnit, Forms, ModelMuseUtilities,
-  frmGoPhastUnit, ModflowOptionsUnit, GoPhastTypes, ModflowPackageSelectionUnit,
+uses ModflowUnitNumbers, frmProgressUnit, Forms,
+  ModflowOptionsUnit, GoPhastTypes, ModflowPackageSelectionUnit,
   frmErrorsAndWarningsUnit, FastGEO, DataSetUnit, ModflowIrregularMeshUnit,
   MeshRenumberingTypes, ModflowTimeUnit, System.Math, System.IOUtils;
 

@@ -118,7 +118,7 @@ type
 implementation
 
 uses
-  StrUtils, ModelMuseUtilities, frmGoPhastUnit, ScreenObjectUnit,
+  ModelMuseUtilities, frmGoPhastUnit, ScreenObjectUnit,
   ModflowHobUnit, FastGEO, BigCanvasMethods, GR32_Polygons, Math,
   PhastModelUnit, frmErrorsAndWarningsUnit, RbwParser, ShapefileUnit, XBase1,
   frmExportShapefileUnit;

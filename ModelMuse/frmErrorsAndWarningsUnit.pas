@@ -479,16 +479,6 @@ begin
   FFormTop := Value;
 end;
 
-//class procedure TfrmErrorsAndWarnings.SetFormLeft(const Value: Integer);
-//begin
-//  FFormLeft := Value;
-//end;
-//
-//class procedure TfrmErrorsAndWarnings.SetFormTop(const Value: Integer);
-//begin
-//  FFormTop := Value;
-//end;
-
 procedure TfrmErrorsAndWarnings.Show;
 begin
   if DelayShowing then

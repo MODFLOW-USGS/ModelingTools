@@ -2,9 +2,9 @@ unit ModflowFmp4LandUseBoundaryUnit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes, System.Generics.Collections,
+uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  SubscriptionUnit, GoPhastTypes, System.Generics.Collections,
   RbwParser;
 
 type
@@ -292,8 +292,8 @@ type
 implementation
 
 uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
-  AbstractGridUnit, ModflowPackageSelectionUnit;
+  frmGoPhastUnit,
+  ModflowPackageSelectionUnit;
 
 function LandUseCount(Model: TCustomModel): Integer;
 begin

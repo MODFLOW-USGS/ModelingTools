@@ -4,9 +4,8 @@ inherited frmSvdaPrepInput: TfrmSvdaPrepInput
   Caption = 'SVDAPREP Input'
   ClientHeight = 316
   ClientWidth = 367
-  ExplicitWidth = 383
-  ExplicitHeight = 355
-  PixelsPerInch = 96
+  ExplicitWidth = 379
+  ExplicitHeight = 354
   TextHeight = 18
   object lblNumSupParameters: TLabel
     Left = 134
@@ -95,7 +94,7 @@ inherited frmSvdaPrepInput: TfrmSvdaPrepInput
   object fedPestControlFile: TJvFilenameEdit
     Left = 8
     Top = 32
-    Width = 353
+    Width = 349
     Height = 26
     DefaultExt = '.pst'
     Filter = 'Pest Control File (*.pst)|*.pst'
@@ -103,5 +102,6 @@ inherited frmSvdaPrepInput: TfrmSvdaPrepInput
     TabOrder = 7
     Text = ''
     OnChange = fedPestControlFileChange
+    ExplicitWidth = 345
   end
 end

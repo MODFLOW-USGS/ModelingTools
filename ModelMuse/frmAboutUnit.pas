@@ -9,7 +9,7 @@ interface
 uses
   SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
   Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, ExtCtrls, Grids,
-  RbwDataGrid4, JvExStdCtrls, JvHtControls, Menus, ComCtrls;
+  RbwDataGrid4, JvExStdCtrls, JvHtControls, ComCtrls;
 
 type
   {@abstract(@name shows a USGS logo, the version of the model and
@@ -81,7 +81,7 @@ var
 
 implementation
 
-uses frmGoPhastUnit, frmNewVersionUnit, RbwInternetUtilities,
+uses frmGoPhastUnit, RbwInternetUtilities,
   DisclaimerTextUnit;
 
 {$R *.dfm}

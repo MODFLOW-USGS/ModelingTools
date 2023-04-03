@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ExtCtrls, Mask, JvExMask,
-  JvToolEdit, JvExControls, JvLinkLabel, JvExStdCtrls, JvHtControls, UndoItems,
+  JvToolEdit, JvExControls, JvExStdCtrls, JvHtControls, UndoItems,
   PhastModelUnit, JvExExtCtrls, JvExtComponent, JvRollOut, ImgList,
   System.ImageList;
 

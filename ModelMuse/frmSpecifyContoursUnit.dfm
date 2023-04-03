@@ -4,9 +4,8 @@ inherited frmSpecifyContours: TfrmSpecifyContours
   Caption = 'Specify Contours'
   ClientHeight = 301
   ClientWidth = 316
-  ExplicitWidth = 332
-  ExplicitHeight = 340
-  PixelsPerInch = 96
+  ExplicitWidth = 328
+  ExplicitHeight = 339
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -16,6 +15,8 @@ inherited frmSpecifyContours: TfrmSpecifyContours
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 176
+    ExplicitWidth = 312
     object lblRowCount: TLabel
       Left = 95
       Top = 9
@@ -228,6 +229,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
     OnBeforeDrawCell = rdgContourDataBeforeDrawCell
     OnButtonClick = rdgContourDataButtonClick
     OnColSize = rdgContourDataColSize
+    OnEndUpdate = rdgContourDataEndUpdate
     ColorRangeSelection = False
     OnHorizontalScroll = rdgContourDataHorizontalScroll
     Columns = <
@@ -327,8 +329,9 @@ inherited frmSpecifyContours: TfrmSpecifyContours
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
-    OnEndUpdate = rdgContourDataEndUpdate
     WordWrapRowCaptions = False
+    ExplicitWidth = 312
+    ExplicitHeight = 143
   end
   object Panel1: TPanel
     Left = 0
@@ -337,6 +340,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
     Height = 33
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 312
     object rdeLineThickness: TRbwDataEntry
       Left = 60
       Top = 5

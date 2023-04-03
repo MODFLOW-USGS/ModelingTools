@@ -41,7 +41,7 @@ type
 
 implementation
 
-uses frmGoPhastUnit, ScreenObjectUnit, ModelMuseUtilities;
+uses frmGoPhastUnit, ScreenObjectUnit;
 
 {$R *.dfm}
 

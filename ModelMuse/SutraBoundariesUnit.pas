@@ -3,9 +3,9 @@ unit SutraBoundariesUnit;
 interface
 
 uses
-  GoPhastTypes, Classes, OrderedCollectionUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, Generics.Collections, RbwParser, DataSetUnit,
-  SysUtils, SubscriptionUnit, SutraBoundaryUnit, SutraGeneralBoundaryUnit,
+  GoPhastTypes, Classes, ModflowBoundaryUnit,
+  Generics.Collections, RbwParser,
+  SysUtils, SutraBoundaryUnit, SutraGeneralBoundaryUnit,
   SutraGenTransBoundUnit, SutraPestObsUnit;
 
 type
@@ -66,9 +66,7 @@ type
 
 implementation
 
-uses
-  frmGoPhastUnit, PhastModelUnit, frmProgressUnit,
-  ScreenObjectUnit, SutraMeshUnit, frmFormulaErrorsUnit;
+
 
 { TSutraBoundaries }
 

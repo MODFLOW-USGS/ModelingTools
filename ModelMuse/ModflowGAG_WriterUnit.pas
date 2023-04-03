@@ -26,7 +26,7 @@ type
 implementation
 
 uses Contnrs , RbwParser, GoPhastTypes, ModflowCellUnit, ModflowUnitNumbers,
-  frmProgressUnit, DataSetUnit, frmGoPhastUnit,
+  frmProgressUnit, DataSetUnit,
   SubscriptionUnit, ModflowSfrUnit, PestObsUnit, ModflowGageUnit;
 
 resourcestring

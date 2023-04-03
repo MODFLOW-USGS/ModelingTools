@@ -4,9 +4,8 @@ inherited frmGridPosition: TfrmGridPosition
   Caption = 'Grid Position'
   ClientHeight = 130
   ClientWidth = 340
-  ExplicitWidth = 356
+  ExplicitWidth = 352
   ExplicitHeight = 168
-  PixelsPerInch = 96
   TextHeight = 18
   object lblGridOriginX: TLabel
     Left = 8

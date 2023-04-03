@@ -3,7 +3,7 @@ unit ModflowFmp4LandUseAreaFractionUnit;
 interface
 
 uses
-  ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, SubscriptionUnit,
+  ModflowFmp4BoundaryUnit, ModflowBoundaryUnit,
   ModflowFmp4LandUseBoundaryUnit, GoPhastTypes;
 
 type

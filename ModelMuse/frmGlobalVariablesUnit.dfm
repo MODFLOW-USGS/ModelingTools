@@ -5,8 +5,8 @@ inherited frmGlobalVariables: TfrmGlobalVariables
   ClientHeight = 283
   ClientWidth = 526
   OnClose = FormClose
-  ExplicitWidth = 542
-  ExplicitHeight = 322
+  ExplicitWidth = 538
+  ExplicitHeight = 321
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -16,8 +16,8 @@ inherited frmGlobalVariables: TfrmGlobalVariables
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 178
-    ExplicitWidth = 530
+    ExplicitTop = 176
+    ExplicitWidth = 522
     object Label1: TLabel
       Left = 71
       Top = 11
@@ -240,8 +240,8 @@ inherited frmGlobalVariables: TfrmGlobalVariables
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 530
-    ExplicitHeight = 178
+    ExplicitWidth = 522
+    ExplicitHeight = 176
     ColWidths = (
       64
       80

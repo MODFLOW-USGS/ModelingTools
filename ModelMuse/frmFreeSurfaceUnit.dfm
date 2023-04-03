@@ -5,8 +5,8 @@ inherited frmFreeSurface: TfrmFreeSurface
   Caption = 'PHAST Free Surface'
   ClientHeight = 112
   ClientWidth = 326
-  ExplicitWidth = 344
-  ExplicitHeight = 157
+  ExplicitWidth = 338
+  ExplicitHeight = 150
   PixelsPerInch = 120
   TextHeight = 18
   object cbFreeSurface: TCheckBox

@@ -7,9 +7,8 @@ inherited frmGenerateGrid: TfrmGenerateGrid
   Caption = 'Generate Grid'
   ClientHeight = 250
   ClientWidth = 340
-  ExplicitWidth = 356
-  ExplicitHeight = 289
-  PixelsPerInch = 96
+  ExplicitWidth = 352
+  ExplicitHeight = 288
   TextHeight = 18
   object lblGridAngle: TLabel
     Left = 128

@@ -2,7 +2,8 @@ inherited frmBudgetPrecisionQuery: TfrmBudgetPrecisionQuery
   Caption = 'Budget Precision'
   ClientHeight = 195
   ClientWidth = 373
-  ExplicitWidth = 391
+  ExplicitWidth = 385
+  ExplicitHeight = 233
   PixelsPerInch = 120
   TextHeight = 18
   object rgBudgetPrecision: TRadioGroup
@@ -19,7 +20,8 @@ inherited frmBudgetPrecisionQuery: TfrmBudgetPrecisionQuery
       'I don'#39't know'
       'Huh? What does this mean?')
     TabOrder = 0
-    ExplicitHeight = 105
+    ExplicitWidth = 369
+    ExplicitHeight = 153
   end
   object pnlBottom: TPanel
     Left = 0
@@ -28,18 +30,15 @@ inherited frmBudgetPrecisionQuery: TfrmBudgetPrecisionQuery
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitLeft = 248
-    ExplicitTop = 168
-    ExplicitWidth = 185
+    ExplicitTop = 153
+    ExplicitWidth = 369
     object btnClose: TBitBtn
       Left = 288
       Top = 6
       Width = 75
       Height = 25
-      DoubleBuffered = True
       Kind = bkClose
       NumGlyphs = 2
-      ParentDoubleBuffered = False
       TabOrder = 0
     end
   end

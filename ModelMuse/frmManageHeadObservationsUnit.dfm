@@ -5,9 +5,8 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
   ClientHeight = 356
   ClientWidth = 738
   OnResize = FormResize
-  ExplicitWidth = 754
-  ExplicitHeight = 395
-  PixelsPerInch = 96
+  ExplicitWidth = 750
+  ExplicitHeight = 394
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -17,11 +16,13 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 311
+    ExplicitWidth = 734
     DesignSize = (
       738
       44)
     object btnOK: TBitBtn
-      Left = 561
+      Left = 557
       Top = 6
       Width = 82
       Height = 33
@@ -31,9 +32,10 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
+      ExplicitLeft = 553
     end
     object btnCancel: TBitBtn
-      Left = 649
+      Left = 645
       Top = 6
       Width = 82
       Height = 33
@@ -42,9 +44,10 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
+      ExplicitLeft = 641
     end
     object btnHelp: TBitBtn
-      Left = 473
+      Left = 469
       Top = 6
       Width = 82
       Height = 33
@@ -53,6 +56,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 465
     end
     object btnHighlightObject: TButton
       Left = 4
@@ -72,6 +76,8 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
     ActivePage = tabObservations
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 734
+    ExplicitHeight = 311
     object tabObservations: TTabSheet
       Caption = 'Observations'
       object rdgObservations: TRbwDataGrid4
@@ -329,6 +335,8 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 726
+        ExplicitHeight = 237
         ColWidths = (
           64
           106
@@ -348,6 +356,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 726
         object edObsGroupName: TEdit
           Left = 8
           Top = 9
@@ -427,7 +436,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
       object rdgRowFilter: TRbwRowDataGrid
         Left = 0
         Top = 0
-        Width = 730
+        Width = 734
         Height = 279
         Align = alClient
         ColCount = 3
@@ -694,6 +703,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
             CaseSensitivePicklist = False
             CheckStyle = csCheck
           end>
+        ExplicitWidth = 730
         ColWidths = (
           64
           184

@@ -10,7 +10,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, framePackageUnit, RbwController, StdCtrls, ArgusDataEntry,
   JvExStdCtrls, JvCombobox, JvListComb, ModflowPackageSelectionUnit, ComCtrls,
-  JvExComCtrls, JvComCtrls, ExtCtrls;
+  JvExComCtrls, JvComCtrls;
 
 type
   {@name is a frame that is used to enter data for the GMG package in MODFLOW.

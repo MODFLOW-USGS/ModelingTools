@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
-  Vcl.StdCtrls, Vcl.CheckLst, Vcl.ExtCtrls, ModflowPackageSelectionUnit;
+  Vcl.StdCtrls, Vcl.CheckLst, ModflowPackageSelectionUnit;
 
 type
   TframePackageFmp4Wells = class(TframePackage)

@@ -654,7 +654,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Height = 41
         Align = alBottom
         TabOrder = 2
-        ExplicitTop = 437
         DesignSize = (
           553
           41)
@@ -1436,7 +1435,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Height = 259
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 261
         object dgDown: TRbwDataGrid4
           Left = 1
           Top = 53
@@ -1688,7 +1686,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Align = alClient
         Caption = 'shouldn'#39't see this'
         TabOrder = 0
-        ExplicitHeight = 369
         object Splitter3: TSplitter
           Left = 378
           Top = 58
@@ -1886,7 +1883,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Exaggeration = 1.000000000000000000
         HorizontalDirection = hdRight
         Image32.Left = 0
-        Image32.Top = 68
+        Image32.Top = 0
         Image32.Width = 553
         Image32.Height = 109
         Image32.Anchors = [akLeft, akBottom]
@@ -1897,11 +1894,9 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Image32.Scale = 1.000000000000000000
         Image32.ScaleMode = smNormal
         Image32.TabOrder = 0
-        Image32.ExplicitTop = 0
         ImmediateResize = True
         Magnification = 1.000000000000000000
         VerticalDirection = vdUp
-        ExplicitTop = 369
         DesignSize = (
           553
           109)
@@ -2238,7 +2233,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             Value = 100.000000000000000000
           end>
         TabOrder = 2
-        ExplicitTop = 321
         object zbFlowDepthTable: TQRbwZoomBox2
           AlignWithMargins = True
           Left = 4
@@ -2251,7 +2245,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 108
+          Image32.Top = 0
           Image32.Width = 269
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2262,7 +2256,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
-          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp
@@ -2282,7 +2275,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 108
+          Image32.Top = 0
           Image32.Width = 270
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2293,7 +2286,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
-          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp

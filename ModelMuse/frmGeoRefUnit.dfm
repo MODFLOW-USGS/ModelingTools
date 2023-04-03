@@ -4,9 +4,8 @@ inherited frmGeoRef: TfrmGeoRef
   Caption = 'Geo Reference'
   ClientHeight = 341
   ClientWidth = 298
-  ExplicitWidth = 314
-  ExplicitHeight = 380
-  PixelsPerInch = 96
+  ExplicitWidth = 310
+  ExplicitHeight = 379
   TextHeight = 18
   object rrdgGeoRef: TRbwRowDataGrid
     Left = 0
@@ -294,6 +293,8 @@ inherited frmGeoRef: TfrmGeoRef
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
+    ExplicitWidth = 294
+    ExplicitHeight = 296
   end
   object pnlBottom: TPanel
     Left = 0
@@ -303,6 +304,8 @@ inherited frmGeoRef: TfrmGeoRef
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 296
+    ExplicitWidth = 294
     object btnCancel: TBitBtn
       Left = 199
       Top = 6

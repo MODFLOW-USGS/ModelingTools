@@ -931,7 +931,7 @@ function FileShapeType(const FileName: string): integer;
 
 implementation
 
-uses Contnrs, Vcl.Dialogs;
+uses Vcl.Dialogs;
 
 resourcestring
   StrTheShapefileMainF = 'The Shapefile main file and index file headers do ' +

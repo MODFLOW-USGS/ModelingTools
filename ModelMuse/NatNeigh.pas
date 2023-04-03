@@ -75,7 +75,7 @@ procedure GetHighAndLowValuesFromArray(const AnArray: TFloatArray; var HighValue
 implementation
 
 uses
-  Contnrs, gpc, TripackProcedures, Math;
+  Contnrs, gpc;
 
 procedure GetHighAndLowValuesFromArray(const AnArray: TDoubleDynArray;
   var HighValue, LowValue: Extended); overload;

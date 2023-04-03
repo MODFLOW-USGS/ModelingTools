@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, Grids,
   RbwDataGrid4, StdCtrls, ArgusDataEntry, Buttons, FishnetMeshGenerator,
-  Mask, JvExMask, JvSpin, ComCtrls, frameDiscretizationUnit, UndoItems,
+  ComCtrls, frameDiscretizationUnit, UndoItems,
   GrayTabs;
 
 type

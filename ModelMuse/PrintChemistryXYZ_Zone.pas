@@ -6,7 +6,7 @@ unit PrintChemistryXYZ_Zone;
 
 interface
 
-uses SysUtils, Classes, GoPhastTypes, DataSetUnit, PhastDataSets, ZoneUnit;
+uses SysUtils, Classes, GoPhastTypes, DataSetUnit, ZoneUnit;
 
 type
   {@abstract(@name stores and initializes the @link(DataSetUnit.TDataArray)s
@@ -63,7 +63,7 @@ type
 
 implementation
 
-uses Contnrs, frmGoPhastUnit, PhastModelUnit;
+uses frmGoPhastUnit, PhastModelUnit;
 
 { TPrintChemistryXYZ_DataSets }
 

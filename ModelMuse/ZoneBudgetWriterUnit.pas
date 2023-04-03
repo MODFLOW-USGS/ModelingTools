@@ -75,7 +75,7 @@ const
 implementation
 
 uses
-  ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit, Forms,
+  frmProgressUnit, frmErrorsAndWarningsUnit, Forms,
   GoPhastTypes, ArchiveNodeInterface;
 
 resourcestring

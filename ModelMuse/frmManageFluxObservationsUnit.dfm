@@ -11,9 +11,8 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
   Position = poScreenCenter
   OnActivate = ListClick
   OnResize = FormResize
-  ExplicitWidth = 808
-  ExplicitHeight = 430
-  PixelsPerInch = 96
+  ExplicitWidth = 804
+  ExplicitHeight = 429
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121
@@ -35,11 +34,13 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     Height = 41
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 349
+    ExplicitWidth = 788
     DesignSize = (
       792
       41)
     object btnHelp: TBitBtn
-      Left = 511
+      Left = 507
       Top = 6
       Width = 87
       Height = 27
@@ -48,9 +49,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
+      ExplicitLeft = 503
     end
     object CancelBtn: TBitBtn
-      Left = 697
+      Left = 693
       Top = 6
       Width = 87
       Height = 27
@@ -58,9 +60,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 689
     end
     object OkBtn: TBitBtn
-      Left = 604
+      Left = 600
       Top = 6
       Width = 87
       Height = 27
@@ -69,6 +72,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       NumGlyphs = 2
       TabOrder = 3
       OnClick = OkBtnClick
+      ExplicitLeft = 596
     end
     object btnDeleteObservation: TButton
       Left = 88
@@ -100,6 +104,8 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 657
+    ExplicitHeight = 349
     object pcGroup: TPageControl
       Left = 0
       Top = 0
@@ -108,12 +114,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       ActivePage = tabObservationProperties
       Align = alClient
       TabOrder = 0
+      ExplicitWidth = 657
+      ExplicitHeight = 349
       object tabObservationProperties: TTabSheet
         Caption = 'Observation Properties'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object pnlTop: TPanel
           Left = 0
           Top = 0
@@ -121,6 +125,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           Height = 65
           Align = alTop
           TabOrder = 0
+          ExplicitWidth = 649
           object lblObservationName: TLabel
             Left = 6
             Top = 6
@@ -170,13 +175,11 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           ActivePage = tabObjects
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 649
+          ExplicitHeight = 251
           object tabObservationsTimes: TTabSheet
             Caption = 'Observation times and values'
             OnResize = tabObservationsTimesResize
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -391,7 +394,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               OnChange = seNumObsTimesChange
             end
             object btnDelete: TButton
-              Left = 463
+              Left = 459
               Top = 189
               Width = 87
               Height = 27
@@ -399,9 +402,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               Caption = 'Delete'
               TabOrder = 3
               OnClick = btnDeleteClick
+              ExplicitLeft = 463
             end
             object btnInsert: TButton
-              Left = 558
+              Left = 554
               Top = 189
               Width = 87
               Height = 27
@@ -409,6 +413,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               Caption = 'Insert'
               TabOrder = 4
               OnClick = btnInsertClick
+              ExplicitLeft = 558
             end
             object rdeMultiValueEdit: TRbwDataEntry
               Left = 80
@@ -468,10 +473,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
             Caption = 'Mass flux observation times and values'
             ImageIndex = 2
             TabVisible = False
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -760,7 +761,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               OnChange = seNumMt3dmsObsTimesChange
             end
             object btnDeleteMt3dmsFlux: TButton
-              Left = 463
+              Left = 459
               Top = 189
               Width = 87
               Height = 27
@@ -768,9 +769,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               Caption = 'Delete'
               TabOrder = 3
               OnClick = btnDeleteMt3dmsFluxClick
+              ExplicitLeft = 463
             end
             object btnInsertMt3dmsFlux: TButton
-              Left = 558
+              Left = 554
               Top = 189
               Width = 87
               Height = 27
@@ -778,15 +780,12 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               Caption = 'Insert'
               TabOrder = 4
               OnClick = btnInsertMt3dmsFluxClick
+              ExplicitLeft = 558
             end
           end
           object tabObjects: TTabSheet
             Caption = 'Objects'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -834,6 +833,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               OnDragDrop = SrcListDragDrop
               OnDragOver = SrcListDragOver
               OnKeyDown = SrcListKeyDown
+              ExplicitHeight = 159
             end
             object IncBtn: TButton
               Left = 184
@@ -932,20 +932,23 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               OnDragDrop = DstListDragDrop
               OnDragOver = DstListDragOver
               OnKeyDown = DstListKeyDown
+              ExplicitHeight = 159
             end
             object edFactorFormula: TJvEdit
               Left = 61
               Top = 189
-              Width = 480
+              Width = 476
               Height = 26
               Anchors = [akLeft, akRight, akBottom]
               TabOrder = 7
               Text = ''
               OnChange = edFactorFormulaChange
               OnExit = edFactorFormulaExit
+              ExplicitTop = 188
+              ExplicitWidth = 472
             end
             object btnFactorFormula: TButton
-              Left = 546
+              Left = 542
               Top = 187
               Width = 90
               Height = 30
@@ -954,6 +957,8 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               Enabled = False
               TabOrder = 6
               OnClick = btnFactorFormulaClick
+              ExplicitLeft = 538
+              ExplicitTop = 186
             end
           end
         end
@@ -961,10 +966,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       object tabObservationGroupNames: TTabSheet
         Caption = 'Observation Group Names'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object rdgGroupNames: TRbwDataGrid4
           Left = 0
           Top = 0
@@ -1049,6 +1050,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     ReadOnly = True
     TabOrder = 0
     OnChange = tvFluxObservationsChange
+    ExplicitHeight = 349
   end
   object rparserThreeDFormulaElements: TRbwParser
     Left = 272

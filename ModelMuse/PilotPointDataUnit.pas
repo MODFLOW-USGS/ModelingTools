@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.Generics.Collections, DataSetUnit,
-  OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes, PestObsGroupUnit,
+  OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes,
   PointCollectionUnit;
 
 type

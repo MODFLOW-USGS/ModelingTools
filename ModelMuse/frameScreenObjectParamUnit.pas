@@ -5,7 +5,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  StdCtrls, Dialogs, Grids, Math, RbwDataGrid4, JvExControls, JvComponent,
+  StdCtrls, Dialogs, Grids, RbwDataGrid4, JvExControls,
   JvxCheckListBox, ExtCtrls, Buttons, Mask, JvExMask, JvSpin, ArgusDataEntry,
   frameScreenObjectNoParamUnit, ModflowBoundaryUnit;
 
@@ -81,8 +81,8 @@ type
 
 implementation
 
-uses OrderedCollectionUnit, frmGoPhastUnit, ModflowTimeUnit,
-  frmCustomGoPhastUnit, GoPhastTypes;
+uses OrderedCollectionUnit, frmGoPhastUnit,
+  GoPhastTypes;
 
 {$R *.dfm}
 

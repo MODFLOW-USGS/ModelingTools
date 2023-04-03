@@ -3,7 +3,7 @@ unit PointCollectionUnit;
 interface
 
 uses
-  System.Classes, ZLib, FastGEO, System.ZLibConst;
+  System.Classes, ZLib, FastGEO;
 
 type
   {@abstract(@name is used to store a TPoint2D.)}

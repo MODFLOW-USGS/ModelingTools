@@ -3,7 +3,7 @@ unit FootprintGridUnit;
 interface
 
 uses
-  AbstractGridUnit, GoPhastTypes, GR32, ZoomBox2, System.Classes;
+  AbstractGridUnit, GoPhastTypes, ZoomBox2, System.Classes;
 
 type
   TFootprintGrid = class(TCustomModelGrid)

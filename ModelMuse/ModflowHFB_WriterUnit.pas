@@ -2,7 +2,7 @@ unit ModflowHFB_WriterUnit;
 
 interface
 
-uses SysUtils, Classes, Contnrs, PhastModelUnit, CustomModflowWriterUnit,
+uses SysUtils, Classes, PhastModelUnit, CustomModflowWriterUnit,
   ScreenObjectUnit, ModflowPackageSelectionUnit, ModflowParameterUnit,
   EdgeDisplayUnit, GoPhastTypes, System.Generics.Collections, RbwParser,
   Vcl.Dialogs;
@@ -160,9 +160,9 @@ type
 implementation
 
 uses Math, ModflowUnitNumbers, ModflowHfbUnit, OrderedCollectionUnit,
-  frmErrorsAndWarningsUnit, ModflowGridUnit, GIS_Functions, 
+  frmErrorsAndWarningsUnit, ModflowGridUnit, GIS_Functions,
   frmProgressUnit, frmFormulaErrorsUnit, Forms, ModflowIrregularMeshUnit,
-  FastGEO, QuadtreeClass, ModflowTimeUnit, DataSetUnit, ModelMuseUtilities;
+  FastGEO, QuadtreeClass, ModflowTimeUnit, DataSetUnit;
 
 resourcestring
   StrInTheHFBPackage = 'In the HFB package, one or more objects do not defin' +

@@ -4,9 +4,8 @@ inherited frmDuplicateNames: TfrmDuplicateNames
   Caption = 'Duplicate Names'
   ClientHeight = 376
   ClientWidth = 436
-  ExplicitWidth = 452
+  ExplicitWidth = 448
   ExplicitHeight = 414
-  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -15,11 +14,13 @@ inherited frmDuplicateNames: TfrmDuplicateNames
     Height = 166
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 209
+    ExplicitWidth = 432
     DesignSize = (
       436
       166)
     object btnOK: TBitBtn
-      Left = 343
+      Left = 339
       Top = 124
       Width = 89
       Height = 33
@@ -28,9 +29,10 @@ inherited frmDuplicateNames: TfrmDuplicateNames
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 3
+      ExplicitLeft = 335
     end
     object btnHelp: TBitBtn
-      Left = 343
+      Left = 339
       Top = 46
       Width = 89
       Height = 33
@@ -39,6 +41,7 @@ inherited frmDuplicateNames: TfrmDuplicateNames
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 335
     end
     object rgResponse: TRadioGroup
       AlignWithMargins = True
@@ -61,7 +64,7 @@ inherited frmDuplicateNames: TfrmDuplicateNames
       OnClick = rgResponseClick
     end
     object btn1: TBitBtn
-      Left = 343
+      Left = 339
       Top = 85
       Width = 89
       Height = 33
@@ -69,6 +72,7 @@ inherited frmDuplicateNames: TfrmDuplicateNames
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 335
     end
   end
   object pnlTop: TPanel
@@ -78,6 +82,7 @@ inherited frmDuplicateNames: TfrmDuplicateNames
     Height = 49
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 432
     object lblTop: TLabel
       AlignWithMargins = True
       Left = 4
@@ -102,5 +107,7 @@ inherited frmDuplicateNames: TfrmDuplicateNames
     ReadOnly = True
     ScrollBars = ssBoth
     TabOrder = 1
+    ExplicitWidth = 432
+    ExplicitHeight = 160
   end
 end

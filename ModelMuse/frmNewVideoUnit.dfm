@@ -1,5 +1,7 @@
 inherited frmNewVideos: TfrmNewVideos
   Caption = 'New ModelMuse Videos'
+  ExplicitWidth = 438
+  ExplicitHeight = 272
   TextHeight = 18
   object lblNewVideo: TLabel
     AlignWithMargins = True
@@ -29,6 +31,8 @@ inherited frmNewVideos: TfrmNewVideos
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
+    ExplicitWidth = 422
+    ExplicitHeight = 156
   end
   object pnlBottom: TPanel
     Left = 0
@@ -42,6 +46,8 @@ inherited frmNewVideos: TfrmNewVideos
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 182
+    ExplicitWidth = 422
     object btnVideoPage: TButton
       Left = 16
       Top = 10

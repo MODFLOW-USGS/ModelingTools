@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, RbwParser, GoPhastTypes;
+  SubscriptionUnit, RbwParser, GoPhastTypes;
 
 type
   TStrRecord = record
@@ -528,7 +528,7 @@ const
 
 implementation
 
-uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
+uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions, ModflowPackageSelectionUnit;
 
 resourcestring
