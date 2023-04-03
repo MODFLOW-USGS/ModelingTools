@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, framePackageUnit, StdCtrls, ArgusDataEntry, JvExStdCtrls, JvCheckBox,
+  Dialogs, framePackageUnit, StdCtrls, ArgusDataEntry,
   ModflowPackageSelectionUnit, RbwController, ExtCtrls;
 
 type
@@ -30,7 +30,7 @@ type
 implementation
 
 uses
-  ModelMuseUtilities;
+  GoPhastTypes;
 
 {$R *.dfm}
 

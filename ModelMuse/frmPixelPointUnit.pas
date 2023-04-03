@@ -8,7 +8,7 @@ interface
 uses
   SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
   Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, 
-  GoPhastTypes, ArgusDataEntry, Vcl.Grids, RbwDataGrid4;
+  GoPhastTypes, Vcl.Grids, RbwDataGrid4;
 
 type
   {@abstract(@name is used to allow the user to specify the real world

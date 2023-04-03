@@ -7,7 +7,7 @@ interface
 
 uses
   SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, frmCustomGoPhastUnit, CheckLst, ExtCtrls, Buttons, frmCustomSelectObjectsUnit,
+  Dialogs, StdCtrls, ExtCtrls, Buttons, frmCustomSelectObjectsUnit,
   VirtualTrees, ScreenObjectUnit, UndoItemsScreenObjects;
 
 type
@@ -43,8 +43,7 @@ type
 
 implementation
 
-uses frmGoPhastUnit, DataSetUnit, 
-  GoPhastTypes, frmGoToUnit;
+uses frmGoPhastUnit;
 
 {$R *.dfm}
 

@@ -2,7 +2,7 @@ unit ModflowRiverWriterUnit;
 
 interface
 
-uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowRivUnit,
+uses SysUtils, Classes, CustomModflowWriterUnit, ModflowRivUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes,
   Modflow6ObsUnit, FluxObservationUnit;
@@ -61,8 +61,8 @@ type
 
 implementation
 
-uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
-  ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
+uses frmErrorsAndWarningsUnit,
+  ModflowUnitNumbers, frmProgressUnit, Forms,
   DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
   Mt3dmsChemSpeciesUnit, PestPropertiesUnit;
 

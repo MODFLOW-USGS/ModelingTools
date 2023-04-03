@@ -2,8 +2,8 @@ unit GlobalVariablesUnit;
 
 interface
 
-uses Classes, SysUtils, RbwParser, GoPhastTypes, SubscriptionUnit,
-  OrderedCollectionUnit;
+uses Classes, SysUtils, RbwParser, SubscriptionUnit,
+  OrderedCollectionUnit, GoPhastTypes;
 
 type
   TVariableRecord = record
@@ -98,8 +98,7 @@ type
 
 implementation
 
-uses
-  ModelMuseUtilities;
+
 
 { TGlobalVariable }
 

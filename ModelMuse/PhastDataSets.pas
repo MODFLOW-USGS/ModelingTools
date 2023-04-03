@@ -983,9 +983,8 @@ to elements or cells.}
 
 implementation
 
-uses Contnrs, ScreenObjectUnit, frmGoPhastUnit, frmDataSetsUnits,
-  GIS_Functions, frmFormulaErrorsUnit, SubscriptionUnit, PhastModelUnit,
-  ModelMuseUtilities;
+uses ScreenObjectUnit, frmGoPhastUnit,
+  GIS_Functions, frmFormulaErrorsUnit, SubscriptionUnit, PhastModelUnit;
 
 resourcestring
   StrSetByPHASTstyleI = 'Set by PHAST-style interpolation';

@@ -185,7 +185,7 @@ uses
   {$IFDEF Mf2005ObsExtractor}
   SwiObsUtilities;
   {$ELSE}
-  ModelMuseUtilities;
+  {ModelMuseUtilities,} GoPhastTypes;
   {$ENDIF}
 {$ENDIF}
 

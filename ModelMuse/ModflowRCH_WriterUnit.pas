@@ -6,7 +6,7 @@ uses System.UITypes,Windows, SysUtils, Classes, Contnrs,
   CustomModflowWriterUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowPackageSelectionUnit, OrderedCollectionUnit,
   ModflowCellUnit, PhastModelUnit, ModflowBoundaryDisplayUnit, Vcl.Dialogs,
-  DataSetUnit, SparseDataSets, Modflow6ObsUnit;
+  DataSetUnit, SparseDataSets, Modflow6ObsUnit, GoPhastTypes;
 
 Type
   TModflowRCH_Writer = class(TCustomTransientArrayWriter)
@@ -55,8 +55,8 @@ Type
 implementation
 
 uses RbwParser, ModflowUnitNumbers, ModflowTransientListParameterUnit,
-  frmErrorsAndWarningsUnit, ModflowRchUnit, GoPhastTypes,
-  frmProgressUnit, Forms, ModflowOutputControlUnit, System.Math,
+  frmErrorsAndWarningsUnit, ModflowRchUnit,
+  frmProgressUnit, Forms, System.Math,
   SparseArrayUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring

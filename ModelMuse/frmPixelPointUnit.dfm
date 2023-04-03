@@ -6,8 +6,8 @@ inherited frmPixelPoint: TfrmPixelPoint
   Caption = 'Coordinates'
   ClientHeight = 126
   ClientWidth = 495
-  ExplicitWidth = 513
-  ExplicitHeight = 173
+  ExplicitWidth = 507
+  ExplicitHeight = 164
   PixelsPerInch = 120
   TextHeight = 18
   object btnOK: TBitBtn

@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, GoPhastTypes, System.Generics.Collections,
-  ObsInterfaceUnit;
+  ObsInterfaceUnit, ScreenObjectOwnerCollectionUnit;
 
 type
   TCustomObservationItem = class(TPhastCollectionItem, IObservationItem)

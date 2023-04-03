@@ -78,6 +78,10 @@ function ModifiedSpectralScheme(Fraction, ColorAdjustmentFactor: real): TColor;
 // each of those choices varies the chroma and intensity.
 function SteppedSequential(Fraction, ColorAdjustmentFactor: real): TColor;
 
+function FracAndSchemeToColor(ColorSchemeIndex: integer;
+  Fraction, ColorAdjustmentFactor: real; const Cycles: integer): TColor;
+
+
 type
   TColorItem = class(TPhastCollectionItem)
   private
@@ -184,6 +188,9 @@ const MaxColorScheme = 11;
 implementation
 
 uses Math, frmGoPhastUnit;
+
+var
+  ColorParameters: TColorParameters;
 
 procedure AdjustColorFactor(var ColorAdjustmentFactor: Real);
 begin
@@ -1076,6 +1083,64 @@ procedure TUserDefinedColorSchemeCollection.SetItem(Index: Integer;
 begin
   inherited Items[Index] := Value;
 end;
+
+function FracAndSchemeToColor(ColorSchemeIndex: integer;
+  Fraction, ColorAdjustmentFactor: real; const Cycles: integer): TColor;
+var
+  ColorScheme: TUserDefinedColorSchemeItem;
+begin
+  if ColorSchemeIndex <= MaxColorScheme then
+  begin
+    if ColorSchemeIndex < 0 then
+    begin
+      result := clWhite;
+      Exit;
+    end;
+    if Fraction <> 1 then
+    begin
+      Fraction := Frac(Fraction*Cycles);
+    end;
+
+    case ColorSchemeIndex of
+      0: result := FracToSpectrum(Fraction, ColorAdjustmentFactor);
+      1: result := FracToGreenMagenta(1 - Fraction, ColorAdjustmentFactor);
+      2: result := FracToBlueRed(1 - Fraction, ColorAdjustmentFactor);
+      3: result := FracToBlueDarkOrange(1 - Fraction, ColorAdjustmentFactor);
+      4: result := FracToBlueGreen(1 - Fraction, ColorAdjustmentFactor);
+      5: result := FracToBrownBlue(1 - Fraction, ColorAdjustmentFactor);
+      6: result := FracToBlueGray(1 - Fraction, ColorAdjustmentFactor);
+      7: result := FracToBlueOrange(1 - Fraction, ColorAdjustmentFactor);
+      8: result := FracToBlue_OrangeRed(1 - Fraction, ColorAdjustmentFactor);
+      9: result := FracToLightBlue_DarkBlue(1 - Fraction, ColorAdjustmentFactor);
+      10: result := ModifiedSpectralScheme(1 - Fraction, ColorAdjustmentFactor);
+      11: result := SteppedSequential(1 - Fraction, ColorAdjustmentFactor);
+    else
+      result := clWhite;
+      Assert(False);
+    end;
+  end
+  else
+  begin
+    ColorSchemeIndex := ColorSchemeIndex-MaxColorScheme-1;
+    if ColorSchemeIndex <= frmGoPhast.PhastModel.ColorSchemes.Count then
+    begin
+      ColorParameters.ColorCycles := Cycles;
+      ColorParameters.ColorExponent := ColorAdjustmentFactor;
+      ColorScheme:= frmGoPhast.PhastModel.ColorSchemes[ColorSchemeIndex];
+      result := ColorParameters.FracToColor(Fraction, ColorScheme)
+    end
+    else
+    begin
+      result := clWhite;
+    end;
+  end;
+end;
+
+initialization
+  ColorParameters := TColorParameters.Create;
+
+finalization
+  ColorParameters.Free;
 
 end.
 

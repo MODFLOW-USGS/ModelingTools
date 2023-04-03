@@ -2,9 +2,9 @@ unit ModflowSfrUnsatSegment;
 
 interface
 
-uses Windows, Classes, SysUtils, ZLib, RbwParser, GoPhastTypes,
+uses Windows, Classes, SysUtils, ZLib, GoPhastTypes,
   OrderedCollectionUnit, ModflowCellUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, SubscriptionUnit, SparseDataSets;
+  FormulaManagerUnit, SubscriptionUnit;
 
 type
   TSfrUnsatSegmentRecord = record
@@ -201,8 +201,8 @@ const
 
 implementation
 
-uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  ModflowSfrUnit, TempFiles, frmGoPhastUnit;
+uses DataSetUnit, ScreenObjectUnit, PhastModelUnit,
+  ModflowSfrUnit, frmGoPhastUnit;
 
 resourcestring
   StrInitialWaterConten = 'Initial water content';

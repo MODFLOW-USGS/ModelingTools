@@ -8,9 +8,10 @@ uses System.UITypes, System.Types,
   ModflowParameterUnit, OrderedCollectionUnit,
   ModflowTransientListParameterUnit, HufDefinition, Buttons, Mask, JvExMask,
   JvSpin, ExtCtrls, RequiredDataSetsUndoUnit, UndoItemsScreenObjects,
-  ModflowPackageSelectionUnit, frameGridUnit, JvExExtCtrls, JvNetscapeSplitter,
-  PestParamGroupsUnit, Vcl.ComCtrls, frameAvailableObjectsUnit, JvListBox,
-  frameParentChildUnit, System.Generics.Collections, JvComCtrls, JvExComCtrls;
+  ModflowPackageSelectionUnit, frameGridUnit,
+  PestParamGroupsUnit, Vcl.ComCtrls,
+  frameParentChildUnit, System.Generics.Collections,
+  GoPhastTypes;
 
 type
   TParamColumn = (pcName, pcPackage, pcType, pcValue, pcMult, pcZone,
@@ -129,9 +130,9 @@ Type
 implementation
 
 uses
-  Contnrs, frmGoPhastUnit, PhastModelUnit, ModflowDiscretizationWriterUnit,
+  Contnrs, frmGoPhastUnit, PhastModelUnit,
   ScreenObjectUnit, frmShowHideObjectsUnit, ModflowPackagesUnit, ReadPvalUnit,
-  IntListUnit, GoPhastTypes, PestPropertiesUnit;
+  IntListUnit, PestPropertiesUnit;
 
 resourcestring
   StrErrorReadingPvalF = 'Error reading %0:s file. Check that it is a valid ' +

@@ -3,7 +3,7 @@ unit ElevationStorageUnit;
 
 interface
 
-uses Classes, GoPhastTypes;
+uses Classes, GoPhastTypes, FastGEO;
 
 type
   {
@@ -46,7 +46,7 @@ type
     // See @link(Elevations)
     function GetElevations: T3DRealPointArray2;
     // @name tests whether OtherPoint and Point are different.
-    function PointsAreDifferent(const OtherPoint, Point: T3DRealPoint): boolean;
+    function PointsAreDifferent(const OtherPoint, Point: TPoint3D): boolean;
     // @name updates @link(FCachedElevations).
     procedure UpdateCache;
   public

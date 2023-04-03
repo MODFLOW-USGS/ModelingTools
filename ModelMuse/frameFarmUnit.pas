@@ -56,6 +56,8 @@ type
     frameDiversionsOwhm2: TframeMultSemiRouted;
     tabReturnFlowOwhm2: TTabSheet;
     frameReturnFlowsOwhm2: TframeMultSemiRouted;
+    tabSwAllotment: TTabSheet;
+    frameSwAllotment: TframeFormulaGrid;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -186,6 +188,15 @@ type
     procedure frameNoReturnFlowsbDeleteClick(Sender: TObject);
     procedure frameFormulaGridDiversionGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameSwAllotmentedFormulaChange(Sender: TObject);
+    procedure frameSwAllotmentseNumberChange(Sender: TObject);
+    procedure frameSwAllotmentsbAddClick(Sender: TObject);
+    procedure frameSwAllotmentsbInsertClick(Sender: TObject);
+    procedure frameSwAllotmentsbDeleteClick(Sender: TObject);
+    procedure frameSwAllotmentGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameSwAllotmentGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -193,7 +204,8 @@ type
     FOnChange: TNotifyEvent;
     FChangedID: Boolean;
     FChanging: Boolean;
-    FChangedAllotment: Boolean;
+    FChangedSwAllotment: Boolean;
+    FChangedGwAllotment: Boolean;
     FEfficiencyImprovementChanged: Boolean;
     FAddedDemandRunoffSplitChanged: Boolean;
     FIrrigationUniformityChanged: Boolean;
@@ -217,6 +229,7 @@ type
     procedure GetCostsForFirstFarm(FirstFarm: TFarm);
     procedure GetWaterRightsForFirstFarm(FirstFarm: TFarm);
     procedure GetGwAllotmentForFirstFarm(FirstFarm: TFarm);
+    procedure GetSwAllotmentForFirstFarm(FirstFarm: TFarm);
     procedure GetMaxTimeAndCountForCrops(var MaxIndex, MaxTimeCount: Integer;
       AFarm: TFarm);
     procedure SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection;
@@ -237,6 +250,7 @@ type
     procedure SetFarmCosts(Farm: TFarm);
     procedure SetWaterRights(Farm: TFarm);
     procedure SetGwAllotment(Farm: TFarm);
+    procedure SetSwAllotment(Farm: TFarm);
 
     procedure Change(Sender: TObject);
     property Changing: Boolean read FChanging write FChanging;
@@ -474,6 +488,7 @@ begin
       ClearGrid(frameFormulaGridCosts.Grid);
       ClearGrid(frameFormulaGridWaterRights.Grid);
       ClearGrid(frameGW_Allocation.Grid);
+      ClearGrid(frameSwAllotment.Grid);
       ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
       ClearGrid(frameAddedDemandRunoffSplit.Grid);
       ClearGrid(frameIrrigationUniformity.Grid);
@@ -511,6 +526,7 @@ begin
       frameFormulaGridCosts.Grid.BeginUpdate;
       frameFormulaGridWaterRights.Grid.BeginUpdate;
       frameGW_Allocation.Grid.BeginUpdate;
+      frameSwAllotment.Grid.BeginUpdate;
       frameFormulaGridEfficiencyImprovement.Grid.BeginUpdate;
       frameAddedDemandRunoffSplit.Grid.BeginUpdate;
       frameIrrigationUniformity.Grid.BeginUpdate;
@@ -525,6 +541,7 @@ begin
         ClearGrid(frameFormulaGridCosts.Grid);
         ClearGrid(frameFormulaGridWaterRights.Grid);
         ClearGrid(frameGW_Allocation.Grid);
+        ClearGrid(frameSwAllotment.Grid);
         ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
         ClearGrid(frameAddedDemandRunoffSplit.Grid);
         ClearGrid(frameIrrigationUniformity.Grid);
@@ -550,6 +567,7 @@ begin
         GetCostsForFirstFarm(FirstFarm);
         GetWaterRightsForFirstFarm(FirstFarm);
         GetGwAllotmentForFirstFarm(FirstFarm);
+        GetSwAllotmentForFirstFarm(FirstFarm);
 
         if FarmList.Count = 1 then
         begin
@@ -622,6 +640,18 @@ begin
           begin
             ClearGrid(frameGW_Allocation.Grid);
             frameGW_Allocation.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.SWAllotment.IsSame(
+            FirstFarm.SWAllotment) then
+          begin
+            ClearGrid(frameSwAllotment.Grid);
+            frameSwAllotment.seNumber.AsInteger := 0;
             break;
           end;
         end;
@@ -728,6 +758,7 @@ begin
         frameFormulaGridCosts.Grid.EndUpdate;
         frameFormulaGridWaterRights.Grid.EndUpdate;
         frameGW_Allocation.Grid.EndUpdate;
+        frameSwAllotment.Grid.EndUpdate;
         frameAddedDemandRunoffSplit.Grid.EndUpdate;
         frameIrrigationUniformity.Grid.EndUpdate;
         frameDeficiencyScenario.Grid.EndUpdate;
@@ -783,7 +814,8 @@ begin
       FChangedCosts := False;
       FChangedWaterRights := False;
       FChangedID := False;
-      FChangedAllotment := false;
+      FChangedGwAllotment := false;
+      FChangedSwAllotment := False;
       FEfficiencyImprovementChanged := False;
       FAddedDemandRunoffSplitChanged := False;
       FIrrigationUniformityChanged := False;
@@ -1423,7 +1455,7 @@ procedure TframeFarm.frameGW_AllocationedFormulaChange(Sender: TObject);
 begin
   inherited;
   frameGW_Allocation.edFormulaChange(Sender);
-  FChangedAllotment := True;
+  FChangedGwAllotment := True;
 end;
 
 procedure TframeFarm.frameGW_AllocationGridButtonClick(Sender: TObject; ACol,
@@ -1437,7 +1469,7 @@ procedure TframeFarm.frameGW_AllocationGridSetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
 begin
   inherited;
-  FChangedAllotment := True;
+  FChangedGwAllotment := True;
   UpdateEndTime(Sender, ACol, ARow);
 //  UpdateNextTimeCell(frameGW_Allocation.Grid, ACol, ARow);
   DoChange;
@@ -1447,7 +1479,7 @@ procedure TframeFarm.frameGW_AllocationsbAddClick(Sender: TObject);
 begin
   inherited;
   frameGW_Allocation.sbAddClick(Sender);
-  FChangedAllotment := True;
+  FChangedGwAllotment := True;
   DoChange;
 end;
 
@@ -1455,7 +1487,7 @@ procedure TframeFarm.frameGW_AllocationsbDeleteClick(Sender: TObject);
 begin
   inherited;
   frameGW_Allocation.sbDeleteClick(Sender);
-  FChangedAllotment := True;
+  FChangedGwAllotment := True;
   DoChange;
 end;
 
@@ -1463,7 +1495,7 @@ procedure TframeFarm.frameGW_AllocationsbInsertClick(Sender: TObject);
 begin
   inherited;
   frameGW_Allocation.sbInsertClick(Sender);
-  FChangedAllotment := True;
+  FChangedGwAllotment := True;
   DoChange;
 end;
 
@@ -1471,7 +1503,7 @@ procedure TframeFarm.frameGW_AllocationseNumberChange(Sender: TObject);
 begin
   inherited;
   frameGW_Allocation.seNumberChange(Sender);
-  FChangedAllotment := True;
+  FChangedGwAllotment := True;
   DoChange;
 end;
 
@@ -1579,6 +1611,61 @@ begin
   frameNoReturnFlow.seNumberChange(Sender);
   FNoReturnFlowChanged := True;
   DoChange;
+end;
+
+procedure TframeFarm.frameSwAllotmentedFormulaChange(Sender: TObject);
+begin
+  inherited;
+  frameSwAllotment.edFormulaChange(Sender);
+  FChangedSwAllotment := True;
+end;
+
+procedure TframeFarm.frameSwAllotmentGridButtonClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameSwAllotmentGridSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  FChangedSwAllotment := True;
+  UpdateEndTime(Sender, ACol, ARow);
+//  UpdateNextTimeCell(frameGW_Allocation.Grid, ACol, ARow);
+  DoChange;
+
+end;
+
+procedure TframeFarm.frameSwAllotmentsbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameSwAllotment.sbAddClick(Sender);
+  FChangedSwAllotment := True;
+
+end;
+
+procedure TframeFarm.frameSwAllotmentsbDeleteClick(Sender: TObject);
+begin
+  inherited;
+  frameSwAllotment.sbDeleteClick(Sender);
+  FChangedSwAllotment := True;
+end;
+
+procedure TframeFarm.frameSwAllotmentsbInsertClick(Sender: TObject);
+begin
+  inherited;
+  frameSwAllotment.sbInsertClick(Sender);
+  FChangedSwAllotment := True;
+end;
+
+procedure TframeFarm.frameSwAllotmentseNumberChange(Sender: TObject);
+begin
+  inherited;
+  frameSwAllotment.seNumberChange(Sender);
+  FChangedSwAllotment := True;
+
 end;
 
 procedure TframeFarm.frameWaterSourceedFormulaChange(Sender: TObject);
@@ -1847,8 +1934,29 @@ begin
   frameDiversionsOwhm2.InitializeControls;
   frameReturnFlowsOwhm2.InitializeControls;
 
-  tabGW_Allocation.TabVisible := frmGoPhast.PhastModel.ModflowPackages.
-    FarmProcess.GroundwaterAllotmentsUsed;
+  if frmGoPhast.ModelSelection = msModflowFmp then
+  begin
+    tabGW_Allocation.Caption := 'GW Allocation';
+    tabGW_Allocation.TabVisible := Packages.FarmProcess.
+      GroundwaterAllotmentsUsed;
+  end
+  else
+  begin
+    {$IFDEF OWHMV2}
+    Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
+    {$ENDIF}
+    tabGW_Allocation.Caption := 'GW Allotment';
+    tabGW_Allocation.TabVisible := Packages.FarmAllotments.IsSelected
+      and (Packages.FarmAllotments.GroundWater.FarmOption <> foNotUsed);
+  end;
+
+
+{$IFDEF OWHMV2}
+  tabSwAllotment.TabVisible := Packages.FarmAllotments.IsSelected
+      and (Packages.FarmAllotments.SurfaceWater.FarmOption <> foNotUsed);
+{$ELSE}
+  tabSwAllotment.TabVisible := False;
+{$ENDIF}
 
   pcMain.ActivePageIndex := 0;
   StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
@@ -2048,6 +2156,23 @@ begin
       Grid.EndUpdate;
     end;
     frameGW_Allocation.LayoutMultiRowEditControls;
+
+    Grid := frameSwAllotment.Grid;
+    ClearGrid(Grid);
+    Grid.BeginUpdate;
+    try
+      frameFormulaGridWaterRights.FirstFormulaColumn := Ord(gacAllotment);
+      Grid.Cells[Ord(gacStartTime), 0] := StrStartingTime;
+      Grid.Cells[Ord(gacEndTime), 0] := StrEndingTime;
+      Grid.Cells[Ord(gacAllotment), 0] := 'Surface-water allotment';
+      Grid.Columns[Ord(gacStartTime)].PickList := StartTimes;
+      Grid.Columns[Ord(gacEndTime)].PickList := EndTimes;
+      Grid.Columns[Ord(gacStartTime)].ComboUsed := True;
+      Grid.Columns[Ord(gacEndTime)].ComboUsed := True;
+    finally
+      Grid.EndUpdate;
+    end;
+    frameSwAllotment.LayoutMultiRowEditControls;
 
   finally
     EndTimes.Free;
@@ -2254,7 +2379,7 @@ begin
     end;
   end;
 
-  if FChangedAllotment then
+  if FChangedGwAllotment then
   begin
     for index := 0 to FarmList.Count - 1 do
     begin
@@ -2265,6 +2390,19 @@ begin
       end;
     end;
   end;
+
+  if FChangedSwAllotment then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetSwAllotment(Farm);
+      end;
+    end;
+  end;
+
   if {FarmCreated or} frameFormulaGridDiversion.DataChanged then
   begin
     frameFormulaGridDiversion.SetData(FarmList, dtDiversion);
@@ -2439,6 +2577,26 @@ begin
     Grid.RealValue[Ord(nrfcStartTime), Row] := Item.StartTime;
     Grid.RealValue[Ord(nrfcEndTime), Row] := Item.EndTime;
     Grid.ItemIndex[Ord(nrfcValue), Row] := Ord(Item.NoReturnOption);
+  end;
+end;
+
+procedure TframeFarm.GetSwAllotmentForFirstFarm(FirstFarm: TFarm);
+var
+  AFarm: TFarm;
+  Grid: TRbwDataGrid4;
+  TimeIndex: Integer;
+  ATimeItem: TAllotmentItem;
+begin
+  AFarm := FirstFarm;
+  frameSwAllotment.seNumber.AsInteger := AFarm.SWAllotment.Count;
+  frameSwAllotment.seNumber.OnChange(frameSwAllotment.seNumber);
+  Grid := frameSwAllotment.Grid;
+  for TimeIndex := 0 to AFarm.SWAllotment.Count - 1 do
+  begin
+    ATimeItem := AFarm.SWAllotment[TimeIndex];
+    Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
+    Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
+    Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.Allotment;
   end;
 end;
 
@@ -3064,6 +3222,44 @@ begin
       Inc(ItemCount);
     end;
     Farm.NoReturnFlow.Count := ItemCount;
+  end;
+end;
+
+procedure TframeFarm.SetSwAllotment(Farm: TFarm);
+var
+  Allotment: TAllotmentCollection;
+  Grid: TRbwDataGrid4;
+  Count: Integer;
+  RowIndex: Integer;
+  StartTime: double;
+  EndTime: double;
+  AllotmentItem: TAllotmentItem;
+begin
+  Allotment := Farm.SWAllotment;
+  Grid := frameSwAllotment.Grid;
+  Count := 0;
+  for RowIndex := 1 to frameSwAllotment.seNumber.AsInteger do
+  begin
+    if TryStrToFloat(Grid.Cells[Ord(gacStartTime), RowIndex], StartTime)
+      and TryStrToFloat(Grid.Cells[Ord(gacEndTime), RowIndex], EndTime) then
+    begin
+      if Count < Allotment.Count then
+      begin
+        AllotmentItem := Allotment[Count];
+      end
+      else
+      begin
+        AllotmentItem := Allotment.Add;
+      end;
+      Inc(Count);
+      AllotmentItem.StartTime := StartTime;
+      AllotmentItem.EndTime := EndTime;
+      AllotmentItem.Allotment := Grid.Cells[Ord(gacAllotment), RowIndex];
+    end;
+  end;
+  while Allotment.Count > Count do
+  begin
+    Allotment.Last.Free;
   end;
 end;
 

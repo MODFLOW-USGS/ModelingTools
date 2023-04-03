@@ -5,8 +5,7 @@ interface
 uses System.UITypes,Winapi.Windows, SysUtils, Classes, Contnrs, RbwParser,
   PhastModelUnit,
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, ScreenObjectUnit,
-  ModflowBoundaryUnit, OrderedCollectionUnit, ModflowBoundaryDisplayUnit,
-  Vcl.Dialogs;
+  ModflowBoundaryDisplayUnit, Vcl.Dialogs;
 
 type
   TModflowUzfWriter = class(TCustomTransientWriter)

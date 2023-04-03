@@ -54,7 +54,7 @@ type
 
 implementation
 
-uses frmGoPhastUnit, PhastModelUnit, GoPhastTypes;
+uses frmGoPhastUnit, PhastModelUnit;
 
 { TTopLeakyDataSets }
 

@@ -86,8 +86,8 @@ var
 
 implementation
 
-uses RbwParser, frmGoPhastUnit, DataSetUnit, PhastModelUnit, ReadGlobalsUnit,
-  IntListUnit, ModelMuseUtilities;
+uses RbwParser, frmGoPhastUnit, PhastModelUnit, ReadGlobalsUnit,
+  IntListUnit, {ModelMuseUtilities,} GoPhastTypes;
 
 resourcestring
   StrChangeGlobalVariab = 'change global variables';

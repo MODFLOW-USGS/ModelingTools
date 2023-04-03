@@ -2,9 +2,9 @@ unit ModflowSfrSegment;
 
 interface
 
-uses Windows, Classes, SysUtils, ZLib, RbwParser, GoPhastTypes,
+uses Windows, Classes, SysUtils, ZLib, GoPhastTypes,
   OrderedCollectionUnit, ModflowCellUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, SubscriptionUnit, SparseDataSets;
+  FormulaManagerUnit, SubscriptionUnit;
 
 type
   TSfrSegmentRecord = record
@@ -220,8 +220,8 @@ resourcestring
 
 implementation
 
-uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  ModflowSfrUnit, TempFiles, frmGoPhastUnit, frmErrorsAndWarningsUnit;
+uses DataSetUnit, ScreenObjectUnit, PhastModelUnit,
+  ModflowSfrUnit, frmGoPhastUnit, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrStreambedThickness = 'Streambed thickness';

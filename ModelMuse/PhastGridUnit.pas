@@ -579,7 +579,7 @@ procedure TPhastGrid.DrawFront(const BitMap: TPersistent;
       const ZoomBox: TQRbwZoomBox2);
 var
   LayerIndex, ColumnIndex: integer;
-  Point1, Point2, Point3, Point4: T3DRealPoint;
+  Point1, Point2, Point3, Point4: TPoint3D;
   AColor, NewColor: TColor;
   PriorLayer: integer;
   BoxCoordinates: TPointArray;
@@ -588,7 +588,7 @@ var
   LineWidth: single;
   P: TPolygon32;
   MultiplePolygons: boolean;
-  function GetNodeBasedCorner(Col, Row, Lay: integer): T3DRealPoint;
+  function GetNodeBasedCorner(Col, Row, Lay: integer): TPoint3D;
   begin
     if (Col = 0) or (Col > ColumnCount) then
     begin
@@ -798,7 +798,7 @@ procedure TPhastGrid.DrawSide(const BitMap: TPersistent;
       const ZoomBox: TQRbwZoomBox2);
 var
   LayerIndex, RowIndex: integer;
-  Point1, Point2, Point3, Point4: T3DRealPoint;
+  Point1, Point2, Point3, Point4: TPoint3D;
   AColor, NewColor: TColor;
   PriorLayer: integer;
   BoxCoordinates: TPointArray;
@@ -807,7 +807,7 @@ var
   LineWidth: single;
   P: TPolygon32;
   MultiplePolygons: boolean;
-  function GetNodeBasedCorner(Col, Row, Lay: integer): T3DRealPoint;
+  function GetNodeBasedCorner(Col, Row, Lay: integer): TPoint3D;
   begin
     if (Row = 0) or (Row > RowCount) then
     begin
@@ -1266,8 +1266,8 @@ procedure TPhastGrid.DrawOrdinarySideRows(const ZoomBox: TQRbwZoomBox2;
 var
   RowIndex: Integer;
   LineWidth: Single;
-  Point1: T3DRealPoint;
-  Point2: T3DRealPoint;
+  Point1: TPoint3D;
+  Point2: TPoint3D;
   LocalEvalAt: TEvaluatedAt;
   LineColor: TColor32;
   Column: Integer;
@@ -1389,8 +1389,8 @@ var
   LineWidth: Single;
   LineColor: TColor32;
   LocalEvalAt: TEvaluatedAt;
-  Point1: T3DRealPoint;
-  Point2: T3DRealPoint;
+  Point1: TPoint3D;
+  Point2: TPoint3D;
   Column: Integer;
   RowIndex: Integer;
   LocalLineWidth: single;
@@ -1509,8 +1509,8 @@ var
   ColumnIndex: Integer;
   LineColor: TColor32;
   LocalEvalAt: TEvaluatedAt;
-  Point1: T3DRealPoint;
-  Point2: T3DRealPoint;
+  Point1: TPoint3D;
+  Point2: TPoint3D;
   LineWidth: Single;
   Row: Integer;
   LayerIndex: Integer;
@@ -1632,8 +1632,8 @@ var
   LocalEvalAt: TEvaluatedAt;
   LineWidth: Single;
   LineColor: TColor32;
-  Point1: T3DRealPoint;
-  Point2: T3DRealPoint;
+  Point1: TPoint3D;
+  Point2: TPoint3D;
   Row: Integer;
   ColIndex: Integer;
   LocalLineWidth: Extended;

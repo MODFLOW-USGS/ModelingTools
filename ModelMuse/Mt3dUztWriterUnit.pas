@@ -4,9 +4,9 @@ interface
 
 uses System.UITypes, System.Classes,
   Windows, CustomModflowWriterUnit, ModflowBoundaryUnit, ModflowPackageSelectionUnit,
-  ScreenObjectUnit, ModflowCellUnit, OrderedCollectionUnit,
+  ScreenObjectUnit, ModflowCellUnit,
   System.Generics.Collections, PhastModelUnit, Vcl.Forms,
-  ModflowBoundaryDisplayUnit, Vcl.Dialogs;
+  ModflowBoundaryDisplayUnit, Vcl.Dialogs, GoPhastTypes;
 
 type
   TEvaluatePhase = (epRech, epSatEt, epUnsatEt);
@@ -46,7 +46,7 @@ implementation
 
 uses
   Mt3dmsChemUnit, frmErrorsAndWarningsUnit, System.SysUtils, ModflowUnitNumbers,
-  frmProgressUnit, GoPhastTypes, DataSetUnit, RbwParser;
+  frmProgressUnit, DataSetUnit, RbwParser;
 
 resourcestring
   StrTheUztPackageHasB = 'The %0:s package has been activated but no %1:s ' +

@@ -24,7 +24,8 @@ type
     wlAddedDemandRunoffSplit, wlIrrigationUniformity, wlDeficiencyScenario,
     wlWaterSource, wlAddedCropDemandFlux, wlAddedCropDemandRate,
     wlPrecipicationTable, wlSoilCoefficient, wlNoReturnFlow,
-    wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit);
+    wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit, wlSwAllotment,
+    wlGwAllotment);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -68,6 +69,7 @@ type
     FSurfaceWater4: TFarmProcess4SurfaceWater;
     FSalinityFlush: TFarmProcess4SalinityFlush;
     FSoil4: TFarmProcess4Soil;
+    FAllotments: TFarmProcess4Allotments;
 
     FACtiveSurfaceCells: array of array of boolean;
     FWriteLocation: TWriteLocation;
@@ -144,6 +146,9 @@ type
     FSemiRoutedDeliveryFileStream: TFileStream;
     FSemiRoutedDeliveryLowerLimitFileStream: TFileStream;
     FSemiRoutedDeliveryUpperLimitFileStream: TFileStream;
+    FSemiRoutedReturnFileStream: TFileStream;
+    FSurfaceWaterAllotmentFileStream: TFileStream;
+    FGroundWaterAllotmentFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -235,15 +240,21 @@ type
     procedure WriteNrdInfilLocation;
     procedure PrintSurfaceWaterOutputOptions;
 
-    procedure WriteSemiRoutedDelivery; // finish
-    procedure WriteSemiRoutedDeliveryLowerLimit; // finish
-    procedure WriteSemiRoutedDeliveryUpperLimit; // finish
+    procedure WriteSemiRoutedDelivery;
+    procedure WriteSemiRoutedDeliveryLowerLimit;
+    procedure WriteSemiRoutedDeliveryUpperLimit;
     procedure WriteSemiRoutedDeliveryClosureTolerance; 
     
     procedure WriteNoReturnFlow; 
-    procedure WriteSemiRoutedReturn; // finish
+    procedure WriteSemiRoutedReturn;
     procedure WriteRoutedReturn; 
     procedure WriteRebuildFullyRoutedReturn;
+
+    // ALLOTMENT
+    // SURFACE_WATER
+    procedure WriteSurfaceWaterAllotment;
+    // GROUNDWATER
+    procedure WriteGroundWaterAllotment;
 
     // Land use
     // LOCATION
@@ -405,9 +416,10 @@ implementation
 
 uses
   frmErrorsAndWarningsUnit, ModflowFmpWriterUnit,
-  ModflowFmpFarmIdUnit, ModflowUnitNumbers, frmProgressUnit, ModflowFmpEvapUnit,
-  ModflowFmpPrecipitationUnit, ModflowFmpFarmUnit, System.Math, System.StrUtils,
-  ModflowFmpIrrigationUnit, ModflowFmpCropUnit, ModflowFmpBaseClasses;
+  ModflowUnitNumbers, frmProgressUnit,
+  ModflowFmpFarmUnit, System.StrUtils,
+  ModflowFmpIrrigationUnit, ModflowFmpCropUnit, ModflowFmpBaseClasses,
+  ModflowFmpAllotmentUnit;
 
 resourcestring
   StrUndefinedError = 'Undefined %s in one or more stress periods';
@@ -604,6 +616,7 @@ begin
   FLandUse := Model.ModflowPackages.FarmLandUse;
   FSoil4 := Model.ModflowPackages.FarmSoil4;
   FSurfaceWater4 := Model.ModflowPackages.FarmSurfaceWater4;
+  FAllotments := Model.ModflowPackages.FarmAllotments;
   FSalinityFlush := Model.ModflowPackages.FarmSalinityFlush;
   FFmpSoils := Model.FmpSoils;
 end;
@@ -1114,6 +1127,9 @@ begin
   FreeAndNil(FSemiRoutedDeliveryFileStream);
   FreeAndNil(FSemiRoutedDeliveryLowerLimitFileStream);
   FreeAndNil(FSemiRoutedDeliveryUpperLimitFileStream);
+  FreeAndNil(FSemiRoutedReturnFileStream);
+  FreeAndNil(FSurfaceWaterAllotmentFileStream);
+  FreeAndNil(FGroundWaterAllotmentFileStream);
 
 end;
 
@@ -1209,6 +1225,12 @@ begin
       end;
     wlSemiRouteReturn:
       begin
+        result := ChangeFileExt(FBaseName, '.semi_routed_return');
+        if FSemiRoutedReturnFileStream = nil then
+        begin
+          FSemiRoutedReturnFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
       end;
     wlCall:
       begin
@@ -1512,10 +1534,28 @@ begin
       end;
     wlSemiRouteDeliveryUpperLimit:
       begin
-        result := ChangeFileExt(FBaseName, '.semi_routed_delivery_upperr_limit');
+        result := ChangeFileExt(FBaseName, '.semi_routed_delivery_upper_limit');
         if FSemiRoutedDeliveryUpperLimitFileStream = nil then
         begin
           FSemiRoutedDeliveryUpperLimitFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlSwAllotment:
+      begin
+        result := ChangeFileExt(FBaseName, '.surface_water_allotment');
+        if FSurfaceWaterAllotmentFileStream = nil then
+        begin
+          FSurfaceWaterAllotmentFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlGwAllotment:
+      begin
+        result := ChangeFileExt(FBaseName, '.groundwater_allotment');
+        if FGroundWaterAllotmentFileStream = nil then
+        begin
+          FGroundWaterAllotmentFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
         end;
       end;
@@ -1697,6 +1737,8 @@ begin
     wlNoReturnFlow: ;
     wlSemiRouteDeliveryLowerLimit: ;
     wlSemiRouteDeliveryUpperLimit: ;
+    wlSwAllotment: ;
+    wlGwAllotment: ;
     else Assert(False);
   end;
 end;
@@ -1757,6 +1799,8 @@ begin
     wlNoReturnFlow: ;
     wlSemiRouteDeliveryLowerLimit: ;
     wlSemiRouteDeliveryUpperLimit: ;
+    wlSwAllotment: ;
+    wlGwAllotment: ;
     else Assert(False)
   end;
 end;
@@ -4265,7 +4309,20 @@ end;
 
 procedure TModflowFmp4Writer.WriteAllotments;
 begin
+  if FAllotments.IsSelected then
+  begin
+    WriteString('BEGIN ALLOTMENTS');
+    NewLine;
 
+    // SURFACE_WATER
+    WriteSurfaceWaterAllotment;
+    // GROUNDWATER
+    WriteGroundWaterAllotment;
+
+    WriteString('END ALLOTMENTS');
+    NewLine;
+    NewLine;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteBareEvap;
@@ -6394,6 +6451,167 @@ begin
   NewLine;
 end;
 
+procedure TModflowFmp4Writer.WriteGroundWaterAllotment;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  AllotmentItem: TAllotmentItem;
+  procedure WriteAllotmentItem(AFarm: TFarm; AllotmentItem: TAllotmentItem);
+  var
+    Formula: string;
+  begin
+    if AllotmentItem <> nil then
+    begin
+      Formula := AllotmentItem.Allotment;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        'Invalid ground water allotment formula in ' + AFarm.FarmName);
+    end
+    else
+    begin
+      WriteInteger(1);
+    end;
+  end;
+begin
+  if FAllotments.GroundWater.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlGwAllotment;
+  RequiredValues.DefaultValue := 1;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP ALLOTMENTS: GwAllotment';
+  RequiredValues.ErrorID := 'FMP ALLOTMENTS: GwAllotment';
+  RequiredValues.ID := 'GwAllotment';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FAllotments.GroundWater.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := 'Invalid ground water allotment value';
+  case FAllotments.GroundWaterAllotmentMethod of
+    amHeight:
+      begin
+        RequiredValues.Option := 'HEIGHT ';
+      end;
+    amVolume:
+      begin
+        RequiredValues.Option := 'VOLUME ';
+      end;
+    amRate:
+      begin
+        RequiredValues.Option := 'RATE ';
+      end;
+  end;
+  RequiredValues.FarmProperty := FAllotments.GroundWater;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlGwAllotment);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              WriteInteger(0);
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            AllotmentItem := AFarm.GwAllotment.ItemByStartTime(StartTime) as TAllotmentItem;
+            WriteAllotmentItem(AFarm, AllotmentItem);
+
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            WriteInteger(0);
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          if AFarm.GwAllotment.Count > 0 then
+          begin
+            AllotmentItem := AFarm.GwAllotment.First as TAllotmentItem;
+          end
+          else
+          begin
+            AllotmentItem := nil;
+          end;
+          WriteAllotmentItem(AFarm, AllotmentItem);
+
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteGroundwaterRootInteraction;
 var
   AFileName: string;
@@ -7650,9 +7868,8 @@ begin
         end;
       wlSemiRouteReturn:
         begin
-          Assert(False);
-//          Assert(FSemiReturn_FileStream <> nil);
-//          FSemiReturn_FileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+          Assert(FSemiRoutedReturnFileStream <> nil);
+          FSemiRoutedReturnFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       wlCall:
         begin
@@ -7830,6 +8047,16 @@ begin
           Assert(FSemiRoutedDeliveryUpperLimitFileStream <> nil);
           FSemiRoutedDeliveryUpperLimitFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlSwAllotment:
+        begin
+          Assert(FSurfaceWaterAllotmentFileStream <> nil);
+          FSurfaceWaterAllotmentFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlGwAllotment:
+        begin
+          Assert(FGroundWaterAllotmentFileStream <> nil);
+          FGroundWaterAllotmentFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -7942,6 +8169,167 @@ begin
     WriteString('END SURFACE_WATER');
     NewLine;
     NewLine;
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteSurfaceWaterAllotment;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+  AllotmentItem: TAllotmentItem;
+  procedure WriteAllotmentItem(AFarm: TFarm; AllotmentItem: TAllotmentItem);
+  var
+    Formula: string;
+  begin
+    if AllotmentItem <> nil then
+    begin
+      Formula := AllotmentItem.Allotment;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        'Invalid surface water allotment formula in ' + AFarm.FarmName);
+    end
+    else
+    begin
+      WriteInteger(1);
+    end;
+  end;
+begin
+  if FAllotments.SurfaceWater.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlSwAllotment;
+  RequiredValues.DefaultValue := 1;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP ALLOTMENTS: SURFACE_WATER';
+  RequiredValues.ErrorID := 'FMP ALLOTMENTS: SURFACE_WATER';
+  RequiredValues.ID := 'SURFACE_WATER';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FAllotments.SurfaceWater.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := 'Invalid surface water allotment value';
+  case FAllotments.SurfaceWaterAllotmentMethod of
+    amHeight:
+      begin
+        RequiredValues.Option := 'HEIGHT ';
+      end;
+    amVolume:
+      begin
+        RequiredValues.Option := 'VOLUME ';
+      end;
+    amRate:
+      begin
+        RequiredValues.Option := 'RATE ';
+      end;
+  end;
+  RequiredValues.FarmProperty := FAllotments.SurfaceWater;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlSwAllotment);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              WriteInteger(0);
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            AllotmentItem := AFarm.SWAllotment.ItemByStartTime(StartTime) as TAllotmentItem;
+            WriteAllotmentItem(AFarm, AllotmentItem);
+
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            WriteInteger(0);
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          if AFarm.SWAllotment.Count > 0 then
+          begin
+            AllotmentItem := AFarm.SWAllotment.First as TAllotmentItem;
+          end
+          else
+          begin
+            AllotmentItem := nil;
+          end;
+          WriteAllotmentItem(AFarm, AllotmentItem);
+
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
   end;
 end;
 

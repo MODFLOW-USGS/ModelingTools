@@ -5,9 +5,9 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ScreenObjectUnit,
-  ComCtrls, DataSetUnit, VirtualTrees, FastGEO, GoPhastTypes, SsButtonEd,
-  RbwStringTreeCombo, Grids, RbwDataGrid4, ExtCtrls, JvExExtCtrls,
-  JvExtComponent, JvRollOut, RbwRollupPanel, Vcl.Mask;
+  DataSetUnit, VirtualTrees, FastGEO, GoPhastTypes, SsButtonEd,
+  RbwStringTreeCombo, Grids, RbwDataGrid4, ExtCtrls,
+  RbwRollupPanel, Vcl.Mask;
 
 type
   TPathLineColumn = (plcLabel, plcFirst, plcLast, plcClosest);
@@ -166,12 +166,12 @@ var
 
 implementation
 
-uses Clipbrd, CustomModflowWriterUnit, AbstractGridUnit, frmGoPhastUnit, 
+uses AbstractGridUnit, frmGoPhastUnit,
   GIS_Functions, RbwParser, Contnrs, ClassificationUnit,
   PhastModelUnit, PathlineReader, QuadtreeClass, ZoomBox2, InteractiveTools,
-  frmSutraLayersUnit, SutraMeshUnit, UndoItems, DisplaySettingsUnit,
+  SutraMeshUnit, DisplaySettingsUnit,
   System.Generics.Collections, ModflowSwrStructureUnit,
-  ModflowIrregularMeshUnit, ModflowGncUnit, System.Math;
+  ModflowIrregularMeshUnit, ModflowGncUnit;
 
 resourcestring
   StrSelectedObject = 'Selected object';

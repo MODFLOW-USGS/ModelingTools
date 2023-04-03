@@ -153,7 +153,7 @@ implementation
 uses
   ModflowUnitNumbers, ModflowStrUnit, frmProgressUnit,
   frmErrorsAndWarningsUnit, GIS_Functions, ModflowTimeUnit, Math,
-  frmModflowOutputControlUnit, ModflowOutputControlUnit, DataSetUnit,
+  ModflowOutputControlUnit, DataSetUnit,
   PestPropertiesUnit;
 
 resourcestring

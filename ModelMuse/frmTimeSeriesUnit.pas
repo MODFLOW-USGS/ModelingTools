@@ -63,7 +63,7 @@ implementation
 
 uses
   System.Math, frmGoPhastUnit, ModflowParameterUnit, OrderedCollectionUnit,
-  System.UITypes, ModflowTimeUnit;
+  System.UITypes, ModflowTimeUnit, GoPhastTypes;
 
 resourcestring
   StrTimeSeriesGroupNa = 'Time series group names must be unique. The follow' +

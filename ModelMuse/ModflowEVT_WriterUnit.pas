@@ -5,8 +5,8 @@ interface
 uses System.UITypes, Winapi.Windows, SysUtils, Classes, Contnrs,
   RbwParser, CustomModflowWriterUnit,
   ScreenObjectUnit, ModflowBoundaryUnit, ModflowPackageSelectionUnit,
-  OrderedCollectionUnit, ModflowCellUnit, PhastModelUnit,
-  ModflowBoundaryDisplayUnit, Vcl.Dialogs;
+  ModflowCellUnit, PhastModelUnit,
+  ModflowBoundaryDisplayUnit, Vcl.Dialogs, GoPhastTypes;
 
 Type
   TModflowEVT_Writer = class(TCustomTransientArrayWriter)
@@ -47,8 +47,8 @@ Type
 
 implementation
 
-uses ModflowUnitNumbers, ModflowTransientListParameterUnit,
-  frmErrorsAndWarningsUnit, DataSetUnit, ModflowEvtUnit, GoPhastTypes, 
+uses ModflowUnitNumbers,
+  frmErrorsAndWarningsUnit, DataSetUnit, ModflowEvtUnit,
   frmProgressUnit, Forms;
 
 resourcestring

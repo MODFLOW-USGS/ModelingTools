@@ -427,7 +427,7 @@ procedure MoveToGridCenter;
 var
   XCoordinate, YCoordinate, ZCoordinate: double;
   TopPoint: TPoint2D;
-  FrontPoint, SidePoint: T3DRealPoint;
+  FrontPoint, SidePoint: TPoint3D;
   LocalGrid: TCustomModelGrid;
 begin
   LocalGrid := GetLocalGrid;

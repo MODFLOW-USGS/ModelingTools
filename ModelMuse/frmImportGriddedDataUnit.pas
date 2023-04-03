@@ -119,7 +119,7 @@ type
       ScreenObject: TScreenObject);
 //    procedure GetElevations(var Elevations: TValueArrayStorage;
 //      DataSet: TDataArray; ScreenObject: TScreenObject);
-    procedure GetLocation(var Point2D: TPoint2D; var APoint: T3DRealPoint;
+    procedure GetLocation(var Point2D: TPoint2D; var APoint: TPoint3D;
       Column: Integer; Row: Integer; Layer: Integer; DataSet: TDataArray);
     procedure AssignValueToScreenObject(ScreenObject: TScreenObject;
       StringData: string; BooleanData: Boolean; IntegerData: Integer;

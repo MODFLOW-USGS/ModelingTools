@@ -5,7 +5,7 @@ interface
 uses
   ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit, OrderedCollectionUnit,
   FormulaManagerUnit, GoPhastTypes, RbwParser, SubscriptionUnit, Mt3dmsChemUnit,
-  System.SysUtils;
+  System.SysUtils, GwtStatusUnit;
 
 type
   TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate,

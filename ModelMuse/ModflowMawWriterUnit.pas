@@ -92,7 +92,7 @@ uses
   DataSetUnit, GIS_Functions, AbstractGridUnit, System.Math, ModflowUnitNumbers,
   MeshRenumberingTypes, Vcl.Dialogs, Modflow6ObsWriterUnit,
   ModflowMvrUnit, ModflowMvrWriterUnit, ModflowParameterUnit,
-  ModelMuseUtilities, Mt3dmsChemUnit, Mt3dmsChemSpeciesUnit;
+  ModelMuseUtilities, Mt3dmsChemUnit, Mt3dmsChemSpeciesUnit, GwtStatusUnit;
 
 resourcestring
   StrTheFollowingObject = 'The following objects can not be used to define m' +

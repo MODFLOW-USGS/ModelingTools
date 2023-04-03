@@ -333,7 +333,7 @@ end;
 procedure MoveToFrontCell(Grid: TCustomModelGrid; const Column, Layer: integer);
 var
   XCoordinate, ZCoordinate: double;
-  FrontPoint: T3DRealPoint;
+  FrontPoint: TPoint3D;
 begin
   FrontPoint := Grid.ThreeDElementCenter(Column,
     Grid.SelectedRow, Layer);
@@ -345,7 +345,7 @@ end;
 procedure MoveToSideCell(Grid: TCustomModelGrid; const Row, Layer: integer);
 var
   YCoordinate, ZCoordinate: double;
-  SidePoint: T3DRealPoint;
+  SidePoint: TPoint3D;
 begin
   SidePoint := Grid.ThreeDElementCenter(
     Grid.SelectedColumn, Row, Layer);

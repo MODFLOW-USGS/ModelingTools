@@ -7,12 +7,13 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
   JvPageList, JvExControls, Vcl.ComCtrls, JvExComCtrls, JvPageListTreeView,
   ArgusDataEntry, PestPropertiesUnit, Vcl.Buttons, Vcl.ExtCtrls, UndoItems,
-  frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
+  frameGridUnit, PestObsUnit, frameParentChildUnit,
   PestObsGroupUnit, Vcl.Mask, JvExMask, JvToolEdit,
   FluxObservationUnit, ModflowHobUnit, System.UITypes,
   System.Generics.Collections, Vcl.Grids, RbwDataGrid4, JvSpin,
   OrderedCollectionUnit, ModflowParameterUnit,
-  ModflowTransientListParameterUnit, HufDefinition, JvExStdCtrls, JvHtControls;
+  ModflowTransientListParameterUnit, HufDefinition, JvExStdCtrls, JvHtControls,
+  GoPhastTypes;
 
 type
   TPestObsGroupColumn = (pogcName, pogcRegularization, pogcUseTarget,
@@ -482,10 +483,10 @@ const StrNone = '(none)';
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes, JvComCtrls, PhastModelUnit,
+  frmGoPhastUnit, PhastModelUnit,
   PointCollectionUnit, QuadTreeClass, ShapefileUnit, System.IOUtils, FastGEO,
   ModelMuseUtilities, ScreenObjectUnit, TriCP_Routines, TriPackRoutines,
-  SutraPestObsUnit, System.Math, PestControlFileWriterUnit;
+  SutraPestObsUnit, System.Math;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';

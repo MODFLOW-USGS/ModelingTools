@@ -3,7 +3,8 @@ inherited frmFilesToArchive: TfrmFilesToArchive
   HelpKeyword = 'Files_to_Archive_Dialog_Box'
   Caption = ' Files To Archive'
   ClientWidth = 631
-  ExplicitWidth = 647
+  ExplicitWidth = 643
+  ExplicitHeight = 272
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -12,7 +13,8 @@ inherited frmFilesToArchive: TfrmFilesToArchive
     Height = 73
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 153
+    ExplicitTop = 160
+    ExplicitWidth = 627
     DesignSize = (
       631
       73)
@@ -27,7 +29,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       OnLinkClick = JvLinkLabel1LinkClick
     end
     object btnCancel: TBitBtn
-      Left = 533
+      Left = 529
       Top = 30
       Width = 83
       Height = 32
@@ -35,9 +37,10 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 5
+      ExplicitLeft = 525
     end
     object btnOK: TBitBtn
-      Left = 444
+      Left = 440
       Top = 30
       Width = 83
       Height = 32
@@ -46,9 +49,10 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
+      ExplicitLeft = 436
     end
     object btnHelp: TBitBtn
-      Left = 357
+      Left = 353
       Top = 30
       Width = 81
       Height = 32
@@ -57,6 +61,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 349
     end
     object btnArchive: TButton
       Left = 8
@@ -101,7 +106,8 @@ inherited frmFilesToArchive: TfrmFilesToArchive
     OnCustomDrawItem = tvArchiveCustomDrawItem
     OnDragDrop = tvArchiveDragDrop
     OnDragOver = tvArchiveDragOver
-    ExplicitHeight = 153
+    ExplicitWidth = 627
+    ExplicitHeight = 160
   end
   object sdArchive: TSaveDialog
     DefaultExt = '.zip'

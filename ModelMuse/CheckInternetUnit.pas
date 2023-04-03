@@ -9,7 +9,7 @@ unit CheckInternetUnit;
 interface
 
 uses System.UITypes, Windows, SysUtils, Classes, Dialogs, Forms, IniFiles,
-  JvExStdCtrls, JvHtControls, System.Generics.Collections, Xml.VerySimple,
+  JvHtControls, System.Generics.Collections, Xml.VerySimple,
   System.StrUtils;
 
 type
@@ -65,7 +65,7 @@ const
 implementation
 
 uses
-  Math, RbwInternetUtilities, frmGoPhastUnit, IniFileUtilities, GoPhastTypes,
+  Math, RbwInternetUtilities, frmGoPhastUnit,
   StdCtrls, frmNewVersionUnit, System.IOUtils, frmNewVideoUnit;
 
 resourcestring

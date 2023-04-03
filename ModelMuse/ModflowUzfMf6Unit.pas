@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, ModflowCellUnit, System.Classes,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, GoPhastTypes,
-  SubscriptionUnit, Mt3dmsChemUnit;
+  SubscriptionUnit, Mt3dmsChemUnit, GwtStatusUnit;
 
 type
   TUzfOb = (uoGW_Recharge, uoGW_Discharge, uoDischargeToMvr,

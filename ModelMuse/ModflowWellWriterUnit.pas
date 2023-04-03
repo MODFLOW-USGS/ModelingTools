@@ -4,8 +4,8 @@ interface
 
 uses SysUtils, Classes, CustomModflowWriterUnit, ModflowWellUnit,
   ScreenObjectUnit, ModflowBoundaryUnit, ModflowPackageSelectionUnit,
-  ModflowCellUnit, OrderedCollectionUnit, ModflowBoundaryDisplayUnit,
-  ModflowTransientListParameterUnit, GoPhastTypes, System.Generics.Collections,
+  ModflowCellUnit, OrderedCollectionUnit,
+  GoPhastTypes, System.Generics.Collections,
   PhastModelUnit, Modflow6ObsUnit;
 
 type
@@ -67,8 +67,8 @@ type
 implementation
 
 uses ModflowUnitNumbers, frmProgressUnit, Forms, frmErrorsAndWarningsUnit,
-  System.IOUtils, ModflowTimeSeriesUnit, ModflowTimeSeriesWriterUnit,
-  ModflowMvrWriterUnit, ModflowMvrUnit, DataSetUnit, Mt3dmsChemSpeciesUnit;
+  System.IOUtils,
+  ModflowMvrWriterUnit, ModflowMvrUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrWritingWELPackage = 'Writing WEL Package input.';

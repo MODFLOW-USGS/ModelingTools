@@ -30,6 +30,7 @@ type
     procedure sbAddClick(Sender: TObject);
     procedure sbDeleteClick(Sender: TObject);
     procedure edSemiRouteNameChange(Sender: TObject);
+    procedure frameFarmDiversionsGridExit(Sender: TObject);
   private
     FSrItem: TMultiSrdItem;
     FFarm: TFarm;
@@ -80,6 +81,14 @@ begin
   end;
 end;
 
+procedure TframeMultSemiRouted.frameFarmDiversionsGridExit(Sender: TObject);
+begin
+  if FSrList.Count >= 0 then
+  begin
+    frameFarmDiversions.SetDataForListOfSemiRoutedLists(FSrList, FDiversionType);
+  end;
+end;
+
 procedure TframeMultSemiRouted.GetData(FarmList: TFarmList;
   DiversionType: TDiversionType);
 var
@@ -92,6 +101,10 @@ var
   SRItem: TMultiSrdItem;
   MultiSrd: TMultiSrdCollection;
 begin
+  if DiversionType = dtReturnFlow then
+  begin
+    frameFarmDiversions.Grid.ColCount := 6;
+  end;
   tvSRCollections.Items.Clear;
   FDiversionType := DiversionType;
   FarmNode := nil;

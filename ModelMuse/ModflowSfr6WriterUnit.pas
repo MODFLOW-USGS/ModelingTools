@@ -125,7 +125,7 @@ uses
   AbstractGridUnit, Modflow6ObsWriterUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO,
   Vcl.Dialogs, ModflowParameterUnit, ModelMuseUtilities, Mt3dmsChemSpeciesUnit,
-  Mt3dmsChemUnit;
+  Mt3dmsChemUnit, GwtStatusUnit;
 
 resourcestring
   StrTheFollowingPairO = 'The following pair of objects have the same SFR se' +

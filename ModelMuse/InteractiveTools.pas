@@ -1827,7 +1827,7 @@ end;
 
 procedure TCustomGridTool.ShowNewColumnOrLayer(const BitMap: TBitmap32);
 var
-  P1, P2: T3DRealPoint;
+  P1, P2: TPoint3D;
   CursorPoint: TPoint2D;
   Column: integer;
 begin
@@ -1938,7 +1938,7 @@ end;
 
 procedure TCustomGridTool.ShowNewRowOrLayer(const BitMap: TBitmap32);
 var
-  P1, P2: T3DRealPoint;
+  P1, P2: TPoint3D;
   CursorPoint: TPoint2D;
   Row: integer;
 begin
@@ -3337,7 +3337,7 @@ procedure TCustomCellSelectionTool.DrawSelectedFrontCells(FirstCol,
 const
   Opacity = 125;
 var
-  APoint: T3DRealPoint;
+  APoint: TPoint3D;
   L1, L2, C1, C2: integer;
   Polygon: TPointArray;
   SelectColor32: TColor32;
@@ -3486,7 +3486,7 @@ procedure TCustomCellSelectionTool.DrawSelectedSideCells(FirstRow, LastRow,
 const
   Opacity = 125;
 var
-  APoint: T3DRealPoint;
+  APoint: TPoint3D;
   L1, L2, R1, R2: integer;
   Polygon: TPointArray;
   SelectColor32: TColor32;

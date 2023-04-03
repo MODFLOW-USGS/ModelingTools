@@ -4,10 +4,10 @@ inherited frmCustomImportSimpleFile: TfrmCustomImportSimpleFile
   HelpType = htKeyword
   ActiveControl = comboDataSets
   Caption = 'frmCustomImportSimpleFile'
-  ClientHeight = 269
-  ClientWidth = 564
-  ExplicitWidth = 580
-  ExplicitHeight = 308
+  ClientHeight = 268
+  ClientWidth = 560
+  ExplicitWidth = 576
+  ExplicitHeight = 307
   TextHeight = 18
   object lblDataSet: TLabel
     Left = 8

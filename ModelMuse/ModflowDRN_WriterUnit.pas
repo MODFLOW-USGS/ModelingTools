@@ -2,9 +2,9 @@ unit ModflowDRN_WriterUnit;
 
 interface
 
-uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowDrnUnit,
+uses SysUtils, Classes, CustomModflowWriterUnit, ModflowDrnUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
-  ModflowPackageSelectionUnit, OrderedCollectionUnit, FluxObservationUnit,
+  ModflowPackageSelectionUnit, FluxObservationUnit,
   GoPhastTypes, Modflow6ObsUnit;
 
 type
@@ -60,10 +60,9 @@ type
 
 implementation
 
-uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
-  ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
-  ModflowParameterUnit, PestPropertiesUnit;
+uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit,
+  DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
+  PestPropertiesUnit;
 
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +

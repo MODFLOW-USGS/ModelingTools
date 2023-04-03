@@ -4,18 +4,18 @@ inherited frmShowHideObjects: TfrmShowHideObjects
   HelpType = htKeyword
   HelpKeyword = 'Show_or_Hide_Objects_Dialog_Box'
   Caption = 'Show or Hide Objects'
+  ClientWidth = 418
   KeyPreview = True
   Position = poDesigned
   OnClose = FormClose
   OnKeyUp = FormKeyUp
-  ExplicitWidth = 430
-  ExplicitHeight = 450
+  ExplicitWidth = 434
   TextHeight = 18
   inherited pnlBottom: TPanel
-    Top = 254
+    Top = 253
+    Width = 418
     Height = 158
     ExplicitTop = 253
-    ExplicitWidth = 414
     ExplicitHeight = 158
     inherited btnClose: TBitBtn
       Left = 314
@@ -98,7 +98,8 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     end
   end
   inherited vstObjects: TVirtualStringTree
-    Height = 254
+    Width = 418
+    Height = 253
     Images = ilAngles
     PopupMenu = pmSelectEdit
     OnChecked = vstObjectsChecked

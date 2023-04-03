@@ -30920,5 +30920,18 @@ object TTaskHistory
         'Documentation'
         'Dialog boxes'
         'FMP')
+    end
+    item
+      Date = 45017.000000000000000000
+    end
+    item
+      Date = 45018.000000000000000000
+    end
+    item
+      Date = 45019.000000000000000000
+      Categories.Strings = (
+        'Refactoring'
+        'FMP'
+        'Dialog boxes')
     end>
 end

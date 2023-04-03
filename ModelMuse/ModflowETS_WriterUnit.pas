@@ -6,7 +6,8 @@ uses System.UITypes,Winapi.Windows, SysUtils, Classes, Contnrs,
   RbwParser, CustomModflowWriterUnit,
   ScreenObjectUnit, ModflowBoundaryUnit, ModflowPackageSelectionUnit,
   OrderedCollectionUnit, ModflowCellUnit, PhastModelUnit,
-  ModflowBoundaryDisplayUnit, DataSetUnit, Vcl.Dialogs, Modflow6ObsUnit;
+  ModflowBoundaryDisplayUnit, DataSetUnit, Vcl.Dialogs, Modflow6ObsUnit,
+  GoPhastTypes;
 
 Type
   TModflowETS_Writer = class(TCustomTransientArrayWriter)
@@ -91,7 +92,7 @@ Type
 implementation
 
 uses ModflowUnitNumbers, ModflowTransientListParameterUnit,
-  frmErrorsAndWarningsUnit, ModflowEtsUnit, GoPhastTypes,
+  frmErrorsAndWarningsUnit, ModflowEtsUnit,
   frmProgressUnit, Forms, frmGoPhastUnit, ModflowEvtUnit, System.Math,
   SparseArrayUnit, SparseDataSets, Mt3dmsChemSpeciesUnit;
 

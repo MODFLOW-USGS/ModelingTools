@@ -527,6 +527,7 @@ type
     FNoReturnFlow: TNoReturnCollection;
     FMultiSrd: TMultiSrdCollection;
     FMultiSrReturns: TMultiSrdCollection;
+    FSWAllotment: TAllotmentCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -560,6 +561,7 @@ type
     procedure SetNoReturnFlow(const Value: TNoReturnCollection);
     procedure SetMultiSrd(const Value: TMultiSrdCollection);
     procedure SetMultiSrReturns(const Value: TMultiSrdCollection);
+    procedure SetSWAllotment(const Value: TAllotmentCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -594,7 +596,8 @@ type
     //Data Sets 39
     property WaterRights: TWaterRightsCollection read FWaterRights
       write SetWaterRights;
-    // Data Set 25
+    // Data Set 25 in OWHM version 1
+    // Groundwater in ALLOTMENTS in OWHM version 2
     property GwAllotment: TAllotmentCollection read FGwAllotment
       write SetGwAllotment;
     property FarmName: string read FFarmName write SetFarmName;
@@ -675,6 +678,13 @@ type
       // SEMI_ROUTED_RETURN
       property MultiSrReturns: TMultiSrdCollection read FMultiSrReturns
         write SetMultiSrReturns
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      // SURFACE_WATER in ALLOCATIONS
+    property SWAllotment: TAllotmentCollection read FSWAllotment
+      write SetSWAllotment
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1446,6 +1456,8 @@ begin
     NoReturnFlow := SourceFarm.NoReturnFlow;
     MultiSrDeliveries := SourceFarm.MultiSrDeliveries;
     MultiSrReturns := SourceFarm.MultiSrReturns;
+    SWAllotment := SourceFarm.SWAllotment;
+
   end
   else
   begin
@@ -1503,10 +1515,12 @@ begin
   FNoReturnFlow := TNoReturnCollection.Create(LocalModel);
   FMultiSrd := TMultiSrdCollection.Create(LocalModel);
   FMultiSrReturns := TMultiSrdCollection.Create(LocalModel);
+  FSWAllotment := TAllotmentCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FSWAllotment.Free;
   FMultiSrReturns.Free;
   FMultiSrd.Free;
   FNoReturnFlow.Free;
@@ -1588,6 +1602,8 @@ begin
       and NoReturnFlow.IsSame(SourceFarm.NoReturnFlow)
       and MultiSrDeliveries.IsSame(SourceFarm.MultiSrDeliveries)
       and MultiSrReturns.IsSame(SourceFarm.MultiSrReturns)
+      and SWAllotment.IsSame(SourceFarm.SWAllotment)
+
   end;
 
 end;
@@ -1716,6 +1732,11 @@ procedure TFarm.SetSemiRoutedReturnFlow(
   const Value: TSemiRoutedDeliveriesAndReturnFlowCollection);
 begin
   FSemiRoutedReturnFlow.Assign(Value);
+end;
+
+procedure TFarm.SetSWAllotment(const Value: TAllotmentCollection);
+begin
+  FSWAllotment.Assign(Value);
 end;
 
 procedure TFarm.SetWaterRights(
@@ -2236,7 +2257,7 @@ begin
         PriorSegment := ASegment;
       end;
       if (Result.Segment > 0) and (Result.Reach = 0)
-        and (DiversionObject.DiversionPosition = dpEnd) then
+        and (DiversionObject.DiversionPosition in [dpEnd, dpMiddle]) then
       begin
         Result.Reach := ReachNumber;
       end;

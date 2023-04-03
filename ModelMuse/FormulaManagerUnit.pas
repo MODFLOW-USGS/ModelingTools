@@ -100,7 +100,7 @@ procedure GlobalDummyHandleSubscription(Sender: TObject; Subject: TObject;
 implementation
 
 uses
-  frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModflowBoundaryUnit, 
+  frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModflowBoundaryUnit,
   ModflowSfrTable, SubscriptionUnit, GIS_Functions,
   PhastModelUnit, Math, ModflowHfbUnit, Mt3dmsChemUnit,
   ModflowRipPlantGroupsUnit, ModflowMvrUnit, Modflow6ObsUnit;

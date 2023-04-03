@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms,
-  Dialogs, StdCtrls, ComCtrls, JvExStdCtrls, JvCheckBox, JvPageList,
+  Dialogs, StdCtrls, ComCtrls, JvPageList,
   ModflowPackageSelectionUnit, RbwController, Grids, RbwDataGrid4;
 
 type
@@ -62,8 +62,7 @@ var
 
 implementation
 
-uses
-  frmGoPhastUnit, GoPhastTypes;
+
 
 {$R *.dfm}
 

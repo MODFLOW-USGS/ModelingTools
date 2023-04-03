@@ -2,9 +2,9 @@ unit ModflowSfrReachUnit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, RbwParser, OrderedCollectionUnit,
+uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowCellUnit, ModflowBoundaryUnit, DataSetUnit, FormulaManagerUnit,
-  SubscriptionUnit, SparseDataSets, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes;
 
 type
   TSfrRecord = record
@@ -279,8 +279,7 @@ const
 
 implementation
 
-uses Contnrs, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  ModflowSfrUnit, TempFiles, frmGoPhastUnit;
+uses ScreenObjectUnit, PhastModelUnit, ModflowSfrUnit, frmGoPhastUnit;
 
 resourcestring
   StrReachLength = 'Reach length';

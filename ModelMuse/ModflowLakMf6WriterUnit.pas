@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, PhastModelUnit, CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, ModflowTimeUnit, ModflowLakUnit,
   ScreenObjectUnit, System.Generics.Collections, ModflowCellUnit,
-  ModflowLakMf6Unit, Modflow6ObsUnit, GoPhastTypes;
+  ModflowLakMf6Unit, Modflow6ObsUnit, GoPhastTypes, GwtStatusUnit;
 
 type
   TLakObservation = record

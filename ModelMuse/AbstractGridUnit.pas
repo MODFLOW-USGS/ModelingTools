@@ -22,21 +22,21 @@ type
   EInvalidGrid = class(Exception);
 
   T3DCellCoordinates = record
-    Col1_Row1_Lay1: T3DRealPoint;
-    Col2_Row1_Lay1: T3DRealPoint;
-    Col1_Row2_Lay1: T3DRealPoint;
-    Col2_Row2_Lay1: T3DRealPoint;
-    Col1_Row1_Lay2: T3DRealPoint;
-    Col2_Row1_Lay2: T3DRealPoint;
-    Col1_Row2_Lay2: T3DRealPoint;
-    Col2_Row2_Lay2: T3DRealPoint;
+    Col1_Row1_Lay1: TPoint3D;
+    Col2_Row1_Lay1: TPoint3D;
+    Col1_Row2_Lay1: TPoint3D;
+    Col2_Row2_Lay1: TPoint3D;
+    Col1_Row1_Lay2: TPoint3D;
+    Col2_Row1_Lay2: TPoint3D;
+    Col1_Row2_Lay2: TPoint3D;
+    Col2_Row2_Lay2: TPoint3D;
   end;
 
   T3DElementCoordinates = record
-    TopCenter: T3DRealPoint;
-    TopEdge: array[0..7] of T3DRealPoint;
-    BottomCenter: T3DRealPoint;
-    BottomEdge: array[0..7] of T3DRealPoint;
+    TopCenter: TPoint3D;
+    TopEdge: array[0..7] of TPoint3D;
+    BottomCenter: TPoint3D;
+    BottomEdge: array[0..7] of TPoint3D;
   end;
 
   // @name is used to indicate the direction in which columns are numbered.
@@ -890,7 +890,7 @@ side views of the model.}
       center of a column boundary in the coordinate system of the grid.
       @SeeAlso(ThreeDRowEdgeCenter) @SeeAlso(ThreeDLayerEdgeCenter)}
     function ThreeDColumnEdgeCenter(const Column, Row, Layer: integer):
-      T3DRealPoint;
+      TPoint3D;
     {@name is the @link(TDataArray) whose values are used
      to determine the colors
      of the cells in a 3D view of the grid.  See: @link(TCellColors),
@@ -903,17 +903,17 @@ side views of the model.}
     { @name returns the X, Y, and Z coordinates of the center of
       a grid element in the coordinate system of the grid.}
     function ThreeDElementCenter(const Column, Row, Layer: integer):
-      T3DRealPoint; virtual;
+      TPoint3D; virtual;
     function RotatedThreeDElementCenter(const Column, Row, Layer: integer):
-      T3DRealPoint;
+      TPoint3D;
     { @name returns the X, Y, and Z coordinates of a corner of
       a grid element in the coordinate system of the grid.}
     function ThreeDElementCorner(const Column, Row, Layer: integer):
-      T3DRealPoint; virtual;
+      TPoint3D; virtual;
     function RotatedThreeDElementCorner(const Column, Row, Layer: integer):
-      T3DRealPoint;
+      TPoint3D;
     function ThreeDCellCorner(Column, Row, Layer: integer):
-      T3DRealPoint; virtual;
+      TPoint3D; virtual;
     // @name is used to notify @link(TScreenObject)s and @link(TDataArray)s
     // That they need to redraw themselves due to a change in the columns,
     //  rows. or layers.
@@ -923,12 +923,12 @@ side views of the model.}
       center of a layer boundary in the coordinate system of the grid.
       @SeeAlso(ThreeDColumnEdgeCenter) @SeeAlso(ThreeDRowEdgeCenter)}
     function ThreeDLayerEdgeCenter(const Column, Row, Layer: integer):
-      T3DRealPoint;
+      TPoint3D;
     { @name returns the X, Y, and Z coordinates of the
       center of a row boundary in the coordinate system of the grid.
       @SeeAlso(ThreeDColumnEdgeCenter) @SeeAlso(ThreeDLayerEdgeCenter)}
     function ThreeDRowEdgeCenter(const Column, Row, Layer: integer):
-      T3DRealPoint;
+      TPoint3D;
     {@name is used to retrieve or set the color of a element or
      node in a top view of the grid.  Whether the color is the color of a cell
      or a node depends on whether the @link(TopDataSet) is evaluated at
@@ -1174,8 +1174,8 @@ const
 implementation
 
 uses GR32_Polygons, Math, RealListUnit, frmGoPhastUnit, BigCanvasMethods,
-  ModelMuseUtilities, PhastDataSets, PhastModelUnit, InteractiveTools,
-  EdgeDisplayUnit, ZLib, IntListUnit, PathlineReader, ScreenObjectUnit,
+  ModelMuseUtilities, PhastDataSets, PhastModelUnit,
+  EdgeDisplayUnit, ZLib, IntListUnit, PathlineReader,
   Vcl.Dialogs;
 
 resourcestring
@@ -1990,7 +1990,7 @@ var
   ColumnIndex: Integer;
   RowIndex: Integer;
   LayerIndex: Integer;
-  APoint3D: T3DRealPoint;
+  APoint3D: TPoint3D;
   APoint2D: TPoint2D;
 begin
   if FBlockGridCache <> nil then
@@ -2331,7 +2331,7 @@ var
   RowIndex: Integer;
   LayerIndex: Integer;
   APoint2D: TPoint2D;
-  APoint3D: T3DRealPoint;
+  APoint3D: TPoint3D;
   ElevAbove, ElevBelow: double;
 begin
   if FNodeGridCache <> nil then
@@ -3031,7 +3031,7 @@ begin
 end;
 
 function TCustomModelGrid.RotatedThreeDElementCenter(const Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 var
   APoint: TPoint2D;
 begin
@@ -3044,7 +3044,7 @@ begin
 end;
 
 function TCustomModelGrid.RotatedThreeDElementCorner(const Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 var
   APoint: TPoint2D;
 begin
@@ -3772,7 +3772,7 @@ begin
 end;
 
 function TCustomModelGrid.ThreeDElementCenter(const Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 begin
   result.X := (ColumnPosition[Column] + ColumnPosition[Column + 1]) / 2;
   result.Y := (RowPosition[Row] + RowPosition[Row + 1]) / 2;
@@ -3781,7 +3781,7 @@ begin
 end;
 
 function TCustomModelGrid.ThreeDElementCorner(const Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 begin
   result.X := ColumnPosition[Column];
   result.Y := RowPosition[Row];
@@ -5835,7 +5835,7 @@ var
   Z1: Real;
   Z2: Real;
   TempPoint: TPoint2D;
-  function AveragePoint(Point1, Point2: T3DRealPoint): T3DRealPoint;
+  function AveragePoint(Point1, Point2: TPoint3D): TPoint3D;
   begin
     result.x := (Point1.x + Point2.x)/2;
     result.y := (Point1.y + Point2.y)/2;
@@ -7394,7 +7394,7 @@ begin
 end;
 
 function TCustomModelGrid.ThreeDCellCorner(Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 begin
 //  if Column > ColumnCount then
 //  begin
@@ -7448,9 +7448,9 @@ begin
 end;
 
 function TCustomModelGrid.ThreeDColumnEdgeCenter(const Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 var
-  Point1, Point2: T3DRealPoint;
+  Point1, Point2: TPoint3D;
 begin
   Point1 := ThreeDElementCorner(Column, Row, Layer);
   Point2 := ThreeDElementCorner(Column, Row + 1, Layer);
@@ -7460,9 +7460,9 @@ begin
 end;
 
 function TCustomModelGrid.ThreeDLayerEdgeCenter(const Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 var
-  Point1, Point2: T3DRealPoint;
+  Point1, Point2: TPoint3D;
 begin
   Point1 := ThreeDElementCorner(Column, Row, Layer);
   Point2 := ThreeDElementCorner(Column, Row, Layer + 1);
@@ -7472,9 +7472,9 @@ begin
 end;
 
 function TCustomModelGrid.ThreeDRowEdgeCenter(const Column, Row,
-  Layer: integer): T3DRealPoint;
+  Layer: integer): TPoint3D;
 var
-  Point1, Point2: T3DRealPoint;
+  Point1, Point2: TPoint3D;
 begin
   Point1 := ThreeDElementCorner(Column, Row, Layer);
   Point2 := ThreeDElementCorner(Column + 1, Row, Layer);

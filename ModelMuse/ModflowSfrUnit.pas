@@ -2,7 +2,7 @@ unit ModflowSfrUnit;
 
 interface
 
-uses Classes, RbwParser, RealListUnit, OrderedCollectionUnit, ModflowCellUnit,
+uses Classes, RealListUnit, OrderedCollectionUnit, ModflowCellUnit,
   ModflowBoundaryUnit, ModflowSfrReachUnit, ModflowSfrChannelUnit, GoPhastTypes,
   ModflowSfrSegment, ModflowSfrUnsatSegment, ModflowSfrTable, ModflowSfrFlows,
   ModflowSfrEquationUnit, ModflowSfrParamIcalcUnit, PestObsUnit,
@@ -586,7 +586,7 @@ var
 
 implementation
 
-uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
+uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
   SysUtils, frmGoPhastUnit;
 
 { TSfrBoundary }

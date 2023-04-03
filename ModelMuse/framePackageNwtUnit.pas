@@ -95,7 +95,7 @@ var
 implementation
 
 uses
-  ModelMuseUtilities, frmGoPhastUnit, ModflowNWT_WriterUnit;
+  frmGoPhastUnit, ModflowNWT_WriterUnit, GoPhastTypes;
 
 {$R *.dfm}
 

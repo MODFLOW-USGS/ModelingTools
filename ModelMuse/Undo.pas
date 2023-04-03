@@ -10,8 +10,7 @@ unit Undo;
 interface
 
 uses
-  SysUtils, Classes, Forms, Menus, ActnList, Controls, ComCtrls,
-  frmCustomGoPhastUnit;
+  SysUtils, Classes, Forms, Menus, ActnList, Controls, ComCtrls;
 
 // Use const for version 9.0 and earlier.  Otherwise, use resourcestring.
 {$IFDEF MSWINDOWS}

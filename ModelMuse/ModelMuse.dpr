@@ -839,7 +839,9 @@ uses
   ModflowFmp4AddedDemandRunoffSplitUnit in 'ModflowFmp4AddedDemandRunoffSplitUnit.pas',
   frameScreenObjectAddedDemandRunoffSplitUnit in 'frameScreenObjectAddedDemandRunoffSplitUnit.pas' {frameScreenObjectAddedDemandRunoffSplit: TFrame},
   frameSoilEffectivePrecipUnit in 'frameSoilEffectivePrecipUnit.pas' {frameSoilEffectivePrecip: TFrame},
-  frameMultSemiRoutedUnit in 'frameMultSemiRoutedUnit.pas' {frameMultSemiRouted: TFrame};
+  frameMultSemiRoutedUnit in 'frameMultSemiRoutedUnit.pas' {frameMultSemiRouted: TFrame},
+  GwtStatusUnit in 'GwtStatusUnit.pas',
+  ScreenObjectOwnerCollectionUnit in 'ScreenObjectOwnerCollectionUnit.pas';
 
 {$R *.res}
 

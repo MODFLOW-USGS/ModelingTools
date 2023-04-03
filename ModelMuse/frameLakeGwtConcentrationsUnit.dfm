@@ -208,10 +208,4 @@ inherited frameLakeGwtConcentrations: TframeLakeGwtConcentrations
       64
       64)
   end
-  inherited pnl1: TPanel
-    inherited lblInitialConcentration: TLabel
-      Top = 10
-      ExplicitTop = 10
-    end
-  end
 end

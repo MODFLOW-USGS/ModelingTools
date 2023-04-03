@@ -105,9 +105,6 @@ object frameMultSemiRouted: TframeMultSemiRouted
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitLeft = 0
-    ExplicitWidth = 640
-    ExplicitHeight = 81
     object pnlName: TPanel
       Left = 1
       Top = 1
@@ -115,9 +112,6 @@ object frameMultSemiRouted: TframeMultSemiRouted
       Height = 41
       Align = alTop
       TabOrder = 0
-      ExplicitLeft = 208
-      ExplicitTop = 8
-      ExplicitWidth = 185
       object lblSemiRouteName: TLabel
         Left = 135
         Top = 13
@@ -142,13 +136,15 @@ object frameMultSemiRouted: TframeMultSemiRouted
       Align = alClient
       Enabled = False
       TabOrder = 1
-      ExplicitWidth = 517
-      ExplicitHeight = 238
+      ExplicitLeft = 1
+      ExplicitTop = 42
+      ExplicitWidth = 512
+      ExplicitHeight = 396
       inherited Panel: TPanel
         Top = 355
         Width = 512
-        ExplicitTop = 197
-        ExplicitWidth = 517
+        ExplicitTop = 355
+        ExplicitWidth = 512
         inherited lblLocationMethod: TLabel
           Visible = False
         end
@@ -159,12 +155,18 @@ object frameMultSemiRouted: TframeMultSemiRouted
       inherited Grid: TRbwDataGrid4
         Width = 512
         Height = 298
+        OnExit = frameFarmDiversionsGridExit
         ExplicitWidth = 512
         ExplicitHeight = 298
       end
       inherited pnlTop: TPanel
         Width = 512
-        ExplicitWidth = 517
+        ExplicitWidth = 512
+        inherited edFormula: TLabeledEdit
+          EditLabel.ExplicitLeft = 0
+          EditLabel.ExplicitTop = -18
+          EditLabel.ExplicitWidth = 57
+        end
       end
     end
   end
@@ -179,9 +181,6 @@ object frameMultSemiRouted: TframeMultSemiRouted
     MultiSelectStyle = [msControlSelect, msShiftSelect]
     TabOrder = 2
     OnChange = tvSRCollectionsChange
-    ExplicitLeft = 384
-    ExplicitTop = 248
-    ExplicitHeight = 97
   end
   object Controller: TRbwController
     ControlList = <

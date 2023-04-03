@@ -7,8 +7,8 @@ interface
 
 uses
   UndoItemsScreenObjects, Windows, SysUtils, Types, Classes, Variants,
-  Graphics, Controls, Forms, Dialogs, StdCtrls, frmCustomGoPhastUnit, ComCtrls,
-  Buttons, ExtCtrls, Menus, ScreenObjectUnit, VirtualTrees, Contnrs,
+  Graphics, Controls, Forms, Dialogs, StdCtrls, frmCustomGoPhastUnit,
+  Buttons, ExtCtrls, Menus, ScreenObjectUnit, VirtualTrees,
   frmCustomSelectObjectsUnit, ImgList, System.ImageList;
 
 type
@@ -106,8 +106,8 @@ var
 
 implementation
 
-uses StrUtils, frmGoPhastUnit, DataSetUnit, GoPhastTypes, ModelMuseUtilities,
-  ModflowPackagesUnit, InteractiveTools, FastGEO, UndoItems, frmGoToUnit;
+uses frmGoPhastUnit, GoPhastTypes,
+  InteractiveTools, FastGEO, UndoItems, frmGoToUnit;
 
 resourcestring
   StrSObjectsContainin = '%s objects containing search term';

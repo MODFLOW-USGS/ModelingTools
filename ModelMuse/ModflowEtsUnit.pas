@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, ModflowEvtUnit,
-  FormulaManagerUnit, SubscriptionUnit, RbwParser, SparseDataSets, GoPhastTypes,
+  FormulaManagerUnit, SubscriptionUnit, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
 type
@@ -438,10 +438,8 @@ const
 
 implementation
 
-uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit, TempFiles,
-  frmGoPhastUnit, frmErrorsAndWarningsUnit, ModflowTimeSeriesUnit,
-  ModflowParameterUnit, ModelMuseUtilities, CustomModflowWriterUnit,
-  System.Generics.Collections;
+uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
+  frmGoPhastUnit, frmErrorsAndWarningsUnit, System.Generics.Collections;
 
 resourcestring
   StrFractionalRateS = 'Fractional rate %s';

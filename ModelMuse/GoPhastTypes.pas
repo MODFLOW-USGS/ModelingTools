@@ -67,13 +67,13 @@ type
   TRealArray = array of Real;
 
   // @name is a 1D array of @link(T3DRealPoint)s.
-  T3DRealPointArray1 = array of T3DRealPoint;
+  T3DRealPointArray1 = array of TPoint3D;
 
   // @name is a 2D array of @link(T3DRealPoint)s.
   T3DRealPointArray2 = array of T3DRealPointArray1;
 
   // @name is a 3D array of @link(T3DRealPoint)s.
-  T3DRealPointArray3 = array of array of array of T3DRealPoint;
+  T3DRealPointArray3 = array of array of array of TPoint3D;
 
   // @name records the minimum and maximum values assigned to a data set.
   TMinMax = record
@@ -557,15 +557,6 @@ type
     procedure InvalidateModel;
   end;
 
-  TScreenObjectOwnerCollection = class(TPhastCollection)
-  private
-    FScreenObject: TObject;
-  public
-    constructor Create(ItemClass: TCollectionItemClass;
-      InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
-    property ScreenObject: TObject read FScreenObject;
-  end;
-
   // @name adds the required functions of IInterface.
   TInterfacedPhastCollectionItem = class(TPhastCollectionItem, IInterface)
   protected
@@ -708,20 +699,6 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
   end;
 
-  TGwtBoundaryStatus = (gbsActive, gbsInactive, gbsConstant);
-
-  TGwtBoundaryStatusArray = array of TGwtBoundaryStatus;
-
-  TGwtBoundaryStatusItem = class(TCollectionItem)
-  private
-    FGwtBoundaryStatus: TGwtBoundaryStatus;
-    procedure SetGwtBoundaryStatus(const Value: TGwtBoundaryStatus);
-  public
-    procedure Assign(Source: TPersistent); override;
-  published
-    Property GwtBoundaryStatus: TGwtBoundaryStatus read FGwtBoundaryStatus write SetGwtBoundaryStatus;
-  end;
-
   TBaseModel = class abstract(TComponent)
   private
     // See @link(UpToDate).
@@ -748,29 +725,27 @@ type
       write SetModelSelection;
   end;
 
-  TGwtBoundaryStatusCollection = class(TCollection)
-  private
-    FModel: TBaseModel;
-    function GetItems(Index: Integer): TGwtBoundaryStatusItem;
-    procedure SetItems(Index: Integer; const Value: TGwtBoundaryStatusItem);
-    function GetCount: Integer;
-    procedure SetCount(const Value: Integer);
-  protected
-    property Model: TBaseModel read FModel;
-  public
-    constructor Create(Model: TBaseModel);
-    procedure Assign(Source: TPersistent); override;
-    property Items[Index: Integer]: TGwtBoundaryStatusItem read GetItems
-      write SetItems; default;
-    function IsSame(OtherCollection: TGwtBoundaryStatusCollection): Boolean;
-    property Count: Integer read GetCount write SetCount;
-  end;
-
   TLayerSort = class(TObject)
     Layer: integer;
     ActiveCells: integer;
     Proportion: double;
   end;
+
+  {TPhastModel.UpdateModelMateParameter should be updated
+  if new parameters are added.
+  }
+  TParameterType = (ptUndefined, ptLPF_HK, ptLPF_HANI, ptLPF_VK,
+    ptLPF_VANI, ptLPF_SS, ptLPF_SY, ptLPF_VKCB, ptRCH, ptEVT, ptETS,
+    ptCHD, ptGHB, ptQ,
+    ptRIV, ptDRN, ptDRT, ptSFR, ptHFB,
+    ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY,
+    ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX, ptPEST);
+  //
+
+  // @name is used to indicate groups of related MODFLOW parameters.
+  TParameterTypes = set of TParameterType;
+
+
 
   TSutraLimitType = (sltNone, sltFlow, sltPressure);
   TSutraExitSpecificationMethod = (sexmRelative, sexmDirect);
@@ -1077,6 +1052,8 @@ function StrToStatFlag(Const AStatFlagLabel: string): TStatFlag;
 function StatFlatToStr(AStatFlag: TStatFlag): string;
 function SortLayerSorts(Item1, Item2: Pointer): Integer;
 function IsNetworkDrive(const FileName: string): Boolean;
+function FortranStrToFloat(AString: string): Extended;
+function FortranFloatToStr(Value: Extended): string;
 
 resourcestring
   StrNoBoundaryConditio = 'No boundary conditions assigned to the %s because' +
@@ -1098,7 +1075,7 @@ implementation
 
 
 {$IFNDEF Testing}
-uses PhastModelUnit, Math, ModelMuseUtilities, ScreenObjectUnit;
+uses Math, System.StrUtils;
 {$ENDIF}
 
 function SortLayerSorts(Item1, Item2: Pointer): Integer;
@@ -1115,6 +1092,43 @@ begin
   end;
 end;
 
+function FortranStrToFloat(AString: string): Extended;
+var
+  OldDecimalSeparator: Char;
+  SignPos: Integer;
+begin
+  AString := Trim(AString);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  try
+    FormatSettings.DecimalSeparator := '.';
+    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
+    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
+    if SignPos > 0 then
+    begin
+      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
+      begin
+        Insert('E', AString, SignPos);
+      end;
+    end;
+    result := StrToFloat(AString);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
+end;
+
+function FortranFloatToStr(Value: Extended): string;
+var
+  OldDecimalSeparator: Char;
+begin
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  try
+    FormatSettings.DecimalSeparator := '.';
+    result := FloatToStr(Value);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
+end;
 
 function StrToStatFlag(Const AStatFlagLabel: string): TStatFlag;
 var
@@ -2255,16 +2269,16 @@ end;
 
 { TScreenObjectOwnerCollection }
 
-constructor TScreenObjectOwnerCollection.Create(ItemClass: TCollectionItemClass;
-  InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
-begin
-  inherited Create(ItemClass, InvalidateModelEvent);
-  if ScreenObject <> nil then
-  begin
-    Assert(ScreenObject is TScreenObject);
-  end;
-  FScreenObject := ScreenObject;
-end;
+//constructor TScreenObjectOwnerCollection.Create(ItemClass: TCollectionItemClass;
+//  InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+//begin
+//  inherited Create(ItemClass, InvalidateModelEvent);
+//  if ScreenObject <> nil then
+//  begin
+//    Assert(ScreenObject is TScreenObject);
+//  end;
+//  FScreenObject := ScreenObject;
+//end;
 
 { TGwtCellData }
 
@@ -2464,113 +2478,113 @@ end;
 
 { TGwtBoundaryStatusItem }
 
-procedure TGwtBoundaryStatusItem.Assign(Source: TPersistent);
-begin
-  if Source is TGwtBoundaryStatusItem then
-  begin
-    GwtBoundaryStatus := TGwtBoundaryStatusItem(Source).GwtBoundaryStatus;
-  end
-  else
-  begin
-    inherited;
-  end;
-end;
-
-procedure TGwtBoundaryStatusItem.SetGwtBoundaryStatus(const Value: TGwtBoundaryStatus);
-begin
-  FGwtBoundaryStatus := Value;
-end;
+//procedure TGwtBoundaryStatusItem.Assign(Source: TPersistent);
+//begin
+//  if Source is TGwtBoundaryStatusItem then
+//  begin
+//    GwtBoundaryStatus := TGwtBoundaryStatusItem(Source).GwtBoundaryStatus;
+//  end
+//  else
+//  begin
+//    inherited;
+//  end;
+//end;
+//
+//procedure TGwtBoundaryStatusItem.SetGwtBoundaryStatus(const Value: TGwtBoundaryStatus);
+//begin
+//  FGwtBoundaryStatus := Value;
+//end;
 
 { TGwtBoundaryStatusCollection }
 
-procedure TGwtBoundaryStatusCollection.Assign(Source: TPersistent);
-begin
-  if Source is TGwtBoundaryStatusCollection then
-  begin
-    TGwtBoundaryStatusCollection(Source).Count;
-  end;
-  inherited;
-end;
-
-constructor TGwtBoundaryStatusCollection.Create(Model: TBaseModel);
-begin
-  FModel := Model;
-  inherited Create(TGwtBoundaryStatusItem);
-end;
-
-function TGwtBoundaryStatusCollection.GetCount: integer;
-var
-  LocalModel: TCustomModel;
-begin
-  if Model <> nil then
-  begin
-    LocalModel := Model as TCustomModel;
-    if inherited Count < LocalModel.MobileComponents.Count then
-    begin
-      Count := LocalModel.MobileComponents.Count;
-    end;
-  end;
-  result := inherited Count
-end;
-
-function TGwtBoundaryStatusCollection.GetItems(Index: Integer): TGwtBoundaryStatusItem;
-var
-  LocalModel: TCustomModel;
-begin
-  if Model <> nil then
-  begin
-    LocalModel := Model as TCustomModel;
-    if inherited Count < LocalModel.MobileComponents.Count then
-    begin
-      Count := LocalModel.MobileComponents.Count;
-    end;
-  end
-  else
-  begin
-    while Index >= Count do
-    begin
-      Add;
-    end;
-  end;
-  result := inherited Items[Index] as TGwtBoundaryStatusItem
-end;
-
-function TGwtBoundaryStatusCollection.IsSame(
-  OtherCollection: TGwtBoundaryStatusCollection): Boolean;
-var
-  Index: Integer;
-begin
-  result := Count = OtherCollection.Count;
-  if Result then
-  begin
-    for Index := 0 to Count - 1 do
-    begin
-      result := Items[Index].GwtBoundaryStatus = OtherCollection[Index].GwtBoundaryStatus;
-      if not Result then
-      begin
-        Exit;
-      end;
-    end;
-  end;
-end;
-
-procedure TGwtBoundaryStatusCollection.SetCount(const Value: Integer);
-begin
-  while inherited Count < Value do
-  begin
-    Add;
-  end;
-  while inherited Count > Value do
-  begin
-    Delete(inherited Count -1);
-  end;
-end;
-
-procedure TGwtBoundaryStatusCollection.SetItems(Index: Integer;
-  const Value: TGwtBoundaryStatusItem);
-begin
-  inherited Items[Index] := Value;
-end;
+//procedure TGwtBoundaryStatusCollection.Assign(Source: TPersistent);
+//begin
+//  if Source is TGwtBoundaryStatusCollection then
+//  begin
+//    TGwtBoundaryStatusCollection(Source).Count;
+//  end;
+//  inherited;
+//end;
+//
+//constructor TGwtBoundaryStatusCollection.Create(Model: TBaseModel);
+//begin
+//  FModel := Model;
+//  inherited Create(TGwtBoundaryStatusItem);
+//end;
+//
+//function TGwtBoundaryStatusCollection.GetCount: integer;
+//var
+//  LocalModel: TCustomModel;
+//begin
+//  if Model <> nil then
+//  begin
+//    LocalModel := Model as TCustomModel;
+//    if inherited Count < LocalModel.MobileComponents.Count then
+//    begin
+//      Count := LocalModel.MobileComponents.Count;
+//    end;
+//  end;
+//  result := inherited Count
+//end;
+//
+//function TGwtBoundaryStatusCollection.GetItems(Index: Integer): TGwtBoundaryStatusItem;
+//var
+//  LocalModel: TCustomModel;
+//begin
+//  if Model <> nil then
+//  begin
+//    LocalModel := Model as TCustomModel;
+//    if inherited Count < LocalModel.MobileComponents.Count then
+//    begin
+//      Count := LocalModel.MobileComponents.Count;
+//    end;
+//  end
+//  else
+//  begin
+//    while Index >= Count do
+//    begin
+//      Add;
+//    end;
+//  end;
+//  result := inherited Items[Index] as TGwtBoundaryStatusItem
+//end;
+//
+//function TGwtBoundaryStatusCollection.IsSame(
+//  OtherCollection: TGwtBoundaryStatusCollection): Boolean;
+//var
+//  Index: Integer;
+//begin
+//  result := Count = OtherCollection.Count;
+//  if Result then
+//  begin
+//    for Index := 0 to Count - 1 do
+//    begin
+//      result := Items[Index].GwtBoundaryStatus = OtherCollection[Index].GwtBoundaryStatus;
+//      if not Result then
+//      begin
+//        Exit;
+//      end;
+//    end;
+//  end;
+//end;
+//
+//procedure TGwtBoundaryStatusCollection.SetCount(const Value: Integer);
+//begin
+//  while inherited Count < Value do
+//  begin
+//    Add;
+//  end;
+//  while inherited Count > Value do
+//  begin
+//    Delete(inherited Count -1);
+//  end;
+//end;
+//
+//procedure TGwtBoundaryStatusCollection.SetItems(Index: Integer;
+//  const Value: TGwtBoundaryStatusItem);
+//begin
+//  inherited Items[Index] := Value;
+//end;
 
 
 

@@ -2,10 +2,10 @@ unit ModflowGHB_WriterUnit;
 
 interface
 
-uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowGhbUnit,
+uses SysUtils, Classes, CustomModflowWriterUnit, ModflowGhbUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes,
-  ModflowBoundaryDisplayUnit, ModflowTransientListParameterUnit,
+
   Modflow6ObsUnit, FluxObservationUnit;
 
 type
@@ -60,7 +60,7 @@ type
 
 implementation
 
-uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers,
+uses frmErrorsAndWarningsUnit, ModflowUnitNumbers,
   frmProgressUnit, Forms, DataSetUnit, FastGEO, ModflowMvrWriterUnit,
   ModflowMvrUnit, Mt3dmsChemSpeciesUnit, PestPropertiesUnit;
 

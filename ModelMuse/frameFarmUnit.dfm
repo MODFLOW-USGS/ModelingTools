@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabReturnFlowOwhm2
+    ActivePage = tabSwAllotment
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -2022,6 +2022,7 @@ inherited frameFarm: TframeFarm
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitTop = 58
           ExplicitWidth = 577
           ExplicitHeight = 233
         end
@@ -2037,6 +2038,153 @@ inherited frameFarm: TframeFarm
             EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
             OnChange = frameGW_AllocationedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+        end
+      end
+    end
+    object tabSwAllotment: TTabSheet
+      Caption = 'SW Allotment'
+      ImageIndex = 18
+      inline frameSwAllotment: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 332
+        Align = alClient
+        TabOrder = 0
+        ExplicitWidth = 577
+        ExplicitHeight = 332
+        inherited Panel: TPanel
+          Top = 291
+          Width = 577
+          ExplicitTop = 291
+          ExplicitWidth = 577
+          inherited lbNumber: TLabel
+            Width = 45
+            Height = 16
+            ExplicitWidth = 45
+            ExplicitHeight = 16
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 301
+            OnClick = frameSwAllotmentsbAddClick
+            ExplicitLeft = 301
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 357
+            OnClick = frameSwAllotmentsbInsertClick
+            ExplicitLeft = 357
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 412
+            OnClick = frameSwAllotmentsbDeleteClick
+            ExplicitLeft = 412
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 24
+            OnChange = frameSwAllotmentseNumberChange
+            ExplicitHeight = 24
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 577
+          Height = 234
+          ColCount = 3
+          OnSetEditText = frameSwAllotmentGridSetEditText
+          OnButtonClick = frameSwAllotmentGridButtonClick
+          Columns = <
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4Real
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4Real
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = 'F()'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = True
+              ButtonWidth = 35
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
+          ExplicitWidth = 577
+          ExplicitHeight = 234
+        end
+        inherited pnlTop: TPanel
+          Width = 577
+          ExplicitWidth = 577
+          inherited edFormula: TLabeledEdit
+            Height = 24
+            EditLabel.Width = 47
+            EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitHeight = 16
+            OnChange = frameSwAllotmentedFormulaChange
             ExplicitHeight = 24
           end
           inherited comboChoice: TComboBox
@@ -2247,8 +2395,6 @@ inherited frameFarm: TframeFarm
           ExplicitHeight = 291
           inherited pnlName: TPanel
             Width = 449
-            ExplicitLeft = 1
-            ExplicitTop = 1
             ExplicitWidth = 449
             inherited lblSemiRouteName: TLabel
               Width = 33
@@ -2366,8 +2512,6 @@ inherited frameFarm: TframeFarm
         end
         inherited tvSRCollections: TTreeView
           Height = 291
-          ExplicitLeft = 0
-          ExplicitTop = 0
           ExplicitHeight = 291
         end
         inherited Controller: TRbwController
@@ -2391,14 +2535,17 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = -63
-        ExplicitTop = -148
+        ExplicitWidth = 577
+        ExplicitHeight = 332
         inherited Splitter1: TSplitter
           Height = 291
+          ExplicitHeight = 291
         end
         inherited pnlBottom: TPanel
           Top = 291
           Width = 577
+          ExplicitTop = 291
+          ExplicitWidth = 577
           inherited lbNumber: TLabel
             Width = 45
             Height = 16
@@ -2407,9 +2554,11 @@ inherited frameFarm: TframeFarm
           end
           inherited sbAdd: TSpeedButton
             Left = 476
+            ExplicitLeft = 476
           end
           inherited sbDelete: TSpeedButton
             Left = 538
+            ExplicitLeft = 538
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -2419,11 +2568,11 @@ inherited frameFarm: TframeFarm
         inherited Panel1: TPanel
           Width = 451
           Height = 291
+          ExplicitWidth = 451
+          ExplicitHeight = 291
           inherited pnlName: TPanel
             Width = 449
-            ExplicitLeft = 1
-            ExplicitTop = 1
-            ExplicitWidth = 512
+            ExplicitWidth = 449
             inherited lblSemiRouteName: TLabel
               Width = 33
               Height = 16
@@ -2438,9 +2587,13 @@ inherited frameFarm: TframeFarm
           inherited frameFarmDiversions: TframeFarmDiversion
             Width = 449
             Height = 248
+            ExplicitWidth = 449
+            ExplicitHeight = 248
             inherited Panel: TPanel
               Top = 207
               Width = 449
+              ExplicitTop = 207
+              ExplicitWidth = 449
               inherited lbNumber: TLabel
                 Width = 45
                 Height = 16
@@ -2449,12 +2602,15 @@ inherited frameFarm: TframeFarm
               end
               inherited sbAdd: TSpeedButton
                 Left = 278
+                ExplicitLeft = 278
               end
               inherited sbInsert: TSpeedButton
                 Left = 294
+                ExplicitLeft = 294
               end
               inherited sbDelete: TSpeedButton
                 Left = 310
+                ExplicitLeft = 310
               end
               inherited lblLocationMethod: TLabel
                 Width = 94
@@ -2474,9 +2630,12 @@ inherited frameFarm: TframeFarm
             inherited Grid: TRbwDataGrid4
               Width = 449
               Height = 150
+              ExplicitWidth = 449
+              ExplicitHeight = 150
             end
             inherited pnlTop: TPanel
               Width = 449
+              ExplicitWidth = 449
               inherited lblSfrObjects: TLabel
                 Width = 37
                 Height = 16
@@ -2542,9 +2701,7 @@ inherited frameFarm: TframeFarm
         end
         inherited tvSRCollections: TTreeView
           Height = 291
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitHeight = 439
+          ExplicitHeight = 291
         end
         inherited Controller: TRbwController
           ControlList = <

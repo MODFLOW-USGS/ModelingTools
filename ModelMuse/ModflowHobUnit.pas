@@ -292,7 +292,7 @@ const
 
 implementation
 
-uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit, FastGEO,
+uses ScreenObjectUnit, PhastModelUnit, ModflowGridUnit, FastGEO,
   SubscriptionUnit, RealListUnit, frmErrorsAndWarningsUnit,
   Generics.Collections;
 

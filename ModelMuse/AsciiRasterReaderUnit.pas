@@ -81,7 +81,7 @@ Type
 
 implementation
 
-uses ModelMuseUtilities;
+uses GoPhastTypes;
 
 resourcestring
   StrErrorReadingNCOL = 'Error reading number of columns';

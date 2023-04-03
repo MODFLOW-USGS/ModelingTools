@@ -127,7 +127,7 @@ implementation
 uses
   frmProgressUnit, System.SysUtils, frmErrorsAndWarningsUnit, Vcl.Forms,
   FastGEO, ModflowIrregularMeshUnit, AbstractGridUnit, System.Math,
-  ModflowLakMf6Unit, RbwParser, frmFormulaErrorsUnit, frmModflowPackagesUnit,
+  ModflowLakMf6Unit, RbwParser, frmFormulaErrorsUnit,
   ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, QuadTreeClass;
 
 resourcestring

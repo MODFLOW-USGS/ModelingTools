@@ -4,8 +4,8 @@ interface
 
 uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ExtCtrls, JvExStdCtrls,
-  UndoItems, StrUtils, JvExControls, JvLinkLabel, ComCtrls, JvRichEdit,
+  Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ExtCtrls,
+  UndoItems, JvExControls, JvLinkLabel, ComCtrls,
   Vcl.Menus, System.Generics.Collections;
 
 type
@@ -119,7 +119,7 @@ type
 implementation
 
 uses frmGoPhastUnit, JvLinkLabelTools, AbExcept, System.IOUtils, System.Contnrs,
-  PhastModelUnit, ArchiveNodeInterface, ModelMuseUtilities;
+  PhastModelUnit, ArchiveNodeInterface;
 
 resourcestring
   StrChangedFilesToArc = 'changed files to archive';

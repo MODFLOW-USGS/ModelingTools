@@ -3,10 +3,10 @@ unit frameModpathEndpointDisplayUnit;
 interface
 
 uses System.UITypes,
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Grids, RbwDataGrid4, StdCtrls, ExtCtrls, JvSpin, JvExControls,
   JvxSlider, Mask, JvExMask, JvToolEdit, ComCtrls, frameModpathDisplayUnit,
-  PathlineReader, UndoItems, PhastModelUnit, SubscriptionUnit, LegendUnit,
+  PathlineReader, UndoItems, PhastModelUnit, LegendUnit,
   GrayTabs;
 
 type
@@ -153,8 +153,8 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, ColorSchemes, ModflowGridUnit, ModelMuseUtilities, RbwParser,
-  System.Math, LayerStructureUnit, frmCustomGoPhastUnit, frmColorSchemesUnit;
+  frmGoPhastUnit, ColorSchemes, ModflowGridUnit, RbwParser,
+  LayerStructureUnit, frmCustomGoPhastUnit, frmColorSchemesUnit;
 
 resourcestring
   StrLimitingFactor = 'Limiting factor';

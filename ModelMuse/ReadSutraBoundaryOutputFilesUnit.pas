@@ -130,7 +130,7 @@ procedure ReadLkstFile(const FileName: string; DesiredItems: TStoredResultsList;
 implementation
 
 uses
-  IOUtils, Classes, ModelMuseUtilities, SysUtils, Vcl.Dialogs;
+  IOUtils, Classes, {ModelMuseUtilities,} SysUtils, Vcl.Dialogs, GoPhastTypes;
 
 function ReadFileHeader(const FileName: string; List: TStoredResultsList): Boolean;
 const

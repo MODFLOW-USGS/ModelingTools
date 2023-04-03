@@ -96,20 +96,6 @@ type
   @value(ptQMAX ptQMAX represents the QMAX parameter type
     in the Farm Process. (ptQMAX defines the maximum pumping rate.))
 
-  TPhastModel.UpdateModelMateParameter should be updated
-  if new parameters are added.
-  }
-  TParameterType = (ptUndefined, ptLPF_HK, ptLPF_HANI, ptLPF_VK,
-    ptLPF_VANI, ptLPF_SS, ptLPF_SY, ptLPF_VKCB, ptRCH, ptEVT, ptETS,
-    ptCHD, ptGHB, ptQ,
-    ptRIV, ptDRN, ptDRT, ptSFR, ptHFB,
-    ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY,
-    ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX, ptPEST);
-  //
-
-  // @name is used to indicate groups of related MODFLOW parameters.
-  TParameterTypes = set of TParameterType;
-
   {@name is designed to allow @link(TOrderedCollection) to identify
     changed and new items during @link(TOrderedCollection.Assign
     TOrderedCollection.Assign).
@@ -533,7 +519,7 @@ const
 
 implementation
 
-uses ModflowParameterUnit, LayerStructureUnit, PhastModelUnit, ScreenObjectUnit,
+uses PhastModelUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowTransientListParameterUnit,
   ModflowSfrParamIcalcUnit, Generics.Collections, Modflow6TimeSeriesUnit,
   Generics.Defaults, Math, frmGoPhastUnit, LockedGlobalVariableChangers,

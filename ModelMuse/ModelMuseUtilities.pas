@@ -5,7 +5,7 @@ unit ModelMuseUtilities;
 interface
 
 uses System.UITypes,
-  Windows, SysUtils, Classes, Graphics, OpenGL, GoPhastTypes, ColorSchemes,
+  Windows, SysUtils, Classes, Graphics, OpenGL,
   System.ConvUtils, System.StdConvs, FastGEO, System.Character;
 
 type
@@ -50,19 +50,19 @@ function ExtractFileRoot(const FileName: string): string;
 10: @link(ModifiedSpectralScheme) (reversed); )
 }
 
-function FracAndSchemeToColor(ColorSchemeIndex: integer;
-  Fraction, ColorAdjustmentFactor: real; const Cycles: integer): TColor;
+//function FracAndSchemeToColor(ColorSchemeIndex: integer;
+//  Fraction, ColorAdjustmentFactor: real; const Cycles: integer): TColor;
 
 // @abstract(@name calculates the normal
 // of the plane defined by v1, v2, and v3.)
-procedure Normal(const v1, v2, v3: T3DRealPoint; out result: T3DRealPoint);
+procedure Normal(const v1, v2, v3: TPoint3D; out result: TPoint3D);
 
 // @abstract(@name subtracts v2 from v1.)
-procedure SubtractVectors(const v1, v2: T3DRealPoint; out result: T3DRealPoint);
+procedure SubtractVectors(const v1, v2: TPoint3D; out result: TPoint3D);
 
-function FortranFloatToStr(Value: Extended): string;
+//function FortranFloatToStr(Value: Extended): string;
 
-function FortranStrToFloat(AString: string): Extended;
+//function FortranStrToFloat(AString: string): Extended;
 function FortranStrToFloatDef(AString: string; Value: Extended): Extended;
 function TryFortranStrToFloat(AString: string; out Value: Extended): Boolean;
 
@@ -127,15 +127,13 @@ var
 
 implementation
 
-uses AnsiStrings, StrUtils, Dialogs, Math, frmGoPhastUnit,
-  IdGlobal, IOUtils, System.RTLConsts, System.TypInfo, System.ZLib, TempFiles,
+uses AnsiStrings, StrUtils, Dialogs, Math,
+  IdGlobal, IOUtils, System.RTLConsts, System.TypInfo,
   JvCreateProcess;
 
 resourcestring
   StrBadProcessHandle = 'Bad process handle';
 
-var
-  ColorParameters: TColorParameters;
 
 function FileLength(fileName : string) : Int64;
  var
@@ -189,23 +187,23 @@ begin
   Blue := (v shl 24) shr 24;
 end;
 
-procedure CrossProduct(const v1, v2: T3DRealPoint; out result: T3DRealPoint);
+procedure CrossProduct(const v1, v2: TPoint3D; out result: TPoint3D);
 begin
   result.X := v1.Y * v2.Z - v1.Z * v2.Y;
   result.Y := v1.Z * v2.X - v1.X * v2.Z;
   result.Z := v1.X * v2.Y - v1.Y * v2.X;
 end;
 
-procedure SubtractVectors(const v1, v2: T3DRealPoint; out result: T3DRealPoint);
+procedure SubtractVectors(const v1, v2: TPoint3D; out result: TPoint3D);
 begin
   result.X := v1.X - v2.X;
   result.Y := v1.Y - v2.Y;
   result.Z := v1.Z - v2.Z;
 end;
 
-procedure Normal(const v1, v2, v3: T3DRealPoint; out result: T3DRealPoint);
+procedure Normal(const v1, v2, v3: TPoint3D; out result: TPoint3D);
 var
-  Diff1, Diff2: T3DRealPoint;
+  Diff1, Diff2: TPoint3D;
   d: double;
 begin
   SubtractVectors(v1, v2, Diff1);
@@ -216,58 +214,6 @@ begin
   result.X := result.X / d;
   result.Y := result.Y / d;
   result.Z := result.Z / d;
-end;
-
-function FracAndSchemeToColor(ColorSchemeIndex: integer;
-  Fraction, ColorAdjustmentFactor: real; const Cycles: integer): TColor;
-var
-  ColorScheme: TUserDefinedColorSchemeItem;
-begin
-  if ColorSchemeIndex <= MaxColorScheme then
-  begin
-    if ColorSchemeIndex < 0 then
-    begin
-      result := clWhite;
-      Exit;
-    end;
-    if Fraction <> 1 then
-    begin
-      Fraction := Frac(Fraction*Cycles);
-    end;
-
-    case ColorSchemeIndex of
-      0: result := FracToSpectrum(Fraction, ColorAdjustmentFactor);
-      1: result := FracToGreenMagenta(1 - Fraction, ColorAdjustmentFactor);
-      2: result := FracToBlueRed(1 - Fraction, ColorAdjustmentFactor);
-      3: result := FracToBlueDarkOrange(1 - Fraction, ColorAdjustmentFactor);
-      4: result := FracToBlueGreen(1 - Fraction, ColorAdjustmentFactor);
-      5: result := FracToBrownBlue(1 - Fraction, ColorAdjustmentFactor);
-      6: result := FracToBlueGray(1 - Fraction, ColorAdjustmentFactor);
-      7: result := FracToBlueOrange(1 - Fraction, ColorAdjustmentFactor);
-      8: result := FracToBlue_OrangeRed(1 - Fraction, ColorAdjustmentFactor);
-      9: result := FracToLightBlue_DarkBlue(1 - Fraction, ColorAdjustmentFactor);
-      10: result := ModifiedSpectralScheme(1 - Fraction, ColorAdjustmentFactor);
-      11: result := SteppedSequential(1 - Fraction, ColorAdjustmentFactor);
-    else
-      result := clWhite;
-      Assert(False);
-    end;
-  end
-  else
-  begin
-    ColorSchemeIndex := ColorSchemeIndex-MaxColorScheme-1;
-    if ColorSchemeIndex <= frmGoPhast.PhastModel.ColorSchemes.Count then
-    begin
-      ColorParameters.ColorCycles := Cycles;
-      ColorParameters.ColorExponent := ColorAdjustmentFactor;
-      ColorScheme:= frmGoPhast.PhastModel.ColorSchemes[ColorSchemeIndex];
-      result := ColorParameters.FracToColor(Fraction, ColorScheme)
-    end
-    else
-    begin
-      result := clWhite;
-    end;
-  end;
 end;
 
 function ExtractFileRoot(const FileName: string): string;
@@ -282,18 +228,18 @@ begin
   end;
 end;
 
-function FortranFloatToStr(Value: Extended): string;
-var
-  OldDecimalSeparator: Char;
-begin
-  OldDecimalSeparator := FormatSettings.DecimalSeparator;
-  try
-    FormatSettings.DecimalSeparator := '.';
-    result := FloatToStr(Value);
-  finally
-    FormatSettings.DecimalSeparator := OldDecimalSeparator;
-  end;
-end;
+//function FortranFloatToStr(Value: Extended): string;
+//var
+//  OldDecimalSeparator: Char;
+//begin
+//  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+//  try
+//    FormatSettings.DecimalSeparator := '.';
+//    result := FloatToStr(Value);
+//  finally
+//    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+//  end;
+//end;
 
 function TitleCase(AString: string): string;
 var
@@ -331,30 +277,30 @@ begin
   end;
 end;
 
-function FortranStrToFloat(AString: string): Extended;
-var
-  OldDecimalSeparator: Char;
-  SignPos: Integer;
-begin
-  AString := Trim(AString);
-  OldDecimalSeparator := FormatSettings.DecimalSeparator;
-  try
-    FormatSettings.DecimalSeparator := '.';
-    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
-    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
-    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
-    if SignPos > 0 then
-    begin
-      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
-      begin
-        Insert('E', AString, SignPos);
-      end;
-    end;
-    result := StrToFloat(AString);
-  finally
-    FormatSettings.DecimalSeparator := OldDecimalSeparator;
-  end;
-end;
+//function FortranStrToFloat(AString: string): Extended;
+//var
+//  OldDecimalSeparator: Char;
+//  SignPos: Integer;
+//begin
+//  AString := Trim(AString);
+//  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+//  try
+//    FormatSettings.DecimalSeparator := '.';
+//    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+//    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
+//    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
+//    if SignPos > 0 then
+//    begin
+//      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
+//      begin
+//        Insert('E', AString, SignPos);
+//      end;
+//    end;
+//    result := StrToFloat(AString);
+//  finally
+//    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+//  end;
+//end;
 
 function FortranStrToFloatDef(AString: string; Value: Extended): Extended;
 var
@@ -1276,7 +1222,7 @@ begin
 end;
 
 initialization
-  ColorParameters := TColorParameters.Create;
+//  ColorParameters := TColorParameters.Create;
   StartTimeCmdLines := TStringList.Create;
   ShowElapsedTimeCmdLines := TStringList.Create;
 
@@ -1305,7 +1251,7 @@ initialization
   ShowElapsedTimeCmdLines.Add('');
 
 finalization
-  ColorParameters.Free;
+//  ColorParameters.Free;
   StartTimeCmdLines.Free;
   ShowElapsedTimeCmdLines.Free;
 

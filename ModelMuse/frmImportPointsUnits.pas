@@ -6,8 +6,8 @@ interface
 
 uses System.UITypes,
   Windows, SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, frmCustomGoPhastUnit, ExtCtrls, CheckLst, Grids,
-  RbwDataGrid4, Buttons, ComCtrls, frmImportShapefileUnit, Spin, JvExControls,
+  Dialogs, StdCtrls, frmCustomGoPhastUnit, ExtCtrls, Grids,
+  RbwDataGrid4, Buttons, ComCtrls, frmImportShapefileUnit, JvExControls,
   JvxCheckListBox, Mask, JvExMask, JvSpin, DataSetUnit, ScreenObjectUnit,
   GrayTabs;
 
@@ -201,14 +201,14 @@ type
 
 implementation
 
-uses Clipbrd, Contnrs, GoPhastTypes, frmGoPhastUnit, RbwParser,
+uses Clipbrd, GoPhastTypes, frmGoPhastUnit, RbwParser,
   frmProgressUnit, UndoItems, FastGEO, GIS_Functions,
   ValueArrayStorageUnit, PhastModelUnit, ModflowPackagesUnit,
   ModflowPackageSelectionUnit, ModflowTransientListParameterUnit,
   OrderedCollectionUnit, RealListUnit, ModflowBoundaryUnit,
   ModflowConstantHeadBoundaryUnit, ModflowGhbUnit, ModflowWellUnit,
   ModflowRivUnit, ModelMuseUtilities, ModflowDrnUnit, AbstractGridUnit,
-  frameHeadObservationsUnit, IntListUnit, framePackageHobUnit, ModflowHobUnit,
+  frameHeadObservationsUnit, IntListUnit, ModflowHobUnit,
   frameCustomCellObservationUnit, FootprintPropertiesUnit, FootprintBoundary,
   System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit,
   Modflow6ObsUnit, PestPropertiesUnit;

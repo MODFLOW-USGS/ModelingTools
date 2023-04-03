@@ -2,10 +2,10 @@ unit ModflowUzfUnit;
 
 interface
 
-uses Windows, ZLib, SysUtils, Classes, Contnrs, RealListUnit,
+uses Windows, ZLib, SysUtils, Classes, RealListUnit,
   OrderedCollectionUnit, ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
   ModflowRchUnit, ModflowEvtUnit, FormulaManagerUnit, SubscriptionUnit,
-  SparseDataSets, GoPhastTypes;
+  GoPhastTypes;
 
 type
 
@@ -457,9 +457,8 @@ const
 
 implementation
 
-uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, TempFiles, frmGoPhastUnit,
-  CustomModflowWriterUnit, ModflowParameterUnit, ModelMuseUtilities;
+uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
+  frmGoPhastUnit;
 
 resourcestring
   StrEvapoTranspiration = 'Evapo- transpiration demand';

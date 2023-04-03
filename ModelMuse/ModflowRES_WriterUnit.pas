@@ -51,7 +51,7 @@ implementation
 
 uses RbwParser, ModflowUnitNumbers, DataSetUnit, PhastModelUnit,
   ModflowTimeUnit, frmProgressUnit, frmFormulaErrorsUnit, Forms,
-  frmErrorsAndWarningsUnit, AbstractGridUnit, SolidGeom, PestParamRoots,
+  frmErrorsAndWarningsUnit, SolidGeom, PestParamRoots,
   ModflowParameterUnit;
 
 resourcestring

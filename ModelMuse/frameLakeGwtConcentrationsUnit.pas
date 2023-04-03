@@ -38,7 +38,7 @@ var
 implementation
 
 uses
-  ModflowLakMf6Unit, GoPhastTypes;
+  ModflowLakMf6Unit, GoPhastTypes, GwtStatusUnit;
 
 resourcestring
   StrSpecifiedConcentrat = 'Specified Concentration';

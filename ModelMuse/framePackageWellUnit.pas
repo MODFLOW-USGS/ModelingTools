@@ -26,7 +26,7 @@ var
 implementation
 
 uses
-  ModelMuseUtilities;
+  GoPhastTypes;
 
 {$R *.dfm}
 

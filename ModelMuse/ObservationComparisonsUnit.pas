@@ -3,7 +3,7 @@ unit ObservationComparisonsUnit;
 interface
 
 uses
-  System.Classes, GoPhastTypes, PestObsUnit;
+  System.Classes, GoPhastTypes, PestObsUnit, ScreenObjectOwnerCollectionUnit;
 
 type
   // Compare two @link(TCustomObservationItem)s in different objects.

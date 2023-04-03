@@ -7,7 +7,7 @@ uses
   CustomModflowWriterUnit, PhastModelUnit, ScreenObjectUnit, System.Classes,
   System.SysUtils, ModflowPackageSelectionUnit, ModflowCellUnit,
   System.Generics.Collections, Mt3dSftUnit, GoPhastTypes, Vcl.Forms,
-  ModflowBoundaryUnit, OrderedCollectionUnit, ModflowBoundaryDisplayUnit;
+  ModflowBoundaryUnit, ModflowBoundaryDisplayUnit;
 
 type
   TMt3dmsSftWriter = class(TCustomParameterTransientWriter)
@@ -58,7 +58,7 @@ type
 implementation
 
 uses
-  frmProgressUnit, ModflowSfrUnit, Access2000, frmErrorsAndWarningsUnit,
+  frmProgressUnit, ModflowSfrUnit, frmErrorsAndWarningsUnit,
   ModflowUnitNumbers, Mt3dmsChemUnit, DataSetUnit, Vcl.Dialogs, RbwParser;
 
 resourcestring

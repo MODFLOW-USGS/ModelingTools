@@ -3,7 +3,7 @@ unit InterpolationUnit;
 
 interface
 
-uses System.UITypes, Windows, PhastModelUnit, SysUtils, Classes, Controls,
+uses System.UITypes, Windows, PhastModelUnit, SysUtils, Classes,
   Dialogs, RbwParser, DataSetUnit,
   frmGoPhastUnit, ScreenObjectUnit, FastGEO, GoPhastTypes, QuadTreeClass,
   SfrInterpolatorUnit, NatNeigh, Contnrs;
@@ -400,9 +400,9 @@ type
 
 implementation
 
-uses Math, AbstractGridUnit, RealListUnit, TripackTypes, GIS_Functions, Types,
+uses Math, AbstractGridUnit, TripackTypes, GIS_Functions, Types,
   Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit,
-  PlProcUnit, TempFiles, Vcl.Forms, System.IOUtils, ModelMuseUtilities,
+  PlProcUnit, TempFiles, Vcl.Forms, System.IOUtils,
   JvCreateProcess;
 
 resourcestring

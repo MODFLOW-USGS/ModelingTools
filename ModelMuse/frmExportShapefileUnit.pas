@@ -123,7 +123,7 @@ implementation
 uses Math, ClassificationUnit, PhastModelUnit, frmGoPhastUnit,
   PhastDataSets, RealListUnit, ModflowTimeUnit,
   TimeUnit, FastGEO, RbwParser, EdgeDisplayUnit, ModelMuseUtilities,
-  frameCustomColorUnit, SutraTimeScheduleUnit, SutraBoundariesUnit,
+  frameCustomColorUnit, SutraTimeScheduleUnit,
   frmProgressUnit, SutraBoundaryUnit, ConvexHullUnit;
 
 resourcestring
@@ -154,12 +154,6 @@ begin
   result.X := Point.x;
   result.Y := Point.y;
 end;
-
-{function ConvertPoint(Point: T3DRealPoint): TShapePoint; overload;
-begin
-  result.X := Point.x;
-  result.Y := Point.y;
-end;}
 
 function TfrmExportShapefile.BooleanOnly(DataArray: TDataArray): boolean;
 begin
@@ -1110,7 +1104,7 @@ end;
 procedure TfrmExportShapefile.Assign3DShapeGeometry(Shape: TShapeObject;
   ColIndex, RowIndex, LayerIndex: Integer; EvaluatedAt: TEvaluatedAt);
 var
-  APoint: T3DRealPoint;
+  APoint: TPoint3D;
   Cell: T3DCellCoordinates;
   Element: T3DElementCoordinates;
   MIndex: Integer;

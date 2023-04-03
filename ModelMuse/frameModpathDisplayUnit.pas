@@ -107,7 +107,7 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, ColorSchemes, ModflowGridUnit, ModelMuseUtilities,
+  frmGoPhastUnit, ColorSchemes, ModflowGridUnit,
   LayerStructureUnit, frmCustomGoPhastUnit, frmColorSchemesUnit;
 
 resourcestring

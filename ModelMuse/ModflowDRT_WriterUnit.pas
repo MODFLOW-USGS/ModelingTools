@@ -2,9 +2,9 @@ unit ModflowDRT_WriterUnit;
 
 interface
 
-uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowDrtUnit,
+uses SysUtils, Classes, CustomModflowWriterUnit, ModflowDrtUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
-  ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes;
+  ModflowPackageSelectionUnit, GoPhastTypes;
 
 type
   TModflowDRT_Writer = class(TCustomListWriter)
@@ -43,8 +43,8 @@ type
 
 implementation
 
-uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
-  ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
+uses frmErrorsAndWarningsUnit,
+  ModflowUnitNumbers, frmProgressUnit, Forms,
   DataSetUnit, FastGEO;
 
 resourcestring

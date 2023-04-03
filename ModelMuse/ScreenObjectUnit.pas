@@ -4997,7 +4997,7 @@ SectionStarts.}
       LastParallelIndexA, FirstParallelIndexB, LastParallelIndexB: Integer);
     // @name creates a set of segments for each cell intersected by
     // @link(FScreenObject) in front or side views.
-    function IsPointInside(const CellLocation3D: T3DRealPoint;
+    function IsPointInside(const CellLocation3D: TPoint3D;
       Grid: TCustomModelGrid; out SectionIndex: integer): boolean;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name assigns values to FTopElevation and FBottomElevation

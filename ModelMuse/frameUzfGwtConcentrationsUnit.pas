@@ -35,7 +35,7 @@ var
 implementation
 
 uses
-  ModflowUzfMf6Unit, GoPhastTypes;
+  ModflowUzfMf6Unit, GoPhastTypes, GwtStatusUnit;
 
 {$R *.dfm}
 

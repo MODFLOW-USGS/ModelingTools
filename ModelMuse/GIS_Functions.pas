@@ -976,7 +976,7 @@ procedure UpdateGlobalLocations(const Col, Row, Layer: integer;
   const EvaluatedAt: TEvaluatedAt; Model: TBaseModel);
 var
   CC2D: TPoint2D;
-  CC3D: T3DRealPoint;
+  CC3D: TPoint3D;
   LocalModel: TCustomModel;
   Node: TSutraNode2D;
   Node3D: TSutraNode3D;

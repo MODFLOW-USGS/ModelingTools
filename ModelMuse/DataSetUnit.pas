@@ -11,11 +11,11 @@ unit DataSetUnit;
 
 interface
 
-uses System.UITypes, Windows, Math, ZLib, GR32, TempFiles, IntListUnit,
+uses System.UITypes, Windows, Math, ZLib, GR32, TempFiles,
   RealListUnit, SysUtils,
   Classes, Forms, RbwParser, GoPhastTypes, SubscriptionUnit,
   SparseDataSets, ObserverIntfU, FormulaManagerUnit, Dialogs,
-  Generics.Collections, Generics.Defaults, SparseArrayUnit, QuadTreeClass,
+  Generics.Collections, Generics.Defaults, SparseArrayUnit,
   FastGEO;
 
 { TODO :
@@ -1700,7 +1700,7 @@ implementation
 uses Contnrs, frmGoPhastUnit, frmConvertChoiceUnit, GIS_Functions,
   ScreenObjectUnit, frmFormulaErrorsUnit, InterpolationUnit,
   PhastModelUnit, AbstractGridUnit, frmErrorsAndWarningsUnit, frmProgressUnit,
-  GlobalVariablesUnit, frmDisplayDataUnit, SutraMeshUnit, PhastDataSets,
+  frmDisplayDataUnit, SutraMeshUnit, PhastDataSets,
   ModflowParameterUnit, OrderedCollectionUnit, SfrProcedures
   {$IFDEF MeasureTime}
   , ModelMuseUtilities
@@ -2307,7 +2307,7 @@ var
   LayerToUse, RowToUse, ColToUse: integer;
   TempUseList: TStringList;
   CellCenter, CellCorner: TPoint2D;
-  CellCenter3D, CellCorner3D: T3DRealPoint;
+  CellCenter3D, CellCorner3D: TPoint3D;
   LayerLimit, RowLimit, ColLimit: integer;
   FreeStack: boolean;
   AnnotationString: string;

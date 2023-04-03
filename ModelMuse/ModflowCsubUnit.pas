@@ -5,7 +5,7 @@ interface
 uses
   GoPhastTypes, System.Classes, ModflowCellUnit, System.ZLib,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, RbwParser,
-  RealListUnit, System.SysUtils, System.Contnrs, SubscriptionUnit;
+  RealListUnit, System.SysUtils, SubscriptionUnit;
 
 type
   TCSubOb = (coCSub, coInelastCSub, coElastCSub, coCoarseCSub, coCSubCell,
@@ -358,7 +358,7 @@ implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
-  frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit,
+  frmErrorsAndWarningsUnit, ModflowTimeUnit,
   ModflowPackageSelectionUnit, ModflowCSubInterbed, DataSetUnit;
 
 const

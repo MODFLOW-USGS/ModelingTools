@@ -7,7 +7,8 @@ uses System.UITypes,
   Types, // included to allow inlining of "Point" function.
   SysUtils, Classes, Controls, Graphics, Forms,
   GR32, // TBitmap32 and TFloatRect are declared in GR32.
-  GoPhastTypes, AbstractGridUnit, ZoomBox2, OpenGL12x, OpenGL, DataSetUnit;
+  GoPhastTypes, AbstractGridUnit, ZoomBox2, OpenGL, DataSetUnit,
+  FastGEO;
 
 type
   TModflowGrid = class(TCustomModelGrid)
@@ -123,7 +124,7 @@ type
     //
     constructor Create(Model: TBaseModel);
     function ThreeDElementCorner(const Column, Row, Layer: integer):
-      T3DRealPoint; override;
+      TPoint3D; override;
     // @name is the elevations of the top and bottom of the model layers
     // @name is accessed as @name[Col, Row, Layer].
     property LayerElevations: TThreeDRealArray read GetLayerElevations
@@ -179,9 +180,9 @@ type
 
 implementation
 
-uses GR32_Polygons, BigCanvasMethods, frmGoPhastUnit, SparseArrayUnit,
-  ModelMuseUtilities, LayerStructureUnit, FastGEO,
-  ModflowDiscretizationWriterUnit, PhastModelUnit, frmErrorsAndWarningsUnit, 
+uses GR32_Polygons, BigCanvasMethods, frmGoPhastUnit,
+  ModelMuseUtilities, LayerStructureUnit,
+  PhastModelUnit, frmErrorsAndWarningsUnit,
   IsosurfaceUnit, CustomModflowWriterUnit, Vcl.Dialogs;
 
 resourcestring

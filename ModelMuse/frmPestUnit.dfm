@@ -2,17 +2,16 @@ inherited frmPEST: TfrmPEST
   HelpType = htKeyword
   HelpKeyword = 'Pest_Properties_Dialog_Box'
   Caption = 'PEST Properties'
-  ClientHeight = 485
-  ClientWidth = 764
-  ExplicitWidth = 780
-  ExplicitHeight = 524
-  PixelsPerInch = 96
+  ClientHeight = 484
+  ClientWidth = 760
+  ExplicitWidth = 776
+  ExplicitHeight = 523
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
     Top = 0
     Width = 5
-    Height = 443
+    Height = 442
     ExplicitLeft = 121
     ExplicitHeight = 287
   end
@@ -20,7 +19,7 @@ inherited frmPEST: TfrmPEST
     Left = 0
     Top = 0
     Width = 193
-    Height = 443
+    Height = 442
     AutoExpand = False
     ShowButtons = True
     PageDefault = 0
@@ -35,8 +34,8 @@ inherited frmPEST: TfrmPEST
   object plMain: TJvPageList
     Left = 198
     Top = 0
-    Width = 566
-    Height = 443
+    Width = 562
+    Height = 442
     ActivePage = jvspIterationControls
     PropagateEnable = False
     Align = alClient
@@ -44,14 +43,14 @@ inherited frmPEST: TfrmPEST
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Basic_Pane'
       Caption = 'jvspBasic'
       DesignSize = (
-        566
-        443)
+        562
+        442)
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 72
@@ -138,12 +137,13 @@ inherited frmPEST: TfrmPEST
       object diredPest: TJvDirectoryEdit
         Left = 17
         Top = 312
-        Width = 536
+        Width = 528
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 2
         Text = 'C:\PEST'
         OnChange = diredPestChange
+        ExplicitWidth = 536
       end
       object comboArrayMarker: TComboBox
         Left = 17
@@ -182,8 +182,8 @@ inherited frmPEST: TfrmPEST
     object jvspControlDataMode: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Mode_and_Dimen'
       Caption = 'jvspControlDataMode'
@@ -258,8 +258,8 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Inversion_Cont'
       Caption = 'jvspInversionControls'
@@ -400,8 +400,8 @@ inherited frmPEST: TfrmPEST
     object jvspParameterAdjustmentControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Parameter_Adju'
       object lblMaxRelParamChange: TLabel
@@ -500,8 +500,8 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls2: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Inversion_Con2'
       Caption = 'jvspInversionControls2'
@@ -606,8 +606,8 @@ inherited frmPEST: TfrmPEST
     object jvspIterationControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Iteration_Cont'
       Caption = 'jvspIterationControls'
@@ -784,11 +784,13 @@ inherited frmPEST: TfrmPEST
     object jvspOutputOptions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Output_Pane'
       Caption = 'jvspOutputOptions'
+      ExplicitWidth = 566
+      ExplicitHeight = 443
       object cbWriteCov: TCheckBox
         Left = 6
         Top = 3
@@ -876,8 +878,8 @@ inherited frmPEST: TfrmPEST
     object jvspSingularValueDecomp: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Singular_Value'
       Caption = 'jvspSingularValueDecomp'
@@ -963,8 +965,8 @@ inherited frmPEST: TfrmPEST
     object jvspLqsr: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_LQSR_Pane'
       Caption = 'jvspLqsr'
@@ -1067,27 +1069,27 @@ inherited frmPEST: TfrmPEST
     object jvspObservationGroups: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Observation_Gr'
       Caption = 'jvspObservationGroups'
       inline frameObservationGroups: TframeGrid
         Left = 0
         Top = 0
-        Width = 566
-        Height = 443
+        Width = 562
+        Height = 442
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 566
-        ExplicitHeight = 443
+        ExplicitWidth = 562
+        ExplicitHeight = 442
         inherited Panel: TPanel
-          Top = 402
-          Width = 566
-          ExplicitTop = 402
-          ExplicitWidth = 566
+          Top = 401
+          Width = 562
+          ExplicitTop = 401
+          ExplicitWidth = 562
           DesignSize = (
-            566
+            562
             41)
           inherited lbNumber: TLabel
             Width = 209
@@ -1097,16 +1099,16 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 464
+            Left = 457
             ExplicitLeft = 419
           end
           inherited sbInsert: TSpeedButton
-            Left = 497
+            Left = 490
             OnClick = frameObservationGroupssbInsertClick
             ExplicitLeft = 448
           end
           inherited sbDelete: TSpeedButton
-            Left = 528
+            Left = 520
             OnClick = frameObservationGroupssbDeleteClick
             ExplicitLeft = 477
           end
@@ -1117,8 +1119,8 @@ inherited frmPEST: TfrmPEST
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 566
-          Height = 402
+          Width = 562
+          Height = 401
           ColCount = 5
           OnSelectCell = frameObservationGroupsGridSelectCell
           OnSetEditText = frameObservationGroupsGridSetEditText
@@ -1254,58 +1256,59 @@ inherited frmPEST: TfrmPEST
     object jvspObsGroupAssignments: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Observation_G2'
       Caption = 'jvspObsGroupAssignments'
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
-        Width = 566
-        Height = 443
+        Width = 562
+        Height = 442
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 566
-        ExplicitHeight = 443
+        ExplicitWidth = 562
+        ExplicitHeight = 442
         inherited tvTree: TTreeView
-          Width = 566
-          Height = 443
-          ExplicitWidth = 566
-          ExplicitHeight = 443
+          Width = 562
+          Height = 442
+          ExplicitWidth = 562
+          ExplicitHeight = 442
         end
       end
     end
     object jvspPilotPoints: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Pilot_Points_P'
       Caption = 'jvspPilotPoints'
       object Panel2: TPanel
         Left = 0
         Top = 140
-        Width = 566
-        Height = 303
+        Width = 562
+        Height = 302
         Align = alClient
         TabOrder = 0
         object Splitter1: TSplitter
           Left = 242
           Top = 1
           Width = 5
-          Height = 301
+          Height = 300
           ExplicitHeight = 293
         end
         object gbIndividualPilotPoints: TGroupBox
           Left = 1
           Top = 1
           Width = 241
-          Height = 301
+          Height = 300
           Align = alLeft
           Caption = 'Individually specified pilot points'
           TabOrder = 0
+          ExplicitHeight = 301
           inline framePilotPoints: TframeGrid
             Left = 2
             Top = 89
@@ -1448,16 +1451,16 @@ inherited frmPEST: TfrmPEST
         object gbBetweenPointObs: TGroupBox
           Left = 247
           Top = 1
-          Width = 318
-          Height = 301
+          Width = 314
+          Height = 300
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 169
-            Width = 314
-            Height = 130
+            Width = 310
+            Height = 129
             Align = alClient
             ColCount = 2
             FixedCols = 0
@@ -1521,6 +1524,8 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 314
+            ExplicitHeight = 130
             ColWidths = (
               64
               64)
@@ -1528,7 +1533,7 @@ inherited frmPEST: TfrmPEST
           object Panel3: TPanel
             Left = 2
             Top = 20
-            Width = 314
+            Width = 310
             Height = 149
             Align = alTop
             TabOrder = 1
@@ -1576,7 +1581,7 @@ inherited frmPEST: TfrmPEST
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 562
         Height = 140
         Align = alTop
         TabOrder = 1
@@ -1596,7 +1601,7 @@ inherited frmPEST: TfrmPEST
           TabOrder = 0
         end
         object gbArray: TGroupBox
-          Left = 302
+          Left = 298
           Top = 1
           Width = 263
           Height = 138
@@ -1660,8 +1665,8 @@ inherited frmPEST: TfrmPEST
     object jvspRegularisation: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Regularization'
       object lblPhimLim: TLabel
@@ -1863,8 +1868,8 @@ inherited frmPEST: TfrmPEST
     object jvspRegularizationOption: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Regularizatio2'
       Caption = 'jvspRegularizationOption'
@@ -2002,28 +2007,28 @@ inherited frmPEST: TfrmPEST
     object jvspPriorInfoObsGroups: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Prior_Informat'
       Caption = 'jvspPriorInfoObsGroups'
       inline framePriorInfoObservationGroups: TframeGrid
         Left = 0
         Top = 57
-        Width = 566
-        Height = 386
+        Width = 562
+        Height = 385
         Align = alClient
         TabOrder = 0
         ExplicitTop = 57
-        ExplicitWidth = 566
-        ExplicitHeight = 386
+        ExplicitWidth = 562
+        ExplicitHeight = 385
         inherited Panel: TPanel
-          Top = 345
-          Width = 566
-          ExplicitTop = 345
-          ExplicitWidth = 566
+          Top = 344
+          Width = 562
+          ExplicitTop = 344
+          ExplicitWidth = 562
           DesignSize = (
-            566
+            562
             41)
           inherited lbNumber: TLabel
             Width = 241
@@ -2033,15 +2038,15 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 346
+            Left = 341
             ExplicitLeft = 338
           end
           inherited sbInsert: TSpeedButton
-            Left = 375
+            Left = 370
             ExplicitLeft = 367
           end
           inherited sbDelete: TSpeedButton
-            Left = 405
+            Left = 399
             ExplicitLeft = 477
           end
           inherited seNumber: TJvSpinEdit
@@ -2050,8 +2055,8 @@ inherited frmPEST: TfrmPEST
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 566
-          Height = 345
+          Width = 562
+          Height = 344
           ColCount = 5
           OnExit = framePriorInfoObservationGroupsGridExit
           OnSelectCell = framePriorInfoObservationGroupsGridSelectCell
@@ -2187,10 +2192,11 @@ inherited frmPEST: TfrmPEST
       object Panel8: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 562
         Height = 57
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 566
         object btnMakeAllRegul: TButton
           Left = 6
           Top = 12
@@ -2206,11 +2212,13 @@ inherited frmPEST: TfrmPEST
     object jvspPriorInfoInitialValue: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Initial_Value_'
       Caption = 'jvspPriorInfoInitialValue'
+      ExplicitWidth = 566
+      ExplicitHeight = 443
       object rdgPriorInfoInitialValue: TRbwDataGrid4
         Left = 0
         Top = 105
@@ -2361,15 +2369,15 @@ inherited frmPEST: TfrmPEST
     object jvspPriorInfoHorizContinuity: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Within_Layer_C'
       Caption = 'jvspPriorInfoHorizContinuity'
       object pnlPriorInfoContinuity: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 562
         Height = 161
         Align = alTop
         TabOrder = 0
@@ -2432,8 +2440,8 @@ inherited frmPEST: TfrmPEST
       object rdgPriorInfoHorizContinuity: TRbwDataGrid4
         Left = 0
         Top = 161
-        Width = 566
-        Height = 282
+        Width = 562
+        Height = 281
         Align = alClient
         ColCount = 4
         FixedCols = 1
@@ -2548,16 +2556,20 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 566
+        ExplicitHeight = 282
       end
     end
     object jvspPriorInfoVertContinuity: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Between_Layer_'
       Caption = 'jvspPriorInfoVertContinuity'
+      ExplicitWidth = 566
+      ExplicitHeight = 443
       object Panel6: TPanel
         Left = 0
         Top = 0
@@ -2710,8 +2722,8 @@ inherited frmPEST: TfrmPEST
     object jvspPrediction1: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Prediction_Ana'
       Caption = 'jvspPrediction1'
@@ -2950,8 +2962,8 @@ inherited frmPEST: TfrmPEST
     object jvspPrediction2: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Prediction_An2'
       Caption = 'jvspPrediction2'
@@ -3040,15 +3052,15 @@ inherited frmPEST: TfrmPEST
     object jvspPareto1: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Pareto_Control'
       Caption = 'jvspPareto1'
       object Panel7: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 562
         Height = 289
         Align = alTop
         BevelOuter = bvNone
@@ -3186,8 +3198,8 @@ inherited frmPEST: TfrmPEST
       object rdgObservationsToReport: TRbwDataGrid4
         Left = 0
         Top = 289
-        Width = 566
-        Height = 154
+        Width = 562
+        Height = 153
         Align = alClient
         ColCount = 2
         FixedCols = 1
@@ -3251,6 +3263,8 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 566
+        ExplicitHeight = 154
         ColWidths = (
           64
           119)
@@ -3259,8 +3273,8 @@ inherited frmPEST: TfrmPEST
     object jsvpPareto2: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 566
-      Height = 443
+      Width = 562
+      Height = 442
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Pareto_Alterna'
       Caption = 'jsvpPareto2'
@@ -3345,11 +3359,13 @@ inherited frmPEST: TfrmPEST
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 443
-    Width = 764
+    Top = 442
+    Width = 760
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 443
+    ExplicitWidth = 764
     object btnHelp: TBitBtn
       Left = 446
       Top = 6

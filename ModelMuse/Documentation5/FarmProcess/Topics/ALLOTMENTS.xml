@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T14:25:19.222-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-04-03T07:32:59.103-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>ALLOTMENTS</title>
   <body>
     <header>
@@ -12,9 +12,9 @@
     <para styleclass="Normal"> All are optional and LIST is loaded with WBS as record ID</para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"> &#160;Secondary keyword indicates how input units:</para>
-    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;RATE (L^3/T) volumetric rate limit</para>
-    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;VOLUME (L^3) per stress period</para>
-    <para styleclass="Normal"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;HEIGHT (L) &#160; per stress period - multiplied by WBS irrigated area to get volume per stress period</para>
+    <para styleclass="Normal"> &#160;RATE (L^3/T) volumetric rate limit</para>
+    <para styleclass="Normal"> &#160;VOLUME (L^3) per stress period</para>
+    <para styleclass="Normal"> &#160;HEIGHT (L) &#160; per stress period - multiplied by WBS irrigated area to get volume per stress period</para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[SURFACE_WATER]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
@@ -24,8 +24,8 @@
           <para styleclass="Normal">List Style reads NWBS records that specify, for each WBS, a total delivery limit from the WBS’s SEMI_ROUTED_DELIVERY. If the WBS has multiple SEMI_ROUTED_DELIVERY’s, then their sum cannot exceed the limit. </para>
           <para styleclass="Normal">The second keyword is required and specifies the model units of the surface water allotment. Only one second keyword may be in use during a simulation. </para>
           <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
-            <li styleclass="Normal">RATE allotment is a volumetric rate [L3/T] </li>
-            <li styleclass="Normal">VOLUME allotment is a volume per stress period [L3] </li>
+            <li styleclass="Normal">RATE allotment is a volumetric rate [L<text style="font-size:7pt; vertical-align:super;">3</text>/T] </li>
+            <li styleclass="Normal">VOLUME allotment is a volume per stress period [L<text style="font-size:7pt; vertical-align:super;">3</text>] </li>
             <li styleclass="Normal">HEIGHT allotment is a length per stress period [L] that is multiplied by the WBS’s irrigated area to obtain a volume per stress period.</li>
           </list>
         </td>
@@ -40,8 +40,8 @@
           <para styleclass="Normal">List Style reads NWBS records that specify, for each WBS, a total pumpage limit from the WBS’s SUPPLY_WELLS (that is, a global limit on a WBS groundwater pumping). </para>
           <para styleclass="Normal">The second keyword is required and specifies the model units of the groundwater allotment. Only one second keyword may be in use during a simulation. </para>
           <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:11pt; color:#000000;">
-            <li styleclass="Normal">RATE allotment is a volumetric rate [L3/T] </li>
-            <li styleclass="Normal">VOLUME allotment is a volume per stress period [L3] </li>
+            <li styleclass="Normal">RATE allotment is a volumetric rate [L<text style="font-size:7pt; vertical-align:super;">3</text>/T] </li>
+            <li styleclass="Normal">VOLUME allotment is a volume per stress period [L<text style="font-size:7pt; vertical-align:super;">3</text>] </li>
             <li styleclass="Normal">HEIGHT allotment is a length per stress period [L] that is multiplied by the WBS’s irrigated area to obtain a volume per stress period.</li>
           </list>
         </td>

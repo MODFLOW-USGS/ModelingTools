@@ -4,8 +4,7 @@ interface
 
 uses Classes, GoPhastTypes, UndoItems, PhastModelUnit, frmShowHideObjectsUnit,
   ModflowParameterUnit, HufDefinition, ModflowTransientListParameterUnit,
-  UndoItemsScreenObjects, ModflowPackageSelectionUnit,
-  System.Generics.Collections, ModflowOutputControlUnit, PestParamGroupsUnit;
+  ModflowPackageSelectionUnit, ModflowOutputControlUnit, PestParamGroupsUnit;
 
 type
   TCustomCreateRequiredDataSetsUndo = class(TCustomUndo)
@@ -93,8 +92,7 @@ type
 
 implementation
 
-uses DataSetUnit, RbwParser, frmGoPhastUnit,
-  frmGridValueUnit, ScreenObjectUnit,
+uses DataSetUnit, frmGoPhastUnit, frmGridValueUnit, ScreenObjectUnit,
   ModflowPackagesUnit, frmDisplayDataUnit, System.SysUtils, contnrs;
 
 resourcestring

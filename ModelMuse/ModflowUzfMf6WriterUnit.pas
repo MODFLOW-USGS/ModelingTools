@@ -2,7 +2,7 @@ unit ModflowUzfMf6WriterUnit;
 
 interface
 
-uses System.UITypes,Winapi.Windows, SysUtils, Classes, Contnrs, RbwParser,
+uses System.UITypes,Winapi.Windows, SysUtils, Classes, RbwParser,
   PhastModelUnit, Vcl.Forms,
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, OrderedCollectionUnit, ModflowBoundaryDisplayUnit,
@@ -101,7 +101,7 @@ uses
   ModflowMvrWriterUnit, ModflowMvrUnit, System.Generics.Defaults,
   Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
   ModflowGridUnit, frmErrorsAndWarningsUnit, SparseArrayUnit,
-  Mt3dmsChemSpeciesUnit;
+  Mt3dmsChemSpeciesUnit, GwtStatusUnit;
 
 resourcestring
   StrWritingUZF6Package = 'Writing UZF6 Package input.';

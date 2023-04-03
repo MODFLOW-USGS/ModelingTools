@@ -3,12 +3,12 @@ unit frameCustomColorUnit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ArgusDataEntry, Grids, RbwDataGrid4, frameDisplayLimitUnit,
   SsButtonEd, RbwStringTreeCombo, StdCtrls, ComCtrls, JvExComCtrls, JvUpDown,
-  JvExControls, JvxSlider, Mask, JvExMask, JvSpin, JvExStdCtrls,
+  JvExControls, JvxSlider, Mask, JvExMask, JvSpin,
   VirtualTrees, DataSetUnit, LegendUnit, RbwParser, ClassificationUnit,
-  EdgeDisplayUnit, SubscriptionUnit, GrayTabs;
+  SubscriptionUnit, GrayTabs;
 
 type
   TframeCustomColor = class(TFrame)
@@ -167,7 +167,7 @@ implementation
 
 uses
   GoPhastTypes, frmGoPhastUnit, frmCustomGoPhastUnit, PhastModelUnit,
-  ModelMuseUtilities, Clipbrd, Contnrs, frmColorSchemesUnit;
+  Clipbrd, Contnrs, frmColorSchemesUnit, ColorSchemes;
 
 resourcestring
   StrValuesToIgnore = 'Values to ignore';
