@@ -243,11 +243,11 @@ type
     procedure WriteSemiRoutedDelivery;
     procedure WriteSemiRoutedDeliveryLowerLimit;
     procedure WriteSemiRoutedDeliveryUpperLimit;
-    procedure WriteSemiRoutedDeliveryClosureTolerance; 
-    
-    procedure WriteNoReturnFlow; 
+    procedure WriteSemiRoutedDeliveryClosureTolerance;
+
+    procedure WriteNoReturnFlow;
     procedure WriteSemiRoutedReturn;
-    procedure WriteRoutedReturn; 
+    procedure WriteRoutedReturn;
     procedure WriteRebuildFullyRoutedReturn;
 
     // ALLOTMENT
@@ -257,6 +257,7 @@ type
     procedure WriteGroundWaterAllotment;
 
     // Land use
+    procedure WriteLandUseOption;
     // LOCATION
     procedure EvaluateCropID;
     procedure WriteLandUseLocation;
@@ -343,7 +344,6 @@ type
       var ExternalScaleFileName: string);
     procedure WriteScaleFactorsID_andOption(RequiredValues: TRequiredValues;
       UnitConversionScaleFactor: string; ExternalScaleFileName: string);
-    procedure WriteLandUseOption;
     procedure WriteExpressionVariableNearZero;
   protected
     class function Extension: string; override;
@@ -7009,24 +7009,43 @@ begin
     WriteLandUseLocation;
     WriteLandUseAreaFraction;
     WriteLandUsePrintOptions;
+
+    // PRINT ROW_COLUMN
+    // SPECIFY_PRINT_ALL_CROPS
+    // CROP_NAME
+
     WriteCropCoefficient;
     WriteConsumptiveUse;
     WriteIrrigation;
     WriteRootDepth;
+
+    // ROOT_PRESSURE
+
     WriteGroundwaterRootInteraction;
     WriteTranspirationFraction;
     WriteEvaporationIrrigationFraction;
     WriteFractionOfPrecipToSurfaceWater;
     WriteFractionOfIrrigToSurfaceWater;
+
+    // POND_DEPTH
+
     WriteAddedDemand;
+
+    // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
 
     WriteString('  MIN_BARE_FRACTION');
     WriteFloat(FLandUse.MinimumBareFraction);
     NewLine;
 
+    // EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
+
     WriteString('  RELAXATION_FACTOR_HEAD_CHANGE');
     WriteFloat(FLandUse.RelaxFracHeadChange);
     NewLine;
+
+    //  CROPS_THAT_SPECIFY_SURFACE_ELEVATION
+    //  CROP_SURFACE_ELEVATION
+    //  CROP_SURFACE_ELEVATION_OFFSET
 
     WriteString('END LAND_USE');
     NewLine;

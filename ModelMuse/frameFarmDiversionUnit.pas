@@ -591,6 +591,7 @@ begin
                 DiversionObject.DiversionVertex :=
                   StrToIntDef(Grid.Cells[Ord(docVertex) + 2, TimeIndex], 1);
               end;
+            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 DelivRetItem.Frac := Grid.Cells[Ord(docFraction) + 2, TimeIndex];
@@ -600,6 +601,7 @@ begin
                   DelivRetItem.UpperLimit := Grid.Cells[Ord(docUpperLimit) + 2, TimeIndex];
                 end;
               end;
+            {$ENDIF}
             end;
           rtLocation:
             begin
@@ -607,6 +609,7 @@ begin
               DiversionLocation.X := StrToFloatDef(Grid.Cells[Ord(dlcX) + 2, TimeIndex], 0);
               DiversionLocation.Y := StrToFloatDef(Grid.Cells[Ord(dlcY) + 2, TimeIndex], 0);
               DiversionLocation.Z := 0;
+            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 DelivRetItem.Frac := Grid.Cells[Ord(dlFraction) + 2, TimeIndex];
@@ -616,6 +619,7 @@ begin
                   DelivRetItem.UpperLimit := Grid.Cells[Ord(dlUpperLimit) + 2, TimeIndex];
                 end;
               end;
+            {$ENDIF}
             end;
           rtCell:
             begin
@@ -623,6 +627,7 @@ begin
               DiversionCell.Row := StrToIntDef(Grid.Cells[Ord(dccRow) + 2, TimeIndex], 1);
               DiversionCell.Col := StrToIntDef(Grid.Cells[Ord(dccColumn) + 2, TimeIndex], 1);
               DiversionCell.Lay := 0;
+            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 DelivRetItem.Frac := Grid.Cells[Ord(dccFraction) + 2, TimeIndex];
@@ -632,6 +637,7 @@ begin
                   DelivRetItem.UpperLimit := Grid.Cells[Ord(dccUpperLimit) + 2, TimeIndex];
                 end;
               end;
+            {$ENDIF}
             end;
         else
           Assert(False);
@@ -701,6 +707,7 @@ begin
               begin
                 Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1] := '';
               end;
+            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 Grid.Cells[Ord(docFraction) + 2, ItemIndex + 1] := AnItem.Frac;
@@ -710,12 +717,14 @@ begin
                   Grid.Cells[Ord(docUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
                 end;
               end;
+            {$ENDIF}
             end;
           rtLocation:
             begin
               DiversionLocation := LinkedStream.DiversionLocation;
               Grid.Cells[Ord(dlcX) + 2, ItemIndex + 1] := FloatToStr(DiversionLocation.X);
               Grid.Cells[Ord(dlcY) + 2, ItemIndex + 1] := FloatToStr(DiversionLocation.Y);
+            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 Grid.Cells[Ord(dlFraction) + 2, ItemIndex + 1] := AnItem.Frac;
@@ -725,12 +734,14 @@ begin
                   Grid.Cells[Ord(dlUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
                 end;
               end;
+            {$ENDIF}
             end;
           rtCell:
             begin
               DiversionCell := LinkedStream.DiversionCell;
               Grid.Cells[Ord(dccRow) + 2, ItemIndex + 1] := IntToStr(DiversionCell.Row);
               Grid.Cells[Ord(dccColumn) + 2, ItemIndex + 1] := IntToStr(DiversionCell.Col);
+            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 Grid.Cells[Ord(dccFraction) + 2, ItemIndex + 1] := AnItem.Frac;
@@ -740,6 +751,7 @@ begin
                   Grid.Cells[Ord(dccUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
                 end;
               end;
+            {$ENDIF}
             end;
         else
           Assert(False);

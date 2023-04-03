@@ -1926,7 +1926,7 @@ begin
     (Packages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed);
 {$ELSE}
   tabDiversionsOwhm2.TabVisible := False;
-  tabReturnFlowOwhm.TabVisible := False;
+  tabReturnFlowOwhm2.TabVisible := False;
 {$ENDIF}
 //    tabReturnFlowLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
 //      and Packages.FarmSurfaceWater4.IsSelected and
