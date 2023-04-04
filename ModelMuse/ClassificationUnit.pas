@@ -8,7 +8,8 @@ unit ClassificationUnit;
 interface
 
 uses SysUtils, StrUtils, Classes, ComCtrls, VirtualTrees, DataSetUnit,
-  StdCtrls, PhastDataSets, RbwParser;
+  StdCtrls, PhastDataSets, RbwParser, EdgeDisplayUnit, RbwStringTreeCombo,
+  System.Generics.Collections;
 
 Type
   {@name is an abstract base class used in @link(TClassificationList),
@@ -140,10 +141,107 @@ procedure CreateClassifiedVirtualNodes(Classifications: TStringList;
   const SelectedName: string; DummyObjects: TList);
 
 function CompareStrings(List: TStringList; Index1, Index2: Integer): Integer;
-  
+
+procedure UpdateTreeComboText(SelectedNode: PVirtualNode;
+  TreeCombo: TRbwStringTreeCombo);
+
+procedure SelectOnlyLeaves(Node: PVirtualNode;
+  TreeCombo: TRbwStringTreeCombo; Sender: TBaseVirtualTree;
+  var SelectedNode: PVirtualNode);
+
+type
+  TEdgeDisplayEdit = class(TObject)
+  private
+    function GetDisplayTime: Double;
+    procedure SetDisplayTime(const Value: Double);
+  public
+    Edge: TCustomModflowGridEdgeDisplay;
+    DataIndex: integer;
+    property DisplayTime: Double read GetDisplayTime write SetDisplayTime;
+  end;
+
+  TMnw2ItemID = class(TObject)
+    ID: string;
+  end;
+
+  TMnw2ItemIDObjectList = TObjectList<TMnw2ItemID>;
+
+  TBoundaryClassification = class(TClassificationObject)
+  private
+    FDataArray: TDataArray;
+    FTimeList: TCustomTimeList;
+    FEdgeDisplay: TEdgeDisplayEdit;
+    FMnw2ItemID: TMnw2ItemID;
+    FName: string;
+    function GetClassifiedObject: TObject;
+    function GetBoundaryType: TBoundaryType;
+  public
+    function ClassificationName: string; Override;
+    function FullClassification: string; Override;
+    Constructor Create(AnObject: TDataArray); overload;
+    Constructor Create(AnObject: TCustomTimeList); overload;
+    Constructor Create(const Name: string; AnObject: TEdgeDisplayEdit); overload;
+    Constructor Create(const Name: string; AnObject: TMnw2ItemID); overload;
+    Constructor Create(const Name: string; AnObject: TObject); overload;
+    property ClassifiedObject: TObject read GetClassifiedObject;
+    property BoundaryType: TBoundaryType read GetBoundaryType;
+  end;
+
+  TCanSelectBoundary = function (BoundaryClassification: TBoundaryClassification): Boolean of object;
+
+  TDataSetAllowedEvent = function (DataArray: TDataArray): boolean of object;
+
+  TDataSetClassification = class(TClassificationObject)
+  private
+    FDataArray: TDataArray;
+  public
+    function ClassificationName: string; Override;
+    function FullClassification: string; Override;
+    Constructor Create(ADataArray: TDataArray);
+    property DataArray: TDataArray read FDataArray;
+  end;
+
+procedure GetNodeCaption(Node: PVirtualNode; var CellText: string;
+  Sender: TBaseVirtualTree);
+
+Procedure FillVirtualStringTreeWithDataSets(Tree : TVirtualStringTree;
+  ClassificationObjectOwnerList: TList; SelectedDataArray: TDataArray;
+  DataSetAllowed: TDataSetAllowedEvent);
+
+procedure FillDataSetLists(HufDataArrays: TClassificationList;
+  LayerGroupList: TClassificationList;
+  SutraLayerGroupList: TClassificationList;
+  ClassificationObjects: TClassificationList;
+  ClassificationObjectOwnerList: TList;
+  DataSetAllowed: TDataSetAllowedEvent = nil);
+
+procedure FillVirtStrTreeWithBoundaryConditions(
+  SelectedDataArray: TDataArray;
+  SelectedTimeList: TCustomTimeList;
+  SelectedEdgeDisplay: TCustomModflowGridEdgeDisplay;
+  LocalBoundaryClassifications: TList; EdgeEdits: TList;
+  ATree: TVirtualStringTree;
+  CanSelectBoundary: TCanSelectBoundary = nil;
+  IncludeMnw2TimeData: Boolean = false);
+
+resourcestring
+  StrMnw2PumpingRate = 'Pumping Rate';
+  StrMnw2HeadCapacityMultip = 'Head Capacity Multiplier';
+  StrMnw2LimitingWaterLevel = 'Limiting Water Level';
+  StrMnw2InactivationPumping = 'Inactivation Pumping Rate';
+  StrMnw2ReactivationPumping = 'Reactivation Pumping Rate';
+resourcestring
+  StrBoundaryConditions = 'Boundary Conditions, Observations, and Other Features';
+
+
+
 implementation
 
-uses IntListUnit, ScreenObjectUnit;
+uses IntListUnit, ScreenObjectUnit, PhastModelUnit, frmGoPhastUnit,
+  GoPhastTypes;
+
+var
+  Mnw2Objects: TMnw2ItemIDObjectList = nil;
 
 function CompareStrings(List: TStringList; Index1, Index2: Integer): Integer;
 const
@@ -682,5 +780,632 @@ begin
     end;
   end;
 end;
+
+{ TEdgeDisplayEdit }
+
+function TEdgeDisplayEdit.GetDisplayTime: Double;
+begin
+  result := Edge.DisplayTime;
+end;
+
+procedure TEdgeDisplayEdit.SetDisplayTime(const Value: Double);
+begin
+  Edge.DisplayTime := Value;
+end;
+
+{ TBoundaryClassification }
+
+function TBoundaryClassification.ClassificationName: string;
+begin
+  if FDataArray <> nil then
+  begin
+    result := FDataArray.DisplayName;
+    Assert(FTimeList = nil);
+    Assert(FEdgeDisplay = nil);
+  end
+  else if FTimeList <> nil then
+  begin
+    result := FTimeList.Name;
+    Assert(FEdgeDisplay = nil);
+  end
+  else
+  begin
+    result := FName;
+  end;
+end;
+
+constructor TBoundaryClassification.Create(AnObject: TCustomTimeList);
+begin
+  FTimeList := AnObject;
+  FDataArray := nil;
+  FEdgeDisplay := nil;
+  FMnw2ItemID := nil;
+end;
+
+constructor TBoundaryClassification.Create(AnObject: TDataArray);
+begin
+  FDataArray := AnObject;
+  FTimeList := nil;
+  FEdgeDisplay := nil;
+  FMnw2ItemID := nil;
+end;
+
+constructor TBoundaryClassification.Create(const Name: string;
+  AnObject: TObject);
+begin
+  FName := Name;
+  if AnObject is TDataArray then
+  begin
+    Create(TDataArray(AnObject));
+  end
+  else if AnObject is TCustomTimeList then
+  begin
+    Create(TCustomTimeList(AnObject));
+  end
+  else if AnObject is TEdgeDisplayEdit then
+  begin
+    Create(Name, TEdgeDisplayEdit(AnObject));
+  end
+  else if AnObject is TMnw2ItemID then
+  begin
+    Create(Name, TMnw2ItemID(AnObject));
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+constructor TBoundaryClassification.Create(const Name: string;
+  AnObject: TMnw2ItemID);
+begin
+  FName := Name;
+  FEdgeDisplay := nil;
+  FDataArray := nil;
+  FTimeList := nil;
+  FMnw2ItemID := AnObject;
+end;
+
+constructor TBoundaryClassification.Create(const Name: string;
+  AnObject: TEdgeDisplayEdit);
+begin
+  FName := Name;
+  FEdgeDisplay := AnObject;
+  FDataArray := nil;
+  FTimeList := nil;
+  FMnw2ItemID := nil;
+end;
+
+function TBoundaryClassification.FullClassification: string;
+begin
+  result := ''
+end;
+
+function TBoundaryClassification.GetBoundaryType: TBoundaryType;
+begin
+  if FMnw2ItemID <> nil then
+  begin
+    result := btMfMnw;
+  end
+  else if FEdgeDisplay <> nil then
+  begin
+    result := btMfHfb;
+  end
+  else
+  begin
+    result := FTimeList.BoundaryType;
+  end;
+end;
+
+function TBoundaryClassification.GetClassifiedObject: TObject;
+begin
+  result := nil;
+  if FDataArray <> nil then
+  begin
+    result := FDataArray;
+  end
+  else if FTimeList <> nil then
+  begin
+    result := FTimeList;
+  end
+  else if FEdgeDisplay <> nil then
+  begin
+    result := FEdgeDisplay;
+  end
+  else if FMnw2ItemID <> nil then
+  begin
+    result := FMnw2ItemID;
+    Assert(result <> nil);
+  end;
+end;
+
+procedure FileMnw2Objects;
+var
+  Mnw2Item: TMnw2ItemID;
+begin
+  Mnw2Item := TMnw2ItemID.Create;
+  Mnw2Item.ID := StrMnw2PumpingRate;
+  Mnw2Objects.Add(Mnw2Item);
+
+  Mnw2Item := TMnw2ItemID.Create;
+  Mnw2Item.ID := StrMnw2HeadCapacityMultip;
+  Mnw2Objects.Add(Mnw2Item);
+
+  Mnw2Item := TMnw2ItemID.Create;
+  Mnw2Item.ID := StrMnw2LimitingWaterLevel;
+  Mnw2Objects.Add(Mnw2Item);
+
+  Mnw2Item := TMnw2ItemID.Create;
+  Mnw2Item.ID := StrMnw2InactivationPumping;
+  Mnw2Objects.Add(Mnw2Item);
+
+  Mnw2Item := TMnw2ItemID.Create;
+  Mnw2Item.ID := StrMnw2ReactivationPumping;
+  Mnw2Objects.Add(Mnw2Item);
+end;
+
+Procedure FillVirtualStringTreeWithDataSets(Tree : TVirtualStringTree;
+  ClassificationObjectOwnerList: TList; SelectedDataArray: TDataArray;
+  DataSetAllowed: TDataSetAllowedEvent);
+var
+  ClassificationList: TStringList;
+  ClassificationObjects: TClassificationList;
+  LayerGroupList: TClassificationList;
+  SutraLayerGroupList: TClassificationList;
+  SelectedName: string;
+  HufDataArrays: TClassificationList;
+begin
+
+  { TODO : Nearly the same code is use in TfrmFormulaUnit, TFrmGridColor,
+  TfrmScreenObjectProperties, and TfrmDataSets. Find a way to combine them. }
+
+  // ClassificationObjectOwnerList will be filled with ClassificationObjects
+  // for all the TDataArrays.
+  ClassificationObjectOwnerList.Clear;
+
+  // get the name of the selected TDataArray.
+  if SelectedDataArray = nil then
+  begin
+    SelectedName := '';
+  end
+  else
+  begin
+    SelectedName := SelectedDataArray.DisplayName;
+  end;
+
+  // Create lists used for sorting the nodes.
+  HufDataArrays := TClassificationList.Create;
+  ClassificationObjects:= TClassificationList.Create;
+  LayerGroupList := TClassificationList.Create;
+  SutraLayerGroupList := TClassificationList.Create;
+  try
+    FillDataSetLists(HufDataArrays,
+      LayerGroupList, SutraLayerGroupList,
+      ClassificationObjects,
+      ClassificationObjectOwnerList, DataSetAllowed);
+
+    ClassificationList := TStringList.Create;
+    try
+
+      ClassifyListedObjects(ClassificationList, ClassificationObjects,
+        [LayerGroupList, SutraLayerGroupList, HufDataArrays]);
+
+      CreateClassifiedVirtualNodes(ClassificationList, 0,
+        Tree, SelectedName, ClassificationObjectOwnerList);
+    finally
+      ClassificationList.Free;
+    end;
+
+  finally
+    SutraLayerGroupList.Free;
+    LayerGroupList.Free;
+    ClassificationObjects.Free;
+    HufDataArrays.Free;
+  end;
+end;
+
+procedure FillDataSetLists(HufDataArrays: TClassificationList;
+  LayerGroupList: TClassificationList;
+  SutraLayerGroupList: TClassificationList;
+  ClassificationObjects: TClassificationList;
+  ClassificationObjectOwnerList: TList;
+  DataSetAllowed: TDataSetAllowedEvent = nil);
+var
+  Index: Integer;
+  DataSet: TDataArray;
+  ClassificationObject: TDataSetClassification;
+  Position: Integer;
+  HydrogeologicUnitNames: TStringList;
+  LayerGroupsDataSets: TList;
+  SutraLayerGroupsDataSets: TList;
+  DataArrayManager: TDataArrayManager;
+begin
+  LayerGroupsDataSets := TList.Create;
+  HydrogeologicUnitNames := TStringList.Create;
+  SutraLayerGroupsDataSets := TList.Create;
+  try
+    // HufDataArrays will be filled with TDataSetClassifications for the
+    // TDataArrays used to define HUF data.
+    frmGoPhast.PhastModel.HydrogeologicUnits.
+      FillDataArrayNames(HydrogeologicUnitNames);
+    HydrogeologicUnitNames.CaseSensitive := False;
+    for Index := 0 to HydrogeologicUnitNames.Count - 1 do
+    begin
+      HufDataArrays.Add(nil);
+    end;
+    // LayerGroupList will be filled with TDataSetClassifications for the
+    // TDataArrays used to define the layer geometry.
+    frmGoPhast.PhastModel.GetModflowLayerGroupDataSets(LayerGroupsDataSets);
+    for Index := 0 to LayerGroupsDataSets.Count - 1 do
+    begin
+      LayerGroupList.Add(nil);
+    end;
+
+    frmGoPhast.PhastModel.GetSutraLayerGroupDataSets(SutraLayerGroupsDataSets);
+    for Index := 0 to SutraLayerGroupsDataSets.Count - 1 do
+    begin
+      SutraLayerGroupList.Add(nil);
+    end;
+
+    // DataSetClassificationList will be filled with TDataSetClassifications
+    // for the all the TDataArrays
+    DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
+    for Index := 0 to DataArrayManager.DataSetCount - 1 do
+    begin
+      DataSet := DataArrayManager.DataSets[Index];
+      if Assigned(DataSetAllowed) and not DataSetAllowed(DataSet) then
+      begin
+        Continue;
+      end;
+      ClassificationObject := TDataSetClassification.Create(DataSet);
+      ClassificationObjects.Add(ClassificationObject);
+      ClassificationObjectOwnerList.Add(ClassificationObject);
+
+      Position := LayerGroupsDataSets.IndexOf(DataSet);
+      if Position >= 0 then
+      begin
+        LayerGroupList[Position] := ClassificationObject;
+      end;
+
+      Position := SutraLayerGroupsDataSets.IndexOf(DataSet);
+      if Position >= 0 then
+      begin
+        SutraLayerGroupList[Position] := ClassificationObject;
+      end;
+
+      Position := HydrogeologicUnitNames.IndexOf(DataSet.Name);
+      if Position >= 0 then
+      begin
+        HufDataArrays[Position] := ClassificationObject;
+      end;
+    end;
+  finally
+    LayerGroupsDataSets.Free;
+    HydrogeologicUnitNames.Free;
+    SutraLayerGroupsDataSets.Free;
+  end;
+end;
+
+{ TDataSetClassification }
+
+constructor TDataSetClassification.Create(ADataArray: TDataArray);
+begin
+  inherited Create;
+  FDataArray := ADataArray;
+end;
+
+function TDataSetClassification.FullClassification: string;
+begin
+  result := FDataArray.FullClassification;
+end;
+
+function TDataSetClassification.ClassificationName: string;
+begin
+  result := FDataArray.DisplayName;
+end;
+
+procedure FillVirtStrTreeWithBoundaryConditions(
+  SelectedDataArray: TDataArray;
+  SelectedTimeList: TCustomTimeList;
+  SelectedEdgeDisplay: TCustomModflowGridEdgeDisplay;
+  LocalBoundaryClassifications: TList; EdgeEdits: TList;
+  ATree: TVirtualStringTree;
+  CanSelectBoundary: TCanSelectBoundary = nil;
+  IncludeMnw2TimeData: Boolean = false);
+var
+  List: TStringList;
+  ClassificationPosition: Integer;
+  DataSet: TDataArray;
+  Index: Integer;
+  DataArrayManager: TDataArrayManager;
+  Classifications: TStringList;
+  NodeData: PClassificationNodeData;
+  RootNode: PVirtualNode;
+  ANode: PVirtualNode;
+  NextNode: PVirtualNode;
+  DummyRootClassification: TDummyClassification;
+  ParentNode: PVirtualNode;
+  AnObject: TObject;
+  VirtualNode: PVirtualNode;
+  BounddaryClassification: TBoundaryClassification;
+  BoundaryIndex: Integer;
+  VirtualClassificationNode: PVirtualNode;
+  DummyClassification: TDummyClassification;
+  TimeList: TCustomTimeList;
+  EdgeEdit: TEdgeDisplayEdit;
+  UsedByModel: Boolean;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+  ChildTimeList: TCustomTimeList;
+  NodeDeleted: Boolean;
+  Mnw2Item: TMnw2ItemID;
+  Mnw2Index: integer;
+begin
+  LocalBoundaryClassifications.Clear;
+  DummyRootClassification := TDummyClassification.Create(StrBoundaryConditions);
+  LocalBoundaryClassifications.Add(DummyRootClassification);
+  RootNode := ATree.AddChild(nil);
+  NodeData := ATree.GetNodeData(RootNode);
+  NodeData.ClassificationObject := DummyRootClassification;
+  Classifications := TStringList.Create;
+  try
+    if frmGoPhast.PhastModel.ModelSelection = msPhast then
+    begin
+      DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
+      for Index := 0 to DataArrayManager.BoundaryDataSetCount - 1 do
+      begin
+        DataSet := DataArrayManager.BoundaryDataSets[Index];
+        ClassificationPosition := Classifications.IndexOf(
+          DataSet.Classification);
+        if ClassificationPosition < 0 then
+        begin
+          List := TStringList.Create;
+          Classifications.AddObject(DataSet.Classification, List);
+        end
+        else
+        begin
+          List := Classifications.Objects[ClassificationPosition]
+            as TStringList;
+        end;
+        List.AddObject(DataSet.Name, DataSet);
+      end;
+    end;
+    EdgeEdits.Clear;
+    if (frmGoPhast.PhastModel.ModelSelection in ModflowSelection)
+      and frmGoPhast.PhastModel.HfbIsSelected then
+    begin
+      List := TStringList.Create;
+      Classifications.AddObject('MODFLOW Horizontal Flow Barrier', List);
+      for Index := 0 to frmGoPhast.PhastModel.
+        HfbDisplayer.RealValueTypeCount - 1 do
+      begin
+        EdgeEdit := TEdgeDisplayEdit.Create;
+        EdgeEdits.Add(EdgeEdit);
+        EdgeEdit.DataIndex := Index;
+        EdgeEdit.Edge := frmGoPhast.PhastModel.HfbDisplayer;
+        List.AddObject(EdgeEdit.Edge.RealDescription[Index], EdgeEdit);
+      end;
+    end;
+    for Index := 0 to frmGoPhast.PhastModel.TimeListCount - 1 do
+    begin
+      TimeList := frmGoPhast.PhastModel.TimeLists[Index];
+      UsedByModel := TimeList.UsedByModel;
+      if not UsedByModel and frmGoPhast.PhastModel.LgrUsed then
+      begin
+        for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
+        begin
+          ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
+          if ChildModel <> nil then
+          begin
+            ChildTimeList := ChildModel.GetTimeListByName(TimeList.Name);
+            if (ChildTimeList <> nil) and ChildTimeList.UsedByModel then
+            begin
+              UsedByModel := True;
+              break;
+            end;
+          end;
+        end;
+      end;
+      if UsedByModel then
+      begin
+        ClassificationPosition := Classifications.IndexOf(
+          TimeList.Classification);
+        if ClassificationPosition < 0 then
+        begin
+          List := TStringList.Create;
+          Classifications.AddObject(TimeList.Classification, List);
+        end
+        else
+        begin
+          List := Classifications.Objects[ClassificationPosition]
+            as TStringList;
+        end;
+        List.AddObject(TimeList.Name, TimeList);
+      end;
+    end;
+    if IncludeMnw2TimeData and frmGoPhast.PhastModel.Mnw2IsSelected then
+    begin
+      ClassificationPosition := Classifications.IndexOf(StrMODFLOWMultinodeWe);
+      if ClassificationPosition < 0 then
+      begin
+        List := TStringList.Create;
+        Classifications.AddObject(StrMODFLOWMultinodeWe, List);
+      end
+      else
+      begin
+        List := Classifications.Objects[ClassificationPosition]
+          as TStringList;
+      end;
+
+      for Mnw2Index := 0 to Mnw2Objects.Count - 1 do
+      begin
+        Mnw2Item := Mnw2Objects[Mnw2Index];
+        List.AddObject(Mnw2Item.ID, Mnw2Item);
+      end;
+    end;
+    Classifications.Sort;
+    for Index := 0 to Classifications.Count - 1 do
+    begin
+      DummyClassification := TDummyClassification.Create(Classifications[Index]);
+      LocalBoundaryClassifications.Add(DummyClassification);
+      VirtualClassificationNode := ATree.AddChild(RootNode);
+      NodeData := ATree.GetNodeData(VirtualClassificationNode);
+      NodeData.ClassificationObject := DummyClassification;
+      List := Classifications.Objects[Index] as TStringList;
+      List.Sort;
+      for BoundaryIndex := 0 to List.Count - 1 do
+      begin
+        BounddaryClassification := TBoundaryClassification.Create(
+          List[BoundaryIndex], List.Objects[BoundaryIndex]);
+        if Assigned(CanSelectBoundary) then
+        begin
+          if not CanSelectBoundary(BounddaryClassification) then
+          begin
+            BounddaryClassification.Free;
+            Continue;
+          end;
+        end;
+        LocalBoundaryClassifications.Add(BounddaryClassification);
+        VirtualNode := ATree.AddChild(VirtualClassificationNode);
+        NodeData := ATree.GetNodeData(VirtualNode);
+        NodeData.ClassificationObject := BounddaryClassification;
+        AnObject := BounddaryClassification.ClassifiedObject;
+        if AnObject is TEdgeDisplayEdit then
+        begin
+          EdgeEdit := TEdgeDisplayEdit(AnObject);
+          ATree.Selected[VirtualNode] := (EdgeEdit.Edge = SelectedEdgeDisplay)
+            and (EdgeEdit.DataIndex = SelectedEdgeDisplay.DataToPlot);
+        end
+        else
+        begin
+          ATree.Selected[VirtualNode] := (AnObject = SelectedDataArray)
+            or (AnObject = SelectedTimeList);
+        end;
+        if ATree.Selected[VirtualNode] then
+        begin
+          ParentNode := ATree.NodeParent[VirtualNode];
+          while ParentNode <> nil do
+          begin
+            ATree.Expanded[ParentNode] := True;
+            if ParentNode = RootNode then
+            begin
+              break;
+            end;
+            ParentNode := ATree.NodeParent[ParentNode];
+          end;
+        end;
+      end;
+    end;
+
+    repeat
+      ANode := RootNode;
+      NodeDeleted := False;
+      while ANode <> nil do
+      begin
+        NextNode := ATree.GetNext(ANode);
+        NodeData := ATree.GetNodeData(ANode);
+        if NodeData.ClassificationObject is TDummyClassification then
+        begin
+          if not ATree.HasChildren[ANode] then
+          begin
+            if ANode = RootNode then
+            begin
+              RootNode := nil;
+            end;
+            ATree.DeleteNode(ANode);
+            NodeDeleted := True;
+          end;
+        end;
+        ANode:= NextNode;
+      end;
+    until not NodeDeleted;
+
+
+  finally
+    for Index := 0 to Classifications.Count - 1 do
+    begin
+      Classifications.Objects[Index].Free;
+    end;
+    Classifications.Free;
+  end;
+end;
+
+procedure GetNodeCaption(Node: PVirtualNode;
+  var CellText: string; Sender: TBaseVirtualTree);
+var
+  ClassificationNodeData: PClassificationNodeData;
+begin
+  ClassificationNodeData := Sender.GetNodeData(Node);
+  if not Assigned(ClassificationNodeData)
+    or not Assigned(ClassificationNodeData.ClassificationObject) then
+  begin
+    CellText := StrNone;
+  end
+  else
+  begin
+    CellText := ClassificationNodeData.ClassificationObject.ClassificationName;
+  end;
+end;
+
+procedure UpdateTreeComboText(SelectedNode: PVirtualNode;
+  TreeCombo: TRbwStringTreeCombo);
+var
+  CellText: string;
+begin
+  if TreeCombo.Tree.SelectedCount = 0 then
+  begin
+    if TreeCombo.Text <> 'none' then
+    begin
+      TreeCombo.Text := 'none';
+    end;
+  end
+  else
+  begin
+    GetNodeCaption(SelectedNode, CellText, TreeCombo.Tree);
+    TreeCombo.Text := CellText;
+  end;
+end;
+
+procedure SelectOnlyLeaves(Node: PVirtualNode;
+  TreeCombo: TRbwStringTreeCombo; Sender: TBaseVirtualTree;
+  var SelectedNode: PVirtualNode); overload;
+var
+  CellText: string;
+begin
+  if Sender.Selected[Node] and Sender.HasChildren[Node] then
+  begin
+    Sender.Selected[Node] := False;
+    Sender.FocusedNode := nil;
+    if TreeCombo <> nil then
+    begin
+      TreeCombo.Text := '';
+    end;
+  end;
+  if Sender.Selected[Node] then
+  begin
+    SelectedNode := Node;
+    GetNodeCaption(Node, CellText, Sender);
+    if TreeCombo <> nil then
+    begin
+      TreeCombo.Text := CellText;
+    end;
+  end
+  else
+  begin
+    SelectedNode := nil;
+  end;
+end;
+
+
+initialization
+
+Mnw2Objects := TMnw2ItemIDObjectList.Create;
+  FileMnw2Objects;
+
+finalization
+  Mnw2Objects.Free;
+//  KillApp('ModelMuse Help');
+//  GlobalFont.Free;
+
 
 end.

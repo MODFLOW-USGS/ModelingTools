@@ -55,7 +55,7 @@ uses
   frmGoPhastUnit, GoPhastTypes, ModflowTransientListParameterUnit,
   OrderedCollectionUnit, frmScreenObjectPropertiesUnit,
   ScreenObjectUnit, ModflowTimeUnit, ModflowBoundaryUnit,
-  frameScreenObjectNoParamUnit, frmCustomGoPhastUnit;
+  frameScreenObjectNoParamUnit;
 
 resourcestring
   StrOutflowSegmentItr = 'Outflow segment (Itrib)';

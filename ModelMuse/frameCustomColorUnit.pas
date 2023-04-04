@@ -160,9 +160,6 @@ type
     { Public declarations }
   end;
 
-resourcestring
-  StrBoundaryConditions = 'Boundary Conditions, Observations, and Other Features';
-
 implementation
 
 uses

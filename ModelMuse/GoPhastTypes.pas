@@ -877,6 +877,8 @@ resourcestring
   StrStreamTransport = 'SFT Stream Transport';
   StrWritingStressP = '    Writing Stress Period %d';
   StrWritingGridData = 'Writing Grid Data';
+resourcestring
+  StrNone = 'none';
 
 
   {@name is used as the default name for a new data set.

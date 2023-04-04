@@ -27,7 +27,7 @@ uses System.UITypes,
   ModflowPackagesUnit, ModflowOptionsUnit, ModflowTimeUnit, FluxObservationUnit,
   ModflowOutputControlUnit, ModflowParameterUnit, Graphics, ColorSchemes,
   ModflowTransientListParameterUnit, GlobalVariablesUnit, OrderedCollectionUnit,
-  ModflowBoundaryDisplayUnit, ModflowBoundaryUnit, ClassificationUnit,
+  ModflowBoundaryDisplayUnit, ModflowBoundaryUnit,
   ModflowHfbDisplayUnit, EdgeDisplayUnit, ModflowUnitNumbers, HufDefinition,
   ModelMateClassesUnit, ModflowHobUnit, FormulaManagerUnit,
   PathlineReader, LegendUnit, DisplaySettingsUnit, ModflowCellUnit,
@@ -890,16 +890,6 @@ type
     Visible: boolean;
     OnInitialize: TNotifyEvent;
     OnShouldUseOnInitialize: TCheckUsageEvent;
-  end;
-
-  TDataSetClassification = class(TClassificationObject)
-  private
-    FDataArray: TDataArray;
-  public
-    function ClassificationName: string; Override;
-    function FullClassification: string; Override;
-    Constructor Create(ADataArray: TDataArray);
-    property DataArray: TDataArray read FDataArray;
   end;
 
   TProgramLocations = class(TPersistent)
@@ -32460,24 +32450,6 @@ begin
   {$IFDEF OWHMV2}
   IniFile.WriteString(StrProgramLocations, strModflowOWHM_V2, ModflowOwhmV2Location);
   {$ENDIF}
-end;
-
-{ TDataSetClassification }
-
-constructor TDataSetClassification.Create(ADataArray: TDataArray);
-begin
-  inherited Create;
-  FDataArray := ADataArray;
-end;
-
-function TDataSetClassification.FullClassification: string;
-begin
-  result := FDataArray.FullClassification;
-end;
-
-function TDataSetClassification.ClassificationName: string;
-begin
-  result := FDataArray.DisplayName;
 end;
 
 { TLookUpList }

@@ -7,7 +7,7 @@ uses System.Types, System.UITypes,
   Dialogs, frmCustomSelectObjectsUnit, VirtualTrees, StdCtrls, Buttons,
   ExtCtrls, Contnrs, ScreenObjectUnit, DataSetUnit, ArgusDataEntry,
   ShapefileUnit, XBase1, ValueArrayStorageUnit, CheckLst,
-  frmCustomGoPhastUnit;
+  frmCustomGoPhastUnit, ClassificationUnit;
 
 type
   TFhbBoundaryType = (fbtFlow, fbtHead);
@@ -140,7 +140,7 @@ implementation
 
 {$R *.dfm}
 
-uses ClassificationUnit, PhastModelUnit, FastGEO,
+uses PhastModelUnit, FastGEO,
   ConvexHullUnit, GPC_Classes, gpc, RbwParser, StrUtils,
   frmErrorsAndWarningsUnit, GIS_Functions, ModelMuseUtilities, frmGoPhastUnit,
   GoPhastTypes, ModflowTimeUnit,

@@ -65,7 +65,7 @@ type
 implementation
 
 uses
-  ClassificationUnit, frmCustomGoPhastUnit, RbwParser, PhastDataSets,
+  ClassificationUnit, RbwParser, PhastDataSets,
   Contnrs, frmGoPhastUnit, PhastModelUnit, Math;
 
 {$R *.dfm}
