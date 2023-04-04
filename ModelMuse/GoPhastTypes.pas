@@ -443,8 +443,7 @@ type
   TIface = (iIndeterminant, iHorizontal, iInternal,
     iLeft, iRight, iFront, iBack, iBottom, iTop);
 
-  TStatFlag = (stVariance, stStandardDev,
-    stCoefVar, stWeight, stSquaredWeight);
+  TStatFlag = (stVariance, stStandardDev, stCoefVar, stWeight, stSquaredWeight);
 
   TObservationPurpose = (ofObserved, ofPredicted, ofInacative);
 

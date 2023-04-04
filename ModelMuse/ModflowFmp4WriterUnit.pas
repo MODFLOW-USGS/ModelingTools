@@ -149,6 +149,7 @@ type
     FSemiRoutedReturnFileStream: TFileStream;
     FSurfaceWaterAllotmentFileStream: TFileStream;
     FGroundWaterAllotmentFileStream: TFileStream;
+    FFarmWells4: TFarmProcess4Wells;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -436,6 +437,18 @@ resourcestring
   're enabled but none have been defined in the Farms dialog box.';
   StrNonroutedDelivery = 'Non-routed delivery infiltration locations must be' +
   ' greater than or equal to 10.';
+  StrLANDUSEPRINTROWC = 'LAND_USE PRINT ROW_COLUMN Issue';
+  PrintRowColWarning1 = 'The "PRINT ROW_COLUMN" option in the LAND_USE block' +
+  ' of the Farm Process has been selected but every cell has been selected i' +
+  'n the %s data set. This is equivalent to "PRINT ALL" and "PRINT ALL" is a' +
+  'lso selected so PRINT ROW_COLUMN is being skipped.';
+  PrintRowColWarning2 = 'The "PRINT ROW_COLUMN" option in the LAND_USE block' +
+  ' of the Farm Process has been selected but every cell has been selected i' +
+  'n the %s data set. This is equivalent to "PRINT ALL" so "PRINT ALL" is be' +
+  'ing used instead.';
+  PrintRowColWarning3 = 'The PRINT ROW_COLUMN option in the LAND_USE block o' +
+  'f the Farm Process has been selected but no cell has been selected in the' +
+  ' %s data set so "PRINT ROW_COLUMN" is being skipped.';
 
 { TModflowFmp4Writer }
 
@@ -618,6 +631,8 @@ begin
   FSurfaceWater4 := Model.ModflowPackages.FarmSurfaceWater4;
   FAllotments := Model.ModflowPackages.FarmAllotments;
   FSalinityFlush := Model.ModflowPackages.FarmSalinityFlush;
+  FFarmWells4 := Model.ModflowPackages.FarmWells4;
+
   FFmpSoils := Model.FmpSoils;
 end;
 
@@ -2073,6 +2088,10 @@ procedure TModflowFmp4Writer.WriteLandUsePrintOptions;
 var
   PrintOption: TLandUsePrint;
   OutputFile: string;
+  CellsToPrint: TDataArray;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  OutputFileFormat: string;
 begin
   if Model.ModflowOutputControl.PrintInputArrays
     or Model.ModflowOutputControl.PrintInputCellLists then
@@ -2144,7 +2163,54 @@ begin
         end;
       lupPrintRowCol:
         begin
-
+          CellsToPrint := Model.DataArrayManager.GetDataSetByName(KLandUseCellsToPrint);
+          CellsToPrint.Initialize;
+          if CellsToPrint.IsUniform = iuTrue then
+          begin
+            if CellsToPrint.UniformBooleanValue then
+            begin
+              if (lupPrintByCell in FLandUse.LandUsePrints)  then
+              begin
+                frmErrorsAndWarnings.AddWarning(Model, StrLANDUSEPRINTROWC,
+                  Format(PrintRowColWarning1, [KLandUseCellsToPrint]), nil);
+              end
+              else
+              begin
+                WriteString('  PRINT ALL ');
+                OutputFile := ChangeFileExt(FInputFileName, '.CropOutput_All');
+                WriteString(ExtractFileName(OutputFile));
+                Model.AddModelOutputFile(OutputFile);
+                NewLine;
+                frmErrorsAndWarnings.AddWarning(Model, StrLANDUSEPRINTROWC,
+                  Format(PrintRowColWarning2, [KLandUseCellsToPrint]), nil);
+              end;
+            end
+            else
+            begin
+                frmErrorsAndWarnings.AddWarning(Model, StrLANDUSEPRINTROWC,
+                  Format(PrintRowColWarning3, [KLandUseCellsToPrint]), nil);
+            end;
+          end
+          else
+          begin
+            OutputFileFormat := ChangeFileExt(FInputFileName, '.CropOutput_Row_%0:d_Column_%1:d');
+            for RowIndex := 0 to CellsToPrint.RowCount - 1 do
+            begin
+              for ColIndex := 0 to CellsToPrint.ColumnCount - 1 do
+              begin
+                if CellsToPrint.BooleanData[0, RowIndex, ColIndex] then
+                begin
+                  WriteString('  PRINT ROW_COLUMN ');
+                  WriteInteger(RowIndex+1);
+                  WriteInteger(ColIndex+1);
+                  OutputFile := Format(OutputFileFormat, [RowIndex+1, ColIndex+1]);
+                  Model.AddModelOutputFile(OutputFile);
+                  WriteString(' ' + ExtractFileName(OutputFile));
+                  NewLine;
+                end;
+              end;
+            end;
+          end;
         end;
     end;
   end;
@@ -7010,7 +7076,6 @@ begin
     WriteLandUseAreaFraction;
     WriteLandUsePrintOptions;
 
-    // PRINT ROW_COLUMN
     // SPECIFY_PRINT_ALL_CROPS
     // CROP_NAME
 
@@ -8083,8 +8148,94 @@ begin
 end;
 
 procedure TModflowFmp4Writer.WriteSupplyWell;
+var
+  PrintOption: TFarmWellPrint;
+  OutputFile: string;
 begin
+  if FFarmWells4.IsSelected then
+  begin
+    WriteString('BEGIN SUPPLY_WELL');
+    NewLine;
 
+    if Model.ModflowOutputControl.PrintInputCellLists then
+    begin
+      WriteString('  PRINT INPUT ');
+      OutputFile := ChangeFileExt(FInputFileName, '.Well_Data_Input');
+      WriteString(ExtractFileName(OutputFile));
+      Model.AddModelOutputFile(OutputFile);
+      NewLine;
+    end;
+
+    for PrintOption in FFarmWells4.FarmWellPrints do
+    begin
+      case PrintOption of
+        fwpPrint_ByWell:
+          begin
+            WriteString('  PRINT BYWELL ');
+            OutputFile := ChangeFileExt(FInputFileName, '.Well_Data_By_Well');
+            WriteString(ExtractFileName(OutputFile));
+            Model.AddModelOutputFile(OutputFile);
+            NewLine;
+          end;
+        fwpPrint_ByWbs:
+          begin
+            WriteString('  PRINT ByWBS ');
+            OutputFile := ChangeFileExt(FInputFileName, '.Well_Data_By_WBS');
+            WriteString(ExtractFileName(OutputFile));
+            Model.AddModelOutputFile(OutputFile);
+            NewLine;
+          end;
+        fwpPrint_ByMNW:
+          begin
+            WriteString('  PRINT ByMNW ');
+            OutputFile := ChangeFileExt(FInputFileName, '.Well_Data_By_MNW');
+            WriteString(ExtractFileName(OutputFile));
+            Model.AddModelOutputFile(OutputFile);
+            NewLine;
+          end;
+        fwpPrint_List:
+          begin
+            WriteString('  PRINT LIST ');
+            NewLine;
+          end;
+        fwpPrint_Smoothing:
+          begin
+            WriteString('  PRINT SMOOTHING ');
+            OutputFile := ChangeFileExt(FInputFileName, '.Well_Smoothing_Data');
+            WriteString(ExtractFileName(OutputFile));
+            Model.AddModelOutputFile(OutputFile);
+            NewLine;
+          end;
+      end;
+    end;
+
+    if FFarmWells4.WellXY = xyCoordinates then
+    begin
+      WriteString('  INPUT_OPTION XY');
+      NewLine;
+    end;
+
+    case FFarmWells4.WellLayerChoice of
+      plcLayer:
+        begin
+          // do nothing
+        end;
+      plcElevation:
+        begin
+          WriteString('  INPUT_OPTION ELEVATION');
+          NewLine;
+        end;
+      plcDepth:
+        begin
+          WriteString('  INPUT_OPTION DEPTH');
+          NewLine;
+        end;
+    end;
+
+    WriteString('END SUPPLY_WELL');
+    NewLine;
+    NewLine;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteSurfaceK;

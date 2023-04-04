@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T14:02:54.324-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-04-04T15:07:52.489-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SUPPLY_WELL</title>
   <body>
     <header>
@@ -47,7 +47,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal">Echo supply well results to LIST file (not recommended)</para>
-          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Write to the LI</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">ST file a </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">tr</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">anscript of the supply wells that ar</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">e </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">in us </text></para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Write to the LI</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">ST file a </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">tr</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">anscript of the supply wells that ar</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">e </text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">in us e.</text></para>
         </td>
       </tr>
     </table></para>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-03-31T16:48:06.515-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-04-04T16:48:14.362-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">FMP: Farm Process V4</title>
   <body>
     <header>
@@ -15,24 +15,39 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">WBS_WATER_USE</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">FARM_DEMAND_SUPPLY_SUMMARY</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">FARM_BUDGET</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">FARM_BUDGET_COMPACT</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">FARM_NET_RECHARGE_ARRAY</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">FARM_NET_RECHARGE_LIST</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">EVAPOTRANSPIRATION_SUMMARY &#160;SUM</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">EVAPOTRANSPIRATION_SUMMARY SEPARATE</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">ET_LIST</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">FARM_WELL_SUMMARY</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">LANDSCAPE_RUNOFF [COMPACT]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">DEEP_PERCOLATION &#160; &#160;[COMPACT]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">These options from the OUTPUT block of the Farm process will cause the Farm Process to print detailed data of various sources.</text></para>
+          <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">WBS_WATER_USE</text><text styleclass="Normal" translate="true">: The Farm process will print detailed information about the water use for each water balance subregion (WBS). Data that is printed include the WBS number, irrigated area, natural evapotranspiration and precipitation, the potential demand, efficiency, and other items.</text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">FARM_DEMAND_SUPPLY_SUMMARY</text><text styleclass="Normal" translate="true">: The Farm process will print detailed information about the water demand supply by water balance subregion (= farm). Items printed include the farm ID (FID), On farm efficiency (OFE), and other items.</text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">FARM_BUDGET</text><text styleclass="Normal" translate="true">: The Farm process will print detailed information about all the sources and sinks of water to each farm identified by its Farm ID (FID) along with many budget terms.</text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">FARM_BUDGET_COMPACT</text><text styleclass="Normal" translate="true">: The Farm process will print detailed information about the main sources and sinks of water to each farm identified by its Farm ID (FID) along with many budget terms.</text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">FARM_NET_RECHARGE_ARRAY</text><text styleclass="Normal" translate="true">: The Farm process will print the net recharge as an array of cell values. </text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">FARM_NET_RECHARGE_LIST</text><text styleclass="Normal" translate="true">: The Farm process will print the net recharge by farm.</text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">EVAPOTRANSPIRATION_SUMMARY &#160;SUM</text><text styleclass="Normal" translate="true">: </text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">EVAPOTRANSPIRATION_SUMMARY SEPARATE</text><text styleclass="Normal" translate="true">: </text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">ET_LIST</text><text styleclass="Normal" translate="true">: Farm process will print the evaporation, transpiration, and evapotranspiration by farm.</text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">FARM_WELL_SUMMARY</text><text styleclass="Normal" translate="true">: </text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">LANDSCAPE_RUNOFF [COMPACT]</text><text styleclass="Normal" translate="true">: </text></li>
+            <li styleclass="Strong"><text styleclass="Strong" translate="true">DEEP_PERCOLATION [COMPACT]</text><text styleclass="Normal" translate="true">: </text></li>
+          </list>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">Print Routing</text></para>
         </td>
       </tr>
     </table></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[MNW2 Closure Criteria]]></caption></toggle></li>
+    </list>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The MNW2 Closure criteria appear in the Options block of the Farm process input file. They are not recommended.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">QClose is the pumping criterion (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HPCT is the head criterion (L).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">RPCT is the residual criterion (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T). </text></para>
+        </td>
+      </tr>
+    </table></para>
     <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal"><text styleclass="Strong" translate="true">MNW2 Closure Criteria</text></li>
       <li styleclass="Normal"><text styleclass="Strong" translate="true">Options</text><text styleclass="Normal" translate="true">, and</text></li>
       <li styleclass="Normal"><text styleclass="Strong" translate="true">Water Balance Subregion Options (Farm Options).</text></li>
     </list>

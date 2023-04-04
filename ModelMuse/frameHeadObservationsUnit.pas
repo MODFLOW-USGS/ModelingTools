@@ -26,6 +26,8 @@ type
     procedure rdgObservationsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean); override;
     procedure edObsNameExit(Sender: TObject);
+    procedure rdgObservationsBeforeDrawCell(Sender: TObject; ACol,
+      ARow: Integer);
   private
     { Private declarations }
   protected
@@ -327,6 +329,32 @@ begin
   inherited;
   AssignValuesToSelectedGridCells(rdeMultiValueEdit.Text, rdgObservations,
     Ord(hocTime), Ord(hocStatistic));
+end;
+
+procedure TframeHeadObservations.rdgObservationsBeforeDrawCell(Sender: TObject;
+  ACol, ARow: Integer);
+var
+  ItemIndex: Integer;
+  Statistic: Double;
+  StatFlag: TStatFlag;
+begin
+  inherited;
+  if (ARow >= rdgObservations.FixedRows) and (ACol = Ord(hocStatistic)) then
+  begin
+    ItemIndex := rdgObservations.ItemIndex[Ord(hocStatFlag), ARow];
+    if (ItemIndex >= 0) and (rdgObservations.Cells[ACol, ARow] <> '') then
+    begin
+      StatFlag := TStatFlag(ItemIndex);
+      if StatFlag in [stVariance, stStandardDev, stCoefVar] then
+      begin
+        if TryStrToFloat(rdgObservations.Cells[
+          Ord(hocStatistic), ARow], Statistic) and (Statistic <= 0) then
+        begin
+          rdgObservations.Canvas.Brush.Color := clRed;
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TframeHeadObservations.rdgObservationsSelectCell(Sender: TObject;

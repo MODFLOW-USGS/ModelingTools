@@ -594,6 +594,7 @@ const
   KFractionOfIrrigToSurfaceWater = 'Frac_Unconsumed_Irrig_to_SW';
   KAddedDemand = 'Added_Demand';
   KCropHasSalinityDemand = 'Crop_Has_Salinity_Demand';
+  KLandUseCellsToPrint = 'Land_Use_Cells_ToPrint';
 
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
@@ -2576,6 +2577,7 @@ that affects the model output should also have a comment. }
     function FractionOfIrrigToSurfaceWaterUsed(Sender: TObject): Boolean;
     function AddedDemandUsed(Sender: TObject): Boolean;
     function CropHasSalinityDemandUsed(Sender: TObject): Boolean;
+    function LandUseCellsToPrintUsed(Sender: TObject): Boolean;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -6335,6 +6337,7 @@ resourcestring
   'es before the beginning of the first stress period.';
   StrIrrigationLate = 'The specified times for irrigation types include time' +
   's after the end of the last stress period.';
+  StrLandUseCellsToPrint = KLandUseCellsToPrint;
 
 
 const
@@ -38803,7 +38806,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 27;
+  OWHM4DataSets  = 28;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -41989,13 +41992,25 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND';
-
-
   Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtBoolean;
+  FDataArrayCreationRecords[Index].Name := KLandUseCellsToPrint;
+  FDataArrayCreationRecords[Index].DisplayName := StrLandUseCellsToPrint;
+  FDataArrayCreationRecords[Index].Formula := 'False';
+  FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.LandUseCellsToPrintUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-OWHM version 2, LAND_USE: PRINT ROW_COLUMN';
+  Inc(Index);
+
 
   {$ENDIF}
 
-//StrSurfaceK = KSurfaceK;
   // See ArrayCount above.
   Assert(Length(FDataArrayCreationRecords) = Index);
 end;
@@ -43275,6 +43290,18 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticLandUseAreaFractionArrayUsed(nil);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
+function TCustomModel.LandUseCellsToPrintUsed(Sender: TObject): Boolean;
+begin
+  {$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2)
+    and ModflowPackages.FarmProcess4.IsSelected
+    and ModflowPackages.FarmLandUse.IsSelected
+    and (lupPrintRowCol IN ModflowPackages.FarmLandUse.LandUsePrints);
   {$ELSE}
   result := False;
   {$ENDIF}

@@ -315,9 +315,11 @@ begin
     // that handles enabling the popup menu must also be changed.
     Assert(AnObject is TScreenObject);
   end;
-  ErrorMessages.AddObject(ErrorOrWarning, AnObject);
+//  ErrorMessages.AddObject(ErrorOrWarning, AnObject);
   vstWarningsAndErrors.ChildCount[ChildNode] :=
-    vstWarningsAndErrors.ChildCount[ChildNode] + 1;
+    ErrorMessages.AddObject(ErrorOrWarning, AnObject) + 1;
+
+//    vstWarningsAndErrors.ChildCount[ChildNode] + 1;
   if (frmProgressMM <> nil) and frmProgressMM.Visible then
   begin
     if (Left + Width > frmProgressMM.Left) and (Left > 0) then
@@ -948,9 +950,19 @@ end;
 { TErrMessages }
 
 function TErrMessages.AddObject(const S: string; AObject: TObject): Integer;
+var
+  ExistingIndex: Integer;
 begin
-  result := inherited;
-  FObjects.Add(AObject);
+  ExistingIndex := IndexOf(S);
+  if (ExistingIndex >= 0) and (Objects[ExistingIndex] = AObject) then
+  begin
+    result := ExistingIndex;
+  end
+  else
+  begin
+    result := inherited;
+    FObjects.Add(AObject);
+  end;
 end;
 
 constructor TErrMessages.Create;

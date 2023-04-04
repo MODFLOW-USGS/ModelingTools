@@ -293,7 +293,7 @@ resourcestring
   'hydrogeologic unit used vertical hydraulic conductivity and vertical anis' +
   'otropy. The VANI parameters will be ignored.';
   StrLayerDRowDCo = 'Layer %0:d, Row %1:d, Column %2:d';
-  StrTheDataAccessedTh = 'The data accessed through %s are not real numbers.';
+  StrTheDataAccessedTh = 'The data accessed in %0:s through %1:s are ';//not real numbers.';
   StrTheDataAccessedThInt = 'The data accessed through %s are not integers.';
   StrTheDataAccessedThBoole = 'The data accessed through %s are not booleans' +
   '.';
@@ -324,6 +324,14 @@ resourcestring
   'he following locations and objects';
   StrInvalidFormulaFor = 'Invalid formula for third dimension formula in the' +
   ' following objects';
+  StrBecauseItIs0s = '%0:s data. Because they are %0:s data they should be ' +
+  'accessed using %1:s. One of the conversion functions may be able to ' +
+  'convert them to data of the desired type.';
+  StrTheDataBeingAcce = ' The data being accessed is named "';
+  StrRealNumber = 'real number';
+  StrInteger = 'integer';
+  StrBoolean = 'Boolean';
+  StrText = 'text';
 
 function RemoveQuotes(const Value: string): string;
 begin
@@ -6159,6 +6167,66 @@ begin
   end;
 end;
 
+function GetErrorMessageForImportedDataOfWrongType(CorrectDataType,
+  ActualDataType: TRbwDataType; const ImportedName: string;
+  ScreenObjectName: string): string;
+
+  function DataTypeToFunctionName(DataType: TRbwDataType): string;
+  begin
+    case DataType of
+      rdtDouble:
+        begin
+          result := rsObjectImportedValuesR;
+        end;
+      rdtInteger:
+        begin
+          result := rsObjectImportedValuesI;
+        end;
+      rdtBoolean:
+        begin
+          result := rsObjectImportedValuesB;
+        end;
+      rdtString:
+        begin
+          result := rsObjectImportedValuesT;
+        end;
+    end;
+  end;
+var
+  CorrectFunctionToUse: string;
+  IncorrectFunctionUsed: string;
+begin
+  CorrectFunctionToUse := DataTypeToFunctionName(ActualDataType);
+  IncorrectFunctionUsed := DataTypeToFunctionName(CorrectDataType);
+
+  result := Format(StrTheDataAccessedTh,
+    [ScreenObjectName, IncorrectFunctionUsed]);
+  result := result + StrBecauseItIs0s;
+  case ActualDataType of
+    rdtDouble:
+      begin
+        result := Format(result, [StrRealNumber, CorrectFunctionToUse]);
+      end;
+    rdtInteger:
+      begin
+        result := Format(result, [StrInteger, CorrectFunctionToUse]);
+      end;
+    rdtBoolean:
+      begin
+        result := Format(result, [StrBoolean, CorrectFunctionToUse]);
+      end;
+    rdtString:
+      begin
+        result := Format(result, [StrText, CorrectFunctionToUse]);
+      end;
+  end;
+  if ImportedName <> '' then
+  begin
+    result := result + StrTheDataBeingAcce + ImportedName + '".';
+  end;
+
+end;
+
 function _ImportedScreenObjectValuesR(Values: array of pointer): double;
 var
   Index: integer;
@@ -6199,12 +6267,12 @@ begin
       Assert(Index < ImportedValues.Count);
       if ImportedValues.DataType <> rdtDouble then
       begin
-        ErrorMessage := Format(StrTheDataAccessedTh, [rsObjectImportedValuesR]);
-        if ImportedName <> '' then
-        begin
-          ErrorMessage := ErrorMessage + ' (' + ImportedName + ')';
-        end;
-        raise Exception.Create(ErrorMessage);
+        ErrorMessage := GetErrorMessageForImportedDataOfWrongType(rdtDouble,
+          ImportedValues.DataType, ImportedName, GlobalCurrentScreenObject.Name);
+        frmErrorsAndWarnings.AddError(GlobalCurrentModel,
+          Format(StrProblemEvaluating, [rsObjectImportedValuesR]),
+          ErrorMessage, GlobalCurrentScreenObject);
+        Exit
       end;
       result := ImportedValues.RealValues[Index];
     end;
@@ -6250,12 +6318,12 @@ begin
       Assert(Index < ImportedValues.Count);
       if ImportedValues.DataType <> rdtInteger then
       begin
-        ErrorMessage := Format(StrTheDataAccessedThInt, [rsObjectImportedValuesI]);
-        if ImportedName <> '' then
-        begin
-          ErrorMessage := ErrorMessage + ' (' + ImportedName + ')';
-        end;
-        raise Exception.Create(ErrorMessage);
+        ErrorMessage := GetErrorMessageForImportedDataOfWrongType(rdtInteger,
+          ImportedValues.DataType, ImportedName, GlobalCurrentScreenObject.Name);
+        frmErrorsAndWarnings.AddError(GlobalCurrentModel,
+          Format(StrProblemEvaluating, [rsObjectImportedValuesR]),
+          ErrorMessage, GlobalCurrentScreenObject);
+        Exit
       end;
       Assert(ImportedValues.DataType= rdtInteger);
       result := ImportedValues.IntValues[Index];
@@ -6302,13 +6370,12 @@ begin
       Assert(Index < ImportedValues.Count);
       if ImportedValues.DataType <> rdtBoolean then
       begin
-        ErrorMessage := Format(StrTheDataAccessedThBoole,
-          [rsObjectImportedValuesB]);
-        if ImportedName <> '' then
-        begin
-          ErrorMessage := ErrorMessage + ' (' + ImportedName + ')';
-        end;
-        raise Exception.Create(ErrorMessage);
+        ErrorMessage := GetErrorMessageForImportedDataOfWrongType(rdtBoolean,
+          ImportedValues.DataType, ImportedName, GlobalCurrentScreenObject.Name);
+        frmErrorsAndWarnings.AddError(GlobalCurrentModel,
+          Format(StrProblemEvaluating, [rsObjectImportedValuesR]),
+          ErrorMessage, GlobalCurrentScreenObject);
+        Exit
       end;
       result := ImportedValues.BooleanValues[Index];
     end;
@@ -6354,13 +6421,12 @@ begin
       Assert(Index < ImportedValues.Count);
       if ImportedValues.DataType <> rdtString then
       begin
-        ErrorMessage := Format(StrTheDataAccessedThStr,
-          [rsObjectImportedValuesT]);
-        if ImportedName <> '' then
-        begin
-          ErrorMessage := ErrorMessage + ' (' + ImportedName + ')';
-        end;
-        raise Exception.Create(ErrorMessage);
+        ErrorMessage := GetErrorMessageForImportedDataOfWrongType(rdtString,
+          ImportedValues.DataType, ImportedName, GlobalCurrentScreenObject.Name);
+        frmErrorsAndWarnings.AddError(GlobalCurrentModel,
+          Format(StrProblemEvaluating, [rsObjectImportedValuesR]),
+          ErrorMessage, GlobalCurrentScreenObject);
+        Exit
       end;
       result := ImportedValues.StringValues[Index];
     end;
