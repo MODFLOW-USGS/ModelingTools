@@ -603,10 +603,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             Anchors = [akTop, akRight]
             ExplicitLeft = 338
           end
-          inherited seNumber: TJvSpinEdit
-            Height = 23
-            ExplicitHeight = 23
-          end
         end
         inherited Grid: TRbwDataGrid4
           Width = 477
@@ -717,10 +713,8 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           Width = 477
           ExplicitWidth = 477
           inherited edFormula: TLabeledEdit
-            Height = 23
             EditLabel.ExplicitTop = -16
             EditLabel.ExplicitWidth = 50
-            ExplicitHeight = 23
           end
         end
       end

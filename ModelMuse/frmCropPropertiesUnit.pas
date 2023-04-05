@@ -9,7 +9,7 @@ uses
   JvExComCtrls, JvPageListTreeView, StdCtrls, Buttons, frameGridUnit,
   PhastModelUnit, ModflowFmpCropUnit, RbwDataGrid4, GoPhastTypes, RbwParser,
   ModflowPackageSelectionUnit, UndoItems, frameFormulaGridUnit,
-  ModflowFmpFarmUnit;
+  ModflowFmpFarmUnit, ModflowFmpBaseClasses;
 
 type
   TUndoCrops = class(TCustomUndo)
@@ -51,6 +51,8 @@ type
     rbwprsrGlobal: TRbwParser;
     jvspIrrigation: TJvStandardPage;
     frameIrrigation: TframeFormulaGrid;
+    jvspLandUseFraction: TJvStandardPage;
+    frameLandUseFraction: TframeFormulaGrid;
     procedure FormDestroy(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
     procedure jvpltvMainChange(Sender: TObject; Node: TTreeNode);
@@ -78,6 +80,7 @@ type
     procedure frameCropNameGridBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
     procedure frameIrrigationGridEndUpdate(Sender: TObject);
+    procedure frameLandUseFractionGridEndUpdate(Sender: TObject);
   private
     FNameStart: integer;
     FPressureStart: integer;
@@ -96,6 +99,7 @@ type
     FIrrigation: TFmp4IrrigationCollection;
     FFarmProcess4: TFarmProcess4;
     FFarmLandUse: TFarmProcess4LandUse;
+    FLandUseFraction: TOwhmCollection;
     procedure SetUpCropNameTable(Model: TCustomModel);
     procedure SetCropNameTableColumns(Model: TCustomModel);
     procedure GetCrops(CropCollection: TCropCollection);
@@ -111,6 +115,8 @@ type
     procedure GetCropWaterUseFunction(WaterUseCollection: TCropWaterUseCollection);
     procedure SetUpIrrigationTable(Model: TCustomModel);
     procedure GetIrrigation(Irrigation: TFmp4IrrigationCollection);
+    procedure SetUpLandUseFractionTable(Model: TCustomModel);
+    procedure GetLandUseFraction(LandUseFraction: TOwhmCollection);
     procedure GetData;
     procedure SetGridColumnProperties(Grid: TRbwDataGrid4);
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
@@ -134,7 +140,6 @@ var
 implementation
 
 uses
-
   frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit, ModflowTimeUnit;
 
 resourcestring
@@ -181,6 +186,7 @@ resourcestring
   StrIrrigation = 'Irrigation';
   StrEvaporationIrrigati = 'Evaporation Irrigation Fraction';
   StrSurfaceWaterLossF = 'Surface Water Loss Fraction Irrigation';
+  StrLandUseAreaFracti = 'Land Use Area Fraction';
 
 type
   TNameCol = (ncID, ncName);
@@ -198,6 +204,7 @@ type
   TCropWaterUse = (cwuStart, cwuEnd, cwuCropValue, cwuIrrigated);
   TIrrigationColumns = (icStart, icEnd, IcIrrigation, icEvapIrrigateFraction,
     icSWLossFracIrrigate);
+  TOwhmColumns = (ocStart, ocEnd, ocFormula);
 
 {$R *.dfm}
 
@@ -335,6 +342,23 @@ begin
   SetUseButton(frameIrrigation.Grid, Ord(icIrrigation));
   frameIrrigation.FirstFormulaColumn := 2;
   frameIrrigation.LayoutMultiRowEditControls;
+end;
+
+procedure TfrmCropProperties.SetUpLandUseFractionTable(Model: TCustomModel);
+begin
+
+  frameLandUseFraction.Grid.ColCount := 3;
+  frameLandUseFraction.Grid.FixedCols := 0;
+  frameLandUseFraction.Grid.Columns[Ord(ocStart)].Format := rcf4Real;
+  frameLandUseFraction.Grid.Columns[Ord(ocEnd)].Format := rcf4Real;
+  frameLandUseFraction.Grid.Cells[Ord(ocStart), 0] := StrStartingTime;
+  frameLandUseFraction.Grid.Cells[Ord(ocEnd), 0] := StrEndingTime;
+  frameLandUseFraction.Grid.Cells[Ord(ocFormula), 0] := 'Land Use Fraction';
+
+  SetGridColumnProperties(frameLandUseFraction.Grid);
+  SetUseButton(frameLandUseFraction.Grid, Ord(ocFormula));
+  frameLandUseFraction.FirstFormulaColumn := 2;
+  frameLandUseFraction.LayoutMultiRowEditControls;
 end;
 
 procedure TfrmCropProperties.SetUpLossesTable(Model: TCustomModel);
@@ -512,14 +536,23 @@ begin
 
 {$IFDEF OWHMV2}
   if (frmGoPhast.ModelSelection = msModflowOwhm2)
-    and FFarmProcess4.IsSelected and FFarmLandUse.IsSelected
-    and (FFarmLandUse.IrrigationListUsed
-      or FFarmLandUse.EvapIrrigateFractionListByCropUsed
-      or FFarmLandUse.SwLossFracIrrigListByCropUsed) then
+      and FFarmProcess4.IsSelected and FFarmLandUse.IsSelected then
   begin
-    ANode := jvpltvMain.Items.AddChild(CropNode, StrIrrigation) as TJvPageIndexNode;
-    ANode.PageIndex := jvspIrrigation.PageIndex;
-    ANode.Data := ACrop.IrrigationCollection;
+    if (FFarmLandUse.IrrigationListUsed
+        or FFarmLandUse.EvapIrrigateFractionListByCropUsed
+        or FFarmLandUse.SwLossFracIrrigListByCropUsed) then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrIrrigation) as TJvPageIndexNode;
+      ANode.PageIndex := jvspIrrigation.PageIndex;
+      ANode.Data := ACrop.IrrigationCollection;
+    end;
+
+    if FFarmLandUse.LandUseFraction.ListUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrLandUseAreaFracti) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.LandUseFraction;
+    end;
   end;
 {$ENDIF}
 
@@ -1016,6 +1049,54 @@ begin
   end
 end;
 
+procedure TfrmCropProperties.frameLandUseFractionGridEndUpdate(Sender: TObject);
+var
+  RowIndex: Integer;
+  ItemCount: Integer;
+  StartTime: double;
+  EndTime: double;
+  AnItem: TOwhmItem;
+  Frame: TframeFormulaGrid;
+  OwhmCollection: TOwhmCollection;
+begin
+  inherited;
+  if FGettingData then
+  begin
+    Exit;
+  end;
+  Frame := frameLandUseFraction;
+  OwhmCollection := FLandUseFraction;
+
+  Frame.GridEndUpdate(Sender);
+  if OwhmCollection <> nil then
+  begin
+    ItemCount := 0;
+    for RowIndex := 1 to Frame.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Frame.Grid.Cells[
+        Ord(ocStart), RowIndex], StartTime)
+        and TryStrToFloat(Frame.Grid.Cells[
+        Ord(ocEnd), RowIndex], EndTime) then
+      begin
+        if ItemCount >= OwhmCollection.Count then
+        begin
+          OwhmCollection.Add;
+        end;
+        AnItem := OwhmCollection[ItemCount];
+        AnItem.StartTime := StartTime;
+        AnItem.EndTime := EndTime;
+        AnItem.OwhmValue :=
+          Frame.Grid.Cells[Ord(ocFormula), RowIndex];
+        Inc(ItemCount);
+      end;
+    end;
+    while OwhmCollection.Count > ItemCount do
+    begin
+      OwhmCollection.Last.Free;
+    end;
+  end
+end;
+
 procedure TfrmCropProperties.frameLossesGridEndUpdate(Sender: TObject);
 var
   RowIndex: Integer;
@@ -1241,6 +1322,7 @@ begin
   SetUpCropFunctionTable(frmGoPhast.PhastModel);
   SetUpCropWaterUseTable(frmGoPhast.PhastModel);
   SetUpIrrigationTable(frmGoPhast.PhastModel);
+  SetUpLandUseFractionTable(frmGoPhast.PhastModel);
 
   StartTimes := TStringList.Create;
   EndTimes := TStringList.Create;
@@ -1258,6 +1340,7 @@ begin
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropFunction.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropWaterUse.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameIrrigation.Grid);
+    SetStartAndEndTimeLists(StartTimes, EndTimes, frameLandUseFraction.Grid);
   finally
     EndTimes.Free;
     StartTimes.Free;
@@ -1340,6 +1423,39 @@ begin
     end;
   finally
     frameEvapFractions.Grid.EndUpdate;
+  end;
+end;
+
+procedure TfrmCropProperties.GetLandUseFraction(
+  LandUseFraction: TOwhmCollection);
+var
+  ItemIndex: Integer;
+  AnItem: TOwhmItem;
+  frame: TframeFormulaGrid;
+begin
+  Assert(LandUseFraction <> nil);
+  FLandUseFraction := LandUseFraction;
+  frame := frameLandUseFraction;
+
+  frame.ClearGrid;
+  frame.seNumber.AsInteger := LandUseFraction.Count;
+  frame.seNumber.OnChange(frame.seNumber);
+  if frame.seNumber.AsInteger = 0 then
+  begin
+    frame.Grid.Row := 1;
+    frame.ClearSelectedRow;
+  end;
+  frame.Grid.BeginUpdate;
+  try
+    for ItemIndex := 0 to LandUseFraction.Count - 1 do
+    begin
+      AnItem := LandUseFraction[ItemIndex];
+      frame.Grid.Cells[Ord(ocStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
+      frame.Grid.Cells[Ord(ocEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
+      frame.Grid.Cells[Ord(ocFormula), ItemIndex+1] := AnItem.OwhmValue;
+    end;
+  finally
+    frame.Grid.EndUpdate;
   end;
 end;
 
@@ -1446,6 +1562,10 @@ begin
       else if AnObject is TFmp4IrrigationCollection then
       begin
         GetIrrigation(TFmp4IrrigationCollection(AnObject));
+      end
+      else if AnObject is TOwhmCollection then
+      begin
+        GetLandUseFraction(TOwhmCollection(AnObject));
       end
       else
         Assert(False);

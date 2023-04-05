@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="UzfSfrLgrTest" FileType="bin">
+    <FileName Model_Name="UzfSfrLgrTest" FileType="bin">..\..\..\WRDAPP\mflgr.2_0\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="UzfSfrLgrTest" FileType="ancillary">
+    <FileName Model_Name="UzfSfrLgrTest" FileType="ancillary">UzfSfrLgrTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="UzfSfrLgrTest" FileType="Model Input">
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">usgs.UzfSfrLgrTest.reference</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.bas</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.chd</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.dis</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.gag</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.gsf</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.lgr.archive</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.lpf</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.nam.archive</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.oc</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.pcg</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.sfr</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Input">UzfSfrLgrTest.uzf</FileName>
+  </model>
+  <model Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.bas</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.chd</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.dis</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.gag</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.gsf</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.lpf</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.nam.archive</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.oc</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.pcg</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.sfr</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Input">UzfSfrLgrTest_Child_1.uzf</FileName>
+  </model>
+  <output Model_Name="UzfSfrLgrTest" FileType="Model Output">
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.bfh_flux</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.bfh_head</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.cbc</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.fdn</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.fhd</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.lst</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.sfrg1</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest.sfrg2</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest_Child_1.bfh_flux</FileName>
+    <FileName Model_Name="UzfSfrLgrTest" FileType="Model Output">UzfSfrLgrTest_Child_1.bfh_head</FileName>
+  </output>
+  <output Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Output">
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Output">UzfSfrLgrTest_Child_1.cbc</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Output">UzfSfrLgrTest_Child_1.fdn</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Output">UzfSfrLgrTest_Child_1.fhd</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Output">UzfSfrLgrTest_Child_1.lst</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Output">UzfSfrLgrTest_Child_1.sfrg1</FileName>
+    <FileName Model_Name="UzfSfrLgrTest_Child_1" FileType="Model Output">UzfSfrLgrTest_Child_1.sfrg2</FileName>
+  </output>
+</Model_Archive_List>

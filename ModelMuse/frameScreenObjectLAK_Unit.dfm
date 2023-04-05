@@ -569,7 +569,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
             inherited Panel: TPanel
               Top = 69
               Width = 451
-              ExplicitTop = 73
+              ExplicitTop = 69
               ExplicitWidth = 451
             end
             inherited Grid: TRbwDataGrid4

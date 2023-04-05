@@ -4940,11 +4940,13 @@ Type
     procedure SetUnitConversionScaleFactor(const Value: string);
     procedure DoOnChangeArrayList;
     procedure DoOnChangeFarmOption;
+    function GetListUsed: Boolean;
   public
     procedure Assign(Source: TPersistent); override;
     property OnChangeArrayList: TNotifyEvent read FOnChangeArrayList write FOnChangeArrayList;
     property OnChangeFarmOption: TNotifyEvent read FOnChangeFarmOption write FOnChangeFarmOption;
     procedure Initialize;
+    property ListUsed: Boolean read GetListUsed;
   published
     property FarmOption: TFarmOption read FFarmOption write SetFarmOption;
     Property ArrayList: TArrayList read FArrayList write SetArrayList;
@@ -5151,16 +5153,16 @@ Type
     property WELLFIELD: Boolean read FWELLFIELD write SetWELLFIELD;
     // RECOMP_Q_BD. Check OWHM V2 documentation for default.
     property Recompute: Boolean read FRecompute write SetRecompute;
-    property UseMnwCriteria: Boolean read FUseMnwCriteria write SetUseMnwCriteria;
+    property UseMnwCriteria: Boolean read FUseMnwCriteria write SetUseMnwCriteria stored False;
     // MNWCLOSE  QCLOSE
     property StoredMnwQClose: TRealStorage read FStoredMnwQClose
-      write SetStoredMnwQClose;
+      write SetStoredMnwQClose stored False;
     // MNWCLOSE  HPCT
     property StoredMnwHPercent: TRealStorage read FStoredMnwHPercent
-      write SetStoredMnwHPercent;
+      write SetStoredMnwHPercent stored False;
     // MNWCLOSE  RPCT
     property StoredMnwRPercent: TRealStorage read FStoredMnwRPercent
-      write SetStoredMnwRPercent;
+      write SetStoredMnwRPercent stored False;
 
     // Farms/WBS
     // LOCATION
@@ -5358,7 +5360,6 @@ Type
     FSemiRoutedDeliveryLowerLimit: TFarmProperty;
     FNon_Routed_Delivery: TFarmProperty;
     FSemi_Routed_Delivery: TFarmProperty;
-    FReturnChoice: TFarmProperty;
     FSurfaceWaterPrints: TSurfaceWaterPrints;
     FSemiRoutedDeliveryUpperLimit: TFarmProperty;
     FNRDOption: TNRDOption;
@@ -5370,7 +5371,6 @@ Type
     procedure SetNon_Routed_Delivery(const Value: TFarmProperty);
     procedure SetNrd_Infiltration_Location(const Value: TFarmProperty);
     procedure SetRebuild_Fully_Routed_Return(const Value: Boolean);
-    procedure SetReturnChoice(const Value: TFarmProperty);
     procedure SetSemi_Routed_Delivery(const Value: TFarmProperty);
     procedure SetSemiRoutedDeliveryLowerLimit(const Value: TFarmProperty);
     procedure SetStoredSemi_Routed_Delivery_Closure_Tolerance(
@@ -5455,10 +5455,6 @@ Type
     // ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH
     property ReturnOption: TReturnOption read FReturnOption write SetReturnOption;
 
-    // NO_RETURN_FLOW, SEMI_ROUTED_RETURN,
-    // ROUTED_RETURN_ANY_NON_DIVERSION_REACH or ROUTED_RETURN_ANY_REACH
-    // no scale factors
-    property ReturnChoice: TFarmProperty read FReturnChoice write SetReturnChoice stored False;
     // REBUILD_FULLY_ROUTED_RETURN
     property Rebuild_Fully_Routed_Return: Boolean
       read FRebuild_Fully_Routed_Return write SetRebuild_Fully_Routed_Return;
@@ -5773,6 +5769,8 @@ Type
     function GetEvapIrrigateFractionListByIrrigationUsed: Boolean;
     function GetSwLossFracIrrigListByCropUsed: Boolean;
     function GetSwLossFracIrrigListByIrrigationUsed: Boolean;
+
+    procedure Update;
   protected
     procedure InvalidateModel; Override;
   public
@@ -26522,7 +26520,6 @@ begin
     Semi_Routed_Delivery := SurfaceWater.Semi_Routed_Delivery;
     SemiRoutedDeliveryLowerLimit := SurfaceWater.SemiRoutedDeliveryLowerLimit;
     SemiRoutedDeliveryUpperLimit := SurfaceWater.SemiRoutedDeliveryUpperLimit;
-    ReturnChoice := SurfaceWater.ReturnChoice;
     Rebuild_Fully_Routed_Return := SurfaceWater.Rebuild_Fully_Routed_Return;
     NRDOption := SurfaceWater.NRDOption;
     NoReturnFlow := SurfaceWater.NoReturnFlow;
@@ -26555,7 +26552,6 @@ begin
   FSemiRoutedDeliveryUpperLimit := TFarmProperty.Create(InvalidateEvent);
   FNon_Routed_Delivery := TFarmProperty.Create(InvalidateEvent);
   FSemi_Routed_Delivery := TFarmProperty.Create(InvalidateEvent);
-  FReturnChoice := TFarmProperty.Create(InvalidateEvent);
   FRoutedReturn := TFarmProperty.Create(InvalidateEvent);
   FNoReturnFlow := TFarmProperty.Create(InvalidateEvent);
   FSemiRoutedReturn := TFarmProperty.Create(InvalidateEvent);
@@ -26589,7 +26585,6 @@ begin
   FSemiRoutedDeliveryUpperLimit.Free;
   FNon_Routed_Delivery.Free;
   FSemi_Routed_Delivery.Free;
-  FReturnChoice.Free;
   FRoutedReturn.Free;
   FNoReturnFlow.Free;
   FSemiRoutedReturn.Free;
@@ -26644,7 +26639,6 @@ begin
   FSemiRoutedDeliveryUpperLimit.Initialize;
   FNon_Routed_Delivery.Initialize;
   FSemi_Routed_Delivery.Initialize;
-  FReturnChoice.Initialize;
   FRoutedReturn.Initialize;
   FNoReturnFlow.Initialize;
   FSemiRoutedReturn.Initialize;
@@ -26712,11 +26706,6 @@ procedure TFarmProcess4SurfaceWater.SetRebuild_Fully_Routed_Return(
   const Value: Boolean);
 begin
   SetBooleanProperty(FRebuild_Fully_Routed_Return, Value);
-end;
-
-procedure TFarmProcess4SurfaceWater.SetReturnChoice(const Value: TFarmProperty);
-begin
-  FReturnChoice.Assign(Value);
 end;
 
 procedure TFarmProcess4SurfaceWater.SetRoutedReturn(const Value: TFarmProperty);
@@ -26930,6 +26919,8 @@ begin
     AddedDemandOption := LandUse.AddedDemandOption;
     NoCropUseMeansBareSoil := LandUse.NoCropUseMeansBareSoil;
     ET_IrrigFracCorrection := LandUse.ET_IrrigFracCorrection;
+
+    Update;
   end;
   inherited;
 end;
@@ -28803,6 +28794,18 @@ begin
     and (LandUseOption = luoMultiple);
 end;
 
+procedure TFarmProcess4LandUse.Update;
+begin
+  if LandUseOption = luoMultiple then
+  begin
+    if (LandUseFraction.FarmOption = foNotUsed) then
+    begin
+      LandUseFraction.FarmOption := foStatic
+    end;
+    LandUseFraction.ArrayList := alArray;
+  end;
+end;
+
 procedure TFarmProcess4LandUse.UpdateMultAddedDemandsArrays;
 begin
   UpdateMultLandUseLists(TransientAddedDemandMultArrayUsed(nil),
@@ -29524,6 +29527,11 @@ begin
     OnChangeFarmOption(self);
   end;
   InvalidateModel;
+end;
+
+function TFarmProperty.GetListUsed: Boolean;
+begin
+  result := (FarmOption <> foNotUsed) and (ArrayList = alList);
 end;
 
 procedure TFarmProperty.Initialize;

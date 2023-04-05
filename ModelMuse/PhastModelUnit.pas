@@ -2788,7 +2788,11 @@ that affects the model output should also have a comment. }
        write SetFmpAllotment;
     property Farms: TFarmCollection read GetFarms write SetFarms;
     property IrrigationTypes: TIrrigationCollection read GetIrrigationTypes
-      write SetIrrigationTypes;
+      write SetIrrigationTypes
+      {$IFNDEF OWHMV2}
+      stored False
+      {$ENDIF}
+      ;
     property ParentModel: TCustomModel read GetParentModel;
     procedure DrawSfrStreamLinkages(const BitMap: TPersistent;
       const ZoomBox: TQRbwZoomBox2);
@@ -5149,9 +5153,9 @@ that affects the model output should also have a comment. }
     property FmpAllotment: TAllotmentCollection read GetFmpAllotment
        write SetFmpAllotment;
     property Farms: TFarmCollection read GetFarms write SetFarms;
-  {$IFDEF OWHMV2}
+//  {$IFDEF OWHMV2}
     property IrrigationTypes;
-  {$ENDIF}
+//  {$ENDIF}
   {$IFDEF LinkedRasters}
     property LinkedRasters;
   {$ENDIF}
@@ -11057,6 +11061,9 @@ const
 //                SUTRA state calibration observations are now reassigned to
 //                prevent potential conflicts with existing calibration
 //                observations.
+
+//               Bug fix: Fixed bug exporting SRF in MODFLOW LGR models if
+//                unsaturated flow was enabled in SFR.
 
 
 //               Enhancement: Added suport for SUTRA 4.

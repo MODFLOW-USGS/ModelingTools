@@ -239,7 +239,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 98
           Width = 49
-          Height = 24
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000
@@ -250,7 +250,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 133
           Width = 49
-          Height = 24
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000
@@ -261,7 +261,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 168
           Width = 49
-          Height = 24
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000
@@ -673,7 +673,7 @@ object frameModpathParticles: TframeModpathParticles
       Left = 400
       Top = 242
       Width = 62
-      Height = 24
+      Height = 23
       CheckMaxValue = False
       ButtonKind = bkClassic
       MinValue = 1.000000000000000000

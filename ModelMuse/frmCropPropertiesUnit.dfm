@@ -41,7 +41,7 @@ inherited frmCropProperties: TfrmCropProperties
     Top = 0
     Width = 509
     Height = 477
-    ActivePage = jvspIrrigation
+    ActivePage = jvspLandUseFraction
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -68,7 +68,7 @@ inherited frmCropProperties: TfrmCropProperties
           Top = 436
           Width = 509
           ExplicitTop = 436
-          ExplicitWidth = 444
+          ExplicitWidth = 509
           inherited lbNumber: TLabel
             Top = 6
             Width = 115
@@ -79,17 +79,17 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 265
+            Left = 263
             OnClick = frameCropNamesbAddClick
             ExplicitLeft = 148
           end
           inherited sbInsert: TSpeedButton
-            Left = 313
+            Left = 310
             OnClick = frameCropNamesbInsertClick
             ExplicitLeft = 176
           end
           inherited sbDelete: TSpeedButton
-            Left = 363
+            Left = 360
             OnClick = frameCropNamesbDeleteClick
             ExplicitLeft = 204
           end
@@ -148,7 +148,7 @@ inherited frmCropProperties: TfrmCropProperties
           Top = 436
           Width = 509
           ExplicitTop = 436
-          ExplicitWidth = 444
+          ExplicitWidth = 509
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -156,15 +156,15 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 265
+            Left = 263
             ExplicitLeft = 148
           end
           inherited sbInsert: TSpeedButton
-            Left = 313
+            Left = 310
             ExplicitLeft = 176
           end
           inherited sbDelete: TSpeedButton
-            Left = 363
+            Left = 360
             ExplicitLeft = 204
           end
           inherited seNumber: TJvSpinEdit
@@ -221,7 +221,7 @@ inherited frmCropProperties: TfrmCropProperties
           Top = 436
           Width = 509
           ExplicitTop = 436
-          ExplicitWidth = 444
+          ExplicitWidth = 509
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -229,15 +229,15 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 265
+            Left = 263
             ExplicitLeft = 148
           end
           inherited sbInsert: TSpeedButton
-            Left = 313
+            Left = 310
             ExplicitLeft = 176
           end
           inherited sbDelete: TSpeedButton
-            Left = 363
+            Left = 360
             ExplicitLeft = 204
           end
           inherited seNumber: TJvSpinEdit
@@ -294,7 +294,7 @@ inherited frmCropProperties: TfrmCropProperties
           Top = 436
           Width = 509
           ExplicitTop = 436
-          ExplicitWidth = 444
+          ExplicitWidth = 509
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -302,15 +302,15 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 265
+            Left = 263
             ExplicitLeft = 148
           end
           inherited sbInsert: TSpeedButton
-            Left = 313
+            Left = 310
             ExplicitLeft = 176
           end
           inherited sbDelete: TSpeedButton
-            Left = 363
+            Left = 360
             ExplicitLeft = 204
           end
           inherited seNumber: TJvSpinEdit
@@ -367,7 +367,7 @@ inherited frmCropProperties: TfrmCropProperties
           Top = 436
           Width = 509
           ExplicitTop = 436
-          ExplicitWidth = 444
+          ExplicitWidth = 509
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -375,15 +375,15 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 265
+            Left = 263
             ExplicitLeft = 148
           end
           inherited sbInsert: TSpeedButton
-            Left = 313
+            Left = 310
             ExplicitLeft = 176
           end
           inherited sbDelete: TSpeedButton
-            Left = 363
+            Left = 360
             ExplicitLeft = 204
           end
           inherited seNumber: TJvSpinEdit
@@ -440,7 +440,7 @@ inherited frmCropProperties: TfrmCropProperties
           Top = 436
           Width = 509
           ExplicitTop = 436
-          ExplicitWidth = 444
+          ExplicitWidth = 509
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -448,15 +448,15 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 265
+            Left = 263
             ExplicitLeft = 148
           end
           inherited sbInsert: TSpeedButton
-            Left = 313
+            Left = 310
             ExplicitLeft = 176
           end
           inherited sbDelete: TSpeedButton
-            Left = 363
+            Left = 360
             ExplicitLeft = 204
           end
           inherited seNumber: TJvSpinEdit
@@ -522,15 +522,15 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 263
+            Left = 261
             ExplicitLeft = 232
           end
           inherited sbInsert: TSpeedButton
-            Left = 311
+            Left = 309
             ExplicitLeft = 275
           end
           inherited sbDelete: TSpeedButton
-            Left = 360
+            Left = 357
             ExplicitLeft = 318
           end
           inherited seNumber: TJvSpinEdit
@@ -550,6 +550,147 @@ inherited frmCropProperties: TfrmCropProperties
         inherited pnlTop: TPanel
           Width = 509
           ExplicitWidth = 505
+          inherited edFormula: TLabeledEdit
+            Height = 26
+            EditLabel.Width = 57
+            EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 9
+            EditLabel.ExplicitHeight = 18
+            ExplicitHeight = 26
+          end
+          inherited comboChoice: TComboBox
+            Height = 26
+            ExplicitHeight = 26
+          end
+        end
+      end
+    end
+    object jvspLandUseFraction: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 509
+      Height = 477
+      Caption = 'jvspLandUseFraction'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameLandUseFraction: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 509
+        Height = 477
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 62
+        ExplicitTop = 80
+        inherited Panel: TPanel
+          Top = 436
+          Width = 509
+          inherited lbNumber: TLabel
+            Width = 55
+            Height = 18
+            ExplicitWidth = 55
+            ExplicitHeight = 18
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 265
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 314
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 362
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 26
+            ExplicitHeight = 26
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 509
+          Height = 379
+          ColCount = 3
+          OnEndUpdate = frameLandUseFractionGridEndUpdate
+          Columns = <
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = False
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = False
+            end>
+          ExplicitLeft = -4
+          ExplicitTop = 60
+          ExplicitWidth = 509
+          ExplicitHeight = 379
+        end
+        inherited pnlTop: TPanel
+          Width = 509
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57

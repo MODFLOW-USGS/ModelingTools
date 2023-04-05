@@ -30,7 +30,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
       end
       inherited Panel2: TPanel
         Top = 145
-        ExplicitTop = 147
+        ExplicitTop = 145
         inherited lblNumberOfTimes: TLabel
           Left = 95
           ExplicitLeft = 95

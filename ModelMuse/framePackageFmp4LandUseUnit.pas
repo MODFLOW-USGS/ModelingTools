@@ -121,7 +121,7 @@ var
 
     CanSelect := True;
     rdgLandUseSelectCell(rdgLandUse, Ord(socArray), ARow, CanSelect);
-    if CanSelect then
+    if CanSelect or (ARow = Ord(sorLandUseFraction)) then
     begin
       rdgLandUse.ItemIndex[Ord(socArray), ARow] := Ord(FarmProperty.ArrayList);
     end;
@@ -291,6 +291,10 @@ begin
           sorGroundwaterRootInteraction, sorTranspirationFraction,
           sorEvapIrrigationFraction, sorFractionOfPrecipToSurfaceWater,
           sorFractionOfIrrigationToSurfaceWater, sorAddedDemand];
+        if (SoilRow = sorLandUseFraction) then
+        begin
+          CanSelect := comboLandUsePerCell.ItemIndex = 0;
+        end;
       end;
     socSFAC, socSfacFile:
       begin
@@ -421,11 +425,6 @@ begin
     StaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)]));
 
   SetFarmProperty(LandUsePackage.LandUseFraction, sorLandUseFraction);
-  if (LandUsePackage.LandUseOption = luoMultiple)
-    and (LandUsePackage.LandUseFraction.FarmOption = foNotUsed) then
-  begin
-    LandUsePackage.LandUseFraction.FarmOption := foStatic
-  end;
   LandUsePackage.SpecifyCropsToPrint := SetFarmOption(comboSpecifyCrops);
   SetFarmProperty(LandUsePackage.CropCoeff, sorCropCoeff);
   SetFarmProperty(LandUsePackage.ConsumptiveUse, sorConsumptiveUse);

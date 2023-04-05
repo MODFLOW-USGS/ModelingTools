@@ -8,7 +8,7 @@ uses
   CustomModflowWriterUnit, PhastModelUnit, ModflowFmpWellUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, ScreenObjectUnit, ModflowBoundaryUnit, RbwParser,
   DataSetUnit, OrderedCollectionUnit, GoPhastTypes, ModflowBoundaryDisplayUnit,
-  ModflowFmpSoilUnit;
+  ModflowFmpSoilUnit, ModflowFmpBaseClasses, ModflowFmpCropUnit;
 
 type
   TWriteLocation = (wlMain, wlOpenClose, wlOFE, wlCID, wlFID, wlRoot, wlCropUse, wlETR,
@@ -33,6 +33,9 @@ type
     const ErrorMessage: string) of object;
 
   TTransientDataUsed = function (Sender: TObject): Boolean of object;
+
+  TGetCropCollection = function (Crop: TCropItem): TOwhmCollection of object;
+
 
   TEvaluateProcedure = procedure of object;
 
@@ -265,9 +268,12 @@ type
 
     // LAND_USE_AREA_FRACTION
     procedure EvaluateLandUseAreaFraction;
-    procedure WriteLandUseAreaFraction; // finish list
+    procedure WriteLandUseAreaFraction;
 
     procedure WriteLandUsePrintOptions;
+
+    // SPECIFY_PRINT_ALL_CROPS
+    // CROP_NAME
 
     // CROP_COEFFICIENT
     procedure EvaluateCropCoefficient;
@@ -284,6 +290,8 @@ type
     // ROOT_DEPTH
     procedure EvaluateRootDepth;
     procedure WriteRootDepth; // finish list
+
+//    ROOT_PRESSURE
 
     // GROUNDWATER_ROOT_INTERACTION
     procedure WriteGroundwaterRootInteraction; // finish list
@@ -304,9 +312,18 @@ type
     procedure EvaluateFractionOfIrrigToSurfaceWater;
     procedure WriteFractionOfIrrigToSurfaceWater;
 
+    // POND_DEPTH
+
     // ADDED_DEMAND
     procedure EvaluateAddedDemand;
     procedure WriteAddedDemand; // finish list
+
+    // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
+    // EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
+    //  CROPS_THAT_SPECIFY_SURFACE_ELEVATION
+    //  CROP_SURFACE_ELEVATION
+    //  CROP_SURFACE_ELEVATION_OFFSET
+
 
     // Salinity flush
     procedure WriteIrrigationUniformity;
@@ -346,6 +363,9 @@ type
     procedure WriteScaleFactorsID_andOption(RequiredValues: TRequiredValues;
       UnitConversionScaleFactor: string; ExternalScaleFileName: string);
     procedure WriteExpressionVariableNearZero;
+    function GetLandUseFractionCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteOwhmList(RequiredValues: TRequiredValues; AFileName: string;
+      GetCollection: TGetCropCollection; const ErrorMessage: string);
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -419,7 +439,7 @@ uses
   frmErrorsAndWarningsUnit, ModflowFmpWriterUnit,
   ModflowUnitNumbers, frmProgressUnit,
   ModflowFmpFarmUnit, System.StrUtils,
-  ModflowFmpIrrigationUnit, ModflowFmpCropUnit, ModflowFmpBaseClasses,
+  ModflowFmpIrrigationUnit,
   ModflowFmpAllotmentUnit;
 
 resourcestring
@@ -449,6 +469,7 @@ resourcestring
   PrintRowColWarning3 = 'The PRINT ROW_COLUMN option in the LAND_USE block o' +
   'f the Farm Process has been selected but no cell has been selected in the' +
   ' %s data set so "PRINT ROW_COLUMN" is being skipped.';
+  StrInvalidLandUseAre = 'Invalid land use area fraction formula in ';
 
 { TModflowFmp4Writer }
 
@@ -1920,6 +1941,113 @@ begin
   UpdateRequirements.WriteLocation := wlAddedDemandRunoffSplit;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.WriteOwhmList(RequiredValues: TRequiredValues;
+  AFileName: string; GetCollection: TGetCropCollection; const ErrorMessage: string);
+var
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  procedure WriteOwhmItem(Crop: TCropItem; OwhmItem: TOwhmItem);
+  var
+    Formula: string;
+  begin
+    if OwhmItem <> nil then
+    begin
+      Formula := OwhmItem.OwhmValue;
+      WriteFloatValueFromGlobalFormula(Formula, Crop,
+        ErrorMessage + Crop.CropName);
+    end
+    else
+    begin
+      WriteInteger(0);
+    end;
+  end;
+  procedure WriteTransientData;
+  var
+    TimeIndex: Integer;
+    CropIndex: Integer;
+    StartTime: Double;
+    ACrop: TCropItem;
+    OwhmCollection: TOwhmCollection;
+    OwhmItem: TOwhmItem;
+  begin
+    for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+    begin
+      WriteCommentLine(Format(StrStressPeriodD, [TimeIndex + 1]));
+      StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+      for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+      begin
+        ACrop := Model.FmpCrops[CropIndex];
+        WriteInteger(CropIndex + 1);
+        OwhmCollection := GetCollection(ACrop);
+        OwhmItem := OwhmCollection.ItemByStartTime(StartTime) as TOwhmItem;
+        WriteOwhmItem(ACrop, OwhmItem);
+        NewLine;
+      end;
+    end;
+  end;
+  procedure WriteStaticData;
+  var
+    CropIndex: Integer;
+    ACrop: TCropItem;
+    OwhmCollection: TOwhmCollection;
+    OwhmItem: TOwhmItem;
+  begin
+    for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+    begin
+      ACrop := Model.FmpCrops[CropIndex];
+      WriteInteger(CropIndex + 1);
+      OwhmCollection := GetCollection(ACrop);
+      if OwhmCollection.Count > 0 then
+      begin
+        OwhmItem := ACrop.LandUseFraction.First as TOwhmItem;
+      end
+      else
+      begin
+        OwhmItem := nil;
+      end;
+      WriteOwhmItem(ACrop, OwhmItem);
+      NewLine;
+    end;
+  end;
+begin
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues, UnitConversionScaleFactor,
+    ExternalScaleFileName);
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        WriteTransientData;
+      end
+      else
+      begin
+        WriteStaticData;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteProrateDeficiency;
@@ -7118,6 +7246,11 @@ begin
   end;
 end;
 
+function TModflowFmp4Writer.GetLandUseFractionCollection(Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.LandUseFraction;
+end;
+
 procedure TModflowFmp4Writer.WriteLandUseAreaFraction;
 var
   AFileName: string;
@@ -7183,7 +7316,8 @@ begin
   end
   else
   begin
-    Assert(False);
+    WriteOwhmList(RequiredValues, AFileName, GetLandUseFractionCollection,
+      StrInvalidLandUseAre);
   end;
 end;
 
@@ -7314,14 +7448,14 @@ begin
       NewLine;
     end;
 
-    if  FFarmProcess4.UseMnwCriteria then
-    begin
-      WriteString('  MNWCLOSE');
-      WriteFloat(FFarmProcess4.MnwQClose);
-      WriteFloat(FFarmProcess4.MnwHPercent);
-      WriteFloat(FFarmProcess4.MnwRPercent);
-      NewLine;
-    end;
+//    if  FFarmProcess4.UseMnwCriteria then
+//    begin
+//      WriteString('  MNWCLOSE');
+//      WriteFloat(FFarmProcess4.MnwQClose);
+//      WriteFloat(FFarmProcess4.MnwHPercent);
+//      WriteFloat(FFarmProcess4.MnwRPercent);
+//      NewLine;
+//    end;
 
     WriteString('END OPTIONS');
     NewLine;

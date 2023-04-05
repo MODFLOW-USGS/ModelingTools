@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-4965
+4996
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4965,3 +4965,34 @@ SftTimeSeries.gpt
 	Archive\SftTimeSeries.sfr.MyGroup.ts
 	Archive\SftTimeSeries.tdis
 	Archive\usgs.SftTimeSeries.reference
+UzfSfrLgrTest.gpt
+	Archive\UzfSfrLgrTest.axml
+	Archive\UzfSfrLgrTest.bas
+	Archive\UzfSfrLgrTest.chd
+	Archive\UzfSfrLgrTest.dis
+	Archive\UzfSfrLgrTest.gag
+	Archive\UzfSfrLgrTest.gsf
+	Archive\UzfSfrLgrTest.lgr
+	Archive\UzfSfrLgrTest.lgr.archive
+	Archive\UzfSfrLgrTest.lpf
+	Archive\UzfSfrLgrTest.nam
+	Archive\UzfSfrLgrTest.nam.archive
+	Archive\UzfSfrLgrTest.oc
+	Archive\UzfSfrLgrTest.pcg
+	Archive\UzfSfrLgrTest.RunModel.Bat
+	Archive\UzfSfrLgrTest.RunModflow.Bat
+	Archive\UzfSfrLgrTest.sfr
+	Archive\UzfSfrLgrTest.uzf
+	Archive\UzfSfrLgrTest_Child_1.bas
+	Archive\UzfSfrLgrTest_Child_1.chd
+	Archive\UzfSfrLgrTest_Child_1.dis
+	Archive\UzfSfrLgrTest_Child_1.gag
+	Archive\UzfSfrLgrTest_Child_1.gsf
+	Archive\UzfSfrLgrTest_Child_1.lpf
+	Archive\UzfSfrLgrTest_Child_1.nam
+	Archive\UzfSfrLgrTest_Child_1.nam.archive
+	Archive\UzfSfrLgrTest_Child_1.oc
+	Archive\UzfSfrLgrTest_Child_1.pcg
+	Archive\UzfSfrLgrTest_Child_1.sfr
+	Archive\UzfSfrLgrTest_Child_1.uzf
+	Archive\usgs.UzfSfrLgrTest.reference

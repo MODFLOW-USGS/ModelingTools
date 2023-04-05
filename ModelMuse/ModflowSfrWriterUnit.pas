@@ -4586,7 +4586,7 @@ begin
             and (Length(UnsatDownstreamValues.SrfUnsatSegmentArray) > 0) then
           begin
             UpUnsatValues := UnsatUpstreamValues.SrfUnsatSegmentArray[0];
-            DownUnsatValues := UnsatDownstreamValues.SrfUnsatSegmentArray[StressPeriod];
+            DownUnsatValues := UnsatDownstreamValues.SrfUnsatSegmentArray[0];
           end;
         end;
 

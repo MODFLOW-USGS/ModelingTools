@@ -346,7 +346,7 @@ type
   TCropArray = array of TCropRecord;
 
   // define crops and FMP Data sets 14 and 15.
-  TCropItem = class(TCustomBoundaryItem)
+  TCropItem = class(TCustomFarmItem)
   private
     const
     PSI1Position = 0;
@@ -367,22 +367,6 @@ type
     FAllowPosition = 15;
     var
     FCropName: string;
-    FBaseTemperature: TFormulaObject;
-    FBeginningRootDepth: TFormulaObject;
-    FCoefficient0: TFormulaObject;
-    FCoefficient1: TFormulaObject;
-    FCoefficient2: TFormulaObject;
-    FCoefficient3: TFormulaObject;
-    FIrrigated: TFormulaObject;
-    FMaximumCutoffTemperature: TFormulaObject;
-    FMaximumRootDepth: TFormulaObject;
-    FMinimumCutoffTemperature: TFormulaObject;
-    FPSI1: TFormulaObject;
-    FPSI2: TFormulaObject;
-    FPSI3: TFormulaObject;
-    FPSI4: TFormulaObject;
-    FRootGrowthCoefficient: TFormulaObject;
-    FFAllow: TFormulaObject;
     FCropFunctionCollection: TCropFunctionCollection;
     FFmpRootDepthCollection: TFmpRootDepthCollection;
     FEvapFractionsCollection: TEvapFractionsCollection;
@@ -413,6 +397,8 @@ type
     FCropHasSalinityDemandDataArrayName: string;
     FCropHasSalinityDemandDisplayName: string;
     FIrrigationCollection: TFmp4IrrigationCollection;
+    FLandUseFraction: TOwhmCollection;
+    procedure SetLandUseFraction(const Value: TOwhmCollection);
     procedure SetLandUseAreaFractionDataArrayName(const NewName: string);
     procedure SetCropCoefficientDataArrayName(const NewName: string);
     procedure SetAddedDemandDataArrayName(const NewName: string);
@@ -425,52 +411,16 @@ type
     procedure SetGroundwaterRootInteractionDataArrayName(const NewName: string);
     procedure SetTranspirationFractionDataArrayName(const NewName: string);
     procedure SetCropHasSalinityDemandDataArrayName(const NewName: string);
-    function GetBaseTemperature: string;
-    function GetBeginningRootDepth: string;
-    function GetCoefficient0: string;
-    function GetCoefficient1: string;
-    function GetCoefficient2: string;
-    function GetCoefficient3: string;
-    function GetIrrigated: string;
-    function GetMaximumCutoffTemperature: string;
-    function GetMaximumRootDepth: string;
-    function GetMinimumCutoffTemperature: string;
-    function GetPSI1: string;
-    function GetPSI2: string;
-    function GetPSI3: string;
-    function GetPSI4: string;
-    function GetRootGrowthCoefficient: string;
-    procedure SetBaseTemperature(const Value: string);
-    procedure SetBeginningRootDepth(const Value: string);
-    procedure SetCoefficient0(const Value: string);
-    procedure SetCoefficient1(const Value: string);
-    procedure SetCoefficient2(const Value: string);
-    procedure SetCoefficient3(const Value: string);
     procedure SetCropName(Value: string);
-    procedure SetIrrigated(const Value: string);
-    procedure SetMaximumCutoffTemperature(const Value: string);
-    procedure SetMaximumRootDepth(const Value: string);
-    procedure SetMinimumCutoffTemperature(const Value: string);
-    procedure SetPSI1(const Value: string);
-    procedure SetPSI2(const Value: string);
-    procedure SetPSI3(const Value: string);
-    procedure SetPSI4(const Value: string);
-    procedure SetRootGrowthCoefficient(const Value: string);
     procedure SetCropFunctionCollection(const Value: TCropFunctionCollection);
     procedure SetCropWaterUseCollection(const Value: TCropWaterUseCollection);
     procedure SetEvapFractionsCollection(const Value: TEvapFractionsCollection);
     procedure SetFmpRootDepthCollection(const Value: TFmpRootDepthCollection);
     procedure SetLossesCollection(const Value: TLossesCollection);
-    function GetFallow: string;
-    procedure SetFallow(const Value: string);
     procedure UpdateAllDataArrays;
     procedure SetIrrigationCollection(const Value: TFmp4IrrigationCollection);
     procedure UpdateFarmProperties;
   protected
-    procedure AssignObserverEvents(Collection: TCollection); override;
-    procedure CreateFormulaObjects; override;
-    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
-    procedure RemoveFormulaObjects; override;
     function GetBoundaryFormula(Index: integer): string; override;
     // See @link(BoundaryFormula).
     procedure SetBoundaryFormula(Index: integer; const Value: string);
@@ -487,40 +437,52 @@ type
       var StartRangeExtended, EndRangeExtended: boolean);
   published
     property CropName: string read FCropName write SetCropName;
-    property PSI1: string read GetPSI1 write SetPSI1;
-    property PSI2: string read GetPSI2 write SetPSI2;
-    property PSI3: string read GetPSI3 write SetPSI3;
-    property PSI4: string read GetPSI4 write SetPSI4;
+    property PSI1: string index PSI1Position read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property PSI2: string index PSI2Position read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property PSI3: string index PSI3Position read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property PSI4: string index PSI4Position read GetBoundaryFormula
+      write SetBoundaryFormula;
     // BaseT
-    property BaseTemperature: string read GetBaseTemperature
-      write SetBaseTemperature;
+    property BaseTemperature: string index BaseTemperaturePosition
+      read GetBoundaryFormula write SetBoundaryFormula;
     // MinCutT
-    property MinimumCutoffTemperature: string read GetMinimumCutoffTemperature
-      write SetMinimumCutoffTemperature;
+    property MinimumCutoffTemperature: string
+      index MinimumCutoffTemperaturePosition read GetBoundaryFormula
+      write SetBoundaryFormula;
     // MaxCutT
-    property MaximumCutoffTemperature: string read GetMaximumCutoffTemperature
-      write SetMaximumCutoffTemperature;
+    property MaximumCutoffTemperature: string
+      index MaximumCutoffTemperaturePosition read GetBoundaryFormula
+      write SetBoundaryFormula;
     // C0
-    property Coefficient0: string read GetCoefficient0 write SetCoefficient0;
+    property Coefficient0: string index Coefficient0Position
+      read GetBoundaryFormula write SetBoundaryFormula;
     // C1
-    property Coefficient1: string read GetCoefficient1 write SetCoefficient1;
+    property Coefficient1: string index Coefficient1Position
+      read GetBoundaryFormula write SetBoundaryFormula;
     // C2
-    property Coefficient2: string read GetCoefficient2 write SetCoefficient2;
+    property Coefficient2: string index Coefficient2Position
+      read GetBoundaryFormula write SetBoundaryFormula;
     // C3
-    property Coefficient3: string read GetCoefficient3 write SetCoefficient3;
+    property Coefficient3: string index Coefficient3Position
+      read GetBoundaryFormula write SetBoundaryFormula;
     // BegRootD
-    property BeginningRootDepth: string read GetBeginningRootDepth
-      write SetBeginningRootDepth;
+    property BeginningRootDepth: string index BeginningRootDepthPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
     // MaxRootD
-    property MaximumRootDepth: string read GetMaximumRootDepth
-      write SetMaximumRootDepth;
+    property MaximumRootDepth: string index MaximumRootDepthPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
     // RootGC
-    property RootGrowthCoefficient: string read GetRootGrowthCoefficient
-      write SetRootGrowthCoefficient;
+    property RootGrowthCoefficient: string index RootGrowthCoefficientPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
     // inverse of NONIRR
-    property Irrigated: string read GetIrrigated write SetIrrigated;
+    property Irrigated: string index IrrigatedPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
     // IFALLOW
-    property Fallow: string read GetFallow write SetFallow;
+    property Fallow: string index FAllowPosition read GetBoundaryFormula
+      write SetBoundaryFormula;
     // // FMP Data Sets 11 and 26
     property FmpRootDepthCollection: TFmpRootDepthCollection
       read FFmpRootDepthCollection write SetFmpRootDepthCollection;
@@ -617,16 +579,13 @@ type
       stored False
     {$ENDIF}
     ;
+    property LandUseFraction: TOwhmCollection read FLandUseFraction
+      write SetLandUseFraction
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
   end;
-
-//  StrConsumptiveUsePrefix = KConsumptiveUsePrefix;
-//  StrIrrigationPrefix = KIrrigationPrefix;
-//  StrRootDepthPrefix = KRootDepthPrefix;
-//  StrEvaporationIrrigationPrefix = KEvaporationIrrigationPrefix;
-//  StrSWLossFractionIrrigationPrefix = KSWLossFractionIrrigationPrefix;
-//  StrSWLossFractionPrecipPrefix = KSWLossFractionPrecipPrefix;
-//  StrAddedDemandPrefix = KAddedDemandPrefix;
-
 
   TCropCollection = class(TCustomFarmCollection)
   private
@@ -638,6 +597,7 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
     property FarmList: TFarmList read GetFarmList;
+    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
     destructor Destroy; override;
@@ -683,40 +643,6 @@ resourcestring
   StrAddedDemandPrefix = KAddedDemandPrefix;
   StrCropHasSalinityDemandPrefix = KCropHasSalinityDemandPrefix;
   StrIncompleteIrrigatio = 'Incomplete Irrigation data';
-
-//const
-//  RootingDepthPosition = 0;
-
-//  TranspirationFractionPosition = 0;
-//  PrecipFractionPosition = 1;
-//  IrrigFractionPosition = 2;
-
-//  PrecipitationLossesPosition = 0;
-//  IrrigationLossesPosition = 1;
-
-//  SlopePosition = 0;
-//  InterceptPosition = 1;
-//  PricePosition = 2;
-
-//  CropValuePosition = 0;
-//  WaterUseIrrigatedPosition = 1;
-
-//  PSI1Position = 0;
-//  PSI2Position = 1;
-//  PSI3Position = 2;
-//  PSI4Position = 3;
-//  BaseTemperaturePosition = 4;
-//  MinimumCutoffTemperaturePosition = 5;
-//  MaximumCutoffTemperaturePosition = 6;
-//  Coefficient0Position = 7;
-//  Coefficient1Position = 8;
-//  Coefficient2Position = 9;
-//  Coefficient3Position = 10;
-//  BeginningRootDepthPosition = 11;
-//  MaximumRootDepthPosition = 12;
-//  RootGrowthCoefficientPosition = 13;
-//  IrrigatedPosition = 14;
-//  FAllowPosition = 15;
 
 resourcestring
   IDError = 'Time: %g.';
@@ -914,9 +840,6 @@ function TEvapFractionsItem.GetIrrigFraction: string;
 begin
   Result := FFormulaObjects[IrrigFractionPosition].Formula;
   ResetItemObserver(IrrigFractionPosition);
-//  TranspirationFractionPosition = 0;
-//  PrecipFractionPosition = 1;
-//  IrrigFractionPosition = 2;
 end;
 
 function TEvapFractionsItem.GetPrecipFraction: string;
@@ -929,9 +852,6 @@ function TEvapFractionsItem.GetTranspirationFraction: string;
 begin
   Result := FFormulaObjects[TranspirationFractionPosition].Formula;
   ResetItemObserver(TranspirationFractionPosition);
-//  TranspirationFractionPosition = 0;
-//  PrecipFractionPosition = 1;
-//  IrrigFractionPosition = 2;
 end;
 
 procedure TEvapFractionsItem.SetBoundaryFormula(Index: integer;
@@ -1756,10 +1676,6 @@ begin
   if Source is TCropItem then
   begin
     SourceItem := TCropItem(Source);
-    for Index := 0 to BoundaryFormulaCount - 1 do
-    begin
-      BoundaryFormula[Index] := SourceItem.BoundaryFormula[Index];
-    end;
     CropName := SourceItem.CropName;
     FmpRootDepthCollection := SourceItem.FmpRootDepthCollection;
     EvapFractionsCollection := SourceItem.EvapFractionsCollection;
@@ -1768,6 +1684,7 @@ begin
     CropWaterUseCollection := SourceItem.CropWaterUseCollection;
 
     IrrigationCollection := SourceItem.IrrigationCollection;
+    LandUseFraction := SourceItem.LandUseFraction;
 
 
     // This is done differently in TChemSpeciesItem
@@ -1789,11 +1706,6 @@ begin
   inherited;
 end;
 
-procedure TCropItem.AssignObserverEvents(Collection: TCollection);
-begin
-  // do nothing
-end;
-
 function TCropItem.BoundaryFormulaCount: integer;
 begin
   result := 16;
@@ -1812,28 +1724,8 @@ begin
   FCropWaterUseCollection := TCropWaterUseCollection.Create(Model);
 
   FIrrigationCollection := TFmp4IrrigationCollection.Create(Model);
+  FLandUseFraction := TOwhmCollection.Create(Model);
 
-end;
-
-procedure TCropItem.CreateFormulaObjects;
-begin
-  inherited;
-  FPSI1 := CreateFormulaObject(dso3D);
-  FPSI2 := CreateFormulaObject(dso3D);
-  FPSI3 := CreateFormulaObject(dso3D);
-  FPSI4 := CreateFormulaObject(dso3D);
-  FBaseTemperature := CreateFormulaObject(dso3D);
-  FMinimumCutoffTemperature := CreateFormulaObject(dso3D);
-  FMaximumCutoffTemperature := CreateFormulaObject(dso3D);
-  FCoefficient0 := CreateFormulaObject(dso3D);
-  FCoefficient1 := CreateFormulaObject(dso3D);
-  FCoefficient2 := CreateFormulaObject(dso3D);
-  FCoefficient3 := CreateFormulaObject(dso3D);
-  FBeginningRootDepth := CreateFormulaObject(dso3D);
-  FMaximumRootDepth := CreateFormulaObject(dso3D);
-  FRootGrowthCoefficient := CreateFormulaObject(dso3D);
-  FIrrigated := CreateFormulaObject(dso3D);
-  FFAllow := CreateFormulaObject(dso3D);
 end;
 
 destructor TCropItem.Destroy;
@@ -1914,6 +1806,7 @@ begin
     end;
   end;
 
+  FLandUseFraction.Free;
   FIrrigationCollection.Free;
 
   FCropFunctionCollection.Free;
@@ -1926,214 +1819,12 @@ begin
   inherited;
 end;
 
-function TCropItem.GetBaseTemperature: string;
-begin
-  Result := FBaseTemperature.Formula;
-  ResetItemObserver(BaseTemperaturePosition);
-end;
-
-function TCropItem.GetBeginningRootDepth: string;
-begin
-  Result := FBeginningRootDepth.Formula;
-  ResetItemObserver(BeginningRootDepthPosition);
-end;
-
 function TCropItem.GetBoundaryFormula(Index: integer): string;
 begin
-  case Index of
-    PSI1Position:
-      Result := PSI1;
-    PSI2Position:
-      Result := PSI2;
-    PSI3Position:
-      Result := PSI3;
-    PSI4Position:
-      Result := PSI4;
-    BaseTemperaturePosition:
-      Result := BaseTemperature;
-    MinimumCutoffTemperaturePosition:
-      Result := MinimumCutoffTemperature;
-    MaximumCutoffTemperaturePosition:
-      Result := MaximumCutoffTemperature;
-    Coefficient0Position:
-      Result := Coefficient0;
-    Coefficient1Position:
-      Result := Coefficient1;
-    Coefficient2Position:
-      Result := Coefficient2;
-    Coefficient3Position:
-      Result := Coefficient3;
-    BeginningRootDepthPosition:
-      Result := BeginningRootDepth;
-    MaximumRootDepthPosition:
-      Result := MaximumRootDepth;
-    RootGrowthCoefficientPosition:
-      Result := RootGrowthCoefficient;
-    IrrigatedPosition:
-      Result := Irrigated;
-    FAllowPosition:
-      Result := FAllow;
-    else
-      Assert(False);
-  end;
-end;
-
-function TCropItem.GetCoefficient0: string;
-begin
-  Result := FCoefficient0.Formula;
-  ResetItemObserver(Coefficient0Position);
-end;
-
-function TCropItem.GetCoefficient1: string;
-begin
-  Result := FCoefficient1.Formula;
-  ResetItemObserver(Coefficient1Position);
-end;
-
-function TCropItem.GetCoefficient2: string;
-begin
-  Result := FCoefficient2.Formula;
-  ResetItemObserver(Coefficient2Position);
-end;
-
-function TCropItem.GetCoefficient3: string;
-begin
-  Result := FCoefficient3.Formula;
-  ResetItemObserver(Coefficient3Position);
-end;
-
-function TCropItem.GetFallow: string;
-begin
-  Result := FFallow.Formula;
-  ResetItemObserver(FAllowPosition);
-end;
-
-function TCropItem.GetIrrigated: string;
-begin
-  Result := FIrrigated.Formula;
-  ResetItemObserver(IrrigatedPosition);
-end;
-
-function TCropItem.GetMaximumCutoffTemperature: string;
-begin
-  Result := FMaximumCutoffTemperature.Formula;
-  ResetItemObserver(MaximumCutoffTemperaturePosition);
-end;
-
-function TCropItem.GetMaximumRootDepth: string;
-begin
-  Result := FMaximumRootDepth.Formula;
-  ResetItemObserver(MaximumRootDepthPosition);
-end;
-
-function TCropItem.GetMinimumCutoffTemperature: string;
-begin
-  Result := FMinimumCutoffTemperature.Formula;
-  ResetItemObserver(MinimumCutoffTemperaturePosition);
-end;
-
-procedure TCropItem.GetPropertyObserver(Sender: TObject; List: TList);
-begin
-  if Sender = FPSI1 then
-  begin
-    List.Add(FObserverList[PSI1Position]);
-  end
-  else if Sender = FPSI2 then
-  begin
-    List.Add(FObserverList[PSI2Position]);
-  end
-  else if Sender = FPSI3 then
-  begin
-    List.Add(FObserverList[PSI3Position]);
-  end
-  else if Sender = FPSI4 then
-  begin
-    List.Add(FObserverList[PSI4Position]);
-  end
-  else if Sender = FBaseTemperature then
-  begin
-    List.Add(FObserverList[BaseTemperaturePosition]);
-  end
-  else if Sender = FMinimumCutoffTemperature then
-  begin
-    List.Add(FObserverList[MinimumCutoffTemperaturePosition]);
-  end
-  else if Sender = FMaximumCutoffTemperature then
-  begin
-    List.Add(FObserverList[MaximumCutoffTemperaturePosition]);
-  end
-  else if Sender = FCoefficient0 then
-  begin
-    List.Add(FObserverList[Coefficient0Position]);
-  end
-  else if Sender = FCoefficient1 then
-  begin
-    List.Add(FObserverList[Coefficient1Position]);
-  end
-  else if Sender = FCoefficient2 then
-  begin
-    List.Add(FObserverList[Coefficient2Position]);
-  end
-  else if Sender = FCoefficient3 then
-  begin
-    List.Add(FObserverList[Coefficient3Position]);
-  end
-  else if Sender = FBeginningRootDepth then
-  begin
-    List.Add(FObserverList[BeginningRootDepthPosition]);
-  end
-  else if Sender = FMaximumRootDepth then
-  begin
-    List.Add(FObserverList[MaximumRootDepthPosition]);
-  end
-  else if Sender = FRootGrowthCoefficient then
-  begin
-    List.Add(FObserverList[RootGrowthCoefficientPosition]);
-  end
-  else if Sender = FIrrigated then
-  begin
-    List.Add(FObserverList[IrrigatedPosition]);
-  end
-  else if Sender = FFAllow then
-  begin
-    List.Add(FObserverList[FAllowPosition]);
-  end
-
-//  BeginningRootDepthPosition = 11;
-//  MaximumRootDepthPosition = 12;
-//  RootGrowthCoefficientPosition = 13;
-//  IrrigatedPosition = 14;
-
-end;
-
-function TCropItem.GetPSI1: string;
-begin
-  Result := FPSI1.Formula;
-  ResetItemObserver(PSI1Position);
-end;
-
-function TCropItem.GetPSI2: string;
-begin
-  Result := FPSI2.Formula;
-  ResetItemObserver(PSI2Position);
-end;
-
-function TCropItem.GetPSI3: string;
-begin
-  Result := FPSI3.Formula;
-  ResetItemObserver(PSI3Position);
-end;
-
-function TCropItem.GetPSI4: string;
-begin
-  Result := FPSI4.Formula;
-  ResetItemObserver(PSI4Position);
-end;
-
-function TCropItem.GetRootGrowthCoefficient: string;
-begin
-  Result := FRootGrowthCoefficient.Formula;
-  ResetItemObserver(RootGrowthCoefficientPosition);
+  Assert(Index >= 0);
+  Assert(Index < BoundaryFormulaCount);
+  Result := FFormulaObjects[Index].Formula;
+  ResetItemObserver(Index);
 end;
 
 procedure TCropItem.InitializeFormulas;
@@ -2166,18 +1857,6 @@ begin
   if result then
   begin
     OtherItem := TCropItem(AnotherItem);
-    for PropIndex := 0 to BoundaryFormulaCount - 1 do
-    begin
-      Result := BoundaryFormula[PropIndex] = OtherItem.BoundaryFormula[PropIndex];
-      if not result then
-      begin
-        break;
-      end;
-    end;
-  end;
-  if result then
-  begin
-//    OtherItem := TCropItem(AnotherItem);
     result := (CropName = OtherItem.CropName)
       and FmpRootDepthCollection.IsSame(OtherItem.FmpRootDepthCollection)
       and EvapFractionsCollection.IsSame(OtherItem.EvapFractionsCollection)
@@ -2186,6 +1865,7 @@ begin
       and CropWaterUseCollection.IsSame(OtherItem.CropWaterUseCollection)
 
       and IrrigationCollection.IsSame(OtherItem.IrrigationCollection)
+      and LandUseFraction.IsSame(OtherItem.LandUseFraction)
 
       and (LandUseAreaFractionDataArrayName = OtherItem.LandUseAreaFractionDataArrayName)
       and (CropCoefficientDataArrayName = OtherItem.CropCoefficientDataArrayName)
@@ -2200,73 +1880,6 @@ begin
       and (AddedDemandDataArrayName = OtherItem.AddedDemandDataArrayName)
       and (CropHasSalinityDemandDataArrayName = OtherItem.CropHasSalinityDemandDataArrayName)
   end;
-end;
-
-procedure TCropItem.RemoveFormulaObjects;
-begin
-  frmGoPhast.PhastModel.FormulaManager.Remove(FPSI1,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FPSI1,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FPSI3,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FPSI4,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FBaseTemperature,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FMinimumCutoffTemperature,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FMaximumCutoffTemperature,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FCoefficient0,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FCoefficient1,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FCoefficient2,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FCoefficient3,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FBeginningRootDepth,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FMaximumRootDepth,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FRootGrowthCoefficient,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FIrrigated,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
-
-  frmGoPhast.PhastModel.FormulaManager.Remove(FFallow,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 procedure TCropItem.SetAddedDemandDataArrayName(const NewName: string);
@@ -2303,91 +1916,13 @@ begin
   SetCaseSensitiveStringProperty(FAddedDemandDataArrayName, NewName);
 end;
 
-procedure TCropItem.SetBaseTemperature(const Value: string);
-begin
-  if FBaseTemperature.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, BaseTemperaturePosition, FBaseTemperature);
-  end;
-end;
-
-procedure TCropItem.SetBeginningRootDepth(const Value: string);
-begin
-  if FBeginningRootDepth.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, BeginningRootDepthPosition, FBeginningRootDepth);
-  end;
-end;
-
 procedure TCropItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
-  case Index of
-    PSI1Position:
-      PSI1 := Value;
-    PSI2Position:
-      PSI2 := Value;
-    PSI3Position:
-      PSI3 := Value;
-    PSI4Position:
-      PSI4 := Value;
-    BaseTemperaturePosition:
-      BaseTemperature := Value;
-    MinimumCutoffTemperaturePosition:
-      MinimumCutoffTemperature := Value;
-    MaximumCutoffTemperaturePosition:
-      MaximumCutoffTemperature := Value;
-    Coefficient0Position:
-      Coefficient0 := Value;
-    Coefficient1Position:
-      Coefficient1 := Value;
-    Coefficient2Position:
-      Coefficient2 := Value;
-    Coefficient3Position:
-      Coefficient3 := Value;
-    BeginningRootDepthPosition:
-      BeginningRootDepth := Value;
-    MaximumRootDepthPosition:
-      MaximumRootDepth := Value;
-    RootGrowthCoefficientPosition:
-      RootGrowthCoefficient := Value;
-    IrrigatedPosition:
-      Irrigated := Value;
-    FAllowPosition:
-      FAllow := Value;
-    else
-      Assert(False);
-  end;
-end;
-
-procedure TCropItem.SetCoefficient0(const Value: string);
-begin
-  if FCoefficient0.Formula <> Value then
+  Assert(Index >= 0);
+  Assert(Index < BoundaryFormulaCount);
+  if FFormulaObjects[Index].Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, Coefficient0Position, FCoefficient0);
-  end;
-end;
-
-procedure TCropItem.SetCoefficient1(const Value: string);
-begin
-  if FCoefficient1.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, Coefficient1Position, FCoefficient1);
-  end;
-end;
-
-procedure TCropItem.SetCoefficient2(const Value: string);
-begin
-  if FCoefficient2.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, Coefficient2Position, FCoefficient2);
-  end;
-end;
-
-procedure TCropItem.SetCoefficient3(const Value: string);
-begin
-  if FCoefficient3.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, Coefficient3Position, FCoefficient3);
+    UpdateFormulaBlocks(Value, Index, FFormulaObjects[Index]);
   end;
 end;
 
@@ -2419,7 +1954,6 @@ begin
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
     UpdateOrCreateDataArray(UpdateDat);
-
   end;
 
   SetCaseSensitiveStringProperty(FConsumptiveUseDataArrayName, NewName);
@@ -2759,14 +2293,6 @@ begin
   SetCaseSensitiveStringProperty(FEvaporationIrrigationDataArrayName, NewName);
 end;
 
-procedure TCropItem.SetFallow(const Value: string);
-begin
-  if FFallow.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, FAllowPosition, FFallow);
-  end;
-end;
-
 procedure TCropItem.SetFmpRootDepthCollection(
   const Value: TFmpRootDepthCollection);
 begin
@@ -2831,14 +2357,6 @@ begin
   end;
   inherited;
 
-end;
-
-procedure TCropItem.SetIrrigated(const Value: string);
-begin
-  if FIrrigated.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, IrrigatedPosition, FIrrigated);
-  end;
 end;
 
 procedure TCropItem.SetIrrigationCollection(const Value: TFmp4IrrigationCollection);
@@ -2914,65 +2432,14 @@ begin
   SetCaseSensitiveStringProperty(FLandUseAreaFractionDataArrayName, NewName);
 end;
 
+procedure TCropItem.SetLandUseFraction(const Value: TOwhmCollection);
+begin
+  FLandUseFraction.Assign(Value);
+end;
+
 procedure TCropItem.SetLossesCollection(const Value: TLossesCollection);
 begin
   FLossesCollection.Assign(Value);
-end;
-
-procedure TCropItem.SetMaximumCutoffTemperature(const Value: string);
-begin
-  if FMaximumCutoffTemperature.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, MaximumCutoffTemperaturePosition, FMaximumCutoffTemperature);
-  end;
-end;
-
-procedure TCropItem.SetMaximumRootDepth(const Value: string);
-begin
-  if FMaximumRootDepth.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, MaximumRootDepthPosition, FMaximumRootDepth);
-  end;
-end;
-
-procedure TCropItem.SetMinimumCutoffTemperature(const Value: string);
-begin
-  if FMinimumCutoffTemperature.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, MinimumCutoffTemperaturePosition, FMinimumCutoffTemperature);
-  end;
-end;
-
-procedure TCropItem.SetPSI1(const Value: string);
-begin
-  if FPSI1.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, PSI1Position, FPSI1);
-  end;
-end;
-
-procedure TCropItem.SetPSI2(const Value: string);
-begin
-  if FPSI2.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, PSI2Position, FPSI2);
-  end;
-end;
-
-procedure TCropItem.SetPSI3(const Value: string);
-begin
-  if FPSI3.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, PSI3Position, FPSI3);
-  end;
-end;
-
-procedure TCropItem.SetPSI4(const Value: string);
-begin
-  if FPSI4.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, PSI4Position, FPSI4);
-  end;
 end;
 
 procedure TCropItem.SetRootDepthDataArrayName(const NewName: string);
@@ -3007,14 +2474,6 @@ begin
   end;
 
   SetCaseSensitiveStringProperty(FRootDepthDataArrayName, NewName);
-end;
-
-procedure TCropItem.SetRootGrowthCoefficient(const Value: string);
-begin
-  if FRootGrowthCoefficient.Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, RootGrowthCoefficientPosition, FRootGrowthCoefficient);
-  end;
 end;
 
 procedure TCropItem.SetSWLossFractionIrrigationDataArrayName(
@@ -3230,6 +2689,8 @@ begin
     StartRangeExtended, EndRangeExtended);
 
   IrrigationCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  LandUseFraction.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
 end;
 
@@ -3657,14 +3118,6 @@ begin
     end;
     FCropArray[Index] := CurrentRecord;
 
-//    if FarmProcess.IsSelected and FarmLandUse.IsSelected
-//      and (FarmLandUse.Irrigation.FarmOption <> foNotUsed)
-//      and (FarmLandUse.Irrigation.ArrayList <> alList)
-//      then
-//    begin
-//      CurrentItem.IrrigationCollection.EvaluateBoundaries;
-//    end;
-
     if FarmProcess.RootingDepth = rdSpecified then
     begin
       CurrentItem.FmpRootDepthCollection.EvaluateBoundaries;
@@ -3723,6 +3176,11 @@ end;
 procedure TCropCollection.SetItems(Index: Integer; const Value: TCropItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+function TCropCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
+begin
+  result := False;
 end;
 
 procedure TCropCollection.UpdateAllDataArrays;
