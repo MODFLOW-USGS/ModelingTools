@@ -15,6 +15,9 @@ type
     procedure RemoveFormulaObjects; override;
     // @name checks whether AnotherItem is the same as the current @classname.
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    function GetBoundaryFormula(Index: integer): string; override;
+    procedure SetBoundaryFormula(Index: integer; const Value: string);
+      override;
   public
     // @name copies Source to this @classname.
     procedure CreateFormulaObjects; override;
@@ -34,7 +37,7 @@ type
 
   TCustomFarmCollection = class(TCustomNonSpatialBoundColl)
   public
-    constructor Create(Model: TBaseModel); reintroduce;
+    constructor Create(Model: TBaseModel); reintroduce; virtual;
     function ItemByStartTime(ATime: Double): TCustomBoundaryItem;
     procedure UpdateTimes(Times: TRealList;
       StartTestTime, EndTestTime: double;
@@ -61,15 +64,20 @@ type
   // @name is used to define list properties for MODFLOW OWHM version 2.
   TOwhmCollection = class(TCustomFarmCollection)
   private
+    FOwhmNames: TStrings;
     function GetItem(Index: Integer): TOwhmItem;
     procedure SetItem(Index: Integer; const Value: TOwhmItem);
+    procedure SetOwhmNames(const Value: TStrings);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
+    constructor Create(Model: TBaseModel); override;
+    destructor Destroy; override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     property Items[Index: Integer]: TOwhmItem read GetItem
       write SetItem;  default;
     function First: TOwhmItem;
+    Property OwhmNames: TStrings read FOwhmNames write SetOwhmNames;
  end;
 
   TCustomOneFarmItem = class(TOwhmItem)
@@ -117,6 +125,14 @@ begin
   end;
 end;
 
+function TCustomFarmItem.GetBoundaryFormula(Index: integer): string;
+begin
+  Assert(Index >= 0);
+  Assert(Index < BoundaryFormulaCount);
+  Result := FFormulaObjects[Index].Formula;
+  ResetItemObserver(Index);
+end;
+
 procedure TCustomFarmItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Index: integer;
@@ -160,6 +176,17 @@ begin
     frmGoPhast.PhastModel.FormulaManager.Remove(FFormulaObjects[Index],
       GlobalRemoveModflowBoundaryItemSubscription,
       GlobalRestoreModflowBoundaryItemSubscription, self);
+  end;
+end;
+
+procedure TCustomFarmItem.SetBoundaryFormula(Index: integer;
+  const Value: string);
+begin
+  Assert(Index >= 0);
+  Assert(Index < BoundaryFormulaCount);
+  if FFormulaObjects[Index].Formula <> Value then
+  begin
+    UpdateFormulaBlocks(Value, Index, FFormulaObjects[Index]);
   end;
 end;
 
@@ -284,6 +311,18 @@ end;
 
 { TOwhmCollection }
 
+constructor TOwhmCollection.Create(Model: TBaseModel);
+begin
+  inherited;
+  FOwhmNames := TStringList.Create;
+end;
+
+destructor TOwhmCollection.Destroy;
+begin
+  FOwhmNames.Free;
+  inherited;
+end;
+
 function TOwhmCollection.First: TOwhmItem;
 begin
   result := inherited First as TOwhmItem;
@@ -309,6 +348,11 @@ end;
 procedure TOwhmCollection.SetItem(Index: Integer; const Value: TOwhmItem);
 begin
   inherited Items[index] := Value;
+end;
+
+procedure TOwhmCollection.SetOwhmNames(const Value: TStrings);
+begin
+  FOwhmNames.Assign(Value);
 end;
 
 { TCustomDefaultFormulaItem }

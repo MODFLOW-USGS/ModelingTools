@@ -25,7 +25,7 @@ type
     wlWaterSource, wlAddedCropDemandFlux, wlAddedCropDemandRate,
     wlPrecipicationTable, wlSoilCoefficient, wlNoReturnFlow,
     wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit, wlSwAllotment,
-    wlGwAllotment);
+    wlGwAllotment, wlRootPressure);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -153,6 +153,7 @@ type
     FSurfaceWaterAllotmentFileStream: TFileStream;
     FGroundWaterAllotmentFileStream: TFileStream;
     FFarmWells4: TFarmProcess4Wells;
+    FRootPressureFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -268,6 +269,7 @@ type
 
     // LAND_USE_AREA_FRACTION
     procedure EvaluateLandUseAreaFraction;
+    function GetLandUseFractionCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteLandUseAreaFraction;
 
     procedure WriteLandUsePrintOptions;
@@ -277,10 +279,12 @@ type
 
     // CROP_COEFFICIENT
     procedure EvaluateCropCoefficient;
-    procedure WriteCropCoefficient;  // finish list
+    function GetCropCoefficentCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteCropCoefficient;
 
     // CONSUMPTIVE_USE
     procedure EvaluateConsumptiveUse;
+    function GetConsumptiveUseCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteConsumptiveUse;  // finish list
 
     // IRRIGATION
@@ -289,9 +293,11 @@ type
 
     // ROOT_DEPTH
     procedure EvaluateRootDepth;
+    function GetRootDepthCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteRootDepth; // finish list
 
 //    ROOT_PRESSURE
+    procedure WriteRootPressure;
 
     // GROUNDWATER_ROOT_INTERACTION
     procedure WriteGroundwaterRootInteraction; // finish list
@@ -363,7 +369,6 @@ type
     procedure WriteScaleFactorsID_andOption(RequiredValues: TRequiredValues;
       UnitConversionScaleFactor: string; ExternalScaleFileName: string);
     procedure WriteExpressionVariableNearZero;
-    function GetLandUseFractionCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteOwhmList(RequiredValues: TRequiredValues; AFileName: string;
       GetCollection: TGetCropCollection; const ErrorMessage: string);
   protected
@@ -470,6 +475,9 @@ resourcestring
   'f the Farm Process has been selected but no cell has been selected in the' +
   ' %s data set so "PRINT ROW_COLUMN" is being skipped.';
   StrInvalidLandUseAre = 'Invalid land use area fraction formula in ';
+  StrInvalidCropCoeffic = 'Invalid crop coefficient formula in ';
+  StrInvalidConsumptive = 'Invalid consumptive use formula in ';
+  StrInvalidRootDepthF = 'Invalid root depth formula in ';
 
 { TModflowFmp4Writer }
 
@@ -1166,6 +1174,7 @@ begin
   FreeAndNil(FSemiRoutedReturnFileStream);
   FreeAndNil(FSurfaceWaterAllotmentFileStream);
   FreeAndNil(FGroundWaterAllotmentFileStream);
+  FreeAndNil(FRootPressureFileStream);
 
 end;
 
@@ -1173,6 +1182,18 @@ function TModflowFmp4Writer.GetBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   result := ScreenObject.ModflowFmpWellBoundary;
+end;
+
+function TModflowFmp4Writer.GetConsumptiveUseCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.ConsumptiveUseCollection;
+end;
+
+function TModflowFmp4Writer.GetCropCoefficentCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.CropCoefficientCollection;
 end;
 
 function TModflowFmp4Writer.GetFileStreamName(WriteLocation: TWriteLocation): string;
@@ -1595,6 +1616,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlRootPressure:
+      begin
+        result := ChangeFileExt(FBaseName, '.root_pressure');
+        if FRootPressureFileStream = nil then
+        begin
+          FRootPressureFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
   if result <> '' then
@@ -1775,6 +1805,7 @@ begin
     wlSemiRouteDeliveryUpperLimit: ;
     wlSwAllotment: ;
     wlGwAllotment: ;
+    wlRootPressure: ;
     else Assert(False);
   end;
 end;
@@ -1837,6 +1868,7 @@ begin
     wlSemiRouteDeliveryUpperLimit: ;
     wlSwAllotment: ;
     wlGwAllotment: ;
+    wlRootPressure: ;
     else Assert(False)
   end;
 end;
@@ -2002,7 +2034,7 @@ var
       OwhmCollection := GetCollection(ACrop);
       if OwhmCollection.Count > 0 then
       begin
-        OwhmItem := ACrop.LandUseFraction.First as TOwhmItem;
+        OwhmItem := OwhmCollection.First as TOwhmItem;
       end
       else
       begin
@@ -3659,7 +3691,7 @@ begin
               begin
                 ACrop := Model.FmpCrops[CropIndex];
                 WriteInteger(CropIndex+1);
-                IrregationItem := ACrop.IrrigationCollection.
+                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.
                   ItemByStartTime(StartTime) as TCropIrrigationItem;
                 WriteIrrigationItem(ACrop, IrregationItem);
               end;
@@ -3671,9 +3703,9 @@ begin
             begin
               ACrop := Model.FmpCrops[CropIndex];
               WriteInteger(CropIndex + 1);
-              if ACrop.IrrigationCollection.Count > 0 then
+              if ACrop.SW_LossFractionIrrigationCollection.Count > 0 then
               begin
-                IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
+                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.First as TCropIrrigationItem;
               end
               else
               begin
@@ -4956,7 +4988,8 @@ begin
   end
   else
   begin
-    Assert(False);
+    WriteOwhmList(RequiredValues, AFileName, GetConsumptiveUseCollection,
+      StrInvalidConsumptive);
   end;
 end;
 
@@ -5025,7 +5058,8 @@ begin
   end
   else
   begin
-    Assert(False);
+    WriteOwhmList(RequiredValues, AFileName, GetCropCoefficentCollection,
+      StrInvalidCropCoeffic);
   end;
 end;
 
@@ -5777,7 +5811,7 @@ begin
               begin
                 ACrop := Model.FmpCrops[CropIndex];
                 WriteInteger(CropIndex+1);
-                IrregationItem := ACrop.IrrigationCollection.
+                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.
                   ItemByStartTime(StartTime) as TCropIrrigationItem;
                 WriteEvapIrrigationItem(ACrop, IrregationItem);
               end;
@@ -5789,9 +5823,9 @@ begin
             begin
               ACrop := Model.FmpCrops[CropIndex];
               WriteInteger(CropIndex + 1);
-              if ACrop.IrrigationCollection.Count > 0 then
+              if ACrop.SW_LossFractionIrrigationCollection.Count > 0 then
               begin
-                IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
+                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.First as TCropIrrigationItem;
               end
               else
               begin
@@ -6812,6 +6846,10 @@ var
   RequiredValues: TRequiredValues;
   DataArrayNames: TStringList;
   CropIndex: Integer;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  ACrop: TCropItem;
 begin
   if FLandUse.GroundwaterRootInteraction.FarmOption = foNotUsed then
   begin
@@ -6862,7 +6900,33 @@ begin
   end
   else
   begin
-    Assert(False);
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsID_andOption(RequiredValues, UnitConversionScaleFactor,
+      ExternalScaleFileName);
+    WriteString('STATIC LIST DATAFILE ');
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+        for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+        begin
+          ACrop := Model.FmpCrops[CropIndex];
+          WriteInteger(CropIndex + 1);
+          WriteInteger(ACrop.GroundwaterRootInteraction.InteractionCode);
+          NewLine;
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
   end;
 end;
 
@@ -6993,7 +7057,7 @@ begin
             begin
               ACrop := Model.FmpCrops[CropIndex];
               WriteInteger(CropIndex+1);
-              IrregationItem := ACrop.IrrigationCollection.
+              IrregationItem := ACrop.SW_LossFractionIrrigationCollection.
                 ItemByStartTime(StartTime) as TCropIrrigationItem;
               WriteIrrigationItem(ACrop, IrregationItem);
             end;
@@ -7005,9 +7069,9 @@ begin
           begin
             ACrop := Model.FmpCrops[CropIndex];
             WriteInteger(CropIndex + 1);
-            if ACrop.IrrigationCollection.Count > 0 then
+            if ACrop.SW_LossFractionIrrigationCollection.Count > 0 then
             begin
-              IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
+              IrregationItem := ACrop.SW_LossFractionIrrigationCollection.First as TCropIrrigationItem;
             end
             else
             begin
@@ -7211,8 +7275,7 @@ begin
     WriteConsumptiveUse;
     WriteIrrigation;
     WriteRootDepth;
-
-    // ROOT_PRESSURE
+    WriteRootPressure;
 
     WriteGroundwaterRootInteraction;
     WriteTranspirationFraction;
@@ -7248,7 +7311,13 @@ end;
 
 function TModflowFmp4Writer.GetLandUseFractionCollection(Crop: TCropItem): TOwhmCollection;
 begin
-  result := Crop.LandUseFraction;
+  result := Crop.LandUseFractionCollection;
+end;
+
+function TModflowFmp4Writer.GetRootDepthCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.FmpRootDepthCollection;
 end;
 
 procedure TModflowFmp4Writer.WriteLandUseAreaFraction;
@@ -7808,7 +7877,153 @@ begin
   end
   else
   begin
-    Assert(False);
+    WriteOwhmList(RequiredValues, AFileName, GetRootDepthCollection,
+      StrInvalidRootDepthF);
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteRootPressure;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  DataArrayNames: TStringList;
+  CropIndex: Integer;
+var
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  procedure WriteRootPressureItem(Crop: TCropItem; RootPressureItem: TRootPressureItem);
+  var
+    Formula: string;
+  begin
+    if RootPressureItem <> nil then
+    begin
+      Formula := RootPressureItem.Psi1;
+      WriteFloatValueFromGlobalFormula(Formula, Crop,
+        'Invalid Anoxia Pressure formula in ' + Crop.CropName);
+      Formula := RootPressureItem.Psi2;
+      WriteFloatValueFromGlobalFormula(Formula, Crop,
+        'Invalid High Optimal Pressure formula in ' + Crop.CropName);
+      Formula := RootPressureItem.Psi3;
+      WriteFloatValueFromGlobalFormula(Formula, Crop,
+        'Invalid Low Optimal Pressure formula in ' + Crop.CropName);
+      Formula := RootPressureItem.Psi4;
+      WriteFloatValueFromGlobalFormula(Formula, Crop,
+        'Invalid Wilting Pressure formula in ' + Crop.CropName);
+    end
+    else
+    begin
+      WriteInteger(0);
+      WriteInteger(0);
+      WriteInteger(0);
+      WriteInteger(0);
+    end;
+  end;
+  procedure WriteTransientData;
+  var
+    TimeIndex: Integer;
+    CropIndex: Integer;
+    StartTime: Double;
+    ACrop: TCropItem;
+    RootPressureItem: TRootPressureItem;
+  begin
+    for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+    begin
+      WriteCommentLine(Format(StrStressPeriodD, [TimeIndex + 1]));
+      StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+      for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+      begin
+        ACrop := Model.FmpCrops[CropIndex];
+        WriteInteger(CropIndex + 1);
+        RootPressureItem := ACrop.RootPressureCollection.ItemByStartTime(StartTime) as TRootPressureItem;
+        WriteRootPressureItem(ACrop, RootPressureItem);
+        NewLine;
+      end;
+    end;
+  end;
+  procedure WriteStaticData;
+  var
+    CropIndex: Integer;
+    ACrop: TCropItem;
+    RootPressureItem: TRootPressureItem;
+  begin
+    for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+    begin
+      ACrop := Model.FmpCrops[CropIndex];
+      WriteInteger(CropIndex + 1);
+      if ACrop.RootPressureCollection.Count > 0 then
+      begin
+        RootPressureItem := ACrop.RootPressureCollection.First as TRootPressureItem;
+      end
+      else
+      begin
+        RootPressureItem := nil;
+      end;
+      WriteRootPressureItem(ACrop, RootPressureItem);
+      NewLine;
+    end;
+  end;
+begin
+  if FLandUse.RootPressure.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlRootPressure;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: ROOT_PRESSURE';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ROOT_PRESSURE';
+  RequiredValues.ID := 'ROOT_PRESSURE';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FLandUse.RootPressure.FarmOption = foTransient);
+  RequiredValues.CheckError :=  'Invalid Root Pressure value';
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.RootPressure;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlRootPressure);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues, UnitConversionScaleFactor,
+    ExternalScaleFileName);
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        WriteTransientData;
+      end
+      else
+      begin
+        WriteStaticData;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
   end;
 end;
 
@@ -8274,6 +8489,11 @@ begin
         begin
           Assert(FGroundWaterAllotmentFileStream <> nil);
           FGroundWaterAllotmentFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlRootPressure:
+        begin
+          Assert(FRootPressureFileStream <> nil);
+          FRootPressureFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

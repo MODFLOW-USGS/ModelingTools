@@ -9,45 +9,23 @@ uses
 
 type
   // FMP Data Sets 11 and 26
-  TRootingDepthRecord = record
-    StartingTime: double;
-    EndingTime: Double;
-    // ROOT
-    RootingDepth: double;
-    RootingDepthAnnotation: string;
-  end;
-
-  TRootingDepthItem = class(TCustomZeroFarmItem)
+  // LAND_USE ROOT_DEPTH
+  TRootingDepthItem = class(TOwhmItem)
   private
     const
     RootingDepthPosition = 0;
-    function GetRootingDepth: string;
-    procedure SetRootingDepth(const Value: string);
-  protected
-    // See @link(BoundaryFormula).
-    function GetBoundaryFormula(Index: integer): string; override;
-    // See @link(BoundaryFormula).
-    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
-    function BoundaryFormulaCount: integer; override;
   published
-    property RootingDepth: string read GetRootingDepth write SetRootingDepth;
+    property RootingDepth: string index RootingDepthPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
   end;
 
-  TFmpRootDepthCollection = class(TCustomFarmCollection)
+  TFmpRootDepthCollection = class(TOwhmCollection)
   private
-    FTimeValues: array of TRootingDepthRecord;
-    function GetRootingDepthTimeValues(Index: integer): TRootingDepthRecord;
-    procedure SetRootingDepthTimeValues(Index: integer;
-      const Value: TRootingDepthRecord);
     function GetItems(Index: Integer): TRootingDepthItem;
     procedure SetItems(Index: Integer; const Value: TRootingDepthItem);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-    procedure EvaluateBoundaries;
-    property RootingDepthTimeValues[Index: integer]: TRootingDepthRecord
-      read GetRootingDepthTimeValues write SetRootingDepthTimeValues;
-    function GetRootingDepthTimeValuesFromTime(StartTime: double): TRootingDepthRecord;
     property Items[Index: Integer]: TRootingDepthItem read GetItems
       write SetItems; default;
   end;
@@ -80,7 +58,7 @@ type
   end;
 
   // @name represents the choice of irrigation type for one crop.
-  TFmp4IrrigationCollection = class(TCustomFarmCollection)
+  TFmp4SW_LossFractionIrrigationCollection = class(TCustomFarmCollection)
   private
     function GetItems(Index: Integer): TCropIrrigationItem;
     procedure SetItems(Index: Integer; const Value: TCropIrrigationItem);
@@ -345,26 +323,67 @@ type
 
   TCropArray = array of TCropRecord;
 
-  // define crops and FMP Data sets 14 and 15.
-  TCropItem = class(TCustomFarmItem)
+  TRootPressureItem = class(TCustomFarmItem)
   private
     const
     PSI1Position = 0;
     PSI2Position = 1;
     PSI3Position = 2;
     PSI4Position = 3;
-    BaseTemperaturePosition = 4;
-    MinimumCutoffTemperaturePosition = 5;
-    MaximumCutoffTemperaturePosition = 6;
-    Coefficient0Position = 7;
-    Coefficient1Position = 8;
-    Coefficient2Position = 9;
-    Coefficient3Position = 10;
-    BeginningRootDepthPosition = 11;
-    MaximumRootDepthPosition = 12;
-    RootGrowthCoefficientPosition = 13;
-    IrrigatedPosition = 14;
-    FAllowPosition = 15;
+  protected
+    function BoundaryFormulaCount: integer; override;
+  published
+    property PSI1: string index PSI1Position read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property PSI2: string index PSI2Position read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property PSI3: string index PSI3Position read GetBoundaryFormula
+      write SetBoundaryFormula;
+    property PSI4: string index PSI4Position read GetBoundaryFormula
+      write SetBoundaryFormula;
+  end;
+
+  TRootPressureCollection = class(TCustomFarmCollection)
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  end;
+
+  TInteractionCode = 0..5;
+
+  TGroundwaterRootInteraction = class(TGoPhastPersistent)
+  private
+    FInteractionCode: TInteractionCode;
+    function GetAnoxia: Boolean;
+    function GetGroundwaterUptake: Boolean;
+    function GetSoilStress: Boolean;
+    procedure SetAnoxia(const Value: Boolean);
+    procedure SetGroundwaterUptake(const Value: Boolean);
+    procedure SetInteractionCode(const Value: TInteractionCode);
+    procedure SetSoilStress(const Value: Boolean);
+    function GetHasTranspiration: Boolean;
+    procedure SetHasTranspiration(const Value: Boolean);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    procedure Assign(Source: TPersistent); override;
+    property GroundwaterUptake: Boolean read GetGroundwaterUptake
+      write SetGroundwaterUptake;
+    property Anoxia: Boolean read GetAnoxia write SetAnoxia;
+    property SoilStress: Boolean read GetSoilStress write SetSoilStress;
+    property HasTranspiration: Boolean read GetHasTranspiration
+      write SetHasTranspiration;
+    function IsSame(OtherItem: TGroundwaterRootInteraction): Boolean;
+    class function ConvertToInteractionCode(HasTranspriationB, GWUptakeB, AnoxiaB,
+      SoilStressB: Boolean): TInteractionCode;
+    class procedure ConvertFromInteractionCode(Code: TInteractionCode; var
+      HasTranspirationB, HasGroundwater, HasAnoxia, HasStress: Boolean);
+  published
+    property InteractionCode: TInteractionCode read FInteractionCode
+      write SetInteractionCode;
+  end;
+
+  // define crops and FMP Data sets 14 and 15.
+  TCropItem = class(TCustomFarmItem)
+  private
     var
     FCropName: string;
     FCropFunctionCollection: TCropFunctionCollection;
@@ -396,9 +415,35 @@ type
     FTranspirationFractionDisplayName: string;
     FCropHasSalinityDemandDataArrayName: string;
     FCropHasSalinityDemandDisplayName: string;
-    FIrrigationCollection: TFmp4IrrigationCollection;
-    FLandUseFraction: TOwhmCollection;
-    procedure SetLandUseFraction(const Value: TOwhmCollection);
+    FSW_LossFractionIrrigationCollection: TFmp4SW_LossFractionIrrigationCollection;
+    FLandUseFractionCollection: TOwhmCollection;
+    FCropCoefficientCollection: TOwhmCollection;
+    FConsumptiveUseCollection: TOwhmCollection;
+    FRootPressureCollection: TRootPressureCollection;
+    FGroundwaterRootInteraction: TGroundwaterRootInteraction;
+    procedure SetRootPressureCollection(const Value: TRootPressureCollection);
+    procedure SetGroundwaterRootInteraction(
+      const Value: TGroundwaterRootInteraction);
+    const
+    PSI1Position = 0;
+    PSI2Position = 1;
+    PSI3Position = 2;
+    PSI4Position = 3;
+    BaseTemperaturePosition = 4;
+    MinimumCutoffTemperaturePosition = 5;
+    MaximumCutoffTemperaturePosition = 6;
+    Coefficient0Position = 7;
+    Coefficient1Position = 8;
+    Coefficient2Position = 9;
+    Coefficient3Position = 10;
+    BeginningRootDepthPosition = 11;
+    MaximumRootDepthPosition = 12;
+    RootGrowthCoefficientPosition = 13;
+    IrrigatedPosition = 14;
+    FAllowPosition = 15;
+    procedure SetConsumptiveUseCollection(const Value: TOwhmCollection);
+    procedure SetCropCoefficientCollection(const Value: TOwhmCollection);
+    procedure SetLandUseFractionCollection(const Value: TOwhmCollection);
     procedure SetLandUseAreaFractionDataArrayName(const NewName: string);
     procedure SetCropCoefficientDataArrayName(const NewName: string);
     procedure SetAddedDemandDataArrayName(const NewName: string);
@@ -418,7 +463,7 @@ type
     procedure SetFmpRootDepthCollection(const Value: TFmpRootDepthCollection);
     procedure SetLossesCollection(const Value: TLossesCollection);
     procedure UpdateAllDataArrays;
-    procedure SetIrrigationCollection(const Value: TFmp4IrrigationCollection);
+    procedure SetSW_LossFractionIrrigationCollection(const Value: TFmp4SW_LossFractionIrrigationCollection);
     procedure UpdateFarmProperties;
   protected
     function GetBoundaryFormula(Index: integer): string; override;
@@ -484,6 +529,7 @@ type
     property Fallow: string index FAllowPosition read GetBoundaryFormula
       write SetBoundaryFormula;
     // // FMP Data Sets 11 and 26
+    // LAND_USE ROOT_DEPTH
     property FmpRootDepthCollection: TFmpRootDepthCollection
       read FFmpRootDepthCollection write SetFmpRootDepthCollection;
     // FMP Data Sets 12 and 28
@@ -573,14 +619,45 @@ type
       stored False
     {$ENDIF}
     ;
-    property IrrigationCollection: TFmp4IrrigationCollection
-      read FIrrigationCollection write SetIrrigationCollection
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION
+    property SW_LossFractionIrrigationCollection: TFmp4SW_LossFractionIrrigationCollection
+      read FSW_LossFractionIrrigationCollection
+      write SetSW_LossFractionIrrigationCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
-    property LandUseFraction: TOwhmCollection read FLandUseFraction
-      write SetLandUseFraction
+    property IrrigationCollection: TFmp4SW_LossFractionIrrigationCollection
+      read FSW_LossFractionIrrigationCollection
+      write SetSW_LossFractionIrrigationCollection
+      stored False;
+
+    property LandUseFractionCollection: TOwhmCollection
+      read FLandUseFractionCollection write SetLandUseFractionCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property CropCoefficientCollection: TOwhmCollection
+      read FCropCoefficientCollection write SetCropCoefficientCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property ConsumptiveUseCollection: TOwhmCollection
+      read FConsumptiveUseCollection write SetConsumptiveUseCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property RootPressureCollection: TRootPressureCollection
+      read FRootPressureCollection write SetRootPressureCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property GroundwaterRootInteraction: TGroundwaterRootInteraction
+      read FGroundwaterRootInteraction write SetGroundwaterRootInteraction
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -643,6 +720,10 @@ resourcestring
   StrAddedDemandPrefix = KAddedDemandPrefix;
   StrCropHasSalinityDemandPrefix = KCropHasSalinityDemandPrefix;
   StrIncompleteIrrigatio = 'Incomplete Irrigation data';
+  StrLandUseAreaFracti = 'Land Use Area Fraction';
+  StrCropCoefficient = 'Crop Coefficient';
+  StrConsumptiveUse = 'Consumptive Use';
+  StrIrrigation = 'Irrigation';
 
 resourcestring
   IDError = 'Time: %g.';
@@ -670,132 +751,13 @@ resourcestring
 
   StrIncompleteCropWaterUse = 'Incomplete Crop Water Use data';
   StrCropVariable = 'Crop Variable';
-{ TRootingDepthItem }
 
-function TRootingDepthItem.BoundaryFormulaCount: integer;
-begin
-  Result := 1;
-end;
-
-function TRootingDepthItem.GetBoundaryFormula(Index: integer): string;
-begin
-  case Index of
-    0:
-      result := RootingDepth;
-    else Assert(False);
-  end;
-end;
-
-function TRootingDepthItem.GetRootingDepth: string;
-begin
-  Result := FFormulaObjects[RootingDepthPosition].Formula;
-  ResetItemObserver(RootingDepthPosition);
-end;
-
-procedure TRootingDepthItem.SetBoundaryFormula(Index: integer;
-  const Value: string);
-begin
-  case Index of
-    0:
-      RootingDepth := Value;
-    else Assert(False);
-  end;
-end;
-
-procedure TRootingDepthItem.SetRootingDepth(const Value: string);
-begin
-  if FFormulaObjects[RootingDepthPosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, RootingDepthPosition,
-      FFormulaObjects[RootingDepthPosition]);
-  end;
-end;
 
 { TFmpRootDepthCollection }
-
-procedure TFmpRootDepthCollection.EvaluateBoundaries;
-var
-  CurrentRecord: TRootingDepthRecord;
-  CurrentItem: TRootingDepthItem;
-  Compiler: TRbwParser;
-  PhastModel: TPhastModel;
-  Formula: string;
-  Expression: TExpression;
-  Index: integer;
-begin
-  PhastModel := Model as TPhastModel;
-  SetLength(FTimeValues, Count);
-  Compiler := PhastModel.rpThreeDFormulaCompiler;
-  for Index := 0 to Count - 1 do
-  begin
-    CurrentItem := Items[Index] as TRootingDepthItem;
-    CurrentRecord.StartingTime := CurrentItem.StartTime;
-    CurrentRecord.EndingTime := CurrentItem.EndTime;
-    Expression := nil;
-    Formula := CurrentItem.RootingDepth;
-    CurrentRecord.RootingDepthAnnotation := Format(StrAssignedUsingS,
-      [Formula]);
-    try
-      Compiler.Compile(Formula);
-      Expression := Compiler.CurrentExpression;
-      // only global variables are used so there should be no need
-      // to update the variables.
-      Expression.Evaluate;
-    except on E: ERbwParserError do
-      begin
-        frmFormulaErrors.AddFormulaError('',
-          StrRootingDepthInThe,
-          Formula, E.Message);
-
-        CurrentItem.RootingDepth := '0.';
-        Formula := CurrentItem.RootingDepth;
-        Compiler.Compile(Formula);
-        Expression := Compiler.CurrentExpression;
-        Expression.Evaluate;
-      end;
-    end;
-    CurrentRecord.RootingDepth := Expression.DoubleResult;
-
-    FTimeValues[Index] := CurrentRecord;
-  end;
-end;
 
 function TFmpRootDepthCollection.GetItems(Index: Integer): TRootingDepthItem;
 begin
   result := inherited Items[Index] as TRootingDepthItem;
-end;
-
-function TFmpRootDepthCollection.GetRootingDepthTimeValues(
-  Index: integer): TRootingDepthRecord;
-begin
-  Assert((Index >= 0) and (Index < Length(FTimeValues)));
-  result := FTimeValues[Index];
-end;
-
-function TFmpRootDepthCollection.GetRootingDepthTimeValuesFromTime(
-  StartTime: double): TRootingDepthRecord;
-var
-  Index: integer;
-  ErrorMessage: string;
-begin
-  Assert(Length(FTimeValues) > 0);
-  result := FTimeValues[0];
-  for Index := 0 to Length(FTimeValues) - 1 do
-  begin
-    if (FTimeValues[Index].StartingTime <= StartTime) then
-    begin
-      result := FTimeValues[Index];
-      if (FTimeValues[Index].EndingTime > StartTime) then
-      begin
-        Exit;
-      end;
-    end;
-  end;
-  ErrorMessage := Format(IDError, [StartTime]);
-//  ErrorMessage := 'Object = ' + ScreenObjectName
-//    + '; Time = ' + FloatToStr(StartTime);
-  frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
-    StrIncompleteRootingD, ErrorMessage);
 end;
 
 class function TFmpRootDepthCollection.ItemClass: TBoundaryItemClass;
@@ -807,13 +769,6 @@ procedure TFmpRootDepthCollection.SetItems(Index: Integer;
   const Value: TRootingDepthItem);
 begin
   inherited Items[Index] := Value;
-end;
-
-procedure TFmpRootDepthCollection.SetRootingDepthTimeValues(Index: integer;
-  const Value: TRootingDepthRecord);
-begin
-  Assert((Index >= 0) and (Index < Length(FTimeValues)));
-  FTimeValues[Index] := Value;
 end;
 
 { TEvapFractionsItem }
@@ -1683,9 +1638,12 @@ begin
     CropFunctionCollection := SourceItem.CropFunctionCollection;
     CropWaterUseCollection := SourceItem.CropWaterUseCollection;
 
-    IrrigationCollection := SourceItem.IrrigationCollection;
-    LandUseFraction := SourceItem.LandUseFraction;
-
+    SW_LossFractionIrrigationCollection := SourceItem.SW_LossFractionIrrigationCollection;
+    LandUseFractionCollection := SourceItem.LandUseFractionCollection;
+    CropCoefficientCollection := SourceItem.CropCoefficientCollection;
+    ConsumptiveUseCollection := SourceItem.ConsumptiveUseCollection;
+    RootPressureCollection := SourceItem.RootPressureCollection;
+    GroundwaterRootInteraction := SourceItem.GroundwaterRootInteraction;
 
     // This is done differently in TChemSpeciesItem
     // There the field is first assign then set to an empty string
@@ -1712,20 +1670,40 @@ begin
 end;
 
 constructor TCropItem.Create(Collection: TCollection);
+var
+  InvalidatEvent: TNotifyEvent;
 begin
   inherited;
   CreateFormulaObjects;
   InitializeFormulas;
 
+  if Model = nil then
+  begin
+    InvalidatEvent := nil;
+  end
+  else
+  begin
+   InvalidatEvent := Model.Invalidate;
+  end;
+
   FCropFunctionCollection := TCropFunctionCollection.Create(Model);
   FFmpRootDepthCollection := TFmpRootDepthCollection.Create(Model);
+  FFmpRootDepthCollection.OwhmNames.Add('Rooting Depth');
   FEvapFractionsCollection := TEvapFractionsCollection.Create(Model);
   FLossesCollection := TLossesCollection.Create(Model);
   FCropWaterUseCollection := TCropWaterUseCollection.Create(Model);
 
-  FIrrigationCollection := TFmp4IrrigationCollection.Create(Model);
-  FLandUseFraction := TOwhmCollection.Create(Model);
-
+  FSW_LossFractionIrrigationCollection :=
+    TFmp4SW_LossFractionIrrigationCollection.Create(Model);
+  FLandUseFractionCollection := TOwhmCollection.Create(Model);
+  FLandUseFractionCollection.OwhmNames.Add(StrLandUseAreaFracti);
+  FCropCoefficientCollection := TOwhmCollection.Create(Model);
+  FCropCoefficientCollection.OwhmNames.Add(StrCropCoefficient);
+  FConsumptiveUseCollection := TOwhmCollection.Create(Model);
+  FConsumptiveUseCollection.OwhmNames.Add(StrConsumptiveUse);
+  FRootPressureCollection := TRootPressureCollection.Create(Model);
+  FGroundwaterRootInteraction :=
+    TGroundwaterRootInteraction.Create(InvalidatEvent);
 end;
 
 destructor TCropItem.Destroy;
@@ -1806,8 +1784,12 @@ begin
     end;
   end;
 
-  FLandUseFraction.Free;
-  FIrrigationCollection.Free;
+  FGroundwaterRootInteraction.Free;
+  FRootPressureCollection.Free;
+  FConsumptiveUseCollection.Free;
+  FCropCoefficientCollection.Free;
+  FLandUseFractionCollection.Free;
+  FSW_LossFractionIrrigationCollection.Free;
 
   FCropFunctionCollection.Free;
   FFmpRootDepthCollection.Free;
@@ -1864,8 +1846,13 @@ begin
       and CropFunctionCollection.IsSame(OtherItem.CropFunctionCollection)
       and CropWaterUseCollection.IsSame(OtherItem.CropWaterUseCollection)
 
-      and IrrigationCollection.IsSame(OtherItem.IrrigationCollection)
-      and LandUseFraction.IsSame(OtherItem.LandUseFraction)
+      and SW_LossFractionIrrigationCollection.IsSame(OtherItem.SW_LossFractionIrrigationCollection)
+      and LandUseFractionCollection.IsSame(OtherItem.LandUseFractionCollection)
+      and CropCoefficientCollection.IsSame(OtherItem.CropCoefficientCollection)
+      and ConsumptiveUseCollection.IsSame(OtherItem.ConsumptiveUseCollection)
+      and RootPressureCollection.IsSame(OtherItem.RootPressureCollection)
+      and GroundwaterRootInteraction.IsSame(OtherItem.GroundwaterRootInteraction)
+
 
       and (LandUseAreaFractionDataArrayName = OtherItem.LandUseAreaFractionDataArrayName)
       and (CropCoefficientDataArrayName = OtherItem.CropCoefficientDataArrayName)
@@ -1926,6 +1913,11 @@ begin
   end;
 end;
 
+procedure TCropItem.SetConsumptiveUseCollection(const Value: TOwhmCollection);
+begin
+  FConsumptiveUseCollection.Assign(Value);
+end;
+
 procedure TCropItem.SetConsumptiveUseDataArrayName(const NewName: string);
 var
   LocalModel: TPhastModel;
@@ -1957,6 +1949,11 @@ begin
   end;
 
   SetCaseSensitiveStringProperty(FConsumptiveUseDataArrayName, NewName);
+end;
+
+procedure TCropItem.SetCropCoefficientCollection(const Value: TOwhmCollection);
+begin
+  FCropCoefficientCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetCropCoefficientDataArrayName(const NewName: string);
@@ -2299,6 +2296,12 @@ begin
   FFmpRootDepthCollection.Assign(Value);
 end;
 
+procedure TCropItem.SetGroundwaterRootInteraction(
+  const Value: TGroundwaterRootInteraction);
+begin
+  FGroundwaterRootInteraction.Assign(Value);
+end;
+
 procedure TCropItem.SetGroundwaterRootInteractionDataArrayName(
   const NewName: string);
 var
@@ -2359,9 +2362,9 @@ begin
 
 end;
 
-procedure TCropItem.SetIrrigationCollection(const Value: TFmp4IrrigationCollection);
+procedure TCropItem.SetSW_LossFractionIrrigationCollection(const Value: TFmp4SW_LossFractionIrrigationCollection);
 begin
-  FIrrigationCollection.Assign(Value);
+  FSW_LossFractionIrrigationCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetIrrigationDataArrayName(const NewName: string);
@@ -2432,9 +2435,9 @@ begin
   SetCaseSensitiveStringProperty(FLandUseAreaFractionDataArrayName, NewName);
 end;
 
-procedure TCropItem.SetLandUseFraction(const Value: TOwhmCollection);
+procedure TCropItem.SetLandUseFractionCollection(const Value: TOwhmCollection);
 begin
-  FLandUseFraction.Assign(Value);
+  FLandUseFractionCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetLossesCollection(const Value: TLossesCollection);
@@ -2474,6 +2477,12 @@ begin
   end;
 
   SetCaseSensitiveStringProperty(FRootDepthDataArrayName, NewName);
+end;
+
+procedure TCropItem.SetRootPressureCollection(
+  const Value: TRootPressureCollection);
+begin
+  FRootPressureCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetSWLossFractionIrrigationDataArrayName(
@@ -2688,9 +2697,15 @@ begin
   CropWaterUseCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
 
-  IrrigationCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+  SW_LossFractionIrrigationCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
-  LandUseFraction.UpdateTimes(Times, StartTestTime, EndTestTime,
+  LandUseFractionCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  CropCoefficientCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  ConsumptiveUseCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  RootPressureCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
 end;
 
@@ -3118,10 +3133,10 @@ begin
     end;
     FCropArray[Index] := CurrentRecord;
 
-    if FarmProcess.RootingDepth = rdSpecified then
-    begin
-      CurrentItem.FmpRootDepthCollection.EvaluateBoundaries;
-    end;
+//    if FarmProcess.RootingDepth = rdSpecified then
+//    begin
+//      CurrentItem.FmpRootDepthCollection.EvaluateBoundaries;
+//    end;
 
     CurrentItem.EvapFractionsCollection.EvaluateBoundaries;
 
@@ -3285,108 +3300,203 @@ end;
 
 { TFmp4IrrigationCollection }
 
-{
-procedure TFmp4IrrigationCollection.EvaluateBoundaries;
-var
-  CurrentRecord: TIrrigationRecord;
-  CurrentItem: TCropIrrigationItem;
-  Compiler: TRbwParser;
-  PhastModel: TPhastModel;
-  Formula: string;
-  Expression: TExpression;
-  Index: integer;
-begin
-  PhastModel := Model as TPhastModel;
-  SetLength(FTimeValues, Count);
-  Compiler := PhastModel.rpThreeDFormulaCompiler;
-  for Index := 0 to Count - 1 do
-  begin
-    CurrentItem := Items[Index] as TCropIrrigationItem;
-    CurrentRecord.StartingTime := CurrentItem.StartTime;
-    CurrentRecord.EndingTime := CurrentItem.EndTime;
-    Expression := nil;
-    Formula := CurrentItem.Irrigation;
-    CurrentRecord.IrrigationAnnotation := Format(StrAssignedUsingS,
-      [Formula]);
-    try
-      Compiler.Compile(Formula);
-      Expression := Compiler.CurrentExpression;
-      // only global variables are used so there should be no need
-      // to update the variables.
-      Expression.Evaluate;
-    except on E: ERbwParserError do
-      begin
-        frmFormulaErrors.AddFormulaError('',
-          StrIrrigationInThe,
-          Formula, E.Message);
-
-        CurrentItem.Irrigation := '0';
-        Formula := CurrentItem.Irrigation;
-        Compiler.Compile(Formula);
-        Expression := Compiler.CurrentExpression;
-        Expression.Evaluate;
-      end;
-    end;
-    CurrentRecord.Irrigation := Expression.IntegerResult;
-
-    FTimeValues[Index] := CurrentRecord;
-  end;
-end;
-}
-
-//function TFmp4IrrigationCollection.GetIrrigationTimeValues(
-//  Index: integer): TIrrigationRecord;
-//begin
-//  Assert((Index >= 0) and (Index < Length(FTimeValues)));
-//  result := FTimeValues[Index];
-//end;
-
-
-//function TFmp4IrrigationCollection.GetIrrigationTimeValuesFromTime(
-//  StartTime: double): TIrrigationRecord;
-//var
-//  Index: integer;
-//  ErrorMessage: string;
-//begin
-//  Assert(Length(FTimeValues) > 0);
-//  result := FTimeValues[0];
-//  for Index := 0 to Length(FTimeValues) - 1 do
-//  begin
-//    if (FTimeValues[Index].StartingTime <= StartTime) then
-//    begin
-//      result := FTimeValues[Index];
-//      if (FTimeValues[Index].EndingTime > StartTime) then
-//      begin
-//        Exit;
-//      end;
-//    end;
-//  end;
-//  ErrorMessage := Format(IDError, [StartTime]);
-//  frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
-//    StrIncompleteIrrigatio, ErrorMessage);
-//end;
-
-function TFmp4IrrigationCollection.GetItems(Index: Integer): TCropIrrigationItem;
+function TFmp4SW_LossFractionIrrigationCollection.GetItems(Index: Integer): TCropIrrigationItem;
 begin
   result := inherited Items[Index] as TCropIrrigationItem;
 end;
 
-class function TFmp4IrrigationCollection.ItemClass: TBoundaryItemClass;
+class function TFmp4SW_LossFractionIrrigationCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TCropIrrigationItem;
 end;
 
-//procedure TFmp4IrrigationCollection.SetIrrigationTimeValues(Index: integer;
-//  const Value: TIrrigationRecord);
-//begin
-//  Assert((Index >= 0) and (Index < Length(FTimeValues)));
-//  FTimeValues[Index] := Value;
-//end;
-
-procedure TFmp4IrrigationCollection.SetItems(Index: Integer;
+procedure TFmp4SW_LossFractionIrrigationCollection.SetItems(Index: Integer;
   const Value: TCropIrrigationItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+{ TRootPressureItem }
+
+function TRootPressureItem.BoundaryFormulaCount: integer;
+begin
+  result := 4;
+end;
+
+{ TRootPressureCollection }
+
+class function TRootPressureCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TRootPressureItem;
+end;
+
+{ TGroundwaterRootInteraction }
+
+procedure TGroundwaterRootInteraction.Assign(Source: TPersistent);
+begin
+  if Source is TGroundwaterRootInteraction then
+  begin
+    InteractionCode := TGroundwaterRootInteraction(Source).InteractionCode
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+class procedure TGroundwaterRootInteraction.ConvertFromInteractionCode(
+  Code: TInteractionCode; var HasTranspirationB, HasGroundwater, HasAnoxia,
+  HasStress: Boolean);
+begin
+  case Code of
+    0:
+      begin
+        HasTranspirationB := False;
+        HasGroundwater := False;
+        HasAnoxia := False;
+        HasStress := False;
+      end;
+    1:
+      begin
+        HasTranspirationB := True;
+        HasGroundwater := False;
+        HasAnoxia := False;
+        HasStress := False;
+      end;
+    2:
+      begin
+        HasTranspirationB := True;
+        HasGroundwater := False;
+        HasAnoxia := True;
+        HasStress := True;
+      end;
+    3:
+      begin
+        HasTranspirationB := True;
+        HasGroundwater := True;
+        HasAnoxia := False;
+        HasStress := False;
+      end;
+    4:
+      begin
+        HasTranspirationB := True;
+        HasGroundwater := True;
+        HasAnoxia := False;
+        HasStress := True;
+      end;
+    5:
+      begin
+        HasTranspirationB := True;
+        HasGroundwater := True;
+        HasAnoxia := True;
+        HasStress := True;
+
+      end;
+  end;
+end;
+
+class function TGroundwaterRootInteraction.ConvertToInteractionCode(
+  HasTranspriationB, GWUptakeB, AnoxiaB, SoilStressB: Boolean): TInteractionCode;
+begin
+  if HasTranspriationB then
+  begin
+    if GWUptakeB then
+    begin
+      if AnoxiaB then
+      begin
+        result := 5;
+      end
+      else
+      begin
+        if SoilStressB then
+        begin
+          result := 4;
+        end
+        else
+        begin
+          result := 3;
+        end;
+      end;
+    end
+    else
+    begin
+      if AnoxiaB or SoilStressB then
+      begin
+        result := 2;
+      end
+      else
+      begin
+        result := 1;
+      end;
+     end;
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+constructor TGroundwaterRootInteraction.Create(
+  InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited;
+  FInteractionCode := 5;
+end;
+
+function TGroundwaterRootInteraction.GetAnoxia: Boolean;
+begin
+  Result := FInteractionCode in [2, 5]
+end;
+
+function TGroundwaterRootInteraction.GetGroundwaterUptake: Boolean;
+begin
+  Result := FInteractionCode in [3..5]
+end;
+
+function TGroundwaterRootInteraction.GetHasTranspiration: Boolean;
+begin
+  Result := FInteractionCode <> 0
+end;
+
+function TGroundwaterRootInteraction.GetSoilStress: Boolean;
+begin
+  Result := FInteractionCode in [2, 4, 5]
+end;
+
+function TGroundwaterRootInteraction.IsSame(
+  OtherItem: TGroundwaterRootInteraction): Boolean;
+begin
+  result := InteractionCode = OtherItem.InteractionCode;
+end;
+
+procedure TGroundwaterRootInteraction.SetAnoxia(const Value: Boolean);
+begin
+  InteractionCode := ConvertToInteractionCode(HasTranspiration, GroundwaterUptake, Value, SoilStress)
+end;
+
+procedure TGroundwaterRootInteraction.SetGroundwaterUptake(
+  const Value: Boolean);
+begin
+  InteractionCode := ConvertToInteractionCode(HasTranspiration, Value, Anoxia, SoilStress)
+end;
+
+procedure TGroundwaterRootInteraction.SetHasTranspiration(const Value: Boolean);
+begin
+
+end;
+
+procedure TGroundwaterRootInteraction.SetInteractionCode(const Value: TInteractionCode);
+begin
+  if FInteractionCode <> Value then
+  begin
+    FInteractionCode := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TGroundwaterRootInteraction.SetSoilStress(const Value: Boolean);
+begin
+  InteractionCode := ConvertToInteractionCode(HasTranspiration, GroundwaterUptake, Anoxia, Value)
 end;
 
 end.

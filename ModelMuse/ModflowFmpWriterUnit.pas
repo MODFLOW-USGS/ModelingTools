@@ -214,7 +214,7 @@ uses
   frmErrorsAndWarningsUnit, ModflowFmpCropSpatialUnit,
   Generics.Collections, ModflowFmpEvapUnit, ModflowFmpPrecipitationUnit,
   ModflowOutputControlUnit, ModflowFmpFarmIdUnit, frmGoPhastUnit,
-  ModflowMNW2_WriterUnit, PestParamRoots;
+  ModflowMNW2_WriterUnit, PestParamRoots, ModflowFmpBaseClasses;
 
 resourcestring
   StrWritingDataSet2a = '  Writing Data Set 2a.';
@@ -500,7 +500,7 @@ function TModflowFmpWriter.GetRootingDepthFlag: integer;
 var
   Crops: TCropCollection;
   CropIndex: Integer;
-  RootDepths: TFmpRootDepthCollection;
+  RootDepths: TOwhmCollection;
 begin
   result := 0;
   case FFarmProcess.RootingDepth of
@@ -1191,9 +1191,9 @@ procedure TModflowFmpWriter.WriteDataSet11;
 var
   Crops: TCropCollection;
   CropIndex: Integer;
-  RootDepths: TFmpRootDepthCollection;
+  RootDepths: TOwhmCollection;
   CropID: Integer;
-  RootItem: TRootingDepthItem;
+  RootItem: TOwhmItem;
 begin
   if (IRTFL = 1) then
   begin
@@ -1226,7 +1226,7 @@ begin
         CropID := CropIndex + 1;
         RootItem := RootDepths[0];
         WriteInteger(CropID);
-        WriteFloatValueFromGlobalFormula(RootItem.RootingDepth,
+        WriteFloatValueFromGlobalFormula(RootItem.OwhmValue,
           Crops[CropIndex], StrRootingDepth,
           procedure (Value: double)
           begin
@@ -1964,7 +1964,7 @@ procedure TModflowFmpWriter.WriteDataSet29;
 var
   Crops: TCropCollection;
   CropIndex: Integer;
-  RootDepths: TFmpRootDepthCollection;
+  RootDepths: TOwhmCollection;
   ARootDepthItem: TRootingDepthItem;
   CropID: Integer;
   AFileName: string;

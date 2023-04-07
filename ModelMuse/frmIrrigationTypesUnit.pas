@@ -639,7 +639,7 @@ var
 begin
   for ColIndex := StartCol to Grid.ColCount - 1 do
   begin
-    Grid.Columns[ColIndex].UseButton := True;
+    Grid.Columns[ColIndex].ButtonUsed := True;
     Grid.Columns[ColIndex].ButtonCaption := StrFormulaButtonCaption;
     Grid.Columns[ColIndex].ButtonWidth := 35;
   end;

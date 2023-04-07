@@ -390,14 +390,14 @@ begin
 
     for ColIndex := Ord(stcDownstreamSegment) to Ord(stcDiversionSegment) do
     begin
-      rdgModflowBoundary.Columns[ColIndex].UseButton := True;
+      rdgModflowBoundary.Columns[ColIndex].ButtonUsed := True;
       rdgModflowBoundary.Columns[ColIndex].ButtonCaption := StrNearest;
       rdgModflowBoundary.Columns[ColIndex].ButtonWidth := 70;
       rdgModflowBoundary.ColWidths[ColIndex] := 100;
     end;
     for ColIndex := Ord(stcFlow) to rdgModflowBoundary.ColCount-1 do
     begin
-      rdgModflowBoundary.Columns[ColIndex].UseButton := True;
+      rdgModflowBoundary.Columns[ColIndex].ButtonUsed := True;
       rdgModflowBoundary.Columns[ColIndex].ButtonCaption := StrF;
       rdgModflowBoundary.Columns[ColIndex].ButtonWidth := 40;
     end;

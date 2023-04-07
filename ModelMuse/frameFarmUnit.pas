@@ -1986,7 +1986,7 @@ begin
           ACrop := Crops[CropIndex];
           Grid.Cells[Ord(ccCrop) + CropIndex, 0] :=
             Format(StrCropEfficiency, [ACrop.CropName]);
-          Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].ButtonUsed := True;
           Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
           Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
           Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
@@ -2025,7 +2025,7 @@ begin
           IrrigationType := IrrigationTypes[CropIndex];
           Grid.Cells[Ord(ccCrop) + CropIndex, 0] :=
             Format(StrCropEfficiency, [IrrigationType.Name]);
-          Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+          Grid.Columns[Ord(ccCrop) + CropIndex].ButtonUsed := True;
           Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
           Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
           Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
@@ -2207,7 +2207,7 @@ begin
     Grid.Columns[Ord(dcEndTime)].WordWrapCaptions := True;
 
     Grid.Cells[Ord(dcValue), 0] := ValueCaption;
-    Grid.Columns[Ord(dcValue)].UseButton := True;
+    Grid.Columns[Ord(dcValue)].ButtonUsed := True;
     Grid.Columns[Ord(dcValue)].ButtonCaption := StrF;
     Grid.Columns[Ord(dcValue)].ButtonWidth := 35;
     Grid.Columns[Ord(dcValue)].WordWrapCaptions := True;
@@ -2759,7 +2759,7 @@ begin
     begin
       ACrop := Crops[CropIndex];
       Grid.Cells[Ord(ccCrop) + CropIndex, 0] := Format(CaptionFormatString, [ACrop.CropName]);
-      Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].ButtonUsed := True;
       Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
       Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
       Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
@@ -2806,7 +2806,7 @@ begin
     begin
       IrrigationType := IrrigationTypes[CropIndex];
       Grid.Cells[Ord(ccCrop) + CropIndex, 0] := Format(CaptionFormatString, [IrrigationType.Name]);
-      Grid.Columns[Ord(ccCrop) + CropIndex].UseButton := True;
+      Grid.Columns[Ord(ccCrop) + CropIndex].ButtonUsed := True;
       Grid.Columns[Ord(ccCrop) + CropIndex].ButtonCaption := StrF;
       Grid.Columns[Ord(ccCrop) + CropIndex].ButtonWidth := 35;
       Grid.Columns[Ord(ccCrop) + CropIndex].WordWrapCaptions := True;
@@ -2850,7 +2850,7 @@ begin
     for Index := wscGroundwater to wscNonRouted do
     begin
       Grid.Cells[Ord(Index), 0] := ValueCaptions[Ord(Index)-2];
-      Grid.Columns[Ord(Index)].UseButton := True;
+      Grid.Columns[Ord(Index)].ButtonUsed := True;
       Grid.Columns[Ord(Index)].ButtonCaption := StrF;
       Grid.Columns[Ord(Index)].ButtonWidth := 35;
       Grid.Columns[Ord(Index)].WordWrapCaptions := True;

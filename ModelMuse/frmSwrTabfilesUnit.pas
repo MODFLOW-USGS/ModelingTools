@@ -353,7 +353,7 @@ begin
           begin
             if not frameTabFiles.Grid.Drawing then
             begin
-              frameTabFiles.Grid.Columns[Ord(tcNameValue)].UseButton := True;
+              frameTabFiles.Grid.Columns[Ord(tcNameValue)].ButtonUsed := True;
               frameTabFiles.Grid.UseSpecialFormat[ACol, ARow] := False;
             end;
           end;
@@ -361,7 +361,7 @@ begin
           begin
             if not frameTabFiles.Grid.Drawing then
             begin
-              frameTabFiles.Grid.Columns[Ord(tcNameValue)].UseButton := False;
+              frameTabFiles.Grid.Columns[Ord(tcNameValue)].ButtonUsed := False;
               frameTabFiles.Grid.SpecialFormat[ACol, ARow] := rcf4Integer;
               frameTabFiles.Grid.UseSpecialFormat[ACol, ARow] := True;
             end;

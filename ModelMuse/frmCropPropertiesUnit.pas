@@ -9,7 +9,7 @@ uses
   JvExComCtrls, JvPageListTreeView, StdCtrls, Buttons, frameGridUnit,
   PhastModelUnit, ModflowFmpCropUnit, RbwDataGrid4, GoPhastTypes, RbwParser,
   ModflowPackageSelectionUnit, UndoItems, frameFormulaGridUnit,
-  ModflowFmpFarmUnit, ModflowFmpBaseClasses;
+  ModflowFmpFarmUnit, ModflowFmpBaseClasses, Vcl.Grids;
 
 type
   TUndoCrops = class(TCustomUndo)
@@ -33,7 +33,6 @@ type
     splitterMain: TJvNetscapeSplitter;
     jplMain: TJvPageList;
     jvspCropName: TJvStandardPage;
-    jvspRootDepth: TJvStandardPage;
     jvspEvapFractions: TJvStandardPage;
     jvspLosses: TJvStandardPage;
     jvspCropFunction: TJvStandardPage;
@@ -47,12 +46,15 @@ type
     frameCropWaterUse: TFrameFormulaGrid;
     frameEvapFractions: TFrameFormulaGrid;
     frameLosses: TFrameFormulaGrid;
-    frameRootDepth: TFrameFormulaGrid;
     rbwprsrGlobal: TRbwParser;
     jvspIrrigation: TJvStandardPage;
     frameIrrigation: TframeFormulaGrid;
     jvspLandUseFraction: TJvStandardPage;
     frameLandUseFraction: TframeFormulaGrid;
+    jvspRootPressure: TJvStandardPage;
+    frameRootPressure: TframeFormulaGrid;
+    jvspGwRootInteraction: TJvStandardPage;
+    rdgGwRootInteraction: TRbwDataGrid4;
     procedure FormDestroy(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
     procedure jvpltvMainChange(Sender: TObject; Node: TTreeNode);
@@ -67,8 +69,9 @@ type
     procedure frameCropFunctionGridEndUpdate(Sender: TObject);
     procedure frameEvapFractionsGridEndUpdate(Sender: TObject);
     procedure frameLossesGridEndUpdate(Sender: TObject);
-    procedure frameRootDepthGridEndUpdate(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
+    procedure chklstGwRootInteractionClickCheck(Sender: TObject);
+    procedure chklstGwRootInteractionExit(Sender: TObject);
     procedure frameCropNamesbAddClick(Sender: TObject);
     procedure frameCropNamesbInsertClick(Sender: TObject);
     procedure frameCropNamesbDeleteClick(Sender: TObject);
@@ -81,6 +84,11 @@ type
       ARow: Integer);
     procedure frameIrrigationGridEndUpdate(Sender: TObject);
     procedure frameLandUseFractionGridEndUpdate(Sender: TObject);
+    procedure frameRootPressureGridEndUpdate(Sender: TObject);
+    procedure jvspGwRootInteractionShow(Sender: TObject);
+    procedure rdgGwRootInteractionExit(Sender: TObject);
+    procedure rdgGwRootInteractionStateChange(Sender: TObject; ACol, ARow: Integer;
+        const Value: TCheckBoxState);
   private
     FNameStart: integer;
     FPressureStart: integer;
@@ -90,21 +98,21 @@ type
     FCrops: TCropCollection;
     FCropsNode: TJvPageIndexNode;
     FFarmProcess: TFarmProcess;
-    FRootDepth: TFmpRootDepthCollection;
     FEvapFract: TEvapFractionsCollection;
     FLosses: TLossesCollection;
     FCropFunctions: TCropFunctionCollection;
     FWaterUseCollection: TCropWaterUseCollection;
     FGettingData: Boolean;
-    FIrrigation: TFmp4IrrigationCollection;
+    FIrrigation: TFmp4SW_LossFractionIrrigationCollection;
     FFarmProcess4: TFarmProcess4;
     FFarmLandUse: TFarmProcess4LandUse;
     FLandUseFraction: TOwhmCollection;
+    FRootPressure: TRootPressureCollection;
+    FGroundwaterRootInteraction: TGroundwaterRootInteraction;
+    FSettingGwInteraction: Boolean;
     procedure SetUpCropNameTable(Model: TCustomModel);
     procedure SetCropNameTableColumns(Model: TCustomModel);
     procedure GetCrops(CropCollection: TCropCollection);
-    procedure SetUpRootingTable(Model: TCustomModel);
-    procedure GetRootingDepth(RootDepth: TFmpRootDepthCollection);
     procedure SetUpEvapFractionsTable(Model: TCustomModel);
     procedure GetEvapFractions(EvapFract: TEvapFractionsCollection);
     procedure SetUpLossesTable(Model: TCustomModel);
@@ -114,9 +122,14 @@ type
     procedure SetUpCropWaterUseTable(Model: TCustomModel);
     procedure GetCropWaterUseFunction(WaterUseCollection: TCropWaterUseCollection);
     procedure SetUpIrrigationTable(Model: TCustomModel);
-    procedure GetIrrigation(Irrigation: TFmp4IrrigationCollection);
+    procedure GetIrrigation(Irrigation: TFmp4SW_LossFractionIrrigationCollection);
     procedure SetUpLandUseFractionTable(Model: TCustomModel);
     procedure GetLandUseFraction(LandUseFraction: TOwhmCollection);
+    procedure SetUpRootPressureTable(Model: TCustomModel);
+    procedure GetRootPressure(RootPressure: TRootPressureCollection);
+    procedure SetUpGroundwaterRootInteractionTable(Model: TCustomModel);
+    procedure GetGroundwaterRootInteraction(
+      GroundwaterRootInteraction: TGroundwaterRootInteraction);
     procedure GetData;
     procedure SetGridColumnProperties(Grid: TRbwDataGrid4);
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
@@ -128,6 +141,8 @@ type
       Grid: TRbwDataGrid4);
     procedure GetGlobalVariables;
     procedure SetData;
+    procedure AssignGWRootInteractionCheckboxes(Code: TInteractionCode);
+    function CheckBoxesToGwRootInteractionCode: TInteractionCode;
     { Private declarations }
 
   public
@@ -174,7 +189,6 @@ resourcestring
   StrBeginningRootDepth = 'Beginning Root Depth (BegRootD)';
   StrMaximumRootDepth = 'Maximum Root Depth (MaxRootD)';
   StrRootGrowthCoeffici = 'Root Growth Coefficient (RootGC)';
-//  StrIrrigatedInverseO = 'Irrigated (Inverse of NONIRR)';
   StrFallowIFALLOW = 'Can be fallow (IFALLOW)';
   StrRootingDepth = 'Rooting Depth';
   StrConsumptiveUse = 'Consumptive Use Factors';
@@ -187,6 +201,8 @@ resourcestring
   StrEvaporationIrrigati = 'Evaporation Irrigation Fraction';
   StrSurfaceWaterLossF = 'Surface Water Loss Fraction Irrigation';
   StrLandUseAreaFracti = 'Land Use Area Fraction';
+  StrCropCoefficient2 = 'Crop Coefficient';
+  StrConsumptiveUse2 = 'Consumptive Use';
 
 type
   TNameCol = (ncID, ncName);
@@ -205,6 +221,9 @@ type
   TIrrigationColumns = (icStart, icEnd, IcIrrigation, icEvapIrrigateFraction,
     icSWLossFracIrrigate);
   TOwhmColumns = (ocStart, ocEnd, ocFormula);
+  TPsiColumns = (pcStart, pcEnd, pcPsi1, pcPsi2, pcPsi3, pcPsi4);
+  TGwRootInteractionIndicies = (griHasTranspiration, griGroundwater,
+    griAnoxia, griStress);
 
 {$R *.dfm}
 
@@ -326,6 +345,18 @@ begin
   frameEvapFractions.LayoutMultiRowEditControls;
 end;
 
+procedure TfrmCropProperties.SetUpGroundwaterRootInteractionTable(
+  Model: TCustomModel);
+begin
+  rdgGwRootInteraction.Cells[0, Ord(griHasTranspiration)] := 'Has Transpiration';
+  rdgGwRootInteraction.Cells[0, Ord(griGroundwater)] := 'Has groundwater uptake';
+  rdgGwRootInteraction.Cells[0, Ord(griAnoxia)] := 'Anoxia: Consumptive use reduced from any anoxia';
+  rdgGwRootInteraction.Cells[0, Ord(griStress)] := 'Water Stress: Consumptive use reduced from any water stress';
+  rdgGwRootInteraction.RowCount := 5;
+  rdgGwRootInteraction.Row := 4;
+  rdgGwRootInteraction.RowCount := 4;
+end;
+
 procedure TfrmCropProperties.SetUpIrrigationTable(Model: TCustomModel);
 begin
   frameIrrigation.Grid.ColCount := 5;
@@ -377,19 +408,23 @@ begin
   frameLosses.LayoutMultiRowEditControls;
 end;
 
-procedure TfrmCropProperties.SetUpRootingTable(Model: TCustomModel);
+procedure TfrmCropProperties.SetUpRootPressureTable(Model: TCustomModel);
 begin
-  frameRootDepth.Grid.ColCount := 3;
-  frameRootDepth.Grid.FixedCols := 0;
-  frameRootDepth.Grid.Columns[Ord(rdcStart)].Format := rcf4Real;
-  frameRootDepth.Grid.Columns[Ord(rdcEnd)].Format := rcf4Real;
-  frameRootDepth.Grid.Cells[Ord(rdcStart), 0] := StrStartingTime;
-  frameRootDepth.Grid.Cells[Ord(rdcEnd), 0] := StrEndingTime;
-  frameRootDepth.Grid.Cells[Ord(rdcRootingDepth), 0] := StrRootingDepthRoot;
-  SetGridColumnProperties(frameRootDepth.Grid);
-  SetUseButton(frameRootDepth.Grid, Ord(rdcRootingDepth));
-  frameRootDepth.FirstFormulaColumn := 2;
-  frameRootDepth.LayoutMultiRowEditControls;
+  frameRootPressure.Grid.ColCount := 6;
+  frameRootPressure.Grid.FixedCols := 0;
+  frameRootPressure.Grid.Columns[Ord(pcStart)].Format := rcf4Real;
+  frameRootPressure.Grid.Columns[Ord(pcEnd)].Format := rcf4Real;
+  frameRootPressure.Grid.Cells[Ord(pcStart), 0] := StrStartingTime;
+  frameRootPressure.Grid.Cells[Ord(pcEnd), 0] := StrEndingTime;
+  frameRootPressure.Grid.Cells[Ord(pcPsi1), 0] := 'Anoxia Pressure';
+  frameRootPressure.Grid.Cells[Ord(pcPsi2), 0] := 'High Optimal Pressure';
+  frameRootPressure.Grid.Cells[Ord(pcPsi3), 0] := 'Low Optimal Pressure';
+  frameRootPressure.Grid.Cells[Ord(pcPsi4), 0] := 'Wilting Pressure';
+
+  SetGridColumnProperties(frameRootPressure.Grid);
+  SetUseButton(frameRootPressure.Grid, Ord(pcPsi1));
+  frameRootPressure.FirstFormulaColumn := 2;
+  frameRootPressure.LayoutMultiRowEditControls;
 end;
 
 procedure TfrmCropProperties.btnOKClick(Sender: TObject);
@@ -404,6 +439,18 @@ begin
   end;
   SetData;
   inherited;
+end;
+
+procedure TfrmCropProperties.chklstGwRootInteractionExit(Sender: TObject);
+var
+  Code: TInteractionCode;
+begin
+  inherited;
+  Code := CheckBoxesToGwRootInteractionCode;
+
+  FGroundwaterRootInteraction.InteractionCode := Code;
+
+
 end;
 
 procedure TfrmCropProperties.CreateBoundaryFormula(
@@ -483,7 +530,7 @@ var
 begin
   for ColIndex := StartCol to Grid.ColCount - 1 do
   begin
-    Grid.Columns[ColIndex].UseButton := True;
+    Grid.Columns[ColIndex].ButtonUsed := True;
     Grid.Columns[ColIndex].ButtonCaption := StrFormulaButtonCaption;
     Grid.Columns[ColIndex].ButtonWidth := 35;
   end;
@@ -493,11 +540,23 @@ procedure TfrmCropProperties.CreateChildNodes(ACrop: TCropItem; CropNode: TJvPag
 var
   ANode: TJvPageIndexNode;
 begin
-  if FFarmProcess.RootingDepth = rdSpecified then
+  if frmGoPhast.ModelSelection = msModflowFmp then
   begin
-    ANode := jvpltvMain.Items.AddChild(CropNode, StrRootingDepth) as TJvPageIndexNode;
-    ANode.PageIndex := jvspRootDepth.PageIndex;
-    ANode.Data := ACrop.FmpRootDepthCollection;
+    if FFarmProcess.RootingDepth = rdSpecified then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrRootingDepth) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.FmpRootDepthCollection;
+    end;
+  end
+  else
+  begin
+    if FFarmLandUse.RootDepth.ListUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, 'Root Depth') as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.FmpRootDepthCollection;
+    end;
   end;
 
   ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUse) as TJvPageIndexNode;
@@ -542,16 +601,44 @@ begin
         or FFarmLandUse.EvapIrrigateFractionListByCropUsed
         or FFarmLandUse.SwLossFracIrrigListByCropUsed) then
     begin
-      ANode := jvpltvMain.Items.AddChild(CropNode, StrIrrigation) as TJvPageIndexNode;
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrSurfaceWaterLossF) as TJvPageIndexNode;
       ANode.PageIndex := jvspIrrigation.PageIndex;
-      ANode.Data := ACrop.IrrigationCollection;
+      ANode.Data := ACrop.SW_LossFractionIrrigationCollection;
     end;
 
     if FFarmLandUse.LandUseFraction.ListUsed then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrLandUseAreaFracti) as TJvPageIndexNode;
       ANode.PageIndex := jvspLandUseFraction.PageIndex;
-      ANode.Data := ACrop.LandUseFraction;
+      ANode.Data := ACrop.LandUseFractionCollection;
+    end;
+
+    if FFarmLandUse.CropCoeff.ListUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrCropCoefficient2) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.CropCoefficientCollection;
+    end;
+
+    if FFarmLandUse.ConsumptiveUse.ListUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUse2) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.ConsumptiveUseCollection;
+    end;
+
+    if FFarmLandUse.RootPressure.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, 'Root Pressure') as TJvPageIndexNode;
+      ANode.PageIndex := jvspRootPressure.PageIndex;
+      ANode.Data := ACrop.RootPressureCollection;
+    end;
+
+    if FFarmLandUse.GroundwaterRootInteraction.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, 'Groundwater Root Interaction') as TJvPageIndexNode;
+      ANode.PageIndex := jvspGwRootInteraction.PageIndex;
+      ANode.Data := ACrop.GroundwaterRootInteraction;
     end;
   end;
 {$ENDIF}
@@ -1140,44 +1227,48 @@ begin
   end;
 end;
 
-procedure TfrmCropProperties.frameRootDepthGridEndUpdate(Sender: TObject);
+procedure TfrmCropProperties.frameRootPressureGridEndUpdate(Sender: TObject);
 var
   RowIndex: Integer;
   ItemCount: Integer;
   StartTime: double;
   EndTime: double;
-  AnItem: TRootingDepthItem;
+  AnItem: TRootPressureItem;
+//  AnItem: TRootingDepthItem;
 begin
   inherited;
   if FGettingData then
   begin
     Exit;
   end;
-  frameRootDepth.GridEndUpdate(Sender);
-  if FRootDepth <> nil then
+  frameRootPressure.GridEndUpdate(Sender);
+  if FRootPressure <> nil then
   begin
     ItemCount := 0;
-    for RowIndex := 1 to frameRootDepth.seNumber.AsInteger do
+    for RowIndex := 1 to frameRootPressure.seNumber.AsInteger do
     begin
-      if TryStrToFloat(frameRootDepth.Grid.Cells[
-        Ord(rdcStart), RowIndex], StartTime)
-        and TryStrToFloat(frameRootDepth.Grid.Cells[
-        Ord(rdcEnd), RowIndex], EndTime) then
+      if TryStrToFloat(frameRootPressure.Grid.Cells[
+        Ord(pcStart), RowIndex], StartTime)
+        and TryStrToFloat(frameRootPressure.Grid.Cells[
+        Ord(pcEnd), RowIndex], EndTime) then
       begin
-        if ItemCount >= FRootDepth.Count then
+        if ItemCount >= FRootPressure.Count then
         begin
-          FRootDepth.Add;
+          FRootPressure.Add;
         end;
-        AnItem := FRootDepth[ItemCount];
+        AnItem := FRootPressure[ItemCount] as TRootPressureItem;
         AnItem.StartTime := StartTime;
         AnItem.EndTime := EndTime;
-        AnItem.RootingDepth := frameRootDepth.Grid.Cells[Ord(rdcRootingDepth), RowIndex];
+        AnItem.Psi1 := frameRootPressure.Grid.Cells[Ord(pcPsi1), RowIndex];
+        AnItem.Psi2:= frameRootPressure.Grid.Cells[Ord(pcPsi2), RowIndex];
+        AnItem.Psi3:= frameRootPressure.Grid.Cells[Ord(pcPsi3), RowIndex];
+        AnItem.Psi4:= frameRootPressure.Grid.Cells[Ord(pcPsi4), RowIndex];
         Inc(ItemCount);
       end;
     end;
-    while FRootDepth.Count > ItemCount do
+    while FRootPressure.Count > ItemCount do
     begin
-      FRootDepth.Last.Free;
+      FRootPressure.Last.Free;
     end;
   end;
 end;
@@ -1316,13 +1407,14 @@ var
 begin
   GetGlobalVariables;
   SetUpCropNameTable(frmGoPhast.PhastModel);
-  SetUpRootingTable(frmGoPhast.PhastModel);
   SetUpEvapFractionsTable(frmGoPhast.PhastModel);
   SetUpLossesTable(frmGoPhast.PhastModel);
   SetUpCropFunctionTable(frmGoPhast.PhastModel);
   SetUpCropWaterUseTable(frmGoPhast.PhastModel);
   SetUpIrrigationTable(frmGoPhast.PhastModel);
   SetUpLandUseFractionTable(frmGoPhast.PhastModel);
+  SetUpRootPressureTable(frmGoPhast.PhastModel);
+  SetUpGroundwaterRootInteractionTable(frmGoPhast.PhastModel);
 
   StartTimes := TStringList.Create;
   EndTimes := TStringList.Create;
@@ -1334,13 +1426,13 @@ begin
       StartTimes.Add(FloatToStr(AStressPeriod.StartTime));
       EndTimes.Add(FloatToStr(AStressPeriod.EndTime));
     end;
-    SetStartAndEndTimeLists(StartTimes, EndTimes, frameRootDepth.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameEvapFractions.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameLosses.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropFunction.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropWaterUse.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameIrrigation.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameLandUseFraction.Grid);
+    SetStartAndEndTimeLists(StartTimes, EndTimes, frameRootPressure.Grid);
   finally
     EndTimes.Free;
     StartTimes.Free;
@@ -1428,6 +1520,8 @@ end;
 
 procedure TfrmCropProperties.GetLandUseFraction(
   LandUseFraction: TOwhmCollection);
+const
+  TimeColumnCount = 2;
 var
   ItemIndex: Integer;
   AnItem: TOwhmItem;
@@ -1447,6 +1541,11 @@ begin
   end;
   frame.Grid.BeginUpdate;
   try
+    if Ord(ocFormula) - TimeColumnCount < LandUseFraction.OwhmNames.Count then
+    begin
+      frame.Grid.Cells[Ord(ocFormula), 0] :=
+        LandUseFraction.OwhmNames[Ord(ocFormula) - TimeColumnCount];
+    end;
     for ItemIndex := 0 to LandUseFraction.Count - 1 do
     begin
       AnItem := LandUseFraction[ItemIndex];
@@ -1488,33 +1587,35 @@ begin
   end;
 end;
 
-procedure TfrmCropProperties.GetRootingDepth(
-  RootDepth: TFmpRootDepthCollection);
+procedure TfrmCropProperties.GetRootPressure(RootPressure: TRootPressureCollection);
 var
   ItemIndex: Integer;
-  AnItem: TRootingDepthItem;
+  AnItem: TRootPressureItem;
 begin
-  Assert(RootDepth <> nil);
-  FRootDepth := RootDepth;
-  frameRootDepth.ClearGrid;
-  frameRootDepth.seNumber.AsInteger := RootDepth.Count;
-  frameRootDepth.seNumber.OnChange(frameRootDepth.seNumber);
-  if frameRootDepth.seNumber.AsInteger = 0 then
+  Assert(RootPressure <> nil);
+  FRootPressure := RootPressure;
+  frameRootPressure.ClearGrid;
+  frameRootPressure.seNumber.AsInteger := RootPressure.Count;
+  frameRootPressure.seNumber.OnChange(frameRootPressure.seNumber);
+  if frameRootPressure.seNumber.AsInteger = 0 then
   begin
-    frameRootDepth.Grid.Row := 1;
-    frameRootDepth.ClearSelectedRow;
+    frameRootPressure.Grid.Row := 1;
+    frameRootPressure.ClearSelectedRow;
   end;
-  frameRootDepth.Grid.BeginUpdate;
+  frameRootPressure.Grid.BeginUpdate;
   try
-    for ItemIndex := 0 to RootDepth.Count - 1 do
+    for ItemIndex := 0 to RootPressure.Count - 1 do
     begin
-      AnItem := RootDepth[ItemIndex];
-      frameRootDepth.Grid.Cells[Ord(rdcStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-      frameRootDepth.Grid.Cells[Ord(rdcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
-      frameRootDepth.Grid.Cells[Ord(rdcRootingDepth), ItemIndex+1] := AnItem.RootingDepth;
+      AnItem := RootPressure[ItemIndex] as TRootPressureItem;
+      frameRootPressure.Grid.Cells[Ord(pcStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
+      frameRootPressure.Grid.Cells[Ord(pcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
+      frameRootPressure.Grid.Cells[Ord(pcPsi1), ItemIndex+1] := AnItem.Psi1;
+      frameRootPressure.Grid.Cells[Ord(pcPsi2), ItemIndex+1] := AnItem.Psi2;
+      frameRootPressure.Grid.Cells[Ord(pcPsi3), ItemIndex+1] := AnItem.Psi3;
+      frameRootPressure.Grid.Cells[Ord(pcPsi4), ItemIndex+1] := AnItem.Psi4;
     end;
   finally
-    frameRootDepth.Grid.EndUpdate;
+    frameRootPressure.Grid.EndUpdate;
   end;
 end;
 
@@ -1539,10 +1640,10 @@ begin
       begin
         GetCrops(TCropCollection(AnObject));
       end
-      else if AnObject is TFmpRootDepthCollection then
-      begin
-        GetRootingDepth(TFmpRootDepthCollection(AnObject));
-      end
+//      else if AnObject is TFmpRootDepthCollection then
+//      begin
+//        GetRootingDepth(TFmpRootDepthCollection(AnObject));
+//      end
       else if AnObject is TEvapFractionsCollection then
       begin
         GetEvapFractions(TEvapFractionsCollection(AnObject));
@@ -1559,13 +1660,21 @@ begin
       begin
         GetCropWaterUseFunction(TCropWaterUseCollection(AnObject));
       end
-      else if AnObject is TFmp4IrrigationCollection then
+      else if AnObject is TFmp4SW_LossFractionIrrigationCollection then
       begin
-        GetIrrigation(TFmp4IrrigationCollection(AnObject));
+        GetIrrigation(TFmp4SW_LossFractionIrrigationCollection(AnObject));
       end
       else if AnObject is TOwhmCollection then
       begin
         GetLandUseFraction(TOwhmCollection(AnObject));
+      end
+      else if AnObject is TRootPressureCollection then
+      begin
+        GetRootPressure(TRootPressureCollection(AnObject));
+      end
+      else if AnObject is TGroundwaterRootInteraction then
+      begin
+        GetGroundwaterRootInteraction(TGroundwaterRootInteraction(AnObject));
       end
       else
         Assert(False);
@@ -1630,8 +1739,25 @@ begin
   end;
 end;
 
+procedure TfrmCropProperties.GetGroundwaterRootInteraction(
+  GroundwaterRootInteraction: TGroundwaterRootInteraction);
+var
+  Code: TInteractionCode;
+begin
+  FSettingGwInteraction := True;
+  try
+//    rdgGwRootInteraction.HideEditor;
+    FGroundwaterRootInteraction := GroundwaterRootInteraction;
+
+    Code := FGroundwaterRootInteraction.InteractionCode;
+    AssignGWRootInteractionCheckboxes(Code);
+  finally
+    FSettingGwInteraction := False;
+  end;
+end;
+
 procedure TfrmCropProperties.GetIrrigation(
-  Irrigation: TFmp4IrrigationCollection);
+  Irrigation: TFmp4SW_LossFractionIrrigationCollection);
 var
   ItemIndex: Integer;
   AnItem: TCropIrrigationItem;
@@ -1666,6 +1792,158 @@ procedure TfrmCropProperties.SetData;
 begin
   frmGoPhast.UndoStack.Submit(TUndoCrops.Create(FCrops));
 end;
+
+procedure TfrmCropProperties.AssignGWRootInteractionCheckboxes(Code: TInteractionCode);
+var
+  HasTranspiration: Boolean;
+  GW: Boolean;
+  Anoxia: Boolean;
+  Stress: Boolean;
+begin
+  TGroundwaterRootInteraction.ConvertFromInteractionCode(Code,
+    HasTranspiration, GW, Anoxia, Stress);
+  rdgGwRootInteraction.Checked[0,Ord(griHasTranspiration)] := HasTranspiration;
+  rdgGwRootInteraction.Checked[0,Ord(griGroundwater)] := GW;
+  rdgGwRootInteraction.Checked[0,Ord(griAnoxia)] := Anoxia;
+  rdgGwRootInteraction.Checked[0,Ord(griStress)] := Stress;
+end;
+
+function TfrmCropProperties.CheckBoxesToGwRootInteractionCode: TInteractionCode;
+var
+  HasTranspriationB: Boolean;
+  GWUptakeB: Boolean;
+  AnoxiaB: Boolean;
+  SoilStressB: Boolean;
+begin
+  HasTranspriationB := rdgGwRootInteraction.Checked[0,Ord(griHasTranspiration)];
+  GWUptakeB := rdgGwRootInteraction.Checked[0,Ord(griGroundwater)];
+  AnoxiaB := rdgGwRootInteraction.Checked[0,Ord(griAnoxia)];
+  SoilStressB := rdgGwRootInteraction.Checked[0,Ord(griStress)];
+  result := TGroundwaterRootInteraction.ConvertToInteractionCode(
+    HasTranspriationB, GWUptakeB, AnoxiaB, SoilStressB);
+end;
+
+procedure TfrmCropProperties.chklstGwRootInteractionClickCheck(Sender: TObject);
+begin
+  inherited;
+  if FSettingGwInteraction then
+  begin
+    Exit;
+  end;
+  FSettingGwInteraction := True;
+  try
+//    casae
+
+    if rdgGwRootInteraction.Checked[0,Ord(griGroundwater)]
+      or rdgGwRootInteraction.Checked[0,Ord(griAnoxia)]
+      or rdgGwRootInteraction.Checked[0,Ord(griStress)]
+      then
+    begin
+      rdgGwRootInteraction.Checked[0,Ord(griHasTranspiration)] := True;
+    end;
+    if not rdgGwRootInteraction.Checked[0,Ord(griHasTranspiration)] then
+    begin
+
+    end;
+
+    if rdgGwRootInteraction.Checked[0,Ord(griAnoxia)] then
+    begin
+      rdgGwRootInteraction.Checked[0,Ord(griStress)] := True;
+    end;
+    AssignGWRootInteractionCheckboxes(CheckBoxesToGwRootInteractionCode);
+  finally
+    FSettingGwInteraction := False;
+  end;
+end;
+
+procedure TfrmCropProperties.jvspGwRootInteractionShow(Sender: TObject);
+begin
+  rdgGwRootInteraction.RowCount := 5;
+  rdgGwRootInteraction.Row := 4;
+  rdgGwRootInteraction.RowCount := 4;
+  inherited;
+end;
+
+procedure TfrmCropProperties.rdgGwRootInteractionExit(Sender: TObject);
+begin
+  inherited;
+  FGroundwaterRootInteraction.InteractionCode :=
+    CheckBoxesToGwRootInteractionCode
+end;
+
+procedure TfrmCropProperties.rdgGwRootInteractionStateChange(Sender: TObject;
+    ACol, ARow: Integer; const Value: TCheckBoxState);
+var
+  index: TGwRootInteractionIndicies;
+  Checked: Boolean;
+begin
+  inherited;
+  if FSettingGwInteraction or (ARow < 0) then
+  begin
+    Exit;
+  end;
+  FSettingGwInteraction := True;
+  try
+
+    Checked := rdgGwRootInteraction.Checked[0,ARow];
+
+    index := TGwRootInteractionIndicies(ARow);
+    case index of
+      griHasTranspiration:
+        begin
+          if not Checked then
+          begin
+            rdgGwRootInteraction.Checked[0,Ord(griGroundwater)] := False;
+            rdgGwRootInteraction.Checked[0,Ord(griAnoxia)] := False;
+            rdgGwRootInteraction.Checked[0,Ord(griStress)] := False;
+          end;
+        end;
+      griGroundwater:
+        begin
+          if Checked then
+          begin
+            rdgGwRootInteraction.Checked[0,Ord(griHasTranspiration)] := True;
+          end;
+        end;
+      griAnoxia:
+        begin
+          if Checked then
+          begin
+            rdgGwRootInteraction.Checked[0,Ord(griHasTranspiration)] := True;
+            rdgGwRootInteraction.Checked[0,Ord(griStress)] := True;
+          end
+          else
+          begin
+            if not rdgGwRootInteraction.Checked[0,Ord(griGroundwater)] then
+            begin
+              rdgGwRootInteraction.Checked[0,Ord(griStress)] := False;
+            end;
+          end;
+        end;
+      griStress:
+        begin
+          if Checked then
+          begin
+            rdgGwRootInteraction.Checked[0,Ord(griHasTranspiration)] := True;
+          end
+          else
+          begin
+            rdgGwRootInteraction.Checked[0,Ord(griAnoxia)] := False;
+          end;
+        end;
+    end;
+
+    AssignGWRootInteractionCheckboxes(CheckBoxesToGwRootInteractionCode);
+  finally
+    FSettingGwInteraction := False;
+  end;
+
+end;
+
+//procedure TfrmCropProperties.chklstGwRootInteractionKeyUp(Sender: TObject; var
+//    Key: Word; Shift: TShiftState);
+//begin
+//end;
 
 { TUndoCrops }
 

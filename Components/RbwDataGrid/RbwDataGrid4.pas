@@ -313,6 +313,8 @@ type
     procedure SetCheckStyle(const Value: TCheckStyle);
     procedure InvalidateCachedWidth(Sender: TObject);
     procedure SetAutoAdjustCaptionRowHeights(const Value: boolean);
+    procedure ReadNothing(Reader: TReader);
+    procedure WriteNothing(Writer: TWriter);
   protected
     // @name checks that all the cells in the @classname have values
     // that are between @link(Max) and @link(Min)
@@ -325,6 +327,7 @@ type
     function SelectedRowOrColumn: integer;virtual;abstract;
     // @name sets the format of the @classname).
     procedure SetGridRowOrColumnCount(const Value: integer); virtual; abstract;
+    procedure DefineProperties(Filer: TFiler); override;
   public
     procedure CheckACell(const ACol, ARow: integer; LocalCheckMax,
       LocalCheckMin: Boolean; LocalMax, LocalMin: extended);
@@ -400,8 +403,10 @@ type
     // @name contains the list of items in the combobox.
     property PickList: TStrings read FPickList write SetPickList;
     // @exclude UseButton is for backwards compatibility.
-    property UseButton: boolean read FButtonUsed write SetButtonUsed
-      stored False;
+    // ButtonUsed is the property to use instead.
+//    property UseButton: boolean read FButtonUsed write SetButtonUsed
+//      stored False;
+
     // @name determines whether or not word-wrapping will be applied to
     // the text of cells that are captions.
     property WordWrapCaptions: boolean read FWordWrapCaptions
@@ -790,7 +795,8 @@ type
     procedure SetColumns(const Value: TRbwDataGridColumns4);
     procedure SetWordWrapColTitles(const Value: boolean);
     procedure SetWordWrapRowCaptions(const Value: Boolean);
-
+    procedure ReadNothing(Reader: TReader);
+    procedure WriteNothing(Writer: TWriter);
   { Private declarations }
   protected
     function ShouldAdjustColWidths(ACol: integer): boolean; override;
@@ -812,6 +818,7 @@ type
     function PickListRequiredWidth(const ACol, ARow: integer): integer; override;
     procedure InvalidateCachedWidth; override;
     function GetCaptionFlags(const ACol, ARow: integer) : UINT; override;
+    procedure DefineProperties(Filer: TFiler); override;
     { Protected declarations }
   public
     procedure AdjustRowHeights(const ARow: integer);override;
@@ -835,8 +842,8 @@ type
     property WordWrapRowCaptions: Boolean read FWordWrapRowCaptions
       write SetWordWrapRowCaptions;
     // @name is only for backwards compatibility.
-    property WordWrapColTitles : boolean read FWordWrapColTitles
-      write SetWordWrapColTitles Stored False;
+//    property WordWrapColTitles : boolean read FWordWrapColTitles
+//      write SetWordWrapColTitles Stored False;
     { Published declarations }
   end;
 
@@ -1489,6 +1496,17 @@ begin
   end;
 end;
 
+procedure TRbwDataGrid4.WriteNothing(Writer: TWriter);
+begin
+
+end;
+
+procedure TRbwDataGrid4.DefineProperties(Filer: TFiler);
+begin
+  inherited;
+  Filer.DefineProperty('WordWrapColTitles', ReadNothing, WriteNothing, False)
+end;
+
 procedure TRbwDataGrid4.DeleteColumn(ACol: Integer);
 var
   TempColumns: TRbwDataGridColumns4;
@@ -1700,6 +1718,11 @@ end;
 function TRbwDataGrid4.GetCheckStyle(const ACol, ARow: integer): TCheckStyle;
 begin
   result := Columns[ACol].CheckStyle;
+end;
+
+procedure TRbwDataGrid4.ReadNothing(Reader: TReader);
+begin
+
 end;
 
 procedure TRbwDataGrid4.RowMoved(FromIndex, ToIndex: Integer);
@@ -2310,6 +2333,12 @@ begin
   end;
 end;
 
+procedure TCustomRowOrColumn.DefineProperties(Filer: TFiler);
+begin
+  inherited;
+  Filer.DefineProperty('UseButton', ReadNothing, WriteNothing, False)
+end;
+
 destructor TCustomRowOrColumn.Destroy;
 begin
   FPickList.Free;
@@ -2322,6 +2351,11 @@ begin
   end;
   FButtonFont.Free;
   inherited;
+end;
+
+procedure TCustomRowOrColumn.ReadNothing(Reader: TReader);
+begin
+
 end;
 
 procedure TCustomRowOrColumn.SetPickList(const Value: TStrings);
@@ -4815,6 +4849,11 @@ begin
   begin
     Grid.Invalidate;
   end;
+end;
+
+procedure TCustomRowOrColumn.WriteNothing(Writer: TWriter);
+begin
+
 end;
 
 procedure TRbwRowDataGrid.AdjustRowHeights(const ARow: integer);

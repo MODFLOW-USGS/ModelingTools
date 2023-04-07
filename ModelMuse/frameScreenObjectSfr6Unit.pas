@@ -248,7 +248,7 @@ begin
       := Format('Diversion rate %d', [ColIndex+1]);
     AColumn := rdgModflowBoundary.Columns[Ord(s6cDiversionStart) + ColIndex];
     AColumn.WordWrapCaptions := True;
-    AColumn.UseButton := True;
+    AColumn.ButtonUsed := True;
     AColumn.ButtonCaption := 'F()';
     AColumn.AutoAdjustColWidths := True;
     AColumn.ButtonWidth := 50;
@@ -660,7 +660,7 @@ begin
     begin
       AColumn := rdgModflowBoundary.Columns[ColIndex];
       AColumn.WordWrapCaptions := True;
-      AColumn.UseButton := True;
+      AColumn.ButtonUsed := True;
       AColumn.ButtonCaption := 'F()';
       AColumn.AutoAdjustColWidths := True;
       AColumn.AutoAdjustRowHeights := True;

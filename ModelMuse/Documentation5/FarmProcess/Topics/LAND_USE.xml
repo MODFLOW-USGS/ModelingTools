@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-03-06T09:45:48.950-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-04-06T13:05:16.998-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>LAND_USE</title>
   <body>
     <header>
@@ -252,17 +252,6 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="ROOT_PRESSURE"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="LAI">LAI</link>[S,T,L-4]</para>
-          <para styleclass="Normal">Groundwater Root Interaction Flag, Specify as 0, 1 , 2, 3, 4, 5 (default is 5)</para>
-          <para styleclass="Normal"> &#160; &#160;This determines if there is groundwater uptake to meet crop demand and</para>
-          <para styleclass="Normal"> &#160; &#160;if the Potential Consumptive Use is reduced due to anoxia and soil stresses</para>
-          <para styleclass="Normal"></para>
-          <para styleclass="Normal">0 = No Transpiration &#160; &#160; &#160; &#160; &#160; &#160;==&gt; Zeros out any T requirement</para>
-          <para styleclass="Normal">1 = No Groundwater Interaction &#160;==&gt; No Root-Groundwater Uptake, No &#160;Anoxia or Stress Reduction, Full CU must be met through surface sources (Precip or Irrigation)</para>
-          <para styleclass="Normal">2 = Has Anoxia/Soil Stress Loss, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;NO Root-Groundwater Uptake ==&gt; CU Reduced from any anoxia and soil stress, but CU may only be satisfied with surface sources</para>
-          <para styleclass="Normal">3 = Has Root-Groundwater Uptake, &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;NO Anoxia/Soil Stress Loss ==&gt; Anoxia and Soil Stress losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
-          <para styleclass="Normal">4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss &#160; &#160; &#160; &#160; &#160; &#160; ==&gt; Anoxia &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</para>
-          <para styleclass="Normal">5 = Full Interaction &#160;==&gt; HAS Anoxia/Soil Stress Reduction, HAS Root-Groundwater Uptake &#160;(DEFAULT)</para>
-          <para styleclass="Normal"></para>
           <para styleclass="Normal">FLOAT input that defines crop stress-response pressures [L] for the analytical root response option (appendixes 4 and 5). If keyword is specified, then the SOIL block must specify the COEFFICIENT keyword. Input expects four root pressures, . (PSI), that are species in units of hydraulic head [L]. The four root pressures specify the extent to which the crop is under (1) anoxia conditions, (2 and 3) optimally consumes groundwater, or (4) undergoes wilting. For any crop that has all four root pressures set to zero, or if the keyword is not specified, then FMP uses the linear root response concept.</para>
         </td>
       </tr>

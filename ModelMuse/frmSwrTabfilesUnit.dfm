@@ -2,26 +2,24 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
   HelpType = htKeyword
   HelpKeyword = 'SWR_Tab_Files_Dialog_Box'
   Caption = 'SWR Tabfiles'
-  ClientHeight = 377
-  ClientWidth = 782
+  ClientHeight = 376
+  ClientWidth = 778
   OnResize = FormResize
   ExplicitWidth = 794
   ExplicitHeight = 415
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 335
-    Width = 782
+    Top = 334
+    Width = 778
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 334
-    ExplicitWidth = 778
     DesignSize = (
-      782
+      778
       42)
     object btnHelp: TBitBtn
-      Left = 507
+      Left = 499
       Top = 6
       Width = 83
       Height = 33
@@ -32,7 +30,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
       ExplicitLeft = 503
     end
     object btnOK: TBitBtn
-      Left = 596
+      Left = 588
       Top = 6
       Width = 83
       Height = 33
@@ -44,7 +42,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
       ExplicitLeft = 592
     end
     object btnCancel: TBitBtn
-      Left = 685
+      Left = 677
       Top = 6
       Width = 83
       Height = 33
@@ -58,8 +56,8 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
   inline frameTabFiles: TframeGrid
     Left = 0
     Top = 41
-    Width = 782
-    Height = 294
+    Width = 778
+    Height = 293
     Align = alClient
     TabOrder = 1
     ExplicitTop = 41
@@ -67,7 +65,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
     ExplicitHeight = 293
     inherited Panel: TPanel
       Top = 253
-      Width = 782
+      Width = 786
       ExplicitTop = 252
       ExplicitWidth = 778
       inherited lbNumber: TLabel
@@ -95,7 +93,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 782
+      Width = 786
       Height = 253
       ColCount = 7
       DefaultColWidth = 100
@@ -312,11 +310,10 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
   object pnlTob: TPanel
     Left = 0
     Top = 0
-    Width = 782
+    Width = 778
     Height = 41
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 778
     object comboType: TJvImageComboBox
       Left = 48
       Top = 7

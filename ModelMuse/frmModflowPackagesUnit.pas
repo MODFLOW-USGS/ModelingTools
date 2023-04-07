@@ -299,6 +299,7 @@ type
     framePkgFmp4LandUse: TframePackageFmp4LandUse;
     jvspFmp4SalinityFlush: TJvStandardPage;
     framePkgFmp4SalinityFlush: TframePackageFmp4SalinityFlush;
+    dlgOpenSelectExternalFile: TOpenDialog;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -387,6 +388,8 @@ type
     procedure TimerBringToFrontTimer(Sender: TObject);
     procedure frameGridMobileGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure OwhmFrameButtonClick(Sender: TObject; ACol,
+        ARow: Integer);
     procedure framePkgFmp4SoilsrdgSoilsSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
   private
@@ -5005,6 +5008,20 @@ begin
     end;
   end;
 
+end;
+
+procedure TfrmModflowPackages.OwhmFrameButtonClick(
+    Sender: TObject; ACol, ARow: Integer);
+var
+  Grid: TRbwDataGrid4;
+begin
+  inherited;
+  Grid := Sender as TRbwDataGrid4;
+  dlgOpenSelectExternalFile.FileName := Grid.Cells[ACol, ARow];
+  if dlgOpenSelectExternalFile.Execute then
+  begin
+    Grid.Cells[ACol, ARow] := dlgOpenSelectExternalFile.FileName;
+  end;
 end;
 
 procedure TfrmModflowPackages.tvHufParameterTypesChange(Sender: TObject;

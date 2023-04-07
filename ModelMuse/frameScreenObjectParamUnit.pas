@@ -197,7 +197,7 @@ begin
         rdgModflowBoundary.Columns[NewColPosition + NameIndex].
           Format := rcf4String;
         rdgModflowBoundary.Columns[NewColPosition + NameIndex].
-          UseButton := True;
+          ButtonUsed := True;
 
   //      rdgModflowBoundary.Columns[NewColPosition + NameIndex].
   //        AutoAdjustColWidths := True;
