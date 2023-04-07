@@ -25,7 +25,7 @@ type
     wlWaterSource, wlAddedCropDemandFlux, wlAddedCropDemandRate,
     wlPrecipicationTable, wlSoilCoefficient, wlNoReturnFlow,
     wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit, wlSwAllotment,
-    wlGwAllotment, wlRootPressure);
+    wlGwAllotment, wlRootPressure, wlPondDepth);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -154,6 +154,7 @@ type
     FGroundWaterAllotmentFileStream: TFileStream;
     FFarmWells4: TFarmProcess4Wells;
     FRootPressureFileStream: TFileStream;
+    FPondDepthFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -300,11 +301,12 @@ type
     procedure WriteRootPressure;
 
     // GROUNDWATER_ROOT_INTERACTION
-    procedure WriteGroundwaterRootInteraction; // finish list
+    procedure WriteGroundwaterRootInteraction;
 
     // TRANSPIRATION_FRACTION
     procedure EvaluateTranspirationFraction;
-    procedure WriteTranspirationFraction; // finish list
+    function GetTranspirationFractionCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteTranspirationFraction;
 
     // EVAPORATION_IRRIGATION_FRACTION
     procedure EvaluateEvaporationIrrigationFraction;
@@ -312,23 +314,31 @@ type
 
     // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     procedure EvaluateFractionOfPrecipToSurfaceWater;
-    procedure WriteFractionOfPrecipToSurfaceWater; // finish list
+    function GetSWLossFracPrecipCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteFractionOfPrecipToSurfaceWater;
 
     // SURFACEWATER_LOSS_FRACTION_IRRIGATION
     procedure EvaluateFractionOfIrrigToSurfaceWater;
     procedure WriteFractionOfIrrigToSurfaceWater;
 
     // POND_DEPTH
+    function GetPondDepthCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WritePondDepth;
 
     // ADDED_DEMAND
     procedure EvaluateAddedDemand;
     procedure WriteAddedDemand; // finish list
 
     // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
+    procedure WriteZeroConsumptiveUseBecomesBareSoil; // finish
     // EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
+    procedure WriteEvapIrrigateFracSumOneCorrection; // finish
     //  CROPS_THAT_SPECIFY_SURFACE_ELEVATION
+    procedure WriteCropsThatSpecifySurfaceElevation; // should this be done?
     //  CROP_SURFACE_ELEVATION
+    procedure WriteCropSurfaceElevation; // should this be done?
     //  CROP_SURFACE_ELEVATION_OFFSET
+    procedure WriteSurfaceElevationOffset; // should this be done?
 
 
     // Salinity flush
@@ -478,6 +488,11 @@ resourcestring
   StrInvalidCropCoeffic = 'Invalid crop coefficient formula in ';
   StrInvalidConsumptive = 'Invalid consumptive use formula in ';
   StrInvalidRootDepthF = 'Invalid root depth formula in ';
+  StrInvalidTranspiratio = 'Invalid transpiration fraction formula in ';
+  StrInvalidSurfaceWate = 'Invalid surface water loss fraction precipitation' +
+  ' formula in ';
+  StrInvalidPondDepthF = 'Invalid pond depth formula in ';
+  StrInvalidAddedDemand = 'Invalid added demand formula in ';
 
 { TModflowFmp4Writer }
 
@@ -1175,8 +1190,15 @@ begin
   FreeAndNil(FSurfaceWaterAllotmentFileStream);
   FreeAndNil(FGroundWaterAllotmentFileStream);
   FreeAndNil(FRootPressureFileStream);
+  FreeAndNil(FPondDepthFileStream);
 
 end;
+
+//function TModflowFmp4Writer.GetAddedDemandCollection(
+//  Crop: TCropItem): TOwhmCollection;
+//begin
+//  result := Crop.AddedDemandCollection;
+//end;
 
 function TModflowFmp4Writer.GetBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
@@ -1625,6 +1647,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlPondDepth:
+      begin
+        result := ChangeFileExt(FBaseName, '.pond_depth');
+        if FPondDepthFileStream = nil then
+        begin
+          FPondDepthFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
   if result <> '' then
@@ -1806,6 +1837,7 @@ begin
     wlSwAllotment: ;
     wlGwAllotment: ;
     wlRootPressure: ;
+    wlPondDepth: ;
     else Assert(False);
   end;
 end;
@@ -1869,8 +1901,15 @@ begin
     wlSwAllotment: ;
     wlGwAllotment: ;
     wlRootPressure: ;
+    wlPondDepth: ;
     else Assert(False)
   end;
+end;
+
+function TModflowFmp4Writer.GetTranspirationFractionCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.TranspirationFractionCollection;
 end;
 
 function TModflowFmp4Writer.Package: TModflowPackageSelection;
@@ -3027,6 +3066,12 @@ begin
   end;
 end;
 
+function TModflowFmp4Writer.GetSWLossFracPrecipCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.SWLossFractionPrecipCollection;
+end;
+
 procedure TModflowFmp4Writer.UpdateCropIDDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
 var
@@ -3691,7 +3736,7 @@ begin
               begin
                 ACrop := Model.FmpCrops[CropIndex];
                 WriteInteger(CropIndex+1);
-                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.
+                IrregationItem := ACrop.IrrigationCollection.
                   ItemByStartTime(StartTime) as TCropIrrigationItem;
                 WriteIrrigationItem(ACrop, IrregationItem);
               end;
@@ -3703,9 +3748,9 @@ begin
             begin
               ACrop := Model.FmpCrops[CropIndex];
               WriteInteger(CropIndex + 1);
-              if ACrop.SW_LossFractionIrrigationCollection.Count > 0 then
+              if ACrop.IrrigationCollection.Count > 0 then
               begin
-                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.First as TCropIrrigationItem;
+                IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
               end
               else
               begin
@@ -3826,7 +3871,8 @@ begin
   end
   else
   begin
-    Assert(False);
+    WriteOwhmList(RequiredValues, AFileName, GetSWLossFracPrecipCollection,
+      StrInvalidSurfaceWate);
   end;
 end;
 
@@ -5132,6 +5178,16 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteCropsThatSpecifySurfaceElevation;
+begin
+
+end;
+
+procedure TModflowFmp4Writer.WriteCropSurfaceElevation;
+begin
+
+end;
+
 procedure TModflowFmp4Writer.WriteDirectRecharge;
 var
   AFileName: string;
@@ -5668,6 +5724,11 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteEvapIrrigateFracSumOneCorrection;
+begin
+
+end;
+
 procedure TModflowFmp4Writer.WriteEvaporationIrrigationFraction;
 var
   AFileName: string;
@@ -5811,7 +5872,7 @@ begin
               begin
                 ACrop := Model.FmpCrops[CropIndex];
                 WriteInteger(CropIndex+1);
-                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.
+                IrregationItem := ACrop.IrrigationCollection.
                   ItemByStartTime(StartTime) as TCropIrrigationItem;
                 WriteEvapIrrigationItem(ACrop, IrregationItem);
               end;
@@ -5823,9 +5884,9 @@ begin
             begin
               ACrop := Model.FmpCrops[CropIndex];
               WriteInteger(CropIndex + 1);
-              if ACrop.SW_LossFractionIrrigationCollection.Count > 0 then
+              if ACrop.IrrigationCollection.Count > 0 then
               begin
-                IrregationItem := ACrop.SW_LossFractionIrrigationCollection.First as TCropIrrigationItem;
+                IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
               end
               else
               begin
@@ -6478,7 +6539,8 @@ begin
   end
   else
   begin
-    Assert(False);
+    WriteOwhmList(RequiredValues, AFileName, GetTranspirationFractionCollection,
+      StrInvalidTranspiratio);
   end;
 end;
 
@@ -7057,7 +7119,7 @@ begin
             begin
               ACrop := Model.FmpCrops[CropIndex];
               WriteInteger(CropIndex+1);
-              IrregationItem := ACrop.SW_LossFractionIrrigationCollection.
+              IrregationItem := ACrop.IrrigationCollection.
                 ItemByStartTime(StartTime) as TCropIrrigationItem;
               WriteIrrigationItem(ACrop, IrregationItem);
             end;
@@ -7069,9 +7131,9 @@ begin
           begin
             ACrop := Model.FmpCrops[CropIndex];
             WriteInteger(CropIndex + 1);
-            if ACrop.SW_LossFractionIrrigationCollection.Count > 0 then
+            if ACrop.IrrigationCollection.Count > 0 then
             begin
-              IrregationItem := ACrop.SW_LossFractionIrrigationCollection.First as TCropIrrigationItem;
+              IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
             end
             else
             begin
@@ -7282,26 +7344,23 @@ begin
     WriteEvaporationIrrigationFraction;
     WriteFractionOfPrecipToSurfaceWater;
     WriteFractionOfIrrigToSurfaceWater;
-
-    // POND_DEPTH
-
+    WritePondDepth;
     WriteAddedDemand;
-
-    // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
+    WriteZeroConsumptiveUseBecomesBareSoil;
 
     WriteString('  MIN_BARE_FRACTION');
     WriteFloat(FLandUse.MinimumBareFraction);
     NewLine;
 
-    // EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
+    WriteEvapIrrigateFracSumOneCorrection;
 
     WriteString('  RELAXATION_FACTOR_HEAD_CHANGE');
     WriteFloat(FLandUse.RelaxFracHeadChange);
     NewLine;
 
-    //  CROPS_THAT_SPECIFY_SURFACE_ELEVATION
-    //  CROP_SURFACE_ELEVATION
-    //  CROP_SURFACE_ELEVATION_OFFSET
+    WriteCropsThatSpecifySurfaceElevation;
+    WriteCropSurfaceElevation;
+    WriteSurfaceElevationOffset;
 
     WriteString('END LAND_USE');
     NewLine;
@@ -7312,6 +7371,12 @@ end;
 function TModflowFmp4Writer.GetLandUseFractionCollection(Crop: TCropItem): TOwhmCollection;
 begin
   result := Crop.LandUseFractionCollection;
+end;
+
+function TModflowFmp4Writer.GetPondDepthCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.PondDepthCollection;
 end;
 
 function TModflowFmp4Writer.GetRootDepthCollection(
@@ -7684,10 +7749,45 @@ begin
 
 end;
 
+procedure TModflowFmp4Writer.WritePondDepth;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FLandUse.PondDepth.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlPondDepth;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: POND_DEPTH';
+  RequiredValues.ErrorID := 'FMP LAND_USE: POND_DEPTH';
+  RequiredValues.ID := 'POND_DEPTH';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FLandUse.PondDepth.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.PondDepth;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlPondDepth);
+  end;
+
+  WriteOwhmList(RequiredValues, AFileName, GetPondDepthCollection,
+    StrInvalidPondDepthF);
+
+end;
+
 procedure TModflowFmp4Writer.WritePrecipitation;
 var
   AFileName: string;
-//  DataArray: TDataArray;
   RequiredValues: TRequiredValues;
 begin
   if FClimatePackage.Precipitation.FarmOption = foNotUsed then
@@ -8495,6 +8595,11 @@ begin
           Assert(FRootPressureFileStream <> nil);
           FRootPressureFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlPondDepth:
+        begin
+          Assert(FPondDepthFileStream <> nil);
+          FPondDepthFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -8590,6 +8695,11 @@ begin
     NewLine;
     NewLine;
   end;
+end;
+
+procedure TModflowFmp4Writer.WriteSurfaceElevationOffset;
+begin
+
 end;
 
 procedure TModflowFmp4Writer.WriteSurfaceK;
@@ -9077,6 +9187,11 @@ begin
       FWriteLocation := wlMain;
     end;
   end;
+end;
+
+procedure TModflowFmp4Writer.WriteZeroConsumptiveUseBecomesBareSoil;
+begin
+
 end;
 
 end.

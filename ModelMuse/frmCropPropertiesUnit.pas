@@ -103,7 +103,7 @@ type
     FCropFunctions: TCropFunctionCollection;
     FWaterUseCollection: TCropWaterUseCollection;
     FGettingData: Boolean;
-    FIrrigation: TFmp4SW_LossFractionIrrigationCollection;
+    FIrrigation: TIrrigationCollection;
     FFarmProcess4: TFarmProcess4;
     FFarmLandUse: TFarmProcess4LandUse;
     FLandUseFraction: TOwhmCollection;
@@ -122,7 +122,7 @@ type
     procedure SetUpCropWaterUseTable(Model: TCustomModel);
     procedure GetCropWaterUseFunction(WaterUseCollection: TCropWaterUseCollection);
     procedure SetUpIrrigationTable(Model: TCustomModel);
-    procedure GetIrrigation(Irrigation: TFmp4SW_LossFractionIrrigationCollection);
+    procedure GetIrrigation(Irrigation: TIrrigationCollection);
     procedure SetUpLandUseFractionTable(Model: TCustomModel);
     procedure GetLandUseFraction(LandUseFraction: TOwhmCollection);
     procedure SetUpRootPressureTable(Model: TCustomModel);
@@ -203,6 +203,11 @@ resourcestring
   StrLandUseAreaFracti = 'Land Use Area Fraction';
   StrCropCoefficient2 = 'Crop Coefficient';
   StrConsumptiveUse2 = 'Consumptive Use';
+  StrTranspirationFracti = 'Transpiration Fraction';
+  StrGroundwaterRootInt = 'Groundwater Root Interaction';
+  StrRootPressure = 'Root Pressure';
+  StrSurfaceWaterLossFPrecip = 'Surface Water Loss Fraction Precipitation';
+  StrPondDepth = 'Pond Depth';
 
 type
   TNameCol = (ncID, ncName);
@@ -603,7 +608,7 @@ begin
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrSurfaceWaterLossF) as TJvPageIndexNode;
       ANode.PageIndex := jvspIrrigation.PageIndex;
-      ANode.Data := ACrop.SW_LossFractionIrrigationCollection;
+      ANode.Data := ACrop.IrrigationCollection;
     end;
 
     if FFarmLandUse.LandUseFraction.ListUsed then
@@ -629,16 +634,53 @@ begin
 
     if FFarmLandUse.RootPressure.FarmOption <> foNotUsed then
     begin
-      ANode := jvpltvMain.Items.AddChild(CropNode, 'Root Pressure') as TJvPageIndexNode;
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrRootPressure) as TJvPageIndexNode;
       ANode.PageIndex := jvspRootPressure.PageIndex;
       ANode.Data := ACrop.RootPressureCollection;
     end;
 
     if FFarmLandUse.GroundwaterRootInteraction.FarmOption <> foNotUsed then
     begin
-      ANode := jvpltvMain.Items.AddChild(CropNode, 'Groundwater Root Interaction') as TJvPageIndexNode;
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrGroundwaterRootInt) as TJvPageIndexNode;
       ANode.PageIndex := jvspGwRootInteraction.PageIndex;
       ANode.Data := ACrop.GroundwaterRootInteraction;
+    end;
+
+    if FFarmLandUse.TranspirationFraction.ListUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrTranspirationFracti) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.TranspirationFractionCollection;
+    end;
+
+    if FFarmLandUse.FractionOfPrecipToSurfaceWater.ListUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrSurfaceWaterLossFPrecip) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.SWLossFractionPrecipCollection;
+    end;
+
+    if FFarmLandUse.PondDepth.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrPondDepth) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.Data := ACrop.PondDepthCollection;
+    end;
+
+    if FFarmLandUse.AddedDemand.ListUsed then
+    begin
+//      ANode := jvpltvMain.Items.AddChild(CropNode, 'Added Demand') as TJvPageIndexNode;
+//      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+//      ANode.Data := ACrop.AddedDemandCollection;
+//      if FFarmLandUse.AddedDemandOption = doLength then
+//      begin
+//        ACrop.AddedDemandCollection.OwhmNames[0] := 'Added Demand [L]'
+//      end
+//      else
+//      begin
+//        Assert(FFarmLandUse.AddedDemandOption = doRate);
+//        ACrop.AddedDemandCollection.OwhmNames[0] := 'Added Demand [L^3/T]'
+//      end;
     end;
   end;
 {$ENDIF}
@@ -1660,9 +1702,9 @@ begin
       begin
         GetCropWaterUseFunction(TCropWaterUseCollection(AnObject));
       end
-      else if AnObject is TFmp4SW_LossFractionIrrigationCollection then
+      else if AnObject is TIrrigationCollection then
       begin
-        GetIrrigation(TFmp4SW_LossFractionIrrigationCollection(AnObject));
+        GetIrrigation(TIrrigationCollection(AnObject));
       end
       else if AnObject is TOwhmCollection then
       begin
@@ -1757,7 +1799,7 @@ begin
 end;
 
 procedure TfrmCropProperties.GetIrrigation(
-  Irrigation: TFmp4SW_LossFractionIrrigationCollection);
+  Irrigation: TIrrigationCollection);
 var
   ItemIndex: Integer;
   AnItem: TCropIrrigationItem;

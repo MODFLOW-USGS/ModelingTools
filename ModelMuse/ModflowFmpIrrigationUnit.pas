@@ -23,8 +23,10 @@ type
     procedure SetBoundaryFormula(Index: integer; const Value: string); override;
     function BoundaryFormulaCount: integer; override;
   published
+    // EVAPORATION_IRRIGATION_FRACTION
     property EvapIrrigateFraction: string read GetEvapIrrigateFraction
       write SetEvapIrrigateFraction;
+    // SURFACEWATER_LOSS_FRACTION_IRRIGATION
     property SurfaceWaterLossFractionIrrigation: string
       read GetSurfaceWaterLossFractionIrrigation
       write SetSurfaceWaterLossFractionIrrigation;

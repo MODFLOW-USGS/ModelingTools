@@ -58,7 +58,7 @@ type
   end;
 
   // @name represents the choice of irrigation type for one crop.
-  TFmp4SW_LossFractionIrrigationCollection = class(TCustomFarmCollection)
+  TIrrigationCollection = class(TCustomFarmCollection)
   private
     function GetItems(Index: Integer): TCropIrrigationItem;
     procedure SetItems(Index: Integer; const Value: TCropIrrigationItem);
@@ -381,6 +381,48 @@ type
       write SetInteractionCode;
   end;
 
+  TAddedDemandFarmItem = class(TCustomStringValueItem)
+  private
+    FFarmGuid: string;
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property FarmGuid: string read FFarmGuid write FFarmGuid;
+  end;
+
+  TAddedDemandFarmCollection = class(TCustomStringCollection)
+  private
+    function GetItem(Index: Integer): TAddedDemandFarmItem;
+    procedure SetItem(Index: Integer; const Value: TAddedDemandFarmItem);
+  public
+    constructor Create(Model: TBaseModel);
+    property Items[Index: Integer]: TAddedDemandFarmItem read GetItem
+      write SetItem; default;
+    function Add: TAddedDemandFarmItem;
+  end;
+
+  TAddedDemandItem = class(TNoFormulaItem)
+  private
+    FAddedDemandValues: TAddedDemandFarmCollection;
+    procedure SetAddedDemandValues(const Value: TAddedDemandFarmCollection);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    property AddedDemandValues: TAddedDemandFarmCollection
+      read FAddedDemandValues write SetAddedDemandValues;
+  end;
+
+  TAddedDemandCollection = class(TCustomNonSpatialBoundColl)
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  public
+    constructor Create(Model: TBaseModel); reintroduce;
+  end;
+
+
   // define crops and FMP Data sets 14 and 15.
   TCropItem = class(TCustomFarmItem)
   private
@@ -415,15 +457,23 @@ type
     FTranspirationFractionDisplayName: string;
     FCropHasSalinityDemandDataArrayName: string;
     FCropHasSalinityDemandDisplayName: string;
-    FSW_LossFractionIrrigationCollection: TFmp4SW_LossFractionIrrigationCollection;
+    FIrrigationCollection: TIrrigationCollection;
     FLandUseFractionCollection: TOwhmCollection;
     FCropCoefficientCollection: TOwhmCollection;
     FConsumptiveUseCollection: TOwhmCollection;
     FRootPressureCollection: TRootPressureCollection;
     FGroundwaterRootInteraction: TGroundwaterRootInteraction;
+    FTranspirationFractionCollection: TOwhmCollection;
+    FSWLossFractionPrecipCollection: TOwhmCollection;
+    FPondDepthCollection: TOwhmCollection;
+    FAddedDemandCollection: TAddedDemandCollection;
     procedure SetRootPressureCollection(const Value: TRootPressureCollection);
     procedure SetGroundwaterRootInteraction(
       const Value: TGroundwaterRootInteraction);
+    procedure SetTranspirationFractionCollection(const Value: TOwhmCollection);
+    procedure SetSWLossFractionPrecipCollection(const Value: TOwhmCollection);
+    procedure SetPondDepthCollection(const Value: TOwhmCollection);
+    procedure SetAddedDemandCollection(const Value: TAddedDemandCollection);
     const
     PSI1Position = 0;
     PSI2Position = 1;
@@ -463,7 +513,7 @@ type
     procedure SetFmpRootDepthCollection(const Value: TFmpRootDepthCollection);
     procedure SetLossesCollection(const Value: TLossesCollection);
     procedure UpdateAllDataArrays;
-    procedure SetSW_LossFractionIrrigationCollection(const Value: TFmp4SW_LossFractionIrrigationCollection);
+    procedure SetIrrigationCollection(const Value: TIrrigationCollection);
     procedure UpdateFarmProperties;
   protected
     function GetBoundaryFormula(Index: integer): string; override;
@@ -619,17 +669,16 @@ type
       stored False
     {$ENDIF}
     ;
-    // SURFACEWATER_LOSS_FRACTION_IRRIGATION
-    property SW_LossFractionIrrigationCollection: TFmp4SW_LossFractionIrrigationCollection
-      read FSW_LossFractionIrrigationCollection
-      write SetSW_LossFractionIrrigationCollection
+    // EVAPORATION_IRRIGATION_FRACTION and SURFACEWATER_LOSS_FRACTION_IRRIGATION
+    property IrrigationCollection: TIrrigationCollection
+      read FIrrigationCollection write SetIrrigationCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
-    property IrrigationCollection: TFmp4SW_LossFractionIrrigationCollection
-      read FSW_LossFractionIrrigationCollection
-      write SetSW_LossFractionIrrigationCollection
+    { TODO : SW_LossFractionIrrigationCollection can be deleted upon publication }
+    property SW_LossFractionIrrigationCollection: TIrrigationCollection
+      read FIrrigationCollection write SetIrrigationCollection
       stored False;
 
     property LandUseFractionCollection: TOwhmCollection
@@ -661,6 +710,30 @@ type
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
+    ;
+    property TranspirationFractionCollection: TOwhmCollection
+      read FTranspirationFractionCollection
+      write SetTranspirationFractionCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property SWLossFractionPrecipCollection: TOwhmCollection
+      read FSWLossFractionPrecipCollection
+      write SetSWLossFractionPrecipCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property PondDepthCollection: TOwhmCollection read FPondDepthCollection
+      write SetPondDepthCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    property AddedDemandCollection: TAddedDemandCollection read FAddedDemandCollection
+      write SetAddedDemandCollection
+      stored False
     ;
   end;
 
@@ -724,6 +797,11 @@ resourcestring
   StrCropCoefficient = 'Crop Coefficient';
   StrConsumptiveUse = 'Consumptive Use';
   StrIrrigation = 'Irrigation';
+  StrRootingDepth = 'Rooting Depth';
+  StrTranspirationFracti = 'Transpiration Fraction';
+  StrSurfaceWaterLossF = 'Surface Water Loss Fraction Precipitation';
+  StrPondDepth = 'Pond Depth';
+  StrAddedDemand = 'Added Demand';
 
 resourcestring
   IDError = 'Time: %g.';
@@ -1636,14 +1714,18 @@ begin
     EvapFractionsCollection := SourceItem.EvapFractionsCollection;
     LossesCollection := SourceItem.LossesCollection;
     CropFunctionCollection := SourceItem.CropFunctionCollection;
-    CropWaterUseCollection := SourceItem.CropWaterUseCollection;
+    PondDepthCollection := SourceItem.PondDepthCollection;
+    AddedDemandCollection := SourceItem.AddedDemandCollection;
 
-    SW_LossFractionIrrigationCollection := SourceItem.SW_LossFractionIrrigationCollection;
+    IrrigationCollection := SourceItem.IrrigationCollection;
     LandUseFractionCollection := SourceItem.LandUseFractionCollection;
     CropCoefficientCollection := SourceItem.CropCoefficientCollection;
     ConsumptiveUseCollection := SourceItem.ConsumptiveUseCollection;
     RootPressureCollection := SourceItem.RootPressureCollection;
     GroundwaterRootInteraction := SourceItem.GroundwaterRootInteraction;
+    TranspirationFractionCollection := SourceItem.TranspirationFractionCollection;
+    SWLossFractionPrecipCollection := SourceItem.SWLossFractionPrecipCollection;
+    SWLossFractionPrecipCollection := SourceItem.SWLossFractionPrecipCollection;
 
     // This is done differently in TChemSpeciesItem
     // There the field is first assign then set to an empty string
@@ -1688,13 +1770,13 @@ begin
 
   FCropFunctionCollection := TCropFunctionCollection.Create(Model);
   FFmpRootDepthCollection := TFmpRootDepthCollection.Create(Model);
-  FFmpRootDepthCollection.OwhmNames.Add('Rooting Depth');
+  FFmpRootDepthCollection.OwhmNames.Add(StrRootingDepth);
   FEvapFractionsCollection := TEvapFractionsCollection.Create(Model);
   FLossesCollection := TLossesCollection.Create(Model);
   FCropWaterUseCollection := TCropWaterUseCollection.Create(Model);
 
-  FSW_LossFractionIrrigationCollection :=
-    TFmp4SW_LossFractionIrrigationCollection.Create(Model);
+  FIrrigationCollection :=
+    TIrrigationCollection.Create(Model);
   FLandUseFractionCollection := TOwhmCollection.Create(Model);
   FLandUseFractionCollection.OwhmNames.Add(StrLandUseAreaFracti);
   FCropCoefficientCollection := TOwhmCollection.Create(Model);
@@ -1704,6 +1786,14 @@ begin
   FRootPressureCollection := TRootPressureCollection.Create(Model);
   FGroundwaterRootInteraction :=
     TGroundwaterRootInteraction.Create(InvalidatEvent);
+  FTranspirationFractionCollection := TOwhmCollection.Create(Model);
+  FTranspirationFractionCollection.OwhmNames.Add(StrTranspirationFracti);
+  FSWLossFractionPrecipCollection := TOwhmCollection.Create(Model);
+  FSWLossFractionPrecipCollection.OwhmNames.Add(StrSurfaceWaterLossF);
+  FPondDepthCollection := TOwhmCollection.Create(Model);
+  FPondDepthCollection.OwhmNames.Add(StrPondDepth);
+  FAddedDemandCollection := TAddedDemandCollection.Create(Model);
+
 end;
 
 destructor TCropItem.Destroy;
@@ -1784,12 +1874,16 @@ begin
     end;
   end;
 
+  FAddedDemandCollection.Free;
+  FPondDepthCollection.Free;
+  FSWLossFractionPrecipCollection.Free;
+  FTranspirationFractionCollection.Free;
   FGroundwaterRootInteraction.Free;
   FRootPressureCollection.Free;
   FConsumptiveUseCollection.Free;
   FCropCoefficientCollection.Free;
   FLandUseFractionCollection.Free;
-  FSW_LossFractionIrrigationCollection.Free;
+  FIrrigationCollection.Free;
 
   FCropFunctionCollection.Free;
   FFmpRootDepthCollection.Free;
@@ -1846,12 +1940,16 @@ begin
       and CropFunctionCollection.IsSame(OtherItem.CropFunctionCollection)
       and CropWaterUseCollection.IsSame(OtherItem.CropWaterUseCollection)
 
-      and SW_LossFractionIrrigationCollection.IsSame(OtherItem.SW_LossFractionIrrigationCollection)
+      and IrrigationCollection.IsSame(OtherItem.IrrigationCollection)
       and LandUseFractionCollection.IsSame(OtherItem.LandUseFractionCollection)
       and CropCoefficientCollection.IsSame(OtherItem.CropCoefficientCollection)
       and ConsumptiveUseCollection.IsSame(OtherItem.ConsumptiveUseCollection)
       and RootPressureCollection.IsSame(OtherItem.RootPressureCollection)
       and GroundwaterRootInteraction.IsSame(OtherItem.GroundwaterRootInteraction)
+      and TranspirationFractionCollection.IsSame(OtherItem.TranspirationFractionCollection)
+      and SWLossFractionPrecipCollection.IsSame(OtherItem.SWLossFractionPrecipCollection)
+      and PondDepthCollection.IsSame(OtherItem.PondDepthCollection)
+      and AddedDemandCollection.IsSame(OtherItem.AddedDemandCollection)
 
 
       and (LandUseAreaFractionDataArrayName = OtherItem.LandUseAreaFractionDataArrayName)
@@ -1867,6 +1965,11 @@ begin
       and (AddedDemandDataArrayName = OtherItem.AddedDemandDataArrayName)
       and (CropHasSalinityDemandDataArrayName = OtherItem.CropHasSalinityDemandDataArrayName)
   end;
+end;
+
+procedure TCropItem.SetAddedDemandCollection(const Value: TAddedDemandCollection);
+begin
+  FAddedDemandCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetAddedDemandDataArrayName(const NewName: string);
@@ -2256,6 +2359,12 @@ begin
   FEvapFractionsCollection.Assign(Value);
 end;
 
+//procedure TCropItem.SetEvapIrrigationFractionCollection(
+//  const Value: TOwhmCollection);
+//begin
+//  FEvapIrrigationFractionCollection.Assign(Value);
+//end;
+
 procedure TCropItem.SetEvaporationIrrigationDataArrayName(const NewName: string);
 var
   LocalModel: TPhastModel;
@@ -2362,9 +2471,9 @@ begin
 
 end;
 
-procedure TCropItem.SetSW_LossFractionIrrigationCollection(const Value: TFmp4SW_LossFractionIrrigationCollection);
+procedure TCropItem.SetIrrigationCollection(const Value: TIrrigationCollection);
 begin
-  FSW_LossFractionIrrigationCollection.Assign(Value);
+  FIrrigationCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetIrrigationDataArrayName(const NewName: string);
@@ -2445,6 +2554,11 @@ begin
   FLossesCollection.Assign(Value);
 end;
 
+procedure TCropItem.SetPondDepthCollection(const Value: TOwhmCollection);
+begin
+  FPondDepthCollection.Assign(Value);
+end;
+
 procedure TCropItem.SetRootDepthDataArrayName(const NewName: string);
 var
   LocalModel: TPhastModel;
@@ -2520,6 +2634,12 @@ begin
   SetCaseSensitiveStringProperty(FSWLossFractionIrrigationDataArrayName, NewName);
 end;
 
+procedure TCropItem.SetSWLossFractionPrecipCollection(
+  const Value: TOwhmCollection);
+begin
+  FSWLossFractionPrecipCollection.Assign(Value);
+end;
+
 procedure TCropItem.SetSWLossFractionPrecipDataArrayName(const NewName: string);
 var
   LocalModel: TPhastModel;
@@ -2552,6 +2672,11 @@ begin
   end;
 
   SetCaseSensitiveStringProperty(FSWLossFractionPrecipDataArrayName, NewName);
+end;
+
+procedure TCropItem.SetTranspirationFractionCollection(const Value: TOwhmCollection);
+begin
+  FTranspirationFractionCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetTranspirationFractionDataArrayName(const NewName: string);
@@ -2697,7 +2822,7 @@ begin
   CropWaterUseCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
 
-  SW_LossFractionIrrigationCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+  IrrigationCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
   LandUseFractionCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
@@ -2707,6 +2832,14 @@ begin
     StartRangeExtended, EndRangeExtended);
   RootPressureCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
+  TranspirationFractionCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  SWLossFractionPrecipCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  PondDepthCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+//  AddedDemandCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+//    StartRangeExtended, EndRangeExtended);
 end;
 
 { TCropCollection }
@@ -3300,17 +3433,17 @@ end;
 
 { TFmp4IrrigationCollection }
 
-function TFmp4SW_LossFractionIrrigationCollection.GetItems(Index: Integer): TCropIrrigationItem;
+function TIrrigationCollection.GetItems(Index: Integer): TCropIrrigationItem;
 begin
   result := inherited Items[Index] as TCropIrrigationItem;
 end;
 
-class function TFmp4SW_LossFractionIrrigationCollection.ItemClass: TBoundaryItemClass;
+class function TIrrigationCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TCropIrrigationItem;
 end;
 
-procedure TFmp4SW_LossFractionIrrigationCollection.SetItems(Index: Integer;
+procedure TIrrigationCollection.SetItems(Index: Integer;
   const Value: TCropIrrigationItem);
 begin
   inherited Items[Index] := Value;
@@ -3482,7 +3615,7 @@ end;
 
 procedure TGroundwaterRootInteraction.SetHasTranspiration(const Value: Boolean);
 begin
-
+  InteractionCode := ConvertToInteractionCode(Value, GroundwaterUptake, Anoxia, SoilStress)
 end;
 
 procedure TGroundwaterRootInteraction.SetInteractionCode(const Value: TInteractionCode);
@@ -3497,6 +3630,134 @@ end;
 procedure TGroundwaterRootInteraction.SetSoilStress(const Value: Boolean);
 begin
   InteractionCode := ConvertToInteractionCode(HasTranspiration, GroundwaterUptake, Anoxia, Value)
+end;
+
+{ TAddedDemandCollection }
+
+constructor TAddedDemandCollection.Create(Model: TBaseModel);
+begin
+  inherited Create(nil, Model, nil);
+end;
+
+class function TAddedDemandCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TAddedDemandItem;
+end;
+
+{ TAddedDemandFarmCollection }
+
+function TAddedDemandFarmCollection.Add: TAddedDemandFarmItem;
+begin
+  result := inherited Add as TAddedDemandFarmItem
+end;
+
+constructor TAddedDemandFarmCollection.Create(Model: TBaseModel);
+begin
+  inherited Create(TAddedDemandFarmItem, Model, nil, nil);
+end;
+
+{ TAddedDemandItem }
+
+//procedure TAddedDemandItem.AssignObserverEvents(Collection: TCollection);
+//begin
+//  inherited;
+//
+//end;
+//
+//function TAddedDemandItem.BoundaryFormulaCount: integer;
+//begin
+//  result := 0;
+//end;
+
+//function TAddedDemandItem.BoundaryObserverPrefix: string;
+//begin
+//  result := 'AddedDemand_'
+//end;
+
+procedure TAddedDemandItem.Assign(Source: TPersistent);
+begin
+  if Source is TAddedDemandItem then
+  begin
+    AddedDemandValues := TAddedDemandItem(Source).AddedDemandValues;
+  end;
+  inherited;
+
+end;
+
+constructor TAddedDemandItem.Create(Collection: TCollection);
+var
+  AModel: TBaseModel;
+begin
+  inherited;
+  if Collection <> nil then
+  begin
+    AModel := (Collection as TAddedDemandCollection).Model;
+  end
+  else
+  begin
+    AModel := nil;
+  end;
+  FAddedDemandValues := TAddedDemandFarmCollection.Create(Model);
+end;
+
+//procedure TAddedDemandItem.CreateFormulaObjects;
+//begin
+//  inherited;
+//
+//end;
+
+destructor TAddedDemandItem.Destroy;
+begin
+  FAddedDemandValues.Free;
+  inherited;
+end;
+
+function TAddedDemandItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  result := (AnotherItem is TAddedDemandItem) and inherited IsSame(AnotherItem);
+  if result then
+  begin
+    result := AddedDemandValues.IsSame(TAddedDemandItem(AnotherItem).AddedDemandValues);
+  end;
+end;
+
+procedure TAddedDemandItem.SetAddedDemandValues(
+  const Value: TAddedDemandFarmCollection);
+begin
+  FAddedDemandValues.Assign(Value);
+end;
+
+function TAddedDemandFarmCollection.GetItem(
+  Index: Integer): TAddedDemandFarmItem;
+begin
+  Assert(Index >= 0);
+  while Index >= Count do
+  begin
+    Add;
+  end;
+  result := inherited Items[Index] as  TAddedDemandFarmItem
+end;
+
+procedure TAddedDemandFarmCollection.SetItem(Index: Integer;
+  const Value: TAddedDemandFarmItem);
+begin
+  Assert(Index >= 0);
+  while Index >= Count do
+  begin
+    Add;
+  end;
+  inherited Items[Index] := Value;
+end;
+
+{ TAddedDemandFarmItem }
+
+procedure TAddedDemandFarmItem.Assign(Source: TPersistent);
+begin
+  if Source is TAddedDemandFarmItem then
+  begin
+    FarmGuid := TAddedDemandFarmItem(Source).FarmGuid;
+  end;
+  inherited;
 end;
 
 end.

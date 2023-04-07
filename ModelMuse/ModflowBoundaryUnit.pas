@@ -217,10 +217,6 @@ type
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
   public
-    // @name is the @link(TScreenObject) for this boundary.
-    // @name provides access to @link(TCustomModflowBoundaryItem) representing
-    // the boundary conditions for different time periods.
-    property ScreenObject;
 
     // @name is the @link(TScreenObject) for this boundary.
     // @name provides access to @link(TCustomModflowBoundaryItem) representing
@@ -2675,7 +2671,7 @@ begin
   begin
     Exit;
   end;
-  result := (Collection as TCustomNonSpatialBoundColl).ScreenObject;
+  result := (Collection as TCustomObjectOrderedCollection).ScreenObject;
 end;
 
 { TCustomBoundaryStorage }

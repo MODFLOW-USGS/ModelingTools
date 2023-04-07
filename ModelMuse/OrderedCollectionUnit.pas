@@ -284,9 +284,11 @@ type
   TCustomObjectOrderedCollection = class(TEnhancedOrderedCollection)
   private
     FScreenObject: TObject;
-  protected
-    property ScreenObject: TObject read FScreenObject;
   public
+    // @name is the @link(TScreenObject) for this boundary.
+    // @name provides access to @link(TCustomModflowBoundaryItem) representing
+    // the boundary conditions for different time periods.
+    property ScreenObject: TObject read FScreenObject;
     constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel;
       AScreenObject: TObject);
   end;

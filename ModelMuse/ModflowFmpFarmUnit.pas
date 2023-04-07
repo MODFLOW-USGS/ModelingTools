@@ -6,7 +6,7 @@ uses
   Classes, ModflowBoundaryUnit,
   OrderedCollectionUnit, GoPhastTypes, ModflowDrtUnit, ModflowCellUnit,
   Generics.Collections, ModflowFmpBaseClasses, RealListUnit,
-  ModflowFmpAllotmentUnit;
+  ModflowFmpAllotmentUnit, System.SysUtils;
 
 type
   // FMP data sets 19 or 32.
@@ -528,6 +528,7 @@ type
     FMultiSrd: TMultiSrdCollection;
     FMultiSrReturns: TMultiSrdCollection;
     FSWAllotment: TAllotmentCollection;
+    FFarmGUID: string;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -562,6 +563,7 @@ type
     procedure SetMultiSrd(const Value: TMultiSrdCollection);
     procedure SetMultiSrReturns(const Value: TMultiSrdCollection);
     procedure SetSWAllotment(const Value: TAllotmentCollection);
+    procedure SetFarmGUID(const Value: string);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -575,6 +577,11 @@ type
       read GetCurrentFarmEfficiencyCollection
       write SetCurrentFarmEfficiencyCollection;
   published
+    property FarmGUID: string read FFarmGUID write SetFarmGUID
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
     // FID, FMP Data set 6.
     property FarmId: Integer read FFarmId write SetFarmId;
     // FMP Data sets 7 or 27.
@@ -1458,6 +1465,8 @@ begin
     MultiSrReturns := SourceFarm.MultiSrReturns;
     SWAllotment := SourceFarm.SWAllotment;
 
+    FarmGUID := SourceFarm.FarmGUID;
+
   end
   else
   begin
@@ -1484,8 +1493,13 @@ constructor TFarm.Create(Collection: TCollection);
 var
   LocalModel: TBaseModel;
   InvalidateEvent: TNotifyEvent;
+  NewGUID: TGUID;
 begin
   inherited Create(Collection);
+  if CreateGUID(NewGUID) = 0 then
+  begin
+    FarmGUID := GUIDToString(NewGUID);
+  end;
   LocalModel := Model;
   if LocalModel = nil then
   begin
@@ -1668,6 +1682,11 @@ procedure TFarm.SetFarmEfficiencyCollection(
   const Value: TFarmEfficiencyCollection);
 begin
   FFarmEfficiencyCollection.Assign(Value);
+end;
+
+procedure TFarm.SetFarmGUID(const Value: string);
+begin
+  FFarmGUID := Value;
 end;
 
 procedure TFarm.SetFarmId(const Value: Integer);
