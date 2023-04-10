@@ -410,6 +410,7 @@ type
     destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure Assign(Source: TPersistent); override;
+    function GetItemByFarmGUID(FarmGUID: string): TAddedDemandFarmItem;
   published
     property AddedDemandValues: TAddedDemandFarmCollection
       read FAddedDemandValues write SetAddedDemandValues;
@@ -467,6 +468,8 @@ type
     FSWLossFractionPrecipCollection: TOwhmCollection;
     FPondDepthCollection: TOwhmCollection;
     FAddedDemandCollection: TAddedDemandCollection;
+    FConvertToBareSoilCollection: TBoolFarmCollection;
+    FUseEvapFractionCorrectionCollection: TBoolFarmCollection;
     procedure SetRootPressureCollection(const Value: TRootPressureCollection);
     procedure SetGroundwaterRootInteraction(
       const Value: TGroundwaterRootInteraction);
@@ -474,6 +477,8 @@ type
     procedure SetSWLossFractionPrecipCollection(const Value: TOwhmCollection);
     procedure SetPondDepthCollection(const Value: TOwhmCollection);
     procedure SetAddedDemandCollection(const Value: TAddedDemandCollection);
+    procedure SetConvertToBareSoilCollection(const Value: TBoolFarmCollection);
+    procedure SetUseEvapFractionCorrectionCollection(const Value: TBoolFarmCollection);
     const
     PSI1Position = 0;
     PSI2Position = 1;
@@ -731,9 +736,26 @@ type
       stored False
     {$ENDIF}
     ;
-    property AddedDemandCollection: TAddedDemandCollection read FAddedDemandCollection
-      write SetAddedDemandCollection
+    property AddedDemandCollection: TAddedDemandCollection
+      read FAddedDemandCollection write SetAddedDemandCollection
+    {$IFNDEF OWHMV2}
       stored False
+    {$ENDIF}
+    ;
+    // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
+    property ConvertToBareSoilCollection: TBoolFarmCollection
+      read FConvertToBareSoilCollection write SetConvertToBareSoilCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
+    //EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
+    property UseEvapFractionCorrectionCollection: TBoolFarmCollection
+      read FUseEvapFractionCorrectionCollection
+      write SetUseEvapFractionCorrectionCollection
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
     ;
   end;
 
@@ -802,6 +824,9 @@ resourcestring
   StrSurfaceWaterLossF = 'Surface Water Loss Fraction Precipitation';
   StrPondDepth = 'Pond Depth';
   StrAddedDemand = 'Added Demand';
+  StrZeroConsumptiveUse = 'Zero Consumptive Use Becomes Bare Soil';
+  StrEvaporationIrrigatiCorrection = 'Evaporation Irrigation Fraction Sum On' +
+  'e Correction';
 
 resourcestring
   IDError = 'Time: %g.';
@@ -1716,6 +1741,8 @@ begin
     CropFunctionCollection := SourceItem.CropFunctionCollection;
     PondDepthCollection := SourceItem.PondDepthCollection;
     AddedDemandCollection := SourceItem.AddedDemandCollection;
+    ConvertToBareSoilCollection := SourceItem.ConvertToBareSoilCollection;
+    UseEvapFractionCorrectionCollection := SourceItem.UseEvapFractionCorrectionCollection;
 
     IrrigationCollection := SourceItem.IrrigationCollection;
     LandUseFractionCollection := SourceItem.LandUseFractionCollection;
@@ -1793,7 +1820,10 @@ begin
   FPondDepthCollection := TOwhmCollection.Create(Model);
   FPondDepthCollection.OwhmNames.Add(StrPondDepth);
   FAddedDemandCollection := TAddedDemandCollection.Create(Model);
-
+  FConvertToBareSoilCollection := TBoolFarmCollection.Create(Model);
+  FConvertToBareSoilCollection.OwhmNames.Add(StrZeroConsumptiveUse);
+  FUseEvapFractionCorrectionCollection := TBoolFarmCollection.Create(Model);
+  FUseEvapFractionCorrectionCollection.OwhmNames.Add(StrEvaporationIrrigatiCorrection);
 end;
 
 destructor TCropItem.Destroy;
@@ -1874,6 +1904,8 @@ begin
     end;
   end;
 
+  FUseEvapFractionCorrectionCollection.Free;
+  FConvertToBareSoilCollection.Free;
   FAddedDemandCollection.Free;
   FPondDepthCollection.Free;
   FSWLossFractionPrecipCollection.Free;
@@ -1950,7 +1982,8 @@ begin
       and SWLossFractionPrecipCollection.IsSame(OtherItem.SWLossFractionPrecipCollection)
       and PondDepthCollection.IsSame(OtherItem.PondDepthCollection)
       and AddedDemandCollection.IsSame(OtherItem.AddedDemandCollection)
-
+      and ConvertToBareSoilCollection.IsSame(OtherItem.ConvertToBareSoilCollection)
+      and UseEvapFractionCorrectionCollection.IsSame(OtherItem.UseEvapFractionCorrectionCollection)
 
       and (LandUseAreaFractionDataArrayName = OtherItem.LandUseAreaFractionDataArrayName)
       and (CropCoefficientDataArrayName = OtherItem.CropCoefficientDataArrayName)
@@ -2052,6 +2085,11 @@ begin
   end;
 
   SetCaseSensitiveStringProperty(FConsumptiveUseDataArrayName, NewName);
+end;
+
+procedure TCropItem.SetConvertToBareSoilCollection(const Value: TBoolFarmCollection);
+begin
+  FConvertToBareSoilCollection.Assign(Value);
 end;
 
 procedure TCropItem.SetCropCoefficientCollection(const Value: TOwhmCollection);
@@ -2713,6 +2751,12 @@ begin
   SetCaseSensitiveStringProperty(FTranspirationFractionDataArrayName, NewName);
 end;
 
+procedure TCropItem.SetUseEvapFractionCorrectionCollection(
+  const Value: TBoolFarmCollection);
+begin
+  FUseEvapFractionCorrectionCollection.Assign(Value);
+end;
+
 procedure TCropItem.UpdateAllDataArrays;
 begin
   if (Collection as TCropCollection).Model <> nil then
@@ -2838,8 +2882,12 @@ begin
     StartRangeExtended, EndRangeExtended);
   PondDepthCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
-//  AddedDemandCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
-//    StartRangeExtended, EndRangeExtended);
+  AddedDemandCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  ConvertToBareSoilCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  UseEvapFractionCorrectionCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
 end;
 
 { TCropCollection }
@@ -3710,6 +3758,24 @@ destructor TAddedDemandItem.Destroy;
 begin
   FAddedDemandValues.Free;
   inherited;
+end;
+
+function TAddedDemandItem.GetItemByFarmGUID(
+  FarmGUID: string): TAddedDemandFarmItem;
+var
+  FormulaIndex: Integer;
+  AnItem: TAddedDemandFarmItem;
+begin
+  result := nil;
+  for FormulaIndex := 0 to FAddedDemandValues.Count - 1 do
+  begin
+    AnItem := FAddedDemandValues[FormulaIndex];
+    if AnItem.FarmGuid = FarmGUID then
+    begin
+      result := AnItem;
+      Exit;
+    end;
+  end;
 end;
 
 function TAddedDemandItem.IsSame(AnotherItem: TOrderedItem): boolean;

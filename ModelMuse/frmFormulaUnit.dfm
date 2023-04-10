@@ -541,7 +541,7 @@ inherited frmFormula: TfrmFormula
       769
       41)
     object btnCancel: TBitBtn
-      Left = 657
+      Left = 653
       Top = 6
       Width = 91
       Height = 33
@@ -549,10 +549,10 @@ inherited frmFormula: TfrmFormula
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 653
+      ExplicitLeft = 649
     end
     object btnOK: TBitBtn
-      Left = 560
+      Left = 556
       Top = 6
       Width = 91
       Height = 33
@@ -561,10 +561,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 556
+      ExplicitLeft = 552
     end
     object btnHelp: TBitBtn
-      Left = 465
+      Left = 461
       Top = 4
       Width = 91
       Height = 33
@@ -573,10 +573,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 461
+      ExplicitLeft = 457
     end
     object btnFunctionHelp: TBitBtn
-      Left = 295
+      Left = 291
       Top = 4
       Width = 163
       Height = 33
@@ -605,7 +605,7 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnFunctionHelpClick
-      ExplicitLeft = 291
+      ExplicitLeft = 287
     end
   end
   object pnlRight: TPanel

@@ -25,7 +25,8 @@ type
     wlWaterSource, wlAddedCropDemandFlux, wlAddedCropDemandRate,
     wlPrecipicationTable, wlSoilCoefficient, wlNoReturnFlow,
     wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit, wlSwAllotment,
-    wlGwAllotment, wlRootPressure, wlPondDepth);
+    wlGwAllotment, wlRootPressure, wlPondDepth, wlNoCropMeansBareSoil,
+    wlNoEvapErrCorrection);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -155,6 +156,8 @@ type
     FFarmWells4: TFarmProcess4Wells;
     FRootPressureFileStream: TFileStream;
     FPondDepthFileStream: TFileStream;
+    FConvertToBareFileStream: TFileStream;
+    FSumOneCorrectionFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -327,12 +330,16 @@ type
 
     // ADDED_DEMAND
     procedure EvaluateAddedDemand;
-    procedure WriteAddedDemand; // finish list
+    procedure WriteAddedDemand;
 
     // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
-    procedure WriteZeroConsumptiveUseBecomesBareSoil; // finish
+    function GetZeroConsumptiveUseBecomesBareSoilCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteZeroConsumptiveUseBecomesBareSoil;
+
     // EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
+    function GetEvapIrrigateFracSumOneCorrectionCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteEvapIrrigateFracSumOneCorrection; // finish
+
     //  CROPS_THAT_SPECIFY_SURFACE_ELEVATION
     procedure WriteCropsThatSpecifySurfaceElevation; // should this be done?
     //  CROP_SURFACE_ELEVATION
@@ -493,6 +500,10 @@ resourcestring
   ' formula in ';
   StrInvalidPondDepthF = 'Invalid pond depth formula in ';
   StrInvalidAddedDemand = 'Invalid added demand formula in ';
+  StrInvalidZeroConsump = 'Invalid Zero consumptive use becomes bare soil fo' +
+  'rmula in ';
+  StrInvalidEvaporation = 'Invalid Evaporation Irrigation Fraction Sum One C' +
+  'orrection formula in ';
 
 { TModflowFmp4Writer }
 
@@ -1191,7 +1202,8 @@ begin
   FreeAndNil(FGroundWaterAllotmentFileStream);
   FreeAndNil(FRootPressureFileStream);
   FreeAndNil(FPondDepthFileStream);
-
+  FreeAndNil(FConvertToBareFileStream);
+  FreeAndNil(FSumOneCorrectionFileStream);
 end;
 
 //function TModflowFmp4Writer.GetAddedDemandCollection(
@@ -1216,6 +1228,12 @@ function TModflowFmp4Writer.GetCropCoefficentCollection(
   Crop: TCropItem): TOwhmCollection;
 begin
   result := Crop.CropCoefficientCollection;
+end;
+
+function TModflowFmp4Writer.GetEvapIrrigateFracSumOneCorrectionCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.UseEvapFractionCorrectionCollection;
 end;
 
 function TModflowFmp4Writer.GetFileStreamName(WriteLocation: TWriteLocation): string;
@@ -1656,6 +1674,24 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlNoCropMeansBareSoil:
+      begin
+        result := ChangeFileExt(FBaseName, '.zero_consumptive_use_becomes_bare_soil');
+        if FConvertToBareFileStream = nil then
+        begin
+          FConvertToBareFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlNoEvapErrCorrection:
+      begin
+        result := ChangeFileExt(FBaseName, '.evaporation_irrigation_fraction_sum_one_correction');
+        if FSumOneCorrectionFileStream = nil then
+        begin
+          FSumOneCorrectionFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
   if result <> '' then
@@ -1838,6 +1874,8 @@ begin
     wlGwAllotment: ;
     wlRootPressure: ;
     wlPondDepth: ;
+    wlNoCropMeansBareSoil: ;
+    wlNoEvapErrCorrection: ;
     else Assert(False);
   end;
 end;
@@ -1902,6 +1940,8 @@ begin
     wlGwAllotment: ;
     wlRootPressure: ;
     wlPondDepth: ;
+    wlNoCropMeansBareSoil: ;
+    wlNoEvapErrCorrection: ;
     else Assert(False)
   end;
 end;
@@ -1910,6 +1950,12 @@ function TModflowFmp4Writer.GetTranspirationFractionCollection(
   Crop: TCropItem): TOwhmCollection;
 begin
   result := Crop.TranspirationFractionCollection;
+end;
+
+function TModflowFmp4Writer.GetZeroConsumptiveUseBecomesBareSoilCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.ConvertToBareSoilCollection;
 end;
 
 function TModflowFmp4Writer.Package: TModflowPackageSelection;
@@ -2027,8 +2073,16 @@ var
     if OwhmItem <> nil then
     begin
       Formula := OwhmItem.OwhmValue;
-      WriteFloatValueFromGlobalFormula(Formula, Crop,
-        ErrorMessage + Crop.CropName);
+      if OwhmItem is TBoolFarmItem then
+      begin
+        WriteBooleanValueFromGlobalFormula(Formula, Crop,
+          ErrorMessage + Crop.CropName);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(Formula, Crop,
+          ErrorMessage + Crop.CropName);
+      end;
     end
     else
     begin
@@ -4329,6 +4383,54 @@ var
   RequiredValues: TRequiredValues;
   DataArrayNames: TStringList;
   CropIndex: Integer;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  TimeIndex: Integer;
+  StartTime: Double;
+  ACrop: TCropItem;
+  AddedDemandItem: TAddedDemandItem;
+  procedure WriteAddedDemandItem(ACrop: TCropItem; AddedDemandItem: TAddedDemandItem);
+  var
+    FarmIndex: Integer;
+    AFarm: TFarm;
+    FarmItem: TAddedDemandFarmItem;
+    FarmID: Integer;
+    InnerFarmIndex: Integer;
+    Formula: string;
+  begin
+    FarmID := 1;
+    for FarmIndex := 0 to Model.Farms.Count - 1 do
+    begin
+      AFarm := Model.Farms[FarmIndex];
+      for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+      begin
+        WriteInteger(0);
+        Inc(FarmID);
+      end;
+      if AddedDemandItem = nil then
+      begin
+          WriteInteger(0);
+      end
+      else
+      begin
+        FarmItem := AddedDemandItem.GetItemByFarmGUID(AFarm.FarmGUID);
+        if FarmItem  = nil then
+        begin
+          WriteInteger(0);
+        end
+        else
+        begin
+          Formula := FarmItem.Value;
+          WriteFloatValueFromGlobalFormula(Formula, ACrop,
+            Format('Invalid Added Demand formula for %0:s for Farm %1:s.',
+            [ACrop.CropName, AFarm.FarmName]));
+        end;
+      end;
+      Inc(FarmID);
+    end;
+    NewLine;
+  end;
 begin
   if FLandUse.AddedDemand.FarmOption = foNotUsed then
   begin
@@ -4397,7 +4499,72 @@ begin
   end
   else
   begin
-    Assert(False);
+    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+      ExternalFileName, ExternalScaleFileName);
+    WriteScaleFactorsID_andOption(RequiredValues,
+      UnitConversionScaleFactor, ExternalScaleFileName);
+
+    if RequiredValues.WriteTransientData then
+    begin
+      WriteString('TRANSIENT LIST DATAFILE ');
+    end
+    else
+    begin
+      WriteString('STATIC LIST DATAFILE ');
+    end;
+
+    if ExternalFileName <> '' then
+    begin
+      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+      NewLine;
+      Exit;
+    end
+    else
+    begin
+      WriteString(ExtractFileName(AFileName));
+      NewLine;
+      try
+        FWriteLocation := RequiredValues.WriteLocation;
+
+        if RequiredValues.WriteTransientData then
+        begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+            begin
+              ACrop := Model.FmpCrops[CropIndex];
+              WriteInteger(CropIndex+1);
+              AddedDemandItem := ACrop.AddedDemandCollection.
+                ItemByStartTime(StartTime) as TAddedDemandItem;
+              WriteAddedDemandItem(ACrop, AddedDemandItem);
+            end;
+          end;
+        end
+        else
+        begin
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            ACrop := Model.FmpCrops[CropIndex];
+            WriteInteger(CropIndex + 1);
+            if ACrop.AddedDemandCollection.Count > 0 then
+            begin
+              AddedDemandItem := ACrop.AddedDemandCollection.First as TAddedDemandItem;
+            end
+            else
+            begin
+              AddedDemandItem := nil;
+            end;
+            WriteAddedDemandItem(ACrop, AddedDemandItem);
+          end;
+        end;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
   end;
 end;
 
@@ -5725,7 +5892,38 @@ begin
 end;
 
 procedure TModflowFmp4Writer.WriteEvapIrrigateFracSumOneCorrection;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
 begin
+  if FLandUse.ET_IrrigFracCorrection.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlNoEvapErrCorrection;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION';
+  RequiredValues.ErrorID := 'FMP LAND_USE: EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION';
+  RequiredValues.ID := 'EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FLandUse.ET_IrrigFracCorrection.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.ET_IrrigFracCorrection;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlNoEvapErrCorrection);
+  end;
+
+  WriteOwhmList(RequiredValues, AFileName, GetEvapIrrigateFracSumOneCorrectionCollection,
+    StrInvalidEvaporation);
 
 end;
 
@@ -5834,7 +6032,6 @@ begin
       ExternalFileName, ExternalScaleFileName);
     WriteScaleFactorsID_andOption(RequiredValues,
       UnitConversionScaleFactor, ExternalScaleFileName);
-//    WriteString(RequiredValues.Option);
 
     if RequiredValues.WriteTransientData then
     begin
@@ -7986,13 +8183,12 @@ procedure TModflowFmp4Writer.WriteRootPressure;
 var
   AFileName: string;
   RequiredValues: TRequiredValues;
-  DataArrayNames: TStringList;
-  CropIndex: Integer;
 var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  procedure WriteRootPressureItem(Crop: TCropItem; RootPressureItem: TRootPressureItem);
+  procedure WriteRootPressureItem(Crop: TCropItem;
+    RootPressureItem: TRootPressureItem);
   var
     Formula: string;
   begin
@@ -8135,10 +8331,22 @@ begin
     NewLine;
 
     WriteSalinityFlushPrintOptions;
+
+    // EXPRESSION_LINE_LENGTH
+
     WriteExpressionVariableNearZero;
+
+    // WBS_SUPPLY_SALT_CONCENTRATION
 
     WriteIrrigationUniformity;
     WriteCropHasSalinityDemand;
+
+
+//   CROP_SALINITY_TOLERANCE
+//   CROP_MAX_LEACHING_REQUIREMENT
+//   CROP_LEACHING_REQUIREMENT
+//   CROP_SALINITY_APPLIED_WATER
+
 
     WriteString('END SALINITY_FLUSH_IRRIGATION');
     NewLine;
@@ -8599,6 +8807,16 @@ begin
         begin
           Assert(FPondDepthFileStream <> nil);
           FPondDepthFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlNoCropMeansBareSoil:
+        begin
+          Assert(FConvertToBareFileStream <> nil);
+          FConvertToBareFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlNoEvapErrCorrection:
+        begin
+          Assert(FSumOneCorrectionFileStream <> nil);
+          FSumOneCorrectionFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);
@@ -9190,7 +9408,38 @@ begin
 end;
 
 procedure TModflowFmp4Writer.WriteZeroConsumptiveUseBecomesBareSoil;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
 begin
+  if FLandUse.NoCropUseMeansBareSoil.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlNoCropMeansBareSoil;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL';
+  RequiredValues.ID := 'ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FLandUse.NoCropUseMeansBareSoil.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FLandUse.NoCropUseMeansBareSoil;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlNoCropMeansBareSoil);
+  end;
+
+  WriteOwhmList(RequiredValues, AFileName, GetZeroConsumptiveUseBecomesBareSoilCollection,
+    StrInvalidZeroConsump);
 
 end;
 

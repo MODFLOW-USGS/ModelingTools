@@ -24,6 +24,8 @@ type
     procedure Assign(Source: TPersistent); override;
   end;
 
+  // descendents need to override BoundaryFormulaCount
+  // and specify the properties
   TCustomDefaultFormulaItem = class(TCustomFarmItem)
   protected
     class function DefaultFormula: string; virtual;
@@ -38,10 +40,6 @@ type
   TCustomFarmCollection = class(TCustomNonSpatialBoundColl)
   public
     constructor Create(Model: TBaseModel); reintroduce; virtual;
-    function ItemByStartTime(ATime: Double): TCustomBoundaryItem;
-    procedure UpdateTimes(Times: TRealList;
-      StartTestTime, EndTestTime: double;
-      var StartRangeExtended, EndRangeExtended: boolean);
   end;
 
   // @name is used to define list properties for MODFLOW OWHM version 2.
@@ -49,16 +47,11 @@ type
   private
   const
     OwhmValuePosition = 0;
-    function GetOwhmValue: string;
-    procedure SetOwhmValue(const Value: string);
   protected
-    // See @link(BoundaryFormula).
-    function GetBoundaryFormula(Index: integer): string; override;
-    // See @link(BoundaryFormula).
-    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
     function BoundaryFormulaCount: integer; override;
   published
-    property OwhmValue: string read GetOwhmValue write SetOwhmValue;
+    property OwhmValue: string index OwhmValuePosition read GetBoundaryFormula
+      write SetBoundaryFormula;
   end;
 
   // @name is used to define list properties for MODFLOW OWHM version 2.
@@ -85,6 +78,16 @@ type
     class function DefaultFormula: string; override;
   end;
 
+  TBoolFarmItem = class(TOwhmItem)
+  protected
+    class function DefaultFormula: string; override;
+  published
+  end;
+
+  TBoolFarmCollection = class(TOwhmCollection)
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  end;
 
 implementation
 
@@ -199,114 +202,11 @@ constructor TCustomFarmCollection.Create(Model: TBaseModel);
 begin
   inherited Create(nil, Model, nil);
 end;
-
-function TCustomFarmCollection.ItemByStartTime(
-  ATime: Double): TCustomBoundaryItem;
-var
-  TimeIndex: Integer;
-  AnItem: TCustomBoundaryItem;
-begin
-  result := nil;
-  for TimeIndex := 0 to Count - 1 do
-  begin
-    AnItem := Items[TimeIndex];
-    if AnItem.StartTime <= ATime then
-    begin
-      result := AnItem;
-
-      if AnItem is TCustomModflowBoundaryItem then
-      begin
-        if TCustomModflowBoundaryItem(AnItem).EndTime > ATime then
-        begin
-          Break;
-        end;
-      end;
-    end;
-  end;
-end;
-
-procedure TCustomFarmCollection.UpdateTimes(Times: TRealList;
-  StartTestTime, EndTestTime: double; var StartRangeExtended,
-  EndRangeExtended: boolean);
-var
-  BoundaryIndex: Integer;
-  Boundary: TCustomModflowBoundaryItem;
-  ClosestIndex: Integer;
-  ExistingTime: Double;
-  SP_Epsilon: Extended;
-begin
-  SP_Epsilon := (Model as TCustomModel).SP_Epsilon;
-  for BoundaryIndex := 0 to Count - 1 do
-  begin
-    Boundary := Items[BoundaryIndex] as TCustomModflowBoundaryItem;
-    ClosestIndex := Times.IndexOfClosest(Boundary.StartTime);
-    if ClosestIndex >= 0 then
-    begin
-      ExistingTime := Times[ClosestIndex];
-      if Abs(ExistingTime-Boundary.StartTime) >  SP_Epsilon then
-      begin
-        Times.AddUnique(Boundary.StartTime);
-      end;
-    end;
-    ClosestIndex := Times.IndexOfClosest(Boundary.EndTime);
-    if ClosestIndex >= 0 then
-    begin
-      ExistingTime := Times[ClosestIndex];
-      if Abs(ExistingTime-Boundary.EndTime) >  SP_Epsilon then
-      begin
-        Times.AddUnique(Boundary.EndTime);
-      end;
-    end;
-    if (Boundary.StartTime < StartTestTime-SP_Epsilon) then
-    begin
-      StartRangeExtended := True;
-    end;
-    if (Boundary.EndTime > EndTestTime+SP_Epsilon) then
-    begin
-      EndRangeExtended := True;
-    end;
-  end;
-end;
-
 { TOwhmItem }
 
 function TOwhmItem.BoundaryFormulaCount: integer;
 begin
   result := 1;
-end;
-
-function TOwhmItem.GetBoundaryFormula(Index: integer): string;
-begin
-  case Index of
-    OwhmValuePosition:
-      result := OwhmValue;
-    else
-      Assert(False);
-  end;
-end;
-
-function TOwhmItem.GetOwhmValue: string;
-begin
-  Result := FFormulaObjects[OwhmValuePosition].Formula;
-  ResetItemObserver(OwhmValuePosition);
-end;
-
-procedure TOwhmItem.SetBoundaryFormula(Index: integer; const Value: string);
-begin
-  case Index of
-    OwhmValuePosition:
-      OwhmValue := Value;
-    else
-      Assert(False);
-  end;
-end;
-
-procedure TOwhmItem.SetOwhmValue(const Value: string);
-begin
-  if FFormulaObjects[OwhmValuePosition].Formula <> Value then
-  begin
-    UpdateFormulaBlocks(Value, OwhmValuePosition, FFormulaObjects[OwhmValuePosition]);
-  end;
 end;
 
 { TOwhmCollection }
@@ -389,6 +289,20 @@ end;
 class function TCustomOneFarmItem.DefaultFormula: string;
 begin
   result := '1';
+end;
+
+{ TBoolFarmItem }
+
+class function TBoolFarmItem.DefaultFormula: string;
+begin
+  result := 'False';
+end;
+
+{ TBoolFarmCollection }
+
+class function TBoolFarmCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TBoolFarmItem;
 end;
 
 end.

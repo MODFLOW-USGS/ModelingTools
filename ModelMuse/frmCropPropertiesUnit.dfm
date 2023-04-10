@@ -41,7 +41,7 @@ inherited frmCropProperties: TfrmCropProperties
     Top = 0
     Width = 509
     Height = 477
-    ActivePage = jvspGwRootInteraction
+    ActivePage = jvspOwhmCollection
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -491,13 +491,13 @@ inherited frmCropProperties: TfrmCropProperties
         end
       end
     end
-    object jvspLandUseFraction: TJvStandardPage
+    object jvspOwhmCollection: TJvStandardPage
       Left = 0
       Top = 0
       Width = 509
       Height = 477
-      Caption = 'jvspLandUseFraction'
-      inline frameLandUseFraction: TframeFormulaGrid
+      Caption = 'jvspOwhmCollection'
+      inline frameOwhmCollection: TframeFormulaGrid
         Left = 0
         Top = 0
         Width = 509
@@ -767,6 +767,69 @@ inherited frmCropProperties: TfrmCropProperties
         ExplicitLeft = -4
         ExplicitTop = 129
         ExplicitHeight = 348
+      end
+    end
+    object jvspAddedDemand: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 509
+      Height = 477
+      Caption = 'jvspAddedDemand'
+      ExplicitLeft = 6
+      inline frameAddedDemand: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 509
+        Height = 477
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 24
+        ExplicitTop = 32
+        inherited Panel: TPanel
+          Top = 436
+          Width = 509
+          inherited lbNumber: TLabel
+            Width = 55
+            Height = 18
+            ExplicitWidth = 55
+            ExplicitHeight = 18
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 265
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 314
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 362
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 26
+            ExplicitHeight = 26
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 509
+          Height = 379
+          OnButtonClick = GridButtonClick
+          OnEndUpdate = frameAddedDemandGridEndUpdate
+        end
+        inherited pnlTop: TPanel
+          Width = 509
+          inherited edFormula: TLabeledEdit
+            Height = 26
+            EditLabel.Width = 57
+            EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 9
+            EditLabel.ExplicitHeight = 18
+            ExplicitHeight = 26
+          end
+          inherited comboChoice: TComboBox
+            Height = 26
+            ExplicitHeight = 26
+          end
+        end
       end
     end
   end

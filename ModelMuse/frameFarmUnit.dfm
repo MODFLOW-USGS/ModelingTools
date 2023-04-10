@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabSwAllotment
+    ActivePage = tabWaterSupplyConcentration
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1372,14 +1372,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited comboPositionChoice: TComboBox
-            Height = 24
-            ExplicitHeight = 24
-          end
-          inherited rdeVertexNumber: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeX: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1397,6 +1389,14 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited comboSfrObjects: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited comboPositionChoice: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeVertexNumber: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -1523,14 +1523,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited comboPositionChoice: TComboBox
-            Height = 24
-            ExplicitHeight = 24
-          end
-          inherited rdeVertexNumber: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeX: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1548,6 +1540,14 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited comboSfrObjects: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited comboPositionChoice: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeVertexNumber: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -2022,7 +2022,6 @@ inherited frameFarm: TframeFarm
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitTop = 58
           ExplicitWidth = 577
           ExplicitHeight = 233
         end
@@ -2185,6 +2184,210 @@ inherited frameFarm: TframeFarm
             EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
             OnChange = frameSwAllotmentedFormulaChange
+            ExplicitHeight = 24
+          end
+          inherited comboChoice: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+        end
+      end
+    end
+    object tabWaterSupplyConcentration: TTabSheet
+      Caption = 'Water Supply Concentration'
+      ImageIndex = 19
+      inline frameWaterSupplyConcentration: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 332
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 80
+        ExplicitTop = 16
+        inherited Panel: TPanel
+          Top = 291
+          Width = 577
+          inherited lbNumber: TLabel
+            Width = 45
+            Height = 16
+            ExplicitWidth = 45
+            ExplicitHeight = 16
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 301
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 357
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 412
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 24
+            ExplicitHeight = 24
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 577
+          Height = 234
+          ColCount = 6
+          Columns = <
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4Real
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4Real
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
+        end
+        inherited pnlTop: TPanel
+          Width = 577
+          inherited edFormula: TLabeledEdit
+            Height = 24
+            EditLabel.Width = 47
+            EditLabel.Height = 16
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 11
+            EditLabel.ExplicitWidth = 47
+            EditLabel.ExplicitHeight = 16
             ExplicitHeight = 24
           end
           inherited comboChoice: TComboBox
@@ -2485,11 +2688,11 @@ inherited frameFarm: TframeFarm
                 Height = 16
                 ExplicitHeight = 16
               end
-              inherited comboPositionChoice: TComboBox
+              inherited comboSfrObjects: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end
-              inherited comboSfrObjects: TComboBox
+              inherited comboPositionChoice: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end
@@ -2674,11 +2877,11 @@ inherited frameFarm: TframeFarm
                 Height = 16
                 ExplicitHeight = 16
               end
-              inherited comboPositionChoice: TComboBox
+              inherited comboSfrObjects: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end
-              inherited comboSfrObjects: TComboBox
+              inherited comboPositionChoice: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end

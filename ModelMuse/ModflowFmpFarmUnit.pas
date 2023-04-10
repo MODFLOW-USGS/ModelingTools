@@ -497,12 +497,32 @@ type
   TNoReturnCollection = class(TCustomFarmCollection)
   protected
     class function ItemClass: TBoundaryItemClass; override;
-//  public
-//    constructor Create(Model: TBaseModel);
   end;
 
-//  TPhastCollectionItem      constructor Create(ItemClass: TCollectionItemClass; InvalidateModelEvent: TNotifyEvent);
-//TPhastCollection
+  TSaltSupplyConcentrationItem = class(TCustomDefaultFormulaItem)
+  private
+    const
+    NonRoutedPosition = 0;
+    SurfaceWaterPosition  = 1;
+    GroundWaterPosiiton = 2;
+    ExternalPosition = 3;
+  protected
+    function BoundaryFormulaCount: integer; override;
+  published
+    property NonRoutedConcentration: string index NonRoutedPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
+    property SurfaceWaterConcentration: string index SurfaceWaterPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
+    property GroundwaterConcentration: string index GroundWaterPosiiton
+      read GetBoundaryFormula write SetBoundaryFormula;
+    property ExternalConcentration: string index ExternalPosition
+      read GetBoundaryFormula write SetBoundaryFormula;
+  end;
+
+  TSaltSupplyConcentrationCollection = class(TCustomFarmCollection)
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  end;
 
   TFarm = class(TOrderedItem)
   private
@@ -529,6 +549,7 @@ type
     FMultiSrReturns: TMultiSrdCollection;
     FSWAllotment: TAllotmentCollection;
     FFarmGUID: string;
+    FSaltSupplyConcentrationCollection: TSaltSupplyConcentrationCollection;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -564,6 +585,8 @@ type
     procedure SetMultiSrReturns(const Value: TMultiSrdCollection);
     procedure SetSWAllotment(const Value: TAllotmentCollection);
     procedure SetFarmGUID(const Value: string);
+    procedure SetSaltSupplyConcentrationCollection(
+      const Value: TSaltSupplyConcentrationCollection);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -692,6 +715,13 @@ type
       // SURFACE_WATER in ALLOCATIONS
     property SWAllotment: TAllotmentCollection read FSWAllotment
       write SetSWAllotment
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+      property SaltSupplyConcentrationCollection: TSaltSupplyConcentrationCollection
+        read FSaltSupplyConcentrationCollection
+        write SetSaltSupplyConcentrationCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -1464,6 +1494,7 @@ begin
     MultiSrDeliveries := SourceFarm.MultiSrDeliveries;
     MultiSrReturns := SourceFarm.MultiSrReturns;
     SWAllotment := SourceFarm.SWAllotment;
+    SaltSupplyConcentrationCollection := SourceFarm.SaltSupplyConcentrationCollection;
 
     FarmGUID := SourceFarm.FarmGUID;
 
@@ -1530,10 +1561,12 @@ begin
   FMultiSrd := TMultiSrdCollection.Create(LocalModel);
   FMultiSrReturns := TMultiSrdCollection.Create(LocalModel);
   FSWAllotment := TAllotmentCollection.Create(LocalModel);
+  FSaltSupplyConcentrationCollection := TSaltSupplyConcentrationCollection.Create(LocalModel);
 end;
 
 destructor TFarm.Destroy;
 begin
+  FSaltSupplyConcentrationCollection.Free;
   FSWAllotment.Free;
   FMultiSrReturns.Free;
   FMultiSrd.Free;
@@ -1617,6 +1650,8 @@ begin
       and MultiSrDeliveries.IsSame(SourceFarm.MultiSrDeliveries)
       and MultiSrReturns.IsSame(SourceFarm.MultiSrReturns)
       and SWAllotment.IsSame(SourceFarm.SWAllotment)
+      and SaltSupplyConcentrationCollection.IsSame(
+        SourceFarm.SaltSupplyConcentrationCollection)
 
   end;
 
@@ -1739,6 +1774,12 @@ end;
 procedure TFarm.SetNoReturnFlow(const Value: TNoReturnCollection);
 begin
   FNoReturnFlow.Assign(Value);
+end;
+
+procedure TFarm.SetSaltSupplyConcentrationCollection(
+  const Value: TSaltSupplyConcentrationCollection);
+begin
+  FSaltSupplyConcentrationCollection.Assign(Value);
 end;
 
 procedure TFarm.SetSemiRoutedDeliveries(
@@ -2633,6 +2674,20 @@ procedure TMultiSrdCollection.SetItem(Index: Integer;
   const Value: TMultiSrdItem);
 begin
   inherited Items[index] := Value;
+end;
+
+{ TSaltSupplyConcentrationItem }
+
+function TSaltSupplyConcentrationItem.BoundaryFormulaCount: integer;
+begin
+  result := 4;
+end;
+
+{ TSaltSupplyConcentrationCollection }
+
+class function TSaltSupplyConcentrationCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TSaltSupplyConcentrationItem;
 end;
 
 end.

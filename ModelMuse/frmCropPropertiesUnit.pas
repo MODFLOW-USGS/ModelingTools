@@ -49,12 +49,14 @@ type
     rbwprsrGlobal: TRbwParser;
     jvspIrrigation: TJvStandardPage;
     frameIrrigation: TframeFormulaGrid;
-    jvspLandUseFraction: TJvStandardPage;
-    frameLandUseFraction: TframeFormulaGrid;
+    jvspOwhmCollection: TJvStandardPage;
+    frameOwhmCollection: TframeFormulaGrid;
     jvspRootPressure: TJvStandardPage;
     frameRootPressure: TframeFormulaGrid;
     jvspGwRootInteraction: TJvStandardPage;
     rdgGwRootInteraction: TRbwDataGrid4;
+    jvspAddedDemand: TJvStandardPage;
+    frameAddedDemand: TframeFormulaGrid;
     procedure FormDestroy(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
     procedure jvpltvMainChange(Sender: TObject; Node: TTreeNode);
@@ -72,6 +74,7 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure chklstGwRootInteractionClickCheck(Sender: TObject);
     procedure chklstGwRootInteractionExit(Sender: TObject);
+    procedure frameAddedDemandGridEndUpdate(Sender: TObject);
     procedure frameCropNamesbAddClick(Sender: TObject);
     procedure frameCropNamesbInsertClick(Sender: TObject);
     procedure frameCropNamesbDeleteClick(Sender: TObject);
@@ -106,10 +109,11 @@ type
     FIrrigation: TIrrigationCollection;
     FFarmProcess4: TFarmProcess4;
     FFarmLandUse: TFarmProcess4LandUse;
-    FLandUseFraction: TOwhmCollection;
+    FOwhmCollection: TOwhmCollection;
     FRootPressure: TRootPressureCollection;
     FGroundwaterRootInteraction: TGroundwaterRootInteraction;
     FSettingGwInteraction: Boolean;
+    FAddedDemand: TAddedDemandCollection;
     procedure SetUpCropNameTable(Model: TCustomModel);
     procedure SetCropNameTableColumns(Model: TCustomModel);
     procedure GetCrops(CropCollection: TCropCollection);
@@ -123,13 +127,15 @@ type
     procedure GetCropWaterUseFunction(WaterUseCollection: TCropWaterUseCollection);
     procedure SetUpIrrigationTable(Model: TCustomModel);
     procedure GetIrrigation(Irrigation: TIrrigationCollection);
-    procedure SetUpLandUseFractionTable(Model: TCustomModel);
-    procedure GetLandUseFraction(LandUseFraction: TOwhmCollection);
+    procedure SetUpOwhmCollectionTable(Model: TCustomModel);
+    procedure GetOwhmCollection(OwhmCollection: TOwhmCollection);
     procedure SetUpRootPressureTable(Model: TCustomModel);
     procedure GetRootPressure(RootPressure: TRootPressureCollection);
     procedure SetUpGroundwaterRootInteractionTable(Model: TCustomModel);
     procedure GetGroundwaterRootInteraction(
       GroundwaterRootInteraction: TGroundwaterRootInteraction);
+    procedure SetUpAddedDemandTable(Model: TCustomModel);
+    procedure GetAddedDemand(AddedDemand: TAddedDemandCollection);
     procedure GetData;
     procedure SetGridColumnProperties(Grid: TRbwDataGrid4);
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
@@ -208,6 +214,11 @@ resourcestring
   StrRootPressure = 'Root Pressure';
   StrSurfaceWaterLossFPrecip = 'Surface Water Loss Fraction Precipitation';
   StrPondDepth = 'Pond Depth';
+  StrRootDepth = 'Root Depth';
+  StrAddedDemand = 'Added Demand';
+  StrZeroConsumptiveUse = 'Zero Consumptive Use Becomes Bare Soil';
+  StrEvaporationIrrigatiCorrection = 'Evaporation Irrigation Fraction Sum One Correcti' +
+  'on';
 
 type
   TNameCol = (ncID, ncName);
@@ -229,10 +240,49 @@ type
   TPsiColumns = (pcStart, pcEnd, pcPsi1, pcPsi2, pcPsi3, pcPsi4);
   TGwRootInteractionIndicies = (griHasTranspiration, griGroundwater,
     griAnoxia, griStress);
+  TAddedDemandColumns = (acStart, acEnd, acFormula);
 
 {$R *.dfm}
 
 { TfrmCropProperties }
+
+procedure TfrmCropProperties.SetUpAddedDemandTable(Model: TCustomModel);
+const
+  TimeColumnCount = 2;
+var
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  ACol: Integer;
+  LandUse: TFarmProcess4LandUse;
+begin
+  LandUse := Model.ModflowPackages.FarmLandUse;
+  frameAddedDemand.Grid.ColCount := Model.Farms.Count + TimeColumnCount;
+  frameAddedDemand.Grid.FixedCols := 0;
+  frameAddedDemand.Grid.Columns[Ord(acStart)].Format := rcf4Real;
+  frameAddedDemand.Grid.Columns[Ord(acEnd)].Format := rcf4Real;
+  frameAddedDemand.Grid.Cells[Ord(acStart), 0] := StrStartingTime;
+  frameAddedDemand.Grid.Cells[Ord(pcEnd), 0] := StrEndingTime;
+  for FarmIndex := 0 to Model.Farms.Count - 1 do
+  begin
+    AFarm := Model.Farms[FarmIndex];
+    ACol := FarmIndex + TimeColumnCount;
+    if LandUse.AddedDemandOption = doLength then
+    begin
+      frameAddedDemand.Grid.Cells[ACol, 0] := 'Added Demand  [L] ' + AFarm.FarmName;
+    end
+    else
+    begin
+      Assert(LandUse.AddedDemandOption = doRate);
+      frameAddedDemand.Grid.Cells[ACol, 0] := 'Added Demand  [L^3/T] ' + AFarm.FarmName;
+    end;
+    frameAddedDemand.Grid.Objects[ACol, 0] := AFarm;
+  end;
+
+  SetGridColumnProperties(frameAddedDemand.Grid);
+  SetUseButton(frameAddedDemand.Grid, Ord(pcPsi1));
+  frameAddedDemand.FirstFormulaColumn := 2;
+  frameAddedDemand.LayoutMultiRowEditControls;
+end;
 
 procedure TfrmCropProperties.SetUpCropFunctionTable(Model: TCustomModel);
 begin
@@ -380,21 +430,21 @@ begin
   frameIrrigation.LayoutMultiRowEditControls;
 end;
 
-procedure TfrmCropProperties.SetUpLandUseFractionTable(Model: TCustomModel);
+procedure TfrmCropProperties.SetUpOwhmCollectionTable(Model: TCustomModel);
 begin
 
-  frameLandUseFraction.Grid.ColCount := 3;
-  frameLandUseFraction.Grid.FixedCols := 0;
-  frameLandUseFraction.Grid.Columns[Ord(ocStart)].Format := rcf4Real;
-  frameLandUseFraction.Grid.Columns[Ord(ocEnd)].Format := rcf4Real;
-  frameLandUseFraction.Grid.Cells[Ord(ocStart), 0] := StrStartingTime;
-  frameLandUseFraction.Grid.Cells[Ord(ocEnd), 0] := StrEndingTime;
-  frameLandUseFraction.Grid.Cells[Ord(ocFormula), 0] := 'Land Use Fraction';
+  frameOwhmCollection.Grid.ColCount := 3;
+  frameOwhmCollection.Grid.FixedCols := 0;
+  frameOwhmCollection.Grid.Columns[Ord(ocStart)].Format := rcf4Real;
+  frameOwhmCollection.Grid.Columns[Ord(ocEnd)].Format := rcf4Real;
+  frameOwhmCollection.Grid.Cells[Ord(ocStart), 0] := StrStartingTime;
+  frameOwhmCollection.Grid.Cells[Ord(ocEnd), 0] := StrEndingTime;
+  frameOwhmCollection.Grid.Cells[Ord(ocFormula), 0] := 'Land Use Fraction';
 
-  SetGridColumnProperties(frameLandUseFraction.Grid);
-  SetUseButton(frameLandUseFraction.Grid, Ord(ocFormula));
-  frameLandUseFraction.FirstFormulaColumn := 2;
-  frameLandUseFraction.LayoutMultiRowEditControls;
+  SetGridColumnProperties(frameOwhmCollection.Grid);
+  SetUseButton(frameOwhmCollection.Grid, Ord(ocFormula));
+  frameOwhmCollection.FirstFormulaColumn := 2;
+  frameOwhmCollection.LayoutMultiRowEditControls;
 end;
 
 procedure TfrmCropProperties.SetUpLossesTable(Model: TCustomModel);
@@ -508,6 +558,17 @@ begin
     begin
       ResultType := rdtBoolean;
     end;
+  end
+  else if DataGrid = frameOwhmCollection.Grid then
+  begin
+    if FOwhmCollection is TBoolFarmCollection then
+    begin
+      ResultType := rdtBoolean;
+    end
+    else
+    begin
+      ResultType := rdtDouble;
+    end;
   end;
 
   if (ResultType = CompiledFormula.ResultType) or
@@ -550,7 +611,7 @@ begin
     if FFarmProcess.RootingDepth = rdSpecified then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrRootingDepth) as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.FmpRootDepthCollection;
     end;
   end
@@ -558,8 +619,8 @@ begin
   begin
     if FFarmLandUse.RootDepth.ListUsed then
     begin
-      ANode := jvpltvMain.Items.AddChild(CropNode, 'Root Depth') as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrRootDepth) as TJvPageIndexNode;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.FmpRootDepthCollection;
     end;
   end;
@@ -614,21 +675,21 @@ begin
     if FFarmLandUse.LandUseFraction.ListUsed then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrLandUseAreaFracti) as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.LandUseFractionCollection;
     end;
 
     if FFarmLandUse.CropCoeff.ListUsed then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrCropCoefficient2) as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.CropCoefficientCollection;
     end;
 
     if FFarmLandUse.ConsumptiveUse.ListUsed then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUse2) as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.ConsumptiveUseCollection;
     end;
 
@@ -649,38 +710,43 @@ begin
     if FFarmLandUse.TranspirationFraction.ListUsed then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrTranspirationFracti) as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.TranspirationFractionCollection;
     end;
 
     if FFarmLandUse.FractionOfPrecipToSurfaceWater.ListUsed then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrSurfaceWaterLossFPrecip) as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.SWLossFractionPrecipCollection;
     end;
 
     if FFarmLandUse.PondDepth.FarmOption <> foNotUsed then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrPondDepth) as TJvPageIndexNode;
-      ANode.PageIndex := jvspLandUseFraction.PageIndex;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.PondDepthCollection;
     end;
 
     if FFarmLandUse.AddedDemand.ListUsed then
     begin
-//      ANode := jvpltvMain.Items.AddChild(CropNode, 'Added Demand') as TJvPageIndexNode;
-//      ANode.PageIndex := jvspLandUseFraction.PageIndex;
-//      ANode.Data := ACrop.AddedDemandCollection;
-//      if FFarmLandUse.AddedDemandOption = doLength then
-//      begin
-//        ACrop.AddedDemandCollection.OwhmNames[0] := 'Added Demand [L]'
-//      end
-//      else
-//      begin
-//        Assert(FFarmLandUse.AddedDemandOption = doRate);
-//        ACrop.AddedDemandCollection.OwhmNames[0] := 'Added Demand [L^3/T]'
-//      end;
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrAddedDemand) as TJvPageIndexNode;
+      ANode.PageIndex := jvspAddedDemand.PageIndex;
+      ANode.Data := ACrop.AddedDemandCollection;
+    end;
+
+    if FFarmLandUse.NoCropUseMeansBareSoil.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrZeroConsumptiveUse) as TJvPageIndexNode;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
+      ANode.Data := ACrop.ConvertToBareSoilCollection;
+    end;
+
+    if FFarmLandUse.ET_IrrigFracCorrection.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrEvaporationIrrigatiCorrection) as TJvPageIndexNode;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
+      ANode.Data := ACrop.UseEvapFractionCorrectionCollection;
     end;
   end;
 {$ENDIF}
@@ -1193,8 +1259,8 @@ begin
   begin
     Exit;
   end;
-  Frame := frameLandUseFraction;
-  OwhmCollection := FLandUseFraction;
+  Frame := frameOwhmCollection;
+  OwhmCollection := FOwhmCollection;
 
   Frame.GridEndUpdate(Sender);
   if OwhmCollection <> nil then
@@ -1312,6 +1378,52 @@ begin
     begin
       FRootPressure.Last.Free;
     end;
+  end;
+end;
+
+procedure TfrmCropProperties.GetAddedDemand(
+  AddedDemand: TAddedDemandCollection);
+var
+  ItemIndex: Integer;
+  AnItem: TAddedDemandItem;
+  ColIndex: Integer;
+  AFarm: TFarm;
+  FarmItem: TAddedDemandFarmItem;
+begin
+  Assert(AddedDemand <> nil);
+  FAddedDemand := AddedDemand;
+  frameAddedDemand.ClearGrid;
+  frameAddedDemand.seNumber.AsInteger := AddedDemand.Count;
+  frameAddedDemand.seNumber.OnChange(frameAddedDemand.seNumber);
+  if frameAddedDemand.seNumber.AsInteger = 0 then
+  begin
+    frameAddedDemand.Grid.Row := 1;
+    frameAddedDemand.ClearSelectedRow;
+  end;
+  frameAddedDemand.Grid.BeginUpdate;
+  try
+    for ItemIndex := 0 to AddedDemand.Count - 1 do
+    begin
+      AnItem := AddedDemand[ItemIndex] as TAddedDemandItem;
+      frameAddedDemand.Grid.Cells[Ord(pcStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
+      frameAddedDemand.Grid.Cells[Ord(pcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
+      for ColIndex := Ord(acFormula) to frameAddedDemand.Grid.ColCount - 1 do
+      begin
+        AFarm := frameAddedDemand.Grid.Objects[ColIndex,0] as TFarm;
+        FarmItem := AnItem.GetItemByFarmGUID(AFarm.FarmGUID);
+        if FarmItem = nil then
+        begin
+          frameAddedDemand.Grid.Cells[ColIndex, ItemIndex+1] := '';
+        end
+        else
+        begin
+          frameAddedDemand.Grid.Cells[ColIndex, ItemIndex+1] := FarmItem.Value;
+        end;
+        frameAddedDemand.Grid.Objects[ColIndex, ItemIndex+1] := FarmItem;
+      end;
+    end;
+  finally
+    frameAddedDemand.Grid.EndUpdate;
   end;
 end;
 
@@ -1454,9 +1566,10 @@ begin
   SetUpCropFunctionTable(frmGoPhast.PhastModel);
   SetUpCropWaterUseTable(frmGoPhast.PhastModel);
   SetUpIrrigationTable(frmGoPhast.PhastModel);
-  SetUpLandUseFractionTable(frmGoPhast.PhastModel);
+  SetUpOwhmCollectionTable(frmGoPhast.PhastModel);
   SetUpRootPressureTable(frmGoPhast.PhastModel);
   SetUpGroundwaterRootInteractionTable(frmGoPhast.PhastModel);
+  SetUpAddedDemandTable(frmGoPhast.PhastModel);
 
   StartTimes := TStringList.Create;
   EndTimes := TStringList.Create;
@@ -1473,8 +1586,9 @@ begin
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropFunction.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropWaterUse.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameIrrigation.Grid);
-    SetStartAndEndTimeLists(StartTimes, EndTimes, frameLandUseFraction.Grid);
+    SetStartAndEndTimeLists(StartTimes, EndTimes, frameOwhmCollection.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameRootPressure.Grid);
+    SetStartAndEndTimeLists(StartTimes, EndTimes, frameAddedDemand.Grid);
   finally
     EndTimes.Free;
     StartTimes.Free;
@@ -1560,8 +1674,8 @@ begin
   end;
 end;
 
-procedure TfrmCropProperties.GetLandUseFraction(
-  LandUseFraction: TOwhmCollection);
+procedure TfrmCropProperties.GetOwhmCollection(
+  OwhmCollection: TOwhmCollection);
 const
   TimeColumnCount = 2;
 var
@@ -1569,12 +1683,12 @@ var
   AnItem: TOwhmItem;
   frame: TframeFormulaGrid;
 begin
-  Assert(LandUseFraction <> nil);
-  FLandUseFraction := LandUseFraction;
-  frame := frameLandUseFraction;
+  Assert(OwhmCollection <> nil);
+  FOwhmCollection := OwhmCollection;
+  frame := frameOwhmCollection;
 
   frame.ClearGrid;
-  frame.seNumber.AsInteger := LandUseFraction.Count;
+  frame.seNumber.AsInteger := OwhmCollection.Count;
   frame.seNumber.OnChange(frame.seNumber);
   if frame.seNumber.AsInteger = 0 then
   begin
@@ -1583,14 +1697,14 @@ begin
   end;
   frame.Grid.BeginUpdate;
   try
-    if Ord(ocFormula) - TimeColumnCount < LandUseFraction.OwhmNames.Count then
+    if Ord(ocFormula) - TimeColumnCount < OwhmCollection.OwhmNames.Count then
     begin
       frame.Grid.Cells[Ord(ocFormula), 0] :=
-        LandUseFraction.OwhmNames[Ord(ocFormula) - TimeColumnCount];
+        OwhmCollection.OwhmNames[Ord(ocFormula) - TimeColumnCount];
     end;
-    for ItemIndex := 0 to LandUseFraction.Count - 1 do
+    for ItemIndex := 0 to OwhmCollection.Count - 1 do
     begin
-      AnItem := LandUseFraction[ItemIndex];
+      AnItem := OwhmCollection[ItemIndex];
       frame.Grid.Cells[Ord(ocStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
       frame.Grid.Cells[Ord(ocEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
       frame.Grid.Cells[Ord(ocFormula), ItemIndex+1] := AnItem.OwhmValue;
@@ -1682,10 +1796,6 @@ begin
       begin
         GetCrops(TCropCollection(AnObject));
       end
-//      else if AnObject is TFmpRootDepthCollection then
-//      begin
-//        GetRootingDepth(TFmpRootDepthCollection(AnObject));
-//      end
       else if AnObject is TEvapFractionsCollection then
       begin
         GetEvapFractions(TEvapFractionsCollection(AnObject));
@@ -1708,7 +1818,7 @@ begin
       end
       else if AnObject is TOwhmCollection then
       begin
-        GetLandUseFraction(TOwhmCollection(AnObject));
+        GetOwhmCollection(TOwhmCollection(AnObject));
       end
       else if AnObject is TRootPressureCollection then
       begin
@@ -1717,6 +1827,10 @@ begin
       else if AnObject is TGroundwaterRootInteraction then
       begin
         GetGroundwaterRootInteraction(TGroundwaterRootInteraction(AnObject));
+      end
+      else if AnObject is TAddedDemandCollection then
+      begin
+        GetAddedDemand(TAddedDemandCollection(AnObject));
       end
       else
         Assert(False);
@@ -1895,6 +2009,67 @@ begin
     AssignGWRootInteractionCheckboxes(CheckBoxesToGwRootInteractionCode);
   finally
     FSettingGwInteraction := False;
+  end;
+end;
+
+procedure TfrmCropProperties.frameAddedDemandGridEndUpdate(Sender: TObject);
+var
+  ItemCount: Integer;
+  RowIndex: Integer;
+  StartTime: double;
+  EndTime: double;
+  AnItem: TAddedDemandItem;
+  ColIndex: Integer;
+  Item: TAddedDemandFarmItem;
+  AnObject: TObject;
+  AFarm: TFarm;
+begin
+  inherited;
+  if FGettingData then
+  begin
+    Exit;
+  end;
+  frameAddedDemand.GridEndUpdate(Sender);
+  if FAddedDemand <> nil then
+  begin
+    ItemCount := 0;
+    for RowIndex := 1 to frameAddedDemand.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(frameAddedDemand.Grid.Cells[
+        Ord(acStart), RowIndex], StartTime)
+        and TryStrToFloat(frameAddedDemand.Grid.Cells[
+        Ord(acEnd), RowIndex], EndTime) then
+      begin
+        if ItemCount >= FAddedDemand.Count then
+        begin
+          FAddedDemand.Add;
+        end;
+        AnItem := FAddedDemand[ItemCount] as TAddedDemandItem;
+        AnItem.StartTime := StartTime;
+        AnItem.EndTime := EndTime;
+        for ColIndex := Ord(acFormula) to frameAddedDemand.Grid.ColCount - 1 do
+        begin
+          AnObject := frameAddedDemand.Grid.Objects[ColIndex, RowIndex];
+          if AnObject = nil then
+          begin
+            AFarm := frameAddedDemand.Grid.Objects[ColIndex, 0] as TFarm;
+            Item := AnItem.AddedDemandValues.Add;
+            Item.FarmGUID := AFarm.FarmGUID;
+            frameAddedDemand.Grid.Objects[ColIndex, RowIndex] := Item;
+          end
+          else
+          begin
+            Item := TAddedDemandFarmItem(AnObject);
+          end;
+          Item.Value := frameAddedDemand.Grid.Cells[ColIndex, RowIndex]
+        end;
+        Inc(ItemCount);
+      end;
+    end;
+    while FAddedDemand.Count > ItemCount do
+    begin
+      FAddedDemand.Last.Free;
+    end;
   end;
 end;
 

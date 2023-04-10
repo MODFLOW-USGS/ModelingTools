@@ -231,6 +231,9 @@ type
     function Used: boolean;
     function UsesATime(ATime: Double): Boolean;
     procedure ReplaceATime(OldTime, NewTime: Double);
+    function ItemByStartTime(ATime: double): TCustomBoundaryItem;
+    procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
+      var StartRangeExtended, EndRangeExtended: boolean);
   end;
 
   TCustomMF_BoundColl = class;
@@ -2570,6 +2573,31 @@ function TCustomNonSpatialBoundColl.GetItem(
   Index: Integer): TCustomBoundaryItem;
 begin
   result := inherited Items[Index] as TCustomBoundaryItem
+end;
+
+function TCustomNonSpatialBoundColl.ItemByStartTime(
+  ATime: Double): TCustomBoundaryItem;
+var
+  TimeIndex: Integer;
+  AnItem: TCustomBoundaryItem;
+begin
+  result := nil;
+  for TimeIndex := 0 to Count - 1 do
+  begin
+    AnItem := Items[TimeIndex];
+    if AnItem.StartTime <= ATime then
+    begin
+      result := AnItem;
+
+      if AnItem is TCustomModflowBoundaryItem then
+      begin
+        if TCustomModflowBoundaryItem(AnItem).EndTime > ATime then
+        begin
+          Break;
+        end;
+      end;
+    end;
+  end;
 end;
 
 function TCustomNonSpatialBoundColl.QueryInterface(const IID: TGUID;
@@ -5116,5 +5144,47 @@ begin
   end;
 end;
 
+procedure TCustomNonSpatialBoundColl.UpdateTimes(Times: TRealList;
+  StartTestTime, EndTestTime: double; var StartRangeExtended, EndRangeExtended
+  : boolean);
+var
+  BoundaryIndex: integer;
+  Boundary: TCustomModflowBoundaryItem;
+  ClosestIndex: integer;
+  ExistingTime: double;
+  SP_Epsilon: Extended;
+begin
+  SP_Epsilon := (Model as TCustomModel).SP_Epsilon;
+  for BoundaryIndex := 0 to Count - 1 do
+  begin
+    Boundary := Items[BoundaryIndex] as TCustomModflowBoundaryItem;
+    ClosestIndex := Times.IndexOfClosest(Boundary.StartTime);
+    if ClosestIndex >= 0 then
+    begin
+      ExistingTime := Times[ClosestIndex];
+      if Abs(ExistingTime - Boundary.StartTime) > SP_Epsilon then
+      begin
+        Times.AddUnique(Boundary.StartTime);
+      end;
+    end;
+    ClosestIndex := Times.IndexOfClosest(Boundary.EndTime);
+    if ClosestIndex >= 0 then
+    begin
+      ExistingTime := Times[ClosestIndex];
+      if Abs(ExistingTime - Boundary.EndTime) > SP_Epsilon then
+      begin
+        Times.AddUnique(Boundary.EndTime);
+      end;
+    end;
+    if (Boundary.StartTime < StartTestTime - SP_Epsilon) then
+    begin
+      StartRangeExtended := True;
+    end;
+    if (Boundary.EndTime > EndTestTime + SP_Epsilon) then
+    begin
+      EndRangeExtended := True;
+    end;
+  end;
+end;
 
 end.

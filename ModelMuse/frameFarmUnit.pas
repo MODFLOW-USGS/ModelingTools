@@ -58,6 +58,8 @@ type
     frameReturnFlowsOwhm2: TframeMultSemiRouted;
     tabSwAllotment: TTabSheet;
     frameSwAllotment: TframeFormulaGrid;
+    tabWaterSupplyConcentration: TTabSheet;
+    frameWaterSupplyConcentration: TframeFormulaGrid;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -251,6 +253,7 @@ type
     procedure SetWaterRights(Farm: TFarm);
     procedure SetGwAllotment(Farm: TFarm);
     procedure SetSwAllotment(Farm: TFarm);
+    procedure SetSaltSupplyConcentration(Farm: TFarm);
 
     procedure Change(Sender: TObject);
     property Changing: Boolean read FChanging write FChanging;
@@ -275,6 +278,7 @@ type
       AFrame: TframeFormulaGrid; CaptionFormatString: string);
     procedure InitializeAddedCropDemandFluxFrame(StartTimes, EndTimes: TStringList);
     procedure InitializeAddedCropDemandRateFrame(StartTimes, EndTimes: TStringList);
+    procedure InitializeSaltSupplyConcentrationFrame(StartTimes, EndTimes: TStringList);
 
     procedure GetAnEfficiencyCollection(AFarm: TFarm; AFrame: TframeFormulaGrid;
       EfficiencyCollection: TFarmEfficiencyCollection);
@@ -333,6 +337,8 @@ type
     wscSurfaceWater, wscNonRouted);
   TBareRunoffFractionsColumns = (brfcStartTime, brfcEndTime, brfcValue);
   TNoReturnFlowColumns = (nrfcStartTime, nrfcEndTime, nrfcValue);
+  TSourceConcentrationColumns = (sccStartTime, sccEndTime, sccNonRouted,
+    sccSurfaceWater, sccGroundWater, sccExternal);
 
 {$R *.dfm}
 
@@ -497,6 +503,7 @@ begin
       ClearGrid(frameBareRunoffFractions.Grid);
       ClearGrid(frameAddedCropDemandFlux.Grid);
       ClearGrid(frameAddedCropDemandRate.Grid);
+      ClearGrid(frameWaterSupplyConcentration.Grid);
       Enabled := False;
       Exit;
     end;
@@ -536,6 +543,7 @@ begin
       frameAddedCropDemandFlux.Grid.BeginUpdate;
       frameAddedCropDemandRate.Grid.BeginUpdate;
       frameNoReturnFlow.Grid.BeginUpdate;
+      frameWaterSupplyConcentration.Grid.BeginUpdate;
       try
         ClearGrid(frameFormulaGridCrops.Grid);
         ClearGrid(frameFormulaGridCosts.Grid);
@@ -551,6 +559,7 @@ begin
         ClearGrid(frameAddedCropDemandFlux.Grid);
         ClearGrid(frameAddedCropDemandRate.Grid);
         ClearGrid(frameNoReturnFlow.Grid);
+        ClearGrid(frameWaterSupplyConcentration.Grid);
 
         FirstFarm := FarmList[0];
         GetCropEffForFirstFarm(FirstFarm);
@@ -752,6 +761,18 @@ begin
           end;
         end;
 
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if not AFarm.SaltSupplyConcentrationCollection.IsSame(
+            FirstFarm.SaltSupplyConcentrationCollection) then
+          begin
+            ClearGrid(frameWaterSupplyConcentration.Grid);
+            frameWaterSupplyConcentration.seNumber.AsInteger := 0;
+            break;
+          end;
+        end;
+
       finally
         frameFormulaGridCrops.Grid.EndUpdate;
         frameFormulaGridEfficiencyImprovement.Grid.EndUpdate;
@@ -767,6 +788,7 @@ begin
         frameAddedCropDemandFlux.Grid.EndUpdate;
         frameAddedCropDemandRate.Grid.EndUpdate;
         frameNoReturnFlow.Grid.EndUpdate;
+        frameWaterSupplyConcentration.Grid.EndUpdate;
       end;
 
       frameFormulaGridDiversion.GetData(FarmList, dtDiversion);
@@ -2144,7 +2166,7 @@ begin
     ClearGrid(Grid);
     Grid.BeginUpdate;
     try
-      frameFormulaGridWaterRights.FirstFormulaColumn := Ord(gacAllotment);
+      frameGW_Allocation.FirstFormulaColumn := Ord(gacAllotment);
       Grid.Cells[Ord(gacStartTime), 0] := StrStartingTime;
       Grid.Cells[Ord(gacEndTime), 0] := StrEndingTime;
       Grid.Cells[Ord(gacAllotment), 0] := 'Groundwater allotment';
@@ -2161,7 +2183,7 @@ begin
     ClearGrid(Grid);
     Grid.BeginUpdate;
     try
-      frameFormulaGridWaterRights.FirstFormulaColumn := Ord(gacAllotment);
+      frameSwAllotment.FirstFormulaColumn := Ord(gacAllotment);
       Grid.Cells[Ord(gacStartTime), 0] := StrStartingTime;
       Grid.Cells[Ord(gacEndTime), 0] := StrEndingTime;
       Grid.Cells[Ord(gacAllotment), 0] := 'Surface-water allotment';
@@ -2174,6 +2196,29 @@ begin
     end;
     frameSwAllotment.LayoutMultiRowEditControls;
 
+    Grid := frameWaterSupplyConcentration.Grid;
+    ClearGrid(Grid);
+    Grid.BeginUpdate;
+    try
+      frameWaterSupplyConcentration.FirstFormulaColumn := Ord(sccNonRouted);
+      Grid.Cells[Ord(sccStartTime), 0] := StrStartingTime;
+      Grid.Cells[Ord(sccEndTime), 0] := StrEndingTime;
+      Grid.Columns[Ord(sccStartTime)].PickList := StartTimes;
+      Grid.Columns[Ord(sccEndTime)].PickList := EndTimes;
+      Grid.Columns[Ord(sccStartTime)].ComboUsed := True;
+      Grid.Columns[Ord(sccEndTime)].ComboUsed := True;
+      Grid.Cells[Ord(sccNonRouted), 0] := 'Non-Routed Delivery Concentration';
+      Grid.Cells[Ord(gacAllotment), 0] := 'Surface-Water Delivery Concentration';
+      Grid.Cells[Ord(gacAllotment), 0] := 'Groundwater Pumpage Concentration';
+      Grid.Cells[Ord(gacAllotment), 0] := 'External Source Concentration';
+    finally
+      Grid.EndUpdate;
+    end;
+    frameWaterSupplyConcentration.LayoutMultiRowEditControls;
+//  TSourceConcentrationColumns = (sccStartTime sccEndTime, sccNonRouted,
+//    sccSurfaceWater, sccGroundWater, sccExternal);
+
+
   finally
     EndTimes.Free;
     StartTimes.Free;
@@ -2185,6 +2230,12 @@ procedure TframeFarm.InitializeDeficiencyScenarioFrame(StartTimes,
 begin
   InitializeSingleValueFrame(StartTimes, EndTimes,
     frameDeficiencyScenario, 'Deficiency Scenario');
+end;
+
+procedure TframeFarm.InitializeSaltSupplyConcentrationFrame(StartTimes,
+  EndTimes: TStringList);
+begin
+
 end;
 
 procedure TframeFarm.InitializeSingleValueFrame(StartTimes,
@@ -3223,6 +3274,11 @@ begin
     end;
     Farm.NoReturnFlow.Count := ItemCount;
   end;
+end;
+
+procedure TframeFarm.SetSaltSupplyConcentration(Farm: TFarm);
+begin
+
 end;
 
 procedure TframeFarm.SetSwAllotment(Farm: TFarm);
