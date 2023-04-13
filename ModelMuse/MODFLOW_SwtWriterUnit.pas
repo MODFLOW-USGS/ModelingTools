@@ -61,7 +61,8 @@ uses
   frmErrorsAndWarningsUnit, SysUtils,
   Forms, GoPhastTypes, ScreenObjectUnit, ModflowTimeUnit, ModflowCellUnit,
   AbstractGridUnit, FastGEO, BasisFunctionUnit,
-  System.Math, PestObsUnit, PestParamRoots, PestPropertiesUnit;
+  System.Math, PestObsUnit, PestParamRoots, PestPropertiesUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrNoSWTLayersDefine = 'No SWT layers defined';

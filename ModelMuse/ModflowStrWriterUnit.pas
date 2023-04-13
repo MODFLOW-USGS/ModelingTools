@@ -154,7 +154,7 @@ uses
   ModflowUnitNumbers, ModflowStrUnit, frmProgressUnit,
   frmErrorsAndWarningsUnit, GIS_Functions, ModflowTimeUnit, Math,
   ModflowOutputControlUnit, DataSetUnit,
-  PestPropertiesUnit;
+  PestPropertiesUnit, DataSetNamesUnit;
 
 resourcestring
   StrWritingSTRPackage = 'Writing STR Package input.';

@@ -260,7 +260,8 @@ type
 implementation
 
 uses
-  ModflowParameterUnit, OrderedCollectionUnit, SutraOptionsUnit, System.Math;
+  ModflowParameterUnit, OrderedCollectionUnit, SutraOptionsUnit, System.Math,
+  DataSetNamesUnit;
 
 const
   KDisName = 'cl_Discretization';

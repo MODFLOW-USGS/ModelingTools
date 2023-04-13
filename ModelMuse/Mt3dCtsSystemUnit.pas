@@ -72,7 +72,7 @@ type
     procedure Loaded(Model: TBaseModel);
 //    class function ItemClass: TBoundaryItemClass; static;
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     function Add: TCtsObjectItem;
     property Items[Index: Integer]: TCtsObjectItem read GetItem write SetItem; default;
     function GetItemByStartTime(StartTime: Double): TCtsObjectItem;
@@ -102,7 +102,7 @@ type
     function GetItem(Index: Integer): TInjectionOptionItem;
     procedure SetItem(Index: Integer; const Value: TInjectionOptionItem);
   public
-    constructor Create(Model: TBaseModel; ScreenObject: TObject;
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
       Mt3dmsConcCollection: TCollection);
     function Add: TInjectionOptionItem;
     property Items[Index: Integer]: TInjectionOptionItem read GetItem write SetItem; default;
@@ -181,7 +181,7 @@ type
     procedure SetItem(Index: Integer;
       const Value: TIndividualWellInjectionItem);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TIndividualWellInjectionItem read GetItem
       write SetItem; default;
     function GetItemByObjectName(const AName: string): TIndividualWellInjectionItem;
@@ -291,7 +291,7 @@ type
   protected
     function BoundaryObserverPrefix: string; override;
   public
-    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure Loaded;
@@ -337,7 +337,7 @@ type
     function GetItem(Index: Integer): TCtsSystemItem;
     procedure SetItem(Index: Integer; const Value: TCtsSystemItem);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     function Add: TCtsSystemItem;
     property Items[Index: Integer]: TCtsSystemItem read GetItem write SetItem; default;
     procedure Loaded;
@@ -702,7 +702,7 @@ end;
 constructor TCtsInjectionTimeItem.Create(Collection: TCollection);
 begin
   inherited;
-  FInjectionOptions := TInjectionOptionCollection.Create(Model, ScreenObject, Collection);
+  FInjectionOptions := TInjectionOptionCollection.Create(Model as TCustomModel, ScreenObject, Collection);
 end;
 
 procedure TCtsInjectionTimeItem.CreateFormulaObjects;
@@ -778,7 +778,7 @@ end;
 constructor TCtsExternalFlowsItem.Create(Collection: TCollection);
 begin
   inherited;
-  FInflowConcentrations := TStringConcCollection.Create(Model, ScreenObject,
+  FInflowConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject,
     Collection);
 end;
 
@@ -906,7 +906,7 @@ begin
   result := inherited Add as TCtsObjectItem;
 end;
 
-constructor TCtsObjectCollection.Create(Model: TBaseModel);
+constructor TCtsObjectCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TCtsObjectItem, Model);
 end;
@@ -1052,13 +1052,13 @@ begin
   result := 'CTS_';
 end;
 
-constructor TCtsSystem.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor TCtsSystem.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
   FDefaultInjectionOptions := TCtsInjectionTimeCollection.Create(Self, Model, ScreenObject);
-  FCtsObjects := TCtsObjectCollection.Create(Model);
+  FCtsObjects := TCtsObjectCollection.Create(Model as TCustomModel);
   FExternalFlows := TCtsExternalFlowsCollection.Create(Self, Model, ScreenObject);
-  FInjections := TIndividualWellInjectionCollection.Create(Model);
+  FInjections := TIndividualWellInjectionCollection.Create(Model as TCustomModel);
   FMaximumAllowedConc := TCtsMaxConcCollection.Create(self, Model, ScreenObject);
 end;
 
@@ -1085,8 +1085,8 @@ end;
 
 procedure TCtsSystem.Loaded;
 begin
-  FCtsObjects.Loaded(ParentModel);
-  FInjections.Loaded(ParentModel);
+  FCtsObjects.Loaded(ParentModel as TCustomModel);
+  FInjections.Loaded(ParentModel as TCustomModel);
 end;
 
 procedure TCtsSystem.SetCtsObjects(const Value: TCtsObjectCollection);
@@ -1146,7 +1146,7 @@ begin
   Result := inherited Add as TInjectionOptionItem;
 end;
 
-constructor TInjectionOptionCollection.Create(Model: TBaseModel;
+constructor TInjectionOptionCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   inherited Create(TInjectionOptionItem, Model, ScreenObject, Mt3dmsConcCollection);
@@ -1179,7 +1179,7 @@ end;
 constructor TCtsSystemItem.Create(Collection: TCollection);
 begin
   inherited;
-  FCtsSystem := TCtsSystem.Create(Model, nil);
+  FCtsSystem := TCtsSystem.Create(Model as TCustomModel, nil);
 end;
 
 destructor TCtsSystemItem.Destroy;
@@ -1214,7 +1214,7 @@ begin
   result := inherited Add as TCtsSystemItem
 end;
 
-constructor TCtsSystemCollection.Create(Model: TBaseModel);
+constructor TCtsSystemCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TCtsSystemItem, Model);
 end;
@@ -1260,7 +1260,7 @@ end;
 constructor TIndividualWellInjectionItem.Create(Collection: TCollection);
 begin
   inherited;
-  FInjections := TCtsInjectionTimeCollection.Create(nil, Model, nil);
+  FInjections := TCtsInjectionTimeCollection.Create(nil, Model as TCustomModel, nil);
 end;
 
 destructor TIndividualWellInjectionItem.Destroy;
@@ -1348,7 +1348,7 @@ begin
   result := inherited Add as TIndividualWellInjectionItem;
 end;
 
-constructor TIndividualWellInjectionCollection.Create(Model: TBaseModel);
+constructor TIndividualWellInjectionCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TIndividualWellInjectionItem, Model);
 end;
@@ -1416,7 +1416,7 @@ end;
 constructor TCtsMaxConcItem.Create(Collection: TCollection);
 begin
   inherited;
-  FMaxConcentrations := TStringConcCollection.Create(Model, ScreenObject,
+  FMaxConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject,
     Collection);
 end;
 

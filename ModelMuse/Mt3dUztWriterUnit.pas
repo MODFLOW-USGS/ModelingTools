@@ -46,7 +46,7 @@ implementation
 
 uses
   Mt3dmsChemUnit, frmErrorsAndWarningsUnit, System.SysUtils, ModflowUnitNumbers,
-  frmProgressUnit, DataSetUnit, RbwParser;
+  frmProgressUnit, DataSetUnit, RbwParser, DataSetNamesUnit;
 
 resourcestring
   StrTheUztPackageHasB = 'The %0:s package has been activated but no %1:s ' +

@@ -35,7 +35,7 @@ implementation
 
 uses
   SutraBoundariesUnit, SutraBoundaryUnit, frmGoPhastUnit, ScreenObjectUnit,
-  DataSetUnit, PhastModelUnit;
+  DataSetUnit, PhastModelUnit, DataSetNamesUnit;
 
 {$R *.dfm}
 

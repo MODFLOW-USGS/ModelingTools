@@ -156,7 +156,7 @@ type
   public
     function Add: TSwrTransientReachItem;
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSwrTransientCell = class(TValueCell)
@@ -360,7 +360,7 @@ implementation
 
 uses
   PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, frmGoPhastUnit,
-  frmErrorsAndWarningsUnit, DataSetUnit, GIS_Functions;
+  frmErrorsAndWarningsUnit, DataSetUnit, GIS_Functions, DataSetNamesUnit;
 
 resourcestring
   StrVerticalOffset = 'Vertical Offset';
@@ -720,7 +720,7 @@ begin
 end;
 
 constructor TSwrReachCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   SectionDuplicatesAllowed := True;
@@ -1989,7 +1989,7 @@ begin
   end
   else
   begin
-    result := FModel.Invalidate;
+    result := FModel.DoInvalidate;
   end;
 end;
 

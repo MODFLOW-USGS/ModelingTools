@@ -27,7 +27,7 @@ implementation
 
 uses PhastModelUnit, OrderedCollectionUnit, ModflowUnitNumbers,
   frmProgressUnit, DataSetUnit, HufDefinition, frmErrorsAndWarningsUnit,
-  ModflowParameterUnit, Forms, GoPhastTypes, PestParamRoots;
+  ModflowParameterUnit, Forms, GoPhastTypes, PestParamRoots, DataSetNamesUnit;
 
 resourcestring
   StrWritingKDEPFileIn = 'Writing KDEP file input.';

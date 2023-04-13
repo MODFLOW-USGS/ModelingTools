@@ -111,8 +111,6 @@ uses
   System.Math, frmGoPhastUnit, ZoomBox2, AbstractGridUnit, BigCanvasMethods,
   GR32;
 
-{ TCrossSection }
-
 function TMeshCrossSectionLine.Angle: Double;
 begin
   result := ArcTan2(EndY-StartY, EndX-StartX);

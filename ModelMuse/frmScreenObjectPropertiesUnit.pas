@@ -2799,7 +2799,8 @@ uses Math, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4EvaporationIrrigationFractionUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
-  ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit;
+  ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';

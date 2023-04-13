@@ -62,7 +62,7 @@ implementation
 
 uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit,
   DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
-  PestPropertiesUnit;
+  PestPropertiesUnit, DataSetNamesUnit;
 
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +

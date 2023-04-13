@@ -124,7 +124,7 @@ type
   protected
     function BoundaryObserverPrefix: string; override;
   public
-    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function Used: boolean; override;
@@ -159,7 +159,7 @@ type
     procedure SetItems(Index: Integer; const Value: TLakeOutletItem);
     procedure Loaded;
   public
-    constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     property Items[Index: Integer]: TLakeOutletItem read GetItems write SetItems; default;
     function Add: TLakeOutletItem;
   end;
@@ -216,7 +216,7 @@ type
     function GetItems(Index: Integer): TLakeTableItemMf6;
     procedure SetItems(Index: Integer; const Value: TLakeTableItemMf6);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TLakeTableItemMf6 read GetItems
       write SetItems; default;
     function Add: TLakeTableItemMf6;
@@ -610,7 +610,8 @@ const
 implementation
 
 uses
-  frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit, DataSetUnit;
+  frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit, DataSetUnit,
+  DataSetNamesUnit;
 
 const
   LakeObName: array[TLakOb] of string = ('Stage', 'ExternalInflow', 'SimOutletInflow', 'SumInflow', 'FromMvr', 'Rain',
@@ -818,19 +819,19 @@ var
   LakCollection: TLakTimeCollection;
 begin
   LakCollection := Collection as TLakTimeCollection;
-  FSpecifiedConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+  FSpecifiedConcentrations := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     LakCollection);
-  FRainfallConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+  FRainfallConcentrations := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     LakCollection);
-  FEvapConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+  FEvapConcentrations := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     LakCollection);
-  FRunoffConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+  FRunoffConcentrations := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     LakCollection);
-  FInflowConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject,
+  FInflowConcentrations := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     LakCollection);
 
   inherited;
-  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model);
+  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model as TCustomModel);
 end;
 
 procedure TLakeTimeItem.CreateFormulaObjects;
@@ -1515,9 +1516,9 @@ begin
   result := 'LakeOutlet';
 end;
 
-constructor TLakeOutlet.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor TLakeOutlet.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
-  inherited;
+  inherited Create(Model, ScreenObject);
   FLakeTimes := TLakOutletTimeCollection.Create(self, Model, ScreenObject);
 end;
 
@@ -1679,7 +1680,7 @@ begin
   Result := inherited Add as TLakeOutletItem
 end;
 
-constructor TLakeOutlets.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor TLakeOutlets.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
 //  FScreenObject := ScreenObject;
   inherited Create(TLakeOutletItem, Model, ScreenObject);
@@ -1914,19 +1915,19 @@ begin
   FPestInflowConcentrations := TLktGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestInflowConcentrations.UsedForPestSeries := True;
 
-  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestRainfallConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestRunoffConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestInflowConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestRainfallConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestRunoffConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestInflowConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 
 
 
-  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
+  FStartingConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
 //  FStartingConcentrationPestNames := TStringList.Create;
   CreateBoundaryObserver;
-  FOutlets := TLakeOutlets.Create(Model, ScreenObject);
-  FLakeTable := TLakeTableMf6.Create(Model);
+  FOutlets := TLakeOutlets.Create(Model as TCustomModel, ScreenObject);
+  FLakeTable := TLakeTableMf6.Create(Model as TCustomModel);
   LakeConnections := [lctHorizontal, lctVertical];
   CreateFormulaObjects;
   CreateObservers;
@@ -3451,7 +3452,7 @@ begin
   result := inherited Add as TLakeTableItemMf6;
 end;
 
-constructor TLakeTableMf6.Create(Model: TBaseModel);
+constructor TLakeTableMf6.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TLakeTableItemMf6, Model);
 end;

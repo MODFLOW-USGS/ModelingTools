@@ -112,7 +112,7 @@ implementation
 
 uses frmGoPhastUnit, ModflowSfrParamIcalcUnit, ModflowStrUnit,
   ModflowBoundaryUnit, DataSetUnit, PhastModelUnit,
-  DisplaySettingsUnit, FastGEO, GoPhastTypes;
+  DisplaySettingsUnit, FastGEO, GoPhastTypes, DataSetNamesUnit;
 
 resourcestring
   StrAssignStreamLinkag = 'assign stream linkages';

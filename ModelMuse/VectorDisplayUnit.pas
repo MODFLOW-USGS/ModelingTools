@@ -201,7 +201,8 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, SutraMeshUnit, BigCanvasMethods, Math,
   ModelMuseUtilities, QuadtreeClass, OctTreeClass, MeshRenumberingTypes,
-  ModflowIrregularMeshUnit, AbstractGridUnit;
+  ModflowIrregularMeshUnit, AbstractGridUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 const
   DegToRadiansFactor = Pi/180;
@@ -315,7 +316,7 @@ begin
   end
   else
   begin
-    inherited Create(Model.Invalidate);
+    inherited Create(Model.DoInvalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
@@ -2005,7 +2006,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TVectorItem, InvalidateModelEvent);
   FSelectedItem := -1;

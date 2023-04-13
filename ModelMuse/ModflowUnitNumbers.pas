@@ -541,7 +541,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TUnitNumberItem, InvalidateModelEvent);
   CreateDefaultItems;
@@ -834,7 +834,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TExternalFileItem, InvalidateModelEvent);
 end;

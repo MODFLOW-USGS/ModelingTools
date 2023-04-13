@@ -1094,9 +1094,9 @@ begin
   end
   else
   begin
-    inherited Create(Model.Invalidate);
-    FLakeOptions := TSutraLakeOptions.Create(Model.Invalidate);
-    FPestAnisotropyOptions := TSutraPestAnisotropyOptions.Create(Model.Invalidate);
+    inherited Create(Model.DoInvalidate);
+    FLakeOptions := TSutraLakeOptions.Create(Model.DoInvalidate);
+    FPestAnisotropyOptions := TSutraPestAnisotropyOptions.Create(Model.DoInvalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
@@ -2593,7 +2593,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+    InvalidateModelEvent := (AModel as TCustomModel).DoInvalidate;
   end;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
@@ -2810,7 +2810,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+    InvalidateModelEvent := (AModel as TCustomModel).DoInvalidate;
   end;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
@@ -2975,7 +2975,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+    InvalidateModelEvent := (AModel as TCustomModel).DoInvalidate;
   end;
   FFunctionParameters := TRealCollection.Create(InvalidateModelEvent);
   SetInitialValues;
@@ -3304,7 +3304,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := (AModel as TCustomModel).Invalidate;
+    InvalidateModelEvent := (AModel as TCustomModel).DoInvalidate;
   end;
   inherited Create(TRegionalProperty, InvalidateModelEvent);
 end;
@@ -3370,7 +3370,7 @@ begin
   end
   else
   begin
-    Event := (AModel as TCustomModel).Invalidate;
+    Event := (AModel as TCustomModel).DoInvalidate;
   end;
   inherited Create(Event);
 end;

@@ -7,7 +7,7 @@ uses
   Forms, Classes, ModflowBoundaryDisplayUnit, GoPhastTypes,
   PhastModelUnit, Generics.Collections, ModflowSwrReachUnit,
   ScreenObjectUnit, FastGEO, ModflowSwrStructureUnit, SwrReachObjectUnit,
-  ModflowSwrObsUnit;
+  ModflowSwrObsUnit, DataArrayManagerUnit;
 
 type
   TStructureList = TList<TStructure>;
@@ -143,7 +143,7 @@ uses
   ModflowCellUnit, ModflowUnitNumbers, RbwParser, DataSetUnit, Contnrs,
   ModflowSwrDirectRunoffUnit, AbstractGridUnit, GIS_Functions,
   ModflowSwrTabfilesUnit, ModflowSwrReachGeometryUnit,
-  ModflowTimeUnit;
+  ModflowTimeUnit, DataSetNamesUnit;
 
 resourcestring
   StrEvaluatingRainSWRPacka = 'Evaluating rain in the SWR Package';
@@ -1047,7 +1047,7 @@ begin
               begin
                 ADataSet :=
                   DataArrayManager.DataSets[DataSetIndex];
-                Assert(Model = ADataSet.Model);
+                Assert(Model = (ADataSet.Model as TCustomModel));
                 Assert(ADataSet.DataType = Variable.ResultType);
                 if ADataSet.Orientation = dsoTop then
                 begin

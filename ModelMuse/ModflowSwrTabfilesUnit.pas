@@ -305,7 +305,7 @@ begin
   FModel := AModel;
   if Assigned(FModel) then
   begin
-    OnInvalidateEvent := FModel.Invalidate;
+    OnInvalidateEvent := FModel.DoInvalidate;
   end
   else
   begin

@@ -125,7 +125,7 @@ uses
   Modflow6ObsWriterUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO,
   Vcl.Dialogs, ModflowParameterUnit, Mt3dmsChemSpeciesUnit,
-  Mt3dmsChemUnit, GwtStatusUnit;
+  Mt3dmsChemUnit, GwtStatusUnit, DataSetNamesUnit;
 
 resourcestring
   StrTheFollowingPairO = 'The following pair of objects have the same SFR se' +
@@ -684,7 +684,7 @@ begin
             begin
               ADataSet :=
                 Model.DataArrayManager.DataSets[DataSetIndex];
-              Assert(Model = ADataSet.Model);
+              Assert(Model = (ADataSet.Model as TCustomModel));
               Assert(ADataSet.DataType = Variable.ResultType);
               if ADataSet.Orientation = dsoTop then
               begin

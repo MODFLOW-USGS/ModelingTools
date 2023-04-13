@@ -5,28 +5,26 @@ inherited frmStartUp: TfrmStartUp
   HelpKeyword = 'Start_Up_Dialog_Box'
   ActiveControl = btnNext
   Caption = 'GoPhast'
-  ClientHeight = 405
-  ClientWidth = 747
+  ClientHeight = 404
+  ClientWidth = 743
   OnClose = FormClose
   ExplicitWidth = 759
   ExplicitHeight = 443
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 358
-    Width = 747
+    Top = 357
+    Width = 743
     Height = 47
     Align = alBottom
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 357
-    ExplicitWidth = 743
     DesignSize = (
-      747
+      743
       47)
     object btnNext: TBitBtn
-      Left = 643
+      Left = 635
       Top = 6
       Width = 86
       Height = 33
@@ -52,7 +50,7 @@ inherited frmStartUp: TfrmStartUp
       ExplicitLeft = 639
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 456
+      Left = 448
       Top = 6
       Width = 100
       Height = 33
@@ -66,7 +64,7 @@ inherited frmStartUp: TfrmStartUp
       ExplicitLeft = 452
     end
     object btnHelp: TBitBtn
-      Left = 562
+      Left = 554
       Top = 6
       Width = 75
       Height = 33
@@ -82,16 +80,14 @@ inherited frmStartUp: TfrmStartUp
   object pcStartup: TPageControl
     Left = 0
     Top = 0
-    Width = 747
-    Height = 358
+    Width = 743
+    Height = 357
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
     ActivePage = tabModelChoice
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
-    ExplicitWidth = 743
-    ExplicitHeight = 357
     object tabModelChoice: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Start_Up_Dialog_Box'
@@ -245,11 +241,13 @@ inherited frmStartUp: TfrmStartUp
       object gbInitialGrid: TGroupBox
         Left = 0
         Top = 0
-        Width = 739
+        Width = 743
         Height = 325
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 616
+        ExplicitHeight = 361
         object lblZDist: TLabel
           Left = 520
           Top = 110
@@ -548,10 +546,10 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 463
+          Left = 467
           Top = 20
-          Width = 274
-          Height = 262
+          Width = 266
+          Height = 261
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
           ColCount = 2
@@ -635,10 +633,11 @@ inherited frmStartUp: TfrmStartUp
       object pnlModflowChoice: TPanel
         Left = 0
         Top = 0
-        Width = 739
+        Width = 735
         Height = 41
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 739
         object lblModflowSelection: TLabel
           Left = 175
           Top = 10
@@ -671,8 +670,8 @@ inherited frmStartUp: TfrmStartUp
       Caption = 'tabInitialSutraMesh'
       ImageIndex = 3
       DesignSize = (
-        739
-        325)
+        735
+        324)
       object lblLayerGroups: TLabel
         Left = 464
         Top = 8
@@ -711,8 +710,8 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 257
-        Height = 293
+        Width = 249
+        Height = 292
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
@@ -964,7 +963,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 218
+        Width = 210
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'

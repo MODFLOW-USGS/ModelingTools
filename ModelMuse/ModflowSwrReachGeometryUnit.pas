@@ -41,7 +41,7 @@ type
     function GetItems(Index: Integer): TReachCrossSectionItem;
     procedure SetItems(Index: Integer; const Value: TReachCrossSectionItem);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TReachCrossSectionItem read GetItems
       write SetItems; default;
     function Add: TReachCrossSectionItem;
@@ -105,7 +105,7 @@ type
     function GetItems(Index: Integer): TReachTableItem;
     procedure SetItems(Index: Integer; const Value: TReachTableItem);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TReachTableItem read GetItems
       write SetItems; default;
     function Add: TReachTableItem;
@@ -233,7 +233,7 @@ type
   protected
     function SortItems: Boolean; override;
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TReachGeometryItem read GetItems
       write SetItems; default;
     function GetItemByName(AName: string): TReachGeometryItem;
@@ -331,7 +331,7 @@ begin
   Result := inherited Add as TReachCrossSectionItem;
 end;
 
-constructor TReachCrossSection.Create(Model: TBaseModel);
+constructor TReachCrossSection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TReachCrossSectionItem, Model);
 end;
@@ -492,7 +492,7 @@ begin
   Result := inherited Add as TReachTableItem;
 end;
 
-constructor TReachTable.Create(Model: TBaseModel);
+constructor TReachTable.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TReachTableItem, Model);
 end;
@@ -537,8 +537,8 @@ end;
 constructor TReachGeometryItem.Create(Collection: TCollection);
 begin
   inherited;
-  FTable := TReachTable.Create(Model);
-  FCrossSection := TReachCrossSection.Create(Model);
+  FTable := TReachTable.Create(Model as TCustomModel);
+  FCrossSection := TReachCrossSection.Create(Model as TCustomModel);
   FStoredBottomElevation := TRealStorage.Create;
   FStoredSideSlope := TRealStorage.Create;
   FStoredLeakance := TRealStorage.Create;
@@ -821,7 +821,7 @@ begin
   result := inherited Add as TReachGeometryItem;
 end;
 
-constructor TReachGeometryCollection.Create(Model: TBaseModel);
+constructor TReachGeometryCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TReachGeometryItem, Model);
 end;

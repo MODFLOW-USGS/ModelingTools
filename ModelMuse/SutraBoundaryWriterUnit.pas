@@ -1864,18 +1864,14 @@ begin
   begin
     WriteCommentLine('Data set 4');
   end;
-//  WriteCommentLine('Data set 4');
   if FNodeNumbers.MaxLayer < 0 then
   begin
     Exit;
   end;
 
-//  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   MergedUsedDataArray := UTimeList.UsedItems[TimeIndex];
 
-//  PQFormulas := FPQPestTimeFormulas[TimeIndex];
-//  PQFormulasUsed := FPQFormulaUsed[TimeIndex];
   UFormulas := FUPestTimeFormulas[TimeIndex];
   UFormulasUsed := FUFormulaUsed[TimeIndex];
 
@@ -2075,12 +2071,10 @@ begin
   begin
     WriteCommentLine('Data set 5');
   end;
-//  WriteCommentLine('Data set 5');
   if FNodeNumbers.MaxLayer < 0 then
   begin
     Exit;
   end;
-//  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   PQDataArray := PQTimeList[TimeIndex];
   MergedUsedDataArray := PQTimeList.UsedItems[TimeIndex];
@@ -2313,12 +2307,9 @@ begin
   begin
     Exit;
   end;
-//  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   MergedUsedDataArray := UTimeList.UsedItems[TimeIndex];
 
-//  PQFormulas := FPQPestTimeFormulas[TimeIndex];
-//  PQFormulasUsed := FPQFormulaUsed[TimeIndex];
   UFormulas := FUPestTimeFormulas[TimeIndex];
   UFormulasUsed := FUFormulaUsed[TimeIndex];
 
@@ -2626,7 +2617,7 @@ procedure TSutraFluxCheckList.CheckSameModel(const Data: TDataArray);
 begin
   if (Data <> nil) and (Model <> nil) then
   begin
-    Assert(Model = Data.Model);
+    Assert(Model = (Data.Model as TCustomModel));
   end;
 end;
 

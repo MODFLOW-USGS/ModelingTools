@@ -39,7 +39,7 @@ implementation
 
 uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
   RbwParser, GoPhastTypes, ModflowOptionsUnit, Generics.Collections,
-  PestParamRoots;
+  PestParamRoots, DataSetNamesUnit;
 
 resourcestring
   StrTheFileSDoesNot = 'The file %s does not exist. This file is specified in '

@@ -6,7 +6,7 @@ uses Winapi.Windows, System.UITypes, SysUtils,
   Classes, ZLib, RbwParser, GoPhastTypes,
   OrderedCollectionUnit, ModflowTransientListParameterUnit, DataSetUnit,
   RealListUnit, TempFiles, SubscriptionUnit, FormulaManagerUnit, SparseDataSets,
-  System.Generics.Collections, System.StrUtils, ModelMuseInterfacesUnit;
+  System.Generics.Collections, System.StrUtils, ModelMuseFarmFormInterfacesUnit;
 
 type
     // @name defines how a formula is interpreted.
@@ -222,7 +222,8 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name is the @link(TScreenObject) for this boundary.
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); virtual;
+      Model: ICustomModelInterfaceForTOrderedCollection;
+      ScreenObject: TObject); virtual;
     function Used: boolean;
     function UsesATime(ATime: Double): Boolean;
     procedure ReplaceATime(OldTime, NewTime: Double);
@@ -435,7 +436,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name creates an instance of @classname.
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
     // @name destroys the current instance of @classname.
     // Do not call @name; call Free instead.
     destructor Destroy; override;
@@ -549,7 +550,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name determines the locations, times, and values of
     // the boundary condition associated with @classname.  These boundaries
@@ -775,7 +776,8 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name creates an instance of @classname.
     constructor Create(Boundary: TModflowParamBoundary;
-      ItemClass: TModflowParamItemClass; Model: TBaseModel; ScreenObject: TObject); virtual;
+      ItemClass: TModflowParamItemClass;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); virtual;
     // @name returns the @link(TModflowParamItem) whose
     // @link(TCustomMF_BoundColl.ParamName TModflowParamItem.Param.ParamName)
     // matches AName.
@@ -813,7 +815,7 @@ type
   private
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     // See @link(ParentModel).
-    FModel: TBaseModel;
+    FModel: ICustomModelInterfaceForTOrderedCollection;
     // See @link(ScreenObject).
     FScreenObject: TObject;
   protected
@@ -836,11 +838,11 @@ type
   public
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     // @name is either nil or the the current @link(TPhastModel).
-    property ParentModel: TBaseModel read FModel;
+    property ParentModel: ICustomModelInterfaceForTOrderedCollection read FModel;
     // @name is either @nil or the @link(TScreenObject) that owns
     // this @classname.
     property ScreenObject: TObject read FScreenObject;
-    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     function Used: boolean; virtual; abstract;
   end;
@@ -879,7 +881,7 @@ type
     // @seealso(THfbBoundary).
     // @seealso(TSfrMf6Boundary).
     property BoundaryObserver: TObserver read FBoundaryObserver;
-    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     procedure StopTalkingToAnyone; virtual;
     procedure Invalidate;
@@ -1180,7 +1182,7 @@ uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
   GIS_Functions, IntListUnit, frmProgressUnit, Dialogs,
   SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
-  CustomModflowWriterUnit, Modflow6TimeSeriesUnit;
+  CustomModflowWriterUnit, Modflow6TimeSeriesUnit, DataSetNamesUnit;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';
@@ -1399,7 +1401,7 @@ begin
 end;
 
 constructor TCustomMF_BoundColl.Create(Boundary: TModflowScreenObjectProperty;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited ;
   FTimeListLink:= TTimeListModelLinkList.Create(self);
@@ -1466,7 +1468,7 @@ end;
 //end;
 
 constructor TCustomListArrayBoundColl.Create(Boundary: TModflowScreenObjectProperty;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   FListDuplicatesAllowed := True;
@@ -1928,7 +1930,7 @@ begin
   AlwaysAssignForeignId := True;
   BC := BoundaryClass;
   FParam := BC.Create(ParameterCollection.FBoundary,
-    ParameterCollection.Model, ParameterCollection.ScreenObject);
+    ParameterCollection.Model as TCustomModel, ParameterCollection.ScreenObject);
 end;
 
 function TModflowParamItem.DataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -1970,7 +1972,8 @@ begin
 end;
 
 constructor TModflowParameters.Create(Boundary: TModflowParamBoundary;
-  ItemClass: TModflowParamItemClass; Model: TBaseModel; ScreenObject: TObject);
+  ItemClass: TModflowParamItemClass;
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
   FBoundary := Boundary;
@@ -2172,7 +2175,7 @@ begin
 //  FPhastModel := Model;
 //  FValues:= BoundaryCollectionClass.Create(self, Model,
 //    ScreenObject);
-  FParameters := TModflowParameters.Create(self, ModflowParamItemClass, Model,
+  FParameters := TModflowParameters.Create(self, ModflowParamItemClass, Model as TCustomModel,
     ScreenObject);
 end;
 
@@ -2309,12 +2312,12 @@ end;
 
 constructor TModflowBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
-  inherited Create(Model, ScreenObject);
+  inherited Create(Model as TCustomModel, ScreenObject);
 //  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
 //  FScreenObject := ScreenObject;
 //  Assert((Model = nil) or (Model is TPhastModel));
 //  FPhastModel := Model;
-  FValues:= BoundaryCollectionClass.Create(self, Model,
+  FValues:= BoundaryCollectionClass.Create(self, Model as TCustomModel,
     ScreenObject);
 end;
 
@@ -2470,7 +2473,8 @@ begin
   end;
 end;
 
-constructor TCustomNonSpatialBoundColl.Create(Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
+constructor TCustomNonSpatialBoundColl.Create(Boundary: TModflowScreenObjectProperty;
+  Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
@@ -3316,7 +3320,7 @@ end;
 constructor TModflowSteadyBoundary.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
-  inherited;
+  inherited Create (Model as TCustomModel, ScreenObject);
   CreateFormulaObjects;
   CreateBoundaryObserver;
 
@@ -3547,7 +3551,7 @@ begin
       Item := Items[ItemIndex] as TCustomModflowBoundaryItem;
       if Item.StartTime = Item.EndTime then
       begin
-        frmErrorsAndWarnings.AddWarning(Model, StrBoundaryStartingAn,
+        frmErrorsAndWarnings.AddWarning(Model as TCustomModel, StrBoundaryStartingAn,
           Format(StrBecauseTheBoundary,
           [(ScreenObject as TScreenObject).Name]), ScreenObject);
       end;
@@ -3730,7 +3734,8 @@ begin
 
     if CellList.Count = 0 then
     begin
-      frmErrorsAndWarnings.AddWarning(Model, StrTheFollowingObjectNoCells, AScreenObject.Name, AScreenObject)
+      frmErrorsAndWarnings.AddWarning(Model as TCustomModel, StrTheFollowingObjectNoCells,
+        AScreenObject.Name, AScreenObject)
     end;
     // FSectionDuplicatesAllowed is set to True in TSwrReachCollection
     // and TStrCollection.
@@ -4407,10 +4412,10 @@ begin
   end;
 end;
 
-constructor TModflowScreenObjectProperty.Create(Model: TBaseModel;
+constructor TModflowScreenObjectProperty.Create(Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
-  inherited;
+  inherited Create(Model, ScreenObject);
   FMf6TimeSeriesNames:= TStringList.Create;
   FMf6TimeSeriesNames.Sorted := True;
   FMf6TimeSeriesNames.Duplicates := dupIgnore;
@@ -4558,7 +4563,7 @@ end;
 constructor TMultiHeadCollection.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
-  inherited Create(TMultiHeadItem, Model, ScreenObject);
+  inherited Create(TMultiHeadItem, Model as TCustomModel, ScreenObject);
 //  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
 //  FScreenObject := ScreenObject;
 end;
@@ -4626,7 +4631,7 @@ end;
 constructor TCustomLocationObsBoundary.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
-  inherited;
+  inherited Create(Model as TCustomModel, ScreenObject);
   FPurpose := ofObserved;
 end;
 
@@ -4684,7 +4689,7 @@ end;
 
 { TFormulaProperty }
 
-constructor TFormulaProperty.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor TFormulaProperty.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create;
   Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
@@ -4728,7 +4733,7 @@ begin
       and (FModel <> nil) then
   begin
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent. }
-    (FModel as TPhastModel).Invalidate(self)
+    (FModel as TPhastModel).DoInvalidate(self)
   end;
 end;
 
@@ -5077,7 +5082,7 @@ end;
 constructor TCustomStringCollection.Create(ItemClass: TCollectionItemClass;
   Model: TBaseModel; AScreenObject: TObject; ParentCollection: TCustomNonSpatialBoundColl);
 begin
-  inherited Create(ItemClass, Model, ScreenObject);
+  inherited Create(ItemClass, Model as TCustomModel, ScreenObject);
   // ParentCollection might be nil.
   FParentCollection := ParentCollection;
 end;

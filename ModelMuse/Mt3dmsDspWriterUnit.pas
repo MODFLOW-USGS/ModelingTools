@@ -28,7 +28,7 @@ implementation
 
 uses
   frmProgressUnit, ModflowUnitNumbers, DataSetUnit, SysUtils,
-  Mt3dmsChemSpeciesUnit;
+  Mt3dmsChemSpeciesUnit, DataSetNamesUnit;
 
 resourcestring
   StrALLayerD = 'Data Set 1: AL, Layer: %d';

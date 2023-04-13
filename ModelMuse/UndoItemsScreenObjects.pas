@@ -9,7 +9,7 @@ uses SubscriptionUnit, PhastModelUnit, Types, SysUtils, Classes, Graphics,
   Contnrs, QuadTreeClass, UndoItems, AbstractGridUnit, ScreenObjectUnit,
   FastGEO, GoPhastTypes, ValueArrayStorageUnit, ModflowPackageSelectionUnit,
   System.Generics.Collections, ModflowTransientListParameterUnit,
-  ModflowConstantHeadBoundaryUnit;
+  ModflowConstantHeadBoundaryUnit, DataArrayManagerUnit;
 
 type
   EIllegalMerge = class(Exception);
@@ -1007,7 +1007,7 @@ uses Math, frmGoPhastUnit, frmSelectedObjectsUnit, frmShowHideObjectsUnit,
   ModflowCsubUnit, MeshRenumberingTypes, ModflowPackagesUnit,
   OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowFhbUnit,
-  ModflowWellUnit, Modflow6ObsUnit;
+  ModflowWellUnit, Modflow6ObsUnit, DataSetNamesUnit;
 
 resourcestring
   StrChangeSelection = 'change selection';

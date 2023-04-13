@@ -180,10 +180,10 @@ type
 
 implementation
 
-uses GR32_Polygons, BigCanvasMethods, frmGoPhastUnit,
-  ModelMuseUtilities, LayerStructureUnit,
-  PhastModelUnit, frmErrorsAndWarningsUnit,
-  IsosurfaceUnit, CustomModflowWriterUnit, Vcl.Dialogs;
+uses Vcl.Dialogs, GR32_Polygons, BigCanvasMethods, frmGoPhastUnit,
+  ModelMuseUtilities, LayerStructureUnit, PhastModelUnit, frmErrorsAndWarningsUnit,
+  IsosurfaceUnit, CustomModflowWriterUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrColumns = 'columns';

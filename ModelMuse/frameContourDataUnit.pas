@@ -72,7 +72,7 @@ uses
   RbwParser, GoPhastTypes, frmGoPhastUnit, ColorSchemes, frmFormulaErrorsUnit,
   frmErrorsAndWarningsUnit, frmProgressUnit, PhastModelUnit, LegendUnit,
   frmSpecifyContoursUnit, ClassificationUnit, Math, AbstractGridUnit,
-  MeshRenumberingTypes;
+  MeshRenumberingTypes, DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrMinValueS = ' (Min value = %s)';

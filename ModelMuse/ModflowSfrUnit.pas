@@ -720,27 +720,27 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited;
   if Model <> nil then
   begin
     ISFROPT := (Model as TPhastModel).ModflowPackages.SfrPackage.Isfropt;
   end;
-  FParamIcalc := TSfrParamIcalcCollection.Create(self, Model, ScreenObject);
-  FChannelValues := TSfrChannelCollection.Create(self, Model, ScreenObject);
-  FUpstreamSegmentValues := TSfrSegmentCollection.Create(self, Model, ScreenObject);
+  FParamIcalc := TSfrParamIcalcCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FChannelValues := TSfrChannelCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FUpstreamSegmentValues := TSfrSegmentCollection.Create(self, Model as TCustomModel, ScreenObject);
   FUpstreamSegmentValues.AssignmentLocation := alFirstVertex;
-  FDownstreamSegmentValues := TSfrSegmentCollection.Create(self, Model, ScreenObject);
+  FDownstreamSegmentValues := TSfrSegmentCollection.Create(self, Model as TCustomModel, ScreenObject);
   FDownstreamSegmentValues.AssignmentLocation := alLastVertex;
-  FUpstreamUnsatSegmentValues := TSfrUnsatSegmentCollection.Create(self, Model, ScreenObject);
+  FUpstreamUnsatSegmentValues := TSfrUnsatSegmentCollection.Create(self, Model as TCustomModel, ScreenObject);
   FUpstreamUnsatSegmentValues.AssignmentLocation := alFirstVertex;
-  FDownstreamUnsatSegmentValues := TSfrUnsatSegmentCollection.Create(self, Model, ScreenObject);
+  FDownstreamUnsatSegmentValues := TSfrUnsatSegmentCollection.Create(self, Model as TCustomModel, ScreenObject);
   FDownstreamUnsatSegmentValues.AssignmentLocation := alLastVertex;
-  FTableCollection := TSfrTableCollection.Create(self, Model, ScreenObject);
-  FSegmentFlows := TSfrSegmentFlowCollection.Create(self, Model, ScreenObject);
-  FEquationValues := TSfrEquationCollection.Create(self, Model, ScreenObject);
-  FExternalFlow := TExternalFlowProperties.Create(Model);
+  FTableCollection := TSfrTableCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FSegmentFlows := TSfrSegmentFlowCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FEquationValues := TSfrEquationCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FExternalFlow := TExternalFlowProperties.Create(Model as TCustomModel);
 
   FObservations := TSfrObservations.Create(OnInvalidateModelEvent, ScreenObject);
 
@@ -3388,7 +3388,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TFlowFileItem, InvalidateModelEvent);
 end;
@@ -3441,7 +3441,7 @@ begin
   end
   else
   begin
-    inherited Create(Model.Invalidate);
+    inherited Create(Model.DoInvalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;

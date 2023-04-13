@@ -1165,7 +1165,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TDisplaySettingsItem, InvalidateModelEvent);
 end;
@@ -1431,7 +1431,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(InvalidateModelEvent);
   FStreamColor := clBlue;
@@ -1787,7 +1787,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(InvalidateModelEvent);
   FConnectedColor := clBlue;

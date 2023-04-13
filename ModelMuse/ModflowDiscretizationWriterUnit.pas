@@ -44,7 +44,8 @@ implementation
 uses ModflowUnitNumbers, frmProgressUnit, Forms,
   ModflowOptionsUnit, GoPhastTypes, ModflowPackageSelectionUnit,
   frmErrorsAndWarningsUnit, FastGEO, DataSetUnit, ModflowIrregularMeshUnit,
-  MeshRenumberingTypes, ModflowTimeUnit, System.Math, System.IOUtils;
+  MeshRenumberingTypes, ModflowTimeUnit, System.Math, System.IOUtils,
+  DataSetNamesUnit;
 
 resourcestring
   StrWritingDiscretizati = 'Writing Discretization Package input.';

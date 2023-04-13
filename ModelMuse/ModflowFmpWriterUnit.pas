@@ -214,7 +214,8 @@ uses
   frmErrorsAndWarningsUnit, ModflowFmpCropSpatialUnit,
   Generics.Collections, ModflowFmpEvapUnit, ModflowFmpPrecipitationUnit,
   ModflowOutputControlUnit, ModflowFmpFarmIdUnit, frmGoPhastUnit,
-  ModflowMNW2_WriterUnit, PestParamRoots, ModflowFmpBaseClasses;
+  ModflowMNW2_WriterUnit, PestParamRoots, ModflowFmpBaseClasses,
+  DataSetNamesUnit;
 
 resourcestring
   StrWritingDataSet2a = '  Writing Data Set 2a.';
@@ -4201,26 +4202,6 @@ begin
     FreeAndNil(FOpenCloseFileStream);
   end;
 end;
-
-//procedure TModflowFmpWriter.WriteDataSet6;
-//var
-//  DataArray: TDataArray;
-//begin
-//  DataArray := Model.DataArrayManager.GetDataSetByName(KFarmID);
-//  Assert(DataArray <> nil);
-//  FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.FID');
-//  Model.AddModelInputFile(FOpenCloseFileName);
-//  FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
-//    fmCreate or fmShareDenyWrite);
-//  try
-//    FWriteLocation := wlOpenClose;
-//    FOpenCloseFileName := ExtractFileName(FOpenCloseFileName);
-//    WriteArray(DataArray, 0, 'Data set 6: FID', StrNoValueAssigned);
-//  finally
-//    FreeAndNil(FOpenCloseFileStream);
-//    FWriteLocation := wlMain;
-//  end;
-//end;
 
 procedure TModflowFmpWriter.WriteDataSet7;
 var

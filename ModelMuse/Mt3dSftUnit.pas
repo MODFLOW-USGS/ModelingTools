@@ -4,7 +4,8 @@ interface
 
 uses ModflowCellUnit, Mt3dmsChemUnit, System.Classes, ModflowBoundaryUnit,
   GoPhastTypes, SubscriptionUnit,
-  System.Generics.Collections, System.SysUtils, System.ZLib, DataSetUnit;
+  System.Generics.Collections, System.SysUtils, System.ZLib, DataSetUnit,
+  OrderedCollectionUnit;
 
 type
   TSftSteady = class(TObject)
@@ -152,7 +153,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TPrecipitationMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
@@ -160,7 +161,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TRunoffMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
@@ -168,7 +169,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TConstConcMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
@@ -176,7 +177,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSftObsLocation = (solNone, solFirst, solLast, solAll);
@@ -277,7 +278,7 @@ implementation
 uses
   PhastModelUnit, Mt3dmsChemSpeciesUnit, RbwParser,
   frmGoPhastUnit, ModflowTimeUnit, ScreenObjectUnit, frmFormulaErrorsUnit,
-  GlobalVariablesUnit, GIS_Functions, ModflowSfrReachUnit;
+  GlobalVariablesUnit, GIS_Functions, ModflowSfrReachUnit, DataSetNamesUnit;
 
 resourcestring
   StrHeadwater = 'Headwater';
@@ -712,7 +713,7 @@ end;
 { THeadWaterMt3dSftReachCollection }
 
 constructor THeadWaterMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
+  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -727,7 +728,7 @@ end;
 { TPrecipitationMt3dSftReachCollection }
 
 constructor TPrecipitationMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
+  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -742,7 +743,7 @@ end;
 { TRunoffMt3dSftReachCollection }
 
 constructor TRunoffMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
+  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -757,7 +758,7 @@ end;
 { TConstConcMt3dSftReachCollection }
 
 constructor TConstConcMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
+  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -1216,13 +1217,13 @@ begin
 
   CreateObservers;
 
-  FPrecipitation := TPrecipitationMt3dSftReachCollection.Create(Self, Model, ScreenObject);
-  FRunOff := TRunoffMt3dSftReachCollection.Create(Self, Model, ScreenObject);
-  FConstConc := TConstConcMt3dSftReachCollection.Create(Self, Model, ScreenObject);
+  FPrecipitation := TPrecipitationMt3dSftReachCollection.Create(Self, Model as TCustomModel, ScreenObject);
+  FRunOff := TRunoffMt3dSftReachCollection.Create(Self, Model as TCustomModel, ScreenObject);
+  FConstConc := TConstConcMt3dSftReachCollection.Create(Self, Model as TCustomModel, ScreenObject);
 
-  FInitialConcentration := TMt3dSftInitConcCollection.Create(Self, Model, ScreenObject);
+  FInitialConcentration := TMt3dSftInitConcCollection.Create(Self, Model as TCustomModel, ScreenObject);
 
-  FDispersionCoefficient:= TMt3dSftDispCollection.Create(self, Model,
+  FDispersionCoefficient:= TMt3dSftDispCollection.Create(self, Model as TCustomModel,
     ScreenObject);
 
   FObsLocation := solNone;

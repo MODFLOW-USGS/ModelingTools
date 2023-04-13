@@ -462,7 +462,7 @@ uses
   ModflowUnitNumbers, frmProgressUnit,
   ModflowFmpFarmUnit, System.StrUtils,
   ModflowFmpIrrigationUnit,
-  ModflowFmpAllotmentUnit;
+  ModflowFmpAllotmentUnit, DataSetNamesUnit;
 
 resourcestring
   StrUndefinedError = 'Undefined %s in one or more stress periods';

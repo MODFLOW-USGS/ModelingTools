@@ -55,7 +55,7 @@ uses
   GoPhastTypes, Mt3dmsChemUnit, frmProgressUnit, frmErrorsAndWarningsUnit,
   ModflowUnitNumbers, ModflowGridUnit, Mt3dmsChemSpeciesUnit,
   DataSetUnit, RbwParser, ModflowPackagesUnit, System.Contnrs, Mt3dUztRchUnit,
-  Mt3dUzfSeepageUnit;
+  Mt3dUzfSeepageUnit, DataSetNamesUnit;
 
 resourcestring
   StrUnspecifiedSSMData = 'Unspecified SSM data';

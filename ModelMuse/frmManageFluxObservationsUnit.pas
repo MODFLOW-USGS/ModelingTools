@@ -275,7 +275,7 @@ uses
   JvBoxProcs, frmGoPhastUnit, Math, GIS_Functions,
   GoPhastTypes, DataSetUnit, frmFormulaUnit, frmErrorsAndWarningsUnit,
   PhastModelUnit, Mt3dmsChemSpeciesUnit, UndoItemsScreenObjects, frmGoToUnit,
-  Modflow6ObsUnit, PestPropertiesUnit;
+  Modflow6ObsUnit, PestPropertiesUnit, DataArrayManagerUnit;
 
 resourcestring
   StrName = 'Name';

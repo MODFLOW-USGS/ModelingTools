@@ -1,8 +1,9 @@
 inherited frmImportDXF: TfrmImportDXF
   HelpKeyword = 'Import_DXF_File_Dialog_Box'
   Caption = 'Import DXF File'
-  ClientHeight = 301
-  ExplicitWidth = 568
+  ClientHeight = 300
+  ClientWidth = 556
+  ExplicitWidth = 572
   ExplicitHeight = 339
   TextHeight = 18
   inherited rgEvaluatedAt: TRadioGroup

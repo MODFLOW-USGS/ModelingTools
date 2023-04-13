@@ -5,8 +5,8 @@ inherited frmFormulaErrors: TfrmFormulaErrors
   HelpKeyword = 'Formula_Errors_Dialog_Box'
   ActiveControl = btnClose
   Caption = 'Formula Errors'
-  ClientHeight = 219
-  ClientWidth = 538
+  ClientHeight = 218
+  ClientWidth = 534
   Font.Height = 19
   FormStyle = fsStayOnTop
   OnResize = FormResize
@@ -16,19 +16,17 @@ inherited frmFormulaErrors: TfrmFormulaErrors
   TextHeight = 19
   object pnlBottom: TPanel
     Left = 0
-    Top = 174
-    Width = 538
+    Top = 173
+    Width = 534
     Height = 45
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 173
-    ExplicitWidth = 534
     DesignSize = (
-      538
+      534
       45)
     object btnClose: TBitBtn
-      Left = 433
+      Left = 425
       Top = 6
       Width = 83
       Height = 33
@@ -51,7 +49,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       OnClick = btnCopyClick
     end
     object btnHelp: TBitBtn
-      Left = 344
+      Left = 336
       Top = 6
       Width = 83
       Height = 33
@@ -87,29 +85,26 @@ inherited frmFormulaErrors: TfrmFormulaErrors
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 538
+    Width = 534
     Height = 65
     Align = alTop
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 534
     object Label1: TLabel
       Left = 1
       Top = 1
-      Width = 536
-      Height = 63
+      Width = 459
+      Height = 19
       Align = alClient
       Caption = 'The following formulas were invalid. They may have been reset.'
       WordWrap = True
-      ExplicitWidth = 459
-      ExplicitHeight = 19
     end
   end
   object sgErrors: TRbwDataGrid4
     Left = 0
     Top = 65
-    Width = 538
-    Height = 109
+    Width = 534
+    Height = 108
     Align = alClient
     ColCount = 4
     DefaultColWidth = 100
@@ -223,8 +218,6 @@ inherited frmFormulaErrors: TfrmFormulaErrors
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 534
-    ExplicitHeight = 108
     ColWidths = (
       100
       100

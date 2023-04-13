@@ -313,7 +313,7 @@ begin
   PestThicknessMethod :=
     DefaultBoundaryMethod(HfbPestThicknessPosition);
 
-  FValues := THfbCollection.Create(self, Model, ScreenObject);
+  FValues := THfbCollection.Create(self, Model as TCustomModel, ScreenObject);
 end;
 
 procedure THfbBoundary.CreateFormulaObjects;

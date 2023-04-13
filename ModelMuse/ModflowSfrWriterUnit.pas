@@ -206,7 +206,7 @@ uses ModflowUnitNumbers, OrderedCollectionUnit, frmErrorsAndWarningsUnit,
   ModflowSfrFlows, ModflowSfrChannelUnit, ModflowSfrEquationUnit,
   ModflowTimeUnit, frmProgressUnit, IntListUnit, Forms,
   ModflowBoundaryUnit, Math, DataSetUnit,
-  PestObsUnit;
+  PestObsUnit, DataSetNamesUnit;
 
 resourcestring
   StrInvalidStartingTimeStep1 = 'Invalid starting time or missing data for the '

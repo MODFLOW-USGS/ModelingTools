@@ -2,39 +2,38 @@ inherited frmImportGriddedData: TfrmImportGriddedData
   HelpType = htKeyword
   HelpKeyword = 'Import_Gridded_Data_Dialog_Box'
   Caption = 'Import Gridded Data'
-  ClientHeight = 447
-  ClientWidth = 432
+  ClientHeight = 445
+  ClientWidth = 428
   Constraints.MinHeight = 432
   Constraints.MinWidth = 444
   KeyPreview = True
   OnKeyUp = FormKeyUp
   OnResize = FormResize
   ExplicitWidth = 444
-  ExplicitHeight = 485
+  ExplicitHeight = 484
   TextHeight = 18
   object jvplCellGrid: TJvPageList
     Left = 0
     Top = 185
-    Width = 432
-    Height = 215
+    Width = 428
+    Height = 213
     ActivePage = jvspGrid
     PropagateEnable = False
     Align = alClient
-    ExplicitWidth = 428
     ExplicitHeight = 214
     object jvspCellList: TJvStandardPage
       Left = 0
       Top = 0
       Width = 432
-      Height = 215
+      Height = 214
       Caption = 'jvspCellList'
       ExplicitWidth = 436
       ExplicitHeight = 216
       object rdgList: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 436
-        Height = 174
+        Width = 432
+        Height = 173
         Align = alClient
         ColCount = 4
         FixedCols = 1
@@ -149,16 +148,18 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 436
         ExplicitHeight = 175
       end
       object pnlListControls: TPanel
         Left = 0
-        Top = 174
-        Width = 436
+        Top = 173
+        Width = 432
         Height = 41
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 175
+        ExplicitWidth = 436
         object lblNumberOfRows: TLabel
           Left = 79
           Top = 12
@@ -307,10 +308,9 @@ inherited frmImportGriddedData: TfrmImportGriddedData
     object jvspGrid: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 432
-      Height = 215
+      Width = 428
+      Height = 213
       Caption = 'jvspGrid'
-      ExplicitWidth = 428
       ExplicitHeight = 214
       object lblColumns: TLabel
         Left = 190
@@ -355,13 +355,12 @@ inherited frmImportGriddedData: TfrmImportGriddedData
   object pnlMethodControls: TPanel
     Left = 0
     Top = 0
-    Width = 432
+    Width = 428
     Height = 185
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 428
     DesignSize = (
-      432
+      428
       185)
     object lblMethod: TLabel
       Left = 8
@@ -406,7 +405,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
         'Array')
     end
     object rdgIgnoreValues: TRbwDataGrid4
-      Left = 291
+      Left = 279
       Top = 45
       Width = 124
       Height = 98
@@ -468,7 +467,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
     object combotreeDataSets: TRbwStringTreeCombo
       Left = 8
       Top = 122
-      Width = 277
+      Width = 265
       Height = 26
       Tree.Left = 0
       Tree.Top = 0
@@ -554,18 +553,17 @@ inherited frmImportGriddedData: TfrmImportGriddedData
   end
   object Panel2: TPanel
     Left = 0
-    Top = 400
-    Width = 432
+    Top = 398
+    Width = 428
     Height = 47
     Align = alBottom
     TabOrder = 2
     ExplicitTop = 399
-    ExplicitWidth = 428
     DesignSize = (
-      432
+      428
       47)
     object btnHelp: TBitBtn
-      Left = 131
+      Left = 119
       Top = 6
       Width = 91
       Height = 33
@@ -577,7 +575,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       ExplicitLeft = 127
     end
     object btnOK: TBitBtn
-      Left = 228
+      Left = 216
       Top = 6
       Width = 91
       Height = 33
@@ -609,7 +607,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       ExplicitLeft = 224
     end
     object btnCancel: TBitBtn
-      Left = 324
+      Left = 312
       Top = 6
       Width = 91
       Height = 33
@@ -620,7 +618,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       ExplicitLeft = 320
     end
     object btnPasteData: TButton
-      Left = 34
+      Left = 22
       Top = 6
       Width = 91
       Height = 33

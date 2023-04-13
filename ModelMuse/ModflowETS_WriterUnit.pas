@@ -94,7 +94,7 @@ implementation
 uses ModflowUnitNumbers, ModflowTransientListParameterUnit,
   frmErrorsAndWarningsUnit, ModflowEtsUnit,
   frmProgressUnit, Forms, frmGoPhastUnit, ModflowEvtUnit, System.Math,
-  SparseArrayUnit, SparseDataSets, Mt3dmsChemSpeciesUnit;
+  SparseArrayUnit, SparseDataSets, Mt3dmsChemSpeciesUnit, DataSetNamesUnit;
 
 { TModflowETS_Writer }
 

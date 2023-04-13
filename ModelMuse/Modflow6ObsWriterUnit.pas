@@ -273,7 +273,7 @@ uses
   ModflowIrregularMeshUnit, ModflowUnitNumbers, frmErrorsAndWarningsUnit,
   ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
   PestHeadObsWeightsUnit, ModflowCsubUnit, System.Math,
-  PestPropertiesUnit;
+  PestPropertiesUnit, DataSetNamesUnit;
 
 resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +

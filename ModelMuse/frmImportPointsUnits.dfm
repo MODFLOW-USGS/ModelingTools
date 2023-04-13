@@ -5,17 +5,17 @@ inherited frmImportPoints: TfrmImportPoints
   HelpKeyword = 'Import_Points_Dialog_Box'
   ActiveControl = btnCancel
   Caption = 'Import Points'
-  ClientHeight = 517
-  ClientWidth = 581
+  ClientHeight = 515
+  ClientWidth = 573
   KeyPreview = True
   OnKeyUp = FormKeyUp
-  ExplicitWidth = 593
-  ExplicitHeight = 555
+  ExplicitWidth = 589
+  ExplicitHeight = 554
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 468
-    Width = 581
+    Top = 466
+    Width = 573
     Height = 49
     Align = alBottom
     ParentColor = True
@@ -23,10 +23,10 @@ inherited frmImportPoints: TfrmImportPoints
     ExplicitTop = 467
     ExplicitWidth = 577
     DesignSize = (
-      581
+      573
       49)
     object btnCancel: TBitBtn
-      Left = 476
+      Left = 460
       Top = 6
       Width = 83
       Height = 33
@@ -37,7 +37,7 @@ inherited frmImportPoints: TfrmImportPoints
       ExplicitLeft = 472
     end
     object btnOK: TBitBtn
-      Left = 387
+      Left = 371
       Top = 6
       Width = 83
       Height = 33
@@ -49,7 +49,7 @@ inherited frmImportPoints: TfrmImportPoints
       ExplicitLeft = 383
     end
     object btnHelp: TBitBtn
-      Left = 298
+      Left = 282
       Top = 6
       Width = 83
       Height = 33
@@ -64,8 +64,8 @@ inherited frmImportPoints: TfrmImportPoints
   object pcImportPoints: TPageControl
     Left = 0
     Top = 0
-    Width = 581
-    Height = 468
+    Width = 573
+    Height = 466
     ActivePage = tabControls
     Align = alClient
     TabOrder = 0
@@ -77,12 +77,11 @@ inherited frmImportPoints: TfrmImportPoints
         Left = 180
         Top = 0
         Width = 393
-        Height = 435
+        Height = 434
         Align = alRight
         ParentColor = True
         TabOrder = 1
         ExplicitLeft = 176
-        ExplicitHeight = 434
         object lblRoot: TLabel
           Left = 207
           Top = 255
@@ -251,8 +250,8 @@ inherited frmImportPoints: TfrmImportPoints
       object pnlData: TPanel
         Left = 0
         Top = 0
-        Width = 180
-        Height = 435
+        Width = 172
+        Height = 433
         Align = alClient
         Caption = 'pnlData'
         TabOrder = 0
@@ -262,20 +261,19 @@ inherited frmImportPoints: TfrmImportPoints
           Left = 1
           Top = 26
           Width = 178
-          Height = 408
+          Height = 407
           Align = alClient
           Color = clRed
           ItemHeight = 18
           TabOrder = 1
           OnClickCheck = jvclbDataSetsClickCheck
           ExplicitWidth = 174
-          ExplicitHeight = 407
           InternalVersion = 202
         end
         object pnlLabelDataSets: TPanel
           Left = 1
           Top = 1
-          Width = 178
+          Width = 170
           Height = 25
           Align = alTop
           Caption = 'Data sets'
@@ -290,13 +288,13 @@ inherited frmImportPoints: TfrmImportPoints
       ImageIndex = 1
       object pnlDataTabControls: TPanel
         Left = 0
-        Top = 389
-        Width = 577
+        Top = 388
+        Width = 573
         Height = 46
         Align = alBottom
         ParentColor = True
         TabOrder = 1
-        ExplicitWidth = 573
+        ExplicitTop = 389
         object lblRows: TLabel
           Left = 115
           Top = 13
@@ -343,8 +341,8 @@ inherited frmImportPoints: TfrmImportPoints
       object dgData: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 577
-        Height = 389
+        Width = 573
+        Height = 388
         Align = alClient
         ColCount = 2
         FixedColor = 14803425
@@ -412,7 +410,7 @@ inherited frmImportPoints: TfrmImportPoints
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 573
+        ExplicitHeight = 389
         ColWidths = (
           64
           64)

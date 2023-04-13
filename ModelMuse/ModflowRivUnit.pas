@@ -527,7 +527,7 @@ var
   RivCol: TRivCollection;
 begin
   RivCol := Collection as TRivCollection;
-  FGwtConcentrations := TRivGwtConcCollection.Create(Model, ScreenObject,
+  FGwtConcentrations := TRivGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     RivCol);
   inherited;
 end;
@@ -1683,7 +1683,7 @@ begin
   inherited;
   FPestConcentrationFormulas:= TRivGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;

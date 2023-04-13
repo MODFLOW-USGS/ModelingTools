@@ -52,7 +52,7 @@ implementation
 uses RbwParser, ModflowUnitNumbers, DataSetUnit, PhastModelUnit,
   ModflowTimeUnit, frmProgressUnit, frmFormulaErrorsUnit, Forms,
   frmErrorsAndWarningsUnit, SolidGeom, PestParamRoots,
-  ModflowParameterUnit;
+  ModflowParameterUnit, DataSetNamesUnit;
 
 resourcestring
   StrNoReservoirsDefine = 'No reservoirs defined';

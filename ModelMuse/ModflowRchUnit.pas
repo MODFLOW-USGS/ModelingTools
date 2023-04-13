@@ -515,7 +515,7 @@ var
   RchCol: TRchCollection;
 begin
   RchCol := Collection as TRchCollection;
-  FGwtConcentrations := TRchGwtConcCollection.Create(Model, ScreenObject,
+  FGwtConcentrations := TRchGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     RchCol);
   inherited;
 end;
@@ -1537,7 +1537,7 @@ begin
   inherited Create(Model, ScreenObject);
   FPestConcentrationFormulas:= TRchGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;
@@ -1547,7 +1547,7 @@ begin
   PestRechargeFormula := '';
   FPestRechargeMethod := DefaultBoundaryMethod(RechPosition);
 
-  FRechargeLayers := TRchLayerCollection.Create(self, Model, ScreenObject);
+  FRechargeLayers := TRchLayerCollection.Create(self, Model as TCustomModel, ScreenObject);
 end;
 
 procedure TRchBoundary.CreateFormulaObjects;

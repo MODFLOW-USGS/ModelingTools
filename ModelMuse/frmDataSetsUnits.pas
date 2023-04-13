@@ -432,7 +432,8 @@ implementation
 uses frmGoPhastUnit, frmFormulaUnit, frmConvertChoiceUnit, InterpolationUnit,
   GIS_Functions, PhastModelUnit, GlobalVariablesUnit,
   OrderedCollectionUnit, HufDefinition, LayerStructureUnit,
-  SubscriptionUnit, Menus, SutraOptionsUnit;
+  SubscriptionUnit, Menus, SutraOptionsUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrNone = 'none';

@@ -1930,7 +1930,7 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited;
   FSubLakes:= TList.Create;
@@ -2870,7 +2870,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TLakeTableItem, InvalidateModelEvent);
 end;
@@ -2913,7 +2913,7 @@ begin
   end
   else
   begin
-    inherited Create(Model.Invalidate);
+    inherited Create(Model.DoInvalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;

@@ -76,7 +76,7 @@ implementation
 
 uses
   frmProgressUnit, frmErrorsAndWarningsUnit, Forms,
-  GoPhastTypes, ArchiveNodeInterface;
+  GoPhastTypes, ArchiveNodeInterface, DataSetNamesUnit;
 
 resourcestring
   StrZONEBUDGETZonesMus = 'ZONEBUDGET Zones must be  between 0 and 999 ' +
@@ -228,35 +228,9 @@ end;
 
 procedure TZoneBudgetZoneFileWriter.WriteDimensionsMf6;
 var
-//  IDomainDataSet: TDataArray;
-//  LayerIndex: Integer;
-//  RowIndex: Integer;
-//  ColIndex: Integer;
   NCELLS: Integer;
 begin
-//  if Model.DisvUsed then
-//  begin
-//    IDomainDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-//    NCELLS := 0;
-//    IDomainDataSet.Initialize;
-//    for LayerIndex := 0 to IDomainDataSet.LayerCount - 1 do
-//    begin
-//      for RowIndex := 0 to IDomainDataSet.RowCount - 1 do
-//      begin
-//        for ColIndex := 0 to IDomainDataSet.ColumnCount - 1 do
-//        begin
-//          if IDomainDataSet.IntegerData[LayerIndex, RowIndex, ColIndex] > 0 then
-//          begin
-//            Inc(NCELLS);
-//          end;
-//        end;
-//      end;
-//    end;
-//  end
-//  else
-//  begin
-    NCELLS := Model.ModflowLayerCount * Model.RowCount * Model.ColumnCount;
-//  end;
+  NCELLS := Model.ModflowLayerCount * Model.RowCount * Model.ColumnCount;
   WriteBeginDimensions;
   WriteString('  NCELLS ');
   WriteInteger(NCELLS);
@@ -331,7 +305,6 @@ end;
 
 procedure TZoneBudgetZoneFileWriter.WriteGridDataMf6;
 var
-//  IDomainDataSet: TDataArray;
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
@@ -340,9 +313,7 @@ var
 const
   NumbersPerLine = 20;
 begin
-//  IDomainDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   ZoneDataArray := Model.DataArrayManager.GetDataSetByName(StrZones);
-//  IDomainDataSet.Initialize;
   ZoneDataArray.Initialize;
   Count := 0;
   WriteBeginGridData;

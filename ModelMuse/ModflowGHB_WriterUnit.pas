@@ -62,7 +62,7 @@ implementation
 
 uses frmErrorsAndWarningsUnit, ModflowUnitNumbers,
   frmProgressUnit, Forms, DataSetUnit, FastGEO, ModflowMvrWriterUnit,
-  ModflowMvrUnit, Mt3dmsChemSpeciesUnit, PestPropertiesUnit;
+  ModflowMvrUnit, Mt3dmsChemSpeciesUnit, PestPropertiesUnit, DataSetNamesUnit;
 
 resourcestring
   StrTheFollowingGHBOb = 'The following GHB observation names may be valid f' +

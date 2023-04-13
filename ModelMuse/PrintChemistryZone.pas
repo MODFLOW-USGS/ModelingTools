@@ -63,7 +63,7 @@ type
 
 implementation
 
-uses frmGoPhastUnit, PhastModelUnit;
+uses frmGoPhastUnit, PhastModelUnit, DataSetNamesUnit;
 
 { TPrintChemistryDataSets }
 

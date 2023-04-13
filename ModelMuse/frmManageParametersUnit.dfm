@@ -2,15 +2,15 @@ inherited frmManageParameters: TfrmManageParameters
   HelpType = htKeyword
   HelpKeyword = 'Manage_Parameters_Dialog_Box'
   Caption = 'Manage Parameters'
-  ClientHeight = 560
-  ClientWidth = 780
-  ExplicitWidth = 792
-  ExplicitHeight = 598
+  ClientHeight = 558
+  ClientWidth = 772
+  ExplicitWidth = 788
+  ExplicitHeight = 597
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 516
-    Width = 780
+    Top = 514
+    Width = 772
     Height = 44
     Align = alBottom
     BevelOuter = bvNone
@@ -18,10 +18,10 @@ inherited frmManageParameters: TfrmManageParameters
     ExplicitTop = 515
     ExplicitWidth = 776
     DesignSize = (
-      780
+      772
       44)
     object btnOK: TBitBtn
-      Left = 598
+      Left = 582
       Top = 6
       Width = 82
       Height = 33
@@ -34,7 +34,7 @@ inherited frmManageParameters: TfrmManageParameters
       ExplicitLeft = 594
     end
     object btnCancel: TBitBtn
-      Left = 686
+      Left = 670
       Top = 6
       Width = 82
       Height = 33
@@ -46,7 +46,7 @@ inherited frmManageParameters: TfrmManageParameters
       ExplicitLeft = 682
     end
     object btnHelp: TBitBtn
-      Left = 510
+      Left = 494
       Top = 6
       Width = 82
       Height = 33
@@ -70,8 +70,8 @@ inherited frmManageParameters: TfrmManageParameters
   object pcParameters: TPageControl
     Left = 0
     Top = 0
-    Width = 780
-    Height = 516
+    Width = 772
+    Height = 514
     ActivePage = tabParameters
     Align = alClient
     TabOrder = 1
@@ -81,16 +81,15 @@ inherited frmManageParameters: TfrmManageParameters
       Caption = 'Parameters'
       object pnlParameters: TPanel
         Left = 0
-        Top = 442
+        Top = 441
         Width = 772
         Height = 41
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 441
         ExplicitWidth = 768
         DesignSize = (
-          772
+          764
           41)
         object lblNumParameters: TLabel
           Left = 63
@@ -100,7 +99,7 @@ inherited frmManageParameters: TfrmManageParameters
           Caption = 'Number of parameters'
         end
         object btnDelete: TBitBtn
-          Left = 682
+          Left = 666
           Top = 6
           Width = 82
           Height = 33
@@ -152,8 +151,8 @@ inherited frmManageParameters: TfrmManageParameters
       object rdgParameters: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 772
-        Height = 442
+        Width = 764
+        Height = 440
         Align = alClient
         ColCount = 16
         FixedCols = 0
@@ -578,15 +577,15 @@ inherited frmManageParameters: TfrmManageParameters
       inline frameParameterGroups: TframeGrid
         Left = 0
         Top = 0
-        Width = 776
-        Height = 483
+        Width = 772
+        Height = 482
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 776
         ExplicitHeight = 484
         inherited Panel: TPanel
-          Top = 442
-          Width = 776
+          Top = 441
+          Width = 772
           ExplicitTop = 443
           ExplicitWidth = 776
           inherited lbNumber: TLabel
@@ -617,8 +616,8 @@ inherited frmManageParameters: TfrmManageParameters
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 776
-          Height = 442
+          Width = 772
+          Height = 441
           ColCount = 12
           OnSelectCell = frameParameterGroupsGridSelectCell
           OnSetEditText = frameParameterGroupsGridSetEditText
@@ -945,16 +944,16 @@ inherited frmManageParameters: TfrmManageParameters
         Left = 0
         Top = 0
         Width = 772
-        Height = 483
+        Height = 482
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 772
-        ExplicitHeight = 483
+        ExplicitWidth = 616
+        ExplicitHeight = 364
         inherited tvTree: TTreeView
           Width = 772
-          Height = 483
-          ExplicitWidth = 772
-          ExplicitHeight = 483
+          Height = 482
+          ExplicitWidth = 764
+          ExplicitHeight = 481
         end
       end
     end
@@ -964,8 +963,8 @@ inherited frmManageParameters: TfrmManageParameters
       object tvTiedParameters: TTreeView
         Left = 0
         Top = 0
-        Width = 776
-        Height = 483
+        Width = 772
+        Height = 482
         Align = alClient
         DragMode = dmAutomatic
         Indent = 19

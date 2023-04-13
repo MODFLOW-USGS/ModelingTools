@@ -2,34 +2,34 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   HelpType = htKeyword
   HelpKeyword = 'Edit_Feature_Formula_Dialog_Bo'
   Caption = 'Edit Feature Formula'
-  ClientHeight = 499
-  ClientWidth = 601
-  ExplicitWidth = 613
-  ExplicitHeight = 537
+  ClientHeight = 497
+  ClientWidth = 593
+  ExplicitWidth = 609
+  ExplicitHeight = 536
   TextHeight = 18
   object spl1: TSplitter
-    Left = 256
+    Left = 248
     Top = 0
     Width = 8
-    Height = 465
+    Height = 463
     Align = alRight
     ExplicitLeft = 0
     ExplicitHeight = 601
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 465
-    Width = 601
+    Top = 463
+    Width = 593
     Height = 34
     Align = alBottom
     TabOrder = 2
     ExplicitTop = 464
     ExplicitWidth = 597
     DesignSize = (
-      601
+      593
       34)
     object btnCancel: TBitBtn
-      Left = 509
+      Left = 493
       Top = 2
       Width = 83
       Height = 27
@@ -40,7 +40,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       ExplicitLeft = 505
     end
     object btnOK: TBitBtn
-      Left = 421
+      Left = 405
       Top = 2
       Width = 82
       Height = 27
@@ -71,7 +71,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       ExplicitLeft = 417
     end
     object btnHelp: TBitBtn
-      Left = 333
+      Left = 317
       Top = 2
       Width = 82
       Height = 27
@@ -84,10 +84,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     end
   end
   object pnlTop: TPanel
-    Left = 264
+    Left = 256
     Top = 0
     Width = 337
-    Height = 465
+    Height = 463
     Align = alRight
     TabOrder = 1
     ExplicitLeft = 260
@@ -96,11 +96,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Left = 1
       Top = 162
       Width = 335
-      Height = 302
+      Height = 301
       Align = alClient
       TabOrder = 1
       OnChange = memoFormulaChange
-      ExplicitHeight = 301
     end
     object pnlControls: TPanel
       Left = 1
@@ -175,8 +174,8 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   object tvFeatures: TTreeView
     Left = 0
     Top = 0
-    Width = 256
-    Height = 465
+    Width = 248
+    Height = 463
     Align = alClient
     HideSelection = False
     Indent = 19
@@ -185,7 +184,5 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     TabOrder = 0
     OnChange = tvFeaturesChange
     OnHint = tvFeaturesHint
-    ExplicitWidth = 252
-    ExplicitHeight = 464
   end
 end

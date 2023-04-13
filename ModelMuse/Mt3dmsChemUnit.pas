@@ -114,9 +114,9 @@ type
     procedure SetItem(Index: integer; const Value: TStringConcValueItem);
   public
     procedure Assign(Source: TPersistent); override;
-    constructor Create(Model: TBaseModel; ScreenObject: TObject;
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
       Mt3dmsConcCollection: TCollection); overload;
-    constructor Create(ItemClass: TStringConcValueItemClass; Model: TBaseModel;
+    constructor Create(ItemClass: TStringConcValueItemClass; Model: ICustomModelInterfaceForTOrderedCollection;
       ScreenObject: TObject; Mt3dmsConcCollection: TCollection); overload;
     property Items[Index: integer]: TStringConcValueItem read GetItem
       write SetItem; default;
@@ -387,7 +387,7 @@ implementation
 uses ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions, Mt3dmsChemSpeciesUnit,
   ModflowPackageSelectionUnit, ModflowPackagesUnit, PhastModelUnit,
-  AbstractGridUnit, Mt3dCtsSystemUnit;
+  AbstractGridUnit, Mt3dCtsSystemUnit, DataSetNamesUnit;
 
 resourcestring
   StrConcentration = ' concentration or mass-loading';
@@ -488,7 +488,7 @@ begin
   if FStringConcCollection = nil then
   begin
     FStringConcCollection := TStringConcCollection.Create(
-      Model, ScreenObject, Collection);
+      Model as TCustomModel, ScreenObject, Collection);
   end;
   for Index := 0 to BoundaryFormulaCount - 1 do
   begin
@@ -2079,14 +2079,14 @@ begin
 end;
 
 constructor TStringConcCollection.Create(ItemClass: TStringConcValueItemClass;
-  Model: TBaseModel; ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
 //  FScreenObject := ScreenObject;
   FMt3dmsConcCollection := Mt3dmsConcCollection;
 end;
 
-constructor TStringConcCollection.Create(Model: TBaseModel;
+constructor TStringConcCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   Create(TStringConcValueItem, Model, ScreenObject, Mt3dmsConcCollection);
@@ -2405,7 +2405,7 @@ begin
     SetBoundaryCapacity(TimeList.Count, AModel);
     for TimeIndex := 0 to TimeList.Count - 1 do
     begin
-      AddSpecificBoundary(Model)
+      AddSpecificBoundary(Model as TCustomModel)
     end;
     for SpeciesIndex := 0 to ALink.TimeLists.Count - 1 do
     begin

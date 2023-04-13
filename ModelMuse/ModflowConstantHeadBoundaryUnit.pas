@@ -123,7 +123,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   // Each @name stores a @link(TChdCollection).
@@ -409,7 +409,7 @@ var
   ChdCol: TChdCollection;
 begin
   ChdCol := Collection as TChdCollection;
-  FGwtConcentrations := TChdGwtConcCollection.Create(Model, ScreenObject,
+  FGwtConcentrations := TChdGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     ChdCol);
   inherited;
 end;
@@ -788,7 +788,7 @@ begin
   end;
 end;
 
-constructor TChdCollection.Create(Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
+constructor TChdCollection.Create(Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -1121,7 +1121,7 @@ begin
 
   FPestConcentrationFormulas:= TChdGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;

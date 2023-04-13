@@ -45,7 +45,7 @@ type
   protected
     procedure OnTimesChanged(Sender: TObject); virtual;
   public
-    Constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel);
+    Constructor Create(ItemClass: TCollectionItemClass; Model: ICustomModelInterfaceForTOrderedCollection);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
@@ -68,7 +68,7 @@ type
   protected
     procedure OnTimesChanged(Sender: TObject); override;
   public
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function GetValuesByName(const AName: string): TMf6TimeSeries;
@@ -107,7 +107,7 @@ type
     procedure SetItem(Index: Integer; const Value: TDynamicTimeSeriesItem);
     procedure SetTimeCount(const Value: Integer);
   public
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function GetValuesByName(const AName: string): TDynamicTimeSeriesCollection;
@@ -142,7 +142,7 @@ type
     procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
     function GetTimeSeriesNames: TStringList;
   public
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property Items[Index: Integer]: TimeSeriesCollectionItem read GetItem write SetItem; default;
@@ -221,7 +221,7 @@ begin
   inherited;
 end;
 
-constructor TTimesSeriesCollection.Create(Model: TBaseModel);
+constructor TTimesSeriesCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TTimeSeriesItem, Model);
   FTimeSeriesDictionary := TCacheDictionary<string, TMf6TimeSeries>.Create;
@@ -764,7 +764,7 @@ end;
 constructor TimeSeriesCollectionItem.Create(Collection: TCollection);
 begin
   inherited;
-  FTimesSeriesCollection := TTimesSeriesCollection.Create(Model)
+  FTimesSeriesCollection := TTimesSeriesCollection.Create(Model as TCustomModel)
 end;
 
 destructor TimeSeriesCollectionItem.Destroy;
@@ -801,7 +801,7 @@ begin
   FTimeSeriesDictionary.Clear;
 end;
 
-constructor TTimesSeriesCollections.Create(Model: TBaseModel);
+constructor TTimesSeriesCollections.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TimeSeriesCollectionItem, Model);
 //  {$IF CompilerVersion > 28}
@@ -1134,11 +1134,11 @@ begin
   end;
 end;
 
-constructor TCustomTimesSeriesCollection.Create(ItemClass: TCollectionItemClass; Model: TBaseModel);
+constructor TCustomTimesSeriesCollection.Create(ItemClass: TCollectionItemClass; Model: ICustomModelInterfaceForTOrderedCollection);
 var
   InvalidateModelEvent: TNotifyEvent;
 begin
-  inherited;
+  inherited Create(ItemClass, Model);
   if Model = nil then
   begin
     InvalidateModelEvent := nil;
@@ -1229,7 +1229,7 @@ begin
   inherited;
 end;
 
-constructor TDyanmicTimesSeriesCollection.Create(Model: TBaseModel);
+constructor TDyanmicTimesSeriesCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TDynamicTimeSeriesItem, Model);
   FTimeSeriesDictionary := TCacheDictionary<string, TDynamicTimeSeriesCollection>.Create;

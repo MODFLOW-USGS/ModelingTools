@@ -36,7 +36,7 @@ implementation
 
 uses
   GoPhastTypes, SutraMeshUnit, Generics.Defaults,
-  SutraFileWriterUnit, IOUtils, Dialogs, PlProcUnit;
+  SutraFileWriterUnit, IOUtils, Dialogs, PlProcUnit, DataSetNamesUnit;
 
 resourcestring
   StrTheRestartFileS = 'The restart file "%s" does not exist.';

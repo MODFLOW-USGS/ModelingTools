@@ -655,7 +655,7 @@ begin
   LakPackage.PackageIdentifier := StrLAKLakePackage;
   LakPackage.Classification := BC_HeadDependentFlux;
 
-  FSfrPackage := TSfrPackageSelection.Create(Model);
+  FSfrPackage := TSfrPackageSelection.Create(Model as TCustomModel);
   SfrPackage.PackageIdentifier := StrSFR_Identifier;
   SfrPackage.Classification := BC_HeadDependentFlux;
 

@@ -166,7 +166,8 @@ implementation
 
 uses
   Contnrs, RbwParser, frmGoPhastUnit, ClassificationUnit,PhastModelUnit,
-  UndoItems, GIS_Functions, Clipbrd, SutraMeshUnit;
+  UndoItems, GIS_Functions, Clipbrd, SutraMeshUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrImportGriddedData = 'import gridded data';

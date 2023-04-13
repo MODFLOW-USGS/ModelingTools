@@ -65,7 +65,7 @@ uses
   frmCustomGoPhastUnit, frmGoPhastUnit, PhastModelUnit, ModflowParameterUnit,
   DataSetUnit, OrderedCollectionUnit, frmFormulaUnit,
   Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit,
-  frmConvertChoiceUnit, System.UITypes;
+  frmConvertChoiceUnit, System.UITypes, DataArrayManagerUnit;
 
 {$R *.dfm}
 

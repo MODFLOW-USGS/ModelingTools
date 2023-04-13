@@ -202,7 +202,7 @@ implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit,
-  AbstractGridUnit;
+  AbstractGridUnit, DataSetNamesUnit;
 
 resourcestring
   StrFarmID = 'Farm ID';

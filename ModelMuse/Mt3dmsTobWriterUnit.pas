@@ -63,7 +63,8 @@ implementation
 uses
   frmErrorsAndWarningsUnit, DataSetUnit, Contnrs,
   SubscriptionUnit, GlobalVariablesUnit, GIS_Functions, frmFormulaErrorsUnit,
-  ModflowUnitNumbers, frmProgressUnit, Math, ModflowBoundaryUnit;
+  ModflowUnitNumbers, frmProgressUnit, Math, ModflowBoundaryUnit,
+  DataSetNamesUnit;
 
 resourcestring
   ConcOffGrid = 'One or more concentration observation are not located on ' +

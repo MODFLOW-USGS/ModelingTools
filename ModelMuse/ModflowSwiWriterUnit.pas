@@ -83,7 +83,7 @@ uses
   ModflowUnitNumbers, SysUtils, frmProgressUnit,
   AbstractGridUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit, System.Math,
   BasisFunctionUnit, FastGEO, InterpolatedObsResourceUnit, ArchiveNodeInterface,
-  PestParamRoots, PestPropertiesUnit;
+  PestParamRoots, PestPropertiesUnit, DataSetNamesUnit;
 
 resourcestring
   StrTheSWIObservations = 'The SWI observations at the following cells have ' +

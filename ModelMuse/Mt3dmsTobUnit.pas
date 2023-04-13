@@ -96,7 +96,7 @@ type
     procedure RemoveModelLink(AModel: TBaseModel);
 //    property ScreenObject: TObject read FScreenObject;
     // @name creates an instance of @classname
-    constructor Create(Boundary: TMt3dmsTransObservations; Model: TBaseModel;
+    constructor Create(Boundary: TMt3dmsTransObservations; Model: ICustomModelInterfaceForTOrderedCollection;
       ScreenObject: TObject);
     procedure EvaluateConcentrationObservations(AModel: TBaseModel);
     // @name destroys the current instance of @classname.
@@ -237,7 +237,7 @@ implementation
 
 uses
   PhastModelUnit, ScreenObjectUnit, ModflowGridUnit, FastGEO,
-  frmErrorsAndWarningsUnit, SysUtils, RealListUnit;
+  frmErrorsAndWarningsUnit, SysUtils, RealListUnit, DataSetNamesUnit;
 
 resourcestring
   EarlyTimeWarning = 'Concentration observation times earlier than the beginning of the first stress period will be ignored.';
@@ -448,7 +448,7 @@ begin
 end;
 
 constructor TMt3dmsTobCollection.Create(Boundary: TMt3dmsTransObservations;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(TMt3dmsTobItem, Model, ScreenObject);
   FBoundary := Boundary;
@@ -758,7 +758,7 @@ end;
 constructor TMt3dmsTransObservations.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FValues:= TMt3dmsTobCollection.Create(self, Model, ScreenObject);
+  FValues:= TMt3dmsTobCollection.Create(self, Model as TCustomModel, ScreenObject);
 end;
 
 procedure TMt3dmsTransObservations.DeleteSpecies(const SpeciesName: string);

@@ -52,7 +52,7 @@ implementation
 uses
   ModflowUnitNumbers, frmProgressUnit, SysUtils, GoPhastTypes,
   DataSetUnit, Mt3dmsChemSpeciesUnit, ModflowOutputControlUnit, Mt3dmsTimesUnit,
-  frmErrorsAndWarningsUnit, ReadModflowArrayUnit, Dialogs;
+  frmErrorsAndWarningsUnit, ReadModflowArrayUnit, Dialogs, DataSetNamesUnit;
 
 resourcestring
   StrSInTheMT3DMSBTN = '%s in the MT3DMS or MT3D-USGS BTN package';

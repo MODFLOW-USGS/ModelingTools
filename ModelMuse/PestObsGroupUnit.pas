@@ -281,7 +281,7 @@ end;
 
 constructor TPestObservationGroups.Create(Model: TBaseModel);
 begin
-  inherited Create(TPestObservationGroup, Model);
+  inherited Create(TPestObservationGroup, Model as TCustomModel);
 end;
 
 function TPestObservationGroups.GetObsGroupByName(

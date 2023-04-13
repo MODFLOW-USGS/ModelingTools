@@ -123,7 +123,8 @@ implementation
 uses Math, ClassificationUnit, PhastModelUnit, frmGoPhastUnit,
   PhastDataSets, RealListUnit, ModflowTimeUnit,
   TimeUnit, FastGEO, RbwParser, EdgeDisplayUnit, ModelMuseUtilities,
-  SutraTimeScheduleUnit, frmProgressUnit, SutraBoundaryUnit, ConvexHullUnit;
+  SutraTimeScheduleUnit, frmProgressUnit, SutraBoundaryUnit, ConvexHullUnit,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrSAlreadyExists = '%s already exists.  Do you want to replace it?';

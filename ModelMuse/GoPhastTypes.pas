@@ -702,7 +702,11 @@ type
     procedure SetModelSelection(const Value: TModelSelection);
     property ModelSelection: TModelSelection read GetModelSelection
       write SetModelSelection;
-    procedure Invalidate(Sender: TObject);
+    procedure DoInvalidate(Sender: TObject);
+    function GetGwtUsed: Boolean;
+    property GwtUsed: Boolean read GetGwtUsed;
+    function GetInvalidate: TNotifyEvent;
+    property Invalidate: TNotifyEvent read GetInvalidate;
   end;
 
   TBaseModel = class abstract(TComponent, IModelMuseModel)
@@ -721,7 +725,9 @@ type
   public
     // Call @name to indicate that the model has changed in some important
     // respect.  The user will be prompted to save the model when closing.
-    procedure Invalidate(Sender: TObject); virtual;
+    procedure DoInvalidate(Sender: TObject); virtual;
+    function GetInvalidate: TNotifyEvent;
+    property Invalidate: TNotifyEvent read GetInvalidate;
 
     // @name indicates whether or not the model needs to be saved to file.
     // See @link(Invalidate).
@@ -1708,6 +1714,12 @@ begin
   PredictionStatFlagLabels.Add(StrStdDev);
 end;
 
+function TBaseModel.GetInvalidate: TNotifyEvent;
+begin
+  result := DoInvalidate;
+end;
+
+
 procedure TBaseModel.SetUpToDate(const Value : boolean);
 begin
   FUpToDate := Value;
@@ -1723,7 +1735,7 @@ begin
   result := 1;
 end;
 
-procedure TBaseModel.Invalidate(Sender: TObject);
+procedure TBaseModel.DoInvalidate(Sender: TObject);
 begin
   UpToDate := False;
 end;

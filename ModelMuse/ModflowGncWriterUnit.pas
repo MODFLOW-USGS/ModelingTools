@@ -47,7 +47,7 @@ implementation
 
 uses
   GoPhastTypes, DataSetUnit, frmProgressUnit,
-  frmErrorsAndWarningsUnit;
+  frmErrorsAndWarningsUnit, DataSetNamesUnit;
 
 resourcestring
   StrWritingGNCPackage = 'Writing GNC Package input.';
@@ -95,7 +95,6 @@ begin
   FDisvGrid := Model.DisvGrid;
   FGhostNodes := FDisvGrid.TwodGrid.GhostNodes;
   IDomainDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-//  ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
   KxDataArray := Model.DataArrayManager.GetDataSetByName(rsKx);
   for LayerIndex := 0 to FDisvGrid.Layers.Count - 1 do
   begin

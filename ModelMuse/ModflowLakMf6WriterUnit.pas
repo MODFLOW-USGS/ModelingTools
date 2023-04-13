@@ -266,7 +266,7 @@ uses
   frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
   FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit,
   ModflowParameterUnit, Modflow6TimeSeriesUnit,
-  Mt3dmsChemSpeciesUnit, frmGoPhastUnit, Mt3dmsChemUnit;
+  Mt3dmsChemSpeciesUnit, frmGoPhastUnit, Mt3dmsChemUnit, DataSetNamesUnit;
 
 resourcestring
   StrTheFollowingObject = 'The following objects are supposed to define lake' +

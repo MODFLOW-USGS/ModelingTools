@@ -47,7 +47,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit, GoPhastTypes, RbwParser,
   ScreenObjectUnit, AbstractGridUnit, UndoItems, FastGEO,
-  ValueArrayStorageUnit, GIS_Functions, MeshRenumberingTypes;
+  ValueArrayStorageUnit, GIS_Functions, MeshRenumberingTypes, DataSetNamesUnit;
 
 resourcestring
   StrThereWasAnErrorR = 'There was an error reading %s. Please check that th' +

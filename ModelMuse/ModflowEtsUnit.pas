@@ -439,7 +439,8 @@ const
 implementation
 
 uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  frmGoPhastUnit, frmErrorsAndWarningsUnit, System.Generics.Collections;
+  frmGoPhastUnit, frmErrorsAndWarningsUnit, System.Generics.Collections,
+  DataSetNamesUnit;
 
 resourcestring
   StrFractionalRateS = 'Fractional rate %s';
@@ -693,11 +694,11 @@ begin
   inherited Create(Model, ScreenObject);
   FPestConcentrationFormulas:= TEtsGwtConcCollection.Create(Model, ScreenObject, nil);
 //  FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 //  FConcentrationObservers := TObserverList.Create;
 
-  FEvapotranspirationLayers := TEtsLayerCollection.Create(self, Model, ScreenObject);
-  FEvtSurfDepthCollection := TEtsSurfDepthCollection.Create(self, Model, ScreenObject);
+  FEvapotranspirationLayers := TEtsLayerCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FEvtSurfDepthCollection := TEtsSurfDepthCollection.Create(self, Model as TCustomModel, ScreenObject);
 
   CreateFormulaObjects;
   CreateBoundaryObserver;
@@ -1333,7 +1334,7 @@ begin
       + ((ParentModel as TPhastModel).ModflowPackages.EtsPackage.SegmentCount-1) * 2;
     if TimeVaryingEvapotranspirationLayers then
     begin
-      result := result + EvapotranspirationLayers.TimeListCount(ParentModel);
+      result := result + EvapotranspirationLayers.TimeListCount(ParentModel as TCustomModel);
     end;
   end;
 end;
@@ -1556,7 +1557,7 @@ var
 begin
   inherited;
   LocalCollection := Collection as TCustomListArrayBoundColl;
-  Model := LocalCollection.Model;
+  Model := LocalCollection.Model as TCustomModel;
   FEtFractions := TEtsStringCollection.Create(Model, ScreenObject, LocalCollection);
   FEtFractions.Purpose := scpEtFractions;
   FDepthFractions := TEtsStringCollection.Create(Model, ScreenObject, LocalCollection);
@@ -1737,11 +1738,11 @@ procedure TEtsSurfDepthCollection.Assign(Source: TPersistent);
 begin
   if Source is TEtsSurfDepthCollection then
   begin
-    FTimeListCount := TEtsSurfDepthCollection(Source).TimeListCount(Model);
+    FTimeListCount := TEtsSurfDepthCollection(Source).TimeListCount(Model as TCustomModel);
   end
   else if Source is TEvtSurfDepthCollection then
   begin
-    FTimeListCount := TEvtSurfDepthCollection(Source).TimeListCount(Model);
+    FTimeListCount := TEvtSurfDepthCollection(Source).TimeListCount(Model as TCustomModel);
   end;
   inherited;
 end;
@@ -2033,7 +2034,7 @@ begin
         if SegmentIndex > Item.DepthFractions.Count then
         begin
           AScreenObject := ScreenObject as TScreenObject;
-          frmErrorsAndWarnings.AddError(Model,
+          frmErrorsAndWarnings.AddError(Model as TCustomModel,
             StrEvaporationDepthFr,
             Format(StrInSEvaportionsDe, [AScreenObject.Name]), AScreenObject);
           BoundaryValues[Index].Formula := '';
@@ -2059,7 +2060,7 @@ begin
         if SegmentIndex > Item.EtFractions.Count then
         begin
           AScreenObject := ScreenObject as TScreenObject;
-          frmErrorsAndWarnings.AddError(Model,
+          frmErrorsAndWarnings.AddError(Model as TCustomModel,
             StrEvaporationDepthFr,
             Format(StrInSEvaportionsDe, [AScreenObject.Name]), AScreenObject);
           BoundaryValues[Index].Formula := '';

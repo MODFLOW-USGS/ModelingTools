@@ -454,7 +454,7 @@ uses StrUtils, ModflowPackagesUnit, ModflowPackageSelectionUnit,
   ModpathParticleUnit, ModflowUzfUnit, ModflowHobUnit, ModflowRchUnit,
   ModflowEtsUnit, ModflowBoundaryUnit, ClassificationUnit, ModflowDrtUnit,
   SutraOptionsUnit, Modflow6ObsUnit, ModflowSfr6Unit, ModflowLakMf6Unit,
-  ModflowMawUnit, ModflowUzfMf6Unit;
+  ModflowMawUnit, ModflowUzfMf6Unit, DataArrayManagerUnit;
 
 resourcestring
   StrSUTRAFeatures = 'SUTRA Features';

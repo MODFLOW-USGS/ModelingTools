@@ -111,7 +111,7 @@ implementation
 
 uses frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, UndoItemsScreenObjects,
   GoPhastTypes, UndoItems, GIS_Functions, RbwParser, FastGEO, PhastModelUnit,
-  ModelMuseUtilities;
+  ModelMuseUtilities, DataArrayManagerUnit;
 
 resourcestring
   StrDataSets = 'Data Sets';

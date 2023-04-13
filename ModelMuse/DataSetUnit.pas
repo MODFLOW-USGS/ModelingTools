@@ -572,7 +572,7 @@ type
     FIsUniform: TIsUniform;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name is the @link(TPhastModel) that owns the @classname.
-    FModel: TBaseModel;
+    FModel: IModelMuseModel;
     // @name is @true if the @classname has been cleared.
     FCleared: boolean;
     // @name is true if the @classname data has been stored in a temporary file.
@@ -735,7 +735,7 @@ type
     // @name gives the number of columns of data in the @classname.
     property ColumnCount: integer read GetColumnCount;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); reintroduce; virtual;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -887,7 +887,7 @@ type
     procedure AssignProperties(Source: TDataArray); virtual;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    property Model: TBaseModel read FModel;
+    property Model: IModelMuseModel read FModel;
     property UseLgrEdgeCells: TLgrCellTreatment read FUseLgrEdgeCells write FUseLgrEdgeCells;
     property DisplayName: string read GetDisplayName write SetDisplayName;
     property ContourAlg: TContourAlg read FContourAlg write SetContourAlg;
@@ -1179,7 +1179,7 @@ type
     procedure Invalidate; override;
     // @name creates an instance of @classname and sets
     // @link(TDataArray.EvaluatedAt) to eaNodes.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1236,7 +1236,7 @@ type
       LayerMax, RowMax, ColMax: integer); override;
     // @name creates an instance of @classname and sets
     // @link(TDataArray.DataType) to rdtDouble.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1282,7 +1282,7 @@ type
       LayerMax, RowMax, ColMax: integer); override;
     // @name creates an instance of @classname and sets
     // @link(TDataArray.DataType) to rdtDouble.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1327,7 +1327,7 @@ type
     // @name adds a value at the designated location.
     procedure AddDataValue(const DataAnnotation: string; DataValue: Double;
       ColIndex, RowIndex, LayerIndex: Integer);
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     destructor Destroy; override;
     // for each cell, @name computes the average of all the values that have
     // been assigned to the cell when @AddMethod has been assigned a value of
@@ -1385,7 +1385,7 @@ type
     procedure RemoveValue(const Layer, Row, Col: Integer);
     // @name creates an instance of @classname and sets
     // @link(TDataArray.DataType) to rdtInteger.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1431,7 +1431,7 @@ type
     procedure RemoveValue(const Layer, Row, Col: Integer);
     // @name creates an instance of @classname and sets
     // @link(TDataArray.DataType) to rdtInteger.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1701,10 +1701,11 @@ uses Contnrs, frmGoPhastUnit, frmConvertChoiceUnit, GIS_Functions,
   ScreenObjectUnit, frmFormulaErrorsUnit, InterpolationUnit,
   PhastModelUnit, AbstractGridUnit, frmErrorsAndWarningsUnit, frmProgressUnit,
   frmDisplayDataUnit, SutraMeshUnit, PhastDataSets,
-  ModflowParameterUnit, OrderedCollectionUnit, SfrProcedures
+  ModflowParameterUnit, OrderedCollectionUnit, SfrProcedures,
   {$IFDEF MeasureTime}
-  , ModelMuseUtilities
+  ModelMuseUtilities,
   {$ENDIF}
+  DataArrayManagerUnit, DataSetNamesUnit
   ;
 
 resourcestring
@@ -1823,7 +1824,7 @@ begin
     end;
   end;
   if (FModel <> nil)
-    and not (csDestroying in FModel.ComponentState)
+    and not (csDestroying in (FModel as TComponent).ComponentState)
     and not (FModel as TCustomModel).Clearing
     and not ClearingDeletedDataSets then
   begin
@@ -1866,7 +1867,7 @@ begin
   FPestArrayFileNames.Free;
   LocalModel := nil;
   if (FModel <> nil)
-    and (not (csDestroying in FModel.ComponentState))
+    and (not (csDestroying in (FModel as TComponent).ComponentState))
     and not (FModel as TCustomModel).Clearing
     and not ClearingDeletedDataSets then
   begin
@@ -2284,7 +2285,7 @@ begin
   end;
   FCleared := False;
   UpToDate := True;
-  frmErrorsAndWarnings.AddError(Model, StrCircularReferenceE, ErrorMessage, ScreenObject);
+  frmErrorsAndWarnings.AddError(Model as TCustomModel, StrCircularReferenceE, ErrorMessage, ScreenObject);
   Beep;
   MessageDlg(ErrorMessage, mtError, [mbOK], 0);
 end;
@@ -2390,13 +2391,13 @@ var
         begin
           if Name = '' then
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               ErrorMessageFormulaUnNamed, Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1] ));
           end
           else
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               Format(ErrorMessageFormulaNamed, [Name]),
               Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1]));
@@ -2407,13 +2408,13 @@ var
         begin
           if Name = '' then
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               ErrorMessageFormulaUnNamedInt, Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1] ));
           end
           else
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               Format(ErrorMessageFormulaNamedInt, [Name]),
               Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1]));
@@ -2424,13 +2425,13 @@ var
         begin
           if Name = '' then
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               ErrorMessageFormulaUnNamedBool, Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1] ));
           end
           else
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               Format(ErrorMessageFormulaNamedBool, [Name]),
               Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1]));
@@ -2441,13 +2442,13 @@ var
         begin
           if Name = '' then
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               ErrorMessageFormulaUnNamedString, Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1] ));
           end
           else
           begin
-            frmErrorsAndWarnings.AddError(Model,
+            frmErrorsAndWarnings.AddError(Model as TCustomModel,
               Format(ErrorMessageFormulaNamedString, [Name]),
               Format(ErrorString,
               [LayerIndex+1,RowIndex+1,ColIndex+1]));
@@ -2553,7 +2554,7 @@ begin
             Beep;
             CurrentObject.ElevationCount := ecZero;
             ErrorMessage := Format(StrThereWasACircular, [Name, CurrentObject.Name]);
-            frmErrorsAndWarnings.AddError(Model, StrCircularReferenceE, ErrorMessage, CurrentObject);
+            frmErrorsAndWarnings.AddError(Model as TCustomModel, StrCircularReferenceE, ErrorMessage, CurrentObject);
             MessageDlg(ErrorMessage, mtError, [mbOK], 0);
             Exit;
           end
@@ -2662,7 +2663,7 @@ begin
                                   RowIndex);
 
                                 UpdateGlobalLocations(ColIndex,
-                                  RowIndex, 0, EvaluatedAt, FModel);
+                                  RowIndex, 0, EvaluatedAt, FModel as TCustomModel);
 
                                 case Datatype of
                                   rdtDouble:
@@ -2673,13 +2674,13 @@ begin
                                       begin
                                         if Name = '' then
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             ErrorMessageInterpUnNamed, Format(ErrorString,
                                             [1,RowIndex+1,ColIndex+1] ));
                                         end
                                         else
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             Format(ErrorMessageInterpNamed, [Name]),
                                             Format(ErrorString,
                                             [1,RowIndex+1,ColIndex+1]));
@@ -2726,7 +2727,7 @@ begin
                                   LocalModel.TwoDElementCorner(ColIndex,
                                   RowIndex);
                                 UpdateGlobalLocations(ColIndex,
-                                  RowIndex, 0, EvaluatedAt, FModel);
+                                  RowIndex, 0, EvaluatedAt, FModel as TCustomModel);
 
                                 case Datatype of
                                   rdtDouble:
@@ -2742,13 +2743,13 @@ begin
                                       begin
                                         if Name = '' then
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             ErrorMessageInterpUnNamed,
                                             Format(ErrorString, [1,RowIndex+1,ColIndex+1] ));
                                         end
                                         else
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             Format(ErrorMessageInterpNamed, [Name]),
                                             Format(ErrorString,
                                             [1,RowIndex+1,ColIndex+1]));
@@ -2804,7 +2805,7 @@ begin
                                   ColIndex, 0, LayerIndex);
 
                                 UpdateGlobalLocations(ColIndex, 0,
-                                  LayerIndex, EvaluatedAt, FModel);
+                                  LayerIndex, EvaluatedAt, FModel as TCustomModel);
 
                                 CellCenter.X := CellCenter3D.X;
                                 CellCenter.Y := CellCenter3D.Z;
@@ -2818,13 +2819,13 @@ begin
                                       begin
                                         if Name = '' then
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             ErrorMessageInterpUnNamed, Format(ErrorString,
                                             [LayerIndex+1,1,ColIndex+1] ));
                                         end
                                         else
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             Format(ErrorMessageInterpNamed, [Name]),
                                             Format(ErrorString,
                                             [LayerIndex+1,1,ColIndex+1]));
@@ -2871,7 +2872,7 @@ begin
                                   ColIndex, 0, LayerIndex);
 
                                 UpdateGlobalLocations(ColIndex, 0,
-                                  LayerIndex, EvaluatedAt, FModel);
+                                  LayerIndex, EvaluatedAt, FModel as TCustomModel);
 
                                 CellCorner.X := CellCorner3D.X;
                                 CellCorner.Y := CellCorner3D.Z;
@@ -2885,13 +2886,13 @@ begin
                                       begin
                                         if Name = '' then
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             ErrorMessageInterpUnNamed, Format(ErrorString,
                                             [LayerIndex+1,1,ColIndex+1] ));
                                         end
                                         else
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             Format(ErrorMessageInterpNamed, [Name]),
                                             Format(ErrorString,
                                             [LayerIndex+1,1,ColIndex+1]));
@@ -2948,7 +2949,7 @@ begin
                                   0, RowIndex, LayerIndex);
 
                                 UpdateGlobalLocations(0,
-                                  RowIndex, LayerIndex, EvaluatedAt, FModel);
+                                  RowIndex, LayerIndex, EvaluatedAt, FModel as TCustomModel);
 
                                 CellCenter.X := CellCenter3D.Y;
                                 CellCenter.Y := CellCenter3D.Z;
@@ -2962,13 +2963,13 @@ begin
                                       begin
                                         if Name = '' then
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             ErrorMessageInterpUnNamed, Format(ErrorString,
                                             [LayerIndex+1,RowIndex+1,1] ));
                                         end
                                         else
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             Format(ErrorMessageInterpNamed, [Name]),
                                             Format(ErrorString,
                                             [LayerIndex+1,RowIndex+1,1]));
@@ -3016,7 +3017,7 @@ begin
                                   0, RowIndex, LayerIndex);
 
                                 UpdateGlobalLocations(0,
-                                  RowIndex, LayerIndex, EvaluatedAt, FModel);
+                                  RowIndex, LayerIndex, EvaluatedAt, FModel as TCustomModel);
 
                                 CellCorner.X := CellCorner3D.Y;
                                 CellCorner.Y := CellCorner3D.Z;
@@ -3030,13 +3031,13 @@ begin
                                       begin
                                         if Name = '' then
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             ErrorMessageInterpUnNamed, Format(ErrorString,
                                             [LayerIndex+1,RowIndex+1,1] ));
                                         end
                                         else
                                         begin
-                                          frmErrorsAndWarnings.AddError(Model,
+                                          frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                             Format(ErrorMessageInterpNamed, [Name]),
                                             Format(ErrorString,
                                             [LayerIndex+1,RowIndex+1,1]));
@@ -3202,7 +3203,7 @@ begin
                     begin
 
                       UpdateGlobalLocations(ColIndex, RowIndex, LayerIndex,
-                        EvaluatedAt, FModel);
+                        EvaluatedAt, FModel as TCustomModel);
 
                       for VarIndex := 0 to TempUseList.Count - 1 do
                       begin
@@ -3312,13 +3313,13 @@ begin
                             begin
                               if Name = '' then
                               begin
-                                frmErrorsAndWarnings.AddError(Model,
+                                frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                   ErrorMessageFormulaUnNamed, Format(ErrorString,
                                   [LayerIndex+1,RowIndex+1,ColIndex+1] ));
                               end
                               else
                               begin
-                                frmErrorsAndWarnings.AddError(Model,
+                                frmErrorsAndWarnings.AddError(Model as TCustomModel,
                                   Format(ErrorMessageFormulaNamed, [Name]),
                                   Format(ErrorString,
                                   [LayerIndex+1,RowIndex+1,ColIndex+1]));
@@ -4158,7 +4159,7 @@ begin
   FDataType := NewDataType;
 end;
 
-constructor TDataArray.Create(AnOwner: TComponent);
+constructor TDataArray.Create(AnOwner: IModelMuseModel);
 var
   LocalPhastModel : TPhastModel;
   LocalChildModel: TChildModel;
@@ -5301,7 +5302,7 @@ begin
     begin
       FUnicodeSaved := False;
     end;
-    if (Count = 0) and (csReading in Model.ComponentState) then
+    if (Count = 0) and (csReading in (Model as TComponent).ComponentState) then
     begin
       // Data is corrupted
       raise ECorruptedData.Create(StrThereWasAProblem);
@@ -5315,7 +5316,7 @@ begin
         SetString(AnnText, nil, AnnSize);
         DecompressionStream.Read(Pointer(AnnText)^, AnnSize * SizeOf(Char));
         Annotations.Add(AnnText);
-        if (Count = 1) and (AnnText = '') and (csReading in Model.ComponentState) then
+        if (Count = 1) and (AnnText = '') and (csReading in (Model as TComponent).ComponentState) then
         begin
           // Data is corrupted
           raise ECorruptedData.Create(StrThereWasAProblem);
@@ -5326,7 +5327,7 @@ begin
         SetString(AnsiAnnText, nil, AnnSize);
         DecompressionStream.Read(Pointer(AnsiAnnText)^, AnnSize * SizeOf(AnsiChar));
         Annotations.Add(string(AnsiAnnText));
-        if (Count = 1) and (AnsiAnnText = '') and (csReading in Model.ComponentState) then
+        if (Count = 1) and (AnsiAnnText = '') and (csReading in (Model as TComponent).ComponentState) then
         begin
           // Data is corrupted
           raise ECorruptedData.Create(StrThereWasAProblem);
@@ -5880,7 +5881,7 @@ begin
   end;
   if (FModel <> nil) then
   begin
-    if (csDestroying in FModel.ComponentState) then
+    if (csDestroying in (Model as TComponent).ComponentState) then
     begin
       Exit;
     end;
@@ -6149,7 +6150,7 @@ begin
 
     if not ParameterAssigned then
     begin
-      frmErrorsAndWarnings.AddError(Model, StrNoPESTParameterAs,
+      frmErrorsAndWarnings.AddError(Model as TCustomModel, StrNoPESTParameterAs,
         Format(StrNoPESTParametersA, [Name]))
     end;
 
@@ -6206,7 +6207,7 @@ begin
     Exit;
   end;
   FDataSet := AOwner as TDataArray;
-  FModel := FDataSet.FModel;
+  FModel := FDataSet.FModel as TCustomModel;
   if not (FDataSet.DataType in ValidReturnTypes) then
   begin
     raise EInterpolationException.Create(Format(
@@ -6241,7 +6242,7 @@ begin
     AScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];
     if AScreenObject.Deleted
       or not AScreenObject.SetValuesByInterpolation
-      or not AScreenObject.UsedModels.UsesModel(DataSet.Model)
+      or not AScreenObject.UsedModels.UsesModel(DataSet.Model as TCustomModel)
       or (AScreenObject.ElevationCount <> ecZero) then
     begin
       continue;
@@ -6368,7 +6369,7 @@ begin
       continue;
     end;
 
-    if not AScreenObject.UsedModels.UsesModel(FDataSet.Model) then
+    if not AScreenObject.UsedModels.UsesModel(FDataSet.Model as TCustomModel) then
     begin
       Continue;
     end;
@@ -6418,7 +6419,7 @@ begin
   FAnnotation.Clear;
 end;
 
-constructor TCustomSparseDataSet.Create(AnOwner: TComponent);
+constructor TCustomSparseDataSet.Create(AnOwner: IModelMuseModel);
 var
   LocalModel: TCustomModel;
   LayerCount, RowCount, ColumnCount: Integer;
@@ -6516,9 +6517,9 @@ begin
         begin
           AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
           if not AScreenObject.Deleted
-            and AScreenObject.UsedModels.UsesModel(Model) then
+            and AScreenObject.UsedModels.UsesModel(Model as TCustomModel) then
           begin
-            AScreenObject.AssignValuesToDataSet(self, FModel,
+            AScreenObject.AssignValuesToDataSet(self, FModel as TCustomModel,
               UseLgrEdgeCells);
           end;
         end;
@@ -6691,7 +6692,7 @@ begin
   end;
 end;
 
-constructor TRealSparseDataSet.Create(AnOwner: TComponent);
+constructor TRealSparseDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FRealValues := T3DSparseRealArray.Create(GetQuantum(LayerCount),
@@ -6845,7 +6846,7 @@ begin
   end;
 end;
 
-constructor TIntegerSparseDataSet.Create(AnOwner: TComponent);
+constructor TIntegerSparseDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FIntegerValues := T3DSparseIntegerArray.Create(GetQuantum(LayerCount),
@@ -7481,7 +7482,7 @@ end;
 procedure TCustomTimeList.CheckSameModel(const Data: TDataArray);
 begin
   Assert(Data <> nil);
-  Assert(Model = Data.Model);
+  Assert(Model = Data.Model as TCustomModel);
 end;
 
 function TCustomTimeList.Add(const ATime: double;
@@ -8457,9 +8458,9 @@ begin
     begin
       AScreenObject := TCustomModel(FModel).ScreenObjects[ScreenObjectIndex];
       if not AScreenObject.Deleted
-        and AScreenObject.UsedModels.UsesModel(Model) then
+        and AScreenObject.UsedModels.UsesModel(Model as TCustomModel) then
       begin
-        AScreenObject.AssignValuesToDataSet(self, FModel, UseLgrEdgeCells);
+        AScreenObject.AssignValuesToDataSet(self, FModel as TCustomModel, UseLgrEdgeCells);
       end;
     end;
   end;
@@ -9316,7 +9317,7 @@ begin
   end;
 end;
 
-constructor TCustomBoundaryRealSparseDataSet.Create(AnOwner: TComponent);
+constructor TCustomBoundaryRealSparseDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FDataCached := False;
@@ -9604,7 +9605,7 @@ begin
   end;
 end;
 
-constructor TStringSparseDataSet.Create(AnOwner: TComponent);
+constructor TStringSparseDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FStringValues := T3DSparseStringArray.Create(GetQuantum(LayerCount),
@@ -9722,7 +9723,7 @@ begin
   end;
 end;
 
-constructor TBooleanSparseDataSet.Create(AnOwner: TComponent);
+constructor TBooleanSparseDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FBooleanValues := T3DSparseBooleanArray.Create(GetQuantum(LayerCount),

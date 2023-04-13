@@ -129,7 +129,7 @@ implementation
 
 uses frmGoPhastUnit, GoPhastTypes, frmCustomGoPhastUnit, System.Math,
   ScreenObjectUnit, ModflowSfr6Unit, PhastModelUnit,
-  Mt3dmsChemSpeciesUnit;
+  Mt3dmsChemSpeciesUnit, DataSetNamesUnit;
 
 resourcestring
   StrDiversionSegmentI = 'Diversion Segment (iconr)';

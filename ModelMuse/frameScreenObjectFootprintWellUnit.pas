@@ -28,7 +28,8 @@ type
 implementation
 
 uses
-  GoPhastTypes, FootprintBoundary, DataSetUnit, PhastModelUnit, frmGoPhastUnit;
+  GoPhastTypes, FootprintBoundary, DataSetUnit, PhastModelUnit, frmGoPhastUnit,
+  DataSetNamesUnit;
 
 
 

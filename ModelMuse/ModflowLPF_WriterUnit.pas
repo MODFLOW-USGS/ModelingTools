@@ -68,7 +68,8 @@ resourcestring
 implementation
 
 uses ModflowUnitNumbers,
-  frmErrorsAndWarningsUnit, frmProgressUnit, Forms, PestParamRoots;
+  frmErrorsAndWarningsUnit, frmProgressUnit, Forms, PestParamRoots,
+  DataSetNamesUnit;
 
 resourcestring
   StrVKCBParameterImpro = 'VKCB parameter improperly defined.';

@@ -110,7 +110,7 @@ type
     procedure RemoveModelLink(AModel: TBaseModel);
 //    property ScreenObject: TObject read FScreenObject;
     // @name creates an instance of @classname
-    constructor Create(Boundary: TSwiObsBoundary; Model: TBaseModel;
+    constructor Create(Boundary: TSwiObsBoundary; Model: ICustomModelInterfaceForTOrderedCollection;
       ScreenObject: TObject);
     procedure EvaluateZetaObservations(AModel: TBaseModel);
     // @name destroys the current instance of @classname.
@@ -229,7 +229,7 @@ implementation
 
 uses
   ScreenObjectUnit, PhastModelUnit, ModflowGridUnit, FastGEO,
-  frmErrorsAndWarningsUnit, RealListUnit;
+  frmErrorsAndWarningsUnit, RealListUnit, DataSetNamesUnit;
 
 resourcestring
   ErrorRoot = 'Error: Duplicate zeta observation times';
@@ -414,7 +414,7 @@ begin
 end;
 
 constructor TSwiObsCollection.Create(Boundary: TSwiObsBoundary;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(TSwiObsItem, Model, ScreenObject);
   FBoundary := Boundary;
@@ -701,7 +701,7 @@ end;
 constructor TSwiObsBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FValues:= TSwiObsCollection.Create(self, Model, ScreenObject);
+  FValues:= TSwiObsCollection.Create(self, Model as TCustomModel, ScreenObject);
   FZetaSurfaceNumber := 1;
 end;
 

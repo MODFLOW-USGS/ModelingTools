@@ -2,22 +2,23 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
   HelpType = htKeyword
   HelpKeyword = 'Import_Gridded_Data_Files_Dial'
   Caption = 'Import Gridded Data Files'
-  ClientHeight = 267
+  ClientHeight = 266
+  ClientWidth = 422
   ExplicitWidth = 438
   ExplicitHeight = 305
   TextHeight = 18
   inline frameGridFiles: TframeGrid
     Left = 0
     Top = 0
-    Width = 426
-    Height = 132
+    Width = 422
+    Height = 131
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 422
     ExplicitHeight = 131
     inherited Panel: TPanel
       Top = 91
-      Width = 426
+      Width = 430
       ExplicitTop = 90
       ExplicitWidth = 422
       inherited lbNumber: TLabel
@@ -44,7 +45,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 426
+      Width = 430
       Height = 91
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowMoving, goEditing, goAlwaysShowEditor]
       OnSetEditText = frameGridFilesGridSetEditText
@@ -80,15 +81,13 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 132
-    Width = 426
+    Top = 131
+    Width = 422
     Height = 135
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 131
-    ExplicitWidth = 422
     DesignSize = (
-      426
+      422
       135)
     object lblModel: TLabel
       Left = 8
@@ -98,7 +97,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
       Caption = 'Model'
     end
     object btnHelp: TBitBtn
-      Left = 149
+      Left = 141
       Top = 94
       Width = 83
       Height = 33
@@ -110,7 +109,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
       ExplicitLeft = 145
     end
     object btnOK: TBitBtn
-      Left = 238
+      Left = 230
       Top = 94
       Width = 83
       Height = 33
@@ -122,7 +121,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
       ExplicitLeft = 234
     end
     object btnCancel: TBitBtn
-      Left = 327
+      Left = 319
       Top = 94
       Width = 83
       Height = 33

@@ -136,7 +136,7 @@ implementation
 uses
   DataSetUnit, SutraFileWriterUnit, frmErrorsAndWarningsUnit, PlProcUnit,
   ModflowParameterUnit, OrderedCollectionUnit, RbwParser,
-  frmFormulaErrorsUnit, frmGoPhastUnit;
+  frmFormulaErrorsUnit, frmGoPhastUnit, DataSetNamesUnit;
 
 resourcestring
   StrMaxPermMinPerm = 'Maximum permeability < Minimum permeability';

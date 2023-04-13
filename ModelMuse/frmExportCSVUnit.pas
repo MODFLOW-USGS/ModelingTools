@@ -60,7 +60,8 @@ implementation
 uses
   Contnrs, ClassificationUnit, frmGoPhastUnit, PhastModelUnit, AbstractGridUnit,
   CustomModflowWriterUnit, RbwParser,
-  Generics.Collections, FastGEO, Generics.Defaults, MeshRenumberingTypes;
+  Generics.Collections, FastGEO, Generics.Defaults, MeshRenumberingTypes,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrYouMustDefineThe = 'You must define the grid before you can export data' +

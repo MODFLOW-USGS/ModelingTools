@@ -93,7 +93,8 @@ type
 implementation
 
 uses DataSetUnit, frmGoPhastUnit, frmGridValueUnit, ScreenObjectUnit,
-  ModflowPackagesUnit, frmDisplayDataUnit, System.SysUtils, contnrs;
+  ModflowPackagesUnit, frmDisplayDataUnit, System.SysUtils, contnrs,
+  DataSetNamesUnit;
 
 resourcestring
   StrChangeModelSelecti = 'change model selection';
@@ -125,89 +126,9 @@ begin
     FNewSteadyModflowParameterDataSets;
 end;
 
-(*
-procedure TCustomCreateRequiredDataSetsUndo.UpdateDataArray(Model: TCustomModel; Index: integer);
-var
-  DataArray: TDataArray;
-//  DataArrayIndex: Integer;
-  DataSetName: string;
-  Orientation: TDataSetOrientation;
-  DataType: TRbwDataType;
-  ArrayNeeded, CreateDataSet: TObjectUsedEvent;
-  NewFormula, Classification: string;
-  Lock: TDataLock;
-  DataArrayManager: TDataArrayManager;
-  PhastModel: TPhastModel;
-  ChildIndex: Integer;
-  ChildModel: TChildModel;
-begin
-  DataArrayManager := Model.DataArrayManager;
-
-  DataSetName := DataArrayManager.FDataArrayCreationRecords[Index].Name;
-  Orientation := DataArrayManager.FDataArrayCreationRecords[Index].Orientation;
-  DataType := DataArrayManager.FDataArrayCreationRecords[Index].DataType;
-  ArrayNeeded := DataArrayManager.FDataArrayCreationRecords[Index].DataSetNeeded;
-  CreateDataSet := DataArrayManager.FDataArrayCreationRecords[Index].DataSetShouldBeCreated;
-  NewFormula := DataArrayManager.FDataArrayCreationRecords[Index].Formula;
-  Classification := DataArrayManager.FDataArrayCreationRecords[Index].Classification;
-  Lock := DataArrayManager.FDataArrayCreationRecords[Index].Lock;
-
-  DataArray := DataArrayManager.GetDataSetByName(DataSetName);
-//  DataArray := nil;
-  Assert(Assigned(ArrayNeeded));
-  if DataArray <> nil then
-  begin
-//    DataArray := Model.DataSets[DataArrayIndex];
-    DataArray.Name := DataSetName;
-    DataArray.Lock := Lock;
-  end
-  else if ArrayNeeded(DataArray)
-    or (Assigned(CreateDataSet) and CreateDataSet(self)) then
-  begin
-    DataArray := DataArrayManager.CreateNewDataArray(
-      DataArrayManager.FDataArrayCreationRecords[Index].DataSetType, DataSetName,
-      NewFormula, DataSetName,
-      Lock, DataType, DataArrayManager.FDataArrayCreationRecords[Index].EvaluatedAt,
-      Orientation, Classification);
-    DataArray.OnDataSetUsed := ArrayNeeded;
-    DataArray.Lock := Lock;
-    DataArray.CheckMax := DataArrayManager.FDataArrayCreationRecords[Index].CheckMax;
-    DataArray.CheckMin := DataArrayManager.FDataArrayCreationRecords[Index].CheckMin;
-    DataArray.Max := DataArrayManager.FDataArrayCreationRecords[Index].Max;
-    DataArray.Min := DataArrayManager.FDataArrayCreationRecords[Index].Min;
-
-    DataArray.Visible := DataArrayManager.FDataArrayCreationRecords[Index].Visible;
-
-    FNewPackageDataSets.Add(DataArray);
-  end;
-  if DataArray <> nil then
-  begin
-    DataArray.AssociatedDataSets :=
-      DataArrayManager.FDataArrayCreationRecords[Index].AssociatedDataSets;
-  end;
-  if (DataArray <> nil) {and (Model.Grid <> nil)} then
-  begin
-    Model.UpdateDataArrayDimensions(DataArray);
-//    DataArray.UpdateDimensions(Model.Grid.LayerCount, Model.Grid.RowCount,
-//      Model.Grid.ColumnCount);
-  end;
-  Model.UpdateDataArrayParameterUsed;
-  if Model is TPhastModel then
-  begin
-    PhastModel := TPhastModel(Model);
-    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
-    begin
-      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      UpdateDataArray(ChildModel, Index);
-    end;
-  end;
-end;
-*)
-
 procedure TCustomCreateRequiredDataSetsUndo.UpdatePackageLayers;
 var
   Model: TPhastModel;
-//  Index: Integer;
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
@@ -219,15 +140,7 @@ begin
     ChildModel := Model.ChildModels[ChildIndex].ChildModel;
     ChildModel.DataArrayManager.CreateInitialDataSets;
   end;
-
-
-//  for Index := 0 to Length(Model.DataArrayManager.FDataArrayCreationRecords) - 1 do
-//  begin
-//    UpdateDataArray(Model, Index);
-//  end;
-
   UpdateFrmDisplayData;
-//  UpdateFrmContourData;
   UpdateFrmGridValue;
 end;
 

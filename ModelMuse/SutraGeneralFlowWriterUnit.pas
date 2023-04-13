@@ -594,7 +594,6 @@ begin
     end;
 
     Mesh := Model.Mesh as TSutraMesh3D;
-  //  ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
     LastUsed := TIntegerList.Create;
     try
       for ListIndex := 0 to FPressure1TimeLists.Count - 1 do

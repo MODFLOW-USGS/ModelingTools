@@ -45,7 +45,7 @@ implementation
 
 uses frmErrorsAndWarningsUnit,
   ModflowUnitNumbers, frmProgressUnit, Forms,
-  DataSetUnit, FastGEO;
+  DataSetUnit, FastGEO, DataSetNamesUnit;
 
 resourcestring
   StrWritingDRNPackage = 'Writing DRN Package input.';

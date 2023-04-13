@@ -178,7 +178,8 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions, DataSetUnit;
+  frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions, DataSetUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrLKTInitialConcentr = 'LKT Initial Concentration';
@@ -289,9 +290,9 @@ begin
   CreateBoundaryObserver;
 //  CreateFormulaObjects;
   CreateObservers;
-  FInitialConcentrations := TLktInitConcCollection.Create(Self, Model, ScreenObject);
+  FInitialConcentrations := TLktInitConcCollection.Create(Self, Model as TCustomModel, ScreenObject);
 
-  FRunoffConcentration:= TMt3dLktConcCollection.Create(self, Model,
+  FRunoffConcentration:= TMt3dLktConcCollection.Create(self, Model as TCustomModel,
     ScreenObject);
 //  InitialConcentration := '0';
 end;
@@ -554,13 +555,9 @@ end;
 
 procedure TLktInitConcItem.Loaded;
 var
-//  ScreenBottomObserver: TObserver;
   InitConcObserver: TObserver;
-//  SkinKObserver: TObserver;
-//  SkinRadiusObserver: TObserver;
   ParentCollection: TLktInitConcCollection;
   ScreenObject: TScreenObject;
-//  InitConcDataArray: TDataArray;
 begin
   ParentCollection := Collection as TLktInitConcCollection;
   ScreenObject := ParentCollection.ScreenObject as TScreenObject;
@@ -568,11 +565,6 @@ begin
   InitConcObserver := FObserverList[InitConcPosition];
   ScreenObject.TalksTo(InitConcObserver);
   InitConcObserver.OnUpToDateSet := ParentCollection.InvalidateInitConcData;
-//  InitConcDataArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(KMAWScreenBottom);
-//  if InitConcDataArray <> nil then
-//  begin
-//    InitConcObserver.TalksTo(InitConcDataArray);
-//  end;
 end;
 
 procedure TLktInitConcItem.RemoveFormulaObjects;
@@ -729,12 +721,6 @@ begin
         Link.FInitCondData.Invalidate;
       end;
     end;
-
-//    ScreenTopDataArray := PhastModel.DataArrayManager.GetDataSetByName(KMAWScreenTop);
-//    if ScreenTopDataArray <> nil then
-//    begin
-//      ScreenTopDataArray.Invalidate;
-//    end;
   end;
 end;
 

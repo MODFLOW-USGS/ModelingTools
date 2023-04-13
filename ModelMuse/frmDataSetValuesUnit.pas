@@ -66,7 +66,7 @@ implementation
 {$R *.dfm}
 
 uses Contnrs, ClassificationUnit, frmGoPhastUnit, RbwParser,
-  GoPhastTypes, PhastModelUnit, SutraMeshUnit;
+  GoPhastTypes, PhastModelUnit, SutraMeshUnit, DataSetNamesUnit;
 
 resourcestring
   StrParentModel = 'Parent model';

@@ -87,7 +87,7 @@ type
     procedure SetItem(Index: Integer; const Value: TReceiverItem);
   public
     procedure Loaded(AModel: TBaseModel);
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TReceiverItem read GetItem write SetItem; default;
     function Add: TReceiverItem;
   end;
@@ -126,7 +126,7 @@ type
     procedure SetItem(Index: Integer; const Value: TIndividualMvrItem);
   public
     procedure Assign(Source: TPersistent); override;
-    constructor Create(Model: TBaseModel; ScreenObject: TObject;
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
       MvrItems: TCollection);
     property Items[Index:Integer]: TIndividualMvrItem read GetItem write SetItem; default;
     function IndexOfFormulaObject(AFormulaObject: TFormulaObject): integer;
@@ -482,7 +482,7 @@ begin
   if FItems = nil then
   begin
     FItems := TIndividualMvrItems.Create(
-      Model, ScreenObject, Collection);
+      Model as TCustomModel, ScreenObject, Collection);
   end;
   for Index := 0 to BoundaryFormulaCount - 1 do
   begin
@@ -633,7 +633,7 @@ end;
 constructor TMvrBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FReceivers := TReceiverCollection.Create(Model);
+  FReceivers := TReceiverCollection.Create(Model as TCustomModel);
 end;
 
 destructor TMvrBoundary.Destroy;
@@ -711,7 +711,7 @@ begin
 
 end;
 
-constructor TIndividualMvrItems.Create(Model: TBaseModel; ScreenObject: TObject;
+constructor TIndividualMvrItems.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
   MvrItems: TCollection);
 begin
   inherited Create(TIndividualMvrItem, Model, ScreenObject);
@@ -1108,7 +1108,7 @@ begin
   result := inherited Add as TReceiverItem;
 end;
 
-constructor TReceiverCollection.Create(Model: TBaseModel);
+constructor TReceiverCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TReceiverItem, Model);
 end;

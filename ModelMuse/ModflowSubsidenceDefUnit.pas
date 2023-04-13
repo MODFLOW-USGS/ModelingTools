@@ -24,7 +24,7 @@ type
     procedure SetItem(Index: integer; const Value: TUseLayerNumberItem);
   public
     function Add: TUseLayerNumberItem;
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TUseLayerNumberItem read GetItem
       write SetItem; default;
     function GetItemByLayerNumber(LayerNumber: integer): TUseLayerNumberItem;
@@ -129,7 +129,7 @@ type
     procedure SetItem(Index: integer; const Value: TSubNoDelayBedLayerItem);
   public
     function Add: TSubNoDelayBedLayerItem;
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TSubNoDelayBedLayerItem read GetItem
       write SetItem; default;
     procedure Loaded;
@@ -228,7 +228,7 @@ type
     procedure SetItem(Index: integer; const Value: TSubDelayBedLayerItem);
   public
     function Add: TSubDelayBedLayerItem;
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TSubDelayBedLayerItem read GetItem
       write SetItem; default;
     procedure Loaded;
@@ -306,7 +306,7 @@ type
     procedure SetItem(Index: integer; const Value: TSwtWaterTableItem);
   public
     function Add: TSwtWaterTableItem;
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TSwtWaterTableItem read GetItem
       write SetItem; default;
     procedure Loaded;
@@ -427,7 +427,7 @@ implementation
 uses
   PhastModelUnit, DataSetUnit, RbwParser,
   ModflowPackageSelectionUnit, ModflowPackagesUnit, ScreenObjectUnit,
-  frmGoPhastUnit, LayerStructureUnit;
+  frmGoPhastUnit, LayerStructureUnit, DataSetNamesUnit;
 
 const
   kNoDelayPreconsolid = 'No_Delay_Preconsolidation_Head';
@@ -1083,7 +1083,7 @@ begin
   result := inherited Add as TSubDelayBedLayerItem;
 end;
 
-constructor TSubDelayBedLayers.Create(Model: TBaseModel);
+constructor TSubDelayBedLayers.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSubDelayBedLayerItem, Model);
 end;
@@ -1126,7 +1126,7 @@ begin
   result := inherited Add as TSubNoDelayBedLayerItem;
 end;
 
-constructor TSubNoDelayBedLayers.Create(Model: TBaseModel);
+constructor TSubNoDelayBedLayers.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSubNoDelayBedLayerItem, Model);
 end;
@@ -1191,7 +1191,7 @@ begin
   result := inherited Add as TUseLayerNumberItem;
 end;
 
-constructor TUseLayersCollection.Create(Model: TBaseModel);
+constructor TUseLayersCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TUseLayerNumberItem, Model);
 end;
@@ -1249,7 +1249,7 @@ begin
   FDataArrayTypes := TStringList.Create;
   FDataArrayDisplayTypes := TStringList.Create;
   FUsedLayers := TUseLayersCollection.Create(
-    (Collection as TOrderedCollection).Model);
+    (Collection as TOrderedCollection).Model as TCustomModel);
 end;
 
 destructor TCustomSubLayerItem.Destroy;
@@ -1266,7 +1266,7 @@ begin
   FDataArrayTypes.Free;
   FAssociatedModelDataSetNames.Free;
 
-  if (Model <> nil) and not (csDestroying in Model.ComponentState) then
+  if (Model <> nil) and not (csDestroying in (Model as TComponent).ComponentState) then
   begin
     LocalModel := Model as TCustomModel;
     for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
@@ -1699,7 +1699,7 @@ begin
   result := inherited Add as TSwtWaterTableItem
 end;
 
-constructor TWaterTableLayers.Create(Model: TBaseModel);
+constructor TWaterTableLayers.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSwtWaterTableItem, Model);
 end;

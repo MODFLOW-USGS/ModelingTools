@@ -68,7 +68,7 @@ implementation
 uses
   frmProgressUnit, AsciiRasterReaderUnit, frmGoPhastUnit, DataSetUnit,
   ScreenObjectUnit, UndoItems, ModelMuseUtilities,
-  ValueArrayStorageUnit, GIS_Functions;
+  ValueArrayStorageUnit, GIS_Functions, DataSetNamesUnit;
 
 resourcestring
   StrYouMustHaveAVali = 'You must have a valid grid before attempting ' +

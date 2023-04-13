@@ -10,9 +10,9 @@ interface
 uses System.UITypes,
   Windows, SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
   Dialogs, StdCtrls, frmCustomGoPhastUnit, Buttons, ExtCtrls,
-  ScreenObjectUnit,
-  FastGEO, AbstractGridUnit, GoPhastTypes,
-  ValueArrayStorageUnit, PhastModelUnit, MeshRenumberingTypes;
+  ScreenObjectUnit, FastGEO, AbstractGridUnit, GoPhastTypes,
+  ValueArrayStorageUnit, PhastModelUnit, MeshRenumberingTypes,
+  DataArrayManagerUnit;
 
 type
   TImportMethod = (imLowest, imHighest, imAverage, imClosest);
@@ -140,7 +140,7 @@ resourcestring
 implementation
 
 uses frmGoPhastUnit, DataSetUnit,
-  RbwParser, frmDataSetsUnits;
+  RbwParser, frmDataSetsUnits, DataSetNamesUnit;
 
 resourcestring
   StrYouMustHaveAGrid = 'You must have a grid or mesh defined before you can' +

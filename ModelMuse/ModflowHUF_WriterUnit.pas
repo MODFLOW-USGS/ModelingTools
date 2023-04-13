@@ -3,7 +3,7 @@ unit ModflowHUF_WriterUnit;
 interface
 
 uses SysUtils, Classes, CustomModflowWriterUnit, PhastModelUnit, 
-  ModflowPackageSelectionUnit, HufDefinition;
+  ModflowPackageSelectionUnit, HufDefinition, DataArrayManagerUnit;
 
 type
   TModflowHUF_Writer = class(TCustomFlowPackageWriter)
@@ -41,7 +41,7 @@ implementation
 
 uses Math, Contnrs , ModflowUnitNumbers, frmProgressUnit, OrderedCollectionUnit,
   GoPhastTypes, DataSetUnit, frmErrorsAndWarningsUnit, ModflowParameterUnit,
-  Forms, PestParamRoots;
+  Forms, PestParamRoots, DataSetNamesUnit;
 
 const
   HufSteadyAndTransientParameters = [ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY];

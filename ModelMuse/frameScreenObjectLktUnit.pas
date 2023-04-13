@@ -69,7 +69,8 @@ implementation
 
 uses
   ScreenObjectUnit, Mt3dLktUnit, PhastModelUnit, frmGoPhastUnit, GoPhastTypes,
-  frmCustomGoPhastUnit, System.Math, System.UITypes, DataSetUnit;
+  frmCustomGoPhastUnit, System.Math, System.UITypes, DataSetUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrChemicalSpecies = 'Chemical species';

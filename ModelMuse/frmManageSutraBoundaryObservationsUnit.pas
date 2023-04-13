@@ -9,7 +9,7 @@ uses
   RbwDataGrid4, JvExComCtrls, JvComCtrls, JvEdit,
   Vcl.ComCtrls, RbwParser, Vcl.Buttons, Vcl.ExtCtrls, Vcl.Menus, JvExExtCtrls,
   JvNetscapeSplitter, framePestObsUnit, FluxObservationUnit, SutraPestObsUnit,
-  ScreenObjectUnit, JvBoxProcs, UndoItems, System.UITypes, System.Types;
+  ScreenObjectUnit, JvBoxProcs, UndoItems, System.UITypes, System.Types, DataArrayManagerUnit;
 
 type
   TfrmManageSutraBoundaryObservations = class(TfrmCustomGoPhast)

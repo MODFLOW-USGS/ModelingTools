@@ -199,7 +199,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[index: Integer] : TConduitLayerItem read GetItem
       write SetItem; default;
   end;
@@ -340,7 +340,7 @@ type
     procedure Assign(Source: TPersistent);override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     destructor Destroy; override;
     property LayerGroups[const Index: integer]: TLayerGroup
       read GetLayerGroup; default;
@@ -386,7 +386,7 @@ type
     function LayerCount: integer; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property LayerGroups[const Index: integer]: TSutraLayerGroup
       read GetLayerGroup; default;
     function NodeLayerCount: Integer;
@@ -399,7 +399,7 @@ resourcestring
 implementation
 
 uses Math, RbwParser, PhastModelUnit, DataSetUnit,
-  ModflowDiscretizationWriterUnit, SutraMeshUnit;
+  ModflowDiscretizationWriterUnit, SutraMeshUnit, DataSetNamesUnit;
 
 const
   KBottom = '_Bottom';
@@ -446,7 +446,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := (Model as TCustomModel).DoInvalidate;
   end;
   FMt3dmsHorzTransDisp := TRealCollection.Create(InvalidateModelEvent);
   FMt3dmsHorzTransDisp.InitialValue := 0.1;
@@ -454,10 +454,10 @@ begin
   FMt3dmsVertTransDisp.InitialValue := 0.01;
   FMt3dmsDiffusionCoef := TRealCollection.Create(InvalidateModelEvent);
   FMt3dmsDiffusionCoef.InitialValue := 0;
-  FSubNoDelayBedLayers := TSubNoDelayBedLayers.Create(Model);
-  FSubDelayBedLayers := TSubDelayBedLayers.Create(Model);
-  FWaterTableLayers := TWaterTableLayers.Create(Model);
-  FConduitLayers := TConduitLayerCollection.Create(Model);
+  FSubNoDelayBedLayers := TSubNoDelayBedLayers.Create(Model as TCustomModel);
+  FSubDelayBedLayers := TSubDelayBedLayers.Create(Model as TCustomModel);
+  FWaterTableLayers := TWaterTableLayers.Create(Model as TCustomModel);
+  FConduitLayers := TConduitLayerCollection.Create(Model as TCustomModel);
 //  AquiferName := 'New Layer Group';
 //  AquiferName := '';
   FHorizontalAnisotropy := 1;
@@ -912,7 +912,7 @@ begin
   end;
 end;
 
-constructor TLayerStructure.Create(Model: TBaseModel);
+constructor TLayerStructure.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TLayerGroup, Model);
   FSimulatedNotifier := TObserver.Create(nil);
@@ -1922,7 +1922,7 @@ begin
         begin
           LocalDataArrayName := GenerateNewName(Value);
 //          FAquiferDisplayName := LocalDataArrayName;
-          SetTopDisplayName(Collection.Model);
+          SetTopDisplayName(Collection.Model as TCustomModel);
 //          FAquiferDisplayName := ModelTopDisplayName;
           DataArrayName := LocalDataArrayName;
         end
@@ -1975,7 +1975,7 @@ end;
 
 { TSutraLayerStructure }
 
-constructor TSutraLayerStructure.Create(Model: TBaseModel);
+constructor TSutraLayerStructure.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSutraLayerGroup, Model);
 end;
@@ -2303,7 +2303,7 @@ end;
 
 { TConduitLayerCollection }
 
-constructor TConduitLayerCollection.Create(Model: TBaseModel);
+constructor TConduitLayerCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TConduitLayerItem, Model);
 end;

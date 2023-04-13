@@ -4,8 +4,8 @@ inherited frmImportDistributedData: TfrmImportDistributedData
   HelpType = htKeyword
   HelpKeyword = 'Import_Distributed_Data_by_Zone'
   Caption = 'Import Distributed Data by Zone'
-  ClientHeight = 356
-  ClientWidth = 468
+  ClientHeight = 355
+  ClientWidth = 464
   OnResize = FormResize
   ExplicitWidth = 480
   ExplicitHeight = 394
@@ -14,12 +14,11 @@ inherited frmImportDistributedData: TfrmImportDistributedData
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 468
+    Width = 464
     Height = 169
     Align = alTop
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 464
     object lblLowerX: TLabel
       Left = 8
       Top = 12
@@ -159,19 +158,17 @@ inherited frmImportDistributedData: TfrmImportDistributedData
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 315
-    Width = 468
+    Top = 314
+    Width = 464
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 314
-    ExplicitWidth = 464
     DesignSize = (
-      468
+      464
       41)
     object btnOK: TBitBtn
-      Left = 261
+      Left = 253
       Top = 4
       Width = 89
       Height = 33
@@ -203,7 +200,7 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       ExplicitLeft = 257
     end
     object btnCancel: TBitBtn
-      Left = 357
+      Left = 349
       Top = 4
       Width = 91
       Height = 33
@@ -214,7 +211,7 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       ExplicitLeft = 353
     end
     object btnHelp: TBitBtn
-      Left = 165
+      Left = 157
       Top = 4
       Width = 89
       Height = 33
@@ -229,8 +226,8 @@ inherited frmImportDistributedData: TfrmImportDistributedData
   object dgDataSets: TRbwDataGrid4
     Left = 0
     Top = 169
-    Width = 468
-    Height = 146
+    Width = 464
+    Height = 145
     Align = alClient
     ColCount = 2
     DefaultColWidth = 100
@@ -297,8 +294,6 @@ inherited frmImportDistributedData: TfrmImportDistributedData
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 464
-    ExplicitHeight = 145
     ColWidths = (
       100
       100)

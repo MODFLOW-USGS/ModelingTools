@@ -83,7 +83,7 @@ uses ModflowGridUnit, AbstractGridUnit, ScreenObjectUnit, GoPhastTypes,
   ModflowSwrReachGeometryUnit, ModflowSwrReachUnit, ModflowSwrUnit,
   ModflowSwrDirectRunoffUnit, ModflowSwrStructureUnit, ModflowSwrTabfilesUnit,
   CustomModflowWriterUnit, ModflowSwrObsUnit, ModflowMnw1Unit,
-  ReadModflowArrayUnit, System.IOUtils;
+  ReadModflowArrayUnit, System.IOUtils, DataSetNamesUnit;
 
 resourcestring
   StrErrorInSPackage = 'Error in %s package input. In the first stress perio' +

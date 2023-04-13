@@ -217,7 +217,7 @@ type
 implementation
 
 uses Math, frmGoPhastUnit, AbstractGridUnit,
-  BigCanvasMethods, PhastModelUnit, frmDisplayDataUnit;
+  BigCanvasMethods, PhastModelUnit, frmDisplayDataUnit, DataSetNamesUnit;
 
 resourcestring
   StrAverageOfSeveralV = 'Average of several values:';
@@ -303,7 +303,6 @@ begin
     ActiveDataArray := nil;
     if ColoringLimits.ActiveOnly then
     begin
-//      ActiveDataArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(rsActive);
       ActiveDataArray := (FModel as TCustomModel).DataArrayManager.GetDataSetByName(rsActive);
       ActiveDataArray.Initialize;
     end;
@@ -563,7 +562,6 @@ begin
   ActiveDataArray := nil;
   if ColoringLimits.ActiveOnly then
   begin
-//    ActiveDataArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(rsActive);
     ActiveDataArray := (FModel as TCustomModel).DataArrayManager.GetDataSetByName(rsActive);
     ActiveDataArray.Initialize;
   end;

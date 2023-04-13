@@ -238,7 +238,7 @@ resourcestring
 implementation
 
 uses IntListUnit, ScreenObjectUnit, PhastModelUnit, frmGoPhastUnit,
-  GoPhastTypes;
+  GoPhastTypes, DataArrayManagerUnit;
 
 var
   Mnw2Objects: TMnw2ItemIDObjectList = nil;

@@ -126,7 +126,7 @@ type
     function GetUsed: Boolean;
   public
     property Used: Boolean read GetUsed;
-    constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
     function Add: TCSubPackageData;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
@@ -359,7 +359,8 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
   frmErrorsAndWarningsUnit, ModflowTimeUnit,
-  ModflowPackageSelectionUnit, ModflowCSubInterbed, DataSetUnit;
+  ModflowPackageSelectionUnit, ModflowCSubInterbed, DataSetUnit,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 const
   CSubObName: array[TCSubOb] of string =
@@ -715,7 +716,6 @@ begin
         end;
       end;
 
-//      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.EquivInterbedNumberName);
       if LocalInterbed.EquivInterbedNumberName <> '' then
       begin
         ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.EquivInterbedNumberName);
@@ -738,7 +738,6 @@ begin
         end;
       end;
 
-//      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialDelayHeadOffset);
       if LocalInterbed.InitialDelayHeadOffset <> '' then
       begin
         ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialDelayHeadOffset);
@@ -910,7 +909,7 @@ begin
   result := inherited Add as TCSubPackageData;
 end;
 
-constructor TCSubPackageDataCollection.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor TCSubPackageDataCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(TCSubPackageData, Model, ScreenObject);
 end;
@@ -1672,7 +1671,7 @@ begin
   PestStressOffsetFormula := '';
   PestStressOffsetMethod := DefaultBoundaryMethod(CsubStressOffsetPosition);
 
-  FCSubPackageData := TCSubPackageDataCollection.Create(Model, ScreenObject);
+  FCSubPackageData := TCSubPackageDataCollection.Create(Model as TCustomModel, ScreenObject);
 end;
 
 procedure TCSubBoundary.CreateFormulaObjects;

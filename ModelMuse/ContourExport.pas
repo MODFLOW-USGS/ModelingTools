@@ -79,7 +79,7 @@ implementation
 uses
   frmGoPhastUnit, Math,
   frmExportShapefileUnit, RbwParser, ModelMuseUtilities,
-  LineStorage, SutraMeshUnit;
+  LineStorage, SutraMeshUnit, DataSetNamesUnit;
 
 procedure GlobalImportSegments(Sender: TObject;
   const Segments: TLine2DArray; Epsilon: Real;

@@ -843,6 +843,10 @@ uses
   GwtStatusUnit in 'GwtStatusUnit.pas',
   ScreenObjectOwnerCollectionUnit in 'ScreenObjectOwnerCollectionUnit.pas',
   Modflow6DynamicTimeSeriesUnit in 'Modflow6DynamicTimeSeriesUnit.pas',
+  ModelMuseFarmFormInterfacesUnit in 'ModelMuseFarmFormInterfacesUnit.pas',
+  DataArrayManagerUnit in 'DataArrayManagerUnit.pas',
+  CrossSectionUnit in 'CrossSectionUnit.pas',
+  DataSetNamesUnit in 'DataSetNamesUnit.pas',
   ModelMuseInterfacesUnit in 'ModelMuseInterfacesUnit.pas';
 
 {$R *.res}

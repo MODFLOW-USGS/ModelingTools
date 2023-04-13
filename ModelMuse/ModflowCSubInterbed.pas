@@ -69,7 +69,7 @@ type
     procedure SetItem(Index: Integer; const Value: TCSubInterbed);
   public
     function Add: TCSubInterbed;
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TCSubInterbed read GetItem write SetItem; default;
     function DataArrayUsed(ADataArray: TDataArray): Boolean;
     function GetInterbedByName(AName: string): TCSubInterbed;
@@ -81,7 +81,8 @@ implementation
 
 uses
   PhastModelUnit, GlobalVariablesUnit, frmGoPhastUnit,
-  ModflowPackagesUnit, ModflowPackageSelectionUnit;
+  ModflowPackagesUnit, ModflowPackageSelectionUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 const
   KDelayKv = 'DelayKv';
@@ -210,29 +211,29 @@ begin
     if CSubPackage.SpecifyInitialPreconsolidationStress then
     begin
       CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialPreconsolidat,
-        StrInitialPreconsolidat, NewInterbedName, Model);
+        StrInitialPreconsolidat, NewInterbedName, Model as TCustomModel);
     end
     else
     begin
       CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialOffset,
-        StrInitialOffset, NewInterbedName, Model);
+        StrInitialOffset, NewInterbedName, Model as TCustomModel);
     end;
 
     if CSubPackage.InterbedThicknessMethod = itmThickness then
     begin
       CreateOrRenameDataArray(FThickness, rdtDouble, KThickness, StrThickness,
-        NewInterbedName, Model);
+        NewInterbedName, Model as TCustomModel);
     end
     else
     begin
       CreateOrRenameDataArray(FThickness, rdtDouble, KCellThicknessFractio,
-        StrCellThicknessFractio, NewInterbedName, Model);
+        StrCellThicknessFractio, NewInterbedName, Model as TCustomModel);
     end;
 
     if InterbedType = itDelay then
     begin
       CreateOrRenameDataArray(FEquivInterbedNumberName, rdtDouble,
-        KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model);
+        KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model as TCustomModel);
     end
     else
     begin
@@ -242,32 +243,32 @@ begin
     if CSubPackage.CompressionMethod = coRecompression then
     begin
       CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble,
-        KInitialInelasticComp, StrInitialInelasticComp, NewInterbedName, Model);
+        KInitialInelasticComp, StrInitialInelasticComp, NewInterbedName, Model as TCustomModel);
     end
     else
     begin
       CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble,
-        KInitialInelasticSpec, StrInitialInelasticSpec, NewInterbedName, Model);
+        KInitialInelasticSpec, StrInitialInelasticSpec, NewInterbedName, Model as TCustomModel);
     end;
 
     if CSubPackage.CompressionMethod = coRecompression then
     begin
       CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble,
-        KInitialElasticCompre, StrInitialElasticCompre, NewInterbedName, Model);
+        KInitialElasticCompre, StrInitialElasticCompre, NewInterbedName, Model as TCustomModel);
     end
     else
     begin
       CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble,
-        KInitialElasticSpecif, StrInitialElasticSpecif, NewInterbedName, Model);
+        KInitialElasticSpecif, StrInitialElasticSpecif, NewInterbedName, Model as TCustomModel);
     end;
 
     CreateOrRenameDataArray(FInitialPorosity, rdtDouble, KInitialPorosity,
-      StrInitialPorosity, NewInterbedName, Model);
+      StrInitialPorosity, NewInterbedName, Model as TCustomModel);
 
     if InterbedType = itDelay then
     begin
       CreateOrRenameDataArray(FDelayKvName, rdtDouble, KDelayKv, StrDelayKv,
-        NewInterbedName, Model);
+        NewInterbedName, Model as TCustomModel);
     end
     else
     begin
@@ -279,12 +280,12 @@ begin
       if CSubPackage.SpecifyInitialDelayHead then
       begin
         CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble,
-          KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model);
+          KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model as TCustomModel);
       end
       else
       begin
         CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble,
-          KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model);
+          KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model as TCustomModel);
       end;
     end
     else
@@ -293,7 +294,7 @@ begin
     end;
 
     CreateOrRenameDataArray(FCSubBoundName, rdtString, KCSubBoundName,
-      StrCSubBoundName, NewInterbedName, Model);
+      StrCSubBoundName, NewInterbedName, Model as TCustomModel);
   end;
 end;
 
@@ -492,7 +493,7 @@ begin
   result := inherited Add as TCSubInterbed;
 end;
 
-constructor TCSubInterbeds.Create(Model: TBaseModel);
+constructor TCSubInterbeds.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TCSubInterbed, Model);
 end;

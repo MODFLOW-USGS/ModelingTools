@@ -103,7 +103,7 @@ uses
   frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModflowBoundaryUnit,
   ModflowSfrTable, SubscriptionUnit, GIS_Functions, PhastModelUnit, Math,
   Mt3dmsChemUnit, ModflowMvrUnit, Modflow6ObsUnit,
-  Modflow6DynamicTimeSeriesUnit;
+  Modflow6DynamicTimeSeriesUnit, DataArrayManagerUnit;
 
 { TFormulaObject }
 

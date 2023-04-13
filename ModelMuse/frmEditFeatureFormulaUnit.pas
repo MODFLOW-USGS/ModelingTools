@@ -124,7 +124,7 @@ uses
   RbwParser, ModflowMnw2Unit,
   ModflowCfpFixedUnit, ModflowCfpPipeUnit, frmFormulaUnit, DataSetUnit,
   ModflowStrUnit, RealListUnit, SutraBoundariesUnit, ModflowMawUnit,
-  Modflow6TimeSeriesUnit;
+  Modflow6TimeSeriesUnit, DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrNoObjectsOfTheSe = 'No objects of the selected type were selected for e' +

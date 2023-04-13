@@ -1176,7 +1176,7 @@ implementation
 uses GR32_Polygons, Math, RealListUnit, frmGoPhastUnit, BigCanvasMethods,
   ModelMuseUtilities, PhastDataSets, PhastModelUnit,
   EdgeDisplayUnit, ZLib, IntListUnit, PathlineReader,
-  Vcl.Dialogs;
+  Vcl.Dialogs, DataSetNamesUnit;
 
 resourcestring
   StrInvalidColumnNumbe = 'Invalid column number: %d';
@@ -4620,7 +4620,7 @@ var
   LayerCount, RowCount, ColCount: integer;
 begin
   Assert(DataSet <> nil);
-  Assert(Model = DataSet.Model);
+  Assert(Model = DataSet.Model as TCustomModel);
   DataSet.Initialize;
   GetCounts(DataSet, LayerCount, RowCount, ColCount);
   if (LayerCount = 0) or (RowCount = 0) or (ColCount = 0) then
@@ -5981,7 +5981,7 @@ begin
     if DataSet = nil then
       Exit;
 
-    Assert(Model = DataSet.Model);
+    Assert(Model = DataSet.Model as TCustomModel);
     DataSet.Initialize;
     GetCounts(DataSet, LayerCount, RowCount, ColCount);
     if (LayerCount = 0) or (RowCount = 0) or (ColCount = 0) then
@@ -9084,7 +9084,7 @@ begin
   end
   else
   begin
-    inherited Create(Model.Invalidate);
+    inherited Create(Model.DoInvalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
@@ -9437,7 +9437,7 @@ var
   ColIndex: integer;
 begin
   Assert(DataSet <> nil);
-  Assert(Model = DataSet.Model);
+  Assert(Model = DataSet.Model as TCustomModel);
   DataSet.Initialize;
   if DataSet.Datatype = rdtString then
   begin

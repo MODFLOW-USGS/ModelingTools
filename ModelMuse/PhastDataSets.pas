@@ -271,7 +271,7 @@ type
       TInterpolationDirection read GetCellInterpolationDirection write
       SetCellInterpolationDirection;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -501,7 +501,7 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: integer read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name represents the fraction of the first value
     // at each location in the data set.
     property Fraction[const ALay, ARow, ACol: integer]: double read GetFraction
@@ -572,7 +572,7 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: double read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
   published
     // @name is the first value used for PHAST-style interpolation
     // when PHAST-style interpolation is applied to the entire data set.
@@ -665,7 +665,7 @@ to elements or cells.}
     property BoundaryDataType: TDataArray read FBoundaryDataType
       write FBoundaryDataType;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -743,7 +743,7 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: double read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -837,7 +837,7 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: integer read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: IModelMuseModel); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -984,7 +984,8 @@ to elements or cells.}
 implementation
 
 uses ScreenObjectUnit, frmGoPhastUnit,
-  GIS_Functions, frmFormulaErrorsUnit, SubscriptionUnit, PhastModelUnit;
+  GIS_Functions, frmFormulaErrorsUnit, SubscriptionUnit, PhastModelUnit,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrSetByPHASTstyleI = 'Set by PHAST-style interpolation';
@@ -1380,7 +1381,7 @@ begin
   inherited;
 end;
 
-constructor TCustomPhastDataSet.Create(AnOwner: TComponent);
+constructor TCustomPhastDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FMixtureFormulaObject := TPhastModel(AnOwner).FormulaManager.Add;
@@ -1466,7 +1467,7 @@ begin
           AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
           if not AScreenObject.Deleted then
           begin
-            AScreenObject.AssignValuesToDataSet(self, FModel, lctUse);
+            AScreenObject.AssignValuesToDataSet(self, FModel as TCustomModel, lctUse);
           end;
         end;
 
@@ -1729,7 +1730,7 @@ end;
 destructor TCustomPhastDataSet.Destroy;
 begin
   if (Model <> nil)
-    and (not (csDestroying in Model.ComponentState))
+    and (not (csDestroying in (Model as TComponent).ComponentState))
     and not (Model as TPhastModel).Clearing then
   begin
     MixtureFormula := '0.';
@@ -1989,7 +1990,7 @@ begin
   inherited;
 end;
 
-constructor TIntegerPhastDataSet.Create(AnOwner: TComponent);
+constructor TIntegerPhastDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   DataType := rdtInteger;
@@ -2516,7 +2517,7 @@ begin
   inherited;
 end;
 
-constructor TRealPhastDataSet.Create(AnOwner: TComponent);
+constructor TRealPhastDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   DataType := rdtDouble;
@@ -2851,7 +2852,7 @@ end;
 
 { TSparseArrayPhastInterpolationDataSet }
 
-constructor TSparseArrayPhastInterpolationDataSet.Create(AnOwner: TComponent);
+constructor TSparseArrayPhastInterpolationDataSet.Create(AnOwner: IModelMuseModel);
 var
   LocalModel: TCustomModel;
   LayerCount, RowCount, ColumnCount: Integer;
@@ -3014,7 +3015,7 @@ begin
       AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
       if not AScreenObject.Deleted then
       begin
-        AScreenObject.AssignValuesToDataSet(self, FModel, lctUse);
+        AScreenObject.AssignValuesToDataSet(self, FModel as TCustomModel, lctUse);
       end;
     end;
   finally
@@ -3177,7 +3178,7 @@ begin
   inherited;
 end;
 
-constructor TSparseRealPhastDataSet.Create(AnOwner: TComponent);
+constructor TSparseRealPhastDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FCellValue1 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
@@ -3442,7 +3443,7 @@ begin
   inherited;
 end;
 
-constructor TSparseIntegerPhastDataSet.Create(AnOwner: TComponent);
+constructor TSparseIntegerPhastDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
   FCellValue1 := T3DSparseIntegerArray.Create(GetQuantum(LayerCount),

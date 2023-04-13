@@ -696,7 +696,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit,
   ScreenObjectUnit, ModflowTimeUnit, ModflowMvrUnit, ModflowUzfUnit,
-  ModflowRchUnit, ModflowEvtUnit;
+  ModflowRchUnit, ModflowEvtUnit, DataSetNamesUnit;
 
 const
   UzfObsNames: array[TUzfOb] of string = ('UZF_GW_Recharge', 'UZF_GW_Discharge', 'UZF_DischargeToMvr',
@@ -1214,15 +1214,15 @@ var
   UzfCollection: TUzfMf6Collection;
 begin
   UzfCollection := Collection as TUzfMf6Collection;
-  FSpecifiedConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
+  FSpecifiedConcentrations := TUztGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     UzfCollection);
-  FInfiltrationConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
+  FInfiltrationConcentrations := TUztGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     UzfCollection);
-  FEvapConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject,
+  FEvapConcentrations := TUztGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     UzfCollection);
 
   inherited;
-  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model);
+  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model as TCustomModel);
 end;
 
 procedure TUzfMf6Item.CreateFormulaObjects;
@@ -3866,9 +3866,9 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
-  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
+  FStartingConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
   FPestInfiltrationConcentrationObservers := TObserverList.Create;
   FPestEvaporationConcentrationObservers := TObserverList.Create;
@@ -3880,9 +3880,9 @@ begin
   FPestEvaporationConcentrations := TUztGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestEvaporationConcentrations.UsedForPestSeries := True;
 
-  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestInfiltrationConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestInfiltrationConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 
   CreateFormulaObjects;
   CreateBoundaryObserver;

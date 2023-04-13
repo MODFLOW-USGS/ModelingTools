@@ -718,11 +718,11 @@ constructor TUzfBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
   FEvapotranspirationDemand := TUzfEvapotranspirationDemandCollection.
-    Create(self, Model, ScreenObject);
+    Create(self, Model as TCustomModel, ScreenObject);
   FExtinctionDepth := TUzfExtinctionDepthCollection.
-    Create(self, Model, ScreenObject);
+    Create(self, Model as TCustomModel, ScreenObject);
   FWaterContent := TUzfWaterContentCollection.
-    Create(self, Model, ScreenObject);
+    Create(self, Model as TCustomModel, ScreenObject);
 
   CreateFormulaObjects;
   CreateBoundaryObserver;

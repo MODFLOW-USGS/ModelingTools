@@ -57,7 +57,7 @@ implementation
 
 uses ModflowUnitNumbers, ScreenObjectUnit, frmErrorsAndWarningsUnit,
   DataSetUnit, frmProgressUnit, Forms, GoPhastTypes, PestObsUnit,
-  PestParamRoots, ModflowParameterUnit;
+  PestParamRoots, ModflowParameterUnit, DataSetNamesUnit;
 
 resourcestring
   DupNameErrorMessage = 'The following Lakes have the same Lake ID.';

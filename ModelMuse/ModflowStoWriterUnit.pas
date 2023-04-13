@@ -24,7 +24,7 @@ implementation
 
 uses
   GoPhastTypes, frmProgressUnit, DataSetUnit,
-  PhastModelUnit, ModflowTimeUnit, PestParamRoots;
+  PhastModelUnit, ModflowTimeUnit, PestParamRoots, DataSetNamesUnit;
 
 { TStoPackageWriter }
 

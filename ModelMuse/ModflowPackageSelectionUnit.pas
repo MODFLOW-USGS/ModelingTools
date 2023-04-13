@@ -1711,7 +1711,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TSfrParamInstance read GetItems
       write SetItems;
     function ParameterInstanceExists
@@ -1977,7 +1977,7 @@ Type
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     destructor Destroy; override;
     Function StreamConstant: double;
     property AssignParameterInstances: boolean read FAssignParameterInstances
@@ -2830,7 +2830,7 @@ Type
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     property Items[Index: integer]: ZZoneItem read GetItem
       write SetItem; default;
@@ -2859,7 +2859,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TCompositeZoneItem read GetItem
       write SetItem; default;
   end;
@@ -3222,7 +3222,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TSubPrintItem read GetItem
       write SetItem; default;
     procedure ReportErrors;
@@ -3664,7 +3664,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: TSwtPrintItem read GetItem
       write SetItem; default;
     procedure ReportErrors;
@@ -7183,7 +7183,7 @@ Type
     function GetItems(Index: Integer): TIstPackageItem;
     procedure SetItems(Index: Integer; const Value: TIstPackageItem);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TIstPackageItem read GetItems write SetItems; default;
   end;
 
@@ -7281,7 +7281,7 @@ uses Contnrs , PhastModelUnit, ModflowOptionsUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
   ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit, ModflowCsubUnit,
   ModflowCSubWriterUnit,
-  ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit;
+  ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit, DataSetNamesUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -7492,7 +7492,7 @@ begin
   if FModel <> nil then
   begin
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent. }
-    FModel.Invalidate(self);
+    FModel.DoInvalidate(self);
   end;
 end;
 
@@ -9035,9 +9035,9 @@ begin
   inherited;
 end;
 
-constructor TSfrPackageSelection.Create(Model: TBaseModel);
+constructor TSfrPackageSelection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
-  inherited;
+  inherited Create(Model as TCustomModel);
   FStoredLossFactor := TRealStorage.Create;
   FStoredLossFactor.OnChange := OnValueChanged;
   InitializeVariables;
@@ -9045,56 +9045,56 @@ begin
   AssignParameterInstances := True;
   if Model <> nil then
   begin
-    FMfSfrSegmentNumber := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrSegmentNumber := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrSegmentNumber.OnTimeListUsed := TimeListsUsed;
     FMfSfrSegmentNumber.OnInitialize := InitializeSfrDisplay;
     FMfSfrSegmentNumber.OnGetUseList := GetMfSfrUseList;
     FMfSfrSegmentNumber.Name := StrModflowSfrSegment;
     AddTimeList(FMfSfrSegmentNumber);
 
-    FMfSfrReachNumber := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrReachNumber := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrReachNumber.OnTimeListUsed := TimeListsUsed;
     FMfSfrReachNumber.OnInitialize := InitializeSfrDisplay;
     FMfSfrReachNumber.OnGetUseList := GetMfSfrUseList;
     FMfSfrReachNumber.Name := StrModflowSfrReach;
     AddTimeList(FMfSfrReachNumber);
 
-    FMfSfrIcalc := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrIcalc := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrIcalc.OnTimeListUsed := TimeListsUsed;
     FMfSfrIcalc.OnInitialize := InitializeSfrDisplay;
     FMfSfrIcalc.OnGetUseList := GetMfSfrUseList;
     FMfSfrIcalc.Name := StrModflowSfrIcalc;
     AddTimeList(FMfSfrIcalc);
 
-    FMfSfrReachLength := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrReachLength := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrReachLength.OnTimeListUsed := TimeListsUsed;
     FMfSfrReachLength.OnInitialize := InitializeSfrDisplay;
     FMfSfrReachLength.OnGetUseList := GetMfSfrReachLengthUseList;
     FMfSfrReachLength.Name := StrModflowSfrReachLength;
     AddTimeList(FMfSfrReachLength);
 
-    FMfSfrStreamTop := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrStreamTop := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrStreamTop.OnTimeListUsed := ModflowSfrSpatialVariationSelected;
     FMfSfrStreamTop.OnInitialize := InitializeSfrDisplay;
     FMfSfrStreamTop.OnGetUseList := GetMfSfrStreamTopUseList;
     FMfSfrStreamTop.Name := StrModflowSfrStreamTop;
     AddTimeList(FMfSfrStreamTop);
 
-    FMfSfrStreamSlope := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrStreamSlope := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrStreamSlope.OnTimeListUsed := ModflowSfrSpatialVariationSelected;
     FMfSfrStreamSlope.OnInitialize := InitializeSfrDisplay;
     FMfSfrStreamSlope.OnGetUseList := GetMfSfrStreamSlopeUseList;
     FMfSfrStreamSlope.Name := StrModflowSfrStreamSlope;
     AddTimeList(FMfSfrStreamSlope);
 
-    FMfSfrStreamThickness := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrStreamThickness := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrStreamThickness.OnTimeListUsed := ModflowSfrSpatialVariationSelected;
     FMfSfrStreamThickness.OnInitialize := InitializeSfrDisplay;
     FMfSfrStreamThickness.OnGetUseList := GetMfSfrStreamThicknessUseList;
     FMfSfrStreamThickness.Name := StrModflowSfrStreamThickness;
     AddTimeList(FMfSfrStreamThickness);
 
-    FMfSfrStreamK := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrStreamK := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrStreamK.OnTimeListUsed := ModflowSfrSpatialVariationSelected;
     FMfSfrStreamK.OnInitialize := InitializeSfrDisplay;
     FMfSfrStreamK.OnGetUseList := GetMfSfrStreamKUseList;
@@ -9102,7 +9102,7 @@ begin
     AddTimeList(FMfSfrStreamK);
 
     FMfSfrSaturatedWaterContent :=
-      TModflowBoundaryDisplayTimeList.Create(Model);
+      TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrSaturatedWaterContent.OnTimeListUsed :=
       ModflowSfrUnsatSpatialVariationSelected;
     FMfSfrSaturatedWaterContent.OnInitialize := InitializeSfrDisplay;
@@ -9111,7 +9111,7 @@ begin
     FMfSfrSaturatedWaterContent.Name := StrModflowSfrSatWatCont;
     AddTimeList(FMfSfrSaturatedWaterContent);
 
-    FMfSfrInitialWaterContent := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrInitialWaterContent := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrInitialWaterContent.OnTimeListUsed :=
       ModflowSfrUnsatSpatialVariationSelected;
     FMfSfrInitialWaterContent.OnInitialize := InitializeSfrDisplay;
@@ -9120,14 +9120,14 @@ begin
     FMfSfrInitialWaterContent.Name := StrModflowSfrInitWatCont;
     AddTimeList(FMfSfrInitialWaterContent);
 
-    FMfSfrBrooksCorey := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrBrooksCorey := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrBrooksCorey.OnTimeListUsed := ModflowSfrUnsatSpatialVariationSelected;
     FMfSfrBrooksCorey.OnInitialize := InitializeSfrDisplay;
     FMfSfrBrooksCorey.OnGetUseList := GetMfSfrBrooksCoreyUseList;
     FMfSfrBrooksCorey.Name := StrModflowSfrBrooksCorey;
     AddTimeList(FMfSfrBrooksCorey);
 
-    FMfSfrVerticalUnsatK := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrVerticalUnsatK := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrVerticalUnsatK.OnTimeListUsed :=
       ModflowSfrUnsatKzSpatialVariationSelected;
     FMfSfrVerticalUnsatK.OnInitialize := InitializeSfrDisplay;
@@ -9135,91 +9135,91 @@ begin
     FMfSfrVerticalUnsatK.Name := StrModflowSfrVertK;
     AddTimeList(FMfSfrVerticalUnsatK);
 
-    FMfSfrOutSegment := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrOutSegment := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrOutSegment.OnTimeListUsed := TimeListsUsed;
     FMfSfrOutSegment.OnInitialize := InitializeSfrDisplay;
     FMfSfrOutSegment.OnGetUseList := GetMfSfrUseList;
     FMfSfrOutSegment.Name := StrModflowSfrDownstreamSegment;
     AddTimeList(FMfSfrOutSegment);
 
-    FMfSfrDiversionSegment := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDiversionSegment := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDiversionSegment.OnTimeListUsed := TimeListsUsed;
     FMfSfrDiversionSegment.OnInitialize := InitializeSfrDisplay;
     FMfSfrDiversionSegment.OnGetUseList := GetMfSfrUseList;
     FMfSfrDiversionSegment.Name := StrModflowSfrDiversionSegment;
     AddTimeList(FMfSfrDiversionSegment);
 
-    FMfSfrIprior := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrIprior := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrIprior.OnTimeListUsed := TimeListsUsed;
     FMfSfrIprior.OnInitialize := InitializeSfrDisplay;
     FMfSfrIprior.OnGetUseList := GetMfSfrUseList;
     FMfSfrIprior.Name := StrModflowSfrIprior;
     AddTimeList(FMfSfrIprior);
 
-    FMfSfrFlow := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrFlow := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrFlow.OnTimeListUsed := TimeListsUsed;
     FMfSfrFlow.OnInitialize := InitializeSfrDisplay;
     FMfSfrFlow.OnGetUseList := GetMfSfrFlowUseList;
     FMfSfrFlow.Name := StrModflowSfrFlow;
     AddTimeList(FMfSfrFlow);
 
-    FMfSfrRunoff := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrRunoff := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrRunoff.OnTimeListUsed := TimeListsUsed;
     FMfSfrRunoff.OnInitialize := InitializeSfrDisplay;
     FMfSfrRunoff.OnGetUseList := GetMfSfrRunoffUseList;
     FMfSfrRunoff.Name := StrModflowSfrRunoff;
     AddTimeList(FMfSfrRunoff);
 
-    FMfSfrPrecipitation := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrPrecipitation := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrPrecipitation.OnTimeListUsed := TimeListsUsed;
     FMfSfrPrecipitation.OnInitialize := InitializeSfrDisplay;
     FMfSfrPrecipitation.OnGetUseList := GetMfSfrPrecipitationUseList;
     FMfSfrPrecipitation.Name := StrModflowSfrPrecipitation;
     AddTimeList(FMfSfrPrecipitation);
 
-    FMfSfrEvapotranspiration := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrEvapotranspiration := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrEvapotranspiration.OnTimeListUsed := TimeListsUsed;
     FMfSfrEvapotranspiration.OnInitialize := InitializeSfrDisplay;
     FMfSfrEvapotranspiration.OnGetUseList := GetMfSfrEvapotranspirationUseList;
     FMfSfrEvapotranspiration.Name := StrModflowSfrEvapotranspiration;
     AddTimeList(FMfSfrEvapotranspiration);
 
-    FMfSfrChannelRoughness := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrChannelRoughness := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrChannelRoughness.OnTimeListUsed := TimeListsUsed;
     FMfSfrChannelRoughness.OnInitialize := InitializeSfrDisplay;
     FMfSfrChannelRoughness.OnGetUseList := GetMfSfrChannelRoughnessUseList;
     FMfSfrChannelRoughness.Name := StrModflowSfrChannelRoughness;
     AddTimeList(FMfSfrChannelRoughness);
 
-    FMfSfrBankRoughness := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrBankRoughness := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrBankRoughness.OnTimeListUsed := TimeListsUsed;
     FMfSfrBankRoughness.OnInitialize := InitializeSfrDisplay;
     FMfSfrBankRoughness.OnGetUseList := GetMfSfrBankRoughnessUseList;
     FMfSfrBankRoughness.Name := StrModflowSfrBankRoughness;
     AddTimeList(FMfSfrBankRoughness);
 
-    FMfSfrDepthCoefficient := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDepthCoefficient := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDepthCoefficient.OnTimeListUsed := TimeListsUsed;
     FMfSfrDepthCoefficient.OnInitialize := InitializeSfrDisplay;
     FMfSfrDepthCoefficient.OnGetUseList := GetMfSfrDepthCoefficientUseList;
     FMfSfrDepthCoefficient.Name := StrModflowSfrDepthCoefficient;
     AddTimeList(FMfSfrDepthCoefficient);
 
-    FMfSfrDepthExponent := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDepthExponent := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDepthExponent.OnTimeListUsed := TimeListsUsed;
     FMfSfrDepthExponent.OnInitialize := InitializeSfrDisplay;
     FMfSfrDepthExponent.OnGetUseList := GetMfSfrDepthExponentUseList;
     FMfSfrDepthExponent.Name := StrModflowSfrDepthExponent;
     AddTimeList(FMfSfrDepthExponent);
 
-    FMfSfrWidthCoefficient := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrWidthCoefficient := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrWidthCoefficient.OnTimeListUsed := TimeListsUsed;
     FMfSfrWidthCoefficient.OnInitialize := InitializeSfrDisplay;
     FMfSfrWidthCoefficient.OnGetUseList := GetMfSfrWidthCoefficientUseList;
     FMfSfrWidthCoefficient.Name := StrModflowSfrWidthCoefficient;
     AddTimeList(FMfSfrWidthCoefficient);
 
-    FMfSfrWidthExponent := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrWidthExponent := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrWidthExponent.OnTimeListUsed := TimeListsUsed;
     FMfSfrWidthExponent.OnInitialize := InitializeSfrDisplay;
     FMfSfrWidthExponent.OnGetUseList := GetMfSfrWidthExponentUseList;
@@ -9227,7 +9227,7 @@ begin
     AddTimeList(FMfSfrWidthExponent);
 
     FMfSfrUpstreamHydraulicConductivity :=
-      TModflowBoundaryDisplayTimeList.Create(Model);
+      TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamHydraulicConductivity.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUsed;
     FMfSfrUpstreamHydraulicConductivity.OnInitialize := InitializeSfrDisplay;
@@ -9238,7 +9238,7 @@ begin
     AddTimeList(FMfSfrUpstreamHydraulicConductivity);
 
     FMfSfrDownstreamHydraulicConductivity :=
-      TModflowBoundaryDisplayTimeList.Create(Model);
+      TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamHydraulicConductivity.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUsed;
     FMfSfrDownstreamHydraulicConductivity.OnInitialize := InitializeSfrDisplay;
@@ -9248,56 +9248,56 @@ begin
       StrModflowSfrDownstreamHydraulicConductivity;
     AddTimeList(FMfSfrDownstreamHydraulicConductivity);
 
-    FMfSfrUpstreamWidth := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrUpstreamWidth := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamWidth.OnTimeListUsed := TimeListsUsed;
     FMfSfrUpstreamWidth.OnInitialize := InitializeSfrDisplay;
     FMfSfrUpstreamWidth.OnGetUseList := GetMfSfrUpstreamWidthUseList;
     FMfSfrUpstreamWidth.Name := StrModflowSfrUpstreamWidth;
     AddTimeList(FMfSfrUpstreamWidth);
 
-    FMfSfrDownstreamWidth := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDownstreamWidth := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamWidth.OnTimeListUsed := TimeListsUsed;
     FMfSfrDownstreamWidth.OnInitialize := InitializeSfrDisplay;
     FMfSfrDownstreamWidth.OnGetUseList := GetMfSfrDownstreamWidthUseList;
     FMfSfrDownstreamWidth.Name := StrModflowSfrDownstreamWidth;
     AddTimeList(FMfSfrDownstreamWidth);
 
-    FMfSfrUpstreamThickness := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrUpstreamThickness := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamThickness.OnTimeListUsed := ModflowSfrUpstreamDownstreamUsed;
     FMfSfrUpstreamThickness.OnInitialize := InitializeSfrDisplay;
     FMfSfrUpstreamThickness.OnGetUseList := GetMfSfrUpstreamThicknessUseList;
     FMfSfrUpstreamThickness.Name := StrModflowSfrUpstreamThickness;
     AddTimeList(FMfSfrUpstreamThickness);
 
-    FMfSfrDownstreamThickness := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDownstreamThickness := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamThickness.OnTimeListUsed := ModflowSfrUpstreamDownstreamUsed;
     FMfSfrDownstreamThickness.OnInitialize := InitializeSfrDisplay;
     FMfSfrDownstreamThickness.OnGetUseList := GetMfSfrDownstreamThicknessUseList;
     FMfSfrDownstreamThickness.Name := StrModflowSfrDownstreamThickness;
     AddTimeList(FMfSfrDownstreamThickness);
 
-    FMfSfrUpstreamElevation := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrUpstreamElevation := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamElevation.OnTimeListUsed := ModflowSfrUpstreamDownstreamUsed;
     FMfSfrUpstreamElevation.OnInitialize := InitializeSfrDisplay;
     FMfSfrUpstreamElevation.OnGetUseList := GetMfSfrUpstreamElevationUseList;
     FMfSfrUpstreamElevation.Name := StrModflowSfrUpstreamElevation;
     AddTimeList(FMfSfrUpstreamElevation);
 
-    FMfSfrDownstreamElevation := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDownstreamElevation := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamElevation.OnTimeListUsed := ModflowSfrUpstreamDownstreamUsed;
     FMfSfrDownstreamElevation.OnInitialize := InitializeSfrDisplay;
     FMfSfrDownstreamElevation.OnGetUseList := GetMfSfrDownstreamElevationUseList;
     FMfSfrDownstreamElevation.Name := StrModflowSfrDownstreamElevation;
     AddTimeList(FMfSfrDownstreamElevation);
 
-    FMfSfrUpstreamDepth := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrUpstreamDepth := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamDepth.OnTimeListUsed := TimeListsUsed;
     FMfSfrUpstreamDepth.OnInitialize := InitializeSfrDisplay;
     FMfSfrUpstreamDepth.OnGetUseList := GetMfSfrUpstreamDepthUseList;
     FMfSfrUpstreamDepth.Name := StrModflowSfrUpstreamDepth;
     AddTimeList(FMfSfrUpstreamDepth);
 
-    FMfSfrDownstreamDepth := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDownstreamDepth := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamDepth.OnTimeListUsed := TimeListsUsed;
     FMfSfrDownstreamDepth.OnInitialize := InitializeSfrDisplay;
     FMfSfrDownstreamDepth.OnGetUseList := GetMfSfrDownstreamDepthUseList;
@@ -9305,7 +9305,7 @@ begin
     AddTimeList(FMfSfrDownstreamDepth);
 
     FMfSfrUpstreamUnsaturatedWaterContent :=
-      TModflowBoundaryDisplayTimeList.Create(Model);
+      TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamUnsaturatedWaterContent.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatUsed;
     FMfSfrUpstreamUnsaturatedWaterContent.OnInitialize := InitializeSfrDisplay;
@@ -9316,7 +9316,7 @@ begin
     AddTimeList(FMfSfrUpstreamUnsaturatedWaterContent);
 
     FMfSfrDownstreamUnsaturatedWaterContent :=
-      TModflowBoundaryDisplayTimeList.Create(Model);
+      TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamUnsaturatedWaterContent.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatUsed;
     FMfSfrDownstreamUnsaturatedWaterContent.OnInitialize := InitializeSfrDisplay;
@@ -9327,7 +9327,7 @@ begin
     AddTimeList(FMfSfrDownstreamUnsaturatedWaterContent);
 
     FMfSfrUpstreamUnsatInitialWaterContent :=
-      TModflowBoundaryDisplayTimeList.Create(Model);
+      TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamUnsatInitialWaterContent.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatUsed;
     FMfSfrUpstreamUnsatInitialWaterContent.OnInitialize := InitializeSfrDisplay;
@@ -9338,7 +9338,7 @@ begin
     AddTimeList(FMfSfrUpstreamUnsatInitialWaterContent);
 
     FMfSfrDownstreamUnsatInitialWaterContent :=
-      TModflowBoundaryDisplayTimeList.Create(Model);
+      TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamUnsatInitialWaterContent.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatUsed;
     FMfSfrDownstreamUnsatInitialWaterContent.OnInitialize :=
@@ -9349,7 +9349,7 @@ begin
       StrModflowSfrDownstreamInitialUnsaturatedWaterContent;
     AddTimeList(FMfSfrDownstreamUnsatInitialWaterContent);
 
-    FMfSfrUpstreamBrooksCorey := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrUpstreamBrooksCorey := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamBrooksCorey.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatUsed;
     FMfSfrUpstreamBrooksCorey.OnInitialize := InitializeSfrDisplay;
@@ -9357,7 +9357,7 @@ begin
     FMfSfrUpstreamBrooksCorey.Name := StrModflowSfrUpstreamBrooksCoreyExponent;
     AddTimeList(FMfSfrUpstreamBrooksCorey);
 
-    FMfSfrDownstreamBrooksCorey := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDownstreamBrooksCorey := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamBrooksCorey.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatUsed;
     FMfSfrDownstreamBrooksCorey.OnInitialize := InitializeSfrDisplay;
@@ -9367,7 +9367,7 @@ begin
       StrModflowSfrDownstreamBrooksCoreyExponent;
     AddTimeList(FMfSfrDownstreamBrooksCorey);
 
-    FMfSfrUpstreamUnsatKz := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrUpstreamUnsatKz := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrUpstreamUnsatKz.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatKzUsed;
     FMfSfrUpstreamUnsatKz.OnInitialize := InitializeSfrDisplay;
@@ -9375,7 +9375,7 @@ begin
     FMfSfrUpstreamUnsatKz.Name := StrModflowSfrUpstreamMaxUnsaturatedKz;
     AddTimeList(FMfSfrUpstreamUnsatKz);
 
-    FMfSfrDownstreamUnsatKz := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfSfrDownstreamUnsatKz := TModflowBoundaryDisplayTimeList.Create(Model as TCustomModel);
     FMfSfrDownstreamUnsatKz.OnTimeListUsed :=
       ModflowSfrUpstreamDownstreamUnsatKzUsed;
     FMfSfrDownstreamUnsatKz.OnInitialize := InitializeSfrDisplay;
@@ -10523,7 +10523,7 @@ end;
 
 { TSfrParamInstances }
 
-constructor TSfrParamInstances.Create(Model: TBaseModel);
+constructor TSfrParamInstances.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSfrParamInstance, Model);
 end;
@@ -13410,7 +13410,7 @@ begin
 end;
 
 { TSubPrintCollection }
-constructor TSubPrintCollection.Create(Model: TBaseModel);
+constructor TSubPrintCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSubPrintItem, Model);
 end;
@@ -13478,10 +13478,10 @@ begin
   end
   else
   begin
-    OnInvalidate := Model.Invalidate;
+    OnInvalidate := Model.DoInvalidate;
   end;
   inherited;
-  FPrintChoices := TSubPrintCollection.Create(Model);
+  FPrintChoices := TSubPrintCollection.Create(Model as TCustomModel);
   FPrintFormats := TSubPrintFormats.Create(OnInvalidate);
   InitializeVariables;
 end;
@@ -13762,7 +13762,7 @@ begin
   inherited;
 end;
 
-constructor TCompositeZone.Create(Model: TBaseModel);
+constructor TCompositeZone.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(ZZoneItem, Model);
 end;
@@ -13817,7 +13817,7 @@ end;
 constructor TCompositeZoneItem.Create(Collection: TCollection);
 begin
   inherited;
-  FCompositeZone:= TCompositeZone.Create(Model);
+  FCompositeZone:= TCompositeZone.Create(Model as TCustomModel);
 end;
 
 destructor TCompositeZoneItem.Destroy;
@@ -13843,7 +13843,7 @@ end;
 
 { TCompositeZoneCollection }
 
-constructor TCompositeZoneCollection.Create(Model: TBaseModel);
+constructor TCompositeZoneCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TCompositeZoneItem, Model);
 end;
@@ -13879,7 +13879,7 @@ end;
 constructor TZoneBudgetSelect.Create(Model: TBaseModel);
 begin
   inherited;
-  FCompositeZones := TCompositeZoneCollection.Create(Model);
+  FCompositeZones := TCompositeZoneCollection.Create(Model as TCustomModel);
   InitializeVariables;
 end;
 
@@ -14268,7 +14268,7 @@ end;
 
 { TSwtPrintCollection }
 
-constructor TSwtPrintCollection.Create(Model: TBaseModel);
+constructor TSwtPrintCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSwtPrintItem, Model);
 end;
@@ -14445,10 +14445,10 @@ begin
   end
   else
   begin
-    OnInvalidate := Model.Invalidate;
+    OnInvalidate := Model.DoInvalidate;
   end;
   inherited;
-  FPrintChoices := TSwtPrintCollection.Create(Model);
+  FPrintChoices := TSwtPrintCollection.Create(Model as TCustomModel);
   FInitialPrint := TSwtInitialPrint.Create(OnInvalidate);
   FPrintFormats := TSwtPrintFormats.Create(OnInvalidate);
   InitializeVariables;
@@ -18225,7 +18225,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   FZoneDimensionlessDensities := TRealCollection.Create(InvalidateModelEvent);
 
@@ -24078,7 +24078,7 @@ begin
   FStoredGamma := TRealStorage.Create;
   FStoredGamma.OnChange := OnValueChanged;
 
-  FInterbeds := TCSubInterbeds.Create(Model);
+  FInterbeds := TCSubInterbeds.Create(Model as TCustomModel);
 
   FStressOffset := TModflowBoundaryDisplayTimeList.Create(Model);
   StressOffset.OnInitialize := InitializeStressOffsetDisplay;
@@ -24610,7 +24610,7 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := FModel.Invalidate;
+    OnInvalidateModelEvent := FModel.DoInvalidate;
   end;
   inherited Create(TGwtPackagesItem, OnInvalidateModelEvent);
 end;
@@ -24927,7 +24927,7 @@ end;
 
 { TIstPackageProperties }
 
-constructor TIstPackageProperties.Create(Model: TBaseModel);
+constructor TIstPackageProperties.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TIstPackageItem, Model);
 end;
@@ -24958,7 +24958,7 @@ end;
 constructor TGwtIstPackage.Create(Model: TBaseModel);
 begin
   inherited;
-  FIstPackageProperties := TIstPackageProperties.Create(Model);
+  FIstPackageProperties := TIstPackageProperties.Create(Model as TCustomModel);
   InitializeVariables;
 end;
 
@@ -25289,7 +25289,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   FFarms := TFarmProperty.Create(InvalidateEvent);
@@ -26017,7 +26017,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   FStoredRefEtToBare := TRealStorage.Create;
@@ -26544,7 +26544,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   FNrd_Infiltration_Location := TFarmProperty.Create(InvalidateEvent);
@@ -26941,7 +26941,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   FLandUseFraction := TFarmProperty.Create(InvalidateEvent);
@@ -28976,7 +28976,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   FFarmIrrigationUniformityChoice := TFarmProperty.Create(InvalidateEvent);
@@ -29311,7 +29311,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   FCapFringe := TFarmProperty.Create(InvalidateEvent);
@@ -29431,7 +29431,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   FGroundWater := TFarmProperty.Create(InvalidateEvent);

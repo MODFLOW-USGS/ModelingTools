@@ -67,7 +67,8 @@ var
 implementation
 
 uses
-  DataSetUnit, gpc, SutraMeshUnit, GoPhastTypes, ModflowIrregularMeshUnit;
+  DataSetUnit, gpc, SutraMeshUnit, GoPhastTypes, ModflowIrregularMeshUnit,
+  DataSetNamesUnit;
 
 const
   StrAREA = 'AREA';

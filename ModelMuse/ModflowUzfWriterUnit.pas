@@ -63,7 +63,7 @@ implementation
 
 uses ModflowUnitNumbers, DataSetUnit, ModflowUzfUnit, frmErrorsAndWarningsUnit,
   frmProgressUnit, ModflowCellUnit, Forms, GoPhastTypes,
-  ModflowOutputControlUnit, PestParamRoots;
+  ModflowOutputControlUnit, PestParamRoots, DataSetNamesUnit;
 
 resourcestring
   StrUnspecifiedUZFData = 'Unspecified UZF data';

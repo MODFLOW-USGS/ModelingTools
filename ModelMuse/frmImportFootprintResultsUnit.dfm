@@ -2,7 +2,8 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
   HelpType = htKeyword
   HelpKeyword = 'Import_Footprint_Results'
   Caption = 'Import WellFootprint Results'
-  ClientHeight = 230
+  ClientHeight = 229
+  ClientWidth = 422
   ExplicitWidth = 438
   ExplicitHeight = 268
   TextHeight = 18
@@ -55,7 +56,7 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     TabOrder = 2
   end
   object btnHelp: TBitBtn
-    Left = 146
+    Left = 138
     Top = 188
     Width = 82
     Height = 30
@@ -67,7 +68,7 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     ExplicitLeft = 142
   end
   object btnOK: TBitBtn
-    Left = 234
+    Left = 226
     Top = 188
     Width = 82
     Height = 30
@@ -79,7 +80,7 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     ExplicitLeft = 230
   end
   object btnCancel: TBitBtn
-    Left = 322
+    Left = 314
     Top = 188
     Width = 83
     Height = 30

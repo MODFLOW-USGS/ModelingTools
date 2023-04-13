@@ -1437,7 +1437,7 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(Model, ScreenObject);
   FDrainReturn := TDrainReturn.Create(OnInvalidateModelEvent);

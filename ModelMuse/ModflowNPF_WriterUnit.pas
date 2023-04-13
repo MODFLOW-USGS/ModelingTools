@@ -30,7 +30,7 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit, GoPhastTypes,
   ModflowOptionsUnit, PhastModelUnit,
-  System.SysUtils, PestParamRoots;
+  System.SysUtils, PestParamRoots, DataSetNamesUnit;
 
 resourcestring
   StrWritingNPFPackage = 'Writing NPF Package input.';

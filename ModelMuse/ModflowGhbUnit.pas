@@ -459,7 +459,7 @@ var
   GhbCol: TGhbCollection;
 begin
   GhbCol := Collection as TGhbCollection;
-  FGwtConcentrations := TGhbGwtConcCollection.Create(Model, ScreenObject,
+  FGwtConcentrations := TGhbGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     GhbCol);
   inherited;
 end;
@@ -1526,7 +1526,7 @@ begin
   inherited;
   FPestConcentrationFormulas:= TGhbGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;

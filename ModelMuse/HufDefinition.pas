@@ -74,7 +74,7 @@ type
     property Items[Index: integer]: THufUsedParameter read GetItem; default;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel; HufUnit: THydrogeologicUnit);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; HufUnit: THydrogeologicUnit);
     function GetUsedParameterByName(const ParameterName: string): THufUsedParameter;
     function IsUsed(const ParameterName: string): boolean;
     procedure Notify(Item: TCollectionItem; Action: TCollectionNotification); override;
@@ -188,7 +188,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: integer]: THydrogeologicUnit read GetItems write SetItems; default;
     procedure RenameParameters(const OldName, NewName: string);
     function GetUnitByName(UnitName: string): THydrogeologicUnit;
@@ -211,7 +211,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     function GetParameterByName(const ParameterName: string): THufParameter;
     property Items[Index: integer]: THufParameter read GetItem; default;
     function CountParameters(ParamTypes: TParameterTypes): integer;
@@ -222,7 +222,8 @@ implementation
 
 uses
   SysUtils, PhastModelUnit, DataSetUnit, frmGoPhastUnit, Math, 
-  ModflowParameterUnit, GlobalVariablesUnit;
+  ModflowParameterUnit, GlobalVariablesUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 const
   kMultiplier = '_Multiplier';
@@ -490,7 +491,7 @@ var
   NewRoot: string;
 begin
   NewRoot := NewHufName + '_' + ParameterName;
-  RenameDataArrays(NewRoot, Model);
+  RenameDataArrays(NewRoot, Model as TCustomModel);
 end;
 
 procedure THufUsedParameter.SetParameterName(const Value: string);
@@ -501,7 +502,7 @@ begin
   if FParameterName <> Value then
   begin
     NewRoot := HufUnit.HufName + '_' + Value;
-    RenameDataArrays(NewRoot, Model);
+    RenameDataArrays(NewRoot, Model as TCustomModel);
     FParameterName := Value;
     InvalidateModel;
     NotifyParamChange;
@@ -513,7 +514,7 @@ begin
   if FUseMultiplier <> Value then
   begin
     FUseMultiplier := Value;
-    CreateOrUpdataDataArray(FMultiplierName, rdtDouble, FUseMultiplier, Model);
+    CreateOrUpdataDataArray(FMultiplierName, rdtDouble, FUseMultiplier, Model as TCustomModel);
     SendNotifications;
     InvalidateModel;
     NotifyParamChange;
@@ -525,7 +526,7 @@ begin
   if FUseZone <> Value then
   begin
     FUseZone := Value;
-    CreateOrUpdataDataArray(FZoneName, rdtBoolean, FUseZone, Model);
+    CreateOrUpdataDataArray(FZoneName, rdtBoolean, FUseZone, Model as TCustomModel);
     SendNotifications;
     InvalidateModel;
     NotifyParamChange;
@@ -592,7 +593,7 @@ end;
 
 { THufUsedParameters }
 
-constructor THufUsedParameters.Create(Model: TBaseModel; HufUnit: THydrogeologicUnit);
+constructor THufUsedParameters.Create(Model: ICustomModelInterfaceForTOrderedCollection; HufUnit: THydrogeologicUnit);
 begin
   inherited Create(THufUsedParameter, Model);
   FHufUnit := HufUnit;
@@ -710,9 +711,9 @@ end;
 constructor THydrogeologicUnit.Create(Collection: TCollection);
 begin
   inherited;
-  FPrintItems := TPrintCollection.Create(Model);
+  FPrintItems := TPrintCollection.Create(Model as TCustomModel);
   FHufUsedParameters := THufUsedParameters.Create(
-    Model, self);
+    Model as TCustomModel, self);
   FHorizontalAnisotropy := 1;
   FVerticalAnisotropy := 1;
   FPrintFormat := 1;
@@ -935,9 +936,9 @@ var
 begin
   if Model <> nil then
   begin
-    CreateOrRenameDataArray(FTopArrayName, kTop, StrTop, NewHufName, Model);
+    CreateOrRenameDataArray(FTopArrayName, kTop, StrTop, NewHufName, Model as TCustomModel);
     CreateOrRenameDataArray(FThickessArrayName, kHufThickness,
-      StrHufThickness, NewHufName, Model);
+      StrHufThickness, NewHufName, Model as TCustomModel);
     LocalModel := Model as TCustomModel;
     DataArray := LocalModel.DataArrayManager.GetDataSetByName(FThickessArrayName);
     Assert(DataArray <> nil);
@@ -1067,7 +1068,7 @@ end;
 
 { THydrogeologicUnits }
 
-constructor THydrogeologicUnits.Create(Model: TBaseModel);
+constructor THydrogeologicUnits.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(THydrogeologicUnit, Model);
 end;
@@ -1189,7 +1190,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TPrintItem, InvalidateModelEvent);
   for Index := Low(TPrintParam) to High(TPrintParam) do
@@ -1311,7 +1312,7 @@ begin
   end;
 end;
 
-constructor THufModflowParameters.Create(Model: TBaseModel);
+constructor THufModflowParameters.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(THufParameter, Model);
 end;

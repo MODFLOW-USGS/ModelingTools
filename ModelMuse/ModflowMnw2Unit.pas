@@ -226,7 +226,6 @@ type
     Destructor Destroy; override;
   end;
 
-//  TMnw2SpatialCollection = class(TCustomMF_ListBoundColl)
   TMnw2SpatialCollection = class(TCustomMF_ArrayBoundColl)
   private
 //    FWellRadiusData: TModflowTimeList;
@@ -291,7 +290,7 @@ type
 
   TLiftCollection = class(TEnhancedOrderedCollection)
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     procedure Sort;
     procedure Assign(Source: TPersistent); override;
   end;
@@ -741,7 +740,7 @@ uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit,
   ModflowGridUnit, frmFormulaErrorsUnit, Math, SparseDataSets, SparseArrayUnit,
   frmErrorsAndWarningsUnit, AbstractGridUnit, ModflowParameterUnit,
-  CustomModflowWriterUnit, ModflowMNW2_WriterUnit;
+  CustomModflowWriterUnit, ModflowMNW2_WriterUnit, DataSetNamesUnit;
 
 resourcestring
   StrOneOrMoreMNW2Wel = 'One or more MNW2 wells has a well radius that is '
@@ -1708,29 +1707,6 @@ begin
     begin
       Formula := Item.WellRadius;
       AssignFormula(Formula, Mnw2RwItems);
-//      Parameter := LocalModel.GetPestParameterByName(Formula);
-//      if Parameter <> nil then
-//      begin
-//        Formula := FortranFloatToStr(Parameter.Value);
-//        Mnw2RwItems.Add(Parameter.ParameterName);
-//      end
-//      else
-//      begin
-//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//        begin
-//          Mnw2RwItems.Add(PestDataArray.Name);
-//          if MNW2Writer = nil then
-//          begin
-//            MNW2Writer := Writer as TModflowMNW2_Writer;
-//          end;
-//          MNW2Writer.AddUsedPestDataArray(PestDataArray);
-//        end
-//        else
-//        begin
-//          Mnw2RwItems.Add('');
-//        end;
-//      end;
       BoundaryValues[Index].Formula := Formula;
     end
     else
@@ -2479,14 +2455,14 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited;
   FLossType := mltThiem;
-  FTimeValues := TMnw2TimeCollection.Create(self, Model, ScreenObject);
-  FLiftValues := TLiftCollection.Create(Model);
+  FTimeValues := TMnw2TimeCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FLiftValues := TLiftCollection.Create(Model as TCustomModel);
   FPumpCellTarget := TTarget.Create(OnInvalidateModelEvent);
-  FVerticalScreens := TVerticalScreenCollection.Create(self, Model, ScreenObject);
+  FVerticalScreens := TVerticalScreenCollection.Create(self, Model as TCustomModel, ScreenObject);
   FObservations := TMnw2Observations.Create(OnInvalidateModelEvent, ScreenObject);
 
   CreateFormulaObjects;
@@ -3924,7 +3900,7 @@ begin
   Sort;
 end;
 
-constructor TLiftCollection.Create(Model: TBaseModel);
+constructor TLiftCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TLiftItem, Model);
 end;

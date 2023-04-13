@@ -2,8 +2,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
   HelpType = htKeyword
   HelpKeyword = 'Manage_SUTRA_Boundary_Observati'
   Caption = 'Manage SUTRA Boundary Observations'
-  ClientHeight = 561
-  ClientWidth = 784
+  ClientHeight = 560
+  ClientWidth = 780
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   ExplicitWidth = 796
@@ -12,7 +12,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
   object spltr1: TJvNetscapeSplitter
     Left = 165
     Top = 0
-    Height = 520
+    Height = 519
     Align = alLeft
     MinSize = 1
     Maximized = False
@@ -24,18 +24,16 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 520
-    Width = 784
+    Top = 519
+    Width = 780
     Height = 41
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 519
-    ExplicitWidth = 780
     DesignSize = (
-      784
+      780
       41)
     object btnHelp: TBitBtn
-      Left = 499
+      Left = 491
       Top = 6
       Width = 87
       Height = 27
@@ -47,7 +45,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       ExplicitLeft = 495
     end
     object btnCancel: TBitBtn
-      Left = 685
+      Left = 677
       Top = 6
       Width = 87
       Height = 27
@@ -58,7 +56,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       ExplicitLeft = 681
     end
     object btnOk: TBitBtn
-      Left = 592
+      Left = 584
       Top = 6
       Width = 87
       Height = 27
@@ -95,29 +93,26 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     Left = 0
     Top = 0
     Width = 165
-    Height = 520
+    Height = 519
     Align = alLeft
     HideSelection = False
     Indent = 20
     ReadOnly = True
     TabOrder = 1
     OnChange = tvFluxObservationsChange
-    ExplicitHeight = 519
   end
   object pnlMain: TPanel
     Left = 175
     Top = 0
-    Width = 609
-    Height = 520
+    Width = 605
+    Height = 519
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 605
-    ExplicitHeight = 519
     object pnlTop: TPanel
       Left = 0
       Top = 0
-      Width = 609
+      Width = 613
       Height = 65
       Align = alTop
       TabOrder = 0
@@ -167,14 +162,12 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     object pcMain: TJvPageControl
       Left = 0
       Top = 65
-      Width = 609
-      Height = 455
+      Width = 605
+      Height = 454
       ActivePage = tabObservationsTimes
       Align = alClient
       Enabled = False
       TabOrder = 1
-      ExplicitWidth = 605
-      ExplicitHeight = 454
       object tabObservationsTimes: TTabSheet
         Caption = 'Observation times and values'
         inline frameSutraFluxObs: TframePestObs
@@ -272,8 +265,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         ImageIndex = 1
         OnResize = FormResize
         DesignSize = (
-          601
-          422)
+          597
+          421)
         object lblSrcLabel: TLabel
           Left = 14
           Top = 3
@@ -290,7 +283,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         end
         object lblFactor: TLabel
           Left = 15
-          Top = 395
+          Top = 394
           Width = 45
           Height = 18
           Anchors = [akLeft, akBottom]
@@ -301,7 +294,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           Left = 14
           Top = 23
           Width = 164
-          Height = 363
+          Height = 362
           Anchors = [akLeft, akTop, akBottom]
           DragMode = dmAutomatic
           ItemHeight = 18
@@ -399,7 +392,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           Left = 216
           Top = 23
           Width = 164
-          Height = 363
+          Height = 362
           Anchors = [akLeft, akTop, akBottom]
           DragMode = dmAutomatic
           ItemHeight = 18
@@ -419,18 +412,19 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         end
         object edFactorFormula: TJvEdit
           Left = 61
-          Top = 392
-          Width = 432
+          Top = 391
+          Width = 424
           Height = 26
           Anchors = [akLeft, akRight, akBottom]
           TabOrder = 7
           Text = ''
           OnChange = edFactorFormulaChange
-          ExplicitWidth = 436
+          ExplicitTop = 392
+          ExplicitWidth = 432
         end
         object btnFactorFormula: TButton
-          Left = 498
-          Top = 390
+          Left = 490
+          Top = 389
           Width = 90
           Height = 30
           Anchors = [akRight, akBottom]
@@ -439,6 +433,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           TabOrder = 6
           OnClick = btnFactorFormulaClick
           ExplicitLeft = 502
+          ExplicitTop = 390
         end
       end
     end

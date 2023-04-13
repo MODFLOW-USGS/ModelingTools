@@ -49,7 +49,7 @@ type
 
 implementation
 
-uses frmGoPhastUnit, PhastModelUnit;
+uses frmGoPhastUnit, PhastModelUnit, DataSetNamesUnit;
 
 type
   {@abstract(@name stores and initializes the @link(DataSetUnit.TDataArray)s

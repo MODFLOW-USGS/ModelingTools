@@ -4,27 +4,27 @@ inherited frmDataSets: TfrmDataSets
   HelpType = htKeyword
   HelpKeyword = 'Data_Sets_Dialog_Box'
   Caption = 'Data Sets'
-  ClientHeight = 463
-  ClientWidth = 636
+  ClientHeight = 461
+  ClientWidth = 628
   Font.Height = 19
   OnActivate = FormActivate
   OnClose = FormClose
-  ExplicitWidth = 648
-  ExplicitHeight = 501
+  ExplicitWidth = 644
+  ExplicitHeight = 500
   TextHeight = 19
   object Splitter1: TSplitter
-    Left = 311
+    Left = 303
     Top = 0
     Width = 5
-    Height = 395
+    Height = 393
     Align = alRight
     ExplicitLeft = 325
     ExplicitHeight = 405
   end
   object pnlButtons: TPanel
     Left = 0
-    Top = 395
-    Width = 636
+    Top = 393
+    Width = 628
     Height = 41
     Align = alBottom
     ParentColor = True
@@ -32,10 +32,10 @@ inherited frmDataSets: TfrmDataSets
     ExplicitTop = 394
     ExplicitWidth = 632
     DesignSize = (
-      636
+      628
       41)
     object btnOK: TBitBtn
-      Left = 433
+      Left = 417
       Top = 2
       Width = 91
       Height = 33
@@ -66,7 +66,7 @@ inherited frmDataSets: TfrmDataSets
       ExplicitLeft = 429
     end
     object btnCancel: TBitBtn
-      Left = 530
+      Left = 514
       Top = 2
       Width = 91
       Height = 33
@@ -96,7 +96,7 @@ inherited frmDataSets: TfrmDataSets
       OnClick = btnDeleteClick
     end
     object btnHelp: TBitBtn
-      Left = 336
+      Left = 320
       Top = 2
       Width = 91
       Height = 33
@@ -110,8 +110,8 @@ inherited frmDataSets: TfrmDataSets
   end
   object sbStatusBar: TStatusBar
     Left = 0
-    Top = 436
-    Width = 636
+    Top = 434
+    Width = 628
     Height = 27
     Panels = <>
     ParentColor = True
@@ -122,8 +122,8 @@ inherited frmDataSets: TfrmDataSets
   object tvDataSets: TTreeView
     Left = 0
     Top = 0
-    Width = 311
-    Height = 395
+    Width = 303
+    Height = 393
     Align = alClient
     HideSelection = False
     Indent = 21
@@ -134,14 +134,12 @@ inherited frmDataSets: TfrmDataSets
     OnChange = tvDataSetsChange
     OnChanging = tvDataSetsChanging
     OnMouseDown = tvDataSetsMouseDown
-    ExplicitWidth = 307
-    ExplicitHeight = 394
   end
   object pcDataSets: TJvPageControl
-    Left = 316
+    Left = 308
     Top = 0
     Width = 320
-    Height = 395
+    Height = 393
     ActivePage = tabBasic
     Align = alRight
     TabOrder = 1
@@ -151,7 +149,7 @@ inherited frmDataSets: TfrmDataSets
       Caption = 'Basic'
       DesignSize = (
         312
-        361)
+        359)
       object lblName: TLabel
         Left = 3
         Top = 3
@@ -358,12 +356,11 @@ inherited frmDataSets: TfrmDataSets
         Left = 2
         Top = 271
         Width = 275
-        Height = 87
+        Height = 85
         Anchors = [akLeft, akTop, akRight, akBottom]
         ScrollBars = ssBoth
         TabOrder = 8
         OnExit = reDefaultFormulaExit
-        ExplicitHeight = 86
       end
       object comboUnits: TComboBox
         Left = 149
@@ -593,12 +590,13 @@ inherited frmDataSets: TfrmDataSets
       end
       object pnlDescription: TPanel
         Left = 0
-        Top = 174
+        Top = 172
         Width = 312
         Height = 187
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitTop = 174
         object lblAssociatedDataSets: TLabel
           AlignWithMargins = True
           Left = 3

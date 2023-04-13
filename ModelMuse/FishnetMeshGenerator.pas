@@ -270,7 +270,7 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited;
   FNodeNumbers := TIntegerCollection.Create(OnInvalidateModelEvent);
@@ -854,7 +854,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TFishnetMeshElement, InvalidateModelEvent);
   FGenerator := Generator;
@@ -906,7 +906,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   FElements := TFishnetMeshElementCollection.Create(Model, self);
   FNodes := TFishnetMeshNodeCollection.Create(InvalidateModelEvent, self);

@@ -48,7 +48,7 @@ implementation
 
 uses ModflowUnitNumbers, ScreenObjectUnit, DataSetUnit,
   frmErrorsAndWarningsUnit, frmProgressUnit, Forms, ModflowTimeUnit,
-  ModflowBoundaryUnit, PestPropertiesUnit;
+  ModflowBoundaryUnit, PestPropertiesUnit, DataSetNamesUnit;
 
 resourcestring
   ObsNameWarning = 'The following Head observation names may be valid for MODFLOW but they are not valid for UCODE.';

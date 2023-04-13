@@ -86,7 +86,8 @@ implementation
 uses
   frmProgressUnit, ScreenObjectUnit, ModflowUnitNumbers, Vcl.Forms,
   frmGoPhastUnit, frmFormulaErrorsUnit,
-  GIS_Functions, AbstractGridUnit, frmErrorsAndWarningsUnit, DataSetUnit;
+  GIS_Functions, AbstractGridUnit, frmErrorsAndWarningsUnit, DataSetUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrWritingRIPPackage = 'Writing RIP Package input.';

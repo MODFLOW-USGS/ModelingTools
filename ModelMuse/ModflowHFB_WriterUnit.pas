@@ -162,7 +162,7 @@ implementation
 uses Math, ModflowUnitNumbers, ModflowHfbUnit, OrderedCollectionUnit,
   frmErrorsAndWarningsUnit, ModflowGridUnit, GIS_Functions,
   frmProgressUnit, frmFormulaErrorsUnit, Forms, ModflowIrregularMeshUnit,
-  FastGEO, QuadtreeClass, ModflowTimeUnit, DataSetUnit;
+  FastGEO, QuadtreeClass, ModflowTimeUnit, DataSetUnit, DataSetNamesUnit;
 
 resourcestring
   StrInTheHFBPackage = 'In the HFB package, one or more objects do not defin' +

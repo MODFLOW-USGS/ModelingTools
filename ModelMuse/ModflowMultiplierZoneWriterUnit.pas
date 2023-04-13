@@ -94,7 +94,7 @@ type
 implementation
 
 uses OrderedCollectionUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
-  frmErrorsAndWarningsUnit, System.IOUtils;
+  frmErrorsAndWarningsUnit, System.IOUtils, DataSetNamesUnit;
 
 resourcestring
   StrWritingSPackageI = 'Writing %s Package input.';

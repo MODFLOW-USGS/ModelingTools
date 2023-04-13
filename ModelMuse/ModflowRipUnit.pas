@@ -505,7 +505,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := (Model as TCustomModel).DoInvalidate;
   end;
   FCoverages := TList<TFormulaObject>.Create;
   FCoverageFormulas := TStringList.Create;

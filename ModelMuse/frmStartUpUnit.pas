@@ -199,7 +199,8 @@ implementation
 
 uses Math, Contnrs, frmGoPhastUnit, GoPhastTypes, frmGoToUnit, DataSetUnit,
   LayerStructureUnit, PhastModelUnit, ModelMuseUtilities,
-  SutraMeshUnit, SutraOptionsUnit, RealListUnit, ZoomBox2, GeoRefUnit;
+  SutraMeshUnit, SutraOptionsUnit, RealListUnit, ZoomBox2, GeoRefUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrInitialGrid = 'Initial Grid';

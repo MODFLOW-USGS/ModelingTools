@@ -217,7 +217,7 @@ type
       override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   // Each @name stores a @link(TStrCollection).
@@ -1066,16 +1066,16 @@ end;
 
 procedure TStrItem.SetDiversionSegment(const Value: integer);
 var
-  Model: TBaseModel;
+  Model: TCustomModel;
 begin
   if FDiversionSegment <> Value then
   begin
     InvalidateModel;
     FDiversionSegment := Value;
-    Model := (Collection as TStrCollection).Model;
+    Model := (Collection as TStrCollection).Model as TCustomModel;
     if Model <> nil then
     begin
-      (Model as TCustomModel).ModflowPackages.StrPackage.
+      Model.ModflowPackages.StrPackage.
         MfStrSegmentNumber.Invalidate;
     end;
   end;
@@ -1088,16 +1088,16 @@ end;
 
 procedure TStrItem.SetOutflowSegment(const Value: integer);
 var
-  Model: TBaseModel;
+  Model: TCustomModel;
 begin
   if FOutflowSegment <> Value then
   begin
     InvalidateModel;
     FOutflowSegment := Value;
-    Model := (Collection as TStrCollection).Model;
+    Model := (Collection as TStrCollection).Model as TCustomModel;
     if Model <> nil then
     begin
-      (Model as TCustomModel).ModflowPackages.StrPackage.
+      Model.ModflowPackages.StrPackage.
         MfStrSegmentNumber.Invalidate;
     end;
   end;
@@ -1421,7 +1421,7 @@ begin
   end;
 end;
 
-constructor TStrCollection.Create(Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
+constructor TStrCollection.Create(Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;

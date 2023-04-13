@@ -234,7 +234,7 @@ type
     property UsedObserver: TObserver read GetUsedObserver;
     procedure CreateObservers;
   public
-    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     Procedure Assign(Source: TPersistent); override;
     function Used: boolean; override;
@@ -403,7 +403,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraFluidBoundary = class(TSutraBoundary)
@@ -441,7 +441,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraMassEnergySourceSinkBoundary = class(TSutraBoundary)
@@ -480,7 +480,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraSpecifiedPressureBoundary = class(TSutraBoundary)
@@ -518,7 +518,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraSpecifiedConcTempBoundary = class(TSutraBoundary)
@@ -990,7 +990,7 @@ begin
     and not (csDestroying in PhastModel.ComponentState)
     and not PhastModel.Clearing then
   begin
-    PhastModel.Invalidate(self);
+    PhastModel.DoInvalidate(self);
 //    PhastModel.InvalidateMfWellPumpage(self);
   end;
 end;
@@ -1074,7 +1074,7 @@ end;
 { TSutraFluidBoundaryCollection }
 
 constructor TSutraFluidBoundaryCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 
@@ -1118,7 +1118,7 @@ end;
 { TSutraMassEnergySourceSinkCollection }
 
 constructor TSutraMassEnergySourceSinkCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: TBaseModel; ScreenObject: TObject);
+  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 end;
@@ -1152,7 +1152,7 @@ end;
 { TSutraSpecifiedPressureCollection }
 
 constructor TSutraSpecifiedPressureCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 
@@ -1196,7 +1196,7 @@ end;
 { TSutraSpecifiedConcTempCollection }
 
 constructor TSutraSpecifiedConcTempCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 
@@ -1537,7 +1537,7 @@ procedure TSutraTimeList.CheckSameModel(const Data: TDataArray);
 begin
   if Data <> nil then
   begin
-    Assert(Model = Data.Model);
+    Assert(Model = (Data.Model as TCustomModel));
   end;
 end;
 
@@ -1788,7 +1788,7 @@ begin
   result := 4;
 end;
 
-constructor TSutraLake.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor TSutraLake.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   CreateFormulaObjects;

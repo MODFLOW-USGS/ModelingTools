@@ -66,7 +66,8 @@ implementation
 
 uses
   ClassificationUnit, RbwParser, PhastDataSets,
-  Contnrs, frmGoPhastUnit, PhastModelUnit, Math;
+  Contnrs, frmGoPhastUnit, PhastModelUnit, Math, DataArrayManagerUnit,
+  CrossSectionUnit, DataSetNamesUnit;
 
 {$R *.dfm}
 

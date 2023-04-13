@@ -662,7 +662,7 @@ implementation
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit,
   frmErrorsAndWarningsUnit,
-  ModflowUzfUnit;
+  ModflowUzfUnit, DataSetNamesUnit;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';
@@ -730,7 +730,7 @@ var
   EvtCol: TEvtCollection;
 begin
   EvtCol := Collection as TEvtCollection;
-  FGwtConcentrations := TEvtGwtConcCollection.Create(Model, ScreenObject,
+  FGwtConcentrations := TEvtGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     EvtCol);
   inherited;
 end;
@@ -1570,8 +1570,8 @@ end;
 constructor TEvtBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
-  FEvapotranspirationLayers := TEvtLayerCollection.Create(self, Model, ScreenObject);
-  FEvtSurfDepthCollection := TEvtSurfDepthCollection.Create(self, Model, ScreenObject);
+  FEvapotranspirationLayers := TEvtLayerCollection.Create(self, Model as TCustomModel, ScreenObject);
+  FEvtSurfDepthCollection := TEvtSurfDepthCollection.Create(self, Model as TCustomModel, ScreenObject);
 
   CreateFormulaObjects;
   CreateBoundaryObserver;

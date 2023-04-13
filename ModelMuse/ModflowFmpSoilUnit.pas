@@ -165,7 +165,7 @@ end;
 constructor TSoilItem.Create(Collection: TCollection);
 begin
   inherited;
-  FLookUpTable := TLookUpTable.Create(Model);
+  FLookUpTable := TLookUpTable.Create(Model as TCustomModel);
 end;
 
 destructor TSoilItem.Destroy;
@@ -175,9 +175,9 @@ begin
   FLookUpTable.Free;
   if (Model <> nil) and (SoilName <> '')  then
   begin
-    if ([csLoading, csDestroying] * Model.ComponentState) = [] then
+    if ([csLoading, csDestroying] * (Model as TComponent).ComponentState) = [] then
     begin
-      Unlocker := TDefineGlobalIntegerObject.Create(Model, FSoilName, FSoilName,
+      Unlocker := TDefineGlobalIntegerObject.Create(Model as TCustomModel, FSoilName, FSoilName,
         StrSoilVariable);
       try
         Unlocker.Locked := False;
@@ -338,7 +338,7 @@ var
 begin
   if (Model <> nil) and (FSoilName <> '') then
   begin
-    ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FSoilName, FSoilName,
+    ChangeGlobals := TDefineGlobalIntegerObject.Create(Model as TCustomModel, FSoilName, FSoilName,
       StrSoilVariable);
     try
       ChangeGlobals.SetValue(Value+1);
@@ -360,11 +360,11 @@ var
   ChangeGlobals: TDefineGlobalIntegerObject;
 begin
   if (FSoilName <> Value) and (Model <> nil)
-    and not (csReading in Model.ComponentState) then
+    and not (csReading in (Model as TComponent).ComponentState) then
   begin
     Value := GenerateNewName(Value, nil, '_');
   end;
-  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FSoilName, Value,
+  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model as TCustomModel, FSoilName, Value,
     StrSoilVariable);
   try
     if FSoilName <> Value then

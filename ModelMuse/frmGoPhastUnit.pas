@@ -2176,7 +2176,7 @@ uses
   frmSupCalcUnit, PestPropertiesUnit,
   frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
   frmTimeSeriesUnit, frmIrrigationTypesUnit,
-  frmLayersToExportUnit;
+  frmLayersToExportUnit, DataArrayManagerUnit, DataSetNamesUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -9265,7 +9265,7 @@ begin
     end;
     InvalidateViewOfModel;
     ReDrawAllViews(nil);
-    PhastModel.Invalidate(self);
+    PhastModel.DoInvalidate(self);
   end;
   EnableDeleteImage;
 end;
@@ -14460,7 +14460,7 @@ begin
   if PhastModel <> nil then
   begin
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
-    PhastModel.Invalidate(self);
+    PhastModel.DoInvalidate(self);
   end;
 end;
 

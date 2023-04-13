@@ -104,7 +104,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, DataSetUnit;
+  PhastModelUnit, DataSetUnit, DataSetNamesUnit;
 
 const
   DiameterPosition = 0;

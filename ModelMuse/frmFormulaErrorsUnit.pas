@@ -75,9 +75,6 @@ type
 function frmFormulaErrors: TfrmFormulaErrors;
 procedure ClearFormulaErrors;
 
-var
-  ClearingDeletedDataSets: boolean = False;
-
 implementation
 
 uses Clipbrd;

@@ -56,7 +56,7 @@ implementation
 
 uses frmGoPhastUnit, GoPhastTypes, DataSetUnit,
   RbwParser, UndoItems, frmProgressUnit, ModelMuseUtilities, FastGEO,
-  ValueArrayStorageUnit, GIS_Functions;
+  ValueArrayStorageUnit, GIS_Functions, DataSetNamesUnit;
 
 resourcestring
   StrImportDXFFile = 'import DXF file';

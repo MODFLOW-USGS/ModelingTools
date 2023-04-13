@@ -55,7 +55,7 @@ implementation
 uses
   frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModelMuseUtilities,
   UndoItems, ValueArrayStorageUnit, GIS_Functions,
-  frmImportAsciiRasterUnit;
+  frmImportAsciiRasterUnit, DataSetNamesUnit;
 
 resourcestring
   StrImportSurferGridF = 'import Surfer grid file';

@@ -235,7 +235,8 @@ uses
   UndoItemsScreenObjects, ClassificationUnit, frmProgressUnit,
   frmErrorsAndWarningsUnit, Clipbrd, RbwParser, frmDisplayDataUnit,
   pngimage, jpeg, VectorDisplayUnit, ModflowHeadObsResults,
-  Generics.Collections, DrawMeshTypesUnit, PestObservationResults;
+  Generics.Collections, DrawMeshTypesUnit, PestObservationResults,
+  DataSetNamesUnit;
 
 resourcestring
   StrProgress = 'Progress';

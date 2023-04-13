@@ -171,7 +171,8 @@ uses AbstractGridUnit, frmGoPhastUnit,
   PhastModelUnit, PathlineReader, QuadtreeClass, ZoomBox2, InteractiveTools,
   SutraMeshUnit, DisplaySettingsUnit,
   System.Generics.Collections, ModflowSwrStructureUnit,
-  ModflowIrregularMeshUnit, ModflowGncUnit;
+  ModflowIrregularMeshUnit, ModflowGncUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrSelectedObject = 'Selected object';

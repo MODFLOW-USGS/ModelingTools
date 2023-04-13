@@ -290,7 +290,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage); override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
+      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSfrMf6_Cell = class(TValueCell)
@@ -426,7 +426,7 @@ type
     procedure SetItem(Index: Integer; const Value: TSDiversionItem);
   public
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TSDiversionItem read GetItem write SetItem; default;
     function Add: TSDiversionItem;
   end;
@@ -628,7 +628,7 @@ type
     property PestInflowConcentrationObserver[const Index: Integer]: TObserver
       read GetPestInflowConcentrationObserver;
   public
-    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     Destructor Destroy; override;
     Procedure Assign(Source: TPersistent); override;
     procedure Loaded;
@@ -752,7 +752,8 @@ uses
   frmGoPhastUnit, ModflowTimeUnit, PhastModelUnit,
   ScreenObjectUnit, GIS_Functions, ModflowSfrUnit, ModflowSfrReachUnit,
   ModflowSfrSegment, ModflowSfrChannelUnit, ModflowSfrParamIcalcUnit,
-  ModflowSfrFlows, ModflowStrUnit, DataSetUnit, ModflowMvrUnit;
+  ModflowSfrFlows, ModflowStrUnit, DataSetUnit, ModflowMvrUnit,
+  DataSetNamesUnit;
 
 
 const
@@ -1408,19 +1409,19 @@ begin
   FDiversionFormulas := TList<TFormulaObject>.Create;
 
   SfrCollection := Collection as TSfrMf6Collection;
-  FSpecifiedConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+  FSpecifiedConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
-  FRainfallConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+  FRainfallConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
-  FEvapConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+  FEvapConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
-  FRunoffConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+  FRunoffConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
-  FInflowConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject,
+  FInflowConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
 
   inherited;
-  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model);
+  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model as TCustomModel);
 
   FStatus := True;
 
@@ -2498,7 +2499,7 @@ begin
 end;
 
 constructor TSfrMf6Collection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: TBaseModel; ScreenObject: TObject);
+  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   FSfrMf6Boundary := Boundary as TSfrMf6Boundary;
@@ -3034,7 +3035,7 @@ begin
   result := inherited Add as TSDiversionItem;
 end;
 
-constructor TDiversionCollection.Create(Model: TBaseModel);
+constructor TDiversionCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TSDiversionItem, Model);
 end;
@@ -3488,34 +3489,35 @@ begin
   result := 'Sfr6';
 end;
 
-constructor TSfrMf6Boundary.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor TSfrMf6Boundary.Create(Model: ICustomModelInterfaceForTOrderedCollection;
+  ScreenObject: TObject);
 var
   InvalidateEvent: TNotifyEvent;
   Index: Integer;
 begin
-  inherited;
+  inherited Create(Model as TCustomModel, ScreenObject); ;
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
   FPestRainfallConcentrationObservers := TObserverList.Create;
   FPestEvaporationConcentrationObservers := TObserverList.Create;
   FPestRunoffConcentrationObservers := TObserverList.Create;
   FPestInflowConcentrationObservers := TObserverList.Create;
 
-  FPestSpecifiedConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestSpecifiedConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   FPestSpecifiedConcentrations.UsedForPestSeries := True;
-  FPestRainfallConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestRainfallConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   FPestRainfallConcentrations.UsedForPestSeries := True;
-  FPestEvaporationConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestEvaporationConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   FPestEvaporationConcentrations.UsedForPestSeries := True;
-  FPestRunoffConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestRunoffConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   FPestRunoffConcentrations.UsedForPestSeries := True;
-  FPestInflowConcentrations := TSftGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestInflowConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   FPestInflowConcentrations.UsedForPestSeries := True;
 
-  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestRainfallConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestRunoffConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestInflowConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestRainfallConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestEvaporationConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestRunoffConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestInflowConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 
   if Model = nil then
   begin
@@ -3525,7 +3527,7 @@ begin
   begin
     InvalidateEvent := Model.Invalidate;
   end;
-  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
+  FStartingConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
 
 //  FStartConcFormulas := TFormulaObjectList.Create;
   FDownstreamSegments := TIntegerCollection.Create(InvalidateEvent);

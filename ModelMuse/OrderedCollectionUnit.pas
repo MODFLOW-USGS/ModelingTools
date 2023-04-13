@@ -2,10 +2,21 @@ unit OrderedCollectionUnit;
 
 interface
 
-uses DataSetUnit, Classes, GoPhastTypes, SysUtils, SubscriptionUnit, RbwParser,
-  FormulaManagerUnit;
+uses DataSetUnit, System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit, RbwParser,
+  FormulaManagerUnit, ModelMuseInterfacesUnit;
 
 type
+
+  ICustomModelInterfaceForTOrderedCollection = interface(IModelMuseModel)
+    procedure RemoveVariables(const DataSet: TDataArray); overload;
+    procedure RemoveVariables(const DataSetName: String;
+      Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt); overload;
+    function GetDataArrayInterface: ISimpleDataArrayManager;
+//    function GetDataArrayManager: TDataArrayManager;
+//    property DataArrayManager: TDataArrayManager read GetDataArrayManager;
+  end;
+
+
   {@name defines the types of parameters used in MODFLOW.
   @value(ptUndefined ptUndefined represents an undefined type.)
   @value(ptLPF_HK ptLPF_HK represents the HK parameter type
@@ -112,7 +123,7 @@ type
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    function Model: TBaseModel;
+    function Model: ICustomModelInterfaceForTOrderedCollection;
     function GetOnInvalidateModelEvent: TNotifyEvent;
     property OnInvalidateModelEvent: TNotifyEvent read GetOnInvalidateModelEvent;
     // @name tests whether another @classname is identical to the current one.
@@ -209,7 +220,7 @@ type
   private
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // See @link(Model).
-    FModel: TBaseModel;
+    FModel: ICustomModelInterfaceForTOrderedCollection;
     procedure SetCount(const Value: Integer);
   protected
     // @name invalidates the model.
@@ -227,12 +238,12 @@ type
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; virtual;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
     // @name is a @link(TPhastModel) or nil.
-    property Model: TBaseModel read FModel;
+    property Model: ICustomModelInterfaceForTOrderedCollection read FModel;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
     // @name creates an instance of @classname.
     // @param(ItemClass ItemClass must be a descendant of @link(TOrderedItem).)
     // @param(Model Model must be a @link(TPhastModel) or nil.)
-    constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel);
+    constructor Create(ItemClass: TCollectionItemClass; Model: ICustomModelInterfaceForTOrderedCollection);
     // @name copies the source @classname to itself.  If @link(Model) is nil,
     // it uses the inherited method which causes it to delete all its items,
     // and copy new ones from the source.  If @link(Model) is assigned,
@@ -266,7 +277,7 @@ type
     procedure SetItems(const Index: Integer; const Value: TPestMethodItem);
     function GetCount: Integer; override;
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[const Index: Integer]: TPestMethodItem read GetItems
       write SetItems; default;
   end;
@@ -277,7 +288,7 @@ type
     procedure SetItems(const Index: Integer; const Value: TPestMethodItem);
     function GetCount: Integer; override;
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[const Index: Integer]: TPestMethodItem read GetItems
       write SetItems; default;
   end;
@@ -290,7 +301,8 @@ type
     // @name provides access to @link(TCustomModflowBoundaryItem) representing
     // the boundary conditions for different time periods.
     property ScreenObject: TObject read FScreenObject;
-    constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel;
+    constructor Create(ItemClass: TCollectionItemClass;
+      Model: ICustomModelInterfaceForTOrderedCollection;
       AScreenObject: TObject);
   end;
 
@@ -348,11 +360,11 @@ type
 
   TPPObsGrpCollection = class(TPhastCollection)
   private
-    FModel: TBaseModel;
+    FModel: IModelMuseModel;
     function GetItem(Index: Integer): TPilotPointObsGrp;
     procedure SetItem(Index: Integer; const Value: TPilotPointObsGrp);
   public
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: IModelMuseModel);
     function Add: TPilotPointObsGrp;
     function IsSame(OtherCollection: TPPObsGrpCollection): Boolean;
     property Items[Index: Integer]: TPilotPointObsGrp read GetItem
@@ -526,7 +538,7 @@ uses PhastModelUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowTransientListParameterUnit,
   ModflowSfrParamIcalcUnit, Generics.Collections, Modflow6TimeSeriesUnit,
   Generics.Defaults, Math, frmGoPhastUnit, LockedGlobalVariableChangers,
-  PestObsGroupUnit;
+  PestObsGroupUnit, DataSetNamesUnit;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
 begin
@@ -558,10 +570,9 @@ begin
 end;
 
 constructor TOrderedCollection.Create(ItemClass: TCollectionItemClass;
-  Model: TBaseModel);
+  Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(ItemClass);
-  Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
 end;
 
@@ -797,7 +808,7 @@ begin
   end;
 end;
 
-function TOrderedItem.Model: TBaseModel;
+function TOrderedItem.Model: ICustomModelInterfaceForTOrderedCollection;
 begin
   if Collection = nil then
   begin
@@ -810,17 +821,14 @@ begin
 end;
 
 function TOrderedItem.GetOnInvalidateModelEvent: TNotifyEvent;
-var
-  LocalModel: TBaseModel;
 begin
-  LocalModel := Model;
-  if LocalModel = nil then
+  if Model = nil then
   begin
     result := nil;
   end
   else
   begin
-    result := LocalModel.Invalidate;
+    result := Model.Invalidate;
   end;
 end;
 
@@ -843,15 +851,13 @@ procedure TLayerOwnerCollection.RemoveNewDataSets;
 var
   DataArray: TDataArray;
   Index: integer;
-  LocalModel: TCustomModel;
   ChildIndex: Integer;
-  ChildModel: TChildModel;
+  ChildModel: ICustomModelInterfaceForTOrderedCollection;
   ChildDataArray: TDataArray;
   PhastModel: TPhastModel;
 begin
   Assert(FNewDataSets <> nil);
   Assert(FModel <> nil);
-  LocalModel := FModel as TCustomModel;
   if FModel is TPhastModel then
   begin
      PhastModel := TPhastModel(FModel);
@@ -871,16 +877,16 @@ begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        ChildDataArray := ChildModel.DataArrayManager.GetDataSetByName(DataArray.Name);
+        ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByName(DataArray.Name);
         Assert(ChildDataArray <> nil);
         ChildModel.RemoveVariables(ChildDataArray);
-        ChildModel.DataArrayManager.ExtractDataSet(ChildDataArray);
+        ChildModel.GetDataArrayInterface.ExtractDataSet(ChildDataArray);
         ChildDataArray.Free;
       end;
     end;
     end;
-    LocalModel.RemoveVariables(DataArray);
-    LocalModel.DataArrayManager.ExtractDataSet(DataArray);
+    FModel.RemoveVariables(DataArray);
+    FModel.GetDataArrayInterface.ExtractDataSet(DataArray);
     DataArray.Free;
   end;
   ClearNewDataSets;
@@ -1474,7 +1480,7 @@ begin
       if (FParameterType = ptPEST) or  (Value = ptPEST) then
       begin
         ChangeGlobal := TDefineGlobalStringObject.Create(
-          Model, ParameterName, ParameterName, StrParameterType);
+          Model as TCustomModel, ParameterName, ParameterName, StrParameterType);
         try
           ChangeGlobal.Locked := (Value = ptPEST);
           ChangeGlobal.SetValue(ParameterName);
@@ -1891,7 +1897,8 @@ end;
 { TCustomObjectOrderedCollection }
 
 constructor TCustomObjectOrderedCollection.Create(
-  ItemClass: TCollectionItemClass; Model: TBaseModel; AScreenObject: TObject);
+  ItemClass: TCollectionItemClass;
+  Model: ICustomModelInterfaceForTOrderedCollection; AScreenObject: TObject);
 begin
   inherited Create(ItemClass, Model);
   FScreenObject := AScreenObject;
@@ -1940,7 +1947,7 @@ end;
 
 { TPestMethodCollection }
 
-constructor TGwtPestMethodCollection.Create(Model: TBaseModel);
+constructor TGwtPestMethodCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TPestMethodItem, Model);
 end;
@@ -2055,7 +2062,7 @@ begin
 end;
 
 
-constructor TPPObsGrpCollection.Create(Model: TBaseModel);
+constructor TPPObsGrpCollection.Create(Model: IModelMuseModel);
 var
   InvalidateEvent: TNotifyEvent;
 begin
@@ -2141,7 +2148,7 @@ end;
 
 { TLandUsePestMethodCollection }
 
-constructor TLandUsePestMethodCollection.Create(Model: TBaseModel);
+constructor TLandUsePestMethodCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TPestMethodItem, Model);
 end;

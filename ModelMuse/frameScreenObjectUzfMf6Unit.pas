@@ -70,7 +70,7 @@ implementation
 
 uses
   GoPhastTypes, ModflowUzfMf6Unit, frmGoPhastUnit, DataSetUnit,
-  ScreenObjectUnit, PhastModelUnit, Mt3dmsChemSpeciesUnit;
+  ScreenObjectUnit, PhastModelUnit, Mt3dmsChemSpeciesUnit, DataSetNamesUnit;
 
 resourcestring
   StrInfiltration = 'Infiltration (finf)';

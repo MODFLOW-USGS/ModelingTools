@@ -101,7 +101,7 @@ uses
   ModflowMvrWriterUnit, ModflowMvrUnit, System.Generics.Defaults,
   Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
   ModflowGridUnit, frmErrorsAndWarningsUnit, SparseArrayUnit,
-  Mt3dmsChemSpeciesUnit, GwtStatusUnit;
+  Mt3dmsChemSpeciesUnit, GwtStatusUnit, DataSetNamesUnit;
 
 resourcestring
   StrWritingUZF6Package = 'Writing UZF6 Package input.';

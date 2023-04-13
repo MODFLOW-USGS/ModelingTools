@@ -125,7 +125,8 @@ implementation
 uses
   LayerStructureUnit, ModpathStartingLocationsWriter,
   ModpathParticleUnit, frmProgressUnit, Forms, frmGoPhastUnit,
-  frmErrorsAndWarningsUnit, ModflowTimeUnit, ArchiveNodeInterface, System.Generics.Collections, FastGEO;
+  frmErrorsAndWarningsUnit, ModflowTimeUnit, ArchiveNodeInterface, System.Generics.Collections, FastGEO,
+  DataSetNamesUnit;
 
 resourcestring
   StrWritingDataSets32and33 = '  Writing Data Sets 32 and 33.';

@@ -83,7 +83,7 @@ uses
   frmErrorsAndWarningsUnit, frmGoPhastUnit, ScreenObjectUnit, FootprintBoundary,
   RbwParser, AbstractGridUnit, GIS_Functions, System.SysUtils, System.Math,
   QuadTreeClass,
-  System.UITypes, Vcl.Dialogs;
+  System.UITypes, Vcl.Dialogs, DataSetNamesUnit;
 
 resourcestring
   StrRedistributedWithdrawals = 'Redistributed withdrawals';
@@ -311,7 +311,7 @@ begin
   UpToDate := True;
   if FModel <> nil then
   begin
-    FModel.Invalidate(Self);
+    FModel.DoInvalidate(Self);
   end;
 end;
 

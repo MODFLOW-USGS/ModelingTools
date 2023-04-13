@@ -194,7 +194,7 @@ type
 
   TChemSpeciesCollection = class(TCustomChemSpeciesCollection)
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
   end;
 
   TMobileChemSpeciesItem = class(TChemSpeciesItem)
@@ -218,7 +218,7 @@ type
     function GetItem(Index: Integer): TMobileChemSpeciesItem;
     procedure SetItem(Index: Integer; const Value: TMobileChemSpeciesItem);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer] : TMobileChemSpeciesItem read GetItem
       write SetItem; default;
     function Add: TMobileChemSpeciesItem;
@@ -481,13 +481,11 @@ procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
   AssociatedDataSets: string; ShouldCreate: boolean;
   const Classification: string);
 var
-//  DataArray: TDataArray;
-//  LocalModel: TPhastModel;
   UpdataDat: TUpdataDataArrayRecord;
 begin
   if Collection.Model <> nil then
   begin
-    UpdataDat.Model := Collection.Model;
+    UpdataDat.Model := Collection.Model as TCustomModel;
     UpdataDat.OnDataSetUsed := OnDataSetUsed;
     UpdataDat.OldDataArrayName := OldDataArrayName;
     UpdataDat.NewName := NewName;
@@ -499,44 +497,6 @@ begin
     UpdataDat.Orientation := dso3D;
 
     UpdateOrCreateDataArray(UpdataDat);
-
-//    LocalModel := Collection.Model as TPhastModel;
-//    if not (csLoading in LocalModel.ComponentState) then
-//    begin
-//      DataArray := LocalModel.DataArrayManager.GetDataSetByName(NewName);
-//      if DataArray = nil then
-//      begin
-//        DataArray := LocalModel.DataArrayManager.
-//          GetDataSetByName(OldDataArrayName);
-//      end;
-//      if DataArray <> nil then
-//      begin
-//        if DataArray.Name <> NewName then
-//        begin
-//          LocalModel.RenameDataArray(DataArray, NewName, NewDisplayName);
-//        end;
-//      end;
-//      if DataArray = nil then
-//      begin
-//        if ShouldCreate then
-//        begin
-//          // create a new data array.
-//          DataArray := LocalModel.DataArrayManager.CreateNewDataArray(
-//            TDataArray, NewName, NewFormula, NewDisplayName,
-//            [dcName, dcType, dcOrientation, dcEvaluatedAt],
-//            rdtDouble, eaBlocks, dso3D, Classification);
-//        end;
-//      end;
-//      if DataArray <> nil then
-//      begin
-//        LocalModel.ThreeDGridObserver.TalksTo(DataArray);
-//        DataArray.UpdateDimensions(LocalModel.LayerCount,
-//          LocalModel.RowCount, LocalModel.ColumnCount);
-//        DataArray.OnDataSetUsed := OnDataSetUsed;
-//        DataArray.AssociatedDataSets := AssociatedDataSets;
-//        DataArray.Classification := Classification;
-//      end;
-//    end;
   end;
 end;
 
@@ -569,7 +529,7 @@ begin
   FImmobilePorosities := TStringList.Create;
   FImmobileMassTransferRates := TStringList.Create;
 
-  if (Model <> nil) and not (csLoading in Model.ComponentState) then
+  if (Model <> nil) and not (csLoading in (Model as TComponent).ComponentState) then
   begin
     LocalModel := Model as TCustomModel;
     SpeciesIndex := LocalModel.MobileComponents.IndexOf(self);
@@ -653,7 +613,7 @@ begin
   FImmobilePorosities.Free;
   FImmobileMassTransferRates.Free;
 
-  if (Model <> nil) and not (csDestroying in Model.ComponentState)
+  if (Model <> nil) and not (csDestroying in (Model as TComponent).ComponentState)
     and not (Model as TCustomModel).Clearing then
   begin
     LocalModel := Model as TCustomModel;
@@ -2153,7 +2113,7 @@ begin
   Result := inherited Add as TChemSpeciesItem;
 end;
 
-constructor TChemSpeciesCollection.Create(Model: TBaseModel);
+constructor TChemSpeciesCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TChemSpeciesItem, Model);
 end;
@@ -2282,7 +2242,7 @@ begin
   result := inherited Add as TMobileChemSpeciesItem
 end;
 
-constructor TMobileChemSpeciesCollection.Create(Model: TBaseModel);
+constructor TMobileChemSpeciesCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TMobileChemSpeciesItem, Model);
 end;

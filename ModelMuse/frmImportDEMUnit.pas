@@ -45,7 +45,8 @@ implementation
 uses
   frmGoPhastUnit, DemReaderUnit, 
   ModelMuseUtilities, DataSetUnit, frmProgressUnit, UndoItems,
-  GIS_Functions, CoordinateConversionUnit, MeshRenumberingTypes;
+  GIS_Functions, CoordinateConversionUnit, MeshRenumberingTypes,
+  DataSetNamesUnit;
 
 resourcestring
   StrSampleDigitalEleva = 'sample Digital Elevation Model';

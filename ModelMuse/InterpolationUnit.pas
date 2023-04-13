@@ -403,7 +403,7 @@ implementation
 uses Math, AbstractGridUnit, TripackTypes, GIS_Functions, Types,
   Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit,
   PlProcUnit, TempFiles, Vcl.Forms, System.IOUtils,
-  JvCreateProcess;
+  JvCreateProcess, DataSetNamesUnit;
 
 resourcestring
   StrErrorEncoutereredI = 'Error encouterered in initializing %0:s for the ' +
@@ -1482,7 +1482,7 @@ begin
   NearestSegment := AScreenObject.Segments[FModel].ClosestSegment(
     Location, Anisotropy);
   UpDateGlobalLocations(Cell.Col, Cell.Row, Cell.Lay, DataSet.EvaluatedAt,
-    DataSet.Model);
+    DataSet.Model as TCustomModel);
   UpdateCurrentScreenObject(AScreenObject);
   UpdateCurrentSegment(NearestSegment);
 //  if NearestSegment = nil then
@@ -1537,7 +1537,7 @@ begin
     end;
   end;
   UpDateGlobalLocations(Cell.Col, Cell.Row, Cell.Lay, DataSet.EvaluatedAt,
-    DataSet.Model);
+    DataSet.Model as TCustomModel);
   UpdateCurrentScreenObject(AScreenObject);
   UpdateCurrentSegment(NearestSegment);
 //  if NearestSegment = nil then
@@ -1906,7 +1906,7 @@ begin
     end;
   except on E: ERbwParserError do
     begin
-      frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+      frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel, StrErrorAssigningValu,
         Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
       Exit;
     end;
@@ -2438,7 +2438,7 @@ begin
     FRealData[Count] := Expression.DoubleResult;
   except on E: ERbwParserError do
     begin
-      frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+      frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel, StrErrorAssigningValu,
         Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
       FRealData[Count] := 0;
       Exit;
@@ -2481,7 +2481,7 @@ begin
       begin
         continue;
       end;
-      if not AScreenObject.UsedModels.UsesModel(DataSet.Model) then
+      if not AScreenObject.UsedModels.UsesModel(DataSet.Model as TCustomModel) then
       begin
         Continue;
       end;
@@ -3001,7 +3001,7 @@ begin
         FCount[ALocation.Dimen1, ALocation.Dimen2] + 1;
     except on E: ERbwParserError do
       begin
-        frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+        frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel, StrErrorAssigningValu,
           Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
         Exit;
       end;
@@ -3316,12 +3316,12 @@ begin
     end;
 
     ErrorMessage := Format(StrKriggingCouldNotB, [DataSet.Name]);
-    frmErrorsAndWarnings.RemoveErrorGroup(DataSet.Model, ErrorMessage);
+    frmErrorsAndWarnings.RemoveErrorGroup(DataSet.Model as TCustomModel, ErrorMessage);
     if Count > MaxAllowedPoints then
     begin
 //    PlProc can handle at most 46500 points.
       FReady := True;
-      frmErrorsAndWarnings.AddError(DataSet.Model, ErrorMessage,
+      frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel, ErrorMessage,
         Format(StrKriggingCouldNotB2, [DataSet.Name, MaxAllowedPoints, Count]));
       Exit;
     end;
@@ -3484,7 +3484,7 @@ begin
     FValues[Count].z := Expression.DoubleResult;
   except on E: ERbwParserError do
     begin
-      frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+      frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel, StrErrorAssigningValu,
         Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
       Exit;
     end;

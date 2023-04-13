@@ -67,8 +67,8 @@ type
 
 implementation
 
-uses frmGoPhastUnit, PhastModelUnit, GoPhastTypes,
-ScreenObjectUnit;
+uses frmGoPhastUnit, PhastModelUnit, GoPhastTypes, ScreenObjectUnit,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 { TRiverWriter }
 

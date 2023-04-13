@@ -2,8 +2,8 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   HelpType = htKeyword
   HelpKeyword = 'Export_Model_Outline_Dialog_Bo'
   Caption = 'Export Model Outline'
-  ClientHeight = 286
-  ClientWidth = 346
+  ClientHeight = 285
+  ClientWidth = 342
   ExplicitWidth = 358
   ExplicitHeight = 324
   TextHeight = 18
@@ -25,7 +25,7 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   object rgExportChoice: TRadioGroup
     Left = 8
     Top = 64
-    Width = 326
+    Width = 318
     Height = 129
     Anchors = [akLeft, akTop, akRight]
     Caption = 'What to export'
@@ -42,14 +42,12 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 240
-    Width = 346
+    Top = 239
+    Width = 342
     Height = 46
     Align = alBottom
     ParentColor = True
     TabOrder = 3
-    ExplicitTop = 239
-    ExplicitWidth = 342
     object btnCancel: TBitBtn
       Left = 207
       Top = 6

@@ -149,7 +149,7 @@ type
     procedure RemoveModelLink(AModel: TBaseModel);
     property ScreenObject;
     // @name creates an instance of @classname
-    constructor Create(Boundary: THobBoundary; Model: TBaseModel;
+    constructor Create(Boundary: THobBoundary; Model: ICustomModelInterfaceForTOrderedCollection;
       ScreenObject: TObject);
     procedure EvaluateHeadObservations(AModel: TBaseModel);
     // @name destroys the current instance of @classname.
@@ -294,7 +294,7 @@ implementation
 
 uses ScreenObjectUnit, PhastModelUnit, ModflowGridUnit, FastGEO,
   SubscriptionUnit, RealListUnit, frmErrorsAndWarningsUnit,
-  Generics.Collections;
+  Generics.Collections, DataSetNamesUnit;
 
 resourcestring
   ErrorRoot = 'Error: Duplicate head observation times';
@@ -443,7 +443,7 @@ end;
 constructor THobBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FValues:= THobCollection.Create(self, Model,
+  FValues:= THobCollection.Create(self, Model as TCustomModel,
     ScreenObject);
   FMultiObsMethod := momHeadAndDrawdown;
 end;
@@ -821,7 +821,7 @@ begin
   end;
 end;
 
-constructor THobCollection.Create(Boundary: THobBoundary; Model: TBaseModel;
+constructor THobCollection.Create(Boundary: THobBoundary; Model: ICustomModelInterfaceForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited Create(THobItem, Model, ScreenObject);

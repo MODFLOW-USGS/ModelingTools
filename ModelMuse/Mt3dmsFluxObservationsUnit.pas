@@ -542,7 +542,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TMt3dmsFluxObservationGroup, Model);
 end;

@@ -2144,6 +2144,10 @@
         <DCCReference Include="GwtStatusUnit.pas"/>
         <DCCReference Include="ScreenObjectOwnerCollectionUnit.pas"/>
         <DCCReference Include="Modflow6DynamicTimeSeriesUnit.pas"/>
+        <DCCReference Include="ModelMuseFarmFormInterfacesUnit.pas"/>
+        <DCCReference Include="DataArrayManagerUnit.pas"/>
+        <DCCReference Include="CrossSectionUnit.pas"/>
+        <DCCReference Include="DataSetNamesUnit.pas"/>
         <DCCReference Include="ModelMuseInterfacesUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">

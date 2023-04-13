@@ -9,7 +9,8 @@ uses System.UITypes,
   DataSetUnit, ScreenObjectUnit, StrUtils, UndoItems, Contnrs, RealListUnit,
   ModflowGridUnit, ExtCtrls, EdgeDisplayUnit, GoPhastTypes, Grids, RbwDataGrid4,
   PhastModelUnit, Types, ModflowSwrWriterUnit, ReadSwrOutputUnit,
-  JvExControls, JvxCheckListBox, RbwEdit, ModflowIrregularMeshUnit;
+  JvExControls, JvxCheckListBox, RbwEdit, ModflowIrregularMeshUnit,
+  DataArrayManagerUnit;
 
 type
   TModflowResultFormat = (mrBinary, mrAscii, mrFlux, mrHufAscii, mrHufBinary,
@@ -317,7 +318,8 @@ uses Math, frmGoPhastUnit, RbwParser,
   frmGridValueUnit, AnsiStrings, frmDisplayDataUnit,
   Mt3dmsChemSpeciesUnit, IOUtils,
   SwrReachObjectUnit, frmProgressUnit, Generics.Collections,
-  frmBudgetPrecisionQueryUnit, ModflowBoundaryDisplayUnit, VectorDisplayUnit;
+  frmBudgetPrecisionQueryUnit, ModflowBoundaryDisplayUnit, VectorDisplayUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrHead = 'Head';
@@ -674,7 +676,7 @@ begin
     end;
   end;
   AdjustTotalTime(TOTIM);
-  if LayerData.Model = frmGoPhast.PhastModel then
+  if (LayerData.Model as TCustomModel) = frmGoPhast.PhastModel then
   begin
     ParentLayerData := LayerData;
   end
@@ -1503,7 +1505,7 @@ procedure TfrmSelectResultToImport.UpdateOldComments(OldComments: TStringList;
 var
   ParentDataArray: TDataArray;
 begin
-  if ADataArray.Model = frmGoPhast.PhastModel then
+  if (ADataArray.Model as TCustomModel) = frmGoPhast.PhastModel then
   begin
     ParentDataArray := ADataArray;
   end
@@ -2216,7 +2218,7 @@ begin
 //      Grid.ColumnCount);
   end;
   AdjustTotalTime(TOTIM);
-  if New3DArray.Model = frmGoPhast.PhastModel then
+  if (New3DArray.Model as TCustomModel) = frmGoPhast.PhastModel then
   begin
     Parent3DArray := New3DArray;
   end
@@ -5844,7 +5846,7 @@ var
   AFormulaAssigner: TFormulaAssigner;
 begin
   Assert(ADataArray <> nil);
-  Assert(ADataArray.Model = frmGoPhast.PhastModel);
+  Assert((ADataArray.Model as TCustomModel) = frmGoPhast.PhastModel);
   for Index := 0 to FList.Count - 1 do
   begin
     AFormulaAssigner := FList[Index];

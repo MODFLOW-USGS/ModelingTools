@@ -43,7 +43,8 @@ implementation
 
 uses
   frmProgressUnit, ModflowUnitNumbers, DataSetUnit, SysUtils, RbwParser,
-  Mt3dmsChemSpeciesUnit, GoPhastTypes, frmErrorsAndWarningsUnit;
+  Mt3dmsChemSpeciesUnit, GoPhastTypes, frmErrorsAndWarningsUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrSInTheMT3DMSRCT = '%s in the MT3DMS or MT3D-USGS RCT package';

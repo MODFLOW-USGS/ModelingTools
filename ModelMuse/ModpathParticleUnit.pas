@@ -261,7 +261,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TParticleLocation, InvalidateModelEvent);
   FMaxParticleSize := 1;
@@ -403,7 +403,7 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(OnInvalidateModelEvent);
 //  inherited;
@@ -1358,7 +1358,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TModpathTimeItem, InvalidateModelEvent);
 end;

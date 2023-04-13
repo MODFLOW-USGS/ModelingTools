@@ -145,7 +145,7 @@ type
     function GetItems(Index: Integer): TPointValue;
     procedure SetItems(Index: Integer; const Value: TPointValue);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     function Add: TPointValue;
     property Items[Index: Integer]: TPointValue read GetItems
       write SetItems; default;
@@ -180,7 +180,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     function IndexOfPosition(APosition: integer): integer;
     function GetItemByPosition(APosition: integer): TPointValuesItem;
     procedure Sort;
@@ -5838,7 +5838,7 @@ uses Math, UndoItemsScreenObjects, BigCanvasMethods,
   frmGoPhastUnit, IsosurfaceUnit, LayerStructureUnit,
   gpc, frmGridValueUnit, frmErrorsAndWarningsUnit,
   frmScreenObjectPropertiesUnit, OctTreeClass,
-  ModflowIrregularMeshUnit;
+  ModflowIrregularMeshUnit, DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrInvalidVertex0 = 'Invalid vertex (#%0:d) in "%1:s". %2:s';
@@ -8802,7 +8802,7 @@ begin
     if (frmGoPhast.PhastModel <> nil) then
 //      and (frmGoPhast.PhastModel.ComponentState <> []) then
     begin
-      FPointPositionValues := TPointPositionValues.Create(Model);
+      FPointPositionValues := TPointPositionValues.Create(Model as TCustomModel);
     end;
   end;
   result := FPointPositionValues;
@@ -9042,7 +9042,7 @@ begin
   if FCanInvalidateModel and (FModel <> nil) then
   begin
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent. }
-    FModel.Invalidate(self);
+    FModel.DoInvalidate(self);
   end;
 end;
 
@@ -10411,7 +10411,7 @@ begin
   begin
     if FPointPositionValues = nil then
     begin
-      FPointPositionValues := TPointPositionValues.Create(Model);
+      FPointPositionValues := TPointPositionValues.Create(Model as TCustomModel);
     end;
     FPointPositionValues.Assign(Value);
     FPointPositionValues.Sort;
@@ -11751,7 +11751,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := FModel.Invalidate;
+    InvalidateModelEvent := FModel.DoInvalidate;
   end;
   FCanInvalidateModel := (FModel <> nil);
 
@@ -17035,7 +17035,7 @@ begin
     end
     else
     begin
-      InvalidateModelEvent := FModel.Invalidate;
+      InvalidateModelEvent := FModel.DoInvalidate;
     end;
     ModflowBoundaries.FModflowSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
   end;
@@ -17132,7 +17132,7 @@ begin
     end
     else
     begin
-      InvalidateModelEvent := FModel.Invalidate;
+      InvalidateModelEvent := FModel.DoInvalidate;
     end;
     ModflowBoundaries.FModflowSwtObservations := TSwtObservations.Create(InvalidateModelEvent, self);
   end;
@@ -18476,7 +18476,7 @@ var
 begin
   if DataSet <> nil then
   begin
-    UpdateGlobalLocations(Column, Row, Layer, DataSet.EvaluatedAt, DataSet.Model);
+    UpdateGlobalLocations(Column, Row, Layer, DataSet.EvaluatedAt, DataSet.Model as TCustomModel);
 
     LocalModel := (DataSet.Model as TCustomModel);
   end
@@ -18617,13 +18617,13 @@ begin
           begin
             if DataSet.Name = '' then
             begin
-              frmErrorsAndWarnings.AddError(DataSet.Model,
+              frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel,
                 Format(ErrorMessageFormulaUnNamed, [Name]),
                 Format(ErrorString, [LayerIndex+1,RowIndex+1,ColIndex+1] ), self);
             end
             else
             begin
-              frmErrorsAndWarnings.AddError(DataSet.Model,
+              frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel,
                 Format(ErrorMessageFormulaNamed, [DataSet.Name,Name]),
                 Format(ErrorString, [LayerIndex+1,RowIndex+1,ColIndex+1]), self);
             end;
@@ -18664,7 +18664,7 @@ begin
   else
   begin
     UpdateGlobalLocations(ColIndex, RowIndex, LayerIndex, DataSet.EvaluatedAt,
-      DataSet.Model);
+      DataSet.Model as TCustomModel);
 
     case DataSet.Datatype of
       rdtDouble:
@@ -19257,7 +19257,7 @@ end;
 
 function TScreenObject.GetTestDataArray(const DataSet: TDataArray): TDataArray;
 begin
-  if (DataSet.Model = Model) or (DataSet.Name = '') then
+  if ((DataSet.Model as TCustomModel) = Model) or (DataSet.Name = '') then
   begin
     result := DataSet;
   end
@@ -25005,14 +25005,14 @@ begin
         begin
           if DataSet.Name = '' then
           begin
-            frmErrorsAndWarnings.AddError(DataSet.Model,
+            frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel,
               Format(ErrorMessageFormulaUnNamed, [FScreenObject.Name]),
               Format(ErrorString, [LayerIndex+1,RowIndex+1,ColIndex+1] ),
               FScreenObject);
           end
           else
           begin
-            frmErrorsAndWarnings.AddError(DataSet.Model,
+            frmErrorsAndWarnings.AddError(DataSet.Model as TCustomModel,
               Format(ErrorMessageFormulaNamed, [DataSet.Name,FScreenObject.Name]),
               Format(ErrorString, [LayerIndex+1,RowIndex+1,ColIndex+1]), FScreenObject);
           end;
@@ -25278,7 +25278,7 @@ var
   AnotherDataSet: TDataArray;
   LocalModel: TCustomModel;
 begin
-  UpdateGlobalLocations(Column, Row, Layer, DataSet.EvaluatedAt, DataSet.Model);
+  UpdateGlobalLocations(Column, Row, Layer, DataSet.EvaluatedAt, DataSet.Model as TCustomModel);
   LocalModel := DataSet.Model as TCustomModel;
   for VarIndex := 0 to UsedVariables.Count - 1 do
   begin
@@ -25397,7 +25397,7 @@ begin
   else
   begin
     UpdateGlobalLocations(ColIndex, RowIndex, LayerIndex, DataSet.EvaluatedAt,
-      DataSet.Model);
+      DataSet.Model as TCustomModel);
     UpdateCurrentSection(SectionIndex);
 
     case DataSet.Datatype of
@@ -39700,7 +39700,7 @@ procedure TScreenObject.CreateHydmodData;
 begin
   if (ModflowBoundaries.FModflowHydmodData = nil) then
   begin
-    ModflowBoundaries.FModflowHydmodData := THydmodData.Create(FModel, self);
+    ModflowBoundaries.FModflowHydmodData := THydmodData.Create(FModel as TCustomModel, self);
   end;
 end;
 
@@ -39740,7 +39740,7 @@ procedure TScreenObject.CreateSfr6Boundary;
 begin
   if (ModflowBoundaries.FModflowSfr6Boundary = nil) then
   begin
-    ModflowBoundaries.FModflowSfr6Boundary := TSfrMf6Boundary.Create(FModel, self);
+    ModflowBoundaries.FModflowSfr6Boundary := TSfrMf6Boundary.Create(FModel as TCustomModel, self);
   end;
 end;
 
@@ -39765,7 +39765,7 @@ begin
     end
     else
     begin
-      OnInvalidateModelEvent := FModel.Invalidate;
+      OnInvalidateModelEvent := FModel.DoInvalidate;
     end;
     ModflowBoundaries.FModflowGage :=
       TStreamGage.Create(OnInvalidateModelEvent, self);
@@ -41258,7 +41258,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(ItemClass, InvalidateModelEvent);
 end;
@@ -41371,7 +41371,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(ScreenObject, Model);
   FAllocateByPressureAndMobility := true;
@@ -41767,7 +41767,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   FRealValues := TRealDataListCollection.Create(self, InvalidateModelEvent);
   FIntegerValues := TIntegerDataListCollection.Create(self, InvalidateModelEvent);
@@ -42020,7 +42020,7 @@ begin
   end
   else
   begin
-    InvalidateEvent := Model.Invalidate;
+    InvalidateEvent := Model.DoInvalidate;
   end;
 
   if Source.FModflowChdBoundary = nil then
@@ -42280,7 +42280,7 @@ begin
   begin
     if FModflowHydmodData = nil then
     begin
-      FModflowHydmodData := THydmodData.Create(Model, FScreenObject);
+      FModflowHydmodData := THydmodData.Create(Model as TCustomModel, FScreenObject);
     end;
     FModflowHydmodData.Assign(Source.FModflowHydmodData);
   end;
@@ -42683,7 +42683,7 @@ begin
   begin
     if FModflowSfr6Boundary = nil then
     begin
-      FModflowSfr6Boundary := TSfrMf6Boundary.Create(Model, FScreenObject);
+      FModflowSfr6Boundary := TSfrMf6Boundary.Create(Model as TCustomModel, FScreenObject);
     end;
     FModflowSfr6Boundary.Assign(Source.FModflowSfr6Boundary);
   end;
@@ -47241,7 +47241,7 @@ begin
   result := inherited Add as TPointValue;
 end;
 
-constructor TPointValues.Create(Model: TBaseModel);
+constructor TPointValues.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TPointValue, Model);
 end;
@@ -47275,7 +47275,7 @@ end;
 constructor TPointValuesItem.Create(Collection: TCollection);
 begin
   inherited;
-  FValues:= TPointValues.Create(Model);
+  FValues:= TPointValues.Create(Model as TCustomModel);
 end;
 
 destructor TPointValuesItem.Destroy;
@@ -47346,7 +47346,7 @@ begin
   FItemArray := nil;
 end;
 
-constructor TPointPositionValues.Create(Model: TBaseModel);
+constructor TPointPositionValues.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TPointValuesItem, Model);
 end;
@@ -47895,7 +47895,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TUsedWithModelItem, InvalidateModelEvent);
   FUsedWithAllModels := True;

@@ -132,7 +132,7 @@ implementation
 uses
   Contnrs, frmGoPhastUnit, PhastModelUnit,
   ScreenObjectUnit, frmShowHideObjectsUnit, ModflowPackagesUnit, ReadPvalUnit,
-  IntListUnit, PestPropertiesUnit;
+  IntListUnit, PestPropertiesUnit, DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrErrorReadingPvalF = 'Error reading %0:s file. Check that it is a valid ' +

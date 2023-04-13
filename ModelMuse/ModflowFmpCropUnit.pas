@@ -420,7 +420,7 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-    constructor Create(Model: TBaseModel); reintroduce;
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection); reintroduce;
   end;
 
 
@@ -1792,37 +1792,37 @@ begin
   end
   else
   begin
-   InvalidatEvent := Model.Invalidate;
+   InvalidatEvent := (Model as TCustomModel).DoInvalidate;
   end;
 
-  FCropFunctionCollection := TCropFunctionCollection.Create(Model);
-  FFmpRootDepthCollection := TFmpRootDepthCollection.Create(Model);
+  FCropFunctionCollection := TCropFunctionCollection.Create(Model as TCustomModel);
+  FFmpRootDepthCollection := TFmpRootDepthCollection.Create(Model as TCustomModel);
   FFmpRootDepthCollection.OwhmNames.Add(StrRootingDepth);
-  FEvapFractionsCollection := TEvapFractionsCollection.Create(Model);
-  FLossesCollection := TLossesCollection.Create(Model);
-  FCropWaterUseCollection := TCropWaterUseCollection.Create(Model);
+  FEvapFractionsCollection := TEvapFractionsCollection.Create(Model as TCustomModel);
+  FLossesCollection := TLossesCollection.Create(Model as TCustomModel);
+  FCropWaterUseCollection := TCropWaterUseCollection.Create(Model as TCustomModel);
 
   FIrrigationCollection :=
-    TIrrigationCollection.Create(Model);
-  FLandUseFractionCollection := TOwhmCollection.Create(Model);
+    TIrrigationCollection.Create(Model as TCustomModel);
+  FLandUseFractionCollection := TOwhmCollection.Create(Model as TCustomModel);
   FLandUseFractionCollection.OwhmNames.Add(StrLandUseAreaFracti);
-  FCropCoefficientCollection := TOwhmCollection.Create(Model);
+  FCropCoefficientCollection := TOwhmCollection.Create(Model as TCustomModel);
   FCropCoefficientCollection.OwhmNames.Add(StrCropCoefficient);
-  FConsumptiveUseCollection := TOwhmCollection.Create(Model);
+  FConsumptiveUseCollection := TOwhmCollection.Create(Model as TCustomModel);
   FConsumptiveUseCollection.OwhmNames.Add(StrConsumptiveUse);
-  FRootPressureCollection := TRootPressureCollection.Create(Model);
+  FRootPressureCollection := TRootPressureCollection.Create(Model as TCustomModel);
   FGroundwaterRootInteraction :=
     TGroundwaterRootInteraction.Create(InvalidatEvent);
-  FTranspirationFractionCollection := TOwhmCollection.Create(Model);
+  FTranspirationFractionCollection := TOwhmCollection.Create(Model as TCustomModel);
   FTranspirationFractionCollection.OwhmNames.Add(StrTranspirationFracti);
-  FSWLossFractionPrecipCollection := TOwhmCollection.Create(Model);
+  FSWLossFractionPrecipCollection := TOwhmCollection.Create(Model as TCustomModel);
   FSWLossFractionPrecipCollection.OwhmNames.Add(StrSurfaceWaterLossF);
-  FPondDepthCollection := TOwhmCollection.Create(Model);
+  FPondDepthCollection := TOwhmCollection.Create(Model as TCustomModel);
   FPondDepthCollection.OwhmNames.Add(StrPondDepth);
-  FAddedDemandCollection := TAddedDemandCollection.Create(Model);
-  FConvertToBareSoilCollection := TBoolFarmCollection.Create(Model);
+  FAddedDemandCollection := TAddedDemandCollection.Create(Model as TCustomModel);
+  FConvertToBareSoilCollection := TBoolFarmCollection.Create(Model as TCustomModel);
   FConvertToBareSoilCollection.OwhmNames.Add(StrZeroConsumptiveUse);
-  FUseEvapFractionCorrectionCollection := TBoolFarmCollection.Create(Model);
+  FUseEvapFractionCorrectionCollection := TBoolFarmCollection.Create(Model as TCustomModel);
   FUseEvapFractionCorrectionCollection.OwhmNames.Add(StrEvaporationIrrigatiCorrection);
 end;
 
@@ -1841,9 +1841,9 @@ begin
   begin
     LocalModel := Model as TPhastModel;
 
-    if ([csLoading, csDestroying] * Model.ComponentState) = [] then
+    if ([csLoading, csDestroying] * (Model as TComponent).ComponentState) = [] then
     begin
-      Unlocker := TDefineGlobalIntegerObject.Create(Model,
+      Unlocker := TDefineGlobalIntegerObject.Create(Model as TCustomModel,
         FCropName, FCropName, StrCropVariable);
       try
         Unlocker.Locked := False;
@@ -2183,11 +2183,11 @@ var
   NewRoot: string;
 begin
   if (FCropName <> Value) and (Model <> nil)
-    and not (csReading in Model.ComponentState) then
+    and not (csReading in (Model as TComponent).ComponentState) then
   begin
     Value := GenerateNewName(Value, nil, '_');
   end;
-  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FCropName, Value,
+  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model as TCustomModel, FCropName, Value,
     StrCropVariable);
   try
     if FCropName <> Value then
@@ -2497,7 +2497,7 @@ var
 begin
   if {(Index <> Value) and} (Model <> nil) and (FCropName <> '') then
   begin
-    ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FCropName, FCropName,
+    ChangeGlobals := TDefineGlobalIntegerObject.Create(Model as TCustomModel, FCropName, FCropName,
       StrCropVariable);
     try
       ChangeGlobals.SetValue(Value+1);
@@ -3682,7 +3682,7 @@ end;
 
 { TAddedDemandCollection }
 
-constructor TAddedDemandCollection.Create(Model: TBaseModel);
+constructor TAddedDemandCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(nil, Model, nil);
 end;
@@ -3706,22 +3706,6 @@ end;
 
 { TAddedDemandItem }
 
-//procedure TAddedDemandItem.AssignObserverEvents(Collection: TCollection);
-//begin
-//  inherited;
-//
-//end;
-//
-//function TAddedDemandItem.BoundaryFormulaCount: integer;
-//begin
-//  result := 0;
-//end;
-
-//function TAddedDemandItem.BoundaryObserverPrefix: string;
-//begin
-//  result := 'AddedDemand_'
-//end;
-
 procedure TAddedDemandItem.Assign(Source: TPersistent);
 begin
   if Source is TAddedDemandItem then
@@ -3733,26 +3717,10 @@ begin
 end;
 
 constructor TAddedDemandItem.Create(Collection: TCollection);
-var
-  AModel: TBaseModel;
 begin
   inherited;
-  if Collection <> nil then
-  begin
-    AModel := (Collection as TAddedDemandCollection).Model;
-  end
-  else
-  begin
-    AModel := nil;
-  end;
-  FAddedDemandValues := TAddedDemandFarmCollection.Create(Model);
+  FAddedDemandValues := TAddedDemandFarmCollection.Create(Model as TCustomModel);
 end;
-
-//procedure TAddedDemandItem.CreateFormulaObjects;
-//begin
-//  inherited;
-//
-//end;
 
 destructor TAddedDemandItem.Destroy;
 begin

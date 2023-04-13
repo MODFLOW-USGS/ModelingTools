@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, DataSetUnit;
+  PhastModelUnit, DataSetUnit, DataSetNamesUnit;
 
 const
   FixedHeadPosition = 0;

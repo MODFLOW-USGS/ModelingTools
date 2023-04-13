@@ -54,7 +54,7 @@ type
 
 implementation
 
-uses frmGoPhastUnit, PhastModelUnit;
+uses frmGoPhastUnit, PhastModelUnit, DataArrayManagerUnit, DataSetNamesUnit;
 
 { TSideLeakyDataSets }
 

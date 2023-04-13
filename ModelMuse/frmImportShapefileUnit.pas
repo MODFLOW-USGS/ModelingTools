@@ -870,7 +870,8 @@ uses Math, Contnrs , frmGoPhastUnit, frmProgressUnit,
   System.IOUtils, SutraMeshUnit, SubscriptionUnit, FootPrintUtilities,
   ModflowSfr6Unit, ModflowMawUnit, Modflow6ObsUnit,
   ModflowBoundaryDisplayUnit, Mt3dUztRchUnit, Mt3dUztSatEtUnit,
-  Mt3dUztUnsatEtUnit, ModflowLakMf6Unit, PestPropertiesUnit, ModflowFhbUnit;
+  Mt3dUztUnsatEtUnit, ModflowLakMf6Unit, PestPropertiesUnit, ModflowFhbUnit,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrParameterName = 'Parameter name';

@@ -307,7 +307,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(THeadObsItem, InvalidateModelEvent);
   FMaxTimeLimit := TColoringLimit.Create;

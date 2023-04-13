@@ -1125,7 +1125,7 @@ uses
   Dialogs, LayerStructureUnit, RbwParser, GR32_Polygons, SolidGeom,
   OctTreeClass, Contnrs,
   ContourUnit, GR32_Backends, ConvexHullUnit, ModelMuseUtilities,
-  CuthillMcKeeRenumbering;
+  CuthillMcKeeRenumbering, DataSetNamesUnit;
 
 resourcestring
   StrErrorGeneratingCel = 'Error generating cell for Node %d.';
@@ -2339,7 +2339,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TSutraNode2D, InvalidateModelEvent, ParentMesh);
 //  FMesh2D := ParentMesh.Mesh2D;
@@ -3829,7 +3829,7 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(Model);
 //  FShouldUpdateMinMax := True;
@@ -3963,7 +3963,6 @@ procedure TSutraMesh2D.DrawTopContours(const ZoomBox: TQRbwZoomBox2;
   const BitMap: TPersistent);
 var
   Contourer: TMultipleContourCreator;
-//  LocalModel: TCustomModel;
 begin
   if (Nodes.Count > 0) and (TopContourDataSet <> nil)
     and (TopContourDataSet.Orientation in [dsoTop, dso3D]) then
@@ -3972,9 +3971,7 @@ begin
       try
         PlotList := FTopContourPlotList;
         Contourer.DataSet := TopContourDataSet;
-//        LocalModel := FModel as TCustomModel;
         Contourer.ActiveDataSet := nil;
-//          LocalModel.DataArrayManager.GetDataSetByName(rsActive);
         Contourer.BitMap := BitMap;
         Contourer.ViewDirection := vdTop;
         Contourer.Mesh := Self.Mesh3D;
@@ -4264,7 +4261,7 @@ var
   LayerCount, RowCount, ColCount: integer;
 begin
   Assert(DataSet <> nil);
-  Assert(Model = DataSet.Model);
+  Assert(Model = (DataSet.Model as TCustomModel));
   DataSet.Initialize;
   GetCounts(DataSet, LayerCount, RowCount, ColCount);
   if (LayerCount = 0) or (RowCount = 0) or (ColCount = 0) then
@@ -5115,7 +5112,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TSutraNode3D, InvalidateModelEvent, ParentMesh);
   FStoredRotatedLocations:= TStoredLocations.Create;
@@ -5231,7 +5228,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TSutraNodeNumber3D_Item, InvalidateModelEvent, Mesh3D);
 end;
@@ -6557,7 +6554,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(Model);
 
@@ -7684,7 +7681,6 @@ procedure TSutraMesh3D.DrawFrontContours(const ZoomBox: TQRbwZoomBox2;
   const BitMap: TPersistent);
 var
   Contourer: TMultipleContourCreator;
-//  LocalModel: TCustomModel;
 begin
   if (Nodes.Count > 0) and (ThreeDContourDataSet <> nil)
     and (ThreeDContourDataSet.Orientation in [dsoFront, dso3d]) then
@@ -7693,9 +7689,7 @@ begin
       try
         PlotList := FFrontContourPlotList;
         Contourer.DataSet := ThreeDContourDataSet;
-//        LocalModel := FModel as TCustomModel;
         Contourer.ActiveDataSet := nil;
-//          LocalModel.DataArrayManager.GetDataSetByName(rsActive);
         Contourer.BitMap := BitMap;
         Contourer.ViewDirection := vdTop;
         Contourer.Mesh := Self;
@@ -9576,7 +9570,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TSutraElement3D, InvalidateModelEvent, ParentMesh);
   FAngle := -1000;

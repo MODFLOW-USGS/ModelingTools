@@ -130,7 +130,7 @@ begin
   end
   else
   begin
-    OnChange := FModel.Invalidate;
+    OnChange := FModel.DoInvalidate;
   end;
   inherited Create(OnChange);
 end;

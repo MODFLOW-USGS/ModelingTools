@@ -4,7 +4,8 @@ interface
 
 uses
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, PhastModelUnit,
-  LayerStructureUnit, SysUtils, DataSetUnit, System.Generics.Collections;
+  LayerStructureUnit, SysUtils, DataSetUnit, System.Generics.Collections,
+  DataArrayManagerUnit;
 
 type
   TModflowBCF_Writer = class(TCustomFlowPackageWriter)
@@ -43,7 +44,7 @@ implementation
 
 uses
   ModflowUnitNumbers, frmProgressUnit, GoPhastTypes, 
-  Forms, frmErrorsAndWarningsUnit, PestParamRoots;
+  Forms, frmErrorsAndWarningsUnit, PestParamRoots, DataSetNamesUnit;
 
 resourcestring
   StrWritingDataForL = '  Writing data for layer %d.';

@@ -286,7 +286,8 @@ uses frmGoPhastUnit, DataSetUnit, FastGEO, LayerStructureUnit, PhastModelUnit,
   frmErrorsAndWarningsUnit, SutraMeshUnit, AbstractGridUnit,
   RasterValuesAlongSegmentsUnit, ModflowPackagesUnit, RealListUnit,
   BasisFunctionUnit, ModflowIrregularMeshUnit, MeshRenumberingTypes,
-  SparseDataSets, SparseArrayUnit, Point2DRegressionUnit, JmTypes;
+  SparseDataSets, SparseArrayUnit, Point2DRegressionUnit, JmTypes,
+  DataArrayManagerUnit, DataSetNamesUnit;
 
 resourcestring
   StrInSVANIParamete = 'In %s, VANI parameters are defined even though that ' +

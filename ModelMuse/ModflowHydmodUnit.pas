@@ -4,7 +4,7 @@ interface
 
 uses
   ModflowBoundaryUnit, ModflowSubsidenceDefUnit, Classes, LayerStructureUnit,
-  GoPhastTypes;
+  GoPhastTypes, OrderedCollectionUnit;
 
 type
   TAssignmentMethod = (amCell, amInterpolate);
@@ -51,7 +51,7 @@ type
     function BoundaryObserverPrefix: string; override;
   public
     procedure Assign(Source: TPersistent); override;
-    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
     Destructor Destroy; override;
     function Used: boolean; override;
     procedure Loaded;
@@ -129,9 +129,9 @@ begin
   Assert(False);
 end;
 
-constructor THydmodData.Create(Model: TBaseModel; ScreenObject: TObject);
+constructor THydmodData.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
 begin
-  inherited;
+  inherited Create(Model as TCustomModel, ScreenObject);
   FSubUsedLayers := TUseLayersCollection.Create(Model);
 end;
 

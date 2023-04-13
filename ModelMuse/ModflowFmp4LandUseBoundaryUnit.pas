@@ -364,7 +364,7 @@ var
   LandUseCol: TFmp4LandUseCollection;
 begin
   LandUseCol := Collection as TFmp4LandUseCollection;
-  FFmp4LandUseValues := TLandUseStringCollection.Create(Model, ScreenObject,
+  FFmp4LandUseValues := TLandUseStringCollection.Create(Model as TCustomModel, ScreenObject,
     LandUseCol);
   inherited;
 end;
@@ -1057,7 +1057,7 @@ begin
   inherited;
   FPestLandUseFormulas:= TLandUseStringCollection.Create(Model, ScreenObject, nil);
   FPestLandUseFormulas.UsedForPestSeries := True;
-  FPestLandUseMethods := TLandUsePestMethodCollection.Create(Model);
+  FPestLandUseMethods := TLandUsePestMethodCollection.Create(Model as TCustomModel);
   FLandUseObservers := TObserverList.Create;
 
   CreateFormulaObjects;

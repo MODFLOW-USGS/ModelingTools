@@ -58,7 +58,8 @@ implementation
 uses
   ModflowPackageSelectionUnit, frmGoPhastUnit, ScreenObjectUnit,
   ModflowCsubUnit, GoPhastTypes, System.Math, frmCustomGoPhastUnit,
-  ModflowCSubInterbed, PhastModelUnit, DataSetUnit;
+  ModflowCSubInterbed, PhastModelUnit, DataSetUnit, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrInterbed = 'Interbed system';

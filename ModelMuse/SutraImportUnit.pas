@@ -18,7 +18,8 @@ implementation
 uses
   System.IOUtils, frmGoPhastUnit, PhastModelUnit, GoPhastTypes,
   ScreenObjectUnit, SutraMeshUnit, UndoItems, DataSetUnit,
-  ValueArrayStorageUnit, RbwParser, frmProgressUnit, GIS_Functions, FastGEO;
+  ValueArrayStorageUnit, RbwParser, frmProgressUnit, GIS_Functions, FastGEO,
+  DataSetNamesUnit;
 
 resourcestring
   StrObject = 'Object ';

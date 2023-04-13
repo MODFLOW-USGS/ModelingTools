@@ -66,6 +66,9 @@ type
 
 implementation
 
+uses
+  PhastModelUnit;
+
 
 
 { TSutraBoundaries }
@@ -116,7 +119,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(InvalidateModelEvent);
   FFluidSource := TSutraFluidBoundary.Create(Model, ScreenObject);
@@ -124,7 +127,7 @@ begin
   FSpecifiedPressure := TSutraSpecifiedPressureBoundary.Create(Model, ScreenObject);
   FSpecifiedConcTemp := TSutraSpecifiedConcTempBoundary.Create(Model, ScreenObject);
   FObservations := TSutraObservations.Create(InvalidateModelEvent);
-  FLake := TSutraLake.Create(Model, ScreenObject);
+  FLake := TSutraLake.Create(Model as TCustomModel, ScreenObject);
   FGeneralFlowBoundary := TSutraGeneralFlowBoundary.Create(Model, ScreenObject);
   FGenTransportBoundary := TSutraGeneralTransportBoundary.Create(Model, ScreenObject);
   FSutraStateObs := TSutraStateObservations.Create(Model, ScreenObject);

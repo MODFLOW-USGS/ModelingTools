@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  DataSetUnit, Mt3dmsChemSpeciesUnit, PhastModelUnit;
+  DataSetUnit, Mt3dmsChemSpeciesUnit, PhastModelUnit, DataSetNamesUnit;
 
 { TModflowGwtMstWriter }
 

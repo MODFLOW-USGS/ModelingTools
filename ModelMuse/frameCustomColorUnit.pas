@@ -164,7 +164,7 @@ implementation
 
 uses
   GoPhastTypes, frmGoPhastUnit, frmCustomGoPhastUnit, PhastModelUnit,
-  Clipbrd, Contnrs, frmColorSchemesUnit, ColorSchemes;
+  Clipbrd, Contnrs, frmColorSchemesUnit, ColorSchemes, DataArrayManagerUnit;
 
 resourcestring
   StrValuesToIgnore = 'Values to ignore';

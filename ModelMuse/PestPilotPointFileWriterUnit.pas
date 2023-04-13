@@ -28,7 +28,8 @@ implementation
 
 uses
   QuadTreeClass, FastGEO, PestPropertiesUnit, frmErrorsAndWarningsUnit,
-  SutraMeshUnit, System.IOUtils, PilotPointCovarinceFileWriterUnit;
+  SutraMeshUnit, System.IOUtils, PilotPointCovarinceFileWriterUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrNoPilotPointsDefi = 'No pilot points defined';
@@ -138,7 +139,6 @@ begin
   Assert(DataArray <> nil);
   Assert(DataArray.PestParametersUsed);
   PestProperties := Model.PestProperties;
-//  PilotPointsDefined := Model.PilotPointCount > 0;
   ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
     DataArray.ParamDataSetName);
   if Model.ModelSelection = msModflow2015 then
@@ -205,11 +205,7 @@ begin
         ParamQuadDictionary.Add(AParam, AQuadTree);
       end;
     end;
-//    ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
-//      DataArray.ParamDataSetName);
     SetLength(Values, DataArray.RowCount * DataArray.ColumnCount);
-
-//    Assert(ActiveDataSet <> nil);
 
     for LayerIndex := 0 to DataArray.LayerCount - 1 do
     begin

@@ -2,23 +2,23 @@ inherited frmExportCSV: TfrmExportCSV
   HelpType = htKeyword
   HelpKeyword = 'Export_Data_as_CSV_Dialog_Box'
   Caption = 'Export Data as CSV'
-  ClientHeight = 452
-  ClientWidth = 578
-  ExplicitWidth = 590
-  ExplicitHeight = 490
+  ClientHeight = 450
+  ClientWidth = 570
+  ExplicitWidth = 586
+  ExplicitHeight = 489
   TextHeight = 18
   object Panel1: TPanel
     Left = 0
     Top = 64
-    Width = 578
-    Height = 388
+    Width = 570
+    Height = 386
     Align = alClient
     TabOrder = 1
     ExplicitWidth = 574
     ExplicitHeight = 387
     DesignSize = (
-      578
-      388)
+      570
+      386)
     object lblDataToExport: TLabel
       Left = 264
       Top = 288
@@ -29,8 +29,8 @@ inherited frmExportCSV: TfrmExportCSV
     object vstDataSets: TVirtualStringTree
       Left = 8
       Top = 8
-      Width = 566
-      Height = 273
+      Width = 550
+      Height = 271
       Anchors = [akLeft, akTop, akRight, akBottom]
       Colors.BorderColor = 15987699
       Colors.DisabledColor = clGray
@@ -59,11 +59,13 @@ inherited frmExportCSV: TfrmExportCSV
       OnGetNodeDataSize = vstDataSetsGetNodeDataSize
       Touch.InteractiveGestures = [igPan, igPressAndTap]
       Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+      ExplicitWidth = 566
+      ExplicitHeight = 273
       Columns = <>
     end
     object rgOrientation: TRadioGroup
       Left = 8
-      Top = 315
+      Top = 313
       Width = 113
       Height = 65
       Anchors = [akLeft, akBottom]
@@ -78,7 +80,7 @@ inherited frmExportCSV: TfrmExportCSV
     end
     object rgEvaluatedAt: TRadioGroup
       Left = 127
-      Top = 315
+      Top = 313
       Width = 122
       Height = 65
       Anchors = [akLeft, akBottom]
@@ -92,8 +94,8 @@ inherited frmExportCSV: TfrmExportCSV
       ExplicitTop = 314
     end
     object btnHelp: TBitBtn
-      Left = 454
-      Top = 315
+      Left = 438
+      Top = 313
       Width = 104
       Height = 27
       Anchors = [akRight, akBottom]
@@ -105,8 +107,8 @@ inherited frmExportCSV: TfrmExportCSV
       ExplicitTop = 314
     end
     object btnSave: TBitBtn
-      Left = 454
-      Top = 353
+      Left = 438
+      Top = 351
       Width = 104
       Height = 27
       Anchors = [akRight, akBottom]
@@ -132,7 +134,7 @@ inherited frmExportCSV: TfrmExportCSV
     end
     object clIncluded: TJvCheckListBox
       Left = 263
-      Top = 315
+      Top = 313
       Width = 186
       Height = 65
       Anchors = [akLeft, akBottom]
@@ -143,21 +145,20 @@ inherited frmExportCSV: TfrmExportCSV
         'Cell, element, or node'
         'Data set values')
       ParentDoubleBuffered = False
-      ScrollWidth = 176
+      ScrollWidth = 180
       TabOrder = 3
-      ExplicitTop = 314
     end
   end
   object pnlModel: TPanel
     Left = 0
     Top = 0
-    Width = 578
+    Width = 570
     Height = 64
     Align = alTop
     TabOrder = 0
     ExplicitWidth = 574
     DesignSize = (
-      578
+      570
       64)
     object lblModel: TLabel
       Left = 8
@@ -169,12 +170,11 @@ inherited frmExportCSV: TfrmExportCSV
     object comboModel: TComboBox
       Left = 8
       Top = 32
-      Width = 573
+      Width = 557
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
-      ExplicitWidth = 569
     end
   end
   object sdSaveCSV: TSaveDialog

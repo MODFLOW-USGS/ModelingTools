@@ -168,8 +168,8 @@ object frameCustomGwtConcentrations: TframeCustomGwtConcentrations
     object lblInitialConcentration: TLabel
       Left = 256
       Top = 10
-      Width = 132
-      Height = 20
+      Width = 106
+      Height = 15
       Caption = 'Initial concentration'
     end
     object btnedInitialConcentration: TssButtonEdit

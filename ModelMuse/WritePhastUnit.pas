@@ -22,7 +22,8 @@ uses Windows, Dialogs, SysUtils, frmGoPhastUnit, PhastModelUnit, PrintFrequency,
   SideLeakyZone, TopLeakyZone, WriteRiverUnit, ScreenObjectUnit,
   WriteWellUnit, DataSetUnit, PhastDataSets,
   ModelMuseUtilities, frmErrorsAndWarningsUnit, GeoRefWriterUnit,
-  ArchiveNodeInterface, System.IOUtils, System.Types;
+  ArchiveNodeInterface, System.IOUtils, System.Types, DataArrayManagerUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrNoBoundaryConditio = 'No boundary conditions specified.';

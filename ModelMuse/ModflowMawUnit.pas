@@ -916,7 +916,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit,
   GIS_Functions, ModflowTimeUnit, DataSetUnit, ModflowMnw2Unit,
-  ModflowMvrUnit;
+  ModflowMvrUnit, DataSetNamesUnit;
 
 const MawObName: array[TMawOb] of string = ('Head', 'FromMvr', 'FlowRate',
   'FlowRateCells', 'PumpRate', 'RateToMvr',
@@ -2025,14 +2025,14 @@ begin
   FPestInjectionConcentrations.UsedForPestSeries := True;
   FPestSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestSpecifiedConcentrations.UsedForPestSeries := True;
-  FPestInjectionConcentrationMethods := TGwtPestMethodCollection.Create(Model);
-  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestInjectionConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+  FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 
-  FStartingConcentrations := TStringConcCollection.Create(Model, ScreenObject, nil);
+  FStartingConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;
-  FWellScreens := TMawWellScreenCollection.Create(Self, Model, ScreenObject);
+  FWellScreens := TMawWellScreenCollection.Create(Self, Model as TCustomModel, ScreenObject);
 
   LinkRadius;
   LinkBottom;
@@ -4273,13 +4273,13 @@ var
 begin
   MawCollection := Collection as TMawWellCollection;
 
-  FSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject,
+  FSpecifiedConcentrations := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     MawCollection);
-  FInjectionConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject,
+  FInjectionConcentrations := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     MawCollection);
 
   inherited;
-  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model);
+  FGwtStatus := TGwtBoundaryStatusCollection.Create(Model as TCustomModel);
 
   FMawStatus := mwActive;
   FFlowingWell := fwNotFlowing;

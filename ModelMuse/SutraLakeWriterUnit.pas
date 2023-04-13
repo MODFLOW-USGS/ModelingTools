@@ -68,7 +68,7 @@ uses
   ScreenObjectUnit, SutraBoundariesUnit, GoPhastTypes, DataSetUnit, RbwParser,
   frmFormulaErrorsUnit, SutraMeshUnit, SutraFileWriterUnit, SutraBoundaryUnit,
   frmErrorsAndWarningsUnit, MeshRenumberingTypes, ModflowParameterUnit,
-  ModflowCellUnit;
+  ModflowCellUnit, DataSetNamesUnit;
 
 resourcestring
   StrInitialLakeStage = 'Initial Lake Stage';

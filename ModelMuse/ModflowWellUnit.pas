@@ -383,7 +383,7 @@ var
   WelCol: TWellCollection;
 begin
   WelCol := Collection as TWellCollection;
-  FGwtConcentrations := TWelGwtConcCollection.Create(Model, ScreenObject,
+  FGwtConcentrations := TWelGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     WelCol);
   inherited;
 end;
@@ -1272,7 +1272,7 @@ begin
   inherited;
   FPestConcentrationFormulas:= TWelGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationFormulas.UsedForPestSeries := True;
-  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model);
+  FPestConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
   FConcentrationObservers := TObserverList.Create;
 
   CreateFormulaObjects;

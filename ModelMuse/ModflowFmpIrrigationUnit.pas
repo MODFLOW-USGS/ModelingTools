@@ -79,7 +79,7 @@ type
   public
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean);
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     destructor Destroy; override;
     property Items[Index: Integer]: TIrrigationItem read GetItems
       write SetItems; default;
@@ -222,7 +222,7 @@ begin
     end;
   end;
 
-  FEvapFraction := TFmp4EvapFractionCollection.Create(Model);
+  FEvapFraction := TFmp4EvapFractionCollection.Create(Model as TCustomModel);
 end;
 
 
@@ -262,11 +262,11 @@ var
   FoundMatch: Boolean;
 begin
   if (FName <> Value) and (Model <> nil)
-    and not (csReading in Model.ComponentState) then
+    and not (csReading in (Model as TComponent).ComponentState) then
   begin
     Value := GenerateNewName(Value, nil, '_');
   end;
-  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FName, Value,
+  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model as TCustomModel, FName, Value,
     StrIrrigationVariable);
   try
     if FName <> Value then
@@ -482,7 +482,7 @@ end;
 //  end;
 //end;
 
-constructor TIrrigationCollection.Create(Model: TBaseModel);
+constructor TIrrigationCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TIrrigationItem, Model);
 end;

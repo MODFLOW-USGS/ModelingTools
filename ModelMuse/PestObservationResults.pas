@@ -304,7 +304,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := LocalModel.Invalidate;
+    InvalidateModelEvent := LocalModel.DoInvalidate;
   end;
   FStoredMeasured := TRealStorage.Create(InvalidateModelEvent);
   FStoredWeightedModeled := TRealStorage.Create(InvalidateModelEvent);
@@ -744,7 +744,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(TPestObsResult, InvalidateModelEvent);
   FMaxTimeLimit := TColoringLimit.Create;

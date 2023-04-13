@@ -186,7 +186,7 @@ type
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name creates an instance of @classname.
-    Constructor Create(Model: TBaseModel);
+    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     // @name destroys this instance of @classname.
     destructor Destroy; override;
     // @name returns the number of parameters that match ParamTypes.
@@ -211,7 +211,7 @@ implementation
 
 uses Math, RbwParser, PhastModelUnit, DataSetUnit, 
   ScreenObjectUnit, ModflowHfbUnit, frmGoPhastUnit,
-  LockedGlobalVariableChangers;
+  LockedGlobalVariableChangers, DataSetNamesUnit;
 
 { TModflowSteadyParameter }
 
@@ -432,7 +432,7 @@ begin
     Model := Collection.Model as TPhastModel;
     if ([csLoading, csDestroying] * Model.ComponentState) = [] then
     begin
-      Unlocker := TDefineGlobalStringObject.Create(Collection.Model,
+      Unlocker := TDefineGlobalStringObject.Create(Collection.Model as TCustomModel,
         ParameterName, ParameterName, StrParameterType);
       try
         Unlocker.Locked := False;
@@ -631,7 +631,7 @@ begin
     InvalidateModel;
     if ParameterType = ptPEST then
     begin
-      ChangeGlobal := TDefineGlobalStringObject.Create(Model, FParameterName, NewName,
+      ChangeGlobal := TDefineGlobalStringObject.Create(Model as TCustomModel, FParameterName, NewName,
         StrParameterType);
       try
         ChangeGlobal.Rename;
@@ -980,7 +980,7 @@ begin
   end;
 end;
 
-constructor TModflowSteadyParameters.Create(Model: TBaseModel);
+constructor TModflowSteadyParameters.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TModflowSteadyParameter, Model);
   FArrayNames:= TStringList.Create;

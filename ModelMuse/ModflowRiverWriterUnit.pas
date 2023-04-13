@@ -64,7 +64,7 @@ implementation
 uses frmErrorsAndWarningsUnit,
   ModflowUnitNumbers, frmProgressUnit, Forms,
   DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
-  Mt3dmsChemSpeciesUnit, PestPropertiesUnit;
+  Mt3dmsChemSpeciesUnit, PestPropertiesUnit, DataSetNamesUnit;
 
 resourcestring
   StrInTheFollowingRiv = 'In the following river cells, the stage is equal to or below t' +

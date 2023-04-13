@@ -211,7 +211,7 @@ uses Clipbrd, GoPhastTypes, frmGoPhastUnit, RbwParser,
   frameHeadObservationsUnit, IntListUnit, ModflowHobUnit,
   frameCustomCellObservationUnit, FootprintPropertiesUnit, FootprintBoundary,
   System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit,
-  Modflow6ObsUnit, PestPropertiesUnit;
+  Modflow6ObsUnit, PestPropertiesUnit, DataArrayManagerUnit, DataSetNamesUnit;
 
 {$R *.dfm}
 

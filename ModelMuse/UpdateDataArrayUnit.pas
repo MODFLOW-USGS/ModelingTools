@@ -25,7 +25,7 @@ procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord); over
 implementation
 
 uses
-  PhastModelUnit;
+  PhastModelUnit, DataSetNamesUnit;
 
 procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord); overload;
 var

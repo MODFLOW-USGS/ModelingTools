@@ -19,7 +19,7 @@ type
 implementation
 
 uses
-  DataSetUnit, Mt3dmsChemSpeciesUnit, GoPhastTypes;
+  DataSetUnit, Mt3dmsChemSpeciesUnit, GoPhastTypes, DataSetNamesUnit;
 
 { TGwtInitialConcWriter }
 

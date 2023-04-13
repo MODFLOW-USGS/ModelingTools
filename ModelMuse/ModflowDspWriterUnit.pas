@@ -22,7 +22,7 @@ type
 implementation
 
 uses
-  System.IOUtils, PhastModelUnit, DataSetUnit;
+  System.IOUtils, PhastModelUnit, DataSetUnit, DataSetNamesUnit;
 
 { TModflowDspWriter }
 

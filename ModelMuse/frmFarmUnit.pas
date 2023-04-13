@@ -7,7 +7,7 @@ uses
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, StdCtrls,
   Buttons, ExtCtrls, frameScreenObjectUnit, frameFarmUnit, VirtualTrees,
   Mask, JvExMask, JvSpin, ModflowFmpFarmUnit, UndoItems,
-  ModelMuseInterfacesUnit, GoPhastTypes;
+  ModelMuseFarmFormInterfacesUnit, GoPhastTypes;
 
 type
   TUndoEditFarms = class(TCustomUndo)

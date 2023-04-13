@@ -152,7 +152,7 @@ uses PhastModelUnit, FastGEO,
   ModflowSfrReachUnit, ModflowSfrFlows, ModflowSfrChannelUnit,
   ModflowSfrEquationUnit, ModflowSfrSegment, ModflowSfrUnsatSegment,
   ModflowPackageSelectionUnit, ModflowMawUnit, ModflowSfr6Unit, ModflowStrUnit,
-  Mt3dmsChemUnit, ModflowFhbUnit, System.IOUtils;
+  Mt3dmsChemUnit, ModflowFhbUnit, System.IOUtils, DataSetNamesUnit;
 
 resourcestring
   StrDataSet0sOb = ' Data set = %0:s; Object = %1:s';

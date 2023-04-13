@@ -1225,7 +1225,8 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
   ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit,
   PestObsExtractorInputWriterUnit,
-  System.AnsiStrings, ModflowMf6TimeSeriesWriterUnit, ModflowFmpWriterUnit;
+  System.AnsiStrings, ModflowMf6TimeSeriesWriterUnit, ModflowFmpWriterUnit,
+  DataSetNamesUnit;
 
 resourcestring
   StrTheFollowingParameSkip = 'The following %s parameters are being skipped ' +

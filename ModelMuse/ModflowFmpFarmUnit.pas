@@ -231,7 +231,7 @@ type
     function GetItem(Index: Integer): TMultiSrdItem;
     procedure SetItem(Index: Integer; const Value: TMultiSrdItem);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TMultiSrdItem read GetItem write SetItem; default;
   end;
 
@@ -314,7 +314,7 @@ type
     procedure SetItem(Index: Integer; const Value: TDeliveryParamItem);
   public
 //    function Add: TDeliveryParamItem;
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TDeliveryParamItem read GetItem
       write SetItem; default;
   end;
@@ -416,7 +416,7 @@ type
     function GetFirst: TFarmEfficienciesItem;
   public
     function Add: TFarmEfficienciesItem;
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TFarmEfficienciesItem read GetItem
       write SetItem; default;
     property First: TFarmEfficienciesItem read GetFirst;
@@ -733,7 +733,7 @@ type
     function GetItem(Index: Integer): TFarm;
     procedure SetItem(Index: Integer; const Value: TFarm);
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
     property Items[Index: Integer]: TFarm read GetItem write SetItem; default;
     function Add: TFarm;
     function Last: TFarm;
@@ -959,7 +959,7 @@ end;
 constructor TSemiRoutedDeliveriesAndRunoffItem.Create(Collection: TCollection);
 begin
   inherited;
-  FLinkedStream := TSfrDiversion.Create(Model);
+  FLinkedStream := TSfrDiversion.Create(Model as TCustomModel);
 end;
 
 destructor TSemiRoutedDeliveriesAndRunoffItem.Destroy;
@@ -1214,7 +1214,7 @@ end;
 constructor TDeliveryParamItem.Create(Collection: TCollection);
 begin
   inherited;
-  FDeliveryParam := TNonRoutedDeliveryParameterCollection.Create(Model);
+  FDeliveryParam := TNonRoutedDeliveryParameterCollection.Create(Model as TCustomModel);
 end;
 
 destructor TDeliveryParamItem.Destroy;
@@ -1241,7 +1241,7 @@ end;
 
 { TDeliveryParamCollection }
 
-constructor TDeliveryParamCollection.Create(Model: TBaseModel);
+constructor TDeliveryParamCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TDeliveryParamItem, Model);
 end;
@@ -1388,7 +1388,7 @@ end;
 constructor TFarmEfficienciesItem.Create(Collection: TCollection);
 begin
   inherited;
-  FCropEfficiency := TCropEfficiencyCollection.Create(Model);
+  FCropEfficiency := TCropEfficiencyCollection.Create(Model as TCustomModel);
 end;
 
 destructor TFarmEfficienciesItem.Destroy;
@@ -1510,7 +1510,7 @@ begin
   Result := inherited Add as TFarmEfficienciesItem;
 end;
 
-constructor TFarmEfficiencyCollection.Create(Model: TBaseModel);
+constructor TFarmEfficiencyCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TFarmEfficienciesItem, Model);
 //  FWaterRights := TWaterRightsCollection.Create(Model);
@@ -1522,7 +1522,7 @@ end;
 
 constructor TFarm.Create(Collection: TCollection);
 var
-  LocalModel: TBaseModel;
+  LocalModel: TCustomModel;
   InvalidateEvent: TNotifyEvent;
   NewGUID: TGUID;
 begin
@@ -1531,35 +1531,35 @@ begin
   begin
     FarmGUID := GUIDToString(NewGUID);
   end;
-  LocalModel := Model;
+  LocalModel := Model as TCustomModel;
   if LocalModel = nil then
   begin
     InvalidateEvent := nil;
   end
   else
   begin
-    InvalidateEvent := LocalModel.Invalidate
+    InvalidateEvent := LocalModel.DoInvalidate
   end;
-  FFarmEfficiencyCollection := TFarmEfficiencyCollection.Create(LocalModel);
+  FFarmEfficiencyCollection := TFarmEfficiencyCollection.Create(Model);
   FWaterRights := TWaterRightsCollection.Create(LocalModel);
   FSemiRoutedDeliveries := TSemiRoutedDeliveriesAndReturnFlowCollection.Create(LocalModel);
-  FDeliveryParamCollection := TDeliveryParamCollection.Create(LocalModel);
+  FDeliveryParamCollection := TDeliveryParamCollection.Create(Model);
   FSemiRoutedReturnFlow := TSemiRoutedDeliveriesAndReturnFlowCollection.Create(LocalModel);
   FFarmCostsCollection := TFarmCostsCollection.Create(LocalModel);
   FGwAllotment := TAllotmentCollection.Create(LocalModel);
 
-  FFarmIrrigationEfficiencyCollection := TFarmEfficiencyCollection.Create(LocalModel);
-  FFarmIrrigationEfficiencyImprovementCollection := TFarmEfficiencyCollection.Create(LocalModel);
-  FAddedDemandRunoffSplitCollection := TFarmEfficiencyCollection.Create(LocalModel);
-  FIrrigationUniformity := TFarmEfficiencyCollection.Create(LocalModel);
+  FFarmIrrigationEfficiencyCollection := TFarmEfficiencyCollection.Create(Model);
+  FFarmIrrigationEfficiencyImprovementCollection := TFarmEfficiencyCollection.Create(Model);
+  FAddedDemandRunoffSplitCollection := TFarmEfficiencyCollection.Create(Model);
+  FIrrigationUniformity := TFarmEfficiencyCollection.Create(Model);
   FDeficiencyScenario := TDeficiencyScenarioCollection.Create(LocalModel);
   FWaterSource := TWaterSourceCollection.Create(LocalModel);
   FBareRunoffFraction := TBareRunoffFractionCollection.Create(LocalModel);
-  FAddedCropDemandFlux := TFarmEfficiencyCollection.Create(LocalModel);
-  FAddedCropDemandRate := TFarmEfficiencyCollection.Create(LocalModel);
+  FAddedCropDemandFlux := TFarmEfficiencyCollection.Create(Model);
+  FAddedCropDemandRate := TFarmEfficiencyCollection.Create(Model);
   FNoReturnFlow := TNoReturnCollection.Create(LocalModel);
-  FMultiSrd := TMultiSrdCollection.Create(LocalModel);
-  FMultiSrReturns := TMultiSrdCollection.Create(LocalModel);
+  FMultiSrd := TMultiSrdCollection.Create(Model);
+  FMultiSrReturns := TMultiSrdCollection.Create(Model);
   FSWAllotment := TAllotmentCollection.Create(LocalModel);
   FSaltSupplyConcentrationCollection := TSaltSupplyConcentrationCollection.Create(LocalModel);
 end;
@@ -1973,7 +1973,7 @@ begin
   end
   else
   begin
-    inherited Create(Model.Invalidate);
+    inherited Create(Model.DoInvalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
@@ -2123,7 +2123,7 @@ begin
   end
   else
   begin
-    OnInvalidateModelEvent := Model.Invalidate;
+    OnInvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(OnInvalidateModelEvent);
   Assert((Model = nil) or (Model is TCustomModel));
@@ -2383,7 +2383,7 @@ begin
   result := inherited Add as TFarm;
 end;
 
-constructor TFarmCollection.Create(Model: TBaseModel);
+constructor TFarmCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
   inherited Create(TFarm, Model);
 end;
@@ -2624,7 +2624,7 @@ begin
   inherited;
   SrdCollection := Collection as TMultiSrdCollection;
   FSemiRouted := TSemiRoutedDeliveriesAndReturnFlowCollection.
-    Create(SrdCollection.FModel);
+    Create(SrdCollection.FModel as TCustomModel);
 end;
 
 destructor TMultiSrdItem.Destroy;
@@ -2659,9 +2659,9 @@ end;
 
 { TMultiSrdCollection }
 
-constructor TMultiSrdCollection.Create(Model: TBaseModel);
+constructor TMultiSrdCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
 begin
-  FModel := Model;
+  FModel := Model as TCustomModel;
   inherited Create(TMultiSrdItem, Model);
 end;
 

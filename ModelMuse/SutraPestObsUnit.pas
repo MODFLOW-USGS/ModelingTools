@@ -554,7 +554,7 @@ begin
   end
   else
   begin
-    FInvalidateModelEvent := (Model as TCustomModel).Invalidate;
+    FInvalidateModelEvent := (Model as TCustomModel).DoInvalidate;
   end;
   inherited Create(ItemClass, FInvalidateModelEvent, ScreenObject);
 end;
@@ -938,7 +938,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
   end;
   inherited Create(InvalidateModelEvent);
   FSpecPres:= TSutraSpecPressureObservationGroups.Create(Model);
@@ -1036,7 +1036,7 @@ begin
   FModel := Model;
   if FModel <> nil then
   begin
-    InvalidateModelEvent := FModel.Invalidate;
+    InvalidateModelEvent := FModel.DoInvalidate;
   end
   else
   begin

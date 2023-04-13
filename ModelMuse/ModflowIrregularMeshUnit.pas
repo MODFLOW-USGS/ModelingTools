@@ -820,7 +820,7 @@ uses
   frmGoPhastUnit, BigCanvasMethods, System.Math, PhastModelUnit,
   LayerStructureUnit, ConvexHullUnit, System.Contnrs,
   ModflowGridUnit, ModelMuseUtilities, gpc, ContourUnit, EdgeDisplayUnit,
-  ScreenObjectUnit;
+  ScreenObjectUnit, DataSetNamesUnit;
 
 const
   ThinLine = 0.1;
@@ -2514,7 +2514,7 @@ begin
   FMesh := ParentMesh;
   if Model <> nil then
   begin
-    InvalidatEvent := Model.Invalidate;
+    InvalidatEvent := Model.DoInvalidate;
   end
   else
   begin
@@ -5176,7 +5176,7 @@ begin
   end
   else
   begin
-    InvalidateModelEvent := Model.Invalidate;
+    InvalidateModelEvent := Model.DoInvalidate;
     FThreeDGridObserver := (Model as TCustomModel).ThreeDGridObserver;
   end;
   inherited;

@@ -28,7 +28,7 @@ type
 implementation
 
 uses
-  DataSetUnit, Mt3dmsChemSpeciesUnit, PhastModelUnit;
+  DataSetUnit, Mt3dmsChemSpeciesUnit, PhastModelUnit, DataSetNamesUnit;
 { TModflowGwtIstWriter }
 
 class function TModflowGwtIstWriter.Extension: string;
