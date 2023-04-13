@@ -48,7 +48,7 @@ uses System.UITypes,
   PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults,
   Modflow6TimeSeriesCollectionsUnit, ModflowFmpIrrigationUnit,
   ModelMuseFarmFormInterfacesUnit, DataArrayManagerUnit, CrossSectionUnit,
-  DataSetNamesUnit, ModelMuseInterfacesUnit;
+  DataSetNamesUnit, ModelMuseInterfaceUnit;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '

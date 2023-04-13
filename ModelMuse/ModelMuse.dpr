@@ -847,7 +847,7 @@ uses
   DataArrayManagerUnit in 'DataArrayManagerUnit.pas',
   CrossSectionUnit in 'CrossSectionUnit.pas',
   DataSetNamesUnit in 'DataSetNamesUnit.pas',
-  ModelMuseInterfacesUnit in 'ModelMuseInterfacesUnit.pas';
+  ModelMuseInterfaceUnit in 'ModelMuseInterfaceUnit.pas';
 
 {$R *.res}
 

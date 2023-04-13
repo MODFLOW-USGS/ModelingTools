@@ -3,7 +3,7 @@ unit OrderedCollectionUnit;
 interface
 
 uses DataSetUnit, System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit, RbwParser,
-  FormulaManagerUnit, ModelMuseInterfacesUnit;
+  FormulaManagerUnit, ModelMuseInterfaceUnit;
 
 type
 

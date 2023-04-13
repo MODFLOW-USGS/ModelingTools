@@ -2148,7 +2148,7 @@
         <DCCReference Include="DataArrayManagerUnit.pas"/>
         <DCCReference Include="CrossSectionUnit.pas"/>
         <DCCReference Include="DataSetNamesUnit.pas"/>
-        <DCCReference Include="ModelMuseInterfacesUnit.pas"/>
+        <DCCReference Include="ModelMuseInterfaceUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

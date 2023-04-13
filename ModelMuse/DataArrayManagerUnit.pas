@@ -6,7 +6,7 @@ uses
   DataSetUnit, GoPhastTypes,
   SutraMeshUnit, System.Classes, CrossSectionUnit, System.Contnrs, RbwParser,
   HashTableFacadeUnit, PhastDataSets, System.SysUtils, AbstractGridUnit,
-  System.Math, ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, ModelMuseInterfacesUnit;
+  System.Math, ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, ModelMuseInterfaceUnit;
 
 type
   ICustomModelForDataArrayManager = interface(IModelMuseModel)
