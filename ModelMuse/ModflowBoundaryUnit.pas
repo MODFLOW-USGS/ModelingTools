@@ -6,7 +6,7 @@ uses Winapi.Windows, System.UITypes, SysUtils,
   Classes, ZLib, RbwParser, GoPhastTypes,
   OrderedCollectionUnit, ModflowTransientListParameterUnit, DataSetUnit,
   RealListUnit, TempFiles, SubscriptionUnit, FormulaManagerUnit, SparseDataSets,
-  System.Generics.Collections, System.StrUtils;
+  System.Generics.Collections, System.StrUtils, ModelMuseInterfacesUnit;
 
 type
     // @name defines how a formula is interpreted.
@@ -46,7 +46,7 @@ type
   private
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    FModel: TBaseModel;
+    FModel: IModelMuseModel;
   protected
     FCached: boolean;
     FCleared: Boolean;
@@ -62,10 +62,10 @@ type
     procedure CacheData;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(AModel: TBaseModel);
+    constructor Create(AModel: IModelMuseModel);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    property Model: TBaseModel read FModel;
+    property Model: IModelMuseModel read FModel;
   end;
 
   // @name defines a time and a formula used in
@@ -93,8 +93,6 @@ type
     procedure RemoveFormulaObjects; virtual; abstract;
     function GetScreenObject: TObject; override;
     procedure ResetItemObserver(Index: integer);
-//    procedure UpdateFormulaDependencies(OldFormula: string; var
-//      NewFormula: string; Observer: TObserver; Compiler: TRbwParser); override;
     // See @link(BoundaryFormula).
     function GetBoundaryFormula(Index: integer): string; virtual; abstract;
     // See @link(BoundaryFormula).
@@ -106,15 +104,12 @@ type
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function BoundaryFormulaCount: integer; virtual; abstract;
     function NonBlankFormulas: boolean;
-//    procedure UpdateFormula(Value: string; Position: Integer;
-//      var FormulaObject: TFormulaObject);
     procedure RemoveSubscription(Sender: TObject; const AName: string);
     procedure RestoreSubscription(Sender: TObject; const AName: string);
     function CreateFormulaObject(Orientation:
       TDataSetOrientation): TFormulaObject; virtual;
     function GetObserver(Index: Integer): TObserver; override;
   public
-//    property ScreenObject: TObject read GetScreenObject;
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -1352,7 +1347,7 @@ procedure TCustomMF_BoundColl.AddBoundary(
 var
   Link: TBoundaryModelLink;
 begin
-  Link := FBoundaries.GetLink(Value.Model);
+  Link := FBoundaries.GetLink(Value.Model as TBaseModel);
   Link.Boundaries.Add(Value);
 end;
 
@@ -2704,7 +2699,7 @@ end;
 
 { TCustomBoundaryStorage }
 
-constructor TCustomBoundaryStorage.Create(AModel: TBaseModel);
+constructor TCustomBoundaryStorage.Create(AModel: IModelMuseModel);
 begin
   FModel := AModel;
 end;
@@ -2905,6 +2900,7 @@ procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
 begin
   (Subject as TCustomStringValueItem).RestoreSubscription(Sender, AName);
 end;
+
 
 procedure TCustomBoundaryItem.RemoveSubscription(Sender: TObject; const AName: string);
 var

@@ -1784,13 +1784,13 @@ begin
   FDataSetAbbreviations := TStringList.Create;
   FSutra4NodePilotPointFiles := TObjectList<TPilotPointFiles>.Create;
   FSutra4DataSetRoots := TStringList.Create;
-  if Model.Sutra4Used(nil) then
+  if Model.DoSutra4Used(nil) then
   begin
     FDataSetNames.Add(KSolidMatrixComp);
     FDataSetAbbreviations.Add('COMPMA');
     FSutra4NodePilotPointFiles.Add(TPilotPointFiles.Create);
 
-    if Model.Sutra4EnergyUsed(nil) then
+    if Model.DoSutra4EnergyUsed(nil) then
     begin
       FDataSetNames.Add(KSolidGrainSpecificHeat);
       FDataSetAbbreviations.Add('CS');
@@ -1805,7 +1805,7 @@ begin
       FSutra4NodePilotPointFiles.Add(nil);
     end;
 
-    if Model.Sutra4EnergyOrSorptionUsed(nil) then
+    if Model.DoSutra4EnergyOrSorptionUsed(nil) then
     begin
       FDataSetNames.Add(KSolidGrainDensity);
       FDataSetAbbreviations.Add('RHOS');
@@ -1820,10 +1820,10 @@ begin
       FSutra4NodePilotPointFiles.Add(nil);
     end;
 
-    if Model.Sutra4ProductionUsed(nil) then
+    if Model.DoSutra4ProductionUsed(nil) then
     begin
     end;
-    if Model.Sutra4ProductionUsed(nil) then
+    if Model.DoSutra4ProductionUsed(nil) then
     begin
       FDataSetNames.Add(KZeroOrderProductionRateInLiquid);
       FDataSetAbbreviations.Add('PRODL0');
@@ -1834,7 +1834,7 @@ begin
       FSutra4NodePilotPointFiles.Add(TPilotPointFiles.Create);
     end;
 
-    if Model.Sutra4SoluteUsed(nil) then
+    if Model.DoSutra4SoluteUsed(nil) then
     begin
       FDataSetNames.Add(KFirstOrderProductionRateInLiquid);
       FDataSetAbbreviations.Add('PRODL1');
@@ -1845,10 +1845,10 @@ begin
       FSutra4NodePilotPointFiles.Add(TPilotPointFiles.Create);
     end;
 
-    if Model.Sutra4FreezingUsed(nil) then
+    if Model.DoSutra4FreezingUsed(nil) then
     begin
     end;
-    if Model.Sutra4FreezingUsed(nil) then
+    if Model.DoSutra4FreezingUsed(nil) then
     begin
       FDataSetNames.Add(KZeroOrderProductionRateInIce);
       FDataSetAbbreviations.Add('PRODI');
@@ -2325,7 +2325,7 @@ begin
       {$ENDREGION}
 
       {$REGION 'SUTRA 4 data sets'}
-      if Model.Sutra4Used(nil) then
+      if Model.DoSutra4Used(nil) then
       begin
         for Sutra4Index := 0 to FDataSetNames.Count - 1 do
         begin
@@ -3345,7 +3345,7 @@ begin
 {$ENDREGION}
 
 {$REGION 'SIGMAS'}
-  if Model.Sutra4EnergyUsed(nil) then
+  if Model.DoSutra4EnergyUsed(nil) then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(KScaledSolidGrainThermalConductivity);
   end
@@ -3357,7 +3357,7 @@ begin
 {$ENDREGION}
 
 {$REGION 'SIGMAA'}
-  if Model.Sutra4EnergyUsed(nil) then
+  if Model.DoSutra4EnergyUsed(nil) then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(KScaledEffectiveAirThermalConductivity);
   end
@@ -3786,7 +3786,7 @@ begin
       {$ENDREGION}
 
     {$REGION 'SIGMAS'}
-      if Model.Sutra4EnergyUsed(nil) then
+      if Model.DoSutra4EnergyUsed(nil) then
       begin
         DataArray := Model.DataArrayManager.GetDataSetByName(KScaledSolidGrainThermalConductivity);
       end
@@ -3798,7 +3798,7 @@ begin
     {$ENDREGION}
 
    {$REGION 'SIGMAA'}
-     if Model.Sutra4EnergyUsed(nil) then
+     if Model.DoSutra4EnergyUsed(nil) then
       begin
         DataArray := Model.DataArrayManager.GetDataSetByName(KScaledEffectiveAirThermalConductivity);
       end

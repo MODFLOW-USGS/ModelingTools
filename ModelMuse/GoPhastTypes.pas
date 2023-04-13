@@ -697,7 +697,15 @@ type
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
   end;
 
-  TBaseModel = class abstract(TComponent)
+  IModelMuseModel = interface(IInterface)
+    function GetModelSelection: TModelSelection;
+    procedure SetModelSelection(const Value: TModelSelection);
+    property ModelSelection: TModelSelection read GetModelSelection
+      write SetModelSelection;
+    procedure Invalidate(Sender: TObject);
+  end;
+
+  TBaseModel = class abstract(TComponent, IModelMuseModel)
   private
     // See @link(UpToDate).
     FUpToDate: boolean;
@@ -708,6 +716,8 @@ type
     function GetModelSelection: TModelSelection; virtual; abstract;
     procedure SetModelSelection(const Value: TModelSelection); virtual; abstract;
     function GetGwtUsed: Boolean; virtual; abstract;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     // Call @name to indicate that the model has changed in some important
     // respect.  The user will be prompted to save the model when closing.
@@ -1701,6 +1711,16 @@ end;
 procedure TBaseModel.SetUpToDate(const Value : boolean);
 begin
   FUpToDate := Value;
+end;
+
+function TBaseModel._AddRef: Integer;
+begin
+  result := 1;
+end;
+
+function TBaseModel._Release: Integer;
+begin
+  result := 1;
 end;
 
 procedure TBaseModel.Invalidate(Sender: TObject);

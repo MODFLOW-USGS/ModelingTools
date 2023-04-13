@@ -101,9 +101,9 @@ implementation
 
 uses
   frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModflowBoundaryUnit,
-  ModflowSfrTable, SubscriptionUnit, GIS_Functions,
-  PhastModelUnit, Math, Mt3dmsChemUnit,
-  ModflowMvrUnit, Modflow6ObsUnit;
+  ModflowSfrTable, SubscriptionUnit, GIS_Functions, PhastModelUnit, Math,
+  Mt3dmsChemUnit, ModflowMvrUnit, Modflow6ObsUnit,
+  Modflow6DynamicTimeSeriesUnit;
 
 { TFormulaObject }
 
@@ -265,6 +265,10 @@ begin
                 else if RestoreEvent = Addr(GlobalRestoreMf6CalibrationObsSubscription) then
                 begin
                   GlobalRestoreMf6CalibrationObsSubscription(self, Subject, UsedVariables[VariableIndex])
+                end
+                else if RestoreEvent = Addr(DynamicTimeItemRestoreSubscription) then
+                begin
+                  DynamicTimeItemRestoreSubscription(self, Subject, UsedVariables[VariableIndex])
                 end
                 else if RestoreEvent = Addr(GlobalDummyHandleSubscription) then
                 begin
@@ -469,6 +473,10 @@ begin
                     begin
                       GlobalRemoveMf6CalibrationObsSubscription(self, Subject, OldSubscriptions[VariableIndex])
                     end
+                    else if PRemoveEvent = Addr(DynamicTimeItemRemoveSubscription) then
+                    begin
+                      DynamicTimeItemRemoveSubscription(self, Subject, OldSubscriptions[VariableIndex])
+                    end
                     else
                     begin
                       Assert(False);
@@ -581,6 +589,10 @@ begin
               else if RestoreEvent = Addr(GlobalRestoreMf6CalibrationObsSubscription) then
               begin
                 GlobalRestoreMf6CalibrationObsSubscription(self, Subject, FNewSubscriptions[VariableIndex])
+              end
+              else if RestoreEvent = Addr(DynamicTimeItemRestoreSubscription) then
+              begin
+                DynamicTimeItemRestoreSubscription(self, Subject, FNewSubscriptions[VariableIndex])
               end
               else
               begin

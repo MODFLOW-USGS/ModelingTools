@@ -311,10 +311,10 @@ begin
   Assert(LocalModel.ModelSelection in SutraSelection);
 
 
-  Sutra4Used := LocalModel.Sutra4Used(nil);
-  Sutra4SoluteUsed := LocalModel.Sutra4SoluteUsed(nil);
-  Sutra4FreezingUsed := LocalModel.Sutra4FreezingUsed(nil);
-  Sutra4ProductionUsed := LocalModel.Sutra4ProductionUsed(nil);
+  Sutra4Used := LocalModel.DoSutra4Used(nil);
+  Sutra4SoluteUsed := LocalModel.DoSutra4SoluteUsed(nil);
+  Sutra4FreezingUsed := LocalModel.DoSutra4FreezingUsed(nil);
+  Sutra4ProductionUsed := LocalModel.DoSutra4ProductionUsed(nil);
 
   Mesh := LocalModel.SutraMesh;
 
@@ -715,7 +715,7 @@ begin
   Assert(TFile.Exists(FileName));
   LocalModel := frmGoPhast.PhastModel;
   Assert(LocalModel.ModelSelection in SutraSelection);
-  Sutra4EnergyUsed := LocalModel.Sutra4EnergyUsed(nil);
+  Sutra4EnergyUsed := LocalModel.DoSutra4EnergyUsed(nil);
   Mesh := LocalModel.SutraMesh;
 
   if Mesh.MeshType = mt3D then

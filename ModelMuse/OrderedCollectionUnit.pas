@@ -196,6 +196,7 @@ type
       write SetPestParamMethod;
   end;
 
+
   // @name is a base class for collections that avoid deleting their collection
   // items during assign whenever they can. @name is typically used to
   // allow editing of the collection in a GUI.  The model owns (directly or

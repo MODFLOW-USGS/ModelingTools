@@ -1051,7 +1051,7 @@ var
   PointIndex: integer;
 begin
   Stream.WriteString('HEAD_IC' + EndOfLine);
-  if frmGoPhast.PhastModel.InitialWaterTableUsed(nil) then
+  if frmGoPhast.PhastModel.DoInitialWaterTableUsed(nil) then
   begin
     DataSet := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(rsInitial_Water_Table);
 //    DataSet := frmGoPhast.PhastModel.DataSets[DataSetIndex];

@@ -10062,7 +10062,13 @@ begin
   inherited;
   if PhastModel.FmpCrops.Count > 0 then
   begin
-    ShowAForm(TfrmFarm);
+    frmFarm := TfrmFarm.Create(nil, PhastModel);
+    try
+      frmFarm.ShowModal;
+    finally
+      frmFarm.Free;
+    end;
+//    ShowAForm(TfrmFarm);
   end
   else
   begin

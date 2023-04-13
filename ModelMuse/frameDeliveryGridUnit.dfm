@@ -7,7 +7,7 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
     Top = 169
     Width = 476
     ExplicitTop = 169
-    ExplicitWidth = 393
+    ExplicitWidth = 476
     DesignSize = (
       476
       41)
@@ -96,12 +96,12 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
         CheckStyle = csCheck
         AutoAdjustColWidths = False
       end>
-    ExplicitWidth = 393
+    ExplicitWidth = 476
     ExplicitHeight = 112
   end
   inherited pnlTop: TPanel
     Width = 476
-    ExplicitWidth = 393
+    ExplicitWidth = 476
     object lblHowUsed: TLabel [0]
       Left = 255
       Top = 11
@@ -115,7 +115,7 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
       EditLabel.ExplicitWidth = 50
     end
     inherited cbMultiCheck: TCheckBox
-      TabOrder = 2
+      TabOrder = 3
     end
     object comboHowUsed: TComboBox
       Left = 255

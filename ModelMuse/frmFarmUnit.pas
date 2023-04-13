@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, StdCtrls,
   Buttons, ExtCtrls, frameScreenObjectUnit, frameFarmUnit, VirtualTrees,
-  Mask, JvExMask, JvSpin, ModflowFmpFarmUnit, UndoItems;
+  Mask, JvExMask, JvSpin, ModflowFmpFarmUnit, UndoItems,
+  ModelMuseInterfacesUnit, GoPhastTypes;
 
 type
   TUndoEditFarms = class(TCustomUndo)
@@ -86,12 +87,14 @@ type
     FFarms: TFarmCollection;
     FSelectedFarms: TFarmList;
     FChangingSelection: Boolean;
+    FModel: IModelMuseModel;
     procedure GetData;
     procedure SetData;
     function AddAFarm: TFarm;
     procedure ClearSelection;
     { Private declarations }
   public
+    constructor Create(AOwner: TComponent; Model: IModelMuseModel); reintroduce;
     { Public declarations }
   end;
 
@@ -101,7 +104,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, ModflowFmpCropUnit, GoPhastTypes, ModflowFmpIrrigationUnit;
+  frmGoPhastUnit, ModflowFmpCropUnit, ModflowFmpIrrigationUnit;
 
 {$R *.dfm}
 
@@ -267,7 +270,7 @@ procedure TfrmFarm.GetData;
 var
   ANode: PVirtualNode;
 begin
-  if frmGoPhast.ModelSelection = msModflowFMP then
+  if FModel.ModelSelection = msModflowFMP then
   begin
     frameFarm.tabCrops.Caption := 'Crop Efficiencies';
   end
@@ -466,6 +469,12 @@ begin
     FChangingSelection := False;
   end;
   FSelectedFarms.Clear;
+end;
+
+constructor TfrmFarm.Create(AOwner: TComponent; Model: IModelMuseModel);
+begin
+  inherited Create(AOwner);
+  FModel := Model;
 end;
 
 procedure TfrmFarm.vstFarmsAddToSelection(Sender: TBaseVirtualTree;

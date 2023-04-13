@@ -46,7 +46,8 @@ uses System.UITypes,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
   PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit,
   PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults,
-  Modflow6TimeSeriesCollectionsUnit, ModflowFmpIrrigationUnit;
+  Modflow6TimeSeriesCollectionsUnit, ModflowFmpIrrigationUnit,
+  ModelMuseInterfacesUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -1870,7 +1871,336 @@ DataArray and  ScreenObject should have a comment and there should
 also be comments for each DataArray or boundary condition specified
 by a ScreenObject.  Any special dialog box that has a preserved state
 that affects the model output should also have a comment. }
-  TCustomModel = class;
+
+  ICustomModelForDataArrayManager = interface(IModelMuseModel)
+    function GetGrid: TCustomModelGrid;
+    function GetThreeDDataSet: TDataArray;
+    function GetFrontDataSet: TDataArray;
+    function GetSideDataSet: TDataArray;
+    function GetTopDataSet: TDataArray;
+    function GetFrontContourDataSet: TDataArray;
+    function GetSideContourDataSet: TDataArray;
+    function GetThreeDContourDataSet: TDataArray;
+    function GetTopContourDataSet: TDataArray;
+    function GetModflowPackages: TModflowPackages;
+    function GetMobileComponents: TMobileChemSpeciesCollection;
+    function GetSutraMesh: TSutraMesh3D;
+    function GetOnActiveDataSetChanged: TNotifyEvent;
+    function GetOnNodeActiveDataSetChanged: TNotifyEvent;
+    function GetZetaUsed: TObjectUsedEvent;
+    function GetSftUsed: TObjectUsedEvent;
+    function GetGwtUztUsed: TObjectUsedEvent;
+    function GetActiveUsed: TObjectUsedEvent;
+    function GetInitializeActiveDataArrayWithCellSizeObjects: TNotifyEvent;
+    function GetDoShouldActiveBeSetByCellSize: TCheckUsageEvent;
+    function GetAquiferPropertiesUsed: TObjectUsedEvent;
+    function GetKyUsed: TObjectUsedEvent;
+    function GetDetermineKyFromAnisotropy: TNotifyEvent;
+    function GetShouldKyBeDeterminedFromAnisotropy: TCheckUsageEvent;
+    function GetKzUsed: TObjectUsedEvent;
+    function GetDetermineKzFromAnisotropy: TNotifyEvent;
+    function GetShouldKzBeDeterminedFromAnisotropy: TCheckUsageEvent;
+    function GetPorosityUsed: TObjectUsedEvent;
+
+    procedure SetFrontDataSet(const Value: TDataArray);
+    procedure SetSideDataSet(const Value: TDataArray);
+    procedure SetTopDataSet(const Value: TDataArray);
+    procedure SetThreeDDataSet(const Value: TDataArray);
+    procedure SetThreeDContourDataSet(const Value: TDataArray);
+    procedure SetTopContourDataSet(const Value: TDataArray);
+    procedure SetFrontContourDataSet(const Value: TDataArray);
+    procedure SetSideContourDataSet(const Value: TDataArray);
+    procedure SetModflowPackages(const Value: TModflowPackages);
+    procedure SetMobileComponents(const Value: TMobileChemSpeciesCollection);
+    procedure SetSutraMesh(const Value: TSutraMesh3D);
+
+    procedure CreateVariables(const DataSet: TDataArray);
+    procedure UpdateDataArrayDimensions(DataArray: TDataArray);
+    function DoSwiUsed(Sender: TObject): boolean;
+    function GetSwiUsed: TObjectUsedEvent;
+    property SwiUsed: TObjectUsedEvent read GetSwiUsed;
+    function NumberOfMt3dChemComponents: integer;
+    procedure DoOnActiveDataSetChanged(Sender: TObject);
+
+    property Grid: TCustomModelGrid read GetGrid;
+    property ThreeDDataSet: TDataArray read GetThreeDDataSet
+      write SetThreeDDataSet;
+    property TopDataSet: TDataArray read GetTopDataSet
+      write SetTopDataSet;
+    property FrontDataSet: TDataArray read GetFrontDataSet
+      write SetFrontDataSet;
+    property SideDataSet: TDataArray read GetSideDataSet
+      write SetSideDataSet;
+    property ThreeDContourDataSet: TDataArray read GetThreeDContourDataSet
+      write SetThreeDContourDataSet;
+    property TopContourDataSet: TDataArray read GetTopContourDataSet
+      write SetTopContourDataSet;
+    property FrontContourDataSet: TDataArray read GetFrontContourDataSet
+      write SetFrontContourDataSet;
+    property SideContourDataSet: TDataArray read GetSideContourDataSet
+      write SetSideContourDataSet;
+    property ModflowPackages: TModflowPackages read GetModflowPackages
+      write SetModflowPackages;
+    property MobileComponents: TMobileChemSpeciesCollection
+      read GetMobileComponents write SetMobileComponents;
+    property SutraMesh: TSutraMesh3D read GetSutraMesh write SetSutraMesh;
+    property OnActiveDataSetChanged: TNotifyEvent read GetOnActiveDataSetChanged;
+    property OnNodeActiveDataSetChanged: TNotifyEvent read GetOnNodeActiveDataSetChanged;
+    property ZetaUsed: TObjectUsedEvent read GetZetaUsed;
+    property SftUsed: TObjectUsedEvent read GetSftUsed;
+    property GwtUztUsed: TObjectUsedEvent read GetGwtUztUsed;
+    property ActiveUsed: TObjectUsedEvent read GetActiveUsed;
+    property InitializeActiveDataArrayWithCellSizeObjects: TNotifyEvent
+      read GetInitializeActiveDataArrayWithCellSizeObjects;
+    property ShouldActiveBeSetByCellSize: TCheckUsageEvent
+      read GetDoShouldActiveBeSetByCellSize;
+    property AquiferPropertiesUsed: TObjectUsedEvent read GetAquiferPropertiesUsed;
+    property KyUsed: TObjectUsedEvent read GetKyUsed;
+    property DetermineKyFromAnisotropy: TNotifyEvent read GetDetermineKyFromAnisotropy;
+    property ShouldKyBeDeterminedFromAnisotropy: TCheckUsageEvent read GetShouldKyBeDeterminedFromAnisotropy;
+    property KzUsed: TObjectUsedEvent read GetKzUsed;
+    property DetermineKzFromAnisotropy: TNotifyEvent read GetDetermineKzFromAnisotropy;
+    property ShouldKzBeDeterminedFromAnisotropy: TCheckUsageEvent read GetShouldKzBeDeterminedFromAnisotropy;
+    property PorosityUsed:  TObjectUsedEvent read GetPorosityUsed;
+    function GetSpecificStorageUsed: TObjectUsedEvent;
+    property SpecificStorageUsed: TObjectUsedEvent read GetSpecificStorageUsed;
+    function GetLongitudinalDispersionUsed: TObjectUsedEvent;
+    property LongitudinalDispersionUsed: TObjectUsedEvent read GetLongitudinalDispersionUsed;
+    function GetHorizontalTransverseDispersionUsed: TObjectUsedEvent;
+    property HorizontalTransverseDispersionUsed: TObjectUsedEvent read GetHorizontalTransverseDispersionUsed;
+    function GetVerticalTransverseDispersionUsed: TObjectUsedEvent;
+    property VerticalTransverseDispersionUsed: TObjectUsedEvent read GetVerticalTransverseDispersionUsed;
+    function GetInitialHeadUsed: TObjectUsedEvent;
+    property InitialHeadUsed: TObjectUsedEvent read GetInitialHeadUsed;
+    function GetInitialWaterTableUsed: TObjectUsedEvent;
+    property InitialWaterTableUsed: TObjectUsedEvent read GetInitialWaterTableUsed;
+    function GetChemistryUsed: TObjectUsedEvent;
+    property ChemistryUsed: TObjectUsedEvent read GetChemistryUsed;
+    function GetEquilibriumPhasesUsed: TObjectUsedEvent;
+    property EquilibriumPhasesUsed: TObjectUsedEvent read GetEquilibriumPhasesUsed;
+    function GetSurfacesUsed: TObjectUsedEvent;
+    property SurfacesUsed: TObjectUsedEvent read GetSurfacesUsed;
+    function GetExchangeUsed: TObjectUsedEvent;
+    property ExchangeUsed: TObjectUsedEvent read GetExchangeUsed;
+    function GetGasPhaseUsed: TObjectUsedEvent;
+    property GasPhaseUsed: TObjectUsedEvent read GetGasPhaseUsed;
+    function GetSolidSolutionUsed: TObjectUsedEvent;
+    property SolidSolutionUsed: TObjectUsedEvent read GetSolidSolutionUsed;
+    function GetReservoirLayerUsed: TObjectUsedEvent;
+    property ReservoirLayerUsed: TObjectUsedEvent read GetReservoirLayerUsed;
+    function GetReservoirPackageUsed: TObjectUsedEvent;
+    property ReservoirPackageUsed: TObjectUsedEvent read GetReservoirPackageUsed;
+    function GetKineticsUsed: TObjectUsedEvent;
+    property KineticsUsed: TObjectUsedEvent read GetKineticsUsed;
+    function GetLakePackageUsed: TObjectUsedEvent;
+    property LakePackageUsed: TObjectUsedEvent read GetLakePackageUsed;
+    function GetGroundSurfaceUsed: TObjectUsedEvent;
+    property GroundSurfaceUsed: TObjectUsedEvent read GetGroundSurfaceUsed;
+    function GetModflowUsed: TObjectUsedEvent;
+    property ModflowUsed: TObjectUsedEvent read GetModflowUsed;
+    function GetUzfPackageUsed: TObjectUsedEvent;
+    property UzfPackageUsed: TObjectUsedEvent read GetUzfPackageUsed;
+    function GetRouteUzfDischarge: TObjectUsedEvent;
+    property RouteUzfDischarge: TObjectUsedEvent read GetRouteUzfDischarge;
+    function GetUzfUnsatVertKUsed: TObjectUsedEvent;
+    property UzfUnsatVertKUsed: TObjectUsedEvent read GetUzfUnsatVertKUsed;
+    function GetUzfInitialInfiltrationUsed: TObjectUsedEvent;
+    property UzfInitialInfiltrationUsed: TObjectUsedEvent read GetUzfInitialInfiltrationUsed;
+    function GetUzfResidualWaterContentUsed: TObjectUsedEvent;
+    property UzfResidualWaterContentUsed: TObjectUsedEvent read GetUzfResidualWaterContentUsed;
+    function GetUzfSurfKUsed: TObjectUsedEvent;
+    property UzfSurfKUsed: TObjectUsedEvent read GetUzfSurfKUsed;
+    function GetModflowInitialHeadUsed: TObjectUsedEvent;
+    property ModflowInitialHeadUsed: TObjectUsedEvent read GetModflowInitialHeadUsed;
+    function GetConfiningBedKzUsed: TObjectUsedEvent;
+    property ConfiningBedKzUsed: TObjectUsedEvent read GetConfiningBedKzUsed;
+    function GetVerticalAnisotropyUsed: TObjectUsedEvent;
+    property VerticalAnisotropyUsed: TObjectUsedEvent read GetVerticalAnisotropyUsed;
+    function GetHorizontalAnisotropyUsed: TObjectUsedEvent;
+    property HorizontalAnisotropyUsed: TObjectUsedEvent read GetHorizontalAnisotropyUsed;
+    function GetSpecificYieldUsed: TObjectUsedEvent;
+    property SpecificYieldUsed: TObjectUsedEvent read GetSpecificYieldUsed;
+    function GetWetDryUsed: TObjectUsedEvent;
+    property WetDryUsed: TObjectUsedEvent read GetWetDryUsed;
+    function GetModpathZonesNeeded: TObjectUsedEvent;
+    property ModpathZonesNeeded: TObjectUsedEvent read GetModpathZonesNeeded;
+    function GetHufReferenceSurfaceNeeded: TObjectUsedEvent;
+    property HufReferenceSurfaceNeeded: TObjectUsedEvent read GetHufReferenceSurfaceNeeded;
+    function GetBcfUsed: TObjectUsedEvent;
+    property BcfUsed: TObjectUsedEvent read GetBcfUsed;
+    function GetConfinedStorageCoefUsed: TObjectUsedEvent;
+    property ConfinedStorageCoefUsed: TObjectUsedEvent read GetConfinedStorageCoefUsed;
+    function GetHufSelected: TObjectUsedEvent;
+    property HufSelected: TObjectUsedEvent read GetHufSelected;
+    function GetOptionalDataSet: TObjectUsedEvent;
+    property OptionalDataSet: TObjectUsedEvent read GetOptionalDataSet;
+    function GetHufStorageUsed: TObjectUsedEvent;
+    property HufStorageUsed: TObjectUsedEvent read GetHufStorageUsed;
+    function GetZoneBudgetSelected: TObjectUsedEvent;
+    property ZoneBudgetSelected: TObjectUsedEvent read GetZoneBudgetSelected;
+    function GetSwtSelected: TObjectUsedEvent;
+    property SwtSelected: TObjectUsedEvent read GetSwtSelected;
+    function GetSwtOffsetsUsed: TObjectUsedEvent;
+    property SwtOffsetsUsed: TObjectUsedEvent read GetSwtOffsetsUsed;
+    function GetSwtSpecifiedUsed: TObjectUsedEvent;
+    property SwtSpecifiedUsed: TObjectUsedEvent read GetSwtSpecifiedUsed;
+    function GetMt3dMS_StrictUsed: TObjectUsedEvent;
+    property Mt3dMS_StrictUsed: TObjectUsedEvent read GetMt3dMS_StrictUsed;
+    function GetMt3dMSBulkDensityUsed: TObjectUsedEvent;
+    property Mt3dMSBulkDensityUsed: TObjectUsedEvent read GetMt3dMSBulkDensityUsed;
+    function GetMt3dMSImmobPorosityUsed: TObjectUsedEvent;
+    property Mt3dMSImmobPorosityUsed: TObjectUsedEvent read GetMt3dMSImmobPorosityUsed;
+    function GetModpathBudgetNeeded: TObjectUsedEvent;
+    property ModpathBudgetNeeded: TObjectUsedEvent read GetModpathBudgetNeeded;
+    function GetModpathRetardationNeeded: TObjectUsedEvent;
+    property ModpathRetardationNeeded: TObjectUsedEvent read GetModpathRetardationNeeded;
+    function GetSutraUsed: TObjectUsedEvent;
+    property SutraUsed: TObjectUsedEvent read GetSutraUsed;
+    function GetSutraThicknessUsed: TObjectUsedEvent;
+    property SutraThicknessUsed: TObjectUsedEvent read GetSutraThicknessUsed;
+    function DoSutraUnsatRegionUsed(Sender: TObject): boolean;
+    function GetSutraUnsatRegionUsed: TObjectUsedEvent;
+    property SutraUnsatRegionUsed: TObjectUsedEvent read GetSutraUnsatRegionUsed;
+    function GetSutraPermeabilityUsed: TObjectUsedEvent;
+    property SutraPermeabilityUsed: TObjectUsedEvent read GetSutraPermeabilityUsed;
+    function GetSutraMiddlePermeabilityUsed: TObjectUsedEvent;
+    property SutraMiddlePermeabilityUsed: TObjectUsedEvent read GetSutraMiddlePermeabilityUsed;
+    function GetSutraHydraulicConductivityUsed: TObjectUsedEvent;
+    property SutraHydraulicConductivityUsed: TObjectUsedEvent read GetSutraHydraulicConductivityUsed;
+    function GetSutraMiddleHydraulicConductivityUsed: TObjectUsedEvent;
+    property SutraMiddleHydraulicConductivityUsed: TObjectUsedEvent read GetSutraMiddleHydraulicConductivityUsed;
+    function GetSutra3DModel: TObjectUsedEvent;
+    property Sutra3DModel: TObjectUsedEvent read GetSutra3DModel;
+    function GetSutraConcentrationUsed: TObjectUsedEvent;
+    property SutraConcentrationUsed: TObjectUsedEvent read GetSutraConcentrationUsed;
+    function GetSutraTemperatureUsed: TObjectUsedEvent;
+    property SutraTemperatureUsed: TObjectUsedEvent read GetSutraTemperatureUsed;
+    function GetSoilIDUsed: TObjectUsedEvent;
+    property SoilIDUsed: TObjectUsedEvent read GetSoilIDUsed;
+    function GetCfpPipesSelected: TObjectUsedEvent;
+    property CfpPipesSelected: TObjectUsedEvent read GetCfpPipesSelected;
+    function GetSwiObsUsed: TObjectUsedEvent;
+    property SwiObsUsed: TObjectUsedEvent read GetSwiObsUsed;
+    function GetSwrSelected: TObjectUsedEvent;
+    property SwrSelected: TObjectUsedEvent read GetSwrSelected;
+    function GetFootprintSelected: TObjectUsedEvent;
+    property FootprintSelected: TObjectUsedEvent read GetFootprintSelected;
+    function GetModflow6Selected: TObjectUsedEvent;
+    property Modflow6Selected: TObjectUsedEvent read GetModflow6Selected;
+    function GetStorageSelected: TObjectUsedEvent;
+    property StorageSelected: TObjectUsedEvent read GetStorageSelected;
+    function GetSutraLakeUsed: TObjectUsedEvent;
+    property SutraLakeUsed: TObjectUsedEvent read GetSutraLakeUsed;
+    function GetAssignFootprintBoundarydWithdrawal: TNotifyEvent;
+    property AssignFootprintBoundarydWithdrawal: TNotifyEvent read GetAssignFootprintBoundarydWithdrawal;
+    function GetUseFootprintWells: TCheckUsageEvent;
+    property UseFootprintWells: TCheckUsageEvent read GetUseFootprintWells;
+    function GetNpfUsed: TObjectUsedEvent;
+    property NpfUsed: TObjectUsedEvent read GetNpfUsed;
+    function GetSfrMf6Selected: TObjectUsedEvent;
+    property SfrMf6Selected: TObjectUsedEvent read GetSfrMf6Selected;
+    function GetMawSelected: TObjectUsedEvent;
+    property MawSelected: TObjectUsedEvent read GetMawSelected;
+    function GetLakMf6Selected: TObjectUsedEvent;
+    property LakMf6Selected: TObjectUsedEvent read GetLakMf6Selected;
+    function GetUzfMf6PackageUsed: TObjectUsedEvent;
+    property UzfMf6PackageUsed: TObjectUsedEvent read GetUzfMf6PackageUsed;
+    function GetSutraLakeBottomUsed: TObjectUsedEvent;
+    property SutraLakeBottomUsed: TObjectUsedEvent read GetSutraLakeBottomUsed;
+    function GetHorizAnisotropyMf6Used: TObjectUsedEvent;
+    property HorizAnisotropyMf6Used: TObjectUsedEvent read GetHorizAnisotropyMf6Used;
+    function GetVertAnisotropyMf6Used: TObjectUsedEvent;
+    property VertAnisotropyMf6Used: TObjectUsedEvent read GetVertAnisotropyMf6Used;
+    function GetCSubInitialElasticStorageUsed: TObjectUsedEvent;
+    property CSubInitialElasticStorageUsed: TObjectUsedEvent read GetCSubInitialElasticStorageUsed;
+    function GetCSubInitialRecompressionIndexUsed: TObjectUsedEvent;
+    property CSubInitialRecompressionIndexUsed: TObjectUsedEvent read GetCSubInitialRecompressionIndexUsed;
+    function GetCSubDataSetsUsed: TObjectUsedEvent;
+    property CSubDataSetsUsed: TObjectUsedEvent read GetCSubDataSetsUsed;
+    function GetMt3d_LktIsSelected: TObjectUsedEvent;
+    property Mt3d_LktIsSelected: TObjectUsedEvent read GetMt3d_LktIsSelected;
+    function GetSutra4Used: TObjectUsedEvent;
+    property Sutra4Used: TObjectUsedEvent read GetSutra4Used;
+    function GetSutra4EnergyUsed: TObjectUsedEvent;
+    property Sutra4EnergyUsed: TObjectUsedEvent read GetSutra4EnergyUsed;
+    function GetSutra4EnergyOrSorptionUsed: TObjectUsedEvent;
+    property Sutra4EnergyOrSorptionUsed: TObjectUsedEvent read GetSutra4EnergyOrSorptionUsed;
+    function GetSutra4ProductionUsed: TObjectUsedEvent;
+    property Sutra4ProductionUsed: TObjectUsedEvent read GetSutra4ProductionUsed;
+    function GetSutra4FreezingUsed: TObjectUsedEvent;
+    property Sutra4FreezingUsed: TObjectUsedEvent read GetSutra4FreezingUsed;
+    function GetGwtDispUsed: TObjectUsedEvent;
+    property GwtDispUsed: TObjectUsedEvent read GetGwtDispUsed;
+    function GetSeparatedLongitudinalDispersionUsed: TObjectUsedEvent;
+    property SeparatedLongitudinalDispersionUsed: TObjectUsedEvent read GetSeparatedLongitudinalDispersionUsed;
+    function GetSeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent;
+    property SeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent
+       read GetSeparatedHorizontalTransverseDispersionUsed;
+    function GetFarmProcess4SteadyFarmsUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyFarmsUsed: TObjectUsedEvent read GetFarmProcess4SteadyFarmsUsed;
+    function GetAssignModflow6LakeDisplayArrays: TNotifyEvent;
+    property AssignModflow6LakeDisplayArrays: TNotifyEvent read GetAssignModflow6LakeDisplayArrays;
+    function GetSutra4SoluteUsed: TObjectUsedEvent;
+    property Sutra4SoluteUsed: TObjectUsedEvent read GetSutra4SoluteUsed;
+    function GetFarmProcess4SteadyCropsUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyCropsUsed: TObjectUsedEvent read GetFarmProcess4SteadyCropsUsed;
+    function GetFarmProcess4SteadyRefETUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyRefETUsed: TObjectUsedEvent read GetFarmProcess4SteadyRefETUsed;
+    function GetFarmProcess4SteadyPrecipUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyPrecipUsed: TObjectUsedEvent read GetFarmProcess4SteadyPrecipUsed;
+    function GetFarmProcess4SteadArrayEfficiencyUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayEfficiencyUsed: TObjectUsedEvent read GetFarmProcess4SteadArrayEfficiencyUsed;
+    function GetFarmProcess4SteadArrayEfficiencyImprovementUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayEfficiencyImprovementUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayEfficiencyImprovementUsed;
+    function GetFarmProcess4SteadArrayBareRunoffFractionUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayBareRunoffFractionUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayBareRunoffFractionUsed;
+    function GetFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed;
+    function GetFarmProcess4SteadArrayAddedDemandRunoffSplitUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayAddedDemandRunoffSplitUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayAddedDemandRunoffSplitUsed;
+    function GetCapillaryFringeUsed: TObjectUsedEvent;
+    property CapillaryFringeUsed: TObjectUsedEvent read GetCapillaryFringeUsed;
+    function GetSurfaceKUsed: TObjectUsedEvent;
+    property SurfaceKUsed: TObjectUsedEvent read GetSurfaceKUsed;
+    function GetPotentialEvapBareUsed: TObjectUsedEvent;
+    property PotentialEvapBareUsed: TObjectUsedEvent read GetPotentialEvapBareUsed;
+    function GetDirectRechargeUsed: TObjectUsedEvent;
+    property DirectRechargeUsed: TObjectUsedEvent read GetDirectRechargeUsed;
+    function GetPrecipPotConsumptionUsed: TObjectUsedEvent;
+    property PrecipPotConsumptionUsed: TObjectUsedEvent read GetPrecipPotConsumptionUsed;
+    function GetNrdInfilLocationUsed: TObjectUsedEvent;
+    property NrdInfilLocationUsed: TObjectUsedEvent read GetNrdInfilLocationUsed;
+    function GetCropCoefficientUsed: TObjectUsedEvent;
+    property CropCoefficientUsed: TObjectUsedEvent read GetCropCoefficientUsed;
+    function GetLandUseAreaFractionUsed: TObjectUsedEvent;
+    property LandUseAreaFractionUsed: TObjectUsedEvent read GetLandUseAreaFractionUsed;
+    function GetConsumptiveUseUsed: TObjectUsedEvent;
+    property ConsumptiveUseUsed: TObjectUsedEvent read GetConsumptiveUseUsed;
+    function GetIrrigationUsed: TObjectUsedEvent;
+    property IrrigationUsed: TObjectUsedEvent read GetIrrigationUsed;
+    function GetRootDepthUsed: TObjectUsedEvent;
+    property RootDepthUsed: TObjectUsedEvent read GetRootDepthUsed;
+    function GetGwRootInteractionUsed: TObjectUsedEvent;
+    property GwRootInteractionUsed: TObjectUsedEvent read GetGwRootInteractionUsed;
+    function GetTranspirationFractionUsed: TObjectUsedEvent;
+    property TranspirationFractionUsed: TObjectUsedEvent read GetTranspirationFractionUsed;
+    function GetEvaporationIrrigationFractionUsed: TObjectUsedEvent;
+    property EvaporationIrrigationFractionUsed: TObjectUsedEvent read GetEvaporationIrrigationFractionUsed;
+    function GetFractionOfPrecipToSurfaceWaterUsed: TObjectUsedEvent;
+    property FractionOfPrecipToSurfaceWaterUsed: TObjectUsedEvent read GetFractionOfPrecipToSurfaceWaterUsed;
+    function GetFractionOfIrrigToSurfaceWaterUsed: TObjectUsedEvent;
+    property FractionOfIrrigToSurfaceWaterUsed: TObjectUsedEvent read GetFractionOfIrrigToSurfaceWaterUsed;
+    function GetAddedDemandUsed: TObjectUsedEvent;
+    property AddedDemandUsed: TObjectUsedEvent read GetAddedDemandUsed;
+    function GetCropHasSalinityDemandUsed: TObjectUsedEvent;
+    property CropHasSalinityDemandUsed: TObjectUsedEvent read GetCropHasSalinityDemandUsed;
+    function GetLandUseCellsToPrintUsed: TObjectUsedEvent;
+    property LandUseCellsToPrintUsed: TObjectUsedEvent read GetLandUseCellsToPrintUsed;
+  end;
 
   {
     @name manages the creation of @link(TDataArray)s. The @link(TDataArray)s
@@ -1879,7 +2209,7 @@ that affects the model output should also have a comment. }
   }
   TDataArrayManager = class(TObject)
   private
-    FCustomModel: TCustomModel;
+    FCustomModel: ICustomModelForDataArrayManager;
     // @name is used to store the @link(TDataArray)s in the model that
     // are defined throughout the grid.  An example is the data set for
     // the hydraulic conductivity in the X direction.
@@ -1937,7 +2267,7 @@ that affects the model output should also have a comment. }
     FUztInitConc: TDataSetCreationData;
     procedure Assign(Source: TDataArrayManager);
     procedure AddDataSetToLookUpList(const DataSet: TDataArray);
-    Constructor Create(Model: TCustomModel);
+    Constructor Create(Model: ICustomModelForDataArrayManager);
     Destructor Destroy; override;
     procedure ClearDataSetsToCache;
     procedure ClearAllDataSets;
@@ -2019,7 +2349,7 @@ that affects the model output should also have a comment. }
     FLayersToUse: TGenericIntegerList;
     FDataArrays: TDataArrayObjectList;
     FAllLayers: boolean;
-    FModel: TCustomModel;
+    FModel: IModelMuseModel;
     FColors: TList<TColor>;
     FLineThickness: Integer;
     procedure SetAllLayers(const Value: boolean);
@@ -2034,7 +2364,7 @@ that affects the model output should also have a comment. }
       Action: TCollectionNotification);
     procedure SetLineThickness(const Value: Integer);
   public
-    Constructor Create(AModel: TCustomModel); reintroduce;
+    Constructor Create(AModel: IModelMuseModel); reintroduce;
     destructor Destroy; override;
     procedure Assign(Source: TCrossSection); reintroduce;
     procedure Clear;
@@ -2047,7 +2377,8 @@ that affects the model output should also have a comment. }
     property LineThickness: Integer read FLineThickness write SetLineThickness default 1;
   end;
 
-  TCustomModel = class abstract (TBaseModel)
+  TCustomModel = class abstract (TBaseModel, IModelMuseModel,
+    ICustomModelForDataArrayManager)
   private
     FOnModelSelectionChange: TNotifyEvent;
     // See @link(PhastGrid).
@@ -2112,82 +2443,155 @@ that affects the model output should also have a comment. }
     // See @link(PhastGrid).
     procedure SetPhastGrid(const Value: TPhastGrid);
     procedure UpdateDischargeRouting(Sender: TObject);
-    function AquiferPropertiesUsed(Sender: TObject): boolean; virtual;
-    function KyUsed(Sender: TObject): boolean; virtual;
-    function KzUsed(Sender: TObject): boolean; virtual;
-    function PorosityUsed(Sender: TObject): boolean; virtual;
-    function SpecificStorageUsed(Sender: TObject): boolean; virtual;
     // @name returns true if the model uses solute transport.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function ChemistryUsed(Sender: TObject): boolean; virtual;
+    function DoChemistryUsed(Sender: TObject): boolean; virtual;
+    function GetChemistryUsed: TObjectUsedEvent;
+    property ChemistryUsed: TObjectUsedEvent read GetChemistryUsed;
     // @name returns true if the model uses initial heads.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function InitialHeadUsed(Sender: TObject): boolean; virtual;
+    function DoInitialHeadUsed(Sender: TObject): boolean; virtual;
+    function GetInitialHeadUsed: TObjectUsedEvent;
+    property InitialHeadUsed: TObjectUsedEvent read GetInitialHeadUsed;
     // @name returns true if the model uses equilibrium phases.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function EquilibriumPhasesUsed(Sender: TObject): boolean; virtual;
+    function DoEquilibriumPhasesUsed(Sender: TObject): boolean; virtual;
+    function GetEquilibriumPhasesUsed: TObjectUsedEvent;
+    property EquilibriumPhasesUsed: TObjectUsedEvent read GetEquilibriumPhasesUsed;
     // @name returns true if the model uses surface reactions.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function SurfacesUsed(Sender: TObject): boolean; virtual;
+    function DoSurfacesUsed(Sender: TObject): boolean; virtual;
+    function GetSurfacesUsed: TObjectUsedEvent;
+    property SurfacesUsed: TObjectUsedEvent read GetSurfacesUsed;
     // @name returns true if the model uses exchange reactions.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function ExchangeUsed(Sender: TObject): boolean; virtual;
+    function DoExchangeUsed(Sender: TObject): boolean; virtual;
+    function GetExchangeUsed: TObjectUsedEvent;
+    property ExchangeUsed: TObjectUsedEvent read GetExchangeUsed;
     // @name returns true if the model uses gas phases.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function GasPhaseUsed(Sender: TObject): boolean; virtual;
+    function DoGasPhaseUsed(Sender: TObject): boolean; virtual;
+    function GetGasPhaseUsed: TObjectUsedEvent;
+    property GasPhaseUsed: TObjectUsedEvent read GetGasPhaseUsed;
     // @name returns true if the model uses solid solutions.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function SolidSolutionUsed(Sender: TObject): boolean; virtual;
+    function DoSolidSolutionUsed(Sender: TObject): boolean; virtual;
+    function GetSolidSolutionUsed: TObjectUsedEvent;
+    property SolidSolutionUsed: TObjectUsedEvent read GetSolidSolutionUsed;
     // @name returns true if the model uses kinetics.
     // @name is used an event handler for
     // TDataArray.@link(TDataArray.OnDataSetUsed)
-    function KineticsUsed(Sender: TObject): boolean; virtual;
-    function ModflowUsed(Sender: TObject): boolean; virtual;
-    function RouteUzfDischarge(Sender: TObject): boolean; virtual;
-    function ModflowInitialHeadUsed(Sender: TObject): boolean; virtual;
-    function ConfiningBedKzUsed(Sender: TObject): boolean; virtual;
-    function VerticalAnisotropyUsed(Sender: TObject): boolean; virtual;
-    function HorizontalAnisotropyUsed(Sender: TObject): boolean; virtual;
-    function SpecificYieldUsed(Sender: TObject): boolean; virtual;
-    function WetDryUsed(Sender: TObject): boolean; virtual;
+    function DoKineticsUsed(Sender: TObject): boolean; virtual;
+    function GetKineticsUsed: TObjectUsedEvent;
+    property KineticsUsed: TObjectUsedEvent read GetKineticsUsed;
+    function DoModflowUsed(Sender: TObject): boolean; virtual;
+    function GetModflowUsed: TObjectUsedEvent;
+    property ModflowUsed: TObjectUsedEvent read GetModflowUsed;
+    function DoRouteUzfDischarge(Sender: TObject): boolean; virtual;
+    function GetRouteUzfDischarge: TObjectUsedEvent;
+    property RouteUzfDischarge: TObjectUsedEvent read GetRouteUzfDischarge;
+    function DoModflowInitialHeadUsed(Sender: TObject): boolean; virtual;
+    function GetModflowInitialHeadUsed: TObjectUsedEvent;
+    property ModflowInitialHeadUsed: TObjectUsedEvent read GetModflowInitialHeadUsed;
+    function DoConfiningBedKzUsed(Sender: TObject): boolean; virtual;
+    function GetConfiningBedKzUsed: TObjectUsedEvent;
+    property ConfiningBedKzUsed: TObjectUsedEvent read GetConfiningBedKzUsed;
+    function DoVerticalAnisotropyUsed(Sender: TObject): boolean; virtual;
+    function GetVerticalAnisotropyUsed: TObjectUsedEvent;
+    property VerticalAnisotropyUsed: TObjectUsedEvent read GetVerticalAnisotropyUsed;
+    function DoHorizontalAnisotropyUsed(Sender: TObject): boolean; virtual;
+    function GetHorizontalAnisotropyUsed: TObjectUsedEvent;
+    property HorizontalAnisotropyUsed: TObjectUsedEvent read GetHorizontalAnisotropyUsed;
+    function DoSpecificYieldUsed(Sender: TObject): boolean; virtual;
+    function GetSpecificYieldUsed: TObjectUsedEvent;
+    property SpecificYieldUsed: TObjectUsedEvent read GetSpecificYieldUsed;
+    function DoWetDryUsed(Sender: TObject): boolean; virtual;
+    function GetWetDryUsed: TObjectUsedEvent;
+    property WetDryUsed: TObjectUsedEvent read GetWetDryUsed;
     function ModpathUsed(Sender: TObject): boolean; virtual;
-    function HufReferenceSurfaceNeeded(Sender: TObject): boolean; virtual;
-    function BcfUsed(Sender: TObject): boolean; virtual;
-    function ConfinedStorageCoefUsed(Sender: TObject): boolean; virtual;
-    function OptionalDataSet(Sender: TObject): boolean;
-    function HufSelected(Sender: TObject): boolean;
-    function HufStorageUsed(Sender: TObject): boolean;
-    function ZoneBudgetSelected(Sender: TObject): boolean; virtual;
-    function SwtSelected(Sender: TObject): boolean; virtual;
-    function SwtOffsetsUsed(Sender: TObject): boolean; virtual;
-    function SwtSpecifiedUsed(Sender: TObject): boolean; virtual;
-    function SutraUsed(Sender: TObject): boolean;
+    function DoHufReferenceSurfaceNeeded(Sender: TObject): boolean; virtual;
+    function GetHufReferenceSurfaceNeeded: TObjectUsedEvent;
+    property HufReferenceSurfaceNeeded: TObjectUsedEvent read GetHufReferenceSurfaceNeeded;
+    function DoBcfUsed(Sender: TObject): boolean; virtual;
+    function GetBcfUsed: TObjectUsedEvent;
+    property BcfUsed: TObjectUsedEvent read GetBcfUsed;
+    function DoConfinedStorageCoefUsed(Sender: TObject): boolean; virtual;
+    function GetConfinedStorageCoefUsed: TObjectUsedEvent;
+    property ConfinedStorageCoefUsed: TObjectUsedEvent read GetConfinedStorageCoefUsed;
+    function DoOptionalDataSet(Sender: TObject): boolean;
+    function GetOptionalDataSet: TObjectUsedEvent;
+    property OptionalDataSet: TObjectUsedEvent read GetOptionalDataSet;
+    function DoHufSelected(Sender: TObject): boolean;
+    function GetHufSelected: TObjectUsedEvent;
+    property HufSelected: TObjectUsedEvent read GetHufSelected;
+    function DoHufStorageUsed(Sender: TObject): boolean;
+    function GetHufStorageUsed: TObjectUsedEvent;
+    property HufStorageUsed: TObjectUsedEvent read GetHufStorageUsed;
+    function DoZoneBudgetSelected(Sender: TObject): boolean; virtual;
+    function GetZoneBudgetSelected: TObjectUsedEvent;
+    property ZoneBudgetSelected: TObjectUsedEvent read GetZoneBudgetSelected;
+    function DoSwtSelected(Sender: TObject): boolean; virtual;
+    function GetSwtSelected: TObjectUsedEvent;
+    property SwtSelected: TObjectUsedEvent read GetSwtSelected;
+    function DoSwtOffsetsUsed(Sender: TObject): boolean; virtual;
+    function GetSwtOffsetsUsed: TObjectUsedEvent;
+    property SwtOffsetsUsed: TObjectUsedEvent read GetSwtOffsetsUsed;
+    function DoSwtSpecifiedUsed(Sender: TObject): boolean; virtual;
+    function GetSwtSpecifiedUsed: TObjectUsedEvent;
+    property SwtSpecifiedUsed: TObjectUsedEvent read GetSwtSpecifiedUsed;
+    function DoSutraUsed(Sender: TObject): boolean;
+    function GetSutraUsed: TObjectUsedEvent;
+    property SutraUsed: TObjectUsedEvent read GetSutraUsed;
     function Sutra30OrAboveUsed(Sender: TObject): boolean;
-    function SutraLakeUsed(Sender: TObject): boolean;
-    function SutraLakeBottomUsed(Sender: TObject): boolean;
+    function DoSutraLakeUsed(Sender: TObject): boolean;
+    function GetSutraLakeUsed: TObjectUsedEvent;
+    property SutraLakeUsed: TObjectUsedEvent read GetSutraLakeUsed;
+    function DoSutraLakeBottomUsed(Sender: TObject): boolean;
+    function GetSutraLakeBottomUsed: TObjectUsedEvent;
+    property SutraLakeBottomUsed: TObjectUsedEvent read GetSutraLakeBottomUsed;
     function UztUsed(Sender: TObject): boolean; virtual;
-    function GwtUztUsed(Sender: TObject): boolean; virtual;
+//    function GwtUztUsed(Sender: TObject): boolean; virtual;
 //    function Xt3DUsed(Sender: TObject): boolean; virtual;
-    function NpfUsed(Sender: TObject): boolean; virtual;
-    function Sutra3DModel(Sender: TObject): boolean;
-    function SutraConcentrationUsed(Sender: TObject): boolean;
-    function SutraTemperatureUsed(Sender: TObject): boolean;
+    function DoNpfUsed(Sender: TObject): boolean; virtual;
+    function GetNpfUsed: TObjectUsedEvent;
+    property NpfUsed: TObjectUsedEvent read GetNpfUsed;
+    function DoSutra3DModel(Sender: TObject): boolean;
+    function GetSutra3DModel: TObjectUsedEvent;
+    property Sutra3DModel: TObjectUsedEvent read GetSutra3DModel;
+    function DoSutraConcentrationUsed(Sender: TObject): boolean;
+    function GetSutraConcentrationUsed: TObjectUsedEvent;
+    property SutraConcentrationUsed: TObjectUsedEvent read GetSutraConcentrationUsed;
+    function DoSutraTemperatureUsed(Sender: TObject): boolean;
+    function GetSutraTemperatureUsed: TObjectUsedEvent;
+    property SutraTemperatureUsed: TObjectUsedEvent read GetSutraTemperatureUsed;
     function ModflowOrPhastUsed(Sender: TObject): boolean; virtual;
-    function SwiUsed(Sender: TObject): boolean;
-    function SftUsed(Sender: TObject): boolean; virtual;
-    function ZetaUsed(Sender: TObject): boolean;
-    function HorizAnisotropyMf6Used(Sender: TObject): boolean;
-    function VertAnisotropyMf6Used(Sender: TObject): boolean;
-    function CSubDataSetsUsed(Sender: TObject): boolean;
-    function CSubInitialElasticStorageUsed(Sender: TObject): boolean;
-    function CSubInitialRecompressionIndexUsed(Sender: TObject): boolean;
+    function DoSwiUsed(Sender: TObject): boolean;
+    function GetSwiUsed: TObjectUsedEvent;
+    property SwiUsed: TObjectUsedEvent read GetSwiUsed;
+//    function DoSwiUsed(Sender: TObject): boolean;
+    function DoZetaUsed(Sender: TObject): boolean;
+    function DoHorizAnisotropyMf6Used(Sender: TObject): boolean;
+    function GetHorizAnisotropyMf6Used: TObjectUsedEvent;
+    property HorizAnisotropyMf6Used: TObjectUsedEvent read GetHorizAnisotropyMf6Used;
+    function DoVertAnisotropyMf6Used(Sender: TObject): boolean;
+    function GetVertAnisotropyMf6Used: TObjectUsedEvent;
+    property VertAnisotropyMf6Used: TObjectUsedEvent read GetVertAnisotropyMf6Used;
+    function DoCSubDataSetsUsed(Sender: TObject): boolean;
+    function GetCSubDataSetsUsed: TObjectUsedEvent;
+    property CSubDataSetsUsed: TObjectUsedEvent read GetCSubDataSetsUsed;
+    function DoCSubInitialElasticStorageUsed(Sender: TObject): boolean;
+    function GetCSubInitialElasticStorageUsed: TObjectUsedEvent;
+    property CSubInitialElasticStorageUsed: TObjectUsedEvent read GetCSubInitialElasticStorageUsed;
+    function DoCSubInitialRecompressionIndexUsed(Sender: TObject): boolean;
+    function GetCSubInitialRecompressionIndexUsed: TObjectUsedEvent;
+    property CSubInitialRecompressionIndexUsed: TObjectUsedEvent read GetCSubInitialRecompressionIndexUsed;
 
     function IndenticalTransientArray(DataArray: TDataArray; DataArrays: TList;
       var CachedIndex: integer): TDataArray;
@@ -2217,15 +2621,21 @@ that affects the model output should also have a comment. }
     function CountStepsInExport: Integer;
     procedure GetDefaultOutputFileExtension(var Extension: string);
     function CheckMt3dTimes(ShowWarning: Boolean): boolean;
-    procedure AssignFootprintBoundarydWithdrawal(Sender: TObject);
+    procedure DoAssignFootprintBoundarydWithdrawal(Sender: TObject);
+    function GetAssignFootprintBoundarydWithdrawal: TNotifyEvent;
+    property AssignFootprintBoundarydWithdrawal: TNotifyEvent read GetAssignFootprintBoundarydWithdrawal;
 //    procedure AssignFootprintDistributedWithdrawals(Sender: TObject);
-    procedure UseFootprintWells(Sender: TObject; var ShouldUse: Boolean);
+    procedure DoUseFootprintWells(Sender: TObject; var ShouldUse: Boolean);
+    function GetUseFootprintWells: TCheckUsageEvent;
+    property UseFootprintWells: TCheckUsageEvent read GetUseFootprintWells;
     procedure FillListWithMeshSpecificationScreenObjects(
       var ErrorMessage: string; List: TList);
     procedure CreateBoundariesForMeshCreator(MeshCreator: TQuadMeshCreator;
       List: TList; Exag: Extended);
     procedure UpdateAllDataArrayDimensions;
-    procedure AssignModflow6LakeDisplayArrays(Sender: TObject);
+    procedure DoAssignModflow6LakeDisplayArrays(Sender: TObject);
+    function GetAssignModflow6LakeDisplayArrays: TNotifyEvent;
+    property AssignModflow6LakeDisplayArrays: TNotifyEvent read GetAssignModflow6LakeDisplayArrays;
     procedure UpdateIdomain(Sender: TObject);
   private
     FGrid: TCustomModelGrid;
@@ -2359,18 +2769,35 @@ that affects the model output should also have a comment. }
     procedure ExportSfrPackage(const FileName: string);
     procedure EvaluateSfrPackage;
     procedure ExportUzfPackage(const FileName: string);
-    function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; virtual;
-    function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; virtual;
+    function DoMt3dMSBulkDensityUsed(Sender: TObject): boolean; virtual;
+    function GetMt3dMSBulkDensityUsed: TObjectUsedEvent;
+    property Mt3dMSBulkDensityUsed: TObjectUsedEvent read GetMt3dMSBulkDensityUsed;
+    function DoMt3dMSImmobPorosityUsed(Sender: TObject): boolean; virtual;
+    function GetMt3dMSImmobPorosityUsed: TObjectUsedEvent;
+    property Mt3dMSImmobPorosityUsed: TObjectUsedEvent read GetMt3dMSImmobPorosityUsed;
     procedure SetMt3dmsOutputControl(const Value: TMt3dmsOutputControl); virtual; abstract;
     function GetMt3dmsOutputControl: TMt3dmsOutputControl; virtual; abstract;
     function GetMt3dmsTimes: TMt3dmsTimeCollection; virtual; abstract;
     procedure SetMt3dmsTimes(const Value: TMt3dmsTimeCollection); virtual; abstract;
-    function GwtDispUsed(Sender: TObject): boolean; virtual;
-    function LongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
-    function HorizontalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
-    function VerticalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
-    function SeparatedLongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
-    function SeparatedHorizontalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
+    function DoGwtDispUsed(Sender: TObject): boolean; virtual;
+    function GetGwtDispUsed: TObjectUsedEvent;
+    property GwtDispUsed: TObjectUsedEvent read GetGwtDispUsed;
+    function DoLongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
+    function GetLongitudinalDispersionUsed: TObjectUsedEvent;
+    property LongitudinalDispersionUsed: TObjectUsedEvent read GetLongitudinalDispersionUsed;
+    function DoHorizontalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
+    function GetHorizontalTransverseDispersionUsed: TObjectUsedEvent;
+    property HorizontalTransverseDispersionUsed: TObjectUsedEvent read GetHorizontalTransverseDispersionUsed;
+    function DoVerticalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
+    function GetVerticalTransverseDispersionUsed: TObjectUsedEvent;
+    property VerticalTransverseDispersionUsed: TObjectUsedEvent read GetVerticalTransverseDispersionUsed;
+    function DoSeparatedLongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
+    function GetSeparatedLongitudinalDispersionUsed: TObjectUsedEvent;
+    property SeparatedLongitudinalDispersionUsed: TObjectUsedEvent read GetSeparatedLongitudinalDispersionUsed;
+    function DoSeparatedHorizontalTransverseDispersionUsed(Sender: TObject): boolean; virtual;
+    function GetSeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent;
+    property SeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent
+      read GetSeparatedHorizontalTransverseDispersionUsed;
 //    function
     procedure UpdateMt3dmsActive(Sender: TObject);
     function CountStepsInMt3dExport: Integer;
@@ -2427,12 +2854,21 @@ that affects the model output should also have a comment. }
     function GetTopDataSet: TDataArray;
     function GetMesh: IMesh;
     procedure SetSutraOptions(const Value: TSutraOptions);
-    function ModpathBudgetNeeded(Sender: TObject): boolean;
-    function ModpathRetardationNeeded(Sender: TObject): boolean;
+    function DoModpathBudgetNeeded(Sender: TObject): boolean;
+    function GetModpathBudgetNeeded: TObjectUsedEvent;
+    property ModpathBudgetNeeded: TObjectUsedEvent read GetModpathBudgetNeeded;
+    function DoModpathRetardationNeeded(Sender: TObject): boolean;
+    function GetModpathRetardationNeeded: TObjectUsedEvent;
+    property ModpathRetardationNeeded: TObjectUsedEvent read GetModpathRetardationNeeded;
     function GetModPathLocation: string;
-    function ModpathZonesNeeded(Sender: TObject): boolean; virtual;
+    function DoModpathZonesNeeded(Sender: TObject): boolean; virtual;
+    function GetModpathZonesNeeded: TObjectUsedEvent;
+    property ModpathZonesNeeded: TObjectUsedEvent read GetModpathZonesNeeded;
     procedure SetSutraOutputControl(const Value: TSutraOutputControl);
-    function SutraThicknessUsed(Sender: TObject): boolean;
+    function DoSutraThicknessUsed(Sender: TObject): boolean;
+    function GetSutraThicknessUsed: TObjectUsedEvent;
+    property SutraThicknessUsed: TObjectUsedEvent read GetSutraThicknessUsed;
+    function GetSutraUnsatRegionUsed: TObjectUsedEvent;
     function GetSutraMesh: TSutraMesh3D;
     procedure InitializeSutraSpecPres(Sender: TObject);
     procedure InitializeSutraSpecifiedConcTemp(Sender: TObject);
@@ -2441,10 +2877,18 @@ that affects the model output should also have a comment. }
     procedure InitializeSutraGeneralFlow(Sender: TObject);
     procedure InitializeSutraGeneralTransport(Sender: TObject);
     procedure DiscretizationChangedEvent(Sender: TObject);
-    function SutraHydraulicConductivityUsed(Sender: TObject): boolean;
-    function SutraPermeabilityUsed(Sender: TObject): boolean;
-    function SutraMiddlePermeabilityUsed(Sender: TObject): boolean;
-    function SutraMiddleHydraulicConductivityUsed(Sender: TObject): boolean;
+    function DoSutraHydraulicConductivityUsed(Sender: TObject): boolean;
+    function GetSutraHydraulicConductivityUsed: TObjectUsedEvent;
+    property SutraHydraulicConductivityUsed: TObjectUsedEvent read GetSutraHydraulicConductivityUsed;
+    function DoSutraPermeabilityUsed(Sender: TObject): boolean;
+    function GetSutraPermeabilityUsed: TObjectUsedEvent;
+    property SutraPermeabilityUsed: TObjectUsedEvent read GetSutraPermeabilityUsed;
+    function DoSutraMiddlePermeabilityUsed(Sender: TObject): boolean;
+    function GetSutraMiddlePermeabilityUsed: TObjectUsedEvent;
+    property SutraMiddlePermeabilityUsed: TObjectUsedEvent read GetSutraMiddlePermeabilityUsed;
+    function DoSutraMiddleHydraulicConductivityUsed(Sender: TObject): boolean;
+    function GetSutraMiddleHydraulicConductivityUsed: TObjectUsedEvent;
+    property SutraMiddleHydraulicConductivityUsed: TObjectUsedEvent read GetSutraMiddleHydraulicConductivityUsed;
     function GetGlobalVariables: TGlobalVariables; virtual; abstract;
     procedure SetStrObservations(const Value: TFluxObservationGroups);
     function StoreStrObservations: Boolean;
@@ -2467,12 +2911,16 @@ that affects the model output should also have a comment. }
     procedure SetSwrStructures(const Value: TStructureCollection);
     procedure SetSwrObservations(const Value: TSwrObsCollection);
     function GetUnitNumbers: TUnitNumbers;
-    function SwrSelected(Sender: TObject): Boolean;
+    function DoSwrSelected(Sender: TObject): Boolean;
+    function GetSwrSelected: TObjectUsedEvent;
+    property SwrSelected: TObjectUsedEvent read GetSwrSelected;
     procedure UpdateSwrReachNumber(Sender: TObject);
     procedure UpdateSfr6SteadyData(Sender: TObject);
     procedure UpdateSftSteadyData(Sender: TObject);
     procedure UpdateMawSteadyData(Sender: TObject);
-    function FootprintSelected(Sender: TObject): Boolean;
+    function DoFootprintSelected(Sender: TObject): Boolean;
+    function GetFootprintSelected: TObjectUsedEvent;
+    property FootprintSelected: TObjectUsedEvent read GetFootprintSelected;
     procedure UpdateSpecifiedHeadArray(Sender: TObject);
 
     function GetModelInputFiles: TStrings;
@@ -2491,7 +2939,6 @@ that affects the model output should also have a comment. }
     procedure SetFmpAllotment(const Value: TAllotmentCollection); virtual; abstract;
     procedure SetFootPrintGrid(const Value: TFootPrintGrid);
     function StoreLinkedRaster: Boolean;
-    function ActiveUsed(Sender: TObject): boolean;
     procedure SetModpathInputFiles(const Value: TStrings);
     procedure SetModpathOutputFiles(const Value: TStrings);
     procedure SetZoneBudgetInputFiles(const Value: TStrings);
@@ -2514,9 +2961,15 @@ that affects the model output should also have a comment. }
     function GetGrid: TCustomModelGrid;
     function GetDiscretiztionElevation(Column, Row, Layer: Integer): Double;
     function GetLayerThickness(Layer, Row, Column: Integer): Double;
-    function SfrMf6Selected(Sender: TObject): Boolean;
-    function MawSelected(Sender: TObject): Boolean;
-    function LakMf6Selected(Sender: TObject): Boolean;
+    function DoSfrMf6Selected(Sender: TObject): Boolean;
+    function GetSfrMf6Selected: TObjectUsedEvent;
+    property SfrMf6Selected: TObjectUsedEvent read GetSfrMf6Selected;
+    function DoMawSelected(Sender: TObject): Boolean;
+    function GetMawSelected: TObjectUsedEvent;
+    property MawSelected: TObjectUsedEvent read GetMawSelected;
+    function DoLakMf6Selected(Sender: TObject): Boolean;
+    function GetLakMf6Selected: TObjectUsedEvent;
+    property LakMf6Selected: TObjectUsedEvent read GetLakMf6Selected;
     function GetMt3dSpecesName(const Index: Integer): string;
     procedure SetModflowGlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
@@ -2554,30 +3007,86 @@ that affects the model output should also have a comment. }
     function GetAppsMoved: TStringList; virtual; abstract;
     function GetPestStatus: TPestStatus;
     function GetSeparateGwtUsed: Boolean;
-    function FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): Boolean;
-    function FarmProcess4SteadArrayEfficiencyImprovementUsed(Sender: TObject): Boolean;
-    function FarmProcess4SteadArrayBareRunoffFractionUsed(Sender: TObject): Boolean;
-    function FarmProcess4SteadArrayAddedDemandRunoffSplitUsed(Sender: TObject): Boolean;
-    function FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(Sender: TObject): Boolean;
-    function CapillaryFringeUsed(Sender: TObject): Boolean;
-    function SurfaceKUsed(Sender: TObject): Boolean;
-    function PotentialEvapBareUsed(Sender: TObject): Boolean;
-    function DirectRechargeUsed(Sender: TObject): Boolean;
-    function PrecipPotConsumptionUsed(Sender: TObject): Boolean;
-    function NrdInfilLocationUsed(Sender: TObject): Boolean;
-    function CropCoefficientUsed(Sender: TObject): Boolean;
-    function LandUseAreaFractionUsed(Sender: TObject): Boolean;
-    function ConsumptiveUseUsed(Sender: TObject): Boolean;
-    function IrrigationUsed(Sender: TObject): Boolean;
-    function RootDepthUsed(Sender: TObject): Boolean;
-    function GwRootInteractionUsed(Sender: TObject): Boolean;
-    function TranspirationFractionUsed(Sender: TObject): Boolean;
-    function EvaporationIrrigationFractionUsed(Sender: TObject): Boolean;
-    function FractionOfPrecipToSurfaceWaterUsed(Sender: TObject): Boolean;
-    function FractionOfIrrigToSurfaceWaterUsed(Sender: TObject): Boolean;
-    function AddedDemandUsed(Sender: TObject): Boolean;
-    function CropHasSalinityDemandUsed(Sender: TObject): Boolean;
-    function LandUseCellsToPrintUsed(Sender: TObject): Boolean;
+    function DoFarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): Boolean;
+    function GetFarmProcess4SteadArrayEfficiencyUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayEfficiencyUsed: TObjectUsedEvent read GetFarmProcess4SteadArrayEfficiencyUsed;
+    function DoFarmProcess4SteadArrayEfficiencyImprovementUsed(Sender: TObject): Boolean;
+    function GetFarmProcess4SteadArrayEfficiencyImprovementUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayEfficiencyImprovementUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayEfficiencyImprovementUsed;
+    function DoFarmProcess4SteadArrayBareRunoffFractionUsed(Sender: TObject): Boolean;
+    function GetFarmProcess4SteadArrayBareRunoffFractionUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayBareRunoffFractionUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayBareRunoffFractionUsed;
+    function DoFarmProcess4SteadArrayAddedDemandRunoffSplitUsed(Sender: TObject): Boolean;
+    function GetFarmProcess4SteadArrayAddedDemandRunoffSplitUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayAddedDemandRunoffSplitUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayAddedDemandRunoffSplitUsed;
+    function DoFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(Sender: TObject): Boolean;
+    function GetFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed: TObjectUsedEvent;
+    property FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed: TObjectUsedEvent
+      read GetFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed;
+    function DoCapillaryFringeUsed(Sender: TObject): Boolean;
+    function GetCapillaryFringeUsed: TObjectUsedEvent;
+    property CapillaryFringeUsed: TObjectUsedEvent read GetCapillaryFringeUsed;
+    function DoSurfaceKUsed(Sender: TObject): Boolean;
+    function GetSurfaceKUsed: TObjectUsedEvent;
+    property SurfaceKUsed: TObjectUsedEvent read GetSurfaceKUsed;
+    function DoPotentialEvapBareUsed(Sender: TObject): Boolean;
+    function GetPotentialEvapBareUsed: TObjectUsedEvent;
+    property PotentialEvapBareUsed: TObjectUsedEvent read GetPotentialEvapBareUsed;
+    function DoDirectRechargeUsed(Sender: TObject): Boolean;
+    function GetDirectRechargeUsed: TObjectUsedEvent;
+    property DirectRechargeUsed: TObjectUsedEvent read GetDirectRechargeUsed;
+    function DoPrecipPotConsumptionUsed(Sender: TObject): Boolean;
+    function GetPrecipPotConsumptionUsed: TObjectUsedEvent;
+    property PrecipPotConsumptionUsed: TObjectUsedEvent read GetPrecipPotConsumptionUsed;
+    function DoNrdInfilLocationUsed(Sender: TObject): Boolean;
+    function GetNrdInfilLocationUsed: TObjectUsedEvent;
+    property NrdInfilLocationUsed: TObjectUsedEvent read GetNrdInfilLocationUsed;
+    function DoCropCoefficientUsed(Sender: TObject): Boolean;
+    function GetCropCoefficientUsed: TObjectUsedEvent;
+    property CropCoefficientUsed: TObjectUsedEvent read GetCropCoefficientUsed;
+    function DoLandUseAreaFractionUsed(Sender: TObject): Boolean;
+    function GetLandUseAreaFractionUsed: TObjectUsedEvent;
+    property LandUseAreaFractionUsed: TObjectUsedEvent read GetLandUseAreaFractionUsed;
+    function DoConsumptiveUseUsed(Sender: TObject): Boolean;
+    function GetConsumptiveUseUsed: TObjectUsedEvent;
+    property ConsumptiveUseUsed: TObjectUsedEvent read GetConsumptiveUseUsed;
+    function DoIrrigationUsed(Sender: TObject): Boolean;
+    function GetIrrigationUsed: TObjectUsedEvent;
+    property IrrigationUsed: TObjectUsedEvent read GetIrrigationUsed;
+    function DoRootDepthUsed(Sender: TObject): Boolean;
+    function GetRootDepthUsed: TObjectUsedEvent;
+    property RootDepthUsed: TObjectUsedEvent read GetRootDepthUsed;
+    function DoGwRootInteractionUsed(Sender: TObject): Boolean;
+    function GetGwRootInteractionUsed: TObjectUsedEvent;
+    property GwRootInteractionUsed: TObjectUsedEvent read GetGwRootInteractionUsed;
+    function DoTranspirationFractionUsed(Sender: TObject): Boolean;
+    function GetTranspirationFractionUsed: TObjectUsedEvent;
+    property TranspirationFractionUsed: TObjectUsedEvent read GetTranspirationFractionUsed;
+    function DoEvaporationIrrigationFractionUsed(Sender: TObject): Boolean;
+    function GetEvaporationIrrigationFractionUsed: TObjectUsedEvent;
+    property EvaporationIrrigationFractionUsed: TObjectUsedEvent read GetEvaporationIrrigationFractionUsed;
+    function DoFractionOfPrecipToSurfaceWaterUsed(Sender: TObject): Boolean;
+    function GetFractionOfPrecipToSurfaceWaterUsed: TObjectUsedEvent;
+    property FractionOfPrecipToSurfaceWaterUsed: TObjectUsedEvent read GetFractionOfPrecipToSurfaceWaterUsed;
+    function DoFractionOfIrrigToSurfaceWaterUsed(Sender: TObject): Boolean;
+    function GetFractionOfIrrigToSurfaceWaterUsed: TObjectUsedEvent;
+    property FractionOfIrrigToSurfaceWaterUsed: TObjectUsedEvent read GetFractionOfIrrigToSurfaceWaterUsed;
+    function DoAddedDemandUsed(Sender: TObject): Boolean;
+    function GetAddedDemandUsed: TObjectUsedEvent;
+    property AddedDemandUsed: TObjectUsedEvent read GetAddedDemandUsed;
+    function DoCropHasSalinityDemandUsed(Sender: TObject): Boolean;
+    function GetCropHasSalinityDemandUsed: TObjectUsedEvent;
+    property CropHasSalinityDemandUsed: TObjectUsedEvent read GetCropHasSalinityDemandUsed;
+    function DoLandUseCellsToPrintUsed(Sender: TObject): Boolean;
+    function GetLandUseCellsToPrintUsed: TObjectUsedEvent;
+    property LandUseCellsToPrintUsed: TObjectUsedEvent read GetLandUseCellsToPrintUsed;
+    function GetModflowPackages: TModflowPackages;
+    procedure DoOnActiveDataSetChanged(Sender: TObject);
+    function GetOnActiveDataSetChanged: TNotifyEvent;
+    function GetOnNodeActiveDataSetChanged: TNotifyEvent;
   protected
     function GetGwtUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2602,18 +3111,14 @@ that affects the model output should also have a comment. }
     procedure SetLinkedRasters(const Value: TLinkedRasterCollection);  virtual; abstract;
     function GetGeoRef: TGeoRef; virtual; abstract;
     procedure SetGeoRef(const Value: TGeoRef); virtual; abstract;
-    procedure ShouldActiveBeSetByCellSize(Sender: TObject; var ShouldCheck: Boolean);
-    procedure InitializeActiveDataArrayWithCellSizeObjects(Sender: TObject);
     function GetContourLegend: TLegend; virtual; abstract;
     function GetUseGsflowFormat: boolean; virtual; abstract;
     procedure SetUseGsflowFormat(const Value: boolean); virtual; abstract;
     procedure SetCtsSystems(const Value: TCtsSystemCollection); virtual; abstract;
     function GetCtsSystems: TCtsSystemCollection; virtual; abstract;
-    procedure ShouldKyBeDeterminedFromAnisotropy(Sender: TObject; var ShouldCheck: Boolean);
-    procedure ShouldKzBeDeterminedFromAnisotropy(Sender: TObject; var ShouldCheck: Boolean);
-    procedure DetermineKyFromAnisotropy(Sender: TObject);
-    procedure DetermineKzFromAnisotropy(Sender: TObject);
-    function Mt3d_LktIsSelected(Sender: TObject): Boolean; virtual;
+    function DoMt3d_LktIsSelected(Sender: TObject): Boolean; virtual;
+    function GetMt3d_LktIsSelected: TObjectUsedEvent;
+    property Mt3d_LktIsSelected: TObjectUsedEvent read GetMt3d_LktIsSelected;
     function GetParamGroups: TPestParamGroups; virtual; abstract;
     procedure SetParamGroups(const Value: TPestParamGroups); virtual; abstract;
     function GetPestProperties: TPestProperties; virtual; abstract;
@@ -2700,7 +3205,67 @@ that affects the model output should also have a comment. }
     // @name holds the @link(TCustomTimeList)s in the model.
     // See @link(TimeLists).
     FTimeLists: TList;
+  private
+    function GetZetaUsed: TObjectUsedEvent;
+    function GetSftUsed: TObjectUsedEvent;
+    property ZetaUsed: TObjectUsedEvent read GetZetaUsed;
+    function DoSftUsed(Sender: TObject): boolean; virtual;
+    property SftUsed: TObjectUsedEvent read GetSftUsed;
+    function DoGwtUztUsed(Sender: TObject): boolean; virtual;
+    function GetGwtUztUsed: TObjectUsedEvent;
+    property GwtUztUsed: TObjectUsedEvent read GetGwtUztUsed;
+    function DoActiveUsed(Sender: TObject): boolean;
+    function GetActiveUsed: TObjectUsedEvent;
+    property ActiveUsed: TObjectUsedEvent read GetActiveUsed;
 
+    procedure DoInitializeActiveDataArrayWithCellSizeObjects(Sender: TObject);
+    function GetInitializeActiveDataArrayWithCellSizeObjects: TNotifyEvent;
+    property InitializeActiveDataArrayWithCellSizeObjects: TNotifyEvent
+      read GetInitializeActiveDataArrayWithCellSizeObjects;
+
+    procedure DoShouldActiveBeSetByCellSize(Sender: TObject; var ShouldCheck: Boolean);
+    function GetDoShouldActiveBeSetByCellSize: TCheckUsageEvent;
+    property ShouldActiveBeSetByCellSize: TCheckUsageEvent
+      read GetDoShouldActiveBeSetByCellSize;
+
+    function DoAquiferPropertiesUsed(Sender: TObject): boolean; virtual;
+    function GetAquiferPropertiesUsed: TObjectUsedEvent;
+    property AquiferPropertiesUsed: TObjectUsedEvent read GetAquiferPropertiesUsed;
+
+    function DoKyUsed(Sender: TObject): boolean; virtual;
+    function GetKyUsed: TObjectUsedEvent;
+    property KyUsed: TObjectUsedEvent read GetKyUsed;
+
+    procedure DoDetermineKyFromAnisotropy(Sender: TObject);
+    function GetDetermineKyFromAnisotropy: TNotifyEvent;
+    property DetermineKyFromAnisotropy: TNotifyEvent read GetDetermineKyFromAnisotropy;
+
+    procedure DoShouldKyBeDeterminedFromAnisotropy(Sender: TObject; var ShouldCheck: Boolean);
+    function GetShouldKyBeDeterminedFromAnisotropy: TCheckUsageEvent;
+    property ShouldKyBeDeterminedFromAnisotropy: TCheckUsageEvent read GetShouldKyBeDeterminedFromAnisotropy;
+
+    function DoKzUsed(Sender: TObject): boolean; virtual;
+    function GetKzUsed: TObjectUsedEvent;
+    property KzUsed: TObjectUsedEvent read GetKzUsed;
+
+    procedure DoDetermineKzFromAnisotropy(Sender: TObject);
+    function GetDetermineKzFromAnisotropy: TNotifyEvent;
+    property DetermineKzFromAnisotropy: TNotifyEvent read GetDetermineKzFromAnisotropy;
+
+    procedure DoShouldKzBeDeterminedFromAnisotropy(Sender: TObject; var ShouldCheck: Boolean);
+    function GetShouldKzBeDeterminedFromAnisotropy: TCheckUsageEvent;
+    property ShouldKzBeDeterminedFromAnisotropy: TCheckUsageEvent read GetShouldKzBeDeterminedFromAnisotropy;
+
+    function DoPorosityUsed(Sender: TObject): boolean; virtual;
+    function GetPorosityUsed: TObjectUsedEvent;
+    property PorosityUsed:  TObjectUsedEvent read GetPorosityUsed;
+
+//    function DoSpecificStorageUsed(Sender: TObject): boolean; virtual;
+    function DoSpecificStorageUsed(Sender: TObject): boolean; virtual;
+    function GetSpecificStorageUsed: TObjectUsedEvent;
+    property SpecificStorageUsed: TObjectUsedEvent read GetSpecificStorageUsed;
+
+//      TCheckUsageEvent
   protected
     function GetSfrStreamLinkPlot: TSfrStreamLinkPlot; virtual; abstract;
     procedure SetSfrStreamLinkPlot(const Value: TSfrStreamLinkPlot); virtual; abstract;
@@ -2770,17 +3335,21 @@ that affects the model output should also have a comment. }
       virtual; abstract;
     function GetContourLabelSpacing: Integer; virtual; abstract;
     procedure SetContourLabelSpacing(const Value: Integer);virtual; abstract;
+  private
+    function GetMt3dMS_StrictUsed: TObjectUsedEvent;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
-//    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
-    function Mt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
+    function DoMt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
+    property Mt3dMS_StrictUsed: TObjectUsedEvent read GetMt3dMS_StrictUsed;
     function Mf6GwtUsed(Sender: TObject): boolean; virtual;
     procedure ClearPval;
     procedure FinalizePvalAndTemplate(FileName: string);
     function ParamNamesDataSetUsed(Sender: TObject): boolean; virtual;
     function InterpSwiObsDefined: Boolean;
-    function SwiObsUsed(Sender: TObject): boolean;
+    function DoSwiObsUsed(Sender: TObject): boolean;
+    function GetSwiObsUsed: TObjectUsedEvent;
+    property SwiObsUsed: TObjectUsedEvent read GetSwiObsUsed;
     property FmpCrops: TCropCollection read GetFmpCrops write SetFmpCrops;
     property FmpSoils: TSoilCollection read GetFmpSoils write SetFmpSoils;
     property FmpClimate: TClimateCollection read GetFmpClimate write SetFmpClimate;
@@ -2879,8 +3448,9 @@ that affects the model output should also have a comment. }
     property Clearing: Boolean read FClearing;
     property DataArrayManager: TDataArrayManager read FDataArrayManager;
 
-    procedure OnActiveDataSetChanged(Sender: TObject);
-    procedure OnNodeActiveDataSetChanged(Sender: TObject);
+    property OnActiveDataSetChanged: TNotifyEvent read GetOnActiveDataSetChanged;
+    procedure DoOnNodeActiveDataSetChanged(Sender: TObject);
+    property OnNodeActiveDataSetChanged: TNotifyEvent read GetOnNodeActiveDataSetChanged;
     procedure Clear;
     constructor Create(AnOwner: TComponent); override;
     destructor Destroy; override;
@@ -2967,22 +3537,44 @@ that affects the model output should also have a comment. }
     // TDataArray.@link(TDataArray.OnDataSetUsed).
     // @name is also used in WriteHeadIC which
     // is found in the implementation section of @link(WritePhastUnit).
-    function InitialWaterTableUsed(Sender: TObject): boolean; virtual;
-    function ReservoirLayerUsed(Sender: TObject): boolean; virtual;
-    function ReservoirPackageUsed(Sender: TObject): boolean; virtual;
-    function LakePackageUsed(Sender: TObject): boolean; virtual;
-    function UzfPackageUsed(Sender: TObject): boolean; virtual;
-    function UzfMf6PackageUsed(Sender: TObject): boolean; virtual;
+    function DoInitialWaterTableUsed(Sender: TObject): boolean; virtual;
+    function GetInitialWaterTableUsed: TObjectUsedEvent;
+    property InitialWaterTableUsed: TObjectUsedEvent read GetInitialWaterTableUsed;
+    function DoReservoirLayerUsed(Sender: TObject): boolean; virtual;
+    function GetReservoirLayerUsed: TObjectUsedEvent;
+    property ReservoirLayerUsed: TObjectUsedEvent read GetReservoirLayerUsed;
+    function DoReservoirPackageUsed(Sender: TObject): boolean; virtual;
+    function GetReservoirPackageUsed: TObjectUsedEvent;
+    property ReservoirPackageUsed: TObjectUsedEvent read GetReservoirPackageUsed;
+    function DoLakePackageUsed(Sender: TObject): boolean; virtual;
+    function GetLakePackageUsed: TObjectUsedEvent;
+    property LakePackageUsed: TObjectUsedEvent read GetLakePackageUsed;
+    function DoUzfPackageUsed(Sender: TObject): boolean; virtual;
+    function GetUzfPackageUsed: TObjectUsedEvent;
+    property UzfPackageUsed: TObjectUsedEvent read GetUzfPackageUsed;
+    function DoUzfMf6PackageUsed(Sender: TObject): boolean; virtual;
+    function GetUzfMf6PackageUsed: TObjectUsedEvent;
+    property UzfMf6PackageUsed: TObjectUsedEvent read GetUzfMf6PackageUsed;
     function FarmProcessUsed(Sender: TObject): boolean; virtual;
     function Farm4ProcessUsed(Sender: TObject): boolean; virtual;
-    function FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; virtual;
+    function DoFarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; virtual;
+    function GetFarmProcess4SteadyFarmsUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyFarmsUsed: TObjectUsedEvent read GetFarmProcess4SteadyFarmsUsed;
     function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; virtual;
-    function FarmProcess4SteadyPrecipUsed(Sender: TObject): boolean; virtual;
-    function FarmProcess4SteadyRefETUsed(Sender: TObject): boolean; virtual;
-    function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; virtual;
+    function DoFarmProcess4SteadyPrecipUsed(Sender: TObject): boolean; virtual;
+    function GetFarmProcess4SteadyPrecipUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyPrecipUsed: TObjectUsedEvent read GetFarmProcess4SteadyPrecipUsed;
+    function DoFarmProcess4SteadyRefETUsed(Sender: TObject): boolean; virtual;
+    function GetFarmProcess4SteadyRefETUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyRefETUsed: TObjectUsedEvent read GetFarmProcess4SteadyRefETUsed;
+    function DoFarmProcess4SteadyCropsUsed(Sender: TObject): boolean; virtual;
+    function GetFarmProcess4SteadyCropsUsed: TObjectUsedEvent;
+    property FarmProcess4SteadyCropsUsed: TObjectUsedEvent read GetFarmProcess4SteadyCropsUsed;
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; virtual;
     function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): boolean; virtual;
-    function SoilIDUsed(Sender: TObject): boolean; virtual;
+    function DoSoilIDUsed(Sender: TObject): boolean; virtual;
+    function GetSoilIDUsed: TObjectUsedEvent;
+    property SoilIDUsed: TObjectUsedEvent read GetSoilIDUsed;
     // LAND_USE_AREA_FRACTION
     function MultipleLandUseFractionsUsed(Sender: TObject): Boolean;
     // CROP_COEFFICIENT
@@ -3008,11 +3600,21 @@ that affects the model output should also have a comment. }
     // CROP_HAS_SALINITY_DEMAND
     function MultipleCropHasSalinityDemandUsed(Sender: TObject): Boolean;
 
-    function GroundSurfaceUsed(Sender: TObject): boolean; virtual;
-    function UzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
-    function UzfInitialInfiltrationUsed(Sender: TObject): boolean; virtual;
-    function UzfResidualWaterContentUsed(Sender: TObject): boolean; virtual;
-    function UzfSurfKUsed(Sender: TObject): boolean; virtual;
+    function DoGroundSurfaceUsed(Sender: TObject): boolean; virtual;
+    function GetGroundSurfaceUsed: TObjectUsedEvent;
+    property GroundSurfaceUsed: TObjectUsedEvent read GetGroundSurfaceUsed;
+    function DoUzfUnsatVertKUsed(Sender: TObject): boolean; virtual;
+    function GetUzfUnsatVertKUsed: TObjectUsedEvent;
+    property UzfUnsatVertKUsed: TObjectUsedEvent read GetUzfUnsatVertKUsed;
+    function DoUzfInitialInfiltrationUsed(Sender: TObject): boolean; virtual;
+    function GetUzfInitialInfiltrationUsed: TObjectUsedEvent;
+    property UzfInitialInfiltrationUsed: TObjectUsedEvent read GetUzfInitialInfiltrationUsed;
+    function DoUzfResidualWaterContentUsed(Sender: TObject): boolean; virtual;
+    function GetUzfResidualWaterContentUsed: TObjectUsedEvent;
+    property UzfResidualWaterContentUsed: TObjectUsedEvent read GetUzfResidualWaterContentUsed;
+    function DoUzfSurfKUsed(Sender: TObject): boolean; virtual;
+    function GetUzfSurfKUsed: TObjectUsedEvent;
+    property UzfSurfKUsed: TObjectUsedEvent read GetUzfSurfKUsed;
 
     property TransientMultiplierArrays: TList read FTransientMultiplierArrays;
     property TransientZoneArrays: TList read FTransientZoneArrays;
@@ -3064,12 +3666,24 @@ that affects the model output should also have a comment. }
       RunModel, EmbeddedExport: boolean);
     procedure ExportMt3dmsModel(const FileName: string;
       RunModel, ShowWarning: Boolean);
-    function Sutra4Used(Sender: TObject): boolean;
-    function Sutra4EnergyUsed(Sender: TObject): boolean;
-    function Sutra4SoluteUsed(Sender: TObject): boolean;
-    function Sutra4EnergyOrSorptionUsed(Sender: TObject): boolean;
-    function Sutra4FreezingUsed(Sender: TObject): boolean;
-    function Sutra4ProductionUsed(Sender: TObject): boolean;
+    function DoSutra4Used(Sender: TObject): boolean;
+    function GetSutra4Used: TObjectUsedEvent;
+    property Sutra4Used: TObjectUsedEvent read GetSutra4Used;
+    function DoSutra4EnergyUsed(Sender: TObject): boolean;
+    function GetSutra4EnergyUsed: TObjectUsedEvent;
+    property Sutra4EnergyUsed: TObjectUsedEvent read GetSutra4EnergyUsed;
+    function DoSutra4SoluteUsed(Sender: TObject): boolean;
+    function GetSutra4SoluteUsed: TObjectUsedEvent;
+    property Sutra4SoluteUsed: TObjectUsedEvent read GetSutra4SoluteUsed;
+    function DoSutra4EnergyOrSorptionUsed(Sender: TObject): boolean;
+    function GetSutra4EnergyOrSorptionUsed: TObjectUsedEvent;
+    property Sutra4EnergyOrSorptionUsed: TObjectUsedEvent read GetSutra4EnergyOrSorptionUsed;
+    function DoSutra4FreezingUsed(Sender: TObject): boolean;
+    function GetSutra4FreezingUsed: TObjectUsedEvent;
+    property Sutra4FreezingUsed: TObjectUsedEvent read GetSutra4FreezingUsed;
+    function DoSutra4ProductionUsed(Sender: TObject): boolean;
+    function GetSutra4ProductionUsed: TObjectUsedEvent;
+    property Sutra4ProductionUsed: TObjectUsedEvent read GetSutra4ProductionUsed;
 
     // @name is the @link(TCustomTimeList) for
     // the transient data set used to color
@@ -3507,7 +4121,9 @@ that affects the model output should also have a comment. }
     function CfpIsSelected: Boolean; virtual;
     function SwrIsSelected: Boolean; virtual;
     function Mf6ObsIsSelected: Boolean; virtual;
-    function CfpPipesSelected(Sender: TObject): Boolean;
+    function DoCfpPipesSelected(Sender: TObject): Boolean;
+    function GetCfpPipesSelected: TObjectUsedEvent;
+    property CfpPipesSelected: TObjectUsedEvent read GetCfpPipesSelected;
     procedure ExportHeadObservationsToShapeFile(const FileName: string);
     property OnHeadOBsChanged: TNotifyEvent read FOnHeadOBsChanged
       write FOnHeadOBsChanged;
@@ -3515,8 +4131,12 @@ that affects the model output should also have a comment. }
     property OnCrossSectionChanged: TNotifyEvent read FOnCrossSectionChanged
       write FOnCrossSectionChanged;
     function DiscretizationLimits(ViewDirection: TViewDirection): TGridLimit;
-    function Modflow6Selected(Sender: TObject): boolean;
-    function StorageSelected(Sender: TObject): boolean;
+    function DoModflow6Selected(Sender: TObject): boolean;
+    function GetModflow6Selected: TObjectUsedEvent;
+    property Modflow6Selected: TObjectUsedEvent read GetModflow6Selected;
+    function DoStorageSelected(Sender: TObject): boolean;
+    function GetStorageSelected: TObjectUsedEvent;
+    property StorageSelected: TObjectUsedEvent read GetStorageSelected;
     procedure AddModpathInputFile(AFileName: string);
     procedure AddModpathOutputFile(AFileName: string);
     procedure AddZoneBudgetInputFile(AFileName: string);
@@ -3622,11 +4242,12 @@ that affects the model output should also have a comment. }
       write SetMf6TimesSeries;
     property SeparateGwtUsed: Boolean read GetSeparateGwtUsed;
     Procedure UpdateGwtConc;
-    function SutraUnsatRegionUsed(Sender: TObject): boolean;
     procedure ClearPestPriorInfoGroupData;
     property AppsMoved: TStringList read GetAppsMoved;
     property Mf6GwtNameWriters: TObject read FMf6GwtNameWriters;
     procedure InvalidateParamNamesDataSets;
+    function DoSutraUnsatRegionUsed(Sender: TObject): boolean;
+    property SutraUnsatRegionUsed: TObjectUsedEvent read GetSutraUnsatRegionUsed;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3645,7 +4266,7 @@ that affects the model output should also have a comment. }
     property ModflowGrid: TModflowGrid read FModflowGrid write SetModflowGrid;
     property ModflowNameFileLines: TStrings read FModflowNameFileLines
       write SetModflowNameFileLines;
-    property ModflowPackages: TModflowPackages read FModflowPackages
+    property ModflowPackages: TModflowPackages read GetModflowPackages
       write SetModflowPackages;
     property HeadFluxObservations: TFluxObservationGroups
       read FHeadFluxObservations write SetHeadFluxObservations
@@ -4203,46 +4824,46 @@ that affects the model output should also have a comment. }
     procedure SetNeedToRecalculateFrontCellColors(const Value: boolean);
     procedure SetNeedToRecalculateSideCellColors(const Value: boolean);
     procedure SetNeedToRecalculateTopCellColors(const Value: boolean);
-    function AquiferPropertiesUsed(Sender: TObject): boolean; override;
-    function KyUsed(Sender: TObject): boolean; override;
-    function KzUsed(Sender: TObject): boolean; override;
-    function PorosityUsed(Sender: TObject): boolean; override;
-    function SpecificStorageUsed(Sender: TObject): boolean; override;
-    function ChemistryUsed(Sender: TObject): boolean; override;
-    function InitialHeadUsed(Sender: TObject): boolean; override;
-    function EquilibriumPhasesUsed(Sender: TObject): boolean; override;
-    function SurfacesUsed(Sender: TObject): boolean; override;
-    function ExchangeUsed(Sender: TObject): boolean; override;
-    function GasPhaseUsed(Sender: TObject): boolean; override;
-    function SolidSolutionUsed(Sender: TObject): boolean; override;
-    function KineticsUsed(Sender: TObject): boolean; override;
-    function ModflowUsed(Sender: TObject): boolean; override;
-    function RouteUzfDischarge(Sender: TObject): boolean; override;
-    function ModflowInitialHeadUsed(Sender: TObject): boolean; override;
-    function ConfiningBedKzUsed(Sender: TObject): boolean; override;
-    function VerticalAnisotropyUsed(Sender: TObject): boolean; override;
-    function HorizontalAnisotropyUsed(Sender: TObject): boolean; override;
-    function SpecificYieldUsed(Sender: TObject): boolean; override;
-    function WetDryUsed(Sender: TObject): boolean; override;
+    function DoAquiferPropertiesUsed(Sender: TObject): boolean; override;
+    function DoKyUsed(Sender: TObject): boolean; override;
+    function DoKzUsed(Sender: TObject): boolean; override;
+    function DoPorosityUsed(Sender: TObject): boolean; override;
+    function DoSpecificStorageUsed(Sender: TObject): boolean; override;
+    function DoChemistryUsed(Sender: TObject): boolean; override;
+    function DoInitialHeadUsed(Sender: TObject): boolean; override;
+    function DoEquilibriumPhasesUsed(Sender: TObject): boolean; override;
+    function DoSurfacesUsed(Sender: TObject): boolean; override;
+    function DoExchangeUsed(Sender: TObject): boolean; override;
+    function DoGasPhaseUsed(Sender: TObject): boolean; override;
+    function DoSolidSolutionUsed(Sender: TObject): boolean; override;
+    function DoKineticsUsed(Sender: TObject): boolean; override;
+    function DoModflowUsed(Sender: TObject): boolean; override;
+    function DoRouteUzfDischarge(Sender: TObject): boolean; override;
+    function DoModflowInitialHeadUsed(Sender: TObject): boolean; override;
+    function DoConfiningBedKzUsed(Sender: TObject): boolean; override;
+    function DoVerticalAnisotropyUsed(Sender: TObject): boolean; override;
+    function DoHorizontalAnisotropyUsed(Sender: TObject): boolean; override;
+    function DoSpecificYieldUsed(Sender: TObject): boolean; override;
+    function DoWetDryUsed(Sender: TObject): boolean; override;
     function ModpathUsed(Sender: TObject): boolean; override;
-    function ModpathZonesNeeded(Sender: TObject): boolean; override;
-    function HufReferenceSurfaceNeeded(Sender: TObject): boolean; override;
-    function BcfUsed(Sender: TObject): boolean; override;
-    function ConfinedStorageCoefUsed(Sender: TObject): boolean; override;
-    function ZoneBudgetSelected(Sender: TObject): boolean; override;
-    function SwtSelected(Sender: TObject): boolean; override;
-    function SwtOffsetsUsed(Sender: TObject): boolean; override;
-    function SwtSpecifiedUsed(Sender: TObject): boolean; override;
+    function DoModpathZonesNeeded(Sender: TObject): boolean; override;
+    function DoHufReferenceSurfaceNeeded(Sender: TObject): boolean; override;
+    function DoBcfUsed(Sender: TObject): boolean; override;
+    function DoConfinedStorageCoefUsed(Sender: TObject): boolean; override;
+    function DoZoneBudgetSelected(Sender: TObject): boolean; override;
+    function DoSwtSelected(Sender: TObject): boolean; override;
+    function DoSwtOffsetsUsed(Sender: TObject): boolean; override;
+    function DoSwtSpecifiedUsed(Sender: TObject): boolean; override;
     function UztUsed(Sender: TObject): boolean; override;
-    function GwtUztUsed(Sender: TObject): boolean; override;
-    function GwtDispUsed(Sender: TObject): boolean; override;
-    function LongitudinalDispersionUsed(Sender: TObject): boolean; override;
-    function HorizontalTransverseDispersionUsed(Sender: TObject): boolean; override;
-    function VerticalTransverseDispersionUsed(Sender: TObject): boolean; override;
-    function SeparatedLongitudinalDispersionUsed(Sender: TObject): boolean; override;
-    function SeparatedHorizontalTransverseDispersionUsed(Sender: TObject): boolean; override;
+    function DoGwtUztUsed(Sender: TObject): boolean; override;
+    function DoGwtDispUsed(Sender: TObject): boolean; override;
+    function DoLongitudinalDispersionUsed(Sender: TObject): boolean; override;
+    function DoHorizontalTransverseDispersionUsed(Sender: TObject): boolean; override;
+    function DoVerticalTransverseDispersionUsed(Sender: TObject): boolean; override;
+    function DoSeparatedLongitudinalDispersionUsed(Sender: TObject): boolean; override;
+    function DoSeparatedHorizontalTransverseDispersionUsed(Sender: TObject): boolean; override;
 //    function Xt3DUsed(Sender: TObject): boolean; override;
-    function NpfUsed(Sender: TObject): boolean; override;
+    function DoNpfUsed(Sender: TObject): boolean; override;
     function WettingActive: boolean; override;
     procedure InternalExportModflowLgrFile(const FileName: string);
     function GetCombinedDisplayColumn: integer;
@@ -4392,9 +5013,9 @@ that affects the model output should also have a comment. }
     function GetContourLegend: TLegend; override;
     function GetUseGsflowFormat: boolean; override;
     procedure SetUseGsflowFormat(const Value: boolean); override;
-    function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; override;
-    function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; override;
-    function SftUsed(Sender: TObject): boolean; override;
+    function DoMt3dMSBulkDensityUsed(Sender: TObject): boolean; override;
+    function DoMt3dMSImmobPorosityUsed(Sender: TObject): boolean; override;
+    function DoSftUsed(Sender: TObject): boolean; override;
     procedure SetCtsSystems(const Value: TCtsSystemCollection); override;
     function GetCtsSystems: TCtsSystemCollection; override;
     function GetParamGroups: TPestParamGroups; override;
@@ -4407,7 +5028,7 @@ that affects the model output should also have a comment. }
     procedure SetIrrigationTypes(const Value: TIrrigationCollection); override;
   public
 //    function Mt3dMSUsed(Sender: TObject): boolean; override;
-    function Mt3dMS_StrictUsed(Sender: TObject): boolean; override;
+    function DoMt3dMS_StrictUsed(Sender: TObject): boolean; override;
     function Mf6GwtUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
 //    procedure RefreshDataArraysVariables;
@@ -4418,25 +5039,24 @@ that affects the model output should also have a comment. }
       const ZoomBox: TQRbwZoomBox2); override;
     // Update relationships of parent grid with child grids.
     procedure UpdateMapping;
-    function InitialWaterTableUsed(Sender: TObject): boolean; override;
-    function ReservoirLayerUsed(Sender: TObject): boolean; override;
-    function ReservoirPackageUsed(Sender: TObject): boolean; override;
-    function LakePackageUsed(Sender: TObject): boolean; override;
-    function UzfPackageUsed(Sender: TObject): boolean; override;
-    function UzfMf6PackageUsed(Sender: TObject): boolean; override;
+    function DoInitialWaterTableUsed(Sender: TObject): boolean; override;
+    function DoReservoirLayerUsed(Sender: TObject): boolean; override;
+    function DoReservoirPackageUsed(Sender: TObject): boolean; override;
+    function DoLakePackageUsed(Sender: TObject): boolean; override;
+    function DoUzfPackageUsed(Sender: TObject): boolean; override;
+    function DoUzfMf6PackageUsed(Sender: TObject): boolean; override;
     function FarmProcessUsed(Sender: TObject): boolean; override;
     function Farm4ProcessUsed(Sender: TObject): boolean; override;
-    function FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; override;
+    function DoFarmProcess4SteadyFarmsUsed(Sender: TObject): boolean; override;
     function FarmProcess4TransientFarmsUsed(Sender: TObject): boolean; override;
-    function FarmProcess4SteadyCropsUsed(Sender: TObject): boolean; override;
+    function DoFarmProcess4SteadyCropsUsed(Sender: TObject): boolean; override;
     function FarmProcess4TransientCropsUsed(Sender: TObject): boolean; override;
     function FarmProcess4TransientEfficiencyArrayUsed(Sender: TObject): Boolean; override;
-    function SoilIDUsed(Sender: TObject): boolean; override;
-//    function GroundSurfaceUsed(Sender: TObject): boolean; override;
-    function UzfUnsatVertKUsed(Sender: TObject): boolean; override;
-    function UzfInitialInfiltrationUsed(Sender: TObject): boolean; override;
-    function UzfResidualWaterContentUsed(Sender: TObject): boolean; override;
-    function UzfSurfKUsed(Sender: TObject): boolean; override;
+    function DoSoilIDUsed(Sender: TObject): boolean; override;
+    function DoUzfUnsatVertKUsed(Sender: TObject): boolean; override;
+    function DoUzfInitialInfiltrationUsed(Sender: TObject): boolean; override;
+    function DoUzfResidualWaterContentUsed(Sender: TObject): boolean; override;
+    function DoUzfSurfKUsed(Sender: TObject): boolean; override;
     procedure InvalidateMapping;
     procedure UpdateChildGrids;
     procedure UpdateDataSetConnections;
@@ -4795,7 +5415,8 @@ that affects the model output should also have a comment. }
       write SetModelMateProject;
     procedure UpdateModelMateProject;
     procedure ImportFromModelMateProject(Project: TProject);
-    procedure RegisterGlobalVariables(Parser: TRbwParser; IgnoreDuplicates: Boolean = False);
+    procedure RegisterGlobalVariables(Parser: TRbwParser;
+      IgnoreDuplicates: Boolean = False);
 
     property FormulaManager: TFormulaManager read GetFormulaManager;
     procedure ClearScreenObjectCollection;
@@ -4853,7 +5474,7 @@ that affects the model output should also have a comment. }
     function Mt3dmsSsmIsSelected: Boolean;
     function Mt3d_UztIsSelected: Boolean;
     function Mt3d_UztEtIsSelected: Boolean;
-    function Mt3d_LktIsSelected(Sender: TObject): Boolean; override;
+    function DoMt3d_LktIsSelected(Sender: TObject): Boolean; override;
     function Mt3d_SftIsSelected: Boolean;
     function Mt3dmsTobIsSelected: Boolean;
     function PcgIsSelected: Boolean;
@@ -4993,6 +5614,7 @@ that affects the model output should also have a comment. }
     function GwtImmobileDecaySorbedUsed(Sender: TObject): boolean;
     function GwtImmobileBulkDensityUsed(Sender: TObject): boolean;
     function GwtImmobileDistCoefUsed(Sender: TObject): boolean;
+    property Mt3d_LktIsSelected;
   published
     property Mf6TimesSeries;
 
@@ -11705,12 +12327,12 @@ begin
   end;
 end;
 
-function TPhastModel.AquiferPropertiesUsed(Sender: TObject): boolean;
+function TPhastModel.DoAquiferPropertiesUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited AquiferPropertiesUsed(Sender);
+  result := inherited DoAquiferPropertiesUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -11718,7 +12340,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.AquiferPropertiesUsed(Sender);
+        result := result or ChildModel.DoAquiferPropertiesUsed(Sender);
       end;
     end;
   end;
@@ -11812,12 +12434,12 @@ begin
   end;
 end;
 
-function TPhastModel.BcfUsed(Sender: TObject): boolean;
+function TPhastModel.DoBcfUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited BcfUsed(Sender);
+  result := inherited DoBcfUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -11825,7 +12447,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.BcfUsed(Sender);
+        result := result or ChildModel.DoBcfUsed(Sender);
       end;
     end;
   end;
@@ -12819,12 +13441,12 @@ begin
   end;
 end;
 
-function TPhastModel.HufReferenceSurfaceNeeded(Sender: TObject): boolean;
+function TPhastModel.DoHufReferenceSurfaceNeeded(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited HufReferenceSurfaceNeeded(Sender);
+  result := inherited DoHufReferenceSurfaceNeeded(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -12833,7 +13455,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.HufReferenceSurfaceNeeded(Sender);
+          ChildModel.DoHufReferenceSurfaceNeeded(Sender);
       end;
     end;
   end;
@@ -13045,12 +13667,12 @@ begin
   end;
 end;
 
-function TPhastModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
+function TPhastModel.DoLongitudinalDispersionUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited LongitudinalDispersionUsed(Sender);
+  result := inherited DoLongitudinalDispersionUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -13059,7 +13681,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.LongitudinalDispersionUsed(Sender);
+          ChildModel.DoLongitudinalDispersionUsed(Sender);
       end;
     end;
   end;
@@ -13431,12 +14053,12 @@ begin
   inherited;
 end;
 
-function TPhastModel.ExchangeUsed(Sender: TObject): boolean;
+function TPhastModel.DoExchangeUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ExchangeUsed(Sender);
+  result := inherited DoExchangeUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -13445,7 +14067,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ExchangeUsed(Sender);
+          ChildModel.DoExchangeUsed(Sender);
       end;
     end;
   end;
@@ -13479,7 +14101,7 @@ begin
   (FScreenObjectList as TObjectList).OwnsObjects := Value;
 end;
 
-function TCustomModel.CapillaryFringeUsed(Sender: TObject): Boolean;
+function TCustomModel.DoCapillaryFringeUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -13548,7 +14170,7 @@ begin
     ModflowPackages.ConduitFlowProcess.IsSelected;
 end;
 
-function TCustomModel.CfpPipesSelected(Sender: TObject): Boolean;
+function TCustomModel.DoCfpPipesSelected(Sender: TObject): Boolean;
 begin
   result := CfpIsSelected and
     ModflowPackages.ConduitFlowProcess.PipesUsed;
@@ -13560,14 +14182,14 @@ begin
     and ModflowPackages.SwrPackage.IsSelected;
 end;
 
-function TCustomModel.SwrSelected(Sender: TObject): Boolean;
+function TCustomModel.DoSwrSelected(Sender: TObject): Boolean;
 begin
   result := SwrIsSelected
 end;
 
 function TPhastModel.CfpRechargeIsSelected(Sender: TObject): Boolean;
 begin
-  result := CfpPipesSelected(Sender) and RchIsSelected
+  result := DoCfpPipesSelected(Sender) and RchIsSelected
     and ModflowPackages.ConduitFlowProcess.ConduitRechargeUsed;
 end;
 
@@ -13590,12 +14212,12 @@ begin
   end;
 end;
 
-function TPhastModel.ChemistryUsed(Sender: TObject): boolean;
+function TPhastModel.DoChemistryUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ChemistryUsed(Sender);
+  result := inherited DoChemistryUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -13604,7 +14226,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ChemistryUsed(Sender);
+          ChildModel.DoChemistryUsed(Sender);
       end;
     end;
   end;
@@ -13913,12 +14535,12 @@ begin
   result := ModelSelection = msPhast;
 end;
 
-function TPhastModel.PorosityUsed(Sender: TObject): boolean;
+function TPhastModel.DoPorosityUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited PorosityUsed(Sender);
+  result := inherited DoPorosityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -13927,7 +14549,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.PorosityUsed(Sender);
+          ChildModel.DoPorosityUsed(Sender);
       end;
     end;
   end;
@@ -16393,7 +17015,7 @@ begin
       GetOldFileVersion;
       FileNames.Add(ModelFile);
     end;
-    if ZoneBudgetSelected(nil) then
+    if DoZoneBudgetSelected(nil) then
     begin
       if ModelSelection = msModflow2015 then
       begin
@@ -16639,11 +17261,11 @@ begin
   end;
 end;
 
-function TPhastModel.GasPhaseUsed(Sender: TObject): boolean;
+function TPhastModel.DoGasPhaseUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
 begin
-  result := inherited GasPhaseUsed(Sender);
+  result := inherited DoGasPhaseUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -16651,7 +17273,7 @@ begin
       if ChildModels[ChildIndex].ChildModel <> nil then
       begin
         result := result or
-          ChildModels[ChildIndex].ChildModel.GasPhaseUsed(Sender);
+          ChildModels[ChildIndex].ChildModel.DoGasPhaseUsed(Sender);
       end;
     end;
   end;
@@ -18051,7 +18673,7 @@ begin
     end;
   end;
 
-  if SftUsed(nil) then
+  if DoSftUsed(nil) then
   begin
     for Index := 1 to NumberOfMt3dChemComponents do
     begin
@@ -18519,7 +19141,7 @@ begin
   end;
 end;
 
-procedure TCustomModel.UseFootprintWells(Sender: TObject;
+procedure TCustomModel.DoUseFootprintWells(Sender: TObject;
   var ShouldUse: Boolean);
 var
   ScreenObjectIndex: Integer;
@@ -18539,12 +19161,12 @@ begin
   end;
 end;
 
-function TPhastModel.UzfInitialInfiltrationUsed(Sender: TObject): boolean;
+function TPhastModel.DoUzfInitialInfiltrationUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited UzfInitialInfiltrationUsed(Sender);
+  result := inherited DoUzfInitialInfiltrationUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18553,7 +19175,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.UzfInitialInfiltrationUsed(Sender);
+          ChildModel.DoUzfInitialInfiltrationUsed(Sender);
       end;
     end;
   end;
@@ -18597,12 +19219,12 @@ begin
   end;
 end;
 
-function TPhastModel.UzfMf6PackageUsed(Sender: TObject): boolean;
+function TPhastModel.DoUzfMf6PackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited UzfMf6PackageUsed(Sender);
+  result := inherited DoUzfMf6PackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18611,18 +19233,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.UzfMf6PackageUsed(Sender);
+          ChildModel.DoUzfMf6PackageUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.UzfPackageUsed(Sender: TObject): boolean;
+function TPhastModel.DoUzfPackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited UzfPackageUsed(Sender);
+  result := inherited DoUzfPackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18631,18 +19253,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.UzfPackageUsed(Sender);
+          ChildModel.DoUzfPackageUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.UzfResidualWaterContentUsed(Sender: TObject): boolean;
+function TPhastModel.DoUzfResidualWaterContentUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited UzfResidualWaterContentUsed(Sender);
+  result := inherited DoUzfResidualWaterContentUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18651,7 +19273,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.UzfResidualWaterContentUsed(Sender);
+          ChildModel.DoUzfResidualWaterContentUsed(Sender);
       end;
     end;
   end;
@@ -18680,12 +19302,12 @@ begin
   end;
 end;
 
-function TPhastModel.UzfSurfKUsed(Sender: TObject): boolean;
+function TPhastModel.DoUzfSurfKUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited UzfSurfKUsed(Sender);
+  result := inherited DoUzfSurfKUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18694,18 +19316,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.UzfSurfKUsed(Sender);
+          ChildModel.DoUzfSurfKUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.UzfUnsatVertKUsed(Sender: TObject): boolean;
+function TPhastModel.DoUzfUnsatVertKUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited UzfUnsatVertKUsed(Sender);
+  result := inherited DoUzfUnsatVertKUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18714,7 +19336,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.UzfUnsatVertKUsed(Sender);
+          ChildModel.DoUzfUnsatVertKUsed(Sender);
       end;
     end;
   end;
@@ -18740,12 +19362,12 @@ begin
   end;
 end;
 
-function TPhastModel.VerticalAnisotropyUsed(Sender: TObject): boolean;
+function TPhastModel.DoVerticalAnisotropyUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited VerticalAnisotropyUsed(Sender);
+  result := inherited DoVerticalAnisotropyUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18754,13 +19376,13 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.VerticalAnisotropyUsed(Sender);
+          ChildModel.DoVerticalAnisotropyUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.VerticalTransverseDispersionUsed(Sender: TObject): boolean;
+function TPhastModel.DoVerticalTransverseDispersionUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
@@ -18773,7 +19395,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.VerticalTransverseDispersionUsed(Sender);
+        result := result or ChildModel.DoVerticalTransverseDispersionUsed(Sender);
       end;
     end;
   end;
@@ -18798,12 +19420,12 @@ begin
   end;
 end;
 
-function TPhastModel.WetDryUsed(Sender: TObject): boolean;
+function TPhastModel.DoWetDryUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited WetDryUsed(Sender);
+  result := inherited DoWetDryUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18812,7 +19434,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.WetDryUsed(Sender);
+          ChildModel.DoWetDryUsed(Sender);
       end;
     end;
   end;
@@ -18876,12 +19498,12 @@ begin
   end;
 end;
 
-function TPhastModel.ZoneBudgetSelected(Sender: TObject): boolean;
+function TPhastModel.DoZoneBudgetSelected(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ZoneBudgetSelected(Sender);
+  result := inherited DoZoneBudgetSelected(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18890,7 +19512,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ZoneBudgetSelected(Sender);
+          ChildModel.DoZoneBudgetSelected(Sender);
       end;
     end;
   end;
@@ -18908,12 +19530,12 @@ begin
   end;
 end;
 
-function TPhastModel.ReservoirLayerUsed(Sender: TObject): boolean;
+function TPhastModel.DoReservoirLayerUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ReservoirLayerUsed(Sender);
+  result := inherited DoReservoirLayerUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18922,18 +19544,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ReservoirLayerUsed(Sender);
+          ChildModel.DoReservoirLayerUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.ReservoirPackageUsed(Sender: TObject): boolean;
+function TPhastModel.DoReservoirPackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ReservoirPackageUsed(Sender);
+  result := inherited DoReservoirPackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -18942,7 +19564,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ReservoirPackageUsed(Sender);
+          ChildModel.DoReservoirPackageUsed(Sender);
       end;
     end;
   end;
@@ -19080,12 +19702,12 @@ begin
   end;
 end;
 
-function TPhastModel.RouteUzfDischarge(Sender: TObject): boolean;
+function TPhastModel.DoRouteUzfDischarge(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited RouteUzfDischarge(Sender);
+  result := inherited DoRouteUzfDischarge(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -19094,7 +19716,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.RouteUzfDischarge(Sender);
+          ChildModel.DoRouteUzfDischarge(Sender);
       end;
     end;
   end;
@@ -19554,7 +20176,7 @@ begin
     and ModflowPackages.GwtCncPackage.IsSelected;
 end;
 
-function TPhastModel.GwtDispUsed(Sender: TObject): boolean;
+function TPhastModel.DoGwtDispUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
@@ -19567,7 +20189,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.GwtDispUsed(nil);
+        result := result or ChildModel.DoGwtDispUsed(nil);
       end;
     end;
   end;
@@ -20035,7 +20657,7 @@ begin
     and ModflowPackages.GwtSrcPackage.IsSelected;
 end;
 
-function TPhastModel.GwtUztUsed(Sender: TObject): boolean;
+function TPhastModel.DoGwtUztUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
@@ -20048,7 +20670,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.GwtUztUsed(nil);
+        result := result or ChildModel.DoGwtUztUsed(nil);
       end;
     end;
   end;
@@ -20277,12 +20899,12 @@ begin
   end;
 end;
 
-function TPhastModel.ConfinedStorageCoefUsed(Sender: TObject): boolean;
+function TPhastModel.DoConfinedStorageCoefUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ConfinedStorageCoefUsed(Sender);
+  result := inherited DoConfinedStorageCoefUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20291,18 +20913,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ConfinedStorageCoefUsed(Sender);
+          ChildModel.DoConfinedStorageCoefUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.ConfiningBedKzUsed(Sender: TObject): boolean;
+function TPhastModel.DoConfiningBedKzUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ConfiningBedKzUsed(Sender);
+  result := inherited DoConfiningBedKzUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20311,7 +20933,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ConfiningBedKzUsed(Sender);
+          ChildModel.DoConfiningBedKzUsed(Sender);
       end;
     end;
   end;
@@ -20376,12 +20998,12 @@ begin
   Invalidate(self);
 end;
 
-function TPhastModel.InitialWaterTableUsed(Sender: TObject): boolean;
+function TPhastModel.DoInitialWaterTableUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited InitialWaterTableUsed(Sender);
+  result := inherited DoInitialWaterTableUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20390,7 +21012,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.InitialWaterTableUsed(Sender);
+          ChildModel.DoInitialWaterTableUsed(Sender);
       end;
     end;
   end;
@@ -20446,12 +21068,12 @@ begin
   end;
 end;
 
-function TPhastModel.InitialHeadUsed(Sender: TObject): boolean;
+function TPhastModel.DoInitialHeadUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited InitialHeadUsed(Sender);
+  result := inherited DoInitialHeadUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20460,7 +21082,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.InitialHeadUsed(Sender);
+          ChildModel.DoInitialHeadUsed(Sender);
       end;
     end;
   end;
@@ -20602,12 +21224,12 @@ begin
   end;
 end;
 
-function TPhastModel.LakePackageUsed(Sender: TObject): boolean;
+function TPhastModel.DoLakePackageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited LakePackageUsed(Sender);
+  result := inherited DoLakePackageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20616,7 +21238,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.LakePackageUsed(Sender);
+          ChildModel.DoLakePackageUsed(Sender);
       end;
     end;
   end;
@@ -20865,12 +21487,12 @@ begin
   end;
 end;
 
-function TPhastModel.KineticsUsed(Sender: TObject): boolean;
+function TPhastModel.DoKineticsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited KineticsUsed(Sender);
+  result := inherited DoKineticsUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20879,18 +21501,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.KineticsUsed(Sender);
+          ChildModel.DoKineticsUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.KyUsed(Sender: TObject): boolean;
+function TPhastModel.DoKyUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited KyUsed(Sender);
+  result := inherited DoKyUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20899,18 +21521,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.KyUsed(Sender);
+          ChildModel.DoKyUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.KzUsed(Sender: TObject): boolean;
+function TPhastModel.DoKzUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited KzUsed(Sender);
+  result := inherited DoKzUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -20919,7 +21541,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.KzUsed(Sender);
+          ChildModel.DoKzUsed(Sender);
       end;
     end;
   end;
@@ -21071,12 +21693,12 @@ begin
   result := False;
 end;
 
-function TPhastModel.ModflowInitialHeadUsed(Sender: TObject): boolean;
+function TPhastModel.DoModflowInitialHeadUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ModflowInitialHeadUsed(Sender);
+  result := inherited DoModflowInitialHeadUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -21085,18 +21707,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModels[ChildIndex].ChildModel.ModflowInitialHeadUsed(Sender);
+          ChildModels[ChildIndex].ChildModel.DoModflowInitialHeadUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.ModflowUsed(Sender: TObject): boolean;
+function TPhastModel.DoModflowUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ModflowUsed(Sender);
+  result := inherited DoModflowUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -21105,7 +21727,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ModflowUsed(Sender);
+          ChildModel.DoModflowUsed(Sender);
       end;
     end;
   end;
@@ -21272,12 +21894,12 @@ begin
   end;
 end;
 
-function TPhastModel.ModpathZonesNeeded(Sender: TObject): boolean;
+function TPhastModel.DoModpathZonesNeeded(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited ModpathZonesNeeded(Sender);
+  result := inherited DoModpathZonesNeeded(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -21286,7 +21908,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.ModpathZonesNeeded(Sender);
+          ChildModel.DoModpathZonesNeeded(Sender);
       end;
     end;
   end;
@@ -21382,13 +22004,13 @@ begin
   end;
 end;
 
-function TPhastModel.Mt3dMSBulkDensityUsed(Sender: TObject): boolean;
+function TPhastModel.DoMt3dMSBulkDensityUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMS_StrictUsed(Sender)
-    and inherited Mt3dMSBulkDensityUsed(Sender);
+  result := inherited DoMt3dMS_StrictUsed(Sender)
+    and inherited DoMt3dMSBulkDensityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -21396,7 +22018,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := ChildModel.Mt3dMSBulkDensityUsed(Sender);
+        result := ChildModel.DoMt3dMSBulkDensityUsed(Sender);
         if result then
         begin
           Exit;
@@ -21438,13 +22060,13 @@ begin
   end;
 end;
 
-function TPhastModel.Mt3dMSImmobPorosityUsed(Sender: TObject): boolean;
+function TPhastModel.DoMt3dMSImmobPorosityUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMS_StrictUsed(Sender)
-    and inherited Mt3dMSImmobPorosityUsed(Sender);
+  result := inherited DoMt3dMS_StrictUsed(Sender)
+    and inherited DoMt3dMSImmobPorosityUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -21452,7 +22074,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := ChildModel.Mt3dMSImmobPorosityUsed(Sender);
+        result := ChildModel.DoMt3dMSImmobPorosityUsed(Sender);
         if result then
         begin
           Exit;
@@ -21702,7 +22324,7 @@ end;
 //  end;
 //end;
 
-function TPhastModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
+function TPhastModel.DoMt3dMS_StrictUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
@@ -21715,7 +22337,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.Mt3dMS_StrictUsed(Sender);
+        result := result or ChildModel.DoMt3dMS_StrictUsed(Sender);
       end;
     end;
   end;
@@ -21817,7 +22439,7 @@ begin
 end;
 
 
-function TPhastModel.Mt3d_LktIsSelected(Sender: TObject): Boolean;
+function TPhastModel.DoMt3d_LktIsSelected(Sender: TObject): Boolean;
 var
   ChildIndex: integer;
   ChildModel: TChildModel;
@@ -21833,7 +22455,7 @@ begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
         if ChildModel <> nil then
         begin
-          result := result or ChildModel.Mt3d_LktIsSelected(Sender);
+          result := result or ChildModel.DoMt3d_LktIsSelected(Sender);
         end;
       end;
     end;
@@ -22096,12 +22718,12 @@ begin
   end;
 end;
 
-function TPhastModel.SurfacesUsed(Sender: TObject): boolean;
+function TPhastModel.DoSurfacesUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SurfacesUsed(Sender);
+  result := inherited DoSurfacesUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -22110,7 +22732,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SurfacesUsed(Sender);
+          ChildModel.DoSurfacesUsed(Sender);
       end;
     end;
   end;
@@ -22154,12 +22776,12 @@ begin
   end;
 end;
 
-function TPhastModel.SwtOffsetsUsed(Sender: TObject): boolean;
+function TPhastModel.DoSwtOffsetsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SwtOffsetsUsed(Sender);
+  result := inherited DoSwtOffsetsUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -22168,18 +22790,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SwtOffsetsUsed(Sender);
+          ChildModel.DoSwtOffsetsUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.SwtSelected(Sender: TObject): boolean;
+function TPhastModel.DoSwtSelected(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SwtSelected(Sender);
+  result := inherited DoSwtSelected(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -22188,18 +22810,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SwtSelected(Sender);
+          ChildModel.DoSwtSelected(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.SwtSpecifiedUsed(Sender: TObject): boolean;
+function TPhastModel.DoSwtSpecifiedUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SwtSpecifiedUsed(Sender);
+  result := inherited DoSwtSpecifiedUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -22208,7 +22830,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SwtSpecifiedUsed(Sender);
+          ChildModel.DoSwtSpecifiedUsed(Sender);
       end;
     end;
   end;
@@ -23900,7 +24522,7 @@ begin
   {$ENDIF}
 end;
 
-function TPhastModel.FarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
+function TPhastModel.DoFarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
@@ -23915,7 +24537,7 @@ begin
       if ChildModel <> nil then
       begin
         result := ChildModel.
-          FarmProcess4SteadyCropsUsed(Sender);
+          DoFarmProcess4SteadyCropsUsed(Sender);
         if result then
         begin
           break;
@@ -23928,7 +24550,7 @@ begin
   {$ENDIF}
 end;
 
-function TPhastModel.FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
+function TPhastModel.DoFarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
@@ -23943,7 +24565,7 @@ begin
       if ChildModel <> nil then
       begin
         result := ChildModel.
-          FarmProcess4SteadyFarmsUsed(Sender);
+          DoFarmProcess4SteadyFarmsUsed(Sender);
         if result then
         begin
           break;
@@ -25182,12 +25804,12 @@ begin
   end;
 end;
 
-function TPhastModel.EquilibriumPhasesUsed(Sender: TObject): boolean;
+function TPhastModel.DoEquilibriumPhasesUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited EquilibriumPhasesUsed(Sender);
+  result := inherited DoEquilibriumPhasesUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25196,7 +25818,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.EquilibriumPhasesUsed(Sender);
+          ChildModel.DoEquilibriumPhasesUsed(Sender);
       end;
     end;
   end;
@@ -25563,12 +26185,12 @@ begin
   end;
 end;
 
-function TPhastModel.HorizontalAnisotropyUsed(Sender: TObject): boolean;
+function TPhastModel.DoHorizontalAnisotropyUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited HorizontalAnisotropyUsed(Sender);
+  result := inherited DoHorizontalAnisotropyUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25577,13 +26199,13 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.HorizontalAnisotropyUsed(Sender);
+          ChildModel.DoHorizontalAnisotropyUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.HorizontalTransverseDispersionUsed(
+function TPhastModel.DoHorizontalTransverseDispersionUsed(
   Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -25597,7 +26219,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.HorizontalTransverseDispersionUsed(Sender);
+        result := result or ChildModel.DoHorizontalTransverseDispersionUsed(Sender);
       end;
     end;
   end;
@@ -25694,12 +26316,12 @@ begin
   end;
 end;
 
-function TPhastModel.SftUsed(Sender: TObject): boolean;
+function TPhastModel.DoSftUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited Mt3dMS_StrictUsed(Sender) and inherited SftUsed(Sender);
+  result := inherited DoMt3dMS_StrictUsed(Sender) and inherited DoSftUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25707,7 +26329,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := ChildModel.SftUsed(Sender);
+        result := ChildModel.DoSftUsed(Sender);
         if result then
         begin
           Exit;
@@ -25802,12 +26424,12 @@ begin
   end;
 end;
 
-function TPhastModel.SoilIDUsed(Sender: TObject): boolean;
+function TPhastModel.DoSoilIDUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SoilIDUsed(Sender);
+  result := inherited DoSoilIDUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25816,18 +26438,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SoilIDUsed(Sender);
+          ChildModel.DoSoilIDUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.SolidSolutionUsed(Sender: TObject): boolean;
+function TPhastModel.DoSolidSolutionUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SolidSolutionUsed(Sender);
+  result := inherited DoSolidSolutionUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25836,18 +26458,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SolidSolutionUsed(Sender);
+          ChildModel.DoSolidSolutionUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.SpecificStorageUsed(Sender: TObject): boolean;
+function TPhastModel.DoSpecificStorageUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SpecificStorageUsed(Sender);
+  result := inherited DoSpecificStorageUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25856,18 +26478,18 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SpecificStorageUsed(Sender);
+          ChildModel.DoSpecificStorageUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.SpecificYieldUsed(Sender: TObject): boolean;
+function TPhastModel.DoSpecificYieldUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited SpecificYieldUsed(Sender);
+  result := inherited DoSpecificYieldUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25876,7 +26498,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.SpecificYieldUsed(Sender);
+          ChildModel.DoSpecificYieldUsed(Sender);
       end;
     end;
   end;
@@ -26449,7 +27071,7 @@ begin
   begin
     exit;
   end;
-  if not SwrSelected(nil) then
+  if not DoSwrSelected(nil) then
   begin
     Exit;
   end;
@@ -27719,7 +28341,7 @@ begin
   ModflowPackages.SfrPackage.MfSfrDownstreamUnsatKz.Invalidate;
 end;
 
-function TCustomModel.DirectRechargeUsed(Sender: TObject): Boolean;
+function TCustomModel.DoDirectRechargeUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -29017,7 +29639,7 @@ begin
   end;
 end;
 
-function TCustomModel.PrecipPotConsumptionUsed(Sender: TObject): Boolean;
+function TCustomModel.DoPrecipPotConsumptionUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -29770,7 +30392,7 @@ begin
   ModflowPackages.Mt3dUnsatTransport.SatConcentrations.Invalidate;
 end;
 
-function TCustomModel.IrrigationUsed(Sender: TObject): Boolean;
+function TCustomModel.DoIrrigationUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -29798,7 +30420,7 @@ begin
   end;
 end;
 
-function TPhastModel.SeparatedHorizontalTransverseDispersionUsed(
+function TPhastModel.DoSeparatedHorizontalTransverseDispersionUsed(
   Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -29812,13 +30434,13 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.SeparatedHorizontalTransverseDispersionUsed(Sender);
+        result := result or ChildModel.DoSeparatedHorizontalTransverseDispersionUsed(Sender);
       end;
     end;
   end;
 end;
 
-function TPhastModel.SeparatedLongitudinalDispersionUsed(
+function TPhastModel.DoSeparatedLongitudinalDispersionUsed(
   Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -29832,7 +30454,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.SeparatedLongitudinalDispersionUsed(Sender);
+        result := result or ChildModel.DoSeparatedLongitudinalDispersionUsed(Sender);
       end;
     end;
   end;
@@ -30660,12 +31282,12 @@ end;
 //  end;
 //end;
 
-function TPhastModel.NpfUsed(Sender: TObject): boolean;
+function TPhastModel.DoNpfUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited NpfUsed(Sender);
+  result := inherited DoNpfUsed(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -30673,7 +31295,7 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := result or ChildModel.NpfUsed(Sender);
+        result := result or ChildModel.DoNpfUsed(Sender);
       end;
     end;
   end;
@@ -32670,7 +33292,7 @@ begin
     tcEnergy, tcFreezing: FSutraSpecPressureTimeList.Name := StrSpecifiedPressure;
     else Assert(False);
   end;
-  FSutraSpecPressureTimeList.OnTimeListUsed := SutraUsed;
+  FSutraSpecPressureTimeList.OnTimeListUsed := DoSutraUsed;
   FSutraSpecPressureTimeList.OnInitialize := InitializeSutraSpecPres;
   AddTimeList(FSutraSpecPressureTimeList);
 
@@ -32681,7 +33303,7 @@ begin
     tcEnergy, tcFreezing: FSutraSpecPresUTimeList.Name := StrAssocPresTemp;
     else Assert(False);
   end;
-  FSutraSpecPresUTimeList.OnTimeListUsed := SutraUsed;
+  FSutraSpecPresUTimeList.OnTimeListUsed := DoSutraUsed;
   FSutraSpecPresUTimeList.OnInitialize := InitializeSutraSpecPres;
   AddTimeList(FSutraSpecPresUTimeList);
 
@@ -32691,14 +33313,14 @@ begin
     tcEnergy, tcFreezing: FSutraConcTempTimeList.Name := StrSpecifiedTemp;
     else Assert(False);
   end;
-  FSutraConcTempTimeList.OnTimeListUsed := SutraUsed;
+  FSutraConcTempTimeList.OnTimeListUsed := DoSutraUsed;
   FSutraConcTempTimeList.OnInitialize := InitializeSutraSpecifiedConcTemp;
   AddTimeList(FSutraConcTempTimeList);
 
 
   FSutraFluidFluxTimeList := TSutraMergedTimeList.Create(self);
   FSutraFluidFluxTimeList.Name := StrFluidFlux;
-  FSutraFluidFluxTimeList.OnTimeListUsed := SutraUsed;
+  FSutraFluidFluxTimeList.OnTimeListUsed := DoSutraUsed;
   FSutraFluidFluxTimeList.OnInitialize := InitializeSutraFluidFlux;
   AddTimeList(FSutraFluidFluxTimeList);
 
@@ -32708,7 +33330,7 @@ begin
     tcEnergy, tcFreezing: FSutraFluidFluxUTimeList.Name := StrFluxAssocPresTemp;
     else Assert(False);
   end;
-  FSutraFluidFluxUTimeList.OnTimeListUsed := SutraUsed;
+  FSutraFluidFluxUTimeList.OnTimeListUsed := DoSutraUsed;
   FSutraFluidFluxUTimeList.OnInitialize := InitializeSutraFluidFlux;
   AddTimeList(FSutraFluidFluxUTimeList);
 
@@ -32718,7 +33340,7 @@ begin
     tcEnergy, tcFreezing: FSutraMassEnergyFluxTimeList.Name := StrEnergyFlux;
     else Assert(False);
   end;
-  FSutraMassEnergyFluxTimeList.OnTimeListUsed := SutraUsed;
+  FSutraMassEnergyFluxTimeList.OnTimeListUsed := DoSutraUsed;
   FSutraMassEnergyFluxTimeList.OnInitialize := InitializeSutraMassEnergyFlux;
   AddTimeList(FSutraMassEnergyFluxTimeList);
 
@@ -33479,7 +34101,7 @@ begin
   inherited;
 end;
 
-procedure TCustomModel.DetermineKyFromAnisotropy(Sender: TObject);
+procedure TCustomModel.DoDetermineKyFromAnisotropy(Sender: TObject);
 var
   KyDataArray: TDataArray;
   LayerIndex: Integer;
@@ -33512,7 +34134,7 @@ begin
   KyDataArray.UptoDate := True;
 end;
 
-procedure TCustomModel.DetermineKzFromAnisotropy(Sender: TObject);
+procedure TCustomModel.DoDetermineKzFromAnisotropy(Sender: TObject);
 var
   KzDataArray: TDataArray;
   LayerIndex: Integer;
@@ -33587,7 +34209,7 @@ begin
   end;
 end;
 
-function TCustomModel.TranspirationFractionUsed(Sender: TObject): Boolean;
+function TCustomModel.DoTranspirationFractionUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -33608,9 +34230,9 @@ begin
   result := LayerStructure.TRPV;
 end;
 
-function TCustomModel.EquilibriumPhasesUsed(Sender: TObject): boolean;
+function TCustomModel.DoEquilibriumPhasesUsed(Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender) and ChemistryOptions.UseEquilibriumPhases;
+  result := DoChemistryUsed(Sender) and ChemistryOptions.UseEquilibriumPhases;
 end;
 
 procedure TCustomModel.SetModflowGrid(const Value: TModflowGrid);
@@ -33658,17 +34280,17 @@ begin
   end;
 end;
 
-function TCustomModel.SeparatedHorizontalTransverseDispersionUsed(
+function TCustomModel.DoSeparatedHorizontalTransverseDispersionUsed(
   Sender: TObject): boolean;
 begin
-  result := GwtDispUsed(Sender)
+  result := DoGwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtSeparate)
 end;
 
-function TCustomModel.SeparatedLongitudinalDispersionUsed(
+function TCustomModel.DoSeparatedLongitudinalDispersionUsed(
   Sender: TObject): boolean;
 begin
-  result := (GwtDispUsed(Sender)
+  result := (DoGwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate))
 end;
 
@@ -34654,7 +35276,7 @@ begin
   result := DataArrayManager.AddDataSet(DataSet);
 end;
 
-function TCustomModel.AddedDemandUsed(Sender: TObject): Boolean;
+function TCustomModel.DoAddedDemandUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -36010,6 +36632,51 @@ begin
   end;
 end;
 
+function TCustomModel.GetActiveUsed: TObjectUsedEvent;
+begin
+  result := DoActiveUsed;
+end;
+
+function TCustomModel.GetAddedDemandUsed: TObjectUsedEvent;
+begin
+  result := DoAddedDemandUsed;
+end;
+
+function TCustomModel.GetAquiferPropertiesUsed: TObjectUsedEvent;
+begin
+  result := DoAquiferPropertiesUsed;
+end;
+
+function TCustomModel.GetAssignFootprintBoundarydWithdrawal: TNotifyEvent;
+begin
+  result := DoAssignFootprintBoundarydWithdrawal;
+end;
+
+function TCustomModel.GetAssignModflow6LakeDisplayArrays: TNotifyEvent;
+begin
+  result := DoAssignModflow6LakeDisplayArrays;
+end;
+
+function TCustomModel.GetBcfUsed: TObjectUsedEvent;
+begin
+  result := DoBcfUsed
+end;
+
+function TCustomModel.GetCapillaryFringeUsed: TObjectUsedEvent;
+begin
+  result := DoCapillaryFringeUsed;
+end;
+
+function TCustomModel.GetCfpPipesSelected: TObjectUsedEvent;
+begin
+  result := DoCfpPipesSelected;
+end;
+
+function TCustomModel.GetChemistryUsed: TObjectUsedEvent;
+begin
+  result := DoChemistryUsed;
+end;
+
 function TCustomModel.GetCompiler(const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt): TRbwParser;
 begin
@@ -36065,6 +36732,46 @@ begin
   else
     Assert(False);
   end;
+end;
+
+function TCustomModel.GetConfinedStorageCoefUsed: TObjectUsedEvent;
+begin
+  result := DoConfinedStorageCoefUsed;
+end;
+
+function TCustomModel.GetConfiningBedKzUsed: TObjectUsedEvent;
+begin
+  result := DoConfiningBedKzUsed;
+end;
+
+function TCustomModel.GetConsumptiveUseUsed: TObjectUsedEvent;
+begin
+  result := DoConsumptiveUseUsed;
+end;
+
+function TCustomModel.GetCropCoefficientUsed: TObjectUsedEvent;
+begin
+  result := DoCropCoefficientUsed;
+end;
+
+function TCustomModel.GetCropHasSalinityDemandUsed: TObjectUsedEvent;
+begin
+  result := DoCropHasSalinityDemandUsed;
+end;
+
+function TCustomModel.GetCSubDataSetsUsed: TObjectUsedEvent;
+begin
+  result := DoCSubDataSetsUsed;
+end;
+
+function TCustomModel.GetCSubInitialElasticStorageUsed: TObjectUsedEvent;
+begin
+  result := DoCSubInitialElasticStorageUsed;
+end;
+
+function TCustomModel.GetCSubInitialRecompressionIndexUsed: TObjectUsedEvent;
+begin
+  result := DoCSubInitialRecompressionIndexUsed;
 end;
 
 function TCustomModel.ParamNamesDataSetUsed(Sender: TObject): boolean;
@@ -36253,9 +36960,29 @@ begin
   end;
 end;
 
+function TCustomModel.GetSeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent;
+begin
+  result := DoSeparatedHorizontalTransverseDispersionUsed;
+end;
+
+function TCustomModel.GetSeparatedLongitudinalDispersionUsed: TObjectUsedEvent;
+begin
+  result := DoSeparatedLongitudinalDispersionUsed;
+end;
+
 function TCustomModel.GetSeparateGwtUsed: Boolean;
 begin
   result := GwtUsed and ModflowPackages.GwtProcess.SeparateGwt;
+end;
+
+function TCustomModel.GetSfrMf6Selected: TObjectUsedEvent;
+begin
+  result := DoSfrMf6Selected;
+end;
+
+function TCustomModel.GetSftUsed: TObjectUsedEvent;
+begin
+  result := DoSftUsed
 end;
 
 function TCustomModel.GetShortestHorizontalBlockEdge(Layer, Row,
@@ -36269,6 +36996,16 @@ begin
   begin
     result := Grid.ShortestHorizontalBlockEdge[Layer, Row, Column];
   end;
+end;
+
+function TCustomModel.GetShouldKyBeDeterminedFromAnisotropy: TCheckUsageEvent;
+begin
+  result := DoShouldKyBeDeterminedFromAnisotropy;
+end;
+
+function TCustomModel.GetShouldKzBeDeterminedFromAnisotropy: TCheckUsageEvent;
+begin
+  result := DoShouldKzBeDeterminedFromAnisotropy;
 end;
 
 function TCustomModel.GetSideContourDataSet: TDataArray;
@@ -36352,10 +37089,100 @@ begin
   end;
 end;
 
+function TCustomModel.GetSoilIDUsed: TObjectUsedEvent;
+begin
+  result := DoSoilIDUsed;
+end;
+
+function TCustomModel.GetSolidSolutionUsed: TObjectUsedEvent;
+begin
+  result := DoSolidSolutionUsed;
+end;
+
+function TCustomModel.GetSpecificStorageUsed: TObjectUsedEvent;
+begin
+  result := DoSpecificStorageUsed;
+end;
+
+function TCustomModel.GetSpecificYieldUsed: TObjectUsedEvent;
+begin
+  result := DoSpecificYieldUsed;
+end;
+
+function TCustomModel.GetStorageSelected: TObjectUsedEvent;
+begin
+  Result := DoStorageSelected;
+end;
+
+function TCustomModel.GetSurfaceKUsed: TObjectUsedEvent;
+begin
+  result := DoSurfaceKUsed;
+end;
+
+function TCustomModel.GetSurfacesUsed: TObjectUsedEvent;
+begin
+  result := DoSurfacesUsed;
+end;
+
+function TCustomModel.GetSutra3DModel: TObjectUsedEvent;
+begin
+  result := DoSutra3DModel;
+end;
+
+function TCustomModel.GetSutra4EnergyOrSorptionUsed: TObjectUsedEvent;
+begin
+  result := DoSutra4EnergyOrSorptionUsed
+end;
+
+function TCustomModel.GetSutra4EnergyUsed: TObjectUsedEvent;
+begin
+  result := DoSutra4EnergyUsed;
+end;
+
+function TCustomModel.GetSutra4FreezingUsed: TObjectUsedEvent;
+begin
+  result := DoSutra4FreezingUsed;
+end;
+
+function TCustomModel.GetSutra4ProductionUsed: TObjectUsedEvent;
+begin
+  result := DoSutra4ProductionUsed;
+end;
+
+function TCustomModel.GetSutra4SoluteUsed: TObjectUsedEvent;
+begin
+  result := DoSutra4SoluteUsed;
+end;
+
+function TCustomModel.GetSutra4Used: TObjectUsedEvent;
+begin
+  result := DoSutra4Used;
+end;
+
+function TCustomModel.GetSutraConcentrationUsed: TObjectUsedEvent;
+begin
+  result := DoSutraConcentrationUsed
+end;
+
+function TCustomModel.GetSutraHydraulicConductivityUsed: TObjectUsedEvent;
+begin
+  result := DoSutraHydraulicConductivityUsed;
+end;
+
+function TCustomModel.GetSutraLakeBottomUsed: TObjectUsedEvent;
+begin
+  result := DoSutraLakeBottomUsed;
+end;
+
 function TCustomModel.GetSutraLakesUsed: Boolean;
 begin
   result := (ModelSelection in [msSutra30, msSutra40])
           and SutraOptions.LakeOptions.UseLakes;
+end;
+
+function TCustomModel.GetSutraLakeUsed: TObjectUsedEvent;
+begin
+  result := DoSutraLakeUsed;
 end;
 
 function TCustomModel.GetSutraMesh: TSutraMesh3D;
@@ -36373,6 +37200,56 @@ begin
     end;
   end;
   result := FSutraMesh;
+end;
+
+function TCustomModel.GetSutraMiddleHydraulicConductivityUsed: TObjectUsedEvent;
+begin
+  result := DoSutraMiddleHydraulicConductivityUsed;
+end;
+
+function TCustomModel.GetSutraMiddlePermeabilityUsed: TObjectUsedEvent;
+begin
+  result := DoSutraMiddlePermeabilityUsed;
+end;
+
+function TCustomModel.GetSutraPermeabilityUsed: TObjectUsedEvent;
+begin
+  result := DoSutraPermeabilityUsed;
+end;
+
+function TCustomModel.GetSutraTemperatureUsed: TObjectUsedEvent;
+begin
+  result := DoSutraTemperatureUsed;
+end;
+
+function TCustomModel.GetSutraThicknessUsed: TObjectUsedEvent;
+begin
+  result := DoSutraThicknessUsed;
+end;
+
+function TCustomModel.GetSutraUnsatRegionUsed: TObjectUsedEvent;
+begin
+  result := DoSutraUnsatRegionUsed;
+end;
+
+function TCustomModel.GetSutraUsed: TObjectUsedEvent;
+begin
+  result := DoSutraUsed;
+end;
+
+function TCustomModel.GetSwtOffsetsUsed: TObjectUsedEvent;
+begin
+  result := DoSwtOffsetsUsed;
+end;
+
+function TCustomModel.GetSwtSelected: TObjectUsedEvent;
+begin
+  result := DoSwtSelected;
+end;
+
+function TCustomModel.GetSwtSpecifiedUsed: TObjectUsedEvent;
+begin
+  result := DoSwtSpecifiedUsed;
 end;
 
 procedure TCustomModel.Clear;
@@ -36415,7 +37292,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
+function TCustomModel.DoFarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -36427,7 +37304,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
+function TCustomModel.DoFarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -36438,7 +37315,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FarmProcess4SteadyPrecipUsed(Sender: TObject): boolean;
+function TCustomModel.DoFarmProcess4SteadyPrecipUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -36450,7 +37327,7 @@ begin
 end;
 
 
-function TCustomModel.FarmProcess4SteadArrayAddedDemandRunoffSplitUsed(
+function TCustomModel.DoFarmProcess4SteadArrayAddedDemandRunoffSplitUsed(
   Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -36462,7 +37339,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(
+function TCustomModel.DoFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(
   Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -36474,7 +37351,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FarmProcess4SteadArrayBareRunoffFractionUsed(
+function TCustomModel.DoFarmProcess4SteadArrayBareRunoffFractionUsed(
   Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -36486,7 +37363,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FarmProcess4SteadArrayEfficiencyImprovementUsed(
+function TCustomModel.DoFarmProcess4SteadArrayEfficiencyImprovementUsed(
   Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -36498,7 +37375,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): boolean;
+function TCustomModel.DoFarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -36510,7 +37387,7 @@ begin
 end;
 
 
-function TCustomModel.FarmProcess4SteadyRefETUsed(Sender: TObject): boolean;
+function TCustomModel.DoFarmProcess4SteadyRefETUsed(Sender: TObject): boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -36885,7 +37762,7 @@ end;
 
 function TCustomModel.FarmProcessUsed(Sender: TObject): boolean;
 begin
-  result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
+  result := DoModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
 end;
 
 function TCustomModel.FhbIsSelected: Boolean;
@@ -37948,7 +38825,7 @@ begin
   end;
 end;
 
-function TCustomModel.CropCoefficientUsed(Sender: TObject): Boolean;
+function TCustomModel.DoCropCoefficientUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -37976,28 +38853,28 @@ begin
   end;
 end;
 
-function TCustomModel.CSubDataSetsUsed(Sender: TObject): boolean;
+function TCustomModel.DoCSubDataSetsUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = MsModflow2015)
     and (ModflowPackages.CSubPackage.IsSelected)
 end;
 
-function TCustomModel.CSubInitialElasticStorageUsed(Sender: TObject): boolean;
+function TCustomModel.DoCSubInitialElasticStorageUsed(Sender: TObject): boolean;
 begin
-  result := CSubDataSetsUsed(Sender)
+  result := DoCSubDataSetsUsed(Sender)
     and (ModflowPackages.CSubPackage.CompressionMethod = coElasticSpecificStorage);
 end;
 
-function TCustomModel.CSubInitialRecompressionIndexUsed(
+function TCustomModel.DoCSubInitialRecompressionIndexUsed(
   Sender: TObject): boolean;
 begin
-  result := CSubDataSetsUsed(Sender)
+  result := DoCSubDataSetsUsed(Sender)
     and (ModflowPackages.CSubPackage.CompressionMethod = coRecompression);
 end;
 
 function TCustomModel.CSubInterbedDataArrayUsed(Sender: TObject): boolean;
 begin
-  result := CSubDataSetsUsed(Sender) and ModflowPackages.CSubPackage.Interbeds.DataArrayUsed(Sender as TDataArray);
+  result := DoCSubDataSetsUsed(Sender) and ModflowPackages.CSubPackage.Interbeds.DataArrayUsed(Sender as TDataArray);
 end;
 
 procedure TCustomModel.RemoveVariables(const DataSet: TDataArray);
@@ -38011,7 +38888,7 @@ begin
   FEdgeDisplay := Value;
 end;
 
-procedure TCustomModel.OnNodeActiveDataSetChanged(Sender: TObject);
+procedure TCustomModel.DoOnNodeActiveDataSetChanged(Sender: TObject);
 var
   NodeActiveDataArray: TDataArray;
 begin
@@ -38048,7 +38925,7 @@ begin
   end;
 end;
 
-procedure TCustomModel.OnActiveDataSetChanged(Sender: TObject);
+procedure TCustomModel.DoOnActiveDataSetChanged(Sender: TObject);
 var
   ActiveDataArray: TDataArray;
   DataArray: TDataArray;
@@ -38122,7 +38999,7 @@ begin
   end;
 end;
 
-function TCustomModel.OptionalDataSet(Sender: TObject): boolean;
+function TCustomModel.DoOptionalDataSet(Sender: TObject): boolean;
 begin
   result := False;
 end;
@@ -38159,7 +39036,7 @@ begin
   FreeAndNil(FarmWriter4);
 end;
 
-function TCustomModel.FractionOfIrrigToSurfaceWaterUsed(
+function TCustomModel.DoFractionOfIrrigToSurfaceWaterUsed(
   Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -38171,7 +39048,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.FractionOfPrecipToSurfaceWaterUsed(
+function TCustomModel.DoFractionOfPrecipToSurfaceWaterUsed(
   Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -38285,7 +39162,7 @@ begin
     DataArray := GetDataSetByName(SourceDataArray.Name);
     if DataArray = nil then
     begin
-      DataArray := TDataArrayType(SourceDataArray.ClassType).Create(FCustomModel);
+      DataArray := TDataArrayType(SourceDataArray.ClassType).Create(FCustomModel as TCustomModel);
       AddDataSet(DataArray);
     end;
     DataArray.AssignProperties(SourceDataArray);
@@ -38296,7 +39173,7 @@ begin
     DA_Index := IndexOfBoundaryDataSet(SourceDataArray.Name);
     if DA_Index < 0 then
     begin
-      DataArray := TDataArrayType(SourceDataArray.ClassType).Create(FCustomModel);
+      DataArray := TDataArrayType(SourceDataArray.ClassType).Create(FCustomModel as TCustomModel);
       AddBoundaryDataSet(DataArray);
     end
     else
@@ -38386,7 +39263,7 @@ begin
   end;
 end;
 
-constructor TDataArrayManager.Create(Model: TCustomModel);
+constructor TDataArrayManager.Create(Model: ICustomModelForDataArrayManager);
 begin
   FCustomModel := Model;
   FRiverDataSets := TList.Create;
@@ -38402,8 +39279,10 @@ end;
 procedure TDataArrayManager.CreateInitialBoundaryDataSets;
 var
   PhastDataSet: TDataArray;
+  CustomModel: TCustomModel;
 begin
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  CustomModel := FCustomModel as TCustomModel;
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsTopLeakyHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -38414,7 +39293,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsTopLeakyThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -38425,7 +39304,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsFrontLeakyHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -38436,7 +39315,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsFrontLeakyThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -38447,7 +39326,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsSideLeakyHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -38458,7 +39337,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsSideLeakyThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -38469,7 +39348,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -38481,7 +39360,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverWidth);
   PhastDataSet.DataType := rdtDouble;
@@ -38493,7 +39372,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverDepth);
   PhastDataSet.DataType := rdtDouble;
@@ -38505,7 +39384,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TRealSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverBedThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -38517,7 +39396,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TIntegerSparseDataSet.Create(FCustomModel);
+  PhastDataSet := TIntegerSparseDataSet.Create(CustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsSolutionType);
   PhastDataSet.DataType := rdtInteger;
@@ -38543,6 +39422,7 @@ var
   Lock: TDataLock;
   DisplayName: string;
   AngleType: TAngleType;
+  NotifyEvent: TNotifyEvent;
   procedure HandleDataArray(
     const DataSetCreationData: TDataSetCreationData);
   begin
@@ -38600,11 +39480,6 @@ var
     if DataArray <> nil then
     begin
       FCustomModel.UpdateDataArrayDimensions(DataArray);
-//      if FCustomModel.Grid <> nil then
-//      begin
-//        DataArray.UpdateDimensions(FCustomModel.Grid.LayerCount, FCustomModel.Grid.RowCount,
-//          FCustomModel.Grid.ColumnCount);
-//      end;
       DataArray.AssociatedDataSets := DataSetCreationData.AssociatedDataSets;
       DataArray.Classification := DataSetCreationData.Classification;
     end;
@@ -38613,7 +39488,7 @@ begin
   // See DefinePackageDataArrays for the definition of the
   // contents of DataArrayCreationRecords.
 
-  if FCustomModel.SwiUsed(nil) then
+  if FCustomModel.DoSwiUsed(nil) then
   begin
     for Index := 1 to FCustomModel.ModflowPackages.SwiPackage.NumberOfSurfaces do
     begin
@@ -38748,16 +39623,16 @@ begin
   DataArray := GetDataSetByName(rsActive);
   if (DataArray <> nil) and not Assigned(DataArray.OnUpToDateSet) then
   begin
-    DataArray.OnUpToDateSet := FCustomModel.OnActiveDataSetChanged;
+    NotifyEvent := FCustomModel.OnActiveDataSetChanged;
+    DataArray.OnUpToDateSet := NotifyEvent;
   end;
 
   DataArray := GetDataSetByName(KNodeActive);
   if (DataArray <> nil) and (FCustomModel.SutraMesh <> nil) then
   begin
-    DataArray.OnUpToDateSet := FCustomModel.OnNodeActiveDataSetChanged;
+    NotifyEvent := FCustomModel.OnNodeActiveDataSetChanged;;
+    DataArray.OnUpToDateSet := NotifyEvent;
   end;
-
-
 end;
 
 function TDataArrayManager.CreateNewDataArray(const ClassType: TDataArrayType;
@@ -38767,8 +39642,10 @@ function TDataArrayManager.CreateNewDataArray(const ClassType: TDataArrayType;
 var
   ChildManagerIndex: Integer;
   ChildMan: TDataArrayManager;
+//  CustomModel: TCustomModel;
 begin
-  result := ClassType.Create(FCustomModel);
+//  CustomModel := FCustomModel as TCustomModel;
+  result := ClassType.Create(FCustomModel as TCustomModel);
   result.Lock := Lock;
   result.UpdateWithName(Name);
   result.DisplayName := DisplayName;
@@ -38826,6 +39703,7 @@ const
 var
   Index: integer;
 begin
+//  FCustomModel := FCustomModel as TCustomModel;
   FZetaDataDefinition.DataSetType := TDataArray;
   FZetaDataDefinition.Orientation := dso3D;
   FZetaDataDefinition.DataType := rdtDouble;
@@ -38833,6 +39711,7 @@ begin
   FZetaDataDefinition.DisplayName := StrActiveSurfaceEleva;
   FZetaDataDefinition.Formula := '0';
   FZetaDataDefinition.Classification := StrSWI;
+//  AssignDataSetNeeded(FZetaDataDefinition FCustomModel.ZetaUsed);
   FZetaDataDefinition.DataSetNeeded := FCustomModel.ZetaUsed;
   FZetaDataDefinition.Lock := StandardLock;
   FZetaDataDefinition.EvaluatedAt := eaBlocks;
@@ -39039,7 +39918,6 @@ begin
     FDataArrayCreationRecords[Index].Classification := StrMT3DMS_GWT_Classificaton;
   end;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.LongitudinalDispersionUsed;
-
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -39082,7 +39960,6 @@ begin
   FDataArrayCreationRecords[Index].Name := rsVertical_Transv_Dispersivity;
   FDataArrayCreationRecords[Index].DisplayName := rsVertical_Transv_DispersivityDisplayName;
   FDataArrayCreationRecords[Index].Formula := '1.';
-
   if (FCustomModel = nil) or (FCustomModel.ModelSelection = msPhast) then
   begin
     FDataArrayCreationRecords[Index].Classification := StrHydrology;
@@ -39532,8 +40409,6 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets := StrUZFIUZOPT;
   NoCheck(FDataArrayCreationRecords[Index]);
   Inc(Index);
-
-
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -40605,22 +41480,6 @@ begin
   FDataArrayCreationRecords[Index].Min := 1e-6;
   Inc(Index);
 
-//  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
-//  FDataArrayCreationRecords[Index].Orientation := dsoTop;
-//  FDataArrayCreationRecords[Index].DataType := rdtDouble;
-//  FDataArrayCreationRecords[Index].Name := KDistributedWithdrawals;
-//  FDataArrayCreationRecords[Index].DisplayName := StrDistributedWithdrawals;
-//  FDataArrayCreationRecords[Index].Formula := '0';
-//  FDataArrayCreationRecords[Index].Classification := StrFootprintOutputClassification;
-//  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FootprintSelected;
-//  FDataArrayCreationRecords[Index].Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula];
-//  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
-//  FDataArrayCreationRecords[Index].AssociatedDataSets := 'Calculated distributed withdrawals (L^3/T)';
-////  FDataArrayCreationRecords[Index].Visible := False;
-//  FDataArrayCreationRecords[Index].OnInitialize :=
-//    FCustomModel.AssignFootprintDistributedWithdrawals;
-//  Inc(Index);
-
   FDataArrayCreationRecords[Index].DataSetType := TFootprintWithdrawalDataArray;
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
@@ -40632,31 +41491,11 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock; // [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets := StrSpecifiedWithdrawal;
-//  FDataArrayCreationRecords[Index].Visible := False;
   FDataArrayCreationRecords[Index].OnInitialize :=
     FCustomModel.AssignFootprintBoundarydWithdrawal;
   FDataArrayCreationRecords[Index].OnShouldUseOnInitialize :=
     FCustomModel.UseFootprintWells;
   Inc(Index);
-
-//  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
-//  FDataArrayCreationRecords[Index].Orientation := dsoTop;
-//  FDataArrayCreationRecords[Index].DataType := rdtInteger;
-//  FDataArrayCreationRecords[Index].Name := KFootprint_Code;
-//  FDataArrayCreationRecords[Index].DisplayName := StrFootprint_Code;
-//  FDataArrayCreationRecords[Index].Formula := 'If(not(ActiveOnLayer(1)), 0, If(('
-//    + KDistributedWithdrawals + ' = 0.), 1, If(('
-//    + KDistributedWithdrawals + ' < (' + KDepthRateIndex + ' * BlockAreaTop)), 2, 3)))';
-//  FDataArrayCreationRecords[Index].Classification := StrFootprintOutputClassification;
-//  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FootprintSelected;
-//  FDataArrayCreationRecords[Index].Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula];
-//  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
-//  FDataArrayCreationRecords[Index].AssociatedDataSets := '0 = Inactive'
-//    + sLineBreak  + '1 = No distributed withdrawals'
-//    + sLineBreak  + '2 = Distributed withdrawals < Capacity'
-//    + sLineBreak  + '3 = Distributed withdrawals >= Capacity';
-////  FDataArrayCreationRecords[Index].Visible := False;
-//  Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -40770,38 +41609,6 @@ begin
     StrSUTRA30FDRO;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
-
-//  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
-//  FDataArrayCreationRecords[Index].Orientation := dso3D;
-//  FDataArrayCreationRecords[Index].DataType := rdtDouble;
-//  FDataArrayCreationRecords[Index].Name := KInitialWaterContent;
-//  FDataArrayCreationRecords[Index].DisplayName := StrInitialWaterContent;
-//  FDataArrayCreationRecords[Index].Formula := '0';
-//  FDataArrayCreationRecords[Index].Classification := StrUzt;
-//  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UztUsed;
-//  FDataArrayCreationRecords[Index].Lock := StandardLock;
-//  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
-//  FDataArrayCreationRecords[Index].AssociatedDataSets :=
-//    StrMT3DUSGSUZTWC;
-//  FDataArrayCreationRecords[Index].Visible := True;
-//  Inc(Index);
-
-//  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
-//  FDataArrayCreationRecords[Index].Orientation := dso3D;
-//  FDataArrayCreationRecords[Index].DataType := rdtDouble;
-//  FDataArrayCreationRecords[Index].Name := KSaturatedThickness;
-//  FDataArrayCreationRecords[Index].DisplayName := StrSaturatedThickness;
-//  FDataArrayCreationRecords[Index].Formula :=
-//    'IfR(ConfinedLayer, LayerHeight, MaxR(0, MinR(LayerHeight, (Modflow_Initial_Head '
-//    + '- LayerBoundaryPosition((Layer + 1))))))';
-//  FDataArrayCreationRecords[Index].Classification := StrUzt;
-//  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UztUsed;
-//  FDataArrayCreationRecords[Index].Lock := StandardLock;
-//  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
-//  FDataArrayCreationRecords[Index].AssociatedDataSets :=
-//    StrMT3DUSGSUZTSDH;
-//  FDataArrayCreationRecords[Index].Visible := True;
-//  Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -40937,21 +41744,6 @@ begin
     StrSFRMODFLOW6Packa_rhk;
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
-
-//  FDataArrayCreationRecords[Index].DataSetType := TModflowBoundaryDisplayDataArray;
-//  FDataArrayCreationRecords[Index].Orientation := dso3D;
-//  FDataArrayCreationRecords[Index].DataType := rdtDouble;
-//  FDataArrayCreationRecords[Index].Name := KRoughnessSFR6;
-//  FDataArrayCreationRecords[Index].DisplayName := StrRoughnessSFR6;
-//  FDataArrayCreationRecords[Index].Formula := '0';
-//  FDataArrayCreationRecords[Index].Classification := 'SFR MODFLOW 6';
-//  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SfrMf6Selected;
-//  FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula];
-//  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
-//  FDataArrayCreationRecords[Index].AssociatedDataSets :=
-//    'SFR MODFLOW 6, Package Data: man';
-//  FDataArrayCreationRecords[Index].Visible := True;
-//  Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TModflowBoundaryDisplayDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -41399,7 +42191,6 @@ begin
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
   FDataArrayCreationRecords[Index].AssociatedDataSets := '';
-//    StrMODFLOW6UZF6PacVks;
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
@@ -41896,7 +42687,7 @@ begin
     'MODFLOW-OWHM version 2, LAND_USE: ROOT_DEPTH';
   Inc(Index);
 
-    FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtInteger;
   FDataArrayCreationRecords[Index].Name := KGWRootInteraction;
@@ -42246,15 +43037,16 @@ var
   ChildDataArray: TDataArray;
   DeletedIndex: Integer;
   TestDataArray: TDataArray;
-//  ChildGrid: TCustomModelGrid;
+  CustomModel: TCustomModel;
 begin
+  CustomModel := FCustomModel as TCustomModel;
   for Index := 0 to AddedDataSetList.Count - 1 do
   begin
     DataArray := AddedDataSetList[Index];
     if GetDataSetByName(DataArray.Name) = nil then
     begin
       AddDataSet(DataArray);
-      FCustomModel.CreateVariables(DataArray);
+      CustomModel.CreateVariables(DataArray);
     end;
     FDeletedDataSets.Extract(DataArray);
   end;
@@ -42288,8 +43080,9 @@ begin
             DataArray.DataType, DataArray.EvaluatedAt, DataArray.Orientation,
             DataArray.Classification);
           ChildDataArray.AssignProperties(DataArray);
-          ChildManager.FCustomModel.UpdateDataArrayDimensions(ChildDataArray);
-//          ChildGrid := ChildManager.FCustomModel.Grid;
+          CustomModel := ChildManager.FCustomModel as TCustomModel;
+          CustomModel.UpdateDataArrayDimensions(ChildDataArray);
+//          ChildGrid := ChildManager.CustomModel.Grid;
 //          ChildDataArray.UpdateDimensions(ChildGrid.LayerCount,
 //            ChildGrid.RowCount, ChildGrid.ColumnCount);
         end;
@@ -42312,12 +43105,14 @@ var
   NewDeletedList: TList;
   DataArrayIndex: integer;
   ChildDataArray: TDataArray;
+  CustomModel: TCustomModel;
 begin
+  CustomModel := FCustomModel as TCustomModel;
   for Index := DeletedDataSetList.Count - 1 downto 0 do
   begin
     DataArray := DeletedDataSetList[Index];
-    FCustomModel.FCrossSection.RemoveDataArray(DataArray);
-    FCustomModel.RemoveVariables(DataArray);
+    CustomModel.FCrossSection.RemoveDataArray(DataArray);
+    CustomModel.RemoveVariables(DataArray);
     ExtractDataSet(DataArray);
 
   end;
@@ -42382,7 +43177,9 @@ procedure TDataArrayManager.InvalidateAll3DDataSets;
 var
   Index: Integer;
   DS: TDataArray;
+  CustomModel: TCustomModel;
 begin
+  CustomModel := FCustomModel as TCustomModel;
   for Index := 0 to DataSetCount - 1 do
   begin
     DS := DataSets[Index];
@@ -42390,7 +43187,7 @@ begin
     begin
       if (DS.Name <> kNodeActive)
         or not (FCustomModel.ModelSelection in SutraSelection)
-        or not FCustomModel.SutraMesh.UpdatingElevations then
+        or not CustomModel.SutraMesh.UpdatingElevations then
       begin
         DS.Invalidate;
       end;
@@ -42575,7 +43372,9 @@ procedure TDataArrayManager.UpdateClassifications;
 var
   DataArray: TDataArray;
   Packages: TModflowPackages;
+  CustomModel: TCustomModel;
 begin
+  CustomModel := FCustomModel as TCustomModel;
   if FLongitudinalDispersivityIndex >= 0 then
   begin
     if FCustomModel.ModelSelection = msPhast then
@@ -42620,12 +43419,12 @@ begin
     end
     else
     begin
-      Packages := FCustomModel.ModflowPackages;
-      if (Packages.Mt3dBasic.IsSelected or FCustomModel.GwtUsed) and Packages.ModPath.IsSelected then
+      Packages := CustomModel.ModflowPackages;
+      if (Packages.Mt3dBasic.IsSelected or CustomModel.GwtUsed) and Packages.ModPath.IsSelected then
       begin
         FDataArrayCreationRecords[FPorosityIndex].Classification := StrModpath + ' \ ' + StrMT3DMS_GWT_Classificaton;
       end
-      else if Packages.Mt3dBasic.IsSelected or FCustomModel.GwtUsed then
+      else if Packages.Mt3dBasic.IsSelected or CustomModel.GwtUsed then
       begin
         FDataArrayCreationRecords[FPorosityIndex].Classification := StrMT3DMS_GWT_Classificaton;
       end
@@ -42653,23 +43452,25 @@ var
   DataSet: TDataArray;
   Grid: TCustomModelGrid;
   Manager: TDataArrayManager;
+  CustomModel: TCustomModel;
 begin
+  CustomModel := FCustomModel as TCustomModel;
   for Index := 0 to LocalCount - 1 do
   begin
     DataSet := DataSets[Index];
-    FCustomModel.UpdateDataArrayDimensions(DataSet);
+    CustomModel.UpdateDataArrayDimensions(DataSet);
   end;
   for Index := 0 to BoundaryDataSetCount - 1 do
   begin
     DataSet := BoundaryDataSets[Index];
-    FCustomModel.UpdateDataArrayDimensions(DataSet);
+    CustomModel.UpdateDataArrayDimensions(DataSet);
   end;
   for Index := 0 to FDeletedDataSets.Count - 1 do
   begin
     DataSet := FDeletedDataSets[Index];
-    FCustomModel.UpdateDataArrayDimensions(DataSet);
+    CustomModel.UpdateDataArrayDimensions(DataSet);
   end;
-  Grid := FCustomModel.Grid;
+  Grid := CustomModel.Grid;
   if Grid <> nil then
   begin
     Grid.NeedToRecalculateTopCellColors := True;
@@ -42686,7 +43487,7 @@ begin
   end;
 end;
 
-function TCustomModel.AquiferPropertiesUsed(Sender: TObject): boolean;
+function TCustomModel.DoAquiferPropertiesUsed(Sender: TObject): boolean;
 var
   HufUsed: Boolean;
 begin
@@ -42762,12 +43563,12 @@ begin
   end;
 end;
 
-procedure TCustomModel.AssignFootprintBoundarydWithdrawal(Sender: TObject);
+procedure TCustomModel.DoAssignFootprintBoundarydWithdrawal(Sender: TObject);
 begin
   FootprintProperties.AssignFootprintBoundarydWithdrawal(Sender);
 end;
 
-procedure TCustomModel.AssignModflow6LakeDisplayArrays(Sender: TObject);
+procedure TCustomModel.DoAssignModflow6LakeDisplayArrays(Sender: TObject);
 var
   LakeMf6Writer: TModflowLAKMf6Writer;
 begin
@@ -42784,12 +43585,12 @@ end;
 //  FootprintProperties.AssignFootprintDistributedWithdrawals(Sender);
 //end;
 
-function TCustomModel.KineticsUsed(Sender: TObject): boolean;
+function TCustomModel.DoKineticsUsed(Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender) and ChemistryOptions.UseKineticReactants;
+  result := DoChemistryUsed(Sender) and ChemistryOptions.UseKineticReactants;
 end;
 
-function TCustomModel.KyUsed(Sender: TObject): boolean;
+function TCustomModel.DoKyUsed(Sender: TObject): boolean;
 begin
   result := False;
   case ModelSelection of
@@ -42816,7 +43617,7 @@ begin
   end;
 end;
 
-function TCustomModel.KzUsed(Sender: TObject): boolean;
+function TCustomModel.DoKzUsed(Sender: TObject): boolean;
 var
   LayerGroupIndex: Integer;
   LayerGroup: TLayerGroup;
@@ -42950,7 +43751,7 @@ begin
   end;
 end;
 
-function TCustomModel.PorosityUsed(Sender: TObject): boolean;
+function TCustomModel.DoPorosityUsed(Sender: TObject): boolean;
 var
   SpeciesIndex: Integer;
   MstPackage: TGwtMstPackage;
@@ -42982,7 +43783,7 @@ begin
 //    and (ModflowPackages.ModPath.IsSelected or ModflowPackages.Mt3dBasic.IsSelected));
 end;
 
-function TCustomModel.PotentialEvapBareUsed(Sender: TObject): Boolean;
+function TCustomModel.DoPotentialEvapBareUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -42993,7 +43794,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.SpecificStorageUsed(Sender: TObject): boolean;
+function TCustomModel.DoSpecificStorageUsed(Sender: TObject): boolean;
 begin
   result := False;
   case ModelSelection of
@@ -43028,24 +43829,24 @@ begin
   end;
 end;
 
-function TCustomModel.ChemistryUsed(Sender: TObject): boolean;
+function TCustomModel.DoChemistryUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msPhast) and SoluteTransport;
 end;
 
-function TCustomModel.InitialWaterTableUsed(Sender: TObject): boolean;
+function TCustomModel.DoInitialWaterTableUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msPhast) and FreeSurface and UseWaterTable;
 end;
 
-function TCustomModel.InitialHeadUsed(Sender: TObject): boolean;
+function TCustomModel.DoInitialHeadUsed(Sender: TObject): boolean;
 begin
-  result := ((ModelSelection = msPhast) and not InitialWaterTableUsed(Sender))
+  result := ((ModelSelection = msPhast) and not DoInitialWaterTableUsed(Sender))
     or ((ModelSelection in SutraSelection)
     and (SutraOptions.TransportChoice = tcSoluteHead));
 end;
 
-function TCustomModel.SurfaceKUsed(Sender: TObject): Boolean;
+function TCustomModel.DoSurfaceKUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -43056,9 +43857,9 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.SurfacesUsed(Sender: TObject): boolean;
+function TCustomModel.DoSurfacesUsed(Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender) and ChemistryOptions.UseSurfaceAssemblages;
+  result := DoChemistryUsed(Sender) and ChemistryOptions.UseSurfaceAssemblages;
 end;
 
 function TCustomModel.Sutra30OrAboveUsed(Sender: TObject): boolean;
@@ -43066,19 +43867,19 @@ begin
   result := (ModelSelection in [msSutra30, msSutra40])
 end;
 
-function TCustomModel.Sutra3DModel(Sender: TObject): boolean;
+function TCustomModel.DoSutra3DModel(Sender: TObject): boolean;
 begin
   result := False;
   if (frmGoPhast.PhastModel <> nil) then
   begin
-    result := SutraUsed(Sender)
+    result := DoSutraUsed(Sender)
       and (frmGoPhast.PhastModel.SutraMesh.MeshType = mt3D);
   end;
 end;
 
-function TCustomModel.Sutra4SoluteUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutra4SoluteUsed(Sender: TObject): boolean;
 begin
-  result := Sutra4Used(Sender) and  SutraOptions.ProductionUsed
+  result := DoSutra4Used(Sender) and  SutraOptions.ProductionUsed
     and (SutraOptions.TransportChoice in [tcSolute, tcSoluteHead]);
 end;
 
@@ -43101,102 +43902,102 @@ begin
   end;
 end;
 
-function TCustomModel.Sutra4EnergyOrSorptionUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutra4EnergyOrSorptionUsed(Sender: TObject): boolean;
 begin
-  result := Sutra4Used(Sender) and
+  result := DoSutra4Used(Sender) and
     ((SutraOptions.TransportChoice in [tcEnergy, tcFreezing])
     or Sutra4SorptionUsed(Sender));
 end;
 
-function TCustomModel.Sutra4EnergyUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutra4EnergyUsed(Sender: TObject): boolean;
 begin
-  result := Sutra4Used(Sender) and (SutraOptions.TransportChoice in [tcEnergy, tcFreezing]);
+  result := DoSutra4Used(Sender) and (SutraOptions.TransportChoice in [tcEnergy, tcFreezing]);
 end;
 
-function TCustomModel.Sutra4FreezingUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutra4FreezingUsed(Sender: TObject): boolean;
 begin
-  result := Sutra4Used(Sender) and  SutraOptions.ProductionUsed
+  result := DoSutra4Used(Sender) and  SutraOptions.ProductionUsed
     and (SutraOptions.TransportChoice = tcFreezing);
 end;
 
-function TCustomModel.Sutra4ProductionUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutra4ProductionUsed(Sender: TObject): boolean;
 begin
-  result := Sutra4Used(nil) and SutraOptions.ProductionUsed;
+  result := DoSutra4Used(nil) and SutraOptions.ProductionUsed;
 end;
 
-function TCustomModel.Sutra4Used(Sender: TObject): boolean;
+function TCustomModel.DoSutra4Used(Sender: TObject): boolean;
 begin
   result := ModelSelection = msSutra40;
 end;
 
-function TCustomModel.SutraConcentrationUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraConcentrationUsed(Sender: TObject): boolean;
 begin
-  result := SutraUsed(Sender)
+  result := DoSutraUsed(Sender)
     and (SutraOptions.TransportChoice in [tcSolute, tcSoluteHead]);
 end;
 
-function TCustomModel.SutraTemperatureUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraTemperatureUsed(Sender: TObject): boolean;
 begin
-  result := SutraUsed(Sender) and (SutraOptions.TransportChoice in [tcEnergy, tcFreezing]);
+  result := DoSutraUsed(Sender) and (SutraOptions.TransportChoice in [tcEnergy, tcFreezing]);
 end;
 
-function TCustomModel.SutraUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in SutraSelection)
 end;
 
-function TCustomModel.SutraHydraulicConductivityUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraHydraulicConductivityUsed(Sender: TObject): boolean;
 begin
-  result := SutraUsed(Sender)
+  result := DoSutraUsed(Sender)
     and (SutraOptions.TransportChoice = tcSoluteHead);
 end;
 
-function TCustomModel.SutraLakeBottomUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraLakeBottomUsed(Sender: TObject): boolean;
 begin
-  result := SutraLakeUsed(Sender)
+  result := DoSutraLakeUsed(Sender)
     and (not SutraOptions.LakeOptions.AllNodesLakes)
     and SutraOptions.LakeOptions.SpecifyLakeBottom
 end;
 
-function TCustomModel.SutraLakeUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraLakeUsed(Sender: TObject): boolean;
 begin
   result := Sutra30OrAboveUsed(Sender) and (SutraMesh.MeshType = mt3d)
     and SutraOptions.LakeOptions.UseLakes;
 
 end;
 
-function TCustomModel.SutraMiddleHydraulicConductivityUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraMiddleHydraulicConductivityUsed(Sender: TObject): boolean;
 begin
-  result := SutraHydraulicConductivityUsed(Sender)
-    and Sutra3DModel(Sender);
+  result := DoSutraHydraulicConductivityUsed(Sender)
+    and DoSutra3DModel(Sender);
 end;
 
-function TCustomModel.SutraPermeabilityUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraPermeabilityUsed(Sender: TObject): boolean;
 begin
-  result := SutraUsed(Sender)
+  result := DoSutraUsed(Sender)
     and (SutraOptions.TransportChoice in [tcSolute, tcEnergy, tcFreezing]);
 end;
 
-function TCustomModel.SutraMiddlePermeabilityUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraMiddlePermeabilityUsed(Sender: TObject): boolean;
 begin
-  result := SutraPermeabilityUsed(Sender)
-    and Sutra3DModel(Sender);
+  result := DoSutraPermeabilityUsed(Sender)
+    and DoSutra3DModel(Sender);
 end;
 
-function TCustomModel.SutraThicknessUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraThicknessUsed(Sender: TObject): boolean;
 begin
-  result := SutraUsed(Sender) and (FSutraMesh <> nil)
+  result := DoSutraUsed(Sender) and (FSutraMesh <> nil)
     and (FSutraMesh.MeshType in [mt2D, mtProfile]);
 end;
 
-function TCustomModel.SutraUnsatRegionUsed(Sender: TObject): boolean;
+function TCustomModel.DoSutraUnsatRegionUsed(Sender: TObject): boolean;
 begin
-  result := SutraUsed(Sender)
+  result := DoSutraUsed(Sender)
     and ((SutraOptions.SaturationChoice = scUnsaturated)
-    or Sutra4Used(Sender));
+    or DoSutra4Used(Sender));
 end;
 
-function TCustomModel.ActiveUsed(Sender: TObject): boolean;
+function TCustomModel.DoActiveUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     or (ModelSelection in [msPhast, msFootPrint]);
@@ -43208,17 +44009,17 @@ begin
     or (ModelSelection = msPhast);
 end;
 
-function TCustomModel.ExchangeUsed(Sender: TObject): boolean;
+function TCustomModel.DoExchangeUsed(Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender) and ChemistryOptions.UseExchange;
+  result := DoChemistryUsed(Sender) and ChemistryOptions.UseExchange;
 end;
 
-function TCustomModel.GasPhaseUsed(Sender: TObject): boolean;
+function TCustomModel.DoGasPhaseUsed(Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender) and ChemistryOptions.UseGasPhases;
+  result := DoChemistryUsed(Sender) and ChemistryOptions.UseGasPhases;
 end;
 
-function TCustomModel.SoilIDUsed(Sender: TObject): boolean;
+function TCustomModel.DoSoilIDUsed(Sender: TObject): boolean;
 begin
   result := FarmProcessUsed(Sender);
 {$IFDEF OWHMV2}
@@ -43233,30 +44034,30 @@ begin
 
 end;
 
-function TCustomModel.SolidSolutionUsed(Sender: TObject): boolean;
+function TCustomModel.DoSolidSolutionUsed(Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender) and ChemistryOptions.UseSolidSolution;
+  result := DoChemistryUsed(Sender) and ChemistryOptions.UseSolidSolution;
 end;
 
-function TCustomModel.ReservoirLayerUsed(Sender: TObject): boolean;
+function TCustomModel.DoReservoirLayerUsed(Sender: TObject): boolean;
 begin
-  result := ReservoirPackageUsed(Sender)
+  result := DoReservoirPackageUsed(Sender)
     and (ModflowPackages.ResPackage.LayerOption = loSpecified);
 end;
 
-function TCustomModel.ReservoirPackageUsed(Sender: TObject): boolean;
+function TCustomModel.DoReservoirPackageUsed(Sender: TObject): boolean;
 begin
-  result := ModflowUsed(Sender)and (ModelSelection <> msModflow2015)
+  result := DoModflowUsed(Sender)and (ModelSelection <> msModflow2015)
     and ModflowPackages.ResPackage.IsSelected;
 end;
 
-function TCustomModel.LakePackageUsed(Sender: TObject): boolean;
+function TCustomModel.DoLakePackageUsed(Sender: TObject): boolean;
 begin
-  result := ModflowUsed(Sender) and (ModelSelection <> msModflow2015)
+  result := DoModflowUsed(Sender) and (ModelSelection <> msModflow2015)
     and ModflowPackages.LakPackage.IsSelected;
 end;
 
-function TCustomModel.LakMf6Selected(Sender: TObject): Boolean;
+function TCustomModel.DoLakMf6Selected(Sender: TObject): Boolean;
 begin
   result := (ModelSelection = msModflow2015)
     and ModflowPackages.LakMf6Package.IsSelected;
@@ -43291,7 +44092,7 @@ begin
   result := FLakScreenObjects;
 end;
 
-function TCustomModel.LandUseAreaFractionUsed(Sender: TObject): Boolean;
+function TCustomModel.DoLandUseAreaFractionUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -43302,7 +44103,7 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.LandUseCellsToPrintUsed(Sender: TObject): Boolean;
+function TCustomModel.DoLandUseCellsToPrintUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -43314,15 +44115,15 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.UzfPackageUsed(Sender: TObject): boolean;
+function TCustomModel.DoUzfPackageUsed(Sender: TObject): boolean;
 begin
-  result := ModflowUsed(Sender) and (ModelSelection <> msModflow2015)
+  result := DoModflowUsed(Sender) and (ModelSelection <> msModflow2015)
     and ModflowPackages.UzfPackage.IsSelected;
 end;
 
-function TCustomModel.UzfResidualWaterContentUsed(Sender: TObject): boolean;
+function TCustomModel.DoUzfResidualWaterContentUsed(Sender: TObject): boolean;
 begin
-  result := UzfPackageUsed(Sender);
+  result := DoUzfPackageUsed(Sender);
   if result then
   begin
       result := ModflowPackages.UzfPackage.SpecifyResidualWaterContent
@@ -43355,19 +44156,19 @@ begin
   end;
 end;
 
-function TCustomModel.UzfSurfKUsed(Sender: TObject): boolean;
+function TCustomModel.DoUzfSurfKUsed(Sender: TObject): boolean;
 begin
-  result := UzfPackageUsed(Sender) and
+  result := DoUzfPackageUsed(Sender) and
     ModflowPackages.UzfPackage.SpecifySurfaceK { (NWT_Format = nf1_1)
     and ModflowPackages.UzfPackage.SpecifySurfaceK;}
 end;
 
-function TCustomModel.UzfUnsatVertKUsed(Sender: TObject): boolean;
+function TCustomModel.DoUzfUnsatVertKUsed(Sender: TObject): boolean;
 var
   IUZFOPT: integer;
 begin
   result := False;
-  if UzfPackageUsed(Sender) then
+  if DoUzfPackageUsed(Sender) then
   begin
     IUZFOPT := ModflowPackages.UzfPackage.VerticalKSource;
     if not (ModflowPackages.LpfPackage.IsSelected
@@ -43381,18 +44182,18 @@ end;
 
 function TCustomModel.UztUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.UzfPackage.IsSelected
+  result := DoMt3dMS_StrictUsed(Sender) and ModflowPackages.UzfPackage.IsSelected
     and ModflowPackages.Mt3dBasic.IsSelected
     and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS)
     and ModflowPackages.Mt3dUnsatTransport.IsSelected;
 end;
 
-function TCustomModel.ModflowUsed(Sender: TObject): boolean;
+function TCustomModel.DoModflowUsed(Sender: TObject): boolean;
 begin
   result := ModelSelection in ModflowSelection;
 end;
 
-function TCustomModel.RootDepthUsed(Sender: TObject): Boolean;
+function TCustomModel.DoRootDepthUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -43403,9 +44204,9 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.RouteUzfDischarge(Sender: TObject): boolean;
+function TCustomModel.DoRouteUzfDischarge(Sender: TObject): boolean;
 begin
-  result := UzfPackageUsed(Sender)
+  result := DoUzfPackageUsed(Sender)
     and ModflowPackages.UzfPackage.RouteDischargeToStreams
     and (ModflowPackages.SfrPackage.IsSelected
     or ModflowPackages.LakPackage.IsSelected
@@ -43425,9 +44226,9 @@ begin
   end;
 end;
 
-function TCustomModel.UzfInitialInfiltrationUsed(Sender: TObject): boolean;
+function TCustomModel.DoUzfInitialInfiltrationUsed(Sender: TObject): boolean;
 begin
-  result := UzfPackageUsed(Sender);
+  result := DoUzfPackageUsed(Sender);
   if result then
   begin
       result := ModflowStressPeriods.CompletelyTransient or
@@ -43441,7 +44242,7 @@ begin
   end;
 end;
 
-function TCustomModel.UzfMf6PackageUsed(Sender: TObject): boolean;
+function TCustomModel.DoUzfMf6PackageUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
     and ModflowPackages.UzfMf6Package.IsSelected;
@@ -43476,9 +44277,9 @@ begin
   result := FUzfMf6ScreenObjects;
 end;
 
-function TCustomModel.ModflowInitialHeadUsed(Sender: TObject): boolean;
+function TCustomModel.DoModflowInitialHeadUsed(Sender: TObject): boolean;
 begin
-  result := ModflowUsed(Sender) and (ModflowOptions.InitialHeadFileName = '');
+  result := DoModflowUsed(Sender) and (ModflowOptions.InitialHeadFileName = '');
 end;
 
 function TCustomModel.ModflowLayerBottomDescription(
@@ -43498,7 +44299,7 @@ begin
   result := LayerStructure.ModflowLayerToDataSetLayer(ModflowLayer);
 end;
 
-function TCustomModel.ConfiningBedKzUsed(Sender: TObject): boolean;
+function TCustomModel.DoConfiningBedKzUsed(Sender: TObject): boolean;
 var
   UnitIndex: Integer;
   LayerGroup: TLayerGroup;
@@ -43520,7 +44321,7 @@ begin
   end;
 end;
 
-function TCustomModel.ConsumptiveUseUsed(Sender: TObject): Boolean;
+function TCustomModel.DoConsumptiveUseUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -43670,14 +44471,14 @@ begin
   end;
 end;
 
-function TCustomModel.VertAnisotropyMf6Used(Sender: TObject): boolean;
+function TCustomModel.DoVertAnisotropyMf6Used(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
     and (ModflowPackages.NpfPackage.IsSelected)
     and ModflowPackages.NpfPackage.UseVerticalAnisotropy
 end;
 
-function TCustomModel.VerticalAnisotropyUsed(Sender: TObject): boolean;
+function TCustomModel.DoVerticalAnisotropyUsed(Sender: TObject): boolean;
 var
   UnitIndex: Integer;
   LayerGroup: TLayerGroup;
@@ -43698,15 +44499,15 @@ begin
   end;
 end;
 
-function TCustomModel.VerticalTransverseDispersionUsed(
+function TCustomModel.DoVerticalTransverseDispersionUsed(
   Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender)
-    or (GwtDispUsed(Sender)
+  result := DoChemistryUsed(Sender)
+    or (DoGwtDispUsed(Sender)
     and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow)
 end;
 
-function TCustomModel.CropHasSalinityDemandUsed(Sender: TObject): Boolean;
+function TCustomModel.DoCropHasSalinityDemandUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -43718,14 +44519,14 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.HorizAnisotropyMf6Used(Sender: TObject): boolean;
+function TCustomModel.DoHorizAnisotropyMf6Used(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
     and (ModflowPackages.NpfPackage.IsSelected)
     and ModflowPackages.NpfPackage.UseHorizontalAnisotropy
 end;
 
-function TCustomModel.HorizontalAnisotropyUsed(Sender: TObject): boolean;
+function TCustomModel.DoHorizontalAnisotropyUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection);
   if result then
@@ -43742,15 +44543,15 @@ begin
   end;
 end;
 
-function TCustomModel.HorizontalTransverseDispersionUsed(
+function TCustomModel.DoHorizontalTransverseDispersionUsed(
   Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender)
-    or (GwtDispUsed(Sender)
+  result := DoChemistryUsed(Sender)
+    or (DoGwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtCombined))
 end;
 
-function TCustomModel.SpecificYieldUsed(Sender: TObject): boolean;
+function TCustomModel.DoSpecificYieldUsed(Sender: TObject): boolean;
 var
   UnitIndex: Integer;
   LayerGroup: TLayerGroup;
@@ -43790,9 +44591,9 @@ begin
   end;
 end;
 
-function TCustomModel.StorageSelected(Sender: TObject): boolean;
+function TCustomModel.DoStorageSelected(Sender: TObject): boolean;
 begin
-  result := Modflow6Selected(Sender) and
+  result := DoModflow6Selected(Sender) and
     ModflowPackages.StoPackage.IsSelected;
 end;
 
@@ -43918,7 +44719,7 @@ begin
   result := FMt3dmsWellMassFluxObservations.Count > 0;
 end;
 
-function TCustomModel.WetDryUsed(Sender: TObject): boolean;
+function TCustomModel.DoWetDryUsed(Sender: TObject): boolean;
 begin
   result := ModflowWettingOptions.WettingActive;
   if result and (ModelSelection in [msModflowNWT, msModflowFmp
@@ -43931,7 +44732,7 @@ begin
   end;
 end;
 
-function TCustomModel.ModpathBudgetNeeded(Sender: TObject): boolean;
+function TCustomModel.DoModpathBudgetNeeded(Sender: TObject): boolean;
 begin
   result := ModpathUsed(Sender);
   if result and (ModflowPackages.ModPath.MpathVersion <> mp7) then
@@ -43940,13 +44741,13 @@ begin
   end;
 end;
 
-function TCustomModel.ModpathRetardationNeeded(Sender: TObject): boolean;
+function TCustomModel.DoModpathRetardationNeeded(Sender: TObject): boolean;
 begin
   result := ModpathUsed(Sender)
     and (ModflowPackages.ModPath.RetardationOption = roUsed);
 end;
 
-function TCustomModel.ModpathZonesNeeded(Sender: TObject): boolean;
+function TCustomModel.DoModpathZonesNeeded(Sender: TObject): boolean;
 begin
   result :=  (ModelSelection in ModflowSelection)
     and ModflowPackages.ModPath.IsSelected;
@@ -43962,7 +44763,7 @@ begin
     and ModflowPackages.ModPath.IsSelected;
 end;
 
-function TCustomModel.HufReferenceSurfaceNeeded(Sender: TObject): boolean;
+function TCustomModel.DoHufReferenceSurfaceNeeded(Sender: TObject): boolean;
 begin
   { TODO : In LGR, this function may need to updated. }
   result := (ModelSelection in ModflowSelection)
@@ -43971,7 +44772,7 @@ begin
     and (HufParameters.CountParameters([ptHUF_KDEP]) > 0);
 end;
 
-function TCustomModel.BcfUsed(Sender: TObject): boolean;
+function TCustomModel.DoBcfUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     and (ModelSelection <> msModflow2015)
@@ -44002,7 +44803,7 @@ begin
   end;
 end;
 
-function TCustomModel.ConfinedStorageCoefUsed(Sender: TObject): boolean;
+function TCustomModel.DoConfinedStorageCoefUsed(Sender: TObject): boolean;
 begin
   result := False;
   case ModelSelection of
@@ -44033,20 +44834,20 @@ begin
   end;
 end;
 
-function TCustomModel.HufSelected(Sender: TObject): boolean;
+function TCustomModel.DoHufSelected(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     and (ModelSelection <> msModflow2015)
     and ModflowPackages.HufPackage.IsSelected
 end;
 
-function TCustomModel.HufStorageUsed(Sender: TObject): boolean;
+function TCustomModel.DoHufStorageUsed(Sender: TObject): boolean;
 begin
-  result := HufSelected(Sender)
+  result := DoHufSelected(Sender)
     and ModflowStressPeriods.TransientModel;
 end;
 
-function TCustomModel.ZetaUsed(Sender: TObject): boolean;
+function TCustomModel.DoZetaUsed(Sender: TObject): boolean;
 var
   DataArray: TDataArray;
   AnInt: Integer;
@@ -44070,40 +44871,40 @@ begin
   end;
 end;
 
-function TCustomModel.ZoneBudgetSelected(Sender: TObject): boolean;
+function TCustomModel.DoZoneBudgetSelected(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     and ModflowPackages.ZoneBudget.IsSelected
 end;
 
-function TCustomModel.SwtSelected(Sender: TObject): boolean;
+function TCustomModel.DoSwtSelected(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     and (ModelSelection <> msModflow2015)
     and ModflowPackages.SwtPackage.IsSelected
 end;
 
-function TCustomModel.SwiObsUsed(Sender: TObject): boolean;
+function TCustomModel.DoSwiObsUsed(Sender: TObject): boolean;
 begin
   result := SwiUsed(Sender)
     and (ModflowPackages.SwiPackage.ObsChoice <> socNone);
 end;
 
-function TCustomModel.SwiUsed(Sender: TObject): boolean;
+function TCustomModel.DoSwiUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in [msModflow, msModflowNWT])
     and ModflowPackages.SwiPackage.IsSelected;
 end;
 
-function TCustomModel.SwtOffsetsUsed(Sender: TObject): boolean;
+function TCustomModel.DoSwtOffsetsUsed(Sender: TObject): boolean;
 begin
-  result := SwtSelected(Sender)
+  result := DoSwtSelected(Sender)
     and (ModflowPackages.SwtPackage.PreconsolidationSource = pcOffsets);
 end;
 
-function TCustomModel.SwtSpecifiedUsed(Sender: TObject): boolean;
+function TCustomModel.DoSwtSpecifiedUsed(Sender: TObject): boolean;
 begin
-  result := SwtSelected(Sender)
+  result := DoSwtSelected(Sender)
     and (ModflowPackages.SwtPackage.PreconsolidationSource = pcSpecified);
 end;
 
@@ -44119,11 +44920,11 @@ begin
   UpdateGwtConc;
 end;
 
-function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
+function TCustomModel.DoLongitudinalDispersionUsed(Sender: TObject): boolean;
 begin
-  result := ChemistryUsed(Sender)
-    or (Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
-    or (GwtDispUsed(Sender)
+  result := DoChemistryUsed(Sender)
+    or (DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
+    or (DoGwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtCombined))
 end;
 
@@ -44133,18 +44934,18 @@ begin
     and ModflowPackages.Mt3dBasic.IsSelected
 end;
 
-function TCustomModel.Mt3dMSBulkDensityUsed(Sender: TObject): boolean;
+function TCustomModel.DoMt3dMSBulkDensityUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
+  result := DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
     and ((ModflowPackages.Mt3dmsChemReact.SorptionChoice in [scLinear,
     scFreundlich, scLangmuir, scFirstOrderKinetic, scDualDomainWithSorption,
     scDualWithDifferingConstants])
     or (ModflowPackages.Mt3dmsChemReact.ReactionChoice = rcKinetic));
 end;
 
-function TCustomModel.Mt3dMSImmobPorosityUsed(Sender: TObject): boolean;
+function TCustomModel.DoMt3dMSImmobPorosityUsed(Sender: TObject): boolean;
 begin
-  result := Mt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
+  result := DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
     and (ModflowPackages.Mt3dmsChemReact.SorptionChoice in
     [scDualDomainNoSorption, scDualDomainWithSorption,
     scDualWithDifferingConstants]);
@@ -44156,14 +44957,14 @@ end;
 //    and ModflowPackages.Mt3dBasic.IsSelected;
 //end;
 
-function TCustomModel.Mt3dMS_StrictUsed(Sender: TObject): boolean;
+function TCustomModel.DoMt3dMS_StrictUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     and ModflowPackages.Mt3dBasic.IsSelected
     and (ModflowPackages.Mt3dBasic.Mt3dVersion in [mvUSGS, mvMS]);
 end;
 
-function TCustomModel.Mt3d_LktIsSelected(Sender: TObject): Boolean;
+function TCustomModel.DoMt3d_LktIsSelected(Sender: TObject): Boolean;
 begin
   result := ModflowPackages.Mt3dLkt.IsSelected;
 end;
@@ -44359,13 +45160,13 @@ begin
 {$ENDIF}
 end;
 
-function TCustomModel.NpfUsed(Sender: TObject): boolean;
+function TCustomModel.DoNpfUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
     and ModflowPackages.NpfPackage.IsSelected;
 end;
 
-function TCustomModel.NrdInfilLocationUsed(Sender: TObject): Boolean;
+function TCustomModel.DoNrdInfilLocationUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -45149,6 +45950,16 @@ begin
   end;
 end;
 
+function TCustomModel.GetDetermineKyFromAnisotropy: TNotifyEvent;
+begin
+  result := DoDetermineKyFromAnisotropy;
+end;
+
+function TCustomModel.GetDetermineKzFromAnisotropy: TNotifyEvent;
+begin
+  result := DoDetermineKzFromAnisotropy;
+end;
+
 function TCustomModel.RelativeFileName(const FullFileName: string): string;
 var
   BaseDir: string;
@@ -45395,7 +46206,7 @@ begin
   result := FMawScreenObjects;
 end;
 
-function TCustomModel.MawSelected(Sender: TObject): Boolean;
+function TCustomModel.DoMawSelected(Sender: TObject): Boolean;
 begin
   result := ModflowPackages.MawPackage.IsSelected;
 end;
@@ -45441,7 +46252,7 @@ begin
 
 end;
 
-function TCustomModel.Modflow6Selected(Sender: TObject): boolean;
+function TCustomModel.DoModflow6Selected(Sender: TObject): boolean;
 begin
   result := ModelSelection = msModflow2015;
 end;
@@ -45460,6 +46271,11 @@ end;
 function TCustomModel.ModflowHobPackageUsed(Sender: TObject): boolean;
 begin
   result := ModflowPackages.HobPackage.IsSelected;
+end;
+
+function TCustomModel.GetMawSelected: TObjectUsedEvent;
+begin
+  Result := DoMawSelected;
 end;
 
 function TCustomModel.GetMesh: IMesh;
@@ -45490,6 +46306,21 @@ begin
   end;
 end;
 
+function TCustomModel.GetMt3dMSBulkDensityUsed: TObjectUsedEvent;
+begin
+  result := DoMt3dMSBulkDensityUsed;
+end;
+
+function TCustomModel.GetMt3dMSImmobPorosityUsed: TObjectUsedEvent;
+begin
+  result := DoMt3dMSImmobPorosityUsed;
+end;
+
+function TCustomModel.GetMt3dMS_StrictUsed: TObjectUsedEvent;
+begin
+  result := DoMt3dMS_StrictUsed;
+end;
+
 function TCustomModel.GetMt3dSpecesName(const Index: Integer): string;
 begin
   if Index < MobileComponents.Count then
@@ -45510,6 +46341,21 @@ begin
 end;
 
 
+function TCustomModel.GetMt3d_LktIsSelected: TObjectUsedEvent;
+begin
+  Result := DoMt3d_LktIsSelected;
+end;
+
+function TCustomModel.GetNpfUsed: TObjectUsedEvent;
+begin
+  result := DoNpfUsed
+end;
+
+function TCustomModel.GetNrdInfilLocationUsed: TObjectUsedEvent;
+begin
+  result := DoNrdInfilLocationUsed;
+end;
+
 procedure TCustomModel.GetMfHobHeadsUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
@@ -45522,7 +46368,7 @@ var
   index: Integer;
   ATabFile: string;
 begin
-  if SwrSelected(nil) then
+  if DoSwrSelected(nil) then
   begin
     for index := 0 to SwrTabFiles.Count - 1 do
     begin
@@ -45543,6 +46389,16 @@ begin
   result := FModelInputFiles;
 end;
 
+function TCustomModel.GetModflow6Selected: TObjectUsedEvent;
+begin
+  result := DoModflow6Selected;
+end;
+
+function TCustomModel.GetModflowInitialHeadUsed: TObjectUsedEvent;
+begin
+  result := DoModflowInitialHeadUsed;
+end;
+
 function TCustomModel.GetModflowLocation: string;
 begin
   case ModelSelection of
@@ -45560,6 +46416,21 @@ begin
   end;
 end;
 
+function TCustomModel.GetModflowPackages: TModflowPackages;
+begin
+  result := FModflowPackages
+end;
+
+function TCustomModel.GetModflowUsed: TObjectUsedEvent;
+begin
+  result := DoModflowUsed;
+end;
+
+function TCustomModel.GetModpathBudgetNeeded: TObjectUsedEvent;
+begin
+  result := DoModpathBudgetNeeded;
+end;
+
 function TCustomModel.GetModPathLocation: string;
 begin
   Result := '';
@@ -45571,6 +46442,16 @@ begin
   end;
 end;
 
+function TCustomModel.GetModpathRetardationNeeded: TObjectUsedEvent;
+begin
+  result := DoModpathRetardationNeeded;
+end;
+
+function TCustomModel.GetModpathZonesNeeded: TObjectUsedEvent;
+begin
+  result := DoModpathZonesNeeded;
+end;
+
 function TCustomModel.GetObserverByName(const ObserverName: string): TObserver;
 begin
   result := FDataArrayManager.GetDataSetByName(ObserverName);
@@ -45578,6 +46459,21 @@ begin
   begin
     result := GlobalVariables.GetVariableByName(ObserverName);
   end;
+end;
+
+function TCustomModel.GetOnActiveDataSetChanged: TNotifyEvent;
+begin
+  result := DoOnActiveDataSetChanged
+end;
+
+function TCustomModel.GetOnNodeActiveDataSetChanged: TNotifyEvent;
+begin
+  result := DoOnNodeActiveDataSetChanged;
+end;
+
+function TCustomModel.GetOptionalDataSet: TObjectUsedEvent;
+begin
+  result := DoOptionalDataSet;
 end;
 
 procedure TCustomModel.CreateModflowDisplayTimeLists;
@@ -45617,15 +46513,15 @@ begin
   FZoneBudgetOutputFiles.Assign(Value);
 end;
 
-function TCustomModel.SfrMf6Selected(Sender: TObject): Boolean;
+function TCustomModel.DoSfrMf6Selected(Sender: TObject): Boolean;
 begin
   result := ModflowPackages.SfrModflow6Package.IsSelected;
 end;
 
-function TCustomModel.SftUsed(Sender: TObject): boolean;
+function TCustomModel.DoSftUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in [msModflowNWT])
-    and Mt3dMS_StrictUsed(Sender)
+    and DoMt3dMS_StrictUsed(Sender)
     and ModflowPackages.Mt3dSft.IsSelected;
 end;
 
@@ -45658,7 +46554,7 @@ begin
   result := FSfrScreenObjects;
 end;
 
-procedure TCustomModel.ShouldActiveBeSetByCellSize(Sender: TObject;
+procedure TCustomModel.DoShouldActiveBeSetByCellSize(Sender: TObject;
   var ShouldCheck: Boolean);
 var
   ActiveDatArray: TDataArray;
@@ -45697,16 +46593,16 @@ begin
   end;
 end;
 
-procedure TCustomModel.ShouldKyBeDeterminedFromAnisotropy(Sender: TObject;
+procedure TCustomModel.DoShouldKyBeDeterminedFromAnisotropy(Sender: TObject;
   var ShouldCheck: Boolean);
 begin
-  ShouldCheck := HorizAnisotropyMf6Used(Sender);
+  ShouldCheck := DoHorizAnisotropyMf6Used(Sender);
 end;
 
-procedure TCustomModel.ShouldKzBeDeterminedFromAnisotropy(Sender: TObject;
+procedure TCustomModel.DoShouldKzBeDeterminedFromAnisotropy(Sender: TObject;
   var ShouldCheck: Boolean);
 begin
-  ShouldCheck := VertAnisotropyMf6Used(Sender);
+  ShouldCheck := DoVertAnisotropyMf6Used(Sender);
 end;
 
 function TCustomModel.PackageGeneratedExternally(const PackageName: string): boolean;
@@ -45963,6 +46859,11 @@ begin
   result := FDataSetCollection;
 end;
 
+function TCustomModel.GetDirectRechargeUsed: TObjectUsedEvent;
+begin
+  result := DoDirectRechargeUsed;
+end;
+
 function TCustomModel.GetDiscretization: TCustomDiscretization;
 begin
   result := nil;
@@ -46045,6 +46946,11 @@ begin
   result := Grid.DisplayRow;
 end;
 
+function TCustomModel.GetDoShouldActiveBeSetByCellSize: TCheckUsageEvent;
+begin
+  result := DoShouldActiveBeSetByCellSize;
+end;
+
 function TCustomModel.GetDrawMesh: IDrawMesh;
 begin
   if ModelSelection in SutraSelection then
@@ -46065,6 +46971,56 @@ function TCustomModel.GetHeadObsResults: THeadObsCollection;
 begin
   CreateHeadObsResults;
   result := FHeadObsResults;
+end;
+
+function TCustomModel.GetHorizAnisotropyMf6Used: TObjectUsedEvent;
+begin
+  result := DoHorizAnisotropyMf6Used;
+end;
+
+function TCustomModel.GetHorizontalAnisotropyUsed: TObjectUsedEvent;
+begin
+  result := DoHorizontalAnisotropyUsed;
+end;
+
+function TCustomModel.GetHorizontalTransverseDispersionUsed: TObjectUsedEvent;
+begin
+  result := DoHorizontalTransverseDispersionUsed;
+end;
+
+function TCustomModel.GetHufReferenceSurfaceNeeded: TObjectUsedEvent;
+begin
+  result := DoHufReferenceSurfaceNeeded;
+end;
+
+function TCustomModel.GetHufSelected: TObjectUsedEvent;
+begin
+  result := DoHufSelected;
+end;
+
+function TCustomModel.GetHufStorageUsed: TObjectUsedEvent;
+begin
+  result := DoHufStorageUsed;
+end;
+
+function TCustomModel.GetInitialHeadUsed: TObjectUsedEvent;
+begin
+  result := DoInitialHeadUsed;
+end;
+
+function TCustomModel.GetInitializeActiveDataArrayWithCellSizeObjects: TNotifyEvent;
+begin
+  result := DoInitializeActiveDataArrayWithCellSizeObjects;
+end;
+
+function TCustomModel.GetInitialWaterTableUsed: TObjectUsedEvent;
+begin
+  result := DoInitialWaterTableUsed;
+end;
+
+function TCustomModel.GetIrrigationUsed: TObjectUsedEvent;
+begin
+  result := DoIrrigationUsed;
 end;
 
 function TCustomModel.GetItemTopLocation(const EvalAt: TEvaluatedAt;
@@ -46104,6 +47060,56 @@ begin
   end;
 end;
 
+function TCustomModel.GetKineticsUsed: TObjectUsedEvent;
+begin
+  result := DoKineticsUsed
+end;
+
+function TCustomModel.GetKyUsed: TObjectUsedEvent;
+begin
+  result := DoKyUsed;
+end;
+
+function TCustomModel.GetKzUsed: TObjectUsedEvent;
+begin
+  result := DoKzUsed;
+end;
+
+function TCustomModel.GetSwiObsUsed: TObjectUsedEvent;
+begin
+  result := DoSwiObsUsed;
+end;
+
+function TCustomModel.GetSwiUsed: TObjectUsedEvent;
+begin
+  result := DoSwiUsed;
+end;
+
+function TCustomModel.GetSwrSelected: TObjectUsedEvent;
+begin
+  result := DoSwrSelected;
+end;
+
+function TCustomModel.GetLakePackageUsed: TObjectUsedEvent;
+begin
+  result := DoLakePackageUsed;
+end;
+
+function TCustomModel.GetLakMf6Selected: TObjectUsedEvent;
+begin
+  result := DoLakMf6Selected;
+end;
+
+function TCustomModel.GetLandUseAreaFractionUsed: TObjectUsedEvent;
+begin
+  result := DoLandUseAreaFractionUsed;
+end;
+
+function TCustomModel.GetLandUseCellsToPrintUsed: TObjectUsedEvent;
+begin
+  result := DoLandUseCellsToPrintUsed;
+end;
+
 function TCustomModel.GetLayerGroupByLayer(const Layer: integer): TLayerGroup;
 begin
   result := LayerStructure.GetLayerGroupByLayer(Layer);
@@ -46113,6 +47119,11 @@ function TCustomModel.GetLayerThickness(Layer, Row, Column: Integer): Double;
 begin
   result := DiscretiztionElevation[Column, Row, Layer] -
     DiscretiztionElevation[Column, Row, Layer+1]
+end;
+
+function TCustomModel.GetLongitudinalDispersionUsed: TObjectUsedEvent;
+begin
+  result := DoLongitudinalDispersionUsed;
 end;
 
 function TCustomModel.WettingActive: boolean;
@@ -46191,7 +47202,7 @@ begin
   result := FileName;
 end;
 
-function TCustomModel.FootprintSelected(Sender: TObject): Boolean;
+function TCustomModel.DoFootprintSelected(Sender: TObject): Boolean;
 begin
   result := (ModelSelection = msFootprint);
 end;
@@ -46371,7 +47382,7 @@ var
   ScreenObjectIndex: Integer;
 begin
   result := False;
-  if SwiObsUsed(nil) then
+  if DoSwiObsUsed(nil) then
   begin
     for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
     begin
@@ -47208,7 +48219,7 @@ begin
   end;
 end;
 
-procedure TCustomModel.InitializeActiveDataArrayWithCellSizeObjects(
+procedure TCustomModel.DoInitializeActiveDataArrayWithCellSizeObjects(
   Sender: TObject);
 var
   ActiveDatArray: TDataArray;
@@ -47366,7 +48377,7 @@ begin
   (SfrWriter as TModflowSFR_Writer).Evaluate;
 end;
 
-function TCustomModel.EvaporationIrrigationFractionUsed(
+function TCustomModel.DoEvaporationIrrigationFractionUsed(
   Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -53453,17 +54464,87 @@ begin
   end;
 end;
 
+function TCustomModel.GetTranspirationFractionUsed: TObjectUsedEvent;
+begin
+  result := DoTranspirationFractionUsed;
+end;
+
 function TCustomModel.GetUnitNumbers: TUnitNumbers;
 begin
   result := FUnitNumbers;
 end;
 
-function TCustomModel.GroundSurfaceUsed(Sender: TObject): boolean;
+function TCustomModel.GetUseFootprintWells: TCheckUsageEvent;
 begin
-  result := UzfPackageUsed(Sender) or FarmProcessUsed(Sender);
+  Result := DoUseFootprintWells;
 end;
 
-function TCustomModel.GwRootInteractionUsed(Sender: TObject): Boolean;
+function TCustomModel.GetUzfInitialInfiltrationUsed: TObjectUsedEvent;
+begin
+  result := DoUzfInitialInfiltrationUsed;
+end;
+
+function TCustomModel.GetUzfMf6PackageUsed: TObjectUsedEvent;
+begin
+  result := DoUzfMf6PackageUsed;
+end;
+
+function TCustomModel.GetUzfPackageUsed: TObjectUsedEvent;
+begin
+  result := DoUzfPackageUsed;
+end;
+
+function TCustomModel.GetUzfResidualWaterContentUsed: TObjectUsedEvent;
+begin
+  result := DoUzfResidualWaterContentUsed;
+end;
+
+function TCustomModel.GetUzfSurfKUsed: TObjectUsedEvent;
+begin
+  result := DoUzfSurfKUsed;
+end;
+
+function TCustomModel.GetUzfUnsatVertKUsed: TObjectUsedEvent;
+begin
+  result := DoUzfUnsatVertKUsed;
+end;
+
+function TCustomModel.GetVertAnisotropyMf6Used: TObjectUsedEvent;
+begin
+  Result := DoVertAnisotropyMf6Used;
+end;
+
+function TCustomModel.GetVerticalAnisotropyUsed: TObjectUsedEvent;
+begin
+  result := DoVerticalAnisotropyUsed;
+end;
+
+function TCustomModel.GetVerticalTransverseDispersionUsed: TObjectUsedEvent;
+begin
+  result := DoVerticalTransverseDispersionUsed;
+end;
+
+function TCustomModel.GetWetDryUsed: TObjectUsedEvent;
+begin
+  result := DoWetDryUsed;
+end;
+
+function TCustomModel.GetZetaUsed: TObjectUsedEvent;
+begin
+  result := DoZetaUsed;
+end;
+
+function TCustomModel.GetZoneBudgetSelected: TObjectUsedEvent;
+begin
+  result := DoZoneBudgetSelected;
+end;
+
+function TCustomModel.DoGroundSurfaceUsed(Sender: TObject): boolean;
+begin
+  result := DoUzfPackageUsed(Sender) or FarmProcessUsed(Sender);
+end;
+
+function TCustomModel.DoGwRootInteractionUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
@@ -53474,12 +54555,12 @@ begin
   {$ENDIF}
 end;
 
-function TCustomModel.GwtDispUsed(Sender: TObject): boolean;
+function TCustomModel.DoGwtDispUsed(Sender: TObject): boolean;
 begin
   result := Mf6GwtUsed(Sender) and ModflowPackages.GwtDispersionPackage.IsSelected;
 end;
 
-function TCustomModel.GwtUztUsed(Sender: TObject): boolean;
+function TCustomModel.DoGwtUztUsed(Sender: TObject): boolean;
 begin
   result := GwtUsed and ModflowPackages.UzfMf6Package.IsSelected
 end;
@@ -53498,6 +54579,61 @@ begin
   result := FEndPoints;
 end;
 
+function TCustomModel.GetEquilibriumPhasesUsed: TObjectUsedEvent;
+begin
+  result := DoEquilibriumPhasesUsed;
+end;
+
+function TCustomModel.GetEvaporationIrrigationFractionUsed: TObjectUsedEvent;
+begin
+  result := DoEvaporationIrrigationFractionUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadArrayAddedDemandRunoffSplitUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadArrayAddedDemandRunoffSplitUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadArrayBareRunoffFractionUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadArrayBareRunoffFractionUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadArrayEfficiencyImprovementUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadArrayEfficiencyImprovementUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadArrayEfficiencyUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadArrayEfficiencyUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadyCropsUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadyCropsUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadyFarmsUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadyFarmsUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadyPrecipUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadyPrecipUsed;
+end;
+
+function TCustomModel.GetFarmProcess4SteadyRefETUsed: TObjectUsedEvent;
+begin
+  result := DoFarmProcess4SteadyRefETUsed;
+end;
+
 function TCustomModel.GetFilesToArchive: TStrings;
 var
   index: Integer;
@@ -53510,6 +54646,21 @@ begin
     end;
   end;
   result := FFilesToArchive
+end;
+
+function TCustomModel.GetFootprintSelected: TObjectUsedEvent;
+begin
+  result := DoFootprintSelected;
+end;
+
+function TCustomModel.GetFractionOfIrrigToSurfaceWaterUsed: TObjectUsedEvent;
+begin
+  result := DoFractionOfIrrigToSurfaceWaterUsed
+end;
+
+function TCustomModel.GetFractionOfPrecipToSurfaceWaterUsed: TObjectUsedEvent;
+begin
+  result := DoFractionOfPrecipToSurfaceWaterUsed;
 end;
 
 function TCustomModel.GetFrontContourDataSet: TDataArray;
@@ -53597,6 +54748,11 @@ begin
   end;
 end;
 
+function TCustomModel.GetGasPhaseUsed: TObjectUsedEvent;
+begin
+  result := DoGasPhaseUsed;
+end;
+
 function TCustomModel.GetGrid: TCustomModelGrid;
 begin
   if ModelSelection in SutraSelection then
@@ -53615,6 +54771,21 @@ begin
   end;
 end;
 
+function TCustomModel.GetGroundSurfaceUsed: TObjectUsedEvent;
+begin
+  result := DoGroundSurfaceUsed;
+end;
+
+function TCustomModel.GetGwRootInteractionUsed: TObjectUsedEvent;
+begin
+  result := DoGwRootInteractionUsed;
+end;
+
+function TCustomModel.GetGwtDispUsed: TObjectUsedEvent;
+begin
+  result := DoGwtDispUsed;
+end;
+
 function TCustomModel.GetGwtUsed: Boolean;
 begin
   if ModelSelection = msModflow2015 then
@@ -53625,6 +54796,11 @@ begin
   begin
     result := False;
   end;
+end;
+
+function TCustomModel.GetGwtUztUsed: TObjectUsedEvent;
+begin
+  result := DoGwtUztUsed;
 end;
 
 procedure TCustomModel.SetEndPoints(const Value: TEndPointReader);
@@ -53667,7 +54843,7 @@ begin
   UpToDate := False;
 end;
 
-constructor TCrossSection.Create(AModel: TCustomModel);
+constructor TCrossSection.Create(AModel: IModelMuseModel);
 begin
   inherited Create(nil);
   FModel := AModel;
@@ -53716,6 +54892,7 @@ var
   LayerIndex: Integer;
   AColor: TColor;
   IDomain: TDataArray;
+  AModel: TCustomModel;
   function UseCell(Layer, Row, Col: Integer; Orientation: TDataSetOrientation): boolean;
   var
     LayerIndex: Integer;
@@ -53728,15 +54905,15 @@ var
           if IDomain <> nil then
           begin
             Value := ADataArray.RealData[0,Row,Col];
-            if (Not NearlyTheSame(Value, FModel.ModflowOptions.HNoFlow, Epsilon))
-              and (Not NearlyTheSame(Value, FModel.ModflowOptions.HDry, Epsilon)) then
+            if (Not NearlyTheSame(Value, AModel.ModflowOptions.HNoFlow, Epsilon))
+              and (Not NearlyTheSame(Value, AModel.ModflowOptions.HDry, Epsilon)) then
             begin
               result := True;
               Exit;
             end;
           end
           else if Not NearlyTheSame(ADataArray.RealData[0,Row,Col],
-            FModel.ModflowOptions.HDry, Epsilon) then
+            AModel.ModflowOptions.HDry, Epsilon) then
           begin
             if ActiveDataArray = nil then
             begin
@@ -53761,8 +54938,8 @@ var
           if IDomain <> nil then
           begin
             Value := ADataArray.RealData[Layer,Row,Col];
-            if (Not NearlyTheSame(Value, FModel.ModflowOptions.HNoFlow, Epsilon))
-              and (Not NearlyTheSame(Value, FModel.ModflowOptions.HDry, Epsilon)) then
+            if (Not NearlyTheSame(Value, AModel.ModflowOptions.HNoFlow, Epsilon))
+              and (Not NearlyTheSame(Value, AModel.ModflowOptions.HDry, Epsilon)) then
             begin
               result := True;
               Exit;
@@ -53775,10 +54952,10 @@ var
           end
           else if ActiveDataArray.BooleanData[Layer, Row, Col] then
           begin
-            if FModel.ModelSelection in ModflowSelection then
+            if AModel.ModelSelection in ModflowSelection then
             begin
               if not NearlyTheSame(ADataArray.RealData[Layer,Row,Col],
-                FModel.ModflowOptions.HDry, Epsilon) then
+                AModel.ModflowOptions.HDry, Epsilon) then
               begin
                 result := True;
                 Exit;
@@ -53823,27 +55000,27 @@ var
     SegmentLine: TLine2D;
     SegmentAngle: double;
     OriginAngle: Double;
-  procedure ComputeCrossSectionDistance(ALine: TLine2D; ALocation: TPoint2D);
-  var
-    ClosestPoint: TPoint2D;
-    PointAngle: Double;
-  begin
-    ClosestPoint := ClosestPointOnLineFromPoint(
-      ALine, ALocation);
-    ADistance := {-}Distance(ALine[1], ClosestPoint);
-    if ADistance <> 0 then
+    procedure ComputeCrossSectionDistance(ALine: TLine2D; ALocation: TPoint2D);
+    var
+      ClosestPoint: TPoint2D;
+      PointAngle: Double;
     begin
-      PointAngle := ArcTan2(ALine[1].Y - ClosestPoint.y, ALine[1].x - ClosestPoint.x);
-//      if FastGEO.Orientation(ALocation,
-//        CrossSectionSegment[1], CrossSectionSegment[2]) =
-//        LeftHandSide then
-      if Abs(SegmentAngle - PointAngle) > 0.001 then
+      ClosestPoint := ClosestPointOnLineFromPoint(
+        ALine, ALocation);
+      ADistance := {-}Distance(ALine[1], ClosestPoint);
+      if ADistance <> 0 then
       begin
-        ADistance := -ADistance;
+        PointAngle := ArcTan2(ALine[1].Y - ClosestPoint.y, ALine[1].x - ClosestPoint.x);
+  //      if FastGEO.Orientation(ALocation,
+  //        CrossSectionSegment[1], CrossSectionSegment[2]) =
+  //        LeftHandSide then
+        if Abs(SegmentAngle - PointAngle) > 0.001 then
+        begin
+          ADistance := -ADistance;
+        end;
       end;
+  //    ADistance := ADistance + OffSet;
     end;
-//    ADistance := ADistance + OffSet;
-  end;
   begin
     case ViewDirection of
       vdFront:
@@ -53851,16 +55028,16 @@ var
           ZoomBox := frmGoPhast.frameFrontView.ZoomBox;
           StartIndex := 0;
           LastIndex := -1;
-          if (FModel.Grid <> nil) then
+          if (AModel.Grid <> nil) then
           begin
-            ARow := FModel.Grid.SelectedRow;
-            SetLength(Points, FModel.Grid.ColumnCount);
-            for ColIndex := 0 to FModel.Grid.ColumnCount - 1 do
+            ARow := AModel.Grid.SelectedRow;
+            SetLength(Points, AModel.Grid.ColumnCount);
+            for ColIndex := 0 to AModel.Grid.ColumnCount - 1 do
             begin
               DrawLine := False;
               if UseCell(LayerIndex, ARow, ColIndex, ADataArray.Orientation)  then
               begin
-                APoint.x := ZoomBox.XCoord(FModel.Grid.ColumnCenter(ColIndex));
+                APoint.x := ZoomBox.XCoord(AModel.Grid.ColumnCenter(ColIndex));
                 APoint.y := ZoomBox.YCoord(ADataArray.RealData[LayerIndex,ARow,ColIndex]);
                 Points[ColIndex] := APoint;
                 LastIndex := ColIndex;
@@ -53869,7 +55046,7 @@ var
               begin
                 DrawLine := True;
               end;
-              if DrawLine or (ColIndex = FModel.Grid.ColumnCount - 1) then
+              if DrawLine or (ColIndex = AModel.Grid.ColumnCount - 1) then
               begin
                 NumPoints := LastIndex-StartIndex+1;
                 if NumPoints > 1 then
@@ -53883,7 +55060,7 @@ var
           end
           else
           begin
-            DrawMesh := FModel.DrawMesh;
+            DrawMesh := AModel.DrawMesh;
             CrossSectionSegment := DrawMesh.CrossSection.Segment;
             SegmentLine := EquateLine(CrossSectionSegment[1],CrossSectionSegment[2]);
             SegmentAngle := ArcTan2(SegmentLine[1].Y - SegmentLine[2].y, SegmentLine[1].x - SegmentLine[2].x);
@@ -53917,7 +55094,7 @@ var
 
             CellList := TIElement2DList.Create;
             try
-              FModel.Mesh3D.GetElementsIntfOnCrossSection(CellList);
+              AModel.Mesh3D.GetElementsIntfOnCrossSection(CellList);
               SetLength(Points, CellList.Count);
 
               CellList.Sort(TComparer<IElement2D>.Construct(
@@ -53962,7 +55139,7 @@ var
         end;
       vdSide:
         begin
-          if FModel.Grid = nil then
+          if AModel.Grid = nil then
           begin
             Exit;
           end;
@@ -53970,14 +55147,14 @@ var
           StartIndex := 0;
           LastIndex := -1;
 
-          ACol := FModel.Grid.SelectedColumn;
-          SetLength(Points, FModel.Grid.RowCount);
-          for RowIndex := 0 to FModel.Grid.RowCount - 1 do
+          ACol := AModel.Grid.SelectedColumn;
+          SetLength(Points, AModel.Grid.RowCount);
+          for RowIndex := 0 to AModel.Grid.RowCount - 1 do
           begin
             DrawLine := False;
             if UseCell(LayerIndex, RowIndex, ACol, ADataArray.Orientation)  then
             begin
-              APoint.y := ZoomBox.YCoord(FModel.Grid.RowCenter(RowIndex));
+              APoint.y := ZoomBox.YCoord(AModel.Grid.RowCenter(RowIndex));
               APoint.x := ZoomBox.XCoord(ADataArray.RealData[LayerIndex,RowIndex,ACol]);
               Points[RowIndex] := APoint;
               LastIndex := RowIndex;
@@ -53986,7 +55163,7 @@ var
             begin
               DrawLine := True;
             end;
-            if DrawLine or (RowIndex = FModel.Grid.RowCount - 1) then
+            if DrawLine or (RowIndex = AModel.Grid.RowCount - 1) then
             begin
               NumPoints := LastIndex-StartIndex+1;
               if NumPoints > 1 then
@@ -54003,6 +55180,7 @@ var
     end;
   end;
 begin
+  AModel := AModel as TCustomModel;
   if ViewDirection = vdTop then
   begin
     Exit;
@@ -54011,33 +55189,33 @@ begin
   begin
     Exit;
   end;
-  if (FModel.Grid = nil) and (FModel.Mesh3D = nil) then
+  if (AModel.Grid = nil) and (AModel.Mesh3D = nil) then
   begin
     Exit;
   end;
-  if (FModel.Grid <> nil)
-    and ((FModel.Grid.LayerCount = 0)
-    or (FModel.Grid.RowCount = 0)
-    or (FModel.Grid.ColumnCount = 0))
+  if (AModel.Grid <> nil)
+    and ((AModel.Grid.LayerCount = 0)
+    or (AModel.Grid.RowCount = 0)
+    or (AModel.Grid.ColumnCount = 0))
     then
   begin
     Exit;
   end;
-  if (FModel.Mesh3D <> nil)
-    and ((FModel.Mesh3D.LayerCount = 0)
-    or (FModel.Mesh3D.Mesh2DI.ElementCount = 0))
+  if (AModel.Mesh3D <> nil)
+    and ((AModel.Mesh3D.LayerCount = 0)
+    or (AModel.Mesh3D.Mesh2DI.ElementCount = 0))
     then
   begin
     Exit;
   end;
-  if not (FModel.ModelSelection in SutraSelection) then
+  if not (AModel.ModelSelection in SutraSelection) then
   begin
-    ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
+    ActiveDataArray := AModel.DataArrayManager.GetDataSetByName(rsActive);
     ActiveDataArray.Initialize;
   end;
-  if FModel.ModelSelection = msModflow2015 then
+  if AModel.ModelSelection = msModflow2015 then
   begin
-    IDomain := FModel.DataArrayManager.GetDataSetByName(StrIDOMAIN);
+    IDomain := AModel.DataArrayManager.GetDataSetByName(StrIDOMAIN);
 //    IDomain.Initialize;
   end
   else
@@ -54154,6 +55332,11 @@ begin
   end;
 end;
 
+function TCustomModel.GetExchangeUsed: TObjectUsedEvent;
+begin
+  result := DoExchangeUsed;
+end;
+
 procedure TCustomModel.SetExaggeration(Value: double);
 begin
   if Value <= 0 then
@@ -54189,6 +55372,41 @@ end;
 function TCustomModel.GetPilotPointCount: integer;
 begin
   result := PestProperties.PilotPointCount;
+end;
+
+function TCustomModel.GetPorosityUsed: TObjectUsedEvent;
+begin
+  result := DoPorosityUsed;
+end;
+
+function TCustomModel.GetPotentialEvapBareUsed: TObjectUsedEvent;
+begin
+  result := DoPotentialEvapBareUsed;
+end;
+
+function TCustomModel.GetPrecipPotConsumptionUsed: TObjectUsedEvent;
+begin
+  result := DirectRechargeUsed
+end;
+
+function TCustomModel.GetReservoirLayerUsed: TObjectUsedEvent;
+begin
+  result := DoReservoirLayerUsed;
+end;
+
+function TCustomModel.GetReservoirPackageUsed: TObjectUsedEvent;
+begin
+  result := DoReservoirPackageUsed;
+end;
+
+function TCustomModel.GetRootDepthUsed: TObjectUsedEvent;
+begin
+  result := DoRootDepthUsed;
+end;
+
+function TCustomModel.GetRouteUzfDischarge: TObjectUsedEvent;
+begin
+  result := DoRouteUzfDischarge;
 end;
 
 procedure TCustomModel.InvalidateMfSfrReachLength(Sender: TObject);

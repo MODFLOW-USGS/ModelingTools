@@ -835,12 +835,12 @@ var
 begin
   WriteCommentLine('Data set 14A');
   Comment := 'NODE   SCALX                 SCALY                 SCALZ                 PORFAC             ';
-  if Model.Sutra4Used(nil) then
+  if Model.DoSutra4Used(nil) then
   begin
     Comment := Comment + '   COMPMAF            ';
     Comment := Comment + '   CSF                ';
     Comment := Comment + '   RHOSF              ';
-    if Model.Sutra4ProductionUsed(nil) then
+    if Model.DoSutra4ProductionUsed(nil) then
     begin
       Comment := Comment + '    PROD            ';
       Comment := Comment + '   PRODL0F            ';
@@ -850,12 +850,12 @@ begin
     begin
       Comment := Comment + '    NOPROD          ';
     end;
-    if Model.Sutra4SoluteUsed(nil) then
+    if Model.DoSutra4SoluteUsed(nil) then
     begin
       Comment := Comment + '   PRODL1F            ';
       Comment := Comment + '   PRODS1F            ';
     end;
-    if Model.Sutra4FreezingUsed(nil) then
+    if Model.DoSutra4FreezingUsed(nil) then
     begin
       Comment := Comment + '   PRODI0F            ';
     end;
@@ -868,10 +868,10 @@ begin
   WriteFloat(SCALZ);
   WriteFloat(PORFAC);
 
-  if Model.Sutra4Used(nil) then
+  if Model.DoSutra4Used(nil) then
   begin
     WriteFloat(COMPMAF);
-    if Model.Sutra4EnergyUsed(nil) then
+    if Model.DoSutra4EnergyUsed(nil) then
     begin
       WriteFloat(CSF);
     end
@@ -880,7 +880,7 @@ begin
       WriteFloat(0);
     end;
     WriteFloat(RHOSF);
-    if Model.Sutra4ProductionUsed(nil) then
+    if Model.DoSutra4ProductionUsed(nil) then
     begin
       WriteString('   ''PROD''           ');
       WriteFloat(PRODLØF);
@@ -890,12 +890,12 @@ begin
     begin
       WriteString('   ''NOPROD''         ');
     end;
-    if Model.Sutra4SoluteUsed(nil) then
+    if Model.DoSutra4SoluteUsed(nil) then
     begin
       WriteFloat(PRODL1F);
       WriteFloat(PRODS1F);
     end;
-    if Model.Sutra4FreezingUsed(nil) then
+    if Model.DoSutra4FreezingUsed(nil) then
     begin
       WriteFloat(PRODI0F);
     end;
@@ -969,22 +969,22 @@ var
     begin
       WriteCommentLine('Data set 14B');
       Comment := '  II  NREG  X                     Y                     Z                     POR                ';
-      if Model.Sutra4Used(nil) then
+      if Model.DoSutra4Used(nil) then
       begin
         Comment := Comment + '   COMPMA             ';
         Comment := Comment + '   CS                 ';
         Comment := Comment + '   RHOS               ';
-        if Model.Sutra4ProductionUsed(nil) then
+        if Model.DoSutra4ProductionUsed(nil) then
         begin
           Comment := Comment + '   PRODL0             ';
           Comment := Comment + '   PRODS0             ';
         end;
-        if Model.Sutra4SoluteUsed(nil) then
+        if Model.DoSutra4SoluteUsed(nil) then
         begin
           Comment := Comment + '   PRODL1             ';
           Comment := Comment + '   PRODS1             ';
         end;
-        if Model.Sutra4FreezingUsed(nil) then
+        if Model.DoSutra4FreezingUsed(nil) then
         begin
           Comment := Comment + '   PRODI              ';
         end;
@@ -1030,12 +1030,12 @@ var
     end;
   end;
 begin
-  Sutra4Used := Model.Sutra4Used(nil);
-  Sutra4EnergyUsed := Model.Sutra4EnergyUsed(nil);
-  Sutra4SoluteUsed := Model.Sutra4SoluteUsed(nil);
-  Sutra4EnergyOrSorptionUsed := Model.Sutra4EnergyOrSorptionUsed(nil);
-  Sutra4FreezingUsed := Model.Sutra4FreezingUsed(nil);
-  Sutra4ProductionUsed := Model.Sutra4ProductionUsed(nil);
+  Sutra4Used := Model.DoSutra4Used(nil);
+  Sutra4EnergyUsed := Model.DoSutra4EnergyUsed(nil);
+  Sutra4SoluteUsed := Model.DoSutra4SoluteUsed(nil);
+  Sutra4EnergyOrSorptionUsed := Model.DoSutra4EnergyOrSorptionUsed(nil);
+  Sutra4FreezingUsed := Model.DoSutra4FreezingUsed(nil);
+  Sutra4ProductionUsed := Model.DoSutra4ProductionUsed(nil);
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
   Porosity.Initialize;
@@ -1150,7 +1150,7 @@ begin
     Thickness := nil;
   end;
 
-  if Model.SutraUnsatRegionUsed(nil) then
+  if Model.DoSutraUnsatRegionUsed(nil) then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionNodes);
     UnsatRegion.Initialize;
@@ -1460,7 +1460,7 @@ begin
   end;
   Comment := Comment + '   ATMINF             ';
 
-  if Model.Sutra4EnergyUsed(nil) then
+  if Model.DoSutra4EnergyUsed(nil) then
   begin
     Comment := Comment + '   SIGMASF            ';
     Comment := Comment + '   SIGMAAF            ';
@@ -1493,7 +1493,7 @@ begin
   end;
   WriteFloat(ATMINF);
 
-  if Model.Sutra4EnergyUsed(nil) then
+  if Model.DoSutra4EnergyUsed(nil) then
   begin
     WriteFloat(SIGMASF);
     WriteFloat(SIGMAAF);
@@ -1683,7 +1683,7 @@ var
     end
   end;
 begin
-  Sutra4EnergyUsed := Model.Sutra4EnergyUsed(nil);
+  Sutra4EnergyUsed := Model.DoSutra4EnergyUsed(nil);
   PestParametersUsed := False;
   MaxPerm := nil;
   case FOptions.TransportChoice of
@@ -1807,7 +1807,7 @@ begin
     SIGMAA := nil;
   end;
 
-  if Model.SutraUnsatRegionUsed(nil) then
+  if Model.DoSutraUnsatRegionUsed(nil) then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionElements);
     UnsatRegion.Initialize;

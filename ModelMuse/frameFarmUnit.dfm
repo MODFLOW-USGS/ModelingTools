@@ -2205,9 +2205,13 @@ inherited frameFarm: TframeFarm
         TabOrder = 0
         ExplicitLeft = 80
         ExplicitTop = 16
+        ExplicitWidth = 577
+        ExplicitHeight = 332
         inherited Panel: TPanel
           Top = 291
           Width = 577
+          ExplicitTop = 291
+          ExplicitWidth = 577
           inherited lbNumber: TLabel
             Width = 45
             Height = 16
@@ -2216,12 +2220,15 @@ inherited frameFarm: TframeFarm
           end
           inherited sbAdd: TSpeedButton
             Left = 301
+            ExplicitLeft = 301
           end
           inherited sbInsert: TSpeedButton
             Left = 357
+            ExplicitLeft = 357
           end
           inherited sbDelete: TSpeedButton
             Left = 412
+            ExplicitLeft = 412
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
@@ -2377,9 +2384,12 @@ inherited frameFarm: TframeFarm
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitWidth = 577
+          ExplicitHeight = 234
         end
         inherited pnlTop: TPanel
           Width = 577
+          ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24
             EditLabel.Width = 47

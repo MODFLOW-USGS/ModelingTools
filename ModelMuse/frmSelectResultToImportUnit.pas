@@ -952,7 +952,7 @@ var
 begin
   if FResultFormat = mfMt3dConc then
   begin
-    if not AModel.Mt3dMS_StrictUsed(nil) then
+    if not AModel.DoMt3dMS_StrictUsed(nil) then
     begin
       Beep;
       MessageDlg(StrMT3DConcentrations, mtError, [mbOK], 0);
@@ -1854,7 +1854,7 @@ var
 begin
   if FResultFormat = mfMt3dConc then
   begin
-    if not AModel.Mt3dMS_StrictUsed(nil) then
+    if not AModel.DoMt3dMS_StrictUsed(nil) then
     begin
       Beep;
       MessageDlg(StrMT3DConcentrations, mtError, [mbOK], 0);
@@ -5261,7 +5261,7 @@ begin
   else if (SameText(Extension, StrMt3dConcFile)) then
   begin
     FResultFormat := mfMt3dConc;
-    if not frmGoPhast.PhastModel.Mt3dMS_StrictUsed(nil) then
+    if not frmGoPhast.PhastModel.DoMt3dMS_StrictUsed(nil) then
     begin
       result := False;
       Beep;

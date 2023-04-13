@@ -841,7 +841,9 @@ uses
   frameSoilEffectivePrecipUnit in 'frameSoilEffectivePrecipUnit.pas' {frameSoilEffectivePrecip: TFrame},
   frameMultSemiRoutedUnit in 'frameMultSemiRoutedUnit.pas' {frameMultSemiRouted: TFrame},
   GwtStatusUnit in 'GwtStatusUnit.pas',
-  ScreenObjectOwnerCollectionUnit in 'ScreenObjectOwnerCollectionUnit.pas';
+  ScreenObjectOwnerCollectionUnit in 'ScreenObjectOwnerCollectionUnit.pas',
+  Modflow6DynamicTimeSeriesUnit in 'Modflow6DynamicTimeSeriesUnit.pas',
+  ModelMuseInterfacesUnit in 'ModelMuseInterfacesUnit.pas';
 
 {$R *.res}
 

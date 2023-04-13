@@ -1013,7 +1013,7 @@ var
   ScreenObject: TScreenObject;
 begin
   FLakeObjects.Clear;
-  if (FLinkType = ltSFR) and frmGoPhast.PhastModel.LakePackageUsed(nil) then
+  if (FLinkType = ltSFR) and frmGoPhast.PhastModel.DoLakePackageUsed(nil) then
   begin
     for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
     begin

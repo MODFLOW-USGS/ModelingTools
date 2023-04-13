@@ -40,17 +40,12 @@ type
     property ParamMethod: TPestParamMethod read FParamMethod
       write SetParamMethod;
     property Deleted: Boolean read FDeleted write FDeleted;
-//    function GetInterpolatedValue(Model: TBaseModel; Time: double;
-//      StartTimeOffset: double = 0): double;
   end;
 
 implementation
 
 uses
   System.SysUtils, System.AnsiStrings, System.IOUtils;
-
-//uses
-//  PhastModelUnit, ModflowTimeUnit;
 
 { TTimeSeries }
 
@@ -84,20 +79,6 @@ begin
   FStoredScaleFactor.Free;
   inherited;
 end;
-
-//function TMf6TimeSeries.GetInterpolatedValue(Model: TBaseModel; Time: double;
-//  StartTimeOffset: double = 0): double;
-//var
-//  LocalModel: TCustomModel;
-//  Period: Integer;
-//  Step: Integer;
-//begin
-//  LocalModel := Model as TCustomModel;
-//  LocalModel.ModflowStressPeriods.TimeToPeriodAndStep(
-//    Time-StartTimeOffset, Period, Step);
-//  TimeStep := LocalModel.ModflowStressPeriods[Period].GetTimeStep(Step);
-//
-//end;
 
 function TMf6TimeSeries.GetScaleFactor: double;
 begin
