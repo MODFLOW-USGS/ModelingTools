@@ -5,7 +5,7 @@ interface
 uses
   ModflowBoundaryUnit, OrderedCollectionUnit, System.Classes,
   FormulaManagerUnit, GoPhastTypes, SubscriptionUnit, RbwParser,
-  ModflowCellUnit, System.ZLib;
+  ModflowCellUnit, System.ZLib, OrderedCollectionInterfaceUnit;
 
 type
   TMvrType = (mtFactor, mtExcess, mtThreshold, mtUpTo);

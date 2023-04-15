@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
   System.Generics.Collections, Mt3dmsChemUnit, FormulaManagerUnit,
-  ScreenObjectUnit;
+  ScreenObjectUnit, OrderedCollectionInterfaceUnit;
 
 type
   // ITRTINJ

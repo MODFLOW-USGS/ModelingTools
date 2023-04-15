@@ -5,7 +5,8 @@ interface
 uses
   GoPhastTypes, Classes, OrderedCollectionUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, Generics.Collections, RbwParser, DataSetUnit,
-  SysUtils, SubscriptionUnit, SutraOptionsUnit, RealListUnit;
+  SysUtils, SubscriptionUnit, SutraOptionsUnit, RealListUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   TObservationFormat = (ofOBS, ofOBC);

@@ -4,7 +4,8 @@ interface
 
 uses Classes, ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit,
   RbwParser, ModflowCellUnit, ZLib, GoPhastTypes, RealListUnit,
-  SubscriptionUnit, SysUtils, DataSetUnit, PestObsUnit;
+  SubscriptionUnit, SysUtils, DataSetUnit, PestObsUnit,
+  OrderedCollectionInterfaceUnit;
 
 const
   PumpingRatePosition = 0;
@@ -740,7 +741,7 @@ uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit,
   ModflowGridUnit, frmFormulaErrorsUnit, Math, SparseDataSets, SparseArrayUnit,
   frmErrorsAndWarningsUnit, AbstractGridUnit, ModflowParameterUnit,
-  CustomModflowWriterUnit, ModflowMNW2_WriterUnit, DataSetNamesUnit;
+  CustomModflowWriterUnit, ModflowMNW2_WriterUnit;
 
 resourcestring
   StrOneOrMoreMNW2Wel = 'One or more MNW2 wells has a well radius that is '

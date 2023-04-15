@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, OrderedCollectionUnit, GoPhastTypes, ModflowFmpFarmUnit,
-    ModflowFmpBaseClasses, ModflowBoundaryUnit, RealListUnit;
+    ModflowFmpBaseClasses, ModflowBoundaryUnit, RealListUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   TEvapFractionItem = class(TCustomZeroFarmItem)

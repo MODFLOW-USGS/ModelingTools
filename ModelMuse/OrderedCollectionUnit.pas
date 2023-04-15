@@ -3,18 +3,10 @@ unit OrderedCollectionUnit;
 interface
 
 uses DataSetUnit, System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit, RbwParser,
-  FormulaManagerUnit, ModelMuseInterfaceUnit;
+  FormulaManagerUnit, ModelMuseInterfaceUnit, OrderedCollectionInterfaceUnit;
 
 type
 
-  ICustomModelInterfaceForTOrderedCollection = interface(IModelMuseModel)
-    procedure RemoveVariables(const DataSet: TDataArray); overload;
-    procedure RemoveVariables(const DataSetName: String;
-      Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt); overload;
-    function GetDataArrayInterface: ISimpleDataArrayManager;
-//    function GetDataArrayManager: TDataArrayManager;
-//    property DataArrayManager: TDataArrayManager read GetDataArrayManager;
-  end;
 
 
   {@name defines the types of parameters used in MODFLOW.
@@ -534,11 +526,13 @@ const
 
 implementation
 
-uses PhastModelUnit, ScreenObjectUnit,
+uses
+  PhastModelUnit,
+  ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowTransientListParameterUnit,
-  ModflowSfrParamIcalcUnit, Generics.Collections, Modflow6TimeSeriesUnit,
-  Generics.Defaults, Math, frmGoPhastUnit, LockedGlobalVariableChangers,
-  PestObsGroupUnit, DataSetNamesUnit;
+  ModflowSfrParamIcalcUnit, Generics.Collections,
+  Generics.Defaults, Math, LockedGlobalVariableChangers,
+  PestObsGroupUnit, PhastModelInterfaceUnit;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
 begin
@@ -834,7 +828,7 @@ end;
 
 procedure TOrderedCollection.InvalidateModel;
 begin
-  If (FModel <> nil) then
+  If (FModel <> nil) and (IGlobalModel <> nil) then
   begin
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent. }
     FModel.Invalidate(self);
@@ -871,19 +865,18 @@ begin
     DataArray := FNewDataSets[Index];
     if PhastModel <> nil then
     begin
-
-    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
-    begin
-      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      if ChildModel <> nil then
+      for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
       begin
-        ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByName(DataArray.Name);
-        Assert(ChildDataArray <> nil);
-        ChildModel.RemoveVariables(ChildDataArray);
-        ChildModel.GetDataArrayInterface.ExtractDataSet(ChildDataArray);
-        ChildDataArray.Free;
+        ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByName(DataArray.Name);
+          Assert(ChildDataArray <> nil);
+          ChildModel.RemoveVariables(ChildDataArray);
+          ChildModel.GetDataArrayInterface.ExtractDataSet(ChildDataArray);
+          ChildDataArray.Free;
+        end;
       end;
-    end;
     end;
     FModel.RemoveVariables(DataArray);
     FModel.GetDataArrayInterface.ExtractDataSet(DataArray);
@@ -1736,159 +1729,68 @@ end;
 function TFormulaOrderedItem.CreateBlockFormulaObject(
   Orientation: TDataSetOrientation): TFormulaObject;
 begin
-  result := frmGoPhast.PhastModel.FormulaManager.Add;
-  case Orientation of
-    dsoTop:
-      begin
-        result.Parser := frmGoPhast.PhastModel.rpTopFormulaCompiler;
-      end;
-    dso3D:
-      begin
-        result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
-      end;
-    else Assert(False);
-  end;
+  result := Model.CreateBlockFormulaObject(Orientation);
 end;
 
 procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string; Position: integer;
   var FormulaObject: TFormulaObject);
 var
-  ParentModel: TPhastModel;
   Compiler: TRbwParser;
   LocalObserver: TObserver;
 begin
   if FormulaObject.Formula <> Value then
   begin
-    ParentModel := Model as TPhastModel;
-    if ParentModel <> nil then
+    if Model <> nil then
     begin
-      Compiler := ParentModel.rpThreeDFormulaCompiler;
+      Compiler := Model.FormulaCompiler[dso3D, eaBlocks];
       LocalObserver := Observer[Position];
       UpdateFormulaDependencies(FormulaObject.Formula, Value, LocalObserver,
         Compiler);
     end;
     InvalidateModel;
-    if not(csDestroying in frmGoPhast.PhastModel.ComponentState) and
-      not frmGoPhast.PhastModel.Clearing then
+    if IGlobalModelForOrderedCollection <> nil then
     begin
-      frmGoPhast.PhastModel.FormulaManager.ChangeFormula(FormulaObject, Value,
-        frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
-        OnRemoveSubscription, OnRestoreSubscription, self);
+      if not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState) and
+        not IGlobalModelForOrderedCollection.Clearing then
+      begin
+        IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaBlocks,
+          OnRemoveSubscription, OnRestoreSubscription, self);
+      end;
     end;
   end;
 end;
 
 procedure TFormulaOrderedItem.UpdateFormulaDependencies(OldFormula: string;
   var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
-var
-  OldUses: TStringList;
-  NewUses: TStringList;
-  Position: integer;
-  DS: TObserver;
-  ParentScreenObject: TScreenObject;
-  Index: integer;
-  LocalModel: TCustomModel;
-  TimeSeries: TMf6TimeSeries;
-  procedure CompileFormula(var AFormula: string; UsesList: TStringList);
+begin
+  if (ScreenObject = nil) then
   begin
-    if AFormula <> '' then
-    begin
-      TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(AFormula);
-      if TimeSeries <> nil then
-      begin
-        AFormula := String(TimeSeries.SeriesName);
-        UsesList.Clear;
-      end
-      else
-      begin
-        try
-          Compiler.Compile(AFormula);
-          UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
-        except
-          on E: ERbwParserError do
-          begin
-          end;
-        end;
-      end;
-    end;
+    Exit;
   end;
 
-begin
-  OldFormula := Trim(OldFormula);
-  NewFormula := Trim(NewFormula);
-  if OldFormula = NewFormula then
-  begin
-    Exit;
-  end;
-  if (frmGoPhast.PhastModel <> nil) and
-    ((frmGoPhast.PhastModel.ComponentState * [csLoading, csReading]) <> []) then
-  begin
-    Exit;
-  end;
-  LocalModel := frmGoPhast.PhastModel;
-  ParentScreenObject := ScreenObject as TScreenObject;
-  if (ParentScreenObject = nil)
-  // or not ParentScreenObject.CanInvalidateModel then
-  // 3
-  { or not ParentScreenObject.CanInvalidateModel } then
-  begin
-    Exit;
-  end;
-  OldUses := TStringList.Create;
-  NewUses := TStringList.Create;
-  try
-    CompileFormula(OldFormula, OldUses);
-    CompileFormula(NewFormula, NewUses);
-    for Index := OldUses.Count - 1 downto 0 do
-    begin
-      Position := NewUses.IndexOf(OldUses[Index]);
-      if Position >= 0 then
-      begin
-        OldUses.Delete(Index);
-        NewUses.Delete(Position);
-      end;
-    end;
-    for Index := 0 to OldUses.Count - 1 do
-    begin
-      DS := frmGoPhast.PhastModel.GetObserverByName(OldUses[Index]);
-      Assert(DS <> nil);
-      DS.StopsTalkingTo(Observer);
-    end;
-    for Index := 0 to NewUses.Count - 1 do
-    begin
-      DS := frmGoPhast.PhastModel.GetObserverByName(NewUses[Index]);
-      Assert(DS <> nil);
-      DS.TalksTo(Observer);
-    end;
-  finally
-    NewUses.Free;
-    OldUses.Free;
-  end;
+  Model.UpdateFormulaDependencies(OldFormula, NewFormula, Observer, Compiler);
 end;
 
 procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;
   Position: integer; var FormulaObject: TFormulaObject);
 var
-  ParentModel: TPhastModel;
   Compiler: TRbwParser;
   LocalObserver: TObserver;
 begin
   if FormulaObject.Formula <> Value then
   begin
-    ParentModel := Model as TPhastModel;
-    if ParentModel <> nil then
+    if Model <> nil then
     begin
-      Compiler := ParentModel.rpThreeDFormulaCompilerNodes;
+      Compiler := Model.FormulaCompiler[dso3D, eaNodes];
       LocalObserver := Observer[Position];
       UpdateFormulaDependencies(FormulaObject.Formula, Value, LocalObserver,
         Compiler);
     end;
     InvalidateModel;
-    if not(csDestroying in frmGoPhast.PhastModel.ComponentState) and
-      not frmGoPhast.PhastModel.Clearing then
+    if not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState) and
+      not IGlobalModelForOrderedCollection.Clearing then
     begin
-      frmGoPhast.PhastModel.FormulaManager.ChangeFormula(FormulaObject, Value,
-        frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes,
+      IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaNodes,
         OnRemoveSubscription, OnRestoreSubscription, self);
     end;
   end;
@@ -1969,17 +1871,17 @@ end;
 
 function TGwtPestMethodCollection.GetItems(const Index: Integer): TPestMethodItem;
 var
-  LocalModel: TCustomModel;
+  LocalModel: IModelForTGwtPestMethodCollection;
 begin
-  LocalModel := Model as TCustomModel;
+  LocalModel := Model as IModelForTGwtPestMethodCollection;
   if LocalModel = nil then
   begin
-    LocalModel := frmGoPhast.PhastModel;
+    LocalModel := IGlobalModel as IModelForTGwtPestMethodCollection;
   end;
   if (LocalModel <> nil)
-    and (Count < LocalModel.MobileComponents.Count) then
+    and (Count < LocalModel.GetMobileComponentCount) then
   begin
-    Count := LocalModel.MobileComponents.Count;
+    Count := LocalModel.GetMobileComponentCount;
   end;
   result := inherited Items[Index] as TPestMethodItem;
 end;
@@ -2171,17 +2073,17 @@ end;
 function TLandUsePestMethodCollection.GetItems(
   const Index: Integer): TPestMethodItem;
 var
-  LocalModel: TCustomModel;
+  LocalModel: IModelForTLandUsePestMethodCollection;
 begin
-  LocalModel := Model as TCustomModel;
+  LocalModel := Model as IModelForTLandUsePestMethodCollection;
   if LocalModel = nil then
   begin
-    LocalModel := frmGoPhast.PhastModel;
+    LocalModel := IGlobalModel as IModelForTLandUsePestMethodCollection;
   end;
   if (LocalModel <> nil)
-    and (Count < LocalModel.FmpCrops.Count) then
+    and (Count < LocalModel.CropCount) then
   begin
-    Count := LocalModel.FmpCrops.Count;
+    Count := LocalModel.CropCount;
   end;
   result := inherited Items[Index] as TPestMethodItem;
 end;

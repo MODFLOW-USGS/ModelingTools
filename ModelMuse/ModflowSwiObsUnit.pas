@@ -5,7 +5,7 @@ interface
 uses
   ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
   System.Classes, ModflowCellUnit, System.ZLib, DataSetUnit, System.SysUtils,
-  System.Generics.Collections, PestObsUnit;
+  System.Generics.Collections, PestObsUnit, OrderedCollectionInterfaceUnit;
 
 type
 //  TSwiPostProcessor = (sppMF2005Extractor, sppSwiExtractor);

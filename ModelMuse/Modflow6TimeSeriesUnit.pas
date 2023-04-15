@@ -3,10 +3,10 @@ unit Modflow6TimeSeriesUnit;
 interface
 
 uses
-  System.Classes, GoPhastTypes;
+  System.Classes, GoPhastTypes, Modflow6TimeSeriesInterfaceUnit;
 
 type
-  TMf6TimeSeries = class(TRealCollection)
+  TMf6TimeSeries = class(TRealCollection, ITimeSeriesInterface)
   private
     FSeriesName: AnsiString;
     FScaleFactorParameter: string;
@@ -22,22 +22,31 @@ type
     procedure SetSeriesName(Value: AnsiString);
     procedure SetStoredScaleFactor(const Value: TRealStorage);
     procedure SetParamMethod(const Value: TPestParamMethod);
-    function IsSame(OtherTimeSeries: TMf6TimeSeries): Boolean;
+    function GetSeriesName: AnsiString;
+    function GetInterpolationMethod: TMf6InterpolationMethods;
+    function GetStoredScaleFactor: TRealStorage;
+    function GetScaleFactorParameter: string;
+    function GetParamMethod: TPestParamMethod;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
+    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
+      virtual; stdcall;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent); overload; override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property ScaleFactor: double read GetScaleFactor write SetScaleFactor;
     property NotifierComponent: TComponent read FNotifierComponent;
+    function IsSame(OtherTimeSeries: TMf6TimeSeries): Boolean;
   published
-    property SeriesName: AnsiString read FSeriesName write SetSeriesName;
+    property SeriesName: AnsiString read GetSeriesName write SetSeriesName;
     property InterpolationMethod: TMf6InterpolationMethods
-      read FInterpolationMethod write SetInterpolationMethod;
-    property StoredScaleFactor: TRealStorage read FStoredScaleFactor
+      read GetInterpolationMethod write SetInterpolationMethod;
+    property StoredScaleFactor: TRealStorage read GetStoredScaleFactor
       write SetStoredScaleFactor;
-    property ScaleFactorParameter: string read FScaleFactorParameter
+    property ScaleFactorParameter: string read GetScaleFactorParameter
       write SetScaleFactorParameter;
-    property ParamMethod: TPestParamMethod read FParamMethod
+    property ParamMethod: TPestParamMethod read GetParamMethod
       write SetParamMethod;
     property Deleted: Boolean read FDeleted write FDeleted;
   end;
@@ -80,9 +89,34 @@ begin
   inherited;
 end;
 
+function TMf6TimeSeries.GetInterpolationMethod: TMf6InterpolationMethods;
+begin
+  result := FInterpolationMethod;
+end;
+
+function TMf6TimeSeries.GetParamMethod: TPestParamMethod;
+begin
+  result := FParamMethod;
+end;
+
 function TMf6TimeSeries.GetScaleFactor: double;
 begin
   result := StoredScaleFactor.Value;
+end;
+
+function TMf6TimeSeries.GetScaleFactorParameter: string;
+begin
+  Result := FScaleFactorParameter;
+end;
+
+function TMf6TimeSeries.GetSeriesName: AnsiString;
+begin
+  Result := FSeriesName;
+end;
+
+function TMf6TimeSeries.GetStoredScaleFactor: TRealStorage;
+begin
+  result := FStoredScaleFactor;
 end;
 
 function TMf6TimeSeries.IsSame(OtherTimeSeries: TMf6TimeSeries): Boolean;
@@ -93,6 +127,16 @@ begin
     and (ScaleFactorParameter = OtherTimeSeries.ScaleFactorParameter)
     and (ParamMethod = OtherTimeSeries.ParamMethod)
     and inherited IsSame(OtherTimeSeries);
+end;
+
+function TMf6TimeSeries.QueryInterface(const IID: TGUID; out Obj): HRESULT;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
 end;
 
 procedure TMf6TimeSeries.SetInterpolationMethod(
@@ -156,6 +200,16 @@ end;
 procedure TMf6TimeSeries.SetStoredScaleFactor(const Value: TRealStorage);
 begin
   FStoredScaleFactor.Assign(Value);
+end;
+
+function TMf6TimeSeries._AddRef: Integer;
+begin
+  Result := 1;
+end;
+
+function TMf6TimeSeries._Release: Integer;
+begin
+  Result := 1;
 end;
 
 end.

@@ -4,7 +4,7 @@ interface
 
 uses
   OrderedCollectionUnit, DataSetUnit, Classes,
-  GoPhastTypes;
+  GoPhastTypes, OrderedCollectionInterfaceUnit;
 
 type
   TCustomChemSpeciesCollection = class;
@@ -495,6 +495,7 @@ begin
     UpdataDat.ShouldCreate := ShouldCreate;
     UpdataDat.Classification := Classification;
     UpdataDat.Orientation := dso3D;
+    UpdataDat.DataType := rdtDouble;
 
     UpdateOrCreateDataArray(UpdataDat);
   end;

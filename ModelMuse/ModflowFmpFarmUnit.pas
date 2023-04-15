@@ -6,7 +6,7 @@ uses
   Classes, ModflowBoundaryUnit,
   OrderedCollectionUnit, GoPhastTypes, ModflowDrtUnit, ModflowCellUnit,
   Generics.Collections, ModflowFmpBaseClasses, RealListUnit,
-  ModflowFmpAllotmentUnit, System.SysUtils;
+  ModflowFmpAllotmentUnit, System.SysUtils, OrderedCollectionInterfaceUnit;
 
 type
   // FMP data sets 19 or 32.

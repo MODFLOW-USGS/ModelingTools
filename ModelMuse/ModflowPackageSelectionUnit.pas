@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, GoPhastTypes, OrderedCollectionUnit, DataSetUnit,
   ModpathParticleUnit, ModflowBoundaryDisplayUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections,
-  Mt3dSftUnit, ModflowCSubInterbed;
+  Mt3dSftUnit, ModflowCSubInterbed, OrderedCollectionInterfaceUnit;
 
 const
   KSfrDefaultPicardIterations = 100;

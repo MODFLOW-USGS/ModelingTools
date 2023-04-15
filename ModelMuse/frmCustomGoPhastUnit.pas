@@ -12,7 +12,7 @@ unit frmCustomGoPhastUnit;
 interface
 
 uses
-  System.UITypes, OrderedCollectionUnit, CommDlg, RbwDataGrid4,
+  System.UITypes, CommDlg, RbwDataGrid4,
   Windows, Forms, SysUtils, Types,
   Classes, Graphics, Controls, Dialogs, StdCtrls, Grids,
   VirtualTrees, DataSetUnit, GLWin32Viewer, Generics.Collections,

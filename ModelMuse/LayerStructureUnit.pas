@@ -3,7 +3,7 @@ unit LayerStructureUnit;
 interface
 
 uses OrderedCollectionUnit, Classes, GoPhastTypes, SubscriptionUnit,
-  ModflowSubsidenceDefUnit, SysUtils;
+  ModflowSubsidenceDefUnit, SysUtils, OrderedCollectionInterfaceUnit;
 
 type
   TIntTypeMethod = (itmLaytype, itmLayavg, itmLayvka);

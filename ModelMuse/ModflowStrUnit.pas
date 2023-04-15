@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, RbwParser, GoPhastTypes;
+  SubscriptionUnit, RbwParser, GoPhastTypes, OrderedCollectionInterfaceUnit;
 
 type
   TStrRecord = record

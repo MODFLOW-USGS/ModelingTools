@@ -70,7 +70,13 @@ begin
     for ItemIndex := 0 to ObsItemList.Count - 1 do
     begin
       ObsItem := ObsItemList[ItemIndex];
-      ObsItemDictionary.Add(ObsItem.GUID, ObsItem);
+      try
+        ObsItemDictionary.Add(ObsItem.GUID, ObsItem);
+      except on EListError do
+        begin
+          ObsItem.ReplaceGUID;
+        end;
+      end;
     end;
     for ScreenObjectIndex := 0 to FModel.ScreenObjectCount - 1 do
     begin

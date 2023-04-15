@@ -3,7 +3,7 @@ unit ModflowTransientListParameterUnit;
 interface
 
 uses SysUtils, Classes, OrderedCollectionUnit,
-  GoPhastTypes, ModflowTimeSeriesUnit;
+  GoPhastTypes, ModflowTimeSeriesUnit, OrderedCollectionInterfaceUnit;
 
 type
   TModflowTransientListParameters = class;

@@ -4,7 +4,8 @@ interface
 
 uses
 ModflowBoundaryUnit, FormulaManagerUnit, Classes,
-  OrderedCollectionUnit, SysUtils, GoPhastTypes, RealListUnit;
+  OrderedCollectionUnit, SysUtils, GoPhastTypes,
+  OrderedCollectionInterfaceUnit;
 
 type
   TCustomFarmItem = class(TCustomModflowBoundaryItem)

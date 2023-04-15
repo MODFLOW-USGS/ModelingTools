@@ -3,7 +3,7 @@ unit GlobalVariablesUnit;
 interface
 
 uses Classes, SysUtils, RbwParser, SubscriptionUnit,
-  OrderedCollectionUnit, GoPhastTypes;
+  OrderedCollectionUnit, GoPhastTypes, OrderedCollectionInterfaceUnit;
 
 type
   TVariableRecord = record

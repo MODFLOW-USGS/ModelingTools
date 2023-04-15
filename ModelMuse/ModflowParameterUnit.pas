@@ -2,7 +2,8 @@ unit ModflowParameterUnit;
 
 interface
 
-uses SysUtils, Classes, OrderedCollectionUnit, GoPhastTypes;
+uses SysUtils, Classes, OrderedCollectionUnit, GoPhastTypes,
+  OrderedCollectionInterfaceUnit;
 
 type
   TModflowSteadyParameters = Class;

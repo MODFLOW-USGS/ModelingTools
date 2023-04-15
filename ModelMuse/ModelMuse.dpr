@@ -847,7 +847,14 @@ uses
   DataArrayManagerUnit in 'DataArrayManagerUnit.pas',
   CrossSectionUnit in 'CrossSectionUnit.pas',
   DataSetNamesUnit in 'DataSetNamesUnit.pas',
-  ModelMuseInterfaceUnit in 'ModelMuseInterfaceUnit.pas';
+  ModelMuseInterfaceUnit in 'ModelMuseInterfaceUnit.pas',
+  ChangeGlobalVariablesInterfaceUnit in 'ChangeGlobalVariablesInterfaceUnit.pas',
+  Modflow6DynamicTimeSeriesInterfaceUnit in 'Modflow6DynamicTimeSeriesInterfaceUnit.pas',
+  Modflow6TimeSeriesCollectionsInterfaceUnit in 'Modflow6TimeSeriesCollectionsInterfaceUnit.pas',
+  ModflowTimeInterfaceUnit in 'ModflowTimeInterfaceUnit.pas',
+  Modflow6TimeSeriesInterfaceUnit in 'Modflow6TimeSeriesInterfaceUnit.pas',
+  PhastModelInterfaceUnit in 'PhastModelInterfaceUnit.pas',
+  OrderedCollectionInterfaceUnit in 'OrderedCollectionInterfaceUnit.pas';
 
 {$R *.res}
 

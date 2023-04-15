@@ -6,7 +6,7 @@ uses
   ModflowCellUnit, ModflowBoundaryUnit, GoPhastTypes, Classes,
   OrderedCollectionUnit, Generics.Collections,
   FormulaManagerUnit, ModflowSwrReachGeometryUnit, ZLib, RbwParser,
-  SysUtils, SubscriptionUnit, ModflowSwrObsUnit;
+  SysUtils, SubscriptionUnit, ModflowSwrObsUnit, OrderedCollectionInterfaceUnit;
 
 type
   TSwrRouteType = (rtLevelPool, rtTiltedPool, rtDiffusiveWave, rtKinematicWave);

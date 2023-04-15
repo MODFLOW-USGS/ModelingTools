@@ -6,6 +6,15 @@ uses
   System.Classes, GoPhastTypes, GlobalVariablesUnit, RbwParser;
 
 type
+  IModelForChangeGlobalVariables = interface(IModelMuseModel)
+    procedure UpdateFormulas(OldNames, NewNames: TStringList);
+    function GetGlobalVariables: TGlobalVariables;
+    procedure SetGlobalVariables(const Value: TGlobalVariables);
+    property GlobalVariables: TGlobalVariables read GetGlobalVariables
+      write SetGlobalVariables;
+    procedure RestoreSubscriptions;
+  end;
+
   TCustomDefinedGlobalObject = class(TObject)
   private
     FLocked: Boolean;

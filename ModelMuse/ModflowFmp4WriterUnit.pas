@@ -6870,7 +6870,14 @@ begin
   NewLine;
 
   Model.Farms.Sort;
-  FNWBS := Model.Farms.Last.FarmId;
+  if Model.Farms.Count > 0 then
+  begin
+    FNWBS := Model.Farms.Last.FarmId;
+  end
+  else
+  begin
+    FNWBS := 0;
+  end;
   WriteString('  NWBS');
   WriteInteger(FNWBS);
   NewLine;

@@ -5,7 +5,8 @@ interface
 uses
   GoPhastTypes, System.Classes, ModflowCellUnit, System.ZLib,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, RbwParser,
-  RealListUnit, System.SysUtils, SubscriptionUnit;
+  RealListUnit, System.SysUtils, SubscriptionUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   TCSubOb = (coCSub, coInelastCSub, coElastCSub, coCoarseCSub, coCSubCell,

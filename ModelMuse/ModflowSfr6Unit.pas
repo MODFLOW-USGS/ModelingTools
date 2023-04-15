@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, ModflowCellUnit,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, GoPhastTypes,
   System.Generics.Collections, SubscriptionUnit, RbwParser, Mt3dmsChemUnit,
-  GwtStatusUnit;
+  GwtStatusUnit, OrderedCollectionInterfaceUnit;
 
 type
   TSfrOb = (soStage, soExtInflow, soInflow, soFromMvr, soRainfall, soRunoff, soSfr,

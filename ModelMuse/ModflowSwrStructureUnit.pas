@@ -3,7 +3,8 @@ unit ModflowSwrStructureUnit;
 interface
 
 uses
-  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils;
+  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils,
+  OrderedCollectionInterfaceUnit;
 
 type
   TSwrStructureType = (sstUncontrolledZeroDepth, sstNone, sstSpecifiedElevation,

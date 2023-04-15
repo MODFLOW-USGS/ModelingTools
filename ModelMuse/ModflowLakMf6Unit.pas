@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
   FormulaManagerUnit, SubscriptionUnit, System.Generics.Collections,
-  ModflowCellUnit, RealListUnit, Mt3dmsChemUnit, System.SysUtils, GwtStatusUnit;
+  ModflowCellUnit, RealListUnit, Mt3dmsChemUnit, System.SysUtils, GwtStatusUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   // related to claktype.

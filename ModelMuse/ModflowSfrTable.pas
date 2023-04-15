@@ -3,7 +3,8 @@ unit ModflowSfrTable;
 interface
 
 uses SysUtils, Classes, RbwParser, GoPhastTypes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit;
+  ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   TSfrFlowTableItemRecord = record
@@ -53,10 +54,6 @@ type
     procedure GetPropertyObserver(Sender: TObject; List: TList);
     procedure RemoveSubscription(Sender: TObject; const AName: string);
     procedure RestoreSubscription(Sender: TObject; const AName: string);
-//    procedure UpdateFormula(Value: string; Observer: TObserver;
-//      var FormulaObject: TFormulaObject);
-//    procedure UpdateFormulaDependencies(OldFormula: string; var
-//      NewFormula: string; Observer: TObserver; Compiler: TRbwParser); override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function GetObserver(Index: Integer): TObserver; override;
     function GetScreenObject: TObject; override;

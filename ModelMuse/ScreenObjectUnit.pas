@@ -61,7 +61,8 @@ uses
   ModflowFmp4EvaporationIrrigationFractionUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
-  ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit;
+  ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   //

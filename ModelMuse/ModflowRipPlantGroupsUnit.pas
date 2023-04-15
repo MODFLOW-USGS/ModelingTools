@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, GoPhastTypes, OrderedCollectionUnit, FormulaManagerUnit,
-  SubscriptionUnit, System.Generics.Collections, RbwParser, System.SysUtils;
+  SubscriptionUnit, System.Generics.Collections, RbwParser, System.SysUtils,
+  OrderedCollectionInterfaceUnit;
 
 const
   FormulaCount = 4;
@@ -89,9 +90,9 @@ type
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function GetObserver(Index: Integer): TObserver; override;
-    procedure UpdateFormulaDependencies(OldFormula: string;
-      var NewFormula: string; Observer: TObserver;
-      Compiler: TRbwParser); override;
+//    procedure UpdateFormulaDependencies(OldFormula: string;
+//      var NewFormula: string; Observer: TObserver;
+//      Compiler: TRbwParser); override;
     function GetScreenObject: TObject; override;
   public
     constructor Create(Collection: TCollection); override;
@@ -508,72 +509,72 @@ begin
   end;
 end;
 
-procedure TRipPlantGroup.UpdateFormulaDependencies(OldFormula: string;
-  var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
-var
-  OldUses: TStringList;
-  NewUses: TStringList;
-  Position: integer;
-  DS: TObserver;
-  Index: integer;
-  procedure CompileFormula(var AFormula: string; UsesList: TStringList);
-  begin
-    if AFormula <> '' then
-    begin
-      try
-        Compiler.Compile(AFormula);
-        UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
-      except
-        on E: ERbwParserError do
-        begin
-        end;
-      end;
-    end;
-  end;
-
-begin
-  OldFormula := Trim(OldFormula);
-  NewFormula := Trim(NewFormula);
-  if OldFormula = NewFormula then
-  begin
-    Exit;
-  end;
-  if (frmGoPhast.PhastModel <> nil) and
-    ((frmGoPhast.PhastModel.ComponentState * [csLoading, csReading]) <> []) then
-  begin
-    Exit;
-  end;
-  OldUses := TStringList.Create;
-  NewUses := TStringList.Create;
-  try
-    CompileFormula(OldFormula, OldUses);
-    CompileFormula(NewFormula, NewUses);
-    for Index := OldUses.Count - 1 downto 0 do
-    begin
-      Position := NewUses.IndexOf(OldUses[Index]);
-      if Position >= 0 then
-      begin
-        OldUses.Delete(Index);
-        NewUses.Delete(Position);
-      end;
-    end;
-    for Index := 0 to OldUses.Count - 1 do
-    begin
-      DS := frmGoPhast.PhastModel.GetObserverByName(OldUses[Index]);
-      Assert(DS <> nil);
-      DS.StopsTalkingTo(Observer);
-    end;
-    for Index := 0 to NewUses.Count - 1 do
-    begin
-      DS := frmGoPhast.PhastModel.GetObserverByName(NewUses[Index]);
-      Assert(DS <> nil);
-      DS.TalksTo(Observer);
-    end;
-  finally
-    NewUses.Free;
-    OldUses.Free;
-  end;
-end;
+//procedure TRipPlantGroup.UpdateFormulaDependencies(OldFormula: string;
+//  var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
+//var
+//  OldUses: TStringList;
+//  NewUses: TStringList;
+//  Position: integer;
+//  DS: TObserver;
+//  Index: integer;
+//  procedure CompileFormula(var AFormula: string; UsesList: TStringList);
+//  begin
+//    if AFormula <> '' then
+//    begin
+//      try
+//        Compiler.Compile(AFormula);
+//        UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
+//      except
+//        on E: ERbwParserError do
+//        begin
+//        end;
+//      end;
+//    end;
+//  end;
+//
+//begin
+//  OldFormula := Trim(OldFormula);
+//  NewFormula := Trim(NewFormula);
+//  if OldFormula = NewFormula then
+//  begin
+//    Exit;
+//  end;
+//  if (frmGoPhast.PhastModel <> nil) and
+//    ((frmGoPhast.PhastModel.ComponentState * [csLoading, csReading]) <> []) then
+//  begin
+//    Exit;
+//  end;
+//  OldUses := TStringList.Create;
+//  NewUses := TStringList.Create;
+//  try
+//    CompileFormula(OldFormula, OldUses);
+//    CompileFormula(NewFormula, NewUses);
+//    for Index := OldUses.Count - 1 downto 0 do
+//    begin
+//      Position := NewUses.IndexOf(OldUses[Index]);
+//      if Position >= 0 then
+//      begin
+//        OldUses.Delete(Index);
+//        NewUses.Delete(Position);
+//      end;
+//    end;
+//    for Index := 0 to OldUses.Count - 1 do
+//    begin
+//      DS := frmGoPhast.PhastModel.GetObserverByName(OldUses[Index]);
+//      Assert(DS <> nil);
+//      DS.StopsTalkingTo(Observer);
+//    end;
+//    for Index := 0 to NewUses.Count - 1 do
+//    begin
+//      DS := frmGoPhast.PhastModel.GetObserverByName(NewUses[Index]);
+//      Assert(DS <> nil);
+//      DS.TalksTo(Observer);
+//    end;
+//  finally
+//    NewUses.Free;
+//    OldUses.Free;
+//  end;
+//end;
 
 { TRipPlantGroups }
 

@@ -33,9 +33,9 @@ uses System.UITypes,
   PathlineReader, LegendUnit, DisplaySettingsUnit, ModflowCellUnit,
   ModflowGageUnit, ModflowHeadObsResults, GR32, AxCtrls, Generics.Collections,
   Generics.Defaults, Mt3dmsTimesUnit, Mt3dmsChemSpeciesUnit,
-  Mt3dmsFluxObservationsUnit, SutraMeshUnit, HashTableFacadeUnit,
+  Mt3dmsFluxObservationsUnit, SutraMeshUnit,
   SutraOptionsUnit, SutraTimeScheduleUnit,
-  SutraOutputControlUnit, SutraBoundariesUnit, FishnetMeshGenerator,
+  SutraOutputControlUnit, FishnetMeshGenerator,
   VectorDisplayUnit, ModflowFmpCropUnit, ModflowFmpSoilUnit,
   ModflowFmpClimateUnit, ModflowFmpAllotmentUnit, ModflowSwrTabfilesUnit,
   ModflowSwrReachGeometryUnit, ModflowSwrStructureUnit, ModflowSwrObsUnit,
@@ -47,8 +47,10 @@ uses System.UITypes,
   PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit,
   PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults,
   Modflow6TimeSeriesCollectionsUnit, ModflowFmpIrrigationUnit,
-  ModelMuseFarmFormInterfacesUnit, DataArrayManagerUnit, CrossSectionUnit,
-  DataSetNamesUnit, ModelMuseInterfaceUnit;
+  DataArrayManagerUnit, CrossSectionUnit,
+  DataSetNamesUnit, ModelMuseInterfaceUnit, LockedGlobalVariableChangers,
+  Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit,
+  PhastModelInterfaceUnit, OrderedCollectionInterfaceUnit;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
@@ -1649,7 +1651,9 @@ that affects the model output should also have a comment. }
 
   TCustomModel = class abstract (TBaseModel, IModelMuseModel,
     ICustomModelForDataArrayManager, ICustomModelInterfaceForCrosssection,
-    ICustomModelInterfaceForTOrderedCollection)
+    ICustomModelInterfaceForTOrderedCollection, IModelForChangeGlobalVariables,
+    IModelForDynamicTimeSeries, IModelTimesSeriesInterface,
+    IModelForTGwtPestMethodCollection, IModelForTLandUsePestMethodCollection)
   private
     FOnModelSelectionChange: TNotifyEvent;
     // See @link(PhastGrid).
@@ -1908,8 +1912,25 @@ that affects the model output should also have a comment. }
     function GetAssignModflow6LakeDisplayArrays: TNotifyEvent;
     property AssignModflow6LakeDisplayArrays: TNotifyEvent read GetAssignModflow6LakeDisplayArrays;
     procedure UpdateIdomain(Sender: TObject);
+    // functions used in interfaces.
     function GetDataSetByName(const DataSetName: string): TDataArray;
     function GetDataArrayInterface: ISimpleDataArrayManager;
+    procedure RestoreSubscriptions;
+    function AddFormulaObject: TFormulaObject;
+    procedure RemoveFormulaObject(FormulaObject: TFormulaObject;
+      OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
+      Subject: TObject);
+    function TimeToTimeStepTimes(ATime: double; out StartTime, EndTime: double): Boolean;
+    function GetPestParameterValueByName(PestParamName: string; out Value: double): Boolean;
+    procedure UpdateFormulaDependencies(OldFormula: string;
+      var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
+    function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TFormulaObject;
+    procedure ChangeFormula(var FormulaObject: TFormulaObject;
+      NewFormula: string; EvaluatedAt: TEvaluatedAt; OnRemoveSubscription,
+      OnRestoreSubscription: TChangeSubscription; Subject: TObject);
+    function GetMobileComponentCount: Integer;
+    function CropCount: integer;
+
   private
     FGrid: TCustomModelGrid;
     FModflowOptions: TModflowOptions;
@@ -2613,6 +2634,7 @@ that affects the model output should also have a comment. }
     function GetCrossSection: TCrossSection;
     function GetModflowOptions: TModflowOptions;
     function GetDataArrayManager: TDataArrayManager;
+    function GetClearing: Boolean;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
@@ -2721,7 +2743,7 @@ that affects the model output should also have a comment. }
     procedure UpdateDisplayUseList(NewUseList: TStringList;
       ParamType: TParameterType; DataIndex: integer; const DisplayName: string); virtual; abstract;
     procedure Assign(Source: TPersistent); override;
-    property Clearing: Boolean read FClearing;
+    property Clearing: Boolean read GetClearing;
     property DataArrayManager: TDataArrayManager read GetDataArrayManager;
 
     property OnActiveDataSetChanged: TNotifyEvent read GetOnActiveDataSetChanged;
@@ -2767,6 +2789,8 @@ that affects the model output should also have a comment. }
     // @link(TDataSetOrientation) and @link(TEvaluatedAt).
     function GetCompiler(const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt): TRbwParser;
+    property FormulaCompiler[const Orientation: TDataSetOrientation;
+      const EvaluatedAt: TEvaluatedAt]:TRbwParser read GetCompiler;
     function ParserCount: integer;
     property Parsers[Index: integer]: TRbwParser read GetParsers;
     procedure ClearExpressionsAndVariables;
@@ -4183,6 +4207,7 @@ that affects the model output should also have a comment. }
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections); override;
     function GetMf6TimesSeries: TTimesSeriesCollections; override;
     procedure UpdateFarmProperties;
+    procedure CheckObservationGUIDs;
 //    procedure FixGwtModel;
     //    function GetPilotPoint(Index: Integer): TPoint2D;
 //    function GetPilotPointSpacing: double;
@@ -5623,10 +5648,9 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowDRN_WriterUnit, ModflowDRT_WriterUnit, ModflowRCH_WriterUnit,
   ModflowEVT_WriterUnit, ModflowETS_WriterUnit, ModflowRES_WriterUnit,
   IntListUnit, ModflowLAK_Writer, ModflowLPF_WriterUnit,
-  ModelMuseUtilities, frmFormulaErrorsUnit, ModflowEtsUnit,
-  ModflowEvtUnit, ModflowSfrWriterUnit, ModflowSfrUnit,
+  ModelMuseUtilities, frmFormulaErrorsUnit,
+  ModflowSfrWriterUnit, ModflowSfrUnit,
   ModflowSfrFlows, ModflowSfrChannelUnit,
-
   ModflowUzfWriterUnit, ModflowGMG_WriterUnit,
   ModflowSIP_WriterUnit, ModflowDE4_WriterUnit, ModflowOC_Writer,
   ModflowGAG_WriterUnit, ModflowHOB_WriterUnit,
@@ -5648,7 +5672,7 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   SutraBoundaryWriterUnit, QuadtreeClass, frmMeshInformationUnit,
   ModflowStrWriterUnit, ModflowFhbWriterUnit,
   ModflowFmpWriterUnit, ModflowCfpWriterUnit, ModflowSwiWriterUnit,
-  ModflowSwrWriterUnit, SolidGeom, ModflowMnw1Writer,
+  ModflowSwrWriterUnit, ModflowMnw1Writer,
   FootprintBoundary, FootprintFileUnit, ModflowFhbUnit,
   Modflow2015StartingHeadsWriterUnit, ModflowNPF_WriterUnit,
   ModflowStoWriterUnit, ModflowSmsWriterUnit, ModflowTDisWriterUnit,
@@ -5667,7 +5691,8 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   PestControlFileWriterUnit, ModflowInitialConcentrationWriterUnit,
   ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
   ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit,
-  ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit;
+  ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit,
+  ModflowTimeInterfaceUnit, Modflow6TimeSeriesUnit;
 
 
 
@@ -10389,16 +10414,16 @@ const
 //                SUTRA state calibration observations are now reassigned to
 //                prevent potential conflicts with existing calibration
 //                observations.
-
-//               Bug fix: Fixed bug exporting SRF in MODFLOW LGR models if
+//    '5.1.1.22' Bug fix: Fixed bug exporting SRF in MODFLOW LGR models if
 //                unsaturated flow was enabled in SFR.
-
+//               Bug fix: If some observations have duplicate GUIDs, ModelMuse
+//                reassigns the GUID.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.21';
+  IIModelVersion = '5.1.1.22';
 
 function IModelVersion: string;
 begin
@@ -11821,6 +11846,7 @@ var
   Variable: TGlobalVariable;
   ScreenObject: TScreenObject;
 begin
+  SetGlobals(nil);
   frmFileProgress:= TfrmProgressMM.Create(nil);
   try
     FAppsMoved.Free;
@@ -16674,6 +16700,90 @@ begin
   end;
 end;
 
+procedure TCustomModel.UpdateFormulaDependencies(OldFormula: string;
+  var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
+var
+  OldUses: TStringList;
+  NewUses: TStringList;
+  Position: integer;
+  DS: TObserver;
+  ParentScreenObject: TScreenObject;
+  Index: integer;
+  TimeSeries: TMf6TimeSeries;
+  procedure CompileFormula(var AFormula: string; UsesList: TStringList);
+  begin
+    if AFormula <> '' then
+    begin
+      // Mf6TimesSeries.GetTimeSeriesByName always returns nil for
+      // non MODFLOW 6 models.
+      TimeSeries := Mf6TimesSeries.GetTimeSeriesByName(AFormula);
+      if TimeSeries <> nil then
+      begin
+        AFormula := String(TimeSeries.SeriesName);
+        UsesList.Clear;
+      end
+      else
+      begin
+        try
+          Compiler.Compile(AFormula);
+          UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
+        except
+          on E: ERbwParserError do
+          begin
+          end;
+        end;
+      end;
+    end;
+  end;
+
+begin
+  OldFormula := Trim(OldFormula);
+  NewFormula := Trim(NewFormula);
+  if OldFormula = NewFormula then
+  begin
+    Exit;
+  end;
+  if (ComponentState * [csLoading, csReading]) <> [] then
+  begin
+    Exit;
+  end;
+//  ParentScreenObject := ScreenObject as TScreenObject;
+//  if (ParentScreenObject = nil) then
+//  begin
+//    Exit;
+//  end;
+  OldUses := TStringList.Create;
+  NewUses := TStringList.Create;
+  try
+    CompileFormula(OldFormula, OldUses);
+    CompileFormula(NewFormula, NewUses);
+    for Index := OldUses.Count - 1 downto 0 do
+    begin
+      Position := NewUses.IndexOf(OldUses[Index]);
+      if Position >= 0 then
+      begin
+        OldUses.Delete(Index);
+        NewUses.Delete(Position);
+      end;
+    end;
+    for Index := 0 to OldUses.Count - 1 do
+    begin
+      DS := GetObserverByName(OldUses[Index]);
+      Assert(DS <> nil);
+      DS.StopsTalkingTo(Observer);
+    end;
+    for Index := 0 to NewUses.Count - 1 do
+    begin
+      DS := GetObserverByName(NewUses[Index]);
+      Assert(DS <> nil);
+      DS.TalksTo(Observer);
+    end;
+  finally
+    NewUses.Free;
+    OldUses.Free;
+  end;
+end;
+
 procedure TCustomModel.UpdateFormulas(OldNames, NewNames: TStringList);
 var
   CompilerList: TList;
@@ -20026,6 +20136,50 @@ begin
     and (ChildModels.Count > 0);
 end;
 
+procedure TPhastModel.CheckObservationGUIDs;
+var
+  ObsItemDictionary: TObsItemDictionary;
+  ObsItemList: TObservationInterfaceList;
+  ItemIndex: Integer;
+  ChildIndex: Integer;
+  ObsItem: IObservationItem;
+  ChildModel: TChildModel;
+begin
+  ObsItemDictionary := TObsItemDictionary.Create;
+  ObsItemList:=  TObservationInterfaceList.Create;
+  try
+    FillObsInterfaceItemList(ObsItemList);
+    for ItemIndex := 0 to ObsItemList.Count - 1 do
+    begin
+      ObsItem := ObsItemList[ItemIndex];
+      if ObsItemDictionary.ContainsKey(ObsItem.GUID) then
+      begin
+        ObsItem.ReplaceGUID;
+      end;
+      ObsItemDictionary.Add(ObsItem.GUID, ObsItem);
+    end;
+    ObsItemList.Clear;
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      ChildModel.FillObsInterfaceItemList(ObsItemList);
+      for ItemIndex := 0 to ObsItemList.Count - 1 do
+      begin
+        ObsItem := ObsItemList[ItemIndex];
+        if ObsItemDictionary.ContainsKey(ObsItem.GUID) then
+        begin
+          ObsItem.ReplaceGUID;
+        end;
+        ObsItemDictionary.Add(ObsItem.GUID, ObsItem);
+      end;
+    end;
+  finally
+    ObsItemList.Free;
+    ObsItemDictionary.Free;
+  end;
+
+end;
+
 procedure TPhastModel.Loaded;
 var
   Index: integer;
@@ -20067,7 +20221,7 @@ begin
     end;
   end;
   FSutraMesh.Assign(SutraSettings);
-  SetMf2005ObsGroupNames
+  SetMf2005ObsGroupNames;
 end;
 
 procedure TPhastModel.InvalidateSegments;
@@ -20930,6 +21084,11 @@ begin
 end;
 
 
+procedure TCustomModel.RestoreSubscriptions;
+begin
+  FormulaManager.RestoreSubscriptions;
+end;
+
 function TPhastModel.Mt3dMsSorbImmobInitialConcUsed(Sender: TObject): boolean;
 var
   DataArray: TDataArray;
@@ -21666,6 +21825,9 @@ var
   UnsatElementDataArray: TDataArray;
 begin
   UpdateFarmProperties;
+
+  CheckObservationGUIDs;
+
 
   FixScreenObjectNames;
   RenameOldVerticalLeakance;
@@ -32916,6 +33078,27 @@ begin
   end;
 end;
 
+function TCustomModel.TimeToTimeStepTimes(ATime: double; out StartTime,
+  EndTime: double): Boolean;
+var
+  Period: Integer;
+  Step: Integer;
+  StressPeriod: TModflowStressPeriod;
+  TimeStep: TTimeStep;
+begin
+  result := False;
+  ModflowStressPeriods.TimeToPeriodAndStep(Time, Period, Step);
+  if (Period < 0) or (Step < 0) then
+  begin
+    Exit;
+  end;
+  result := True;
+  StressPeriod := ModflowStressPeriods[Period];
+  TimeStep := StressPeriod.GetTimeStep(Step);
+  StartTime := TimeStep.StartTime;
+  EndTime := TimeStep.EndTime;
+end;
+
 function TCustomModel.DoTranspirationFractionUsed(Sender: TObject): Boolean;
 begin
   {$IFDEF OWHMV2}
@@ -33741,6 +33924,23 @@ begin
   TestAddModelModelFile(AFileName, FModelOutputFiles);
 end;
 
+function TCustomModel.CreateBlockFormulaObject(
+  Orientation: TDataSetOrientation): TFormulaObject;
+begin
+  result := FormulaManager.Add;
+  case Orientation of
+    dsoTop:
+      begin
+        result.Parser := rpTopFormulaCompiler;
+      end;
+    dso3D:
+      begin
+        result.Parser := rpThreeDFormulaCompiler;
+      end;
+    else Assert(False);
+  end;
+end;
+
 procedure TCustomModel.CreateBoundariesForMeshCreator(MeshCreator: TQuadMeshCreator; List: TList; Exag: Extended);
 var
   NodeTree: TRbwQuadTree;
@@ -34033,6 +34233,11 @@ begin
     FilesToArchive.Add(FileName);
     DoInvalidate(self);
   end;
+end;
+
+function TCustomModel.AddFormulaObject: TFormulaObject;
+begin
+  result := FormulaManager.Add;
 end;
 
 procedure TCustomModel.InternalClear;
@@ -35382,6 +35587,11 @@ end;
 function TCustomModel.GetChemistryUsed: TObjectUsedEvent;
 begin
   result := DoChemistryUsed;
+end;
+
+function TCustomModel.GetClearing: Boolean;
+begin
+  result := FClearing;
 end;
 
 function TCustomModel.GetCompiler(const Orientation: TDataSetOrientation;
@@ -37546,6 +37756,11 @@ begin
   {$ELSE}
   result := False;
   {$ENDIF}
+end;
+
+function TCustomModel.CropCount: integer;
+begin
+  result := FmpCrops.Count;
 end;
 
 procedure TCustomModel.CrossSectionChanged(Sender: TObject);
@@ -40267,6 +40482,14 @@ begin
   end;
 end;
 
+procedure TCustomModel.RemoveFormulaObject(FormulaObject: TFormulaObject;
+  OnRemoveSubscription, OnRestoreSubscription: TChangeSubscription;
+  Subject: TObject);
+begin
+  FormulaManager.Remove(FormulaObject, OnRemoveSubscription,
+    OnRestoreSubscription, Subject);
+end;
+
 procedure TCustomModel.RemoveTimeList(TimeList: TCustomTimeList);
 begin
   FTimeLists.Remove(TimeList);
@@ -40654,6 +40877,11 @@ procedure TCustomModel.GetMfHobHeadsUseList(Sender: TObject;
 begin
   NewUseList.Add(rsActive);
   // do nothing
+end;
+
+function TCustomModel.GetMobileComponentCount: Integer;
+begin
+  result := MobileComponents.Count;
 end;
 
 function TCustomModel.GetModelInputFiles: TStrings;
@@ -41443,6 +41671,32 @@ function TCustomModel.WettingActive: boolean;
 begin
   result := ModflowWettingOptions.WettingActive
     and not ModflowPackages.UpwPackage.IsSelected;
+end;
+
+procedure TCustomModel.ChangeFormula(var FormulaObject: TFormulaObject;
+  NewFormula: string; EvaluatedAt: TEvaluatedAt; OnRemoveSubscription,
+  OnRestoreSubscription: TChangeSubscription; Subject: TObject);
+var
+  Local3DCompiler: TRbwParser;
+begin
+  Local3DCompiler := nil;
+  case EvaluatedAt of
+    eaBlocks:
+      begin
+        Local3DCompiler := rpThreeDFormulaCompiler;
+      end;
+    eaNodes:
+      begin
+        Local3DCompiler := rpThreeDFormulaCompilerNodes;
+      end;
+  else
+    Assert(False);
+  end;
+
+  ParentModel.FormulaManager.ChangeFormula(FormulaObject, NewFormula,
+    Local3DCompiler,
+    OnRemoveSubscription,
+    OnRestoreSubscription, Subject)
 end;
 
 function TCustomModel.Chani: TOneDIntegerArray;
@@ -48646,6 +48900,19 @@ begin
   if not FPestParamDictionay.TryGetValue(UpperCase(PestParamName), result) then
   begin
     result := nil;
+  end;
+end;
+
+function TCustomModel.GetPestParameterValueByName(PestParamName: string;
+  out Value: double): Boolean;
+var
+  Param: TModflowSteadyParameter;
+begin
+  Param := GetPestParameterByName(PestParamName);
+  result := (Param <> nil);
+  if result then
+  begin
+    Value := Param.Value;
   end;
 end;
 

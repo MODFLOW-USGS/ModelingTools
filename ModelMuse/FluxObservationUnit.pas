@@ -84,6 +84,7 @@ type
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
+    procedure ReplaceGUID;
   public
     // If Source is a @classname, @name copies the published properties
     // of @classname from the source.
@@ -719,6 +720,16 @@ begin
     result := 0
   else
     result := E_NOINTERFACE;
+end;
+
+procedure TFluxObservation.ReplaceGUID;
+var
+  MyGuid: TGUID;
+begin
+  if CreateGUID(MyGuid) = 0 then
+  begin
+    FGUID := GUIDToString(MyGuid);
+  end;
 end;
 
 //procedure TFluxObservation.SetObservationGroup(const Value: string);

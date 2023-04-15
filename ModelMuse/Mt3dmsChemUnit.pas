@@ -5,7 +5,7 @@ interface
 uses System.Types, Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes, IntListUnit,
-  ModflowMnw2Unit;
+  ModflowMnw2Unit, OrderedCollectionInterfaceUnit;
 
 const
   // Mass loading source

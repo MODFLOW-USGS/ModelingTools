@@ -4,7 +4,8 @@ interface
 
 uses
   ZLib, Classes, ModflowCellUnit, OrderedCollectionUnit, Contnrs, GoPhastTypes,
-  ModflowBoundaryUnit, DataSetUnit, System.Generics.Collections;
+  ModflowBoundaryUnit, DataSetUnit, System.Generics.Collections,
+  OrderedCollectionInterfaceUnit;
 
 type
   TMt3dmsTobRecord = record

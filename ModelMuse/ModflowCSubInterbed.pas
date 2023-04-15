@@ -4,7 +4,7 @@ interface
 
 uses
   OrderedCollectionUnit, System.Classes, GoPhastTypes, System.SysUtils,
-  DataSetUnit, RbwParser;
+  DataSetUnit, RbwParser, OrderedCollectionInterfaceUnit;
 
 type
   TCSubInterbedType = (itNoDelay, itDelay);

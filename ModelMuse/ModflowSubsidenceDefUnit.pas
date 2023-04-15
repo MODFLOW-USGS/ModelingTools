@@ -4,7 +4,8 @@ interface
 
 uses
   Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils, PestObsUnit,
-  System.Generics.Collections, InterpolatedObsCellUnit;
+  System.Generics.Collections, InterpolatedObsCellUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   TUseLayerNumberItem = class(TOrderedItem)

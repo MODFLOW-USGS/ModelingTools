@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
-  ModflowTransientListParameterUnit;
+  ModflowTransientListParameterUnit, OrderedCollectionInterfaceUnit;
 
 type
   // @name stores data for one CHD cell in a time increment defined by

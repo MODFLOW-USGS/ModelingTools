@@ -5,7 +5,7 @@ interface
 uses
   ModflowBoundaryUnit, FormulaManagerUnit, Classes,
   OrderedCollectionUnit, SysUtils, GoPhastTypes, ModflowFmpFarmUnit,
-  ModflowFmpBaseClasses, RealListUnit;
+  ModflowFmpBaseClasses, RealListUnit, OrderedCollectionInterfaceUnit;
 
 type
   // FMP Data Sets 11 and 26

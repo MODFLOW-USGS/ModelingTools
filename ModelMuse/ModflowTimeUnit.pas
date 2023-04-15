@@ -2,18 +2,13 @@ unit ModflowTimeUnit;
 
 interface
 
-uses SysUtils, Classes, RbwDataGrid4, GoPhastTypes;
+uses SysUtils, Classes, RbwDataGrid4, GoPhastTypes, ModflowTimeInterfaceUnit;
 
 type
   // @name defines the types of stress periods supported by MODFLOW.
   // @value(sptSteadyState Steady-state stress period)
   // @value(sptTransient Transient stress period)
   TStressPeriodType = (sptSteadyState, sptTransient);
-
-  TTimeStep = record
-    StartTime: double;
-    EndTime: double;
-  end;
 
   TGwtStressPeriod = class(TPhastCollectionItem)
   private

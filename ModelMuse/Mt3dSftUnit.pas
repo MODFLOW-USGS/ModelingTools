@@ -5,7 +5,7 @@ interface
 uses ModflowCellUnit, Mt3dmsChemUnit, System.Classes, ModflowBoundaryUnit,
   GoPhastTypes, SubscriptionUnit,
   System.Generics.Collections, System.SysUtils, System.ZLib, DataSetUnit,
-  OrderedCollectionUnit;
+  OrderedCollectionUnit, OrderedCollectionInterfaceUnit;
 
 type
   TSftSteady = class(TObject)

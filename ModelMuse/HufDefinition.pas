@@ -3,7 +3,8 @@ unit HufDefinition;
 interface
 
 uses
-  Classes, RbwParser, GoPhastTypes, OrderedCollectionUnit;
+  Classes, RbwParser, GoPhastTypes, OrderedCollectionUnit,
+  OrderedCollectionInterfaceUnit;
 
 type
   TVK_Method = (vkVK, vkVANI);

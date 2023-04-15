@@ -379,7 +379,7 @@ type
 
   // @link(TMf6_SimNameFileWriter) in @link(CustomModflowWriterUnit)
   // implements @name
-  IMf6_SimNameFileWriter = interface(IUnknown) ['{9C59A1EE-3BB2-4E39-A92A-DA09791188BD}']
+  IMf6_SimNameFileWriter = interface(IInterface) ['{9C59A1EE-3BB2-4E39-A92A-DA09791188BD}']
     function GetTDisFileName: string;
     procedure SetTDisFileName(const Value: string);
     property TDisFileName: string read GetTDisFileName write SetTDisFileName;
@@ -408,7 +408,7 @@ type
       PressureOrFlowFormula, TempOrConcFormula: string): TBoundaryNode; static;
   end;
 
-  IBoundaryNodes = interface(IUnknown) ['{8DAD8491-1A06-4C52-99B6-C204C17CCF9A}']
+  IBoundaryNodes = interface(IInterface) ['{8DAD8491-1A06-4C52-99B6-C204C17CCF9A}']
     procedure AddUnique(Node: TBoundaryNode);
     procedure Clear;
     function ToArray: TArray<TPair<Integer,TBoundaryNode>>;
@@ -698,6 +698,7 @@ type
   end;
 
   IModelMuseModel = interface(IInterface)
+    ['{84E508DD-8AC0-4FA4-9919-C81388A57403}']
     function GetModelSelection: TModelSelection;
     procedure SetModelSelection(const Value: TModelSelection);
     property ModelSelection: TModelSelection read GetModelSelection

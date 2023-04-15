@@ -4,7 +4,7 @@ interface
 
 uses ZLib, SysUtils, Classes, Contnrs, GoPhastTypes, ModflowBoundaryUnit,
   OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, ObsInterfaceUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, OrderedCollectionInterfaceUnit;
 
 type
   THobRecord = record

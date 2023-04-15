@@ -4,7 +4,7 @@ interface
 
 uses
   ModflowBoundaryUnit, ModflowSubsidenceDefUnit, Classes, LayerStructureUnit,
-  GoPhastTypes, OrderedCollectionUnit;
+  GoPhastTypes, OrderedCollectionUnit, OrderedCollectionInterfaceUnit;
 
 type
   TAssignmentMethod = (amCell, amInterpolate);

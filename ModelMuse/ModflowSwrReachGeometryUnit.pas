@@ -3,7 +3,8 @@ unit ModflowSwrReachGeometryUnit;
 interface
 
 uses
-  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils;
+  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils,
+  OrderedCollectionInterfaceUnit;
 
 type
   TGeometryType = (gtRectangular, gtTrapezoidal, gtIrregular, gtTable,

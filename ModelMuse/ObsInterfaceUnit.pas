@@ -22,6 +22,7 @@ type
     property Name: string read GetName;
     property ExportedName: string read GetExportedName;
     property GUID: string read GetGUID;
+    procedure ReplaceGUID;
     property ScreenObject: TObject read GetScreenObject;
     property ObservedValue: double read GetObservedValue
       write SetObservedValue;

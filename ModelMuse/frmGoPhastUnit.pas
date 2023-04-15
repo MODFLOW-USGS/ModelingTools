@@ -2176,7 +2176,8 @@ uses
   frmSupCalcUnit, PestPropertiesUnit,
   frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
   frmTimeSeriesUnit, frmIrrigationTypesUnit,
-  frmLayersToExportUnit, DataArrayManagerUnit, DataSetNamesUnit;
+  frmLayersToExportUnit, DataArrayManagerUnit, DataSetNamesUnit,
+  PhastModelInterfaceUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -5032,6 +5033,7 @@ end;
 procedure TfrmGoPhast.CreatePhastModel;
 begin
   PhastModel := TPhastModel.Create(self);
+  SetGlobals(PhastModel);
   PhastModel.ContourFont := Font;
   PhastModel.OnGetZoomBox := GetZoomBox;
   PhastModel.OnGetCurrentScreenObject := GetCurrentScreenObject;

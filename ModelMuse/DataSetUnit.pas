@@ -4163,24 +4163,26 @@ constructor TDataArray.Create(AnOwner: IModelMuseModel);
 var
   LocalPhastModel : TPhastModel;
   LocalChildModel: TChildModel;
+  LocalModel: TCustomModel;
 begin
   FPestParametersAllowed := True;
   FVisible := True;
   FUseLgrEdgeCells := lctUse;
   Assert(AnOwner <> nil);
-  FModel := AnOwner as TCustomModel;
-  if FModel is TPhastModel then
+  FModel := AnOwner;
+  LocalModel := FModel as TCustomModel;
+  if LocalModel is TPhastModel then
   begin
-    LocalPhastModel := TPhastModel(FModel);
+    LocalPhastModel := TPhastModel(LocalModel);
   end
   else
   begin
-    LocalChildModel := FModel as TChildModel;
+    LocalChildModel := LocalModel as TChildModel;
     LocalPhastModel := LocalChildModel.ParentModel as TPhastModel;
   end;
   FUnicodeSaved := not LocalPhastModel.FileVersionEqualOrEarlier('2.9.1.2');
   inherited Create(nil);
-  FFormulaObject := TCustomModel(AnOwner).FormulaManager.Add;
+  FFormulaObject := LocalModel.FormulaManager.Add;
   FFormulaObject.AddSubscriptionEvents(GlobalDataArrayRemoveSubscription,
       GlobalDataArrayRestoreSubscription, self);
   FLimits := TColoringLimits.Create;
