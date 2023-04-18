@@ -858,7 +858,8 @@ uses
   ScreenObjectInterfaceUnit in 'ScreenObjectInterfaceUnit.pas',
   ColorSchemesInterface in 'ColorSchemesInterface.pas',
   DataArrayInterfaceUnit in 'DataArrayInterfaceUnit.pas',
-  FormulaManagerInterfaceUnit in 'FormulaManagerInterfaceUnit.pas';
+  FormulaManagerInterfaceUnit in 'FormulaManagerInterfaceUnit.pas',
+  ContourInterfaceUnit in 'ContourInterfaceUnit.pas';
 
 {$R *.res}
 

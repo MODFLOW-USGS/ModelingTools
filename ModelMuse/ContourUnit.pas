@@ -8,27 +8,28 @@ interface
 
 uses Classes, Graphics, FastGeo, GR32, ZoomBox2, GoPhastTypes, DataSetUnit,
   ColorSchemes, QuadTreeClass, Generics.Collections, Types, TriPackRoutines,
-  SparseDataSets, SparseArrayUnit, DrawMeshTypesUnit, MeshRenumberingTypes;
+  SparseDataSets, SparseArrayUnit, DrawMeshTypesUnit, MeshRenumberingTypes,
+  ContourInterfaceUnit;
 
 const
   DefaultLineThickness = 2;
   DefaultMajorLineThickness = 4;
 
 type
-  T2DGridPoint = record
-    P: TPoint2D;
-    Value: TFloat;
-    Active: boolean;
-  end;
-
-  P2DGridPoint = ^T2DGridPoint;
-  TGridSquare = record
-    // Points to 4 grid points (square)
-    GridPoint : Array [0..3] of P2DGridPoint;
-  end;
-
-  T2DGrid = array of array of T2DGridPoint;
-  TSquares = array of array of TGridSquare;
+//  T2DGridPoint = record
+//    P: TPoint2D;
+//    Value: TFloat;
+//    Active: boolean;
+//  end;
+//
+//  P2DGridPoint = ^T2DGridPoint;
+//  TGridSquare = record
+//    // Points to 4 grid points (square)
+//    GridPoint : Array [0..3] of P2DGridPoint;
+//  end;
+//
+//  T2DGrid = array of array of T2DGridPoint;
+//  TSquares = array of array of TGridSquare;
 
   TTriangulationData = class(TObject)
   private

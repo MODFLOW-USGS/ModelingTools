@@ -2160,6 +2160,7 @@
         <DCCReference Include="ColorSchemesInterface.pas"/>
         <DCCReference Include="DataArrayInterfaceUnit.pas"/>
         <DCCReference Include="FormulaManagerInterfaceUnit.pas"/>
+        <DCCReference Include="ContourInterfaceUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -2244,6 +2245,12 @@
                 <DeployFile LocalName="ObserverProxyU.PAS" Configuration="Modflow 6 Beta" Class="ProjectFile"/>
                 <DeployFile LocalName="ObserverProxyU.PAS" Configuration="Release" Class="ProjectFile"/>
                 <DeployFile LocalName="Release\Win32\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
+                <DeployFile LocalName="Release\Win32\ModelMuse.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>ModelMuse.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Release\Win64\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployFile LocalName="Release\Win64\ModelMuse.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">

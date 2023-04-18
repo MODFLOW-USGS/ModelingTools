@@ -4,8 +4,8 @@ interface
 
 // Windows is used so that AnsiCompareText will be inlined.
 uses System.UITypes, Windows, SubscriptionUnit, SysUtils, Classes, Contnrs,
-  JclSysUtils,
-  ModflowPackageSelectionUnit, Dialogs, Types, Forms, SubPolygonUnit;
+  JclSysUtils, ModflowPackageSelectionUnit, Dialogs, Types, Forms,
+  SubPolygonUnit, ContourInterfaceUnit;
 
 type
   TProgressHandler = procedure(Position, Total: integer) of object;

@@ -15,7 +15,10 @@ uses System.UITypes, Winapi.Windows, Types, SysUtils, Classes, Graphics, Control
   OpenGL,
   GR32, // TBitmap32 and TFloatRect are declared in GR32.
   FastGEO, GoPhastTypes, RbwParser, ZoomBox2, SubscriptionUnit,
-  IsosurfaceUnit, ContourUnit, DataSetUnit, LineStorage, ModflowCellUnit;
+  IsosurfaceUnit,
+  ContourUnit,
+  ContourInterfaceUnit,
+  DataSetUnit, LineStorage, ModflowCellUnit;
 
 type
   // @abstract(@name is used for grid related errors.)
