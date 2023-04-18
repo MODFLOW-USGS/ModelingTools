@@ -3,7 +3,8 @@ unit ModflowCfpRechargeUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -36,7 +37,7 @@ type
   TCfpRchFractionItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(CfpRechargeFraction).
-    FCfpRechargeFraction: TFormulaObject;
+    FCfpRechargeFraction: IFormulaObject;
     // See @link(CfpRechargeFraction).
     procedure SetCfpRechargeFraction(const Value: string);
     function GetCfpRechargeFraction: string;
@@ -316,7 +317,7 @@ end;
 
 procedure TCfpRchFractionItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FCfpRechargeFraction);
+  Assert(Sender = FCfpRechargeFraction as TObject);
   List.Add(FObserverList[RechPosition]);
 end;
 

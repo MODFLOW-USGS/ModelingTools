@@ -3,7 +3,8 @@ unit ModflowDrnUnit;
 interface
 
 uses ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
-  OrderedCollectionUnit, ModflowCellUnit, FormulaManagerUnit,
+  OrderedCollectionUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes, ModflowTransientListParameterUnit;
 
 type
@@ -71,9 +72,9 @@ type
     function GetElevation: string;
   protected
     // See @link(Elevation).
-    FElevation: TFormulaObject;
+    FElevation: IFormulaObject;
     // See @link(Conductance).
-    FConductance: TFormulaObject;
+    FConductance: IFormulaObject;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -253,8 +254,8 @@ type
   TDrnBoundary = class(TSpecificModflowBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
-    FPestElevFormula: TFormulaObject;
-    FPestCondFormula: TFormulaObject;
+    FPestElevFormula: IFormulaObject;
+    FPestCondFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestElevationObserver: TObserver;
     FPestConductanceObserver: TObserver;
@@ -396,11 +397,11 @@ end;
 
 procedure TDrnItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FConductance then
+  if Sender = FConductance as TObject then
   begin
     List.Add(FObserverList[DrnConductancePosition]);
   end;
-  if Sender = FElevation then
+  if Sender = FElevation as TObject then
   begin
     List.Add(FObserverList[DrnElevationPosition]);
   end;
@@ -1360,14 +1361,14 @@ end;
 
 procedure TDrnBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestElevFormula then
+  if Sender = FPestElevFormula as TObject then
   begin
     if DrnElevationPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DrnElevationPosition]);
     end;
   end;
-  if Sender = FPestCondFormula then
+  if Sender = FPestCondFormula as TObject then
   begin
     if DrnConductancePosition < FObserverList.Count then
     begin

@@ -3,7 +3,8 @@ unit ModflowRchUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
@@ -87,7 +88,7 @@ type
   TRchItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(RechargeRate).
-    FRechargeRate: TFormulaObject;
+    FRechargeRate: IFormulaObject;
     FGwtConcentrations: TRchGwtConcCollection;
     // See @link(RechargeRate).
     procedure SetRechargeRate(const Value: string);
@@ -124,7 +125,7 @@ type
   TRchLayerItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(RechargeLayer).
-    FRechargeLayer: TFormulaObject;
+    FRechargeLayer: IFormulaObject;
     // See @link(RechargeLayer).
     procedure SetRechargeLayer(const Value: string);
     function GetRechargeLayer: string;
@@ -350,7 +351,7 @@ type
     FRechargeLayers: TRchLayerCollection;
     FCurrentParameter: TModflowTransientListParameter;
     FPestRechargeMethod: TPestParamMethod;
-    FPestRechargeFormula: TFormulaObject;
+    FPestRechargeFormula: IFormulaObject;
     FPestRechargeObserver: TObserver;
     FUsedObserver: TObserver;
     FPestConcentrationMethods: TGwtPestMethodCollection;
@@ -563,12 +564,14 @@ var
   Item: TGwtConcStringValueItem;
   ConcIndex: Integer;
 begin
-  Assert(Sender = FRechargeRate);
-  List.Add(FObserverList[RechPosition]);
+  if (Sender = FRechargeRate as TObject) then
+  begin
+    List.Add(FObserverList[RechPosition]);
+  end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     Item := GwtConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1811,7 +1814,7 @@ procedure TRchBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Index: Integer;
 begin
-  if Sender = FPestRechargeFormula then
+  if Sender = FPestRechargeFormula as TObject then
   begin
     if RechPosition < FObserverList.Count then
     begin
@@ -1820,7 +1823,7 @@ begin
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
-    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    if FPestConcentrationFormulas[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[RchStartConcentration + Index]);
     end;
@@ -2088,7 +2091,7 @@ end;
 
 procedure TRchLayerItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FRechargeLayer);
+  Assert(Sender = FRechargeLayer as TObject);
   List.Add(FObserverList[LayerPosition]);
 end;
 

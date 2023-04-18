@@ -3,7 +3,9 @@ unit ModflowUzfMf6Unit;
 interface
 
 uses Windows, ZLib, SysUtils, ModflowCellUnit, System.Classes,
-  ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, GoPhastTypes,
+  ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  OrderedCollectionUnit, GoPhastTypes,
   SubscriptionUnit, Mt3dmsChemUnit, GwtStatusUnit;
 
 type
@@ -113,13 +115,13 @@ type
   TUzfMf6Item = class(TCustomModflowBoundaryItem)
   private
     // See @link(UzfExtinctDepth).
-    FInfiltration: TFormulaObject;
-    FPotentialET: TFormulaObject;
-    FUzfExtinctDepth: TFormulaObject;
-    FExtinctionWaterContent: TFormulaObject;
-    FAirEntryPotential: TFormulaObject;
-    FRootPotential: TFormulaObject;
-    FRootActivity: TFormulaObject;
+    FInfiltration: IFormulaObject;
+    FPotentialET: IFormulaObject;
+    FUzfExtinctDepth: IFormulaObject;
+    FExtinctionWaterContent: IFormulaObject;
+    FAirEntryPotential: IFormulaObject;
+    FRootPotential: IFormulaObject;
+    FRootActivity: IFormulaObject;
     // GWT
     FGwtStatus: TGwtBoundaryStatusCollection;
     FSpecifiedConcentrations: TUztGwtConcCollection;
@@ -403,12 +405,12 @@ type
   TUzfMf6Boundary = class(TModflowBoundary)
   private
 
-    FSurfaceDepressionDepth: TFormulaObject;
-    FVerticalSaturatedK: TFormulaObject;
-    FResidualWaterContent: TFormulaObject;
-    FSaturatedWaterContent: TFormulaObject;
-    FInitialWaterContent: TFormulaObject;
-    FBrooksCoreyEpsilon: TFormulaObject;
+    FSurfaceDepressionDepth: IFormulaObject;
+    FVerticalSaturatedK: IFormulaObject;
+    FResidualWaterContent: IFormulaObject;
+    FSaturatedWaterContent: IFormulaObject;
+    FInitialWaterContent: IFormulaObject;
+    FBrooksCoreyEpsilon: IFormulaObject;
 
     FSurfaceDepressionDepthObserver: TObserver;
     FVerticalSaturatedKObserver: TObserver;
@@ -423,13 +425,13 @@ type
     FPestRootPotentialMethod: TPestParamMethod;
     FPestRootActivityMethod: TPestParamMethod;
     FPestInfiltrationMethod: TPestParamMethod;
-    FInfiltration: TFormulaObject;
-    FPotentialET: TFormulaObject;
-    FExtinctionDepth: TFormulaObject;
-    FExtinctionWaterContent: TFormulaObject;
-    FAirEntryPotential: TFormulaObject;
-    FRootPotential: TFormulaObject;
-    FRootActivity: TFormulaObject;
+    FInfiltration: IFormulaObject;
+    FPotentialET: IFormulaObject;
+    FExtinctionDepth: IFormulaObject;
+    FExtinctionWaterContent: IFormulaObject;
+    FAirEntryPotential: IFormulaObject;
+    FRootPotential: IFormulaObject;
+    FRootActivity: IFormulaObject;
     FPestAirEntryPotentialObserver: TObserver;
     FPestExtinctionDepthObserver: TObserver;
     FPestExtinctionWaterContentObserver: TObserver;
@@ -1369,31 +1371,31 @@ var
   ConcIndex: Integer;
   Item: TGwtConcStringValueItem;
 begin
-  if (Sender = FInfiltration) then
+  if (Sender = FInfiltration as TObject) then
   begin
     List.Add( FObserverList[UzfMf6InfiltrationPosition]);
   end
-  else if (Sender = FPotentialET) then
+  else if (Sender = FPotentialET as TObject) then
   begin
     List.Add( FObserverList[UzfMf6PotentialETPosition]);
   end
-  else if (Sender = FUzfExtinctDepth) then
+  else if (Sender = FUzfExtinctDepth as TObject) then
   begin
     List.Add( FObserverList[UzfMf6ExtinctionDepthPosition]);
   end
-  else if (Sender = FExtinctionWaterContent) then
+  else if (Sender = FExtinctionWaterContent as TObject) then
   begin
     List.Add( FObserverList[UzfMf6ExtinctionWaterContentPosition]);
   end
-  else if (Sender = FAirEntryPotential) then
+  else if (Sender = FAirEntryPotential as TObject) then
   begin
     List.Add( FObserverList[UzfMf6AirEntryPotentialPosition]);
   end
-  else if (Sender = FRootPotential) then
+  else if (Sender = FRootPotential as TObject) then
   begin
     List.Add( FObserverList[UzfMf6RootPotentialPosition]);
   end
-  else if (Sender = FRootActivity) then
+  else if (Sender = FRootActivity as TObject) then
   begin
     List.Add( FObserverList[UzfMf6RootActivityPosition]);
   end
@@ -1403,7 +1405,7 @@ begin
     for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
     begin
       Item := SpecifiedConcentrations.Items[ConcIndex];
-      if Item.ValueObject = Sender then
+      if Item.ValueObject as TObject = Sender then
       begin
         List.Add(Item.Observer);
       end;
@@ -1412,7 +1414,7 @@ begin
     for ConcIndex := 0 to InfiltrationConcentrations.Count - 1 do
     begin
       Item := InfiltrationConcentrations.Items[ConcIndex];
-      if Item.ValueObject = Sender then
+      if Item.ValueObject as TObject = Sender then
       begin
         List.Add(Item.Observer);
       end;
@@ -1421,7 +1423,7 @@ begin
     for ConcIndex := 0 to EvapConcentrations.Count - 1 do
     begin
       Item := EvapConcentrations.Items[ConcIndex];
-      if Item.ValueObject = Sender then
+      if Item.ValueObject as TObject = Sender then
       begin
         List.Add(Item.Observer);
       end;
@@ -4472,56 +4474,56 @@ var
   StartIndex: Integer;
   Index: Integer;
 begin
-  if Sender = FSurfaceDepressionDepth then
+  if Sender = FSurfaceDepressionDepth as TObject then
   begin
     List.Add(FObserverList[SurfaceDepressionDepthPosition]);
   end
-  else if Sender = FVerticalSaturatedK then
+  else if Sender = FVerticalSaturatedK as TObject then
   begin
     List.Add(FObserverList[VerticalSaturatedKPosition]);
   end
-  else if Sender = FResidualWaterContent then
+  else if Sender = FResidualWaterContent as TObject then
   begin
     List.Add(FObserverList[ResidualWaterContentPosition]);
   end
-  else if Sender = FSaturatedWaterContent then
+  else if Sender = FSaturatedWaterContent as TObject then
   begin
     List.Add(FObserverList[SaturatedWaterContentPosition]);
   end
-  else if Sender = FInitialWaterContentObserver then
+  else if Sender = FInitialWaterContentObserver as TObject then
   begin
     List.Add(FObserverList[InitialWaterContentPosition]);
   end
-  else if Sender = FBrooksCoreyEpsilon then
+  else if Sender = FBrooksCoreyEpsilon as TObject then
   begin
     List.Add(FObserverList[BrooksCoreyEpsilonPosition]);
   end
 
-  else if Sender = FInfiltration then
+  else if Sender = FInfiltration as TObject then
   begin
     List.Add(FObserverList[InfiltrationPosition]);
   end
-  else if Sender = FPotentialET then
+  else if Sender = FPotentialET as TObject then
   begin
     List.Add(FObserverList[PotentialETPosition]);
   end
-  else if Sender = FExtinctionDepth then
+  else if Sender = FExtinctionDepth as TObject then
   begin
     List.Add(FObserverList[ExtinctionDepthPosition]);
   end
-  else if Sender = FExtinctionWaterContent then
+  else if Sender = FExtinctionWaterContent as TObject then
   begin
     List.Add(FObserverList[ExtinctionWaterContentPosition]);
   end
-  else if Sender = FAirEntryPotential then
+  else if Sender = FAirEntryPotential as TObject then
   begin
     List.Add(FObserverList[AirEntryPotentialPosition]);
   end
-  else if Sender = FRootPotential then
+  else if Sender = FRootPotential as TObject then
   begin
     List.Add(FObserverList[RootPotentialPosition]);
   end
-  else if Sender = FRootActivity then
+  else if Sender = FRootActivity as TObject then
   begin
     List.Add(FObserverList[RootActivityPosition]);
   end;
@@ -4529,7 +4531,7 @@ begin
   StartIndex := UzfBoundaryGwtStart;
   for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
   begin
-    if FPestSpecifiedConcentrations[Index].ValueObject = Sender then
+    if FPestSpecifiedConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -4538,7 +4540,7 @@ begin
   StartIndex := StartIndex + FPestSpecifiedConcentrations.Count;
   for Index := 0 to PestInfiltrationConcentrations.Count - 1 do
   begin
-    if PestInfiltrationConcentrations[Index].ValueObject = Sender then
+    if PestInfiltrationConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -4547,7 +4549,7 @@ begin
   StartIndex := StartIndex + PestInfiltrationConcentrations.Count;
   for Index := 0 to PestEvaporationConcentrations.Count - 1 do
   begin
-    if PestEvaporationConcentrations[Index].ValueObject = Sender then
+    if PestEvaporationConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;

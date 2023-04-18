@@ -859,7 +859,8 @@ uses
   ColorSchemesInterface in 'ColorSchemesInterface.pas',
   DataArrayInterfaceUnit in 'DataArrayInterfaceUnit.pas',
   FormulaManagerInterfaceUnit in 'FormulaManagerInterfaceUnit.pas',
-  ContourInterfaceUnit in 'ContourInterfaceUnit.pas';
+  ContourInterfaceUnit in 'ContourInterfaceUnit.pas',
+  SubscriptionInterfaceUnit in 'SubscriptionInterfaceUnit.pas';
 
 {$R *.res}
 

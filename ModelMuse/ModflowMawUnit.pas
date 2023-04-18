@@ -4,7 +4,8 @@ interface
 
 uses
   ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit, OrderedCollectionUnit,
-  FormulaManagerUnit, GoPhastTypes, RbwParser, SubscriptionUnit, Mt3dmsChemUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  GoPhastTypes, RbwParser, SubscriptionUnit, Mt3dmsChemUnit,
   System.SysUtils, GwtStatusUnit;
 
 type
@@ -137,16 +138,16 @@ type
   private
     FFlowingWell: TFlowingWell;
     FMawStatus: TMawStatus;
-    FFlowingWellConductance: TFormulaObject;
-    FFlowingWellElevation: TFormulaObject;
-    FFlowingWellReductionLength: TFormulaObject;
-    FHeadLimit: TFormulaObject;
-    FMaxRate: TFormulaObject;
-    FMinRate: TFormulaObject;
-    FPumpElevation: TFormulaObject;
-    FRate: TFormulaObject;
-    FScalingLength: TFormulaObject;
-    FWellHead: TFormulaObject;
+    FFlowingWellConductance: IFormulaObject;
+    FFlowingWellElevation: IFormulaObject;
+    FFlowingWellReductionLength: IFormulaObject;
+    FHeadLimit: IFormulaObject;
+    FMaxRate: IFormulaObject;
+    FMinRate: IFormulaObject;
+    FPumpElevation: IFormulaObject;
+    FRate: IFormulaObject;
+    FScalingLength: IFormulaObject;
+    FWellHead: IFormulaObject;
     FHeadLimitChoice: Boolean;
     FRateLimitation: TRateLimitation;
     FInjectionConcentrations: TMawGwtConcCollection;
@@ -512,10 +513,10 @@ type
       SkinKPosition = 2;
       SkinRadiusPosition = 3;
     var
-    FScreenBottom: TFormulaObject;
-    FScreenTop: TFormulaObject;
-    FSkinK: TFormulaObject;
-    FSkinRadius: TFormulaObject;
+    FScreenBottom: IFormulaObject;
+    FScreenTop: IFormulaObject;
+    FSkinK: IFormulaObject;
+    FSkinRadius: IFormulaObject;
     function GetScreenBottom: string;
     function GetScreenTop: string;
     function GetSkinK: string;
@@ -623,24 +624,24 @@ type
     FPestWellHeadMethod: TPestParamMethod;
     FPestScalingLengthMethod: TPestParamMethod;
     FUsedObserver: TObserver;
-    FPestFlowingWellElevationFormula: TFormulaObject;
-    FPestFlowingWellConductanceFormula: TFormulaObject;
-    FPestRateFormula: TFormulaObject;
-    FPestWellHeadFormula: TFormulaObject;
-    FPestHeadLimitFormula: TFormulaObject;
-    FPestMinRateFormula: TFormulaObject;
-    FPestMaxRateFormula: TFormulaObject;
-    FPestPumpElevationFormula: TFormulaObject;
-    FPestScalingLengthFormula: TFormulaObject;
-    FPestFlowingWellReductionLengthFormula: TFormulaObject;
+    FPestFlowingWellElevationFormula: IFormulaObject;
+    FPestFlowingWellConductanceFormula: IFormulaObject;
+    FPestRateFormula: IFormulaObject;
+    FPestWellHeadFormula: IFormulaObject;
+    FPestHeadLimitFormula: IFormulaObject;
+    FPestMinRateFormula: IFormulaObject;
+    FPestMaxRateFormula: IFormulaObject;
+    FPestPumpElevationFormula: IFormulaObject;
+    FPestScalingLengthFormula: IFormulaObject;
+    FPestFlowingWellReductionLengthFormula: IFormulaObject;
     FWellNumber: Integer;
     FBottomObserver: TObserver;
     FInitialHeadObserver: TObserver;
     FRadiusObserver: TObserver;
     FConductanceMethod: TMawConductanceMethod;
-    FRadius: TFormulaObject;
-    FBottom: TFormulaObject;
-    FInitialHead: TFormulaObject;
+    FRadius: IFormulaObject;
+    FBottom: IFormulaObject;
+    FInitialHead: IFormulaObject;
     FWellScreens: TMawWellScreenCollection;
     FPestFlowingWellConductanceObserver: TObserver;
     FPestFlowingWellElevationObserver: TObserver;
@@ -1235,19 +1236,19 @@ end;
 
 procedure TMawWellScreenItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FScreenBottom then
+  if Sender = FScreenBottom as TObject then
   begin
     List.Add(FObserverList[ScreenBottomPosition]);
   end;
-  if Sender = FScreenTop then
+  if Sender = FScreenTop as TObject then
   begin
     List.Add(FObserverList[ScreenTopPosition]);
   end;
-  if Sender = FSkinK then
+  if Sender = FSkinK as TObject then
   begin
     List.Add(FObserverList[SkinKPosition]);
   end;
-  if Sender = FSkinRadius then
+  if Sender = FSkinRadius as TObject then
   begin
     List.Add(FObserverList[SkinRadiusPosition]);
   end;
@@ -2601,7 +2602,7 @@ var
   StartIndex: Integer;
   Index: Integer;
 begin
-  if Sender = FPestFlowingWellElevationFormula then
+  if Sender = FPestFlowingWellElevationFormula as TObject then
   begin
     if MawFlowingWellElevationPosition < FObserverList.Count then
     begin
@@ -2609,7 +2610,7 @@ begin
     end;
   end;
 
-  if Sender = FPestFlowingWellConductanceFormula then
+  if Sender = FPestFlowingWellConductanceFormula as TObject then
   begin
     if MawFlowingWellConductancePosition < FObserverList.Count then
     begin
@@ -2617,7 +2618,7 @@ begin
     end;
   end;
 
-  if Sender = FPestRateFormula then
+  if Sender = FPestRateFormula as TObject then
   begin
     if MawRatePosition < FObserverList.Count then
     begin
@@ -2625,7 +2626,7 @@ begin
     end;
   end;
 
-  if Sender = FPestWellHeadFormula then
+  if Sender = FPestWellHeadFormula as TObject then
   begin
     if MawWellHeadPosition < FObserverList.Count then
     begin
@@ -2633,7 +2634,7 @@ begin
     end;
   end;
 
-  if Sender = FPestHeadLimitFormula then
+  if Sender = FPestHeadLimitFormula as TObject then
   begin
     if MawHeadLimitPosition < FObserverList.Count then
     begin
@@ -2641,7 +2642,7 @@ begin
     end;
   end;
 
-  if Sender = FPestMinRateFormula then
+  if Sender = FPestMinRateFormula as TObject then
   begin
     if MawMinRatePosition < FObserverList.Count then
     begin
@@ -2649,7 +2650,7 @@ begin
     end;
   end;
 
-  if Sender = FPestMaxRateFormula then
+  if Sender = FPestMaxRateFormula as TObject then
   begin
     if MawMaxRatePosition < FObserverList.Count then
     begin
@@ -2657,7 +2658,7 @@ begin
     end;
   end;
 
-  if Sender = FPestPumpElevationFormula then
+  if Sender = FPestPumpElevationFormula as TObject then
   begin
     if MawPumpElevationPosition < FObserverList.Count then
     begin
@@ -2665,7 +2666,7 @@ begin
     end;
   end;
 
-  if Sender = FPestScalingLengthFormula then
+  if Sender = FPestScalingLengthFormula as TObject then
   begin
     if MawScalingLengthPosition < FObserverList.Count then
     begin
@@ -2673,7 +2674,7 @@ begin
     end;
   end;
 
-  if Sender = FPestFlowingWellReductionLengthFormula then
+  if Sender = FPestFlowingWellReductionLengthFormula as TObject then
   begin
     if MawFlowingWellReductionLengthPosition < FObserverList.Count then
     begin
@@ -2684,7 +2685,7 @@ begin
   StartIndex := MawGwtStart;
   for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
   begin
-    if FPestSpecifiedConcentrations[Index].ValueObject = Sender then
+    if FPestSpecifiedConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -2693,7 +2694,7 @@ begin
   StartIndex := StartIndex + FPestSpecifiedConcentrations.Count;
   for Index := 0 to FPestInjectionConcentrations.Count - 1 do
   begin
-    if FPestInjectionConcentrations[Index].ValueObject = Sender then
+    if FPestInjectionConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -4441,43 +4442,43 @@ var
   Item: TGwtConcStringValueItem;
 begin
   inherited;
-  if Sender = FFlowingWellConductance then
+  if Sender = FFlowingWellConductance as TObject then
   begin
     List.Add(FObserverList[MawFlowingWellConductancePosition]);
   end
-  else if Sender = FFlowingWellElevation then
+  else if Sender = FFlowingWellElevation as TObject then
   begin
     List.Add(FObserverList[MawFlowingWellElevationPosition]);
   end
-  else if Sender = FFlowingWellReductionLength then
+  else if Sender = FFlowingWellReductionLength as TObject then
   begin
     List.Add(FObserverList[MawFlowingWellReductionLengthPosition]);
   end
-  else if Sender = FHeadLimit then
+  else if Sender = FHeadLimit as TObject then
   begin
     List.Add(FObserverList[MawHeadLimitPosition]);
   end
-  else if Sender = FMaxRate then
+  else if Sender = FMaxRate as TObject then
   begin
     List.Add(FObserverList[MawMaxRatePosition]);
   end
-  else if Sender = FMinRate then
+  else if Sender = FMinRate as TObject then
   begin
     List.Add(FObserverList[MawMinRatePosition]);
   end
-  else if Sender = FPumpElevation then
+  else if Sender = FPumpElevation as TObject then
   begin
     List.Add(FObserverList[MawPumpElevationPosition]);
   end
-  else if Sender = FRate then
+  else if Sender = FRate as TObject then
   begin
     List.Add(FObserverList[MawRatePosition]);
   end
-  else if Sender = FScalingLength then
+  else if Sender = FScalingLength as TObject then
   begin
     List.Add(FObserverList[MawScalingLengthPosition]);
   end
-  else if Sender = FWellHead then
+  else if Sender = FWellHead as TObject then
   begin
     List.Add(FObserverList[MawWellHeadPosition]);
   end;
@@ -4485,7 +4486,7 @@ begin
   for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
   begin
     Item := SpecifiedConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -4494,7 +4495,7 @@ begin
   for ConcIndex := 0 to InjectionConcentrations.Count - 1 do
   begin
     Item := InjectionConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;

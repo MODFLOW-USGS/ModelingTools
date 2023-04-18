@@ -4,7 +4,7 @@ interface
 
 uses
   OrderedCollectionUnit, ModflowBoundaryUnit, SysUtils, Classes,
-  ModflowFmpBaseClasses;
+  ModflowFmpBaseClasses, FormulaManagerInterfaceUnit;
 
 type
   TClimateItem = class(TCustomZeroFarmItem)

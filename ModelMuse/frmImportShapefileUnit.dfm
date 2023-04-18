@@ -518,8 +518,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       inline frameCSV: TframeGrid
         Left = 0
         Top = 0
-        Width = 759
-        Height = 520
+        Width = 751
+        Height = 519
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 755
@@ -840,15 +840,16 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object pnlBoundaryCondition: TPanel
         Left = 0
         Top = 0
-        Width = 759
-        Height = 520
+        Width = 751
+        Height = 519
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 755
+        ExplicitHeight = 520
         object splitterBoundary: TSplitter
           Left = 1
-          Top = 249
-          Width = 757
+          Top = 248
+          Width = 749
           Height = 5
           Cursor = crVSplit
           Align = alBottom
@@ -858,7 +859,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         object pnlBoundaryControls: TPanel
           Left = 1
           Top = 1
-          Width = 757
+          Width = 749
           Height = 41
           Align = alTop
           TabOrder = 0
@@ -1048,7 +1049,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           object jvspNone: TJvStandardPage
             Left = 0
             Top = 0
-            Width = 757
+            Width = 749
             Height = 265
             Caption = 'jvspNone'
             ExplicitWidth = 761
@@ -1056,7 +1057,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           object jvspPhastSpecifiedHead: TJvStandardPage
             Left = 0
             Top = 0
-            Width = 757
+            Width = 749
             Height = 265
             Caption = 'jvspPhastSpecifiedHead'
             ExplicitWidth = 753
@@ -1470,7 +1471,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pcSFR: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 749
               Height = 265
               ActivePage = tabSfrBasic
               Align = alClient
@@ -2048,7 +2049,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pcMnw2: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 749
               Height = 265
               ActivePage = tabBasic
               Align = alClient
@@ -2622,7 +2623,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pgcSfrMf6: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 749
               Height = 265
               ActivePage = tabSfrMf6Properties
               Align = alClient
@@ -2741,7 +2742,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 inline frameDownstreamSegmentsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
-                  Width = 749
+                  Width = 741
                   Height = 232
                   Align = alClient
                   TabOrder = 0
@@ -2749,7 +2750,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   ExplicitHeight = 232
                   inherited Panel: TPanel
                     Top = 191
-                    Width = 749
+                    Width = 741
                     ExplicitTop = 191
                     ExplicitWidth = 753
                     inherited lbNumber: TLabel
@@ -2784,7 +2785,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                     end
                   end
                   inherited Grid: TRbwDataGrid4
-                    Width = 749
+                    Width = 741
                     Height = 191
                     Columns = <
                       item
@@ -2955,7 +2956,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pgcModflowMAW: TPageControl
               Left = 0
               Top = 0
-              Width = 757
+              Width = 749
               Height = 265
               ActivePage = tabMawBasic
               Align = alClient

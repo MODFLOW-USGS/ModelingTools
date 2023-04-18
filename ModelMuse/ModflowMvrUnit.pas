@@ -4,7 +4,8 @@ interface
 
 uses
   ModflowBoundaryUnit, OrderedCollectionUnit, System.Classes,
-  FormulaManagerUnit, GoPhastTypes, SubscriptionUnit, RbwParser,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  GoPhastTypes, SubscriptionUnit, RbwParser,
   ModflowCellUnit, System.ZLib, OrderedCollectionInterfaceUnit;
 
 type
@@ -97,7 +98,7 @@ type
   TIndividualMvrItem = class(TFormulaOrderedItem)
   private
     FMvrType: TMvrType;
-    FValue: TFormulaObject;
+    FValue: IFormulaObject;
     FObserver: TObserver;
     function GetValue: string;
     procedure SetMvrType(const Value: TMvrType);
@@ -120,7 +121,6 @@ type
 
   TIndividualMvrItems = class(TCustomObjectOrderedCollection)
   private
-//    FScreenObject: TObject;
     FMvrItems: TCollection;
     function GetItem(Index: Integer): TIndividualMvrItem;
     procedure SetItem(Index: Integer; const Value: TIndividualMvrItem);
@@ -129,7 +129,7 @@ type
     constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject;
       MvrItems: TCollection);
     property Items[Index:Integer]: TIndividualMvrItem read GetItem write SetItem; default;
-    function IndexOfFormulaObject(AFormulaObject: TFormulaObject): integer;
+    function IndexOfFormulaObject(AFormulaObject: IFormulaObject): integer;
     function Add: TIndividualMvrItem;
   end;
 
@@ -715,7 +715,6 @@ constructor TIndividualMvrItems.Create(Model: IModelForTOrderedCollection; Scree
   MvrItems: TCollection);
 begin
   inherited Create(TIndividualMvrItem, Model, ScreenObject);
-//  FScreenObject := ScreenObject;
   FMvrItems := MvrItems;
 end;
 
@@ -725,7 +724,7 @@ begin
 end;
 
 function TIndividualMvrItems.IndexOfFormulaObject(
-  AFormulaObject: TFormulaObject): integer;
+  AFormulaObject: IFormulaObject): integer;
 var
   Index: Integer;
   AnItem: TIndividualMvrItem;

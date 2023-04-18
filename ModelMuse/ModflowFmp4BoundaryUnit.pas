@@ -4,7 +4,8 @@ unit ModflowFmp4BoundaryUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes, RbwParser;
 
 type
@@ -47,7 +48,7 @@ type
   TFmp4Item = class(TCustomModflowBoundaryItem)
   private
     // See @link(FmpValue).
-    FFmp4Value: TFormulaObject;
+    FFmp4Value: IFormulaObject;
     // See @link(FmpValue).
     procedure SetFmp4Value(const Value: string);
     function GetFmp4Value: string;
@@ -173,7 +174,7 @@ type
   TFmp4Boundary = class(TModflowBoundary)
   private
     FPestValueMethod: TPestParamMethod;
-    FPestValueFormula: TFormulaObject;
+    FPestValueFormula: IFormulaObject;
     FPestValueObserver: TObserver;
     FUsedObserver: TObserver;
     function GetPestValueFormula: string;
@@ -294,7 +295,7 @@ end;
 
 procedure TFmp4Item.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FFmp4Value);
+  Assert(Sender = FFmp4Value as TObject);
   List.Add(FObserverList[Fmp4Position]);
 end;
 

@@ -3,7 +3,8 @@ unit ModflowRivUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
-  OrderedCollectionUnit, ModflowCellUnit, FormulaManagerUnit,
+  OrderedCollectionUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
@@ -91,11 +92,11 @@ type
   TRivItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(RiverBottom).
-    FRiverBottom: TFormulaObject;
+    FRiverBottom: IFormulaObject;
     // See @link(RiverStage).
-    FRiverStage: TFormulaObject;
+    FRiverStage: IFormulaObject;
     // See @link(Conductance).
-    FConductance: TFormulaObject;
+    FConductance: IFormulaObject;
     FGwtConcentrations: TRivGwtConcCollection;
     // See @link(RiverBottom).
     procedure SetRiverBottom(const Value: string);
@@ -342,9 +343,9 @@ type
     FPestRiverBottomMethod: TPestParamMethod;
     FPestRiverStageMethod: TPestParamMethod;
 
-    FPestCondFormula: TFormulaObject;
-    FPestRiverStageFormula: TFormulaObject;
-    FPestRiverBottomFormula: TFormulaObject;
+    FPestCondFormula: IFormulaObject;
+    FPestRiverStageFormula: IFormulaObject;
+    FPestRiverBottomFormula: IFormulaObject;
     FPestConductanceObserver: TObserver;
     FPestRiverBottomObserver: TObserver;
     FUsedObserver: TObserver;
@@ -585,22 +586,22 @@ var
   ConcIndex: Integer;
   Item: TGwtConcStringValueItem;
 begin
-  if Sender = FRiverStage then
+  if Sender = FRiverStage as TObject then
   begin
     List.Add( FObserverList[RivStagePosition]);
   end;
-  if Sender = FConductance then
+  if Sender = FConductance as TObject then
   begin
     List.Add( FObserverList[RivConductancePosition]);
   end;
-  if Sender = FRiverBottom then
+  if Sender = FRiverBottom as TObject then
   begin
     List.Add( FObserverList[RivBottomPosition]);
   end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     Item := GwtConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -2034,21 +2035,21 @@ procedure TRivBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Index: Integer;
 begin
-  if Sender = FPestRiverStageFormula then
+  if Sender = FPestRiverStageFormula as TObject then
   begin
     if RivStagePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[RivStagePosition]);
     end;
   end;
-  if Sender = FPestCondFormula then
+  if Sender = FPestCondFormula as TObject then
   begin
     if RivConductancePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[RivConductancePosition]);
     end;
   end;
-  if Sender = FPestRiverBottomFormula then
+  if Sender = FPestRiverBottomFormula as TObject then
   begin
     if RivBottomPosition < FObserverList.Count then
     begin
@@ -2057,7 +2058,7 @@ begin
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
-    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    if FPestConcentrationFormulas[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[RivStartConcentration + Index]);
     end;

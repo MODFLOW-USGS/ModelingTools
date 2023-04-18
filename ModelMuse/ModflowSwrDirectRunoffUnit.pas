@@ -3,7 +3,8 @@ unit ModflowSwrDirectRunoffUnit;
 interface
 
 uses
-  ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit, FormulaManagerUnit,
+  ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   OrderedCollectionUnit, GoPhastTypes, SysUtils, SubscriptionUnit;
 
 type
@@ -40,8 +41,8 @@ type
 
   TSwrDirectRunoffItem = class(TCustomModflowBoundaryItem)
   private
-    FReach: TFormulaObject;
-    FRunoff: TFormulaObject;
+    FReach: IFormulaObject;
+    FRunoff: IFormulaObject;
     procedure SetReach(const Value: string);
     procedure SetRunoff(const Value: string);
     function GetReach: string;
@@ -136,7 +137,7 @@ type
   private
     FPestRunoffMethod: TPestParamMethod;
     FUsedObserver: TObserver;
-    FPestRunoffFormula: TFormulaObject;
+    FPestRunoffFormula: IFormulaObject;
     FPestRunoffObserver: TObserver;
     function GetPestRunoffFormula: string;
     procedure SetPestRunoffFormula(const Value: string);
@@ -357,11 +358,11 @@ end;
 procedure TSwrDirectRunoffItem.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
-  if Sender = FReach then
+  if Sender = FReach as TObject then
   begin
     List.Add( FObserverList[ReachPosition]);
   end;
-  if Sender = FRunoff then
+  if Sender = FRunoff as TObject then
   begin
     List.Add( FObserverList[RunoffPosition]);
   end;
@@ -1037,11 +1038,11 @@ end;
 procedure TSwrDirectRunoffBoundary.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
-  if Sender = FPestRunoffFormula then
+  if Sender = FPestRunoffFormula as TObject then
   begin
     if RunoffPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[RunoffPosition]);
+      List.Add(FObserverList[RunoffPosition] as TObject);
     end;
   end;
 end;

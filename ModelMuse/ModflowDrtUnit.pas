@@ -4,7 +4,9 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, GoPhastTypes,
-  ModflowDrnUnit, ModflowGridUnit, FormulaManagerUnit, SubscriptionUnit,
+  ModflowDrnUnit, ModflowGridUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit,
   RbwParser;
 
 type
@@ -56,7 +58,7 @@ type
   // @name is stored by @link(TDrnCollection).
   TDrtItem = class(TDrnItem)
   private
-    FReturnFraction: TFormulaObject;
+    FReturnFraction: IFormulaObject;
     procedure SetReturnFraction(const Value: string);
     function GetReturnFraction: string;
   protected
@@ -302,9 +304,9 @@ type
   TDrtBoundary = class(TSpecificModflowBoundary)
   private
     FDrainReturn: TDrainReturn;
-    FPestElevFormula: TFormulaObject;
-    FPestCondFormula: TFormulaObject;
-    FPestReturnFractionFormula: TFormulaObject;
+    FPestElevFormula: IFormulaObject;
+    FPestCondFormula: IFormulaObject;
+    FPestReturnFractionFormula: IFormulaObject;
     FPestConductanceMethod: TPestParamMethod;
     FPestElevMethod: TPestParamMethod;
     FPestReturnFractionMethod: TPestParamMethod;
@@ -475,15 +477,15 @@ end;
 
 procedure TDrtItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FConductance then
+  if Sender = FConductance as TObject then
   begin
     List.Add(FObserverList[DrtConductancePosition]);
   end;
-  if Sender = FElevation then
+  if Sender = FElevation as TObject then
   begin
     List.Add(FObserverList[DrtElevationPosition]);
   end;
-  if Sender = FReturnFraction then
+  if Sender = FReturnFraction as TObject then
   begin
     List.Add(FObserverList[DrtReturnPosition]);
   end;
@@ -1257,21 +1259,21 @@ end;
 
 procedure TDrtBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestElevFormula then
+  if Sender = FPestElevFormula as TObject then
   begin
     if DrtElevationPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DrtElevationPosition]);
     end;
   end;
-  if Sender = FPestCondFormula then
+  if Sender = FPestCondFormula as TObject then
   begin
     if DrtConductancePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DrtConductancePosition]);
     end;
   end;
-  if Sender = FPestReturnFractionFormula then
+  if Sender = FPestReturnFractionFormula as TObject then
   begin
     if DrtReturnPosition < FObserverList.Count then
     begin

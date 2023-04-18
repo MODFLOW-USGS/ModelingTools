@@ -3,14 +3,16 @@ unit ModflowFmpBaseClasses;
 interface
 
 uses
-ModflowBoundaryUnit, FormulaManagerUnit, Classes,
+  ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  Classes,
   OrderedCollectionUnit, SysUtils, GoPhastTypes,
   OrderedCollectionInterfaceUnit;
 
 type
   TCustomFarmItem = class(TCustomModflowBoundaryItem)
   protected
-    FFormulaObjects: array of TFormulaObject;
+    FFormulaObjects: array of IFormulaObject;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
     procedure RemoveFormulaObjects; override;
@@ -143,7 +145,7 @@ var
 begin
   for Index := 0 to BoundaryFormulaCount - 1 do
   begin
-    if Sender = FFormulaObjects[Index] then
+    if Sender = FFormulaObjects[Index] as TObject then
     begin
       List.Add(FObserverList[Index]);
       Break;

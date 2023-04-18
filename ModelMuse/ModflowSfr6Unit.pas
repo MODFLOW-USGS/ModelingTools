@@ -3,7 +3,9 @@ unit ModflowSfr6Unit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, ModflowCellUnit,
-  ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, GoPhastTypes,
+  ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  OrderedCollectionUnit, GoPhastTypes,
   System.Generics.Collections, SubscriptionUnit, RbwParser, Mt3dmsChemUnit,
   GwtStatusUnit, OrderedCollectionInterfaceUnit;
 
@@ -124,15 +126,15 @@ type
   TSfrMf6Item = class(TCustomModflowBoundaryItem)
   private
     FDiversions: TStringList;
-    FInflow: TFormulaObject;
-    FEvaporation: TFormulaObject;
-    FRunoff: TFormulaObject;
-    FUpstreamFraction: TFormulaObject;
-    FDiversionFormulas: TList<TFormulaObject>;
+    FInflow: IFormulaObject;
+    FEvaporation: IFormulaObject;
+    FRunoff: IFormulaObject;
+    FUpstreamFraction: IFormulaObject;
+    FDiversionFormulas: TIformulaList;
     FStatus: Boolean;
-    FRainfall: TFormulaObject;
-    FStage: TFormulaObject;
-    FRoughness: TFormulaObject;
+    FRainfall: IFormulaObject;
+    FStage: IFormulaObject;
+    FRoughness: IFormulaObject;
     FStreamStatus: TStreamStatus;
     // GWT
     FGwtStatus: TGwtBoundaryStatusCollection;
@@ -436,13 +438,13 @@ type
     FDiversions: TDiversionCollection;
     FDownstreamSegments: TIntegerCollection;
     FSegmentNumber: Integer;
-    FReachLength: TFormulaObject;
-    FGradient: TFormulaObject;
-    FHydraulicConductivity: TFormulaObject;
-    FReachWidth: TFormulaObject;
+    FReachLength: IFormulaObject;
+    FGradient: IFormulaObject;
+    FHydraulicConductivity: IFormulaObject;
+    FReachWidth: IFormulaObject;
     FRoughness: string;
-    FStreambedThickness: TFormulaObject;
-    FStreambedTop: TFormulaObject;
+    FStreambedThickness: IFormulaObject;
+    FStreambedTop: IFormulaObject;
     FUpstreamFraction: string;
     FReachLengthObserver: TObserver;
     FHydraulicConductivityObserver: TObserver;
@@ -457,13 +459,13 @@ type
     FPestEvaporationMethod: TPestParamMethod;
     FPestStageMethod: TPestParamMethod;
     FPestUpstreamFractionMethod: TPestParamMethod;
-    FInflow: TFormulaObject;
-    FRainfall: TFormulaObject;
-    FEvaporation: TFormulaObject;
-    FRunoff: TFormulaObject;
-    FStage: TFormulaObject;
-    FUpstreamFractionFormula: TFormulaObject;
-    FRoughnessFormula: TFormulaObject;
+    FInflow: IFormulaObject;
+    FRainfall: IFormulaObject;
+    FEvaporation: IFormulaObject;
+    FRunoff: IFormulaObject;
+    FStage: IFormulaObject;
+    FUpstreamFractionFormula: IFormulaObject;
+    FRoughnessFormula: IFormulaObject;
     FPestEvaporationObserver: TObserver;
     FPestInflowObserver: TObserver;
     FPestRainfallObserver: TObserver;
@@ -1406,7 +1408,7 @@ var
   SfrCollection: TSfrMf6Collection;
 begin
   FDiversions := TStringList.Create;
-  FDiversionFormulas := TList<TFormulaObject>.Create;
+  FDiversionFormulas := TIformulaList.Create;
 
   SfrCollection := Collection as TSfrMf6Collection;
   FSpecifiedConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
@@ -1625,31 +1627,31 @@ var
   ConcIndex: Integer;
   Item: TGwtConcStringValueItem;
 begin
-  if Sender = FInflow then
+  if Sender = FInflow as TObject then
   begin
     List.Add(FObserverList[SfrMf6InflowPosition]);
   end;
-  if Sender = FRainfall then
+  if Sender = FRainfall as TObject then
   begin
     List.Add(FObserverList[SfrMf6RainfallPosition]);
   end;
-  if Sender = FEvaporation then
+  if Sender = FEvaporation as TObject then
   begin
     List.Add(FObserverList[SfrMf6EvaporationPosition]);
   end;
-  if Sender = FRunoff then
+  if Sender = FRunoff as TObject then
   begin
     List.Add(FObserverList[SfrMf6RunoffPosition]);
   end;
-  if Sender = FUpstreamFraction then
+  if Sender = FUpstreamFraction as TObject then
   begin
     List.Add(FObserverList[SfrMf6UpstreamFractionPosition]);
   end;
-  if Sender = FStage then
+  if Sender = FStage as TObject then
   begin
     List.Add(FObserverList[SfrMf6StagePosition]);
   end;
-  if Sender = FRoughness then
+  if Sender = FRoughness as TObject then
   begin
     List.Add(FObserverList[SfrMf6RoughnessPosition]);
   end;
@@ -1661,7 +1663,7 @@ begin
   for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
   begin
     Item := SpecifiedConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1670,7 +1672,7 @@ begin
   for ConcIndex := 0 to RainfallConcentrations.Count - 1 do
   begin
     Item := RainfallConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1679,7 +1681,7 @@ begin
   for ConcIndex := 0 to EvapConcentrations.Count - 1 do
   begin
     Item := EvapConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1688,7 +1690,7 @@ begin
   for ConcIndex := 0 to RunoffConcentrations.Count - 1 do
   begin
     Item := RunoffConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1697,7 +1699,7 @@ begin
   for ConcIndex := 0 to InflowConcentrations.Count - 1 do
   begin
     Item := InflowConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1925,7 +1927,7 @@ end;
 
 procedure TSfrMf6Item.SetDiversionCount(const Value: Integer);
 var
-  FormulaObj: TFormulaObject;
+  FormulaObj: IFormulaObject;
 begin
   While Value > FDiversionFormulas.Count do
   begin
@@ -1947,7 +1949,7 @@ end;
 
 procedure TSfrMf6Item.SetDiversionFormula(Index: Integer; const Value: string);
 var
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   FormulaObject := FDiversionFormulas[Index];
   UpdateFormulaBlocks(Value, SfrMf6DiversionStartPosition+Index, FormulaObject);
@@ -4201,56 +4203,56 @@ var
   StartIndex: Integer;
   Index: Integer;
 begin
-  if Sender = FReachLength then
+  if Sender = FReachLength as TObject then
   begin
     List.Add(FObserverList[SfrMf6ReachLengthPosition]);
   end;
-  if Sender = FReachWidth then
+  if Sender = FReachWidth as TObject then
   begin
     List.Add(FObserverList[SfrMf6ReachWidthPosition]);
   end;
-  if Sender = FGradient then
+  if Sender = FGradient as TObject then
   begin
     List.Add(FObserverList[SfrMf6GradientPosition]);
   end;
-  if Sender = FStreambedTop then
+  if Sender = FStreambedTop as TObject then
   begin
     List.Add(FObserverList[SfrMf6StreambedTopPosition]);
   end;
-  if Sender = FStreambedThickness then
+  if Sender = FStreambedThickness as TObject then
   begin
     List.Add(FObserverList[SfrMf6StreambedThicknessPosition]);
   end;
-  if Sender = FHydraulicConductivity then
+  if Sender = FHydraulicConductivity as TObject then
   begin
     List.Add(FObserverList[SfrMf6HydraulicConductivityPosition]);
   end;
 
-  if Sender = FInflow then
+  if Sender = FInflow as TObject then
   begin
     List.Add(FObserverList[SfrMf6InflowPosition + SfrMf6PestBoundaryOffset]);
   end;
-  if Sender = FRainfall then
+  if Sender = FRainfall as TObject then
   begin
     List.Add(FObserverList[SfrMf6RainfallPosition + SfrMf6PestBoundaryOffset]);
   end;
-  if Sender = FEvaporation then
+  if Sender = FEvaporation as TObject then
   begin
     List.Add(FObserverList[SfrMf6EvaporationPosition + SfrMf6PestBoundaryOffset]);
   end;
-  if Sender = FRunoff then
+  if Sender = FRunoff as TObject then
   begin
     List.Add(FObserverList[SfrMf6RunoffPosition + SfrMf6PestBoundaryOffset]);
   end;
-  if Sender = FUpstreamFractionFormula then
+  if Sender = FUpstreamFractionFormula as TObject then
   begin
     List.Add(FObserverList[SfrMf6UpstreamFractionPosition + SfrMf6PestBoundaryOffset]);
   end;
-  if Sender = FStage then
+  if Sender = FStage as TObject then
   begin
     List.Add(FObserverList[SfrMf6StagePosition + SfrMf6PestBoundaryOffset]);
   end;
-  if Sender = FRoughnessFormula then
+  if Sender = FRoughnessFormula as TObject then
   begin
     List.Add(FObserverList[SfrMf6RoughnessPosition + SfrMf6PestBoundaryOffset]);
   end;
@@ -4258,7 +4260,7 @@ begin
   StartIndex := SfrMf6DiversionStartPosition + Diversions.Count;
   for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
   begin
-    if FPestSpecifiedConcentrations[Index].ValueObject = Sender then
+    if FPestSpecifiedConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -4267,7 +4269,7 @@ begin
   StartIndex := StartIndex + FPestSpecifiedConcentrations.Count;
   for Index := 0 to PestRainfallConcentrations.Count - 1 do
   begin
-    if PestRainfallConcentrations[Index].ValueObject = Sender then
+    if PestRainfallConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -4276,7 +4278,7 @@ begin
   StartIndex := StartIndex + PestRainfallConcentrations.Count;
   for Index := 0 to PestEvaporationConcentrations.Count - 1 do
   begin
-    if PestEvaporationConcentrations[Index].ValueObject = Sender then
+    if PestEvaporationConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -4285,7 +4287,7 @@ begin
   StartIndex := StartIndex + PestEvaporationConcentrations.Count;
   for Index := 0 to PestRunoffConcentrations.Count - 1 do
   begin
-    if PestRunoffConcentrations[Index].ValueObject = Sender then
+    if PestRunoffConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -4294,7 +4296,7 @@ begin
   StartIndex := StartIndex + PestRunoffConcentrations.Count;
   for Index := 0 to PestInflowConcentrations.Count - 1 do
   begin
-    if PestInflowConcentrations[Index].ValueObject = Sender then
+    if PestInflowConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;

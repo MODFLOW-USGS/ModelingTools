@@ -3,7 +3,8 @@ unit ModflowFmpFarmIdUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -57,7 +58,7 @@ type
   TFmpFarmIDItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(FarmID).
-    FFarmID: TFormulaObject;
+    FFarmID: IFormulaObject;
     // See @link(FarmID).
     procedure SetFarmID(const Value: string);
     function GetFarmID: string;
@@ -259,7 +260,7 @@ end;
 
 procedure TFmpFarmIDItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FFarmID);
+  Assert(Sender = FFarmID as TObject);
   List.Add(FObserverList[FarmIDPosition]);
 end;
 

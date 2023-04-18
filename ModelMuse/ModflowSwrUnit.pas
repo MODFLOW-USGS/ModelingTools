@@ -3,7 +3,8 @@ unit ModflowSwrUnit;
 interface
 
 uses
-  SysUtils, Classes, ModflowBoundaryUnit, FormulaManagerUnit,
+  SysUtils, Classes, ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   OrderedCollectionUnit, GoPhastTypes, RbwParser, ModflowCellUnit, ZLib,
   SubscriptionUnit;
 
@@ -40,7 +41,7 @@ type
   TCustomSwrBoundaryItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(SwrValue).
-    FSwrValue: TFormulaObject;
+    FSwrValue: IFormulaObject;
     // See @link(SwrValue).
     procedure SetSwrValue(const Value: string);
     function GetSwrValue: string;
@@ -136,7 +137,7 @@ type
   TCustomSwrBoundary = class(TModflowBoundary)
   private
     FPestValueMethod: TPestParamMethod;
-    FPestValueFormula: TFormulaObject;
+    FPestValueFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestValueObserver: TObserver;
     function GetPestValueFormula: string;
@@ -400,7 +401,7 @@ end;
 
 procedure TCustomSwrBoundaryItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FSwrValue);
+  Assert(Sender = FSwrValue as TObject);
   List.Add(FObserverList[SwrValuePosition]);
 end;
 
@@ -1351,11 +1352,11 @@ end;
 
 procedure TCustomSwrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestValueFormula then
+  if Sender = FPestValueFormula as TObject then
   begin
     if SwrValuePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[SwrValuePosition]);
+      List.Add(FObserverList[SwrValuePosition] as TObject);
     end;
   end;
 end;

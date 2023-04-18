@@ -50,15 +50,15 @@ type
   TRulerValues = class(TPersistent)
   private
     // See @link(Upper).
-    FHigh: double;
+    FUpper: double;
     // See @link(Lower).
-    FLow: double;
+    FLower: double;
     // @name is the @link(TRulerPainter) that owns and uses the @classname.
     FOwner: TRulerPainter;
     // See @link(Upper).
-    procedure SetHigh(const Value: double);
+    procedure SetUpper(const Value: double);
     // See @link(Lower).
-    procedure SetLow(const Value: double);
+    procedure SetLower(const Value: double);
   public
     // If Source is a @classname, @name copies its
     // values of @link(Lower) and @link(Upper).
@@ -67,9 +67,9 @@ type
     constructor Create(Owner: TRulerPainter);
   published
     // @name represents the value at the lower end of the ruler.
-    property Lower: double read FLow write SetLow;
+    property Lower: double read FLower write SetLower;
     // @name represents the value at the upper end of the ruler.
-    property Upper: double read FHigh write SetHigh;
+    property Upper: double read FUpper write SetUpper;
   end;
 
   // @name is a class used to draw the ruler on a TCanvas.
@@ -79,7 +79,7 @@ type
   private
     FPrecision: integer;
     FMinorTickLength: integer;
-    FValues: TRulerValues;
+    FRulerValues: TRulerValues;
     FMajorTickLength: integer;
     FDigits: integer;
     FStart: TStart;
@@ -215,7 +215,7 @@ type
     // ruler line. Thus the ruler represents a length equal to
     // TRulerValues.@link(TRulerValues.Upper) minus
     // TRulerValues.@link(TRulerValues.Lower)
-    property RulerValues: TRulerValues read FValues write SetValues;
+    property RulerValues: TRulerValues read FRulerValues write SetValues;
     procedure DrawRuler(ACanvas: TCanvas; InputRect: TRect; var OutputRect: TRect);
     property OnInvalidate: TNotifyEvent read FOnInvalidate write FOnInvalidate;
   end;
@@ -610,23 +610,23 @@ constructor TRulerValues.Create(Owner: TRulerPainter);
 begin
   inherited Create;
   FOwner := Owner;
-  FHigh := 100;
+  FUpper := 100;
 end;
 
-procedure TRulerValues.SetHigh(const Value: double);
+procedure TRulerValues.SetUpper(const Value: double);
 begin
-  if FHigh <> Value then
+  if FUpper <> Value then
   begin
-    FHigh := Value;
+    FUpper := Value;
     FOwner.Invalidate;
   end;
 end;
 
-procedure TRulerValues.SetLow(const Value: double);
+procedure TRulerValues.SetLower(const Value: double);
 begin
-  if FLow <> Value then
+  if FLower <> Value then
   begin
-    FLow := Value;
+    FLower := Value;
     FOwner.Invalidate;
   end;
 end;
@@ -690,13 +690,13 @@ begin
   FOwner := Owner;
   SetDefaults;
   FPositions := TRulerPositions.Create(self);
-  FValues := TRulerValues.Create(self);
+  FRulerValues := TRulerValues.Create(self);
 end;
 
 destructor TRulerPainter.Destroy;
 begin
   FPositions.Free;
-  FValues.Free;
+  FRulerValues.Free;
   inherited;
 end;
 
@@ -1168,6 +1168,11 @@ var
   PriorSpacing: Integer;
 begin
   Factor := Ten;
+  if RulerValues = nil then
+  begin
+    Spacing := 100;
+    Exit;
+  end;
   LowCoord := RulerValues.Lower;
   HighCoord := RulerValues.Upper;
   try
@@ -1412,7 +1417,7 @@ end;
 
 procedure TRulerPainter.SetValues(const Value: TRulerValues);
 begin
-  FValues.Assign(Value);
+  FRulerValues.Assign(Value);
   Invalidate;
 end;
 

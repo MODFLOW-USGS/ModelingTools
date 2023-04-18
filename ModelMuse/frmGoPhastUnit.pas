@@ -7705,7 +7705,7 @@ procedure TfrmGoPhast.UpdateVerticalExaggeration(VerticalExaggeration: Double);
 var
   FrontCenter: TPoint2D;
   SideCenter: TPoint2D;
-  TopCenter: TPoint2D;
+//  TopCenter: TPoint2D;
   Temp: TPoint2D;
 begin
   if VerticalExaggeration = 0 then
@@ -7730,9 +7730,9 @@ begin
       Temp.Y := frameTopView.ZoomBox.Y(
         frameTopView.ZoomBox.Image32.Height div 2);
       frameTopView.ZoomBox.OriginX := frameTopView.ZoomBox.OriginX
-        - Temp.X + TopCenter.X;
+        - Temp.X + FrontCenter.X;
       frameTopView.ZoomBox.OriginY := frameTopView.ZoomBox.OriginY
-        - Temp.Y + TopCenter.Y;
+        - Temp.Y + FrontCenter.Y;
 
       TopDiscretizationChanged := True;
       AdjustScales;

@@ -4,7 +4,8 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, ModflowEvtUnit,
-  FormulaManagerUnit, SubscriptionUnit, GoPhastTypes,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
 type
@@ -78,8 +79,8 @@ type
   // @name is stored by @link(TEtsSurfDepthCollection).
   TEtsSurfDepthItem = class(TCustomModflowBoundaryItem)
   private
-    FEvapotranspirationSurface: TFormulaObject;
-    FEvapotranspirationDepth: TFormulaObject;
+    FEvapotranspirationSurface: IFormulaObject;
+    FEvapotranspirationDepth: IFormulaObject;
     FDepthFractions: TEtsStringCollection;
     FEtFractions: TEtsStringCollection;
     // See @link(EvapotranspirationSurface).
@@ -292,9 +293,9 @@ type
     FPestDepthMethod: TPestParamMethod;
     FPestEvapotranspirationRateMethod: TPestParamMethod;
     FPestSurfaceMethod: TPestParamMethod;
-    FPestEvapotranspirationRateFormula: TFormulaObject;
-    FPestSurfaceFormula: TFormulaObject;
-    FPestDepthFormula: TFormulaObject;
+    FPestEvapotranspirationRateFormula: IFormulaObject;
+    FPestSurfaceFormula: IFormulaObject;
+    FPestDepthFormula: IFormulaObject;
     FPestDepthObserver: TObserver;
     FPestEvapotranspirationRateObserver: TObserver;
     FPestSurfaceObserver: TObserver;
@@ -954,34 +955,27 @@ procedure TEtsBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 //var
 //  Index: Integer;
 begin
-  if Sender = FPestEvapotranspirationRateFormula then
+  if Sender = FPestEvapotranspirationRateFormula as TObject then
   begin
     if RateBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[RateBoundaryPosition]);
     end;
   end;
-  if Sender = FPestSurfaceFormula then
+  if Sender = FPestSurfaceFormula as TObject then
   begin
     if SurfaceBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[SurfaceBoundaryPosition]);
     end;
   end;
-  if Sender = FPestDepthFormula then
+  if Sender = FPestDepthFormula as TObject then
   begin
     if DepthBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DepthBoundaryPosition]);
     end;
   end;
-//  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
-//  begin
-//    if FPestConcentrationFormulas[Index].ValueObject = Sender then
-//    begin
-//      List.Add(FObserverList[EtsStartConcentration + Index]);
-//    end;
-//  end;
 end;
 
 procedure TEtsBoundary.GetCellValues(ValueTimeList: TList;
@@ -1626,11 +1620,11 @@ var
   Index: integer;
   Item: TEtsStringValueItem;
 begin
-  if Sender = FEvapotranspirationSurface then
+  if Sender = FEvapotranspirationSurface as TObject then
   begin
     List.Add(FObserverList[EtsSurfacePosition]);
   end;
-  if Sender = FEvapotranspirationDepth then
+  if Sender = FEvapotranspirationDepth as TObject then
   begin
     List.Add(FObserverList[EtsDepthPosition]);
   end;
@@ -1638,7 +1632,7 @@ begin
   for Index := 0 to EtFractions.Count - 1 do
   begin
     Item := EtFractions.Items[Index] as TEtsStringValueItem;
-    if Item.FValue = Sender then
+    if Item.FValue as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1646,7 +1640,7 @@ begin
   for Index := 0 to DepthFractions.Count - 1 do
   begin
     Item := DepthFractions.Items[Index] as TEtsStringValueItem;
-    if Item.FValue = Sender then
+    if Item.FValue as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;

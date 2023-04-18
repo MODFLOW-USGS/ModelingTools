@@ -5,7 +5,9 @@ interface
 uses Winapi.Windows, System.UITypes, SysUtils,
   Classes, ZLib, RbwParser, GoPhastTypes,
   OrderedCollectionUnit, ModflowTransientListParameterUnit, DataSetUnit,
-  RealListUnit, TempFiles, SubscriptionUnit, FormulaManagerUnit, SparseDataSets,
+  RealListUnit, TempFiles, SubscriptionUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SparseDataSets,
   System.Generics.Collections, System.StrUtils,
   OrderedCollectionInterfaceUnit;
 
@@ -108,7 +110,7 @@ type
     procedure RemoveSubscription(Sender: TObject; const AName: string);
     procedure RestoreSubscription(Sender: TObject; const AName: string);
     function CreateFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject; virtual;
+      TDataSetOrientation): IFormulaObject; virtual;
     function GetObserver(Index: Integer): TObserver; override;
   public
     procedure Assign(Source: TPersistent); override;
@@ -209,9 +211,6 @@ type
     // same start and end times.
     function ShouldDeleteItemsWithZeroDuration: Boolean; virtual;
     procedure DeleteItemsWithZeroDuration; virtual;
-    function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
   public
 
     // @name is the @link(TScreenObject) for this boundary.
@@ -616,14 +615,14 @@ type
     procedure RemoveSubscription(Sender: TObject; const AName: string);
     procedure RestoreSubscription(Sender: TObject; const AName: string);
   protected
-    FValue: TFormulaObject;
+    FValue: IFormulaObject;
     function StringCollection: TCustomStringCollection;
     function GetScreenObject: TObject; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function GetObserver(Index: Integer): TObserver; override;
   public
     property Observer: TObserver read FObserver;
-    property ValueObject: TFormulaObject read FValue write FValue;
+    property ValueObject: IFormulaObject read FValue write FValue;
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -826,14 +825,14 @@ type
     procedure UpdateFormulaDependencies(OldFormula: string;
       var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
     procedure UpdateFormulaBlocks(Value: string; Position: integer;
-      var FormulaObject: TFormulaObject);
+      var FormulaObject: IFormulaObject);
     procedure UpdateFormulaNodes(Value: string; Position: integer;
-      var FormulaObject: TFormulaObject);
+      var FormulaObject: IFormulaObject);
     procedure ResetBoundaryObserver(Index: integer);
     function CreateFormulaObjectBlocks(
-      Orientation: TDataSetOrientation): TFormulaObject;
+      Orientation: TDataSetOrientation): IFormulaObject;
     function CreateFormulaObjectNodes(
-      Orientation: TDataSetOrientation): TFormulaObject;
+      Orientation: TDataSetOrientation): IFormulaObject;
     procedure CreateObserver(ObserverNameRoot: string; var Observer: TObserver;
       Displayer: TObserver); virtual;
   public
@@ -859,9 +858,6 @@ type
     procedure AddBoundaryTimes(BoundCol: TCustomNonSpatialBoundColl;
       Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean); virtual;
-//    procedure ResetItemObserver(Index: integer);
-//    function CreateFormulaObject(Orientation: TDataSetOrientation)
-//      : TFormulaObject;
     procedure CreateObserver(ObserverNameRoot: string; var Observer: TObserver;
       Displayer: TObserver); override;
     function BoundaryObserverPrefix: string; virtual; abstract;
@@ -2516,16 +2512,6 @@ begin
   end;
 end;
 
-function TCustomNonSpatialBoundColl._AddRef: Integer;
-begin
-  Result := 1;
-end;
-
-function TCustomNonSpatialBoundColl._Release: Integer;
-begin
-  Result := 1;
-end;
-
 procedure TCustomNonSpatialBoundColl.DeleteItemsWithZeroDuration;
 var
   Item1: TCustomBoundaryItem;
@@ -2598,15 +2584,6 @@ begin
       end;
     end;
   end;
-end;
-
-function TCustomNonSpatialBoundColl.QueryInterface(const IID: TGUID;
-  out Obj): HResult;
-begin
-  if GetInterface(IID, Obj) then
-    Result := 0
-  else
-    Result := E_NOINTERFACE;
 end;
 
 procedure TCustomNonSpatialBoundColl.ReplaceATime(OldTime, NewTime: Double);
@@ -2964,7 +2941,7 @@ begin
 end;
 
 function TCustomBoundaryItem.CreateFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
+  Orientation: TDataSetOrientation): IFormulaObject;
 begin
   result := frmGoPhast.PhastModel.FormulaManager.Add;
   case Orientation of
@@ -4322,7 +4299,7 @@ begin
 end;
 
 procedure TFormulaProperty.UpdateFormulaBlocks(Value: string;
-  Position: integer; var FormulaObject: TFormulaObject);
+  Position: integer; var FormulaObject: IFormulaObject);
 var
   LocalModel: TPhastModel;
   Compiler: TRbwParser;
@@ -4351,7 +4328,7 @@ begin
 end;
 
 function TFormulaProperty.CreateFormulaObjectBlocks
-  (Orientation: TDataSetOrientation): TFormulaObject;
+  (Orientation: TDataSetOrientation): IFormulaObject;
 begin
   result := frmGoPhast.PhastModel.FormulaManager.Add;
   case Orientation of
@@ -4371,7 +4348,7 @@ begin
 end;
 
 function TFormulaProperty.CreateFormulaObjectNodes
-  (Orientation: TDataSetOrientation): TFormulaObject;
+  (Orientation: TDataSetOrientation): IFormulaObject;
 begin
   result := frmGoPhast.PhastModel.FormulaManager.Add;
   case Orientation of
@@ -4844,7 +4821,7 @@ begin
 end;
 
 procedure TFormulaProperty.UpdateFormulaNodes(Value: string; Position: integer;
-  var FormulaObject: TFormulaObject);
+  var FormulaObject: IFormulaObject);
 var
   LocalModel: TPhastModel;
   Compiler: TRbwParser;

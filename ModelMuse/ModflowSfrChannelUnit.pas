@@ -3,7 +3,8 @@ unit ModflowSfrChannelUnit;
 interface
 
 uses SysUtils, Classes, RbwParser, OrderedCollectionUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, SubscriptionUnit, GoPhastTypes;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit, GoPhastTypes;
 
 type
   TSfrChannelRecord = record
@@ -23,10 +24,10 @@ type
   // @name is stored by @link(TSfrCollection).
   TSfrChannelItem = class(TCustomModflowBoundaryItem)
   private
-    FX: array[0..7] of TFormulaObject;
-    FZ: array[0..7] of TFormulaObject;
-    FChannelRoughness: TFormulaObject;
-    FBankRoughness: TFormulaObject;
+    FX: array[0..7] of IFormulaObject;
+    FZ: array[0..7] of IFormulaObject;
+    FChannelRoughness: IFormulaObject;
+    FBankRoughness: IFormulaObject;
     procedure SetBankRoughness(const Value: string);
     procedure SetChannelRoughness(const Value: string);
     function GetX(Index: integer): string;
@@ -423,11 +424,11 @@ end;
 
 procedure TSfrChannelItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FChannelRoughness then
+  if Sender = FChannelRoughness as TObject then
   begin
     List.Add(FObserverList[ChannelRoughnessPosition]);
   end;
-  if Sender = FBankRoughness then
+  if Sender = FBankRoughness as TObject then
   begin
     List.Add(FObserverList[BankRoughnessPosition]);
   end;

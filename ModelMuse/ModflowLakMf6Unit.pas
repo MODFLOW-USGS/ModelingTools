@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
-  FormulaManagerUnit, SubscriptionUnit, System.Generics.Collections,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit, SubscriptionUnit, System.Generics.Collections,
   ModflowCellUnit, RealListUnit, Mt3dmsChemUnit, System.SysUtils, GwtStatusUnit,
   OrderedCollectionInterfaceUnit;
 
@@ -55,11 +55,11 @@ type
       KWidthPosition = 3;
       KSlopePosition = 4;
     var
-    FRate: TFormulaObject;
-    FInvert: TFormulaObject;
-    FRoughness: TFormulaObject;
-    FSlope: TFormulaObject;
-    FWidth: TFormulaObject;
+    FRate: IFormulaObject;
+    FInvert: IFormulaObject;
+    FRoughness: IFormulaObject;
+    FSlope: IFormulaObject;
+    FWidth: IFormulaObject;
     function GetInvert: string;
     function GetRate: string;
     function GetRoughness: string;
@@ -174,10 +174,10 @@ type
     SurfaceAreaPosition = 2;
     ExchangeAreaEvapPosition = 3;
   var
-    FStage: TFormulaObject;
-    FVolume: TFormulaObject;
-    FSurfaceArea: TFormulaObject;
-    FExchangeArea: TFormulaObject;
+    FStage: IFormulaObject;
+    FVolume: IFormulaObject;
+    FSurfaceArea: IFormulaObject;
+    FExchangeArea: IFormulaObject;
     FObserverList: TObjectList<TObserver>;
     function GetExchangeArea: string;
     function GetStage: string;
@@ -189,7 +189,7 @@ type
     procedure SetVolume(const Value: string);
     procedure CreateFormulaObjects;
     function CreateFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject;
+      TDataSetOrientation): IFormulaObject;
     procedure RemoveFormulaObjects;
     procedure ResetItemObserver(Index: integer);
     procedure StopTalkingToAnyone;
@@ -234,12 +234,12 @@ type
   TLakeTimeItem = class(TCustomModflowBoundaryItem)
   private
     FStatus: TLakeStatus;
-    FStage: TFormulaObject;
-    FRainfall: TFormulaObject;
-    FRunoff: TFormulaObject;
-    FEvaporation: TFormulaObject;
-    FInflow: TFormulaObject;
-    FWithdrawal: TFormulaObject;
+    FStage: IFormulaObject;
+    FRainfall: IFormulaObject;
+    FRunoff: IFormulaObject;
+    FEvaporation: IFormulaObject;
+    FInflow: IFormulaObject;
+    FWithdrawal: IFormulaObject;
     // GWT
     FGwtStatus: TGwtBoundaryStatusCollection;
     FSpecifiedConcentrations: TLktGwtConcCollection;
@@ -415,12 +415,12 @@ type
     FLakeTable: TLakeTableMf6;
     FLakeConnections: TLakeConnectionTypes;
     FEmbedded: Boolean;
-    FBottomElevation: TFormulaObject;
-    FTopElevation: TFormulaObject;
-    FBedK: TFormulaObject;
-    FBedThickness: TFormulaObject;
-    FConnectionLength: TFormulaObject;
-    FStartingStage: TFormulaObject;
+    FBottomElevation: IFormulaObject;
+    FTopElevation: IFormulaObject;
+    FBedK: IFormulaObject;
+    FBedThickness: IFormulaObject;
+    FConnectionLength: IFormulaObject;
+    FStartingStage: IFormulaObject;
     FBottomElevationObserver: TObserver;
     FTopElevationObserver: TObserver;
     FBedKObserver: TObserver;
@@ -428,10 +428,10 @@ type
     FConnectionLengthObserver: TObserver;
     FConnectionWidthObserver: TObserver;
     FStartingStageObserver: TObserver;
-    FPestStageFormula: TFormulaObject;
-    FPestEvaporationFormula: TFormulaObject;
-    FPestInflowFormula: TFormulaObject;
-    FPestWithdrawalFormula: TFormulaObject;
+    FPestStageFormula: IFormulaObject;
+    FPestEvaporationFormula: IFormulaObject;
+    FPestInflowFormula: IFormulaObject;
+    FPestWithdrawalFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestEvaporationObserver: TObserver;
     FPestInflowObserver: TObserver;
@@ -439,8 +439,8 @@ type
     FPestRunoffObserver: TObserver;
     FPestStageObserver: TObserver;
     FPestWithdrawalObserver: TObserver;
-    FPestRainfallFormula: TFormulaObject;
-    FPestRunoffFormula: TFormulaObject;
+    FPestRainfallFormula: IFormulaObject;
+    FPestRunoffFormula: IFormulaObject;
     FPestSpecifiedConcentrationObservers: TObserverList;
     FPestRainfallConcentrationObservers: TObserverList;
     FPestEvaporationConcentrationObservers: TObserverList;
@@ -983,27 +983,27 @@ var
   Item: TGwtConcStringValueItem;
 begin
   inherited;
-  if Sender = FStage then
+  if Sender = FStage as TObject then
   begin
     List.Add(FObserverList[Lak6StagePosition]);
   end;
-  if Sender = FRainfall then
+  if Sender = FRainfall as TObject then
   begin
     List.Add(FObserverList[Lak6RainfallPosition]);
   end;
-  if Sender = FRunoff then
+  if Sender = FRunoff as TObject then
   begin
     List.Add(FObserverList[Lak6RunoffPosition]);
   end;
-  if Sender = FEvaporation then
+  if Sender = FEvaporation as TObject then
   begin
     List.Add(FObserverList[Lak6EvaporationPosition]);
   end;
-  if Sender = FInflow then
+  if Sender = FInflow as TObject then
   begin
     List.Add(FObserverList[Lak6InflowPosition]);
   end;
-  if Sender = FWithdrawal then
+  if Sender = FWithdrawal as TObject then
   begin
     List.Add(FObserverList[Lak6WithdrawalPosition]);
   end;
@@ -1012,7 +1012,7 @@ begin
   for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
   begin
     Item := SpecifiedConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1021,7 +1021,7 @@ begin
   for ConcIndex := 0 to RainfallConcentrations.Count - 1 do
   begin
     Item := RainfallConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1030,7 +1030,7 @@ begin
   for ConcIndex := 0 to EvapConcentrations.Count - 1 do
   begin
     Item := EvapConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1039,7 +1039,7 @@ begin
   for ConcIndex := 0 to RunoffConcentrations.Count - 1 do
   begin
     Item := RunoffConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1048,7 +1048,7 @@ begin
   for ConcIndex := 0 to InflowConcentrations.Count - 1 do
   begin
     Item := InflowConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1367,23 +1367,23 @@ end;
 
 procedure TLakeOutletTimeItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FRate then
+  if Sender = FRate as TObject then
   begin
     List.Add(FObserverList[KRatePosition]);
   end;
-  if Sender = FInvert then
+  if Sender = FInvert as TObject then
   begin
     List.Add(FObserverList[KInvertPosition]);
   end;
-  if Sender = FRoughness then
+  if Sender = FRoughness as TObject then
   begin
     List.Add(FObserverList[KRoughnessPosition]);
   end;
-  if Sender = FWidth then
+  if Sender = FWidth as TObject then
   begin
     List.Add(FObserverList[KWidthPosition]);
   end;
-  if Sender = FSlope then
+  if Sender = FSlope as TObject then
   begin
     List.Add(FObserverList[KSlopePosition]);
   end;
@@ -2644,55 +2644,55 @@ var
   StartIndex: Integer;
   Index: Integer;
 begin
-  if Sender = FPestStageFormula then
+  if Sender = FPestStageFormula as TObject then
   begin
     List.Add(FObserverList[Lak6StagePosition]);
   end
-  else if Sender = FPestRainfallFormula then
+  else if Sender = FPestRainfallFormula as TObject then
   begin
     List.Add(FObserverList[Lak6RainfallPosition]);
   end
-  else if Sender = FPestRunoffFormula then
+  else if Sender = FPestRunoffFormula as TObject then
   begin
     List.Add(FObserverList[Lak6RunoffPosition]);
   end
-  else if Sender = FPestEvaporationFormula then
+  else if Sender = FPestEvaporationFormula as TObject then
   begin
     List.Add(FObserverList[Lak6RunoffPosition]);
   end
-  else if Sender = FPestEvaporationFormula then
+  else if Sender = FPestEvaporationFormula as TObject then
   begin
     List.Add(FObserverList[Lak6EvaporationPosition]);
   end
-  else if Sender = FPestInflowFormula then
+  else if Sender = FPestInflowFormula as TObject then
   begin
     List.Add(FObserverList[Lak6InflowPosition]);
   end
-  else if Sender = FPestWithdrawalFormula then
+  else if Sender = FPestWithdrawalFormula as TObject then
   begin
     List.Add(FObserverList[Lak6WithdrawalPosition]);
   end
-  else if Sender = FBottomElevation then
+  else if Sender = FBottomElevation as TObject then
   begin
     List.Add(FObserverList[BottomElevationPosition]);
   end
-  else if Sender = FTopElevation then
+  else if Sender = FTopElevation as TObject then
   begin
     List.Add(FObserverList[TopElevationPosition]);
   end
-  else if Sender = FBedK then
+  else if Sender = FBedK as TObject then
   begin
     List.Add(FObserverList[BedKPosition]);
   end
-  else if Sender = FBedThickness then
+  else if Sender = FBedThickness as TObject then
   begin
     List.Add(FObserverList[BedThicknessPosition]);
   end
-  else if Sender = FConnectionLength then
+  else if Sender = FConnectionLength as TObject then
   begin
     List.Add(FObserverList[ConnectionLengthPosition]);
   end
-  else if Sender = FStartingStage then
+  else if Sender = FStartingStage as TObject then
   begin
     List.Add(FObserverList[StartingStagePosition]);
   end;
@@ -2700,7 +2700,7 @@ begin
   StartIndex := Lak6GwtPestStartPosition;
   for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
   begin
-    if FPestSpecifiedConcentrations[Index].ValueObject = Sender then
+    if FPestSpecifiedConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -2709,7 +2709,7 @@ begin
   StartIndex := StartIndex + FPestSpecifiedConcentrations.Count;
   for Index := 0 to PestRainfallConcentrations.Count - 1 do
   begin
-    if PestRainfallConcentrations[Index].ValueObject = Sender then
+    if PestRainfallConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -2718,7 +2718,7 @@ begin
   StartIndex := StartIndex + PestRainfallConcentrations.Count;
   for Index := 0 to PestEvaporationConcentrations.Count - 1 do
   begin
-    if PestEvaporationConcentrations[Index].ValueObject = Sender then
+    if PestEvaporationConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -2727,7 +2727,7 @@ begin
   StartIndex := StartIndex + PestEvaporationConcentrations.Count;
   for Index := 0 to PestRunoffConcentrations.Count - 1 do
   begin
-    if PestRunoffConcentrations[Index].ValueObject = Sender then
+    if PestRunoffConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -2736,7 +2736,7 @@ begin
   StartIndex := StartIndex + PestRunoffConcentrations.Count;
   for Index := 0 to PestInflowConcentrations.Count - 1 do
   begin
-    if PestInflowConcentrations[Index].ValueObject = Sender then
+    if PestInflowConcentrations[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[StartIndex + Index]);
     end;
@@ -3320,9 +3320,9 @@ begin
 end;
 
 function TLakeTableItemMf6.CreateFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
+  Orientation: TDataSetOrientation): IFormulaObject;
 begin
-  result := CreateBlockFormulaObject(Orientation);
+  result := CreateBlockFormulaObject(Orientation) as IFormulaObject;
   result.AddSubscriptionEvents(
     GlobalRemoveFormulaObjectSubscription,
     GlobalRestoreFormulaObjectSubscription, self);

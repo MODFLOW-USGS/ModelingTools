@@ -5,11 +5,6 @@ program SwiObsExtractor;
 {$R *.res}
 
 uses
-  madExcept,
-  madLinkDisAsm,
-  madListHardware,
-  madListProcesses,
-  madListModules,
   System.SysUtils,
   SwiObsInputReader in 'SwiObsInputReader.pas',
   SwiObsReaderUnit in 'SwiObsReaderUnit.pas',

@@ -3,7 +3,8 @@ unit ModflowGhbUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
-  OrderedCollectionUnit, ModflowCellUnit, FormulaManagerUnit,
+  OrderedCollectionUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit;
 
@@ -65,9 +66,9 @@ type
   TGhbItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(BoundaryHead).
-    FBoundaryHead: TFormulaObject;
+    FBoundaryHead: IFormulaObject;
     // See @link(Conductance).
-    FConductance: TFormulaObject;
+    FConductance: IFormulaObject;
     FGwtConcentrations: TGhbGwtConcCollection;
     // See @link(BoundaryHead).
     procedure SetBoundaryHead(const Value: string);
@@ -282,8 +283,8 @@ type
   private
     FPestConductanceMethod: TPestParamMethod;
     FPestHeadMethod: TPestParamMethod;
-    FPestHeadFormula: TFormulaObject;
-    FPestConductanceFormula: TFormulaObject;
+    FPestHeadFormula: IFormulaObject;
+    FPestConductanceFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestConductanceObserver: TObserver;
     FPestHeadObserver: TObserver;
@@ -527,18 +528,18 @@ var
   Item: TGwtConcStringValueItem;
   ConcIndex: Integer;
 begin
-  if Sender = FConductance then
+  if Sender = FConductance as TObject then
   begin
     List.Add(FObserverList[GhbConductancePosition]);
   end;
-  if Sender = FBoundaryHead then
+  if Sender = FBoundaryHead as TObject then
   begin
     List.Add(FObserverList[GhbHeadPosition]);
   end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     Item := GwtConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1843,14 +1844,14 @@ procedure TGhbBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Index: Integer;
 begin
-  if Sender = FPestHeadFormula then
+  if Sender = FPestHeadFormula as TObject then
   begin
     if GhbHeadPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[GhbHeadPosition]);
     end;
   end;
-  if Sender = FPestConductanceFormula then
+  if Sender = FPestConductanceFormula as TObject then
   begin
     if GhbConductancePosition < FObserverList.Count then
     begin
@@ -1859,7 +1860,7 @@ begin
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
-    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    if FPestConcentrationFormulas[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[GhbStartConcentration + Index]);
     end;

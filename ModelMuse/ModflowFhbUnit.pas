@@ -15,7 +15,9 @@ unit ModflowFhbUnit;
 interface
 
 uses
-  Classes, ZLib, ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit,
+  Classes, ZLib, ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  OrderedCollectionUnit,
   RbwParser, GoPhastTypes, ModflowCellUnit, SysUtils, SubscriptionUnit;
 
 type
@@ -49,7 +51,7 @@ type
   // @name represents either a specified flow or specified head boundary.
   TFhbItem = class(TCustomModflowBoundaryItem)
     // See @link(BoundaryValue).
-    FBoundaryValue: TFormulaObject;
+    FBoundaryValue: IFormulaObject;
     function GetBoundaryValue: string;
     procedure SetBoundaryValue(const Value: string);
   protected
@@ -181,7 +183,7 @@ type
   TFhbHeadBoundary = class(TModflowBoundary)
   private
     FPestFhbBoundaryMethod: TPestParamMethod;
-    FPestFhbBoundaryFormula: TFormulaObject;
+    FPestFhbBoundaryFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestBoundaryObserver: TObserver;
     function GetPestBoundaryObserver: TObserver;
@@ -349,7 +351,7 @@ end;
 
 procedure TFhbItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FBoundaryValue then
+  if Sender = FBoundaryValue as TObject then
   begin
     List.Add(FObserverList[FhbBoundaryValuePosition]);
   end;
@@ -1263,7 +1265,7 @@ end;
 
 procedure TFhbHeadBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestFhbBoundaryFormula then
+  if Sender = FPestFhbBoundaryFormula as TObject then
   begin
     if FhbBoundaryValuePosition < FObserverList.Count then
     begin

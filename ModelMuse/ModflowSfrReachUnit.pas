@@ -3,7 +3,8 @@ unit ModflowSfrReachUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowCellUnit, ModflowBoundaryUnit, DataSetUnit, FormulaManagerUnit,
+  ModflowCellUnit, ModflowBoundaryUnit, DataSetUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -64,15 +65,15 @@ type
   // @name is stored by @link(TSfrCollection).
   TSfrItem = class(TCustomModflowBoundaryItem)
   private
-    FStreamBedThickness: TFormulaObject;
-    FStreambedElevation: TFormulaObject;
-    FHydraulicConductivity: TFormulaObject;
-    FStreamSlope: TFormulaObject;
-    FBrooksCoreyExponent: TFormulaObject;
-    FVerticalK: TFormulaObject;
-    FInitialWaterContent: TFormulaObject;
-    FSaturatedWaterContent: TFormulaObject;
-    FReachLength: TFormulaObject;
+    FStreamBedThickness: IFormulaObject;
+    FStreambedElevation: IFormulaObject;
+    FHydraulicConductivity: IFormulaObject;
+    FStreamSlope: IFormulaObject;
+    FBrooksCoreyExponent: IFormulaObject;
+    FVerticalK: IFormulaObject;
+    FInitialWaterContent: IFormulaObject;
+    FSaturatedWaterContent: IFormulaObject;
+    FReachLength: IFormulaObject;
     procedure SetHydraulicConductivity(const Value: string);
     procedure SetStreambedElevation(const Value: string);
     procedure SetStreamBedThickness(const Value: string);
@@ -440,39 +441,39 @@ end;
 
 procedure TSfrItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FReachLength then
+  if Sender = FReachLength as TObject then
   begin
     List.Add(FObserverList[ReachLengthPosition]);
   end;
-  if Sender = FHydraulicConductivity then
+  if Sender = FHydraulicConductivity as TObject then
   begin
     List.Add(FObserverList[HydraulicConductivityPosition]);
   end;
-  if Sender = FStreamBedThickness then
+  if Sender = FStreamBedThickness as TObject then
   begin
     List.Add(FObserverList[StreamBedThicknessPosition]);
   end;
-  if Sender = FStreambedElevation then
+  if Sender = FStreambedElevation as TObject then
   begin
     List.Add(FObserverList[StreambedElevationPosition]);
   end;
-  if Sender = FStreamSlope then
+  if Sender = FStreamSlope as TObject then
   begin
     List.Add(FObserverList[StreamSlopePosition]);
   end;
-  if Sender = FSaturatedWaterContent then
+  if Sender = FSaturatedWaterContent as TObject then
   begin
     List.Add(FObserverList[SaturatedWaterContentPosition]);
   end;
-  if Sender = FInitialWaterContent then
+  if Sender = FInitialWaterContent as TObject then
   begin
     List.Add(FObserverList[InitialWaterContentPosition]);
   end;
-  if Sender = FBrooksCoreyExponent then
+  if Sender = FBrooksCoreyExponent as TObject then
   begin
     List.Add(FObserverList[BrooksCoreyExponentPosition]);
   end;
-  if Sender = FVerticalK then
+  if Sender = FVerticalK as TObject then
   begin
     List.Add(FObserverList[VerticalKPosition]);
   end;

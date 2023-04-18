@@ -8,11 +8,6 @@ program EnhancedTemplateProcessor;
 {$R *.res}
 
 uses
-  madExcept,
-  madLinkDisAsm,
-  madListHardware,
-  madListProcesses,
-  madListModules,
   System.SysUtils,
   ProcessTemplateUnit in 'ProcessTemplateUnit.pas',
   DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';

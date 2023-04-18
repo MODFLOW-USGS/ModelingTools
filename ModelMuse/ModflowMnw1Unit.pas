@@ -4,7 +4,9 @@ interface
 
 uses
   Windows, ZLib, SysUtils, Classes, ModflowBoundaryUnit, OrderedCollectionUnit,
-  ModflowCellUnit, RbwParser, GoPhastTypes, FormulaManagerUnit, SubscriptionUnit;
+  ModflowCellUnit, RbwParser, GoPhastTypes,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit;
 
 type
   // Rw  > 0, Rw  = 0, Rw  < 0
@@ -112,27 +114,27 @@ type
   TMnw1Item = class (TCustomModflowBoundaryItem)
   private
     // Qdes
-    FDesiredPumpingRate: TFormulaObject;
+    FDesiredPumpingRate: IFormulaObject;
     // QWval
-    FWaterQuality: TFormulaObject;
+    FWaterQuality: IFormulaObject;
     // Rw
-    FWellRadius: TFormulaObject;
+    FWellRadius: IFormulaObject;
     // Rw
-    FConductance: TFormulaObject;
+    FConductance: IFormulaObject;
     // Skin
-    FSkinFactor: TFormulaObject;
+    FSkinFactor: IFormulaObject;
     // Hlim
-    FLimitingWaterLevel: TFormulaObject;
+    FLimitingWaterLevel: IFormulaObject;
     // Href
-    FReferenceElevation: TFormulaObject;
+    FReferenceElevation: IFormulaObject;
     // Iwgrp
-    FWaterQualityGroup: TFormulaObject;
+    FWaterQualityGroup: IFormulaObject;
     // Cp:C
-    FNonLinearLossCoefficient: TFormulaObject;
+    FNonLinearLossCoefficient: IFormulaObject;
     // Qfrcmn
-    FMinimumPumpingRate: TFormulaObject;
+    FMinimumPumpingRate: IFormulaObject;
     // Qfrcmx
-    FMaximumPumpingRate: TFormulaObject;
+    FMaximumPumpingRate: IFormulaObject;
 
     FConductanceMethod: TMnw1ConductanceMethod;
     FPumpingLimitType: TMnw1PumpingLimitType;
@@ -391,18 +393,18 @@ type
     FPestWaterQualityObserver: TObserver;
     FPestWellRadiusObserver: TObserver;
     FPestSkinFactorObserver: TObserver;
-    FPestDesiredPumpingRateFormula: TFormulaObject;
-    FPestWaterQualityFormula: TFormulaObject;
-    FPestWellRadiusFormula: TFormulaObject;
-    FPestConductanceFormula: TFormulaObject;
-    FPestSkinFactorFormula: TFormulaObject;
-    FPestLimitingWaterLevelFormula: TFormulaObject;
-    FPestReferenceElevationFormula: TFormulaObject;
-    FPestNonLinearLossCoefficientFormula: TFormulaObject;
-    FPestMinimumPumpingRateFormula: TFormulaObject;
-    FPestMaximumPumpingRateFormula: TFormulaObject;
+    FPestDesiredPumpingRateFormula: IFormulaObject;
+    FPestWaterQualityFormula: IFormulaObject;
+    FPestWellRadiusFormula: IFormulaObject;
+    FPestConductanceFormula: IFormulaObject;
+    FPestSkinFactorFormula: IFormulaObject;
+    FPestLimitingWaterLevelFormula: IFormulaObject;
+    FPestReferenceElevationFormula: IFormulaObject;
+    FPestNonLinearLossCoefficientFormula: IFormulaObject;
+    FPestMinimumPumpingRateFormula: IFormulaObject;
+    FPestMaximumPumpingRateFormula: IFormulaObject;
     FUsedObserver: TObserver;
-    FDummy: TFormulaObject;
+    FDummy: IFormulaObject;
     procedure SetSite(const Value: string);
     function GetPestConductanceObserver: TObserver;
     function GetPestDesiredPumpingRateObserver: TObserver;
@@ -773,47 +775,47 @@ end;
 
 procedure TMnw1Item.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FDesiredPumpingRate then
+  if Sender = FDesiredPumpingRate as TObject then
   begin
     List.Add(FObserverList[DesiredPumpingRatePosition]);
   end;
-  if Sender = FWaterQuality then
+  if Sender = FWaterQuality as TObject then
   begin
     List.Add(FObserverList[WaterQualityPosition]);
   end;
-  if Sender = FWellRadius then
+  if Sender = FWellRadius as TObject then
   begin
     List.Add(FObserverList[WellRadiusPosition]);
   end;
-  if Sender = FConductance then
+  if Sender = FConductance as TObject then
   begin
     List.Add(FObserverList[ConductancePosition]);
   end;
-  if Sender = FSkinFactor then
+  if Sender = FSkinFactor as TObject then
   begin
     List.Add(FObserverList[SkinFactorPosition]);
   end;
-  if Sender = FLimitingWaterLevel then
+  if Sender = FLimitingWaterLevel as TObject then
   begin
     List.Add(FObserverList[LimitingWaterLevelPosition]);
   end;
-  if Sender = FReferenceElevation then
+  if Sender = FReferenceElevation as TObject then
   begin
     List.Add(FObserverList[ReferenceElevationPosition]);
   end;
-  if Sender = FWaterQualityGroup then
+  if Sender = FWaterQualityGroup as TObject then
   begin
     List.Add(FObserverList[WaterQualityGroupPosition]);
   end;
-  if Sender = FNonLinearLossCoefficient then
+  if Sender = FNonLinearLossCoefficient as TObject then
   begin
     List.Add(FObserverList[NonLinearLossCoefficientPosition]);
   end;
-  if Sender = FMinimumPumpingRate then
+  if Sender = FMinimumPumpingRate as TObject then
   begin
     List.Add(FObserverList[MinimumPumpingRatePosition]);
   end;
-  if Sender = FMaximumPumpingRate then
+  if Sender = FMaximumPumpingRate as TObject then
   begin
     List.Add(FObserverList[ReactivationPumpingRatePosition]);
   end;
@@ -2765,14 +2767,15 @@ end;
 
 procedure TMnw1Boundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestDesiredPumpingRateFormula then
+  if Sender = FPestDesiredPumpingRateFormula as TObject then
   begin
     if DesiredPumpingRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DesiredPumpingRatePosition]);
     end;
   end;
-  if Sender = FPestWaterQualityFormula then
+
+  if Sender = FPestWaterQualityFormula as TObject then
   begin
     if WaterQualityPosition < FObserverList.Count then
     begin
@@ -2780,63 +2783,63 @@ begin
     end;
   end;
 
-  if Sender = FPestWellRadiusFormula then
+  if Sender = FPestWellRadiusFormula as TObject then
   begin
     if WellRadiusPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[WellRadiusPosition]);
     end;
   end;
-  if Sender = FPestConductanceFormula then
+  if Sender = FPestConductanceFormula as TObject then
   begin
     if ConductancePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[ConductancePosition]);
     end;
   end;
-  if Sender = FPestSkinFactorFormula then
+  if Sender = FPestSkinFactorFormula as TObject then
   begin
     if SkinFactorPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[SkinFactorPosition]);
     end;
   end;
-  if Sender = FPestLimitingWaterLevelFormula then
+  if Sender = FPestLimitingWaterLevelFormula as TObject then
   begin
     if LimitingWaterLevelPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[LimitingWaterLevelPosition]);
     end;
   end;
-  if Sender = FPestReferenceElevationFormula then
+  if Sender = FPestReferenceElevationFormula as TObject then
   begin
     if ReferenceElevationPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[ReferenceElevationPosition]);
     end;
   end;
-  if Sender = FPestNonLinearLossCoefficientFormula then
+  if Sender = FPestNonLinearLossCoefficientFormula as TObject then
   begin
     if NonLinearLossCoefficientPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[NonLinearLossCoefficientPosition]);
     end;
   end;
-  if Sender = FPestMinimumPumpingRateFormula then
+  if Sender = FPestMinimumPumpingRateFormula as TObject then
   begin
     if MinimumPumpingRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[MinimumPumpingRatePosition]);
     end;
   end;
-  if Sender = FPestDesiredPumpingRateFormula then
+  if Sender = FPestDesiredPumpingRateFormula as TObject then
   begin
     if DesiredPumpingRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DesiredPumpingRatePosition]);
     end;
   end;
-  if Sender = FPestMaximumPumpingRateFormula then
+  if Sender = FPestMaximumPumpingRateFormula as TObject then
   begin
     if ReactivationPumpingRatePosition < FObserverList.Count then
     begin

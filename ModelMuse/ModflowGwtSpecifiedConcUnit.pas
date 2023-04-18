@@ -3,7 +3,7 @@ unit ModflowGwtSpecifiedConcUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   System.Generics.Collections, Mt3dmsChemSpeciesUnit;
 
@@ -50,7 +50,7 @@ type
   TCncItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(Concentration).
-    FConcentration: TFormulaObject;
+    FConcentration: IFormulaObject;
     // See @link(Concentration).
     procedure SetConcentration(const Value: string);
     function GetConcentration: string;
@@ -178,7 +178,7 @@ type
   TCncBoundary = class(TModflowBoundary)
   private
     FPestConcentrationMethod: TPestParamMethod;
-    FPestConcentrationFormula: TFormulaObject;
+    FPestConcentrationFormula: IFormulaObject;
     FPestConcentrationObserver: TObserver;
     FUsedObserver: TObserver;
     FChemSpecies: TChemSpeciesItem;
@@ -1221,7 +1221,7 @@ end;
 
 procedure TCncBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestConcentrationFormula then
+  if Sender = FPestConcentrationFormula as TObject then
   begin
     if CncConcentrationPosition < FObserverList.Count then
     begin

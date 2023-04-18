@@ -3,7 +3,8 @@ unit ModflowHfbUnit;
 interface
 
 uses ZLib, Classes, SysUtils, RbwParser, GoPhastTypes,
-  ModflowBoundaryUnit, SubscriptionUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, SubscriptionUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   OrderedCollectionUnit, ModflowCellUnit, RealListUnit;
 
 type
@@ -48,9 +49,9 @@ type
   THfbItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(HydraulicConductivityFormula).
-    FHydraulicConductivityFormula: TFormulaObject;
+    FHydraulicConductivityFormula: IFormulaObject;
     // See @link(ThicknessFormula).
-    FThicknessFormula: TFormulaObject;
+    FThicknessFormula: IFormulaObject;
     function GetHydraulicConductivity: string;
     function GetThickness: string;
     procedure SetHydraulicConductivity(const Value: string);
@@ -150,19 +151,19 @@ type
   THfbBoundary = class(TModflowSteadyBoundary)
   private
     FAdjustmentMethod: TAdjustmentMethod;
-    FThicknessFormula: TFormulaObject;
-    FHydraulicConductivityFormula: TFormulaObject;
+    FThicknessFormula: IFormulaObject;
+    FHydraulicConductivityFormula: IFormulaObject;
     FParameterName: string;
     FHydraulicConductivityObserver: TObserver;
     FThicknessObserver: TObserver;
     FParameterNameObserver: TObserver;
     FAdjustmentMethodObserver: TObserver;
     FVerticalBoundary: boolean;
-    FLayerOffsetFormula: TFormulaObject;
+    FLayerOffsetFormula: IFormulaObject;
     FLayerOffsetObserver: TObserver;
     FPestHydraulicConductivityObserver: TObserver;
-    FPestThicknessFormula: TFormulaObject;
-    FPestHydraulicConductivityFormula: TFormulaObject;
+    FPestThicknessFormula: IFormulaObject;
+    FPestHydraulicConductivityFormula: IFormulaObject;
     FPestThicknessObserver: TObserver;
   private
 
@@ -533,27 +534,27 @@ end;
 
 procedure THfbBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if (Sender = FThicknessFormula)
+  if (Sender = FThicknessFormula as TObject)
     and (HfbThicknessPosition < List.Count) then
   begin
     List.Add(FObserverList[HfbThicknessPosition]);
   end;
-  if (Sender = FHydraulicConductivityFormula)
+  if (Sender = FHydraulicConductivityFormula as TObject)
     and (HfbHydraulicConductivityPosition < List.Count) then
   begin
     List.Add(FObserverList[HfbHydraulicConductivityPosition]);
   end;
-  if (Sender = FLayerOffsetFormula)
+  if (Sender = FLayerOffsetFormula as TObject)
     and (HfbLayerOffsetPosition < List.Count) then
   begin
     List.Add(FObserverList[HfbLayerOffsetPosition]);
   end;
-  if (Sender = FPestThicknessFormula)
+  if (Sender = FPestThicknessFormula as TObject)
     and (HfbPestThicknessPosition < List.Count) then
   begin
     List.Add(FObserverList[HfbPestThicknessPosition]);
   end;
-  if (Sender = FPestHydraulicConductivityFormula)
+  if (Sender = FPestHydraulicConductivityFormula as TObject)
     and (HfbPestHydraulicConductivityPosition < List.Count) then
   begin
     List.Add(FObserverList[HfbPestHydraulicConductivityPosition]);
@@ -879,11 +880,11 @@ end;
 
 procedure THfbItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FThicknessFormula then
+  if Sender = FThicknessFormula as TObject then
   begin
     List.Add(FObserverList[HfbThicknessPosition]);
   end;
-  if Sender = FHydraulicConductivityFormula then
+  if Sender = FHydraulicConductivityFormula as TObject then
   begin
     List.Add(FObserverList[HfbHydraulicConductivityPosition]);
   end;

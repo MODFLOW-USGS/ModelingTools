@@ -6,7 +6,8 @@ uses Classes, RealListUnit, OrderedCollectionUnit, ModflowCellUnit,
   ModflowBoundaryUnit, ModflowSfrReachUnit, ModflowSfrChannelUnit, GoPhastTypes,
   ModflowSfrSegment, ModflowSfrUnsatSegment, ModflowSfrTable, ModflowSfrFlows,
   ModflowSfrEquationUnit, ModflowSfrParamIcalcUnit, PestObsUnit,
-  SubscriptionUnit, FormulaManagerUnit;
+  SubscriptionUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit;
 
 type
   TGageLocation = (glNone, glFirst, glLast, glAll);
@@ -169,20 +170,20 @@ type
     FPestRunoffMethod: TPestParamMethod;
     FPestUpstreamDepthMethod: TPestParamMethod;
     FPestDownstreamKMethod: TPestParamMethod;
-    FPestUpstreamKFormula: TFormulaObject;
-    FPestUpstreamBedThicknessFormula: TFormulaObject;
-    FPestUpstreamBedElevationFormula: TFormulaObject;
-    FPestUpstreamWidthFormula: TFormulaObject;
-    FPestUpstreamDepthFormula: TFormulaObject;
-    FPestDownstreamKFormula: TFormulaObject;
-    FPestDownstreamBedThicknessFormula: TFormulaObject;
-    FPestDownstreamBedElevationFormula: TFormulaObject;
-    FPestDownstreamWidthFormula: TFormulaObject;
-    FPestDownstreamDepthFormula: TFormulaObject;
-    FPestFlowFormula: TFormulaObject;
-    FPestPrecipFormula: TFormulaObject;
-    FPestEvapFormula: TFormulaObject;
-    FPestRunoffFormula: TFormulaObject;
+    FPestUpstreamKFormula: IFormulaObject;
+    FPestUpstreamBedThicknessFormula: IFormulaObject;
+    FPestUpstreamBedElevationFormula: IFormulaObject;
+    FPestUpstreamWidthFormula: IFormulaObject;
+    FPestUpstreamDepthFormula: IFormulaObject;
+    FPestDownstreamKFormula: IFormulaObject;
+    FPestDownstreamBedThicknessFormula: IFormulaObject;
+    FPestDownstreamBedElevationFormula: IFormulaObject;
+    FPestDownstreamWidthFormula: IFormulaObject;
+    FPestDownstreamDepthFormula: IFormulaObject;
+    FPestFlowFormula: IFormulaObject;
+    FPestPrecipFormula: IFormulaObject;
+    FPestEvapFormula: IFormulaObject;
+    FPestRunoffFormula: IFormulaObject;
     FPestDownstreamBedElevationObserver: TObserver;
     FPestDownstreamBedThicknessObserver: TObserver;
     FPestDownstreamDepthObserver: TObserver;
@@ -198,30 +199,6 @@ type
     FPestUpstreamKObserver: TObserver;
     FPestUpstreamWidthObserver: TObserver;
     FUsedObserver: TObserver;
-//    FPestDownstreamVerticalSaturatedKMethod: TPestParamMethod;
-//    FPestDownstreamBrooksCoreyExponentMethod: TPestParamMethod;
-//    FPestUpstreamVerticalSaturatedKMethod: TPestParamMethod;
-//    FPestUpstreamBrooksCoreyExponentMethod: TPestParamMethod;
-//    FPestDownstreamInitialWaterContentMethod: TPestParamMethod;
-//    FPestDownstreamSaturatedWaterContentMethod: TPestParamMethod;
-//    FPestUpstreamInitialWaterContentMethod: TPestParamMethod;
-//    FPestUpstreamSaturatedWaterContentMethod: TPestParamMethod;
-//    FPestDownstreamBrooksCoreyExponentObserver: TObserver;
-//    FPestDownstreamInitialWaterContentObserver: TObserver;
-//    FPestDownstreamSaturatedWaterContentObserver: TObserver;
-//    FPestDownstreamVerticalSaturatedKObserver: TObserver;
-//    FPestUpstreamBrooksCoreyExponentObserver: TObserver;
-//    FPestUpstreamInitialWaterContentObserver: TObserver;
-//    FPestUpstreamSaturatedWaterContentObserver: TObserver;
-//    FPestUpstreamVerticalSaturatedKObserver: TObserver;
-//    FPestUpstreamSaturatedWaterContentFormula: TFormulaObject;
-//    FPestUpstreamInitialWaterContentFormula: TFormulaObject;
-//    FPestUpstreamBrooksCoreyExponentFormula: TFormulaObject;
-//    FPestUpstreamVerticalSaturatedKFormula: TFormulaObject;
-//    FPestDownstreamSaturatedWaterContentFormula: TFormulaObject;
-//    FPestDownstreamInitialWaterContentFormula: TFormulaObject;
-//    FPestDownstreamBrooksCoreyExponentFormula: TFormulaObject;
-//    FPestDownstreamVerticalSaturatedKFormula: TFormulaObject;
     procedure SetSegmentNumber(const Value: integer);
     procedure SetChannelValues(const Value: TSfrChannelCollection);
     procedure SetUpstreamSegmentValues(const Value: TSfrSegmentCollection);
@@ -1798,35 +1775,35 @@ end;
 
 procedure TSfrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestUpstreamKFormula then
+  if Sender = FPestUpstreamKFormula as TObject then
   begin
     if UpstreamKPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[UpstreamKPosition]);
     end;
   end;
-  if Sender = FPestUpstreamBedThicknessFormula then
+  if Sender = FPestUpstreamBedThicknessFormula as TObject then
   begin
     if UpstreamBedThicknessPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[UpstreamBedThicknessPosition]);
     end;
   end;
-  if Sender = FPestUpstreamBedElevationFormula then
+  if Sender = FPestUpstreamBedElevationFormula as TObject then
   begin
     if UpstreamBedElevationPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[UpstreamBedElevationPosition]);
     end;
   end;
-  if Sender = FPestUpstreamWidthFormula then
+  if Sender = FPestUpstreamWidthFormula as TObject then
   begin
     if UpstreamWidthPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[UpstreamWidthPosition]);
     end;
   end;
-  if Sender = FPestUpstreamDepthFormula then
+  if Sender = FPestUpstreamDepthFormula as TObject then
   begin
     if UpstreamDepthPosition < FObserverList.Count then
     begin
@@ -1834,64 +1811,35 @@ begin
     end;
   end;
 
-//  if Sender = FPestUpstreamSaturatedWaterContentFormula then
-//  begin
-//    if UpstreamSaturatedWaterContentPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[UpstreamSaturatedWaterContentPosition]);
-//    end;
-//  end;
-//  if Sender = FPestUpstreamInitialWaterContentFormula then
-//  begin
-//    if UpstreamInitialWaterContentPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[UpstreamInitialWaterContentPosition]);
-//    end;
-//  end;
-//  if Sender = FPestUpstreamBrooksCoreyExponentFormula then
-//  begin
-//    if UpstreamBrooksCoreyExponentPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[UpstreamBrooksCoreyExponentPosition]);
-//    end;
-//  end;
-//  if Sender = FPestUpstreamVerticalSaturatedKFormula then
-//  begin
-//    if UpstreamVerticalSaturatedKPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[UpstreamVerticalSaturatedKPosition]);
-//    end;
-//  end;
-
-  if Sender = FPestDownstreamKFormula then
+  if Sender = FPestDownstreamKFormula as TObject then
   begin
     if DownstreamKPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DownstreamKPosition]);
     end;
   end;
-  if Sender = FPestDownstreamBedThicknessFormula then
+  if Sender = FPestDownstreamBedThicknessFormula as TObject then
   begin
     if DownstreamBedThicknessPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DownstreamBedThicknessPosition]);
     end;
   end;
-  if Sender = FPestDownstreamBedElevationFormula then
+  if Sender = FPestDownstreamBedElevationFormula as TObject then
   begin
     if DownstreamBedElevationPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DownstreamBedElevationPosition]);
     end;
   end;
-  if Sender = FPestDownstreamWidthFormula then
+  if Sender = FPestDownstreamWidthFormula as TObject then
   begin
     if DownstreamWidthPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DownstreamWidthPosition]);
     end;
   end;
-  if Sender = FPestDownstreamDepthFormula then
+  if Sender = FPestDownstreamDepthFormula as TObject then
   begin
     if DownstreamDepthPosition < FObserverList.Count then
     begin
@@ -1899,57 +1847,28 @@ begin
     end;
   end;
 
-//  if Sender = FPestDownstreamSaturatedWaterContentFormula then
-//  begin
-//    if DownstreamSaturatedWaterContentPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[DownstreamSaturatedWaterContentPosition]);
-//    end;
-//  end;
-//  if Sender = FPestDownstreamInitialWaterContentFormula then
-//  begin
-//    if DownstreamInitialWaterContentPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[DownstreamInitialWaterContentPosition]);
-//    end;
-//  end;
-//  if Sender = FPestDownstreamBrooksCoreyExponentFormula then
-//  begin
-//    if DownstreamBrooksCoreyExponentPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[DownstreamBrooksCoreyExponentPosition]);
-//    end;
-//  end;
-//  if Sender = FPestDownstreamVerticalSaturatedKFormula then
-//  begin
-//    if DownstreamVerticalSaturatedKPosition < FObserverList.Count then
-//    begin
-//      List.Add(FObserverList[DownstreamVerticalSaturatedKPosition]);
-//    end;
-//  end;
-
-  if Sender = FPestFlowFormula then
+  if Sender = FPestFlowFormula as TObject then
   begin
     if FlowPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[FlowPosition]);
     end;
   end;
-  if Sender = FPestPrecipFormula then
+  if Sender = FPestPrecipFormula as TObject then
   begin
     if PrecipPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[PrecipPosition]);
     end;
   end;
-  if Sender = FPestEvapFormula then
+  if Sender = FPestEvapFormula as TObject then
   begin
     if EvapPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[EvapPosition]);
     end;
   end;
-  if Sender = FPestRunoffFormula then
+  if Sender = FPestRunoffFormula as TObject then
   begin
     if RunoffPosition < FObserverList.Count then
     begin
@@ -2323,18 +2242,6 @@ begin
   SetPestParamMethod(FPestDownstreamBedThicknessMethod, Value);
 end;
 
-//procedure TSfrBoundary.SetPestDownstreamBrooksCoreyExponentFormula(
-//  const Value: string);
-//begin
-//  UpdateFormulaBlocks(Value, DownstreamBrooksCoreyExponentPosition, FPestDownstreamBrooksCoreyExponentFormula);
-//end;
-//
-//procedure TSfrBoundary.SetPestDownstreamBrooksCoreyExponentMethod(
-//  const Value: TPestParamMethod);
-//begin
-//  SetPestParamMethod(FPestDownstreamBrooksCoreyExponentMethod, Value);
-//end;
-
 procedure TSfrBoundary.SetPestDownstreamDepthFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, DownstreamDepthPosition, FPestDownstreamDepthFormula);
@@ -2345,18 +2252,6 @@ procedure TSfrBoundary.SetPestDownstreamDepthMethod(
 begin
   SetPestParamMethod(FPestDownstreamDepthMethod, Value);
 end;
-
-//procedure TSfrBoundary.SetPestDownstreamInitialWaterContentFormula(
-//  const Value: string);
-//begin
-//  UpdateFormulaBlocks(Value, DownstreamInitialWaterContentPosition, FPestDownstreamInitialWaterContentFormula);
-//end;
-//
-//procedure TSfrBoundary.SetPestDownstreamInitialWaterContentMethod(
-//  const Value: TPestParamMethod);
-//begin
-//  SetPestParamMethod(FPestDownstreamInitialWaterContentMethod, Value);
-//end;
 
 procedure TSfrBoundary.SetPestDownstreamKFormula(const Value: string);
 begin
@@ -2465,18 +2360,6 @@ begin
   SetPestParamMethod(FPestUpstreamBedThicknessMethod, Value);
 end;
 
-//procedure TSfrBoundary.SetPestUpstreamBrooksCoreyExponentFormula(
-//  const Value: string);
-//begin
-//  UpdateFormulaBlocks(Value, UpstreamBrooksCoreyExponentPosition, FPestUpstreamBrooksCoreyExponentFormula);
-//end;
-//
-//procedure TSfrBoundary.SetPestUpstreamBrooksCoreyExponentMethod(
-//  const Value: TPestParamMethod);
-//begin
-//  SetPestParamMethod(FPestUpstreamBrooksCoreyExponentMethod, Value);
-//end;
-
 procedure TSfrBoundary.SetPestUpstreamDepthFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, UpstreamDepthPosition, FPestUpstreamDepthFormula);
@@ -2509,30 +2392,6 @@ procedure TSfrBoundary.SetPestUpstreamKMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestUpstreamKMethod, Value);
 end;
-
-//procedure TSfrBoundary.SetPestUpstreamSaturatedWaterContentFormula(
-//  const Value: string);
-//begin
-//  UpdateFormulaBlocks(Value, UpstreamSaturatedWaterContentPosition, FPestUpstreamSaturatedWaterContentFormula);
-//end;
-//
-//procedure TSfrBoundary.SetPestUpstreamSaturatedWaterContentMethod(
-//  const Value: TPestParamMethod);
-//begin
-//  SetPestParamMethod(FPestUpstreamSaturatedWaterContentMethod, Value);
-//end;
-
-//procedure TSfrBoundary.SetPestUpstreamVerticalSaturatedKFormula(
-//  const Value: string);
-//begin
-//  UpdateFormulaBlocks(Value, UpstreamVerticalSaturatedKPosition, FPestUpstreamVerticalSaturatedKFormula);
-//end;
-//
-//procedure TSfrBoundary.SetPestUpstreamVerticalSaturatedKMethod(
-//  const Value: TPestParamMethod);
-//begin
-//  SetPestParamMethod(FPestUpstreamVerticalSaturatedKMethod, Value);
-//end;
 
 procedure TSfrBoundary.SetPestUpstreamWidthFormula(const Value: string);
 begin

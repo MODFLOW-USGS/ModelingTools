@@ -5,7 +5,7 @@ unit SubscriptionUnit;
 interface
 
 uses System.Types, Classes, SysUtils, ObserverIntfU, ObserverListU, ObserverU,
-  Generics.Collections;
+  Generics.Collections, SubscriptionInterfaceUnit;
 
 const
   // @name is used in TObserver.@link(TObserver.IsRecursive) to
@@ -24,7 +24,7 @@ type
   {@abstract(@name is used to
   coordinate when @link(DataSetUnit.TDataArray)s need to be updated.)
   }
-  TObserver = class(TComponent)
+  TObserver = class(TComponent, IObserver)
   private
     // @name: boolean;
     // See @link(Observed).

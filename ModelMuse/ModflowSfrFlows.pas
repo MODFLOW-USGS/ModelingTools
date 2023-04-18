@@ -3,7 +3,9 @@ unit ModflowSfrFlows;
 interface
 
 uses SysUtils, Classes, RbwParser, OrderedCollectionUnit,
-  ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit, GoPhastTypes;
+  ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit, GoPhastTypes;
 
 type
   TSfrSegmentFlowRecord = record
@@ -51,10 +53,10 @@ type
   // @name is stored by @link(TSfrCollection).
   TSfrSegmentFlowItem = class(TCustomModflowBoundaryItem)
   private
-    FFlow: TFormulaObject;
-    FPrecipitation: TFormulaObject;
-    FEvapotranspiration: TFormulaObject;
-    FRunnoff: TFormulaObject;
+    FFlow: IFormulaObject;
+    FPrecipitation: IFormulaObject;
+    FEvapotranspiration: IFormulaObject;
+    FRunnoff: IFormulaObject;
     procedure SetPrecipitation(const Value: string);
     procedure SetFlow(const Value: string);
     procedure SetEvapotranspiration(const Value: string);
@@ -226,19 +228,19 @@ end;
 
 procedure TSfrSegmentFlowItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FFlow then
+  if Sender = FFlow as TObject then
   begin
     List.Add(FObserverList[FlowPosition]);
   end;
-  if Sender = FPrecipitation then
+  if Sender = FPrecipitation as TObject then
   begin
     List.Add(FObserverList[PrecipitationPosition]);
   end;
-  if Sender = FEvapotranspiration then
+  if Sender = FEvapotranspiration as TObject then
   begin
     List.Add(FObserverList[EvapotranspirationPosition]);
   end;
-  if Sender = FRunnoff then
+  if Sender = FRunnoff as TObject then
   begin
     List.Add(FObserverList[RunnoffPosition]);
   end;

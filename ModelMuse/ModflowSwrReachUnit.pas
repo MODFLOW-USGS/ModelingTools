@@ -5,7 +5,8 @@ interface
 uses
   ModflowCellUnit, ModflowBoundaryUnit, GoPhastTypes, Classes,
   OrderedCollectionUnit, Generics.Collections,
-  FormulaManagerUnit, ModflowSwrReachGeometryUnit, ZLib, RbwParser,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  ModflowSwrReachGeometryUnit, ZLib, RbwParser,
   SysUtils, SubscriptionUnit, ModflowSwrObsUnit, OrderedCollectionInterfaceUnit;
 
 type
@@ -82,10 +83,10 @@ type
   TSwrTransientReachItem = class(TCustomModflowBoundaryItem)
   private
     FReachType: TSwrReachType;
-    FVerticalOffset: TFormulaObject;
+    FVerticalOffset: IFormulaObject;
     FGeom: TReachGeometryItem;
     FGeometryName: string;
-    FStageOffset: TFormulaObject;
+    FStageOffset: IFormulaObject;
     function GetGeometryName: string;
     function GetVerticalOffset: string;
     procedure SetGeometryName(const Value: string);
@@ -246,7 +247,7 @@ type
   TSwrReachBoundary = class(TModflowBoundary)
   private
     FRouteType: TSwrRouteType;
-    FReachLengthFormula: TFormulaObject;
+    FReachLengthFormula: IFormulaObject;
     FConnections: TSwrConnections;
     FMultiLayer: Boolean;
     FGroupNumber: Integer;
@@ -254,8 +255,8 @@ type
     FObsTypes: TSwrObsTypes;
     FPestVerticalOffsetMethod: TPestParamMethod;
     FPestStageMethod: TPestParamMethod;
-    FPestVerticalOffsetFormula: TFormulaObject;
-    FPestStageFormula: TFormulaObject;
+    FPestVerticalOffsetFormula: IFormulaObject;
+    FPestStageFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestStageObserver: TObserver;
     FPestVerticalOffsetObserver: TObserver;
@@ -302,9 +303,6 @@ type
 
     procedure HandleChangedValue(Observer: TObserver); //override;
     function GetUsedObserver: TObserver; //override;
-//    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
-//    procedure CreateFormulaObjects; //override;
-//    function BoundaryObserverPrefix: string; override;
     procedure CreateObservers; //override;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
@@ -451,11 +449,11 @@ end;
 procedure TSwrTransientReachItem.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
-  if Sender = FVerticalOffset then
+  if Sender = FVerticalOffset as TObject then
   begin
     List.Add( FObserverList[SwrVerticalOffsetPosition]);
   end;
-  if Sender = FStageOffset then
+  if Sender = FStageOffset as TObject then
   begin
     List.Add( FObserverList[SwrStagePosition]);
   end;
@@ -1484,21 +1482,21 @@ end;
 
 procedure TSwrReachBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestVerticalOffsetFormula then
+  if Sender = FPestVerticalOffsetFormula as TObject then
   begin
     if SwrVerticalOffsetPosition+SwrOffset < FObserverList.Count then
     begin
       List.Add(FObserverList[SwrVerticalOffsetPosition+SwrOffset]);
     end;
   end;
-  if Sender = FPestStageFormula then
+  if Sender = FPestStageFormula as TObject then
   begin
     if SwrStagePosition+SwrOffset < FObserverList.Count then
     begin
       List.Add(FObserverList[SwrStagePosition+SwrOffset]);
     end;
   end;
-  if Sender = FReachLengthFormula then
+  if Sender = FReachLengthFormula as TObject then
   begin
     if SwrReachLengthPosition < FObserverList.Count then
     begin

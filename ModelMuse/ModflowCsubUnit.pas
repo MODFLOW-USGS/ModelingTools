@@ -4,7 +4,9 @@ interface
 
 uses
   GoPhastTypes, System.Classes, ModflowCellUnit, System.ZLib,
-  ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, RbwParser,
+  ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  OrderedCollectionUnit, RbwParser,
   RealListUnit, System.SysUtils, SubscriptionUnit,
   OrderedCollectionInterfaceUnit;
 
@@ -40,14 +42,14 @@ type
     FInterbedSystemName: string;
     FUsed: Boolean;
     FInterbed: TObject;
-    FDelayKv: TFormulaObject;
-    FEquivInterbedNumber: TFormulaObject;
-    FInitialDelayHeadOffset: TFormulaObject;
-    FInitialElasticSpecificStorage: TFormulaObject;
-    FInitialInelasticSpecificStorage: TFormulaObject;
-    FInitialOffset: TFormulaObject;
-    FInitialPorosity: TFormulaObject;
-    FThickness: TFormulaObject;
+    FDelayKv: IFormulaObject;
+    FEquivInterbedNumber: IFormulaObject;
+    FInitialDelayHeadOffset: IFormulaObject;
+    FInitialElasticSpecificStorage: IFormulaObject;
+    FInitialInelasticSpecificStorage: IFormulaObject;
+    FInitialOffset: IFormulaObject;
+    FInitialPorosity: IFormulaObject;
+    FThickness: IFormulaObject;
     function GetInterbedSystemName: string;
     procedure SetUsed(const Value: Boolean);
     procedure SetInterbed(const Value: TObject);
@@ -169,7 +171,7 @@ type
   TCSubItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(StressOffset).
-    FStressOffset: TFormulaObject;
+    FStressOffset: IFormulaObject;
     // See @link(StressOffset).
     procedure SetStressOffset(const Value: string);
     function GetStressOffset: string;
@@ -279,7 +281,7 @@ type
   private
     FCSubPackageData: TCSubPackageDataCollection;
     FPestStressOffsetMethod: TPestParamMethod;
-    FPestStressOffsetFormula: TFormulaObject;
+    FPestStressOffsetFormula: IFormulaObject;
     FPestStressOffsetObserver: TObserver;
     FUsedObserver: TObserver;
     procedure SetCSubPackageData(const Value: TCSubPackageDataCollection);
@@ -528,14 +530,14 @@ end;
 procedure TCSubPackageData.CreateFormulaObjects;
 begin
 
-  FDelayKv := CreateBlockFormulaObject(dso3D);
-  FEquivInterbedNumber := CreateBlockFormulaObject(dso3D);
-  FInitialDelayHeadOffset := CreateBlockFormulaObject(dso3D);
-  FInitialElasticSpecificStorage := CreateBlockFormulaObject(dso3D);
-  FInitialInelasticSpecificStorage := CreateBlockFormulaObject(dso3D);
-  FInitialOffset := CreateBlockFormulaObject(dso3D);
-  FInitialPorosity := CreateBlockFormulaObject(dso3D);
-  FThickness := CreateBlockFormulaObject(dso3D);
+  FDelayKv := CreateBlockFormulaObject(dso3D) as TFormulaObject;
+  FEquivInterbedNumber := CreateBlockFormulaObject(dso3D) as TFormulaObject;
+  FInitialDelayHeadOffset := CreateBlockFormulaObject(dso3D) as TFormulaObject;
+  FInitialElasticSpecificStorage := CreateBlockFormulaObject(dso3D) as TFormulaObject;
+  FInitialInelasticSpecificStorage := CreateBlockFormulaObject(dso3D) as TFormulaObject;
+  FInitialOffset := CreateBlockFormulaObject(dso3D) as TFormulaObject;
+  FInitialPorosity := CreateBlockFormulaObject(dso3D) as TFormulaObject;
+  FThickness := CreateBlockFormulaObject(dso3D) as TFormulaObject;
 end;
 
 destructor TCSubPackageData.Destroy;
@@ -1110,7 +1112,7 @@ end;
 
 procedure TCSubItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FStressOffset);
+  Assert(Sender = FStressOffset as TObject);
   List.Add(FObserverList[CsubStressOffsetPosition]);
 end;
 
@@ -1785,7 +1787,7 @@ end;
 
 procedure TCSubBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestStressOffsetFormula then
+  if Sender = FPestStressOffsetFormula as TObject then
   begin
     if CsubStressOffsetPosition < FObserverList.Count then
     begin

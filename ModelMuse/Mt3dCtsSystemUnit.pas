@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
-  System.Generics.Collections, Mt3dmsChemUnit, FormulaManagerUnit,
+  System.Generics.Collections, Mt3dmsChemUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   ScreenObjectUnit, OrderedCollectionInterfaceUnit;
 
 type
@@ -191,8 +192,8 @@ type
   TCtsExternalFlowsItem = class(TCustomModflowBoundaryItem)
   private
     FInflowConcentrations: TStringConcCollection;
-    FInflowFormula: TFormulaObject;
-    FOutflowFormula: TFormulaObject;
+    FInflowFormula: IFormulaObject;
+    FOutflowFormula: IFormulaObject;
     function GetInflow: string;
     function GetOutflow: string;
     procedure SetInflow(const Value: string);
@@ -828,11 +829,11 @@ end;
 procedure TCtsExternalFlowsItem.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
-  if (Sender = FInflowFormula) then
+  if (Sender = FInflowFormula as TObject) then
   begin
     List.Add(FObserverList[InflowPosition]);
   end
-  else if (Sender = FOutflowFormula) then
+  else if (Sender = FOutflowFormula as TObject) then
   begin
     List.Add(FObserverList[OutflowPosition]);
   end

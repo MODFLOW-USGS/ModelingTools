@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, System.ZLib, ModflowCellUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, System.Generics.Collections, OrderedCollectionUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  System.Generics.Collections, OrderedCollectionUnit,
   GoPhastTypes, RbwParser;
 
 type
@@ -48,8 +49,8 @@ type
 
   TRipItem = class(TCustomModflowBoundaryItem)
   private
-    FLandElevation: TFormulaObject;
-    FCoverages: TList<TFormulaObject>;
+    FLandElevation: IFormulaObject;
+    FCoverages: TList<IFormulaObject>;
     FCoverageFormulas: TStrings;
     FCoverageID: TIntegerCollection;
     function GetLandElevation: string;
@@ -453,7 +454,7 @@ end;
 procedure TRipItem.CoverageFormulaChanged(Sender: TObject);
 var
   Index: integer;
-  AFormulaObject: TFormulaObject;
+  AFormulaObject: IFormulaObject;
 begin
   if Model = nil then
   begin
@@ -507,7 +508,7 @@ begin
   begin
     InvalidateModelEvent := (Model as TCustomModel).DoInvalidate;
   end;
-  FCoverages := TList<TFormulaObject>.Create;
+  FCoverages := TList<IFormulaObject>.Create;
   FCoverageFormulas := TStringList.Create;
   (FCoverageFormulas as TStringList).OnChange := CoverageFormulaChanged;
   FCoverageID := TIntegerCollection.Create(InvalidateModelEvent);
@@ -581,7 +582,7 @@ procedure TRipItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Position: Integer;
 begin
-  if Sender = FLandElevation then
+  if Sender = FLandElevation as TObject then
   begin
     List.Add(FObserverList[LandElevationPosition]);
   end
@@ -631,7 +632,7 @@ procedure TRipItem.RemoveFormulaObjects;
 var
   CoverageIndex: Integer;
   FormulaManager: TFormulaManager;
-  ACoverage: TFormulaObject;
+  ACoverage: IFormulaObject;
 begin
   FormulaManager := frmGoPhast.PhastModel.FormulaManager;
   FormulaManager.Remove(FLandElevation,
@@ -649,7 +650,7 @@ end;
 procedure TRipItem.RemovePlantGroup(PlantGroupID: Integer);
 var
   CoverageIndex: Integer;
-  ACoverage: TFormulaObject;
+  ACoverage: IFormulaObject;
   LocalScreenObject: TScreenObject;
   Observer: TObserver;
 begin
@@ -696,7 +697,7 @@ end;
 
 procedure TRipItem.SetBoundaryFormula(Index: integer; const Value: string);
 var
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   case Index of
     LandElevationPosition:

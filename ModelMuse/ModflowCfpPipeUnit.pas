@@ -3,19 +3,20 @@ unit ModflowCfpPipeUnit;
 interface
 
 uses Classes, RbwParser, GoPhastTypes, ModflowBoundaryUnit, SubscriptionUnit,
-  FormulaManagerUnit, SysUtils;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SysUtils;
 
 type
   // @name controls data set 25 in CFP
   TCfpPipeBoundary = class(TModflowSteadyBoundary)
   private
-    FDiameter: TFormulaObject;
-    FTortuosity: TFormulaObject;
-    FRoughnessHeight: TFormulaObject;
-    FLowerCriticalR: TFormulaObject;
-    FHigherCriticalR: TFormulaObject;
-    FConductancePermeability: TFormulaObject;
-    FElevation: TFormulaObject;
+    FDiameter: IFormulaObject;
+    FTortuosity: IFormulaObject;
+    FRoughnessHeight: IFormulaObject;
+    FLowerCriticalR: IFormulaObject;
+    FHigherCriticalR: IFormulaObject;
+    FConductancePermeability: IFormulaObject;
+    FElevation: IFormulaObject;
     FConductancePermeabilityObserver: TObserver;
     FDiameterObserver: TObserver;
     FHigherCriticalRObserver: TObserver;
@@ -373,31 +374,31 @@ end;
 
 procedure TCfpPipeBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FDiameter then
+  if Sender = FDiameter as TObject then
   begin
     List.Add(FObserverList[DiameterPosition]);
   end;
-  if Sender = FTortuosity then
+  if Sender = FTortuosity as TObject then
   begin
     List.Add(FObserverList[TortuosityPosition]);
   end;
-  if Sender = FRoughnessHeight then
+  if Sender = FRoughnessHeight as TObject then
   begin
     List.Add(FObserverList[RoughnessHeightPosition]);
   end;
-  if Sender = FLowerCriticalR then
+  if Sender = FLowerCriticalR as TObject then
   begin
     List.Add(FObserverList[LowerCriticalRPosition]);
   end;
-  if Sender = FHigherCriticalR then
+  if Sender = FHigherCriticalR as TObject then
   begin
     List.Add(FObserverList[HigherCriticalRPosition]);
   end;
-  if Sender = FConductancePermeability then
+  if Sender = FConductancePermeability as TObject then
   begin
     List.Add(FObserverList[ConductancePermeabilityPosition]);
   end;
-  if Sender = FElevation then
+  if Sender = FElevation as TObject then
   begin
     List.Add(FObserverList[ElevationPosition]);
   end;

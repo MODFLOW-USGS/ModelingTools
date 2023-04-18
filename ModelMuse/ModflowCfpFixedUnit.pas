@@ -3,7 +3,8 @@ unit ModflowCfpFixedUnit;
 interface
 
 uses Classes, RbwParser, GoPhastTypes, ModflowBoundaryUnit, SubscriptionUnit,
-  FormulaManagerUnit, SysUtils;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SysUtils;
 
 type
 
@@ -11,7 +12,7 @@ type
   // @link(TDataArray) "CfpFixedHeads."
   TCfpFixedBoundary = class(TModflowSteadyBoundary)
   private
-    FFixedHead: TFormulaObject;
+    FFixedHead: IFormulaObject;
     FFixedHeadObserver: TObserver;
     function GetFixedHead: string;
     procedure SetFixedHead(const Value: string);
@@ -116,7 +117,7 @@ end;
 
 procedure TCfpFixedBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FFixedHead then
+  if Sender = FFixedHead as TObject then
   begin
     List.Add(FObserverList[FixedHeadPosition]);
   end;

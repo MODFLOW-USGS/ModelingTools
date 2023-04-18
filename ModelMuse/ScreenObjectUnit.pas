@@ -62,7 +62,8 @@ uses
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
-  OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit;
+  OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit,
+  FormulaManagerInterfaceUnit;
 
 type
   //
@@ -1878,7 +1879,7 @@ view. }
       by calling @link(Changed).}
     FBottomElevSubscription: TObserver;
     // See @link(BoundaryDataSetFormulas).
-    FBoundaryDataSetFormulas: TList;
+    FBoundaryDataSetFormulas: TIformulaList;
     // See @link(BoundaryDataSets).
     FBoundaryDataSets: TList;
     {
@@ -1901,7 +1902,7 @@ view. }
     // See @link(Count).
     FCount: integer;
     // See @link(DataSetFormulas).
-    FDataSetFormulas: TList;
+    FDataSetFormulas: TIformulaList;
     // See @link(DataSets).
     FDataSets: TDataArrayList;
     {
@@ -2033,9 +2034,9 @@ view. }
     FPriorObjectIntersectLengthLayer: Integer;
     FPriorObjectIntersectLengthResult: Real;
     FCachedDataSetIndex: integer;
-    FElevationFormulaObject: TFormulaObject;
-    FHigherElevationFormulaObject: TFormulaObject;
-    FLowerElevationFormulaObject: TFormulaObject;
+    FElevationFormulaObject: IFormulaObject;
+    FHigherElevationFormulaObject: IFormulaObject;
+    FLowerElevationFormulaObject: IFormulaObject;
     FPriorObjectSectionIntersectLengthCol: integer;
     FPriorObjectSectionIntersectLengthRow: integer;
     FPriorObjectSectionIntersectLengthLayer: integer;
@@ -2727,7 +2728,7 @@ view. }
     function GetHigherElevationFormula: string;
     function GetLowerElevationFormula: string;
     procedure CreateOrRetrieveBoundaryFormulaObject(const Index: Integer;
-      ADataSet: TDataArray; var FormulaObject: TFormulaObject);
+      ADataSet: TDataArray; var FormulaObject: IFormulaObject);
     procedure RestoreBoundaryDataArraySubscription(Sender: TObject;
       const AName: string);
     procedure RemoveBoundaryDataArraySubscription(Sender: TObject;
@@ -3281,10 +3282,10 @@ view. }
     procedure CreateFormulaObjects;
     procedure SetFormulaParsers;
     procedure CreateOrRetrieveFormulaObject(const Index: Integer;
-      ADataSet: TDataArray; var FormulaObject: TFormulaObject);
+      ADataSet: TDataArray; var FormulaObject: IFormulaObject);
     procedure RemoveSubscriptionFromList(const AName: string; Sender: TObject;
-      List: TList; SubscriptionList: TObjectList);
-    procedure RestoreSubscriptionToList(List: TList; const AName: string;
+      List: TIformulaList; SubscriptionList: TObjectList);
+    procedure RestoreSubscriptionToList(List: TIformulaList; const AName: string;
       Sender: TObject; Subscriptions: TObjectList);
     function GetTestDataArray(const DataSet: TDataArray): TDataArray;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5492,7 +5493,7 @@ SectionStarts.}
     // See @link(Time).
     FTime: double;
     FFormulaObserver: TObserver;
-    FFormulaObject: TFormulaObject;
+    FFormulaObject: IFormulaObject;
     // @name determines the @link(TDataArray)s that are used in
     // @link(MixtureFormula) and has @link(FMixtureObserver) listen to
     // each of them.  See (TObserver.TalksTo).
@@ -7838,7 +7839,7 @@ var
   ADataSet: TDataArray;
   Observer: TObserver;
   FormulaIndex: Integer;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   Assert(FDataSetMixtureSubscriptions.Count = DataSetCount);
   for Index := 0 to FDataSetMixtureSubscriptions.Count -1 do
@@ -8054,7 +8055,7 @@ procedure TScreenObject.DeleteBoundaryDataSet(const Index: Integer);
 var
   DataSet: TDataArray;
   Subscription: TObserver;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   // Get rid of any subscriptions due to the formula.
   BoundaryDataSetFormulas[Index] := '0';
@@ -10226,8 +10227,8 @@ var
   Compiler: TRbwParser;
   ADataSet: TDataArray;
   DS: TObserver;
-  AFormulaObject: TFormulaObject;
-  FormulaObject: TFormulaObject;
+  AFormulaObject: IFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   if (Value = rsObjectImportedValuesR)
     or (Value = rsObjectImportedValuesI)
@@ -10374,7 +10375,7 @@ procedure TScreenObject.SetDataSets(const Index: integer; const DataSet:
   TDataArray);
 var
   OldIndex: integer;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   // Determine the position of DataSet in FDataSets.
   // If OldIndex < 0, DataSet is not in FDataSets.
@@ -11770,7 +11771,7 @@ begin
   end;
   if FDataSetFormulas = nil then
   begin
-    FDataSetFormulas := TList.Create;
+    FDataSetFormulas := TIformulaList.Create;
   end;
 
   if FDataSetSubscriptions = nil then
@@ -16108,7 +16109,7 @@ end;
 function TScreenObject.GetBoundaryDataSetFormulas(
   const Index: integer): string;
 var
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   Assert(FBoundaryDataSetFormulas <> nil);
   FormulaObject := FBoundaryDataSetFormulas[Index];
@@ -16135,7 +16136,7 @@ var
   Compiler: TRbwParser;
   ADataSet: TDataArray;
   DS: TObserver;
-  AFormulaObject: TFormulaObject;
+  AFormulaObject: IFormulaObject;
 begin
   Assert(FBoundaryDataSetFormulas <> nil);
   AFormulaObject := FBoundaryDataSetFormulas[Index];
@@ -16259,7 +16260,7 @@ procedure TScreenObject.SetBoundaryDataSets(const Index: integer;
   const DataSet: TDataArray);
 var
   OldIndex: integer;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   CreateBoundaryDataSets;
   // Determine the position of DataSet in FDataSets.
@@ -16305,7 +16306,7 @@ var
   Index: integer;
   ADataSet: TDataArray;
   Observer: TObserver;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   CreateBoundaryDataSetSubscriptions;
   CreateBoundaryDataSets;
@@ -19343,7 +19344,7 @@ begin
   end;
 end;
 
-procedure TScreenObject.RestoreSubscriptionToList(List: TList;
+procedure TScreenObject.RestoreSubscriptionToList(List: TIformulaList;
   const AName: string; Sender: TObject; Subscriptions: TObjectList);
 var
   DS: TObserver;
@@ -19352,7 +19353,7 @@ var
 begin
   if FCanInvalidateModel then
   begin
-    Index := List.IndexOf(Sender);
+    Index := List.IndexOf(Sender as TFormulaObject);
     Assert(Index >= 0);
     Observer := Subscriptions[Index] as TObserver;
     DS := (FModel as TPhastModel).GetObserverByName(AName);
@@ -19363,7 +19364,7 @@ begin
 end;
 
 procedure TScreenObject.RemoveSubscriptionFromList(const AName: string;
-  Sender: TObject; List: TList; SubscriptionList: TObjectList);
+  Sender: TObject; List: TIformulaList; SubscriptionList: TObjectList);
 var
   DS: TObserver;
   Observer: TObserver;
@@ -19371,7 +19372,7 @@ var
 begin
   if FCanInvalidateModel then
   begin
-    Index := List.IndexOf(Sender);
+    Index := List.IndexOf(Sender as TFormulaObject);
     Assert(Index >= 0);
     Observer := SubscriptionList[Index] as TObserver;
     DS := (FModel as TPhastModel).GetObserverByName(AName);
@@ -19578,7 +19579,7 @@ begin
 end;
 
 procedure TScreenObject.CreateOrRetrieveBoundaryFormulaObject(const Index: Integer;
-  ADataSet: TDataArray; var FormulaObject: TFormulaObject);
+  ADataSet: TDataArray; var FormulaObject: IFormulaObject);
 begin
   if FBoundaryDataSetFormulas[Index] = nil then
   begin
@@ -19597,7 +19598,7 @@ begin
 end;
 
 procedure TScreenObject.CreateOrRetrieveFormulaObject(const Index: Integer;
-  ADataSet: TDataArray; var FormulaObject: TFormulaObject);
+  ADataSet: TDataArray; var FormulaObject: IFormulaObject);
 begin
   if FDataSetFormulas[Index] = nil then
   begin
@@ -19635,7 +19636,7 @@ end;
 procedure TScreenObject.SetFormulaParsers;
 var
   Index: Integer;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
   ADataArray: TDataArray;
 begin
   SetElevationFormulaParser;
@@ -19982,7 +19983,7 @@ var
   Index: Integer;
   DataArray: TDataArray;
   FormulaIndex: Integer;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
 //  FSubObservations.Free;
   FStoredMinimumFraction.Free;
@@ -20221,7 +20222,7 @@ end;
 
 function TScreenObject.GetDataSetFormulas(const Index: integer): string;
 var
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   FormulaObject := FDataSetFormulas[Index];
   if FormulaObject = nil then
@@ -32120,7 +32121,7 @@ procedure TScreenObject.DeleteDataSet(const Index: Integer);
 var
   FormulaSubscription, MixtureSubscription: TObserver;
   DataSet: TDataArray;
-  FormulaObject: TFormulaObject;
+  FormulaObject: IFormulaObject;
 begin
   // Get rid of any subscriptions due to the formula.
   MixtureDataSetFormula[Index] := '0';
@@ -39007,7 +39008,7 @@ procedure TScreenObject.CreateBoundaryDataSetFormulas;
 begin
   if FBoundaryDataSetFormulas = nil then
   begin
-    FBoundaryDataSetFormulas := TList.Create;
+    FBoundaryDataSetFormulas := TIformulaList.Create;
   end;
 end;
 

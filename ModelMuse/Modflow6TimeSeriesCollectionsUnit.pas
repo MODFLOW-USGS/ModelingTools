@@ -1080,49 +1080,6 @@ begin
 //  {$ENDIF}
 end;
 
-{ TDynamicTimeSeriesItem }
-
-//procedure TDynamicTimeSeriesItem.Assign(Source: TPersistent);
-//begin
-//  if Source is TDynamicTimeSeriesItem then
-//  begin
-//    TimeSeries := TDynamicTimeSeriesItem(Source).TimeSeries;
-//  end
-//  else
-//  begin
-//    inherited;
-//  end;
-//end;
-//
-//constructor TDynamicTimeSeriesItem.Create(Collection: TCollection);
-//var
-//  DyanmicCollection: TDyanmicTimesSeriesCollection;
-//begin
-//  Assert(Collection <> nil);
-//  inherited;
-//  DyanmicCollection := (Collection as TDyanmicTimesSeriesCollection);
-//  FModel := DyanmicCollection.FModel;
-//  FDynamicTimeSeries := TDynamicTimeSeries.Create(FModel as IModelForDynamicTimeSeries);
-//end;
-//
-//destructor TDynamicTimeSeriesItem.Destroy;
-//begin
-//  FDynamicTimeSeries.Free;
-//  inherited;
-//end;
-//
-//function TDynamicTimeSeriesItem.IsSame(AnotherItem: TOrderedItem): boolean;
-//begin
-//  result := (AnotherItem is TDynamicTimeSeriesItem)
-//    and (TimeSeries.IsSame(TDynamicTimeSeriesItem(AnotherItem).TimeSeries));
-//end;
-//
-//procedure TDynamicTimeSeriesItem.SetTimeSeries(
-//  const Value: TDynamicTimeSeries);
-//begin
-//
-//end;
-
 { TCustomTimesSeriesCollection }
 
 procedure TCustomTimesSeriesCollection.Assign(Source: TPersistent);

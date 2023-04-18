@@ -4,7 +4,8 @@ interface
 
 uses Windows, Classes, SysUtils, ZLib, GoPhastTypes,
   OrderedCollectionUnit, ModflowCellUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, SubscriptionUnit;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit;
 
 type
   TSfrUnsatSegmentRecord = record
@@ -57,10 +58,10 @@ type
   // @name is stored by @link(TSfrUnsatSegmentCollection).
   TSfrUnsatSegmentItem = class(TCustomModflowBoundaryItem)
   private
-    FInitialWaterContent: TFormulaObject;
-    FSaturatedWaterContent: TFormulaObject;
-    FBrooksCoreyExponent: TFormulaObject;
-    FVerticalSaturatedK: TFormulaObject;
+    FInitialWaterContent: IFormulaObject;
+    FSaturatedWaterContent: IFormulaObject;
+    FBrooksCoreyExponent: IFormulaObject;
+    FVerticalSaturatedK: IFormulaObject;
     procedure SetBrooksCoreyExponent(const Value: string);
     procedure SetSaturatedWaterContent(const Value: string);
     procedure SetInitialWaterContent(const Value: string);
@@ -310,19 +311,19 @@ end;
 
 procedure TSfrUnsatSegmentItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FSaturatedWaterContent then
+  if Sender = FSaturatedWaterContent as TObject then
   begin
     List.Add(FObserverList[UnsatSaturatedWaterContentPosition]);
   end;
-  if Sender = FInitialWaterContent then
+  if Sender = FInitialWaterContent as TObject then
   begin
     List.Add(FObserverList[UnSatInitialWaterContentPosition]);
   end;
-  if Sender = FBrooksCoreyExponent then
+  if Sender = FBrooksCoreyExponent as TObject then
   begin
     List.Add(FObserverList[UnSatBrooksCoreyExponentPosition]);
   end;
-  if Sender = FVerticalSaturatedK then
+  if Sender = FVerticalSaturatedK as TObject then
   begin
     List.Add(FObserverList[UnSatVerticalSaturatedKPosition]);
   end;

@@ -3,7 +3,8 @@ unit ModflowFmpPrecipitationUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -57,7 +58,7 @@ type
   TFmpPrecipItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(PrecipRate).
-    FPrecipRate: TFormulaObject;
+    FPrecipRate: IFormulaObject;
     // See @link(PrecipRate).
     procedure SetPrecipRate(const Value: string);
     function GetPrecipRate: string;
@@ -270,7 +271,7 @@ end;
 
 procedure TFmpPrecipItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FPrecipRate);
+  Assert(Sender = FPrecipRate as TObject);
   List.Add(FObserverList[PrecipPosition]);
 end;
 

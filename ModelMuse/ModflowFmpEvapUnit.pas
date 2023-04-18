@@ -3,7 +3,8 @@ unit ModflowFmpEvapUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -57,7 +58,7 @@ type
   TFmpRefEvapItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(RefEvapRate).
-    FRefEvapRate: TFormulaObject;
+    FRefEvapRate: IFormulaObject;
     // See @link(RefEvapRate).
     procedure SetRefEvapRate(const Value: string);
     function GetRefEvapRate: string;
@@ -264,7 +265,7 @@ end;
 
 procedure TFmpRefEvapItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FRefEvapRate);
+  Assert(Sender = FRefEvapRate as TObject);
   List.Add(FObserverList[RefEvapPosition]);
 end;
 

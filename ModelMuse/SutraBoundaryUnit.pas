@@ -6,7 +6,7 @@ uses
   GoPhastTypes, Classes, OrderedCollectionUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, Generics.Collections, RbwParser, DataSetUnit,
   SysUtils, SubscriptionUnit, SutraOptionsUnit, RealListUnit,
-  OrderedCollectionInterfaceUnit;
+  OrderedCollectionInterfaceUnit, FormulaManagerInterfaceUnit;
 
 type
   TObservationFormat = (ofOBS, ofOBC);
@@ -99,8 +99,8 @@ type
     FUseBCTime: Boolean;
     FPestBoundaryValueMethod: TPestParamMethod;
     FPestAssociatedValueMethod: TPestParamMethod;
-    FPestBoundaryValueFormula: TFormulaObject;
-    FPestAssociatedValueFormula: TFormulaObject;
+    FPestBoundaryValueFormula: IFormulaObject;
+    FPestAssociatedValueFormula: IFormulaObject;
 //    FOnInvalidateAssociatedPestBoundaryValue: TNotifyEvent;
 //    FOnInvalidatePestBoundaryValue: TNotifyEvent;
     FPestAssociatedValueObserver: TObserver;
@@ -201,10 +201,10 @@ type
     FractionRechargeDivertedPosition = 2;
     FractionDischargeDivertedPosition = 3;
     var
-    FInitialStage: TFormulaObject;
-    FInitialConcentrationOrTemperature: TFormulaObject;
-    FFractionRechargeDiverted: TFormulaObject;
-    FFractionDischargeDiverted: TFormulaObject;
+    FInitialStage: IFormulaObject;
+    FInitialConcentrationOrTemperature: IFormulaObject;
+    FFractionRechargeDiverted: IFormulaObject;
+    FFractionDischargeDiverted: IFormulaObject;
     FInitialStageObserver: TObserver;
     FFracDisDivObserver: TObserver;
     FFracRechDivObserver: TObserver;
@@ -264,8 +264,8 @@ type
 
   TCustomSutraBoundaryItem = class(TCustomBoundaryItem)
   private
-    FUFormulaObject: TFormulaObject;
-    FUsedFormulaObject: TFormulaObject;
+    FUFormulaObject: IFormulaObject;
+    FUsedFormulaObject: IFormulaObject;
     FUsed: Boolean;
     procedure SetUFormula(const Value: string);
     function GetUFormula: string;
@@ -274,7 +274,7 @@ type
     procedure SetUsedFormula(const Value: string);
   protected
     function CreateFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject; override;
+      TDataSetOrientation): IFormulaObject; override;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -344,7 +344,7 @@ type
 
   TCustomSutraAssociatedBoundaryItem = class(TCustomSutraBoundaryItem)
   private
-    FPQFormulaObject: TFormulaObject;
+    FPQFormulaObject: IFormulaObject;
     procedure SetPQFormula(const Value: string);
     function GetPQFormula: string;
   protected
@@ -763,7 +763,7 @@ end;
 procedure TCustomSutraAssociatedBoundaryItem.GetPropertyObserver(
   Sender: TObject; List: TList);
 begin
-  if Sender = FPQFormulaObject then
+  if Sender = FPQFormulaObject as TObject then
   begin
     List.Add(FObserverList[PQFormulaPosition]);
   end
@@ -910,7 +910,7 @@ begin
 end;
 
 function TCustomSutraBoundaryItem.CreateFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
+  Orientation: TDataSetOrientation): IFormulaObject;
 begin
   result := frmGoPhast.PhastModel.FormulaManager.Add;
   case Orientation of
@@ -955,11 +955,11 @@ end;
 procedure TCustomSutraBoundaryItem.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
-  if Sender = FUFormulaObject then
+  if Sender = FUFormulaObject as TObject then
   begin
     List.Add(FObserverList[UFormulaPosition]);
   end
-  else if Sender = FUsedFormulaObject then
+  else if Sender = FUsedFormulaObject as TObject then
   begin
     List.Add(FObserverList[UsedFormulaPosition]);
   end

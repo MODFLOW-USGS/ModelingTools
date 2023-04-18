@@ -4,7 +4,9 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, RealListUnit,
   OrderedCollectionUnit, ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
-  ModflowRchUnit, ModflowEvtUnit, FormulaManagerUnit, SubscriptionUnit,
+  ModflowRchUnit, ModflowEvtUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit,
   GoPhastTypes;
 
 type
@@ -81,7 +83,7 @@ type
   TUzfExtinctDepthItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(UzfExtinctDepth).
-    FUzfExtinctDepth: TFormulaObject;
+    FUzfExtinctDepth: IFormulaObject;
     // See @link(UzfExtinctDepth).
     procedure SetUzfExtinctDepth(const Value: string);
     function GetUzfExtinctDepth: string;
@@ -112,7 +114,7 @@ type
   TUzfWaterContentItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(UzfWaterContent).
-    FUzfWaterContent: TFormulaObject;
+    FUzfWaterContent: IFormulaObject;
     // See @link(UzfWaterContent).
     procedure SetUzfWaterContent(const Value: string);
     function GetUzfWaterContent: string;
@@ -326,10 +328,10 @@ type
     FPestWaterContentMethod: TPestParamMethod;
     FPestETDemandMethod: TPestParamMethod;
     FPestInfiltrationRateMethod: TPestParamMethod;
-    FPestInfiltrationRateFormula: TFormulaObject;
-    FPestETDemandFormula: TFormulaObject;
-    FPestExtinctionDepthFormula: TFormulaObject;
-    FPestWaterContentFormula: TFormulaObject;
+    FPestInfiltrationRateFormula: IFormulaObject;
+    FPestETDemandFormula: IFormulaObject;
+    FPestExtinctionDepthFormula: IFormulaObject;
+    FPestWaterContentFormula: IFormulaObject;
     FPestETDemandObserver: TObserver;
     FPestExtinctionDepthObserver: TObserver;
     FPestInfiltrationRateObserver: TObserver;
@@ -996,28 +998,28 @@ end;
 
 procedure TUzfBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestInfiltrationRateFormula then
+  if Sender = FPestInfiltrationRateFormula as TObject then
   begin
     if UzfInfiltrationBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[UzfInfiltrationBoundaryPosition]);
     end;
   end;
-  if Sender = FPestEtDemandFormula then
+  if Sender = FPestEtDemandFormula as TObject then
   begin
     if UzfEtDemandBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[UzfEtDemandBoundaryPosition]);
     end;
   end;
-  if Sender = FPestExtinctionDepthFormula then
+  if Sender = FPestExtinctionDepthFormula as TObject then
   begin
     if UzfExtinctionDepthBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[UzfExtinctionDepthBoundaryPosition]);
     end;
   end;
-  if Sender = FPestWaterContentFormula then
+  if Sender = FPestWaterContentFormula as TObject then
   begin
     if UzfWaterContentBoundaryPosition < FObserverList.Count then
     begin
@@ -1409,7 +1411,7 @@ end;
 
 procedure TUzfExtinctDepthItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FUzfExtinctDepth);
+  Assert(Sender = FUzfExtinctDepth as TObject);
   List.Add( FObserverList[UzfExtinctDepthPosition]);
 end;
 
@@ -1499,7 +1501,7 @@ end;
 
 procedure TUzfWaterContentItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FUzfWaterContent);
+  Assert(Sender = FUzfWaterContent as TObject);
   List.Add( FObserverList[UzfWaterContentPosition]);
 end;
 

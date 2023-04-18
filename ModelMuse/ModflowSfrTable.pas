@@ -3,7 +3,9 @@ unit ModflowSfrTable;
 interface
 
 uses SysUtils, Classes, RbwParser, GoPhastTypes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit,
+  ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit,
   OrderedCollectionInterfaceUnit;
 
 type
@@ -34,10 +36,10 @@ type
       WidthPosition = 2;
     var
     FObserverList: TList;
-    FFormulaList: TList;
-    FWidth: TFormulaObject;
-    FFlow: TFormulaObject;
-    FDepth: TFormulaObject;
+    FFormulaList: TIformulaList;
+    FWidth: IFormulaObject;
+    FFlow: IFormulaObject;
+    FDepth: IFormulaObject;
     FFlowObserver: TObserver;
     FWidthObserver: TObserver;
     FDepthObserver: TObserver;
@@ -48,8 +50,8 @@ type
     function GetFlow: string;
     function GetWidth: string;
     function SfrTable: TSfrTable;
-    function CreateFormulaObject: TFormulaObject;
-    procedure ResetItemObserver(FormulaObject: TFormulaObject);
+    function CreateFormulaObject: IFormulaObject;
+    procedure ResetItemObserver(FormulaObject: IFormulaObject);
   protected
     procedure GetPropertyObserver(Sender: TObject; List: TList);
     procedure RemoveSubscription(Sender: TObject; const AName: string);
@@ -487,7 +489,7 @@ begin
   (Subject as TSfrTableRowItem).RestoreSubscription(Sender, AName);
 end;
 
-function TSfrTableRowItem.CreateFormulaObject: TFormulaObject;
+function TSfrTableRowItem.CreateFormulaObject: IFormulaObject;
 begin
   result := frmGoPhast.PhastModel.FormulaManager.Add;
   result.Parser := frmGoPhast.PhastModel.rpTopFormulaCompiler;
@@ -514,7 +516,7 @@ begin
   FDepth := CreateFormulaObject;
   FWidth := CreateFormulaObject;
 
-  FFormulaList := TList.Create;
+  FFormulaList := TIformulaList.Create;
   FFormulaList.Add(FFlow);
   FFormulaList.Add(FDepth);
   FFormulaList.Add(FWidth);
@@ -583,7 +585,7 @@ var
 begin
   for Index := 0 to FFormulaList.Count - 1 do
   begin
-    if FFormulaList[Index] = Sender then
+    if FFormulaList[Index] as TObject = Sender then
     begin
       List.Add(FObserverList[Index])
     end;
@@ -637,7 +639,7 @@ begin
   end;
 end;
 
-procedure TSfrTableRowItem.ResetItemObserver(FormulaObject: TFormulaObject);
+procedure TSfrTableRowItem.ResetItemObserver(FormulaObject: IFormulaObject);
 var
   List: TList;
   Observer: TObserver;
@@ -645,7 +647,7 @@ var
 begin
   List := TList.Create;
   try
-    GetPropertyObserver(FormulaObject, List);
+    GetPropertyObserver(FormulaObject as TFormulaObject, List);
     for ObserverIndex := 0 to List.Count - 1 do
     begin
       Observer := List[ObserverIndex];

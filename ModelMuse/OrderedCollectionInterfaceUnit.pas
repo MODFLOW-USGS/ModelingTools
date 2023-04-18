@@ -5,7 +5,8 @@ interface
 uses
   GoPhastTypes, RbwParser, ModelMuseInterfaceUnit,
   FormulaManagerInterfaceUnit,
-  SubscriptionUnit, ScreenObjectInterfaceUnit,
+  SubscriptionInterfaceUnit,
+  ScreenObjectInterfaceUnit,
   DataArrayInterfaceUnit;
 
 type
@@ -16,13 +17,14 @@ type
       Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt); overload;
     function GetDataArrayInterface: ISimpleDataArrayManager;
     procedure UpdateFormulaDependencies(OldFormula: string;
-      var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
-    function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TObject;
+      var NewFormula: string; Observer: IObserver; Compiler: TRbwParser);
+//    function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TObject;
+    function CreateBlockFormulaObjectI(Orientation: TDataSetOrientation): IFormulaObject;
     function GetCompiler(const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt): TRbwParser;
     property FormulaCompiler[const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt]:TRbwParser read GetCompiler;
-    procedure ChangeFormula(var FormulaObject: TObject;
+    procedure ChangeFormula(var FormulaObject: IFormulaObject;
       NewFormula: string; EvaluatedAt: TEvaluatedAt; OnRemoveSubscription,
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetClearing: Boolean;
@@ -67,6 +69,15 @@ type
     procedure NotifyHufKz;
     procedure NotifyHufSS;
     procedure NotifyHufSy;
+  end;
+
+  IOrderedItem = interface
+    ['{6A44459F-D802-4A96-9D31-A6C8E4602DA8}']
+    function IsSame(AnotherItem: IOrderedItem): boolean; overload;
+  end;
+
+  IOrderedCollection = interface
+    ['{B1C9519C-75D5-406A-ACEC-4FF0FC1D39C7}']
   end;
 
 implementation

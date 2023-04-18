@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes;
 
 type
@@ -46,9 +47,9 @@ type
 
   TFmpWellItem = class(TCustomModflowBoundaryItem)
   private
-    FMaxPumpingRate: TFormulaObject;
-    FPumpOnlyIfCropRequiresWater: TFormulaObject;
-    FFarmID: TFormulaObject;
+    FMaxPumpingRate: IFormulaObject;
+    FPumpOnlyIfCropRequiresWater: IFormulaObject;
+    FFarmID: IFormulaObject;
     FConstructed: Boolean;
     procedure SetMaxPumpingRate(const Value: string);
     function GetMaxPumpingRate: string;
@@ -197,7 +198,7 @@ type
   TFmpWellBoundary = class(TSpecificModflowBoundary)
   private
     FPestMaxPumpingRateMethod: TPestParamMethod;
-    FPestMaxPumpingRateFormula: TFormulaObject;
+    FPestMaxPumpingRateFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestMaxPumpingRateObserver: TObserver;
     function GetPestMaxPumpingRateFormula: string;
@@ -218,7 +219,6 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
-//    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
 
     procedure HandleChangedValue(Observer: TObserver); //override;
     function GetUsedObserver: TObserver; //override;
@@ -516,15 +516,15 @@ end;
 
 procedure TFmpWellItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FMaxPumpingRate then
+  if Sender = FMaxPumpingRate as TObject then
   begin
     List.Add(FObserverList[FmpWellMaxPumpingRatePosition]);
   end;
-  if Sender = FFarmID then
+  if Sender = FFarmID as TObject then
   begin
     List.Add(FObserverList[FmpWellFarmIDPosition]);
   end;
-  if Sender = FPumpOnlyIfCropRequiresWater then
+  if Sender = FPumpOnlyIfCropRequiresWater as TObject then
   begin
     List.Add(FObserverList[FmpWellPumpOnlyIfCropRequiresWaterPosition]);
   end;
@@ -1479,7 +1479,7 @@ end;
 
 procedure TFmpWellBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestMaxPumpingRateFormula then
+  if Sender = FPestMaxPumpingRateFormula as TObject then
   begin
     if FmpWellMaxPumpingRatePosition < FObserverList.Count then
     begin

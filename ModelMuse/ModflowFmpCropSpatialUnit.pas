@@ -3,7 +3,8 @@ unit ModflowFmpCropSpatialUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -57,7 +58,7 @@ type
   TFmpCropIDItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(CropID).
-    FCropID: TFormulaObject;
+    FCropID: IFormulaObject;
     // See @link(CropID).
     procedure SetCropID(const Value: string);
     function GetCropID: string;
@@ -263,7 +264,7 @@ end;
 
 procedure TFmpCropIDItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FCropID);
+  Assert(Sender = FCropID as TObject);
   List.Add(FObserverList[CropIDPosition]);
 end;
 

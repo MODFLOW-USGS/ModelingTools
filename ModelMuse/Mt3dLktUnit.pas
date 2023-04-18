@@ -4,14 +4,14 @@ interface
 
 uses
   Classes, Mt3dmsChemUnit, ModflowBoundaryUnit, GoPhastTypes,
-  FormulaManagerUnit, SubscriptionUnit, System.Generics.Collections,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit, System.Generics.Collections,
   OrderedCollectionUnit, RbwParser, System.ZLib, ModflowCellUnit;
 
 type
   TMt3dLktConcItem = class(TCustomMt3dmsConcItem)
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
-//    procedure InvalidateModel; override;
   end;
 
   TMt3dLktConcTimeListLink = class(TCustomMt3dmsConcTimeListLink)
@@ -64,7 +64,7 @@ type
     const
       InitConcPosition = 0;
     var
-    FInitConc: TFormulaObject;
+    FInitConc: IFormulaObject;
     function GetInitConc: string;
     procedure SetInitConc(const Value: string);
   protected
@@ -194,33 +194,6 @@ begin
   result := TMt3dLktConcTimeListLink;
 end;
 
-//procedure TMt3dLktConcCollection.InvalidateLktConc(Sender: TObject);
-//var
-//  PhastModel: TPhastModel;
-//  Link: TMt3dLktConcTimeListLink;
-//  ChildIndex: Integer;
-//  ChildModel: TChildModel;
-////  ScreenTopDataArray: TDataArray;
-//begin
-//  if not (Sender as TObserver).UpToDate then
-//  begin
-//    PhastModel := frmGoPhast.PhastModel;
-//    if PhastModel.Clearing then
-//    begin
-//      Exit;
-//    end;
-//    Link := TimeListLink.GetLink(PhastModel) as TMt3dLktConcTimeListLink;
-////    Link.FInitCondData.Invalidate;
-//    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
-//    begin
-//      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-//      Link := TimeListLink.GetLink(ChildModel) as TMt3dLktConcTimeListLink;
-////      Link.FInitCondData.Invalidate;
-//    end;
-//
-//  end;
-//end;
-
 class function TMt3dLktConcCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TMt3dLktConcItem;
@@ -236,7 +209,6 @@ begin
   begin
     LktSource := TMt3dLktConcBoundary(Source);
     RunoffConcentration := LktSource.RunoffConcentration;
-//    InitialConcentration := LktSource.InitialConcentration;
     InitialConcentrations := LktSource.InitialConcentrations;
   end;
   inherited;
@@ -279,28 +251,19 @@ begin
 
   FRunoffConcentration.Clear;
   FInitialConcentrations.Clear;
-//  InitialConcentration := '0';
 end;
 
 constructor TMt3dLktConcBoundary.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
-//  FInitConcFormulas := TList<TFormulaObject>.Create;
   inherited;
   CreateBoundaryObserver;
-//  CreateFormulaObjects;
   CreateObservers;
   FInitialConcentrations := TLktInitConcCollection.Create(Self, Model as TCustomModel, ScreenObject);
 
   FRunoffConcentration:= TMt3dLktConcCollection.Create(self, Model as TCustomModel,
     ScreenObject);
-//  InitialConcentration := '0';
 end;
-
-//procedure TMt3dLktConcBoundary.CreateFormulaObjects;
-//begin
-//  FInitialConcentration := CreateFormulaObjectBlocks(dso3D);
-//end;
 
 procedure TMt3dLktConcBoundary.CreateObservers;
 begin
@@ -330,30 +293,6 @@ procedure TMt3dLktConcBoundary.GetCellValues(ValueTimeList: TList;
 begin
   Assert(False);
 end;
-
-//function TMt3dLktConcBoundary.GetChemSpeciesCount: Integer;
-//begin
-//
-//end;
-
-//function TMt3dLktConcBoundary.GetInitialConcentration: string;
-//begin
-//  Result := FInitialConcentration.Formula;
-//  if ScreenObject <> nil then
-//  begin
-//    ResetItemObserver(InitialConcentrationPosition);
-//  end;
-//end;
-
-//function TMt3dLktConcBoundary.GetInitialConcentrationFormula(
-//  Index: Integer): string;
-//begin
-//  Result := FInitConcFormulas[Index].Formula;
-//  if ScreenObject <> nil then
-//  begin
-////    ResetItemObserver(DiversionStartPosition+Index);
-//  end;
-//end;
 
 function TMt3dLktConcBoundary.GetInitialConcentrationObserver: TObserver;
 begin
@@ -385,35 +324,11 @@ end;
 
 procedure TMt3dLktConcBoundary.RenameSpecies(const OldSpeciesName,
   NewSpeciesName: string);
-//var
-//  Concentrations: TCustomMt3dmsConcCollection;
 begin
   inherited;
   RunoffConcentration.RenameTimeList(OldSpeciesName, NewSpeciesName);
   RunoffConcentration.RenameItems(OldSpeciesName, NewSpeciesName);
 end;
-
-//procedure TMt3dLktConcBoundary.SetChemSpeciesCount(const Value: Integer);
-//begin
-//
-//end;
-
-//procedure TMt3dLktConcBoundary.SetInitialConcentration(
-//  const Value: string);
-//begin
-//  UpdateFormulaBlocks(Value, InitialConcentrationPosition, FInitialConcentration);
-//
-//end;
-
-//procedure TMt3dLktConcBoundary.SetInitialConcentrationFormula(Index: Integer;
-//  const Value: string);
-//var
-//  FormulaObject: TFormulaObject;
-//begin
-//  FormulaObject := FInitConcFormulas[Index];
-////  UpdateFormula(Value, DiversionStartPosition+Index, FormulaObject);
-//  FInitConcFormulas[Index] := FormulaObject;
-//end;
 
 procedure TMt3dLktConcBoundary.SetInitialConcentrations(
   const Value: TLktInitConcCollection);
@@ -431,7 +346,6 @@ function TMt3dLktConcBoundary.Used: boolean;
 begin
   result := inherited Used or (RunoffConcentration.Count > 0)
     or (InitialConcentrations.Count > 0)
-//    or (InitialConcentration <> '0');
 end;
 
 { TLktInitConcItem }
@@ -457,9 +371,6 @@ procedure TLktInitConcItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TLktInitConcCollection;
   InitConcObserver: TObserver;
-//  ScreenTopObserver: TObserver;
-//  SkinKObserver: TObserver;
-//  SkinRadiusObserver: TObserver;
 begin
   ParentCollection := Collection as TLktInitConcCollection;
 
@@ -513,7 +424,7 @@ end;
 
 procedure TLktInitConcItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FInitConc then
+  if Sender = FInitConc as TObject then
   begin
     List.Add(FObserverList[InitConcPosition]);
   end;
@@ -819,10 +730,6 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(InitialConcentrationPestName));
   WriteCompInt(Comp, Strings.IndexOf(InitialConcentrationPestSeriesName));
   WriteCompInt(Comp, Ord(InitialConcentrationPestSeriesMethod));
-//  WriteCompInt(Comp, Strings.IndexOf(ScreenBottomAnnotation));
-//  WriteCompInt(Comp, Strings.IndexOf(SkinKAnnotation));
-//  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusAnnotation));
-//  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusAnnotation));
 end;
 
 procedure TLktInitConcRecord.RecordStrings(Strings: TStringList);
@@ -830,9 +737,6 @@ begin
   Strings.Add(InitialConcentrationAnnotation);
   Strings.Add(InitialConcentrationPestName);
   Strings.Add(InitialConcentrationPestSeriesName);
-//  Strings.Add(ScreenBottomAnnotation);
-//  Strings.Add(SkinKAnnotation);
-//  Strings.Add(SkinRadiusAnnotation);
 end;
 
 procedure TLktInitConcRecord.Restore(Decomp: TDecompressionStream;
@@ -916,15 +820,8 @@ end;
 procedure TMt3dLktConcItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TMt3dLktConcCollection;
-//  InitConcObserver: TObserver;
-//  ScreenTopObserver: TObserver;
-//  SkinKObserver: TObserver;
-//  SkinRadiusObserver: TObserver;
 begin
   ParentCollection := Collection as TMt3dLktConcCollection;
-
-//  InitConcObserver := FObserverList[InitConcPosition];
-//  InitConcObserver.OnUpToDateSet := ParentCollection.InvalidateLktConc;
 end;
 
 { TMt3dLktConcTimeListLink }
@@ -932,44 +829,17 @@ end;
 procedure TMt3dLktConcTimeListLink.CreateTimeLists;
 var
   Index: Integer;
-//  Mt3dmsConcData: TModflowTimeList;
-//  Item: TChemSpeciesItem;
   LocalModel: TPhastModel;
 begin
   TimeLists.Clear;
-//  FListOfTimeLists.Clear;
   LocalModel := frmGoPhast.PhastModel;
   for Index := 0 to LocalModel.MobileComponents.Count - 1 do
   begin
-//    Item := LocalModel.MobileComponents[Index];
-//    Mt3dmsConcData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-//    Mt3dmsConcData.NonParamDescription := Item.Name +  StrConcentration;
-//    Mt3dmsConcData.ParamDescription := Item.Name +  StrConcentrationMulti;
-//    if Model <> nil then
-//    begin
-//      Mt3dmsConcData.OnInvalidate :=
-//        (Model as TCustomModel).InvalidateMt3dmsChemSources;
-//    end;
-//    AddTimeList(Mt3dmsConcData);
-//    FListOfTimeLists.Add(Mt3dmsConcData);
     AddTimeList(nil);
-//    FListOfTimeLists.Add(nil);
   end;
   for Index := 0 to LocalModel.ImmobileComponents.Count - 1 do
   begin
-//    Item := LocalModel.ImmobileComponents[Index];
-//    Mt3dmsConcData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-//    Mt3dmsConcData.NonParamDescription := Item.Name +  StrConcentration;
-//    Mt3dmsConcData.ParamDescription := Item.Name +  StrConcentrationMulti;
-//    if Model <> nil then
-//    begin
-//      Mt3dmsConcData.OnInvalidate :=
-//        (Model as TCustomModel).InvalidateMt3dmsChemSources;
-//    end;
-//    AddTimeList(Mt3dmsConcData);
-//    FListOfTimeLists.Add(Mt3dmsConcData);
     AddTimeList(nil);
-//    FListOfTimeLists.Add(nil);
   end;
 end;
 

@@ -5,7 +5,8 @@ unit ModflowEvtUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -134,7 +135,7 @@ type
   TEvtItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(EvapotranspirationRate).
-    FEvapotranspirationRate: TFormulaObject;
+    FEvapotranspirationRate: IFormulaObject;
     FGwtConcentrations: TEvtGwtConcCollection;
     // See @link(EvapotranspirationRate).
     procedure SetEvapotranspirationRate(const Value: string);
@@ -171,7 +172,7 @@ type
   TEvtLayerItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(EvapotranspirationLayer).
-    FEvapotranspirationLayer: TFormulaObject;
+    FEvapotranspirationLayer: IFormulaObject;
     // See @link(EvapotranspirationLayer).
     procedure SetEvapotranspirationLayer(const Value: string);
     function GetEvapotranspirationLayer: string;
@@ -203,8 +204,8 @@ type
   TEvtSurfDepthItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(EvapotranspirationSurface).
-    FEvapotranspirationSurface: TFormulaObject;
-    FEvapotranspirationDepth: TFormulaObject;
+    FEvapotranspirationSurface: IFormulaObject;
+    FEvapotranspirationDepth: IFormulaObject;
     // See @link(EvapotranspirationSurface).
     procedure SetEvapotranspirationSurface(const Value: string);
     procedure SetEvapotranspirationDepth(const Value: string);
@@ -530,9 +531,9 @@ type
     FPestDepthMethod: TPestParamMethod;
     FPestEvapotranspirationRateMethod: TPestParamMethod;
     FPestSurfaceMethod: TPestParamMethod;
-    FPestEvapotranspirationRateFormula: TFormulaObject;
-    FPestSurfaceFormula: TFormulaObject;
-    FPestDepthFormula: TFormulaObject;
+    FPestEvapotranspirationRateFormula: IFormulaObject;
+    FPestSurfaceFormula: IFormulaObject;
+    FPestDepthFormula: IFormulaObject;
     FPestDepthObserver: TObserver;
     FPestEvapotranspirationRateObserver: TObserver;
     FPestSurfaceObserver: TObserver;
@@ -783,12 +784,14 @@ var
   Item: TGwtConcStringValueItem;
   ConcIndex: Integer;
 begin
-  Assert(Sender = FEvapotranspirationRate);
-  List.Add(FObserverList[EvtRatePosition]);
+  if (Sender = FEvapotranspirationRate as TObject) then
+  begin
+    List.Add(FObserverList[EvtRatePosition]);
+  end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     Item := GwtConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1790,21 +1793,21 @@ end;
 
 procedure TEvtBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestEvapotranspirationRateFormula then
+  if Sender = FPestEvapotranspirationRateFormula as TObject then
   begin
     if RateBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[RateBoundaryPosition]);
     end;
   end;
-  if Sender = FPestSurfaceFormula then
+  if Sender = FPestSurfaceFormula as TObject then
   begin
     if SurfaceBoundaryPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[SurfaceBoundaryPosition]);
     end;
   end;
-  if Sender = FPestDepthFormula then
+  if Sender = FPestDepthFormula as TObject then
   begin
     if DepthBoundaryPosition < FObserverList.Count then
     begin
@@ -2197,7 +2200,7 @@ end;
 
 procedure TEvtLayerItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FEvapotranspirationLayer);
+  Assert(Sender = FEvapotranspirationLayer as TObject);
   List.Add(FObserverList[LayerPosition]);
 end;
 
@@ -2550,11 +2553,11 @@ end;
 
 procedure TEvtSurfDepthItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FEvapotranspirationSurface then
+  if Sender = FEvapotranspirationSurface as TObject then
   begin
     List.Add( FObserverList[EvtSurfacePosition]);
   end;
-  if Sender = FEvapotranspirationDepth then
+  if Sender = FEvapotranspirationDepth as TObject then
   begin
     List.Add( FObserverList[EvtDepthPosition]);
   end;

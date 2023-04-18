@@ -3,7 +3,8 @@ unit ModflowRipPlantGroupsUnit;
 interface
 
 uses
-  System.Classes, GoPhastTypes, OrderedCollectionUnit, FormulaManagerUnit,
+  System.Classes, GoPhastTypes, OrderedCollectionUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, System.Generics.Collections, RbwParser, System.SysUtils,
   OrderedCollectionInterfaceUnit;
 
@@ -62,10 +63,10 @@ type
   TRipPlantGroup = class(TFormulaOrderedItem)
   private
     FName: string;
-    FSaturatedExtinctionDepth: TFormulaObject;
-    FActiveRootDepth: TFormulaObject;
-    FMaxET: TFormulaObject;
-    FSatExtinctionEvap: TFormulaObject;
+    FSaturatedExtinctionDepth: IFormulaObject;
+    FActiveRootDepth: IFormulaObject;
+    FMaxET: IFormulaObject;
+    FSatExtinctionEvap: IFormulaObject;
     FETSegments: TRipETSegments;
     FID: integer;
     FObserverList: TObjectList<TObserver>;
@@ -84,7 +85,7 @@ type
     function GetSaturatedExtinctionDepth: string;
     procedure CreateFormulaObjects;
     function CreateFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject;
+      TDataSetOrientation): IFormulaObject;
     procedure ResetItemObserver(Index: integer);
     procedure RemoveFormulaObjects;
   protected
@@ -335,9 +336,9 @@ begin
 end;
 
 function TRipPlantGroup.CreateFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
+  Orientation: TDataSetOrientation): IFormulaObject;
 begin
-  result := CreateBlockFormulaObject(Orientation);
+  result := CreateBlockFormulaObject(Orientation) as IFormulaObject;
   result.AddSubscriptionEvents(
     GlobalRemoveFormulaObjectSubscription,
     GlobalRestoreFormulaObjectSubscription, self);

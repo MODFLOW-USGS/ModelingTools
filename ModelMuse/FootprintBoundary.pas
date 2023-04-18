@@ -4,12 +4,12 @@ interface
 
 uses
   Classes, ModflowBoundaryUnit, GoPhastTypes, SubscriptionUnit,
-  FormulaManagerUnit;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit;
 
 type
   TFootprintWell = class(TModflowSteadyBoundary)
   private
-    FWithdrawalFormula: TFormulaObject;
+    FWithdrawalFormula: IFormulaObject;
     FWithdrawalObserver: TObserver;
     function GetWithdrawal: string;
     procedure SetWithdrawal(const Value: string);

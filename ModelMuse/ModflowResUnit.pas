@@ -3,7 +3,8 @@ unit ModflowResUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes;
 
 type
@@ -37,9 +38,9 @@ type
   TResItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(StartHead).
-    FStartHead: TFormulaObject;
+    FStartHead: IFormulaObject;
     // See @link(EndHead).
-    FEndHead: TFormulaObject;
+    FEndHead: IFormulaObject;
     // See @link(StartHead).
     procedure SetStartHead(const Value: string);
     // See @link(EndHead).
@@ -143,8 +144,8 @@ type
     FResId: integer;
     FPestEndHeadMethod: TPestParamMethod;
     FPestStartHeadMethod: TPestParamMethod;
-    FPestStartHeadFormula: TFormulaObject;
-    FPestEndHeadFormula: TFormulaObject;
+    FPestStartHeadFormula: IFormulaObject;
+    FPestEndHeadFormula: IFormulaObject;
     FPestEndHeadObserver: TObserver;
     FPestStartHeadObserver: TObserver;
     FUsedObserver: TObserver;
@@ -275,11 +276,11 @@ end;
 
 procedure TResItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FStartHead then
+  if Sender = FStartHead as TObject then
   begin
     List.Add(FObserverList[StartPosition]);
   end;
-  if Sender = FEndHead then
+  if Sender = FEndHead as TObject then
   begin
     List.Add(FObserverList[EndPosition]);
   end;
@@ -709,14 +710,14 @@ end;
 
 procedure TResBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestEndHeadFormula then
+  if Sender = FPestEndHeadFormula as TObject then
   begin
     if EndPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[EndPosition]);
     end;
   end;
-  if Sender = FPestStartHeadFormula then
+  if Sender = FPestStartHeadFormula as TObject then
   begin
     if StartPosition < FObserverList.Count then
     begin

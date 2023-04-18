@@ -5,32 +5,33 @@ interface
 uses
   System.Classes, ModflowBoundaryUnit, FormulaManagerUnit, GoPhastTypes,
   OrderedCollectionUnit, RbwParser, SutraBoundaryUnit,
-  System.Generics.Collections, SutraOptionsUnit, SubscriptionUnit;
+  System.Generics.Collections, SutraOptionsUnit, SubscriptionUnit,
+  FormulaManagerInterfaceUnit;
 
 type
   TSutraGeneralFlowItem = class(TCustomBoundaryItem)
   private
     // PBG11
-    FLowerPressureFormula: TFormulaObject;
+    FLowerPressureFormula: IFormulaObject;
     // QPBG11
-    FLowerFlowRateFormula: TFormulaObject;
+    FLowerFlowRateFormula: IFormulaObject;
     // PBG21
-    FHigherPressureFormula: TFormulaObject;
+    FHigherPressureFormula: IFormulaObject;
     // QPBG21
-    FHigherFlowRateFormula: TFormulaObject;
+    FHigherFlowRateFormula: IFormulaObject;
     // UPBGI1
     // Temperature or solute concentration of any external fluid that
     // enters the model
-    FUInFormula: TFormulaObject;
+    FUInFormula: IFormulaObject;
     // UPBGO1
     // value U+UBPGO1, where U is the temperature or concentration computed
     // at the node.
-    FUoutFormula: TFormulaObject;
+    FUoutFormula: IFormulaObject;
     FExitSpecMethod: TSutraExitSpecificationMethod;
     FLowerLimitType: TSutraLimitType;
     FUpperLimitType: TSutraLimitType;
     FUsed: Boolean;
-    FUsedFormulaObject: TFormulaObject;
+    FUsedFormulaObject: IFormulaObject;
     function GetHigherFlowRateFormula: string;
     function GetHigherPressureFormula: string;
     function GetLowerFlowRateFormula: string;
@@ -52,7 +53,7 @@ type
     function GetUsed: Boolean;
   protected
     function CreateFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject; override;
+      TDataSetOrientation): IFormulaObject; override;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -155,10 +156,10 @@ type
     FPestLowerFlowRateMethod: TPestParamMethod;
     FPestHigherFlowRateMethod: TPestParamMethod;
     FPestUOutMethod: TPestParamMethod;
-    FPestLowerFlowRateFormula: TFormulaObject;
-    FPestHigherPressureFormula: TFormulaObject;
-    FPestHigherFlowRateFormula: TFormulaObject;
-    FPestUOutFormula: TFormulaObject;
+    FPestLowerFlowRateFormula: IFormulaObject;
+    FPestHigherPressureFormula: IFormulaObject;
+    FPestHigherFlowRateFormula: IFormulaObject;
+    FPestUOutFormula: IFormulaObject;
     FPestHigherFlowRateObserver: TObserver;
     FPestHigherPressureObserver: TObserver;
     FPestLowerFlowRateObserver: TObserver;
@@ -327,7 +328,7 @@ begin
 end;
 
 function TSutraGeneralFlowItem.CreateFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
+  Orientation: TDataSetOrientation): IFormulaObject;
 begin
   Assert(Orientation = dso3D);
   result := frmGoPhast.PhastModel.FormulaManager.Add;
@@ -403,31 +404,31 @@ end;
 procedure TSutraGeneralFlowItem.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
-  if Sender = FLowerPressureFormula then
+  if Sender = FLowerPressureFormula as TObject then
   begin
     List.Add(FObserverList[LowerPressurePosition]);
   end
-  else if Sender = FLowerFlowRateFormula then
+  else if Sender = FLowerFlowRateFormula as TObject then
   begin
     List.Add(FObserverList[LowerFlowRatePosition]);
   end
-  else if Sender = FHigherPressureFormula then
+  else if Sender = FHigherPressureFormula as TObject then
   begin
     List.Add(FObserverList[HigherPressurePosition]);
   end
-  else if Sender = FHigherFlowRateFormula then
+  else if Sender = FHigherFlowRateFormula as TObject then
   begin
     List.Add(FObserverList[HigherFlowRatePosition]);
   end
-  else if Sender = FUInFormula then
+  else if Sender = FUInFormula as TObject then
   begin
     List.Add(FObserverList[UInPosition]);
   end
-  else if Sender = FUoutFormula then
+  else if Sender = FUoutFormula as TObject then
   begin
     List.Add(FObserverList[UOutPosition]);
   end
-  else if Sender = FUsedFormulaObject then
+  else if Sender = FUsedFormulaObject as TObject then
   begin
     List.Add(FObserverList[UsedFormulaPosition]);
   end

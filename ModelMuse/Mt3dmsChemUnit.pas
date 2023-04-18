@@ -3,7 +3,8 @@ unit Mt3dmsChemUnit;
 interface
 
 uses System.Types, Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes, IntListUnit,
   ModflowMnw2Unit, OrderedCollectionInterfaceUnit;
 
@@ -82,7 +83,7 @@ type
 
   TStringConcValueItem = class(TFormulaOrderedItem)
   private
-    FValue: TFormulaObject;
+    FValue: IFormulaObject;
     FObserver: TObserver;
     FName: string;
     procedure SetValue(const Value: string);
@@ -120,7 +121,7 @@ type
       ScreenObject: TObject; Mt3dmsConcCollection: TCollection); overload;
     property Items[Index: integer]: TStringConcValueItem read GetItem
       write SetItem; default;
-    function IndexOfFormulaObject(AFormulaObject: TFormulaObject): integer;
+    function IndexOfFormulaObject(AFormulaObject: IFormulaObject): integer;
     function Add: TStringConcValueItem;
     procedure RenameItems(const OldSpeciesName, NewSpeciesName: string);
   end;
@@ -2098,7 +2099,7 @@ begin
 end;
 
 function TStringConcCollection.IndexOfFormulaObject(
-  AFormulaObject: TFormulaObject): integer;
+  AFormulaObject: IFormulaObject): integer;
 var
   Index: Integer;
   AnItem: TStringConcValueItem;

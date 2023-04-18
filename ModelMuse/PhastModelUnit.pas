@@ -52,7 +52,7 @@ uses System.UITypes,
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit,
   PhastModelInterfaceUnit, OrderedCollectionInterfaceUnit,
   LockedGlobalVariableChangersInterfaceUnit, ScreenObjectInterfaceUnit,
-  ColorSchemesInterface, DataArrayInterfaceUnit;
+  ColorSchemesInterface, DataArrayInterfaceUnit, SubscriptionInterfaceUnit;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
@@ -1398,16 +1398,20 @@ that affects the model output should also have a comment. }
     function GetDataSetByName(const DataSetName: string): TDataArray;
     function GetDataArrayInterface: ISimpleDataArrayManager;
     procedure RestoreSubscriptions;
-    function AddFormulaObject: TFormulaObject;
+    function AddFormulaObject: IFormulaObject;
     procedure RemoveFormulaObject(FormulaObject: TFormulaObject;
       OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
-      Subject: TObject);
+      Subject: TObject); overload;
+    procedure RemoveFormulaObject(FormulaObject: IFormulaObject;
+      OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
+      Subject: TObject); overload;
     function TimeToTimeStepTimes(ATime: double; out StartTime, EndTime: double): Boolean;
     function GetPestParameterValueByName(PestParamName: string; out Value: double): Boolean;
     procedure UpdateFormulaDependencies(OldFormula: string;
-      var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
+      var NewFormula: string; Observer: IObserver; Compiler: TRbwParser);
     function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TObject;
-    procedure ChangeFormula(var FormulaObject: TObject;
+    function CreateBlockFormulaObjectI(Orientation: TDataSetOrientation): IFormulaObject;
+    procedure ChangeFormula(var FormulaObject: IFormulaObject;
       NewFormula: string; EvaluatedAt: TEvaluatedAt; OnRemoveSubscription,
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetMobileComponentCount: Integer;
@@ -9912,8 +9916,8 @@ const
 //                unsaturated flow was enabled in SFR.
 //               Bug fix: If some observations have duplicate GUIDs, ModelMuse
 //                reassigns the GUID.
-//    '5.1.1.23' Bug fix: Trapped information for a possible but in the rulers
-//                for inclusion in a bug report.
+//    '5.1.1.23' Bug fix: Fixed bug that could cause an exception when drawing
+//                the horizontal ruler in SUTRA profile models.
 
 //               Enhancement: Added suport for SUTRA 4.
 
@@ -16212,7 +16216,7 @@ begin
 end;
 
 procedure TCustomModel.UpdateFormulaDependencies(OldFormula: string;
-  var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
+  var NewFormula: string; Observer: IObserver; Compiler: TRbwParser);
 var
   OldUses: TStringList;
   NewUses: TStringList;
@@ -16281,13 +16285,13 @@ begin
     begin
       DS := GetObserverByName(OldUses[Index]);
       Assert(DS <> nil);
-      DS.StopsTalkingTo(Observer);
+      DS.StopsTalkingTo(Observer as TObserver);
     end;
     for Index := 0 to NewUses.Count - 1 do
     begin
       DS := GetObserverByName(NewUses[Index]);
       Assert(DS <> nil);
-      DS.TalksTo(Observer);
+      DS.TalksTo(Observer as TObserver);
     end;
   finally
     NewUses.Free;
@@ -33461,6 +33465,23 @@ begin
   result := resultObject;
 end;
 
+function TCustomModel.CreateBlockFormulaObjectI(
+  Orientation: TDataSetOrientation): IFormulaObject;
+begin
+  result := FormulaManager.Add;
+  case Orientation of
+    dsoTop:
+      begin
+        result.Parser := rpTopFormulaCompiler;
+      end;
+    dso3D:
+      begin
+        result.Parser := rpThreeDFormulaCompiler;
+      end;
+    else Assert(False);
+  end;
+end;
+
 procedure TCustomModel.CreateBoundariesForMeshCreator(MeshCreator: TQuadMeshCreator; List: TList; Exag: Extended);
 var
   NodeTree: TRbwQuadTree;
@@ -33755,7 +33776,7 @@ begin
   end;
 end;
 
-function TCustomModel.AddFormulaObject: TFormulaObject;
+function TCustomModel.AddFormulaObject: IFormulaObject;
 begin
   result := FormulaManager.Add;
 end;
@@ -40051,6 +40072,14 @@ begin
     OnRestoreSubscription, Subject);
 end;
 
+procedure TCustomModel.RemoveFormulaObject(FormulaObject: IFormulaObject;
+  OnRemoveSubscription, OnRestoreSubscription: TChangeSubscription;
+  Subject: TObject);
+begin
+  RemoveFormulaObject(FormulaObject as TFormulaObject,
+    OnRemoveSubscription, OnRestoreSubscription, Subject);
+end;
+
 procedure TCustomModel.RemoveTimeList(TimeList: TCustomTimeList);
 begin
   FTimeLists.Remove(TimeList);
@@ -41247,14 +41276,13 @@ begin
     and not ModflowPackages.UpwPackage.IsSelected;
 end;
 
-procedure TCustomModel.ChangeFormula(var FormulaObject: TObject;
+procedure TCustomModel.ChangeFormula(var FormulaObject: IFormulaObject;
   NewFormula: string; EvaluatedAt: TEvaluatedAt; OnRemoveSubscription,
   OnRestoreSubscription: TChangeSubscription; Subject: TObject);
 var
   Local3DCompiler: TRbwParser;
-  LocalFObject: TFormulaObject;
+  LocalFormulaObject: TFormulaObject;
 begin
-  LocalFObject := FormulaObject as TFormulaObject;
   Local3DCompiler := nil;
   case EvaluatedAt of
     eaBlocks:
@@ -41269,12 +41297,15 @@ begin
     Assert(False);
   end;
 
-  ParentModel.FormulaManager.ChangeFormula(LocalFObject, NewFormula,
+  LocalFormulaObject := FormulaObject as TFormulaObject;
+  ParentModel.FormulaManager.ChangeFormula(LocalFormulaObject,
+    NewFormula,
     Local3DCompiler,
     OnRemoveSubscription,
     OnRestoreSubscription, Subject);
+  FormulaObject := LocalFormulaObject;
 
-  FormulaObject := LocalFObject;
+//  FormulaObject := LocalFObject;
 end;
 
 function TCustomModel.Chani: TOneDIntegerArray;

@@ -3,7 +3,9 @@ unit ModflowFmpCropUnit;
 interface
 
 uses
-  ModflowBoundaryUnit, FormulaManagerUnit, Classes,
+  ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  Classes,
   OrderedCollectionUnit, SysUtils, GoPhastTypes, ModflowFmpFarmUnit,
   ModflowFmpBaseClasses, RealListUnit, OrderedCollectionInterfaceUnit;
 

@@ -1786,14 +1786,14 @@ begin
               Exit;
             end;
           end;
-          if xbShapeDataBase.RecordCount <> FGeometryFile.Count then
+          if Int64(xbShapeDataBase.RecordCount) <> Int64(FGeometryFile.Count) then
           begin
             result := False;
             Beep;
             MessageDlg(StrErrorThereIsAMi, mtError, [mbOK], 0);
             Exit;
           end;
-          Assert(xbShapeDataBase.RecordCount = FGeometryFile.Count);
+          Assert(Int64(xbShapeDataBase.RecordCount) = Int64(FGeometryFile.Count));
           xbShapeDataBase.GotoBOF;
           ValidFields := TStringList.Create;
           ValidIndicies := TIntegerList.Create;

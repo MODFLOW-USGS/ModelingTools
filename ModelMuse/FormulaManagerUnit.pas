@@ -7,7 +7,7 @@ uses SysUtils, Classes, Contnrs, RbwParser, IntListUnit, Dialogs,
   System.Generics.Collections, FormulaManagerInterfaceUnit;
 
 type
-  TFormulaObject = class(TComponent)
+  TFormulaObject = class(TComponent, IFormulaObject)
   private
     FPosition: integer;
     FExpression: TExpression;
@@ -37,17 +37,20 @@ type
     procedure DeleteSubscriptionEvents(OnRemoveSubscription,
     OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetDisplayFormula: string;
+    function GetParser: TRbwParser;
 //    function GetHasTimeSeries: Boolean;
   protected
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); override;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     property Expression: TExpression read GetExpression;
     property Formula: string read GetFormula;
     property DisplayFormula: string read GetDisplayFormula;
-    property Parser: TRbwParser read FParser write SetParser;
+    property Parser: TRbwParser read GetParser write SetParser;
     // if @name is called with new events, be sure to update
     // @link(RemoveSubscriptions), @link(RestoreSubscriptions), and
     // @link(FixSubscriptions).
@@ -77,14 +80,20 @@ type
     function Add: TFormulaObject;
     procedure Remove(FormulaObject: TFormulaObject;
       OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
-      Subject: TObject);
+      Subject: TObject); overload;
+    procedure Remove(FormulaObject: IFormulaObject;
+      OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
+      Subject: TObject); overload;
     procedure ResetFormulas;
     procedure RemoveSubscriptions(OldSubscriptions, NewSubscriptions: TStringList);
     procedure RestoreSubscriptions;
     procedure FixSubscriptions;
     procedure ChangeFormula(var FormulaObject: TFormulaObject;
       NewFormula: string; Parser: TRbwParser; OnRemoveSubscription,
-      OnRestoreSubscription: TChangeSubscription; Subject: TObject);
+      OnRestoreSubscription: TChangeSubscription; Subject: TObject); overload;
+    procedure ChangeFormula(var FormulaObject: IFormulaObject;
+      NewFormula: string; Parser: TRbwParser; OnRemoveSubscription,
+      OnRestoreSubscription: TChangeSubscription; Subject: TObject); overload;
     procedure Pack;
     procedure Clear;
     function FunctionUsed(AString: string): boolean;
@@ -338,6 +347,11 @@ begin
     result := FExpression.Decompile;
     FFormula := result;
   end;
+end;
+
+function TFormulaObject.GetParser: TRbwParser;
+begin
+  result := FParser;
 end;
 
 //function TFormulaObject.GetHasTimeSeries: Boolean;
@@ -727,6 +741,16 @@ begin
   end;
 end;
 
+function TFormulaObject._AddRef: Integer;
+begin
+  result := 1;
+end;
+
+function TFormulaObject._Release: Integer;
+begin
+  result := 1;
+end;
+
 { TFormulaManager }
 
 function TFormulaManager.Add: TFormulaObject;
@@ -898,6 +922,18 @@ begin
   end;
 end;
 
+procedure TFormulaManager.ChangeFormula(var FormulaObject: IFormulaObject;
+  NewFormula: string; Parser: TRbwParser; OnRemoveSubscription,
+  OnRestoreSubscription: TChangeSubscription; Subject: TObject);
+var
+  LocalFormulaObject: TFormulaObject;
+begin
+  LocalFormulaObject := FormulaObject as TFormulaObject;
+  ChangeFormula(LocalFormulaObject, NewFormula, Parser, OnRemoveSubscription,
+    OnRestoreSubscription, Subject);
+  FormulaObject := LocalFormulaObject;
+end;
+
 procedure TFormulaManager.Clear;
 begin
   FList.Clear;
@@ -1034,6 +1070,14 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TFormulaManager.Remove(FormulaObject: IFormulaObject;
+  OnRemoveSubscription, OnRestoreSubscription: TChangeSubscription;
+  Subject: TObject);
+begin
+  Remove(FormulaObject as TFormulaObject,
+    OnRemoveSubscription, OnRestoreSubscription, Subject);
 end;
 
 procedure TFormulaManager.RemoveSubscriptions(OldSubscriptions,

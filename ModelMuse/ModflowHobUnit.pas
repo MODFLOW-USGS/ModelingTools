@@ -80,9 +80,6 @@ type
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
-    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
     property ScreenObject: TObject read GetScreenObject;
     procedure ReplaceGUID;
   public
@@ -705,16 +702,6 @@ begin
   result := 'HOB';
 end;
 
-function THobItem.QueryInterface(const IID: TGUID; out Obj): HResult;
-const
-  E_NOINTERFACE = HRESULT($80004002);
-begin
-  if GetInterface(IID, Obj) then
-    result := 0
-  else
-    result := E_NOINTERFACE;
-end;
-
 procedure THobItem.ReplaceGUID;
 var
   MyGuid: TGUID;
@@ -783,15 +770,6 @@ begin
     FStatistic := Value;
     InvalidateModel;
   end;
-end;
-function THobItem._AddRef: Integer;
-begin
-  result := -1;
-end;
-
-function THobItem._Release: Integer;
-begin
-  result := -1;
 end;
 
 { THobCollection }

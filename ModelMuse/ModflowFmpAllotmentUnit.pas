@@ -3,7 +3,7 @@ unit ModflowFmpAllotmentUnit;
 interface
 
 uses
-  ModflowFmpBaseClasses, ModflowBoundaryUnit, SysUtils;
+  ModflowFmpBaseClasses, ModflowBoundaryUnit, SysUtils, FormulaManagerInterfaceUnit;
 
 type
   TAllotmentItem = class(TCustomZeroFarmItem)

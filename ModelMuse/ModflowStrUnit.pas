@@ -3,7 +3,8 @@ unit ModflowStrUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
-  OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, FormulaManagerUnit,
+  OrderedCollectionUnit, DataSetUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes, OrderedCollectionInterfaceUnit;
 
 type
@@ -105,15 +106,15 @@ type
     function GetSegmentNumber: Integer;
   protected
     // See @link(Stage).
-    FStage: TFormulaObject;
+    FStage: IFormulaObject;
     // See @link(Conductance).
-    FConductance: TFormulaObject;
-    FBedTop: TFormulaObject;
-    FBedBottom: TFormulaObject;
-    FFlow: TFormulaObject;
-    FWidth: TFormulaObject;
-    Fslope: TFormulaObject;
-    FRoughness: TFormulaObject;
+    FConductance: IFormulaObject;
+    FBedTop: IFormulaObject;
+    FBedBottom: IFormulaObject;
+    FFlow: IFormulaObject;
+    FWidth: IFormulaObject;
+    Fslope: IFormulaObject;
+    FRoughness: IFormulaObject;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -366,14 +367,14 @@ type
     FBedBottomPestMethod: TPestParamMethod;
     FStagePestMethod: TPestParamMethod;
     FBedTopPestMethod: TPestParamMethod;
-    FStreamConductanceFormula: TFormulaObject;
-    FStreamBedTopFormula: TFormulaObject;
-    FStreamBedBottomFormula: TFormulaObject;
-    FStreamFlowFormula: TFormulaObject;
-    FStreamStageFormula: TFormulaObject;
-    FStreamWidthFormula: TFormulaObject;
-    FStreamSlopeFormula: TFormulaObject;
-    FStreamRoughnessFormula: TFormulaObject;
+    FStreamConductanceFormula: IFormulaObject;
+    FStreamBedTopFormula: IFormulaObject;
+    FStreamBedBottomFormula: IFormulaObject;
+    FStreamFlowFormula: IFormulaObject;
+    FStreamStageFormula: IFormulaObject;
+    FStreamWidthFormula: IFormulaObject;
+    FStreamSlopeFormula: IFormulaObject;
+    FStreamRoughnessFormula: IFormulaObject;
     FBedBottomPestObserver: TObserver;
     FBedTopPestObserver: TObserver;
     FConductancePestObserver: TObserver;
@@ -882,35 +883,35 @@ end;
 
 procedure TStrItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FConductance then
+  if Sender = FConductance as TObject then
   begin
     List.Add(FObserverList[StrConductancePosition]);
   end;
-  if Sender = FStage then
+  if Sender = FStage as TObject then
   begin
     List.Add(FObserverList[StrStagePosition]);
   end;
-  if Sender = FBedTop then
+  if Sender = FBedTop as TObject then
   begin
     List.Add(FObserverList[StrBedTopPosition]);
   end;
-  if Sender = FBedBottom then
+  if Sender = FBedBottom as TObject then
   begin
     List.Add(FObserverList[StrBedBottomPosition]);
   end;
-  if Sender = FFlow then
+  if Sender = FFlow as TObject then
   begin
     List.Add(FObserverList[StrFlowPosition]);
   end;
-  if Sender = FWidth then
+  if Sender = FWidth as TObject then
   begin
     List.Add(FObserverList[StrWidthPosition]);
   end;
-  if Sender = FSlope then
+  if Sender = FSlope as TObject then
   begin
     List.Add(FObserverList[StrSlopePosition]);
   end;
-  if Sender = FRoughness then
+  if Sender = FRoughness as TObject then
   begin
     List.Add(FObserverList[StrRoughnessPosition]);
   end;
@@ -2647,7 +2648,7 @@ end;
 
 procedure TStrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FStreamConductanceFormula then
+  if Sender = FStreamConductanceFormula as TObject then
   begin
     if StrConductancePosition < FObserverList.Count then
     begin
@@ -2655,7 +2656,7 @@ begin
     end;
   end;
 
-  if Sender = FStreamBedTopFormula then
+  if Sender = FStreamBedTopFormula as TObject then
   begin
     if StrBedTopPosition < FObserverList.Count then
     begin
@@ -2663,7 +2664,7 @@ begin
     end;
   end;
 
-  if Sender = FStreamBedBottomFormula then
+  if Sender = FStreamBedBottomFormula as TObject then
   begin
     if StrBedBottomPosition < FObserverList.Count then
     begin
@@ -2671,7 +2672,7 @@ begin
     end;
   end;
 
-  if Sender = FStreamFlowFormula then
+  if Sender = FStreamFlowFormula as TObject then
   begin
     if StrFlowPosition < FObserverList.Count then
     begin
@@ -2679,7 +2680,7 @@ begin
     end;
   end;
 
-  if Sender = FStreamStageFormula then
+  if Sender = FStreamStageFormula as TObject then
   begin
     if StrStagePosition < FObserverList.Count then
     begin
@@ -2687,7 +2688,7 @@ begin
     end;
   end;
 
-  if Sender = FStreamWidthFormula then
+  if Sender = FStreamWidthFormula as TObject then
   begin
     if StrWidthPosition < FObserverList.Count then
     begin
@@ -2695,7 +2696,7 @@ begin
     end;
   end;
 
-  if Sender = FStreamSlopeFormula then
+  if Sender = FStreamSlopeFormula as TObject then
   begin
     if StrSlopePosition < FObserverList.Count then
     begin
@@ -2703,7 +2704,7 @@ begin
     end;
   end;
 
-  if Sender = FStreamRoughnessFormula then
+  if Sender = FStreamRoughnessFormula as TObject then
   begin
     if StrRoughnessPosition < FObserverList.Count then
     begin

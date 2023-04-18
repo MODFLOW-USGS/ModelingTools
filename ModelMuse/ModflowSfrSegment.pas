@@ -4,7 +4,8 @@ interface
 
 uses Windows, Classes, SysUtils, ZLib, GoPhastTypes,
   OrderedCollectionUnit, ModflowCellUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, SubscriptionUnit;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit;
 
 type
   TSfrSegmentRecord = record
@@ -64,11 +65,11 @@ type
   // @name is stored by @link(TSfrSegmentCollection).
   TSfrSegmentItem = class(TCustomModflowBoundaryItem)
   private
-    FStreamBedThickness: TFormulaObject;
-    FStreambedElevation: TFormulaObject;
-    FHydraulicConductivity: TFormulaObject;
-    FStreamWidth: TFormulaObject;
-    FStreamDepth: TFormulaObject;
+    FStreamBedThickness: IFormulaObject;
+    FStreambedElevation: IFormulaObject;
+    FHydraulicConductivity: IFormulaObject;
+    FStreamWidth: IFormulaObject;
+    FStreamDepth: IFormulaObject;
     procedure SetHydraulicConductivity(const Value: string);
     procedure SetStreambedElevation(const Value: string);
     procedure SetStreamBedThickness(const Value: string);
@@ -339,23 +340,23 @@ end;
 
 procedure TSfrSegmentItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FHydraulicConductivity then
+  if Sender = FHydraulicConductivity as TObject then
   begin
     List.Add(FObserverList[HydraulicConductivityPosition]);
   end;
-  if Sender = FStreamBedThickness then
+  if Sender = FStreamBedThickness as TObject then
   begin
     List.Add(FObserverList[StreamBedThicknessPosition]);
   end;
-  if Sender = FStreambedElevation then
+  if Sender = FStreambedElevation as TObject then
   begin
     List.Add(FObserverList[StreambedElevationPosition]);
   end;
-  if Sender = FStreamWidth then
+  if Sender = FStreamWidth as TObject then
   begin
     List.Add(FObserverList[StreamWidthPosition]);
   end;
-  if Sender = FStreamDepth then
+  if Sender = FStreamDepth as TObject then
   begin
     List.Add(FObserverList[StreamDepthPosition]);
   end;

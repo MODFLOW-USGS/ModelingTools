@@ -2,8 +2,10 @@ unit OrderedCollectionUnit;
 
 interface
 
-uses DataSetUnit, System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit, RbwParser,
-  FormulaManagerUnit, ModelMuseInterfaceUnit, OrderedCollectionInterfaceUnit,
+uses DataSetUnit, System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit,
+  RbwParser,
+  FormulaManagerUnit,
+  ModelMuseInterfaceUnit, OrderedCollectionInterfaceUnit,
   FormulaManagerInterfaceUnit;
 
 type
@@ -104,7 +106,7 @@ type
     changed and new items during @link(TOrderedCollection.Assign
     TOrderedCollection.Assign).
     Descendents need to override @link(IsSame) and @link(Assign).}
-  TOrderedItem = class(TCollectionItem)
+  TOrderedItem = class(TCollectionItem, IOrderedItem)
   private
     {@name is the ID of a @classname that has been assigned to this
      @classname.  If no @classname has been assigned to it, @name is -1.}
@@ -113,6 +115,7 @@ type
     FAlwaysAssignForeignId: boolean;
     FInsertionNeeded: boolean;
     FNewIndex: Integer;
+    function IsSame(AnotherItem: IOrderedItem): boolean; overload;
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -120,7 +123,7 @@ type
     function GetOnInvalidateModelEvent: TNotifyEvent;
     property OnInvalidateModelEvent: TNotifyEvent read GetOnInvalidateModelEvent;
     // @name tests whether another @classname is identical to the current one.
-    function IsSame(AnotherItem: TOrderedItem): boolean; virtual; abstract;
+    function IsSame(AnotherItem: TOrderedItem): boolean; overload; virtual; abstract;
     // @name invalidates the model.
     // @seeAlso(TOrderedCollection.InvalidateModel)
     // @seeAlso(TBaseModel.Invalidate)
@@ -139,6 +142,8 @@ type
       const NewValue: string);
     procedure SetCaseInsensitiveStringProperty(var AField: string;
       NewValue: string);
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     // @name copies Source to the current @classname.  It will also assign
     // @link(FForeignId) if @link(AlwaysAssignForeignId) is @true or
@@ -148,6 +153,8 @@ type
     // sets @link(FForeignId) to -1.
     constructor Create(Collection: TCollection); override;
     property ForeignId: Integer read FForeignId;
+    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
+      virtual; stdcall;
   end;
 
   // @name defines boundary properties that are defined with formulas but
@@ -173,13 +180,13 @@ type
     // After calling this function, the calling function needs to
     // call AddSubscriptionEvents on the result.
     function CreateBlockFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject;
+      TDataSetOrientation): IFormulaObject;
   public
     property Observer[Index: Integer]: TObserver read GetObserver;
     procedure UpdateFormulaBlocks(Value: string; Position: integer;
-      var FormulaObject: TFormulaObject);
+      var FormulaObject: IFormulaObject); overload;
     procedure UpdateFormulaNodes(Value: string; Position: integer;
-      var FormulaObject: TFormulaObject);
+      var FormulaObject: IFormulaObject); overload;
     property OnRemoveSubscription: TChangeSubscription
       read FOnRemoveSubscription write FOnRemoveSubscription;
     property OnRestoreSubscription: TChangeSubscription
@@ -209,7 +216,7 @@ type
   // The user will edit this latter copy in the GUI.  The copy then gets
   // assigned back to the original copy.
   // @seealso(TOrderedCollection.Assign)
-  TOrderedCollection = class(TCollection)
+  TOrderedCollection = class(TCollection, IOrderedCollection)
   private
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // See @link(Model).
@@ -223,6 +230,8 @@ type
     // using the same order as in the collection that is being assigned to it.
     function SortItems: Boolean; virtual;
     function GetCount: Integer; virtual;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     function First: TCollectionItem;
     function Last: TCollectionItem;
@@ -250,6 +259,8 @@ type
     procedure Assign(Source: TPersistent); override;
     function FindMatchingItem(AnOrderedItem: TOrderedItem): TOrderedItem;
     property Count: Integer read GetCount write SetCount;
+    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
+      virtual; stdcall;
   end;
 
   // @name extends @link(TOrderedCollection) by adding
@@ -622,6 +633,16 @@ begin
   result := Items[Count-1];
 end;
 
+function TOrderedCollection.QueryInterface(const IID: TGUID; out Obj): HRESULT;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
+end;
+
 procedure TOrderedCollection.SetCount(const Value: Integer);
 var
   ExistingCount: integer;
@@ -643,6 +664,16 @@ end;
 function TOrderedCollection.SortItems: Boolean;
 begin
   result := False;
+end;
+
+function TOrderedCollection._AddRef: Integer;
+begin
+  result := 1;
+end;
+
+function TOrderedCollection._Release: Integer;
+begin
+  result := 1;
 end;
 
 procedure TOrderedCollection.Assign(Source: TPersistent);
@@ -804,6 +835,11 @@ begin
   end;
 end;
 
+function TOrderedItem.IsSame(AnotherItem: IOrderedItem): boolean;
+begin
+  result := IsSame(AnotherItem as TOrderedItem);
+end;
+
 function TOrderedItem.Model: IModelForTOrderedCollection;
 begin
   if Collection = nil then
@@ -814,6 +850,16 @@ begin
   begin
     result := (Collection as TOrderedCollection).Model;
   end;
+end;
+
+function TOrderedItem.QueryInterface(const IID: TGUID; out Obj): HRESULT;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
 end;
 
 function TOrderedItem.GetOnInvalidateModelEvent: TNotifyEvent;
@@ -1664,6 +1710,16 @@ begin
   end;
 end;
 
+function TOrderedItem._AddRef: Integer;
+begin
+  result := 1;
+end;
+
+function TOrderedItem._Release: Integer;
+begin
+  result := 1;
+end;
+
 procedure TOrderedItem.SetCaseInsensitiveStringProperty(var AField: string;
   NewValue: string);
 begin
@@ -1704,17 +1760,17 @@ begin
 end;
 
 function TFormulaOrderedItem.CreateBlockFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
+  Orientation: TDataSetOrientation): IFormulaObject;
 begin
-  result := Model.CreateBlockFormulaObject(Orientation) as TFormulaObject;
+  result := Model.CreateBlockFormulaObjectI(Orientation);// as TFormulaObject;
 end;
 
 procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string; Position: integer;
-  var FormulaObject: TFormulaObject);
+  var FormulaObject: IFormulaObject);
 var
   Compiler: TRbwParser;
   LocalObserver: TObserver;
-  AnObject: TObject;
+//  AnObject: TObject;
 begin
   if FormulaObject.Formula <> Value then
   begin
@@ -1732,14 +1788,24 @@ begin
         and not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState)
         and not IGlobalModelForOrderedCollection.Clearing then
       begin
-        AnObject := FormulaObject;
-        IGlobalModelForOrderedCollection.ChangeFormula(AnObject, Value, eaBlocks,
+//        AnObject := FormulaObject;
+        IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaBlocks,
           OnRemoveSubscription, OnRestoreSubscription, self);
-        FormulaObject := AnObject as TFormulaObject;
+//        FormulaObject := AnObject as TFormulaObject;
       end;
     end;
   end;
 end;
+
+//procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string;
+//  Position: integer; var FormulaObject: IFormulaObject);
+//var
+//  LocalFormulaObject: TFormulaObject;
+//begin
+//  LocalFormulaObject := FormulaObject as TFormulaObject;
+//  UpdateFormulaBlocks(Value,Position, LocalFormulaObject);
+//  FormulaObject := LocalFormulaObject;
+//end;
 
 procedure TFormulaOrderedItem.UpdateFormulaDependencies(OldFormula: string;
   var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
@@ -1752,12 +1818,22 @@ begin
   Model.UpdateFormulaDependencies(OldFormula, NewFormula, Observer, Compiler);
 end;
 
+//procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;
+//  Position: integer; var FormulaObject: IFormulaObject);
+//var
+//  LocalFormulaObject: TFormulaObject;
+//begin
+//  LocalFormulaObject := FormulaObject as TFormulaObject;
+//  UpdateFormulaNodes(Value,Position, LocalFormulaObject);
+//  FormulaObject := LocalFormulaObject;
+//end;
+
 procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;
-  Position: integer; var FormulaObject: TFormulaObject);
+  Position: integer; var FormulaObject: IFormulaObject);
 var
   Compiler: TRbwParser;
   LocalObserver: TObserver;
-  AnObject: TObject;
+//  AnObject: TObject;
 begin
   if FormulaObject.Formula <> Value then
   begin
@@ -1773,10 +1849,10 @@ begin
       and not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState)
       and not IGlobalModelForOrderedCollection.Clearing then
     begin
-      AnObject := FormulaObject;
-      IGlobalModelForOrderedCollection.ChangeFormula(AnObject, Value, eaNodes,
+//      AnObject := FormulaObject;
+      IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaNodes,
         OnRemoveSubscription, OnRestoreSubscription, self);
-      FormulaObject := AnObject as TFormulaObject;
+//      FormulaObject := AnObject as TFormulaObject;
     end;
   end;
 end;

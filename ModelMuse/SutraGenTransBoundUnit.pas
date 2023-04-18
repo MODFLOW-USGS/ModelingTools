@@ -3,23 +3,25 @@ unit SutraGenTransBoundUnit;
 interface
 
 uses
-  System.Classes, ModflowBoundaryUnit, FormulaManagerUnit, GoPhastTypes,
+  System.Classes, ModflowBoundaryUnit,
+  GoPhastTypes,
   OrderedCollectionUnit, RbwParser, SutraBoundaryUnit,
-  System.Generics.Collections, SutraOptionsUnit, SubscriptionUnit;
+  System.Generics.Collections, SutraOptionsUnit, SubscriptionUnit,
+  FormulaManagerInterfaceUnit;
 
 type
   TSutraGenTransportItem = class(TCustomBoundaryItem)
   private
     // PBG11
-    FLowerUFormula: TFormulaObject;
+    FLowerUFormula: IFormulaObject;
     // QPBG11
-    FLowerFlowUFormula: TFormulaObject;
+    FLowerFlowUFormula: IFormulaObject;
     // PBG21
-    FHigherUFormula: TFormulaObject;
+    FHigherUFormula: IFormulaObject;
     // QPBG21
-    FHigherFlowUFormula: TFormulaObject;
+    FHigherFlowUFormula: IFormulaObject;
     FUsed: Boolean;
-    FUsedFormulaObject: TFormulaObject;
+    FUsedFormulaObject: IFormulaObject;
     function GetHigherFlowUFormula: string;
     function GetHigherUFormula: string;
     function GetLowerFlowUFormula: string;
@@ -33,7 +35,7 @@ type
     procedure SetUsedFormula(const Value: string);
   protected
     function CreateFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject; override;
+      TDataSetOrientation): IFormulaObject; override;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -114,9 +116,9 @@ type
     FPestHigherFlowUMethod: TPestParamMethod;
     FPestHigherUMethod: TPestParamMethod;
     FPestLowerFlowUMethod: TPestParamMethod;
-    FPestHigherUFormula: TFormulaObject;
-    FPestLowerFlowUFormula: TFormulaObject;
-    FPestHigherFlowUFormula: TFormulaObject;
+    FPestHigherUFormula: IFormulaObject;
+    FPestLowerFlowUFormula: IFormulaObject;
+    FPestHigherFlowUFormula: IFormulaObject;
     FPestHigherFlowUObserver: TObserver;
     FPestHigherUObserver: TObserver;
     FPestLowerFlowUObserver: TObserver;
@@ -251,7 +253,7 @@ begin
 end;
 
 function TSutraGenTransportItem.CreateFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
+  Orientation: TDataSetOrientation): IFormulaObject;
 begin
   Assert(Orientation = dso3D);
   result := frmGoPhast.PhastModel.FormulaManager.Add;
@@ -322,23 +324,23 @@ end;
 procedure TSutraGenTransportItem.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
-  if Sender = FLowerUFormula then
+  if Sender = FLowerUFormula as TObject then
   begin
     List.Add(FObserverList[LowerUPosition]);
   end
-  else if Sender = FLowerFlowUFormula then
+  else if Sender = FLowerFlowUFormula as TObject then
   begin
     List.Add(FObserverList[LowerFlowUPosition]);
   end
-  else if Sender = FHigherUFormula then
+  else if Sender = FHigherUFormula as TObject then
   begin
     List.Add(FObserverList[HigherUPosition]);
   end
-  else if Sender = FHigherFlowUFormula then
+  else if Sender = FHigherFlowUFormula as TObject then
   begin
     List.Add(FObserverList[HigherFlowUPosition]);
   end
-  else if Sender = FUsedFormulaObject then
+  else if Sender = FUsedFormulaObject as TObject then
   begin
     List.Add(FObserverList[UsedFormulaPosition]);
   end

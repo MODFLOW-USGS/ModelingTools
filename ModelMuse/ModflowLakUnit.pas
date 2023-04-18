@@ -3,7 +3,8 @@ unit ModflowLakUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
-  ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes, PestObsUnit;
 
 type
@@ -66,12 +67,12 @@ type
   // @name is stored by @link(TResCollection).
   TLakItem = class(TCustomModflowBoundaryItem)
   private
-    FMaximumStage: TFormulaObject;
-    FPrecipitation: TFormulaObject;
-    FMinimumStage: TFormulaObject;
-    FWithdrawal: TFormulaObject;
-    FOverlandRunoff: TFormulaObject;
-    FEvaporation: TFormulaObject;
+    FMaximumStage: IFormulaObject;
+    FPrecipitation: IFormulaObject;
+    FMinimumStage: IFormulaObject;
+    FWithdrawal: IFormulaObject;
+    FOverlandRunoff: IFormulaObject;
+    FEvaporation: IFormulaObject;
     procedure SetEvaporation(const Value: string);
     procedure SetMaximumStage(const Value: string);
     procedure SetMinimumStage(const Value: string);
@@ -344,12 +345,12 @@ type
     FPestWithdrawalMethod: TPestParamMethod;
     FPestOverlandRunoffMethod: TPestParamMethod;
     FPestEvaporationMethod: TPestParamMethod;
-    FPestMinimumStageFormula: TFormulaObject;
-    FPestMaximumStageFormula: TFormulaObject;
-    FPestPrecipitationFormula: TFormulaObject;
-    FPestEvaporationFormula: TFormulaObject;
-    FPestOverlandRunoffFormula: TFormulaObject;
-    FPestWithdrawalFormula: TFormulaObject;
+    FPestMinimumStageFormula: IFormulaObject;
+    FPestMaximumStageFormula: IFormulaObject;
+    FPestPrecipitationFormula: IFormulaObject;
+    FPestEvaporationFormula: IFormulaObject;
+    FPestOverlandRunoffFormula: IFormulaObject;
+    FPestWithdrawalFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestEvaporationObserver: TObserver;
     FPestMaximumStageObserver: TObserver;
@@ -697,27 +698,27 @@ end;
 
 procedure TLakItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FMinimumStage then
+  if Sender = FMinimumStage as TObject then
   begin
     List.Add(FObserverList[LakMinimumStagePosition]);
   end;
-  if Sender = FMaximumStage then
+  if Sender = FMaximumStage as TObject then
   begin
     List.Add(FObserverList[LakMaximumStagePosition]);
   end;
-  if Sender = FPrecipitation then
+  if Sender = FPrecipitation as TObject then
   begin
     List.Add(FObserverList[LakPrecipitationPosition]);
   end;
-  if Sender = FEvaporation then
+  if Sender = FEvaporation as TObject then
   begin
     List.Add(FObserverList[LakEvaporationPosition]);
   end;
-  if Sender = FOverlandRunoff then
+  if Sender = FOverlandRunoff as TObject then
   begin
     List.Add(FObserverList[LakOverlandRunoffPosition]);
   end;
-  if Sender = FWithdrawal then
+  if Sender = FWithdrawal as TObject then
   begin
     List.Add(FObserverList[LakWithdrawalPosition]);
   end;
@@ -893,19 +894,6 @@ end;
 
 procedure TLakItem.SetMaximumStage(const Value: string);
 begin
-//  LakMinimumStagePosition = 0;
-//  LakMaximumStagePosition = 1;
-//  LakPrecipitationPosition = 2;
-//  LakEvaporationPosition = 3;
-//  LakOverlandRunoffPosition = 4;
-//  LakWithdrawalPosition = 5;
-
-//    FMaximumStage: TFormulaObject;
-//    FPrecipitation: TFormulaObject;
-//    FMinimumStage: TFormulaObject;
-//    FWithdrawal: TFormulaObject;
-//    FOverlandRunoff: TFormulaObject;
-//    FEvaporation: TFormulaObject;
   UpdateFormulaBlocks(Value, LakMaximumStagePosition, FMaximumStage);
 end;
 
@@ -2252,42 +2240,42 @@ end;
 
 procedure TLakBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestMinimumStageFormula then
+  if Sender = FPestMinimumStageFormula as TObject then
   begin
     if LakMinimumStagePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[LakMinimumStagePosition]);
     end;
   end;
-  if Sender = FPestMaximumStageFormula then
+  if Sender = FPestMaximumStageFormula as TObject then
   begin
     if LakMaximumStagePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[LakMaximumStagePosition]);
     end;
   end;
-  if Sender = FPestPrecipitationFormula then
+  if Sender = FPestPrecipitationFormula as TObject then
   begin
     if LakPrecipitationPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[LakPrecipitationPosition]);
     end;
   end;
-  if Sender = FPestEvaporationFormula then
+  if Sender = FPestEvaporationFormula as TObject then
   begin
     if LakEvaporationPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[LakEvaporationPosition]);
     end;
   end;
-  if Sender = FPestOverlandRunoffFormula then
+  if Sender = FPestOverlandRunoffFormula as TObject then
   begin
     if LakOverlandRunoffPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[LakOverlandRunoffPosition]);
     end;
   end;
-  if Sender = FPestWithdrawalFormula then
+  if Sender = FPestWithdrawalFormula as TObject then
   begin
     if LakWithdrawalPosition < FObserverList.Count then
     begin

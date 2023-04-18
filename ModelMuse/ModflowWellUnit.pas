@@ -3,7 +3,8 @@ unit ModflowWellUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit, RealListUnit, System.Generics.Collections;
 
@@ -62,7 +63,7 @@ type
   TWellItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(PumpingRate).
-    FPumpingRate: TFormulaObject;
+    FPumpingRate: IFormulaObject;
     FGwtConcentrations: TWelGwtConcCollection;
     // See @link(PumpingRate).
     procedure SetPumpingRate(const Value: string);
@@ -222,7 +223,7 @@ type
     FRelativeTabFileName: string;
     FTabFileLines: Integer;
     FPestPumpingRateMethod: TPestParamMethod;
-    FPestPumpingRateFormula: TFormulaObject;
+    FPestPumpingRateFormula: IFormulaObject;
     FPestPumpingRateObserver: TObserver;
     FUsedObserver: TObserver;
     FPestConcentrationFormulas: TWelGwtConcCollection;
@@ -430,12 +431,14 @@ var
   Item: TGwtConcStringValueItem;
   ConcIndex: Integer;
 begin
-//  Assert(Sender = FPumpingRate);
-  List.Add(FObserverList[WelPumpingRatePosition]);
+  if (Sender = FPumpingRate as TObject) then
+  begin
+    List.Add(FObserverList[WelPumpingRatePosition]);
+  end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     Item := GwtConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1498,7 +1501,7 @@ procedure TMfWellBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Index: Integer;
 begin
-  if Sender = FPestPumpingRateFormula then
+  if Sender = FPestPumpingRateFormula as TObject then
   begin
     if WelPumpingRatePosition < FObserverList.Count then
     begin
@@ -1507,7 +1510,7 @@ begin
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
-    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    if FPestConcentrationFormulas[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[WelStartConcentration + Index]);
     end;

@@ -4,7 +4,7 @@ interface
 
 uses
   OrderedCollectionUnit, ModflowBoundaryUnit, SysUtils, Classes,
-  ModflowFmpBaseClasses, GoPhastTypes;
+  ModflowFmpBaseClasses, GoPhastTypes, FormulaManagerInterfaceUnit;
 
 type
   TSoilType = (stSand, stSandyLoam, stSilt, stSiltyClay, stOther);
@@ -261,76 +261,13 @@ begin
   end;
 end;
 
-//procedure TSoilItem.SetACoeff(const Value: string);
-//begin
-//  if FFormulaObjects[ACoeffPosition].Formula <> Value then
-//  begin
-//    UpdateFormulaBlocks(Value, ACoeffPosition, FFormulaObjects[ACoeffPosition]);
-//  end;
-//end;
-//
-//procedure TSoilItem.SetBCoeff(const Value: string);
-//begin
-//  if FFormulaObjects[BCoeffPosition].Formula <> Value then
-//  begin
-//    UpdateFormulaBlocks(Value, BCoeffPosition, FFormulaObjects[BCoeffPosition]);
-//  end;
-//end;
-
 procedure TSoilItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   if FFormulaObjects[Index].Formula <> Value then
   begin
     UpdateFormulaBlocks(Value, Index, FFormulaObjects[Index]);
   end;
-//  case Index of
-//    CapillaryFringePosition:
-//      CapillaryFringe := Value;
-//    ACoeffPosition:
-//      ACoeff := Value;
-//    BCoeffPosition:
-//      BCoeff := Value;
-//    CCoeffPosition:
-//      CCoeff := Value;
-//    DCoeffPosition:
-//      DCoeff := Value;
-//    ECoeffPosition:
-//      ECoeff := Value;
-//    else Assert(False);
-//  end;
 end;
-
-//procedure TSoilItem.SetCapillaryFringe(const Value: string);
-//begin
-//  if FFormulaObjects[CapillaryFringePosition].Formula <> Value then
-//  begin
-//    UpdateFormulaBlocks(Value, CapillaryFringePosition, FFormulaObjects[CapillaryFringePosition]);
-//  end;
-//end;
-//
-//procedure TSoilItem.SetCCoeff(const Value: string);
-//begin
-//  if FFormulaObjects[CCoeffPosition].Formula <> Value then
-//  begin
-//    UpdateFormulaBlocks(Value, CCoeffPosition, FFormulaObjects[CCoeffPosition]);
-//  end;
-//end;
-//
-//procedure TSoilItem.SetDCoeff(const Value: string);
-//begin
-//  if FFormulaObjects[DCoeffPosition].Formula <> Value then
-//  begin
-//    UpdateFormulaBlocks(Value, DCoeffPosition, FFormulaObjects[DCoeffPosition]);
-//  end;
-//end;
-//
-//procedure TSoilItem.SetECoeff(const Value: string);
-//begin
-//  if FFormulaObjects[ECoeffPosition].Formula <> Value then
-//  begin
-//    UpdateFormulaBlocks(Value, ECoeffPosition, FFormulaObjects[ECoeffPosition]);
-//  end;
-//end;
 
 procedure TSoilItem.SetIndex(Value: Integer);
 var

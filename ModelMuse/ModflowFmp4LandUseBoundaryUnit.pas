@@ -408,7 +408,7 @@ begin
   for LandUseIndex := 0 to Fmp4LandUseValues.Count - 1 do
   begin
     Item := Fmp4LandUseValues.Items[LandUseIndex];
-    if Item.ValueObject = Sender then
+    if (Item.ValueObject as TObject) = Sender then
     begin
       List.Add(Item.Observer);
     end;

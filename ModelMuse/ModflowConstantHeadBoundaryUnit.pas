@@ -3,7 +3,8 @@ unit ModflowConstantHeadBoundaryUnit;
 interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
-  ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit,
+  ModflowBoundaryUnit, ModflowCellUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit, OrderedCollectionInterfaceUnit;
 
@@ -138,9 +139,9 @@ type
   TChdItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(EndHead).
-    FEndHead: TFormulaObject;
+    FEndHead: IFormulaObject;
     // See @link(StartHead).
-    FStartHead: TFormulaObject;
+    FStartHead: IFormulaObject;
     FGwtConcentrations: TChdGwtConcCollection;
     // See @link(EndHead).
     procedure SetEndHead(const Value: string);
@@ -276,8 +277,8 @@ type
     FCurrentParameter: TModflowTransientListParameter;
     FPestStartingHeadMethod: TPestParamMethod;
     FPestEndingHeadMethod: TPestParamMethod;
-    FPestStartingHeadFormula: TFormulaObject;
-    FPestEndingHeadFormula: TFormulaObject;
+    FPestStartingHeadFormula: IFormulaObject;
+    FPestEndingHeadFormula: IFormulaObject;
     FPestEndingObserver: TObserver;
     FPestStartingObserver: TObserver;
     FUsedObserver: TObserver;
@@ -494,18 +495,18 @@ var
   ConcIndex: Integer;
   Item: TGwtConcStringValueItem;
 begin
-  if Sender = FStartHead then
+  if Sender = FStartHead as TObject then
   begin
     List.Add(FObserverList[ChdStartHeadPosition]);
   end;
-  if Sender = FEndHead then
+  if Sender = FEndHead as TObject then
   begin
     List.Add(FObserverList[ChdEndHeadPosition]);
   end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     Item := GwtConcentrations.Items[ConcIndex];
-    if Item.ValueObject = Sender then
+    if (Item.ValueObject as TObject) = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -1368,14 +1369,14 @@ procedure TChdBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Index: Integer;
 begin
-  if Sender = FPestStartingHeadFormula then
+  if Sender = FPestStartingHeadFormula as TObject then
   begin
     if ChdStartHeadPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[ChdStartHeadPosition]);
     end;
   end;
-  if Sender = FPestEndingHeadFormula then
+  if Sender = FPestEndingHeadFormula as TObject then
   begin
     if ChdEndHeadPosition < FObserverList.Count then
     begin
@@ -1384,7 +1385,7 @@ begin
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
-    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    if FPestConcentrationFormulas[Index].ValueObject as TObject = Sender then
     begin
       List.Add(FObserverList[ChdStartConcentration + Index]);
     end;

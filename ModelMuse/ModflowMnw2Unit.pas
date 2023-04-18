@@ -2,7 +2,9 @@ unit ModflowMnw2Unit;
 
 interface
 
-uses Classes, ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit,
+uses Classes, ModflowBoundaryUnit,
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  OrderedCollectionUnit,
   RbwParser, ModflowCellUnit, ZLib, GoPhastTypes, RealListUnit,
   SubscriptionUnit, SysUtils, DataSetUnit, PestObsUnit,
   OrderedCollectionInterfaceUnit;
@@ -69,11 +71,11 @@ type
   TMnw2TimeItem = class(TCustomModflowBoundaryItem)
   private
     FLimitMethod: TMnwLimitMethod;
-    FPumpingRate: TFormulaObject;
-    FReactivationPumpingRate: TFormulaObject;
-    FLimitingWaterLevel: TFormulaObject;
-    FInactivationPumpingRate: TFormulaObject;
-    FHeadCapacityMultiplier: TFormulaObject;
+    FPumpingRate: IFormulaObject;
+    FReactivationPumpingRate: IFormulaObject;
+    FLimitingWaterLevel: IFormulaObject;
+    FInactivationPumpingRate: IFormulaObject;
+    FHeadCapacityMultiplier: IFormulaObject;
     FHlim: double;
     FQdes: double;
     FCapMult: double;
@@ -160,14 +162,14 @@ type
 
   TMnw2SpatialItem = class(TCustomModflowBoundaryItem)
   private
-    FB: TFormulaObject;
-    FC: TFormulaObject;
-    FCellToWellConductance: TFormulaObject;
-    FP: TFormulaObject;
-    FPartialPenetration: TFormulaObject;
-    FSkinK: TFormulaObject;
-    FSkinRadius: TFormulaObject;
-    FWellRadius: TFormulaObject;
+    FB: IFormulaObject;
+    FC: IFormulaObject;
+    FCellToWellConductance: IFormulaObject;
+    FP: IFormulaObject;
+    FPartialPenetration: IFormulaObject;
+    FSkinK: IFormulaObject;
+    FSkinRadius: IFormulaObject;
+    FWellRadius: IFormulaObject;
     function GetB: string;
     function GetC: string;
     function GetCellToWellConductance: string;
@@ -433,14 +435,14 @@ type
 
   TVerticalScreen = class(TCustomModflowBoundaryItem)
   private
-    FSkinRadius: TFormulaObject;
-    FB: TFormulaObject;
-    FC: TFormulaObject;
+    FSkinRadius: IFormulaObject;
+    FB: IFormulaObject;
+    FC: IFormulaObject;
     FZTop: double;
-    FCellToWellConductance: TFormulaObject;
-    FP: TFormulaObject;
-    FWellRadius: TFormulaObject;
-    FSkinK: TFormulaObject;
+    FCellToWellConductance: IFormulaObject;
+    FP: IFormulaObject;
+    FWellRadius: IFormulaObject;
+    FSkinK: IFormulaObject;
     FZBottom: double;
     procedure SetB(const Value: string);
     procedure SetC(const Value: string);
@@ -551,11 +553,11 @@ type
     FPestPumpingRateMethod: TPestParamMethod;
     FPestReactivationPumpingRateMethod: TPestParamMethod;
     FPestInactivationPumpingRateMethod: TPestParamMethod;
-    FPestPumpingRateFormula: TFormulaObject;
-    FPestHeadCapacityMultiplierFormula: TFormulaObject;
-    FPestLimitingWaterLevelFormula: TFormulaObject;
-    FPestInactivationPumpingRateFormula: TFormulaObject;
-    FPestReactivationPumpingRateFormula: TFormulaObject;
+    FPestPumpingRateFormula: IFormulaObject;
+    FPestHeadCapacityMultiplierFormula: IFormulaObject;
+    FPestLimitingWaterLevelFormula: IFormulaObject;
+    FPestInactivationPumpingRateFormula: IFormulaObject;
+    FPestReactivationPumpingRateFormula: IFormulaObject;
     FPestHeadCapacityMultiplierObserver: TObserver;
     FPestInactivationPumpingRateObserver: TObserver;
     FUsedObserver: TObserver;
@@ -1001,23 +1003,23 @@ end;
 
 procedure TMnw2TimeItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPumpingRate then
+  if Sender = FPumpingRate as TObject then
   begin
     List.Add(FObserverList[PumpingRatePosition]);
   end;
-  if Sender = FReactivationPumpingRate then
+  if Sender = FReactivationPumpingRate as TObject then
   begin
     List.Add(FObserverList[ReactivationPumpingRatePosition]);
   end;
-  if Sender = FLimitingWaterLevel then
+  if Sender = FLimitingWaterLevel as TObject then
   begin
     List.Add(FObserverList[LimitingWaterLevelPosition]);
   end;
-  if Sender = FInactivationPumpingRate then
+  if Sender = FInactivationPumpingRate as TObject then
   begin
     List.Add(FObserverList[InactivationPumpingRatePosition]);
   end;
-  if Sender = FHeadCapacityMultiplier then
+  if Sender = FHeadCapacityMultiplier as TObject then
   begin
     List.Add(FObserverList[HeadCapacityMultiplierPosition]);
   end;
@@ -2724,35 +2726,35 @@ end;
 
 procedure TMnw2Boundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FPestPumpingRateFormula then
+  if Sender = FPestPumpingRateFormula as TObject then
   begin
     if PumpingRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[PumpingRatePosition]);
     end;
   end;
-  if Sender = FPestHeadCapacityMultiplierFormula then
+  if Sender = FPestHeadCapacityMultiplierFormula as TObject then
   begin
     if HeadCapacityMultiplierPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[HeadCapacityMultiplierPosition]);
     end;
   end;
-  if Sender = FPestLimitingWaterLevelFormula then
+  if Sender = FPestLimitingWaterLevelFormula as TObject then
   begin
     if LimitingWaterLevelPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[LimitingWaterLevelPosition]);
     end;
   end;
-  if Sender = FPestInactivationPumpingRateFormula then
+  if Sender = FPestInactivationPumpingRateFormula as TObject then
   begin
     if InactivationPumpingRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[InactivationPumpingRatePosition]);
     end;
   end;
-  if Sender = FPestReactivationPumpingRateFormula then
+  if Sender = FPestReactivationPumpingRateFormula as TObject then
   begin
     if ReactivationPumpingRatePosition < FObserverList.Count then
     begin
@@ -3288,35 +3290,35 @@ end;
 
 procedure TMnw2SpatialItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FB then
+  if Sender = FB as TObject then
   begin
     List.Add(FObserverList[BPosition]);
   end;
-  if Sender = FC then
+  if Sender = FC as TObject then
   begin
     List.Add(FObserverList[CPosition]);
   end;
-  if Sender = FCellToWellConductance then
+  if Sender = FCellToWellConductance as TObject then
   begin
     List.Add(FObserverList[CellToWellConductancePosition]);
   end;
-  if Sender = FP then
+  if Sender = FP as TObject then
   begin
     List.Add(FObserverList[PPosition]);
   end;
-  if Sender = FPartialPenetration then
+  if Sender = FPartialPenetration as TObject then
   begin
     List.Add(FObserverList[PartialPenetrationPosition]);
   end;
-  if Sender = FSkinK then
+  if Sender = FSkinK as TObject then
   begin
     List.Add(FObserverList[SkinKPosition]);
   end;
-  if Sender = FSkinRadius then
+  if Sender = FSkinRadius as TObject then
   begin
     List.Add(FObserverList[SkinRadiusPosition]);
   end;
-  if Sender = FWellRadius then
+  if Sender = FWellRadius as TObject then
   begin
     List.Add(FObserverList[WellRadiusPosition]);
   end;
@@ -4283,31 +4285,31 @@ end;
 
 procedure TVerticalScreen.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FB then
+  if Sender = FB as TObject then
   begin
     List.Add(FObserverList[BPosition]);
   end;
-  if Sender = FC then
+  if Sender = FC as TObject then
   begin
     List.Add(FObserverList[CPosition]);
   end;
-  if Sender = FCellToWellConductance then
+  if Sender = FCellToWellConductance as TObject then
   begin
     List.Add(FObserverList[CellToWellConductancePosition]);
   end;
-  if Sender = FP then
+  if Sender = FP as TObject then
   begin
     List.Add(FObserverList[PPosition]);
   end;
-  if Sender = FSkinK then
+  if Sender = FSkinK as TObject then
   begin
     List.Add(FObserverList[SkinKPosition]);
   end;
-  if Sender = FSkinRadius then
+  if Sender = FSkinRadius as TObject then
   begin
     List.Add(FObserverList[SkinRadiusPosition]);
   end;
-  if Sender = FWellRadius then
+  if Sender = FWellRadius as TObject then
   begin
     List.Add(FObserverList[WellRadiusPosition]);
   end;

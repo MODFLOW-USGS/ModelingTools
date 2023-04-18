@@ -3,7 +3,8 @@ unit ModflowSfrEquationUnit;
 interface
 
 uses SysUtils, Classes, RbwParser, OrderedCollectionUnit, ModflowBoundaryUnit,
-  FormulaManagerUnit, SubscriptionUnit;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit,
+  SubscriptionUnit;
 
 type
   TSfrEquationRecord = record
@@ -23,10 +24,10 @@ type
   // @name is stored by @link(TSfrCollection).
   TSfrEquationItem = class(TCustomModflowBoundaryItem)
   private
-    FDepthCoefficient: TFormulaObject;
-    FDepthExponent: TFormulaObject;
-    FWidthCoefficient: TFormulaObject;
-    FWidthExponent: TFormulaObject;
+    FDepthCoefficient: IFormulaObject;
+    FDepthExponent: IFormulaObject;
+    FWidthCoefficient: IFormulaObject;
+    FWidthExponent: IFormulaObject;
     procedure SetDepthExponent(const Value: string);
     procedure SetDepthCoefficient(const Value: string);
     procedure SetWidthCoefficient(const Value: string);
@@ -190,19 +191,19 @@ end;
 
 procedure TSfrEquationItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FDepthCoefficient then
+  if Sender = FDepthCoefficient as TObject then
   begin
     List.Add(FObserverList[DepthCoefficientPosition]);
   end;
-  if Sender = FDepthExponent then
+  if Sender = FDepthExponent as TObject then
   begin
     List.Add(FObserverList[DepthExponentPosition]);
   end;
-  if Sender = FWidthCoefficient then
+  if Sender = FWidthCoefficient as TObject then
   begin
     List.Add(FObserverList[WidthCoefficientPosition]);
   end;
-  if Sender = FWidthExponent then
+  if Sender = FWidthExponent as TObject then
   begin
     List.Add(FObserverList[WidthExponentPosition]);
   end;

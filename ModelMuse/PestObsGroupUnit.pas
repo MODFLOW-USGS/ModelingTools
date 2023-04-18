@@ -28,9 +28,6 @@ type
     procedure SetIsRegularizationGroup(const Value: Boolean);
     function GetExportedGroupName: string;
   protected
-    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     constructor Create(Collection: TCollection); override;
@@ -206,18 +203,6 @@ begin
   end;
 end;
 
-
-function TPestObservationGroup.QueryInterface(const IID: TGUID;
-  out Obj): HResult;
-const
-  E_NOINTERFACE = HRESULT($80004002);
-begin
-  if GetInterface(IID, Obj) then
-    result := 0
-  else
-    result := E_NOINTERFACE;
-end;
-
 procedure TPestObservationGroup.SetAbsoluteCorrelationFileName(
   const Value: string);
 begin
@@ -260,16 +245,6 @@ end;
 procedure TPestObservationGroup.SetUseGroupTarget(const Value: Boolean);
 begin
   SetBooleanProperty(FUseGroupTarget, Value);
-end;
-
-function TPestObservationGroup._AddRef: Integer;
-begin
-  result := -1;
-end;
-
-function TPestObservationGroup._Release: Integer;
-begin
-  result := -1;
 end;
 
 { TPestObservationGroups }
