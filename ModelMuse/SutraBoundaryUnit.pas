@@ -235,7 +235,7 @@ type
     property UsedObserver: TObserver read GetUsedObserver;
     procedure CreateObservers;
   public
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     Procedure Assign(Source: TPersistent); override;
     function Used: boolean; override;
@@ -404,7 +404,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraFluidBoundary = class(TSutraBoundary)
@@ -442,7 +442,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraMassEnergySourceSinkBoundary = class(TSutraBoundary)
@@ -481,7 +481,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraSpecifiedPressureBoundary = class(TSutraBoundary)
@@ -519,7 +519,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSutraSpecifiedConcTempBoundary = class(TSutraBoundary)
@@ -1075,7 +1075,7 @@ end;
 { TSutraFluidBoundaryCollection }
 
 constructor TSutraFluidBoundaryCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 
@@ -1119,7 +1119,7 @@ end;
 { TSutraMassEnergySourceSinkCollection }
 
 constructor TSutraMassEnergySourceSinkCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Boundary: TModflowScreenObjectProperty; Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 end;
@@ -1153,7 +1153,7 @@ end;
 { TSutraSpecifiedPressureCollection }
 
 constructor TSutraSpecifiedPressureCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 
@@ -1197,7 +1197,7 @@ end;
 { TSutraSpecifiedConcTempCollection }
 
 constructor TSutraSpecifiedConcTempCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
 
@@ -1789,7 +1789,7 @@ begin
   result := 4;
 end;
 
-constructor TSutraLake.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor TSutraLake.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   CreateFormulaObjects;

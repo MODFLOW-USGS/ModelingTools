@@ -44,7 +44,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TChildModelValue
       read GetItems write SetItems; default;
   end;
@@ -90,7 +90,7 @@ type
     procedure UpdateDisplay(Value: TModflowTransientListParameter);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TModflowTransientListParameter
       read GetItems write SetItems; default;
     function GetParamByName(
@@ -358,7 +358,7 @@ begin
   end;
 end;
 
-constructor TModflowTransientListParameters.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TModflowTransientListParameters.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TModflowTransientListParameter, Model);
 end;
@@ -610,7 +610,7 @@ end;
 
 { TChildModelValues }
 
-constructor TChildModelValues.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TChildModelValues.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TChildModelValue, Model);
 end;

@@ -58,7 +58,7 @@ type
     function GetItems(Index: Integer): TStructureDischargeItem;
     procedure SetItems(Index: Integer; const Value: TStructureDischargeItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TStructureDischargeItem read GetItems
       write SetItems; default;
     function Add: TStructureDischargeItem;
@@ -97,7 +97,7 @@ type
     function GetItem(Index: Integer): TStructureTimeItem;
     procedure SetItem(Index: Integer; const Value: TStructureTimeItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TStructureTimeItem read GetItem
       write SetItem; default;
     function Add: TStructureTimeItem;
@@ -384,7 +384,7 @@ type
     function GetItems(Index: Integer): TStructure;
     procedure SetItems(Index: Integer; const Value: TStructure);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TStructure read GetItems
       write SetItems; default;
     function GetStructureByName(AName: string): TStructure;
@@ -1142,7 +1142,7 @@ begin
   result := inherited Add as TStructureDischargeItem;
 end;
 
-constructor TStructureDischargeCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TStructureDischargeCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TStructureDischargeItem, Model);
 end;
@@ -1166,7 +1166,7 @@ begin
   result := inherited Add as TStructure;
 end;
 
-constructor TStructureCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TStructureCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TStructure, Model);
 end;
@@ -1288,7 +1288,7 @@ begin
   result := inherited Add as TStructureTimeItem;
 end;
 
-constructor TStructureTimes.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TStructureTimes.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TStructureTimeItem, Model);
 end;

@@ -290,7 +290,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage); override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSfrMf6_Cell = class(TValueCell)
@@ -426,7 +426,7 @@ type
     procedure SetItem(Index: Integer; const Value: TSDiversionItem);
   public
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TSDiversionItem read GetItem write SetItem; default;
     function Add: TSDiversionItem;
   end;
@@ -628,7 +628,7 @@ type
     property PestInflowConcentrationObserver[const Index: Integer]: TObserver
       read GetPestInflowConcentrationObserver;
   public
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     Destructor Destroy; override;
     Procedure Assign(Source: TPersistent); override;
     procedure Loaded;
@@ -2499,7 +2499,7 @@ begin
 end;
 
 constructor TSfrMf6Collection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   FSfrMf6Boundary := Boundary as TSfrMf6Boundary;
@@ -3035,7 +3035,7 @@ begin
   result := inherited Add as TSDiversionItem;
 end;
 
-constructor TDiversionCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TDiversionCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSDiversionItem, Model);
 end;
@@ -3489,7 +3489,7 @@ begin
   result := 'Sfr6';
 end;
 
-constructor TSfrMf6Boundary.Create(Model: ICustomModelInterfaceForTOrderedCollection;
+constructor TSfrMf6Boundary.Create(Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 var
   InvalidateEvent: TNotifyEvent;

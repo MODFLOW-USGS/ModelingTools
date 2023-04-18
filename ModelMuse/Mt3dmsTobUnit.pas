@@ -97,7 +97,7 @@ type
     procedure RemoveModelLink(AModel: TBaseModel);
 //    property ScreenObject: TObject read FScreenObject;
     // @name creates an instance of @classname
-    constructor Create(Boundary: TMt3dmsTransObservations; Model: ICustomModelInterfaceForTOrderedCollection;
+    constructor Create(Boundary: TMt3dmsTransObservations; Model: IModelForTOrderedCollection;
       ScreenObject: TObject);
     procedure EvaluateConcentrationObservations(AModel: TBaseModel);
     // @name destroys the current instance of @classname.
@@ -449,7 +449,7 @@ begin
 end;
 
 constructor TMt3dmsTobCollection.Create(Boundary: TMt3dmsTransObservations;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(TMt3dmsTobItem, Model, ScreenObject);
   FBoundary := Boundary;

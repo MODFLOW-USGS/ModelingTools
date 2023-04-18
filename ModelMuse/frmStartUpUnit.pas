@@ -657,6 +657,13 @@ var
 begin
   inherited;
 
+{$IFNDEF SUTRA4}
+  if rgTransport.Items.Count = 4 then
+  begin
+    rgTransport.Items.Delete(3);
+  end;
+{$ENDIF}
+
   jvtmdtSimStartTime.Time := 0;
 
   SetAppearance;

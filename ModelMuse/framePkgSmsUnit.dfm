@@ -23,6 +23,7 @@ inherited framePkgSms: TframePkgSms
     Height = 414
     ActivePage = tabLinear
     Align = alBottom
+    Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
     OnChange = pgcControlsChange
     object tabBasic: TTabSheet
@@ -387,6 +388,8 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 489
+        ExplicitHeight = 390
         ColWidths = (
           84
           64
@@ -493,6 +496,8 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 489
+        ExplicitHeight = 390
         ColWidths = (
           84
           64

@@ -199,7 +199,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[index: Integer] : TConduitLayerItem read GetItem
       write SetItem; default;
   end;
@@ -340,7 +340,7 @@ type
     procedure Assign(Source: TPersistent);override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     destructor Destroy; override;
     property LayerGroups[const Index: integer]: TLayerGroup
       read GetLayerGroup; default;
@@ -386,7 +386,7 @@ type
     function LayerCount: integer; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property LayerGroups[const Index: integer]: TSutraLayerGroup
       read GetLayerGroup; default;
     function NodeLayerCount: Integer;
@@ -912,7 +912,7 @@ begin
   end;
 end;
 
-constructor TLayerStructure.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TLayerStructure.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TLayerGroup, Model);
   FSimulatedNotifier := TObserver.Create(nil);
@@ -1975,7 +1975,7 @@ end;
 
 { TSutraLayerStructure }
 
-constructor TSutraLayerStructure.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TSutraLayerStructure.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSutraLayerGroup, Model);
 end;
@@ -2303,7 +2303,7 @@ end;
 
 { TConduitLayerCollection }
 
-constructor TConduitLayerCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TConduitLayerCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TConduitLayerItem, Model);
 end;

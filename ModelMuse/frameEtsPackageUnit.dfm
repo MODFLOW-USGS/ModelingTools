@@ -25,7 +25,7 @@ inherited frameEtsPackage: TframeEtsPackage
       Left = 17
       Top = 25
       Width = 41
-      Height = 21
+      Height = 23
       ButtonKind = bkClassic
       MaxValue = 100.000000000000000000
       MinValue = 1.000000000000000000

@@ -18,6 +18,8 @@ type
   TRbwRuler = class;
   TRulerPainter = class;
 
+  ERulerException = class(Exception);
+
   {@abstract(See TRbwRuler.@link(TRbwRuler.RulerEnds).)}
   TRulerPositions = class(TPersistent)
   private
@@ -1168,8 +1170,22 @@ begin
   Factor := Ten;
   LowCoord := RulerValues.Lower;
   HighCoord := RulerValues.Upper;
-  GetRoundMinMax(LowCoord, HighCoord, Increment, factor);
-  Spacing := Round(Increment / Multiplier);
+  try
+    GetRoundMinMax(LowCoord, HighCoord, Increment, factor);
+    Spacing := Round(Increment / Multiplier);
+  except on E: ERangeError do
+    begin
+      raise ERulerException.Create(
+        'RulerValues.Upper = ' + RulerValues.Upper.ToString
+        + '; RulerValues.Lower = ' + RulerValues.Lower.ToString
+        + '; RulerEnds.Upper = ' + RulerEnds.Upper.ToString
+        + '; RulerEnds.Lower = ' + RulerEnds.Lower.ToString
+        + Format(' The error message was %s', [E.Message]));
+    end;
+//  Multiplier := (RulerValues.Upper - RulerValues.Lower)
+//    / (RulerEnds.Upper - RulerEnds.Lower);
+
+  end;
   PriorSpacing := Spacing;
   while Spacing > RulerDesiredSpacing do
   begin

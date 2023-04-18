@@ -420,6 +420,7 @@ type
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function GetModel: ICustomModelForDataArrayManager;
   public
     FDataArrayCreationRecords: array of TDataSetCreationData;
     FZetaDataDefinition: TDataSetCreationData;
@@ -427,6 +428,7 @@ type
     FSftDispersion: TDataSetCreationData;
     FUztInitConc: TDataSetCreationData;
     procedure Assign(Source: TDataArrayManager);
+    property Model: ICustomModelForDataArrayManager read GetModel;
     procedure AddDataSetToLookUpList(const DataSet: TDataArray);
     Constructor Create(Model: ICustomModelForDataArrayManager);
     Destructor Destroy; override;
@@ -4423,10 +4425,13 @@ end;
 procedure TDataArrayManager.Loaded;
 var
   DataArrayIndex: Integer;
+  ADataArray: TDataArray;
 begin
   for DataArrayIndex := 0 to DataSetCount - 1 do
   begin
-    DataSets[DataArrayIndex].Loaded;
+    ADataArray := DataSets[DataArrayIndex];
+    ADataArray.AssignModel(Model);
+    ADataArray.Loaded;
   end;
   UpdateClassifications;
 end;
@@ -4504,6 +4509,11 @@ begin
   begin
     result := FDataSets.Capacity;
   end;
+end;
+
+function TDataArrayManager.GetModel: ICustomModelForDataArrayManager;
+begin
+  result := FCustomModel;
 end;
 
 procedure TDataArrayManager.HandleAddedDataArrays(AddedDataSetList: TList);

@@ -48,7 +48,7 @@ inherited framePackageRes: TframePackageRes
       Left = 16
       Top = 48
       Width = 50
-      Height = 21
+      Height = 23
       CheckMinValue = True
       ButtonKind = bkClassic
       Value = 15.000000000000000000

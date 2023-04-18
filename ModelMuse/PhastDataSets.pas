@@ -1384,7 +1384,7 @@ end;
 constructor TCustomPhastDataSet.Create(AnOwner: IModelMuseModel);
 begin
   inherited;
-  FMixtureFormulaObject := TPhastModel(AnOwner).FormulaManager.Add;
+  FMixtureFormulaObject := TCustomModel(AnOwner).FormulaManager.Add;
   FMixtureFormulaObject.AddSubscriptionEvents(
     GlobalDataArrayRemoveSubscription,
     GlobalDataArrayRestoreSubscription, self);

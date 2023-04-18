@@ -141,7 +141,7 @@ inherited frmChildModels: TfrmChildModels
       object edModelName: TLabeledEdit
         Left = 4
         Top = 32
-        Width = 339
+        Width = 335
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         EditLabel.Width = 126
@@ -155,13 +155,14 @@ inherited frmChildModels: TfrmChildModels
       object comboBottomUnit: TComboBox
         Left = 3
         Top = 85
-        Width = 340
+        Width = 336
         Height = 26
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 1
         OnChange = comboBottomUnitChange
         OnExit = comboBottomUnitExit
+        ExplicitWidth = 332
       end
       object seBottomLayer: TJvSpinEdit
         Left = 4
@@ -190,7 +191,7 @@ inherited frmChildModels: TfrmChildModels
       object rgStartingHeads: TRadioGroup
         Left = 3
         Top = 248
-        Width = 340
+        Width = 336
         Height = 49
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Starting heads (ISHFLG)'
@@ -350,7 +351,7 @@ inherited frmChildModels: TfrmChildModels
       object lblMaxIterations: TLabel
         Left = 3
         Top = 63
-        Width = 320
+        Width = 316
         Height = 36
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Maximum number of LGR iterations in two-way coupling (MXLGRITER)'
@@ -399,7 +400,7 @@ inherited frmChildModels: TfrmChildModels
       object rgPrintIterations: TRadioGroup
         Left = 0
         Top = 134
-        Width = 343
+        Width = 339
         Height = 81
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Print maximum head and flux change (IOUTLGR)'
@@ -468,7 +469,7 @@ inherited frmChildModels: TfrmChildModels
       object rgCouplingMethod: TRadioGroup
         Left = 3
         Top = 3
-        Width = 340
+        Width = 336
         Height = 54
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Coupling method (MXLGRITER)'
@@ -494,7 +495,7 @@ inherited frmChildModels: TfrmChildModels
       471
       91)
     object btnHelp: TBitBtn
-      Left = 116
+      Left = 112
       Top = 47
       Width = 108
       Height = 33
@@ -503,10 +504,9 @@ inherited frmChildModels: TfrmChildModels
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 112
     end
     object btnOK: TBitBtn
-      Left = 230
+      Left = 226
       Top = 47
       Width = 108
       Height = 33
@@ -515,10 +515,9 @@ inherited frmChildModels: TfrmChildModels
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 226
     end
     object btnCancel: TBitBtn
-      Left = 344
+      Left = 340
       Top = 47
       Width = 108
       Height = 33
@@ -526,7 +525,6 @@ inherited frmChildModels: TfrmChildModels
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 340
     end
     object cbSaveBFH: TCheckBox
       Left = 1

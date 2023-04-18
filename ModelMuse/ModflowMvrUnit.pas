@@ -87,7 +87,7 @@ type
     procedure SetItem(Index: Integer; const Value: TReceiverItem);
   public
     procedure Loaded(AModel: TBaseModel);
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TReceiverItem read GetItem write SetItem; default;
     function Add: TReceiverItem;
   end;
@@ -126,7 +126,7 @@ type
     procedure SetItem(Index: Integer; const Value: TIndividualMvrItem);
   public
     procedure Assign(Source: TPersistent); override;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
+    constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject;
       MvrItems: TCollection);
     property Items[Index:Integer]: TIndividualMvrItem read GetItem write SetItem; default;
     function IndexOfFormulaObject(AFormulaObject: TFormulaObject): integer;
@@ -711,7 +711,7 @@ begin
 
 end;
 
-constructor TIndividualMvrItems.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
+constructor TIndividualMvrItems.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject;
   MvrItems: TCollection);
 begin
   inherited Create(TIndividualMvrItem, Model, ScreenObject);
@@ -1108,7 +1108,7 @@ begin
   result := inherited Add as TReceiverItem;
 end;
 
-constructor TReceiverCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TReceiverCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TReceiverItem, Model);
 end;

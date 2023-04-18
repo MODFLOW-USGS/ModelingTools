@@ -48,9 +48,11 @@ uses System.UITypes,
   PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults,
   Modflow6TimeSeriesCollectionsUnit, ModflowFmpIrrigationUnit,
   DataArrayManagerUnit, CrossSectionUnit,
-  DataSetNamesUnit, ModelMuseInterfaceUnit, LockedGlobalVariableChangers,
+  DataSetNamesUnit, ModelMuseInterfaceUnit,
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit,
-  PhastModelInterfaceUnit, OrderedCollectionInterfaceUnit;
+  PhastModelInterfaceUnit, OrderedCollectionInterfaceUnit,
+  LockedGlobalVariableChangersInterfaceUnit, ScreenObjectInterfaceUnit,
+  ColorSchemesInterface;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
@@ -1114,53 +1116,6 @@ type
     Constructor Create;
   end;
 
-//  ICustomModelInterfaceForCrosssection = interface(IModelMuseModel)
-//    function GetModflowOptions: TModflowOptions;
-//    procedure SetModflowOptions(const Value: TModflowOptions);
-//    property ModflowOptions: TModflowOptions read GetModflowOptions
-//      write SetModflowOptions;
-//    function GetDrawMesh: IDrawMesh;
-//    property DrawMesh: IDrawMesh read GetDrawMesh;
-//    function GetMesh3D: IMesh3D;
-//    property Mesh3D: IMesh3D read GetMesh3D;
-//    function GetDataSetByName(const DataSetName: string): TDataArray;
-//    function GetGrid: TCustomModelGrid;
-//    property Grid: TCustomModelGrid read GetGrid;
-//  end;
-
-//  TCrossSection = class(TObserver)
-//  private
-//    FLayersToUse: TGenericIntegerList;
-//    FDataArrays: TDataArrayObjectList;
-//    FAllLayers: boolean;
-//    FModel: ICustomModelInterfaceForCrosssection;
-//    FColors: TList<TColor>;
-//    FLineThickness: Integer;
-//    procedure SetAllLayers(const Value: boolean);
-//    procedure SetDataArrays(const Value: TDataArrayObjectList);
-//    procedure SetLayersToUse(const Value: TList<integer>);
-//    procedure DataArrayChanged (Sender: TObject; const Item: TDataArray;
-//      Action: TCollectionNotification);
-//    procedure LayerChanged (Sender: TObject; const Item: integer;
-//      Action: TCollectionNotification);
-//    procedure SetColors(const Value: TList<TColor>);
-//    procedure ColorChanged (Sender: TObject; const Item: TColor;
-//      Action: TCollectionNotification);
-//    procedure SetLineThickness(const Value: Integer);
-//  public
-//    Constructor Create(AModel: ICustomModelInterfaceForCrosssection); reintroduce;
-//    destructor Destroy; override;
-//    procedure Assign(Source: TCrossSection); reintroduce;
-//    procedure Clear;
-//    property AllLayers: boolean read FAllLayers write SetAllLayers;
-//    property LayersToUse: TList<integer> read FLayersToUse write SetLayersToUse;
-//    property DataArrays: TDataArrayObjectList read FDataArrays write SetDataArrays;
-//    property Colors: TList<TColor> read FColors write SetColors;
-//    procedure Draw(ABitMap: TPersistent; ViewDirection: TViewDirection);
-//    procedure RemoveDataArray(ADataArray: TDataArray);
-//    property LineThickness: Integer read FLineThickness write SetLineThickness default 1;
-//  end;
-
 
 { TODO :
 Make comments a pervasive feature of the model.  The project as whole
@@ -1171,489 +1126,15 @@ also be comments for each DataArray or boundary condition specified
 by a ScreenObject.  Any special dialog box that has a preserved state
 that affects the model output should also have a comment. }
 
-//  ICustomModelForDataArrayManager = interface(IModelMuseModel)
-//    function GetThreeDDataSet: TDataArray;
-//    function GetFrontDataSet: TDataArray;
-//    function GetSideDataSet: TDataArray;
-//    function GetTopDataSet: TDataArray;
-//    function GetFrontContourDataSet: TDataArray;
-//    function GetSideContourDataSet: TDataArray;
-//    function GetThreeDContourDataSet: TDataArray;
-//    function GetTopContourDataSet: TDataArray;
-//    function GetModflowPackages: TModflowPackages;
-//    function GetMobileComponents: TMobileChemSpeciesCollection;
-//    function GetSutraMesh: TSutraMesh3D;
-//    function GetOnActiveDataSetChanged: TNotifyEvent;
-//    function GetOnNodeActiveDataSetChanged: TNotifyEvent;
-//    function GetZetaUsed: TObjectUsedEvent;
-//    function GetSftUsed: TObjectUsedEvent;
-//    function GetGwtUztUsed: TObjectUsedEvent;
-//    function GetActiveUsed: TObjectUsedEvent;
-//    function GetInitializeActiveDataArrayWithCellSizeObjects: TNotifyEvent;
-//    function GetDoShouldActiveBeSetByCellSize: TCheckUsageEvent;
-//    function GetAquiferPropertiesUsed: TObjectUsedEvent;
-//    function GetKyUsed: TObjectUsedEvent;
-//    function GetDetermineKyFromAnisotropy: TNotifyEvent;
-//    function GetShouldKyBeDeterminedFromAnisotropy: TCheckUsageEvent;
-//    function GetKzUsed: TObjectUsedEvent;
-//    function GetDetermineKzFromAnisotropy: TNotifyEvent;
-//    function GetShouldKzBeDeterminedFromAnisotropy: TCheckUsageEvent;
-//    function GetPorosityUsed: TObjectUsedEvent;
-//
-//    procedure SetFrontDataSet(const Value: TDataArray);
-//    procedure SetSideDataSet(const Value: TDataArray);
-//    procedure SetTopDataSet(const Value: TDataArray);
-//    procedure SetThreeDDataSet(const Value: TDataArray);
-//    procedure SetThreeDContourDataSet(const Value: TDataArray);
-//    procedure SetTopContourDataSet(const Value: TDataArray);
-//    procedure SetFrontContourDataSet(const Value: TDataArray);
-//    procedure SetSideContourDataSet(const Value: TDataArray);
-//    procedure SetModflowPackages(const Value: TModflowPackages);
-//    procedure SetMobileComponents(const Value: TMobileChemSpeciesCollection);
-//    procedure SetSutraMesh(const Value: TSutraMesh3D);
-//
-//    procedure CreateVariables(const DataSet: TDataArray);
-//    procedure UpdateDataArrayDimensions(DataArray: TDataArray);
-//    function DoSwiUsed(Sender: TObject): boolean;
-//    function GetSwiUsed: TObjectUsedEvent;
-//    property SwiUsed: TObjectUsedEvent read GetSwiUsed;
-//    function NumberOfMt3dChemComponents: integer;
-//    procedure DoOnActiveDataSetChanged(Sender: TObject);
-//
-//    property ThreeDDataSet: TDataArray read GetThreeDDataSet
-//      write SetThreeDDataSet;
-//    property TopDataSet: TDataArray read GetTopDataSet
-//      write SetTopDataSet;
-//    property FrontDataSet: TDataArray read GetFrontDataSet
-//      write SetFrontDataSet;
-//    property SideDataSet: TDataArray read GetSideDataSet
-//      write SetSideDataSet;
-//    property ThreeDContourDataSet: TDataArray read GetThreeDContourDataSet
-//      write SetThreeDContourDataSet;
-//    property TopContourDataSet: TDataArray read GetTopContourDataSet
-//      write SetTopContourDataSet;
-//    property FrontContourDataSet: TDataArray read GetFrontContourDataSet
-//      write SetFrontContourDataSet;
-//    property SideContourDataSet: TDataArray read GetSideContourDataSet
-//      write SetSideContourDataSet;
-//    property ModflowPackages: TModflowPackages read GetModflowPackages
-//      write SetModflowPackages;
-//    property MobileComponents: TMobileChemSpeciesCollection
-//      read GetMobileComponents write SetMobileComponents;
-//    property SutraMesh: TSutraMesh3D read GetSutraMesh write SetSutraMesh;
-//    property OnActiveDataSetChanged: TNotifyEvent read GetOnActiveDataSetChanged;
-//    property OnNodeActiveDataSetChanged: TNotifyEvent read GetOnNodeActiveDataSetChanged;
-//    property ZetaUsed: TObjectUsedEvent read GetZetaUsed;
-//    property SftUsed: TObjectUsedEvent read GetSftUsed;
-//    property GwtUztUsed: TObjectUsedEvent read GetGwtUztUsed;
-//    property ActiveUsed: TObjectUsedEvent read GetActiveUsed;
-//    property InitializeActiveDataArrayWithCellSizeObjects: TNotifyEvent
-//      read GetInitializeActiveDataArrayWithCellSizeObjects;
-//    property ShouldActiveBeSetByCellSize: TCheckUsageEvent
-//      read GetDoShouldActiveBeSetByCellSize;
-//    property AquiferPropertiesUsed: TObjectUsedEvent read GetAquiferPropertiesUsed;
-//    property KyUsed: TObjectUsedEvent read GetKyUsed;
-//    property DetermineKyFromAnisotropy: TNotifyEvent read GetDetermineKyFromAnisotropy;
-//    property ShouldKyBeDeterminedFromAnisotropy: TCheckUsageEvent read GetShouldKyBeDeterminedFromAnisotropy;
-//    property KzUsed: TObjectUsedEvent read GetKzUsed;
-//    property DetermineKzFromAnisotropy: TNotifyEvent read GetDetermineKzFromAnisotropy;
-//    property ShouldKzBeDeterminedFromAnisotropy: TCheckUsageEvent read GetShouldKzBeDeterminedFromAnisotropy;
-//    property PorosityUsed:  TObjectUsedEvent read GetPorosityUsed;
-//    function GetSpecificStorageUsed: TObjectUsedEvent;
-//    property SpecificStorageUsed: TObjectUsedEvent read GetSpecificStorageUsed;
-//    function GetLongitudinalDispersionUsed: TObjectUsedEvent;
-//    property LongitudinalDispersionUsed: TObjectUsedEvent read GetLongitudinalDispersionUsed;
-//    function GetHorizontalTransverseDispersionUsed: TObjectUsedEvent;
-//    property HorizontalTransverseDispersionUsed: TObjectUsedEvent read GetHorizontalTransverseDispersionUsed;
-//    function GetVerticalTransverseDispersionUsed: TObjectUsedEvent;
-//    property VerticalTransverseDispersionUsed: TObjectUsedEvent read GetVerticalTransverseDispersionUsed;
-//    function GetInitialHeadUsed: TObjectUsedEvent;
-//    property InitialHeadUsed: TObjectUsedEvent read GetInitialHeadUsed;
-//    function GetInitialWaterTableUsed: TObjectUsedEvent;
-//    property InitialWaterTableUsed: TObjectUsedEvent read GetInitialWaterTableUsed;
-//    function GetChemistryUsed: TObjectUsedEvent;
-//    property ChemistryUsed: TObjectUsedEvent read GetChemistryUsed;
-//    function GetEquilibriumPhasesUsed: TObjectUsedEvent;
-//    property EquilibriumPhasesUsed: TObjectUsedEvent read GetEquilibriumPhasesUsed;
-//    function GetSurfacesUsed: TObjectUsedEvent;
-//    property SurfacesUsed: TObjectUsedEvent read GetSurfacesUsed;
-//    function GetExchangeUsed: TObjectUsedEvent;
-//    property ExchangeUsed: TObjectUsedEvent read GetExchangeUsed;
-//    function GetGasPhaseUsed: TObjectUsedEvent;
-//    property GasPhaseUsed: TObjectUsedEvent read GetGasPhaseUsed;
-//    function GetSolidSolutionUsed: TObjectUsedEvent;
-//    property SolidSolutionUsed: TObjectUsedEvent read GetSolidSolutionUsed;
-//    function GetReservoirLayerUsed: TObjectUsedEvent;
-//    property ReservoirLayerUsed: TObjectUsedEvent read GetReservoirLayerUsed;
-//    function GetReservoirPackageUsed: TObjectUsedEvent;
-//    property ReservoirPackageUsed: TObjectUsedEvent read GetReservoirPackageUsed;
-//    function GetKineticsUsed: TObjectUsedEvent;
-//    property KineticsUsed: TObjectUsedEvent read GetKineticsUsed;
-//    function GetLakePackageUsed: TObjectUsedEvent;
-//    property LakePackageUsed: TObjectUsedEvent read GetLakePackageUsed;
-//    function GetGroundSurfaceUsed: TObjectUsedEvent;
-//    property GroundSurfaceUsed: TObjectUsedEvent read GetGroundSurfaceUsed;
-//    function GetModflowUsed: TObjectUsedEvent;
-//    property ModflowUsed: TObjectUsedEvent read GetModflowUsed;
-//    function GetUzfPackageUsed: TObjectUsedEvent;
-//    property UzfPackageUsed: TObjectUsedEvent read GetUzfPackageUsed;
-//    function GetRouteUzfDischarge: TObjectUsedEvent;
-//    property RouteUzfDischarge: TObjectUsedEvent read GetRouteUzfDischarge;
-//    function GetUzfUnsatVertKUsed: TObjectUsedEvent;
-//    property UzfUnsatVertKUsed: TObjectUsedEvent read GetUzfUnsatVertKUsed;
-//    function GetUzfInitialInfiltrationUsed: TObjectUsedEvent;
-//    property UzfInitialInfiltrationUsed: TObjectUsedEvent read GetUzfInitialInfiltrationUsed;
-//    function GetUzfResidualWaterContentUsed: TObjectUsedEvent;
-//    property UzfResidualWaterContentUsed: TObjectUsedEvent read GetUzfResidualWaterContentUsed;
-//    function GetUzfSurfKUsed: TObjectUsedEvent;
-//    property UzfSurfKUsed: TObjectUsedEvent read GetUzfSurfKUsed;
-//    function GetModflowInitialHeadUsed: TObjectUsedEvent;
-//    property ModflowInitialHeadUsed: TObjectUsedEvent read GetModflowInitialHeadUsed;
-//    function GetConfiningBedKzUsed: TObjectUsedEvent;
-//    property ConfiningBedKzUsed: TObjectUsedEvent read GetConfiningBedKzUsed;
-//    function GetVerticalAnisotropyUsed: TObjectUsedEvent;
-//    property VerticalAnisotropyUsed: TObjectUsedEvent read GetVerticalAnisotropyUsed;
-//    function GetHorizontalAnisotropyUsed: TObjectUsedEvent;
-//    property HorizontalAnisotropyUsed: TObjectUsedEvent read GetHorizontalAnisotropyUsed;
-//    function GetSpecificYieldUsed: TObjectUsedEvent;
-//    property SpecificYieldUsed: TObjectUsedEvent read GetSpecificYieldUsed;
-//    function GetWetDryUsed: TObjectUsedEvent;
-//    property WetDryUsed: TObjectUsedEvent read GetWetDryUsed;
-//    function GetModpathZonesNeeded: TObjectUsedEvent;
-//    property ModpathZonesNeeded: TObjectUsedEvent read GetModpathZonesNeeded;
-//    function GetHufReferenceSurfaceNeeded: TObjectUsedEvent;
-//    property HufReferenceSurfaceNeeded: TObjectUsedEvent read GetHufReferenceSurfaceNeeded;
-//    function GetBcfUsed: TObjectUsedEvent;
-//    property BcfUsed: TObjectUsedEvent read GetBcfUsed;
-//    function GetConfinedStorageCoefUsed: TObjectUsedEvent;
-//    property ConfinedStorageCoefUsed: TObjectUsedEvent read GetConfinedStorageCoefUsed;
-//    function GetHufSelected: TObjectUsedEvent;
-//    property HufSelected: TObjectUsedEvent read GetHufSelected;
-//    function GetOptionalDataSet: TObjectUsedEvent;
-//    property OptionalDataSet: TObjectUsedEvent read GetOptionalDataSet;
-//    function GetHufStorageUsed: TObjectUsedEvent;
-//    property HufStorageUsed: TObjectUsedEvent read GetHufStorageUsed;
-//    function GetZoneBudgetSelected: TObjectUsedEvent;
-//    property ZoneBudgetSelected: TObjectUsedEvent read GetZoneBudgetSelected;
-//    function GetSwtSelected: TObjectUsedEvent;
-//    property SwtSelected: TObjectUsedEvent read GetSwtSelected;
-//    function GetSwtOffsetsUsed: TObjectUsedEvent;
-//    property SwtOffsetsUsed: TObjectUsedEvent read GetSwtOffsetsUsed;
-//    function GetSwtSpecifiedUsed: TObjectUsedEvent;
-//    property SwtSpecifiedUsed: TObjectUsedEvent read GetSwtSpecifiedUsed;
-//    function GetMt3dMS_StrictUsed: TObjectUsedEvent;
-//    property Mt3dMS_StrictUsed: TObjectUsedEvent read GetMt3dMS_StrictUsed;
-//    function GetMt3dMSBulkDensityUsed: TObjectUsedEvent;
-//    property Mt3dMSBulkDensityUsed: TObjectUsedEvent read GetMt3dMSBulkDensityUsed;
-//    function GetMt3dMSImmobPorosityUsed: TObjectUsedEvent;
-//    property Mt3dMSImmobPorosityUsed: TObjectUsedEvent read GetMt3dMSImmobPorosityUsed;
-//    function GetModpathBudgetNeeded: TObjectUsedEvent;
-//    property ModpathBudgetNeeded: TObjectUsedEvent read GetModpathBudgetNeeded;
-//    function GetModpathRetardationNeeded: TObjectUsedEvent;
-//    property ModpathRetardationNeeded: TObjectUsedEvent read GetModpathRetardationNeeded;
-//    function GetSutraUsed: TObjectUsedEvent;
-//    property SutraUsed: TObjectUsedEvent read GetSutraUsed;
-//    function GetSutraThicknessUsed: TObjectUsedEvent;
-//    property SutraThicknessUsed: TObjectUsedEvent read GetSutraThicknessUsed;
-//    function DoSutraUnsatRegionUsed(Sender: TObject): boolean;
-//    function GetSutraUnsatRegionUsed: TObjectUsedEvent;
-//    property SutraUnsatRegionUsed: TObjectUsedEvent read GetSutraUnsatRegionUsed;
-//    function GetSutraPermeabilityUsed: TObjectUsedEvent;
-//    property SutraPermeabilityUsed: TObjectUsedEvent read GetSutraPermeabilityUsed;
-//    function GetSutraMiddlePermeabilityUsed: TObjectUsedEvent;
-//    property SutraMiddlePermeabilityUsed: TObjectUsedEvent read GetSutraMiddlePermeabilityUsed;
-//    function GetSutraHydraulicConductivityUsed: TObjectUsedEvent;
-//    property SutraHydraulicConductivityUsed: TObjectUsedEvent read GetSutraHydraulicConductivityUsed;
-//    function GetSutraMiddleHydraulicConductivityUsed: TObjectUsedEvent;
-//    property SutraMiddleHydraulicConductivityUsed: TObjectUsedEvent read GetSutraMiddleHydraulicConductivityUsed;
-//    function GetSutra3DModel: TObjectUsedEvent;
-//    property Sutra3DModel: TObjectUsedEvent read GetSutra3DModel;
-//    function GetSutraConcentrationUsed: TObjectUsedEvent;
-//    property SutraConcentrationUsed: TObjectUsedEvent read GetSutraConcentrationUsed;
-//    function GetSutraTemperatureUsed: TObjectUsedEvent;
-//    property SutraTemperatureUsed: TObjectUsedEvent read GetSutraTemperatureUsed;
-//    function GetSoilIDUsed: TObjectUsedEvent;
-//    property SoilIDUsed: TObjectUsedEvent read GetSoilIDUsed;
-//    function GetCfpPipesSelected: TObjectUsedEvent;
-//    property CfpPipesSelected: TObjectUsedEvent read GetCfpPipesSelected;
-//    function GetSwiObsUsed: TObjectUsedEvent;
-//    property SwiObsUsed: TObjectUsedEvent read GetSwiObsUsed;
-//    function GetSwrSelected: TObjectUsedEvent;
-//    property SwrSelected: TObjectUsedEvent read GetSwrSelected;
-//    function GetFootprintSelected: TObjectUsedEvent;
-//    property FootprintSelected: TObjectUsedEvent read GetFootprintSelected;
-//    function GetModflow6Selected: TObjectUsedEvent;
-//    property Modflow6Selected: TObjectUsedEvent read GetModflow6Selected;
-//    function GetStorageSelected: TObjectUsedEvent;
-//    property StorageSelected: TObjectUsedEvent read GetStorageSelected;
-//    function GetSutraLakeUsed: TObjectUsedEvent;
-//    property SutraLakeUsed: TObjectUsedEvent read GetSutraLakeUsed;
-//    function GetAssignFootprintBoundarydWithdrawal: TNotifyEvent;
-//    property AssignFootprintBoundarydWithdrawal: TNotifyEvent read GetAssignFootprintBoundarydWithdrawal;
-//    function GetUseFootprintWells: TCheckUsageEvent;
-//    property UseFootprintWells: TCheckUsageEvent read GetUseFootprintWells;
-//    function GetNpfUsed: TObjectUsedEvent;
-//    property NpfUsed: TObjectUsedEvent read GetNpfUsed;
-//    function GetSfrMf6Selected: TObjectUsedEvent;
-//    property SfrMf6Selected: TObjectUsedEvent read GetSfrMf6Selected;
-//    function GetMawSelected: TObjectUsedEvent;
-//    property MawSelected: TObjectUsedEvent read GetMawSelected;
-//    function GetLakMf6Selected: TObjectUsedEvent;
-//    property LakMf6Selected: TObjectUsedEvent read GetLakMf6Selected;
-//    function GetUzfMf6PackageUsed: TObjectUsedEvent;
-//    property UzfMf6PackageUsed: TObjectUsedEvent read GetUzfMf6PackageUsed;
-//    function GetSutraLakeBottomUsed: TObjectUsedEvent;
-//    property SutraLakeBottomUsed: TObjectUsedEvent read GetSutraLakeBottomUsed;
-//    function GetHorizAnisotropyMf6Used: TObjectUsedEvent;
-//    property HorizAnisotropyMf6Used: TObjectUsedEvent read GetHorizAnisotropyMf6Used;
-//    function GetVertAnisotropyMf6Used: TObjectUsedEvent;
-//    property VertAnisotropyMf6Used: TObjectUsedEvent read GetVertAnisotropyMf6Used;
-//    function GetCSubInitialElasticStorageUsed: TObjectUsedEvent;
-//    property CSubInitialElasticStorageUsed: TObjectUsedEvent read GetCSubInitialElasticStorageUsed;
-//    function GetCSubInitialRecompressionIndexUsed: TObjectUsedEvent;
-//    property CSubInitialRecompressionIndexUsed: TObjectUsedEvent read GetCSubInitialRecompressionIndexUsed;
-//    function GetCSubDataSetsUsed: TObjectUsedEvent;
-//    property CSubDataSetsUsed: TObjectUsedEvent read GetCSubDataSetsUsed;
-//    function GetMt3d_LktIsSelected: TObjectUsedEvent;
-//    property Mt3d_LktIsSelected: TObjectUsedEvent read GetMt3d_LktIsSelected;
-//    function GetSutra4Used: TObjectUsedEvent;
-//    property Sutra4Used: TObjectUsedEvent read GetSutra4Used;
-//    function GetSutra4EnergyUsed: TObjectUsedEvent;
-//    property Sutra4EnergyUsed: TObjectUsedEvent read GetSutra4EnergyUsed;
-//    function GetSutra4EnergyOrSorptionUsed: TObjectUsedEvent;
-//    property Sutra4EnergyOrSorptionUsed: TObjectUsedEvent read GetSutra4EnergyOrSorptionUsed;
-//    function GetSutra4ProductionUsed: TObjectUsedEvent;
-//    property Sutra4ProductionUsed: TObjectUsedEvent read GetSutra4ProductionUsed;
-//    function GetSutra4FreezingUsed: TObjectUsedEvent;
-//    property Sutra4FreezingUsed: TObjectUsedEvent read GetSutra4FreezingUsed;
-//    function GetGwtDispUsed: TObjectUsedEvent;
-//    property GwtDispUsed: TObjectUsedEvent read GetGwtDispUsed;
-//    function GetSeparatedLongitudinalDispersionUsed: TObjectUsedEvent;
-//    property SeparatedLongitudinalDispersionUsed: TObjectUsedEvent read GetSeparatedLongitudinalDispersionUsed;
-//    function GetSeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent;
-//    property SeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent
-//       read GetSeparatedHorizontalTransverseDispersionUsed;
-//    function GetFarmProcess4SteadyFarmsUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadyFarmsUsed: TObjectUsedEvent read GetFarmProcess4SteadyFarmsUsed;
-//    function GetAssignModflow6LakeDisplayArrays: TNotifyEvent;
-//    property AssignModflow6LakeDisplayArrays: TNotifyEvent read GetAssignModflow6LakeDisplayArrays;
-//    function GetSutra4SoluteUsed: TObjectUsedEvent;
-//    property Sutra4SoluteUsed: TObjectUsedEvent read GetSutra4SoluteUsed;
-//    function GetFarmProcess4SteadyCropsUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadyCropsUsed: TObjectUsedEvent read GetFarmProcess4SteadyCropsUsed;
-//    function GetFarmProcess4SteadyRefETUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadyRefETUsed: TObjectUsedEvent read GetFarmProcess4SteadyRefETUsed;
-//    function GetFarmProcess4SteadyPrecipUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadyPrecipUsed: TObjectUsedEvent read GetFarmProcess4SteadyPrecipUsed;
-//    function GetFarmProcess4SteadArrayEfficiencyUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadArrayEfficiencyUsed: TObjectUsedEvent read GetFarmProcess4SteadArrayEfficiencyUsed;
-//    function GetFarmProcess4SteadArrayEfficiencyImprovementUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadArrayEfficiencyImprovementUsed: TObjectUsedEvent
-//      read GetFarmProcess4SteadArrayEfficiencyImprovementUsed;
-//    function GetFarmProcess4SteadArrayBareRunoffFractionUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadArrayBareRunoffFractionUsed: TObjectUsedEvent
-//      read GetFarmProcess4SteadArrayBareRunoffFractionUsed;
-//    function GetFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed: TObjectUsedEvent
-//      read GetFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed;
-//    function GetFarmProcess4SteadArrayAddedDemandRunoffSplitUsed: TObjectUsedEvent;
-//    property FarmProcess4SteadArrayAddedDemandRunoffSplitUsed: TObjectUsedEvent
-//      read GetFarmProcess4SteadArrayAddedDemandRunoffSplitUsed;
-//    function GetCapillaryFringeUsed: TObjectUsedEvent;
-//    property CapillaryFringeUsed: TObjectUsedEvent read GetCapillaryFringeUsed;
-//    function GetSurfaceKUsed: TObjectUsedEvent;
-//    property SurfaceKUsed: TObjectUsedEvent read GetSurfaceKUsed;
-//    function GetPotentialEvapBareUsed: TObjectUsedEvent;
-//    property PotentialEvapBareUsed: TObjectUsedEvent read GetPotentialEvapBareUsed;
-//    function GetDirectRechargeUsed: TObjectUsedEvent;
-//    property DirectRechargeUsed: TObjectUsedEvent read GetDirectRechargeUsed;
-//    function GetPrecipPotConsumptionUsed: TObjectUsedEvent;
-//    property PrecipPotConsumptionUsed: TObjectUsedEvent read GetPrecipPotConsumptionUsed;
-//    function GetNrdInfilLocationUsed: TObjectUsedEvent;
-//    property NrdInfilLocationUsed: TObjectUsedEvent read GetNrdInfilLocationUsed;
-//    function GetCropCoefficientUsed: TObjectUsedEvent;
-//    property CropCoefficientUsed: TObjectUsedEvent read GetCropCoefficientUsed;
-//    function GetLandUseAreaFractionUsed: TObjectUsedEvent;
-//    property LandUseAreaFractionUsed: TObjectUsedEvent read GetLandUseAreaFractionUsed;
-//    function GetConsumptiveUseUsed: TObjectUsedEvent;
-//    property ConsumptiveUseUsed: TObjectUsedEvent read GetConsumptiveUseUsed;
-//    function GetIrrigationUsed: TObjectUsedEvent;
-//    property IrrigationUsed: TObjectUsedEvent read GetIrrigationUsed;
-//    function GetRootDepthUsed: TObjectUsedEvent;
-//    property RootDepthUsed: TObjectUsedEvent read GetRootDepthUsed;
-//    function GetGwRootInteractionUsed: TObjectUsedEvent;
-//    property GwRootInteractionUsed: TObjectUsedEvent read GetGwRootInteractionUsed;
-//    function GetTranspirationFractionUsed: TObjectUsedEvent;
-//    property TranspirationFractionUsed: TObjectUsedEvent read GetTranspirationFractionUsed;
-//    function GetEvaporationIrrigationFractionUsed: TObjectUsedEvent;
-//    property EvaporationIrrigationFractionUsed: TObjectUsedEvent read GetEvaporationIrrigationFractionUsed;
-//    function GetFractionOfPrecipToSurfaceWaterUsed: TObjectUsedEvent;
-//    property FractionOfPrecipToSurfaceWaterUsed: TObjectUsedEvent read GetFractionOfPrecipToSurfaceWaterUsed;
-//    function GetFractionOfIrrigToSurfaceWaterUsed: TObjectUsedEvent;
-//    property FractionOfIrrigToSurfaceWaterUsed: TObjectUsedEvent read GetFractionOfIrrigToSurfaceWaterUsed;
-//    function GetAddedDemandUsed: TObjectUsedEvent;
-//    property AddedDemandUsed: TObjectUsedEvent read GetAddedDemandUsed;
-//    function GetCropHasSalinityDemandUsed: TObjectUsedEvent;
-//    property CropHasSalinityDemandUsed: TObjectUsedEvent read GetCropHasSalinityDemandUsed;
-//    function GetLandUseCellsToPrintUsed: TObjectUsedEvent;
-//    property LandUseCellsToPrintUsed: TObjectUsedEvent read GetLandUseCellsToPrintUsed;
-//    procedure RemoveVariables(const DataSet: TDataArray); overload;
-//    procedure RemoveVariables(const DataSetName: String;
-//      Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt); overload;
-//    function GetCrossSection: TCrossSection;
-//    procedure SetCrossSection(const Value: TCrossSection);
-//    property CrossSection: TCrossSection read GetCrossSection write SetCrossSection;
-//    function GetGrid: TCustomModelGrid;
-//    property Grid: TCustomModelGrid read GetGrid;
-//  end;
-
-  {
-    @name manages the creation of @link(TDataArray)s. The @link(TDataArray)s
-    are defined in @link(DefinePackageDataArrays) and actually created in
-    @link(CreateInitialDataSets).
-  }
-//  TDataArrayManager = class(TObject)
-//  private
-//    FCustomModel: ICustomModelForDataArrayManager;
-//    // @name is used to store the @link(TDataArray)s in the model that
-//    // are defined throughout the grid.  An example is the data set for
-//    // the hydraulic conductivity in the X direction.
-//    FDataSets: TObjectList;
-//    FDataSetsToCache: TList;
-//    // @name is used to store @link(TDataArray)s that are related to
-//    // boundary conditions but which do not vary with time.
-//    FBoundaryDataSets: TObjectList;
-//    FDataSetLookUpList: THashTableFacade;
-//    FRiverDataSets: TList;
-//    FStoreCachedData: boolean;
-//    // @name is used to store @link(TDataArray)s that have been deleted
-//    // so that they can be restored later.
-//    FDeletedDataSets: TList;
-//    FLongitudinalDispersivityIndex: Integer;
-//    FPorosityIndex: Integer;
-//    FDataSetNames: TStringList;
-//    FTransverseDispersivityIndex: Integer;
-//    // See @link(DataSetCount).
-//    function GetDataSetCount: integer;
-//    // See @link(DataSets).
-//    function GetDataSet(const Index: integer): TDataArray;
-//    // See @link(BoundaryDataSetCount).
-//    function GetBoundaryDataSetCount: integer;
-//    // See @link(BoundaryDataSets).
-//    function GetBoundaryDataSets(const Index: integer): TDataArray;
-//    // @name returns the position of the @link(TDataArray) whose name is
-//    // DataSetName in List.
-//    // @name is used in @link(IndexOfBoundaryDataSet)
-//    // and @link(IndexOfDataSet).
-//    function IndexOfDataSetInList(DataSetName: string;
-//      const List: TObjectList): integer;
-//    function GetDataSetsCapacity: integer;
-//    procedure SetDataSetsCapacity(const Value: integer);
-//    procedure Invalidate;
-//    // @name defines the characteristics of the data sets that should be
-//    // created under different circumstances.
-//    // @seealso(CreateInitialDataSets)
-//    procedure DefinePackageDataArrays;
-//    procedure InvalidateDataSetLookupList;
-//    function DataArrayHeld(DataArray: TDataArray): boolean;
-//    function GetChildDataArrayManager(Index: integer): TDataArrayManager;
-//    function GetChildDataArrayManagerCount: integer;
-//    function LocalCount: integer;
-//    // @name adds DataSet to @link(FDataSets) and calls @link(AddDataSetToLookUpList);
-//    function AddDataSet(const DataSet: TDataArray): Integer;
-//    procedure UpdateDataSetDimensions;
-//    procedure ClearPestArrayFileNames;
-//    function GetDataSetNames: TStringList;
-//  public
-//    FDataArrayCreationRecords: array of TDataSetCreationData;
-//    FZetaDataDefinition: TDataSetCreationData;
-//    FSftInitConc: TDataSetCreationData;
-//    FSftDispersion: TDataSetCreationData;
-//    FUztInitConc: TDataSetCreationData;
-//    procedure Assign(Source: TDataArrayManager);
-//    procedure AddDataSetToLookUpList(const DataSet: TDataArray);
-//    Constructor Create(Model: ICustomModelForDataArrayManager);
-//    Destructor Destroy; override;
-//    procedure ClearDataSetsToCache;
-//    procedure ClearAllDataSets;
-//    // @name holds all the @link(TDataArray)s that are related to the river
-//    // boundary but which are not transient.
-//    property RiverDataSets: TList read FRiverDataSets;
-//    property StoreCachedData: boolean read FStoreCachedData
-//      write FStoreCachedData;
-//    // @name indicates the number of @link(TDataArray)s in @name.
-//    property DataSetCount: integer read GetDataSetCount;
-//    // @name is used to access the @link(TDataArray)s that are defined
-//    // throughout the grid.
-//    property DataSets[const Index: integer]: TDataArray read GetDataSet; default;
-//    // @name is used to determine the number of @link(TDataArray)s in
-//    // @link(BoundaryDataSets).  Only data sets that don't vary with
-//    // time yet are related to boundary conditions are in
-//    // @link(BoundaryDataSets).
-//    property BoundaryDataSetCount: integer read GetBoundaryDataSetCount;
-//    // @name is used to access @link(TDataArray)s in
-//    // @link(FBoundaryDataSets).  Only data sets that don't vary with
-//    // time yet are related to boundary conditions are in
-//    // @link(FBoundaryDataSets).
-//    property BoundaryDataSets[const Index: integer]: TDataArray
-//      read GetBoundaryDataSets;
-//    property DataSetsCapacity: integer read GetDataSetsCapacity
-//      write SetDataSetsCapacity;
-//    procedure AddDataSetToCache(DataArray: TDataArray);
-//    procedure DontCache(DataArray: TDataArray);
-//    procedure CacheDataArrays;
-//    // @name creates a new @link(TDataArray) and adds it to @link(DataSets).
-//    function CreateNewDataArray(const ClassType: TDataArrayType;
-//      const Name, Formula, DisplayName: string; Lock: TDataLock;
-//      DataType: TRbwDataType;
-//      EvaluatedAt: TEvaluatedAt; Orientation: TDataSetOrientation;
-//      const Classification: string): TDataArray;
-//    // @name retrieves a @link(TDataArray) from
-//    // @link(DataSets) based on its name.
-//    function GetDataSetByName(const DataSetName: string): TDataArray;
-//    // @name is used to create data sets whenever the required data sets change.
-//    // @seealso(DefinePackageDataArrays)
-//    procedure CreateInitialDataSets;
-//    procedure RemoveDataSetFromLookUpList(const DataSet: TDataArray);
-//    // @name creates non-transient @link(TDataArray)s for boundary conditions.
-//    // @name is used to store DataSet in @link(FBoundaryDataSets).
-//    function AddBoundaryDataSet(const DataSet: TDataArray): Integer;
-//    // @name creates non-transient @link(TDataArray)s for boundary conditions.
-//    procedure CreateInitialBoundaryDataSets;
-//    // @name removes DataSet from @link(DataSets) without freeing it.
-//    procedure ExtractDataSet(const DataSet: TDataArray);
-//    // @name returns the position of the @link(TDataArray) in
-//    // @link(DataSets) whose Name is DataSetName. If none has that
-//    // name, @name returns -1.
-//    function IndexOfDataSet(DataSetName: string): integer;
-//    // @name returns the position of the @link(TDataArray) in
-//    // @link(BoundaryDataSets) whose Name is DataSetName. If none has that
-//    // name, @name returns -1.
-//    function IndexOfBoundaryDataSet(DataSetName: string): integer;
-//    procedure InvalidateAllDataSets;
-//    procedure InvalidateAll3DDataSets;
-//    procedure ClearDeletedDataSets;
-//    procedure UnlinkDeletedDataSets;
-//    procedure HandleAddedDataArrays(AddedDataSetList: TList);
-//    procedure HandleDeletedDataArrays(DeletedDataSetList: TList);
-//    property ChildDataArrayManagerCount: integer
-//      read GetChildDataArrayManagerCount;
-//    property ChildDataArrayManagers[Index: integer]: TDataArrayManager
-//      read GetChildDataArrayManager;
-//    procedure UpdateClassifications;
-//    procedure RemoveDataSet(ADataArray: TDataArray);
-//    procedure Loaded;
-//    property DataSetNames: TStringList read GetDataSetNames;
-//    procedure InvalidateHguFormulaDataSets;
-//  end;
-
   TChildModelCollection = class;
 
   TCustomModel = class abstract (TBaseModel, IModelMuseModel,
     ICustomModelForDataArrayManager, ICustomModelInterfaceForCrosssection,
-    ICustomModelInterfaceForTOrderedCollection, IModelForChangeGlobalVariables,
+    IModelForTOrderedCollection,
     IModelForDynamicTimeSeries, IModelTimesSeriesInterface,
-    IModelForTGwtPestMethodCollection, IModelForTLandUsePestMethodCollection)
+    IModelForTGwtPestMethodCollection, IModelForTLandUsePestMethodCollection,
+    IModelForTPilotPointObsGrp, IModelForTCustomDefinedGlobalObject,
+    IModelForTModflowParameter)
   private
     FOnModelSelectionChange: TNotifyEvent;
     // See @link(PhastGrid).
@@ -1912,7 +1393,8 @@ that affects the model output should also have a comment. }
     function GetAssignModflow6LakeDisplayArrays: TNotifyEvent;
     property AssignModflow6LakeDisplayArrays: TNotifyEvent read GetAssignModflow6LakeDisplayArrays;
     procedure UpdateIdomain(Sender: TObject);
-    // functions used in interfaces.
+
+    // functions procedures and properties used in interfaces to TCustomModel.
     function GetDataSetByName(const DataSetName: string): TDataArray;
     function GetDataArrayInterface: ISimpleDataArrayManager;
     procedure RestoreSubscriptions;
@@ -1930,6 +1412,15 @@ that affects the model output should also have a comment. }
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetMobileComponentCount: Integer;
     function CropCount: integer;
+    function GetObsGroupFromName(const Value: string): TObject;
+    function GetScreenObjectInterface(const Index: integer): IScreenObject;
+    property ScreenObjectInterfaces[const Index: integer]: IScreenObject
+      read GetScreenObjectInterface;
+    procedure NotifyHufKx;
+    procedure NotifyHufKy;
+    procedure NotifyHufKz;
+    procedure NotifyHufSS;
+    procedure NotifyHufSy;
 
   private
     FGrid: TCustomModelGrid;
@@ -3793,7 +3284,8 @@ that affects the model output should also have a comment. }
   using @link(FDataArrayManager).@Link(TDataArrayManager.DataSetCount) and
   @Link(TCustomModel.ScreenObjectCount).
   }
-  TPhastModel = class(TCustomModel)
+  TPhastModel = class(TCustomModel, IPhastModelForTLayerOwnerCollection,
+    IModelForTUserDefinedColorSchemeCollection)
   private
     FObservationPurpose: TObservationPurpose;
     FCachedScreenObjectIndex: integer;
@@ -4208,18 +3700,19 @@ that affects the model output should also have a comment. }
     function GetMf6TimesSeries: TTimesSeriesCollections; override;
     procedure UpdateFarmProperties;
     procedure CheckObservationGUIDs;
-//    procedure FixGwtModel;
-    //    function GetPilotPoint(Index: Integer): TPoint2D;
-//    function GetPilotPointSpacing: double;
+    // functions used in interfaces in TPhastModel.
+    function GetChildModelCount: Integer;
+    function GetChildModel(Index: Integer): IModelForTOrderedCollection;
+    function GetColorSchemes: TUserDefinedColorSchemeCollection;
+    function GetColorSchemesI: IUserDefinedColorSchemeCollection;
+    procedure SetColorSchemesI(const Value: IUserDefinedColorSchemeCollection);
+    property ColorSchemesI: IUserDefinedColorSchemeCollection
+      read GetColorSchemesI write SetColorSchemesI;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); override;
     procedure SetSideDataSet(const Value: TDataArray); override;
     procedure SetTopDataSet(const Value: TDataArray); override;
     procedure SetThreeDDataSet(const Value: TDataArray); override;
-//    procedure SetThreeDContourDataSet(const Value: TDataArray); override;
-//    procedure SetTopContourDataSet(const Value: TDataArray); override;
-//    procedure SetFrontContourDataSet(const Value: TDataArray); override;
-//    procedure SetSideContourDataSet(const Value: TDataArray); override;
     procedure InternalExportModflowModel(const FileName: string; ExportAllLgr: boolean); override;
     function GetGlobalVariables: TGlobalVariables; override;
     procedure SetGlobalVariables(const Value: TGlobalVariables); override;
@@ -5062,7 +4555,7 @@ that affects the model output should also have a comment. }
       write SetSutraTimeOptions;
     // User defined color schemes for coloring the grid or mesh
     // or for contour lines.
-    property ColorSchemes: TUserDefinedColorSchemeCollection read FColorSchemes write SetColorSchemes;
+    property ColorSchemes: TUserDefinedColorSchemeCollection read GetColorSchemes write SetColorSchemes;
     property FishnetMeshGenerator: TFishnetMeshGenerator read FFishnetMeshGenerator
       write SetFishnetMeshGenerator;
     property SutraSettings: TSutraSettings read FSutraSettings write SetSutraSettings;
@@ -5145,7 +4638,7 @@ that affects the model output should also have a comment. }
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     { TODO -cRefactor : Consider replacing CModel with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     procedure Assign(Source: TPersistent); override;
     property BottomLayerGroup: TLayerGroup read GetBottomLayerGroup
       write SetBottomLayerGroup;
@@ -5511,7 +5004,7 @@ that affects the model output should also have a comment. }
   published
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
   end;
 
   procedure EnableLighting;
@@ -10418,12 +9911,14 @@ const
 //                unsaturated flow was enabled in SFR.
 //               Bug fix: If some observations have duplicate GUIDs, ModelMuse
 //                reassigns the GUID.
+//    '5.1.1.23' Bug fix: Trapped information for a possible but in the rulers
+//                for inclusion in a bug report.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.22';
+  IIModelVersion = '5.1.1.23';
 
 function IModelVersion: string;
 begin
@@ -16424,9 +15919,24 @@ begin
   Result := FChemistryOptions;
 end;
 
+function TPhastModel.GetChildModel(Index: Integer): IModelForTOrderedCollection;
+begin
+  result := ChildModels[Index].ChildModel;
+end;
+
+function TPhastModel.GetChildModelCount: Integer;
+begin
+  result := ChildModels.Count;
+end;
+
 function TPhastModel.GetChildModels: TChildModelCollection;
 begin
   result := FChildModels;
+end;
+
+function TPhastModel.GetColorSchemes: TUserDefinedColorSchemeCollection;
+begin
+  result := FColorSchemes;
 end;
 
 function TPhastModel.GetCombinedDisplayColumn: integer;
@@ -33207,6 +32717,12 @@ begin
   FCanDrawContours := Value;
 end;
 
+procedure TPhastModel.SetColorSchemesI(
+  const Value: IUserDefinedColorSchemeCollection);
+begin
+  SetColorSchemes(Value as TUserDefinedColorSchemeCollection);
+end;
+
 procedure TCustomModel.SetCrossSection(const Value: TCrossSection);
 begin
   FCrossSection.Assign(Value);
@@ -35594,6 +35110,11 @@ begin
   result := FClearing;
 end;
 
+function TPhastModel.GetColorSchemesI: IUserDefinedColorSchemeCollection;
+begin
+  result := GetColorSchemes;
+end;
+
 function TCustomModel.GetCompiler(const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt): TRbwParser;
 begin
@@ -35843,6 +35364,12 @@ end;
 function TCustomModel.GetParsers(Index: integer): TRbwParser;
 begin
   result := FParsers[Index];
+end;
+
+function TCustomModel.GetScreenObjectInterface(
+  const Index: integer): IScreenObject;
+begin
+  result := GetScreenObjects(index);
 end;
 
 function TCustomModel.GetSelectedColumn: integer;
@@ -39685,6 +39212,36 @@ begin
   {$ENDIF}
 end;
 
+procedure TCustomModel.NotifyHufKx;
+begin
+  HufKxNotifier.UpToDate := False;
+  HufKxNotifier.UpToDate := True;
+end;
+
+procedure TCustomModel.NotifyHufKy;
+begin
+  HufKyNotifier.UpToDate := False;
+  HufKyNotifier.UpToDate := True;
+end;
+
+procedure TCustomModel.NotifyHufKz;
+begin
+  HufKxNotifier.UpToDate := False;
+  HufKxNotifier.UpToDate := True;
+end;
+
+procedure TCustomModel.NotifyHufSS;
+begin
+  HufSsNotifier.UpToDate := False;
+  HufSsNotifier.UpToDate := True;
+end;
+
+procedure TCustomModel.NotifyHufSy;
+begin
+  HufSyNotifier.UpToDate := False;
+  HufSyNotifier.UpToDate := True;
+end;
+
 function TCustomModel.NumberOfMt3dChemComponents: integer;
 begin
   if (MobileComponents <> nil) and (ImmobileComponents <> nil) then
@@ -40985,6 +40542,14 @@ begin
   begin
     result := GlobalVariables.GetVariableByName(ObserverName);
   end;
+end;
+
+function TCustomModel.GetObsGroupFromName(const Value: string): TObject;
+var
+  ObservationGroups: TPestObservationGroups;
+begin
+  ObservationGroups := PestProperties.PriorInfoObservationGroups;
+  result := ObservationGroups.GetObsGroupByName(Value);
 end;
 
 function TCustomModel.GetOnActiveDataSetChanged: TNotifyEvent;
@@ -45349,7 +44914,7 @@ begin
   UpdateUnitNumbers;
 end;
 
-constructor TChildModelCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TChildModelCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TChildModelItem, Model);
 end;
@@ -48574,7 +48139,7 @@ begin
   end;
 end;
 
-constructor TChildDiscretizationCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TChildDiscretizationCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TChildDiscretization, Model);
   FBottomLayerInUnit := 0;

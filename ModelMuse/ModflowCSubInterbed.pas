@@ -69,7 +69,7 @@ type
     procedure SetItem(Index: Integer; const Value: TCSubInterbed);
   public
     function Add: TCSubInterbed;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TCSubInterbed read GetItem write SetItem; default;
     function DataArrayUsed(ADataArray: TDataArray): Boolean;
     function GetInterbedByName(AName: string): TCSubInterbed;
@@ -493,7 +493,7 @@ begin
   result := inherited Add as TCSubInterbed;
 end;
 
-constructor TCSubInterbeds.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TCSubInterbeds.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TCSubInterbed, Model);
 end;

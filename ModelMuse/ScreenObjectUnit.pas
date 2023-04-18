@@ -62,7 +62,7 @@ uses
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
-  OrderedCollectionInterfaceUnit;
+  OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit;
 
 type
   //
@@ -146,7 +146,7 @@ type
     function GetItems(Index: Integer): TPointValue;
     procedure SetItems(Index: Integer; const Value: TPointValue);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     function Add: TPointValue;
     property Items[Index: Integer]: TPointValue read GetItems
       write SetItems; default;
@@ -181,7 +181,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     function IndexOfPosition(APosition: integer): integer;
     function GetItemByPosition(APosition: integer): TPointValuesItem;
     procedure Sort;
@@ -1811,7 +1811,7 @@ view. }
   @seealso(TPhastInterpolationValues)
   }
 
-  TScreenObject = class(TObserver)
+  TScreenObject = class(TObserver, IScreenObject)
   strict private
     FCachedCells: TCachedCells;
     FIntervalTree: TRbwIntervalTree;
@@ -47242,7 +47242,7 @@ begin
   result := inherited Add as TPointValue;
 end;
 
-constructor TPointValues.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TPointValues.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TPointValue, Model);
 end;
@@ -47347,7 +47347,7 @@ begin
   FItemArray := nil;
 end;
 
-constructor TPointPositionValues.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TPointPositionValues.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TPointValuesItem, Model);
 end;

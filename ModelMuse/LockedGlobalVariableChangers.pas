@@ -3,31 +3,23 @@ unit LockedGlobalVariableChangers;
 interface
 
 uses
-  System.Classes, GoPhastTypes, GlobalVariablesUnit, RbwParser;
+  System.Classes, GoPhastTypes, GlobalVariablesUnit, RbwParser,
+  LockedGlobalVariableChangersInterfaceUnit;
 
 type
-  IModelForChangeGlobalVariables = interface(IModelMuseModel)
-    procedure UpdateFormulas(OldNames, NewNames: TStringList);
-    function GetGlobalVariables: TGlobalVariables;
-    procedure SetGlobalVariables(const Value: TGlobalVariables);
-    property GlobalVariables: TGlobalVariables read GetGlobalVariables
-      write SetGlobalVariables;
-    procedure RestoreSubscriptions;
-  end;
-
   TCustomDefinedGlobalObject = class(TObject)
   private
     FLocked: Boolean;
     procedure SetLocked(const Value: Boolean);
   protected
-    FModel: TBaseModel;
+    FModel: IModelForTCustomDefinedGlobalObject;
     FOldName: string;
     FNewName: string;
     FComment: string;
     function GetVariable: TGlobalVariable;
     function DataType: TRbwDataType; virtual; abstract;
   public
-    constructor Create(Model: TBaseModel; const OldName, NewName,
+    constructor Create(Model: IModelForTCustomDefinedGlobalObject; const OldName, NewName,
       Comment: string);
     procedure Rename;
     property Locked: Boolean read FLocked write SetLocked;
@@ -50,12 +42,11 @@ type
 
 implementation
 
-uses
-  PhastModelUnit;
+
 
 { TDefineGlobalIntegerObject }
 
-constructor TCustomDefinedGlobalObject.Create(Model: TBaseModel; const OldName,
+constructor TCustomDefinedGlobalObject.Create(Model: IModelForTCustomDefinedGlobalObject; const OldName,
   NewName, Comment: string);
 begin
   FModel := Model;
@@ -67,7 +58,7 @@ end;
 
 procedure TCustomDefinedGlobalObject.Rename;
 var
-  LocalModel: TPhastModel;
+//  LocalModel: TPhastModel;
   NewVariables: TGlobalVariables;
   Variable: TGlobalVariable;
   OldNames: TStringList;
@@ -78,11 +69,11 @@ begin
     Exit
   end;
 
-  LocalModel := (FModel as TPhastModel);
+//  FModel := (FModel as TPhastModel);
 
   NewVariables := TGlobalVariables.Create(nil);
   try
-    NewVariables.Assign(LocalModel.GlobalVariables);
+    NewVariables.Assign(FModel.GlobalVariables);
 
     Variable := NewVariables.GetVariableByName(FOldName);
     if Variable <> nil then
@@ -93,10 +84,10 @@ begin
       try
         OldNames.Add(FOldName);
         NewNames.Add(FNewName);
-        LocalModel.UpdateFormulas(OldNames, NewNames);
+        FModel.UpdateFormulas(OldNames, NewNames);
         Variable.Name := FNewName;
-        LocalModel.GlobalVariables := NewVariables;
-        LocalModel.FormulaManager.RestoreSubscriptions;
+        FModel.GlobalVariables := NewVariables;
+        FModel.RestoreSubscriptions;
       finally
         NewNames.Free;
         OldNames.Free;
@@ -128,7 +119,6 @@ end;
 
 function TCustomDefinedGlobalObject.GetVariable: TGlobalVariable;
 var
-  LocalModel: TPhastModel;
   GlobalVariables: TGlobalVariables;
   AVar: TGlobalVariable;
 begin
@@ -137,21 +127,20 @@ begin
   begin
     Exit;
   end;
-  LocalModel := (FModel as TPhastModel);
-  result := LocalModel.GlobalVariables.GetVariableByName(FNewName);
+  result := FModel.GlobalVariables.GetVariableByName(FNewName);
   if result = nil then
   begin
     GlobalVariables := TGlobalVariables.Create(nil);
     try
-      GlobalVariables.Assign(LocalModel.GlobalVariables);
+      GlobalVariables.Assign(FModel.GlobalVariables);
       AVar := (GlobalVariables.Add as TGlobalVariableItem).Variable;
       AVar.Format := DataType;
       AVar.Name := FNewName;
-      LocalModel.GlobalVariables := GlobalVariables;
+      FModel.GlobalVariables := GlobalVariables;
     finally
       GlobalVariables.Free;
     end;
-    result := LocalModel.GlobalVariables.GetVariableByName(FNewName);
+    result := FModel.GlobalVariables.GetVariableByName(FNewName);
   end;
   result.Locked := FLocked;
   result.Comment := FComment;

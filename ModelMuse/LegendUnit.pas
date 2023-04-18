@@ -74,7 +74,8 @@ type
 implementation
 
 uses
-  PhastModelUnit, RbwParser, frmGoPhastUnit, GR32, MeshRenumberingTypes;
+  PhastModelUnit, RbwParser, frmGoPhastUnit, GR32, MeshRenumberingTypes,
+  ColorSchemesInterface;
 
 resourcestring
   StrColorLegend = 'Color legend';
@@ -893,11 +894,11 @@ var
   ARect: TRect;
   Extent: TSize;
   CustomColorSchemes: TUserDefinedColorSchemeCollection;
-  ACustomColorScheme: TUserDefinedColorSchemeItem;
+  ACustomColorScheme: IUserDefinedColorSchemeItem;
   ContourValues: TOneDRealArray;
   ContourColors: TArrayOfColor32;
   ColorIndex: Integer;
-  ColorItem: TColorItem;
+  ColorItem: IColorItem;
   AMinValue: Double;
   AMaxValue: Double;
   DeltaValue: Double;
@@ -972,7 +973,7 @@ begin
         DeltaValue := AMaxValue-AMinValue;
         for ColorIndex := 0 to Length(ContourValues) - 1 do
         begin
-          ColorItem := ACustomColorScheme.Colors.Add;
+          ColorItem := ACustomColorScheme.ColorsI.Add;
           ColorItem.Color := WinColor(ContourColors[ColorIndex]);
           if ColorIndex = 0 then
           begin

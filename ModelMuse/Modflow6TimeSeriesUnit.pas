@@ -27,10 +27,10 @@ type
     function GetStoredScaleFactor: TRealStorage;
     function GetScaleFactorParameter: string;
     function GetParamMethod: TPestParamMethod;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
-    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
-      virtual; stdcall;
+//    function _AddRef: Integer; stdcall;
+//    function _Release: Integer; stdcall;
+//    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
+//      virtual; stdcall;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent); overload; override;
     destructor Destroy; override;
@@ -129,15 +129,15 @@ begin
     and inherited IsSame(OtherTimeSeries);
 end;
 
-function TMf6TimeSeries.QueryInterface(const IID: TGUID; out Obj): HRESULT;
-const
-  E_NOINTERFACE = HRESULT($80004002);
-begin
-  if GetInterface(IID, Obj) then
-    result := 0
-  else
-    result := E_NOINTERFACE;
-end;
+//function TMf6TimeSeries.QueryInterface(const IID: TGUID; out Obj): HRESULT;
+//const
+//  E_NOINTERFACE = HRESULT($80004002);
+//begin
+//  if GetInterface(IID, Obj) then
+//    result := 0
+//  else
+//    result := E_NOINTERFACE;
+//end;
 
 procedure TMf6TimeSeries.SetInterpolationMethod(
   const Value: TMf6InterpolationMethods);
@@ -202,14 +202,14 @@ begin
   FStoredScaleFactor.Assign(Value);
 end;
 
-function TMf6TimeSeries._AddRef: Integer;
-begin
-  Result := 1;
-end;
-
-function TMf6TimeSeries._Release: Integer;
-begin
-  Result := 1;
-end;
+//function TMf6TimeSeries._AddRef: Integer;
+//begin
+//  Result := 1;
+//end;
+//
+//function TMf6TimeSeries._Release: Integer;
+//begin
+//  Result := 1;
+//end;
 
 end.

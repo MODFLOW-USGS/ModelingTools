@@ -1711,7 +1711,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TSfrParamInstance read GetItems
       write SetItems;
     function ParameterInstanceExists
@@ -1977,7 +1977,7 @@ Type
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    Constructor Create(Model: IModelForTOrderedCollection);
     destructor Destroy; override;
     Function StreamConstant: double;
     property AssignParameterInstances: boolean read FAssignParameterInstances
@@ -2830,7 +2830,7 @@ Type
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     property Items[Index: integer]: ZZoneItem read GetItem
       write SetItem; default;
@@ -2859,7 +2859,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TCompositeZoneItem read GetItem
       write SetItem; default;
   end;
@@ -3222,7 +3222,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TSubPrintItem read GetItem
       write SetItem; default;
     procedure ReportErrors;
@@ -3664,7 +3664,7 @@ Type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TSwtPrintItem read GetItem
       write SetItem; default;
     procedure ReportErrors;
@@ -7183,7 +7183,7 @@ Type
     function GetItems(Index: Integer): TIstPackageItem;
     procedure SetItems(Index: Integer; const Value: TIstPackageItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TIstPackageItem read GetItems write SetItems; default;
   end;
 
@@ -9035,7 +9035,7 @@ begin
   inherited;
 end;
 
-constructor TSfrPackageSelection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TSfrPackageSelection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(Model as TCustomModel);
   FStoredLossFactor := TRealStorage.Create;
@@ -10523,7 +10523,7 @@ end;
 
 { TSfrParamInstances }
 
-constructor TSfrParamInstances.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TSfrParamInstances.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSfrParamInstance, Model);
 end;
@@ -13410,7 +13410,7 @@ begin
 end;
 
 { TSubPrintCollection }
-constructor TSubPrintCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TSubPrintCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSubPrintItem, Model);
 end;
@@ -13762,7 +13762,7 @@ begin
   inherited;
 end;
 
-constructor TCompositeZone.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TCompositeZone.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(ZZoneItem, Model);
 end;
@@ -13843,7 +13843,7 @@ end;
 
 { TCompositeZoneCollection }
 
-constructor TCompositeZoneCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TCompositeZoneCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TCompositeZoneItem, Model);
 end;
@@ -14268,7 +14268,7 @@ end;
 
 { TSwtPrintCollection }
 
-constructor TSwtPrintCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TSwtPrintCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSwtPrintItem, Model);
 end;
@@ -24927,7 +24927,7 @@ end;
 
 { TIstPackageProperties }
 
-constructor TIstPackageProperties.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TIstPackageProperties.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TIstPackageItem, Model);
 end;

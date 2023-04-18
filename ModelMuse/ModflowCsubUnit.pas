@@ -127,7 +127,7 @@ type
     function GetUsed: Boolean;
   public
     property Used: Boolean read GetUsed;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
     function Add: TCSubPackageData;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
@@ -910,7 +910,7 @@ begin
   result := inherited Add as TCSubPackageData;
 end;
 
-constructor TCSubPackageDataCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor TCSubPackageDataCollection.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(TCSubPackageData, Model, ScreenObject);
 end;

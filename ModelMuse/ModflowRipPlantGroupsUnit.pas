@@ -131,7 +131,7 @@ type
     procedure SetItems(Index: Integer; const Value: TRipPlantGroup);
     procedure SetMaxID(const Value: Integer);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     destructor Destroy; override;
     property Items[Index: Integer]: TRipPlantGroup read GetItems
       write SetItems; default;
@@ -594,7 +594,7 @@ begin
   end;
 end;
 
-constructor TRipPlantGroups.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TRipPlantGroups.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TRipPlantGroup, Model);
   FErrorStrings := TStringList.Create;

@@ -114,9 +114,9 @@ type
     procedure SetItem(Index: integer; const Value: TStringConcValueItem);
   public
     procedure Assign(Source: TPersistent); override;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
+    constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject;
       Mt3dmsConcCollection: TCollection); overload;
-    constructor Create(ItemClass: TStringConcValueItemClass; Model: ICustomModelInterfaceForTOrderedCollection;
+    constructor Create(ItemClass: TStringConcValueItemClass; Model: IModelForTOrderedCollection;
       ScreenObject: TObject; Mt3dmsConcCollection: TCollection); overload;
     property Items[Index: integer]: TStringConcValueItem read GetItem
       write SetItem; default;
@@ -2079,14 +2079,14 @@ begin
 end;
 
 constructor TStringConcCollection.Create(ItemClass: TStringConcValueItemClass;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
 //  FScreenObject := ScreenObject;
   FMt3dmsConcCollection := Mt3dmsConcCollection;
 end;
 
-constructor TStringConcCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection;
+constructor TStringConcCollection.Create(Model: IModelForTOrderedCollection;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   Create(TStringConcValueItem, Model, ScreenObject, Mt3dmsConcCollection);

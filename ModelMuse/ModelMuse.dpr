@@ -848,13 +848,15 @@ uses
   CrossSectionUnit in 'CrossSectionUnit.pas',
   DataSetNamesUnit in 'DataSetNamesUnit.pas',
   ModelMuseInterfaceUnit in 'ModelMuseInterfaceUnit.pas',
-  ChangeGlobalVariablesInterfaceUnit in 'ChangeGlobalVariablesInterfaceUnit.pas',
+  LockedGlobalVariableChangersInterfaceUnit in 'LockedGlobalVariableChangersInterfaceUnit.pas',
   Modflow6DynamicTimeSeriesInterfaceUnit in 'Modflow6DynamicTimeSeriesInterfaceUnit.pas',
   Modflow6TimeSeriesCollectionsInterfaceUnit in 'Modflow6TimeSeriesCollectionsInterfaceUnit.pas',
   ModflowTimeInterfaceUnit in 'ModflowTimeInterfaceUnit.pas',
   Modflow6TimeSeriesInterfaceUnit in 'Modflow6TimeSeriesInterfaceUnit.pas',
   PhastModelInterfaceUnit in 'PhastModelInterfaceUnit.pas',
-  OrderedCollectionInterfaceUnit in 'OrderedCollectionInterfaceUnit.pas';
+  OrderedCollectionInterfaceUnit in 'OrderedCollectionInterfaceUnit.pas',
+  ScreenObjectInterfaceUnit in 'ScreenObjectInterfaceUnit.pas',
+  ColorSchemesInterface in 'ColorSchemesInterface.pas';
 
 {$R *.res}
 

@@ -125,7 +125,7 @@ type
   protected
     function BoundaryObserverPrefix: string; override;
   public
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function Used: boolean; override;
@@ -160,7 +160,7 @@ type
     procedure SetItems(Index: Integer; const Value: TLakeOutletItem);
     procedure Loaded;
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     property Items[Index: Integer]: TLakeOutletItem read GetItems write SetItems; default;
     function Add: TLakeOutletItem;
   end;
@@ -217,7 +217,7 @@ type
     function GetItems(Index: Integer): TLakeTableItemMf6;
     procedure SetItems(Index: Integer; const Value: TLakeTableItemMf6);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TLakeTableItemMf6 read GetItems
       write SetItems; default;
     function Add: TLakeTableItemMf6;
@@ -1517,7 +1517,7 @@ begin
   result := 'LakeOutlet';
 end;
 
-constructor TLakeOutlet.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor TLakeOutlet.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
   FLakeTimes := TLakOutletTimeCollection.Create(self, Model, ScreenObject);
@@ -1681,7 +1681,7 @@ begin
   Result := inherited Add as TLakeOutletItem
 end;
 
-constructor TLakeOutlets.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor TLakeOutlets.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
 //  FScreenObject := ScreenObject;
   inherited Create(TLakeOutletItem, Model, ScreenObject);
@@ -3453,7 +3453,7 @@ begin
   result := inherited Add as TLakeTableItemMf6;
 end;
 
-constructor TLakeTableMf6.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TLakeTableMf6.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TLakeTableItemMf6, Model);
 end;

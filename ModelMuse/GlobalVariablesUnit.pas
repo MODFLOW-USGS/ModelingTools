@@ -86,7 +86,7 @@ type
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     Destructor Destroy; override;
     function IndexOfVariable(Name: string): integer;
     function GetVariableByName(Const Name: string): TGlobalVariable;
@@ -397,7 +397,7 @@ begin
   Sort;
 end;
 
-constructor TGlobalVariables.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TGlobalVariables.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TGlobalVariableItem, Model);
   FSearchList := nil;

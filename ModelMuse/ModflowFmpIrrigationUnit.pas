@@ -80,7 +80,7 @@ type
   public
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean);
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     destructor Destroy; override;
     property Items[Index: Integer]: TIrrigationItem read GetItems
       write SetItems; default;
@@ -483,7 +483,7 @@ end;
 //  end;
 //end;
 
-constructor TIrrigationCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TIrrigationCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TIrrigationItem, Model);
 end;

@@ -81,7 +81,7 @@ inherited frmLayers: TfrmLayers
       object comboAquiferType: TJvImageComboBox
         Left = 3
         Top = 133
-        Width = 415
+        Width = 411
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -113,12 +113,12 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Convertible'
           end>
-        ExplicitWidth = 411
+        ExplicitWidth = 407
       end
       object comboInterblockMethod: TJvImageComboBox
         Left = 3
         Top = 237
-        Width = 415
+        Width = 411
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -146,12 +146,12 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Arithmetic and logarithmic (2)'
           end>
-        ExplicitWidth = 411
+        ExplicitWidth = 407
       end
       object comboVertKMethod: TJvImageComboBox
         Left = 3
         Top = 319
-        Width = 415
+        Width = 411
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -174,22 +174,21 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Ratio of horizontal to vertical hydraulic conductivity (1)'
           end>
-        ExplicitWidth = 411
+        ExplicitWidth = 407
       end
       object edName: TRbwEdit
         Left = 3
         Top = 26
-        Width = 415
+        Width = 411
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         OnChange = edNameChange
-        ExplicitWidth = 411
       end
       object cbComputeSaturatedThickness: TJvCheckBox
         Left = 3
         Top = 167
-        Width = 415
+        Width = 411
         Height = 40
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Compute saturated thickness using starting head (LAYTYP)'
@@ -204,7 +203,6 @@ inherited frmLayers: TfrmLayers
         HotTrackFont.Name = 'Arial'
         HotTrackFont.Pitch = fpVariable
         HotTrackFont.Style = []
-        ExplicitWidth = 411
       end
       object rdeAnisotropy: TRbwDataEntry
         Left = 3
@@ -232,8 +230,8 @@ inherited frmLayers: TfrmLayers
         Height = 406
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 429
-        ExplicitHeight = 406
+        ExplicitWidth = 425
+        ExplicitHeight = 405
         inherited lbl1: TLabel
           Width = 148
           Height = 18
@@ -247,15 +245,19 @@ inherited frmLayers: TfrmLayers
           ExplicitHeight = 18
         end
         inherited pnlDiscritization: TPanel
-          Width = 181
+          Width = 177
           Height = 405
-          ExplicitHeight = 405
+          ExplicitWidth = 173
+          ExplicitHeight = 404
           inherited spl1: TSplitter
+            Left = 89
             Height = 364
-            ExplicitHeight = 307
+            ExplicitHeight = 363
           end
           inherited rdgSubLayerBoundaries: TRbwDataGrid4
+            Width = 89
             Height = 364
+            ExplicitWidth = 89
             ExplicitHeight = 364
             ColWidths = (
               64)
@@ -264,6 +266,7 @@ inherited frmLayers: TfrmLayers
               24)
           end
           inherited pnl1: TPanel
+            Width = 177
             inherited lbl3: TLabel
               Width = 179
               Height = 36
@@ -272,8 +275,9 @@ inherited frmLayers: TfrmLayers
             end
           end
           inherited pnlPaintboxParent: TPanel
+            Left = 92
             Height = 364
-            ExplicitHeight = 364
+            ExplicitHeight = 363
             inherited pbSubLayers: TPaintBox
               Height = 332
               ExplicitHeight = 275
@@ -314,8 +318,8 @@ inherited frmLayers: TfrmLayers
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 429
-        ExplicitHeight = 406
+        ExplicitWidth = 425
+        ExplicitHeight = 405
         inherited lblCount: TLabel
           Top = 380
           Width = 55
@@ -379,8 +383,8 @@ inherited frmLayers: TfrmLayers
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 429
-        ExplicitHeight = 406
+        ExplicitWidth = 425
+        ExplicitHeight = 405
         inherited lblCount: TLabel
           Top = 380
           Width = 55
@@ -444,8 +448,8 @@ inherited frmLayers: TfrmLayers
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 429
-        ExplicitHeight = 406
+        ExplicitWidth = 425
+        ExplicitHeight = 405
         inherited lblCount: TLabel
           Top = 380
           Width = 55
@@ -641,6 +645,7 @@ inherited frmLayers: TfrmLayers
         Height = 41
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 425
         object rdeMultiDispersionValues: TRbwDataEntry
           Left = 59
           Top = 8
@@ -831,6 +836,7 @@ inherited frmLayers: TfrmLayers
         Height = 41
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 425
         object rdeConduitLayers: TRbwDataEntry
           Left = 59
           Top = 8
@@ -862,7 +868,7 @@ inherited frmLayers: TfrmLayers
       579
       41)
     object btnHelp: TBitBtn
-      Left = 230
+      Left = 226
       Top = 4
       Width = 108
       Height = 33
@@ -871,10 +877,9 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 226
     end
     object btnOK: TBitBtn
-      Left = 344
+      Left = 340
       Top = 4
       Width = 108
       Height = 33
@@ -883,10 +888,9 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 340
     end
     object btnCancel: TBitBtn
-      Left = 458
+      Left = 454
       Top = 4
       Width = 108
       Height = 33
@@ -894,7 +898,6 @@ inherited frmLayers: TfrmLayers
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 454
     end
   end
   object Panel3: TPanel

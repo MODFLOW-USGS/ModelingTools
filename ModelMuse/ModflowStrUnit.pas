@@ -217,7 +217,7 @@ type
       override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   // Each @name stores a @link(TStrCollection).
@@ -1421,7 +1421,7 @@ begin
   end;
 end;
 
-constructor TStrCollection.Create(Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
+constructor TStrCollection.Create(Boundary: TModflowScreenObjectProperty; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;

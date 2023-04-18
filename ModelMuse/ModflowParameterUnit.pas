@@ -187,7 +187,7 @@ type
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name creates an instance of @classname.
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    Constructor Create(Model: IModelForTOrderedCollection);
     // @name destroys this instance of @classname.
     destructor Destroy; override;
     // @name returns the number of parameters that match ParamTypes.
@@ -981,7 +981,7 @@ begin
   end;
 end;
 
-constructor TModflowSteadyParameters.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TModflowSteadyParameters.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TModflowSteadyParameter, Model);
   FArrayNames:= TStringList.Create;

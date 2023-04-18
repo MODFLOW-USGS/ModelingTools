@@ -115,7 +115,7 @@ type
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    function Model: ICustomModelInterfaceForTOrderedCollection;
+    function Model: IModelForTOrderedCollection;
     function GetOnInvalidateModelEvent: TNotifyEvent;
     property OnInvalidateModelEvent: TNotifyEvent read GetOnInvalidateModelEvent;
     // @name tests whether another @classname is identical to the current one.
@@ -212,7 +212,7 @@ type
   private
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // See @link(Model).
-    FModel: ICustomModelInterfaceForTOrderedCollection;
+    FModel: IModelForTOrderedCollection;
     procedure SetCount(const Value: Integer);
   protected
     // @name invalidates the model.
@@ -230,12 +230,12 @@ type
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; virtual;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
     // @name is a @link(TPhastModel) or nil.
-    property Model: ICustomModelInterfaceForTOrderedCollection read FModel;
+    property Model: IModelForTOrderedCollection read FModel;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
     // @name creates an instance of @classname.
     // @param(ItemClass ItemClass must be a descendant of @link(TOrderedItem).)
     // @param(Model Model must be a @link(TPhastModel) or nil.)
-    constructor Create(ItemClass: TCollectionItemClass; Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(ItemClass: TCollectionItemClass; Model: IModelForTOrderedCollection);
     // @name copies the source @classname to itself.  If @link(Model) is nil,
     // it uses the inherited method which causes it to delete all its items,
     // and copy new ones from the source.  If @link(Model) is assigned,
@@ -269,7 +269,7 @@ type
     procedure SetItems(const Index: Integer; const Value: TPestMethodItem);
     function GetCount: Integer; override;
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[const Index: Integer]: TPestMethodItem read GetItems
       write SetItems; default;
   end;
@@ -280,7 +280,7 @@ type
     procedure SetItems(const Index: Integer; const Value: TPestMethodItem);
     function GetCount: Integer; override;
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[const Index: Integer]: TPestMethodItem read GetItems
       write SetItems; default;
   end;
@@ -294,7 +294,7 @@ type
     // the boundary conditions for different time periods.
     property ScreenObject: TObject read FScreenObject;
     constructor Create(ItemClass: TCollectionItemClass;
-      Model: ICustomModelInterfaceForTOrderedCollection;
+      Model: IModelForTOrderedCollection;
       AScreenObject: TObject);
   end;
 
@@ -527,12 +527,13 @@ const
 implementation
 
 uses
-  PhastModelUnit,
+
   ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowTransientListParameterUnit,
   ModflowSfrParamIcalcUnit, Generics.Collections,
   Generics.Defaults, Math, LockedGlobalVariableChangers,
-  PestObsGroupUnit, PhastModelInterfaceUnit;
+  PestObsGroupUnit, PhastModelInterfaceUnit,
+  LockedGlobalVariableChangersInterfaceUnit;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
 begin
@@ -564,7 +565,7 @@ begin
 end;
 
 constructor TOrderedCollection.Create(ItemClass: TCollectionItemClass;
-  Model: ICustomModelInterfaceForTOrderedCollection);
+  Model: IModelForTOrderedCollection);
 begin
   inherited Create(ItemClass);
   FModel := Model;
@@ -802,7 +803,7 @@ begin
   end;
 end;
 
-function TOrderedItem.Model: ICustomModelInterfaceForTOrderedCollection;
+function TOrderedItem.Model: IModelForTOrderedCollection;
 begin
   if Collection = nil then
   begin
@@ -846,17 +847,13 @@ var
   DataArray: TDataArray;
   Index: integer;
   ChildIndex: Integer;
-  ChildModel: ICustomModelInterfaceForTOrderedCollection;
+  ChildModel: IModelForTOrderedCollection;
   ChildDataArray: TDataArray;
-  PhastModel: TPhastModel;
+  PhastModel: IPhastModelForTLayerOwnerCollection;
 begin
   Assert(FNewDataSets <> nil);
   Assert(FModel <> nil);
-  if FModel is TPhastModel then
-  begin
-     PhastModel := TPhastModel(FModel);
-  end
-  else
+  if not FModel.QueryInterface(IPhastModelForTLayerOwnerCollection, PhastModel) = S_OK then
   begin
     PhastModel:= nil;
   end;
@@ -865,9 +862,9 @@ begin
     DataArray := FNewDataSets[Index];
     if PhastModel <> nil then
     begin
-      for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+      for ChildIndex := 0 to PhastModel.GetChildModelCount - 1 do
       begin
-        ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+        ChildModel := PhastModel.GetChildModel(ChildIndex);
         if ChildModel <> nil then
         begin
           ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByName(DataArray.Name);
@@ -967,7 +964,7 @@ end;
 
 destructor TModflowParameter.Destroy;
 var
-  Model: TPhastModel;
+  LocalModel: IModelForTOrderedCollection;
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
   Boundary: TModflowParamBoundary;
@@ -977,10 +974,10 @@ begin
   begin
     if (Collection as TOrderedCollection).Model <> nil then
     begin
-      Model := TOrderedCollection(Collection).Model as TPhastModel;
-      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      LocalModel := TOrderedCollection(Collection).Model as IModelForTOrderedCollection;
+      for ScreenObjectIndex := 0 to LocalModel.GetScreenObjectCount - 1 do
       begin
-        ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        ScreenObject := LocalModel.ScreenObjectInterfaces[ScreenObjectIndex] as TScreenObject;
         Boundary := ScreenObject.GetMfBoundary(ParameterType);
         if Boundary <> nil then
         begin
@@ -1030,13 +1027,12 @@ end;
 
 procedure TModflowParameter.NotifyHufSy;
 var
-  PhastModel: TPhastModel;
+  PhastModel: IModelForTModflowParameter;
 begin
   if Model <> nil then
   begin
-    PhastModel := Model as TPhastModel;
-    PhastModel.HufSyNotifier.UpToDate := False;
-    PhastModel.HufSyNotifier.UpToDate := True;
+    PhastModel := Model as IModelForTModflowParameter;
+    PhastModel.NotifyHufSy
   end;
 end;
 
@@ -1105,49 +1101,45 @@ end;
 
 procedure TModflowParameter.NotifyHufSS;
 var
-  PhastModel: TPhastModel;
+  PhastModel: IModelForTModflowParameter;
 begin
   if Model <> nil then
   begin
-    PhastModel := Model as TPhastModel;
-    PhastModel.HufSsNotifier.UpToDate := False;
-    PhastModel.HufSsNotifier.UpToDate := True;
+    PhastModel := Model as IModelForTModflowParameter;
+    PhastModel.NotifyHufSS
   end;
 end;
 
 procedure TModflowParameter.NotifyHufKz;
 var
-  PhastModel: TPhastModel;
+  PhastModel: IModelForTModflowParameter;
 begin
   if Model <> nil then
   begin
-    PhastModel := Model as TPhastModel;
-    PhastModel.HufKzNotifier.UpToDate := False;
-    PhastModel.HufKzNotifier.UpToDate := True;
+    PhastModel := Model as IModelForTModflowParameter;
+    PhastModel.NotifyHufKz;
   end;
 end;
 
 procedure TModflowParameter.NotifyHufKy;
 var
-  PhastModel: TPhastModel;
+  PhastModel: IModelForTModflowParameter;
 begin
   if Model <> nil then
   begin
-    PhastModel := Model as TPhastModel;
-    PhastModel.HufKyNotifier.UpToDate := False;
-    PhastModel.HufKyNotifier.UpToDate := True;
+    PhastModel := Model as IModelForTModflowParameter;
+    PhastModel.NotifyHufKy;
   end;
 end;
 
 procedure TModflowParameter.NotifyHufKx;
 var
-  PhastModel: TPhastModel;
+  PhastModel: IModelForTModflowParameter;
 begin
   if Model <> nil then
   begin
-    PhastModel := Model as TPhastModel;
-    PhastModel.HufKxNotifier.UpToDate := False;
-    PhastModel.HufKxNotifier.UpToDate := True;
+    PhastModel := Model as IModelForTModflowParameter;
+    PhastModel.NotifyHufKx;
   end;
 end;
 
@@ -1217,7 +1209,7 @@ const
   HufParam = [ptHUF_HK, ptHUF_KDEP, ptHUF_HANI, ptHUF_VK,
       ptHUF_VANI, ptHUF_SS, ptHUF_SY];
 var
-  PhastModel: TPhastModel;
+  PhastModel: IModelForTModflowParameter;
   ScreenObject: TScreenObject;
   Position: Integer;
   ObjectIndex: Integer;
@@ -1235,7 +1227,7 @@ begin
 
     if Model <> nil then
     begin
-      PhastModel := Model as TPhastModel;
+      PhastModel := Model as IModelForTModflowParameter;
 
       case FParameterType of
         ptUndefined: ;
@@ -1250,7 +1242,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowRchBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowRchBoundary.Parameters.
@@ -1266,7 +1258,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowEvtBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowEvtBoundary.Parameters.
@@ -1282,7 +1274,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowEtsBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowEtsBoundary.Parameters.
@@ -1298,7 +1290,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowChdBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowChdBoundary.Parameters.
@@ -1314,7 +1306,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowGhbBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowGhbBoundary.Parameters.
@@ -1330,7 +1322,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowWellBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowWellBoundary.Parameters.
@@ -1346,7 +1338,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowRivBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowRivBoundary.Parameters.
@@ -1362,7 +1354,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowDrnBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowDrnBoundary.Parameters.
@@ -1378,7 +1370,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowDrtBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowDrtBoundary.Parameters.
@@ -1394,7 +1386,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowSfrBoundary <> nil then
               begin
                 for ParamIndex := ScreenObject.ModflowSfrBoundary.
@@ -1415,7 +1407,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowHfbBoundary <> nil then
               begin
                 if ScreenObject.ModflowHfbBoundary.ParameterName = ParameterName then
@@ -1439,7 +1431,7 @@ begin
             Assert(False);
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowStrBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowStrBoundary.Parameters.
@@ -1455,7 +1447,7 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjects[ObjectIndex];
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
               if ScreenObject.ModflowFmpWellBoundary <> nil then
               begin
                 Position := ScreenObject.ModflowFmpWellBoundary.Parameters.
@@ -1473,7 +1465,7 @@ begin
       if (FParameterType = ptPEST) or  (Value = ptPEST) then
       begin
         ChangeGlobal := TDefineGlobalStringObject.Create(
-          Model as TCustomModel, ParameterName, ParameterName, StrParameterType);
+          Model as IModelForTCustomDefinedGlobalObject, ParameterName, ParameterName, StrParameterType);
         try
           ChangeGlobal.Locked := (Value = ptPEST);
           ChangeGlobal.SetValue(ParameterName);
@@ -1562,7 +1554,7 @@ end;
 
 procedure TModflowParameter.SetValue(AValue : double);
 var
-  PhastModel: TPhastModel;
+//  PhastModel: IModelForTOrderedCollection;
   ScreenObject: TScreenObject;
   ScreenObjectIndex: Integer;
 begin
@@ -1574,63 +1566,47 @@ begin
       if ParameterType in [ptHUF_HK, ptHUF_KDEP]  then
       begin
         NotifyHufKx;
-//        PhastModel := Model as TPhastModel;
-//        PhastModel.HufKxNotifier.UpToDate := False;
-//        PhastModel.HufKxNotifier.UpToDate := True;
       end;
       if ParameterType in [ptHUF_HK, ptHUF_KDEP, ptHUF_HANI]  then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.HufKyNotifier.UpToDate := False;
-        PhastModel.HufKyNotifier.UpToDate := True;
+        NotifyHufKy;
       end;
       if ParameterType in [ptHUF_HK, ptHUF_KDEP, ptHUF_VK, ptHUF_VANI]  then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.HufKzNotifier.UpToDate := False;
-        PhastModel.HufKzNotifier.UpToDate := True;
+        NotifyHufKz
       end;
       if ParameterType = ptHUF_SS  then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.HufSsNotifier.UpToDate := False;
-        PhastModel.HufSsNotifier.UpToDate := True;
+        NotifyHufSs;
       end;
       if ParameterType = ptHUF_SY  then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.HufSyNotifier.UpToDate := False;
-        PhastModel.HufSyNotifier.UpToDate := True;
+        NotifyHufSy;
       end;
       if ParameterType = ptRCH then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.InvalidateMfRchRate(nil);
+        Model.InvalidateMfRchRate(nil);
       end;
       if ParameterType = ptEVT then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.InvalidateMfEvtEvapRate(nil);
+        Model.InvalidateMfEvtEvapRate(nil);
       end;
       if ParameterType = ptETS then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.InvalidateMfEtsEvapRate(nil);
+        Model.InvalidateMfEtsEvapRate(nil);
       end;
       if ParameterType = ptETS then
       begin
-        PhastModel := Model as TPhastModel;
-        PhastModel.InvalidateMfEtsEvapRate(nil);
+        Model.InvalidateMfEtsEvapRate(nil);
       end;
     end;
     if (ParameterType = ptHFB) then
     begin
       if Model <> nil then
       begin
-        PhastModel := Model as TPhastModel;
-        for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+        for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
         begin
-          ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+          ScreenObject := Model.ScreenObjectInterfaces[ScreenObjectIndex] as TScreenObject;
           if (ScreenObject.ModflowHfbBoundary <> nil)
             and (ScreenObject.ModflowHfbBoundary.ParameterName = ParameterName)
             then
@@ -1787,8 +1763,9 @@ begin
         Compiler);
     end;
     InvalidateModel;
-    if not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState) and
-      not IGlobalModelForOrderedCollection.Clearing then
+    if (IGlobalModelForOrderedCollection <> nil)
+      and not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState)
+      and not IGlobalModelForOrderedCollection.Clearing then
     begin
       IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaNodes,
         OnRemoveSubscription, OnRestoreSubscription, self);
@@ -1800,7 +1777,7 @@ end;
 
 constructor TCustomObjectOrderedCollection.Create(
   ItemClass: TCollectionItemClass;
-  Model: ICustomModelInterfaceForTOrderedCollection; AScreenObject: TObject);
+  Model: IModelForTOrderedCollection; AScreenObject: TObject);
 begin
   inherited Create(ItemClass, Model);
   FScreenObject := AScreenObject;
@@ -1849,21 +1826,21 @@ end;
 
 { TPestMethodCollection }
 
-constructor TGwtPestMethodCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TGwtPestMethodCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TPestMethodItem, Model);
 end;
 
 function TGwtPestMethodCollection.GetCount: Integer;
 var
-  LocalModel: TCustomModel;
+  MobileComponentCount: Integer;
 begin
   if (Model <> nil) and Model.GwtUsed  then
   begin
-    LocalModel := Model as TCustomModel;
-    if inherited GetCount < LocalModel.MobileComponents.Count then
+    MobileComponentCount := (Model as IModelForTGwtPestMethodCollection).GetMobileComponentCount;
+    if inherited GetCount < MobileComponentCount then
     begin
-      inherited Count := LocalModel.MobileComponents.Count
+      inherited Count := MobileComponentCount
     end;
   end;
   result := inherited;
@@ -1934,15 +1911,13 @@ end;
 
 procedure TPilotPointObsGrp.SetObsGroupName(const Value: string);
 var
-  LocalModel: TCustomModel;
-  ObservationGroups: TPestObservationGroups;
+  LocalModel: IModelForTPilotPointObsGrp;
 begin
   FObsGroupName := Value;
   if (Collection as TPPObsGrpCollection).FModel <> nil then
   begin
-    LocalModel := (Collection as TPPObsGrpCollection).FModel as TCustomModel;
-    ObservationGroups := LocalModel.PestProperties.PriorInfoObservationGroups;
-    FObsGroup := ObservationGroups.GetObsGroupByName(Value);
+    LocalModel := (Collection as TPPObsGrpCollection).FModel as IModelForTPilotPointObsGrp;
+    FObsGroup := LocalModel.GetObsGroupFromName(Value);
     if FObsGroup <> nil then
     begin
       FObsGroupName := (FObsGroup as TPestObservationGroup).ObsGroupName;
@@ -2050,21 +2025,21 @@ end;
 
 { TLandUsePestMethodCollection }
 
-constructor TLandUsePestMethodCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TLandUsePestMethodCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TPestMethodItem, Model);
 end;
 
 function TLandUsePestMethodCollection.GetCount: Integer;
 var
-  LocalModel: TCustomModel;
+  LocalModel: IModelForTLandUsePestMethodCollection;
 begin
   if (Model <> nil) and Model.GwtUsed  then
   begin
-    LocalModel := Model as TCustomModel;
-    if inherited GetCount < LocalModel.FmpCrops.Count then
+    LocalModel := Model as IModelForTLandUsePestMethodCollection;
+    if inherited GetCount < LocalModel.CropCount then
     begin
-      inherited Count := LocalModel.FmpCrops.Count
+      inherited Count := LocalModel.CropCount;
     end;
   end;
   result := inherited;

@@ -291,7 +291,7 @@ type
 
   TLiftCollection = class(TEnhancedOrderedCollection)
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     procedure Sort;
     procedure Assign(Source: TPersistent); override;
   end;
@@ -3901,7 +3901,7 @@ begin
   Sort;
 end;
 
-constructor TLiftCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TLiftCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TLiftItem, Model);
 end;

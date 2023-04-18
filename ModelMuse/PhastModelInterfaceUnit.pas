@@ -7,7 +7,7 @@ uses
 
 var
   IGlobalModel: IModelMuseModel;
-  IGlobalModelForOrderedCollection: ICustomModelInterfaceForTOrderedCollection;
+  IGlobalModelForOrderedCollection: IModelForTOrderedCollection;
 
 procedure SetGlobals(Model: IModelMuseModel);
 
@@ -17,7 +17,7 @@ implementation
 procedure SetGlobals(Model: IModelMuseModel);
 begin
   IGlobalModel := Model;
-  IGlobalModelForOrderedCollection := Model as ICustomModelInterfaceForTOrderedCollection;
+  IGlobalModelForOrderedCollection := Model as IModelForTOrderedCollection;
 end;
 
 initialization

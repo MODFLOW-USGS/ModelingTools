@@ -42,7 +42,7 @@ type
     function GetItems(Index: Integer): TReachCrossSectionItem;
     procedure SetItems(Index: Integer; const Value: TReachCrossSectionItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TReachCrossSectionItem read GetItems
       write SetItems; default;
     function Add: TReachCrossSectionItem;
@@ -106,7 +106,7 @@ type
     function GetItems(Index: Integer): TReachTableItem;
     procedure SetItems(Index: Integer; const Value: TReachTableItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TReachTableItem read GetItems
       write SetItems; default;
     function Add: TReachTableItem;
@@ -234,7 +234,7 @@ type
   protected
     function SortItems: Boolean; override;
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TReachGeometryItem read GetItems
       write SetItems; default;
     function GetItemByName(AName: string): TReachGeometryItem;
@@ -332,7 +332,7 @@ begin
   Result := inherited Add as TReachCrossSectionItem;
 end;
 
-constructor TReachCrossSection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TReachCrossSection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TReachCrossSectionItem, Model);
 end;
@@ -493,7 +493,7 @@ begin
   Result := inherited Add as TReachTableItem;
 end;
 
-constructor TReachTable.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TReachTable.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TReachTableItem, Model);
 end;
@@ -822,7 +822,7 @@ begin
   result := inherited Add as TReachGeometryItem;
 end;
 
-constructor TReachGeometryCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TReachGeometryCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TReachGeometryItem, Model);
 end;

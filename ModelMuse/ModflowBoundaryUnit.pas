@@ -223,7 +223,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name is the @link(TScreenObject) for this boundary.
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection;
+      Model: IModelForTOrderedCollection;
       ScreenObject: TObject); virtual;
     function Used: boolean;
     function UsesATime(ATime: Double): Boolean;
@@ -437,7 +437,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name creates an instance of @classname.
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
     // @name destroys the current instance of @classname.
     // Do not call @name; call Free instead.
     destructor Destroy; override;
@@ -551,7 +551,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name determines the locations, times, and values of
     // the boundary condition associated with @classname.  These boundaries
@@ -778,7 +778,7 @@ type
     // @name creates an instance of @classname.
     constructor Create(Boundary: TModflowParamBoundary;
       ItemClass: TModflowParamItemClass;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); virtual;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); virtual;
     // @name returns the @link(TModflowParamItem) whose
     // @link(TCustomMF_BoundColl.ParamName TModflowParamItem.Param.ParamName)
     // matches AName.
@@ -816,7 +816,7 @@ type
   private
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     // See @link(ParentModel).
-    FModel: ICustomModelInterfaceForTOrderedCollection;
+    FModel: IModelForTOrderedCollection;
     // See @link(ScreenObject).
     FScreenObject: TObject;
   protected
@@ -839,11 +839,11 @@ type
   public
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     // @name is either nil or the the current @link(TPhastModel).
-    property ParentModel: ICustomModelInterfaceForTOrderedCollection read FModel;
+    property ParentModel: IModelForTOrderedCollection read FModel;
     // @name is either @nil or the @link(TScreenObject) that owns
     // this @classname.
     property ScreenObject: TObject read FScreenObject;
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     function Used: boolean; virtual; abstract;
   end;
@@ -882,7 +882,7 @@ type
     // @seealso(THfbBoundary).
     // @seealso(TSfrMf6Boundary).
     property BoundaryObserver: TObserver read FBoundaryObserver;
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     procedure StopTalkingToAnyone; virtual;
     procedure Invalidate;
@@ -1402,7 +1402,7 @@ begin
 end;
 
 constructor TCustomMF_BoundColl.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited ;
   FTimeListLink:= TTimeListModelLinkList.Create(self);
@@ -1469,7 +1469,7 @@ end;
 //end;
 
 constructor TCustomListArrayBoundColl.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   FListDuplicatesAllowed := True;
@@ -1974,7 +1974,7 @@ end;
 
 constructor TModflowParameters.Create(Boundary: TModflowParamBoundary;
   ItemClass: TModflowParamItemClass;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
   FBoundary := Boundary;
@@ -2475,7 +2475,7 @@ begin
 end;
 
 constructor TCustomNonSpatialBoundColl.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection;
+  Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
@@ -4413,7 +4413,7 @@ begin
   end;
 end;
 
-constructor TModflowScreenObjectProperty.Create(Model: ICustomModelInterfaceForTOrderedCollection;
+constructor TModflowScreenObjectProperty.Create(Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
@@ -4690,7 +4690,7 @@ end;
 
 { TFormulaProperty }
 
-constructor TFormulaProperty.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor TFormulaProperty.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create;
   Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));

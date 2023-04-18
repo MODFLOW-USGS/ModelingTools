@@ -73,7 +73,7 @@ type
     function GetItems(Index: integer): TSfrTableRowItem;
     procedure SetItems(Index: integer; const Value: TSfrTableRowItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     property Items[Index: integer]: TSfrTableRowItem read GetItems
       write SetItems; default;
   end;
@@ -790,7 +790,7 @@ end;
 
 { TSfrTable }
 
-constructor TSfrTable.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor TSfrTable.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(TSfrTableRowItem, Model, ScreenObject);
 //  FScreenObject := ScreenObject;

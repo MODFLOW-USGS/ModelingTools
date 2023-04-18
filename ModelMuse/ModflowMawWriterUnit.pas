@@ -1191,7 +1191,7 @@ begin
   begin
     Exit
   end;
-  if Model.PackageGeneratedExternally(StrMAW) then
+  if Model.PackageGeneratedExternally(StrMAW6) then
   begin
     Exit;
   end;
@@ -1217,7 +1217,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrMAW, 0, FNameOfFile, foInput, Model, False, StrMAW1);
+  WriteToNameFile(StrMAW6, 0, FNameOfFile, foInput, Model, False, StrMAW1);
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
   begin

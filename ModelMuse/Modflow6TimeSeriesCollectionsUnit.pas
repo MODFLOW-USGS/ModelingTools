@@ -48,7 +48,7 @@ type
     procedure OnTimesChanged(Sender: TObject); virtual;
   public
     Constructor Create(ItemClass: TCollectionItemClass;
-      Model: ICustomModelInterfaceForTOrderedCollection);
+      Model: IModelForTOrderedCollection);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
@@ -147,7 +147,7 @@ type
     procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
     function GetTimeSeriesNames: TStringList;
   public
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    Constructor Create(Model: IModelForTOrderedCollection);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property Items[Index: Integer]: TimeSeriesCollectionItem read GetItem write SetItem; default;
@@ -231,7 +231,7 @@ end;
 
 constructor TTimesSeriesCollection.Create(Model: IModelMuseModel);
 begin
-  inherited Create(TTimeSeriesItem, Model as ICustomModelInterfaceForTOrderedCollection);
+  inherited Create(TTimeSeriesItem, Model as IModelForTOrderedCollection);
   FTimeSeriesDictionary := TCacheDictionary<string, TMf6TimeSeries>.Create;
 end;
 
@@ -801,7 +801,7 @@ begin
   FTimeSeriesDictionary.Clear;
 end;
 
-constructor TTimesSeriesCollections.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TTimesSeriesCollections.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TimeSeriesCollectionItem, Model);
 //  {$IF CompilerVersion > 28}
@@ -1139,7 +1139,7 @@ begin
   end;
 end;
 
-constructor TCustomTimesSeriesCollection.Create(ItemClass: TCollectionItemClass; Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TCustomTimesSeriesCollection.Create(ItemClass: TCollectionItemClass; Model: IModelForTOrderedCollection);
 var
   InvalidateModelEvent: TNotifyEvent;
 begin
@@ -1220,123 +1220,5 @@ procedure TCustomTimesSeriesCollection.SetTimes(const Value: TRealCollection);
 begin
   FTimes.Assign(Value);
 end;
-
-{ TDyanmicTimesSeriesCollection }
-
-//function TDyanmicTimesSeriesCollection.Add: TDynamicTimeSeriesItem;
-//begin
-//  result := inherited Add as TDynamicTimeSeriesItem;
-//end;
-//
-//procedure TDyanmicTimesSeriesCollection.Assign(Source: TPersistent);
-//begin
-//  FTimeSeriesDictionary.Clear;
-//  inherited;
-//end;
-//
-//constructor TDyanmicTimesSeriesCollection.Create(Model: IModelMuseModel);
-//var
-//  LocalInterface : ICustomModelInterfaceForTOrderedCollection;
-//begin
-//  LocalInterface := Model as ICustomModelInterfaceForTOrderedCollection;
-//  inherited Create(TDynamicTimeSeriesItem, LocalInterface);
-//  FTimeSeriesDictionary := TCacheDictionary<string, TDynamicTimeSeries>.Create;
-//  FModel := Model
-//end;
-//
-//destructor TDyanmicTimesSeriesCollection.Destroy;
-//begin
-//  FTimeSeriesDictionary.Free;
-//  inherited;
-//end;
-//
-//function TDyanmicTimesSeriesCollection.GetItem(
-//  Index: Integer): TDynamicTimeSeriesItem;
-//begin
-//  result := inherited Items[Index] as TDynamicTimeSeriesItem;
-//end;
-//
-//function TDyanmicTimesSeriesCollection.GetTimeCount: Integer;
-//begin
-//  result := FTimes.Count;
-//end;
-//
-//function TDyanmicTimesSeriesCollection.GetValuesByName(
-//  const AName: string): TDynamicTimeSeries;
-//var
-//  ItemIndex: Integer;
-//  TimeSeries: TDynamicTimeSeries;
-//begin
-//  result := nil;
-//  if (Count > 0) and (FTimeSeriesDictionary.Count = 0) then
-//  begin
-//    for ItemIndex := 0 to Count - 1 do
-//    begin
-//      TimeSeries := Items[ItemIndex].TimeSeries;
-//      if TimeSeries.Deleted then
-//      begin
-//        Continue;
-//      end;
-//      FTimeSeriesDictionary.Add(UpperCase(String(TimeSeries.SeriesName)), TimeSeries);
-//    end;
-//  end;
-//  if not FTimeSeriesDictionary.TryGetValue(UpperCase(AName), result) then
-//  begin
-//    result := nil;
-//  end;
-//end;
-
-//function TDyanmicTimesSeriesCollection.IsSame(
-//  AnOrderedCollection: TOrderedCollection): boolean;
-////var
-////  OtherCollection: TDyanmicTimesSeriesCollection;
-//begin
-//  result := (AnOrderedCollection is TDyanmicTimesSeriesCollection)
-//    and inherited IsSame(AnOrderedCollection);
-////  if result then
-////  begin
-////    OtherCollection := TDyanmicTimesSeriesCollection(AnOrderedCollection);
-////    result := (GroupName = OtherCollection.GroupName)
-////      and (Times.IsSame(OtherCollection.Times));
-////  end;
-//end;
-//
-//procedure TDyanmicTimesSeriesCollection.Loaded;
-//var
-//  SeriesIndex: Integer;
-//begin
-//  for SeriesIndex := Count - 1 downto 0 do
-//  begin
-//    if Items[SeriesIndex].TimeSeries.Deleted then
-//    begin
-//      Items[SeriesIndex].Free;
-//    end;
-//  end;
-//  FTimeSeriesDictionary.Clear;
-//end;
-//
-//procedure TDyanmicTimesSeriesCollection.SetItem(Index: Integer;
-//  const Value: TDynamicTimeSeriesItem);
-//begin
-//  inherited Items[Index] := Value;
-//end;
-//
-//procedure TDyanmicTimesSeriesCollection.SetTimeCount(const Value: Integer);
-//var
-//  ItemIndex: Integer;
-//  TimeIndex: Integer;
-//  AnItem: TDynamicTimeSeriesItem;
-//begin
-//  for ItemIndex := 0 to Count-1 do
-//  begin
-//    AnItem := Items[ItemIndex];
-//    AnItem.TimeSeries.Count := Value;
-//    for TimeIndex := FTimes.Count to Value -1 do
-//    begin
-//      AnItem.TimeSeries[TimeIndex].Value := '3.0E30';
-//    end;
-//  end;
-//  FTimes.Count := Value;
-//end;
 
 end.

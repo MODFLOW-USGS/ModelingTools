@@ -156,7 +156,7 @@ type
   public
     function Add: TSwrTransientReachItem;
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSwrTransientCell = class(TValueCell)
@@ -720,7 +720,7 @@ begin
 end;
 
 constructor TSwrReachCollection.Create(Boundary: TModflowScreenObjectProperty;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited;
   SectionDuplicatesAllowed := True;

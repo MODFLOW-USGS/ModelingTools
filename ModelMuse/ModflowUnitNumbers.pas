@@ -161,7 +161,7 @@ const
   StrMnw1ByNode = 'MNW1_ByNode';
   StrMnw1QSum = 'MNW1_QSum';
 
-  StrMAW = 'MAW6';
+  StrMAW6 = 'MAW6';
 
   StrNPF= 'NPF6';
   StrRip = 'RIP';

@@ -420,7 +420,7 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection); reintroduce;
+    constructor Create(Model: IModelForTOrderedCollection); reintroduce;
   end;
 
 
@@ -3682,7 +3682,7 @@ end;
 
 { TAddedDemandCollection }
 
-constructor TAddedDemandCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TAddedDemandCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(nil, Model, nil);
 end;

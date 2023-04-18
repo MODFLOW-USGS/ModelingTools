@@ -25,7 +25,7 @@ type
     procedure SetItem(Index: integer; const Value: TUseLayerNumberItem);
   public
     function Add: TUseLayerNumberItem;
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    Constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TUseLayerNumberItem read GetItem
       write SetItem; default;
     function GetItemByLayerNumber(LayerNumber: integer): TUseLayerNumberItem;
@@ -130,7 +130,7 @@ type
     procedure SetItem(Index: integer; const Value: TSubNoDelayBedLayerItem);
   public
     function Add: TSubNoDelayBedLayerItem;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TSubNoDelayBedLayerItem read GetItem
       write SetItem; default;
     procedure Loaded;
@@ -229,7 +229,7 @@ type
     procedure SetItem(Index: integer; const Value: TSubDelayBedLayerItem);
   public
     function Add: TSubDelayBedLayerItem;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TSubDelayBedLayerItem read GetItem
       write SetItem; default;
     procedure Loaded;
@@ -307,7 +307,7 @@ type
     procedure SetItem(Index: integer; const Value: TSwtWaterTableItem);
   public
     function Add: TSwtWaterTableItem;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: TSwtWaterTableItem read GetItem
       write SetItem; default;
     procedure Loaded;
@@ -1084,7 +1084,7 @@ begin
   result := inherited Add as TSubDelayBedLayerItem;
 end;
 
-constructor TSubDelayBedLayers.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TSubDelayBedLayers.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSubDelayBedLayerItem, Model);
 end;
@@ -1127,7 +1127,7 @@ begin
   result := inherited Add as TSubNoDelayBedLayerItem;
 end;
 
-constructor TSubNoDelayBedLayers.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TSubNoDelayBedLayers.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSubNoDelayBedLayerItem, Model);
 end;
@@ -1192,7 +1192,7 @@ begin
   result := inherited Add as TUseLayerNumberItem;
 end;
 
-constructor TUseLayersCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TUseLayersCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TUseLayerNumberItem, Model);
 end;
@@ -1700,7 +1700,7 @@ begin
   result := inherited Add as TSwtWaterTableItem
 end;
 
-constructor TWaterTableLayers.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TWaterTableLayers.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSwtWaterTableItem, Model);
 end;

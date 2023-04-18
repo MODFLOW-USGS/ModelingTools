@@ -59,10 +59,10 @@ type
     function GetScaleFactorParameter: string;
     function GetParamMethod: TPestParamMethod;
     function GetOrientation: TDataSetOrientation;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
-    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
-      virtual; stdcall;
+//    function _AddRef: Integer; stdcall;
+//    function _Release: Integer; stdcall;
+//    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
+//      virtual; stdcall;
   public
     constructor Create(ModelInterface: IModelForDynamicTimeSeries);
     destructor Destroy; override;
@@ -335,16 +335,16 @@ begin
   end;
 end;
 
-function TDynamicTimeSeries.QueryInterface(const IID: TGUID;
-  out Obj): HRESULT;
-const
-  E_NOINTERFACE = HRESULT($80004002);
-begin
-  if GetInterface(IID, Obj) then
-    result := 0
-  else
-    result := E_NOINTERFACE;
-end;
+//function TDynamicTimeSeries.QueryInterface(const IID: TGUID;
+//  out Obj): HRESULT;
+//const
+//  E_NOINTERFACE = HRESULT($80004002);
+//begin
+//  if GetInterface(IID, Obj) then
+//    result := 0
+//  else
+//    result := E_NOINTERFACE;
+//end;
 
 procedure TDynamicTimeSeries.SetInterpolationMethod(
   const Value: TMf6InterpolationMethods);
@@ -424,15 +424,15 @@ begin
   FStoredScaleFactor.Assign(Value);
 end;
 
-function TDynamicTimeSeries._AddRef: Integer;
-begin
-  result := 1;
-end;
-
-function TDynamicTimeSeries._Release: Integer;
-begin
-  result := 1;
-end;
+//function TDynamicTimeSeries._AddRef: Integer;
+//begin
+//  result := 1;
+//end;
+//
+//function TDynamicTimeSeries._Release: Integer;
+//begin
+//  result := 1;
+//end;
 
 { TDynamicTimeSeriesItem }
 
@@ -492,9 +492,9 @@ end;
 
 constructor TDyanmicTimesSeriesCollection.Create(Model: IModelMuseModel);
 var
-  LocalInterface : ICustomModelInterfaceForTOrderedCollection;
+  LocalInterface : IModelForTOrderedCollection;
 begin
-  LocalInterface := Model as ICustomModelInterfaceForTOrderedCollection;
+  LocalInterface := Model as IModelForTOrderedCollection;
   inherited Create(TDynamicTimeSeriesItem, LocalInterface);
   FTimeSeriesDictionary := TCacheDictionary<string, TDynamicTimeSeries>.Create;
   FModel := Model

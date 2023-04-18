@@ -202,6 +202,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 395
       end
     end
     object cpnlOptions: TCategoryPanel

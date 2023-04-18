@@ -3,7 +3,6 @@ inherited frmColorSchemes: TfrmColorSchemes
   HelpKeyword = 'Custom_Color_Schemes_Dialog_Bo'
   Caption = 'Custom Color Schemes'
   ClientHeight = 307
-  ExplicitWidth = 438
   ExplicitHeight = 345
   TextHeight = 18
   object spl1: TSplitter
@@ -25,7 +24,7 @@ inherited frmColorSchemes: TfrmColorSchemes
       426
       41)
     object btnHelp: TBitBtn
-      Left = 79
+      Left = 75
       Top = 4
       Width = 108
       Height = 33
@@ -34,10 +33,9 @@ inherited frmColorSchemes: TfrmColorSchemes
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 75
     end
     object btnOK: TBitBtn
-      Left = 193
+      Left = 189
       Top = 4
       Width = 108
       Height = 33
@@ -46,10 +44,9 @@ inherited frmColorSchemes: TfrmColorSchemes
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 189
     end
     object btnCancel: TBitBtn
-      Left = 307
+      Left = 303
       Top = 4
       Width = 108
       Height = 33
@@ -57,7 +54,6 @@ inherited frmColorSchemes: TfrmColorSchemes
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 303
     end
   end
   object pnlSelect: TPanel
@@ -231,7 +227,7 @@ inherited frmColorSchemes: TfrmColorSchemes
     object edName: TLabeledEdit
       Left = 6
       Top = 8
-      Width = 207
+      Width = 203
       Height = 26
       Anchors = [akLeft, akTop, akRight]
       EditLabel.Width = 42
@@ -241,7 +237,6 @@ inherited frmColorSchemes: TfrmColorSchemes
       TabOrder = 0
       Text = ''
       OnChange = edNameChange
-      ExplicitWidth = 203
     end
     inline frameColorScheme: TframeGrid
       Left = 1

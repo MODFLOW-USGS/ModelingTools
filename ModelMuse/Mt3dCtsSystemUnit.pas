@@ -72,7 +72,7 @@ type
     procedure Loaded(Model: TBaseModel);
 //    class function ItemClass: TBoundaryItemClass; static;
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     function Add: TCtsObjectItem;
     property Items[Index: Integer]: TCtsObjectItem read GetItem write SetItem; default;
     function GetItemByStartTime(StartTime: Double): TCtsObjectItem;
@@ -102,7 +102,7 @@ type
     function GetItem(Index: Integer): TInjectionOptionItem;
     procedure SetItem(Index: Integer; const Value: TInjectionOptionItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject;
+    constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject;
       Mt3dmsConcCollection: TCollection);
     function Add: TInjectionOptionItem;
     property Items[Index: Integer]: TInjectionOptionItem read GetItem write SetItem; default;
@@ -181,7 +181,7 @@ type
     procedure SetItem(Index: Integer;
       const Value: TIndividualWellInjectionItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TIndividualWellInjectionItem read GetItem
       write SetItem; default;
     function GetItemByObjectName(const AName: string): TIndividualWellInjectionItem;
@@ -291,7 +291,7 @@ type
   protected
     function BoundaryObserverPrefix: string; override;
   public
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure Loaded;
@@ -337,7 +337,7 @@ type
     function GetItem(Index: Integer): TCtsSystemItem;
     procedure SetItem(Index: Integer; const Value: TCtsSystemItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     function Add: TCtsSystemItem;
     property Items[Index: Integer]: TCtsSystemItem read GetItem write SetItem; default;
     procedure Loaded;
@@ -906,7 +906,7 @@ begin
   result := inherited Add as TCtsObjectItem;
 end;
 
-constructor TCtsObjectCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TCtsObjectCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TCtsObjectItem, Model);
 end;
@@ -1052,7 +1052,7 @@ begin
   result := 'CTS_';
 end;
 
-constructor TCtsSystem.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor TCtsSystem.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
   FDefaultInjectionOptions := TCtsInjectionTimeCollection.Create(Self, Model, ScreenObject);
@@ -1146,7 +1146,7 @@ begin
   Result := inherited Add as TInjectionOptionItem;
 end;
 
-constructor TInjectionOptionCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection;
+constructor TInjectionOptionCollection.Create(Model: IModelForTOrderedCollection;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   inherited Create(TInjectionOptionItem, Model, ScreenObject, Mt3dmsConcCollection);
@@ -1214,7 +1214,7 @@ begin
   result := inherited Add as TCtsSystemItem
 end;
 
-constructor TCtsSystemCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TCtsSystemCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TCtsSystemItem, Model);
 end;
@@ -1348,7 +1348,7 @@ begin
   result := inherited Add as TIndividualWellInjectionItem;
 end;
 
-constructor TIndividualWellInjectionCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TIndividualWellInjectionCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TIndividualWellInjectionItem, Model);
 end;

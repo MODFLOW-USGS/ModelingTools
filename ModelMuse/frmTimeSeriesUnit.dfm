@@ -1,4 +1,6 @@
 inherited frmTimeSeries: TfrmTimeSeries
+  HelpType = htKeyword
+  HelpKeyword = 'Time_Series_Dialog_Box'
   Caption = 'Time Series'
   ClientHeight = 560
   ClientWidth = 624
@@ -42,7 +44,7 @@ inherited frmTimeSeries: TfrmTimeSeries
       624
       41)
     object btnHelp: TBitBtn
-      Left = 319
+      Left = 315
       Top = 6
       Width = 91
       Height = 33
@@ -50,10 +52,11 @@ inherited frmTimeSeries: TfrmTimeSeries
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 315
+      OnClick = btnHelpClick
+      ExplicitLeft = 311
     end
     object btnOK: TBitBtn
-      Left = 416
+      Left = 412
       Top = 6
       Width = 91
       Height = 33
@@ -81,10 +84,10 @@ inherited frmTimeSeries: TfrmTimeSeries
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 412
+      ExplicitLeft = 408
     end
     object btnCancel: TBitBtn
-      Left = 512
+      Left = 508
       Top = 6
       Width = 91
       Height = 33
@@ -92,7 +95,7 @@ inherited frmTimeSeries: TfrmTimeSeries
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 508
+      ExplicitLeft = 504
     end
     object btnAddGroup: TButton
       Left = 9

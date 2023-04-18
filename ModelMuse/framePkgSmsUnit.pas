@@ -12,6 +12,10 @@ uses
 type
   TSmsColumns = (scName, scOverride, scValue);
 
+  {If the position of pgcControls relative to the top of the frame is changed,
+   TfrmModflowPackages.ShowImsPage needs to be changed too.
+  }
+
   TframePkgSms = class(TframePackage)
     pgcControls: TPageControl;
     tabBasic: TTabSheet;

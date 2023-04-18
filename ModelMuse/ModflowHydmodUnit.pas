@@ -51,7 +51,7 @@ type
     function BoundaryObserverPrefix: string; override;
   public
     procedure Assign(Source: TPersistent); override;
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     Destructor Destroy; override;
     function Used: boolean; override;
     procedure Loaded;
@@ -129,7 +129,7 @@ begin
   Assert(False);
 end;
 
-constructor THydmodData.Create(Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+constructor THydmodData.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(Model as TCustomModel, ScreenObject);
   FSubUsedLayers := TUseLayersCollection.Create(Model);

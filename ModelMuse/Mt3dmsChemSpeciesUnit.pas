@@ -194,7 +194,7 @@ type
 
   TChemSpeciesCollection = class(TCustomChemSpeciesCollection)
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
   end;
 
   TMobileChemSpeciesItem = class(TChemSpeciesItem)
@@ -218,7 +218,7 @@ type
     function GetItem(Index: Integer): TMobileChemSpeciesItem;
     procedure SetItem(Index: Integer; const Value: TMobileChemSpeciesItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer] : TMobileChemSpeciesItem read GetItem
       write SetItem; default;
     function Add: TMobileChemSpeciesItem;
@@ -2114,7 +2114,7 @@ begin
   Result := inherited Add as TChemSpeciesItem;
 end;
 
-constructor TChemSpeciesCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TChemSpeciesCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TChemSpeciesItem, Model);
 end;
@@ -2243,7 +2243,7 @@ begin
   result := inherited Add as TMobileChemSpeciesItem
 end;
 
-constructor TMobileChemSpeciesCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TMobileChemSpeciesCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TMobileChemSpeciesItem, Model);
 end;

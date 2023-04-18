@@ -231,7 +231,7 @@ type
     function GetItem(Index: Integer): TMultiSrdItem;
     procedure SetItem(Index: Integer; const Value: TMultiSrdItem);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TMultiSrdItem read GetItem write SetItem; default;
   end;
 
@@ -314,7 +314,7 @@ type
     procedure SetItem(Index: Integer; const Value: TDeliveryParamItem);
   public
 //    function Add: TDeliveryParamItem;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TDeliveryParamItem read GetItem
       write SetItem; default;
   end;
@@ -416,7 +416,7 @@ type
     function GetFirst: TFarmEfficienciesItem;
   public
     function Add: TFarmEfficienciesItem;
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TFarmEfficienciesItem read GetItem
       write SetItem; default;
     property First: TFarmEfficienciesItem read GetFirst;
@@ -733,7 +733,7 @@ type
     function GetItem(Index: Integer): TFarm;
     procedure SetItem(Index: Integer; const Value: TFarm);
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TFarm read GetItem write SetItem; default;
     function Add: TFarm;
     function Last: TFarm;
@@ -1241,7 +1241,7 @@ end;
 
 { TDeliveryParamCollection }
 
-constructor TDeliveryParamCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TDeliveryParamCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TDeliveryParamItem, Model);
 end;
@@ -1510,7 +1510,7 @@ begin
   Result := inherited Add as TFarmEfficienciesItem;
 end;
 
-constructor TFarmEfficiencyCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TFarmEfficiencyCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TFarmEfficienciesItem, Model);
 //  FWaterRights := TWaterRightsCollection.Create(Model);
@@ -2383,7 +2383,7 @@ begin
   result := inherited Add as TFarm;
 end;
 
-constructor TFarmCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TFarmCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TFarm, Model);
 end;
@@ -2659,7 +2659,7 @@ end;
 
 { TMultiSrdCollection }
 
-constructor TMultiSrdCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TMultiSrdCollection.Create(Model: IModelForTOrderedCollection);
 begin
   FModel := Model as TCustomModel;
   inherited Create(TMultiSrdItem, Model);

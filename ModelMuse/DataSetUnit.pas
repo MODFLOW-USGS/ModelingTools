@@ -902,6 +902,7 @@ type
       write SetPilotPointsUsed;
     property PestArrayFileNames: TStringList read GetPestArrayFileNames;
     procedure Loaded; override;
+    procedure AssignModel(AModel: IModelMuseModel);
   published
     // @name indicates the hierarchical position of this instance of
     // @classname when it is required by the model.
@@ -8412,6 +8413,11 @@ begin
   begin
     inherited;
   end;
+end;
+
+procedure TDataArray.AssignModel(AModel: IModelMuseModel);
+begin
+  FModel := AModel;
 end;
 
 procedure TDataArray.AssignProperties(Source: TDataArray);

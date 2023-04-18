@@ -75,7 +75,7 @@ type
     property Items[Index: integer]: THufUsedParameter read GetItem; default;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection; HufUnit: THydrogeologicUnit);
+    constructor Create(Model: IModelForTOrderedCollection; HufUnit: THydrogeologicUnit);
     function GetUsedParameterByName(const ParameterName: string): THufUsedParameter;
     function IsUsed(const ParameterName: string): boolean;
     procedure Notify(Item: TCollectionItem; Action: TCollectionNotification); override;
@@ -189,7 +189,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: integer]: THydrogeologicUnit read GetItems write SetItems; default;
     procedure RenameParameters(const OldName, NewName: string);
     function GetUnitByName(UnitName: string): THydrogeologicUnit;
@@ -212,7 +212,7 @@ type
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    Constructor Create(Model: ICustomModelInterfaceForTOrderedCollection);
+    Constructor Create(Model: IModelForTOrderedCollection);
     function GetParameterByName(const ParameterName: string): THufParameter;
     property Items[Index: integer]: THufParameter read GetItem; default;
     function CountParameters(ParamTypes: TParameterTypes): integer;
@@ -594,7 +594,7 @@ end;
 
 { THufUsedParameters }
 
-constructor THufUsedParameters.Create(Model: ICustomModelInterfaceForTOrderedCollection; HufUnit: THydrogeologicUnit);
+constructor THufUsedParameters.Create(Model: IModelForTOrderedCollection; HufUnit: THydrogeologicUnit);
 begin
   inherited Create(THufUsedParameter, Model);
   FHufUnit := HufUnit;
@@ -1069,7 +1069,7 @@ end;
 
 { THydrogeologicUnits }
 
-constructor THydrogeologicUnits.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor THydrogeologicUnits.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(THydrogeologicUnit, Model);
 end;
@@ -1313,7 +1313,7 @@ begin
   end;
 end;
 
-constructor THufModflowParameters.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor THufModflowParameters.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(THufParameter, Model);
 end;

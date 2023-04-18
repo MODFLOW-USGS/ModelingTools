@@ -110,7 +110,7 @@ type
     procedure RemoveModelLink(AModel: TBaseModel);
 //    property ScreenObject: TObject read FScreenObject;
     // @name creates an instance of @classname
-    constructor Create(Boundary: TSwiObsBoundary; Model: ICustomModelInterfaceForTOrderedCollection;
+    constructor Create(Boundary: TSwiObsBoundary; Model: IModelForTOrderedCollection;
       ScreenObject: TObject);
     procedure EvaluateZetaObservations(AModel: TBaseModel);
     // @name destroys the current instance of @classname.
@@ -414,7 +414,7 @@ begin
 end;
 
 constructor TSwiObsCollection.Create(Boundary: TSwiObsBoundary;
-  Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject);
+  Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited Create(TSwiObsItem, Model, ScreenObject);
   FBoundary := Boundary;

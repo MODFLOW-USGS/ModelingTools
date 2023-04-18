@@ -520,7 +520,12 @@ type
   protected
     function GetCount: Integer; virtual;
     procedure SetCount(const Value: Integer); virtual;
+  protected
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
+    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
+      virtual; stdcall;
     procedure Assign(Source: TPersistent); override;
     procedure InvalidateModel;
     // @name invalidates the model.
@@ -1244,6 +1249,16 @@ begin
 {$ENDIF}
 end;
 
+function TPhastCollection.QueryInterface(const IID: TGUID; out Obj): HRESULT;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
+end;
+
 procedure TPhastCollection.SetCount(const Value: Integer);
 var
   ExistingCount: integer;
@@ -1270,6 +1285,16 @@ procedure TPhastCollection.Sort(const AComparer: IComparer<TCollectionItem>);
 begin
   inherited;
   DoOnChange;
+end;
+
+function TPhastCollection._AddRef: Integer;
+begin
+  result := 1;
+end;
+
+function TPhastCollection._Release: Integer;
+begin
+  result := 1;
 end;
 
 { TRealStorage }

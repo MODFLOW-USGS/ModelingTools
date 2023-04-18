@@ -40,7 +40,7 @@ type
 
   TCustomFarmCollection = class(TCustomNonSpatialBoundColl)
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection); reintroduce; virtual;
+    constructor Create(Model: IModelForTOrderedCollection); reintroduce; virtual;
   end;
 
   // @name is used to define list properties for MODFLOW OWHM version 2.
@@ -65,7 +65,7 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-    constructor Create(Model: ICustomModelInterfaceForTOrderedCollection); override;
+    constructor Create(Model: IModelForTOrderedCollection); override;
     destructor Destroy; override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     property Items[Index: Integer]: TOwhmItem read GetItem
@@ -199,7 +199,7 @@ end;
 
 { TCustomFarmCollection }
 
-constructor TCustomFarmCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TCustomFarmCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(nil, Model, nil);
 end;
@@ -212,7 +212,7 @@ end;
 
 { TOwhmCollection }
 
-constructor TOwhmCollection.Create(Model: ICustomModelInterfaceForTOrderedCollection);
+constructor TOwhmCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited;
   FOwhmNames := TStringList.Create;

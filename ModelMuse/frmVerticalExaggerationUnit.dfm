@@ -6,7 +6,6 @@ inherited frmVerticalExaggeration: TfrmVerticalExaggeration
   ActiveControl = rdeVerticalExaggeration
   Caption = 'Vertical Exaggeration'
   ClientHeight = 88
-  ExplicitWidth = 438
   ExplicitHeight = 126
   PixelsPerInch = 120
   TextHeight = 18

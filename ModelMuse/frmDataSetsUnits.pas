@@ -3724,7 +3724,7 @@ procedure TDataArrayEdit.UpdateDataSet;
 begin
   if FDataArray = nil then
   begin
-    FDataArray := TDataArray.Create(frmGoPhast.PhastModel);
+    FDataArray := TDataArray.Create(frmGoPhast.PhastModel.DataArrayManager.Model);
     FDataArray.UpdateWithName(Name);
 //    FDataArray.OnNameChange := frmGoPhast.PhastModel.DataArrayNameChange
   end;

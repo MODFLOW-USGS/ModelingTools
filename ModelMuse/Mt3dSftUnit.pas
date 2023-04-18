@@ -153,7 +153,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TPrecipitationMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
@@ -161,7 +161,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TRunoffMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
@@ -169,7 +169,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TConstConcMt3dSftReachCollection = class(TCustomMt3dSftReachCollection)
@@ -177,7 +177,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   TSftObsLocation = (solNone, solFirst, solLast, solAll);
@@ -713,7 +713,7 @@ end;
 { THeadWaterMt3dSftReachCollection }
 
 constructor THeadWaterMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
+  Boundary: TModflowScreenObjectProperty; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -728,7 +728,7 @@ end;
 { TPrecipitationMt3dSftReachCollection }
 
 constructor TPrecipitationMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
+  Boundary: TModflowScreenObjectProperty; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -743,7 +743,7 @@ end;
 { TRunoffMt3dSftReachCollection }
 
 constructor TRunoffMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
+  Boundary: TModflowScreenObjectProperty; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
@@ -758,7 +758,7 @@ end;
 { TConstConcMt3dSftReachCollection }
 
 constructor TConstConcMt3dSftReachCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
+  Boundary: TModflowScreenObjectProperty; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;

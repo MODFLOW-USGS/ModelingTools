@@ -813,6 +813,7 @@ var
   MemoWidth: Integer;
 begin
   result := TframePkgSms.Create(nil);
+  result.pgcControls.Anchors := result.pgcControls.Anchors + [akTop];
   result.Selected := True;
   FframePkgSmsObjectList.Add(result);
   NewPage := TJvStandardPage.Create(self);
@@ -2475,6 +2476,8 @@ begin
 end;
 
 procedure TfrmModflowPackages.ShowImsPage(Sender: TObject);
+const
+  DistToTopOfAFrame_pgcControls = 103;
 var
   APage: TJvStandardPage;
   ControlIndex: Integer;
@@ -2486,8 +2489,12 @@ begin
     if APage.Controls[ControlIndex] is TframePkgSms then
     begin
       AFrame := TframePkgSms(APage.Controls[ControlIndex]);
+      // Make sure AFrame.pgcControls is visible.
       AFrame.pgcControls.Align := alNone;
       AFrame.pgcControls.Align := alBottom;
+      // Make sure AFrame.pgcControls is shown in the correct position.
+      AFrame.pgcControls.Anchors := AFrame.pgcControls.Anchors + [akTop];
+      AFrame.pgcControls.Height := AFrame.Height - DistToTopOfAFrame_pgcControls;
     end;
   end;
 end;

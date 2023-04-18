@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, ComCtrls,
   ExtCtrls, Buttons, StdCtrls, frameGridUnit, ColorSchemes,
-  UndoItems, Vcl.Mask;
+  UndoItems, Vcl.Mask, ColorSchemesInterface;
 
 type
   TUndoColorSchemes = class(TCustomUndo)
@@ -81,7 +81,7 @@ var
   ANode: TTreeNode;
 begin
   inherited;
-  NewItem := FColorSchemes.Add;
+  NewItem := FColorSchemes.Add as TUserDefinedColorSchemeItem;
   NewItem.Name := 'New Custom Color Scheme';
   ANode := tvColorSchemes.Items.AddObject(nil, NewItem.Name,
     NewItem);
@@ -116,7 +116,7 @@ begin
   else
   begin
     CurrentItem := tvColorSchemes.Selected.Data;
-    NewItem := FColorSchemes.Add;
+    NewItem := FColorSchemes.Add as TUserDefinedColorSchemeItem;
     NewItem.Name := 'New Custom Color Scheme';
     NewItem.Index := CurrentItem.Index + 1;
     ANode := tvColorSchemes.Items.AddObject(nil, NewItem.Name,
@@ -184,11 +184,11 @@ var
   ANode: TTreeNode;
 begin
   FColorSchemes := TUserDefinedColorSchemeCollection.Create(nil);
-  FColorSchemes.Assign(frmGoPhast.PhastModel.ColorSchemes);
+  FColorSchemes.Assign(frmGoPhast.PhastModel.ColorSchemes as TUserDefinedColorSchemeCollection);
   ANode := nil;
   for SchemeIndex := 0 to FColorSchemes.Count - 1 do
   begin
-    AColorScheme := FColorSchemes[SchemeIndex];
+    AColorScheme := FColorSchemes[SchemeIndex] as TUserDefinedColorSchemeItem;
     ANode := tvColorSchemes.Items.AddObject(ANode, AColorScheme.Name,
       AColorScheme);
   end;
@@ -227,7 +227,7 @@ var
   RowIndex: Integer;
   AFraction: double;
   AnInt: integer;
-  Item: TColorItem;
+  Item: IColorItem;
   ShouldEnable: boolean;
 begin
   if FSelectedColorScheme <> Value then
@@ -313,7 +313,7 @@ begin
   FNewColorSchemes := NewColorSchemes;
   NewColorSchemes := nil;
   FOldColorSchemes := TUserDefinedColorSchemeCollection.Create(nil);
-  FOldColorSchemes.Assign(frmGoPhast.PhastModel.ColorSchemes);
+  FOldColorSchemes.Assign(frmGoPhast.PhastModel.ColorSchemes as TUserDefinedColorSchemeCollection);
 end;
 
 function TUndoColorSchemes.Description: string;

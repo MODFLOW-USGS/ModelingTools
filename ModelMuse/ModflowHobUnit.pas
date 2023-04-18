@@ -149,7 +149,7 @@ type
     procedure RemoveModelLink(AModel: TBaseModel);
     property ScreenObject;
     // @name creates an instance of @classname
-    constructor Create(Boundary: THobBoundary; Model: ICustomModelInterfaceForTOrderedCollection;
+    constructor Create(Boundary: THobBoundary; Model: IModelForTOrderedCollection;
       ScreenObject: TObject);
     procedure EvaluateHeadObservations(AModel: TBaseModel);
     // @name destroys the current instance of @classname.
@@ -821,7 +821,7 @@ begin
   end;
 end;
 
-constructor THobCollection.Create(Boundary: THobBoundary; Model: ICustomModelInterfaceForTOrderedCollection;
+constructor THobCollection.Create(Boundary: THobBoundary; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited Create(THobItem, Model, ScreenObject);

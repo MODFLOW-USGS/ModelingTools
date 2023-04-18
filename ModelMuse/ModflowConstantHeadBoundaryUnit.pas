@@ -123,7 +123,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: ICustomModelInterfaceForTOrderedCollection; ScreenObject: TObject); override;
+      Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
   end;
 
   // Each @name stores a @link(TChdCollection).
@@ -788,7 +788,7 @@ begin
   end;
 end;
 
-constructor TChdCollection.Create(Boundary: TModflowScreenObjectProperty; Model: ICustomModelInterfaceForTOrderedCollection;
+constructor TChdCollection.Create(Boundary: TModflowScreenObjectProperty; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
   inherited;
