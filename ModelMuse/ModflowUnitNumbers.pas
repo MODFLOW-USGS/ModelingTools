@@ -176,7 +176,7 @@ const
   StrSubElasCompIB = 'SubElasCompIB';
   StrSubInelasCompIB = 'SubInelasCompIB';
 
-  StrUzt = 'UZT2';
+  StrUzt2 = 'UZT2';
   StrIC = 'IC';
   StrOBS6 = 'OBS6';
 

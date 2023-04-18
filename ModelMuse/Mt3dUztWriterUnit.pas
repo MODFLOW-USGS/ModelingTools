@@ -351,7 +351,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
-  WriteToMt3dMsNameFile(StrUzt, Mt3dUzt,
+  WriteToMt3dMsNameFile(StrUzt2, Mt3dUzt,
     FNameOfFile, foInput, Model);
 
   Evaluate;
