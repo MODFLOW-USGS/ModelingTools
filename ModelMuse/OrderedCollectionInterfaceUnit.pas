@@ -3,24 +3,26 @@ unit OrderedCollectionInterfaceUnit;
 interface
 
 uses
-  GoPhastTypes, DataSetUnit, RbwParser, ModelMuseInterfaceUnit,
-  FormulaManagerUnit, SubscriptionUnit, ScreenObjectInterfaceUnit;
+  GoPhastTypes, RbwParser, ModelMuseInterfaceUnit,
+  FormulaManagerInterfaceUnit,
+  SubscriptionUnit, ScreenObjectInterfaceUnit,
+  DataArrayInterfaceUnit;
 
 type
   IModelForTOrderedCollection = interface(IModelMuseModel)
     ['{24F678A0-6BF6-4CA1-AC98-17C5E5038DD0}']
-    procedure RemoveVariables(const DataSet: TDataArray); overload;
+    procedure RemoveVariables(const DataSet: IDataArray); overload;
     procedure RemoveVariables(const DataSetName: String;
       Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt); overload;
     function GetDataArrayInterface: ISimpleDataArrayManager;
     procedure UpdateFormulaDependencies(OldFormula: string;
       var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
-    function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TFormulaObject;
+    function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TObject;
     function GetCompiler(const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt): TRbwParser;
     property FormulaCompiler[const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt]:TRbwParser read GetCompiler;
-    procedure ChangeFormula(var FormulaObject: TFormulaObject;
+    procedure ChangeFormula(var FormulaObject: TObject;
       NewFormula: string; EvaluatedAt: TEvaluatedAt; OnRemoveSubscription,
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetClearing: Boolean;

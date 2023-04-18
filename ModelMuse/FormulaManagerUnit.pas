@@ -4,13 +4,9 @@ interface
 
 uses SysUtils, Classes, Contnrs, RbwParser, IntListUnit, Dialogs,
   HashTableFacadeUnit, Modflow6TimeSeriesUnit, GoPhastTypes,
-  System.Generics.Collections;
+  System.Generics.Collections, FormulaManagerInterfaceUnit;
 
 type
-  TChangeSubscription = procedure (Sender: TObject;
-    Subject: TObject; const AName: string);
-  PChangeSubscription = ^TChangeSubscription;
-
   TFormulaObject = class(TComponent)
   private
     FPosition: integer;

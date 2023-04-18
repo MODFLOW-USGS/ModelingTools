@@ -3,7 +3,8 @@ unit OrderedCollectionUnit;
 interface
 
 uses DataSetUnit, System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit, RbwParser,
-  FormulaManagerUnit, ModelMuseInterfaceUnit, OrderedCollectionInterfaceUnit;
+  FormulaManagerUnit, ModelMuseInterfaceUnit, OrderedCollectionInterfaceUnit,
+  FormulaManagerInterfaceUnit;
 
 type
 
@@ -1705,7 +1706,7 @@ end;
 function TFormulaOrderedItem.CreateBlockFormulaObject(
   Orientation: TDataSetOrientation): TFormulaObject;
 begin
-  result := Model.CreateBlockFormulaObject(Orientation);
+  result := Model.CreateBlockFormulaObject(Orientation) as TFormulaObject;
 end;
 
 procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string; Position: integer;
@@ -1713,6 +1714,7 @@ procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string; Position: integ
 var
   Compiler: TRbwParser;
   LocalObserver: TObserver;
+  AnObject: TObject;
 begin
   if FormulaObject.Formula <> Value then
   begin
@@ -1726,11 +1728,14 @@ begin
     InvalidateModel;
     if IGlobalModelForOrderedCollection <> nil then
     begin
-      if not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState) and
-        not IGlobalModelForOrderedCollection.Clearing then
+      if (IGlobalModelForOrderedCollection <> nil)
+        and not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState)
+        and not IGlobalModelForOrderedCollection.Clearing then
       begin
-        IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaBlocks,
+        AnObject := FormulaObject;
+        IGlobalModelForOrderedCollection.ChangeFormula(AnObject, Value, eaBlocks,
           OnRemoveSubscription, OnRestoreSubscription, self);
+        FormulaObject := AnObject as TFormulaObject;
       end;
     end;
   end;
@@ -1752,6 +1757,7 @@ procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;
 var
   Compiler: TRbwParser;
   LocalObserver: TObserver;
+  AnObject: TObject;
 begin
   if FormulaObject.Formula <> Value then
   begin
@@ -1767,8 +1773,10 @@ begin
       and not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState)
       and not IGlobalModelForOrderedCollection.Clearing then
     begin
-      IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaNodes,
+      AnObject := FormulaObject;
+      IGlobalModelForOrderedCollection.ChangeFormula(AnObject, Value, eaNodes,
         OnRemoveSubscription, OnRestoreSubscription, self);
+      FormulaObject := AnObject as TFormulaObject;
     end;
   end;
 end;

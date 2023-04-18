@@ -16,7 +16,7 @@ uses System.UITypes, Windows, Math, ZLib, GR32, TempFiles,
   Classes, Forms, RbwParser, GoPhastTypes, SubscriptionUnit,
   SparseDataSets, ObserverIntfU, FormulaManagerUnit, Dialogs,
   Generics.Collections, Generics.Defaults, SparseArrayUnit,
-  FastGEO;
+  FastGEO, DataArrayInterfaceUnit;
 
 { TODO :
 Consider making dual data sets that can be evaluated at both elements
@@ -356,7 +356,7 @@ type
   with the system using RegisterClass in the initialization section
   of the unit in which they are declared.
   }
-  TDataArray = class(TObserver)
+  TDataArray = class(TObserver, IDataArray)
   private
     // See @link(Annotation).
     FAnnotation: T3DStringDataSet;

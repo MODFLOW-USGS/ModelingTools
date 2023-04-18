@@ -856,7 +856,9 @@ uses
   PhastModelInterfaceUnit in 'PhastModelInterfaceUnit.pas',
   OrderedCollectionInterfaceUnit in 'OrderedCollectionInterfaceUnit.pas',
   ScreenObjectInterfaceUnit in 'ScreenObjectInterfaceUnit.pas',
-  ColorSchemesInterface in 'ColorSchemesInterface.pas';
+  ColorSchemesInterface in 'ColorSchemesInterface.pas',
+  DataArrayInterfaceUnit in 'DataArrayInterfaceUnit.pas',
+  FormulaManagerInterfaceUnit in 'FormulaManagerInterfaceUnit.pas';
 
 {$R *.res}
 

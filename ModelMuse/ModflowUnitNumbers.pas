@@ -141,7 +141,7 @@ const
   StrCFP = 'CFP';
   StrCRCH = 'CRCH';
   StrCOC = 'COC';
-  StrSWI = 'SWI2';
+  StrSWI2 = 'SWI2';
   StrSWI_Obs = 'SWI_Obs';
   StrSWI_Zeta = 'SWI_Zeta';
 
@@ -702,7 +702,7 @@ begin
   AddItem(StrCFP, CFP_Unit);
   AddItem(StrCRCH, CRCH_Unit);
   AddItem(StrCOC, COC_Unit);
-  AddItem(StrSWI, SWI_Unit);
+  AddItem(StrSWI2, SWI_Unit);
   AddItem(StrSWI_Obs, SWI_Obs_Unit);
   AddItem(StrSWI_Zeta, SWI_Zeta_Unit);
   AddItem(StrSWR, SWR_Unit);

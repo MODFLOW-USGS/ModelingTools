@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, GoPhastTypes, SubscriptionUnit,
-  FormulaManagerUnit, RbwParser;
+  FormulaManagerUnit, RbwParser, FormulaManagerInterfaceUnit;
 
 type
   IModelForDynamicTimeSeries = interface(IModelMuseModel)

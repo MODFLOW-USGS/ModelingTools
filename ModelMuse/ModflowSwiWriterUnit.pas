@@ -749,7 +749,7 @@ begin
     frmErrorsAndWarnings.AddWarning(Model, StrSWINotSupported, StrTheSWIPackageIsN);
     Exit;
   end;
-  if Model.PackageGeneratedExternally(StrSWI) then
+  if Model.PackageGeneratedExternally(StrSWI2) then
   begin
     Exit;
   end;
@@ -758,7 +758,7 @@ begin
   FInputFileName := FNameOfFile;
   if not WritingTemplate then
   begin
-    WriteToNameFile(StrSWI, Model.UnitNumbers.UnitNumber(StrSWI),
+    WriteToNameFile(StrSWI2, Model.UnitNumbers.UnitNumber(StrSWI2),
         FNameOfFile, foInput, Model);
   end;
   OpenFile(FNameOfFile);
