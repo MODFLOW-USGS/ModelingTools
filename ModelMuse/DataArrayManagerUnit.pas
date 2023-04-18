@@ -6,7 +6,8 @@ uses
   DataSetUnit, GoPhastTypes,
   SutraMeshUnit, System.Classes, CrossSectionUnit, System.Contnrs, RbwParser,
   HashTableFacadeUnit, PhastDataSets, System.SysUtils, AbstractGridUnit,
-  System.Math, ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, ModelMuseInterfaceUnit;
+  System.Math, ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, ModelMuseInterfaceUnit,
+  DataArrayInterfaceUnit;
 
 type
   ICustomModelForDataArrayManager = interface(IModelMuseModel)
@@ -421,6 +422,8 @@ type
     function _Release: Integer; stdcall;
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function GetModel: ICustomModelForDataArrayManager;
+    function GetDataSetByNameI(const DataSetName: string): IDataArray;
+    procedure ExtractDataSetI(const DataSet: IDataArray);
   public
     FDataArrayCreationRecords: array of TDataSetCreationData;
     FZetaDataDefinition: TDataSetCreationData;
@@ -4338,6 +4341,11 @@ begin
   RemoveDataSetFromLookUpList(DataSet);
 end;
 
+procedure TDataArrayManager.ExtractDataSetI(const DataSet: IDataArray);
+begin
+  ExtractDataSet(DataSet as TDataArray);
+end;
+
 function TDataArrayManager.GetBoundaryDataSetCount: integer;
 begin
   result := FBoundaryDataSets.Count;
@@ -4420,6 +4428,12 @@ begin
   begin
     result := nil;
   end;
+end;
+
+function TDataArrayManager.GetDataSetByNameI(
+  const DataSetName: string): IDataArray;
+begin
+  result := GetDataSetByName(DataSetName);
 end;
 
 procedure TDataArrayManager.Loaded;

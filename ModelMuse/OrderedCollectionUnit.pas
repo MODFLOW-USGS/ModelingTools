@@ -868,16 +868,16 @@ begin
         ChildModel := PhastModel.GetChildModel(ChildIndex);
         if ChildModel <> nil then
         begin
-          ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByName(DataArray.Name);
+          ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByNameI(DataArray.Name) as TDataArray;
           Assert(ChildDataArray <> nil);
           ChildModel.RemoveVariables(ChildDataArray);
-          ChildModel.GetDataArrayInterface.ExtractDataSet(ChildDataArray);
+          ChildModel.GetDataArrayInterface.ExtractDataSetI(ChildDataArray);
           ChildDataArray.Free;
         end;
       end;
     end;
     FModel.RemoveVariables(DataArray);
-    FModel.GetDataArrayInterface.ExtractDataSet(DataArray);
+    FModel.GetDataArrayInterface.ExtractDataSetI(DataArray);
     DataArray.Free;
   end;
   ClearNewDataSets;
