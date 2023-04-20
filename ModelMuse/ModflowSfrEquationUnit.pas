@@ -533,7 +533,7 @@ begin
 //  ErrorMessage := 'Object = ' + ScreenObjectName
 //    + '; Time = ' + FloatToStr(StartTime);
   frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
-    StrIncompleteSFRData, ErrorMessage, ScreenObject);
+    StrIncompleteSFRData, ErrorMessage, ScreenObject as TObject);
 end;
 
 function TSfrEquationCollection.GetItemByStartTime(

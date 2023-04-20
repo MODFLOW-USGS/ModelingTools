@@ -7,7 +7,8 @@ uses
   FormulaManagerInterfaceUnit,
   SubscriptionInterfaceUnit,
   ScreenObjectInterfaceUnit,
-  DataArrayInterfaceUnit;
+  DataArrayInterfaceUnit,
+  ObsInterfaceUnit;
 
 type
   IModelForTOrderedCollection = interface(IModelMuseModel)
@@ -53,7 +54,7 @@ type
 
   IModelForTPilotPointObsGrp = interface(IModelMuseModel)
     ['{1276892C-199B-4E89-A956-2A6FB136B0B8}']
-    function GetObsGroupFromName(const Value: string): TObject;
+    function GetObsGroupFromName(const Value: string): IObservationGroup;
   end;
 
   IPhastModelForTLayerOwnerCollection = interface(IModelForTOrderedCollection)
@@ -78,6 +79,9 @@ type
 
   IOrderedCollection = interface
     ['{B1C9519C-75D5-406A-ACEC-4FF0FC1D39C7}']
+    function GetCount: Integer;
+    procedure SetCount(const Value: Integer);
+    property Count: Integer read GetCount write SetCount;
   end;
 
 implementation

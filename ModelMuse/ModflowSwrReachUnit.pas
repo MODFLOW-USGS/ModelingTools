@@ -1878,7 +1878,7 @@ begin
       FScreenObject := LocalModel.GetScreenObjectByName(FScreenObjectName);
     end;
   end;
-  result := FScreenObject;
+  result := FScreenObject as TObject;
 end;
 
 function TSwrConnectionItem.GetScreenObjectName: string;

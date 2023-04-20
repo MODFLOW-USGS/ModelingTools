@@ -6,7 +6,7 @@ uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ExtCtrls, Mask, JvExMask,
   JvSpin, Grids, RbwDataGrid4, GlobalVariablesUnit, UndoItems,
-  System.Generics.Collections;
+  System.Generics.Collections, GlobalVariablesInterfaceUnit;
 
 type
   TGlobalVariableColumns = (gvName, gvType, gvValue, gvComment);
@@ -266,8 +266,8 @@ procedure TfrmGlobalVariables.seGlobalVariableCountChange(Sender: TObject);
 var
   RowIndex: Integer;
   ColIndex: Integer;
-  NewGlobalVariable: TGlobalVariable;
-  OldGlobalVariable: TGlobalVariable;
+  NewGlobalVariable: IGlobalVariable;
+  OldGlobalVariable: IGlobalVariable;
 begin
   inherited;
   while seGlobalVariableCount.AsInteger > FNewGlobals.Count do
@@ -279,7 +279,7 @@ begin
   begin
     OldGlobalVariable := rdgGlobalVariables.Objects[Ord(gvName),
       FNewGlobals.Count] as TGlobalVariable;
-    if (OldGlobalVariable <> nil) and OldGlobalVariable.Locked then
+    if (OldGlobalVariable <> nil) and (OldGlobalVariable as TGlobalVariable).Locked then
     begin
       seGlobalVariableCount.AsInteger := FNewGlobals.Count;
       break;
@@ -335,7 +335,7 @@ var
   RowIndex: Integer;
   OK: boolean;
   ColIndex: Integer;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   AFormat: TRbwDataType;
   ItemIndex: integer;
   OldNames: TStringList;
@@ -450,8 +450,8 @@ end;
 
 procedure TfrmGlobalVariables.btnDeleteClick(Sender: TObject);
 var
-  GlobalVariable: TGlobalVariable;
-  OldGlobalVariable: TGlobalVariable;
+  GlobalVariable: IGlobalVariable;
+  OldGlobalVariable: IGlobalVariable;
 begin
   inherited;
   if (rdgGlobalVariables.Row > 0) then
@@ -460,7 +460,7 @@ begin
       Objects[Ord(gvType), rdgGlobalVariables.Row] as TGlobalVariable;
     GlobalVariable := rdgGlobalVariables.
       Objects[Ord(gvName), rdgGlobalVariables.Row] as TGlobalVariable;
-    if (GlobalVariable <> nil) and (GlobalVariable.Locked) then
+    if (GlobalVariable <> nil) and ((GlobalVariable as TGlobalVariable).Locked) then
     begin
       Exit;
     end;
@@ -878,7 +878,7 @@ end;
 procedure TfrmGlobalVariables.GetData;
 var
   Index: Integer;
-  GlobalVariable: TGlobalVariable;
+  GlobalVariable: IGlobalVariable;
   RowIndex: integer;
 begin
   FDeletedGlobalVariables.Clear;
@@ -924,9 +924,9 @@ begin
       end;
       rdgGlobalVariables.Cells[Ord(gvComment), RowIndex] :=
         GlobalVariable.Comment;
-      rdgGlobalVariables.Objects[Ord(gvName), RowIndex] := GlobalVariable;
+      rdgGlobalVariables.Objects[Ord(gvName), RowIndex] := GlobalVariable as TGlobalVariable;
       rdgGlobalVariables.Objects[Ord(gvType), RowIndex] :=
-        frmGoPhast.PhastModel.GlobalVariables[Index];
+        frmGoPhast.PhastModel.GlobalVariables[Index] as TGlobalVariable;
 
     end;
   finally

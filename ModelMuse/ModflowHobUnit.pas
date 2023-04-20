@@ -624,7 +624,7 @@ begin
     Exit;
   end;
   HobCollection := Collection as THobCollection;
-  result := HobCollection.FBoundary.ScreenObject;
+  result := HobCollection.FBoundary.ScreenObject as TObject;
 end;
 
 function THobItem.GetStatFlag: TStatFlag;
@@ -802,10 +802,8 @@ end;
 constructor THobCollection.Create(Boundary: THobBoundary; Model: IModelForTOrderedCollection;
   ScreenObject: TObject);
 begin
-  inherited Create(THobItem, Model, ScreenObject);
+  inherited Create(THobItem, Model, ScreenObject as TScreenObject);
   FBoundary := Boundary;
-//  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
-//  FScreenObject := ScreenObject;
   FObsTimesModelLinkList := TObsTimesModelLinkList.Create;
 end;
 
@@ -828,7 +826,7 @@ var
   CellList: TObsCellList;
   Cell : THob_Cell;
 begin
-  ObservationHeads[AModel].Initialize(self, ScreenObject, True, AModel);
+  ObservationHeads[AModel].Initialize(self, ScreenObject as TScreenObject, True, AModel);
 
   if FObservationHeads.FCellList.Count > 0 then
   begin

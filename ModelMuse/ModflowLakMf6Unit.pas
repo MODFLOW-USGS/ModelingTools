@@ -1641,7 +1641,7 @@ begin
   inherited;
   LakeOutlets := Collection as TLakeOutlets;
 //  LakeOutlets.
-  FOutlet := TLakeOutlet.Create(LakeOutlets.Model, LakeOutlets.ScreenObject);
+  FOutlet := TLakeOutlet.Create(LakeOutlets.Model, LakeOutlets.ScreenObject as TScreenObject);
   FOutlet.OutletIndex := Index + 1;
 end;
 
@@ -1684,7 +1684,7 @@ end;
 constructor TLakeOutlets.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
 //  FScreenObject := ScreenObject;
-  inherited Create(TLakeOutletItem, Model, ScreenObject);
+  inherited Create(TLakeOutletItem, Model, ScreenObject as TScreenObject);
 end;
 
 function TLakeOutlets.GetItems(Index: Integer): TLakeOutletItem;

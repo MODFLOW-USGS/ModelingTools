@@ -197,7 +197,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       object lblHorizontalAnisotropy: TLabel
         Left = 3
         Top = 65
-        Width = 323
+        Width = 319
         Height = 36
         Anchors = [akLeft, akTop, akRight]
         Caption = 
@@ -254,7 +254,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       object comboVK_Method: TJvImageComboBox
         Left = 3
         Top = 176
-        Width = 365
+        Width = 361
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -277,6 +277,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
             Indent = 0
             Text = 'Ratio of horizontal to vertical hydraulic conductivity '
           end>
+        ExplicitWidth = 357
       end
       object rdeVerticalAnisotropy: TRbwDataEntry
         Left = 3
@@ -449,7 +450,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       object clbItemsToPrint: TCheckListBox
         Left = 0
         Top = 35
-        Width = 379
+        Width = 375
         Height = 244
         Align = alBottom
         Anchors = [akLeft, akTop, akRight, akBottom]
@@ -462,6 +463,8 @@ inherited frmHUF_Layers: TfrmHUF_Layers
           'Specific yield (SY)')
         TabOrder = 1
         OnClickCheck = clbItemsToPrintClickCheck
+        ExplicitWidth = 371
+        ExplicitHeight = 243
       end
       object comboPrintFormat: TJvImageComboBox
         Left = 2
@@ -584,7 +587,7 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       525
       41)
     object btnHelp: TBitBtn
-      Left = 180
+      Left = 176
       Top = 4
       Width = 108
       Height = 33
@@ -593,10 +596,9 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 176
     end
     object btnOK: TBitBtn
-      Left = 294
+      Left = 290
       Top = 4
       Width = 108
       Height = 33
@@ -605,10 +607,9 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 290
     end
     object btnCancel: TBitBtn
-      Left = 408
+      Left = 404
       Top = 4
       Width = 108
       Height = 33
@@ -616,7 +617,6 @@ inherited frmHUF_Layers: TfrmHUF_Layers
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 404
     end
   end
 end

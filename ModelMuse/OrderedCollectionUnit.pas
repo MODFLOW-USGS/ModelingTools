@@ -2,11 +2,12 @@ unit OrderedCollectionUnit;
 
 interface
 
-uses DataSetUnit, System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit,
+uses
+  DataArrayInterfaceUnit, ModflowParameterInterfaceUnit,
+  System.Classes, GoPhastTypes, SysUtils, SubscriptionUnit,
   RbwParser,
-  FormulaManagerUnit,
   ModelMuseInterfaceUnit, OrderedCollectionInterfaceUnit,
-  FormulaManagerInterfaceUnit;
+  FormulaManagerInterfaceUnit, ObsInterfaceUnit, ScreenObjectInterfaceUnit;
 
 type
 
@@ -299,15 +300,15 @@ type
 
   TCustomObjectOrderedCollection = class(TEnhancedOrderedCollection)
   private
-    FScreenObject: TObject;
+    FScreenObject: IScreenObject;
   public
     // @name is the @link(TScreenObject) for this boundary.
     // @name provides access to @link(TCustomModflowBoundaryItem) representing
     // the boundary conditions for different time periods.
-    property ScreenObject: TObject read FScreenObject;
+    property ScreenObject: IScreenObject read FScreenObject;
     constructor Create(ItemClass: TCollectionItemClass;
       Model: IModelForTOrderedCollection;
-      AScreenObject: TObject);
+      AScreenObject: IScreenObject);
   end;
 
   // @name is a @link(TEnhancedOrderedCollection) that stores of list of
@@ -324,10 +325,10 @@ type
   TLayerOwnerCollection = class(TEnhancedOrderedCollection)
   private
     // See @link(NewDataSets).
-    FNewDataSets: TList;
+    FNewDataSets: TIDataArrayList;
   protected
     // @name adds DataArray to @link(NewDataSets)
-    procedure AddOwnedDataArray(DataArray: TDataArray);
+    procedure AddOwnedDataArray(DataArray: IDataArray);
   public
     // @name clears @link(NewDataSets).
     procedure ClearNewDataSets;
@@ -335,7 +336,7 @@ type
     procedure RemoveNewDataSets;
     // @name is the list of @link(TDataArray)s managed by @classname.
     // @name is NOT owned by @classname.
-    property NewDataSets: TList read FNewDataSets write FNewDataSets;
+    property NewDataSets: TIDataArrayList read FNewDataSets write FNewDataSets;
   end;
 
   TPestTransform = (ptNoTransform, ptLog, ptFixed, ptTied);
@@ -345,7 +346,7 @@ type
   private
     FObsGroupName: string;
     FLayer: Integer;
-    FObsGroup: TObject;
+    FObsGroup: IObservationGroup;
     FParamFamily: string;
     procedure SetLayer(const Value: Integer);
     procedure SetObsGroupName(const Value: string);
@@ -355,7 +356,7 @@ type
     procedure Assign(Source: TPersistent); override;
     function IsSame(OtherItem: TPilotPointObsGrp): Boolean;
     // @name is a @link(PestObsGroupUnit.TPestObservationGroup).
-    property ObsGroup: TObject read FObsGroup write FObsGroup;
+    property ObsGroup: IObservationGroup read FObsGroup write FObsGroup;
   published
     Property ObsGroupName: string read GetObsGroupName write SetObsGroupName;
     property Layer: Integer read FLayer write SetLayer;
@@ -378,7 +379,7 @@ type
   end;
 
   // @name represents a MODFLOW parameter
-  TModflowParameter = class abstract (TOrderedItem)
+  TModflowParameter = class abstract (TOrderedItem, IModflowParameter)
   private
     // See @link(ParameterType).
     FParameterType: TParameterType;
@@ -539,12 +540,12 @@ const
 implementation
 
 uses
-
-  ScreenObjectUnit,
-  ModflowBoundaryUnit, ModflowTransientListParameterUnit,
-  ModflowSfrParamIcalcUnit, Generics.Collections,
-  Generics.Defaults, Math, LockedGlobalVariableChangers,
-  PestObsGroupUnit, PhastModelInterfaceUnit,
+  ModflowBoundaryInterfaceUnit,
+  ModflowTransientListParameterInterfaceUnit,
+  ModflowSfrParamIcalcInterfaceUnit,
+  Generics.Collections,
+  Generics.Defaults, Math,
+  PhastModelInterfaceUnit,
   LockedGlobalVariableChangersInterfaceUnit;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
@@ -891,11 +892,11 @@ end;
 
 procedure TLayerOwnerCollection.RemoveNewDataSets;
 var
-  DataArray: TDataArray;
+  DataArray: IDataArray;
   Index: integer;
   ChildIndex: Integer;
   ChildModel: IModelForTOrderedCollection;
-  ChildDataArray: TDataArray;
+  ChildDataArray: IDataArray;
   PhastModel: IPhastModelForTLayerOwnerCollection;
 begin
   Assert(FNewDataSets <> nil);
@@ -914,7 +915,7 @@ begin
         ChildModel := PhastModel.GetChildModel(ChildIndex);
         if ChildModel <> nil then
         begin
-          ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByNameI(DataArray.Name) as TDataArray;
+          ChildDataArray := ChildModel.GetDataArrayInterface.GetDataSetByNameI(DataArray.Name);
           Assert(ChildDataArray <> nil);
           ChildModel.RemoveVariables(ChildDataArray);
           ChildModel.GetDataArrayInterface.ExtractDataSetI(ChildDataArray);
@@ -929,7 +930,7 @@ begin
   ClearNewDataSets;
 end;
 
-procedure TLayerOwnerCollection.AddOwnedDataArray(DataArray: TDataArray);
+procedure TLayerOwnerCollection.AddOwnedDataArray(DataArray: IDataArray);
 begin
   if (FNewDataSets <> nil) then
   begin
@@ -1013,8 +1014,8 @@ destructor TModflowParameter.Destroy;
 var
   LocalModel: IModelForTOrderedCollection;
   ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  Boundary: TModflowParamBoundary;
+  ScreenObject: IScreenObject;
+  Boundary: IModflowParamBoundary;
 begin
   FPilotPointObsGrpCollection.Free;
   if ParameterType in [ptRCH, ptEVT, ptETS, ptCHD, ptGHB, ptQ, ptRIV, ptDRN, ptDRT] then
@@ -1024,8 +1025,8 @@ begin
       LocalModel := TOrderedCollection(Collection).Model as IModelForTOrderedCollection;
       for ScreenObjectIndex := 0 to LocalModel.GetScreenObjectCount - 1 do
       begin
-        ScreenObject := LocalModel.ScreenObjectInterfaces[ScreenObjectIndex] as TScreenObject;
-        Boundary := ScreenObject.GetMfBoundary(ParameterType);
+        ScreenObject := LocalModel.ScreenObjectInterfaces[ScreenObjectIndex];
+        Boundary := ScreenObject.GetMfBoundaryI(ParameterType);
         if Boundary <> nil then
         begin
           Boundary.DeleteParam(self);
@@ -1257,12 +1258,11 @@ const
       ptHUF_VANI, ptHUF_SS, ptHUF_SY];
 var
   PhastModel: IModelForTModflowParameter;
-  ScreenObject: TScreenObject;
+  ScreenObject: IScreenObject;
   Position: Integer;
   ObjectIndex: Integer;
-  ParamIndex: Integer;
-  ParamIntem: TSfrParamIcalcItem;
-  ChangeGlobal: TDefineGlobalStringObject;
+  LocalParamInterFace: IModflowTransientListParameter;
+  Parameters: IModflowParameters;
 begin
   if FParameterType <> Value then
   begin
@@ -1287,144 +1287,189 @@ begin
         ptLPF_VKCB: ;
         ptRCH:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowRchBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.RchParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowRchBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowRchBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptEVT:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowEvtBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.EvtParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowEvtBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowEvtBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptETS:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowEtsBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.EtsParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowEtsBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowEtsBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptCHD:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowChdBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.ChdParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowChdBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowChdBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptGHB:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowGhbBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.GhbParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowGhbBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowGhbBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptQ:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowWellBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.WelParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowWellBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowWellBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptRIV:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowRivBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.RivParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowRivBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowRivBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptDRN:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowDrnBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.DrnParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowDrnBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowDrnBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptDRT:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowDrtBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.DrtParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowDrtBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowDrtBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
@@ -1433,35 +1478,16 @@ begin
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowSfrBoundary <> nil then
-              begin
-                for ParamIndex := ScreenObject.ModflowSfrBoundary.
-                  ParamIcalc.Count-1 downto 0 do
-                begin
-                  ParamIntem := ScreenObject.ModflowSfrBoundary.
-                    ParamIcalc.Items[ParamIndex];
-                  if ParamIntem.Param = ParameterName then
-                  begin
-                    ScreenObject.ModflowSfrBoundary.
-                      ParamIcalc.Delete(ParamIndex);
-                  end;
-                end;
-              end;
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              ScreenObject.DeleteSfrParameter(ParameterName);
             end;
           end;
         ptHFB:
           begin
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowHfbBoundary <> nil then
-              begin
-                if ScreenObject.ModflowHfbBoundary.ParameterName = ParameterName then
-                begin
-                  ScreenObject.ModflowHfbBoundary.ParameterName := ''
-                end;
-              end;
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              ScreenObject.DeleteHfbParameter(ParameterName);
             end;
           end;
         ptHUF_HK: ;
@@ -1476,32 +1502,42 @@ begin
         ptSTR:
           begin
             Assert(False);
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowStrBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.StrParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowStrBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowStrBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
           end;
         ptQMAX:
           begin
+            if QueryInterface(IModflowTransientListParameter,
+              LocalParamInterFace) <> 0 then
+            begin
+              Assert(False)
+            end;
             for ObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
             begin
-              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex] as TScreenObject;
-              if ScreenObject.ModflowFmpWellBoundary <> nil then
+              ScreenObject := PhastModel.ScreenObjectInterfaces[ObjectIndex];
+              Parameters := ScreenObject.FmpWellParameters;
+              if Parameters <> nil then
               begin
-                Position := ScreenObject.ModflowFmpWellBoundary.Parameters.
-                  IndexOfParam(self as TModflowTransientListParameter);
+                Position := Parameters.IndexOfParam(LocalParamInterFace);
                 if Position >= 0 then
                 begin
-                  ScreenObject.ModflowFmpWellBoundary.Parameters.Delete(Position);
+                  Parameters.Delete(Position);
                 end;
               end;
             end;
@@ -1511,15 +1547,8 @@ begin
       end;
       if (FParameterType = ptPEST) or  (Value = ptPEST) then
       begin
-        ChangeGlobal := TDefineGlobalStringObject.Create(
-          Model as IModelForTCustomDefinedGlobalObject, ParameterName, ParameterName, StrParameterType);
-        try
-          ChangeGlobal.Locked := (Value = ptPEST);
-          ChangeGlobal.SetValue(ParameterName);
-        finally
-          ChangeGlobal.Free;
-        end;
-
+        (Model as IModelForTCustomDefinedGlobalObject).
+          ChangeGlobalVariable(ParameterName, Value);
       end;
     end;
 
@@ -1602,7 +1631,7 @@ end;
 procedure TModflowParameter.SetValue(AValue : double);
 var
 //  PhastModel: IModelForTOrderedCollection;
-  ScreenObject: TScreenObject;
+  ScreenObject: IScreenObject;
   ScreenObjectIndex: Integer;
 begin
   if FValue <> AValue then
@@ -1653,13 +1682,8 @@ begin
       begin
         for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
         begin
-          ScreenObject := Model.ScreenObjectInterfaces[ScreenObjectIndex] as TScreenObject;
-          if (ScreenObject.ModflowHfbBoundary <> nil)
-            and (ScreenObject.ModflowHfbBoundary.ParameterName = ParameterName)
-            then
-          begin
-            ScreenObject.ModflowHfbBoundary.HandleChangedParameterValue;
-          end;
+          ScreenObject := Model.ScreenObjectInterfaces[ScreenObjectIndex];
+          ScreenObject.HandleChangedHfbParameter(ParameterName);
         end;
       end;
     end;
@@ -1861,14 +1885,14 @@ end;
 
 constructor TCustomObjectOrderedCollection.Create(
   ItemClass: TCollectionItemClass;
-  Model: IModelForTOrderedCollection; AScreenObject: TObject);
+  Model: IModelForTOrderedCollection; AScreenObject: IScreenObject);
 begin
   inherited Create(ItemClass, Model);
   FScreenObject := AScreenObject;
-  if FScreenObject <> nil then
-  begin
-    Assert(FScreenObject is TScreenObject);
-  end;
+//  if FScreenObject <> nil then
+//  begin
+//    Assert(FScreenObject is TScreenObject);
+//  end;
 end;
 
 
@@ -1976,7 +2000,7 @@ function TPilotPointObsGrp.GetObsGroupName: string;
 begin
   if FObsGroup <> nil then
   begin
-    FObsGroupName := (FObsGroup as TPestObservationGroup).ObsGroupName;
+    FObsGroupName := FObsGroup.ObsGroupName;
   end;
   result := FObsGroupName
 end;
@@ -2004,7 +2028,7 @@ begin
     FObsGroup := LocalModel.GetObsGroupFromName(Value);
     if FObsGroup <> nil then
     begin
-      FObsGroupName := (FObsGroup as TPestObservationGroup).ObsGroupName;
+      FObsGroupName := FObsGroup.ObsGroupName;
     end;
   end;
 

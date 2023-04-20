@@ -355,7 +355,7 @@ end;
 
 function TIndividualMvrItem.GetScreenObject: TObject;
 begin
-  result := ItemCollection.ScreenObject;
+  result := ItemCollection.ScreenObject as TObject;
 end;
 
 function TIndividualMvrItem.GetValue: string;
@@ -714,7 +714,7 @@ end;
 constructor TIndividualMvrItems.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject;
   MvrItems: TCollection);
 begin
-  inherited Create(TIndividualMvrItem, Model, ScreenObject);
+  inherited Create(TIndividualMvrItem, Model, ScreenObject as TScreenObject);
   FMvrItems := MvrItems;
 end;
 

@@ -160,12 +160,11 @@ inherited frmSutraLayers: TfrmSutraLayers
       object edName: TRbwEdit
         Left = 5
         Top = 27
-        Width = 428
+        Width = 424
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         OnChange = edNameChange
-        ExplicitWidth = 424
       end
       object rdeMinimumThickness: TRbwDataEntry
         Left = 5
@@ -205,32 +204,31 @@ inherited frmSutraLayers: TfrmSutraLayers
         ExplicitHeight = 18
       end
       inherited pnlDiscritization: TPanel
-        Width = 189
         Height = 300
+        ExplicitWidth = 181
         ExplicitHeight = 299
         inherited spl1: TSplitter
-          Left = 101
           Height = 259
           ExplicitLeft = 110
           ExplicitHeight = 335
         end
         inherited rdgSubLayerBoundaries: TRbwDataGrid4
-          Width = 101
           Height = 259
+          ExplicitWidth = 93
           ExplicitHeight = 258
         end
         inherited pnl1: TPanel
-          Width = 189
+          ExplicitWidth = 189
           inherited lbl3: TLabel
-            Width = 189
-            Height = 41
+            Width = 179
+            Height = 36
             ExplicitWidth = 179
             ExplicitHeight = 36
           end
         end
         inherited pnlPaintboxParent: TPanel
-          Left = 104
           Height = 259
+          ExplicitLeft = 96
           ExplicitHeight = 258
           DesignSize = (
             85
@@ -272,7 +270,7 @@ inherited frmSutraLayers: TfrmSutraLayers
       585
       41)
     object btnHelp: TBitBtn
-      Left = 240
+      Left = 236
       Top = 4
       Width = 108
       Height = 33
@@ -281,10 +279,9 @@ inherited frmSutraLayers: TfrmSutraLayers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 236
     end
     object btnOK: TBitBtn
-      Left = 354
+      Left = 350
       Top = 4
       Width = 108
       Height = 33
@@ -293,10 +290,9 @@ inherited frmSutraLayers: TfrmSutraLayers
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 350
     end
     object btnCancel: TBitBtn
-      Left = 468
+      Left = 464
       Top = 4
       Width = 108
       Height = 33
@@ -304,7 +300,6 @@ inherited frmSutraLayers: TfrmSutraLayers
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 464
     end
   end
 end

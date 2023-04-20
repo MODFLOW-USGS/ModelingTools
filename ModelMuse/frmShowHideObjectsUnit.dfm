@@ -9,23 +9,27 @@ inherited frmShowHideObjects: TfrmShowHideObjects
   Position = poDesigned
   OnClose = FormClose
   OnKeyUp = FormKeyUp
-  ExplicitHeight = 449
+  ExplicitWidth = 430
   TextHeight = 18
   inherited pnlBottom: TPanel
     Top = 253
     Width = 418
     Height = 158
     ExplicitTop = 252
+    ExplicitWidth = 418
     ExplicitHeight = 158
+    DesignSize = (
+      418
+      158)
     inherited btnClose: TBitBtn
-      Left = 310
+      Left = 306
       Top = 109
       TabOrder = 2
       ExplicitLeft = 306
       ExplicitTop = 109
     end
     inherited btnHelp: TBitBtn
-      Left = 310
+      Left = 306
       Top = 70
       TabOrder = 1
       OnClick = btnHelpClick

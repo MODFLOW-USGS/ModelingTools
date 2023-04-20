@@ -126,12 +126,6 @@ type
     procedure RenameItems(const OldSpeciesName, NewSpeciesName: string);
   end;
 
-//  IMt3dConcCollection = interface ['{4B52C524-1429-4F62-935A-4B92F721E5AD}']
-//    procedure InvalidateMt3dmsConcData(Sender: TObject);
-//    function GetScreenObject: TObject;
-//    property ScreenObject: TObject read GetScreenObject;
-//  end;
-
   // @name represents an MT3DMS concentration point source for one time interval.
   // @name is stored by @link(TMt3dmsConcCollection).
   TCustomMt3dmsConcItem = class(TCustomModflowBoundaryItem)
@@ -2009,7 +2003,7 @@ end;
 
 function TStringConcValueItem.GetScreenObject: TObject;
 begin
-  result := StringCollection.ScreenObject;
+  result := StringCollection.ScreenObject as TObject;
 end;
 
 function TStringConcValueItem.GetValue: string;
@@ -2082,7 +2076,7 @@ end;
 constructor TStringConcCollection.Create(ItemClass: TStringConcValueItemClass;
   Model: IModelForTOrderedCollection; ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
-  inherited Create(ItemClass, Model, ScreenObject);
+  inherited Create(ItemClass, Model, ScreenObject as TScreenObject);
 //  FScreenObject := ScreenObject;
   FMt3dmsConcCollection := Mt3dmsConcCollection;
 end;
@@ -2090,7 +2084,7 @@ end;
 constructor TStringConcCollection.Create(Model: IModelForTOrderedCollection;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
-  Create(TStringConcValueItem, Model, ScreenObject, Mt3dmsConcCollection);
+  Create(TStringConcValueItem, Model, ScreenObject as TScreenObject, Mt3dmsConcCollection);
 end;
 
 function TStringConcCollection.GetItem(Index: integer): TStringConcValueItem;

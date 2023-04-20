@@ -11,8 +11,8 @@ object frameSubBeds: TframeSubBeds
   object lblCount: TLabel
     Left = 63
     Top = 324
-    Width = 44
-    Height = 15
+    Width = 54
+    Height = 20
     Anchors = [akLeft, akBottom]
     Caption = 'Number'
   end
@@ -246,7 +246,7 @@ object frameSubBeds: TframeSubBeds
     Left = 3
     Top = 321
     Width = 54
-    Height = 23
+    Height = 25
     CheckMinValue = True
     ButtonKind = bkClassic
     Anchors = [akLeft, akBottom]

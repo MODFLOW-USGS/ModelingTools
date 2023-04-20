@@ -4,7 +4,7 @@ interface
 
 uses
   Classes, RbwParser, GoPhastTypes, OrderedCollectionUnit,
-  OrderedCollectionInterfaceUnit;
+  OrderedCollectionInterfaceUnit, GlobalVariablesInterfaceUnit;
 
 type
   TVK_Method = (vkVK, vkVANI);
@@ -790,7 +790,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
   LayerDisplayName: string;
-  GlobalVariables: TGlobalVariables;
+  GlobalVariables: IGlobalVariables;
   Basename: string;
 begin
   LocalModel := AModel as TCustomModel;

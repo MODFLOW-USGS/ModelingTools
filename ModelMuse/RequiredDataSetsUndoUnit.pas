@@ -4,12 +4,13 @@ interface
 
 uses Classes, GoPhastTypes, UndoItems, PhastModelUnit, frmShowHideObjectsUnit,
   ModflowParameterUnit, HufDefinition, ModflowTransientListParameterUnit,
-  ModflowPackageSelectionUnit, ModflowOutputControlUnit, PestParamGroupsUnit;
+  ModflowPackageSelectionUnit, ModflowOutputControlUnit, PestParamGroupsUnit,
+  DataArrayInterfaceUnit;
 
 type
   TCustomCreateRequiredDataSetsUndo = class(TCustomUndo)
   private
-    FNewSteadyModflowParameterDataSets: TList;
+    FNewSteadyModflowParameterDataSets: TIDataArrayList;
     FNewPackageDataSets: TList;
   // If a @link(TDataArray) whose name is DataSetName does not exist and
   // ArrayNeeded returns @true, then @name will create a new
@@ -102,7 +103,7 @@ resourcestring
 
 constructor TCustomCreateRequiredDataSetsUndo.Create;
 begin
-  FNewSteadyModflowParameterDataSets := TList.Create;
+  FNewSteadyModflowParameterDataSets := TIDataArrayList.Create;
   FNewPackageDataSets := TList.Create;
 end;
 

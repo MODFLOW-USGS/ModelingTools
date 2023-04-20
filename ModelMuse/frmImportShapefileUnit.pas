@@ -28,7 +28,7 @@ uses System.UITypes, Windows,
   ModflowTransientListParameterUnit,
   OrderedCollectionUnit, Mt3dmsChemUnit, Mt3dmsChemSpeciesUnit, GoPhastTypes,
   frameGridUnit, System.Generics.Collections, GrayTabs, frmDuplicateNamesUnit,
-  Vcl.CheckLst, System.StrUtils;
+  Vcl.CheckLst, System.StrUtils, GlobalVariablesInterfaceUnit;
 
 type
   EImportShapeFileError = class(Exception);
@@ -1658,7 +1658,7 @@ var
   ShapeIndex: Integer;
   Shape: TShapeObject;
   VarIndex: Integer;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   DSIndex: Integer;
   DataArray: TDataArray;
   DataArrayManager: TDataArrayManager;
@@ -8408,7 +8408,7 @@ function TfrmImportShapefile.GetRealFormulaFromText(
 var
   FieldNumber: Integer;
   DataArray: TDataArray;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   CachedPosition: Integer;
   FieldStorage: TFieldNumStorage;
   Value: double;
@@ -8545,7 +8545,7 @@ function TfrmImportShapefile.GetIntegerFormulaFromText(
 var
   FieldNumber: Integer;
   DataArray: TDataArray;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   CachedPosition: Integer;
   FieldStorage: TFieldNumStorage;
   Value: integer;

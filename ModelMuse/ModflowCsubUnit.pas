@@ -615,7 +615,7 @@ end;
 
 function TCSubPackageData.GetScreenObject: TObject;
 begin
-  result := (Collection as TCSubPackageDataCollection).ScreenObject;
+  result := (Collection as TCSubPackageDataCollection).ScreenObject as TObject;
 end;
 
 function TCSubPackageData.GetThickness: string;
@@ -914,7 +914,7 @@ end;
 
 constructor TCSubPackageDataCollection.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
-  inherited Create(TCSubPackageData, Model, ScreenObject);
+  inherited Create(TCSubPackageData, Model, ScreenObject as TScreenObject);
 end;
 
 function TCSubPackageDataCollection.GetItem(Index: integer): TCSubPackageData;

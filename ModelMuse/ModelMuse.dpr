@@ -860,7 +860,12 @@ uses
   DataArrayInterfaceUnit in 'DataArrayInterfaceUnit.pas',
   FormulaManagerInterfaceUnit in 'FormulaManagerInterfaceUnit.pas',
   ContourInterfaceUnit in 'ContourInterfaceUnit.pas',
-  SubscriptionInterfaceUnit in 'SubscriptionInterfaceUnit.pas';
+  SubscriptionInterfaceUnit in 'SubscriptionInterfaceUnit.pas',
+  ModflowBoundaryInterfaceUnit in 'ModflowBoundaryInterfaceUnit.pas',
+  ModflowParameterInterfaceUnit in 'ModflowParameterInterfaceUnit.pas',
+  ModflowSfrParamIcalcInterfaceUnit in 'ModflowSfrParamIcalcInterfaceUnit.pas',
+  ModflowTransientListParameterInterfaceUnit in 'ModflowTransientListParameterInterfaceUnit.pas',
+  GlobalVariablesInterfaceUnit in 'GlobalVariablesInterfaceUnit.pas';
 
 {$R *.res}
 

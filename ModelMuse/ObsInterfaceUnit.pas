@@ -50,7 +50,8 @@ type
 
   TObservationInterfaceList = TList<IObservationItem>;
 
-  IObservationGroup = interface(IUnknown)
+  IObservationGroup = interface(IInterface)
+    ['{0BED2063-FCE1-4F50-AF37-BB4A1FAAC78D}']
     function GetAbsoluteCorrelationFileName: string;
     function GetGroupTarget: Double;
     function GetObsGroupName: string;

@@ -451,7 +451,7 @@ end;
 constructor TMt3dmsTobCollection.Create(Boundary: TMt3dmsTransObservations;
   Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
-  inherited Create(TMt3dmsTobItem, Model, ScreenObject);
+  inherited Create(TMt3dmsTobItem, Model, ScreenObject as TScreenObject);
   FBoundary := Boundary;
 //  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
 //  FScreenObject := ScreenObject;
@@ -493,7 +493,7 @@ var
   CellList: TMt3dmsTobsCellList;
   Cell : TMt3dmsTob_Cell;
 begin
-  ObservationConcentrations[AModel].Initialize(self, ScreenObject, True, AModel);
+  ObservationConcentrations[AModel].Initialize(self, ScreenObject as TObject, True, AModel);
 
   if FObservationConcentrations.FCellList.Count > 0 then
   begin

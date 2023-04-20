@@ -432,7 +432,7 @@ begin
 //  ErrorMessage := 'Object = ' + ScreenObjectName
 //    + '; Time = ' + FloatToStr(StartTime);
   frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
-    StrIncompleteSFRData, ErrorMessage, ScreenObject);
+    StrIncompleteSFRData, ErrorMessage, ScreenObject as TScreenObject);
 end;
 
 function TSfrTableCollection.GetTableTimeValues(
@@ -594,7 +594,7 @@ end;
 
 function TSfrTableRowItem.GetScreenObject: TObject;
 begin
-  result := SfrTable.ScreenObject;
+  result := SfrTable.ScreenObject as TObject;
 end;
 
 function TSfrTableRowItem.GetWidth: string;
@@ -701,100 +701,11 @@ begin
   result := Collection as TSfrTable;
 end;
 
-//procedure TSfrTableRowItem.UpdateFormula(Value: string;  Observer: TObserver;
-//  var FormulaObject: TFormulaObject);
-//var
-//  ParentModel: TPhastModel;
-//  Compiler: TRbwParser;
-//begin
-//  if FormulaObject.Formula <> Value then
-//  begin
-//    ParentModel := Model as TPhastModel;
-//    if ParentModel <> nil then
-//    begin
-//      Compiler := ParentModel.rpThreeDFormulaCompiler;
-//      UpdateFormulaDependencies(FormulaObject.Formula, Value, Observer, Compiler);
-//    end;
-//    InvalidateModel;
-//    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
-//      FormulaObject, Value, frmGoPhast.PhastModel.rpTopFormulaCompiler,
-//      TableRowRemoveSubscription, TableRowRestoreSubscription, self);
-//  end;
-//end;
-
-//procedure TSfrTableRowItem.UpdateFormulaDependencies(OldFormula: string;
-//  var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
-//var
-//  OldUses: TStringList;
-//  NewUses: TStringList;
-//  Position: Integer;
-//  DS: TObserver;
-//  ParentScreenObject: TScreenObject;
-//  Index: integer;
-//  procedure CompileFormula(var AFormula: string;
-//    UsesList: TStringList);
-//  begin
-//    if AFormula <> '' then
-//    begin
-//      try
-//        Compiler.Compile(AFormula);
-//        UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
-//      except on E: ERbwParserError do
-//        begin
-//        end;
-//      end;
-//    end;
-//  end;
-//begin
-//  OldFormula := Trim(OldFormula);
-//  NewFormula := Trim(NewFormula);
-//  if OldFormula = NewFormula then
-//  begin
-//    Exit;
-//  end;
-//  ParentScreenObject := SfrTable.FScreenObject as TScreenObject;
-//  if (ParentScreenObject = nil)
-//    or not ParentScreenObject.CanInvalidateModel then
-//  begin
-//    Exit;
-//  end;
-//  OldUses := TStringList.Create;
-//  NewUses := TStringList.Create;
-//  try
-//    CompileFormula(OldFormula, OldUses);
-//    CompileFormula(NewFormula, NewUses);
-//    for Index := OldUses.Count - 1 downto 0 do
-//    begin
-//      Position := NewUses.IndexOf(OldUses[Index]);
-//      if Position >= 0 then
-//      begin
-//        OldUses.Delete(Index);
-//        NewUses.Delete(Position);
-//      end;
-//    end;
-//    for Index := 0 to OldUses.Count - 1 do
-//    begin
-//      DS := frmGoPhast.PhastModel.GetObserverByName(OldUses[Index]);
-//      Assert(DS <> nil);
-//      DS.StopsTalkingTo(Observer);
-//    end;
-//    for Index := 0 to NewUses.Count - 1 do
-//    begin
-//      DS := frmGoPhast.PhastModel.GetObserverByName(NewUses[Index]);
-//      Assert(DS <> nil);
-//      DS.TalksTo(Observer);
-//    end;
-//  finally
-//    NewUses.Free;
-//    OldUses.Free;
-//  end;
-//end;
-
 { TSfrTable }
 
 constructor TSfrTable.Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
-  inherited Create(TSfrTableRowItem, Model, ScreenObject);
+  inherited Create(TSfrTableRowItem, Model, ScreenObject as TScreenObject);
 //  FScreenObject := ScreenObject;
 end;
 

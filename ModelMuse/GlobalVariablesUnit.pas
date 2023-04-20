@@ -3,7 +3,8 @@ unit GlobalVariablesUnit;
 interface
 
 uses Classes, SysUtils, RbwParser, SubscriptionUnit,
-  OrderedCollectionUnit, GoPhastTypes, OrderedCollectionInterfaceUnit;
+  OrderedCollectionUnit, GoPhastTypes, OrderedCollectionInterfaceUnit,
+  GlobalVariablesInterfaceUnit;
 
 type
   TVariableRecord = record
@@ -16,7 +17,7 @@ type
 
   TGlobalVariables = class;
 
-  TGlobalVariable = class(TObserver)
+  TGlobalVariable = class(TObserver, IGlobalVariable)
   private
     FValues: TVariableRecord;
     FCollection: TGlobalVariables;
@@ -40,6 +41,7 @@ type
     procedure SetComment(const Value: string);
     procedure NotifyObservers;
     procedure SetLocked(const Value: Boolean);
+    function GetComment: string;
   protected
     procedure SetName(const NewName: TComponentName); override;
   public
@@ -55,7 +57,7 @@ type
       stored StoreBooleanValue;
     property StringValue: string read GetStringValue write SetStringValue
       stored StoreStringValue;
-    property Comment: string read FComment write SetComment;
+    property Comment: string read GetComment write SetComment;
     property Locked: Boolean read FLocked write SetLocked;
   end;
 
@@ -73,12 +75,12 @@ type
     property Variable: TGlobalVariable read FVariable write SetVariable;
   end;
 
-  TGlobalVariables = class(TOrderedCollection)
+  TGlobalVariables = class(TOrderedCollection, IGlobalVariables)
   private
     FSearchList: TStringList;
     FVariableNames: TStringList;
-    function GetVariable(Index: integer): TGlobalVariable;
-    procedure SetVariable(Index: integer; const Value: TGlobalVariable);
+    function GetVariable(Index: integer): IGlobalVariable;
+    procedure SetVariable(Index: integer; const Value: IGlobalVariable);
     function GetGlobalVariableNames: TStringList;
   protected
     procedure FreeSearchList;
@@ -89,8 +91,8 @@ type
     constructor Create(Model: IModelForTOrderedCollection);
     Destructor Destroy; override;
     function IndexOfVariable(Name: string): integer;
-    function GetVariableByName(Const Name: string): TGlobalVariable;
-    property Variables[Index: integer]: TGlobalVariable read GetVariable
+    function GetVariableByName(Const Name: string): IGlobalVariable;
+    property Variables[Index: integer]: IGlobalVariable read GetVariable
       write SetVariable; default;
     procedure Sort; overload;
     property GlobalVariableNames: TStringList read GetGlobalVariableNames;
@@ -145,6 +147,11 @@ function TGlobalVariable.GetBooleanValue: boolean;
 begin
   Assert(Format = rdtBoolean);
   result := FValues.BooleanValue;
+end;
+
+function TGlobalVariable.GetComment: string;
+begin
+  result := FComment;
 end;
 
 function TGlobalVariable.GetFormat: TRbwDataType;
@@ -434,13 +441,13 @@ begin
   result := FVariableNames;
 end;
 
-function TGlobalVariables.GetVariable(Index: integer): TGlobalVariable;
+function TGlobalVariables.GetVariable(Index: integer): IGlobalVariable;
 begin
   result := (Items[Index] as TGlobalVariableItem).Variable;
 end;
 
 function TGlobalVariables.GetVariableByName(
-  const Name: string): TGlobalVariable;
+  const Name: string): IGlobalVariable;
 var
   Index: integer;
 begin
@@ -516,9 +523,9 @@ begin
 end;
 
 procedure TGlobalVariables.SetVariable(Index: integer;
-  const Value: TGlobalVariable);
+  const Value: IGlobalVariable);
 begin
-  (Items[Index] as TGlobalVariableItem).Variable := Value;
+  (Items[Index] as TGlobalVariableItem).Variable := Value as TGlobalVariable;
 end;
 
 
@@ -538,18 +545,22 @@ begin
 end;
 
 constructor TGlobalVariableItem.Create(Collection: TCollection);
+var
+  AVariable: TGlobalVariable;
 begin
   inherited;
-  FVariable:= TGlobalVariable.Create(nil);
-  FVariable.FCollection := Collection as TGlobalVariables;
-  FVariable.SetSubComponent(True);
+  AVariable := TGlobalVariable.Create(nil);
+  FVariable:= AVariable;
+
+  AVariable.FCollection := Collection as TGlobalVariables;
+  AVariable.SetSubComponent(True);
   AlwaysAssignForeignId := True;
   (Collection as TGlobalVariables).FreeSearchList;
 end;
 
 destructor TGlobalVariableItem.Destroy;
 begin
-  FVariable.Free;
+  (FVariable as TGlobalVariable).Free;
   if Collection <> nil then
   begin
     (Collection as TGlobalVariables).FreeSearchList;

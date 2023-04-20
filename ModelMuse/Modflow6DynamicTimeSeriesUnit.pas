@@ -6,7 +6,7 @@ uses
   System.Classes, GoPhastTypes,
   OrderedCollectionUnit,
   OrderedCollectionInterfaceUnit,
-  SubscriptionUnit,
+  SubscriptionUnit, SubscriptionInterfaceUnit,
   FormulaManagerInterfaceUnit,
   System.IOUtils,
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,

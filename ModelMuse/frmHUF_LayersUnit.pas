@@ -6,7 +6,8 @@ uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, ExtCtrls, ComCtrls, Buttons,
   ArgusDataEntry, JvExStdCtrls, JvCombobox, JvListComb, Grids, RbwDataGrid4,
-  CheckLst, HufDefinition, RequiredDataSetsUndoUnit, GoPhastTypes, GrayTabs;
+  CheckLst, HufDefinition, RequiredDataSetsUndoUnit, GoPhastTypes, GrayTabs,
+  DataArrayInterfaceUnit;
 
 type
   THufParamGridColumns = (hpgcName, hpgcType, hpgcUseZone, hpgcUseMultiplier);
@@ -87,7 +88,7 @@ type
     private
       FNewHydrogeologicUnits: THydrogeologicUnits;
       FOldHydrogeologicUnits: THydrogeologicUnits;
-      FNewDataSets: TList;
+      FNewDataSets: TIDataArrayList;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure AssignNewHufUnits(AModel: TBaseModel);
@@ -1005,7 +1006,7 @@ end;
 constructor TUndoHufLayers.Create(
   var NewHydrogeologicUnits: THydrogeologicUnits);
 begin
-  FNewDataSets := TList.Create;
+  FNewDataSets := TIDataArrayList.Create;
   // Take ownership of NewHydrogeologicUnits
   FNewHydrogeologicUnits := NewHydrogeologicUnits;
   NewHydrogeologicUnits := nil;

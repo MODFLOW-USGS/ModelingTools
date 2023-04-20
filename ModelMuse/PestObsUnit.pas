@@ -273,7 +273,7 @@ begin
   result := nil;
   if Collection <> nil then
   begin
-    Result := (Collection as TScreenObjectOwnerCollection).ScreenObject;
+    Result := (Collection as TScreenObjectOwnerCollection).ScreenObject as TObject;
   end;
 end;
 

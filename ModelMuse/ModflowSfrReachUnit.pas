@@ -584,7 +584,7 @@ var
 begin
   SfrCollection := Collection as TSfrCollection;
   Assert(SfrCollection <> nil);
-  result := SfrCollection.ScreenObject;
+  result := SfrCollection.ScreenObject as TObject;
 end;
 
 procedure TSfrItem.SetBoundaryFormula(Index: integer; const Value: string);
@@ -1164,52 +1164,8 @@ end;
 
 procedure TSfrCollection.CountArrayBoundaryCells(var BoundaryCount: Integer;
   DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel);
-//var
-//  DSIndex: Integer;
-//  ColIndex: Integer;
-//  RowIndex: Integer;
-//  LayerIndex: Integer;
-//  DataArray2: TDataArray;
-//  SO: TScreenObject;
-//  Index: Integer;
-//  Segment: TCellElementSegment;
-//  PriorCol, PriorRow, PriorLayer: integer;
-//  LocalModel: TCustomModel;
 begin
-  CountArrayBoundaryCellsSfr(BoundaryCount, DataArray1, DataSets, AModel, ScreenObject);
-{  LocalModel := AModel as TCustomModel;
-  BoundaryCount := 0;
-  PriorCol := -1;
-  PriorRow := -1;
-  PriorLayer := -1;
-
-  SO := ScreenObject as TScreenObject;
-  for Index := 0 to SO.Segments[LocalModel].Count - 1 do
-  begin
-    Segment := SO.Segments[LocalModel][Index];
-    LayerIndex := Segment.Layer;
-    if not LocalModel.IsLayerSimulated(LayerIndex) then
-    begin
-      Continue;
-    end;
-    RowIndex := Segment.Row;
-    ColIndex := Segment.Col;
-    if DataArray1.IsValue[LayerIndex, RowIndex, ColIndex]
-      and ((LayerIndex <> PriorLayer)
-      or (RowIndex <> PriorRow)
-      or (ColIndex <> PriorCol)) then
-    begin
-      for DSIndex := 1 to DataSets.Count - 1 do
-      begin
-        DataArray2 := DataSets[DSIndex];
-        Assert(DataArray2.IsValue[LayerIndex, RowIndex, ColIndex]);
-      end;
-      Inc(BoundaryCount);
-      PriorLayer := Segment.Layer;
-      PriorRow := Segment.Row;
-      PriorCol := Segment.Col;
-    end;
-  end;  }
+  CountArrayBoundaryCellsSfr(BoundaryCount, DataArray1, DataSets, AModel, ScreenObject as TObject);
 end;
 
 class function TSfrCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;

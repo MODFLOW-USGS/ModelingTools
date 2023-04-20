@@ -5,7 +5,8 @@ interface
 uses ModflowCellUnit, Mt3dmsChemUnit, System.Classes, ModflowBoundaryUnit,
   GoPhastTypes, SubscriptionUnit,
   System.Generics.Collections, System.SysUtils, System.ZLib, DataSetUnit,
-  OrderedCollectionUnit, OrderedCollectionInterfaceUnit;
+  OrderedCollectionUnit, OrderedCollectionInterfaceUnit,
+  GlobalVariablesInterfaceUnit;
 
 type
   TSftSteady = class(TObject)
@@ -586,7 +587,7 @@ procedure TCustomMt3dSftReachCollection.CountArrayBoundaryCells(
 begin
 //  inherited;
   CountArrayBoundaryCellsSfr(BoundaryCount, DataArray1, DataSets, AModel,
-    ScreenObject);
+    ScreenObject as TScreenObject);
 end;
 
 procedure TCustomMt3dSftReachCollection.InvalidateModel;
@@ -887,7 +888,7 @@ var
   AnotherDataSet: TDataArray;
   Variables: TList<TCustomValue>;
   DataSets: TDataArrayList;
-  GlobalVariable: TGlobalVariable;
+  GlobalVariable: IGlobalVariable;
   ExpressionIndex: Integer;
   InitConcExpressionAnnotations: TStringList;
   DispExpressionAnnotations: TStringList;

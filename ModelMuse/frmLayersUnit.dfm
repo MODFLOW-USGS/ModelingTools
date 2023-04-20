@@ -81,7 +81,7 @@ inherited frmLayers: TfrmLayers
       object comboAquiferType: TJvImageComboBox
         Left = 3
         Top = 133
-        Width = 411
+        Width = 407
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -113,12 +113,12 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Convertible'
           end>
-        ExplicitWidth = 407
+        ExplicitWidth = 403
       end
       object comboInterblockMethod: TJvImageComboBox
         Left = 3
         Top = 237
-        Width = 411
+        Width = 407
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -146,12 +146,12 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Arithmetic and logarithmic (2)'
           end>
-        ExplicitWidth = 407
+        ExplicitWidth = 403
       end
       object comboVertKMethod: TJvImageComboBox
         Left = 3
         Top = 319
-        Width = 411
+        Width = 407
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -174,21 +174,22 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Ratio of horizontal to vertical hydraulic conductivity (1)'
           end>
-        ExplicitWidth = 407
+        ExplicitWidth = 403
       end
       object edName: TRbwEdit
         Left = 3
         Top = 26
-        Width = 411
+        Width = 407
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         OnChange = edNameChange
+        ExplicitWidth = 411
       end
       object cbComputeSaturatedThickness: TJvCheckBox
         Left = 3
         Top = 167
-        Width = 411
+        Width = 407
         Height = 40
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Compute saturated thickness using starting head (LAYTYP)'
@@ -203,6 +204,7 @@ inherited frmLayers: TfrmLayers
         HotTrackFont.Name = 'Arial'
         HotTrackFont.Pitch = fpVariable
         HotTrackFont.Style = []
+        ExplicitWidth = 411
       end
       object rdeAnisotropy: TRbwDataEntry
         Left = 3
@@ -245,20 +247,21 @@ inherited frmLayers: TfrmLayers
           ExplicitHeight = 18
         end
         inherited pnlDiscritization: TPanel
-          Width = 177
+          Width = 173
           Height = 405
-          ExplicitWidth = 173
+          ExplicitWidth = 169
           ExplicitHeight = 404
           inherited spl1: TSplitter
-            Left = 89
+            Left = 85
             Height = 364
+            ExplicitLeft = 89
             ExplicitHeight = 363
           end
           inherited rdgSubLayerBoundaries: TRbwDataGrid4
-            Width = 89
+            Width = 85
             Height = 364
-            ExplicitWidth = 89
-            ExplicitHeight = 364
+            ExplicitWidth = 81
+            ExplicitHeight = 363
             ColWidths = (
               64)
             RowHeights = (
@@ -266,7 +269,8 @@ inherited frmLayers: TfrmLayers
               24)
           end
           inherited pnl1: TPanel
-            Width = 177
+            Width = 173
+            ExplicitWidth = 177
             inherited lbl3: TLabel
               Width = 179
               Height = 36
@@ -275,8 +279,9 @@ inherited frmLayers: TfrmLayers
             end
           end
           inherited pnlPaintboxParent: TPanel
-            Left = 92
+            Left = 88
             Height = 364
+            ExplicitLeft = 92
             ExplicitHeight = 363
             inherited pbSubLayers: TPaintBox
               Height = 332
@@ -350,8 +355,8 @@ inherited frmLayers: TfrmLayers
           Width = 429
           Height = 367
           AutoDistributeText = True
-          ExplicitWidth = 429
-          ExplicitHeight = 367
+          ExplicitWidth = 425
+          ExplicitHeight = 366
           ColWidths = (
             64
             64
@@ -415,8 +420,8 @@ inherited frmLayers: TfrmLayers
           Width = 429
           Height = 367
           AutoDistributeText = True
-          ExplicitWidth = 429
-          ExplicitHeight = 367
+          ExplicitWidth = 425
+          ExplicitHeight = 366
           ColWidths = (
             64
             64
@@ -480,8 +485,8 @@ inherited frmLayers: TfrmLayers
           Width = 429
           Height = 367
           AutoDistributeText = True
-          ExplicitWidth = 429
-          ExplicitHeight = 367
+          ExplicitWidth = 425
+          ExplicitHeight = 366
           ColWidths = (
             64
             64
@@ -868,7 +873,7 @@ inherited frmLayers: TfrmLayers
       579
       41)
     object btnHelp: TBitBtn
-      Left = 226
+      Left = 222
       Top = 4
       Width = 108
       Height = 33
@@ -877,9 +882,10 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 226
     end
     object btnOK: TBitBtn
-      Left = 340
+      Left = 336
       Top = 4
       Width = 108
       Height = 33
@@ -888,9 +894,10 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 340
     end
     object btnCancel: TBitBtn
-      Left = 454
+      Left = 450
       Top = 4
       Width = 108
       Height = 33
@@ -898,6 +905,7 @@ inherited frmLayers: TfrmLayers
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 454
     end
   end
   object Panel3: TPanel

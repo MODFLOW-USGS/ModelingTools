@@ -1749,7 +1749,7 @@ function TReturnObject.GetScreenObject: TObject;
 begin
   if ValidScreenObject(FScreenObject) then
   begin
-    result := FScreenObject;
+    result := FScreenObject as TObject;
   end
   else
   begin
