@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, GoPhastTypes, SubscriptionUnit,
-  FormulaManagerUnit, RbwParser, FormulaManagerInterfaceUnit,
+  RbwParser, FormulaManagerInterfaceUnit,
   OrderedCollectionInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
 
 type
@@ -15,9 +15,6 @@ type
     property FormulaCompiler[const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt]:TRbwParser read GetCompiler;
     function AddFormulaObject: IFormulaObject;
-    procedure RemoveFormulaObject(FormulaObject: TFormulaObject;
-      OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
-      Subject: TObject); overload;
     procedure RemoveFormulaObject(FormulaObject: IFormulaObject;
       OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
       Subject: TObject); overload;
