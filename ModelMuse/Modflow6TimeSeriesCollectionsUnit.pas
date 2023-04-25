@@ -6,7 +6,7 @@ uses
   System.AnsiStrings, System.SysUtils, System.Classes, GoPhastTypes,
   OrderedCollectionUnit, Modflow6TimeSeriesUnit, Generics.Collections,
   System.IOUtils, RealListUnit,
-  ModflowTimeInterfaceUnit,
+  ModflowTimeInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
   Modflow6TimeSeriesCollectionsInterfaceUnit, OrderedCollectionInterfaceUnit;
 
 type
@@ -22,16 +22,18 @@ type
     function TryGetValue(const Key: K; var Value: V): Boolean;
   end;
 
-  TTimeSeriesItem = class(TOrderedItem)
+  TTimeSeriesItem = class(TOrderedItem, ITimeSeriesItem)
   private
     FTimeSeries: TMf6TimeSeries;
     procedure SetTimeSeries(const Value: TMf6TimeSeries);
+    function GetTimeSeriesI: ITimeSeries;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     Constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    property TimeSeriesI: ITimeSeries read GetTimeSeriesI;
   published
     property TimeSeries: TMf6TimeSeries read FTimeSeries write SetTimeSeries;
   end;
@@ -42,7 +44,9 @@ type
     FDeleted: Boolean;
     FSortedTimes: TRealList;
     FGroupName: AnsiString;
+    function GetTimes: TRealCollection;
     procedure SetTimes(const Value: TRealCollection);
+    function GetGroupName: AnsiString;
     procedure SetGroupName(Value: AnsiString);
   protected
     procedure OnTimesChanged(Sender: TObject); virtual;
@@ -53,12 +57,13 @@ type
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
-    property Times: TRealCollection read FTimes write SetTimes;
-    property GroupName: AnsiString read FGroupName write SetGroupName;
+    property Times: TRealCollection read GetTimes write SetTimes;
+    property GroupName: AnsiString read GetGroupName write SetGroupName;
     property Deleted: Boolean read FDeleted write FDeleted;
   end;
 
-  TTimesSeriesCollection = class(TCustomTimesSeriesCollection)
+  TTimesSeriesCollection = class(TCustomTimesSeriesCollection,
+    ITimesSeriesCollection)
   private
     FInputFile: TStreamReader;
     FTimeSeriesDictionary: TCacheDictionary<string, TMf6TimeSeries>;
@@ -79,6 +84,7 @@ type
     property Items[Index: Integer]: TTimeSeriesItem read GetItem write SetItem; default;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     function Add: TTimeSeriesItem;
+    function AddI: ITimeSeriesItem;
     procedure ReadFromFile(const AFileName: string);
     function GetInterpolatedValue(Model: IModelMuseModel; Time: double; const
       SeriesName: string; StartTimeOffset: double = 0): double;
@@ -87,59 +93,27 @@ type
 
   TTimesSeriesGroups = TObjectList<TTimesSeriesCollection>;
 
-//  TDynamicTimeSeriesItem = class(TOrderedItem)
-//  private
-//    FDynamicTimeSeries: TDynamicTimeSeries;
-//    FModel: IModelMuseModel;
-//    procedure SetTimeSeries(const Value: TDynamicTimeSeries);
-//  protected
-//    function IsSame(AnotherItem: TOrderedItem): boolean; override;
-//  public
-//    Constructor Create(Collection: TCollection); override;
-//    destructor Destroy; override;
-//    procedure Assign(Source: TPersistent); override;
-//  published
-//    property TimeSeries: TDynamicTimeSeries read FDynamicTimeSeries
-//      write SetTimeSeries;
-//  end;
-//
-//  TDyanmicTimesSeriesCollection = class(TCustomTimesSeriesCollection)
-//  private
-//    FTimeSeriesDictionary: TCacheDictionary<string, TDynamicTimeSeries>;
-//    FModel: IModelMuseModel;
-//    function GetItem(Index: Integer): TDynamicTimeSeriesItem;
-//    function GetTimeCount: Integer;
-//    procedure SetItem(Index: Integer; const Value: TDynamicTimeSeriesItem);
-//    procedure SetTimeCount(const Value: Integer);
-//  public
-//    Constructor Create(Model: IModelMuseModel);
-//    Destructor Destroy; override;
-//    procedure Assign(Source: TPersistent); override;
-//    function GetValuesByName(const AName: string): TDynamicTimeSeries;
-//    property TimeCount: Integer read GetTimeCount write SetTimeCount;
-//    property Items[Index: Integer]: TDynamicTimeSeriesItem read GetItem write SetItem; default;
-//    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
-//    function Add: TDynamicTimeSeriesItem;
-//    procedure Loaded;
-//  end;
-
-  TimeSeriesCollectionItem = class(TOrderedItem)
+  TimeSeriesCollectionItem = class(TOrderedItem, ITimeSeriesCollectionItem)
   private
     FTimesSeriesCollection: TTimesSeriesCollection;
     procedure SetTimesSeriesCollection(const Value: TTimesSeriesCollection);
+    function GetTimesSeriesCollectionI: ITimesSeriesCollection;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     Constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    property TimesSeriesCollectionI: ITimesSeriesCollection read GetTimesSeriesCollectionI;
   published
     property TimesSeriesCollection: TTimesSeriesCollection
       read FTimesSeriesCollection write SetTimesSeriesCollection;
   end;
 
-  TTimesSeriesCollections = class(TOrderedCollection)
+  TTimesSeriesCollections = class(TOrderedCollection, ITimesSeriesCollections)
   private
+    FDefaultGroupNameCount: integer;
+    FDefaultTimeSeriesNameCount: Integer;
     FTimeSeriesGroupsDictionary: TCacheDictionary<string, TTimesSeriesCollection>;
     FTimeSeriesDictionary: TCacheDictionary<string, TMf6TimeSeries>;
     FTimeSeriesNames: TStringList;
@@ -152,6 +126,7 @@ type
     procedure Assign(Source: TPersistent); override;
     property Items[Index: Integer]: TimeSeriesCollectionItem read GetItem write SetItem; default;
     function Add: TimeSeriesCollectionItem;
+    function AddI: ITimeSeriesCollectionItem;
     function GetTimeSeriesByName(ASeriesName: String): TMf6TimeSeries;
     procedure GetTimesSeriesGroups(SeriesNames: TStrings;
       Groups: TTimesSeriesGroups);
@@ -161,6 +136,8 @@ type
     procedure Loaded;
     function GetInterpolatedValue(Model: IModelMuseModel; Time: double; const
       SeriesName: string; StartTimeOffset: double = 0): double;
+    function DefaultGroupName: string;
+    function DefaultTimeSeriesName: string;
   end;
 
 implementation
@@ -202,6 +179,11 @@ begin
   inherited;
 end;
 
+function TTimeSeriesItem.GetTimeSeriesI: ITimeSeries;
+begin
+  Result := TimeSeries;
+end;
+
 function TTimeSeriesItem.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
   result := (AnotherItem is TTimeSeriesItem);
@@ -221,6 +203,11 @@ end;
 function TTimesSeriesCollection.Add: TTimeSeriesItem;
 begin
   result := inherited Add as TTimeSeriesItem;
+end;
+
+function TTimesSeriesCollection.AddI: ITimeSeriesItem;
+begin
+  result := Add;
 end;
 
 procedure TTimesSeriesCollection.Assign(Source: TPersistent);
@@ -262,7 +249,7 @@ var
   ScaleFactor: Double;
   StartSearch: Integer;
   EndSearch: Integer;
-  LocalModel: IModelTimesSeriesInterface;
+  LocalModel: IModelForTimesSeriesInterface;
   StartTime: double;
   EndTime: double;
   ParamValue: Double;
@@ -280,7 +267,7 @@ begin
 
   UsedTime := Time -StartTimeOffset;
 
-  LocalModel := Model as IModelTimesSeriesInterface;
+  LocalModel := Model as IModelForTimesSeriesInterface;
   if not LocalModel.TimeToTimeStepTimes(Time, StartTime, EndTime) then
   begin
     Exit;
@@ -773,6 +760,11 @@ begin
   inherited;
 end;
 
+function TimeSeriesCollectionItem.GetTimesSeriesCollectionI: ITimesSeriesCollection;
+begin
+  result := TimesSeriesCollection;
+end;
+
 function TimeSeriesCollectionItem.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
   result := (AnotherItem is TimeSeriesCollectionItem)
@@ -794,6 +786,11 @@ begin
   result := inherited Add as TimeSeriesCollectionItem;
 end;
 
+function TTimesSeriesCollections.AddI: ITimeSeriesCollectionItem;
+begin
+  Result := Add;
+end;
+
 procedure TTimesSeriesCollections.Assign(Source: TPersistent);
 begin
   inherited;
@@ -811,6 +808,74 @@ begin
 //  FTimeSeriesGroupsDictionary := TDictionary<string, TTimesSeriesCollection>.Create;
 //  FTimeSeriesDictionary := TDictionary<string, TMf6TimeSeries>.Create;
 //  {$ENDIF}
+  FDefaultGroupNameCount := 0;
+  FDefaultTimeSeriesNameCount := 0;
+end;
+
+function TTimesSeriesCollections.DefaultGroupName: string;
+var
+  Index: Integer;
+  GroupName: string;
+  NumberString: string;
+  Value: Integer;
+begin
+  if FDefaultGroupNameCount = 0 then
+  begin
+    for Index := 0 to Count - 1 do
+    begin
+      GroupName := String(Items[Index].TimesSeriesCollection.GroupName);
+      if Pos('group', LowerCase(GroupName)) = 1 then
+      begin
+        NumberString := Copy(GroupName, 6, MAXINT);
+        if TryStrToInt(NumberString, Value) then
+        begin
+          if Value > FDefaultGroupNameCount then
+          begin
+            FDefaultGroupNameCount := Value;
+          end;
+        end;
+      end;
+    end;
+  end;
+  Inc(FDefaultGroupNameCount);
+  result := 'Group' + IntToStr(FDefaultGroupNameCount);
+end;
+
+function TTimesSeriesCollections.DefaultTimeSeriesName: string;
+var
+  TSNames: TStringList;
+  Index: Integer;
+  TSName: string;
+  NumberString: string;
+  Value: Integer;
+begin
+
+  if FDefaultTimeSeriesNameCount = 0 then
+  begin
+    TSNames := TStringList.Create;
+    try
+      TSNames.Assign(TimeSeriesNames);
+      for Index := 0 to TSNames.Count - 1 do
+      begin
+        TSName := LowerCase(TSNames[Index]);
+        if Pos('ts_', TSName) = 1 then
+        begin
+          NumberString := Copy(TSName, 4, MaxInt);
+          if TryStrToInt(NumberString, Value) then
+          begin
+            if Value > FDefaultTimeSeriesNameCount then
+            begin
+              FDefaultTimeSeriesNameCount := Value;
+            end;
+          end;
+        end;
+      end;
+    finally
+      TSNames.Free;
+    end;
+  end;
+  Inc(FDefaultTimeSeriesNameCount);
+  result := 'TS_' + IntToStr(FDefaultTimeSeriesNameCount);
 end;
 
 destructor TTimesSeriesCollections.Destroy;
@@ -1122,6 +1187,16 @@ begin
   FTimes.Free;
   FSortedTimes.Free;
   inherited;
+end;
+
+function TCustomTimesSeriesCollection.GetGroupName: AnsiString;
+begin
+  Result := FGroupName;
+end;
+
+function TCustomTimesSeriesCollection.GetTimes: TRealCollection;
+begin
+  result := FTimes;
 end;
 
 function TCustomTimesSeriesCollection.IsSame(

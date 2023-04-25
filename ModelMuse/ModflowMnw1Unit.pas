@@ -6,7 +6,7 @@ uses
   Windows, ZLib, SysUtils, Classes, ModflowBoundaryUnit, OrderedCollectionUnit,
   ModflowCellUnit, RbwParser, GoPhastTypes,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  SubscriptionUnit;
+  SubscriptionUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
 
 type
   // Rw  > 0, Rw  = 0, Rw  < 0
@@ -269,11 +269,7 @@ type
     procedure InvalidateModel; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
-    procedure AssignCellList(Expression: TExpression; ACellList: TObject;
-      BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
+    procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
   end;
@@ -1413,18 +1409,39 @@ begin
   result := Item.BoundaryFormula[FormulaIndex];
 end;
 
-procedure TMnw1WellCollection.AssignCellList(Expression: TExpression;
-  ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
-  BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
-  TimeSeriesName: string);
+procedure TMnw1WellCollection.AssignCellList(CellAssignmentData: TCellAssignmentData);
 var
   Mnw1Storage: TMnw1Storage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
+  Expression: TExpression;
+  ACellList: TObject;
+  BoundaryStorage: TCustomBoundaryStorage;
+  BoundaryFunctionIndex: integer;
+  Variables, DataSets: TList;
+  AModel: TBaseModel;
+  AScreenObject: TObject;
+  PestName: string;
+  PestSeriesName: string;
+  PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string;
+  DynamicTimeSeries: IDynamicTimeSeries;
 begin
+  Expression := CellAssignmentData.Expression;
+  ACellList := CellAssignmentData.ACellList;
+  BoundaryStorage := CellAssignmentData.BoundaryStorage;
+  BoundaryFunctionIndex := CellAssignmentData.BoundaryFunctionIndex;
+  Variables := CellAssignmentData.Variables;
+  DataSets := CellAssignmentData.DataSets;
+  AModel := CellAssignmentData.AModel;
+  AScreenObject := CellAssignmentData.AScreenObject;
+  PestName := CellAssignmentData.PestName;
+  PestSeriesName := CellAssignmentData.PestSeriesName;
+  PestSeriesMethod := CellAssignmentData.PestSeriesMethod;
+  TimeSeriesName := CellAssignmentData.TimeSeriesName;
+  DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
+
   Assert(BoundaryFunctionIndex in
     [DesiredPumpingRatePosition..ReactivationPumpingRatePosition]);
   Assert(Expression <> nil);

@@ -3448,8 +3448,8 @@ begin
   if ModelSelection <> msUndefined then
   begin
     FNeedFirstRedraw := False;
-    CanDraw := True;
     timTimer.Enabled := False;
+    CanDraw := True;
     timTimer.OnTimer := nil;
     frameTopView.ZoomBox.InvalidateImage32;
     frameFrontView.ZoomBox.InvalidateImage32;

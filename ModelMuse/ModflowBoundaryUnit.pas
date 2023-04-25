@@ -9,7 +9,7 @@ uses Winapi.Windows, System.UITypes, SysUtils,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SparseDataSets,
   System.Generics.Collections, System.StrUtils,
-  OrderedCollectionInterfaceUnit;
+  OrderedCollectionInterfaceUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
 
 type
     // @name defines how a formula is interpreted.
@@ -476,6 +476,22 @@ type
 
   TMF_BoundCollClass = class of TCustomMF_BoundColl;
 
+  TCellAssignmentData = record
+    Expression: TExpression;
+    ACellList: TObject;
+    BoundaryStorage: TCustomBoundaryStorage;
+    BoundaryFunctionIndex: integer;
+    Variables: TList;
+    DataSets: TList;
+    AModel: TBaseModel;
+    AScreenObject: TObject;
+    PestName: string;
+    PestSeriesName: string;
+    PestSeriesMethod: TPestParamMethod;
+    TimeSeriesName: string;
+    DynamicTimeSeries: IDynamicTimeSeries;
+  end;
+
   TCustomListArrayBoundColl = class(TCustomMF_BoundColl)
   private
     FListDuplicatesAllowed: Boolean;
@@ -527,11 +543,12 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name assigns values to the contents of
     // @link(TCustomBoundaryStorage BoundaryStorage)
-    procedure AssignCellList(Expression: TExpression; ACellList: TObject;
+    procedure AssignCellList(CellAssignmentData: TCellAssignmentData);
+      {Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); virtual; abstract;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string);} virtual; abstract;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -579,11 +596,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name assigns values to the contents of
     // @link(TCustomBoundaryStorage BoundaryStorage)
-    procedure AssignCellList(Expression: TExpression; ACellList: TObject;
-      BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
+    procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -1441,12 +1454,7 @@ begin
   Assert(False);
 end;
 
-procedure TCustomMF_ArrayBoundColl.AssignCellList(Expression: TExpression;
-  ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
-  BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
-  PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
-  TimeSeriesName: string);
+procedure TCustomMF_ArrayBoundColl.AssignCellList(CellAssignmentData: TCellAssignmentData);
 begin
   // this is only used with cell lists.
   Assert(False);
@@ -3659,6 +3667,7 @@ var
   PestSeriesName: string;
   TimeSeries: TMf6TimeSeries;
   TimeSeriesName: string;
+  CellAssignmentData: TCellAssignmentData;
 begin
   if Count = 0 then
   begin
@@ -3875,10 +3884,21 @@ begin
                 Method := ppmMultiply;
                 TimeSeriesName := '';
 
-                AssignCellList(Expression, CellList, Boundaries[0, AModel],
-                  BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-                  AScreenObject, PestParamName, PestSeriesName, Method,
-                  TimeSeriesName);
+                CellAssignmentData.Expression := Expression;
+                CellAssignmentData.ACellList := CellList;
+                CellAssignmentData.BoundaryStorage := Boundaries[0, AModel];
+                CellAssignmentData.BoundaryFunctionIndex := BoundaryFunctionIndex;
+                CellAssignmentData.Variables := Variables;
+                CellAssignmentData.DataSets := DataSets;
+                CellAssignmentData.AModel := LocalModel;
+                CellAssignmentData.AScreenObject := AScreenObject;
+                CellAssignmentData.PestName := PestParamName;
+                CellAssignmentData.PestSeriesName := PestSeriesName;
+                CellAssignmentData.PestSeriesMethod := Method;
+                CellAssignmentData.TimeSeriesName := TimeSeriesName;
+                CellAssignmentData.DynamicTimeSeries := nil;
+
+                AssignCellList(CellAssignmentData);
 
                 LocalModel.DataArrayManager.CacheDataArrays;
               end;
@@ -3978,14 +3998,7 @@ begin
         end
         else
         begin
-//          if CanUsePestParmeters then
-//          begin
-            PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
-//          end
-//          else
-//          begin
-//            PestParam := nil;
-//          end;
+          PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
           // handle the situation if it is a PEST parameter
           if PestParam = nil then
           begin
@@ -4104,9 +4117,21 @@ begin
           Method := BoundaryGroup.
             PestBoundaryMethod[BoundaryFunctionIndex];
 
-          AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
-            BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-            AScreenObject, PestParamName, PestSeriesName, Method, TimeSeriesName);
+          CellAssignmentData.Expression := Expression;
+          CellAssignmentData.ACellList := CellList;
+          CellAssignmentData.BoundaryStorage := Boundaries[ItemCount, AModel];
+          CellAssignmentData.BoundaryFunctionIndex := BoundaryFunctionIndex;
+          CellAssignmentData.Variables := Variables;
+          CellAssignmentData.DataSets := DataSets;
+          CellAssignmentData.AModel := LocalModel;
+          CellAssignmentData.AScreenObject := AScreenObject;
+          CellAssignmentData.PestName := PestParamName;
+          CellAssignmentData.PestSeriesName := PestSeriesName;
+          CellAssignmentData.PestSeriesMethod := Method;
+          CellAssignmentData.TimeSeriesName := TimeSeriesName;
+          CellAssignmentData.DynamicTimeSeries := nil;
+
+          AssignCellList(CellAssignmentData);
         finally
           Variables.Free;
           DataSets.Free;
@@ -4260,10 +4285,22 @@ begin
                   end;
                   UpdateCurrentScreenObject(AScreenObject);
 
-                  AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
-                    BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-                    AScreenObject, PestParamName, PestSeriesName, Method,
-                    TimeSeriesName);
+
+                  CellAssignmentData.Expression := Expression;
+                  CellAssignmentData.ACellList := CellList;
+                  CellAssignmentData.BoundaryStorage := Boundaries[ItemCount, AModel];
+                  CellAssignmentData.BoundaryFunctionIndex := BoundaryFunctionIndex;
+                  CellAssignmentData.Variables := Variables;
+                  CellAssignmentData.DataSets := DataSets;
+                  CellAssignmentData.AModel := LocalModel;
+                  CellAssignmentData.AScreenObject := AScreenObject;
+                  CellAssignmentData.PestName := PestParamName;
+                  CellAssignmentData.PestSeriesName := PestSeriesName;
+                  CellAssignmentData.PestSeriesMethod := Method;
+                  CellAssignmentData.TimeSeriesName := TimeSeriesName;
+                  CellAssignmentData.DynamicTimeSeries := nil;
+
+                  AssignCellList(CellAssignmentData);
                 end;
               finally
                 Variables.Free;

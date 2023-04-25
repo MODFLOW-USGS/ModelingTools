@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, GoPhastTypes, SubscriptionUnit,
   FormulaManagerUnit, RbwParser, FormulaManagerInterfaceUnit,
-  OrderedCollectionInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
+  OrderedCollectionInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
+  System.Generics.Defaults, System.Hash, System.Generics.Collections;
 
 type
   IModelForDynamicTimeSeries = interface(IModelMuseModel)
@@ -24,6 +25,22 @@ type
     function GetObserverByName(const ObserverName: string): TObserver;
   end;
 
+  TTimeSeriesLocation = record
+    Layer: Integer;
+    Row: Integer;
+    Column: Integer;
+  end;
+
+  TTTimeSeriesLocationComparer = class(TEqualityComparer<TTimeSeriesLocation>)
+    function Equals(const Left, Right: TTimeSeriesLocation): Boolean; override;
+    function GetHashCode(const Value: TTimeSeriesLocation): Integer; override;
+  end;
+
+  TTimeSeriesLocationDictionary = class(TDictionary<
+    TTimeSeriesLocation, ITimeSeries>)
+    constructor Create;
+  end;
+
   IDynamicTimeSeriesFormulaItem = interface(IOrderedItem)
     ['{490D60F0-33BB-47E7-9447-05FCE89BAA37}']
     procedure SetValue(const Value: string);
@@ -31,7 +48,7 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
-  IDynamicTimeSeries = interface(ITimeSeriesInterface)
+  IDynamicTimeSeries = interface(ITimeSeries)
     ['{C3064432-B8D5-4D5A-81B6-BE42AACF39D4}']
     function GetCount: Integer;
     procedure SetCount(Const Value: Integer);
@@ -63,5 +80,37 @@ type
   end;
 
 implementation
+
+{ TTTimeSeriesLocationComparer }
+
+function TTTimeSeriesLocationComparer.Equals(const Left,
+  Right: TTimeSeriesLocation): Boolean;
+begin
+  Result := (Left.Layer = Right.Layer)
+    and (Left.Row = Right.Row)
+    and (Left.Column = Right.Column)
+
+end;
+
+function TTTimeSeriesLocationComparer.GetHashCode(
+  const Value: TTimeSeriesLocation): Integer;
+begin
+  {$IF CompilerVersion > 28}
+  Result := THashBobJenkins.GetHashValue(Value.Layer, SizeOf(Value.Layer), 0);
+  Result := THashBobJenkins.GetHashValue(Value.Row, SizeOf(Value.Row), Result);
+  Result := THashBobJenkins.GetHashValue(Value.Column, SizeOf(Value.Column), Result);
+  {$ELSE}
+  Result := BobJenkinsHash(Value.Layer, SizeOf(Value.Layer), 0);
+  Result := BobJenkinsHash(Value.Row, SizeOf(Value.Row), Result);
+  Result := BobJenkinsHash(Value.Column, SizeOf(Value.Column), Result);
+  {$ENDIF}
+end;
+
+{ TTimeSeriesLocationDictionary }
+
+constructor TTimeSeriesLocationDictionary.Create;
+begin
+  inherited Create(TTTimeSeriesLocationComparer.Create);
+end;
 
 end.

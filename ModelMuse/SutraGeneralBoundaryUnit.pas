@@ -133,11 +133,7 @@ type
     procedure UsedFormulaChangeHandler(Sender: TObject);
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
-    procedure AssignCellList(Expression: TExpression; ACellList: TObject;
-      BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
+    procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -656,12 +652,7 @@ begin
   inherited;
 end;
 
-procedure TSutraGeneralFlowCollection.AssignCellList(
-  Expression: TExpression; ACellList: TObject;
-  BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-  Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
-  TimeSeriesName: string);
+procedure TSutraGeneralFlowCollection.AssignCellList(CellAssignmentData: TCellAssignmentData);
 begin
   inherited;
   // this needs to be changed?

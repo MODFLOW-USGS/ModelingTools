@@ -6,7 +6,7 @@ uses
   ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit, OrderedCollectionUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   GoPhastTypes, RbwParser, SubscriptionUnit, Mt3dmsChemUnit,
-  System.SysUtils, GwtStatusUnit;
+  System.SysUtils, GwtStatusUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
 
 type
   TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate,
@@ -305,11 +305,7 @@ type
     procedure InvalidateModel; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
-    procedure AssignCellList(Expression: TExpression; ACellList: TObject;
-      BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
+    procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
     function AllowInactiveMf6Cells: boolean; override;
@@ -591,11 +587,7 @@ type
     procedure InvalidateModel; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
-    procedure AssignCellList(Expression: TExpression; ACellList: TObject;
-      BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
+    procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
       PestItemNames, TimeSeriesNames: TStringListObjectList); override;
@@ -1446,19 +1438,39 @@ begin
 
 end;
 
-procedure TMawWellScreenCollection.AssignCellList(Expression: TExpression;
-  ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
-  BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
-  PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
-  TimeSeriesName: string);
+procedure TMawWellScreenCollection.AssignCellList(CellAssignmentData: TCellAssignmentData);
 var
   MawStorage: TMawSteadyConnectionStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
-//  LocalScreenObject: TScreenObject;
+  Expression: TExpression;
+  ACellList: TObject;
+  BoundaryStorage: TCustomBoundaryStorage;
+  BoundaryFunctionIndex: integer;
+  Variables, DataSets: TList;
+  AModel: TBaseModel;
+  AScreenObject: TObject;
+  PestName: string;
+  PestSeriesName: string;
+  PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string;
+  DynamicTimeSeries: IDynamicTimeSeries;
 begin
+  Expression := CellAssignmentData.Expression;
+  ACellList := CellAssignmentData.ACellList;
+  BoundaryStorage := CellAssignmentData.BoundaryStorage;
+  BoundaryFunctionIndex := CellAssignmentData.BoundaryFunctionIndex;
+  Variables := CellAssignmentData.Variables;
+  DataSets := CellAssignmentData.DataSets;
+  AModel := CellAssignmentData.AModel;
+  AScreenObject := CellAssignmentData.AScreenObject;
+  PestName := CellAssignmentData.PestName;
+  PestSeriesName := CellAssignmentData.PestSeriesName;
+  PestSeriesMethod := CellAssignmentData.PestSeriesMethod;
+  TimeSeriesName := CellAssignmentData.TimeSeriesName;
+  DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
+
   Assert(BoundaryFunctionIndex in
     [TMawWellScreenItem.ScreenBottomPosition .. TMawWellScreenItem.SkinRadiusPosition]);
   Assert(Expression <> nil);
@@ -5006,12 +5018,7 @@ begin
   result := True;
 end;
 
-procedure TMawWellCollection.AssignCellList(Expression: TExpression;
-  ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
-  BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
-  PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
-  TimeSeriesName: string);
+procedure TMawWellCollection.AssignCellList(CellAssignmentData: TCellAssignmentData);
 var
   MawStorage: TMawTransientStorage;
   CellList: TCellAssignmentList;
@@ -5019,7 +5026,33 @@ var
   ACell: TCellAssignment;
   FormulaIndex: Integer;
   SpeciesCount: Integer;
+  Expression: TExpression;
+  ACellList: TObject;
+  BoundaryStorage: TCustomBoundaryStorage;
+  BoundaryFunctionIndex: integer;
+  Variables, DataSets: TList;
+  AModel: TBaseModel;
+  AScreenObject: TObject;
+  PestName: string;
+  PestSeriesName: string;
+  PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string;
+  DynamicTimeSeries: IDynamicTimeSeries;
 begin
+  Expression := CellAssignmentData.Expression;
+  ACellList := CellAssignmentData.ACellList;
+  BoundaryStorage := CellAssignmentData.BoundaryStorage;
+  BoundaryFunctionIndex := CellAssignmentData.BoundaryFunctionIndex;
+  Variables := CellAssignmentData.Variables;
+  DataSets := CellAssignmentData.DataSets;
+  AModel := CellAssignmentData.AModel;
+  AScreenObject := CellAssignmentData.AScreenObject;
+  PestName := CellAssignmentData.PestName;
+  PestSeriesName := CellAssignmentData.PestSeriesName;
+  PestSeriesMethod := CellAssignmentData.PestSeriesMethod;
+  TimeSeriesName := CellAssignmentData.TimeSeriesName;
+  DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
+
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
 //  Assert(BoundaryFunctionIndex in
 //    [MawFlowingWellElevationPosition..MawFlowingWellReductionLengthPosition]);

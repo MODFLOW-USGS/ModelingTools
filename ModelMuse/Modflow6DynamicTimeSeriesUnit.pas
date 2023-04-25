@@ -39,7 +39,7 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
-  TDynamicTimeSeries = class(TPhastCollection, ITimeSeriesInterface,
+  TDynamicTimeSeries = class(TPhastCollection, ITimeSeries,
     IDynamicTimeSeries)
   private
     FDeleted: Boolean;
@@ -52,6 +52,7 @@ type
     FModel: IModelForDynamicTimeSeries;
     FOrientation: TDataSetOrientation;
     FScreenObject: IScreenObject;
+    FTimeSeriesLocationDictionary: TTimeSeriesLocationDictionary;
     function GetScaleFactor: double;
     function GetItems(Index: Integer): IDynamicTimeSeriesFormulaItem;
     procedure SetItems(Index: Integer; const Value: IDynamicTimeSeriesFormulaItem);
@@ -288,10 +289,12 @@ begin
   FStoredScaleFactor := TRealStorage.Create(NotifyEvent);
   FNotifierComponent := TComponent.Create(nil);
   FModel := ModelInterface;
+  FTimeSeriesLocationDictionary := TTimeSeriesLocationDictionary.Create;
 end;
 
 destructor TDynamicTimeSeries.Destroy;
 begin
+  FTimeSeriesLocationDictionary.Free;
   FNotifierComponent.Free;
   FStoredScaleFactor.Free;
   inherited;

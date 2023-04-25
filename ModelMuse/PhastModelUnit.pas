@@ -1131,7 +1131,7 @@ that affects the model output should also have a comment. }
   TCustomModel = class abstract (TBaseModel, IModelMuseModel,
     ICustomModelForDataArrayManager, ICustomModelInterfaceForCrosssection,
     IModelForTOrderedCollection,
-    IModelForDynamicTimeSeries, IModelTimesSeriesInterface,
+    IModelForDynamicTimeSeries, IModelForTimesSeriesInterface,
     IModelForTGwtPestMethodCollection, IModelForTLandUsePestMethodCollection,
     IModelForTPilotPointObsGrp, IModelForTCustomDefinedGlobalObject,
     IModelForTModflowParameter)
@@ -2131,6 +2131,7 @@ that affects the model output should also have a comment. }
     function GetModflowOptions: TModflowOptions;
     function GetDataArrayManager: TDataArrayManager;
     function GetClearing: Boolean;
+    function GetMf6TimesSeriesI: ITimesSeriesCollections;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
@@ -3034,6 +3035,7 @@ that affects the model output should also have a comment. }
     property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
       read GetShortestHorizontalBlockEdge;
     procedure ClearPestArrayFileNames;
+    property Mf6TimesSeriesI: ITimesSeriesCollections read GetMf6TimesSeriesI;
     property Mf6TimesSeries: TTimesSeriesCollections read GetMf6TimesSeries
       write SetMf6TimesSeries;
     property SeparateGwtUsed: Boolean read GetSeparateGwtUsed;
@@ -40465,6 +40467,11 @@ end;
 function TCustomModel.GetNrdInfilLocationUsed: TObjectUsedEvent;
 begin
   result := DoNrdInfilLocationUsed;
+end;
+
+function TCustomModel.GetMf6TimesSeriesI: ITimesSeriesCollections;
+begin
+  result := Mf6TimesSeries;
 end;
 
 procedure TCustomModel.GetMfHobHeadsUseList(Sender: TObject;

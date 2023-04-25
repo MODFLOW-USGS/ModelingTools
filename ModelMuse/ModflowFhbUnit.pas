@@ -18,7 +18,8 @@ uses
   Classes, ZLib, ModflowBoundaryUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   OrderedCollectionUnit,
-  RbwParser, GoPhastTypes, ModflowCellUnit, SysUtils, SubscriptionUnit;
+  RbwParser, GoPhastTypes, ModflowCellUnit, SysUtils, SubscriptionUnit,
+  Modflow6DynamicTimeSeriesInterfaceUnit;
 
 type
   TFhbRecord = record
@@ -101,11 +102,7 @@ type
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
-    procedure AssignCellList(Expression: TExpression; ACellList: TObject;
-      BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
+    procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -511,12 +508,7 @@ begin
   end;
 end;
 
-procedure TFhbHeadCollection.AssignCellList(Expression: TExpression;
-  ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
-  BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
-  TimeSeriesName: string);
+procedure TFhbHeadCollection.AssignCellList(CellAssignmentData: TCellAssignmentData);
 var
   FhbStorage: TFhbStorage;
   CellList: TCellAssignmentList;
@@ -524,7 +516,33 @@ var
   ACell: TCellAssignment;
   Compiler: TRbwParser;
   NewFormula: string;
+  Expression: TExpression;
+  ACellList: TObject;
+  BoundaryStorage: TCustomBoundaryStorage;
+  BoundaryFunctionIndex: integer;
+  Variables, DataSets: TList;
+  AModel: TBaseModel;
+  AScreenObject: TObject;
+  PestName: string;
+  PestSeriesName: string;
+  PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string;
+  DynamicTimeSeries: IDynamicTimeSeries;
 begin
+  Expression := CellAssignmentData.Expression;
+  ACellList := CellAssignmentData.ACellList;
+  BoundaryStorage := CellAssignmentData.BoundaryStorage;
+  BoundaryFunctionIndex := CellAssignmentData.BoundaryFunctionIndex;
+  Variables := CellAssignmentData.Variables;
+  DataSets := CellAssignmentData.DataSets;
+  AModel := CellAssignmentData.AModel;
+  AScreenObject := CellAssignmentData.AScreenObject;
+  PestName := CellAssignmentData.PestName;
+  PestSeriesName := CellAssignmentData.PestSeriesName;
+  PestSeriesMethod := CellAssignmentData.PestSeriesMethod;
+  TimeSeriesName := CellAssignmentData.TimeSeriesName;
+  DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
+
   Assert(BoundaryFunctionIndex in [FhbBoundaryValuePosition]);
   Assert(Expression <> nil);
 

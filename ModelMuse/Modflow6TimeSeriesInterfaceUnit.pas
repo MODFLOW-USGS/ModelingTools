@@ -6,7 +6,7 @@ uses
   GoPhastTypes;
 
 type
-  ITimeSeriesInterface = interface(IInterface)
+  ITimeSeries = interface(IInterface)
     ['{41D81EBC-D817-4787-9A45-43A31E7D4025}']
     function GetScaleFactor: double;
     function GetSeriesName: AnsiString;

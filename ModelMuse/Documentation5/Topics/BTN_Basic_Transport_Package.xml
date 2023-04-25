@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-08-04T08:28:34.333-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-04-25T10:41:02.159-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">BTN: Basic Transport Package Pane</title>
   <body>
     <header>
@@ -13,6 +13,7 @@
     <para styleclass="Normal"><text styleclass="Strong" translate="true">THKMIN</text><text styleclass="Normal" translate="true"> is the minimum saturated thickness in a cell, expressed as the decimal fraction of the model layer thickness (DZ) below which the cell is considered inactive. The default value is 0.01 (i.e., 1 percent of the model layer thickness).</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The names of the Mobile and Immobile chemical species are defined on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Chem-Species-(MT3D-and-GWT)" styleclass="Strong" translate="true">Chem Species (MT3D and GWT)</link><text styleclass="Normal" translate="true"> pane.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The user also defines the names of the Mobile and Immobile chemical species. The names of the chemical species are not part of the MT3DMS or MT3D-USGS input but they are used to identify </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets" styleclass="Normal" translate="true">data sets</link><text styleclass="Normal" translate="true"> and output files related to individual chemical species.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LKT_Lake_Transport_Package_Pan" styleclass="Normal" translate="true">Lake</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFT_Stream_Flow_Transport_Pack" styleclass="Normal" translate="true">Stream-Flow</link><text styleclass="Normal" translate="true">, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZT_Unsaturated_Zone_Transport" styleclass="Normal" translate="true">Unsaturated-Zone</link><text styleclass="Normal" translate="true"> Transport packages in MT3D-USGS can only be used if the flow model is a MODFLOW-NWT model.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

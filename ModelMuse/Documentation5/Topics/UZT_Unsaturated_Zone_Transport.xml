@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-04-25T10:41:27.352-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZT: Unsaturated-Zone Transport Package (MT3D-USGS) Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZT: Unsaturated-Zone Transport Package (MT3D-USGS) Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The UZT: Unsaturated-Zone Transport package (MT3D-USGS) pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS or MT3D-USGS</link><text styleclass="Normal" translate="true">. It is used to specify some of the data for the UZT package in MT3D-USGS. The UZT package is not included with MT3DMS. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The UZT: Unsaturated-Zone Transport package (MT3D-USGS) pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS or MT3D-USGS</link><text styleclass="Normal" translate="true">. It is used to specify some of the data for the UZT package in MT3D-USGS. The UZT package is not included with MT3DMS. The Unsaturated-Zone Flow Transport Package in MT3D-USGS can only be used if the groundwater flow model is a MODFLOW-NWT model.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The comments can be used to record any information. The comments will be included at the beginning of the UZT package input file.</text></para>
   </body>
 </topic>
