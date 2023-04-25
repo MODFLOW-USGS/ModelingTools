@@ -2,10 +2,11 @@ unit ModflowSfrParamIcalcUnit;
 
 interface
 
-uses Classes, Math, GoPhastTypes, OrderedCollectionUnit, ModflowBoundaryUnit;
+uses Classes, Math, GoPhastTypes, OrderedCollectionUnit, ModflowBoundaryUnit,
+  ModflowSfrParamIcalcInterfaceUnit;
 
 type
-  TSfrParamIcalcItem = class(TCustomModflowBoundaryItem)
+  TSfrParamIcalcItem = class(TCustomModflowBoundaryItem, ISfrParamIcalcItem)
   private
     FICalc: integer;
     FParam: string;

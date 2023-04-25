@@ -3,7 +3,8 @@ unit ModflowTransientListParameterUnit;
 interface
 
 uses SysUtils, Classes, OrderedCollectionUnit,
-  GoPhastTypes, ModflowTimeSeriesUnit, OrderedCollectionInterfaceUnit;
+  GoPhastTypes, ModflowTimeSeriesUnit, OrderedCollectionInterfaceUnit,
+  ModflowTransientListParameterInterfaceUnit;
 
 type
   TModflowTransientListParameters = class;
@@ -49,7 +50,8 @@ type
       read GetItems write SetItems; default;
   end;
 
-  TModflowTransientListParameter = class(TModflowParameter)
+  TModflowTransientListParameter = class(TModflowParameter,
+    IModflowTransientListParameter)
   private
     FChildModelValues: TChildModelValues;
     FCellCount: Integer;

@@ -9,7 +9,7 @@ uses System.UITypes,
   JvExStdCtrls, JvCombobox, JvListComb, UndoItems, RbwController, RbwEdit,
   RequiredDataSetsUndoUnit, JvCheckBox, JvSpin,
   frameSubBedsUnit, ModflowSubsidenceDefUnit, frameDiscretizationUnit,
-  System.ImageList, GrayTabs, Character;
+  System.ImageList, GrayTabs, Character, DataArrayInterfaceUnit;
 
 type
   TDispersionCols = (drLayerNumber, drHorzTransDisp, drVerTransDisp, drDiffCoef);
@@ -146,7 +146,7 @@ type
   private
     FNewLayerStructure: TLayerStructure;
     FOldLayerStructure: TLayerStructure;
-    FNewDataSets: TList;
+    FNewDataSets: TIDataArrayList;
     FChildDiscretizations: TList;
   protected
     function Description: string; override;
@@ -1947,7 +1947,7 @@ begin
       FChildDiscretizations.Add(NewDis);
     end;
   end;
-  FNewDataSets := TList.Create;
+  FNewDataSets := TIDataArrayList.Create;
 
   FNewLayerStructure:= NewLayerStructure;
   // TUndoDefineLayers takes ownership of NewLayerStructure.

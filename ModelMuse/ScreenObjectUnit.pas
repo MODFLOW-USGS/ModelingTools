@@ -63,7 +63,8 @@ uses
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
   OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit,
-  FormulaManagerInterfaceUnit;
+  FormulaManagerInterfaceUnit, ModflowBoundaryInterfaceUnit,
+  GlobalVariablesInterfaceUnit;
 
 type
   //
@@ -2069,9 +2070,6 @@ view. }
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
     FSutraScheduleName: string;
-//    FVerticesArePilotPoints: Boolean;
-//    FSubObservations: TSubObservations;
-//    FModflow6Obs: TModflow6Obs;
     procedure CreateLastSubPolygon;
     procedure DestroyLastSubPolygon;
     function GetSubPolygonCount: integer;
@@ -3311,6 +3309,21 @@ view. }
     procedure UpdateTalksToActive;
     procedure UpdateTalksToWithdrawals;
     procedure UpdateTalksToLakeMf6;
+    // functions for IScreenObject
+    function RchParameters: IModflowParameters;
+    function EvtParameters: IModflowParameters;
+    function EtsParameters: IModflowParameters;
+    function ChdParameters: IModflowParameters;
+    function GhbParameters: IModflowParameters;
+    function WelParameters: IModflowParameters;
+    function RivParameters: IModflowParameters;
+    function DrnParameters: IModflowParameters;
+    function DrtParameters: IModflowParameters;
+    procedure DeleteSfrParameter(const ParameterName: string);
+    procedure DeleteHfbParameter(const ParameterName: string);
+    function StrParameters: IModflowParameters;
+    function FmpWellParameters: IModflowParameters;
+    procedure HandleChangedHfbParameter(const ParameterName: string);
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -4082,6 +4095,7 @@ view. }
       var Distance: real; out ClosestLocation: TPoint2D; var SectionIndex: integer;
       const Anisotropy: real): boolean;
     function GetMfBoundary(ParamType: TParameterType): TModflowParamBoundary;
+    function GetMfBoundaryI(ParamType: TParameterType): IModflowParamBoundary;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name returns a MODFLOW cell where @classname is located.
     // The cell numbers in the @link(TCellLocation) will be 1 based.
@@ -8002,6 +8016,15 @@ begin
   NotifyGuiOfChange(Sender);
 end;
 
+function TScreenObject.ChdParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowChdBoundary <> nil then
+  begin
+    result := ModflowChdBoundary.Parameters;
+  end;
+end;
+
 constructor TScreenObject.CreateWithViewDirection(const Model: TBaseModel;
   const AViewDirection: TViewDirection;
   out UndoCreateScreenObject: TCustomUndo;
@@ -8221,6 +8244,14 @@ begin
     DestroyLastSubPolygon;
   end;
   Invalidate;
+end;
+
+procedure TScreenObject.DeleteSfrParameter(const ParameterName: string);
+begin
+  if ModflowSfrBoundary <> nil then
+  begin
+    ModflowSfrBoundary.DeleteSfrParameter(ParameterName);
+  end;
 end;
 
 procedure TScreenObject.Draw3D;
@@ -8842,6 +8873,15 @@ begin
   Capacity := FCapacity + Amount;
 end;
 
+procedure TScreenObject.HandleChangedHfbParameter(const ParameterName: string);
+begin
+  if (ModflowHfbBoundary <> nil)
+    and (ModflowHfbBoundary.ParameterName = ParameterName) then
+  begin
+    ModflowHfbBoundary.HandleChangedParameterValue;
+  end;
+end;
+
 function TScreenObject.HigherCoordinateCaption: string;
 begin
   case ViewDirection of
@@ -9323,6 +9363,24 @@ begin
   end;
 end;
 
+function TScreenObject.DrnParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowDrnBoundary <> nil then
+  begin
+    result := ModflowDrnBoundary.Parameters
+  end;
+end;
+
+function TScreenObject.DrtParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowDrtBoundary <> nil then
+  begin
+    result := ModflowDrtBoundary.Parameters
+  end;
+end;
+
 procedure TScreenObject.DrawVertexLabels(const ACanvas: TCanvas);
 var
   StartPoint: TPoint;
@@ -9510,6 +9568,15 @@ end;
 procedure TScreenObject.InvalidateCoordinates;
 begin
   FRecalculateCoordinates := True;
+end;
+
+function TScreenObject.FmpWellParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowFmpWellBoundary <> nil then
+  begin
+    result := ModflowFmpWellBoundary.Parameters;
+  end;
 end;
 
 function TScreenObject.FrameScreenObject(VD: TViewDirection): TScreenObject;
@@ -10549,6 +10616,15 @@ procedure TScreenObject.EvaluateSubPolygon(const ASubPolygon: TSubPolygon;
   const X, Y: real; var IsInside: boolean);
 begin
   ASubPolygon.EvaluateSubPolygon(X, Y, IsInside);
+end;
+
+function TScreenObject.EvtParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowRchBoundary <> nil then
+  begin
+    result := ModflowRchBoundary.Parameters;
+  end;
 end;
 
 procedure TScreenObject.SetGeometryUpToDate;
@@ -13818,6 +13894,15 @@ begin
     ImportedValues.Items[Index].Values.Reverse;
   end;
   Invalidate;
+end;
+
+function TScreenObject.RivParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowRivBoundary <> nil then
+  begin
+    result := ModflowRivBoundary.Parameters
+  end;
 end;
 
 procedure TScreenObject.UpdateElevationSubscriptions(var NewFormula: string; OldFormula: string);
@@ -18756,6 +18841,15 @@ begin
   end;
 end;
 
+function TScreenObject.EtsParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowEtsBoundary <> nil then
+  begin
+    result := ModflowEtsBoundary.Parameters;
+  end;
+end;
+
 procedure TScreenObject.SortPoints(const Input: TEdgePointArray;
   out SortedPoints: TEdgePointArray; const APoint, PreviousPoint: TEdgePoint;
   const MaxLength: integer; Const EpsilonX: real = 0;
@@ -19418,7 +19512,7 @@ var
   VarPosition: Integer;
   Variable: TCustomValue;
   AnotherDataSet: TDataArray;
-  GlobalVariable: TGlobalVariable;
+  GlobalVariable: IGlobalVariable;
   LocalModel: TCustomModel;
 begin
   LocalModel := Model as TCustomModel;
@@ -20476,6 +20570,12 @@ begin
   end;
 end;
 
+function TScreenObject.GetMfBoundaryI(
+  ParamType: TParameterType): IModflowParamBoundary;
+begin
+  result := GetMfBoundary(ParamType);
+end;
+
 function TScreenObject.GetMinimumFraction: double;
 begin
   result := StoredMinimumFraction.Value;
@@ -20952,6 +21052,15 @@ begin
     and not (FModel as TPhastModel).Clearing then
   begin
     (FModel as TPhastModel).ScreenObjectsChanged(Sender);
+  end;
+end;
+
+function TScreenObject.RchParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowRchBoundary <> nil then
+  begin
+    result := ModflowRchBoundary.Parameters;
   end;
 end;
 
@@ -23243,6 +23352,15 @@ begin
   result :=  GoPhastTypes.ValidName(OriginalName);
 end;
 
+function TScreenObject.WelParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowWellBoundary <> nil then
+  begin
+    result := ModflowWellBoundary.Parameters
+  end;
+end;
+
 procedure TScreenObject.SetUpToDate(const Value: boolean);
 var
   Index: integer;
@@ -23343,6 +23461,15 @@ begin
   if result and (FModel <> nil) then
   begin
     result := Closed;
+  end;
+end;
+
+function TScreenObject.GhbParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowGhbBoundary <> nil then
+  begin
+    result := ModflowGhbBoundary.Parameters
   end;
 end;
 
@@ -33503,6 +33630,15 @@ begin
     or (WellBoundary.Solution.Count > 0));
 end;
 
+function TScreenObject.StrParameters: IModflowParameters;
+begin
+  result := nil;
+  if ModflowStrBoundary <> nil then
+  begin
+    result := ModflowStrBoundary.Parameters;
+  end;
+end;
+
 function TScreenObject.ThreeDBoundaryFormula: string;
 begin
   if PhastBoundaryType in  [btNone, btSpecifiedHead, btFlux, btLeaky] then
@@ -39852,6 +39988,17 @@ begin
   end;
 end;
 
+procedure TScreenObject.DeleteHfbParameter(const ParameterName: string);
+begin
+  if ModflowHfbBoundary <> nil then
+  begin
+    if ModflowHfbBoundary.ParameterName = ParameterName then
+    begin
+      ModflowHfbBoundary.ParameterName := ''
+    end;
+  end;
+end;
+
 procedure TScreenObject.AssignTopDataSetValues(
   Expression: TExpression; const DataSetFunction: string; Compiler: TRbwParser;
   UsedVariables: TStringList; OtherData: TObject; const DataSet: TDataArray;
@@ -40230,7 +40377,7 @@ end;
 
 function TCustomPhastBoundaryCondition.GetScreenObject: TScreenObject;
 begin
-  result := (Collection as TCustomPhastBoundaryCollection).FScreenObject;
+  result := (Collection as TCustomPhastBoundaryCollection).FScreenObject as TScreenObject;
 end;
 
 function TCustomPhastBoundaryCondition.GetDataSet:

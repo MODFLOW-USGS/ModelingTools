@@ -30,7 +30,8 @@ uses System.UITypes,
   FootprintGridUnit, frmRunFootprintUnit,
   System.ImageList,
   System.Actions, ModflowIrregularMeshUnit, JvComponentBase,
-  JvBalloonHint, frmRunPestUnit, frmRunParRepUnit, System.Generics.Collections;
+  JvBalloonHint, frmRunPestUnit, frmRunParRepUnit, System.Generics.Collections,
+  GlobalVariablesInterfaceUnit;
 
   { TODO : 
 Consider making CurrentTool a property of TframeView instead of 
@@ -6865,7 +6866,7 @@ var
   GloVar: TGlobalList;
   index: Integer;
   Item: TGlobalItem;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   AFloat: double;
   AnInt: Integer;
   AValue: string;
@@ -12147,7 +12148,7 @@ begin
 
             PhastModel.PhastGrid.Initialize;
             PhastModel.ModflowGrid.Initialize;
-            try
+//            try
               if FileFormat = ffBinary then
               begin
                 FFileStream.ReadComponent(PhastModel);
@@ -12174,16 +12175,17 @@ begin
                 TempStream.ReadComponent(PhastModel);
                 result := True;
               end;
-            except
-              on E: EReadError do
-              begin
-                Beep;
-                result := False;
-                MessageDlg(Format(StrReadingTheFileFai, [E.Message]),
-                  mtError, [mbOK], 0);
-                Exit;
-              end;
-            end;
+//            except
+//              on E: EReadError do
+//              begin
+//                Beep;
+//                result := False;
+//                MessageDlg(Format(StrReadingTheFileFai, [E.Message]),
+//                  mtError, [mbOK], 0);
+//                raise;
+//                Exit;
+//              end;
+//            end;
           finally
             TempStream.Free;
             DecompressionStream.Free;

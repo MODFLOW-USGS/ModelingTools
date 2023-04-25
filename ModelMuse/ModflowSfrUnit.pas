@@ -421,6 +421,7 @@ type
     procedure ReplaceGUID;
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
+    procedure DeleteSfrParameter(const ParameterName: string);
   published
     // @name was mispelled. It is now @link(SegmentNumber).
     property SegementNumber: integer read FSegmentNumber
@@ -896,6 +897,21 @@ begin
         result := inherited;
         Assert(False);
       end;
+  end;
+end;
+
+procedure TSfrBoundary.DeleteSfrParameter(const ParameterName: string);
+var
+  ParamIndex: Integer;
+  ParamIntem: TSfrParamIcalcItem;
+begin
+  for ParamIndex := ParamIcalc.Count-1 downto 0 do
+  begin
+    ParamIntem := ParamIcalc.Items[ParamIndex];
+    if ParamIntem.Param = ParameterName then
+    begin
+      ParamIcalc.Delete(ParamIndex);
+    end;
   end;
 end;
 

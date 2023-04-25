@@ -731,7 +731,7 @@ begin
 //  ErrorMessage := 'Object = ' + ScreenObjectName
 //    + '; Time = ' + FloatToStr(StartTime);
   frmErrorsAndWarnings.AddError(AModel, StrIncompleteSFRData, ErrorMessage,
-    ScreenObject);
+    ScreenObject as TScreenObject);
 
 end;
 

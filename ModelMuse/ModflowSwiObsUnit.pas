@@ -303,7 +303,7 @@ begin
   result := nil;
   if Collection <> nil then
   begin
-    result := (Collection as TSwiObsCollection).ScreenObject;
+    result := (Collection as TSwiObsCollection).ScreenObject as TObject;
   end;
 end;
 
@@ -416,7 +416,7 @@ end;
 constructor TSwiObsCollection.Create(Boundary: TSwiObsBoundary;
   Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
-  inherited Create(TSwiObsItem, Model, ScreenObject);
+  inherited Create(TSwiObsItem, Model, ScreenObject as TScreenObject);
   FBoundary := Boundary;
 //  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
 //  FScreenObject := ScreenObject;
@@ -442,7 +442,7 @@ var
   CellList: TSwiObsCellList;
   Cell : TSwi_Cell;
 begin
-  SwiObservations[AModel].Initialize(self, ScreenObject, True, AModel);
+  SwiObservations[AModel].Initialize(self, ScreenObject as TObject, True, AModel);
 
   if FSwiObservations.FCellList.Count > 0 then
   begin
@@ -985,7 +985,7 @@ end;
 
 function TSwiPestObsItem.GetScreenObject: TObject;
 begin
-  result := FSwiObsItem.ScreenObject;
+  result := FSwiObsItem.ScreenObject as TObject;
 end;
 
 function TSwiPestObsItem.GetWeight: Double;

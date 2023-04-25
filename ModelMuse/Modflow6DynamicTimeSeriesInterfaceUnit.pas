@@ -4,9 +4,9 @@ interface
 
 uses
   System.Classes, GoPhastTypes, SubscriptionUnit,
-  FormulaManagerUnit, RbwParser, FormulaManagerInterfaceUnit,
   OrderedCollectionInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
-  System.Generics.Defaults, System.Hash, System.Generics.Collections;
+  System.Generics.Defaults, System.Hash, System.Generics.Collections, RbwParser,
+  FormulaManagerInterfaceUnit;
 
 type
   IModelForDynamicTimeSeries = interface(IModelMuseModel)
@@ -16,9 +16,6 @@ type
     property FormulaCompiler[const Orientation: TDataSetOrientation;
       const EvaluatedAt: TEvaluatedAt]:TRbwParser read GetCompiler;
     function AddFormulaObject: IFormulaObject;
-    procedure RemoveFormulaObject(FormulaObject: TFormulaObject;
-      OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
-      Subject: TObject); overload;
     procedure RemoveFormulaObject(FormulaObject: IFormulaObject;
       OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
       Subject: TObject); overload;

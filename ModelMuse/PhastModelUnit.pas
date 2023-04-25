@@ -52,7 +52,8 @@ uses System.UITypes,
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit,
   PhastModelInterfaceUnit, OrderedCollectionInterfaceUnit,
   LockedGlobalVariableChangersInterfaceUnit, ScreenObjectInterfaceUnit,
-  ColorSchemesInterface, DataArrayInterfaceUnit, SubscriptionInterfaceUnit;
+  ColorSchemesInterface, DataArrayInterfaceUnit, SubscriptionInterfaceUnit,
+  GlobalVariablesInterfaceUnit;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
@@ -1194,6 +1195,7 @@ that affects the model output should also have a comment. }
     FPestParamDictionay: TDictionary<string, TModflowSteadyParameter>;
     //  @name is implemented as a @link(TMf6GwtNameWriters).
     FMf6GwtNameWriters: TObject;
+    function GetGlobalVariables: TGlobalVariables; virtual; abstract;
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
     procedure SetSomeSegmentsUpToDate(const Value: boolean); virtual; abstract;
     // See @link(PhastGrid).
@@ -1416,7 +1418,7 @@ that affects the model output should also have a comment. }
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetMobileComponentCount: Integer;
     function CropCount: integer;
-    function GetObsGroupFromName(const Value: string): TObject;
+    function GetObsGroupFromName(const Value: string): IObservationGroup;
     function GetScreenObjectInterface(const Index: integer): IScreenObject;
     property ScreenObjectInterfaces[const Index: integer]: IScreenObject
       read GetScreenObjectInterface;
@@ -1426,6 +1428,12 @@ that affects the model output should also have a comment. }
     procedure NotifyHufSS;
     procedure NotifyHufSy;
     procedure RemoveVariables(const DataSet: IDataArray); overload;
+    procedure ChangeGlobalVariable(const ParameterName: string;
+      const Value: TParameterType);
+    procedure SetGlobalVariablesI(const Value: IGlobalVariables); virtual; abstract;
+    function GetGlobalVariablesI: IGlobalVariables; virtual; abstract;
+    property GlobalVariablesI: IGlobalVariables read GetGlobalVariablesI
+      write SetGlobalVariablesI;
 
   private
     FGrid: TCustomModelGrid;
@@ -1679,7 +1687,6 @@ that affects the model output should also have a comment. }
     function DoSutraMiddleHydraulicConductivityUsed(Sender: TObject): boolean;
     function GetSutraMiddleHydraulicConductivityUsed: TObjectUsedEvent;
     property SutraMiddleHydraulicConductivityUsed: TObjectUsedEvent read GetSutraMiddleHydraulicConductivityUsed;
-    function GetGlobalVariables: TGlobalVariables; virtual; abstract;
     procedure SetStrObservations(const Value: TFluxObservationGroups);
     function StoreStrObservations: Boolean;
     procedure SetMt3dmsStrMassFluxObservations(
@@ -2126,6 +2133,7 @@ that affects the model output should also have a comment. }
     function GetContourLabelSpacing: Integer; virtual; abstract;
     procedure SetContourLabelSpacing(const Value: Integer);virtual; abstract;
   private
+    FGlobalVariables: TGlobalVariables;
     function GetMt3dMS_StrictUsed: TObjectUsedEvent;
     function GetCrossSection: TCrossSection;
     function GetModflowOptions: TModflowOptions;
@@ -3723,6 +3731,8 @@ that affects the model output should also have a comment. }
     procedure InternalExportModflowModel(const FileName: string; ExportAllLgr: boolean); override;
     function GetGlobalVariables: TGlobalVariables; override;
     procedure SetGlobalVariables(const Value: TGlobalVariables); override;
+    function GetGlobalVariablesI: IGlobalVariables; override;
+    procedure SetGlobalVariablesI(const Value: IGlobalVariables); override;
     function GetSfrStreamLinkPlot: TSfrStreamLinkPlot; override;
     procedure SetSfrStreamLinkPlot(const Value: TSfrStreamLinkPlot); override;
     function GetStrStreamLinkPlot: TSfrStreamLinkPlot; override;
@@ -4735,9 +4745,11 @@ that affects the model output should also have a comment. }
 //    function GetUnitNumbers: TUnitNumbers; override;
 //    procedure SetUnitNumbers(const Value: TUnitNumbers); override;
   protected
-    function GetParentModel: TCustomModel; override;
     function GetGlobalVariables: TGlobalVariables; override;
     procedure SetGlobalVariables(const Value: TGlobalVariables); override;
+    function GetParentModel: TCustomModel; override;
+    function GetGlobalVariablesI: IGlobalVariables; override;
+    procedure SetGlobalVariablesI(const Value: IGlobalVariables); override;
     function StoreHydrogeologicUnits: Boolean; override;
     function GetScreenObjects(const Index: integer): TScreenObject; override;
     function GetScreenObjectCount: integer; override;
@@ -5192,7 +5204,8 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowDspWriterUnit, ModflowGwtAdvWriterUnit, ModflowGwtSsmWriterUnit,
   ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit,
   ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit,
-  ModflowTimeInterfaceUnit, Modflow6TimeSeriesUnit;
+  ModflowTimeInterfaceUnit, Modflow6TimeSeriesUnit,
+  LockedGlobalVariableChangers;
 
 
 
@@ -10002,7 +10015,7 @@ var
   Index: integer;
   DataSet: TDataArray;
   DataArrayManager: TDataArrayManager;
-  GlobalVariable: TGlobalVariable;
+  GlobalVariable: IGlobalVariable;
   Compiler: TRbwParser;
 begin
 
@@ -10049,9 +10062,9 @@ begin
     // Names now includes the names of all the data sets.
 
     // don't allow the name to be the same as a global variable.
-    for Index := 0 to frmGoPhast.PhastModel.GlobalVariables.Count -1 do
+    for Index := 0 to frmGoPhast.PhastModel.GlobalVariablesI.Count -1 do
     begin
-      GlobalVariable := frmGoPhast.PhastModel.GlobalVariables[Index];
+      GlobalVariable := frmGoPhast.PhastModel.GlobalVariablesI[Index];
       Names.Add(GlobalVariable.Name);
     end;
 
@@ -11345,7 +11358,7 @@ destructor TPhastModel.Destroy;
 var
   Index: Integer;
 //  DataArray: TDataArray;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   ScreenObject: TScreenObject;
 begin
   SetGlobals(nil);
@@ -11397,7 +11410,7 @@ begin
     FLinkedRasters.Free;
 
     frmFileProgress.pbProgress.Position := 0;
-    frmFileProgress.pbProgress.Max := FDataArrayManager.DataSetCount + GlobalVariables.Count
+    frmFileProgress.pbProgress.Max := FDataArrayManager.DataSetCount + GlobalVariablesI.Count
       + ScreenObjectCount;
     frmFileProgress.Show;
 
@@ -11410,9 +11423,9 @@ begin
     FTop2DBoundaryType.StopTalkingToAnyone;
 
 
-    for Index := 0 to GlobalVariables.Count - 1 do
+    for Index := 0 to GlobalVariablesI.Count - 1 do
     begin
-      Variable := GlobalVariables[Index];
+      Variable := GlobalVariablesI[Index];
       Variable.StopTalkingToAnyone;
       frmFileProgress.pbProgress.StepIt;
       // calling Application.ProcessMessages during
@@ -12210,7 +12223,7 @@ begin
   ModflowPackages.Reset;
   ModflowSteadyParameters.Clear;
   ModflowTransientParameters.Clear;
-  GlobalVariables.Clear;
+  GlobalVariablesI.Clear;
   ModflowOutputControl.Initialize;
   Mt3dmsOutputControl.Initialize;
   FootprintProperties.Initialize;
@@ -13602,6 +13615,11 @@ begin
 end;
 
 function TPhastModel.GetGlobalVariables: TGlobalVariables;
+begin
+  result := FGlobalVariables;
+end;
+
+function TPhastModel.GetGlobalVariablesI: IGlobalVariables;
 begin
   Result := FGlobalVariables;
 end;
@@ -15394,13 +15412,13 @@ end;
 
 procedure TPhastModel.RegisterGlobalVariables(Parser: TRbwParser; IgnoreDuplicates: Boolean = False);
 var
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   VariableIndex: Integer;
   VarClassification: string;
 begin
-  for VariableIndex := 0 to GlobalVariables.Count - 1 do
+  for VariableIndex := 0 to GlobalVariablesI.Count - 1 do
   begin
-    Variable := GlobalVariables[VariableIndex];
+    Variable := GlobalVariablesI[VariableIndex];
     if IgnoreDuplicates and (Parser.IndexOfVariable(Variable.Name) >= 0) then
     begin
       Continue;
@@ -21322,7 +21340,7 @@ var
   SwrReachDataArray: TDataArray;
   GlobalVariableIndex: Integer;
   ChildIndex: Integer;
-  AGlobalVariable: TGlobalVariable;
+  AGlobalVariable: IGlobalVariable;
   CompilerIndex: Integer;
   ACompiler: TRbwParser;
   VarIndex: Integer;
@@ -21628,9 +21646,9 @@ begin
             ChildModels[ChildIndex].ChildModel.FillCompilerList(CompilerList);
           end;
         end;
-        for GlobalVariableIndex := 0 to GlobalVariables.Count - 1 do
+        for GlobalVariableIndex := 0 to GlobalVariablesI.Count - 1 do
         begin
-          AGlobalVariable := GlobalVariables[GlobalVariableIndex];
+          AGlobalVariable := GlobalVariablesI[GlobalVariableIndex];
           for CompilerIndex := 0 to CompilerList.Count - 1 do
           begin
             ACompiler := CompilerList[CompilerIndex];
@@ -24733,7 +24751,7 @@ end;
 procedure TPhastModel.DisconnectObservers;
 var
   Index: Integer;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   ScreenObject: TScreenObject;
   DataArray: TDataArray;
 begin
@@ -24742,9 +24760,9 @@ begin
   AllObserversStopTalking;
   FLayerStructure.StopTalkingToAnyone;
   //  FSutraLayerStructure.StopTalkingToAnyone;
-  for Index := 0 to GlobalVariables.Count - 1 do
+  for Index := 0 to GlobalVariablesI.Count - 1 do
   begin
-    Variable := GlobalVariables[Index];
+    Variable := GlobalVariablesI[Index];
     Variable.StopTalkingToAnyone;
   end;
   for Index := 0 to ScreenObjectCount - 1 do
@@ -36865,18 +36883,23 @@ begin
 end;
 
 procedure TPhastModel.SetGlobalVariables(const Value: TGlobalVariables);
+begin
+  SetGlobalVariablesI(Value);
+end;
+
+procedure TPhastModel.SetGlobalVariablesI(const Value: IGlobalVariables);
 var
   OldVariables: TStringList;
   NewVariables: TStringList;
   CompilerList: TList;
-  Variable: TGlobalVariable;
-  OldVariable: TGlobalVariable;
-  NewVariable: TGlobalVariable;
+  Variable: IGlobalVariable;
+  OldVariable: IGlobalVariable;
+  NewVariable: IGlobalVariable;
   Index: integer;
   NewIndex: integer;
   ChildIndex: integer;
   ChildModel: TChildModel;
-  procedure RemoveVariable(Variable: TGlobalVariable);
+  procedure RemoveVariable(Variable: IGlobalVariable);
   var
     Index: Integer;
     Compiler: TRbwParser;
@@ -36896,7 +36919,7 @@ var
     end;
     Variable.UpToDate := False;
   end;
-  procedure UpdateGlobalVariable(Variable: TGlobalVariable);
+  procedure UpdateGlobalVariable(Variable: IGlobalVariable);
   var
     CompilerIndex: Integer;
     Compiler: TRbwParser;
@@ -37013,12 +37036,12 @@ begin
       for Index := 0 to FGlobalVariables.Count - 1 do
       begin
         Variable := FGlobalVariables[Index];
-        OldVariables.AddObject(UpperCase(Variable.Name), Variable);
+        OldVariables.AddObject(UpperCase(Variable.Name), Variable as TObject);
       end;
       for Index := 0 to Value.Count - 1 do
       begin
         Variable := Value[Index];
-        NewVariables.AddObject(UpperCase(Variable.Name), Variable);
+        NewVariables.AddObject(UpperCase(Variable.Name), Variable as TObject);
       end;
       OldVariables.Sort;
       NewVariables.Sort;
@@ -37056,13 +37079,13 @@ begin
     NewVariables.Free;
   end;
 
-  FGlobalVariables.Assign(Value);
+  FGlobalVariables.Assign(Value as TGlobalVariables);
 end;
 
 procedure TPhastModel.RefreshGlobalVariables(CompilerList: TList);
 var
   Compiler: TRbwParser;
-  Variable: TGlobalVariable;
+  Variable: IGlobalVariable;
   CompilerIndex: Integer;
   VariableIndex: Integer;
   VariablePosition: integer;
@@ -37098,23 +37121,23 @@ begin
     DataSetNames.CaseSensitive := False;
     DataSetNames.Sorted := True;
 
-    for VariableIndex := GlobalVariables.Count - 1 downto 0 do
+    for VariableIndex := GlobalVariablesI.Count - 1 downto 0 do
     begin
-      Variable := GlobalVariables[VariableIndex];
+      Variable := GlobalVariablesI[VariableIndex];
       if DataSetNames.IndexOf(Variable.Name) >= 0 then
       begin
         frmErrorsAndWarnings.AddWarning(self, StrIllegalGlobalVaria,
           Format(StrAGlobalVariableNa, [Variable.Name]));
-        GlobalVariables.Delete(VariableIndex);
+        GlobalVariablesI.Delete(VariableIndex);
       end;
     end;
 
     for CompilerIndex := 0 to CompilerList.Count - 1 do
     begin
       Compiler := CompilerList[CompilerIndex];
-      for VariableIndex := 0 to GlobalVariables.Count - 1 do
+      for VariableIndex := 0 to GlobalVariablesI.Count - 1 do
       begin
-        Variable := GlobalVariables[VariableIndex];
+        Variable := GlobalVariablesI[VariableIndex];
         VariablePosition := Compiler.IndexOfVariable(Variable.Name);
         if VariablePosition < 0 then
         begin
@@ -37586,7 +37609,7 @@ begin
     ModelInputFiles := SourceModel.ModelInputFiles;
     ModelFileName := SourceModel.ModelFileName;
     ModflowWettingOptions := SourceModel.ModflowWettingOptions;
-    GlobalVariables := SourceModel.GlobalVariables;
+    GlobalVariablesI := SourceModel.GlobalVariablesI;
     ModflowOptions := SourceModel.ModflowOptions;
     HeadObsResults := SourceModel.HeadObsResults;
     Mt3dmsHeadMassFluxObservations := SourceModel.Mt3dmsHeadMassFluxObservations;
@@ -40585,11 +40608,11 @@ begin
   result := FDataArrayManager.GetDataSetByName(ObserverName);
   if result = nil then
   begin
-    result := GlobalVariables.GetVariableByName(ObserverName);
+    result := GlobalVariablesI.GetVariableByName(ObserverName) as TObserver;
   end;
 end;
 
-function TCustomModel.GetObsGroupFromName(const Value: string): TObject;
+function TCustomModel.GetObsGroupFromName(const Value: string): IObservationGroup;
 var
   ObservationGroups: TPestObservationGroups;
 begin
@@ -41313,6 +41336,21 @@ begin
   FormulaObject := LocalFormulaObject;
 
 //  FormulaObject := LocalFObject;
+end;
+
+procedure TCustomModel.ChangeGlobalVariable(const ParameterName: string;
+  const Value: TParameterType);
+var
+  ChangeGlobal: TDefineGlobalStringObject;
+begin
+  ChangeGlobal := TDefineGlobalStringObject.Create(
+    self, ParameterName, ParameterName, StrParameterType);
+  try
+    ChangeGlobal.Locked := (Value = ptPEST);
+    ChangeGlobal.SetValue(ParameterName);
+  finally
+    ChangeGlobal.Free;
+  end;
 end;
 
 function TCustomModel.Chani: TOneDIntegerArray;
@@ -46367,6 +46405,18 @@ begin
   end;
 end;
 
+function TChildModel.GetGlobalVariablesI: IGlobalVariables;
+begin
+  if ParentModel = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ParentModel.GetGlobalVariablesI;
+  end;
+end;
+
 function TChildModel.GetHufParameters: THufModflowParameters;
 begin
   result := ParentModel.GetHufParameters;
@@ -46911,6 +46961,11 @@ begin
 end;
 
 procedure TChildModel.SetGlobalVariables(const Value: TGlobalVariables);
+begin
+  // do nothing
+end;
+
+procedure TChildModel.SetGlobalVariablesI(const Value: IGlobalVariables);
 begin
   // do nothing
 end;

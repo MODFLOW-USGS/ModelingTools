@@ -4,7 +4,8 @@ interface
 
 uses
   OrderedCollectionUnit, System.Classes, GoPhastTypes, System.SysUtils,
-  DataSetUnit, RbwParser, OrderedCollectionInterfaceUnit;
+  DataSetUnit, RbwParser, OrderedCollectionInterfaceUnit,
+  GlobalVariablesInterfaceUnit;
 
 type
   TCSubInterbedType = (itNoDelay, itDelay);
@@ -309,7 +310,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
   InterbedDisplayName: string;
-  GlobalVariables: TGlobalVariables;
+  GlobalVariables: IGlobalVariables;
   Basename: string;
   Index: Integer;
   NewFormula: String;

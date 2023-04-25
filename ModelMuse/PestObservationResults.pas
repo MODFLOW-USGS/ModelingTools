@@ -480,7 +480,7 @@ begin
   end
   else
   begin
-    result := FScreenObject;
+    result := FScreenObject as TScreenObject;
   end;
 end;
 

@@ -5,7 +5,7 @@ unit SubscriptionUnit;
 interface
 
 uses System.Types, Classes, SysUtils, ObserverIntfU, ObserverListU, ObserverU,
-  Generics.Collections, SubscriptionInterfaceUnit;
+  Generics.Collections, SubscriptionInterfaceUnit, PhastModelInterfaceUnit;
 
 const
   // @name is used in TObserver.@link(TObserver.IsRecursive) to
@@ -58,6 +58,7 @@ type
     // See @link(Subject).
     function GetSubject: ISubject;
     function GetObserverList: IObjectObserverList;
+    function GetUpToDate: boolean;
     // @name is an interface implemented as a TObjectObserver
     // which is used in handling subscriptions.  See @link(TalksTo).
     // TObjectObserver is defined in ObserverU.
@@ -118,7 +119,7 @@ type
     // @name indicates whether the current @classname is up-to-date.
     // Changing @name from @true to @false will call all the things that
     // observe the current @classname to also have their @name set to false.
-    property UpToDate: boolean read FUpToDate write SetUpToDate;
+    property UpToDate: boolean read GetUpToDate write SetUpToDate;
     function IsListeningTo(const AnotherObserver: TObserver): boolean;
     property OnNameChange: TNotifyEvent read FOnNameChange write FOnNameChange;
   published
@@ -138,8 +139,7 @@ type
 implementation
 
   {$IFDEF DEBUG}
-uses
-  frmGoPhastUnit;
+
   {$ENDIF}
 
 constructor TObserver.Create(AnOwner: TComponent);
@@ -249,6 +249,11 @@ begin
   Result := FObserverlist as ISubject;
 end;
 
+function TObserver.GetUpToDate: boolean;
+begin
+  result := FUpToDate;
+end;
+
 procedure TObserver.ObserverNotification(Kind: TNotificationKInd;
   Obj: TObject; ChangeKind: TChangeKind);
 begin
@@ -294,9 +299,9 @@ end;
 procedure TObserver.TalksTo(const Observer: TObserver);
 begin
   {$IFDEF DEBUG}
-  if frmGoPhast.PhastModel <> nil then
+  if IGlobalModelForOrderedCollection <> nil then
   begin
-    Assert(Not frmGoPhast.PhastModel.Clearing);
+    Assert(Not IGlobalModelForOrderedCollection.Clearing);
   end;
   {$ENDIF}
   Assert(Observer <> nil);

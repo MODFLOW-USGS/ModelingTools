@@ -6,7 +6,7 @@ uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, frameDiscretizationUnit, StdCtrls, RbwEdit,
   ComCtrls, Buttons, ExtCtrls, LayerStructureUnit, RequiredDataSetsUndoUnit,
-  ArgusDataEntry, Character;
+  ArgusDataEntry, Character, DataArrayInterfaceUnit;
 
 type
   TfrmSutraLayers = class(TfrmCustomGoPhast)
@@ -57,7 +57,7 @@ type
   private
     FNewLayerStructure: TSutraLayerStructure;
     FOldLayerStructure: TSutraLayerStructure;
-    FNewDataSets: TList;
+    FNewDataSets: TIDataArrayList;
   protected
     function Description: string; override;
   public
@@ -459,7 +459,7 @@ constructor TUndoDefineSutraLayers.Create(
   var NewLayerStructure: TSutraLayerStructure);
 begin
   inherited Create;
-  FNewDataSets := TList.Create;
+  FNewDataSets := TIDataArrayList.Create;
 
   FNewLayerStructure:= NewLayerStructure;
   // TUndoDefineLayers takes ownership of NewLayerStructure.

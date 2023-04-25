@@ -309,7 +309,7 @@ begin
         for ItemIndex := AParam.PilotPointObsGrpCollection.Count - 1 downto 0 do
         begin
           ObItem := AParam.PilotPointObsGrpCollection[ItemIndex];
-          if List.IndexOf(ObItem.ObsGroup) < 0 then
+          if List.IndexOf(ObItem.ObsGroup as TPestObservationGroup) < 0 then
           begin
             ObItem.Free;
           end;

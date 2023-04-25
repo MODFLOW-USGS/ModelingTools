@@ -4077,7 +4077,7 @@ function TTargetObject.GetScreenObject: TObject;
 begin
   if ValidScreenObject(FScreenObject) then
   begin
-    result := FScreenObject;
+    result := FScreenObject as TObject;
   end
   else
   begin
@@ -4387,7 +4387,7 @@ end;
 
 function TVerticalScreen.ScreenObject: TObject;
 begin
-  result := (Collection as TVerticalScreenCollection).ScreenObject;
+  result := (Collection as TVerticalScreenCollection).ScreenObject as TObject;
 end;
 
 procedure TVerticalScreen.SetB(const Value: string);
