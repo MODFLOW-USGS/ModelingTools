@@ -23,6 +23,9 @@ type
     function StrParameters: IModflowParameters;
     function FmpWellParameters: IModflowParameters;
     procedure HandleChangedHfbParameter(const ParameterName: string);
+    // See @link(TElevationCount).
+    function GetElevationCount: TElevationCount;
+    property ElevationCount: TElevationCount read GetElevationCount;
   end;
 
 implementation

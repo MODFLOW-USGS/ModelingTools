@@ -85,7 +85,7 @@ procedure TfrmTimeSeries.btnAddGroupClick(Sender: TObject);
 var
   NewName: String;
   NewFrame: TframeModflow6TimeSeries;
-  NewItem: TimeSeriesCollectionItem;
+  NewItem: TTimeSeriesCollectionItem;
 begin
   inherited;
 
@@ -188,7 +188,7 @@ end;
 procedure TfrmTimeSeries.GetData;
 var
   SeriesIndex: Integer;
-  ASeriesItem: TimeSeriesCollectionItem;
+  ASeriesItem: TTimeSeriesCollectionItem;
   NewFrame: TframeModflow6TimeSeries;
   ParamIndex: Integer;
   SteadyParams: TModflowSteadyParameters;

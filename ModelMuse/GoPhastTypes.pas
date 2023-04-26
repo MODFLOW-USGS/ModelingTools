@@ -630,12 +630,16 @@ type
     function GetItems(Index: Integer): TRealItem;
     procedure SetItems(Index: Integer; const Value: TRealItem);
     procedure SetInitialValue(const Value: Real);
+  protected
+    function GetValue(Index: Integer): Double;
+    procedure SetValue(Index: Integer; const Value: Double);
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent); overload; virtual;
     constructor Create(InvalidateModelEvent: TNotifyEvent; Values: TOneDRealArray); overload;
     function IsSame(RealCollection: TRealCollection): Boolean;
     property  Items[Index: Integer]: TRealItem read GetItems
       write SetItems; default;
+    property Values[Index: Integer]: Double read GetValue write SetValue;
     function Add: TRealItem;
     property InitialValue: Real read FInitialValue write SetInitialValue;
     procedure Sort;
@@ -1929,6 +1933,11 @@ begin
   result := inherited Items[index] as TRealItem
 end;
 
+function TRealCollection.GetValue(Index: Integer): Double;
+begin
+  Result := Items[Index].Value;
+end;
+
 function TRealCollection.IsSame(RealCollection: TRealCollection): Boolean;
 var
   index: Integer;
@@ -1974,6 +1983,11 @@ end;
 procedure TRealCollection.SetItems(Index: Integer; const Value:TRealItem );
 begin
   inherited Items[index] := Value;
+end;
+
+procedure TRealCollection.SetValue(Index: Integer; const Value: Double);
+begin
+  Items[Index].Value := Value;
 end;
 
 Function CompareRealItems(Item1, Item2: Pointer): integer;

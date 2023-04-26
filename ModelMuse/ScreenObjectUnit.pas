@@ -64,7 +64,7 @@ uses
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
   OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit,
   FormulaManagerInterfaceUnit, ModflowBoundaryInterfaceUnit,
-  GlobalVariablesInterfaceUnit;
+  GlobalVariablesInterfaceUnit, Modflow6DynamicTimeSeriesUnit;
 
 type
   //
@@ -2070,6 +2070,7 @@ view. }
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
     FSutraScheduleName: string;
+    FDyanmicTimesSeriesCollection: TDyanmicTimesSeriesCollection;
     procedure CreateLastSubPolygon;
     procedure DestroyLastSubPolygon;
     function GetSubPolygonCount: integer;
@@ -3082,6 +3083,9 @@ view. }
       const Value: TFmp4AddedDemandRunoffSplitBoundary);
     function StoreFmp4AddedDemandRunoffSplitBoundary: Boolean;
     procedure CreateFmp4AddedDemandRunoffSplitBoundary;
+    procedure SetDyanmicTimesSeriesCollection(
+      const Value: TDyanmicTimesSeriesCollection);
+    function GetElevationCount: TElevationCount;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4165,7 +4169,7 @@ view. }
     property ColorLine: boolean read FColorLine write SetColorLine;
     // @name indicates the number of associated elevations of the @classname.
     // See @link(TElevationCount).
-    property ElevationCount: TElevationCount read FElevationCount
+    property ElevationCount: TElevationCount read GetElevationCount
       write SetElevationCount;
     // If @Link(ElevationCount) = ecOne, @name is the
     // formula used to define the position of the object in the dimension
@@ -4599,6 +4603,9 @@ SectionStarts.}
       write SetQuadtreeRefinementLevel;
 //    property VerticesArePilotPoints: Boolean read FVerticesArePilotPoints
 //      write SetVerticesArePilotPoints;
+    property DyanmicTimesSeriesCollection: TDyanmicTimesSeriesCollection
+      read FDyanmicTimesSeriesCollection write SetDyanmicTimesSeriesCollection
+      stored False;
   end;
 
   // @name does not own its @link(TScreenObject)s.
@@ -7226,6 +7233,7 @@ begin
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
   FootprintWell := AScreenObject.FootprintWell;
+  DyanmicTimesSeriesCollection := AScreenObject.DyanmicTimesSeriesCollection;
 
   // avoid creating AScreenObject.FPointPositionValues if it
   // hasn't been created yet.
@@ -11892,7 +11900,8 @@ begin
   FSutraBoundaries := TSutraBoundaries.Create(Model, self);
   FStoredMinimumFraction := TRealStorage.Create;
   FStoredMinimumFraction.OnChange := InvalidateSelf;
-  
+
+  FDyanmicTimesSeriesCollection := TDyanmicTimesSeriesCollection.Create(Model, self);
 //  FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
 end;
 
@@ -19833,6 +19842,11 @@ begin
   end;
 end;
 
+function TScreenObject.GetElevationCount: TElevationCount;
+begin
+  result := FElevationCount;
+end;
+
 function TScreenObject.GetElevationFormula: string;
 begin
   if ElevationCount = ecOne then
@@ -20079,6 +20093,7 @@ var
   FormulaIndex: Integer;
   FormulaObject: IFormulaObject;
 begin
+  FDyanmicTimesSeriesCollection.Free;
 //  FSubObservations.Free;
   FStoredMinimumFraction.Free;
   FreeAndNil(FFootprintWell);
@@ -20854,6 +20869,12 @@ begin
     FDuplicatesAllowed := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TScreenObject.SetDyanmicTimesSeriesCollection(
+  const Value: TDyanmicTimesSeriesCollection);
+begin
+  FDyanmicTimesSeriesCollection.Assign(Value);
 end;
 
 function TScreenObject.SelectEdge(const X, Y: integer): integer;

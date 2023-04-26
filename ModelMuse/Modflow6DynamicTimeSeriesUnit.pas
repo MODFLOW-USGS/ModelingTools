@@ -11,7 +11,8 @@ uses
   System.IOUtils,
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
   Modflow6TimeSeriesCollectionsUnit, System.SysUtils,
-  ScreenObjectInterfaceUnit;
+  ScreenObjectInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit,
+  RbwParser;
 
 type
   TDynamicTimeSeriesFormulaItem = class (TFormulaOrderedItem,
@@ -39,6 +40,8 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
+  TDynamicTimeSeriesItem = class;
+
   TDynamicTimeSeries = class(TPhastCollection, ITimeSeries,
     IDynamicTimeSeries)
   private
@@ -53,6 +56,8 @@ type
     FOrientation: TDataSetOrientation;
     FScreenObject: IScreenObject;
     FTimeSeriesLocationDictionary: TTimeSeriesLocationDictionary;
+    FGroup: TDynamicTimeSeriesItem;
+    FUsesList: TStringList;
     function GetScaleFactor: double;
     function GetItems(Index: Integer): IDynamicTimeSeriesFormulaItem;
     procedure SetItems(Index: Integer; const Value: IDynamicTimeSeriesFormulaItem);
@@ -70,9 +75,11 @@ type
     function GetOrientation: TDataSetOrientation;
     function GetDeleted: Boolean;
     procedure SetDeleted(const Value: Boolean);
+    function GetStaticTimeSeries(Location: TTimeSeriesLocation): IMf6TimeSeries;
+    function GetUsesList: TStringList;
   public
     constructor Create(ModelInterface: IModelForDynamicTimeSeries;
-      ScreenObject: IScreenObject);
+      ScreenObject: IScreenObject; Group: TDynamicTimeSeriesItem);
     destructor Destroy; override;
     function IsSame(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
     property  Items[Index: Integer]: IDynamicTimeSeriesFormulaItem read GetItems
@@ -81,6 +88,11 @@ type
     procedure Assign(Source: TPersistent); override;
     property ScaleFactor: double read GetScaleFactor write SetScaleFactor;
     property NotifierComponent: TComponent read FNotifierComponent;
+    property StaticTimeSeries[Location: TTimeSeriesLocation]: IMf6TimeSeries
+      read GetStaticTimeSeries;
+    property Orientation: TDataSetOrientation read GetOrientation
+      write SetOrientation;
+    property UsesList: TStringList read GetUsesList;
   published
     property SeriesName: AnsiString read GetSeriesName write SetSeriesName;
     property InterpolationMethod: TMf6InterpolationMethods
@@ -92,24 +104,33 @@ type
     property ParamMethod: TPestParamMethod read GetParamMethod
       write SetParamMethod;
     property Deleted: Boolean read GetDeleted write SetDeleted;
-    property Orientation: TDataSetOrientation read GetOrientation write SetOrientation;
   end;
+
+  TDyanmicTimesSeriesCollection = class;
 
   TDynamicTimeSeriesItem = class(TOrderedItem, IDynamicTimeSeriesItem)
   private
     FDynamicTimeSeries: TDynamicTimeSeries;
-    FModel: IModelMuseModel;
+    FModel: IModelForDynamicTimeSeries;
     FScreenObject: IScreenObject;
-    procedure SetTimeSeries(const Value: IDynamicTimeSeries);
-    function GetDynamicTimeSeries: IDynamicTimeSeries;
+    FStaticGroup: ITimesSeriesCollection;
+    FDyanmicCollection: TDyanmicTimesSeriesCollection;
+    FStaticCollection: ITimesSeriesCollections;
+    procedure SetTimeSeriesI(const Value: IDynamicTimeSeries);
+    function GetDynamicTimeSeriesI: IDynamicTimeSeries;
+    procedure SetTimeSeries(const Value: TDynamicTimeSeries);
+    function GetStaticGroup: ITimesSeriesCollection;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     Constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    property TimeSeriesI: IDynamicTimeSeries read GetDynamicTimeSeriesI
+      write SetTimeSeriesI;
+    property StaticGroup: ITimesSeriesCollection read GetStaticGroup;
   published
-    property TimeSeries: IDynamicTimeSeries read GetDynamicTimeSeries
+    property TimeSeries: TDynamicTimeSeries read FDynamicTimeSeries
       write SetTimeSeries;
   end;
 
@@ -272,7 +293,8 @@ begin
 end;
 
 constructor TDynamicTimeSeries.Create(
-  ModelInterface: IModelForDynamicTimeSeries; ScreenObject: IScreenObject);
+  ModelInterface: IModelForDynamicTimeSeries; ScreenObject: IScreenObject;
+  Group: TDynamicTimeSeriesItem);
 var
   NotifyEvent: TNotifyEvent;
 begin
@@ -290,6 +312,7 @@ begin
   FNotifierComponent := TComponent.Create(nil);
   FModel := ModelInterface;
   FTimeSeriesLocationDictionary := TTimeSeriesLocationDictionary.Create;
+  FGroup := Group;
 end;
 
 destructor TDynamicTimeSeries.Destroy;
@@ -318,6 +341,17 @@ end;
 
 function TDynamicTimeSeries.GetOrientation: TDataSetOrientation;
 begin
+  if FScreenObject <> nil then
+  begin
+    if FScreenObject.ElevationCount = ecZero then
+    begin
+      FOrientation := dsoTop;
+    end
+    else
+    begin
+      FOrientation := dso3D;
+    end;
+  end;
   result := FOrientation;
 end;
 
@@ -339,6 +373,95 @@ end;
 function TDynamicTimeSeries.GetSeriesName: AnsiString;
 begin
   result := FSeriesName;
+end;
+
+function TDynamicTimeSeries.GetStaticTimeSeries(
+  Location: TTimeSeriesLocation): IMf6TimeSeries;
+var
+  Index: Integer;
+  Formula: string;
+  Compiler: TRbwParser;
+  Expression: TExpression;
+  VariablesUsed: TStringList;
+  VariableIndex: Integer;
+begin
+  if not FTimeSeriesLocationDictionary.TryGetValue(Location, result) then
+  begin
+    result := FGroup.StaticGroup.AddI.TimeSeriesI;
+    Assert(FGroup.FStaticCollection <> nil);
+    result.SeriesName := FGroup.FStaticCollection.DefaultTimeSeriesName;
+    result.ScaleFactor := ScaleFactor;
+    result.InterpolationMethod := InterpolationMethod;
+    result.ScaleFactorParameter := ScaleFactorParameter;
+    result.ParamMethod := ParamMethod;
+
+    result.Count := Count;
+    Compiler := FModel.FormulaCompiler[Orientation, eaBlocks];
+
+    for Index := 0 to Count - 1 do
+    begin
+      Formula := Items[Index].Value;
+      try
+        Compiler.Compile(Formula);
+      except on ERbwParserError do
+        begin
+          Formula := '0';
+          Compiler.Compile(Formula);
+        end;
+      end;
+      Expression := Compiler.CurrentExpression;
+      if not (Expression.ResultType in [rdtDouble, rdtInteger]) then
+      begin
+        Formula := '0';
+        Compiler.Compile(Formula);
+        Expression := Compiler.CurrentExpression;
+      end;
+      Expression.Evaluate;
+      result.Values[Index] := Expression.DoubleResult;
+    end;
+
+    FTimeSeriesLocationDictionary.Add(Location, result)
+  end;
+end;
+
+function TDynamicTimeSeries.GetUsesList: TStringList;
+var
+  index: Integer;
+  Compiler: TRbwParser;
+  Formula: string;
+  Expression: TExpression;
+begin
+  if FUsesList = nil then
+  begin
+    FUsesList := TStringList.Create;
+  end;
+  FUsesList.Clear;
+  FUsesList.Sorted := True;
+  FUsesList.Duplicates := dupIgnore;
+  FUsesList.CaseSensitive := False;
+  Compiler := FModel.FormulaCompiler[Orientation, eaBlocks];
+
+  for Index := 0 to Count - 1 do
+  begin
+    Formula := Items[Index].Value;
+    try
+      Compiler.Compile(Formula);
+    except on ERbwParserError do
+      begin
+        Formula := '0';
+        Compiler.Compile(Formula);
+      end;
+    end;
+    Expression := Compiler.CurrentExpression;
+    if not (Expression.ResultType in [rdtDouble, rdtInteger]) then
+    begin
+      Formula := '0';
+      Compiler.Compile(Formula);
+      Expression := Compiler.CurrentExpression;
+    end;
+    FUsesList.AddStrings(Expression.VariablesUsed);
+  end;
+  result := FUsesList;
 end;
 
 function TDynamicTimeSeries.IsSame(
@@ -458,7 +581,7 @@ procedure TDynamicTimeSeriesItem.Assign(Source: TPersistent);
 begin
   if Source is TDynamicTimeSeriesItem then
   begin
-    TimeSeries := TDynamicTimeSeriesItem(Source).TimeSeries;
+    TimeSeriesI := TDynamicTimeSeriesItem(Source).TimeSeriesI;
   end
   else
   begin
@@ -467,16 +590,14 @@ begin
 end;
 
 constructor TDynamicTimeSeriesItem.Create(Collection: TCollection);
-var
-  DyanmicCollection: TDyanmicTimesSeriesCollection;
 begin
   Assert(Collection <> nil);
   inherited;
-  DyanmicCollection := (Collection as TDyanmicTimesSeriesCollection);
-  FScreenObject := DyanmicCollection.FScreenObject;
-  FModel := DyanmicCollection.FModel;
+  FDyanmicCollection := (Collection as TDyanmicTimesSeriesCollection);
+  FScreenObject := FDyanmicCollection.FScreenObject;
+  FModel := FDyanmicCollection.FModel as IModelForDynamicTimeSeries;
   FDynamicTimeSeries := TDynamicTimeSeries.Create(
-    FModel as IModelForDynamicTimeSeries, FScreenObject);
+    FModel as IModelForDynamicTimeSeries, FScreenObject, self);
 end;
 
 destructor TDynamicTimeSeriesItem.Destroy;
@@ -485,21 +606,44 @@ begin
   inherited;
 end;
 
-function TDynamicTimeSeriesItem.GetDynamicTimeSeries: IDynamicTimeSeries;
+function TDynamicTimeSeriesItem.GetDynamicTimeSeriesI: IDynamicTimeSeries;
 begin
   result := FDynamicTimeSeries;
+end;
+
+function TDynamicTimeSeriesItem.GetStaticGroup: ITimesSeriesCollection;
+var
+//  FStaticCollection: ITimesSeriesCollections;
+  Item: ITimeSeriesCollectionItem;
+  ChildCollection: ITimesSeriesCollection;
+begin
+  if FStaticGroup = nil then
+  begin
+    Assert(FModel <> nil);
+    FStaticCollection :=  FModel.GetMf6TimesSeriesI;
+    Item := FStaticCollection.AddI;
+    result := Item.TimesSeriesCollectionI;
+    result.GroupName := FStaticCollection.DefaultGroupName;
+    result.Times := FDyanmicCollection.Times;
+  end;
+  result := FStaticGroup;
 end;
 
 function TDynamicTimeSeriesItem.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
   result := (AnotherItem is TDynamicTimeSeriesItem)
-    and (TimeSeries.IsSame(TDynamicTimeSeriesItem(AnotherItem).TimeSeries));
+    and (TimeSeriesI.IsSame(TDynamicTimeSeriesItem(AnotherItem).TimeSeriesI));
 end;
 
-procedure TDynamicTimeSeriesItem.SetTimeSeries(
+procedure TDynamicTimeSeriesItem.SetTimeSeries(const Value: TDynamicTimeSeries);
+begin
+  FDynamicTimeSeries.Assign(Value);
+end;
+
+procedure TDynamicTimeSeriesItem.SetTimeSeriesI(
   const Value: IDynamicTimeSeries);
 begin
-  FDynamicTimeSeries.Assign(Value as TDynamicTimeSeries)
+  TimeSeries := Value as TDynamicTimeSeries;
 end;
 
 { TDyanmicTimesSeriesCollection }
@@ -551,11 +695,16 @@ var
   TimeSeries: IDynamicTimeSeries;
 begin
   result := nil;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+
   if (Count > 0) and (FTimeSeriesDictionary.Count = 0) then
   begin
     for ItemIndex := 0 to Count - 1 do
     begin
-      TimeSeries := Items[ItemIndex].TimeSeries;
+      TimeSeries := Items[ItemIndex].TimeSeriesI;
       if TimeSeries.Deleted then
       begin
         Continue;
@@ -582,7 +731,7 @@ var
 begin
   for SeriesIndex := Count - 1 downto 0 do
   begin
-    if Items[SeriesIndex].TimeSeries.Deleted then
+    if Items[SeriesIndex].TimeSeriesI.Deleted then
     begin
       (Items[SeriesIndex] as TDynamicTimeSeriesItem).Free;
     end;
@@ -605,10 +754,10 @@ begin
   for ItemIndex := 0 to Count-1 do
   begin
     AnItem := Items[ItemIndex];
-    AnItem.TimeSeries.Count := Value;
+    AnItem.TimeSeriesI.Count := Value;
     for TimeIndex := Times.Count to Value -1 do
     begin
-      AnItem.TimeSeries[TimeIndex].Value := '3.0E30';
+      AnItem.TimeSeriesI[TimeIndex].Value := '3.0E30';
     end;
   end;
   Times.Count := Value;

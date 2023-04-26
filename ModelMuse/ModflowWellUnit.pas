@@ -7,7 +7,7 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit, RealListUnit, System.Generics.Collections,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
 
 type
   {
@@ -544,6 +544,8 @@ var
   PestSeriesMethod: TPestParamMethod;
   TimeSeriesName: string;
   DynamicTimeSeries: IDynamicTimeSeries;
+  Location: TTimeSeriesLocation;
+  TimeSeries: IMf6TimeSeries;
 begin
   Expression := CellAssignmentData.Expression;
   ACellList := CellAssignmentData.ACellList;
@@ -578,10 +580,21 @@ begin
   for Index := 0 to CellList.Count - 1 do
   begin
     ACell := CellList[Index];
-    // Handle dynamic time series here.
 
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+    // Handle dynamic time series here.
+
+    if DynamicTimeSeries <> nil then
+    begin
+      Location.Layer := ACell.Layer;
+      Location.Row := ACell.Row;
+      Location.Column := ACell.Column;
+      TimeSeries := DynamicTimeSeries.StaticTimeSeries[Location];
+      BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeries.SeriesName);
+      TimeSeriesName := TimeSeries.SeriesName;
+    end;
+
     // 2. update locations
     try
       Expression.Evaluate;

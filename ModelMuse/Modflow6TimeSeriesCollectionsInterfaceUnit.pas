@@ -8,8 +8,8 @@ uses
 type
   ITimeSeriesItem = interface
     ['{0898E1CE-26BE-44FD-8E78-9D13804D83D7}']
-    function GetTimeSeriesI: ITimeSeries;
-    property TimeSeriesI: ITimeSeries read GetTimeSeriesI;
+    function GetTimeSeriesI: IMf6TimeSeries;
+    property TimeSeriesI: IMf6TimeSeries read GetTimeSeriesI;
   end;
 
   ITimesSeriesCollection = interface
@@ -24,6 +24,12 @@ type
     procedure SetGroupName(Value: AnsiString);
     property GroupName: AnsiString read GetGroupName write SetGroupName;
     function AddI: ITimeSeriesItem;
+    function GetCount: Integer;
+    procedure SetCount(const Value: Integer);
+    property Count: Integer read GetCount write SetCount;
+    function GetItemI(Index: Integer): ITimeSeriesItem;
+    procedure SetItemI(Index: Integer; const Value: ITimeSeriesItem);
+    property ItemsI[Index: Integer]: ITimeSeriesItem read GetItemI write SetItemI;
   end;
 
   ITimeSeriesCollectionItem = interface
@@ -36,8 +42,8 @@ type
   ITimesSeriesCollections = interface
     ['{136A260B-2DDA-4DF2-A911-FA951FA5D0B9}']
     function AddI: ITimeSeriesCollectionItem;
-    function DefaultGroupName: string;
-    function DefaultTimeSeriesName: string;
+    function DefaultGroupName: AnsiString;
+    function DefaultTimeSeriesName: AnsiString;
   end;
 
   IModelForTimesSeriesInterface = interface(IModelMuseModel)

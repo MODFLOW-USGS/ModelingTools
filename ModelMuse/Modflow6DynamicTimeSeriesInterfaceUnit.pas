@@ -6,7 +6,7 @@ uses
   System.Classes, GoPhastTypes, SubscriptionUnit,
   OrderedCollectionInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
   System.Generics.Defaults, System.Hash, System.Generics.Collections, RbwParser,
-  FormulaManagerInterfaceUnit;
+  FormulaManagerInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit;
 
 type
   IModelForDynamicTimeSeries = interface(IModelMuseModel)
@@ -20,6 +20,7 @@ type
       OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription;
       Subject: TObject); overload;
     function GetObserverByName(const ObserverName: string): TObserver;
+    function GetMf6TimesSeriesI: ITimesSeriesCollections;
   end;
 
   TTimeSeriesLocation = record
@@ -34,7 +35,7 @@ type
   end;
 
   TTimeSeriesLocationDictionary = class(TDictionary<
-    TTimeSeriesLocation, ITimeSeries>)
+    TTimeSeriesLocation, IMf6TimeSeries>)
     constructor Create;
   end;
 
@@ -62,14 +63,19 @@ type
     function GetDeleted: Boolean;
     procedure SetDeleted(const Value: Boolean);
     property Deleted: Boolean read GetDeleted write SetDeleted;
+    function GetUsesList: TStringList;
+    property UsesList: TStringList read GetUsesList;
+    function GetStaticTimeSeries(Location: TTimeSeriesLocation): IMf6TimeSeries;
+    property StaticTimeSeries[Location: TTimeSeriesLocation]: IMf6TimeSeries
+      read GetStaticTimeSeries;
   end;
 
   IDynamicTimeSeriesItem = interface(IOrderedItem)
     ['{5FAB459C-747A-46F8-81F9-FA7AEF8BC635}']
-    procedure SetTimeSeries(const Value: IDynamicTimeSeries);
-    function GetDynamicTimeSeries: IDynamicTimeSeries;
-    property TimeSeries: IDynamicTimeSeries read GetDynamicTimeSeries
-      write SetTimeSeries;
+    procedure SetTimeSeriesI(const Value: IDynamicTimeSeries);
+    function GetDynamicTimeSeriesI: IDynamicTimeSeries;
+    property TimeSeriesI: IDynamicTimeSeries read GetDynamicTimeSeriesI
+      write SetTimeSeriesI;
   end;
 
   IDyanmicTimesSeriesCollection= interface(IOrderedCollection)

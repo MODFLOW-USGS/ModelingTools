@@ -6,7 +6,7 @@ uses
   System.Classes, GoPhastTypes, Modflow6TimeSeriesInterfaceUnit;
 
 type
-  TMf6TimeSeries = class(TRealCollection, ITimeSeries)
+  TMf6TimeSeries = class(TRealCollection, IMf6TimeSeries)
   private
     FSeriesName: AnsiString;
     FScaleFactorParameter: string;
@@ -27,6 +27,8 @@ type
     function GetStoredScaleFactor: TRealStorage;
     function GetScaleFactorParameter: string;
     function GetParamMethod: TPestParamMethod;
+    function GetDeleted: Boolean;
+    procedure SetDeleted(const Value: Boolean);
 //    function _AddRef: Integer; stdcall;
 //    function _Release: Integer; stdcall;
 //    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
@@ -48,7 +50,7 @@ type
       write SetScaleFactorParameter;
     property ParamMethod: TPestParamMethod read GetParamMethod
       write SetParamMethod;
-    property Deleted: Boolean read FDeleted write FDeleted;
+    property Deleted: Boolean read GetDeleted write SetDeleted;
   end;
 
 implementation
@@ -89,6 +91,11 @@ begin
   inherited;
 end;
 
+function TMf6TimeSeries.GetDeleted: Boolean;
+begin
+  result := FDeleted;
+end;
+
 function TMf6TimeSeries.GetInterpolationMethod: TMf6InterpolationMethods;
 begin
   result := FInterpolationMethod;
@@ -126,18 +133,14 @@ begin
     and (InterpolationMethod = OtherTimeSeries.InterpolationMethod)
     and (ScaleFactorParameter = OtherTimeSeries.ScaleFactorParameter)
     and (ParamMethod = OtherTimeSeries.ParamMethod)
+    and (Deleted = OtherTimeSeries.Deleted)
     and inherited IsSame(OtherTimeSeries);
 end;
 
-//function TMf6TimeSeries.QueryInterface(const IID: TGUID; out Obj): HRESULT;
-//const
-//  E_NOINTERFACE = HRESULT($80004002);
-//begin
-//  if GetInterface(IID, Obj) then
-//    result := 0
-//  else
-//    result := E_NOINTERFACE;
-//end;
+procedure TMf6TimeSeries.SetDeleted(const Value: Boolean);
+begin
+  FDeleted := Value;
+end;
 
 procedure TMf6TimeSeries.SetInterpolationMethod(
   const Value: TMf6InterpolationMethods);

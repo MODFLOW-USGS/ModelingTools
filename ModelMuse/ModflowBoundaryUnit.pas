@@ -3693,6 +3693,7 @@ var
   TimeSeries: TMf6TimeSeries;
   TimeSeriesName: string;
   CellAssignmentData: TCellAssignmentData;
+  DynamicTimeSeries: IDynamicTimeSeries;
 begin
   if Count = 0 then
   begin
@@ -3954,6 +3955,16 @@ begin
         TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(UnmodifiedFormula);
         if TimeSeries = nil then
         begin
+          DynamicTimeSeries := AScreenObject.DyanmicTimesSeriesCollection.
+            GetValuesByName(UnmodifiedFormula);
+        end
+        else
+        begin
+          DynamicTimeSeries := nil;
+        end;
+
+        if (TimeSeries = nil) and (DynamicTimeSeries = nil) then
+        begin
           if CanUsePestParmeters then
           begin
             PestSeriesName := BoundaryGroup.
@@ -3968,6 +3979,7 @@ begin
         begin
           PestSeriesName := '';
         end;
+
         Method := BoundaryGroup.
           PestBoundaryMethod[BoundaryFunctionIndex];
         if (PestSeriesName <> '') and (PestSeriesName <> '0') then
@@ -4017,7 +4029,7 @@ begin
         begin
           PestParamName := ADataSet.Name;
         end
-        else if TimeSeries <> nil then
+        else if (TimeSeries <> nil) or (DynamicTimeSeries <> nil) then
         begin
           PestParamName := '';
         end
@@ -4037,7 +4049,8 @@ begin
             PestParamName := PestParam.ParameterName;
           end;
         end;
-        if TimeSeries <> nil then
+
+        if (TimeSeries <> nil) or (DynamicTimeSeries <> nil) then
         begin
           Formula := '1.';
         end;
@@ -4090,6 +4103,10 @@ begin
         DataSets := TList.Create;
         try
           UsedVariables.Assign(Expression.VariablesUsed);
+          if (DynamicTimeSeries <> nil) then
+          begin
+            UsedVariables.AddStrings(DynamicTimeSeries.UsesList);
+          end;
           for VarIndex := 0 to UsedVariables.Count - 1 do
           begin
             VarName := UsedVariables[VarIndex];
@@ -4121,10 +4138,15 @@ begin
             CellList.Delete(EliminateIndicies[Index]);
           end;
 
-          if TimeSeries <> nil then
+          if (TimeSeries <> nil) then
           begin
             PestSeriesName := '' ;
             TimeSeriesName := String(TimeSeries.SeriesName);
+          end
+          else if (DynamicTimeSeries <> nil) then
+          begin
+            PestSeriesName := '' ;
+            TimeSeriesName := '';
           end
           else
           begin
@@ -4154,7 +4176,7 @@ begin
           CellAssignmentData.PestSeriesName := PestSeriesName;
           CellAssignmentData.PestSeriesMethod := Method;
           CellAssignmentData.TimeSeriesName := TimeSeriesName;
-          CellAssignmentData.DynamicTimeSeries := nil;
+          CellAssignmentData.DynamicTimeSeries := DynamicTimeSeries;
 
           AssignCellList(CellAssignmentData);
         finally
@@ -4210,6 +4232,17 @@ begin
                   TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(Formula);
                   if TimeSeries = nil then
                   begin
+                    DynamicTimeSeries := AScreenObject.DyanmicTimesSeriesCollection.
+                      GetValuesByName(Formula);
+                  end
+                  else
+                  begin
+                    DynamicTimeSeries := nil;
+                  end;
+
+
+                  if (TimeSeries = nil) and (DynamicTimeSeries = nil) then
+                  begin
                     if CanUsePestParmeters then
                     begin
                       PestSeriesName := BoundaryGroup.
@@ -4221,10 +4254,15 @@ begin
                     end;
                     TimeSeriesName := '';
                   end
-                  else
+                  else if TimeSeries <> nil then
                   begin
                     PestSeriesName := '';
                     TimeSeriesName := string(TimeSeries.SeriesName);
+                  end
+                  else if DynamicTimeSeries <> nil then
+                  begin
+                    PestSeriesName := '';
+                    TimeSeriesName := '';
                   end;
                   Method := BoundaryGroup.
                     PestBoundaryMethod[BoundaryFunctionIndex];
@@ -4272,7 +4310,7 @@ begin
 
                   // The Formula might by a PEST parameter or a TDataArray
                   // that is modified by PEST or a MODFLOW 6 time series.
-                  if TimeSeries <> nil then
+                  if (TimeSeries <> nil) or (DynamicTimeSeries <> nil) then
                   begin
                     PestParamName := '';
                     Formula := '1.';
@@ -4323,7 +4361,7 @@ begin
                   CellAssignmentData.PestSeriesName := PestSeriesName;
                   CellAssignmentData.PestSeriesMethod := Method;
                   CellAssignmentData.TimeSeriesName := TimeSeriesName;
-                  CellAssignmentData.DynamicTimeSeries := nil;
+                  CellAssignmentData.DynamicTimeSeries := DynamicTimeSeries;
 
                   AssignCellList(CellAssignmentData);
                 end;
