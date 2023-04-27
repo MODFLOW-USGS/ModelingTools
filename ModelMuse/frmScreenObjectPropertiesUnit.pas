@@ -500,11 +500,6 @@ type
     jvspFmp4AddedDemandRunoffSplit: TJvStandardPage;
     frameFmp4AddedDemandRunoffSplit: TframeScreenObjectAddedDemandRunoffSplit;
     tabDynamicTimeSeries: TTabSheet;
-    plTimeSeries: TJvPageList;
-    Panel6: TPanel;
-    btnAddGroup: TButton;
-    btnDeleteGroup: TButton;
-    tvTimeSeries: TJvPageListTreeView;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;

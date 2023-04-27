@@ -3,30 +3,35 @@ unit Modflow6TimeSeriesCollectionsInterfaceUnit;
 interface
 
 uses
-  GoPhastTypes, Modflow6TimeSeriesInterfaceUnit;
+  GoPhastTypes, Modflow6TimeSeriesInterfaceUnit, OrderedCollectionInterfaceUnit;
 
 type
   ITimeSeriesItem = interface
     ['{0898E1CE-26BE-44FD-8E78-9D13804D83D7}']
-    function GetTimeSeriesI: IMf6TimeSeries;
-    property TimeSeriesI: IMf6TimeSeries read GetTimeSeriesI;
+    function GetTimeSeriesI: ITimeSeries;
+    property TimeSeriesI: ITimeSeries read GetTimeSeriesI;
   end;
 
-  ITimesSeriesCollection = interface
+  ITimesSeriesCollection = interface(IOrderedCollection)
     ['{69DF209F-0771-455C-93A6-2E59B9610981}']
     function GetTimeCount: Integer;
     procedure SetTimeCount(const Value: Integer);
     property TimeCount: Integer read GetTimeCount write SetTimeCount;
+
     function GetTimes: TRealCollection;
     procedure SetTimes(const Value: TRealCollection);
     property Times: TRealCollection read GetTimes write SetTimes;
+
     function GetGroupName: AnsiString;
     procedure SetGroupName(Value: AnsiString);
     property GroupName: AnsiString read GetGroupName write SetGroupName;
+
     function AddI: ITimeSeriesItem;
+
     function GetCount: Integer;
     procedure SetCount(const Value: Integer);
     property Count: Integer read GetCount write SetCount;
+
     function GetItemI(Index: Integer): ITimeSeriesItem;
     procedure SetItemI(Index: Integer; const Value: ITimeSeriesItem);
     property ItemsI[Index: Integer]: ITimeSeriesItem read GetItemI write SetItemI;

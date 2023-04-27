@@ -51,24 +51,33 @@ type
     function GetCount: Integer;
     procedure SetCount(Const Value: Integer);
     property Count: Integer read GetCount write SetCount;
+
     function GetItems(Index: Integer): IDynamicTimeSeriesFormulaItem;
     procedure SetItems(Index: Integer; const Value: IDynamicTimeSeriesFormulaItem);
     property  Items[Index: Integer]: IDynamicTimeSeriesFormulaItem read GetItems
       write SetItems; default;
+
     function GetOrientation: TDataSetOrientation;
     procedure SetOrientation(const Value: TDataSetOrientation);
     property Orientation: TDataSetOrientation read GetOrientation
       write SetOrientation;
+
     function IsSame(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
+
     function GetDeleted: Boolean;
     procedure SetDeleted(const Value: Boolean);
     property Deleted: Boolean read GetDeleted write SetDeleted;
+
     function GetUsesList: TStringList;
     property UsesList: TStringList read GetUsesList;
+
     function GetStaticTimeSeries(Location: TTimeSeriesLocation): IMf6TimeSeries;
     property StaticTimeSeries[Location: TTimeSeriesLocation]: IMf6TimeSeries
       read GetStaticTimeSeries;
   end;
+
+  // @name is the collection that contains @link(IDynamicTimeSeriesItem);
+  IDyanmicTimesSeriesCollection = interface;
 
   IDynamicTimeSeriesItem = interface(IOrderedItem)
     ['{5FAB459C-747A-46F8-81F9-FA7AEF8BC635}']
@@ -76,10 +85,17 @@ type
     function GetDynamicTimeSeriesI: IDynamicTimeSeries;
     property TimeSeriesI: IDynamicTimeSeries read GetDynamicTimeSeriesI
       write SetTimeSeriesI;
+    function GetTimesSeriesCollectionI: IDyanmicTimesSeriesCollection;
+    property TimesSeriesCollectionI: IDyanmicTimesSeriesCollection
+      read GetTimesSeriesCollectionI;
   end;
 
-  IDyanmicTimesSeriesCollection= interface(IOrderedCollection)
+  // @name is the collection that contains @link(IDynamicTimeSeriesItem);
+  IDyanmicTimesSeriesCollection= interface(ITimesSeriesCollection)
     ['{9A08902D-6085-4D6C-B081-F3108116D897}']
+    function GetDeleted: Boolean;
+    procedure SetDeleted(const Value: Boolean);
+    property Deleted: Boolean read GetDeleted write SetDeleted;
   end;
 
 implementation

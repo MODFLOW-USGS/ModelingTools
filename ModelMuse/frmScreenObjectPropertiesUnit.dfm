@@ -12,15 +12,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitWidth = 776
-  ExplicitHeight = 588
+  ExplicitWidth = 780
+  ExplicitHeight = 589
   TextHeight = 19
   object pageMain: TPageControl
     Left = 0
     Top = 0
     Width = 764
     Height = 509
-    ActivePage = tabComments
+    ActivePage = tabDynamicTimeSeries
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -809,15 +809,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               AlignWithMargins = True
               Left = 4
               Top = 4
-              Width = 277
-              Height = 65
+              Width = 256
+              Height = 57
               Align = alClient
               Caption = 
                 'Layer elevations can only be specified using objects with Zero Z' +
                 ' formulas.'
               WordWrap = True
-              ExplicitWidth = 256
-              ExplicitHeight = 57
             end
           end
         end
@@ -9327,7 +9325,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited lblFluxObservations: TLabel
               AlignWithMargins = True
               Left = 3
-              Width = 555
+              Width = 125
               Height = 19
               Margins.Top = 8
               Align = alTop
@@ -11000,6 +10998,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitHeight = 163
                   inherited lblDescription: TLabel
                     Top = 24
+                    Width = 531
                     Height = 57
                     ExplicitTop = 24
                     ExplicitWidth = 531
@@ -18290,7 +18289,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           AlignWithMargins = True
           Left = 16
           Top = 19
-          Width = 243
+          Width = 241
           Height = 76
           Margins.Top = 10
           Anchors = [akLeft, akTop, akRight]
@@ -18299,7 +18298,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             'ou can describe it here so you will understand how it works late' +
             'r.'
           WordWrap = True
-          ExplicitWidth = 247
         end
         object memoComments: TMemo
           Left = 2
@@ -18485,55 +18483,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       Caption = 'Time Series'
       ImageIndex = 11
       TabVisible = False
-      object plTimeSeries: TJvPageList
-        Left = 121
-        Top = 0
-        Width = 635
-        Height = 430
-        PropagateEnable = False
-        Align = alClient
-        ExplicitWidth = 631
-        ExplicitHeight = 429
-      end
-      object Panel6: TPanel
-        Left = 0
-        Top = 430
-        Width = 756
-        Height = 41
-        Align = alBottom
-        TabOrder = 1
-        ExplicitTop = 429
-        ExplicitWidth = 752
-        object btnAddGroup: TButton
-          Left = 9
-          Top = 6
-          Width = 184
-          Height = 25
-          Caption = 'Add Time Series Group'
-          TabOrder = 0
-        end
-        object btnDeleteGroup: TButton
-          Left = 199
-          Top = 6
-          Width = 202
-          Height = 25
-          Caption = 'Delete Time Series Group'
-          TabOrder = 1
-        end
-      end
-      object tvTimeSeries: TJvPageListTreeView
-        Left = 0
-        Top = 0
-        Width = 121
-        Height = 430
-        PageDefault = 0
-        Align = alLeft
-        HideSelection = False
-        Indent = 19
-        TabOrder = 2
-        Items.Links = {00000000}
-        ExplicitHeight = 429
-      end
     end
   end
   object pnlBottom: TPanel
@@ -18544,8 +18493,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 508
-    ExplicitWidth = 760
     DesignSize = (
       764
       41)
@@ -18577,7 +18524,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
-      ExplicitLeft = 463
     end
     object btnCancel: TBitBtn
       Left = 562
@@ -18589,7 +18535,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 5
       OnClick = btnCancelClick
-      ExplicitLeft = 558
     end
     object btnHelp: TBitBtn
       Left = 372
@@ -18601,7 +18546,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 368
     end
     object btnCopyVertices: TButton
       Left = 4

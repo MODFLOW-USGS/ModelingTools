@@ -1,13 +1,13 @@
-object frameModflow6TimeSeries: TframeModflow6TimeSeries
+object frameModflow6DynamicTimeSeries: TframeModflow6DynamicTimeSeries
   Left = 0
   Top = 0
-  Width = 506
-  Height = 287
+  Width = 640
+  Height = 480
   TabOrder = 0
   object pnlBottom: TPanel
     Left = 0
-    Top = 184
-    Width = 506
+    Top = 377
+    Width = 640
     Height = 103
     Align = alBottom
     TabOrder = 0
@@ -27,7 +27,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     end
     object seTimeSeriesCount: TJvSpinEdit
       Left = 8
-      Top = 19
+      Top = 27
       Width = 73
       Height = 23
       CheckMinValue = True
@@ -36,7 +36,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     end
     object seTimeCount: TJvSpinEdit
       Left = 8
-      Top = 73
+      Top = 75
       Width = 73
       Height = 23
       MaxValue = 2147483647.000000000000000000
@@ -75,11 +75,27 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
       OnClick = btnInsertTimeClick
     end
   end
+  object pnlTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 640
+    Height = 41
+    Align = alTop
+    TabOrder = 1
+    object edGroupName: TEdit
+      Left = 8
+      Top = 14
+      Width = 121
+      Height = 23
+      TabOrder = 0
+      TextHint = 'Group Name'
+    end
+  end
   object rrdgTimeSeries: TRbwRowDataGrid
     Left = 0
     Top = 41
-    Width = 506
-    Height = 143
+    Width = 640
+    Height = 336
     Align = alClient
     ColCount = 2
     DefaultColWidth = 50
@@ -87,7 +103,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     RowCount = 6
     FixedRows = 0
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
-    TabOrder = 1
+    TabOrder = 2
     OnSelectCell = rrdgTimeSeriesSelectCell
     ExtendedAutoDistributeText = False
     AutoMultiEdit = False
@@ -252,21 +268,5 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
-  end
-  object pnlTop: TPanel
-    Left = 0
-    Top = 0
-    Width = 506
-    Height = 41
-    Align = alTop
-    TabOrder = 2
-    object edGroupName: TEdit
-      Left = 8
-      Top = 14
-      Width = 121
-      Height = 23
-      TabOrder = 0
-      TextHint = 'Group Name'
-    end
   end
 end

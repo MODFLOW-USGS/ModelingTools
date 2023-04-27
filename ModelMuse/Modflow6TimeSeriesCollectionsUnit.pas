@@ -26,14 +26,14 @@ type
   private
     FTimeSeries: TMf6TimeSeries;
     procedure SetTimeSeries(const Value: TMf6TimeSeries);
-    function GetTimeSeriesI: IMf6TimeSeries;
+    function GetTimeSeriesI: ITimeSeries;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     Constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    property TimeSeriesI: IMf6TimeSeries read GetTimeSeriesI;
+    property TimeSeriesI: ITimeSeries read GetTimeSeriesI;
   published
     property TimeSeries: TMf6TimeSeries read FTimeSeries write SetTimeSeries;
   end;
@@ -44,14 +44,14 @@ type
     FDeleted: Boolean;
     FSortedTimes: TRealList;
     FGroupName: AnsiString;
+  protected
     function GetTimes: TRealCollection;
     procedure SetTimes(const Value: TRealCollection);
+    procedure OnTimesChanged(Sender: TObject); virtual;
     function GetGroupName: AnsiString;
     procedure SetGroupName(Value: AnsiString);
     function GetDeleted: Boolean;
     procedure SetDeleted(const Value: Boolean);
-  protected
-    procedure OnTimesChanged(Sender: TObject); virtual;
   public
     Constructor Create(ItemClass: TCollectionItemClass;
       Model: IModelForTOrderedCollection);
@@ -64,6 +64,8 @@ type
     property Deleted: Boolean read GetDeleted write SetDeleted;
   end;
 
+  // @name contains @link(TTimeSeriesItem)s.
+  // Each @link(TTimeSeriesItem) has a @link(TMf6TimeSeries).
   TTimesSeriesCollection = class(TCustomTimesSeriesCollection,
     ITimesSeriesCollection)
   private
@@ -129,7 +131,8 @@ type
     Constructor Create(Model: IModelForTOrderedCollection);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    property Items[Index: Integer]: TTimeSeriesCollectionItem read GetItem write SetItem; default;
+    property Items[Index: Integer]: TTimeSeriesCollectionItem read GetItem
+      write SetItem; default;
     function Add: TTimeSeriesCollectionItem;
     function AddI: ITimeSeriesCollectionItem;
     function GetTimeSeriesByName(ASeriesName: String): TMf6TimeSeries;
@@ -184,7 +187,7 @@ begin
   inherited;
 end;
 
-function TTimeSeriesItem.GetTimeSeriesI: IMf6TimeSeries;
+function TTimeSeriesItem.GetTimeSeriesI: ITimeSeries;
 begin
   Result := TimeSeries;
 end;
@@ -784,7 +787,6 @@ end;
 function TTimeSeriesCollectionItem.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
   result := (AnotherItem is TTimeSeriesCollectionItem)
-//    and (inherited IsSame(AnotherItem))
     and (TimesSeriesCollection.IsSame(
     TTimeSeriesCollectionItem(AnotherItem).TimesSeriesCollection));
 end;

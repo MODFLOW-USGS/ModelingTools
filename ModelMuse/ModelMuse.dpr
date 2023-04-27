@@ -865,7 +865,9 @@ uses
   ModflowParameterInterfaceUnit in 'ModflowParameterInterfaceUnit.pas',
   ModflowSfrParamIcalcInterfaceUnit in 'ModflowSfrParamIcalcInterfaceUnit.pas',
   ModflowTransientListParameterInterfaceUnit in 'ModflowTransientListParameterInterfaceUnit.pas',
-  GlobalVariablesInterfaceUnit in 'GlobalVariablesInterfaceUnit.pas';
+  GlobalVariablesInterfaceUnit in 'GlobalVariablesInterfaceUnit.pas',
+  frameDynamicScreenObjectsContainerUnit in 'frameDynamicScreenObjectsContainerUnit.pas' {frameDynamicScreenObjectsContainer: TFrame},
+  frameModflow6DynamicTimeSeriesUnit in 'frameModflow6DynamicTimeSeriesUnit.pas' {frameModflow6DynamicTimeSeries: TFrame};
 
 {$R *.res}
 

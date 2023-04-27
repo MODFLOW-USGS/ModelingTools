@@ -2070,7 +2070,7 @@ view. }
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
     FSutraScheduleName: string;
-    FDyanmicTimesSeriesCollection: TDyanmicTimesSeriesCollection;
+    FDyanmicTimesSeriesCollections: TDynamicTimesSeriesCollections;
     procedure CreateLastSubPolygon;
     procedure DestroyLastSubPolygon;
     function GetSubPolygonCount: integer;
@@ -3084,7 +3084,7 @@ view. }
     function StoreFmp4AddedDemandRunoffSplitBoundary: Boolean;
     procedure CreateFmp4AddedDemandRunoffSplitBoundary;
     procedure SetDyanmicTimesSeriesCollection(
-      const Value: TDyanmicTimesSeriesCollection);
+      const Value: TDynamicTimesSeriesCollections);
     function GetElevationCount: TElevationCount;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
@@ -4603,8 +4603,8 @@ SectionStarts.}
       write SetQuadtreeRefinementLevel;
 //    property VerticesArePilotPoints: Boolean read FVerticesArePilotPoints
 //      write SetVerticesArePilotPoints;
-    property DyanmicTimesSeriesCollection: TDyanmicTimesSeriesCollection
-      read FDyanmicTimesSeriesCollection write SetDyanmicTimesSeriesCollection
+    property DyanmicTimesSeriesCollections: TDynamicTimesSeriesCollections
+      read FDyanmicTimesSeriesCollections write SetDyanmicTimesSeriesCollection
       stored False;
   end;
 
@@ -7233,7 +7233,7 @@ begin
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
   FootprintWell := AScreenObject.FootprintWell;
-  DyanmicTimesSeriesCollection := AScreenObject.DyanmicTimesSeriesCollection;
+  DyanmicTimesSeriesCollections := AScreenObject.DyanmicTimesSeriesCollections;
 
   // avoid creating AScreenObject.FPointPositionValues if it
   // hasn't been created yet.
@@ -11901,7 +11901,7 @@ begin
   FStoredMinimumFraction := TRealStorage.Create;
   FStoredMinimumFraction.OnChange := InvalidateSelf;
 
-  FDyanmicTimesSeriesCollection := TDyanmicTimesSeriesCollection.Create(Model, self);
+  FDyanmicTimesSeriesCollections := TDynamicTimesSeriesCollections.Create(Model as TCustomModel, self);
 //  FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
 end;
 
@@ -20093,7 +20093,7 @@ var
   FormulaIndex: Integer;
   FormulaObject: IFormulaObject;
 begin
-  FDyanmicTimesSeriesCollection.Free;
+  FDyanmicTimesSeriesCollections.Free;
 //  FSubObservations.Free;
   FStoredMinimumFraction.Free;
   FreeAndNil(FFootprintWell);
@@ -20872,9 +20872,9 @@ begin
 end;
 
 procedure TScreenObject.SetDyanmicTimesSeriesCollection(
-  const Value: TDyanmicTimesSeriesCollection);
+  const Value: TDynamicTimesSeriesCollections);
 begin
-  FDyanmicTimesSeriesCollection.Assign(Value);
+  FDyanmicTimesSeriesCollections.Assign(Value);
 end;
 
 function TScreenObject.SelectEdge(const X, Y: integer): integer;

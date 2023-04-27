@@ -591,8 +591,8 @@ begin
       Location.Row := ACell.Row;
       Location.Column := ACell.Column;
       TimeSeries := DynamicTimeSeries.StaticTimeSeries[Location];
-      BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeries.SeriesName);
-      TimeSeriesName := TimeSeries.SeriesName;
+      BoundaryGroup.Mf6TimeSeriesNames.Add(string(TimeSeries.SeriesName));
+      TimeSeriesName := string(TimeSeries.SeriesName);
     end;
 
     // 2. update locations

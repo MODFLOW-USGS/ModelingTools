@@ -1,4 +1,4 @@
-unit frameModflow6TimeSeriesUnit;
+unit frameModflow6DynamicTimeSeriesUnit;
 
 interface
 
@@ -6,54 +6,49 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, RbwDataGrid4,
   Vcl.StdCtrls, Vcl.Mask, JvExMask, JvSpin, Vcl.ExtCtrls,
-  Math, GoPhastTypes,
-  Modflow6TimeSeriesCollectionsInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, GoPhastTypes,
+  Modflow6TimeSeriesCollectionsInterfaceUnit, System.Math,
+  Modflow6TimeSeriesInterfaceUnit;
 
 type
-
-
-  TframeModflow6TimeSeries = class(TFrame)
+  TframeModflow6DynamicTimeSeries = class(TFrame)
     pnlBottom: TPanel;
-    seTimeSeriesCount: TJvSpinEdit;
-    seTimeCount: TJvSpinEdit;
     lblTimeSeriesCount: TLabel;
     lblTimeCount: TLabel;
+    seTimeSeriesCount: TJvSpinEdit;
+    seTimeCount: TJvSpinEdit;
     btnDeleteTimeSeries: TButton;
     btnDeleteTime: TButton;
-    rrdgTimeSeries: TRbwRowDataGrid;
+    btnInsertTime: TButton;
     pnlTop: TPanel;
     edGroupName: TEdit;
-    btnInsertTime: TButton;
+    rrdgTimeSeries: TRbwRowDataGrid;
     procedure rrdgTimeSeriesSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure seTimeSeriesCountChange(Sender: TObject);
-    procedure seTimeCountChange(Sender: TObject);
     procedure btnDeleteTimeSeriesClick(Sender: TObject);
     procedure btnDeleteTimeClick(Sender: TObject);
+    procedure seTimeCountChange(Sender: TObject);
     procedure rrdgTimeSeriesBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
     procedure btnInsertTimeClick(Sender: TObject);
   private
-    // @name contains @link(FTimesSeriesGroup)
-    FTimesSeriesGroupItem: ITimeSeriesCollectionItem;
-    FTimesSeriesGroup: ITimesSeriesCollection;
+    FTimesSeriesGroupItem: IDynamicTimeSeriesItem;
+    FTimesSeriesGroup: IDyanmicTimesSeriesCollection;
     procedure InitializeTimeRows;
     { Private declarations }
   public
     procedure InitializeGrid;
-    procedure GetData(ATimesSeriesGroupItem: ITimeSeriesCollectionItem; PestNames: TStringList);
+    procedure GetData(ATimesSeriesGroupItem: IDynamicTimeSeriesItem; PestNames: TStringList);
     procedure SetData;
-    property GroupItem: ITimeSeriesCollectionItem read FTimesSeriesGroupItem;
+    property GroupItem: IDynamicTimeSeriesItem read FTimesSeriesGroupItem;
     { Public declarations }
   end;
 
-resourcestring
-  StrName = 'Name';
-  StrTimes = 'Times';
-  StrScaleFactorSFAC = 'Scale Factor (SFAC)';
-  StrInterpolationMethod = 'Interpolation Method (METHOD)';
-
 implementation
+
+uses
+  frameModflow6TimeSeriesUnit;
 
 {$R *.dfm}
 
@@ -62,7 +57,9 @@ type
     tsrInterpolation, tsrFirstTime);
   TTimeSeriesColumns = (tscLabel, tscTimes, tscFirstSeries);
 
-procedure TframeModflow6TimeSeries.btnDeleteTimeClick(Sender: TObject);
+{ TframeModflow6DynamicTimeSeries }
+
+procedure TframeModflow6DynamicTimeSeries.btnDeleteTimeClick(Sender: TObject);
 begin
   if (rrdgTimeSeries.Row >= Ord(tsrFirstTime))
     and (seTimeCount.AsInteger > 1) then
@@ -73,9 +70,10 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.btnDeleteTimeSeriesClick(Sender: TObject);
+procedure TframeModflow6DynamicTimeSeries.btnDeleteTimeSeriesClick(
+  Sender: TObject);
 var
-  TimeSeries: IMf6TimeSeries;
+  TimeSeries: IDynamicTimeSeries;
   ACollection: TPhastCollection;
 begin
   if rrdgTimeSeries.Col >= 2 then
@@ -83,7 +81,7 @@ begin
     ACollection := rrdgTimeSeries.Objects[rrdgTimeSeries.Col, 0] as TPhastCollection;
     if ACollection <> nil then
     begin
-      if ACollection.QueryInterface(IMf6TimeSeries, TimeSeries) <> 0 then
+      if ACollection.QueryInterface(IDynamicTimeSeries, TimeSeries) <> 0 then
       begin
         Assert(False);
       end;
@@ -103,7 +101,7 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.btnInsertTimeClick(Sender: TObject);
+procedure TframeModflow6DynamicTimeSeries.btnInsertTimeClick(Sender: TObject);
 begin
   if (rrdgTimeSeries.Row >= Ord(tsrFirstTime)) then
   begin
@@ -113,12 +111,12 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.GetData(
-  ATimesSeriesGroupItem: ITimeSeriesCollectionItem; PestNames: TStringList);
+procedure TframeModflow6DynamicTimeSeries.GetData(
+  ATimesSeriesGroupItem: IDynamicTimeSeriesItem; PestNames: TStringList);
 var
   TimeIndex: Integer;
   SeriesIndex: Integer;
-  ASeries: IMf6TimeSeries;
+  ASeries: IDynamicTimeSeries;
   ColIndex: Integer;
   ASeriesItem: ITimeSeriesItem;
   SeriesCount: Integer;
@@ -126,6 +124,7 @@ var
 begin
   FTimesSeriesGroupItem := ATimesSeriesGroupItem;
   FTimesSeriesGroup := ATimesSeriesGroupItem.TimesSeriesCollectionI;
+
   edGroupName.Text := String(FTimesSeriesGroup.GroupName);
   rrdgTimeSeries.BeginUpdate;
   try
@@ -161,7 +160,7 @@ begin
       end;
       rrdgTimeSeries.Objects[ColIndex, 0] := ASeriesItem.TimeSeriesI as TObject;
       ASeriesI := ASeriesItem.TimeSeriesI;
-      if ASeriesI.QueryInterface(IMf6TimeSeries, ASeries) <> 0 then
+      if ASeriesI.QueryInterface(IDynamicTimeSeries, ASeries) <> 0 then
       begin
         Assert(False);
       end;
@@ -187,8 +186,8 @@ begin
       Assert(ASeries.Count = FTimesSeriesGroup.Times.Count);
       for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
       begin
-        rrdgTimeSeries.RealValue[ColIndex, TimeIndex + Ord(tsrFirstTime)]
-          := ASeries.Values[TimeIndex];
+        rrdgTimeSeries.Cells[ColIndex, TimeIndex + Ord(tsrFirstTime)]
+          := ASeries.Items[TimeIndex].Value;
       end;
       Inc(ColIndex);
     end;
@@ -197,7 +196,23 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.InitializeTimeRows;
+procedure TframeModflow6DynamicTimeSeries.InitializeGrid;
+begin
+  rrdgTimeSeries.BeginUpdate;
+  try
+    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrName)] := StrName;
+    rrdgTimeSeries.Cells[Ord(tscTimes), Ord(tsrName)] := StrTimes;
+    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrPestModifier)] := StrPestModifier;
+    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrPestMethod)] := StrModificationMethod;
+    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrScaleFactor)] := StrScaleFactorSFAC;
+    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrInterpolation)] := StrInterpolationMethod;
+    InitializeTimeRows;
+  finally
+    rrdgTimeSeries.EndUpdate
+  end;
+end;
+
+procedure TframeModflow6DynamicTimeSeries.InitializeTimeRows;
 var
   TimeIndex: Integer;
 begin
@@ -214,24 +229,8 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.InitializeGrid;
-begin
-  rrdgTimeSeries.BeginUpdate;
-  try
-    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrName)] := StrName;
-    rrdgTimeSeries.Cells[Ord(tscTimes), Ord(tsrName)] := StrTimes;
-    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrPestModifier)] := StrPestModifier;
-    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrPestMethod)] := StrModificationMethod;
-    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrScaleFactor)] := StrScaleFactorSFAC;
-    rrdgTimeSeries.Cells[Ord(tscLabel), Ord(tsrInterpolation)] := StrInterpolationMethod;
-    InitializeTimeRows;
-  finally
-    rrdgTimeSeries.EndUpdate
-  end;
-end;
-
-procedure TframeModflow6TimeSeries.rrdgTimeSeriesBeforeDrawCell(Sender: TObject;
-  ACol, ARow: Integer);
+procedure TframeModflow6DynamicTimeSeries.rrdgTimeSeriesBeforeDrawCell(
+  Sender: TObject; ACol, ARow: Integer);
 var
   FirstTime: Double;
   SecondTime: double;
@@ -267,8 +266,8 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.rrdgTimeSeriesSelectCell(Sender: TObject;
-  ACol, ARow: Integer; var CanSelect: Boolean);
+procedure TframeModflow6DynamicTimeSeries.rrdgTimeSeriesSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   if (ACol = 1) then
   begin
@@ -279,13 +278,13 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.SetData;
+procedure TframeModflow6DynamicTimeSeries.SetData;
 const
   NoValue = 3.0E30;
 var
   TimeIndex: Integer;
   SeriesIndex: Integer;
-  ASeries: IMf6TimeSeries;
+  ASeries: IDynamicTimeSeries;
   ACollection: TPhastCollection;
 begin
   FTimesSeriesGroup.GroupName := AnsiString(edGroupName.Text);
@@ -302,7 +301,7 @@ begin
     ACollection := rrdgTimeSeries.Objects[SeriesIndex, 0] as TPhastCollection;
     if ACollection <> nil then
     begin
-      if ACollection.QueryInterface(IMf6TimeSeries, ASeries) <> 0 then
+      if ACollection.QueryInterface(IDynamicTimeSeries, ASeries) <> 0 then
       begin
         Assert(False);
       end;
@@ -332,26 +331,27 @@ begin
     Assert(ASeries.Count = FTimesSeriesGroup.Times.Count);
     for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
     begin
-      ASeries.Values[TimeIndex] :=
-        rrdgTimeSeries.RealValueDefault[
-        SeriesIndex, TimeIndex + Ord(tsrFirstTime), NoValue];
+      ASeries.Items[TimeIndex].Value :=
+        rrdgTimeSeries.Cells[
+        SeriesIndex, TimeIndex + Ord(tsrFirstTime)];
     end;
   end;
 end;
 
-procedure TframeModflow6TimeSeries.seTimeCountChange(Sender: TObject);
+procedure TframeModflow6DynamicTimeSeries.seTimeCountChange(Sender: TObject);
 begin
   rrdgTimeSeries.RowCount := seTimeCount.AsInteger + Ord(tsrFirstTime);
   InitializeTimeRows;
   btnDeleteTime.Enabled := seTimeCount.AsInteger > 1;
 end;
 
-procedure TframeModflow6TimeSeries.seTimeSeriesCountChange(Sender: TObject);
+procedure TframeModflow6DynamicTimeSeries.seTimeSeriesCountChange(
+  Sender: TObject);
 var
   ColIndex: Integer;
-  TimeSeries: IMf6TimeSeries;
-  ASeries: IMf6TimeSeries;
-  SeriesToUse: IMf6TimeSeries;
+  TimeSeries: IDynamicTimeSeries;
+  ASeries: IDynamicTimeSeries;
+  SeriesToUse: IDynamicTimeSeries;
   ColToUse: Integer;
   SeriesIndex: Integer;
   ACollection: TPhastCollection;
@@ -365,7 +365,7 @@ begin
       ACollection  := rrdgTimeSeries.Objects[ColIndex, 0] as TPhastCollection;
       if ACollection <> nil then
       begin
-        if ACollection.QueryInterface(IMf6TimeSeries,TimeSeries) <> 0  then
+        if ACollection.QueryInterface(IDynamicTimeSeries,TimeSeries) <> 0  then
         begin
           Assert(False);
         end;
@@ -386,7 +386,7 @@ begin
       for SeriesIndex := 0 to FTimesSeriesGroup.Count - 1 do
       begin
         ASeriesI := FTimesSeriesGroup.ItemsI[SeriesIndex].TimeSeriesI;
-        if ASeriesI.QueryInterface(IMf6TimeSeries, ASeries) <> 0 then
+        if ASeriesI.QueryInterface(IDynamicTimeSeries, ASeries) <> 0 then
         begin
           Assert(False);
         end;

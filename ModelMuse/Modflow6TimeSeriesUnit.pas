@@ -6,7 +6,7 @@ uses
   System.Classes, GoPhastTypes, Modflow6TimeSeriesInterfaceUnit;
 
 type
-  TMf6TimeSeries = class(TRealCollection, IMf6TimeSeries)
+  TMf6TimeSeries = class(TRealCollection, ITimeSeries, IMf6TimeSeries)
   private
     FSeriesName: AnsiString;
     FScaleFactorParameter: string;

@@ -3955,8 +3955,8 @@ begin
         TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(UnmodifiedFormula);
         if TimeSeries = nil then
         begin
-          DynamicTimeSeries := AScreenObject.DyanmicTimesSeriesCollection.
-            GetValuesByName(UnmodifiedFormula);
+          DynamicTimeSeries := AScreenObject.DyanmicTimesSeriesCollections.
+            GetTimeSeriesByName(UnmodifiedFormula);
         end
         else
         begin
@@ -4232,8 +4232,8 @@ begin
                   TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(Formula);
                   if TimeSeries = nil then
                   begin
-                    DynamicTimeSeries := AScreenObject.DyanmicTimesSeriesCollection.
-                      GetValuesByName(Formula);
+                    DynamicTimeSeries := AScreenObject.DyanmicTimesSeriesCollections.
+                      GetTimeSeriesByName(Formula);
                   end
                   else
                   begin

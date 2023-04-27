@@ -12,7 +12,7 @@ uses
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
   Modflow6TimeSeriesCollectionsUnit, System.SysUtils,
   ScreenObjectInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit,
-  RbwParser;
+  RbwParser, System.Generics.Collections;
 
 type
   TDynamicTimeSeriesFormulaItem = class (TFormulaOrderedItem,
@@ -108,7 +108,7 @@ type
 
   TDyanmicTimesSeriesCollection = class;
 
-  TDynamicTimeSeriesItem = class(TOrderedItem, IDynamicTimeSeriesItem)
+  TDynamicTimeSeriesItem = class(TOrderedItem,  IDynamicTimeSeriesItem, ITimeSeriesItem)
   private
     FDynamicTimeSeries: TDynamicTimeSeries;
     FModel: IModelForDynamicTimeSeries;
@@ -118,10 +118,13 @@ type
     FStaticCollection: ITimesSeriesCollections;
     procedure SetTimeSeriesI(const Value: IDynamicTimeSeries);
     function GetDynamicTimeSeriesI: IDynamicTimeSeries;
+    function GetTimeSeriesI: ITimeSeries;
     procedure SetTimeSeries(const Value: TDynamicTimeSeries);
     function GetStaticGroup: ITimesSeriesCollection;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    function GetTimesSeriesCollectionI: IDyanmicTimesSeriesCollection;
+    property TimesSeriesCollectionI: IDyanmicTimesSeriesCollection read GetTimesSeriesCollectionI;
   public
     Constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -135,27 +138,75 @@ type
   end;
 
   TDyanmicTimesSeriesCollection = class(TCustomTimesSeriesCollection,
-    IDyanmicTimesSeriesCollection)
+    IDyanmicTimesSeriesCollection, ITimesSeriesCollection)
   private
     FTimeSeriesDictionary: TCacheDictionary<string, IDynamicTimeSeries>;
     FModel: IModelMuseModel;
     FScreenObject: IScreenObject;
-    function GetItem(Index: Integer): IDynamicTimeSeriesItem;
+    function GetItemI(Index: Integer): ITimeSeriesItem;
     function GetTimeCount: Integer;
-    procedure SetItem(Index: Integer; const Value: IDynamicTimeSeriesItem);
+    procedure SetItemI(Index: Integer; const Value: ITimeSeriesItem);
     procedure SetTimeCount(const Value: Integer);
+    function GetItem(Index: Integer): TDynamicTimeSeriesItem;
+    procedure SetItem(Index: Integer; const Value: TDynamicTimeSeriesItem);
   public
     Constructor Create(Model: IModelMuseModel; ScreenObject: IScreenObject);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function GetValuesByName(const AName: string): IDynamicTimeSeries;
     property TimeCount: Integer read GetTimeCount write SetTimeCount;
-    property Items[Index: Integer]: IDynamicTimeSeriesItem read GetItem write SetItem; default;
+    property ItemsI[Index: Integer]: ITimeSeriesItem read GetItemI write SetItemI; default;
+    property Items[Index: Integer]: TDynamicTimeSeriesItem read GetItem write SetItem;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
-    function Add: IDynamicTimeSeriesItem;
+    function Add: TDynamicTimeSeriesItem;
+    function AddI: ITimeSeriesItem;
     procedure Loaded;
   end;
 
+  TDynamicTimeSeriesCollectionItem = class(TOrderedItem, ITimeSeriesCollectionItem)
+  private
+    FTimesSeriesCollection: TDyanmicTimesSeriesCollection;
+    function GetTimesSeriesCollectionI: ITimesSeriesCollection;
+    procedure SetTimesSeriesCollection(const Value: TDyanmicTimesSeriesCollection);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    Constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    property TimesSeriesCollectionI: ITimesSeriesCollection read GetTimesSeriesCollectionI;
+  published
+    property TimesSeriesCollection: TDyanmicTimesSeriesCollection
+      read FTimesSeriesCollection write SetTimesSeriesCollection;
+  end;
+
+  TDynamicTimesSeriesGroups = TObjectList<TDyanmicTimesSeriesCollection>;
+
+  TDynamicTimesSeriesCollections = class(TOrderedCollection)
+  private
+    FTimeSeriesGroupsDictionary: TCacheDictionary<string, TDyanmicTimesSeriesCollection>;
+    FTimeSeriesDictionary: TCacheDictionary<string, TDynamicTimeSeries>;
+    FTimeSeriesNames: TStringList;
+    FScreenObject: IScreenObject;
+    function GetItem(Index: Integer): TDynamicTimeSeriesCollectionItem;
+    procedure SetItem(Index: Integer; const Value: TDynamicTimeSeriesCollectionItem);
+    function GetTimeSeriesNames: TStringList;
+  public
+    Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: IScreenObject);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    property Items[Index: Integer]: TDynamicTimeSeriesCollectionItem
+      read GetItem write SetItem; default;
+    function Add: TDynamicTimeSeriesCollectionItem;
+    function AddI: ITimeSeriesCollectionItem;
+    function GetTimeSeriesByName(ASeriesName: String): TDynamicTimeSeries;
+    procedure GetTimesSeriesGroups(SeriesNames: TStrings;
+      Groups: TDynamicTimesSeriesGroups);
+    function GetTimesSeriesCollectionBySeriesName(
+      const ASeriesName: string): TDyanmicTimesSeriesCollection;
+    property TimeSeriesNames: TStringList read GetTimeSeriesNames;
+    procedure Loaded;
+  end;
 
 
 procedure DynamicTimeItemRemoveSubscription(Sender: TObject; Subject: TObject;
@@ -317,6 +368,7 @@ end;
 
 destructor TDynamicTimeSeries.Destroy;
 begin
+  FUsesList.Free;
   FTimeSeriesLocationDictionary.Free;
   FNotifierComponent.Free;
   FStoredScaleFactor.Free;
@@ -384,10 +436,16 @@ var
   Expression: TExpression;
   VariablesUsed: TStringList;
   VariableIndex: Integer;
+  TimeSeriesI: ITimeSeries;
 begin
   if not FTimeSeriesLocationDictionary.TryGetValue(Location, result) then
   begin
-    result := FGroup.StaticGroup.AddI.TimeSeriesI;
+    TimeSeriesI := FGroup.StaticGroup.AddI.TimeSeriesI;
+    if TimeSeriesI.QueryInterface(IMf6TimeSeries, result) <> 0 then
+    begin
+      Assert(False);
+    end;
+//    result := FGroup.StaticGroup.AddI.TimeSeriesI;
     Assert(FGroup.FStaticCollection <> nil);
     result.SeriesName := FGroup.FStaticCollection.DefaultTimeSeriesName;
     result.ScaleFactor := ScaleFactor;
@@ -613,7 +671,6 @@ end;
 
 function TDynamicTimeSeriesItem.GetStaticGroup: ITimesSeriesCollection;
 var
-//  FStaticCollection: ITimesSeriesCollections;
   Item: ITimeSeriesCollectionItem;
   ChildCollection: ITimesSeriesCollection;
 begin
@@ -627,6 +684,16 @@ begin
     result.Times := FDyanmicCollection.Times;
   end;
   result := FStaticGroup;
+end;
+
+function TDynamicTimeSeriesItem.GetTimeSeriesI: ITimeSeries;
+begin
+  result := FDynamicTimeSeries;
+end;
+
+function TDynamicTimeSeriesItem.GetTimesSeriesCollectionI: IDyanmicTimesSeriesCollection;
+begin
+  result := FDyanmicCollection;
 end;
 
 function TDynamicTimeSeriesItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -648,7 +715,12 @@ end;
 
 { TDyanmicTimesSeriesCollection }
 
-function TDyanmicTimesSeriesCollection.Add: IDynamicTimeSeriesItem;
+function TDyanmicTimesSeriesCollection.Add: TDynamicTimeSeriesItem;
+begin
+  result := inherited Add as TDynamicTimeSeriesItem;
+end;
+
+function TDyanmicTimesSeriesCollection.AddI: ITimeSeriesItem;
 begin
   result := inherited Add as TDynamicTimeSeriesItem;
 end;
@@ -678,7 +750,13 @@ begin
 end;
 
 function TDyanmicTimesSeriesCollection.GetItem(
-  Index: Integer): IDynamicTimeSeriesItem;
+  Index: Integer): TDynamicTimeSeriesItem;
+begin
+  result := inherited Items[Index] as TDynamicTimeSeriesItem;
+end;
+
+function TDyanmicTimesSeriesCollection.GetItemI(
+  Index: Integer): ITimeSeriesItem;
 begin
   result := inherited Items[Index] as TDynamicTimeSeriesItem;
 end;
@@ -693,6 +771,7 @@ function TDyanmicTimesSeriesCollection.GetValuesByName(
 var
   ItemIndex: Integer;
   TimeSeries: IDynamicTimeSeries;
+  TimeSeriesI: ITimeSeries;
 begin
   result := nil;
   if Model.ModelSelection <> msModflow2015 then
@@ -704,7 +783,11 @@ begin
   begin
     for ItemIndex := 0 to Count - 1 do
     begin
-      TimeSeries := Items[ItemIndex].TimeSeriesI;
+      TimeSeriesI := ItemsI[ItemIndex].TimeSeriesI;
+      if TimeSeriesI.QueryInterface(IMf6TimeSeries, TimeSeries) <> 0 then
+      begin
+        Assert(False);
+      end;
       if TimeSeries.Deleted then
       begin
         Continue;
@@ -731,16 +814,22 @@ var
 begin
   for SeriesIndex := Count - 1 downto 0 do
   begin
-    if Items[SeriesIndex].TimeSeriesI.Deleted then
+    if ItemsI[SeriesIndex].TimeSeriesI.Deleted then
     begin
-      (Items[SeriesIndex] as TDynamicTimeSeriesItem).Free;
+      (ItemsI[SeriesIndex] as TDynamicTimeSeriesItem).Free;
     end;
   end;
   FTimeSeriesDictionary.Clear;
 end;
 
 procedure TDyanmicTimesSeriesCollection.SetItem(Index: Integer;
-  const Value: IDynamicTimeSeriesItem);
+  const Value: TDynamicTimeSeriesItem);
+begin
+  inherited Items[Index] := Value as TDynamicTimeSeriesItem;
+end;
+
+procedure TDyanmicTimesSeriesCollection.SetItemI(Index: Integer;
+  const Value: ITimeSeriesItem);
 begin
   inherited Items[Index] := Value as TDynamicTimeSeriesItem;
 end;
@@ -750,10 +839,15 @@ var
   ItemIndex: Integer;
   TimeIndex: Integer;
   AnItem: IDynamicTimeSeriesItem;
+  AnItemI: ITimeSeriesItem;
 begin
   for ItemIndex := 0 to Count-1 do
   begin
-    AnItem := Items[ItemIndex];
+    AnItemI := ItemsI[ItemIndex];
+    if AnItemI.QueryInterface(IDynamicTimeSeriesItem, AnItem) <> 0 then
+    begin
+      Assert(False);
+    end;
     AnItem.TimeSeriesI.Count := Value;
     for TimeIndex := Times.Count to Value -1 do
     begin
@@ -773,6 +867,294 @@ procedure DynamicTimeItemRestoreSubscription(Sender: TObject; Subject: TObject;
   const AName: string);
 begin
   (Subject as TDynamicTimeSeriesFormulaItem).RestoreSubscription(Sender, AName);
+end;
+
+{ TDynamicTimeSeriesCollectionItem }
+
+procedure TDynamicTimeSeriesCollectionItem.Assign(Source: TPersistent);
+begin
+  if Source is TDynamicTimeSeriesCollectionItem then
+  begin
+    TimesSeriesCollection := TDynamicTimeSeriesCollectionItem(Source).TimesSeriesCollection
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TDynamicTimeSeriesCollectionItem.Create(Collection: TCollection);
+var
+  ScreenObject: IScreenObject;
+begin
+  inherited;
+  ScreenObject := (Collection as TDynamicTimesSeriesCollections).FScreenObject;
+  FTimesSeriesCollection := TDyanmicTimesSeriesCollection.Create(Model, ScreenObject)
+end;
+
+destructor TDynamicTimeSeriesCollectionItem.Destroy;
+begin
+  FTimesSeriesCollection.Free;
+  inherited;
+end;
+
+function TDynamicTimeSeriesCollectionItem.GetTimesSeriesCollectionI: ITimesSeriesCollection;
+begin
+  result := FTimesSeriesCollection;
+end;
+
+function TDynamicTimeSeriesCollectionItem.IsSame(
+  AnotherItem: TOrderedItem): boolean;
+begin
+  result := (AnotherItem is TDynamicTimeSeriesCollectionItem)
+    and (TimesSeriesCollection.IsSame(
+    TDynamicTimeSeriesCollectionItem(AnotherItem).TimesSeriesCollection));
+end;
+
+procedure TDynamicTimeSeriesCollectionItem.SetTimesSeriesCollection(
+  const Value: TDyanmicTimesSeriesCollection);
+begin
+  FTimesSeriesCollection.Assign(Value);
+end;
+
+{ TDynamicTimesSeriesCollections }
+
+function TDynamicTimesSeriesCollections.Add: TDynamicTimeSeriesCollectionItem;
+begin
+  result := inherited Add as TDynamicTimeSeriesCollectionItem;
+end;
+
+function TDynamicTimesSeriesCollections.AddI: ITimeSeriesCollectionItem;
+begin
+  result := Add;
+end;
+
+procedure TDynamicTimesSeriesCollections.Assign(Source: TPersistent);
+begin
+  inherited;
+  FTimeSeriesGroupsDictionary.Clear;
+  FTimeSeriesDictionary.Clear;
+end;
+
+constructor TDynamicTimesSeriesCollections.Create(
+  Model: IModelForTOrderedCollection; ScreenObject: IScreenObject);
+begin
+  inherited Create(TDynamicTimeSeriesCollectionItem, Model);
+  FScreenObject := ScreenObject;
+
+  FTimeSeriesGroupsDictionary := TCacheDictionary<string, TDyanmicTimesSeriesCollection>.Create;
+  FTimeSeriesDictionary := TCacheDictionary<string, TDynamicTimeSeries>.Create;
+end;
+
+destructor TDynamicTimesSeriesCollections.Destroy;
+begin
+  FTimeSeriesNames.Free;
+  FTimeSeriesDictionary.Free;
+  FTimeSeriesGroupsDictionary.Free;
+  inherited;
+end;
+
+function TDynamicTimesSeriesCollections.GetItem(
+  Index: Integer): TDynamicTimeSeriesCollectionItem;
+begin
+  result := inherited Items[Index] as TDynamicTimeSeriesCollectionItem;
+end;
+
+function TDynamicTimesSeriesCollections.GetTimeSeriesByName(
+  ASeriesName: String): TDynamicTimeSeries;
+var
+  GroupIndex: Integer;
+  SeriesIndex: Integer;
+  AGroup: TDyanmicTimesSeriesCollection;
+  ASeries: TDynamicTimeSeries;
+begin
+  result := nil;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  if (Count > 0) and(FTimeSeriesDictionary.Count = 0) then
+  begin
+    for GroupIndex := 0 to Count - 1 do
+    begin
+      AGroup := Items[GroupIndex].TimesSeriesCollection;
+      if AGroup.Deleted then
+      begin
+        Continue;
+      end;
+      for SeriesIndex := 0 to AGroup.Count - 1 do
+      begin
+        ASeries := AGroup.Items[SeriesIndex].TimeSeries;
+        if ASeries.Deleted then
+        begin
+          Continue;
+        end;
+        FTimeSeriesDictionary.Add(UpperCase(string(ASeries.SeriesName)), ASeries);
+      end;
+    end;
+  end;
+  if not FTimeSeriesDictionary.TryGetValue(UpperCase(ASeriesName), result) then
+  begin
+    result := nil;
+  end;
+end;
+
+function TDynamicTimesSeriesCollections.GetTimeSeriesNames: TStringList;
+var
+  GroupIndex: Integer;
+  AGroup: TDyanmicTimesSeriesCollection;
+  SeriesIndex: Integer;
+  TimeSeries: TDynamicTimeSeries;
+begin
+  if FTimeSeriesNames = nil then
+  begin
+    FTimeSeriesNames := TStringList.Create;
+  end
+  else
+  begin
+    FTimeSeriesNames.Clear
+  end;
+  for GroupIndex := 0 to Count - 1 do
+  begin
+    AGroup := Items[GroupIndex].TimesSeriesCollection;
+    if AGroup.Deleted then
+    begin
+      Continue;
+    end;
+    for SeriesIndex := 0 to AGroup.Count - 1 do
+    begin
+      TimeSeries := AGroup.Items[SeriesIndex].TimeSeries;
+      if TimeSeries.Deleted then
+      begin
+        Continue;
+      end;
+      FTimeSeriesNames.Add(string(TimeSeries.SeriesName));
+    end;
+  end;
+  result := FTimeSeriesNames
+end;
+
+function TDynamicTimesSeriesCollections.GetTimesSeriesCollectionBySeriesName(
+  const ASeriesName: string): TDyanmicTimesSeriesCollection;
+var
+  GroupIndex: Integer;
+  SeriesIndex: Integer;
+  AGroup: TDyanmicTimesSeriesCollection;
+  TimeSeries: TDynamicTimeSeries;
+begin
+  result := nil;
+  if (Count > 0) then
+  begin
+    if (FTimeSeriesGroupsDictionary.Count = 0) then
+    begin
+      for GroupIndex := 0 to Count - 1 do
+      begin
+        AGroup := Items[GroupIndex].TimesSeriesCollection;
+        if AGroup.Deleted then
+        begin
+          Continue;
+        end;
+        for SeriesIndex := 0 to AGroup.Count - 1 do
+        begin
+          TimeSeries := AGroup.Items[SeriesIndex].TimeSeries;
+          if TimeSeries.Deleted then
+          begin
+            Continue;
+          end;
+          FTimeSeriesGroupsDictionary.Add(UpperCase(String(TimeSeries.SeriesName)), AGroup);
+        end;
+      end;
+    end;
+    if not FTimeSeriesGroupsDictionary.TryGetValue(UpperCase(ASeriesName), result) then
+    begin
+      result := nil;
+    end;
+  end;
+end;
+
+procedure TDynamicTimesSeriesCollections.GetTimesSeriesGroups(
+  SeriesNames: TStrings; Groups: TDynamicTimesSeriesGroups);
+var
+  SeriesIndex: Integer;
+  GroupIndex: Integer;
+  LocalSeriesNames: TStringList;
+  SeriesName: string;
+  AGroup: TDyanmicTimesSeriesCollection;
+  UsedGroup: TDyanmicTimesSeriesCollection;
+  TimeSeries: IDynamicTimeSeries;
+begin
+  Groups.Clear;
+  if (SeriesNames.Count = 1) and (SeriesNames[0] = '') then
+  begin
+    Exit;
+  end;
+  LocalSeriesNames := TStringList.Create;
+  try
+    LocalSeriesNames.AddStrings(SeriesNames);
+    for GroupIndex := 0 to Count - 1 do
+    begin
+      AGroup := Items[GroupIndex].TimesSeriesCollection;
+      if AGroup.Deleted then
+      begin
+        Continue;
+      end;
+      UsedGroup := nil;
+      for SeriesIndex := LocalSeriesNames.Count - 1 downto 0 do
+      begin
+        SeriesName := LocalSeriesNames[SeriesIndex];
+        if SeriesName <> '' then
+        begin
+          TimeSeries := AGroup.GetValuesByName(SeriesName);
+          if (TimeSeries <> nil) and not TimeSeries.Deleted then
+          begin
+            if UsedGroup = nil then
+            begin
+              UsedGroup := TDyanmicTimesSeriesCollection.Create(nil, nil);
+              UsedGroup.Times := AGroup.Times;
+              UsedGroup.GroupName := AGroup.GroupName;
+            end;
+            UsedGroup.Add.TimeSeries := TimeSeries as TDynamicTimeSeries;
+            LocalSeriesNames.Delete(SeriesIndex);
+          end;
+        end
+        else
+        begin
+          LocalSeriesNames.Delete(SeriesIndex);
+        end;
+      end;
+      if UsedGroup <> nil then
+      begin
+        Groups.Add(UsedGroup);
+      end;
+    end;
+  finally
+    LocalSeriesNames.Free;
+  end;
+end;
+
+procedure TDynamicTimesSeriesCollections.Loaded;
+var
+  Index: Integer;
+begin
+  for Index := Count - 1 downto 0 do
+  begin
+    if Items[Index].TimesSeriesCollection.Deleted then
+    begin
+      Items[Index].Free;
+    end
+    else
+    begin
+      Items[Index].TimesSeriesCollection.Loaded;
+    end;
+  end;
+  FTimeSeriesDictionary.Clear;
+  FTimeSeriesGroupsDictionary.Clear;
+end;
+
+procedure TDynamicTimesSeriesCollections.SetItem(Index: Integer;
+  const Value: TDynamicTimeSeriesCollectionItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

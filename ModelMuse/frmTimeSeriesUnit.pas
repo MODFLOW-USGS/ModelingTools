@@ -271,7 +271,6 @@ var
   AFrame: TframeModflow6TimeSeries;
   SeriesIndex: Integer;
 begin
-//  Assert(plTimeSeries.PageCount = FTimesSeries.Count);
   for SeriesIndex := 0 to plTimeSeries.PageCount - 1 do
   begin
     AFrame := plTimeSeries.Pages[SeriesIndex].Controls[0] as TframeModflow6TimeSeries;

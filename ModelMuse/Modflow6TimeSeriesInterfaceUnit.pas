@@ -34,6 +34,10 @@ type
     function GetCount: Integer;
     procedure SetCount(const Value: Integer);
     property Count: Integer read GetCount write SetCount;
+
+    function GetDeleted: Boolean;
+    procedure SetDeleted(const Value: Boolean);
+    property Deleted: Boolean read GetDeleted write SetDeleted;
   end;
 
   IMf6TimeSeries = interface(ITimeSeries)
@@ -42,10 +46,6 @@ type
     function GetValue(Index: Integer): Double;
     procedure SetValue(Index: Integer; const Value: Double);
     property Values[Index: Integer]: Double read GetValue write SetValue;
-
-    function GetDeleted: Boolean;
-    procedure SetDeleted(const Value: Boolean);
-    property Deleted: Boolean read GetDeleted write SetDeleted;
   end;
 
 
