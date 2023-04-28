@@ -748,7 +748,7 @@ implementation
 
 uses
   ScreenObjectUnit, FastGEO, PhastModelUnit, ModflowGridUnit,
-  frmGoPhastUnit;
+  frmGoPhastUnit, CellLocationUnit;
 
 { TFarmCostsItem }
 

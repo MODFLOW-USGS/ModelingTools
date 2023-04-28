@@ -86,6 +86,9 @@ type
     // @name is used to specify whether a special format is used for a
     // particular cell.
     property Used: boolean read GetUsed write SetUsed;
+    function GetButtonAllowed: Boolean;
+    procedure SetButtonAllowed(const Value: Boolean);
+    property ButtonAllowed: Boolean read GetButtonAllowed write SetButtonAllowed;
   end;
 
   {$TYPEINFO ON}
@@ -96,6 +99,7 @@ type
     FFormat: TRbwColumnFormat4;
     // @name is the field whose value is get and set in @link(Used).
     FUsed: boolean;
+    FButtonAllowed: Boolean;
     // See @link(Format).
     // @seealso(ISpecialFormatter.SetFormat ISpecialFormatter.SetFormat).
     procedure SetFormat(const Value: TRbwColumnFormat4);
@@ -108,6 +112,8 @@ type
     // See @link(Used).
     // @seealso(ISpecialFormatter.SetUsed ISpecialFormatter.SetUsed).
     procedure SetUsed(const Value: boolean);
+    function GetButtonAllowed: Boolean;
+    procedure SetButtonAllowed(const Value: Boolean);
   published
     // @name is used to specify whether a special format is used for a
     // particular cells
@@ -117,6 +123,7 @@ type
     // particular cells
     // @seealso(ISpecialFormatter.Used ISpecialFormatter.Used).
     property Used: boolean read GetUsed write SetUsed;
+    property ButtonAllowed: Boolean read GetButtonAllowed write SetButtonAllowed;
   End;
   {$TYPEINFO OFF}
 
@@ -611,6 +618,9 @@ type
       DefaultValue: Integer = 0): integer;
     procedure InvalidateCachedWidth; virtual;
     function GetIsUpdating: boolean;
+    function GetSpecialButtonAllowed(ACol, ARow: Integer): Boolean;
+    procedure SetSpecialButtonAllowed(ACol, ARow: Integer;
+      const Value: Boolean);
   protected
     FColorSelectedColumnOrRow: boolean;
     FdgColumn: integer;
@@ -713,6 +723,8 @@ type
       read GetUseSpecialFormat write SetUseSpecialFormat;
     property SpecialFormat[ACol, ARow: Integer]: TRbwColumnFormat4
       read GetSpecialFormat write SetSpecialFormat;
+    property SpecialButtonAllowed[ACol, ARow: Integer]: Boolean
+      read GetSpecialButtonAllowed write SetSpecialButtonAllowed;
     procedure AddRangeSelection(Selection: TGridRect);
     property ItemIndex[const ACol, ARow: integer]: integer read GetItemIndex
       write SetItemIndex;
@@ -2415,6 +2427,7 @@ end;
 function TCustomRBWDataGrid.GetEditStyle(ACol, ARow: Integer): TEditStyle;
 var
   Item: TCustomRowOrColumn;
+  ButtonUsed: Boolean;
 begin
   Item := CollectionItem(ACol, ARow);
   if Item = nil then
@@ -2422,7 +2435,15 @@ begin
     Result := esSimple;
     Exit;
   end;
-  if Item.ButtonUsed then
+  ButtonUsed := Item.ButtonUsed;
+  if ButtonUsed then
+  begin
+    if UseSpecialFormat[ACol, ARow] then
+    begin
+      ButtonUsed := SpecialButtonAllowed[ACol, ARow];
+    end;
+  end;
+  if ButtonUsed then
   begin
     result := esEllipsis;
   end
@@ -5238,6 +5259,13 @@ begin
   result := inherited Selection;
 end;
 
+function TCustomRBWDataGrid.GetSpecialButtonAllowed(ACol,
+  ARow: Integer): Boolean;
+begin
+  AssignSpecialFormat(ACol, ARow);
+  result := FSpecialFormat[ACol, ARow].ButtonAllowed;
+end;
+
 function TCustomRBWDataGrid.GetSpecialFormat(ACol,
   ARow: Integer): TRbwColumnFormat4;
 begin
@@ -5252,6 +5280,13 @@ begin
   dgRow := Value.Top;
   FAnchor := inherited Selection.TopLeft;
   FOtherPoint := inherited Selection.BottomRight;
+end;
+
+procedure TCustomRBWDataGrid.SetSpecialButtonAllowed(ACol, ARow: Integer;
+  const Value: Boolean);
+begin
+  AssignSpecialFormat(ACol, ARow);
+  FSpecialFormat[ACol, ARow].ButtonAllowed := Value;
 end;
 
 procedure TCustomRBWDataGrid.SetSpecialFormat(ACol, ARow: Integer;
@@ -5415,6 +5450,11 @@ end;
 
 { TSpecialFormatter }
 
+function TSpecialFormatter.GetButtonAllowed: Boolean;
+begin
+  result := FButtonAllowed;
+end;
+
 function TSpecialFormatter.GetFormat: TRbwColumnFormat4;
 begin
   result := FFormat;
@@ -5423,6 +5463,11 @@ end;
 function TSpecialFormatter.GetUsed: boolean;
 begin
   result := FUsed;
+end;
+
+procedure TSpecialFormatter.SetButtonAllowed(const Value: Boolean);
+begin
+  FButtonAllowed := Value;
 end;
 
 procedure TSpecialFormatter.SetFormat(const Value: TRbwColumnFormat4);

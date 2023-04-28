@@ -3,7 +3,8 @@ unit ModflowCellUnit;
 interface
 
 uses Windows, SysUtils, Classes, Contnrs, ZLib, GoPhastTypes,
-  System.Generics.Collections;
+  System.Generics.Collections, PhastModelInterfaceUnit, ModelCellInterfaceUnit,
+  ScreenObjectInterfaceUnit;
 
 type
   // @name defines a cell location.
@@ -36,10 +37,10 @@ type
   TValueCell = class(TObject)
   private
     FIFace: TIface;
-    FScreenObject: TObject;
+    FScreenObject: IScreenObject;
     FBoundaryIndex: integer;
     FMf6ObsName: string;
-    procedure SetScreenObject(const Value: TObject);
+    procedure SetScreenObject(const Value: IScreenObject);
   protected
     function GetColumn: integer; virtual; abstract;
     function GetLayer: integer; virtual; abstract;
@@ -125,7 +126,7 @@ type
     // @name is only assigned for boundary conditions that have
     // observations associated with them. (Drains, General head boundaries,
     // Rivers, and constant head cells.).
-    property ScreenObject: TObject read FScreenObject write SetScreenObject;
+    property ScreenObject: IScreenObject read FScreenObject write SetScreenObject;
     property Section: integer read GetSection;
     function IsIdentical(AnotherCell: TValueCell): boolean; virtual;
     function AreRealValuesIdentical(AnotherCell: TValueCell;
@@ -195,7 +196,7 @@ function ReadCompCell(Stream: TStream): TCellLocation;
 
 implementation
 
-uses TempFiles, ScreenObjectUnit, frmGoPhastUnit;
+uses TempFiles;
 
 const
   MaxCondensed = 100;
@@ -582,7 +583,7 @@ begin
   end
   else
   begin
-    WriteCompString(Comp, TScreenObject(ScreenObject).Name);
+    WriteCompString(Comp, ScreenObject.Name);
   end;
   WriteCompString(Comp, Mf6ObsName);
 end;
@@ -648,6 +649,7 @@ procedure TValueCell.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
 var
   ScreenObjectName: string;
+  LocalModel: IModelForTValueCell;
 begin
   FBoundaryIndex := ReadCompInt(Decomp);
   Decomp.Read(FIFace, SizeOf(FIFace));
@@ -658,8 +660,12 @@ begin
   end
   else
   begin
-    ScreenObject := frmGoPhast.PhastModel.
-      GetScreenObjectByName(ScreenObjectName);
+    if IGlobalModel.QueryInterface(IModelForTValueCell, LocalModel) <> 0 then
+    begin
+      Assert(False);
+    end;
+    ScreenObject := LocalModel.
+      GetScreenObjectInterfaceByName(ScreenObjectName);
     Assert(ScreenObject <> nil);
   end;
   Mf6ObsName := ReadCompStringSimple(Decomp);
@@ -670,12 +676,12 @@ begin
 // do nothing
 end;
 
-procedure TValueCell.SetScreenObject(const Value: TObject);
+procedure TValueCell.SetScreenObject(const Value: IScreenObject);
 begin
-  if Value <> nil then
-  begin
-    Assert(Value is TScreenObject)
-  end;
+//  if Value <> nil then
+//  begin
+//    Assert(Value is TScreenObject)
+//  end;
   FScreenObject := Value;
 end;
 

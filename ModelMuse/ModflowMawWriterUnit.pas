@@ -92,7 +92,8 @@ uses
   DataSetUnit, GIS_Functions, AbstractGridUnit, System.Math, ModflowUnitNumbers,
   MeshRenumberingTypes, Vcl.Dialogs, Modflow6ObsWriterUnit,
   ModflowMvrUnit, ModflowMvrWriterUnit, ModflowParameterUnit,
-  Mt3dmsChemUnit, Mt3dmsChemSpeciesUnit, GwtStatusUnit, DataSetNamesUnit;
+  Mt3dmsChemUnit, Mt3dmsChemSpeciesUnit, GwtStatusUnit, DataSetNamesUnit,
+  CellLocationUnit;
 
 resourcestring
   StrTheFollowingObject = 'The following objects can not be used to define m' +
@@ -652,7 +653,7 @@ begin
       ACell := Cells[CellIndex] as TMawCell;
 
       MvrReceiver.ReceiverKey.ScreenObject :=
-        ACell.MawBoundary.ScreenObject;
+        ACell.MawBoundary.ScreenObject as TScreenObject;
       MvrReceiver.ReceiverValues.Index := ACell.WellNumber;
       if (MoverWriter <> nil) and not WritingTemplate then
       begin
@@ -890,6 +891,7 @@ begin
       SetTimeListsUpToDate(TimeLists);
     finally
       DataSets.Free;
+      (Model as TPhastModel).InvalidateAllDynamicLists;
     end;
   except on E: EInvalidTime do
     begin
@@ -1469,7 +1471,7 @@ begin
       ACell := Cells[CellIndex] as TMawCell;
 
       MvrReceiver.ReceiverKey.ScreenObject :=
-        ACell.MawBoundary.ScreenObject;
+        ACell.MawBoundary.ScreenObject as TScreenObject;
       MvrReceiver.ReceiverValues.Index := ACell.WellNumber;
       if (MoverWriter <> nil) and not WritingTemplate then
       begin
@@ -1594,7 +1596,7 @@ begin
       begin
         MvrSource.Index := ACell.WellNumber;
         MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
-        MvrSource.SourceKey.ScreenObject := ACell.MawBoundary.ScreenObject;
+        MvrSource.SourceKey.ScreenObject := ACell.MawBoundary.ScreenObject as TScreenObject;
         MoverWriter.AddMvrSource(MvrSource);
       end;
     end;

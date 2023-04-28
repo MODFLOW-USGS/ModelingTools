@@ -27,6 +27,7 @@ type
     property GroupName: AnsiString read GetGroupName write SetGroupName;
 
     function AddI: ITimeSeriesItem;
+    procedure Free;
 
     function GetCount: Integer;
     procedure SetCount(const Value: Integer);

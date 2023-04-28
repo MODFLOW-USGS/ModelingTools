@@ -64,7 +64,7 @@ uses
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
   OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit,
   FormulaManagerInterfaceUnit, ModflowBoundaryInterfaceUnit,
-  GlobalVariablesInterfaceUnit, Modflow6DynamicTimeSeriesUnit;
+  GlobalVariablesInterfaceUnit, Modflow6DynamicTimeSeriesUnit, CellLocationUnit;
 
 type
   //
@@ -77,12 +77,6 @@ type
   EScreenObjectError = class(Exception);
   ECircularRefScreenObjectError = class(EScreenObjectError);
 
-  // @abstract(@name stores information about where
-  // a @link(TScreenObject) is intersecting
-  // the grid.)
-  //
-  // See @link(TEdgePoint) and @link(TCellElementSegment).
-  TEdgePosition = (epFirst, epMiddle, epLast);
 
   {@abstract(@name represents a point of intersection between a
    @link(TScreenObject) and a grid element or grid cell.)
@@ -221,87 +215,87 @@ type
   // @abstract(@name represents the 2D intersection of
   // one segment of a @link(TScreenObject)
   // with a cell or element in the grid.)
-  TCellElementSegment = class(TObject)
-  private
-    // See @link(X1), @link(X2), @link(Y1), and @link(Y2).
-    FSegment: TSegment2D;
-    // See @link(Col).
-    FCol: integer;
-    // See @link(EndPosition).
-    FEndPosition: TEdgePosition;
-    // See @link(Layer).
-    FLayer: integer;
-    // See @link(VertexIndex).
-    FVertexIndex: integer;
-    // See @link(Row).
-    FRow: integer;
-    // See @link(StartPosition).
-    FStartPosition: TEdgePosition;
-    FSectionIndex: integer;
-    FSubSegments: TSegment2DArray;
-    FLgrEdge: boolean;
-    FScreenObject: TScreenObject;
-    FPositionInSegmentList: integer;
-    procedure Store(Stream: TStream);
-    procedure Restore(Stream: TDecompressionStream);
-  public
-    // @name is the column of the grid which this @classname intersects.
-    // In this context, column can represent a column of elements or a column
-    // of cells depending on which this @classname is intersecting.
-    property Col: integer read FCol write FCol;
-    // If the start of this @classname is at a vertex of a @link(TScreenObject),
-    // @name is epFirst or epLast.  If it is at a location where the
-    // the @link(TScreenObject) crosses the edge of a cell or element,
-    //  it is epMiddle.
-    // @name is used in exporting rivers in PHAST.
-    property EndPosition: TEdgePosition read FEndPosition write FEndPosition;
-    // @name is the layer of the grid which this @classname intersects.
-    // In this context, layer can represent a layer of elements or a layer
-    // of cells depending on which this @classname is intersecting.
-    property Layer: integer read FLayer write FLayer;
-    // @name returns the length of this @classname.
-    function SegmentLength: double;
-    // @name is the index of the point in @link(TScreenObject.Points)
-    // that comes before this @classname.
-    property VertexIndex: integer read FVertexIndex write FVertexIndex;
-    // @name is the row of the grid which this @classname intersects.
-    // In this context, row can represent a row of elements or a row
-    // of cells depending on which this @classname is intersecting.
-    property Row: integer read FRow write FRow;
-    // If the start of this @classname is at a vertex of a @link(TScreenObject),
-    // @name is epFirst or epLast.  If it is at a location where the
-    // the @link(TScreenObject) crosses the edge of a cell or element,
-    //  it is epMiddle.
-    // @name is used in exporting rivers in PHAST.
-    property StartPosition: TEdgePosition read FStartPosition
-      write FStartPosition;
-    // @name is the X-coordinate of the start of this @classname.
-    // @name is in the coordinate system of the grid rather
-    // than global coordinate system.
-    property X1: double read FSegment[1].x write FSegment[1].x;
-    // @name is the X-coordinate of the end of this @classname.
-    // @name is in the coordinate system of the grid rather
-    // than global coordinate system.
-    property X2: double read FSegment[2].x write FSegment[2].x;
-    // @name is the Y-coordinate of the start of this @classname.
-    // @name is in the coordinate system of the grid rather
-    // than global coordinate system.
-    property Y1: double read FSegment[1].y write FSegment[1].y;
-    // @name is the Y-coordinate of the end of this @classname.
-    // @name is in the coordinate system of the grid rather
-    // than global coordinate system.
-    property Y2: double read FSegment[2].y write FSegment[2].y;
-    Property StartPoint: TPoint2D read FSegment[1];
-    Property EndPoint: TPoint2D read FSegment[2];
-    function FirstPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
-    function SecondPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
-    property SectionIndex: integer read FSectionIndex write FSectionIndex;
-    property LgrEdge: boolean read FLgrEdge write FLgrEdge;
-    constructor Create(ScreenObject: TScreenObject);
-    function IsSame(AnotherSegment: TCellElementSegment): boolean;
-    property Segment: TSegment2D read FSegment;
-    property PositionInSegmentList: integer read FPositionInSegmentList;
-  end;
+//  TCellElementSegment = class(TObject)
+//  private
+//    // See @link(X1), @link(X2), @link(Y1), and @link(Y2).
+//    FSegment: TSegment2D;
+//    // See @link(Col).
+//    FCol: integer;
+//    // See @link(EndPosition).
+//    FEndPosition: TEdgePosition;
+//    // See @link(Layer).
+//    FLayer: integer;
+//    // See @link(VertexIndex).
+//    FVertexIndex: integer;
+//    // See @link(Row).
+//    FRow: integer;
+//    // See @link(StartPosition).
+//    FStartPosition: TEdgePosition;
+//    FSectionIndex: integer;
+//    FSubSegments: TSegment2DArray;
+//    FLgrEdge: boolean;
+//    FScreenObject: IScreenObject;
+//    FPositionInSegmentList: integer;
+//    procedure Store(Stream: TStream);
+//    procedure Restore(Stream: TDecompressionStream);
+//  public
+//    // @name is the column of the grid which this @classname intersects.
+//    // In this context, column can represent a column of elements or a column
+//    // of cells depending on which this @classname is intersecting.
+//    property Col: integer read FCol write FCol;
+//    // If the start of this @classname is at a vertex of a @link(TScreenObject),
+//    // @name is epFirst or epLast.  If it is at a location where the
+//    // the @link(TScreenObject) crosses the edge of a cell or element,
+//    //  it is epMiddle.
+//    // @name is used in exporting rivers in PHAST.
+//    property EndPosition: TEdgePosition read FEndPosition write FEndPosition;
+//    // @name is the layer of the grid which this @classname intersects.
+//    // In this context, layer can represent a layer of elements or a layer
+//    // of cells depending on which this @classname is intersecting.
+//    property Layer: integer read FLayer write FLayer;
+//    // @name returns the length of this @classname.
+//    function SegmentLength: double;
+//    // @name is the index of the point in @link(TScreenObject.Points)
+//    // that comes before this @classname.
+//    property VertexIndex: integer read FVertexIndex write FVertexIndex;
+//    // @name is the row of the grid which this @classname intersects.
+//    // In this context, row can represent a row of elements or a row
+//    // of cells depending on which this @classname is intersecting.
+//    property Row: integer read FRow write FRow;
+//    // If the start of this @classname is at a vertex of a @link(TScreenObject),
+//    // @name is epFirst or epLast.  If it is at a location where the
+//    // the @link(TScreenObject) crosses the edge of a cell or element,
+//    //  it is epMiddle.
+//    // @name is used in exporting rivers in PHAST.
+//    property StartPosition: TEdgePosition read FStartPosition
+//      write FStartPosition;
+//    // @name is the X-coordinate of the start of this @classname.
+//    // @name is in the coordinate system of the grid rather
+//    // than global coordinate system.
+//    property X1: double read FSegment[1].x write FSegment[1].x;
+//    // @name is the X-coordinate of the end of this @classname.
+//    // @name is in the coordinate system of the grid rather
+//    // than global coordinate system.
+//    property X2: double read FSegment[2].x write FSegment[2].x;
+//    // @name is the Y-coordinate of the start of this @classname.
+//    // @name is in the coordinate system of the grid rather
+//    // than global coordinate system.
+//    property Y1: double read FSegment[1].y write FSegment[1].y;
+//    // @name is the Y-coordinate of the end of this @classname.
+//    // @name is in the coordinate system of the grid rather
+//    // than global coordinate system.
+//    property Y2: double read FSegment[2].y write FSegment[2].y;
+//    Property StartPoint: TPoint2D read FSegment[1];
+//    Property EndPoint: TPoint2D read FSegment[2];
+//    function FirstPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
+//    function SecondPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
+//    property SectionIndex: integer read FSectionIndex write FSectionIndex;
+//    property LgrEdge: boolean read FLgrEdge write FLgrEdge;
+//    constructor Create(ScreenObject: IScreenObject);
+//    function IsSame(AnotherSegment: TCellElementSegment): boolean;
+//    property Segment: TSegment2D read FSegment;
+//    property PositionInSegmentList: integer read FPositionInSegmentList;
+//  end;
 
   TCellElementLeaf = class(TRangeTreeLeaf)
   private
@@ -436,64 +430,64 @@ type
   TIntersectionArray = array of TIntersection;
 
               
-  TAssignmentMethod = (amEnclose, amIntersect);
-
-  TCellAssignment = class(TObject)
-  strict private
-    FAnnotation: string;
-    FAssignmentMethod: TAssignmentMethod;
-    FOwnedSegment: TCellElementSegment;
-    FSegment: TCellElementSegment;
-    FLayer: integer;
-    FSection: integer;
-    FRow: integer;
-    FColumn: integer;
-    FLgrEdge: Boolean;
-  private
-    FScreenObject: TScreenObject;
-    FSutraX: double;
-    FSutraY: double;
-    FSutraZ: Double;
-    procedure Assign(Cell: TCellAssignment);
-    function GetSection: integer;
-    procedure Store(Stream: TStream);
-    procedure Restore(Stream: TDecompressionStream;
-      const EncloseAnnotation, IntersectAnnotation: string);
-    constructor CreateFromStream(Stream: TDecompressionStream;
-      const EncloseAnnotation, IntersectAnnotation: string);
-    constructor CreateFromCell(Cell: TCellAssignment);
-    function GetCell: TCellLocation;
-  public
-    property Cell: TCellLocation read GetCell;
-    property AssignmentMethod: TAssignmentMethod read FAssignmentMethod;
-    // @name starts at zero.
-    property Layer: integer read FLayer write FLayer;
-    // @name starts at zero.
-    property Row: integer read FRow write FRow;
-    // @name starts at zero.
-    property Column: integer read FColumn write FColumn;
-    property Segment: TCellElementSegment read FSegment;
-    property Section: integer read GetSection;
-    property Annotation: string read FAnnotation;
-    Constructor Create(ALayer, ARow, ACol: integer;
-      ASegment: TCellElementSegment; ASection: integer;
-      const AnAnnotation: string; AnAssignmentMethod: TAssignmentMethod);
-    Destructor Destroy; override;
-    property LgrEdge: Boolean read FLgrEdge;
-    // @name is used for the location of SUTRA observations when those
-    // locations are defined by the location of the object rather than
-    // the location of the node or element intersected by the object.
-    Property SutraX: double read FSutraX;
-    // @name is used for the location of SUTRA observations when those
-    // locations are defined by the location of the object rather than
-    // the location of the node or element intersected by the object.
-    property SutraY: double read FSutraY;
-    // @name is used for the location of SUTRA observations when those
-    // locations are defined by the location of the object rather than
-    // the location of the node or element intersected by the object.
-    property SutraZ: Double read FSutraZ;
-    // If any new properties are added, be sure to update Assign too.
-  end;
+//  TAssignmentMethod = (amEnclose, amIntersect);
+//
+//  TCellAssignment = class(TObject)
+//  strict private
+//    FAnnotation: string;
+//    FAssignmentMethod: TAssignmentMethod;
+//    FOwnedSegment: TCellElementSegment;
+//    FSegment: TCellElementSegment;
+//    FLayer: integer;
+//    FSection: integer;
+//    FRow: integer;
+//    FColumn: integer;
+//    FLgrEdge: Boolean;
+//  private
+//    FScreenObject: IScreenObject;
+//    FSutraX: double;
+//    FSutraY: double;
+//    FSutraZ: Double;
+//    procedure Assign(Cell: TCellAssignment);
+//    function GetSection: integer;
+//    procedure Store(Stream: TStream);
+//    procedure Restore(Stream: TDecompressionStream;
+//      const EncloseAnnotation, IntersectAnnotation: string);
+//    constructor CreateFromStream(Stream: TDecompressionStream;
+//      const EncloseAnnotation, IntersectAnnotation: string);
+//    constructor CreateFromCell(Cell: TCellAssignment);
+//    function GetCell: TCellLocation;
+//  public
+//    property Cell: TCellLocation read GetCell;
+//    property AssignmentMethod: TAssignmentMethod read FAssignmentMethod;
+//    // @name starts at zero.
+//    property Layer: integer read FLayer write FLayer;
+//    // @name starts at zero.
+//    property Row: integer read FRow write FRow;
+//    // @name starts at zero.
+//    property Column: integer read FColumn write FColumn;
+//    property Segment: TCellElementSegment read FSegment;
+//    property Section: integer read GetSection;
+//    property Annotation: string read FAnnotation;
+//    Constructor Create(ALayer, ARow, ACol: integer;
+//      ASegment: TCellElementSegment; ASection: integer;
+//      const AnAnnotation: string; AnAssignmentMethod: TAssignmentMethod);
+//    Destructor Destroy; override;
+//    property LgrEdge: Boolean read FLgrEdge;
+//    // @name is used for the location of SUTRA observations when those
+//    // locations are defined by the location of the object rather than
+//    // the location of the node or element intersected by the object.
+//    Property SutraX: double read FSutraX;
+//    // @name is used for the location of SUTRA observations when those
+//    // locations are defined by the location of the object rather than
+//    // the location of the node or element intersected by the object.
+//    property SutraY: double read FSutraY;
+//    // @name is used for the location of SUTRA observations when those
+//    // locations are defined by the location of the object rather than
+//    // the location of the node or element intersected by the object.
+//    property SutraZ: Double read FSutraZ;
+//    // If any new properties are added, be sure to update Assign too.
+//  end;
 
   // @name is used to provide limited access to @link(TCellAssignment);
   // @name owns the @link(TCellAssignment)s stored in it.
@@ -3086,6 +3080,8 @@ view. }
     procedure SetDyanmicTimesSeriesCollection(
       const Value: TDynamicTimesSeriesCollections);
     function GetElevationCount: TElevationCount;
+    function GetFullObjectIntersectLength: Boolean;
+    procedure SetFullObjectIntersectLength(const Value: Boolean);
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -3632,8 +3628,8 @@ view. }
     procedure GetModelDimensions(AModel: TBaseModel; var NumberOfLayers, NumberOfRows,
       NumberOfColumns: Integer);
   public
-    property FullObjectIntersectLength: Boolean read FFullObjectIntersectLength
-      write FFullObjectIntersectLength;
+    property FullObjectIntersectLength: Boolean read GetFullObjectIntersectLength
+      write SetFullObjectIntersectLength;
     procedure UpdateUzfGage1and2;
     procedure UpdateUzfGage3;
     procedure CacheSegments;
@@ -4604,8 +4600,7 @@ SectionStarts.}
 //    property VerticesArePilotPoints: Boolean read FVerticesArePilotPoints
 //      write SetVerticesArePilotPoints;
     property DyanmicTimesSeriesCollections: TDynamicTimesSeriesCollections
-      read FDyanmicTimesSeriesCollections write SetDyanmicTimesSeriesCollection
-      stored False;
+      read FDyanmicTimesSeriesCollections write SetDyanmicTimesSeriesCollection;
   end;
 
   // @name does not own its @link(TScreenObject)s.
@@ -7364,7 +7359,6 @@ begin
     AChildModel := ABaseModel as TChildModel;
     AChildModel.HorizontalPositionScreenObject := self;
   end;
-
 end;
 
 procedure TScreenObject.Assign3DElevationsFromFront(const Compiler: TRbwParser;
@@ -12298,11 +12292,11 @@ begin
   result := Segment1.VertexIndex - Segment2.VertexIndex;
   if result = 0 then
   begin
-    StartPoint := Segment1.FScreenObject.Points[Segment1.VertexIndex];
-    S1.x := (Segment1.FSegment[1].x + Segment1.FSegment[2].x)/2;
-    S1.y := (Segment1.FSegment[1].y + Segment1.FSegment[2].y)/2;
-    S2.x := (Segment2.FSegment[1].x + Segment2.FSegment[2].x)/2;
-    S2.y := (Segment2.FSegment[1].y + Segment2.FSegment[2].y)/2;
+    StartPoint := Segment1.ScreenObject.Points[Segment1.VertexIndex];
+    S1.x := (Segment1.Segment[1].x + Segment1.Segment[2].x)/2;
+    S1.y := (Segment1.Segment[1].y + Segment1.Segment[2].y)/2;
+    S2.x := (Segment2.Segment[1].x + Segment2.Segment[2].x)/2;
+    S2.y := (Segment2.Segment[1].y + Segment2.Segment[2].y)/2;
     result := Sign(FastGeo.Distance(StartPoint,S1) - FastGeo.Distance(StartPoint,S2));
     if result = 0 then
     begin
@@ -12324,11 +12318,11 @@ begin
   result := Segment1.VertexIndex - Segment2.VertexIndex;
   if result = 0 then
   begin
-    StartPoint := Segment1.FScreenObject.Points[Segment1.VertexIndex];
-    S1.x := (Segment1.FSegment[1].x + Segment1.FSegment[2].x)/2;
-    S1.y := (Segment1.FSegment[1].y + Segment1.FSegment[2].y)/2;
-    S2.x := (Segment2.FSegment[1].x + Segment2.FSegment[2].x)/2;
-    S2.y := (Segment2.FSegment[1].y + Segment2.FSegment[2].y)/2;
+    StartPoint := Segment1.ScreenObject.Points[Segment1.VertexIndex];
+    S1.x := (Segment1.Segment[1].x + Segment1.Segment[2].x)/2;
+    S1.y := (Segment1.Segment[1].y + Segment1.Segment[2].y)/2;
+    S2.x := (Segment2.Segment[1].x + Segment2.Segment[2].x)/2;
+    S2.y := (Segment2.Segment[1].y + Segment2.Segment[2].y)/2;
     result := Sign(FastGeo.Distance(StartPoint,S1) - FastGeo.Distance(StartPoint,S2));
     if result = 0 then
     begin
@@ -12368,7 +12362,7 @@ var
   procedure AddElementSegment(Layer: integer; ASeg: TSegment2D);
   begin
     Segment := TCellElementSegment.Create(self);
-    Segment.FSegment := ASeg;
+    Segment.Segment := ASeg;
     Segment.Col := Element.ElementNumber;
     Segment.Row := 0;
     Segment.Layer := Layer;
@@ -12380,7 +12374,7 @@ var
   procedure AddNodeSegment(Layer: integer; ASeg: TSegment2D);
   begin
     Segment := TCellElementSegment.Create(self);
-    Segment.FSegment := ASeg;
+    Segment.Segment := ASeg;
     Segment.Col := Node.NodeNumber;
     Segment.Row := 0;
     Segment.Layer := Layer;
@@ -12571,7 +12565,7 @@ var
     FSegments.Sort(CompareTopSegments);
     for SegIndex := 0 to FSegments.Count - 1 do
     begin
-      FSegments[SegIndex].FPositionInSegmentList := SegIndex;
+      FSegments[SegIndex].PositionInSegmentList := SegIndex;
     end;
   end;
 begin
@@ -12766,7 +12760,7 @@ var
 begin
   Segment1 := Item1;
   Segment2 := Item2;
-  result := Segment1.FPositionInSegmentList - Segment2.FPositionInSegmentList;
+  result := Segment1.PositionInSegmentList - Segment2.PositionInSegmentList;
 end;
 
 function TScreenObject.CellReferenceLength(AModel: TBaseModel;
@@ -17887,11 +17881,11 @@ var
   var
     SubSegIndex: integer;
   begin
-    SetLength(ASegment.FSubSegments,TempSegList.Count);
+    ASegment.SetSubsegmentLength(TempSegList.Count);
     for SubSegIndex := 0 to TempSegList.Count - 1 do
     begin
       ATempSeg := TempSegList[SubSegIndex];
-      ASegment.FSubSegments[SubSegIndex] := ATempSeg.FSeg;
+      ASegment.SubSegments[SubSegIndex] := ATempSeg.FSeg;
     end;
   end;
   procedure AdjustEdgeSegment(EdgeSegment: TCellElementSegment);
@@ -17914,7 +17908,7 @@ begin
   PhastModel := AModel as TPhastModel;
   LocalChildModel := CModel as TChildModel;
 
-  SubSeg := ASegment.FSegment;
+  SubSeg := ASegment.Segment;
 
   ColCenter := PhastModel.ModflowGrid.ColumnCenter(ASegment.Col);
   RowCenter := PhastModel.ModflowGrid.RowCenter(ASegment.Row);
@@ -18039,8 +18033,8 @@ begin
         begin
           AdjustValues(SubSeg[2].x, ColCenter, SubSeg[2].y,
             SubSeg[1].x, SubSeg[1].y);
-          SetLength(ASegment.FSubSegments,1);
-          ASegment.FSubSegments[0] := SubSeg;
+          ASegment.SetSubsegmentLength(1);
+          ASegment.SubSegments[0] := SubSeg;
         end;
       end
       else
@@ -18049,8 +18043,8 @@ begin
         begin
           AdjustValues(SubSeg[1].x, ColCenter, SubSeg[1].y,
             SubSeg[2].x, SubSeg[2].y);
-          SetLength(ASegment.FSubSegments,1);
-          ASegment.FSubSegments[0] := SubSeg;
+          ASegment.SetSubsegmentLength(1);
+          ASegment.SubSegments[0] := SubSeg;
         end;
       end;
     end;
@@ -18175,8 +18169,8 @@ begin
         begin
           AdjustValues(SubSeg[2].x, ColCenter, SubSeg[2].y,
             SubSeg[1].x, SubSeg[1].y);
-          SetLength(ASegment.FSubSegments,1);
-          ASegment.FSubSegments[0] := SubSeg;
+          ASegment.SetSubsegmentLength(1);
+          ASegment.SubSegments[0] := SubSeg;
         end;
       end
       else
@@ -18185,8 +18179,8 @@ begin
         begin
           AdjustValues(SubSeg[1].x, ColCenter, SubSeg[1].y,
             SubSeg[2].x, SubSeg[2].y);
-          SetLength(ASegment.FSubSegments,1);
-          ASegment.FSubSegments[0] := SubSeg;
+          ASegment.SetSubsegmentLength(1);
+          ASegment.SubSegments[0] := SubSeg;
         end;
       end;
     end;
@@ -18213,8 +18207,8 @@ begin
       begin
         AdjustValues(SubSeg[2].y, RowCenter, SubSeg[2].x,
           SubSeg[1].y, SubSeg[1].x);
-        SetLength(ASegment.FSubSegments,1);
-        ASegment.FSubSegments[0] := SubSeg;
+        ASegment.SetSubsegmentLength(1);
+        ASegment.SubSegments[0] := SubSeg;
       end;
     end
     else
@@ -18223,8 +18217,8 @@ begin
       begin
         AdjustValues(SubSeg[1].y, RowCenter, SubSeg[1].x,
           SubSeg[2].y, SubSeg[2].x);
-        SetLength(ASegment.FSubSegments,1);
-        ASegment.FSubSegments[0] := SubSeg;
+        ASegment.SetSubsegmentLength(1);
+        ASegment.SubSegments[0] := SubSeg;
       end;
     end;
   end
@@ -18250,8 +18244,8 @@ begin
       begin
         AdjustValues(SubSeg[2].y, RowCenter, SubSeg[2].x,
           SubSeg[1].y, SubSeg[1].x);
-        SetLength(ASegment.FSubSegments,1);
-        ASegment.FSubSegments[0] := SubSeg;
+        ASegment.SetSubsegmentLength(1);
+        ASegment.SubSegments[0] := SubSeg;
       end;
     end
     else
@@ -18260,8 +18254,8 @@ begin
       begin
         AdjustValues(SubSeg[1].y, RowCenter, SubSeg[1].x,
           SubSeg[2].y, SubSeg[2].x);
-        SetLength(ASegment.FSubSegments,1);
-        ASegment.FSubSegments[0] := SubSeg;
+        ASegment.SetSubsegmentLength(1);
+        ASegment.SubSegments[0] := SubSeg;
       end;
     end;
   end
@@ -19638,9 +19632,9 @@ begin
       else
       begin
         Assert(EndSeg <> nil);
-        if (ASegment.FLayer <> EndSeg.FLayer)
-          or (ASegment.FRow <> EndSeg.FRow)
-            or (ASegment.FCol <> EndSeg.FCol) then
+        if (ASegment.Layer <> EndSeg.Layer)
+          or (ASegment.Row <> EndSeg.Row)
+            or (ASegment.Col <> EndSeg.Col) then
         begin
           ReferenceLength := CellReferenceLength(AModel, EndSeg);
           if (ReferenceLength > 0) and (TotalSegLength > 0)
@@ -19676,7 +19670,7 @@ begin
     FSegments.Sort(CompareSegmentOrder);
     for SegIndex1 := 0 to FSegments.Count - 1 do
     begin
-      FSegments[SegIndex1].FPositionInSegmentList := SegIndex1;
+      FSegments[SegIndex1].PositionInSegmentList := SegIndex1;
     end;
   end;
 end;
@@ -19753,6 +19747,11 @@ begin
       ADataArray.Orientation, ADataArray.EvaluatedAt);
 
   end;
+end;
+
+procedure TScreenObject.SetFullObjectIntersectLength(const Value: Boolean);
+begin
+  FFullObjectIntersectLength := Value;
 end;
 
 procedure TScreenObject.CreateFootprintWell;
@@ -20319,6 +20318,11 @@ begin
   result := FFootprintWell;
 end;
 
+function TScreenObject.GetFullObjectIntersectLength: Boolean;
+begin
+  Result := FFullObjectIntersectLength;
+end;
+
 function TScreenObject.GetDataSetCapacity: integer;
 begin
   result := FDataSets.Capacity;
@@ -20874,7 +20878,11 @@ end;
 procedure TScreenObject.SetDyanmicTimesSeriesCollection(
   const Value: TDynamicTimesSeriesCollections);
 begin
-  FDyanmicTimesSeriesCollections.Assign(Value);
+  if not FDyanmicTimesSeriesCollections.IsSame(Value) then
+  begin
+    FDyanmicTimesSeriesCollections.Assign(Value);
+    FDyanmicTimesSeriesCollections.Invalidate;
+  end;
 end;
 
 function TScreenObject.SelectEdge(const X, Y: integer): integer;
@@ -23446,7 +23454,6 @@ begin
         LocalModel.InvalidateMt3dTobConcs (self);
       end;
 
-
       if FModflowBoundaries <> nil then
       begin
         FModflowBoundaries.Invalidate;
@@ -23465,6 +23472,11 @@ begin
       SegList := FSegModelAssoc[Index];
       SegList.FHigher3DElevationsNeedsUpdating := True;
       SegList.FLower3DElevationsNeedsUpdating := True;
+    end;
+
+    if FDyanmicTimesSeriesCollections <> nil then
+    begin
+      DyanmicTimesSeriesCollections.Invalidate;
     end;
 
     FCachedCells.Invalidate;
@@ -23954,7 +23966,7 @@ end;
 function TCellElementSegmentList.Add(ASegment: TCellElementSegment): Integer;
 begin
   result := inherited Add(ASegment);
-  ASegment.FPositionInSegmentList := result;
+  ASegment.PositionInSegmentList := result;
 end;
 
 procedure TCellElementSegmentList.CacheData;
@@ -24628,118 +24640,118 @@ begin
   end;
 end;
 
-{ TCellElementSegment }
-
-constructor TCellElementSegment.Create(ScreenObject: TScreenObject);
-begin
-  inherited Create;
-  FPositionInSegmentList := -1;
-  FScreenObject := ScreenObject;
-end;
-
-function TCellElementSegment.FirstPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
-begin
-  result := FSegment[1];
-  if (ViewDirection = vdTop) and (frmGoPhast.Grid <> nil) then
-  begin
-    result := frmGoPhast.Grid.
-      RotateFromGridCoordinatesToRealWorldCoordinates(result);
-  end;
-end;
-
-function TCellElementSegment.IsSame(
-  AnotherSegment: TCellElementSegment): boolean;
-begin
-  result := (Col = AnotherSegment.Col)
-    and (EndPosition = AnotherSegment.EndPosition)
-    and (Layer = AnotherSegment.Layer)
-    and (VertexIndex = AnotherSegment.VertexIndex)
-    and (Row = AnotherSegment.Row)
-    and (StartPosition = AnotherSegment.StartPosition)
-    and (X1 = AnotherSegment.X1)
-    and (X2 = AnotherSegment.X2)
-    and (Y1 = AnotherSegment.Y1)
-    and (Y2 = AnotherSegment.Y2)
-    and (SectionIndex = AnotherSegment.SectionIndex)
-end;
-
-function TCellElementSegment.SegmentLength: double;
-var
-  SubIndex: Integer;
-begin
-  if (Length(FSubSegments) = 0)
-  or ((FScreenObject <> nil)
-    and (FScreenObject.FullObjectIntersectLength)) then
-  begin
-    result := Sqrt(Sqr(X1 - X2) + Sqr(Y1 - Y2));
-  end
-  else
-  begin
-    result := 0;
-    for SubIndex := 0 to Length(FSubSegments) - 1 do
-    begin
-      result := result
-        + Sqrt(Sqr(FSubSegments[SubIndex][1].x - FSubSegments[SubIndex][2].x)
-        + Sqr(FSubSegments[SubIndex][1].y - FSubSegments[SubIndex][2].y));
-    end;
-  end;
-end;
-
-procedure TCellElementSegment.Restore(Stream: TDecompressionStream);
-var
-  SubSegLength: integer;
-begin
-  FCol := ReadCompInt(Stream);
-  Stream.Read(FEndPosition, SizeOf(FEndPosition));
-  FLayer := ReadCompInt(Stream);
-  FVertexIndex := ReadCompInt(Stream);
-  FRow := ReadCompInt(Stream);
-  Stream.Read(FStartPosition, SizeOf(FStartPosition));
-  Stream.Read(FSegment, SizeOf(FSegment));
-  FSectionIndex := ReadCompInt(Stream);
-  LgrEdge := ReadCompBoolean(Stream);
-  FPositionInSegmentList := ReadCompInt(Stream);
-
-  SubSegLength := ReadCompInt(Stream);
-  SetLength(FSubSegments, SubSegLength);
-  if SubSegLength > 0 then
-  begin
-    Stream.Read(FSubSegments[0], SubSegLength*SizeOf(TSegment2D));
-  end;
-end;
-
-function TCellElementSegment.SecondPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
-begin
-  result := FSegment[2];
-  if (ViewDirection = vdTop) and (frmGoPhast.Grid <> nil) then
-  begin
-    result := frmGoPhast.Grid.
-      RotateFromGridCoordinatesToRealWorldCoordinates(result);
-  end;
-end;
-
-procedure TCellElementSegment.Store(Stream: TStream);
-var
-  SubSegLength: integer;
-begin
-  WriteCompInt(Stream, FCol);
-  Stream.Write(FEndPosition, SizeOf(FEndPosition));
-  WriteCompInt(Stream, FLayer);
-  WriteCompInt(Stream, FVertexIndex);
-  WriteCompInt(Stream, FRow);
-  Stream.Write(FStartPosition, SizeOf(FStartPosition));
-  Stream.Write(FSegment, SizeOf(FSegment));
-  WriteCompInt(Stream, FSectionIndex);
-  WriteCompBoolean(Stream, LgrEdge);
-  WriteCompInt(Stream, FPositionInSegmentList);
-
-  SubSegLength := System.Length(FSubSegments);
-  WriteCompInt(Stream, SubSegLength);
-  if SubSegLength > 0 then
-  begin
-    Stream.Write(FSubSegments[0], SubSegLength*SizeOf(TSegment2D));
-  end;
-end;
+//{ TCellElementSegment }
+//
+//constructor TCellElementSegment.Create(ScreenObject: IScreenObject);
+//begin
+//  inherited Create;
+//  FPositionInSegmentList := -1;
+//  FScreenObject := ScreenObject;
+//end;
+//
+//function TCellElementSegment.FirstPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
+//begin
+//  result := FSegment[1];
+//  if (ViewDirection = vdTop) and (frmGoPhast.Grid <> nil) then
+//  begin
+//    result := frmGoPhast.Grid.
+//      RotateFromGridCoordinatesToRealWorldCoordinates(result);
+//  end;
+//end;
+//
+//function TCellElementSegment.IsSame(
+//  AnotherSegment: TCellElementSegment): boolean;
+//begin
+//  result := (Col = AnotherSegment.Col)
+//    and (EndPosition = AnotherSegment.EndPosition)
+//    and (Layer = AnotherSegment.Layer)
+//    and (VertexIndex = AnotherSegment.VertexIndex)
+//    and (Row = AnotherSegment.Row)
+//    and (StartPosition = AnotherSegment.StartPosition)
+//    and (X1 = AnotherSegment.X1)
+//    and (X2 = AnotherSegment.X2)
+//    and (Y1 = AnotherSegment.Y1)
+//    and (Y2 = AnotherSegment.Y2)
+//    and (SectionIndex = AnotherSegment.SectionIndex)
+//end;
+//
+//function TCellElementSegment.SegmentLength: double;
+//var
+//  SubIndex: Integer;
+//begin
+//  if (Length(FSubSegments) = 0)
+//  or ((FScreenObject <> nil)
+//    and (FScreenObject.FullObjectIntersectLength)) then
+//  begin
+//    result := Sqrt(Sqr(X1 - X2) + Sqr(Y1 - Y2));
+//  end
+//  else
+//  begin
+//    result := 0;
+//    for SubIndex := 0 to Length(FSubSegments) - 1 do
+//    begin
+//      result := result
+//        + Sqrt(Sqr(FSubSegments[SubIndex][1].x - FSubSegments[SubIndex][2].x)
+//        + Sqr(FSubSegments[SubIndex][1].y - FSubSegments[SubIndex][2].y));
+//    end;
+//  end;
+//end;
+//
+//procedure TCellElementSegment.Restore(Stream: TDecompressionStream);
+//var
+//  SubSegLength: integer;
+//begin
+//  FCol := ReadCompInt(Stream);
+//  Stream.Read(FEndPosition, SizeOf(FEndPosition));
+//  FLayer := ReadCompInt(Stream);
+//  FVertexIndex := ReadCompInt(Stream);
+//  FRow := ReadCompInt(Stream);
+//  Stream.Read(FStartPosition, SizeOf(FStartPosition));
+//  Stream.Read(FSegment, SizeOf(FSegment));
+//  FSectionIndex := ReadCompInt(Stream);
+//  LgrEdge := ReadCompBoolean(Stream);
+//  FPositionInSegmentList := ReadCompInt(Stream);
+//
+//  SubSegLength := ReadCompInt(Stream);
+//  SetLength(FSubSegments, SubSegLength);
+//  if SubSegLength > 0 then
+//  begin
+//    Stream.Read(FSubSegments[0], SubSegLength*SizeOf(TSegment2D));
+//  end;
+//end;
+//
+//function TCellElementSegment.SecondPointRealCoord(ViewDirection: TViewDirection): TPoint2D;
+//begin
+//  result := FSegment[2];
+//  if (ViewDirection = vdTop) and (frmGoPhast.Grid <> nil) then
+//  begin
+//    result := frmGoPhast.Grid.
+//      RotateFromGridCoordinatesToRealWorldCoordinates(result);
+//  end;
+//end;
+//
+//procedure TCellElementSegment.Store(Stream: TStream);
+//var
+//  SubSegLength: integer;
+//begin
+//  WriteCompInt(Stream, FCol);
+//  Stream.Write(FEndPosition, SizeOf(FEndPosition));
+//  WriteCompInt(Stream, FLayer);
+//  WriteCompInt(Stream, FVertexIndex);
+//  WriteCompInt(Stream, FRow);
+//  Stream.Write(FStartPosition, SizeOf(FStartPosition));
+//  Stream.Write(FSegment, SizeOf(FSegment));
+//  WriteCompInt(Stream, FSectionIndex);
+//  WriteCompBoolean(Stream, LgrEdge);
+//  WriteCompInt(Stream, FPositionInSegmentList);
+//
+//  SubSegLength := System.Length(FSubSegments);
+//  WriteCompInt(Stream, SubSegLength);
+//  if SubSegLength > 0 then
+//  begin
+//    Stream.Write(FSubSegments[0], SubSegLength*SizeOf(TSegment2D));
+//  end;
+//end;
 
 { TRealDataListItem }
 
@@ -30327,7 +30339,7 @@ begin
                  
             TempSegList := TObjectList.Create;
             try
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               ATempSeg := TTempSeg.Create;
               TempSegList.Add(ATempSeg);
               ATempSeg.FSeg := ASeg;
@@ -30364,7 +30376,7 @@ begin
               end;
               BottomSeg[1] := Right;
               BottomSeg[2] := Center;
-              if Intersect(ASegment.FSegment, BottomSeg, IntSect.x, IntSect.y) then
+              if Intersect(ASegment.Segment, BottomSeg, IntSect.x, IntSect.y) then
               begin
                 for SegIndex := TempSegList.Count - 1 downto 0 do
                 begin
@@ -30402,11 +30414,11 @@ begin
                   TempSegList.Delete(SegIndex);
                 end;
               end;
-              SetLength(ASegment.FSubSegments, TempSegList.Count);
+              ASegment.SetSubsegmentLength(TempSegList.Count);
               for SegIndex := 0 to TempSegList.Count - 1 do
               begin
                 ATempSeg := TempSegList[SegIndex];
-                ASegment.FSubSegments[SegIndex] := ATempSeg.FSeg;
+                ASegment.SubSegments[SegIndex] := ATempSeg.FSeg;
               end;
             finally
               TempSegList.Free;
@@ -30426,19 +30438,19 @@ begin
             end;
             if (ASegment.X1 > CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[2].x, CenterX, ASeg[2].y,
                 ASeg[1].x, ASeg[1].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end
             else if (ASegment.X2 > CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[1].x, CenterX, ASeg[1].y,
                 ASeg[2].x, ASeg[2].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end;
           end;
         end
@@ -30459,7 +30471,7 @@ begin
             end;
             TempSegList := TObjectList.Create;
             try
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               ATempSeg := TTempSeg.Create;
               TempSegList.Add(ATempSeg);
               ATempSeg.FSeg := ASeg;
@@ -30496,7 +30508,7 @@ begin
               end;
               BottomSeg[1] := Left;
               BottomSeg[2] := Center;
-              if Intersect(ASegment.FSegment, BottomSeg, IntSect.x, IntSect.y) then
+              if Intersect(ASegment.Segment, BottomSeg, IntSect.x, IntSect.y) then
               begin
                 for SegIndex := TempSegList.Count - 1 downto 0 do
                 begin
@@ -30534,11 +30546,11 @@ begin
                   TempSegList.Delete(SegIndex);
                 end;
               end;
-              SetLength(ASegment.FSubSegments, TempSegList.Count);
+              ASegment.SetSubsegmentLength(TempSegList.Count);
               for SegIndex := 0 to TempSegList.Count - 1 do
               begin
                 ATempSeg := TempSegList[SegIndex];
-                ASegment.FSubSegments[SegIndex] := ATempSeg.FSeg;
+                ASegment.SubSegments[SegIndex] := ATempSeg.FSeg;
               end;
             finally
               TempSegList.Free;
@@ -30559,19 +30571,19 @@ begin
             end;
             if (ASegment.X1 < CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[2].x, CenterX, ASeg[2].y,
                 ASeg[1].x, ASeg[1].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end
             else if (ASegment.X2 < CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[1].x, CenterX, ASeg[1].y,
                 ASeg[2].x, ASeg[2].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end;
           end;
         end
@@ -30581,7 +30593,7 @@ begin
           GetChildModelBottom;
           TempSegList := TObjectList.Create;
           try
-            ASeg := ASegment.FSegment;
+            ASeg := ASegment.Segment;
             ATempSeg := TTempSeg.Create;
             TempSegList.Add(ATempSeg);
             ATempSeg.FSeg := ASeg;
@@ -30647,11 +30659,11 @@ begin
               FreeAndNil(ASegment);
               Exit;
             end;
-            SetLength(ASegment.FSubSegments, TempSegList.Count);
+            ASegment.SetSubsegmentLength(TempSegList.Count);
             for SegIndex := 0 to TempSegList.Count - 1 do
             begin
               ATempSeg := TempSegList[SegIndex];
-              ASegment.FSubSegments[SegIndex] := ATempSeg.FSeg;
+              ASegment.SubSegments[SegIndex] := ATempSeg.FSeg;
             end;
           finally
             TempSegList.Free;
@@ -30681,7 +30693,7 @@ begin
             end;
             TempSegList := TObjectList.Create;
             try
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               ATempSeg := TTempSeg.Create;
               TempSegList.Add(ATempSeg);
               ATempSeg.FSeg := ASeg;
@@ -30718,7 +30730,7 @@ begin
               end;
               BottomSeg[1] := Left;
               BottomSeg[2] := Center;
-              if Intersect(ASegment.FSegment, BottomSeg, IntSect.x, IntSect.y) then
+              if Intersect(ASegment.Segment, BottomSeg, IntSect.x, IntSect.y) then
               begin
                 for SegIndex := TempSegList.Count - 1 downto 0 do
                 begin
@@ -30756,11 +30768,11 @@ begin
                   TempSegList.Delete(SegIndex);
                 end;
               end;
-              SetLength(ASegment.FSubSegments, TempSegList.Count);
+              ASegment.SetSubsegmentLength(TempSegList.Count);
               for SegIndex := 0 to TempSegList.Count - 1 do
               begin
                 ATempSeg := TempSegList[SegIndex];
-                ASegment.FSubSegments[SegIndex] := ATempSeg.FSeg;
+                ASegment.SubSegments[SegIndex] := ATempSeg.FSeg;
               end;
             finally
               TempSegList.Free;
@@ -30781,19 +30793,19 @@ begin
             end;
             if (ASegment.X1 > CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[2].x, CenterX, ASeg[2].y,
                 ASeg[1].x, ASeg[1].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end
             else if (ASegment.X2 > CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[1].x, CenterX, ASeg[1].y,
                 ASeg[2].x, ASeg[2].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end;
           end;
         end
@@ -30814,7 +30826,7 @@ begin
             end;
             TempSegList := TObjectList.Create;
             try
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               ATempSeg := TTempSeg.Create;
               TempSegList.Add(ATempSeg);
               ATempSeg.FSeg := ASeg;
@@ -30851,7 +30863,7 @@ begin
               end;
               BottomSeg[1] := Right;
               BottomSeg[2] := Center;
-              if Intersect(ASegment.FSegment, BottomSeg, IntSect.x, IntSect.y) then
+              if Intersect(ASegment.Segment, BottomSeg, IntSect.x, IntSect.y) then
               begin
                 for SegIndex := TempSegList.Count - 1 downto 0 do
                 begin
@@ -30889,11 +30901,11 @@ begin
                   TempSegList.Delete(SegIndex);
                 end;
               end;
-              SetLength(ASegment.FSubSegments, TempSegList.Count);
+              ASegment.SetSubsegmentLength(TempSegList.Count);
               for SegIndex := 0 to TempSegList.Count - 1 do
               begin
                 ATempSeg := TempSegList[SegIndex];
-                ASegment.FSubSegments[SegIndex] := ATempSeg.FSeg;
+                ASegment.SubSegments[SegIndex] := ATempSeg.FSeg;
               end;
             finally
               TempSegList.Free;
@@ -30914,19 +30926,19 @@ begin
             end;
             if (ASegment.X1 < CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[2].x, CenterX, ASeg[2].y,
                 ASeg[1].x, ASeg[1].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end
             else if (ASegment.X2 < CenterX) then
             begin
-              ASeg := ASegment.FSegment;
+              ASeg := ASegment.Segment;
               AdjustValues(ASeg[1].x, CenterX, ASeg[1].y,
                 ASeg[2].x, ASeg[2].y);
-              SetLength(ASegment.FSubSegments, 1);
-              ASegment.FSubSegments[0] := ASeg;
+              ASegment.SetSubsegmentLength(1);
+              ASegment.SubSegments[0] := ASeg;
             end;
           end;
         end
@@ -30935,7 +30947,7 @@ begin
         begin
           GetChildModelBottom;
 
-          ASeg := ASegment.FSegment;
+          ASeg := ASegment.Segment;
 
           BottomSeg[1] := Left;
           BottomSeg[2] := Center;
@@ -31049,11 +31061,11 @@ begin
               Exit;
             end;
 
-            SetLength(ASegment.FSubSegments, TempSegList.Count);
+            ASegment.SetSubsegmentLength(TempSegList.Count);
             for SegIndex := 0 to TempSegList.Count - 1 do
             begin
               ATempSeg := TempSegList[SegIndex];
-              ASegment.FSubSegments[SegIndex] := ATempSeg.FSeg;
+              ASegment.SubSegments[SegIndex] := ATempSeg.FSeg;
             end;
 
           finally
@@ -46672,136 +46684,136 @@ begin
   result := (Point2.x = Seg.Point1.x) and (Point2.y = Seg.Point1.y)
 end;
 
-{ TCellAssignment }
-
-procedure TCellAssignment.Assign(Cell: TCellAssignment);
-begin
-  FLayer := Cell.FLayer;
-  FRow := Cell.FRow;
-  FColumn := Cell.FColumn;
-  FSegment := Cell.FSegment;
-  FSection := Cell.FSection;
-  FAnnotation := Cell.FAnnotation;
-  FAssignmentMethod := Cell.FAssignmentMethod;
-  FLgrEdge := Cell.FLgrEdge;
-  FSutraX := Cell.FSutraX;
-  FSutraY := Cell.FSutraY;
-  FSutraZ := Cell.FSutraZ;
-end;
-
-constructor TCellAssignment.Create(ALayer, ARow, ACol: integer;
-      ASegment: TCellElementSegment; ASection: integer;
-      const AnAnnotation: string; AnAssignmentMethod: TAssignmentMethod);
-begin
-  FLayer := ALayer;
-  FRow := ARow;
-  FColumn := ACol;
-  FSegment := ASegment;
-  FSection := ASection;
-  FAnnotation := AnAnnotation;
-  FAssignmentMethod := AnAssignmentMethod;
-  if ASegment <> nil then
-  begin
-    FScreenObject := ASegment.FScreenObject;
-    FLgrEdge := ASegment.LgrEdge;
-  end
-  else
-  begin
-    FLgrEdge := False;
-    FScreenObject := nil;
-  end;
-end;
-
-constructor TCellAssignment.CreateFromCell(Cell: TCellAssignment);
-begin
-  Assign(Cell);
-end;
-
-constructor TCellAssignment.CreateFromStream(Stream: TDecompressionStream;
-  const EncloseAnnotation, IntersectAnnotation: string);
-begin
-  Restore(Stream, EncloseAnnotation, IntersectAnnotation);
-end;
-
-destructor TCellAssignment.Destroy;
-begin
-  FOwnedSegment.Free;
-  inherited;
-end;
-
-function TCellAssignment.GetCell: TCellLocation;
-begin
-  result.Layer := Layer;
-  result.Row := Row;
-  result.Column := Column;
-  result.Section := Section;
-end;
-
-function TCellAssignment.GetSection: integer;
-begin
-  if Segment = nil then
-  begin
-    result := FSection;
-  end
-  else
-  begin
-    result := Segment.SectionIndex;
-  end;
-end;
-
-procedure TCellAssignment.Restore(Stream: TDecompressionStream;
-  const EncloseAnnotation, IntersectAnnotation: string);
-var
-  ReadSegment: boolean;
-begin
-  Stream.Read(FAssignmentMethod, SizeOf(FAssignmentMethod));
-  case FAssignmentMethod of
-    amEnclose: FAnnotation := EncloseAnnotation;
-    amIntersect: FAnnotation := IntersectAnnotation;
-    else Assert(False);
-  end;
-  Stream.Read(ReadSegment, SizeOf(ReadSegment));
-  if ReadSegment then
-  begin
-    FOwnedSegment.Free;
-    FOwnedSegment := TCellElementSegment.Create(FScreenObject);
-    FOwnedSegment.Restore(Stream);
-    FSegment := FOwnedSegment;
-  end
-  else
-  begin
-    FSegment := nil;
-  end;
-  FLayer := ReadCompInt(Stream);
-  FSection := ReadCompInt(Stream);
-  FRow := ReadCompInt(Stream);
-  FColumn := ReadCompInt(Stream);
-  FLgrEdge := ReadCompBoolean(Stream);
-  FSutraX := ReadCompReal(Stream);
-  FSutraY := ReadCompReal(Stream);
-  FSutraZ := ReadCompReal(Stream);
-end;
-
-procedure TCellAssignment.Store(Stream: TStream);
-var
-  StoreSegment: boolean;
-begin
-  Stream.Write(FAssignmentMethod, SizeOf(FAssignmentMethod));
-  StoreSegment := FSegment <> nil;
-  Stream.Write(StoreSegment, SizeOf(StoreSegment));
-  if StoreSegment then
-  begin
-    FSegment.Store(Stream);
-  end;
-  WriteCompInt(Stream, FLayer);
-  WriteCompInt(Stream, FSection);
-  WriteCompInt(Stream, FRow);
-  WriteCompInt(Stream, FColumn);
-  WriteCompBoolean(Stream, FLgrEdge);
-  WriteCompReal(Stream, FSutraX);
-  WriteCompReal(Stream, FSutraY);
-  WriteCompReal(Stream, FSutraZ);
-end;
+//{ TCellAssignment }
+//
+//procedure TCellAssignment.Assign(Cell: TCellAssignment);
+//begin
+//  FLayer := Cell.FLayer;
+//  FRow := Cell.FRow;
+//  FColumn := Cell.FColumn;
+//  FSegment := Cell.FSegment;
+//  FSection := Cell.FSection;
+//  FAnnotation := Cell.FAnnotation;
+//  FAssignmentMethod := Cell.FAssignmentMethod;
+//  FLgrEdge := Cell.FLgrEdge;
+//  FSutraX := Cell.FSutraX;
+//  FSutraY := Cell.FSutraY;
+//  FSutraZ := Cell.FSutraZ;
+//end;
+//
+//constructor TCellAssignment.Create(ALayer, ARow, ACol: integer;
+//      ASegment: TCellElementSegment; ASection: integer;
+//      const AnAnnotation: string; AnAssignmentMethod: TAssignmentMethod);
+//begin
+//  FLayer := ALayer;
+//  FRow := ARow;
+//  FColumn := ACol;
+//  FSegment := ASegment;
+//  FSection := ASection;
+//  FAnnotation := AnAnnotation;
+//  FAssignmentMethod := AnAssignmentMethod;
+//  if ASegment <> nil then
+//  begin
+//    FScreenObject := ASegment.FScreenObject;
+//    FLgrEdge := ASegment.LgrEdge;
+//  end
+//  else
+//  begin
+//    FLgrEdge := False;
+//    FScreenObject := nil;
+//  end;
+//end;
+//
+//constructor TCellAssignment.CreateFromCell(Cell: TCellAssignment);
+//begin
+//  Assign(Cell);
+//end;
+//
+//constructor TCellAssignment.CreateFromStream(Stream: TDecompressionStream;
+//  const EncloseAnnotation, IntersectAnnotation: string);
+//begin
+//  Restore(Stream, EncloseAnnotation, IntersectAnnotation);
+//end;
+//
+//destructor TCellAssignment.Destroy;
+//begin
+//  FOwnedSegment.Free;
+//  inherited;
+//end;
+//
+//function TCellAssignment.GetCell: TCellLocation;
+//begin
+//  result.Layer := Layer;
+//  result.Row := Row;
+//  result.Column := Column;
+//  result.Section := Section;
+//end;
+//
+//function TCellAssignment.GetSection: integer;
+//begin
+//  if Segment = nil then
+//  begin
+//    result := FSection;
+//  end
+//  else
+//  begin
+//    result := Segment.SectionIndex;
+//  end;
+//end;
+//
+//procedure TCellAssignment.Restore(Stream: TDecompressionStream;
+//  const EncloseAnnotation, IntersectAnnotation: string);
+//var
+//  ReadSegment: boolean;
+//begin
+//  Stream.Read(FAssignmentMethod, SizeOf(FAssignmentMethod));
+//  case FAssignmentMethod of
+//    amEnclose: FAnnotation := EncloseAnnotation;
+//    amIntersect: FAnnotation := IntersectAnnotation;
+//    else Assert(False);
+//  end;
+//  Stream.Read(ReadSegment, SizeOf(ReadSegment));
+//  if ReadSegment then
+//  begin
+//    FOwnedSegment.Free;
+//    FOwnedSegment := TCellElementSegment.Create(FScreenObject);
+//    FOwnedSegment.Restore(Stream);
+//    FSegment := FOwnedSegment;
+//  end
+//  else
+//  begin
+//    FSegment := nil;
+//  end;
+//  FLayer := ReadCompInt(Stream);
+//  FSection := ReadCompInt(Stream);
+//  FRow := ReadCompInt(Stream);
+//  FColumn := ReadCompInt(Stream);
+//  FLgrEdge := ReadCompBoolean(Stream);
+//  FSutraX := ReadCompReal(Stream);
+//  FSutraY := ReadCompReal(Stream);
+//  FSutraZ := ReadCompReal(Stream);
+//end;
+//
+//procedure TCellAssignment.Store(Stream: TStream);
+//var
+//  StoreSegment: boolean;
+//begin
+//  Stream.Write(FAssignmentMethod, SizeOf(FAssignmentMethod));
+//  StoreSegment := FSegment <> nil;
+//  Stream.Write(StoreSegment, SizeOf(StoreSegment));
+//  if StoreSegment then
+//  begin
+//    FSegment.Store(Stream);
+//  end;
+//  WriteCompInt(Stream, FLayer);
+//  WriteCompInt(Stream, FSection);
+//  WriteCompInt(Stream, FRow);
+//  WriteCompInt(Stream, FColumn);
+//  WriteCompBoolean(Stream, FLgrEdge);
+//  WriteCompReal(Stream, FSutraX);
+//  WriteCompReal(Stream, FSutraY);
+//  WriteCompReal(Stream, FSutraZ);
+//end;
 
 { TCellList }
 
@@ -49073,20 +49085,20 @@ begin
               amIntersect);
 //            CellList.Add(ACellAssignment);
           end;
-          ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/2;
-          ACellAssignment.FSutraZ := (ASegment.Y1 + ASegment.Y2)/2;
+          ACellAssignment.SutraX := (ASegment.X1 + ASegment.X2)/2;
+          ACellAssignment.SutraZ := (ASegment.Y1 + ASegment.Y2)/2;
           case FScreenObject.ElevationCount of
             ecZero:
               begin
-                ACellAssignment.FSutraY := 0;
+                ACellAssignment.SutraY := 0;
               end;
             ecOne:
               begin
-                ACellAssignment.FSutraY := FScreenObject.FTopElevation;
+                ACellAssignment.SutraY := FScreenObject.FTopElevation;
               end;
             ecTwo:
               begin
-                ACellAssignment.FSutraY := (FScreenObject.FTopElevation
+                ACellAssignment.SutraY := (FScreenObject.FTopElevation
                   + FScreenObject.FBottomElevation)/2;
               end;
           end;
@@ -49568,9 +49580,9 @@ begin
                     ASegment.Row, ASegment.Col, ASegment,
                     ASegment.SectionIndex, Annotation, amIntersect);
 //                  CellList.Add(ACell);
-                  ACell.FSutraX := (ASegment.X1 + ASegment.X2)/2;
-                  ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/2;
-                  ACell.FSutraZ :=0;
+                  ACell.SutraX := (ASegment.X1 + ASegment.X2)/2;
+                  ACell.SutraY := (ASegment.Y1 + ASegment.Y2)/2;
+                  ACell.SutraZ :=0;
                 end;
               True:
                 begin
@@ -49581,9 +49593,9 @@ begin
                           ASegment.Row, ASegment.Col, ASegment,
                           ASegment.SectionIndex, Annotation, amIntersect);
 //                        CellList.Add(ACell);
-                        ACell.FSutraX := (ASegment.X1 + ASegment.X2)/2;
-                        ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/2;
-                        ACell.FSutraZ :=0;
+                        ACell.SutraX := (ASegment.X1 + ASegment.X2)/2;
+                        ACell.SutraY := (ASegment.Y1 + ASegment.Y2)/2;
+                        ACell.SutraZ :=0;
                       end;
                     ecOne:
                       begin
@@ -49600,11 +49612,11 @@ begin
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
 //                                CellList.Add(ACell);
-                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
+                                ACell.SutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.SutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACell.FSutraZ :=FScreenObject.FTopElevation;
+                                ACell.SutraZ :=FScreenObject.FTopElevation;
                               end;
                             end;
                           eaNodes:
@@ -49642,11 +49654,11 @@ begin
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
 //                                CellList.Add(ACell);
-                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
+                                ACell.SutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.SutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACell.FSutraZ :=FScreenObject.FTopElevation;
+                                ACell.SutraZ :=FScreenObject.FTopElevation;
                               end;
                             end;
                           else Assert(False);
@@ -49669,11 +49681,11 @@ begin
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
 //                                CellList.Add(ACell);
-                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
+                                ACell.SutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.SutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACell.FSutraZ := Middle;
+                                ACell.SutraZ := Middle;
                               end;
                             end;
                           eaNodes:
@@ -49686,11 +49698,11 @@ begin
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
 //                                CellList.Add(ACell);
-                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
+                                ACell.SutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.SutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACell.FSutraZ := (FScreenObject.FTopElevation
+                                ACell.SutraZ := (FScreenObject.FTopElevation
                                   + FScreenObject.FBottomElevation)/2;
                               end;
                             end;
@@ -50056,7 +50068,7 @@ var
     FScreenObject.FSegments.Sort(CompareFrontSegments);
     for SegIndex := 0 to FScreenObject.FSegments.Count - 1 do
     begin
-      FScreenObject.FSegments[SegIndex].FPositionInSegmentList := SegIndex;
+      FScreenObject.FSegments[SegIndex].PositionInSegmentList := SegIndex;
     end;
   end;
 begin

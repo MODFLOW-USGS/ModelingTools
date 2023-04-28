@@ -83,7 +83,7 @@ uses
   frmErrorsAndWarningsUnit, frmGoPhastUnit, ScreenObjectUnit, FootprintBoundary,
   RbwParser, AbstractGridUnit, GIS_Functions, System.SysUtils, System.Math,
   QuadTreeClass,
-  System.UITypes, Vcl.Dialogs, DataSetNamesUnit;
+  System.UITypes, Vcl.Dialogs, DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrRedistributedWithdrawals = 'Redistributed withdrawals';

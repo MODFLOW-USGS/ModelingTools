@@ -172,7 +172,7 @@ uses AbstractGridUnit, frmGoPhastUnit,
   SutraMeshUnit, DisplaySettingsUnit,
   System.Generics.Collections, ModflowSwrStructureUnit,
   ModflowIrregularMeshUnit, ModflowGncUnit, DataArrayManagerUnit,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrSelectedObject = 'Selected object';

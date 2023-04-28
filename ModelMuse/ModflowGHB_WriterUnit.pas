@@ -413,7 +413,7 @@ begin
     MvrKey.StressPeriod := FStressPeriod;
     MvrKey.Index := FBoundaryIndex;
     MvrKey.SourceKey.MvrIndex := GHB_Cell.MvrIndex;
-    MvrKey.SourceKey.ScreenObject := GHB_Cell.ScreenObject;
+    MvrKey.SourceKey.ScreenObject := GHB_Cell.ScreenObject as TScreenObject;
     TModflowMvrWriter(MvrWriter).AddMvrSource(MvrKey);
   end;
 end;

@@ -395,7 +395,7 @@ begin
       ACell := AList[CellIndex] as TMvrSourceCell;
       Assert(ACell.ScreenObject <> nil);
       SourceKey.MvrIndex := ACell.MvrIndex;
-      SourceKey.ScreenObject := ACell.ScreenObject;
+      SourceKey.ScreenObject := ACell.ScreenObject as TScreenObject;
       if not MvrSourceDictionary.ContainsKey(SourceKey) then
       begin
         MvrSourceDictionary.Add(SourceKey, ACell);
@@ -606,7 +606,7 @@ begin
       begin
         ReceiverItem := ASource.Receivers[ReceiverIndex];
         ReceiverKey.ReceiverPackage := ReceiverItem.ReceiverPackage;
-        ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject;
+        ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject as TScreenObject;
 
         if FReceiverDictionary.ContainsKey(ReceiverKey) then
         begin
@@ -1003,7 +1003,7 @@ begin
           begin
             ReceiverItem := ASource.Receivers[ReceiverIndex];
             ReceiverKey.ReceiverPackage := ReceiverItem.ReceiverPackage;
-            ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject;
+            ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject as TScreenObject;
 
             UseSfrNearestMultipleSegment :=
               (ReceiverItem.ReceiverPackage = rpcSfr)

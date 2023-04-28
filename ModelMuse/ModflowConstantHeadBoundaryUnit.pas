@@ -364,7 +364,7 @@ implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions,
-  frmErrorsAndWarningsUnit;
+  frmErrorsAndWarningsUnit, CellLocationUnit;
 
 resourcestring
   FormatString =
@@ -657,6 +657,9 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
+
     try
       Expression.Evaluate;
       with ChdStorage.ChdArray[Index] do
@@ -1113,7 +1116,7 @@ begin
             BoundaryValues.StartAnnotation, BoundaryValues.EndingHead,
             BoundaryValues.EndingTime, BoundaryValues.EndAnnotation]);
         end;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         // don't move CHD cells away from the edge of child  model grids.
 //        LocalModel.AdjustCellPosition(Cell);
       end;

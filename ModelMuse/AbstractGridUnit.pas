@@ -18,7 +18,7 @@ uses System.UITypes, Winapi.Windows, Types, SysUtils, Classes, Graphics, Control
   IsosurfaceUnit,
   ContourUnit,
   ContourInterfaceUnit,
-  DataSetUnit, LineStorage, ModflowCellUnit;
+  DataSetUnit, LineStorage, ModflowCellUnit, AbstractGridInterfaceUnit;
 
 type
   // @abstract(@name is used for grid related errors.)
@@ -130,7 +130,7 @@ side views of the model.}
    @seealso(TPhastGrid)
    @seealso(TModflowGrid)
    }
-  TCustomModelGrid = class(TCustomDiscretization)
+  TCustomModelGrid = class(TCustomDiscretization, ICustomModelGrid)
   private
     // See @link(EdgesGLIndex).
     FEdgesGLIndex: GLuint;
@@ -1099,8 +1099,6 @@ side views of the model.}
   public
     procedure BeginUpdate; virtual;
     procedure EndUpdate; virtual;
-    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
-      virtual; stdcall;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
       StringValues: TStringList; out MinMaxInitialized: Boolean); override;
   end;
@@ -9384,16 +9382,6 @@ begin
     frmGoPhast.PhastModel.InvalidateSegments;
     frmGoPhast.EnableVisualization;
   end;
-end;
-
-function TCustomMesh.QueryInterface(const IID: TGUID; out Obj): HRESULT;
-const
-  E_NOINTERFACE = HRESULT($80004002);
-begin
-  if GetInterface(IID, Obj) then
-    result := 0
-  else
-    result := E_NOINTERFACE;
 end;
 
 function TCustomMesh._AddRef: Integer;

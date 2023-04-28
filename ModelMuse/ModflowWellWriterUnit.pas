@@ -604,7 +604,7 @@ begin
       MvrKey.StressPeriod := FStressPeriod;
       MvrKey.Index := FBoundaryIndex;
       MvrKey.SourceKey.MvrIndex := Well_Cell.MvrIndex;
-      MvrKey.SourceKey.ScreenObject := Well_Cell.ScreenObject;
+      MvrKey.SourceKey.ScreenObject := Well_Cell.ScreenObject as TScreenObject;
       TModflowMvrWriter(MvrWriter).AddMvrSource(MvrKey);
     end;
   end;

@@ -392,7 +392,7 @@ implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions, ModflowMvrUnit,
-  frmErrorsAndWarningsUnit;
+  frmErrorsAndWarningsUnit, CellLocationUnit;
 
 resourcestring
   StrConductance = 'Conductance';
@@ -766,6 +766,8 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
 
     try
       Expression.Evaluate;
@@ -1521,7 +1523,7 @@ begin
         Cells.Add(Cell);
         Cell.FStressPeriod := TimeIndex;
         Cell.FValues := BoundaryValues;
-        Cell.ScreenObject := LocalScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

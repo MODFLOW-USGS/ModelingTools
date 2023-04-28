@@ -283,7 +283,7 @@ implementation
 uses
   PhastModelUnit, frmGoPhastUnit, ScreenObjectUnit,
   ModflowTimeUnit, GIS_Functions,
-  frmFormulaErrorsUnit;
+  frmFormulaErrorsUnit, CellLocationUnit;
 
 resourcestring
   StrFHBHeads = 'FHB Heads';
@@ -1101,7 +1101,7 @@ begin
             PriorCell.Values.BoundaryValue, Cell.Values.BoundaryValue,
             PriorCells.StartTime, Cells.StartTime, InterpCells.StartTime);
           InterpCell.Values.BoundaryValueAnnotation := InterpolatedAnnotation;
-          InterpCell.ScreenObject := ScreenObject;
+          InterpCell.ScreenObject := ScreenObjectI;
           LocalModel.AdjustCellPosition(InterpCell);
         end;
       end;

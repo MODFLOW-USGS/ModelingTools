@@ -2,20 +2,20 @@ inherited frmGridValue: TfrmGridValue
   HelpType = htKeyword
   HelpKeyword = 'Grid_Value_Dialog_Box'
   Caption = 'Grid or Mesh Value'
-  ClientHeight = 511
-  ClientWidth = 640
+  ClientHeight = 510
+  ClientWidth = 636
   KeyPreview = True
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitWidth = 656
-  ExplicitHeight = 550
+  ExplicitWidth = 652
+  ExplicitHeight = 549
   DesignSize = (
-    640
-    511)
+    636
+    510)
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 420
-    Top = 471
+    Left = 412
+    Top = 470
     Width = 89
     Height = 33
     Anchors = [akRight, akBottom]
@@ -27,8 +27,8 @@ inherited frmGridValue: TfrmGridValue
     ExplicitTop = 472
   end
   object btnClose: TBitBtn
-    Left = 517
-    Top = 471
+    Left = 509
+    Top = 470
     Width = 89
     Height = 33
     Anchors = [akRight, akBottom]
@@ -41,8 +41,8 @@ inherited frmGridValue: TfrmGridValue
   object pnlTabs: TPanel
     Left = 0
     Top = 0
-    Width = 640
-    Height = 465
+    Width = 636
+    Height = 464
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
@@ -51,42 +51,42 @@ inherited frmGridValue: TfrmGridValue
     object splAllDataSets: TSplitter
       Left = 441
       Top = 1
-      Height = 464
+      Height = 463
       ExplicitLeft = 50
       ExplicitHeight = 465
     end
     object splPathline: TSplitter
       Left = 471
       Top = 1
-      Height = 464
+      Height = 463
       ExplicitLeft = 58
       ExplicitHeight = 465
     end
     object splEndPoint: TSplitter
       Left = 501
       Top = 1
-      Height = 464
+      Height = 463
       ExplicitLeft = 88
       ExplicitHeight = 465
     end
     object splSWR: TSplitter
       Left = 531
       Top = 1
-      Height = 464
+      Height = 463
       ExplicitLeft = 118
       ExplicitHeight = 465
     end
     object splGNC: TSplitter
       Left = 561
       Top = 1
-      Height = 464
+      Height = 463
       ExplicitLeft = 148
       ExplicitHeight = 465
     end
     object splXt3d: TSplitter
       Left = 591
       Top = 1
-      Height = 464
+      Height = 463
       ExplicitLeft = 178
       ExplicitHeight = 465
     end
@@ -94,7 +94,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 1
       Top = 1
       Width = 440
-      Height = 464
+      Height = 463
       Align = alLeft
       Caption = 'rrlcurrentData'
       Font.Charset = ANSI_CHARSET
@@ -109,9 +109,10 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Current Data'
       LabelWidth = 27
       ExpandedWidth = 413
+      ExplicitHeight = 464
       DesignSize = (
         440
-        463)
+        462)
       object lblModel: TLabel
         Left = 40
         Top = 19
@@ -142,7 +143,7 @@ inherited frmGridValue: TfrmGridValue
       end
       object lblHigher3rdDimensionCoordinate: TStaticText
         Left = 40
-        Top = 410
+        Top = 409
         Width = 231
         Height = 22
         Anchors = [akLeft, akBottom]
@@ -152,7 +153,7 @@ inherited frmGridValue: TfrmGridValue
       end
       object lblLower3rdDimensionCoordinate: TStaticText
         Left = 40
-        Top = 431
+        Top = 430
         Width = 228
         Height = 22
         Anchors = [akLeft, akBottom]
@@ -162,7 +163,7 @@ inherited frmGridValue: TfrmGridValue
       end
       object lblSection: TStaticText
         Left = 40
-        Top = 363
+        Top = 362
         Width = 57
         Height = 22
         Anchors = [akLeft, akBottom]
@@ -172,7 +173,7 @@ inherited frmGridValue: TfrmGridValue
       end
       object lblSelectedObject: TStaticText
         Left = 40
-        Top = 318
+        Top = 317
         Width = 112
         Height = 22
         Anchors = [akLeft, akBottom]
@@ -182,7 +183,7 @@ inherited frmGridValue: TfrmGridValue
       end
       object lblVertex: TStaticText
         Left = 40
-        Top = 342
+        Top = 341
         Width = 104
         Height = 22
         Anchors = [akLeft, akBottom]
@@ -250,7 +251,7 @@ inherited frmGridValue: TfrmGridValue
       end
       object cbShowThirdDValues: TCheckBox
         Left = 40
-        Top = 387
+        Top = 386
         Width = 390
         Height = 17
         Anchors = [akLeft, akBottom]
@@ -271,7 +272,7 @@ inherited frmGridValue: TfrmGridValue
         Left = 40
         Top = 192
         Width = 390
-        Height = 120
+        Height = 119
         Anchors = [akLeft, akTop, akRight, akBottom]
         ReadOnly = True
         ScrollBars = ssVertical
@@ -284,7 +285,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 444
       Top = 1
       Width = 27
-      Height = 463
+      Height = 462
       Align = alLeft
       Caption = 'rrlAllDataSets'
       Font.Charset = ANSI_CHARSET
@@ -302,7 +303,7 @@ inherited frmGridValue: TfrmGridValue
       ExplicitHeight = 464
       DesignSize = (
         27
-        463)
+        462)
       object lblSelectExplanation: TLabel
         Left = 31
         Top = 63
@@ -319,7 +320,7 @@ inherited frmGridValue: TfrmGridValue
       end
       object btnUpdate: TButton
         Left = 31
-        Top = 427
+        Top = 426
         Width = 75
         Height = 25
         Anchors = [akLeft, akBottom]
@@ -341,7 +342,7 @@ inherited frmGridValue: TfrmGridValue
         Left = 32
         Top = 87
         Width = 0
-        Height = 333
+        Height = 332
         Anchors = [akLeft, akTop, akRight, akBottom]
         ReadOnly = True
         ScrollBars = ssVertical
@@ -416,7 +417,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 474
       Top = 1
       Width = 27
-      Height = 463
+      Height = 462
       Align = alLeft
       Caption = 'rrlPathline'
       Font.Charset = ANSI_CHARSET
@@ -436,11 +437,12 @@ inherited frmGridValue: TfrmGridValue
         Left = 28
         Top = 1
         Width = 397
-        Height = 462
+        Height = 461
         Align = alClient
         Caption = 'pnlPathline'
         ShowCaption = False
         TabOrder = 1
+        ExplicitHeight = 462
         object rdgPathline: TRbwDataGrid4
           Left = 1
           Top = 1
@@ -589,7 +591,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 504
       Top = 1
       Width = 27
-      Height = 463
+      Height = 462
       Align = alLeft
       Caption = 'rrlEndPoint'
       Font.Charset = ANSI_CHARSET
@@ -609,11 +611,12 @@ inherited frmGridValue: TfrmGridValue
         Left = 28
         Top = 1
         Width = 397
-        Height = 462
+        Height = 461
         Align = alClient
         Caption = 'pnlEndpoint'
         ShowCaption = False
         TabOrder = 1
+        ExplicitHeight = 462
         object pnlEndPoints: TPanel
           Left = 1
           Top = 356
@@ -763,7 +766,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 534
       Top = 1
       Width = 27
-      Height = 463
+      Height = 462
       Align = alLeft
       Caption = 'rrlSWR'
       Font.Charset = ANSI_CHARSET
@@ -783,11 +786,12 @@ inherited frmGridValue: TfrmGridValue
         Left = 28
         Top = 1
         Width = 381
-        Height = 462
+        Height = 461
         Align = alClient
         Caption = 'pnlSWR'
         ShowCaption = False
         TabOrder = 1
+        ExplicitHeight = 462
         object pnlSwrReaches: TPanel
           Left = 1
           Top = 1
@@ -1046,7 +1050,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 564
       Top = 1
       Width = 27
-      Height = 463
+      Height = 462
       Align = alLeft
       Caption = 'GNC'
       Font.Charset = ANSI_CHARSET
@@ -1185,7 +1189,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 594
       Top = 1
       Width = 27
-      Height = 463
+      Height = 462
       Align = alLeft
       Caption = 'rrlXt3d'
       Font.Charset = ANSI_CHARSET

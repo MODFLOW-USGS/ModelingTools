@@ -7,7 +7,8 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit, RealListUnit, System.Generics.Collections,
-  Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
+  CellLocationUnit;
 
 type
   {
@@ -544,8 +545,6 @@ var
   PestSeriesMethod: TPestParamMethod;
   TimeSeriesName: string;
   DynamicTimeSeries: IDynamicTimeSeries;
-  Location: TTimeSeriesLocation;
-  TimeSeries: IMf6TimeSeries;
 begin
   Expression := CellAssignmentData.Expression;
   ACellList := CellAssignmentData.ACellList;
@@ -583,17 +582,8 @@ begin
 
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
-    // Handle dynamic time series here.
 
-    if DynamicTimeSeries <> nil then
-    begin
-      Location.Layer := ACell.Layer;
-      Location.Row := ACell.Row;
-      Location.Column := ACell.Column;
-      TimeSeries := DynamicTimeSeries.StaticTimeSeries[Location];
-      BoundaryGroup.Mf6TimeSeriesNames.Add(string(TimeSeries.SeriesName));
-      TimeSeriesName := string(TimeSeries.SeriesName);
-    end;
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
 
     // 2. update locations
     try
@@ -1284,7 +1274,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.FValues := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

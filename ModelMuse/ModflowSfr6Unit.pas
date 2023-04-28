@@ -752,7 +752,7 @@ uses
   ScreenObjectUnit, GIS_Functions, ModflowSfrUnit, ModflowSfrReachUnit,
   ModflowSfrSegment, ModflowSfrChannelUnit, ModflowSfrParamIcalcUnit,
   ModflowSfrFlows, ModflowStrUnit, DataSetUnit, ModflowMvrUnit,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CellLocationUnit;
 
 
 const
@@ -3490,7 +3490,7 @@ begin
         Cell.FValues.Assign(BoundaryValues);
 //        SetLength(Cell.FValues.Diversions, Length(Cell.FValues.Diversions));
 //        SetLength(Cell.FValues.DiversionAnnotations, Length(Cell.FValues.DiversionAnnotations));
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

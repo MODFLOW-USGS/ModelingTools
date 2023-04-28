@@ -225,6 +225,7 @@ many will be displayed at one time. }
     FIncludeTimeSeries: Boolean;
     FTimeSeries: TTreeNode;
     FTimesSeriesNames: TStringList;
+    FDynamicTimesSeriesNames: TStringList;
     // See @link(Formula).
     function GetFormula: string;
     // @name inserts NewText into the formula at
@@ -240,6 +241,7 @@ many will be displayed at one time. }
     procedure CreateNodesForVariables;
     procedure SetIncludeTimeSeries(const Value: Boolean);
     procedure CreateNodesForTimeSeries;
+    procedure SetDynamicTimesSeriesNames(const Value: TStringList);
     { Private declarations }
   protected
     procedure CreateParams(var Params: TCreateParams); override;
@@ -271,6 +273,9 @@ many will be displayed at one time. }
     procedure UpdateTreeList;
     property IncludeTimeSeries: Boolean read FIncludeTimeSeries
       write SetIncludeTimeSeries;
+    property DynamicTimesSeriesNames: TStringList read FDynamicTimesSeriesNames
+      write SetDynamicTimesSeriesNames;
+
     { Public declarations }
   end;
 
@@ -282,7 +287,7 @@ implementation
 
 uses Contnrs, GIS_Functions, IntListUnit, frmGoPhastUnit,
   PhastModelUnit, DataSetUnit, Modflow6TimeSeriesCollectionsUnit,
-  Modflow6TimeSeriesUnit;
+  Modflow6TimeSeriesUnit, Modflow6DynamicTimeSeriesUnit;
 
 resourcestring
   StrErrorAppendingRTF = 'Error appending RTF data.';
@@ -712,31 +717,10 @@ begin
 end;
 
 function TfrmFormula.GetFormula: string;
-//var
-//  Index: integer;
-//  OnChangeEvent: TNotifyEvent;
 begin
-//  OnChangeEvent := jreFormula.OnChange;
-//  jreFormula.OnChange := nil;
-//  try
-//    jreFormula.WordWrap := False;
-    result := jreFormula.Lines.Text;
-    result := StringReplace(result, sLineBreak, '', [rfReplaceAll, rfIgnoreCase]);
-
-//    result := '';
-//    for Index := 0 to jreFormula.Lines.Count - 1 do
-//    begin
-//      result := result + jreFormula.Lines[Index];
-//      if (Length(result) > 0) and (result[Length(result)] <> ' ') then
-//      begin
-//        result := result + ' ';
-//      end;
-//    end;
-    result := Trim(Result);
-//  finally
-//    jreFormula.WordWrap := True;
-//    jreFormula.OnChange := OnChangeEvent;
-//  end;
+  result := jreFormula.Lines.Text;
+  result := StringReplace(result, sLineBreak, '', [rfReplaceAll, rfIgnoreCase]);
+  result := Trim(Result);
 end;
 
 procedure TfrmFormula.jreFormulaDblClick(Sender: TObject);
@@ -900,6 +884,11 @@ begin
   end;
 end;
 
+procedure TfrmFormula.SetDynamicTimesSeriesNames(const Value: TStringList);
+begin
+  FDynamicTimesSeriesNames.Assign(Value);
+end;
+
 procedure TfrmFormula.SetFormula(const Value: string);
 begin
   jreFormula.Lines.Clear;
@@ -980,6 +969,7 @@ procedure TfrmFormula.FormCreate(Sender: TObject);
 begin
   inherited;
   FTimesSeriesNames := TStringList.Create;
+  FDynamicTimesSeriesNames := TStringList.Create;
   jreFormula.DoubleBuffered := False;
   DataSetGroupName := StrDataSets;
 
@@ -996,6 +986,7 @@ begin
   inherited;
   FDiagramObjectStorage.Free;
   FTimesSeriesNames.Free;
+  FDynamicTimesSeriesNames.Free;
 end;
 
 procedure TfrmFormula.RemoveGIS_Functions;
@@ -1131,7 +1122,7 @@ begin
   if IncludeTimeSeries then
   begin
     Mf6TimesSeries := frmGoPhast.PhastModel.Mf6TimesSeries;
-    if Mf6TimesSeries.Count > 0 then
+    if (Mf6TimesSeries.Count > 0) or (DynamicTimesSeriesNames.Count > 0) then
     begin
       FTimesSeriesNames.Sorted := True;
       FTimesSeriesNames.CaseSensitive := False;
@@ -1157,6 +1148,18 @@ begin
             tvItems.Items.AddChildObject(ParentNode, String(ASeries.SeriesName), ASeries);
             FTimesSeriesNames.Add(string(ASeries.SeriesName));
           end;
+        end;
+      end;
+
+      if DynamicTimesSeriesNames.Count > 0 then
+      begin
+        ParentNode := tvItems.Items.AddChild(FTimeSeries, 'Dynamic Time Series');
+        for SeriesIndex := 0 to DynamicTimesSeriesNames.Count - 1 do
+        begin
+          tvItems.Items.AddChildObject(ParentNode,
+            DynamicTimesSeriesNames[SeriesIndex],
+            DynamicTimesSeriesNames.Objects[SeriesIndex]);
+          FTimesSeriesNames.Add(DynamicTimesSeriesNames[SeriesIndex]);
         end;
       end;
     end;
@@ -1467,6 +1470,10 @@ begin
     else if AnObject is TMf6TimeSeries then
     begin
       InsertText(String(TMf6TimeSeries(AnObject).SeriesName));
+    end
+    else if AnObject is TDynamicTimeSeries then
+    begin
+      InsertText(String(TDynamicTimeSeries(AnObject).SeriesName));
     end;
   end;
 end;

@@ -53,7 +53,8 @@ uses System.UITypes,
   PhastModelInterfaceUnit, OrderedCollectionInterfaceUnit,
   LockedGlobalVariableChangersInterfaceUnit, ScreenObjectInterfaceUnit,
   ColorSchemesInterface, DataArrayInterfaceUnit, SubscriptionInterfaceUnit,
-  GlobalVariablesInterfaceUnit;
+  GlobalVariablesInterfaceUnit, AbstractGridInterfaceUnit, CellLocationUnit,
+  ModelCellInterfaceUnit;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
@@ -1135,7 +1136,7 @@ that affects the model output should also have a comment. }
     IModelForDynamicTimeSeries, IModelForTimesSeriesInterface,
     IModelForTGwtPestMethodCollection, IModelForTLandUsePestMethodCollection,
     IModelForTPilotPointObsGrp, IModelForTCustomDefinedGlobalObject,
-    IModelForTModflowParameter)
+    IModelForTModflowParameter, IModelForCustomModelGrid, IModelForTValueCell)
   private
     FOnModelSelectionChange: TNotifyEvent;
     // See @link(PhastGrid).
@@ -2140,6 +2141,7 @@ that affects the model output should also have a comment. }
     function GetDataArrayManager: TDataArrayManager;
     function GetClearing: Boolean;
     function GetMf6TimesSeriesI: ITimesSeriesCollections;
+    function GetGridI: ICustomModelGrid;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
@@ -2261,6 +2263,7 @@ that affects the model output should also have a comment. }
     procedure AddFileToArchive(const FileName: string);
 
     property Grid: TCustomModelGrid read GetGrid;
+    property GridI: ICustomModelGrid read GetGridI;
 
     // @name is the TRbwParser for formulas for data sets on the front
     // view of the model evaluated at elements.
@@ -2464,6 +2467,7 @@ that affects the model output should also have a comment. }
     procedure ExportModflowModel(const FileName: string;
       RunModel, ExportModpath, NewBudgetFileForModpath, ExportZoneBudget,
       ShowWarning: boolean);
+    procedure InvalidateAllDynamicLists;
     procedure ExportWellCsv(const FileName: string);
     procedure ExportModpathModel(FileName: string;
       RunModel, NewBudgetFile: boolean; EmbeddedExport: boolean = False);
@@ -2643,6 +2647,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateRipGroundSurface(Sender: TObject);
     procedure InvalidateRipCoverages(Sender: TObject);
 
+    function GetScreenObjectInterfaceByName(AName: string): IScreenObject;
     function GetScreenObjectByName(AName: string): TScreenObject; virtual; abstract;
     // @name sets the event handlers for the discharge routing array in
     // the UZF package.
@@ -26207,6 +26212,18 @@ begin
   end;
 end;
 
+procedure TCustomModel.InvalidateAllDynamicLists;
+var
+  index: Integer;
+  AScreenObject: TScreenObject;
+begin
+  for index := 0 to ScreenObjectCount - 1 do
+  begin
+    AScreenObject := ScreenObjects[index];
+    AScreenObject.DyanmicTimesSeriesCollections.Invalidate;
+  end;
+end;
+
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
 begin
   ModflowPackages.GwtCncPackage.InvalidateConcentrations;
@@ -35417,6 +35434,12 @@ begin
   result := GetScreenObjects(index);
 end;
 
+function TCustomModel.GetScreenObjectInterfaceByName(
+  AName: string): IScreenObject;
+begin
+  result := GetScreenObjectByName(AName);
+end;
+
 function TCustomModel.GetSelectedColumn: integer;
 begin
   if Grid <> nil then
@@ -42424,6 +42447,7 @@ begin
 //        WinExec(PAnsiChar(AnsiString('"' + BatchFileLocation + '"')), SW_SHOW);
       end;
     finally
+      InvalidateAllDynamicLists;
       frmProgressMM.btnAbort.Visible := False;
       frmProgressMM.Hide;
       if frmProgressMM.Owner = nil then
@@ -49020,6 +49044,11 @@ begin
       result := ModflowGrid;
     end;
   end;
+end;
+
+function TCustomModel.GetGridI: ICustomModelGrid;
+begin
+  result := Grid;
 end;
 
 function TCustomModel.GetGroundSurfaceUsed: TObjectUsedEvent;

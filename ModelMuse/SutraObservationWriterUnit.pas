@@ -78,7 +78,7 @@ implementation
 uses
   ScreenObjectUnit, OctTreeClass,
   SutraMeshUnit, SutraOutputControlUnit, SutraFileWriterUnit, SutraPestObsUnit,
-  PestPropertiesUnit;
+  PestPropertiesUnit, CellLocationUnit;
 
 { TSutraObservationWriter }
 

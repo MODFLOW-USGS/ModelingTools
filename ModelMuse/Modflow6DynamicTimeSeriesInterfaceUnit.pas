@@ -62,7 +62,7 @@ type
     property Orientation: TDataSetOrientation read GetOrientation
       write SetOrientation;
 
-    function IsSame(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
+    function IsSameI(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
 
     function GetDeleted: Boolean;
     procedure SetDeleted(const Value: Boolean);

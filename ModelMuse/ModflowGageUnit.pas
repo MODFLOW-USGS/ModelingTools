@@ -47,7 +47,7 @@ Type
 implementation
 
 uses
-  RbwParser, ScreenObjectUnit, DataSetUnit, PhastModelUnit;
+  RbwParser, ScreenObjectUnit, DataSetUnit, PhastModelUnit, CellLocationUnit;
 
 resourcestring
   StrAssignedByS = 'Assigned by %s';

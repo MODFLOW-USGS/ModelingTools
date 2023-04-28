@@ -338,7 +338,7 @@ const
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
-  frmGoPhastUnit, GIS_Functions, ModflowMvrUnit;
+  frmGoPhastUnit, GIS_Functions, ModflowMvrUnit, CellLocationUnit;
 
 { TDrnItem }
 
@@ -616,6 +616,9 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
+
     // 2. update locations
     Expression.Evaluate;
     with DrnStorage.DrnArray[Index] do
@@ -1100,7 +1103,7 @@ begin
         Cells.Add(Cell);
 //        Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := LocalScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

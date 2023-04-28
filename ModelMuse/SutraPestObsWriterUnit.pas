@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, PhastModelUnit, System.SysUtils, ScreenObjectUnit,
   System.Classes, SutraPestObsUnit, System.Generics.Collections,
-  SutraOptionsUnit, SutraTimeScheduleUnit, GoPhastTypes;
+  SutraOptionsUnit, SutraTimeScheduleUnit, GoPhastTypes, CellLocationUnit;
 
 type
   TExportType = (etInstructions, etExtractedValues);

@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
   SubscriptionUnit, GoPhastTypes, System.Generics.Collections,
-  RbwParser;
+  RbwParser, ScreenObjectInterfaceUnit;
 
 type
   {
@@ -1039,7 +1039,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
       end;
       Cells.Cache;
     end;

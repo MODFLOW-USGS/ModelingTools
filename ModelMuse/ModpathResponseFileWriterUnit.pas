@@ -126,7 +126,8 @@ uses
   LayerStructureUnit, ModpathStartingLocationsWriter,
   ModpathParticleUnit, frmProgressUnit, Forms, frmGoPhastUnit,
   frmErrorsAndWarningsUnit, ModflowTimeUnit, ArchiveNodeInterface, System.Generics.Collections, FastGEO,
-  DataSetNamesUnit;
+  DataSetNamesUnit,
+  CellLocationUnit;
 
 resourcestring
   StrWritingDataSets32and33 = '  Writing Data Sets 32 and 33.';

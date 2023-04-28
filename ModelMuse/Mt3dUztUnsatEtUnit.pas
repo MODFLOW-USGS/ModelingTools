@@ -268,7 +268,7 @@ begin
         Cell.IFace := LocalScreenObject.IFace;
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         Cell.SetConcentrationLength(Length(Cell.Values.Concentration));
       end;
       Cells.Cache;

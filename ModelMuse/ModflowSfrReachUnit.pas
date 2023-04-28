@@ -280,7 +280,8 @@ const
 
 implementation
 
-uses ScreenObjectUnit, PhastModelUnit, ModflowSfrUnit, frmGoPhastUnit;
+uses ScreenObjectUnit, PhastModelUnit, ModflowSfrUnit, frmGoPhastUnit,
+  CellLocationUnit;
 
 resourcestring
   StrReachLength = 'Reach length';

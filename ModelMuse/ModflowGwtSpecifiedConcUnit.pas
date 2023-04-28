@@ -263,7 +263,7 @@ const
 implementation
 
 uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  frmGoPhastUnit, GIS_Functions, frmErrorsAndWarningsUnit;
+  frmGoPhastUnit, GIS_Functions, frmErrorsAndWarningsUnit, CellLocationUnit;
 
 resourcestring
   StrCNCSpecifiedConcen = 'CNC Specified Concentration';
@@ -660,6 +660,9 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
+
     // 2. update locations
     try
       Expression.Evaluate;
@@ -1095,7 +1098,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.FValues := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

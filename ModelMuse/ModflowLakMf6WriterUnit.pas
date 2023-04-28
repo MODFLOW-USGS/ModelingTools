@@ -266,7 +266,8 @@ uses
   frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
   FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit,
   ModflowParameterUnit, Modflow6TimeSeriesUnit,
-  Mt3dmsChemSpeciesUnit, frmGoPhastUnit, Mt3dmsChemUnit, DataSetNamesUnit;
+  Mt3dmsChemSpeciesUnit, frmGoPhastUnit, Mt3dmsChemUnit, DataSetNamesUnit,
+  CellLocationUnit;
 
 resourcestring
   StrTheFollowingObject = 'The following objects are supposed to define lake' +
@@ -2767,7 +2768,7 @@ begin
         ALake := FLakes[LakeIndex];
         Assert(ALake.FScreenObject <> nil);
         MvrReceiver.ReceiverValues.Index := LakeIndex+1;
-        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
+        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject as TScreenObject;
           if (MoverWriter <> nil) and not WritingTemplate then
           begin
             MoverWriter.AddMvrReceiver(MvrReceiver);
@@ -2791,7 +2792,7 @@ begin
       begin
         ALake := FLakes[LakeIndex];
         Assert(ALake.FScreenObject <> nil);
-        MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject;
+        MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject as TScreenObject;
         LocalScreenObject := ALake.FScreenObject as TScreenObject;
         MvrUsed := (MoverWriter <> nil)
           and (LocalScreenObject.ModflowMvr <> nil)

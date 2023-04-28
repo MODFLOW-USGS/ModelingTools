@@ -12,7 +12,7 @@ uses
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
   Modflow6TimeSeriesCollectionsUnit, System.SysUtils,
   ScreenObjectInterfaceUnit, Modflow6TimeSeriesCollectionsInterfaceUnit,
-  RbwParser, System.Generics.Collections;
+  RbwParser, System.Generics.Collections, PhastModelInterfaceUnit;
 
 type
   TDynamicTimeSeriesFormulaItem = class (TFormulaOrderedItem,
@@ -42,7 +42,7 @@ type
 
   TDynamicTimeSeriesItem = class;
 
-  TDynamicTimeSeries = class(TPhastCollection, ITimeSeries,
+  TDynamicTimeSeries = class(TOrderedCollection, ITimeSeries,
     IDynamicTimeSeries)
   private
     FDeleted: Boolean;
@@ -77,11 +77,13 @@ type
     procedure SetDeleted(const Value: Boolean);
     function GetStaticTimeSeries(Location: TTimeSeriesLocation): IMf6TimeSeries;
     function GetUsesList: TStringList;
+    procedure Invalidate;
+    function IsSameI(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
   public
     constructor Create(ModelInterface: IModelForDynamicTimeSeries;
       ScreenObject: IScreenObject; Group: TDynamicTimeSeriesItem);
     destructor Destroy; override;
-    function IsSame(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
+    function IsSame(AnOrderedCollection: TOrderedCollection): Boolean; override;
     property  Items[Index: Integer]: IDynamicTimeSeriesFormulaItem read GetItems
       write SetItems; default;
     function Add: IDynamicTimeSeriesFormulaItem;
@@ -116,6 +118,7 @@ type
     FStaticGroup: ITimesSeriesCollection;
     FDyanmicCollection: TDyanmicTimesSeriesCollection;
     FStaticCollection: ITimesSeriesCollections;
+    FStaticItem: ITimeSeriesCollectionItem;
     procedure SetTimeSeriesI(const Value: IDynamicTimeSeries);
     function GetDynamicTimeSeriesI: IDynamicTimeSeries;
     function GetTimeSeriesI: ITimeSeries;
@@ -149,6 +152,7 @@ type
     procedure SetTimeCount(const Value: Integer);
     function GetItem(Index: Integer): TDynamicTimeSeriesItem;
     procedure SetItem(Index: Integer; const Value: TDynamicTimeSeriesItem);
+    procedure Invalidate;
   public
     Constructor Create(Model: IModelMuseModel; ScreenObject: IScreenObject);
     Destructor Destroy; override;
@@ -206,6 +210,7 @@ type
       const ASeriesName: string): TDyanmicTimesSeriesCollection;
     property TimeSeriesNames: TStringList read GetTimeSeriesNames;
     procedure Loaded;
+    procedure Invalidate;
   end;
 
 
@@ -231,6 +236,7 @@ end;
 constructor TDynamicTimeSeriesFormulaItem.Create(Collection: TCollection);
 var
   TimeSeries: TDynamicTimeSeries;
+  LocalModel: IModelForDynamicTimeSeries;
 begin
   Assert(Collection <> nil);
   inherited;
@@ -239,20 +245,47 @@ begin
   FScreenObject := TimeSeries.FScreenObject;
   FModel := TimeSeries.FModel;
 
-  OnRemoveSubscription := DynamicTimeItemRemoveSubscription;
-  OnRestoreSubscription := DynamicTimeItemRestoreSubscription;
-  FValue := FModel.AddFormulaObject;
-  FValue.Parser := FModel.FormulaCompiler[TimeSeries.Orientation, eaBlocks];
-  FValue.AddSubscriptionEvents(DynamicTimeItemRemoveSubscription,
-  DynamicTimeItemRestoreSubscription, self);
+  if FModel <> nil then
+  begin
+    OnRemoveSubscription := DynamicTimeItemRemoveSubscription;
+    OnRestoreSubscription := DynamicTimeItemRestoreSubscription;
+    FValue := FModel.AddFormulaObject;
+    FValue.Parser := FModel.FormulaCompiler[TimeSeries.Orientation, eaBlocks];
+    FValue.AddSubscriptionEvents(DynamicTimeItemRemoveSubscription,
+    DynamicTimeItemRestoreSubscription, self);
+  end
+  else
+  begin
+    if IGlobalModel.QueryInterface(IModelForDynamicTimeSeries, LocalModel) <> 0 then
+    begin
+      Assert(False)
+    end;
+    FValue := LocalModel.AddFormulaObject;
+    FValue.Parser := LocalModel.FormulaCompiler[TimeSeries.Orientation, eaBlocks];
+  end;
 end;
 
 destructor TDynamicTimeSeriesFormulaItem.Destroy;
+var
+  LocalModel: IModelForDynamicTimeSeries;
 begin
   Value := '0';
-  FModel.RemoveFormulaObject(FValue,
-    DynamicTimeItemRemoveSubscription,
-    DynamicTimeItemRestoreSubscription, self);
+  if FModel <> nil then
+  begin
+    FModel.RemoveFormulaObject(FValue,
+      DynamicTimeItemRemoveSubscription,
+      DynamicTimeItemRestoreSubscription, self);
+  end
+  else
+  begin
+    if IGlobalModel.QueryInterface(IModelForDynamicTimeSeries, LocalModel) <> 0 then
+    begin
+      Assert(False);
+    end;
+    LocalModel.RemoveFormulaObject(FValue,
+      nil,
+      nil, self);
+  end;
   FObserver.Free;
   inherited;
 end;
@@ -338,6 +371,7 @@ begin
     ScaleFactor := TimeSeriesSource.ScaleFactor;
     ScaleFactorParameter := TimeSeriesSource.ScaleFactorParameter;
     ParamMethod := TimeSeriesSource.ParamMethod;
+    Orientation := TimeSeriesSource.Orientation;
     Deleted := TimeSeriesSource.Deleted;
   end;
   inherited;
@@ -348,17 +382,23 @@ constructor TDynamicTimeSeries.Create(
   Group: TDynamicTimeSeriesItem);
 var
   NotifyEvent: TNotifyEvent;
+  ModelI: IModelForTOrderedCollection;
 begin
   if ModelInterface = nil then
   begin
     NotifyEvent := nil;
+    ModelI := nil;
   end
   else
   begin
     NotifyEvent := ModelInterface.Invalidate;
+    if ModelInterface.QueryInterface(IModelForTOrderedCollection, ModelI) <> 0 then
+    begin
+      Assert(False);
+    end;
   end;
   FScreenObject := ScreenObject;
-  inherited Create(TDynamicTimeSeriesFormulaItem, NotifyEvent);
+  inherited Create(TDynamicTimeSeriesFormulaItem, ModelI);
   FStoredScaleFactor := TRealStorage.Create(NotifyEvent);
   FNotifierComponent := TComponent.Create(nil);
   FModel := ModelInterface;
@@ -434,8 +474,8 @@ var
   Formula: string;
   Compiler: TRbwParser;
   Expression: TExpression;
-  VariablesUsed: TStringList;
-  VariableIndex: Integer;
+//  VariablesUsed: TStringList;
+//  VariableIndex: Integer;
   TimeSeriesI: ITimeSeries;
 begin
   if not FTimeSeriesLocationDictionary.TryGetValue(Location, result) then
@@ -522,32 +562,50 @@ begin
   result := FUsesList;
 end;
 
-function TDynamicTimeSeries.IsSame(
-  DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
+procedure TDynamicTimeSeries.Invalidate;
+begin
+  FTimeSeriesLocationDictionary.Clear;
+end;
+
+function TDynamicTimeSeries.IsSame(AnOrderedCollection: TOrderedCollection): Boolean;
 var
-  index: Integer;
+//  index: Integer;
+  DynamicTimeSeriesCollection: TDynamicTimeSeries;
 begin
   // if Assign is updated, update IsSame too.
-  result := (Count = DynamicTimeSeriesCollection.Count)
-    and (SeriesName = DynamicTimeSeriesCollection.SeriesName)
-    and (ScaleFactor = DynamicTimeSeriesCollection.ScaleFactor)
-    and (InterpolationMethod = DynamicTimeSeriesCollection.InterpolationMethod)
-    and (ScaleFactorParameter = DynamicTimeSeriesCollection.ScaleFactorParameter)
-    and (ParamMethod = DynamicTimeSeriesCollection.ParamMethod)
-    and (Orientation = DynamicTimeSeriesCollection.Orientation);
+  result := (AnOrderedCollection is TDynamicTimeSeries) and inherited;
 
   if result then
   begin
-    for index := 0 to Count - 1 do
-    begin
-      result := Items[index].IsSame(DynamicTimeSeriesCollection[index]);
-      if not result then
-      begin
-        Exit;
-      end;
-    end;
+    DynamicTimeSeriesCollection := TDynamicTimeSeries(AnOrderedCollection);
+    result := (Count = DynamicTimeSeriesCollection.Count)
+      and (SeriesName = DynamicTimeSeriesCollection.SeriesName)
+      and (ScaleFactor = DynamicTimeSeriesCollection.ScaleFactor)
+      and (InterpolationMethod = DynamicTimeSeriesCollection.InterpolationMethod)
+      and (ScaleFactorParameter = DynamicTimeSeriesCollection.ScaleFactorParameter)
+      and (ParamMethod = DynamicTimeSeriesCollection.ParamMethod)
+      and (Orientation = DynamicTimeSeriesCollection.Orientation)
+      and (Deleted = DynamicTimeSeriesCollection.Deleted);
+
+//    if result then
+//    begin
+//      for index := 0 to Count - 1 do
+//      begin
+//        result := Items[index].IsSame(DynamicTimeSeriesCollection[index]);
+//        if not result then
+//        begin
+//          Exit;
+//        end;
+//      end;
+//    end;
   end;
 
+end;
+
+function TDynamicTimeSeries.IsSameI(
+  DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
+begin
+  Result := IsSame(DynamicTimeSeriesCollection as TDynamicTimeSeries)
 end;
 
 procedure TDynamicTimeSeries.SetDeleted(const Value: Boolean);
@@ -672,16 +730,16 @@ end;
 function TDynamicTimeSeriesItem.GetStaticGroup: ITimesSeriesCollection;
 var
   Item: ITimeSeriesCollectionItem;
-  ChildCollection: ITimesSeriesCollection;
+//  ChildCollection: ITimesSeriesCollection;
 begin
   if FStaticGroup = nil then
   begin
     Assert(FModel <> nil);
     FStaticCollection :=  FModel.GetMf6TimesSeriesI;
-    Item := FStaticCollection.AddI;
-    result := Item.TimesSeriesCollectionI;
-    result.GroupName := FStaticCollection.DefaultGroupName;
-    result.Times := FDyanmicCollection.Times;
+    FStaticItem := FStaticCollection.AddI;
+    FStaticGroup := FStaticItem.TimesSeriesCollectionI;
+    FStaticGroup.GroupName := FStaticCollection.DefaultGroupName;
+    FStaticGroup.Times := FDyanmicCollection.Times;
   end;
   result := FStaticGroup;
 end;
@@ -699,7 +757,7 @@ end;
 function TDynamicTimeSeriesItem.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
   result := (AnotherItem is TDynamicTimeSeriesItem)
-    and (TimeSeriesI.IsSame(TDynamicTimeSeriesItem(AnotherItem).TimeSeriesI));
+    and (TimeSeriesI.IsSameI(TDynamicTimeSeriesItem(AnotherItem).TimeSeriesI));
 end;
 
 procedure TDynamicTimeSeriesItem.SetTimeSeries(const Value: TDynamicTimeSeries);
@@ -800,7 +858,25 @@ begin
     result := nil;
   end;
 end;
-//
+
+procedure TDyanmicTimesSeriesCollection.Invalidate;
+var
+  index: Integer;
+  Item: TDynamicTimeSeriesItem;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Item := Items[index];
+    if Item.FStaticGroup <> nil then
+    begin
+      Item.FStaticItem.Free;
+      Item.FStaticItem := nil;
+      Item.FStaticGroup := nil;
+    end;
+    Item.TimeSeries.Invalidate;
+  end;
+end;
+
 function TDyanmicTimesSeriesCollection.IsSame(
   AnOrderedCollection: TOrderedCollection): boolean;
 begin
@@ -969,7 +1045,7 @@ var
   ASeries: TDynamicTimeSeries;
 begin
   result := nil;
-  if Model.ModelSelection <> msModflow2015 then
+  if IGlobalModel.ModelSelection <> msModflow2015 then
   begin
     Exit;
   end;
@@ -1028,7 +1104,7 @@ begin
       begin
         Continue;
       end;
-      FTimeSeriesNames.Add(string(TimeSeries.SeriesName));
+      FTimeSeriesNames.AddObject(string(TimeSeries.SeriesName), TimeSeries);
     end;
   end;
   result := FTimeSeriesNames
@@ -1129,6 +1205,18 @@ begin
     end;
   finally
     LocalSeriesNames.Free;
+  end;
+end;
+
+procedure TDynamicTimesSeriesCollections.Invalidate;
+var
+  index: Integer;
+  TimeSeriesCollection: TDyanmicTimesSeriesCollection;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    TimeSeriesCollection := Items[index].TimesSeriesCollection;
+    TimeSeriesCollection.Invalidate;
   end;
 end;
 

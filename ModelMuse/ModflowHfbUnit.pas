@@ -254,7 +254,7 @@ const
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, frmGoPhastUnit, frmErrorsAndWarningsUnit,
-  GIS_Functions;
+  GIS_Functions, CellLocationUnit;
 
 resourcestring
   StrHFBThicknessSetTo = 'HFB Thickness set to 0 because of a math error.';

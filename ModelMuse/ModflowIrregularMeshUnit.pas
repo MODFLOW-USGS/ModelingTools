@@ -820,7 +820,7 @@ uses
   frmGoPhastUnit, BigCanvasMethods, System.Math, PhastModelUnit,
   LayerStructureUnit, ConvexHullUnit, System.Contnrs,
   ModflowGridUnit, ModelMuseUtilities, gpc, ContourUnit, EdgeDisplayUnit,
-  ScreenObjectUnit, DataSetNamesUnit;
+  ScreenObjectUnit, DataSetNamesUnit, CellLocationUnit;
 
 const
   ThinLine = 0.1;

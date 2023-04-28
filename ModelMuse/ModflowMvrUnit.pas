@@ -275,7 +275,8 @@ implementation
 
 uses
   ScreenObjectUnit, frmGoPhastUnit, System.Contnrs,
-  System.SysUtils, PhastModelUnit, ModflowTimeUnit, GIS_Functions;
+  System.SysUtils, PhastModelUnit, ModflowTimeUnit, GIS_Functions,
+  CellLocationUnit;
 
 const
   ValuePosition = 0;
@@ -614,7 +615,7 @@ begin
           LocalModel.AdjustCellPosition(Cell);
           Cell.StressPeriod := TimeIndex;
           Cell.Values := BoundaryValues;
-          Cell.ScreenObject := ScreenObject;
+          Cell.ScreenObject := ScreenObjectI;
           Cell.SetValueLength(Length(Cell.Values.Values));
         end;
         Cells.Cache;
@@ -810,6 +811,8 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
 
     Expression.Evaluate;
     with MvrStorage.MvrRecordArray[Index] do

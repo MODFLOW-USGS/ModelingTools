@@ -2,8 +2,8 @@
 
 interface
 
-uses Winapi.Windows, System.UITypes, SysUtils,
-  Classes, ZLib, RbwParser, GoPhastTypes,
+uses Modflow6TimeSeriesInterfaceUnit, System.Classes, Winapi.Windows,
+  System.UITypes, SysUtils,ZLib, RbwParser, GoPhastTypes,
   OrderedCollectionUnit, ModflowTransientListParameterUnit, DataSetUnit,
   RealListUnit, TempFiles, SubscriptionUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
@@ -11,7 +11,7 @@ uses Winapi.Windows, System.UITypes, SysUtils,
   System.Generics.Collections, System.StrUtils,
   OrderedCollectionInterfaceUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
   ScreenObjectInterfaceUnit, ModflowTransientListParameterInterfaceUnit,
-  GlobalVariablesInterfaceUnit;
+  GlobalVariablesInterfaceUnit, CellLocationUnit;
 
 type
     // @name defines how a formula is interpreted.
@@ -582,6 +582,9 @@ type
     // @name determines the locations, times, and values of
     // the boundary condition associated with @classname.
     procedure EvaluateListBoundaries(AModel: TBaseModel);
+  protected
+    procedure AssignDynamicTimeSeries(var TimeSeriesName: string;
+      DynamicTimeSeries: IDynamicTimeSeries; ACell: TCellAssignment);
   end;
 
   // @name is used for boundary conditions in which the boundary conditions
@@ -834,6 +837,7 @@ type
     FModel: IModelForTOrderedCollection;
     // See @link(ScreenObject).
     FScreenObject: TObject;
+    function GetScreenObjectI: IScreenObject;
   protected
     // @name is a TObjectList;
     FObserverList: TObserverObjectList;
@@ -860,6 +864,7 @@ type
     // @name is either @nil or the @link(TScreenObject) that owns
     // this @classname.
     property ScreenObject: TObject read FScreenObject;
+    property ScreenObjectI: IScreenObject read GetScreenObjectI;
     Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     destructor Destroy; override;
     function Used: boolean; virtual; abstract;
@@ -4802,6 +4807,11 @@ begin
   inherited;
 end;
 
+function TFormulaProperty.GetScreenObjectI: IScreenObject;
+begin
+  result := ScreenObject as TScreenObject
+end;
+
 procedure TFormulaProperty.InvalidateModel;
 begin
   if (ScreenObject <> nil)
@@ -5281,6 +5291,24 @@ begin
     begin
       EndRangeExtended := True;
     end;
+  end;
+end;
+
+procedure TCustomListArrayBoundColl.AssignDynamicTimeSeries(var TimeSeriesName
+  : string; DynamicTimeSeries: IDynamicTimeSeries; ACell: TCellAssignment);
+var
+  Location: TTimeSeriesLocation;
+  TimeSeries: IMf6TimeSeries;
+begin
+  // Handle dynamic time series here.
+  if DynamicTimeSeries <> nil then
+  begin
+    Location.Layer := ACell.Layer;
+    Location.Row := ACell.Row;
+    Location.Column := ACell.Column;
+    TimeSeries := DynamicTimeSeries.StaticTimeSeries[Location];
+    BoundaryGroup.Mf6TimeSeriesNames.Add(string(TimeSeries.SeriesName));
+    TimeSeriesName := string(TimeSeries.SeriesName);
   end;
 end;
 

@@ -33,22 +33,22 @@ type
       ARow: Integer);
     procedure btnInsertTimeClick(Sender: TObject);
   private
-    FTimesSeriesGroupItem: IDynamicTimeSeriesItem;
+//    FTimesSeriesGroupItem: IDynamicTimeSeriesItem;
     FTimesSeriesGroup: IDyanmicTimesSeriesCollection;
     procedure InitializeTimeRows;
     { Private declarations }
   public
     procedure InitializeGrid;
-    procedure GetData(ATimesSeriesGroupItem: IDynamicTimeSeriesItem; PestNames: TStringList);
+    procedure GetData(ATimesSeriesGroup: IDyanmicTimesSeriesCollection; PestNames: TStringList);
     procedure SetData;
-    property GroupItem: IDynamicTimeSeriesItem read FTimesSeriesGroupItem;
+//    property GroupItem: IDynamicTimeSeriesItem read FTimesSeriesGroupItem;
     { Public declarations }
   end;
 
 implementation
 
 uses
-  frameModflow6TimeSeriesUnit;
+  frameModflow6TimeSeriesUnit, OrderedCollectionUnit;
 
 {$R *.dfm}
 
@@ -112,7 +112,7 @@ begin
 end;
 
 procedure TframeModflow6DynamicTimeSeries.GetData(
-  ATimesSeriesGroupItem: IDynamicTimeSeriesItem; PestNames: TStringList);
+  ATimesSeriesGroup: IDyanmicTimesSeriesCollection; PestNames: TStringList);
 var
   TimeIndex: Integer;
   SeriesIndex: Integer;
@@ -122,8 +122,8 @@ var
   SeriesCount: Integer;
   ASeriesI: ITimeSeries;
 begin
-  FTimesSeriesGroupItem := ATimesSeriesGroupItem;
-  FTimesSeriesGroup := ATimesSeriesGroupItem.TimesSeriesCollectionI;
+//  FTimesSeriesGroupItem := ATimesSeriesGroupItem;
+  FTimesSeriesGroup := ATimesSeriesGroup;
 
   edGroupName.Text := String(FTimesSeriesGroup.GroupName);
   rrdgTimeSeries.BeginUpdate;
@@ -215,14 +215,25 @@ end;
 procedure TframeModflow6DynamicTimeSeries.InitializeTimeRows;
 var
   TimeIndex: Integer;
+  RowItem: TRbwRow;
+  Row: Integer;
 begin
   rrdgTimeSeries.BeginUpdate;
   try
     for TimeIndex := 1 to seTimeCount.AsInteger do
     begin
-      rrdgTimeSeries.Cells[Ord(tscLabel), TimeIndex-1 + Ord(tsrFirstTime)] :=
-        IntToStr(TimeIndex);
-      rrdgTimeSeries.Rows[TimeIndex-1 + Ord(tsrFirstTime)].Format := rcf4Real;
+      Row := TimeIndex-1 + Ord(tsrFirstTime);
+      rrdgTimeSeries.Cells[Ord(tscLabel), Row] := IntToStr(TimeIndex);
+
+      RowItem  := rrdgTimeSeries.Rows[Row];
+      RowItem.Format := rcf4String;
+      RowItem.ButtonUsed := True;
+      RowItem.ButtonCaption := 'F()';
+      RowItem.ButtonWidth := 35;
+
+      rrdgTimeSeries.UseSpecialFormat[Ord(tscTimes),Row] := True;
+      rrdgTimeSeries.SpecialFormat[Ord(tscTimes),Row] := rcf4Real;
+      rrdgTimeSeries.SpecialButtonAllowed[Ord(tscTimes),Row] := False;
     end;
   finally
     rrdgTimeSeries.EndUpdate
@@ -285,7 +296,7 @@ var
   TimeIndex: Integer;
   SeriesIndex: Integer;
   ASeries: IDynamicTimeSeries;
-  ACollection: TPhastCollection;
+  ACollection: TOrderedCollection;
 begin
   FTimesSeriesGroup.GroupName := AnsiString(edGroupName.Text);
   FTimesSeriesGroup.TimeCount := seTimeCount.AsInteger;
@@ -298,7 +309,7 @@ begin
 
   for SeriesIndex := Ord(tscFirstSeries) to rrdgTimeSeries.ColCount - 1 do
   begin
-    ACollection := rrdgTimeSeries.Objects[SeriesIndex, 0] as TPhastCollection;
+    ACollection := rrdgTimeSeries.Objects[SeriesIndex, 0] as TOrderedCollection;
     if ACollection <> nil then
     begin
       if ACollection.QueryInterface(IDynamicTimeSeries, ASeries) <> 0 then

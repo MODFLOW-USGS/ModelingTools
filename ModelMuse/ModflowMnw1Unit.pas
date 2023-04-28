@@ -585,7 +585,7 @@ implementation
 
 uses
   PhastModelUnit, frmGoPhastUnit, ScreenObjectUnit, ModflowTimeUnit,
-  GIS_Functions;
+  GIS_Functions, CellLocationUnit;
 
 resourcestring
   StrDesiredPumpingRate = 'Desired pumping rate';
@@ -2331,7 +2331,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         Cell.FSite := Site;
         LocalModel.AdjustCellPosition(Cell);
       end;

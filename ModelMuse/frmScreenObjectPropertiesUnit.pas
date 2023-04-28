@@ -79,7 +79,8 @@ uses System.UITypes, Windows,
   frameScreenObjectFmp4AddedDemandUnit, frameScreenObjectMultAddedDemandUnit,
   frameScreenObjectFmp4CropHasSalinityRequirementUnit,
   frameScreenObjectMultCropHasSalinityDemandUnit,
-  frameScreenObjectAddedDemandRunoffSplitUnit;
+  frameScreenObjectAddedDemandRunoffSplitUnit,
+  frameDynamicScreenObjectsContainerUnit, Modflow6DynamicTimeSeriesUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -500,6 +501,7 @@ type
     jvspFmp4AddedDemandRunoffSplit: TJvStandardPage;
     frameFmp4AddedDemandRunoffSplit: TframeScreenObjectAddedDemandRunoffSplit;
     tabDynamicTimeSeries: TTabSheet;
+    frameDynamicTimeSeries: TframeDynamicScreenObjectsContainer;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1903,7 +1905,7 @@ type
     // based on the text in DataGrid at ACol, ARow.
     // Orientation, and EvaluatedAt
     // are used to chose the TRbwParser.
-    procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
+    procedure CreateBoundaryFormula(const DataGrid: TCustomRBWDataGrid;
       const ACol, ARow: integer; Formula: string;
       const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
 
@@ -2368,8 +2370,8 @@ type
     function GetPestModifier(Grid: TRbwDataGrid4; ACol: Integer): string;
     procedure SetPestModifier(Grid: TRbwDataGrid4; ACol: Integer;
       const Value: string);
-    function GetPestParameterAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
-    function GetModflow6TimeSeriesAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
+    function GetPestParameterAllowed(DataGrid: TCustomRBWDataGrid; ACol: Integer): boolean;
+    function GetModflow6TimeSeriesAllowed(DataGrid: TCustomRBWDataGrid; ACol: Integer): boolean;
     function GetPestModifierAssigned(Grid: TRbwDataGrid4;
       ACol: Integer): Boolean;
     function GwtColumnCount: integer;
@@ -2801,7 +2803,7 @@ uses Math, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
-  DataArrayManagerUnit, DataSetNamesUnit;
+  DataArrayManagerUnit, DataSetNamesUnit, frameModflow6DynamicTimeSeriesUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -4717,6 +4719,8 @@ var
   ParameterIndex: Integer;
   AParameter: TModflowSteadyParameter;
 begin
+  frameDynamicTimeSeries.SetGridButtonEvent(frameChdParamdgModflowBoundaryButtonClick);
+
   frameLak.tabObservations.Visible := frmGoPhast.PhastModel.PestUsed;
 
   FPestBlockParametersAndDataSets.Clear;
@@ -4872,7 +4876,6 @@ begin
 
   InitializeControls(AScreenObject);
 
-//  GetGlobalVariables;
   memoNames.Visible := False;
   lblNames.Visible := False;
   FScreenObject := AScreenObject;
@@ -4884,21 +4887,17 @@ begin
     rgBoundaryType.Handle;
     rgBoundaryType.Buttons[Ord(btRiver)].Enabled := False;
     rgBoundaryType.Buttons[Ord(btWell)].Enabled := False;
-//    rgBoundaryType.Controls[Ord(btRiver)].Enabled := False;
-//    rgBoundaryType.Controls[Ord(btWell)].Enabled := False;
   end;
 
   if AScreenObject.Count > 1 then
   begin
     rgBoundaryType.Handle;
     rgBoundaryType.Buttons[Ord(btWell)].Enabled := False;
-//    rgBoundaryType.Controls[Ord(btWell)].Enabled := False;
   end;
   if AScreenObject.Closed or (AScreenObject.Count <= 1) then
   begin
     rgBoundaryType.Handle;
     rgBoundaryType.Buttons[Ord(btRiver)].Enabled := False;
-//    rgBoundaryType.Controls[Ord(btRiver)].Enabled := False;
   end;
 
   rgEvaluatedAt.ItemIndex := Ord(AScreenObject.EvaluatedAt);
@@ -4914,9 +4913,6 @@ begin
   GetAssignmentMethodForSingleObject;
   cbDuplicatesAllowed.Checked := FScreenObject.DuplicatesAllowed;
   cbDuplicatesAllowed.AllowGrayed := False;
-
-//  cbPilotPoints.Checked := FScreenObject.VerticesArePilotPoints;
-//  cbPilotPoints.AllowGrayed := False;
 
   // Set AllowGrayed.
   MultipleScreenObjects := False;
@@ -4979,6 +4975,10 @@ begin
     begin
       FillPropertyCollection(FNewProperties, List);
     end;
+
+    tabDynamicTimeSeries.TabVisible :=
+      frameDynamicTimeSeries.GetData(FNewProperties);
+
     GetModflowBoundaries(List);
     GetSutraObservations(List);
     GetFootprintWells;
@@ -7164,6 +7164,10 @@ begin
       // don't allow the users to edit nodes if the number of screen objects
       // is greater than 1.
       tabNodes.TabVisible := False;
+
+      tabDynamicTimeSeries.TabVisible :=
+        frameDynamicTimeSeries.GetData(FNewProperties);
+
       GetModflowBoundaries(AScreenObjectList);
       GetSutraObservations(AScreenObjectList);
       GetFootprintWells;
@@ -8487,6 +8491,8 @@ begin
       MissingHeadObsNames.Free;
     end;
   end;
+
+  frameDynamicTimeSeries.SetData(FNewProperties);
 
   if (FSFR_Node <> nil) then
   begin
@@ -19704,7 +19710,7 @@ begin
 end;
 
 function TfrmScreenObjectProperties.GetModflow6TimeSeriesAllowed(
-  DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
+  DataGrid: TCustomRBWDataGrid; ACol: Integer): boolean;
 var
   EtsLayerCol: Integer;
   FirstSegmentLayer: Integer;
@@ -23376,7 +23382,7 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.CreateBoundaryFormula(const DataGrid:
-  TRbwDataGrid4; const ACol, ARow: integer; Formula: string;
+  TCustomRBWDataGrid; const ACol, ARow: integer; Formula: string;
   const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
 var
   TempCompiler: TRbwParser;
@@ -23390,6 +23396,7 @@ var
   Mf6TimesSeries: TTimesSeriesCollections;
   TimeSeries: TMf6TimeSeries;
   EtsLayerCol: Integer;
+  DynamicTimeSeries: TDynamicTimeSeries;
 begin
   PestParamAllowed := GetPestParameterAllowed(DataGrid, ACol);
   if Formula = '' then
@@ -23398,6 +23405,7 @@ begin
   end;
 
   TimeSeries := nil;
+  DynamicTimeSeries := nil;
   TimeSeriesAllowed := GetModflow6TimeSeriesAllowed(DataGrid, ACol);
   if TimeSeriesAllowed then
   begin
@@ -23406,7 +23414,16 @@ begin
     if TimeSeries <> nil then
     begin
       Formula := '1';
+    end
+    else
+    begin
+      DynamicTimeSeries := frameDynamicTimeSeries.GetTimeSeriesByName(Formula);
+      if DynamicTimeSeries <> nil then
+      begin
+        Formula := '1';
+      end;
     end;
+
   end;
 
   // CreateBoundaryFormula creates an Expression for a boundary condition
@@ -23427,7 +23444,11 @@ begin
   CompiledFormula := TempCompiler.CurrentExpression;
 
   ResultType := rdtDouble;
-  if (DataGrid = dgSpecifiedHead) or (DataGrid = dgBoundaryFlux) or
+  if DataGrid.Parent is TframeModflow6DynamicTimeSeries then
+  begin
+    ResultType := rdtDouble;
+  end
+  else if (DataGrid = dgSpecifiedHead) or (DataGrid = dgBoundaryFlux) or
     (DataGrid = dgBoundaryLeaky) then
   begin
     if ACol = 2 then
@@ -23641,6 +23662,10 @@ begin
     begin
       DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
     end
+    else if DynamicTimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := string(DynamicTimeSeries.SeriesName);
+    end
     else
     begin
       DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
@@ -23652,6 +23677,10 @@ begin
     begin
       DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
     end
+    else if DynamicTimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := string(DynamicTimeSeries.SeriesName);
+    end
     else
     begin
       DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
@@ -23662,6 +23691,10 @@ begin
     if TimeSeries <> nil then
     begin
       DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
+    end
+    else if DynamicTimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := string(DynamicTimeSeries.SeriesName);
     end
     else
     begin
@@ -29666,7 +29699,7 @@ begin
 end;
 
 function TfrmScreenObjectProperties.GetPestParameterAllowed(
-  DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
+  DataGrid: TCustomRBWDataGrid; ACol: Integer): boolean;
 begin
  { Support PEST here }
   result :=
@@ -29723,7 +29756,7 @@ procedure TfrmScreenObjectProperties.frameChdParamdgModflowBoundaryButtonClick(
 var
   VariableList: TList;
   Orientation: TDataSetOrientation;
-  DataGrid: TRbwDataGrid4;
+  DataGrid: TCustomRBWDataGrid;
   EvaluatedAt: TEvaluatedAt;
   Index: integer;
   DataSet: TDataArray;
@@ -29736,7 +29769,7 @@ var
 //  PestParamAllowed: Boolean;
 begin
   inherited;
-  DataGrid := Sender as TRbwDataGrid4;
+  DataGrid := Sender as TCustomRBWDataGrid;
   VariableList := TList.Create;
   // VariableList will hold a list of variables that can
   // be used in the function
@@ -29744,7 +29777,18 @@ begin
 //    PestParamAllowed := GetPestParameterAllowed(DataGrid);
 
     // get the orientation of the data set.
-    if (DataGrid = frameRchParam.rdgModflowBoundary)
+    if DataGrid.Parent is TframeModflow6DynamicTimeSeries then
+    begin
+      if rgElevationCount.ItemIndex = 0 then
+      begin
+        Orientation := dsoTop;
+      end
+      else
+      begin
+        Orientation := dso3D;
+      end;
+    end
+    else if (DataGrid = frameRchParam.rdgModflowBoundary)
       or (DataGrid = frameEvtParam.rdgModflowBoundary)
       or (DataGrid = frameEtsParam.rdgModflowBoundary)
       or (DataGrid = frameFarmCropID.rdgModflowBoundary)
@@ -29801,7 +29845,6 @@ begin
       EvaluatedAt := eaBlocks;
     end;
 
-
     DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
     for Index := 0 to DataArrayManager.DataSetCount - 1 do
     begin
@@ -29854,7 +29897,15 @@ begin
         end;
 
         // show the variables and functions
-        IncludeTimeSeries := GetModflow6TimeSeriesAllowed(DataGrid, ACol);;
+        IncludeTimeSeries := GetModflow6TimeSeriesAllowed(DataGrid, ACol);
+        if tabDynamicTimeSeries.TabVisible then
+        begin
+          DynamicTimesSeriesNames := frameDynamicTimeSeries. DynamicTimeSeriesNames
+        end
+        else
+        begin
+          DynamicTimesSeriesNames.Clear;
+        end;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.

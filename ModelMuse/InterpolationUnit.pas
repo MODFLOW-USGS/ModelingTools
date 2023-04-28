@@ -403,7 +403,7 @@ implementation
 uses Math, AbstractGridUnit, TripackTypes, GIS_Functions, Types,
   Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit,
   PlProcUnit, TempFiles, Vcl.Forms, System.IOUtils,
-  JvCreateProcess, DataSetNamesUnit;
+  JvCreateProcess, DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrErrorEncoutereredI = 'Error encouterered in initializing %0:s for the ' +

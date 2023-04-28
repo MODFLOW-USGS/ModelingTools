@@ -909,7 +909,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit,
   GIS_Functions, ModflowTimeUnit, DataSetUnit, ModflowMnw2Unit,
-  ModflowMvrUnit, DataSetNamesUnit;
+  ModflowMvrUnit, DataSetNamesUnit, CellLocationUnit;
 
 const MawObName: array[TMawOb] of string = ('Head', 'FromMvr', 'FlowRate',
   'FlowRateCells', 'PumpRate', 'RateToMvr',
@@ -2010,7 +2010,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values.Assign(BoundaryValues);
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
 //        LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;
@@ -5065,6 +5065,9 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
+
     // 2. update locations
     Expression.Evaluate;
     with MawStorage.MawTransientArray[Index] do

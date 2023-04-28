@@ -1226,7 +1226,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit,
   PestObsExtractorInputWriterUnit,
   System.AnsiStrings, ModflowMf6TimeSeriesWriterUnit, ModflowFmpWriterUnit,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CellLocationUnit, ScreenObjectInterfaceUnit;
 
 resourcestring
   StrTheFollowingParameSkip = 'The following %s parameters are being skipped ' +
@@ -2977,7 +2977,7 @@ begin
   begin
     ACellLocation := ACell.CellLocation;
     CellLocAddr := Addr(ACellLocation);
-    ScreenObject := ACell.ScreenObject;
+    ScreenObject := ACell.ScreenObject as TScreenObject;
   end
   else
   begin
@@ -5604,6 +5604,10 @@ begin
       frmErrorsAndWarnings.Show;
     end;
   finally
+    if Model is TPhastModel then
+    begin
+      TPhastModel(Model).InvalidateAllDynamicLists;
+    end;
     frmErrorsAndWarnings.EndUpdate;
   end;
 end;
@@ -8479,7 +8483,7 @@ begin
     for CellIndex := 0 to AllCells.Count - 1 do
     begin
       ACell := AllCells[CellIndex];
-      if ACell.ScreenObject = ScreenObject then
+      if ACell.ScreenObject = ScreenObject as IScreenObject then
       begin
         TempList.Add(ACell);
       end;

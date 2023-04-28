@@ -76,7 +76,8 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ScreenObjectUnit,
   SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
-  SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit, ModflowCellUnit;
+  SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit, ModflowCellUnit,
+  CellLocationUnit;
 
 resourcestring
   StrGeneralizedtranspor = 'generalized-transport boundary condition';

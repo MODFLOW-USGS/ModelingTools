@@ -333,7 +333,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit,
   frmErrorsAndWarningsUnit, DataSetUnit, AbstractGridUnit, ModflowTimeUnit,
-  ScreenObjectUnit, GIS_Functions;
+  ScreenObjectUnit, GIS_Functions, CellLocationUnit;
 
 resourcestring
   StrRainFormulaError = 'Rain rate set to zero because of a math error';
@@ -1220,7 +1220,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

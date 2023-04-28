@@ -123,7 +123,7 @@ uses
   ModflowGridUnit, ModflowCfpPipeUnit, Forms, frmProgressUnit,
   frmErrorsAndWarningsUnit, Math, ModflowCfpFixedUnit,
   LayerStructureUnit, ModflowCfpRechargeUnit, Contnrs, ModflowCellUnit,
-  ModflowUnitNumbers, AbstractGridUnit, DataSetNamesUnit;
+  ModflowUnitNumbers, AbstractGridUnit, DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrTooManyConduitsAt = 'Too many conduits at a node. The following cells h' +

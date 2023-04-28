@@ -55,7 +55,7 @@ implementation
 uses
   ModflowUnitNumbers, ModflowTimeUnit, ModflowMnw2Unit,
   ModflowWellUnit, ModflowBoundaryUnit, GIS_Functions, frmFormulaErrorsUnit,
-  System.SysUtils, frmProgressUnit;
+  System.SysUtils, frmProgressUnit, CellLocationUnit;
 
 resourcestring
   StrErrorEvaluatingInf = 'Error evaluating Inflow in Contaminanent treatmen' +

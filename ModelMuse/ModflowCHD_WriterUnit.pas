@@ -5,7 +5,8 @@ interface
 uses SysUtils, Classes, RbwParser, CustomModflowWriterUnit,
   PhastModelUnit, ModflowConstantHeadBoundaryUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowPackageSelectionUnit, ModflowCellUnit,
-  OrderedCollectionUnit, FluxObservationUnit, GoPhastTypes, Modflow6ObsUnit;
+  OrderedCollectionUnit, FluxObservationUnit, GoPhastTypes, Modflow6ObsUnit,
+  ScreenObjectInterfaceUnit;
 
 type
   TModflowCHD_Writer = class(TFluxObsWriter)
@@ -596,7 +597,7 @@ begin
       for CellIndex := 0 to List.Count - 1 do
       begin
         ACell := List[CellIndex];
-        if (ACell.ScreenObject = ScreenObject)
+        if (ACell.ScreenObject = ScreenObject as IScreenObject)
           and (CellArray[ACell.Layer, ACell.Row, ACell.Column] = nil) then
         begin
           TempCells.Add(ACell);
@@ -613,7 +614,7 @@ begin
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];
-          if (ACell.ScreenObject = ScreenObject)
+          if (ACell.ScreenObject = ScreenObject as IScreenObject)
             and (CellArray[ACell.Layer, ACell.Row, ACell.Column] = nil) then
           begin
             TempCells.Add(ACell);

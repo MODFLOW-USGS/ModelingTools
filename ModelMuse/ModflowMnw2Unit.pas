@@ -743,7 +743,7 @@ uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit,
   ModflowGridUnit, frmFormulaErrorsUnit, Math, SparseDataSets, SparseArrayUnit,
   frmErrorsAndWarningsUnit, AbstractGridUnit, ModflowParameterUnit,
-  CustomModflowWriterUnit, ModflowMNW2_WriterUnit;
+  CustomModflowWriterUnit, ModflowMNW2_WriterUnit, CellLocationUnit;
 
 resourcestring
   StrOneOrMoreMNW2Wel = 'One or more MNW2 wells has a well radius that is '
@@ -2359,7 +2359,7 @@ begin
     Cells.Add(Cell);
     Cell.FStressPeriod := 0;
     Cell.FValues := BoundaryValues;
-    Cell.ScreenObject := ScreenObject;
+    Cell.ScreenObject := ScreenObjectI;
     LocalModel.AdjustCellPosition(Cell);
   end;
   Cells.Cache;

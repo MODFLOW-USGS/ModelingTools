@@ -375,7 +375,7 @@ implementation
 uses ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions, Mt3dmsChemSpeciesUnit,
   ModflowPackageSelectionUnit, ModflowPackagesUnit, PhastModelUnit,
-  AbstractGridUnit, Mt3dCtsSystemUnit, DataSetNamesUnit;
+  AbstractGridUnit, Mt3dCtsSystemUnit, DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrConcentration = ' concentration or mass-loading';
@@ -1489,7 +1489,7 @@ begin
           Cell.IFace := LocalScreenObject.IFace;
           Cell.StressPeriod := TimeIndex;
           Cell.Values := BoundaryValues;
-          Cell.ScreenObject := ScreenObject;
+          Cell.ScreenObject := ScreenObjectI;
           Cell.SetConcentrationLength(Length(Cell.Values.Concentration));
 //          SetLength(Cell.Values.Concentration,
 //            Length(Cell.Values.Concentration));

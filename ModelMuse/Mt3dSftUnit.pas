@@ -279,7 +279,8 @@ implementation
 uses
   PhastModelUnit, Mt3dmsChemSpeciesUnit, RbwParser,
   frmGoPhastUnit, ModflowTimeUnit, ScreenObjectUnit, frmFormulaErrorsUnit,
-  GlobalVariablesUnit, GIS_Functions, ModflowSfrReachUnit, DataSetNamesUnit;
+  GlobalVariablesUnit, GIS_Functions, ModflowSfrReachUnit, DataSetNamesUnit,
+  CellLocationUnit;
 
 resourcestring
   StrHeadwater = 'Headwater';
@@ -854,7 +855,7 @@ begin
         Cell.IFace := LocalScreenObject.IFace;
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         Cell.SetConcentrationLength(Length(Cell.Values.Concentration));
         Cell.FBoundaryType := FCurrentBoundaryType;
         Cell.FReachNumber := BoundaryIndex + StartingReachNumber;

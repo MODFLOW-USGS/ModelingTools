@@ -6,7 +6,7 @@ uses System.UITypes,
   Winapi.Windows, CustomModflowWriterUnit, GoPhastTypes, PhastModelUnit, Classes, SysUtils,
   Mt3dmsTobUnit, Generics.Collections, Mt3dmsFluxObservationsUnit, RbwParser,
   ScreenObjectUnit, FluxObservationUnit, ModflowPackageSelectionUnit, Forms,
-  ModflowBoundaryDisplayUnit, Vcl.Dialogs;
+  ModflowBoundaryDisplayUnit, Vcl.Dialogs, CellLocationUnit;
 
 type
   TObsList = TList<TMt3dmsFluxObservationGroup>;

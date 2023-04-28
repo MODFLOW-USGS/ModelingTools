@@ -176,7 +176,7 @@ implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions, DataSetUnit,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrLKTInitialConcentr = 'LKT Initial Concentration';

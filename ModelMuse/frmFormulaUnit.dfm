@@ -5,18 +5,18 @@ inherited frmFormula: TfrmFormula
   HelpKeyword = 'Formula_Editor'
   ActiveControl = btnEquals
   Caption = 'Formula Editor'
-  ClientHeight = 479
-  ClientWidth = 769
+  ClientHeight = 478
+  ClientWidth = 765
   Font.Height = 16
   Position = poOwnerFormCenter
-  ExplicitWidth = 781
-  ExplicitHeight = 517
+  ExplicitWidth = 777
+  ExplicitHeight = 516
   TextHeight = 16
   object Splitter: TSplitter
     Left = 539
     Top = 0
     Width = 5
-    Height = 438
+    Height = 437
     OnCanResize = SplitterCanResize
     ExplicitLeft = 476
     ExplicitHeight = 361
@@ -25,11 +25,11 @@ inherited frmFormula: TfrmFormula
     Left = 0
     Top = 0
     Width = 539
-    Height = 438
+    Height = 437
     Align = alLeft
     ParentColor = True
     TabOrder = 0
-    ExplicitHeight = 437
+    ExplicitHeight = 436
     object JvNetscapeSplitter1: TJvNetscapeSplitter
       Left = 1
       Top = 98
@@ -47,7 +47,7 @@ inherited frmFormula: TfrmFormula
     end
     object pnlButtons: TPanel
       Left = 1
-      Top = 192
+      Top = 191
       Width = 537
       Height = 245
       HelpType = htKeyword
@@ -55,7 +55,7 @@ inherited frmFormula: TfrmFormula
       Align = alBottom
       ParentColor = True
       TabOrder = 2
-      ExplicitTop = 191
+      ExplicitTop = 190
       object gbLogicalOperators: TGroupBox
         Left = 8
         Top = 6
@@ -512,7 +512,7 @@ inherited frmFormula: TfrmFormula
       Left = 1
       Top = 108
       Width = 537
-      Height = 84
+      Height = 83
       Hint = 'Type formula here'
       HelpType = htKeyword
       HelpKeyword = 'Formula_Text_Box'
@@ -524,24 +524,24 @@ inherited frmFormula: TfrmFormula
       OnDblClick = jreFormulaDblClick
       OnMouseUp = jreFormulaMouseUp
       OnSelectionChange = jreFormulaSelectionChange
-      ExplicitHeight = 83
+      ExplicitHeight = 82
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 438
-    Width = 769
+    Top = 437
+    Width = 765
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 437
-    ExplicitWidth = 765
+    ExplicitTop = 436
+    ExplicitWidth = 761
     DesignSize = (
-      769
+      765
       41)
     object btnCancel: TBitBtn
-      Left = 653
+      Left = 637
       Top = 6
       Width = 91
       Height = 33
@@ -549,10 +549,10 @@ inherited frmFormula: TfrmFormula
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 649
+      ExplicitLeft = 633
     end
     object btnOK: TBitBtn
-      Left = 556
+      Left = 540
       Top = 6
       Width = 91
       Height = 33
@@ -561,10 +561,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 552
+      ExplicitLeft = 536
     end
     object btnHelp: TBitBtn
-      Left = 461
+      Left = 445
       Top = 4
       Width = 91
       Height = 33
@@ -573,10 +573,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 457
+      ExplicitLeft = 441
     end
     object btnFunctionHelp: TBitBtn
-      Left = 291
+      Left = 275
       Top = 4
       Width = 163
       Height = 33
@@ -605,34 +605,34 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnFunctionHelpClick
-      ExplicitLeft = 287
+      ExplicitLeft = 271
     end
   end
   object pnlRight: TPanel
     Left = 544
     Top = 0
-    Width = 225
-    Height = 438
+    Width = 221
+    Height = 437
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitWidth = 221
-    ExplicitHeight = 437
+    ExplicitWidth = 217
+    ExplicitHeight = 436
     object pnlLabelItemTree: TPanel
       Left = 0
       Top = 0
-      Width = 225
+      Width = 221
       Height = 41
       Align = alTop
       ParentColor = True
       TabOrder = 0
-      ExplicitWidth = 221
+      ExplicitWidth = 217
       object lbltems: TLabel
         AlignWithMargins = True
         Left = 4
         Top = 4
-        Width = 217
+        Width = 213
         Height = 33
         Align = alClient
         Alignment = taCenter
@@ -645,8 +645,8 @@ inherited frmFormula: TfrmFormula
     object tvItems: TTreeView
       Left = 0
       Top = 41
-      Width = 225
-      Height = 397
+      Width = 221
+      Height = 396
       Hint = 'Double-click to insert selected item into formula'
       HelpType = htKeyword
       HelpKeyword = 'List_of_Data_Sets_and_Function'
@@ -659,8 +659,8 @@ inherited frmFormula: TfrmFormula
       OnChange = tvItemsChange
       OnDblClick = tvItemsDblClick
       OnMouseDown = tvItemsMouseDown
-      ExplicitWidth = 221
-      ExplicitHeight = 396
+      ExplicitWidth = 217
+      ExplicitHeight = 395
     end
   end
   object Timer: TTimer

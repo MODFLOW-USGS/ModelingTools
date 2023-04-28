@@ -101,7 +101,7 @@ uses
   ModflowMvrWriterUnit, ModflowMvrUnit, System.Generics.Defaults,
   Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
   ModflowGridUnit, frmErrorsAndWarningsUnit, SparseArrayUnit,
-  Mt3dmsChemSpeciesUnit, GwtStatusUnit, DataSetNamesUnit;
+  Mt3dmsChemSpeciesUnit, GwtStatusUnit, DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrWritingUZF6Package = 'Writing UZF6 Package input.';
@@ -1616,7 +1616,7 @@ begin
                 end;
 
                 NewLine;
-                MvrReceiver.ReceiverKey.ScreenObject := UzfCell.ScreenObject;
+                MvrReceiver.ReceiverKey.ScreenObject := UzfCell.ScreenObject as TScreenObject;
 
                 Inc(BoundaryIndex);
 //                MvrReceiver.ReceiverValues.Index := BoundaryIndex;
@@ -1629,7 +1629,7 @@ begin
                   MvrKey.Index := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
                   MvrKey.SourceKey.MvrIndex := //UzfCell.MvrIndex;
                     FMvrIndicies[LayerIndex, RowIndex, ColumnIndex];
-                  MvrKey.SourceKey.ScreenObject := UzfCell.ScreenObject;
+                  MvrKey.SourceKey.ScreenObject := UzfCell.ScreenObject as TScreenObject;
                   MoverWriter.AddMvrSource(MvrKey);
 //                  MoverWriter.UzfCellNumbers := FUzfCellNumbers;
                 end;

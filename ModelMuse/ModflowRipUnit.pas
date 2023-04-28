@@ -209,7 +209,8 @@ implementation
 
 uses
   frmGoPhastUnit, ModflowRipPlantGroupsUnit, System.SysUtils, PhastModelUnit,
-  SubscriptionUnit, ScreenObjectUnit, GIS_Functions, ModflowTimeUnit;
+  SubscriptionUnit, ScreenObjectUnit, GIS_Functions, ModflowTimeUnit,
+  CellLocationUnit;
 
 resourcestring
   StrRipareanETLandElev = 'Riparean ET Land Elevation';
@@ -1247,7 +1248,7 @@ begin
         SetLength(Cell.Values.CoveragePests, Length(Cell.Values.Coverages));
         SetLength(Cell.Values.CoveragePestSeriesNames, Length(Cell.Values.Coverages));
         SetLength(Cell.Values.CoveragePestSeriesMethods, Length(Cell.Values.Coverages));
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
 
 

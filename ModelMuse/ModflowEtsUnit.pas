@@ -664,7 +664,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
 //        LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

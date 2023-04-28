@@ -8,7 +8,7 @@ uses
   ModflowPackageSelectionUnit, ModflowCellUnit, PhastModelUnit, QuadTreeClass,
   Modflow6ObsUnit, ScreenObjectUnit, System.SysUtils, ModflowMawWriterUnit,
   ModflowSfr6WriterUnit, ModflowLakMf6WriterUnit, System.Classes,
-  ModflowUzfMf6WriterUnit, ModflowCSubWriterUnit, Vcl.Forms;
+  ModflowUzfMf6WriterUnit, ModflowCSubWriterUnit, Vcl.Forms, CellLocationUnit;
 
 type
   THeadDrawdownObservationLocation = record

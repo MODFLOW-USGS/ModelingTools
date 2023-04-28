@@ -66,7 +66,7 @@ implementation
 uses
   ModflowUnitNumbers, ScreenObjectUnit,
   GoPhastTypes, frmProgressUnit, frmErrorsAndWarningsUnit, FastGEO, Forms,
-  frmGoPhastUnit;
+  frmGoPhastUnit, CellLocationUnit;
 
 resourcestring
   StrTheInterpolationAs = 'The interpolation assignment method in HYDMOD pac' +

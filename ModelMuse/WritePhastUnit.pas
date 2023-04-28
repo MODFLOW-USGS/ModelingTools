@@ -23,7 +23,7 @@ uses Windows, Dialogs, SysUtils, frmGoPhastUnit, PhastModelUnit, PrintFrequency,
   WriteWellUnit, DataSetUnit, PhastDataSets,
   ModelMuseUtilities, frmErrorsAndWarningsUnit, GeoRefWriterUnit,
   ArchiveNodeInterface, System.IOUtils, System.Types, DataArrayManagerUnit,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrNoBoundaryConditio = 'No boundary conditions specified.';

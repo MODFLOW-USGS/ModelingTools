@@ -268,5 +268,6 @@ object frameModflow6DynamicTimeSeries: TframeModflow6DynamicTimeSeries
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
+    ExplicitTop = 43
   end
 end

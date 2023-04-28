@@ -66,7 +66,8 @@ implementation
 
 uses
   frmProgressUnit, frmErrorsAndWarningsUnit,
-  Vcl.Forms, Modflow6ObsWriterUnit, PestParamRoots, DataSetNamesUnit;
+  Vcl.Forms, Modflow6ObsWriterUnit, PestParamRoots, DataSetNamesUnit,
+  CellLocationUnit;
 
 resourcestring
   StrNoTransientCSUBDa = 'No Transient CSUB data defined';

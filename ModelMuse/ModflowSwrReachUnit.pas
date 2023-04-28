@@ -355,7 +355,8 @@ implementation
 
 uses
   PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, frmGoPhastUnit,
-  frmErrorsAndWarningsUnit, DataSetUnit, GIS_Functions, DataSetNamesUnit;
+  frmErrorsAndWarningsUnit, DataSetUnit, GIS_Functions, DataSetNamesUnit,
+  CellLocationUnit;
 
 resourcestring
   StrVerticalOffset = 'Vertical Offset';
@@ -1231,7 +1232,7 @@ begin
         Cell.FGeoNumber := GeoItem.Index + 1;
         Cell.FValues.ReachType := SwrItem.ReachType;
         Cell.FObjectName := LocalScreenObject.Name;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

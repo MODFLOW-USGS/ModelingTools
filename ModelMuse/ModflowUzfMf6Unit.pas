@@ -3836,7 +3836,7 @@ begin
           Cells.Add(Cell);
           Cell.FStressPeriod := TimeIndex;
           Cell.FValues := BoundaryValues;
-          Cell.ScreenObject := ScreenObject;
+          Cell.ScreenObject := ScreenObjectI;
           LocalModel.AdjustCellPosition(Cell);
           Inc(BIndex);
         end;

@@ -39,15 +39,15 @@ inherited frmProgressMM: TfrmProgressMM
     object pbProgress: TProgressBar
       Left = 8
       Top = 8
-      Width = 401
+      Width = 397
       Height = 18
       Anchors = [akLeft, akTop, akRight]
       Step = 1
       TabOrder = 0
-      ExplicitWidth = 397
+      ExplicitWidth = 393
     end
     object btnAbort: TBitBtn
-      Left = 334
+      Left = 330
       Top = 30
       Width = 75
       Height = 25
@@ -74,7 +74,7 @@ inherited frmProgressMM: TfrmProgressMM
       TabOrder = 1
       Visible = False
       OnClick = btnAbortClick
-      ExplicitLeft = 330
+      ExplicitLeft = 326
     end
   end
 end

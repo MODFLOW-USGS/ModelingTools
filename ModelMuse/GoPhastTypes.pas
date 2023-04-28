@@ -701,7 +701,11 @@ type
     procedure SetColorProperty(var AField: TColor; const NewValue: TColor);
     procedure SetDataTimeProperty(var AField: TDateTime; const NewValue: TDateTime);
     procedure SetCharacterProperty(var AField: Char; const NewValue: Char);
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
+    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
+      virtual; stdcall;
     property OnInvalidateModel: TNotifyEvent read FOnInvalidateModel;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
   end;
@@ -1392,6 +1396,16 @@ begin
   InvalidateModel;
 end;
 
+function TGoPhastPersistent.QueryInterface(const IID: TGUID; out Obj): HRESULT;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
+end;
+
 procedure TGoPhastPersistent.SetAnsiStringProperty(var AField: AnsiString;
   const NewValue: AnsiString);
 begin
@@ -1477,6 +1491,16 @@ begin
     AField := NewValue;
     InvalidateModel;
   end;
+end;
+
+function TGoPhastPersistent._AddRef: Integer;
+begin
+  result := 1;
+end;
+
+function TGoPhastPersistent._Release: Integer;
+begin
+  result := 1;
 end;
 
 function EvalAtToString(const Eval: TEvaluatedAt; const Model: TModelSelection;

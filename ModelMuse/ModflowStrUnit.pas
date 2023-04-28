@@ -527,7 +527,7 @@ const
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
-  frmGoPhastUnit, GIS_Functions, ModflowPackageSelectionUnit;
+  frmGoPhastUnit, GIS_Functions, ModflowPackageSelectionUnit, CellLocationUnit;
 
 resourcestring
   StrHead = 'Head';
@@ -2252,7 +2252,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

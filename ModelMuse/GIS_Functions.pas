@@ -9,7 +9,7 @@ unit GIS_Functions;
 interface
 
 uses Windows, SysUtils, Classes, RbwParser, ScreenObjectUnit, GoPhastTypes,
-  OrderedCollectionUnit;
+  OrderedCollectionUnit, CellLocationUnit;
 
 type
   TLayerHeight = class(TExpression)

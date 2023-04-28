@@ -60,7 +60,7 @@ implementation
 uses
   frmProgressUnit, ModflowSfrUnit, frmErrorsAndWarningsUnit,
   ModflowUnitNumbers, Mt3dmsChemUnit, DataSetUnit, Vcl.Dialogs, RbwParser,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrTheFollowingObjectSft = 'The following objects define SFT boundaries bu' +

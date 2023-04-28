@@ -69,7 +69,7 @@ implementation
 uses
   ModflowTimeUnit, frmErrorsAndWarningsUnit,
   frmGoPhastUnit, Math, FastGEO,
-  GoPhastTypes;
+  GoPhastTypes, CellLocationUnit;
 
 resourcestring
   StrAStartingTimeFor = 'Starting times for the MODPATH particles defined '

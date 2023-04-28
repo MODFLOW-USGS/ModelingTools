@@ -27,7 +27,8 @@ implementation
 
 uses Contnrs , RbwParser, GoPhastTypes, ModflowCellUnit, ModflowUnitNumbers,
   frmProgressUnit, DataSetUnit,
-  SubscriptionUnit, ModflowSfrUnit, PestObsUnit, ModflowGageUnit;
+  SubscriptionUnit, ModflowSfrUnit, PestObsUnit, ModflowGageUnit,
+  CellLocationUnit;
 
 resourcestring
   StrWritingGAGEPackage = 'Writing GAGE Package input.';

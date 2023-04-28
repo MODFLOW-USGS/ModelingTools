@@ -83,7 +83,7 @@ uses
   frmErrorsAndWarningsUnit, ScreenObjectUnit,
   SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
   SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit,
-  ModflowCellUnit;
+  ModflowCellUnit, CellLocationUnit;
 
 resourcestring
   StrGeneralizedflowBou = 'generalized-flow boundary condition';

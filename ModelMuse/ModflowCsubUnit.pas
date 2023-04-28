@@ -359,7 +359,7 @@ uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
   frmErrorsAndWarningsUnit, ModflowTimeUnit,
   ModflowPackageSelectionUnit, ModflowCSubInterbed, DataSetUnit,
-  DataArrayManagerUnit, DataSetNamesUnit;
+  DataArrayManagerUnit, DataSetNamesUnit, CellLocationUnit;
 
 const
   CSubObName: array[TCSubOb] of string =
@@ -1656,7 +1656,7 @@ begin
         Cells.Add(Cell);
         Cell.FStressPeriod := TimeIndex;
         Cell.FValues := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

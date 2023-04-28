@@ -143,7 +143,7 @@ uses
   ModflowCellUnit, ModflowUnitNumbers, RbwParser, DataSetUnit, Contnrs,
   ModflowSwrDirectRunoffUnit, AbstractGridUnit, GIS_Functions,
   ModflowSwrTabfilesUnit, ModflowSwrReachGeometryUnit,
-  ModflowTimeUnit, DataSetNamesUnit;
+  ModflowTimeUnit, DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrEvaluatingRainSWRPacka = 'Evaluating rain in the SWR Package';
@@ -2587,7 +2587,7 @@ begin
           [TransientCell.Row+1, TransientCell.Column+1, GeoItem.MinimumElevation,
           TransientCell.VerticalOffSet,
           GeoItem.MinimumElevation + TransientCell.VerticalOffSet, ModelTopElev]), 
-          TransientCell.ScreenObject);
+          TransientCell.ScreenObject as TObject);
       end;
     end;
   end;

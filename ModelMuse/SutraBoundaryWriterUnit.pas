@@ -104,7 +104,7 @@ uses
   frmGoPhastUnit, SutraTimeScheduleUnit,
   RbwParser, SutraMeshUnit, SparseArrayUnit, Math, SutraFileWriterUnit,
   frmErrorsAndWarningsUnit, System.Generics.Defaults,
-  ModflowCellUnit;
+  ModflowCellUnit, CellLocationUnit;
 
 resourcestring
   StrFluidSource = 'Fluid Source';

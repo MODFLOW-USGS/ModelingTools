@@ -275,7 +275,7 @@ implementation
 uses
   ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
   frmGoPhastUnit, GIS_Functions, ModflowPackageSelectionUnit,
-  frmErrorsAndWarningsUnit;
+  frmErrorsAndWarningsUnit, CellLocationUnit;
 
 resourcestring
   StrMaxPumpingRateMu = ' max pumping rate multiplier (QMAXfact)';
@@ -1334,7 +1334,7 @@ begin
         Cells.Add(Cell);
         Cell.FStressPeriod := TimeIndex;
         Cell.FValues := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
+        Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
       end;
       Cells.Cache;

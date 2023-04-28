@@ -8,7 +8,7 @@ uses
   JvExComCtrls, JvPageListTreeView, Vcl.StdCtrls, Vcl.ExtCtrls, JvExControls,
   JvPageList, UndoItemsScreenObjects, Modflow6DynamicTimeSeriesUnit,
   frameModflow6DynamicTimeSeriesUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
-  System.Math;
+  System.Math, RbwDataGrid4;
 
 type
   TframeDynamicScreenObjectsContainer = class(TFrame)
@@ -24,14 +24,19 @@ type
     FShouldSetData: Boolean;
     FTimesSeries: TDynamicTimesSeriesCollections;
     FPestNames: TStringList;
+    FGridButtonEvent: TGridButtonEvent;
     function AddNewFrame(NewName: string): TframeModflow6DynamicTimeSeries;
     procedure edGroupNameChange(Sender: TObject);
     procedure AssignProperties;
     { Private declarations }
   public
+    destructor Destroy; override;
+    procedure SetGridButtonEvent(const Value: TGridButtonEvent);
+    property GridButtonEvent: TGridButtonEvent read FGridButtonEvent write SetGridButtonEvent;
     function GetData(ScreenObjectList: TScreenObjectEditCollection): Boolean;
     procedure SetData(ScreenObjectList: TScreenObjectEditCollection);
-    destructor Destroy; override;
+    function DynamicTimeSeriesNames: TStringList;
+    function GetTimeSeriesByName(ASeriesName: String): TDynamicTimeSeries;
     { Public declarations }
   end;
 
@@ -63,6 +68,7 @@ begin
   result.edGroupName.OnChange := edGroupNameChange;
   result.edGroupName.Text := NewName;
   result.InitializeGrid;
+  result.rrdgTimeSeries.OnButtonClick := GridButtonEvent;
   plTimeSeries.ActivePage := NewPage;
   tvTimeSeries.Selected := NewNode;
 end;
@@ -84,7 +90,7 @@ var
   NewName: String;
   NewFrame: TframeModflow6DynamicTimeSeries;
   NewItem: ITimeSeriesCollectionItem;
-  NewerItem: IDynamicTimeSeriesItem;
+  NewerItem: IDyanmicTimesSeriesCollection;
 begin
   inherited;
 
@@ -92,13 +98,15 @@ begin
   NewFrame := AddNewFrame(NewName);
   NewItem := FTimesSeries.AddI;
   NewItem.TimesSeriesCollectionI.GroupName := AnsiString(NewName);
-  if NewItem.QueryInterface(IDynamicTimeSeriesItem, NewerItem) <> 0 then
+
+  // IDyanmicTimesSeriesCollection
+  if NewItem.TimesSeriesCollectionI.QueryInterface(IDyanmicTimesSeriesCollection, NewerItem) <> 0 then
   begin
     Assert(False);
   end;
 
   NewFrame.GetData(NewerItem, FPestNames);
-  tvTimeSeries.Selected.Data := NewerItem.TimesSeriesCollectionI;
+  tvTimeSeries.Selected.Data := NewerItem;
 end;
 
 procedure TframeDynamicScreenObjectsContainer.btnDeleteGroupClick(
@@ -160,6 +168,12 @@ begin
   inherited;
 end;
 
+function TframeDynamicScreenObjectsContainer.DynamicTimeSeriesNames: TStringList;
+begin
+  AssignProperties;
+  result := FTimesSeries.TimeSeriesNames;
+end;
+
 procedure TframeDynamicScreenObjectsContainer.edGroupNameChange(
   Sender: TObject);
 var
@@ -179,12 +193,20 @@ var
   AParam: TModflowSteadyParameter;
   SeriesIndex: Integer;
   ASeriesItem: TDynamicTimeSeriesCollectionItem;
+  ANewFrame: TframeModflow6DynamicTimeSeries;
+  PageIndex: Integer;
 begin
   result := IGlobalModel.ModelSelection = msModflow2015;
   try
     if not result then
     begin
       Exit;
+    end;
+
+    tvTimeSeries.Items.Clear;
+    for PageIndex := plTimeSeries.PageCount - 1 downto 0 do
+    begin
+      plTimeSeries.Pages[PageIndex].Free;
     end;
 
     FreeAndNil(FTimesSeries);
@@ -227,14 +249,21 @@ begin
       begin
         Continue;
       end;
-//      NewFrame := AddNewFrame(String(ASeriesItem.TimesSeriesCollection.GroupName));
-//      tvTimeSeries.Selected.Data := ASeriesItem.TimesSeriesCollection;
-//      NewFrame.GetData(ASeriesItem, FPestNames);
+      ANewFrame := AddNewFrame(String(ASeriesItem.TimesSeriesCollection.GroupName));
+      tvTimeSeries.Selected.Data := ASeriesItem.TimesSeriesCollection;
+      ANewFrame.GetData(ASeriesItem.TimesSeriesCollection, FPestNames);
     end;
 
   finally
     FShouldSetData := result;
   end;
+end;
+
+function TframeDynamicScreenObjectsContainer.GetTimeSeriesByName(
+  ASeriesName: String): TDynamicTimeSeries;
+begin
+  AssignProperties;
+  result := FTimesSeries.GetTimeSeriesByName(ASeriesName);
 end;
 
 procedure TframeDynamicScreenObjectsContainer.SetData(
@@ -253,6 +282,12 @@ begin
     AScreenObject := ScreenObjectList[ScreenObjectIndex].ScreenObject;
     AScreenObject.DyanmicTimesSeriesCollections := FTimesSeries;
   end;
+end;
+
+procedure TframeDynamicScreenObjectsContainer.SetGridButtonEvent(
+  const Value: TGridButtonEvent);
+begin
+  FGridButtonEvent := Value;
 end;
 
 procedure TframeDynamicScreenObjectsContainer.tvTimeSeriesChange(

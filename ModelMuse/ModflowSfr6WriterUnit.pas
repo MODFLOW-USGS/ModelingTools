@@ -125,7 +125,7 @@ uses
   Modflow6ObsWriterUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO,
   Vcl.Dialogs, ModflowParameterUnit, Mt3dmsChemSpeciesUnit,
-  Mt3dmsChemUnit, GwtStatusUnit, DataSetNamesUnit;
+  Mt3dmsChemUnit, GwtStatusUnit, DataSetNamesUnit, CellLocationUnit;
 
 resourcestring
   StrTheFollowingPairO = 'The following pair of objects have the same SFR se' +
@@ -2330,7 +2330,7 @@ begin
     for SegmentIndex := 0 to FSegments.Count - 1 do
     begin
       ASegment := FSegments[SegmentIndex];
-      MvrReceiver.ReceiverKey.ScreenObject := ASegment.FScreenObject;
+      MvrReceiver.ReceiverKey.ScreenObject := ASegment.FScreenObject as TScreenObject;
 
       Assert(ASegment.FReaches.Count = Model.ModflowFullStressPeriods.Count);
       WriteString(Format('# rno sftsetting (defined by %s)',
@@ -2502,7 +2502,7 @@ begin
     for SegmentIndex := 0 to FSegments.Count - 1 do
     begin
       ASegment := FSegments[SegmentIndex];
-      MvrReceiver.ReceiverKey.ScreenObject := ASegment.FScreenObject;
+      MvrReceiver.ReceiverKey.ScreenObject := ASegment.FScreenObject as TScreenObject;
 
       Assert(ASegment.FReaches.Count = Model.ModflowFullStressPeriods.Count);
       WriteString(Format('# rno sfrsetting (defined by %s)',
@@ -2605,7 +2605,7 @@ begin
         begin
           MvrSource.Index := ReachNumber;
           MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
-          MvrSource.SourceKey.ScreenObject := ASegment.FScreenObject;
+          MvrSource.SourceKey.ScreenObject := ASegment.FScreenObject as TScreenObject;
           TModflowMvrWriter(MvrWriter).AddMvrSource(MvrSource);
         end;
       end;
