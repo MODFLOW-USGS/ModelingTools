@@ -32,6 +32,7 @@ type
     procedure rrdgTimeSeriesBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
     procedure btnInsertTimeClick(Sender: TObject);
+    procedure rrdgTimeSeriesEndUpdate(Sender: TObject);
   private
 //    FTimesSeriesGroupItem: IDynamicTimeSeriesItem;
     FTimesSeriesGroup: IDyanmicTimesSeriesCollection;
@@ -275,6 +276,13 @@ begin
   begin
     rrdgTimeSeries.Canvas.Brush.Color := clBtnFace;
   end;
+end;
+
+procedure TframeModflow6DynamicTimeSeries.rrdgTimeSeriesEndUpdate(Sender:
+    TObject);
+begin
+  seTimeCount.AsInteger := rrdgTimeSeries.RowCount - Ord(tsrFirstTime);
+  seTimeSeriesCount.AsInteger := rrdgTimeSeries.ColCount - Ord(tscFirstSeries);
 end;
 
 procedure TframeModflow6DynamicTimeSeries.rrdgTimeSeriesSelectCell(

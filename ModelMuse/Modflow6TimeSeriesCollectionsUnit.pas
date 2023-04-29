@@ -146,6 +146,7 @@ type
       SeriesName: string; StartTimeOffset: double = 0): double;
     function DefaultGroupName: AnsiString;
     function DefaultTimeSeriesName: AnsiString;
+    procedure ResetCounts;
   end;
 
 implementation
@@ -1117,6 +1118,12 @@ begin
   end;
   FTimeSeriesDictionary.Clear;
   FTimeSeriesGroupsDictionary.Clear;
+end;
+
+procedure TTimesSeriesCollections.ResetCounts;
+begin
+  FDefaultGroupNameCount := 0;
+  FDefaultTimeSeriesNameCount := 0;
 end;
 
 procedure TTimesSeriesCollections.SetItem(Index: Integer;

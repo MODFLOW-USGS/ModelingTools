@@ -172,6 +172,7 @@ type
   private
     FOnRemoveSubscription: TChangeSubscription;
     FOnRestoreSubscription: TChangeSubscription;
+    function GetScreenObjectI: IScreenObject;
   protected
     procedure UpdateFormulaDependencies(OldFormula: string;
       var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
@@ -193,6 +194,7 @@ type
     property OnRestoreSubscription: TChangeSubscription
       read FOnRestoreSubscription write FOnRestoreSubscription;
     property ScreenObject: TObject read GetScreenObject;
+    property ScreenObjectI: IScreenObject read GetScreenObjectI;
   end;
 
   TPestMethodItem = class(TOrderedItem)
@@ -1789,6 +1791,11 @@ begin
   result := Model.CreateBlockFormulaObjectI(Orientation);// as TFormulaObject;
 end;
 
+function TFormulaOrderedItem.GetScreenObjectI: IScreenObject;
+begin
+  result := ScreenObject as TObserver as IScreenObject;
+end;
+
 procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string; Position: integer;
   var FormulaObject: IFormulaObject);
 var
@@ -1839,7 +1846,8 @@ begin
     Exit;
   end;
 
-  Model.UpdateFormulaDependencies(OldFormula, NewFormula, Observer, Compiler);
+  Model.UpdateFormulaDependencies(OldFormula, NewFormula, Observer, Compiler,
+    ScreenObjectI);
 end;
 
 //procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;

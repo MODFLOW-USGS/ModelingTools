@@ -3,7 +3,8 @@ unit FormulaManagerInterfaceUnit;
 interface
 
 uses
-  GoPhastTypes, RbwParser, System.Generics.Collections;
+  GoPhastTypes, RbwParser, System.Generics.Collections,
+  ScreenObjectInterfaceUnit;
 
 type
   TChangeSubscription = procedure (Sender: TObject;
@@ -19,6 +20,9 @@ type
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetFormula: string;
     property Formula: string read GetFormula;
+    function GetScreenObject: IScreenObject;
+    procedure SetScreenObject(const Value: IScreenObject);
+    property ScreenObject: IScreenObject read GetScreenObject write SetScreenObject;
   end;
 
   TIformulaList = class(TList<IFormulaObject>);

@@ -37,7 +37,6 @@ type
     procedure SetFullObjectIntersectLength(const Value: Boolean);
     property FullObjectIntersectLength: Boolean read GetFullObjectIntersectLength
       write SetFullObjectIntersectLength;
-
   end;
 
 implementation

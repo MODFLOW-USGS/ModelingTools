@@ -6,7 +6,7 @@ uses
   System.Classes, ModflowBoundaryUnit, FormulaManagerUnit, GoPhastTypes,
   OrderedCollectionUnit, RbwParser, SutraBoundaryUnit,
   System.Generics.Collections, SutraOptionsUnit, SubscriptionUnit,
-  FormulaManagerInterfaceUnit;
+  FormulaManagerInterfaceUnit, ScreenObjectInterfaceUnit;
 
 type
   TSutraGeneralFlowItem = class(TCustomBoundaryItem)

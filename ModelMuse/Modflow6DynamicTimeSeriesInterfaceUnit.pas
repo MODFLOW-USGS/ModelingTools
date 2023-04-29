@@ -98,6 +98,11 @@ type
     property Deleted: Boolean read GetDeleted write SetDeleted;
   end;
 
+  IScreenObjectForDynamicTimeSeries = interface
+    ['{F8CD5CE4-F5E0-487E-8131-E5C9D423BC23}']
+    function GetDynamicTimeSeriesIByName(const Value: string): IDynamicTimeSeries;
+  end;
+
 implementation
 
 { TTTimeSeriesLocationComparer }

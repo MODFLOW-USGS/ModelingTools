@@ -64,7 +64,8 @@ uses
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
   OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit,
   FormulaManagerInterfaceUnit, ModflowBoundaryInterfaceUnit,
-  GlobalVariablesInterfaceUnit, Modflow6DynamicTimeSeriesUnit, CellLocationUnit;
+  GlobalVariablesInterfaceUnit, Modflow6DynamicTimeSeriesUnit, CellLocationUnit,
+  Modflow6DynamicTimeSeriesInterfaceUnit;
 
 type
   //
@@ -1807,7 +1808,7 @@ view. }
   @seealso(TPhastInterpolationValues)
   }
 
-  TScreenObject = class(TObserver, IScreenObject)
+  TScreenObject = class(TObserver, IScreenObject, IScreenObjectForDynamicTimeSeries)
   strict private
     FCachedCells: TCachedCells;
     FIntervalTree: TRbwIntervalTree;
@@ -4150,6 +4151,8 @@ view. }
     procedure ReplaceGUID;
     property SutraScheduleName: string read FSutraScheduleName write FSutraScheduleName;
     procedure CreateGwtTimeLists(AModel: TBaseModel);
+
+    function GetDynamicTimeSeriesIByName(const Value: string): IDynamicTimeSeries;
   published
     // @name is deprecated.
     property ChildModelDiscretization: integer read FChildModelDiscretization
@@ -20356,6 +20359,12 @@ end;
 function TScreenObject.GetDeleted: boolean;
 begin
   result := FDeleted or (Count = 0);
+end;
+
+function TScreenObject.GetDynamicTimeSeriesIByName(
+  const Value: string): IDynamicTimeSeries;
+begin
+  result := DyanmicTimesSeriesCollections.GetTimeSeriesByName(Value);
 end;
 
 function TScreenObject.GetCount: integer;

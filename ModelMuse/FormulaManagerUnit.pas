@@ -4,7 +4,9 @@ interface
 
 uses SysUtils, Classes, Contnrs, RbwParser, IntListUnit, Dialogs,
   HashTableFacadeUnit, Modflow6TimeSeriesUnit, GoPhastTypes,
-  System.Generics.Collections, FormulaManagerInterfaceUnit;
+  System.Generics.Collections, FormulaManagerInterfaceUnit,
+  ScreenObjectInterfaceUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
+  PhastModelInterfaceUnit;
 
 type
   TFormulaObject = class(TComponent, IFormulaObject)
@@ -21,6 +23,8 @@ type
     FReferenceCountList: TIntegerList;
     FSubjectList: TList;
     FTimeSeries: TMf6TimeSeries;
+    FDynamicTimeSeries: IDynamicTimeSeries;
+    FScreenObject: IScreenObject;
     procedure SetFormula(Value: string);
     procedure SetParser(const Value: TRbwParser);
     procedure CompileFormula(var Value: string);
@@ -38,6 +42,9 @@ type
     OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetDisplayFormula: string;
     function GetParser: TRbwParser;
+    function GetScreenObject: IScreenObject;
+    procedure SetScreenObject(const Value: IScreenObject);
+    property ScreenObject: IScreenObject read GetScreenObject write SetScreenObject;
 //    function GetHasTimeSeries: Boolean;
   protected
     procedure Notification(AComponent: TComponent;
@@ -334,6 +341,10 @@ begin
   begin
     result := string(FTimeSeries.SeriesName);
   end
+  else if (FDynamicTimeSeries <> nil) and not FDynamicTimeSeries.Deleted then
+  begin
+    result := string(FDynamicTimeSeries.SeriesName);
+  end
   else if (FExpression = nil) or not FNotifies then
   begin
     if (FParser <> nil) and (FFormula <> '') then
@@ -352,6 +363,11 @@ end;
 function TFormulaObject.GetParser: TRbwParser;
 begin
   result := FParser;
+end;
+
+function TFormulaObject.GetScreenObject: IScreenObject;
+begin
+  result := FScreenObject;
 end;
 
 //function TFormulaObject.GetHasTimeSeries: Boolean;
@@ -653,6 +669,7 @@ procedure TFormulaObject.CompileFormula(var Value: string);
 var
   TempValue: string;
   ADummyValue: double;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
 begin
   if (FExpression <> nil) and FNotifies then
   begin
@@ -665,8 +682,8 @@ begin
     FExpression := nil;
     FNotifies := False;
   end
-  else if (frmGoPhast.PhastModel <> nil)
-    and ((frmGoPhast.PhastModel.ComponentState * [csLoading, csReading]) <> [])
+  else if (IGlobalModel <> nil)
+    and ((IGlobalModel.ComponentState * [csLoading, csReading]) <> [])
     and (Value <> 'True') and (Value <> 'False')
     and not TryStrToFloat(Value, ADummyValue) then
   begin
@@ -686,10 +703,21 @@ begin
       end;
     except on ERbwParserError do
       begin
-        if frmGoPhast.PhastModel.ModelSelection = msModflow2015 then
+        FDynamicTimeSeries := nil;
+        if IGlobalModel.ModelSelection = msModflow2015 then
         begin
           FTimeSeries :=
             frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(TempValue);
+          if (FTimeSeries = nil) and (FScreenObject <> nil) then
+          begin
+            if FScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+              LocalScreenObject) <> 0 then
+            begin
+              Assert(False);
+            end;
+            FDynamicTimeSeries := LocalScreenObject.
+              GetDynamicTimeSeriesIByName(TempValue);
+          end;
         end
         else
         begin
@@ -698,6 +726,10 @@ begin
         if FTimeSeries <> nil then
         begin
           FTimeSeries.NotifierComponent.FreeNotification(self);
+          FFormula := '0';
+        end
+        else if FDynamicTimeSeries <> nil then
+        begin
           FFormula := '0';
         end
         else
@@ -739,6 +771,11 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TFormulaObject.SetScreenObject(const Value: IScreenObject);
+begin
+  FScreenObject := Value;
 end;
 
 function TFormulaObject._AddRef: Integer;
@@ -833,7 +870,7 @@ begin
   begin
     if FormulaObject.FExpression <> nil then
     begin
-      PhastModel := frmGoPhast.PhastModel;
+      PhastModel := IGlobalModel as TPhastModel;
       if PhastModel <> nil then
       begin
         Notifier :=PhastModel.LayerStructure.SimulatedNotifier;
@@ -1032,8 +1069,8 @@ procedure TFormulaManager.Remove(FormulaObject: TFormulaObject;
   OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription; Subject: TObject);
 begin
   if (FormulaObject = nil)
-    or ((frmGoPhast.PhastModel <> nil)
-    and ((csDestroying in frmGoPhast.PhastModel.ComponentState)
+    or ((IGlobalModel <> nil)
+    and ((csDestroying in IGlobalModel.ComponentState)
     or frmGoPhast.PhastModel.Clearing)) then
   begin
     Exit;
@@ -1050,8 +1087,8 @@ begin
     Dec(FormulaObject.FReferenceCount);
     Assert(FormulaObject.FReferenceCount >= 0);
     if (FormulaObject.FReferenceCount = 0)
-      and (frmGoPhast.PhastModel <> nil) and
-      not (csLoading in frmGoPhast.PhastModel.ComponentState) then
+      and (IGlobalModel <> nil) and
+      not (csLoading in IGlobalModel.ComponentState) then
     begin
       FSortedList.Delete(FormulaObject.Formula);
 

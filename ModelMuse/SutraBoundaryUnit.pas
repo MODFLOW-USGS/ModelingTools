@@ -6,7 +6,8 @@ uses
   GoPhastTypes, Classes, OrderedCollectionUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, Generics.Collections, RbwParser, DataSetUnit,
   SysUtils, SubscriptionUnit, SutraOptionsUnit, RealListUnit,
-  OrderedCollectionInterfaceUnit, FormulaManagerInterfaceUnit;
+  OrderedCollectionInterfaceUnit, FormulaManagerInterfaceUnit,
+  ScreenObjectInterfaceUnit;
 
 type
   TObservationFormat = (ofOBS, ofOBC);

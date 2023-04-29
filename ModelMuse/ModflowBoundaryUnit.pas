@@ -583,6 +583,7 @@ type
     // the boundary condition associated with @classname.
     procedure EvaluateListBoundaries(AModel: TBaseModel);
   protected
+    FWriter: TObject;
     procedure AssignDynamicTimeSeries(var TimeSeriesName: string;
       DynamicTimeSeries: IDynamicTimeSeries; ACell: TCellAssignment);
   end;
@@ -3520,6 +3521,7 @@ begin
   begin
     Exit;
   end;
+  FWriter := Writer;
 
   LocalModel := AModel as TCustomModel;
   FirstUsedTime := LocalModel.ModflowFullStressPeriods[0].StartTime;
@@ -4999,11 +5001,27 @@ var
   PestParamSeries: TModflowSteadyParameter;
   CustomWriter: TCustomFileWriter;
   TimeSeries: TMf6TimeSeries;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+  DynamicTimeSeries: IDynamicTimeSeries;
 begin
   CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
+  DynamicTimeSeries := nil;
   TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(ItemFormula);
   if TimeSeries = nil then
+  begin
+    if ScreenObject <> nil then
+    begin
+      if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+        LocalScreenObject) <> 0 then
+      begin
+        Assert(False);
+      end;
+      DynamicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(ItemFormula);
+    end;
+  end;
+  if (TimeSeries = nil) and (DynamicTimeSeries = nil) then
   begin
     TimeSeriesItems.Add('');
     PestParam := LocalModel.GetPestParameterByName(ItemFormula);
@@ -5074,7 +5092,7 @@ begin
       end;
     end;
   end
-  else
+  else if (TimeSeries <> nil) then
   begin
     if CustomWriter = nil then
     begin
@@ -5083,6 +5101,13 @@ begin
     end;
     PestItems.Add('');
     TimeSeriesItems.Add(string(TimeSeries.SeriesName));
+    Formula := '1';
+  end
+  else
+  begin
+    Assert(DynamicTimeSeries <> nil);
+    PestItems.Add('');
+    TimeSeriesItems.Add(string(DynamicTimeSeries.SeriesName));
     Formula := '1';
   end;
   BoundaryValue.Formula := Formula;

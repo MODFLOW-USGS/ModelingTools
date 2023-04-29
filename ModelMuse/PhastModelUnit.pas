@@ -1411,7 +1411,8 @@ that affects the model output should also have a comment. }
     function TimeToTimeStepTimes(ATime: double; out StartTime, EndTime: double): Boolean;
     function GetPestParameterValueByName(PestParamName: string; out Value: double): Boolean;
     procedure UpdateFormulaDependencies(OldFormula: string;
-      var NewFormula: string; Observer: IObserver; Compiler: TRbwParser);
+      var NewFormula: string; Observer: IObserver; Compiler: TRbwParser;
+      ScreenObject: IScreenObject = nil);
     function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TObject;
     function CreateBlockFormulaObjectI(Orientation: TDataSetOrientation): IFormulaObject;
     procedure ChangeFormula(var FormulaObject: IFormulaObject;
@@ -9938,12 +9939,16 @@ const
 //                reassigns the GUID.
 //    '5.1.1.23' Bug fix: Fixed bug that could cause an exception when drawing
 //                the horizontal ruler in SUTRA profile models.
+//
+//    '5.1.1.24' Enhancement: PARTIAL implementation of dynamic time series
+//                for MODFLOW 6.
+//
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.23';
+  IIModelVersion = '5.1.1.24';
 
 function IModelVersion: string;
 begin
@@ -16241,28 +16246,48 @@ begin
 end;
 
 procedure TCustomModel.UpdateFormulaDependencies(OldFormula: string;
-  var NewFormula: string; Observer: IObserver; Compiler: TRbwParser);
+  var NewFormula: string; Observer: IObserver; Compiler: TRbwParser;
+  ScreenObject: IScreenObject = nil);
 var
   OldUses: TStringList;
   NewUses: TStringList;
   Position: integer;
   DS: TObserver;
-  ParentScreenObject: TScreenObject;
+//  ParentScreenObject: TScreenObject;
   Index: integer;
   TimeSeries: TMf6TimeSeries;
+//  DynamicTimeSeries:
   procedure CompileFormula(var AFormula: string; UsesList: TStringList);
+  var
+    LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+    DynamicTimeSeries: IDynamicTimeSeries;
   begin
     if AFormula <> '' then
     begin
       // Mf6TimesSeries.GetTimeSeriesByName always returns nil for
       // non MODFLOW 6 models.
+      DynamicTimeSeries := nil;
       TimeSeries := Mf6TimesSeries.GetTimeSeriesByName(AFormula);
       if TimeSeries <> nil then
       begin
         AFormula := String(TimeSeries.SeriesName);
         UsesList.Clear;
       end
-      else
+      else if ScreenObject <> nil then
+      begin
+        if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+          LocalScreenObject) <> 0 then
+        begin
+          Assert(False);
+        end;
+        DynamicTimeSeries := LocalScreenObject.GetDynamicTimeSeriesIByName(AFormula);
+        if DynamicTimeSeries <> nil then
+        begin
+          UsesList.Assign(DynamicTimeSeries.UsesList);
+        end;
+      end;
+
+      if (TimeSeries = nil) and (DynamicTimeSeries = nil) then
       begin
         try
           Compiler.Compile(AFormula);
@@ -26222,6 +26247,7 @@ begin
     AScreenObject := ScreenObjects[index];
     AScreenObject.DyanmicTimesSeriesCollections.Invalidate;
   end;
+  Mf6TimesSeries.ResetCounts;
 end;
 
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);

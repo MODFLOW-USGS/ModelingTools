@@ -6,7 +6,8 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes,
-  ModflowTransientListParameterUnit;
+  ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
+  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
 
 type
   {
@@ -451,7 +452,7 @@ uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit,
 
 
-  System.Generics.Collections;
+  System.Generics.Collections, CustomModflowWriterUnit;
 
 resourcestring
   StrRechargeLayer = 'Recharge layer';
@@ -580,7 +581,12 @@ end;
 
 function TRchItem.GetRechargeRate: string;
 begin
-  Result := FRechargeRate.Formula;
+  FRechargeRate.ScreenObject := ScreenObjectI;
+  try
+    Result := FRechargeRate.Formula;
+  finally
+    FRechargeRate.ScreenObject := nil;
+  end;
   ResetItemObserver(RechPosition);
 end;
 
@@ -685,7 +691,13 @@ var
   LocalConcentrationPest: string;
   ConcentrationTimeItems: TStringList;
   LocalConcentrationTimeSeries: string;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+  DynamicTimeSeries: IDynamicTimeSeries;
+  TimeSeriesLocation: TTimeSeriesLocation;
+  StaticTimeSeries: IMf6TimeSeries;
+  CustomWriter: TCustomFileWriter;
 begin
+  CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
   Boundary := Boundaries[ItemIndex, AModel] as TRchStorage;
@@ -701,6 +713,18 @@ begin
   LocalRechargePest := RechargePestItems[ItemIndex];
   RechargeTimeItems := TimeSeriesNames[RechPosition];
   LocalRechargeTimeSeries := RechargeTimeItems[ItemIndex];
+
+  DynamicTimeSeries := nil;
+  if ScreenObject <> nil then
+  begin
+    if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+      LocalScreenObject) <> 0 then
+    begin
+      Assert(False);
+    end;
+    DynamicTimeSeries := LocalScreenObject.
+      GetDynamicTimeSeriesIByName(LocalRechargeTimeSeries);
+  end;
 
   if LayerMin >= 0 then
   begin
@@ -727,7 +751,23 @@ begin
                 RechargePest := LocalRechargePest;
                 RechargePestSeries := LocalRechargePestSeries;
                 RechargePestMethod := LocalRechargePestMethod;
-                RechargeTimeSeriesName := LocalRechargeTimeSeries;
+                if DynamicTimeSeries = nil then
+                begin
+                  RechargeTimeSeriesName := LocalRechargeTimeSeries;
+                end
+                else
+                begin
+                  TimeSeriesLocation.Layer := LayerIndex;
+                  TimeSeriesLocation.Row := RowIndex;
+                  TimeSeriesLocation.Column := ColIndex;
+                  StaticTimeSeries := DynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                  RechargeTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                  if CustomWriter = nil then
+                  begin
+                    CustomWriter := FWriter as TCustomFileWriter;
+                  end;
+                  CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                end;
               end;
               Inc(BoundaryIndex);
             end;

@@ -326,6 +326,7 @@ begin
     finally
       ConcLists.Free;
       ParameterValues.Free;
+      Model.InvalidateAllDynamicLists
     end;
   except on E: EInvalidTime do
     begin
@@ -404,7 +405,6 @@ var
   MAXBOUND: Integer;
   NPRCH: Integer;
   MXL: Integer;
-//  NETSEG: integer;
 begin
   // Layered data doesn't use the Dimensions block.
 //  Exit;
@@ -422,26 +422,12 @@ begin
   CountParametersAndParameterCells(NPRCH, MXL);
   MAXBOUND := MAXBOUND + MXL;
 
-//  MAXBOUND := Model.Grid.ColumnCount * Model.Grid.RowCount;
   WriteString('  MAXBOUND');
   WriteInteger(MAXBOUND);
   NewLine;
 
   WriteEndDimensions;
 end;
-//  Assert(Model.ModelSelection = msModflow2015);
-//  Exit;
-//
-//  // Dimensions not used for structured models.
-//  WriteBeginDimensions;
-//
-////  MAXBOUND := Model.Grid.ColumnCount * Model.Grid.RowCount;
-////  WriteString('  MAXBOUND');
-////  WriteInteger(MAXBOUND);
-////  NewLine;
-//
-//  WriteEndDimensions;
-//end;
 
 procedure TModflowRCH_Writer.WriteFile(const AFileName: string);
 begin

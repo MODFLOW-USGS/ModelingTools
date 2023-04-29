@@ -721,12 +721,15 @@ type
     property GwtUsed: Boolean read GetGwtUsed;
     function GetInvalidate: TNotifyEvent;
     property Invalidate: TNotifyEvent read GetInvalidate;
+    function GetComponentState: TComponentState;
+    property ComponentState: TComponentState read GetComponentState;
   end;
 
   TBaseModel = class abstract(TComponent, IModelMuseModel)
   private
     // See @link(UpToDate).
     FUpToDate: boolean;
+    function GetComponentState: TComponentState;
   protected
     // See @link(UpToDate).
     procedure SetUpToDate(const Value : boolean); virtual;
@@ -736,6 +739,7 @@ type
     function GetGwtUsed: Boolean; virtual; abstract;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
+    property ComponentState: TComponentState read GetComponentState;
   public
     // Call @name to indicate that the model has changed in some important
     // respect.  The user will be prompted to save the model when closing.
@@ -1766,6 +1770,11 @@ begin
 
   PredictionStatFlagLabels.Add(StrVariance);
   PredictionStatFlagLabels.Add(StrStdDev);
+end;
+
+function TBaseModel.GetComponentState: TComponentState;
+begin
+  result := inherited ComponentState
 end;
 
 function TBaseModel.GetInvalidate: TNotifyEvent;

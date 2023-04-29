@@ -18,7 +18,8 @@ type
       Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt); overload;
     function GetDataArrayInterface: ISimpleDataArrayManager;
     procedure UpdateFormulaDependencies(OldFormula: string;
-      var NewFormula: string; Observer: IObserver; Compiler: TRbwParser);
+      var NewFormula: string; Observer: IObserver; Compiler: TRbwParser;
+      ScreenObject: IScreenObject = nil);
 //    function CreateBlockFormulaObject(Orientation: TDataSetOrientation): TObject;
     function CreateBlockFormulaObjectI(Orientation: TDataSetOrientation): IFormulaObject;
     function GetCompiler(const Orientation: TDataSetOrientation;

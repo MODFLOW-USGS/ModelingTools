@@ -113,6 +113,7 @@ object frameModflow6DynamicTimeSeries: TframeModflow6DynamicTimeSeries
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBlack
     OnBeforeDrawCell = rrdgTimeSeriesBeforeDrawCell
+    OnEndUpdate = rrdgTimeSeriesEndUpdate
     ColorRangeSelection = False
     ColorSelectedColumn = False
     Columns = <
