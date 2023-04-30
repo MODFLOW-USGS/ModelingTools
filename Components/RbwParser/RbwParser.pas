@@ -2081,6 +2081,14 @@ resourcestring
   StrUnableToEvaluate = 'Unable to evaluate "%0:s". ' + sLineBreak +
   'The error message was %1:s' + sLineBreak +
   'The class name was %2:s';
+  StrTheMultiInterpolate1 = 'The MultiInterpolate function must have at leas' +
+  't three arguments';
+  StrTheMultiInterpolateOdd = 'The MultiInterpolate function must have an od' +
+  'd number of arguments';
+  StrTheFirstArgumentO = 'The first argument of the MultiInterpolate functio' +
+  'n must be a real number';
+  StrTheArgumentsOfThe = 'The arguments of the MultiInterpolate function mus' +
+  't be real numbers';
 
 const
   ValidCharacters = ['A'..'Z', 'a'..'z', '0'..'9', '_'];
@@ -9493,7 +9501,7 @@ begin
 
   MultiInterpolateFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(MultiInterpolateFunction);
-  MultiInterpolateFunction.InputDataCount := 4;
+  MultiInterpolateFunction.InputDataCount := 5;
   MultiInterpolateFunction.OptionalArguments := -1;
   MultiInterpolateFunction.RFunctionAddr := @_MultiInterpolate;
   MultiInterpolateFunction.Name := 'MultiInterpolate';
@@ -9503,6 +9511,7 @@ begin
   MultiInterpolateFunction.InputDataTypes[1] := rdtDouble;
   MultiInterpolateFunction.InputDataTypes[2] := rdtDouble;
   MultiInterpolateFunction.InputDataTypes[3] := rdtDouble;
+  MultiInterpolateFunction.InputDataTypes[4] := rdtDouble;
 end;
 
 procedure TIntToDoubleExpression.MakeDiagram(List: TStringList; Level: integer);
@@ -9602,8 +9611,8 @@ begin
   if ShouldEvaluate then
   begin
     ArrayLength := Length(Data);
-    Assert(ArrayLength >= 3);
-    Assert((ArrayLength mod 2) = 1);
+    Assert(ArrayLength >= 3, StrTheMultiInterpolate1);
+    Assert((ArrayLength mod 2) = 1, StrTheMultiInterpolateOdd);
 
     if ArrayLength = 3 then
     begin
@@ -9616,7 +9625,8 @@ begin
       Exit;
     end;
 
-    Assert(Data[0].DataType in [rdtDouble, rdtInteger]);
+    Assert(Data[0].DataType in [rdtDouble, rdtInteger],
+      StrTheFirstArgumentO);
     PositionVariable := TConstant(Data[0].Datum);
     if PositionVariable is TExpression then
     begin
@@ -9627,7 +9637,8 @@ begin
     PriorDistance := 0;
     for DistanceIndex := 0 to ArrayLength div 2 - 1 do
     begin
-      Assert(Data[DistanceIndex * 2 + 2].DataType in [rdtDouble, rdtInteger]);
+      Assert(Data[DistanceIndex * 2 + 2].DataType in [rdtDouble, rdtInteger],
+        StrTheArgumentsOfThe);
       AVariable := TConstant(Data[DistanceIndex * 2 + 2].Datum);
       if AVariable is TExpression then
       begin
@@ -9636,7 +9647,8 @@ begin
       Distance := AVariable.DoubleResult;
       if Position < Distance then
       begin
-        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger]);
+        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger],
+          StrTheArgumentsOfThe);
         AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
         if AVariable is TExpression then
         begin
@@ -9647,12 +9659,11 @@ begin
         if (DistanceIndex = 0) or (Distance = PriorDistance) then
         begin
           SetResultFromNumber(Value);
-//          PDouble(FResult)^ := Value;
         end
         else
         begin
           Assert(Data[DistanceIndex * 2 - 1].DataType in [rdtDouble,
-            rdtInteger]);
+            rdtInteger], StrTheArgumentsOfThe);
           AVariable := TConstant(Data[DistanceIndex * 2 - 1].Datum);
           if AVariable is TExpression then
           begin
@@ -9662,21 +9673,19 @@ begin
 
           SetResultFromNumber((Position - PriorDistance)
             / (Distance - PriorDistance) * (Value - PriorValue) + PriorValue);
-//          PDouble(FResult)^ := (Position - PriorDistance)
-//            / (Distance - PriorDistance) * (Value - PriorValue) + PriorValue;
         end;
         Exit;
       end
       else if Distance = Position then
       begin
-        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger]);
+        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger],
+          StrTheArgumentsOfThe);
         AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
         if AVariable is TExpression then
         begin
           TExpression(AVariable).Evaluate;
         end;
         SetResultFromNumber(AVariable.DoubleResult);
-//        PDouble(FResult)^ := AVariable.DoubleResult;
         Exit;
       end
       else
@@ -9684,14 +9693,13 @@ begin
         if DistanceIndex = (ArrayLength div 2) then
         begin
           Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble,
-            rdtInteger]);
+            rdtInteger], StrTheArgumentsOfThe);
           AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
           if AVariable is TExpression then
           begin
             TExpression(AVariable).Evaluate;
           end;
           SetResultFromNumber(AVariable.DoubleResult);
-//          PDouble(FResult)^ := AVariable.DoubleResult;
           Exit;
         end;
         PriorDistance := Distance;
