@@ -752,7 +752,7 @@ uses
   ScreenObjectUnit, GIS_Functions, ModflowSfrUnit, ModflowSfrReachUnit,
   ModflowSfrSegment, ModflowSfrChannelUnit, ModflowSfrParamIcalcUnit,
   ModflowSfrFlows, ModflowStrUnit, DataSetUnit, ModflowMvrUnit,
-  DataSetNamesUnit, CellLocationUnit;
+  DataSetNamesUnit, CellLocationUnit, frmFormulaErrorsUnit;
 
 
 const
@@ -2251,7 +2251,15 @@ begin
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
     FractionAnnotation := Format(StrAllButTheFirstRe, [(AScreenObject as TScreenObject).Name]);
 
-    Expression.Evaluate;
+    try
+      Expression.Evaluate;
+    except on E: ERbwParserError do
+      begin
+        frmFormulaErrors.AddFormulaError((AScreenObject as TScreenObject).Name, '',
+          Expression.Decompile, E.Message);
+        raise;
+      end;
+    end;
     with Sfr6Storage.SfrMF6Array[Index] do
     begin
       case BoundaryFunctionIndex of

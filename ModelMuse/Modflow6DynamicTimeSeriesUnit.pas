@@ -728,9 +728,6 @@ begin
 end;
 
 function TDynamicTimeSeriesItem.GetStaticGroup: ITimesSeriesCollection;
-var
-  Item: ITimeSeriesCollectionItem;
-//  ChildCollection: ITimesSeriesCollection;
 begin
   if FStaticGroup = nil then
   begin
@@ -1045,6 +1042,10 @@ var
   ASeries: TDynamicTimeSeries;
 begin
   result := nil;
+  if IGlobalModel = nil then
+  begin
+    Exit;
+  end;
   if IGlobalModel.ModelSelection <> msModflow2015 then
   begin
     Exit;

@@ -9611,8 +9611,16 @@ begin
   if ShouldEvaluate then
   begin
     ArrayLength := Length(Data);
-    Assert(ArrayLength >= 3, StrTheMultiInterpolate1);
-    Assert((ArrayLength mod 2) = 1, StrTheMultiInterpolateOdd);
+    if not (ArrayLength >= 3) then
+    begin
+      raise ERbwParserError.Create(StrTheMultiInterpolate1)
+    end;
+//    Assert(ArrayLength >= 3, StrTheMultiInterpolate1);
+//    Assert((ArrayLength mod 2) = 1, StrTheMultiInterpolateOdd);
+    if not ((ArrayLength mod 2) = 1) then
+    begin
+      raise ERbwParserError.Create(StrTheMultiInterpolateOdd)
+    end;
 
     if ArrayLength = 3 then
     begin
@@ -9625,8 +9633,12 @@ begin
       Exit;
     end;
 
-    Assert(Data[0].DataType in [rdtDouble, rdtInteger],
-      StrTheFirstArgumentO);
+//    Assert(Data[0].DataType in [rdtDouble, rdtInteger],
+//      StrTheFirstArgumentO);
+    if not (Data[0].DataType in [rdtDouble, rdtInteger]) then
+    begin
+      raise ERbwParserError.Create(StrTheFirstArgumentO)
+    end;
     PositionVariable := TConstant(Data[0].Datum);
     if PositionVariable is TExpression then
     begin
@@ -9637,8 +9649,12 @@ begin
     PriorDistance := 0;
     for DistanceIndex := 0 to ArrayLength div 2 - 1 do
     begin
-      Assert(Data[DistanceIndex * 2 + 2].DataType in [rdtDouble, rdtInteger],
-        StrTheArgumentsOfThe);
+//      Assert(Data[DistanceIndex * 2 + 2].DataType in [rdtDouble, rdtInteger],
+//        StrTheArgumentsOfThe);
+      if not (Data[DistanceIndex * 2 + 2].DataType in [rdtDouble, rdtInteger]) then
+      begin
+        raise ERbwParserError.Create(StrTheArgumentsOfThe)
+      end;
       AVariable := TConstant(Data[DistanceIndex * 2 + 2].Datum);
       if AVariable is TExpression then
       begin
@@ -9647,8 +9663,12 @@ begin
       Distance := AVariable.DoubleResult;
       if Position < Distance then
       begin
-        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger],
-          StrTheArgumentsOfThe);
+//        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger],
+//          StrTheArgumentsOfThe);
+        if not (Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger]) then
+        begin
+          raise ERbwParserError.Create(StrTheArgumentsOfThe)
+        end;
         AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
         if AVariable is TExpression then
         begin
@@ -9662,8 +9682,13 @@ begin
         end
         else
         begin
-          Assert(Data[DistanceIndex * 2 - 1].DataType in [rdtDouble,
-            rdtInteger], StrTheArgumentsOfThe);
+//          Assert(Data[DistanceIndex * 2 - 1].DataType in [rdtDouble,
+//            rdtInteger], StrTheArgumentsOfThe);
+          if not (Data[DistanceIndex * 2 - 1].DataType in [rdtDouble,
+            rdtInteger]) then
+          begin
+            raise ERbwParserError.Create(StrTheArgumentsOfThe)
+          end;
           AVariable := TConstant(Data[DistanceIndex * 2 - 1].Datum);
           if AVariable is TExpression then
           begin
@@ -9678,8 +9703,12 @@ begin
       end
       else if Distance = Position then
       begin
-        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger],
-          StrTheArgumentsOfThe);
+//        Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger],
+//          StrTheArgumentsOfThe);
+        if not (Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger]) then
+        begin
+          raise ERbwParserError.Create(StrTheArgumentsOfThe)
+        end;
         AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
         if AVariable is TExpression then
         begin
@@ -9692,8 +9721,13 @@ begin
       begin
         if DistanceIndex = (ArrayLength div 2) then
         begin
-          Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble,
-            rdtInteger], StrTheArgumentsOfThe);
+//          Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble,
+//            rdtInteger], StrTheArgumentsOfThe);
+          if not (Data[DistanceIndex * 2 + 1].DataType in [rdtDouble,
+            rdtInteger]) then
+          begin
+            raise ERbwParserError.Create(StrTheArgumentsOfThe)
+          end;
           AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
           if AVariable is TExpression then
           begin
