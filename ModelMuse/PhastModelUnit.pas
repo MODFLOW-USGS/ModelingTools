@@ -12933,25 +12933,57 @@ var
   TempUseList: TStringList;
   VariableIndex: Integer;
   ScreenObject: TScreenObject;
+  ATimeSeries: TMf6TimeSeries;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+  ADynamicTimeSeries: IDynamicTimeSeries;
 begin
   Formula := Item.BoundaryFormula[DataIndex];
-  try
-    rpThreeDFormulaCompiler.Compile(Formula);
-  except on E: ErbwParserError do
+
+  ATimeSeries := nil;
+  ADynamicTimeSeries := nil;
+  if IGlobalModel <> nil then
+  begin
+    if IGlobalModel.ModelSelection = msModflow2015 then
     begin
-      ScreenObject := Item.ScreenObject as TScreenObject;
-      frmFormulaErrors.AddFormulaError(ScreenObject.Name, StrModflowSfrReachLength,
-        Formula, E.Message);
-      Formula := '0';
-      rpThreeDFormulaCompiler.Compile(Formula);
+      ATimeSeries :=
+        frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(Formula);
+      if (ATimeSeries = nil) and (Item.ScreenObjectI <> nil) then
+      begin
+        if Item.ScreenObjectI.QueryInterface(IScreenObjectForDynamicTimeSeries,
+          LocalScreenObject) <> 0 then
+        begin
+          Assert(False);
+        end;
+        ADynamicTimeSeries := LocalScreenObject.
+          GetDynamicTimeSeriesIByName(Formula);
+      end;
     end;
   end;
-  TempUseList := rpThreeDFormulaCompiler.CurrentExpression.VariablesUsed;
-  for VariableIndex := 0 to TempUseList.Count - 1 do
+
+  if ADynamicTimeSeries <> nil then
   begin
-    if NewUseList.IndexOf(TempUseList[VariableIndex]) < 0 then
+    NewUseList.AddStrings(ADynamicTimeSeries.UsesList);
+  end
+  else
+  begin
+    try
+      rpThreeDFormulaCompiler.Compile(Formula);
+    except on E: ErbwParserError do
+      begin
+        ScreenObject := Item.ScreenObject as TScreenObject;
+        frmFormulaErrors.AddFormulaError(ScreenObject.Name, StrModflowSfrReachLength,
+          Formula, E.Message);
+        Formula := '0';
+        rpThreeDFormulaCompiler.Compile(Formula);
+      end;
+    end;
+    TempUseList := rpThreeDFormulaCompiler.CurrentExpression.VariablesUsed;
+    for VariableIndex := 0 to TempUseList.Count - 1 do
     begin
-      NewUseList.Add(TempUseList[VariableIndex]);
+      if NewUseList.IndexOf(TempUseList[VariableIndex]) < 0 then
+      begin
+        NewUseList.Add(TempUseList[VariableIndex]);
+      end;
     end;
   end;
 end;
@@ -12980,7 +13012,12 @@ begin
       for ValueIndex := 0 to Boundary.Values.Count -1 do
       begin
         Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
-        UpdateUseList(DataIndex, NewUseList, Item);
+
+        try
+          UpdateUseList(DataIndex, NewUseList, Item);
+        finally
+
+        end;
       end;
       for ParamIndex := 0 to Boundary. Parameters.Count - 1 do
       begin

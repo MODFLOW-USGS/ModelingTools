@@ -22,6 +22,7 @@ end;
 
 initialization
 
+  IGlobalModel := nil;
   IGlobalModelForOrderedCollection := nil;
 
 end.

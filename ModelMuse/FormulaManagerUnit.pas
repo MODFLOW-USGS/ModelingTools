@@ -123,6 +123,7 @@ constructor TFormulaObject.Create(AOwner: TComponent);
 begin
   inherited;
   FTimeSeries := nil;
+  FDynamicTimeSeries := nil;
   FNewSubscriptions := TStringList.Create;
   FReferenceCount := 1;
   FOnRemoveSubscriptionList := TList.Create;
@@ -684,7 +685,8 @@ begin
   end
   else if (IGlobalModel <> nil)
     and ((IGlobalModel.ComponentState * [csLoading, csReading]) <> [])
-    and (Value <> 'True') and (Value <> 'False')
+    and (Value <> 'True')
+    and (Value <> 'False')
     and not TryStrToFloat(Value, ADummyValue) then
   begin
     FExpression := nil;
@@ -693,50 +695,92 @@ begin
   else
   begin
     TempValue := Value;
-    try
-      FParser.Compile(Value);
-      FExpression := FParser.CurrentExpression;
-      Assert(FExpression <> nil);
+
+    FTimeSeries := nil;
+    FDynamicTimeSeries := nil;
+    if IGlobalModel <> nil then
+    begin
+      if IGlobalModel.ModelSelection = msModflow2015 then
       begin
-        FNotifies := True;
-        FExpression.Notifier.FreeNotification(self);
-      end;
-    except on ERbwParserError do
-      begin
-        FDynamicTimeSeries := nil;
-        if IGlobalModel.ModelSelection = msModflow2015 then
+        FTimeSeries :=
+          frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(TempValue);
+        if (FTimeSeries = nil) and (FScreenObject <> nil) then
         begin
-          FTimeSeries :=
-            frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(TempValue);
-          if (FTimeSeries = nil) and (FScreenObject <> nil) then
+          if FScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+            LocalScreenObject) <> 0 then
           begin
-            if FScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
-              LocalScreenObject) <> 0 then
-            begin
-              Assert(False);
-            end;
-            FDynamicTimeSeries := LocalScreenObject.
-              GetDynamicTimeSeriesIByName(TempValue);
+            Assert(False);
           end;
-        end
-        else
-        begin
-          FTimeSeries := nil;
+          FDynamicTimeSeries := LocalScreenObject.
+            GetDynamicTimeSeriesIByName(TempValue);
         end;
-        if FTimeSeries <> nil then
+      end
+      else
+      begin
+        FTimeSeries := nil;
+      end;
+    end;
+
+    if FTimeSeries <> nil then
+    begin
+      FTimeSeries.NotifierComponent.FreeNotification(self);
+      FFormula := '0';
+    end
+    else if FDynamicTimeSeries <> nil then
+    begin
+      FFormula := '0';
+    end;
+
+
+    if (FDynamicTimeSeries = nil) and (FTimeSeries = nil) then
+    begin
+      try
+        FParser.Compile(Value);
+        FExpression := FParser.CurrentExpression;
+        Assert(FExpression <> nil);
         begin
-          FTimeSeries.NotifierComponent.FreeNotification(self);
-          FFormula := '0';
-        end
-        else if FDynamicTimeSeries <> nil then
+          FNotifies := True;
+          FExpression.Notifier.FreeNotification(self);
+        end;
+      except on ERbwParserError do
         begin
-          FFormula := '0';
-        end
-        else
-        begin
-          FExpression := nil;
-          Value := TempValue;
-          FNotifies := False;
+          FDynamicTimeSeries := nil;
+          if (IGlobalModel <> nil)
+            and (IGlobalModel.ModelSelection = msModflow2015) then
+          begin
+            FTimeSeries :=
+              frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(TempValue);
+            if (FTimeSeries = nil) and (FScreenObject <> nil) then
+            begin
+              if FScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+                LocalScreenObject) <> 0 then
+              begin
+                Assert(False);
+              end;
+              FDynamicTimeSeries := LocalScreenObject.
+                GetDynamicTimeSeriesIByName(TempValue);
+            end;
+          end
+          else
+          begin
+            FTimeSeries := nil;
+          end;
+
+          if FTimeSeries <> nil then
+          begin
+            FTimeSeries.NotifierComponent.FreeNotification(self);
+            FFormula := '0';
+          end
+          else if FDynamicTimeSeries <> nil then
+          begin
+            FFormula := '0';
+          end
+          else
+          begin
+            FExpression := nil;
+            Value := TempValue;
+            FNotifies := False;
+          end;
         end;
       end;
     end;
@@ -808,6 +852,7 @@ var
   Listener: TObserver;
   Notifier: TObserver;
   PhastModel: TPhastModel;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
 begin
   Remove(FormulaObject, OnRemoveSubscription, OnRestoreSubscription, Subject);
 
@@ -828,24 +873,40 @@ begin
 
     FormulaObject.Parser := Parser;
 
+    FormulaObject.FTimeSeries := nil;
     if FModel.ModelSelection = msModflow2015 then
     begin
       FormulaObject.FTimeSeries :=
         TCustomModel(FModel).Mf6TimesSeries.GetTimeSeriesByName(NewFormula);
-    end
-    else
-    begin
-      FormulaObject.FTimeSeries := nil;
+      if FormulaObject.FTimeSeries = nil then
+      begin
+        if (FormulaObject.FTimeSeries = nil) and (FormulaObject.FScreenObject <> nil) then
+        begin
+          if FormulaObject.FScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+            LocalScreenObject) <> 0 then
+          begin
+            Assert(False);
+          end;
+          FormulaObject.FDynamicTimeSeries := LocalScreenObject.
+            GetDynamicTimeSeriesIByName(NewFormula);
+        end;
+      end;
     end;
+
     if FormulaObject.FTimeSeries <> nil then
     begin
       FormulaObject.FTimeSeries.NotifierComponent.FreeNotification(FormulaObject);
+      FormulaObject.FFormula := '0';
+    end
+    else if FormulaObject.FDynamicTimeSeries <> nil then
+    begin
       FormulaObject.FFormula := '0';
     end
     else
     begin
       FormulaObject.SetFormula(NewFormula);
     end;
+
     if FSortedList.Search(FormulaObject.Formula, APointer)
     then
     begin

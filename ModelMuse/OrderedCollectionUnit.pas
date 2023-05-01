@@ -1801,7 +1801,6 @@ procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string; Position: integ
 var
   Compiler: TRbwParser;
   LocalObserver: TObserver;
-//  AnObject: TObject;
 begin
   if FormulaObject.Formula <> Value then
   begin
@@ -1819,24 +1818,17 @@ begin
         and not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState)
         and not IGlobalModelForOrderedCollection.Clearing then
       begin
-//        AnObject := FormulaObject;
-        IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaBlocks,
-          OnRemoveSubscription, OnRestoreSubscription, self);
-//        FormulaObject := AnObject as TFormulaObject;
+        FormulaObject.ScreenObject := ScreenObjectI;
+        try
+          IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaBlocks,
+            OnRemoveSubscription, OnRestoreSubscription, self);
+        finally
+          FormulaObject.ScreenObject := nil;
+        end;
       end;
     end;
   end;
 end;
-
-//procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string;
-//  Position: integer; var FormulaObject: IFormulaObject);
-//var
-//  LocalFormulaObject: TFormulaObject;
-//begin
-//  LocalFormulaObject := FormulaObject as TFormulaObject;
-//  UpdateFormulaBlocks(Value,Position, LocalFormulaObject);
-//  FormulaObject := LocalFormulaObject;
-//end;
 
 procedure TFormulaOrderedItem.UpdateFormulaDependencies(OldFormula: string;
   var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
@@ -1850,22 +1842,11 @@ begin
     ScreenObjectI);
 end;
 
-//procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;
-//  Position: integer; var FormulaObject: IFormulaObject);
-//var
-//  LocalFormulaObject: TFormulaObject;
-//begin
-//  LocalFormulaObject := FormulaObject as TFormulaObject;
-//  UpdateFormulaNodes(Value,Position, LocalFormulaObject);
-//  FormulaObject := LocalFormulaObject;
-//end;
-
 procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;
   Position: integer; var FormulaObject: IFormulaObject);
 var
   Compiler: TRbwParser;
   LocalObserver: TObserver;
-//  AnObject: TObject;
 begin
   if FormulaObject.Formula <> Value then
   begin
@@ -1881,10 +1862,8 @@ begin
       and not(csDestroying in (IGlobalModelForOrderedCollection as TComponent).ComponentState)
       and not IGlobalModelForOrderedCollection.Clearing then
     begin
-//      AnObject := FormulaObject;
       IGlobalModelForOrderedCollection.ChangeFormula(FormulaObject, Value, eaNodes,
         OnRemoveSubscription, OnRestoreSubscription, self);
-//      FormulaObject := AnObject as TFormulaObject;
     end;
   end;
 end;
@@ -1897,10 +1876,6 @@ constructor TCustomObjectOrderedCollection.Create(
 begin
   inherited Create(ItemClass, Model);
   FScreenObject := AScreenObject;
-//  if FScreenObject <> nil then
-//  begin
-//    Assert(FScreenObject is TScreenObject);
-//  end;
 end;
 
 

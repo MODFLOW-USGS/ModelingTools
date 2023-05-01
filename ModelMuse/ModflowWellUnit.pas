@@ -445,7 +445,12 @@ end;
 
 function TWellItem.GetPumpingRate: string;
 begin
-  Result := FPumpingRate.Formula;
+  FPumpingRate.ScreenObject := ScreenObjectI;
+  try
+    Result := FPumpingRate.Formula;
+  finally
+    FPumpingRate.ScreenObject := nil;
+  end;
   ResetItemObserver(WelPumpingRatePosition);
 end;
 

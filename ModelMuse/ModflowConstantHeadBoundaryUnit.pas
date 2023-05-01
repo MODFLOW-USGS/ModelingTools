@@ -512,7 +512,12 @@ end;
 
 function TChdItem.GetStartHead: string;
 begin
-  Result := FStartHead.Formula;
+  FStartHead.ScreenObject := ScreenObjectI;
+  try
+    Result := FStartHead.Formula;
+  finally
+    FStartHead.ScreenObject := nil;
+  end;
   ResetItemObserver(ChdStartHeadPosition);
 end;
 

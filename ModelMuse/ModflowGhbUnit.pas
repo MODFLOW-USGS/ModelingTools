@@ -504,13 +504,23 @@ end;
 
 function TGhbItem.GetBoundaryHead: string;
 begin
-  Result := FBoundaryHead.Formula;
+  FBoundaryHead.ScreenObject := ScreenObjectI;
+  try
+    Result := FBoundaryHead.Formula;
+  finally
+    FBoundaryHead.ScreenObject := nil;
+  end;
   ResetItemObserver(GhbHeadPosition);
 end;
 
 function TGhbItem.GetConductance: string;
 begin
-  Result := FConductance.Formula;
+  FConductance.ScreenObject := ScreenObjectI;
+  try
+    Result := FConductance.Formula;
+  finally
+    FConductance.ScreenObject := ScreenObjectI;
+  end;
   ResetItemObserver(GhbConductancePosition);
 end;
 

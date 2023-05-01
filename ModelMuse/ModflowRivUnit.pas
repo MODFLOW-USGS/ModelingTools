@@ -568,7 +568,12 @@ end;
 
 function TRivItem.GetConductance: string;
 begin
-  Result := FConductance.Formula;
+  FConductance.ScreenObject := ScreenObjectI;
+  try
+    Result := FConductance.Formula;
+  finally
+    FConductance.ScreenObject := nil;
+  end;
   ResetItemObserver(RivConductancePosition);
 end;
 
@@ -606,13 +611,23 @@ end;
 
 function TRivItem.GetRiverBottom: string;
 begin
-  Result := FRiverBottom.Formula;
+  FRiverBottom.ScreenObject := ScreenObjectI;
+  try
+    Result := FRiverBottom.Formula;
+  finally
+    FRiverBottom.ScreenObject := nil;
+  end;
   ResetItemObserver(RivBottomPosition);
 end;
 
 function TRivItem.GetRiverStage: string;
 begin
-  Result := FRiverStage.Formula;
+  FRiverStage.ScreenObject := ScreenObjectI;
+  try
+    Result := FRiverStage.Formula;
+  finally
+    FRiverStage.ScreenObject := nil;
+  end;
   ResetItemObserver(RivStagePosition);
 end;
 

@@ -420,7 +420,12 @@ end;
 
 function TDrnItem.GetConductance: string;
 begin
-  Result := FConductance.Formula;
+  FConductance.ScreenObject := ScreenObjectI;
+  try
+    Result := FConductance.Formula;
+  finally
+    FConductance.ScreenObject := nil;
+  end;
   ResetItemObserver(DrnConductancePosition);
 end;
 
@@ -431,7 +436,12 @@ end;
 
 function TDrnItem.GetElevation: string;
 begin
-  Result := FElevation.Formula;
+  FElevation.ScreenObject := ScreenObjectI;
+  try
+    Result := FElevation.Formula;
+  finally
+    FElevation.ScreenObject := nil;
+  end;
   ResetItemObserver(DrnElevationPosition);
 end;
 
