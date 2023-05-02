@@ -896,11 +896,11 @@ begin
     if FormulaObject.FTimeSeries <> nil then
     begin
       FormulaObject.FTimeSeries.NotifierComponent.FreeNotification(FormulaObject);
-      FormulaObject.FFormula := '0';
+      FormulaObject.FFormula := FormulaObject.FTimeSeries.SeriesName;
     end
     else if FormulaObject.FDynamicTimeSeries <> nil then
     begin
-      FormulaObject.FFormula := '0';
+      FormulaObject.FFormula := FormulaObject.FDynamicTimeSeries.SeriesName;
     end
     else
     begin
