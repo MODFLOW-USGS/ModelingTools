@@ -1130,6 +1130,7 @@ procedure TFormulaManager.Remove(FormulaObject: TFormulaObject;
   OnRemoveSubscription, OnRestoreSubscription:TChangeSubscription; Subject: TObject);
 begin
   if (FormulaObject = nil)
+    or (IGlobalModel = nil)
     or ((IGlobalModel <> nil)
     and ((csDestroying in IGlobalModel.ComponentState)
     or frmGoPhast.PhastModel.Clearing)) then
