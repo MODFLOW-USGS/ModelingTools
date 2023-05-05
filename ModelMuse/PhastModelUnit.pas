@@ -9943,12 +9943,14 @@ const
 //    '5.1.1.24' Enhancement: PARTIAL implementation of dynamic time series
 //                for MODFLOW 6.
 //
+//    '5.1.1.25' Enhancement: Added support for exporting the outline of the
+//                current layer to a Shapefile.
 
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.24';
+  IIModelVersion = '5.1.1.25';
 
 function IModelVersion: string;
 begin

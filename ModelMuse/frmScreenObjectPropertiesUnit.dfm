@@ -12,8 +12,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitWidth = 776
-  ExplicitHeight = 588
+  ExplicitWidth = 780
+  ExplicitHeight = 589
   TextHeight = 19
   object pageMain: TPageControl
     Left = 0
@@ -6042,7 +6042,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboMultiIprior: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                 end
@@ -8835,9 +8834,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 561
               ExplicitHeight = 449
               inherited tabBasic: TTabSheet
-                inherited comboLossType: TJvImageComboBox
-                  ItemIndex = -1
-                end
                 inherited edPartialPenetration: TJvComboEdit
                   Left = 227
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
@@ -10988,7 +10984,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboRouteType: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                   inherited cbbObservationTypes: TJvCheckedComboBox
@@ -12289,7 +12284,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited comboConductEq: TJvImageComboBox
                   Height = 29
                   ItemHeight = 23
-                  ItemIndex = -1
                   ExplicitHeight = 29
                 end
               end
@@ -18297,7 +18291,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Left = 16
           Top = 19
           Width = 237
-          Height = 76
+          Height = 95
           Margins.Top = 10
           Anchors = [akLeft, akTop, akRight]
           Caption = 
@@ -18305,7 +18299,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             'ou can describe it here so you will understand how it works late' +
             'r.'
           WordWrap = True
-          ExplicitWidth = 241
         end
         object memoComments: TMemo
           Left = 2
@@ -18497,19 +18490,24 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Height = 471
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 72
-        ExplicitTop = -9
+        ExplicitWidth = 756
+        ExplicitHeight = 471
         inherited plTimeSeries: TJvPageList
           Width = 635
           Height = 430
+          ExplicitWidth = 635
+          ExplicitHeight = 430
         end
         inherited pnlBottom: TPanel
           Top = 430
           Width = 756
+          ExplicitTop = 430
+          ExplicitWidth = 756
         end
         inherited tvTimeSeries: TJvPageListTreeView
           Height = 430
           Items.Links = {00000000}
+          ExplicitHeight = 430
         end
       end
     end
@@ -18522,8 +18520,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 508
-    ExplicitWidth = 760
     DesignSize = (
       764
       41)
@@ -18555,7 +18551,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
-      ExplicitLeft = 459
     end
     object btnCancel: TBitBtn
       Left = 558
@@ -18567,7 +18562,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 5
       OnClick = btnCancelClick
-      ExplicitLeft = 554
     end
     object btnHelp: TBitBtn
       Left = 368
@@ -18579,7 +18573,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 364
     end
     object btnCopyVertices: TButton
       Left = 4

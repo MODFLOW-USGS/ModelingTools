@@ -4976,8 +4976,12 @@ begin
       FillPropertyCollection(FNewProperties, List);
     end;
 
+  {$IFDEF DynamicTimeSeries}
     tabDynamicTimeSeries.TabVisible :=
       frameDynamicTimeSeries.GetData(FNewProperties);
+  {$ELSE}
+    tabDynamicTimeSeries.TabVisible := False;
+  {$ENDIF}
 
     GetModflowBoundaries(List);
     GetSutraObservations(List);
@@ -7165,8 +7169,12 @@ begin
       // is greater than 1.
       tabNodes.TabVisible := False;
 
+    {$IFDEF DynamicTimeSeries}
       tabDynamicTimeSeries.TabVisible :=
         frameDynamicTimeSeries.GetData(FNewProperties);
+    {$ELSE}
+      tabDynamicTimeSeries.TabVisible := False;
+    {$ENDIF}
 
       GetModflowBoundaries(AScreenObjectList);
       GetSutraObservations(AScreenObjectList);

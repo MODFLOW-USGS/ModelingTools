@@ -31086,5 +31086,14 @@ object TTaskHistory
       Date = 45049.000000000000000000
       Categories.Strings = (
         'core code')
+    end
+    item
+      Date = 45050.000000000000000000
+    end
+    item
+      Date = 45051.000000000000000000
+      Categories.Strings = (
+        'Export Shapefile'
+        'Documentation')
     end>
 end

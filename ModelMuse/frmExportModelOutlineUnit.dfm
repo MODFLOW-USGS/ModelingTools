@@ -2,10 +2,10 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   HelpType = htKeyword
   HelpKeyword = 'Export_Model_Outline_Dialog_Bo'
   Caption = 'Export Model Outline'
-  ClientHeight = 285
+  ClientHeight = 310
   ClientWidth = 342
   ExplicitWidth = 358
-  ExplicitHeight = 324
+  ExplicitHeight = 349
   TextHeight = 18
   object lblModel: TLabel
     Left = 8
@@ -16,7 +16,7 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   end
   object lblGridLines: TLabel
     Left = 136
-    Top = 211
+    Top = 235
     Width = 193
     Height = 18
     Caption = 'Grid line frequency to export'
@@ -26,28 +26,29 @@ inherited frmExportModelOutline: TfrmExportModelOutline
     Left = 8
     Top = 64
     Width = 318
-    Height = 129
+    Height = 153
     Anchors = [akLeft, akTop, akRight]
     Caption = 'What to export'
     ItemIndex = 2
     Items.Strings = (
       'Grid outline'
+      'Outline of current layer'
       'Active cells'
       'Active and inactive cells'
       'All grid lines'
       'Active area grid lines')
     TabOrder = 1
     OnClick = rgExportChoiceClick
-    ExplicitWidth = 322
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 239
+    Top = 264
     Width = 342
     Height = 46
     Align = alBottom
     ParentColor = True
     TabOrder = 3
+    ExplicitTop = 239
     object btnCancel: TBitBtn
       Left = 207
       Top = 6
@@ -88,7 +89,7 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   end
   object seGridLines: TJvSpinEdit
     Left = 8
-    Top = 208
+    Top = 232
     Width = 121
     Height = 26
     MaxValue = 10000000.000000000000000000

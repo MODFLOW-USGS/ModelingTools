@@ -13,8 +13,8 @@ uses
 type
   TPointList = TList<TPoint2D>;
 
-  TExportChoice = (ecEntireGrid, ecActiveCells, ecActiveAndInactive,
-    ecGridLinesAll, ecGridLinesActive);
+  TExportChoice = (ecEntireGrid, edOutlinecurrentLayer, ecActiveCells,
+    ecActiveAndInactive, ecGridLinesAll, ecGridLinesActive);
 
   TfrmExportModelOutline = class(TfrmCustomGoPhast)
     rgExportChoice: TRadioGroup;
@@ -56,6 +56,8 @@ type
     procedure InitializeGeometryWriter;
     procedure FinalizeGeometryWriter;
     procedure UpdateChoices;
+    procedure GetActiveOutlineOfCurrentLayer(var ActiveCells: TGpcPolygonClass;
+      out InactiveCellCount: Integer);
     { Private declarations }
   public
     { Public declarations }
@@ -362,25 +364,25 @@ begin
   xbsShapeFile.AppendBlank;
   case TExportChoice(rgExportChoice.ItemIndex) of
     ecEntireGrid:
-	  begin
-      xbsShapeFile.UpdFieldStr(StrAREA, 'Grid Outline');
-    end;
-	ecActiveCells, ecActiveAndInactive:
-	  begin
-      if Active then
       begin
-        xbsShapeFile.UpdFieldStr(StrAREA, 'Active');
-      end
-      else
-      begin
-        xbsShapeFile.UpdFieldStr(StrAREA, 'Inactive');
+        xbsShapeFile.UpdFieldStr(StrAREA, 'Grid Outline');
       end;
-    end;
-	ecGridLinesAll, ecGridLinesActive:
-	  begin
-      xbsShapeFile.UpdFieldInt(StrRow, FRowIndex);
-      xbsShapeFile.UpdFieldInt(StrColumn, FColIndex);
-    end;
+    ecActiveCells, edOutlinecurrentLayer, ecActiveAndInactive:
+      begin
+        if Active then
+        begin
+          xbsShapeFile.UpdFieldStr(StrAREA, 'Active');
+        end
+        else
+        begin
+          xbsShapeFile.UpdFieldStr(StrAREA, 'Inactive');
+        end;
+      end;
+    ecGridLinesAll, ecGridLinesActive:
+      begin
+        xbsShapeFile.UpdFieldInt(StrRow, FRowIndex);
+        xbsShapeFile.UpdFieldInt(StrColumn, FColIndex);
+      end;
 	else
 	  Assert(False);
   end;
@@ -470,14 +472,73 @@ begin
   end
   else if Model.DisvUsed then
   begin
-//    rgExportChoice.Controls[1].Enabled := False;
-//    rgExportChoice.Controls[2].Enabled := False;
     rgExportChoice.Controls[3].Enabled := False;
     rgExportChoice.Controls[4].Enabled := False;
-//    rgExportChoice.ItemIndex := 0;
   end;
 end;
 
+procedure TfrmExportModelOutline.GetActiveOutlineOfCurrentLayer(
+  var ActiveCells: TGpcPolygonClass;
+  out InactiveCellCount: Integer);
+var
+  ActiveDataArray: TDataArray;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  IsActive: Boolean;
+  LayerIndex: Integer;
+  Cell: TGpcPolygonClass;
+  NewOutline: TGpcPolygonClass;
+  APoint: TPoint2D;
+begin
+  InactiveCellCount := 0;
+  ActiveCells.NumberOfContours := 0;
+  Cell := TGpcPolygonClass.Create;
+  try
+    Cell.NumberOfContours := 1;
+    Cell.VertexCount[0] := 4;
+    if FModel.ModelSelection <> msModflow2015 then
+    begin
+      ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
+    end
+    else
+    begin
+      ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    end;
+    for RowIndex := 0 to ActiveDataArray.RowCount - 1 do
+    begin
+      for ColIndex := 0 to ActiveDataArray.ColumnCount - 1 do
+      begin
+        IsActive := False;
+        LayerIndex := FModel.SelectedLayer;
+        if FModel.ModelSelection <> msModflow2015 then
+        begin
+          IsActive := ActiveDataArray.BooleanData[LayerIndex,RowIndex,ColIndex];
+        end
+        else
+        begin
+          IsActive := ActiveDataArray.IntegerData[LayerIndex,RowIndex,ColIndex] > 0;
+        end;
+        if IsActive then
+        begin
+          APoint := FGrid.TwoDElementCorner(ColIndex, RowIndex);
+          Cell.Vertices[0,0] := APoint;
+          APoint := FGrid.TwoDElementCorner(ColIndex+1, RowIndex);
+          Cell.Vertices[0,1] := APoint;
+          APoint := FGrid.TwoDElementCorner(ColIndex+1, RowIndex+1);
+          Cell.Vertices[0,2] := APoint;
+          APoint := FGrid.TwoDElementCorner(ColIndex, RowIndex+1);
+          Cell.Vertices[0,3] := APoint;
+          NewOutline := TGpcPolygonClass.CreateFromOperation(
+            GPC_UNION, Cell, ActiveCells);
+          ActiveCells.Free;
+          ActiveCells := NewOutline;
+        end;
+      end;
+    end;
+  finally
+    Cell.Free;
+  end;
+end;
 
 procedure TfrmExportModelOutline.GetEntireGridOutline(var Polygon: TGpcPolygonClass);
 var
@@ -669,7 +730,6 @@ begin
         PointIndex := 0;
         for ColIndex := 0 to FGrid.ColumnCount do
         begin
-//        try
           if IsActive(ColIndex, FRowIndex) then
           begin
             APoint := FGrid.TwoDElementCorner(ColIndex, FRowIndex);
@@ -690,9 +750,6 @@ begin
           begin
             PriorActive := False;
           end;
-//        except
-//          ShowMessage(ColIndex.ToString + ' ' + FRowIndex.ToString);
-//        end;
         end;
         SetLength(AShape.FPoints, AShape.FNumPoints);
         if AShape.FNumPoints = 0 then
@@ -845,6 +902,12 @@ begin
             GetEntireGridOutline(FOutline);
             StoreAShape;
             AppendDataBaseRecord(False);
+          end;
+        edOutlinecurrentLayer:
+          begin
+            GetActiveOutlineOfCurrentLayer(FOutline, Dummy);
+            StoreAShape;
+            AppendDataBaseRecord(True);
           end;
         ecActiveCells:
           begin
