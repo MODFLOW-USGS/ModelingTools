@@ -19732,12 +19732,14 @@ begin
     or (DataGrid = frameGhbParam.rdgModflowBoundary)
     or (DataGrid = frameWellParam.rdgModflowBoundary)
     or (DataGrid = frameLakMf6.rdgModflowBoundary)
-    or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3,4])) // Only rate and stage
+    or (DataGrid = frameMAW.rdgModflowBoundary) // Only rate and stage
+//    or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3,4])) // Only rate and stage
     or (DataGrid = frameRivParam.rdgModflowBoundary)
     or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol < 9)) // all but upstream fraction and diversions.
     or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
     or (DataGrid = frameGwtCnc.rdgModflowBoundary)
     or (DataGrid = frameGwtSrc.rdgModflowBoundary)
+    or (DataGrid.Parent is TframeLakeOutlet)
     )
   ;
   if (DataGrid = frameRchParam.rdgModflowBoundary)
@@ -19765,7 +19767,7 @@ begin
   begin
     EtsLayerCol := 5 + GwtColumnCount +
       (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
-    FirstSegmentLayer := 4 + GwtColumnCount;
+    FirstSegmentLayer := 5 + GwtColumnCount;
     if (ACol >= FirstSegmentLayer) and (ACol < EtsLayerCol) then
     begin
       // We are setting the formula for  the segment fractions
@@ -26441,6 +26443,14 @@ begin
 
       // Show the functions and global variables.
       IncludeTimeSeries := GetModflow6TimeSeriesAllowed(DataGrid, ACol);
+      if tabDynamicTimeSeries.TabVisible then
+      begin
+        DynamicTimesSeriesNames := frameDynamicTimeSeries. DynamicTimeSeriesNames
+      end
+      else
+      begin
+        DynamicTimesSeriesNames.Clear;
+      end;
       UpdateTreeList;
 
       // put the formula in the TfrmFormula.

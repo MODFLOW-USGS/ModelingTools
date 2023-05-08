@@ -75,11 +75,11 @@ procedure TframeModflow6DynamicTimeSeries.btnDeleteTimeSeriesClick(
   Sender: TObject);
 var
   TimeSeries: IDynamicTimeSeries;
-  ACollection: TPhastCollection;
+  ACollection: TOrderedCollection;
 begin
   if rrdgTimeSeries.Col >= 2 then
   begin
-    ACollection := rrdgTimeSeries.Objects[rrdgTimeSeries.Col, 0] as TPhastCollection;
+    ACollection := rrdgTimeSeries.Objects[rrdgTimeSeries.Col, 0] as TOrderedCollection;
     if ACollection <> nil then
     begin
       if ACollection.QueryInterface(IDynamicTimeSeries, TimeSeries) <> 0 then
@@ -373,7 +373,7 @@ var
   SeriesToUse: IDynamicTimeSeries;
   ColToUse: Integer;
   SeriesIndex: Integer;
-  ACollection: TPhastCollection;
+  ACollection: TOrderedCollection;
   ASeriesI: ITimeSeries;
 begin
   rrdgTimeSeries.BeginUpdate;
@@ -381,7 +381,7 @@ begin
     for ColIndex := rrdgTimeSeries.ColCount - 1
       downto seTimeSeriesCount.AsInteger + 2 do
     begin
-      ACollection  := rrdgTimeSeries.Objects[ColIndex, 0] as TPhastCollection;
+      ACollection  := rrdgTimeSeries.Objects[ColIndex, 0] as TOrderedCollection;
       if ACollection <> nil then
       begin
         if ACollection.QueryInterface(IDynamicTimeSeries,TimeSeries) <> 0  then

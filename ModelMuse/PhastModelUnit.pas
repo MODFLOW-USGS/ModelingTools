@@ -12151,166 +12151,183 @@ procedure TPhastModel.InternalClear;
 var
   ChildIndex: Integer;
 begin
-  SelectedModel := Self;
-
-  FTimesSeries.Clear;
-  FCtsSystems.Clear;
-
-  FColorLegend.ValueAssignmentMethod := vamAutomatic;
-  FContourLegend.ValueAssignmentMethod := vamAutomatic;
-  FEndPointLegend.ValueAssignmentMethod := vamAutomatic;
-
-
-  FGeoRef.Initialize;
-  FSaveBfhBoundaryConditions := True;
-
-  DisconnectObservers;
-
-  SutraFluxObs.Clear;
-  RipPlantGroups.Clear;
-  Bitmaps.Clear;
-  ClearViewedItems;
-  FColorLegend.ValueSource := nil;
-  FColorLegend.ValueSourceInterface := nil;
-  FContourLegend.ValueSource := nil;
-  FContourLegend.ValueSourceInterface := nil;
-  FEndPointLegend.ValueSource := nil;
-  FEndPointLegend.ValueSourceInterface := nil;
-
-  FCachedZoneArrayIndex := -1;
-  FCachedMultiplierArrayIndex := -1;
-  ModflowNameFileLines.Clear;
-  Title.Clear;
-  FrontX := 0;
-  FrontY := 0;
-  TopX := 0;
-  TopY := 0;
-  SideX := 0;
-  SideY := 0;
-  MagnificationFront := 0;
-  MagnificationSide := 0;
-  MagnificationTop := 0;
-  GridColorParameters.Clear;
-  ContourColorParameters.Clear;
-  FDiffusivity := 1E-9;
-  FFreeSurface := False;
-  FDiffusivitySet := False;
-
-  // Clear screen objects before clearing child models because
-  // the screen objects access the child models while being destroyed.
-  FScreenObjectList.Clear;
-
-  FmpCrops.Clear;
-  FmpSoils.Clear;
-  FmpClimate.Clear;
-  FmpAllotment.Clear;
-  FFarms.Clear;
-
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
     if ChildModels[ChildIndex].ChildModel <> nil then
     begin
-      ChildModels[ChildIndex].ChildModel.Clear;
+      ChildModels[ChildIndex].ChildModel.FClearing := True;
     end;
   end;
-  ChildModels.Clear;
-  ModelSelection := msUndefined;
+  try
+    SelectedModel := Self;
+
+    FTimesSeries.Clear;
+    FCtsSystems.Clear;
+
+    FColorLegend.ValueAssignmentMethod := vamAutomatic;
+    FContourLegend.ValueAssignmentMethod := vamAutomatic;
+    FEndPointLegend.ValueAssignmentMethod := vamAutomatic;
 
 
-  FCrossSection.Clear;
-  FDataArrayManager.ClearAllDataSets;
-  ClearParsers;
+    FGeoRef.Initialize;
+    FSaveBfhBoundaryConditions := True;
 
-  SolutionOptions.Initialize;
-  PhastGrid.GridAngle := 0;
-  ModflowGrid.GridAngle := 0;
-  FLayerStructure.Clear;
-  if FSutraLayerStructure <> nil then
-  begin
-    FSutraLayerStructure.Clear;
+    DisconnectObservers;
+
+    SutraFluxObs.Clear;
+    RipPlantGroups.Clear;
+    Bitmaps.Clear;
+    ClearViewedItems;
+    FColorLegend.ValueSource := nil;
+    FColorLegend.ValueSourceInterface := nil;
+    FContourLegend.ValueSource := nil;
+    FContourLegend.ValueSourceInterface := nil;
+    FEndPointLegend.ValueSource := nil;
+    FEndPointLegend.ValueSourceInterface := nil;
+
+    FCachedZoneArrayIndex := -1;
+    FCachedMultiplierArrayIndex := -1;
+    ModflowNameFileLines.Clear;
+    Title.Clear;
+    FrontX := 0;
+    FrontY := 0;
+    TopX := 0;
+    TopY := 0;
+    SideX := 0;
+    SideY := 0;
+    MagnificationFront := 0;
+    MagnificationSide := 0;
+    MagnificationTop := 0;
+    GridColorParameters.Clear;
+    ContourColorParameters.Clear;
+    FDiffusivity := 1E-9;
+    FFreeSurface := False;
+    FDiffusivitySet := False;
+
+    // Clear screen objects before clearing child models because
+    // the screen objects access the child models while being destroyed.
+    FScreenObjectList.Clear;
+
+    FmpCrops.Clear;
+    FmpSoils.Clear;
+    FmpClimate.Clear;
+    FmpAllotment.Clear;
+    FFarms.Clear;
+
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      if ChildModels[ChildIndex].ChildModel <> nil then
+      begin
+        ChildModels[ChildIndex].ChildModel.Clear;
+      end;
+    end;
+    ChildModels.Clear;
+    ModelSelection := msUndefined;
+
+
+    FCrossSection.Clear;
+    FDataArrayManager.ClearAllDataSets;
+    ClearParsers;
+
+    SolutionOptions.Initialize;
+    PhastGrid.GridAngle := 0;
+    ModflowGrid.GridAngle := 0;
+    FLayerStructure.Clear;
+    if FSutraLayerStructure <> nil then
+    begin
+      FSutraLayerStructure.Clear;
+    end;
+
+    Times.Initialize;
+
+    ModflowPackages.Reset;
+    ModflowSteadyParameters.Clear;
+    ModflowTransientParameters.Clear;
+    GlobalVariablesI.Clear;
+    ModflowOutputControl.Initialize;
+    Mt3dmsOutputControl.Initialize;
+    FootprintProperties.Initialize;
+
+    HydrogeologicUnits.Clear;
+    FHufParameters.Clear;
+
+    HeadFluxObservations.Clear;
+    DrainObservations.Clear;
+    GhbObservations.Clear;
+    RiverObservations.Clear;
+    StreamObservations.Clear;
+    Mt3dmsHeadMassFluxObservations.Clear;
+    Mt3dmsWellMassFluxObservations.Clear;
+    Mt3dmsDrnMassFluxObservations.Clear;
+    Mt3dmsRivMassFluxObservations.Clear;
+    Mt3dmsGhbMassFluxObservations.Clear;
+    Mt3dmsRchMassFluxObservations.Clear;
+    Mt3dmsEvtMassFluxObservations.Clear;
+    Mt3dmsMassLoadingMassFluxObservations.Clear;
+    Mt3dmsResMassFluxObservations.Clear;
+    Mt3dmsLakMassFluxObservations.Clear;
+    Mt3dmsDrtMassFluxObservations.Clear;
+    Mt3dmsEtsMassFluxObservations.Clear;
+    Mt3dmsStrMassFluxObservations.Clear;
+    Mt3dmsFhbHeadMassFluxObservations.Clear;
+    Mt3dmsFhbFlowMassFluxObservations.Clear;
+
+    FilesToArchive.Clear;
+    ModelFileName := '';
+    ModelInputFiles.Clear;
+    ModelOutputFiles.Clear;
+    ModpathInputFiles.Clear;
+    ModpathOutputFiles.Clear;
+    ZoneBudgetInputFiles.Clear;
+    ZoneBudgetOutputFiles.Clear;
+    Mt3dmsInputFiles.Clear;
+    Mt3dmsOutputFiles.Clear;
+
+    FDataArrayManager.InvalidateDataSetLookupList;
+
+    BatchFileAdditionsBeforeModel.Clear;
+    BatchFileAdditionsAfterModel.Clear;
+    AlternateFlowPackage := False;
+    AlternateSolver := False;
+
+    FSutraOptions.RegionalProperties.Clear;
+    FormulaManager.Clear;
+    FDisplaySettings.Clear;
+
+    if GlobalFont <> nil then
+    begin
+      ContourFont := GlobalFont;
+    end;
+    FImmobileComponents.Clear;
+    FMobileComponents.Clear;
+
+    Mt3dmsTimes.Clear;
+    ModflowStressPeriods.Clear;
+    FishnetMeshGenerator.Clear;
+
+    MaxVectors.InitializeVariables;
+    MidVectors.InitializeVariables;
+    MinVectors.InitializeVariables;
+    SvdaPrepProperties.InitializeVariables;
+    SupCalcProperties.InitializeVariables;
+    PestProperties.InitializeVariables;
+    if CtsSystems <> nil then
+    begin
+      CtsSystems.Clear;
+    end;
+
+    FArchiveName := '';
+    DoInvalidate(self);
+    inherited;
+  finally
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      if ChildModels[ChildIndex].ChildModel <> nil then
+      begin
+        ChildModels[ChildIndex].ChildModel.FClearing := False;
+      end;
+    end;
   end;
-
-  Times.Initialize;
-
-  ModflowPackages.Reset;
-  ModflowSteadyParameters.Clear;
-  ModflowTransientParameters.Clear;
-  GlobalVariablesI.Clear;
-  ModflowOutputControl.Initialize;
-  Mt3dmsOutputControl.Initialize;
-  FootprintProperties.Initialize;
-
-  HydrogeologicUnits.Clear;
-  FHufParameters.Clear;
-
-  HeadFluxObservations.Clear;
-  DrainObservations.Clear;
-  GhbObservations.Clear;
-  RiverObservations.Clear;
-  StreamObservations.Clear;
-  Mt3dmsHeadMassFluxObservations.Clear;
-  Mt3dmsWellMassFluxObservations.Clear;
-  Mt3dmsDrnMassFluxObservations.Clear;
-  Mt3dmsRivMassFluxObservations.Clear;
-  Mt3dmsGhbMassFluxObservations.Clear;
-  Mt3dmsRchMassFluxObservations.Clear;
-  Mt3dmsEvtMassFluxObservations.Clear;
-  Mt3dmsMassLoadingMassFluxObservations.Clear;
-  Mt3dmsResMassFluxObservations.Clear;
-  Mt3dmsLakMassFluxObservations.Clear;
-  Mt3dmsDrtMassFluxObservations.Clear;
-  Mt3dmsEtsMassFluxObservations.Clear;
-  Mt3dmsStrMassFluxObservations.Clear;
-  Mt3dmsFhbHeadMassFluxObservations.Clear;
-  Mt3dmsFhbFlowMassFluxObservations.Clear;
-
-  FilesToArchive.Clear;
-  ModelFileName := '';
-  ModelInputFiles.Clear;
-  ModelOutputFiles.Clear;
-  ModpathInputFiles.Clear;
-  ModpathOutputFiles.Clear;
-  ZoneBudgetInputFiles.Clear;
-  ZoneBudgetOutputFiles.Clear;
-  Mt3dmsInputFiles.Clear;
-  Mt3dmsOutputFiles.Clear;
-
-  FDataArrayManager.InvalidateDataSetLookupList;
-
-  BatchFileAdditionsBeforeModel.Clear;
-  BatchFileAdditionsAfterModel.Clear;
-  AlternateFlowPackage := False;
-  AlternateSolver := False;
-
-  FSutraOptions.RegionalProperties.Clear;
-  FormulaManager.Clear;
-  FDisplaySettings.Clear;
-
-  if GlobalFont <> nil then
-  begin
-    ContourFont := GlobalFont;
-  end;
-  FImmobileComponents.Clear;
-  FMobileComponents.Clear;
-
-  Mt3dmsTimes.Clear;
-  ModflowStressPeriods.Clear;
-  FishnetMeshGenerator.Clear;
-
-  MaxVectors.InitializeVariables;
-  MidVectors.InitializeVariables;
-  MinVectors.InitializeVariables;
-  SvdaPrepProperties.InitializeVariables;
-  SupCalcProperties.InitializeVariables;
-  PestProperties.InitializeVariables;
-  if CtsSystems <> nil then
-  begin
-    CtsSystems.Clear;
-  end;
-
-  FArchiveName := '';
-  DoInvalidate(self);
-  inherited;
 end;
 
 function TPhastModel.DoExchangeUsed(Sender: TObject): boolean;
@@ -26286,7 +26303,7 @@ begin
     AScreenObject := ScreenObjects[index];
     AScreenObject.DyanmicTimesSeriesCollections.Invalidate;
   end;
-  Mf6TimesSeries.ResetCounts;
+  Mf6TimesSeries.ResetDictionaries;
 end;
 
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
@@ -32704,7 +32721,7 @@ var
   TimeStep: TTimeStep;
 begin
   result := False;
-  ModflowStressPeriods.TimeToPeriodAndStep(Time, Period, Step);
+  ModflowStressPeriods.TimeToPeriodAndStep(ATime, Period, Step);
   if (Period < 0) or (Step < 0) then
   begin
     Exit;

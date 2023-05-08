@@ -1114,7 +1114,12 @@ end;
 
 function TCSubItem.GetStressOffset: string;
 begin
-  Result := FStressOffset.Formula;
+  FStressOffset.ScreenObject := ScreenObjectI;
+  try
+    Result := FStressOffset.Formula;
+  finally
+    FStressOffset.ScreenObject := nil;
+  end;
   ResetItemObserver(CsubStressOffsetPosition);
 end;
 
@@ -1163,7 +1168,12 @@ end;
 
 procedure TCSubItem.SetStressOffset(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, CsubStressOffsetPosition, FStressOffset);
+  FStressOffset.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, CsubStressOffsetPosition, FStressOffset);
+  finally
+    FStressOffset.ScreenObject := nil;
+  end;
 end;
 
 { TCSubCollection }
@@ -1249,6 +1259,9 @@ begin
     ACell := CellList[Index];
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
+
     // 2. update locations
     try
       Expression.Evaluate;

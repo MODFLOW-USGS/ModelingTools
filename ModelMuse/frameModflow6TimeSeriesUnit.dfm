@@ -6,9 +6,9 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
   TabOrder = 0
   object pnlBottom: TPanel
     Left = 0
-    Top = 184
+    Top = 176
     Width = 506
-    Height = 103
+    Height = 111
     Align = alBottom
     TabOrder = 0
     object lblTimeSeriesCount: TLabel
@@ -20,14 +20,14 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     end
     object lblTimeCount: TLabel
       Left = 8
-      Top = 54
+      Top = 64
       Width = 90
       Height = 15
       Caption = 'Number of times'
     end
     object seTimeSeriesCount: TJvSpinEdit
       Left = 8
-      Top = 19
+      Top = 29
       Width = 73
       Height = 23
       CheckMinValue = True
@@ -36,7 +36,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     end
     object seTimeCount: TJvSpinEdit
       Left = 8
-      Top = 73
+      Top = 83
       Width = 73
       Height = 23
       MaxValue = 2147483647.000000000000000000
@@ -47,7 +47,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     end
     object btnDeleteTimeSeries: TButton
       Left = 121
-      Top = 27
+      Top = 37
       Width = 152
       Height = 25
       Caption = 'Delete time series'
@@ -57,7 +57,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     end
     object btnDeleteTime: TButton
       Left = 122
-      Top = 72
+      Top = 82
       Width = 103
       Height = 25
       Caption = 'Delete time'
@@ -67,7 +67,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     end
     object btnInsertTime: TButton
       Left = 231
-      Top = 72
+      Top = 82
       Width = 97
       Height = 25
       Caption = 'Insert Time'
@@ -79,7 +79,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     Left = 0
     Top = 41
     Width = 506
-    Height = 143
+    Height = 135
     Align = alClient
     ColCount = 2
     DefaultColWidth = 50
@@ -252,6 +252,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
+    ExplicitHeight = 143
   end
   object pnlTop: TPanel
     Left = 0

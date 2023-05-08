@@ -650,7 +650,12 @@ end;
 
 procedure TRchItem.SetRechargeRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, RechPosition, FRechargeRate);
+  FRechargeRate.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, RechPosition, FRechargeRate);
+  finally
+    FRechargeRate.ScreenObject := nil;
+  end;
 end;
 
 { TRchCollection }

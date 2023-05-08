@@ -494,6 +494,7 @@ begin
         end;
       finally
         ParameterValues.Free;
+        Model.InvalidateAllDynamicLists
       end;
     finally
       frmErrorsAndWarnings.EndUpdate;

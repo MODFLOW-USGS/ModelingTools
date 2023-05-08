@@ -7,7 +7,9 @@ interface
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  SubscriptionUnit, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes, ModflowTransientListParameterUnit,
+  Modflow6DynamicTimeSeriesInterfaceUnit, ScreenObjectInterfaceUnit,
+  Modflow6TimeSeriesInterfaceUnit;
 
 type
   {
@@ -661,9 +663,8 @@ const
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, frmGoPhastUnit,
-  frmErrorsAndWarningsUnit,
-  ModflowUzfUnit, DataSetNamesUnit;
+  frmGoPhastUnit, frmErrorsAndWarningsUnit, ModflowUzfUnit, DataSetNamesUnit,
+  CustomModflowWriterUnit;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';
@@ -775,7 +776,12 @@ end;
 
 function TEvtItem.GetEvapotranspirationRate: string;
 begin
-  Result := FEvapotranspirationRate.Formula;
+  FEvapotranspirationRate.ScreenObject := ScreenObjectI;
+  try
+    Result := FEvapotranspirationRate.Formula;
+  finally
+    FEvapotranspirationRate.ScreenObject := nil;
+  end;
   ResetItemObserver(EvtRatePosition);
 end;
 
@@ -838,7 +844,12 @@ end;
 
 procedure TEvtItem.SetEvapotranspirationRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, EvtRatePosition, FEvapotranspirationRate);
+  FEvapotranspirationRate.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, EvtRatePosition, FEvapotranspirationRate);
+  finally
+    FEvapotranspirationRate.ScreenObject := nil;
+  end;
 end;
 
 procedure TEvtItem.SetGwtConcentrations(const Value: TEvtGwtConcCollection);
@@ -876,15 +887,13 @@ var
   LocalRatePest: string;
   RateTimeItems: TStringList;
   LocalRateTimeSeries: string;
-//  SpeciesIndex: Integer;
-//  ConcentrationArray: TDataArray;
-//  LocalConcentrationPestSeries: string;
-//  LocalConcentrationPestMethod: TPestParamMethod;
-//  ConcentrationPestItems: TStringList;
-//  LocalConcentrationPest: string;
-//  ConcentrationTimeItems: TStringList;
-//  LocalConcentrationTimeSeries: string;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+  TimeSeriesLocation: TTimeSeriesLocation;
+  StaticTimeSeries: IMf6TimeSeries;
+  CustomWriter: TCustomFileWriter;
+  DyanmicTimeSeries: IDynamicTimeSeries;
 begin
+  CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   Boundary := Boundaries[ItemIndex, AModel] as TEvtStorage;
   // TEvtCollection is used in the EVT, ETS and UZF packages.
@@ -902,6 +911,19 @@ begin
 
   RateTimeItems := TimeSeriesNames[EvtRatePosition];
   LocalRateTimeSeries := RateTimeItems[ItemIndex];
+
+  DyanmicTimeSeries := nil;
+  if ScreenObject <> nil then
+  begin
+    if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+      LocalScreenObject) <> 0 then
+    begin
+      Assert(False);
+    end;
+    DyanmicTimeSeries := LocalScreenObject.
+      GetDynamicTimeSeriesIByName(LocalRateTimeSeries);
+  end;
+
   BoundaryIndex := 0;
   if LayerMin >= 0 then
   begin
@@ -928,7 +950,23 @@ begin
                 RatePest := LocalRatePest;
                 RatePestSeries := LocalRatePestSeries;
                 RatePestMethod := LocalRatePestMethod;
-                RateTimeSeries := LocalRateTimeSeries;
+                if DyanmicTimeSeries = nil then
+                begin
+                  RateTimeSeries := LocalRateTimeSeries;
+                end
+                else
+                begin
+                  TimeSeriesLocation.Layer := LayerIndex;
+                  TimeSeriesLocation.Row := RowIndex;
+                  TimeSeriesLocation.Column := ColIndex;
+                  StaticTimeSeries := DyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                  RateTimeSeries := string(StaticTimeSeries.SeriesName);
+                  if CustomWriter = nil then
+                  begin
+                    CustomWriter := FWriter as TCustomFileWriter;
+                  end;
+                  CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                end;
               end;
               Inc(BoundaryIndex);
             end;

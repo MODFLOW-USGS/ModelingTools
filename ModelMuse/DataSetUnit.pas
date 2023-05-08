@@ -2221,7 +2221,10 @@ begin
     end
     else
     begin
-      ObservedItem.TalksTo(self);
+      if not Model.Clearing then
+      begin
+        ObservedItem.TalksTo(self);
+      end;
     end;
   end;
 end;

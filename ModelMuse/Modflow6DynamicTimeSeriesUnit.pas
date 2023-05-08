@@ -801,6 +801,7 @@ end;
 destructor TDyanmicTimesSeriesCollection.Destroy;
 begin
   FTimeSeriesDictionary.Free;
+  FTimeSeriesDictionary := nil;
   inherited;
 end;
 
@@ -1022,8 +1023,11 @@ end;
 destructor TDynamicTimesSeriesCollections.Destroy;
 begin
   FTimeSeriesNames.Free;
+  FTimeSeriesNames := nil;
   FTimeSeriesDictionary.Free;
+  FTimeSeriesDictionary := nil;
   FTimeSeriesGroupsDictionary.Free;
+  FTimeSeriesGroupsDictionary := nil;
   inherited;
 end;
 
@@ -1047,6 +1051,10 @@ begin
     Exit;
   end;
   if IGlobalModel.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  if FTimeSeriesDictionary = nil then
   begin
     Exit;
   end;

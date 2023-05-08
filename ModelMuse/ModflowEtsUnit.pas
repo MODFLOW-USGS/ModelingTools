@@ -6,8 +6,8 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit, ModflowEvtUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes,
-  ModflowTransientListParameterUnit;
-
+  ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
+  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
 type
 
   TEtsSurfDepthRecord = record
@@ -441,7 +441,7 @@ implementation
 
 uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit, frmErrorsAndWarningsUnit, System.Generics.Collections,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CustomModflowWriterUnit;
 
 resourcestring
   StrFractionalRateS = 'Fractional rate %s';
@@ -1605,13 +1605,23 @@ end;
 
 function TEtsSurfDepthItem.GetEvapotranspirationDepth: string;
 begin
-  Result := FEvapotranspirationDepth.Formula;
+  FEvapotranspirationDepth.ScreenObject := ScreenObjectI;
+  try
+    Result := FEvapotranspirationDepth.Formula;
+  finally
+    FEvapotranspirationDepth.ScreenObject := nil;
+  end;
   ResetItemObserver(EtsDepthPosition);
 end;
 
 function TEtsSurfDepthItem.GetEvapotranspirationSurface: string;
 begin
-  Result := FEvapotranspirationSurface.Formula;
+  FEvapotranspirationSurface.ScreenObject := ScreenObjectI;
+  try
+    Result := FEvapotranspirationSurface.Formula;
+  finally
+    FEvapotranspirationSurface.ScreenObject := nil;
+  end;
   ResetItemObserver(EtsSurfacePosition);
 end;
 
@@ -1713,12 +1723,22 @@ end;
 
 procedure TEtsSurfDepthItem.SetEvapotranspirationDepth(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, EtsDepthPosition, FEvapotranspirationDepth);
+  FEvapotranspirationDepth.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, EtsDepthPosition, FEvapotranspirationDepth);
+  finally
+    FEvapotranspirationDepth.ScreenObject := nil;
+  end;
 end;
 
 procedure TEtsSurfDepthItem.SetEvapotranspirationSurface(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, EtsSurfacePosition, FEvapotranspirationSurface);
+  FEvapotranspirationSurface.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, EtsSurfacePosition, FEvapotranspirationSurface);
+  finally
+    FEvapotranspirationSurface.ScreenObject := nil;
+  end;
 end;
 
 { TEtsSurfDepthCollection }
@@ -1776,7 +1796,14 @@ var
   LocalSurfaceTimeSeries: string;
   DepthTimeSeries: TStringList;
   LocalDepthTimeSeries: string;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+  TimeSeriesLocation: TTimeSeriesLocation;
+  StaticTimeSeries: IMf6TimeSeries;
+  CustomWriter: TCustomFileWriter;
+  SurfaceDyanmicTimeSeries: IDynamicTimeSeries;
+  DepthDyanmicTimeSeries: IDynamicTimeSeries;
 begin
+  CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   SegmentCount := LocalModel.
     ModflowPackages.EtsPackage.SegmentCount;
@@ -1802,6 +1829,21 @@ begin
 
   DepthTimeSeries := TimeSeriesNames[EtsDepthPosition];
   LocalDepthTimeSeries := DepthTimeSeries[ItemIndex];
+
+  SurfaceDyanmicTimeSeries := nil;
+  DepthDyanmicTimeSeries := nil;
+  if ScreenObject <> nil then
+  begin
+    if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+      LocalScreenObject) <> 0 then
+    begin
+      Assert(False);
+    end;
+    SurfaceDyanmicTimeSeries := LocalScreenObject.
+      GetDynamicTimeSeriesIByName(LocalSurfaceTimeSeries);
+    DepthDyanmicTimeSeries := LocalScreenObject.
+      GetDynamicTimeSeriesIByName(LocalDepthTimeSeries);
+  end;
 
   if LayerMin >= 0 then
   begin
@@ -1841,8 +1883,41 @@ begin
                 DepthPestSeries := LocalDepthPestSeries;
                 DepthPestMethod := LocalDepthPestMethod;
 
-                SurfaceTimeSeries := LocalSurfaceTimeSeries;
-                DepthTimeSeries := LocalDepthTimeSeries;
+                if SurfaceDyanmicTimeSeries = nil then
+                begin
+                  SurfaceTimeSeries := LocalSurfaceTimeSeries;
+                end
+                else
+                begin
+                  TimeSeriesLocation.Layer := LayerIndex;
+                  TimeSeriesLocation.Row := RowIndex;
+                  TimeSeriesLocation.Column := ColIndex;
+                  StaticTimeSeries := SurfaceDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                  SurfaceTimeSeries := string(StaticTimeSeries.SeriesName);
+                  if CustomWriter = nil then
+                  begin
+                    CustomWriter := FWriter as TCustomFileWriter;
+                  end;
+                  CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                end;
+
+                if DepthDyanmicTimeSeries = nil then
+                begin
+                  DepthTimeSeries := LocalDepthTimeSeries;
+                end
+                else
+                begin
+                  TimeSeriesLocation.Layer := LayerIndex;
+                  TimeSeriesLocation.Row := RowIndex;
+                  TimeSeriesLocation.Column := ColIndex;
+                  StaticTimeSeries := SurfaceDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                  DepthTimeSeries := string(StaticTimeSeries.SeriesName);
+                  if CustomWriter = nil then
+                  begin
+                    CustomWriter := FWriter as TCustomFileWriter;
+                  end;
+                  CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                end;
 
                 for SegmentIndex := 1 to SegmentCount - 1 do
                 begin

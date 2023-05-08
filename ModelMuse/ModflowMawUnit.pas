@@ -4522,7 +4522,12 @@ end;
 
 function TMawItem.GetRate: string;
 begin
-  Result := FRate.Formula;
+  FRate.ScreenObject := ScreenObjectI;
+  try
+    Result := FRate.Formula;
+  finally
+    FRate.ScreenObject := nil;
+  end;
   ResetItemObserver(MawRatePosition);
 end;
 
@@ -4544,7 +4549,12 @@ end;
 
 function TMawItem.GetWellHead: string;
 begin
-  Result := FWellHead.Formula;
+  FWellHead.ScreenObject := ScreenObjectI;
+  try
+    Result := FWellHead.Formula;
+  finally
+    FWellHead.ScreenObject := nil;
+  end;
   ResetItemObserver(MawWellHeadPosition);
 end;
 
@@ -4759,7 +4769,12 @@ end;
 
 procedure TMawItem.SetRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, MawRatePosition, FRate);
+  FRate.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, MawRatePosition, FRate);
+  finally
+    FRate.ScreenObject := nil;
+  end;
 end;
 
 procedure TMawItem.SetRateLimitation(const Value: TRateLimitation);
@@ -4784,7 +4799,12 @@ end;
 
 procedure TMawItem.SetWellHead(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, MawWellHeadPosition, FWellHead);
+  FWellHead.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, MawWellHeadPosition, FWellHead);
+  finally
+    FWellHead.ScreenObject := nil;
+  end;
 end;
 
 { TMawTimeListLink }

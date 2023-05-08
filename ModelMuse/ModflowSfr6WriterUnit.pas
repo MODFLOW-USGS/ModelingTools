@@ -1385,6 +1385,7 @@ begin
     EvapConcList.Free;
     RunoffConcList.Free;
     InflowfConcList.Free;
+    Model.InvalidateAllDynamicLists;
   end;
 
 end;

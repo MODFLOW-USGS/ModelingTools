@@ -334,6 +334,7 @@ begin
   
   finally
     frmErrorsAndWarnings.EndUpdate;
+    Model.InvalidateAllDynamicLists;
   end;
 
 end;

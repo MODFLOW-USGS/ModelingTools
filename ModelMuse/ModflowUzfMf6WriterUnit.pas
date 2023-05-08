@@ -735,6 +735,7 @@ begin
     SpecConcList.Free;
     ImfiltrationConcList.Free;
     ET_ConcList.Free;
+    Model.InvalidateAllDynamicLists;
   end;
 
 end;

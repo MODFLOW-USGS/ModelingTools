@@ -1787,8 +1787,15 @@ end;
 
 function TFormulaOrderedItem.CreateBlockFormulaObject(
   Orientation: TDataSetOrientation): IFormulaObject;
+var
+  LocalModel: IModelForTOrderedCollection;
 begin
-  result := Model.CreateBlockFormulaObjectI(Orientation);// as TFormulaObject;
+  LocalModel := Model;
+  if LocalModel = nil then
+  begin
+    LocalModel := IGlobalModelForOrderedCollection;
+  end;
+  result := LocalModel.CreateBlockFormulaObjectI(Orientation);// as TFormulaObject;
 end;
 
 function TFormulaOrderedItem.GetScreenObjectI: IScreenObject;
@@ -1834,6 +1841,11 @@ procedure TFormulaOrderedItem.UpdateFormulaDependencies(OldFormula: string;
   var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
 begin
   if (ScreenObject = nil) then
+  begin
+    Exit;
+  end;
+
+  if Model.Clearing then
   begin
     Exit;
   end;

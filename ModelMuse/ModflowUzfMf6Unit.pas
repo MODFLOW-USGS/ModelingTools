@@ -6,7 +6,9 @@ uses Windows, ZLib, SysUtils, ModflowCellUnit, System.Classes,
   ModflowBoundaryUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   OrderedCollectionUnit, GoPhastTypes,
-  SubscriptionUnit, Mt3dmsChemUnit, GwtStatusUnit;
+  SubscriptionUnit, Mt3dmsChemUnit, GwtStatusUnit,
+  ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
+  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
 
 type
   TUzfOb = (uoGW_Recharge, uoGW_Discharge, uoDischargeToMvr,
@@ -698,7 +700,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit,
   ScreenObjectUnit, ModflowTimeUnit, ModflowMvrUnit, ModflowUzfUnit,
-  ModflowRchUnit, ModflowEvtUnit, DataSetNamesUnit;
+  ModflowRchUnit, ModflowEvtUnit, DataSetNamesUnit, CustomModflowWriterUnit;
 
 const
   UzfObsNames: array[TUzfOb] of string = ('UZF_GW_Recharge', 'UZF_GW_Discharge', 'UZF_DischargeToMvr',
@@ -1275,7 +1277,12 @@ end;
 
 function TUzfMf6Item.GetAirEntryPotential: string;
 begin
-  Result := FAirEntryPotential.Formula;
+  FAirEntryPotential.ScreenObject := ScreenObjectI;
+  try
+    Result := FAirEntryPotential.Formula;
+  finally
+    FAirEntryPotential.ScreenObject := nil;
+  end;
   ResetItemObserver(UzfMf6AirEntryPotentialPosition);
 end;
 
@@ -1344,25 +1351,45 @@ end;
 
 function TUzfMf6Item.GetExtinctionDepth: string;
 begin
-  Result := FUzfExtinctDepth.Formula;
+  FUzfExtinctDepth.ScreenObject := ScreenObjectI;
+  try
+    Result := FUzfExtinctDepth.Formula;
+  finally
+    FUzfExtinctDepth.ScreenObject := nil;
+  end;
   ResetItemObserver(UzfMf6ExtinctionDepthPosition);
 end;
 
 function TUzfMf6Item.GetExtinctionWaterContent: string;
 begin
-  Result := FExtinctionWaterContent.Formula;
+  FExtinctionWaterContent.ScreenObject := ScreenObjectI;
+  try
+    Result := FExtinctionWaterContent.Formula;
+  finally
+    FExtinctionWaterContent.ScreenObject := nil;
+  end;
   ResetItemObserver(UzfMf6ExtinctionWaterContentPosition);
 end;
 
 function TUzfMf6Item.GetInfiltration: string;
 begin
-  Result := FInfiltration.Formula;
+  FInfiltration.ScreenObject := ScreenObjectI;
+  try
+    Result := FInfiltration.Formula;
+  finally
+    FInfiltration.ScreenObject := nil;
+  end;
   ResetItemObserver(UzfMf6InfiltrationPosition);
 end;
 
 function TUzfMf6Item.GetPotentialET: string;
 begin
-  Result := FPotentialET.Formula;
+  FPotentialET.ScreenObject := ScreenObjectI;
+  try
+    Result := FPotentialET.Formula;
+  finally
+    FPotentialET.ScreenObject := nil;
+  end;
   ResetItemObserver(UzfMf6PotentialETPosition);
 end;
 
@@ -1433,13 +1460,23 @@ end;
 
 function TUzfMf6Item.GetRootActivity: string;
 begin
-  Result := FRootActivity.Formula;
+  FRootActivity.ScreenObject := ScreenObjectI;
+  try
+    Result := FRootActivity.Formula;
+  finally
+    FRootActivity.ScreenObject := nil;
+  end;
   ResetItemObserver(UzfMf6RootActivityPosition);
 end;
 
 function TUzfMf6Item.GetRootPotential: string;
 begin
-  Result := FRootPotential.Formula;
+  FRootPotential.ScreenObject := ScreenObjectI;
+  try
+    Result := FRootPotential.Formula;
+  finally
+    FRootPotential.ScreenObject := nil;
+  end;
   ResetItemObserver(UzfMf6RootPotentialPosition);
 end;
 
@@ -1492,7 +1529,12 @@ end;
 
 procedure TUzfMf6Item.SetAirEntryPotential(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, UzfMf6AirEntryPotentialPosition, FAirEntryPotential);
+  FAirEntryPotential.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6AirEntryPotentialPosition, FAirEntryPotential);
+  finally
+    FAirEntryPotential.ScreenObject :=  nil;
+  end;
 end;
 
 procedure TUzfMf6Item.SetBoundaryFormula(Index: integer; const Value: string);
@@ -1574,12 +1616,22 @@ end;
 
 procedure TUzfMf6Item.SetExtinctionDepth(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, UzfMf6ExtinctionDepthPosition, FUzfExtinctDepth);
+  FUzfExtinctDepth.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6ExtinctionDepthPosition, FUzfExtinctDepth);
+  finally
+    FUzfExtinctDepth.ScreenObject := nil;
+  end;
 end;
 
 procedure TUzfMf6Item.SetExtinctionWaterContent(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, UzfMf6ExtinctionWaterContentPosition, FExtinctionWaterContent);
+  FExtinctionWaterContent.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6ExtinctionWaterContentPosition, FExtinctionWaterContent);
+  finally
+    FExtinctionWaterContent.ScreenObject := nil;
+  end;
 end;
 
 procedure TUzfMf6Item.SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
@@ -1589,12 +1641,22 @@ end;
 
 procedure TUzfMf6Item.SetInfiltration(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, UzfMf6InfiltrationPosition, FInfiltration);
+  FInfiltration.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6InfiltrationPosition, FInfiltration);
+  finally
+    FInfiltration.ScreenObject := nil;
+  end;
 end;
 
 procedure TUzfMf6Item.SetPotentialET(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, UzfMf6PotentialETPosition, FPotentialET);
+  FPotentialET.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6PotentialETPosition, FPotentialET);
+  finally
+    FPotentialET.ScreenObject := nil;
+  end;
 end;
 
 procedure TUzfMf6Item.SetInfiltrationConcentrations(
@@ -1605,12 +1667,22 @@ end;
 
 procedure TUzfMf6Item.SetRootActivity(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, UzfMf6RootActivityPosition, FRootActivity);
+  FRootActivity.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6RootActivityPosition, FRootActivity);
+  finally
+    FRootActivity.ScreenObject := nil;
+  end;
 end;
 
 procedure TUzfMf6Item.SetRootPotential(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, UzfMf6RootPotentialPosition, FRootPotential);
+  FRootPotential.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6RootPotentialPosition, FRootPotential);
+  finally
+    FRootPotential.ScreenObject := nil;
+  end;
 end;
 
 procedure TUzfMf6Item.SetSpecifiedConcentrations(
@@ -1719,7 +1791,19 @@ var
   ADataArray: TDataArray;
   PestItem: string;
   ATimeSeriesName: string;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+  TimeSeriesLocation: TTimeSeriesLocation;
+  StaticTimeSeries: IMf6TimeSeries;
+  CustomWriter: TCustomFileWriter;
+  InfiltrationDyanmicTimeSeries: IDynamicTimeSeries;
+  PotentialEtDyanmicTimeSeries: IDynamicTimeSeries;
+  ExtinctionDepthDyanmicTimeSeries: IDynamicTimeSeries;
+  ExtinctionWaterContentDyanmicTimeSeries: IDynamicTimeSeries;
+  AirEntryPotentialDyanmicTimeSeries: IDynamicTimeSeries;
+  RootPotentialDyanmicTimeSeries: IDynamicTimeSeries;
+  RootActivitylDyanmicTimeSeries: IDynamicTimeSeries;
 begin
+  CustomWriter := nil;
   LocalSpecifiedConcentrations := TDataArrayList.Create;
   LocalInfiltrationConcentrations := TDataArrayList.Create;
   LocalEvapConcentrations := TDataArrayList.Create;
@@ -1739,6 +1823,7 @@ begin
   SpecifiedConcentrationTimeSeriesNames := TStringList.Create;
   InfiltrationConcentrationTimeSeriesNames := TStringList.Create;
   EvapConcentrationTimeSeriesNames := TStringList.Create;
+
   try
     LocalModel := AModel as TCustomModel;
     BoundaryIndex := 0;
@@ -1856,6 +1941,39 @@ begin
     RootActivityTimeSeries := TimeSeriesNames[RootActivityPosition-PestOffset];
     LocalRootActivityTimeSeriesName := RootActivityTimeSeries[ItemIndex];
 
+
+    InfiltrationDyanmicTimeSeries := nil;
+    PotentialEtDyanmicTimeSeries := nil;
+    ExtinctionDepthDyanmicTimeSeries := nil;
+    ExtinctionWaterContentDyanmicTimeSeries := nil;
+    AirEntryPotentialDyanmicTimeSeries := nil;
+    RootPotentialDyanmicTimeSeries := nil;
+    RootActivitylDyanmicTimeSeries := nil;
+    if ScreenObject <> nil then
+    begin
+      if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+        LocalScreenObject) <> 0 then
+      begin
+        Assert(False);
+      end;
+      InfiltrationDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalInfiltrationTimeSeriesName);
+      PotentialEtDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalPotentialETTimeSeriesName);
+      ExtinctionDepthDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalExtinctionDepthTimeSeriesName);
+      ExtinctionWaterContentDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalExtinctionWaterContentTimeSeriesName);
+      AirEntryPotentialDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalAirEntryPotentialTimeSeriesName);
+      RootPotentialDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalRootPotentialTimeSeriesName);
+      RootActivitylDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalRootActivityTimeSeriesName);
+    end;
+
+
+
     Boundary := Boundaries[ItemIndex, AModel] as TUzfMf6Storage;
     InfiltrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
       LayerMax, RowMax, ColMax);
@@ -1891,7 +2009,23 @@ begin
                   InfiltrationPest := LocalInfiltrationPest;
                   InfiltrationPestSeriesMethod := LocalInfiltrationPestSeriesMethod;
                   InfiltrationPestSeriesName := LocalInfiltrationPestSeriesName;
-                  InfiltrationTimeSeriesName := LocalInfiltrationTimeSeriesName;
+                  if InfiltrationDyanmicTimeSeries = nil then
+                  begin
+                    InfiltrationTimeSeriesName := LocalInfiltrationTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := InfiltrationDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    InfiltrationTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
 
                   PotentialET := PotentialETArray.
                     RealData[LayerIndex, RowIndex, ColIndex];
@@ -1900,7 +2034,23 @@ begin
                   PotentialETPest := LocalPotentialETPest;
                   PotentialETPestSeriesMethod := LocalPotentialETPestSeriesMethod;
                   PotentialETPestSeriesName := LocalPotentialETPestSeriesName;
-                  PotentialETTimeSeriesName := LocalPotentialETTimeSeriesName;
+                  if PotentialEtDyanmicTimeSeries = nil then
+                  begin
+                    PotentialETTimeSeriesName := LocalPotentialETTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := PotentialEtDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    PotentialETTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
 
                   ExtinctionDepth := ExtinctionDepthArray.
                     RealData[LayerIndex, RowIndex, ColIndex];
@@ -1909,7 +2059,23 @@ begin
                   ExtinctionDepthPest := LocalExtinctionDepthPest;
                   ExtinctionDepthPestSeriesMethod := LocalExtinctionDepthPestSeriesMethod;
                   ExtinctionDepthPestSeriesName := LocalExtinctionDepthPestSeriesName;
-                  ExtinctionDepthTimeSeriesName := LocalExtinctionDepthTimeSeriesName;
+                  if ExtinctionDepthDyanmicTimeSeries = nil then
+                  begin
+                    ExtinctionDepthTimeSeriesName := LocalExtinctionDepthTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := ExtinctionDepthDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    ExtinctionDepthTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
 
                   ExtinctionWaterContent := ExtinctionWaterContentArray.
                     RealData[LayerIndex, RowIndex, ColIndex];
@@ -1918,7 +2084,23 @@ begin
                   ExtinctionWaterContentPest := LocalExtinctionWaterContentPest;
                   ExtinctionWaterContentPestSeriesMethod := LocalExtinctionWaterContentPestSeriesMethod;
                   ExtinctionWaterContentPestSeriesName := LocalExtinctionWaterContentPestSeriesName;
-                  ExtinctionWaterContentTimeSeriesName := LocalExtinctionWaterContentTimeSeriesName;
+                  if ExtinctionWaterContentDyanmicTimeSeries = nil then
+                  begin
+                    ExtinctionWaterContentTimeSeriesName := LocalExtinctionWaterContentTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := ExtinctionWaterContentDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    ExtinctionWaterContentTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
 
                   AirEntryPotential := AirEntryPotentialArray.
                     RealData[LayerIndex, RowIndex, ColIndex];
@@ -1927,7 +2109,23 @@ begin
                   AirEntryPotentialPest := LocalAirEntryPotentialPest;
                   AirEntryPotentialPestSeriesMethod := LocalAirEntryPotentialPestSeriesMethod;
                   AirEntryPotentialPestSeriesName := LocalAirEntryPotentialPestSeriesName;
-                  AirEntryPotentialTimeSeriesName := LocalAirEntryPotentialTimeSeriesName;
+                  if AirEntryPotentialDyanmicTimeSeries = nil then
+                  begin
+                    AirEntryPotentialTimeSeriesName := LocalAirEntryPotentialTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := AirEntryPotentialDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    AirEntryPotentialTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
 
                   RootPotential := RootPotentialArray.
                     RealData[LayerIndex, RowIndex, ColIndex];
@@ -1936,7 +2134,23 @@ begin
                   RootPotentialPest := LocalRootPotentialPest;
                   RootPotentialPestSeriesMethod := LocalRootPotentialPestSeriesMethod;
                   RootPotentialPestSeriesName := LocalRootPotentialPestSeriesName;
-                  RootPotentialTimeSeriesName := LocalRootPotentialTimeSeriesName;
+                  if RootPotentialDyanmicTimeSeries = nil then
+                  begin
+                    RootPotentialTimeSeriesName := LocalRootPotentialTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := RootPotentialDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    RootPotentialTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
 
                   RootActivity := RootActivityArray.
                     RealData[LayerIndex, RowIndex, ColIndex];
@@ -1945,7 +2159,23 @@ begin
                   RootActivityPest := LocalRootActivityPest;
                   RootActivityPestSeriesMethod := LocalRootActivityPestSeriesMethod;
                   RootActivityPestSeriesName := LocalRootActivityPestSeriesName;
-                  RootActivityTimeSeriesName := LocalRootActivityTimeSeriesName;
+                  if RootActivitylDyanmicTimeSeries = nil then
+                  begin
+                    RootActivityTimeSeriesName := LocalRootActivityTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := RootActivitylDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    RootActivityTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
 
                   if LocalModel.GwtUsed then
                   begin

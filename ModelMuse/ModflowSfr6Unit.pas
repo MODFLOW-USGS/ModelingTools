@@ -1609,13 +1609,23 @@ end;
 
 function TSfrMf6Item.GetEvaporation: string;
 begin
-  Result := FEvaporation.Formula;
+  FEvaporation.ScreenObject := ScreenObjectI;
+  try
+    Result := FEvaporation.Formula;
+  finally
+    FEvaporation.ScreenObject := nil;
+  end;
   ResetItemObserver(SfrMf6EvaporationPosition);
 end;
 
 function TSfrMf6Item.GetInflow: string;
 begin
-  Result := FInflow.Formula;
+  FInflow.ScreenObject := ScreenObjectI;
+  try
+    Result := FInflow.Formula;
+  finally
+    FInflow.ScreenObject := nil;
+  end;
   ResetItemObserver(SfrMf6InflowPosition);
 end;
 
@@ -1706,31 +1716,56 @@ end;
 
 function TSfrMf6Item.GetRainfall: string;
 begin
-  Result := FRainfall.Formula;
+  FRainfall.ScreenObject := ScreenObjectI;
+  try
+    Result := FRainfall.Formula;
+  finally
+    FRainfall.ScreenObject := nil;
+  end;
   ResetItemObserver(SfrMf6RainfallPosition);
 end;
 
 function TSfrMf6Item.GetRoughness: string;
 begin
-  Result := FRoughness.Formula;
+  FRoughness.ScreenObject := ScreenObjectI;
+  try
+    Result := FRoughness.Formula;
+  finally
+    FRoughness.ScreenObject := nil;
+  end;
   ResetItemObserver(SfrMf6RoughnessPosition);
 end;
 
 function TSfrMf6Item.GetRunoff: string;
 begin
-  Result := FRunoff.Formula;
+  FRunoff.ScreenObject := ScreenObjectI;
+  try
+    Result := FRunoff.Formula;
+  finally
+    FRunoff.ScreenObject :=  nil;
+  end;
   ResetItemObserver(SfrMf6RunoffPosition);
 end;
 
 function TSfrMf6Item.GetStage: string;
 begin
-  Result := FStage.Formula;
+  FStage.ScreenObject := ScreenObjectI;
+  try
+    Result := FStage.Formula;
+  finally
+    FStage.ScreenObject :=  nil;
+  end;
   ResetItemObserver(SfrMf6StagePosition);
 end;
 
 function TSfrMf6Item.GetUpstreamFraction: string;
 begin
-  Result := FUpstreamFraction.Formula;
+  FUpstreamFraction.ScreenObject := ScreenObjectI;
+  try
+    Result := FUpstreamFraction.Formula;
+  finally
+    FUpstreamFraction.ScreenObject := nil;
+  end;
   ResetItemObserver(SfrMf6UpstreamFractionPosition);
 end;
 
@@ -1971,7 +2006,12 @@ var
 begin
   if FEvaporation.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, SfrMf6EvaporationPosition, FEvaporation);
+    FEvaporation.ScreenObject := ScreenObjectI;
+    try
+      UpdateFormulaBlocks(Value, SfrMf6EvaporationPosition, FEvaporation);
+    finally
+      FEvaporation.ScreenObject := nil;
+    end;
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1999,7 +2039,12 @@ var
 begin
   if FInflow.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, SfrMf6InflowPosition, FInflow);
+    FInflow.ScreenObject := ScreenObjectI;
+    try
+      UpdateFormulaBlocks(Value, SfrMf6InflowPosition, FInflow);
+    finally
+      FInflow.ScreenObject := nil;
+    end;
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -2023,7 +2068,12 @@ end;
 
 procedure TSfrMf6Item.SetRainfall(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, SfrMf6RainfallPosition, FRainfall);
+  FRainfall.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, SfrMf6RainfallPosition, FRainfall);
+  finally
+    FRainfall.ScreenObject := nil;
+  end;
 end;
 
 procedure TSfrMf6Item.SetRainfallConcentrations(
@@ -2039,7 +2089,12 @@ var
 begin
   if FRoughness.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, SfrMf6RoughnessPosition, FRoughness);
+    FRoughness.ScreenObject := ScreenObjectI;
+    try
+      UpdateFormulaBlocks(Value, SfrMf6RoughnessPosition, FRoughness);
+    finally
+      FRoughness.ScreenObject := nil;
+    end;
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -2062,7 +2117,12 @@ var
 begin
   if FRunoff.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, SfrMf6RunoffPosition, FRunoff);
+    FRunoff.ScreenObject := ScreenObjectI;
+    try
+      UpdateFormulaBlocks(Value, SfrMf6RunoffPosition, FRunoff);
+    finally
+      FRunoff.ScreenObject := nil;
+    end;
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -2097,7 +2157,12 @@ var
 begin
   if FStage.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, SfrMf6StagePosition, FStage);
+    FStage.ScreenObject := ScreenObjectI;
+    try
+      UpdateFormulaBlocks(Value, SfrMf6StagePosition, FStage);
+    finally
+      FStage.ScreenObject := nil;
+    end;
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -2149,7 +2214,12 @@ var
 begin
   if FUpstreamFraction.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, SfrMf6UpstreamFractionPosition, FUpstreamFraction);
+    FUpstreamFraction.ScreenObject := ScreenObjectI;
+    try
+      UpdateFormulaBlocks(Value, SfrMf6UpstreamFractionPosition, FUpstreamFraction);
+    finally
+      FUpstreamFraction.ScreenObject := nil;
+    end;
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -2250,6 +2320,8 @@ begin
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
     FractionAnnotation := Format(StrAllButTheFirstRe, [(AScreenObject as TScreenObject).Name]);
+
+    AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
 
     try
       Expression.Evaluate;

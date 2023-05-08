@@ -5,7 +5,8 @@ interface
 uses SysUtils, Classes, PhastModelUnit, CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, ModflowTimeUnit,
   ScreenObjectUnit, System.Generics.Collections, ModflowCellUnit,
-  ModflowLakMf6Unit, Modflow6ObsUnit, GoPhastTypes, GwtStatusUnit;
+  ModflowLakMf6Unit, Modflow6ObsUnit, GoPhastTypes, GwtStatusUnit,
+  Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
 
 type
   TLakObservation = record
@@ -1158,6 +1159,9 @@ var
   OutletSetting: TOutletSetting;
   PestParamName: string;
   TimeSeries: TMf6TimeSeries;
+  DynamicTimeSeries: IDynamicTimeSeries;
+  TimeSeriesLocation: TTimeSeriesLocation;
+  StaticTimeSeries: IMf6TimeSeries;
 begin
   for LakeIndex := 0 to FLakes.Count - 1 do
   begin
@@ -1201,12 +1205,28 @@ begin
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Rate);
           if TimeSeries = nil then
           begin
-            OutletSetting.Rate := EvaluateFormula(OutletTimeItem.Rate,
-              Format(StrLakeOutletRateIn,
-              [OutletIndex +1, OutletSetting.StartTime]),
-              ALake.FScreenObject.Name, PestParamName);
-            OutletSetting.RatePestParam := PestParamName;
-            OutletSetting.RateTimeSeriesName := '';
+            DynamicTimeSeries := ALake.FScreenObject.GetDynamicTimeSeriesIByName
+              (OutletTimeItem.Rate);
+            if DynamicTimeSeries = nil then
+            begin
+              OutletSetting.Rate := EvaluateFormula(OutletTimeItem.Rate,
+                Format(StrLakeOutletRateIn,
+                [OutletIndex +1, OutletSetting.StartTime]),
+                ALake.FScreenObject.Name, PestParamName);
+              OutletSetting.RatePestParam := PestParamName;
+              OutletSetting.RateTimeSeriesName := '';
+            end
+            else
+            begin
+              TimeSeriesLocation.Layer  := 0;
+              TimeSeriesLocation.Row  := 0;
+              TimeSeriesLocation.Column  := 0;
+              StaticTimeSeries := DynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+              OutletSetting.Rate := 0;
+              OutletSetting.RatePestParam := '';
+              OutletSetting.RateTimeSeriesName := String(StaticTimeSeries.SeriesName);
+              FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
+            end;
           end
           else
           begin
@@ -1219,12 +1239,28 @@ begin
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Invert);
           if TimeSeries = nil then
           begin
-            OutletSetting.Invert := EvaluateFormula(OutletTimeItem.Invert,
-              Format(StrLakeOutletInvertI,
-              [OutletIndex +1, OutletSetting.StartTime]),
-              ALake.FScreenObject.Name, PestParamName);
-            OutletSetting.InvertPestParam := PestParamName;
-            OutletSetting.InvertTimeSeriesName := '';
+            DynamicTimeSeries := ALake.FScreenObject.GetDynamicTimeSeriesIByName
+              (OutletTimeItem.Invert);
+            if DynamicTimeSeries = nil then
+            begin
+              OutletSetting.Invert := EvaluateFormula(OutletTimeItem.Invert,
+                Format(StrLakeOutletInvertI,
+                [OutletIndex +1, OutletSetting.StartTime]),
+                ALake.FScreenObject.Name, PestParamName);
+              OutletSetting.InvertPestParam := PestParamName;
+              OutletSetting.InvertTimeSeriesName := '';
+            end
+            else
+            begin
+              TimeSeriesLocation.Layer  := 0;
+              TimeSeriesLocation.Row  := 0;
+              TimeSeriesLocation.Column  := 0;
+              StaticTimeSeries := DynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+              OutletSetting.Invert := 0;
+              OutletSetting.InvertPestParam := '';
+              OutletSetting.InvertTimeSeriesName := String(StaticTimeSeries.SeriesName);
+              FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
+            end;
           end
           else
           begin
@@ -1237,12 +1273,28 @@ begin
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Width);
           if TimeSeries = nil then
           begin
-            OutletSetting.Width := EvaluateFormula(OutletTimeItem.Width,
-              Format(StrLakeOutletWidthIn,
-              [OutletIndex +1, OutletSetting.StartTime]),
-              ALake.FScreenObject.Name, PestParamName);
-            OutletSetting.WidthPestParam := PestParamName;
-            OutletSetting.WidthTimeSeriesName := '';
+            DynamicTimeSeries := ALake.FScreenObject.GetDynamicTimeSeriesIByName
+              (OutletTimeItem.Width);
+            if DynamicTimeSeries = nil then
+            begin
+              OutletSetting.Width := EvaluateFormula(OutletTimeItem.Width,
+                Format(StrLakeOutletWidthIn,
+                [OutletIndex +1, OutletSetting.StartTime]),
+                ALake.FScreenObject.Name, PestParamName);
+              OutletSetting.WidthPestParam := PestParamName;
+              OutletSetting.WidthTimeSeriesName := '';
+            end
+            else
+            begin
+              TimeSeriesLocation.Layer  := 0;
+              TimeSeriesLocation.Row  := 0;
+              TimeSeriesLocation.Column  := 0;
+              StaticTimeSeries := DynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+              OutletSetting.Width := 0;
+              OutletSetting.WidthPestParam := '';
+              OutletSetting.WidthTimeSeriesName := String(StaticTimeSeries.SeriesName);
+              FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
+            end;
           end
           else
           begin;
@@ -1255,12 +1307,28 @@ begin
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Slope);
           if TimeSeries = nil then
           begin
-            OutletSetting.Slope := EvaluateFormula(OutletTimeItem.Slope,
-              Format(StrLakeOutletSlopeIn,
-              [OutletIndex +1, OutletSetting.StartTime]),
-              ALake.FScreenObject.Name, PestParamName);
-            OutletSetting.SlopePestParam := PestParamName;
-            OutletSetting.SlopeTimeSeriesName := '';
+            DynamicTimeSeries := ALake.FScreenObject.GetDynamicTimeSeriesIByName
+              (OutletTimeItem.Slope);
+            if DynamicTimeSeries = nil then
+            begin
+              OutletSetting.Slope := EvaluateFormula(OutletTimeItem.Slope,
+                Format(StrLakeOutletSlopeIn,
+                [OutletIndex +1, OutletSetting.StartTime]),
+                ALake.FScreenObject.Name, PestParamName);
+              OutletSetting.SlopePestParam := PestParamName;
+              OutletSetting.SlopeTimeSeriesName := '';
+            end
+            else
+            begin
+              TimeSeriesLocation.Layer  := 0;
+              TimeSeriesLocation.Row  := 0;
+              TimeSeriesLocation.Column  := 0;
+              StaticTimeSeries := DynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+              OutletSetting.Slope := 0;
+              OutletSetting.SlopePestParam := '';
+              OutletSetting.SlopeTimeSeriesName := String(StaticTimeSeries.SeriesName);
+              FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
+            end;
           end
           else
           begin;
@@ -1273,12 +1341,28 @@ begin
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Roughness);
           if TimeSeries = nil then
           begin
-            OutletSetting.Rough := EvaluateFormula(OutletTimeItem.Roughness,
-              Format(StrLakeOutletRoughnes,
-              [OutletIndex +1, OutletSetting.StartTime]),
-              ALake.FScreenObject.Name, PestParamName);
-            OutletSetting.RoughPestParam := PestParamName;
-            OutletSetting.RoughTimeSeriesName := '';
+            DynamicTimeSeries := ALake.FScreenObject.GetDynamicTimeSeriesIByName
+              (OutletTimeItem.Roughness);
+            if DynamicTimeSeries = nil then
+            begin
+              OutletSetting.Rough := EvaluateFormula(OutletTimeItem.Roughness,
+                Format(StrLakeOutletRoughnes,
+                [OutletIndex +1, OutletSetting.StartTime]),
+                ALake.FScreenObject.Name, PestParamName);
+              OutletSetting.RoughPestParam := PestParamName;
+              OutletSetting.RoughTimeSeriesName := '';
+            end
+            else
+            begin
+              TimeSeriesLocation.Layer  := 0;
+              TimeSeriesLocation.Row  := 0;
+              TimeSeriesLocation.Column  := 0;
+              StaticTimeSeries := DynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+              OutletSetting.Rough := 0;
+              OutletSetting.RoughPestParam := '';
+              OutletSetting.RoughTimeSeriesName := String(StaticTimeSeries.SeriesName);
+              FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
+            end;
           end
           else
           begin;
@@ -1451,55 +1535,74 @@ var
     Method: TPestParamMethod;
     DummyVariable: string;
     TimeSeries: TMf6TimeSeries;
+    DynamicTimeSeries: IDynamicTimeSeries;
+    TimeSeriesLocation: TTimeSeriesLocation;
+    StaticTimeSeries: IMf6TimeSeries;
   begin
     Formula := LakeItem.BoundaryFormula[DataSetIdentifier];
     TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(Formula);
     if TimeSeries = nil then
     begin
-      LakeSetting.TimeSeriesName[DataSetIdentifier] := '';
-      Param := Model.GetPestParameterByName(Formula);
-      if Param <> nil then
+      DynamicTimeSeries := ALake.FScreenObject.GetDynamicTimeSeriesIByName(Formula);
+      if DynamicTimeSeries = nil then
       begin
-        Param.IsUsedInTemplate := True;
-        LakeSetting.PestName[DataSetIdentifier] := Param.ParameterName;
-        Formula := FortranFloatToStr(Param.Value);
-      end
-      else
-      begin
-        LakeSetting.PestName[DataSetIdentifier] := '';
-      end;
-      LakeSetting.Value[DataSetIdentifier] := EvaluateFormula(Formula,
-        Format(FormatString,
-        [LakeSetting.StartTime]),
-        ALake.FScreenObject.Name, DummyVariable);
-      Modifier := LakeBoundary.PestBoundaryFormula[DataSetIdentifier];
-      Param := Model.GetPestParameterByName(Modifier);
-      if Param <> nil then
-      begin
-        Param.IsUsedInTemplate := True;
-        LakeSetting.PestSeries[DataSetIdentifier] := Param.ParameterName;
-        Method := LakeBoundary.PestBoundaryMethod[DataSetIdentifier];
-        LakeSetting.PestMethod[DataSetIdentifier] := Method;
-        case Method of
-          ppmMultiply:
-            begin
-              LakeSetting.Value[DataSetIdentifier] :=
-                LakeSetting.Value[DataSetIdentifier] * Param.Value;
-            end;
-          ppmAdd:
-            begin
-              LakeSetting.Value[DataSetIdentifier] :=
-                LakeSetting.Value[DataSetIdentifier] + Param.Value;
-            end;
-          else
-            begin
-              Assert(False);
-            end;
+        LakeSetting.TimeSeriesName[DataSetIdentifier] := '';
+        Param := Model.GetPestParameterByName(Formula);
+        if Param <> nil then
+        begin
+          Param.IsUsedInTemplate := True;
+          LakeSetting.PestName[DataSetIdentifier] := Param.ParameterName;
+          Formula := FortranFloatToStr(Param.Value);
+        end
+        else
+        begin
+          LakeSetting.PestName[DataSetIdentifier] := '';
+        end;
+        LakeSetting.Value[DataSetIdentifier] := EvaluateFormula(Formula,
+          Format(FormatString,
+          [LakeSetting.StartTime]),
+          ALake.FScreenObject.Name, DummyVariable);
+        Modifier := LakeBoundary.PestBoundaryFormula[DataSetIdentifier];
+        Param := Model.GetPestParameterByName(Modifier);
+        if Param <> nil then
+        begin
+          Param.IsUsedInTemplate := True;
+          LakeSetting.PestSeries[DataSetIdentifier] := Param.ParameterName;
+          Method := LakeBoundary.PestBoundaryMethod[DataSetIdentifier];
+          LakeSetting.PestMethod[DataSetIdentifier] := Method;
+          case Method of
+            ppmMultiply:
+              begin
+                LakeSetting.Value[DataSetIdentifier] :=
+                  LakeSetting.Value[DataSetIdentifier] * Param.Value;
+              end;
+            ppmAdd:
+              begin
+                LakeSetting.Value[DataSetIdentifier] :=
+                  LakeSetting.Value[DataSetIdentifier] + Param.Value;
+              end;
+            else
+              begin
+                Assert(False);
+              end;
+          end;
+        end
+        else
+        begin
+          LakeSetting.PestSeries[DataSetIdentifier] := ''
         end;
       end
       else
       begin
-        LakeSetting.PestSeries[DataSetIdentifier] := ''
+        TimeSeriesLocation.Layer  := 0;
+        TimeSeriesLocation.Row  := 0;
+        TimeSeriesLocation.Column  := 0;
+        StaticTimeSeries := DynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+        LakeSetting.PestName[DataSetIdentifier] := '';
+        LakeSetting.PestSeries[DataSetIdentifier] := '';
+        LakeSetting.Value[DataSetIdentifier] := 0;
+        LakeSetting.TimeSeriesName[DataSetIdentifier] := String(StaticTimeSeries.SeriesName);
+        FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
       end;
     end
     else

@@ -1361,7 +1361,12 @@ end;
 
 function TLakeOutletTimeItem.GetInvert: string;
 begin
-  Result := FInvert.Formula;
+  FInvert.ScreenObject := ScreenObjectI;
+  try
+    Result := FInvert.Formula;
+  finally
+    FInvert.ScreenObject := nil;
+  end;
   ResetItemObserver(KInvertPosition);
 end;
 
@@ -1391,25 +1396,45 @@ end;
 
 function TLakeOutletTimeItem.GetRate: string;
 begin
-  Result := FRate.Formula;
+  FRate.ScreenObject := ScreenObjectI;
+  try
+    Result := FRate.Formula;
+  finally
+    FRate.ScreenObject := nil;
+  end;
   ResetItemObserver(KRatePosition);
 end;
 
 function TLakeOutletTimeItem.GetRoughness: string;
 begin
-  Result := FRoughness.Formula;
+  FRoughness.ScreenObject := ScreenObjectI;
+  try
+    Result := FRoughness.Formula;
+  finally
+    FRoughness.ScreenObject := nil;
+  end;
   ResetItemObserver(KRoughnessPosition);
 end;
 
 function TLakeOutletTimeItem.GetSlope: string;
 begin
-  Result := FSlope.Formula;
+  FSlope.ScreenObject := ScreenObjectI;
+  try
+    Result := FSlope.Formula;
+  finally
+    FSlope.ScreenObject := nil;
+  end;
   ResetItemObserver(KSlopePosition);
 end;
 
 function TLakeOutletTimeItem.GetWidth: string;
 begin
-  Result := FWidth.Formula;
+  FWidth.ScreenObject := ScreenObjectI;
+  try
+    Result := FWidth.Formula;
+  finally
+    FWidth.ScreenObject := nil;
+  end;
   ResetItemObserver(KWidthPosition);
 end;
 
@@ -1470,27 +1495,52 @@ end;
 
 procedure TLakeOutletTimeItem.SetInvert(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KInvertPosition, FInvert);
+  FInvert.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, KInvertPosition, FInvert);
+  finally
+    FInvert.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeOutletTimeItem.SetRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KRatePosition, FRate);
+  FRate.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, KRatePosition, FRate);
+  finally
+    FRate.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeOutletTimeItem.SetRoughness(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KRoughnessPosition, FRoughness);
+  FRoughness.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, KRoughnessPosition, FRoughness);
+  finally
+    FRoughness.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeOutletTimeItem.SetSlope(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KSlopePosition, FSlope);
+  FSlope.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, KSlopePosition, FSlope);
+  finally
+    FSlope.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeOutletTimeItem.SetWidth(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KWidthPosition, FWidth);
+  FWidth.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, KWidthPosition, FWidth);
+  finally
+    FWidth.ScreenObject := nil;
+  end;
 end;
 
 { TLakeOutlet }
@@ -3346,7 +3396,12 @@ end;
 
 function TLakeTableItemMf6.GetExchangeArea: string;
 begin
-  Result := FExchangeArea.Formula;
+  FExchangeArea.ScreenObject := ScreenObjectI;
+  try
+    Result := FExchangeArea.Formula;
+  finally
+    FExchangeArea.ScreenObject := nil;
+  end;
   ResetItemObserver(ExchangeAreaEvapPosition);
 end;
 
@@ -3362,19 +3417,34 @@ end;
 
 function TLakeTableItemMf6.GetStage: string;
 begin
-  Result := FStage.Formula;
+  FStage.ScreenObject := ScreenObjectI;
+  try
+    Result := FStage.Formula;
+  finally
+    FStage.ScreenObject := nil;
+  end;
   ResetItemObserver(StagePosition);
 end;
 
 function TLakeTableItemMf6.GetSurfaceArea: string;
 begin
-  Result := FSurfaceArea.Formula;
+  FSurfaceArea.ScreenObject := ScreenObjectI;
+  try
+    Result := FSurfaceArea.Formula;
+  finally
+    FSurfaceArea.ScreenObject := nil;
+  end;
   ResetItemObserver(SurfaceAreaPosition);
 end;
 
 function TLakeTableItemMf6.GetVolume: string;
 begin
-  Result := FVolume.Formula;
+  FVolume.ScreenObject := ScreenObjectI;
+  try
+    Result := FVolume.Formula;
+  finally
+    FVolume.ScreenObject := nil;
+  end;
   ResetItemObserver(VolumePosition);
 end;
 
@@ -3418,22 +3488,42 @@ end;
 
 procedure TLakeTableItemMf6.SetExchangeArea(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ExchangeAreaEvapPosition, FExchangeArea);
+  FExchangeArea.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, ExchangeAreaEvapPosition, FExchangeArea);
+  finally
+    FExchangeArea.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeTableItemMf6.SetStage(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StagePosition, FStage);
+  FStage.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, StagePosition, FStage);
+  finally
+    FStage.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeTableItemMf6.SetSurfaceArea(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, SurfaceAreaPosition, FSurfaceArea);
+  FSurfaceArea.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, SurfaceAreaPosition, FSurfaceArea);
+  finally
+    FSurfaceArea.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeTableItemMf6.SetVolume(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, VolumePosition, FVolume);
+  FVolume.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, VolumePosition, FVolume);
+  finally
+    FVolume.ScreenObject := nil;
+  end;
 end;
 
 procedure TLakeTableItemMf6.StopTalkingToAnyone;

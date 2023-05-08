@@ -724,13 +724,12 @@ begin
     if FTimeSeries <> nil then
     begin
       FTimeSeries.NotifierComponent.FreeNotification(self);
-      FFormula := '0';
+      FFormula := string(FTimeSeries.SeriesName);
     end
     else if FDynamicTimeSeries <> nil then
     begin
-      FFormula := '0';
+      FFormula := string(FDynamicTimeSeries.SeriesName);
     end;
-
 
     if (FDynamicTimeSeries = nil) and (FTimeSeries = nil) then
     begin
@@ -1137,6 +1136,7 @@ begin
   begin
     Exit;
   end;
+  FormulaObject.ScreenObject := nil;
   if FormulaObject = FEmptyFormula then
   begin
     FormulaObject.FOnRemoveSubscriptionList.Clear;
