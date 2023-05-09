@@ -262,6 +262,9 @@ type
     { @name represents alternative valid spellings for the same function.
     }
     Synonyms: array of string;
+    {If @name is @True and @link(TRbwParser.SquareBracketsAllowed) is @True,
+    square brakets will be used in decompiling}
+    SquareBracketsUsed: Boolean;
     {
      @Name defines the type of data returned by the function.
      It must correspond to the value assigned to the RFunctionAddr,
@@ -342,6 +345,7 @@ type
     // @Name: string;
     // See @link(Prototype).
     FPrototype: string;
+    FSquareBracketsUsed: Boolean;
     // See @link(AllowConversionToConstant).
     function GetAllowConversionToConstant: boolean;
     // Gets value of BFunctionAddr property
@@ -389,6 +393,7 @@ type
     procedure SetSynonyms(const Value: TStrings);
     function GetOptionalType: TRbwDataType;
     procedure SetOptionalType(const Value: TRbwDataType);
+    procedure SetSquareBracketsUsed(const Value: Boolean);
   public
     {
       @Name defines whether the result of a function may be
@@ -485,8 +490,9 @@ type
     }
     property OptionalArguments: integer read GetOptionalArguments
       write SetOptionalArguments;
+    property SquareBracketsUsed: Boolean read FSquareBracketsUsed write SetSquareBracketsUsed;
     {
-      @Name is used to define the data type passed returned by
+      @Name is used to define the data type returned by
       a function.  The results of the functions are values of the correct
       type rather than pointers.
 
@@ -870,7 +876,8 @@ type
     }
     constructor Create;
     {
-      @Name destroys the @Link(TFunctionClass) at the position Index.
+      @Name destroys the @Link(TFunctionClass) at the position Index\
+      including all its synonyms.
     }
     procedure Delete(Index: Integer); override;
     {
@@ -1187,14 +1194,17 @@ type
     // used an instance of @name when the instance is destroyed.
     FNotifier: TNotifierComponent;
     // Create a TExpression.
+    FSquareBracketsUsed: Boolean;
     constructor Create(const VariableName: string; const DataType: TRbwDataType;
-      const CanConvertToConstant: boolean; SpecialImplementorList: TSpecialImplementorList); overload;
+      const CanConvertToConstant: boolean;
+      SpecialImplementorList: TSpecialImplementorList); overload;
     // Create a TExpression.
-    constructor Create(const FunctionRecord: TFunctionRecord; SpecialImplementorList: TSpecialImplementorList); overload;
+    constructor Create(const FunctionRecord: TFunctionRecord;
+      SpecialImplementorList: TSpecialImplementorList); overload;
     // Create a TExpression.
     constructor Create(const VariableName: string; const DataType:
       TRbwDataType; SpecialImplementorList: TSpecialImplementorList);
-      overload;
+      overload; virtual;
     // Initializes certain variables.  Called by Create.
     procedure Initalize(const FunctionAddress: Pointer;
       const DataTypes: array of TRbwDataType; const OptionalArguments: integer);
@@ -1343,7 +1353,8 @@ type
       @Link(Evaluate).
     }
     class function New(const FunctionClass: TFunctionClass;
-      SpecialImplementorList: TSpecialImplementorList): TExpression;
+      SpecialImplementorList: TSpecialImplementorList;
+      SquareBracketAllowed: Boolean): TExpression;
       virtual;
     {
       @Name has no predefined meaning. The Tag property is provided for the
@@ -1488,8 +1499,12 @@ type
   // or are before a single argument.
   TOperator = class(TExpression)
   private
+    FParenthesesAllowed: Boolean;
     function DecompileByType(DecompileType: TDecompileType): string;
   public
+    constructor Create(const VariableName: string; const DataType:
+      TRbwDataType; SpecialImplementorList: TSpecialImplementorList);
+      overload; override;
     {
       Decompile converts the value stored in the TOperator to a
       string that can be compiled into an equivalent TOperator
@@ -1497,6 +1512,7 @@ type
     }
     function Decompile: string; override;
     function DecompileDisplay: string; override;
+    property ParenthesesAllowed: Boolean read FParenthesesAllowed write FParenthesesAllowed;
   end;
 
   // @name is used in @link(TOperatorArgumentDefinition) to indicate
@@ -1526,6 +1542,11 @@ type
 
   // @name is used to determine in which order operators will be evaluated.
   // p1 will be evaluated first; p5 will be evaluated last.
+  // p1 operators = not, ** and ^.
+  // p2 operators are the sign operaators +  and -.
+  // p3 operators = *, /, div, mod, and "and".
+  // p4 operators = +, -, or, and xor
+  // p5 operators are =, <>, >, <, >=, and <=.
   TPrecedence = (p1, p2, p3, p4, p5);
 
   // Name is used to restrict ensure that in @link(TOperatorDefinition)
@@ -1573,6 +1594,8 @@ type
     FArgumentDefinitions: TArgumentList;
     // See @link(SignOperator).
     FSignOperator: boolean;
+    // See @link(ParenthesesAllowed).
+    FParenthesesAllowed: Boolean;
   public
     // @name is the name of the operator.
     property OperatorName: AnsiString read FOperatorName write FOperatorName;
@@ -1584,6 +1607,8 @@ type
     property ArgumentDefinitions: TArgumentList read FArgumentDefinitions;
     // @name indicates whether or not the operator is a sign operator.
     property SignOperator: boolean read FSignOperator write FSignOperator;
+    // @name indicates whether Parentheses will surround the related expression when decompiled.
+    property ParenthesesAllowed: Boolean read FParenthesesAllowed write FParenthesesAllowed;
     // @name creates an instance of @classname.
     Constructor Create;
     // @name destroys the current instance of @classname.
@@ -1642,6 +1667,7 @@ type
     // @name contains a series of @link(TOperatorDefinition)s.
     FOpereratorDefinitions: TList;
     FCachedFindResult: integer;
+    FSquareBracketsAllowed: Boolean;
     // See @link(Expressions).
     function GetExpressions(const Index: integer): TExpression;
     // See @link(Variables).
@@ -1685,6 +1711,7 @@ type
     // @name defines the "^" operator
     procedure DefinePowerOperator;
     procedure DefinePowerOperator2;
+    procedure SetSquareBracketsAllowed(const Value: Boolean);
     { Private declarations }
   protected
     { Protected declarations }
@@ -1886,6 +1913,9 @@ type
       @Name is the number of variables in @Link(Variables).
     }
     function VariableCount: integer;
+
+    property SquareBracketsAllowed: Boolean read FSquareBracketsAllowed
+      write SetSquareBracketsAllowed;
     { Public declarations }
   published
     { Published declarations }
@@ -2243,6 +2273,7 @@ type
   TTokenStringList = class(TStringList)
   private
     FOpereratorDefinitions: TList;
+    FSquareBracketsAllowed: Boolean;
     function FixToken(const Token: string): string;
     procedure MakeVariableList(SpecialImplementorList: TSpecialImplementorList;
       Start, Stop: integer);
@@ -2338,6 +2369,7 @@ type
 const
   Digits: set of AnsiChar = ['0'..'9'];
   Parenthesis: set of AnsiChar = ['(', ')'];
+  SquareBrackets: set of AnsiChar = ['[', ']'];
 {$IFNDEF DELPHI_XE_UP}
   WhiteSpace: set of AnsiChar = [' ', #9, #10, #13, #32];
 {$ENDIF}
@@ -2829,6 +2861,7 @@ begin
     FCurrentExpression := nil;
     Tokens := TTokenStringList.Create;
     try
+      Tokens.FSquareBracketsAllowed := SquareBracketsAllowed;
       Tokens.FOpereratorDefinitions := FOpereratorDefinitions;
       // Find string constants (starting with the " character.
       // For now, at least, string constants may not contain the " character.
@@ -2931,7 +2964,9 @@ begin
             // The current character is not white space.
             // Add parentheses to the tokens.
             {$IFDEF Delphi_2009_UP}
-            if CharInSet(ALine[Index], Parenthesis) then
+            if CharInSet(ALine[Index], Parenthesis)
+              or (SquareBracketsAllowed
+              and CharInSet(ALine[Index], SquareBrackets)) then
             {$ELSE}
             if ALine[Index] in Parenthesis then
             {$ENDIF}
@@ -3098,7 +3133,7 @@ begin
             raise ErbwParserError.Create(
               Format(StrUnableToEvaluate, [AString, E.Message, E.ClassName]));
           {$ELSE}
-            Exception.RaiseOuterException(ErbwParserError.Create(
+            ErbwParserError.RaiseOuterException(ErbwParserError.Create(
               Format(StrUnableToEvaluate, [AString, E.Message, E.ClassName])));
           {$ENDIF}
           end;
@@ -3337,6 +3372,15 @@ begin
 
   end;
 
+end;
+
+procedure TRbwParser.SetSquareBracketsAllowed(const Value: Boolean);
+begin
+  if FSquareBracketsAllowed <> Value then
+  begin
+    FSquareBracketsAllowed := Value;
+    ClearExpressions;
+  end;
 end;
 
 procedure TRbwParser.DeleteExpression(const Index: integer);
@@ -3898,6 +3942,10 @@ begin
       begin
         Continue;
       end
+      else if FSquareBracketsAllowed and ((Token = '[') or (Token = ']')) then
+      begin
+        Continue;
+      end
       else if IsStringConstant(Token) then
       begin
         Objects[Index] := TConstant.Create(Token);
@@ -3915,7 +3963,9 @@ begin
         Objects[Index] := TConstant.Create(ADouble);
       end
       {$IFDEF Delphi_2009_UP}
-      else if (Length(Token) = 1) and CharInSet(Token[1], Parenthesis) then
+      else if (Length(Token) = 1) and ((CharInSet(Token[1], Parenthesis)
+        or (FSquareBracketsAllowed
+        and CharInSet(Token[1], SquareBrackets)))) then
       {$ELSE}
       else if (Length(Token) = 1) and (Token[1] in Parenthesis) then
       {$ENDIF}
@@ -3929,7 +3979,7 @@ begin
       else if (Functions <> nil) and (Functions.Find(Token, Position)) then
       begin
         Objects[Index] := TExpression.New(Functions.FunctionClass[Position],
-          SpecialImplementorList);
+          SpecialImplementorList, FSquareBracketsAllowed);
       end;
     end;
     ParenStack := TIntegerStack.Create;
@@ -4028,7 +4078,7 @@ begin
                       Strings[Index],
                       E.Message]));
                   {$ELSE}
-                    Exception.RaiseOuterException(ERbwParserError.Create(Format(StrErrorInArgumentNu,
+                    ErbwParserError.RaiseOuterException(ERbwParserError.Create(Format(StrErrorInArgumentNu,
                       [VarIndex2 + 1,
                       PriorExpression.Name,
                       Strings[Index],
@@ -4152,7 +4202,7 @@ begin
       raise ERbwParserError.Create(
         E.ClassName + ': ' + E.Message);
     {$ELSE}
-      Exception.RaiseOuterException(ERbwParserError.Create(
+      ErbwParserError.RaiseOuterException(ERbwParserError.Create(
         E.ClassName + ': ' + E.Message));
     {$ENDIF}
     end;
@@ -4371,7 +4421,8 @@ begin
         end;
         Assert(Functions.Count = 1);
         FunctionClass := TFunctionClass(Functions[0]);
-        AnExpression := TExpression.New(FunctionClass, SpecialImplementorList);
+        AnExpression := TExpression.New(FunctionClass, SpecialImplementorList,
+          FSquareBracketsAllowed);
         if FunctionClass.OptionalArguments <> 0 then
         begin
           SetLength(AnExpression.Data, Arguments.Count);
@@ -4479,7 +4530,7 @@ begin
         [string(OperatorDefinition.OperatorName),
         Strings[Index + 1]]));
     {$ELSE}
-      Exception.RaiseOuterException(ErbwParserError.Create(Format(StrErrorInParsing03,
+      ErbwParserError.RaiseOuterException(ErbwParserError.Create(Format(StrErrorInParsing03,
         [string(OperatorDefinition.OperatorName),
         Strings[Index + 1]])));
     {$ENDIF}
@@ -4519,7 +4570,7 @@ begin
       cmNew:
         begin
           AnExpression := UsedDef.OperatorClass.New(
-            UsedDef.FunctionClass, SpecialImplementorList);
+            UsedDef.FunctionClass, SpecialImplementorList, FSquareBracketsAllowed);
         end;
       else Assert(False);
     end;
@@ -4719,6 +4770,7 @@ var
   ArgumentDef: TOperatorArgumentDefinition;
   PriorArgOK: Boolean;
   SubsequentArgOK: Boolean;
+  AnOperator: TOperator;
 begin
   if (Objects[Index] <> nil) or (Index + 1 >= Count) or (Index - 1 < 0) then
   begin
@@ -4783,11 +4835,16 @@ begin
     cmNew:
       begin
         AnExpression := UsedDef.OperatorClass.New(UsedDef.FunctionClass,
-          SpecialImplementorList);
+          SpecialImplementorList, FSquareBracketsAllowed);
       end;
   else
     Assert(False);
   end;
+  if AnExpression is TOperator then
+  begin
+    TOperator(AnExpression).ParenthesesAllowed := OperatorDefinition.ParenthesesAllowed;
+  end;
+
   AnExpression.Variables[0] := PriorArgument;
   AnExpression.Variables[1] := SubsequentArgument;
   Objects[Index - 1] := AnExpression;
@@ -5720,7 +5777,8 @@ begin
         end;
         Assert(Functions.Count = 1);
         FunctionClass := TFunctionClass(Functions[0]);
-        AnExpression := TExpression.New(FunctionClass, SpecialImplementorList);
+        AnExpression := TExpression.New(FunctionClass, SpecialImplementorList,
+          FSquareBracketsAllowed);
         if FunctionClass.OptionalArguments <> 0 then
         begin
           SetLength(AnExpression.Data, Arguments.Count);
@@ -5840,7 +5898,17 @@ begin
         Token := Strings[Index];
         if (Token <> '(') and (Token <> ',') and (Token <> ')') then
         begin
-          raise ErbwParserError.Create(Format(StrError0sNotRe, [Token]));
+          if FSquareBracketsAllowed then
+          begin
+            if (Token <> '[') and  (Token <> ']') then
+            begin
+              raise ErbwParserError.Create(Format(StrError0sNotRe, [Token]));
+            end;
+          end
+          else
+          begin
+            raise ErbwParserError.Create(Format(StrError0sNotRe, [Token]));
+          end;
         end;
       end
       else
@@ -5974,7 +6042,8 @@ begin
     if (Data[Index].DataType = rdtDouble) and (Value.ResultType = rdtInteger)
       then
     begin
-      Converter := TExpression.New(IntToDoubleFunction, FSpecialImplementorList);
+      Converter := TExpression.New(IntToDoubleFunction, FSpecialImplementorList,
+        FSquareBracketsUsed);
       Converter.Variables[0] := Value;
       Data[Index].Datum := Converter;
     end
@@ -7074,11 +7143,16 @@ end;
 
 class function TExpression.New(
   const FunctionClass: TFunctionClass;
-  SpecialImplementorList: TSpecialImplementorList): TExpression;
+  SpecialImplementorList: TSpecialImplementorList;
+  SquareBracketAllowed: Boolean): TExpression;
 var
   Index: integer;
   SpecialImplementor: TSpecialImplementor;
 begin
+  if FunctionClass = nil then
+  begin
+    raise ERbwParserError.Create('Invalid Expression');
+  end;
   if (FunctionClass = IntToDoubleFunction)
     or (FunctionClass.FunctionRecord.Name = IntToDoubleFunction.Name) then
   begin
@@ -7132,6 +7206,10 @@ begin
       end;
     end;
     result := TExpression.Create(FunctionClass, SpecialImplementorList);
+  end;
+  if FunctionClass.SquareBracketsUsed and SquareBracketAllowed then
+  begin
+    result.FSquareBracketsUsed := True;
   end;
 end;
 
@@ -7344,7 +7422,14 @@ begin
 
       if NeedsParenthesis and ParametersPresent then
       begin
-        DecompileList.Add('(');
+        if FSquareBracketsUsed then
+        begin
+          DecompileList.Add('[');
+        end
+        else
+        begin
+          DecompileList.Add('(');
+        end;
       end;
       for Index := 0 to ArrayLength - 1 do
       begin
@@ -7370,7 +7455,14 @@ begin
       end;
       if NeedsParenthesis and ParametersPresent then
       begin
-        DecompileList.Add(')');
+        if FSquareBracketsUsed then
+        begin
+          DecompileList.Add(']');
+        end
+        else
+        begin
+          DecompileList.Add(')');
+        end;
       end;
       result := ConcatenateStrings(DecompileList);
     finally
@@ -7666,6 +7758,11 @@ begin
   FunctionRecord.ResultType := rdtString;
 end;
 
+procedure TFunctionClass.SetSquareBracketsUsed(const Value: Boolean);
+begin
+  FSquareBracketsUsed := Value;
+end;
+
 { TFunctionStringList }
 
 function TFunctionStringList.Add(
@@ -7689,6 +7786,7 @@ begin
     SetLength(AFunctionClass.FunctionRecord.Synonyms,
       Length(AFunctionClass.FunctionRecord.Synonyms));
     AFunctionClass.Hidden := FunctionRecord.Hidden;
+    AFunctionClass.SquareBracketsUsed := FunctionRecord.SquareBracketsUsed;
     AFunctionClass.Prototype := FunctionRecord.Prototype;
     AFunctionClass.FunctionRecord.ResultType := FunctionRecord.ResultType;
     AFunctionClass.FunctionRecord.Name := FunctionRecord.Name;
@@ -8705,6 +8803,14 @@ end;
 
 { TOperator }
 
+constructor TOperator.Create(const VariableName: string;
+  const DataType: TRbwDataType;
+  SpecialImplementorList: TSpecialImplementorList);
+begin
+  inherited;
+  FParenthesesAllowed := True;
+end;
+
 function TOperator.Decompile: string;
 begin
   result := DecompileByType(dtInternal);
@@ -8735,7 +8841,7 @@ begin
     begin
       AVariable := TConstant(Data[0].Datum);
       Assert(AVariable <> nil);
-      if FTopLevel then
+      if FTopLevel or not ParenthesesAllowed then
       begin
         Paren := '';
       end
@@ -8766,7 +8872,7 @@ begin
         else Assert(False);
       end;
 
-      if not FTopLevel then
+      if (not FTopLevel) and ParenthesesAllowed then
       begin
         result := result + ')';
       end;
@@ -9347,6 +9453,7 @@ begin
   MaxIOverloadedFunction.InputDataTypes[0] := rdtInteger;
   MaxIOverloadedFunction.InputDataTypes[1] := rdtInteger;
   MaxIOverloadedFunction.InputDataTypes[2] := rdtInteger;
+  MaxIOverloadedFunction.SquareBracketsUsed := True;
 
   MaxROverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(MaxROverloadedFunction);
@@ -9358,6 +9465,7 @@ begin
   MaxROverloadedFunction.InputDataTypes[0] := rdtDouble;
   MaxROverloadedFunction.InputDataTypes[1] := rdtDouble;
   MaxROverloadedFunction.InputDataTypes[2] := rdtDouble;
+  MaxROverloadedFunction.SquareBracketsUsed := True;
 
   MinIOverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(MinIOverloadedFunction);
@@ -9369,6 +9477,7 @@ begin
   MinIOverloadedFunction.InputDataTypes[0] := rdtInteger;
   MinIOverloadedFunction.InputDataTypes[1] := rdtInteger;
   MinIOverloadedFunction.InputDataTypes[2] := rdtInteger;
+  MinIOverloadedFunction.SquareBracketsUsed := True;
 
   MinROverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(MinROverloadedFunction);
@@ -9380,6 +9489,7 @@ begin
   MinROverloadedFunction.InputDataTypes[0] := rdtDouble;
   MinROverloadedFunction.InputDataTypes[1] := rdtDouble;
   MinROverloadedFunction.InputDataTypes[2] := rdtDouble;
+  MinROverloadedFunction.SquareBracketsUsed := True;
 
   SqrIOverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(SqrIOverloadedFunction);
@@ -9462,6 +9572,7 @@ begin
   IfBOverloadedFunction.InputDataTypes[0] := rdtBoolean;
   IfBOverloadedFunction.InputDataTypes[1] := rdtBoolean;
   IfBOverloadedFunction.InputDataTypes[2] := rdtBoolean;
+  IfBOverloadedFunction.SquareBracketsUsed := True;
 
   IfIOverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(IfIOverloadedFunction);
@@ -9474,6 +9585,7 @@ begin
   IfIOverloadedFunction.InputDataTypes[0] := rdtBoolean;
   IfIOverloadedFunction.InputDataTypes[1] := rdtInteger;
   IfIOverloadedFunction.InputDataTypes[2] := rdtInteger;
+  IfIOverloadedFunction.SquareBracketsUsed := True;
 
   IfROverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(IfROverloadedFunction);
@@ -9486,6 +9598,7 @@ begin
   IfROverloadedFunction.InputDataTypes[0] := rdtBoolean;
   IfROverloadedFunction.InputDataTypes[1] := rdtDouble;
   IfROverloadedFunction.InputDataTypes[2] := rdtDouble;
+  IfROverloadedFunction.SquareBracketsUsed := True;
 
   IfSOverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(IfSOverloadedFunction);
@@ -9498,10 +9611,11 @@ begin
   IfSOverloadedFunction.InputDataTypes[0] := rdtBoolean;
   IfSOverloadedFunction.InputDataTypes[1] := rdtString;
   IfSOverloadedFunction.InputDataTypes[2] := rdtString;
+  IfSOverloadedFunction.SquareBracketsUsed := True;
 
   MultiInterpolateFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(MultiInterpolateFunction);
-  MultiInterpolateFunction.InputDataCount := 5;
+  MultiInterpolateFunction.InputDataCount := 4;
   MultiInterpolateFunction.OptionalArguments := -1;
   MultiInterpolateFunction.RFunctionAddr := @_MultiInterpolate;
   MultiInterpolateFunction.Name := 'MultiInterpolate';
@@ -9511,7 +9625,7 @@ begin
   MultiInterpolateFunction.InputDataTypes[1] := rdtDouble;
   MultiInterpolateFunction.InputDataTypes[2] := rdtDouble;
   MultiInterpolateFunction.InputDataTypes[3] := rdtDouble;
-  MultiInterpolateFunction.InputDataTypes[4] := rdtDouble;
+//  MultiInterpolateFunction.InputDataTypes[4] := rdtDouble;
 end;
 
 procedure TIntToDoubleExpression.MakeDiagram(List: TStringList; Level: integer);
@@ -9827,6 +9941,7 @@ constructor TOperatorDefinition.Create;
 begin
   inherited;
   FArgumentDefinitions:= TArgumentList.Create;
+  FParenthesesAllowed := True;
 end;
 
 destructor TOperatorDefinition.Destroy;

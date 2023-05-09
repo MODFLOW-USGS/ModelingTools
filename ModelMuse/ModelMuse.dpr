@@ -870,7 +870,8 @@ uses
   frameModflow6DynamicTimeSeriesUnit in 'frameModflow6DynamicTimeSeriesUnit.pas' {frameModflow6DynamicTimeSeries: TFrame},
   CellLocationUnit in 'CellLocationUnit.pas',
   AbstractGridInterfaceUnit in 'AbstractGridInterfaceUnit.pas',
-  ModelCellInterfaceUnit in 'ModelCellInterfaceUnit.pas';
+  ModelCellInterfaceUnit in 'ModelCellInterfaceUnit.pas',
+  frmFmpFormulaEditorUnit in 'frmFmpFormulaEditorUnit.pas' {frmFmpFormulaEditor};
 
 {$R *.res}
 

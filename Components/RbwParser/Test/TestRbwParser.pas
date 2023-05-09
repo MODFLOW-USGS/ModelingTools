@@ -29,6 +29,9 @@ type
   strict private
     FRbwParser: TRbwParser;
   private
+    procedure CheckInvalidNumberOfArguments;
+    procedure CheckInvalidSquareBrackets;
+    procedure CompileTestFormula;
   public
     procedure SetUp; override;
     procedure TearDown; override;
@@ -158,6 +161,10 @@ type
     procedure Test_UsesFunction;
     procedure Test_SpecialImplementor;
     procedure TestDisplayNames;
+    procedure TestSquareBracketsUsed;
+    procedure TestChangedPriority;
+    procedure TestOperatorParenthesisSkipped;
+    procedure FarmProcessTest;
   end;
 
 implementation
@@ -167,6 +174,7 @@ Uses Math, StrUtils;
 procedure TestTRbwParser.SetUp;
 begin
   FRbwParser := TRbwParser.Create(nil);
+  FRbwParser.SquareBracketsAllowed := False;
 end;
 
 procedure TestTRbwParser.TearDown;
@@ -285,6 +293,139 @@ begin
       Check(True);
     end;
   end;
+end;
+
+var
+  AndOperator: TFunctionClass;
+  OrOperator: TFunctionClass;
+
+procedure TestTRbwParser.CompileTestFormula;
+const
+  TestFormula = 'A and B or C and D';
+var
+  Formula: string;
+begin
+  Formula := TestFormula;
+  FRbwParser.Compile(Formula);
+end;
+
+var
+  OtherNotEqualsOperator: TFunctionClass;
+
+procedure TestTRbwParser.FarmProcessTest;
+const
+  TestFormula = 'If(A!=B, C, D)';
+  procedure DefineNotEqualsOperator;
+  var
+    ArgumentDef: TOperatorArgumentDefinition;
+    OperatorDefinition: TOperatorDefinition;
+  begin
+    OperatorDefinition := TOperatorDefinition.Create;
+    OperatorDefinition.OperatorName := '!=';
+    OperatorDefinition.ArgumentCount := acTwo;
+    OperatorDefinition.Precedence := p1;
+    OperatorDefinition.SignOperator := False;
+    OperatorDefinition.ParenthesesAllowed := False;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtBoolean;
+    ArgumentDef.SecondArgumentType := rdtBoolean;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := OtherNotEqualsOperator;
+    ArgumentDef.OperatorClass := TOperator;
+
+    FRbwParser.AddOperator(OperatorDefinition);
+  end;
+var
+  Formula: string;
+begin
+  FRbwParser.SquareBracketsAllowed := True;
+  DefineNotEqualsOperator;
+
+  FRbwParser.CreateVariable('A', '', True, '');
+  FRbwParser.CreateVariable('B', '', True, '');
+  FRbwParser.CreateVariable('C', '', 1.0, '');
+  FRbwParser.CreateVariable('D', '', 2.0, '');
+
+  Formula := TestFormula;
+  FRbwParser.Compile(Formula);
+  CheckEquals(FRbwParser.CurrentExpression.Decompile, 'If[A != B, C, D]')
+
+end;
+
+procedure TestTRbwParser.TestChangedPriority;
+const
+  TestFormula = 'A and B or C and D';
+var
+  DecompiledFormula: string;
+  procedure DefineAndOperator;
+  var
+    OperatorDefinition: TOperatorDefinition;
+    ArgumentDef: TOperatorArgumentDefinition;
+  begin
+    OperatorDefinition := TOperatorDefinition.Create;
+    OperatorDefinition.OperatorName := 'AND';
+    OperatorDefinition.ArgumentCount := acTwo;
+    OperatorDefinition.Precedence := p4;
+    OperatorDefinition.SignOperator := False;
+
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtBoolean;
+    ArgumentDef.SecondArgumentType := rdtBoolean;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := AndOperator;
+    ArgumentDef.OperatorClass := TOperator;
+
+    FRbwParser.AddOperator(OperatorDefinition);
+  end;
+  procedure DefineOrOperator;
+  var
+    ArgumentDef: TOperatorArgumentDefinition;
+    OperatorDefinition: TOperatorDefinition;
+  begin
+    OperatorDefinition := TOperatorDefinition.Create;
+    OperatorDefinition.OperatorName := 'OR';
+    OperatorDefinition.ArgumentCount := acTwo;
+    OperatorDefinition.Precedence := p3;
+    OperatorDefinition.SignOperator := False;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtBoolean;
+    ArgumentDef.SecondArgumentType := rdtBoolean;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := OrOperator;
+    ArgumentDef.OperatorClass := TOperator;
+
+    FRbwParser.AddOperator(OperatorDefinition);
+  end;
+begin
+  FRbwParser.CreateVariable('A', '', True, '');
+  FRbwParser.CreateVariable('B', '', True, '');
+  FRbwParser.CreateVariable('C', '', True, '');
+  FRbwParser.CreateVariable('D', '', True, '');
+
+  CompileTestFormula;
+
+  DecompiledFormula := FRbwParser.CurrentExpression.Decompile;
+  CheckEquals(DecompiledFormula, '(A and B) or (C and D)');
+
+  FRbwParser.ClearExpressions;
+  FRbwParser.RemoveOperator('and');
+  FRbwParser.RemoveOperator('or');
+
+  CheckException(CompileTestFormula, ERbwParserError);
+
+  DefineAndOperator;
+  DefineOrOperator;
+
+  CompileTestFormula;
+  DecompiledFormula := FRbwParser.CurrentExpression.Decompile;
+  CheckEquals(DecompiledFormula, '(A AND (B OR C)) AND D');
+
+//  CheckNotEquals(DecompiledFormula, FRbwParser.CurrentExpression.Decompile)
 end;
 
 procedure TestTRbwParser.TestClearExpressions;
@@ -580,6 +721,47 @@ begin
   Check(FRbwParser.Variables[ReturnValue] = RealVariable1, 'Error finding variable');
 end;
 
+procedure TestTRbwParser.TestOperatorParenthesisSkipped;
+const
+  NotEqualsFormaula = 'A != B or C != D';
+  procedure DefineNotEqualsOperator;
+  var
+    ArgumentDef: TOperatorArgumentDefinition;
+    OperatorDefinition: TOperatorDefinition;
+  begin
+    OperatorDefinition := TOperatorDefinition.Create;
+    OperatorDefinition.OperatorName := '!=';
+    OperatorDefinition.ArgumentCount := acTwo;
+    OperatorDefinition.Precedence := p1;
+    OperatorDefinition.SignOperator := False;
+    OperatorDefinition.ParenthesesAllowed := False;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtBoolean;
+    ArgumentDef.SecondArgumentType := rdtBoolean;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := OtherNotEqualsOperator;
+    ArgumentDef.OperatorClass := TOperator;
+
+    FRbwParser.AddOperator(OperatorDefinition);
+  end;
+var
+  TestFormula: string;
+begin
+  FRbwParser.CreateVariable('A', '', True, '');
+  FRbwParser.CreateVariable('B', '', True, '');
+  FRbwParser.CreateVariable('C', '', True, '');
+  FRbwParser.CreateVariable('D', '', True, '');
+
+  DefineNotEqualsOperator;
+
+  TestFormula := NotEqualsFormaula;
+  FRbwParser.Compile(TestFormula);
+  CheckEquals(NotEqualsFormaula, FRbwParser.CurrentExpression.Decompile);
+
+end;
+
 procedure TestTRbwParser.TestRemoveExpression;
 var
   Expression1: TExpression;
@@ -722,6 +904,56 @@ begin
   Position := FRbwParser.IndexOfVariable('RealVariable1');
   FRbwParser.RenameVariable(Position, 'RealVariable3', '');
   Check(RealVariable1.Decompile = 'RealVariable3', 'Error renaming variable');
+end;
+
+procedure TestTRbwParser.CheckInvalidSquareBrackets;
+const
+  IfFormula = 'If[ABoolean, One, Two]';
+var
+  Formula: string;
+begin
+  Formula:= IfFormula;
+  FRbwParser.Compile(Formula);
+end;
+
+procedure TestTRbwParser.TestSquareBracketsUsed;
+const
+  IfFormula = 'If[ABoolean, One, Two]';
+  IfFormula2 = 'If(ABoolean, One, Two)';
+  MaxFormula = 'Max[One, Two, Three]';
+  MinFormula = 'Min[One, Two, Three]';
+var
+  Formula: string;
+begin
+  FRbwParser.SquareBracketsAllowed := True;
+  FRbwParser.CreateVariable('ABoolean', '', True, '');
+  FRbwParser.CreateVariable('One', '', 1.0, '');
+  FRbwParser.CreateVariable('Two', '', 2.0, '');
+  FRbwParser.CreateVariable('Three', '', 3.0, '');
+
+  Formula:= IfFormula;
+  FRbwParser.Compile(Formula);
+  CheckEquals(FRbwParser.CurrentExpression.Decompile, IfFormula);
+
+  Formula:= MaxFormula;
+  FRbwParser.Compile(Formula);
+  CheckEquals(FRbwParser.CurrentExpression.Decompile, MaxFormula);
+
+  Formula:= MinFormula;
+  FRbwParser.Compile(Formula);
+  CheckEquals(FRbwParser.CurrentExpression.Decompile, MinFormula);
+
+  Formula:= IfFormula2;
+  FRbwParser.Compile(Formula);
+  CheckEquals(FRbwParser.CurrentExpression.Decompile, IfFormula);
+
+  FRbwParser.SquareBracketsAllowed := False;
+
+  Formula:= IfFormula2;
+  FRbwParser.Compile(Formula);
+  CheckEquals(FRbwParser.CurrentExpression.Decompile, IfFormula2);
+
+  CheckException(CheckInvalidSquareBrackets, ERbwParserError);
 end;
 
 procedure TestTRbwParser.TestVariableCount;
@@ -2348,10 +2580,26 @@ begin
   end;
 end;
 
+procedure TestTRbwParser.CheckInvalidNumberOfArguments;
+var
+  Expression: string;
+begin
+  FRbwParser.ClearVariables;
+  FRbwParser.CreateVariable('Position', '', 0.0, '');
+  FRbwParser.CreateVariable('Distance1', '', 0.0, '');
+  FRbwParser.CreateVariable('Value1', '', 0.0, '');
+  FRbwParser.CreateVariable('Value2', '', 0.0, '');
+  Expression := 'MultiInterpolate(Position, Value1, Distance1, Value2)';
+  FRbwParser.Compile(Expression);
+  FRbwParser.CurrentExpression.Evaluate;
+end;
+
+
 procedure TestTRbwParser.Test_MultiInterpolate;
 var
   rPosition, rDistance1, rDistance2, rDistance3, rValue1, rValue2, rValue3: TRealVariable;
   Expression: string;
+
 begin
   FRbwParser.ClearVariables;
   Check(FRbwParser.ExpressionCount = 0, 'Error clearing variables');
@@ -2437,6 +2685,9 @@ begin
   FRbwParser.CurrentExpression.Evaluate;
   Check(FRbwParser.CurrentExpression.DoubleResult = 1,
     'Error calculating MultiInterpolate.');
+
+  CheckException(CheckInvalidNumberOfArguments, ERbwParserError);
+
 end;
 
 Function FactorialI(const Int: integer): integer;
@@ -5312,6 +5563,20 @@ begin
   result := Power(PDouble(Values[0])^, PDouble(Values[1])^);
 end;
 
+function _And(Values: array of pointer): Boolean;
+begin
+  result := PBoolean(Values[0])^ and PBoolean(Values[1])^;
+end;
+
+function _Or(Values: array of pointer): Boolean;
+begin
+  result := PBoolean(Values[0])^ or PBoolean(Values[1])^;
+end;
+
+function _NotEquals(Values: array of pointer): Boolean;
+begin
+  result := PBoolean(Values[0])^ <> PBoolean(Values[1])^;
+end;
 
 { TMyExpression }
 
@@ -5326,12 +5591,46 @@ initialization
   PowerOperator.OptionalArguments := 0;
   PowerOperator.RFunctionAddr := _TestPower;
 
+  AndOperator := TFunctionClass.Create;
+  AndOperator.AllowConversionToConstant := True;
+  AndOperator.InputDataCount := 2;
+  AndOperator.InputDataTypes[0] := rdtBoolean;
+  AndOperator.InputDataTypes[1] := rdtBoolean;
+  AndOperator.Name := 'AND';
+  AndOperator.Prototype := '';
+  AndOperator.OptionalArguments := 0;
+  AndOperator.BFunctionAddr := _And;
+
+  OrOperator := TFunctionClass.Create;
+  OrOperator.AllowConversionToConstant := True;
+  OrOperator.InputDataCount := 2;
+  OrOperator.InputDataTypes[0] := rdtBoolean;
+  OrOperator.InputDataTypes[1] := rdtBoolean;
+  OrOperator.Name := 'OR';
+  OrOperator.Prototype := '';
+  OrOperator.OptionalArguments := 0;
+  OrOperator.BFunctionAddr := _Or;
+
+  OtherNotEqualsOperator := TFunctionClass.Create;
+  OtherNotEqualsOperator.AllowConversionToConstant := True;
+  OtherNotEqualsOperator.InputDataCount := 2;
+  OtherNotEqualsOperator.InputDataTypes[0] := rdtBoolean;
+  OtherNotEqualsOperator.InputDataTypes[1] := rdtBoolean;
+  OtherNotEqualsOperator.Name := '!=';
+  OtherNotEqualsOperator.Prototype := '';
+  OtherNotEqualsOperator.OptionalArguments := 0;
+  OtherNotEqualsOperator.BFunctionAddr := _NotEquals;
+
+
   // Register any test cases with the test runner
   RegisterTest(TestTRbwParser.Suite);
   Randomize;
 
 finalization
   PowerOperator.Free;
+  AndOperator.Free;
+  OrOperator.Free;
+  OtherNotEqualsOperator.Free;
 
 end.
 

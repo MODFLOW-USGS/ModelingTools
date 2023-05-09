@@ -15,6 +15,11 @@ program RbwParserPrjTests;
 {$ENDIF}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   Forms,
   TestFramework,
   GUITestRunner,
