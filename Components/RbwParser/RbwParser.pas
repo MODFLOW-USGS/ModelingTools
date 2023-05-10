@@ -880,6 +880,7 @@ type
       including all its synonyms.
     }
     procedure Delete(Index: Integer); override;
+    procedure Remove(const FunctionName: string);
     {
       @Name destroys the @Link(TFunctionStringList).
       Do not call @Name directly. Call Free instead.
@@ -6308,7 +6309,7 @@ function _EqualR(Values: array of pointer): boolean;
 begin
   result := PDouble(Values[0])^ = PDouble(Values[1])^;
 end;
-{$WARNINGS OFF}
+{$WARNINGS ON}
 
 {$WARNINGS OFF}
 function _EqualI(Values: array of pointer): boolean;
@@ -8580,6 +8581,17 @@ function TFunctionStringList.GetFunctionClass(
   const Index: integer): TFunctionClass;
 begin
   Result := Objects[Index] as TFunctionClass;
+end;
+
+procedure TFunctionStringList.Remove(const FunctionName: string);
+var
+  Position: Integer;
+begin
+  Position := IndexOf(FunctionName);
+  if Position >= 0 then
+  begin
+    Delete(Position);
+  end;
 end;
 
 { TAndExpression }

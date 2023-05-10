@@ -26,7 +26,7 @@ type
     wlPrecipicationTable, wlSoilCoefficient, wlNoReturnFlow,
     wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit, wlSwAllotment,
     wlGwAllotment, wlRootPressure, wlPondDepth, wlNoCropMeansBareSoil,
-    wlNoEvapErrCorrection);
+    wlNoEvapErrCorrection, wlSaltSupplyConcentration);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -158,6 +158,7 @@ type
     FPondDepthFileStream: TFileStream;
     FConvertToBareFileStream: TFileStream;
     FSumOneCorrectionFileStream: TFileStream;
+    FSaltSupplyConcentrationFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -349,6 +350,7 @@ type
 
 
     // Salinity flush
+    procedure WriteSaltSupplyConcentration;
     procedure WriteIrrigationUniformity;
     procedure WriteSalinityFlushPrintOptions;
 
@@ -1204,6 +1206,8 @@ begin
   FreeAndNil(FPondDepthFileStream);
   FreeAndNil(FConvertToBareFileStream);
   FreeAndNil(FSumOneCorrectionFileStream);
+  FreeAndNil(FSaltSupplyConcentrationFileStream);
+
 end;
 
 //function TModflowFmp4Writer.GetAddedDemandCollection(
@@ -1692,6 +1696,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlSaltSupplyConcentration:
+      begin
+        result := ChangeFileExt(FBaseName, '.wbs_salt_supply_concentration');
+        if FSaltSupplyConcentrationFileStream = nil then
+        begin
+          FSaltSupplyConcentrationFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
   if result <> '' then
@@ -1876,6 +1889,7 @@ begin
     wlPondDepth: ;
     wlNoCropMeansBareSoil: ;
     wlNoEvapErrCorrection: ;
+    wlSaltSupplyConcentration: ;
     else Assert(False);
   end;
 end;
@@ -1942,6 +1956,7 @@ begin
     wlPondDepth: ;
     wlNoCropMeansBareSoil: ;
     wlNoEvapErrCorrection: ;
+    wlSaltSupplyConcentration: ;
     else Assert(False)
   end;
 end;
@@ -2237,14 +2252,6 @@ begin
           Model.AddModelOutputFile(OutputFile);
           NewLine;
         end;
-      sfpPrintByCrop:
-        begin
-          WriteString('  PRINT BYCROP ');
-          OutputFile := ChangeFileExt(FInputFileName, '.Salinity_Flush_Irrigation_By_Crop');
-          WriteString(ExtractFileName(OutputFile));
-          Model.AddModelOutputFile(OutputFile);
-          NewLine;
-        end;
       sfpPrintAll:
         begin
           WriteString('  PRINT ALL ');
@@ -2253,6 +2260,180 @@ begin
           Model.AddModelOutputFile(OutputFile);
           NewLine;
         end;
+    end;
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteSaltSupplyConcentration;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  FarmID: Integer;
+  InnerFarmIndex: Integer;
+//  IrrIndex: Integer;
+//  OfeItem: TCropEfficiencyItem;
+  TimeIndex: Integer;
+  StartTime: Double;
+  SourceConcentration: TSaltSupplyConcentrationItem;
+  Index: Integer;
+  procedure WriteItem(AFarm: TFarm; SourceConcentration: TSaltSupplyConcentrationItem);
+  var
+    Formula: string;
+  begin
+    if SourceConcentration <> nil then
+    begin
+      Formula := SourceConcentration.NonRoutedConcentration;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid non-routed salt supply concentration formula for farm %0:s',
+        [AFarm.FarmName]));
+
+      Formula := SourceConcentration.SurfaceWaterConcentration;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid surface water salt supply concentration formula for farm %0:s',
+        [AFarm.FarmName]));
+
+      Formula := SourceConcentration.GroundwaterConcentration;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid groundwater salt supply concentration formula for farm %0:s',
+        [AFarm.FarmName]));
+
+      Formula := SourceConcentration.ExternalConcentration;
+      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+        Format('Invalid external salt supply concentration formula for farm %0:s',
+        [AFarm.FarmName]));
+    end
+    else
+    begin
+      WriteFloat(0);
+      WriteFloat(0);
+      WriteFloat(0);
+      WriteFloat(0);
+    end;
+  end;
+begin
+  if FSalinityFlush.FarmSaltConcentrationsChoice.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlSaltSupplyConcentration;
+  RequiredValues.DefaultValue := 1;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SALINITY_FLUSH_IRRIGATION: WBS_SUPPLY_SALT_CONCENTRATION';
+  RequiredValues.ErrorID := 'FMP SALINITY_FLUSH_IRRIGATION: WBS_SUPPLY_SALT_CONCENTRATION';
+  RequiredValues.ID := 'WBS_SUPPLY_SALT_CONCENTRATION';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FSalinityFlush.FarmSaltConcentrationsChoice.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.CheckError := 'Invalid salt supply concentration formula';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSalinityFlush.FarmSaltConcentrationsChoice;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlSaltSupplyConcentration);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for Index := 1 to 4 do
+              begin
+                WriteFloat(0);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            SourceConcentration :=AFarm.SaltSupplyConcentrationCollection.ItemByStartTime(StartTime) as TSaltSupplyConcentrationItem;
+              WriteItem(AFarm, SourceConcentration);
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for Index := 1 to 4 do
+            begin
+              WriteFloat(0);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          if AFarm.SaltSupplyConcentrationCollection.Count > 0 then
+          begin
+            SourceConcentration := AFarm.SaltSupplyConcentrationCollection.First as TSaltSupplyConcentrationItem;
+          end
+          else
+          begin
+            SourceConcentration := nil;
+          end;
+          WriteItem(AFarm,  SourceConcentration);
+          Inc(FarmID);
+          NewLine;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
     end;
   end;
 end;
@@ -8344,6 +8525,7 @@ begin
     WriteExpressionVariableNearZero;
 
     // WBS_SUPPLY_SALT_CONCENTRATION
+    WriteSaltSupplyConcentration;
 
     WriteIrrigationUniformity;
     WriteCropHasSalinityDemand;
@@ -8825,6 +9007,12 @@ begin
           Assert(FSumOneCorrectionFileStream <> nil);
           FSumOneCorrectionFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlSaltSupplyConcentration:
+        begin
+          Assert(FSaltSupplyConcentrationFileStream <> nil);
+          FSaltSupplyConcentrationFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+
       else
         Assert(False);
     end;

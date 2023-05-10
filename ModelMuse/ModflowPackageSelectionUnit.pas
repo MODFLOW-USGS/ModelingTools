@@ -5977,8 +5977,7 @@ Type
   end;
 
                         {PRINT BYFARM,   PRINT BYFARM_BYCROP,   PRINT ALL}
-  TSalinityFlushPrint = (sfpPrintByFarm, sfpPrintByFarmByCrop,
-    sfpPrintByCrop, sfpPrintAll);
+  TSalinityFlushPrint = (sfpPrintByFarm, sfpPrintByFarmByCrop, sfpPrintAll);
   TSalinityFlushPrints = set of TSalinityFlushPrint;
 
 

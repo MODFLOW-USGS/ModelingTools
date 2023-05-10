@@ -541,7 +541,7 @@ inherited frmFormula: TfrmFormula
       765
       41)
     object btnCancel: TBitBtn
-      Left = 637
+      Left = 633
       Top = 6
       Width = 91
       Height = 33
@@ -549,10 +549,10 @@ inherited frmFormula: TfrmFormula
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 633
+      ExplicitLeft = 629
     end
     object btnOK: TBitBtn
-      Left = 540
+      Left = 536
       Top = 6
       Width = 91
       Height = 33
@@ -561,10 +561,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 536
+      ExplicitLeft = 532
     end
     object btnHelp: TBitBtn
-      Left = 445
+      Left = 441
       Top = 4
       Width = 91
       Height = 33
@@ -573,10 +573,10 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 441
+      ExplicitLeft = 437
     end
     object btnFunctionHelp: TBitBtn
-      Left = 275
+      Left = 271
       Top = 4
       Width = 163
       Height = 33
@@ -605,7 +605,7 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnFunctionHelpClick
-      ExplicitLeft = 271
+      ExplicitLeft = 267
     end
   end
   object pnlRight: TPanel
@@ -659,8 +659,7 @@ inherited frmFormula: TfrmFormula
       OnChange = tvItemsChange
       OnDblClick = tvItemsDblClick
       OnMouseDown = tvItemsMouseDown
-      ExplicitWidth = 217
-      ExplicitHeight = 395
+      ExplicitLeft = 1
     end
   end
   object Timer: TTimer

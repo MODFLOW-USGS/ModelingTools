@@ -165,6 +165,7 @@ type
     procedure TestChangedPriority;
     procedure TestOperatorParenthesisSkipped;
     procedure FarmProcessTest;
+    procedure TestAddedOperatorOverload;
   end;
 
 implementation
@@ -293,6 +294,106 @@ begin
       Check(True);
     end;
   end;
+end;
+
+
+var
+  NotEqualRROperator: TFunctionClass;
+  NotEqualRIOperator: TFunctionClass;
+  NotEqualIROperator: TFunctionClass;
+  NotEqualIOperator: TFunctionClass;
+  NotEqualBOperator: TFunctionClass;
+
+procedure TestTRbwParser.TestAddedOperatorOverload;
+  procedure DefineAltNotEqualsOperator;
+  var
+    ArgumentDef: TOperatorArgumentDefinition;
+    OperatorDefinition: TOperatorDefinition;
+  begin
+    OperatorDefinition := TOperatorDefinition.Create;
+    OperatorDefinition.OperatorName := '!=';
+    OperatorDefinition.ArgumentCount := acTwo;
+    OperatorDefinition.Precedence := p1;
+    OperatorDefinition.SignOperator := False;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtDouble;
+    ArgumentDef.SecondArgumentType := rdtDouble;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := NotEqualRROperator;
+    ArgumentDef.OperatorClass := TOperator;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtInteger;
+    ArgumentDef.SecondArgumentType := rdtDouble;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := NotEqualIROperator;
+    ArgumentDef.OperatorClass := TOperator;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtDouble;
+    ArgumentDef.SecondArgumentType := rdtInteger;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := NotEqualRIOperator;
+    ArgumentDef.OperatorClass := TOperator;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtInteger;
+    ArgumentDef.SecondArgumentType := rdtInteger;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := NotEqualIOperator;
+    ArgumentDef.OperatorClass := TOperator;
+    //
+    ArgumentDef := TOperatorArgumentDefinition.Create;
+    OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+    ArgumentDef.FirstArgumentType := rdtBoolean;
+    ArgumentDef.SecondArgumentType := rdtBoolean;
+    ArgumentDef.CreationMethod := cmCreate;
+    ArgumentDef.FunctionClass := NotEqualBOperator;
+    ArgumentDef.OperatorClass := TOperator;
+
+    FRbwParser.AddOperator(OperatorDefinition);
+  end;
+var
+  Formula: string;
+begin
+  DefineAltNotEqualsOperator;
+
+  FRbwParser.CreateVariable('A', '', True, '');
+  FRbwParser.CreateVariable('B', '', True, '');
+  FRbwParser.CreateVariable('C', '', 1.0, '');
+  FRbwParser.CreateVariable('D', '', 1.0, '');
+  FRbwParser.CreateVariable('E', '', 1, '');
+  FRbwParser.CreateVariable('F', '', 1, '');
+
+  Formula := 'A!=B';
+  FRbwParser.Compile(Formula);
+  FRbwParser.CurrentExpression.Evaluate;
+  Check(not FRbwParser.CurrentExpression.BooleanResult);
+
+  Formula := 'C!=D';
+  FRbwParser.Compile(Formula);
+  FRbwParser.CurrentExpression.Evaluate;
+  Check(not FRbwParser.CurrentExpression.BooleanResult);
+
+  Formula := 'C!=E';
+  FRbwParser.Compile(Formula);
+  FRbwParser.CurrentExpression.Evaluate;
+  Check(not FRbwParser.CurrentExpression.BooleanResult);
+
+  Formula := 'E!=C';
+  FRbwParser.Compile(Formula);
+  FRbwParser.CurrentExpression.Evaluate;
+  Check(not FRbwParser.CurrentExpression.BooleanResult);
+
+  Formula := 'E!=F';
+  FRbwParser.Compile(Formula);
+  FRbwParser.CurrentExpression.Evaluate;
+  Check(not FRbwParser.CurrentExpression.BooleanResult);
 end;
 
 var
@@ -5577,6 +5678,31 @@ function _NotEquals(Values: array of pointer): Boolean;
 begin
   result := PBoolean(Values[0])^ <> PBoolean(Values[1])^;
 end;
+function _NotEqualB(Values: array of pointer): boolean;
+begin
+  result := PBoolean(Values[0])^ <> PBoolean(Values[1])^;
+end;
+
+function _NotEqualI(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ <> PInteger(Values[1])^;
+end;
+
+function _NotEqualRR(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ <> PDouble(Values[1])^;
+end;
+
+function _NotEqualRI(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ <> PInteger(Values[1])^;
+end;
+
+function _NotEqualIR(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ <> PDouble(Values[1])^;
+end;
+
 
 { TMyExpression }
 
@@ -5621,6 +5747,57 @@ initialization
   OtherNotEqualsOperator.OptionalArguments := 0;
   OtherNotEqualsOperator.BFunctionAddr := _NotEquals;
 
+  NotEqualIOperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualIOperator);
+  NotEqualIOperator.InputDataCount := 2;
+  NotEqualIOperator.BFunctionAddr := @_NotEqualI;
+  NotEqualIOperator.Name := '!=';
+  NotEqualIOperator.Prototype := '<>';
+  NotEqualIOperator.InputDataTypes[0] := rdtInteger;
+  NotEqualIOperator.InputDataTypes[1] := rdtInteger;
+  NotEqualIOperator.OptionalArguments := 0;
+
+  NotEqualRROperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualRROperator);
+  NotEqualRROperator.InputDataCount := 2;
+  NotEqualRROperator.BFunctionAddr := @_NotEqualRR;
+  NotEqualRROperator.Name := '!=';
+  NotEqualRROperator.Prototype := '<>';
+  NotEqualRROperator.InputDataTypes[0] := rdtDouble;
+  NotEqualRROperator.InputDataTypes[1] := rdtDouble;
+  NotEqualRROperator.OptionalArguments := 0;
+
+  NotEqualRIOperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualRIOperator);
+  NotEqualRIOperator.InputDataCount := 2;
+  NotEqualRIOperator.BFunctionAddr := @_NotEqualRI;
+  NotEqualRIOperator.Name := '!=';
+  NotEqualRIOperator.Prototype := '<>';
+  NotEqualRIOperator.InputDataTypes[0] := rdtDouble;
+  NotEqualRIOperator.InputDataTypes[1] := rdtInteger;
+  NotEqualRIOperator.OptionalArguments := 0;
+
+  NotEqualIROperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualIROperator);
+  NotEqualIROperator.InputDataCount := 2;
+  NotEqualIROperator.BFunctionAddr := @_NotEqualIR;
+  NotEqualIROperator.Name := '!=';
+  NotEqualIROperator.Prototype := '<>';
+  NotEqualIROperator.InputDataTypes[0] := rdtInteger;
+  NotEqualIROperator.InputDataTypes[1] := rdtDouble;
+  NotEqualIROperator.OptionalArguments := 0;
+
+  NotEqualBOperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualBOperator);
+  NotEqualBOperator.InputDataCount := 2;
+  NotEqualBOperator.BFunctionAddr := @_NotEqualB;
+  NotEqualBOperator.Name := '!=';
+  NotEqualBOperator.Prototype := '<>';
+  NotEqualBOperator.InputDataTypes[0] := rdtBoolean;
+  NotEqualBOperator.InputDataTypes[1] := rdtBoolean;
+  NotEqualBOperator.OptionalArguments := 0;
+
+
 
   // Register any test cases with the test runner
   RegisterTest(TestTRbwParser.Suite);
@@ -5631,6 +5808,11 @@ finalization
   AndOperator.Free;
   OrOperator.Free;
   OtherNotEqualsOperator.Free;
+  NotEqualRROperator.Free;
+  NotEqualRIOperator.Free;
+  NotEqualIROperator.Free;
+  NotEqualIOperator.Free;
+  NotEqualBOperator.Free;
 
 end.
 

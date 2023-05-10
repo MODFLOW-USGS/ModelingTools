@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.ExtCtrls,
   RbwParser, Vcl.StdCtrls, JvExStdCtrls, JvRichEdit, Vcl.ComCtrls, JvExExtCtrls,
-  JvNetscapeSplitter, Vcl.Buttons, frmFormulaUnit, Winapi.RichEdit;
+  JvNetscapeSplitter, Vcl.Buttons, frmFormulaUnit, Winapi.RichEdit,
+  System.Contnrs;
 
 type
   TfrmFmpFormulaEditor = class(TfrmCustomGoPhast)
@@ -60,12 +61,18 @@ type
     btnCloseBracket: TButton;
     btnAndOperator: TButton;
     btnOrOperator: TButton;
+    procedure FormDestroy(Sender: TObject); override;
+    procedure FormCreate(Sender: TObject); override;
     procedure btnClick(Sender: TObject);
+    procedure btnOKClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure jreFormulaChange(Sender: TObject);
     procedure jreFormulaDblClick(Sender: TObject);
     procedure jreFormulaMouseUp(Sender: TObject; Button: TMouseButton; Shift:
         TShiftState; X, Y: Integer);
     procedure jreFormulaSelectionChange(Sender: TObject);
+    procedure SplitterCanResize(Sender: TObject; var NewSize: Integer; var Accept:
+        Boolean);
     procedure TimerSetSelection(Sender: TObject);
     procedure tvFormulaDiagramCollapsed(Sender: TObject; Node: TTreeNode);
     procedure tvFormulaDiagramExpanded(Sender: TObject; Node: TTreeNode);
@@ -94,6 +101,17 @@ type
     procedure CreateNodesForVariables;
     procedure CreatePredefinedVariables;
     procedure RemoveUnsupportedFunctions;
+    procedure RemoveUnsupportedOrChangedOperators;
+    procedure DefineAndOperator;
+    procedure DefinOrOperator;
+    procedure DefineEqualsOperator;
+    procedure DefineNotEqualsOperator;
+    procedure DefineGreaterThanOperator;
+    procedure DefineLessThanOperator;
+    procedure DefineGreaterThanOrEqualsOperator;
+    procedure DefineLessThanOrEqualsOperator;
+    procedure DefineNewOperators;
+    procedure AddNewFunctions;
     { Private declarations }
   protected
     procedure CreateParams(var Params: TCreateParams); override;
@@ -111,7 +129,7 @@ var
 implementation
 
 uses
-  System.StrUtils, IntListUnit, ClassificationUnit;
+  System.StrUtils, IntListUnit, ClassificationUnit, System.Math;
 
 resourcestring
   StrErrorAppendingRTF = 'Error appending RTF data.';
@@ -119,7 +137,70 @@ resourcestring
   StrFunctions = 'Functions';
   StrYouCanCheckTheDo = 'You can check the documentation for any functions y' +
   'ou are using in the ModelMuse help.';
+  StrFarmProcess = 'Farm Process';
 {$R *.dfm}
+
+var
+  PriorSelectedText: string = '';
+
+var
+  AndOperator: TFunctionClass;
+  OrOperator: TFunctionClass;
+  EqualRROperator: TFunctionClass;
+  EqualRIOperator: TFunctionClass;
+  EqualIROperator: TFunctionClass;
+  EqualIOperator: TFunctionClass;
+  EqualBOperator: TFunctionClass;
+  NotEqualRROperator: TFunctionClass;
+  NotEqualRIOperator: TFunctionClass;
+  NotEqualIROperator: TFunctionClass;
+  NotEqualIOperator: TFunctionClass;
+  NotEqualBOperator: TFunctionClass;
+
+  LessThanIOperator: TFunctionClass;
+  LessThanRROperator: TFunctionClass;
+  LessThanRIOperator: TFunctionClass;
+  LessThanIROperator: TFunctionClass;
+
+  GreaterThanIOperator: TFunctionClass;
+  GreaterThanRROperator: TFunctionClass;
+  GreaterThanRIOperator: TFunctionClass;
+  GreaterThanIROperator: TFunctionClass;
+
+  LessThanOrEqualsIOperator: TFunctionClass;
+  LessThanOrEqualsRROperator: TFunctionClass;
+  LessThanOrEqualsRIOperator: TFunctionClass;
+  LessThanOrEqualsIROperator: TFunctionClass;
+
+  GreaterThanOrEqualsIOperator: TFunctionClass;
+  GreaterThanOrEqualsRROperator: TFunctionClass;
+  GreaterThanOrEqualsRIOperator: TFunctionClass;
+  GreaterThanOrEqualsIROperator: TFunctionClass;
+
+  CEILING_Function: TFunctionRecord;
+  FLOOR_Function: TFunctionRecord;
+  LOG_Function: TFunctionRecord;
+  NEG_Function: TFunctionRecord;
+  NEG_TO_ZERO_Function: TFunctionRecord;
+  POS_TO_ZERO_Function: TFunctionRecord;
+  TRUNCATE_Function: TFunctionRecord;
+
+procedure TfrmFmpFormulaEditor.FormDestroy(Sender: TObject);
+begin
+  FDiagramObjectStorage.Free;
+  inherited;
+end;
+
+procedure TfrmFmpFormulaEditor.FormCreate(Sender: TObject);
+begin
+  inherited;
+  jreFormula.DoubleBuffered := False;
+  Constraints.MinWidth := Width;
+  pnlMain.Constraints.MinWidth := pnlMain.Width;
+  pnlButtons.Constraints.MinWidth := pnlButtons.Width;
+
+  FDiagramObjectStorage := TObjectList.Create;
+end;
 
 procedure TfrmFmpFormulaEditor.btnClick(Sender: TObject);
 var
@@ -260,29 +341,29 @@ end;
 
 procedure TfrmFmpFormulaEditor.CreatePredefinedVariables;
 begin
-  rbFormulaParser.CreateVariable('LR', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ECw', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ECe', '', 0.0, '');
-  rbFormulaParser.CreateVariable('CU', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ETr', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ETc', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ETp', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ETi', '', 0.0, '');
-  rbFormulaParser.CreateVariable('CIR', '', 0.0, '');
-  rbFormulaParser.CreateVariable('DMD', '', 0.0, '');
-  rbFormulaParser.CreateVariable('P', '', 0.0, '');
-  rbFormulaParser.CreateVariable('AREA', '', 0.0, '');
-  rbFormulaParser.CreateVariable('Tgw', '', 0.0, '');
-  rbFormulaParser.CreateVariable('Tp', '', 0.0, '');
-  rbFormulaParser.CreateVariable('Ti', '', 0.0, '');
-  rbFormulaParser.CreateVariable('EFF', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ROOT', '', 0.0, '');
-  rbFormulaParser.CreateVariable('CapF', '', 0.0, '');
-  rbFormulaParser.CreateVariable('DP_p', '', 0.0, '');
-  rbFormulaParser.CreateVariable('DP_i', '', 0.0, '');
-  rbFormulaParser.CreateVariable('DP', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ADRS', '', 0.0, '');
-  rbFormulaParser.CreateVariable('ADMD', '', 0.0, '');
+  rbFormulaParser.CreateVariable('LR', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ECw', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ECe', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('CU', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ETr', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ETc', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ETp', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ETi', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('CIR', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('DMD', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('P', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('AREA', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('Tgw', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('Tp', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('Ti', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('EFF', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ROOT', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('CapF', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('DP_p', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('DP_i', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('DP', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ADRS', StrFarmProcess, 0.0, '');
+  rbFormulaParser.CreateVariable('ADMD', StrFarmProcess, 0.0, '');
 end;
 
 procedure TfrmFmpFormulaEditor.DiagramFormula;
@@ -383,6 +464,342 @@ begin
   result := Trim(Result);
 end;
 
+procedure TfrmFmpFormulaEditor.DefineAndOperator;
+var
+  OperatorDefinition: TOperatorDefinition;
+  ArgumentDef: TOperatorArgumentDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '&';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtBoolean;
+  ArgumentDef.SecondArgumentType := rdtBoolean;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := AndOperator;
+  ArgumentDef.OperatorClass := TOperator;
+
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
+procedure TfrmFmpFormulaEditor.DefinOrOperator;
+var
+  OperatorDefinition: TOperatorDefinition;
+  ArgumentDef: TOperatorArgumentDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '|';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtBoolean;
+  ArgumentDef.SecondArgumentType := rdtBoolean;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := OrOperator;
+  ArgumentDef.OperatorClass := TOperator;
+
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
+procedure TfrmFmpFormulaEditor.DefineEqualsOperator;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OperatorDefinition: TOperatorDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '==';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := EqualRROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := EqualIROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := EqualRIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := EqualIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtBoolean;
+  ArgumentDef.SecondArgumentType := rdtBoolean;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := EqualBOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
+procedure TfrmFmpFormulaEditor.DefineNotEqualsOperator;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OperatorDefinition: TOperatorDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '!=';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := NotEqualRROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := NotEqualIROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := NotEqualRIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := NotEqualIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtBoolean;
+  ArgumentDef.SecondArgumentType := rdtBoolean;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := NotEqualBOperator;
+  ArgumentDef.OperatorClass := TOperator;
+
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
+procedure TfrmFmpFormulaEditor.DefineGreaterThanOperator;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OperatorDefinition: TOperatorDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '>';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanRROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanRIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanIROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
+procedure TfrmFmpFormulaEditor.DefineLessThanOperator;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OperatorDefinition: TOperatorDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '<';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanRROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanIROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanRIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
+procedure TfrmFmpFormulaEditor.DefineLessThanOrEqualsOperator;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OperatorDefinition: TOperatorDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '<=';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanOrEqualsRROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanOrEqualsIROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanOrEqualsRIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := LessThanOrEqualsIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
+procedure TfrmFmpFormulaEditor.DefineGreaterThanOrEqualsOperator;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OperatorDefinition: TOperatorDefinition;
+begin
+  OperatorDefinition := TOperatorDefinition.Create;
+  OperatorDefinition.OperatorName := '>=';
+  OperatorDefinition.ArgumentCount := acTwo;
+  OperatorDefinition.Precedence := p1;
+  OperatorDefinition.SignOperator := False;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanOrEqualsRROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanOrEqualsIROperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanOrEqualsRIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+  //
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.FunctionClass := GreaterThanOrEqualsIOperator;
+  ArgumentDef.OperatorClass := TOperator;
+
+  rbFormulaParser.AddOperator(OperatorDefinition);
+end;
+
 procedure TfrmFmpFormulaEditor.Initialize;
 begin
   rbFormulaParser.ClearExpressions;
@@ -393,21 +810,10 @@ begin
   tvItems.Items.Clear;
   tvFormulaDiagram.Items.Clear;
 
-  rbFormulaParser.RemoveOperator('and');
-  rbFormulaParser.RemoveOperator('or');
-  rbFormulaParser.RemoveOperator('not');
-  rbFormulaParser.RemoveOperator('xor');
-  rbFormulaParser.RemoveOperator('=');
-  rbFormulaParser.RemoveOperator('<>');
-  rbFormulaParser.RemoveOperator('>');
-  rbFormulaParser.RemoveOperator('<');
-  rbFormulaParser.RemoveOperator('>=');
-  rbFormulaParser.RemoveOperator('<=');
-  rbFormulaParser.RemoveOperator('mod');
-  rbFormulaParser.RemoveOperator('div');
-
+  RemoveUnsupportedOrChangedOperators;
   RemoveUnsupportedFunctions;
-
+  DefineNewOperators;
+  AddNewFunctions;
   CreatePredefinedVariables;
 end;
 
@@ -1116,6 +1522,99 @@ begin
   end;
 end;
 
+procedure TfrmFmpFormulaEditor.AddNewFunctions;
+begin
+  rbFormulaParser.Functions.Add(CEILING_Function);
+  rbFormulaParser.Functions.Add(FLOOR_Function);
+  rbFormulaParser.Functions.Add(LOG_Function);
+  rbFormulaParser.Functions.Add(NEG_Function);
+  rbFormulaParser.Functions.Add(NEG_TO_ZERO_Function);
+  rbFormulaParser.Functions.Add(POS_TO_ZERO_Function);
+  rbFormulaParser.Functions.Add(TRUNCATE_Function);
+end;
+
+procedure TfrmFmpFormulaEditor.btnOKClick(Sender: TObject);
+var
+  AFormula: string;
+begin
+  inherited;
+  AFormula := Formula;
+  try
+    if rbFormulaParser.Compile(AFormula) >= 0 then
+    begin
+      FResultSet := True;
+    end;
+    Close;
+  except on E: ErbwParserError do
+    begin
+      btnOK.Enabled := False;
+      Beep;
+      MessageDlg(E.Message + SLineBreak + StrYouCanCheckTheDo, mtError, [mbOK], 0);
+    end;
+  end;
+  if FResultSet then
+  begin
+    ModalResult := mrOK
+  end;
+  if tvItems.Selected <> nil then
+  begin
+    PriorSelectedText := tvItems.Selected.Text;
+  end;
+end;
+
+procedure TfrmFmpFormulaEditor.DefineNewOperators;
+begin
+  DefineAndOperator;
+  DefinOrOperator;
+  DefineEqualsOperator;
+  DefineNotEqualsOperator;
+  DefineLessThanOperator;
+  DefineGreaterThanOperator;
+  DefineGreaterThanOrEqualsOperator;
+  DefineLessThanOrEqualsOperator;
+end;
+
+procedure TfrmFmpFormulaEditor.FormShow(Sender: TObject);
+var
+  Index: Integer;
+  Item: TTreeNode;
+begin
+  inherited;
+  if PriorSelectedText <> '' then
+  begin
+    for Index := 0 to tvItems.Items.Count - 1 do
+    begin
+      Item := tvItems.Items[Index];
+      if Item.Text = PriorSelectedText then
+      begin
+        tvItems.Selected := Item;
+        break;
+      end;
+    end;
+  end;
+  // For some reason ModelMuse sometimes has trouble reading the ScrollBars
+  // property when creating the form.
+  jreFormula.ScrollBars := ssVertical;
+
+  jreFormula.SetFocus;
+end;
+
+procedure TfrmFmpFormulaEditor.RemoveUnsupportedOrChangedOperators;
+begin
+  rbFormulaParser.RemoveOperator('and');
+  rbFormulaParser.RemoveOperator('or');
+  rbFormulaParser.RemoveOperator('not');
+  rbFormulaParser.RemoveOperator('xor');
+  rbFormulaParser.RemoveOperator('=');
+  rbFormulaParser.RemoveOperator('<>');
+  rbFormulaParser.RemoveOperator('>');
+  rbFormulaParser.RemoveOperator('<');
+  rbFormulaParser.RemoveOperator('>=');
+  rbFormulaParser.RemoveOperator('<=');
+  rbFormulaParser.RemoveOperator('mod');
+  rbFormulaParser.RemoveOperator('div');
+end;
+
 procedure TfrmFmpFormulaEditor.RemoveUnsupportedFunctions;
 begin
   rbFormulaParser.Functions.Remove('case');
@@ -1179,5 +1678,566 @@ begin
   rbFormulaParser.Functions.Remove('tan');
   rbFormulaParser.Functions.Remove('tanh');
 end;
+
+procedure TfrmFmpFormulaEditor.SplitterCanResize(Sender: TObject; var NewSize:
+    Integer; var Accept: Boolean);
+begin
+  inherited;
+  Accept := NewSize >= pnlMain.Constraints.MinWidth;
+end;
+
+function _And(Values: array of pointer): Boolean;
+begin
+  result := PBoolean(Values[0])^ and PBoolean(Values[1])^;
+end;
+
+function _Or(Values: array of pointer): Boolean;
+begin
+  result := PBoolean(Values[0])^ or PBoolean(Values[1])^;
+end;
+
+function _EqualRR(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ = PDouble(Values[1])^;
+end;
+
+function _EqualRI(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ = PInteger(Values[1])^;
+end;
+
+function _EqualIR(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ = PDouble(Values[1])^;
+end;
+
+function _EqualI(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ = PInteger(Values[1])^;
+end;
+
+function _EqualB(Values: array of pointer): boolean;
+begin
+  result := PBoolean(Values[0])^ = PBoolean(Values[1])^;
+end;
+
+function _NotEqualB(Values: array of pointer): boolean;
+begin
+  result := PBoolean(Values[0])^ <> PBoolean(Values[1])^;
+end;
+
+function _NotEqualI(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ <> PInteger(Values[1])^;
+end;
+
+function _NotEqualRR(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ <> PDouble(Values[1])^;
+end;
+
+function _NotEqualRI(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ <> PInteger(Values[1])^;
+end;
+
+function _NotEqualIR(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ <> PDouble(Values[1])^;
+end;
+
+function _LessThanI(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ < PInteger(Values[1])^;
+end;
+
+function _LessThanRR(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ < PDouble(Values[1])^;
+end;
+
+function _LessThanRI(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ < PInteger(Values[1])^;
+end;
+
+function _LessThanIR(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ < PDouble(Values[1])^;
+end;
+
+function _GreaterThanI(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ > PInteger(Values[1])^;
+end;
+
+function _GreaterThanRR(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ > PDouble(Values[1])^;
+end;
+
+function _GreaterThanRI(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ > PInteger(Values[1])^;
+end;
+
+function _GreaterThanIR(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ > PDouble(Values[1])^;
+end;
+
+function _LessThanOrEqualsI(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ <= PInteger(Values[1])^;
+end;
+
+function _LessThanOrEqualsRR(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ <= PDouble(Values[1])^;
+end;
+
+function _LessThanOrEqualsRI(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ <= PInteger(Values[1])^;
+end;
+
+function _LessThanOrEqualsIR(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ <= PDouble(Values[1])^;
+end;
+
+function _GreaterThanOrEqualsI(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ >= PInteger(Values[1])^;
+end;
+
+function _GreaterThanOrEqualsRR(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ >= PDouble(Values[1])^;
+end;
+
+function _GreaterThanOrEqualsRI(Values: array of pointer): boolean;
+begin
+  result := PDouble(Values[0])^ >= PInteger(Values[1])^;
+end;
+function _GreaterThanOrEqualsIR(Values: array of pointer): boolean;
+begin
+  result := PInteger(Values[0])^ >= PDouble(Values[1])^;
+end;
+
+function _Ceiling(Values: array of pointer): double;
+begin
+  result := Ceil(PDouble(Values[0])^);
+end;
+
+function _Floor(Values: array of pointer): double;
+begin
+  result := Floor(PDouble(Values[0])^);
+end;
+
+function _Log(Values: array of pointer): double;
+begin
+  result := Ln(PDouble(Values[0])^);
+end;
+
+function _Neg(Values: array of pointer): double;
+begin
+  result := -(PDouble(Values[0])^);
+end;
+
+function _NegToZero(Values: array of pointer): double;
+begin
+  result := Max(0,(PDouble(Values[0])^));
+end;
+
+function _PosToZero(Values: array of pointer): double;
+begin
+  result := Min(0,(PDouble(Values[0])^));
+end;
+
+function _Truncate(Values: array of pointer): double;
+begin
+  result := Trunc(PDouble(Values[0])^);
+end;
+
+
+resourcestring
+  StrMath = 'Math|';
+  StrLogical = 'Logical|';
+
+
+procedure CreateFunctionClasses;
+begin
+  AndOperator := TFunctionClass.Create;
+  AndOperator.AllowConversionToConstant := True;
+  AndOperator.InputDataCount := 2;
+  AndOperator.InputDataTypes[0] := rdtBoolean;
+  AndOperator.InputDataTypes[1] := rdtBoolean;
+  AndOperator.Name := '&';
+  AndOperator.Prototype := StrLogical + '&';
+  AndOperator.OptionalArguments := 0;
+  AndOperator.BFunctionAddr := _And;
+
+  OrOperator := TFunctionClass.Create;
+  OrOperator.AllowConversionToConstant := True;
+  OrOperator.InputDataCount := 2;
+  OrOperator.InputDataTypes[0] := rdtBoolean;
+  OrOperator.InputDataTypes[1] := rdtBoolean;
+  OrOperator.Name := '|';
+  OrOperator.Prototype := StrLogical + '|';
+  OrOperator.OptionalArguments := 0;
+  OrOperator.BFunctionAddr := _Or;
+
+  EqualIOperator := TFunctionClass.Create;
+//  OperatorList.Add(EqualIOperator);
+  EqualIOperator.InputDataCount := 2;
+  EqualIOperator.BFunctionAddr := @_EqualI;
+  EqualIOperator.Name := '==';
+  EqualIOperator.Prototype := StrLogical+'=';
+  EqualIOperator.InputDataTypes[0] := rdtInteger;
+  EqualIOperator.InputDataTypes[1] := rdtInteger;
+  EqualIOperator.OptionalArguments := 0;
+
+  EqualRROperator := TFunctionClass.Create;
+  EqualRROperator.InputDataCount := 2;
+  EqualRROperator.BFunctionAddr := @_EqualRR;
+  EqualRROperator.Name := '==';
+  EqualRROperator.Prototype := StrLogical+'=';
+  EqualRROperator.InputDataTypes[0] := rdtDouble;
+  EqualRROperator.InputDataTypes[1] := rdtDouble;
+  EqualRROperator.OptionalArguments := 0;
+
+  EqualRIOperator := TFunctionClass.Create;
+  EqualRIOperator.InputDataCount := 2;
+  EqualRIOperator.BFunctionAddr := @_EqualRI;
+  EqualRIOperator.Name := '==';
+  EqualRIOperator.Prototype := StrLogical+'=';
+  EqualRIOperator.InputDataTypes[0] := rdtDouble;
+  EqualRIOperator.InputDataTypes[1] := rdtInteger;
+  EqualRIOperator.OptionalArguments := 0;
+
+  EqualIROperator := TFunctionClass.Create;
+  EqualIROperator.InputDataCount := 2;
+  EqualIROperator.BFunctionAddr := @_EqualIR;
+  EqualIROperator.Name := '==';
+  EqualIROperator.Prototype := StrLogical+'=';
+  EqualIROperator.InputDataTypes[0] := rdtInteger;
+  EqualIROperator.InputDataTypes[1] := rdtDouble;
+  EqualIROperator.OptionalArguments := 0;
+
+  EqualBOperator := TFunctionClass.Create;
+  EqualBOperator.InputDataCount := 2;
+  EqualBOperator.BFunctionAddr := @_EqualB;
+  EqualBOperator.Name := '==';
+  EqualBOperator.Prototype := StrLogical+'=';
+  EqualBOperator.InputDataTypes[0] := rdtBoolean;
+  EqualBOperator.InputDataTypes[1] := rdtBoolean;
+  EqualBOperator.OptionalArguments := 0;
+
+  NotEqualIOperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualIOperator);
+  NotEqualIOperator.InputDataCount := 2;
+  NotEqualIOperator.BFunctionAddr := @_NotEqualI;
+  NotEqualIOperator.Name := '!=';
+  NotEqualIOperator.Prototype := StrLogical+'<>';
+  NotEqualIOperator.InputDataTypes[0] := rdtInteger;
+  NotEqualIOperator.InputDataTypes[1] := rdtInteger;
+  NotEqualIOperator.OptionalArguments := 0;
+
+  NotEqualRROperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualRROperator);
+  NotEqualRROperator.InputDataCount := 2;
+  NotEqualRROperator.BFunctionAddr := @_NotEqualRR;
+  NotEqualRROperator.Name := '!=';
+  NotEqualRROperator.Prototype := StrLogical+'<>';
+  NotEqualRROperator.InputDataTypes[0] := rdtDouble;
+  NotEqualRROperator.InputDataTypes[1] := rdtDouble;
+  NotEqualRROperator.OptionalArguments := 0;
+
+  NotEqualRIOperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualRIOperator);
+  NotEqualRIOperator.InputDataCount := 2;
+  NotEqualRIOperator.BFunctionAddr := @_NotEqualRI;
+  NotEqualRIOperator.Name := '!=';
+  NotEqualRIOperator.Prototype := StrLogical+'<>';
+  NotEqualRIOperator.InputDataTypes[0] := rdtDouble;
+  NotEqualRIOperator.InputDataTypes[1] := rdtInteger;
+  NotEqualRIOperator.OptionalArguments := 0;
+
+  NotEqualIROperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualIROperator);
+  NotEqualIROperator.InputDataCount := 2;
+  NotEqualIROperator.BFunctionAddr := @_NotEqualIR;
+  NotEqualIROperator.Name := '!=';
+  NotEqualIROperator.Prototype := StrLogical+'<>';
+  NotEqualIROperator.InputDataTypes[0] := rdtInteger;
+  NotEqualIROperator.InputDataTypes[1] := rdtDouble;
+  NotEqualIROperator.OptionalArguments := 0;
+
+  NotEqualBOperator := TFunctionClass.Create;
+//  OperatorList.Add(NotEqualBOperator);
+  NotEqualBOperator.InputDataCount := 2;
+  NotEqualBOperator.BFunctionAddr := @_NotEqualB;
+  NotEqualBOperator.Name := '!=';
+  NotEqualBOperator.Prototype := StrLogical+'<>';
+  NotEqualBOperator.InputDataTypes[0] := rdtBoolean;
+  NotEqualBOperator.InputDataTypes[1] := rdtBoolean;
+  NotEqualBOperator.OptionalArguments := 0;
+
+  LessThanIOperator := TFunctionClass.Create;
+//  OperatorList.Add(LessThanIOperator);
+  LessThanIOperator.InputDataCount := 2;
+  LessThanIOperator.BFunctionAddr := @_LessThanI;
+  LessThanIOperator.Name := '<';
+  LessThanIOperator.Prototype := StrLogical+'<';
+  LessThanIOperator.InputDataTypes[0] := rdtInteger;
+  LessThanIOperator.InputDataTypes[1] := rdtInteger;
+  LessThanIOperator.OptionalArguments := 0;
+
+  LessThanRROperator := TFunctionClass.Create;
+  LessThanRROperator.InputDataCount := 2;
+  LessThanRROperator.BFunctionAddr := @_LessThanRR;
+  LessThanRROperator.Name := '<';
+  LessThanRROperator.Prototype := StrLogical+'<';
+  LessThanRROperator.InputDataTypes[0] := rdtDouble;
+  LessThanRROperator.InputDataTypes[1] := rdtDouble;
+  LessThanRROperator.OptionalArguments := 0;
+
+  LessThanRIOperator := TFunctionClass.Create;
+  LessThanRIOperator.InputDataCount := 2;
+  LessThanRIOperator.BFunctionAddr := @_LessThanRI;
+  LessThanRIOperator.Name := '<';
+  LessThanRIOperator.Prototype := StrLogical+'<';
+  LessThanRIOperator.InputDataTypes[0] := rdtDouble;
+  LessThanRIOperator.InputDataTypes[1] := rdtInteger;
+  LessThanRIOperator.OptionalArguments := 0;
+
+  LessThanIROperator := TFunctionClass.Create;
+  LessThanIROperator.InputDataCount := 2;
+  LessThanIROperator.BFunctionAddr := @_LessThanIR;
+  LessThanIROperator.Name := '<';
+  LessThanIROperator.Prototype := StrLogical+'<';
+  LessThanIROperator.InputDataTypes[0] := rdtInteger;
+  LessThanIROperator.InputDataTypes[1] := rdtDouble;
+  LessThanIROperator.OptionalArguments := 0;
+
+
+  GreaterThanIOperator := TFunctionClass.Create;
+  GreaterThanIOperator.InputDataCount := 2;
+  GreaterThanIOperator.BFunctionAddr := @_GreaterThanI;
+  GreaterThanIOperator.Name := '>';
+  GreaterThanIOperator.Prototype := StrLogical+'>';
+  GreaterThanIOperator.InputDataTypes[0] := rdtInteger;
+  GreaterThanIOperator.InputDataTypes[1] := rdtInteger;
+  GreaterThanIOperator.OptionalArguments := 0;
+
+  GreaterThanRROperator := TFunctionClass.Create;
+  GreaterThanRROperator.InputDataCount := 2;
+  GreaterThanRROperator.BFunctionAddr := @_GreaterThanRR;
+  GreaterThanRROperator.Name := '>';
+  GreaterThanRROperator.Prototype := StrLogical+'>';
+  GreaterThanRROperator.InputDataTypes[0] := rdtDouble;
+  GreaterThanRROperator.InputDataTypes[1] := rdtDouble;
+  GreaterThanRROperator.OptionalArguments := 0;
+
+  GreaterThanRIOperator := TFunctionClass.Create;
+  GreaterThanRIOperator.InputDataCount := 2;
+  GreaterThanRIOperator.BFunctionAddr := @_GreaterThanRI;
+  GreaterThanRIOperator.Name := '>';
+  GreaterThanRIOperator.Prototype := StrLogical+'>';
+  GreaterThanRIOperator.InputDataTypes[0] := rdtDouble;
+  GreaterThanRIOperator.InputDataTypes[1] := rdtInteger;
+  GreaterThanRIOperator.OptionalArguments := 0;
+
+  GreaterThanIROperator := TFunctionClass.Create;
+  GreaterThanIROperator.InputDataCount := 2;
+  GreaterThanIROperator.BFunctionAddr := @_GreaterThanIR;
+  GreaterThanIROperator.Name := '>';
+  GreaterThanIROperator.Prototype := StrLogical+'>';
+  GreaterThanIROperator.InputDataTypes[0] := rdtInteger;
+  GreaterThanIROperator.InputDataTypes[1] := rdtDouble;
+  GreaterThanIROperator.OptionalArguments := 0;
+
+
+  LessThanOrEqualsIOperator := TFunctionClass.Create;
+  LessThanOrEqualsIOperator.InputDataCount := 2;
+  LessThanOrEqualsIOperator.BFunctionAddr := @_LessThanOrEqualsI;
+  LessThanOrEqualsIOperator.Name := '<=';
+  LessThanOrEqualsIOperator.Prototype := StrLogical+'<=';
+  LessThanOrEqualsIOperator.InputDataTypes[0] := rdtInteger;
+  LessThanOrEqualsIOperator.InputDataTypes[1] := rdtInteger;
+  LessThanOrEqualsIOperator.OptionalArguments := 0;
+
+  LessThanOrEqualsRROperator := TFunctionClass.Create;
+  LessThanOrEqualsRROperator.InputDataCount := 2;
+  LessThanOrEqualsRROperator.BFunctionAddr := @_LessThanOrEqualsRR;
+  LessThanOrEqualsRROperator.Name := '<=';
+  LessThanOrEqualsRROperator.Prototype := StrLogical+'<=';
+  LessThanOrEqualsRROperator.InputDataTypes[0] := rdtDouble;
+  LessThanOrEqualsRROperator.InputDataTypes[1] := rdtDouble;
+  LessThanOrEqualsRROperator.OptionalArguments := 0;
+
+  LessThanOrEqualsRIOperator := TFunctionClass.Create;
+  LessThanOrEqualsRIOperator.InputDataCount := 2;
+  LessThanOrEqualsRIOperator.BFunctionAddr := @_LessThanOrEqualsRI;
+  LessThanOrEqualsRIOperator.Name := '<=';
+  LessThanOrEqualsRIOperator.Prototype := StrLogical+'<=';
+  LessThanOrEqualsRIOperator.InputDataTypes[0] := rdtDouble;
+  LessThanOrEqualsRIOperator.InputDataTypes[1] := rdtInteger;
+  LessThanOrEqualsRIOperator.OptionalArguments := 0;
+
+  LessThanOrEqualsIROperator := TFunctionClass.Create;
+  LessThanOrEqualsIROperator.InputDataCount := 2;
+  LessThanOrEqualsIROperator.BFunctionAddr := @_LessThanOrEqualsIR;
+  LessThanOrEqualsIROperator.Name := '<=';
+  LessThanOrEqualsIROperator.Prototype := StrLogical+'<=';
+  LessThanOrEqualsIROperator.InputDataTypes[0] := rdtInteger;
+  LessThanOrEqualsIROperator.InputDataTypes[1] := rdtDouble;
+  LessThanOrEqualsIROperator.OptionalArguments := 0;
+
+
+  GreaterThanOrEqualsIOperator := TFunctionClass.Create;
+  GreaterThanOrEqualsIOperator.InputDataCount := 2;
+  GreaterThanOrEqualsIOperator.BFunctionAddr := @_GreaterThanOrEqualsI;
+  GreaterThanOrEqualsIOperator.Name := '>=';
+  GreaterThanOrEqualsIOperator.Prototype := StrLogical+'>=';
+  GreaterThanOrEqualsIOperator.InputDataTypes[0] := rdtInteger;
+  GreaterThanOrEqualsIOperator.InputDataTypes[1] := rdtInteger;
+  GreaterThanOrEqualsIOperator.OptionalArguments := 0;
+
+  GreaterThanOrEqualsRROperator := TFunctionClass.Create;
+  GreaterThanOrEqualsRROperator.InputDataCount := 2;
+  GreaterThanOrEqualsRROperator.BFunctionAddr := @_GreaterThanOrEqualsRR;
+  GreaterThanOrEqualsRROperator.Name := '>=';
+  GreaterThanOrEqualsRROperator.Prototype := StrLogical+'>=';
+  GreaterThanOrEqualsRROperator.InputDataTypes[0] := rdtDouble;
+  GreaterThanOrEqualsRROperator.InputDataTypes[1] := rdtDouble;
+  GreaterThanOrEqualsRROperator.OptionalArguments := 0;
+
+  GreaterThanOrEqualsRIOperator := TFunctionClass.Create;
+  GreaterThanOrEqualsRIOperator.InputDataCount := 2;
+  GreaterThanOrEqualsRIOperator.BFunctionAddr := @_GreaterThanOrEqualsRI;
+  GreaterThanOrEqualsRIOperator.Name := '>=';
+  GreaterThanOrEqualsRIOperator.Prototype := StrLogical+'>=';
+  GreaterThanOrEqualsRIOperator.InputDataTypes[0] := rdtDouble;
+  GreaterThanOrEqualsRIOperator.InputDataTypes[1] := rdtInteger;
+  GreaterThanOrEqualsRIOperator.OptionalArguments := 0;
+
+  GreaterThanOrEqualsIROperator := TFunctionClass.Create;
+  GreaterThanOrEqualsIROperator.InputDataCount := 2;
+  GreaterThanOrEqualsIROperator.BFunctionAddr := @_GreaterThanOrEqualsIR;
+  GreaterThanOrEqualsIROperator.Name := '>=';
+  GreaterThanOrEqualsIROperator.Prototype := StrLogical+'>=';
+  GreaterThanOrEqualsIROperator.InputDataTypes[0] := rdtInteger;
+  GreaterThanOrEqualsIROperator.InputDataTypes[1] := rdtDouble;
+  GreaterThanOrEqualsIROperator.OptionalArguments := 0;
+
+end;
+
+procedure DefineFmpFunctions;
+begin
+  CEILING_Function.ResultType := rdtDouble;
+  CEILING_Function.RFunctionAddr := _Ceiling;
+  SetLength(CEILING_Function.InputDataTypes, 1);
+  CEILING_Function.InputDataTypes[0] := rdtDouble;
+  CEILING_Function.OptionalArguments := 0;
+  CEILING_Function.CanConvertToConstant := False;
+  CEILING_Function.Name := 'CEILING';
+  CEILING_Function.Prototype := 'CEILING(Value)';
+
+  FLOOR_Function.ResultType := rdtDouble;
+  FLOOR_Function.RFunctionAddr := _Floor;
+  SetLength(FLOOR_Function.InputDataTypes, 1);
+  FLOOR_Function.InputDataTypes[0] := rdtDouble;
+  FLOOR_Function.OptionalArguments := 0;
+  FLOOR_Function.CanConvertToConstant := False;
+  FLOOR_Function.Name := 'FLOOR';
+  FLOOR_Function.Prototype := 'FLOOR(Value)';
+
+  LOG_Function.ResultType := rdtDouble;
+  LOG_Function.RFunctionAddr := _Log;
+  SetLength(LOG_Function.InputDataTypes, 1);
+  LOG_Function.InputDataTypes[0] := rdtDouble;
+  LOG_Function.OptionalArguments := 0;
+  LOG_Function.CanConvertToConstant := False;
+  LOG_Function.Name := 'LOG';
+  LOG_Function.Prototype := 'LOG(Value)';
+
+  NEG_Function.ResultType := rdtDouble;
+  NEG_Function.RFunctionAddr := _Neg;
+  SetLength(NEG_Function.InputDataTypes, 1);
+  NEG_Function.InputDataTypes[0] := rdtDouble;
+  NEG_Function.OptionalArguments := 0;
+  NEG_Function.CanConvertToConstant := False;
+  NEG_Function.Name := 'NEG';
+  NEG_Function.Prototype := 'NEG(Value)';
+
+  NEG_TO_ZERO_Function.ResultType := rdtDouble;
+  NEG_TO_ZERO_Function.RFunctionAddr := _NegToZero;
+  SetLength(NEG_TO_ZERO_Function.InputDataTypes, 1);
+  NEG_TO_ZERO_Function.InputDataTypes[0] := rdtDouble;
+  NEG_TO_ZERO_Function.OptionalArguments := 0;
+  NEG_TO_ZERO_Function.CanConvertToConstant := False;
+  NEG_TO_ZERO_Function.Name := 'NEG_TO_ZERO';
+  NEG_TO_ZERO_Function.Prototype := 'NEG_TO_ZERO(Value)';
+
+  POS_TO_ZERO_Function.ResultType := rdtDouble;
+  POS_TO_ZERO_Function.RFunctionAddr := _PosToZero;
+  SetLength(POS_TO_ZERO_Function.InputDataTypes, 1);
+  POS_TO_ZERO_Function.InputDataTypes[0] := rdtDouble;
+  POS_TO_ZERO_Function.OptionalArguments := 0;
+  POS_TO_ZERO_Function.CanConvertToConstant := False;
+  POS_TO_ZERO_Function.Name := 'POS_TO_ZERO';
+  POS_TO_ZERO_Function.Prototype := 'POS_TO_ZERO(Value)';
+
+  TRUNCATE_Function.ResultType := rdtDouble;
+  TRUNCATE_Function.RFunctionAddr := _Truncate;
+  SetLength(TRUNCATE_Function.InputDataTypes, 1);
+  TRUNCATE_Function.InputDataTypes[0] := rdtDouble;
+  TRUNCATE_Function.OptionalArguments := 0;
+  TRUNCATE_Function.CanConvertToConstant := False;
+  TRUNCATE_Function.Name := 'TRUNCATE';
+  TRUNCATE_Function.Prototype := 'TRUNCATE(Value)';
+
+end;
+
+initialization
+
+  CreateFunctionClasses;
+  DefineFmpFunctions;
+
+finalization
+
+  AndOperator.Free;
+  OrOperator.Free;
+  EqualRROperator.Free;
+  EqualRIOperator.Free;
+  EqualIROperator.Free;
+  EqualIOperator.Free;
+  EqualBOperator.Free;
+  NotEqualRROperator.Free;
+  NotEqualRIOperator.Free;
+  NotEqualIROperator.Free;
+  NotEqualIOperator.Free;
+  NotEqualBOperator.Free;
+
+  LessThanIOperator.Free;
+  LessThanRROperator.Free;
+  LessThanRIOperator.Free;
+  LessThanIROperator.Free;
+  GreaterThanIOperator.Free;
+  GreaterThanRROperator.Free;
+  GreaterThanRIOperator.Free;
+  GreaterThanIROperator.Free;
+
+  LessThanOrEqualsIOperator.Free;
+  LessThanOrEqualsRROperator.Free;
+  LessThanOrEqualsRIOperator.Free;
+  LessThanOrEqualsIROperator.Free;
+
+  GreaterThanOrEqualsIOperator.Free;
+  GreaterThanOrEqualsRROperator.Free;
+  GreaterThanOrEqualsRIOperator.Free;
+  GreaterThanOrEqualsIROperator.Free;
 
 end.

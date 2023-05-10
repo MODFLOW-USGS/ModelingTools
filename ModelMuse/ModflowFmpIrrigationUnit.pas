@@ -229,8 +229,8 @@ end;
 
 destructor TIrrigationItem.Destroy;
 begin
-  FEvapFraction.Free;
   inherited;
+  FEvapFraction.Free;
 end;
 
 function TIrrigationItem.IsSame(AnotherItem: TOrderedItem): boolean;

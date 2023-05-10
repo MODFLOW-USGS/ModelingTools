@@ -1372,10 +1372,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited rdeX: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeY: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1397,6 +1393,10 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited rdeVertexNumber: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeX: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -1523,10 +1523,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited rdeX: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeY: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1548,6 +1544,10 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited rdeVertexNumber: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeX: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -2169,6 +2169,7 @@ inherited frameFarm: TframeFarm
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitTop = 58
           ExplicitWidth = 577
           ExplicitHeight = 234
         end
@@ -2203,8 +2204,6 @@ inherited frameFarm: TframeFarm
         Height = 332
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 80
-        ExplicitTop = 16
         ExplicitWidth = 577
         ExplicitHeight = 332
         inherited Panel: TPanel
@@ -2220,18 +2219,22 @@ inherited frameFarm: TframeFarm
           end
           inherited sbAdd: TSpeedButton
             Left = 301
+            OnClick = frameWaterSupplyConcentrationsbAddClick
             ExplicitLeft = 301
           end
           inherited sbInsert: TSpeedButton
             Left = 357
+            OnClick = frameWaterSupplyConcentrationsbInsertClick
             ExplicitLeft = 357
           end
           inherited sbDelete: TSpeedButton
             Left = 412
+            OnClick = frameWaterSupplyConcentrationsbDeleteClick
             ExplicitLeft = 412
           end
           inherited seNumber: TJvSpinEdit
             Height = 24
+            OnChange = frameWaterSupplyConcentrationseNumberChange
             ExplicitHeight = 24
           end
         end
@@ -2239,6 +2242,8 @@ inherited frameFarm: TframeFarm
           Width = 577
           Height = 234
           ColCount = 6
+          OnSetEditText = frameWaterSupplyConcentrationGridSetEditText
+          OnButtonClick = frameWaterSupplyConcentrationGridButtonClick
           Columns = <
             item
               AutoAdjustRowHeights = False
@@ -2398,6 +2403,7 @@ inherited frameFarm: TframeFarm
             EditLabel.ExplicitTop = 11
             EditLabel.ExplicitWidth = 47
             EditLabel.ExplicitHeight = 16
+            OnChange = frameWaterSupplyConcentrationedFormulaChange
             ExplicitHeight = 24
           end
           inherited comboChoice: TComboBox

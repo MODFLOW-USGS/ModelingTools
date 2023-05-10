@@ -199,6 +199,15 @@ type
       ARow: Integer; const Value: string);
     procedure frameSwAllotmentGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameWaterSupplyConcentrationedFormulaChange(Sender: TObject);
+    procedure frameWaterSupplyConcentrationGridButtonClick(Sender: TObject; ACol,
+        ARow: Integer);
+    procedure frameWaterSupplyConcentrationGridSetEditText(Sender: TObject; ACol,
+        ARow: Integer; const Value: string);
+    procedure frameWaterSupplyConcentrationsbAddClick(Sender: TObject);
+    procedure frameWaterSupplyConcentrationsbDeleteClick(Sender: TObject);
+    procedure frameWaterSupplyConcentrationsbInsertClick(Sender: TObject);
+    procedure frameWaterSupplyConcentrationseNumberChange(Sender: TObject);
   private
     FChangedCrops: boolean;
     FChangedCosts: boolean;
@@ -217,6 +226,7 @@ type
     FAddedCropDemandFluxChanged: Boolean;
     FAddedCropDemandRateChanged: Boolean;
     FNoReturnFlowChanged: Boolean;
+    FChangedWaterSupplyConcentrations: Boolean;
     procedure GetCropEffForFirstFarm(FirstFarm: TFarm);
     procedure GetCropEffImproveForFirstFarm(FirstFarm: TFarm);
     procedure GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
@@ -232,6 +242,7 @@ type
     procedure GetWaterRightsForFirstFarm(FirstFarm: TFarm);
     procedure GetGwAllotmentForFirstFarm(FirstFarm: TFarm);
     procedure GetSwAllotmentForFirstFarm(FirstFarm: TFarm);
+    procedure GetWaterSupplyConcentrationForFirstFarm(FirstFarm: TFarm);
     procedure GetMaxTimeAndCountForCrops(var MaxIndex, MaxTimeCount: Integer;
       AFarm: TFarm);
     procedure SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection;
@@ -286,7 +297,7 @@ type
     procedure GetMaxTimeAndCountForEfficiencyCollection(
       AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection;
       var MaxTimeCount: Integer; var MaxIndex: Integer);
-    procedure GetEfficienyDataForFirstFarm(AFrame: TframeFormulaGrid;
+    procedure GetEfficiencyDataForFirstFarm(AFrame: TframeFormulaGrid;
       EffCollection: TFarmEfficiencyCollection);
     procedure SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection;
       AFrame: TframeFormulaGrid);
@@ -528,6 +539,9 @@ begin
     tabWaterRights.TabVisible :=
       FarmProcess.SurfaceWaterAllotment = swaPriorWithCalls;
 
+    tabWaterSupplyConcentration.TabVisible := SalinityFlush.IsSelected
+      and (SalinityFlush.FarmSaltConcentrationsChoice.FarmOption <> foNotUsed);
+
     try
       frameFormulaGridCrops.Grid.BeginUpdate;
       frameFormulaGridCosts.Grid.BeginUpdate;
@@ -577,6 +591,7 @@ begin
         GetWaterRightsForFirstFarm(FirstFarm);
         GetGwAllotmentForFirstFarm(FirstFarm);
         GetSwAllotmentForFirstFarm(FirstFarm);
+        GetWaterSupplyConcentrationForFirstFarm(FirstFarm);
 
         if FarmList.Count = 1 then
         begin
@@ -847,6 +862,7 @@ begin
       FAddedCropDemandFluxChanged := False;
       FAddedCropDemandRateChanged := False;
       FNoReturnFlowChanged := False;
+      FChangedWaterSupplyConcentrations := False;
     end;
   finally
     Changing := False;
@@ -1748,14 +1764,69 @@ begin
   FWaterSourceChanged := True;
 end;
 
+procedure TframeFarm.frameWaterSupplyConcentrationedFormulaChange(Sender:
+    TObject);
+begin
+  inherited;
+  frameWaterSupplyConcentration.edFormulaChange(Sender);
+  FChangedWaterSupplyConcentrations := True;
+end;
+
+procedure TframeFarm.frameWaterSupplyConcentrationGridButtonClick(Sender:
+    TObject; ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
+procedure TframeFarm.frameWaterSupplyConcentrationGridSetEditText(Sender:
+    TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  FChangedWaterSupplyConcentrations := True;
+  UpdateEndTime(Sender, ACol, ARow);
+  DoChange;
+end;
+
+procedure TframeFarm.frameWaterSupplyConcentrationsbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameWaterSupplyConcentration.sbAddClick(Sender);
+  FChangedWaterSupplyConcentrations := True;
+end;
+
+procedure TframeFarm.frameWaterSupplyConcentrationsbDeleteClick(Sender:
+    TObject);
+begin
+  inherited;
+  frameWaterSupplyConcentration.sbDeleteClick(Sender);
+  FChangedWaterSupplyConcentrations := True;
+end;
+
+procedure TframeFarm.frameWaterSupplyConcentrationsbInsertClick(Sender:
+    TObject);
+begin
+  inherited;
+  frameWaterSupplyConcentration.sbInsertClick(Sender);
+  FChangedWaterSupplyConcentrations := True;
+end;
+
+procedure TframeFarm.frameWaterSupplyConcentrationseNumberChange(Sender:
+    TObject);
+begin
+  inherited;
+  frameWaterSupplyConcentration.seNumberChange(Sender);
+  FChangedWaterSupplyConcentrations := True;
+end;
+
 procedure TframeFarm.GetAddedCropDemandFluxForFirstFarm(FirstFarm: TFarm);
 begin
-  GetEfficienyDataForFirstFarm(frameAddedCropDemandFlux, FirstFarm.AddedCropDemandFlux);
+  GetEfficiencyDataForFirstFarm(frameAddedCropDemandFlux, FirstFarm.AddedCropDemandFlux);
 end;
 
 procedure TframeFarm.GetAddedCropDemandRateForFirstFarm(FirstFarm: TFarm);
 begin
-  GetEfficienyDataForFirstFarm(frameAddedCropDemandRate, FirstFarm.AddedCropDemandRate);
+  GetEfficiencyDataForFirstFarm(frameAddedCropDemandRate, FirstFarm.AddedCropDemandRate);
 end;
 
 procedure TframeFarm.GetAddedDemandRunoffSplitForFirstFarm(FirstFarm: TFarm);
@@ -1885,6 +1956,39 @@ begin
     Grid.Cells[Ord(wscSurfaceWater), TimeIndex+1] := ATimeItem.SurfaceWater;
     Grid.Cells[Ord(wscNonRouted), TimeIndex+1] := ATimeItem.NonRoutedDelivery;
   end;
+end;
+
+procedure TframeFarm.GetWaterSupplyConcentrationForFirstFarm(FirstFarm: TFarm);
+var
+  AFarm: TFarm;
+  Grid: TRbwDataGrid4;
+  TimeIndex: Integer;
+  ATimeItem: TSaltSupplyConcentrationItem;
+begin
+  AFarm := FirstFarm;
+  frameWaterSupplyConcentration.seNumber.AsInteger :=
+    AFarm.SaltSupplyConcentrationCollection.Count;
+  frameWaterSupplyConcentration.seNumber.OnChange(frameWaterSupplyConcentration.seNumber);
+  Grid := frameWaterSupplyConcentration.Grid;
+  Grid.BeginUpdate;
+  try
+    for TimeIndex := 0 to AFarm.SaltSupplyConcentrationCollection.Count - 1 do
+    begin
+      ATimeItem := AFarm.SaltSupplyConcentrationCollection[TimeIndex] as TSaltSupplyConcentrationItem;
+      Grid.Cells[Ord(sccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
+      Grid.Cells[Ord(sccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
+      Grid.Cells[Ord(sccNonRouted), TimeIndex+1] := ATimeItem.NonRoutedConcentration;
+      Grid.Cells[Ord(sccSurfaceWater), TimeIndex+1] := ATimeItem.SurfaceWaterConcentration;
+      Grid.Cells[Ord(sccGroundWater), TimeIndex+1] := ATimeItem.GroundwaterConcentration;
+      Grid.Cells[Ord(sccExternal), TimeIndex+1] := ATimeItem.ExternalConcentration;
+    end;
+  finally
+    Grid.EndUpdate;
+  end;
+
+//  TSourceConcentrationColumns = (sccStartTime, sccEndTime, sccNonRouted,
+//    sccSurfaceWater, sccGroundWater, sccExternal);
+
 end;
 
 procedure TframeFarm.InitializeAddedCropDemandFluxFrame(StartTimes,
@@ -2208,16 +2312,14 @@ begin
       Grid.Columns[Ord(sccStartTime)].ComboUsed := True;
       Grid.Columns[Ord(sccEndTime)].ComboUsed := True;
       Grid.Cells[Ord(sccNonRouted), 0] := 'Non-Routed Delivery Concentration';
-      Grid.Cells[Ord(gacAllotment), 0] := 'Surface-Water Delivery Concentration';
-      Grid.Cells[Ord(gacAllotment), 0] := 'Groundwater Pumpage Concentration';
-      Grid.Cells[Ord(gacAllotment), 0] := 'External Source Concentration';
+      Grid.Cells[Ord(sccSurfaceWater), 0] := 'Surface-Water Delivery Concentration';
+      Grid.Cells[Ord(sccGroundWater), 0] := 'Groundwater Pumpage Concentration';
+      Grid.Cells[Ord(sccExternal), 0] := 'External Source Concentration';
+
     finally
       Grid.EndUpdate;
     end;
     frameWaterSupplyConcentration.LayoutMultiRowEditControls;
-//  TSourceConcentrationColumns = (sccStartTime sccEndTime, sccNonRouted,
-//    sccSurfaceWater, sccGroundWater, sccExternal);
-
 
   finally
     EndTimes.Free;
@@ -2481,6 +2583,18 @@ begin
       end;
     end;
   end;
+
+  if FChangedWaterSupplyConcentrations then
+  begin
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      if Farm <> nil then
+      begin
+        SetSaltSupplyConcentration(Farm);
+      end;
+    end;
+  end;
 end;
 
 procedure TframeFarm.SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection; AFrame: TframeFormulaGrid);
@@ -2555,7 +2669,7 @@ begin
   end;
 end;
 
-procedure TframeFarm.GetEfficienyDataForFirstFarm(AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection);
+procedure TframeFarm.GetEfficiencyDataForFirstFarm(AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection);
 var
   MaxTimeCount: Integer;
   MaxIndex: Integer;
@@ -2642,12 +2756,17 @@ begin
   frameSwAllotment.seNumber.AsInteger := AFarm.SWAllotment.Count;
   frameSwAllotment.seNumber.OnChange(frameSwAllotment.seNumber);
   Grid := frameSwAllotment.Grid;
-  for TimeIndex := 0 to AFarm.SWAllotment.Count - 1 do
-  begin
-    ATimeItem := AFarm.SWAllotment[TimeIndex];
-    Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
-    Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
-    Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.Allotment;
+  Grid.BeginUpdate;
+  try
+    for TimeIndex := 0 to AFarm.SWAllotment.Count - 1 do
+    begin
+      ATimeItem := AFarm.SWAllotment[TimeIndex];
+      Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
+      Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
+      Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.Allotment;
+    end;
+  finally
+    Grid.EndUpdate;
   end;
 end;
 
@@ -3277,8 +3396,42 @@ begin
 end;
 
 procedure TframeFarm.SetSaltSupplyConcentration(Farm: TFarm);
+var
+  SaltSupplyConcentrationCollection: TSaltSupplyConcentrationCollection;
+  Grid: TRbwDataGrid4;
+  Count: Integer;
+  RowIndex: Integer;
+  StartTime: double;
+  EndTime: double;
+  SupplyItem: TSaltSupplyConcentrationItem;
 begin
+  SaltSupplyConcentrationCollection := Farm.SaltSupplyConcentrationCollection;
+  Grid := frameWaterSupplyConcentration.Grid;
+  Count := 0;
+  for RowIndex := 1 to frameWaterSupplyConcentration.seNumber.AsInteger do
+  begin
 
+    if TryStrToFloat(Grid.Cells[Ord(sccStartTime), RowIndex], StartTime)
+      and TryStrToFloat(Grid.Cells[Ord(sccEndTime), RowIndex], EndTime) then
+    begin
+      if Count < SaltSupplyConcentrationCollection.Count then
+      begin
+        SupplyItem := SaltSupplyConcentrationCollection[Count] as TSaltSupplyConcentrationItem;
+      end
+      else
+      begin
+        SupplyItem := SaltSupplyConcentrationCollection.Add as TSaltSupplyConcentrationItem;
+      end;
+      Inc(Count);
+      SupplyItem.StartTime := StartTime;
+      SupplyItem.EndTime := EndTime;
+      SupplyItem.NonRoutedConcentration := Grid.Cells[Ord(sccNonRouted), RowIndex];
+      SupplyItem.SurfaceWaterConcentration := Grid.Cells[Ord(sccSurfaceWater), RowIndex];
+      SupplyItem.GroundwaterConcentration := Grid.Cells[Ord(sccGroundWater), RowIndex];
+      SupplyItem.ExternalConcentration := Grid.Cells[Ord(sccExternal), RowIndex];
+    end;
+  end;
+  SaltSupplyConcentrationCollection.Count := Count;
 end;
 
 procedure TframeFarm.SetSwAllotment(Farm: TFarm);
