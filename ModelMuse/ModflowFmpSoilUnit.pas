@@ -15,12 +15,12 @@ type
     const
     LookupPosition = 0;
     ReturnPostion  = 1;
+  protected
+    function BoundaryFormulaCount: integer; override;
     // See @link(BoundaryFormula).
     function GetBoundaryFormula(Index: integer): string; override;
     // See @link(BoundaryFormula).
     procedure SetBoundaryFormula(Index: integer; const Value: string); override;
-    function BoundaryFormulaCount: integer; override;
-    protected
   public
 //    constructor Create(Collection: TCollection); override;
     procedure Assign(Source: TPersistent); override;

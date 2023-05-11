@@ -57,7 +57,8 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
       'PRINT ByWBS'
       'PRINT ByMNW'
       'PRINT LIST'
-      'PRINT SMOOTHING')
+      'PRINT SMOOTHING'
+      'PRINT BYWBS_BYLAYER')
     TabOrder = 1
   end
   object comboPumpSpread: TComboBox [8]

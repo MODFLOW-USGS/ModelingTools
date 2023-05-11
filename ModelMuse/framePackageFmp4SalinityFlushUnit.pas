@@ -21,8 +21,6 @@ type
     cpnlOptions: TCategoryPanel;
     pnl1: TPanel;
     rdgSalinityFlush: TRbwDataGrid4;
-    seExpressionLength: TJvSpinEdit;
-    lblExpressionLength: TLabel;
     rdeExpressionMin: TRbwDataEntry;
     lblExpressionMin: TLabel;
     procedure rdgSalinityFlushSelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -118,7 +116,6 @@ begin
     clbPrint.Checked[Ord(PrintIndex)] := PrintIndex in SalinityFlush.SalinityFlushPrints;
   end;
 
-  seExpressionLength.AsInteger := SalinityFlush.ExpressionLength;
   rdeExpressionMin.RealValue := SalinityFlush.ExpressionMin;
 
   GetFarmProperty(SalinityFlush.FarmSaltConcentrationsChoice, Ord(sfrFarmSaltConcentrations));
@@ -244,7 +241,6 @@ begin
   end;
   SalinityFlush.SalinityFlushPrints := PrintOptions;
 
-  SalinityFlush.ExpressionLength := seExpressionLength.AsInteger;
   SalinityFlush.ExpressionMin := rdeExpressionMin.RealValue;
 
   SetFarmProperty(SalinityFlush.FarmSaltConcentrationsChoice, sfrFarmSaltConcentrations);

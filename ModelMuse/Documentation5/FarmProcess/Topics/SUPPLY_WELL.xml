@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-04-04T15:07:52.489-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-11T16:27:10.208-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SUPPLY_WELL</title>
   <body>
     <header>
@@ -68,6 +68,15 @@
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">If smoothing is enabled, then output smooth effect to file</para>
           <para styleclass="Normal">If SMOOTH is enabled, then writes any non-MNW2 linked wells that had their capacity reduced because of smoothing. If not enabled, then file will be empty.</para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT BYWBS_BYLAYER]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
+          <para styleclass="Normal">Summarize by WBS the pumping in and out of each model layer from FMP, MNW2, and WEL Packages.</para>
         </td>
       </tr>
     </table></para>
@@ -233,7 +242,7 @@
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal">Must chose: TIME FRAME, WBS LineFeed, Capacity LineFeed</para>
+          <para styleclass="Normal">Must chose: TIME FRAME,LINEFEED WBS, LINEFEED CAPACITY</para>
           <para styleclass="Normal">Then follow the keyword with appropriate WELL_INPUT</para>
           <para styleclass="Normal"></para>
           <para styleclass="Normal"> All well input a minimum contains:</para>

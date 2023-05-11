@@ -26,7 +26,8 @@ type
     wlPrecipicationTable, wlSoilCoefficient, wlNoReturnFlow,
     wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit, wlSwAllotment,
     wlGwAllotment, wlRootPressure, wlPondDepth, wlNoCropMeansBareSoil,
-    wlNoEvapErrCorrection, wlSaltSupplyConcentration);
+    wlNoEvapErrCorrection, wlSaltSupplyConcentration, wlCropSalinityTolerance,
+    wlCropMaxLeachRequirement, wlCropLeachRequirement, wlSalinityAppliedWater);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -159,6 +160,10 @@ type
     FConvertToBareFileStream: TFileStream;
     FSumOneCorrectionFileStream: TFileStream;
     FSaltSupplyConcentrationFileStream: TFileStream;
+    FCropSalinityToleranceFileStream: TFileStream;
+    FCropMaxLeachingRequirementFileStream: TFileStream;
+    FCropLeachingRequirementFileStream: TFileStream;
+    FCropSalinityAppliedWaterFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -350,9 +355,27 @@ type
 
 
     // Salinity flush
+    procedure WriteSalinityFlushPrintOptions;
+    procedure WriteExpressionLineLength;
+    procedure WriteExpressionVariableNearZero;
     procedure WriteSaltSupplyConcentration;
     procedure WriteIrrigationUniformity;
-    procedure WriteSalinityFlushPrintOptions;
+
+    // CROP_SALINITY_TOLERANCE
+    function GetSalinityToleranceCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteCropSalinityTolerance;
+    // CROP_MAX_LEACHING_REQUIREMENT
+    function GetMaxLeachingRequirementCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteCropMaxLeachingRequirement;
+
+    // CROP_LEACHING_REQUIREMENT
+    function GetLeachingRequirementCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteCropLeachingRequirement;
+
+    //CROP_SALINITY_APPLIED_WATER
+    function GetSalinityAppliedWaterCollection(Crop: TCropItem): TOwhmCollection;
+    procedure WriteSalinityAppliedWater;
+
 
     procedure EvaluateCropHasSalinityDemand;
     procedure WriteCropHasSalinityDemand; // finish list
@@ -387,8 +410,9 @@ type
       var ExternalScaleFileName: string);
     procedure WriteScaleFactorsID_andOption(RequiredValues: TRequiredValues;
       UnitConversionScaleFactor: string; ExternalScaleFileName: string);
-    procedure WriteExpressionVariableNearZero;
     procedure WriteOwhmList(RequiredValues: TRequiredValues; AFileName: string;
+      GetCollection: TGetCropCollection; const ErrorMessage: string);
+    procedure WriteLeachList(RequiredValues: TRequiredValues; AFileName: string;
       GetCollection: TGetCropCollection; const ErrorMessage: string);
   protected
     class function Extension: string; override;
@@ -1207,7 +1231,10 @@ begin
   FreeAndNil(FConvertToBareFileStream);
   FreeAndNil(FSumOneCorrectionFileStream);
   FreeAndNil(FSaltSupplyConcentrationFileStream);
-
+  FreeAndNil(FCropSalinityToleranceFileStream);
+  FreeAndNil(FCropMaxLeachingRequirementFileStream);
+  FreeAndNil(FCropLeachingRequirementFileStream);
+  FreeAndNil(FCropSalinityAppliedWaterFileStream);
 end;
 
 //function TModflowFmp4Writer.GetAddedDemandCollection(
@@ -1705,6 +1732,42 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlCropSalinityTolerance:
+      begin
+        result := ChangeFileExt(FBaseName, '.crop_salinity_tolerance');
+        if FCropSalinityToleranceFileStream = nil then
+        begin
+          FCropSalinityToleranceFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlCropMaxLeachRequirement:
+      begin
+        result := ChangeFileExt(FBaseName, '.crop_max_leaching_requirement');
+        if FCropMaxLeachingRequirementFileStream = nil then
+        begin
+          FCropMaxLeachingRequirementFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlCropLeachRequirement:
+      begin
+        result := ChangeFileExt(FBaseName, '.crop_leaching_requirement');
+        if FCropLeachingRequirementFileStream = nil then
+        begin
+          FCropLeachingRequirementFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlSalinityAppliedWater:
+      begin
+        result := ChangeFileExt(FBaseName, '.crop_salinity_applied_water');
+        if FCropSalinityAppliedWaterFileStream = nil then
+        begin
+          FCropSalinityAppliedWaterFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
   if result <> '' then
@@ -1890,6 +1953,10 @@ begin
     wlNoCropMeansBareSoil: ;
     wlNoEvapErrCorrection: ;
     wlSaltSupplyConcentration: ;
+    wlCropSalinityTolerance: ;
+    wlCropMaxLeachRequirement: ;
+    wlCropLeachRequirement: ;
+    wlSalinityAppliedWater: ;
     else Assert(False);
   end;
 end;
@@ -1957,6 +2024,10 @@ begin
     wlNoCropMeansBareSoil: ;
     wlNoEvapErrCorrection: ;
     wlSaltSupplyConcentration: ;
+    wlCropSalinityTolerance: ;
+    wlCropMaxLeachRequirement: ;
+    wlCropLeachRequirement: ;
+    wlSalinityAppliedWater: ;
     else Assert(False)
   end;
 end;
@@ -2101,7 +2172,7 @@ var
     end
     else
     begin
-      WriteInteger(0);
+      WriteFloat(RequiredValues.DefaultValue);
     end;
   end;
   procedure WriteTransientData;
@@ -2213,6 +2284,49 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteExpressionLineLength;
+var
+  ACrop: TCropItem;
+  ItemIndex: Integer;
+  CropIndex: Integer;
+  AnItem: TLeachItem;
+  LineLength: Integer;
+  CustomFormula: string;
+begin
+  LineLength := 20;
+  for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+  begin
+    ACrop := Model.FmpCrops[CropIndex];
+    for ItemIndex := 0 to ACrop.LeachingRequirementCollection.Count - 1 do
+    begin
+      AnItem := ACrop.LeachingRequirementCollection[ItemIndex]as TLeachItem;
+      if AnItem.LeachChoice = lcCustomFormula then
+      begin
+        CustomFormula := AnItem.CustomFormula;
+        if Length(CustomFormula) > LineLength then
+        begin
+          LineLength := Length(CustomFormula);
+        end;
+      end;
+    end;
+    for ItemIndex := 0 to ACrop.SalinityAppliedWater.Count - 1 do
+    begin
+      AnItem := ACrop.SalinityAppliedWater[ItemIndex]as TLeachItem;
+      if AnItem.LeachChoice = lcCustomFormula then
+      begin
+        CustomFormula := AnItem.CustomFormula;
+        if Length(CustomFormula) > LineLength then
+        begin
+          LineLength := Length(CustomFormula);
+        end;
+      end;
+    end;
+  end;
+  WriteString('  EXPRESSION_LINE_LENGTH');
+  WriteInteger(LineLength);
+  NewLine;
+end;
+
 procedure TModflowFmp4Writer.WriteExpressionVariableNearZero;
 begin
   WriteString('  EXPRESSION_VARIABLE_NEARZERO');
@@ -2275,8 +2389,6 @@ var
   AFarm: TFarm;
   FarmID: Integer;
   InnerFarmIndex: Integer;
-//  IrrIndex: Integer;
-//  OfeItem: TCropEfficiencyItem;
   TimeIndex: Integer;
   StartTime: Double;
   SourceConcentration: TSaltSupplyConcentrationItem;
@@ -2646,6 +2758,135 @@ begin
             end;
           end;
         end;
+    end;
+  end;
+end;
+
+procedure TModflowFmp4Writer.WriteLeachList(RequiredValues: TRequiredValues;
+  AFileName: string; GetCollection: TGetCropCollection;
+  const ErrorMessage: string);
+var
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  procedure WriteOwhmItem(Crop: TCropItem; OwhmItem: TLeachItem);
+  var
+    Formula: string;
+  begin
+    if OwhmItem <> nil then
+    begin
+      case OwhmItem.LeachChoice of
+        lcValue:
+          begin
+            Formula := OwhmItem.OwhmValue;
+            WriteFloatValueFromGlobalFormula(Formula, Crop,
+              ErrorMessage + Crop.CropName);
+          end;
+        lcRhoades:
+          begin
+            WriteString(' RHOADES')
+          end;
+        lcNone:
+          begin
+            WriteString(' None')
+          end;
+        lcCustomFormula:
+          begin
+            WriteString(' ' + OwhmItem.CustomFormula)
+          end;
+        else
+          begin
+            Assert(False)
+          end;
+      end;
+    end
+    else
+    begin
+      WriteString(' None')
+    end;
+  end;
+  procedure WriteTransientData;
+  var
+    TimeIndex: Integer;
+    CropIndex: Integer;
+    StartTime: Double;
+    ACrop: TCropItem;
+    OwhmCollection: TLeachCollection;
+    OwhmItem: TLeachItem;
+  begin
+    for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+    begin
+      WriteCommentLine(Format(StrStressPeriodD, [TimeIndex + 1]));
+      StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+      for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+      begin
+        ACrop := Model.FmpCrops[CropIndex];
+        WriteInteger(CropIndex + 1);
+        OwhmCollection := GetCollection(ACrop) as TLeachCollection;
+        OwhmItem := OwhmCollection.ItemByStartTime(StartTime) as TLeachItem;
+        WriteOwhmItem(ACrop, OwhmItem);
+        NewLine;
+      end;
+    end;
+  end;
+  procedure WriteStaticData;
+  var
+    CropIndex: Integer;
+    ACrop: TCropItem;
+    OwhmCollection: TLeachCollection;
+    OwhmItem: TLeachItem;
+  begin
+    for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+    begin
+      ACrop := Model.FmpCrops[CropIndex];
+      WriteInteger(CropIndex + 1);
+      OwhmCollection := GetCollection(ACrop) as TLeachCollection;
+      if OwhmCollection.Count > 0 then
+      begin
+        OwhmItem := OwhmCollection.First as TLeachItem;
+      end
+      else
+      begin
+        OwhmItem := nil;
+      end;
+      WriteOwhmItem(ACrop, OwhmItem);
+      NewLine;
+    end;
+  end;
+begin
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues, UnitConversionScaleFactor,
+    ExternalScaleFileName);
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      if RequiredValues.WriteTransientData then
+      begin
+        WriteTransientData;
+      end
+      else
+      begin
+        WriteStaticData;
+      end;
+    finally
+      FWriteLocation := wlMain;
     end;
   end;
 end;
@@ -3281,6 +3522,18 @@ begin
       FWriteLocation := wlMain;
     end;
   end;
+end;
+
+function TModflowFmp4Writer.GetSalinityAppliedWaterCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.SalinityAppliedWater;
+end;
+
+function TModflowFmp4Writer.GetSalinityToleranceCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.SalinityToleranceCollection;
 end;
 
 procedure TModflowFmp4Writer.GetScaleFactorsAndExternalFile(
@@ -5526,6 +5779,114 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteCropLeachingRequirement;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSalinityFlush.CropLeachRequirementChoice.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlCropLeachRequirement;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_LEACHING_REQUIREMENT';
+  RequiredValues.ErrorID := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_LEACHING_REQUIREMENT';
+  RequiredValues.ID := 'CROP_LEACHING_REQUIREMENT';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FSalinityFlush.CropLeachRequirementChoice.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSalinityFlush.CropLeachRequirementChoice;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlCropLeachRequirement);
+  end;
+
+  WriteLeachList(RequiredValues, AFileName, GetLeachingRequirementCollection,
+    'Invalid Crop Leaching Requirement formula in ');
+
+end;
+
+procedure TModflowFmp4Writer.WriteCropMaxLeachingRequirement;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSalinityFlush.CropMaxLeachChoice.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlCropMaxLeachRequirement;
+  RequiredValues.DefaultValue := 0.99;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_MAX_LEACHING_REQUIREMENT';
+  RequiredValues.ErrorID := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_MAX_LEACHING_REQUIREMENT';
+  RequiredValues.ID := 'CROP_MAX_LEACHING_REQUIREMENT';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FSalinityFlush.CropMaxLeachChoice.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSalinityFlush.CropMaxLeachChoice;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlCropMaxLeachRequirement);
+  end;
+
+  WriteOwhmList(RequiredValues, AFileName, GetMaxLeachingRequirementCollection,
+    'Invalid Crop Max Leaching Requirement formula in ');
+
+end;
+
+procedure TModflowFmp4Writer.WriteCropSalinityTolerance;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSalinityFlush.CropSalinityToleranceChoice.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlCropSalinityTolerance;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_SALINITY_TOLERANCE';
+  RequiredValues.ErrorID := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_SALINITY_TOLERANCE';
+  RequiredValues.ID := 'CROP_SALINITY_TOLERANCE';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FSalinityFlush.CropSalinityToleranceChoice.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSalinityFlush.CropSalinityToleranceChoice;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlCropSalinityTolerance);
+  end;
+
+  WriteOwhmList(RequiredValues, AFileName, GetSalinityToleranceCollection,
+    'Invalid Crop Salinity Tolerance formula in ');
+
+end;
+
 procedure TModflowFmp4Writer.WriteCropsThatSpecifySurfaceElevation;
 begin
 
@@ -7758,6 +8119,18 @@ begin
   result := Crop.LandUseFractionCollection;
 end;
 
+function TModflowFmp4Writer.GetLeachingRequirementCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.LeachingRequirementCollection;
+end;
+
+function TModflowFmp4Writer.GetMaxLeachingRequirementCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.MaxLeachingRequirementCollection;
+end;
+
 function TModflowFmp4Writer.GetPondDepthCollection(
   Crop: TCropItem): TOwhmCollection;
 begin
@@ -8511,6 +8884,42 @@ begin
   end;
 end;
 
+procedure TModflowFmp4Writer.WriteSalinityAppliedWater;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+begin
+  if FSalinityFlush.CropExtraWaterChoice.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlSalinityAppliedWater;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_SALINITY_APPLIED_WATER';
+  RequiredValues.ErrorID := 'FMP SALINITY_FLUSH_IRRIGATION: CROP_SALINITY_APPLIED_WATER';
+  RequiredValues.ID := 'CROP_SALINITY_APPLIED_WATER';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := FSalinityFlush.CropExtraWaterChoice.FarmOption = foTransient;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := FSalinityFlush.CropExtraWaterChoice;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlSalinityAppliedWater);
+  end;
+
+  WriteLeachList(RequiredValues, AFileName, GetSalinityAppliedWaterCollection,
+    'Invalid Salinity of Applied Water formula in ');
+
+end;
+
 procedure TModflowFmp4Writer.WriteSalinityFlush;
 begin
   if FSalinityFlush.IsSelected then
@@ -8521,6 +8930,7 @@ begin
     WriteSalinityFlushPrintOptions;
 
     // EXPRESSION_LINE_LENGTH
+    WriteExpressionLineLength;
 
     WriteExpressionVariableNearZero;
 
@@ -8529,12 +8939,13 @@ begin
 
     WriteIrrigationUniformity;
     WriteCropHasSalinityDemand;
-
-
-//   CROP_SALINITY_TOLERANCE
-//   CROP_MAX_LEACHING_REQUIREMENT
+    WriteCropSalinityTolerance;
+    WriteCropMaxLeachingRequirement;
 //   CROP_LEACHING_REQUIREMENT
+    WriteCropLeachingRequirement;
+
 //   CROP_SALINITY_APPLIED_WATER
+    WriteSalinityAppliedWater;
 
 
     WriteString('END SALINITY_FLUSH_IRRIGATION');
@@ -9012,7 +9423,26 @@ begin
           Assert(FSaltSupplyConcentrationFileStream <> nil);
           FSaltSupplyConcentrationFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
-
+      wlCropSalinityTolerance:
+        begin
+          Assert(FCropSalinityToleranceFileStream <> nil);
+          FCropSalinityToleranceFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlCropMaxLeachRequirement:
+        begin
+          Assert(FCropMaxLeachingRequirementFileStream <> nil);
+          FCropMaxLeachingRequirementFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlCropLeachRequirement:
+        begin
+          Assert(FCropLeachingRequirementFileStream <> nil);
+          FCropLeachingRequirementFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlSalinityAppliedWater:
+        begin
+          Assert(FCropSalinityAppliedWaterFileStream <> nil);
+          FCropSalinityAppliedWaterFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -9074,6 +9504,14 @@ begin
           begin
             WriteString('  PRINT SMOOTHING ');
             OutputFile := ChangeFileExt(FInputFileName, '.Well_Smoothing_Data');
+            WriteString(ExtractFileName(OutputFile));
+            Model.AddModelOutputFile(OutputFile);
+            NewLine;
+          end;
+        fwpPrint_ByWbs_ByLayer:
+          begin
+            WriteString('  PRINT BYWBS_BYLAYER ');
+            OutputFile := ChangeFileExt(FInputFileName, '.Well_Data_By_WBS_By_Layer');
             WriteString(ExtractFileName(OutputFile));
             Model.AddModelOutputFile(OutputFile);
             NewLine;

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-29T14:30:20.947-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-10T17:17:59.195-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>SALINITY_FLUSH_IRRIGATION</title>
   <body>
     <header>
@@ -28,15 +28,6 @@
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generic-Output">GENERIC_OUTPUT_OptKey</link></para>
           <para styleclass="Normal">PRINT ByWBS_ByCROP Generic_Output_OptKey</para>
           <para styleclass="Normal">Writes salinity irrigation flush output that is summarized for each crop within each WBS.</para>
-        </td>
-      </tr>
-    </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif"><caption><![CDATA[PRINT ByCROP]]></caption></toggle></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
-      <tr style="vertical-align:top">
-        <td>
-          <para styleclass="Normal">Generic_Output_OptKey</para>
-          <para styleclass="Normal">Writes salinity irrigation flush output that is summarized for each crop across the entire model domain.</para>
         </td>
       </tr>
     </table></para>

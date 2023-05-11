@@ -9,7 +9,7 @@ uses
   JvExComCtrls, JvPageListTreeView, StdCtrls, Buttons, frameGridUnit,
   PhastModelUnit, ModflowFmpCropUnit, RbwDataGrid4, GoPhastTypes, RbwParser,
   ModflowPackageSelectionUnit, UndoItems, frameFormulaGridUnit,
-  ModflowFmpFarmUnit, ModflowFmpBaseClasses, Vcl.Grids;
+  ModflowFmpFarmUnit, ModflowFmpBaseClasses, Vcl.Grids, frameLeachUnit;
 
 type
   TUndoCrops = class(TCustomUndo)
@@ -57,6 +57,8 @@ type
     rdgGwRootInteraction: TRbwDataGrid4;
     jvspAddedDemand: TJvStandardPage;
     frameAddedDemand: TframeFormulaGrid;
+    jvspLeach: TJvStandardPage;
+    frameLeach: TframeLeach;
     procedure FormDestroy(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
     procedure jvpltvMainChange(Sender: TObject; Node: TTreeNode);
@@ -87,6 +89,8 @@ type
       ARow: Integer);
     procedure frameIrrigationGridEndUpdate(Sender: TObject);
     procedure frameLandUseFractionGridEndUpdate(Sender: TObject);
+    procedure frameLeachGridButtonClick(Sender: TObject; ACol, ARow: Integer);
+    procedure frameLeachGridEndUpdate(Sender: TObject);
     procedure frameRootPressureGridEndUpdate(Sender: TObject);
     procedure jvspGwRootInteractionShow(Sender: TObject);
     procedure rdgGwRootInteractionExit(Sender: TObject);
@@ -114,6 +118,8 @@ type
     FGroundwaterRootInteraction: TGroundwaterRootInteraction;
     FSettingGwInteraction: Boolean;
     FAddedDemand: TAddedDemandCollection;
+    FSalinityFlush: TFarmProcess4SalinityFlush;
+    FLeachCollection: TLeachCollection;
     procedure SetUpCropNameTable(Model: TCustomModel);
     procedure SetCropNameTableColumns(Model: TCustomModel);
     procedure GetCrops(CropCollection: TCropCollection);
@@ -129,6 +135,8 @@ type
     procedure GetIrrigation(Irrigation: TIrrigationCollection);
     procedure SetUpOwhmCollectionTable(Model: TCustomModel);
     procedure GetOwhmCollection(OwhmCollection: TOwhmCollection);
+    procedure GetLeach(Leach: TLeachCollection);
+
     procedure SetUpRootPressureTable(Model: TCustomModel);
     procedure GetRootPressure(RootPressure: TRootPressureCollection);
     procedure SetUpGroundwaterRootInteractionTable(Model: TCustomModel);
@@ -161,7 +169,8 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit, ModflowTimeUnit;
+  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit, ModflowTimeUnit,
+  ModflowPackagesUnit, frmFmpFormulaEditorUnit;
 
 resourcestring
   StrRootingDepthRoot = 'Rooting depth (ROOT)';
@@ -219,6 +228,10 @@ resourcestring
   StrZeroConsumptiveUse = 'Zero Consumptive Use Becomes Bare Soil';
   StrEvaporationIrrigatiCorrection = 'Evaporation Irrigation Fraction Sum One Correcti' +
   'on';
+  StrSalinityTolerance = 'Salinity Tolerance';
+  StrMaximumLeachingReq = 'Maximum Leaching Requirement';
+  StrCropLeachingRequir = 'Crop Leaching Requirement';
+  StrSalinityOfApplied = 'Salinity of Applied Water';
 
 type
   TNameCol = (ncID, ncName);
@@ -747,6 +760,38 @@ begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrEvaporationIrrigatiCorrection) as TJvPageIndexNode;
       ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.UseEvapFractionCorrectionCollection;
+    end;
+  end;
+
+  if (frmGoPhast.ModelSelection = msModflowOwhm2)
+      and FFarmProcess4.IsSelected and FSalinityFlush.IsSelected then
+  begin
+    if FSalinityFlush.CropSalinityToleranceChoice.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrSalinityTolerance) as TJvPageIndexNode;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
+      ANode.Data := ACrop.SalinityToleranceCollection;
+    end;
+
+    if FSalinityFlush.CropMaxLeachChoice.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrMaximumLeachingReq) as TJvPageIndexNode;
+      ANode.PageIndex := jvspOwhmCollection.PageIndex;
+      ANode.Data := ACrop.MaxLeachingRequirementCollection;
+    end;
+
+    if FSalinityFlush.CropLeachRequirementChoice.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrCropLeachingRequir) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLeach.PageIndex;
+      ANode.Data := ACrop.LeachingRequirementCollection;
+    end;
+
+    if FSalinityFlush.CropExtraWaterChoice.FarmOption <> foNotUsed then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrSalinityOfApplied) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLeach.PageIndex;
+      ANode.Data := ACrop.SalinityAppliedWater;
     end;
   end;
 {$ENDIF}
@@ -1558,6 +1603,7 @@ var
   TimeIndex: Integer;
   StressPeriods: TModflowStressPeriods;
   AStressPeriod: TModflowStressPeriod;
+  ModflowPackages: TModflowPackages;
 begin
   GetGlobalVariables;
   SetUpCropNameTable(frmGoPhast.PhastModel);
@@ -1589,6 +1635,7 @@ begin
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameOwhmCollection.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameRootPressure.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameAddedDemand.Grid);
+    SetStartAndEndTimeLists(StartTimes, EndTimes, frameLeach.Grid);
   finally
     EndTimes.Free;
     StartTimes.Free;
@@ -1602,9 +1649,11 @@ begin
   FCropsNode.PageIndex := jvspCropName.PageIndex;
   FCropsNode.Data := FCrops;
 
-  FFarmProcess := frmGoPhast.PhastModel.ModflowPackages.FarmProcess;
-  FFarmProcess4 := frmGoPhast.PhastModel.ModflowPackages.FarmProcess4;
-  FFarmLandUse := frmGoPhast.PhastModel.ModflowPackages.FarmLandUse;
+  ModflowPackages := frmGoPhast.PhastModel.ModflowPackages;
+  FFarmProcess := ModflowPackages.FarmProcess;
+  FFarmProcess4 := ModflowPackages.FarmProcess4;
+  FFarmLandUse := ModflowPackages.FarmLandUse;
+  FSalinityFlush := ModflowPackages.FarmSalinityFlush;
 
   for CropIndex := 0 to FCrops.Count - 1 do
   begin
@@ -1714,6 +1763,73 @@ begin
   end;
 end;
 
+procedure TfrmCropProperties.GetLeach(Leach: TLeachCollection);
+const
+  TimeColumnCount = 2;
+var
+  ItemIndex: Integer;
+  frame: TframeLeach;
+  AnItem: TLeachItem;
+begin
+  Assert(Leach <> nil);
+  FLeachCollection := Leach;
+  frame := frameLeach;
+
+  frame.ClearGrid;
+  frame.seNumber.AsInteger := Leach.Count;
+  frame.seNumber.OnChange(frame.seNumber);
+  if frame.seNumber.AsInteger = 0 then
+  begin
+    frame.Grid.Row := 1;
+    frame.ClearSelectedRow;
+  end;
+  frame.Grid.BeginUpdate;
+  try
+    if Ord(lcLeachChoice) - TimeColumnCount < Leach.OwhmNames.Count then
+    begin
+      frame.Grid.Cells[Ord(lcLeachChoice), 0] :=
+        Leach.OwhmNames[Ord(lcLeachChoice) - TimeColumnCount];
+    end;
+    if Ord(lcFormula) - TimeColumnCount < Leach.OwhmNames.Count then
+    begin
+      frame.Grid.Cells[Ord(lcFormula), 0] :=
+        Leach.OwhmNames[Ord(lcFormula) - TimeColumnCount];
+    end;
+
+    frame.FirstFormulaColumn := Ord(lcFormula);
+    frame.FirstChoiceColumn := Ord(lcLeachChoice);
+    frame.LayoutMultiRowEditControls;
+
+    for ItemIndex := 0 to Leach.Count - 1 do
+    begin
+      AnItem := Leach[ItemIndex] as TLeachItem;
+      frame.Grid.Cells[Ord(lcStartTime), ItemIndex+1] := FloatToStr(AnItem.StartTime);
+      frame.Grid.Cells[Ord(lcEndTime), ItemIndex+1] := FloatToStr(AnItem.EndTime);
+      frame.Grid.ItemIndex[Ord(lcLeachChoice), ItemIndex+1] := Ord(AnItem.LeachChoice);
+      case AnItem.LeachChoice of
+        lcValue:
+          begin
+            frame.Grid.Cells[Ord(lcFormula), ItemIndex+1] := AnItem.OwhmValue;
+          end;
+        lcRhoades, lcNone:
+          begin
+            frame.Grid.Cells[Ord(lcFormula), ItemIndex+1] := '';
+          end;
+        lcCustomFormula:
+          begin
+            frame.Grid.Cells[Ord(lcFormula), ItemIndex+1] := AnItem.CustomFormula;
+          end;
+        else
+          begin
+            Assert(False);
+          end;
+      end;
+    end;
+  finally
+    frame.Grid.EndUpdate;
+  end;
+end;
+
 procedure TfrmCropProperties.GetLosses(Losses: TLossesCollection);
 var
   ItemIndex: Integer;
@@ -1815,6 +1931,10 @@ begin
       else if AnObject is TIrrigationCollection then
       begin
         GetIrrigation(TIrrigationCollection(AnObject));
+      end
+      else if AnObject is TLeachCollection then
+      begin
+        GetLeach(TLeachCollection(AnObject));
       end
       else if AnObject is TOwhmCollection then
       begin
@@ -2071,6 +2191,139 @@ begin
       FAddedDemand.Last.Free;
     end;
   end;
+end;
+
+procedure TfrmCropProperties.frameLeachGridButtonClick(Sender: TObject; ACol,
+    ARow: Integer);
+var
+  ItemIndex: Integer;
+  LeachChoice: TLeachChoice;
+  DataGrid: TRbwDataGrid4;
+  Orientation: TDataSetOrientation;
+  EvaluatedAt: TEvaluatedAt;
+  NewValue: string;
+begin
+  inherited;
+  ItemIndex := frameLeach.Grid.ItemIndex[Ord(lcLeachChoice), ARow];
+  if ItemIndex >= 0 then
+  begin
+    LeachChoice := TLeachChoice(ItemIndex);
+    if LeachChoice = lcValue then
+    begin
+      GridButtonClick(Sender, ACol, ARow);
+    end
+    else if LeachChoice = lcCustomFormula then
+    begin
+      DataGrid := Sender as TRbwDataGrid4;
+      // Lakes and reservoirs can only be specified from the top.
+      Orientation := dsoTop;
+      // All the MODFLOW boundary conditions are evaluated at blocks.
+      EvaluatedAt := eaBlocks;
+
+      NewValue := DataGrid.Cells[ACol, ARow];
+      if (NewValue = '') then
+      begin
+        NewValue := '0';
+      end;
+
+      with TfrmFmpFormulaEditor.Create(self) do
+      begin
+        try
+          Initialize;
+          PopupParent := self;
+
+          // Show the functions and global variables.
+          UpdateTreeList;
+
+          // put the formula in the TfrmFormula.
+          Formula := NewValue;
+          // The user edits the formula.
+          ShowModal;
+          if ResultSet then
+          begin
+            DataGrid.Cells[ACol, ARow] := Formula;
+            if Assigned(DataGrid.OnEndUpdate) then
+            begin
+              DataGrid.OnEndUpdate(nil);
+            end;
+          end;
+        finally
+          Free;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmCropProperties.frameLeachGridEndUpdate(Sender: TObject);
+var
+  RowIndex: Integer;
+  ItemCount: Integer;
+  StartTime: double;
+  EndTime: double;
+  Frame: TframeLeach;
+  Leach: TLeachCollection;
+  AnItem: TLeachItem;
+  ItemIndex: Integer;
+begin
+  inherited;
+  if FGettingData then
+  begin
+    Exit;
+  end;
+  Frame := frameLeach;
+  Frame.GridEndUpdate(Sender);
+
+  Leach := FLeachCollection;
+
+  if Leach <> nil then
+  begin
+    ItemCount := 0;
+    for RowIndex := 1 to Frame.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(Frame.Grid.Cells[
+        Ord(lcStartTime), RowIndex], StartTime)
+        and TryStrToFloat(Frame.Grid.Cells[
+        Ord(lcEndTime), RowIndex], EndTime) then
+      begin
+        if ItemCount >= Leach.Count then
+        begin
+          Leach.Add;
+        end;
+        AnItem := Leach[ItemCount] as TLeachItem;
+        AnItem.StartTime := StartTime;
+        AnItem.EndTime := EndTime;
+        ItemIndex := Frame.Grid.ItemIndex[Ord(lcLeachChoice), RowIndex];
+        if ItemIndex >= 0 then
+        begin
+          AnItem.LeachChoice := TLeachChoice(ItemIndex);
+        end;
+        case AnItem.LeachChoice of
+          lcValue:
+            begin
+              AnItem.OwhmValue := frame.Grid.Cells[Ord(lcFormula), RowIndex];
+            end;
+          lcRhoades, lcNone:
+            begin
+              // do nothing
+            end;
+          lcCustomFormula:
+            begin
+              AnItem.CustomFormula := frame.Grid.Cells[Ord(lcFormula), RowIndex];
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+        Inc(ItemCount);
+      end;
+    end;
+    while Leach.Count > ItemCount do
+    begin
+      Leach.Last.Free;
+    end;
+  end
 end;
 
 procedure TfrmCropProperties.jvspGwRootInteractionShow(Sender: TObject);

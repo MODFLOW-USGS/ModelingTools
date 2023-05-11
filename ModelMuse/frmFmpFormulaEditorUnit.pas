@@ -276,7 +276,6 @@ var
   Index: Integer;
   VariableList: TClassificationList;
   VarEdit: TVariableEdit;
-  Position: integer;
   Node: TTreeNode;
   DuplicateVarCheck: TList;
 begin
@@ -458,10 +457,21 @@ begin
 end;
 
 function TfrmFmpFormulaEditor.GetFormula: string;
+var
+  AFormula: string;
 begin
   result := jreFormula.Lines.Text;
   result := StringReplace(result, sLineBreak, '', [rfReplaceAll, rfIgnoreCase]);
-  result := Trim(Result);
+  result := Trim(result);
+  AFormula := result;
+  try
+    rbFormulaParser.Compile(AFormula);
+    result := AFormula;
+  except on ERbwParserError do
+    begin
+      // ignore
+    end;
+  end;
 end;
 
 procedure TfrmFmpFormulaEditor.DefineAndOperator;
@@ -474,6 +484,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
 
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -496,6 +507,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
 
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -518,6 +530,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
   //
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -572,6 +585,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
   //
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -626,6 +640,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
   //
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -672,6 +687,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
   //
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -718,6 +734,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
   //
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -764,6 +781,7 @@ begin
   OperatorDefinition.ArgumentCount := acTwo;
   OperatorDefinition.Precedence := p1;
   OperatorDefinition.SignOperator := False;
+  OperatorDefinition.ParenthesesAllowed := False;
   //
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OperatorDefinition.ArgumentDefinitions.Add(ArgumentDef);
@@ -810,6 +828,7 @@ begin
   tvItems.Items.Clear;
   tvFormulaDiagram.Items.Clear;
 
+  rbFormulaParser.SquareBracketsAllowed := True;
   RemoveUnsupportedOrChangedOperators;
   RemoveUnsupportedFunctions;
   DefineNewOperators;

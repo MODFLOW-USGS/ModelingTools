@@ -3989,11 +3989,11 @@ begin
       while Index < Count do
       begin
         Token := Strings[Index];
-        if Token = '(' then
+        if (Token = '(') or (FSquareBracketsAllowed and (Token = '[')) then
         begin
           ParenStack.Push(Index);
         end
-        else if Token = ')' then
+        else if (Token = ')') or (FSquareBracketsAllowed and (Token = ']')) then
         begin
           StartParenPosition := ParenStack.Pop;
           MakeVariableList(SpecialImplementorList, StartParenPosition, Index);

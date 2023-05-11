@@ -5462,8 +5462,8 @@ Type
 
                     {PRINT BYWELL,   PRINT ByWBS,    PRINT ByMNW}
   TFarmWellPrint = (fwpPrint_ByWell, fwpPrint_ByWbs, fwpPrint_ByMNW,
-    {PRINT LIST,   PRINT SMOOTHING}
-    fwpPrint_List, fwpPrint_Smoothing);
+    {PRINT LIST,   PRINT SMOOTHING,     PRINT BYWBS_BYLAYER}
+    fwpPrint_List, fwpPrint_Smoothing,  fwpPrint_ByWbs_ByLayer);
   TFarmWellPrints = set of TFarmWellPrint;
   TXYChoice = (xyCells, xyCoordinates);
 
@@ -5987,7 +5987,7 @@ Type
     FCropExtraWaterChoice: TFarmProperty;
     FCropMaxLeachChoice: TFarmProperty;
     FCropSalinityToleranceChoice: TFarmProperty;
-    FExpressionLength: Integer;
+//    FExpressionLength: Integer;
     FCropSalinityDemandChoice: TFarmProperty;
     FCropLeachRequirementChoice: TFarmProperty;
     FFarmSaltConcentrationsChoice: TFarmProperty;
@@ -6000,7 +6000,6 @@ Type
     procedure SetCropMaxLeachChoice(const Value: TFarmProperty);
     procedure SetCropSalinityDemandChoice(const Value: TFarmProperty);
     procedure SetCropSalinityToleranceChoice(const Value: TFarmProperty);
-    procedure SetExpressionLength(const Value: Integer);
     procedure SetExpressionMin(const Value: double);
     procedure SetFarmIrrigationUniformityChoice(const Value: TFarmProperty);
     procedure SetFarmSaltConcentrationsChoice(const Value: TFarmProperty);
@@ -6051,9 +6050,6 @@ Type
     // PRINT INPUT (use default from model)
     property SalinityFlushPrints: TSalinityFlushPrints read FSalinityFlushPrints
       write SetSalinityFlushPrints;
-    // EXPRESSION_LINE_LENGTH default to 100.
-    property ExpressionLength: Integer read FExpressionLength
-      write SetExpressionLength;
     // EXPRESSION_VARIABLE_NEARZERO
     property StoredExpressionMin: TRealStorage read FStoredExpressionMin
       write SetStoredExpressionMin;
@@ -28949,7 +28945,6 @@ begin
     SalinityFlush := TFarmProcess4SalinityFlush(Source);
     ExpressionMin := SalinityFlush.ExpressionMin;
     SalinityFlushPrints := SalinityFlush.SalinityFlushPrints;
-    ExpressionLength := SalinityFlush.ExpressionLength;
     FarmSaltConcentrationsChoice := SalinityFlush.FarmSaltConcentrationsChoice;
     FarmIrrigationUniformityChoice := SalinityFlush.FarmIrrigationUniformityChoice;
     CropSalinityDemandChoice := SalinityFlush.CropSalinityDemandChoice;
@@ -29111,7 +29106,6 @@ begin
   inherited;
   ExpressionMin := 0;
   FSalinityFlushPrints := [];
-  FExpressionLength := 100;
   FFarmSaltConcentrationsChoice.Initialize;
   FFarmIrrigationUniformityChoice.Initialize;
   FCropSalinityDemandChoice.Initialize;
@@ -29200,10 +29194,10 @@ begin
   FCropSalinityToleranceChoice.Assign(Value);
 end;
 
-procedure TFarmProcess4SalinityFlush.SetExpressionLength(const Value: Integer);
-begin
-  SetIntegerProperty(FExpressionLength, Value);
-end;
+//procedure TFarmProcess4SalinityFlush.SetExpressionLength(const Value: Integer);
+//begin
+//  SetIntegerProperty(FExpressionLength, Value);
+//end;
 
 procedure TFarmProcess4SalinityFlush.SetExpressionMin(const Value: double);
 begin

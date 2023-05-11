@@ -15455,11 +15455,22 @@ var
   Node: TJvPageIndexNode;
 begin
   FFarmWell_Node := nil;
-  if frmGoPhast.PhastModel.FarmProcess3IsSelected then
+  if frmGoPhast.PhastModel.FarmProcess3IsSelected
+    or frmGoPhast.PhastModel.FarmProcess4WellSelected then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format(StrFarmWellsInS,
-      [frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier]))
-      as TJvPageIndexNode;
+    if frmGoPhast.PhastModel.FarmProcess3IsSelected then
+    begin
+      Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format(StrFarmWellsInS,
+        [frmGoPhast.PhastModel.ModflowPackages.FarmProcess.PackageIdentifier]))
+        as TJvPageIndexNode;
+    end
+    else
+    begin
+      Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format(StrFarmWellsInS,
+        [frmGoPhast.PhastModel.ModflowPackages.FarmWells4.PackageIdentifier]))
+        as TJvPageIndexNode;
+    end;
+
     Node.PageIndex := jvspFarmWell.PageIndex;
     frameFarmWell.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
@@ -21193,7 +21204,8 @@ var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
 begin
-  if not frmGoPhast.PhastModel.FarmProcess3IsSelected then
+  if not (frmGoPhast.PhastModel.FarmProcess3IsSelected
+    or frmGoPhast.PhastModel.FarmProcess4WellSelected) then
   begin
     Exit;
   end;

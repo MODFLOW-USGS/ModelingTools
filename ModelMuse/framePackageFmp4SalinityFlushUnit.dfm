@@ -1,9 +1,9 @@
 inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
-  Height = 507
-  ExplicitHeight = 507
+  Height = 526
+  ExplicitHeight = 526
   DesignSize = (
     422
-    507)
+    526)
   inherited memoComments: TMemo
     Height = 51
     ExplicitHeight = 51
@@ -12,7 +12,8 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
     Left = 0
     Top = 119
     Width = 422
-    Height = 388
+    Height = 407
+    VertScrollBar.Position = 7
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -23,10 +24,12 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlPrint: TCategoryPanel
-      Top = 0
-      Height = 81
+      Top = -7
+      Height = 30
       Caption = 'Print'
+      Collapsed = True
       TabOrder = 0
+      ExpandedHeight = 81
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
@@ -40,55 +43,35 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
           'PRINT BYFARM_BYCROP'
           'PRINT ALL')
         TabOrder = 0
-        ExplicitHeight = 92
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 81
-      Height = 312
+      Top = 23
+      Height = 380
       Caption = 'Options'
       TabOrder = 1
-      ExplicitTop = 118
       object pnl1: TPanel
         Left = 0
         Top = 0
         Width = 399
-        Height = 65
+        Height = 49
         Align = alTop
         TabOrder = 0
-        object lblExpressionLength: TLabel
-          Left = 140
-          Top = 11
-          Width = 115
-          Height = 15
-          Caption = 'Expression line length'
-        end
         object lblExpressionMin: TLabel
           Left = 140
-          Top = 40
+          Top = 18
           Width = 186
-          Height = 15
+          Height = 19
           Caption = 'EXPRESSION_VARIABLE_NEARZERO'
-        end
-        object seExpressionLength: TJvSpinEdit
-          Left = 13
-          Top = 8
-          Width = 121
-          Height = 23
-          CheckMaxValue = False
-          MinValue = 1.000000000000000000
-          Value = 1.000000000000000000
-          Enabled = False
-          TabOrder = 0
         end
         object rdeExpressionMin: TRbwDataEntry
           Left = 13
-          Top = 37
+          Top = 15
           Width = 121
-          Height = 22
+          Height = 26
           Color = clBtnFace
           Enabled = False
-          TabOrder = 1
+          TabOrder = 0
           Text = '0'
           DataType = dtReal
           Max = 1.000000000000000000
@@ -97,9 +80,9 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       end
       object rdgSalinityFlush: TRbwDataGrid4
         Left = 0
-        Top = 65
+        Top = 49
         Width = 399
-        Height = 221
+        Height = 305
         Align = alClient
         ColCount = 6
         Enabled = False
@@ -269,6 +252,9 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = 96
+        ExplicitWidth = 416
+        ExplicitHeight = 258
       end
     end
   end
@@ -284,7 +270,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Control = clbPrint
       end
       item
-        Control = seExpressionLength
       end
       item
         Control = rdeExpressionMin

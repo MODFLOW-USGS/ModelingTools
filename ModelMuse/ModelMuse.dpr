@@ -871,7 +871,8 @@ uses
   CellLocationUnit in 'CellLocationUnit.pas',
   AbstractGridInterfaceUnit in 'AbstractGridInterfaceUnit.pas',
   ModelCellInterfaceUnit in 'ModelCellInterfaceUnit.pas',
-  frmFmpFormulaEditorUnit in 'frmFmpFormulaEditorUnit.pas' {frmFmpFormulaEditor};
+  frmFmpFormulaEditorUnit in 'frmFmpFormulaEditorUnit.pas' {frmFmpFormulaEditor},
+  frameLeachUnit in 'frameLeachUnit.pas' {frameLeach: TFrame};
 
 {$R *.res}
 

@@ -4346,6 +4346,7 @@ that affects the model output should also have a comment. }
     function FarmProcess4TransientAddedDemandMultIsSelected: Boolean; override;
     function FarmProcess4TransientCropHasSalinityDemandIsSelected: Boolean; override;
     function FarmProcess4TransientCropHasSalinityDemandMultIsSelected: Boolean; override;
+    function FarmProcess4WellSelected: Boolean;
 
     function CfpRechargeIsSelected(Sender: TObject): boolean;
     function SwrIsSelected: Boolean; override;
@@ -24081,6 +24082,41 @@ begin
   {$ENDIF}
 end;
 
+function TPhastModel.FarmProcess4WellSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+
+{$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2);
+  if result then
+  begin
+    result := ModflowPackages.FarmProcess4.IsSelected
+      and ModflowPackages.FarmWells4.IsSelected;
+    if not result and LgrUsed then
+    begin
+      for ChildIndex := 0 to ChildModels.Count - 1 do
+      begin
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          result :=
+            ChildModel.ModflowPackages.FarmProcess4.IsSelected
+            and ChildModel.ModflowPackages.FarmWells4.IsSelected;
+          if result then
+          begin
+            Exit;
+          end;
+        end;
+      end;
+    end;
+  end;
+{$ELSE}
+   result := False;
+{$ENDIF}
+end;
+
 function TPhastModel.Farm4ProcessUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -24106,17 +24142,20 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := (ModelSelection = msModflowFmp)
-    and ModflowPackages.FarmProcess.IsSelected;
-  if not result and LgrUsed then
+  result := (ModelSelection = msModflowFmp);
+  if result then
   begin
-    for ChildIndex := 0 to ChildModels.Count - 1 do
+    result :=  ModflowPackages.FarmProcess.IsSelected;
+    if not result and LgrUsed then
     begin
-      ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel <> nil then
+      for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        result := result or
-          ChildModel.ModflowPackages.FarmProcess.IsSelected;
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          result := result or
+            ChildModel.ModflowPackages.FarmProcess.IsSelected;
+        end;
       end;
     end;
   end;

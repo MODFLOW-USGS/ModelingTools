@@ -28,7 +28,7 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       761
       41)
     object btnCancel: TBitBtn
-      Left = 609
+      Left = 605
       Top = 6
       Width = 91
       Height = 33
@@ -36,10 +36,10 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 605
+      ExplicitLeft = 601
     end
     object btnOK: TBitBtn
-      Left = 512
+      Left = 508
       Top = 6
       Width = 91
       Height = 33
@@ -48,10 +48,10 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 508
+      ExplicitLeft = 504
     end
     object btnHelp: TBitBtn
-      Left = 417
+      Left = 413
       Top = 4
       Width = 91
       Height = 33
@@ -60,10 +60,10 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 413
+      ExplicitLeft = 409
     end
     object btnFunctionHelp: TBitBtn
-      Left = 247
+      Left = 243
       Top = 4
       Width = 163
       Height = 33
@@ -91,7 +91,7 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
         0000}
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 243
+      ExplicitLeft = 239
     end
   end
   object pnlMain: TPanel
