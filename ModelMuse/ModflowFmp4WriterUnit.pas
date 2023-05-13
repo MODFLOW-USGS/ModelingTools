@@ -27,7 +27,8 @@ type
     wlSemiRouteDeliveryLowerLimit, wlSemiRouteDeliveryUpperLimit, wlSwAllotment,
     wlGwAllotment, wlRootPressure, wlPondDepth, wlNoCropMeansBareSoil,
     wlNoEvapErrCorrection, wlSaltSupplyConcentration, wlCropSalinityTolerance,
-    wlCropMaxLeachRequirement, wlCropLeachRequirement, wlSalinityAppliedWater);
+    wlCropMaxLeachRequirement, wlCropLeachRequirement, wlSalinityAppliedWater,
+    wlSupplyWells);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -75,6 +76,7 @@ type
     FSalinityFlush: TFarmProcess4SalinityFlush;
     FSoil4: TFarmProcess4Soil;
     FAllotments: TFarmProcess4Allotments;
+    FFarmWells4: TFarmProcess4Wells;
 
     FACtiveSurfaceCells: array of array of boolean;
     FWriteLocation: TWriteLocation;
@@ -154,7 +156,6 @@ type
     FSemiRoutedReturnFileStream: TFileStream;
     FSurfaceWaterAllotmentFileStream: TFileStream;
     FGroundWaterAllotmentFileStream: TFileStream;
-    FFarmWells4: TFarmProcess4Wells;
     FRootPressureFileStream: TFileStream;
     FPondDepthFileStream: TFileStream;
     FConvertToBareFileStream: TFileStream;
@@ -164,6 +165,7 @@ type
     FCropMaxLeachingRequirementFileStream: TFileStream;
     FCropLeachingRequirementFileStream: TFileStream;
     FCropSalinityAppliedWaterFileStream: TFileStream;
+    FSupplyWellFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -177,6 +179,7 @@ type
     procedure WriteSalinityFlush;
     procedure WriteSurfaceWaterIrrigation;
     procedure WriteFileInternal;
+    procedure Evaluate; override;
     procedure EvaluateAll;
 
     // WBS
@@ -376,6 +379,7 @@ type
     function GetSalinityAppliedWaterCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteSalinityAppliedWater;
 
+    procedure WriteSupplyWells;
 
     procedure EvaluateCropHasSalinityDemand;
     procedure WriteCropHasSalinityDemand; // finish list
@@ -428,6 +432,8 @@ type
       AssignmentMethod: TUpdateMethod;
       MultiplierArrayNames: TTransientMultCollection;
       ZoneArrayNames: TTransientZoneCollection); override;
+    procedure WriteStressPeriods(const VariableIdentifiers, DataSetIdentifier,
+      DS5, D7PNameIname, D7PName: string); override;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -488,7 +494,7 @@ uses
   ModflowUnitNumbers, frmProgressUnit,
   ModflowFmpFarmUnit, System.StrUtils,
   ModflowFmpIrrigationUnit,
-  ModflowFmpAllotmentUnit, DataSetNamesUnit;
+  ModflowFmpAllotmentUnit, DataSetNamesUnit, ModflowMNW2_WriterUnit, FastGEO;
 
 resourcestring
   StrUndefinedError = 'Undefined %s in one or more stress periods';
@@ -896,6 +902,14 @@ begin
   inherited;
 end;
 
+procedure TModflowFmp4Writer.Evaluate;
+begin
+  if FFarmWells4.IsSelected then
+  begin
+    inherited;
+  end;
+end;
+
 procedure TModflowFmp4Writer.EvaluateActiveCells;
 var
   RowIndex: Integer;
@@ -944,6 +958,7 @@ end;
 
 procedure TModflowFmp4Writer.EvaluateAll;
 begin
+  Evaluate;
   EvaluateActiveCells;
   EvaluateFarmID;
   EvaluateReferenceET;
@@ -1235,6 +1250,8 @@ begin
   FreeAndNil(FCropMaxLeachingRequirementFileStream);
   FreeAndNil(FCropLeachingRequirementFileStream);
   FreeAndNil(FCropSalinityAppliedWaterFileStream);
+  FreeAndNil(FSupplyWellFileStream);
+
 end;
 
 //function TModflowFmp4Writer.GetAddedDemandCollection(
@@ -1768,6 +1785,15 @@ begin
             fmCreate or fmShareDenyWrite);
         end;
       end;
+    wlSupplyWells:
+      begin
+        result := ChangeFileExt(FBaseName, '.supply_well');
+        if FSupplyWellFileStream = nil then
+        begin
+          FSupplyWellFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end
     else Assert(False);
   end;
   if result <> '' then
@@ -1957,6 +1983,7 @@ begin
     wlCropMaxLeachRequirement: ;
     wlCropLeachRequirement: ;
     wlSalinityAppliedWater: ;
+    wlSupplyWells: ;
     else Assert(False);
   end;
 end;
@@ -2028,6 +2055,7 @@ begin
     wlCropMaxLeachRequirement: ;
     wlCropLeachRequirement: ;
     wlSalinityAppliedWater: ;
+    wlSupplyWells: ;
     else Assert(False)
   end;
 end;
@@ -5507,8 +5535,114 @@ end;
 
 procedure TModflowFmp4Writer.WriteCell(Cell: TValueCell;
   const DataSetIdentifier, VariableIdentifiers: string);
+var
+  Well_Cell: TFmpWell_Cell;
+  LocalLayer: integer;
+  AuxValue: integer;
+  AuxName: string;
+  MNW2NAM: STRING;
+  WellName: string;
+  APoint: TPoint2D;
+//  DataArray: TDataArray;
 begin
-  Assert(False);
+  Well_Cell := Cell as TFmpWell_Cell;
+  if Well_Cell.Mnw2 then
+  begin
+    LocalLayer := 0;
+    WellName := Copy(Well_Cell.MnwName, 1, 20);
+    TModflowMNW2_Writer.AdjustWellID(WellName);
+  end
+  else
+  begin
+    LocalLayer := Model.
+      DataSetLayerToModflowLayer(Well_Cell.Layer);
+    WellName := IntToStr(FFarmWellID);
+  end;
+  WriteString(WellName);
+  WriteInteger(Well_Cell.FarmID);
+
+
+  if Well_Cell.Mnw2 then
+  begin
+    WriteString(' MNW') ;
+  end
+  else
+  begin
+    WriteInteger(LocalLayer);
+  end;
+
+  if FFarmWells4.WellXY = xyCells then
+  begin
+    WriteInteger(Well_Cell.Row+1);
+    WriteInteger(Well_Cell.Column+1);
+  end
+  else
+  begin
+    Assert(Well_Cell.ScreenObject <> nil);
+    if Well_Cell.ScreenObject.Count = 1 then
+    begin
+      APoint := Well_Cell.ScreenObject.Points[0];
+    end
+    else
+    begin
+      APoint := Model.Grid.TwoDElementCenter(Well_Cell.Column, Well_Cell.Row);
+    end;
+    WriteFloat(APoint.x);
+    WriteFloat(APoint.Y);
+  end;
+
+  if (Well_Cell.MaxPumpingRatePestName <> '')
+    or (Well_Cell.MaxPumpingRatePestSeriesName <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
+  WriteValueOrFormula(Well_Cell, FmpWellMaxPumpingRatePosition);
+
+//  WriteFloat(Well_Cell.MaxPumpingRate);
+
+  WriteInteger(StressPeriod+1);
+  WriteInteger(StressPeriod+1);
+
+  Inc(FFarmWellID);
+
+//  Skip QMAXRESET because MNW1 is not supported.
+
+//  AuxName := '';
+//  case FFarmProcess.CropIrrigationRequirement of
+//    cirOnlyWhenNeeded:
+//      begin
+//        if Well_Cell.PumpOnlyIfCropRequiresWater then
+//        begin
+//          AuxValue := 1;
+//        end
+//        else
+//        begin
+//          AuxValue := 0;
+//        end;
+//        WriteInteger(AuxValue);
+//        AuxName := ' AUX-NOCIRNOQ';
+//      end;
+//    cirContinuously: ;// do nothing
+//    else Assert(False);
+//  end;
+
+  // FMP does not accept auxilliary variables.
+//  WriteIface(Well_Cell.IFace);
+
+//  WriteString(' # ' + DataSetIdentifier
+//    + ' Layer, Row, Column, Farm-Well-ID, Farm ID, ' + VariableIdentifiers);
+//  if Well_Cell.Mnw2 then
+//  begin
+//    WriteString(', MNW2NAM ');
+//  end;
+
+//  WriteString(VariableIdentifiers + ',' + AuxName + ',' + ' IFACE');
+
+//  // The annotation identifies the object used to define the well.
+//  // This can be helpful in identifying when used with PEST.
+//  WriteString(Well_Cell.PumpingRateAnnotation);
+  NewLine;
 end;
 
 procedure TModflowFmp4Writer.WriteClimate;
@@ -9124,6 +9258,13 @@ begin
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
 
+procedure TModflowFmp4Writer.WriteStressPeriods(const VariableIdentifiers,
+  DataSetIdentifier, DS5, D7PNameIname, D7PName: string);
+begin
+  inherited;
+
+end;
+
 procedure TModflowFmp4Writer.WriteString(const Value: AnsiString);
 begin
   if Length(Value) > 0 then
@@ -9443,6 +9584,11 @@ begin
           Assert(FCropSalinityAppliedWaterFileStream <> nil);
           FCropSalinityAppliedWaterFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
+      wlSupplyWells:
+        begin
+          Assert(FSupplyWellFileStream <> nil);
+          FSupplyWellFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
       else
         Assert(False);
     end;
@@ -9519,33 +9665,91 @@ begin
       end;
     end;
 
+//    case FFarmWells4.Smoothing of
+//      sNone: ;
+//      sByFraction:
+//        begin
+//          WriteString('  SMOOTH ByFRACTION');
+//          NewLine;
+//        end;
+//      sByThickness:
+//        begin
+//          WriteString('  SMOOTH ByTHICK');
+//          NewLine;
+//        end;
+//      else
+//        begin
+//          Assert(False);
+//        end;
+//    end;
+//
+//    case FFarmWells4.ProrateDemand of
+//      sNone: ;
+//      sByFraction:
+//        begin
+//          WriteString('  SMOOTH ByFRACTION');
+//          NewLine;
+//        end;
+//      sByThickness:
+//        begin
+//          WriteString('  SMOOTH ByTHICK');
+//          NewLine;
+//        end;
+//      else
+//        begin
+//          Assert(False);
+//        end;
+//    end;
+
     if FFarmWells4.WellXY = xyCoordinates then
     begin
       WriteString('  INPUT_OPTION XY');
       NewLine;
     end;
 
-    case FFarmWells4.WellLayerChoice of
-      plcLayer:
-        begin
-          // do nothing
-        end;
-      plcElevation:
-        begin
-          WriteString('  INPUT_OPTION ELEVATION');
-          NewLine;
-        end;
-      plcDepth:
-        begin
-          WriteString('  INPUT_OPTION DEPTH');
-          NewLine;
-        end;
-    end;
+//    case FFarmWells4.WellLayerChoice of
+//      plcLayer:
+//        begin
+//          // do nothing
+//        end;
+//      plcElevation:
+//        begin
+//          WriteString('  INPUT_OPTION ELEVATION');
+//          NewLine;
+//        end;
+//      plcDepth:
+//        begin
+//          WriteString('  INPUT_OPTION DEPTH');
+//          NewLine;
+//        end;
+//    end;
+
+    WriteSupplyWells;
 
     WriteString('END SUPPLY_WELL');
     NewLine;
     NewLine;
   end;
+end;
+
+procedure TModflowFmp4Writer.WriteSupplyWells;
+var
+  AFileName: string;
+begin
+  WriteString('  TIME FRAME');
+  NewLine;
+  AFileName := GetFileStreamName(wlSupplyWells);
+  WriteString('  OPEN/CLOSE ');
+  WriteString(ExtractFileName(AFileName));
+  NewLine;
+
+  FWriteLocation := wlSupplyWells;
+  try
+    WriteStressPeriods('', '','','','')
+  finally
+    FWriteLocation := wlMain;
+  end;
+
 end;
 
 procedure TModflowFmp4Writer.WriteSurfaceElevationOffset;

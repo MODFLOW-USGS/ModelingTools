@@ -5466,6 +5466,9 @@ Type
     fwpPrint_List, fwpPrint_Smoothing,  fwpPrint_ByWbs_ByLayer);
   TFarmWellPrints = set of TFarmWellPrint;
   TXYChoice = (xyCells, xyCoordinates);
+  TSmoothing = (sNone, sByFraction, sByThickness);
+  TProrateDemand = (pdNone, pdByCapacity, pdByAverage);
+
 
   TFarmProcess4Wells = class(TCustomFarm4)
   private
@@ -5474,11 +5477,15 @@ Type
     FWellXY: TXYChoice;
     FWellLayerChoice: TPumpLayerChoice;
     FFarmWellPrints: TFarmWellPrints;
+    FSmoothing: TSmoothing;
+    FProrateDemand: TProrateDemand;
     procedure SetMnwPumpSpread(const Value: TPumpSpreadChoice);
     procedure SetWellFormat(const Value: TWellFormat);
     procedure SetWellLayerChoice(const Value: TPumpLayerChoice);
     procedure SetWellXY(const Value: TXYChoice);
     procedure SetFarmWellPrints(const Value: TFarmWellPrints);
+    procedure SetSmoothing(const Value: TSmoothing);
+    procedure SetProrateDemand(const Value: TProrateDemand);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -5499,7 +5506,9 @@ Type
     property WellLayerChoice: TPumpLayerChoice read FWellLayerChoice
       write SetWellLayerChoice;
     // {TIME FRAME (default), LINEFEED WBS, LINEFEED CAPACITY}}
-    property WellFormat: TWellFormat read FWellFormat write SetWellFormat;
+    property WellFormat: TWellFormat read FWellFormat write SetWellFormat stored False;
+    property Smoothing: TSmoothing read FSmoothing write SetSmoothing;
+    property ProrateDemand: TProrateDemand read FProrateDemand write SetProrateDemand;
   end;
 
   TAllotmentMethod =  (amHeight, amVolume, amRate);
@@ -26784,6 +26793,8 @@ begin
     WellXY := WellsSource.WellXY;
     WellLayerChoice := WellsSource.WellLayerChoice;
     WellFormat := WellsSource.WellFormat;
+    Smoothing := WellsSource.Smoothing;
+    ProrateDemand := WellsSource.ProrateDemand;
   end;
   inherited;
 end;
@@ -26801,7 +26812,9 @@ begin
   FMnwPumpSpread := pscConductance;
   FWellXY := xyCells;
   FWellLayerChoice := plcLayer;
-  WellFormat := wfTimeFrame;
+  FWellFormat := wfTimeFrame;
+  FSmoothing := sNone;
+  FProrateDemand := pdNone;
 end;
 
 procedure TFarmProcess4Wells.SetFarmWellPrints(const Value: TFarmWellPrints);
@@ -26818,6 +26831,24 @@ begin
   if FMnwPumpSpread <> Value then
   begin
     FMnwPumpSpread := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmProcess4Wells.SetProrateDemand(const Value: TProrateDemand);
+begin
+  if FProrateDemand <> Value then
+  begin
+    FProrateDemand := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TFarmProcess4Wells.SetSmoothing(const Value: TSmoothing);
+begin
+  if FSmoothing <> Value then
+  begin
+    FSmoothing := Value;
     InvalidateModel;
   end;
 end;

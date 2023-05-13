@@ -16,8 +16,10 @@ type
     lblXY: TLabel;
     comboWellLayer: TComboBox;
     lblWellLayer: TLabel;
-    comboWellFormat: TComboBox;
-    lblWellFormat: TLabel;
+    comboSmoothing: TComboBox;
+    lblSmoothing: TLabel;
+    comboProrateDemand: TComboBox;
+    lblProrateDemand: TLabel;
   private
     { Private declarations }
   public
@@ -51,7 +53,8 @@ begin
   comboPumpSpread.ItemIndex := Ord(FrmWellPackage.MnwPumpSpread);
   comboXY.ItemIndex := Ord(FrmWellPackage.WellXY);
   comboWellLayer.ItemIndex := Ord(FrmWellPackage.WellLayerChoice);
-  comboWellFormat.ItemIndex := Ord(FrmWellPackage.WellFormat);
+  comboSmoothing.ItemIndex := Ord(FrmWellPackage.Smoothing);
+  comboProrateDemand.ItemIndex := Ord(FrmWellPackage.ProrateDemand);
 end;
 
 procedure TframePackageFmp4Wells.SetData(Package: TModflowPackageSelection);
@@ -76,7 +79,9 @@ begin
   FrmWellPackage.MnwPumpSpread := TPumpSpreadChoice(comboPumpSpread.ItemIndex);
   FrmWellPackage.WellXY := TXYChoice(comboXY.ItemIndex);
   FrmWellPackage.WellLayerChoice := TPumpLayerChoice(comboWellLayer.ItemIndex);
-  FrmWellPackage.WellFormat := TWellFormat(comboWellFormat.ItemIndex);
+  FrmWellPackage.Smoothing := TSmoothing(comboSmoothing.ItemIndex);
+  FrmWellPackage.ProrateDemand := TProrateDemand(comboProrateDemand.ItemIndex);
+
 end;
 
 end.

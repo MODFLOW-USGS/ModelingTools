@@ -831,6 +831,9 @@ end;
     procedure WriteIntegerValueFromGlobalFormula(Formula: string;
       ErrorObject: TObject; const DataSetErrorString: string;
       TestValue: TTestIntValueOkProcedure = nil);
+    // @name begins at 0. That is if @name is zero, that is the first stress
+    // period.
+    property StressPeriod: integer read FStressPeriod;
   public
     // @name is used to update the display of transient data used to color the
     // grid.
@@ -6008,7 +6011,12 @@ begin
             Format(StrStressPeriod0d, [TimeIndex+1]));
         end;
 
-        if (Model.ModelSelection <> msModflow2015) and (FEvaluationType <> etExportCsv) then
+        if (not (Model.ModelSelection in [msModflow2015
+          {$IFDEF OWHMV2}
+          , msModflowOwhm2
+          {$ENDIF}
+              ]))
+          and (FEvaluationType <> etExportCsv) then
         begin
           // data set 5;
           WriteInteger(ITMP);

@@ -37,6 +37,11 @@ type
     procedure SetFullObjectIntersectLength(const Value: Boolean);
     property FullObjectIntersectLength: Boolean read GetFullObjectIntersectLength
       write SetFullObjectIntersectLength;
+
+    function GetCount: integer;
+    procedure SetCount(const Value: integer);
+    property Count: integer read GetCount write SetCount;
+
   end;
 
 implementation

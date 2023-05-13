@@ -7,37 +7,48 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
     595
     514)
   object lblPumpSpread: TLabel [2]
-    Left = 223
-    Top = 275
-    Width = 347
+    Left = 261
+    Top = 290
+    Width = 310
     Height = 30
     Caption = 
       'Specify how pumping demand should be allocated among MNW well no' +
       'des (MNW_PUMP_SPREAD)'
+    Constraints.MaxWidth = 310
     WordWrap = True
   end
   object lblWellLayer: TLabel [3]
     Left = 223
-    Top = 379
+    Top = 384
     Width = 233
     Height = 15
     Caption = 'Method for specifying well vertical locations'
+    Visible = False
     WordWrap = True
   end
   object lblXY: TLabel [4]
     Left = 223
-    Top = 329
+    Top = 355
     Width = 248
     Height = 15
     Caption = 'Method for specifying well horizontal locations'
     WordWrap = True
   end
-  object lblWellFormat: TLabel [5]
+  object lblSmoothing: TLabel [5]
     Left = 223
-    Top = 419
-    Width = 96
+    Top = 413
+    Width = 59
     Height = 15
-    Caption = 'Well input  format'
+    Caption = 'Smoothing'
+    Visible = False
+  end
+  object lblProrateDemand: TLabel [6]
+    Left = 223
+    Top = 442
+    Width = 86
+    Height = 15
+    Caption = 'Prorate Demand'
+    Visible = False
   end
   inherited memoComments: TMemo
     Top = 70
@@ -45,11 +56,11 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
     ExplicitTop = 70
     ExplicitWidth = 564
   end
-  object clbPrint: TCheckListBox [7]
+  object clbPrint: TCheckListBox [8]
     Left = 16
     Top = 165
-    Width = 201
-    Height = 100
+    Width = 233
+    Height = 116
     Enabled = False
     ItemHeight = 15
     Items.Strings = (
@@ -61,10 +72,10 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
       'PRINT BYWBS_BYLAYER')
     TabOrder = 1
   end
-  object comboPumpSpread: TComboBox [8]
+  object comboPumpSpread: TComboBox [9]
     Left = 16
-    Top = 272
-    Width = 201
+    Top = 287
+    Width = 233
     Height = 23
     Style = csDropDownList
     Enabled = False
@@ -77,23 +88,24 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
       'Assign to top node (2)'
       'Assign separately in each WBS')
   end
-  object comboWellLayer: TComboBox [9]
+  object comboWellLayer: TComboBox [10]
     Left = 16
-    Top = 376
+    Top = 381
     Width = 201
     Height = 23
     Enabled = False
     ItemIndex = 2
     TabOrder = 3
     Text = 'By depth below surface'
+    Visible = False
     Items.Strings = (
       'By layer'
       'By elevation'
       'By depth below surface')
   end
-  object comboXY: TComboBox [10]
+  object comboXY: TComboBox [11]
     Left = 16
-    Top = 326
+    Top = 352
     Width = 201
     Height = 23
     Style = csDropDownList
@@ -105,20 +117,37 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
       'By row and column'
       'By X and Y coordinates')
   end
-  object comboWellFormat: TComboBox [11]
+  object comboSmoothing: TComboBox [12]
     Left = 16
-    Top = 416
+    Top = 410
     Width = 201
     Height = 23
     Style = csDropDownList
     Enabled = False
     ItemIndex = 0
     TabOrder = 5
-    Text = 'TIME FRAME'
+    Text = 'none'
+    Visible = False
     Items.Strings = (
-      'TIME FRAME'
-      'LINEFEED WBS'
-      'LINEFEED CAPACITY')
+      'none'
+      'By fraction'
+      'By thickness')
+  end
+  object comboProrateDemand: TComboBox [13]
+    Left = 16
+    Top = 439
+    Width = 201
+    Height = 23
+    Style = csDropDownList
+    Enabled = False
+    ItemIndex = 0
+    TabOrder = 6
+    Text = 'none'
+    Visible = False
+    Items.Strings = (
+      'none'
+      'By capacity'
+      'By average')
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -141,7 +170,10 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
         Control = comboWellLayer
       end
       item
-        Control = comboWellFormat
+        Control = comboSmoothing
+      end
+      item
+        Control = comboProrateDemand
       end>
   end
 end
