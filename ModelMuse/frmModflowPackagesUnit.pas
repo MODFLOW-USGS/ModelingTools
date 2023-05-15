@@ -2661,7 +2661,11 @@ begin
       AddNode(StrSurfaceWaterRoutin, StrSurfaceWaterRoutin, PriorNode);
     end;
 
-    if frmGoPhast.ModelSelection = msModflowCFP then
+    if frmGoPhast.ModelSelection in [msModflowCFP
+      {$IFDEF OWHMV2}
+      , msModflowOwhm2
+      {$ENDIF}
+      ] then
     begin
       AddNode(StrConduitFlowProcess, StrConduitFlowProcess, PriorNode);
     end;
@@ -4784,7 +4788,11 @@ begin
   end;
           {$ENDIF}
 
-  if frmGoPhast.ModelSelection = msModflowCFP then
+  if frmGoPhast.ModelSelection in [msModflowCFP
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    ] then
   begin
     Packages.ConduitFlowProcess.Frame := framePkgCFP;
     FPackageList.Add(Packages.ConduitFlowProcess);

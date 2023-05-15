@@ -4920,8 +4920,8 @@ Type
   fpEvapotranspiration_SummarySum, fpEvapotranspiration_SummarySeparate,
   {ET_LIST,  FARM_WELL_SUMMARY,   LANDSCAPE_RUNOFF [COMPACT]}
   fpEt_List, fpFarm_Well_Summary, fpLandscape_Runoff,
-  {DEEP_PERCOLATION    [COMPACT]}
-  fpDeep_Percolation);
+  {DEEP_PERCOLATION    [COMPACT], ROUTING_INFORMATION STATIC,TRANSIENT}
+  fpDeep_Percolation,             fpRoutingInformation);
   TFarmPrints = set of TFarmPrint;
 
   TFarmProperty = class(TGoPhastPersistent)

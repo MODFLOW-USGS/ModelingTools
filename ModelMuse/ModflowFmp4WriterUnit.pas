@@ -418,6 +418,7 @@ type
       GetCollection: TGetCropCollection; const ErrorMessage: string);
     procedure WriteLeachList(RequiredValues: TRequiredValues; AFileName: string;
       GetCollection: TGetCropCollection; const ErrorMessage: string);
+    procedure WriteSurfaceElevation;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -2172,6 +2173,34 @@ begin
   UpdateRequirements.WriteLocation := wlAddedDemandRunoffSplit;
   UpdateRequirements.TimeLists := TimeLists;
   UpdateDisplay(UpdateRequirements);
+end;
+
+procedure TModflowFmp4Writer.WriteSurfaceElevation;
+var
+  DataArray: TDataArray;
+  RequiredValues: TRequiredValues;
+begin
+  RequiredValues.WriteLocation := wlMain;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP GLOBAL_DIMENSION: SURFACE_ELEVATION';
+  RequiredValues.ErrorID := 'FMP GLOBAL_DIMENSION: SURFACE_ELEVATION';
+  RequiredValues.ID := 'SURFACE_ELEVATION';
+  RequiredValues.StaticDataName := StrUzfLandSurface;
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckError :=  '';
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
+
+
+  WriteFmpArrayData('', RequiredValues);
+//  WriteString('  SURFACE_ELEVATION STATIC ARRAY INTERNAL');
+//  NewLine;
+//  DataArray := Model.DataArrayManager.GetDataSetByName(StrUzfLandSurface);
+//  WriteArray(DataArray, 0, StrUzfLandSurface, '', '', False, False);
 end;
 
 procedure TModflowFmp4Writer.WriteOwhmList(RequiredValues: TRequiredValues;
@@ -4069,27 +4098,40 @@ begin
     end
     else
     begin
-      WriteString('STATIC ARRAY DATAFILE ');
-      if ExternalFileName <> '' then
+      if RequiredValues.WriteLocation <> wlMain then
       begin
-        WriteString(ExternalFileName);
-        NewLine;
+        WriteString('STATIC ARRAY DATAFILE ');
+        if ExternalFileName <> '' then
+        begin
+          WriteString(ExternalFileName);
+          NewLine;
+        end
+        else
+        begin
+          WriteString(ExtractFileName(AFileName));
+          NewLine;
+          FWriteLocation := RequiredValues.WriteLocation;
+          try
+            WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
+            if Assigned(RequiredValues.CheckProcedure) then
+            begin
+              RequiredValues.CheckProcedure(DataArray, RequiredValues.CheckError);
+            end;
+          finally
+            FWriteLocation := wlMain;
+          end;
+
+        end;
       end
       else
       begin
-        WriteString(ExtractFileName(AFileName));
+        WriteString('STATIC ARRAY INTERNAL');
         NewLine;
-        FWriteLocation := RequiredValues.WriteLocation;
-        try
-          WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
-          if Assigned(RequiredValues.CheckProcedure) then
-          begin
-            RequiredValues.CheckProcedure(DataArray, RequiredValues.CheckError);
-          end;
-        finally
-          FWriteLocation := wlMain;
+        WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
+        if Assigned(RequiredValues.CheckProcedure) then
+        begin
+          RequiredValues.CheckProcedure(DataArray, RequiredValues.CheckError);
         end;
-
       end;
     end;
   end;
@@ -7541,6 +7583,8 @@ var
   FarmIndex: Integer;
   AFarm: TFarm;
   NSFR_DELIV: Integer;
+  NSFR_RETURN: Integer;
+  RowIndex: Integer;
 begin
   WriteString('BEGIN GLOBAL DIMENSION');
   NewLine;
@@ -7614,7 +7658,22 @@ begin
     WriteString('  NSFR_DELIV');
     WriteInteger(NSFR_DELIV);
     NewLine;
-  end;    
+
+    NSFR_RETURN := 0;
+    if FSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed then
+    begin
+      for FarmIndex := 0 to Model.Farms.Count - 1 do
+      begin
+        AFarm := Model.Farms[FarmIndex];
+        Inc(NSFR_RETURN, AFarm.MultiSrReturns.Count);
+      end;
+    end;
+    WriteString('  NSFR_RETURN');
+    WriteInteger(NSFR_RETURN);
+    NewLine;
+  end;
+
+  WriteSurfaceElevation;
 
   WriteString('END');
   NewLine;
@@ -8592,6 +8651,14 @@ begin
         begin
           WriteString('  DEEP_PERCOLATION COMPACT ');
           OutputFile := ChangeFileExt(FInputFileName, '.DEEP_PERCOLATION');
+          WriteString(ExtractFileName(OutputFile));
+          Model.AddModelOutputFile(OutputFile);
+          NewLine;
+        end;
+      fpRoutingInformation:
+        begin
+          WriteString('  ROUTING_INFORMATION TRANSIENT ');
+          OutputFile := ChangeFileExt(FInputFileName, '.ROUTING_INFORMATION');
           WriteString(ExtractFileName(OutputFile));
           Model.AddModelOutputFile(OutputFile);
           NewLine;

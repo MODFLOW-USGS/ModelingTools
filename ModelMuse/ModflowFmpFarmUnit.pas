@@ -2470,7 +2470,7 @@ end;
 
 class function TWaterSourceItem.DefaultFormula: string;
 begin
-  result := 'False';
+  result := 'True';
 end;
 
 function TWaterSourceItem.GetBoundaryFormula(Index: integer): string;

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-12-01T17:00:53.064-05:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-15T09:01:29.945-04:00" lasteditedby="rbwinst" version="2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title>GLOBAL DIMENSION</title>
   <body>
     <header>
@@ -102,7 +102,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="SURFACE_ELEVATION"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="ULOAD">ULOAD</link></para>
           <para styleclass="Normal">SURFACE_ELEVATION is a 2D FLOAT ARRAY of land surface elevations</para>
           <para styleclass="Normal"> &#160; --Note you do not have to specify this, if it is specified DIS package keyword as &quot;SURFACE_ELEVATION ULOAD&quot;. Where the keyword &quot;SURFACE_ELEVATION&quot; IS ON THE LINE BEFORE SPECIFYING TOP.</para>
-          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Land-surface ele</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">va􀆟</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">on of the model. Required if not speci</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">fi</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">ed in DIS. Loaded as </text><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">FLOAT </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Array [L]. </text></para>
+          <para styleclass="Normal"><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Land-surface ele</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">vati</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">on of the model. Required if not speci</text><text styleclass="" style="font-family:ANPHCO+Calibri; font-size:11pt; color:#000000;">fi</text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">ed in DIS. Loaded as </text><text styleclass="" style="font-family:Consolas; font-size:11pt; font-weight:bold; color:#000000;">FLOAT </text><text styleclass="" style="font-family:PFXOKZ+Calibri; font-size:11pt; color:#000000;">Array [L]. </text></para>
           <para styleclass="Normal">See <link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE">LAND_USE</link></para>
         </td>
       </tr>

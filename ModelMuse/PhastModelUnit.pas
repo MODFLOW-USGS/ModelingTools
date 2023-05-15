@@ -12444,7 +12444,12 @@ end;
 
 function TCustomModel.CfpIsSelected: Boolean;
 begin
-  result := (ModelSelection = msModflowCfp) and
+  result := (ModelSelection in [msModflowCfp
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    ]
+  ) and
     ModflowPackages.ConduitFlowProcess.IsSelected;
 end;
 
@@ -43680,7 +43685,11 @@ begin
             Exit;
           end;
           if ModflowPackages.ConduitFlowProcess.IsSelected
-            and (ModelSelection = msModflowCFP) then
+            and (ModelSelection in [msModflowCFP
+            {$IFDEF OWHMV2}
+            , msModflowOwhm2
+            {$ENDIF}
+            ]) then
           begin
             frmProgressMM.StepIt;
           end;
@@ -48937,7 +48946,7 @@ end;
 
 function TCustomModel.DoGroundSurfaceUsed(Sender: TObject): boolean;
 begin
-  result := DoUzfPackageUsed(Sender) or FarmProcessUsed(Sender);
+  result := DoUzfPackageUsed(Sender) or FarmProcessUsed(Sender) or Farm4ProcessUsed(Sender);
 end;
 
 function TCustomModel.DoGwRootInteractionUsed(Sender: TObject): Boolean;

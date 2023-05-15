@@ -17,7 +17,7 @@ inherited framePackageFmp4: TframePackageFmp4
     Top = 103
     Width = 575
     Height = 397
-    VertScrollBar.Position = 513
+    VertScrollBar.Position = 1
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -28,14 +28,15 @@ inherited framePackageFmp4: TframePackageFmp4
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlWaterBalanceRegions: TCategoryPanel
-      Top = 141
+      Top = 181
       Height = 377
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
+      ExplicitTop = 393
       object rdgFarms: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 548
+        Width = 552
         Height = 351
         Align = alClient
         ColCount = 7
@@ -229,18 +230,17 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 553
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 19
+      Top = 59
       Height = 122
       Caption = 'Options'
       TabOrder = 1
       object cbAllowPrinting: TCheckBox
         Left = 8
         Top = 8
-        Width = 308
+        Width = 369
         Height = 17
         Caption = 'Allow printing to listing file (inverse of NOPRINT)'
         Enabled = False
@@ -261,7 +261,7 @@ inherited framePackageFmp4: TframePackageFmp4
       object cbRecompute: TCheckBox
         Left = 8
         Top = 74
-        Width = 449
+        Width = 521
         Height = 17
         Caption = 'Calls FMP FM routine before budget calculation (RECOMP_Q_BD)'
         Enabled = False
@@ -269,10 +269,12 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlMnw2: TCategoryPanel
-      Top = -223
-      Height = 242
+      Top = 29
+      Height = 30
       Caption = 'MNW2 Closure Criteria'
+      Collapsed = True
       TabOrder = 2
+      ExpandedHeight = 242
       object lblQClose: TLabel
         Left = 74
         Top = 82
@@ -362,18 +364,20 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlOutput: TCategoryPanel
-      Top = -513
-      Height = 290
+      Top = -1
+      Height = 30
       Caption = 'Print'
+      Collapsed = True
       TabOrder = 3
+      ExpandedHeight = 310
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
-        Width = 548
+        Width = 552
         Height = 224
         Align = alClient
         Enabled = False
-        ItemHeight = 17
+        ItemHeight = 15
         Items.Strings = (
           'WBS_WATER_USE'
           'FARM_DEMAND_SUPPLY_SUMMARY'
@@ -386,20 +390,17 @@ inherited framePackageFmp4: TframePackageFmp4
           'ET_LIST'
           'FARM_WELL_SUMMARY'
           'LANDSCAPE_RUNOFF [COMPACT]'
-          'DEEP_PERCOLATION    [COMPACT]')
+          'DEEP_PERCOLATION    [COMPACT]'
+          'ROUTING_INFORMATION')
         TabOrder = 0
-        ExplicitWidth = 553
-        ExplicitHeight = 231
       end
       object Panel1: TPanel
         Left = 0
         Top = 224
-        Width = 548
+        Width = 552
         Height = 40
         Align = alBottom
         TabOrder = 1
-        ExplicitTop = 231
-        ExplicitWidth = 553
         object lblPrintRouting: TLabel
           Left = 168
           Top = 8

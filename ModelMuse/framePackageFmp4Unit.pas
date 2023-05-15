@@ -63,7 +63,7 @@ resourcestring
   StrEfficiency = 'Efficiency';
   StrEfficiencyImproveme = 'Efficiency_Improvement';
   StrDeficiencyScenario = 'Deficiency_Scenario';
-  StrWatersource = 'Watersource';
+  StrWatersource = 'WaterSource';
   StrBareRunoffFraction = 'Bare_Runoff_Fraction';
   StrBarePrecipitationC = 'Bare_Precipitation_Consumption_Fraction';
   StrAddedDemandRunoff = 'Added_Demand_Runoff_Split';

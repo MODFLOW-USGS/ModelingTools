@@ -1208,7 +1208,11 @@ procedure TModflowCfpWriter.WriteFile(const AFileName: string);
 var
   ShouldWriteFile: boolean;
 begin
-  if not Package.IsSelected or (Model.ModelSelection <> msModflowCfp) then
+  if not Package.IsSelected or not (Model.ModelSelection in [msModflowCfp
+    {$IFDEF OWHMV2}
+    , msModflowOwhm2
+    {$ENDIF}
+    ]) then
   begin
     Exit
   end;
