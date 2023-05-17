@@ -850,12 +850,34 @@ begin
 
     else if Node = FvstModflowFarmNode then
     begin
-      Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);
+    {$IFDEF OWHMV2}
+      if Model.ModelSelection = msModflowFMP then
+      begin
+        Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);
+      end
+      else
+      begin
+        Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess4.PackageIdentifier]);
+      end;
+    {$ELSE}
+        Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);
+    {$ENDIF}
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmWellNode then
     begin
-      Data.Caption := Format(StrFarmWellsIn, [Packages.FarmProcess.PackageIdentifier]);
+    {$IFDEF OWHMV2}
+      if Model.ModelSelection = msModflowFMP then
+      begin
+        Data.Caption := Format(StrFarmWellsIn, [Packages.FarmProcess.PackageIdentifier]);
+      end
+      else
+      begin
+        Data.Caption := Format(StrFarmWellsIn, [Packages.FarmWells4.PackageIdentifier]);
+      end;
+    {$ELSE}
+        Data.Caption := Format(StrFarmWellsIn, [Packages.FarmProcess.PackageIdentifier]);
+    {$ENDIF}
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmPrecipNode then

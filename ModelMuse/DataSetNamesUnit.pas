@@ -444,6 +444,19 @@ const
   StrFMP4BareRunoffFra = 'FMP4 Bare Runoff Fraction';
   StrFMP4BarePrecipitat = 'FMP4 Bare Precipitation Consumption Fraction';
   StrFMP4AddedDemandRu = 'FMP4 Added Demand Runoff Split';
+  StrFMP4DirectRecharge = 'FMP4 Direct Recharge';
+  StrFMP4PrecipitationP = 'FMP4 Precipitation Potential Consumption';
+  StrFMP4NonRoutedDeli = 'FMP4 Non-Routed Delivery Infiltration Location';
+  StrFMP4LandUseAreaF = 'FMP4 Land Use Area Fraction';
+  StrFMP4CropCoefficien = 'FMP4 Crop Coefficient';
+  StrFMP4ConsumptiveUse = 'FMP4 Consumptive Use';
+  StrFMP4Irrigation = 'FMP4 Irrigation';
+  StrFMP4RootDepth = 'FMP4 Root Depth';
+  StrFMP4TranspirationF = 'FMP4 Transpiration Fraction';
+  StrFMP4EvaporationIrr = 'FMP4 Evaporation Irrigation Fraction';
+  StrFMP4FractionOfExc = 'FMP4 Fraction of Excess Precip to SW';
+  StrFMP4FractionOfExcIrrig = 'FMP4 Fraction of Excess Irrig to SW';
+  StrFMP4AddedDemand = 'FMP4 Added Demand';
 
   StrCfpRecharge = 'Conduit Recharge';
   StrSWR_Rain = 'SWR Rain';

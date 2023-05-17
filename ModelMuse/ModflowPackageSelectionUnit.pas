@@ -7420,17 +7420,18 @@ resourcestring
   StrSFRRunoffConcS = 'SFR MF6 Runoff Conc %s';
   StrSFRInflowConcS = 'SFR MF6 Inflow Conc %s';
   StrFMP4PotentialEvapor = 'FMP Potential Evaporation Bare';
-  StrLandUseAreaFracti = 'Land Use Area Fractions %s';
-  StrCropCoefficientsS = 'Crop Coefficients %s';
-  StrConsumptiveUsesS = 'Consumptive Use %s';
-  StrIrrigationsS = 'Irrigation %s';
-  StrRootDepthsS = 'Root Depth %s';
-  StrTranspirationFractionsS = 'Transpiration Fraction %s';
-  StrEvaporationIrrigationFractionsS = 'Evaporation Irrigation Fraction %s';
-  StrFractionOfPrecipToSurfaceWatersS = 'Frac Excess Precip to SW %s';
-  StrFractionOfIrrigToSurfaceWatersS = 'Frac Excess Irrig to SW %s';
-  StrAddedDemandsS = 'Added Demand %s';
-  StrHasSalinityDemandsS = 'Crop Has Salinity Demand %s';
+  StrLandUseAreaFracti = 'FMP4 Land Use Area Fractions %s';
+  StrCropCoefficientsS = 'FMP4 Crop Coefficients %s';
+  StrConsumptiveUsesS = 'FMP4 Consumptive Use %s';
+  StrIrrigationsS = 'FMP4 Irrigation %s';
+  StrRootDepthsS = 'FMP4 Root Depth %s';
+  StrTranspirationFractionsS = 'FMP4 Transpiration Fraction %s';
+  StrEvaporationIrrigationFractionsS = 'FMP4 Evaporation Irrigation Fraction %s';
+  StrFractionOfPrecipToSurfaceWatersS = 'FMP4 Frac Excess Precip to SW %s';
+  StrFractionOfIrrigToSurfaceWatersS = 'FMP4 Frac Excess Irrig to SW %s';
+  StrAddedDemandsS = 'FMP4 Added Demand %s';
+  StrHasSalinityDemandsS = 'FMP4 Crop Has Salinity Demand %s';
+  StrFMP4CropHasSalini = 'FMP4 Crop_Has_Salinity_Demand';
 
 { TModflowPackageSelection }
 
@@ -26069,7 +26070,7 @@ begin
     FMfFmp4DirectRecharge.OnInitialize := InitializeDirectRechargeDisplay;
     FMfFmp4DirectRecharge.OnGetUseList := GetDirectRechargeUseList;
     FMfFmp4DirectRecharge.OnTimeListUsed := TransientDirectRechargeUsed;
-    FMfFmp4DirectRecharge.Name := 'Direct Recharge';
+    FMfFmp4DirectRecharge.Name := StrFMP4DirectRecharge;
     FMfFmp4DirectRecharge.AddMethod := vamReplace;
     if TransientDirectRechargeUsed(nil) then
     begin
@@ -26080,7 +26081,7 @@ begin
     FMfFmp4PrecipPotConsumption.OnInitialize := InitializePrecipPotConsumptionDisplay;
     FMfFmp4PrecipPotConsumption.OnGetUseList := GetPrecipPotConsumptionUseList;
     FMfFmp4PrecipPotConsumption.OnTimeListUsed := TransientPrecipPotConsumptionUsed;
-    FMfFmp4PrecipPotConsumption.Name := 'Precipitation Potential Consumption';
+    FMfFmp4PrecipPotConsumption.Name := StrFMP4PrecipitationP;
     FMfFmp4PrecipPotConsumption.AddMethod := vamReplace;
     if TransientPrecipPotConsumptionUsed(nil) then
     begin
@@ -26563,7 +26564,7 @@ begin
     FMfFmp4NrdInfilLocation.OnInitialize := InitializeNrdInfilLocationDisplay;
     FMfFmp4NrdInfilLocation.OnGetUseList := GetNrdInfilLocationUseList;
     FMfFmp4NrdInfilLocation.OnTimeListUsed := TransientNrdInfilLocationUsed;
-    FMfFmp4NrdInfilLocation.Name := 'Non-Routed Delivery Infiltration Location';
+    FMfFmp4NrdInfilLocation.Name := StrFMP4NonRoutedDeli;
     FMfFmp4NrdInfilLocation.AddMethod := vamReplace;
     if TransientNrdInfilLocationUsed(nil) then
     begin
@@ -27002,7 +27003,7 @@ begin
     FMfFmp4LandUseAreaFraction.OnInitialize := InitializeLandUseAreaFractionDisplay;
     FMfFmp4LandUseAreaFraction.OnGetUseList := GetLandUseAreaFractionUseList;
     FMfFmp4LandUseAreaFraction.OnTimeListUsed := TransientLandUseAreaFractionarrayUsed;
-    FMfFmp4LandUseAreaFraction.Name := 'Land Use Area Fraction';
+    FMfFmp4LandUseAreaFraction.Name := StrFMP4LandUseAreaF;
     FMfFmp4LandUseAreaFraction.AddMethod := vamReplace;
     if TransientLandUseAreaFractionarrayUsed(nil) then
     begin
@@ -27013,7 +27014,7 @@ begin
     FMfFmp4CropCoefficient.OnInitialize := InitializeCropCoefficientDisplay;
     FMfFmp4CropCoefficient.OnGetUseList := GetCropCoefficientUseList;
     FMfFmp4CropCoefficient.OnTimeListUsed := TransientCropCoefficientarrayUsed;
-    FMfFmp4CropCoefficient.Name := 'Crop Coefficient';
+    FMfFmp4CropCoefficient.Name := StrFMP4CropCoefficien;
     FMfFmp4CropCoefficient.AddMethod := vamReplace;
     if TransientCropCoefficientarrayUsed(nil) then
     begin
@@ -27024,7 +27025,7 @@ begin
     FMfFmp4ConsumptiveUse.OnInitialize := InitializeConsumptiveUseDisplay;
     FMfFmp4ConsumptiveUse.OnGetUseList := GetConsumptiveUseUseList;
     FMfFmp4ConsumptiveUse.OnTimeListUsed := TransientConsumptiveUsearrayUsed;
-    FMfFmp4ConsumptiveUse.Name := 'Consumptive Use';
+    FMfFmp4ConsumptiveUse.Name := StrFMP4ConsumptiveUse;
     FMfFmp4ConsumptiveUse.AddMethod := vamReplace;
     if TransientConsumptiveUsearrayUsed(nil) then
     begin
@@ -27035,7 +27036,7 @@ begin
     FMfFmp4Irrigation.OnInitialize := InitializeIrrigationDisplay;
     FMfFmp4Irrigation.OnGetUseList := GetIrrigationUseList;
     FMfFmp4Irrigation.OnTimeListUsed := TransientIrrigationarrayUsed;
-    FMfFmp4Irrigation.Name := 'Irrigation';
+    FMfFmp4Irrigation.Name := StrFMP4Irrigation;
     FMfFmp4Irrigation.AddMethod := vamReplace;
     if TransientIrrigationarrayUsed(nil) then
     begin
@@ -27046,7 +27047,7 @@ begin
     FMfFmp4RootDepth.OnInitialize := InitializeRootDepthDisplay;
     FMfFmp4RootDepth.OnGetUseList := GetRootDepthUseList;
     FMfFmp4RootDepth.OnTimeListUsed := TransientRootDeptharrayUsed;
-    FMfFmp4RootDepth.Name := 'Root Depth';
+    FMfFmp4RootDepth.Name := StrFMP4RootDepth;
     FMfFmp4RootDepth.AddMethod := vamReplace;
     if TransientRootDeptharrayUsed(nil) then
     begin
@@ -27057,7 +27058,7 @@ begin
     FMfFmp4TranspirationFraction.OnInitialize := InitializeTranspirationFractionDisplay;
     FMfFmp4TranspirationFraction.OnGetUseList := GetTranspirationFractionUseList;
     FMfFmp4TranspirationFraction.OnTimeListUsed := TransientTranspirationFractionarrayUsed;
-    FMfFmp4TranspirationFraction.Name := 'Transpiration Fraction';
+    FMfFmp4TranspirationFraction.Name := StrFMP4TranspirationF;
     FMfFmp4TranspirationFraction.AddMethod := vamReplace;
     if TransientTranspirationFractionarrayUsed(nil) then
     begin
@@ -27068,7 +27069,7 @@ begin
     FMfFmp4EvaporationIrrigationFraction.OnInitialize := InitializeEvaporationIrrigationFractionDisplay;
     FMfFmp4EvaporationIrrigationFraction.OnGetUseList := GetEvaporationIrrigationFractionUseList;
     FMfFmp4EvaporationIrrigationFraction.OnTimeListUsed := TransientEvaporationIrrigationFractionarrayUsed;
-    FMfFmp4EvaporationIrrigationFraction.Name := 'Evaporation Irrigation Fraction';
+    FMfFmp4EvaporationIrrigationFraction.Name := StrFMP4EvaporationIrr;
     FMfFmp4EvaporationIrrigationFraction.AddMethod := vamReplace;
     if TransientEvaporationIrrigationFractionarrayUsed(nil) then
     begin
@@ -27079,7 +27080,7 @@ begin
     FMfFmp4FractionOfPrecipToSurfaceWater.OnInitialize := InitializeFractionOfPrecipToSurfaceWaterDisplay;
     FMfFmp4FractionOfPrecipToSurfaceWater.OnGetUseList := GetFractionOfPrecipToSurfaceWaterUseList;
     FMfFmp4FractionOfPrecipToSurfaceWater.OnTimeListUsed := TransientFractionOfPrecipToSurfaceWaterarrayUsed;
-    FMfFmp4FractionOfPrecipToSurfaceWater.Name := 'Fraction of Excess Precip to SW';
+    FMfFmp4FractionOfPrecipToSurfaceWater.Name := StrFMP4FractionOfExc;
     FMfFmp4FractionOfPrecipToSurfaceWater.AddMethod := vamReplace;
     if TransientFractionOfPrecipToSurfaceWaterarrayUsed(nil) then
     begin
@@ -27090,7 +27091,7 @@ begin
     FMfFmp4FractionOfIrrigToSurfaceWater.OnInitialize := InitializeFractionOfIrrigToSurfaceWaterDisplay;
     FMfFmp4FractionOfIrrigToSurfaceWater.OnGetUseList := GetFractionOfIrrigToSurfaceWaterUseList;
     FMfFmp4FractionOfIrrigToSurfaceWater.OnTimeListUsed := TransientFractionOfIrrigToSurfaceWaterarrayUsed;
-    FMfFmp4FractionOfIrrigToSurfaceWater.Name := 'Fraction of Excess Irrig to SW';
+    FMfFmp4FractionOfIrrigToSurfaceWater.Name := StrFMP4FractionOfExcIrrig;
     FMfFmp4FractionOfIrrigToSurfaceWater.AddMethod := vamReplace;
     if TransientFractionOfIrrigToSurfaceWaterarrayUsed(nil) then
     begin
@@ -27101,7 +27102,7 @@ begin
     FMfFmp4AddedDemand.OnInitialize := InitializeAddedDemandDisplay;
     FMfFmp4AddedDemand.OnGetUseList := GetAddedDemandUseList;
     FMfFmp4AddedDemand.OnTimeListUsed := TransientAddedDemandarrayUsed;
-    FMfFmp4AddedDemand.Name := 'Added Demand';
+    FMfFmp4AddedDemand.Name := StrFMP4AddedDemand;
     FMfFmp4AddedDemand.AddMethod := vamReplace;
     if TransientAddedDemandarrayUsed(nil) then
     begin
@@ -29015,7 +29016,7 @@ begin
     FMfFmp4CropHasSalinityDemand.OnInitialize := InitializeCropHasSalinityDemandDisplay;
     FMfFmp4CropHasSalinityDemand.OnGetUseList := GetCropHasSalinityDemandUseList;
     FMfFmp4CropHasSalinityDemand.OnTimeListUsed := TransientCropHasSalinityDemandarrayUsed;
-    FMfFmp4CropHasSalinityDemand.Name := 'Crop_Has_Salinity_Demand';
+    FMfFmp4CropHasSalinityDemand.Name := StrFMP4CropHasSalini;
     FMfFmp4CropHasSalinityDemand.AddMethod := vamReplace;
     if TransientCropHasSalinityDemandarrayUsed(nil) then
     begin

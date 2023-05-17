@@ -7825,7 +7825,21 @@ begin
     or (Name = StrFMP4BareRunoffFra)
     or (Name = StrFMP4BarePrecipitat)
     or (Name = StrFMP4AddedDemandRu)
-
+    or (Name = StrPotentialEvaporatio)
+    or (Name = StrFMP4DirectRecharge)
+    or (Name = StrFMP4PrecipitationP)
+    or (Name = StrFMP4NonRoutedDeli)
+    or (Name = StrFMP4LandUseAreaF)
+    or (Name = StrFMP4CropCoefficien)
+    or (Name = StrFMP4ConsumptiveUse)
+    or (Name = StrFMP4Irrigation)
+    or (Name = StrFMP4RootDepth)
+    or (Name = StrFMP4TranspirationF)
+    or (Name = StrFMP4EvaporationIrr)
+    or (Name = StrFMP4FractionOfExc)
+    or (Name = StrFMP4FractionOfExcIrrig)
+    or (Name = StrFMP4AddedDemand)
+    or (Pos('FMP4', Name) = 1)
     then
   begin
     Result := btMfFarm;
