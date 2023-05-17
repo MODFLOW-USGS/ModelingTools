@@ -298,18 +298,8 @@ inherited frmFarm: TfrmFarm
         end
       end
       inherited tabNonRoutedDelivery: TTabSheet
-        ExplicitWidth = 601
-        ExplicitHeight = 361
         inherited frameDelivery: TframeDeliveryGrid
-          Width = 601
-          Height = 361
-          ExplicitWidth = 597
-          ExplicitHeight = 360
           inherited Panel: TPanel
-            Top = 311
-            Width = 601
-            ExplicitTop = 310
-            ExplicitWidth = 597
             inherited sbAdd: TSpeedButton
               Left = 401
               Top = 9
@@ -336,29 +326,13 @@ inherited frmFarm: TfrmFarm
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 601
-            Height = 254
             OnSetEditText = frameDeliveryGridSetEditText
-            ExplicitLeft = 2
-            ExplicitTop = 58
-            ExplicitWidth = 601
-            ExplicitHeight = 254
-          end
-          inherited pnlTop: TPanel
-            Width = 601
-            ExplicitWidth = 597
           end
         end
       end
       inherited tabWaterRights: TTabSheet
-        ExplicitWidth = 601
-        ExplicitHeight = 361
         inherited frameFormulaGridWaterRights: TframeFormulaGrid
-          Width = 601
-          Height = 361
           inherited Panel: TPanel
-            Top = 319
-            Width = 601
             inherited sbAdd: TSpeedButton
               Left = 267
               ExplicitLeft = 256
@@ -373,24 +347,13 @@ inherited frmFarm: TfrmFarm
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 601
-            Height = 262
             OnSetEditText = frameFormulaGridWaterRightsGridSetEditText
-          end
-          inherited pnlTop: TPanel
-            Width = 601
           end
         end
       end
       inherited tabGW_Allocation: TTabSheet
-        ExplicitWidth = 601
-        ExplicitHeight = 361
         inherited frameGW_Allocation: TframeFormulaGrid
-          Width = 601
-          Height = 361
           inherited Panel: TPanel
-            Top = 319
-            Width = 601
             inherited sbAdd: TSpeedButton
               Left = 295
               ExplicitLeft = 295
@@ -405,12 +368,7 @@ inherited frmFarm: TfrmFarm
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 601
-            Height = 262
             OnSetEditText = frameGW_AllocationGridSetEditText
-          end
-          inherited pnlTop: TPanel
-            Width = 601
           end
         end
       end
@@ -420,8 +378,6 @@ inherited frmFarm: TfrmFarm
         inherited frameWaterSupplyConcentration: TframeFormulaGrid
           Width = 601
           Height = 361
-          ExplicitLeft = 0
-          ExplicitTop = 0
           ExplicitWidth = 601
           ExplicitHeight = 361
           inherited Panel: TPanel
@@ -510,6 +466,8 @@ inherited frmFarm: TfrmFarm
         inherited frameReturnFlowsOwhm2: TframeMultSemiRouted
           Width = 601
           Height = 361
+          ExplicitWidth = 601
+          ExplicitHeight = 361
           inherited Splitter1: TSplitter
             Height = 320
             ExplicitHeight = 320
@@ -517,51 +475,64 @@ inherited frmFarm: TfrmFarm
           inherited pnlBottom: TPanel
             Top = 320
             Width = 601
+            ExplicitTop = 319
+            ExplicitWidth = 597
             inherited sbAdd: TSpeedButton
-              Left = 514
+              Left = 510
               ExplicitLeft = 473
             end
             inherited sbDelete: TSpeedButton
-              Left = 582
+              Left = 578
               ExplicitLeft = 535
             end
           end
           inherited Panel1: TPanel
             Width = 475
             Height = 320
+            ExplicitWidth = 471
+            ExplicitHeight = 319
             inherited pnlName: TPanel
               Width = 473
+              ExplicitWidth = 469
             end
             inherited frameFarmDiversions: TframeFarmDiversion
               Width = 473
               Height = 277
+              ExplicitWidth = 469
+              ExplicitHeight = 276
               inherited Panel: TPanel
                 Top = 236
                 Width = 473
+                ExplicitTop = 235
+                ExplicitWidth = 469
                 inherited sbAdd: TSpeedButton
-                  Left = 306
+                  Left = 304
                   ExplicitLeft = 275
                 end
                 inherited sbInsert: TSpeedButton
-                  Left = 325
+                  Left = 322
                   ExplicitLeft = 292
                 end
                 inherited sbDelete: TSpeedButton
-                  Left = 343
+                  Left = 340
                   ExplicitLeft = 308
                 end
               end
               inherited Grid: TRbwDataGrid4
                 Width = 473
                 Height = 179
+                ExplicitWidth = 473
+                ExplicitHeight = 179
               end
               inherited pnlTop: TPanel
                 Width = 473
+                ExplicitWidth = 469
               end
             end
           end
           inherited tvSRCollections: TTreeView
             Height = 320
+            ExplicitHeight = 319
           end
           inherited Controller: TRbwController
             ControlList = <
@@ -734,7 +705,7 @@ inherited frmFarm: TfrmFarm
       759
       41)
     object btnHelp: TBitBtn
-      Left = 360
+      Left = 356
       Top = 4
       Width = 108
       Height = 33
@@ -743,10 +714,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 356
+      ExplicitLeft = 352
     end
     object btnOK: TBitBtn
-      Left = 474
+      Left = 470
       Top = 4
       Width = 108
       Height = 33
@@ -755,10 +726,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 470
+      ExplicitLeft = 466
     end
     object btnCancel: TBitBtn
-      Left = 588
+      Left = 584
       Top = 4
       Width = 108
       Height = 33
@@ -766,7 +737,7 @@ inherited frmFarm: TfrmFarm
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 584
+      ExplicitLeft = 580
     end
   end
 end

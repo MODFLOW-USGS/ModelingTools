@@ -394,7 +394,6 @@ const
 var
   PerMil: Integer;
   NewPerMil: Int64;
-//  Divider: Int64;
   OffSet: Int64;
   Buffer: TCharArray;
   NumberRead: Integer;
@@ -410,21 +409,12 @@ var
   LineIndex: integer;
   LineBreakPos: integer;
 begin
-//  if Assigned(Indexer) then
-//  begin
-//    LinesCritSect.Enter;
-//    AllLines := False;
-//    FListFile := Self;
-//    LinesCritSect.Leave;
-//  end;
   FAbort := False;
   FFileName := Value;
   FreeAndNil(FFile);
   FPositions.Clear;
   LineBreakLength := 0;
 
-
-//  FFile := TFile.OpenText(FileName);
 
   // The default buffer size is 1024.
   // Both increasing (16x) and decreasing (4x) the default buffer size result
@@ -441,7 +431,6 @@ begin
   FFileSize := FFile.BaseStream.Size;
   FFileDate := TFile.GetLastWriteTimeUtc(FileName);
 
-//  Divider := FFile.BaseStream.Size div 1000;
   FPositions.Capacity := FFile.BaseStream.Size div 50;
   PerMil := 0;
   FPositions.Add(0);
@@ -489,11 +478,15 @@ begin
       Converter.Clear;
       Converter.Append(Buffer);
       AString := Converter.ToString;
+//      if AString[Length(AString)] = #10 then
+//      begin
+//        AString := Copy(AString,1, Length(AString)-1);
+//      end;
       GetLineStartingPositions(OffSet, FPositions, AString);
       if Buffer[Length(Buffer)-1] = #13 then
       begin
         Buffer[0] := #13;
-        if Assigned(OnIndexSomeLines) {or Assigned(Indexer)} then
+        if Assigned(OnIndexSomeLines) then
         begin
           if NextLine = '' then
           begin
@@ -529,7 +522,7 @@ begin
       end
       else
       begin
-        if Assigned(OnIndexSomeLines) {or Assigned(Indexer)} then
+        if Assigned(OnIndexSomeLines) then
         begin
           LineBreakPos := FindLastLineBreak(AString);
           if NextLine = '' then
@@ -556,29 +549,10 @@ begin
         StartPosition := 0;
       end;
 
-//      if (Length(CurrentLine) >=2)
-//        and (CurrentLine[Length(CurrentLine)-1] = #13)
-//        and (CurrentLine[Length(CurrentLine)] = #10)
-//        then
-//      begin
-//        Beep;
-////        CurrentLine := Copy(CurrentLine, 1, Length(CurrentLine)-2);
-////        NextLine := #13#10 + NextLine;
-//      end;
-
-
       if Assigned(OnIndexSomeLines) then
       begin
-//        SomeLines.Text := CurrentLine;
         OnIndexSomeLines(CurrentLine, Indent, NewTimeStepPostions,
           NewTimeStepLines, LineIndex);
-//        Inc(LineIndex, SomeLines.Count);
-//      end
-//      else if Assigned(Indexer) then
-//      begin
-//        LinesCritSect.Enter;
-//        LinesToIndex.Add(CurrentLine);
-//        LinesCritSect.Leave;
       end;
 
 
@@ -590,7 +564,6 @@ begin
         begin
           PerMil := NewPerMil;
           OnProgress(self, PerMil);
-//          Application.ProcessMessages;
         end;
       end;
     end;
@@ -599,25 +572,10 @@ begin
     begin
       if Assigned(OnIndexSomeLines) then
       begin
-  //      SomeLines.Text := NextLine;
         OnIndexSomeLines(NextLine, Indent, NewTimeStepPostions,
           NewTimeStepLines, LineIndex);
-  //      Inc(LineIndex, SomeLines.Count);
-//      end
-//      else if Assigned(Indexer) then
-//      begin
-//        LinesCritSect.Enter;
-//        LinesToIndex.Add(NextLine);
-//        AllLines := True;
-//        LinesCritSect.Leave;
       end;
     end;
-//    if Assigned(Indexer) then
-//    begin
-//      LinesCritSect.Enter;
-//      AllLines := True;
-//      LinesCritSect.Leave;
-//    end;
 
     if Assigned(OnUpdateTimeSteps) then
     begin

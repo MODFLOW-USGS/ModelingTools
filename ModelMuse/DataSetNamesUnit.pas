@@ -439,6 +439,11 @@ const
   StrFarmWellPumpRequired = 'Farm Well Pump Only If Required';
   StrLandUseID = 'Land Use ID';
   StrPotentialEvaporatio = 'Potential Evaporation Bare';
+  StrFMP4Efficiency = 'FMP4 Efficiency';
+  StrFMP4EfficiencyImpr = 'FMP4 Efficiency Improvement';
+  StrFMP4BareRunoffFra = 'FMP4 Bare Runoff Fraction';
+  StrFMP4BarePrecipitat = 'FMP4 Bare Precipitation Consumption Fraction';
+  StrFMP4AddedDemandRu = 'FMP4 Added Demand Runoff Split';
 
   StrCfpRecharge = 'Conduit Recharge';
   StrSWR_Rain = 'SWR Rain';
@@ -510,7 +515,7 @@ const
   KEfficiencyImprovement = 'Efficiency_Improvement';
   KBareRunoffFraction = 'Bare_Runoff_Fraction';
   KAddedDemandRunoffSplit = 'Added_Demand_Runoff_Split';
-  KBarePrecipitationConsumptionFraction = 'Bare Precipitation Consumption Fraction';
+  KBarePrecipitationConsumptionFraction = 'Bare_Precipitation_Consumption_Fraction';
   KCapillary_Fringe = 'Capillary_Fringe';
   KSurfaceK = 'Surface_Vert_K';
   KPotential_Evap_Bare = 'Potential_Evap_Bare';

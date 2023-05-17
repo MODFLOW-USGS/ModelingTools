@@ -545,6 +545,7 @@ var
   DiversionLocation: TReturnLocation;
   DiversionCell: TReturnCell;
   DelivReturn: TSemiRoutedDeliveriesAndReturnFlowCollection;
+  Fraction: string;
 begin
   ModelSelection := frmGoPhast.ModelSelection;
   for index := 0 to SrList.Count - 1 do
@@ -630,7 +631,12 @@ begin
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                DelivRetItem.Frac := Grid.Cells[Ord(dccFraction) + 2, TimeIndex];
+                Fraction := Grid.Cells[Ord(dccFraction) + 2, TimeIndex];
+                if Fraction = '' then
+                begin
+                  Fraction := '1';
+                end;
+                DelivRetItem.Frac := Fraction;
                 if DiversionType = dtDiversion then
                 begin
                   DelivRetItem.LowerLimit := Grid.Cells[Ord(dccLowerLimit) + 2, TimeIndex];

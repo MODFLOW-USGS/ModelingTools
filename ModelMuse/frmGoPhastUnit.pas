@@ -6513,23 +6513,29 @@ var
   FarmProcess: TFarmProcess;
 begin
   FarmProcess := PhastModel.ModflowPackages.FarmProcess;
-  acFarmClimate.Enabled := (PhastModel.ModelSelection in [msModflowFmp
+  if PhastModel.ModelSelection = msModflowFmp then
+  begin
+    acFarmClimate.Enabled :=  FarmProcess.IsSelected
+      and ((FarmProcess.RootingDepth = rdCalculated)
+      or (FarmProcess.ConsumptiveUse = cuCalculated)
+      or (FarmProcess.Precipitation = pTimeSeries));
+    acFarmAllotment.Enabled := FarmProcess.IsSelected
+      and (FarmProcess.SurfaceWaterAllotment = swaEqual);
+  end
+  else
+  begin
   {$IFDEF OWHMV2}
-  , msModflowOwhm2
+    acFarmClimate.Enabled := (PhastModel.ModelSelection = msModflowOwhm2)
+      and PhastModel.ModflowPackages.FarmProcess4.IsSelected
+      and PhastModel.ModflowPackages.FarmClimate4.IsSelected;
+    acFarmAllotment.Enabled := (PhastModel.ModelSelection = msModflowOwhm2)
+      and PhastModel.ModflowPackages.FarmProcess4.IsSelected
+      and PhastModel.ModflowPackages.FarmAllotments.IsSelected;
+  {$ELSE}
+    acFarmClimate.Enabled := False;
+    acFarmAllotment.Enabled := False;
   {$ENDIF}
-  ])
-    and FarmProcess.IsSelected
-    and ((FarmProcess.RootingDepth = rdCalculated)
-    or (FarmProcess.ConsumptiveUse = cuCalculated)
-    or (FarmProcess.Precipitation = pTimeSeries));
-
-  acFarmAllotment.Enabled := (PhastModel.ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ])
-    and FarmProcess.IsSelected
-    and (FarmProcess.SurfaceWaterAllotment = swaEqual);
+  end;
 end;
 
 procedure TfrmGoPhast.NilDisplay;
@@ -10063,7 +10069,11 @@ end;
 procedure TfrmGoPhast.acEditFarmsExecute(Sender: TObject);
 begin
   inherited;
-  if PhastModel.FmpCrops.Count > 0 then
+  if
+    {$IFDEF OWHMV2}
+    (ModelSelection = msModflowOwhm2) or
+    {$ENDIF}
+    (PhastModel.FmpCrops.Count > 0) then
   begin
     frmFarm := TfrmFarm.Create(nil, PhastModel);
     try
@@ -10071,7 +10081,6 @@ begin
     finally
       frmFarm.Free;
     end;
-//    ShowAForm(TfrmFarm);
   end
   else
   begin

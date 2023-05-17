@@ -79,15 +79,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 407
+        Left = 403
         ExplicitLeft = 316
       end
       inherited sbInsert: TSpeedButton
-        Left = 483
+        Left = 477
         ExplicitLeft = 374
       end
       inherited sbDelete: TSpeedButton
-        Left = 554
+        Left = 548
         ExplicitLeft = 432
       end
       inherited seNumber: TJvSpinEdit
@@ -106,6 +106,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       OnRowMoved = frameSoilsGridRowMoved
       OnSelectCell = frameSoilsGridSelectCell
       OnSetEditText = frameSoilsGridSetEditText
+      OnBeforeDrawCell = frameSoilsGridBeforeDrawCell
       OnButtonClick = frameSoilsGridButtonClick
       OnHorizontalScroll = frameSoilsGridHorizontalScroll
       Columns = <
@@ -412,15 +413,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 624
+        Left = 618
         ExplicitLeft = 630
       end
       inherited sbInsert: TSpeedButton
-        Left = 669
+        Left = 661
         ExplicitLeft = 677
       end
       inherited sbDelete: TSpeedButton
-        Left = 719
+        Left = 713
         ExplicitLeft = 725
       end
       inherited lblMethod: TLabel

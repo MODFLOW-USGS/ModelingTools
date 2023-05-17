@@ -41,7 +41,7 @@ inherited frmCropProperties: TfrmCropProperties
     Top = 0
     Width = 509
     Height = 477
-    ActivePage = jvspLeach
+    ActivePage = jvspEvapFractions
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -156,15 +156,15 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 257
+            Left = 255
             ExplicitLeft = 148
           end
           inherited sbInsert: TSpeedButton
-            Left = 303
+            Left = 301
             ExplicitLeft = 176
           end
           inherited sbDelete: TSpeedButton
-            Left = 351
+            Left = 348
             ExplicitLeft = 204
           end
           inherited seNumber: TJvSpinEdit
@@ -497,8 +497,6 @@ inherited frmCropProperties: TfrmCropProperties
       Width = 509
       Height = 477
       Caption = 'jvspOwhmCollection'
-      ExplicitWidth = 505
-      ExplicitHeight = 476
       inline frameOwhmCollection: TframeFormulaGrid
         Left = 0
         Top = 0
@@ -506,8 +504,8 @@ inherited frmCropProperties: TfrmCropProperties
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 505
-        ExplicitHeight = 476
+        ExplicitWidth = 509
+        ExplicitHeight = 477
         inherited Panel: TPanel
           Top = 436
           Width = 509
@@ -620,7 +618,7 @@ inherited frmCropProperties: TfrmCropProperties
         end
         inherited pnlTop: TPanel
           Width = 509
-          ExplicitWidth = 505
+          ExplicitWidth = 509
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -842,8 +840,8 @@ inherited frmCropProperties: TfrmCropProperties
       Width = 509
       Height = 477
       Caption = 'jvspLeach'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 505
+      ExplicitHeight = 476
       inline frameLeach: TframeLeach
         Left = 0
         Top = 0
@@ -851,12 +849,13 @@ inherited frmCropProperties: TfrmCropProperties
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 62
-        ExplicitTop = 96
+        ExplicitWidth = 505
+        ExplicitHeight = 476
         inherited Panel: TPanel
           Top = 436
           Width = 509
-          ExplicitTop = 215
+          ExplicitTop = 435
+          ExplicitWidth = 505
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -864,13 +863,16 @@ inherited frmCropProperties: TfrmCropProperties
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 265
+            Left = 263
+            ExplicitLeft = 265
           end
           inherited sbInsert: TSpeedButton
-            Left = 314
+            Left = 312
+            ExplicitLeft = 314
           end
           inherited sbDelete: TSpeedButton
-            Left = 362
+            Left = 359
+            ExplicitLeft = 362
           end
           inherited seNumber: TJvSpinEdit
             Height = 26
@@ -901,6 +903,7 @@ inherited frmCropProperties: TfrmCropProperties
               Format = rcf4Real
               LimitToList = False
               MaxLength = 0
+              ParentButtonFont = False
               WordWrapCaptions = True
               WordWrapCells = False
               CaseSensitivePicklist = False
@@ -925,6 +928,7 @@ inherited frmCropProperties: TfrmCropProperties
               Format = rcf4Real
               LimitToList = False
               MaxLength = 0
+              ParentButtonFont = False
               WordWrapCaptions = True
               WordWrapCells = False
               CaseSensitivePicklist = False
@@ -949,6 +953,7 @@ inherited frmCropProperties: TfrmCropProperties
               Format = rcf4String
               LimitToList = True
               MaxLength = 0
+              ParentButtonFont = False
               PickList.Strings = (
                 'Value'
                 'Rhoades'
@@ -978,13 +983,15 @@ inherited frmCropProperties: TfrmCropProperties
               Format = rcf4String
               LimitToList = False
               MaxLength = 0
+              ParentButtonFont = False
               WordWrapCaptions = True
               WordWrapCells = False
               CaseSensitivePicklist = False
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitHeight = 158
+          ExplicitWidth = 505
+          ExplicitHeight = 378
           ColWidths = (
             64
             64
@@ -993,6 +1000,7 @@ inherited frmCropProperties: TfrmCropProperties
         end
         inherited pnlTop: TPanel
           Width = 509
+          ExplicitWidth = 505
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57

@@ -441,6 +441,8 @@ type
     procedure DrnSelectedChange(Sender: TObject);
     procedure GhbSelectedChange(Sender: TObject);
     procedure RivSelectedChange(Sender: TObject);
+    procedure LandUse4Change(Sender: TObject);
+    procedure Soil4Change(Sender: TObject);
     procedure FillHufTree;
     procedure UpdateFlowParamGrid(Node: TTreeNode;
       ParameterFrame: TframeListParameterDefinition;
@@ -2499,6 +2501,14 @@ begin
   end;
 end;
 
+procedure TfrmModflowPackages.Soil4Change(Sender: TObject);
+begin
+  if not framePkgFmp4Soils.Selected then
+  begin
+    framePkgFmp4LandUse.Selected := False;
+  end;
+end;
+
 procedure TfrmModflowPackages.AdjustDroppedWidth(OwnerComponent: TComponent);
 var
   Combo: TJvImageComboBox;
@@ -2838,6 +2848,8 @@ begin
     framePkgNwt.OnSelectedChange := NwtSelectedChange;
     framePkgUpw.OnSelectedChange := UpwSelectedChange;
     framePkgFMP4.OnSelectedChange := Fmp4SelectedChange;
+    framePkgFmp4LandUse.OnSelectedChange := LandUse4Change;
+    framePkgFmp4Soils.OnSelectedChange := Soil4Change;
     framePkgCHOB.CanSelect := False;
     framePkgDROB.CanSelect := False;
     framePkgGBOB.CanSelect := False;
@@ -3713,6 +3725,14 @@ begin
   inherited;
   framePkgSwt.MoveControlsToTab(framePkgSwt.pcSWT);
 
+end;
+
+procedure TfrmModflowPackages.LandUse4Change(Sender: TObject);
+begin
+  if framePkgFmp4LandUse.Selected then
+  begin
+    framePkgFmp4Soils.Selected := True;
+  end;
 end;
 
 procedure TfrmModflowPackages.Mt3dmsGcgSelectedChange(Sender: TObject);

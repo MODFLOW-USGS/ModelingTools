@@ -1649,19 +1649,6 @@ begin
   FModflow6 := False;
   if FShowIndexFile = ifcYes then
   begin
-//    LinesCritSect.Enter;
-//    AllLines := False;
-//    LinesCritSect.Leave;
-//    AnIndexer := TIndexingThread.Create(True);
-//    AnIndexer.FreeOnTerminate := True;
-//    AnIndexer.frameWarning := frameWarning;
-//    AnIndexer.frameErrors := frameErrors;
-//    AnIndexer.frameListing := frameListing;
-//    FListFile.Indexer := AnIndexer;
-//    AnIndexer.OnTerminate := ShowThreadTime;
-////    AnIndexer.Priority := tpHighest;
-//
-//    AnIndexer.Suspended := False;
     FListFile.OnIndexSomeLines := IndexSomeLines;
     FListFile.OnUpdateTimeSteps := UpdateTimeSteps;
   end;

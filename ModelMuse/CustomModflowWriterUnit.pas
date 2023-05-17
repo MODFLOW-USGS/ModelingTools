@@ -834,6 +834,7 @@ end;
     // @name begins at 0. That is if @name is zero, that is the first stress
     // period.
     property StressPeriod: integer read FStressPeriod;
+    function ITMPUsed: Boolean; virtual;
   public
     // @name is used to update the display of transient data used to color the
     // grid.
@@ -5446,6 +5447,11 @@ begin
   end;
 end;
 
+function TCustomListWriter.ITMPUsed: Boolean;
+begin
+  result := True;
+end;
+
 function TCustomTransientWriter.ObsType: string;
 begin
   result := '';
@@ -5982,6 +5988,8 @@ var
   ParamIndex: Integer;
   ParametersUsed: TStringList;
   TimeIndex: Integer;
+  ShouldWriteITMP: Boolean;
+  WriteCells: Boolean;
 begin
   FUsedInstanceNames.Clear;
   ParamValues := TList.Create;
@@ -6011,12 +6019,22 @@ begin
             Format(StrStressPeriod0d, [TimeIndex+1]));
         end;
 
-        if (not (Model.ModelSelection in [msModflow2015
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-              ]))
-          and (FEvaluationType <> etExportCsv) then
+        ShouldWriteITMP := True;
+        if (Model.ModelSelection = msModflow2015) and (FEvaluationType <> etExportCsv) then
+        begin
+          ShouldWriteITMP := False;
+        end
+        else
+        begin
+        {$IFDEF OWHMV2}
+          if (Model.ModelSelection = msModflowOwhm2) then
+          begin
+            ShouldWriteITMP := ITMPUsed;
+          end;
+        {$ENDIF}
+        end;
+
+        if ShouldWriteITMP then
         begin
           // data set 5;
           WriteInteger(ITMP);
@@ -6040,7 +6058,15 @@ begin
           end;
         end;
         // data set 6
-        if (ITMP > 0) or ((ITMP < 0) and (FEvaluationType = etExportCsv)) then
+        WriteCells := (ITMP > 0) or ((ITMP < 0) and (FEvaluationType = etExportCsv));
+        {$IFDEF OWHMV2}
+        if (Model.ModelSelection = msModflowOwhm2) and not ITMPUsed and (ITMP < 0) then
+        begin
+          WriteCells := True;
+        end;
+        {$ENDIF}
+
+        if WriteCells then
         begin
           DoBeforeWriteCells;
           WriteAndCheckCells(VariableIdentifiers, DataSetIdentifier, List,

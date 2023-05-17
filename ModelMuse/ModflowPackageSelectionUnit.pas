@@ -4920,8 +4920,8 @@ Type
   fpEvapotranspiration_SummarySum, fpEvapotranspiration_SummarySeparate,
   {ET_LIST,  FARM_WELL_SUMMARY,   LANDSCAPE_RUNOFF [COMPACT]}
   fpEt_List, fpFarm_Well_Summary, fpLandscape_Runoff,
-  {DEEP_PERCOLATION    [COMPACT], ROUTING_INFORMATION STATIC,TRANSIENT}
-  fpDeep_Percolation,             fpRoutingInformation);
+  {DEEP_PERCOLATION    [COMPACT]}
+  fpDeep_Percolation);
   TFarmPrints = set of TFarmPrint;
 
   TFarmProperty = class(TGoPhastPersistent)
@@ -7419,9 +7419,6 @@ resourcestring
   StrSFREvaporationConc = 'SFR MF6 Evaporation Conc %s';
   StrSFRRunoffConcS = 'SFR MF6 Runoff Conc %s';
   StrSFRInflowConcS = 'SFR MF6 Inflow Conc %s';
-  StrFMP4Efficiency = 'FMP4 Efficiency';
-  StrFMP4EfficiencyImpr = 'FMP4 Efficiency Improvement';
-  StrFMP4BareRunoffFra = 'FMP4 Bare Runoff Fraction';
   StrFMP4PotentialEvapor = 'FMP Potential Evaporation Bare';
   StrLandUseAreaFracti = 'Land Use Area Fractions %s';
   StrCropCoefficientsS = 'Crop Coefficients %s';
@@ -25385,7 +25382,7 @@ begin
     FBarePrecipitationConsumptionFractionDisplay.OnInitialize := InitializeBarePrecipitationConsumptionFractionDisplay;
     FBarePrecipitationConsumptionFractionDisplay.OnGetUseList := GetBarePrecipitationConsumptionFractionDisplayUseList;
     FBarePrecipitationConsumptionFractionDisplay.OnTimeListUsed := TransientArrayBarePrecipitationConsumptionFractionDisplayUsed;
-    FBarePrecipitationConsumptionFractionDisplay.Name := 'FMP4 Bare Precipitation Consumption Fraction';
+    FBarePrecipitationConsumptionFractionDisplay.Name := StrFMP4BarePrecipitat;
     FBarePrecipitationConsumptionFractionDisplay.DataType := rdtDouble;
     FBarePrecipitationConsumptionFractionDisplay.AddMethod := vamReplace;
     FBarePrecipitationConsumptionFractionDisplay.Orientation := dsoTop;
@@ -25399,7 +25396,7 @@ begin
     FAddedDemandRunoffSplitDisplay.OnInitialize := InitializeAddedDemandRunoffSplitDisplay;
     FAddedDemandRunoffSplitDisplay.OnGetUseList := GetAddedDemandRunoffSplitDisplayUseList;
     FAddedDemandRunoffSplitDisplay.OnTimeListUsed := TransientArrayAddedDemandRunoffSplitDisplayUsed;
-    FAddedDemandRunoffSplitDisplay.Name := 'FMP4 Added Demand Runoff Split';
+    FAddedDemandRunoffSplitDisplay.Name := StrFMP4AddedDemandRu;
     FAddedDemandRunoffSplitDisplay.DataType := rdtDouble;
     FAddedDemandRunoffSplitDisplay.AddMethod := vamReplace;
     FAddedDemandRunoffSplitDisplay.Orientation := dsoTop;

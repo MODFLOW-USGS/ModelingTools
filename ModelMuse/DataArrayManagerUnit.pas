@@ -3973,7 +3973,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KBareRunoffFraction;
   FDataArrayCreationRecords[Index].DisplayName := StrBareRunoffFraction;
-  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Formula := '1.';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadArrayBareRunoffFractionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
@@ -3987,7 +3987,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KBarePrecipitationConsumptionFraction;
   FDataArrayCreationRecords[Index].DisplayName := StrBarePrecipitationConsumptionFraction;
-  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Formula := '1.';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;

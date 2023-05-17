@@ -101,7 +101,8 @@ uses
   ModflowMvrWriterUnit, ModflowMvrUnit, System.Generics.Defaults,
   Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
   ModflowGridUnit, frmErrorsAndWarningsUnit, SparseArrayUnit,
-  Mt3dmsChemSpeciesUnit, GwtStatusUnit, DataSetNamesUnit, CellLocationUnit;
+  Mt3dmsChemSpeciesUnit, GwtStatusUnit, DataSetNamesUnit, CellLocationUnit,
+  IntListUnit;
 
 resourcestring
   StrWritingUZF6Package = 'Writing UZF6 Package input.';
@@ -179,6 +180,7 @@ var
   UztObs: TUztObservation;
   MfObs: TModflow6Obs;
   SpeciesIndex: Integer;
+  EliminateIndicies: TIntegerList;
 begin
   SetLength(FMvrIndicies, Model.LayerCount,
     Model.RowCount, Model.ColumnCount);
@@ -233,6 +235,15 @@ begin
 
         CellList.Clear;
         ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+
+        EliminateIndicies := TIntegerList.Create;
+        try
+          EliminateDuplicateCells(ScreenObject, Model, CellList,
+            EliminateIndicies, True, False);
+        finally
+          EliminateIndicies.Free;
+        end;
+
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];

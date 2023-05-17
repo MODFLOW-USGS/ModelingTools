@@ -7820,6 +7820,12 @@ begin
     or (Name = StrFarmWellFarmID)
     or (Name = StrFarmWellPumpRequired)
     or (Name = StrLandUseID)
+    or (Name = StrFMP4Efficiency)
+    or (Name = StrFMP4EfficiencyImpr)
+    or (Name = StrFMP4BareRunoffFra)
+    or (Name = StrFMP4BarePrecipitat)
+    or (Name = StrFMP4AddedDemandRu)
+
     then
   begin
     Result := btMfFarm;

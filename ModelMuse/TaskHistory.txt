@@ -31145,5 +31145,19 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'FMP')
+    end
+    item
+      Date = 45062.000000000000000000
+      Categories.Strings = (
+        'FMP')
+    end
+    item
+      Date = 45063.000000000000000000
+      Categories.Strings = (
+        'FMP'
+        'Bug fix'
+        'Testing'
+        'List File Analyzer'
+        'Error checking')
     end>
 end

@@ -11,7 +11,7 @@ uses Modflow6TimeSeriesInterfaceUnit, System.Classes, Winapi.Windows,
   System.Generics.Collections, System.StrUtils,
   OrderedCollectionInterfaceUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
   ScreenObjectInterfaceUnit, ModflowTransientListParameterInterfaceUnit,
-  GlobalVariablesInterfaceUnit, CellLocationUnit;
+  GlobalVariablesInterfaceUnit, CellLocationUnit, IntListUnit;
 
 type
     // @name defines how a formula is interpreted.
@@ -1201,11 +1201,15 @@ procedure StringValueRemoveSubscription(Sender: TObject; Subject: TObject;
 procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
   const AName: string);
 
+procedure EliminateDuplicateCells(AScreenObjectI: IScreenObject;
+  AModel: TBaseModel; ACellList: TObject; EliminateIndicies: TIntegerList;
+  ListDuplicatesAllowed: Boolean; AllowInactiveMf6Cells: Boolean);
+
 implementation
 
 uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
-  GIS_Functions, IntListUnit, frmProgressUnit, Dialogs,
+  GIS_Functions, frmProgressUnit, Dialogs,
   SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
   CustomModflowWriterUnit, Modflow6TimeSeriesUnit, DataSetNamesUnit;
 
@@ -3671,25 +3675,15 @@ var
   Variable: TCustomValue;
   AnotherDataSet: TDataArray;
   GlobalVariable: IGlobalVariable;
-  CellIndex: Integer;
-  ACell: TCellAssignment;
-  SparseArrays: TList;
   EliminateIndicies: TIntegerList;
-  SectionIndex: Integer;
-  SparseArray: T3DSparseBooleanArray;
   Index: Integer;
-  Layer: Integer;
   Variables: TList;
   DataSets: TList;
   FirstUsedTime: Double;
   LastUsedTime: Double;
-  MaxArrays: Integer;
   ErrorFormula: string;
   StoredCount: Integer;
   OKTypes: TRbwDataTypes;
-  NumberOfLayers: Integer;
-  NumberOfRows: Integer;
-  NumberOfColumns: Integer;
   IDomainArray: TDataArray;
   UnmodifiedFormula: string;
   PestParam: TModflowSteadyParameter;
@@ -3757,77 +3751,12 @@ begin
       frmErrorsAndWarnings.AddWarning(Model as TCustomModel, StrTheFollowingObjectNoCells,
         AScreenObject.Name, AScreenObject)
     end;
-    // FSectionDuplicatesAllowed is set to True in TSwrReachCollection
-    // and TStrCollection.
-    // SFR in MODFLOW 6 requires duplicate cells to be used.
-    if not FSectionDuplicatesAllowed then
-    begin
-      // eliminate cells that are at the same location and are part of the
-      // same section;
-      SparseArrays := TObjectList.Create;
-      try
-        if FListDuplicatesAllowed then
-        begin
-          MaxArrays := AScreenObject.SectionCount;
-        end
-        else
-        begin
-          MaxArrays := 1;
-        end;
-        for SectionIndex := 0 to MaxArrays - 1 do
-        begin
-          AScreenObject.GetModelDimensions(LocalModel, NumberOfLayers,
-            NumberOfRows, NumberOfColumns);
-          SparseArray := T3DSparseBooleanArray.Create(GetQuantum(NumberOfLayers),
-            GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
-          SparseArrays.Add(SparseArray)
-        end;
-        SparseArray := SparseArrays[0];
-        for CellIndex := CellList.Count - 1 downto 0 do
-        begin
-          ACell := CellList[CellIndex];
-          if ACell.LgrEdge then
-          begin
-            EliminateIndicies.Add(CellIndex);
-          end
-          else if LocalModel.IsLayerSimulated(ACell.Layer) then
-          begin
-            if FListDuplicatesAllowed then
-            begin
-              SparseArray := SparseArrays[ACell.Section];
-            end;
-            Layer := LocalModel.
-              DataSetLayerToModflowLayer(ACell.Layer);
-            if SparseArray.IsValue[Layer, ACell.Row, ACell.Column] then
-            begin
-              EliminateIndicies.Add(CellIndex);
-            end
-            else if (LocalModel.ModelSelection = msModflow2015)
-              and not AllowInactiveMf6Cells
-              and (IDomainArray.IntegerData[
-              ACell.Layer, ACell.Row, ACell.Column] <= 0) then
-            begin
-              EliminateIndicies.Add(CellIndex);
-            end
-            else
-            begin
-              SparseArray.Items[Layer, ACell.Row, ACell.Column] := True;
-            end;
-          end
-          else
-          begin
-            EliminateIndicies.Add(CellIndex);
-          end;
-        end;
-      finally
-        SparseArrays.Free;
-      end;
-    end;
 
-    for Index := 0 to EliminateIndicies.Count - 1  do
-    begin
-      CellList.Delete(EliminateIndicies[Index]);
-    end;
+  if not FSectionDuplicatesAllowed then
+  begin
+    EliminateDuplicateCells(AScreenObject, LocalModel, CellList,
+      EliminateIndicies, FListDuplicatesAllowed, AllowInactiveMf6Cells);
+  end;
 
     ClearBoundaries(AModel);
 
@@ -5334,6 +5263,107 @@ begin
     TimeSeries := DynamicTimeSeries.StaticTimeSeries[Location];
     BoundaryGroup.Mf6TimeSeriesNames.Add(string(TimeSeries.SeriesName));
     TimeSeriesName := string(TimeSeries.SeriesName);
+  end;
+end;
+
+procedure EliminateDuplicateCells(AScreenObjectI: IScreenObject;
+  AModel: TBaseModel; ACellList: TObject; EliminateIndicies: TIntegerList;
+  ListDuplicatesAllowed: Boolean; AllowInactiveMf6Cells: Boolean);
+var
+  SparseArrays: TList;
+  MaxArrays: Integer;
+  SectionIndex: Integer;
+  NumberOfLayers: Integer;
+  NumberOfRows: Integer;
+  NumberOfColumns: Integer;
+  SparseArray: T3DSparseBooleanArray;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  Layer: Integer;
+  Index: Integer;
+  AScreenObject: TScreenObject;
+  LocalModel: TCustomModel;
+  CellList: TCellAssignmentList;
+  IDomainArray: TDataArray;
+begin
+  AScreenObject := AScreenObjectI as TScreenObject;
+  LocalModel := AModel as TCustomModel;
+  CellList := ACellList as TCellAssignmentList;
+  if (LocalModel.ModelSelection = msModflow2015) then
+  begin
+    IDomainArray := LocalModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  end
+  else
+  begin
+    IDomainArray := nil;
+  end;
+
+  // FSectionDuplicatesAllowed is set to True in TSwrReachCollection
+  // and TStrCollection.
+  // SFR in MODFLOW 6 requires duplicate cells to be used.
+//  if not FSectionDuplicatesAllowed then
+  begin
+    // eliminate cells that are at the same location and are part of the
+    // same section;
+    SparseArrays := TObjectList.Create;
+    try
+      if ListDuplicatesAllowed then
+      begin
+        MaxArrays := AScreenObject.SectionCount;
+      end
+      else
+      begin
+        MaxArrays := 1;
+      end;
+      for SectionIndex := 0 to MaxArrays - 1 do
+      begin
+        AScreenObject.GetModelDimensions(LocalModel, NumberOfLayers, NumberOfRows, NumberOfColumns);
+        SparseArray := T3DSparseBooleanArray.Create(GetQuantum(NumberOfLayers), GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
+        SparseArrays.Add(SparseArray);
+      end;
+      SparseArray := SparseArrays[0];
+      for CellIndex := CellList.Count - 1 downto 0 do
+      begin
+        ACell := CellList[CellIndex];
+        if ACell.LgrEdge then
+        begin
+          EliminateIndicies.Add(CellIndex);
+        end
+        else if LocalModel.IsLayerSimulated(ACell.Layer) then
+        begin
+          if ListDuplicatesAllowed then
+          begin
+            SparseArray := SparseArrays[ACell.Section];
+          end;
+          Layer := LocalModel.DataSetLayerToModflowLayer(ACell.Layer);
+          if SparseArray.IsValue[Layer, ACell.Row, ACell.Column] then
+          begin
+            EliminateIndicies.Add(CellIndex);
+          end
+          else if (LocalModel.ModelSelection = msModflow2015)
+            and not AllowInactiveMf6Cells
+            and (IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] <= 0) then
+          begin
+            EliminateIndicies.Add(CellIndex);
+          end
+          else
+          begin
+            SparseArray.Items[Layer, ACell.Row, ACell.Column] := True;
+          end;
+        end
+        else
+        begin
+          EliminateIndicies.Add(CellIndex);
+        end;
+      end;
+    finally
+      SparseArrays.Free;
+    end;
+
+    for Index := 0 to EliminateIndicies.Count - 1 do
+    begin
+      CellList.Delete(EliminateIndicies[Index]);
+    end;
   end;
 end;
 

@@ -179,7 +179,6 @@ type
     procedure WriteSalinityFlush;
     procedure WriteSurfaceWaterIrrigation;
     procedure WriteFileInternal;
-    procedure Evaluate; override;
     procedure EvaluateAll;
 
     // WBS
@@ -420,6 +419,7 @@ type
       GetCollection: TGetCropCollection; const ErrorMessage: string);
     procedure WriteSurfaceElevation;
   protected
+    procedure Evaluate; override;
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
     function CellType: TValueCellType; override;
@@ -435,6 +435,7 @@ type
       ZoneArrayNames: TTransientZoneCollection); override;
     procedure WriteStressPeriods(const VariableIdentifiers, DataSetIdentifier,
       DS5, D7PNameIname, D7PName: string); override;
+    function ITMPUsed: Boolean; override;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -498,7 +499,7 @@ uses
   ModflowFmpAllotmentUnit, DataSetNamesUnit, ModflowMNW2_WriterUnit, FastGEO;
 
 resourcestring
-  StrUndefinedError = 'Undefined %s in one or more stress periods';
+  StrUndefinedError = 'Undefined value in one or more stress periods';
   StrInvalidEfficiencyV = 'Invalid Efficiency value';
   StrInvalidEfficiencyI = 'Invalid Efficiency Improvement value';
   StrInvalidBareRunoff = 'Invalid Bare Runoff Fraction value';
@@ -537,6 +538,46 @@ resourcestring
   'rmula in ';
   StrInvalidEvaporation = 'Invalid Evaporation Irrigation Fraction Sum One C' +
   'orrection formula in ';
+  StrInvalidGroundwater = 'Invalid Groundwater Root Interaction value';
+  StrInvalidDeficiencyS = 'Invalid Deficiency Scenario value';
+  StrInvalidFractionOf = 'Invalid Fraction of Unconsumed Irrig. to Surface W' +
+  'ater value';
+  StrInvalidFractionOf2 = 'Invalid Fraction of Unconsumed Precip. to Surface ' +
+  'Water value';
+  StrInvalidAddedDemand2 = 'Invalid Added Demand Runoff Split value';
+  StrInvalidTranspiratio2 = 'Invalid Transpiration Fraction value';
+  StrInvalidGroundWaterAllotment = 'Invalid ground water allotment value';
+  StrInvalidIrrigationU = 'Invalid Irrigation Uniformity';
+  StrInvalidLandUseArea = 'Invalid Land Use Area Fraction value';
+  StrInvalidPrecipitatio = 'Invalid Precipitation Potential Consumption valu' +
+  'e';
+  StrInvalidSurfaceWaterallotment = 'Invalid surface water allotment value';
+  StrInvalidWaterSource = 'Invalid Water Source value';
+  StrInvalidSaltSupply = 'Invalid salt supply concentration formula';
+  StrInvalidSemirouted = 'Invalid semi-routed delivery value';
+  StrInvalidSemirouted2 = 'Invalid semi-routed delivery lower limit value';
+  StrInvalidSemiroutedUpper = 'Invalid semi-routed delivery upper limit valu' +
+  'e';
+  StrInvalidSemiroutedRet = 'Invalid semi-routed return value';
+  StrInvalidAddedCropD = 'Invalid Added_Crop_Demand Flux value';
+  StrInvalidAddedCropDRate = 'Invalid Added_Crop_Demand rate value';
+  StrInvalidAddedDemandV = 'Invalid Added Demand value';
+  StrInvalidConsumptiveUse = 'Invalid Consumptive Use value';
+  StrInvalidCropCoefficV = 'Invalid Crop Coefficient value';
+  StrInvalidNonroutedD = 'Invalid non-routed delivery value';
+  StrInvalidNoReturnFl = 'Invalid no return flow value';
+  StrInvalidIrrigationV = 'Invalid Irrigation value';
+  StrInvalidRootDepthV = 'Invalid Root Depth value';
+  StrInvalidRootPressur = 'Invalid Root Pressure value';
+  StrInvalidSoilCoeffic = 'Invalid soil coefficient value';
+  StrInvalidSoilIDValu = 'Invalid Soil ID value';
+  StrInvalidSurfaceVert = 'Invalid Surface Vertical K value';
+  StrStressPeriod = ' Stress period ';
+  StrNoSoilsDefined = 'No soils defined';
+  StrNoSoilsAreDefined = 'No soils are defined, so the FMP4 SOIL block is sk' +
+  'ipped.';
+  StrAtLeastOneSoilMu = 'At least one soil must be defined if land uses are ' +
+  'used.';
 
 { TModflowFmp4Writer }
 
@@ -771,7 +812,7 @@ begin
   RequiredValues.WriteTransientData :=
     (FFarmProcess4.DeficiencyScenario.FarmOption = foTransient);
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := 'Invalid Deficiency Scenario value';
+  RequiredValues.CheckError := StrInvalidDeficiencyS;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.DeficiencyScenario;
 
@@ -959,6 +1000,16 @@ end;
 
 procedure TModflowFmp4Writer.EvaluateAll;
 begin
+  RemoveErrorAndWarningMessages;
+
+  if FLandUse.IsSelected then
+  begin
+    if FFmpSoils.Count = 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrNoSoilsDefined, StrAtLeastOneSoilMu)
+    end;
+  end;
+
   Evaluate;
   EvaluateActiveCells;
   EvaluateFarmID;
@@ -2073,6 +2124,11 @@ begin
   result := Crop.ConvertToBareSoilCollection;
 end;
 
+function TModflowFmp4Writer.ITMPUsed: Boolean;
+begin
+  result := False;
+end;
+
 function TModflowFmp4Writer.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.FarmProcess4;
@@ -2146,6 +2202,54 @@ end;
 
 procedure TModflowFmp4Writer.RemoveErrorAndWarningMessages;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidEfficiencyV);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidEfficiencyI);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidBareRunoff);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPrecipConsumpRunoff);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidCapillaryFringe);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPotentialEv);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNonroutedDelivery);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidGroundwater);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidDeficiencyS);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFractionOf);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFractionOf2);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidAddedDemand2);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidTranspiratio2);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidGroundWaterAllotment);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidIrrigationU);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidLandUseArea);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPrecipitatio);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSurfaceWaterallotment);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidWaterSource);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSaltSupply);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSaltSupply);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSemirouted);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSemirouted2);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSemiroutedUpper);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSemiroutedRet);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidAddedCropD);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidAddedCropDRate);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidAddedDemandV);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidConsumptiveUse);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidCropCoefficV);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidNonroutedD);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidNoReturnFl);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidIrrigationV);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidRootDepthV);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidRootPressur);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSoilCoeffic);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSoilIDValu);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSurfaceVert);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrThePriorityForNon);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrUndefinedError);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmProcess);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoSoilsDefined);
+
+
+
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonRoutedDeliverie);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInTheMODFLOWPacka);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrLANDUSEPRINTROWC);
 
 end;
 
@@ -2177,7 +2281,6 @@ end;
 
 procedure TModflowFmp4Writer.WriteSurfaceElevation;
 var
-  DataArray: TDataArray;
   RequiredValues: TRequiredValues;
 begin
   RequiredValues.WriteLocation := wlMain;
@@ -2197,10 +2300,6 @@ begin
 
 
   WriteFmpArrayData('', RequiredValues);
-//  WriteString('  SURFACE_ELEVATION STATIC ARRAY INTERNAL');
-//  NewLine;
-//  DataArray := Model.DataArrayManager.GetDataSetByName(StrUzfLandSurface);
-//  WriteArray(DataArray, 0, StrUzfLandSurface, '', '', False, False);
 end;
 
 procedure TModflowFmp4Writer.WriteOwhmList(RequiredValues: TRequiredValues;
@@ -2502,7 +2601,7 @@ begin
   RequiredValues.WriteTransientData :=
     (FSalinityFlush.FarmSaltConcentrationsChoice.FarmOption = foTransient);
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid salt supply concentration formula';
+  RequiredValues.CheckError := StrInvalidSaltSupply;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FSalinityFlush.FarmSaltConcentrationsChoice;
 
@@ -3004,7 +3103,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData := FSurfaceWater4.Semi_Routed_Delivery.FarmOption = foTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid semi-routed delivery value';
+  RequiredValues.CheckError := StrInvalidSemirouted;
   RequiredValues.Option := '';
 
   RequiredValues.FarmProperty := FSurfaceWater4.Semi_Routed_Delivery;
@@ -3051,31 +3150,44 @@ begin
           for FarmIndex := 0 to Model.Farms.Count - 1 do
           begin
             AFarm := Model.Farms[FarmIndex];
-            for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+            if AFarm.MultiSrDeliveries.Count > 0 then
             begin
-              SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
-
-              WriteInteger(ISRD);
-              ADelivery := SrdCollection.ItemByStartTime(
-                StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-              if ADelivery = nil then
+              for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
               begin
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteInteger(0);
-              end
-              else
-              begin
-                WriteInteger(AFarm.FarmId);
+                SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
 
-//                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                SegmentReach := ADelivery.LinkedStream.SegmentReach;
-                WriteInteger(SegmentReach.Segment);
-                WriteInteger(SegmentReach.Reach);
-                WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                  AFarm, 'Invalid semin-routed delivery fraction');
+                WriteInteger(ISRD);
+                ADelivery := SrdCollection.ItemByStartTime(
+                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
+                if ADelivery = nil then
+                begin
+                  WriteInteger(AFarm.FarmId);
+                  WriteInteger(0);
+                  WriteInteger(0);
+                  WriteInteger(0);
+                end
+                else
+                begin
+                  WriteInteger(AFarm.FarmId);
+
+  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
+                  SegmentReach := ADelivery.LinkedStream.SegmentReach;
+                  WriteInteger(SegmentReach.Segment);
+                  WriteInteger(SegmentReach.Reach);
+                  WriteFloatValueFromGlobalFormula(ADelivery.Frac,
+                    AFarm, 'Invalid semin-routed delivery fraction');
+                end;
+                NewLine;
+                Inc(ISRD);
               end;
+            end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteInteger(AFarm.FarmId);
+              WriteInteger(0);
+              WriteInteger(0);
+              WriteInteger(0);
               NewLine;
               Inc(ISRD);
             end;
@@ -3088,6 +3200,8 @@ begin
         for FarmIndex := 0 to Model.Farms.Count - 1 do
         begin
           AFarm := Model.Farms[FarmIndex];
+          if AFarm.MultiSrDeliveries.Count > 0 then
+          begin
             for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
             begin
               SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
@@ -3104,7 +3218,7 @@ begin
               end;
               if ADelivery = nil then
               begin
-                WriteInteger(0);
+                WriteInteger(AFarm.FarmId);
                 WriteInteger(0);
                 WriteInteger(0);
                 WriteInteger(0);
@@ -3122,6 +3236,17 @@ begin
               NewLine;
               Inc(ISRD);
             end;
+          end
+          else
+          begin
+            WriteInteger(ISRD);
+            WriteInteger(AFarm.FarmId);
+            WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
+            NewLine;
+            Inc(ISRD);
+          end;
         end;
 
       end;
@@ -3171,7 +3296,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData := FSurfaceWater4.Semi_Routed_Delivery.FarmOption = foTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid semi-routed delivery lower limit value';
+  RequiredValues.CheckError := StrInvalidSemirouted2;
   RequiredValues.Option := '';
 
   RequiredValues.FarmProperty := FSurfaceWater4.SemiRoutedDeliveryLowerLimit;
@@ -3313,7 +3438,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData := FSurfaceWater4.Semi_Routed_Delivery.FarmOption = foTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid semi-routed delivery upper limit value';
+  RequiredValues.CheckError := StrInvalidSemiroutedUpper;
   RequiredValues.Option := '';
 
   RequiredValues.FarmProperty := FSurfaceWater4.SemiRoutedDeliveryUpperLimit;
@@ -3455,7 +3580,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData := FSurfaceWater4.SemiRoutedReturn.FarmOption = foTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid semi-routed return value';
+  RequiredValues.CheckError := StrInvalidSemiroutedRet;
   RequiredValues.Option := '';
 
   RequiredValues.FarmProperty := FSurfaceWater4.SemiRoutedReturn;
@@ -3501,31 +3626,44 @@ begin
           for FarmIndex := 0 to Model.Farms.Count - 1 do
           begin
             AFarm := Model.Farms[FarmIndex];
-            for SrdIndex := 0 to AFarm.MultiSrReturns.Count - 1 do
+            if AFarm.MultiSrReturns.Count > 0 then
             begin
-              SrdCollection := AFarm.MultiSrReturns[SrdIndex].SemiRouted;
-
-              WriteInteger(ISRD);
-              ADelivery := SrdCollection.ItemByStartTime(
-                StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-              if ADelivery = nil then
+              for SrdIndex := 0 to AFarm.MultiSrReturns.Count - 1 do
               begin
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteInteger(0);
-              end
-              else
-              begin
-                WriteInteger(AFarm.FarmId);
+                SrdCollection := AFarm.MultiSrReturns[SrdIndex].SemiRouted;
 
-//                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                SegmentReach := ADelivery.LinkedStream.SegmentReach;
-                WriteInteger(SegmentReach.Segment);
-                WriteInteger(SegmentReach.Reach);
-                WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                  AFarm, 'Invalid semin-routed delivery fraction');
+                WriteInteger(ISRD);
+                ADelivery := SrdCollection.ItemByStartTime(
+                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
+                if ADelivery = nil then
+                begin
+                  WriteInteger(AFarm.FarmId);
+                  WriteInteger(0);
+                  WriteInteger(0);
+                  WriteInteger(0);
+                end
+                else
+                begin
+                  WriteInteger(AFarm.FarmId);
+
+  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
+                  SegmentReach := ADelivery.LinkedStream.SegmentReach;
+                  WriteInteger(SegmentReach.Segment);
+                  WriteInteger(SegmentReach.Reach);
+                  WriteFloatValueFromGlobalFormula(ADelivery.Frac,
+                    AFarm, 'Invalid semin-routed delivery fraction');
+                end;
+                NewLine;
+                Inc(ISRD);
               end;
+            end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteInteger(AFarm.FarmId);
+              WriteInteger(0);
+              WriteInteger(0);
+              WriteInteger(0);
               NewLine;
               Inc(ISRD);
             end;
@@ -3538,6 +3676,8 @@ begin
         for FarmIndex := 0 to Model.Farms.Count - 1 do
         begin
           AFarm := Model.Farms[FarmIndex];
+          if AFarm.MultiSrReturns.Count > 0 then
+          begin
             for SrdIndex := 0 to AFarm.MultiSrReturns.Count - 1 do
             begin
               SrdCollection := AFarm.MultiSrReturns[SrdIndex].SemiRouted;
@@ -3554,7 +3694,7 @@ begin
               end;
               if ADelivery = nil then
               begin
-                WriteInteger(0);
+                WriteInteger(AFarm.FarmId);
                 WriteInteger(0);
                 WriteInteger(0);
                 WriteInteger(0);
@@ -3569,6 +3709,17 @@ begin
                 WriteFloatValueFromGlobalFormula(ADelivery.Frac,
                   AFarm, 'Invalid semin-routed delivery fraction');
               end;
+              NewLine;
+              Inc(ISRD);
+            end;
+          end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteInteger(AFarm.FarmId);
+              WriteInteger(0);
+              WriteInteger(0);
+              WriteInteger(0);
               NewLine;
               Inc(ISRD);
             end;
@@ -3697,7 +3848,6 @@ begin
         begin
           DataArray := DataSets[DataSetIndex];
           DataArray.UpToDate := True;
-//          CheckDataSetZeroOrPositive(DataArray, StrInvalidFarmID);
           DataArray.CacheData;
         end;
       end;
@@ -4203,7 +4353,7 @@ begin
   RequiredValues.StaticDataName := KFractionOfIrrigToSurfaceWater;
   RequiredValues.WriteTransientData :=
     (FLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Fraction of Unconsumed Irrig. to Surface Water value';
+  RequiredValues.CheckError :=  StrInvalidFractionOf;
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
 //  RequiredValues.Option := '';
   if FLandUse.FractionOfPrecipToSurfaceWaterIrrigationOption = ioByIrrigate then
@@ -4387,7 +4537,7 @@ begin
   RequiredValues.StaticDataName := KFractionOfPrecipToSurfaceWater;
   RequiredValues.WriteTransientData :=
     (FLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Fraction of Unconsumed Precip. to Surface Water value';
+  RequiredValues.CheckError :=  StrInvalidFractionOf2;
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.FractionOfPrecipToSurfaceWater;
@@ -4593,7 +4743,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData :=
     (FFarmProcess4.Added_Crop_Demand_Flux.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Added_Crop_Demand Flux value';
+  RequiredValues.CheckError :=  StrInvalidAddedCropD;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := 'FLUX ';
   RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Flux;
@@ -4764,7 +4914,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData :=
     (FFarmProcess4.Added_Crop_Demand_Rate.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Added_Crop_Demand rate value';
+  RequiredValues.CheckError :=  StrInvalidAddedCropDRate;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := 'RATE ';
   RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Rate;
@@ -4952,7 +5102,7 @@ begin
   RequiredValues.StaticDataName := KAddedDemand;
   RequiredValues.WriteTransientData :=
     (FLandUse.AddedDemand.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Added Demand value';
+  RequiredValues.CheckError :=  StrInvalidAddedDemandV;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   case FLandUse.AddedDemandOption of
     doLength:
@@ -5124,7 +5274,7 @@ begin
   RequiredValues.WriteTransientData :=
     (FFarmProcess4.Added_Demand_Runoff_Split.FarmOption = foTransient);
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := 'Invalid Added Demand Runoff Split value';
+  RequiredValues.CheckError := StrInvalidAddedDemand2;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.Added_Demand_Runoff_Split;
 
@@ -5320,7 +5470,7 @@ begin
   end;
 
   RequiredValues.WriteLocation := wlBarePrecipitationConsumptionFraction;
-  RequiredValues.DefaultValue := 0;
+  RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtDouble;
   RequiredValues.DataTypeIndex := 0;
   RequiredValues.MaxDataTypeIndex := 0;
@@ -5379,7 +5529,7 @@ begin
   end;
 
   RequiredValues.WriteLocation := wlBareRunoffFraction;
-  RequiredValues.DefaultValue := 0;
+  RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtDouble;
   RequiredValues.DataTypeIndex := 0;
   RequiredValues.MaxDataTypeIndex := 0;
@@ -5580,9 +5730,9 @@ procedure TModflowFmp4Writer.WriteCell(Cell: TValueCell;
 var
   Well_Cell: TFmpWell_Cell;
   LocalLayer: integer;
-  AuxValue: integer;
-  AuxName: string;
-  MNW2NAM: STRING;
+//  AuxValue: integer;
+//  AuxName: string;
+//  MNW2NAM: STRING;
   WellName: string;
   APoint: TPoint2D;
 //  DataArray: TDataArray;
@@ -5769,7 +5919,7 @@ begin
   RequiredValues.StaticDataName := KConsumptiveUse;
   RequiredValues.WriteTransientData :=
     (FLandUse.ConsumptiveUse.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Consumptive Use value';
+  RequiredValues.CheckError :=  StrInvalidConsumptiveUse;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.ConsumptiveUse;
@@ -5839,7 +5989,7 @@ begin
   RequiredValues.StaticDataName := KCropCoefficient;
   RequiredValues.WriteTransientData :=
     (FLandUse.CropCoeff.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Crop Coefficient value';
+  RequiredValues.CheckError :=  StrInvalidCropCoefficV;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.CropCoeff;
@@ -6132,7 +6282,7 @@ var
   ItemIndex: Integer;
   ASoil: TSoilItem;
 begin
-  if FSoil4.CapFringe.FarmOption = foNotUsed then
+  if FSoil4.EffPrecipTable.FarmOption = foNotUsed then
   begin
     Exit;
   end;
@@ -6939,7 +7089,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData := FSurfaceWater4.Non_Routed_Delivery.FarmOption = foTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid non-routed delivery value';
+  RequiredValues.CheckError := StrInvalidNonroutedD;
   case FSurfaceWater4.NRDOption of
     nrdoRate:
       begin
@@ -7191,7 +7341,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData := FSurfaceWater4.NoReturnFlow.FarmOption = foTransient;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid no return flow value';
+  RequiredValues.CheckError := StrInvalidNoReturnFl;
   RequiredValues.Option := '';
 
   RequiredValues.FarmProperty := FSurfaceWater4.NoReturnFlow;
@@ -7359,7 +7509,7 @@ begin
       if TransList.Count <= StressPeriodIndex then
       begin
         frmErrorsAndWarnings.AddError(Model,
-          Format(StrUndefinedError, [RequiredValues.ErrorID]),
+          StrUndefinedError, RequiredValues.ErrorID + StrStressPeriod +
           IntToStr(StressPeriodIndex+1));
         Exit;
       end;
@@ -7412,7 +7562,7 @@ begin
   RequiredValues.StaticDataName := KTranspirationFraction;
   RequiredValues.WriteTransientData :=
     (FLandUse.TranspirationFraction.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Transpiration Fraction value';
+  RequiredValues.CheckError :=  StrInvalidTranspiratio2;
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.TranspirationFraction;
@@ -7584,7 +7734,7 @@ var
   AFarm: TFarm;
   NSFR_DELIV: Integer;
   NSFR_RETURN: Integer;
-  RowIndex: Integer;
+//  RowIndex: Integer;
 begin
   WriteString('BEGIN GLOBAL DIMENSION');
   NewLine;
@@ -7652,7 +7802,14 @@ begin
       for FarmIndex := 0 to Model.Farms.Count - 1 do
       begin
         AFarm := Model.Farms[FarmIndex];
-        Inc(NSFR_DELIV, AFarm.MultiSrDeliveries.Count);
+        if AFarm.MultiSrDeliveries.Count > 0 then
+        begin
+          Inc(NSFR_DELIV, AFarm.MultiSrDeliveries.Count);
+        end
+        else
+        begin
+          Inc(NSFR_DELIV)
+        end;
       end;
     end;
     WriteString('  NSFR_DELIV');
@@ -7665,7 +7822,14 @@ begin
       for FarmIndex := 0 to Model.Farms.Count - 1 do
       begin
         AFarm := Model.Farms[FarmIndex];
-        Inc(NSFR_RETURN, AFarm.MultiSrReturns.Count);
+        if AFarm.MultiSrReturns.Count > 0 then
+        begin
+          Inc(NSFR_RETURN, AFarm.MultiSrReturns.Count);
+        end
+        else
+        begin
+          Inc(NSFR_RETURN);
+        end;
       end;
     end;
     WriteString('  NSFR_RETURN');
@@ -7727,7 +7891,7 @@ begin
   RequiredValues.WriteTransientData :=
     (FAllotments.GroundWater.FarmOption = foTransient);
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := 'Invalid ground water allotment value';
+  RequiredValues.CheckError := StrInvalidGroundWaterAllotment;
   case FAllotments.GroundWaterAllotmentMethod of
     amHeight:
       begin
@@ -7867,7 +8031,7 @@ begin
   RequiredValues.ID := 'GROUNDWATER_ROOT_INTERACTION';
   RequiredValues.StaticDataName := KGWRootInteraction;
   RequiredValues.WriteTransientData := False;
-  RequiredValues.CheckError :=  'Invalid Groundwater Root Interaction value';
+  RequiredValues.CheckError :=  StrInvalidGroundwater;
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndFive;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.GroundwaterRootInteraction;
@@ -7977,7 +8141,7 @@ begin
   RequiredValues.StaticDataName := KIrrigation;
   RequiredValues.WriteTransientData :=
     (FLandUse.Irrigation.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Irrigation value';
+  RequiredValues.CheckError :=  StrInvalidIrrigationV;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.Irrigation;
@@ -8139,7 +8303,7 @@ begin
   RequiredValues.WriteTransientData :=
     (FSalinityFlush.FarmIrrigationUniformityChoice.FarmOption = foTransient);
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := 'Invalid Irrigation Uniformity';
+  RequiredValues.CheckError := StrInvalidIrrigationU;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FSalinityFlush.FarmIrrigationUniformityChoice;
 
@@ -8359,7 +8523,7 @@ begin
   RequiredValues.StaticDataName := KLandUseAreaFraction;
   RequiredValues.WriteTransientData :=
     (FLandUse.LandUseFraction.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Land Use Area Fraction value';
+  RequiredValues.CheckError :=  StrInvalidLandUseArea;
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.LandUseFraction;
@@ -8655,14 +8819,6 @@ begin
           Model.AddModelOutputFile(OutputFile);
           NewLine;
         end;
-      fpRoutingInformation:
-        begin
-          WriteString('  ROUTING_INFORMATION TRANSIENT ');
-          OutputFile := ChangeFileExt(FInputFileName, '.ROUTING_INFORMATION');
-          WriteString(ExtractFileName(OutputFile));
-          Model.AddModelOutputFile(OutputFile);
-          NewLine;
-        end;
     end;
   end;
 
@@ -8798,7 +8954,7 @@ begin
   RequiredValues.StaticDataName := KPrecipPotConsumption;
   RequiredValues.WriteTransientData :=
     (FClimatePackage.Precipitation_Potential_Consumption.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Precipitation Potential Consumption value';
+  RequiredValues.CheckError :=  StrInvalidPrecipitatio;
 
   if RequiredValues.FarmProperty.ExternalFileName = '' then
   begin
@@ -8894,7 +9050,7 @@ begin
   RequiredValues.StaticDataName := KRootDepth;
   RequiredValues.WriteTransientData :=
     (FLandUse.RootDepth.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Root Depth value';
+  RequiredValues.CheckError :=  StrInvalidRootDepthV;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.RootDepth;
@@ -9038,7 +9194,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData :=
     (FLandUse.RootPressure.FarmOption = foTransient);
-  RequiredValues.CheckError :=  'Invalid Root Pressure value';
+  RequiredValues.CheckError :=  StrInvalidRootPressur;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FLandUse.RootPressure;
@@ -9164,8 +9320,8 @@ begin
   end;
   if Model.FmpSoils.Count = 0 then
   begin
-    frmErrorsAndWarnings.AddError(Model, 'No soils defined',
-      'No soils are defined, so the FMP4 SOIL block is skipped.');
+    frmErrorsAndWarnings.AddError(Model, StrNoSoilsDefined,
+      StrNoSoilsAreDefined);
     Exit;
   end;
 
@@ -9211,7 +9367,7 @@ begin
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData := False;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid soil coefficient value';
+  RequiredValues.CheckError := StrInvalidSoilCoeffic;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FSoil4.Coefficient;
 
@@ -9316,7 +9472,7 @@ begin
   RequiredValues.StaticDataName := KSoilID;
   RequiredValues.WriteTransientData := False;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid Soil ID value';
+  RequiredValues.CheckError := StrInvalidSoilIDValu;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := nil;
 
@@ -9852,7 +10008,7 @@ begin
   RequiredValues.StaticDataName := KSurfaceK;
   RequiredValues.WriteTransientData := False;
   RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.CheckError := 'Invalid Surface Vertical K value';
+  RequiredValues.CheckError := StrInvalidSurfaceVert;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FSoil4.SurfVertK;
 
@@ -9975,7 +10131,7 @@ begin
   RequiredValues.WriteTransientData :=
     (FAllotments.SurfaceWater.FarmOption = foTransient);
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := 'Invalid surface water allotment value';
+  RequiredValues.CheckError := StrInvalidSurfaceWaterallotment;
   case FAllotments.SurfaceWaterAllotmentMethod of
     amHeight:
       begin
@@ -10201,7 +10357,7 @@ begin
   end;
 
   RequiredValues.WriteLocation := wlWaterSource;
-  RequiredValues.DefaultValue := 0;
+  RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtInteger;
   RequiredValues.DataTypeIndex := 0;
   RequiredValues.MaxDataTypeIndex := 0;
@@ -10212,7 +10368,7 @@ begin
   RequiredValues.WriteTransientData :=
     (FFarmProcess4.WaterSource.FarmOption = foTransient);
   RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := 'Invalid Water Source value';
+  RequiredValues.CheckError := StrInvalidWaterSource;
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := FFarmProcess4.WaterSource;
 

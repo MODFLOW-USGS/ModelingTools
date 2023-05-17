@@ -51,6 +51,7 @@ type
     procedure frameSoilsGridRowMoved(Sender: TObject; FromIndex,
       ToIndex: Integer);
     procedure frameSoilEffectivePrecipGridExit(Sender: TObject);
+    procedure frameSoilsGridBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
   private
     FSoils: TSoilCollection;
     FLookUpTable: TLookUpTable;
@@ -215,6 +216,20 @@ begin
   if FLookUpTable <> nil then
   begin
     SetLookUpTableProperties;
+  end;
+end;
+
+procedure TfrmSoilProperties.frameSoilsGridBeforeDrawCell(Sender: TObject;
+    ACol, ARow: Integer);
+begin
+  inherited;
+  if (ARow > 0) and (ACol in [Ord(scName), Ord(scSoiltype)]) then
+  begin
+    if frameSoils.Grid.Cells[ACol, ARow] = '' then
+    begin
+      frameSoils.Grid.Canvas.Brush.Color := clRed;
+    end;
+
   end;
 end;
 

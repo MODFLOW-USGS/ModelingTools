@@ -18,7 +18,7 @@ inherited framePackageSub: TframePackageSub
     Top = 119
     Width = 595
     Height = 395
-    ActivePage = tabPrintSave
+    ActivePage = tabControls
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
@@ -37,9 +37,9 @@ inherited framePackageSub: TframePackageSub
       object lblAccel1: TLabel
         Left = 88
         Top = 35
-        Width = 176
+        Width = 179
         Height = 15
-        Caption = 'First acceleration parameter (AC!)'
+        Caption = 'First acceleration parameter (AC1)'
       end
       object lblAccel2: TLabel
         Left = 88
@@ -74,7 +74,7 @@ inherited framePackageSub: TframePackageSub
         Left = 8
         Top = 3
         Width = 50
-        Height = 21
+        Height = 23
         ButtonKind = bkClassic
         MaxValue = 10000000.000000000000000000
         MinValue = 2.000000000000000000
@@ -138,13 +138,12 @@ inherited framePackageSub: TframePackageSub
         Left = 8
         Top = 158
         Width = 564
-        Height = 21
+        Height = 23
         Filter = 'Restart files (*.rst)|*.rst|All files (*.*)|*.*'
         Enabled = False
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 5
         Text = ''
-        ExplicitWidth = 413
       end
       object comboOutputChoice: TJvImageComboBox
         Left = 8
