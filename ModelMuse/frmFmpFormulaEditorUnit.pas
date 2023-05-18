@@ -1472,6 +1472,8 @@ var
   ChildNode: TTreeNode;
   FunctionNames: TStringList;
   Item: TSpecialImplementor;
+  ShowClass: Boolean;
+  FunctionName: string;
 begin
   FunctionNames := TStringList.Create;
   try
@@ -1480,7 +1482,15 @@ begin
     for Index := 0 to OverloadedFunctionList.Count - 1 do
     begin
       FClass := OverloadedFunctionList[Index] as TFunctionClass;
-      if not FClass.Hidden then
+      ShowClass := not FClass.Hidden;
+      FunctionName := UpperCase(FClass.Name);
+      if (FunctionName = 'CASE')
+        or (FunctionName = 'MULTIINTERPOLATE')
+        or (FunctionName = 'SQR') then
+      begin
+        ShowClass := False;
+      end;
+      if ShowClass then
       begin
         FunctionNames.AddObject(FClass.Prototype, FClass);
       end;
@@ -1636,7 +1646,13 @@ end;
 
 procedure TfrmFmpFormulaEditor.RemoveUnsupportedFunctions;
 begin
-  rbFormulaParser.Functions.Remove('case');
+  // Removing Case, multiinterpolate, and sqr functions doesn't work
+  // here because they are in the global variable
+  // RbwParser.OverloadedFunctionList. Removing them from OverloadedFunctionList
+  // wouldn't work because that would remove them everywhere instead of just
+  // in this dialog box. Instead, they are skipped in UpdateTreeList.
+
+//  rbFormulaParser.Functions.Remove('case');  // not working
   rbFormulaParser.Functions.Remove('caseb');
   rbFormulaParser.Functions.Remove('casei');
   rbFormulaParser.Functions.Remove('caser');
@@ -1655,16 +1671,17 @@ begin
   rbFormulaParser.Functions.Remove('interpolate');
   rbFormulaParser.Functions.Remove('intpower');
   rbFormulaParser.Functions.Remove('log');
+  rbFormulaParser.Functions.Remove('logn');
   rbFormulaParser.Functions.Remove('ln');
   rbFormulaParser.Functions.Remove('maxi');
   rbFormulaParser.Functions.Remove('maxr');
   rbFormulaParser.Functions.Remove('mini');
   rbFormulaParser.Functions.Remove('minr');
-  rbFormulaParser.Functions.Remove('multiinterpolate');
+//  rbFormulaParser.Functions.Remove('multiinterpolate'); // not working
   rbFormulaParser.Functions.Remove('odd');
   rbFormulaParser.Functions.Remove('pi');
   rbFormulaParser.Functions.Remove('power');
-  rbFormulaParser.Functions.Remove('sqr');
+//  rbFormulaParser.Functions.Remove('sqr'); // not working
   rbFormulaParser.Functions.Remove('sqri');
   rbFormulaParser.Functions.Remove('sqrr');
   rbFormulaParser.Functions.Remove('trunc');
@@ -1675,7 +1692,7 @@ begin
   rbFormulaParser.Functions.Remove('lowercase');
   rbFormulaParser.Functions.Remove('pos');
   rbFormulaParser.Functions.Remove('Posex');
-  rbFormulaParser.Functions.Remove('positininlist');
+  rbFormulaParser.Functions.Remove('positioninlist');
   rbFormulaParser.Functions.Remove('texttofloat');
   rbFormulaParser.Functions.Remove('texttofloatdef');
   rbFormulaParser.Functions.Remove('texttoint');
@@ -1687,6 +1704,7 @@ begin
   rbFormulaParser.Functions.Remove('arcsin');
   rbFormulaParser.Functions.Remove('arcsinh');
   rbFormulaParser.Functions.Remove('arctan');
+  rbFormulaParser.Functions.Remove('arctan2');
   rbFormulaParser.Functions.Remove('arctanh');
   rbFormulaParser.Functions.Remove('cos');
   rbFormulaParser.Functions.Remove('cosh');
@@ -2162,7 +2180,7 @@ begin
   CEILING_Function.OptionalArguments := 0;
   CEILING_Function.CanConvertToConstant := False;
   CEILING_Function.Name := 'CEILING';
-  CEILING_Function.Prototype := 'CEILING(Value)';
+  CEILING_Function.Prototype := 'FMP|CEILING(Value)';
 
   FLOOR_Function.ResultType := rdtDouble;
   FLOOR_Function.RFunctionAddr := _Floor;
@@ -2171,7 +2189,7 @@ begin
   FLOOR_Function.OptionalArguments := 0;
   FLOOR_Function.CanConvertToConstant := False;
   FLOOR_Function.Name := 'FLOOR';
-  FLOOR_Function.Prototype := 'FLOOR(Value)';
+  FLOOR_Function.Prototype := 'FMP|FLOOR(Value)';
 
   LOG_Function.ResultType := rdtDouble;
   LOG_Function.RFunctionAddr := _Log;
@@ -2180,7 +2198,7 @@ begin
   LOG_Function.OptionalArguments := 0;
   LOG_Function.CanConvertToConstant := False;
   LOG_Function.Name := 'LOG';
-  LOG_Function.Prototype := 'LOG(Value)';
+  LOG_Function.Prototype := 'FMP|LOG(Value)';
 
   NEG_Function.ResultType := rdtDouble;
   NEG_Function.RFunctionAddr := _Neg;
@@ -2189,7 +2207,7 @@ begin
   NEG_Function.OptionalArguments := 0;
   NEG_Function.CanConvertToConstant := False;
   NEG_Function.Name := 'NEG';
-  NEG_Function.Prototype := 'NEG(Value)';
+  NEG_Function.Prototype := 'FMP|NEG(Value)';
 
   NEG_TO_ZERO_Function.ResultType := rdtDouble;
   NEG_TO_ZERO_Function.RFunctionAddr := _NegToZero;
@@ -2198,7 +2216,7 @@ begin
   NEG_TO_ZERO_Function.OptionalArguments := 0;
   NEG_TO_ZERO_Function.CanConvertToConstant := False;
   NEG_TO_ZERO_Function.Name := 'NEG_TO_ZERO';
-  NEG_TO_ZERO_Function.Prototype := 'NEG_TO_ZERO(Value)';
+  NEG_TO_ZERO_Function.Prototype := 'FMP|NEG_TO_ZERO(Value)';
 
   POS_TO_ZERO_Function.ResultType := rdtDouble;
   POS_TO_ZERO_Function.RFunctionAddr := _PosToZero;
@@ -2207,7 +2225,7 @@ begin
   POS_TO_ZERO_Function.OptionalArguments := 0;
   POS_TO_ZERO_Function.CanConvertToConstant := False;
   POS_TO_ZERO_Function.Name := 'POS_TO_ZERO';
-  POS_TO_ZERO_Function.Prototype := 'POS_TO_ZERO(Value)';
+  POS_TO_ZERO_Function.Prototype := 'FMP|POS_TO_ZERO(Value)';
 
   TRUNCATE_Function.ResultType := rdtDouble;
   TRUNCATE_Function.RFunctionAddr := _Truncate;
@@ -2216,7 +2234,7 @@ begin
   TRUNCATE_Function.OptionalArguments := 0;
   TRUNCATE_Function.CanConvertToConstant := False;
   TRUNCATE_Function.Name := 'TRUNCATE';
-  TRUNCATE_Function.Prototype := 'TRUNCATE(Value)';
+  TRUNCATE_Function.Prototype := 'FMP|TRUNCATE(Value)';
 
 end;
 

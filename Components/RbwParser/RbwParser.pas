@@ -1418,6 +1418,7 @@ type
     TRbwParser.SpecialImplementorList).  It is used together with
     @Link(TSpecialImplementor) to create a descendant of @Link(TExpression)
     in TExpression.@Link(TExpression.New).)
+    The items in @name are not owned by the @name.
   }
   TSpecialImplementorList = class(TObject)
   private
@@ -1485,7 +1486,8 @@ type
       from @Link(Items) and returns its former position.  If it was not
       in @Link(Items) it returns -1.
     }
-    function Remove(const Item: TSpecialImplementor): Integer;
+    function Remove(const Item: TSpecialImplementor): Integer; overload;
+    function Remove(Name: string): Integer; overload;
   end;
 
   // @name is used in @link(TOperatorDefinition) to indicate how many
@@ -9919,6 +9921,25 @@ function TSpecialImplementorList.GetItems(
   const Index: integer): TSpecialImplementor;
 begin
   result := TSpecialImplementor(FList[Index]);
+end;
+
+function TSpecialImplementorList.Remove(Name: string): Integer;
+var
+  index: Integer;
+  SpecialImplementor: TSpecialImplementor;
+begin
+  result := -1;
+  Name := UpperCase(Name);
+  for index := 0 to Count - 1 do
+  begin
+    SpecialImplementor := Items[index];
+    if UpperCase(SpecialImplementor.FunctionClass.Name) = Name then
+    begin
+      Delete(Index);
+      result := Index;
+      Exit;
+    end;
+  end;
 end;
 
 function TSpecialImplementorList.Remove(

@@ -776,6 +776,7 @@ document.write('</frameset>');
       <helpcontext-number href="CHOB_Specified_Head_Flow_Observations" value="3464"/>
       <helpcontext-number href="CHOB_Specified_Head_Flow_ObsObjects" value="3469"/>
       <helpcontext-number href="CLIMATE-Farm-Process-V4-Climat" value="4415"/>
+      <helpcontext-number href="CLIMATE-Farm-Process-V4-Climat#PRECIPITATION_POTENTIAL_CONSUMPTION" value="4424"/>
       <helpcontext-number href="Closest" value="3671"/>
       <helpcontext-number href="CNC-GWT-Constant-Concentratio2" value="4347"/>
       <helpcontext-number href="CNC-GWT-Constant-Concentration" value="4341"/>
@@ -1743,6 +1744,7 @@ document.write('</frameset>');
       <helpcontext-number href="SMS_Sparse_Matrix_Solution_Pac" value="4008"/>
       <helpcontext-number href="Snap_to_Point" value="3523"/>
       <helpcontext-number href="SOIL-Farm-Process-V4-Soil-Opti" value="4414"/>
+      <helpcontext-number href="SOIL-Farm-Process-V4-Soil-Opti#EFFECTIVE_PRECIPITATION_TABLE" value="4423"/>
       <helpcontext-number href="Solid_Matrix__Adsorption_Pane" value="3758"/>
       <helpcontext-number href="Solution_Method_Dialog_Box" value="2850"/>
       <helpcontext-number href="Solver_Packages" value="2760"/>

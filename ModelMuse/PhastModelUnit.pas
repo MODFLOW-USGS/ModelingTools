@@ -49309,7 +49309,7 @@ end;
 
 function TCustomModel.GetPrecipPotConsumptionUsed: TObjectUsedEvent;
 begin
-  result := DirectRechargeUsed
+  result := DoPrecipPotConsumptionUsed
 end;
 
 function TCustomModel.GetReservoirLayerUsed: TObjectUsedEvent;

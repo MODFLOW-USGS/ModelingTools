@@ -147,6 +147,49 @@ type
     FvstGwtSrcObsMf6Node: PVirtualNode;
     FGwtSrcObs6List: TList;
 
+    FFmp4EfficiencyNode: PVirtualNode;
+    FFmp4EfficiencyList: TList;
+    FFmp4EfficiencyImprovementNode: PVirtualNode;
+    FFmp4EfficiencyImprovementList: TList;
+    FFmp4BareRunoffFractionNode: PVirtualNode;
+    FFmp4BareRunoffFractionList: TList;
+    FFmp4BarePrecipitationConsumptionFractionNode: PVirtualNode;
+    FFmp4BarePrecipitationConsumptionFractionList: TList;
+    FFmp4AddedDemandRunoffSplitNode: PVirtualNode;
+    FFmp4AddedDemandRunoffSplitList: TList;
+    FFmp4BareEvapNode: PVirtualNode;
+    FFmp4BareEvapList: TList;
+    FFmp4DirectRechargeNode: PVirtualNode;
+    FFmp4DirectRechargeList: TList;
+    FFmp4PrecipPotConsumptionNode: PVirtualNode;
+    FFmp4PrecipPotConsumptionList: TList;
+    FFmp4NrdInfilLocationNode: PVirtualNode;
+    FFmp4NrdInfilLocationList: TList;
+    FFmp4LandUseAreaFractionNode: PVirtualNode;
+    FFmp4LandUseAreaFractionList: TList;
+    FFmp4CropCoefficientNode: PVirtualNode;
+    FFmp4CropCoefficientList: TList;
+    FFmp4ConsumptiveUseNode: PVirtualNode;
+    FFmp4ConsumptiveUseList: TList;
+    FFmp4IrrigationNode: PVirtualNode;
+    FFmp4IrrigationList: TList;
+    FFmp4RootDepthNode: PVirtualNode;
+    FFmp4RootDepthList: TList;
+    FFmp4TranspirationFractionNode: PVirtualNode;
+    FFmp4TranspirationFractionList: TList;
+    FFmp4EvaporationIrrigationNode: PVirtualNode;
+    FFmp4EvaporationIrrigationList: TList;
+    FFmp4FractionOfPrecipToSurfaceWaterNode: PVirtualNode;
+    FFmp4FractionOfPrecipToSurfaceWaterList: TList;
+    FFmp4FractionOfIrrigToSurfaceWaterNode: PVirtualNode;
+    FFmp4FractionOfIrrigToSurfaceWaterList: TList;
+    FFmp4AddedDemandNode: PVirtualNode;
+    FFmp4AddedDemandList: TList;
+    FFmp4CropHasSalinityDemandNode: PVirtualNode;
+    FFmp4CropHasSalinityDemandList: TList;
+
+
+
     procedure RecordExpandedNodes;
     procedure RestoreExpandedNodes;
 
@@ -851,13 +894,13 @@ begin
     else if Node = FvstModflowFarmNode then
     begin
     {$IFDEF OWHMV2}
-      if Model.ModelSelection = msModflowFMP then
+      if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
       begin
         Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);
       end
       else
       begin
-        Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess4.PackageIdentifier]);
+        Data.Caption := 'FMP4: Farm IDs';
       end;
     {$ELSE}
         Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);
@@ -867,13 +910,13 @@ begin
     else if Node = FvstModflowFarmWellNode then
     begin
     {$IFDEF OWHMV2}
-      if Model.ModelSelection = msModflowFMP then
+      if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
       begin
         Data.Caption := Format(StrFarmWellsIn, [Packages.FarmProcess.PackageIdentifier]);
       end
       else
       begin
-        Data.Caption := Format(StrFarmWellsIn, [Packages.FarmWells4.PackageIdentifier]);
+        Data.Caption :=  'FMP4: Farm Wells';
       end;
     {$ELSE}
         Data.Caption := Format(StrFarmWellsIn, [Packages.FarmProcess.PackageIdentifier]);
@@ -882,12 +925,34 @@ begin
     end
     else if Node = FvstModflowFarmPrecipNode then
     begin
-      Data.Caption := Format(StrPrecipInS, [Packages.FarmProcess.PackageIdentifier]);
-      Node.CheckType := ctTriStateCheckBox;
+    {$IFDEF OWHMV2}
+      if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
+      begin
+        Data.Caption := Format(StrPrecipInS, [Packages.FarmProcess.PackageIdentifier]);
+      end
+      else
+      begin
+        Data.Caption := 'FMP4 Climate: Precipitation';
+      end;
+    {$ELSE}
+        Data.Caption := Format(StrPrecipInS, [Packages.FarmProcess.PackageIdentifier]);
+    {$ENDIF}
+        Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmRefEvapNode then
     begin
-      Data.Caption := Format(StrRefEvapInS, [Packages.FarmProcess.PackageIdentifier]);
+    {$IFDEF OWHMV2}
+      if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
+      begin
+        Data.Caption := Format(StrRefEvapInS, [Packages.FarmProcess.PackageIdentifier]);
+      end
+      else
+      begin
+        Data.Caption := 'FMP4 Climate: Reference Evaporation';
+      end;
+    {$ELSE}
+        Data.Caption := Format(StrRefEvapInS, [Packages.FarmProcess.PackageIdentifier]);
+    {$ENDIF}
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmCropIDNode then
@@ -1117,6 +1182,107 @@ begin
       Data.Caption := 'OBS6: GWT UZT Observations';
       Node.CheckType := ctTriStateCheckBox;
     end
+    else if Node = FFmp4EfficiencyNode then
+    begin
+      Data.Caption := 'FMP4: Efficiency';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4EfficiencyImprovementNode then
+    begin
+      Data.Caption := 'FMP4: Efficiency Improvement';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4BareRunoffFractionNode then
+    begin
+      Data.Caption := 'FMP4: Bare Runoff Fraction';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4BarePrecipitationConsumptionFractionNode then
+    begin
+      Data.Caption := 'FMP4: Bare Precipitation Consumption Fraction';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4AddedDemandRunoffSplitNode then
+    begin
+      Data.Caption := 'FMP4: Added Demand Runoff Split';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4BareEvapNode then
+    begin
+      Data.Caption := 'FMP4 Climate: Bare Evaporation';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4DirectRechargeNode then
+    begin
+      Data.Caption := 'FMP4 Climate: Direct Recharge';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4PrecipPotConsumptionNode then
+    begin
+      Data.Caption := 'FMP4 Climate: Precip Potential Consumption';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4NrdInfilLocationNode then
+    begin
+      Data.Caption := 'FMP4 Surface Water: Non-routed Deliveries Infiltration Location';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4LandUseAreaFractionNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Land Use Area Fraction';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4CropCoefficientNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Crop Coefficient';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4ConsumptiveUseNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Consumptive Use';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4IrrigationNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Irrigation';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4RootDepthNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Root Depth';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4TranspirationFractionNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Transpiration Fraction';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4EvaporationIrrigationNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Evaporation Irrigation';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4FractionOfPrecipToSurfaceWaterNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Fraction of Precipitation to Surface Water';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4FractionOfIrrigToSurfaceWaterNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Fraction of Irrigation to Surface Water';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4AddedDemandNode then
+    begin
+      Data.Caption := 'FMP4 Land Use: Added Demand';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FFmp4CropHasSalinityDemandNode then
+    begin
+      Data.Caption := 'FMP4 Salinity Flush: Crop has Salinity Demand';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+
     ;
 
 
@@ -2037,6 +2203,161 @@ begin
       InitializeData(FvstModflowMvrNode);
     end;
 
+    if (AScreenObject.Fmp4EfficiencyBoundary <> nil)
+      and AScreenObject.Fmp4EfficiencyBoundary.Used then
+    begin
+      InitializeData(FFmp4EfficiencyNode);
+    end;
+
+    if (AScreenObject.Fmp4EfficiencyImprovementBoundary <> nil)
+      and AScreenObject.Fmp4EfficiencyImprovementBoundary.Used then
+    begin
+      InitializeData(FFmp4EfficiencyImprovementNode);
+    end;
+
+    if (AScreenObject.Fmp4BareRunoffFractionBoundary <> nil)
+      and AScreenObject.Fmp4BareRunoffFractionBoundary.Used then
+    begin
+      InitializeData(FFmp4BareRunoffFractionNode);
+    end;
+
+    if (AScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary <> nil)
+      and AScreenObject.Fmp4BarePrecipitationConsumptionFractionBoundary.Used then
+    begin
+      InitializeData(FFmp4BarePrecipitationConsumptionFractionNode);
+    end;
+
+    if (AScreenObject.Fmp4AddedDemandRunoffSplitBoundary <> nil)
+      and AScreenObject.Fmp4AddedDemandRunoffSplitBoundary.Used then
+    begin
+      InitializeData(FFmp4AddedDemandRunoffSplitNode);
+    end;
+
+    if (AScreenObject.ModflowFmpBareEvap <> nil)
+      and AScreenObject.ModflowFmpBareEvap.Used then
+    begin
+      InitializeData(FFmp4BareEvapNode);
+    end;
+
+    if (AScreenObject.ModflowFmpDirectRecharge <> nil)
+      and AScreenObject.ModflowFmpDirectRecharge.Used then
+    begin
+      InitializeData(FFmp4DirectRechargeNode);
+    end;
+
+    if (AScreenObject.ModflowFmpPrecipPotConsumption <> nil)
+      and AScreenObject.ModflowFmpPrecipPotConsumption.Used then
+    begin
+      InitializeData(FFmp4PrecipPotConsumptionNode);
+    end;
+
+    if (AScreenObject.ModflowFmp4NrdInfilLocationBoundary <> nil)
+      and AScreenObject.ModflowFmp4NrdInfilLocationBoundary.Used then
+    begin
+      InitializeData(FFmp4NrdInfilLocationNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4LandUseAreaFraction <> nil)
+      and AScreenObject.ModflowFmp4LandUseAreaFraction.Used)
+      or ((AScreenObject.ModflowFmp4MultLandUseAreaFraction <> nil)
+      and AScreenObject.ModflowFmp4MultLandUseAreaFraction.Used)
+      then
+    begin
+      InitializeData(FFmp4LandUseAreaFractionNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4CropCoefficient <> nil)
+      and AScreenObject.ModflowFmp4CropCoefficient.Used)
+      or ((AScreenObject.ModflowFmp4MultCropCoefficient <> nil)
+      and AScreenObject.ModflowFmp4MultCropCoefficient.Used)
+      then
+    begin
+      InitializeData(FFmp4CropCoefficientNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4ConsumptiveUse <> nil)
+      and AScreenObject.ModflowFmp4ConsumptiveUse.Used)
+      or ((AScreenObject.ModflowFmp4MultConsumptiveUse <> nil)
+      and AScreenObject.ModflowFmp4MultConsumptiveUse.Used)
+      then
+    begin
+      InitializeData(FFmp4ConsumptiveUseNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4Irrigation <> nil)
+      and AScreenObject.ModflowFmp4Irrigation.Used)
+      or ((AScreenObject.ModflowFmp4MultIrrigation <> nil)
+      and AScreenObject.ModflowFmp4MultIrrigation.Used)
+      then
+    begin
+      InitializeData(FFmp4IrrigationNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4RootDepth <> nil)
+      and AScreenObject.ModflowFmp4RootDepth.Used)
+      or ((AScreenObject.ModflowFmp4MultRootDepth <> nil)
+      and AScreenObject.ModflowFmp4MultRootDepth.Used)
+      then
+    begin
+      InitializeData(FFmp4RootDepthNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4TranspirationFraction <> nil)
+      and AScreenObject.ModflowFmp4TranspirationFraction.Used)
+      or ((AScreenObject.ModflowFmp4MultTranspirationFraction <> nil)
+      and AScreenObject.ModflowFmp4MultTranspirationFraction.Used)
+      then
+    begin
+      InitializeData(FFmp4TranspirationFractionNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4EvaporationIrrigationFraction <> nil)
+      and AScreenObject.ModflowFmp4EvaporationIrrigationFraction.Used)
+      or ((AScreenObject.ModflowFmp4MultEvaporationIrrigationFraction <> nil)
+      and AScreenObject.ModflowFmp4MultEvaporationIrrigationFraction.Used)
+      then
+    begin
+      InitializeData(FFmp4EvaporationIrrigationNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4FractionOfPrecipToSurfaceWater <> nil)
+      and AScreenObject.ModflowFmp4FractionOfPrecipToSurfaceWater.Used)
+      or ((AScreenObject.ModflowFmp4MultFractionOfPrecipToSurfaceWater <> nil)
+      and AScreenObject.ModflowFmp4MultFractionOfPrecipToSurfaceWater.Used)
+      then
+    begin
+      InitializeData(FFmp4FractionOfPrecipToSurfaceWaterNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4FractionOfIrrigToSurfaceWater <> nil)
+      and AScreenObject.ModflowFmp4FractionOfIrrigToSurfaceWater.Used)
+      or ((AScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater <> nil)
+      and AScreenObject.ModflowFmp4MultFractionOfIrrigToSurfaceWater.Used)
+      then
+    begin
+      InitializeData(FFmp4FractionOfIrrigToSurfaceWaterNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4AddedDemand <> nil)
+      and AScreenObject.ModflowFmp4AddedDemand.Used)
+      or ((AScreenObject.ModflowFmp4MultAddedDemand <> nil)
+      and AScreenObject.ModflowFmp4MultAddedDemand.Used)
+      then
+    begin
+      InitializeData(FFmp4AddedDemandNode);
+    end;
+
+    if ((AScreenObject.ModflowFmp4CropHasSalinityDemand <> nil)
+      and AScreenObject.ModflowFmp4CropHasSalinityDemand.Used)
+      or ((AScreenObject.ModflowFmp4MultCropHasSalinityDemand <> nil)
+      and AScreenObject.ModflowFmp4MultCropHasSalinityDemand.Used)
+      then
+    begin
+      InitializeData(FFmp4CropHasSalinityDemandNode);
+    end;
+
+
+
     if PutInOtherObjects then
     begin
       InitializeData(FvstOtherObjectsNode);
@@ -2201,6 +2522,31 @@ begin
 
     vstCheckDeleteNode(FvstObsMf6Node);
     vstCheckDeleteNode(FvstCalibrationObsMf6Node);
+
+    vstCheckDeleteNode(FFmp4EfficiencyNode);
+    vstCheckDeleteNode(FFmp4EfficiencyImprovementNode);
+    vstCheckDeleteNode(FFmp4BareRunoffFractionNode);
+    vstCheckDeleteNode(FFmp4BarePrecipitationConsumptionFractionNode);
+    vstCheckDeleteNode(FFmp4AddedDemandRunoffSplitNode);
+    vstCheckDeleteNode(FFmp4BareEvapNode);
+    vstCheckDeleteNode(FFmp4DirectRechargeNode);
+    vstCheckDeleteNode(FFmp4PrecipPotConsumptionNode);
+    vstCheckDeleteNode(FFmp4NrdInfilLocationNode);
+    vstCheckDeleteNode(FFmp4LandUseAreaFractionNode);
+    vstCheckDeleteNode(FFmp4CropCoefficientNode);
+    vstCheckDeleteNode(FFmp4ConsumptiveUseNode);
+    vstCheckDeleteNode(FFmp4IrrigationNode);
+    vstCheckDeleteNode(FFmp4RootDepthNode);
+    vstCheckDeleteNode(FFmp4TranspirationFractionNode);
+    vstCheckDeleteNode(FFmp4EvaporationIrrigationNode);
+    vstCheckDeleteNode(FFmp4FractionOfPrecipToSurfaceWaterNode);
+    vstCheckDeleteNode(FFmp4FractionOfIrrigToSurfaceWaterNode);
+    vstCheckDeleteNode(FFmp4AddedDemandNode);
+    vstCheckDeleteNode(FFmp4CropHasSalinityDemandNode);
+
+
+
+
 
     ParentNodes := TList.Create;
     try
@@ -2651,6 +2997,29 @@ begin
     InitializeMF_BoundaryNode(FvstModflowFarmCropIDNode, PriorNode, FFarmCropIDList);
     InitializeMF_BoundaryNode(FvstModflowCfpRechargeNode, PriorNode, FCfpRechargeList);
 
+    InitializeMF_BoundaryNode(FFmp4EfficiencyNode, PriorNode, FFmp4EfficiencyList);
+    InitializeMF_BoundaryNode(FFmp4EfficiencyImprovementNode, PriorNode, FFmp4EfficiencyImprovementList);
+    InitializeMF_BoundaryNode(FFmp4BareRunoffFractionNode, PriorNode, FFmp4BareRunoffFractionList);
+    InitializeMF_BoundaryNode(FFmp4BarePrecipitationConsumptionFractionNode, PriorNode, FFmp4BarePrecipitationConsumptionFractionList);
+    InitializeMF_BoundaryNode(FFmp4AddedDemandRunoffSplitNode, PriorNode, FFmp4AddedDemandRunoffSplitList);
+    InitializeMF_BoundaryNode(FFmp4BareEvapNode, PriorNode, FFmp4BareEvapList);
+    InitializeMF_BoundaryNode(FFmp4DirectRechargeNode, PriorNode, FFmp4DirectRechargeList);
+    InitializeMF_BoundaryNode(FFmp4PrecipPotConsumptionNode, PriorNode, FFmp4PrecipPotConsumptionList);
+    InitializeMF_BoundaryNode(FFmp4NrdInfilLocationNode, PriorNode, FFmp4NrdInfilLocationList);
+    InitializeMF_BoundaryNode(FFmp4LandUseAreaFractionNode, PriorNode, FFmp4LandUseAreaFractionList);
+    InitializeMF_BoundaryNode(FFmp4CropCoefficientNode, PriorNode, FFmp4CropCoefficientList);
+    InitializeMF_BoundaryNode(FFmp4ConsumptiveUseNode, PriorNode, FFmp4ConsumptiveUseList);
+    InitializeMF_BoundaryNode(FFmp4IrrigationNode, PriorNode, FFmp4IrrigationList);
+    InitializeMF_BoundaryNode(FFmp4RootDepthNode, PriorNode, FFmp4RootDepthList);
+    InitializeMF_BoundaryNode(FFmp4TranspirationFractionNode, PriorNode, FFmp4TranspirationFractionList);
+    InitializeMF_BoundaryNode(FFmp4EvaporationIrrigationNode, PriorNode, FFmp4EvaporationIrrigationList);
+    InitializeMF_BoundaryNode(FFmp4FractionOfPrecipToSurfaceWaterNode, PriorNode, FFmp4FractionOfPrecipToSurfaceWaterList);
+    InitializeMF_BoundaryNode(FFmp4FractionOfIrrigToSurfaceWaterNode, PriorNode, FFmp4FractionOfIrrigToSurfaceWaterList);
+    InitializeMF_BoundaryNode(FFmp4AddedDemandNode, PriorNode, FFmp4AddedDemandList);
+    InitializeMF_BoundaryNode(FFmp4CropHasSalinityDemandNode, PriorNode, FFmp4CropHasSalinityDemandList);
+
+
+
 
     InitializeMF_BoundaryNode(FvstMt3dLkt, PriorNode, FLktList);
     InitializeMF_BoundaryNode(FvstMt3dSft, PriorNode, FSftList);
@@ -2987,6 +3356,27 @@ begin
   FLktObs6List.Free;
   FMwtObs6List.Free;
   FUztObs6List.Free;
+
+  FFmp4EfficiencyList.Free;
+  FFmp4EfficiencyImprovementList.Free;
+  FFmp4BareRunoffFractionList.Free;
+  FFmp4BarePrecipitationConsumptionFractionList.Free;
+  FFmp4AddedDemandRunoffSplitList.Free;
+  FFmp4BareEvapList.Free;
+  FFmp4DirectRechargeList.Free;
+  FFmp4PrecipPotConsumptionList.Free;
+  FFmp4NrdInfilLocationList.Free;
+  FFmp4LandUseAreaFractionList.Free;
+  FFmp4CropCoefficientList.Free;
+  FFmp4ConsumptiveUseList.Free;
+  FFmp4IrrigationList.Free;
+  FFmp4RootDepthList.Free;
+  FFmp4TranspirationFractionList.Free;
+  FFmp4EvaporationIrrigationList.Free;
+  FFmp4FractionOfPrecipToSurfaceWaterList.Free;
+  FFmp4FractionOfIrrigToSurfaceWaterList.Free;
+  FFmp4AddedDemandList.Free;
+  FFmp4CropHasSalinityDemandList.Free;
   inherited;
 end;
 
@@ -3109,6 +3499,27 @@ begin
   FLktObs6List  := TList.Create;
   FMwtObs6List  := TList.Create;
   FUztObs6List  := TList.Create;
+
+  FFmp4EfficiencyList := TList.Create;
+  FFmp4EfficiencyImprovementList := TList.Create;
+  FFmp4BareRunoffFractionList := TList.Create;
+  FFmp4BarePrecipitationConsumptionFractionList := TList.Create;
+  FFmp4AddedDemandRunoffSplitList := TList.Create;
+  FFmp4BareEvapList := TList.Create;
+  FFmp4DirectRechargeList := TList.Create;
+  FFmp4PrecipPotConsumptionList := TList.Create;
+  FFmp4NrdInfilLocationList := TList.Create;
+  FFmp4LandUseAreaFractionList := TList.Create;
+  FFmp4CropCoefficientList := TList.Create;
+  FFmp4ConsumptiveUseList := TList.Create;
+  FFmp4IrrigationList := TList.Create;
+  FFmp4RootDepthList := TList.Create;
+  FFmp4TranspirationFractionList := TList.Create;
+  FFmp4EvaporationIrrigationList := TList.Create;
+  FFmp4FractionOfPrecipToSurfaceWaterList := TList.Create;
+  FFmp4FractionOfIrrigToSurfaceWaterList := TList.Create;
+  FFmp4AddedDemandList := TList.Create;
+  FFmp4CropHasSalinityDemandList := TList.Create;
 
   FCanEdit := True;
 
@@ -3247,6 +3658,26 @@ begin
   FvstObsMf6Node := nil;
   FvstCalibrationObsMf6Node := nil;
 
+  FFmp4EfficiencyNode := nil;
+  FFmp4EfficiencyImprovementNode := nil;
+  FFmp4BareRunoffFractionNode := nil;
+  FFmp4BarePrecipitationConsumptionFractionNode := nil;
+  FFmp4AddedDemandRunoffSplitNode := nil;
+  FFmp4BareEvapNode := nil;
+  FFmp4DirectRechargeNode := nil;
+  FFmp4PrecipPotConsumptionNode := nil;
+  FFmp4NrdInfilLocationNode := nil;
+  FFmp4LandUseAreaFractionNode := nil;
+  FFmp4CropCoefficientNode := nil;
+  FFmp4ConsumptiveUseNode := nil;
+  FFmp4IrrigationNode := nil;
+  FFmp4RootDepthNode := nil;
+  FFmp4TranspirationFractionNode := nil;
+  FFmp4EvaporationIrrigationNode := nil;
+  FFmp4FractionOfPrecipToSurfaceWaterNode := nil;
+  FFmp4FractionOfIrrigToSurfaceWaterNode := nil;
+  FFmp4AddedDemandNode := nil;
+  FFmp4CropHasSalinityDemandNode := nil;
 end;
 
 function TfrmCustomSelectObjects.NodeString(ANode: PVirtualNode): string;
@@ -3501,6 +3932,27 @@ begin
   FLktObs6List.Sort(ScreenObjectCompare);
   FMwtObs6List.Sort(ScreenObjectCompare);
   FUztObs6List.Sort(ScreenObjectCompare);
+
+  FFmp4EfficiencyList.Sort(ScreenObjectCompare);
+  FFmp4EfficiencyImprovementList.Sort(ScreenObjectCompare);
+  FFmp4BareRunoffFractionList.Sort(ScreenObjectCompare);
+  FFmp4BarePrecipitationConsumptionFractionList.Sort(ScreenObjectCompare);
+  FFmp4AddedDemandRunoffSplitList.Sort(ScreenObjectCompare);
+  FFmp4BareEvapList.Sort(ScreenObjectCompare);
+  FFmp4DirectRechargeList.Sort(ScreenObjectCompare);
+  FFmp4PrecipPotConsumptionList.Sort(ScreenObjectCompare);
+  FFmp4NrdInfilLocationList.Sort(ScreenObjectCompare);
+  FFmp4LandUseAreaFractionList.Sort(ScreenObjectCompare);
+  FFmp4CropCoefficientList.Sort(ScreenObjectCompare);
+  FFmp4ConsumptiveUseList.Sort(ScreenObjectCompare);
+  FFmp4IrrigationList.Sort(ScreenObjectCompare);
+  FFmp4RootDepthList.Sort(ScreenObjectCompare);
+  FFmp4TranspirationFractionList.Sort(ScreenObjectCompare);
+  FFmp4EvaporationIrrigationList.Sort(ScreenObjectCompare);
+  FFmp4FractionOfPrecipToSurfaceWaterList.Sort(ScreenObjectCompare);
+  FFmp4FractionOfIrrigToSurfaceWaterList.Sort(ScreenObjectCompare);
+  FFmp4AddedDemandList.Sort(ScreenObjectCompare);
+  FFmp4CropHasSalinityDemandList.Sort(ScreenObjectCompare);
 
   for Index := 0 to FDataSetLists.Count - 1 do
   begin

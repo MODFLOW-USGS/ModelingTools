@@ -6524,15 +6524,15 @@ begin
   end
   else
   begin
+    acFarmClimate.Enabled := False;
   {$IFDEF OWHMV2}
-    acFarmClimate.Enabled := (PhastModel.ModelSelection = msModflowOwhm2)
-      and PhastModel.ModflowPackages.FarmProcess4.IsSelected
-      and PhastModel.ModflowPackages.FarmClimate4.IsSelected;
+//    acFarmClimate.Enabled := (PhastModel.ModelSelection = msModflowOwhm2)
+//      and PhastModel.ModflowPackages.FarmProcess4.IsSelected
+//      and PhastModel.ModflowPackages.FarmClimate4.IsSelected;
     acFarmAllotment.Enabled := (PhastModel.ModelSelection = msModflowOwhm2)
       and PhastModel.ModflowPackages.FarmProcess4.IsSelected
       and PhastModel.ModflowPackages.FarmAllotments.IsSelected;
   {$ELSE}
-    acFarmClimate.Enabled := False;
     acFarmAllotment.Enabled := False;
   {$ENDIF}
   end;
