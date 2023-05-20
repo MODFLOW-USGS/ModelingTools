@@ -1602,6 +1602,7 @@ begin
     {$IFDEF OWHMV2}
     result := FarmIrrigationEfficiencyCollection;
     {$ELSE}
+      result := nil;
     Assert(False);
     {$ENDIF}
   end;

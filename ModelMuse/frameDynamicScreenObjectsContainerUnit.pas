@@ -263,7 +263,14 @@ function TframeDynamicScreenObjectsContainer.GetTimeSeriesByName(
   ASeriesName: String): TDynamicTimeSeries;
 begin
   AssignProperties;
-  result := FTimesSeries.GetTimeSeriesByName(ASeriesName);
+  if FTimesSeries <> nil then
+  begin
+    result := FTimesSeries.GetTimeSeriesByName(ASeriesName);
+  end
+  else
+  begin
+    result := nil;
+  end;
 end;
 
 procedure TframeDynamicScreenObjectsContainer.SetData(
