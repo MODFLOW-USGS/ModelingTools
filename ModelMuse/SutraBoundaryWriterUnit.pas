@@ -111,6 +111,11 @@ resourcestring
   StrMassOrEnergySourc = 'Mass or Energy Source';
   StrSpecifiedPressureS = 'Specified Pressure Source';
   StrSpecifiedConcentrat = 'Specified Concentration or Temperature Source';
+  StrErrorInDataSet3 = 'Error in Data Set 3, Check that the mesh is numbered' +
+  ' properly.';
+  StrErrorInLayer0d = 'Error in layer %0:d at node %1:d';
+  StrErrorEvaluatingBou = 'Error evaluating boundary data; check that the me' +
+  'sh is numbered properly';
 
 { TSutraBoundaryWriter }
 
@@ -773,6 +778,12 @@ begin
                             LayerIndex, RowIndex, ColIndex]
                             and MergedUsedDataArray.BooleanData[
                             LayerIndex, RowIndex, ColIndex];
+                          if not UDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
+                          begin
+                            frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                              Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                            Exit;
+                          end;
                           Assert(UDataSet.IsValue[LayerIndex, RowIndex,
                             ColIndex]);
                           FNodeNumbers[LayerIndex, RowIndex, ColIndex] := 1;
@@ -839,6 +850,12 @@ begin
                           if (PQDataSet.RealData[LayerIndex, RowIndex,
                             ColIndex] > 0) and UsedBoundary then
                           begin
+                            if not PositiveDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
+                            begin
+                              frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                                Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                              Exit;
+                            end;
                             Assert(PositiveDataSet.IsValue[LayerIndex, RowIndex,
                               ColIndex] = PositiveUDataSet.IsValue[LayerIndex,
                               RowIndex, ColIndex]);
@@ -925,6 +942,12 @@ begin
                   begin
                     CellLocation.Column := ColIndex;
                     CellLocationAddr := Addr(CellLocation);
+                    if not MergedPQDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
+                    begin
+                      frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                        Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                      Exit;
+                    end;
                     Assert(MergedPQDataSet.IsValue[LayerIndex, RowIndex,
                       ColIndex] = MergedUDataSet.IsValue[LayerIndex, RowIndex,
                       ColIndex]);
@@ -932,8 +955,20 @@ begin
                       and (MergedPQDataSet.RealData[LayerIndex, RowIndex,
                       ColIndex] > 0) then
                     begin
+                      if not PositiveDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
+                      begin
+                        frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                          Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                        Exit;
+                      end;
                       Assert(PositiveDataSet.IsValue[LayerIndex, RowIndex,
                         ColIndex]);
+                      if not PositiveUDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
+                      begin
+                        frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                          Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                        Exit;
+                      end;
                       Assert(PositiveUDataSet.IsValue[LayerIndex, RowIndex,
                         ColIndex]);
                       MergedUDataSet.RealData[LayerIndex, RowIndex, ColIndex] :=
@@ -1135,6 +1170,12 @@ begin
                     begin
                       CellLocation.Column := ColIndex;
                       CellLocationAddr := Addr(CellLocation);
+                      if not PQDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
+                      begin
+                        frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                          Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                        Exit;
+                      end;
                       Assert(PQDataSet.IsValue[LayerIndex, RowIndex, ColIndex]
                         = UDataSet.IsValue[LayerIndex, RowIndex, ColIndex]);
                       if PQDataSet.IsValue[LayerIndex, RowIndex, ColIndex] then
@@ -1663,6 +1704,12 @@ begin
             UFormula := '';
             if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin
+              if not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorInDataSet3,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
               IQCP1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
               Assert(IQCP1 > 0);
@@ -1672,9 +1719,33 @@ begin
               end;
               QINC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               UINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+              if not PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+              if not PQFormulasUsed.IsValue[LayerIndex, ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
+              if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+              if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
               if PQFormulasUsed[LayerIndex, ColIndex] then
               begin
@@ -1760,6 +1831,12 @@ begin
               UFormula := '';
               if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
               begin
+                if not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
                 IQCP1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
                 Assert(IQCP1 > 0);
@@ -1770,9 +1847,33 @@ begin
                 QINC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
                 UINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
 
+                if not PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                if not PQFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
                 if PQFormulasUsed[LayerIndex, ColIndex] then
                 begin
@@ -1899,7 +2000,19 @@ begin
                 IQCU1 := -IQCU1;
               end;
               QUINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+              if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+              if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
               if UFormulasUsed[LayerIndex, ColIndex] then
               begin
@@ -1976,7 +2089,19 @@ begin
                   IQCU1 := -IQCU1;
                 end;
                 QUINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+                if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
                 if UFormulasUsed[LayerIndex, ColIndex] then
                 begin
@@ -2102,6 +2227,12 @@ begin
               UFormula := '';
               if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
               begin
+                if not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
                 IPBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
                 Assert(IPBC1 > 0);
@@ -2111,9 +2242,33 @@ begin
                 end;
                 PBC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
                 UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+                if not PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                if not PQFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
                 if PQFormulasUsed[LayerIndex, ColIndex] then
                 begin
@@ -2179,7 +2334,19 @@ begin
               begin
                 if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
                 begin
+                  if not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                      Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                    Exit;
+                  end;
                   Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  if not PriorPQDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                      Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                    Exit;
+                  end;
                   Assert(PriorPQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
                   Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
                     <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex])
@@ -2201,6 +2368,12 @@ begin
                 UFormula := '';
                 if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
                 begin
+                  if not PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                      Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                    Exit;
+                  end;
                   Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
                   IPBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
                   Assert(IPBC1 > 0);
@@ -2211,9 +2384,33 @@ begin
                   PBC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
                   UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
 
+                  if not PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                      Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                    Exit;
+                  end;
                   Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  if not PQFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                      Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                    Exit;
+                  end;
                   Assert(PQFormulasUsed.IsValue[LayerIndex, ColIndex]);
+                  if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                      Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                    Exit;
+                  end;
                   Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                  if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                      Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                    Exit;
+                  end;
                   Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
                   if PQFormulasUsed[LayerIndex, ColIndex] then
                   begin
@@ -2335,7 +2532,19 @@ begin
                 IUBC1 := -IUBC1;
               end;
               UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+              if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+              if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                  Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                Exit;
+              end;
               Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
               if UFormulasUsed[LayerIndex, ColIndex] then
               begin
@@ -2412,7 +2621,19 @@ begin
                   IUBC1 := -IUBC1;
                 end;
                 UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
+                if not UFormulas.IsValue[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
+                if not UFormulasUsed.IsValue[LayerIndex, ColIndex] then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
+                    Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
+                  Exit;
+                end;
                 Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
                 if UFormulasUsed[LayerIndex, ColIndex] then
                 begin

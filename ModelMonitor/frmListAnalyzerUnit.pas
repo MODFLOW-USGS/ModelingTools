@@ -1653,6 +1653,7 @@ begin
     FListFile.OnUpdateTimeSteps := UpdateTimeSteps;
   end;
 
+  // Specifying FListFile.FileName cause the file to be read.
   FListFile.FileName := FileName;
   frameSorted.vstIndexLines.SortTree(0, sdAscending);
   progressbar1.Position := 0;
