@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-01-05T13:20:32.579-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-23T15:27:46.710-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Frequently Asked Questions</title>
   <body>
     <header>
@@ -547,6 +547,23 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">In some situations, the USGS can provide training to governmental agencies with a cooperative agreement with the USGS; agencies can contact their cooperating USGS office for additional information.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <list id="27" type="ol" listtype="upper-alpha" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="31" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[How can I convert my older MODFLOW model to a more recent version of MODFLOW?]]></caption></toggle></li>
+    </list>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Was your model was developed in a graphical user interface? If so, the first thing to try would be to try to use the graphical user interface to update the model. If that is not feasible, there are a number of conversion programs that can be used.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Mf96to2k can be used to convert MODFLOW96 to MODFLOW-2000. Mf96to2k is distributed as part of MODFLOW-2000. You can still get MODFLOW-2000 at the following URL.</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://water.usgs.gov/water-resources/legacy-software/</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MF2KtoMF05UC can be used to convert MODFLOW-2000 to MODFLOW-2005. You can get it from the following URL.</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://www.usgs.gov/software/mf2ktomf05uc</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Mf5to6 can be used to convert MODFLOW-2005 to MODFLOW 6. Mf5to6 &#160;is included in the MODFLOW 6 distribution.</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://www.usgs.gov/software/modflow-6-usgs-modular-hydrologic-model</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">One issue with using these conversions in sequence is that the flow package in MODFLOW-96 is always the Block-Centered Flow package. It uses transmissivity for confined layers. Vertical discretization was only specified in MODFLOW-96 for unconfined or convertible layers. For that reason, you may need to supply additional discretization information to convert the model to MODFLOW-2000. Perfect conversions are not guaranteed for any of these programs because differences in the input requirements of different major MODFLOW versions may make a perfect conversion impossible.</text></para>
         </td>
       </tr>
     </table></para>
