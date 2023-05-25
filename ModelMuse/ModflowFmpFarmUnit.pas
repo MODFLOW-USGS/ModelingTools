@@ -1976,6 +1976,7 @@ begin
     inherited Create(Model.DoInvalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
+  FDiversionPosition := dpStart;
   FModel := Model;
 end;
 
