@@ -27,7 +27,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       Height = 318
       Caption = 'Surface Water'
       TabOrder = 0
-      ExplicitWidth = 418
       object rdgSurfaceWater: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -202,7 +201,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 395
       end
     end
     object cpnlOptions: TCategoryPanel
@@ -212,7 +210,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       Collapsed = True
       Enabled = False
       TabOrder = 1
-      ExplicitWidth = 418
       ExpandedHeight = 91
       object lblSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE: TLabel
         Left = 173
@@ -251,7 +248,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       Caption = 'Print'
       Collapsed = True
       TabOrder = 2
-      ExplicitWidth = 418
       ExpandedHeight = 153
       object clbPrint: TCheckListBox
         Left = 0
@@ -269,7 +265,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
           'PRINT NRD'
           'PRINT NRD_BY_WBS')
         TabOrder = 0
-        ExplicitHeight = 127
       end
     end
   end

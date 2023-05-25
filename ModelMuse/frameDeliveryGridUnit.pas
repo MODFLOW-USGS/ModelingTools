@@ -59,13 +59,15 @@ implementation
 
 uses
   GoPhastTypes, ModflowTimeUnit, frmGoPhastUnit,
-  Generics.Collections, frmCustomGoPhastUnit;
+  Generics.Collections, frmCustomGoPhastUnit, ModflowPackagesUnit,
+  ModflowPackageSelectionUnit;
 
 resourcestring
   StrOnlyTheAmountRequ = 'Take required amount (0)';
   StrSurplusDischargedT = 'Surplus discharged (1)';
   StrSurplusStoredInGr = 'Surplus stored (2)';
-  StrVolumeNRDV = 'Volume (NRDV)';
+  StrVolumeNRDV = 'Volume (NRDV) (L^3)';
+  StrRateNRDV = 'Rate (NRDV) (L^3/T)';
   StrRankNRDR = 'Rank (NRDR)';
   StrHowUsedNRDU = 'How used (NRDU)';
   StrVirtualFarm0 = 'Virtual Farm (<0)';
@@ -328,82 +330,88 @@ var
   PriorColCount: Integer;
   ColIndex: Integer;
   ColumnType: TDeliveryColumns_Owhmv1;
+  Packages: TModflowPackages;
+  UseVolume: Boolean;
 begin
   inherited;
   PriorColCount := Grid.ColCount;
   Assert(PriorColCount >= 2);
   Grid.ColCount := seNumberOfDeliveryTypes.AsInteger * DeliveryColumns + 2;
 
-//  PickList := TStringList.Create;
-  try
-    if frmGoPhast.ModelSelection = msModflowFmp then
+  UseVolume := True;
+  if frmGoPhast.ModelSelection = msModflowFmp then
+  begin
+    PickList := PickListOwhmV1;
+  end
+  else
+  begin
+    PickList := PickListOwhmV2;
+    Packages := frmGoPhast.PhastModel.ModflowPackages;
+    if Packages.FarmSurfaceWater4.NRDOption = nrdoRate then
     begin
-      PickList := PickListOwhmV1;
-    end
-    else
-    begin
-      PickList := PickListOwhmV2;
+      UseVolume := False;
     end;
-//    PickList.Add(StrOnlyTheAmountRequ);
-//    PickList.Add(StrSurplusDischargedT);
-//    PickList.Add(StrSurplusStoredInGr);
-//    PickList.Add(StrVirtualFarm0);
-    comboHowUsed.Items := PickList;
+  end;
+  comboHowUsed.Items := PickList;
 
-    Grid.BeginUpdate;
-    try
-      for ColIndex := PriorColCount to Grid.ColCount - 1 do
-      begin
-        ColumnType := TDeliveryColumns_Owhmv1((ColIndex-2) mod DeliveryColumns);
-        case ColumnType of
-          dcVolume:
+  Grid.BeginUpdate;
+  try
+    for ColIndex := PriorColCount to Grid.ColCount - 1 do
+    begin
+      ColumnType := TDeliveryColumns_Owhmv1((ColIndex-2) mod DeliveryColumns);
+      case ColumnType of
+        dcVolume:
+          begin
+            if UseVolume then
             begin
               Grid.Cells[ColIndex,0] := StrVolumeNRDV;
-              Grid.Columns[ColIndex].ButtonUsed := True;
-              Grid.Columns[ColIndex].ButtonCaption := StrF;
-              Grid.Columns[ColIndex].ButtonWidth := 35;
-            end;
-          dcRank:
+            end
+            else
             begin
-              Grid.Cells[ColIndex,0] := StrRankNRDR;
-              Grid.Columns[ColIndex].ButtonUsed := True;
-              Grid.Columns[ColIndex].ButtonCaption := StrF;
-              Grid.Columns[ColIndex].ButtonWidth := 35;
+              Grid.Cells[ColIndex,0] := StrRateNRDV;
             end;
-          dcHowUsed:
+            Grid.Columns[ColIndex].ButtonUsed := True;
+            Grid.Columns[ColIndex].ButtonCaption := StrF;
+            Grid.Columns[ColIndex].ButtonWidth := 35;
+          end;
+        dcRank:
+          begin
+            Grid.Cells[ColIndex,0] := StrRankNRDR;
+            Grid.Columns[ColIndex].ButtonUsed := True;
+            Grid.Columns[ColIndex].ButtonCaption := StrF;
+            Grid.Columns[ColIndex].ButtonWidth := 35;
+          end;
+        dcHowUsed:
+          begin
+            Grid.Cells[ColIndex,0] := StrHowUsedNRDU;
+            Grid.Columns[ColIndex].ComboUsed := True;
+            Grid.Columns[ColIndex].LimitToList := True;
+            Grid.Columns[ColIndex].PickList := PickList;
+          end;
+        dcVirtualFarm:
+          begin
+            if  frmGoPhast.ModelSelection = msModflowFmp then
             begin
-              Grid.Cells[ColIndex,0] := StrHowUsedNRDU;
-              Grid.Columns[ColIndex].ComboUsed := True;
-              Grid.Columns[ColIndex].LimitToList := True;
-              Grid.Columns[ColIndex].PickList := PickList;
-            end;
-          dcVirtualFarm:
+              Grid.Cells[ColIndex,0] := StrVirtualFarmNumber;
+            end
+            else
             begin
-              if  frmGoPhast.ModelSelection = msModflowFmp then
-              begin
-                Grid.Cells[ColIndex,0] := StrVirtualFarmNumber;
-              end
-              else
-              begin
-               Grid.Cells[ColIndex,0] := 'Infiltration Location';
-              end;
-              Grid.Columns[ColIndex].ButtonUsed := True;
-              Grid.Columns[ColIndex].ButtonCaption := StrF;
-              Grid.Columns[ColIndex].ButtonWidth := 35;
+             Grid.Cells[ColIndex,0] := 'Infiltration Location';
             end;
-          else
-            Assert(False);
-        end;
-        Grid.Columns[ColIndex].AutoAdjustColWidths := True;
-        Grid.Columns[ColIndex].AutoAdjustRowHeights := True;
-        Grid.Columns[ColIndex].WordWrapCaptions := True;
-        Grid.Columns[ColIndex].ButtonFont := Font;
+            Grid.Columns[ColIndex].ButtonUsed := True;
+            Grid.Columns[ColIndex].ButtonCaption := StrF;
+            Grid.Columns[ColIndex].ButtonWidth := 35;
+          end;
+        else
+          Assert(False);
       end;
-    finally
-      Grid.EndUpdate;
+      Grid.Columns[ColIndex].AutoAdjustColWidths := True;
+      Grid.Columns[ColIndex].AutoAdjustRowHeights := True;
+      Grid.Columns[ColIndex].WordWrapCaptions := True;
+      Grid.Columns[ColIndex].ButtonFont := Font;
     end;
   finally
-//    PickList.Free;
+    Grid.EndUpdate;
   end;
 
   for ColIndex := PriorColCount to Grid.ColCount - 1 do
@@ -576,7 +584,13 @@ initialization
   PickListOwhmV2.Add(StrOnlyTheAmountRequ);
   PickListOwhmV2.Add(StrSurplusDischargedT);
   PickListOwhmV2.Add(StrSurplusStoredInGr);
-  PickListOwhmV2.Add('Infiltration Location');
+
+  // The infiltration location option has not been implemented as of
+  // MODFLOW-OWHM version 4.3. uncomment the next line if it is activated.
+  // A change would also need to be made in
+  // TframePackageFmp4SurfaceWater.rdgSurfaceWaterSelectCell.
+
+//  PickListOwhmV2.Add('Infiltration Location');
 
 finalization
 

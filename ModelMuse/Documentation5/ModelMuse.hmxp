@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4422</config-value>
+      <config-value name="autohelpstart">4425</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1902,6 +1902,7 @@ document.write('</frameset>');
       <helpcontext-number href="Time_Tab" value="2090"/>
       <helpcontext-number href="Time_Tab#ICALC" value="2100"/>
       <helpcontext-number href="Time_Units_Converter" value="3941"/>
+      <helpcontext-number href="Time-Series-Tab" value="4425"/>
       <helpcontext-number href="Title_and_Units_Dialog_Box" value="2820"/>
       <helpcontext-number href="Title_Pane" value="3753"/>
       <helpcontext-number href="TOB_Transport_Observation_Pack" value="3646"/>

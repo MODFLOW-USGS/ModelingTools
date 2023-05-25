@@ -179,8 +179,16 @@ begin
       end;
     end;
   end;
+
   if ARow = Ord(sfrNrdInfil) then
   begin
+    CanSelect := False;
+    // The option to specify infiltration locations is not included
+    // as of MODFLOW-OWHM version 4.3. If it is included, uncomment
+    // the following lines. A change would also need to be makde in
+    // the initialization section of frameDeliveryGridUnit
+
+    {
     if ACol in [Ord(sfcSfac), Ord(sfcSfacFile)] then
     begin
       CanSelect := False;
@@ -189,7 +197,9 @@ begin
     begin
       CanSelect := rdgSurfaceWater.ItemIndex[Ord(sfcFrequency), ARow] > 0;
     end;
+    }
   end;
+
   if (ACol = Ord(sfcFrequency)) then
   begin
     if ARow in [Ord(sfrSemiLower), Ord(sfrSemiUpper)] then

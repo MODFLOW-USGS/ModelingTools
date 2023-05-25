@@ -78,7 +78,7 @@ inherited frameFormulaGrid: TframeFormulaGrid
     end
     object comboChoice: TComboBox
       Left = 255
-      Top = 30
+      Top = 28
       Width = 145
       Height = 23
       Style = csDropDownList

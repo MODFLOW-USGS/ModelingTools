@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
-  <title translate="true">Farms Dialog Box</title>
+<topic template="Default" status="Under Construction" modified="2023-05-25T15:33:54.857-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Water Balance Subregions Dialog Box</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farms Dialog Box</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Water Balance Subregions Dialog Box</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farms</text><text styleclass="Normal" translate="true"> dialog box is used to specify properties of the farms. The dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">Model|Farm Process|Farms...</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the left is a list of farms identified by the Farm ID (</text><text styleclass="Strong" translate="true">FID</text><text styleclass="Normal" translate="true">) and an optional </text><text styleclass="Strong" translate="true">Farm name</text><text styleclass="Normal" translate="true">. The main part of the dialog box contains 7 tabs each of which are used to define properties of a farm. Farms can be edited individually by selecting a single farm from the list on the left. Multiple farms can be edited by selecting more than one farm from the list on the left. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This dialog box has several tabs that are used to define the properties of farms. Only those tabs that can be used in the current model will be visible.</text></para>
-    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_Efficiencies" styleclass="Normal" translate="true">Crop Efficiencies</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Costs" styleclass="Normal" translate="true">Costs</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Diversion_Location" styleclass="Normal" translate="true">Diversion Location</link><text styleclass="Normal" translate="true"> tab</text></li>

@@ -672,7 +672,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 465
+      Left = 208
       Top = 130
       Width = 212
       Height = 28
@@ -774,7 +774,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 208
+      Left = 433
       Top = 130
       Width = 244
       Height = 28
@@ -3506,8 +3506,8 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acEditFarms: TAction
       Category = 'Model'
-      Caption = 'Farms...'
-      Hint = 'Edit farms'
+      Caption = 'Water Balance Subregions (Farms)...'
+      Hint = 'Edit water balance subregions'
       OnExecute = acEditFarmsExecute
     end
     object acFootprintProperties: TAction

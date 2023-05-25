@@ -546,6 +546,7 @@ var
   DiversionCell: TReturnCell;
   DelivReturn: TSemiRoutedDeliveriesAndReturnFlowCollection;
   Fraction: string;
+  ItemIndex: Integer;
 begin
   ModelSelection := frmGoPhast.ModelSelection;
   for index := 0 to SrList.Count - 1 do
@@ -585,8 +586,12 @@ begin
               begin
                 DiversionObject.ScreenObject := nil;
               end;
-              DiversionObject.DiversionPosition :=
-                TDiversionPosition(Grid.ItemIndex[Ord(docChoice) + 2, TimeIndex]);
+              ItemIndex := Grid.ItemIndex[Ord(docChoice) + 2, TimeIndex];
+              if ItemIndex >= 0 then
+              begin
+                DiversionObject.DiversionPosition :=
+                  TDiversionPosition(ItemIndex);
+              end;
               if DiversionObject.DiversionPosition = dpMiddle then
               begin
                 DiversionObject.DiversionVertex :=

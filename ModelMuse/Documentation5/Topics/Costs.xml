@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-25T15:34:20.224-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Costs</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Costs</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Font Style" style="font-family:'Times New Roman'; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Farms</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Water_Policy_Flags" anchor="IDEFFL" styleclass="Normal" translate="true">acreage optimization</link><text styleclass="Normal" translate="true"> is used, the crops that will be irrigated depend on the profitability of the crops which depends in part on the costs of irrigating the crops. The </text><text styleclass="Strong" translate="true">Crops</text><text styleclass="Normal" translate="true"> tab is where the data for calculating those costs are specified.</text></para>
   </body>
 </topic>

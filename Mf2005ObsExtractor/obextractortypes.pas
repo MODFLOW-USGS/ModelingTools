@@ -63,7 +63,9 @@ function RemoveQuotes(AString: string): string;
 implementation
 
 uses
-  System.Math, System.StrUtils;
+  Math,
+  StrUtils
+  ;
 
 function FortranStrToFloat(AString: string): Extended;
 var
