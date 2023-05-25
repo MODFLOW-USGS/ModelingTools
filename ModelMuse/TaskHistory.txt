@@ -31166,5 +31166,33 @@ object TTaskHistory
         'Documentation'
         'Dialog boxes'
         'FMP')
+    end
+    item
+      Date = 45065.000000000000000000
+      Categories.Strings = (
+        'Bug fix')
+    end
+    item
+      Date = 45066.000000000000000000
+    end
+    item
+      Date = 45067.000000000000000000
+    end
+    item
+      Date = 45068.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'List File Analyzer')
+    end
+    item
+      Date = 45069.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Bug fix')
+    end
+    item
+      Date = 45070.000000000000000000
+      Categories.Strings = (
+        'Documentation')
     end>
 end

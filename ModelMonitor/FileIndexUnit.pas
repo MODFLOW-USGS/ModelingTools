@@ -240,23 +240,12 @@ procedure TFileIndex.GetLineStartingPositions(Offset: Int64;
   LineStarts: TIntList; const Text: string);
 var
   TextLength: Integer;
-//  NextPos: PWideChar;
-//  LineBreak: string;
-//  StartChar: PWideChar;
-//  InitialTextLength: Integer;
-//  SearchStart: PWideChar;
-//  SearchLength: Integer;
   AnsiText: AnsiString;
   NextLineBreak: integer;
   TestBreak: Integer;
 begin
   AnsiText := AnsiString(Text);
   TextLength := Length(AnsiText);
-
-//  TextLength := Length(Text);
-//  InitialTextLength := TextLength;
-//  StartChar := Addr(Text[1]);
-//  NextPos := StartChar;
 
   if LineBreakLength = 0 then
   begin
@@ -273,34 +262,6 @@ begin
       LineBreakLength := 1;
     end;
 
-
-//    SearchLength := Min(250,TextLength);
-//    repeat
-//      SearchLength := SearchLength*2;
-//      SearchLength := Min(SearchLength,TextLength);
-//      LineBreak := sLineBreak;
-//      SearchStart := NextPos;
-//      NextPos := SearchBuf(SearchStart, SearchLength, 0, 0, LineBreak,
-//        [soDown, soMatchCase]);
-//      if NextPos = nil then
-//      begin
-//        LineBreak := #13;
-//        NextPos := SearchBuf(SearchStart, SearchLength, 0, 0, LineBreak,
-//          [soDown, soMatchCase]);
-//      end;
-//      if NextPos = nil then
-//      begin
-//        LineBreak := #10;
-//        NextPos := SearchBuf(SearchStart, SearchLength, 0, 0, LineBreak,
-//          [soDown, soMatchCase]);
-//      end;
-//      if NextPos <> nil then
-//      begin
-//        break;
-//      end;
-//    until SearchLength >= TextLength;
-//
-//    LineBreakLength := Length(LineBreak);
   end;
 
   NextLineBreak := 1;
@@ -316,27 +277,11 @@ begin
       else
       begin
         Inc(NextLineBreak, LineBreakLength);
+//        LineStarts.Add(Offset + NextLineBreak -1);
       end;
     end
   until NextLineBreak = 0;
 
-
-//  repeat
-//    SearchStart := NextPos;
-//    NextPos := SearchBuf(SearchStart, TextLength, 0, 0, LineBreak,
-//      [soDown, soMatchCase]);
-//    if NextPos = nil then
-//    begin
-//      Break;
-//    end
-//    else
-//    begin
-//      Inc(NextPos, Length(LineBreak));
-//      LineStarts.Add((NextPos - StartChar) + Offset);
-//      TextLength := InitialTextLength + Offset
-//        - LineStarts[LineStarts.Count - 1];
-//    end;
-//  until False;
 end;
 
 function TFileIndex.GetNewLineFromOffset(Line, Offset: integer): integer;
@@ -408,6 +353,7 @@ var
   NextLine: string;
   LineIndex: integer;
   LineBreakPos: integer;
+//  LineEnd: string;
 begin
   FAbort := False;
   FFileName := Value;
@@ -478,10 +424,16 @@ begin
       Converter.Clear;
       Converter.Append(Buffer);
       AString := Converter.ToString;
-//      if AString[Length(AString)] = #10 then
-//      begin
-//        AString := Copy(AString,1, Length(AString)-1);
-//      end;
+//      LineEnd := '';
+      if AString[Length(AString)] = #10 then
+      begin
+        AString := Copy(AString,1, Length(AString)-1);
+//        NextLine := #10 + NextLine;
+        Dec(NumberRead);
+        SetLength(Buffer, NumberRead);
+        Dec(StartPosition);
+//        LineEnd := #10;
+      end;
       GetLineStartingPositions(OffSet, FPositions, AString);
       if Buffer[Length(Buffer)-1] = #13 then
       begin
@@ -537,14 +489,18 @@ begin
             end
             else
             begin
-              CurrentLine := Copy(AString,1,LineBreakPos+1);
+              CurrentLine := Copy(AString,1,LineBreakPos+LineBreakLength-1);
             end;
           end
           else
           begin
-            CurrentLine := NextLine + Copy(AString,1,LineBreakPos+1);
+            CurrentLine := NextLine + Copy(AString,1,LineBreakPos+LineBreakLength-1);
+            if CurrentLine[Length(CurrentLine)] = #10 then
+            begin
+//              CurrentLine := Copy(CurrentLine, 1, Length(CurrentLine)-1);
+            end;
           end;
-          NextLine := Copy(AString,LineBreakPos+2,MaxInt);
+          NextLine := Copy(AString,LineBreakPos+LineBreakLength,MaxInt);
         end;
         StartPosition := 0;
       end;

@@ -848,6 +848,7 @@ type
       ACol, ARow: Integer; const Value: string);
     procedure frameFmp4EfficiencyseNumberOfTimesChange(Sender: TObject);
     procedure btnImportVertexValuesClick(Sender: TObject);
+    procedure frameDynamicTimeSeriesbtnAddGroupClick(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -32548,6 +32549,13 @@ begin
   begin
     EmphasizeCheckBoxes([cbEnclosedCells, cbIntersectedCells, cbInterpolation]);
   end;
+end;
+
+procedure TfrmScreenObjectProperties.frameDynamicTimeSeriesbtnAddGroupClick(
+    Sender: TObject);
+begin
+  inherited;
+  frameDynamicTimeSeries.btnAddGroupClick(Sender);
 end;
 
 procedure TfrmScreenObjectProperties.SetMultipleScreenObjects(

@@ -9945,12 +9945,14 @@ const
 //                current layer to a Shapefile.
 //    '5.1.1.26' Enhancement: Added dynamic time series for MODFLOW 6.
 //               Bug fix: Fixed bug in assigning UZF as a MVR source in MODFLOW 6.
+//    '5.1.1.27'
 
+//               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.26';
+  IIModelVersion = '5.1.1.27';
 
 function IModelVersion: string;
 begin
