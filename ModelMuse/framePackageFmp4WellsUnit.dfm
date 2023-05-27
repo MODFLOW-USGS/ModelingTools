@@ -7,9 +7,9 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
     595
     514)
   object lblPumpSpread: TLabel [2]
-    Left = 261
+    Left = 271
     Top = 290
-    Width = 310
+    Width = 300
     Height = 30
     Caption = 
       'Specify how pumping demand should be allocated among MNW well no' +
@@ -30,8 +30,10 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
     Left = 223
     Top = 355
     Width = 248
-    Height = 15
-    Caption = 'Method for specifying well horizontal locations'
+    Height = 30
+    Caption = 
+      'Method for specifying well horizontal locations (INPUT_OPTION XY' +
+      ')'
     WordWrap = True
   end
   object lblSmoothing: TLabel [5]
@@ -59,7 +61,7 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
   object clbPrint: TCheckListBox [8]
     Left = 16
     Top = 165
-    Width = 233
+    Width = 249
     Height = 116
     Enabled = False
     ItemHeight = 15
@@ -75,7 +77,7 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
   object comboPumpSpread: TComboBox [9]
     Left = 16
     Top = 287
-    Width = 233
+    Width = 249
     Height = 23
     Style = csDropDownList
     Enabled = False

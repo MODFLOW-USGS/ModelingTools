@@ -156,8 +156,135 @@ object frameMultSemiRouted: TframeMultSemiRouted
         Width = 512
         Height = 298
         OnExit = frameFarmDiversionsGridExit
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = True
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = True
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end>
         ExplicitWidth = 512
         ExplicitHeight = 298
+        ColWidths = (
+          64
+          64
+          116
+          64
+          64)
       end
       inherited pnlTop: TPanel
         Width = 512

@@ -9947,6 +9947,10 @@ const
 //               Bug fix: Fixed bug in assigning UZF as a MVR source in MODFLOW 6.
 //    '5.1.1.27'
 
+//               Bug fix: Fixed bug in which the SUTRA data sets for regions
+//                were not properly renamed when opening old ModelMuse files
+//                containing data sets for regions.
+
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
@@ -14194,6 +14198,7 @@ var
   ChildModel: TChildModel;
   ChildDataArray: TDataArray;
 begin
+
   FDataArrayManager.DataSetsCapacity := FDataSetCollection.Count
     + FDataArrayManager.DataSetCount;
   for Index := 0 to FDataSetCollection.Count - 1 do
@@ -21451,7 +21456,9 @@ var
   Position: Integer;
   UnsatNodeDataArray: TDataArray;
   UnsatElementDataArray: TDataArray;
+  UpdatedDataArray: TDataArray;
 begin
+
   UpdateFarmProperties;
 
   CheckObservationGUIDs;
@@ -21905,6 +21912,41 @@ begin
     FixSutraMeshEdge;
   end;
 
+  if FileVersionEqualOrEarlier('5.0.0.11') then
+  begin
+    UnsatNodeDataArray := FDataArrayManager.GetDataSetByName('Unsat_Region_Nodes');
+    if UnsatNodeDataArray <> nil then
+    begin
+      FDataArrayManager.RemoveDataSetFromLookUpList(UnsatNodeDataArray);
+      UpdatedDataArray := FDataArrayManager.GetDataSetByName(KUnsatRegionNodes);
+      if UpdatedDataArray <> nil then
+      begin
+        UnsatNodeDataArray.OnDataSetUsed := UpdatedDataArray.OnDataSetUsed;
+        FDataArrayManager.RemoveDataSet(UpdatedDataArray);
+      end;
+      UnsatNodeDataArray.Name := KUnsatRegionNodes;
+      UnsatNodeDataArray.DisplayName := StrUnsatRegionNodesDisplayName;
+      FDataArrayManager.AddDataSetToLookUpList(UnsatNodeDataArray);
+    end;
+
+    UnsatElementDataArray := FDataArrayManager.GetDataSetByName('Unsat_Region_Elements');
+    if UnsatElementDataArray <> nil then
+    begin
+      UpdatedDataArray := FDataArrayManager.GetDataSetByName(KUnsatRegionElements);
+      FDataArrayManager.RemoveDataSetFromLookUpList(UnsatElementDataArray);
+      if UpdatedDataArray <> nil then
+      begin
+        UnsatElementDataArray.OnDataSetUsed := UpdatedDataArray.OnDataSetUsed;
+        FDataArrayManager.RemoveDataSet(UpdatedDataArray)
+      end;
+      UnsatElementDataArray.Name := KUnsatRegionElements;
+      UnsatElementDataArray.DisplayName := StrUnsatRegionElementsDisplayName;
+      FDataArrayManager.AddDataSetToLookUpList(UnsatElementDataArray);
+    end;
+  end;
+
+
+
   // prevent rounding errors in saved files from being used.
 //  for StressPeriodIndex := 0 to ModflowStressPeriods.Count - 1 do
 //  begin
@@ -21923,22 +21965,6 @@ begin
 //    Mt3dStressPeriod.EndTime := FortranStrToFloat(FortranFloatToStr(
 //      Mt3dStressPeriod.EndTime));
 //  end;
-  if FileVersionEqualOrEarlier('5.0.0.11') then
-  begin
-    UnsatNodeDataArray := FDataArrayManager.GetDataSetByName('Unsat_Region_Nodes');
-    if UnsatNodeDataArray <> nil then
-    begin
-      UnsatNodeDataArray.Name := KUnsatRegionNodes;
-      UnsatNodeDataArray.DisplayName := StrUnsatRegionNodesDisplayName;
-    end;
-
-    UnsatElementDataArray := FDataArrayManager.GetDataSetByName('Unsat_Region_Elements');
-    if UnsatElementDataArray <> nil then
-    begin
-      UnsatElementDataArray.Name := KUnsatRegionElements;
-      UnsatElementDataArray.DisplayName := StrUnsatRegionElementsDisplayName;
-    end;
-  end;
 
 end;
 

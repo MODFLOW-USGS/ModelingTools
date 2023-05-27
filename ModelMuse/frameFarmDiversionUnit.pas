@@ -128,7 +128,10 @@ begin
       case DiversionChoice of
         rtObject:
           begin
-            Grid.ColWidths[Ord(docObject)+2] := RequiredWidthForObjectOption;
+            if ModelSelection = msModflowFMP then
+            begin
+              Grid.ColWidths[Ord(docObject)+2] := RequiredWidthForObjectOption;
+            end;
 
             if ModelSelection = msModflowFmp then
             begin
@@ -619,6 +622,10 @@ begin
               if ModelSelection = msModflowOwhm2 then
               begin
                 DelivRetItem.Frac := Grid.Cells[Ord(dlFraction) + 2, TimeIndex];
+                if DelivRetItem.Frac = '' then
+                begin
+                  DelivRetItem.Frac := '1';
+                end;
                 if DiversionType = dtDiversion then
                 begin
                   DelivRetItem.LowerLimit := Grid.Cells[Ord(dlLowerLimit) + 2, TimeIndex];
@@ -897,12 +904,12 @@ var
   SfrBoundary: TSfrBoundary;
   SwrBoundary: TSwrReachBoundary;
 begin
+  LocalModel := frmGoPhast.PhastModel;
   comboSfrObjects.Items.BeginUpdate;
   try
     comboSfrObjects.Items.Clear;
-    if frmGoPhast.PhastModel.SfrIsSelected or frmGoPhast.PhastModel.SwrIsSelected then
+    if LocalModel.SfrIsSelected or LocalModel.SwrIsSelected then
     begin
-      LocalModel := frmGoPhast.PhastModel;
       if LocalModel.ModelSelection = msModflowFmp then
       begin
         comboSfrObjects.Items.Add('prorate over segments option');
@@ -948,7 +955,10 @@ begin
       Grid.Columns[ColIndex].AutoAdjustRowHeights := True;
       Grid.Columns[ColIndex].WordWrapCaptions := True;
     end;
-    Grid.Columns[Ord(docObject)+2].WordWrapCaptions := False;
+    if LocalModel.ModelSelection = msModflowFmp then
+    begin
+      Grid.Columns[Ord(docObject)+2].WordWrapCaptions := False;
+    end;
 
     for ColIndex := Succ(Ord(High(TDiversionTimeColumns))) to Grid.ColCount - 1 do
     begin

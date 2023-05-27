@@ -16,7 +16,7 @@ uses Classes, Contnrs, Controls, Forms, RbwParser, Undo, GoPhastTypes, AbstractG
   DataSetUnit, PhastDataSets, FluxObservationUnit, FormulaManagerUnit,
   DisplaySettingsUnit, Mt3dmsFluxObservationsUnit, FastGEO, SutraMeshUnit,
   IntListUnit, Graphics, MeshRenumberingTypes, DrawMeshTypesUnit,
-  ModflowIrregularMeshUnit, PointCollectionUnit;
+  ModflowIrregularMeshUnit, PointCollectionUnit, System.Generics.Collections;
 
 type
   {@abstract(@name is an abstract base class used as an ancestor
@@ -677,6 +677,9 @@ type
 //      write FParameterLayersUsed;
   end;
 
+
+  TPhastDataSetStorageObjectList = TObjectList<TPhastDataSetStorage>;
+
   // @name is used to add, delete, and change the properties of
   // @link(TDataArray TDataArrays).
   TUndoChangeDataSets = class(TCustomUndo)
@@ -693,12 +696,12 @@ type
     // It is used to store a series of instances of @link(TPhastDataSetStorage)
     // for old properties of @link(TDataArray TDataArrays)
     // or @link(TCustomPhastDataSet TCustomPhastDataSets).
-    FOldDataSetProperties: TList;
+    FOldDataSetProperties: TPhastDataSetStorageObjectList;
     // @name is implemented as a TObjectList.
     // It is used to store a series of instances of @link(TPhastDataSetStorage)
     // for new properties of @link(TDataArray TDataArrays)
     // or @link(TCustomPhastDataSet TCustomPhastDataSets).
-    FNewDataSetProperties: TList;
+    FNewDataSetProperties: TPhastDataSetStorageObjectList;
     FOldNames: TStringList;
     FNewNames: TStringList;
     // @name stores the current state of @link(TDataArrayManager.DataSets
@@ -713,9 +716,9 @@ type
     // @param(DeletedDataSets the existing data sets that have been deleted.)
     // @param(DataSetProperties stores a series of @link(TPhastDataSetStorage)
     // that store the properties of the @link(TDataArray TDataArrays).)
-    procedure SetProperties(AddedDataSets, DeletedDataSets,
-      DataSetProperties: TList);
-    procedure UpdateFormulas(DataSetProperties: TList);
+    procedure SetProperties(AddedDataSets, DeletedDataSets: TList;
+      DataSetProperties: TPhastDataSetStorageObjectList);
+    procedure UpdateFormulas(DataSetProperties: TPhastDataSetStorageObjectList);
   protected
     // @name describes what @classname does.
     function Description: string; override;
@@ -729,7 +732,7 @@ type
     // @link(TPhastDataSetStorage)s that define the changed properties of
     // existing @link(TDataArray)s.)
     Constructor Create(var DeletedDataSets, NewDataSets: TList;
-      var NewDataSetProperties: TObjectList);
+      var NewDataSetProperties: TPhastDataSetStorageObjectList);
     // @name returns @true if any of the @link(TDataArray TDataArrays) has
     // changed;
     function DataSetsChanged: boolean;
@@ -2241,7 +2244,7 @@ begin
 end;
 
 constructor TUndoChangeDataSets.Create(var DeletedDataSets, NewDataSets: TList;
-  var NewDataSetProperties: TObjectList);
+  var NewDataSetProperties: TPhastDataSetStorageObjectList);
 begin
   inherited Create;
   FOldNames := TStringList.Create;
@@ -2255,7 +2258,7 @@ begin
   FNewDataSets := NewDataSets;
   NewDataSets := nil;
 
-  FOldDataSetProperties:= TObjectList.Create;
+  FOldDataSetProperties:= TPhastDataSetStorageObjectList.Create;
 
 //  FNewDataSetProperties:= TObjectList.Create;
   // take over ownership of NewDataSetProperties;
@@ -2281,8 +2284,8 @@ begin
   inherited;
 end;
 
-procedure TUndoChangeDataSets.SetProperties(AddedDataSets, DeletedDataSets,
-  DataSetProperties: TList);
+procedure TUndoChangeDataSets.SetProperties(AddedDataSets, DeletedDataSets: TList;
+  DataSetProperties: TPhastDataSetStorageObjectList);
 var
   Index: integer;
 //  DataSet : TDataArray;
@@ -2501,7 +2504,7 @@ begin
   frmGoPhast.PhastModel.DisallowChildGridUpdates;
 end;
 
-procedure TUndoChangeDataSets.UpdateFormulas(DataSetProperties: TList);
+procedure TUndoChangeDataSets.UpdateFormulas(DataSetProperties: TPhastDataSetStorageObjectList);
 var
   VarIndex: Integer;
   Compiler: TRbwParser;
@@ -3548,6 +3551,23 @@ procedure TUndoRenumberMesh.UpdateElevations;
 begin
   frmGoPhast.SutraMesh.ElevationsNeedUpdating := True;
   frmGoPhast.SutraMesh.CheckUpdateElevations;
+  if frmGoPhast.PhastModel.ThreeDTimeList <> nil then
+  begin
+    frmGoPhast.PhastModel.ThreeDTimeList.Invalidate;
+  end;
+  if frmGoPhast.PhastModel.ThreeDContourDataSet <> nil then
+  begin
+    frmGoPhast.PhastModel.ThreeDContourDataSet.Invalidate;
+  end;
+  if frmGoPhast.PhastModel.TopTimeList <> nil then
+  begin
+    frmGoPhast.PhastModel.TopTimeList.Invalidate;
+  end;
+  if frmGoPhast.PhastModel.TopContourDataSet <> nil then
+  begin
+    frmGoPhast.PhastModel.TopContourDataSet.Invalidate;
+  end;
+//  frmGoPhast.PhastModel.DataArrayManager.InvalidateAllDataSets;
 //  Mesh := frmGoPhast.SutraMesh;
 //  if (Mesh <> nil) and (Mesh.MeshType = mt3D) then
 //  begin

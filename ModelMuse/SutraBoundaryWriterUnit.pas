@@ -850,12 +850,6 @@ begin
                           if (PQDataSet.RealData[LayerIndex, RowIndex,
                             ColIndex] > 0) and UsedBoundary then
                           begin
-                            if not PositiveDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
-                            begin
-                              frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
-                                Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
-                              Exit;
-                            end;
                             Assert(PositiveDataSet.IsValue[LayerIndex, RowIndex,
                               ColIndex] = PositiveUDataSet.IsValue[LayerIndex,
                               RowIndex, ColIndex]);
@@ -942,12 +936,6 @@ begin
                   begin
                     CellLocation.Column := ColIndex;
                     CellLocationAddr := Addr(CellLocation);
-                    if not MergedPQDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
-                    begin
-                      frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
-                        Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
-                      Exit;
-                    end;
                     Assert(MergedPQDataSet.IsValue[LayerIndex, RowIndex,
                       ColIndex] = MergedUDataSet.IsValue[LayerIndex, RowIndex,
                       ColIndex]);
@@ -1170,12 +1158,6 @@ begin
                     begin
                       CellLocation.Column := ColIndex;
                       CellLocationAddr := Addr(CellLocation);
-                      if not PQDataSet.IsValue[LayerIndex, RowIndex,ColIndex] then
-                      begin
-                        frmErrorsAndWarnings.AddError(Model, StrErrorEvaluatingBou,
-                          Format(StrErrorInLayer0d, [LayerIndex+1, ColIndex+1]));
-                        Exit;
-                      end;
                       Assert(PQDataSet.IsValue[LayerIndex, RowIndex, ColIndex]
                         = UDataSet.IsValue[LayerIndex, RowIndex, ColIndex]);
                       if PQDataSet.IsValue[LayerIndex, RowIndex, ColIndex] then

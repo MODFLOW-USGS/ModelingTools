@@ -550,6 +550,7 @@ type
     FSWAllotment: TAllotmentCollection;
     FFarmGUID: string;
     FSaltSupplyConcentrationCollection: TSaltSupplyConcentrationCollection;
+    FPumpSpreadChoice: TOwhmV2PumpSpreadChoice;
     procedure SetDeliveryParamCollection(const Value: TDeliveryParamCollection);
     procedure SetFarmCostsCollection(const Value: TFarmCostsCollection);
     procedure SetFarmId(const Value: Integer);
@@ -587,6 +588,7 @@ type
     procedure SetFarmGUID(const Value: string);
     procedure SetSaltSupplyConcentrationCollection(
       const Value: TSaltSupplyConcentrationCollection);
+    procedure SetPumpSpreadChoice(const Value: TOwhmV2PumpSpreadChoice);
   public
     function Used: boolean;
     procedure Assign(Source: TPersistent); override;
@@ -726,6 +728,8 @@ type
       stored False
     {$ENDIF}
       ;
+    property PumpSpreadChoice: TOwhmV2PumpSpreadChoice read FPumpSpreadChoice
+      write SetPumpSpreadChoice;
   end;
 
   TFarmCollection = class(TEnhancedOrderedCollection)
@@ -1495,6 +1499,7 @@ begin
     MultiSrReturns := SourceFarm.MultiSrReturns;
     SWAllotment := SourceFarm.SWAllotment;
     SaltSupplyConcentrationCollection := SourceFarm.SaltSupplyConcentrationCollection;
+    PumpSpreadChoice := SourceFarm.PumpSpreadChoice;
 
     FarmGUID := SourceFarm.FarmGUID;
 
@@ -1625,6 +1630,7 @@ begin
     SourceFarm := TFarm(AnotherItem);
     result :=
       (FarmId = SourceFarm.FarmId)
+      and (PumpSpreadChoice = SourceFarm.PumpSpreadChoice)
       and FarmEfficiencyCollection.IsSame(SourceFarm.FarmEfficiencyCollection)
       and FarmCostsCollection.IsSame(SourceFarm.FarmCostsCollection)
       and SemiRoutedDeliveries.IsSame(SourceFarm.SemiRoutedDeliveries)
@@ -1775,6 +1781,15 @@ end;
 procedure TFarm.SetNoReturnFlow(const Value: TNoReturnCollection);
 begin
   FNoReturnFlow.Assign(Value);
+end;
+
+procedure TFarm.SetPumpSpreadChoice(const Value: TOwhmV2PumpSpreadChoice);
+begin
+  if FPumpSpreadChoice <> Value then
+  begin
+    FPumpSpreadChoice := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TFarm.SetSaltSupplyConcentrationCollection(

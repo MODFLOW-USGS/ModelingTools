@@ -378,6 +378,8 @@ type
     function GetSalinityAppliedWaterCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteSalinityAppliedWater;
 
+    // SUPPLY_WELL
+    procedure WriteMnwPumpSpread;
     procedure WriteSupplyWells;
 
     procedure EvaluateCropHasSalinityDemand;
@@ -2279,6 +2281,52 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.WriteMnwPumpSpread;
+var
+  FarmID: Integer;
+  FarmIndex: Integer;
+  AFarm: TFarm;
+  InnerFarmIndex: Integer;
+begin
+  WriteString('  MNW_PUMP_SPREAD');
+  case FFarmWells4.MnwPumpSpread of
+    pscConductance:
+      begin
+        WriteString(' BY_COND');
+        NewLine;
+      end;
+    pscByNodeCount:
+      begin
+        WriteString(' BY_COUNT');
+        NewLine;
+      end;
+    pscTopNode:
+      begin
+        WriteString(' BY_TOP');
+        NewLine;
+      end;
+    pscByWbs:
+      begin
+        WriteString(' ByWBS');
+        NewLine;
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(0);
+            Inc(FarmID);
+            NewLine;
+          end;
+          WriteInteger(Ord(AFarm.PumpSpreadChoice));
+          Inc(FarmID);
+          NewLine;
+        end;
+      end;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteSurfaceElevation;
 var
   RequiredValues: TRequiredValues;
@@ -3342,23 +3390,33 @@ begin
           for FarmIndex := 0 to Model.Farms.Count - 1 do
           begin
             AFarm := Model.Farms[FarmIndex];
-            for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+            if AFarm.MultiSrDeliveries.Count > 0 then
             begin
-              SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+              for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+              begin
+                SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
 
-              WriteInteger(ISRD);
-              ADelivery := SrdCollection.ItemByStartTime(
-                StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-              if ADelivery = nil then
-              begin
-                WriteFloat(RequiredValues.DefaultValue);
-              end
-              else
-              begin
-//                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                WriteFloatValueFromGlobalFormula(ADelivery.LowerLimit,
-                  AFarm, 'Invalid semin-routed delivery lower limit');
+                WriteInteger(ISRD);
+                ADelivery := SrdCollection.ItemByStartTime(
+                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
+                if ADelivery = nil then
+                begin
+                  WriteFloat(RequiredValues.DefaultValue);
+                end
+                else
+                begin
+  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
+                  WriteFloatValueFromGlobalFormula(ADelivery.LowerLimit,
+                    AFarm, 'Invalid semin-routed delivery lower limit');
+                end;
+                NewLine;
+                Inc(ISRD);
               end;
+            end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteFloat(RequiredValues.DefaultValue);
               NewLine;
               Inc(ISRD);
             end;
@@ -3484,23 +3542,33 @@ begin
           for FarmIndex := 0 to Model.Farms.Count - 1 do
           begin
             AFarm := Model.Farms[FarmIndex];
-            for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+            if AFarm.MultiSrDeliveries.Count > 0 then
             begin
-              SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+              for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+              begin
+                SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
 
-              WriteInteger(ISRD);
-              ADelivery := SrdCollection.ItemByStartTime(
-                StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-              if ADelivery = nil then
-              begin
-                WriteFloat(RequiredValues.DefaultValue);
-              end
-              else
-              begin
-//                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                WriteFloatValueFromGlobalFormula(ADelivery.UpperLimit,
-                  AFarm, 'Invalid semin-routed delivery upper limit');
+                WriteInteger(ISRD);
+                ADelivery := SrdCollection.ItemByStartTime(
+                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
+                if ADelivery = nil then
+                begin
+                  WriteFloat(RequiredValues.DefaultValue);
+                end
+                else
+                begin
+  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
+                  WriteFloatValueFromGlobalFormula(ADelivery.UpperLimit,
+                    AFarm, 'Invalid semin-routed delivery upper limit');
+                end;
+                NewLine;
+                Inc(ISRD);
               end;
+            end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteFloat(RequiredValues.DefaultValue);
               NewLine;
               Inc(ISRD);
             end;
@@ -9923,6 +9991,9 @@ begin
 //          Assert(False);
 //        end;
 //    end;
+
+    WriteMnwPumpSpread;
+
 
     if FFarmWells4.WellXY = xyCoordinates then
     begin

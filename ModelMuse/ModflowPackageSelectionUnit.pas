@@ -4906,7 +4906,6 @@ Type
   TArrayList = (alArray, alList);
   TProrateDeficiencyOption = (pdoByDemand, pdoAverage);
   TRoutedReturnChoice = (rrcDefault, rrcNoReturn, rrcAnyNonDiversion, rrcAny);
-  TPumpSpreadChoice = (pscConductance, pscByNodeCount, pscTopNode, pscByWbs);
   TPumpLayerChoice = (plcLayer, plcElevation, plcDepth);
   TWellFormat = (wfTimeFrame, wfFarm, wfCapacity);
   TLandUseOption = (luoSingle, luoMultiple);
@@ -5473,13 +5472,13 @@ Type
   TFarmProcess4Wells = class(TCustomFarm4)
   private
     FWellFormat: TWellFormat;
-    FMnwPumpSpread: TPumpSpreadChoice;
+    FMnwPumpSpread: TOwhmV2PumpSpreadChoice;
     FWellXY: TXYChoice;
     FWellLayerChoice: TPumpLayerChoice;
     FFarmWellPrints: TFarmWellPrints;
     FSmoothing: TSmoothing;
     FProrateDemand: TProrateDemand;
-    procedure SetMnwPumpSpread(const Value: TPumpSpreadChoice);
+    procedure SetMnwPumpSpread(const Value: TOwhmV2PumpSpreadChoice);
     procedure SetWellFormat(const Value: TWellFormat);
     procedure SetWellLayerChoice(const Value: TPumpLayerChoice);
     procedure SetWellXY(const Value: TXYChoice);
@@ -5498,7 +5497,7 @@ Type
     property FarmWellPrints: TFarmWellPrints read FFarmWellPrints
       write SetFarmWellPrints;
     // MNW_PUMP_SPREAD
-    property MnwPumpSpread: TPumpSpreadChoice read FMnwPumpSpread
+    property MnwPumpSpread: TOwhmV2PumpSpreadChoice read FMnwPumpSpread
       write SetMnwPumpSpread;
     // INPUT_OPTION XY
     property WellXY: TXYChoice read FWellXY write SetWellXY;
@@ -5536,12 +5535,12 @@ Type
     property SurfaceWater: TFarmProperty read FSurfaceWater
       write SetSurfaceWater;
     property SurfaceWaterAllotmentMethod: TAllotmentMethod
-      read FSurfaceWaterAllotmentMethod write SetSurfaceWaterAllotmentMethod;
+      read FSurfaceWaterAllotmentMethod write SetSurfaceWaterAllotmentMethod stored True;
     // GROUNDWATER
     property GroundWater: TFarmProperty read FGroundWater
       write SetGroundWater;
     property GroundWaterAllotmentMethod: TAllotmentMethod
-      read FGroundWaterAllotmentMethod write SetGroundWaterAllotmentMethod;
+      read FGroundWaterAllotmentMethod write SetGroundWaterAllotmentMethod stored True;
   end;
 
                   {PRINT BYWBS,    NT BYWBS_BYCROP,      PRINT BYCROP}
@@ -26824,7 +26823,7 @@ begin
   end;
 end;
 
-procedure TFarmProcess4Wells.SetMnwPumpSpread(const Value: TPumpSpreadChoice);
+procedure TFarmProcess4Wells.SetMnwPumpSpread(const Value: TOwhmV2PumpSpreadChoice);
 begin
   if FMnwPumpSpread <> Value then
   begin
@@ -29475,8 +29474,8 @@ begin
   inherited;
   FSurfaceWater.Initialize;
   FGroundWater.Initialize;
-  FGroundWaterAllotmentMethod := amHeight;
-  FSurfaceWaterAllotmentMethod := amHeight;
+  FGroundWaterAllotmentMethod := amRate;
+  FSurfaceWaterAllotmentMethod := amRate;
 end;
 
 procedure TFarmProcess4Allotments.SetGroundWaterAllotmentMethod(

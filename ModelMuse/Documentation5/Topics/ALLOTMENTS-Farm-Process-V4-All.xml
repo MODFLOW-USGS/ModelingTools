@@ -1,9 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" modified="2023-03-31T14:28:05.084-04:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>ALLOTMENTS: Farm Process V4 Allotment Options</title>
+<topic template="Default" status="Under Construction" modified="2023-05-27T11:45:10.026-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ALLOTMENTS: Farm Process V4 Allotment Options</title>
   <body>
-    <header><para styleclass="Heading1">ALLOTMENTS: Farm Process V4 Allotment Options</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ALLOTMENTS: Farm Process V4 Allotment Options</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The ALLOTMENTS: Farm Process V4 Allotment Options pane is used to activate the allotment options in the Farm Process in MODFLOW-OWHM version 2 and specify surface water or groundwater allotments for it. It is in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm-Process-(for-MODFLOW-OWHM" styleclass="Normal" translate="true">Farm Process</link><text styleclass="Normal" translate="true"> group on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Allotment_Dialog_Box" styleclass="Strong" translate="true">Farm Allotment</link><text styleclass="Normal" translate="true"> dialog box is only used with version 3 of the Farm Process not with version 4.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Both </text><text styleclass="Strong" translate="true">Surface Water Allotment</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Strong" translate="true">Groundwater Allotment</text><text styleclass="Normal" translate="true"> can be static or transient. Both are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box. There are three options for how the allotments are specified.</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">RATE</text><text styleclass="Normal" translate="true"> (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T) volumetric rate limit.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">VOLUME</text><text styleclass="Normal" translate="true"> (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">) per stress period.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">HEIGHT</text><text styleclass="Normal" translate="true"> (L) per stress period - multiplied by water balance subregion irrigated area to get volume per stress period.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Use of </text><text styleclass="Strong" translate="true">VOLUME</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Strong" translate="true">HEIGHT</text><text styleclass="Normal" translate="true"> will cause incorrect model input if ModelMuse inserts additional stress periods because some boundary conditions are defined at times that do not correspond to the times defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Time</link><text styleclass="Normal" translate="true"> dialog box..</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Strong"></para>
   </body>
 </topic>

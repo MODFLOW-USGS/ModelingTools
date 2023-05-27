@@ -228,6 +228,7 @@ var
   SfrNode: TTreeNode;
   Index: Integer;
   SrItem: TMultiSrdItem;
+  ParentNode: TTreeNode;
 begin
   if FSrList.Count >= 0 then
   begin
@@ -250,6 +251,21 @@ begin
       Controller.Enabled := True;
       seNumber.AsInteger := FFarmNode.Count;
       Exit;
+    end
+    else
+    begin
+      ParentNode := tvSRCollections.Selected.Parent;
+      if ParentNode <> nil then
+      begin
+        AnObject := ParentNode.Data;
+        if AnObject is TFarm then
+        begin
+          FFarm := TFarm(AnObject);
+          FFarmNode := ParentNode;
+          Controller.Enabled := True;
+          seNumber.AsInteger := FFarmNode.Count;
+        end
+      end;
     end;
   end;
 

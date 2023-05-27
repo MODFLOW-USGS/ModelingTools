@@ -4705,8 +4705,11 @@ begin
   MustAdd := False;
   if NameChanged and (Name <> '') then
   begin
-    LocalModel.ThreeDGridObserver.StopsTalkingTo(self);
-    LocalModel.TopGridObserver.StopsTalkingTo(self);
+    if LocalModel <> nil then
+    begin
+      LocalModel.ThreeDGridObserver.StopsTalkingTo(self);
+      LocalModel.TopGridObserver.StopsTalkingTo(self);
+    end;
   end;
   if NameChanged then
   begin
@@ -4723,29 +4726,38 @@ begin
       end;
     end;
 
-    if LocalModel.DataArrayManager.GetDataSetByName(Name) <> nil then
+    if LocalModel <> nil then
     begin
-      LocalModel.DataArrayManager.RemoveDataSetFromLookUpList(self);
-      MustAdd := True;
+      if LocalModel.DataArrayManager.GetDataSetByName(Name) <> nil then
+      begin
+        LocalModel.DataArrayManager.RemoveDataSetFromLookUpList(self);
+        MustAdd := True;
+      end;
     end;
   end;
   inherited;
   if MustAdd then
   begin
-    LocalModel.DataArrayManager.AddDataSetToLookUpList(self);
+    if LocalModel <> nil then
+    begin
+      LocalModel.DataArrayManager.AddDataSetToLookUpList(self);
+    end;
   end;
   if NameChanged then
   begin
-    case FOrientation of
-      dsoTop:
-        begin
-          LocalModel.TopGridObserver.TalksTo(self);
-        end;
-      dsoFront, dsoSide, dso3D:
-        begin
-          LocalModel.ThreeDGridObserver.TalksTo(self);
-        end;
-      else Assert(False);
+    if LocalModel <> nil then
+    begin
+      case FOrientation of
+        dsoTop:
+          begin
+            LocalModel.TopGridObserver.TalksTo(self);
+          end;
+        dsoFront, dsoSide, dso3D:
+          begin
+            LocalModel.ThreeDGridObserver.TalksTo(self);
+          end;
+        else Assert(False);
+      end;
     end;
   end;
   frmGoPhast.InvalidateModel;

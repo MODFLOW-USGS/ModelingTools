@@ -33,6 +33,9 @@ var
 
 implementation
 
+uses
+  GoPhastTypes;
+
 {$R *.dfm}
 
 { TframePackageFmp4Wells }
@@ -76,7 +79,7 @@ begin
   end;
   FrmWellPackage.FarmWellPrints := PrintChoices;
 
-  FrmWellPackage.MnwPumpSpread := TPumpSpreadChoice(comboPumpSpread.ItemIndex);
+  FrmWellPackage.MnwPumpSpread := TOwhmV2PumpSpreadChoice(comboPumpSpread.ItemIndex);
   FrmWellPackage.WellXY := TXYChoice(comboXY.ItemIndex);
   FrmWellPackage.WellLayerChoice := TPumpLayerChoice(comboWellLayer.ItemIndex);
   FrmWellPackage.Smoothing := TSmoothing(comboSmoothing.ItemIndex);

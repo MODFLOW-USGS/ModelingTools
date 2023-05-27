@@ -2538,7 +2538,7 @@ var
   UndoImportResults : TUndoImportModelResults;
   UndoChangeDataSets: TUndoChangeDataSets;
   DeletedDataSets: TList;
-  NewDataSetProperties : TObjectList;
+  NewDataSetProperties : TPhastDataSetStorageObjectList;
   DataArray: TDataArray;
   DataStorage: TPhastDataSetStorage;
   UndoDeleteScreenObjects: TUndoDeleteScreenObjects;
@@ -3410,7 +3410,7 @@ begin
       UndoImportResults := TUndoImportModelResults.Create(NewDataSets,
         DataSetNames, OldComments, New3DArray, DisplayChoice, frmGoPhast.PhastModel);
       DeletedDataSets := TList.Create;
-      NewDataSetProperties := TObjectList.Create;
+      NewDataSetProperties := TPhastDataSetStorageObjectList.Create;
       try
         for Index := 0 to NewDataSets.Count - 1 do
         begin

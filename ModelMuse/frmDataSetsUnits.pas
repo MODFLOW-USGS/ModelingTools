@@ -1190,7 +1190,7 @@ var
   Index: Integer;
   DataSet: TDataArray;
   DataStorage: TPhastDataSetStorage;
-  NewDataSetProperties : TObjectList;
+  NewDataSetProperties : TPhastDataSetStorageObjectList;
   ArrayEdit: TDataArrayEdit;
   DataSetsDeleted: Boolean;
   ANode: TTreeNode;
@@ -1204,7 +1204,7 @@ begin
 
     DeletedDataSets := TList.Create;
     NewDataSets:= TList.Create;
-    NewDataSetProperties := TObjectList.Create;
+    NewDataSetProperties := TPhastDataSetStorageObjectList.Create;
 
     try
       // store deleted data sets.

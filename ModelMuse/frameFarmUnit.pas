@@ -60,6 +60,10 @@ type
     frameSwAllotment: TframeFormulaGrid;
     tabWaterSupplyConcentration: TTabSheet;
     frameWaterSupplyConcentration: TframeFormulaGrid;
+    tabName: TTabSheet;
+    PanelOwhm2: TPanel;
+    comboPumpSpread: TComboBox;
+    lblPumpSpread: TLabel;
     procedure frameFormulaGridCropsedFormulaChange(Sender: TObject);
     procedure frameFormulaGridCropsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -301,6 +305,7 @@ type
       EffCollection: TFarmEfficiencyCollection);
     procedure SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection;
       AFrame: TframeFormulaGrid);
+    procedure GetPumpSpreadForFirstFarm(FirstFarm: TFarm);
 
     { Private declarations }
   public
@@ -592,6 +597,7 @@ begin
         GetGwAllotmentForFirstFarm(FirstFarm);
         GetSwAllotmentForFirstFarm(FirstFarm);
         GetWaterSupplyConcentrationForFirstFarm(FirstFarm);
+        GetPumpSpreadForFirstFarm(FirstFarm);
 
         if FarmList.Count = 1 then
         begin
@@ -606,6 +612,16 @@ begin
           seFarmId.Enabled := False;
           edFarmName.Text := '';
           edFarmName.Enabled := False;
+        end;
+
+        for ItemIndex := 1 to FarmList.Count - 1 do
+        begin
+          AFarm := FarmList[ItemIndex];
+          if AFarm.PumpSpreadChoice <> FirstFarm.PumpSpreadChoice then
+          begin
+            comboPumpSpread.ItemIndex := -1;
+            break;
+          end;
         end;
 
         for ItemIndex := 1 to FarmList.Count - 1 do
@@ -2027,6 +2043,7 @@ var
   IrrigationType: TIrrigationItem;
   IrrigationTypes: TIrrigationCollection;
   Packages: TModflowPackages;
+  Units: string;
 begin
   seFarmId.AsInteger := 0;
   edFarmName.Text := '';
@@ -2266,6 +2283,12 @@ begin
     end;
     frameFormulaGridWaterRights.LayoutMultiRowEditControls;
 
+    Units := '';
+    case Packages.FarmAllotments.GroundWaterAllotmentMethod of
+      amHeight: Units := ' (L)';
+      amVolume: Units := ' (L^3)';
+      amRate: Units := ' (L^3/T)';
+    end;
     Grid := frameGW_Allocation.Grid;
     ClearGrid(Grid);
     Grid.BeginUpdate;
@@ -2273,7 +2296,7 @@ begin
       frameGW_Allocation.FirstFormulaColumn := Ord(gacAllotment);
       Grid.Cells[Ord(gacStartTime), 0] := StrStartingTime;
       Grid.Cells[Ord(gacEndTime), 0] := StrEndingTime;
-      Grid.Cells[Ord(gacAllotment), 0] := 'Groundwater allotment';
+      Grid.Cells[Ord(gacAllotment), 0] := 'Groundwater allotment' + Units;
       Grid.Columns[Ord(gacStartTime)].PickList := StartTimes;
       Grid.Columns[Ord(gacEndTime)].PickList := EndTimes;
       Grid.Columns[Ord(gacStartTime)].ComboUsed := True;
@@ -2283,6 +2306,12 @@ begin
     end;
     frameGW_Allocation.LayoutMultiRowEditControls;
 
+    Units := '';
+    case Packages.FarmAllotments.SurfaceWaterAllotmentMethod of
+      amHeight: Units := ' (L)';
+      amVolume: Units := ' (L^3)';
+      amRate: Units := ' (L^3/T)';
+    end;
     Grid := frameSwAllotment.Grid;
     ClearGrid(Grid);
     Grid.BeginUpdate;
@@ -2290,7 +2319,7 @@ begin
       frameSwAllotment.FirstFormulaColumn := Ord(gacAllotment);
       Grid.Cells[Ord(gacStartTime), 0] := StrStartingTime;
       Grid.Cells[Ord(gacEndTime), 0] := StrEndingTime;
-      Grid.Cells[Ord(gacAllotment), 0] := 'Surface-water allotment';
+      Grid.Cells[Ord(gacAllotment), 0] := 'Surface-water allotment' + Units;
       Grid.Columns[Ord(gacStartTime)].PickList := StartTimes;
       Grid.Columns[Ord(gacEndTime)].PickList := EndTimes;
       Grid.Columns[Ord(gacStartTime)].ComboUsed := True;
@@ -2386,6 +2415,7 @@ var
   Crops: TCropCollection;
   IntValue: Integer;
   IrrigationTypes: TIrrigationCollection;
+  PumpSpreadChoice: TOwhmV2PumpSpreadChoice;
 begin
   if FChangedID then
   begin
@@ -2397,6 +2427,17 @@ begin
       Farm.FarmName := edFarmName.Text;
     end;
   end;
+
+  if comboPumpSpread.ItemIndex >= 0 then
+  begin
+    PumpSpreadChoice := TOwhmV2PumpSpreadChoice(comboPumpSpread.ItemIndex);
+    for index := 0 to FarmList.Count - 1 do
+    begin
+      Farm := FarmList[index];
+      Farm.PumpSpreadChoice := PumpSpreadChoice;
+    end;
+  end;
+
   IrrigationTypes := frmGoPhast.PhastModel.IrrigationTypes;
   if FChangedCrops then
   begin
@@ -2595,6 +2636,11 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TframeFarm.GetPumpSpreadForFirstFarm(FirstFarm: TFarm);
+begin
+  comboPumpSpread.ItemIndex := Ord(FirstFarm.PumpSpreadChoice);
 end;
 
 procedure TframeFarm.SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection; AFrame: TframeFormulaGrid);

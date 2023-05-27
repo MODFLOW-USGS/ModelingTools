@@ -9,8 +9,8 @@ inherited frmDataSets: TfrmDataSets
   Font.Height = 19
   OnActivate = FormActivate
   OnClose = FormClose
-  ExplicitWidth = 636
-  ExplicitHeight = 497
+  ExplicitWidth = 632
+  ExplicitHeight = 496
   TextHeight = 19
   object Splitter1: TSplitter
     Left = 295
@@ -29,13 +29,13 @@ inherited frmDataSets: TfrmDataSets
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 394
-    ExplicitWidth = 632
+    ExplicitTop = 389
+    ExplicitWidth = 616
     DesignSize = (
       620
       41)
     object btnOK: TBitBtn
-      Left = 393
+      Left = 389
       Top = 2
       Width = 91
       Height = 33
@@ -63,10 +63,10 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOKClick
-      ExplicitLeft = 429
+      ExplicitLeft = 385
     end
     object btnCancel: TBitBtn
-      Left = 490
+      Left = 486
       Top = 2
       Width = 91
       Height = 33
@@ -75,7 +75,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnCancelClick
-      ExplicitLeft = 526
+      ExplicitLeft = 482
     end
     object btnAdd: TButton
       Left = 8
@@ -96,7 +96,7 @@ inherited frmDataSets: TfrmDataSets
       OnClick = btnDeleteClick
     end
     object btnHelp: TBitBtn
-      Left = 296
+      Left = 292
       Top = 2
       Width = 91
       Height = 33
@@ -105,7 +105,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
-      ExplicitLeft = 332
+      ExplicitLeft = 288
     end
   end
   object sbStatusBar: TStatusBar
@@ -116,8 +116,8 @@ inherited frmDataSets: TfrmDataSets
     Panels = <>
     ParentColor = True
     SimplePanel = True
-    ExplicitTop = 435
-    ExplicitWidth = 632
+    ExplicitTop = 430
+    ExplicitWidth = 616
   end
   object tvDataSets: TTreeView
     Left = 0
@@ -134,6 +134,8 @@ inherited frmDataSets: TfrmDataSets
     OnChange = tvDataSetsChange
     OnChanging = tvDataSetsChanging
     OnMouseDown = tvDataSetsMouseDown
+    ExplicitWidth = 291
+    ExplicitHeight = 389
   end
   object pcDataSets: TJvPageControl
     Left = 300
@@ -143,8 +145,8 @@ inherited frmDataSets: TfrmDataSets
     ActivePage = tabBasic
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 312
-    ExplicitHeight = 394
+    ExplicitLeft = 296
+    ExplicitHeight = 389
     object tabBasic: TTabSheet
       Caption = 'Basic'
       DesignSize = (
@@ -361,6 +363,7 @@ inherited frmDataSets: TfrmDataSets
         ScrollBars = ssBoth
         TabOrder = 8
         OnExit = reDefaultFormulaExit
+        ExplicitHeight = 79
       end
       object comboUnits: TComboBox
         Left = 149
@@ -550,7 +553,7 @@ inherited frmDataSets: TfrmDataSets
       ImageIndex = 2
       object Splitter2: TSplitter
         Left = 0
-        Top = 169
+        Top = 164
         Width = 312
         Height = 5
         Cursor = crVSplit
@@ -561,7 +564,7 @@ inherited frmDataSets: TfrmDataSets
         Left = 0
         Top = 0
         Width = 312
-        Height = 169
+        Height = 164
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
@@ -569,17 +572,18 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 69
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Comment'
+          ExplicitWidth = 69
         end
         object reComment: TRichEdit
           AlignWithMargins = True
           Left = 3
           Top = 28
           Width = 306
-          Height = 138
+          Height = 133
           Align = alClient
           ScrollBars = ssBoth
           TabOrder = 0
@@ -596,15 +600,15 @@ inherited frmDataSets: TfrmDataSets
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 174
         object lblAssociatedDataSets: TLabel
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 164
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
+          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

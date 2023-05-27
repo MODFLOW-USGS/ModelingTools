@@ -16,7 +16,7 @@ uses
   Windows, Forms, SysUtils, Types,
   Classes, Graphics, Controls, Dialogs, StdCtrls, Grids,
   VirtualTrees, DataSetUnit, GLWin32Viewer, Generics.Collections,
-  JvListComb, Vcl.ExtCtrls;
+  JvListComb, Vcl.ExtCtrls, Vcl.ComCtrls;
 
 type
   EAbortingImport = class(Exception);

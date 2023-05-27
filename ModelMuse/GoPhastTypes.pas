@@ -462,6 +462,8 @@ type
 
   TMf6InterpolationMethods = (mimStepwise, mimLinear, mimLinearEnd);
 
+  TOwhmV2PumpSpreadChoice = (pscConductance, pscByNodeCount, pscTopNode, pscByWbs);
+
   TBaseModel = class;
 
   TElementOutline = record

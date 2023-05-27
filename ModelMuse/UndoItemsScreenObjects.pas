@@ -4584,7 +4584,7 @@ var
   ADataArray: TDataArray;
   DataSetsToDelete: TList;
   NewDataSets: TList;
-  NewDataSetProperties: TObjectList;
+  NewDataSetProperties: TPhastDataSetStorageObjectList;
   PhastModel: TPhastModel;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
@@ -4598,7 +4598,7 @@ begin
   // There are no new data sets but the following two variables
   // are needed for the inherited constructor.
   NewDataSets := TList.Create;
-  NewDataSetProperties := TObjectList.Create;
+  NewDataSetProperties := TPhastDataSetStorageObjectList.Create;
 //  NewDataSets: TList;
   try
     for DataSetIndex := 0 to DataArrayManager.DataSetCount - 1 do

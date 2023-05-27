@@ -7,7 +7,8 @@ uses
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, StdCtrls,
   Buttons, ExtCtrls, frameScreenObjectUnit, frameFarmUnit, VirtualTrees,
   Mask, JvExMask, JvSpin, ModflowFmpFarmUnit, UndoItems,
-  ModelMuseFarmFormInterfacesUnit, GoPhastTypes;
+  ModelMuseFarmFormInterfacesUnit, GoPhastTypes, System.Win.VCLCom,
+  Vcl.ComCtrls;
 
 type
   TUndoEditFarms = class(TCustomUndo)
@@ -133,10 +134,25 @@ begin
 end;
 
 procedure TfrmFarm.FormShow(Sender: TObject);
+var
+  PageIndex: Integer;
+  APage: TTabSheet;
 begin
   inherited;
   if GlobalFont <> nil then
   begin
+    for PageIndex := 0 to frameFarm.pcMain.PageCount - 1 do
+    begin
+      APage := frameFarm.pcMain.Pages[PageIndex];
+      APage.Font := GlobalFont;
+//      APage.Color := GlobalColor;
+      UpdateSubComponents(APage);
+    end;
+
+//    frameFarm.PanelOwhm2.Font := GlobalFont;
+//    frameFarm.PanelOwhm2.Color := GlobalColor;
+//    UpdateSubComponents(frameFarm.PanelOwhm2);
+
     frameFarm.frameFormulaGridCosts.Font := GlobalFont;
     frameFarm.frameFormulaGridCosts.Color := GlobalColor;
     UpdateSubComponents(frameFarm.frameFormulaGridCosts);
@@ -278,6 +294,7 @@ begin
   begin
     frameFarm.tabCrops.Caption := 'Irrigation Efficiencies';
   end;
+  frameFarm.PanelOwhm2.Visible := FModel.ModelSelection <> msModflowFMP;
   FFarms.Assign(frmGoPhast.PhastModel.Farms);
   vstFarms.HasChildren[vstFarms.RootNode] := FFarms.Count > 0;
   vstFarms.ChildCount[vstFarms.RootNode] := FFarms.Count;

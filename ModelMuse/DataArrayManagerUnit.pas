@@ -4804,6 +4804,7 @@ begin
       end;
     end;
   end;
+  RemoveDataSetFromLookUpList(ADataArray);
   FDataSets.Remove(ADataArray);
 end;
 

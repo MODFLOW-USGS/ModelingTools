@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabWaterSupplyConcentration
+    ActivePage = tabCrops
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -47,24 +47,108 @@ inherited frameFarm: TframeFarm
     TabSelectedStyle.Gradient.Active = False
     TabSelectedStyle.Gradient.Orientation = fgdHorizontal
     Options = [ftoAutoFontDirection, ftoExcludeGlyphs, ftoInheriteTabFonts, ftoWordWrap]
-    object tabCrops: TTabSheet
-      HelpType = htKeyword
-      HelpKeyword = 'Crop_Efficiencies'
-      Caption = 'Crop Efficiencies'
-      inline frameFormulaGridCrops: TframeFormulaGrid
+    object tabName: TTabSheet
+      Caption = 'Name'
+      ImageIndex = 20
+      object pnlTop: TPanel
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 65
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 0
+        object lblFarmId: TLabel
+          Left = 130
+          Top = 34
+          Width = 79
+          Height = 16
+          Caption = 'Farm ID (FID)'
+        end
+        object seFarmId: TJvSpinEdit
+          Left = 3
+          Top = 31
+          Width = 121
+          Height = 24
+          MaxValue = 2147483647.000000000000000000
+          TabOrder = 1
+          OnChange = seFarmIdChange
+        end
+        object pnlCaption: TPanel
+          Left = 0
+          Top = 0
+          Width = 577
+          Height = 25
+          Align = alTop
+          BevelInner = bvRaised
+          BevelOuter = bvNone
+          TabOrder = 0
+        end
+        object edFarmName: TLabeledEdit
+          Left = 256
+          Top = 31
+          Width = 185
+          Height = 24
+          EditLabel.Width = 66
+          EditLabel.Height = 24
+          EditLabel.Caption = 'Farm name'
+          LabelPosition = lpRight
+          TabOrder = 2
+          Text = ''
+          OnChange = seFarmIdChange
+        end
+      end
+      object PanelOwhm2: TPanel
         Left = 0
         Top = 65
         Width = 577
         Height = 267
         Align = alClient
         TabOrder = 1
-        ExplicitTop = 65
+        object lblPumpSpread: TLabel
+          Left = 261
+          Top = 13
+          Width = 290
+          Height = 32
+          Caption = 
+            'Specify how pumping demand should be allocated among MNW well no' +
+            'des (MNW_PUMP_SPREAD)'
+          Constraints.MaxWidth = 310
+          WordWrap = True
+        end
+        object comboPumpSpread: TComboBox
+          Left = 3
+          Top = 10
+          Width = 233
+          Height = 24
+          Style = csDropDownList
+          ItemIndex = 0
+          TabOrder = 0
+          Text = 'By node conductance (0)'
+          Items.Strings = (
+            'By node conductance (0)'
+            'Evenly among nodes (1)'
+            'Assign to top node (2)')
+        end
+      end
+    end
+    object tabCrops: TTabSheet
+      HelpType = htKeyword
+      HelpKeyword = 'Crop_Efficiencies'
+      Caption = 'Crop Efficiencies'
+      inline frameFormulaGridCrops: TframeFormulaGrid
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 332
+        Align = alClient
+        TabOrder = 0
         ExplicitWidth = 577
-        ExplicitHeight = 267
+        ExplicitHeight = 332
         inherited Panel: TPanel
-          Top = 226
+          Top = 291
           Width = 577
-          ExplicitTop = 226
+          ExplicitTop = 291
           ExplicitWidth = 577
           DesignSize = (
             577
@@ -105,7 +189,7 @@ inherited frameFarm: TframeFarm
         end
         inherited Grid: TRbwDataGrid4
           Width = 577
-          Height = 169
+          Height = 234
           ColCount = 3
           OnSetEditText = frameFormulaGridCropsGridSetEditText
           OnButtonClick = frameFormulaGridCropsGridButtonClick
@@ -183,7 +267,7 @@ inherited frameFarm: TframeFarm
               AutoAdjustColWidths = False
             end>
           ExplicitWidth = 577
-          ExplicitHeight = 169
+          ExplicitHeight = 234
           RowHeights = (
             27
             27)
@@ -206,54 +290,6 @@ inherited frameFarm: TframeFarm
             Height = 24
             ExplicitHeight = 24
           end
-        end
-      end
-      object pnlTop: TPanel
-        Left = 0
-        Top = 0
-        Width = 577
-        Height = 65
-        Align = alTop
-        BevelOuter = bvNone
-        TabOrder = 0
-        object lblFarmId: TLabel
-          Left = 130
-          Top = 34
-          Width = 79
-          Height = 16
-          Caption = 'Farm ID (FID)'
-        end
-        object seFarmId: TJvSpinEdit
-          Left = 3
-          Top = 31
-          Width = 121
-          Height = 24
-          MaxValue = 2147483647.000000000000000000
-          TabOrder = 1
-          OnChange = seFarmIdChange
-        end
-        object pnlCaption: TPanel
-          Left = 0
-          Top = 0
-          Width = 577
-          Height = 25
-          Align = alTop
-          BevelInner = bvRaised
-          BevelOuter = bvNone
-          TabOrder = 0
-        end
-        object edFarmName: TLabeledEdit
-          Left = 256
-          Top = 31
-          Width = 185
-          Height = 24
-          EditLabel.Width = 66
-          EditLabel.Height = 24
-          EditLabel.Caption = 'Farm name'
-          LabelPosition = lpRight
-          TabOrder = 2
-          Text = ''
-          OnChange = seFarmIdChange
         end
       end
     end
@@ -1372,14 +1408,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited rdeY: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
-          inherited rdeRow: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeCol: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1397,6 +1425,14 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited rdeX: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeY: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeRow: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -1523,14 +1559,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited rdeY: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
-          inherited rdeRow: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeCol: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1548,6 +1576,14 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited rdeX: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeY: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeRow: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -2169,7 +2205,6 @@ inherited frameFarm: TframeFarm
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitTop = 58
           ExplicitWidth = 577
           ExplicitHeight = 234
         end
