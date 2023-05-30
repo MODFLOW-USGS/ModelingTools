@@ -948,7 +948,7 @@ begin
                         begin
                           ObservationName := Format('%0:s_%1:d',
                             [HeadDrawdown.FName, ObservationIndex+1]);
-                          DirectObsLines.Add(Format('  OBSNAME %0:s 1:g',
+                          DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
                             ['ddn_' + ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
                           if LastTime < Observation.Time then

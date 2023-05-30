@@ -497,6 +497,7 @@ type
     FMaxLeachingRequirementCollection: TOwhmCollection;
     FLeachingRequirementCollection: TLeachCollection;
     FSalinityAppliedWater: TLeachCollection;
+    FPrint: Boolean;
     procedure SetRootPressureCollection(const Value: TRootPressureCollection);
     procedure SetGroundwaterRootInteraction(
       const Value: TGroundwaterRootInteraction);
@@ -510,6 +511,7 @@ type
     procedure SetMaxLeachingRequirementCollection(const Value: TOwhmCollection);
     procedure SetLeachingRequirementCollection(const Value: TLeachCollection);
     procedure SetSalinityAppliedWater(const Value: TLeachCollection);
+    procedure SetPrint(const Value: Boolean);
     const
     PSI1Position = 0;
     PSI2Position = 1;
@@ -818,6 +820,11 @@ type
       stored False
     {$ENDIF}
     ;
+    property Print: Boolean
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+     read FPrint write SetPrint;
   end;
 
   TCropCollection = class(TCustomFarmCollection)
@@ -1838,6 +1845,7 @@ begin
     MaxLeachingRequirementCollection := SourceItem.MaxLeachingRequirementCollection;
     LeachingRequirementCollection := SourceItem.LeachingRequirementCollection;
     SalinityAppliedWater := SourceItem.SalinityAppliedWater;
+    Print := SourceItem.Print;
   end;
   inherited;
 end;
@@ -2087,6 +2095,7 @@ begin
       and (SWLossFractionPrecipDataArrayName = OtherItem.SWLossFractionPrecipDataArrayName)
       and (AddedDemandDataArrayName = OtherItem.AddedDemandDataArrayName)
       and (CropHasSalinityDemandDataArrayName = OtherItem.CropHasSalinityDemandDataArrayName)
+      and (Print = OtherItem.Print)
   end;
 end;
 
@@ -2702,6 +2711,11 @@ end;
 procedure TCropItem.SetPondDepthCollection(const Value: TOwhmCollection);
 begin
   FPondDepthCollection.Assign(Value);
+end;
+
+procedure TCropItem.SetPrint(const Value: Boolean);
+begin
+  SetBooleanProperty(FPrint, Value);
 end;
 
 procedure TCropItem.SetRootDepthDataArrayName(const NewName: string);

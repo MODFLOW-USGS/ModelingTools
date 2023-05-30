@@ -777,6 +777,7 @@ document.write('</frameset>');
       <helpcontext-number href="CHOB_Specified_Head_Flow_ObsObjects" value="3469"/>
       <helpcontext-number href="CLIMATE-Farm-Process-V4-Climat" value="4415"/>
       <helpcontext-number href="CLIMATE-Farm-Process-V4-Climat#PRECIPITATION_POTENTIAL_CONSUMPTION" value="4424"/>
+      <helpcontext-number href="CLIMATE-Farm-Process-V4-Climat#REFERENCE_ET" value="4427"/>
       <helpcontext-number href="Closest" value="3671"/>
       <helpcontext-number href="CNC-GWT-Constant-Concentratio2" value="4347"/>
       <helpcontext-number href="CNC-GWT-Constant-Concentration" value="4341"/>
@@ -1202,6 +1203,8 @@ document.write('</frameset>');
       <helpcontext-number href="LAK-SFR-CNC-Transport-Model-Aq" value="4400"/>
       <helpcontext-number href="LAK-SFR-CNC-Transport-Model-St" value="4399"/>
       <helpcontext-number href="LAND_USE-Farm-Process-V4-Land-" value="4419"/>
+      <helpcontext-number href="LAND_USE-Farm-Process-V4-Land-#EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION" value="4428"/>
+      <helpcontext-number href="LAND_USE-Farm-Process-V4-Land-#SINGLE_LAND_USE_PER_CELL" value="4426"/>
       <helpcontext-number href="LastVertexValue" value="3970"/>
       <helpcontext-number href="Lateral_Inflow_in_SWR_Surface" value="3862"/>
       <helpcontext-number href="Layer" value="470"/>

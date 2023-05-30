@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-05-25T15:42:55.204-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-30T11:12:06.152-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Model</title>
   <body>
     <header>
@@ -177,10 +177,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Farm Process|Farm Crops...</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Farm Process|Farm Land Uses...</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Crop Properties</link><text styleclass="Table Cell" translate="true"> dialog box which is used to specify such crop factors as rooting depth and factors that control consumptive use.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">FarmLand Use Properties</link><text styleclass="Table Cell" translate="true"> dialog box which is used to specify such crop factors as rooting depth and factors that control consumptive use.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

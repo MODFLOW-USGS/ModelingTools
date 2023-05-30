@@ -35968,7 +35968,9 @@ begin
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
-    and (ModflowPackages.FarmLandUse.CropLocation = rstStatic);
+    and (ModflowPackages.FarmLandUse.CropLocation = rstStatic)
+    and (ModflowPackages.FarmLandUse.LandUseOption = luoSingle);
+    ;
   {$ELSE}
   result := False;
   {$ENDIF}

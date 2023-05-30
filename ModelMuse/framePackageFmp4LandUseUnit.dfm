@@ -13,6 +13,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     Top = 111
     Width = 422
     Height = 405
+    VertScrollBar.Position = 401
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -23,11 +24,10 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlDataSets: TCategoryPanel
-      Top = 342
+      Top = -59
       Height = 548
       Caption = 'Land Use Data Sets'
       TabOrder = 0
-      ExplicitWidth = 418
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -225,15 +225,13 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 395
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 228
+      Top = -173
       Height = 114
       Caption = 'Land Use Options'
       TabOrder = 1
-      ExplicitWidth = 418
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
@@ -299,11 +297,10 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = 0
+      Top = -401
       Height = 228
       Caption = 'Print'
       TabOrder = 2
-      ExplicitWidth = 418
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
@@ -330,27 +327,14 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
         Height = 41
         Align = alBottom
         TabOrder = 1
-        object lblSpecifyCrops: TLabel
-          Left = 164
-          Top = 8
-          Width = 112
-          Height = 15
-          Caption = 'Specify crops to print'
-        end
-        object comboSpecifyCrops: TComboBox
-          Left = 13
+        object cbSpecifyCrops: TCheckBox
+          Left = 7
           Top = 6
-          Width = 145
-          Height = 23
-          Style = csDropDownList
+          Width = 204
+          Height = 17
+          Caption = 'Specify crops to print'
           Enabled = False
-          ItemIndex = 0
           TabOrder = 0
-          Text = 'Don'#39't use'
-          Items.Strings = (
-            'Don'#39't use'
-            'Static'
-            'Transient')
         end
       end
     end
@@ -367,9 +351,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
         Control = clbPrint
       end
       item
-        Control = comboSpecifyCrops
-      end
-      item
         Control = comboLandUsePerCell
       end
       item
@@ -380,6 +361,9 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
       item
         Control = rdgLandUse
+      end
+      item
+        Control = cbSpecifyCrops
       end>
   end
 end

@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-30T11:09:49.064-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Crops Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Crops Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Crop Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is where the names of the crops are set and where crop properties that do not vary with time are specified. The properties of each crop are defined on one row of the table. The columns on the table depending on the choices the modeler has made on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FMP_Farm_Process" styleclass="Strong" translate="true">FMP: Farm Process Pane</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The first two columns are always present. The first column, </text><text styleclass="Strong" translate="true">Crop ID</text><text styleclass="Normal" translate="true">, is assigned automatically. The next column, </text><text styleclass="Strong" translate="true">Crop Name</text><text styleclass="Normal" translate="true">, is used to identify the crop throughout ModelMuse. The </text><text styleclass="Strong" translate="true">Crop Name</text><text styleclass="Normal" translate="true"> will be used to define a global variable that can be used in assigning the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_ID_in_FMP_Farm_Process" styleclass="Normal" translate="true">spatial distribution of the crops</link><text styleclass="Normal" translate="true"> and to identify the crop to which an </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_Efficiencies" styleclass="Normal" translate="true">on-farm efficiency</link><text styleclass="Normal" translate="true"> is being assigned.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><text styleclass="Strong" translate="true">water stacking</text><text styleclass="Normal" translate="true"> is selected for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Water_Policy_Flags" anchor="IDEFFL" styleclass="Strong" translate="true">IDEFFL</link><text styleclass="Normal" translate="true">, the next column will be for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet17" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">IFALLOW</link><text styleclass="Normal" translate="true"> which determines whether or not a can be fallowed. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet17" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">IFALLOW</link><text styleclass="Normal" translate="true"> must evaluate to True or False. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet17" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">IFALLOW</link><text styleclass="Normal" translate="true"> is true, the crop can be fallowed. Otherwise it can not be fallowed. Pecan trees are an example of a crop that can not be fallowed.</text></para>
@@ -23,7 +23,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <list id="4" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Base Temperature (BaseT)</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Minimum Cutoff Temperature (MinCutT)</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Maximum Cutoff Temperature (MaxCutT)</text></li>
@@ -35,7 +35,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <list id="5" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Coefficient 0 (C0)</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Coefficient 1 (C2)</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Coefficient 2 (C3)</text></li>
@@ -48,7 +48,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <list id="6" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Beginning Root Depth (BegRootD)</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Maximum Root Depth (MaxRootD)</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Root Growth Coefficient (RootGC)</text></li>
@@ -60,7 +60,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <list id="7" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">Irrigated (inverse of NONIRR) (True/false)</text></li>
           </list>
         </td>

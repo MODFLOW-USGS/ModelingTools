@@ -33,9 +33,8 @@ type
     rdeRelaxFracHeadChange: TRbwDataEntry;
     lblRelaxFracHeadChange: TLabel;
     pnl2: TPanel;
-    comboSpecifyCrops: TComboBox;
-    lblSpecifyCrops: TLabel;
     cpnlDataSets: TCategoryPanel;
+    cbSpecifyCrops: TCheckBox;
     procedure rdgLandUseSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure comboLandUsePerCellChange(Sender: TObject);
@@ -59,7 +58,7 @@ uses
   GoPhastTypes;
 
 resourcestring
-  StrCropLocation = 'Crop location';
+  StrCropLocation = 'Land use location';
   StrLandUseFraction = 'Land use fraction';
   StrCropCoeff = 'Crop coeff.';
   StrConsumptiveUse = 'Consumptive use';
@@ -171,7 +170,8 @@ begin
     rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)] := StaticTransient[Ord(LandUsePackage.CropLocation)];
 
     GetFarmProperty(LandUsePackage.LandUseFraction, Ord(sorLandUseFraction));
-    GetFarmOption(comboSpecifyCrops, LandUsePackage.SpecifyCropsToPrint);
+    cbSpecifyCrops.Checked := LandUsePackage.SpecifyCropsToPrint <> foNotUsed;
+//    GetFarmOption(comboSpecifyCrops, LandUsePackage.SpecifyCropsToPrint);
     GetFarmProperty(LandUsePackage.CropCoeff, Ord(sorCropCoeff));
     GetFarmProperty(LandUsePackage.ConsumptiveUse, Ord(sorConsumptiveUse));
     GetFarmProperty(LandUsePackage.Irrigation, Ord(sorIrrigation));
@@ -326,7 +326,7 @@ begin
     CanSelect := False;
   end;
   if (SoilColumns in [socArray, socSFAC, socFile, socSfacFile])
-    and (ARow >= Ord(sorConsumptiveUse))
+    and (ARow >= Ord(sorLandUseFraction))
     and (rdgLandUse.ItemIndex[Ord(socTransient), ARow] <= 0) then
   begin
     CanSelect := False;
@@ -425,7 +425,8 @@ begin
     StaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(sorSoilLocation)]));
 
   SetFarmProperty(LandUsePackage.LandUseFraction, sorLandUseFraction);
-  LandUsePackage.SpecifyCropsToPrint := SetFarmOption(comboSpecifyCrops);
+  LandUsePackage.SpecifyCropsToPrint := TFarmOption(cbSpecifyCrops.Checked);
+//  LandUsePackage.SpecifyCropsToPrint := SetFarmOption(comboSpecifyCrops);
   SetFarmProperty(LandUsePackage.CropCoeff, sorCropCoeff);
   SetFarmProperty(LandUsePackage.ConsumptiveUse, sorConsumptiveUse);
   SetFarmProperty(LandUsePackage.Irrigation, sorIrrigation);

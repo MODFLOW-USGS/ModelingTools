@@ -35,6 +35,8 @@ type
     procedure frameIrrigationTypesseNumberChange(Sender: TObject);
     procedure jvpltvMainChange(Sender: TObject; Node: TTreeNode);
     procedure frameEvaporationFractionsGridEndUpdate(Sender: TObject);
+    procedure frameEvaporationFractionsGridSelectCell(Sender: TObject; ACol, ARow:
+        Integer; var CanSelect: Boolean);
     procedure GridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
     procedure GridSetEditText(Sender: TObject; ACol,
@@ -632,6 +634,23 @@ begin
   frameEvaporationFractions.LayoutMultiRowEditControls;
 end;
 
+procedure TfrmIrrigationTypes.frameEvaporationFractionsGridSelectCell(Sender:
+    TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  if ARow >= frameEvaporationFractions.Grid.FixedRows then
+  begin
+    if ACol = Ord(efcEvaporationFraction) then
+    begin
+      CanSelect := FFarmLandUse.EvapIrrigationOption = ioByIrrigate
+    end;
+    if ACol = Ord(efcSurfaceWaterLossFractionIrrigate) then
+    begin
+      CanSelect := FFarmLandUse.FractionOfPrecipToSurfaceWaterIrrigationOption = ioByIrrigate
+    end;
+  end;
+end;
+
 procedure TfrmIrrigationTypes.SetUseButton(Grid: TRbwDataGrid4;
   StartCol: Integer);
 var
@@ -670,12 +689,14 @@ end;
 
 procedure TUndoSetIrrigationTypes.DoCommand;
 begin
-  frmGoPhast.PhastModel.IrrigationTypes := FNewIrrigationTypes
+  frmGoPhast.PhastModel.IrrigationTypes := FNewIrrigationTypes;
+  frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
 end;
 
 procedure TUndoSetIrrigationTypes.Undo;
 begin
-  frmGoPhast.PhastModel.IrrigationTypes := FOldIrrigationTypes
+  frmGoPhast.PhastModel.IrrigationTypes := FOldIrrigationTypes;
+  frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
 end;
 
 end.

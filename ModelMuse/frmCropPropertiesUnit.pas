@@ -87,7 +87,13 @@ type
       ARow: Integer);
     procedure frameCropNameGridBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameCropNameGridSelectCell(Sender: TObject; ACol, ARow: Integer; var
+        CanSelect: Boolean);
+    procedure frameCropNameGridStateChange(Sender: TObject; ACol, ARow: Integer;
+        const Value: TCheckBoxState);
     procedure frameIrrigationGridEndUpdate(Sender: TObject);
+    procedure frameIrrigationGridSelectCell(Sender: TObject; ACol, ARow: Integer;
+        var CanSelect: Boolean);
     procedure frameLandUseFractionGridEndUpdate(Sender: TObject);
     procedure frameLeachGridButtonClick(Sender: TObject; ACol, ARow: Integer);
     procedure frameLeachGridEndUpdate(Sender: TObject);
@@ -120,6 +126,7 @@ type
     FAddedDemand: TAddedDemandCollection;
     FSalinityFlush: TFarmProcess4SalinityFlush;
     FLeachCollection: TLeachCollection;
+    FPrintStart: Integer;
     procedure SetUpCropNameTable(Model: TCustomModel);
     procedure SetCropNameTableColumns(Model: TCustomModel);
     procedure GetCrops(CropCollection: TCropCollection);
@@ -144,7 +151,6 @@ type
       GroundwaterRootInteraction: TGroundwaterRootInteraction);
     procedure SetUpAddedDemandTable(Model: TCustomModel);
     procedure GetAddedDemand(AddedDemand: TAddedDemandCollection);
-    procedure GetData;
     procedure SetGridColumnProperties(Grid: TRbwDataGrid4);
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
       const ACol, ARow: integer; Formula: string;
@@ -154,9 +160,11 @@ type
     procedure SetStartAndEndTimeLists(StartTimes, EndTimes: TStringList;
       Grid: TRbwDataGrid4);
     procedure GetGlobalVariables;
-    procedure SetData;
     procedure AssignGWRootInteractionCheckboxes(Code: TInteractionCode);
     function CheckBoxesToGwRootInteractionCode: TInteractionCode;
+    procedure GetData;
+    procedure SetData;
+    procedure SetCropSimpleProperties(ACol: Integer; ARow: Integer);
     { Private declarations }
 
   public
@@ -210,7 +218,7 @@ resourcestring
   StrInefficiencylosses = 'Inefficiency-Losses to Surface Water';
   StrCropPriceFunction = 'Crop Price Function';
   StrChangeFarmCrops = 'change farm crops';
-  StrCrops = 'Crops';
+  StrLandUses = 'Land Uses';
   StrIrrigationTypeIRR = 'Irrigation type (IRRIGATION)';
   StrIrrigation = 'Irrigation';
   StrEvaporationIrrigati = 'Evaporation Irrigation Fraction';
@@ -241,6 +249,7 @@ type
     cpCoefficient2, cpCoefficient3, cpBeginningRootDepth, cpMaximumRootDepth,
     cpRootGrowthCoefficient, cpIrrigated);
   TFallowCol = (fcFallow);
+  TPrintCol = (pcPrint);
 
   TRootDepthColumns = (rdcStart, rdcEnd, rdcRootingDepth);
   TEvapFracColumns = (efcStart, efcEnd, efcTransp, efcPrecip, efcIrrig);
@@ -281,7 +290,7 @@ begin
     ACol := FarmIndex + TimeColumnCount;
     if LandUse.AddedDemandOption = doLength then
     begin
-      frameAddedDemand.Grid.Cells[ACol, 0] := 'Added Demand  [L] ' + AFarm.FarmName;
+      frameAddedDemand.Grid.Cells[ACol, 0] := 'Added Demand  [L/T] ' + AFarm.FarmName;
     end
     else
     begin
@@ -364,9 +373,19 @@ begin
     frameCropName.Grid.Cells[FCropPropStart + Ord(cpIrrigated), 0]
       := StrIrrigatedInverseO15;
   end;
+  if FPrintStart >= 0 then
+  begin
+    frameCropName.Grid.Cells[FPrintStart + Ord(pcPrint), 0]
+      := 'Print';
+    frameCropName.Grid.Columns[FPrintStart + Ord(pcPrint)].Format := rcf4Boolean;
+  end;
 
   SetGridColumnProperties(frameCropName.Grid);
   SetUseButton(frameCropName.Grid, Ord(ncName) + 1);
+  if FPrintStart >= 0 then
+  begin
+    frameCropName.Grid.Columns[FPrintStart + Ord(pcPrint)].ButtonUsed := False;
+  end;
   frameCropName.FirstFormulaColumn := 2;
   frameCropName.LayoutMultiRowEditControls;
 end;
@@ -571,6 +590,10 @@ begin
     begin
       ResultType := rdtBoolean;
     end;
+    if (FPrintStart >= 0) and (ACol = FPrintStart + Ord(pcPrint))  then
+    begin
+      ResultType := rdtBoolean;
+    end;
   end
   else if DataGrid = frameOwhmCollection.Grid then
   begin
@@ -638,38 +661,41 @@ begin
     end;
   end;
 
-  ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUse) as TJvPageIndexNode;
-  ANode.PageIndex := jvspEvapFractions.PageIndex;
-  ANode.Data := ACrop.EvapFractionsCollection;
-
-  if FFarmProcess.FractionOfInefficiencyLosses = filSpecified then
+  if frmGoPhast.ModelSelection = msModflowFmp then
   begin
-    ANode := jvpltvMain.Items.AddChild(CropNode, StrInefficiencylosses) as TJvPageIndexNode;
-    ANode.PageIndex := jvspLosses.PageIndex;
-    ANode.Data := ACrop.LossesCollection;
-  end;
+    ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUse) as TJvPageIndexNode;
+    ANode.PageIndex := jvspEvapFractions.PageIndex;
+    ANode.Data := ACrop.EvapFractionsCollection;
 
-  if FFarmProcess.DeficiencyPolicy in
-    [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool] then
-  begin
-    ANode := jvpltvMain.Items.AddChild(CropNode, StrCropPriceFunction) as TJvPageIndexNode;
-    ANode.PageIndex := jvspCropFunction.PageIndex;
-    ANode.Data := ACrop.CropFunctionCollection;
-  end;
-
-  if FFarmProcess.ConsumptiveUse in
-    [cuPotentialET, cuPotentialAndReferenceET, cuCropCoefficient] then
-  begin
-    case frmGoPhast.PhastModel.ModflowPackages.FarmProcess.ConsumptiveUse of
-      cuPotentialET, cuPotentialAndReferenceET:
-        ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUseFlux) as TJvPageIndexNode;
-      cuCropCoefficient:
-        ANode := jvpltvMain.Items.AddChild(CropNode, StrCropCoefficient) as TJvPageIndexNode;
-    else
-      Assert(False);
+    if FFarmProcess.FractionOfInefficiencyLosses = filSpecified then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrInefficiencylosses) as TJvPageIndexNode;
+      ANode.PageIndex := jvspLosses.PageIndex;
+      ANode.Data := ACrop.LossesCollection;
     end;
-    ANode.PageIndex := jvspCropWaterUse.PageIndex;
-    ANode.Data := ACrop.CropWaterUseCollection;
+
+    if FFarmProcess.DeficiencyPolicy in
+      [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool] then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrCropPriceFunction) as TJvPageIndexNode;
+      ANode.PageIndex := jvspCropFunction.PageIndex;
+      ANode.Data := ACrop.CropFunctionCollection;
+    end;
+
+    if FFarmProcess.ConsumptiveUse in
+      [cuPotentialET, cuPotentialAndReferenceET, cuCropCoefficient] then
+    begin
+      case frmGoPhast.PhastModel.ModflowPackages.FarmProcess.ConsumptiveUse of
+        cuPotentialET, cuPotentialAndReferenceET:
+          ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUseFlux) as TJvPageIndexNode;
+        cuCropCoefficient:
+          ANode := jvpltvMain.Items.AddChild(CropNode, StrCropCoefficient) as TJvPageIndexNode;
+      else
+        Assert(False);
+      end;
+      ANode.PageIndex := jvspCropWaterUse.PageIndex;
+      ANode.Data := ACrop.CropWaterUseCollection;
+    end;
   end;
 
 {$IFDEF OWHMV2}
@@ -680,7 +706,7 @@ begin
         or FFarmLandUse.EvapIrrigateFractionListByCropUsed
         or FFarmLandUse.SwLossFracIrrigListByCropUsed) then
     begin
-      ANode := jvpltvMain.Items.AddChild(CropNode, StrSurfaceWaterLossF) as TJvPageIndexNode;
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrIrrigation) as TJvPageIndexNode;
       ANode.PageIndex := jvspIrrigation.PageIndex;
       ANode.Data := ACrop.IrrigationCollection;
     end;
@@ -799,8 +825,16 @@ begin
 end;
 
 procedure TfrmCropProperties.FormCreate(Sender: TObject);
+var
+  ModflowPackages: TModflowPackages;
 begin
   inherited;
+  ModflowPackages := frmGoPhast.PhastModel.ModflowPackages;
+  FFarmProcess := ModflowPackages.FarmProcess;
+  FFarmProcess4 := ModflowPackages.FarmProcess4;
+  FFarmLandUse := ModflowPackages.FarmLandUse;
+  FSalinityFlush := ModflowPackages.FarmSalinityFlush;
+
   jplMain.ActivePageIndex := 0;
   GetData;
 end;
@@ -963,96 +997,9 @@ end;
 
 procedure TfrmCropProperties.frameCropNameGridSetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
-var
-  RowIndex: Integer;
-//  ItemCount: Integer;
-  ItemIndex: Integer;
-  ACrop: TCropItem;
-  ANode: TJvPageIndexNode;
-  ExtraNode: TJvPageIndexNode;
-  NewName: string;
 begin
   inherited;
-  if (csReading in ComponentState) or (FCrops = nil) then
-  begin
-    Exit;
-  end;
-  if ACol = Ord(ncName) then
-  begin
-    if ARow > frameCropName.seNumber.AsInteger then
-    begin
-      frameCropName.seNumber.AsInteger := ARow
-    end;
-  end;
-
-  ItemIndex := -1;
-
-  ANode := FCropsNode;
-  for RowIndex := 1 to frameCropName.seNumber.AsInteger do
-  begin
-//    if frameCropName.Grid.Cells[Ord(ncName), RowIndex] <> '' then
-    begin
-      Inc(ItemIndex);
-
-      while FCrops.Count <= ItemIndex do
-      begin
-        FCrops.Add;
-      end;
-      ACrop := FCrops[ItemIndex];
-
-      NewName := frameCropName.Grid.Cells[Ord(ncName), RowIndex];
-      if NewName <> '' then
-      begin
-        ACrop.CropName := GenerateNewRoot(NewName);
-      end;
-
-      ANode := ANode.getNextSibling as TJvPageIndexNode;
-      if ANode = nil then
-      begin
-        ANode := jvpltvMain.Items.Add(nil, ACrop.CropName) as TJvPageIndexNode;
-        CreateChildNodes(ACrop, ANode);
-        ANode.Expanded := True;
-      end
-      else
-      begin
-        ANode.Text := ACrop.CropName
-      end;
-
-      if FPressureStart > 0 then
-      begin
-        ACrop.PSI1 := frameCropName.Grid.Cells[FPressureStart + Ord(pc1), RowIndex];
-        ACrop.PSI2 := frameCropName.Grid.Cells[FPressureStart + Ord(pc2), RowIndex];
-        ACrop.PSI3 := frameCropName.Grid.Cells[FPressureStart + Ord(pc3), RowIndex];
-        ACrop.PSI4 := frameCropName.Grid.Cells[FPressureStart + Ord(pc4), RowIndex];
-      end;
-
-      if FCropPropStart > 0 then
-      begin
-         ACrop.BaseTemperature := frameCropName.Grid.Cells[FCropPropStart + Ord(cpBaseTemperature), RowIndex];
-         ACrop.MinimumCutoffTemperature := frameCropName.Grid.Cells[FCropPropStart + Ord(cpMinimumCutoffTemperature), RowIndex];
-         ACrop.MaximumCutoffTemperature := frameCropName.Grid.Cells[FCropPropStart + Ord(cpMaximumCutoffTemperature), RowIndex];
-         ACrop.Coefficient0 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient0), RowIndex];
-         ACrop.Coefficient1 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient1), RowIndex];
-         ACrop.Coefficient2 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient2), RowIndex];
-         ACrop.Coefficient3 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient3), RowIndex];
-         ACrop.BeginningRootDepth := frameCropName.Grid.Cells[FCropPropStart + Ord(cpBeginningRootDepth), RowIndex];
-         ACrop.MaximumRootDepth := frameCropName.Grid.Cells[FCropPropStart + Ord(cpMaximumRootDepth), RowIndex];
-         ACrop.RootGrowthCoefficient := frameCropName.Grid.Cells[FCropPropStart + Ord(cpRootGrowthCoefficient), RowIndex];
-         ACrop.Irrigated := frameCropName.Grid.Cells[FCropPropStart + Ord(cpIrrigated), RowIndex];
-      end;
-
-      if FFallowStart > 0 then
-      begin
-         ACrop.Fallow := frameCropName.Grid.Cells[FFallowStart + Ord(fcFallow), RowIndex];
-      end;
-    end;
-  end;
-  ExtraNode := ANode.getNextSibling as TJvPageIndexNode;
-  while ExtraNode <> nil do
-  begin
-    ExtraNode.Free;
-    ExtraNode := ANode.getNextSibling as TJvPageIndexNode;
-  end;
+  SetCropSimpleProperties(ACol, ARow);
 end;
 
 procedure TfrmCropProperties.frameCropNamesbAddClick(Sender: TObject);
@@ -1520,14 +1467,14 @@ begin
       Grid.Cells[Ord(ncID), CropIndex+1] := IntToStr(CropIndex+1);
       Grid.Cells[Ord(ncName), CropIndex+1] := ACrop.CropName;
   //    ColIndex := Ord(ncName);
-      if FPressureStart > 0 then
+      if FPressureStart >= 0 then
       begin
         Grid.Cells[FPressureStart + Ord(pc1), CropIndex+1] := ACrop.PSI1;
         Grid.Cells[FPressureStart + Ord(pc2), CropIndex+1] := ACrop.PSI2;
         Grid.Cells[FPressureStart + Ord(pc3), CropIndex+1] := ACrop.PSI3;
         Grid.Cells[FPressureStart + Ord(pc4), CropIndex+1] := ACrop.PSI4;
       end;
-      if FCropPropStart > 0 then
+      if FCropPropStart >= 0 then
       begin
         Grid.Cells[FCropPropStart + Ord(cpBaseTemperature), CropIndex+1]
           := ACrop.BaseTemperature;
@@ -1552,10 +1499,15 @@ begin
         Grid.Cells[FCropPropStart + Ord(cpIrrigated), CropIndex+1]
           := ACrop.Irrigated;
       end;
-      if FFallowStart > 0 then
+      if FFallowStart >= 0 then
       begin
         Grid.Cells[FFallowStart + Ord(fcFallow), CropIndex+1]
           := ACrop.Fallow;
+      end;
+      if FPrintStart >= 0 then
+      begin
+        Grid.Checked[FPrintStart + Ord(pcPrint), CropIndex+1]
+          := ACrop.Print;
       end;
     end;
   finally
@@ -1645,7 +1597,7 @@ begin
   FCrops := TCropCollection.Create(nil);
   FCrops.Assign(frmGoPhast.PhastModel.FmpCrops);
 
-  FCropsNode := jvpltvMain.Items.Add(nil, StrCrops) as TJvPageIndexNode;
+  FCropsNode := jvpltvMain.Items.Add(nil, StrLandUses) as TJvPageIndexNode;
   FCropsNode.PageIndex := jvspCropName.PageIndex;
   FCropsNode.Data := FCrops;
 
@@ -1979,27 +1931,49 @@ begin
   FLastCol := Ord(High(TNameCol));
 
   FFallowStart := -1;
-  if FarmProcess.DeficiencyPolicy = dpWaterStacking then
+  if Model.ModelSelection = msModflowFmp then
   begin
-    FFallowStart := Succ(FLastCol);
-    FLastCol := FFallowStart + Ord(High(TFallowCol));
+    if FarmProcess.DeficiencyPolicy = dpWaterStacking then
+    begin
+      FFallowStart := Succ(FLastCol);
+      FLastCol := FFallowStart + Ord(High(TFallowCol));
+    end;
   end;
 
   FPressureStart := -1;
-  if FarmProcess.CropConsumptiveConcept = cccConcept1 then
+  if Model.ModelSelection = msModflowFmp then
   begin
-    FPressureStart := Succ(FLastCol);
-    FLastCol := FPressureStart + Ord(High(TPressureCol));
+    if FarmProcess.CropConsumptiveConcept = cccConcept1 then
+    begin
+      FPressureStart := Succ(FLastCol);
+      FLastCol := FPressureStart + Ord(High(TPressureCol));
+    end;
   end;
 
   FCropPropStart := -1;
-  if (FarmProcess.RootingDepth = rdCalculated)
-    or (FarmProcess.ConsumptiveUse = cuCalculated)
-    or (FarmProcess.Precipitation = pTimeSeries) then
+  if Model.ModelSelection = msModflowFmp then
   begin
-    FCropPropStart := Succ(FLastCol);
-    FLastCol := FCropPropStart + Ord(High(TCropProp));
+    if (FarmProcess.RootingDepth = rdCalculated)
+      or (FarmProcess.ConsumptiveUse = cuCalculated)
+      or (FarmProcess.Precipitation = pTimeSeries) then
+    begin
+      FCropPropStart := Succ(FLastCol);
+      FLastCol := FCropPropStart + Ord(High(TCropProp));
+    end;
   end;
+
+  FPrintStart := -1;
+{$IFDEF OWHMV2}
+  if Model.ModelSelection = msModflowOwhm2 then
+  begin
+    if FFarmLandUse.IsSelected
+      and (FFarmLandUse.SpecifyCropsToPrint <> foNotUsed) then
+    begin
+      FPrintStart := Succ(FLastCol);
+      FLastCol := FPrintStart  + Ord(High(TPrintCol));
+    end;
+  end;
+{$ENDIF}
 end;
 
 procedure TfrmCropProperties.GetGlobalVariables;
@@ -2067,6 +2041,93 @@ end;
 procedure TfrmCropProperties.SetData;
 begin
   frmGoPhast.UndoStack.Submit(TUndoCrops.Create(FCrops));
+end;
+
+procedure TfrmCropProperties.SetCropSimpleProperties(ACol: Integer; ARow: Integer);
+var
+  ItemIndex: Integer;
+  ANode: TJvPageIndexNode;
+  RowIndex: Integer;
+  ACrop: TCropItem;
+  NewName: string;
+  ExtraNode: TJvPageIndexNode;
+begin
+  if (csReading in ComponentState) or (FCrops = nil) then
+  begin
+    Exit;
+  end;
+  if ACol = Ord(ncName) then
+  begin
+    if ARow > frameCropName.seNumber.AsInteger then
+    begin
+      frameCropName.seNumber.AsInteger := ARow;
+    end;
+  end;
+  ItemIndex := -1;
+  ANode := FCropsNode;
+  for RowIndex := 1 to frameCropName.seNumber.AsInteger do
+  begin
+    //    if frameCropName.Grid.Cells[Ord(ncName), RowIndex] <> '' then
+    begin
+      Inc(ItemIndex);
+      while FCrops.Count <= ItemIndex do
+      begin
+        FCrops.Add;
+      end;
+      ACrop := FCrops[ItemIndex];
+      NewName := frameCropName.Grid.Cells[Ord(ncName), RowIndex];
+      if NewName <> '' then
+      begin
+        ACrop.CropName := GenerateNewRoot(NewName);
+      end;
+      ANode := ANode.getNextSibling as TJvPageIndexNode;
+      if ANode = nil then
+      begin
+        ANode := jvpltvMain.Items.Add(nil, ACrop.CropName) as TJvPageIndexNode;
+        CreateChildNodes(ACrop, ANode);
+        ANode.Expanded := True;
+      end
+      else
+      begin
+        ANode.Text := ACrop.CropName;
+      end;
+      if FPressureStart > 0 then
+      begin
+        ACrop.PSI1 := frameCropName.Grid.Cells[FPressureStart + Ord(pc1), RowIndex];
+        ACrop.PSI2 := frameCropName.Grid.Cells[FPressureStart + Ord(pc2), RowIndex];
+        ACrop.PSI3 := frameCropName.Grid.Cells[FPressureStart + Ord(pc3), RowIndex];
+        ACrop.PSI4 := frameCropName.Grid.Cells[FPressureStart + Ord(pc4), RowIndex];
+      end;
+      if FCropPropStart > 0 then
+      begin
+        ACrop.BaseTemperature := frameCropName.Grid.Cells[FCropPropStart + Ord(cpBaseTemperature), RowIndex];
+        ACrop.MinimumCutoffTemperature := frameCropName.Grid.Cells[FCropPropStart + Ord(cpMinimumCutoffTemperature), RowIndex];
+        ACrop.MaximumCutoffTemperature := frameCropName.Grid.Cells[FCropPropStart + Ord(cpMaximumCutoffTemperature), RowIndex];
+        ACrop.Coefficient0 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient0), RowIndex];
+        ACrop.Coefficient1 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient1), RowIndex];
+        ACrop.Coefficient2 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient2), RowIndex];
+        ACrop.Coefficient3 := frameCropName.Grid.Cells[FCropPropStart + Ord(cpCoefficient3), RowIndex];
+        ACrop.BeginningRootDepth := frameCropName.Grid.Cells[FCropPropStart + Ord(cpBeginningRootDepth), RowIndex];
+        ACrop.MaximumRootDepth := frameCropName.Grid.Cells[FCropPropStart + Ord(cpMaximumRootDepth), RowIndex];
+        ACrop.RootGrowthCoefficient := frameCropName.Grid.Cells[FCropPropStart + Ord(cpRootGrowthCoefficient), RowIndex];
+        ACrop.Irrigated := frameCropName.Grid.Cells[FCropPropStart + Ord(cpIrrigated), RowIndex];
+      end;
+      if FFallowStart > 0 then
+      begin
+        ACrop.Fallow := frameCropName.Grid.Cells[FFallowStart + Ord(fcFallow), RowIndex];
+      end;
+      if FPrintStart >= 0 then
+      begin
+        ACrop.Print := frameCropName.Grid.Checked[FPrintStart + Ord(pcPrint), RowIndex];
+      end;
+    end;
+  end;
+  ExtraNode := ANode.getNextSibling as TJvPageIndexNode;
+  while ExtraNode <> nil do
+  begin
+    ExtraNode.Free;
+    ExtraNode := ANode.getNextSibling as TJvPageIndexNode;
+  end;
 end;
 
 procedure TfrmCropProperties.AssignGWRootInteractionCheckboxes(Code: TInteractionCode);
@@ -2193,14 +2254,52 @@ begin
   end;
 end;
 
+procedure TfrmCropProperties.frameCropNameGridSelectCell(Sender: TObject; ACol,
+    ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+{$IFDEF OWHMV2}
+  if frmGoPhast.ModelSelection = msModflowOwhm2 then
+  begin
+//    FFarmLandUse
+  end;
+{$ENDIF}
+end;
+
+procedure TfrmCropProperties.frameCropNameGridStateChange(Sender: TObject;
+    ACol, ARow: Integer; const Value: TCheckBoxState);
+begin
+  inherited;
+  SetCropSimpleProperties(ACol, ARow);
+end;
+
+procedure TfrmCropProperties.frameIrrigationGridSelectCell(Sender: TObject;
+    ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  if ARow >= frameIrrigation.Grid.FixedRows then
+  begin
+    if ACol = Ord(IcIrrigation) then
+    begin
+      CanSelect := FFarmLandUse.IrrigationListUsed
+    end
+    else if ACol = Ord(icEvapIrrigateFraction) then
+    begin
+      CanSelect := FFarmLandUse.EvapIrrigateFractionListByCropUsed
+    end
+    else if ACol = Ord(icSWLossFracIrrigate) then
+    begin
+      CanSelect := FFarmLandUse.SwLossFracIrrigListByCropUsed
+    end;
+  end;
+end;
+
 procedure TfrmCropProperties.frameLeachGridButtonClick(Sender: TObject; ACol,
     ARow: Integer);
 var
   ItemIndex: Integer;
   LeachChoice: TLeachChoice;
   DataGrid: TRbwDataGrid4;
-  Orientation: TDataSetOrientation;
-  EvaluatedAt: TEvaluatedAt;
   NewValue: string;
 begin
   inherited;
@@ -2215,10 +2314,6 @@ begin
     else if LeachChoice = lcCustomFormula then
     begin
       DataGrid := Sender as TRbwDataGrid4;
-      // Lakes and reservoirs can only be specified from the top.
-      Orientation := dsoTop;
-      // All the MODFLOW boundary conditions are evaluated at blocks.
-      EvaluatedAt := eaBlocks;
 
       NewValue := DataGrid.Cells[ACol, ARow];
       if (NewValue = '') then

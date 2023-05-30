@@ -28,7 +28,7 @@ type
     wlGwAllotment, wlRootPressure, wlPondDepth, wlNoCropMeansBareSoil,
     wlNoEvapErrCorrection, wlSaltSupplyConcentration, wlCropSalinityTolerance,
     wlCropMaxLeachRequirement, wlCropLeachRequirement, wlSalinityAppliedWater,
-    wlSupplyWells);
+    wlSupplyWells, wlCropNames, wlSpecifyPrintCrops);
 
   TWriteTransientData = procedure (WriteLocation: TWriteLocation) of object;
 
@@ -166,6 +166,8 @@ type
     FCropLeachingRequirementFileStream: TFileStream;
     FCropSalinityAppliedWaterFileStream: TFileStream;
     FSupplyWellFileStream: TFileStream;
+    FCropNamesFileStream: TFileStream;
+    FCropPrintFileStream: TFileStream;
     procedure WriteGobalDimension;
     procedure WriteOutput;
     procedure WriteOptions;
@@ -287,7 +289,9 @@ type
     procedure WriteLandUsePrintOptions;
 
     // SPECIFY_PRINT_ALL_CROPS
+    procedure WriteSpecifyPrintAllCrops;
     // CROP_NAME
+    procedure WriteCropName;
 
     // CROP_COEFFICIENT
     procedure EvaluateCropCoefficient;
@@ -1305,6 +1309,8 @@ begin
   FreeAndNil(FCropLeachingRequirementFileStream);
   FreeAndNil(FCropSalinityAppliedWaterFileStream);
   FreeAndNil(FSupplyWellFileStream);
+  FreeAndNil(FCropNamesFileStream);
+  FreeAndNil(FCropPrintFileStream);
 
 end;
 
@@ -1847,7 +1853,25 @@ begin
           FSupplyWellFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
         end;
-      end
+      end;
+    wlCropNames:
+      begin
+        result := ChangeFileExt(FBaseName, '.crop_names');
+        if FCropNamesFileStream = nil then
+        begin
+          FCropNamesFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
+    wlSpecifyPrintCrops:
+      begin
+        result := ChangeFileExt(FBaseName, '.specify_print_all_crops');
+        if FCropPrintFileStream = nil then
+        begin
+          FCropPrintFileStream := TFileStream.Create(result,
+            fmCreate or fmShareDenyWrite);
+        end;
+      end;
     else Assert(False);
   end;
   if result <> '' then
@@ -2038,6 +2062,8 @@ begin
     wlCropLeachRequirement: ;
     wlSalinityAppliedWater: ;
     wlSupplyWells: ;
+    wlCropNames: ;
+    wlSpecifyPrintCrops: ;
     else Assert(False);
   end;
 end;
@@ -2110,6 +2136,8 @@ begin
     wlCropLeachRequirement: ;
     wlSalinityAppliedWater: ;
     wlSupplyWells: ;
+    wlCropNames: ;
+    wlSpecifyPrintCrops: ;
     else Assert(False)
   end;
 end;
@@ -5144,6 +5172,10 @@ var
         else
         begin
           Formula := FarmItem.Value;
+          if Formula = '' then
+          begin
+            Formula := '0';
+          end;
           WriteFloatValueFromGlobalFormula(Formula, ACrop,
             Format('Invalid Added Demand formula for %0:s for Farm %1:s.',
             [ACrop.CropName, AFarm.FarmName]));
@@ -6242,6 +6274,61 @@ begin
 
   WriteOwhmList(RequiredValues, AFileName, GetMaxLeachingRequirementCollection,
     'Invalid Crop Max Leaching Requirement formula in ');
+
+end;
+
+procedure TModflowFmp4Writer.WriteCropName;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+//  DataArrayNames: TStringList;
+  CropIndex: Integer;
+  ACrop: TCropItem;
+begin
+//  if FSalinityFlush.CropSalinityToleranceChoice.FarmOption = foNotUsed then
+//  begin
+//    Exit;
+//  end;
+
+
+  RequiredValues.WriteLocation := wlCropNames;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtstring;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: CROP_NAME';
+  RequiredValues.ErrorID := 'FMP LAND_USE: CROP_NAME';
+  RequiredValues.ID := 'CROP_NAME';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
+
+//  if RequiredValues.FarmProperty.ExternalFileName = '' then
+//  begin
+    AFileName := GetFileStreamName(wlCropNames);
+//  end;
+
+  WriteScaleFactorsID_andOption(RequiredValues, '', '');
+    WriteString('STATIC LIST DATAFILE ');
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+
+      for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+      begin
+        ACrop := Model.FmpCrops[CropIndex];
+        WriteInteger(CropIndex+1);
+        WriteString(' ' + ACrop.CropName);
+        NewLine;
+      end;
+
+    finally
+      FWriteLocation := wlMain;
+    end;
 
 end;
 
@@ -8502,7 +8589,9 @@ begin
     WriteLandUsePrintOptions;
 
     // SPECIFY_PRINT_ALL_CROPS
+    WriteSpecifyPrintAllCrops;
     // CROP_NAME
+    WriteCropName;
 
     WriteCropCoefficient;
     WriteConsumptiveUse;
@@ -9549,6 +9638,68 @@ begin
   WriteFmpArrayData(AFileName, RequiredValues);
 end;
 
+procedure TModflowFmp4Writer.WriteSpecifyPrintAllCrops;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+//  DataArrayNames: TStringList;
+  CropIndex: Integer;
+  ACrop: TCropItem;
+begin
+  if FLandUse.SpecifyCropsToPrint = foNotUsed then
+  begin
+    Exit;
+  end;
+
+
+  RequiredValues.WriteLocation := wlSpecifyPrintCrops;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtBoolean;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP LAND_USE: SPECIFY_PRINT_ALL_CROPS';
+  RequiredValues.ErrorID := 'FMP LAND_USE: SPECIFY_PRINT_ALL_CROPS';
+  RequiredValues.ID := 'SPECIFY_PRINT_ALL_CROPS';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData := False;
+  RequiredValues.CheckProcedure := nil;
+  RequiredValues.CheckError := '';
+  RequiredValues.Option := '';
+  RequiredValues.FarmProperty := nil;
+
+//  if RequiredValues.FarmProperty.ExternalFileName = '' then
+//  begin
+    AFileName := GetFileStreamName(wlSpecifyPrintCrops);
+//  end;
+
+  WriteScaleFactorsID_andOption(RequiredValues, '', '');
+  WriteString('STATIC LIST DATAFILE ');
+  WriteString(ExtractFileName(AFileName));
+  NewLine;
+  try
+    FWriteLocation := RequiredValues.WriteLocation;
+
+    for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+    begin
+      ACrop := Model.FmpCrops[CropIndex];
+      WriteInteger(CropIndex+1);
+      if ACrop.Print then
+      begin
+        WriteInteger(1);
+      end
+      else
+      begin
+        WriteInteger(0);
+      end;
+      NewLine;
+    end;
+
+  finally
+    FWriteLocation := wlMain;
+  end;
+
+end;
+
 procedure TModflowFmp4Writer.WriteStressPeriods(const VariableIdentifiers,
   DataSetIdentifier, DS5, D7PNameIname, D7PName: string);
 begin
@@ -9879,6 +10030,16 @@ begin
         begin
           Assert(FSupplyWellFileStream <> nil);
           FSupplyWellFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlCropNames:
+        begin
+          Assert(FCropNamesFileStream <> nil);
+          FCropNamesFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+        end;
+      wlSpecifyPrintCrops:
+        begin
+          Assert(FCropPrintFileStream <> nil);
+          FCropPrintFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
         end;
       else
         Assert(False);

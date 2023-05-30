@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-05-30T11:10:18.024-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Inefficiency-Losses to Surface Water Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Inefficiency-Losses to Surface Water Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Crop Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Inefficiency-Losses to Surface Water pane is present if </text><text styleclass="Strong" translate="true">Fraction of inefficiency losses (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="When_to_Read_Flags" anchor="IIESWFL" styleclass="Strong" translate="true">IIESWFL</link><text styleclass="Strong" translate="true">)</text><text styleclass="Normal" translate="true"> is set to Specified (1 or 2). It is used for specifying how the following two things vary with time for a crop.</text></para>
-    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Strong" translate="true">FIESWP</text><text styleclass="Normal" translate="true"> Fraction of in-efficient losses to surface-water related to precipitation (0 ≤ FIESWP ≤ 1)</text></li>
       <li styleclass="Normal"><text styleclass="Strong" translate="true">FIESWI</text><text styleclass="Normal" translate="true"> Fraction of in-efficient losses to surface-water related to irrigation (0 ≤ FIESWI ≤ 1)</text></li>
     </list>
