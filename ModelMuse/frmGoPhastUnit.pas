@@ -8692,7 +8692,8 @@ var
   FileName: TFileName;
   procedure ExportShapeFile(const FileName: string; Layer: Integer = -1);
   begin
-    if frmLayersToExport.rgExportAs.Enabled
+    if (frmLayersToExport <> nil)
+      and frmLayersToExport.rgExportAs.Enabled
       and (frmLayersToExport.rgExportAs.ItemIndex = 1) then
     begin
       ContourExporter.Free;
@@ -8703,6 +8704,7 @@ var
   end;
 begin
   inherited;
+  frmLayersToExport := nil;
   LocalContourDataSet := ContourDataSet;
   if LocalContourDataSet = nil then
   begin

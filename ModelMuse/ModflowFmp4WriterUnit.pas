@@ -387,6 +387,7 @@ type
     procedure WriteSupplyWells;
 
     procedure EvaluateCropHasSalinityDemand;
+    function GetCropHasSalinityDemandCollection(Crop: TCropItem): TOwhmCollection;
     procedure WriteCropHasSalinityDemand; // finish list
 
     procedure FreeFileStreams;
@@ -1336,6 +1337,12 @@ function TModflowFmp4Writer.GetCropCoefficentCollection(
   Crop: TCropItem): TOwhmCollection;
 begin
   result := Crop.CropCoefficientCollection;
+end;
+
+function TModflowFmp4Writer.GetCropHasSalinityDemandCollection(
+  Crop: TCropItem): TOwhmCollection;
+begin
+  result := Crop.CropHasSalinityDemand;
 end;
 
 function TModflowFmp4Writer.GetEvapIrrigateFracSumOneCorrectionCollection(
@@ -2384,6 +2391,7 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
+  OwhmCollection: TOwhmCollection;
   procedure WriteOwhmItem(Crop: TCropItem; OwhmItem: TOwhmItem);
   var
     Formula: string;
@@ -2404,7 +2412,14 @@ var
     end
     else
     begin
-      WriteFloat(RequiredValues.DefaultValue);
+      if OwhmCollection is TBoolFarmCollection then
+      begin
+        WriteInteger(Round(RequiredValues.DefaultValue));
+      end
+      else
+      begin
+        WriteFloat(RequiredValues.DefaultValue);
+      end;
     end;
   end;
   procedure WriteTransientData;
@@ -2413,7 +2428,7 @@ var
     CropIndex: Integer;
     StartTime: Double;
     ACrop: TCropItem;
-    OwhmCollection: TOwhmCollection;
+//    OwhmCollection: TOwhmCollection;
     OwhmItem: TOwhmItem;
   begin
     for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
@@ -2435,7 +2450,6 @@ var
   var
     CropIndex: Integer;
     ACrop: TCropItem;
-    OwhmCollection: TOwhmCollection;
     OwhmItem: TOwhmItem;
   begin
     for CropIndex := 0 to Model.FmpCrops.Count - 1 do
@@ -6201,7 +6215,8 @@ begin
   end
   else
   begin
-    Assert(False);
+    WriteOwhmList(RequiredValues, AFileName, GetCropHasSalinityDemandCollection,
+      'Invalid Crop has salinity deman formula in ');
   end;
 end;
 

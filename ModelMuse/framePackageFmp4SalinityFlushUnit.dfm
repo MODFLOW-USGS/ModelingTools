@@ -13,7 +13,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
     Top = 119
     Width = 422
     Height = 407
-    VertScrollBar.Position = 7
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -24,32 +23,35 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlPrint: TCategoryPanel
-      Top = -7
+      Top = 0
       Height = 30
       Caption = 'Print'
       Collapsed = True
       TabOrder = 0
+      ExplicitWidth = 397
       ExpandedHeight = 81
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
         Width = 399
-        Height = 55
+        Height = 0
         Align = alClient
         Enabled = False
-        ItemHeight = 15
+        ItemHeight = 17
         Items.Strings = (
-          'PRINT BYFARM'
-          'PRINT BYFARM_BYCROP'
+          'PRINT BYWBS'
+          'PRINT BYWBS_BYCROP'
           'PRINT ALL')
         TabOrder = 0
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 23
-      Height = 380
+      Top = 30
+      Height = 379
       Caption = 'Options'
       TabOrder = 1
+      ExplicitTop = 36
+      ExplicitWidth = 397
       object pnl1: TPanel
         Left = 0
         Top = 0
@@ -57,12 +59,13 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Height = 49
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 401
         object lblExpressionMin: TLabel
           Left = 140
           Top = 18
-          Width = 186
-          Height = 19
-          Caption = 'EXPRESSION_VARIABLE_NEARZERO'
+          Width = 155
+          Height = 15
+          Caption = 'Expression Variable Near Zero'
         end
         object rdeExpressionMin: TRbwDataEntry
           Left = 13
@@ -82,7 +85,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Left = 0
         Top = 49
         Width = 399
-        Height = 305
+        Height = 304
         Align = alClient
         ColCount = 6
         Enabled = False
@@ -252,9 +255,8 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 96
-        ExplicitWidth = 416
-        ExplicitHeight = 258
+        ExplicitWidth = 401
+        ExplicitHeight = 310
       end
     end
   end

@@ -4603,11 +4603,7 @@ SectionStarts.}
 //    property VerticesArePilotPoints: Boolean read FVerticesArePilotPoints
 //      write SetVerticesArePilotPoints;
     property DyanmicTimesSeriesCollections: TDynamicTimesSeriesCollections
-      read FDyanmicTimesSeriesCollections write SetDyanmicTimesSeriesCollection
-    {$IFNDEF DynamicTimeSeries}
-      stored False
-    {$ENDIF}
-      ;
+      read FDyanmicTimesSeriesCollections write SetDyanmicTimesSeriesCollection;
   end;
 
   // @name does not own its @link(TScreenObject)s.

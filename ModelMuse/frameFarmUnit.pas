@@ -530,6 +530,11 @@ begin
     SalinityFlush := Packages.FarmSalinityFlush;
     FarmSurfaceWater4 := Packages.FarmSurfaceWater4;
 
+  {$IFDEF OWHMV2}
+    tabCrops.TabVisible := (FarmProcess4.EfficiencyOptions.FarmOption <> foNotUsed)
+      and (FarmProcess4.EfficiencyOptions.ArrayList = alList);
+  {$ENDIF}
+
     tabCosts.TabVisible :=
       (FarmProcess.DeficiencyPolicy in
       [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool])

@@ -13,7 +13,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     Top = 111
     Width = 422
     Height = 405
-    VertScrollBar.Position = 401
+    VertScrollBar.Position = 230
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -24,15 +24,16 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlDataSets: TCategoryPanel
-      Top = -59
-      Height = 548
+      Top = 110
+      Height = 547
       Caption = 'Land Use Data Sets'
       TabOrder = 0
+      ExplicitWidth = 397
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 399
-        Height = 522
+        Height = 521
         Align = alClient
         ColCount = 7
         Enabled = False
@@ -225,13 +226,25 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 395
+        ExplicitHeight = 522
+        ColWidths = (
+          146
+          64
+          64
+          64
+          64
+          64
+          64)
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = -173
-      Height = 114
+      Top = -3
+      Height = 113
       Caption = 'Land Use Options'
       TabOrder = 1
+      ExplicitTop = 3
+      ExplicitWidth = 397
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
@@ -297,14 +310,15 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = -401
-      Height = 228
+      Top = -230
+      Height = 227
       Caption = 'Print'
       TabOrder = 2
+      ExplicitWidth = 397
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
-        Width = 399
+        Width = 395
         Height = 161
         Align = alClient
         Enabled = False
@@ -322,11 +336,13 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
       object pnl2: TPanel
         Left = 0
-        Top = 161
+        Top = 160
         Width = 399
         Height = 41
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 161
+        ExplicitWidth = 395
         object cbSpecifyCrops: TCheckBox
           Left = 7
           Top = 6

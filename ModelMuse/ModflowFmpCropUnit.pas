@@ -498,6 +498,7 @@ type
     FLeachingRequirementCollection: TLeachCollection;
     FSalinityAppliedWater: TLeachCollection;
     FPrint: Boolean;
+    FCropHasSalinityDemand: TBoolFarmCollection;
     procedure SetRootPressureCollection(const Value: TRootPressureCollection);
     procedure SetGroundwaterRootInteraction(
       const Value: TGroundwaterRootInteraction);
@@ -512,6 +513,7 @@ type
     procedure SetLeachingRequirementCollection(const Value: TLeachCollection);
     procedure SetSalinityAppliedWater(const Value: TLeachCollection);
     procedure SetPrint(const Value: Boolean);
+    procedure SetCropHasSalinityDemand(const Value: TBoolFarmCollection);
     const
     PSI1Position = 0;
     PSI2Position = 1;
@@ -820,11 +822,18 @@ type
       stored False
     {$ENDIF}
     ;
-    property Print: Boolean
+    property Print: Boolean read FPrint write SetPrint
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
-     read FPrint write SetPrint;
+     ;
+    //CROP_HAS_SALINITY_DEMAND
+    property CropHasSalinityDemand: TBoolFarmCollection
+      read FCropHasSalinityDemand write SetCropHasSalinityDemand
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+    ;
   end;
 
   TCropCollection = class(TCustomFarmCollection)
@@ -847,6 +856,10 @@ type
     procedure UpdateAllDataArrays;
     procedure UpdateFarmProperties;
   end;
+
+resourcestring
+  StrLeachingChoice = 'Leaching Choice';
+  StrFormula = 'Formula';
 
 implementation
 
@@ -897,8 +910,7 @@ resourcestring
   'e Correction';
   StrSalinityTolerance = 'Salinity Tolerance (dS/m)';
   StrMaximumLeachingReq = 'Maximum Leaching Requirement';
-  StrLeachingChoice = 'Leaching Choice';
-  StrFormula = 'Formula';
+  StrCropHasSalinityDe = 'Crop has Salinity Demand';
 
 resourcestring
   IDError = 'Time: %g.';
@@ -1846,6 +1858,7 @@ begin
     LeachingRequirementCollection := SourceItem.LeachingRequirementCollection;
     SalinityAppliedWater := SourceItem.SalinityAppliedWater;
     Print := SourceItem.Print;
+    CropHasSalinityDemand := SourceItem.CropHasSalinityDemand;
   end;
   inherited;
 end;
@@ -1914,6 +1927,9 @@ begin
   FSalinityAppliedWater := TLeachCollection.Create(Model as TCustomModel);
   FSalinityAppliedWater.OwhmNames.Add(StrLeachingChoice);
   FSalinityAppliedWater.OwhmNames.Add(StrFormula);
+
+  FCropHasSalinityDemand := TBoolFarmCollection.Create(Model as TCustomModel);
+  FCropHasSalinityDemand.OwhmNames.Add(StrCropHasSalinityDe);
 end;
 
 destructor TCropItem.Destroy;
@@ -1994,6 +2010,7 @@ begin
     end;
   end;
 
+  FCropHasSalinityDemand.Free;
   FSalinityAppliedWater.Free;
   FLeachingRequirementCollection.Free;
   FMaxLeachingRequirementCollection.Free;
@@ -2082,6 +2099,7 @@ begin
       and MaxLeachingRequirementCollection.IsSame(OtherItem.MaxLeachingRequirementCollection)
       and LeachingRequirementCollection.IsSame(OtherItem.LeachingRequirementCollection)
       and SalinityAppliedWater.IsSame(OtherItem.SalinityAppliedWater)
+      and CropHasSalinityDemand.IsSame(OtherItem.CropHasSalinityDemand)
 
       and (LandUseAreaFractionDataArrayName = OtherItem.LandUseAreaFractionDataArrayName)
       and (CropCoefficientDataArrayName = OtherItem.CropCoefficientDataArrayName)
@@ -2234,6 +2252,11 @@ procedure TCropItem.SetCropFunctionCollection(
   const Value: TCropFunctionCollection);
 begin
   FCropFunctionCollection.Assign(Value);
+end;
+
+procedure TCropItem.SetCropHasSalinityDemand(const Value: TBoolFarmCollection);
+begin
+  FCropHasSalinityDemand.Assign(Value);
 end;
 
 procedure TCropItem.SetCropHasSalinityDemandDataArrayName(const NewName: string);
@@ -3016,6 +3039,8 @@ begin
   LeachingRequirementCollection.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
   SalinityAppliedWater.UpdateTimes(Times, StartTestTime, EndTestTime,
+    StartRangeExtended, EndRangeExtended);
+  CropHasSalinityDemand.UpdateTimes(Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
 end;
 

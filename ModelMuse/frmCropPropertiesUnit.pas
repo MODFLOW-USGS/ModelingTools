@@ -59,6 +59,8 @@ type
     frameAddedDemand: TframeFormulaGrid;
     jvspLeach: TJvStandardPage;
     frameLeach: TframeLeach;
+    jvspCropHasSalinityDemand: TJvStandardPage;
+    frameCropHasSalinityDemand: TframeFormulaGrid;
     procedure FormDestroy(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
     procedure jvpltvMainChange(Sender: TObject; Node: TTreeNode);
@@ -77,6 +79,7 @@ type
     procedure chklstGwRootInteractionClickCheck(Sender: TObject);
     procedure chklstGwRootInteractionExit(Sender: TObject);
     procedure frameAddedDemandGridEndUpdate(Sender: TObject);
+    procedure frameCropHasSalinityDemandGridEndUpdate(Sender: TObject);
     procedure frameCropNamesbAddClick(Sender: TObject);
     procedure frameCropNamesbInsertClick(Sender: TObject);
     procedure frameCropNamesbDeleteClick(Sender: TObject);
@@ -127,6 +130,7 @@ type
     FSalinityFlush: TFarmProcess4SalinityFlush;
     FLeachCollection: TLeachCollection;
     FPrintStart: Integer;
+    FCropHasSalinityDemand: TBoolFarmCollection;
     procedure SetUpCropNameTable(Model: TCustomModel);
     procedure SetCropNameTableColumns(Model: TCustomModel);
     procedure GetCrops(CropCollection: TCropCollection);
@@ -151,6 +155,11 @@ type
       GroundwaterRootInteraction: TGroundwaterRootInteraction);
     procedure SetUpAddedDemandTable(Model: TCustomModel);
     procedure GetAddedDemand(AddedDemand: TAddedDemandCollection);
+
+    procedure SetUpAddedLeachTable(Model: TCustomModel);
+    procedure SetUpCropHasSalinityDemandTable(Model: TCustomModel);
+    procedure GetCropHasSalinityDemand(CropHasSalinityDemand: TBoolFarmCollection);
+
     procedure SetGridColumnProperties(Grid: TRbwDataGrid4);
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
       const ACol, ARow: integer; Formula: string;
@@ -240,6 +249,8 @@ resourcestring
   StrMaximumLeachingReq = 'Maximum Leaching Requirement';
   StrCropLeachingRequir = 'Crop Leaching Requirement';
   StrSalinityOfApplied = 'Salinity of Applied Water';
+  StrCropHasSalinityDe = 'Crop has Salinity Demand';
+//  StrCropHasSalinityDe = 'Crop has Salinity Demand';
 
 type
   TNameCol = (ncID, ncName);
@@ -263,6 +274,7 @@ type
   TGwRootInteractionIndicies = (griHasTranspiration, griGroundwater,
     griAnoxia, griStress);
   TAddedDemandColumns = (acStart, acEnd, acFormula);
+  TLeachColumns = (lecStartTime, lecEndTime, lecChoice, lecFormula);
 
 {$R *.dfm}
 
@@ -306,6 +318,23 @@ begin
   frameAddedDemand.LayoutMultiRowEditControls;
 end;
 
+procedure TfrmCropProperties.SetUpAddedLeachTable(Model: TCustomModel);
+begin
+
+  frameLeach.Grid.Columns[Ord(lecStartTime)].Format := rcf4Real;
+  frameLeach.Grid.Columns[Ord(lecEndTime)].Format := rcf4Real;
+  frameLeach.Grid.Cells[Ord(lecStartTime), 0] := StrStartingTime;
+  frameLeach.Grid.Cells[Ord(lecEndTime), 0] := StrEndingTime;
+  frameLeach.Grid.Cells[Ord(lecChoice), 0] := StrLeachingChoice;
+  frameLeach.Grid.Cells[Ord(lecFormula), 0] := StrFormula;
+  SetGridColumnProperties(frameLeach.Grid);
+//  SetUseButton(frameLeach.Grid, Ord(cfcSlope));
+  frameLeach.FirstFormulaColumn := 2;
+  frameLeach.LayoutMultiRowEditControls;
+//  TLeachColumns = (lecStartTime, lecEndTime);
+//  TLeachColumns = (lecStartTime, lecEndTime, lecChoice, lecFormula);
+end;
+
 procedure TfrmCropProperties.SetUpCropFunctionTable(Model: TCustomModel);
 begin
   frameCropFunction.Grid.ColCount := 5;
@@ -321,6 +350,28 @@ begin
   SetUseButton(frameCropFunction.Grid, Ord(cfcSlope));
   frameCropFunction.FirstFormulaColumn := 2;
   frameCropFunction.LayoutMultiRowEditControls;
+end;
+
+procedure TfrmCropProperties.SetUpCropHasSalinityDemandTable(
+  Model: TCustomModel);
+const
+  TimeColumnCount = 2;
+var
+  FarmSalinityFlush: TFarmProcess4SalinityFlush;
+  // CropHasSalinityDemand: TBoolFarmCollection
+begin
+  FarmSalinityFlush := Model.ModflowPackages.FarmSalinityFlush;
+  frameCropHasSalinityDemand.Grid.ColCount := TimeColumnCount + 1;
+  frameCropHasSalinityDemand.Grid.FixedCols := 0;
+  frameCropHasSalinityDemand.Grid.Columns[Ord(acStart)].Format := rcf4Real;
+  frameCropHasSalinityDemand.Grid.Columns[Ord(acEnd)].Format := rcf4Real;
+  frameCropHasSalinityDemand.Grid.Cells[Ord(acStart), 0] := StrStartingTime;
+  frameCropHasSalinityDemand.Grid.Cells[Ord(pcEnd), 0] := StrEndingTime;
+  frameCropHasSalinityDemand.Grid.Cells[Ord(acFormula), 0] := StrCropHasSalinityDe;
+  SetGridColumnProperties(frameCropHasSalinityDemand.Grid);
+  SetUseButton(frameCropHasSalinityDemand.Grid, Ord(acFormula));
+  frameCropHasSalinityDemand.FirstFormulaColumn := 2;
+  frameCropHasSalinityDemand.LayoutMultiRowEditControls;
 end;
 
 procedure TfrmCropProperties.SetUpCropNameTable(Model: TCustomModel);
@@ -573,6 +624,10 @@ begin
       ResultType := rdtBoolean;
     end
   end
+  else if (DataGrid = frameCropHasSalinityDemand.Grid)then
+  begin
+    ResultType := rdtBoolean;
+  end
   else if (DataGrid = frameIrrigation.Grid)then
   begin
     if ACol = Ord(IcIrrigation) then
@@ -818,6 +873,14 @@ begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrSalinityOfApplied) as TJvPageIndexNode;
       ANode.PageIndex := jvspLeach.PageIndex;
       ANode.Data := ACrop.SalinityAppliedWater;
+    end;
+
+    if (FSalinityFlush.CropSalinityDemandChoice.FarmOption <> foNotUsed)
+      and (FSalinityFlush.CropSalinityDemandChoice.ArrayList = alList) then
+    begin
+      ANode := jvpltvMain.Items.AddChild(CropNode, StrCropHasSalinityDe) as TJvPageIndexNode;
+      ANode.PageIndex := jvspCropHasSalinityDemand.PageIndex;
+      ANode.Data := ACrop.CropHasSalinityDemand;
     end;
   end;
 {$ENDIF}
@@ -1450,6 +1513,36 @@ begin
   end;
 end;
 
+procedure TfrmCropProperties.GetCropHasSalinityDemand(
+  CropHasSalinityDemand: TBoolFarmCollection);
+var
+  ItemIndex: Integer;
+  AnItem: TBoolFarmItem;
+begin
+  Assert(CropHasSalinityDemand <> nil);
+  FCropHasSalinityDemand := CropHasSalinityDemand;
+  frameCropHasSalinityDemand.ClearGrid;
+  frameCropHasSalinityDemand.seNumber.AsInteger := CropHasSalinityDemand.Count;
+  frameCropHasSalinityDemand.seNumber.OnChange(frameCropHasSalinityDemand.seNumber);
+  if frameCropHasSalinityDemand.seNumber.AsInteger = 0 then
+  begin
+    frameCropHasSalinityDemand.Grid.Row := 1;
+    frameCropHasSalinityDemand.ClearSelectedRow;
+  end;
+  frameCropHasSalinityDemand.Grid.BeginUpdate;
+  try
+    for ItemIndex := 0 to CropHasSalinityDemand.Count - 1 do
+    begin
+      AnItem := CropHasSalinityDemand[ItemIndex] as TBoolFarmItem;
+      frameCropHasSalinityDemand.Grid.Cells[Ord(acStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
+      frameCropHasSalinityDemand.Grid.Cells[Ord(pcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
+      frameCropHasSalinityDemand.Grid.Cells[Ord(acFormula), ItemIndex+1] := AnItem.OwhmValue;
+    end;
+  finally
+    frameCropHasSalinityDemand.Grid.EndUpdate;
+  end;
+end;
+
 procedure TfrmCropProperties.GetCrops(CropCollection: TCropCollection);
 var
   CropIndex: Integer;
@@ -1568,6 +1661,8 @@ begin
   SetUpRootPressureTable(frmGoPhast.PhastModel);
   SetUpGroundwaterRootInteractionTable(frmGoPhast.PhastModel);
   SetUpAddedDemandTable(frmGoPhast.PhastModel);
+  SetUpCropHasSalinityDemandTable(frmGoPhast.PhastModel);
+  SetUpAddedLeachTable(frmGoPhast.PhastModel);
 
   StartTimes := TStringList.Create;
   EndTimes := TStringList.Create;
@@ -1588,6 +1683,7 @@ begin
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameRootPressure.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameAddedDemand.Grid);
     SetStartAndEndTimeLists(StartTimes, EndTimes, frameLeach.Grid);
+    SetStartAndEndTimeLists(StartTimes, EndTimes, frameCropHasSalinityDemand.Grid);
   finally
     EndTimes.Free;
     StartTimes.Free;
@@ -1860,6 +1956,7 @@ begin
     try
       AnObject := Node.Data;
       Assert(AnObject <> nil);
+
       if AnObject is TCropCollection then
       begin
         GetCrops(TCropCollection(AnObject));
@@ -1887,6 +1984,10 @@ begin
       else if AnObject is TLeachCollection then
       begin
         GetLeach(TLeachCollection(AnObject));
+      end
+      else if AnObject is TBoolFarmCollection then
+      begin
+        GetCropHasSalinityDemand(TBoolFarmCollection(AnObject));
       end
       else if AnObject is TOwhmCollection then
       begin
@@ -2252,6 +2353,51 @@ begin
       FAddedDemand.Last.Free;
     end;
   end;
+end;
+
+procedure TfrmCropProperties.frameCropHasSalinityDemandGridEndUpdate(Sender:
+    TObject);
+var
+  ItemCount: Integer;
+  RowIndex: Integer;
+  StartTime: double;
+  EndTime: double;
+  AnItem: TOwhmItem;
+begin
+  inherited;
+
+  if FGettingData then
+  begin
+    Exit;
+  end;
+  frameCropHasSalinityDemand.GridEndUpdate(Sender);
+  if FCropHasSalinityDemand <> nil then
+  begin
+    ItemCount := 0;
+    for RowIndex := 1 to frameCropHasSalinityDemand.seNumber.AsInteger do
+    begin
+      if TryStrToFloat(frameCropHasSalinityDemand.Grid.Cells[
+        Ord(cwuStart), RowIndex], StartTime)
+        and TryStrToFloat(frameCropHasSalinityDemand.Grid.Cells[
+        Ord(cwuEnd), RowIndex], EndTime) then
+      begin
+        if ItemCount >= FCropHasSalinityDemand.Count then
+        begin
+          FCropHasSalinityDemand.Add;
+        end;
+        AnItem := FCropHasSalinityDemand[ItemCount];
+        AnItem.StartTime := StartTime;
+        AnItem.EndTime := EndTime;
+        AnItem.OwhmValue := frameCropHasSalinityDemand.Grid.Cells[Ord(acFormula), RowIndex];
+        Inc(ItemCount);
+      end;
+    end;
+    while FCropHasSalinityDemand.Count > ItemCount do
+    begin
+      FCropHasSalinityDemand.Last.Free;
+    end;
+  end;
+
 end;
 
 procedure TfrmCropProperties.frameCropNameGridSelectCell(Sender: TObject; ACol,

@@ -9946,8 +9946,7 @@ const
 //    '5.1.1.26' Enhancement: Added dynamic time series for MODFLOW 6.
 //               Bug fix: Fixed bug in assigning UZF as a MVR source in MODFLOW 6.
 //    '5.1.1.27'
-
-//               Bug fix: Fixed bug in which the SUTRA data sets for regions
+//    '5.1.1.28' Bug fix: Fixed bug in which the SUTRA data sets for regions
 //                were not properly renamed when opening old ModelMuse files
 //                containing data sets for regions.
 
@@ -9956,7 +9955,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.27';
+  IIModelVersion = '5.1.1.28';
 
 function IModelVersion: string;
 begin

@@ -29142,6 +29142,10 @@ begin
   FCropLeachRequirementChoice.Initialize;
   FCropExtraWaterChoice.Initialize;
 
+  FCropSalinityToleranceChoice.FarmOption := foStatic;
+  FCropLeachRequirementChoice.FarmOption := foStatic;
+  FCropExtraWaterChoice.FarmOption := foStatic;
+
   CropSalinityDemandChoice.OnChangeFarmOption := InvalidateCropHasSalinityDemand;
   CropSalinityDemandChoice.OnChangeArrayList := InvalidateCropHasSalinityDemand;
 end;

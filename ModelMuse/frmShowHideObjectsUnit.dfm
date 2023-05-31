@@ -16,24 +16,24 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     Width = 418
     Height = 158
     ExplicitTop = 252
-    ExplicitWidth = 418
+    ExplicitWidth = 414
     ExplicitHeight = 158
     DesignSize = (
       418
       158)
     inherited btnClose: TBitBtn
-      Left = 306
+      Left = 302
       Top = 109
       TabOrder = 2
-      ExplicitLeft = 306
+      ExplicitLeft = 298
       ExplicitTop = 109
     end
     inherited btnHelp: TBitBtn
-      Left = 306
+      Left = 302
       Top = 70
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 306
+      ExplicitLeft = 298
       ExplicitTop = 70
     end
     object grpShowOrSelect: TGroupBox
@@ -112,6 +112,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     OnPaintText = vstObjectsPaintText
     OnGetImageIndexEx = vstObjectsGetImageIndexEx
     OnMouseDown = vstObjectsMouseDown
+    ExplicitWidth = 418
     ExplicitHeight = 253
   end
   object pmSelectEdit: TPopupMenu

@@ -71,7 +71,7 @@ resourcestring
   StrFractionOfIrrigT = 'Fraction of irrig. to surface water';
   StrPondDepth = 'Pond depth';
   StrAddedDemand = 'Added demand';
-  StrNoCropMeansBareS = 'No crop means bare soil';
+  StrNoCropMeansBareS = 'Zero consumptive use means bare soil';
   StrETIrrigFracCorr = 'ET irrig. frac. correction';
   StrGroundwaterRootInt = 'Groundwater Root Interaction';
   StrOption = 'Key Word';

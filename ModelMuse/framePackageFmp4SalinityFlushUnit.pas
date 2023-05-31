@@ -39,10 +39,22 @@ type
 var
   framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush;
 
+const
+  RequiredRows = [sfrCropSalinityTolerance, sfrCropLeachRequirement, sfrCropExtraWaterChoice];
+
 implementation
 
 uses
   GoPhastTypes;
+
+resourcestring
+  StrFarmSaltConcentrat = 'WBS salt concentration';
+  StrFarmIrrigationUnif = 'WBS irrigation uniformity';
+  StrCropSalinityDemand = 'Crop salinity demand';
+  StrCropSalinityTolera = 'Crop salinity tolerance';
+  StrCropMaxLeach = 'Crop max leach';
+  StrCropLeachRequireme = 'Crop leaching requirement';
+  StrCropExtraWater = 'Crop extra water';
 
 {$R *.dfm}
 
@@ -67,7 +79,7 @@ procedure TframePackageFmp4SalinityFlush.GetData(
     rdgSalinityFlushSelectCell(rdgSalinityFlush, Ord(sfcTransient), ARow, CanSelect);
     if CanSelect then
     begin
-      rdgSalinityFlush.ItemIndex[Ord(sfcTransient), ARow] := Ord(FarmProperty.FarmOption);
+      rdgSalinityFlush.Cells[Ord(sfcTransient), ARow] := DontUseStaticTransient[Ord(FarmProperty.FarmOption)];
     end;
 
     CanSelect := True;
@@ -139,13 +151,13 @@ begin
     rdgSalinityFlush.Cells[Ord(sfcFile), Ord(sfrName)] := StrExternallyGenerated;
     rdgSalinityFlush.Cells[Ord(sfcSfacFile), Ord(sfrName)] := StrExternallyGeneratedSfac;
 
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrFarmSaltConcentrations)] := 'Farm salt concentration';
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrFarmIrrigationUniformity)] := 'Farm irrigation uniformity';
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropSalinityDemand)] := 'Crop salinity demand';
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropSalinityTolerance)] := 'Crop salinity tolerance';
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropMaxLeach)] := 'Crop max leach';
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropLeachRequirement)] := 'Crop Leach requirement';
-    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropExtraWaterChoice)] := 'Crop extra water';
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrFarmSaltConcentrations)] := StrFarmSaltConcentrat;
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrFarmIrrigationUniformity)] := StrFarmIrrigationUnif;
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropSalinityDemand)] := StrCropSalinityDemand;
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropSalinityTolerance)] := StrCropSalinityTolera;
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropMaxLeach)] := StrCropMaxLeach;
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropLeachRequirement)] := StrCropLeachRequireme;
+    rdgSalinityFlush.Cells[Ord(sfcName), Ord(sfrCropExtraWaterChoice)] := StrCropExtraWater;
   finally
   rdgSalinityFlush.EndUpdate;
   end;
@@ -161,6 +173,9 @@ procedure TframePackageFmp4SalinityFlush.rdgSalinityFlushSelectCell(
   Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
 var
   SfRow: TSalinityFlushRows;
+  Column: TRbwColumn4;
+  ItemIndex: Integer;
+  FarmOption: TFarmOption;
 begin
   inherited;
   if (ACol = Ord(sfcArray)) then
@@ -168,14 +183,71 @@ begin
     SfRow := TSalinityFlushRows(ARow);
     CanSelect := SfRow = sfrCropSalinityDemand;
   end;
-
+  if (ACol = Ord(sfcTransient)) and not rdgSalinityFlush.Drawing then
+  begin
+    Column := rdgSalinityFlush.Columns[Ord(sfcTransient)];
+    SfRow := TSalinityFlushRows(ARow);
+    if SfRow in RequiredRows then
+    begin
+      Column.PickList := StaticTransient;
+    end
+    else
+    begin
+      Column.PickList := DontUseStaticTransient;
+    end;
+  end;
+  if ACol in [Ord(sfcSFAC), Ord(sfcFile), Ord(sfcSfacFile)] then
+  begin
+    SfRow := TSalinityFlushRows(ARow);
+    ItemIndex := DontUseStaticTransient.IndexOf(
+      rdgSalinityFlush.Cells[Ord(sfcTransient), Ord(ARow)]);
+    if ItemIndex < 0 then
+    begin
+      ItemIndex := 0;
+    end;
+    if (ItemIndex = 0) and (SfRow in RequiredRows) then
+    begin
+      ItemIndex := 1;
+    end;
+    FarmOption := TFarmOption(ItemIndex);
+    if FarmOption = foNotUsed then
+    begin
+      CanSelect := False
+    end;
+  end;
+  if ACol in [Ord(sfcSFAC), Ord(sfcSfacFile)] then
+  begin
+    SfRow := TSalinityFlushRows(ARow);
+    if SfRow = sfrCropSalinityDemand then
+    begin
+      CanSelect := False
+    end;
+  end;
+{{
+  TSalinityFlushColumns = (sfcName, sfcTransient, sfcArray, sfcSFAC, sfcFile, sfcSfacFile);
+  TSalinityFlushRows = (sfrName, sfrFarmSaltConcentrations,
+    sfrFarmIrrigationUniformity, sfrCropSalinityDemand, sfrCropSalinityTolerance,
+    sfrCropMaxLeach, sfrCropLeachRequirement, sfrCropExtraWaterChoice);
+}
 end;
 
 procedure TframePackageFmp4SalinityFlush.SetData(
   Package: TModflowPackageSelection);
   function SetFarmOptionGrid(Row: TSalinityFlushRows): TFarmOption;
+  var
+    ItemIndex: Integer;
   begin
-    Result := TFarmOption(DontUseStaticTransient.IndexOf(rdgSalinityFlush.Cells[Ord(sfcTransient), Ord(Row)]));
+    ItemIndex := DontUseStaticTransient.IndexOf(
+      rdgSalinityFlush.Cells[Ord(sfcTransient), Ord(Row)]);
+    if ItemIndex < 0 then
+    begin
+      ItemIndex := 0;
+    end;
+    if (ItemIndex = 0) and (Row in RequiredRows) then
+    begin
+      ItemIndex := 1;
+    end;
+    Result := TFarmOption(ItemIndex);
   end;
   function SetArrayListGrid(Row: TSalinityFlushRows): TArrayList;
   begin
