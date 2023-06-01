@@ -142,14 +142,14 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
       item
         AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
+        ButtonCaption = 'Open'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -12
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
+        ButtonUsed = True
+        ButtonWidth = 50
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -166,14 +166,14 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
       item
         AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
+        ButtonCaption = 'Open'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -12
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
+        ButtonUsed = True
+        ButtonWidth = 50
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -188,6 +188,8 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ExplicitLeft = 3
+    ExplicitTop = 188
   end
   object rdeRefEtToBare: TRbwDataEntry [5]
     Left = 16

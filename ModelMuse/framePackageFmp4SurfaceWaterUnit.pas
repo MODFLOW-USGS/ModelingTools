@@ -87,6 +87,8 @@ var
       rdgSurfaceWater.Cells[Ord(sfcSfacFile), ARow] := FarmProperty.ExternalScaleFileName;
     end;
   end;
+  var
+    CanSelect: Boolean;
 begin
   cpnlPrint.Collapse;
   if cpnlgrp1.VertScrollBar.Visible then
@@ -121,6 +123,10 @@ begin
 
   rdeSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE.RealValue := SurfWatPackage.Semi_Routed_Delivery_Closure_Tolerance;
   cbRebuild_Fully_Routed_Return.Checked := SurfWatPackage.Rebuild_Fully_Routed_Return;
+
+  CanSelect := True;
+  rdgSurfaceWaterSelectCell(rdgSurfaceWater, 1, 1, CanSelect);
+
 end;
 
 procedure TframePackageFmp4SurfaceWater.InitializeGrid;
@@ -220,6 +226,14 @@ begin
       end;
     end;
   end;
+
+  if ACol in [Ord(sfcOption), Ord(sfcSfac), Ord(sfcFile), Ord(sfcSfacFile)] then
+  begin
+    if rdgSurfaceWater.Cells[Ord(sfcFrequency), ARow] = 'Don''t use' then
+    begin
+      CanSelect := False;
+    end;
+  end;
 end;
 
 procedure TframePackageFmp4SurfaceWater.SetData(
@@ -229,7 +243,12 @@ var
   PrintChoice: TSurfaceWaterPrints;
   PrintIndex: TSurfaceWaterPrint;
   function RowToFarmOption(ARow: TSurfaceWaterRows): TFarmOption;
+  var
+    ItemIndex: Integer;
+    CanSelect: Boolean;
   begin
+    CanSelect := True;
+    rdgSurfaceWaterSelectCell(rdgSurfaceWater, Ord(sfcFrequency), Ord(ARow), CanSelect);
     result := TFarmOption(
       rdgSurfaceWater.ItemIndex[Ord(sfcFrequency), Ord(ARow)]);
   end;

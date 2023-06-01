@@ -17,6 +17,7 @@ inherited framePackageFmp4Allotments: TframePackageFmp4Allotments
     RowCount = 3
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
     TabOrder = 1
+    OnSelectCell = rdgAllotmentsSelectCell
     ExtendedAutoDistributeText = False
     AutoMultiEdit = False
     AutoDistributeText = False
@@ -133,14 +134,14 @@ inherited framePackageFmp4Allotments: TframePackageFmp4Allotments
       item
         AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
+        ButtonCaption = 'Open'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -12
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
+        ButtonUsed = True
+        ButtonWidth = 50
         CheckMax = False
         CheckMin = False
         ComboUsed = False
@@ -157,14 +158,14 @@ inherited framePackageFmp4Allotments: TframePackageFmp4Allotments
       item
         AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = True
-        ButtonCaption = '...'
+        ButtonCaption = 'Open'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -12
         ButtonFont.Name = 'Segoe UI'
         ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
+        ButtonUsed = True
+        ButtonWidth = 50
         CheckMax = False
         CheckMin = False
         ComboUsed = False

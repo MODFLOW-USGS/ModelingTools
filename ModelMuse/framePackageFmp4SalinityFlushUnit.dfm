@@ -28,7 +28,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       Caption = 'Print'
       Collapsed = True
       TabOrder = 0
-      ExplicitWidth = 397
       ExpandedHeight = 81
       object clbPrint: TCheckListBox
         Left = 0
@@ -37,7 +36,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Height = 0
         Align = alClient
         Enabled = False
-        ItemHeight = 17
+        ItemHeight = 15
         Items.Strings = (
           'PRINT BYWBS'
           'PRINT BYWBS_BYCROP'
@@ -50,8 +49,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       Height = 379
       Caption = 'Options'
       TabOrder = 1
-      ExplicitTop = 36
-      ExplicitWidth = 397
       object pnl1: TPanel
         Left = 0
         Top = 0
@@ -59,7 +56,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
         Height = 49
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 401
         object lblExpressionMin: TLabel
           Left = 140
           Top = 18
@@ -209,14 +205,14 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
           item
             AutoAdjustRowHeights = True
             AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
+            ButtonCaption = 'Open'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
             ButtonFont.Height = -12
             ButtonFont.Name = 'Segoe UI'
             ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
+            ButtonUsed = True
+            ButtonWidth = 50
             CheckMax = False
             CheckMin = False
             ComboUsed = False
@@ -233,14 +229,14 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
           item
             AutoAdjustRowHeights = True
             AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
+            ButtonCaption = 'Open'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
             ButtonFont.Height = -12
             ButtonFont.Name = 'Segoe UI'
             ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
+            ButtonUsed = True
+            ButtonWidth = 50
             CheckMax = False
             CheckMin = False
             ComboUsed = False
@@ -255,8 +251,6 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 401
-        ExplicitHeight = 310
       end
     end
   end

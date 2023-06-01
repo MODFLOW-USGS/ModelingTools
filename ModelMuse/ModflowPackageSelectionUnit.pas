@@ -29363,6 +29363,8 @@ begin
   FCapFringe.Initialize;
   FSurfVertK.Initialize;
   FCoefficient.Initialize;
+  FCoefficient.ArrayList := alList;
+  FEffPrecipTable.ArrayList := alList;
   FEffPrecipTableOption := ppcLength;
 end;
 

@@ -155,14 +155,14 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
           item
             AutoAdjustRowHeights = True
             AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
+            ButtonCaption = 'Open'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
             ButtonFont.Height = -12
             ButtonFont.Name = 'Segoe UI'
             ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
+            ButtonUsed = True
+            ButtonWidth = 50
             CheckMax = False
             CheckMin = False
             ComboUsed = False
@@ -179,14 +179,14 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
           item
             AutoAdjustRowHeights = True
             AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
+            ButtonCaption = 'Open'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
             ButtonFont.Height = -12
             ButtonFont.Name = 'Segoe UI'
             ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
+            ButtonUsed = True
+            ButtonWidth = 50
             CheckMax = False
             CheckMin = False
             ComboUsed = False

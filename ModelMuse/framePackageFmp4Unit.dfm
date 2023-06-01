@@ -17,6 +17,7 @@ inherited framePackageFmp4: TframePackageFmp4
     Top = 103
     Width = 575
     Height = 397
+    VertScrollBar.Position = 393
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -27,7 +28,7 @@ inherited framePackageFmp4: TframePackageFmp4
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlWaterBalanceRegions: TCategoryPanel
-      Top = 462
+      Top = 69
       Height = 377
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
@@ -182,14 +183,14 @@ inherited framePackageFmp4: TframePackageFmp4
           item
             AutoAdjustRowHeights = True
             AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
+            ButtonCaption = 'Open'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
             ButtonFont.Height = -12
             ButtonFont.Name = 'Segoe UI'
             ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
+            ButtonUsed = True
+            ButtonWidth = 50
             CheckMax = False
             CheckMin = False
             ComboUsed = False
@@ -206,14 +207,14 @@ inherited framePackageFmp4: TframePackageFmp4
           item
             AutoAdjustRowHeights = True
             AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
+            ButtonCaption = 'Open'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
             ButtonFont.Height = -12
             ButtonFont.Name = 'Segoe UI'
             ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
+            ButtonUsed = True
+            ButtonWidth = 50
             CheckMax = False
             CheckMin = False
             ComboUsed = False
@@ -231,7 +232,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 340
+      Top = -53
       Height = 122
       Caption = 'Options'
       TabOrder = 1
@@ -267,7 +268,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlMnw2: TCategoryPanel
-      Top = 310
+      Top = -83
       Height = 30
       Caption = 'MNW2 Closure Criteria'
       Collapsed = True
@@ -362,7 +363,7 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlOutput: TCategoryPanel
-      Top = 0
+      Top = -393
       Height = 310
       Caption = 'Print'
       TabOrder = 3

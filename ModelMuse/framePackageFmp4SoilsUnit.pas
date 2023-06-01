@@ -105,19 +105,38 @@ procedure TframePackageFmp4Soils.rdgSoilsSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 var
   SoilColumn: TSoilColumns;
+  SoilRow: TSoilRows;
 begin
   inherited;
   if ARow > 0 then
   begin
     SoilColumn := TSoilColumns(ACol);
-    if ARow in [Ord(srCoefficient), Ord(srEffPrecip)] then
+    SoilRow := TSoilRows(ARow);
+
+    if SoilColumn in [scArrayList, scScaleFactor, scExternalFile, scScaleExternal] then
     begin
-      CanSelect := ACol = Ord(scFrequency);
-    end
-    else if SoilColumn in [scScaleFactor, scExternalFile, scScaleExternal] then
-    begin
-      CanSelect := rdgSoils.ItemIndex[Ord(scFrequency), ARow] > 0;
+      if rdgSoils.ItemIndex[Ord(scFrequency), ARow] <= 0 then
+      begin
+        CanSelect := False;
+      end;
     end;
+    if SoilColumn = scArrayList then
+    begin
+      if (ARow in [Ord(srCoefficient), Ord(srEffPrecip)]) then
+      begin
+        CanSelect := False;
+      end;
+    end;
+
+//TSoilRows =  (srName, srCapFringe, srCoefficient, srSurfK, srEffPrecip);
+//    if ARow in [Ord(srCoefficient), Ord(srEffPrecip)] then
+//    begin
+//      CanSelect := ACol = Ord(scFrequency);
+//    end
+//    else if SoilColumn in [scScaleFactor, scExternalFile, scScaleExternal] then
+//    begin
+//      CanSelect := rdgSoils.ItemIndex[Ord(scFrequency), ARow] > 0;
+//    end;
   end;
 end;
 

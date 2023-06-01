@@ -14,6 +14,8 @@ type
 
   TframePackageFmp4Allotments = class(TframePackage)
     rdgAllotments: TRbwDataGrid4;
+    procedure rdgAllotmentsSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     procedure InitializeGrid;
     { Private declarations }
@@ -87,6 +89,25 @@ procedure TframePackageFmp4Allotments.Loaded;
 begin
   inherited;
   InitializeGrid
+end;
+
+procedure TframePackageFmp4Allotments.rdgAllotmentsSelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  AllotCol: TAllotmentColumns;
+begin
+  inherited;
+  if ARow > 0 then
+  begin
+    AllotCol := TAllotmentColumns(ACol);
+    if AllotCol in [acOption, asSFAC, acExtFile, acExtSfacFile] then
+    begin
+      if rdgAllotments.ItemIndex[Ord(acFrequency), ARow] <= 0 then
+      begin
+        CanSelect := False;
+      end;
+    end;
+  end;
 end;
 
 procedure TframePackageFmp4Allotments.SetData(

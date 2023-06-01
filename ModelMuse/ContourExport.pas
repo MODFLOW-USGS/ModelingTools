@@ -47,6 +47,8 @@ type
     FShapeDataBase: TXBase;
     FShapeFileWriter: TShapefileGeometryWriter;
     FFileName: string;
+    FFieldName: AnsiString;
+    FLayerFieldName: AnsiString;
     // @name is the event handler for TContourCreator.OnExtractSegments
     procedure ImportSegments(Sender: TObject; const Segments: TLine2DArray);
     procedure InitializeQuadTree;
@@ -452,7 +454,7 @@ var
   Shape: TShapeObject;
   PPoint: TPoint2DPtr;
   Fields: TStringList;
-  FieldName: AnsiString;
+//  FieldName: AnsiString;
   FieldDescription: AnsiString;
   MinValue, MaxValue: double;
   DSValues: TStringList;
@@ -470,7 +472,7 @@ var
   TestValue: double;
   MinColWidth: double;
   ColIndex: Integer;
-  LayerFieldName: AnsiString;
+//  LayerFieldName: AnsiString;
   procedure MakeShapesFromContourLines;
   var
     ContourIndex: integer;
@@ -527,29 +529,29 @@ var
         FShapeDataBase.AppendBlank;
         case DataArray.DataType of
           rdtDouble:
-            FShapeDataBase.UpdFieldNum(FieldName,
+            FShapeDataBase.UpdFieldNum(FFieldName,
               ValueList.RealValues[ValueIndex]);
           rdtInteger:
-            FShapeDataBase.UpdFieldInt(FieldName,
+            FShapeDataBase.UpdFieldInt(FFieldName,
               ValueList.IntValues[ValueIndex]);
           rdtBoolean:
             if ValueList.BooleanValues[ValueIndex] then
             begin
-              FShapeDataBase.UpdFieldInt(FieldName, 1);
+              FShapeDataBase.UpdFieldInt(FFieldName, 1);
             end
             else
             begin
-              FShapeDataBase.UpdFieldInt(FieldName, 0);
+              FShapeDataBase.UpdFieldInt(FFieldName, 0);
             end;
           rdtString:
-            FShapeDataBase.UpdFieldStr(FieldName,
+            FShapeDataBase.UpdFieldStr(FFieldName,
               AnsiString(ValueList.StringValues[ValueIndex]));
           else
             Assert(False);
         end;
         if LayerNumber > 0 then
         begin
-          FShapeDataBase.UpdFieldInt(LayerFieldName, LayerNumber);
+          FShapeDataBase.UpdFieldInt(FLayerFieldName, LayerNumber);
         end;
 
         FShapeDataBase.PostChanges;
@@ -628,9 +630,9 @@ begin
       Fields := TStringList.Create;
       FieldNames := TStringList.Create;
       try
-        FieldName := AnsiString(UpperCase(Copy(DataArray.Name, 1, 10)));
-        FieldName := FixShapeFileFieldName(FieldName, FieldNames);
-        FieldNames.Add(string(FieldName));
+        FFieldName := AnsiString(UpperCase(Copy(DataArray.Name, 1, 10)));
+        FFieldName := FixShapeFileFieldName(FFieldName, FieldNames);
+        FieldNames.Add(string(FFieldName));
         case DataArray.DataType of
           rdtDouble:
             FieldFormat := 'N18,10';
@@ -643,13 +645,13 @@ begin
           else
             Assert(False);
         end;
-        FieldDescription := FieldName + '=' + FieldFormat;
+        FieldDescription := FFieldName + '=' + FieldFormat;
         Fields.Add(string(FieldDescription));
         if LayerNumber > 0 then
         begin
-          LayerFieldName := 'LAYER';
+          FLayerFieldName := 'LAYER';
           FieldFormat := 'N';
-          FieldDescription := LayerFieldName + '=' + FieldFormat;
+          FieldDescription := FLayerFieldName + '=' + FieldFormat;
           Fields.Add(string(FieldDescription));
         end;
         try
@@ -777,22 +779,26 @@ begin
                           FShapeDataBase.AppendBlank;
                           case DataArray.DataType of
                             rdtDouble:
-                              FShapeDataBase.UpdFieldNum(FieldName, ValueList.RealValues[ValueIndex]);
+                              FShapeDataBase.UpdFieldNum(FFieldName, ValueList.RealValues[ValueIndex]);
                             rdtInteger:
-                              FShapeDataBase.UpdFieldInt(FieldName, ValueList.IntValues[ValueIndex]);
+                              FShapeDataBase.UpdFieldInt(FFieldName, ValueList.IntValues[ValueIndex]);
                             rdtBoolean:
                               if ValueList.BooleanValues[ValueIndex] then
                               begin
-                                FShapeDataBase.UpdFieldInt(FieldName, 1);
+                                FShapeDataBase.UpdFieldInt(FFieldName, 1);
                               end
                               else
                               begin
-                                FShapeDataBase.UpdFieldInt(FieldName, 0);
+                                FShapeDataBase.UpdFieldInt(FFieldName, 0);
                               end;
                             rdtString:
-                              FShapeDataBase.UpdFieldStr(FieldName, AnsiString(ValueList.StringValues[ValueIndex]));
+                              FShapeDataBase.UpdFieldStr(FFieldName, AnsiString(ValueList.StringValues[ValueIndex]));
                             else
                               Assert(False);
+                          end;
+                          if LayerNumber > 0 then
+                          begin
+                            FShapeDataBase.UpdFieldInt(FLayerFieldName, LayerNumber);
                           end;
 
                           FShapeDataBase.PostChanges;
