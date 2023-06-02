@@ -725,6 +725,8 @@ type
     property Invalidate: TNotifyEvent read GetInvalidate;
     function GetComponentState: TComponentState;
     property ComponentState: TComponentState read GetComponentState;
+    function GetDisplayName: string;
+    property DisplayName: string read GetDisplayName;
   end;
 
   TBaseModel = class abstract(TComponent, IModelMuseModel)

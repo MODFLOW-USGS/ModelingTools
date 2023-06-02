@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-02T15:53:21.981-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Salinity of Applied Water Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Salinity of Applied Water Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CROP_SALINITY_APPLIED_WATER is the extra water that must be applied to the crop in units of L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T (model units). Its result is added to the crops &quot;ADDED_DEMAND&quot; to include its irrigation as a salt flush. To force all the water into the ground, you must specify the WBS Block </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FMP-Farm-Process-V4" anchor="Added_Demand_Runoff_Split" styleclass="Normal" translate="true">ADDED_DEMAND_RUNOFF_SPLIT</link><text styleclass="Normal" translate="true"> close to Zero</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">RHOADES Equation ==&gt; (ETi/DU)/(1-LR) - ETi</text></para>
+    <para styleclass="Normal"><snippet src="CROP_LEACHING_REQUIREMENT-and-" inline="false"/></para>
+  </body>
+</topic>

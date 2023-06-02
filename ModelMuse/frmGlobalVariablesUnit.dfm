@@ -2,22 +2,22 @@ inherited frmGlobalVariables: TfrmGlobalVariables
   HelpType = htKeyword
   HelpKeyword = 'Global_Variables_Dialog_Box'
   Caption = 'Global Variables'
-  ClientHeight = 281
-  ClientWidth = 518
+  ClientHeight = 279
+  ClientWidth = 539
   OnClose = FormClose
-  ExplicitWidth = 534
-  ExplicitHeight = 320
+  ExplicitWidth = 551
+  ExplicitHeight = 317
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 175
-    Width = 518
+    Top = 173
+    Width = 539
     Height = 106
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 176
-    ExplicitWidth = 522
+    ExplicitTop = 172
+    ExplicitWidth = 506
     object Label1: TLabel
       Left = 71
       Top = 11
@@ -116,8 +116,8 @@ inherited frmGlobalVariables: TfrmGlobalVariables
   object rdgGlobalVariables: TRbwDataGrid4
     Left = 0
     Top = 0
-    Width = 518
-    Height = 175
+    Width = 539
+    Height = 173
     Align = alClient
     ColCount = 4
     FixedCols = 0
@@ -240,8 +240,8 @@ inherited frmGlobalVariables: TfrmGlobalVariables
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 522
-    ExplicitHeight = 176
+    ExplicitWidth = 506
+    ExplicitHeight = 172
     ColWidths = (
       64
       80

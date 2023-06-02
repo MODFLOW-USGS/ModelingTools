@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-02T14:39:35.372-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Groundwater Root Interaction Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Groundwater Root Interaction Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The GROUNDWATER_ROOT_INTERACTION determines if there is groundwater uptake to meet crop demand and if the Potential Consumptive Use is reduced due to anoxia and soil stresses. In the Farm process it is specified as an integer with the following values.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">0 = No Transpiration &#160;==&gt; Zeros out any T requirement</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">1 = No Groundwater Interaction &#160;==&gt; No Root-Groundwater Uptake, No &#160;Anoxia or Stress Reduction, Full CU must be met through surface sources (Precip or Irrigation)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">2 = Has Anoxia/Soil Stress Loss, NO Root-Groundwater Uptake ==&gt; CU Reduced from any anoxia and soil stress, but CU may only be satisfied with surface sources</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">3 = Has Root-Groundwater Uptake, NO Anoxia/Soil Stress Loss ==&gt; Anoxia and Soil Stress losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss &#160; &#160; &#160; &#160; &#160; &#160; ==&gt; Anoxia losses are either added to Root-Groundwater Uptake or surface consumption requirement &#160;(i.e. if there is root-groundwater uptake, then the amount lost through anoxia is consumed as root-groundwater uptake. However if there is no root-groundwater uptake then the anoxia is added to the surface sources consumption (Precip or Irrigation)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">5 = Full Interaction ==&gt; HAS Anoxia/Soil Stress Reduction, HAS Root-Groundwater Uptake &#160;(DEFAULT)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In ModelMuse, this is simplified into a series of check boxes that allow only the supported combination of options to be selected.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

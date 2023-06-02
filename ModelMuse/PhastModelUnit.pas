@@ -9949,13 +9949,14 @@ const
 //    '5.1.1.28' Bug fix: Fixed bug in which the SUTRA data sets for regions
 //                were not properly renamed when opening old ModelMuse files
 //                containing data sets for regions.
+//    '5.1.1.29'
 
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.28';
+  IIModelVersion = '5.1.1.29';
 
 function IModelVersion: string;
 begin

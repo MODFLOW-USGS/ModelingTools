@@ -2330,6 +2330,8 @@ var
   NameDataArray: TDataArray;
   OkAssignment: Boolean;
   StackIndex: Integer;
+  AnObject: TObject;
+  AnotherObject: TObject;
   {$IFDEF MeasureTime}
   StartTime: TDateTime;
   ElapsedTime: double;
@@ -3222,7 +3224,22 @@ begin
                             AnotherDataSet :=
                               DataArrayManager.DataSets[DataSetIndex];
                             Assert(AnotherDataSet <> self);
-                            Assert(Model = AnotherDataSet.Model);
+
+                            // Newly created data sets may have different values
+                            // of the Model interface from ones created when
+                            // the model was first created even though they
+                            // represent the same TCustomModel. For that reason
+                            // the following doesn't work
+                            // Assert(Model = AnotherDataSet.Model);
+
+                            // This ensures that the data sets all below to the
+                            // same model without testing for equality of
+                            // Model and AnotherDataSet.Model.
+                            Model.QueryInterface(IInterface, AnObject);
+                            AnotherDataSet.Model.QueryInterface(IInterface, AnotherObject);
+                            Assert(AnObject = AnotherObject);
+
+
                             Assert(AnotherDataSet.DataType = Variable.ResultType);
                             if AnotherDataSet.Orientation = dsoTop then
                             begin

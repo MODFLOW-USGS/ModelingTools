@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-06-02T15:54:50.577-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Farm Allotment Dialog Box</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm Allotment Dialog Box</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farm Allotment</text><text styleclass="Normal" translate="true"> dialog box is used to specify an surface-water allotment height (</text><text styleclass="Strong" translate="true">ALLOTSW</text><text styleclass="Normal" translate="true">) when </text><text styleclass="Strong" translate="true">Surface water allotment (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Surface_Water_Flags" anchor="IALLOTSW" styleclass="Strong" translate="true">IALLOTSW</link><text styleclass="Strong" translate="true">)</text><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Strong" translate="true">Equal (1)</text><text styleclass="Normal" translate="true">. The dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">Model|Farm Process|Farm Allotment...</text><text styleclass="Normal" translate="true"> This is a measure of the total amount of water available for delivery to all of the farms.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farm Allotment</text><text styleclass="Normal" translate="true"> dialog box is only used with MODFLOW-OWHM version 1.</text></para>
   </body>
 </topic>

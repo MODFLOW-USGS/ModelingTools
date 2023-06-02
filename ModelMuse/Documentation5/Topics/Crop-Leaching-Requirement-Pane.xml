@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-02T15:52:52.443-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Crop Leaching Requirement Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Crop Leaching Requirement Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CROP_MAX_LEACHING_REQUIREMENT </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The crop leaching requirement is the fraction of total irrigation (applied) water that must pass through the soil to prevent the soil salinity from reaching the tolerance of the crop.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">RHOADES Equation ==&gt; ECw/(5*ECe - ECw)</text></para>
+    <para styleclass="Normal"><snippet src="CROP_LEACHING_REQUIREMENT-and-" inline="false"/></para>
+  </body>
+</topic>

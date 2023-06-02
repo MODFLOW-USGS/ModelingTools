@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-02T14:03:34.476-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Irrigation Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Irrigation Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The irrigation pane is used to specify three Farm Process inputs.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IRRIGATION determines if crop receives applied water (irrigation) to meet consumptive use and the irrigation efficiency. Zero indicates no irrigation. A non-zero value specifies the irrigation type. Irrigation types are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm-Irrigation-Types--Dialog-" styleclass="Strong" translate="true">Farm Irrigation Types</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">EVAPORATION_IRRIGATION_FRACTION is the fraction of a cropped area that is irrigated but is not covered by a crop. See also the discussion in the help for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE-Farm-Process-V4-Land-" anchor="EVAPORATION_IRRIGATION_FRACTION" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">SURFACEWATER_LOSS_FRACTION_IRRIGATION: indicates the fraction of inefficient losses from irrigation that go to surface water compared to deep percolation.. See also the discussion in the help for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAND_USE-Farm-Process-V4-Land-" anchor="SURFACEWATER_LOSS_FRACTION_IRRIGATION" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

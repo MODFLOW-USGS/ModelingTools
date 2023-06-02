@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-06-02T15:49:51.519-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Salinity Flush Formula Editor</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Salinity Flush Formula Editor</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Salinity Flush Formula Editor is used to set up custom expressions for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop-Leaching-Requirement-Pane" styleclass="Normal" translate="true">CROP_LEACHING_REQUIREMENT</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Salinity-of-Applied-Water-Pane" styleclass="Normal" translate="true">CROP_SALINITY_APPLIED_WATER</link><text styleclass="Normal" translate="true">. It can be accessed from the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop-Leaching-Requirement-Pane" styleclass="Normal" translate="true">Crop Leaching Requirement Pane</link><text styleclass="Normal" translate="true"> or the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Salinity-of-Applied-Water-Pane" styleclass="Normal" translate="true">Salinity of Applied Water Pane</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Normal" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Only the functions and variables defined in MODFLOW-OWHM can be used with custom expressions.</text></para>
+    <para styleclass="Heading2_atoc_"><snippet src="Predefined-Variables-Salinity-" inline="false"/></para>
+  </body>
+</topic>

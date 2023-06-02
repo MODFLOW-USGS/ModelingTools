@@ -7,7 +7,7 @@ uses
   Controls, Forms, Dialogs, frmCustomGoPhastUnit, frameGridUnit,
   frameFormulaGridUnit, StdCtrls, Buttons, ExtCtrls,
   ModflowFmpSoilUnit, UndoItems, Grids, RbwParser, RbwDataGrid4,
-  GoPhastTypes, frameSoilEffectivePrecipUnit;
+  GoPhastTypes, frameSoilEffectivePrecipUnit, ModflowPackageSelectionUnit;
 
 type
   TUndoSoils = class(TCustomUndo)
@@ -55,6 +55,7 @@ type
   private
     FSoils: TSoilCollection;
     FLookUpTable: TLookUpTable;
+    FFarmSoil4: TFarmProcess4Soil;
     procedure SetGridCaptions;
     procedure GetData;
     procedure SetData;
@@ -78,8 +79,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit,
-  ModflowPackageSelectionUnit;
+  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit;
 
 resourcestring
   StrErrorInFormulaS = 'Error in formula: %s';
@@ -339,6 +339,36 @@ begin
   begin
     CanSelect := frameSoils.Grid.ItemIndex[ord(scSoiltype), ARow] = Ord(stOther);
   end;
+
+  if (FFarmSoil4 <> nil) and (ARow >= 1) then
+  begin
+    if ACol = Ord(scCapFringe) then
+    begin
+      if (FFarmSoil4.CapFringe.FarmOption = foNotUsed)
+      or (FFarmSoil4.CapFringe.ArrayList = alArray) then
+      begin
+         CanSelect := False;
+      end;
+    end;
+
+    if ACol = Ord(scSurfKv) then
+    begin
+      if (FFarmSoil4.SurfVertK.FarmOption = foNotUsed)
+      or (FFarmSoil4.SurfVertK.ArrayList = alArray) then
+      begin
+         CanSelect := False;
+      end;
+    end;
+
+    if ACol = Ord(scSoiltype) then
+    begin
+      if (FFarmSoil4.Coefficient.FarmOption = foNotUsed) then
+      begin
+         CanSelect := False;
+      end;
+    end;
+  end;
+
   if (ARow >= frameSoils.Grid.FixedRows) and not frameSoils.Grid.Drawing then
   begin
     SoilIndex := ARow - 1;
@@ -393,12 +423,24 @@ var
   Grid: TRbwDataGrid4;
   ItemIndex: Integer;
   ASoil: TSoilItem;
-  FarmSoil4: TFarmProcess4Soil;
   Dummy: Boolean;
 begin
   GetGlobalVariables;
   FSoils := TSoilCollection.Create(nil);
   FSoils.Assign(frmGoPhast.PhastModel.FmpSoils);
+
+{$IFDEF OWHMV2}
+  if frmGoPhast.ModelSelection = msModflowOwhm2 then
+  begin
+    FFarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
+  end
+  else
+  begin
+    FFarmSoil4 := nil;
+  end;
+{$ELSE}
+  FFarmSoil4 := nil;
+{$ENDIF}
 
 //    Owhm1SoilTypes := TStringList.Create;
 //  Owhm2SoilTypes := TStringList.Create;
@@ -455,11 +497,10 @@ begin
   Dummy := True;
   frameSoilsGridSelectCell(Grid, Ord(scName), 1, Dummy);
 
-  FarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
 {$IFDEF OWHMV2}
   frameSoilEffectivePrecip.Visible :=
     (frmGoPhast.ModelSelection = msModflowOwhm2)
-    and (FarmSoil4.EffPrecipTable.FarmOption <> foNotUsed);
+    and (FFarmSoil4.EffPrecipTable.FarmOption <> foNotUsed);
 {$ELSE}
   frameSoilEffectivePrecip.Visible := False;
 {$ENDIF}
@@ -474,8 +515,8 @@ begin
   try
     Grid.Cells[0,0] := 'Precipitation Rate';
 
-    FarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
-    if FarmSoil4.EffPrecipTableOption = ppcLength then
+    FFarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
+    if FFarmSoil4.EffPrecipTableOption = ppcLength then
     begin
       Grid.Cells[1,0] := 'Effective Precipitation (L)';
     end

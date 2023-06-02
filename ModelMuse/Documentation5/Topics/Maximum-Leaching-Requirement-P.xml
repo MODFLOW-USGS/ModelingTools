@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-02T15:21:28.793-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Maximum Leaching Requirement Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Maximum Leaching Requirement Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CROP_MAX_LEACHING_REQUIREMENT</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The maximum leaching requirement is 1.0, but this could result in a division by zero (RHOADES equation). It may be any value between 0.0 and 0.9999. This allows the user to specify a maximum allowed leaching requirement. If not specified then it is set to 0.99</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

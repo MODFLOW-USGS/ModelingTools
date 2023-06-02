@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-02T15:03:12.647-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Added Demand Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Added Demand Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ADDED_DEMAND specifies any additional demands to include with the crop demand. ADDED_DEMAND only applies to irrigated crops and the additional demanded water only becomes surface runoff or deep percolation based on the fraction specified in the WBS Block &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="FMP-Farm-Process-V4" anchor="Added_Demand_Runoff_Split" styleclass="Normal" translate="true">ADDED_DEMAND_RUNOFF_SPLIT</link><text styleclass="Normal" translate="true">&quot;</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

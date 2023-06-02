@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-06-02T15:47:00.997-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CROP_LEACHING_REQUIREMENT and CROP_SALINITY_APPLIED_WATER</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CROP_LEACHING_REQUIREMENT and CROP_SALINITY_APPLIED_WATER</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CROP_LEACHING_REQUIREMENT and CROP_SALINITY_APPLIED_WATER read a NCROP LIST that may be one of the following input:</text></para>
+    <list id="0" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">FLOAT ==&gt; Specify its exact value or a formula.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">RHOADES ==&gt; Indicates that Rhoades equation is used</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">None ==&gt; Indicates that evaluation is skipped (set to zero)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Custom Expression</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If Custom Expression is selected, the user specifies any equation that has a set of Predefined Variables (See bottom of this file). Any scale factors that are loaded are applied to the result of the equation</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Custom Expression supports keywords and in-line IF,structured as &quot;IF[ Condition, TrueResult, FalseResult ]&quot; where</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Condition &#160; is a conditional expression supported by OWHM</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">TrueResult &#160;is the result that is returned in Cond is TRUE (may be an expression)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">FalseResult is the result that is returned in Cond is FALSE (may be an expression)</text></li>
+    </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Example Custom Expressions:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ECw/(5*ECe - ECw) &#160; &#160; &#160; &#160; # &lt;= Custom expression equivalent to RHOADS equation for calculating the Leaching Requirement (LR)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">(ETi/DU)/(1-LR) - ETi &#160; &#160; # &lt;= Custom expression equivalent to RHOADS equation for calculating the Applied Water (AW)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IF[ ETc &gt; ETr, (ECe/ECw)*LOG(CIR) + CIR, 0.1*CIR ] &#160;# &#160;&lt;= Example of an in-line IF</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A modified </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Salinity-Flush-Formula-Editor" styleclass="Normal" translate="true">Formula Editor</link><text styleclass="Normal" translate="true"> can be used to help set up the custom expressions.</text></para>
+    <para styleclass="Heading2_atoc_"><snippet src="Predefined-Variables-Salinity-" inline="false"/></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>
