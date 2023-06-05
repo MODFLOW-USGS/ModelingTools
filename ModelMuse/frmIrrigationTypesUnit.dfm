@@ -1,4 +1,6 @@
 inherited frmIrrigationTypes: TfrmIrrigationTypes
+  HelpType = htKeyword
+  HelpKeyword = 'Farm-Irrigation-Types--Dialog-'
   Caption = 'Irrigation Types'
   ClientHeight = 432
   ClientWidth = 495
@@ -31,7 +33,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       495
       49)
     object btnCancel: TBitBtn
-      Left = 364
+      Left = 360
       Top = 6
       Width = 83
       Height = 33
@@ -39,10 +41,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 360
+      ExplicitLeft = 356
     end
     object btnOK: TBitBtn
-      Left = 275
+      Left = 271
       Top = 6
       Width = 83
       Height = 33
@@ -51,10 +53,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 271
+      ExplicitLeft = 267
     end
     object btnHelp: TBitBtn
-      Left = 186
+      Left = 182
       Top = 6
       Width = 83
       Height = 33
@@ -62,7 +64,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 182
+      OnClick = btnHelpClick
+      ExplicitLeft = 178
     end
   end
   object jvpltvMain: TJvPageListTreeView
@@ -120,15 +123,15 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 281
+            Left = 278
             ExplicitLeft = 332
           end
           inherited sbInsert: TSpeedButton
-            Left = 304
+            Left = 301
             ExplicitLeft = 361
           end
           inherited sbDelete: TSpeedButton
-            Left = 331
+            Left = 327
             ExplicitLeft = 390
           end
           inherited seNumber: TJvSpinEdit
@@ -227,15 +230,15 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 187
+            Left = 185
             ExplicitLeft = 197
           end
           inherited sbInsert: TSpeedButton
-            Left = 221
+            Left = 218
             ExplicitLeft = 234
           end
           inherited sbDelete: TSpeedButton
-            Left = 256
+            Left = 253
             ExplicitLeft = 271
           end
           inherited seNumber: TJvSpinEdit

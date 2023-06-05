@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-05T15:52:47.352-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Land Use Area Fraction in LAND_USE: Farm Process V4 Land Use Options</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Land Use Area Fraction in LAND_USE: Farm Process V4 Land Use Options</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If MULTIPLE_LAND_USE_PER_CELL is specified, then it is required to specify LAND_USE_AREA_FRACTION which identifies the model cell location for each land use and the area it occupies. If the sum of all the crop fractions for a cell exceeds 1, then the crop fraction for hat cell are scaled to equal 1. If the sum of all the crop fractions are less than 1, then the undefined area is set to bare soil.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If SINGLE_LAND_USE_PER_CELL is specified, then LAND_USE_AREA_FRACTION is optional and specifies the area that the land use covers and the rest is considered bare/fallow land.If not specified, then where ever </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Water-Balance-Subregion-ID-in-" styleclass="Normal" translate="true">LOCATION</link><text styleclass="Normal" translate="true"> has a crop identified (&gt;0) uses 1.0 as the fraction (crop occupies entire cell).</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

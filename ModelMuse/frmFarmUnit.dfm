@@ -28,12 +28,16 @@ inherited frmFarm: TfrmFarm
     inherited pcMain: TJvgPageControl
       Width = 638
       Height = 421
+      ActivePage = frameFarm.tabName
       Font.Pitch = fpVariable
       OnChange = frameFarmpcMainChange
       ExplicitWidth = 638
       ExplicitHeight = 421
       inherited tabName: TTabSheet
+        ExplicitWidth = 630
+        ExplicitHeight = 361
         inherited pnlTop: TPanel
+          Width = 630
           inherited seFarmId: TJvSpinEdit
             OnChange = frameFarmseFarmIdChange
           end
@@ -42,51 +46,39 @@ inherited frmFarm: TfrmFarm
           end
         end
         inherited PanelOwhm2: TPanel
+          Width = 630
+          Height = 296
           inherited lblPumpSpread: TLabel
-            Width = 235
+            Width = 217
             Height = 48
-            ExplicitWidth = 235
+            ExplicitWidth = 217
             ExplicitHeight = 48
           end
         end
       end
       inherited tabCrops: TTabSheet
-        ExplicitWidth = 630
-        ExplicitHeight = 361
         inherited frameFormulaGridCrops: TframeFormulaGrid
-          Width = 630
-          Height = 361
-          ExplicitWidth = 630
-          ExplicitHeight = 361
           inherited Panel: TPanel
-            Top = 320
-            Width = 630
-            ExplicitTop = 320
-            ExplicitWidth = 630
+            ExplicitTop = 319
+            ExplicitWidth = 626
             inherited sbAdd: TSpeedButton
-              Left = 362
+              Left = 359
               ExplicitLeft = 260
             end
             inherited sbInsert: TSpeedButton
-              Left = 429
+              Left = 426
               ExplicitLeft = 343
             end
             inherited sbDelete: TSpeedButton
-              Left = 495
+              Left = 492
               ExplicitLeft = 397
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 630
-            Height = 263
             OnSetEditText = frameFormulaGridCropsGridSetEditText
             OnButtonClick = frameFormulaGridCropsGridButtonClick
-            ExplicitWidth = 630
-            ExplicitHeight = 263
           end
           inherited pnlTop: TPanel
-            Width = 630
-            ExplicitWidth = 630
             inherited edFormula: TLabeledEdit
               OnChange = frameFormulaGridCropsedFormulaChange
             end
@@ -111,19 +103,59 @@ inherited frmFarm: TfrmFarm
           end
         end
       end
+      inherited tabDeficiencyScenario: TTabSheet
+        inherited frameDeficiencyScenario: TframeFormulaGrid
+          inherited Panel: TPanel
+            inherited sbAdd: TSpeedButton
+              Left = 299
+              ExplicitLeft = 299
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 355
+              ExplicitLeft = 355
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 410
+              ExplicitLeft = 410
+            end
+          end
+        end
+      end
+      inherited tabBareRunoffFractions: TTabSheet
+        inherited frameBareRunoffFractions: TframeFormulaGrid
+          inherited Panel: TPanel
+            ExplicitTop = 320
+            ExplicitWidth = 630
+            inherited sbAdd: TSpeedButton
+              Left = 344
+              ExplicitLeft = 314
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 407
+              ExplicitLeft = 372
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 472
+              ExplicitLeft = 431
+            end
+          end
+        end
+      end
       inherited tabAddedDemandRunoffSplit: TTabSheet
         inherited frameAddedDemandRunoffSplit: TframeFormulaGrid
           inherited Panel: TPanel
+            ExplicitTop = 320
+            ExplicitWidth = 630
             inherited sbAdd: TSpeedButton
-              Left = 293
+              Left = 321
               ExplicitLeft = 295
             end
             inherited sbInsert: TSpeedButton
-              Left = 348
+              Left = 381
               ExplicitLeft = 350
             end
             inherited sbDelete: TSpeedButton
-              Left = 402
+              Left = 440
               ExplicitLeft = 405
             end
           end
@@ -202,54 +234,53 @@ inherited frmFarm: TfrmFarm
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
+            ExplicitWidth = 630
+            ExplicitHeight = 263
           end
         end
       end
-      inherited tabDeficiencyScenario: TTabSheet
-        inherited frameDeficiencyScenario: TframeFormulaGrid
+      inherited tabAddedCropDemandFlux: TTabSheet
+        Font.Pitch = fpVariable
+        ExplicitWidth = 630
+        ExplicitHeight = 361
+        inherited frameAddedCropDemandFlux: TframeFormulaGrid
+          Width = 630
+          Height = 361
+          ExplicitWidth = 630
+          ExplicitHeight = 361
           inherited Panel: TPanel
+            Top = 320
+            Width = 630
+            ExplicitTop = 319
+            ExplicitWidth = 626
             inherited sbAdd: TSpeedButton
-              Left = 299
-              ExplicitLeft = 299
+              Left = 328
+              ExplicitLeft = 330
             end
             inherited sbInsert: TSpeedButton
-              Left = 355
-              ExplicitLeft = 355
+              Left = 389
+              ExplicitLeft = 391
             end
             inherited sbDelete: TSpeedButton
-              Left = 410
-              ExplicitLeft = 410
+              Left = 449
+              ExplicitLeft = 452
             end
           end
-        end
-      end
-      inherited tabBareRunoffFractions: TTabSheet
-        inherited frameBareRunoffFractions: TframeFormulaGrid
-          inherited Panel: TPanel
-            inherited sbAdd: TSpeedButton
-              Left = 314
-              ExplicitLeft = 314
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 372
-              ExplicitLeft = 372
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 431
-              ExplicitLeft = 431
-            end
+          inherited Grid: TRbwDataGrid4
+            Width = 630
+            Height = 263
+            ExplicitWidth = 630
+            ExplicitHeight = 263
+          end
+          inherited pnlTop: TPanel
+            Width = 630
+            ExplicitWidth = 630
           end
         end
       end
       inherited tabAddedCropDemandRate: TTabSheet
-        ExplicitWidth = 630
-        ExplicitHeight = 361
         inherited frameAddedCropDemandRate: TframeFormulaGrid
-          Width = 630
-          Height = 361
           inherited Panel: TPanel
-            Top = 320
-            Width = 630
             inherited sbAdd: TSpeedButton
               Left = 327
               ExplicitLeft = 299
@@ -262,13 +293,6 @@ inherited frmFarm: TfrmFarm
               Left = 449
               ExplicitLeft = 410
             end
-          end
-          inherited Grid: TRbwDataGrid4
-            Width = 630
-            Height = 263
-          end
-          inherited pnlTop: TPanel
-            Width = 630
           end
         end
       end
@@ -293,6 +317,41 @@ inherited frmFarm: TfrmFarm
           end
         end
       end
+      inherited tabNonRoutedDelivery: TTabSheet
+        inherited frameDelivery: TframeDeliveryGrid
+          inherited Panel: TPanel
+            ExplicitTop = 311
+            ExplicitWidth = 630
+            inherited sbAdd: TSpeedButton
+              Left = 437
+              Top = 9
+              ExplicitLeft = 391
+              ExplicitTop = 9
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 467
+              Top = 9
+              ExplicitLeft = 420
+              ExplicitTop = 9
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 495
+              Top = 9
+              ExplicitLeft = 443
+              ExplicitTop = 9
+            end
+            inherited lblNumberOfDeliveryTypes: TLabel
+              Width = 112
+              Height = 32
+              ExplicitWidth = 112
+              ExplicitHeight = 32
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            OnSetEditText = frameDeliveryGridSetEditText
+          end
+        end
+      end
       inherited tabDiversionLocation: TTabSheet
         inherited frameFormulaGridDiversion: TframeFarmDiversion
           inherited Panel: TPanel
@@ -313,10 +372,6 @@ inherited frmFarm: TfrmFarm
             OnSetEditText = frameFormulaGridDiversionGridSetEditText
           end
           inherited pnlTop: TPanel
-            inherited rdeCol: TRbwDataEntry
-              Height = 28
-              ExplicitHeight = 28
-            end
             inherited rdeVertexNumber: TRbwDataEntry
               Height = 28
               ExplicitHeight = 28
@@ -330,6 +385,10 @@ inherited frmFarm: TfrmFarm
               ExplicitHeight = 28
             end
             inherited rdeRow: TRbwDataEntry
+              Height = 28
+              ExplicitHeight = 28
+            end
+            inherited rdeCol: TRbwDataEntry
               Height = 28
               ExplicitHeight = 28
             end
@@ -356,10 +415,6 @@ inherited frmFarm: TfrmFarm
             OnSetEditText = frameFormulaGridReturnFlowGridSetEditText
           end
           inherited pnlTop: TPanel
-            inherited rdeCol: TRbwDataEntry
-              Height = 28
-              ExplicitHeight = 28
-            end
             inherited rdeVertexNumber: TRbwDataEntry
               Height = 28
               ExplicitHeight = 28
@@ -376,117 +431,9 @@ inherited frmFarm: TfrmFarm
               Height = 28
               ExplicitHeight = 28
             end
-          end
-        end
-      end
-      inherited tabNonRoutedDelivery: TTabSheet
-        inherited frameDelivery: TframeDeliveryGrid
-          inherited Panel: TPanel
-            inherited sbAdd: TSpeedButton
-              Left = 399
-              Top = 9
-              ExplicitLeft = 391
-              ExplicitTop = 9
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 427
-              Top = 9
-              ExplicitLeft = 420
-              ExplicitTop = 9
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 452
-              Top = 9
-              ExplicitLeft = 443
-              ExplicitTop = 9
-            end
-            inherited lblNumberOfDeliveryTypes: TLabel
-              Width = 82
-              Height = 32
-              ExplicitWidth = 82
-              ExplicitHeight = 32
-            end
-          end
-          inherited Grid: TRbwDataGrid4
-            OnSetEditText = frameDeliveryGridSetEditText
-          end
-        end
-      end
-      inherited tabWaterRights: TTabSheet
-        inherited frameFormulaGridWaterRights: TframeFormulaGrid
-          inherited Panel: TPanel
-            inherited sbAdd: TSpeedButton
-              Left = 267
-              ExplicitLeft = 256
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 316
-              ExplicitLeft = 303
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 366
-              ExplicitLeft = 351
-            end
-          end
-          inherited Grid: TRbwDataGrid4
-            OnSetEditText = frameFormulaGridWaterRightsGridSetEditText
-          end
-        end
-      end
-      inherited tabGW_Allocation: TTabSheet
-        ExplicitWidth = 630
-        ExplicitHeight = 361
-        inherited frameGW_Allocation: TframeFormulaGrid
-          Width = 630
-          Height = 361
-          ExplicitWidth = 626
-          ExplicitHeight = 360
-          inherited Panel: TPanel
-            Top = 319
-            Width = 630
-            ExplicitTop = 318
-            ExplicitWidth = 626
-            inherited sbAdd: TSpeedButton
-              Left = 321
-              ExplicitLeft = 295
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 380
-              ExplicitLeft = 350
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 441
-              ExplicitLeft = 405
-            end
-          end
-          inherited Grid: TRbwDataGrid4
-            Width = 630
-            Height = 262
-            OnSetEditText = frameGW_AllocationGridSetEditText
-            ExplicitWidth = 626
-            ExplicitHeight = 261
-          end
-          inherited pnlTop: TPanel
-            Width = 630
-            ExplicitWidth = 626
-          end
-        end
-      end
-      inherited tabNoReturnFlow: TTabSheet
-        Caption = 'No Return Flow Choice'
-        inherited frameNoReturnFlow: TframeFormulaGrid
-          inherited Panel: TPanel
-            inherited sbAdd: TSpeedButton
-              Left = 339
-              ExplicitLeft = 314
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 403
-              ExplicitLeft = 372
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 464
-              ExplicitLeft = 430
+            inherited rdeCol: TRbwDataEntry
+              Height = 28
+              ExplicitHeight = 28
             end
           end
         end
@@ -553,6 +500,44 @@ inherited frmFarm: TfrmFarm
           end
         end
       end
+      inherited tabNoReturnFlow: TTabSheet
+        ExplicitWidth = 630
+        ExplicitHeight = 361
+        inherited frameNoReturnFlow: TframeFormulaGrid
+          Width = 630
+          Height = 361
+          ExplicitWidth = 626
+          ExplicitHeight = 360
+          inherited Panel: TPanel
+            Top = 320
+            Width = 630
+            ExplicitTop = 319
+            ExplicitWidth = 626
+            inherited sbAdd: TSpeedButton
+              Left = 404
+              ExplicitLeft = 314
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 480
+              ExplicitLeft = 372
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 553
+              ExplicitLeft = 430
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 630
+            Height = 263
+            ExplicitWidth = 626
+            ExplicitHeight = 262
+          end
+          inherited pnlTop: TPanel
+            Width = 630
+            ExplicitWidth = 626
+          end
+        end
+      end
       inherited tabReturnFlowOwhm2: TTabSheet
         inherited frameReturnFlowsOwhm2: TframeMultSemiRouted
           inherited Splitter1: TSplitter
@@ -612,6 +597,50 @@ inherited frmFarm: TfrmFarm
               item
                 Control = frameFarm.frameReturnFlowsOwhm2.sbAdd
               end>
+          end
+        end
+      end
+      inherited tabWaterRights: TTabSheet
+        inherited frameFormulaGridWaterRights: TframeFormulaGrid
+          inherited Panel: TPanel
+            ExplicitTop = 319
+            ExplicitWidth = 630
+            inherited sbAdd: TSpeedButton
+              Left = 293
+              ExplicitLeft = 256
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 346
+              ExplicitLeft = 303
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 401
+              ExplicitLeft = 351
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            OnSetEditText = frameFormulaGridWaterRightsGridSetEditText
+          end
+        end
+      end
+      inherited tabGW_Allocation: TTabSheet
+        inherited frameGW_Allocation: TframeFormulaGrid
+          inherited Panel: TPanel
+            inherited sbAdd: TSpeedButton
+              Left = 321
+              ExplicitLeft = 295
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 380
+              ExplicitLeft = 350
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 441
+              ExplicitLeft = 405
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            OnSetEditText = frameGW_AllocationGridSetEditText
           end
         end
       end
@@ -775,7 +804,7 @@ inherited frmFarm: TfrmFarm
       788
       41)
     object btnHelp: TBitBtn
-      Left = 365
+      Left = 353
       Top = 4
       Width = 108
       Height = 33
@@ -784,10 +813,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 361
+      ExplicitLeft = 349
     end
     object btnOK: TBitBtn
-      Left = 479
+      Left = 467
       Top = 4
       Width = 108
       Height = 33
@@ -796,10 +825,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 475
+      ExplicitLeft = 463
     end
     object btnCancel: TBitBtn
-      Left = 593
+      Left = 581
       Top = 4
       Width = 108
       Height = 33
@@ -807,7 +836,7 @@ inherited frmFarm: TfrmFarm
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 589
+      ExplicitLeft = 577
     end
   end
 end

@@ -102,6 +102,8 @@ type
     procedure frameLeachGridButtonClick(Sender: TObject; ACol, ARow: Integer);
     procedure frameLeachGridEndUpdate(Sender: TObject);
     procedure frameRootPressureGridEndUpdate(Sender: TObject);
+    procedure jvpltvMainChanging(Sender: TObject; Node: TTreeNode; var AllowChange:
+        Boolean);
     procedure jvspGwRootInteractionShow(Sender: TObject);
     procedure rdgGwRootInteractionExit(Sender: TObject);
     procedure rdgGwRootInteractionStateChange(Sender: TObject; ACol, ARow: Integer;
@@ -356,11 +358,7 @@ procedure TfrmCropProperties.SetUpBooleanTable(
   Model: TCustomModel);
 const
   TimeColumnCount = 2;
-var
-  FarmSalinityFlush: TFarmProcess4SalinityFlush;
-  // CropHasSalinityDemand: TBoolFarmCollection
 begin
-  FarmSalinityFlush := Model.ModflowPackages.FarmSalinityFlush;
   frameBoolCollection.Grid.ColCount := TimeColumnCount + 1;
   frameBoolCollection.Grid.FixedCols := 0;
   frameBoolCollection.Grid.Columns[Ord(acStart)].Format := rcf4Real;
@@ -2582,6 +2580,42 @@ begin
       Leach.Last.Free;
     end;
   end
+end;
+
+procedure TfrmCropProperties.jvpltvMainChanging(Sender: TObject; Node:
+    TTreeNode; var AllowChange: Boolean);
+var
+  PageNode: TJvPageIndexNode;
+  APage: TJvCustomPage;
+  KeyWord: string;
+  AnObject: TObject;
+begin
+  inherited;
+  if Node <> nil then
+  begin
+    AnObject := Node.Data;
+
+    PageNode := Node as TJvPageIndexNode;
+    if PageNode.PageIndex >= 0 then
+    begin
+      APage := jplMain.Pages[PageNode.PageIndex];
+      KeyWord := '';
+      if AnObject is TCustomFarmCollection then
+      begin
+        KeyWord := TCustomFarmCollection(AnObject).HelpKeyword;
+      end
+      else if AnObject is TAddedDemandCollection then
+      begin
+        KeyWord := TAddedDemandCollection(AnObject).HelpKeyword;
+      end;
+
+      if KeyWord <> '' then
+      begin
+        APage.HelpKeyword := KeyWord;
+        HelpKeyword := KeyWord;
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmCropProperties.jvspGwRootInteractionShow(Sender: TObject);

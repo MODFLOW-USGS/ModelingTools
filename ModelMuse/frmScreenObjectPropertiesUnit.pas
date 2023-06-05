@@ -2908,8 +2908,8 @@ resourcestring
   StrFarmPrecipInS = 'Precip. in %s';
   StrFarmRefEvapIn = 'Ref. Evap. in %s';
   StrFarmsInS = 'Farms in %s';
-  StrCropIDInS = 'Crop ID in %s';
-  StrFarmIDInS = 'Farm ID in %s';
+  StrCropIDInS = 'Land Use ID in %s';
+  StrFarmIDInS = 'Water Balance Subregion ID in %s';
   StrCFPFixedHeads = 'CFP: Fixed Heads';
   StrCRCHConduitRechar = 'CRCH: Conduit Recharge';
   StrYouCanOnlyDefine = 'You can only define conduits in CFP with objects th' +
@@ -4507,6 +4507,7 @@ begin
   CreateFarmIDNode(AScreenObject);
   CreateFarmWelNode;
   CreateFarmCropIDNode(AScreenObject);
+  CreateFmp4LandUseAreaFractionNode;
   CreateFarmPrecipNode(AScreenObject);
   CreateFarmRefEvapNode(AScreenObject);
   CreateFmp4EfficiencyNode;
@@ -4518,7 +4519,6 @@ begin
   CreateFmp4DirectRechargeNode;
   CreateFmp4PrecipPotConsumptionNode;
   CreateFmp4NrdInfilLocationNode;
-  CreateFmp4LandUseAreaFractionNode;
   CreateFmp4MultLandUseAreaFractionNode;
   CreateFmp4CropCoefficientNode;
   CreateFmp4MultCropCoefficientNode;
@@ -15495,8 +15495,7 @@ begin
   FFmp4AddedDemandRunoffSplitNode := nil;
   if frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Added Demand Runoff Split in %s',
-      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Added Demand Runoff Split in WATER_BALANCE_SUBREGION')
       as TJvPageIndexNode;
     Node.PageIndex := jvspFmp4AddedDemandRunoffSplit.PageIndex;
     frameFmp4AddedDemandRunoffSplit.pnlCaption.Caption := Node.Text;
@@ -15597,8 +15596,7 @@ begin
   FFmp4CropHasSalinityDemandNode := nil;
   if frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandIsSelected then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Crop has Salinity Demand in %s',
-      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Crop has Salinity Demand in SALINITY_FLUSH_IRRIGATION')
       as TJvPageIndexNode;
     Node.PageIndex := jvspFmp4CropHasSalinityDemand.PageIndex;
     frameFmp4CropHasSalinityDemand.pnlCaption.Caption := Node.Text;
@@ -15631,8 +15629,7 @@ begin
   FFmp4PrecipPotConsumptionNode := nil;
   if frmGoPhast.PhastModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Precipitation Potential Consumption in %s',
-      [frmGoPhast.PhastModel.ModflowPackages.FarmClimate4.PackageIdentifier]))
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Precipitation Potential Consumption in CLIMATE')
       as TJvPageIndexNode;
     Node.PageIndex := jvspFmp4PrecipPotConsumption.PageIndex;
     frameFmp4PrecipPotConsumption.pnlCaption.Caption := Node.Text;
@@ -15716,8 +15713,7 @@ begin
   FFmp4EvaporationIrrigationFractionNode := nil;
   if frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Evaporation Irrigation Fraction in %s',
-      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Evaporation Irrigation Fraction in LAND_USE')
       as TJvPageIndexNode;
     Node.PageIndex := jvspFmp4EvaporationIrrigationFraction.PageIndex;
     frameFmp4EvaporationIrrigationFraction.pnlCaption.Caption := Node.Text;
@@ -15852,8 +15848,7 @@ begin
   FFmp4MultCropHasSalinityDemandNode := nil;
   if frmGoPhast.PhastModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Crop has Salinity Demand in %s',
-      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Crop has Salinity Demand in SALINITY_FLUSH_IRRIGATION')
       as TJvPageIndexNode;
     Node.PageIndex := jvspFmp4CropHasSalinityDemandMult.PageIndex;
     frameFmp4MultCropHasSalinityDemand.pnlCaption.Caption := Node.Text;
@@ -15869,8 +15864,7 @@ begin
   FFmp4MultEvaporationIrrigationFractionNode := nil;
   if frmGoPhast.PhastModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, Format('Evaporation Irrigation Fraction in %s',
-      [frmGoPhast.PhastModel.ModflowPackages.FarmLandUse.PackageIdentifier]))
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Evaporation Irrigation Fraction in LAND_USE')
       as TJvPageIndexNode;
     Node.PageIndex := jvspFmp4EvaporationIrrigationFractionMult.PageIndex;
     frameFmp4MultEvaporationIrrigationFraction.pnlCaption.Caption := Node.Text;

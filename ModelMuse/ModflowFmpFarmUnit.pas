@@ -422,12 +422,12 @@ type
     property First: TFarmEfficienciesItem read GetFirst;
   end;
 
-  TDeficiencyScenarioItem = class(TOwhmItem)
+  TDeficiencyScenarioItem = class(TBoolFarmItem)
   protected
     class function DefaultFormula: string; override;
   end;
 
-  TDeficiencyScenarioCollection = class(TOwhmCollection)
+  TDeficiencyScenarioCollection = class(TBoolFarmCollection)
   protected
     class function ItemClass: TBoundaryItemClass; override;
   end;
@@ -2468,7 +2468,7 @@ end;
 
 class function TDeficiencyScenarioItem.DefaultFormula: string;
 begin
-  result := '1';
+  result := 'True';
 end;
 
 { TDefaultScenarioCollection }

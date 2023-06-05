@@ -41,8 +41,11 @@ type
   TCustomZeroFarmItem = TCustomDefaultFormulaItem;
 
   TCustomFarmCollection = class(TCustomNonSpatialBoundColl)
+  private
+    FHelpKeyword: string;
   public
     constructor Create(Model: IModelForTOrderedCollection); reintroduce; virtual;
+    property HelpKeyword: string read FHelpKeyword write FHelpKeyword;
   end;
 
   // @name is used to define list properties for MODFLOW OWHM version 2.

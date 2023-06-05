@@ -86,12 +86,13 @@ uses
   ModflowPackagesUnit, ModflowPackageSelectionUnit;
 
 resourcestring
-  StrObjectName = 'Option or object name';
+  StrObjectName = 'Object name';
+  StrObjectOrOptionName = 'Option or object name';
   StrPositionChoice = 'Position choice';
   StrVertexNumber = 'Vertex number';
   StrFraction = 'Fraction';
-  StrLowerLimit = 'Lower Limit';
-  StrUpperLimit = 'Upper Limit';
+  StrLowerLimit = 'Lower limit';
+  StrUpperLimit = 'Upper limit';
 
 type
   TDiversionTimeColumns = (dtcStart, dtcEnd);
@@ -143,7 +144,14 @@ begin
             end;
             Grid.Columns[Ord(docVertex)+2].WordWrapCaptions := True;
 
-            Grid.Cells[Ord(docObject)+2, 0] := StrObjectName;
+            if ModelSelection = msModflowFmp then
+            begin
+              Grid.Cells[Ord(docObject)+2, 0] := StrObjectOrOptionName;
+            end
+            else
+            begin
+              Grid.Cells[Ord(docObject)+2, 0] := StrObjectName;
+            end;
             Grid.Cells[Ord(docChoice)+2, 0] := StrPositionChoice;
             Grid.Cells[Ord(docVertex)+2, 0] := StrVertexNumber;
             Grid.Columns[Ord(docObject)+2].Format := rcf4String;

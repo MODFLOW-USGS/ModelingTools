@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-05T14:22:09.831-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Water Supply Concentration</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Water Supply Concentration</text></para>
+    </header>
+    <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Specify the source water supply salt concentration in PPM (mg/L) </text><text styleclass="Strong" translate="true">NOT MODEL UNITS</text><text styleclass="Normal" translate="true">!</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In each Water Balance Subregion, the Non-Routed Delivery (NRD), Surface Water Delivery (SW), Groundwater Pumpage (GW), External Source concentrations are specified.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The External Source is only applicable if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Deficiency-Scenario" styleclass="Normal" translate="true">DEFICIENCY_SCENARIO</link><text styleclass="Normal" translate="true"> set to False, which indicates external water is brought in to meet deficit demands</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified, then all source water supplies use a salt concentration of 0.0 PPM (mg/L).</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

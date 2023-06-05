@@ -419,10 +419,13 @@ type
   end;
 
   TAddedDemandCollection = class(TCustomNonSpatialBoundColl)
+  private
+    FHelpKeyword: string;
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
     constructor Create(Model: IModelForTOrderedCollection); reintroduce;
+    property HelpKeyword: string read FHelpKeyword write FHelpKeyword;
   end;
 
   TLeachChoice = (lcValue, lcRhoades, lcNone, lcCustomFormula);
@@ -721,36 +724,47 @@ type
       read FIrrigationCollection write SetIrrigationCollection
       stored False;
 
+    // LAND_USE_AREA_FRACTION
     property LandUseFractionCollection: TOwhmCollection
       read FLandUseFractionCollection write SetLandUseFractionCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
+
+    // CROP_COEFFICIENT
     property CropCoefficientCollection: TOwhmCollection
       read FCropCoefficientCollection write SetCropCoefficientCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
+
+    // CONSUMPTIVE_USE
     property ConsumptiveUseCollection: TOwhmCollection
       read FConsumptiveUseCollection write SetConsumptiveUseCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
+
+    // ROOT_PRESSURE
     property RootPressureCollection: TRootPressureCollection
       read FRootPressureCollection write SetRootPressureCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
+
+    // GROUNDWATER_ROOT_INTERACTION
     property GroundwaterRootInteraction: TGroundwaterRootInteraction
       read FGroundwaterRootInteraction write SetGroundwaterRootInteraction
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
+
+    // TRANSPIRATION_FRACTION
     property TranspirationFractionCollection: TOwhmCollection
       read FTranspirationFractionCollection
       write SetTranspirationFractionCollection
@@ -758,6 +772,8 @@ type
       stored False
     {$ENDIF}
     ;
+
+    // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     property SWLossFractionPrecipCollection: TOwhmCollection
       read FSWLossFractionPrecipCollection
       write SetSWLossFractionPrecipCollection
@@ -765,12 +781,16 @@ type
       stored False
     {$ENDIF}
     ;
+
+    // POND_DEPTH
     property PondDepthCollection: TOwhmCollection read FPondDepthCollection
       write SetPondDepthCollection
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
     ;
+
+    // ADDED_DEMAND
     property AddedDemandCollection: TAddedDemandCollection
       read FAddedDemandCollection write SetAddedDemandCollection
     {$IFNDEF OWHMV2}
@@ -1886,50 +1906,87 @@ begin
   end;
 
   FCropFunctionCollection := TCropFunctionCollection.Create(Model as TCustomModel);
+  FCropFunctionCollection.HelpKeyWord := 'Crop_Price_Function_Pane';
+
   FFmpRootDepthCollection := TFmpRootDepthCollection.Create(Model as TCustomModel);
   FFmpRootDepthCollection.OwhmNames.Add(StrRootingDepth);
+  FFmpRootDepthCollection.HelpKeyWord := 'Rooting_Depth_Pane';
+
   FEvapFractionsCollection := TEvapFractionsCollection.Create(Model as TCustomModel);
+  FEvapFractionsCollection.HelpKeyWord := 'Consumptive_Use_Factors_Pane';
+
   FLossesCollection := TLossesCollection.Create(Model as TCustomModel);
+  FLossesCollection.HelpKeyWord := 'Inefficiency_Losses_to_Surface';
+
   FCropWaterUseCollection := TCropWaterUseCollection.Create(Model as TCustomModel);
+  FCropWaterUseCollection.HelpKeyWord := 'Consumptive_Use_Flux_or_Crop_C';
 
   FIrrigationCollection :=
     TIrrigationCollection.Create(Model as TCustomModel);
+  FIrrigationCollection.HelpKeyWord := 'Irrigation-Pane';
+
   FLandUseFractionCollection := TOwhmCollection.Create(Model as TCustomModel);
   FLandUseFractionCollection.OwhmNames.Add(StrLandUseAreaFracti);
+  FLandUseFractionCollection.HelpKeyWord := 'Land-Use-Area-Fraction-Pane';
+
   FCropCoefficientCollection := TOwhmCollection.Create(Model as TCustomModel);
   FCropCoefficientCollection.OwhmNames.Add(StrCropCoefficient);
+  FCropCoefficientCollection.HelpKeyWord := 'Crop-Coefficient-Pane';
+
   FConsumptiveUseCollection := TOwhmCollection.Create(Model as TCustomModel);
   FConsumptiveUseCollection.OwhmNames.Add(StrConsumptiveUse);
+  FConsumptiveUseCollection.HelpKeyWord := 'Consumptive-Use-Pane';
+
   FRootPressureCollection := TRootPressureCollection.Create(Model as TCustomModel);
+  FRootPressureCollection.HelpKeyWord := 'Root-Pressure-Pane';
+
   FGroundwaterRootInteraction :=
     TGroundwaterRootInteraction.Create(InvalidatEvent);
+
   FTranspirationFractionCollection := TOwhmCollection.Create(Model as TCustomModel);
   FTranspirationFractionCollection.OwhmNames.Add(StrTranspirationFracti);
+  FTranspirationFractionCollection.HelpKeyWord := 'Transpiration-Fraction-Pane';
+
   FSWLossFractionPrecipCollection := TOwhmCollection.Create(Model as TCustomModel);
   FSWLossFractionPrecipCollection.OwhmNames.Add(StrSurfaceWaterLossF);
+  FSWLossFractionPrecipCollection.HelpKeyWord := 'SW-Loss-Fraction-Precipitation';
+
   FPondDepthCollection := TOwhmCollection.Create(Model as TCustomModel);
   FPondDepthCollection.OwhmNames.Add(StrPondDepth);
+  FPondDepthCollection.HelpKeyWord := 'Pond-Depth-Pane';
+
   FAddedDemandCollection := TAddedDemandCollection.Create(Model as TCustomModel);
+  FAddedDemandCollection.HelpKeyWord := 'Added-Demand-Pane';
+
   FConvertToBareSoilCollection := TBoolFarmCollection.Create(Model as TCustomModel);
   FConvertToBareSoilCollection.OwhmNames.Add(StrZeroConsumptiveUse);
+  FConvertToBareSoilCollection.HelpKeyWord := 'Zero-CU-Becomes-Bare-Soil-Pane';
+
   FUseEvapFractionCorrectionCollection := TBoolFarmCollection.Create(Model as TCustomModel);
   FUseEvapFractionCorrectionCollection.OwhmNames.Add(StrEvaporationIrrigatiCorrection);
+  FUseEvapFractionCorrectionCollection.HelpKeyWord := 'Evapn-Irr-Frac-Sum-One-Correct';
+
   FSalinityToleranceCollection := TOwhmCollection.Create(Model as TCustomModel);
   FSalinityToleranceCollection.OwhmNames.Add(StrSalinityTolerance);
+  FSalinityToleranceCollection.HelpKeyWord := 'Salinity-Tolerance-Pane';
 
   FMaxLeachingRequirementCollection := TOwhmCollection.Create(Model as TCustomModel);
   FMaxLeachingRequirementCollection.OwhmNames.Add(StrMaximumLeachingReq);
+  FMaxLeachingRequirementCollection.HelpKeyWord := 'Maximum-Leaching-Requirement-P';
 
   FLeachingRequirementCollection := TLeachCollection.Create(Model as TCustomModel);
   FLeachingRequirementCollection.OwhmNames.Add(StrLeachingChoice);
   FLeachingRequirementCollection.OwhmNames.Add(StrFormula);
+  FLeachingRequirementCollection.HelpKeyWord := 'Crop-Leaching-Requirement-Pane';
 
   FSalinityAppliedWater := TLeachCollection.Create(Model as TCustomModel);
   FSalinityAppliedWater.OwhmNames.Add(StrLeachingChoice);
   FSalinityAppliedWater.OwhmNames.Add(StrFormula);
+  FSalinityAppliedWater.HelpKeyWord := 'Salinity-of-Applied-Water-Pane';
 
   FCropHasSalinityDemand := TBoolFarmCollection.Create(Model as TCustomModel);
   FCropHasSalinityDemand.OwhmNames.Add(StrCropHasSalinityDe);
+  FCropHasSalinityDemand.HelpKeyWord := 'Crop-has-Salinity-Demand-Pane';
 end;
 
 destructor TCropItem.Destroy;

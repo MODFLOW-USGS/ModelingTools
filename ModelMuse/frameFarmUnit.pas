@@ -185,6 +185,8 @@ type
     procedure frameAddedCropDemandRatesbAddClick(Sender: TObject);
     procedure frameAddedCropDemandRatesbInsertClick(Sender: TObject);
     procedure frameAddedCropDemandRatesbDeleteClick(Sender: TObject);
+    procedure frameFarmDiversionsGridButtonClick(Sender: TObject; ACol, ARow:
+        Integer);
     procedure frameNoReturnFlowcomboChoiceChange(Sender: TObject);
     procedure frameNoReturnFlowGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -194,6 +196,8 @@ type
     procedure frameNoReturnFlowsbDeleteClick(Sender: TObject);
     procedure frameFormulaGridDiversionGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameFormulaGridReturnFlowGridButtonClick(Sender: TObject; ACol,
+        ARow: Integer);
     procedure frameSwAllotmentedFormulaChange(Sender: TObject);
     procedure frameSwAllotmentseNumberChange(Sender: TObject);
     procedure frameSwAllotmentsbAddClick(Sender: TObject);
@@ -293,7 +297,7 @@ type
       AFrame: TframeFormulaGrid; CaptionFormatString: string);
     procedure InitializeAddedCropDemandFluxFrame(StartTimes, EndTimes: TStringList);
     procedure InitializeAddedCropDemandRateFrame(StartTimes, EndTimes: TStringList);
-    procedure InitializeSaltSupplyConcentrationFrame(StartTimes, EndTimes: TStringList);
+//    procedure InitializeSaltSupplyConcentrationFrame(StartTimes, EndTimes: TStringList);
 
     procedure GetAnEfficiencyCollection(AFarm: TFarm; AFrame: TframeFormulaGrid;
       EfficiencyCollection: TFarmEfficiencyCollection);
@@ -395,8 +399,8 @@ begin
   end
   else if Grid = frameDeficiencyScenario.Grid then
   begin
-    ValidTypes := [rdtInteger];
-    RequiredType := rdtInteger;
+    ValidTypes := [rdtBoolean];
+    RequiredType := rdtBoolean;
   end
   else if Grid = frameDelivery.Grid then
   begin
@@ -531,26 +535,42 @@ begin
     FarmSurfaceWater4 := Packages.FarmSurfaceWater4;
 
   {$IFDEF OWHMV2}
-    tabCrops.TabVisible := (FarmProcess4.EfficiencyOptions.FarmOption <> foNotUsed)
-      and (FarmProcess4.EfficiencyOptions.ArrayList = alList);
+    tabCrops.TabVisible := (frmGoPhast.ModelSelection = msModflowFmp)
+      or  ((frmGoPhast.ModelSelection = msModflowOwhm2)
+      and (FarmProcess4.EfficiencyOptions.FarmOption <> foNotUsed)
+      and (FarmProcess4.EfficiencyOptions.ArrayList = alList));
+    tabCrops.HelpKeyword := 'Irrigation-Efficiencies';
+  {$ELSE}
+    tabCrops.TabVisible := True;
+    tabCrops.HelpKeyword := 'Crop_Efficiencies';
   {$ENDIF}
 
-    tabCosts.TabVisible :=
-      (FarmProcess.DeficiencyPolicy in
+    tabCosts.TabVisible := (frmGoPhast.ModelSelection = msModflowFmp)
+      and (FarmProcess.DeficiencyPolicy in
       [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool])
       and (FarmProcess.DeficiencyPolicy in
       [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool]);
 
-    tabNoReturnFlow.TabVisible := FarmSurfaceWater4.IsSelected
+  {$IFDEF OWHMV2}
+    tabNoReturnFlow.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+      and FarmSurfaceWater4.IsSelected
       and (FarmSurfaceWater4.NoReturnFlow.FarmOption <> foNotUsed);
+  {$ELSE}
+    tabNoReturnFlow.TabVisible := False;
+  {$ENDIF}
 
     SfrPackage := Packages.SfrPackage;
 
-    tabWaterRights.TabVisible :=
-      FarmProcess.SurfaceWaterAllotment = swaPriorWithCalls;
+    tabWaterRights.TabVisible := (frmGoPhast.ModelSelection = msModflowFmp)
+      and (FarmProcess.SurfaceWaterAllotment = swaPriorWithCalls);
 
-    tabWaterSupplyConcentration.TabVisible := SalinityFlush.IsSelected
+  {$IFDEF OWHMV2}
+    tabWaterSupplyConcentration.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+      and SalinityFlush.IsSelected
       and (SalinityFlush.FarmSaltConcentrationsChoice.FarmOption <> foNotUsed);
+  {$ELSE}
+     SupplyConcentration.TabVisible := False;
+  {$ENDIF}
 
     try
       frameFormulaGridCrops.Grid.BeginUpdate;
@@ -831,40 +851,73 @@ begin
       frameFormulaGridReturnFlow.GetData(FarmList, dtReturnFlow);
 
       frameDelivery.GetData_OwhmV1(FarmList);
-      tabNonRoutedDelivery.tabVisible := FarmProcess.IsSelected
-        or (FarmProcess4.IsSelected and FarmSurfaceWater4.IsSelected
-        and (FarmSurfaceWater4.Non_Routed_Delivery.FarmOption <> foNotUsed));
+      tabNonRoutedDelivery.tabVisible := ((frmGoPhast.ModelSelection = msModflowFmp)
+        and FarmProcess.IsSelected)
+      {$IFDEF OWHMV2}
+        or ((frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected and FarmSurfaceWater4.IsSelected
+        and (FarmSurfaceWater4.Non_Routed_Delivery.FarmOption <> foNotUsed))
+      {$ENDIF}
+        ;
 
       frameDiversionsOwhm2.GetData(FarmList, dtDiversion);
       frameReturnFlowsOwhm2.GetData(FarmList, dtReturnFlow);
 
-      tabEfficiencyImprovement.TabVisible := FarmProcess4.IsSelected
+    {$IFDEF OWHMV2}
+      tabEfficiencyImprovement.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected
         and (FarmProcess4.EfficiencyImprovement.FarmOption <> foNotUsed)
         and (FarmProcess4.EfficiencyImprovement.ArrayList = alList);
+    {$ELSE}
+      tabEfficiencyImprovement.TabVisible := False;
+    {$ENDIF}
 
-      tabAddedDemandRunoffSplit.TabVisible := FarmProcess4.IsSelected
+    {$IFDEF OWHMV2}
+      tabAddedDemandRunoffSplit.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected
         and (FarmProcess4.Added_Demand_Runoff_Split.FarmOption <> foNotUsed)
         and (FarmProcess4.Added_Demand_Runoff_Split.ArrayList = alList);
+    {$ELSE}
+      tabAddedDemandRunoffSplit.TabVisible := False;
+    {$ENDIF}
 
-      tabIrrigationUniformity.TabVisible := FarmProcess4.IsSelected
+    {$IFDEF OWHMV2}
+      tabIrrigationUniformity.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected
         and SalinityFlush.IsSelected
         and (SalinityFlush.FarmIrrigationUniformityChoice.FarmOption <> foNotUsed);
+    {$ELSE}
+      tabIrrigationUniformity.TabVisible := False;
+    {$ENDIF}
 
-      tabDeficiencyScenario.TabVisible := FarmProcess4.IsSelected
+    {$IFDEF OWHMV2}
+      tabDeficiencyScenario.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected
         and (FarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed);
 
-      tabWaterSource.TabVisible := FarmProcess4.IsSelected
+      tabWaterSource.TabVisible :=  (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected
         and (FarmProcess4.WaterSource.FarmOption <> foNotUsed);
 
-      tabBareRunoffFractions.TabVisible := FarmProcess4.IsSelected
+      tabBareRunoffFractions.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected
         and (FarmProcess4.Bare_Runoff_Fraction.FarmOption <> foNotUsed)
         and (FarmProcess4.Bare_Runoff_Fraction.ArrayList = alList);
 
-      tabAddedCropDemandFlux.TabVisible := FarmProcess4.IsSelected
+      tabAddedCropDemandFlux.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and FarmProcess4.IsSelected
         and (FarmProcess4.Added_Crop_Demand_Flux.FarmOption <> foNotUsed);
 
-      tabAddedCropDemandRate.TabVisible := FarmProcess4.IsSelected
+      tabAddedCropDemandRate.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
+        and  FarmProcess4.IsSelected
         and (FarmProcess4.Added_Crop_Demand_Rate.FarmOption <> foNotUsed);
+    {$ELSE}
+      tabDeficiencyScenario.TabVisible := False;
+      tabWaterSource.TabVisible := False;
+      tabBareRunoffFractions.TabVisible := False;
+      tabAddedCropDemandFlux.TabVisible := False;
+      tabAddedCropDemandRate.TabVisible := False;
+    {$ENDIF}
 
 
     finally
@@ -1240,6 +1293,13 @@ begin
   FAddedDemandRunoffSplitChanged := True;
 end;
 
+procedure TframeFarm.frameFarmDiversionsGridButtonClick(Sender: TObject; ACol,
+    ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
+end;
+
 procedure TframeFarm.frameFormulaGridCostsedFormulaChange(
   Sender: TObject);
 begin
@@ -1438,6 +1498,13 @@ begin
   frameFormulaGridEfficiencyImprovement.seNumberChange(Sender);
   FEfficiencyImprovementChanged := True;
   DoChange;
+end;
+
+procedure TframeFarm.frameFormulaGridReturnFlowGridButtonClick(Sender: TObject;
+    ACol, ARow: Integer);
+begin
+  inherited;
+  EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
 end;
 
 procedure TframeFarm.frameFormulaGridReturnFlowGridSetEditText(
@@ -2059,7 +2126,8 @@ begin
 
   Packages := frmGoPhast.PhastModel.ModflowPackages;
 
-  tabDiversionLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
+  tabDiversionLocation.TabVisible :=  (frmGoPhast.ModelSelection = msModflowFmp)
+    and frmGoPhast.PhastModel.SfrIsSelected
     and (frmGoPhast.ModelSelection = msModflowFmp);
   tabReturnFlowLocation.TabVisible := tabDiversionLocation.TabVisible;
 
@@ -2197,7 +2265,7 @@ begin
 
     InitializeEfficiencyCollectionFrame(StartTimes, EndTimes,
       IrrigationTypes, frameFormulaGridEfficiencyImprovement,
-      '%s efficiency improvement');
+      '%s efficiency improvement (True/False)');
 
     InitializeEfficiencyCollectionFrame(StartTimes, EndTimes,
       IrrigationTypes, frameAddedDemandRunoffSplit,
@@ -2211,7 +2279,7 @@ begin
 
     InitializeWaterSourceFrame(StartTimes, EndTimes,
       frameWaterSource,
-      ['Use Groundwater', 'Use Surface Water', 'Use Non-Routed Deliveries']);
+      ['Use Groundwater (True/False)', 'Use Surface Water (True/False)', 'Use Non-Routed Deliveries (True/False)']);
 
     InitializeBareRunoffFractionsFrame(StartTimes, EndTimes);
     InitializeAddedCropDemandFluxFrame(StartTimes, EndTimes);
@@ -2365,14 +2433,14 @@ procedure TframeFarm.InitializeDeficiencyScenarioFrame(StartTimes,
   EndTimes: TStringList);
 begin
   InitializeSingleValueFrame(StartTimes, EndTimes,
-    frameDeficiencyScenario, 'Deficiency Scenario');
+    frameDeficiencyScenario, 'Deficiency Scenario (True/False)');
 end;
 
-procedure TframeFarm.InitializeSaltSupplyConcentrationFrame(StartTimes,
-  EndTimes: TStringList);
-begin
-
-end;
+//procedure TframeFarm.InitializeSaltSupplyConcentrationFrame(StartTimes,
+//  EndTimes: TStringList);
+//begin
+//
+//end;
 
 procedure TframeFarm.InitializeSingleValueFrame(StartTimes,
   EndTimes: TStringList; AFrame: TframeFormulaGrid;

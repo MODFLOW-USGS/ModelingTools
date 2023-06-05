@@ -433,7 +433,7 @@ const
   StrFarmEvap = 'Farm Potential Evaportranspiration';
   StrFarmPrecip = 'Farm Precipitation';
   StrFarmCropID = 'Farm Crop ID';
-  StrFarmID2 = 'Farm ID';
+  StrFarmID2 = 'Water Balance Subregion ID';
   StrFarmMaxPumpRate = 'Farm Well Maximum Pumping Rate';
   StrFarmWellFarmID = 'Farm Well Farm-ID';
   StrFarmWellPumpRequired = 'Farm Well Pump Only If Required';

@@ -1,9 +1,11 @@
 inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
+  HelpType = htKeyword
+  HelpKeyword = 'Salinity-Flush-Formula-Editor'
   Caption = 'Salinity Flush Formula Editor'
   ClientHeight = 482
   ClientWidth = 761
-  ExplicitWidth = 777
-  ExplicitHeight = 521
+  ExplicitWidth = 773
+  ExplicitHeight = 520
   TextHeight = 18
   object Splitter: TSplitter
     Left = 539
@@ -22,11 +24,13 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
     Align = alBottom
     ParentColor = True
     TabOrder = 0
+    ExplicitTop = 440
+    ExplicitWidth = 757
     DesignSize = (
       761
       41)
     object btnCancel: TBitBtn
-      Left = 605
+      Left = 601
       Top = 6
       Width = 91
       Height = 33
@@ -34,9 +38,10 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
+      ExplicitLeft = 597
     end
     object btnOK: TBitBtn
-      Left = 508
+      Left = 504
       Top = 6
       Width = 91
       Height = 33
@@ -45,9 +50,10 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
+      ExplicitLeft = 500
     end
     object btnHelp: TBitBtn
-      Left = 413
+      Left = 409
       Top = 4
       Width = 91
       Height = 33
@@ -56,9 +62,10 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 405
     end
     object btnFunctionHelp: TBitBtn
-      Left = 243
+      Left = 239
       Top = 4
       Width = 163
       Height = 33
@@ -86,6 +93,7 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
         0000}
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 235
     end
   end
   object pnlMain: TPanel
@@ -96,6 +104,7 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
     Align = alLeft
     ParentColor = True
     TabOrder = 1
+    ExplicitHeight = 440
     object JvNetscapeSplitter1: TJvNetscapeSplitter
       Left = 1
       Top = 98
@@ -121,6 +130,7 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       Align = alBottom
       ParentColor = True
       TabOrder = 2
+      ExplicitTop = 229
       object gbLogicalOperators: TGroupBox
         Left = 8
         Top = 6
@@ -509,6 +519,7 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       OnDblClick = jreFormulaDblClick
       OnMouseUp = jreFormulaMouseUp
       OnSelectionChange = jreFormulaSelectionChange
+      ExplicitHeight = 121
     end
   end
   object pnlRight: TPanel
@@ -520,6 +531,8 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 2
+    ExplicitWidth = 213
+    ExplicitHeight = 440
     object pnlLabelItemTree: TPanel
       Left = 0
       Top = 0
@@ -528,6 +541,7 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       Align = alTop
       ParentColor = True
       TabOrder = 0
+      ExplicitWidth = 213
       object lbltems: TLabel
         AlignWithMargins = True
         Left = 4
@@ -559,6 +573,8 @@ inherited frmFmpFormulaEditor: TfrmFmpFormulaEditor
       OnChange = tvItemsChange
       OnDblClick = tvItemsDblClick
       OnMouseDown = tvItemsMouseDown
+      ExplicitWidth = 213
+      ExplicitHeight = 399
     end
   end
   object rbFormulaParser: TRbwParser

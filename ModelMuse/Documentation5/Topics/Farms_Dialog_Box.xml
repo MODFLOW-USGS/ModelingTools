@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-05-25T15:33:54.857-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-05T18:24:47.021-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Water Balance Subregions Dialog Box</title>
   <body>
     <header>
@@ -9,14 +9,39 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farms</text><text styleclass="Normal" translate="true"> dialog box is used to specify properties of the farms. The dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">Model|Farm Process|Farms...</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the left is a list of farms identified by the Farm ID (</text><text styleclass="Strong" translate="true">FID</text><text styleclass="Normal" translate="true">) and an optional </text><text styleclass="Strong" translate="true">Farm name</text><text styleclass="Normal" translate="true">. The main part of the dialog box contains 7 tabs each of which are used to define properties of a farm. Farms can be edited individually by selecting a single farm from the list on the left. Multiple farms can be edited by selecting more than one farm from the list on the left. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This dialog box has several tabs that are used to define the properties of farms. Only those tabs that can be used in the current model will be visible.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM version 1</text></para>
     <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Name" styleclass="Normal" translate="true">Name</link><text styleclass="Normal" translate="true"> tab</text></li>
+    </list>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_Efficiencies" styleclass="Normal" translate="true">Crop Efficiencies</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Costs" styleclass="Normal" translate="true">Costs</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Non_Routed_Delivery" styleclass="Normal" translate="true">Non-Routed Delivery</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Diversion_Location" styleclass="Normal" translate="true">Diversion Location</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Return_Flow_Location" styleclass="Normal" translate="true">Return Flow Location</link><text styleclass="Normal" translate="true"> tab</text></li>
-      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Non_Routed_Delivery" styleclass="Normal" translate="true">Non-Routed Delivery</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Water_Rights" styleclass="Normal" translate="true">Water Rights</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GW_Allocation_Tab" styleclass="Normal" translate="true">GW Allocation</link><text styleclass="Normal" translate="true"> tab</text></li>
     </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM Version 2</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Name" styleclass="Normal" translate="true">Name</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Irrigation-Efficiencies" styleclass="Normal" translate="true">Irrigation Efficiencies</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Efficiency-Improvement" styleclass="Normal" translate="true">Efficiency Improvement</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Deficiency-Scenario" styleclass="Normal" translate="true">Deficiency Scenario</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Water-Source" styleclass="Normal" translate="true">Water Source</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Bare-Runoff-Fractions" styleclass="Normal" translate="true">Bare Runoff Fractions</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Demand-Runoff-Split" styleclass="Normal" translate="true">Added Demand Runoff Split</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Crop-Demand-Flux" styleclass="Normal" translate="true">Added Crop Demand Flux</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Crop-Demand-Rate" styleclass="Normal" translate="true">Added Crop Demand Rate</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Non_Routed_Delivery" styleclass="Normal" translate="true">Non-Routed Delivery</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Diversion-Locations" styleclass="Normal" translate="true">Diversion Locations</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Return-Flow-Choice" styleclass="Normal" translate="true">Return Flow Choice</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Return-Flow-Locations_" styleclass="Normal" translate="true">Return Flow Locations</link><text styleclass="Normal" translate="true"> tab.</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SW-Allotment" styleclass="Normal" translate="true">SW Allotment</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GW_Allocation_Tab" styleclass="Normal" translate="true">GW Allotment</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Water-Supply-Concentration" styleclass="Normal" translate="true">Water Supply Concentration</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Irrigation-Uniformity" styleclass="Normal" translate="true">Irrigation Uniformity</link><text styleclass="Normal" translate="true"> tab</text></li>
+    </list>
+    <para styleclass="Normal"></para>
   </body>
 </topic>

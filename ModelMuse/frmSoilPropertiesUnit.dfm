@@ -407,9 +407,10 @@ inherited frmSoilProperties: TfrmSoilProperties
         788
         41)
       inherited lbNumber: TLabel
-        Width = 55
+        Width = 163
         Height = 18
-        ExplicitWidth = 55
+        Caption = 'Number of rows in table'
+        ExplicitWidth = 163
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
@@ -425,8 +426,12 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitLeft = 725
       end
       inherited lblMethod: TLabel
+        Left = 430
+        Top = 9
         Width = 52
         Height = 18
+        ExplicitLeft = 430
+        ExplicitTop = 9
         ExplicitWidth = 52
         ExplicitHeight = 18
       end
@@ -435,7 +440,9 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 26
       end
       inherited comboInterpolation: TComboBox
+        Left = 296
         Height = 26
+        ExplicitLeft = 296
         ExplicitHeight = 26
       end
     end
@@ -451,9 +458,10 @@ inherited frmSoilProperties: TfrmSoilProperties
       Width = 788
       ExplicitWidth = 784
       inherited lblSoil: TLabel
-        Width = 27
+        Width = 233
         Height = 18
-        ExplicitWidth = 27
+        Caption = 'Effective Precipitation Table - Soil'
+        ExplicitWidth = 233
         ExplicitHeight = 18
       end
       inherited edFormula: TLabeledEdit

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-06-05T08:42:48.162-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">Predefined Variables Salinity Flush</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Predefined Variables Salinity Flush</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Predefined Variables</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">LR      Leach requirement (-) ==&gt; Set by CROP_LEACHING_REQUIREMENT</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ECw     Electrical conductivity of irrigation water (dS/m)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ECe     Crop Electrical conductivity tolerance (dS/m)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">CU      Potential consumptive use of crop (total potential consumption of water) (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ETr     Reference EvapoTranspiration</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ETc     Crop evapotranspiration from precipitation and irrigation (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T) --if irrigation is fully met</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ETp     Crop evapotranspiration from precipitation (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ETi     Crop evapotranspiration from irrigation (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">CIR     Crop irrigation requirement = ETi (water required to meet consumptive use - under perfect efficiency  --EFF=1)(L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">DMD     Crop irrigation demand            (water required to meet consumptive use - includes efficiency of irrigation)(L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">P       Precipitation that falls on crop (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">AREA    Crop area</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Tgw     Transpiration from groundwater-root uptake</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Tp      Transpiration from precipitation</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Ti      Transpiration from irrigation</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF     Irrigation efficiency</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ROOT    Crop root depth</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">CapF    Capillary Fringe Depth/Length</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">DP_p    Deep percolation from precipitation</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">DP_i    Deep percolation from irrigation if irrigated demand is fully met (includes added demands, but not deep percolation from salinity irrigation).</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">DP      Total potential deep percolation from precipitation and irrigation</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ADRS    Crop Added Demand Runoff Split (ADDED_DEMAND_RUNOFF_SPLIT)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ADMD    Sum of other Added Demands for the crop</text></li>
+    </list>
+  </body>
+</topic>

@@ -1,16 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-05-25T15:43:49.303-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-06-05T17:46:48.124-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Crop Efficiencies</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Crop Efficiencies</text></para>
     </header>
     <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Farm ID (FID)</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The farm ID uniquely identifies a farm. It must be a positive integer different from that in any other farm. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Surface_Water_Flags" anchor="IALLOTSW" styleclass="Normal" translate="true">prior appropriation</link><text styleclass="Normal" translate="true"> is used, the farm ID also sets the water rights priority of the farm with farms with lower farm IDs having higher priorities over farms with higher farm IDs.</text></para>
-    <para styleclass="Strong"><text styleclass="Strong" translate="true">Farm Name</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The farm name is optional. It is used to help the user identify a particular farm in the list of farms on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Crop on-farm efficiency (OFE)</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The crop on-farm efficiency is a number between 0 and 1 that indicates the efficiency with which a farm uses water for a particular crop. For example, if 10% of the water diverted from a stream for irrigation evaporated before being applied as irrigation, the crop on-farm efficiency would be 0.9. Separate values must be specified for each crop. The efficiencies can vary with time.</text></para>
   </body>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-05T11:44:21.088-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Irrigation Efficiencies</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Irrigation Efficiencies</text></para>
+    </header>
+    <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Irrigation Efficiency (OFE) is between 0-1 and represents OFE=CIR/DEMAND,</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">where CIR is the crop irrigation requirement under perfect efficiency </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">and Demand is the necessary water demand to meet the CIR</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The efficiency is specified for each irrigation type. Irrigation types are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm-Irrigation-Types--Dialog-" styleclass="Strong" translate="true">Farm Irrigation Types</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -68,6 +68,7 @@ type
     procedure GetGlobalVariables;
     procedure GetLookUpTableProperties;
     procedure SetLookUpTableProperties;
+    procedure SetEffectivePrecipTableCaption(ARow: Integer);
     { Private declarations }
   public
     { Public declarations }
@@ -385,8 +386,7 @@ begin
     FLookUpTable := ASoil.LookUpTable;
     GetLookUpTableProperties;
     frameSoilEffectivePrecip.Enabled := True;
-    frameSoilEffectivePrecip.lblSoil.Caption :=
-      'Soil: ' + frameSoils.Grid.Cells[Ord(scName), ARow];
+    SetEffectivePrecipTableCaption(ARow);
   end;
 end;
 
@@ -397,8 +397,7 @@ begin
   if (ACol = Ord(scName)) and (Value <> '') then
   begin
     frameSoils.seNumber.asInteger := frameSoils.Grid.RowCount-1;
-    frameSoilEffectivePrecip.lblSoil.Caption :=
-      'Soil: ' + frameSoils.Grid.Cells[Ord(scName), ARow];
+    SetEffectivePrecipTableCaption(ARow);
   end;
   if (ACol = Ord(scSoiltype)) and (ARow >= frameSoils.Grid.FixedRows) then
   begin
@@ -513,7 +512,7 @@ begin
   Grid := frameSoilEffectivePrecip.Grid;
   Grid.BeginUpdate;
   try
-    Grid.Cells[0,0] := 'Precipitation Rate';
+    Grid.Cells[0,0] := 'Precipitation Rate (L/T)';
 
     FFarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
     if FFarmSoil4.EffPrecipTableOption = ppcLength then
@@ -708,6 +707,11 @@ begin
       Item.ReturnValue := Grid.Cells[1, ItemIndex+1];
     end;
   end;
+end;
+
+procedure TfrmSoilProperties.SetEffectivePrecipTableCaption(ARow: Integer);
+begin
+  frameSoilEffectivePrecip.lblSoil.Caption := 'Effective Precipitation Table - Soil: ' + frameSoils.Grid.Cells[Ord(scName), ARow];
 end;
 
 { TUndoSoils }

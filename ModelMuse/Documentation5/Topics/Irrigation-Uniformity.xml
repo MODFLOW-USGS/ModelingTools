@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-05T14:22:28.818-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Irrigation Uniformity</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Irrigation Uniformity</text></para>
+    </header>
+    <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The irrigation uniformity represents how evenly the irrigation method is spread across the root zone. It is specified from 0.0 to 1.0, with 1 being perfect, uniform spread</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified, then all irrigation is assumed to be perfectly, uniform (1.0)</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

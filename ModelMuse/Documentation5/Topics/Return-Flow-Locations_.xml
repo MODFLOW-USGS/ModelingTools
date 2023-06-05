@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-06-05T14:16:58.583-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Return Flow Locations.</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Return Flow Locations.</text></para>
+    </header>
+    <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Return Flow Locations</text><text styleclass="Normal" translate="true"> is used to specify SEMI_ROUTED_RETURN in the Farm Process SURFACE_WATER block.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each Water Balance Subregion can have multiple return flow locations. Unlike most other properties of Water Balance Subregion, the return flow locations of &#160;Water Balance Subregion must be edited individually. The </text><text styleclass="Strong" translate="true">Number of return flow locations</text><text styleclass="Normal" translate="true"> is specified for the selected Water Balance Subregion. For each return flow, the user identifies the object that defines the SFR stream from to the return flow occurs and identifies a vertex in the cell where the return flow takes place.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Fraction</text><text styleclass="Normal" translate="true"> is the fraction of surface runoff that is applied the return flow reach. If </text><text styleclass="Strong" translate="true">Fraction</text><text styleclass="Normal" translate="true"> is specified for a Water Balance Subregion, then the fractions for all return flow locations for each Water Balance Subregion should sum to 1.</text></para>
+  </body>
+</topic>

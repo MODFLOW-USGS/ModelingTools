@@ -388,7 +388,7 @@ type
 
     procedure EvaluateCropHasSalinityDemand;
     function GetCropHasSalinityDemandCollection(Crop: TCropItem): TOwhmCollection;
-    procedure WriteCropHasSalinityDemand; // finish list
+    procedure WriteCropHasSalinityDemand;
 
     procedure FreeFileStreams;
     // wbs location
@@ -793,7 +793,7 @@ var
     if DSItem <> nil then
     begin
       Formula := DSItem.OwhmValue;
-      WriteIntegerValueFromGlobalFormula(Formula, AFarm,
+      WriteBooleanValueFromGlobalFormula(Formula, AFarm,
         'Invalid deficiency scenario formula in ' + AFarm.FarmName);
     end
     else
