@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:45:56.576-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T13:43:49.539-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Direct Recharge in Climate: Farm Process V4 Climate Options</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Direct Recharge in Climate: Farm Process V4 Climate Options</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">DIRECT_RECHARGE specifies recharge that is sent directly to the bottom of the root zone. The recharge is not consumed by crops and is treated as deep percolation. The deep percolation is then passed to either UZF or the water table.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This feature mimics both the RCH package Infiltration and UZF Recharge.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

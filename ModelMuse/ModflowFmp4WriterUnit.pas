@@ -2173,8 +2173,8 @@ end;
 
 function TModflowFmp4Writer.ParameterType: TParameterType;
 begin
-  result := ptUndefined;
-  Assert(False);
+  result := ptQMAX;
+//  Assert(False);
 end;
 
 procedure TModflowFmp4Writer.PrintSurfaceWaterOutputOptions;

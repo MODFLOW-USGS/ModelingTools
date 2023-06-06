@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:42:45.959-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T12:28:32.032-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Efficiency in FMP: Farm Process V4</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Efficiency in FMP: Farm Process V4</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Irrigation Efficiency (OFE) is between 0-1 and represents OFE=CIR/DEMAND, where CIR is the crop irrigation requirement under perfect efficiency and Demand is the necessary water demand to meet the CIR.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">OFE is tied to the IRRIGATION type. If a crop is irrigated then it&apos;s </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Irrigation-in-LAND_USE-Farm-Pr" styleclass="Normal" translate="true">IRRIGATION</link><text styleclass="Normal" translate="true"> flag is &gt;0 and set equal to the irrigation type.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

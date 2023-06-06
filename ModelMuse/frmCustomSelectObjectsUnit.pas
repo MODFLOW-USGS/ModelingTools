@@ -512,11 +512,11 @@ resourcestring
   StrFluidFlux = 'Fluid Flux';
   StrMassFlux = 'Mass Flux';
   StrEnergyFlux = 'Energy Flux';
-  StrFarmsIn = 'Farm IDs in %s';
+  StrFarmsIn = 'WBS IDs in %s';
   StrFarmWellsIn = 'Farm Wells in %s';
   StrPrecipInS = 'Precip. in %s';
   StrRefEvapInS = 'Ref. Evap. in %s';
-  StrCropIDInS = 'Crop ID in %s';
+  StrCropIDInS = 'Land Use ID in %s';
   StrHeadsInS = 'Heads in %s';
   StrFlowsInS = 'Flows in %s';
   StrConduitRechargeFra = 'CRCH: Conduit Recharge';
@@ -900,7 +900,7 @@ begin
       end
       else
       begin
-        Data.Caption := 'FMP4: Farm IDs';
+        Data.Caption := 'FMP4: WBS IDs';
       end;
     {$ELSE}
         Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);

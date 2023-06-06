@@ -1,12 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:46:01.863-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">Precipitaiton Potential Consumption in Climate: Farm Process V4 Climate Options</title>
+<topic template="Default" status="Under Construction" modified="2023-06-06T13:48:15.103-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Precipitation Potential Consumption in Climate: Farm Process V4 Climate Options</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Precipitaiton Potential Consumption in Climate: Farm Process V4 Climate Options</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Precipitation Potential Consumption in Climate: Farm Process V4 Climate Options</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PRECIPITATION_POTENTIAL_CONSUMPTION specifies the potential consumption of precipitation. This limits how much precipitation can be consumed as evaporation and transpiration based on the quantity of rainfall and is analogous to specifying an effective precipitation, which represents the quantity of rainfall that is not runoff nor deep percolation.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This is a spatial based input equivalent to the SOIL block&apos;s keyword </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Soil_Properties_Dialog_Bo" anchor="EFFECTIVE_PRECIPITATION_TABLE" styleclass="Normal" translate="true">EFFECTIVE_PRECIPITATION_TABLE</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Precipitation that </text><text styleclass="Strong" translate="true">is not</text><text styleclass="Normal" translate="true"> available for consumption becomes either runoff or deep percolation</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Precipitation that </text><text styleclass="Strong" translate="true">is</text><text styleclass="Normal" translate="true"> available for consumption, but is not consumed as ET becomes either runoff or deep percolation</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

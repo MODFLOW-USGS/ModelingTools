@@ -208,7 +208,7 @@ resourcestring
   StrPriceCropPrice = 'Price (Crop-Price)';
   StrIrrigatedInverseO15 = 'Irrigated (inverse of NONIRR) Data Set 15';
   StrIrrigatedInverseO30 = 'Irrigated (inverse of NONIRR) Data Set 30a';
-  StrCropIDCID = 'Crop ID (CID)';
+  StrCropIDCID = 'Land Use (Crop) ID (CID)';
   StrCropName = 'Crop Name';
   StrPSI1 = 'PSI(1) Anoxia';
   StrPSI2 = 'PSI(2) Optimal';

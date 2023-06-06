@@ -4504,21 +4504,28 @@ begin
   CreateCfpFixedHeadNode(AScreenObject);
   CreateCfpRechargeNode;
 //  CreateFarmNode(AScreenObject);
+  // FmP4 WATER_BALANCE_SUBREGION
   CreateFarmIDNode(AScreenObject);
   CreateFarmWelNode;
-  CreateFarmCropIDNode(AScreenObject);
-  CreateFmp4LandUseAreaFractionNode;
-  CreateFarmPrecipNode(AScreenObject);
-  CreateFarmRefEvapNode(AScreenObject);
   CreateFmp4EfficiencyNode;
   CreateFmp4EfficiencyImprovementNode;
   CreateFmp4BareRunoffFractionNode;
-  CreateFmp4AddedDemandRunoffSplitNode;
   CreateFmp4BarePrecipitationConsumptionFractionNode;
+  CreateFmp4AddedDemandRunoffSplitNode;
+
+  // UNUSED
+  CreateFmp4NrdInfilLocationNode;
+
+  // CLIMATE
+  CreateFarmPrecipNode(AScreenObject);
+  CreateFarmRefEvapNode(AScreenObject);
   CreateFmp4BareEvapNode;
   CreateFmp4DirectRechargeNode;
   CreateFmp4PrecipPotConsumptionNode;
-  CreateFmp4NrdInfilLocationNode;
+
+  // LAND_USE
+  CreateFarmCropIDNode(AScreenObject);
+  CreateFmp4LandUseAreaFractionNode;
   CreateFmp4MultLandUseAreaFractionNode;
   CreateFmp4CropCoefficientNode;
   CreateFmp4MultCropCoefficientNode;
@@ -4538,6 +4545,8 @@ begin
   CreateFmp4MultFractionOfIrrigToSurfaceWaterNode;
   CreateFmp4AddedDemandNode;
   CreateFmp4MultAddedDemandNode;
+
+  // SALINITY_FLUSH_IRRIGATION
   CreateFmp4CropHasSalinityDemandNode;
   CreateFmp4MultCropHasSalinityDemandNode;
   CreateSWR_Reach_Node(AScreenObject);
@@ -23562,7 +23571,16 @@ begin
     else if DataGrid = frameFarmCropID.rdgModflowBoundary then
     begin
       ResultType := rdtInteger;
-    end;
+    end
+    else if DataGrid = frameFmp4EfficiencyImprovement.rdgModflowBoundary then
+    begin
+      ResultType := rdtBoolean;
+    end
+    else if DataGrid = frameFmp4Irrigation.rdgModflowBoundary then
+    begin
+      ResultType := rdtInteger;
+    end
+
   end
   else if (DataGrid.Owner is TCustomframeFluxObs) then
   begin

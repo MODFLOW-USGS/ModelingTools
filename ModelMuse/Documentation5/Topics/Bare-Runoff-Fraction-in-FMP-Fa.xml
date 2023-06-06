@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:42:53.343-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T12:41:35.247-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Bare Runoff Fraction in FMP: Farm Process V4</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Bare Runoff Fraction in FMP: Farm Process V4</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If there are cells declared as FALLOW/BARE then BARE_RUNOFF_FRACTION determines the fraction of runoff to infiltration for precipitation that falls on bare soil/fallow land.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">BARE cells result for model cells not defined by a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Land-Use-ID-in-LAND_USE-Farm-P" styleclass="Normal" translate="true">land use/crop ID</link><text styleclass="Normal" translate="true"> (CID &lt; 1) or if the sum of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Land-Use-Area-Fraction-in-LAND" styleclass="Normal" translate="true">crop fractions</link><text styleclass="Normal" translate="true"> for a cell do not sum to 1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified, BARE_RUNOFF_FRACTION is automatically set to 1.0 to disable any infiltration from precipitation over bare soil.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

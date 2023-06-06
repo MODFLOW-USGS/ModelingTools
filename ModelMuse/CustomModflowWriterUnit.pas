@@ -5473,6 +5473,7 @@ var
   TimeListIndex: Integer;
   DisplayTimeList: TModflowBoundaryDisplayTimeList;
   DataArray: TModflowBoundaryDisplayDataArray;
+  CheckParameters: Boolean;
 begin
   // Quit if the package isn't used.
   if not Package.IsSelected then
@@ -5509,56 +5510,64 @@ begin
       frmErrorsAndWarnings.RemoveWarningGroup(Model, ErrorMessage);
 
 
-      // loop over the parameters
-      for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+      CheckParameters := True;
+      if (ParameterType = ptQMAX) and (Model.ModelSelection = msModflowOwhm2) then
       begin
-        Param := Model.ModflowTransientParameters[ParamIndex];
-        // Consider only those parameters that match the parameter type for the
-        // current package.
-        if Param.ParameterType = ParameterType then
+        CheckParameters := False;
+      end;
+      // loop over the parameters
+      if CheckParameters then
+      begin
+        for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
         begin
-          Position := ParamValues.IndexOf(Param.ParameterName);
-          // The parameter name is erased from FParamValues in
-          // CountParametersAndParameterCells if there are no cells
-          // associated with it.
-          if Position < 0 then
+          Param := Model.ModflowTransientParameters[ParamIndex];
+          // Consider only those parameters that match the parameter type for the
+          // current package.
+          if Param.ParameterType = ParameterType then
           begin
-            if frmErrorsAndWarnings <> nil then
+            Position := ParamValues.IndexOf(Param.ParameterName);
+            // The parameter name is erased from FParamValues in
+            // CountParametersAndParameterCells if there are no cells
+            // associated with it.
+            if Position < 0 then
             begin
-              frmErrorsAndWarnings.AddWarning(Model,
-                ErrorMessage, Param.ParameterName);
-            end;
-            Continue;
-          end;
-          ParameterValues := ParamValues.Objects[Position] as TList;
-          if ParameterValues.Count = 0 then
-          begin
-            Continue;
-          end;
-          // ParameterValues contains lists of cells for a parameter for
-          // each stress period.
-          for TimeListIndex := 0 to TimeLists.Count - 1 do
-          begin
-            DisplayTimeList := TimeLists[TimeListIndex];
-            Assert(ParameterValues.Count = DisplayTimeList.Count);
-          end;
-          // For each stress period, transfer values from
-          // the cells lists to the data arrays.
-          for TimeIndex := 0 to ParameterValues.Count - 1 do
-          begin
-            CellList := ParameterValues[TimeIndex];
-            if CellList.Count > 0 then
-            begin
-              DataArrayList.Clear;
-              for TimeListIndex := 0 to TimeLists.Count - 1 do
+              if frmErrorsAndWarnings <> nil then
               begin
-                DisplayTimeList := TimeLists[TimeListIndex];
-                DataArray := DisplayTimeList[TimeIndex]
-                  as TModflowBoundaryDisplayDataArray;
-                DataArrayList.Add(DataArray);
+                frmErrorsAndWarnings.AddWarning(Model,
+                  ErrorMessage, Param.ParameterName);
               end;
-              UpdateCellDisplay(CellList, DataArrayList,
-                ParameterIndicies, Param);
+              Continue;
+            end;
+            ParameterValues := ParamValues.Objects[Position] as TList;
+            if ParameterValues.Count = 0 then
+            begin
+              Continue;
+            end;
+            // ParameterValues contains lists of cells for a parameter for
+            // each stress period.
+            for TimeListIndex := 0 to TimeLists.Count - 1 do
+            begin
+              DisplayTimeList := TimeLists[TimeListIndex];
+              Assert(ParameterValues.Count = DisplayTimeList.Count);
+            end;
+            // For each stress period, transfer values from
+            // the cells lists to the data arrays.
+            for TimeIndex := 0 to ParameterValues.Count - 1 do
+            begin
+              CellList := ParameterValues[TimeIndex];
+              if CellList.Count > 0 then
+              begin
+                DataArrayList.Clear;
+                for TimeListIndex := 0 to TimeLists.Count - 1 do
+                begin
+                  DisplayTimeList := TimeLists[TimeListIndex];
+                  DataArray := DisplayTimeList[TimeIndex]
+                    as TModflowBoundaryDisplayDataArray;
+                  DataArrayList.Add(DataArray);
+                end;
+                UpdateCellDisplay(CellList, DataArrayList,
+                  ParameterIndicies, Param);
+              end;
             end;
           end;
         end;

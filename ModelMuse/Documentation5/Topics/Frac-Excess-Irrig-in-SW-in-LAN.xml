@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:46:31.727-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T14:14:24.079-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Frac Excess Irrig in SW in LAND_USE: Farm Process V4 Land Use Options</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Frac Excess Irrig in SW in LAND_USE: Farm Process V4 Land Use Options</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Inefficient losses from irrigation is the extra water required to meet an irrigation requirement. They are a result of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Efficiency-in-FMP-Farm-Process" styleclass="Normal" translate="true">EFFICIENCY</link><text styleclass="Normal" translate="true"> being less than 1</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">SURFACEWATER_LOSS_FRACTION_IRRIGATION: indicates the fraction of inefficient losses from irrigation that go to surface water compared to deep percolation. (For example, 0.75 indicates 75% of extra irrigation becomes surface runoff.)</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

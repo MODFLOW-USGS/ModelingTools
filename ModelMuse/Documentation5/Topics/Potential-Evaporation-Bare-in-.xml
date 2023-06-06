@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:45:52.919-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T13:02:27.487-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Potential Evaporation Bare in Climate: Farm Process V4 Climate Options</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Potential Evaporation Bare in Climate: Farm Process V4 Climate Options</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">POTENTIAL_EVAPORATION_BARE is the potential evaporation rate of groundwater under Fallow and Bare Soil. If POTENTIAL_EVAPORATION_BARE is not specified then </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Ref_-Evap-in-Climate-Farm-Proc" styleclass="Normal" translate="true">REFERENCE_ET</link><text styleclass="Normal" translate="true"> is used in its place. If REFERENCE_ET is not specified then POTENTIAL_EVAPORATION_BARE is set to 0.0.</text></para>
   </body>
 </topic>

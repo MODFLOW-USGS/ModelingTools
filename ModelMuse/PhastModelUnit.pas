@@ -26738,6 +26738,7 @@ end;
 procedure TCustomModel.InvalidateMfFmpMaxPumpingRate(Sender: TObject);
 begin
   ModflowPackages.FarmProcess.MfFmpMaxPumpingRate.Invalidate;
+  ModflowPackages.FarmWells4.MfFmpMaxPumpingRate.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfFmpPrecip(Sender: TObject);
@@ -26754,6 +26755,7 @@ end;
 procedure TCustomModel.InvalidateMfFmpWellFarmID(Sender: TObject);
 begin
   ModflowPackages.FarmProcess.MfFmpFarmWellFarmID.Invalidate;
+  ModflowPackages.FarmWells4.MfFmpFarmWellFarmID.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfGhbBoundaryHead(Sender: TObject);

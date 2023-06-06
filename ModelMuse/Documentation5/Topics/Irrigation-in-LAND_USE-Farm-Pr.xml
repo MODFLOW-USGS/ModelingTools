@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:46:13.343-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T14:00:24.789-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Irrigation in LAND_USE: Farm Process V4 Land Use Options</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Irrigation in LAND_USE: Farm Process V4 Land Use Options</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IRRIGATION Determines if crop receives applied water (irrigation) to meet Consumptive Use (CU) and the irrigation efficiency (OFE).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">0 Indicates that it is not irrigated</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">&gt;0 Indicates crop is irrigated and the number is the irrigation type</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A global variable is created for each irrigation type defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm-Irrigation-Types--Dialog-" styleclass="Strong" translate="true">Farm Irrigation Types</link><text styleclass="Normal" translate="true"> dialog box. It is recommended that those global variables when specifying Irrigation.</text></para>
   </body>
 </topic>

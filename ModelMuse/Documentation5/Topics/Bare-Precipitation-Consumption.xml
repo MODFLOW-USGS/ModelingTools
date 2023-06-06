@@ -1,12 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:43:01.495-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T12:58:48.347-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Bare Precipitation Consumption Fraction in FMP: Farm Process V4</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Bare Precipitation Consumption Fraction in FMP: Farm Process V4</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If there is over-consumption through evaporation of precipitation over bare soil, BARE_PRECIPITATION_CONSUMPTION_FRACTION imposes a limit on that consumption. BARE_PRECIPITATION_CONSUMPTION_FRACTION is defined as a fraction of precipitation that falls on bare surface that is available for consumption (evaporation).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It must be between 0 and 1, with a default value of 1 when not specified.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Precipitation that </text><text styleclass="Strong" translate="true">is not</text><text styleclass="Normal" translate="true"> available for consumption becomes either runoff or deep percolation</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Precipitation that </text><text styleclass="Strong" translate="true">is</text><text styleclass="Normal" translate="true"> available for consumption, but does not evaporate becomes either runoff or deep percolation</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This can be tied to Soil Conservation Service estimates of the fraction of consumption or can be user estimated.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

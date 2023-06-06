@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:46:37.959-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T14:16:34.949-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Added Demand in LAND_USE: Farm Process V4 Land Use Options</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Added Demand in LAND_USE: Farm Process V4 Land Use Options</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ADDED_DEMAND specifies any additional demands to include with the crop demand. ADDED_DEMAND only applies to irrigated crops and the additional</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">demanded water only becomes surface runoff or deep percolation based on the fraction specified in the WBS Block &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Demand-Runoff-Split-in-W" styleclass="Normal" translate="true">ADDED_DEMAND_RUNOFF_SPLIT</link><text styleclass="Normal" translate="true">&quot;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The added demand is summed with other added demands (e.g. WBS Block </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Crop-Demand-Flux" styleclass="Normal" translate="true">ADDED_CROP_DEMAND FLUX</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Crop-Demand-Rate" styleclass="Normal" translate="true">ADDED_CROP_DEMAND RATE</link><text styleclass="Normal" translate="true">.)</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

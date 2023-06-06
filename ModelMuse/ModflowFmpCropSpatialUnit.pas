@@ -210,7 +210,7 @@ uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   AbstractGridUnit;
 
 resourcestring
-  StrCropID = 'Crop ID';
+  StrCropID = 'Land Use ID';
 
 const
   CropIDPosition = 0;

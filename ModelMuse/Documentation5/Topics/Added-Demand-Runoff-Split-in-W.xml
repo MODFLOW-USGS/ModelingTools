@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:42:57.727-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T12:46:26.484-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Added Demand Runoff Split in WATER_BALANCE_SUBREGION</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Added Demand Runoff Split in WATER_BALANCE_SUBREGION</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If a Water Balance Subregion has specified an added irrigation demand, then ADDED_DEMAND_RUNOFF_SPLIT defines the split between becoming surface runoff or deep percolation. This fraction is only is a split for the additional demanded water. It does not apply to losses that originate from irrigation required to meet a land use ET which is defined in the Land_Use Block with the SURFACEWATER_LOSS_FRACTION_IRRIGATION keyword. It must be between 0.0 and 1.0; If not specified then it defaults to 0.1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Additional demand is defined with the keyword </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Crop-Demand-Flux" styleclass="Normal" translate="true">ADDED_CROP_DEMAND FLUX</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Crop-Demand-Rate" styleclass="Normal" translate="true">ADDED_CROP_DEMAND RATE</link><text styleclass="Normal" translate="true">, and LAND_USE block keyword </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Added-Demand-in-LAND_USE-Farm-" styleclass="Normal" translate="true">ADDED_DEMAND</link></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

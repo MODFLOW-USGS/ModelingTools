@@ -1611,18 +1611,23 @@ view. }
       write FGwtSrcBoundary;
 
     // FMP4
+    // FMP WBS: Efficiency
     property Fmp4EfficiencyBoundary: TFmp4EfficiencyBoundary
       read FFmp4EfficiencyBoundary write FFmp4EfficiencyBoundary;
+    // FMP WBS: EFFICIENCY_IMPROVEMENT
     property Fmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary
       read FFmp4EfficiencyImprovementBoundary
       write FFmp4EfficiencyImprovementBoundary;
+    // FMP WBS: BARE_RUNOFF_FRACTION
     property Fmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary
       read FFmp4BareRunoffFractionBoundary
       write FFmp4BareRunoffFractionBoundary;
+    // FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION
     property Fmp4BarePrecipitationConsumptionFractionBoundary:
       TFmp4BarePrecipitationConsumptionFractionBoundary
       read FFmp4BarePrecipitationConsumptionFractionBoundary
       write FFmp4BarePrecipitationConsumptionFractionBoundary;
+    // FMP WBS: ADDED_DEMAND_RUNOFF_SPLIT
     property Fmp4AddedDemandRunoffSplitBoundary:
       TFmp4AddedDemandRunoffSplitBoundary
       read FFmp4AddedDemandRunoffSplitBoundary
@@ -4345,14 +4350,21 @@ view. }
       write SetModflowFhbHeadBoundary stored StoreModflowFhbHeadBoundary;
     property ModflowFhbFlowBoundary: TFhbFlowBoundary read GetModflowFhbFlowBoundary
       write SetModflowFhbFlowBoundary stored StoreModflowFhbFlowBoundary;
+
+      // FMP SUPPLY_WELL
     property ModflowFmpWellBoundary: TFmpWellBoundary read GetModflowFmpWellBoundary
       write SetModflowFmpWellBoundary stored StoreModflowFmpWellBoundary;
+
+    // FMP CLIMATE: PRECIPITATION
     property ModflowFmpPrecip: TFmpPrecipBoundary read GetModflowFmpPrecip
       write SetModflowFmpPrecip Stored StoreModflowFmpPrecip;
+    // FMP CLIMATE: REFERENCE_ET
     property ModflowFmpRefEvap: TFmpRefEvapBoundary read GetModflowFmpRefEvap
       write SetModflowFmpRefEvap Stored StoreModflowFmpRefEvap;
+    // FMP LAND_USE: Location
     property ModflowFmpCropID: TFmpCropIDBoundary read GetModflowFmpCropID
       write SetModflowFmpCropID Stored StoreModflowFmpCropID;
+    // FMP WBS: Location
     property ModflowFmpFarmID: TFmpFarmIDBoundary read GetModflowFmpFarmID
       write SetModflowFmpFarmID Stored StoreModflowFmpFarmID;
     property ModflowCfpPipes: TCfpPipeBoundary read GetModflowCfpPipes
@@ -4432,102 +4444,133 @@ view. }
       write SetGwtSrcBoundary stored StoreGwtSrcBoundary;
 
     // FMP4
+    // FMP WBS: Efficiency
     property Fmp4EfficiencyBoundary: TFmp4EfficiencyBoundary
       read GetFmp4EfficiencyBoundary write SetFmp4EfficiencyBoundary
       stored StoreFmp4EfficiencyBoundary;
+    // FMP WBS: EFFICIENCY_IMPROVEMENT
     property Fmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary
       read GetFmp4EfficiencyImprovementBoundary write SetFmp4EfficiencyImprovementBoundary
       stored StoreFmp4EfficiencyImprovementBoundary;
+    // FMP WBS: BARE_RUNOFF_FRACTION
     property Fmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary
       read GetFmp4BareRunoffFractionBoundary write SetFmp4BareRunoffFractionBoundary
       stored StoreFmp4BareRunoffFractionBoundary;
+    // FMP WBS: BARE_PRECIPITATION_CONSUMPTION_FRACTION
     property Fmp4BarePrecipitationConsumptionFractionBoundary:
       TFmp4BarePrecipitationConsumptionFractionBoundary
       read GetFmp4BarePrecipitationConsumptionFractionBoundary
       write SetFmp4BarePrecipitationConsumptionFractionBoundary
       stored StoreFmp4BarePrecipitationConsumptionFractionBoundary;
+    // FMP WBS: ADDED_DEMAND_RUNOFF_SPLIT
     property Fmp4AddedDemandRunoffSplitBoundary:
       TFmp4AddedDemandRunoffSplitBoundary
       read GetFmp4AddedDemandRunoffSplitBoundary
       write SetFmp4AddedDemandRunoffSplitBoundary
       stored StoreFmp4AddedDemandRunoffSplitBoundary;
+    // FMP CLIMATE: POTENTIAL_EVAPORATION_BARE
     property ModflowFmpBareEvap: TFmp4BareEvapBoundary
       read GetModflowFmpBareEvap write SetModflowFmpBareEvap
       Stored StoreModflowFmpBareEvap;
+    // FMP CLIMATE: DIRECT_RECHARGE
     property ModflowFmpDirectRecharge: TFmp4DirectRechargeBoundary
       read GetModflowFmpDirectRecharge write SetModflowFmpDirectRecharge
       Stored StoreModflowFmpDirectRecharge;
+    // FMP CLIMATE: PRECIPITATION_POTENTIAL_CONSUMPTION
     property ModflowFmpPrecipPotConsumption: TFmp4PrecipPotConsumptionBoundary
       read GetModflowFmpPrecipPotConsumption write SetModflowFmpPrecipPotConsumption
       Stored StoreModflowFmpPrecipPotConsumption;
+    // FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION
     property ModflowFmp4NrdInfilLocationBoundary: TFmp4NrdInfilLocationBoundary
       read GetModflowFmp4NrdInfilLocationBoundary write SetModflowFmp4NrdInfilLocationBoundary
       Stored StoreModflowFmp4NrdInfilLocationBoundary;
+    // FMP LAND_USE: LAND_USE_AREA_FRACTION
     property ModflowFmp4LandUseAreaFraction: TFmp4LandUseAreaFractionBoundary
       read GetModflowFmp4LandUseAreaFraction
       write SetModflowFmp4LandUseAreaFraction
       stored StoreModflowFmp4LandUseAreaFraction;
+    // FMP LAND_USE: LAND_USE_AREA_FRACTION
     property ModflowFmp4MultLandUseAreaFraction: TFmp4MultLandUseAreaFractionBoundary
       read GetModflowFmp4MultLandUseAreaFraction
       write SetModflowFmp4MultLandUseAreaFraction
       stored StoreModflowFmp4MultLandUseAreaFraction;
+    // FMP LAND_USE: CROP_COEFFICIENT
     property ModflowFmp4CropCoefficient: TFmp4CropCoefficientBoundary
       read GetModflowFmp4CropCoefficient write SetModflowFmp4CropCoefficient
       Stored StoreModflowFmp4CropCoefficient;
+    // FMP LAND_USE: CROP_COEFFICIENT
     property ModflowFmp4MultCropCoefficient: TFmp4MultCropCoefficientBoundary
       read GetModflowFmp4MultCropCoefficient write SetModflowFmp4MultCropCoefficient
       Stored StoreModflowFmp4MultCropCoefficient;
+    // FMP LAND_USE: CONSUMPTIVE_USE
     property ModflowFmp4ConsumptiveUse: TFmp4ConsumptiveUseBoundary
       read GetModflowFmp4ConsumptiveUse write SetModflowFmp4ConsumptiveUse
       Stored StoreModflowFmp4ConsumptiveUse;
+    // FMP LAND_USE: CONSUMPTIVE_USE
     property ModflowFmp4MultConsumptiveUse: TFmp4MultConsumptiveUseBoundary
       read GetModflowFmp4MultConsumptiveUse write SetModflowFmp4MultConsumptiveUse
       Stored StoreModflowFmp4MultConsumptiveUse;
+    // FMP LAND_USE: IRRIGATION
     property ModflowFmp4Irrigation: TFmp4IrrigationBoundary
       read GetModflowFmp4Irrigation write SetModflowFmp4Irrigation
       Stored StoreModflowFmp4Irrigation;
+    // FMP LAND_USE: IRRIGATION
     property ModflowFmp4MultIrrigation: TFmp4MultIrrigationBoundary
       read GetModflowFmp4MultIrrigation write SetModflowFmp4MultIrrigation
       Stored StoreModflowFmp4MultIrrigation;
+    // FMP LAND_USE: ROOT_DEPTH
     property ModflowFmp4RootDepth: TFmp4RootDepthBoundary
       read GetModflowFmp4RootDepth write SetModflowFmp4RootDepth
       Stored StoreModflowFmp4RootDepth;
+    // FMP LAND_USE: ROOT_DEPTH
     property ModflowFmp4MultRootDepth: TFmp4MultRootDepthBoundary
       read GetModflowFmp4MultRootDepth write SetModflowFmp4MultRootDepth
       Stored StoreModflowFmp4MultRootDepth;
+    // FMP LAND_USE: TRANSPIRATION_FRACTION
     property ModflowFmp4TranspirationFraction: TFmp4TranspirationFractionBoundary
       read GetModflowFmp4TranspirationFraction write SetModflowFmp4TranspirationFraction
       Stored StoreModflowFmp4TranspirationFraction;
+    // FMP LAND_USE: TRANSPIRATION_FRACTION
     property ModflowFmp4MultTranspirationFraction: TFmp4MultTranspirationFractionBoundary
       read GetModflowFmp4MultTranspirationFraction write SetModflowFmp4MultTranspirationFraction
       Stored StoreModflowFmp4MultTranspirationFraction;
+    // FMP LAND_USE: EVAPORATION_IRRIGATION_FRACTION
     property ModflowFmp4EvaporationIrrigationFraction: TFmp4EvaporationIrrigationFractionBoundary
       read GetModflowFmp4EvaporationIrrigationFraction write SetModflowFmp4EvaporationIrrigationFraction
       Stored StoreModflowFmp4EvaporationIrrigationFraction;
+    // FMP LAND_USE: EVAPORATION_IRRIGATION_FRACTION
     property ModflowFmp4MultEvaporationIrrigationFraction: TFmp4MultEvaporationIrrigationFractionBoundary
       read GetModflowFmp4MultEvaporationIrrigationFraction write SetModflowFmp4MultEvaporationIrrigationFraction
       Stored StoreModflowFmp4MultEvaporationIrrigationFraction;
+    // FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     property ModflowFmp4FractionOfPrecipToSurfaceWater: TFmp4FractionOfPrecipToSurfaceWaterBoundary
       read GetModflowFmp4FractionOfPrecipToSurfaceWater write SetModflowFmp4FractionOfPrecipToSurfaceWater
       Stored StoreModflowFmp4FractionOfPrecipToSurfaceWater;
+    // FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     property ModflowFmp4MultFractionOfPrecipToSurfaceWater: TFmp4MultFractionOfPrecipToSurfaceWaterBoundary
       read GetModflowFmp4MultFractionOfPrecipToSurfaceWater write SetModflowFmp4MultFractionOfPrecipToSurfaceWater
       Stored StoreModflowFmp4MultFractionOfPrecipToSurfaceWater;
+    // FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_IRRIGATION
     property ModflowFmp4FractionOfIrrigToSurfaceWater: TFmp4FractionOfIrrigToSurfaceWaterBoundary
       read GetModflowFmp4FractionOfIrrigToSurfaceWater write SetModflowFmp4FractionOfIrrigToSurfaceWater
       Stored StoreModflowFmp4FractionOfIrrigToSurfaceWater;
+    // FMP LAND_USE: SURFACEWATER_LOSS_FRACTION_IRRIGATION
     property ModflowFmp4MultFractionOfIrrigToSurfaceWater: TFmp4MultFractionOfIrrigToSurfaceWaterBoundary
       read GetModflowFmp4MultFractionOfIrrigToSurfaceWater write SetModflowFmp4MultFractionOfIrrigToSurfaceWater
       Stored StoreModflowFmp4MultFractionOfIrrigToSurfaceWater;
+    // FMP LAND_USE: ADDED_DEMAND
     property ModflowFmp4AddedDemand: TFmp4AddedDemandBoundary
       read GetModflowFmp4AddedDemand write SetModflowFmp4AddedDemand
       Stored StoreModflowFmp4AddedDemand;
+    // FMP LAND_USE: ADDED_DEMAND
     property ModflowFmp4MultAddedDemand: TFmp4MultAddedDemandBoundary
       read GetModflowFmp4MultAddedDemand write SetModflowFmp4MultAddedDemand
       Stored StoreModflowFmp4MultAddedDemand;
+    // FMP SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND
     property ModflowFmp4CropHasSalinityDemand: TFmp4CropHasSalinityDemandBoundary
       read GetModflowFmp4CropHasSalinityDemand write SetModflowFmp4CropHasSalinityDemand
       Stored StoreModflowFmp4CropHasSalinityDemand;
+    // FMP SALINITY_FLUSH_IRRIGATION: CROP_HAS_SALINITY_DEMAND
     property ModflowFmp4MultCropHasSalinityDemand: TFmp4MultCropHasSalinityDemandBoundary
       read GetModflowFmp4MultCropHasSalinityDemand write SetModflowFmp4MultCropHasSalinityDemand
       Stored StoreModflowFmp4MultCropHasSalinityDemand;

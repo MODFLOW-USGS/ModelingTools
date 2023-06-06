@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T15:46:42.640-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-06-06T14:19:15.864-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Crop has Salinity Demand in SALINITY_FLUSH_IRRIGATION</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Crop has Salinity Demand in SALINITY_FLUSH_IRRIGATION</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">HAS_CROP_SALINITY_DEMAND is similar to IBOUND, which is an INT and indicates if crop has a salinity irrigation demand calculated</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If specified as a zero (0), then it does not have it, if it is non-zero then it does.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If HAS_CROP_SALINITY_DEMAND is not included, all crops are assumed to have salinity flushing.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

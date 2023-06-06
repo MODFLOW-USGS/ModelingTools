@@ -12,8 +12,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitWidth = 776
-  ExplicitHeight = 588
+  ExplicitWidth = 780
+  ExplicitHeight = 589
   TextHeight = 19
   object pageMain: TPageControl
     Left = 0
@@ -2456,14 +2456,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           006F0075006E00640061007200790020007000610063006B0061006700650029
           00}
         Items.Links = {020000000000000000000000}
-        ExplicitHeight = 470
       end
       object jvplModflowBoundaries: TJvPageList
         Left = 195
         Top = 0
         Width = 561
         Height = 471
-        ActivePage = jvspFmp4TranspirationFraction
+        ActivePage = jvspFmp4Irrigation
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -16445,8 +16444,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           HelpType = htKeyword
           HelpKeyword = 'Crop-has-Salinity-Demand-in-SA'
           Caption = 'jvspFmp4CropHasSalinityDemand'
-          ExplicitWidth = 557
-          ExplicitHeight = 470
           inline frameFmp4CropHasSalinityDemand: TframeScreenObjectFmp4CropHasSalinityRequirement
             Left = 0
             Top = 0
@@ -16455,13 +16452,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitWidth = 557
-            ExplicitHeight = 470
+            ExplicitWidth = 561
+            ExplicitHeight = 471
             inherited pnlBottom: TPanel
               Top = 425
               Width = 561
-              ExplicitTop = 424
-              ExplicitWidth = 557
+              ExplicitTop = 425
+              ExplicitWidth = 561
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -16474,11 +16471,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 449
-                ExplicitLeft = 445
+                ExplicitLeft = 449
               end
               inherited btnInsert: TBitBtn
                 Left = 365
-                ExplicitLeft = 361
+                ExplicitLeft = 365
               end
             end
             inherited pnlTop: TPanel
@@ -16486,19 +16483,17 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 561
               inherited pnlCaption: TPanel
                 Width = 559
-                ExplicitWidth = 555
-                ExplicitHeight = 43
+                ExplicitWidth = 559
               end
             end
             inherited pnlGrid: TPanel
               Width = 561
               Height = 400
-              ExplicitTop = 45
-              ExplicitWidth = 557
-              ExplicitHeight = 379
+              ExplicitWidth = 561
+              ExplicitHeight = 400
               inherited pnlEditGrid: TPanel
                 Width = 559
-                ExplicitWidth = 555
+                ExplicitWidth = 559
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -16510,8 +16505,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 559
                 Height = 348
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                ExplicitWidth = 555
-                ExplicitHeight = 327
+                ExplicitWidth = 559
+                ExplicitHeight = 348
               end
             end
           end
@@ -16659,6 +16654,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 559
                 Height = 348
+                OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitWidth = 559
                 ExplicitHeight = 348
               end
@@ -18396,7 +18392,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           AlignWithMargins = True
           Left = 16
           Top = 19
-          Width = 190
+          Width = 187
           Height = 114
           Margins.Top = 10
           Anchors = [akLeft, akTop, akRight]
@@ -18405,7 +18401,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             'ou can describe it here so you will understand how it works late' +
             'r.'
           WordWrap = True
-          ExplicitWidth = 194
         end
         object memoComments: TMemo
           Left = 2
@@ -18596,8 +18591,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 508
-    ExplicitWidth = 760
     DesignSize = (
       764
       41)
@@ -18629,7 +18622,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
-      ExplicitLeft = 431
     end
     object btnCancel: TBitBtn
       Left = 530
@@ -18641,7 +18633,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 5
       OnClick = btnCancelClick
-      ExplicitLeft = 526
     end
     object btnHelp: TBitBtn
       Left = 340
@@ -18653,7 +18644,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 336
     end
     object btnCopyVertices: TButton
       Left = 4

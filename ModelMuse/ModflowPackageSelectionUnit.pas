@@ -5478,6 +5478,9 @@ Type
     FFarmWellPrints: TFarmWellPrints;
     FSmoothing: TSmoothing;
     FProrateDemand: TProrateDemand;
+    FMfFmpMaxPumpingRate: TModflowBoundaryDisplayTimeList;
+    FMfFmpFarmWellFarmID: TModflowBoundaryDisplayTimeList;
+    function FarmWellsUsed (Sender: TObject): boolean;
     procedure SetMnwPumpSpread(const Value: TOwhmV2PumpSpreadChoice);
     procedure SetWellFormat(const Value: TWellFormat);
     procedure SetWellLayerChoice(const Value: TPumpLayerChoice);
@@ -5485,12 +5488,21 @@ Type
     procedure SetFarmWellPrints(const Value: TFarmWellPrints);
     procedure SetSmoothing(const Value: TSmoothing);
     procedure SetProrateDemand(const Value: TProrateDemand);
+    procedure InitializeFarmWellDisplay(Sender: TObject);
+    procedure GetMfFmpMaxPumpRateUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure GetMfFmpFarmWellFarmIDUseList(Sender: TObject;
+      NewUseList: TStringList);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     Constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
     procedure InitializeVariables; override;
+    property MfFmpMaxPumpingRate: TModflowBoundaryDisplayTimeList
+      read FMfFmpMaxPumpingRate;
+    property MfFmpFarmWellFarmID: TModflowBoundaryDisplayTimeList read FMfFmpFarmWellFarmID;
   published
     // Supply Well
     {PRINT BYWELL,   PRINT ByWBS,    PRINT ByMNW, PRINT LIST,   PRINT SMOOTHING}
@@ -7317,9 +7329,9 @@ resourcestring
   StrMNW2WellRadius = 'MNW2 Well Radius';
   StrSSMConcentration = 'SSM Concentration';
   StrSSMSinkConcentrati = 'SSM Sink Concentration';
-  StrFMPCropID = 'FMP Crop ID';
+  StrFMPCropID = 'FMP Land Use ID';
   StrFMPEvaporation = 'FMP Evaporation';
-  StrFMPFarmID = 'FMP Farm ID';
+  StrFMPFarmID = 'FMP WBS ID';
   StrFMPFarmWellFarmI = 'FMP Farm Well Farm ID';
   StrFMPPrecipitation = 'FMP Precipitation';
   StrCFPRechargeFractio = 'CFP Recharge Fraction';
@@ -26800,6 +26812,98 @@ constructor TFarmProcess4Wells.Create(Model: TBaseModel);
 begin
   inherited;
   InitializeVariables;
+
+  if Model <> nil then
+  begin
+    FMfFmpMaxPumpingRate := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmpMaxPumpingRate.OnInitialize := InitializeFarmWellDisplay;
+    FMfFmpMaxPumpingRate.OnGetUseList := GetMfFmpMaxPumpRateUseList;
+    FMfFmpMaxPumpingRate.OnTimeListUsed := FarmWellsUsed;
+    FMfFmpMaxPumpingRate.Name := StrFarmMaxPumpRate;
+    FMfFmpMaxPumpingRate.AddMethod := vamReplace;
+    AddTimeList(FMfFmpMaxPumpingRate);
+
+    FMfFmpFarmWellFarmID := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfFmpFarmWellFarmID.OnInitialize := InitializeFarmWellDisplay;
+    FMfFmpFarmWellFarmID.OnGetUseList := GetMfFmpFarmWellFarmIDUseList;
+    FMfFmpFarmWellFarmID.OnTimeListUsed := FarmWellsUsed;
+    FMfFmpFarmWellFarmID.Name := StrFarmWellFarmID;
+    FMfFmpFarmWellFarmID.AddMethod := vamReplace;
+    AddTimeList(FMfFmpFarmWellFarmID);
+  end;
+
+end;
+
+destructor TFarmProcess4Wells.Destroy;
+begin
+  FMfFmpMaxPumpingRate.Free;
+  FMfFmpFarmWellFarmID.Free;
+  inherited;
+end;
+
+function TFarmProcess4Wells.FarmWellsUsed(Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender);
+end;
+
+procedure TFarmProcess4Wells.GetMfFmpFarmWellFarmIDUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  PhastModel: TCustomModel;
+  Boundary: TFmpFarmIDBoundary;
+begin
+  PhastModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.ModflowFmpFarmID;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(0, NewUseList, Item, StrFMPFarmWellFarmI);
+      end;
+    end;
+  end;
+end;
+
+procedure TFarmProcess4Wells.GetMfFmpMaxPumpRateUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptQMAX,
+    FmpWellMaxPumpingRatePosition, StrFarmMaxPumpRate);
+end;
+
+procedure TFarmProcess4Wells.InitializeFarmWellDisplay(Sender: TObject);
+var
+  FarmWriter: TModflowFmp4Writer;
+  List: TModflowBoundListOfTimeLists;
+begin
+  MfFmpMaxPumpingRate.CreateDataSets;
+  MfFmpFarmWellFarmID.CreateDataSets;
+
+  List := TModflowBoundListOfTimeLists.Create;
+  FarmWriter := TModflowFmp4Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(MfFmpMaxPumpingRate);
+    List.Add(MfFmpFarmWellFarmID);
+    FarmWriter.UpdateDisplay(List, [FmpWellMaxPumpingRatePosition,
+      FmpWellFarmIDPosition]);
+  finally
+    FarmWriter.Free;
+    List.Free;
+  end;
+  MfFmpMaxPumpingRate.LabelAsSum;
+  MfFmpFarmWellFarmID.ComputeAverage;
 end;
 
 procedure TFarmProcess4Wells.InitializeVariables;

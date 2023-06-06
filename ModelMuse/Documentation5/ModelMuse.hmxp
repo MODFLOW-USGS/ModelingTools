@@ -1013,6 +1013,7 @@ document.write('</frameset>');
       <helpcontext-number href="Farm_ID_in_FMP_Farm_Process_Pa" value="3940"/>
       <helpcontext-number href="Farm_Process_Options" value="3794"/>
       <helpcontext-number href="Farm_Soil_Properties_Dialog_Bo" value="3786"/>
+      <helpcontext-number href="Farm_Soil_Properties_Dialog_Bo#EFFECTIVE_PRECIPITATION_TABLE" value="4503"/>
       <helpcontext-number href="Farm-Irrigation-Types--Dialog-" value="4422"/>
       <helpcontext-number href="FarmParameters" value="3796"/>
       <helpcontext-number href="Farm-Process-(for-MODFLOW-OWHM" value="4412"/>
