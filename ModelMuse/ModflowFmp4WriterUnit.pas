@@ -3265,7 +3265,7 @@ begin
                   WriteInteger(SegmentReach.Segment);
                   WriteInteger(SegmentReach.Reach);
                   WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                    AFarm, 'Invalid semin-routed delivery fraction');
+                    AFarm, 'Invalid semi-routed delivery fraction');
                 end;
                 NewLine;
                 Inc(ISRD);
@@ -3321,7 +3321,7 @@ begin
                 WriteInteger(SegmentReach.Segment);
                 WriteInteger(SegmentReach.Reach);
                 WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                  AFarm, 'Invalid semin-routed delivery fraction');
+                  AFarm, 'Invalid semi-routed delivery fraction');
               end;
               NewLine;
               Inc(ISRD);
@@ -3449,7 +3449,7 @@ begin
                 begin
   //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
                   WriteFloatValueFromGlobalFormula(ADelivery.LowerLimit,
-                    AFarm, 'Invalid semin-routed delivery lower limit');
+                    AFarm, 'Invalid semi-routed delivery lower limit');
                 end;
                 NewLine;
                 Inc(ISRD);
@@ -3492,7 +3492,7 @@ begin
               else
               begin
                 WriteFloatValueFromGlobalFormula(ADelivery.LowerLimit,
-                  AFarm, 'Invalid semin-routed delivery lower limit');
+                  AFarm, 'Invalid semi-routed delivery lower limit');
               end;
               NewLine;
               Inc(ISRD);
@@ -3601,7 +3601,7 @@ begin
                 begin
   //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
                   WriteFloatValueFromGlobalFormula(ADelivery.UpperLimit,
-                    AFarm, 'Invalid semin-routed delivery upper limit');
+                    AFarm, 'Invalid semi-routed delivery upper limit');
                 end;
                 NewLine;
                 Inc(ISRD);
@@ -3644,7 +3644,7 @@ begin
               else
               begin
                 WriteFloatValueFromGlobalFormula(ADelivery.UpperLimit,
-                  AFarm, 'Invalid semin-routed delivery upper limit');
+                  AFarm, 'Invalid semi-routed delivery upper limit');
               end;
               NewLine;
               Inc(ISRD);
@@ -3761,7 +3761,7 @@ begin
                   WriteInteger(SegmentReach.Segment);
                   WriteInteger(SegmentReach.Reach);
                   WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                    AFarm, 'Invalid semin-routed delivery fraction');
+                    AFarm, 'Invalid semi-routed delivery fraction');
                 end;
                 NewLine;
                 Inc(ISRD);
@@ -3817,7 +3817,7 @@ begin
                 WriteInteger(SegmentReach.Segment);
                 WriteInteger(SegmentReach.Reach);
                 WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                  AFarm, 'Invalid semin-routed delivery fraction');
+                  AFarm, 'Invalid semi-routed delivery fraction');
               end;
               NewLine;
               Inc(ISRD);

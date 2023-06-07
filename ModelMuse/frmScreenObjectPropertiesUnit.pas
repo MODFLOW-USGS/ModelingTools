@@ -4729,6 +4729,18 @@ var
   ParameterIndex: Integer;
   AParameter: TModflowSteadyParameter;
 begin
+  if frmGoPhast.ModelSelection = msModflowFMP then
+  begin
+    jvspFarmPrecip.HelpKeyword := 'Precip_in_FMP_Farm_Process';
+    jvspFarmRefEvap.HelpKeyword := 'Ref_Evap_in_FMP_Farm_Process';
+    jvspFarmID.HelpKeyword := 'Farm_ID_in_FMP_Farm_Process_Pa';
+  end
+  else
+  begin
+    jvspFarmPrecip.HelpKeyword := 'Precip-in-Climate-Farm-Process';
+    jvspFarmRefEvap.HelpKeyword := 'Ref_-Evap-in-Climate-Farm-Proc';
+    jvspFarmID.HelpKeyword := 'Water-Balance-Subregion-ID-in-';
+  end;
   frameDynamicTimeSeries.SetGridButtonEvent(frameChdParamdgModflowBoundaryButtonClick);
 
   frameLak.tabObservations.Visible := frmGoPhast.PhastModel.PestUsed;
@@ -23577,6 +23589,10 @@ begin
       ResultType := rdtBoolean;
     end
     else if DataGrid = frameFmp4Irrigation.rdgModflowBoundary then
+    begin
+      ResultType := rdtInteger;
+    end
+    else if DataGrid = frameFmp4MultIrrigation.rdgModflowBoundary then
     begin
       ResultType := rdtInteger;
     end

@@ -1209,7 +1209,7 @@ begin
     end
     else if Node = FFmp4BareEvapNode then
     begin
-      Data.Caption := 'FMP4 Climate: Bare Evaporation';
+      Data.Caption := 'FMP4 Climate: Potential Evaporation Bare';
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FFmp4DirectRechargeNode then

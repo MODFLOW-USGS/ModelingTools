@@ -172,6 +172,10 @@ begin
   ClearFmpGrid;
   rdgModflowBoundary.Cells[Ord(pcStartTime), 0] := StrStartingTime;
   rdgModflowBoundary.Cells[Ord(pcEndTime), 0] := StrEndingTime;
+
+  rdgModflowBoundary.Cells[Ord(pcStartTime), PestModifierRow] := StrPestModifier;
+  rdgModflowBoundary.Cells[Ord(pcStartTime), PestMethodRow] := StrModificationMethod;
+
   GetStartTimes(Ord(pcStartTime));
   GetEndTimes(Ord(pcEndTime));
   seNumberOfTimes.AsInteger := 0;

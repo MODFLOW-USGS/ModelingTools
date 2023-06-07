@@ -2,8 +2,8 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
   Caption = 'frmCustomSelectObjects'
   ClientHeight = 411
   ClientWidth = 414
-  ExplicitWidth = 430
-  ExplicitHeight = 450
+  ExplicitWidth = 426
+  ExplicitHeight = 449
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -13,11 +13,13 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 369
+    ExplicitWidth = 410
     DesignSize = (
       414
       41)
     object btnClose: TBitBtn
-      Left = 278
+      Left = 274
       Top = 4
       Width = 89
       Height = 33
@@ -25,9 +27,10 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
+      ExplicitLeft = 278
     end
     object btnHelp: TBitBtn
-      Left = 185
+      Left = 181
       Top = 4
       Width = 89
       Height = 33
@@ -35,6 +38,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 185
     end
   end
   object vstObjects: TVirtualStringTree

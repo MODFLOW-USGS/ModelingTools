@@ -5511,10 +5511,12 @@ begin
 
 
       CheckParameters := True;
+    {$IFDEF OWHMV2}
       if (ParameterType = ptQMAX) and (Model.ModelSelection = msModflowOwhm2) then
       begin
         CheckParameters := False;
       end;
+    {$ENDIF}
       // loop over the parameters
       if CheckParameters then
       begin

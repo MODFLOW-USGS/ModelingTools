@@ -25367,7 +25367,7 @@ begin
     FMfFmp4EfficiencyImprovement.OnGetUseList := GetMfFmpFarmEfficiencyImprovementUseList;
     FMfFmp4EfficiencyImprovement.OnTimeListUsed := TransientArrayEfficiencyImprovementUsed;
     FMfFmp4EfficiencyImprovement.Name := StrFMP4EfficiencyImpr;
-    FMfFmp4EfficiencyImprovement.DataType := rdtDouble;
+    FMfFmp4EfficiencyImprovement.DataType := rdtBoolean;
     FMfFmp4EfficiencyImprovement.AddMethod := vamReplace;
     FMfFmp4EfficiencyImprovement.Orientation := dsoTop;
     if (FEfficiencyImprovement.FarmOption = foTransient)

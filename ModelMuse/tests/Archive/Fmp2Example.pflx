@@ -1,0 +1,6 @@
+# Stress Period 1
+CONSTANT     2.070000000000E-003  # Data Set 33: PFLX
+# Stress Period 2
+CONSTANT     2.070000000000E-003  # Data Set 33: PFLX
+# Stress Period 3
+CONSTANT     2.630000000000E-003  # Data Set 33: PFLX

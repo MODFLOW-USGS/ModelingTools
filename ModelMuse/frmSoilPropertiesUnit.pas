@@ -341,7 +341,7 @@ begin
     CanSelect := frameSoils.Grid.ItemIndex[ord(scSoiltype), ARow] = Ord(stOther);
   end;
 
-  if (FFarmSoil4 <> nil) and (ARow >= 1) then
+  if (FFarmSoil4 <> nil) and FFarmSoil4.IsSelected and (ARow >= 1) then
   begin
     if ACol = Ord(scCapFringe) then
     begin
@@ -497,8 +497,8 @@ begin
   frameSoilsGridSelectCell(Grid, Ord(scName), 1, Dummy);
 
 {$IFDEF OWHMV2}
-  frameSoilEffectivePrecip.Visible :=
-    (frmGoPhast.ModelSelection = msModflowOwhm2)
+  frameSoilEffectivePrecip.Visible := (FFarmSoil4 <> nil)
+    and (frmGoPhast.ModelSelection = msModflowOwhm2)
     and (FFarmSoil4.EffPrecipTable.FarmOption <> foNotUsed);
 {$ELSE}
   frameSoilEffectivePrecip.Visible := False;
@@ -509,22 +509,24 @@ begin
     frameSoils.Align := alClient;
   end;
 
-  Grid := frameSoilEffectivePrecip.Grid;
-  Grid.BeginUpdate;
-  try
-    Grid.Cells[0,0] := 'Precipitation Rate (L/T)';
+  if frameSoilEffectivePrecip.Visible then
+  begin
+    Grid := frameSoilEffectivePrecip.Grid;
+    Grid.BeginUpdate;
+    try
+      Grid.Cells[0,0] := 'Precipitation Rate (L/T)';
 
-    FFarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
-    if FFarmSoil4.EffPrecipTableOption = ppcLength then
-    begin
-      Grid.Cells[1,0] := 'Effective Precipitation (L)';
-    end
-    else
-    begin
-      Grid.Cells[1,0] := 'Effective Precipitation Fraction';
+      if FFarmSoil4.EffPrecipTableOption = ppcLength then
+      begin
+        Grid.Cells[1,0] := 'Effective Precipitation (L)';
+      end
+      else
+      begin
+        Grid.Cells[1,0] := 'Effective Precipitation Fraction';
+      end;
+    finally
+      Grid.EndUpdate;
     end;
-  finally
-    Grid.EndUpdate;
   end;
 end;
 

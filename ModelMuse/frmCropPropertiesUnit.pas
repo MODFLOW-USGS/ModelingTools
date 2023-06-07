@@ -168,7 +168,9 @@ type
       const ACol, ARow: integer; Formula: string;
       const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
     procedure SetUseButton(Grid: TRbwDataGrid4; StartCol: Integer);
+
     procedure CreateChildNodes(ACrop: TCropItem; CropNode: TJvPageIndexNode);
+
     procedure SetStartAndEndTimeLists(StartTimes, EndTimes: TStringList;
       Grid: TRbwDataGrid4);
     procedure GetGlobalVariables;

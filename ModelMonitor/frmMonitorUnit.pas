@@ -2054,10 +2054,19 @@ begin
     begin
       FVolBudget := True;
       FLineSeriesOwner := nil;
+      if Pos('Please check', ALine) > 0 then
+      begin
+        FVolBudget := False;
+      end;
     end;
   end;
 
+  // Get budget for a package.
   BudgPosition := Pos('BUDGET FOR ENTIRE MODEL' , ALine);
+  if Pos('UNSATURATED ZONE PACKAGE VOLUMETRIC BUDGET', ALine) > 0 then
+  begin
+    BudgPosition := Pos(' VOLUMETRIC BUDGET', ALine)
+  end;
   if BudgPosition > 0 then
   begin
     Package := Trim(Copy(ALine, 1, BudgPosition-1));

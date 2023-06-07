@@ -3,7 +3,7 @@
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="12"/>
-    <BuildModes Active="Default"/>
+    <BuildModes Active="Release"/>
     <Units Count="6">
       <Unit0>
         <Filename Value="EnhancedTemplateProcessor.lpr"/>

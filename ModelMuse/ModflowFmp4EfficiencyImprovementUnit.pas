@@ -2,13 +2,14 @@ unit ModflowFmp4EfficiencyImprovementUnit;
 
 interface
 
-uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit;
+uses ModflowFmp4BoundaryUnit, ModflowBoundaryUnit, RbwParser;
 
 type
   TFmp4EfficiencyImprovementTimeListLink  = class(TFmp4TimeListLink)
   protected
     class function GetDescription: string; override;
     procedure AssignInvalidateEvent; override;
+    function GetDefaultDataType: TRbwDataType; override;
   end;
 
   TFmp4EfficiencyImprovementCollection = class(TFmp4Collection)
@@ -40,6 +41,11 @@ procedure TFmp4EfficiencyImprovementTimeListLink.AssignInvalidateEvent;
 begin
 //  inherited;
 
+end;
+
+function TFmp4EfficiencyImprovementTimeListLink.GetDefaultDataType: TRbwDataType;
+begin
+  result := rdtBoolean;
 end;
 
 class function TFmp4EfficiencyImprovementTimeListLink.GetDescription: string;

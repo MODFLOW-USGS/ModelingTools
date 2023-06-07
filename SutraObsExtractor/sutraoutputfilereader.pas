@@ -107,7 +107,7 @@ type
 implementation
 
 uses
-  System.Math, System.StrUtils;
+  Math, StrUtils;
 
 resourcestring
   rsTheIdentifie = 'The identifier %0:s in %1:s duplicates another identifier '

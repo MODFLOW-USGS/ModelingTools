@@ -79,15 +79,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 401
+        Left = 399
         ExplicitLeft = 316
       end
       inherited sbInsert: TSpeedButton
-        Left = 474
+        Left = 471
         ExplicitLeft = 374
       end
       inherited sbDelete: TSpeedButton
-        Left = 545
+        Left = 542
         ExplicitLeft = 432
       end
       inherited seNumber: TJvSpinEdit
@@ -414,15 +414,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 615
+        Left = 612
         ExplicitLeft = 630
       end
       inherited sbInsert: TSpeedButton
-        Left = 657
+        Left = 653
         ExplicitLeft = 677
       end
       inherited sbDelete: TSpeedButton
-        Left = 710
+        Left = 707
         ExplicitLeft = 725
       end
       inherited lblMethod: TLabel

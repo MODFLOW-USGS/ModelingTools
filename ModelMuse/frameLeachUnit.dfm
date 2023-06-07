@@ -3,6 +3,7 @@ inherited frameLeach: TframeLeach
   ExplicitHeight = 256
   inherited Panel: TPanel
     Top = 215
+    ExplicitTop = 215
   end
   inherited Grid: TRbwDataGrid4
     Height = 158
@@ -26,6 +27,7 @@ inherited frameLeach: TframeLeach
         Format = rcf4Real
         LimitToList = False
         MaxLength = 0
+        ParentButtonFont = False
         WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
@@ -49,6 +51,7 @@ inherited frameLeach: TframeLeach
         Format = rcf4Real
         LimitToList = False
         MaxLength = 0
+        ParentButtonFont = False
         WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
@@ -72,6 +75,7 @@ inherited frameLeach: TframeLeach
         Format = rcf4String
         LimitToList = True
         MaxLength = 0
+        ParentButtonFont = False
         PickList.Strings = (
           'Value'
           'Rhoades'
@@ -100,12 +104,14 @@ inherited frameLeach: TframeLeach
         Format = rcf4String
         LimitToList = False
         MaxLength = 0
+        ParentButtonFont = False
         WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
+    ExplicitHeight = 158
     ColWidths = (
       64
       64

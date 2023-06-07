@@ -2,6 +2,11 @@ program ModelMonitor;
 
 uses
   FastMM4 in '..\ModelMuse\FastMM4.pas',
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   Forms,
   frmMonitorUnit in 'frmMonitorUnit.pas' {frmMonitor},
   ErrorMessages in 'ErrorMessages.pas',

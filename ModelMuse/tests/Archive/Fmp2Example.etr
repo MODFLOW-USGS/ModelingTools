@@ -1,0 +1,6 @@
+# Stress Period 1
+CONSTANT     9.100000000000E-004  # Data Set 30b: ETR
+# Stress Period 2
+CONSTANT     9.100000000000E-004  # Data Set 30b: ETR
+# Stress Period 3
+CONSTANT     1.500000000000E-003  # Data Set 30b: ETR
