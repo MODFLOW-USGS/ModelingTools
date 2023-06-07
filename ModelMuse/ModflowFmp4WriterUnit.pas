@@ -7127,7 +7127,6 @@ begin
               begin
                 IrregationItem := nil;
               end;
-              NewLine;
               WriteEvapIrrigationItem(ACrop, IrregationItem);
             end;
           end;
@@ -10700,7 +10699,14 @@ begin
           Assert(FarmID = AFarm.FarmId);
           WriteInteger(AFarm.FarmId);
 
-          WaterSourceItem := AFarm.WaterSource.First;
+          if AFarm.WaterSource.Count > 0 then
+          begin
+            WaterSourceItem := AFarm.WaterSource.First;
+          end
+          else
+          begin
+            WaterSourceItem := nil;
+          end;
           WriteWaterSourceItem(AFarm, WaterSourceItem);
 
           Inc(FarmID);
