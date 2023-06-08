@@ -430,7 +430,7 @@ const
   StrMt3dSsmRechConcentrat = 'SSM UZF Recharge Concentration';
   StrMt3dSsmSinkConcentrat = 'SSM UZF Sink Concentration';
 
-  StrFarmEvap = 'Farm Potential Evaportranspiration';
+  StrFarmEvap = 'Farm Reference Evaportranspiration';
   StrFarmPrecip = 'Farm Precipitation';
   StrFarmCropID = 'Farm Crop ID';
   StrFarmID2 = 'Water Balance Subregion ID';

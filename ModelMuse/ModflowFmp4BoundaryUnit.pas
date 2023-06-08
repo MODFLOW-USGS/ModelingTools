@@ -19,6 +19,10 @@ type
     StartingTime: double;
     EndingTime: double;
     FmpValueAnnotation: string;
+    // PEST
+    RefEvapPest: string;
+    RefEvapPestSeries: string;
+    RefEvapPestMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -158,6 +162,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TFmp4Record read FValues write FValues;
@@ -494,14 +501,32 @@ var
   ColIndex: Integer;
   LayerIndex: Integer;
   ShouldRemove: Boolean;
+  PestFmpSeriesName: string;
+  FmpMethod: TPestParamMethod;
+  FmpItems: TStringList;
+  TimeSeriesItems: TStringList;
+  ItemFormula: string;
 begin
+  PestFmpSeriesName := BoundaryGroup.PestBoundaryFormula[Fmp4Position];
+  PestSeries.Add(PestFmpSeriesName);
+  FmpMethod := BoundaryGroup.PestBoundaryMethod[Fmp4Position];
+  PestMethods.Add(FmpMethod);
+
+  FmpItems := TStringList.Create;
+  PestItemNames.Add(FmpItems);
+
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
+
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TFmp4Item;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.FmpValue;
+    ItemFormula := Item.FmpValue;
+    AssignBoundaryFormula(AModel, PestFmpSeriesName, FmpMethod,
+      FmpItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TFmp4TimeListLink;
   Fmp4ValueData := ALink.FFmp4ValueData;
@@ -647,6 +672,34 @@ end;
 function TFmp4_Cell.GetLayer: integer;
 begin
   result := Values.Cell.Layer;
+end;
+
+function TFmp4_Cell.GetPestName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    Fmp4Position: result := FValues.RefEvapPest;
+    else Assert(False);
+  end;
+end;
+
+function TFmp4_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  result := inherited;
+  case Index of
+    Fmp4Position: result := FValues.RefEvapPestMethod;
+    else Assert(False);
+  end;
+end;
+
+function TFmp4_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    Fmp4Position: result := FValues.RefEvapPestSeries;
+    else Assert(False);
+  end;
+
 end;
 
 function TFmp4_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -1055,11 +1108,16 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(FmpValueAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(RefEvapPest));
+  WriteCompInt(Comp, Strings.IndexOf(RefEvapPestSeries));
+  WriteCompInt(Comp, Ord(RefEvapPestMethod));
 end;
 
 procedure TFmp4Record.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(FmpValueAnnotation);
+  Strings.Add(RefEvapPest);
+  Strings.Add(RefEvapPestSeries);
 end;
 
 procedure TFmp4Record.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1070,6 +1128,9 @@ begin
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   FmpValueAnnotation := Annotations[ReadCompInt(Decomp)];
+  RefEvapPest := Annotations[ReadCompInt(Decomp)];
+  RefEvapPestSeries := Annotations[ReadCompInt(Decomp)];
+  RefEvapPestMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TFmp4TimeListLink }

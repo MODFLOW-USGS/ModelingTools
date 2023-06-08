@@ -72,6 +72,10 @@ begin
     rdgModflowBoundary.Cells[Ord(pcEndTime), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.EndTime);
     rdgModflowBoundary.Cells[Ord(pcValue), ItemIndex+1+PestRowOffset] := AnItem.BoundaryFormula[0];
   end;
+
+  PestMethod[Ord(pcValue)] := ABoundary.PestBoundaryMethod[0];
+  PestModifier[Ord(pcValue)] := ABoundary.PestBoundaryFormula[0];
+
 end;
 
 procedure TframeScreenObjectFmpBoundary.ClearFmpGrid;
@@ -256,6 +260,23 @@ begin
         end;
         if Boundary <> nil then
         begin
+
+          if rdgModflowBoundary.Cells[Ord(pcValue),PestMethodRow] = '' then
+          begin
+            NewBoundary.PestBoundaryMethod[0] := Boundary.PestBoundaryMethod[0]
+          end
+          else
+          begin
+            NewBoundary.PestBoundaryMethod[0] := PestMethod[Ord(pcValue)];
+          end;
+          if rdgModflowBoundary.Cells[Ord(pcValue),PestModifierRow] = '' then
+          begin
+            NewBoundary.PestBoundaryFormula[0] := Boundary.PestBoundaryFormula[0]
+          end
+          else
+          begin
+            NewBoundary.PestBoundaryFormula[0] := PestModifier[Ord(pcValue)];
+          end;
           Boundary.Assign(NewBoundary);
         end;
       end;

@@ -278,9 +278,9 @@ type
   TGhbBoundary = class(TSpecificModflowBoundary)
   private
     FPestConductanceMethod: TPestParamMethod;
+    FPestConductanceFormula: IFormulaObject;
     FPestHeadMethod: TPestParamMethod;
     FPestHeadFormula: IFormulaObject;
-    FPestConductanceFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestConductanceObserver: TObserver;
     FPestHeadObserver: TObserver;
@@ -1864,7 +1864,7 @@ function TGhbBoundary.GetPestHeadObserver: TObserver;
 begin
   if FPestHeadObserver = nil then
   begin
-    CreateObserver('PestConductance_', FPestHeadObserver, nil);
+    CreateObserver('PestGhbHead_', FPestHeadObserver, nil);
     FPestHeadObserver.OnUpToDateSet := InvalidateHeadData;
   end;
   result := FPestHeadObserver;

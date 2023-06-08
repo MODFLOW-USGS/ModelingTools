@@ -29,6 +29,10 @@ type
     StartingTime: double;
     EndingTime: double;
     RefEvapRateAnnotation: string;
+    // PEST
+    RefEvapPest: string;
+    RefEvapPestSeries: string;
+    RefEvapPestMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -151,6 +155,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TFmpEvapRecord read FValues write FValues;
@@ -166,6 +173,14 @@ type
   // @seealso(TFmpRefEvapCollection)
   TFmpRefEvapBoundary = class(TModflowBoundary)
   private
+    FPestValueFormula: IFormulaObject;
+    FPestValueMethod: TPestParamMethod;
+    FPestValueObserver: TObserver;
+    function GetPestValueFormula: string;
+    procedure SetPestValueFormula(const Value: string);
+    procedure SetPestValueMethod(const Value: TPestParamMethod);
+    function GetPestValueObserver: TObserver;
+    property PestValueObserver: TObserver read GetPestValueObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -175,15 +190,22 @@ type
     // See @link(TModflowBoundary.BoundaryCollectionClass
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
-    // See @link(TModflowParamBoundary.ModflowParamItemClass
-    // TModflowParamBoundary.ModflowParamItemClass).
-//    class function ModflowParamItemClass: TModflowParamItemClass; override;
-//    function ParameterType: TParameterType; override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    procedure CreateFormulaObjects; //override;
+    procedure CreateObservers; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    function BoundaryObserverPrefix: string; override;
+    procedure InvalidateValueData(Sender: TObject);
   public
-//    procedure Assign(Source: TPersistent);override;
+    procedure Assign(Source: TPersistent);override;
 
-//    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
-//    Destructor Destroy; override;
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Destructor Destroy; override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TFmpRefEvapStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -198,10 +220,13 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     function Used: boolean; override;
-//    procedure EvaluateArrayBoundaries(AModel: TBaseModel); override;
     function NonParameterColumns: integer; override;
     procedure InvalidateDisplay; override;
-//    procedure Clear; override;
+  published
+    property PestValueFormula: string read GetPestValueFormula
+      write SetPestValueFormula;
+    property PestValueMethod: TPestParamMethod read FPestValueMethod
+      write SetPestValueMethod;
   end;
 
 implementation
@@ -332,9 +357,22 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalRefEvapPestSeries: string;
+  LocalRefEvapPestMethod: TPestParamMethod;
+  RefEvapPestItems: TStringList;
+  LocalRefEvapPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
+
+  LocalRefEvapPestSeries := PestSeries[RefEvapPosition];
+  LocalRefEvapPestMethod := PestMethods[RefEvapPosition];
+  RefEvapPestItems := PestItemNames[RefEvapPosition];
+  LocalRefEvapPest := RefEvapPestItems[ItemIndex];
+//  RefEvapTimeItems := TimeSeriesNames[RefEvapPosition];
+//  LocalRefEvapTimeSeries := RefEvapTimeItems[ItemIndex];
+
+
   RefEvapArray := DataSets[RefEvapPosition];
   Boundary := Boundaries[ItemIndex, AModel] as TFmpRefEvapStorage;
   RefEvapArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
@@ -361,6 +399,9 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 RefEvapRateAnnotation := RefEvapArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                RefEvapPest := LocalRefEvapPest;
+                RefEvapPestSeries := LocalRefEvapPestSeries;
+                RefEvapPestMethod := LocalRefEvapPestMethod;
               end;
               Inc(BoundaryIndex);
             end;
@@ -396,14 +437,33 @@ var
   ColIndex: Integer;
   LayerIndex: Integer;
   ShouldRemove: Boolean;
+  PestRefEvapSeriesName: string;
+  ReRevEvapMethod: TPestParamMethod;
+  RefEvapItems: TStringList;
+  ItemFormula: string;
+  TimeSeriesItems: TStringList;
 begin
+  PestRefEvapSeriesName := BoundaryGroup.PestBoundaryFormula[RefEvapPosition];
+  PestSeries.Add(PestRefEvapSeriesName);
+  ReRevEvapMethod := BoundaryGroup.PestBoundaryMethod[RefEvapPosition];
+  PestMethods.Add(ReRevEvapMethod);
+
+  RefEvapItems := TStringList.Create;
+  PestItemNames.Add(RefEvapItems);
+
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
+
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TFmpRefEvapItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.RefEvapRate;
+//    BoundaryValues[Index].Formula := Item.RefEvapRate;
+    ItemFormula := Item.RefEvapRate;
+    AssignBoundaryFormula(AModel, PestRefEvapSeriesName, ReRevEvapMethod,
+      RefEvapItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TFmpRefEvapTimeListLink;
   RefEvapRateData := ALink.FRefEvapRateData;
@@ -536,6 +596,33 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TRefEvap_Cell.GetPestName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    RefEvapPosition: result := FValues.RefEvapPest;
+    else Assert(False);
+  end;
+end;
+
+function TRefEvap_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  result := inherited;
+  case Index of
+    RefEvapPosition: result := FValues.RefEvapPestMethod;
+    else Assert(False);
+  end;
+end;
+
+function TRefEvap_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    RefEvapPosition: result := FValues.RefEvapPestSeries;
+    else Assert(False);
+  end;
+end;
+
 function TRefEvap_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -609,6 +696,19 @@ end;
 //  inherited;
 //end;
 
+procedure TFmpRefEvapBoundary.Assign(Source: TPersistent);
+var
+  SourceRefEvap: TFmpRefEvapBoundary;
+begin
+  if Source is TFmpRefEvapBoundary then
+  begin
+    SourceRefEvap := TFmpRefEvapBoundary(Source);
+    PestValueFormula := SourceRefEvap.PestValueFormula;
+    PestValueMethod := SourceRefEvap.PestValueMethod;
+  end;
+  inherited;
+end;
+
 procedure TFmpRefEvapBoundary.AssignCells(BoundaryStorage: TCustomBoundaryStorage;
   ValueTimeList: TList; AModel: TBaseModel);
 var
@@ -662,9 +762,47 @@ begin
   LocalBoundaryStorage.CacheData;
 end;
 
+
 class function TFmpRefEvapBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TFmpRefEvapCollection;
+end;
+
+function TFmpRefEvapBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestFmpRefEvap_';
+end;
+
+constructor TFmpRefEvapBoundary.Create(Model: TBaseModel;
+  ScreenObject: TObject);
+begin
+  inherited;
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestValueFormula := '';
+  FPestValueMethod := DefaultBoundaryMethod(RefEvapPosition);
+end;
+
+procedure TFmpRefEvapBoundary.CreateFormulaObjects;
+begin
+  FPestValueFormula := CreateFormulaObjectBlocks(dsoTop);
+end;
+
+procedure TFmpRefEvapBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestValueObserver);
+  end;
+end;
+
+destructor TFmpRefEvapBoundary.Destroy;
+begin
+  PestValueFormula := '';
+  inherited;
 end;
 
 //procedure TFmpPrecipBoundary.Clear;
@@ -741,6 +879,68 @@ begin
   ClearBoundaries(AModel);
 end;
 
+function TFmpRefEvapBoundary.GetPestBoundaryFormula(
+  FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    RefEvapPosition:
+      begin
+        result := PestValueFormula;
+      end;
+    else
+      begin
+        Assert(False)
+      end;
+  end;
+end;
+
+function TFmpRefEvapBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    RefEvapPosition:
+      begin
+        result := PestValueMethod;
+      end;
+    else
+      begin
+        result  := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TFmpRefEvapBoundary.GetPestValueFormula: string;
+begin
+  Result := FPestValueFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(RefEvapPosition);
+  end;
+end;
+
+function TFmpRefEvapBoundary.GetPestValueObserver: TObserver;
+begin
+  if FPestValueObserver = nil then
+  begin
+    CreateObserver('PestFmpRefEvap_', FPestValueObserver, nil);
+    FPestValueObserver.OnUpToDateSet := InvalidateValueData;
+  end;
+  result := FPestValueObserver;
+end;
+
+procedure TFmpRefEvapBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestValueFormula as TObject then
+  begin
+    if RefEvapPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[RefEvapPosition]);
+    end;
+  end;
+
+end;
+
 procedure TFmpRefEvapBoundary.InvalidateDisplay;
 var
   Model: TCustomModel;
@@ -760,14 +960,63 @@ begin
   end;
 end;
 
-//class function TFmpPrecipBoundary.ModflowParamItemClass: TModflowParamItemClass;
-//begin
-//  result := TFmpPrecipParamItem;
-//end;
+procedure TFmpRefEvapBoundary.InvalidateValueData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMfFmp4Evap(self);
+
+  for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.InvalidateMfFmp4Evap(self);
+    end;
+  end;
+end;
 
 function TFmpRefEvapBoundary.NonParameterColumns: integer;
 begin
   result := inherited NonParameterColumns;
+end;
+
+procedure TFmpRefEvapBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    RefEvapPosition:
+      begin
+        PestValueFormula := Value;
+      end;
+    else
+      begin
+        Assert(False)
+      end;
+  end;
+end;
+
+procedure TFmpRefEvapBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestValueMethod, Value);
+end;
+
+procedure TFmpRefEvapBoundary.SetPestValueFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, RefEvapPosition, FPestValueFormula);
+end;
+
+procedure TFmpRefEvapBoundary.SetPestValueMethod(const Value: TPestParamMethod);
+begin
+  FPestValueMethod := Value;
 end;
 
 //function TFmpPrecipBoundary.ParameterType: TParameterType;
@@ -872,11 +1121,17 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(RefEvapRateAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(RefEvapPest));
+  WriteCompInt(Comp, Strings.IndexOf(RefEvapPestSeries));
+  WriteCompInt(Comp, Ord(RefEvapPestMethod));
+
 end;
 
 procedure TFmpEvapRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(RefEvapRateAnnotation);
+  Strings.Add(RefEvapPest);
+  Strings.Add(RefEvapPestSeries);
 end;
 
 procedure TFmpEvapRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -886,6 +1141,10 @@ begin
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   RefEvapRateAnnotation := Annotations[ReadCompInt(Decomp)];
+  RefEvapPest := Annotations[ReadCompInt(Decomp)];
+  RefEvapPestSeries := Annotations[ReadCompInt(Decomp)];
+  RefEvapPestMethod := TPestParamMethod(ReadCompInt(Decomp));
+
 end;
 
 { TFmpRefEvapTimeListLink }

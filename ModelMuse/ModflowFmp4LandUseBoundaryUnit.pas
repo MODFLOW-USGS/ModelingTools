@@ -912,7 +912,7 @@ end;
 
 function TFmp4LandUse_Cell.GetPestName(Index: Integer): string;
 begin
-  result := FValues.LandUseData.ValueTimeSeriesNames[Index];
+  result := FValues.LandUseData.ValuePestNames[Index];
 end;
 
 function TFmp4LandUse_Cell.GetPestSeriesMethod(
@@ -923,7 +923,7 @@ end;
 
 function TFmp4LandUse_Cell.GetPestSeriesName(Index: Integer): string;
 begin
-  result := FValues.LandUseData.ValueTimeSeriesNames[Index];
+  result := FValues.LandUseData.ValuePestSeriesNames[Index];
 end;
 
 function TFmp4LandUse_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;

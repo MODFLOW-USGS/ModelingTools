@@ -3035,6 +3035,7 @@ var
   ParametersOnly: Boolean;
   UsedEvalAt: TEvaluatedAt;
   SpeciesIndex: Byte;
+  AGrid: TRbwDataGrid4;
 begin
   ParametersOnly := False;
   PestParameterColumns := [];
@@ -3145,6 +3146,42 @@ begin
   else if (Sender = frameMNW1.rdgModflowBoundary) then
   begin
     PestParameterColumns := [2, 3, 5, 6, 7, 9, 10, 12, 14, 15];
+  end
+  else if (Sender = frameFarmRefEvap.rdgModflowBoundary)
+   or (Sender = frameFarmPrecip.rdgModflowBoundary)
+   or (Sender = frameFmp4AddedDemand.rdgModflowBoundary)
+   or (Sender = frameFmp4AddedDemandRunoffSplit.rdgModflowBoundary)
+   or (Sender = frameFmp4BareEvap.rdgModflowBoundary)
+   or (Sender = frameFmp4BarePrecipitationConsumptionFraction.rdgModflowBoundary)
+   or (Sender = frameFmp4BareRunoffFraction.rdgModflowBoundary)
+   or (Sender = frameFmp4ConsumptiveUse.rdgModflowBoundary)
+   or (Sender = frameFmp4CropCoefficient.rdgModflowBoundary)
+   or (Sender = frameFmp4DirectRecharge.rdgModflowBoundary)
+   or (Sender = frameFmp4Efficiency.rdgModflowBoundary)
+   or (Sender = frameFmp4EvaporationIrrigationFraction.rdgModflowBoundary)
+   or (Sender = frameFmp4FractionOfIrrigToSurfaceWater.rdgModflowBoundary)
+   or (Sender = frameFmp4FractionOfPrecipToSurfaceWater.rdgModflowBoundary)
+   or (Sender = frameFmp4LandUseAreaFraction.rdgModflowBoundary)
+   or (Sender = frameFmp4PrecipPotConsumption.rdgModflowBoundary)
+   or (Sender = frameFmp4RootDepth.rdgModflowBoundary)
+   or (Sender = frameFmp4TranspirationFraction.rdgModflowBoundary)
+   then
+  begin
+    PestParameterColumns := [2];
+  end
+  else if (Sender = frameFmp4MultAddedDemand.rdgModflowBoundary)
+    or (Sender = frameFmp4MultConsumptiveUse.rdgModflowBoundary)
+    or (Sender = frameFmp4MultCropCoefficients.rdgModflowBoundary)
+    or (Sender = frameFmp4MultEvaporationIrrigationFraction.rdgModflowBoundary)
+    or (Sender = frameFmp4MultFractionOfIrrigToSurfaceWater.rdgModflowBoundary)
+    or (Sender = frameFmp4MultFractionOfPrecipToSurfaceWater.rdgModflowBoundary)
+    or (Sender = frameMultLandUseAreaFraction.rdgModflowBoundary)
+    or (Sender = frameFmp4MultTranspirationFraction.rdgModflowBoundary)
+    or (Sender = frameFmp4MultRootDepth.rdgModflowBoundary)
+    then
+  begin
+    AGrid := Sender as TRbwDataGrid4;
+    PestParameterColumns := [2.. AGrid.ColCount-1];
   end
   else if (Sender = frameMNW2.rdgTimeTable) then
   begin
@@ -6765,6 +6802,34 @@ begin
   frameGwtCnc.OnCheckPestCell := EnablePestCells;
   frameGwtSrc.OnCheckPestCell := EnablePestCells;
 
+  frameFarmRefEvap.OnCheckPestCell := EnablePestCells;
+  frameFarmPrecip.OnCheckPestCell := EnablePestCells;
+  frameFmp4AddedDemand.OnCheckPestCell := EnablePestCells;
+  frameFmp4AddedDemandRunoffSplit.OnCheckPestCell := EnablePestCells;
+  frameFmp4BareEvap.OnCheckPestCell := EnablePestCells;
+  frameFmp4BarePrecipitationConsumptionFraction.OnCheckPestCell := EnablePestCells;
+  frameFmp4BareRunoffFraction.OnCheckPestCell := EnablePestCells;
+  frameFmp4ConsumptiveUse.OnCheckPestCell := EnablePestCells;
+  frameFmp4CropCoefficient.OnCheckPestCell := EnablePestCells;
+  frameFmp4DirectRecharge.OnCheckPestCell := EnablePestCells;
+  frameFmp4Efficiency.OnCheckPestCell := EnablePestCells;
+  frameFmp4EvaporationIrrigationFraction.OnCheckPestCell := EnablePestCells;
+  frameFmp4FractionOfIrrigToSurfaceWater.OnCheckPestCell := EnablePestCells;
+  frameFmp4FractionOfPrecipToSurfaceWater.OnCheckPestCell := EnablePestCells;
+  frameFmp4LandUseAreaFraction.OnCheckPestCell := EnablePestCells;
+  frameFmp4PrecipPotConsumption.OnCheckPestCell := EnablePestCells;
+  frameFmp4RootDepth.OnCheckPestCell := EnablePestCells;
+  frameFmp4TranspirationFraction.OnCheckPestCell := EnablePestCells;
+
+  frameFmp4MultAddedDemand.OnCheckPestCell := EnablePestCells;
+  frameFmp4MultConsumptiveUse.OnCheckPestCell := EnablePestCells;
+  frameFmp4MultCropCoefficients.OnCheckPestCell := EnablePestCells;
+  frameFmp4MultEvaporationIrrigationFraction.OnCheckPestCell := EnablePestCells;
+  frameFmp4MultFractionOfIrrigToSurfaceWater.OnCheckPestCell := EnablePestCells;
+  frameFmp4MultFractionOfPrecipToSurfaceWater.OnCheckPestCell := EnablePestCells;
+  frameMultLandUseAreaFraction.OnCheckPestCell := EnablePestCells;
+  frameFmp4MultTranspirationFraction.OnCheckPestCell := EnablePestCells;
+  frameFmp4MultRootDepth.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -29799,6 +29864,35 @@ begin
     or ((DataGrid = frameSutraGeneralizeTransBoundary.rdgSutraFeature) and (ACol in [2..5]))
     or (DataGrid = frameGwtCnc.rdgModflowBoundary)
     or (DataGrid = frameGwtSrc.rdgModflowBoundary)
+
+    or (DataGrid = frameFarmRefEvap.rdgModflowBoundary)
+    or (DataGrid = frameFarmPrecip.rdgModflowBoundary)
+    or (DataGrid = frameFmp4AddedDemand.rdgModflowBoundary)
+    or (DataGrid = frameFmp4AddedDemandRunoffSplit.rdgModflowBoundary)
+    or (DataGrid = frameFmp4BareEvap.rdgModflowBoundary)
+    or (DataGrid = frameFmp4BarePrecipitationConsumptionFraction.rdgModflowBoundary)
+    or (DataGrid = frameFmp4BareRunoffFraction.rdgModflowBoundary)
+    or (DataGrid = frameFmp4ConsumptiveUse.rdgModflowBoundary)
+    or (DataGrid = frameFmp4CropCoefficient.rdgModflowBoundary)
+    or (DataGrid = frameFmp4DirectRecharge.rdgModflowBoundary)
+    or (DataGrid = frameFmp4Efficiency.rdgModflowBoundary)
+    or (DataGrid = frameFmp4EvaporationIrrigationFraction.rdgModflowBoundary)
+    or (DataGrid = frameFmp4FractionOfIrrigToSurfaceWater.rdgModflowBoundary)
+    or (DataGrid = frameFmp4FractionOfPrecipToSurfaceWater.rdgModflowBoundary)
+    or (DataGrid = frameFmp4LandUseAreaFraction.rdgModflowBoundary)
+    or (DataGrid = frameFmp4PrecipPotConsumption.rdgModflowBoundary)
+    or (DataGrid = frameFmp4RootDepth.rdgModflowBoundary)
+    or (DataGrid = frameFmp4TranspirationFraction.rdgModflowBoundary)
+
+    or (DataGrid = frameFmp4MultAddedDemand.rdgModflowBoundary)
+    or (DataGrid = frameFmp4MultConsumptiveUse.rdgModflowBoundary)
+    or (DataGrid = frameFmp4MultCropCoefficients.rdgModflowBoundary)
+    or (DataGrid = frameFmp4MultEvaporationIrrigationFraction.rdgModflowBoundary)
+    or (DataGrid = frameFmp4MultFractionOfIrrigToSurfaceWater.rdgModflowBoundary)
+    or (DataGrid = frameFmp4MultFractionOfPrecipToSurfaceWater.rdgModflowBoundary)
+    or (DataGrid = frameMultLandUseAreaFraction.rdgModflowBoundary)
+    or (DataGrid = frameFmp4MultTranspirationFraction.rdgModflowBoundary)
+    or (DataGrid = frameFmp4MultRootDepth.rdgModflowBoundary)
     ;
 end;
 

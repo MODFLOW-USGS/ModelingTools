@@ -425,6 +425,7 @@ type
     procedure WriteLeachList(RequiredValues: TRequiredValues; AFileName: string;
       GetCollection: TGetCropCollection; const ErrorMessage: string);
     procedure WriteSurfaceElevation;
+    procedure WriteArrayTemplate(RequiredValues: TRequiredValues);
   protected
     procedure Evaluate; override;
     class function Extension: string; override;
@@ -1020,28 +1021,10 @@ begin
   Evaluate;
   EvaluateActiveCells;
   EvaluateFarmID;
-  EvaluateReferenceET;
-  EvaluatePrecip;
   EvaluateCropID;
-  EvaluateEfficiency;
   EvaluateEfficiencyImprovement;
-  EvaluateBareRunoffFraction;
-  EvaluateBarePrecipitationConsumptionFraction;
-  EvaluateAddedDemandRunoffSplit;
-  EvaluateBareEvap;
-  EvaluateDirectRecharge;
-  EvaluatePrecipPotConsumption;
   EvaluateNrdInfilLocation;
-  EvaluateLandUseAreaFraction;
-  EvaluateCropCoefficient;
-  EvaluateConsumptiveUse;
   EvaluateIrrigation;
-  EvaluateRootDepth;
-  EvaluateTranspirationFraction;
-  EvaluateEvaporationIrrigationFraction;
-  EvaluateFractionOfPrecipToSurfaceWater;
-  EvaluateFractionOfIrrigToSurfaceWater;
-  EvaluateAddedDemand;
   EvaluateCropHasSalinityDemand;
 end;
 
@@ -1233,7 +1216,7 @@ end;
 
 procedure TModflowFmp4Writer.EvaluateReferenceET;
 begin
-  if FClimatePackage.TransientPrecipUsed(Self) then
+  if FClimatePackage.TransientEvapUsed(Self) then
   begin
     EvaluateTransientArrayData(wlETR);
   end;
@@ -1352,6 +1335,28 @@ begin
 end;
 
 function TModflowFmp4Writer.GetFileStreamName(WriteLocation: TWriteLocation): string;
+  procedure InitializeTemplate;
+  begin
+    if WritingTemplate then
+    begin
+      FNameOfFile := result;
+      WritePestTemplateLine(result);
+      FWriteLocation := WriteLocation;
+      try
+        WriteTemplateHeader;
+      finally
+        FWriteLocation := wlMain;
+      end;
+    end;
+  end;
+  procedure UpdateTemplateFileName(var FileStream: TFileStream);
+  begin
+    if WritingTemplate then
+    begin
+      FreeAndNil(FileStream);
+      result := result + '.tpl';
+    end;
+  end;
 begin
   case WriteLocation of
     wlMain:
@@ -1390,10 +1395,12 @@ begin
     wlETR:
       begin
         result := ChangeFileExt(FBaseName, '.etr');
+        UpdateTemplateFileName(FETR_FileStream);
         if FETR_FileStream = nil then
         begin
           FETR_FileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlEtFrac:
@@ -1405,10 +1412,12 @@ begin
     wlPFLX:
       begin
         result := ChangeFileExt(FBaseName, '.pflx');
+        UpdateTemplateFileName(FPFLX_FileStream);
         if FPFLX_FileStream = nil then
         begin
           FPFLX_FileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCropFunc:
@@ -1420,28 +1429,34 @@ begin
     wlDeliveries:
       begin
         result := ChangeFileExt(FBaseName, '.non_routed_delivery');
+        UpdateTemplateFileName(FNonRoutedDeliveryFileStream);
         if FNonRoutedDeliveryFileStream = nil then
         begin
           FNonRoutedDeliveryFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSemiRouteDelivery:
       begin
         result := ChangeFileExt(FBaseName, '.semi_routed_delivery');
+        UpdateTemplateFileName(FSemiRoutedDeliveryFileStream);
         if FSemiRoutedDeliveryFileStream = nil then
         begin
           FSemiRoutedDeliveryFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSemiRouteReturn:
       begin
         result := ChangeFileExt(FBaseName, '.semi_routed_return');
+        UpdateTemplateFileName(FSemiRoutedReturnFileStream);
         if FSemiRoutedReturnFileStream = nil then
         begin
           FSemiRoutedReturnFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCall:
@@ -1450,46 +1465,56 @@ begin
     wlEfficiency:
       begin
         result := ChangeFileExt(FBaseName, '.efficiency');
+        UpdateTemplateFileName(FEFFICIENCY_FileStream);
         if FEFFICIENCY_FileStream = nil then
         begin
           FEFFICIENCY_FileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlEfficiencyImprovement:
       begin
         result := ChangeFileExt(FBaseName, '.efficiency_improvement');
+        UpdateTemplateFileName(FEFFICIENCY_IMPROVEMENT_FileStream);
         if FEFFICIENCY_IMPROVEMENT_FileStream = nil then
         begin
           FEFFICIENCY_IMPROVEMENT_FileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlBareRunoffFraction:
       begin
         result := ChangeFileExt(FBaseName, '.bare_runoff_fraction');
+        UpdateTemplateFileName(FBARE_RUNOFF_FRACTION_FileStream);
         if FBARE_RUNOFF_FRACTION_FileStream = nil then
         begin
           FBARE_RUNOFF_FRACTION_FileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlBarePrecipitationConsumptionFraction:
       begin
         result := ChangeFileExt(FBaseName, '.bare_precipitation_consumption_fraction');
+        UpdateTemplateFileName(FBarePrecipitationConsumptionFractionFileStream);
         if FBarePrecipitationConsumptionFractionFileStream = nil then
         begin
           FBarePrecipitationConsumptionFractionFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCapillaryFringe:
       begin
         result := ChangeFileExt(FBaseName, '.capillary_fringe');
+        UpdateTemplateFileName(FCapillaryFringeFileStream);
         if FCapillaryFringeFileStream = nil then
         begin
           FCapillaryFringeFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSoilID:
@@ -1504,37 +1529,45 @@ begin
     wlSurfaceK:
       begin
         result := ChangeFileExt(FBaseName, '.surface_vertical_hydraulic_conductivity');
+        UpdateTemplateFileName(FSurfaceKFileStream);
         if FSurfaceKFileStream = nil then
         begin
           FSurfaceKFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlBareEvap:
       begin
         result := ChangeFileExt(FBaseName, '.potential_evaporation_bare');
+        UpdateTemplateFileName(FEvapBareFileStream);
         if FEvapBareFileStream = nil then
         begin
           FEvapBareFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlDirectRecharge:
       begin
         result := ChangeFileExt(FBaseName, '.direct_recharge');
+        UpdateTemplateFileName(FDirectRechargeFileStream);
         if FDirectRechargeFileStream = nil then
         begin
           FDirectRechargeFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlPrecipPotConsumption:
       begin
         result := ChangeFileExt(FBaseName, '.precipitation_potential_consumption');
+        UpdateTemplateFileName(FPrecipPotConsumptionFileStream);
         if FPrecipPotConsumptionFileStream = nil then
         begin
           FPrecipPotConsumptionFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlNrdInfilLoc:
@@ -1549,28 +1582,34 @@ begin
     wlLandUseAreaFraction:
       begin
         result := ChangeFileExt(FBaseName, '.land_use_area_fraction');
+        UpdateTemplateFileName(FLandUseAreaFractionFileStream);
         if FLandUseAreaFractionFileStream = nil then
         begin
           FLandUseAreaFractionFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCropCoefficient:
       begin
         result := ChangeFileExt(FBaseName, '.crop_coefficient');
+        UpdateTemplateFileName(FCropcoefficientFileStream);
         if FCropcoefficientFileStream = nil then
         begin
           FCropcoefficientFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlConsumptiveUse:
       begin
         result := ChangeFileExt(FBaseName, '.consumptive_use');
+        UpdateTemplateFileName(FConsumptiveUseFileStream);
         if FConsumptiveUseFileStream = nil then
         begin
           FConsumptiveUseFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlIrrigation:
@@ -1585,10 +1624,12 @@ begin
     wlRootDepth:
       begin
         result := ChangeFileExt(FBaseName, '.root_depth');
+        UpdateTemplateFileName(FRootDepthFileStream);
         if FRootDepthFileStream = nil then
         begin
           FRootDepthFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlGwRootInteraction:
@@ -1603,46 +1644,56 @@ begin
     wlTranspirationFraction:
       begin
         result := ChangeFileExt(FBaseName, '.transpiration_fraction');
+        UpdateTemplateFileName(FTranspirationFractionFileStream);
         if FTranspirationFractionFileStream = nil then
         begin
           FTranspirationFractionFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlEvaporationIrrigationFraction:
       begin
         result := ChangeFileExt(FBaseName, '.evaporation_irrigation_fraction');
+        UpdateTemplateFileName(FEvaporationIrrigationFractionFileStream);
         if FEvaporationIrrigationFractionFileStream = nil then
         begin
           FEvaporationIrrigationFractionFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlFractionOfPrecipToSurfaceWater:
       begin
         result := ChangeFileExt(FBaseName, '.surfacewater_loss_fraction_precipitation');
+        UpdateTemplateFileName(FFractionOfPrecipToSurfaceWaterFileStream);
         if FFractionOfPrecipToSurfaceWaterFileStream = nil then
         begin
           FFractionOfPrecipToSurfaceWaterFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlFractionOfIrrigToSurfaceWater:
       begin
         result := ChangeFileExt(FBaseName, '.surfacewater_loss_fraction_irrigation');
+        UpdateTemplateFileName(FFractionOfIrrigToSurfaceWaterFileStream);
         if FFractionOfIrrigToSurfaceWaterFileStream = nil then
         begin
           FFractionOfIrrigToSurfaceWaterFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlAddedDemand:
       begin
         result := ChangeFileExt(FBaseName, '.added_demand');
+        UpdateTemplateFileName(FAddedDemandFileStream);
         if FAddedDemandFileStream = nil then
         begin
           FAddedDemandFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCropHasSalinityDemand:
@@ -1657,19 +1708,23 @@ begin
     wlAddedDemandRunoffSplit:
       begin
         result := ChangeFileExt(FBaseName, '.added_demand_runoff_split');
+        UpdateTemplateFileName(FAddedDemandRunoffSplitFileStream);
         if FAddedDemandRunoffSplitFileStream = nil then
         begin
           FAddedDemandRunoffSplitFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlIrrigationUniformity:
       begin
         result := ChangeFileExt(FBaseName, '.wbs_irrigation_uniformity');
+        UpdateTemplateFileName(FIrrigationUniformityFileStream);
         if FIrrigationUniformityFileStream = nil then
         begin
           FIrrigationUniformityFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlDeficiencyScenario:
@@ -1693,42 +1748,50 @@ begin
     wlAddedCropDemandFlux:
       begin
         result := ChangeFileExt(FBaseName, '.added_crop_demand_flux');
+        UpdateTemplateFileName(FAddedCropDemandFluxFileStream);
         if FAddedCropDemandFluxFileStream = nil then
         begin
           FAddedCropDemandFluxFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlAddedCropDemandRate:
       begin
         result := ChangeFileExt(FBaseName, '.added_crop_demand_rate');
+        UpdateTemplateFileName(FAddedCropDemandRateFileStream);
         if FAddedCropDemandRateFileStream = nil then
         begin
           FAddedCropDemandRateFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlPrecipicationTable:
       begin
         result := ChangeFileExt(FBaseName, '.effective_precipitation_table');
+        UpdateTemplateFileName(FEffectivPrecipitationTableFileStream);
         if FEffectivPrecipitationTableFileStream = nil then
         begin
           FEffectivPrecipitationTableFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSoilCoefficient:
       begin
         result := ChangeFileExt(FBaseName, '.coefficient');
+        UpdateTemplateFileName(FEffectivCoefficientTableFileStream);
         if FEffectivCoefficientTableFileStream = nil then
         begin
           FEffectivCoefficientTableFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlNoReturnFlow:
       begin
-        result := ChangeFileExt(FBaseName, '.non_return_flow');
+        result := ChangeFileExt(FBaseName, '.no_return_flow');
         if FNoReturnFlowFileStream = nil then
         begin
           FNoReturnFlowFileStream := TFileStream.Create(result,
@@ -1738,55 +1801,67 @@ begin
     wlSemiRouteDeliveryLowerLimit:
       begin
         result := ChangeFileExt(FBaseName, '.semi_routed_delivery_lower_limit');
+        UpdateTemplateFileName(FSemiRoutedDeliveryLowerLimitFileStream);
         if FSemiRoutedDeliveryLowerLimitFileStream = nil then
         begin
           FSemiRoutedDeliveryLowerLimitFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSemiRouteDeliveryUpperLimit:
       begin
         result := ChangeFileExt(FBaseName, '.semi_routed_delivery_upper_limit');
+        UpdateTemplateFileName(FSemiRoutedDeliveryUpperLimitFileStream);
         if FSemiRoutedDeliveryUpperLimitFileStream = nil then
         begin
           FSemiRoutedDeliveryUpperLimitFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSwAllotment:
       begin
         result := ChangeFileExt(FBaseName, '.surface_water_allotment');
+        UpdateTemplateFileName(FSurfaceWaterAllotmentFileStream);
         if FSurfaceWaterAllotmentFileStream = nil then
         begin
           FSurfaceWaterAllotmentFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlGwAllotment:
       begin
         result := ChangeFileExt(FBaseName, '.groundwater_allotment');
+        UpdateTemplateFileName(FGroundWaterAllotmentFileStream);
         if FGroundWaterAllotmentFileStream = nil then
         begin
           FGroundWaterAllotmentFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlRootPressure:
       begin
         result := ChangeFileExt(FBaseName, '.root_pressure');
+        UpdateTemplateFileName(FRootPressureFileStream);
         if FRootPressureFileStream = nil then
         begin
           FRootPressureFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlPondDepth:
       begin
         result := ChangeFileExt(FBaseName, '.pond_depth');
+        UpdateTemplateFileName(FPondDepthFileStream);
         if FPondDepthFileStream = nil then
         begin
           FPondDepthFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlNoCropMeansBareSoil:
@@ -1810,55 +1885,67 @@ begin
     wlSaltSupplyConcentration:
       begin
         result := ChangeFileExt(FBaseName, '.wbs_salt_supply_concentration');
+        UpdateTemplateFileName(FSaltSupplyConcentrationFileStream);
         if FSaltSupplyConcentrationFileStream = nil then
         begin
           FSaltSupplyConcentrationFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCropSalinityTolerance:
       begin
         result := ChangeFileExt(FBaseName, '.crop_salinity_tolerance');
+        UpdateTemplateFileName(FCropSalinityToleranceFileStream);
         if FCropSalinityToleranceFileStream = nil then
         begin
           FCropSalinityToleranceFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCropMaxLeachRequirement:
       begin
         result := ChangeFileExt(FBaseName, '.crop_max_leaching_requirement');
+        UpdateTemplateFileName(FCropMaxLeachingRequirementFileStream);
         if FCropMaxLeachingRequirementFileStream = nil then
         begin
           FCropMaxLeachingRequirementFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCropLeachRequirement:
       begin
         result := ChangeFileExt(FBaseName, '.crop_leaching_requirement');
+        UpdateTemplateFileName(FCropLeachingRequirementFileStream);
         if FCropLeachingRequirementFileStream = nil then
         begin
           FCropLeachingRequirementFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSalinityAppliedWater:
       begin
         result := ChangeFileExt(FBaseName, '.crop_salinity_applied_water');
+        UpdateTemplateFileName(FCropSalinityAppliedWaterFileStream);
         if FCropSalinityAppliedWaterFileStream = nil then
         begin
           FCropSalinityAppliedWaterFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlSupplyWells:
       begin
         result := ChangeFileExt(FBaseName, '.supply_well');
+        UpdateTemplateFileName(FSupplyWellFileStream);
         if FSupplyWellFileStream = nil then
         begin
           FSupplyWellFileStream := TFileStream.Create(result,
             fmCreate or fmShareDenyWrite);
+          InitializeTemplate;
         end;
       end;
     wlCropNames:
@@ -1881,7 +1968,7 @@ begin
       end;
     else Assert(False);
   end;
-  if result <> '' then
+  if (result <> '') and not WritingTemplate then
   begin
     Model.ModelInputFiles.Add(result);
   end;
@@ -2316,6 +2403,23 @@ begin
   UpdateDisplay(UpdateRequirements);
 end;
 
+procedure TModflowFmp4Writer.WriteArrayTemplate(RequiredValues: TRequiredValues);
+var
+  TemplateFileName: string;
+begin
+  if FPestParamUsed then
+  begin
+    WritingTemplate := True;
+    try
+      TemplateFileName := GetFileStreamName(RequiredValues.WriteLocation);
+      WriteFmpArrayData(TemplateFileName, RequiredValues);
+    finally
+      FPestParamUsed := False;
+      WritingTemplate := False;
+    end;
+  end;
+end;
+
 procedure TModflowFmp4Writer.WriteMnwPumpSpread;
 var
   FarmID: Integer;
@@ -2381,8 +2485,10 @@ begin
   RequiredValues.Option := '';
   RequiredValues.FarmProperty := nil;
 
-
+  FPestParamUsed := False;
   WriteFmpArrayData('', RequiredValues);
+  WriteArrayTemplate(RequiredValues);
+
 end;
 
 procedure TModflowFmp4Writer.WriteOwhmList(RequiredValues: TRequiredValues;
@@ -4294,16 +4400,12 @@ begin
 
   if RequiredValues.WriteTransientData then
   begin
-    WriteScaleFactorsID_andOption(RequiredValues,
-      UnitConversionScaleFactor, ExternalScaleFileName);
-//    WriteString('  ');
-//    WriteString(RequiredValues.ID);
-//    WriteString(' ');
-//    if RequiredValues.Option <> '' then
-//    begin
-//      WriteString(RequiredValues.Option + ' ');
-//    end;
-    WriteString('TRANSIENT ARRAY DATAFILE ');
+    if not WritingTemplate or (RequiredValues.WriteLocation = wlMain) then
+    begin
+      WriteScaleFactorsID_andOption(RequiredValues,
+        UnitConversionScaleFactor, ExternalScaleFileName);
+      WriteString('TRANSIENT ARRAY DATAFILE ');
+    end;
     if ExternalFileName <> '' then
     begin
       WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
@@ -4312,21 +4414,22 @@ begin
     end
     else
     begin
-      WriteString(ExtractFileName(AFileName));
-      NewLine;
+      if not WritingTemplate or (RequiredValues.WriteLocation = wlMain) then
+      begin
+        WriteString(ExtractFileName(AFileName));
+        NewLine;
+      end;
       WriteTransientFmpArrayData(RequiredValues);
     end;
   end
   else
   begin
-    WriteScaleFactorsID_andOption(RequiredValues,
-      UnitConversionScaleFactor, ExternalScaleFileName);
+    if not WritingTemplate or (RequiredValues.WriteLocation = wlMain) then
+    begin
+      WriteScaleFactorsID_andOption(RequiredValues,
+        UnitConversionScaleFactor, ExternalScaleFileName);
+    end;
 
-//    if RequiredValues.Option <> '' then
-//    begin
-//      WriteString(RequiredValues.Option + ' ');
-//    end;
-//    DataArray := nil;
     if ExternalFileName <> '' then
     begin
       WriteString('STATIC ARRAY DATAFILE ');
@@ -4343,7 +4446,8 @@ begin
     begin
       DataArray.Initialize;
     end;
-    if (DataArray <> nil) and (DataArray.IsUniform = iuTrue) then
+    if (DataArray <> nil) and (DataArray.IsUniform = iuTrue)
+       and not DataArray.PestParametersUsed then
     begin
       WriteString('STATIC CONSTANT ');
       if DataArray.DataType = rdtDouble then
@@ -4360,7 +4464,10 @@ begin
     begin
       if RequiredValues.WriteLocation <> wlMain then
       begin
-        WriteString('STATIC ARRAY DATAFILE ');
+        if not WritingTemplate or (RequiredValues.WriteLocation = wlMain) then
+        begin
+          WriteString('STATIC ARRAY DATAFILE ');
+        end;
         if ExternalFileName <> '' then
         begin
           WriteString(ExternalFileName);
@@ -4368,8 +4475,11 @@ begin
         end
         else
         begin
-          WriteString(ExtractFileName(AFileName));
-          NewLine;
+          if not WritingTemplate or (RequiredValues.WriteLocation = wlMain) then
+          begin
+            WriteString(ExtractFileName(AFileName));
+            NewLine;
+          end;
           FWriteLocation := RequiredValues.WriteLocation;
           try
             WriteArray(DataArray, 0, RequiredValues.ErrorID, '', RequiredValues.ID, False, False);
@@ -4452,6 +4562,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateFractionOfIrrigToSurfaceWater;
+
   RequiredValues.WriteLocation := wlFractionOfIrrigToSurfaceWater;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -4486,6 +4599,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -4493,6 +4607,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -4636,6 +4751,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateFractionOfPrecipToSurfaceWater;
+
   RequiredValues.WriteLocation := wlFractionOfPrecipToSurfaceWater;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -4662,6 +4780,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -4669,6 +4788,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -5205,6 +5325,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateAddedDemand;
+
   RequiredValues.WriteLocation := wlAddedDemand;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -5240,6 +5363,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -5247,6 +5371,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -5376,6 +5501,10 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateAddedDemandRunoffSplit;
+
+
   RequiredValues.WriteLocation := wlAddedDemandRunoffSplit;
   RequiredValues.DefaultValue := 0.1;
   RequiredValues.DataType := rdtDouble;
@@ -5400,6 +5529,7 @@ begin
   if (FFarmProcess4.Added_Demand_Runoff_Split.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
@@ -5542,6 +5672,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateBareEvap;
+
   RequiredValues.WriteLocation := wlBareEvap;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -5566,6 +5699,7 @@ begin
   if (FClimatePackage.Potential_Evaporation_Bare.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
@@ -5582,6 +5716,9 @@ begin
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
+  EvaluateBarePrecipitationConsumptionFraction;
 
   RequiredValues.WriteLocation := wlBarePrecipitationConsumptionFraction;
   RequiredValues.DefaultValue := 1;
@@ -5605,6 +5742,7 @@ begin
   end;
 
   WriteFmpArrayData(AFileName, RequiredValues);
+  WriteArrayTemplate(RequiredValues);
 end;
 
 procedure TModflowFmp4Writer.WriteBareRunoffFraction;
@@ -5642,6 +5780,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateBareRunoffFraction;
+
   RequiredValues.WriteLocation := wlBareRunoffFraction;
   RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtDouble;
@@ -5666,6 +5807,7 @@ begin
   if (FFarmProcess4.Bare_Runoff_Fraction.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
@@ -5779,6 +5921,8 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+
   RequiredValues.WriteLocation := wlCapillaryFringe;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -5802,6 +5946,7 @@ begin
   if (FSoil4.CapFringe.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
@@ -6022,6 +6167,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateConsumptiveUse;
+
   RequiredValues.WriteLocation := wlConsumptiveUse;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -6048,6 +6196,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -6055,6 +6204,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -6092,6 +6242,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateCropCoefficient;
+
   RequiredValues.WriteLocation := wlCropCoefficient;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -6118,6 +6271,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -6125,6 +6279,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -6403,6 +6558,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateDirectRecharge;
+
   RequiredValues.WriteLocation := wlDirectRecharge;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -6430,6 +6588,7 @@ begin
   if (FClimatePackage.Direct_Recharge.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
@@ -6612,6 +6771,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateEfficiency;
+
   RequiredValues.WriteLocation := wlEfficiency;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -6636,6 +6798,7 @@ begin
   if (FFarmProcess4.EfficiencyOptions.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
@@ -7005,6 +7168,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateEvaporationIrrigationFraction;
+
   RequiredValues.WriteLocation := wlEvaporationIrrigationFraction;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -7039,6 +7205,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -7046,6 +7213,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -7720,6 +7888,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateTranspirationFraction;
+
   RequiredValues.WriteLocation := wlTranspirationFraction;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -7746,6 +7917,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -7753,6 +7925,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -8683,6 +8856,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateLandUseAreaFraction;
+
   RequiredValues.WriteLocation := wlLandUseAreaFraction;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -8709,6 +8885,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -8716,6 +8893,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -9081,6 +9259,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluatePrecip;
+
   RequiredValues.WriteLocation := wlPFLX;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -9102,6 +9283,7 @@ begin
   end;
 
   WriteFmpArrayData(AFileName, RequiredValues);
+  WriteArrayTemplate(RequiredValues);
 end;
 
 procedure TModflowFmp4Writer.WritePrecipPotConsumption;
@@ -9113,6 +9295,9 @@ begin
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
+  EvaluatePrecipPotConsumption;
 
   RequiredValues.WriteLocation := wlPrecipPotConsumption;
   RequiredValues.DefaultValue := 0;
@@ -9149,6 +9334,7 @@ begin
     RequiredValues.FarmProperty := FClimatePackage.Precipitation_Potential_Consumption;
 
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
@@ -9175,6 +9361,9 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+  EvaluateReferenceET;
+
   RequiredValues.WriteLocation := wlETR;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -9196,6 +9385,7 @@ begin
   end;
 
   WriteFmpArrayData(AFileName, RequiredValues);
+  WriteArrayTemplate(RequiredValues);
 end;
 
 procedure TModflowFmp4Writer.WriteRootDepth;
@@ -9209,6 +9399,9 @@ begin
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
+  EvaluateRootDepth;
 
   RequiredValues.WriteLocation := wlRootDepth;
   RequiredValues.DefaultValue := 0;
@@ -9236,6 +9429,7 @@ begin
     if FLandUse.LandUseOption = luoSingle then
     begin
       WriteFmpArrayData(AFileName, RequiredValues);
+      WriteArrayTemplate(RequiredValues);
     end
     else
     begin
@@ -9243,6 +9437,7 @@ begin
       begin
         RequiredValues.MaxDataTypeIndex := Model.FmpCrops.Count -1;
         WriteFmpArrayData(AFileName, RequiredValues);
+        WriteArrayTemplate(RequiredValues);
       end
       else
       begin
@@ -9547,79 +9742,72 @@ begin
     AFileName := GetFileStreamName(wlSoilCoefficient);
   end;
 
-//  if (FSoil4.Coefficient.ArrayList = alArray) then
-//  begin
-//    WriteFmpArrayData(AFileName, RequiredValues);
-//  end
-//  else
-//  begin
-    GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
-      ExternalFileName, ExternalScaleFileName);
-    WriteScaleFactorsID_andOption(RequiredValues,
-      UnitConversionScaleFactor, ExternalScaleFileName);
-    WriteString('STATIC LIST DATAFILE ');
-    if ExternalFileName <> '' then
-    begin
-      WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
-      NewLine;
-      Exit;
-    end
-    else
-    begin
-      WriteString(ExtractFileName(AFileName));
-      NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-        for SoilIndex := 0 to FFmpSoils.Count - 1 do
-        begin
-          ASoil := FFmpSoils[SoilIndex];
-          SoilID := SoilIndex + 1;
-          WriteInteger(SoilID);
-          case ASoil.SoilType of
-            stSand:
-              begin
-                WriteString(' SAND')
-              end;
-            stSandyLoam:
-              begin
-                WriteString(' SANDYLOAM')
-              end;
-            stSilt:
-              begin
-                WriteString(' SILT')
-              end;
-            stSiltyClay:
-              begin
-                WriteString(' SILTYCLAY')
-              end;
-            stOther:
-              begin
-                Formula := ASoil.ACoeff;
-                WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                  'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
-                Formula := ASoil.BCoeff;
-                WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                  'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
-                Formula := ASoil.CCoeff;
-                WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                  'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
-                Formula := ASoil.DCoeff;
-                WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                  'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
-                Formula := ASoil.ECoeff;
-                WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                  'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
-              end;
-            else
-              Assert(False)
-          end;
-          NewLine;
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+  WriteString('STATIC LIST DATAFILE ');
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    try
+      FWriteLocation := RequiredValues.WriteLocation;
+      for SoilIndex := 0 to FFmpSoils.Count - 1 do
+      begin
+        ASoil := FFmpSoils[SoilIndex];
+        SoilID := SoilIndex + 1;
+        WriteInteger(SoilID);
+        case ASoil.SoilType of
+          stSand:
+            begin
+              WriteString(' SAND')
+            end;
+          stSandyLoam:
+            begin
+              WriteString(' SANDYLOAM')
+            end;
+          stSilt:
+            begin
+              WriteString(' SILT')
+            end;
+          stSiltyClay:
+            begin
+              WriteString(' SILTYCLAY')
+            end;
+          stOther:
+            begin
+              Formula := ASoil.ACoeff;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
+              Formula := ASoil.BCoeff;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
+              Formula := ASoil.CCoeff;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
+              Formula := ASoil.DCoeff;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
+              Formula := ASoil.ECoeff;
+              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+                'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
+            end;
+          else
+            Assert(False)
         end;
-      finally
-        FWriteLocation := wlMain;
+        NewLine;
       end;
+    finally
+      FWriteLocation := wlMain;
     end;
-//  end;
+  end;
 end;
 
 procedure TModflowFmp4Writer.WriteSoilID;
@@ -10243,6 +10431,8 @@ begin
     Exit;
   end;
 
+  FPestParamUsed := False;
+
   RequiredValues.WriteLocation := wlSurfaceK;
   RequiredValues.DefaultValue := 0;
   RequiredValues.DataType := rdtDouble;
@@ -10266,6 +10456,7 @@ begin
   if (FSoil4.SurfVertK.ArrayList = alArray) then
   begin
     WriteFmpArrayData(AFileName, RequiredValues);
+    WriteArrayTemplate(RequiredValues);
   end
   else
   begin
