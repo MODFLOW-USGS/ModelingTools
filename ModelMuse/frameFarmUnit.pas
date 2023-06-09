@@ -187,6 +187,8 @@ type
     procedure frameAddedCropDemandRatesbDeleteClick(Sender: TObject);
     procedure frameFarmDiversionsGridButtonClick(Sender: TObject; ACol, ARow:
         Integer);
+    procedure frameFormulaGridCropsGridSelectCell(Sender: TObject; ACol, ARow:
+        Integer; var CanSelect: Boolean);
     procedure frameNoReturnFlowcomboChoiceChange(Sender: TObject);
     procedure frameNoReturnFlowGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -510,7 +512,7 @@ begin
     if FarmList.count = 0 then
     begin
       seFarmId.AsInteger := 0;
-      ClearGrid(frameFormulaGridCrops.Grid);
+      frameFormulaGridCrops.ClearGrid;
       ClearGrid(frameFormulaGridCosts.Grid);
       ClearGrid(frameFormulaGridWaterRights.Grid);
       ClearGrid(frameGW_Allocation.Grid);
@@ -589,7 +591,7 @@ begin
       frameNoReturnFlow.Grid.BeginUpdate;
       frameWaterSupplyConcentration.Grid.BeginUpdate;
       try
-        ClearGrid(frameFormulaGridCrops.Grid);
+        frameFormulaGridCrops.ClearGrid;
         ClearGrid(frameFormulaGridCosts.Grid);
         ClearGrid(frameFormulaGridWaterRights.Grid);
         ClearGrid(frameGW_Allocation.Grid);
@@ -655,7 +657,7 @@ begin
           if not AFarm.CurrentFarmEfficiencyCollection.IsSame(
             FirstFarm.CurrentFarmEfficiencyCollection) then
           begin
-            ClearGrid(frameFormulaGridCrops.Grid);
+            frameFormulaGridCrops.ClearGrid;
             frameFormulaGridCrops.seNumber.AsInteger := 0;
             break;
           end;
@@ -1376,6 +1378,13 @@ begin
   EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
 end;
 
+procedure TframeFarm.frameFormulaGridCropsGridSelectCell(Sender: TObject; ACol,
+    ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  frameFormulaGridCrops.GridSelectCell(Sender, ACol, ARow, CanSelect);
+end;
+
 procedure TframeFarm.frameFormulaGridCropsGridSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
@@ -1975,8 +1984,8 @@ begin
     for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
     begin
       TimeItem := FarmEff.CropEfficiency[TimeIndex];
-      Grid.Cells[Ord(ccStartTime), TimeIndex+1] := FloatToStr(TimeItem.StartTime);
-      Grid.Cells[Ord(ccEndTime), TimeIndex+1] := FloatToStr(TimeItem.EndTime);
+      Grid.Cells[Ord(ccStartTime), TimeIndex+1+PestRowOffset] := FloatToStr(TimeItem.StartTime);
+      Grid.Cells[Ord(ccEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(TimeItem.EndTime);
     end;
 
     for CropIndex := 0 to AFarm.CurrentFarmEfficiencyCollection.Count - 1 do
@@ -1985,7 +1994,7 @@ begin
       for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
       begin
         TimeItem := FarmEff.CropEfficiency[TimeIndex];
-        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex+1] := TimeItem.Efficiency;
+        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex+1+PestRowOffset] := TimeItem.Efficiency;
       end;
     end;
   end;
@@ -2120,6 +2129,8 @@ begin
   seFarmId.AsInteger := 0;
   edFarmName.Text := '';
 
+  frameFormulaGridCrops.IncludePestAdjustment := True;
+
   frameFormulaGridDiversion.OnChange := Change;
   frameFormulaGridReturnFlow.OnChange := Change;
   frameDelivery.OnChange := Change;
@@ -2185,8 +2196,8 @@ begin
     StressPeriods.FillStringsWithStartTimes(StartTimes);
     StressPeriods.FillStringsWithEndTimes(EndTimes);
     frameFormulaGridCrops.FirstFormulaColumn := Ord(ccCrop);
+    frameFormulaGridCrops.ClearGrid;
     Grid := frameFormulaGridCrops.Grid;
-    ClearGrid(Grid);
     if frmGoPhast.ModelSelection = msModflowFmp then
     begin
       Crops := frmGoPhast.PhastModel.FmpCrops;
@@ -3641,10 +3652,10 @@ begin
     Grid := frameFormulaGridCrops.Grid;
     for RowIndex := 1 to frameFormulaGridCrops.seNumber.AsInteger do
     begin
-      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex], StartTime)
-        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex], EndTime) then
+      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex+PestRowOffset], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex+PestRowOffset], EndTime) then
       begin
-        Rows.Add(RowIndex);
+        Rows.Add(RowIndex+PestRowOffset);
         StartTimes.Add(StartTime);
         EndTimes.Add(EndTime);
       end;

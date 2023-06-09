@@ -27,10 +27,6 @@ inherited frameFormulaGrid: TframeFormulaGrid
       Left = 317
       ExplicitLeft = 317
     end
-    inherited seNumber: TJvSpinEdit
-      Height = 23
-      ExplicitHeight = 23
-    end
   end
   inherited Grid: TRbwDataGrid4
     Top = 57
@@ -39,6 +35,7 @@ inherited frameFormulaGrid: TframeFormulaGrid
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
     TabOrder = 1
     OnMouseUp = GridMouseUp
+    OnSelectCell = GridSelectCell
     OnColSize = GridColSize
     OnHorizontalScroll = GridHorizontalScroll
     ExplicitTop = 57

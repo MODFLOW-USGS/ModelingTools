@@ -3,12 +3,13 @@ unit OrderedCollectionInterfaceUnit;
 interface
 
 uses
-  GoPhastTypes, RbwParser, ModelMuseInterfaceUnit,
+  System.Classes, GoPhastTypes, RbwParser, ModelMuseInterfaceUnit,
   FormulaManagerInterfaceUnit,
   SubscriptionInterfaceUnit,
   ScreenObjectInterfaceUnit,
   DataArrayInterfaceUnit,
-  ObsInterfaceUnit;
+  ObsInterfaceUnit,
+  ModflowParameterInterfaceUnit;
 
 type
   IModelForTOrderedCollection = interface(IModelMuseModel)
@@ -39,6 +40,9 @@ type
     procedure InvalidateMfRchRate(Sender: TObject);
     procedure InvalidateMfEvtEvapRate(Sender: TObject);
     procedure InvalidateMfEtsEvapRate(Sender: TObject);
+    function GetPestParameterByNameI(PestParamName: string)
+      : IModflowParameter;
+    procedure GetPestParameterNames(ParameterNames: TStringList);
 //    function GetDataArrayManager: TDataArrayManager;
 //    property DataArrayManager: TDataArrayManager read GetDataArrayManager;
   end;

@@ -385,12 +385,6 @@ function TframeScreenObjectNoParam.GetPestMethod(
 var
   ItemIndex: Integer;
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    result := ppmMultiply;
-//    Assert(False);
-//    Exit;
-//  end;
   ItemIndex := FPestMethods.IndexOf(
     rdgModflowBoundary.Cells[ACol,PestMethodRow]);
   if ItemIndex >= 0 then
@@ -411,12 +405,6 @@ end;
 
 function TframeScreenObjectNoParam.GetPestModifier(ACol: Integer): string;
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    result := '';
-//    Assert(False);
-//    Exit;
-//  end;
   result := rdgModflowBoundary.Cells[ACol, PestModifierRow];
   if result = strNone then
   begin
@@ -429,21 +417,6 @@ function TframeScreenObjectNoParam.GetPestModifierAssigned(
 begin
   result := inherited PestModifierAssigned[rdgModflowBoundary, ACol];
 end;
-
-//function TframeScreenObjectNoParam.GetPestMethod(ACol: Integer): TPestParamMethod;
-//var
-//  ItemIndex: Integer;
-//begin
-//  ItemIndex := FPestMethods.IndexOf(rdgModflowBoundary.Cells[ACol,PestMethodRow]);
-//  if ItemIndex >= 0 then
-//  begin
-//    result := TPestParamMethod(ItemIndex);
-//  end
-//  else
-//  begin
-//    result := ppmMultiply;
-//  end;
-//end;
 
 procedure TframeScreenObjectNoParam.LayoutMultiRowEditControls;
 begin
@@ -593,11 +566,6 @@ end;
 procedure TframeScreenObjectNoParam.SetPestModifier(ACol: Integer;
   const Value: string);
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    Assert(False);
-//    Exit;
-//  end;
   if Value = '' then
   begin
     rdgModflowBoundary.Cells[ACol, PestModifierRow] := strNone;

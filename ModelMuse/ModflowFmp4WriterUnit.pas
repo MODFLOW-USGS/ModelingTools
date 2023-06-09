@@ -67,6 +67,16 @@ type
     MaxDataTypeIndex: Integer;
   end;
 
+  TPestValues = record
+    Formula: string;
+    PestName: string;
+    PestSeriesName: string;
+    PestSeriesMethod: TPestParamMethod;
+    FormulaErrorMessage: string;
+    ErrorObjectName: string;
+    ParameterUsed: Boolean;
+  end;
+
   TModflowFmp4Writer = class(TCustomListWriter)
   private
     FFarmProcess4: TFarmProcess4;
@@ -426,6 +436,8 @@ type
       GetCollection: TGetCropCollection; const ErrorMessage: string);
     procedure WriteSurfaceElevation;
     procedure WriteArrayTemplate(RequiredValues: TRequiredValues);
+    function GetFormulaValue(var PestValues: TPestValues): Double;
+    procedure AdjustFormulaForPest(var PestValues: TPestValues);
   protected
     procedure Evaluate; override;
     class function Extension: string; override;
@@ -504,7 +516,8 @@ uses
   ModflowUnitNumbers, frmProgressUnit,
   ModflowFmpFarmUnit, System.StrUtils,
   ModflowFmpIrrigationUnit,
-  ModflowFmpAllotmentUnit, DataSetNamesUnit, ModflowMNW2_WriterUnit, FastGEO;
+  ModflowFmpAllotmentUnit, DataSetNamesUnit, ModflowMNW2_WriterUnit, FastGEO,
+  ModflowParameterInterfaceUnit, frmFormulaErrorsUnit;
 
 resourcestring
   StrUndefinedError = 'Undefined value in one or more stress periods';
@@ -6731,6 +6744,88 @@ begin
   end;
 end;
 
+function TModflowFmp4Writer.GetFormulaValue(var PestValues: TPestValues): Double;
+var
+  Compiler: TRbwParser;
+  ErrorFormula: string;
+  Expression: TExpression;
+  InternalFormula: string;
+begin
+  Compiler := Model.ParentModel.rpTopFormulaCompiler;
+  InternalFormula := PestValues.Formula;
+  ErrorFormula := PestValues.Formula;
+  try
+    Compiler.Compile(PestValues.Formula);
+  except
+    on E: ERbwParserError do
+    begin
+      frmFormulaErrors.AddFormulaError(PestValues.ErrorObjectName, '',
+        ErrorFormula, E.Message);
+      PestValues.Formula := '0';
+      Compiler.Compile(PestValues.Formula);
+    end;
+  end;
+  Expression := Compiler.CurrentExpression;
+  if Expression.ResultType in [rdtDouble, rdtInteger] then
+  begin
+    result := Expression.DoubleResult;
+  end
+  else
+  begin
+    frmFormulaErrors.AddFormulaError(PestValues.ErrorObjectName, '',
+      ErrorFormula, PestValues.FormulaErrorMessage);
+    result := 0;
+  end;
+end;
+
+procedure TModflowFmp4Writer.AdjustFormulaForPest(var PestValues: TPestValues);
+var
+  PestParam: IModflowParameter;
+  PestSeriesParameter: IModflowParameter;
+begin
+  PestValues.ParameterUsed := False;
+
+  PestParam := Model.GetPestParameterByNameI(PestValues.Formula);
+  if PestParam <> nil then
+  begin
+    FPestParamUsed := True;
+    PestValues.ParameterUsed := True;
+    PestValues.Formula := FortranFloatToStr(PestParam.Value);
+    PestValues.PestName := PestParam.ParameterName;
+  end;
+
+  PestSeriesParameter := nil;
+  if PestValues.PestSeriesName <> '' then
+  begin
+    PestSeriesParameter := Model.GetPestParameterByNameI(PestValues.PestSeriesName);
+    if PestSeriesParameter <> nil then
+    begin
+      FPestParamUsed := True;
+      PestValues.ParameterUsed := True;
+      PestValues.PestSeriesName := PestSeriesParameter.ParameterName;
+      case PestValues.PestSeriesMethod of
+        ppmMultiply:
+          begin
+            PestValues.Formula := Format('(%0:s) * %1:s',
+              [PestValues.Formula, FortranFloatToStr(PestSeriesParameter.Value)]);
+          end;
+        ppmAdd:
+          begin
+            PestValues.Formula := Format('(%0:s) + %1:s',
+              [PestValues.Formula, FortranFloatToStr(PestSeriesParameter.Value)]);
+          end;
+      else
+        Assert(False);
+      end;
+    end
+    else
+    begin
+      PestValues.PestSeriesName := '';
+    end;
+  end;
+end;
+
+
 procedure TModflowFmp4Writer.WriteEfficiency;
 var
   AFileName: string;
@@ -6751,14 +6846,35 @@ var
   procedure WriteOnFarmEfficiency(
     AFarm: TFarm; IrrIndex: Integer; OfeItem: TCropEfficiencyItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if OfeItem <> nil then
     begin
-      Formula := OfeItem.Efficiency;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
-        Format('Invalid efficiency for %0:s in irrigation type %1:s.',
-        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]));
+      PestValues.Formula := OfeItem.Efficiency;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := OFE.CropEfficiency.PestSeriesParameter;
+      PestValues.PestSeriesMethod := OFE.CropEfficiency.PestParamMethod;
+      PestValues.FormulaErrorMessage := Format('Invalid efficiency for %0:s in irrigation type %1:s.',
+        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
     end
     else
     begin

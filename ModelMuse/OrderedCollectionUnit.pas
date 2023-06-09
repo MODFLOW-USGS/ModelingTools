@@ -431,6 +431,8 @@ type
     function GetInitialValuePriorInfoWeight: double;
     procedure SetInitialValuePriorInfoWeight(const Value: double);
     procedure SetPilotPointObsGrpCollection(const Value: TPPObsGrpCollection);
+    function GetParameterName: string;
+    function GetValue: double;
   protected
     // See @link(ParameterName).
     FParameterName: string;
@@ -474,13 +476,13 @@ type
     // being validated by @classname.
     // In UCODE and PEST, parameter names can be up to 12 characters in length.
     // PARNME in PEST
-    property ParameterName: string read FParameterName write SetParameterName;
+    property ParameterName: string read GetParameterName write SetParameterName;
     // @name indicates what type of parameter this is.
     property ParameterType: TParameterType read FParameterType
       write SetParameterType;
     // @name is the value assigned to the parameter.
     // PARVAL1 in PEST
-    property Value: double read FValue write SetValue;
+    property Value: double read GetValue write SetValue;
     // PARTRANS in PEST
     property Transform: TPestTransform read FTransform write SetTransform;
     // PARCHGLIM in PEST
@@ -1065,6 +1067,11 @@ begin
   result := StoredOffset.Value;
 end;
 
+function TModflowParameter.GetParameterName: string;
+begin
+  result := FParameterName;
+end;
+
 function TModflowParameter.GetScale: double;
 begin
   result := StoredScale.Value;
@@ -1073,6 +1080,11 @@ end;
 function TModflowParameter.GetUpperBound: double;
 begin
   result := StoredUpperBound.Value;
+end;
+
+function TModflowParameter.GetValue: double;
+begin
+  Result := FValue;
 end;
 
 procedure TModflowParameter.NotifyHufSy;

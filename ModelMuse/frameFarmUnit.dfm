@@ -191,6 +191,7 @@ inherited frameFarm: TframeFarm
           Width = 577
           Height = 234
           ColCount = 3
+          OnSelectCell = frameFormulaGridCropsGridSelectCell
           OnSetEditText = frameFormulaGridCropsGridSetEditText
           OnButtonClick = frameFormulaGridCropsGridButtonClick
           Columns = <

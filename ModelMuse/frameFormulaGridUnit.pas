@@ -5,7 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frameGridUnit, Grids, RbwDataGrid4,
-  StdCtrls, Mask, JvExMask, JvSpin, Buttons, ExtCtrls;
+  StdCtrls, Mask, JvExMask, JvSpin, Buttons, ExtCtrls,
+  GoPhastTypes,
+  PhastModelInterfaceUnit
+  ;
 
 type
   TValidCellEvent = procedure (Sender: TObject; ACol, ARow: Integer; var ValidCell: Boolean) of object;
@@ -23,6 +26,8 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure cbMultiCheckClick(Sender: TObject);
     procedure comboChoiceChange(Sender: TObject);
+    procedure GridSelectCell(Sender: TObject; ACol, ARow: Integer; var CanSelect:
+        Boolean);
   private
     FFirstFormulaColumn: Integer;
     FOnValidCell: TValidCellEvent;
@@ -30,9 +35,24 @@ type
     FOnValidCheckCell: TValidCellEvent;
     FFirstChoiceColumn: Integer;
     FOnValidChoiceCell: TValidCellEvent;
+    FPestParameters: TStringList;
+    FPestUsedOnCol: array of Boolean;
+
     procedure AssignNewTextToMultipleCells(NewText: string);
+    function GetPestMethod(ACol: Integer): TPestParamMethod;
+    function GetPestMethodAssigned(ACol: Integer): Boolean;
+    function GetPestModifier(ACol: Integer): string;
+    function GetPestModifierAssigned(ACol: Integer): Boolean;
+    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
+    procedure SetPestMethodAssigned(ACol: Integer; const Value: Boolean);
+    procedure SetPestModifier(ACol: Integer; const Value: string);
+    procedure SetPestModifierAssigned(ACol: Integer; const Value: Boolean);
+    procedure SetPestUsedOnCol(ACol: Integer; const Value: Boolean);
+    function GetPestUsedOnCol(ACol: Integer): Boolean;
     { Private declarations }
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     procedure LayoutMultiRowEditControls; virtual;
     // When @link(edFormula) is used to assign the same formula to multiple
     // cells, @name is the first column in the grid that will be potential
@@ -63,6 +83,17 @@ type
     // is a valid target for the change.
     property OnValidChoiceCell: TValidCellEvent read FOnValidChoiceCell
       write FOnValidChoiceCell;
+    Property PestMethod[ACol: Integer]: TPestParamMethod
+      read GetPestMethod write SetPestMethod;
+    Property PestModifier[ACol: Integer]: string
+      read GetPestModifier write SetPestModifier;
+    Property PestMethodAssigned[ACol: Integer]: Boolean
+      read GetPestMethodAssigned write SetPestMethodAssigned;
+    Property PestModifierAssigned[ACol: Integer]: Boolean
+      read GetPestModifierAssigned write SetPestModifierAssigned;
+    procedure InitializePestParameters;
+    property PestUsedOnCol[ACol: Integer]: Boolean read GetPestUsedOnCol
+       write SetPestUsedOnCol;
     { Public declarations }
   end;
 
@@ -75,6 +106,9 @@ uses
   frmCustomGoPhastUnit, Math;
 
 {$R *.dfm}
+
+var
+  FPestMethods: TStringList;
 
 procedure TframeFormulaGrid.cbMultiCheckClick(Sender: TObject);
 var
@@ -120,6 +154,18 @@ begin
   AssignNewTextToMultipleCells(comboChoice.Text);
 end;
 
+constructor TframeFormulaGrid.Create(AOwner: TComponent);
+begin
+  inherited;
+  FPestParameters := TStringList.Create;
+end;
+
+destructor TframeFormulaGrid.Destroy;
+begin
+  FPestParameters.Free;
+  inherited;
+end;
+
 procedure TframeFormulaGrid.edFormulaChange(Sender: TObject);
 begin
   AssignNewTextToMultipleCells(edFormula.Text);
@@ -129,6 +175,54 @@ procedure TframeFormulaGrid.FrameResize(Sender: TObject);
 begin
   inherited;
   LayoutMultiRowEditControls;
+end;
+
+function TframeFormulaGrid.GetPestMethod(ACol: Integer): TPestParamMethod;
+var
+  ItemIndex: Integer;
+begin
+  ItemIndex := FPestMethods.IndexOf(
+    Grid.Cells[ACol,PestMethodRow]);
+  if ItemIndex >= 0 then
+  begin
+    result := TPestParamMethod(ItemIndex);
+  end
+  else
+  begin
+    result := ppmMultiply;
+  end;
+end;
+
+function TframeFormulaGrid.GetPestMethodAssigned(ACol: Integer): Boolean;
+begin
+  result := FPestMethods.IndexOf(Grid.Cells[ACol,PestMethodRow]) >= 0;
+end;
+
+function TframeFormulaGrid.GetPestModifier(ACol: Integer): string;
+begin
+  result := Grid.Cells[ACol, PestModifierRow];
+  if result = strNone then
+  begin
+    result := '';
+  end;
+end;
+
+function TframeFormulaGrid.GetPestModifierAssigned(ACol: Integer): Boolean;
+begin
+  result := Grid.Cells[ACol, PestModifierRow] <> '';
+end;
+
+function TframeFormulaGrid.GetPestUsedOnCol(ACol: Integer): Boolean;
+begin
+  if ACol < Length(FPestUsedOnCol) then
+  begin
+    result := FPestUsedOnCol[ACol];
+  end
+  else
+  begin
+    result := False;
+  end;
+
 end;
 
 procedure TframeFormulaGrid.GridColSize(Sender: TObject; ACol,
@@ -248,6 +342,18 @@ begin
   end;
 end;
 
+procedure TframeFormulaGrid.InitializePestParameters;
+begin
+  if IGlobalModelForOrderedCollection <> nil then
+  begin
+    IGlobalModelForOrderedCollection.GetPestParameterNames(FPestParameters);
+  end
+  else
+  begin
+    FPestParameters.Clear;
+  end;
+end;
+
 procedure TframeFormulaGrid.LayoutMultiRowEditControls;
 var
   Column: integer;
@@ -321,6 +427,63 @@ begin
   end;
 end;
 
+procedure TframeFormulaGrid.SetPestMethod(ACol: Integer;
+  const Value: TPestParamMethod);
+begin
+  Grid.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
+end;
+
+procedure TframeFormulaGrid.SetPestMethodAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  if not Value then
+  begin
+    Grid.Cells[ACol,PestMethodRow] := '';
+  end;
+end;
+
+procedure TframeFormulaGrid.SetPestModifier(ACol: Integer; const Value: string);
+begin
+  if Value = '' then
+  begin
+    Grid.Cells[ACol, PestModifierRow] := strNone;
+  end
+  else
+  begin
+    Grid.Cells[ACol, PestModifierRow] := Value;
+  end;
+end;
+
+procedure TframeFormulaGrid.SetPestModifierAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  if not Value then
+  begin
+    Grid.Cells[ACol, PestModifierRow] := '';
+  end;
+end;
+
+procedure TframeFormulaGrid.SetPestUsedOnCol(ACol: Integer;
+  const Value: Boolean);
+begin
+  if Length(FPestUsedOnCol) <> Grid.ColCount then
+  begin
+    SetLength(FPestUsedOnCol, Grid.ColCount)
+  end;
+  if Value then
+  begin
+    Grid.UseSpecialFormat[ACol,PestModifierRow] := True;
+    Grid.UseSpecialFormat[ACol,PestMethodRow] := True;
+    FPestUsedOnCol[ACol] := True;
+  end
+  else
+  begin
+    Grid.UseSpecialFormat[ACol,PestModifierRow] := False;
+    Grid.UseSpecialFormat[ACol,PestMethodRow] := False;
+    FPestUsedOnCol[ACol] := False;
+  end;
+end;
+
 procedure TframeFormulaGrid.AssignNewTextToMultipleCells(NewText: string);
 var
   RowIndex: Integer;
@@ -363,5 +526,43 @@ begin
     Grid.Options := TempOptions;
   end;
 end;
+
+procedure TframeFormulaGrid.GridSelectCell(Sender: TObject; ACol, ARow:
+    Integer; var CanSelect: Boolean);
+var
+  Column: TRbwColumn4;
+begin
+  inherited;
+  if FPestUsedOnCol[ACol] and (ARow >= 1) then
+  begin
+    Column := Grid.Columns[ACol];
+    if (ARow <= PestRowOffset)  then
+    begin
+      Column.ComboUsed := True;
+      Column.LimitToList := True;
+      if ARow = PestMethodRow then
+      begin
+        Column.PickList := FPestMethods
+      end
+      else
+      begin
+        Column.PickList := FPestParameters;
+      end;
+    end
+    else
+    begin
+      Column.ButtonUsed := True;
+      Column.LimitToList := False;
+    end;
+  end;
+end;
+
+initialization
+  FPestMethods := TStringList.Create;
+  FPestMethods.Add(StrMultiply);
+  FPestMethods.Add(StrAdd);
+
+finalization
+ FPestMethods.Free;
 
 end.

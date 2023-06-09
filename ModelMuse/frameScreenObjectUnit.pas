@@ -98,12 +98,6 @@ function TframeScreenObject.GetPestMethod(Grid: TRbwDataGrid4;
 var
   ItemIndex: Integer;
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    result := ppmMultiply;
-//    Assert(False);
-//    Exit;
-//  end;
   ItemIndex := FPestMethods.IndexOf(
     Grid.Cells[ACol,PestMethodRow]);
   if ItemIndex >= 0 then
@@ -119,24 +113,12 @@ end;
 function TframeScreenObject.GetPestMethodAssigned(Grid: TRbwDataGrid4;
   ACol: Integer): Boolean;
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    result := False;
-//    Assert(False);
-//    Exit;
-//  end;
   result := FPestMethods.IndexOf(Grid.Cells[ACol,PestMethodRow]) >= 0;
 end;
 
 function TframeScreenObject.GetPestModifier(Grid: TRbwDataGrid4;
   ACol: Integer): string;
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    result := '';
-//    Assert(False);
-//    Exit;
-//  end;
   result := Grid.Cells[ACol, PestModifierRow];
   if result = strNone then
   begin
@@ -147,12 +129,6 @@ end;
 function TframeScreenObject.GetPestModifierAssigned(Grid: TRbwDataGrid4;
   ACol: Integer): Boolean;
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    result := False;
-//    Assert(False);
-//    Exit;
-//  end;
   result := Grid.Cells[ACol, PestModifierRow] <> '';
 end;
 
@@ -164,20 +140,12 @@ end;
 procedure TframeScreenObject.SetPestMethod(Grid: TRbwDataGrid4; ACol: Integer;
   const Value: TPestParamMethod);
 begin
-  if PestMethodRow = 0 then
-  begin
-    Exit;
-  end;
   Grid.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
 end;
 
 procedure TframeScreenObject.SetPestMethodAssigned(Grid: TRbwDataGrid4;
   ACol: Integer; const Value: Boolean);
 begin
-  if PestMethodRow = 0 then
-  begin
-    Exit;
-  end;
   if not Value then
   begin
     Grid.Cells[ACol,PestMethodRow] := '';
@@ -187,11 +155,6 @@ end;
 procedure TframeScreenObject.SetPestModifier(Grid: TRbwDataGrid4; ACol: Integer;
   const Value: string);
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    Assert(False);
-//    Exit;
-//  end;
   if Value = '' then
   begin
     Grid.Cells[ACol, PestModifierRow] := strNone;
@@ -205,11 +168,6 @@ end;
 procedure TframeScreenObject.SetPestModifierAssigned(Grid: TRbwDataGrid4;
   ACol: Integer; const Value: Boolean);
 begin
-//  if PestRowOffset = 0 then
-//  begin
-//    Assert(False);
-//    Exit;
-//  end;
   if not Value then
   begin
     Grid.Cells[ACol, PestModifierRow] := '';

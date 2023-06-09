@@ -399,6 +399,7 @@ type
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    procedure Loaded;
   published
     property CropEfficiency: TCropEfficiencyCollection read FCropEfficiency
       write SetCropEfficiency;
@@ -420,6 +421,10 @@ type
     property Items[Index: Integer]: TFarmEfficienciesItem read GetItem
       write SetItem; default;
     property First: TFarmEfficienciesItem read GetFirst;
+    procedure Loaded;
+  published
+//    property PestSeriesParameter: string read GetPestSeriesParameter write SetPestSeriesParameter;
+//    property TPestParamMethod: TPestParamMethod read FTPestParamMethod write SetTPestParamMethod;
   end;
 
   TDeficiencyScenarioItem = class(TBoolFarmItem)
@@ -1407,6 +1412,11 @@ begin
     CropEfficiency.IsSame(TFarmEfficienciesItem(AnotherItem).CropEfficiency)
 end;
 
+procedure TFarmEfficienciesItem.Loaded;
+begin
+  CropEfficiency.Loaded;
+end;
+
 procedure TFarmEfficienciesItem.SetCropEfficiency(
   const Value: TCropEfficiencyCollection);
 begin
@@ -1617,6 +1627,13 @@ procedure TFarm.Loaded;
 begin
   SemiRoutedDeliveries.Loaded;
   SemiRoutedReturnFlow.Loaded;
+
+  FarmEfficiencyCollection.Loaded;
+  FarmIrrigationEfficiencyCollection.Loaded;
+  FarmIrrigationEfficiencyImprovementCollection.Loaded;
+  IrrigationUniformity.Loaded;
+  AddedCropDemandFlux.Loaded;
+  AddedCropDemandRate.Loaded;
 end;
 
 function TFarm.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -2386,6 +2403,17 @@ function TFarmEfficiencyCollection.GetItem(
 begin
   result := inherited Items[Index] as TFarmEfficienciesItem;
 end;
+
+procedure TFarmEfficiencyCollection.Loaded;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    Items[Index].Loaded;
+  end;
+end;
+
 
 procedure TFarmEfficiencyCollection.SetItem(Index: Integer;
   const Value: TFarmEfficienciesItem);

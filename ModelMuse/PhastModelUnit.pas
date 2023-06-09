@@ -54,7 +54,7 @@ uses System.UITypes,
   LockedGlobalVariableChangersInterfaceUnit, ScreenObjectInterfaceUnit,
   ColorSchemesInterface, DataArrayInterfaceUnit, SubscriptionInterfaceUnit,
   GlobalVariablesInterfaceUnit, AbstractGridInterfaceUnit, CellLocationUnit,
-  ModelCellInterfaceUnit;
+  ModelCellInterfaceUnit, ModflowParameterInterfaceUnit;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
@@ -3038,6 +3038,8 @@ that affects the model output should also have a comment. }
       write SetCanDrawContours;
     function GetPestParameterByName(PestParamName: string)
       : TModflowSteadyParameter;
+    function GetPestParameterByNameI(PestParamName: string)
+      : IModflowParameter;
     procedure ClearPestParmDictionary;
     procedure InvalidateMfSfrReachLength(Sender: TObject);
     procedure InvalidateMfSfrUpstreamDepth(Sender: TObject);
@@ -3060,6 +3062,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateParamNamesDataSets;
     function DoSutraUnsatRegionUsed(Sender: TObject): boolean;
     property SutraUnsatRegionUsed: TObjectUsedEvent read GetSutraUnsatRegionUsed;
+    procedure GetPestParameterNames(ParameterNames: TStringList);
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -45103,6 +45106,22 @@ begin
   end;
 end;
 
+procedure TCustomModel.GetPestParameterNames(ParameterNames: TStringList);
+var
+  ParameterIndex: Integer;
+  AParameter: TModflowSteadyParameter;
+begin
+  ParameterNames.Clear;
+  for ParameterIndex := 0 to ModflowSteadyParameters.Count - 1 do
+  begin
+    AParameter := ModflowSteadyParameters[ParameterIndex];
+    if AParameter.ParameterType = ptPEST then
+    begin
+      ParameterNames.AddObject(AParameter.ParameterName, AParameter);
+    end;
+  end;
+end;
+
 procedure TCustomModel.GetParameterUsedAndParameterFormulaForLPF(
       out ParameterUsed: Boolean; out ParameterFormula: string;
       ParameterType: TParameterType);
@@ -48758,6 +48777,12 @@ begin
   begin
     result := nil;
   end;
+end;
+
+function TCustomModel.GetPestParameterByNameI(
+  PestParamName: string): IModflowParameter;
+begin
+  result := GetPestParameterByName(PestParamName);
 end;
 
 function TCustomModel.GetPestParameterValueByName(PestParamName: string;

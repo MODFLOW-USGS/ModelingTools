@@ -1258,7 +1258,7 @@ begin
   seTimeTableRows.AsInteger := 1;
   for ColIndex := 0 to rdgTimeTable.ColCount - 1 do
   begin
-    rdgTimeTable.Cells[ColIndex, 1] := '';
+    rdgTimeTable.Cells[ColIndex, PestRowOffset] := '';
   end;
 
   frmGoPhast.PhastModel.ModflowStressPeriods.

@@ -7,7 +7,7 @@ uses
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   Classes,
   OrderedCollectionUnit, SysUtils, GoPhastTypes,
-  OrderedCollectionInterfaceUnit;
+  OrderedCollectionInterfaceUnit, ModflowParameterInterfaceUnit;
 
 type
   TCustomFarmItem = class(TCustomModflowBoundaryItem)
@@ -43,9 +43,20 @@ type
   TCustomFarmCollection = class(TCustomNonSpatialBoundColl)
   private
     FHelpKeyword: string;
+    FPestParamMethod: TPestParamMethod;
+    FPestSeriesParameter: IModflowParameter;
+    FPestSeriesParameterName: string;
+    function GetPestSeriesParameter: string;
+    procedure SetPestSeriesParameter(const Value: string);
+    procedure SetPestParamMethod(const Value: TPestParamMethod);
   public
     constructor Create(Model: IModelForTOrderedCollection); reintroduce; virtual;
     property HelpKeyword: string read FHelpKeyword write FHelpKeyword;
+    procedure Loaded;
+  published
+    property PestSeriesParameter: string read GetPestSeriesParameter write SetPestSeriesParameter;
+    property PestParamMethod: TPestParamMethod read FPestParamMethod write SetPestParamMethod;
+
   end;
 
   // @name is used to define list properties for MODFLOW OWHM version 2.
@@ -208,6 +219,50 @@ constructor TCustomFarmCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(nil, Model, nil);
 end;
+function TCustomFarmCollection.GetPestSeriesParameter: string;
+begin
+  if FPestSeriesParameter <> nil then
+  begin
+    FPestSeriesParameterName := FPestSeriesParameter.ParameterName;
+  end;
+  result := FPestSeriesParameterName;
+end;
+
+procedure TCustomFarmCollection.Loaded;
+begin
+  if (Model <> nil) and (FPestSeriesParameterName <> '') then
+  begin
+    FPestSeriesParameter := Model.GetPestParameterByNameI(FPestSeriesParameterName)
+  end;
+end;
+
+procedure TCustomFarmCollection.SetPestSeriesParameter(const Value: string);
+begin
+  if FPestSeriesParameterName <> Value then
+  begin
+    FPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) and (Value <> '') then
+  begin
+    FPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+    if FPestSeriesParameter = nil then
+    begin
+      FPestSeriesParameterName := '';
+      InvalidateModel;
+    end;
+  end;
+end;
+
+procedure TCustomFarmCollection.SetPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FPestParamMethod <> Value then
+  begin
+    FPestParamMethod := Value;
+  end;
+end;
+
 { TOwhmItem }
 
 function TOwhmItem.BoundaryFormulaCount: integer;
