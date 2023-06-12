@@ -518,12 +518,12 @@ begin
       ClearGrid(frameGW_Allocation.Grid);
       ClearGrid(frameSwAllotment.Grid);
       ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
-      ClearGrid(frameAddedDemandRunoffSplit.Grid);
+      frameAddedDemandRunoffSplit.ClearGrid;
       ClearGrid(frameIrrigationUniformity.Grid);
       ClearGrid(frameDeficiencyScenario.Grid);
       ClearGrid(frameWaterSource.Grid);
-      ClearGrid(frameBareRunoffFractions.Grid);
-      ClearGrid(frameAddedCropDemandFlux.Grid);
+      frameBareRunoffFractions.ClearGrid;
+      frameAddedCropDemandFlux.ClearGrid;
       ClearGrid(frameAddedCropDemandRate.Grid);
       ClearGrid(frameWaterSupplyConcentration.Grid);
       Enabled := False;
@@ -597,12 +597,12 @@ begin
         ClearGrid(frameGW_Allocation.Grid);
         ClearGrid(frameSwAllotment.Grid);
         ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
-        ClearGrid(frameAddedDemandRunoffSplit.Grid);
+        frameAddedDemandRunoffSplit.ClearGrid;
         ClearGrid(frameIrrigationUniformity.Grid);
         ClearGrid(frameDeficiencyScenario.Grid);
         ClearGrid(frameWaterSource.Grid);
-        ClearGrid(frameBareRunoffFractions.Grid);
-        ClearGrid(frameAddedCropDemandFlux.Grid);
+        frameBareRunoffFractions.ClearGrid;
+        frameAddedCropDemandFlux.ClearGrid;
         ClearGrid(frameAddedCropDemandRate.Grid);
         ClearGrid(frameNoReturnFlow.Grid);
         ClearGrid(frameWaterSupplyConcentration.Grid);
@@ -729,7 +729,7 @@ begin
           if not AFarm.AddedDemandRunoffSplitCollection.IsSame(
             FirstFarm.AddedDemandRunoffSplitCollection) then
           begin
-            ClearGrid(frameAddedDemandRunoffSplit.Grid);
+            frameAddedDemandRunoffSplit.ClearGrid;
             frameAddedDemandRunoffSplit.seNumber.AsInteger := 0;
             break;
           end;
@@ -777,7 +777,7 @@ begin
           if not AFarm.BareRunoffFraction.IsSame(
             FirstFarm.BareRunoffFraction) then
           begin
-            ClearGrid(frameBareRunoffFractions.Grid);
+            frameBareRunoffFractions.ClearGrid;
             frameBareRunoffFractions.seNumber.AsInteger := 0;
             break;
           end;
@@ -789,7 +789,7 @@ begin
           if not AFarm.AddedCropDemandFlux.IsSame(
             FirstFarm.AddedCropDemandFlux) then
           begin
-            ClearGrid(frameAddedCropDemandFlux.Grid);
+            frameAddedCropDemandFlux.ClearGrid;
             frameAddedCropDemandFlux.seNumber.AsInteger := 0;
             break;
           end;
@@ -1971,11 +1971,14 @@ var
   TimeItem: TCropEfficiencyItem;
   Grid: TRbwDataGrid4;
   MaxTimeCount: Integer;
+  CropEfficiency: TCropEfficiencyCollection;
+  ColIndex: Integer;
 begin
   AFarm := FirstFarm;
   GetMaxTimeAndCountForCrops(MaxIndex, MaxTimeCount, AFarm);
   frameFormulaGridCrops.seNumber.AsInteger := MaxTimeCount;
   frameFormulaGridCrops.seNumber.OnChange(frameFormulaGridCrops.seNumber);
+  frameFormulaGridCrops.InitializePestParameters;
 
   if MaxIndex >= 0 then
   begin
@@ -1988,13 +1991,23 @@ begin
       Grid.Cells[Ord(ccEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(TimeItem.EndTime);
     end;
 
+    frameFormulaGridCrops.PestUsedOnCol[Ord(ccStartTime)] := False;
+    frameFormulaGridCrops.PestUsedOnCol[Ord(ccEndTime)] := False;
+
     for CropIndex := 0 to AFarm.CurrentFarmEfficiencyCollection.Count - 1 do
     begin
       FarmEff := AFarm.CurrentFarmEfficiencyCollection[CropIndex];
-      for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
+      CropEfficiency := FarmEff.CropEfficiency;
+      ColIndex := Ord(ccCrop) + CropIndex;
+
+      frameFormulaGridCrops.PestUsedOnCol[ColIndex] := True;
+      frameFormulaGridCrops.PestModifier[ColIndex] := CropEfficiency.PestSeriesParameter;
+      frameFormulaGridCrops.PestMethod[ColIndex] := CropEfficiency.PestParamMethod;
+
+      for TimeIndex := 0 to CropEfficiency.Count - 1 do
       begin
         TimeItem := FarmEff.CropEfficiency[TimeIndex];
-        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex+1+PestRowOffset] := TimeItem.Efficiency;
+        Grid.Cells[ColIndex, TimeIndex+1+PestRowOffset] := TimeItem.Efficiency;
       end;
     end;
   end;
@@ -2130,6 +2143,12 @@ begin
   edFarmName.Text := '';
 
   frameFormulaGridCrops.IncludePestAdjustment := True;
+  frameBareRunoffFractions.IncludePestAdjustment := True;
+  frameAddedDemandRunoffSplit.IncludePestAdjustment := True;
+  frameFormulaGridEfficiencyImprovement.IncludePestAdjustment := True;
+  frameIrrigationUniformity.IncludePestAdjustment := True;
+  frameAddedCropDemandFlux.IncludePestAdjustment := True;
+  frameAddedCropDemandRate.IncludePestAdjustment := True;
 
   frameFormulaGridDiversion.OnChange := Change;
   frameFormulaGridReturnFlow.OnChange := Change;
@@ -2727,7 +2746,8 @@ begin
   comboPumpSpread.ItemIndex := Ord(FirstFarm.PumpSpreadChoice);
 end;
 
-procedure TframeFarm.SetAddedCropDemand(EfficiencyCollection: TFarmEfficiencyCollection; AFrame: TframeFormulaGrid);
+procedure TframeFarm.SetAddedCropDemand(
+  EfficiencyCollection: TFarmEfficiencyCollection; AFrame: TframeFormulaGrid);
 var
   Crops: TCropCollection;
   CropIndex: Integer;
@@ -2763,9 +2783,10 @@ begin
     Grid := AFrame.Grid;
     for RowIndex := 1 to AFrame.seNumber.AsInteger do
     begin
-      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex], StartTime) and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex], EndTime) then
+      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex+PestRowOffset], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex+PestRowOffset], EndTime) then
       begin
-        Rows.Add(RowIndex);
+        Rows.Add(RowIndex+PestRowOffset);
         StartTimes.Add(StartTime);
         EndTimes.Add(EndTime);
       end;
@@ -2797,6 +2818,22 @@ begin
     EndTimes.Free;
     Rows.Free;
   end;
+
+  for CropIndex := 0 to EfficiencyCollection.Count - 1 do
+  begin
+    EfficienciesItem := EfficiencyCollection[CropIndex];
+    CropEfficiency := EfficienciesItem.CropEfficiency;
+    ColIndex := CropIndex + Ord(ccCrop);
+    if AFrame.PestMethodAssigned[ColIndex] then
+    begin
+      CropEfficiency.PestParamMethod := AFrame.PestMethod[ColIndex];
+    end;
+    if AFrame.PestModifierAssigned[ColIndex] then
+    begin
+      CropEfficiency.PestSeriesParameter := AFrame.PestModifier[ColIndex];
+    end;
+  end;
+
 end;
 
 procedure TframeFarm.GetEfficiencyDataForFirstFarm(AFrame: TframeFormulaGrid; EffCollection: TFarmEfficiencyCollection);
@@ -2808,9 +2845,20 @@ var
   TimeIndex: Integer;
   TimeItem: TCropEfficiencyItem;
   CropIndex: Integer;
+  CropEfficiency: TCropEfficiencyCollection;
+  ColIndex: Integer;
 begin
   GetMaxTimeAndCountForEfficiencyCollection(AFrame, EffCollection, MaxTimeCount, MaxIndex);
   AFrame.seNumber.AsInteger := MaxTimeCount;
+  if Assigned(AFrame.seNumber.OnChange) then
+  begin
+    AFrame.seNumber.OnChange(AFrame.seNumber);
+  end;
+  AFrame.InitializePestParameters;
+
+  AFrame.PestUsedOnCol[Ord(ccStartTime)] := False;
+  AFrame.PestUsedOnCol[Ord(ccEndTime)] := False;
+
   AFrame.seNumber.OnChange(AFrame.seNumber);
   if MaxIndex >= 0 then
   begin
@@ -2819,19 +2867,33 @@ begin
     for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
     begin
       TimeItem := FarmEff.CropEfficiency[TimeIndex];
-      Grid.Cells[Ord(ccStartTime), TimeIndex + 1] := FloatToStr(TimeItem.StartTime);
-      Grid.Cells[Ord(ccEndTime), TimeIndex + 1] := FloatToStr(TimeItem.EndTime);
+      Grid.Cells[Ord(ccStartTime), TimeIndex + 1+PestRowOffset] := FloatToStr(TimeItem.StartTime);
+      Grid.Cells[Ord(ccEndTime), TimeIndex + 1+PestRowOffset] := FloatToStr(TimeItem.EndTime);
     end;
     for CropIndex := 0 to EffCollection.Count - 1 do
     begin
       FarmEff := EffCollection[CropIndex];
-      for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
+      CropEfficiency := FarmEff.CropEfficiency;
+      ColIndex := Ord(ccCrop) + CropIndex;
+
+      AFrame.PestUsedOnCol[ColIndex] := True;
+      AFrame.PestModifier[ColIndex] := CropEfficiency.PestSeriesParameter;
+      AFrame.PestMethod[ColIndex] := CropEfficiency.PestParamMethod;
+
+      for TimeIndex := 0 to CropEfficiency.Count - 1 do
       begin
-        TimeItem := FarmEff.CropEfficiency[TimeIndex];
-        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex + 1] := TimeItem.Efficiency;
+        TimeItem := CropEfficiency[TimeIndex];
+        Grid.Cells[ColIndex, TimeIndex + 1+PestRowOffset] := TimeItem.Efficiency;
       end;
     end;
   end;
+
+//    frameFormulaGridCrops.PestUsedOnCol[Ord(ccStartTime)] := False;
+//    frameFormulaGridCrops.PestUsedOnCol[Ord(ccEndTime)] := False;
+//    frameFormulaGridCrops.PestUsedOnCol[ColIndex] := True;
+//    frameFormulaGridCrops.PestModifier[ColIndex] := CropEfficiency.PestSeriesParameter;
+//    frameFormulaGridCrops.PestMethod[ColIndex] := CropEfficiency.PestParamMethod;
+
 end;
 
 procedure TframeFarm.GetMaxTimeAndCountForEfficiencyCollection(
@@ -2984,10 +3046,18 @@ var
   TimeIndex: Integer;
   TimeItem: TCropEfficiencyItem;
   CropIndex: Integer;
+  CropEfficiency: TCropEfficiencyCollection;
+  ColIndex: Integer;
 begin
   GetMaxTimeAndCountForCrops(MaxIndex, MaxTimeCount, AFarm);
   AFrame.seNumber.AsInteger := MaxTimeCount;
   AFrame.seNumber.OnChange(AFrame.seNumber);
+
+  AFrame.InitializePestParameters;
+
+  AFrame.PestUsedOnCol[Ord(ccStartTime)] := False;
+  AFrame.PestUsedOnCol[Ord(ccEndTime)] := False;
+
   if MaxIndex >= 0 then
   begin
     FarmEff := EfficiencyCollection[MaxIndex];
@@ -2995,16 +3065,23 @@ begin
     for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
     begin
       TimeItem := FarmEff.CropEfficiency[TimeIndex];
-      Grid.Cells[Ord(ccStartTime), TimeIndex + 1] := FloatToStr(TimeItem.StartTime);
-      Grid.Cells[Ord(ccEndTime), TimeIndex + 1] := FloatToStr(TimeItem.EndTime);
+      Grid.Cells[Ord(ccStartTime), TimeIndex + 1+PestRowOffset] := FloatToStr(TimeItem.StartTime);
+      Grid.Cells[Ord(ccEndTime), TimeIndex + 1+PestRowOffset] := FloatToStr(TimeItem.EndTime);
     end;
     for CropIndex := 0 to EfficiencyCollection.Count - 1 do
     begin
       FarmEff := EfficiencyCollection[CropIndex];
-      for TimeIndex := 0 to FarmEff.CropEfficiency.Count - 1 do
+      CropEfficiency := FarmEff.CropEfficiency;
+      ColIndex := Ord(ccCrop) + CropIndex;
+
+      AFrame.PestUsedOnCol[ColIndex] := True;
+      AFrame.PestModifier[ColIndex] := CropEfficiency.PestSeriesParameter;
+      AFrame.PestMethod[ColIndex] := CropEfficiency.PestParamMethod;
+
+      for TimeIndex := 0 to CropEfficiency.Count - 1 do
       begin
-        TimeItem := FarmEff.CropEfficiency[TimeIndex];
-        Grid.Cells[Ord(ccCrop) + CropIndex, TimeIndex + 1] := TimeItem.Efficiency;
+        TimeItem := CropEfficiency[TimeIndex];
+        Grid.Cells[ColIndex, TimeIndex + 1+PestRowOffset] := TimeItem.Efficiency;
       end;
     end;
   end;
@@ -3021,6 +3098,8 @@ var
 begin
   AFarm := FirstFarm;
   Frame := frameBareRunoffFractions;
+  Frame.InitializePestParameters;
+
   Grid := Frame.Grid;
   BareRunoffFraction := AFarm.BareRunoffFraction;
 
@@ -3029,10 +3108,17 @@ begin
   for TimeIndex := 0 to BareRunoffFraction.Count - 1 do
   begin
     ATimeItem := BareRunoffFraction[TimeIndex];
-    Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
-    Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
-    Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.OwhmValue;
+    Grid.Cells[Ord(brfcStartTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.StartTime);
+    Grid.Cells[Ord(brfcEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.EndTime);
+    Grid.Cells[Ord(brfcValue), TimeIndex+1+PestRowOffset] := ATimeItem.OwhmValue;
   end;
+
+  Frame.PestUsedOnCol[Ord(brfcStartTime)] := False;
+  Frame.PestUsedOnCol[Ord(brfcEndTime)] := False;
+  Frame.PestUsedOnCol[Ord(brfcValue)] := True;
+  Frame.PestModifier[Ord(brfcValue)] := BareRunoffFraction.PestSeriesParameter;
+  Frame.PestMethod[Ord(brfcValue)] := BareRunoffFraction.PestParamMethod;
+
 end;
 
 procedure TframeFarm.InitializeEfficiencyCollectionByCropFrame(StartTimes,
@@ -3215,10 +3301,10 @@ begin
     Grid := AFrame.Grid;
     for RowIndex := 1 to AFrame.seNumber.AsInteger do
     begin
-      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex], StartTime)
-        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex], EndTime) then
+      if TryStrToFloat(Grid.Cells[Ord(ccStartTime), RowIndex+PestRowOffset], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(ccEndTime), RowIndex+PestRowOffset], EndTime) then
       begin
-        Rows.Add(RowIndex);
+        Rows.Add(RowIndex+PestRowOffset);
         StartTimes.Add(StartTime);
         EndTimes.Add(EndTime);
       end;
@@ -3250,6 +3336,22 @@ begin
     EndTimes.Free;
     Rows.Free;
   end;
+
+  for CropIndex := 0 to EfficiencyCollection.Count - 1 do
+  begin
+    EfficienciesItem := EfficiencyCollection[CropIndex];
+    CropEfficiency := EfficienciesItem.CropEfficiency;
+    ColIndex := CropIndex + Ord(ccCrop);
+    if AFrame.PestMethodAssigned[ColIndex] then
+    begin
+      CropEfficiency.PestParamMethod := AFrame.PestMethod[ColIndex];
+    end;
+    if AFrame.PestModifierAssigned[ColIndex] then
+    begin
+      CropEfficiency.PestSeriesParameter := AFrame.PestModifier[ColIndex];
+    end;
+  end;
+
 end;
 
 procedure TframeFarm.SetBareRunoffFractions(Farm: TFarm);
@@ -3273,10 +3375,10 @@ begin
   try
     for RowIndex := 1 to AFrame.seNumber.AsInteger do
     begin
-      if TryStrToFloat(Grid.Cells[Ord(dcStartTime), RowIndex], StartTime)
-        and TryStrToFloat(Grid.Cells[Ord(dcEndTime), RowIndex], EndTime) then
+      if TryStrToFloat(Grid.Cells[Ord(brfcStartTime), RowIndex+PestRowOffset], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(brfcEndTime), RowIndex+PestRowOffset], EndTime) then
       begin
-        Rows.Add(RowIndex);
+        Rows.Add(RowIndex+PestRowOffset);
         StartTimes.Add(StartTime);
         EndTimes.Add(EndTime);
       end;
@@ -3292,7 +3394,7 @@ begin
       begin
         OwhmItem := Farm.BareRunoffFraction.Add as TOwhmItem;
       end;
-      OwhmItem.OwhmValue := Grid.Cells[Ord(dcValue),ARow];
+      OwhmItem.OwhmValue := Grid.Cells[Ord(brfcValue),ARow];
       OwhmItem.StartTime := StartTimes[RowIndex];
       OwhmItem.EndTime := EndTimes[RowIndex];
     end;
@@ -3305,6 +3407,16 @@ begin
     StartTimes.Free;
     EndTimes.Free;
   end;
+
+  if AFrame.PestMethodAssigned[Ord(brfcValue)] then
+  begin
+    Farm.BareRunoffFraction.PestParamMethod := AFrame.PestMethod[Ord(brfcValue)];
+  end;
+  if AFrame.PestModifierAssigned[Ord(brfcValue)] then
+  begin
+    Farm.BareRunoffFraction.PestSeriesParameter := AFrame.PestModifier[Ord(brfcValue)];
+  end;
+
 end;
 
 procedure TframeFarm.SetWaterRights(Farm: TFarm);
@@ -3621,6 +3733,7 @@ var
   ARow: Integer;
 begin
   EfficiencyCollection := Farm.CurrentFarmEfficiencyCollection;
+
   if frmGoPhast.ModelSelection = msModflowFmp then
   begin
     for CropIndex := EfficiencyCollection.Count to Crops.Count - 1 do
@@ -3686,6 +3799,21 @@ begin
     StartTimes.Free;
     EndTimes.Free;
     Rows.Free;
+  end;
+
+  for CropIndex := 0 to EfficiencyCollection.Count - 1 do
+  begin
+    EfficienciesItem := EfficiencyCollection[CropIndex];
+    CropEfficiency := EfficienciesItem.CropEfficiency;
+    ColIndex := CropIndex + Ord(ccCrop);
+    if frameFormulaGridCrops.PestMethodAssigned[ColIndex] then
+    begin
+      CropEfficiency.PestParamMethod := frameFormulaGridCrops.PestMethod[ColIndex];
+    end;
+    if frameFormulaGridCrops.PestModifierAssigned[ColIndex] then
+    begin
+      CropEfficiency.PestSeriesParameter := frameFormulaGridCrops.PestModifier[ColIndex];
+    end;
   end;
 end;
 

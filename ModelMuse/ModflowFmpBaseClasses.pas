@@ -53,6 +53,8 @@ type
     constructor Create(Model: IModelForTOrderedCollection); reintroduce; virtual;
     property HelpKeyword: string read FHelpKeyword write FHelpKeyword;
     procedure Loaded;
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
     property PestSeriesParameter: string read GetPestSeriesParameter write SetPestSeriesParameter;
     property PestParamMethod: TPestParamMethod read FPestParamMethod write SetPestParamMethod;
@@ -215,6 +217,19 @@ end;
 
 { TCustomFarmCollection }
 
+procedure TCustomFarmCollection.Assign(Source: TPersistent);
+var
+  OtherFarmCollection: TCustomFarmCollection;
+begin
+  if Source is TCustomFarmCollection then
+  begin
+    OtherFarmCollection := TCustomFarmCollection(Source);
+    PestSeriesParameter := OtherFarmCollection.PestSeriesParameter;
+    PestParamMethod := OtherFarmCollection.PestParamMethod;
+  end;
+  inherited;
+end;
+
 constructor TCustomFarmCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(nil, Model, nil);
@@ -226,6 +241,21 @@ begin
     FPestSeriesParameterName := FPestSeriesParameter.ParameterName;
   end;
   result := FPestSeriesParameterName;
+end;
+
+function TCustomFarmCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  OtherFarmCollection: TCustomFarmCollection;
+begin
+  result := (AnOrderedCollection is TCustomFarmCollection)
+    and inherited;
+  if result then
+  begin
+    OtherFarmCollection := TCustomFarmCollection(AnOrderedCollection);
+    result := (PestSeriesParameter = OtherFarmCollection.PestSeriesParameter)
+      and (PestParamMethod = OtherFarmCollection.PestParamMethod)
+  end;
 end;
 
 procedure TCustomFarmCollection.Loaded;
@@ -243,13 +273,20 @@ begin
     FPestSeriesParameterName := Value;
     InvalidateModel;
   end;
-  if (Model <> nil) and (Value <> '') then
+  if (Model <> nil) then
   begin
-    FPestSeriesParameter := Model.GetPestParameterByNameI(Value);
-    if FPestSeriesParameter = nil then
+    if Value <> '' then
     begin
-      FPestSeriesParameterName := '';
-      InvalidateModel;
+      FPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FPestSeriesParameter = nil then
+      begin
+        FPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FPestSeriesParameter := nil;
     end;
   end;
 end;

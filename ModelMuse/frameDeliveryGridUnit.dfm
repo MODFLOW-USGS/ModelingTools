@@ -31,6 +31,10 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
       Caption = 'Number of delivery types'
       WordWrap = True
     end
+    inherited seNumber: TJvSpinEdit
+      Height = 23
+      ExplicitHeight = 23
+    end
     object seNumberOfDeliveryTypes: TJvSpinEdit
       Left = 176
       Top = 6
@@ -45,7 +49,6 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
     Width = 476
     Height = 112
     ColCount = 2
-    OnSelectCell = GridSelectCell
     OnSetEditText = GridSetEditText
     Columns = <
       item

@@ -3292,14 +3292,125 @@ var
   AFarm: TFarm;
   ADelivery: TSemiRoutedDeliveriesAndRunoffItem;
   ISRD: Integer;
-  SrdIndex: Integer;
   SrdCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
   SegmentReach: TSegmentReach;
+  procedure WriteDelivery(ADelivery: TSemiRoutedDeliveriesAndRunoffItem);
+  begin
+    if ADelivery = nil then
+    begin
+      WriteInteger(0);
+      WriteInteger(0);
+      WriteInteger(0);
+    end
+    else
+    begin
+      SegmentReach := ADelivery.LinkedStream.SegmentReach;
+      WriteInteger(SegmentReach.Segment);
+      WriteInteger(SegmentReach.Reach);
+      WriteFloatValueFromGlobalFormula(ADelivery.Frac,
+        AFarm, 'Invalid semi-routed delivery fraction');
+    end;
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+  SrdIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          ISRD := 1;
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+//          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            if AFarm.MultiSrDeliveries.Count > 0 then
+            begin
+              for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+              begin
+                SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+
+                WriteInteger(ISRD);
+                ADelivery := SrdCollection.ItemByStartTime(
+                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
+                WriteInteger(AFarm.FarmId);
+                WriteDelivery(ADelivery);
+                NewLine;
+                Inc(ISRD);
+              end;
+            end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteInteger(AFarm.FarmId);
+              WriteInteger(0);
+              WriteInteger(0);
+              WriteInteger(0);
+              NewLine;
+              Inc(ISRD);
+            end;
+          end;
+        end;
+      end
+      else
+      begin
+        ISRD := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          if AFarm.MultiSrDeliveries.Count > 0 then
+          begin
+            for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+            begin
+              SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+
+              WriteInteger(ISRD);
+
+              if SrdCollection.Count > 0 then
+              begin
+                ADelivery := SrdCollection.First as TSemiRoutedDeliveriesAndRunoffItem;
+              end
+              else
+              begin
+                ADelivery := nil;
+              end;
+              WriteInteger(AFarm.FarmId);
+              WriteDelivery(ADelivery);
+              NewLine;
+              Inc(ISRD);
+            end;
+          end
+          else
+          begin
+            WriteInteger(ISRD);
+            WriteInteger(AFarm.FarmId);
+            WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
+            NewLine;
+            Inc(ISRD);
+          end;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if (FSurfaceWater4.Semi_Routed_Delivery.FarmOption = foNotUsed) then
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
 
   RequiredValues.WriteLocation := wlSemiRouteDelivery;
   RequiredValues.DefaultValue := 0;
@@ -3344,123 +3455,17 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
-
-      if RequiredValues.WriteTransientData then
-      begin
-        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-        begin
-          ISRD := 1;
-          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-//          FarmID := 1;
-          for FarmIndex := 0 to Model.Farms.Count - 1 do
-          begin
-            AFarm := Model.Farms[FarmIndex];
-            if AFarm.MultiSrDeliveries.Count > 0 then
-            begin
-              for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
-              begin
-                SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
-
-                WriteInteger(ISRD);
-                ADelivery := SrdCollection.ItemByStartTime(
-                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-                if ADelivery = nil then
-                begin
-                  WriteInteger(AFarm.FarmId);
-                  WriteInteger(0);
-                  WriteInteger(0);
-                  WriteInteger(0);
-                end
-                else
-                begin
-                  WriteInteger(AFarm.FarmId);
-
-  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                  SegmentReach := ADelivery.LinkedStream.SegmentReach;
-                  WriteInteger(SegmentReach.Segment);
-                  WriteInteger(SegmentReach.Reach);
-                  WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                    AFarm, 'Invalid semi-routed delivery fraction');
-                end;
-                NewLine;
-                Inc(ISRD);
-              end;
-            end
-            else
-            begin
-              WriteInteger(ISRD);
-              WriteInteger(AFarm.FarmId);
-              WriteInteger(0);
-              WriteInteger(0);
-              WriteInteger(0);
-              NewLine;
-              Inc(ISRD);
-            end;
-          end;
-        end;
-      end
-      else
-      begin
-        ISRD := 1;
-        for FarmIndex := 0 to Model.Farms.Count - 1 do
-        begin
-          AFarm := Model.Farms[FarmIndex];
-          if AFarm.MultiSrDeliveries.Count > 0 then
-          begin
-            for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
-            begin
-              SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
-
-              WriteInteger(ISRD);
-
-              if SrdCollection.Count > 0 then
-              begin
-                ADelivery := SrdCollection.First as TSemiRoutedDeliveriesAndRunoffItem;
-              end
-              else
-              begin
-                ADelivery := nil;
-              end;
-              if ADelivery = nil then
-              begin
-                WriteInteger(AFarm.FarmId);
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteInteger(0);
-              end
-              else
-              begin
-                WriteInteger(AFarm.FarmId);
-//                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                SegmentReach := ADelivery.LinkedStream.SegmentReach;
-                WriteInteger(SegmentReach.Segment);
-                WriteInteger(SegmentReach.Reach);
-                WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                  AFarm, 'Invalid semi-routed delivery fraction');
-              end;
-              NewLine;
-              Inc(ISRD);
-            end;
-          end
-          else
-          begin
-            WriteInteger(ISRD);
-            WriteInteger(AFarm.FarmId);
-            WriteInteger(0);
-            WriteInteger(0);
-            WriteInteger(0);
-            NewLine;
-            Inc(ISRD);
-          end;
-        end;
-
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
       end;
-    finally
-      FWriteLocation := wlMain;
     end;
   end;
 end;
@@ -4941,89 +4946,66 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   OfeItem: TCropEfficiencyItem;
-  CropIndex: Integer;
   FmpCrops: TCropCollection;
   AFarm: TFarm;
-  InnerFarmIndex: Integer;
   FarmID: Integer;
-  FarmIndex: Integer;
   OFE: TFarmEfficienciesItem;
   procedure WriteItem(AFarm: TFarm; CropIndex: Integer; OfeItem: TCropEfficiencyItem);
   var
-    Formula: string;
     ACrop: TCropItem;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if OfeItem <> nil then
     begin
       ACrop := FmpCrops[CropIndex];
-      Formula := OfeItem.Efficiency;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
-        Format('Invalid Added Crop Demand Flux in Farm %0:s for crop %1:s.',
-        [AFarm.FarmName, ACrop.CropName]));
+
+      PestValues.Formula := OfeItem.Efficiency;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := OFE.CropEfficiency.PestSeriesParameter;
+      PestValues.PestSeriesMethod := OFE.CropEfficiency.PestParamMethod;
+      PestValues.FormulaErrorMessage := Format('Invalid Added Crop Demand Flux in Farm %0:s for crop %1:s.',
+        [AFarm.FarmName, ACrop.CropName]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+
+//      Formula := OfeItem.Efficiency;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        Format('Invalid Added Crop Demand Flux in Farm %0:s for crop %1:s.',
+//        [AFarm.FarmName, ACrop.CropName]));
     end
     else
     begin
       WriteFloat(RequiredValues.DefaultValue);
     end;
   end;
-begin
-  if FFarmProcess4.Added_Crop_Demand_Flux.FarmOption = foNotUsed then
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
+    CropIndex: Integer;
   begin
-    Exit;
-  end;
-
-  RequiredValues.WriteLocation := wlAddedCropDemandFlux;
-  RequiredValues.DefaultValue := 0;
-  RequiredValues.DataType := rdtDouble;
-  RequiredValues.DataTypeIndex := 0;
-  RequiredValues.MaxDataTypeIndex := 0;
-  RequiredValues.Comment := 'FMP WBS: : ADDED_CROP_DEMAND';
-  RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_CROP_DEMAND';
-  RequiredValues.ID := 'ADDED_CROP_DEMAND';
-  RequiredValues.StaticDataName := '';
-  RequiredValues.WriteTransientData :=
-    (FFarmProcess4.Added_Crop_Demand_Flux.FarmOption = foTransient);
-  RequiredValues.CheckError :=  StrInvalidAddedCropD;
-  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.Option := 'FLUX ';
-  RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Flux;
-
-  if RequiredValues.FarmProperty.ExternalFileName = '' then
-  begin
-    AFileName := GetFileStreamName(wlAddedCropDemandFlux);
-  end;
-
-  FmpCrops := Model.FmpCrops;
-  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
-    ExternalFileName, ExternalScaleFileName);
-  WriteScaleFactorsID_andOption(RequiredValues,
-    UnitConversionScaleFactor, ExternalScaleFileName);
-//    WriteString(RequiredValues.Option);
-
-  if RequiredValues.WriteTransientData then
-  begin
-    WriteString('TRANSIENT LIST DATAFILE ');
-  end
-  else
-  begin
-    WriteString('STATIC LIST DATAFILE ');
-  end;
-
-  if ExternalFileName <> '' then
-  begin
-    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
-    NewLine;
-    Exit;
-  end
-  else
-  begin
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
+    FWriteLocation := RequiredValues.WriteLocation;
     try
-      FWriteLocation := RequiredValues.WriteLocation;
       if RequiredValues.WriteTransientData then
       begin
         for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
@@ -5101,6 +5083,72 @@ begin
       end;
     finally
       FWriteLocation := wlMain;
+    end
+  end;
+begin
+  if FFarmProcess4.Added_Crop_Demand_Flux.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlAddedCropDemandFlux;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: : ADDED_CROP_DEMAND';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_CROP_DEMAND';
+  RequiredValues.ID := 'ADDED_CROP_DEMAND';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.Added_Crop_Demand_Flux.FarmOption = foTransient);
+  RequiredValues.CheckError :=  StrInvalidAddedCropD;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := 'FLUX ';
+  RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Flux;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlAddedCropDemandFlux);
+  end;
+
+  FmpCrops := Model.FmpCrops;
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+//    WriteString(RequiredValues.Option);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
+      end;
     end;
   end;
 end;
@@ -5112,87 +5160,68 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   OfeItem: TCropEfficiencyItem;
-  CropIndex: Integer;
   FmpCrops: TCropCollection;
   AFarm: TFarm;
-  InnerFarmIndex: Integer;
   FarmID: Integer;
-  FarmIndex: Integer;
   OFE: TFarmEfficienciesItem;
   procedure WriteItem(AFarm: TFarm; CropIndex: Integer; OfeItem: TCropEfficiencyItem);
   var
-    Formula: string;
+//    Formula: string;
     ACrop: TCropItem;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if OfeItem <> nil then
     begin
       ACrop := FmpCrops[CropIndex];
-      Formula := OfeItem.Efficiency;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+
+      PestValues.Formula := OfeItem.Efficiency;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := OFE.CropEfficiency.PestSeriesParameter;
+      PestValues.PestSeriesMethod := OFE.CropEfficiency.PestParamMethod;
+      PestValues.FormulaErrorMessage :=
         Format('Invalid Added Crop Demand Rate in Farm %0:s for crop %1:s.',
-        [AFarm.FarmName, ACrop.CropName]));
+        [AFarm.FarmName, ACrop.CropName]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+
+//      Formula := OfeItem.Efficiency;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        Format('Invalid Added Crop Demand Rate in Farm %0:s for crop %1:s.',
+//        [AFarm.FarmName, ACrop.CropName]));
     end
     else
     begin
       WriteFloat(RequiredValues.DefaultValue);
     end;
   end;
-begin
-  if FFarmProcess4.Added_Crop_Demand_Rate.FarmOption = foNotUsed then
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    CropIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
   begin
-    Exit;
-  end;
-
-  RequiredValues.WriteLocation := wlAddedCropDemandRate;
-  RequiredValues.DefaultValue := 0;
-  RequiredValues.DataType := rdtDouble;
-  RequiredValues.DataTypeIndex := 0;
-  RequiredValues.MaxDataTypeIndex := 0;
-  RequiredValues.Comment := 'FMP WBS: : ADDED_CROP_DEMAND';
-  RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_CROP_DEMAND';
-  RequiredValues.ID := 'ADDED_CROP_DEMAND';
-  RequiredValues.StaticDataName := '';
-  RequiredValues.WriteTransientData :=
-    (FFarmProcess4.Added_Crop_Demand_Rate.FarmOption = foTransient);
-  RequiredValues.CheckError :=  StrInvalidAddedCropDRate;
-  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
-  RequiredValues.Option := 'RATE ';
-  RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Rate;
-
-  if RequiredValues.FarmProperty.ExternalFileName = '' then
-  begin
-    AFileName := GetFileStreamName(wlAddedCropDemandRate);
-  end;
-
-  FmpCrops := Model.FmpCrops;
-  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
-    ExternalFileName, ExternalScaleFileName);
-  WriteScaleFactorsID_andOption(RequiredValues,
-    UnitConversionScaleFactor, ExternalScaleFileName);
-//    WriteString(RequiredValues.Option);
-  if RequiredValues.WriteTransientData then
-  begin
-    WriteString('TRANSIENT LIST DATAFILE ');
-  end
-  else
-  begin
-    WriteString('STATIC LIST DATAFILE ');
-  end;
-  if ExternalFileName <> '' then
-  begin
-    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
-    NewLine;
-    Exit;
-  end
-  else
-  begin
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
+    FWriteLocation := RequiredValues.WriteLocation;
     try
-      FWriteLocation := RequiredValues.WriteLocation;
       if RequiredValues.WriteTransientData then
       begin
         for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
@@ -5270,6 +5299,70 @@ begin
       end;
     finally
       FWriteLocation := wlMain;
+    end
+  end;
+begin
+  if FFarmProcess4.Added_Crop_Demand_Rate.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  RequiredValues.WriteLocation := wlAddedCropDemandRate;
+  RequiredValues.DefaultValue := 0;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP WBS: : ADDED_CROP_DEMAND';
+  RequiredValues.ErrorID := 'FMP LAND_USE: ADDED_CROP_DEMAND';
+  RequiredValues.ID := 'ADDED_CROP_DEMAND';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FFarmProcess4.Added_Crop_Demand_Rate.FarmOption = foTransient);
+  RequiredValues.CheckError :=  StrInvalidAddedCropDRate;
+  RequiredValues.CheckProcedure := CheckDataSetZeroOrPositive;
+  RequiredValues.Option := 'RATE ';
+  RequiredValues.FarmProperty := FFarmProcess4.Added_Crop_Demand_Rate;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlAddedCropDemandRate);
+  end;
+
+  FmpCrops := Model.FmpCrops;
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+//    WriteString(RequiredValues.Option);
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+    Exit;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
+      end;
     end;
   end;
 end;
@@ -5482,32 +5575,138 @@ var
   ExternalFileName: string;
   ExternalScaleFileName: string;
   IrrigationTypes: TIrrigationCollection;
-  TimeIndex: Integer;
   StartTime: Double;
   FarmID: Integer;
-  FarmIndex: Integer;
   AFarm: TFarm;
-  InnerFarmIndex: Integer;
-  IrrIndex: Integer;
   OFE: TFarmEfficienciesItem;
   OfeItem: TCropEfficiencyItem;
   procedure WriteItem(AFarm: TFarm; IrrIndex: Integer; OfeItem: TCropEfficiencyItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if OfeItem <> nil then
     begin
-      Formula := OfeItem.Efficiency;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
-        Format('Invalid Added Demand Runoff Split for %0:s in irrigation type %1:s.',
-        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]));
+      PestValues.Formula := OfeItem.Efficiency;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := OFE.CropEfficiency.PestSeriesParameter;
+      PestValues.PestSeriesMethod := OFE.CropEfficiency.PestParamMethod;
+      PestValues.FormulaErrorMessage := Format('Invalid Added Demand Runoff Split for %0:s in irrigation type %1:s.',
+        [AFarm.FarmName, IrrigationTypes[IrrIndex].Name]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
     end
     else
     begin
       WriteFloat(0.1);
     end;
   end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
+    IrrIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
 
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+              begin
+                WriteFloat(0.1);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(AFarm.AddedDemandRunoffSplitCollection.Count
+              = IrrigationTypes.Count);
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+            for IrrIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
+            begin
+              OFE := AFarm.AddedDemandRunoffSplitCollection[IrrIndex];
+              OfeItem := OFE.CropEfficiency.
+                ItemByStartTime(StartTime) as TCropEfficiencyItem;
+              WriteItem(AFarm, IrrIndex, OfeItem);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+
+
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+            begin
+              WriteFloat(0.1);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+          Assert(AFarm.AddedDemandRunoffSplitCollection.Count
+            = IrrigationTypes.Count);
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+          for IrrIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
+          begin
+            OFE := AFarm.AddedDemandRunoffSplitCollection[IrrIndex];
+            if OFE.CropEfficiency.Count > 0 then
+            begin
+              OfeItem := OFE.CropEfficiency.First;
+            end
+            else
+            begin
+              OfeItem := nil;
+            end;
+            WriteItem(AFarm, IrrIndex, OfeItem);
+          end;
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if FFarmProcess4.Added_Demand_Runoff_Split.FarmOption = foNotUsed then
   begin
@@ -5571,87 +5770,17 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-        if RequiredValues.WriteTransientData then
-        begin
-          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-          begin
-            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-            FarmID := 1;
-            for FarmIndex := 0 to Model.Farms.Count - 1 do
-            begin
-              AFarm := Model.Farms[FarmIndex];
-              for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-              begin
-                WriteInteger(FarmID);
-                for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-                begin
-                  WriteFloat(0.1);
-                end;
-                Inc(FarmID);
-                NewLine;
-              end;
-              Assert(AFarm.AddedDemandRunoffSplitCollection.Count
-                = IrrigationTypes.Count);
-              Assert(FarmID = AFarm.FarmId);
-              WriteInteger(AFarm.FarmId);
-              for IrrIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
-              begin
-                OFE := AFarm.AddedDemandRunoffSplitCollection[IrrIndex];
-                OfeItem := OFE.CropEfficiency.
-                  ItemByStartTime(StartTime) as TCropEfficiencyItem;
-                WriteItem(AFarm, IrrIndex, OfeItem);
-              end;
-              Inc(FarmID);
-              NewLine;
-            end;
-
-
-          end;
-        end
-        else
-        begin
-          FarmID := 1;
-          for FarmIndex := 0 to Model.Farms.Count - 1 do
-          begin
-            AFarm := Model.Farms[FarmIndex];
-            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-            begin
-              WriteInteger(FarmID);
-              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-              begin
-                WriteFloat(0.1);
-              end;
-              Inc(FarmID);
-              NewLine;
-            end;
-            Assert(AFarm.AddedDemandRunoffSplitCollection.Count
-              = IrrigationTypes.Count);
-            Assert(FarmID = AFarm.FarmId);
-            WriteInteger(AFarm.FarmId);
-            for IrrIndex := 0 to AFarm.AddedDemandRunoffSplitCollection.Count - 1 do
-            begin
-              OFE := AFarm.AddedDemandRunoffSplitCollection[IrrIndex];
-              if OFE.CropEfficiency.Count > 0 then
-              begin
-                OfeItem := OFE.CropEfficiency.First;
-              end
-              else
-              begin
-                OfeItem := nil;
-              end;
-              WriteItem(AFarm, IrrIndex, OfeItem);
-            end;
-            Inc(FarmID);
-            NewLine;
-          end;
-
+      WriteListData;
+      if FPestParamUsed then
+      begin
+        WritingTemplate := True;
+        try
+          GetFileStreamName(RequiredValues.WriteLocation);
+          WriteListData;
+        finally
+          FPestParamUsed := False;
+          WritingTemplate := False;
         end;
-      finally
-        FWriteLocation := wlMain;
       end;
     end;
   end;
@@ -5765,27 +5894,123 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   FarmID: Integer;
-  FarmIndex: Integer;
   AFarm: TFarm;
-  InnerFarmIndex: Integer;
   OwhmItem: TOwhmItem;
   procedure WriteItem(AFarm: TFarm; Item: TOwhmItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if Item <> nil then
     begin
-      Formula := Item.OwhmValue;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
-        'Invalid bare runoff fraction formula in ' + AFarm.FarmName);
+      PestValues.Formula := Item.OwhmValue;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := AFarm.BareRunoffFraction.PestSeriesParameter;
+      PestValues.PestSeriesMethod := AFarm.BareRunoffFraction.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid bare runoff fraction formula in ' + AFarm.FarmName;
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+//
+//
+//      Formula := Item.OwhmValue;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        'Invalid bare runoff fraction formula in ' + AFarm.FarmName);
     end
     else
     begin
       WriteInteger(1);
     end;
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              WriteInteger(1);
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            OwhmItem := AFarm.BareRunoffFraction.ItemByStartTime(StartTime) as TOwhmItem;
+            WriteItem(AFarm, OwhmItem);
+
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            WriteInteger(1);
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          if AFarm.BareRunoffFraction.Count > 0 then
+          begin
+            OwhmItem := AFarm.BareRunoffFraction.First;
+          end
+          else
+          begin
+            OwhmItem := nil;
+          end;
+          WriteItem(AFarm, OwhmItem);
+
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
   end;
 begin
   if FFarmProcess4.Bare_Runoff_Fraction.FarmOption = foNotUsed then
@@ -5846,71 +6071,17 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-        if RequiredValues.WriteTransientData then
-        begin
-          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-          begin
-            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-            FarmID := 1;
-            for FarmIndex := 0 to Model.Farms.Count - 1 do
-            begin
-              AFarm := Model.Farms[FarmIndex];
-              for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-              begin
-                WriteInteger(FarmID);
-                WriteInteger(1);
-                Inc(FarmID);
-                NewLine;
-              end;
-              Assert(FarmID = AFarm.FarmId);
-              WriteInteger(AFarm.FarmId);
-
-              OwhmItem := AFarm.BareRunoffFraction.ItemByStartTime(StartTime) as TOwhmItem;
-              WriteItem(AFarm, OwhmItem);
-
-              Inc(FarmID);
-              NewLine;
-            end;
-          end;
-        end
-        else
-        begin
-          FarmID := 1;
-          for FarmIndex := 0 to Model.Farms.Count - 1 do
-          begin
-            AFarm := Model.Farms[FarmIndex];
-            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-            begin
-              WriteInteger(FarmID);
-              WriteInteger(1);
-              Inc(FarmID);
-              NewLine;
-            end;
-
-            Assert(FarmID = AFarm.FarmId);
-            WriteInteger(AFarm.FarmId);
-
-            if AFarm.BareRunoffFraction.Count > 0 then
-            begin
-              OwhmItem := AFarm.BareRunoffFraction.First;
-            end
-            else
-            begin
-              OwhmItem := nil;
-            end;
-            WriteItem(AFarm, OwhmItem);
-
-            Inc(FarmID);
-            NewLine;
-          end;
-
+      WriteListData;
+      if FPestParamUsed then
+      begin
+        WritingTemplate := True;
+        try
+          GetFileStreamName(RequiredValues.WriteLocation);
+          WriteListData;
+        finally
+          FPestParamUsed := False;
+          WritingTemplate := False;
         end;
-      finally
-        FWriteLocation := wlMain;
       end;
     end;
 
@@ -5924,10 +6095,53 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  Formula: string;
-  SoilIndex: Integer;
+//  Formula: string;
   SoilID: Integer;
   ASoil: TSoilItem;
+  procedure WriteListData;
+  var
+    SoilIndex: Integer;
+    Value: double;
+    PestValues: TPestValues;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      for SoilIndex := 0 to FFmpSoils.Count - 1 do
+      begin
+        ASoil := FFmpSoils[SoilIndex];
+        SoilID := SoilIndex + 1;
+        WriteInteger(SoilID);
+
+        PestValues.Formula := ASoil.CapillaryFringe;
+
+        PestValues.PestName := '';
+        PestValues.PestSeriesName := '';
+        PestValues.PestSeriesMethod := ppmMultiply;
+        PestValues.FormulaErrorMessage := 'Invalid formula for capillary fringe in soil ' + ASoil.SoilName;
+        PestValues.ErrorObjectName := ASoil.SoilName;
+
+        AdjustFormulaForPest(PestValues);
+
+        if WritingTemplate and PestValues.ParameterUsed then
+        begin
+          Value := GetFormulaValue(PestValues);
+
+          WritePestTemplateFormula(Value, PestValues.PestName,
+            PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+            nil);
+        end
+        else
+        begin
+          WriteFloatValueFromGlobalFormula(PestValues.Formula, ASoil,
+            PestValues.FormulaErrorMessage);
+        end;
+      end;
+        NewLine;
+//        end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if FSoil4.CapFringe.FarmOption = foNotUsed then
   begin
@@ -5978,20 +6192,17 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-        for SoilIndex := 0 to FFmpSoils.Count - 1 do
-        begin
-          ASoil := FFmpSoils[SoilIndex];
-          SoilID := SoilIndex + 1;
-          WriteInteger(SoilID);
-          Formula := ASoil.CapillaryFringe;
-          WriteFloatValueFromGlobalFormula(Formula, ASoil,
-            'Invalid formula for capillary fringe in soil ' + ASoil.SoilName);
-          NewLine;
+      WriteListData;
+      if FPestParamUsed then
+      begin
+        WritingTemplate := True;
+        try
+          GetFileStreamName(RequiredValues.WriteLocation);
+          WriteListData;
+        finally
+          FPestParamUsed := False;
+          WritingTemplate := False;
         end;
-      finally
-        FWriteLocation := wlMain;
       end;
     end;
   end;
@@ -6833,15 +7044,11 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  FarmIndex: Integer;
   AFarm: TFarm;
   IrrigationTypes: TIrrigationCollection;
   OFE: TFarmEfficienciesItem;
   FarmID: Integer;
-  InnerFarmIndex: Integer;
-  IrrIndex: Integer;
   OfeItem: TCropEfficiencyItem;
-  TimeIndex: Integer;
   StartTime: Double;
   procedure WriteOnFarmEfficiency(
     AFarm: TFarm; IrrIndex: Integer; OfeItem: TCropEfficiencyItem);
@@ -6879,6 +7086,99 @@ var
     else
     begin
       WriteFloat(1);
+    end;
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
+    IrrIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+              begin
+                WriteFloat(1);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(AFarm.FarmIrrigationEfficiencyCollection.Count
+              = IrrigationTypes.Count);
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+            for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
+            begin
+              OFE := AFarm.FarmIrrigationEfficiencyCollection[IrrIndex];
+              OfeItem := OFE.CropEfficiency.
+                ItemByStartTime(StartTime) as TCropEfficiencyItem;
+              WriteOnFarmEfficiency(AFarm, IrrIndex, OfeItem);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+
+
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+            begin
+              WriteFloat(1);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+          Assert(AFarm.FarmIrrigationEfficiencyCollection.Count
+            = IrrigationTypes.Count);
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+          for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
+          begin
+            OFE := AFarm.FarmIrrigationEfficiencyCollection[IrrIndex];
+            if OFE.CropEfficiency.Count > 0 then
+            begin
+              OfeItem := OFE.CropEfficiency.First;
+            end
+            else
+            begin
+              OfeItem := nil;
+            end;
+            WriteOnFarmEfficiency(AFarm, IrrIndex, OfeItem);
+          end;
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+
+
+    finally
+      FWriteLocation := wlMain;
     end;
   end;
 begin
@@ -6943,88 +7243,18 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-        if RequiredValues.WriteTransientData then
-        begin
-          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-          begin
-            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+      WriteListData;
 
-            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-            FarmID := 1;
-            for FarmIndex := 0 to Model.Farms.Count - 1 do
-            begin
-              AFarm := Model.Farms[FarmIndex];
-              for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-              begin
-                WriteInteger(FarmID);
-                for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-                begin
-                  WriteFloat(1);
-                end;
-                Inc(FarmID);
-                NewLine;
-              end;
-              Assert(AFarm.FarmIrrigationEfficiencyCollection.Count
-                = IrrigationTypes.Count);
-              Assert(FarmID = AFarm.FarmId);
-              WriteInteger(AFarm.FarmId);
-              for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
-              begin
-                OFE := AFarm.FarmIrrigationEfficiencyCollection[IrrIndex];
-                OfeItem := OFE.CropEfficiency.
-                  ItemByStartTime(StartTime) as TCropEfficiencyItem;
-                WriteOnFarmEfficiency(AFarm, IrrIndex, OfeItem);
-              end;
-              Inc(FarmID);
-              NewLine;
-            end;
-
-
-          end;
-        end
-        else
-        begin
-          FarmID := 1;
-          for FarmIndex := 0 to Model.Farms.Count - 1 do
-          begin
-            AFarm := Model.Farms[FarmIndex];
-            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-            begin
-              WriteInteger(FarmID);
-              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-              begin
-                WriteFloat(1);
-              end;
-              Inc(FarmID);
-              NewLine;
-            end;
-            Assert(AFarm.FarmIrrigationEfficiencyCollection.Count
-              = IrrigationTypes.Count);
-            Assert(FarmID = AFarm.FarmId);
-            WriteInteger(AFarm.FarmId);
-            for IrrIndex := 0 to AFarm.FarmIrrigationEfficiencyCollection.Count - 1 do
-            begin
-              OFE := AFarm.FarmIrrigationEfficiencyCollection[IrrIndex];
-              if OFE.CropEfficiency.Count > 0 then
-              begin
-                OfeItem := OFE.CropEfficiency.First;
-              end
-              else
-              begin
-                OfeItem := nil;
-              end;
-              WriteOnFarmEfficiency(AFarm, IrrIndex, OfeItem);
-            end;
-            Inc(FarmID);
-            NewLine;
-          end;
-
+      if FPestParamUsed then
+      begin
+        WritingTemplate := True;
+        try
+          GetFileStreamName(RequiredValues.WriteLocation);
+          WriteListData;
+        finally
+          FPestParamUsed := False;
+          WritingTemplate := False;
         end;
-      finally
-        FWriteLocation := wlMain;
       end;
     end;
   end;
@@ -7510,20 +7740,208 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: double;
-  DeliveryIndex: Integer;
   FarmID: Integer;
-  FarmIndex: Integer;
   AFarm: TFarm;
-  InnerFarmIndex: Integer;
   ADeliveryCollection: TNonRoutedDeliveryParameterCollection;
   ADeliveryItem: TNonRoutedDeliveryParameterItem;
+  procedure WriteDeliveryItem(ADeliveryItem: TNonRoutedDeliveryParameterItem);
+  var
+    Value: double;
+    PestValues: TPestValues;
+  begin
+    if ADeliveryItem <> nil then
+    begin
+      PestValues.Formula := ADeliveryItem.Volume;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := ADeliveryCollection.PestSeriesParameter;
+      PestValues.PestSeriesMethod := ADeliveryCollection.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'NRDV';
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+//        WriteFloatValueFromGlobalFormula(ADeliveryItem.Volume ,
+//          AFarm, 'NRDV');
+      end;
+
+
+      WriteIntegerValueFromGlobalFormula(ADeliveryItem.Rank ,
+        AFarm, 'NRDR',
+        procedure (Value: integer)
+        begin
+          if Value <= 0 then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrThePriorityForNon,
+              AFarm.FarmName);
+          end;
+        end);
+      case ADeliveryItem.NonRoutedDeliveryTypeOwhm2 of
+        nrdt2FarmDemand:
+          begin
+            WriteInteger(0);
+          end;
+        nrdt2Discharged:
+          begin
+            WriteInteger(1);
+          end;
+        nrdt2Stored:
+          begin
+            WriteInteger(2);
+          end;
+        nrdt2Infiltrate:
+          begin
+            WriteIntegerValueFromGlobalFormula(ADeliveryItem.VirtualFarm ,
+              AFarm, 'NRDU',
+              procedure (Value: integer)
+              begin
+                if Value < 10 then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrNonroutedDelivery,
+                    AFarm.FarmName);
+                end;
+              end);
+          end;
+        else
+          begin
+            Assert(False);
+          end;
+      end;
+    end
+    else
+    begin
+      WriteFloat(0);
+      WriteInteger(0);
+      WriteInteger(0);
+    end;
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
+    DeliveryIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for DeliveryIndex := 0 to FNrdTypes - 1 do
+              begin
+                WriteFloatCondensed(0);
+                WriteFreeInteger(DeliveryIndex+1);
+                WriteFreeInteger(0);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            for DeliveryIndex := 0 to AFarm.DeliveryParamCollection.Count - 1 do
+            begin
+              ADeliveryCollection := AFarm.DeliveryParamCollection
+                [DeliveryIndex].DeliveryParam;
+              ADeliveryItem := ADeliveryCollection.ItemByStartTime(StartTime)
+                 as TNonRoutedDeliveryParameterItem;
+              WriteDeliveryItem(ADeliveryItem);
+            end;
+            for DeliveryIndex := AFarm.DeliveryParamCollection.Count to FNrdTypes - 1 do
+            begin
+              WriteFloatCondensed(0);
+              WriteFreeInteger(DeliveryIndex+1);
+              WriteFreeInteger(0);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for DeliveryIndex := 0 to FNrdTypes - 1 do
+            begin
+              WriteFloatCondensed(0);
+              WriteFreeInteger(DeliveryIndex+1);
+              WriteFreeInteger(0);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          for DeliveryIndex := 0 to AFarm.DeliveryParamCollection.Count - 1 do
+          begin
+            ADeliveryCollection := AFarm.DeliveryParamCollection
+              [DeliveryIndex].DeliveryParam;
+            if ADeliveryCollection.Count > 0 then
+            begin
+              ADeliveryItem := ADeliveryCollection.First
+                 as TNonRoutedDeliveryParameterItem;
+              WriteDeliveryItem(ADeliveryItem);
+            end
+            else
+            begin
+              WriteDeliveryItem(nil);
+            end;
+          end;
+          for DeliveryIndex := AFarm.DeliveryParamCollection.Count to FNrdTypes - 1 do
+          begin
+            WriteFloatCondensed(0);
+            WriteFreeInteger(DeliveryIndex+1);
+            WriteFreeInteger(0);
+          end;
+
+          Inc(FarmID);
+          NewLine;
+        end;
+
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if (FSurfaceWater4.Non_Routed_Delivery.FarmOption = foNotUsed) then
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
 
   if (FNrdTypes = 0) then
   begin
@@ -7583,182 +8001,17 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
-
-      if RequiredValues.WriteTransientData then
-      begin
-        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-        begin
-          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-          FarmID := 1;
-          for FarmIndex := 0 to Model.Farms.Count - 1 do
-          begin
-            AFarm := Model.Farms[FarmIndex];
-            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-            begin
-              WriteInteger(FarmID);
-              for DeliveryIndex := 0 to FNrdTypes - 1 do
-              begin
-                WriteFloatCondensed(0);
-                WriteFreeInteger(DeliveryIndex+1);
-                WriteFreeInteger(0);
-              end;
-              Inc(FarmID);
-              NewLine;
-            end;
-            Assert(FarmID = AFarm.FarmId);
-            WriteInteger(AFarm.FarmId);
-
-            for DeliveryIndex := 0 to AFarm.DeliveryParamCollection.Count - 1 do
-            begin
-              ADeliveryCollection := AFarm.DeliveryParamCollection
-                [DeliveryIndex].DeliveryParam;
-              ADeliveryItem := ADeliveryCollection.ItemByStartTime(StartTime)
-                 as TNonRoutedDeliveryParameterItem;
-              WriteFloatValueFromGlobalFormula(ADeliveryItem.Volume ,
-                AFarm, 'NRDV');
-              WriteIntegerValueFromGlobalFormula(ADeliveryItem.Rank ,
-                AFarm, 'NRDR',
-                procedure (Value: integer)
-                begin
-                  if Value <= 0 then
-                  begin
-                    frmErrorsAndWarnings.AddError(Model, StrThePriorityForNon,
-                      AFarm.FarmName);
-                  end;
-                end);
-              case ADeliveryItem.NonRoutedDeliveryTypeOwhm2 of
-                nrdt2FarmDemand:
-                  begin
-                    WriteInteger(0);
-                  end;
-                nrdt2Discharged:
-                  begin
-                    WriteInteger(1);
-                  end;
-                nrdt2Stored:
-                  begin
-                    WriteInteger(2);
-                  end;
-                nrdt2Infiltrate:
-                  begin
-                    WriteIntegerValueFromGlobalFormula(ADeliveryItem.VirtualFarm ,
-                      AFarm, 'NRDU',
-                      procedure (Value: integer)
-                      begin
-                        if Value < 10 then
-                        begin
-                          frmErrorsAndWarnings.AddError(Model, StrNonroutedDelivery,
-                            AFarm.FarmName);
-                        end;
-                      end);
-                  end;
-                else
-                  begin
-                    Assert(False);
-                  end;
-              end;
-            end;
-            for DeliveryIndex := AFarm.DeliveryParamCollection.Count to FNrdTypes - 1 do
-            begin
-              WriteFloatCondensed(0);
-              WriteFreeInteger(DeliveryIndex+1);
-              WriteFreeInteger(0);
-            end;
-            Inc(FarmID);
-            NewLine;
-          end;
-        end;
-      end
-      else
-      begin
-        FarmID := 1;
-        for FarmIndex := 0 to Model.Farms.Count - 1 do
-        begin
-          AFarm := Model.Farms[FarmIndex];
-          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-          begin
-            WriteInteger(FarmID);
-            for DeliveryIndex := 0 to FNrdTypes - 1 do
-            begin
-              WriteFloatCondensed(0);
-              WriteFreeInteger(DeliveryIndex+1);
-              WriteFreeInteger(0);
-            end;
-            Inc(FarmID);
-            NewLine;
-          end;
-
-          Assert(FarmID = AFarm.FarmId);
-          WriteInteger(AFarm.FarmId);
-
-          for DeliveryIndex := 0 to AFarm.DeliveryParamCollection.Count - 1 do
-          begin
-            ADeliveryCollection := AFarm.DeliveryParamCollection
-              [DeliveryIndex].DeliveryParam;
-            ADeliveryItem := ADeliveryCollection.First
-               as TNonRoutedDeliveryParameterItem;
-            WriteFloatValueFromGlobalFormula(ADeliveryItem.Volume ,
-              AFarm, 'NRDV');
-            WriteIntegerValueFromGlobalFormula(ADeliveryItem.Rank ,
-              AFarm, 'NRDR',
-              procedure (Value: integer)
-              begin
-                if Value <= 0 then
-                begin
-                  frmErrorsAndWarnings.AddError(Model, StrThePriorityForNon,
-                    AFarm.FarmName);
-                end;
-              end);
-            case ADeliveryItem.NonRoutedDeliveryTypeOwhm2 of
-              nrdt2FarmDemand:
-                begin
-                  WriteInteger(0);
-                end;
-              nrdt2Discharged:
-                begin
-                  WriteInteger(1);
-                end;
-              nrdt2Stored:
-                begin
-                  WriteInteger(2);
-                end;
-              nrdt2Infiltrate:
-                begin
-                  WriteIntegerValueFromGlobalFormula(ADeliveryItem.VirtualFarm ,
-                    AFarm, 'NRDU',
-                    procedure (Value: integer)
-                    begin
-                      if Value < 10 then
-                      begin
-                        frmErrorsAndWarnings.AddError(Model, StrNonroutedDelivery,
-                          AFarm.FarmName);
-                      end;
-                    end);
-                end;
-              else
-                begin
-                  Assert(False);
-                end;
-            end;
-          end;
-          for DeliveryIndex := AFarm.DeliveryParamCollection.Count to FNrdTypes - 1 do
-          begin
-            WriteFloatCondensed(0);
-            WriteFreeInteger(DeliveryIndex+1);
-            WriteFreeInteger(0);
-          end;
-
-          Inc(FarmID);
-          NewLine;
-        end;
-
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
       end;
-    finally
-      FWriteLocation := wlMain;
     end;
   end;
 end;
@@ -9828,10 +10081,101 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  Formula: string;
-  SoilIndex: Integer;
   SoilID: Integer;
   ASoil: TSoilItem;
+  procedure WriteListData;
+  var
+    SoilIndex: Integer;
+    procedure WriteItem(const Formula, ErrorMessage: string);
+    var
+      Value: double;
+      PestValues: TPestValues;
+    begin
+      PestValues.Formula := Formula;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := '';
+      PestValues.PestSeriesMethod := ppmMultiply;
+      PestValues.FormulaErrorMessage := ErrorMessage;
+      PestValues.ErrorObjectName := ASoil.SoilName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, ASoil,
+          PestValues.FormulaErrorMessage);
+      end;
+    end;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      for SoilIndex := 0 to FFmpSoils.Count - 1 do
+      begin
+        ASoil := FFmpSoils[SoilIndex];
+        SoilID := SoilIndex + 1;
+        WriteInteger(SoilID);
+        case ASoil.SoilType of
+          stSand:
+            begin
+              WriteString(' SAND')
+            end;
+          stSandyLoam:
+            begin
+              WriteString(' SANDYLOAM')
+            end;
+          stSilt:
+            begin
+              WriteString(' SILT')
+            end;
+          stSiltyClay:
+            begin
+              WriteString(' SILTYCLAY')
+            end;
+          stOther:
+            begin
+//              Formula := ASoil.ACoeff;
+              WriteItem(ASoil.ACoeff, 'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
+//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+//                'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
+
+//              Formula := ASoil.BCoeff;
+//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+//                'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
+              WriteItem(ASoil.BCoeff, 'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
+
+//              Formula := ASoil.CCoeff;
+//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+//                'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
+              WriteItem(ASoil.CCoeff, 'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
+
+//              Formula := ASoil.DCoeff;
+//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+//                'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
+              WriteItem(ASoil.DCoeff, 'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
+
+//              Formula := ASoil.ECoeff;
+//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
+//                'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
+              WriteItem(ASoil.ECoeff, 'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
+            end;
+          else
+            Assert(False)
+        end;
+        NewLine;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if FSoil4.Coefficient.FarmOption = foNotUsed then
   begin
@@ -9873,55 +10217,17 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
-      for SoilIndex := 0 to FFmpSoils.Count - 1 do
-      begin
-        ASoil := FFmpSoils[SoilIndex];
-        SoilID := SoilIndex + 1;
-        WriteInteger(SoilID);
-        case ASoil.SoilType of
-          stSand:
-            begin
-              WriteString(' SAND')
-            end;
-          stSandyLoam:
-            begin
-              WriteString(' SANDYLOAM')
-            end;
-          stSilt:
-            begin
-              WriteString(' SILT')
-            end;
-          stSiltyClay:
-            begin
-              WriteString(' SILTYCLAY')
-            end;
-          stOther:
-            begin
-              Formula := ASoil.ACoeff;
-              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
-              Formula := ASoil.BCoeff;
-              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
-              Formula := ASoil.CCoeff;
-              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
-              Formula := ASoil.DCoeff;
-              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
-              Formula := ASoil.ECoeff;
-              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-                'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
-            end;
-          else
-            Assert(False)
-        end;
-        NewLine;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
       end;
-    finally
-      FWriteLocation := wlMain;
     end;
   end;
 end;
@@ -10537,10 +10843,56 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  SoilIndex: Integer;
   ASoil: TSoilItem;
   SoilID: Integer;
-  Formula: string;
+  procedure WriteListData;
+  var
+    SoilIndex: Integer;
+    Value: double;
+    PestValues: TPestValues;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      for SoilIndex := 0 to FFmpSoils.Count - 1 do
+      begin
+        ASoil := FFmpSoils[SoilIndex];
+        SoilID := SoilIndex + 1;
+        WriteInteger(SoilID);
+//        Formula := ASoil.SurfVK;
+
+        PestValues.Formula := ASoil.SurfVK;
+
+        PestValues.PestName := '';
+        PestValues.PestSeriesName := '';
+        PestValues.PestSeriesMethod := ppmMultiply;
+        PestValues.FormulaErrorMessage := 'Invalid formula for surface vertical hydraulic conductivity in soil ' + ASoil.SoilName;
+        PestValues.ErrorObjectName := ASoil.SoilName;
+
+        AdjustFormulaForPest(PestValues);
+
+        if WritingTemplate and PestValues.ParameterUsed then
+        begin
+          Value := GetFormulaValue(PestValues);
+
+          WritePestTemplateFormula(Value, PestValues.PestName,
+            PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+            nil);
+        end
+        else
+        begin
+          WriteFloatValueFromGlobalFormula(PestValues.Formula, ASoil,
+            PestValues.FormulaErrorMessage);
+        end;
+
+
+//        WriteFloatValueFromGlobalFormula(Formula, ASoil,
+//          'Invalid formula for surface vertical hydraulic conductivity in soil ' + ASoil.SoilName);
+        NewLine;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if FSoil4.SurfVertK.FarmOption = foNotUsed then
   begin
@@ -10591,20 +10943,17 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-        for SoilIndex := 0 to FFmpSoils.Count - 1 do
-        begin
-          ASoil := FFmpSoils[SoilIndex];
-          SoilID := SoilIndex + 1;
-          WriteInteger(SoilID);
-          Formula := ASoil.SurfVK;
-          WriteFloatValueFromGlobalFormula(Formula, ASoil,
-            'Invalid formula for surface vertical hydraulic conductivity in soil ' + ASoil.SoilName);
-          NewLine;
+      WriteListData;
+      if FPestParamUsed then
+      begin
+        WritingTemplate := True;
+        try
+          GetFileStreamName(RequiredValues.WriteLocation);
+          WriteListData;
+        finally
+          FPestParamUsed := False;
+          WritingTemplate := False;
         end;
-      finally
-        FWriteLocation := wlMain;
       end;
     end;
   end;

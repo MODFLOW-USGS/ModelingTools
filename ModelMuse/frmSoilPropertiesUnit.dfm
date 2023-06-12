@@ -5,8 +5,8 @@ inherited frmSoilProperties: TfrmSoilProperties
   ClientHeight = 562
   ClientWidth = 788
   OnResize = FormResize
-  ExplicitWidth = 800
-  ExplicitHeight = 600
+  ExplicitWidth = 804
+  ExplicitHeight = 601
   TextHeight = 18
   object splitterSoil: TSplitter
     Left = 0
@@ -25,8 +25,6 @@ inherited frmSoilProperties: TfrmSoilProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 517
-    ExplicitWidth = 784
     object btnCancel: TBitBtn
       Left = 586
       Top = 6
@@ -64,13 +62,13 @@ inherited frmSoilProperties: TfrmSoilProperties
     Height = 256
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 784
+    ExplicitWidth = 788
     ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 215
       Width = 788
       ExplicitTop = 215
-      ExplicitWidth = 784
+      ExplicitWidth = 788
       inherited lbNumber: TLabel
         Width = 108
         Height = 18
@@ -356,12 +354,12 @@ inherited frmSoilProperties: TfrmSoilProperties
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitWidth = 784
+      ExplicitWidth = 788
       ExplicitHeight = 158
     end
     inherited pnlTop: TPanel
       Width = 788
-      ExplicitWidth = 784
+      ExplicitWidth = 788
       inherited edFormula: TLabeledEdit
         Height = 26
         EditLabel.Width = 57
@@ -396,13 +394,13 @@ inherited frmSoilProperties: TfrmSoilProperties
     Enabled = False
     TabOrder = 3
     ExplicitTop = 261
-    ExplicitWidth = 784
-    ExplicitHeight = 256
+    ExplicitWidth = 788
+    ExplicitHeight = 257
     inherited Panel: TPanel
       Top = 216
       Width = 788
-      ExplicitTop = 215
-      ExplicitWidth = 784
+      ExplicitTop = 216
+      ExplicitWidth = 788
       DesignSize = (
         788
         41)
@@ -451,12 +449,13 @@ inherited frmSoilProperties: TfrmSoilProperties
       Height = 135
       OnExit = frameSoilEffectivePrecipGridExit
       OnButtonClick = frameSoilsGridButtonClick
-      ExplicitWidth = 784
-      ExplicitHeight = 134
+      ExplicitTop = 84
+      ExplicitWidth = 788
+      ExplicitHeight = 135
     end
     inherited pnlTop: TPanel
       Width = 788
-      ExplicitWidth = 784
+      ExplicitWidth = 788
       inherited lblSoil: TLabel
         Width = 233
         Height = 18

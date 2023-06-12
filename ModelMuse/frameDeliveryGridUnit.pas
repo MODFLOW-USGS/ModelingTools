@@ -197,6 +197,9 @@ begin
       Exit;
     end;
 
+    PestUsedOnCol[Ord(dtcStart)] := False;
+    PestUsedOnCol[Ord(dtcEnd)] := False;
+
     seNumberOfDeliveryTypes.AsInteger := MaxCount;
     Grid.BeginUpdate;
     try
@@ -209,25 +212,29 @@ begin
       for OuterIndex := 0 to FirstFarm.DeliveryParamCollection.Count - 1 do
       begin
         DelivItem := FirstFarm.DeliveryParamCollection[OuterIndex];
+        PestUsedOnCol[Ord(dcVolume) + OuterIndex*DeliveryColumns + 2] := True;
+        PestUsedOnCol[Ord(dcRank) + OuterIndex*DeliveryColumns + 2] := False;
+        PestUsedOnCol[Ord(dcHowUsed) + OuterIndex*DeliveryColumns + 2] := False;
+        PestUsedOnCol[Ord(dcVirtualFarm) + OuterIndex*DeliveryColumns + 2] := False;
         for TimeIndex := 0 to DelivItem.DeliveryParam.Count - 1 do
         begin
           TimeItem := DelivItem.DeliveryParam[TimeIndex];
-          Grid.Cells[Ord(dtcStart), TimeIndex+1] := FloatToStr(TimeItem.StartTime);
-          Grid.Cells[Ord(dtcEnd), TimeIndex+1] := FloatToStr(TimeItem.EndTime);
-          Grid.Cells[Ord(dcVolume) + OuterIndex*DeliveryColumns + 2, TimeIndex+1] := TimeItem.Volume;
-          Grid.Cells[Ord(dcRank) + OuterIndex*DeliveryColumns + 2, TimeIndex+1] := TimeItem.Rank;
+          Grid.Cells[Ord(dtcStart), TimeIndex+1+PestRowOffset] := FloatToStr(TimeItem.StartTime);
+          Grid.Cells[Ord(dtcEnd), TimeIndex+1+PestRowOffset] := FloatToStr(TimeItem.EndTime);
+          Grid.Cells[Ord(dcVolume) + OuterIndex*DeliveryColumns + 2, TimeIndex+1+PestRowOffset] := TimeItem.Volume;
+          Grid.Cells[Ord(dcRank)   + OuterIndex*DeliveryColumns + 2, TimeIndex+1+PestRowOffset] := TimeItem.Rank;
           if ModelSelection = msModflowFmp then
           begin
             Grid.ItemIndex[Ord(dcHowUsed) + OuterIndex*DeliveryColumns + 2,
-              TimeIndex+1] := Ord(TimeItem.NonRoutedDeliveryType);
+              TimeIndex+1+PestRowOffset] := Ord(TimeItem.NonRoutedDeliveryType);
           end
           else
           begin
             Grid.ItemIndex[Ord(dcHowUsed) + OuterIndex*DeliveryColumns + 2,
-              TimeIndex+1] := Ord(TimeItem.NonRoutedDeliveryTypeOwhm2);
+              TimeIndex+1+PestRowOffset] := Ord(TimeItem.NonRoutedDeliveryTypeOwhm2);
           end;
           Grid.Cells[Ord(dcVirtualFarm) + OuterIndex*DeliveryColumns + 2,
-            TimeIndex+1] := TimeItem.VirtualFarm;
+            TimeIndex+1+PestRowOffset] := TimeItem.VirtualFarm;
         end;
       end;
     finally
@@ -373,6 +380,7 @@ begin
             Grid.Columns[ColIndex].ButtonUsed := True;
             Grid.Columns[ColIndex].ButtonCaption := StrF;
             Grid.Columns[ColIndex].ButtonWidth := 35;
+            PestUsedOnCol[ColIndex] := True;
           end;
         dcRank:
           begin
@@ -380,6 +388,7 @@ begin
             Grid.Columns[ColIndex].ButtonUsed := True;
             Grid.Columns[ColIndex].ButtonCaption := StrF;
             Grid.Columns[ColIndex].ButtonWidth := 35;
+            PestUsedOnCol[ColIndex] := False;
           end;
         dcHowUsed:
           begin
@@ -387,6 +396,7 @@ begin
             Grid.Columns[ColIndex].ComboUsed := True;
             Grid.Columns[ColIndex].LimitToList := True;
             Grid.Columns[ColIndex].PickList := PickList;
+            PestUsedOnCol[ColIndex] := False;
           end;
         dcVirtualFarm:
           begin
@@ -401,6 +411,7 @@ begin
             Grid.Columns[ColIndex].ButtonUsed := True;
             Grid.Columns[ColIndex].ButtonCaption := StrF;
             Grid.Columns[ColIndex].ButtonWidth := 35;
+            PestUsedOnCol[ColIndex] := False;
           end;
         else
           Assert(False);
@@ -441,6 +452,7 @@ var
   ColStart: Integer;
   DeliveryTimeItem: TNonRoutedDeliveryParameterItem;
   ModelSelection: TModelSelection;
+  DeliveryParam: TNonRoutedDeliveryParameterCollection;
 begin
   ModelSelection := frmGoPhast.ModelSelection;
   for index := 0 to FarmList.Count - 1 do
@@ -463,10 +475,10 @@ begin
       try
         for RowIndex := 1 to seNumber.AsInteger do
         begin
-          if TryStrToFloat(Grid.Cells[Ord(dtcStart), RowIndex], StartTime)
-            and TryStrToFloat(Grid.Cells[Ord(dtcEnd), RowIndex], EndTime) then
+          if TryStrToFloat(Grid.Cells[Ord(dtcStart), RowIndex+PestRowOffset], StartTime)
+            and TryStrToFloat(Grid.Cells[Ord(dtcEnd), RowIndex+PestRowOffset], EndTime) then
           begin
-            Rows.Add(RowIndex);
+            Rows.Add(RowIndex+PestRowOffset);
             StartTimes.Add(StartTime);
             EndTimes.Add(EndTime);
           end;
@@ -519,6 +531,20 @@ begin
         EndTimes.Free;
         Rows.Free;
       end;
+      for DeliveryIndex := 0 to seNumberOfDeliveryTypes.AsInteger - 1 do
+      begin
+        DeliveryItem := Delivery[DeliveryIndex];
+        ColStart := DeliveryIndex*DeliveryColumns+2;
+        DeliveryParam := DeliveryItem.DeliveryParam;
+        if PestMethodAssigned[ColStart+Ord(dcVolume)] then
+        begin
+          DeliveryParam.PestParamMethod := PestMethod[ColStart+Ord(dcVolume)];
+        end;
+        if PestModifierAssigned[ColStart+Ord(dcVolume)] then
+        begin
+          DeliveryParam.PestSeriesParameter := PestModifier[ColStart+Ord(dcVolume)];
+        end;
+      end;
     end;
   end;
 end;
@@ -535,6 +561,8 @@ var
   StressPeriods: TModflowStressPeriods;
 begin
   FirstFormulaColumn := Succ(Ord(dtcEnd));
+  IncludePestAdjustment := True;
+  InitializePestParameters;
   ClearGrid;
   OnValidCell := CheckValidCell;
   Grid.Cells[Ord(dtcStart), 0] := StrStartingTime;

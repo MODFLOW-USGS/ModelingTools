@@ -6,7 +6,8 @@ uses
   Classes, ModflowBoundaryUnit,
   OrderedCollectionUnit, GoPhastTypes, ModflowDrtUnit, ModflowCellUnit,
   Generics.Collections, ModflowFmpBaseClasses, RealListUnit,
-  ModflowFmpAllotmentUnit, System.SysUtils, OrderedCollectionInterfaceUnit;
+  ModflowFmpAllotmentUnit, System.SysUtils, OrderedCollectionInterfaceUnit,
+  ModflowParameterInterfaceUnit;
 
 type
   // FMP data sets 19 or 32.
@@ -191,9 +192,21 @@ type
   //Data Sets 20 and 34
   TSemiRoutedDeliveriesAndReturnFlowCollection = class(TCustomFarmCollection)
   private
+    FUpperLimitPestParamMethod: TPestParamMethod;
+    FLowerLimitPestParamMethod: TPestParamMethod;
+    FLowerLimitPestSeriesParameter: IModflowParameter;
+    FUpperLimitPestSeriesParameter: IModflowParameter;
+    FLowerLimitPestSeriesParameterName: string;
+    FUpperLimitPestSeriesParameterName: string;
     function GetItem(Index: Integer): TSemiRoutedDeliveriesAndRunoffItem;
     procedure SetItem(Index: Integer;
       const Value: TSemiRoutedDeliveriesAndRunoffItem);
+    function GetLowerLimitPestSeriesParameter: string;
+    function GetUpperLimitPestSeriesParameter: string;
+    procedure SetLowerLimitPestParamMethod(const Value: TPestParamMethod);
+    procedure SetPestLowerLimitSeriesParameter(const Value: string);
+    procedure SetPestUpperLimitSeriesParameter(const Value: string);
+    procedure SetUpperLimitPestParamMethod(const Value: TPestParamMethod);
   protected
     // @name returns TSemiRoutedDeliveriesAndRunoffItem
     class function ItemClass: TBoundaryItemClass; override;
@@ -202,6 +215,19 @@ type
     property Items[Index: Integer]: TSemiRoutedDeliveriesAndRunoffItem
       read GetItem write SetItem; default;
     procedure Loaded;
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+  published
+    property LowerLimitPestSeriesParameter: string
+      read GetLowerLimitPestSeriesParameter
+      write SetPestLowerLimitSeriesParameter;
+    property LowerLimitPestParamMethod: TPestParamMethod
+      read FLowerLimitPestParamMethod write SetLowerLimitPestParamMethod;
+    property UpperLimitPestSeriesParameter: string
+      read GetUpperLimitPestSeriesParameter
+      write SetPestUpperLimitSeriesParameter;
+    property UpperLimitPestParamMethod: TPestParamMethod
+      read FUpperLimitPestParamMethod write SetUpperLimitPestParamMethod;
   end;
 
   TSrCollList = TList<TSemiRoutedDeliveriesAndReturnFlowCollection>;
@@ -1028,10 +1054,61 @@ begin
   result := inherited Add as TSemiRoutedDeliveriesAndRunoffItem;
 end;
 
+procedure TSemiRoutedDeliveriesAndReturnFlowCollection.Assign(
+  Source: TPersistent);
+var
+  OtherFarmCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
+begin
+  if Source is TSemiRoutedDeliveriesAndReturnFlowCollection then
+  begin
+    OtherFarmCollection := TSemiRoutedDeliveriesAndReturnFlowCollection(Source);
+    LowerLimitPestSeriesParameter := OtherFarmCollection.LowerLimitPestSeriesParameter;
+    LowerLimitPestParamMethod := OtherFarmCollection.LowerLimitPestParamMethod;
+    UpperLimitPestSeriesParameter := OtherFarmCollection.UpperLimitPestSeriesParameter;
+    UpperLimitPestParamMethod := OtherFarmCollection.UpperLimitPestParamMethod;
+  end;
+  inherited;
+end;
+
 function TSemiRoutedDeliveriesAndReturnFlowCollection.GetItem(
   Index: Integer): TSemiRoutedDeliveriesAndRunoffItem;
 begin
   result := inherited Items[index] as TSemiRoutedDeliveriesAndRunoffItem
+end;
+
+function TSemiRoutedDeliveriesAndReturnFlowCollection.GetLowerLimitPestSeriesParameter: string;
+begin
+  if FLowerLimitPestSeriesParameter <> nil then
+  begin
+    FLowerLimitPestSeriesParameterName := FLowerLimitPestSeriesParameter.ParameterName;
+  end;
+  result := FLowerLimitPestSeriesParameterName;
+end;
+
+function TSemiRoutedDeliveriesAndReturnFlowCollection.GetUpperLimitPestSeriesParameter: string;
+begin
+  if FUpperLimitPestSeriesParameter <> nil then
+  begin
+    FUpperLimitPestSeriesParameterName := FUpperLimitPestSeriesParameter.ParameterName;
+  end;
+  result := FUpperLimitPestSeriesParameterName;
+end;
+
+function TSemiRoutedDeliveriesAndReturnFlowCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  OtherFarmCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
+begin
+  result := (AnOrderedCollection is TSemiRoutedDeliveriesAndReturnFlowCollection)
+    and inherited;
+  if result then
+  begin
+    OtherFarmCollection := TSemiRoutedDeliveriesAndReturnFlowCollection(AnOrderedCollection);
+    result := (LowerLimitPestSeriesParameter = OtherFarmCollection.LowerLimitPestSeriesParameter)
+      and (LowerLimitPestParamMethod = OtherFarmCollection.LowerLimitPestParamMethod)
+      and (UpperLimitPestSeriesParameter = OtherFarmCollection.UpperLimitPestSeriesParameter)
+      and (UpperLimitPestParamMethod = OtherFarmCollection.UpperLimitPestParamMethod)
+  end;
 end;
 
 class function TSemiRoutedDeliveriesAndReturnFlowCollection.ItemClass:
@@ -1054,6 +1131,78 @@ procedure TSemiRoutedDeliveriesAndReturnFlowCollection.SetItem(Index: Integer;
   const Value: TSemiRoutedDeliveriesAndRunoffItem);
 begin
   inherited Items[index] := Value;
+end;
+
+procedure TSemiRoutedDeliveriesAndReturnFlowCollection.SetLowerLimitPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FLowerLimitPestParamMethod <> Value then
+  begin
+    FLowerLimitPestParamMethod := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TSemiRoutedDeliveriesAndReturnFlowCollection.SetPestLowerLimitSeriesParameter(
+  const Value: string);
+begin
+  if FLowerLimitPestSeriesParameterName <> Value then
+  begin
+    FLowerLimitPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FLowerLimitPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FLowerLimitPestSeriesParameter = nil then
+      begin
+        FLowerLimitPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FLowerLimitPestSeriesParameter := nil;
+    end;
+  end;
+end;
+
+procedure TSemiRoutedDeliveriesAndReturnFlowCollection.SetPestUpperLimitSeriesParameter(
+  const Value: string);
+begin
+  if FUpperLimitPestSeriesParameterName <> Value then
+  begin
+    FUpperLimitPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FUpperLimitPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FUpperLimitPestSeriesParameter = nil then
+      begin
+        FUpperLimitPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FUpperLimitPestSeriesParameter := nil;
+    end;
+  end;
+end;
+
+procedure TSemiRoutedDeliveriesAndReturnFlowCollection.SetUpperLimitPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FUpperLimitPestParamMethod <> Value then
+  begin
+    FUpperLimitPestParamMethod := Value;
+    InvalidateModel;
+  end;
 end;
 
 { TNonRoutedDeliveryParameterItem }

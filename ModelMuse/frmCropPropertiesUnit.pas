@@ -699,20 +699,16 @@ var
 begin
   if frmGoPhast.ModelSelection = msModflowFmp then
   begin
+    ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUse) as TJvPageIndexNode;
+    ANode.PageIndex := jvspEvapFractions.PageIndex;
+    ANode.Data := ACrop.EvapFractionsCollection;
+
     if FFarmProcess.RootingDepth = rdSpecified then
     begin
       ANode := jvpltvMain.Items.AddChild(CropNode, StrRootingDepth) as TJvPageIndexNode;
       ANode.PageIndex := jvspOwhmCollection.PageIndex;
       ANode.Data := ACrop.FmpRootDepthCollection;
     end;
-  end;
-//  else
-
-  if frmGoPhast.ModelSelection = msModflowFmp then
-  begin
-    ANode := jvpltvMain.Items.AddChild(CropNode, StrConsumptiveUse) as TJvPageIndexNode;
-    ANode.PageIndex := jvspEvapFractions.PageIndex;
-    ANode.Data := ACrop.EvapFractionsCollection;
 
     if FFarmProcess.FractionOfInefficiencyLosses = filSpecified then
     begin

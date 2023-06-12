@@ -214,7 +214,7 @@ end;
 
 function TframeFormulaGrid.GetPestUsedOnCol(ACol: Integer): Boolean;
 begin
-  if ACol < Length(FPestUsedOnCol) then
+  if (ACol < Length(FPestUsedOnCol)) and (ACol >= 0) then
   begin
     result := FPestUsedOnCol[ACol];
   end
@@ -533,7 +533,11 @@ var
   Column: TRbwColumn4;
 begin
   inherited;
-  if FPestUsedOnCol[ACol] and (ARow >= 1) then
+  if ComponentState * [csLoading,csReading] <> [] then
+  begin
+    Exit
+  end;
+  if PestUsedOnCol[ACol] and (ARow >= 1) and not Grid.Drawing then
   begin
     Column := Grid.Columns[ACol];
     if (ARow <= PestRowOffset)  then
@@ -554,6 +558,12 @@ begin
       Column.ButtonUsed := True;
       Column.LimitToList := False;
     end;
+  end;
+  if IncludePestAdjustment
+    and (ARow in [PestModifierRow, PestMethodRow])
+    and not PestUsedOnCol[ACol] then
+  begin
+    CanSelect := False;
   end;
 end;
 

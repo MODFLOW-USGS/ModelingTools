@@ -80,7 +80,8 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit;
+  frmGoPhastUnit, frmConvertChoiceUnit, frmFormulaUnit, PhastModelInterfaceUnit,
+  ModflowParameterInterfaceUnit;
 
 resourcestring
   StrErrorInFormulaS = 'Error in formula: %s';
@@ -149,6 +150,7 @@ var
   TempCompiler: TRbwParser;
   CompiledFormula: TExpression;
   ResultType: TRbwDataType;
+  Parameter: IModflowParameter;
 begin
   // CreateBoundaryFormula creates an Expression for a boundary condition
   // based on the text in DataGrid at ACol, ARow. Orientation, and EvaluatedAt
@@ -166,12 +168,20 @@ begin
     end
   end;
   CompiledFormula := TempCompiler.CurrentExpression;
+  if DataGrid = frameSoils.Grid then
+  begin
+    Parameter := IGlobalModelForOrderedCollection.GetPestParameterByNameI(Formula);
+  end
+  else
+  begin
+    Parameter := nil;
+  end;
 
   ResultType := rdtDouble;
 
   if (ResultType = CompiledFormula.ResultType) or
     ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
-      then
+    or (Parameter <> nil) then
   begin
     DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
   end

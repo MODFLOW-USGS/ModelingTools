@@ -709,38 +709,40 @@ begin
       begin
         AnItem := DelivReturns[ItemIndex];
         LinkedStream := AnItem.LinkedStream;
-        Grid.Cells[Ord(dtcStart), ItemIndex + 1] := FloatToStr(AnItem.StartTime);
-        Grid.Cells[Ord(dtcEnd), ItemIndex + 1] := FloatToStr(AnItem.EndTime);
+        Grid.Cells[Ord(dtcStart), ItemIndex + 1+PestRowOffset] := FloatToStr(AnItem.StartTime);
+        Grid.Cells[Ord(dtcEnd), ItemIndex + 1+PestRowOffset] := FloatToStr(AnItem.EndTime);
         case LinkedStream.DiversionChoice of
           rtObject:
             begin
               DiversionObject := LinkedStream.DiversionObject;
               if DiversionObject.ScreenObject = nil then
               begin
-                Grid.ItemIndex[Ord(docObject) + 2, ItemIndex + 1] := 0;
+                Grid.ItemIndex[Ord(docObject) + 2, ItemIndex + 1+PestRowOffset] := 0;
               end
               else
               begin
-                Grid.Cells[Ord(docObject) + 2, ItemIndex + 1] := DiversionObject.ObjectName;
+                Grid.Cells[Ord(docObject) + 2, ItemIndex + 1+PestRowOffset] := DiversionObject.ObjectName;
               end;
-              Grid.Objects[Ord(docObject) + 2, ItemIndex + 1] := DiversionObject.ScreenObject;
-              Grid.ItemIndex[Ord(docChoice) + 2, ItemIndex + 1] := Ord(DiversionObject.DiversionPosition);
+              Grid.Objects[Ord(docObject) + 2, ItemIndex + 1+PestRowOffset] := DiversionObject.ScreenObject;
+              Grid.ItemIndex[Ord(docChoice) + 2, ItemIndex + 1+PestRowOffset] := Ord(DiversionObject.DiversionPosition);
               if DiversionObject.DiversionPosition = dpMiddle then
               begin
-                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1] := IntToStr(DiversionObject.DiversionVertex);
+                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionObject.DiversionVertex);
               end
               else
               begin
-                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1] := '';
+                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1+PestRowOffset] := '';
               end;
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                Grid.Cells[Ord(docFraction) + 2, ItemIndex + 1] := AnItem.Frac;
+                Grid.Cells[Ord(docFraction) + 2, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
                 if DiversionType = dtDiversion then
                 begin
-                  Grid.Cells[Ord(docLowerLimit) + 2, ItemIndex + 1] := AnItem.LowerLimit;
-                  Grid.Cells[Ord(docUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
+                  Grid.Cells[Ord(docLowerLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(docUpperLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
+                  PestUsedOnCol[Ord(docLowerLimit) + 2] := True;
+                  PestUsedOnCol[Ord(docUpperLimit) + 2] := True;
                 end;
               end;
             {$ENDIF}
@@ -748,16 +750,18 @@ begin
           rtLocation:
             begin
               DiversionLocation := LinkedStream.DiversionLocation;
-              Grid.Cells[Ord(dlcX) + 2, ItemIndex + 1] := FloatToStr(DiversionLocation.X);
-              Grid.Cells[Ord(dlcY) + 2, ItemIndex + 1] := FloatToStr(DiversionLocation.Y);
+              Grid.Cells[Ord(dlcX) + 2, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.X);
+              Grid.Cells[Ord(dlcY) + 2, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.Y);
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                Grid.Cells[Ord(dlFraction) + 2, ItemIndex + 1] := AnItem.Frac;
+                Grid.Cells[Ord(dlFraction) + 2, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
                 if DiversionType = dtDiversion then
                 begin
-                  Grid.Cells[Ord(dlLowerLimit) + 2, ItemIndex + 1] := AnItem.LowerLimit;
-                  Grid.Cells[Ord(dlUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
+                  Grid.Cells[Ord(dlLowerLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(dlUpperLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
+                  PestUsedOnCol[Ord(dlLowerLimit) + 2] := True;
+                  PestUsedOnCol[Ord(dlUpperLimit) + 2] := True;
                 end;
               end;
             {$ENDIF}
@@ -765,16 +769,18 @@ begin
           rtCell:
             begin
               DiversionCell := LinkedStream.DiversionCell;
-              Grid.Cells[Ord(dccRow) + 2, ItemIndex + 1] := IntToStr(DiversionCell.Row);
-              Grid.Cells[Ord(dccColumn) + 2, ItemIndex + 1] := IntToStr(DiversionCell.Col);
+              Grid.Cells[Ord(dccRow) + 2, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Row);
+              Grid.Cells[Ord(dccColumn) + 2, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Col);
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                Grid.Cells[Ord(dccFraction) + 2, ItemIndex + 1] := AnItem.Frac;
+                Grid.Cells[Ord(dccFraction) + 2, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
                 if DiversionType = dtDiversion then
                 begin
-                  Grid.Cells[Ord(dccLowerLimit) + 2, ItemIndex + 1] := AnItem.LowerLimit;
-                  Grid.Cells[Ord(dccUpperLimit) + 2, ItemIndex + 1] := AnItem.UpperLimit;
+                  Grid.Cells[Ord(dccLowerLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(dccUpperLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
+                  PestUsedOnCol[Ord(dccLowerLimit) + 2] := True;
+                  PestUsedOnCol[Ord(dccUpperLimit) + 2] := True;
                 end;
               end;
             {$ENDIF}
@@ -914,6 +920,10 @@ var
 begin
   LocalModel := frmGoPhast.PhastModel;
   comboSfrObjects.Items.BeginUpdate;
+
+  IncludePestAdjustment := True;
+  InitializePestParameters;
+
   try
     comboSfrObjects.Items.Clear;
     if LocalModel.SfrIsSelected or LocalModel.SwrIsSelected then
@@ -962,6 +972,7 @@ begin
       Grid.Columns[ColIndex].AutoAdjustColWidths := True;
       Grid.Columns[ColIndex].AutoAdjustRowHeights := True;
       Grid.Columns[ColIndex].WordWrapCaptions := True;
+      PestUsedOnCol[ColIndex] := False;
     end;
     if LocalModel.ModelSelection = msModflowFmp then
     begin

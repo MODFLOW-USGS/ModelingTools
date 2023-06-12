@@ -50,7 +50,6 @@ inherited frameFarmDiversion: TframeFarmDiversion
     Width = 577
     Height = 142
     ColCount = 5
-    OnSelectCell = GridSelectCell
     OnSetEditText = GridSetEditText
     Columns = <
       item
@@ -241,17 +240,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Caption = 'Column'
       Enabled = False
     end
-    object comboSfrObjects: TComboBox [7]
-      Left = 40
-      Top = 27
-      Width = 65
-      Height = 23
-      Style = csDropDownList
-      Enabled = False
-      TabOrder = 1
-      OnChange = comboSfrObjectsChange
-    end
-    object comboPositionChoice: TComboBox [8]
+    object comboPositionChoice: TComboBox [7]
       Left = 80
       Top = 27
       Width = 65
@@ -265,7 +254,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
         'A middle vertex'
         'Last vertex')
     end
-    object rdeVertexNumber: TRbwDataEntry [9]
+    object rdeVertexNumber: TRbwDataEntry [8]
       Left = 118
       Top = 27
       Width = 51
@@ -281,7 +270,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeX: TRbwDataEntry [10]
+    object rdeX: TRbwDataEntry [9]
       Left = 151
       Top = 27
       Width = 51
@@ -297,7 +286,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeY: TRbwDataEntry [11]
+    object rdeY: TRbwDataEntry [10]
       Left = 175
       Top = 27
       Width = 51
@@ -313,7 +302,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeRow: TRbwDataEntry [12]
+    object rdeRow: TRbwDataEntry [11]
       Left = 232
       Top = 27
       Width = 51
@@ -329,7 +318,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeCol: TRbwDataEntry [13]
+    object rdeCol: TRbwDataEntry [12]
       Left = 289
       Top = 27
       Width = 51
@@ -344,6 +333,16 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Min = 1.000000000000000000
       CheckMin = True
       ChangeDisabledColor = True
+    end
+    object comboSfrObjects: TComboBox [13]
+      Left = 40
+      Top = 27
+      Width = 65
+      Height = 23
+      Style = csDropDownList
+      Enabled = False
+      TabOrder = 1
+      OnChange = comboSfrObjectsChange
     end
     inherited edFormula: TLabeledEdit
       Left = 8

@@ -45112,6 +45112,7 @@ var
   AParameter: TModflowSteadyParameter;
 begin
   ParameterNames.Clear;
+  ParameterNames.Add(strNone);
   for ParameterIndex := 0 to ModflowSteadyParameters.Count - 1 do
   begin
     AParameter := ModflowSteadyParameters[ParameterIndex];
