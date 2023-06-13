@@ -2,6 +2,8 @@ inherited frameUzfGwtConcentrations: TframeUzfGwtConcentrations
   inherited rdgConcentrations: TRbwDataGrid4
     ColCount = 6
     FixedCols = 0
+    AutoDistributeText = True
+    AutoIncreaseRowCount = True
     Columns = <
       item
         AutoAdjustRowHeights = True
@@ -158,5 +160,11 @@ inherited frameUzfGwtConcentrations: TframeUzfGwtConcentrations
       64
       64
       64)
+  end
+  inherited pnl1: TPanel
+    inherited btnedInitialConcentration: TssButtonEdit
+      Height = 23
+      ExplicitHeight = 23
+    end
   end
 end

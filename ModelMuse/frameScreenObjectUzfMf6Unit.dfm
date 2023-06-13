@@ -11,10 +11,6 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     DesignSize = (
       454
       46)
-    inherited seNumberOfTimes: TJvSpinEdit
-      Height = 28
-      ExplicitHeight = 28
-    end
     inherited btnDelete: TBitBtn
       Left = 370
       ExplicitLeft = 370
@@ -545,8 +541,8 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Height = 182
         PropagateEnable = False
         Align = alClient
-        ExplicitWidth = 413
-        ExplicitHeight = 212
+        ExplicitLeft = 127
+        ExplicitTop = -2
       end
     end
   end

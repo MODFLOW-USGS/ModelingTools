@@ -155,6 +155,7 @@ var
   TimeIndex: Integer;
   TimeItem: TNonRoutedDeliveryParameterItem;
   ModelSelection: TModelSelection;
+  DeliveryParam: TNonRoutedDeliveryParameterCollection;
 begin
   ModelSelection := frmGoPhast.ModelSelection;
   if ModelSelection = msModflowFmp then
@@ -216,9 +217,15 @@ begin
         PestUsedOnCol[Ord(dcRank) + OuterIndex*DeliveryColumns + 2] := False;
         PestUsedOnCol[Ord(dcHowUsed) + OuterIndex*DeliveryColumns + 2] := False;
         PestUsedOnCol[Ord(dcVirtualFarm) + OuterIndex*DeliveryColumns + 2] := False;
-        for TimeIndex := 0 to DelivItem.DeliveryParam.Count - 1 do
+
+        DeliveryParam := DelivItem.DeliveryParam;
+        PestMethod[Ord(dcVolume) + OuterIndex*DeliveryColumns + 2] := DeliveryParam.PestParamMethod;
+        PestModifier[Ord(dcVolume) + OuterIndex*DeliveryColumns + 2] := DeliveryParam.PestSeriesParameter;
+
+
+        for TimeIndex := 0 to DeliveryParam.Count - 1 do
         begin
-          TimeItem := DelivItem.DeliveryParam[TimeIndex];
+          TimeItem := DeliveryParam[TimeIndex];
           Grid.Cells[Ord(dtcStart), TimeIndex+1+PestRowOffset] := FloatToStr(TimeItem.StartTime);
           Grid.Cells[Ord(dtcEnd), TimeIndex+1+PestRowOffset] := FloatToStr(TimeItem.EndTime);
           Grid.Cells[Ord(dcVolume) + OuterIndex*DeliveryColumns + 2, TimeIndex+1+PestRowOffset] := TimeItem.Volume;
@@ -572,6 +579,7 @@ begin
   StressPeriods.FillPickListWithEndTimes(Grid, Ord(dtcEnd));
   seNumberOfDeliveryTypes.AsInteger := 0;
   seNumber.AsInteger := 0;
+  seNumberChange(nil);
   LayoutMultiRowEditControls;
 end;
 

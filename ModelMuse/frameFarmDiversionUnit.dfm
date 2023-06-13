@@ -240,21 +240,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Caption = 'Column'
       Enabled = False
     end
-    object comboPositionChoice: TComboBox [7]
-      Left = 80
-      Top = 27
-      Width = 65
-      Height = 23
-      Style = csDropDownList
-      Enabled = False
-      TabOrder = 2
-      OnChange = comboPositionChoiceChange
-      Items.Strings = (
-        'First vertex'
-        'A middle vertex'
-        'Last vertex')
-    end
-    object rdeVertexNumber: TRbwDataEntry [8]
+    object rdeVertexNumber: TRbwDataEntry [7]
       Left = 118
       Top = 27
       Width = 51
@@ -270,7 +256,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeX: TRbwDataEntry [9]
+    object rdeX: TRbwDataEntry [8]
       Left = 151
       Top = 27
       Width = 51
@@ -286,7 +272,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeY: TRbwDataEntry [10]
+    object rdeY: TRbwDataEntry [9]
       Left = 175
       Top = 27
       Width = 51
@@ -302,7 +288,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeRow: TRbwDataEntry [11]
+    object rdeRow: TRbwDataEntry [10]
       Left = 232
       Top = 27
       Width = 51
@@ -318,7 +304,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeCol: TRbwDataEntry [12]
+    object rdeCol: TRbwDataEntry [11]
       Left = 289
       Top = 27
       Width = 51
@@ -334,7 +320,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object comboSfrObjects: TComboBox [13]
+    object comboSfrObjects: TComboBox [12]
       Left = 40
       Top = 27
       Width = 65
@@ -343,6 +329,20 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Enabled = False
       TabOrder = 1
       OnChange = comboSfrObjectsChange
+    end
+    object comboPositionChoice: TComboBox [13]
+      Left = 80
+      Top = 27
+      Width = 65
+      Height = 23
+      Style = csDropDownList
+      Enabled = False
+      TabOrder = 2
+      OnChange = comboPositionChoiceChange
+      Items.Strings = (
+        'First vertex'
+        'A middle vertex'
+        'Last vertex')
     end
     inherited edFormula: TLabeledEdit
       Left = 8

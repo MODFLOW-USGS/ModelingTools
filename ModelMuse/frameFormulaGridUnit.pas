@@ -472,14 +472,20 @@ begin
   end;
   if Value then
   begin
-    Grid.UseSpecialFormat[ACol,PestModifierRow] := True;
-    Grid.UseSpecialFormat[ACol,PestMethodRow] := True;
+    if IncludePestAdjustment then
+    begin
+      Grid.UseSpecialFormat[ACol,PestModifierRow] := True;
+      Grid.UseSpecialFormat[ACol,PestMethodRow] := True;
+    end;
     FPestUsedOnCol[ACol] := True;
   end
   else
   begin
-    Grid.UseSpecialFormat[ACol,PestModifierRow] := False;
-    Grid.UseSpecialFormat[ACol,PestMethodRow] := False;
+    if IncludePestAdjustment then
+    begin
+      Grid.UseSpecialFormat[ACol,PestModifierRow] := False;
+      Grid.UseSpecialFormat[ACol,PestMethodRow] := False;
+    end;
     FPestUsedOnCol[ACol] := False;
   end;
 end;

@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabNonRoutedDelivery
+    ActivePage = tabSwAllotment
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -92,7 +92,7 @@ inherited frameFarm: TframeFarm
           Width = 185
           Height = 24
           EditLabel.Width = 63
-          EditLabel.Height = 16
+          EditLabel.Height = 24
           EditLabel.Caption = 'WBS name'
           LabelPosition = lpRight
           TabOrder = 2
@@ -1515,10 +1515,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited comboPositionChoice: TComboBox
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeVertexNumber: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1540,6 +1536,10 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited comboSfrObjects: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited comboPositionChoice: TComboBox
             Height = 24
             ExplicitHeight = 24
           end
@@ -1667,10 +1667,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited comboPositionChoice: TComboBox
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeVertexNumber: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1692,6 +1688,10 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited comboSfrObjects: TComboBox
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited comboPositionChoice: TComboBox
             Height = 24
             ExplicitHeight = 24
           end
@@ -1852,11 +1852,11 @@ inherited frameFarm: TframeFarm
                 Height = 16
                 ExplicitHeight = 16
               end
-              inherited comboPositionChoice: TComboBox
+              inherited comboSfrObjects: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end
-              inherited comboSfrObjects: TComboBox
+              inherited comboPositionChoice: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end
@@ -2200,11 +2200,11 @@ inherited frameFarm: TframeFarm
                 Height = 16
                 ExplicitHeight = 16
               end
-              inherited comboPositionChoice: TComboBox
+              inherited comboSfrObjects: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end
-              inherited comboSfrObjects: TComboBox
+              inherited comboPositionChoice: TComboBox
                 Height = 24
                 ExplicitHeight = 24
               end
@@ -2532,6 +2532,7 @@ inherited frameFarm: TframeFarm
         end
         inherited pnlTop: TPanel
           Width = 577
+          ExplicitTop = -6
           ExplicitWidth = 577
           inherited edFormula: TLabeledEdit
             Height = 24

@@ -9953,13 +9953,17 @@ const
 //                were not properly renamed when opening old ModelMuse files
 //                containing data sets for regions.
 //    '5.1.1.29'
+//    '5.1.1.30' Bug fix: Fixed pasting of GWT concentrations in the
+//                Object Properties dialog box.
+//    '5.1.1.31' Bug fix: Fixed pasting data into the Observation Comparisons
+//                dialog box.
 
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.29';
+  IIModelVersion = '5.1.1.31';
 
 function IModelVersion: string;
 begin

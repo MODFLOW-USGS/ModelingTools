@@ -3286,15 +3286,16 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: double;
-  FarmIndex: Integer;
   AFarm: TFarm;
   ADelivery: TSemiRoutedDeliveriesAndRunoffItem;
   ISRD: Integer;
   SrdCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
   SegmentReach: TSegmentReach;
   procedure WriteDelivery(ADelivery: TSemiRoutedDeliveriesAndRunoffItem);
+  var
+    Value: double;
+    PestValues: TPestValues;
   begin
     if ADelivery = nil then
     begin
@@ -3307,8 +3308,31 @@ var
       SegmentReach := ADelivery.LinkedStream.SegmentReach;
       WriteInteger(SegmentReach.Segment);
       WriteInteger(SegmentReach.Reach);
-      WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-        AFarm, 'Invalid semi-routed delivery fraction');
+
+
+      PestValues.Formula := ADelivery.Frac;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := SrdCollection.PestSeriesParameter;
+      PestValues.PestSeriesMethod := SrdCollection.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid semi-routed delivery fraction';
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
     end;
   end;
   procedure WriteListData;
@@ -3484,20 +3508,130 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: double;
-  FarmIndex: Integer;
   AFarm: TFarm;
   ADelivery: TSemiRoutedDeliveriesAndRunoffItem;
   ISRD: Integer;
-  SrdIndex: Integer;
   SrdCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
+  procedure WriteDeliveryItem(ADelivery: TSemiRoutedDeliveriesAndRunoffItem);
+  var
+    Value: double;
+    PestValues: TPestValues;
+  begin
+    if ADelivery = nil then
+    begin
+      WriteFloat(RequiredValues.DefaultValue);
+    end
+    else
+    begin
+
+      PestValues.Formula := ADelivery.LowerLimit;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := SrdCollection.LowerLimitPestSeriesParameter;
+      PestValues.PestSeriesMethod := SrdCollection.LowerLimitPestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid semi-routed delivery lower limit';
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+
+//      WriteFloatValueFromGlobalFormula(ADelivery.LowerLimit,
+//        AFarm, 'Invalid semi-routed delivery lower limit');
+    end;
+    NewLine;
+    Inc(ISRD);
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    SrdIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          ISRD := 1;
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            if AFarm.MultiSrDeliveries.Count > 0 then
+            begin
+              for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+              begin
+                SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+
+                WriteInteger(ISRD);
+                ADelivery := SrdCollection.ItemByStartTime(
+                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
+                WriteDeliveryItem(ADelivery);
+              end;
+            end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteFloat(RequiredValues.DefaultValue);
+              NewLine;
+              Inc(ISRD);
+            end;
+          end;
+        end;
+      end
+      else
+      begin
+        ISRD := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+            for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+            begin
+              SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+
+              WriteInteger(ISRD);
+
+              if SrdCollection.Count > 0 then
+              begin
+                ADelivery := SrdCollection.First as TSemiRoutedDeliveriesAndRunoffItem;
+              end
+              else
+              begin
+                ADelivery := nil;
+              end;
+              WriteDeliveryItem(ADelivery);
+            end;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if (FSurfaceWater4.Semi_Routed_Delivery.FarmOption = foNotUsed)
    or (FSurfaceWater4.SemiRoutedDeliveryLowerLimit.FarmOption = foNotUsed) then
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
 
   RequiredValues.WriteLocation := wlSemiRouteDeliveryLowerLimit;
   RequiredValues.DefaultValue := 0;
@@ -3542,9 +3676,79 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
+      end;
+    end;
+  end;
+end;
 
+procedure TModflowFmp4Writer.WriteSemiRoutedDeliveryUpperLimit;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  StartTime: double;
+  AFarm: TFarm;
+  ADelivery: TSemiRoutedDeliveriesAndRunoffItem;
+  ISRD: Integer;
+  SrdCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
+  procedure WriteDelivery(ADelivery: TSemiRoutedDeliveriesAndRunoffItem);
+  var
+    Value: double;
+    PestValues: TPestValues;
+  begin
+    if ADelivery = nil then
+    begin
+      WriteFloat(RequiredValues.DefaultValue);
+    end
+    else
+    begin
+      PestValues.Formula := ADelivery.UpperLimit;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := SrdCollection.UpperLimitPestSeriesParameter;
+      PestValues.PestSeriesMethod := SrdCollection.UpperLimitPestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid semi-routed delivery upper limit';
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+    end;
+    NewLine;
+    Inc(ISRD);
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    SrdIndex: Integer;
+    begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
       if RequiredValues.WriteTransientData then
       begin
         for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
@@ -3565,18 +3769,7 @@ begin
                 WriteInteger(ISRD);
                 ADelivery := SrdCollection.ItemByStartTime(
                   StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-                if ADelivery = nil then
-                begin
-                  WriteFloat(RequiredValues.DefaultValue);
-                end
-                else
-                begin
-  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                  WriteFloatValueFromGlobalFormula(ADelivery.LowerLimit,
-                    AFarm, 'Invalid semi-routed delivery lower limit');
-                end;
-                NewLine;
-                Inc(ISRD);
+                WriteDelivery(ADelivery);
               end;
             end
             else
@@ -3609,47 +3802,22 @@ begin
               begin
                 ADelivery := nil;
               end;
-              if ADelivery = nil then
-              begin
-                WriteFloat(RequiredValues.DefaultValue);
-              end
-              else
-              begin
-                WriteFloatValueFromGlobalFormula(ADelivery.LowerLimit,
-                  AFarm, 'Invalid semi-routed delivery lower limit');
-              end;
-              NewLine;
-              Inc(ISRD);
+              WriteDelivery(ADelivery);
             end;
         end;
       end;
     finally
       FWriteLocation := wlMain;
-    end;
+    end
   end;
-end;
-
-procedure TModflowFmp4Writer.WriteSemiRoutedDeliveryUpperLimit;
-var
-  AFileName: string;
-  RequiredValues: TRequiredValues;
-  UnitConversionScaleFactor: string;
-  ExternalFileName: string;
-  ExternalScaleFileName: string;
-  TimeIndex: Integer;
-  StartTime: double;
-  FarmIndex: Integer;
-  AFarm: TFarm;
-  ADelivery: TSemiRoutedDeliveriesAndRunoffItem;
-  ISRD: Integer;
-  SrdIndex: Integer;
-  SrdCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
 begin
   if (FSurfaceWater4.Semi_Routed_Delivery.FarmOption = foNotUsed)
    or (FSurfaceWater4.SemiRoutedDeliveryUpperLimit.FarmOption = foNotUsed) then
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
 
   RequiredValues.WriteLocation := wlSemiRouteDeliveryUpperLimit;
   RequiredValues.DefaultValue := 1E100;
@@ -3694,9 +3862,89 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
+      end;
+    end;
+  end;
+end;
 
+procedure TModflowFmp4Writer.WriteSemiRoutedReturn;
+var
+  AFileName: string;
+  RequiredValues: TRequiredValues;
+  UnitConversionScaleFactor: string;
+  ExternalFileName: string;
+  ExternalScaleFileName: string;
+  StartTime: double;
+  AFarm: TFarm;
+  ADelivery: TSemiRoutedDeliveriesAndRunoffItem;
+  ISRD: Integer;
+  SrdCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
+  SegmentReach: TSegmentReach;
+  procedure WriteDelivery(ADelivery: TSemiRoutedDeliveriesAndRunoffItem);
+  var
+    Value: double;
+    PestValues: TPestValues;
+  begin
+    if ADelivery = nil then
+    begin
+      WriteInteger(AFarm.FarmId);
+      WriteInteger(0);
+      WriteInteger(0);
+      WriteInteger(0);
+    end
+    else
+    begin
+      WriteInteger(AFarm.FarmId);
+
+      SegmentReach := ADelivery.LinkedStream.SegmentReach;
+      WriteInteger(SegmentReach.Segment);
+      WriteInteger(SegmentReach.Reach);
+
+      PestValues.Formula := ADelivery.Frac;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := SrdCollection.PestSeriesParameter;
+      PestValues.PestSeriesMethod := SrdCollection.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid semi-routed return fraction';
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+    end;
+    NewLine;
+    Inc(ISRD);
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    SrdIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
       if RequiredValues.WriteTransientData then
       begin
         for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
@@ -3708,33 +3956,25 @@ begin
           for FarmIndex := 0 to Model.Farms.Count - 1 do
           begin
             AFarm := Model.Farms[FarmIndex];
-            if AFarm.MultiSrDeliveries.Count > 0 then
+            if AFarm.MultiSrReturns.Count > 0 then
             begin
-              for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+              for SrdIndex := 0 to AFarm.MultiSrReturns.Count - 1 do
               begin
-                SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+                SrdCollection := AFarm.MultiSrReturns[SrdIndex].SemiRouted;
 
                 WriteInteger(ISRD);
                 ADelivery := SrdCollection.ItemByStartTime(
                   StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-                if ADelivery = nil then
-                begin
-                  WriteFloat(RequiredValues.DefaultValue);
-                end
-                else
-                begin
-  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                  WriteFloatValueFromGlobalFormula(ADelivery.UpperLimit,
-                    AFarm, 'Invalid semi-routed delivery upper limit');
-                end;
-                NewLine;
-                Inc(ISRD);
+                WriteDelivery(ADelivery);
               end;
             end
             else
             begin
               WriteInteger(ISRD);
-              WriteFloat(RequiredValues.DefaultValue);
+              WriteInteger(AFarm.FarmId);
+              WriteInteger(0);
+              WriteInteger(0);
+              WriteInteger(0);
               NewLine;
               Inc(ISRD);
             end;
@@ -3747,9 +3987,11 @@ begin
         for FarmIndex := 0 to Model.Farms.Count - 1 do
         begin
           AFarm := Model.Farms[FarmIndex];
-            for SrdIndex := 0 to AFarm.MultiSrDeliveries.Count - 1 do
+          if AFarm.MultiSrReturns.Count > 0 then
+          begin
+            for SrdIndex := 0 to AFarm.MultiSrReturns.Count - 1 do
             begin
-              SrdCollection := AFarm.MultiSrDeliveries[SrdIndex].SemiRouted;
+              SrdCollection := AFarm.MultiSrReturns[SrdIndex].SemiRouted;
 
               WriteInteger(ISRD);
 
@@ -3761,47 +4003,33 @@ begin
               begin
                 ADelivery := nil;
               end;
-              if ADelivery = nil then
-              begin
-                WriteFloat(RequiredValues.DefaultValue);
-              end
-              else
-              begin
-                WriteFloatValueFromGlobalFormula(ADelivery.UpperLimit,
-                  AFarm, 'Invalid semi-routed delivery upper limit');
-              end;
+              WriteDelivery(ADelivery);
+            end;
+          end
+            else
+            begin
+              WriteInteger(ISRD);
+              WriteInteger(AFarm.FarmId);
+              WriteInteger(0);
+              WriteInteger(0);
+              WriteInteger(0);
               NewLine;
               Inc(ISRD);
             end;
         end;
+
       end;
     finally
       FWriteLocation := wlMain;
-    end;
-  end;
+    end
 end;
-
-procedure TModflowFmp4Writer.WriteSemiRoutedReturn;
-var
-  AFileName: string;
-  RequiredValues: TRequiredValues;
-  UnitConversionScaleFactor: string;
-  ExternalFileName: string;
-  ExternalScaleFileName: string;
-  TimeIndex: Integer;
-  StartTime: double;
-  FarmIndex: Integer;
-  AFarm: TFarm;
-  ADelivery: TSemiRoutedDeliveriesAndRunoffItem;
-  ISRD: Integer;
-  SrdIndex: Integer;
-  SrdCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
-  SegmentReach: TSegmentReach;
 begin
   if (FSurfaceWater4.SemiRoutedReturn.FarmOption = foNotUsed) then
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
 
   RequiredValues.WriteLocation := wlSemiRouteReturn;
   RequiredValues.DefaultValue := 0;
@@ -3846,122 +4074,17 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
-
-      if RequiredValues.WriteTransientData then
-      begin
-        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-        begin
-          ISRD := 1;
-          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-          for FarmIndex := 0 to Model.Farms.Count - 1 do
-          begin
-            AFarm := Model.Farms[FarmIndex];
-            if AFarm.MultiSrReturns.Count > 0 then
-            begin
-              for SrdIndex := 0 to AFarm.MultiSrReturns.Count - 1 do
-              begin
-                SrdCollection := AFarm.MultiSrReturns[SrdIndex].SemiRouted;
-
-                WriteInteger(ISRD);
-                ADelivery := SrdCollection.ItemByStartTime(
-                  StartTime) as TSemiRoutedDeliveriesAndRunoffItem;
-                if ADelivery = nil then
-                begin
-                  WriteInteger(AFarm.FarmId);
-                  WriteInteger(0);
-                  WriteInteger(0);
-                  WriteInteger(0);
-                end
-                else
-                begin
-                  WriteInteger(AFarm.FarmId);
-
-  //                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                  SegmentReach := ADelivery.LinkedStream.SegmentReach;
-                  WriteInteger(SegmentReach.Segment);
-                  WriteInteger(SegmentReach.Reach);
-                  WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                    AFarm, 'Invalid semi-routed delivery fraction');
-                end;
-                NewLine;
-                Inc(ISRD);
-              end;
-            end
-            else
-            begin
-              WriteInteger(ISRD);
-              WriteInteger(AFarm.FarmId);
-              WriteInteger(0);
-              WriteInteger(0);
-              WriteInteger(0);
-              NewLine;
-              Inc(ISRD);
-            end;
-          end;
-        end;
-      end
-      else
-      begin
-        ISRD := 1;
-        for FarmIndex := 0 to Model.Farms.Count - 1 do
-        begin
-          AFarm := Model.Farms[FarmIndex];
-          if AFarm.MultiSrReturns.Count > 0 then
-          begin
-            for SrdIndex := 0 to AFarm.MultiSrReturns.Count - 1 do
-            begin
-              SrdCollection := AFarm.MultiSrReturns[SrdIndex].SemiRouted;
-
-              WriteInteger(ISRD);
-
-              if SrdCollection.Count > 0 then
-              begin
-                ADelivery := SrdCollection.First as TSemiRoutedDeliveriesAndRunoffItem;
-              end
-              else
-              begin
-                ADelivery := nil;
-              end;
-              if ADelivery = nil then
-              begin
-                WriteInteger(AFarm.FarmId);
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteInteger(0);
-              end
-              else
-              begin
-                WriteInteger(AFarm.FarmId);
-//                ReturnCell := ADelivery.LinkedStream.ReturnCellLocation(Model);
-                SegmentReach := ADelivery.LinkedStream.SegmentReach;
-                WriteInteger(SegmentReach.Segment);
-                WriteInteger(SegmentReach.Reach);
-                WriteFloatValueFromGlobalFormula(ADelivery.Frac,
-                  AFarm, 'Invalid semi-routed delivery fraction');
-              end;
-              NewLine;
-              Inc(ISRD);
-            end;
-          end
-            else
-            begin
-              WriteInteger(ISRD);
-              WriteInteger(AFarm.FarmId);
-              WriteInteger(0);
-              WriteInteger(0);
-              WriteInteger(0);
-              NewLine;
-              Inc(ISRD);
-            end;
-        end;
-
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
       end;
-    finally
-      FWriteLocation := wlMain;
     end;
   end;
 end;
@@ -6135,9 +6258,8 @@ var
           WriteFloatValueFromGlobalFormula(PestValues.Formula, ASoil,
             PestValues.FormulaErrorMessage);
         end;
-      end;
         NewLine;
-//        end;
+      end;
     finally
       FWriteLocation := wlMain;
     end
@@ -7774,8 +7896,6 @@ var
       begin
         WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
           PestValues.FormulaErrorMessage);
-//        WriteFloatValueFromGlobalFormula(ADeliveryItem.Volume ,
-//          AFarm, 'NRDV');
       end;
 
 
@@ -10993,93 +11113,54 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   FarmID: Integer;
-  FarmIndex: Integer;
   AFarm: TFarm;
-  InnerFarmIndex: Integer;
   AllotmentItem: TAllotmentItem;
   procedure WriteAllotmentItem(AFarm: TFarm; AllotmentItem: TAllotmentItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if AllotmentItem <> nil then
     begin
-      Formula := AllotmentItem.Allotment;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
-        'Invalid surface water allotment formula in ' + AFarm.FarmName);
+      PestValues.Formula := AllotmentItem.Allotment;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := AFarm.SWAllotment.PestSeriesParameter;
+      PestValues.PestSeriesMethod := AFarm.SWAllotment.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid surface water allotment formula in ' + AFarm.FarmName;
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
     end
     else
     begin
       WriteInteger(1);
     end;
   end;
-begin
-  if FAllotments.SurfaceWater.FarmOption = foNotUsed then
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
   begin
-    Exit;
-  end;
-
-  RequiredValues.WriteLocation := wlSwAllotment;
-  RequiredValues.DefaultValue := 1;
-  RequiredValues.DataType := rdtDouble;
-  RequiredValues.DataTypeIndex := 0;
-  RequiredValues.MaxDataTypeIndex := 0;
-  RequiredValues.Comment := 'FMP ALLOTMENTS: SURFACE_WATER';
-  RequiredValues.ErrorID := 'FMP ALLOTMENTS: SURFACE_WATER';
-  RequiredValues.ID := 'SURFACE_WATER';
-  RequiredValues.StaticDataName := '';
-  RequiredValues.WriteTransientData :=
-    (FAllotments.SurfaceWater.FarmOption = foTransient);
-  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := StrInvalidSurfaceWaterallotment;
-  case FAllotments.SurfaceWaterAllotmentMethod of
-    amHeight:
-      begin
-        RequiredValues.Option := 'HEIGHT ';
-      end;
-    amVolume:
-      begin
-        RequiredValues.Option := 'VOLUME ';
-      end;
-    amRate:
-      begin
-        RequiredValues.Option := 'RATE ';
-      end;
-  end;
-  RequiredValues.FarmProperty := FAllotments.SurfaceWater;
-
-  if RequiredValues.FarmProperty.ExternalFileName = '' then
-  begin
-    AFileName := GetFileStreamName(wlSwAllotment);
-  end;
-
-  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
-    ExternalFileName, ExternalScaleFileName);
-  WriteScaleFactorsID_andOption(RequiredValues,
-    UnitConversionScaleFactor, ExternalScaleFileName);
-
-  if RequiredValues.WriteTransientData then
-  begin
-    WriteString('TRANSIENT LIST DATAFILE ');
-  end
-  else
-  begin
-    WriteString('STATIC LIST DATAFILE ');
-  end;
-
-  if ExternalFileName <> '' then
-  begin
-    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
-    NewLine;
-  end
-  else
-  begin
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
+    FWriteLocation := RequiredValues.WriteLocation;
     try
-      FWriteLocation := RequiredValues.WriteLocation;
       if RequiredValues.WriteTransientData then
       begin
         for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
@@ -11143,6 +11224,84 @@ begin
       end;
     finally
       FWriteLocation := wlMain;
+    end
+  end;
+begin
+  if FAllotments.SurfaceWater.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  FPestParamUsed := False;
+
+  RequiredValues.WriteLocation := wlSwAllotment;
+  RequiredValues.DefaultValue := 1;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP ALLOTMENTS: SURFACE_WATER';
+  RequiredValues.ErrorID := 'FMP ALLOTMENTS: SURFACE_WATER';
+  RequiredValues.ID := 'SURFACE_WATER';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FAllotments.SurfaceWater.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := StrInvalidSurfaceWaterallotment;
+  case FAllotments.SurfaceWaterAllotmentMethod of
+    amHeight:
+      begin
+        RequiredValues.Option := 'HEIGHT ';
+      end;
+    amVolume:
+      begin
+        RequiredValues.Option := 'VOLUME ';
+      end;
+    amRate:
+      begin
+        RequiredValues.Option := 'RATE ';
+      end;
+  end;
+  RequiredValues.FarmProperty := FAllotments.SurfaceWater;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlSwAllotment);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
+      end;
     end;
   end;
 end;

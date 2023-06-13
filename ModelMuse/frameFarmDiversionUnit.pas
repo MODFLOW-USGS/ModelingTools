@@ -542,6 +542,8 @@ end;
 
 procedure TframeFarmDiversion.SetDataForListOfSemiRoutedLists(SrList: TSrCollList;
   DiversionType: TDiversionType);
+const
+  PropertyColOffset = 2;
 var
   ModelSelection: TModelSelection;
   index: Integer;
@@ -587,17 +589,17 @@ begin
           rtObject:
             begin
               DiversionObject := LinkedStream.DiversionObject;
-              GridItemIndex := Grid.ItemIndex[Ord(docObject) + 2, TimeIndex];
+              GridItemIndex := Grid.ItemIndex[Ord(docObject) + PropertyColOffset, TimeIndex];
               if GridItemIndex >= 0 then
               begin
                 DiversionObject.ScreenObject :=
-                  Grid.Columns[Ord(docObject) + 2].PickList.Objects[GridItemIndex];
+                  Grid.Columns[Ord(docObject) + PropertyColOffset].PickList.Objects[GridItemIndex];
               end
               else
               begin
                 DiversionObject.ScreenObject := nil;
               end;
-              ItemIndex := Grid.ItemIndex[Ord(docChoice) + 2, TimeIndex];
+              ItemIndex := Grid.ItemIndex[Ord(docChoice) + PropertyColOffset, TimeIndex];
               if ItemIndex >= 0 then
               begin
                 DiversionObject.DiversionPosition :=
@@ -606,16 +608,16 @@ begin
               if DiversionObject.DiversionPosition = dpMiddle then
               begin
                 DiversionObject.DiversionVertex :=
-                  StrToIntDef(Grid.Cells[Ord(docVertex) + 2, TimeIndex], 1);
+                  StrToIntDef(Grid.Cells[Ord(docVertex) + PropertyColOffset, TimeIndex], 1);
               end;
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                DelivRetItem.Frac := Grid.Cells[Ord(docFraction) + 2, TimeIndex];
+                DelivRetItem.Frac := Grid.Cells[Ord(docFraction) + PropertyColOffset, TimeIndex];
                 if DiversionType = dtDiversion then
                 begin
-                  DelivRetItem.LowerLimit := Grid.Cells[Ord(docLowerLimit) + 2, TimeIndex];
-                  DelivRetItem.UpperLimit := Grid.Cells[Ord(docUpperLimit) + 2, TimeIndex];
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(docLowerLimit) + PropertyColOffset, TimeIndex];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(docUpperLimit) + PropertyColOffset, TimeIndex];
                 end;
               end;
             {$ENDIF}
@@ -623,8 +625,8 @@ begin
           rtLocation:
             begin
               DiversionLocation := LinkedStream.DiversionLocation;
-              DiversionLocation.X := StrToFloatDef(Grid.Cells[Ord(dlcX) + 2, TimeIndex], 0);
-              DiversionLocation.Y := StrToFloatDef(Grid.Cells[Ord(dlcY) + 2, TimeIndex], 0);
+              DiversionLocation.X := StrToFloatDef(Grid.Cells[Ord(dlcX) + PropertyColOffset, TimeIndex], 0);
+              DiversionLocation.Y := StrToFloatDef(Grid.Cells[Ord(dlcY) + PropertyColOffset, TimeIndex], 0);
               DiversionLocation.Z := 0;
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
@@ -636,8 +638,8 @@ begin
                 end;
                 if DiversionType = dtDiversion then
                 begin
-                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dlLowerLimit) + 2, TimeIndex];
-                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dlUpperLimit) + 2, TimeIndex];
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dlLowerLimit) + PropertyColOffset, TimeIndex];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dlUpperLimit) + PropertyColOffset, TimeIndex];
                 end;
               end;
             {$ENDIF}
@@ -645,13 +647,13 @@ begin
           rtCell:
             begin
               DiversionCell := LinkedStream.DiversionCell;
-              DiversionCell.Row := StrToIntDef(Grid.Cells[Ord(dccRow) + 2, TimeIndex], 1);
-              DiversionCell.Col := StrToIntDef(Grid.Cells[Ord(dccColumn) + 2, TimeIndex], 1);
+              DiversionCell.Row := StrToIntDef(Grid.Cells[Ord(dccRow) + PropertyColOffset, TimeIndex], 1);
+              DiversionCell.Col := StrToIntDef(Grid.Cells[Ord(dccColumn) + PropertyColOffset, TimeIndex], 1);
               DiversionCell.Lay := 0;
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                Fraction := Grid.Cells[Ord(dccFraction) + 2, TimeIndex];
+                Fraction := Grid.Cells[Ord(dccFraction) + PropertyColOffset, TimeIndex];
                 if Fraction = '' then
                 begin
                   Fraction := '1';
@@ -659,8 +661,8 @@ begin
                 DelivRetItem.Frac := Fraction;
                 if DiversionType = dtDiversion then
                 begin
-                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dccLowerLimit) + 2, TimeIndex];
-                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dccUpperLimit) + 2, TimeIndex];
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dccLowerLimit) + PropertyColOffset, TimeIndex];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dccUpperLimit) + PropertyColOffset, TimeIndex];
                 end;
               end;
             {$ENDIF}
@@ -670,11 +672,126 @@ begin
         end;
       end;
     end;
+    DelivReturn := SrList[index];
+    if DelivReturn.Count > 0 then
+    begin
+
+
+      DelivRetItem := DelivReturn[0];
+      LinkedStream := DelivRetItem.LinkedStream;
+      case LinkedStream.DiversionChoice of
+        rtNone: ;
+        rtObject:
+          begin
+            if PestModifierAssigned[Ord(docFraction)+PropertyColOffset] then
+            begin
+              DelivReturn.PestSeriesParameter := PestModifier[Ord(docFraction)+PropertyColOffset];
+            end;
+            if PestMethodAssigned[Ord(docFraction)+PropertyColOffset]  then
+            begin
+              DelivReturn.PestParamMethod := PestMethod[Ord(docFraction)+PropertyColOffset];
+            end;
+            if Ord(docLowerLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              if PestModifierAssigned[Ord(docLowerLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.LowerLimitPestSeriesParameter := PestModifier[Ord(docLowerLimit)+PropertyColOffset];
+              end;
+              if PestMethodAssigned[Ord(docLowerLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.LowerLimitPestParamMethod := PestMethod[Ord(docLowerLimit)+PropertyColOffset];
+              end;
+            end;
+            if Ord(docUpperLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              if PestModifierAssigned[Ord(docUpperLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.UpperLimitPestSeriesParameter := PestModifier[Ord(docUpperLimit)+PropertyColOffset];
+              end;
+              if PestMethodAssigned[Ord(docUpperLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.UpperLimitPestParamMethod := PestMethod[Ord(docUpperLimit)+PropertyColOffset];
+              end;
+            end;
+          end;
+        rtLocation:
+          begin
+            if PestModifierAssigned[Ord(dlFraction)+PropertyColOffset] then
+            begin
+              DelivReturn.PestSeriesParameter := PestModifier[Ord(dlFraction)+PropertyColOffset];
+            end;
+            if PestMethodAssigned[Ord(dlFraction)+PropertyColOffset] then
+            begin
+              DelivReturn.PestParamMethod := PestMethod[Ord(dlFraction)+PropertyColOffset];
+            end;
+            if Ord(dlLowerLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              if PestModifierAssigned[Ord(dlLowerLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.LowerLimitPestSeriesParameter := PestModifier[Ord(dlLowerLimit)+PropertyColOffset];
+              end;
+              if PestMethodAssigned[Ord(dlLowerLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.LowerLimitPestParamMethod := PestMethod[Ord(dlLowerLimit)+PropertyColOffset];
+              end;
+            end;
+            if Ord(dlUpperLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              if PestModifierAssigned[Ord(dlUpperLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.UpperLimitPestSeriesParameter := PestModifier[Ord(dlUpperLimit)+PropertyColOffset];
+              end;
+              if PestMethodAssigned[Ord(dlUpperLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.UpperLimitPestParamMethod := PestMethod[Ord(dlUpperLimit)+PropertyColOffset];
+              end;
+            end;
+          end;
+        rtCell:
+          begin
+            if PestModifierAssigned[Ord(dccFraction)+PropertyColOffset] then
+            begin
+              DelivReturn.PestSeriesParameter := PestModifier[Ord(dccFraction)+PropertyColOffset];
+            end;
+            if PestMethodAssigned[Ord(dccFraction)+PropertyColOffset] then
+            begin
+              DelivReturn.PestParamMethod := PestMethod[Ord(dccFraction)+PropertyColOffset];
+            end;
+            if Ord(dccLowerLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              if PestModifierAssigned[Ord(dccLowerLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.LowerLimitPestSeriesParameter := PestModifier[Ord(dccLowerLimit)+PropertyColOffset];
+              end;
+              if PestMethodAssigned[Ord(dccLowerLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.LowerLimitPestParamMethod := PestMethod[Ord(dccLowerLimit)+PropertyColOffset];
+              end;
+            end;
+            if Ord(dccUpperLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              if PestModifierAssigned[Ord(dccUpperLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.UpperLimitPestSeriesParameter := PestModifier[Ord(dccUpperLimit)+PropertyColOffset];
+              end;
+              if PestMethodAssigned[Ord(dccUpperLimit)+PropertyColOffset] then
+              begin
+                DelivReturn.UpperLimitPestParamMethod := PestMethod[Ord(dccUpperLimit)+PropertyColOffset];
+              end;
+            end;
+          end;
+      else
+        Assert(False);
+      end;
+
+    end;
   end;
 end;
 
 procedure TframeFarmDiversion.GetDataFromListOfSemiRoutedLists(
   SrList: TSrCollList; DiversionType: TDiversionType);
+const
+  PropertyColOffset = 2;
 var
   ModelSelection: TModelSelection;
   Packages: TModflowPackages;
@@ -704,6 +821,60 @@ begin
       seNumber.AsInteger := DelivReturns.Count;
       seNumber.OnChange(seNumber);
       AnItem := DelivReturns[0];
+
+      AnItem := DelivReturns[0];
+      LinkedStream := AnItem.LinkedStream;
+      case LinkedStream.DiversionChoice of
+        rtNone: ;
+        rtObject:
+          begin
+            PestModifier[Ord(docFraction)+PropertyColOffset] := DelivReturns.PestSeriesParameter;
+            PestMethod[Ord(docFraction)+PropertyColOffset] := DelivReturns.PestParamMethod;
+            if Ord(docLowerLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              PestModifier[Ord(docLowerLimit)+PropertyColOffset] := DelivReturns.LowerLimitPestSeriesParameter;
+              PestMethod[Ord(docLowerLimit)+PropertyColOffset] := DelivReturns.LowerLimitPestParamMethod;
+            end;
+            if Ord(docUpperLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              PestModifier[Ord(docUpperLimit)+PropertyColOffset] := DelivReturns.UpperLimitPestSeriesParameter;
+              PestMethod[Ord(docUpperLimit)+PropertyColOffset] := DelivReturns.UpperLimitPestParamMethod;
+            end;
+          end;
+        rtLocation:
+          begin
+            PestModifier[Ord(dlFraction)+PropertyColOffset] := DelivReturns.PestSeriesParameter;
+            PestMethod[Ord(dlFraction)+PropertyColOffset] := DelivReturns.PestParamMethod;
+            if Ord(dlLowerLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              PestModifier[Ord(dlLowerLimit)+PropertyColOffset] := DelivReturns.LowerLimitPestSeriesParameter;
+              PestMethod[Ord(dlLowerLimit)+PropertyColOffset] := DelivReturns.LowerLimitPestParamMethod;
+            end;
+            if Ord(dlUpperLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              PestModifier[Ord(dlUpperLimit)+PropertyColOffset] := DelivReturns.UpperLimitPestSeriesParameter;
+              PestMethod[Ord(dlUpperLimit)+PropertyColOffset] := DelivReturns.UpperLimitPestParamMethod;
+            end;
+          end;
+        rtCell:
+          begin
+            PestModifier[Ord(dccFraction)+PropertyColOffset] := DelivReturns.PestSeriesParameter;
+            PestMethod[Ord(dccFraction)+PropertyColOffset] := DelivReturns.PestParamMethod;
+            if Ord(dccLowerLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              PestModifier[Ord(dccLowerLimit)+PropertyColOffset] := DelivReturns.LowerLimitPestSeriesParameter;
+              PestMethod[Ord(dccLowerLimit)+PropertyColOffset] := DelivReturns.LowerLimitPestParamMethod;
+            end;
+            if Ord(dccUpperLimit)+PropertyColOffset < Grid.ColCount then
+            begin
+              PestModifier[Ord(dccUpperLimit)+PropertyColOffset] := DelivReturns.UpperLimitPestSeriesParameter;
+              PestMethod[Ord(dccUpperLimit)+PropertyColOffset] := DelivReturns.UpperLimitPestParamMethod;
+            end;
+          end;
+      else
+        Assert(False);
+      end;
+
       comboMethod.ItemIndex := Ord(AnItem.LinkedStream.DiversionChoice) - 1;
       for ItemIndex := 0 to DelivReturns.Count - 1 do
       begin
@@ -717,32 +888,33 @@ begin
               DiversionObject := LinkedStream.DiversionObject;
               if DiversionObject.ScreenObject = nil then
               begin
-                Grid.ItemIndex[Ord(docObject) + 2, ItemIndex + 1+PestRowOffset] := 0;
+                Grid.ItemIndex[Ord(docObject) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := 0;
               end
               else
               begin
-                Grid.Cells[Ord(docObject) + 2, ItemIndex + 1+PestRowOffset] := DiversionObject.ObjectName;
+                Grid.Cells[Ord(docObject) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := DiversionObject.ObjectName;
               end;
-              Grid.Objects[Ord(docObject) + 2, ItemIndex + 1+PestRowOffset] := DiversionObject.ScreenObject;
-              Grid.ItemIndex[Ord(docChoice) + 2, ItemIndex + 1+PestRowOffset] := Ord(DiversionObject.DiversionPosition);
+              Grid.Objects[Ord(docObject) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := DiversionObject.ScreenObject;
+              Grid.ItemIndex[Ord(docChoice) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := Ord(DiversionObject.DiversionPosition);
               if DiversionObject.DiversionPosition = dpMiddle then
               begin
-                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionObject.DiversionVertex);
+                Grid.Cells[Ord(docVertex) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionObject.DiversionVertex);
               end
               else
               begin
-                Grid.Cells[Ord(docVertex) + 2, ItemIndex + 1+PestRowOffset] := '';
+                Grid.Cells[Ord(docVertex) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := '';
               end;
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                Grid.Cells[Ord(docFraction) + 2, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
+                Grid.Cells[Ord(docFraction) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
+                PestUsedOnCol[Ord(docFraction) + PropertyColOffset] := True;
                 if DiversionType = dtDiversion then
                 begin
-                  Grid.Cells[Ord(docLowerLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
-                  Grid.Cells[Ord(docUpperLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
-                  PestUsedOnCol[Ord(docLowerLimit) + 2] := True;
-                  PestUsedOnCol[Ord(docUpperLimit) + 2] := True;
+                  Grid.Cells[Ord(docLowerLimit) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(docUpperLimit) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
+                  PestUsedOnCol[Ord(docLowerLimit) + PropertyColOffset] := True;
+                  PestUsedOnCol[Ord(docUpperLimit) + PropertyColOffset] := True;
                 end;
               end;
             {$ENDIF}
@@ -750,18 +922,19 @@ begin
           rtLocation:
             begin
               DiversionLocation := LinkedStream.DiversionLocation;
-              Grid.Cells[Ord(dlcX) + 2, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.X);
-              Grid.Cells[Ord(dlcY) + 2, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.Y);
+              Grid.Cells[Ord(dlcX) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.X);
+              Grid.Cells[Ord(dlcY) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.Y);
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                Grid.Cells[Ord(dlFraction) + 2, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
+                Grid.Cells[Ord(dlFraction) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
+                PestUsedOnCol[Ord(dlFraction) + PropertyColOffset] := True;
                 if DiversionType = dtDiversion then
                 begin
-                  Grid.Cells[Ord(dlLowerLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
-                  Grid.Cells[Ord(dlUpperLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
-                  PestUsedOnCol[Ord(dlLowerLimit) + 2] := True;
-                  PestUsedOnCol[Ord(dlUpperLimit) + 2] := True;
+                  Grid.Cells[Ord(dlLowerLimit) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(dlUpperLimit) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
+                  PestUsedOnCol[Ord(dlLowerLimit) + PropertyColOffset] := True;
+                  PestUsedOnCol[Ord(dlUpperLimit) + PropertyColOffset] := True;
                 end;
               end;
             {$ENDIF}
@@ -769,18 +942,19 @@ begin
           rtCell:
             begin
               DiversionCell := LinkedStream.DiversionCell;
-              Grid.Cells[Ord(dccRow) + 2, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Row);
-              Grid.Cells[Ord(dccColumn) + 2, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Col);
+              Grid.Cells[Ord(dccRow) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Row);
+              Grid.Cells[Ord(dccColumn) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Col);
             {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
-                Grid.Cells[Ord(dccFraction) + 2, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
+                Grid.Cells[Ord(dccFraction) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
+                PestUsedOnCol[Ord(dccFraction) + PropertyColOffset] := True;
                 if DiversionType = dtDiversion then
                 begin
-                  Grid.Cells[Ord(dccLowerLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
-                  Grid.Cells[Ord(dccUpperLimit) + 2, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
-                  PestUsedOnCol[Ord(dccLowerLimit) + 2] := True;
-                  PestUsedOnCol[Ord(dccUpperLimit) + 2] := True;
+                  Grid.Cells[Ord(dccLowerLimit) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.LowerLimit;
+                  Grid.Cells[Ord(dccUpperLimit) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.UpperLimit;
+                  PestUsedOnCol[Ord(dccLowerLimit) + PropertyColOffset] := True;
+                  PestUsedOnCol[Ord(dccUpperLimit) + PropertyColOffset] := True;
                 end;
               end;
             {$ENDIF}
@@ -919,11 +1093,12 @@ var
   SwrBoundary: TSwrReachBoundary;
 begin
   LocalModel := frmGoPhast.PhastModel;
-  comboSfrObjects.Items.BeginUpdate;
 
   IncludePestAdjustment := True;
   InitializePestParameters;
+  seNumberChange(nil);
 
+  comboSfrObjects.Items.BeginUpdate;
   try
     comboSfrObjects.Items.Clear;
     if LocalModel.SfrIsSelected or LocalModel.SwrIsSelected then

@@ -501,7 +501,7 @@ var
   FirstFarm: TFarm;
   FarmProcess: TFarmProcess;
   Packages: TModflowPackages;
-  SfrPackage: TSfrPackageSelection;
+//  SfrPackage: TSfrPackageSelection;
   FarmProcess4: TFarmProcess4;
   SalinityFlush: TFarmProcess4SalinityFlush;
   FarmSurfaceWater4: TFarmProcess4SurfaceWater;
@@ -516,7 +516,7 @@ begin
       ClearGrid(frameFormulaGridCosts.Grid);
       ClearGrid(frameFormulaGridWaterRights.Grid);
       ClearGrid(frameGW_Allocation.Grid);
-      ClearGrid(frameSwAllotment.Grid);
+      frameSwAllotment.ClearGrid;
       ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
       frameAddedDemandRunoffSplit.ClearGrid;
       ClearGrid(frameIrrigationUniformity.Grid);
@@ -561,7 +561,7 @@ begin
     tabNoReturnFlow.TabVisible := False;
   {$ENDIF}
 
-    SfrPackage := Packages.SfrPackage;
+//    SfrPackage := Packages.SfrPackage;
 
     tabWaterRights.TabVisible := (frmGoPhast.ModelSelection = msModflowFmp)
       and (FarmProcess.SurfaceWaterAllotment = swaPriorWithCalls);
@@ -571,7 +571,7 @@ begin
       and SalinityFlush.IsSelected
       and (SalinityFlush.FarmSaltConcentrationsChoice.FarmOption <> foNotUsed);
   {$ELSE}
-     SupplyConcentration.TabVisible := False;
+     tabWaterSupplyConcentration.TabVisible := False;
   {$ENDIF}
 
     try
@@ -595,7 +595,7 @@ begin
         ClearGrid(frameFormulaGridCosts.Grid);
         ClearGrid(frameFormulaGridWaterRights.Grid);
         ClearGrid(frameGW_Allocation.Grid);
-        ClearGrid(frameSwAllotment.Grid);
+        frameSwAllotment.ClearGrid;
         ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
         frameAddedDemandRunoffSplit.ClearGrid;
         ClearGrid(frameIrrigationUniformity.Grid);
@@ -717,7 +717,7 @@ begin
           if not AFarm.SWAllotment.IsSame(
             FirstFarm.SWAllotment) then
           begin
-            ClearGrid(frameSwAllotment.Grid);
+            frameSwAllotment.ClearGrid;
             frameSwAllotment.seNumber.AsInteger := 0;
             break;
           end;
@@ -2149,6 +2149,9 @@ begin
   frameIrrigationUniformity.IncludePestAdjustment := True;
   frameAddedCropDemandFlux.IncludePestAdjustment := True;
   frameAddedCropDemandRate.IncludePestAdjustment := True;
+  frameSwAllotment.IncludePestAdjustment := True;
+//  frameDiversionsOwhm2.frameFarmDiversions.IncludePestAdjustment := True;
+//  frameReturnFlowsOwhm2.frameFarmDiversions.IncludePestAdjustment := True;
 
   frameFormulaGridDiversion.OnChange := Change;
   frameFormulaGridReturnFlow.OnChange := Change;
@@ -2947,16 +2950,25 @@ begin
   AFarm := FirstFarm;
   frameSwAllotment.seNumber.AsInteger := AFarm.SWAllotment.Count;
   frameSwAllotment.seNumber.OnChange(frameSwAllotment.seNumber);
+  frameSwAllotment.InitializePestParameters;
+
   Grid := frameSwAllotment.Grid;
   Grid.BeginUpdate;
   try
     for TimeIndex := 0 to AFarm.SWAllotment.Count - 1 do
     begin
       ATimeItem := AFarm.SWAllotment[TimeIndex];
-      Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
-      Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
-      Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.Allotment;
+      Grid.Cells[Ord(wrccStartTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.StartTime);
+      Grid.Cells[Ord(wrccEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.EndTime);
+      Grid.Cells[Ord(wrccCall), TimeIndex+1+PestRowOffset] := ATimeItem.Allotment;
     end;
+
+    frameSwAllotment.PestUsedOnCol[Ord(wrccStartTime)] := False;
+    frameSwAllotment.PestUsedOnCol[Ord(wrccEndTime)] := False;
+    frameSwAllotment.PestUsedOnCol[Ord(wrccCall)] := True;
+    frameSwAllotment.PestModifier[Ord(wrccCall)] := AFarm.SWAllotment.PestSeriesParameter;
+    frameSwAllotment.PestMethod[Ord(wrccCall)] := AFarm.SWAllotment.PestParamMethod;
+
   finally
     Grid.EndUpdate;
   end;
@@ -3249,9 +3261,6 @@ begin
 end;
 
 procedure TframeFarm.SetAddedCropDemandFlux(Farm: TFarm);
-var
-  EfficiencyCollection: TFarmEfficiencyCollection;
-  AFrame: TframeFormulaGrid;
 begin
   SetAddedCropDemand(Farm.AddedCropDemandFlux, frameAddedCropDemandFlux);
 end;
@@ -3691,8 +3700,8 @@ begin
   Count := 0;
   for RowIndex := 1 to frameSwAllotment.seNumber.AsInteger do
   begin
-    if TryStrToFloat(Grid.Cells[Ord(gacStartTime), RowIndex], StartTime)
-      and TryStrToFloat(Grid.Cells[Ord(gacEndTime), RowIndex], EndTime) then
+    if TryStrToFloat(Grid.Cells[Ord(gacStartTime), RowIndex+PestRowOffset], StartTime)
+      and TryStrToFloat(Grid.Cells[Ord(gacEndTime), RowIndex+PestRowOffset], EndTime) then
     begin
       if Count < Allotment.Count then
       begin
@@ -3705,13 +3714,23 @@ begin
       Inc(Count);
       AllotmentItem.StartTime := StartTime;
       AllotmentItem.EndTime := EndTime;
-      AllotmentItem.Allotment := Grid.Cells[Ord(gacAllotment), RowIndex];
+      AllotmentItem.Allotment := Grid.Cells[Ord(gacAllotment), RowIndex+PestRowOffset];
     end;
   end;
   while Allotment.Count > Count do
   begin
     Allotment.Last.Free;
   end;
+
+  if frameSwAllotment.PestMethodAssigned[Ord(gacAllotment)] then
+  begin
+    Allotment.PestParamMethod := frameSwAllotment.PestMethod[Ord(gacAllotment)];
+  end;
+  if frameSwAllotment.PestModifierAssigned[Ord(gacAllotment)] then
+  begin
+    Allotment.PestSeriesParameter := frameSwAllotment.PestModifier[Ord(gacAllotment)];
+  end;
+
 end;
 
 procedure TframeFarm.SetCropEfficiencies(Farm: TFarm; Crops: TCropCollection;

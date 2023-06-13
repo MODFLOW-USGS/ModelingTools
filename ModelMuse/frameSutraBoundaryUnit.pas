@@ -950,64 +950,69 @@ var
   ColIndex: Integer;
   TransportChoice: TTransportChoice;
 begin
-  rdgSutraFeature.Cells[0,0] := StrTime;
-  rdgSutraFeature.Cells[1,0] := StrUsed;
-  UpdateColWidths;
 
-  TransportChoice := frmGoPhast.PhastModel.SutraOptions.TransportChoice;
+  rdgSutraFeature.BeginUpdate;
+  try
+    rdgSutraFeature.Cells[0,0] := StrTime;
+    rdgSutraFeature.Cells[1,0] := StrUsed;
+    UpdateColWidths;
 
-  case FBoundaryType of
-    sbtFluidSource:
-      begin
-        rdgSutraFeature.Cells[2,0] := StrFluidSource;
-        case TransportChoice of
-          tcSolute, tcSoluteHead: rdgSutraFeature.Cells[3,0] := StrAssociatedConcentra;
-          tcEnergy, tcFreezing: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
-          else Assert(False);
+    TransportChoice := frmGoPhast.PhastModel.SutraOptions.TransportChoice;
+
+    case FBoundaryType of
+      sbtFluidSource:
+        begin
+          rdgSutraFeature.Cells[2,0] := StrFluidSource;
+          case TransportChoice of
+            tcSolute, tcSoluteHead: rdgSutraFeature.Cells[3,0] := StrAssociatedConcentra;
+            tcEnergy, tcFreezing: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
+            else Assert(False);
+          end;
         end;
-      end;
-    sbtMassEnergySource:
-      begin
-        case TransportChoice of
-          tcSolute, tcSoluteHead: rdgSutraFeature.Cells[2,0] := StrSoluteSource;
-          tcEnergy, tcFreezing: rdgSutraFeature.Cells[2,0] := StrEnergySouce;
-          else Assert(False);
+      sbtMassEnergySource:
+        begin
+          case TransportChoice of
+            tcSolute, tcSoluteHead: rdgSutraFeature.Cells[2,0] := StrSoluteSource;
+            tcEnergy, tcFreezing: rdgSutraFeature.Cells[2,0] := StrEnergySouce;
+            else Assert(False);
+          end;
         end;
-      end;
-    sbtSpecPress:
-      begin
-        case TransportChoice of
-          tcSolute, tcEnergy, tcFreezing:
-            begin
-              rdgSutraFeature.Cells[2,0] := StrSpecifiedPressure;
-            end;
-          tcSoluteHead:
-            begin
-              rdgSutraFeature.Cells[2,0] := StrSutraSpecifiedHead;
-            end;
+      sbtSpecPress:
+        begin
+          case TransportChoice of
+            tcSolute, tcEnergy, tcFreezing:
+              begin
+                rdgSutraFeature.Cells[2,0] := StrSpecifiedPressure;
+              end;
+            tcSoluteHead:
+              begin
+                rdgSutraFeature.Cells[2,0] := StrSutraSpecifiedHead;
+              end;
+          end;
+          case TransportChoice of
+            tcSolute, tcSoluteHead: rdgSutraFeature.Cells[3,0] := StrAssociatedConcentra;
+            tcEnergy, tcFreezing: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
+            else Assert(False);
+          end;
         end;
-        case TransportChoice of
-          tcSolute, tcSoluteHead: rdgSutraFeature.Cells[3,0] := StrAssociatedConcentra;
-          tcEnergy, tcFreezing: rdgSutraFeature.Cells[3,0] := StrAssociatedTemp;
-          else Assert(False);
+      sbtSpecConcTemp:
+        begin
+          case TransportChoice of
+            tcSolute, tcSoluteHead: rdgSutraFeature.Cells[2,0] := StrSpecifiedConcentration;
+            tcEnergy, tcFreezing: rdgSutraFeature.Cells[2,0] := StrSpecifiedTemperatur;
+            else Assert(False);
+          end;
         end;
-      end;
-    sbtSpecConcTemp:
-      begin
-        case TransportChoice of
-          tcSolute, tcSoluteHead: rdgSutraFeature.Cells[2,0] := StrSpecifiedConcentration;
-          tcEnergy, tcFreezing: rdgSutraFeature.Cells[2,0] := StrSpecifiedTemperatur;
-          else Assert(False);
-        end;
-      end;
-    else Assert(False);
+      else Assert(False);
+    end;
+  finally
+    rdgSutraFeature.EndUpdate;
   end;
 
   for ColIndex := 2 to rdgSutraFeature.ColCount - 1 do
   begin
     rdgSutraFeature.Columns[ColIndex].AutoAdjustColWidths := false;
   end;
-
 end;
 
 procedure TframeSutraBoundary.LayoutMultiEditControls;

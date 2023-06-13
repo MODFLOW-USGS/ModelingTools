@@ -9,9 +9,24 @@ uses
   Vcl.Buttons, Vcl.ExtCtrls, SsButtonEd, RbwStringTreeCombo,
   System.Generics.Collections, VirtualTrees, frameGridUnit, GoPhastTypes,
   ObservationComparisonsUnit, UndoItems, PestObsUnit, ObsInterfaceUnit,
-  FluxObservationUnit;
+  FluxObservationUnit, SutraPestObsUnit, ScreenObjectUnit;
 
 type
+  TObsTreeItem = class(TObject)
+    ObsTypeName: string;
+    ScreenObject: TScreenObject;
+    ObsCollection: TCustomSutraFluxObservations;
+    FluxGroup: TFluxObservationGroup;
+    Obs: IObservationItem;
+    function Caption: string;
+    function Key: string; overload;
+    class function Key(ObsTypeName: string; ScreenObject: TObject;
+      ObsCollection: TCustomSutraFluxObservations;
+      FluxGroup: TFluxObservationGroup;
+      Obs: IObservationItem): string; overload;
+  end;
+  PObsTreeItem = ^TObsTreeItem;
+
   TRefHolder = class(TObject)
     Ref: IObservationItem;
   end;
@@ -45,6 +60,8 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure frameObsComparisonsGridExit(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
+    procedure frameObsComparisonsGridSetEditText(Sender: TObject; ACol, ARow:
+        Integer; const Value: string);
     procedure treecomboInPlaceEditorTreeMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure treecomboInPlaceEditorCanClose(Sender: TObject;
@@ -53,6 +70,7 @@ type
     { Private declarations }
     FObsDictionary: TDictionary<string, PVirtualNode>;
     FObsItemDictionary: TDictionary<string, IObservationItem>;
+    FObsItemStringList: TStringList;
     FObsItemList: TObservationInterfaceList;
     FRefHolders: TRefHolderObjectList;
 
@@ -65,6 +83,7 @@ type
     procedure InitializeGrid;
     procedure InitializeObsItemDictionary;
     procedure InitializeItemList;
+    procedure GetNodeFullText(MyObject: PObsTreeItem; var CellText: string);
   public
     { Public declarations }
   end;
@@ -90,8 +109,8 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, ScreenObjectUnit,
-  SutraPestObsUnit, PestObsGroupUnit;
+  frmGoPhastUnit,
+  PestObsGroupUnit;
 
 resourcestring
   StrObject0sObse = 'Object: "%0:s"; Observation name: "%1:s".';
@@ -107,21 +126,6 @@ resourcestring
 
 type
   TObsCompColumns = (occName, occGroup, occObs1, occObs2, occValue, occWeight, occComment);
-
-  TObsTreeItem = class(TObject)
-    ObsTypeName: string;
-    ScreenObject: TScreenObject;
-    ObsCollection: TCustomSutraFluxObservations;
-    FluxGroup: TFluxObservationGroup;
-    Obs: IObservationItem;
-    function Caption: string;
-    function Key: string; overload;
-    class function Key(ObsTypeName: string; ScreenObject: TObject;
-      ObsCollection: TCustomSutraFluxObservations;
-      FluxGroup: TFluxObservationGroup;
-      Obs: IObservationItem): string; overload;
-  end;
-  PObsTreeItem = ^TObsTreeItem;
 
 
 { TfrmObservationComparisons }
@@ -139,12 +143,16 @@ begin
   FObsItemDictionary := TDictionary<string, IObservationItem>.Create;
   FObsItemList:= TObservationInterfaceList.Create;
   FRefHolders := TRefHolderObjectList.Create;
-
+  FObsItemStringList := TStringList.Create;
+  FObsItemStringList.Sorted := True;
+  FObsItemStringList.CaseSensitive := False;
+  FObsItemStringList.Duplicates := dupIgnore;
   GetData;
 end;
 
 procedure TfrmObservationComparisons.FormDestroy(Sender: TObject);
 begin
+  FObsItemStringList.Free;
   FObsItemList.Free;
   FObsItemDictionary.Free;
   FObsDictionary.Free;
@@ -192,7 +200,7 @@ begin
 
   if ACol in [Ord(occObs1),Ord(occObs2)] then
   begin
-    CanSelect := False;
+//    CanSelect := False;
     FCol := ACol;
     FRow := ARow;
     treecomboInPlaceEditor.Visible := True;
@@ -230,6 +238,30 @@ begin
   else
   begin
     treecomboInPlaceEditor.Visible := False;
+  end;
+end;
+
+procedure TfrmObservationComparisons.frameObsComparisonsGridSetEditText(Sender:
+    TObject; ACol, ARow: Integer; const Value: string);
+var
+  ItemIndex: Integer;
+  ANode: PVirtualNode;
+begin
+  inherited;
+  if ACol in [Ord(occObs1),Ord(occObs2)] then
+  begin
+    ItemIndex := FObsItemStringList.IndexOf(Value);
+    if ItemIndex >= 0 then
+    begin
+      ANode := PVirtualNode(FObsItemStringList.Objects[ItemIndex]);
+      FCol := ACol;
+      FRow := ARow;
+      treecomboInPlaceEditorTreeChange(treecomboInPlaceEditor.Tree, ANode)
+    end
+    else
+    begin
+      treecomboInPlaceEditorTreeChange(treecomboInPlaceEditor.Tree, nil)
+    end;
   end;
 end;
 
@@ -381,6 +413,8 @@ var
   FluxItem: TCustomFluxObsItem;
   Mf2005FluxObs: TFluxObservation;
   FluxGroup: TFluxObservationGroup;
+  MyObject: PObsTreeItem;
+  CellText: string;
 begin
   treecomboInPlaceEditor.Tree.BeginUpdate;
   UsedTypes := TStringList.Create;
@@ -459,6 +493,20 @@ begin
         ObsTreeItem.FluxGroup := FluxGroup;
         ANode := treecomboInPlaceEditor.Tree.AddChild(ParentNode, ObsTreeItem);
         FObsDictionary.Add(AnObs.GUID, ANode);
+
+
+        MyObject := treecomboInPlaceEditor.Tree.GetNodeData(ANode);
+        if MyObject <> nil then
+        begin
+          if MyObject^.Obs <> nil then
+          begin
+            GetNodeFullText(MyObject, CellText);
+            FObsItemStringList.AddObject(CellText, TObject(ANode));
+          end;
+        end;
+
+
+
       end;
     end;
   finally
@@ -472,10 +520,27 @@ begin
   frmGoPhast.PhastModel.FillObsInterfaceItemList(FObsItemList);
 end;
 
+procedure TfrmObservationComparisons.GetNodeFullText(MyObject: PObsTreeItem; var CellText: string);
+begin
+  if MyObject^.ScreenObject <> nil then
+  begin
+    CellText := Format('%0:s.%1:s', [MyObject^.ScreenObject.Name, MyObject^.Obs.Name]);
+  end
+  else if MyObject^.ObsCollection <> nil then
+  begin
+    CellText := Format('%0:s.%1:s', [MyObject^.ObsCollection.ObservationName, MyObject^.Obs.Name]);
+  end
+  else
+  begin
+    CellText := Format('%0:s.%1:s', [MyObject^.FluxGroup.ObservationName, MyObject^.Obs.Name]);
+  end;
+end;
+
 procedure TfrmObservationComparisons.InitializeObsItemDictionary;
 var
   AnObs: IObservationItem;
   ItemIndex: Integer;
+  ObsName: string;
 begin
   for ItemIndex := 0 to FObsItemList.Count - 1 do
   begin
@@ -567,39 +632,34 @@ procedure TfrmObservationComparisons.treecomboInPlaceEditorTreeChange(
 var
   MyObject: PObsTreeItem;
   RefHolder: TRefHolder;
+  CellText: string;
 begin
-  MyObject := Sender.GetNodeData(Node);
-  if MyObject <> nil then
+  if Node <> nil then
   begin
-    if MyObject^.Obs <> nil then
+    MyObject := Sender.GetNodeData(Node);
+    if MyObject <> nil then
     begin
-      if MyObject^.ScreenObject <> nil then
+      if MyObject^.Obs <> nil then
       begin
-        frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
-          [MyObject^.ScreenObject.Name, MyObject^.Obs.Name]);
-      end
-      else if MyObject^.ObsCollection <> nil then
-      begin
-        frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
-          [MyObject^.ObsCollection.ObservationName, MyObject^.Obs.Name]);
+        GetNodeFullText(MyObject, CellText);
+        frameObsComparisons.Grid.Cells[FCol, FRow] := CellText;
+        RefHolder := TRefHolder.Create;
+        FRefHolders.Add(RefHolder);
+        RefHolder.Ref := MyObject^.Obs;
+        frameObsComparisons.Grid.Objects[FCol, FRow] := RefHolder;
       end
       else
       begin
-        frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
-          [MyObject^.FluxGroup.ObservationName, MyObject^.Obs.Name]);
+        frameObsComparisons.Grid.Cells[FCol, FRow] := '';
+        frameObsComparisons.Grid.Objects[FCol, FRow] := nil;
       end;
-      RefHolder := TRefHolder.Create;
-      FRefHolders.Add(RefHolder);
-      RefHolder.Ref := MyObject^.Obs;
-      frameObsComparisons.Grid.Objects[FCol, FRow] := RefHolder;
-    end
-    else
-    begin
-      frameObsComparisons.Grid.Cells[FCol, FRow] := '';
-      frameObsComparisons.Grid.Objects[FCol, FRow] := nil;
     end;
+  end
+  else
+  begin
+    frameObsComparisons.Grid.Cells[FCol, FRow] := '';
+    frameObsComparisons.Grid.Objects[FCol, FRow] := nil;
   end;
-
 end;
 
 procedure TfrmObservationComparisons.treecomboInPlaceEditorTreeFreeNode(

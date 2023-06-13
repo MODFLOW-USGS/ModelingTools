@@ -20,7 +20,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       784
       35)
     object btnCancel: TBitBtn
-      Left = 692
+      Left = 688
       Top = 2
       Width = 83
       Height = 27
@@ -28,10 +28,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 688
+      ExplicitLeft = 684
     end
     object btnOK: TBitBtn
-      Left = 604
+      Left = 600
       Top = 2
       Width = 82
       Height = 27
@@ -40,10 +40,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 600
+      ExplicitLeft = 596
     end
     object btnHelp: TBitBtn
-      Left = 516
+      Left = 512
       Top = 6
       Width = 82
       Height = 27
@@ -52,7 +52,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 512
+      ExplicitLeft = 508
     end
   end
   object treecomboInPlaceEditor: TRbwStringTreeCombo
@@ -142,15 +142,15 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 410
+        Left = 408
         ExplicitLeft = 312
       end
       inherited sbInsert: TSpeedButton
-        Left = 488
+        Left = 486
         ExplicitLeft = 370
       end
       inherited sbDelete: TSpeedButton
-        Left = 561
+        Left = 558
         ExplicitLeft = 427
       end
       inherited seNumber: TJvSpinEdit
@@ -165,6 +165,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
       OnExit = frameObsComparisonsGridExit
       OnSelectCell = frameObsComparisonsGridSelectCell
+      OnSetEditText = frameObsComparisonsGridSetEditText
       OnColSize = frameObsComparisonsGridColSize
       Columns = <
         item
