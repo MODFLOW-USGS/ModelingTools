@@ -289,11 +289,6 @@ object frameMultSemiRouted: TframeMultSemiRouted
       inherited pnlTop: TPanel
         Width = 512
         ExplicitWidth = 512
-        inherited edFormula: TLabeledEdit
-          EditLabel.ExplicitLeft = 0
-          EditLabel.ExplicitTop = -18
-          EditLabel.ExplicitWidth = 57
-        end
       end
     end
   end

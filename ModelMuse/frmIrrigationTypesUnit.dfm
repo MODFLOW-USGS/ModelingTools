@@ -33,7 +33,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       495
       49)
     object btnCancel: TBitBtn
-      Left = 360
+      Left = 348
       Top = 6
       Width = 83
       Height = 33
@@ -41,10 +41,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 356
+      ExplicitLeft = 344
     end
     object btnOK: TBitBtn
-      Left = 271
+      Left = 259
       Top = 6
       Width = 83
       Height = 33
@@ -53,10 +53,10 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 267
+      ExplicitLeft = 255
     end
     object btnHelp: TBitBtn
-      Left = 182
+      Left = 170
       Top = 6
       Width = 83
       Height = 33
@@ -65,7 +65,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 178
+      ExplicitLeft = 166
     end
   end
   object jvpltvMain: TJvPageListTreeView
@@ -101,7 +101,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Width = 380
       Height = 383
       Caption = 'jvspIrrigationTypes'
-      inline frameIrrigationTypes: TframeGrid
+      inline frameIrrigationTypes: TframeFormulaGrid
         Left = 0
         Top = 0
         Width = 380
@@ -113,8 +113,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         inherited Panel: TPanel
           Top = 342
           Width = 380
-          ExplicitTop = 342
-          ExplicitWidth = 380
+          ExplicitTop = 341
+          ExplicitWidth = 376
           inherited lbNumber: TLabel
             Width = 179
             Height = 18
@@ -123,15 +123,15 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 278
+            Left = 272
             ExplicitLeft = 332
           end
           inherited sbInsert: TSpeedButton
-            Left = 301
+            Left = 295
             ExplicitLeft = 361
           end
           inherited sbDelete: TSpeedButton
-            Left = 327
+            Left = 319
             ExplicitLeft = 390
           end
           inherited seNumber: TJvSpinEdit
@@ -142,7 +142,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         end
         inherited Grid: TRbwDataGrid4
           Width = 380
-          Height = 342
+          Height = 285
           ColCount = 2
           DefaultColWidth = 65
           FixedCols = 1
@@ -196,8 +196,26 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitLeft = 6
           ExplicitWidth = 380
-          ExplicitHeight = 342
+          ExplicitHeight = 285
+        end
+        inherited pnlTop: TPanel
+          Width = 380
+          ExplicitWidth = 380
+          inherited edFormula: TLabeledEdit
+            Height = 26
+            EditLabel.Width = 57
+            EditLabel.Height = 18
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 9
+            EditLabel.ExplicitHeight = 18
+            ExplicitHeight = 26
+          end
+          inherited comboChoice: TComboBox
+            Height = 26
+            ExplicitHeight = 26
+          end
         end
       end
     end
@@ -230,15 +248,15 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 185
+            Left = 179
             ExplicitLeft = 197
           end
           inherited sbInsert: TSpeedButton
-            Left = 218
+            Left = 210
             ExplicitLeft = 234
           end
           inherited sbDelete: TSpeedButton
-            Left = 253
+            Left = 246
             ExplicitLeft = 271
           end
           inherited seNumber: TJvSpinEdit

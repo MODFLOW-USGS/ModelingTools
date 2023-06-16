@@ -515,7 +515,7 @@ begin
       frameFormulaGridCrops.ClearGrid;
       ClearGrid(frameFormulaGridCosts.Grid);
       ClearGrid(frameFormulaGridWaterRights.Grid);
-      ClearGrid(frameGW_Allocation.Grid);
+      frameGW_Allocation.ClearGrid;
       frameSwAllotment.ClearGrid;
       ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
       frameAddedDemandRunoffSplit.ClearGrid;
@@ -594,7 +594,7 @@ begin
         frameFormulaGridCrops.ClearGrid;
         ClearGrid(frameFormulaGridCosts.Grid);
         ClearGrid(frameFormulaGridWaterRights.Grid);
-        ClearGrid(frameGW_Allocation.Grid);
+        frameGW_Allocation.ClearGrid;
         frameSwAllotment.ClearGrid;
         ClearGrid(frameFormulaGridEfficiencyImprovement.Grid);
         frameAddedDemandRunoffSplit.ClearGrid;
@@ -705,7 +705,7 @@ begin
           if not AFarm.GwAllotment.IsSame(
             FirstFarm.GwAllotment) then
           begin
-            ClearGrid(frameGW_Allocation.Grid);
+            frameGW_Allocation.ClearGrid;
             frameGW_Allocation.seNumber.AsInteger := 0;
             break;
           end;
@@ -981,14 +981,28 @@ begin
   AFarm := FirstFarm;
   frameGW_Allocation.seNumber.AsInteger := AFarm.GwAllotment.Count;
   frameGW_Allocation.seNumber.OnChange(frameGW_Allocation.seNumber);
+  frameGW_Allocation.InitializePestParameters;
+
   Grid := frameGW_Allocation.Grid;
-  for TimeIndex := 0 to AFarm.GwAllotment.Count - 1 do
-  begin
-    ATimeItem := AFarm.GwAllotment[TimeIndex];
-    Grid.Cells[Ord(wrccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
-    Grid.Cells[Ord(wrccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
-    Grid.Cells[Ord(wrccCall), TimeIndex+1] := ATimeItem.Allotment;
+  Grid.BeginUpdate;
+  try
+    for TimeIndex := 0 to AFarm.GwAllotment.Count - 1 do
+    begin
+      ATimeItem := AFarm.GwAllotment[TimeIndex];
+      Grid.Cells[Ord(wrccStartTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.StartTime);
+      Grid.Cells[Ord(wrccEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.EndTime);
+      Grid.Cells[Ord(wrccCall), TimeIndex+1+PestRowOffset] := ATimeItem.Allotment;
+    end;
+
+    frameGW_Allocation.PestUsedOnCol[Ord(wrccStartTime)] := False;
+    frameGW_Allocation.PestUsedOnCol[Ord(wrccEndTime)] := False;
+    frameGW_Allocation.PestUsedOnCol[Ord(wrccCall)] := True;
+    frameGW_Allocation.PestModifier[Ord(wrccCall)] := AFarm.GwAllotment.PestSeriesParameter;
+    frameGW_Allocation.PestMethod[Ord(wrccCall)] := AFarm.GwAllotment.PestParamMethod;
+  finally
+    Grid.EndUpdate;
   end;
+
 end;
 
 procedure TframeFarm.GetIrrigationUniformityForFirstFarm(FirstFarm: TFarm);
@@ -2149,6 +2163,7 @@ begin
   frameIrrigationUniformity.IncludePestAdjustment := True;
   frameAddedCropDemandFlux.IncludePestAdjustment := True;
   frameAddedCropDemandRate.IncludePestAdjustment := True;
+  frameGW_Allocation.IncludePestAdjustment := True;
   frameSwAllotment.IncludePestAdjustment := True;
 //  frameDiversionsOwhm2.frameFarmDiversions.IncludePestAdjustment := True;
 //  frameReturnFlowsOwhm2.frameFarmDiversions.IncludePestAdjustment := True;
@@ -3582,8 +3597,8 @@ begin
   Count := 0;
   for RowIndex := 1 to frameGW_Allocation.seNumber.AsInteger do
   begin
-    if TryStrToFloat(Grid.Cells[Ord(gacStartTime), RowIndex], StartTime)
-      and TryStrToFloat(Grid.Cells[Ord(gacEndTime), RowIndex], EndTime) then
+    if TryStrToFloat(Grid.Cells[Ord(gacStartTime), RowIndex+PestRowOffset], StartTime)
+      and TryStrToFloat(Grid.Cells[Ord(gacEndTime), RowIndex+PestRowOffset], EndTime) then
     begin
       if Count < GwAllotment.Count then
       begin
@@ -3596,12 +3611,21 @@ begin
       Inc(Count);
       AllotmentItem.StartTime := StartTime;
       AllotmentItem.EndTime := EndTime;
-      AllotmentItem.Allotment := Grid.Cells[Ord(gacAllotment), RowIndex];
+      AllotmentItem.Allotment := Grid.Cells[Ord(gacAllotment), RowIndex+PestRowOffset];
     end;
   end;
   while GwAllotment.Count > Count do
   begin
     GwAllotment.Last.Free;
+  end;
+
+  if frameGW_Allocation.PestMethodAssigned[Ord(gacAllotment)] then
+  begin
+    GwAllotment.PestParamMethod := frameGW_Allocation.PestMethod[Ord(gacAllotment)];
+  end;
+  if frameGW_Allocation.PestModifierAssigned[Ord(gacAllotment)] then
+  begin
+    GwAllotment.PestSeriesParameter := frameGW_Allocation.PestModifier[Ord(gacAllotment)];
   end;
 end;
 

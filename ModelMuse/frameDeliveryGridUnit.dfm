@@ -13,15 +13,15 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
       41)
     inherited sbAdd: TSpeedButton
       Left = 344
-      ExplicitLeft = 282
+      ExplicitLeft = 344
     end
     inherited sbInsert: TSpeedButton
       Left = 390
-      ExplicitLeft = 320
+      ExplicitLeft = 390
     end
     inherited sbDelete: TSpeedButton
       Left = 436
-      ExplicitLeft = 358
+      ExplicitLeft = 436
     end
     object lblNumberOfDeliveryTypes: TLabel [4]
       Left = 247
@@ -108,10 +108,6 @@ inherited frameDeliveryGrid: TframeDeliveryGrid
       Height = 15
       Caption = 'How used'
       Enabled = False
-    end
-    inherited edFormula: TLabeledEdit
-      EditLabel.ExplicitTop = -16
-      EditLabel.ExplicitWidth = 50
     end
     inherited cbMultiCheck: TCheckBox
       TabOrder = 3

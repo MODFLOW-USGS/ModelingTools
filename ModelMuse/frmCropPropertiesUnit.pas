@@ -496,6 +496,8 @@ begin
 end;
 
 procedure TfrmCropProperties.SetUpIrrigationTable(Model: TCustomModel);
+var
+  GridRect: TGridRect;
 begin
   frameIrrigation.Grid.ColCount := 5;
   frameIrrigation.Grid.FixedCols := 0;
@@ -506,6 +508,19 @@ begin
   frameIrrigation.Grid.Cells[Ord(icIrrigation), 0] := StrIrrigationTypeIRR;
   frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), 0] := StrEvaporationIrrigati;
   frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), 0] := StrSurfaceWaterLossF;
+
+  frameIrrigation.PestUsedOnCol[Ord(icStart)] := False;
+  frameIrrigation.PestUsedOnCol[Ord(icEnd)] := False;
+  frameIrrigation.PestUsedOnCol[Ord(IcIrrigation)] := False;
+  frameIrrigation.PestUsedOnCol[Ord(icEvapIrrigateFraction)] := True;
+  frameIrrigation.PestUsedOnCol[Ord(icSWLossFracIrrigate)] := True;
+  frameIrrigation.InitializePestParameters;
+
+  GridRect.Left := 0;
+  GridRect.Top := 3;
+  GridRect.Right := 0;
+  GridRect.Bottom := 3;
+  frameIrrigation.Grid.Selection := GridRect;
 
   SetGridColumnProperties(frameIrrigation.Grid);
   SetUseButton(frameIrrigation.Grid, Ord(icIrrigation));
@@ -598,6 +613,7 @@ var
   TempCompiler: TRbwParser;
   CompiledFormula: TExpression;
   ResultType: TRbwDataType;
+  PestParamAllowed: Boolean;
 begin
   // CreateBoundaryFormula creates an Expression for a boundary condition
   // based on the text in DataGrid at ACol, ARow. Orientation, and EvaluatedAt
@@ -655,16 +671,21 @@ begin
     if FOwhmCollection is TBoolFarmCollection then
     begin
       ResultType := rdtBoolean;
+      frameOwhmCollection.PestUsedOnCol[Ord(ocFormula)] := False;
     end
     else
     begin
       ResultType := rdtDouble;
+      frameOwhmCollection.PestUsedOnCol[Ord(ocFormula)] := True;
     end;
   end;
 
+  PestParamAllowed :=
+    frmGoPhast.PhastModel.GetPestParameterByName(CompiledFormula.DecompileDisplay) <> nil;
+
   if (ResultType = CompiledFormula.ResultType) or
     ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
-      then
+    or PestParamAllowed  then
   begin
     DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
   end
@@ -878,7 +899,7 @@ begin
       ANode.PageIndex := jvspLeach.PageIndex;
       ANode.Data := ACrop.SalinityAppliedWater;
     end;
-
+//
   end;
 {$ENDIF}
 
@@ -1269,9 +1290,9 @@ begin
     for RowIndex := 1 to frameIrrigation.seNumber.AsInteger do
     begin
       if TryStrToFloat(frameIrrigation.Grid.Cells[
-        Ord(icStart), RowIndex], StartTime)
+        Ord(icStart), RowIndex+PestRowOffset], StartTime)
         and TryStrToFloat(frameIrrigation.Grid.Cells[
-        Ord(icEnd), RowIndex], EndTime) then
+        Ord(icEnd), RowIndex+PestRowOffset], EndTime) then
       begin
         if ItemCount >= FIrrigation.Count then
         begin
@@ -1281,17 +1302,35 @@ begin
         AnItem.StartTime := StartTime;
         AnItem.EndTime := EndTime;
         AnItem.Irrigation :=
-          frameIrrigation.Grid.Cells[Ord(IcIrrigation), RowIndex];
+          frameIrrigation.Grid.Cells[Ord(IcIrrigation), RowIndex+PestRowOffset];
         AnItem.EvapIrrigateFraction :=
-          frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), RowIndex];
+          frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), RowIndex+PestRowOffset];
         AnItem.SurfaceWaterLossFractionIrrigation :=
-          frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), RowIndex];
+          frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), RowIndex+PestRowOffset];
         Inc(ItemCount);
       end;
     end;
     while FIrrigation.Count > ItemCount do
     begin
       FIrrigation.Last.Free;
+    end;
+
+    if frameIrrigation.PestMethodAssigned[Ord(icEvapIrrigateFraction)] then
+    begin
+      FIrrigation.EvapIrrigateFractionPestParamMethod := frameIrrigation.PestMethod[Ord(icEvapIrrigateFraction)];
+    end;
+    if frameIrrigation.PestModifierAssigned[Ord(icEvapIrrigateFraction)] then
+    begin
+      FIrrigation.EvapIrrigateFractionPestSeriesParameter := frameIrrigation.PestModifier[Ord(icEvapIrrigateFraction)];
+    end;
+
+    if frameIrrigation.PestMethodAssigned[Ord(icSWLossFracIrrigate)] then
+    begin
+      FIrrigation.SurfaceWaterLossFractionIrrigationPestParamMethod := frameIrrigation.PestMethod[Ord(icSWLossFracIrrigate)];
+    end;
+    if frameIrrigation.PestModifierAssigned[Ord(icSWLossFracIrrigate)] then
+    begin
+      FIrrigation.SurfaceWaterLossFractionIrrigationPestSeriesParameter := frameIrrigation.PestModifier[Ord(icSWLossFracIrrigate)];
     end;
   end
 end;
@@ -1321,9 +1360,9 @@ begin
     for RowIndex := 1 to Frame.seNumber.AsInteger do
     begin
       if TryStrToFloat(Frame.Grid.Cells[
-        Ord(ocStart), RowIndex], StartTime)
+        Ord(ocStart), RowIndex+PestRowOffset], StartTime)
         and TryStrToFloat(Frame.Grid.Cells[
-        Ord(ocEnd), RowIndex], EndTime) then
+        Ord(ocEnd), RowIndex+PestRowOffset], EndTime) then
       begin
         if ItemCount >= OwhmCollection.Count then
         begin
@@ -1333,7 +1372,7 @@ begin
         AnItem.StartTime := StartTime;
         AnItem.EndTime := EndTime;
         AnItem.OwhmValue :=
-          Frame.Grid.Cells[Ord(ocFormula), RowIndex];
+          Frame.Grid.Cells[Ord(ocFormula), RowIndex+PestRowOffset];
         Inc(ItemCount);
       end;
     end;
@@ -1341,6 +1380,16 @@ begin
     begin
       OwhmCollection.Last.Free;
     end;
+
+    if Frame.PestMethodAssigned[Ord(ocFormula)] then
+    begin
+      OwhmCollection.PestParamMethod := Frame.PestMethod[Ord(ocFormula)];
+    end;
+    if Frame.PestModifierAssigned[Ord(ocFormula)] then
+    begin
+      OwhmCollection.PestSeriesParameter := Frame.PestModifier[Ord(ocFormula)];
+    end;
+
   end
 end;
 
@@ -1655,6 +1704,20 @@ var
   ModflowPackages: TModflowPackages;
 begin
   GetGlobalVariables;
+
+  frameOwhmCollection.IncludePestAdjustment := True;
+  frameOwhmCollection.seNumber.AsInteger := 0;
+  frameOwhmCollection.seNumber.OnChange(nil);
+  frameOwhmCollection.PestUsedOnCol[Ord(ocStart)] := False;
+  frameOwhmCollection.PestUsedOnCol[Ord(ocEnd)] := False;
+  frameOwhmCollection.PestUsedOnCol[Ord(ocFormula)] := True;
+  frameOwhmCollection.InitializePestParameters;
+
+
+  frameIrrigation.IncludePestAdjustment := True;
+  frameIrrigation.seNumber.AsInteger := 0;
+  frameIrrigation.seNumber.OnChange(nil);
+
   SetUpCropNameTable(frmGoPhast.PhastModel);
   SetUpEvapFractionsTable(frmGoPhast.PhastModel);
   SetUpLossesTable(frmGoPhast.PhastModel);
@@ -1806,10 +1869,14 @@ begin
     for ItemIndex := 0 to OwhmCollection.Count - 1 do
     begin
       AnItem := OwhmCollection[ItemIndex];
-      frame.Grid.Cells[Ord(ocStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-      frame.Grid.Cells[Ord(ocEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
-      frame.Grid.Cells[Ord(ocFormula), ItemIndex+1] := AnItem.OwhmValue;
+      frame.Grid.Cells[Ord(ocStart), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.StartTime);
+      frame.Grid.Cells[Ord(ocEnd), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.EndTime);
+      frame.Grid.Cells[Ord(ocFormula), ItemIndex+1+PestRowOffset] := AnItem.OwhmValue;
     end;
+
+    frame.PestModifier[Ord(ocFormula)] := OwhmCollection.PestSeriesParameter;
+    frame.PestMethod[Ord(ocFormula)] := OwhmCollection.PestParamMethod;
+
   finally
     frame.Grid.EndUpdate;
   end;
@@ -2124,7 +2191,7 @@ begin
   frameIrrigation.seNumber.OnChange(frameIrrigation.seNumber);
   if frameIrrigation.seNumber.AsInteger = 0 then
   begin
-    frameIrrigation.Grid.Row := 1;
+    frameIrrigation.Grid.Row := 1+PestRowOffset;
     frameIrrigation.ClearSelectedRow;
   end;
   frameIrrigation.Grid.BeginUpdate;
@@ -2132,12 +2199,18 @@ begin
     for ItemIndex := 0 to Irrigation.Count - 1 do
     begin
       AnItem := Irrigation[ItemIndex];
-      frameIrrigation.Grid.Cells[Ord(icStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-      frameIrrigation.Grid.Cells[Ord(icEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
-      frameIrrigation.Grid.Cells[Ord(IcIrrigation), ItemIndex+1] := AnItem.Irrigation;
-      frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), ItemIndex+1] := AnItem.EvapIrrigateFraction;
-      frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), ItemIndex+1] := AnItem.SurfaceWaterLossFractionIrrigation;
+      frameIrrigation.Grid.Cells[Ord(icStart), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.StartTime);
+      frameIrrigation.Grid.Cells[Ord(icEnd), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.EndTime);
+      frameIrrigation.Grid.Cells[Ord(IcIrrigation), ItemIndex+1+PestRowOffset] := AnItem.Irrigation;
+      frameIrrigation.Grid.Cells[Ord(icEvapIrrigateFraction), ItemIndex+1+PestRowOffset] := AnItem.EvapIrrigateFraction;
+      frameIrrigation.Grid.Cells[Ord(icSWLossFracIrrigate), ItemIndex+1+PestRowOffset] := AnItem.SurfaceWaterLossFractionIrrigation;
     end;
+
+    frameIrrigation.PestMethod[Ord(icEvapIrrigateFraction)] := FIrrigation.EvapIrrigateFractionPestParamMethod;
+    frameIrrigation.PestModifier[Ord(icEvapIrrigateFraction)] := FIrrigation.EvapIrrigateFractionPestSeriesParameter;
+    frameIrrigation.PestMethod[Ord(icSWLossFracIrrigate)] := FIrrigation.SurfaceWaterLossFractionIrrigationPestParamMethod;
+    frameIrrigation.PestModifier[Ord(icSWLossFracIrrigate)] := FIrrigation.SurfaceWaterLossFractionIrrigationPestSeriesParameter;
+
   finally
     frameIrrigation.Grid.EndUpdate;
   end;
@@ -2451,6 +2524,7 @@ begin
       CanSelect := FFarmLandUse.SwLossFracIrrigListByCropUsed
     end;
   end;
+  frameIrrigation.GridSelectCell(Sender, ACol, ARow, CanSelect);
 end;
 
 procedure TfrmCropProperties.frameLeachGridButtonClick(Sender: TObject; ACol,

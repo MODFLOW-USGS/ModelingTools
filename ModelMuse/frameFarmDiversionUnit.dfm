@@ -350,7 +350,6 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Width = 49
       EditLabel.ExplicitLeft = 8
       EditLabel.ExplicitTop = 9
-      EditLabel.ExplicitWidth = 44
       Visible = False
       ExplicitLeft = 8
       ExplicitTop = 27

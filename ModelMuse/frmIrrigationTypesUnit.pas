@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.ExtCtrls,
-  frameGridUnit, Vcl.StdCtrls, Vcl.Buttons, UndoItems, ModflowFmpIrrigationUnit,
+  frameGridUnit, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, UndoItems, ModflowFmpIrrigationUnit,
   JvPageList, JvExControls, JvExExtCtrls, JvNetscapeSplitter, Vcl.ComCtrls,
   JvExComCtrls, JvPageListTreeView, frameFormulaGridUnit, RbwDataGrid4,
   GoPhastTypes, RbwParser, PhastModelUnit, ModflowPackageSelectionUnit;
@@ -17,7 +17,7 @@ type
     efcSurfaceWaterLossFractionIrrigate);
 
   TfrmIrrigationTypes = class(TfrmCustomGoPhast)
-    frameIrrigationTypes: TframeGrid;
+    frameIrrigationTypes: TframeFormulaGrid;
     pnlBottom: TPanel;
     btnCancel: TBitBtn;
     btnOK: TBitBtn;
@@ -62,7 +62,7 @@ type
     procedure SetStartAndEndTimeLists(StartTimes, EndTimes: TStringList;
       Grid: TRbwDataGrid4);
     procedure EvapFractionTable(Model: TCustomModel);
-    procedure GeEvapFraction(EvapFraction: TFmp4EvapFractionCollection);
+    procedure GetEvapFraction(EvapFraction: TFmp4EvapFractionCollection);
     procedure CreateChildNodes(IrrigationItem: TIrrigationItem;
       IrrigationNode: TJvPageIndexNode);
     procedure GetIrrigationTypeNames;
@@ -117,6 +117,7 @@ var
   TempCompiler: TRbwParser;
   CompiledFormula: TExpression;
   ResultType: TRbwDataType;
+  PestParamAllowed: Boolean;
 begin
   // CreateBoundaryFormula creates an Expression for a boundary condition
   // based on the text in DataGrid at ACol, ARow. Orientation, and EvaluatedAt
@@ -136,35 +137,13 @@ begin
   CompiledFormula := TempCompiler.CurrentExpression;
 
   ResultType := rdtDouble;
-//  if (DataGrid = frameCropWaterUse.Grid)then
-//  begin
-//    if ACol = Ord(cwuIrrigated) then
-//    begin
-//      ResultType := rdtBoolean;
-//    end
-//  end
-//  else if (DataGrid = frameIrrigation.Grid)then
-//  begin
-//    if ACol = Ord(IcIrrigation) then
-//    begin
-//      ResultType := rdtInteger;
-//    end
-//  end
-//  else if (DataGrid = frameCropName.Grid)then
-//  begin
-//    if (FFallowStart > 0) and (ACol = FFallowStart + Ord(fcFallow)) then
-//    begin
-//      ResultType := rdtBoolean;
-//    end;
-//    if (FCropPropStart > 0) and (ACol = FCropPropStart + Ord(cpIrrigated)) then
-//    begin
-//      ResultType := rdtBoolean;
-//    end;
-//  end;
+
+  PestParamAllowed :=
+    frmGoPhast.PhastModel.GetPestParameterByName(CompiledFormula.DecompileDisplay) <> nil;
 
   if (ResultType = CompiledFormula.ResultType) or
     ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
-      then
+    or PestParamAllowed then
   begin
     DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
   end
@@ -337,9 +316,9 @@ begin
     for RowIndex := 1 to frameEvaporationFractions.seNumber.AsInteger do
     begin
       if TryStrToFloat(frameEvaporationFractions.Grid.Cells[
-        Ord(efcStart), RowIndex], StartTime)
+        Ord(efcStart), RowIndex+PestRowOffset], StartTime)
         and TryStrToFloat(frameEvaporationFractions.Grid.Cells[
-        Ord(efcEnd), RowIndex], EndTime) then
+        Ord(efcEnd), RowIndex+PestRowOffset], EndTime) then
       begin
         if ItemCount >= FEvapFraction.Count then
         begin
@@ -349,9 +328,9 @@ begin
         AnItem.StartTime := StartTime;
         AnItem.EndTime := EndTime;
         AnItem.EvapIrrigateFraction :=
-          frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), RowIndex];
+          frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), RowIndex+PestRowOffset];
         AnItem.SurfaceWaterLossFractionIrrigation :=
-          frameEvaporationFractions.Grid.Cells[Ord(efcSurfaceWaterLossFractionIrrigate), RowIndex];
+          frameEvaporationFractions.Grid.Cells[Ord(efcSurfaceWaterLossFractionIrrigate), RowIndex+PestRowOffset];
         Inc(ItemCount);
       end;
     end;
@@ -359,7 +338,23 @@ begin
     begin
       FEvapFraction.Last.Free;
     end;
-  end
+  end;
+  if frameEvaporationFractions.PestMethodAssigned[Ord(efcEvaporationFraction)] then
+  begin
+    FEvapFraction.PestParamMethod := frameEvaporationFractions.PestMethod[Ord(efcEvaporationFraction)];
+  end;
+  if frameEvaporationFractions.PestModifierAssigned[Ord(efcEvaporationFraction)] then
+  begin
+    FEvapFraction.PestSeriesParameter := frameEvaporationFractions.PestModifier[Ord(efcEvaporationFraction)];
+  end;
+  if frameEvaporationFractions.PestMethodAssigned[Ord(efcSurfaceWaterLossFractionIrrigate)] then
+  begin
+    FEvapFraction.SurfaceWaterLossFractionPestParamMethod := frameEvaporationFractions.PestMethod[Ord(efcSurfaceWaterLossFractionIrrigate)];
+  end;
+  if frameEvaporationFractions.PestModifierAssigned[Ord(efcSurfaceWaterLossFractionIrrigate)] then
+  begin
+    FEvapFraction.SurfaceWaterLossFractionPestSeriesParameter := frameEvaporationFractions.PestModifier[Ord(efcSurfaceWaterLossFractionIrrigate)];
+  end;
 end;
 
 procedure TfrmIrrigationTypes.frameIrrigationTypesGridEndUpdate(
@@ -407,7 +402,7 @@ begin
       Assert(AnObject <> nil);
       if AnObject is TFmp4EvapFractionCollection then
       begin
-        GeEvapFraction(TFmp4EvapFractionCollection(AnObject));
+        GetEvapFraction(TFmp4EvapFractionCollection(AnObject));
       end;
 
     finally
@@ -427,11 +422,12 @@ begin
   end;
 end;
 
-procedure TfrmIrrigationTypes.GeEvapFraction(
+procedure TfrmIrrigationTypes.GetEvapFraction(
   EvapFraction: TFmp4EvapFractionCollection);
 var
   ItemIndex: Integer;
   AnItem: TEvapFractionItem;
+  GridRect: TGridRect;
 begin
   Assert(EvapFraction <> nil);
   FEvapFraction := EvapFraction;
@@ -440,23 +436,36 @@ begin
   frameEvaporationFractions.seNumber.OnChange(frameEvaporationFractions.seNumber);
   if frameEvaporationFractions.seNumber.AsInteger = 0 then
   begin
-    frameEvaporationFractions.Grid.Row := 1;
+    frameEvaporationFractions.Grid.Row := 1+PestRowOffset;
     frameEvaporationFractions.ClearSelectedRow;
   end;
+  GridRect.Left := 0;
+  GridRect.Top := 3;
+  GridRect.Right := 0;
+  GridRect.Bottom := 3;
+  frameEvaporationFractions.Grid.Selection := GridRect;
   frameEvaporationFractions.Grid.BeginUpdate;
   try
     for ItemIndex := 0 to EvapFraction.Count - 1 do
     begin
       AnItem := EvapFraction[ItemIndex];
-      frameEvaporationFractions.Grid.Cells[Ord(efcStart), ItemIndex+1] :=
+      frameEvaporationFractions.Grid.Cells[Ord(efcStart), ItemIndex+1+PestRowOffset] :=
         FloatToStr(AnItem.StartTime);
-      frameEvaporationFractions.Grid.Cells[Ord(efcEnd), ItemIndex+1] :=
+      frameEvaporationFractions.Grid.Cells[Ord(efcEnd), ItemIndex+1+PestRowOffset] :=
         FloatToStr(AnItem.EndTime);
-      frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), ItemIndex+1] :=
+      frameEvaporationFractions.Grid.Cells[Ord(efcEvaporationFraction), ItemIndex+1+PestRowOffset] :=
         AnItem.EvapIrrigateFraction;
-      frameEvaporationFractions.Grid.Cells[Ord(efcSurfaceWaterLossFractionIrrigate), ItemIndex+1] :=
+      frameEvaporationFractions.Grid.Cells[Ord(efcSurfaceWaterLossFractionIrrigate), ItemIndex+1+PestRowOffset] :=
         AnItem.SurfaceWaterLossFractionIrrigation;
     end;
+
+
+    frameEvaporationFractions.PestMethod[Ord(efcEvaporationFraction)] := EvapFraction.PestParamMethod;
+    frameEvaporationFractions.PestModifier[Ord(efcEvaporationFraction)] := EvapFraction.PestSeriesParameter;
+    frameEvaporationFractions.PestMethod[Ord(efcSurfaceWaterLossFractionIrrigate)] := EvapFraction.SurfaceWaterLossFractionPestParamMethod;
+    frameEvaporationFractions.PestModifier[Ord(efcSurfaceWaterLossFractionIrrigate)] := EvapFraction.SurfaceWaterLossFractionPestSeriesParameter;
+
+
   finally
     frameEvaporationFractions.Grid.EndUpdate;
   end;
@@ -494,6 +503,18 @@ begin
       EndTimes.Free;
       StartTimes.Free;
     end;
+
+    frameEvaporationFractions.IncludePestAdjustment := True;
+    frameEvaporationFractions.seNumber.AsInteger := 0;
+    frameEvaporationFractions.seNumber.OnChange(nil);
+    frameEvaporationFractions.PestUsedOnCol[Ord(efcStart)] := False;
+    frameEvaporationFractions.PestUsedOnCol[Ord(efcEnd)] := False;
+    frameEvaporationFractions.PestUsedOnCol[Ord(efcEvaporationFraction)] := True;
+    frameEvaporationFractions.PestUsedOnCol[Ord(efcSurfaceWaterLossFractionIrrigate)] := True;
+    frameEvaporationFractions.InitializePestParameters;
+//  TEvapFractionColumns = (efcStart, efcEnd, efcEvaporationFraction,
+//    efcSurfaceWaterLossFractionIrrigate);
+
 
 
     FIrrigationTypes := TIrrigationCollection.Create(nil);
@@ -638,7 +659,7 @@ procedure TfrmIrrigationTypes.frameEvaporationFractionsGridSelectCell(Sender:
     TObject; ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
-  if ARow >= frameEvaporationFractions.Grid.FixedRows then
+  if ARow >= frameEvaporationFractions.Grid.FixedRows+PestRowOffset then
   begin
     if ACol = Ord(efcEvaporationFraction) then
     begin
@@ -649,6 +670,7 @@ begin
       CanSelect := FFarmLandUse.FractionOfPrecipToSurfaceWaterIrrigationOption = ioByIrrigate
     end;
   end;
+  frameEvaporationFractions.GridSelectCell(Sender, ACol, ARow, CanSelect);
 end;
 
 procedure TfrmIrrigationTypes.SetUseButton(Grid: TRbwDataGrid4;

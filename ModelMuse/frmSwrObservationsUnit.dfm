@@ -21,7 +21,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       630
       42)
     object btnHelp: TBitBtn
-      Left = 351
+      Left = 347
       Top = 6
       Width = 83
       Height = 33
@@ -29,10 +29,9 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 347
     end
     object btnOK: TBitBtn
-      Left = 440
+      Left = 436
       Top = 6
       Width = 83
       Height = 33
@@ -41,10 +40,9 @@ inherited frmSwrObservations: TfrmSwrObservations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 436
     end
     object btnCancel: TBitBtn
-      Left = 529
+      Left = 525
       Top = 6
       Width = 83
       Height = 33
@@ -52,7 +50,6 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 525
     end
   end
   inline frameObservations: TframeGrid
@@ -67,7 +64,7 @@ inherited frmSwrObservations: TfrmSwrObservations
     ExplicitHeight = 267
     inherited Panel: TPanel
       Top = 227
-      Width = 630
+      Width = 634
       ExplicitTop = 226
       ExplicitWidth = 626
       inherited lbNumber: TLabel
@@ -94,7 +91,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 630
+      Width = 634
       Height = 227
       ColCount = 6
       OnMouseUp = frameObservationsGridMouseUp

@@ -2513,6 +2513,8 @@ var
   OwhmCollection: TOwhmCollection;
   procedure WriteOwhmItem(Crop: TCropItem; OwhmItem: TOwhmItem);
   var
+    Value: double;
+    PestValues: TPestValues;
     Formula: string;
   begin
     if OwhmItem <> nil then
@@ -2525,8 +2527,32 @@ var
       end
       else
       begin
-        WriteFloatValueFromGlobalFormula(Formula, Crop,
-          ErrorMessage + Crop.CropName);
+        PestValues.Formula := Formula;
+
+        PestValues.PestName := '';
+        PestValues.PestSeriesName := OwhmCollection.PestSeriesParameter;
+        PestValues.PestSeriesMethod := OwhmCollection.PestParamMethod;
+        PestValues.FormulaErrorMessage := ErrorMessage + Crop.CropName;
+        PestValues.ErrorObjectName := Crop.CropName;
+
+        AdjustFormulaForPest(PestValues);
+
+        if WritingTemplate and PestValues.ParameterUsed then
+        begin
+          Value := GetFormulaValue(PestValues);
+
+          WritePestTemplateFormula(Value, PestValues.PestName,
+            PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+            nil);
+        end
+        else
+        begin
+          WriteFloatValueFromGlobalFormula(PestValues.Formula, Crop,
+            PestValues.FormulaErrorMessage);
+        end;
+
+//        WriteFloatValueFromGlobalFormula(Formula, Crop,
+//          ErrorMessage + Crop.CropName);
       end;
     end
     else
@@ -2588,7 +2614,25 @@ var
       NewLine;
     end;
   end;
+  procedure WriteListData;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        WriteTransientData;
+      end
+      else
+      begin
+        WriteStaticData;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
+  FPestParamUsed := False;
+
   GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
     ExternalFileName, ExternalScaleFileName);
   WriteScaleFactorsID_andOption(RequiredValues, UnitConversionScaleFactor,
@@ -2610,18 +2654,17 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteTransientData;
-      end
-      else
-      begin
-        WriteStaticData;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
       end;
-    finally
-      FWriteLocation := wlMain;
     end;
   end;
 end;
@@ -4653,27 +4696,50 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
   DataArrayNames: TStringList;
-  CropIndex: Integer;
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   ACrop: TCropItem;
   IrregationItem: TCropIrrigationItem;
   IrrigationTypes: TIrrigationCollection;
-  IrrIndex: Integer;
   IrrigationType: TIrrigationItem;
   EvapFracItem: TEvapFractionItem;
+  CropIndex: Integer;
   procedure WriteIrrigationItem(ACrop: TCropItem; IrregationItem: TCropIrrigationItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if IrregationItem <> nil then
     begin
-      Formula := IrregationItem.SurfaceWaterLossFractionIrrigation;
-      WriteFloatValueFromGlobalFormula(Formula, ACrop,
-        'Invalid Surface Water Loss Fraction Irrigation in crop ' + ACrop.CropName);
+      PestValues.Formula := IrregationItem.SurfaceWaterLossFractionIrrigation;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := ACrop.IrrigationCollection.SurfaceWaterLossFractionIrrigationPestSeriesParameter;
+      PestValues.PestSeriesMethod := ACrop.IrrigationCollection.SurfaceWaterLossFractionIrrigationPestParamMethod;
+      PestValues.FormulaErrorMessage :=  'Invalid Surface Water Loss Fraction Irrigation in crop ' + ACrop.CropName;
+      PestValues.ErrorObjectName := ACrop.CropName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, ACrop,
+          PestValues.FormulaErrorMessage);
+      end;
+
+//      Formula := IrregationItem.SurfaceWaterLossFractionIrrigation;
+//      WriteFloatValueFromGlobalFormula(Formula, ACrop,
+//        'Invalid Surface Water Loss Fraction Irrigation in crop ' + ACrop.CropName);
     end
     else
     begin
@@ -4683,19 +4749,134 @@ var
   end;
   procedure WriteEvapFractItem(IrrigationType: TIrrigationItem; EvapFracItem: TEvapFractionItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if EvapFracItem <> nil then
     begin
-      Formula := EvapFracItem.SurfaceWaterLossFractionIrrigation;
-      WriteFloatValueFromGlobalFormula(Formula, IrrigationType,
-        'Invalid Surface Water Loss Fraction Irrigation in irrigation type ' + IrrigationType.Name);
+
+      PestValues.Formula := EvapFracItem.SurfaceWaterLossFractionIrrigation;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := IrrigationType.EvapFraction.SurfaceWaterLossFractionPestSeriesParameter;
+      PestValues.PestSeriesMethod := IrrigationType.EvapFraction.SurfaceWaterLossFractionPestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid Surface Water Loss Fraction Irrigation in irrigation type ' + IrrigationType.Name;
+      PestValues.ErrorObjectName := IrrigationType.Name;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, IrrigationType,
+          PestValues.FormulaErrorMessage);
+      end;
+
+//      Formula := EvapFracItem.SurfaceWaterLossFractionIrrigation;
+//      WriteFloatValueFromGlobalFormula(Formula, IrrigationType,
+//        'Invalid Surface Water Loss Fraction Irrigation in irrigation type ' + IrrigationType.Name);
     end
     else
     begin
       WriteFloat(0.0);
     end;
     NewLine;
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    CropIndex: Integer;
+    IrrIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if FLandUse.FractionOfPrecipToSurfaceWaterIrrigationOption = ioByCrop then
+      begin
+        if RequiredValues.WriteTransientData then
+        begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+            begin
+              ACrop := Model.FmpCrops[CropIndex];
+              WriteInteger(CropIndex+1);
+              IrregationItem := ACrop.IrrigationCollection.
+                ItemByStartTime(StartTime) as TCropIrrigationItem;
+              WriteIrrigationItem(ACrop, IrregationItem);
+            end;
+          end;
+        end
+        else
+        begin
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            ACrop := Model.FmpCrops[CropIndex];
+            WriteInteger(CropIndex + 1);
+            if ACrop.IrrigationCollection.Count > 0 then
+            begin
+              IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
+            end
+            else
+            begin
+              IrregationItem := nil;
+            end;
+            WriteIrrigationItem(ACrop, IrregationItem);
+          end;
+        end;
+      end
+      else
+      begin
+        IrrigationTypes := Model.IrrigationTypes;
+        if RequiredValues.WriteTransientData then
+        begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+            begin
+              IrrigationType := IrrigationTypes[IrrIndex];
+              WriteInteger(IrrIndex+1);
+              EvapFracItem := IrrigationType.EvapFraction.
+                ItemByStartTime(StartTime) as TEvapFractionItem;
+              WriteEvapFractItem(IrrigationType, EvapFracItem);
+            end;
+          end;
+        end
+        else
+        begin
+          for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+          begin
+            IrrigationType := IrrigationTypes[IrrIndex];
+            WriteInteger(IrrIndex + 1);
+            if IrrigationType.EvapFraction.Count > 0 then
+            begin
+              EvapFracItem := IrrigationType.EvapFraction.First as TEvapFractionItem;
+            end
+            else
+            begin
+              EvapFracItem := nil;
+            end;
+            WriteEvapFractItem(IrrigationType, EvapFracItem);
+          end;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
   end;
 begin
   if FLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foNotUsed then
@@ -4793,88 +4974,17 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-
-        if FLandUse.FractionOfPrecipToSurfaceWaterIrrigationOption = ioByCrop then
-        begin
-          if RequiredValues.WriteTransientData then
-          begin
-            for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-            begin
-              WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-
-              StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-              for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-              begin
-                ACrop := Model.FmpCrops[CropIndex];
-                WriteInteger(CropIndex+1);
-                IrregationItem := ACrop.IrrigationCollection.
-                  ItemByStartTime(StartTime) as TCropIrrigationItem;
-                WriteIrrigationItem(ACrop, IrregationItem);
-              end;
-            end;
-          end
-          else
-          begin
-            for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-            begin
-              ACrop := Model.FmpCrops[CropIndex];
-              WriteInteger(CropIndex + 1);
-              if ACrop.IrrigationCollection.Count > 0 then
-              begin
-                IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
-              end
-              else
-              begin
-                IrregationItem := nil;
-              end;
-              WriteIrrigationItem(ACrop, IrregationItem);
-            end;
-          end;
-        end
-        else
-        begin
-          IrrigationTypes := Model.IrrigationTypes;
-          if RequiredValues.WriteTransientData then
-          begin
-            for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-            begin
-              WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-
-              StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-              begin
-                IrrigationType := IrrigationTypes[IrrIndex];
-                WriteInteger(IrrIndex+1);
-                EvapFracItem := IrrigationType.EvapFraction.
-                  ItemByStartTime(StartTime) as TEvapFractionItem;
-                WriteEvapFractItem(IrrigationType, EvapFracItem);
-              end;
-            end;
-          end
-          else
-          begin
-            for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-            begin
-              IrrigationType := IrrigationTypes[IrrIndex];
-              WriteInteger(IrrIndex + 1);
-              if IrrigationType.EvapFraction.Count > 0 then
-              begin
-                EvapFracItem := IrrigationType.EvapFraction.First as TEvapFractionItem;
-              end
-              else
-              begin
-                EvapFracItem := nil;
-              end;
-              WriteEvapFractItem(IrrigationType, EvapFracItem);
-            end;
-          end;
+      WriteListData;
+      if FPestParamUsed then
+      begin
+        WritingTemplate := True;
+        try
+          GetFileStreamName(RequiredValues.WriteLocation);
+          WriteListData;
+        finally
+          FPestParamUsed := False;
+          WritingTemplate := False;
         end;
-      finally
-        FWriteLocation := wlMain;
       end;
     end;
   end;
@@ -7601,34 +7711,200 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
   DataArrayNames: TStringList;
-  CropIndex: Integer;
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   ACrop: TCropItem;
   IrregationItem: TCropIrrigationItem;
   Formula: string;
   IrrigationTypes: TIrrigationCollection;
-  IrrIndex: Integer;
   EvapFracItem: TEvapFractionItem;
   IrrigationType: TIrrigationItem;
+  CropIndex: Integer;
   procedure WriteEvapIrrigationItem(ACrop: TCropItem; IrregationItem: TCropIrrigationItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if IrregationItem <> nil then
     begin
-      Formula := IrregationItem.EvapIrrigateFraction;
-      WriteFloatValueFromGlobalFormula(Formula, ACrop,
-        'Invalid Evaporation Irrigation Fraction in ' + ACrop.CropName);
+      PestValues.Formula := IrregationItem.EvapIrrigateFraction;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := ACrop.IrrigationCollection.EvapIrrigateFractionPestSeriesParameter;
+      PestValues.PestSeriesMethod := ACrop.IrrigationCollection.EvapIrrigateFractionPestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid Evaporation Irrigation Fraction in ' + ACrop.CropName;
+      PestValues.ErrorObjectName := ACrop.CropName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, ACrop,
+          PestValues.FormulaErrorMessage);
+      end;
     end
     else
     begin
       WriteFloat(0.0);
     end;
     NewLine;
+  end;
+  procedure WriteEvapFractItem(EvapFracItem: TEvapFractionItem);
+  var
+    Value: double;
+    PestValues: TPestValues;
+  begin
+    if EvapFracItem <> nil then
+    begin
+      PestValues.Formula := EvapFracItem.EvapIrrigateFraction;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := IrrigationType.EvapFraction.PestSeriesParameter;
+      PestValues.PestSeriesMethod := IrrigationType.EvapFraction.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid Evaporation Irrigation Fraction in ' + IrrigationType.Name;
+      PestValues.ErrorObjectName := IrrigationType.Name;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, IrrigationType,
+          PestValues.FormulaErrorMessage);
+      end;
+//
+//
+//      Formula := EvapFracItem.EvapIrrigateFraction;
+//      WriteFloatValueFromGlobalFormula(Formula,
+//        IrrigationType, IrrigationType.Name);
+    end
+    else
+    begin
+      WriteFloat(0.0);
+    end;
+    NewLine;
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    CropIndex: Integer;
+    IrrIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if FLandUse.EvapIrrigationOption = ioByCrop then
+      begin
+        if RequiredValues.WriteTransientData then
+        begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+            begin
+              ACrop := Model.FmpCrops[CropIndex];
+              WriteInteger(CropIndex+1);
+              IrregationItem := ACrop.IrrigationCollection.
+                ItemByStartTime(StartTime) as TCropIrrigationItem;
+              WriteEvapIrrigationItem(ACrop, IrregationItem);
+            end;
+          end;
+        end
+        else
+        begin
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            ACrop := Model.FmpCrops[CropIndex];
+            WriteInteger(CropIndex + 1);
+            if ACrop.IrrigationCollection.Count > 0 then
+            begin
+              IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
+            end
+            else
+            begin
+              IrregationItem := nil;
+            end;
+            WriteEvapIrrigationItem(ACrop, IrregationItem);
+          end;
+        end;
+      end
+      else
+      begin
+        IrrigationTypes := Model.IrrigationTypes;
+        if RequiredValues.WriteTransientData then
+        begin
+          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+            for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+            begin
+              IrrigationType := IrrigationTypes[IrrIndex];
+              WriteInteger(IrrIndex+1);
+              EvapFracItem := IrrigationType.EvapFraction.
+                ItemByStartTime(StartTime) as TEvapFractionItem;
+              WriteEvapFractItem(EvapFracItem)
+//              if EvapFracItem <> nil then
+//              begin
+//                Formula := EvapFracItem.EvapIrrigateFraction;
+//                WriteFloatValueFromGlobalFormula(Formula,
+//                  IrrigationType, IrrigationType.Name);
+//              end
+//              else
+//              begin
+//                WriteFloat(0.0);
+//              end;
+//              NewLine;
+            end;
+          end;
+        end
+        else
+        begin
+          for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+          begin
+            IrrigationType := IrrigationTypes[IrrIndex];
+            WriteInteger(IrrIndex + 1);
+            if IrrigationType.EvapFraction.Count > 0 then
+            begin
+              EvapFracItem := IrrigationType.EvapFraction.First as TEvapFractionItem;
+//              Formula := EvapFracItem.EvapIrrigateFraction;
+//              WriteFloatValueFromGlobalFormula(Formula,
+//                IrrigationType, IrrigationType.Name);
+            end
+            else
+            begin
+              EvapFracItem := nil
+//              WriteFloat(0.0);
+            end;
+            WriteEvapFractItem(EvapFracItem)
+//            NewLine;
+          end;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
   end;
 begin
   if FLandUse.EvapIrrigationFraction.FarmOption = foNotUsed then
@@ -7726,103 +8002,114 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-
-        if FLandUse.EvapIrrigationOption = ioByCrop then
-        begin
-          if RequiredValues.WriteTransientData then
-          begin
-            for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-            begin
-              WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-
-              StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-              for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-              begin
-                ACrop := Model.FmpCrops[CropIndex];
-                WriteInteger(CropIndex+1);
-                IrregationItem := ACrop.IrrigationCollection.
-                  ItemByStartTime(StartTime) as TCropIrrigationItem;
-                WriteEvapIrrigationItem(ACrop, IrregationItem);
-              end;
-            end;
-          end
-          else
-          begin
-            for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-            begin
-              ACrop := Model.FmpCrops[CropIndex];
-              WriteInteger(CropIndex + 1);
-              if ACrop.IrrigationCollection.Count > 0 then
-              begin
-                IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
-              end
-              else
-              begin
-                IrregationItem := nil;
-              end;
-              WriteEvapIrrigationItem(ACrop, IrregationItem);
-            end;
-          end;
-        end
-        else
-        begin
-          IrrigationTypes := Model.IrrigationTypes;
-          if RequiredValues.WriteTransientData then
-          begin
-            for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-            begin
-              WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-
-              StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-              begin
-                IrrigationType := IrrigationTypes[IrrIndex];
-                WriteInteger(IrrIndex+1);
-                EvapFracItem := IrrigationType.EvapFraction.
-                  ItemByStartTime(StartTime) as TEvapFractionItem;
-
-                if EvapFracItem <> nil then
-                begin
-                  Formula := EvapFracItem.EvapIrrigateFraction;
-                  WriteFloatValueFromGlobalFormula(Formula,
-                    IrrigationType, IrrigationType.Name);
-                end
-                else
-                begin
-                  WriteFloat(0.0);
-                end;
-                NewLine;
-              end;
-            end;
-          end
-          else
-          begin
-            for IrrIndex := 0 to IrrigationTypes.Count - 1 do
-            begin
-              IrrigationType := IrrigationTypes[IrrIndex];
-              WriteInteger(IrrIndex + 1);
-              if IrrigationType.EvapFraction.Count > 0 then
-              begin
-                EvapFracItem := IrrigationType.EvapFraction.First as TEvapFractionItem;
-                Formula := EvapFracItem.EvapIrrigateFraction;
-                WriteFloatValueFromGlobalFormula(Formula,
-                  IrrigationType, IrrigationType.Name);
-              end
-              else
-              begin
-                WriteFloat(0.0);
-              end;
-              NewLine;
-            end;
-          end;
+      WriteListData;
+      if FPestParamUsed then
+      begin
+        WritingTemplate := True;
+        try
+          GetFileStreamName(RequiredValues.WriteLocation);
+          WriteListData;
+        finally
+          FPestParamUsed := False;
+          WritingTemplate := False;
         end;
-      finally
-        FWriteLocation := wlMain;
       end;
+//      FWriteLocation := RequiredValues.WriteLocation;
+//      try
+//        if FLandUse.EvapIrrigationOption = ioByCrop then
+//        begin
+//          if RequiredValues.WriteTransientData then
+//          begin
+//            for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+//            begin
+//              WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+//
+//              StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+//
+//              for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+//              begin
+//                ACrop := Model.FmpCrops[CropIndex];
+//                WriteInteger(CropIndex+1);
+//                IrregationItem := ACrop.IrrigationCollection.
+//                  ItemByStartTime(StartTime) as TCropIrrigationItem;
+//                WriteEvapIrrigationItem(ACrop, IrregationItem);
+//              end;
+//            end;
+//          end
+//          else
+//          begin
+//            for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+//            begin
+//              ACrop := Model.FmpCrops[CropIndex];
+//              WriteInteger(CropIndex + 1);
+//              if ACrop.IrrigationCollection.Count > 0 then
+//              begin
+//                IrregationItem := ACrop.IrrigationCollection.First as TCropIrrigationItem;
+//              end
+//              else
+//              begin
+//                IrregationItem := nil;
+//              end;
+//              WriteEvapIrrigationItem(ACrop, IrregationItem);
+//            end;
+//          end;
+//        end
+//        else
+//        begin
+//          IrrigationTypes := Model.IrrigationTypes;
+//          if RequiredValues.WriteTransientData then
+//          begin
+//            for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+//            begin
+//              WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+//
+//              StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+//
+//              for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+//              begin
+//                IrrigationType := IrrigationTypes[IrrIndex];
+//                WriteInteger(IrrIndex+1);
+//                EvapFracItem := IrrigationType.EvapFraction.
+//                  ItemByStartTime(StartTime) as TEvapFractionItem;
+//
+//                if EvapFracItem <> nil then
+//                begin
+//                  Formula := EvapFracItem.EvapIrrigateFraction;
+//                  WriteFloatValueFromGlobalFormula(Formula,
+//                    IrrigationType, IrrigationType.Name);
+//                end
+//                else
+//                begin
+//                  WriteFloat(0.0);
+//                end;
+//                NewLine;
+//              end;
+//            end;
+//          end
+//          else
+//          begin
+//            for IrrIndex := 0 to IrrigationTypes.Count - 1 do
+//            begin
+//              IrrigationType := IrrigationTypes[IrrIndex];
+//              WriteInteger(IrrIndex + 1);
+//              if IrrigationType.EvapFraction.Count > 0 then
+//              begin
+//                EvapFracItem := IrrigationType.EvapFraction.First as TEvapFractionItem;
+//                Formula := EvapFracItem.EvapIrrigateFraction;
+//                WriteFloatValueFromGlobalFormula(Formula,
+//                  IrrigationType, IrrigationType.Name);
+//              end
+//              else
+//              begin
+//                WriteFloat(0.0);
+//              end;
+//              NewLine;
+//            end;
+//          end;
+//        end;
+//      finally
+//        FWriteLocation := wlMain;
+//      end;
     end;
   end;
 end;
@@ -8682,93 +8969,59 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   FarmID: Integer;
-  FarmIndex: Integer;
   AFarm: TFarm;
-  InnerFarmIndex: Integer;
   AllotmentItem: TAllotmentItem;
   procedure WriteAllotmentItem(AFarm: TFarm; AllotmentItem: TAllotmentItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if AllotmentItem <> nil then
     begin
-      Formula := AllotmentItem.Allotment;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
-        'Invalid ground water allotment formula in ' + AFarm.FarmName);
+      PestValues.Formula := AllotmentItem.Allotment;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := AFarm.GwAllotment.PestSeriesParameter;
+      PestValues.PestSeriesMethod := AFarm.GwAllotment.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid ground water allotment formula in ' + AFarm.FarmName;
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+//
+//
+//      Formula := AllotmentItem.Allotment;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        'Invalid ground water allotment formula in ' + AFarm.FarmName);
     end
     else
     begin
       WriteInteger(1);
     end;
   end;
-begin
-  if FAllotments.GroundWater.FarmOption = foNotUsed then
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
   begin
-    Exit;
-  end;
-
-  RequiredValues.WriteLocation := wlGwAllotment;
-  RequiredValues.DefaultValue := 1;
-  RequiredValues.DataType := rdtDouble;
-  RequiredValues.DataTypeIndex := 0;
-  RequiredValues.MaxDataTypeIndex := 0;
-  RequiredValues.Comment := 'FMP ALLOTMENTS: GwAllotment';
-  RequiredValues.ErrorID := 'FMP ALLOTMENTS: GwAllotment';
-  RequiredValues.ID := 'GwAllotment';
-  RequiredValues.StaticDataName := '';
-  RequiredValues.WriteTransientData :=
-    (FAllotments.GroundWater.FarmOption = foTransient);
-  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
-  RequiredValues.CheckError := StrInvalidGroundWaterAllotment;
-  case FAllotments.GroundWaterAllotmentMethod of
-    amHeight:
-      begin
-        RequiredValues.Option := 'HEIGHT ';
-      end;
-    amVolume:
-      begin
-        RequiredValues.Option := 'VOLUME ';
-      end;
-    amRate:
-      begin
-        RequiredValues.Option := 'RATE ';
-      end;
-  end;
-  RequiredValues.FarmProperty := FAllotments.GroundWater;
-
-  if RequiredValues.FarmProperty.ExternalFileName = '' then
-  begin
-    AFileName := GetFileStreamName(wlGwAllotment);
-  end;
-
-  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
-    ExternalFileName, ExternalScaleFileName);
-  WriteScaleFactorsID_andOption(RequiredValues,
-    UnitConversionScaleFactor, ExternalScaleFileName);
-
-  if RequiredValues.WriteTransientData then
-  begin
-    WriteString('TRANSIENT LIST DATAFILE ');
-  end
-  else
-  begin
-    WriteString('STATIC LIST DATAFILE ');
-  end;
-
-  if ExternalFileName <> '' then
-  begin
-    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
-    NewLine;
-  end
-  else
-  begin
-    WriteString(ExtractFileName(AFileName));
-    NewLine;
+    FWriteLocation := RequiredValues.WriteLocation;
     try
-      FWriteLocation := RequiredValues.WriteLocation;
       if RequiredValues.WriteTransientData then
       begin
         for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
@@ -8832,6 +9085,84 @@ begin
       end;
     finally
       FWriteLocation := wlMain;
+    end
+  end;
+begin
+  if FAllotments.GroundWater.FarmOption = foNotUsed then
+  begin
+    Exit;
+  end;
+
+  FPestParamUsed := False;
+
+  RequiredValues.WriteLocation := wlGwAllotment;
+  RequiredValues.DefaultValue := 1;
+  RequiredValues.DataType := rdtDouble;
+  RequiredValues.DataTypeIndex := 0;
+  RequiredValues.MaxDataTypeIndex := 0;
+  RequiredValues.Comment := 'FMP ALLOTMENTS: GwAllotment';
+  RequiredValues.ErrorID := 'FMP ALLOTMENTS: GwAllotment';
+  RequiredValues.ID := 'GwAllotment';
+  RequiredValues.StaticDataName := '';
+  RequiredValues.WriteTransientData :=
+    (FAllotments.GroundWater.FarmOption = foTransient);
+  RequiredValues.CheckProcedure := CheckDataSetBetweenZeroAndOne;
+  RequiredValues.CheckError := StrInvalidGroundWaterAllotment;
+  case FAllotments.GroundWaterAllotmentMethod of
+    amHeight:
+      begin
+        RequiredValues.Option := 'HEIGHT ';
+      end;
+    amVolume:
+      begin
+        RequiredValues.Option := 'VOLUME ';
+      end;
+    amRate:
+      begin
+        RequiredValues.Option := 'RATE ';
+      end;
+  end;
+  RequiredValues.FarmProperty := FAllotments.GroundWater;
+
+  if RequiredValues.FarmProperty.ExternalFileName = '' then
+  begin
+    AFileName := GetFileStreamName(wlGwAllotment);
+  end;
+
+  GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
+    ExternalFileName, ExternalScaleFileName);
+  WriteScaleFactorsID_andOption(RequiredValues,
+    UnitConversionScaleFactor, ExternalScaleFileName);
+
+  if RequiredValues.WriteTransientData then
+  begin
+    WriteString('TRANSIENT LIST DATAFILE ');
+  end
+  else
+  begin
+    WriteString('STATIC LIST DATAFILE ');
+  end;
+
+  if ExternalFileName <> '' then
+  begin
+    WriteString(ExtractRelativePath(FInputFileName, ExternalFileName));
+    NewLine;
+  end
+  else
+  begin
+    WriteString(ExtractFileName(AFileName));
+    NewLine;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
+      end;
     end;
   end;
 end;

@@ -610,9 +610,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 ExplicitLeft = 517
               end
               inherited seNumber: TJvSpinEdit
-                Height = 23
                 OnChange = frameObservationsseNumberChange
-                ExplicitHeight = 23
               end
             end
             inherited Grid: TRbwDataGrid4
@@ -648,10 +646,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
               inherited sbDelete: TSpeedButton
                 Left = 517
                 ExplicitLeft = 517
-              end
-              inherited seNumber: TJvSpinEdit
-                Height = 23
-                ExplicitHeight = 23
               end
             end
             inherited Grid: TRbwDataGrid4

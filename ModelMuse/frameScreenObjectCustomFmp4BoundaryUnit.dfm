@@ -11,10 +11,6 @@ inherited frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Bound
     DesignSize = (
       410
       46)
-    inherited seNumberOfTimes: TJvSpinEdit
-      Height = 23
-      ExplicitHeight = 23
-    end
     inherited btnDelete: TBitBtn
       Left = 322
       ExplicitLeft = 322

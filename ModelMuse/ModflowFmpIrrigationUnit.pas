@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, OrderedCollectionUnit, GoPhastTypes, ModflowFmpFarmUnit,
   ModflowFmpBaseClasses, ModflowBoundaryUnit, RealListUnit,
-  OrderedCollectionInterfaceUnit, FormulaManagerInterfaceUnit;
+  OrderedCollectionInterfaceUnit, FormulaManagerInterfaceUnit,
+  ModflowParameterInterfaceUnit;
 
 type
   TEvapFractionItem = class(TCustomZeroFarmItem)
@@ -36,14 +37,32 @@ type
   // @name represents the choice of irrigation type for one crop.
   TFmp4EvapFractionCollection = class(TCustomFarmCollection)
   private
+    FSurfaceWaterLossFractionPestParamMethod: TPestParamMethod;
+    FSurfaceWaterLossFractionPestSeriesParameterName: string;
+    FSurfaceWaterLossFractionPestSeriesParameter: IModflowParameter;
     function GetItems(Index: Integer): TEvapFractionItem;
     procedure SetItems(Index: Integer; const Value: TEvapFractionItem);
+    function GetSurfaceWaterLossFractionPestSeriesParameter: string;
+    procedure SetSurfaceWaterLossFractionPestParamMethod(
+      const Value: TPestParamMethod);
+    procedure SetSurfaceWaterLossFractionPestSeriesParameter(
+      const Value: string);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
     property Items[Index: Integer]: TEvapFractionItem read GetItems
       write SetItems; default;
     function ItemByStartTime(ATime: Double): TEvapFractionItem;
+    procedure Loaded;
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+  published
+    property SurfaceWaterLossFractionPestSeriesParameter: string
+      read GetSurfaceWaterLossFractionPestSeriesParameter
+      write SetSurfaceWaterLossFractionPestSeriesParameter;
+    property SurfaceWaterLossFractionPestParamMethod: TPestParamMethod
+      read FSurfaceWaterLossFractionPestParamMethod
+      write SetSurfaceWaterLossFractionPestParamMethod;
   end;
 
   TIrrigationItem = class(TOrderedItem)
@@ -586,10 +605,48 @@ end;
 
 { TFmp4EvapFractionCollection }
 
+procedure TFmp4EvapFractionCollection.Assign(Source: TPersistent);
+var
+  OtherFarmCollection: TFmp4EvapFractionCollection;
+begin
+  if Source is TFmp4EvapFractionCollection then
+  begin
+    OtherFarmCollection := TFmp4EvapFractionCollection(Source);
+    SurfaceWaterLossFractionPestSeriesParameter := OtherFarmCollection.SurfaceWaterLossFractionPestSeriesParameter;
+    SurfaceWaterLossFractionPestParamMethod := OtherFarmCollection.SurfaceWaterLossFractionPestParamMethod;
+  end;
+  inherited;
+
+end;
+
 function TFmp4EvapFractionCollection.GetItems(
   Index: Integer): TEvapFractionItem;
 begin
   result := inherited Items[Index] as TEvapFractionItem;
+end;
+
+function TFmp4EvapFractionCollection.GetSurfaceWaterLossFractionPestSeriesParameter: string;
+begin
+  if FSurfaceWaterLossFractionPestSeriesParameter <> nil then
+  begin
+    FSurfaceWaterLossFractionPestSeriesParameterName := FSurfaceWaterLossFractionPestSeriesParameter.ParameterName;
+  end;
+  result := FSurfaceWaterLossFractionPestSeriesParameterName;
+end;
+
+function TFmp4EvapFractionCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  OtherFarmCollection: TFmp4EvapFractionCollection;
+begin
+  result := (AnOrderedCollection is TFmp4EvapFractionCollection)
+    and inherited;
+  if result then
+  begin
+    OtherFarmCollection := TFmp4EvapFractionCollection(AnOrderedCollection);
+    result := (SurfaceWaterLossFractionPestSeriesParameter = OtherFarmCollection.SurfaceWaterLossFractionPestSeriesParameter)
+      and (SurfaceWaterLossFractionPestParamMethod = OtherFarmCollection.SurfaceWaterLossFractionPestParamMethod)
+  end;
 end;
 
 function TFmp4EvapFractionCollection.ItemByStartTime(
@@ -622,10 +679,50 @@ begin
   result := TEvapFractionItem;
 end;
 
+procedure TFmp4EvapFractionCollection.Loaded;
+begin
+
+end;
+
 procedure TFmp4EvapFractionCollection.SetItems(Index: Integer;
   const Value: TEvapFractionItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TFmp4EvapFractionCollection.SetSurfaceWaterLossFractionPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FSurfaceWaterLossFractionPestParamMethod <> Value then
+  begin
+    FSurfaceWaterLossFractionPestParamMethod := Value;
+  end;
+end;
+
+procedure TFmp4EvapFractionCollection.SetSurfaceWaterLossFractionPestSeriesParameter(
+  const Value: string);
+begin
+  if FSurfaceWaterLossFractionPestSeriesParameterName <> Value then
+  begin
+    FSurfaceWaterLossFractionPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FSurfaceWaterLossFractionPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FSurfaceWaterLossFractionPestSeriesParameter = nil then
+      begin
+        FSurfaceWaterLossFractionPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FSurfaceWaterLossFractionPestSeriesParameter := nil;
+    end;
+  end;
 end;
 
 end.

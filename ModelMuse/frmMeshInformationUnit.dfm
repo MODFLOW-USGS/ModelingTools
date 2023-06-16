@@ -400,7 +400,7 @@ inherited frmMeshInformation: TfrmMeshInformation
       Caption = 'Elements per Node'
       ImageIndex = 1
       object splNodes: TSplitter
-        Left = 307
+        Left = 311
         Top = 0
         Width = 5
         Height = 250
@@ -411,7 +411,7 @@ inherited frmMeshInformation: TfrmMeshInformation
       object pbElementPerNode: TPaintBox
         Left = 0
         Top = 0
-        Width = 307
+        Width = 311
         Height = 250
         Align = alClient
         OnPaint = pbElementPerNodePaint
@@ -420,7 +420,7 @@ inherited frmMeshInformation: TfrmMeshInformation
         ExplicitWidth = 157
       end
       object rdgNodes: TRbwDataGrid4
-        Left = 312
+        Left = 316
         Top = 0
         Width = 204
         Height = 250

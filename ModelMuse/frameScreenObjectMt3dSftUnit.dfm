@@ -13,9 +13,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       46)
     inherited seNumberOfTimes: TJvSpinEdit
       Top = 12
-      Height = 23
       ExplicitTop = 12
-      ExplicitHeight = 23
     end
     inherited btnDelete: TBitBtn
       Left = 394

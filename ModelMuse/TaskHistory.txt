@@ -31310,5 +31310,15 @@ object TTaskHistory
         'Dialog boxes'
         'FMP'
         'PEST')
+    end
+    item
+      Date = 45091.000000000000000000
+    end
+    item
+      Date = 45092.000000000000000000
+      Categories.Strings = (
+        'FMP'
+        'PEST'
+        'Dialog boxes')
     end>
 end

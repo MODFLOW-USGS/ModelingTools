@@ -105,7 +105,7 @@ object frameGrid: TframeGrid
       Left = 8
       Top = 6
       Width = 65
-      Height = 21
+      Height = 23
       MaxValue = 1000000.000000000000000000
       TabOrder = 0
       OnChange = seNumberChange

@@ -56,8 +56,10 @@ type
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
-    property PestSeriesParameter: string read GetPestSeriesParameter write SetPestSeriesParameter;
-    property PestParamMethod: TPestParamMethod read FPestParamMethod write SetPestParamMethod;
+    property PestSeriesParameter: string read GetPestSeriesParameter
+      write SetPestSeriesParameter;
+    property PestParamMethod: TPestParamMethod read FPestParamMethod
+      write SetPestParamMethod;
 
   end;
 

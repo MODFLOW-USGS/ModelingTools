@@ -46,9 +46,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
         ExplicitLeft = 406
       end
       inherited seNumber: TJvSpinEdit
-        Height = 23
         OnChange = frameSwiObsseNumberChange
-        ExplicitHeight = 23
       end
     end
     inherited Grid: TRbwDataGrid4

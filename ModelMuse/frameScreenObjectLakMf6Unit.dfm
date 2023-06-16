@@ -17,10 +17,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
       Top = 8
       ExplicitTop = 8
     end
-    inherited seNumberOfTimes: TJvSpinEdit
-      Height = 23
-      ExplicitHeight = 23
-    end
     inherited btnDelete: TBitBtn
       Left = 385
       ExplicitLeft = 385

@@ -8,7 +8,6 @@ inherited frameLeach: TframeLeach
   inherited Grid: TRbwDataGrid4
     Height = 158
     ColCount = 4
-    OnSelectCell = GridSelectCell
     Columns = <
       item
         AutoAdjustRowHeights = False

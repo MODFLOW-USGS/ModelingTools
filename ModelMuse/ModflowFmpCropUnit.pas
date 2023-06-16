@@ -7,7 +7,8 @@ uses
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   Classes,
   OrderedCollectionUnit, SysUtils, GoPhastTypes, ModflowFmpFarmUnit,
-  ModflowFmpBaseClasses, RealListUnit, OrderedCollectionInterfaceUnit;
+  ModflowFmpBaseClasses, RealListUnit, OrderedCollectionInterfaceUnit,
+  ModflowParameterInterfaceUnit;
 
 type
   // FMP Data Sets 11 and 26
@@ -62,13 +63,44 @@ type
   // @name represents the choice of irrigation type for one crop.
   TIrrigationCollection = class(TCustomFarmCollection)
   private
+    FEvapIrrigateFractionPestParamMethod: TPestParamMethod;
+    FSurfaceWaterLossFractionIrrigationPestParamMethod: TPestParamMethod;
+    FEvapIrrigateFractionPestSeriesParameterName: string;
+    FEvapIrrigateFractionPestSeriesParameter: IModflowParameter;
+    FSurfaceWaterLossFractionIrrigationPestSeriesParameterName: string;
+    FSurfaceWaterLossFractionIrrigationPestSeriesParameter: IModflowParameter;
     function GetItems(Index: Integer): TCropIrrigationItem;
     procedure SetItems(Index: Integer; const Value: TCropIrrigationItem);
+    function GetEvapIrrigateFractionPestSeriesParameter: string;
+    function GetSurfaceWaterLossFractionIrrigationPestSeriesParameter: string;
+    procedure SetEvapIrrigateFractionPestParamMethod(
+      const Value: TPestParamMethod);
+    procedure SetEvapIrrigateFractionPestSeriesParameter(const Value: string);
+    procedure SetSurfaceWaterLossFractionIrrigationPestParamMethod(
+      const Value: TPestParamMethod);
+    procedure SetSurfaceWaterLossFractionIrrigationPestSeriesParameter(
+      const Value: string);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
     property Items[Index: Integer]: TCropIrrigationItem read GetItems
       write SetItems; default;
+    procedure Loaded;
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+  published
+    property EvapIrrigateFractionPestSeriesParameter: string
+      read GetEvapIrrigateFractionPestSeriesParameter
+      write SetEvapIrrigateFractionPestSeriesParameter;
+    property EvapIrrigateFractionPestParamMethod: TPestParamMethod
+      read FEvapIrrigateFractionPestParamMethod
+      write SetEvapIrrigateFractionPestParamMethod;
+    property SurfaceWaterLossFractionIrrigationPestSeriesParameter: string
+      read GetSurfaceWaterLossFractionIrrigationPestSeriesParameter
+      write SetSurfaceWaterLossFractionIrrigationPestSeriesParameter;
+    property SurfaceWaterLossFractionIrrigationPestParamMethod: TPestParamMethod
+      read FSurfaceWaterLossFractionIrrigationPestParamMethod
+      write SetSurfaceWaterLossFractionIrrigationPestParamMethod;
   end;
 
   // FMP Data Sets 12 and 28
@@ -3692,9 +3724,59 @@ end;
 
 { TFmp4IrrigationCollection }
 
+procedure TIrrigationCollection.Assign(Source: TPersistent);
+var
+  OtherCollection: TIrrigationCollection;
+begin
+  if Source is TIrrigationCollection then
+  begin
+    OtherCollection := TIrrigationCollection(Source);
+    EvapIrrigateFractionPestSeriesParameter := OtherCollection.EvapIrrigateFractionPestSeriesParameter;
+    EvapIrrigateFractionPestParamMethod := OtherCollection.EvapIrrigateFractionPestParamMethod;
+    SurfaceWaterLossFractionIrrigationPestSeriesParameter := OtherCollection.SurfaceWaterLossFractionIrrigationPestSeriesParameter;
+    SurfaceWaterLossFractionIrrigationPestParamMethod := OtherCollection.SurfaceWaterLossFractionIrrigationPestParamMethod;
+  end;
+  inherited;
+end;
+
+function TIrrigationCollection.GetEvapIrrigateFractionPestSeriesParameter: string;
+begin
+  if FEvapIrrigateFractionPestSeriesParameter <> nil then
+  begin
+    FEvapIrrigateFractionPestSeriesParameterName := FEvapIrrigateFractionPestSeriesParameter.ParameterName;
+  end;
+  result := FEvapIrrigateFractionPestSeriesParameterName;
+end;
+
 function TIrrigationCollection.GetItems(Index: Integer): TCropIrrigationItem;
 begin
   result := inherited Items[Index] as TCropIrrigationItem;
+end;
+
+function TIrrigationCollection.GetSurfaceWaterLossFractionIrrigationPestSeriesParameter: string;
+begin
+  if FSurfaceWaterLossFractionIrrigationPestSeriesParameter <> nil then
+  begin
+    FSurfaceWaterLossFractionIrrigationPestSeriesParameterName := FSurfaceWaterLossFractionIrrigationPestSeriesParameter.ParameterName;
+  end;
+  result := FSurfaceWaterLossFractionIrrigationPestSeriesParameterName;
+end;
+
+function TIrrigationCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  OtherFarmCollection: TIrrigationCollection;
+begin
+  result := (AnOrderedCollection is TIrrigationCollection)
+    and inherited;
+  if result then
+  begin
+    OtherFarmCollection := TIrrigationCollection(AnOrderedCollection);
+    result := (EvapIrrigateFractionPestSeriesParameter = OtherFarmCollection.EvapIrrigateFractionPestSeriesParameter)
+      and (EvapIrrigateFractionPestParamMethod = OtherFarmCollection.EvapIrrigateFractionPestParamMethod)
+      and (SurfaceWaterLossFractionIrrigationPestSeriesParameter = OtherFarmCollection.SurfaceWaterLossFractionIrrigationPestSeriesParameter)
+      and (SurfaceWaterLossFractionIrrigationPestParamMethod = OtherFarmCollection.SurfaceWaterLossFractionIrrigationPestParamMethod)
+  end;
 end;
 
 class function TIrrigationCollection.ItemClass: TBoundaryItemClass;
@@ -3702,10 +3784,94 @@ begin
   result := TCropIrrigationItem;
 end;
 
+procedure TIrrigationCollection.Loaded;
+begin
+  if (Model <> nil) and (FEvapIrrigateFractionPestSeriesParameterName <> '') then
+  begin
+    FEvapIrrigateFractionPestSeriesParameter :=
+       Model.GetPestParameterByNameI(FEvapIrrigateFractionPestSeriesParameterName)
+  end;
+  if (Model <> nil) and (FSurfaceWaterLossFractionIrrigationPestSeriesParameterName <> '') then
+  begin
+    FSurfaceWaterLossFractionIrrigationPestSeriesParameter :=
+      Model.GetPestParameterByNameI(FSurfaceWaterLossFractionIrrigationPestSeriesParameterName)
+  end;
+end;
+
+procedure TIrrigationCollection.SetEvapIrrigateFractionPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FEvapIrrigateFractionPestParamMethod <> Value then
+  begin
+    FEvapIrrigateFractionPestParamMethod := Value;
+  end;
+end;
+
+procedure TIrrigationCollection.SetEvapIrrigateFractionPestSeriesParameter(
+  const Value: string);
+begin
+  if FEvapIrrigateFractionPestSeriesParameterName <> Value then
+  begin
+    FEvapIrrigateFractionPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FEvapIrrigateFractionPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FEvapIrrigateFractionPestSeriesParameter = nil then
+      begin
+        FEvapIrrigateFractionPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FEvapIrrigateFractionPestSeriesParameter := nil;
+    end;
+  end;
+end;
+
 procedure TIrrigationCollection.SetItems(Index: Integer;
   const Value: TCropIrrigationItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TIrrigationCollection.SetSurfaceWaterLossFractionIrrigationPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FSurfaceWaterLossFractionIrrigationPestParamMethod <> Value then
+  begin
+    FSurfaceWaterLossFractionIrrigationPestParamMethod := Value;
+  end;
+end;
+
+procedure TIrrigationCollection.SetSurfaceWaterLossFractionIrrigationPestSeriesParameter(
+  const Value: string);
+begin
+  if FSurfaceWaterLossFractionIrrigationPestSeriesParameterName <> Value then
+  begin
+    FSurfaceWaterLossFractionIrrigationPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FSurfaceWaterLossFractionIrrigationPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FSurfaceWaterLossFractionIrrigationPestSeriesParameter = nil then
+      begin
+        FSurfaceWaterLossFractionIrrigationPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FSurfaceWaterLossFractionIrrigationPestSeriesParameter := nil;
+    end;
+  end;
 end;
 
 { TRootPressureItem }
