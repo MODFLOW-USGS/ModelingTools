@@ -102,6 +102,8 @@ type
     procedure frameLeachGridButtonClick(Sender: TObject; ACol, ARow: Integer);
     procedure frameLeachGridEndUpdate(Sender: TObject);
     procedure frameRootPressureGridEndUpdate(Sender: TObject);
+    procedure frameRootPressureGridSelectCell(Sender: TObject; ACol, ARow: Integer;
+        var CanSelect: Boolean);
     procedure jvpltvMainChanging(Sender: TObject; Node: TTreeNode; var AllowChange:
         Boolean);
     procedure jvspGwRootInteractionShow(Sender: TObject);
@@ -562,6 +564,8 @@ begin
 end;
 
 procedure TfrmCropProperties.SetUpRootPressureTable(Model: TCustomModel);
+var
+  GridRect: TGridRect;
 begin
   frameRootPressure.Grid.ColCount := 6;
   frameRootPressure.Grid.FixedCols := 0;
@@ -573,6 +577,21 @@ begin
   frameRootPressure.Grid.Cells[Ord(pcPsi2), 0] := 'High Optimal Pressure';
   frameRootPressure.Grid.Cells[Ord(pcPsi3), 0] := 'Low Optimal Pressure';
   frameRootPressure.Grid.Cells[Ord(pcPsi4), 0] := 'Wilting Pressure';
+
+  frameRootPressure.PestUsedOnCol[Ord(pcStart)] := False;
+  frameRootPressure.PestUsedOnCol[Ord(pcEnd)] := False;
+  frameRootPressure.PestUsedOnCol[Ord(pcPsi1)] := True;
+  frameRootPressure.PestUsedOnCol[Ord(pcPsi2)] := True;
+  frameRootPressure.PestUsedOnCol[Ord(pcPsi3)] := True;
+  frameRootPressure.PestUsedOnCol[Ord(pcPsi4)] := True;
+  frameRootPressure.InitializePestParameters;
+
+  GridRect.Left := 0;
+  GridRect.Top := 3;
+  GridRect.Right := 0;
+  GridRect.Bottom := 3;
+  frameRootPressure.Grid.Selection := GridRect;
+
 
   SetGridColumnProperties(frameRootPressure.Grid);
   SetUseButton(frameRootPressure.Grid, Ord(pcPsi1));
@@ -1457,9 +1476,9 @@ begin
     for RowIndex := 1 to frameRootPressure.seNumber.AsInteger do
     begin
       if TryStrToFloat(frameRootPressure.Grid.Cells[
-        Ord(pcStart), RowIndex], StartTime)
+        Ord(pcStart), RowIndex+PestRowOffset], StartTime)
         and TryStrToFloat(frameRootPressure.Grid.Cells[
-        Ord(pcEnd), RowIndex], EndTime) then
+        Ord(pcEnd), RowIndex+PestRowOffset], EndTime) then
       begin
         if ItemCount >= FRootPressure.Count then
         begin
@@ -1468,16 +1487,52 @@ begin
         AnItem := FRootPressure[ItemCount] as TRootPressureItem;
         AnItem.StartTime := StartTime;
         AnItem.EndTime := EndTime;
-        AnItem.Psi1 := frameRootPressure.Grid.Cells[Ord(pcPsi1), RowIndex];
-        AnItem.Psi2:= frameRootPressure.Grid.Cells[Ord(pcPsi2), RowIndex];
-        AnItem.Psi3:= frameRootPressure.Grid.Cells[Ord(pcPsi3), RowIndex];
-        AnItem.Psi4:= frameRootPressure.Grid.Cells[Ord(pcPsi4), RowIndex];
+        AnItem.Psi1 := frameRootPressure.Grid.Cells[Ord(pcPsi1), RowIndex+PestRowOffset];
+        AnItem.Psi2 := frameRootPressure.Grid.Cells[Ord(pcPsi2), RowIndex+PestRowOffset];
+        AnItem.Psi3 := frameRootPressure.Grid.Cells[Ord(pcPsi3), RowIndex+PestRowOffset];
+        AnItem.Psi4 := frameRootPressure.Grid.Cells[Ord(pcPsi4), RowIndex+PestRowOffset];
         Inc(ItemCount);
       end;
     end;
     while FRootPressure.Count > ItemCount do
     begin
       FRootPressure.Last.Free;
+    end;
+
+    if frameRootPressure.PestMethodAssigned[Ord(pcPsi1)] then
+    begin
+      FRootPressure.PestParamMethod := frameRootPressure.PestMethod[Ord(pcPsi1)];
+    end;
+    if frameRootPressure.PestModifierAssigned[Ord(pcPsi1)] then
+    begin
+      FRootPressure.PestSeriesParameter := frameRootPressure.PestModifier[Ord(pcPsi1)];
+    end;
+
+    if frameRootPressure.PestMethodAssigned[Ord(pcPsi2)] then
+    begin
+      FRootPressure.P2PestParamMethod := frameRootPressure.PestMethod[Ord(pcPsi2)];
+    end;
+    if frameRootPressure.PestModifierAssigned[Ord(pcPsi2)] then
+    begin
+      FRootPressure.P2PestSeriesParameter := frameRootPressure.PestModifier[Ord(pcPsi2)];
+    end;
+
+    if frameRootPressure.PestMethodAssigned[Ord(pcPsi3)] then
+    begin
+      FRootPressure.P3PestParamMethod := frameRootPressure.PestMethod[Ord(pcPsi3)];
+    end;
+    if frameRootPressure.PestModifierAssigned[Ord(pcPsi3)] then
+    begin
+      FRootPressure.P3PestSeriesParameter := frameRootPressure.PestModifier[Ord(pcPsi3)];
+    end;
+
+    if frameRootPressure.PestMethodAssigned[Ord(pcPsi4)] then
+    begin
+      FRootPressure.P4PestParamMethod := frameRootPressure.PestMethod[Ord(pcPsi4)];
+    end;
+    if frameRootPressure.PestModifierAssigned[Ord(pcPsi4)] then
+    begin
+      FRootPressure.P4PestSeriesParameter := frameRootPressure.PestModifier[Ord(pcPsi4)];
     end;
   end;
 end;
@@ -1717,6 +1772,10 @@ begin
   frameIrrigation.IncludePestAdjustment := True;
   frameIrrigation.seNumber.AsInteger := 0;
   frameIrrigation.seNumber.OnChange(nil);
+
+  frameRootPressure.IncludePestAdjustment := True;
+  frameRootPressure.seNumber.AsInteger := 0;
+  frameRootPressure.seNumber.OnChange(nil);
 
   SetUpCropNameTable(frmGoPhast.PhastModel);
   SetUpEvapFractionsTable(frmGoPhast.PhastModel);
@@ -1990,7 +2049,7 @@ begin
   frameRootPressure.seNumber.OnChange(frameRootPressure.seNumber);
   if frameRootPressure.seNumber.AsInteger = 0 then
   begin
-    frameRootPressure.Grid.Row := 1;
+    frameRootPressure.Grid.Row := 1+PestRowOffset;
     frameRootPressure.ClearSelectedRow;
   end;
   frameRootPressure.Grid.BeginUpdate;
@@ -1998,13 +2057,22 @@ begin
     for ItemIndex := 0 to RootPressure.Count - 1 do
     begin
       AnItem := RootPressure[ItemIndex] as TRootPressureItem;
-      frameRootPressure.Grid.Cells[Ord(pcStart), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-      frameRootPressure.Grid.Cells[Ord(pcEnd), ItemIndex+1] := FloatToStr(AnItem.EndTime);
-      frameRootPressure.Grid.Cells[Ord(pcPsi1), ItemIndex+1] := AnItem.Psi1;
-      frameRootPressure.Grid.Cells[Ord(pcPsi2), ItemIndex+1] := AnItem.Psi2;
-      frameRootPressure.Grid.Cells[Ord(pcPsi3), ItemIndex+1] := AnItem.Psi3;
-      frameRootPressure.Grid.Cells[Ord(pcPsi4), ItemIndex+1] := AnItem.Psi4;
+      frameRootPressure.Grid.Cells[Ord(pcStart), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.StartTime);
+      frameRootPressure.Grid.Cells[Ord(pcEnd), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.EndTime);
+      frameRootPressure.Grid.Cells[Ord(pcPsi1), ItemIndex+1+PestRowOffset] := AnItem.Psi1;
+      frameRootPressure.Grid.Cells[Ord(pcPsi2), ItemIndex+1+PestRowOffset] := AnItem.Psi2;
+      frameRootPressure.Grid.Cells[Ord(pcPsi3), ItemIndex+1+PestRowOffset] := AnItem.Psi3;
+      frameRootPressure.Grid.Cells[Ord(pcPsi4), ItemIndex+1+PestRowOffset] := AnItem.Psi4;
     end;
+
+    frameRootPressure.PestMethod[Ord(pcPsi1)] := RootPressure.PestParamMethod;
+    frameRootPressure.PestModifier[Ord(pcPsi1)] := RootPressure.PestSeriesParameter;
+    frameRootPressure.PestMethod[Ord(pcPsi2)] := RootPressure.P2PestParamMethod;
+    frameRootPressure.PestModifier[Ord(pcPsi2)] := RootPressure.P2PestSeriesParameter;
+    frameRootPressure.PestMethod[Ord(pcPsi3)] := RootPressure.P3PestParamMethod;
+    frameRootPressure.PestModifier[Ord(pcPsi3)] := RootPressure.P3PestSeriesParameter;
+    frameRootPressure.PestMethod[Ord(pcPsi4)] := RootPressure.P4PestParamMethod;
+    frameRootPressure.PestModifier[Ord(pcPsi4)] := RootPressure.P4PestSeriesParameter;
   finally
     frameRootPressure.Grid.EndUpdate;
   end;
@@ -2652,6 +2720,13 @@ begin
       Leach.Last.Free;
     end;
   end
+end;
+
+procedure TfrmCropProperties.frameRootPressureGridSelectCell(Sender: TObject;
+    ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  frameRootPressure.GridSelectCell(Sender, ACol, ARow, CanSelect);
 end;
 
 procedure TfrmCropProperties.jvpltvMainChanging(Sender: TObject; Node:

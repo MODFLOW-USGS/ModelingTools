@@ -9958,6 +9958,9 @@ const
 //    '5.1.1.31' Bug fix: Fixed pasting data into the Observation Comparisons
 //                dialog box.
 
+//               Bug fix: Fixed a bug that could cause an access violation when
+//                opening the MODFLOW Packages and Programs dialog box.
+
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 

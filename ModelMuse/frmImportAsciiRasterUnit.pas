@@ -89,7 +89,8 @@ resourcestring
   StrProgress = 'Progress';
   StrNoDataPointsWere = 'No data points were inside the model area';
   StrNoPointsWereInclu = 'No points were included in %0:d %1:s so they have ' +
-  'been skipped.';
+  'been skipped. Check that the coordinate reference system of the file you ' +
+  'are importing matches the coordinate reference system of your model.';
 
 {$R *.dfm}
 

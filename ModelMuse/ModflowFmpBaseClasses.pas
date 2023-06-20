@@ -299,6 +299,7 @@ begin
   if FPestParamMethod <> Value then
   begin
     FPestParamMethod := Value;
+    InvalidateModel;
   end;
 end;
 

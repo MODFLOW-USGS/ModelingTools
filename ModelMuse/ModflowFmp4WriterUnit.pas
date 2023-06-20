@@ -4778,10 +4778,6 @@ var
         WriteFloatValueFromGlobalFormula(PestValues.Formula, IrrigationType,
           PestValues.FormulaErrorMessage);
       end;
-
-//      Formula := EvapFracItem.SurfaceWaterLossFractionIrrigation;
-//      WriteFloatValueFromGlobalFormula(Formula, IrrigationType,
-//        'Invalid Surface Water Loss Fraction Irrigation in irrigation type ' + IrrigationType.Name);
     end
     else
     begin
@@ -5605,14 +5601,13 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
   DataArrayNames: TStringList;
-  CropIndex: Integer;
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  TimeIndex: Integer;
   StartTime: Double;
   ACrop: TCropItem;
   AddedDemandItem: TAddedDemandItem;
+  CropIndex: Integer;
   procedure WriteAddedDemandItem(ACrop: TCropItem; AddedDemandItem: TAddedDemandItem);
   var
     FarmIndex: Integer;
@@ -5657,6 +5652,52 @@ var
       Inc(FarmID);
     end;
     NewLine;
+  end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    CropIndex: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+          begin
+            ACrop := Model.FmpCrops[CropIndex];
+            WriteInteger(CropIndex+1);
+            AddedDemandItem := ACrop.AddedDemandCollection.
+              ItemByStartTime(StartTime) as TAddedDemandItem;
+            WriteAddedDemandItem(ACrop, AddedDemandItem);
+          end;
+        end;
+      end
+      else
+      begin
+        for CropIndex := 0 to Model.FmpCrops.Count - 1 do
+        begin
+          ACrop := Model.FmpCrops[CropIndex];
+          WriteInteger(CropIndex + 1);
+          if ACrop.AddedDemandCollection.Count > 0 then
+          begin
+            AddedDemandItem := ACrop.AddedDemandCollection.First as TAddedDemandItem;
+          end
+          else
+          begin
+            AddedDemandItem := nil;
+          end;
+          WriteAddedDemandItem(ACrop, AddedDemandItem);
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
   end;
 begin
   if FLandUse.AddedDemand.FarmOption = foNotUsed then
@@ -5755,47 +5796,7 @@ begin
     begin
       WriteString(ExtractFileName(AFileName));
       NewLine;
-      try
-        FWriteLocation := RequiredValues.WriteLocation;
-
-        if RequiredValues.WriteTransientData then
-        begin
-          for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-          begin
-            WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-
-            StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-            for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-            begin
-              ACrop := Model.FmpCrops[CropIndex];
-              WriteInteger(CropIndex+1);
-              AddedDemandItem := ACrop.AddedDemandCollection.
-                ItemByStartTime(StartTime) as TAddedDemandItem;
-              WriteAddedDemandItem(ACrop, AddedDemandItem);
-            end;
-          end;
-        end
-        else
-        begin
-          for CropIndex := 0 to Model.FmpCrops.Count - 1 do
-          begin
-            ACrop := Model.FmpCrops[CropIndex];
-            WriteInteger(CropIndex + 1);
-            if ACrop.AddedDemandCollection.Count > 0 then
-            begin
-              AddedDemandItem := ACrop.AddedDemandCollection.First as TAddedDemandItem;
-            end
-            else
-            begin
-              AddedDemandItem := nil;
-            end;
-            WriteAddedDemandItem(ACrop, AddedDemandItem);
-          end;
-        end;
-      finally
-        FWriteLocation := wlMain;
-      end;
+      WriteListData;
     end;
   end;
 end;
@@ -10294,22 +10295,112 @@ var
   procedure WriteRootPressureItem(Crop: TCropItem;
     RootPressureItem: TRootPressureItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if RootPressureItem <> nil then
     begin
-      Formula := RootPressureItem.Psi1;
-      WriteFloatValueFromGlobalFormula(Formula, Crop,
-        'Invalid Anoxia Pressure formula in ' + Crop.CropName);
-      Formula := RootPressureItem.Psi2;
-      WriteFloatValueFromGlobalFormula(Formula, Crop,
-        'Invalid High Optimal Pressure formula in ' + Crop.CropName);
-      Formula := RootPressureItem.Psi3;
-      WriteFloatValueFromGlobalFormula(Formula, Crop,
-        'Invalid Low Optimal Pressure formula in ' + Crop.CropName);
-      Formula := RootPressureItem.Psi4;
-      WriteFloatValueFromGlobalFormula(Formula, Crop,
-        'Invalid Wilting Pressure formula in ' + Crop.CropName);
+      PestValues.Formula := RootPressureItem.Psi1;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := Crop.RootPressureCollection.PestSeriesParameter;
+      PestValues.PestSeriesMethod := Crop.RootPressureCollection.PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid Anoxia Pressure formula in ' + Crop.CropName;
+      PestValues.ErrorObjectName := Crop.CropName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, Crop,
+          PestValues.FormulaErrorMessage);
+      end;
+
+
+
+      PestValues.Formula := RootPressureItem.Psi2;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := Crop.RootPressureCollection.P2PestSeriesParameter;
+      PestValues.PestSeriesMethod := Crop.RootPressureCollection.P2PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid High Optimal Pressure formula in ' + Crop.CropName;
+      PestValues.ErrorObjectName := Crop.CropName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, Crop,
+          PestValues.FormulaErrorMessage);
+      end;
+
+
+
+      PestValues.Formula := RootPressureItem.Psi3;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := Crop.RootPressureCollection.P3PestSeriesParameter;
+      PestValues.PestSeriesMethod := Crop.RootPressureCollection.P3PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid Low Optimal Pressure formula in ' + Crop.CropName;
+      PestValues.ErrorObjectName := Crop.CropName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, Crop,
+          PestValues.FormulaErrorMessage);
+      end;
+
+
+
+      PestValues.Formula := RootPressureItem.Psi4;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := Crop.RootPressureCollection.P4PestSeriesParameter;
+      PestValues.PestSeriesMethod := Crop.RootPressureCollection.P4PestParamMethod;
+      PestValues.FormulaErrorMessage := 'Invalid Wilting Pressure formula in ' + Crop.CropName;
+      PestValues.ErrorObjectName := Crop.CropName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, Crop,
+          PestValues.FormulaErrorMessage);
+      end;
     end
     else
     begin
@@ -10363,11 +10454,29 @@ var
       NewLine;
     end;
   end;
+  procedure WriteListData;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        WriteTransientData;
+      end
+      else
+      begin
+        WriteStaticData;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end;
+  end;
 begin
   if FLandUse.RootPressure.FarmOption = foNotUsed then
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
 
   RequiredValues.WriteLocation := wlRootPressure;
   RequiredValues.DefaultValue := 0;
@@ -10411,18 +10520,17 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
-      if RequiredValues.WriteTransientData then
-      begin
-        WriteTransientData;
-      end
-      else
-      begin
-        WriteStaticData;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
       end;
-    finally
-      FWriteLocation := wlMain;
     end;
   end;
 end;

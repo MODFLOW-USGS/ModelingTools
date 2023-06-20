@@ -42,7 +42,7 @@ inherited frmCropProperties: TfrmCropProperties
     Top = 0
     Width = 567
     Height = 477
-    ActivePage = jvspIrrigation
+    ActivePage = jvspRootPressure
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -688,6 +688,7 @@ inherited frmCropProperties: TfrmCropProperties
         inherited Grid: TRbwDataGrid4
           Width = 567
           Height = 379
+          OnSelectCell = frameRootPressureGridSelectCell
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
           OnEndUpdate = frameRootPressureGridEndUpdate

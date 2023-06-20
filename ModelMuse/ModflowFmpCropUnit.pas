@@ -378,8 +378,44 @@ type
   end;
 
   TRootPressureCollection = class(TCustomFarmCollection)
+  private
+    FP2PestParamMethod: TPestParamMethod;
+    FP3PestParamMethod: TPestParamMethod;
+    FP4PestParamMethod: TPestParamMethod;
+    FP2PestSeriesParameterName: string;
+    FP2PestSeriesParameter: IModflowParameter;
+    FP3PestSeriesParameterName: string;
+    FP3PestSeriesParameter: IModflowParameter;
+    FP4PestSeriesParameterName: string;
+    FP4PestSeriesParameter: IModflowParameter;
+    function GetP2PestSeriesParameter: string;
+    function GetP3PestSeriesParameter: string;
+    function GetP4PestSeriesParameter: string;
+    procedure SetP2PestParamMethod(const Value: TPestParamMethod);
+    procedure SetP2PestSeriesParameter(const Value: string);
+    procedure SetP3PestParamMethod(const Value: TPestParamMethod);
+    procedure SetP3PestSeriesParameter(const Value: string);
+    procedure SetP4PestParamMethod(const Value: TPestParamMethod);
+    procedure SetP4PestSeriesParameter(const Value: string);
   protected
     class function ItemClass: TBoundaryItemClass; override;
+  public
+    procedure Loaded;
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+  published
+    property P2PestSeriesParameter: string read GetP2PestSeriesParameter
+      write SetP2PestSeriesParameter;
+    property P2PestParamMethod: TPestParamMethod read FP2PestParamMethod
+      write SetP2PestParamMethod;
+    property P3PestSeriesParameter: string read GetP3PestSeriesParameter
+      write SetP3PestSeriesParameter;
+    property P3PestParamMethod: TPestParamMethod read FP3PestParamMethod
+      write SetP3PestParamMethod;
+    property P4PestSeriesParameter: string read GetP4PestSeriesParameter
+      write SetP4PestSeriesParameter;
+    property P4PestParamMethod: TPestParamMethod read FP4PestParamMethod
+      write SetP4PestParamMethod;
   end;
 
   TInteractionCode = 0..5;
@@ -3804,6 +3840,7 @@ begin
   if FEvapIrrigateFractionPestParamMethod <> Value then
   begin
     FEvapIrrigateFractionPestParamMethod := Value;
+    InvalidateModel;
   end;
 end;
 
@@ -3845,6 +3882,7 @@ begin
   if FSurfaceWaterLossFractionIrrigationPestParamMethod <> Value then
   begin
     FSurfaceWaterLossFractionIrrigationPestParamMethod := Value;
+    InvalidateModel;
   end;
 end;
 
@@ -3883,9 +3921,194 @@ end;
 
 { TRootPressureCollection }
 
+procedure TRootPressureCollection.Assign(Source: TPersistent);
+var
+  OtherFarmCollection: TRootPressureCollection;
+begin
+  if Source is TRootPressureCollection then
+  begin
+    OtherFarmCollection := TRootPressureCollection(Source);
+    P2PestSeriesParameter := OtherFarmCollection.P2PestSeriesParameter;
+    P2PestParamMethod := OtherFarmCollection.P2PestParamMethod;
+    P3PestSeriesParameter := OtherFarmCollection.P3PestSeriesParameter;
+    P3PestParamMethod := OtherFarmCollection.P3PestParamMethod;
+    P4PestSeriesParameter := OtherFarmCollection.P4PestSeriesParameter;
+    P4PestParamMethod := OtherFarmCollection.P4PestParamMethod;
+  end;
+  inherited;
+
+end;
+
+function TRootPressureCollection.GetP2PestSeriesParameter: string;
+begin
+  if FP2PestSeriesParameter <> nil then
+  begin
+    FP2PestSeriesParameterName := FP2PestSeriesParameter.ParameterName;
+  end;
+  result := FP2PestSeriesParameterName;
+end;
+
+function TRootPressureCollection.GetP3PestSeriesParameter: string;
+begin
+  if FP3PestSeriesParameter <> nil then
+  begin
+    FP3PestSeriesParameterName := FP3PestSeriesParameter.ParameterName;
+  end;
+  result := FP3PestSeriesParameterName;
+end;
+
+function TRootPressureCollection.GetP4PestSeriesParameter: string;
+begin
+  if FP4PestSeriesParameter <> nil then
+  begin
+    FP4PestSeriesParameterName := FP4PestSeriesParameter.ParameterName;
+  end;
+  result := FP4PestSeriesParameterName;
+end;
+
+function TRootPressureCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  OtherFarmCollection: TRootPressureCollection;
+begin
+  result := (AnOrderedCollection is TRootPressureCollection)
+    and inherited;
+  if result then
+  begin
+    OtherFarmCollection := TRootPressureCollection(AnOrderedCollection);
+    result := (P2PestSeriesParameter = OtherFarmCollection.P2PestSeriesParameter)
+      and (P2PestParamMethod = OtherFarmCollection.P2PestParamMethod)
+      and (P3PestSeriesParameter = OtherFarmCollection.P3PestSeriesParameter)
+      and (P3PestParamMethod = OtherFarmCollection.P3PestParamMethod)
+      and (P4PestSeriesParameter = OtherFarmCollection.P4PestSeriesParameter)
+      and (P4PestParamMethod = OtherFarmCollection.P4PestParamMethod)
+  end;
+end;
+
 class function TRootPressureCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TRootPressureItem;
+end;
+
+procedure TRootPressureCollection.Loaded;
+begin
+  if (Model <> nil) and (FP2PestSeriesParameterName <> '') then
+  begin
+    FP2PestSeriesParameter := Model.GetPestParameterByNameI(FP2PestSeriesParameterName)
+  end;
+  if (Model <> nil) and (FP3PestSeriesParameterName <> '') then
+  begin
+    FP3PestSeriesParameter := Model.GetPestParameterByNameI(FP3PestSeriesParameterName)
+  end;
+  if (Model <> nil) and (FP4PestSeriesParameterName <> '') then
+  begin
+    FP4PestSeriesParameter := Model.GetPestParameterByNameI(FP4PestSeriesParameterName)
+  end;
+end;
+
+procedure TRootPressureCollection.SetP2PestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FP2PestParamMethod <> Value then
+  begin
+    FP2PestParamMethod := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TRootPressureCollection.SetP2PestSeriesParameter(const Value: string);
+begin
+  if FP2PestSeriesParameterName <> Value then
+  begin
+    FP2PestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FP2PestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FP2PestSeriesParameter = nil then
+      begin
+        FP2PestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FP2PestSeriesParameter := nil;
+    end;
+  end;
+end;
+
+procedure TRootPressureCollection.SetP3PestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FP3PestParamMethod <> Value then
+  begin
+    FP3PestParamMethod := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TRootPressureCollection.SetP3PestSeriesParameter(const Value: string);
+begin
+  if FP3PestSeriesParameterName <> Value then
+  begin
+    FP3PestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FP3PestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FP3PestSeriesParameter = nil then
+      begin
+        FP3PestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FP3PestSeriesParameter := nil;
+    end;
+  end;
+end;
+
+procedure TRootPressureCollection.SetP4PestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  if FP4PestParamMethod <> Value then
+  begin
+    FP4PestParamMethod := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TRootPressureCollection.SetP4PestSeriesParameter(const Value: string);
+begin
+  if FP4PestSeriesParameterName <> Value then
+  begin
+    FP4PestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FP4PestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FP4PestSeriesParameter = nil then
+      begin
+        FP4PestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FP4PestSeriesParameter := nil;
+    end;
+  end;
 end;
 
 { TGroundwaterRootInteraction }

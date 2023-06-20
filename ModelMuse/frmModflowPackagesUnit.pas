@@ -2731,6 +2731,7 @@ begin
     for Index := 0 to FPackageList.Count - 1 do
     begin
       APackage := FPackageList[Index];
+      APackage.Node := nil;
 
       Frame := APackage.Frame;
       Assert(Frame <> nil);

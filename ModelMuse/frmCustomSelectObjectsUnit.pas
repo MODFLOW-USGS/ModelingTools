@@ -3148,7 +3148,7 @@ begin
     vstObjects.ChildCount[FvstCalibrationDataSetsNode] := 0;
     DataSetClassifications := TStringList.Create;
     try
-      DataSetClassifications.AddObject('Calibration Data Sets', TObject(FvstCalibrationDataSetsNode));
+      DataSetClassifications.AddObject(StrCalibrationDataSets, TObject(FvstCalibrationDataSetsNode));
 
       ClassificationObjectOwnerList := TObjectList.Create;
       try
