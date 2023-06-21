@@ -31352,6 +31352,8 @@ object TTaskHistory
         'Dialog boxes'
         'FMP'
         'PEST'
-        'Pest parameter substitution')
+        'Pest parameter substitution'
+        'Documentation'
+        'Error checking')
     end>
 end
