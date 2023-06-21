@@ -119,14 +119,9 @@ begin
         begin
           for ColIndex := 0 to DataArray.ColumnCount - 1 do
           begin
-//            if DataArray.IntegerData[LayerIndex,RowIndex,ColIndex] = 0 then
-//            begin
-              ActiveCells[LayerIndex,RowIndex,ColIndex] := Sign(DataArray.IntegerData[LayerIndex,RowIndex,ColIndex]);
-//            end
-//            else
-//            begin
-//              ActiveCells[LayerIndex,RowIndex,ColIndex] := 1;
-//            end;
+            ActiveCells[LayerIndex,RowIndex,ColIndex] :=
+              Sign(DataArray.IntegerData[LayerIndex,RowIndex,ColIndex]);
+
             if not FoundFirst
               and (ActiveCells[LayerIndex,RowIndex,ColIndex] = 1) then
             begin
@@ -167,7 +162,6 @@ begin
             begin
               NewCell := TActiveCell.Create;
               NewCell.Layer := LIndex;
-//              NewCell.Layer := {Model.ModflowLayerToDataSetLayer(}NewCell.Layer+1;
               NewCell.Row := ACell.Row;
               NewCell.Column := ACell.Column;
               Queue.Enqueue(NewCell);
@@ -189,7 +183,6 @@ begin
             begin
               NewCell := TActiveCell.Create;
               NewCell.Layer := LIndex;
-//              NewCell.Layer := {Model.ModflowLayerToDataSetLayer(}NewCell.Layer+1;
               NewCell.Row := ACell.Row;
               NewCell.Column := ACell.Column;
               Queue.Enqueue(NewCell);
@@ -209,7 +202,6 @@ begin
           begin
             NewCell := TActiveCell.Create;
             NewCell.Layer := ACell.Layer;
-//            NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row-1;
             NewCell.Column := ACell.Column;
             Queue.Enqueue(NewCell);
@@ -222,7 +214,6 @@ begin
           if (ActiveCells[ACell.Layer,ACell.Row+1,ACell.Column] = 1) then
           begin
             NewCell := TActiveCell.Create;
-//            NewCell.Layer := ACell.Layer;
             NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row+1;
             NewCell.Column := ACell.Column;
@@ -236,7 +227,6 @@ begin
           if (ActiveCells[ACell.Layer,ACell.Row,ACell.Column-1] = 1) then
           begin
             NewCell := TActiveCell.Create;
-//            NewCell.Layer := ACell.Layer;
             NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row;
             NewCell.Column := ACell.Column-1;
@@ -250,7 +240,6 @@ begin
           if (ActiveCells[ACell.Layer,ACell.Row,ACell.Column+1] = 1) then
           begin
             NewCell := TActiveCell.Create;
-//            NewCell.Layer := ACell.Layer;
             NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row;
             NewCell.Column := ACell.Column+1;
@@ -263,13 +252,9 @@ begin
       end;
       if FoundFirst then
       begin
-//        FoundFirst := False;
-//        Layer := -1;
         for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
         begin
-//          if Model.IsLayerSimulated(LayerIndex) then
           begin
-//            Inc(Layer);
             for RowIndex := 0 to DataArray.RowCount - 1 do
             begin
               for ColIndex := 0 to DataArray.ColumnCount - 1 do

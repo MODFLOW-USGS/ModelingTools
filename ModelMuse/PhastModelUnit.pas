@@ -12229,6 +12229,7 @@ begin
     FmpClimate.Clear;
     FmpAllotment.Clear;
     FFarms.Clear;
+    FIrrigationTypes.Clear;
 
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin

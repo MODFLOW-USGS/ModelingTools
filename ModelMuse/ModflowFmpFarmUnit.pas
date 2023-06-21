@@ -214,7 +214,7 @@ type
     function Add: TSemiRoutedDeliveriesAndRunoffItem;
     property Items[Index: Integer]: TSemiRoutedDeliveriesAndRunoffItem
       read GetItem write SetItem; default;
-    procedure Loaded;
+    procedure Loaded; override;
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
@@ -245,6 +245,7 @@ type
      constructor Create(Collection: TCollection); override;
      destructor Destroy; override;
      procedure Assign(Source: TPersistent); override;
+    procedure Loaded;
   published
     property Name: string read FName write SetName;
     property SemiRouted: TSemiRoutedDeliveriesAndReturnFlowCollection
@@ -257,6 +258,7 @@ type
     function GetItem(Index: Integer): TMultiSrdItem;
     procedure SetItem(Index: Integer; const Value: TMultiSrdItem);
   public
+    procedure Loaded;
     constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TMultiSrdItem read GetItem write SetItem; default;
   end;
@@ -448,9 +450,6 @@ type
       write SetItem; default;
     property First: TFarmEfficienciesItem read GetFirst;
     procedure Loaded;
-  published
-//    property PestSeriesParameter: string read GetPestSeriesParameter write SetPestSeriesParameter;
-//    property TPestParamMethod: TPestParamMethod read FTPestParamMethod write SetTPestParamMethod;
   end;
 
   TDeficiencyScenarioItem = class(TBoolFarmItem)
@@ -551,8 +550,44 @@ type
   end;
 
   TSaltSupplyConcentrationCollection = class(TCustomFarmCollection)
+  private
+    FGWConcPestParamMethod: TPestParamMethod;
+    FSWConcPestParamMethod: TPestParamMethod;
+    FExtConcPestParamMethod: TPestParamMethod;
+    FExtConcPestSeriesParameterName: string;
+    FExtConcPestSeriesParameter: IModflowParameter;
+    FGWConcPestSeriesParameterName: string;
+    FGWConcPestSeriesParameter: IModflowParameter;
+    FSWConcPestSeriesParameterName: string;
+    FSWConcPestSeriesParameter: IModflowParameter;
+    function GetExtConcPestSeriesParameter: string;
+    function GetGWConcPestSeriesParameter: string;
+    function GetSWConcPestSeriesParameter: string;
+    procedure SetExtConcPestParamMethod(const Value: TPestParamMethod);
+    procedure SetExtConcPestSeriesParameter(const Value: string);
+    procedure SetGWConcPestParamMethod(const Value: TPestParamMethod);
+    procedure SetGWConcPestSeriesParameter(const Value: string);
+    procedure SetSWConcPestParamMethod(const Value: TPestParamMethod);
+    procedure SetSWConcPestSeriesParameter(const Value: string);
   protected
     class function ItemClass: TBoundaryItemClass; override;
+  public
+    procedure Loaded; override;
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+  published
+    property SWConcPestSeriesParameter: string read GetSWConcPestSeriesParameter
+      write SetSWConcPestSeriesParameter;
+    property SWConcPestParamMethod: TPestParamMethod read FSWConcPestParamMethod
+      write SetSWConcPestParamMethod;
+    property GWConcPestSeriesParameter: string read GetGWConcPestSeriesParameter
+      write SetGWConcPestSeriesParameter;
+    property GWConcPestParamMethod: TPestParamMethod read FGWConcPestParamMethod
+      write SetGWConcPestParamMethod;
+    property ExtConcPestSeriesParameter: string read GetExtConcPestSeriesParameter
+      write SetExtConcPestSeriesParameter;
+    property ExtConcPestParamMethod: TPestParamMethod read FExtConcPestParamMethod
+      write SetExtConcPestParamMethod;
   end;
 
   TFarm = class(TOrderedItem)
@@ -1125,6 +1160,7 @@ begin
   begin
     Items[index].Loaded;
   end;
+  inherited;
 end;
 
 procedure TSemiRoutedDeliveriesAndReturnFlowCollection.SetItem(Index: Integer;
@@ -1783,6 +1819,21 @@ begin
   IrrigationUniformity.Loaded;
   AddedCropDemandFlux.Loaded;
   AddedCropDemandRate.Loaded;
+
+  FarmCostsCollection.Loaded;
+  WaterRights.Loaded;
+  GwAllotment.Loaded;
+  AddedDemandRunoffSplitCollection.Loaded;
+  IrrigationUniformity.Loaded;
+  DeficiencyScenario.Loaded;
+  WaterSource.Loaded;
+  BareRunoffFraction.Loaded;
+  NoReturnFlow.Loaded;
+  MultiSrDeliveries.Loaded;
+  MultiSrReturns.Loaded;
+  SWAllotment.Loaded;
+  SaltSupplyConcentrationCollection.Loaded;
+
 end;
 
 function TFarm.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -2840,6 +2891,11 @@ begin
   end;
 end;
 
+procedure TMultiSrdItem.Loaded;
+begin
+  SemiRouted.Loaded;
+end;
+
 procedure TMultiSrdItem.SetName(const Value: string);
 begin
   SetCaseSensitiveStringProperty(FName, Value);
@@ -2864,6 +2920,16 @@ begin
   result := inherited Items[index] as TMultiSrdItem
 end;
 
+procedure TMultiSrdCollection.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
+  end;
+end;
+
 procedure TMultiSrdCollection.SetItem(Index: Integer;
   const Value: TMultiSrdItem);
 begin
@@ -2879,9 +2945,188 @@ end;
 
 { TSaltSupplyConcentrationCollection }
 
+procedure TSaltSupplyConcentrationCollection.Assign(Source: TPersistent);
+var
+  OtherFarmCollection: TSaltSupplyConcentrationCollection;
+begin
+  if Source is TSaltSupplyConcentrationCollection then
+  begin
+    OtherFarmCollection := TSaltSupplyConcentrationCollection(Source);
+    ExtConcPestSeriesParameter := OtherFarmCollection.ExtConcPestSeriesParameter;
+    ExtConcPestParamMethod := OtherFarmCollection.ExtConcPestParamMethod;
+    GWConcPestSeriesParameter := OtherFarmCollection.GWConcPestSeriesParameter;
+    GWConcPestParamMethod := OtherFarmCollection.GWConcPestParamMethod;
+    SWConcPestSeriesParameter := OtherFarmCollection.SWConcPestSeriesParameter;
+    SWConcPestParamMethod := OtherFarmCollection.SWConcPestParamMethod;
+  end;
+  inherited;
+end;
+
+function TSaltSupplyConcentrationCollection.GetExtConcPestSeriesParameter: string;
+begin
+  if FExtConcPestSeriesParameter <> nil then
+  begin
+    FExtConcPestSeriesParameterName := FExtConcPestSeriesParameter.ParameterName;
+  end;
+  result := FExtConcPestSeriesParameterName;
+end;
+
+function TSaltSupplyConcentrationCollection.GetGWConcPestSeriesParameter: string;
+begin
+  if FGWConcPestSeriesParameter <> nil then
+  begin
+    FGWConcPestSeriesParameterName := FGWConcPestSeriesParameter.ParameterName;
+  end;
+  result := FGWConcPestSeriesParameterName;
+end;
+
+function TSaltSupplyConcentrationCollection.GetSWConcPestSeriesParameter: string;
+begin
+  if FSWConcPestSeriesParameter <> nil then
+  begin
+    FSWConcPestSeriesParameterName := FSWConcPestSeriesParameter.ParameterName;
+  end;
+  result := FSWConcPestSeriesParameterName;
+end;
+
+function TSaltSupplyConcentrationCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  OtherFarmCollection: TSaltSupplyConcentrationCollection;
+begin
+  result := (AnOrderedCollection is TSaltSupplyConcentrationCollection)
+    and inherited;
+  if result then
+  begin
+    OtherFarmCollection := TSaltSupplyConcentrationCollection(AnOrderedCollection);
+    result := (ExtConcPestSeriesParameter = OtherFarmCollection.ExtConcPestSeriesParameter)
+      and (ExtConcPestParamMethod = OtherFarmCollection.ExtConcPestParamMethod)
+      and (GWConcPestSeriesParameter = OtherFarmCollection.GWConcPestSeriesParameter)
+      and (GWConcPestParamMethod = OtherFarmCollection.GWConcPestParamMethod)
+      and (SWConcPestSeriesParameter = OtherFarmCollection.SWConcPestSeriesParameter)
+      and (SWConcPestParamMethod = OtherFarmCollection.SWConcPestParamMethod)
+  end;
+end;
+
 class function TSaltSupplyConcentrationCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TSaltSupplyConcentrationItem;
+end;
+
+procedure TSaltSupplyConcentrationCollection.Loaded;
+begin
+  if (Model <> nil) then
+  begin
+    if (FExtConcPestSeriesParameterName <> '') then
+    begin
+      FExtConcPestSeriesParameter := Model.GetPestParameterByNameI(FExtConcPestSeriesParameterName)
+    end;
+    if (FGWConcPestSeriesParameterName <> '') then
+    begin
+      FGWConcPestSeriesParameter := Model.GetPestParameterByNameI(FGWConcPestSeriesParameterName)
+    end;
+    if (FSWConcPestSeriesParameterName <> '') then
+    begin
+      FSWConcPestSeriesParameter := Model.GetPestParameterByNameI(FSWConcPestSeriesParameterName)
+    end;
+  end;
+  inherited;
+end;
+
+procedure TSaltSupplyConcentrationCollection.SetExtConcPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  FExtConcPestParamMethod := Value;
+end;
+
+procedure TSaltSupplyConcentrationCollection.SetExtConcPestSeriesParameter(
+  const Value: string);
+begin
+  if FExtConcPestSeriesParameterName <> Value then
+  begin
+    FExtConcPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FExtConcPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FExtConcPestSeriesParameter = nil then
+      begin
+        FExtConcPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FExtConcPestSeriesParameter := nil;
+    end;
+  end;
+end;
+
+procedure TSaltSupplyConcentrationCollection.SetGWConcPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  FGWConcPestParamMethod := Value;
+end;
+
+procedure TSaltSupplyConcentrationCollection.SetGWConcPestSeriesParameter(
+  const Value: string);
+begin
+  if FGWConcPestSeriesParameterName <> Value then
+  begin
+    FGWConcPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FGWConcPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FGWConcPestSeriesParameter = nil then
+      begin
+        FGWConcPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FGWConcPestSeriesParameter := nil;
+    end;
+  end;
+end;
+
+procedure TSaltSupplyConcentrationCollection.SetSWConcPestParamMethod(
+  const Value: TPestParamMethod);
+begin
+  FSWConcPestParamMethod := Value;
+end;
+
+procedure TSaltSupplyConcentrationCollection.SetSWConcPestSeriesParameter(
+  const Value: string);
+begin
+  if FSWConcPestSeriesParameterName <> Value then
+  begin
+    FSWConcPestSeriesParameterName := Value;
+    InvalidateModel;
+  end;
+  if (Model <> nil) then
+  begin
+    if Value <> '' then
+    begin
+      FSWConcPestSeriesParameter := Model.GetPestParameterByNameI(Value);
+      if FSWConcPestSeriesParameter = nil then
+      begin
+        FSWConcPestSeriesParameterName := '';
+        InvalidateModel;
+      end;
+    end
+    else
+    begin
+      FSWConcPestSeriesParameter := nil;
+    end;
+  end;
 end;
 
 end.

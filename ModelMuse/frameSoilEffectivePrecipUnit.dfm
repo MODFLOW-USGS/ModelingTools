@@ -30,10 +30,6 @@ inherited frameSoilEffectivePrecip: TframeSoilEffectivePrecip
       Height = 15
       Caption = 'Method'
     end
-    inherited seNumber: TJvSpinEdit
-      Height = 23
-      ExplicitHeight = 23
-    end
     object comboInterpolation: TComboBox
       Left = 145
       Top = 6
@@ -121,12 +117,10 @@ inherited frameSoilEffectivePrecip: TframeSoilEffectivePrecip
     end
     inherited edFormula: TLabeledEdit
       Top = 52
-      Height = 23
       EditLabel.ExplicitLeft = 128
       EditLabel.ExplicitTop = 34
       EditLabel.ExplicitWidth = 44
       ExplicitTop = 52
-      ExplicitHeight = 23
     end
     inherited cbMultiCheck: TCheckBox
       Top = 56

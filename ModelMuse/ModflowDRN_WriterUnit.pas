@@ -303,6 +303,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
+  CellBottom: Double;
 begin
     { Add PEST support for PEST here }
     // handle pest data
@@ -320,6 +321,25 @@ begin
   WriteInteger(Drn_Cell.Column+1);
 
   WriteValueOrFormula(Drn_Cell, DrnElevationPosition);
+
+  CellBottom := Model.DiscretiztionElevation[Drn_Cell.Column, Drn_Cell.Row, Drn_Cell.Layer+1];
+  if Drn_Cell.Elevation < CellBottom then
+  begin
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, 'Drain elevation less than cell bottom elevation at the following locations',
+        Format( '(Layer, Row, Column) = (%0:d, %1:d, %2:d); Drain elevation = %3:g; Cell bottom = %4:g; Object = %5:s',
+        [Drn_Cell.Column+1, Drn_Cell.Row+1, Drn_Cell.Layer+1, Drn_Cell.Elevation, CellBottom, Drn_Cell.ScreenObject.Name]),
+        Drn_Cell.ScreenObject as TObject);
+    end
+    else
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, 'Drain elevation less than cell bottom elevation at the following locations',
+        Format( '(Layer, Row, Column) = (%0:d, %1:d, %2:d); Drain elevation = %3:g; Cell bottom = %4:g; Object = %5:s',
+        [Drn_Cell.Column+1, Drn_Cell.Row+1, Drn_Cell.Layer+1, Drn_Cell.Elevation, CellBottom, Drn_Cell.ScreenObject.Name]),
+        Drn_Cell.ScreenObject as TObject);
+    end;
+  end;
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate

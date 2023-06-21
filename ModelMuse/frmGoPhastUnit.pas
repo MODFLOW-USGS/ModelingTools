@@ -12204,6 +12204,8 @@ begin
 
           PhastModel.SwrObservations.Loaded;
           PhastModel.Farms.Loaded;
+          PhastModel.FmpCrops.Loaded;
+          PhastModel.IrrigationTypes.Loaded;
 
           for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
           begin

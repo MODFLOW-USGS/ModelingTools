@@ -85,7 +85,7 @@ type
   public
     property Items[Index: Integer]: TCropIrrigationItem read GetItems
       write SetItems; default;
-    procedure Loaded;
+    procedure Loaded; override;
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
@@ -400,7 +400,7 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-    procedure Loaded;
+    procedure Loaded; override;
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
@@ -456,6 +456,7 @@ type
     FFarmGuid: string;
   public
     procedure Assign(Source: TPersistent); override;
+    procedure Loaded;
   published
     property FarmGuid: string read FFarmGuid write FFarmGuid;
   end;
@@ -466,6 +467,7 @@ type
     procedure SetItem(Index: Integer; const Value: TAddedDemandFarmItem);
   public
     constructor Create(Model: TBaseModel);
+    procedure Loaded;
     property Items[Index: Integer]: TAddedDemandFarmItem read GetItem
       write SetItem; default;
     function Add: TAddedDemandFarmItem;
@@ -481,6 +483,7 @@ type
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure Assign(Source: TPersistent); override;
     function GetItemByFarmGUID(FarmGUID: string): TAddedDemandFarmItem;
+    procedure Loaded;
   published
     property AddedDemandValues: TAddedDemandFarmCollection
       read FAddedDemandValues write SetAddedDemandValues;
@@ -492,6 +495,7 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
+    procedure Loaded;
     constructor Create(Model: IModelForTOrderedCollection); reintroduce;
     property HelpKeyword: string read FHelpKeyword write FHelpKeyword;
   end;
@@ -641,6 +645,7 @@ type
     Destructor Destroy; override;
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean);
+    procedure Loaded;
   published
     property CropName: string read FCropName write SetCropName;
     property PSI1: string index PSI1Position read GetBoundaryFormula
@@ -936,6 +941,7 @@ type
     property FarmList: TFarmList read GetFarmList;
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
+    procedure Loaded; override;
     procedure Assign(Source: TPersistent); override;
     destructor Destroy; override;
     property CropArray: TCropArray read FCropArray;
@@ -2240,6 +2246,26 @@ begin
       and (CropHasSalinityDemandDataArrayName = OtherItem.CropHasSalinityDemandDataArrayName)
       and (Print = OtherItem.Print)
   end;
+end;
+
+procedure TCropItem.Loaded;
+begin
+  IrrigationCollection.Loaded;
+  LandUseFractionCollection.Loaded;
+  CropCoefficientCollection.Loaded;
+  ConsumptiveUseCollection.Loaded;
+  RootPressureCollection.Loaded;
+  TranspirationFractionCollection.Loaded;
+  SWLossFractionPrecipCollection.Loaded;
+  PondDepthCollection.Loaded;
+  AddedDemandCollection.Loaded;
+  ConvertToBareSoilCollection.Loaded;
+  UseEvapFractionCorrectionCollection.Loaded;
+  SalinityToleranceCollection.Loaded;
+  MaxLeachingRequirementCollection.Loaded;
+  LeachingRequirementCollection.Loaded;
+  SalinityAppliedWater.Loaded;
+  CropHasSalinityDemand.Loaded;
 end;
 
 procedure TCropItem.SetAddedDemandCollection(const Value: TAddedDemandCollection);
@@ -3648,6 +3674,17 @@ begin
   result := TCropItem;
 end;
 
+procedure TCropCollection.Loaded;
+var
+  index: Integer;
+begin
+  inherited;
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
+  end;
+end;
+
 procedure TCropCollection.SetItems(Index: Integer; const Value: TCropItem);
 begin
   inherited Items[Index] := Value;
@@ -3822,15 +3859,19 @@ end;
 
 procedure TIrrigationCollection.Loaded;
 begin
-  if (Model <> nil) and (FEvapIrrigateFractionPestSeriesParameterName <> '') then
+  inherited;
+  if (Model <> nil) then
   begin
-    FEvapIrrigateFractionPestSeriesParameter :=
-       Model.GetPestParameterByNameI(FEvapIrrigateFractionPestSeriesParameterName)
-  end;
-  if (Model <> nil) and (FSurfaceWaterLossFractionIrrigationPestSeriesParameterName <> '') then
-  begin
-    FSurfaceWaterLossFractionIrrigationPestSeriesParameter :=
-      Model.GetPestParameterByNameI(FSurfaceWaterLossFractionIrrigationPestSeriesParameterName)
+    if (FEvapIrrigateFractionPestSeriesParameterName <> '') then
+    begin
+      FEvapIrrigateFractionPestSeriesParameter :=
+         Model.GetPestParameterByNameI(FEvapIrrigateFractionPestSeriesParameterName)
+    end;
+    if (FSurfaceWaterLossFractionIrrigationPestSeriesParameterName <> '') then
+    begin
+      FSurfaceWaterLossFractionIrrigationPestSeriesParameter :=
+        Model.GetPestParameterByNameI(FSurfaceWaterLossFractionIrrigationPestSeriesParameterName)
+    end;
   end;
 end;
 
@@ -3992,18 +4033,22 @@ end;
 
 procedure TRootPressureCollection.Loaded;
 begin
-  if (Model <> nil) and (FP2PestSeriesParameterName <> '') then
+  if (Model <> nil) then
   begin
-    FP2PestSeriesParameter := Model.GetPestParameterByNameI(FP2PestSeriesParameterName)
+    if (FP2PestSeriesParameterName <> '') then
+    begin
+      FP2PestSeriesParameter := Model.GetPestParameterByNameI(FP2PestSeriesParameterName)
+    end;
+    if (FP3PestSeriesParameterName <> '') then
+    begin
+      FP3PestSeriesParameter := Model.GetPestParameterByNameI(FP3PestSeriesParameterName)
+    end;
+    if (FP4PestSeriesParameterName <> '') then
+    begin
+      FP4PestSeriesParameter := Model.GetPestParameterByNameI(FP4PestSeriesParameterName)
+    end;
   end;
-  if (Model <> nil) and (FP3PestSeriesParameterName <> '') then
-  begin
-    FP3PestSeriesParameter := Model.GetPestParameterByNameI(FP3PestSeriesParameterName)
-  end;
-  if (Model <> nil) and (FP4PestSeriesParameterName <> '') then
-  begin
-    FP4PestSeriesParameter := Model.GetPestParameterByNameI(FP4PestSeriesParameterName)
-  end;
+  inherited;
 end;
 
 procedure TRootPressureCollection.SetP2PestParamMethod(
@@ -4292,6 +4337,16 @@ begin
   result := TAddedDemandItem;
 end;
 
+procedure TAddedDemandCollection.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    (Items[index] as TAddedDemandItem).Loaded;
+  end;
+end;
+
 { TAddedDemandFarmCollection }
 
 function TAddedDemandFarmCollection.Add: TAddedDemandFarmItem;
@@ -4355,6 +4410,11 @@ begin
   end;
 end;
 
+procedure TAddedDemandItem.Loaded;
+begin
+  AddedDemandValues.Loaded;
+end;
+
 procedure TAddedDemandItem.SetAddedDemandValues(
   const Value: TAddedDemandFarmCollection);
 begin
@@ -4370,6 +4430,16 @@ begin
     Add;
   end;
   result := inherited Items[Index] as  TAddedDemandFarmItem
+end;
+
+procedure TAddedDemandFarmCollection.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
+  end;
 end;
 
 procedure TAddedDemandFarmCollection.SetItem(Index: Integer;
@@ -4392,6 +4462,11 @@ begin
     FarmGuid := TAddedDemandFarmItem(Source).FarmGuid;
   end;
   inherited;
+end;
+
+procedure TAddedDemandFarmItem.Loaded;
+begin
+
 end;
 
 { TLeachItem }

@@ -240,23 +240,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Caption = 'Column'
       Enabled = False
     end
-    object rdeVertexNumber: TRbwDataEntry [7]
-      Left = 118
-      Top = 27
-      Width = 51
-      Height = 22
-      Color = clBtnFace
-      Enabled = False
-      TabOrder = 3
-      Text = '1'
-      OnChange = rdeVertexNumberChange
-      DataType = dtInteger
-      Max = 1.000000000000000000
-      Min = 1.000000000000000000
-      CheckMin = True
-      ChangeDisabledColor = True
-    end
-    object rdeX: TRbwDataEntry [8]
+    object rdeX: TRbwDataEntry [7]
       Left = 151
       Top = 27
       Width = 51
@@ -272,7 +256,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeY: TRbwDataEntry [9]
+    object rdeY: TRbwDataEntry [8]
       Left = 175
       Top = 27
       Width = 51
@@ -288,7 +272,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeRow: TRbwDataEntry [10]
+    object rdeRow: TRbwDataEntry [9]
       Left = 232
       Top = 27
       Width = 51
@@ -304,7 +288,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeCol: TRbwDataEntry [11]
+    object rdeCol: TRbwDataEntry [10]
       Left = 289
       Top = 27
       Width = 51
@@ -320,7 +304,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object comboSfrObjects: TComboBox [12]
+    object comboSfrObjects: TComboBox [11]
       Left = 40
       Top = 27
       Width = 65
@@ -330,7 +314,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       TabOrder = 1
       OnChange = comboSfrObjectsChange
     end
-    object comboPositionChoice: TComboBox [13]
+    object comboPositionChoice: TComboBox [12]
       Left = 80
       Top = 27
       Width = 65
@@ -343,6 +327,22 @@ inherited frameFarmDiversion: TframeFarmDiversion
         'First vertex'
         'A middle vertex'
         'Last vertex')
+    end
+    object rdeVertexNumber: TRbwDataEntry [13]
+      Left = 118
+      Top = 27
+      Width = 51
+      Height = 22
+      Color = clBtnFace
+      Enabled = False
+      TabOrder = 3
+      Text = '1'
+      OnChange = rdeVertexNumberChange
+      DataType = dtInteger
+      Max = 1.000000000000000000
+      Min = 1.000000000000000000
+      CheckMin = True
+      ChangeDisabledColor = True
     end
     inherited edFormula: TLabeledEdit
       Left = 8

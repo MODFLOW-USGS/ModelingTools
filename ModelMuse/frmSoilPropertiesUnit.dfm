@@ -5,8 +5,8 @@ inherited frmSoilProperties: TfrmSoilProperties
   ClientHeight = 562
   ClientWidth = 788
   OnResize = FormResize
-  ExplicitWidth = 804
-  ExplicitHeight = 601
+  ExplicitWidth = 800
+  ExplicitHeight = 600
   TextHeight = 18
   object splitterSoil: TSplitter
     Left = 0
@@ -25,6 +25,8 @@ inherited frmSoilProperties: TfrmSoilProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 517
+    ExplicitWidth = 784
     object btnCancel: TBitBtn
       Left = 586
       Top = 6
@@ -62,13 +64,13 @@ inherited frmSoilProperties: TfrmSoilProperties
     Height = 256
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 788
+    ExplicitWidth = 784
     ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 215
       Width = 788
       ExplicitTop = 215
-      ExplicitWidth = 788
+      ExplicitWidth = 784
       inherited lbNumber: TLabel
         Width = 108
         Height = 18
@@ -77,15 +79,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 399
+        Left = 395
         ExplicitLeft = 316
       end
       inherited sbInsert: TSpeedButton
-        Left = 471
+        Left = 465
         ExplicitLeft = 374
       end
       inherited sbDelete: TSpeedButton
-        Left = 542
+        Left = 536
         ExplicitLeft = 432
       end
       inherited seNumber: TJvSpinEdit
@@ -354,12 +356,12 @@ inherited frmSoilProperties: TfrmSoilProperties
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitWidth = 788
+      ExplicitWidth = 784
       ExplicitHeight = 158
     end
     inherited pnlTop: TPanel
       Width = 788
-      ExplicitWidth = 788
+      ExplicitWidth = 784
       inherited edFormula: TLabeledEdit
         Height = 26
         EditLabel.Width = 57
@@ -394,13 +396,13 @@ inherited frmSoilProperties: TfrmSoilProperties
     Enabled = False
     TabOrder = 3
     ExplicitTop = 261
-    ExplicitWidth = 788
-    ExplicitHeight = 257
+    ExplicitWidth = 784
+    ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 216
       Width = 788
-      ExplicitTop = 216
-      ExplicitWidth = 788
+      ExplicitTop = 215
+      ExplicitWidth = 784
       DesignSize = (
         788
         41)
@@ -412,15 +414,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 612
+        Left = 606
         ExplicitLeft = 630
       end
       inherited sbInsert: TSpeedButton
-        Left = 653
+        Left = 645
         ExplicitLeft = 677
       end
       inherited sbDelete: TSpeedButton
-        Left = 707
+        Left = 701
         ExplicitLeft = 725
       end
       inherited lblMethod: TLabel
@@ -449,13 +451,12 @@ inherited frmSoilProperties: TfrmSoilProperties
       Height = 135
       OnExit = frameSoilEffectivePrecipGridExit
       OnButtonClick = frameSoilsGridButtonClick
-      ExplicitTop = 84
-      ExplicitWidth = 788
-      ExplicitHeight = 135
+      ExplicitWidth = 784
+      ExplicitHeight = 134
     end
     inherited pnlTop: TPanel
       Width = 788
-      ExplicitWidth = 788
+      ExplicitWidth = 784
       inherited lblSoil: TLabel
         Width = 233
         Height = 18

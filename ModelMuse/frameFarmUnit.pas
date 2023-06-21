@@ -9,7 +9,7 @@ uses
   frameFormulaGridUnit, JvgPage, frameDeliveryGridUnit, frameFarmDiversionUnit,
   ModflowFmpFarmUnit, RbwDataGrid4, ModflowFmpCropUnit,
   RbwParser, ModflowFmpIrrigationUnit,
-  frameMultSemiRoutedUnit;
+  frameMultSemiRoutedUnit, PhastModelInterfaceUnit;
 
 type
   TframeFarm = class(TframeScreenObject)
@@ -198,6 +198,8 @@ type
     procedure frameNoReturnFlowsbDeleteClick(Sender: TObject);
     procedure frameFormulaGridDiversionGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameFormulaGridEfficiencyImprovementGridSelectCell(Sender: TObject;
+        ACol, ARow: Integer; var CanSelect: Boolean);
     procedure frameFormulaGridReturnFlowGridButtonClick(Sender: TObject; ACol,
         ARow: Integer);
     procedure frameSwAllotmentedFormulaChange(Sender: TObject);
@@ -332,7 +334,7 @@ uses
   ModflowTimeUnit, Generics.Collections,
   PhastModelUnit, ModflowPackagesUnit, ModflowPackageSelectionUnit,
   ModflowFmpAllotmentUnit, frmFormulaUnit, frmConvertChoiceUnit,
-  ModflowFmpBaseClasses;
+  ModflowFmpBaseClasses, ModflowParameterInterfaceUnit;
 
 resourcestring
   StrGWBaseMaintenance = 'GW base maintenance costs / volume (GWCost1)';
@@ -389,6 +391,7 @@ var
   ParentControl: TWinControl;
   ValidTypes: TRbwDataTypes;
   RequiredType: TRbwDataType;
+  Parameter: IModflowParameter;
 begin
 
   ValidTypes := [rdtDouble, rdtInteger];
@@ -466,7 +469,13 @@ begin
         end;
         CompiledFormula := rbwprsrFarmParser.CurrentExpression;
 
-        if CompiledFormula.ResultType in ValidTypes then
+        Parameter := nil;
+        if rdtDouble in ValidTypes then
+        begin
+          Parameter := IGlobalModelForOrderedCollection.GetPestParameterByNameI(AFormula);
+        end;
+
+        if (CompiledFormula.ResultType in ValidTypes) or (Parameter <> nil) then
         begin
           Grid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
         end
@@ -525,7 +534,7 @@ begin
       frameBareRunoffFractions.ClearGrid;
       frameAddedCropDemandFlux.ClearGrid;
       ClearGrid(frameAddedCropDemandRate.Grid);
-      ClearGrid(frameWaterSupplyConcentration.Grid);
+      frameWaterSupplyConcentration.ClearGrid;
       Enabled := False;
       Exit;
     end;
@@ -605,7 +614,7 @@ begin
         frameAddedCropDemandFlux.ClearGrid;
         ClearGrid(frameAddedCropDemandRate.Grid);
         ClearGrid(frameNoReturnFlow.Grid);
-        ClearGrid(frameWaterSupplyConcentration.Grid);
+        frameWaterSupplyConcentration.ClearGrid;
 
         FirstFarm := FarmList[0];
         GetCropEffForFirstFarm(FirstFarm);
@@ -825,7 +834,7 @@ begin
           if not AFarm.SaltSupplyConcentrationCollection.IsSame(
             FirstFarm.SaltSupplyConcentrationCollection) then
           begin
-            ClearGrid(frameWaterSupplyConcentration.Grid);
+            frameWaterSupplyConcentration.ClearGrid;
             frameWaterSupplyConcentration.seNumber.AsInteger := 0;
             break;
           end;
@@ -1477,6 +1486,18 @@ begin
   EditFormula(Sender as TRbwDataGrid4, ACol, ARow);
 end;
 
+procedure TframeFarm.frameFormulaGridEfficiencyImprovementGridSelectCell(
+    Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  frameFormulaGridEfficiencyImprovement.GridSelectCell(Sender, ACol, ARow,
+    CanSelect);
+  if ARow <= PestRowOffset then
+  begin
+    CanSelect := False;
+  end;
+end;
+
 procedure TframeFarm.frameFormulaGridEfficiencyImprovementGridSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
@@ -2093,19 +2114,40 @@ begin
   frameWaterSupplyConcentration.seNumber.AsInteger :=
     AFarm.SaltSupplyConcentrationCollection.Count;
   frameWaterSupplyConcentration.seNumber.OnChange(frameWaterSupplyConcentration.seNumber);
+  frameWaterSupplyConcentration.InitializePestParameters;
   Grid := frameWaterSupplyConcentration.Grid;
   Grid.BeginUpdate;
   try
     for TimeIndex := 0 to AFarm.SaltSupplyConcentrationCollection.Count - 1 do
     begin
       ATimeItem := AFarm.SaltSupplyConcentrationCollection[TimeIndex] as TSaltSupplyConcentrationItem;
-      Grid.Cells[Ord(sccStartTime), TimeIndex+1] := FloatToStr(ATimeItem.StartTime);
-      Grid.Cells[Ord(sccEndTime), TimeIndex+1] := FloatToStr(ATimeItem.EndTime);
-      Grid.Cells[Ord(sccNonRouted), TimeIndex+1] := ATimeItem.NonRoutedConcentration;
-      Grid.Cells[Ord(sccSurfaceWater), TimeIndex+1] := ATimeItem.SurfaceWaterConcentration;
-      Grid.Cells[Ord(sccGroundWater), TimeIndex+1] := ATimeItem.GroundwaterConcentration;
-      Grid.Cells[Ord(sccExternal), TimeIndex+1] := ATimeItem.ExternalConcentration;
+      Grid.Cells[Ord(sccStartTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.StartTime);
+      Grid.Cells[Ord(sccEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.EndTime);
+      Grid.Cells[Ord(sccNonRouted), TimeIndex+1+PestRowOffset] := ATimeItem.NonRoutedConcentration;
+      Grid.Cells[Ord(sccSurfaceWater), TimeIndex+1+PestRowOffset] := ATimeItem.SurfaceWaterConcentration;
+      Grid.Cells[Ord(sccGroundWater), TimeIndex+1+PestRowOffset] := ATimeItem.GroundwaterConcentration;
+      Grid.Cells[Ord(sccExternal), TimeIndex+1+PestRowOffset] := ATimeItem.ExternalConcentration;
     end;
+
+    frameWaterSupplyConcentration.PestUsedOnCol[Ord(sccStartTime)] := False;
+    frameWaterSupplyConcentration.PestUsedOnCol[Ord(sccEndTime)] := False;
+
+    frameWaterSupplyConcentration.PestUsedOnCol[Ord(sccNonRouted)] := True;
+    frameWaterSupplyConcentration.PestModifier[Ord(sccNonRouted)] := AFarm.SaltSupplyConcentrationCollection.PestSeriesParameter;
+    frameWaterSupplyConcentration.PestMethod[Ord(sccNonRouted)] := AFarm.SaltSupplyConcentrationCollection.PestParamMethod;
+
+    frameWaterSupplyConcentration.PestUsedOnCol[Ord(sccSurfaceWater)] := True;
+    frameWaterSupplyConcentration.PestModifier[Ord(sccSurfaceWater)] := AFarm.SaltSupplyConcentrationCollection.SWConcPestSeriesParameter;
+    frameWaterSupplyConcentration.PestMethod[Ord(sccSurfaceWater)] := AFarm.SaltSupplyConcentrationCollection.SWConcPestParamMethod;
+
+    frameWaterSupplyConcentration.PestUsedOnCol[Ord(sccGroundWater)] := True;
+    frameWaterSupplyConcentration.PestModifier[Ord(sccGroundWater)] := AFarm.SaltSupplyConcentrationCollection.GWConcPestSeriesParameter;
+    frameWaterSupplyConcentration.PestMethod[Ord(sccGroundWater)] := AFarm.SaltSupplyConcentrationCollection.GWConcPestParamMethod;
+
+    frameWaterSupplyConcentration.PestUsedOnCol[Ord(sccExternal)] := True;
+    frameWaterSupplyConcentration.PestModifier[Ord(sccExternal)] := AFarm.SaltSupplyConcentrationCollection.ExtConcPestSeriesParameter;
+    frameWaterSupplyConcentration.PestMethod[Ord(sccExternal)] := AFarm.SaltSupplyConcentrationCollection.ExtConcPestParamMethod;
+
   finally
     Grid.EndUpdate;
   end;
@@ -2165,6 +2207,7 @@ begin
   frameAddedCropDemandRate.IncludePestAdjustment := True;
   frameGW_Allocation.IncludePestAdjustment := True;
   frameSwAllotment.IncludePestAdjustment := True;
+  frameWaterSupplyConcentration.IncludePestAdjustment := True;
 //  frameDiversionsOwhm2.frameFarmDiversions.IncludePestAdjustment := True;
 //  frameReturnFlowsOwhm2.frameFarmDiversions.IncludePestAdjustment := True;
 
@@ -3130,21 +3173,26 @@ begin
   Grid := Frame.Grid;
   BareRunoffFraction := AFarm.BareRunoffFraction;
 
-  Frame.seNumber.AsInteger := BareRunoffFraction.Count;
-  Frame.seNumber.OnChange(Frame.seNumber);
-  for TimeIndex := 0 to BareRunoffFraction.Count - 1 do
-  begin
-    ATimeItem := BareRunoffFraction[TimeIndex];
-    Grid.Cells[Ord(brfcStartTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.StartTime);
-    Grid.Cells[Ord(brfcEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.EndTime);
-    Grid.Cells[Ord(brfcValue), TimeIndex+1+PestRowOffset] := ATimeItem.OwhmValue;
-  end;
+  Grid.BeginUpdate;
+  try
+    Frame.seNumber.AsInteger := BareRunoffFraction.Count;
+    Frame.seNumber.OnChange(Frame.seNumber);
+    for TimeIndex := 0 to BareRunoffFraction.Count - 1 do
+    begin
+      ATimeItem := BareRunoffFraction[TimeIndex];
+      Grid.Cells[Ord(brfcStartTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.StartTime);
+      Grid.Cells[Ord(brfcEndTime), TimeIndex+1+PestRowOffset] := FloatToStr(ATimeItem.EndTime);
+      Grid.Cells[Ord(brfcValue), TimeIndex+1+PestRowOffset] := ATimeItem.OwhmValue;
+    end;
 
-  Frame.PestUsedOnCol[Ord(brfcStartTime)] := False;
-  Frame.PestUsedOnCol[Ord(brfcEndTime)] := False;
-  Frame.PestUsedOnCol[Ord(brfcValue)] := True;
-  Frame.PestModifier[Ord(brfcValue)] := BareRunoffFraction.PestSeriesParameter;
-  Frame.PestMethod[Ord(brfcValue)] := BareRunoffFraction.PestParamMethod;
+    Frame.PestUsedOnCol[Ord(brfcStartTime)] := False;
+    Frame.PestUsedOnCol[Ord(brfcEndTime)] := False;
+    Frame.PestUsedOnCol[Ord(brfcValue)] := True;
+    Frame.PestModifier[Ord(brfcValue)] := BareRunoffFraction.PestSeriesParameter;
+    Frame.PestMethod[Ord(brfcValue)] := BareRunoffFraction.PestParamMethod;
+  finally
+    Grid.EndUpdate;
+  end;
 
 end;
 
@@ -3686,8 +3734,8 @@ begin
   for RowIndex := 1 to frameWaterSupplyConcentration.seNumber.AsInteger do
   begin
 
-    if TryStrToFloat(Grid.Cells[Ord(sccStartTime), RowIndex], StartTime)
-      and TryStrToFloat(Grid.Cells[Ord(sccEndTime), RowIndex], EndTime) then
+    if TryStrToFloat(Grid.Cells[Ord(sccStartTime), RowIndex+PestRowOffset], StartTime)
+      and TryStrToFloat(Grid.Cells[Ord(sccEndTime), RowIndex+PestRowOffset], EndTime) then
     begin
       if Count < SaltSupplyConcentrationCollection.Count then
       begin
@@ -3700,13 +3748,50 @@ begin
       Inc(Count);
       SupplyItem.StartTime := StartTime;
       SupplyItem.EndTime := EndTime;
-      SupplyItem.NonRoutedConcentration := Grid.Cells[Ord(sccNonRouted), RowIndex];
-      SupplyItem.SurfaceWaterConcentration := Grid.Cells[Ord(sccSurfaceWater), RowIndex];
-      SupplyItem.GroundwaterConcentration := Grid.Cells[Ord(sccGroundWater), RowIndex];
-      SupplyItem.ExternalConcentration := Grid.Cells[Ord(sccExternal), RowIndex];
+      SupplyItem.NonRoutedConcentration := Grid.Cells[Ord(sccNonRouted), RowIndex+PestRowOffset];
+      SupplyItem.SurfaceWaterConcentration := Grid.Cells[Ord(sccSurfaceWater), RowIndex+PestRowOffset];
+      SupplyItem.GroundwaterConcentration := Grid.Cells[Ord(sccGroundWater), RowIndex+PestRowOffset];
+      SupplyItem.ExternalConcentration := Grid.Cells[Ord(sccExternal), RowIndex+PestRowOffset];
     end;
   end;
   SaltSupplyConcentrationCollection.Count := Count;
+
+  if frameWaterSupplyConcentration.PestMethodAssigned[Ord(sccNonRouted)] then
+  begin
+    SaltSupplyConcentrationCollection.PestParamMethod := frameWaterSupplyConcentration.PestMethod[Ord(sccNonRouted)];
+  end;
+  if frameWaterSupplyConcentration.PestModifierAssigned[Ord(sccNonRouted)] then
+  begin
+    SaltSupplyConcentrationCollection.PestSeriesParameter := frameWaterSupplyConcentration.PestModifier[Ord(sccNonRouted)];
+  end;
+
+  if frameWaterSupplyConcentration.PestMethodAssigned[Ord(sccSurfaceWater)] then
+  begin
+    SaltSupplyConcentrationCollection.SWConcPestParamMethod := frameWaterSupplyConcentration.PestMethod[Ord(sccSurfaceWater)];
+  end;
+  if frameWaterSupplyConcentration.PestModifierAssigned[Ord(sccSurfaceWater)] then
+  begin
+    SaltSupplyConcentrationCollection.SWConcPestSeriesParameter := frameWaterSupplyConcentration.PestModifier[Ord(sccSurfaceWater)];
+  end;
+
+  if frameWaterSupplyConcentration.PestMethodAssigned[Ord(sccGroundWater)] then
+  begin
+    SaltSupplyConcentrationCollection.GWConcPestParamMethod := frameWaterSupplyConcentration.PestMethod[Ord(sccGroundWater)];
+  end;
+  if frameWaterSupplyConcentration.PestModifierAssigned[Ord(sccGroundWater)] then
+  begin
+    SaltSupplyConcentrationCollection.GWConcPestSeriesParameter := frameWaterSupplyConcentration.PestModifier[Ord(sccGroundWater)];
+  end;
+
+  if frameWaterSupplyConcentration.PestMethodAssigned[Ord(sccExternal)] then
+  begin
+    SaltSupplyConcentrationCollection.ExtConcPestParamMethod := frameWaterSupplyConcentration.PestMethod[Ord(sccExternal)];
+  end;
+  if frameWaterSupplyConcentration.PestModifierAssigned[Ord(sccExternal)] then
+  begin
+    SaltSupplyConcentrationCollection.ExtConcPestSeriesParameter := frameWaterSupplyConcentration.PestModifier[Ord(sccExternal)];
+  end;
+
 end;
 
 procedure TframeFarm.SetSwAllotment(Farm: TFarm);

@@ -52,7 +52,7 @@ type
   public
     constructor Create(Model: IModelForTOrderedCollection); reintroduce; virtual;
     property HelpKeyword: string read FHelpKeyword write FHelpKeyword;
-    procedure Loaded;
+    procedure Loaded; virtual;
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
@@ -60,7 +60,6 @@ type
       write SetPestSeriesParameter;
     property PestParamMethod: TPestParamMethod read FPestParamMethod
       write SetPestParamMethod;
-
   end;
 
   // @name is used to define list properties for MODFLOW OWHM version 2.

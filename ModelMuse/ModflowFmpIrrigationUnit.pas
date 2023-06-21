@@ -3,7 +3,7 @@ unit ModflowFmpIrrigationUnit;
 interface
 
 uses
-  System.Classes, OrderedCollectionUnit, GoPhastTypes, ModflowFmpFarmUnit,
+  System.Classes, System.SysUtils, OrderedCollectionUnit, GoPhastTypes, ModflowFmpFarmUnit,
   ModflowFmpBaseClasses, ModflowBoundaryUnit, RealListUnit,
   OrderedCollectionInterfaceUnit, FormulaManagerInterfaceUnit,
   ModflowParameterInterfaceUnit;
@@ -53,7 +53,7 @@ type
     property Items[Index: Integer]: TEvapFractionItem read GetItems
       write SetItems; default;
     function ItemByStartTime(ATime: Double): TEvapFractionItem;
-    procedure Loaded;
+    procedure Loaded; override;
     procedure Assign(Source: TPersistent); override;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
@@ -79,6 +79,7 @@ type
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
+    procedure Loaded;
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -97,6 +98,8 @@ type
   protected
     property FarmList: TFarmList read GetFarmList;
   public
+    procedure Loaded;
+    procedure Clear;
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean);
     constructor Create(Model: IModelForTOrderedCollection);
@@ -263,6 +266,11 @@ begin
     result := (Name  = OtherItem.Name)
     and EvapFraction.IsSame(OtherItem.EvapFraction)
   end;
+end;
+
+procedure TIrrigationItem.Loaded;
+begin
+  EvapFraction.Loaded;
 end;
 
 procedure TIrrigationItem.SetEvapFraction(
@@ -449,58 +457,11 @@ end;
 
 { TIrrigationCollection }
 
-//procedure TIrrigationCollection.AddBoundaryTimes(
-//  BoundCol: TCustomNonSpatialBoundColl; Times: TRealList; StartTestTime,
-//  EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean);
-//var
-//  BoundaryIndex: Integer;
-//  Boundary: TCustomModflowBoundaryItem;
-//  SP_Epsilon: Double;
-//  CosestIndex: Integer;
-//  ExistingTime: Double;
-//begin
-//  SP_Epsilon := (Model as TCustomModel).SP_Epsilon;
-//  for BoundaryIndex := 0 to BoundCol.Count - 1 do
-//  begin
-//    Boundary := BoundCol[BoundaryIndex] as TCustomModflowBoundaryItem;
-//    CosestIndex := Times.IndexOfClosest(Boundary.StartTime);
-//    if CosestIndex >= 0 then
-//    begin
-//      ExistingTime := Times[CosestIndex];
-//      if Abs(ExistingTime-Boundary.StartTime) >  SP_Epsilon then
-//      begin
-//        Times.AddUnique(Boundary.StartTime);
-//      end;
-//    end;
-//    CosestIndex := Times.IndexOfClosest(Boundary.EndTime);
-//    if CosestIndex >= 0 then
-//    begin
-//      ExistingTime := Times[CosestIndex];
-//      if Abs(ExistingTime-Boundary.EndTime) >  SP_Epsilon then
-//      begin
-//        Times.AddUnique(Boundary.EndTime);
-//      end;
-//    end;
-////    Times.AddUnique(Boundary.StartTime);
-////    Times.AddUnique(Boundary.EndTime);
-//    if (Boundary.StartTime < StartTestTime-SP_Epsilon) then
-//    begin
-//      StartRangeExtended := True;
-//    end;
-//    if (Boundary.EndTime > EndTestTime+SP_Epsilon) then
-//    begin
-//      EndRangeExtended := True;
-//    end;
-////    if (Boundary.StartTime < StartTestTime) then
-////    begin
-////      StartRangeExtended := True;
-////    end;
-////    if (Boundary.EndTime > EndTestTime) then
-////    begin
-////      EndRangeExtended := True;
-////    end;
-//  end;
-//end;
+procedure TIrrigationCollection.Clear;
+begin
+  inherited;
+  FreeAndNil(FFarmList);
+end;
 
 constructor TIrrigationCollection.Create(Model: IModelForTOrderedCollection);
 begin
@@ -534,6 +495,16 @@ end;
 function TIrrigationCollection.GetItems(Index: Integer): TIrrigationItem;
 begin
   result := inherited Items[index] as TIrrigationItem
+end;
+
+procedure TIrrigationCollection.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded
+  end;
 end;
 
 procedure TIrrigationCollection.SetItems(Index: Integer;
@@ -681,7 +652,15 @@ end;
 
 procedure TFmp4EvapFractionCollection.Loaded;
 begin
-
+  if (Model <> nil) then
+  begin
+    if (FSurfaceWaterLossFractionPestSeriesParameterName <> '') then
+    begin
+      FSurfaceWaterLossFractionPestSeriesParameter :=
+        Model.GetPestParameterByNameI(FSurfaceWaterLossFractionPestSeriesParameterName)
+    end;
+  end;
+  inherited;
 end;
 
 procedure TFmp4EvapFractionCollection.SetItems(Index: Integer;

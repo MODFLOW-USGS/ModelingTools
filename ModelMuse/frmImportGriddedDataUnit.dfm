@@ -3,37 +3,36 @@ inherited frmImportGriddedData: TfrmImportGriddedData
   HelpKeyword = 'Import_Gridded_Data_Dialog_Box'
   Caption = 'Import Gridded Data'
   ClientHeight = 445
-  ClientWidth = 428
+  ClientWidth = 432
   Constraints.MinHeight = 432
   Constraints.MinWidth = 444
   KeyPreview = True
   OnKeyUp = FormKeyUp
   OnResize = FormResize
   ExplicitWidth = 444
-  ExplicitHeight = 484
+  ExplicitHeight = 483
   TextHeight = 18
   object jvplCellGrid: TJvPageList
     Left = 0
     Top = 185
-    Width = 428
+    Width = 432
     Height = 213
     ActivePage = jvspGrid
     PropagateEnable = False
     Align = alClient
-    ExplicitHeight = 214
+    ExplicitWidth = 426
+    ExplicitHeight = 204
     object jvspCellList: TJvStandardPage
       Left = 0
       Top = 0
       Width = 432
-      Height = 214
+      Height = 213
       Caption = 'jvspCellList'
-      ExplicitWidth = 436
-      ExplicitHeight = 216
       object rdgList: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 432
-        Height = 173
+        Height = 172
         Align = alClient
         ColCount = 4
         FixedCols = 1
@@ -148,18 +147,14 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 436
-        ExplicitHeight = 175
       end
       object pnlListControls: TPanel
         Left = 0
-        Top = 173
+        Top = 172
         Width = 432
         Height = 41
         Align = alBottom
         TabOrder = 1
-        ExplicitTop = 175
-        ExplicitWidth = 436
         object lblNumberOfRows: TLabel
           Left = 79
           Top = 12
@@ -308,10 +303,11 @@ inherited frmImportGriddedData: TfrmImportGriddedData
     object jvspGrid: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 428
+      Width = 432
       Height = 213
       Caption = 'jvspGrid'
-      ExplicitHeight = 214
+      ExplicitWidth = 426
+      ExplicitHeight = 204
       object lblColumns: TLabel
         Left = 190
         Top = 16
@@ -340,27 +336,28 @@ inherited frmImportGriddedData: TfrmImportGriddedData
         Left = 40
         Top = 40
         Width = 392
-        Height = 175
+        Height = 173
         Margins.Left = 40
         Margins.Top = 40
         Margins.Right = 0
         Margins.Bottom = 0
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 388
-        ExplicitHeight = 174
+        ExplicitWidth = 386
+        ExplicitHeight = 164
       end
     end
   end
   object pnlMethodControls: TPanel
     Left = 0
     Top = 0
-    Width = 428
+    Width = 432
     Height = 185
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 426
     DesignSize = (
-      428
+      432
       185)
     object lblMethod: TLabel
       Left = 8
@@ -405,7 +402,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
         'Array')
     end
     object rdgIgnoreValues: TRbwDataGrid4
-      Left = 279
+      Left = 277
       Top = 45
       Width = 124
       Height = 98
@@ -452,7 +449,6 @@ inherited frmImportGriddedData: TfrmImportGriddedData
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
-      ExplicitLeft = 287
     end
     object seIgnoreValueCount: TJvSpinEdit
       Left = 96
@@ -467,12 +463,12 @@ inherited frmImportGriddedData: TfrmImportGriddedData
     object combotreeDataSets: TRbwStringTreeCombo
       Left = 8
       Top = 122
-      Width = 265
+      Width = 263
       Height = 26
       Tree.Left = 0
       Tree.Top = 0
-      Tree.Width = 624
-      Tree.Height = 441
+      Tree.Width = 628
+      Tree.Height = 442
       Tree.Align = alClient
       Tree.Colors.BorderColor = 15987699
       Tree.Colors.DisabledColor = clGray
@@ -530,7 +526,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
         EC00D8E9EC00D8E9EC00D8E9EC00D8E9EC00D8E9EC00D8E9EC00}
       NumGlyphs = 2
       TabOrder = 4
-      ExplicitWidth = 273
+      ExplicitWidth = 257
     end
     object cbMultipleDataRows: TCheckBox
       Left = 8
@@ -554,16 +550,17 @@ inherited frmImportGriddedData: TfrmImportGriddedData
   object Panel2: TPanel
     Left = 0
     Top = 398
-    Width = 428
+    Width = 432
     Height = 47
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 399
+    ExplicitTop = 389
+    ExplicitWidth = 426
     DesignSize = (
-      428
+      432
       47)
     object btnHelp: TBitBtn
-      Left = 119
+      Left = 117
       Top = 6
       Width = 91
       Height = 33
@@ -572,10 +569,10 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 127
+      ExplicitLeft = 111
     end
     object btnOK: TBitBtn
-      Left = 216
+      Left = 214
       Top = 6
       Width = 91
       Height = 33
@@ -604,10 +601,10 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 224
+      ExplicitLeft = 208
     end
     object btnCancel: TBitBtn
-      Left = 312
+      Left = 310
       Top = 6
       Width = 91
       Height = 33
@@ -615,10 +612,10 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 320
+      ExplicitLeft = 304
     end
     object btnPasteData: TButton
-      Left = 22
+      Left = 20
       Top = 6
       Width = 91
       Height = 33
@@ -626,7 +623,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       Caption = 'Paste Data'
       TabOrder = 3
       OnClick = btnPasteDataClick
-      ExplicitLeft = 30
+      ExplicitLeft = 14
     end
   end
 end

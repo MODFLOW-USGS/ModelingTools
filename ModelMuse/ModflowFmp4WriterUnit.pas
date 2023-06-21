@@ -2793,39 +2793,150 @@ var
   UnitConversionScaleFactor: string;
   ExternalFileName: string;
   ExternalScaleFileName: string;
-  FarmIndex: Integer;
   AFarm: TFarm;
   FarmID: Integer;
-  InnerFarmIndex: Integer;
-  TimeIndex: Integer;
   StartTime: Double;
   SourceConcentration: TSaltSupplyConcentrationItem;
-  Index: Integer;
   procedure WriteItem(AFarm: TFarm; SourceConcentration: TSaltSupplyConcentrationItem);
   var
-    Formula: string;
+    Value: double;
+    PestValues: TPestValues;
   begin
     if SourceConcentration <> nil then
     begin
-      Formula := SourceConcentration.NonRoutedConcentration;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+      PestValues.Formula := SourceConcentration.NonRoutedConcentration;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := AFarm.SaltSupplyConcentrationCollection.PestSeriesParameter;
+      PestValues.PestSeriesMethod := AFarm.SaltSupplyConcentrationCollection.PestParamMethod;
+      PestValues.FormulaErrorMessage :=
         Format('Invalid non-routed salt supply concentration formula for farm %0:s',
-        [AFarm.FarmName]));
+        [AFarm.FarmName]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
 
-      Formula := SourceConcentration.SurfaceWaterConcentration;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+
+
+
+
+
+//      Formula := SourceConcentration.NonRoutedConcentration;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        Format('Invalid non-routed salt supply concentration formula for farm %0:s',
+//        [AFarm.FarmName]));
+
+
+      PestValues.Formula := SourceConcentration.SurfaceWaterConcentration;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := AFarm.SaltSupplyConcentrationCollection.SWConcPestSeriesParameter;
+      PestValues.PestSeriesMethod := AFarm.SaltSupplyConcentrationCollection.SWConcPestParamMethod;
+      PestValues.FormulaErrorMessage :=
         Format('Invalid surface water salt supply concentration formula for farm %0:s',
-        [AFarm.FarmName]));
+        [AFarm.FarmName]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
 
-      Formula := SourceConcentration.GroundwaterConcentration;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+
+
+//      Formula := SourceConcentration.SurfaceWaterConcentration;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        Format('Invalid surface water salt supply concentration formula for farm %0:s',
+//        [AFarm.FarmName]));
+
+
+
+      PestValues.Formula := SourceConcentration.GroundwaterConcentration;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := AFarm.SaltSupplyConcentrationCollection.GWConcPestSeriesParameter;
+      PestValues.PestSeriesMethod := AFarm.SaltSupplyConcentrationCollection.GWConcPestParamMethod;
+      PestValues.FormulaErrorMessage :=
         Format('Invalid groundwater salt supply concentration formula for farm %0:s',
-        [AFarm.FarmName]));
+        [AFarm.FarmName]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
 
-      Formula := SourceConcentration.ExternalConcentration;
-      WriteFloatValueFromGlobalFormula(Formula, AFarm,
-        Format('Invalid external salt supply concentration formula for farm %0:s',
-        [AFarm.FarmName]));
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+
+
+//      Formula := SourceConcentration.GroundwaterConcentration;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        Format('Invalid groundwater salt supply concentration formula for farm %0:s',
+//        [AFarm.FarmName]));
+
+      PestValues.Formula := SourceConcentration.ExternalConcentration;
+
+      PestValues.PestName := '';
+      PestValues.PestSeriesName := AFarm.SaltSupplyConcentrationCollection.ExtConcPestSeriesParameter;
+      PestValues.PestSeriesMethod := AFarm.SaltSupplyConcentrationCollection.ExtConcPestParamMethod;
+      PestValues.FormulaErrorMessage := Format('Invalid external salt supply concentration formula for farm %0:s',
+        [AFarm.FarmName]);
+      PestValues.ErrorObjectName := AFarm.FarmName;
+
+      AdjustFormulaForPest(PestValues);
+
+      if WritingTemplate and PestValues.ParameterUsed then
+      begin
+        Value := GetFormulaValue(PestValues);
+
+        WritePestTemplateFormula(Value, PestValues.PestName,
+          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+          nil);
+      end
+      else
+      begin
+        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+          PestValues.FormulaErrorMessage);
+      end;
+
+
+
+//      Formula := SourceConcentration.ExternalConcentration;
+//      WriteFloatValueFromGlobalFormula(Formula, AFarm,
+//        Format('Invalid external salt supply concentration formula for farm %0:s',
+//        [AFarm.FarmName]));
     end
     else
     begin
@@ -2835,11 +2946,92 @@ var
       WriteFloat(0);
     end;
   end;
+  procedure WriteListData;
+  var
+    TimeIndex: Integer;
+    FarmIndex: Integer;
+    InnerFarmIndex: Integer;
+    Index: Integer;
+  begin
+    FWriteLocation := RequiredValues.WriteLocation;
+    try
+      if RequiredValues.WriteTransientData then
+      begin
+        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+        begin
+          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
+
+          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
+
+          FarmID := 1;
+          for FarmIndex := 0 to Model.Farms.Count - 1 do
+          begin
+            AFarm := Model.Farms[FarmIndex];
+            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+            begin
+              WriteInteger(FarmID);
+              for Index := 1 to 4 do
+              begin
+                WriteFloat(0);
+              end;
+              Inc(FarmID);
+              NewLine;
+            end;
+            Assert(FarmID = AFarm.FarmId);
+            WriteInteger(AFarm.FarmId);
+
+            SourceConcentration :=AFarm.SaltSupplyConcentrationCollection.
+              ItemByStartTime(StartTime) as TSaltSupplyConcentrationItem;
+              WriteItem(AFarm, SourceConcentration);
+            Inc(FarmID);
+            NewLine;
+          end;
+        end;
+      end
+      else
+      begin
+        FarmID := 1;
+        for FarmIndex := 0 to Model.Farms.Count - 1 do
+        begin
+          AFarm := Model.Farms[FarmIndex];
+          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
+          begin
+            WriteInteger(FarmID);
+            for Index := 1 to 4 do
+            begin
+              WriteFloat(0);
+            end;
+            Inc(FarmID);
+            NewLine;
+          end;
+          Assert(FarmID = AFarm.FarmId);
+          WriteInteger(AFarm.FarmId);
+
+          if AFarm.SaltSupplyConcentrationCollection.Count > 0 then
+          begin
+            SourceConcentration := AFarm.SaltSupplyConcentrationCollection.First
+              as TSaltSupplyConcentrationItem;
+          end
+          else
+          begin
+            SourceConcentration := nil;
+          end;
+          WriteItem(AFarm,  SourceConcentration);
+          Inc(FarmID);
+          NewLine;
+        end;
+      end;
+    finally
+      FWriteLocation := wlMain;
+    end
+  end;
 begin
   if FSalinityFlush.FarmSaltConcentrationsChoice.FarmOption = foNotUsed then
   begin
     Exit;
   end;
+
+  FPestParamUsed := False;
 
   RequiredValues.WriteLocation := wlSaltSupplyConcentration;
   RequiredValues.DefaultValue := 1;
@@ -2886,74 +3078,17 @@ begin
   begin
     WriteString(ExtractFileName(AFileName));
     NewLine;
-    try
-      FWriteLocation := RequiredValues.WriteLocation;
-      if RequiredValues.WriteTransientData then
-      begin
-        for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-        begin
-          WriteCommentLine(Format(StrStressPeriodD, [TimeIndex+1]));
-
-          StartTime := Model.ModflowFullStressPeriods[TimeIndex].StartTime;
-
-          FarmID := 1;
-          for FarmIndex := 0 to Model.Farms.Count - 1 do
-          begin
-            AFarm := Model.Farms[FarmIndex];
-            for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-            begin
-              WriteInteger(FarmID);
-              for Index := 1 to 4 do
-              begin
-                WriteFloat(0);
-              end;
-              Inc(FarmID);
-              NewLine;
-            end;
-            Assert(FarmID = AFarm.FarmId);
-            WriteInteger(AFarm.FarmId);
-
-            SourceConcentration :=AFarm.SaltSupplyConcentrationCollection.ItemByStartTime(StartTime) as TSaltSupplyConcentrationItem;
-              WriteItem(AFarm, SourceConcentration);
-            Inc(FarmID);
-            NewLine;
-          end;
-        end;
-      end
-      else
-      begin
-        FarmID := 1;
-        for FarmIndex := 0 to Model.Farms.Count - 1 do
-        begin
-          AFarm := Model.Farms[FarmIndex];
-          for InnerFarmIndex := FarmID to AFarm.FarmID - 1 do
-          begin
-            WriteInteger(FarmID);
-            for Index := 1 to 4 do
-            begin
-              WriteFloat(0);
-            end;
-            Inc(FarmID);
-            NewLine;
-          end;
-          Assert(FarmID = AFarm.FarmId);
-          WriteInteger(AFarm.FarmId);
-
-          if AFarm.SaltSupplyConcentrationCollection.Count > 0 then
-          begin
-            SourceConcentration := AFarm.SaltSupplyConcentrationCollection.First as TSaltSupplyConcentrationItem;
-          end
-          else
-          begin
-            SourceConcentration := nil;
-          end;
-          WriteItem(AFarm,  SourceConcentration);
-          Inc(FarmID);
-          NewLine;
-        end;
+    WriteListData;
+    if FPestParamUsed then
+    begin
+      WritingTemplate := True;
+      try
+        GetFileStreamName(RequiredValues.WriteLocation);
+        WriteListData;
+      finally
+        FPestParamUsed := False;
+        WritingTemplate := False;
       end;
-    finally
-      FWriteLocation := wlMain;
     end;
   end;
 end;
