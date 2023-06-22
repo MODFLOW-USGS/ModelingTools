@@ -9957,16 +9957,17 @@ const
 //                Object Properties dialog box.
 //    '5.1.1.31' Bug fix: Fixed pasting data into the Observation Comparisons
 //                dialog box.
-
-//               Bug fix: Fixed a bug that could cause an access violation when
+//    '5.1.1.32' Bug fix: Fixed a bug that could cause an access violation when
 //                opening the MODFLOW Packages and Programs dialog box.
+//               Bug fix: Fixed loss of data when editing multiple MNW2 wells
+//                simultaneously.
 
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.31';
+  IIModelVersion = '5.1.1.32';
 
 function IModelVersion: string;
 begin

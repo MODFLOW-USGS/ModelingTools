@@ -140,12 +140,19 @@ type
     procedure rdgVerticalScreensMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure cbSaveMnwiBasicClick(Sender: TObject);
+    procedure rdgLiftTableSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
+    procedure rdgVerticalScreensSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
   private
     FOnChange: TNotifyEvent;
     FChanging: Boolean;
     FVerticalWell: TCheckBoxState;
     FFirstBoundary: TMnw2Boundary;
     FOnCheckPestCell: TSelectCellEvent;
+    FLiftValuesOK: Boolean;
+    FTimeValuesOK: Boolean;
+    FScreenValuesOK: Boolean;
     procedure Changed;
     procedure SetVerticalWell(const Value: TCheckBoxState);
     procedure EnablePartialPenetration;
@@ -660,6 +667,10 @@ var
   ScreenIndex: Integer;
   AScreenObject: TScreenObject;
 begin
+  if not FScreenValuesOK then
+  begin
+    Exit;
+  end;
   AScreenObject := Boundary.ScreenObject as TScreenObject;
   if TMultinodeWell.IsScreenObjectVertical(AScreenObject) then
   begin
@@ -691,6 +702,7 @@ begin
     end
     else
     begin
+      FScreenValuesOK := False;
       for RowIndex := 1 to rdgTimeTable.RowCount - 1 do
       begin
         for ColIndex := 0 to rdgTimeTable.ColCount - 1 do
@@ -709,6 +721,10 @@ var
   TimeItem: TMnw2TimeItem;
   TimeIndex: Integer;
 begin
+  if not FTimeValuesOK then
+  begin
+    Exit;
+  end;
   if seTimeTableRows.AsInteger = Boundary.TimeValues.Count then
   begin
     for TimeIndex := 0 to Boundary.TimeValues.Count - 1 do
@@ -751,6 +767,7 @@ begin
   end
   else
   begin
+    FTimeValuesOK := False;
     for RowIndex := 1 to rdgTimeTable.RowCount - 1 do
     begin
       for ColIndex := 0 to rdgTimeTable.ColCount - 1 do
@@ -779,6 +796,15 @@ var
     end;
   end;
 begin
+  if not FLiftValuesOK then
+  begin
+    Exit;
+  end;
+  if Boundary.LiftValues.Count <> seLiftTableRows.AsInteger then
+  begin
+    FLiftValuesOK := False;
+    ClearLiftTable;
+  end;
   if (Boundary.LiftValues.Count > 0)
     and (seLiftTableRows.AsInteger = Boundary.LiftValues.Count) then
   begin
@@ -788,6 +814,7 @@ begin
       if rdgLiftTable.Cells[Ord(mltcLift), LiftIndex + 1] <>
         FloatToStr(Lift.Lift) then
       begin
+        FLiftValuesOK := False;
         ClearLiftTable;
         Exit;
       end;
@@ -837,16 +864,16 @@ procedure TframeScreenObjectMNW2.UpdateTimeGridCell(Value: string;
 begin
   if ShouldSet then
   begin
-    if rdgTimeTable.Objects[Ord(Column), TimeIndex + 1] = nil then
+    if rdgTimeTable.Objects[Ord(Column), TimeIndex + 1+PestRowOffset] = nil then
     begin
-      rdgTimeTable.Cells[Ord(Column), TimeIndex + 1] := Value;
-      rdgTimeTable.Objects[Ord(Column), TimeIndex + 1] := AnObject;
+      rdgTimeTable.Cells[Ord(Column), TimeIndex + 1+PestRowOffset] := Value;
+      rdgTimeTable.Objects[Ord(Column), TimeIndex + 1+PestRowOffset] := AnObject;
     end
     else
     begin
-      if rdgTimeTable.Cells[Ord(Column), TimeIndex + 1] <> Value then
+      if rdgTimeTable.Cells[Ord(Column), TimeIndex + 1+PestRowOffset] <> Value then
       begin
-        rdgTimeTable.Cells[Ord(Column), TimeIndex + 1] := '';
+        rdgTimeTable.Cells[Ord(Column), TimeIndex + 1+PestRowOffset] := '';
       end;
     end;
   end;
@@ -1001,6 +1028,7 @@ begin
   SetEdForFirstItem(FloatToStr(Boundary.WellTolerance),
     rdeWellTolerance, Boundary.AdjustPumping);
 
+  FLiftValuesOK := True;
   if Boundary.AdjustPumping then
   begin
     if Boundary.LiftValues.Count > 0 then
@@ -1022,6 +1050,7 @@ begin
       end;
     end;
   end;
+  FTimeValuesOK := True;
   seTimeTableRows.AsInteger := Boundary.TimeValues.Count;
   seTimeTableRowsChange(nil);
   rdgTimeTable.BeginUpdate;
@@ -1088,6 +1117,7 @@ begin
     rdgTimeTable.EndUpdate;
   end;
 
+  FScreenValuesOK := True;
   AScreenObject := Boundary.ScreenObject as TScreenObject;
   if TMultinodeWell.IsScreenObjectVertical(AScreenObject) then
   begin
@@ -1347,6 +1377,13 @@ begin
   end;
 end;
 
+procedure TframeScreenObjectMNW2.rdgLiftTableSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  FLiftValuesOK := True;
+end;
+
 procedure TframeScreenObjectMNW2.rdgTimeTableColSize(Sender: TObject; ACol,
   PriorWidth: Integer);
 begin
@@ -1458,6 +1495,7 @@ end;
 procedure TframeScreenObjectMNW2.rdgTimeTableSetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
 begin
+  FTimeValuesOK := True;
   if (ARow >= 1 + PestRowOffset) and (ACol = Ord(mtcLimitMethod)) then
   begin
     rdgTimeTable.Invalidate;
@@ -1559,6 +1597,13 @@ begin
   end;
 end;
 
+procedure TframeScreenObjectMNW2.rdgVerticalScreensSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  FScreenValuesOK := True;
+end;
+
 procedure TframeScreenObjectMNW2.seLiftTableRowsChange(Sender: TObject);
 var
   RowCount: Integer;
@@ -1607,6 +1652,8 @@ var
   LiftError2: Boolean;
   ShowError: boolean;
   ObsCount: Integer;
+  ATime: Double;
+  AFloatValue: Double;
 begin
   ShowError := False;
   for Index := 0 to List.Count - 1 do
@@ -1770,182 +1817,211 @@ begin
         begin
           Boundary.WellTolerance := StrToFloat(rdeWellTolerance.Text);
         end;
-        LiftCount := 0;
-        for RowIndex := 1 to rdgLiftTable.RowCount - 1 do
+        if FLiftValuesOK then
         begin
-          if (rdgLiftTable.Cells[Ord(mltcLift), RowIndex] <> '')
-            and (rdgLiftTable.Cells[Ord(mltcQ), RowIndex] <> '') then
-          begin
-            Inc(LiftCount);
-          end;
-        end;
-        LiftError1 := False;
-        LiftError2 := False;
-        if LiftCount > 0 then
-        begin
-          While Boundary.LiftValues.Count < LiftCount do
-          begin
-            Boundary.LiftValues.Add;
-          end;
-          While Boundary.LiftValues.Count > LiftCount do
-          begin
-            Boundary.LiftValues.Delete(Boundary.LiftValues.Count-1);
-          end;
-          LiftIndex := -1;
+          LiftCount := 0;
           for RowIndex := 1 to rdgLiftTable.RowCount - 1 do
           begin
-            if (rdgLiftTable.Cells[Ord(mltcLift), RowIndex] <> '')
-              and (rdgLiftTable.Cells[Ord(mltcQ), RowIndex] <> '') then
+  //          if (rdgLiftTable.Cells[Ord(mltcLift), RowIndex] <> '')
+  //            and (rdgLiftTable.Cells[Ord(mltcQ), RowIndex] <> '') then
             begin
-              Inc(LiftIndex);
-              LiftItem := Boundary.LiftValues.Items[LiftIndex] as TLiftItem;
-              LiftItem.Lift := StrToFloat(rdgLiftTable.Cells[Ord(mltcLift), RowIndex]);
-              LiftItem.Q := StrToFloat(rdgLiftTable.Cells[Ord(mltcQ), RowIndex]);
-              if Boundary.MaximumLift < LiftItem.Lift then
+              Inc(LiftCount);
+            end;
+          end;
+          LiftError1 := False;
+          LiftError2 := False;
+          if LiftCount > 0 then
+          begin
+            While Boundary.LiftValues.Count < LiftCount do
+            begin
+              Boundary.LiftValues.Add;
+            end;
+            While Boundary.LiftValues.Count > LiftCount do
+            begin
+              Boundary.LiftValues.Delete(Boundary.LiftValues.Count-1);
+            end;
+            LiftIndex := -1;
+            for RowIndex := 1 to rdgLiftTable.RowCount - 1 do
+            begin
+  //            if (rdgLiftTable.Cells[Ord(mltcLift), RowIndex] <> '')
+  //              and (rdgLiftTable.Cells[Ord(mltcQ), RowIndex] <> '') then
               begin
-                LiftError1 := True;
-              end;
-              if Boundary.LiftAtMaxRate > LiftItem.Lift then
-              begin
-                LiftError2 := True;
+                Inc(LiftIndex);
+                LiftItem := Boundary.LiftValues.Items[LiftIndex] as TLiftItem;
+                if TryStrToFloat(rdgLiftTable.Cells[Ord(mltcLift), RowIndex], AFloatValue) then
+                begin
+                  LiftItem.Lift := AFloatValue
+                end;
+                if TryStrToFloat(rdgLiftTable.Cells[Ord(mltcQ), RowIndex], AFloatValue) then
+                begin
+                  LiftItem.Q := AFloatValue;
+                end;
+                if Boundary.MaximumLift < LiftItem.Lift then
+                begin
+                  LiftError1 := True;
+                end;
+                if Boundary.LiftAtMaxRate > LiftItem.Lift then
+                begin
+                  LiftError2 := True;
+                end;
               end;
             end;
           end;
+          if LiftError1 then
+          begin
+            ShowError := True;
+            // Because this is a copy of the TScreenObject and not the original,
+            // it should not be included in the call to
+            // frmErrorsAndWarnings.AddError.
+            frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel, StrInvalidMnwTable,
+              ScreenObject.Name);
+          end;
+          if LiftError2 then
+          begin
+            ShowError := True;
+            // Because this is a copy of the TScreenObject and not the original,
+            // it should not be included in the call to
+            // frmErrorsAndWarnings.AddError.
+            frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel, StrInvalidMnwTable2,
+              ScreenObject.Name);
+          end;
         end;
-        if LiftError1 then
+      end;
+
+      if FTimeValuesOK then
+      begin
+        if PestModifierAssigned[rdgTimeTable, Ord(mtcPumpingRate)]  then
         begin
-          ShowError := True;
-          // Because this is a copy of the TScreenObject and not the original,
-          // it should not be included in the call to
-          // frmErrorsAndWarnings.AddError.
-          frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel, StrInvalidMnwTable,
-            ScreenObject.Name);
+          Boundary.PestPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcPumpingRate)];
         end;
-        if LiftError2 then
+        if PestMethodAssigned[rdgTimeTable, Ord(mtcPumpingRate)] then
         begin
-          ShowError := True;
-          // Because this is a copy of the TScreenObject and not the original,
-          // it should not be included in the call to
-          // frmErrorsAndWarnings.AddError.
-          frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel, StrInvalidMnwTable2,
-            ScreenObject.Name);
+          Boundary.PestPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcPumpingRate)];
         end;
-      end;
 
-      if PestModifierAssigned[rdgTimeTable, Ord(mtcPumpingRate)]  then
-      begin
-        Boundary.PestPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcPumpingRate)];
-      end;
-      if PestMethodAssigned[rdgTimeTable, Ord(mtcPumpingRate)] then
-      begin
-        Boundary.PestPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcPumpingRate)];
-      end;
-
-      if PestModifierAssigned[rdgTimeTable, Ord(mtcMultiplier)]  then
-      begin
-        Boundary.PestHeadCapacityMultiplierFormula := PestModifier[rdgTimeTable, Ord(mtcMultiplier)];
-      end;
-      if PestMethodAssigned[rdgTimeTable, Ord(mtcMultiplier)] then
-      begin
-        Boundary.PestHeadCapacityMultiplierMethod := PestMethod[rdgTimeTable, Ord(mtcMultiplier)];
-      end;
-
-      if PestModifierAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)]  then
-      begin
-        Boundary.PestLimitingWaterLevelFormula := PestModifier[rdgTimeTable, Ord(mtcLimitingWaterLevel)];
-      end;
-      if PestMethodAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)] then
-      begin
-        Boundary.PestLimitingWaterLevelMethod := PestMethod[rdgTimeTable, Ord(mtcLimitingWaterLevel)];
-      end;
-
-      if PestModifierAssigned[rdgTimeTable, Ord(mtcMinRate)]  then
-      begin
-        Boundary.PestInactivationPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcMinRate)];
-      end;
-      if PestMethodAssigned[rdgTimeTable, Ord(mtcMinRate)] then
-      begin
-        Boundary.PestInactivationPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcMinRate)];
-      end;
-
-      if PestModifierAssigned[rdgTimeTable, Ord(mtcMaxRate)]  then
-      begin
-        Boundary.PestReactivationPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcMaxRate)];
-      end;
-      if PestMethodAssigned[rdgTimeTable, Ord(mtcMaxRate)] then
-      begin
-        Boundary.PestReactivationPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcMaxRate)];
-      end;
-
-      TimeCount := 0;
-      for RowIndex := 1 + PestRowOffset to rdgTimeTable.RowCount - 1 do
-      begin
-        if (rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex] <> '')
-          and (rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex] <> '')
-          and (rdgTimeTable.Cells[Ord(mtcPumpingRate), RowIndex] <> '') then
+        if PestModifierAssigned[rdgTimeTable, Ord(mtcMultiplier)]  then
         begin
-          Inc(TimeCount);
+          Boundary.PestHeadCapacityMultiplierFormula := PestModifier[rdgTimeTable, Ord(mtcMultiplier)];
         end;
-      end;
-      if TimeCount > 0 then
-      begin
-        While Boundary.TimeValues.Count < TimeCount do
+        if PestMethodAssigned[rdgTimeTable, Ord(mtcMultiplier)] then
         begin
-          Boundary.TimeValues.Add;
+          Boundary.PestHeadCapacityMultiplierMethod := PestMethod[rdgTimeTable, Ord(mtcMultiplier)];
         end;
-        While Boundary.TimeValues.Count > TimeCount do
+
+        if PestModifierAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)]  then
         begin
-          Boundary.TimeValues.Delete(Boundary.TimeValues.Count-1);
+          Boundary.PestLimitingWaterLevelFormula := PestModifier[rdgTimeTable, Ord(mtcLimitingWaterLevel)];
         end;
-        TimeIndex := -1;
+        if PestMethodAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)] then
+        begin
+          Boundary.PestLimitingWaterLevelMethod := PestMethod[rdgTimeTable, Ord(mtcLimitingWaterLevel)];
+        end;
+
+        if PestModifierAssigned[rdgTimeTable, Ord(mtcMinRate)]  then
+        begin
+          Boundary.PestInactivationPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcMinRate)];
+        end;
+        if PestMethodAssigned[rdgTimeTable, Ord(mtcMinRate)] then
+        begin
+          Boundary.PestInactivationPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcMinRate)];
+        end;
+
+        if PestModifierAssigned[rdgTimeTable, Ord(mtcMaxRate)]  then
+        begin
+          Boundary.PestReactivationPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcMaxRate)];
+        end;
+        if PestMethodAssigned[rdgTimeTable, Ord(mtcMaxRate)] then
+        begin
+          Boundary.PestReactivationPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcMaxRate)];
+        end;
+
+        TimeCount := 0;
         for RowIndex := 1 + PestRowOffset to rdgTimeTable.RowCount - 1 do
         begin
-          if (rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex] <> '')
-            and (rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex] <> '')
-            and (rdgTimeTable.Cells[Ord(mtcPumpingRate), RowIndex] <> '') then
+  //        if (rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex] <> '')
+  //          and (rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex] <> '')
+  //          and (rdgTimeTable.Cells[Ord(mtcPumpingRate), RowIndex] <> '') then
           begin
-            Inc(TimeIndex);
-            TimeItem := Boundary.TimeValues.Items[TimeIndex] as TMnw2TimeItem;
-            TimeItem.StartTime := StrToFloat(
-              rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex]);
-            TimeItem.EndTime := StrToFloat(
-              rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex]);
-            TimeItem.PumpingRate :=
-              rdgTimeTable.Cells[Ord(mtcPumpingRate), RowIndex];
-            if Boundary.AdjustPumping then
+            Inc(TimeCount);
+          end;
+        end;
+        if TimeCount > 0 then
+        begin
+          While Boundary.TimeValues.Count < TimeCount do
+          begin
+            Boundary.TimeValues.Add;
+          end;
+          While Boundary.TimeValues.Count > TimeCount do
+          begin
+            Boundary.TimeValues.Delete(Boundary.TimeValues.Count-1);
+          end;
+          TimeIndex := -1;
+          for RowIndex := 1 + PestRowOffset to rdgTimeTable.RowCount - 1 do
+          begin
+  //          if (rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex] <> '')
+  //            and (rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex] <> '')
+  //            and (rdgTimeTable.Cells[Ord(mtcPumpingRate), RowIndex] <> '') then
             begin
-              TimeItem.HeadCapacityMultiplier :=
-                rdgTimeTable.Cells[Ord(mtcMultiplier), RowIndex];
-            end;
-            if Boundary.ConstrainPumping then
-            begin
-              TimeItem.LimitingWaterLevel :=
-                rdgTimeTable.Cells[Ord(mtcLimitingWaterLevel), RowIndex];
-              LimitMethodInt :=
-                rdgTimeTable.ItemIndex[Ord(mtcLimitMethod), RowIndex];
-              if LimitMethodInt >= 0 then
+              Inc(TimeIndex);
+              TimeItem := Boundary.TimeValues.Items[TimeIndex] as TMnw2TimeItem;
+              if TryStrToFloat(rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex], ATime) then
               begin
-                TimeItem.LimitMethod := TMnwLimitMethod(LimitMethodInt);
+                TimeItem.StartTime := ATime
               end;
-              if TimeItem.LimitMethod <> mlmNoMinimum then
+              if TryStrToFloat(rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex], ATime) then
               begin
-                TimeItem.InactivationPumpingRate :=
-                  rdgTimeTable.Cells[Ord(mtcMinRate), RowIndex];
-                TimeItem.ReactivationPumpingRate :=
-                  rdgTimeTable.Cells[Ord(mtcMaxRate), RowIndex];
+                TimeItem.EndTime := ATime
+              end;
+              if rdgTimeTable.Cells[Ord(mtcPumpingRate), RowIndex] <> '' then
+              begin
+                TimeItem.PumpingRate :=
+                  rdgTimeTable.Cells[Ord(mtcPumpingRate), RowIndex];
+              end;
+              if Boundary.AdjustPumping
+                and (rdgTimeTable.Cells[Ord(mtcMultiplier), RowIndex] <> '') then
+              begin
+                TimeItem.HeadCapacityMultiplier :=
+                  rdgTimeTable.Cells[Ord(mtcMultiplier), RowIndex];
+              end;
+              if Boundary.ConstrainPumping then
+              begin
+                if rdgTimeTable.Cells[Ord(mtcLimitingWaterLevel), RowIndex] <> '' then
+                begin
+                  TimeItem.LimitingWaterLevel :=
+                    rdgTimeTable.Cells[Ord(mtcLimitingWaterLevel), RowIndex];
+                end;
+                LimitMethodInt :=
+                  rdgTimeTable.ItemIndex[Ord(mtcLimitMethod), RowIndex];
+                if LimitMethodInt >= 0 then
+                begin
+                  TimeItem.LimitMethod := TMnwLimitMethod(LimitMethodInt);
+                end;
+                if TimeItem.LimitMethod <> mlmNoMinimum then
+                begin
+                  if rdgTimeTable.Cells[Ord(mtcMinRate), RowIndex] <> '' then
+                  begin
+                    TimeItem.InactivationPumpingRate :=
+                      rdgTimeTable.Cells[Ord(mtcMinRate), RowIndex];
+                  end;
+                  if rdgTimeTable.Cells[Ord(mtcMaxRate), RowIndex] <> '' then
+                  begin
+                    TimeItem.ReactivationPumpingRate :=
+                      rdgTimeTable.Cells[Ord(mtcMaxRate), RowIndex];
+                  end;
+                end;
               end;
             end;
           end;
         end;
       end;
 
-      if TMultinodeWell.IsScreenObjectVertical(ScreenObject) then
+      if TMultinodeWell.IsScreenObjectVertical(ScreenObject) and FScreenValuesOK then
       begin
         ScreenCount := 0;
         for RowIndex := 1 to seVerticalScreens.AsInteger do
         begin
-          if (rdgVerticalScreens.Cells[Ord(vsZTop), RowIndex] <> '')
-            and (rdgVerticalScreens.Cells[Ord(vsZBot), RowIndex] <> '') then
+//          if (rdgVerticalScreens.Cells[Ord(vsZTop), RowIndex] <> '')
+//            and (rdgVerticalScreens.Cells[Ord(vsZBot), RowIndex] <> '') then
           begin
             Inc(ScreenCount);
           end;
@@ -1963,8 +2039,8 @@ begin
           ScreenIndex := -1;
           for RowIndex := 1 to rdgVerticalScreens.RowCount - 1 do
           begin
-            if (rdgVerticalScreens.Cells[Ord(vsZTop), RowIndex] <> '')
-              and (rdgVerticalScreens.Cells[Ord(vsZBot), RowIndex] <> '') then
+//            if (rdgVerticalScreens.Cells[Ord(vsZTop), RowIndex] <> '')
+//              and (rdgVerticalScreens.Cells[Ord(vsZBot), RowIndex] <> '') then
             begin
               Inc(ScreenIndex);
               VerticalScreen := Boundary.VerticalScreens.Items[ScreenIndex]
@@ -1973,10 +2049,14 @@ begin
               // vertical screen will be deleted.
               VerticalScreen.StartTime := ScreenIndex;
               VerticalScreen.EndTime := ScreenIndex+1;
-              VerticalScreen.ZTop := StrToFloat(
-                rdgVerticalScreens.Cells[Ord(vsZTop), RowIndex]);
-              VerticalScreen.ZBottom := StrToFloat(
-                rdgVerticalScreens.Cells[Ord(vsZBot), RowIndex]);
+              if TryStrToFloat(rdgVerticalScreens.Cells[Ord(vsZTop), RowIndex], AFloatValue) then
+              begin
+                VerticalScreen.ZTop := AFloatValue;
+              end;
+              if TryStrToFloat(rdgVerticalScreens.Cells[Ord(vsZBot), RowIndex], AFloatValue) then
+              begin
+                VerticalScreen.ZBottom := AFloatValue;
+              end;
 
               AValue := rdgVerticalScreens.Cells[Ord(vsRw), RowIndex];
               if AValue <> '' then

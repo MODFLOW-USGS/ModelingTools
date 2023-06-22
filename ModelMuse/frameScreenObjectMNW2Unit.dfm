@@ -654,6 +654,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 5
+        OnSetEditText = rdgLiftTableSetEditText
         ExtendedAutoDistributeText = False
         AutoMultiEdit = True
         AutoDistributeText = True
@@ -1147,6 +1148,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         TabOrder = 1
         OnMouseUp = rdgVerticalScreensMouseUp
         OnSelectCell = rdgVerticalScreensSelectCell
+        OnSetEditText = rdgVerticalScreensSetEditText
         ExtendedAutoDistributeText = False
         AutoMultiEdit = True
         AutoDistributeText = False
