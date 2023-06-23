@@ -31361,5 +31361,11 @@ object TTaskHistory
       Categories.Strings = (
         'Design and Planning'
         'Bug fix')
+    end
+    item
+      Date = 45100.000000000000000000
+      Categories.Strings = (
+        'GW_Chart'
+        'Design and Planning')
     end>
 end

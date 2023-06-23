@@ -1,10 +1,10 @@
 object frmConvertFlows: TfrmConvertFlows
   Left = 399
   Top = 199
-  Width = 498
-  Height = 485
   HelpContext = 640
   Caption = 'Convert Flows or Zeta Files'
+  ClientHeight = 426
+  ClientWidth = 482
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -66,7 +66,7 @@ object frmConvertFlows: TfrmConvertFlows
     TabOrder = 3
     object btnConvert: TButton
       Left = 8
-      Top = 8
+      Top = 6
       Width = 75
       Height = 25
       Caption = 'Convert'
@@ -107,6 +107,7 @@ object frmConvertFlows: TfrmConvertFlows
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -130,6 +131,7 @@ object frmConvertFlows: TfrmConvertFlows
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'Browse'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -169,9 +171,9 @@ object frmConvertFlows: TfrmConvertFlows
     end
     object rdgCellsToExport: TRbwDataGrid4
       Left = 1
-      Top = 107
+      Top = 127
       Width = 211
-      Height = 205
+      Height = 185
       Align = alBottom
       Anchors = [akLeft, akTop, akRight, akBottom]
       ColCount = 3
@@ -191,6 +193,7 @@ object frmConvertFlows: TfrmConvertFlows
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -216,6 +219,7 @@ object frmConvertFlows: TfrmConvertFlows
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'Browse'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -241,6 +245,7 @@ object frmConvertFlows: TfrmConvertFlows
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -292,6 +297,14 @@ object frmConvertFlows: TfrmConvertFlows
       Enabled = False
       TabOrder = 1
       OnChange = spinCellCountChange
+    end
+    object cbCombineAll: TCheckBox
+      Left = 8
+      Top = 96
+      Width = 153
+      Height = 17
+      Caption = 'Write to a single CSV File'
+      TabOrder = 3
     end
   end
   object MainMenu1: TMainMenu

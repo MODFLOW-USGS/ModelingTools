@@ -29,6 +29,7 @@ type
     lblCellCount: TLabel;
     spl1: TSplitter;
     pbProgress: TProgressBar;
+    cbCombineAll: TCheckBox;
     procedure feFlowFileChange(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure rdgExportFilesSelectCell(Sender: TObject; ACol,
@@ -61,6 +62,8 @@ type
     procedure WriteCells(AnArray: T3DTModflowArray; KSTP, KPER: Integer;
       TOTIM: TModflowDouble; AFile: TFileStream; Columns, Rows,
       Layers: TIntegerList; NCOL, NROW, NLAY: Integer);
+    procedure ExportSingleFile;
+    function GetCellsToExport(var Columns, Layers, Rows: TIntegerList): Boolean;
     { Private declarations }
   public
     { Public declarations }
@@ -129,6 +132,7 @@ begin
   FlowNames.Clear;
   if FileExists(FileName) then
   begin
+    FNLay := 0;
     BudgetFile := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
     try
       FileLength := BudgetFile.Size;
@@ -156,6 +160,15 @@ begin
         end;
         Description := DESC;
         Description := Trim(Description);
+        if Description <> 'FLOW-JA-FACE' then
+        begin
+          if Abs(NLAY) > Abs(FNLay) then
+          begin
+            FNLay := NLAY;
+          end;
+          FNRow := NROW;
+          FNCol := NCOL;
+        end;
         if FlowNames.IndexOf(Description) < 0 then
         begin
           FlowNames.Add(Description);
@@ -167,9 +180,9 @@ begin
       end;
     finally
       BudgetFile.Free;
-      FNLay := NLAY;
-      FNRow := NROW;
-      FNCol := NCOL;
+//      FNLay := NLAY;
+//      FNRow := NROW;
+//      FNCol := NCOL;
     end;
   end;
 end;
@@ -185,6 +198,10 @@ begin
     if FlowNames = nil then
     begin
       FlowNames := TStringList.Create;
+    end
+    else
+    begin
+      FlowNames.Clear;
     end;
     for FileIndex := 0 to feFlowFile.DialogFiles.Count -1 do
     begin
@@ -393,42 +410,28 @@ var
   FileName, NewFileName: string;
   Extension: string;
   Columns, Rows, Layers : TIntegerList;
-  AColumn, ARow, ALayer: integer;
   CellIndex: integer;
   ALabel: AnsiString;
   Divider: integer;
 begin
   Screen.Cursor := crHourGlass;
   try
+    if cbCombineAll.Checked then
+    begin
+      ExportSingleFile;
+      Exit;
+    end;
+
     Columns := nil;
     Rows := nil;
     Layers := nil;
     try
-      if rgCellsToExport.ItemIndex = 1 then
+      if not GetCellsToExport(Columns, Layers, Rows) then
       begin
-        Columns := TIntegerList.Create;
-        Rows := TIntegerList.Create;
-        Layers := TIntegerList.Create;
-        for RowIndex := 1 to rdgCellsToExport.RowCount -1 do
-        begin
-          if TryStrToInt(rdgCellsToExport.Cells[2,RowIndex], AColumn)
-            and TryStrToInt(rdgCellsToExport.Cells[1,RowIndex], ARow)
-            and TryStrToInt(rdgCellsToExport.Cells[0,RowIndex], ALayer) then
-          begin
-            Columns.Add(AColumn);
-            Rows.Add(ARow);
-            Layers.Add(ALayer);
-          end;
-        end;
-        if Columns.Count = 0 then
-        begin
-          Beep;
-          MessageDlg('No cells specified. Aborting.', mtWarning, [mbOK], 0);
-          Exit;
-        end;
-
+        Beep;
+        MessageDlg('No cells specified. Aborting.', mtWarning, [mbOK], 0);
+        Exit;
       end;
-
 
       for FileIndex := 0 to feFlowFile.DialogFiles.Count -1 do
       begin
@@ -579,6 +582,277 @@ end;
 procedure TfrmConvertFlows.Exit1Click(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TfrmConvertFlows.ExportSingleFile;
+var
+  RowIndex: integer;
+//  Files: TList;
+  AFile: TFileStream;
+  BudgetFile: TFileStream;
+  FileLength: Int64;
+  Precision: TModflowPrecision;
+  KSTP, KPER: Integer;
+  PERTIM, TOTIM: TModflowDouble;
+  DESC: TModflowDesc;
+  NCOL, NROW, NLAY: Integer;
+  AnArray: T3DTModflowArray;
+  IRESULT: integer;
+  Description: string;
+  Position: integer;
+  LayerIndex: integer;
+  FileIndex: integer;
+  FileName, NewFileName: string;
+  Extension: string;
+  Columns, Rows, Layers : TIntegerList;
+  CellIndex: integer;
+  ALabel: AnsiString;
+  Divider: integer;
+  FoundFirst: Boolean;
+  Lines: array of array of array of AnsiString;
+  PriorPeriod: Integer;
+  PriorStep: Integer;
+  PriorTime: double;
+  ColIndex: Integer;
+  LinesWritten: Boolean;
+  procedure ClearLines;
+  var
+    LayerIndex: integer;
+    RowIndex: integer;
+    ColIndex: Integer;
+  begin
+    for LayerIndex := 0 to Abs(FNLay) - 1 do
+    begin
+      for RowIndex := 0 to FNRow - 1 do
+      begin
+        for ColIndex := 0 to FNCol - 1 do
+        begin
+          Lines[LayerIndex,RowIndex,ColIndex] := '';
+        end;
+      end;
+    end;
+  end;
+  procedure WriteLines;
+  var
+    LayerIndex: integer;
+    RowIndex: integer;
+    ColIndex: Integer;
+    CellIndex: Integer;
+    ALine: AnsiString;
+    procedure WriteALine;
+    begin
+      ALine := Lines[LayerIndex,RowIndex,ColIndex];
+      ALabel := Format('%0:d, %1:d, %2:g, %3:d, %4:d, %5:d %6:s',
+        [PriorPeriod, PriorStep, PriorTime, LayerIndex + 1, RowIndex+1,
+        ColIndex+1, ALine+sLineBreak]
+        );
+      AFile.Write(ALabel[1], Length(ALabel)*SizeOf(AnsiChar));
+    end;
+  begin
+    if Columns = nil then
+    begin
+      for LayerIndex := 0 to Abs(FNLay) - 1 do
+      begin
+        for RowIndex := 0 to FNRow - 1 do
+        begin
+          for ColIndex := 0 to FNCol - 1 do
+          begin
+            WriteALine;
+            Lines[LayerIndex,RowIndex,ColIndex] := '';
+          end;
+        end;
+      end;
+    end
+    else
+    begin
+      for CellIndex := 0 to Columns.Count - 1 do
+      begin
+        ColIndex := Columns[CellIndex] -1;
+        RowIndex := Rows[CellIndex] -1;
+        LayerIndex := Layers[CellIndex] -1;
+        WriteALine;
+      end;
+      ClearLines;
+    end;
+    LinesWritten := True;
+  end;
+begin
+  Columns := nil;
+  Rows := nil;
+  Layers := nil;
+  try
+    if not GetCellsToExport(Columns, Layers, Rows) then
+    begin
+      Beep;
+      MessageDlg('No cells specified. Aborting.', mtWarning, [mbOK], 0);
+      Exit;
+    end;
+
+    for FileIndex := 0 to feFlowFile.DialogFiles.Count -1 do
+    begin
+      FileName := feFlowFile.DialogFiles[FileIndex];
+
+      if FileExists(FileName) then
+      begin
+        try
+          Extension := '.csv';
+          NewFileName := ChangeFileExt(FileName, Extension);
+          AFile := TFileStream.Create(NewFileName,
+            fmCreate or fmShareDenyWrite);
+          BudgetFile := TFileStream.Create(FileName,
+            fmOpenRead or fmShareDenyWrite);
+          try
+
+            ALabel := 'Stress Period, Time Step, Total Time, Layer, Row, Column, ';
+            AFile.Write(ALabel[1], Length(ALabel)*SizeOf(AnsiChar));
+
+            ALabel := '';
+            for RowIndex := 1 to rdgExportFiles.RowCount -1 do
+            begin
+              if rdgExportFiles.Checked[0,RowIndex]
+                and (rdgExportFiles.Cells[0,RowIndex] <> 'FLOW-JA-FACE') then
+              begin
+                ALabel := ALabel + rdgExportFiles.Cells[0,RowIndex] + ', ';;
+              end;
+            end;
+            ALabel := Copy(ALabel, 1, Length(ALabel) -2) + sLineBreak;
+            AFile.Write(ALabel[1], Length(ALabel)*SizeOf(AnsiChar));
+
+            FileLength := BudgetFile.Size;
+            Precision := QueryBudgetPrecision(BudgetFile);
+
+            Divider := 1;
+            While FileLength div Divider > MAXINT do
+            begin
+              Divider := Divider * 1024;
+            end;
+            pbProgress.Max := FileLength div Divider;
+
+            FoundFirst := False;
+            while BudgetFile.Position < FileLength do
+            begin
+              case Precision of
+                mpSingle:
+                  begin
+                    ReadModflowSinglePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
+                      TOTIM, DESC, NCOL, NROW, NLAY, AnArray, IRESULT, True);
+                  end;
+                mpDouble:
+                  begin
+                    ReadModflowDoublePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
+                      TOTIM, DESC, NCOL, NROW, NLAY, AnArray,
+                      Abs(FNLay), FNRow, FNCol,
+                      IRESULT, True);
+                  end;
+              else Assert(False);
+              end;
+              if (IRESULT <> 0) then
+              begin
+                Exit;
+              end;
+              if not FoundFirst then
+              begin
+                SetLength(Lines, Abs(FNLay), FNRow, FNCol);
+                ClearLines;
+                FoundFirst := True;
+                PriorPeriod := KPER;
+                PriorStep := KSTP;
+                PriorTime := PERTIM;
+              end;
+              if (PriorStep <> KSTP) or (PriorPeriod <> KPER) then
+              begin
+                WriteLines;
+                PriorPeriod := KPER;
+                PriorStep := KSTP;
+                PriorTime := PERTIM;
+              end;
+              pbProgress.Position := BudgetFile.Position div Divider;
+              Application.ProcessMessages;
+              Description := DESC;
+              Description := Trim(Description);
+              if Description = 'FLOW-JA-FACE' then
+              begin
+                Continue;
+              end;
+              Position := FlowNames.IndexOf(Description);
+              if (Position >= 0) and (rdgExportFiles.Checked[0,Position+1]) then
+              begin
+                LinesWritten := False;
+                for LayerIndex := 0 to Abs(NLAY) - 1 do
+                begin
+                  for RowIndex := 0 to FNRow - 1 do
+                  begin
+                    for ColIndex := 0 to FNCol - 1 do
+                    begin
+                      Lines[LayerIndex, RowIndex, ColIndex] :=
+                        Lines[LayerIndex, RowIndex, ColIndex]
+                        + AnsiString(Format(', %g', [AnArray[LayerIndex, RowIndex, ColIndex]]))
+                    end;
+                  end;
+                 end;
+                for LayerIndex := Abs(NLAY) to Abs(FNLAY) - 1 do
+                begin
+                  for RowIndex := 0 to FNRow - 1 do
+                  begin
+                    for ColIndex := 0 to FNCol - 1 do
+                    begin
+                      Lines[LayerIndex, RowIndex, ColIndex] :=
+                        Lines[LayerIndex, RowIndex, ColIndex]
+                        + ', 0';
+                    end;
+                  end;
+                end;
+              end;
+            end;
+            if not LinesWritten then
+            begin
+              WriteLines
+            end;
+          finally
+            BudgetFile.Free;
+            AFile.Free;
+          end;
+        finally
+//          Files.Free;
+        end;
+      end;
+    end
+
+  finally
+    Columns.Free;
+    Rows.Free;
+    Layers.Free;
+  end;
+
+end;
+
+function TfrmConvertFlows.GetCellsToExport(var Columns, Layers, Rows: TIntegerList): Boolean;
+var
+  ARow: Integer;
+  RowIndex: Integer;
+  ALayer: Integer;
+  AColumn: Integer;
+begin
+  result := True;
+  if rgCellsToExport.ItemIndex = 1 then
+  begin
+    Columns := TIntegerList.Create;
+    Rows := TIntegerList.Create;
+    Layers := TIntegerList.Create;
+    for RowIndex := 1 to rdgCellsToExport.RowCount - 1 do
+    begin
+      if TryStrToInt(rdgCellsToExport.Cells[2, RowIndex], AColumn) and TryStrToInt(rdgCellsToExport.Cells[1, RowIndex], ARow) and TryStrToInt(rdgCellsToExport.Cells[0, RowIndex], ALayer) then
+      begin
+        Columns.Add(AColumn);
+        Rows.Add(ARow);
+        Layers.Add(ALayer);
+      end;
+    end;
+    if Columns.Count = 0 then
+    begin
+      result := False;
+    end;
+  end;
 end;
 
 procedure TfrmConvertFlows.FormShow(Sender: TObject);
