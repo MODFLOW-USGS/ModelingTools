@@ -7249,6 +7249,19 @@ Type
       write SetItem; default;
   end;
 
+  TBuoyancyPackage = class(TModflowPackageSelection)
+  private
+    FDensityUsed: Boolean;
+    FElevationUsed: Boolean;
+    procedure SetDensityUsed(const Value: Boolean);
+    procedure SetElevationUsed(const Value: Boolean);
+  public
+    Constructor Create(Model: TBaseModel);
+    procedure InitializeVariables; override;
+  published
+    property ElevationUsed: Boolean read FElevationUsed write SetElevationUsed;
+    Property DensityUsed: Boolean read FDensityUsed write SetDensityUsed;
+  end;
 
 const
   KMaxRainfallForStepAdjustment = 0.15;
@@ -29762,6 +29775,31 @@ begin
   finally
     List.Free;
   end;
+end;
+
+{ TBuoyancyPackage }
+
+constructor TBuoyancyPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  InitializeVariables;
+end;
+
+procedure TBuoyancyPackage.InitializeVariables;
+begin
+  inherited;
+  FDensityUsed := False;
+  FElevationUsed := False;
+end;
+
+procedure TBuoyancyPackage.SetDensityUsed(const Value: Boolean);
+begin
+  SetBooleanProperty(FDensityUsed, Value);
+end;
+
+procedure TBuoyancyPackage.SetElevationUsed(const Value: Boolean);
+begin
+  SetBooleanProperty(FElevationUsed, Value);
 end;
 
 end.

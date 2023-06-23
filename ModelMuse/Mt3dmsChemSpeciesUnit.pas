@@ -55,6 +55,8 @@ type
     FImmobileBulkDensities: TStringList;
     FImmobilePorosities: TStringList;
     FImmobileMassTransferRates: TStringList;
+    FStoredRefConcentration: TRealStorage;
+    FStoredDensitySlope: TRealStorage;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
       const OldDataArrayName, NewName, NewDisplayName, NewFormula,
@@ -88,6 +90,12 @@ type
     procedure SetImmobileInitialConcentrations(const Value: TStringList);
     procedure SetImmobileMassTransferRates(const Value: TStringList);
     procedure SetImmobilePorosities(const Value: TStringList);
+    procedure SetStoredDensitySlope(const Value: TRealStorage);
+    procedure SetStoredRefConcentration(const Value: TRealStorage);
+    function GetDensitySlope: double;
+    function GetRefConcentration: double;
+    procedure SetRefConcentration(const Value: double);
+    procedure SetDensitySlope(const Value: double);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -95,6 +103,12 @@ type
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    // Buoyancy package drhodc
+    property DensitySlope: double read GetDensitySlope
+      write SetDensitySlope;
+    // Buoyancy package crhoref
+    property RefConcentration: double read GetRefConcentration
+      write SetRefConcentration;
   published
     property Name: string read FName write SetName;
     // BTN package, SCONC, GWT IC package, STRT
@@ -176,6 +190,12 @@ type
     //IST package, DISTCOEF
     property ImmobileDistCoeficients: TStringList read FImmobileDistCoeficients
       write SetImmobileDistCoeficients;
+    // Buoyancy package drhodc
+    property StoredDensitySlope: TRealStorage read FStoredDensitySlope
+      write SetStoredDensitySlope;
+    // Buoyancy package crhoref
+    property StoredRefConcentration: TRealStorage read FStoredRefConcentration
+      write SetStoredRefConcentration;
   end;
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)
@@ -386,6 +406,9 @@ begin
     ImmobileBulkDensities := SourceChem.ImmobileBulkDensities;
 //    ImmobileDistCoeficients.Clear;
     ImmobileDistCoeficients := SourceChem.ImmobileDistCoeficients;
+
+    SetDensitySlope := SourceChem.SetDensitySlope;
+    RefConcentration := SourceChem.RefConcentration;
   end;
   inherited;
 end;
@@ -530,6 +553,9 @@ begin
   FImmobilePorosities := TStringList.Create;
   FImmobileMassTransferRates := TStringList.Create;
 
+  FStoredDensitySlope := TRealStorage.Create(OnInvalidateModelEvent);
+  FStoredRefConcentration := TRealStorage.Create(OnInvalidateModelEvent);
+
   if (Model <> nil) and not (csLoading in (Model as TComponent).ComponentState) then
   begin
     LocalModel := Model as TCustomModel;
@@ -606,6 +632,9 @@ var
   GwtCncBoundary: TCncBoundary;
   GwtSrcBoundary: TSrcBoundary;
 begin
+  FStoredDensitySlope.Free;
+  FStoredRefConcentration.Free;
+
   FImmobileDecaySorbed.Free;
   FImmobileInitialConcentrations.Free;
   FImmobileDistCoeficients.Free;
@@ -698,6 +727,16 @@ begin
   end;
 
   inherited;
+end;
+
+function TChemSpeciesItem.GetDensitySlope: double;
+begin
+  result := StoredDensitySlope.Value;
+end;
+
+function TChemSpeciesItem.GetRefConcentration: double;
+begin
+  result := StoreRefConcentration.Value;
 end;
 
 function TChemSpeciesItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -829,6 +868,16 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TChemSpeciesItem.SetRefConcentration(const Value: double);
+begin
+  StoreRefConcentration.Value := result;
+end;
+
+procedure TChemSpeciesItem.SetDensitySlope(const Value: double);
+begin
+  StoredDensitySlope.Value := Value;
 end;
 
 procedure TChemSpeciesItem.SetFirstSorbParamDataArrayName(const NewName: string);
@@ -2085,6 +2134,16 @@ begin
       LocalModel.AnyMt3dSorbImmobConc, StrMt3dClassification);
   end;
   SetCaseSensitiveStringProperty(FSorbOrImmobInitialConcDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetStoredDensitySlope(const Value: TRealStorage);
+begin
+  FStoredDensitySlope.Assign(Value);
+end;
+
+procedure TChemSpeciesItem.SetStoredRefConcentration(const Value: TRealStorage);
+begin
+  FStoredRefConcentration.Assign(Value);
 end;
 
 procedure TChemSpeciesItem.SetUseInitialConcentrationFile(const Value: boolean);
