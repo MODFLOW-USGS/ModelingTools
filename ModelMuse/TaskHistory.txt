@@ -487,6 +487,10 @@ object TTaskHistory
     item
       Name = 'SUTRA 4'
       Display = True
+    end
+    item
+      Name = 'Buoyancy'
+      Display = True
     end>
   History = <
     item
@@ -31360,6 +31364,7 @@ object TTaskHistory
       Date = 45099.000000000000000000
       Categories.Strings = (
         'Design and Planning'
-        'Bug fix')
+        'Bug fix'
+        'Buoyancy')
     end>
 end
