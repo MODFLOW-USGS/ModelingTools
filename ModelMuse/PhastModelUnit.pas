@@ -4430,6 +4430,7 @@ that affects the model output should also have a comment. }
     function GwtMobileSorptionCapacityUsed(Sender: TObject): boolean;
     function GwtImmobileCimUsed(Sender: TObject): boolean;
     function GwtImmobileThetaimUsed(Sender: TObject): boolean;
+    function GwtImmobileVolumeFractUsed(Sender: TObject): boolean;
     function GwtImmobileZetaimUsed(Sender: TObject): boolean;
     function GwtImmobileDecayUsed(Sender: TObject): boolean;
     function GwtImmobileDecaySorbedUsed(Sender: TObject): boolean;
@@ -9961,6 +9962,8 @@ const
 //                opening the MODFLOW Packages and Programs dialog box.
 //               Bug fix: Fixed loss of data when editing multiple MNW2 wells
 //                simultaneously.
+
+//               Bug fix: Fixed bugs in assigning data for MODFLOW 6 IST package.
 
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
@@ -18888,6 +18891,42 @@ var
 //          begin
 //            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
 //          end;
+        end;
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileVolumeFractUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileVolumeFractions.Count - 1 do
+      begin
+        result := AChemItem.ImmobileVolumeFractions[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
         end;
         Exit;
       end;

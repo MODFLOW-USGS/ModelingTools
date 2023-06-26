@@ -54,6 +54,7 @@ type
     FImmobileDecay: TStringList;
     FImmobileBulkDensities: TStringList;
     FImmobilePorosities: TStringList;
+    FImmobileVolumeFractions: TStringList;
     FImmobileMassTransferRates: TStringList;
     FStoredRefConcentration: TRealStorage;
     FStoredDensitySlope: TRealStorage;
@@ -90,6 +91,7 @@ type
     procedure SetImmobileInitialConcentrations(const Value: TStringList);
     procedure SetImmobileMassTransferRates(const Value: TStringList);
     procedure SetImmobilePorosities(const Value: TStringList);
+    procedure SetImmobileVolumeFractions(const Value: TStringList);
     procedure SetStoredDensitySlope(const Value: TRealStorage);
     procedure SetStoredRefConcentration(const Value: TRealStorage);
     function GetDensitySlope: double;
@@ -175,6 +177,9 @@ type
     //IST package, THETAIM
     property ImmobilePorosities: TStringList read FImmobilePorosities
       write SetImmobilePorosities;
+    // IST package, VOLFRAC
+    property ImmobileVolumeFractions: TStringList read FImmobileVolumeFractions
+      write SetImmobileVolumeFractions;
     //IST package, ZETAIM
     property ImmobileMassTransferRates: TStringList
       read FImmobileMassTransferRates write SetImmobileMassTransferRates;
@@ -282,6 +287,7 @@ const
   KImmobileDecay = 'ImmobileDecay_%0:s_%1:d';
   KImmobileDecaySorbed = 'ImmobileDecaySorbed_%0:s_%1:d';
   KImmobileDistCoeficie = 'ImmobileDistCoeficient_%0:s_%1:d';
+  KImmobileVolFrac = 'ImmobileVolumeFraction_%0:s_%1:d';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -396,6 +402,8 @@ begin
     ImmobileInitialConcentrations := SourceChem.ImmobileInitialConcentrations;
 //    ImmobilePorosities.Clear;
     ImmobilePorosities := SourceChem.ImmobilePorosities;
+    ImmobileVolumeFractions := SourceChem.ImmobileVolumeFractions;
+
 //    ImmobileMassTransferRates.Clear;
     ImmobileMassTransferRates := SourceChem.ImmobileMassTransferRates;
 //    ImmobileDecay.Clear;
@@ -407,7 +415,7 @@ begin
 //    ImmobileDistCoeficients.Clear;
     ImmobileDistCoeficients := SourceChem.ImmobileDistCoeficients;
 
-    SetDensitySlope := SourceChem.SetDensitySlope;
+    DensitySlope := SourceChem.DensitySlope;
     RefConcentration := SourceChem.RefConcentration;
   end;
   inherited;
@@ -463,6 +471,13 @@ begin
         TempNames.Clear;
         for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
         begin
+          TempNames.Add(Format(KImmobileVolFrac, [Name, DomainIndex+1]))
+        end;
+        ImmobileVolumeFractions := TempNames;
+
+        TempNames.Clear;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
           TempNames.Add(Format(KImmobileMassTransfer, [Name, DomainIndex+1]))
         end;
         ImmobileMassTransferRates := TempNames;
@@ -481,12 +496,14 @@ begin
         end;
         ImmobileDecaySorbed := TempNames;
 
+        TempNames.Clear;
         for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
         begin
           TempNames.Add(Format(KImmobileBulkDensity, [Name, DomainIndex+1]))
         end;
         ImmobileBulkDensities := TempNames;
 
+        TempNames.Clear;
         for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
         begin
           TempNames.Add(Format(KImmobileDistCoeficie, [Name, DomainIndex+1]))
@@ -551,6 +568,7 @@ begin
   FImmobileDecay := TStringList.Create;
   FImmobileBulkDensities := TStringList.Create;
   FImmobilePorosities := TStringList.Create;
+  FImmobileVolumeFractions := TStringList.Create;
   FImmobileMassTransferRates := TStringList.Create;
 
   FStoredDensitySlope := TRealStorage.Create(OnInvalidateModelEvent);
@@ -640,6 +658,7 @@ begin
   FImmobileDistCoeficients.Free;
   FImmobileDecay.Free;
   FImmobileBulkDensities.Free;
+  FImmobileVolumeFractions.Free;
   FImmobilePorosities.Free;
   FImmobileMassTransferRates.Free;
 
@@ -736,7 +755,7 @@ end;
 
 function TChemSpeciesItem.GetRefConcentration: double;
 begin
-  result := StoreRefConcentration.Value;
+  result := StoredRefConcentration.Value;
 end;
 
 function TChemSpeciesItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -787,6 +806,7 @@ begin
       and (MobileSorptionCapacityDataArrayName = ChemItem.MobileSorptionCapacityDataArrayName)
       and SameStrings(ImmobileInitialConcentrations,  ChemItem.ImmobileInitialConcentrations)
       and SameStrings(ImmobilePorosities,  ChemItem.ImmobilePorosities)
+      and SameStrings(ImmobileVolumeFractions,  ChemItem.FImmobileVolumeFractions)
       and SameStrings(ImmobileMassTransferRates,  ChemItem.ImmobileMassTransferRates)
       and SameStrings(ImmobileDecay,  ChemItem.ImmobileDecay)
       and SameStrings(ImmobileDecaySorbed,  ChemItem.ImmobileDecaySorbed)
@@ -872,7 +892,7 @@ end;
 
 procedure TChemSpeciesItem.SetRefConcentration(const Value: double);
 begin
-  StoreRefConcentration.Value := result;
+  StoredRefConcentration.Value := Value;
 end;
 
 procedure TChemSpeciesItem.SetDensitySlope(const Value: double);
@@ -959,7 +979,7 @@ begin
       NewName := Value[DomainIndex];
       NewDisplayName := NewName;
       NewFormula := '1.7';
-      AssociatedDataSets := 'GWT IST Pakage: BULK_DENSITY';
+      AssociatedDataSets := 'GWT IST Package: BULK_DENSITY';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption;
       UpdateDataArray(LocalModel.GwtImmobileBulkDensityUsed, OldName, NewName,
         NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
@@ -1023,7 +1043,7 @@ begin
       NewName := Value[DomainIndex];
       NewDisplayName := NewName;
       NewFormula := '0.001';
-      AssociatedDataSets := 'GWT IST Pakage: DECAY';
+      AssociatedDataSets := 'GWT IST Package: DECAY';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected
         and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
       UpdateDataArray(LocalModel.GwtImmobileDecayUsed, OldName, NewName,
@@ -1088,7 +1108,7 @@ begin
       NewName := Value[DomainIndex];
       NewDisplayName := NewName;
       NewFormula := '0.001';
-      AssociatedDataSets := 'GWT IST Pakage: BULK_DECAY_SORBED';
+      AssociatedDataSets := 'GWT IST Package: BULK_DECAY_SORBED';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption
         and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
       UpdateDataArray(LocalModel.GwtImmobileDecaySorbedUsed, OldName, NewName,
@@ -1154,7 +1174,7 @@ begin
       NewName := Value[DomainIndex];
       NewDisplayName := NewName;
       NewFormula := '0.176';
-      AssociatedDataSets := 'GWT IST Pakage: DISTCOEF';
+      AssociatedDataSets := 'GWT IST Package: DISTCOEF';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and IstProp.Sorption;
       UpdateDataArray(LocalModel.GwtImmobileDistCoefUsed, OldName, NewName,
         NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
@@ -1219,7 +1239,7 @@ begin
       NewName := Value[DomainIndex];
       NewDisplayName := NewName;
       NewFormula := '0.';
-      AssociatedDataSets := 'GWT IST PaCkage: CIM';
+      AssociatedDataSets := 'GWT IST Package: CIM';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
       UpdateDataArray(LocalModel.GwtImmobileCimUsed, OldName, NewName,
         NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
@@ -1364,7 +1384,7 @@ begin
       NewName := Value[DomainIndex];
       NewDisplayName := NewName;
       NewFormula := '0.25';
-      AssociatedDataSets := 'GWT IST Pakage: THETAIM';
+      AssociatedDataSets := 'GWT IST Package: VOLFRAC';
       ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
       UpdateDataArray(LocalModel.GwtImmobileThetaimUsed, OldName, NewName,
         NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
@@ -1376,6 +1396,70 @@ begin
     if FImmobilePorosities <> Value then
     begin
       FImmobilePorosities.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileVolumeFractions(const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileVolumeFractions.Count < Value.Count do
+    begin
+      FImmobileVolumeFractions.Add('');
+    end;
+    while FImmobileVolumeFractions.Count > Value.Count do
+    begin
+      FImmobileVolumeFractions.Delete(FImmobileVolumeFractions.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileVolumeFractions[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.25';
+      AssociatedDataSets := 'GWT IST Package: VOLFRAC';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected;
+      UpdateDataArray(LocalModel.GwtImmobileVolumeFractUsed, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
+      FImmobileVolumeFractions[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileVolumeFractions <> Value then
+    begin
+      FImmobileVolumeFractions.Assign(Value);
     end;
   end;
 end;
@@ -1515,7 +1599,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtMobileBulkDensityUsed,
       FMobileBulkDensityDataArrayName, NewName,
-      FMobileBulkDensityDataArrayDisplayName, '1.7', 'GWT MST Pakage: BULK_DENSITY',
+      FMobileBulkDensityDataArrayDisplayName, '1.7', 'GWT MST Package: BULK_DENSITY',
       DataSetUsed, StrGwtClassification);
   end;
 
@@ -1548,7 +1632,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtMobileDecayUsed,
       FMobileDecayRateDataArrayName, NewName,
-      FMobileDecayRateDataArrayDisplayName, '0.001', 'GWT MST Pakage: DECAY',
+      FMobileDecayRateDataArrayDisplayName, '0.001', 'GWT MST Package: DECAY',
       DataSetUsed, StrGwtClassification);
   end;
 
@@ -1581,7 +1665,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtMobileDistibutionCoefUsed,
       FMobileDistCoefDataArrayName, NewName,
-      FMobileDistCoefDataArrayDisplayName, '0.176', 'GWT MST Pakage: DISTCOEF',
+      FMobileDistCoefDataArrayDisplayName, '0.176', 'GWT MST Package: DISTCOEF',
       DataSetUsed, StrGwtClassification);
   end;
 
@@ -1615,7 +1699,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtMobileFreundlichExponentUsed,
       FMobileFreundlichExponentDataArrayName, NewName,
-      FMobileFreundlichExponentDataArrayDisplayName, '0.7', 'GWT MST Pakage: SP2',
+      FMobileFreundlichExponentDataArrayDisplayName, '0.7', 'GWT MST Package: SP2',
       DataSetUsed, StrGwtClassification);
   end;
 
@@ -1650,7 +1734,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtMobileSorbedDecayUsed,
       FMobileSorbedDecayRateDataArrayName, NewName,
-      FMobileSorbedDecayRateDataArrayDisplayName, '0.001', 'GWT MST Pakage: DECAY_SORBED',
+      FMobileSorbedDecayRateDataArrayDisplayName, '0.001', 'GWT MST Package: DECAY_SORBED',
       DataSetUsed, StrGwtClassification);
   end;
 
@@ -1684,7 +1768,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtMobileSorptionCapacityUsed,
       FMobileSorptionCapacityDataArrayName, NewName,
-      FMobileSorptionCapacityDataArrayDisplayName, '0.003', 'GWT MST Pakage: SP2',
+      FMobileSorptionCapacityDataArrayDisplayName, '0.003', 'GWT MST Package: SP2',
       DataSetUsed, StrGwtClassification);
   end;
 
@@ -1833,6 +1917,13 @@ begin
         OldDataSetName := ImmobilePorosities[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
         ImmobilePorosities[DomainIndex] := NewDataSetName;
+      end;
+
+      for DomainIndex := 0 to ImmobileVolumeFractions.Count - 1 do
+      begin
+        OldDataSetName := ImmobileVolumeFractions[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        ImmobileVolumeFractions[DomainIndex] := NewDataSetName;
       end;
 
       for DomainIndex := 0 to ImmobileMassTransferRates.Count - 1 do
@@ -1997,6 +2088,15 @@ begin
         for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
         begin
           AName := GenerateNewRoot(Format(
+            KImmobileVolFrac, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileVolumeFractions := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
             KImmobileMassTransfer, [Value, DomainIndex+1]));
           NewImobileDataSetNames.Add(AName);
         end;
@@ -2060,7 +2160,7 @@ begin
     end;
     UpdateDataArray(LocalModel.GwtMobileSeparatePorosityUsed,
       FPorosityDataArrayName, NewName,
-      FPorosityDataArrayDisplayName, '0.25', 'GWT MST Pakage: POROSITY',
+      FPorosityDataArrayDisplayName, '0.25', 'GWT MST Package: POROSITY',
       DataSetUsed, StrGwtClassification);
   end;
 

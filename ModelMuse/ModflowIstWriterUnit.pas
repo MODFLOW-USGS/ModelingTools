@@ -132,7 +132,16 @@ begin
     DataArray := Model.DataArrayManager.GetDataSetByName(
       ChemSpecies.ImmobilePorosities[FDomainIndex]);
     Assert(DataArray <> nil);
-    WriteMf6_DataSet(DataArray, 'THETAIM');
+    WriteMf6_DataSet(DataArray, 'POROSITY');
+//    WriteMf6_DataSet(DataArray, 'THETAIM');
+  end;
+
+  if FDomainIndex < ChemSpecies.ImmobileVolumeFractions.Count then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(
+      ChemSpecies.ImmobileVolumeFractions[FDomainIndex]);
+    Assert(DataArray <> nil);
+    WriteMf6_DataSet(DataArray, 'VOLFRAC');
   end;
 
   if FDomainIndex < ChemSpecies.ImmobileMassTransferRates.Count then
