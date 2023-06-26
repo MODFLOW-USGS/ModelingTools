@@ -36,7 +36,6 @@ object frmCellFlows: TfrmCellFlows
     Height = 106
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 379
     object lblCounts: TLabel
       Left = 184
       Top = 43
@@ -187,7 +186,6 @@ object frmCellFlows: TfrmCellFlows
     Align = alClient
     Color = clWindow
     TabOrder = 1
-    ExplicitHeight = 215
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 0
   end
