@@ -254,16 +254,18 @@ begin
         end
         else
         begin
-          for CharIndex := 1 to 15 do
-          begin
-            if Text[CharIndex - 1] <> ' ' then
-            begin
-              Text[CharIndex] := AnsiChar(LowerCase(Text[CharIndex])[1]);
-            end;
-          end;
+//          for CharIndex := 1 to 15 do
+//          begin
+//            if TEXT[CharIndex - 1] <> ' ' then
+//            begin
+//              TEXT[CharIndex] := AnsiChar(LowerCase(TEXT[CharIndex])[1]);
+//            end;
+//          end;
 
           AName := Trim(TEXT);
-          if AName = 'flow-ja-face' then
+          AName := LowerCase(AName);
+          AName := String(AnsiString(AName));
+          if (AName = 'flow-ja-face') or (AName = 'Flow-ja-face') then
           begin
             Continue;
           end;
@@ -487,8 +489,11 @@ begin
     end;
   end;
 
+  SetCurrentDir(ExtractFileDir(OpenDialog1.FileName));
   FileStream := nil;
   FileName := ExtractFileName(OpenDialog1.FileName);
+
+//  FileName := ExtractFileName(OpenDialog1.FileName);
   try
     Precision := mpSingle;
     if comboModelChoice.ItemIndex = 1 then
