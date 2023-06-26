@@ -18588,7 +18588,10 @@ var
         MstPackage := GwtPackagesItem.GwtMst;
         result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption <> gscNone);
-        Exit;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -18622,7 +18625,10 @@ var
         MstPackage := GwtPackagesItem.GwtMst;
         result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay);
-        Exit;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -18684,10 +18690,14 @@ var
             and (DomainIndex < IstPackage.IstPackageProperties.Count);
           if result then
           begin
-            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
+            result := IstPackage.IstPackageProperties[DomainIndex].Sorption;
+            if result then
+            begin
+              Exit;
+            end;
           end;
         end;
-        Exit;
+//        Exit;
       end;
     end;
   end;
@@ -18722,12 +18732,15 @@ var
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
           result := IstPackage.IsSelected
             and (DomainIndex < IstPackage.IstPackageProperties.Count);
-//          if result then
+          if result then
+          begin
+            Exit;
+          end;
 //          begin
 //            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
 //          end;
         end;
-        Exit;
+//        Exit;
       end;
     end;
   end;
@@ -18768,9 +18781,13 @@ var
             IstProp := IstPackage.IstPackageProperties[DomainIndex];
             result := IstProp.Sorption
               and (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
+            if result then
+            begin
+              Exit;
+            end;
           end;
         end;
-        Exit;
+//        Exit;
       end;
     end;
   end;
@@ -18810,9 +18827,13 @@ var
           begin
             IstProp := IstPackage.IstPackageProperties[DomainIndex];
             result := (IstProp.FirstOrderDecay or IstProp.ZeroOrderDecay);
+            if result then
+            begin
+              Exit;
+            end;
           end;
         end;
-        Exit;
+//        Exit;
       end;
     end;
   end;
@@ -18849,10 +18870,14 @@ var
             and (DomainIndex < IstPackage.IstPackageProperties.Count);
           if result then
           begin
-            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
+            result := IstPackage.IstPackageProperties[DomainIndex].Sorption;
+            if result then
+            begin
+              Exit;
+            end;
           end;
         end;
-        Exit;
+//        Exit;
       end;
     end;
   end;
@@ -18887,12 +18912,16 @@ var
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
           result := IstPackage.IsSelected
             and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            Exit;
+          end;
 //          if result then
 //          begin
 //            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
 //          end;
         end;
-        Exit;
+//        Exit;
       end;
     end;
   end;
@@ -18927,8 +18956,11 @@ var
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
           result := IstPackage.IsSelected
             and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            Exit;
+          end;
         end;
-        Exit;
       end;
     end;
   end;
@@ -18963,12 +18995,16 @@ var
           IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
           result := IstPackage.IsSelected
             and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            Exit;
+          end;
 //          if result then
 //          begin
 //            result := IstPackage.IstPackageProperties[DomainIndex].Sorption
 //          end;
         end;
-        Exit;
+//        Exit;
       end;
     end;
   end;
@@ -19002,7 +19038,10 @@ var
         MstPackage := GwtPackagesItem.GwtMst;
         result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption <> gscNone);
-        Exit;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -19036,7 +19075,10 @@ var
         MstPackage := GwtPackagesItem.GwtMst;
         result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption = gscFreundlich);
-        Exit;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -19070,7 +19112,10 @@ var
         MstPackage := GwtPackagesItem.GwtMst;
         result := (MstPackage <> nil) and MstPackage.IsSelected
           and MstPackage.SeparatePorosity;
-        Exit;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -19105,7 +19150,10 @@ var
         result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay)
           and (MstPackage.Sorption <> gscNone);
-        Exit;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;
@@ -19139,7 +19187,10 @@ var
         MstPackage := GwtPackagesItem.GwtMst;
         result := (MstPackage <> nil) and MstPackage.IsSelected
           and (MstPackage.Sorption = gscLangmuir);
-        Exit;
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;

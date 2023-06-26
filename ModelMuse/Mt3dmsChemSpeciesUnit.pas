@@ -1905,61 +1905,77 @@ begin
         MobileSorptionCapacityDataArrayName,
         OldRoot,NewRoot, []);
 
+      NewImobileDataSetNames.Assign(ImmobileInitialConcentrations);
       for DomainIndex := 0 to ImmobileInitialConcentrations.Count - 1 do
       begin
         OldDataSetName := ImmobileInitialConcentrations[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobileInitialConcentrations[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobileInitialConcentrations := NewImobileDataSetNames;
 
+      NewImobileDataSetNames.Assign(ImmobilePorosities);
       for DomainIndex := 0 to ImmobilePorosities.Count - 1 do
       begin
         OldDataSetName := ImmobilePorosities[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobilePorosities[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobilePorosities := NewImobileDataSetNames;
 
+      NewImobileDataSetNames.Assign(ImmobileVolumeFractions);
       for DomainIndex := 0 to ImmobileVolumeFractions.Count - 1 do
       begin
         OldDataSetName := ImmobileVolumeFractions[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobileVolumeFractions[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobileVolumeFractions := NewImobileDataSetNames;
 
+      NewImobileDataSetNames.Assign(ImmobileMassTransferRates);
       for DomainIndex := 0 to ImmobileMassTransferRates.Count - 1 do
       begin
         OldDataSetName := ImmobileMassTransferRates[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobileMassTransferRates[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobileMassTransferRates := NewImobileDataSetNames;
 
+      NewImobileDataSetNames.Assign(ImmobileDecay);
       for DomainIndex := 0 to ImmobileDecay.Count - 1 do
       begin
         OldDataSetName := ImmobileDecay[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobileDecay[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobileDecay := NewImobileDataSetNames;
 
+      NewImobileDataSetNames.Assign(ImmobileDecaySorbed);
       for DomainIndex := 0 to ImmobileDecaySorbed.Count - 1 do
       begin
         OldDataSetName := ImmobileDecaySorbed[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobileDecaySorbed[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobileDecaySorbed := NewImobileDataSetNames;
 
+      NewImobileDataSetNames.Assign(ImmobileBulkDensities);
       for DomainIndex := 0 to ImmobileBulkDensities.Count - 1 do
       begin
         OldDataSetName := ImmobileBulkDensities[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobileBulkDensities[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobileBulkDensities := NewImobileDataSetNames;
 
+      NewImobileDataSetNames.Assign(ImmobileDistCoeficients);
       for DomainIndex := 0 to ImmobileDistCoeficients.Count - 1 do
       begin
         OldDataSetName := ImmobileDistCoeficients[DomainIndex];
         NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
-        ImmobileDistCoeficients[DomainIndex] := NewDataSetName;
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
+      ImmobileDistCoeficients := NewImobileDataSetNames;
     end
     else
     begin
@@ -2058,6 +2074,7 @@ begin
       if Index < LocalModel.ModflowPackages.GwtPackages.Count then
       begin
         GwtIst := LocalModel.ModflowPackages.GwtPackages[Index].GwtIst;
+        NewImobileDataSetNames.Clear;
         for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
         begin
           AName := GenerateNewRoot(Format(
