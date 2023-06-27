@@ -105,7 +105,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, DataSetUnit, DataSetNamesUnit;
+  PhastModelUnit, DataSetUnit, DataSetNamesUnit, frmGoPhastUnit;
 
 const
   FixedHeadPosition = 0;

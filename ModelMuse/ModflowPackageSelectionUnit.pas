@@ -29791,7 +29791,7 @@ procedure TBuoyancyPackage.InitializeVariables;
 begin
   inherited;
   FDensityUsed := False;
-  FElevationUsed := False;
+  FElevationUsed := bcCenter;
 end;
 
 procedure TBuoyancyPackage.SetDensityUsed(const Value: Boolean);
