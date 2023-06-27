@@ -176,6 +176,8 @@ const
   KPipeConductanceOrPer = 'PipeConductanceOrPermeabilty';
   KCfpNodeElevation = 'CfpNodeElevation';
   KCfpFixedHeads = 'CfpFixedHeads';
+  KCfpValue2 = 'CfpValue2';
+  KCfpValue3 = 'CfpValue3';
   KActive_Surface_Elevation = 'Active_Surface_Elevation';
   KEffectivePorosity = 'EffectivePorosity';
   KSourceFluidDensityZone = 'SourceFluidDensityZone';

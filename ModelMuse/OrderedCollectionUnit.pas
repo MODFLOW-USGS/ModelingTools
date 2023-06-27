@@ -159,7 +159,7 @@ type
   end;
 
   // @name defines boundary properties that are defined with formulas but
-  // are do not have a starting and ending time assigned. A starting time is
+  // do not have a starting and ending time assigned. A starting time is
   // defined in the descendant @link(TCustomBoundaryItem). A @name may be
   // associated with some other class that does have a starting or ending time
   // assigned.

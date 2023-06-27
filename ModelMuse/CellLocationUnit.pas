@@ -2,6 +2,8 @@ unit CellLocationUnit;
 
 interface
 
+// TCellLocation is declared in ModflowCellUnit.
+
 uses
   GoPhastTypes, FastGEO, ScreenObjectInterfaceUnit, System.Classes, System.ZLib,
   PhastModelInterfaceUnit, AbstractGridInterfaceUnit, ModflowCellUnit;

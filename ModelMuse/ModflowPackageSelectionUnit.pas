@@ -7249,17 +7249,19 @@ Type
       write SetItem; default;
   end;
 
+  TBuoyancyChoice = (bcCenter, bcTop, bcSpecify);
+
   TBuoyancyPackage = class(TModflowPackageSelection)
   private
     FDensityUsed: Boolean;
-    FElevationUsed: Boolean;
+    FElevationUsed: TBuoyancyChoice;
     procedure SetDensityUsed(const Value: Boolean);
-    procedure SetElevationUsed(const Value: Boolean);
+    procedure SetElevationUsed(const Value: TBuoyancyChoice);
   public
     Constructor Create(Model: TBaseModel);
     procedure InitializeVariables; override;
   published
-    property ElevationUsed: Boolean read FElevationUsed write SetElevationUsed;
+    property ElevationUsed: TBuoyancyChoice read FElevationUsed write SetElevationUsed;
     Property DensityUsed: Boolean read FDensityUsed write SetDensityUsed;
   end;
 
@@ -29797,9 +29799,13 @@ begin
   SetBooleanProperty(FDensityUsed, Value);
 end;
 
-procedure TBuoyancyPackage.SetElevationUsed(const Value: Boolean);
+procedure TBuoyancyPackage.SetElevationUsed(const Value: TBuoyancyChoice);
 begin
-  SetBooleanProperty(FElevationUsed, Value);
+  if FElevationUsed <> Value then
+  begin
+    FElevationUsed := Value;
+    InvalidateModel;
+  end;
 end;
 
 end.

@@ -306,7 +306,7 @@ object TTaskHistory
     end
     item
       Name = 'CFP'
-      Display = False
+      Display = True
     end
     item
       Name = 'SWI'
@@ -31384,5 +31384,11 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'MF6 GWT')
+    end
+    item
+      Date = 45104.000000000000000000
+      Categories.Strings = (
+        'CFP'
+        'Dialog boxes')
     end>
 end
