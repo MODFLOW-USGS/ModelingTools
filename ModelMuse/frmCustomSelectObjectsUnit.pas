@@ -234,6 +234,7 @@ type
     FvstModflowFarmCropIDNode: PVirtualNode;
 
     FvstModflowCfpRechargeNode: PVirtualNode;
+    FvstModflowCfpFixedHeadNode: PVirtualNode;
 
     FvstModflowSwrReachNode: PVirtualNode;
     FvstModflowSwrRainNode: PVirtualNode;
@@ -395,6 +396,7 @@ type
     FFarmCropIDList: TList;
     FSutraObsList: TList;
     FCfpRechargeList: TList;
+    FCfpFixedHeadList: TList;
 
     FRipList: TList;
 
@@ -1035,6 +1037,11 @@ begin
     else if Node = FvstModflowCfpRechargeNode then
     begin
       Data.Caption := StrConduitRechargeFra;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstModflowCfpFixedHeadNode then
+    begin
+      Data.Caption := 'CFP: Fixed Head';
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstFootprintWellNode then
@@ -1836,6 +1843,12 @@ begin
       InitializeData(FvstModflowCfpRechargeNode);
     end;
 
+    if (AScreenObject.ModflowCfpFixedHeads <> nil)
+      and AScreenObject.ModflowCfpFixedHeads.Used then
+    begin
+      InitializeData(FvstModflowCfpFixedHeadNode);
+    end;
+
     if AScreenObject.Tag = 1 then
     begin
       InitializeData(FvstModflowDrtReturnLocation);
@@ -2467,6 +2480,7 @@ begin
     vstCheckDeleteNode(FvstModflowFarmRefEvapNode);
     vstCheckDeleteNode(FvstModflowFarmCropIDNode);
     vstCheckDeleteNode(FvstModflowCfpRechargeNode);
+    vstCheckDeleteNode(FvstModflowCfpFixedHeadNode);
     vstCheckDeleteNode(FvstMt3dSft);
     vstCheckDeleteNode(FvstMt3dLkt);
     vstCheckDeleteNode(FvstMt3dmsSsm);
@@ -2996,6 +3010,7 @@ begin
     InitializeMF_BoundaryNode(FvstModflowFarmRefEvapNode, PriorNode, FFarmRefEvtList);
     InitializeMF_BoundaryNode(FvstModflowFarmCropIDNode, PriorNode, FFarmCropIDList);
     InitializeMF_BoundaryNode(FvstModflowCfpRechargeNode, PriorNode, FCfpRechargeList);
+    InitializeMF_BoundaryNode(FvstModflowCfpFixedHeadNode, PriorNode, FCfpFixedHeadList);
 
     InitializeMF_BoundaryNode(FFmp4EfficiencyNode, PriorNode, FFmp4EfficiencyList);
     InitializeMF_BoundaryNode(FFmp4EfficiencyImprovementNode, PriorNode, FFmp4EfficiencyImprovementList);
@@ -3304,6 +3319,7 @@ begin
   FFarmRefEvtList.Free;
   FFarmCropIDList.Free;
   FCfpRechargeList.Free;
+  FCfpFixedHeadList.Free;
 //  FObs6List.Free;
   FSsmList.Free;
   FLktList.Free;
@@ -3443,6 +3459,7 @@ begin
   FFarmPrecipList := TList.Create;
   FFarmRefEvtList := TList.Create;
   FFarmCropIDList := TList.Create;
+  FCfpFixedHeadList := TList.Create;
   FCfpRechargeList := TList.Create;
 //  FObs6List := TList.Create;
   FHobList := TList.Create;
@@ -3601,6 +3618,7 @@ begin
   FvstModflowFarmRefEvapNode := nil;
   FvstModflowFarmCropIDNode := nil;
   FvstModflowCfpRechargeNode := nil;
+  FvstModflowCfpFixedHeadNode := nil;
   FvstMt3dmsSsm := nil;
   FvstMt3dmsTob := nil;
   FvstMt3dUztRech := nil;
@@ -3890,6 +3908,7 @@ begin
   FFarmRefEvtList.Sort(ScreenObjectCompare);
   FFarmCropIDList.Sort(ScreenObjectCompare);
   FCfpRechargeList.Sort(ScreenObjectCompare);
+  FCfpFixedHeadList.Sort(ScreenObjectCompare);
 //  FObs6List.Sort(ScreenObjectCompare);
   FModpathList.Sort(ScreenObjectCompare);
   FChildModelList.Sort(ScreenObjectCompare);

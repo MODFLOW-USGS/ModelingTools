@@ -5,13 +5,15 @@ interface
 uses System.UITypes,
   Winapi.Windows, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
   Generics.Collections, PhastModelUnit, ScreenObjectUnit, DataSetUnit,
-  GoPhastTypes, SysUtils, Classes, ModflowBoundaryDisplayUnit, Vcl.Dialogs;
+  GoPhastTypes, SysUtils, Classes, ModflowBoundaryDisplayUnit, Vcl.Dialogs,
+  ModflowCfpFixedUnit;
 
 type
   TCfpPipe = class;
 
   TCfpNode = class(TObject)
   private
+    FCfpBoundaryType: TCfpBoundaryType;
     FNumber: Integer;
     FIsFixed: Boolean;
     FFixedHead: double;
@@ -24,6 +26,8 @@ type
     FRechargeFraction: array of double;
     FRechargeFractionUsed: array of boolean;
     FRechargeFractionAnnotation: array of string;
+    // @name is used to indicate that data about this node should be written
+    // to an output file. See Conduit Output Control File.
     FRecordData: Boolean;
     FScreenObject: TScreenObject;
     constructor Create;
@@ -41,6 +45,8 @@ type
     FRoughnessHeight: Double;
     FLowerR: Double;
     FHigherR: Double;
+    // @name is used to indicate that data about this pipe should be written
+    // to an output file. See Conduit Output Control File.
     FRecordData: Boolean;
     function SameNodes(Node1, Node2: TCfpNode): boolean;
     function OtherNode(ANode: TCfpNode): TCfpNode;
@@ -121,7 +127,7 @@ implementation
 
 uses
   ModflowGridUnit, ModflowCfpPipeUnit, Forms, frmProgressUnit,
-  frmErrorsAndWarningsUnit, Math, ModflowCfpFixedUnit,
+  frmErrorsAndWarningsUnit, Math,
   LayerStructureUnit, ModflowCfpRechargeUnit, Contnrs, ModflowCellUnit,
   ModflowUnitNumbers, AbstractGridUnit, DataSetNamesUnit, CellLocationUnit;
 
@@ -248,6 +254,7 @@ var
   ACell1: TCellAssignment;
   ACell2: TCellAssignment;
   LocalGrid: TCustomModelGrid;
+  BoundaryTypeArray: TDataArray;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyConduitsAt);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCFPDiameterIsNot);
@@ -463,6 +470,13 @@ begin
       FixedHeadsArray := Model.DataArrayManager.GetDataSetByName(KCfpFixedHeads);
       Assert(FixedHeadsArray <> nil);
       FixedHeadsArray.Initialize;
+      BoundaryTypeArray := nil;
+      if Model.ModelSelection  = msModflowOwhm2 then
+      begin
+        BoundaryTypeArray := Model.DataArrayManager.GetDataSetByName(KCfpBoundaryType);
+        Assert(BoundaryTypeArray <> nil);
+        BoundaryTypeArray.Initialize;
+      end;
       for NodeIndex := 0 to FNodes.Count - 1 do
       begin
         ANode := FNodes[NodeIndex];
@@ -504,6 +518,16 @@ begin
         begin
           ANode.FFixedHead := FixedHeadsArray.RealData[
             ANode.FLayer, ANode.FRow, ANode.FColumn];
+          if BoundaryTypeArray <> nil then
+          begin
+            ANode.FCfpBoundaryType :=
+              TCfpBoundaryType(BoundaryTypeArray.IntegerData[
+              ANode.FLayer, ANode.FRow, ANode.FColumn]);
+          end
+          else
+          begin
+            ANode.FCfpBoundaryType := cbtFixedHead;
+          end;
         end;
       end;
     finally
@@ -865,7 +889,7 @@ end;
 
 procedure TModflowCfpWriter.WriteDataSet26;
 begin
-  WriteString('# NodeNumber (NO_N), N_HEAD = -1 = not fixed; N_HEAD has positive value = piezometric heads for nodes with fixed head');
+  WriteString('# NodeNumber (NO_N), N_HEAD = -1 = not fixed; N_HEAD has positive value = piezometric heads for nodes with fixed head (Data Set 27)');
   NewLine;
 end;
 
@@ -1003,25 +1027,59 @@ end;
 
 procedure TModflowCfpWriter.WriteDataSet35;
 begin
+{$IFDEF OWHMV2}
+  if Model.ModelSelection = msModflowOwhm2 then
+  begin
+    WriteString('# undocumented flag: IRADFLAG');
+    NewLine;
+    WriteInteger(0);
+    NewLine;
+  end
+  ELSE
+  BEGIN
+    WriteString('# Water temperature, in degrees Celsius (LTEMP)');
+    NewLine;
+  end;
+{$ELSE}
   WriteString('# Water temperature, in degrees Celsius (LTEMP)');
   NewLine;
+{$ENDIF}
 end;
 
 procedure TModflowCfpWriter.WriteDataSet36;
 var
   LTEMP: Double;
 begin
+{$IFDEF OWHMV2}
+  if Model.ModelSelection <> msModflowOwhm2 then
+  begin
+    LTEMP := FConduitFlowProcess.LayerTemperature;
+    WriteFloat(LTEMP);
+    NewLine;
+  end;
+{$else}
   LTEMP := FConduitFlowProcess.LayerTemperature;
   WriteFloat(LTEMP);
   NewLine;
+{$ENDIF}
 end;
 
 procedure TModflowCfpWriter.WriteDataSet37;
 begin
-  WriteString('# mean void diameter (VOID), '
-    + 'lower critical Reynolds number (turbulent to laminar) (LCRITREY_L), '
-    + 'Upper critical Reynolds number (laminar to turbulent) (TCRITREY_L)');
-  NewLine;
+{$IFDEF OWHMV2}
+  if Model.ModelSelection <> msModflowOwhm2 then
+  begin
+    WriteString('# mean void diameter (VOID), '
+      + 'lower critical Reynolds number (turbulent to laminar) (LCRITREY_L), '
+      + 'Upper critical Reynolds number (laminar to turbulent) (TCRITREY_L)');
+    NewLine;
+  end;
+{$ELSE}
+    WriteString('# mean void diameter (VOID), '
+      + 'lower critical Reynolds number (turbulent to laminar) (LCRITREY_L), '
+      + 'Upper critical Reynolds number (laminar to turbulent) (TCRITREY_L)');
+    NewLine;
+{$ENDIF}
 end;
 
 procedure TModflowCfpWriter.WriteDataSet4;
@@ -1144,9 +1202,19 @@ var
   VOID: Double;
   LCRITREY_L: Double;
   TCRITREY_L: Double;
+  LayerID: string;
+  LTEMP: Double;
 begin
+{$IFDEF OWHMV2}
+  if Model.ModelSelection = msModflowOwhm2 then
+  begin
+    WriteString('TURBULENT FLOW PARAMETER ARRAYS (undocumented)');
+    NewLine;
+  end;
+{$ENDIF}
   ModelLayer := 0;
   CL := 0;
+  LTEMP := FConduitFlowProcess.LayerTemperature;
   for LayerGroupIndex := 1 to Model.LayerStructure.Count - 1 do
   begin
     ALayerGroup := Model.LayerStructure[LayerGroupIndex];
@@ -1160,18 +1228,85 @@ begin
           AConduitLayer := ALayerGroup.ConduitLayers[LayerIndex];
           if AConduitLayer.IsConduitLayer then
           begin
+            VOID := AConduitLayer.Void;
+            LCRITREY_L := AConduitLayer.LowerCriticalReynoldsNumber;
+            TCRITREY_L := AConduitLayer.HigherCriticalReynoldsNumber;
+
+          {$IFDEF OWHMV2}
+            if Model.ModelSelection = msModflowOwhm2 then
+            begin
+              Inc(CL);
+              LayerID := Format('# conduit layer %0:d, (Model layer %1:d) ', [CL, ModelLayer]);
+              // Data Set 38
+              WriteString(LayerID + 'TWATER2');
+              NewLine;
+              // Data Set 39
+              WriteString('CONSTANT');
+              WriteFloat(LTEMP);
+              NewLine;
+
+              // Data Set 38
+              WriteString(LayerID + 'VOID2');
+              NewLine;
+              // Data Set 39
+              WriteString('CONSTANT');
+              WriteFloat(VOID);
+              NewLine;
+
+              // Data Set 38
+              WriteString(LayerID + 'LCRITREY2');
+              NewLine;
+              // Data Set 39
+              WriteString('CONSTANT');
+              WriteFloat(LCRITREY_L);
+              NewLine;
+
+              // Data Set 38
+              WriteString(LayerID + 'TCRITREY2');
+              NewLine;
+              // Data Set 39
+              WriteString('CONSTANT');
+              WriteFloat(TCRITREY_L);
+              NewLine;
+
+              // Data Set 38
+              WriteString(LayerID + 'FEEXP');
+              NewLine;
+              // Data Set 39
+              WriteString('CONSTANT');
+              WriteFloat(1);
+              NewLine;
+
+            end
+            else
+            begin
+              Inc(CL);
+              WriteString(Format('# conduit layer %0:d, (Model layer %1:d)', [CL, ModelLayer]));
+              NewLine;
+              // Data Set 39
+//              VOID := AConduitLayer.Void;
+//              LCRITREY_L := AConduitLayer.LowerCriticalReynoldsNumber;
+//              TCRITREY_L := AConduitLayer.HigherCriticalReynoldsNumber;
+              WriteFloat(VOID);
+              WriteFloat(LCRITREY_L);
+              WriteFloat(TCRITREY_L);
+              NewLine;
+            end;
+          {$else}
             // Data Set 38
             Inc(CL);
             WriteString(Format('# conduit layer %0:d, (Model layer %1:d)', [CL, ModelLayer]));
             NewLine;
             // Data Set 39
-            VOID := AConduitLayer.Void;
-            LCRITREY_L := AConduitLayer.LowerCriticalReynoldsNumber;
-            TCRITREY_L := AConduitLayer.HigherCriticalReynoldsNumber;
+//            VOID := AConduitLayer.Void;
+//            LCRITREY_L := AConduitLayer.LowerCriticalReynoldsNumber;
+//            TCRITREY_L := AConduitLayer.HigherCriticalReynoldsNumber;
             WriteFloat(VOID);
             WriteFloat(LCRITREY_L);
             WriteFloat(TCRITREY_L);
             NewLine;
+          {$ENDIF}
+
           end;
         end;
       end;

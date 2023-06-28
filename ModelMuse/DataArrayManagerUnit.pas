@@ -215,6 +215,10 @@ type
     property SoilIDUsed: TObjectUsedEvent read GetSoilIDUsed;
     function GetCfpPipesSelected: TObjectUsedEvent;
     property CfpPipesSelected: TObjectUsedEvent read GetCfpPipesSelected;
+
+    function GetCfpPipes2Selected: TObjectUsedEvent;
+    property Cfp2PipesSelected: TObjectUsedEvent read GetCfpPipes2Selected;
+
     function GetSwiObsUsed: TObjectUsedEvent;
     property SwiObsUsed: TObjectUsedEvent read GetSwiObsUsed;
     function GetSwrSelected: TObjectUsedEvent;
@@ -1168,7 +1172,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 28;
+  OWHM4DataSets  = 29;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -2838,6 +2842,23 @@ begin
     StrMODFLOWCFPDataSet_N_HEAD;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
+
+{$IFDEF OWHMV2}
+  FDataArrayCreationRecords[Index].DataSetType := TIntegerSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KCfpBoundaryType;
+  FDataArrayCreationRecords[Index].DisplayName := StrCfpBoundaryType;
+  FDataArrayCreationRecords[Index].Formula := '-1';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOWCFPDataSet_N_HEAD;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+{$ENDIF}
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;

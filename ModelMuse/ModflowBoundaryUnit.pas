@@ -226,7 +226,7 @@ type
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: IModelForTOrderedCollection;
       ScreenObject: TObject); virtual;
-    function Used: boolean;
+    function Used: boolean;  virtual;
     function UsesATime(ATime: Double): Boolean;
     procedure ReplaceATime(OldTime, NewTime: Double);
     function ItemByStartTime(ATime: double): TCustomBoundaryItem;

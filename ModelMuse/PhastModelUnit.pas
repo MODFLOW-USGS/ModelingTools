@@ -2933,8 +2933,11 @@ that affects the model output should also have a comment. }
     function SwrIsSelected: Boolean; virtual;
     function Mf6ObsIsSelected: Boolean; virtual;
     function DoCfpPipesSelected(Sender: TObject): Boolean;
+    function DoCfp2PipesSelected(Sender: TObject): Boolean;
     function GetCfpPipesSelected: TObjectUsedEvent;
+    function GetCfpPipes2Selected: TObjectUsedEvent;
     property CfpPipesSelected: TObjectUsedEvent read GetCfpPipesSelected;
+    property Cfp2PipesSelected: TObjectUsedEvent read GetCfpPipes2Selected;
     procedure ExportHeadObservationsToShapeFile(const FileName: string);
     property OnHeadOBsChanged: TNotifyEvent read FOnHeadOBsChanged
       write FOnHeadOBsChanged;
@@ -12471,6 +12474,15 @@ begin
     ]
   ) and
     ModflowPackages.ConduitFlowProcess.IsSelected;
+end;
+
+function TCustomModel.DoCfp2PipesSelected(Sender: TObject): Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := DoCfpPipesSelected(Sender) and (ModelSelection = msModflowOwhm2);
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.DoCfpPipesSelected(Sender: TObject): Boolean;
@@ -35412,6 +35424,11 @@ end;
 function TCustomModel.GetCapillaryFringeUsed: TObjectUsedEvent;
 begin
   result := DoCapillaryFringeUsed;
+end;
+
+function TCustomModel.GetCfpPipes2Selected: TObjectUsedEvent;
+begin
+  result := DoCfp2PipesSelected;
 end;
 
 function TCustomModel.GetCfpPipesSelected: TObjectUsedEvent;

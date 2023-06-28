@@ -176,6 +176,7 @@ const
   KPipeConductanceOrPer = 'PipeConductanceOrPermeabilty';
   KCfpNodeElevation = 'CfpNodeElevation';
   KCfpFixedHeads = 'CfpFixedHeads';
+  KCfpBoundaryType = 'CfpBoundaryType';
   KCfpValue2 = 'CfpValue2';
   KCfpValue3 = 'CfpValue3';
   KActive_Surface_Elevation = 'Active_Surface_Elevation';
@@ -1271,6 +1272,7 @@ resourcestring
   StrPipeConductanceOrPer = 'PipeConductanceOrPermeabilty';
   StrCfpNodeElevation = 'CfpNodeElevation';
   StrCfpFixedHeads = 'CfpFixedHeads';
+  StrCfpBoundaryType = KCfpBoundaryType;
   StrEffectivePorosity = 'EffectivePorosity';
   StrSourceFluidDensityZo = 'SourceFluidDensityZone';
   StrSWIObservationName = 'SWI_Observation_Name';

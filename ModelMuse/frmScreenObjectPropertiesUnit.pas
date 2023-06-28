@@ -8548,6 +8548,7 @@ var
   CondOrPermDataArray: TDataArray;
   PipeElevation: TDataArray;
   CfpFixedHeadsDataArray: TDataArray;
+  CfpBoundaryTypeDataArray: TDataArray;
   FixedHeadIndex: Integer;
   CfpFixedHeads: TCfpFixedBoundary;
   MissingHeadObsNames: TStringList;
@@ -8975,6 +8976,34 @@ begin
         AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
       end;
     end;
+
+    DataSetIndex := self.GetDataSetIndexByName(KCfpBoundaryType);
+    CfpEdit := FDataEdits[DataSetIndex];
+    CfpBoundaryTypeDataArray := CfpEdit.DataArray;
+
+    for FixedHeadIndex := 0 to FNewProperties.Count - 1 do
+    begin
+      AnEdit := FNewProperties[FixedHeadIndex];
+      CfpFixedHeads := AnEdit.ScreenObject.ModflowCfpFixedHeads;
+      if (CfpFixedHeads <> nil)  then
+      begin
+        if CfpFixedHeads.Used then
+        begin
+          DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpBoundaryTypeDataArray);
+          AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+            IntToStr(Ord(CfpFixedHeads.BoundaryType));
+        end
+        else
+        begin
+          AnEdit.ScreenObject.RemoveDataSet(CfpBoundaryTypeDataArray);
+        end;
+      end
+      else
+      begin
+        AnEdit.ScreenObject.RemoveDataSet(CfpBoundaryTypeDataArray);
+      end;
+    end;
+
   end;
 
   if FSubPestObs_Node <> nil then
@@ -21454,8 +21483,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -21498,8 +21527,8 @@ begin
         for TimeIndex := 0 to Values.Count - 1 do
         begin
           Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-          RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-          Assert(RowIndex >= 1);
+          RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1+PestRowOffset;
+          Assert(RowIndex >= 3);
           for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
           begin
             DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex] :=
