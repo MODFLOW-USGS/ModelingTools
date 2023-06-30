@@ -17,6 +17,15 @@ type
     FNumber: Integer;
     FIsFixed: Boolean;
     FFixedHead: double;
+  {$IFDEF OWHMV2}
+    FLimitedFlow: double;
+    FWellFlow: double;
+    FWellConductance: double;
+    FCauchyHead: double;
+    FCauchyConductance: double;
+    FCauchyLimitedInflow: double;
+    FLimitedHead: double;
+  {$ENDIF}
     FPipes: TList<TCfpPipe>;
     FExchange: Double;
     FLayer: integer;
@@ -255,6 +264,13 @@ var
   ACell2: TCellAssignment;
   LocalGrid: TCustomModelGrid;
   BoundaryTypeArray: TDataArray;
+  LimitedFlowValueArray: TDataArray;
+//  WellConductanceArray: TDataArray;
+  WellFlowArray: TDataArray;
+  WellCauchyHeadArray: TDataArray;
+  CauchyConductanceArray: TDataArray;
+  CauchyLimitedInflowArray: TDataArray;
+  LimitedHeadArray: TDataArray;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyConduitsAt);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCFPDiameterIsNot);
@@ -471,12 +487,42 @@ begin
       Assert(FixedHeadsArray <> nil);
       FixedHeadsArray.Initialize;
       BoundaryTypeArray := nil;
+    {$IFDEF OWHMV2}
       if Model.ModelSelection  = msModflowOwhm2 then
       begin
         BoundaryTypeArray := Model.DataArrayManager.GetDataSetByName(KCfpBoundaryType);
         Assert(BoundaryTypeArray <> nil);
         BoundaryTypeArray.Initialize;
+
+        LimitedFlowValueArray := Model.DataArrayManager.GetDataSetByName(KCfpLimitedFlowValue);
+        Assert(LimitedFlowValueArray <> nil);
+        LimitedFlowValueArray.Initialize;
+
+        WellFlowArray := Model.DataArrayManager.GetDataSetByName(KCfpWellFlow);
+        Assert(WellFlowArray <> nil);
+        WellFlowArray.Initialize;
+
+//        WellConductanceArray := Model.DataArrayManager.GetDataSetByName(KCfpWellConductance);
+//        Assert(WellConductanceArray <> nil);
+//        WellConductanceArray.Initialize;
+
+        WellCauchyHeadArray := Model.DataArrayManager.GetDataSetByName(KCfpCauchyHead);
+        Assert(WellCauchyHeadArray <> nil);
+        WellCauchyHeadArray.Initialize;
+
+        CauchyConductanceArray := Model.DataArrayManager.GetDataSetByName(KCfpCauchyConductivity);
+        Assert(CauchyConductanceArray <> nil);
+        CauchyConductanceArray.Initialize;
+
+        CauchyLimitedInflowArray := Model.DataArrayManager.GetDataSetByName(KCfpCauchyLimitedInflow);
+        Assert(CauchyLimitedInflowArray <> nil);
+        CauchyLimitedInflowArray.Initialize;
+
+        LimitedHeadArray := Model.DataArrayManager.GetDataSetByName(KCfpLimitedHead);
+        Assert(LimitedHeadArray <> nil);
+        LimitedHeadArray.Initialize;
       end;
+    {$ENDIF}
       for NodeIndex := 0 to FNodes.Count - 1 do
       begin
         ANode := FNodes[NodeIndex];
@@ -512,23 +558,146 @@ begin
           end;
         end;
 
-        ANode.FIsFixed := FixedHeadsArray.IsValue[
-          ANode.FLayer, ANode.FRow, ANode.FColumn];
-        if ANode.FIsFixed then
+        if BoundaryTypeArray <> nil then
         begin
-          ANode.FFixedHead := FixedHeadsArray.RealData[
-            ANode.FLayer, ANode.FRow, ANode.FColumn];
-          if BoundaryTypeArray <> nil then
+          if BoundaryTypeArray.IsValue[
+            ANode.FLayer, ANode.FRow, ANode.FColumn] then
           begin
             ANode.FCfpBoundaryType :=
               TCfpBoundaryType(BoundaryTypeArray.IntegerData[
               ANode.FLayer, ANode.FRow, ANode.FColumn]);
+            case ANode.FCfpBoundaryType of
+              cbtFixedHead:
+                begin
+                  ANode.FIsFixed := FixedHeadsArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  Assert(ANode.FIsFixed);
+                  if ANode.FIsFixed then
+                  begin
+                    ANode.FFixedHead := FixedHeadsArray.RealData[
+                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  end;
+                end;
+              cbtWell:
+                begin
+                  if WellFlowArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+                  begin
+                    ANode.FWellFlow := WellFlowArray.RealData[
+                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  end
+                  else
+                  begin
+                    Assert(False);
+                  end;
+                end;
+              cbtCauchy:
+                begin
+                  if WellCauchyHeadArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+                  begin
+                    ANode.FCauchyHead := WellCauchyHeadArray.RealData[
+                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  end
+                  else
+                  begin
+                    Assert(False);
+                  end;
+
+                  if CauchyConductanceArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+                  begin
+                    ANode.FCauchyConductance := CauchyConductanceArray.RealData[
+                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  end
+                  else
+                  begin
+                    Assert(False);
+                  end;
+
+                  if CauchyLimitedInflowArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+                  begin
+                    ANode.FCauchyLimitedInflow := CauchyLimitedInflowArray.RealData[
+                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  end
+                  else
+                  begin
+                    Assert(False);
+                  end;
+                end;
+              cbtLimitedHead:
+                begin
+                  if LimitedHeadArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+                  begin
+                    ANode.FLimitedHead := LimitedHeadArray.RealData[
+                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  end
+                  else
+                  begin
+                    Assert(False);
+                  end;
+                end;
+              cbtFixedHeadLimitedFlow:
+                begin
+                  ANode.FIsFixed := FixedHeadsArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  Assert(ANode.FIsFixed);
+                  ANode.FFixedHead := FixedHeadsArray.RealData[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn];
+
+                  if LimitedFlowValueArray.IsValue[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+                  begin
+                    ANode.FLimitedFlow := LimitedFlowValueArray.RealData[
+                    ANode.FLayer, ANode.FRow, ANode.FColumn];
+                  end
+                  else
+                  begin
+                    Assert(False);
+                  end;
+                end;
+//              cbtWellConductance:
+//                begin
+//                  if WellFlowArray.IsValue[
+//                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+//                  begin
+//                    ANode.FWellFlow := WellFlowArray.RealData[
+//                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+//                  end
+//                  else
+//                  begin
+//                    Assert(False);
+//                  end;
+//
+//                  if WellConductanceArray.IsValue[
+//                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
+//                  begin
+//                    ANode.FWellConductance := WellConductanceArray.RealData[
+//                      ANode.FLayer, ANode.FRow, ANode.FColumn];
+//                  end
+//                  else
+//                  begin
+//                    Assert(False);
+//                  end;
+//                end;
+              else
+                Assert(False);
+            end;
           end
-          else
+        end
+        else
+        begin
+          ANode.FIsFixed := FixedHeadsArray.IsValue[
+            ANode.FLayer, ANode.FRow, ANode.FColumn];
+          if ANode.FIsFixed then
           begin
-            ANode.FCfpBoundaryType := cbtFixedHead;
+            ANode.FFixedHead := FixedHeadsArray.RealData[
+              ANode.FLayer, ANode.FRow, ANode.FColumn];
           end;
         end;
+
       end;
     finally
       CellList.Free;
@@ -899,26 +1068,111 @@ var
   ANode: TCfpNode;
   NO_N: Integer;
   N_HEAD: Double;
+  LQ: Double;
+  HCY: Double;
+  CCY: Double;
+  CYLQ: Double;
+  CWC_WELL: Double;
 begin
   for NodeIndex := 0 to FNodes.Count - 1 do
   begin
     ANode := FNodes[NodeIndex];
     NO_N := ANode.FNumber;
     WriteInteger(NO_N);
-    if ANode.FIsFixed then
+    if ANode.FIsFixed
+    {$IFDEF OWHMV2}
+      or (ANode.FCfpBoundaryType <> cbtFixedHead)
+    {$ENDIF}
+      then
     begin
-      N_HEAD := ANode.FFixedHead;
-      if N_HEAD <= -1 then
+    {$IFDEF OWHMV2}
+      if Model.ModelSelection = msModflowOwhm2 then
       begin
-        frmErrorsAndWarnings.AddError(Model, StrCFPSpecifiedHeads,
-          Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
-            ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]), ANode.FScreenObject);
+        case ANode.FCfpBoundaryType of
+          cbtFixedHead:
+            begin
+              N_HEAD := ANode.FFixedHead;
+              if N_HEAD <= -1 then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrCFPSpecifiedHeads,
+                  Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
+                    ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]), ANode.FScreenObject);
+              end;
+              WriteFloat(N_HEAD);
+              WriteString('    X');
+            end;
+          cbtWell:
+            begin
+              N_HEAD := -1;
+              WriteFloat(N_HEAD);
+              WriteString(' WELL');
+            end;
+          cbtCauchy:
+            begin
+              HCY := ANode.FCauchyHead;
+              CCY := ANode.FCauchyConductance;
+              CYLQ := ANode.FCauchyLimitedInflow;
+              WriteFloat(HCY);
+              WriteString(' CAUCHY');
+              WriteFloat(CCY);
+              WriteFloat(CYLQ);
+            end;
+          cbtLimitedHead:
+            begin
+              N_HEAD := ANode.FLimitedHead;
+              WriteFloat(N_HEAD);
+              WriteString(' LH');
+            end;
+          cbtFixedHeadLimitedFlow:
+            begin
+              N_HEAD := ANode.FFixedHead;
+              if N_HEAD <= -1 then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrCFPSpecifiedHeads,
+                  Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
+                    ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]), ANode.FScreenObject);
+              end;
+              WriteFloat(N_HEAD);
+              WriteString(' FHLQ');
+              LQ := ANode.FLimitedFlow;
+              WriteFloat(LQ);
+            end;
+//          cbtWellConductance:
+//            begin
+//              N_HEAD := -1;
+//              WriteFloat(N_HEAD);
+//              WriteString(' WELL');
+//              CWC_WELL := ANode.FWellConductance;
+//              WriteFloat(CWC_WELL);
+//            end;
+        end;
+      end
+    {$ENDIF}
+      else
+      begin
+        N_HEAD := ANode.FFixedHead;
+        if N_HEAD <= -1 then
+        begin
+          frmErrorsAndWarnings.AddError(Model, StrCFPSpecifiedHeads,
+            Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
+              ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]), ANode.FScreenObject);
+        end;
+        WriteFloat(N_HEAD);
+      {$IFDEF OWHMV2}
+        if Model.ModelSelection = msModflowOwhm2 then
+        begin
+          WriteString('    X');
+        end;
+        {$ENDIF}
       end;
-      WriteFloat(N_HEAD);
     end
     else
     begin
       WriteInteger(-1);
+      if Model.ModelSelection = msModflowOwhm2 then
+      begin
+        WriteString('    X');
+      end;
     end;
     NewLine;
   end;
@@ -1177,6 +1431,12 @@ end;
 
 procedure TModflowCfpWriter.WriteDataSets2and3;
 begin
+{$IFDEF OWHMV2}
+  if Model.ModelSelection = msModflowOwhm2 then
+  begin
+    WriteString('FBC ');
+  end;
+{$ENDIF}
   WriteString('# data for mode 1 (or 3) conduit pipe system');
   NewLine;
   WriteString('# number of nodes (NNODES), number of conduits (NPIPES), number of layers (NLAYERS)');
@@ -1589,6 +1849,10 @@ begin
           else
           begin
             WriteFloat(0);
+          end;
+          if ANode.FCfpBoundaryType = cbtWell then
+          begin
+            WriteFloat(ANode.FWellFlow);
           end;
           NewLine;
         end;

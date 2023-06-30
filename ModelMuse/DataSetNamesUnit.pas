@@ -177,6 +177,15 @@ const
   KCfpNodeElevation = 'CfpNodeElevation';
   KCfpFixedHeads = 'CfpFixedHeads';
   KCfpBoundaryType = 'CfpBoundaryType';
+  KCfpLimitedFlowValue = 'CfpLimitedFlowValue';
+  KCfpWellFlow = 'CfpWellFlow';
+//  KCfpWellConductance = 'CfpWellConductance';
+  KCfpCauchyHead = 'CfpCauchyHead';
+  KCfpCauchyConductivity = 'CfpCauchyConductivity';
+  KCfpCauchyLimitedInflow = 'CfpCauchyLimitedInflow';
+  KCfpLimitedHead = 'CfpLimitedHead';
+
+
   KCfpValue2 = 'CfpValue2';
   KCfpValue3 = 'CfpValue3';
   KActive_Surface_Elevation = 'Active_Surface_Elevation';
@@ -1271,8 +1280,17 @@ resourcestring
   StrUpperCriticalR = 'UpperCriticalR';
   StrPipeConductanceOrPer = 'PipeConductanceOrPermeabilty';
   StrCfpNodeElevation = 'CfpNodeElevation';
-  StrCfpFixedHeads = 'CfpFixedHeads';
+  StrCfpFixedHeads = KCfpFixedHeads;
   StrCfpBoundaryType = KCfpBoundaryType;
+  StrCfpLimitedFlowValue = KCfpLimitedFlowValue;
+  StrCfpWellFlow = KCfpWellFlow;
+//  StrCfpWellConductance = KCfpWellConductance;
+  StrCfpCauchyHead = KCfpCauchyHead;
+  StrCfpCauchyConductivity = KCfpCauchyConductivity;
+  StrCfpCauchyLimitedInflow = KCfpCauchyLimitedInflow;
+  StrCfpLimitedHead = KCfpLimitedHead;
+
+
   StrEffectivePorosity = 'EffectivePorosity';
   StrSourceFluidDensityZo = 'SourceFluidDensityZone';
   StrSWIObservationName = 'SWI_Observation_Name';

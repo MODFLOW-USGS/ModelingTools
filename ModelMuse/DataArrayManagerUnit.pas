@@ -1160,6 +1160,8 @@ resourcestring
     + 'Angle upward from the horizontal';
   StrAngleAround = 'SUTRA Data Set 15B: ANGLE3' + SLineBreak
     + 'Angle around PMAX direction';
+  StrMODFLOWCFPDataSetFHLQ = 'MODFLOW-CFP Data Set 27: FHLQ';
+  StrMODFLOWCFPDataSetCWC_WELL = 'MODFLOW-CFP Data Set 27: CWC_WELL';
 
 
 procedure TDataArrayManager.DefinePackageDataArrays;
@@ -1172,7 +1174,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 29;
+  OWHM4DataSets  = 35;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -2858,6 +2860,115 @@ begin
     StrMODFLOWCFPDataSet_N_HEAD;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCfpLimitedFlowValue;
+  FDataArrayCreationRecords[Index].DisplayName := StrCfpLimitedFlowValue;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOWCFPDataSetFHLQ;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+
+//  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+//  FDataArrayCreationRecords[Index].Orientation := dso3D;
+//  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+//  FDataArrayCreationRecords[Index].Name := KCfpWellConductance;
+//  FDataArrayCreationRecords[Index].DisplayName := StrCfpWellConductance;
+//  FDataArrayCreationRecords[Index].Formula := '0';
+//  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+//  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+//  FDataArrayCreationRecords[Index].Lock := StandardLock;
+//  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+//  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+//    StrMODFLOWCFPDataSetCWC_WELL;
+//  FDataArrayCreationRecords[Index].Visible := False;
+//  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCfpWellFlow;
+  FDataArrayCreationRecords[Index].DisplayName := StrCfpWellFlow;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOWCFPDataSetCWC_WELL;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+
+
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCfpCauchyHead;
+  FDataArrayCreationRecords[Index].DisplayName := StrCfpCauchyHead;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOWCFPDataSetCWC_WELL;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+
+
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCfpCauchyConductivity;
+  FDataArrayCreationRecords[Index].DisplayName := StrCfpCauchyConductivity;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOWCFPDataSetCWC_WELL;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+
+
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCfpCauchyLimitedInflow;
+  FDataArrayCreationRecords[Index].DisplayName := StrCfpCauchyLimitedInflow;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOWCFPDataSetCWC_WELL;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KCfpLimitedHead;
+  FDataArrayCreationRecords[Index].DisplayName := StrCfpLimitedHead;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOWCFPDataSetCWC_WELL;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+
 {$ENDIF}
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;

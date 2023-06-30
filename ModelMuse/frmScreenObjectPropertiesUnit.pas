@@ -8548,7 +8548,15 @@ var
   CondOrPermDataArray: TDataArray;
   PipeElevation: TDataArray;
   CfpFixedHeadsDataArray: TDataArray;
+  CfpLimitedFlowDataArray: TDataArray;
   CfpBoundaryTypeDataArray: TDataArray;
+  CfpWellFlowDataArray: TDataArray;
+//  CfpWellConductanceDataArray: TDataArray;
+  CfpCauchyHeadDataArray: TDataArray;
+  CfpCauchyConductivityDataArray: TDataArray;
+  CfpCauchyLimitedInflowDataArray: TDataArray;
+  CfpLimitedHeadDataArray: TDataArray;
+  BoundaryTypeDataSetIndex: Integer;
   FixedHeadIndex: Integer;
   CfpFixedHeads: TCfpFixedBoundary;
   MissingHeadObsNames: TStringList;
@@ -8954,13 +8962,58 @@ begin
     CfpEdit := FDataEdits[DataSetIndex];
     CfpFixedHeadsDataArray := CfpEdit.DataArray;
 
+    CfpBoundaryTypeDataArray := nil;
+    CfpLimitedFlowDataArray := nil;
+    CfpWellFlowDataArray := nil;
+//    CfpWellConductanceDataArray := nil;
+    CfpCauchyHeadDataArray := nil;
+    CfpCauchyConductivityDataArray := nil;
+    CfpCauchyLimitedInflowDataArray := nil;
+    CfpLimitedHeadDataArray := nil;
+  {$IFDEF OWHMV2}
+    if frmGoPhast.ModelSelection = msModflowOwhm2 then
+    begin
+      BoundaryTypeDataSetIndex := self.GetDataSetIndexByName(KCfpBoundaryType);
+      CfpEdit := FDataEdits[BoundaryTypeDataSetIndex];
+      CfpBoundaryTypeDataArray := CfpEdit.DataArray;
+
+      DataSetIndex := self.GetDataSetIndexByName(KCfpLimitedFlowValue);
+      CfpEdit := FDataEdits[DataSetIndex];
+      CfpLimitedFlowDataArray := CfpEdit.DataArray;
+
+      DataSetIndex := self.GetDataSetIndexByName(KCfpWellFlow);
+      CfpEdit := FDataEdits[DataSetIndex];
+      CfpWellFlowDataArray := CfpEdit.DataArray;
+
+//      DataSetIndex := self.GetDataSetIndexByName(KCfpWellConductance);
+//      CfpEdit := FDataEdits[DataSetIndex];
+//      CfpWellConductanceDataArray := CfpEdit.DataArray;
+
+      DataSetIndex := self.GetDataSetIndexByName(KCfpCauchyHead);
+      CfpEdit := FDataEdits[DataSetIndex];
+      CfpCauchyHeadDataArray := CfpEdit.DataArray;
+
+      DataSetIndex := self.GetDataSetIndexByName(KCfpCauchyConductivity);
+      CfpEdit := FDataEdits[DataSetIndex];
+      CfpCauchyConductivityDataArray := CfpEdit.DataArray;
+
+      DataSetIndex := self.GetDataSetIndexByName(KCfpCauchyLimitedInflow);
+      CfpEdit := FDataEdits[DataSetIndex];
+      CfpCauchyLimitedInflowDataArray := CfpEdit.DataArray;
+
+      DataSetIndex := self.GetDataSetIndexByName(KCfpLimitedHead);
+      CfpEdit := FDataEdits[DataSetIndex];
+      CfpLimitedHeadDataArray := CfpEdit.DataArray;
+    end;
+  {$ENDIF}
+
     for FixedHeadIndex := 0 to FNewProperties.Count - 1 do
     begin
       AnEdit := FNewProperties[FixedHeadIndex];
       CfpFixedHeads := AnEdit.ScreenObject.ModflowCfpFixedHeads;
-      if (CfpFixedHeads <> nil)  then
+      if (CfpFixedHeads <> nil) and CfpFixedHeads.Used then
       begin
-        if CfpFixedHeads.Used then
+        if CfpBoundaryTypeDataArray = nil then
         begin
           DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpFixedHeadsDataArray);
           AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
@@ -8968,39 +9021,112 @@ begin
         end
         else
         begin
-          AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
-        end;
-      end
-      else
-      begin
-        AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
-      end;
-    end;
-
-    DataSetIndex := self.GetDataSetIndexByName(KCfpBoundaryType);
-    CfpEdit := FDataEdits[DataSetIndex];
-    CfpBoundaryTypeDataArray := CfpEdit.DataArray;
-
-    for FixedHeadIndex := 0 to FNewProperties.Count - 1 do
-    begin
-      AnEdit := FNewProperties[FixedHeadIndex];
-      CfpFixedHeads := AnEdit.ScreenObject.ModflowCfpFixedHeads;
-      if (CfpFixedHeads <> nil)  then
-      begin
-        if CfpFixedHeads.Used then
-        begin
-          DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpBoundaryTypeDataArray);
-          AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+          BoundaryTypeDataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpBoundaryTypeDataArray);
+          AnEdit.ScreenObject.DataSetFormulas[BoundaryTypeDataSetIndex] :=
             IntToStr(Ord(CfpFixedHeads.BoundaryType));
-        end
-        else
-        begin
-          AnEdit.ScreenObject.RemoveDataSet(CfpBoundaryTypeDataArray);
+          case CfpFixedHeads.BoundaryType of
+            cbtFixedHead:
+              begin
+                DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpFixedHeadsDataArray);
+                AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+                  CfpFixedHeads.FixedHead;
+              {$IFDEF OWHMV2}
+                if (CfpFixedHeads.Value2 <> '') then
+                begin
+                  DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpLimitedFlowDataArray);
+                  AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+                    CfpFixedHeads.Value2;
+                  BoundaryTypeDataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpBoundaryTypeDataArray);
+                  AnEdit.ScreenObject.DataSetFormulas[BoundaryTypeDataSetIndex] :=
+                    IntToStr(Ord(cbtFixedHeadLimitedFlow));
+                end
+                else
+                begin
+                  AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
+                end;
+                AnEdit.ScreenObject.RemoveDataSet(CfpWellFlowDataArray);
+//                AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyHeadDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyConductivityDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyLimitedInflowDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpLimitedHeadDataArray);
+              {$ENDIF}
+              end;
+          {$IFDEF OWHMV2}
+            cbtWell:
+              begin
+                DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpWellFlowDataArray);
+                AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+                  CfpFixedHeads.FixedHead;
+//                if (CfpFixedHeads.Value2 <> '') then
+//                begin
+//                  DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpWellConductanceDataArray);
+//                  AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+//                    CfpFixedHeads.Value2;
+//                  BoundaryTypeDataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpBoundaryTypeDataArray);
+//                  AnEdit.ScreenObject.DataSetFormulas[BoundaryTypeDataSetIndex] :=
+//                    IntToStr(Ord(cbtWellConductance));
+//                end
+//                else
+//                begin
+//                  AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
+//                end;
+                AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyHeadDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyConductivityDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyLimitedInflowDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpLimitedHeadDataArray);
+              end;
+            cbtCauchy:
+              begin
+                DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpCauchyHeadDataArray);
+                AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+                  CfpFixedHeads.FixedHead;
+                DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpCauchyConductivityDataArray);
+                AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+                  CfpFixedHeads.Value2;
+                DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpCauchyLimitedInflowDataArray);
+                AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+                  CfpFixedHeads.Value3;
+                AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpWellFlowDataArray);
+//                AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpLimitedHeadDataArray);
+              end;
+            cbtLimitedHead:
+              begin
+                DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpLimitedHeadDataArray);
+                AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+                  CfpFixedHeads.FixedHead;
+                AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpWellFlowDataArray);
+//                AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyHeadDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyConductivityDataArray);
+                AnEdit.ScreenObject.RemoveDataSet(CfpCauchyLimitedInflowDataArray);
+              end;
+          {$ENDIF}
+            else
+              Assert(False);
+          end;
         end;
       end
       else
       begin
         AnEdit.ScreenObject.RemoveDataSet(CfpBoundaryTypeDataArray);
+      {$IFDEF OWHMV2}
+        AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
+        AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
+        AnEdit.ScreenObject.RemoveDataSet(CfpWellFlowDataArray);
+//        AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
+        AnEdit.ScreenObject.RemoveDataSet(CfpCauchyHeadDataArray);
+        AnEdit.ScreenObject.RemoveDataSet(CfpCauchyConductivityDataArray);
+        AnEdit.ScreenObject.RemoveDataSet(CfpCauchyLimitedInflowDataArray);
+        AnEdit.ScreenObject.RemoveDataSet(CfpLimitedHeadDataArray);
+      {$ENDIF}
       end;
     end;
 

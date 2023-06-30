@@ -9931,7 +9931,7 @@ initialization
   strDefaultClassification := StrDataSets + '|' + StrUserDefined;
 
   RegisterClasses([TDataArray, TCustom2DInterpolater, TRealSparseDataSet,
-    TStringSparseDataSet]);
+    TStringSparseDataSet, TIntegerSparseDataSet]);
 
 end.
 

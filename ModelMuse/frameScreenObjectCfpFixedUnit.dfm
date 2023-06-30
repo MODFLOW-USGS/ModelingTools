@@ -1,13 +1,13 @@
 inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
   Width = 563
-  Height = 390
+  Height = 447
   ExplicitWidth = 563
-  ExplicitHeight = 390
+  ExplicitHeight = 447
   DesignSize = (
     563
-    390)
+    447)
   object lblHint: TLabel
-    Left = 234
+    Left = 159
     Top = 104
     Width = 314
     Height = 75
@@ -30,7 +30,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
     ExplicitWidth = 350
   end
   object edFixedHead: TLabeledEdit
-    Left = 234
+    Left = 159
     Top = 71
     Width = 215
     Height = 23
@@ -43,7 +43,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
     OnChange = edFixedHeadChange
   end
   object btnFixedHead: TButton
-    Left = 461
+    Left = 386
     Top = 68
     Width = 90
     Height = 30
@@ -54,7 +54,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
   object rgBoundaryType: TRadioGroup
     Left = 3
     Top = 23
-    Width = 225
+    Width = 150
     Height = 113
     Caption = 'Boundary type'
     ItemIndex = 0
@@ -67,7 +67,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
     OnClick = rgBoundaryTypeClick
   end
   object cbTimeDependent: TCheckBox
-    Left = 234
+    Left = 159
     Top = 31
     Width = 185
     Height = 17
@@ -77,9 +77,9 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
   end
   object pcCfp: TPageControl
     Left = 0
-    Top = 185
+    Top = 200
     Width = 563
-    Height = 205
+    Height = 247
     ActivePage = tabSteady
     Align = alBottom
     TabOrder = 5
@@ -141,13 +141,13 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
         Left = 0
         Top = 0
         Width = 555
-        Height = 195
+        Height = 237
         Align = alClient
         TabOrder = 0
         ExplicitLeft = 8
         ExplicitTop = 8
         inherited Panel: TPanel
-          Top = 154
+          Top = 196
           Width = 555
           inherited sbAdd: TSpeedButton
             Left = 290
@@ -161,7 +161,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
         end
         inherited Grid: TRbwDataGrid4
           Width = 555
-          Height = 154
+          Height = 196
         end
       end
     end

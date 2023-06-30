@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frameScreenObjectUnit, StdCtrls,
   ExtCtrls, UndoItemsScreenObjects, Vcl.Mask, Vcl.Grids, Vcl.ComCtrls,
-  frameGridUnit, RbwDataGrid4;
+  frameGridUnit, RbwDataGrid4, PhastModelInterfaceUnit;
 
 type
   TCfpColumns = (ccTime, ccHead, ccValue1, ccValue2);
@@ -58,7 +58,7 @@ var
 implementation
 
 uses
-  ScreenObjectUnit, ModflowCfpFixedUnit;
+  ScreenObjectUnit, ModflowCfpFixedUnit, GoPhastTypes;
 
 resourcestring
   StrDefinedHead = 'Defined Head';
@@ -210,6 +210,20 @@ end;
 procedure TframeScreenObjectCfpFixed.InitializeControls;
 begin
   edFixedHead.Text := '';
+{$IFDEF OWHMV2}
+  if IGlobalModel.ModelSelection = msModflowOwhm2 then
+  begin
+    rgBoundaryType.Enabled := True;
+    pcCfp.Enabled := True;
+    cbTimeDependent.Enabled := True;
+  end
+  else
+{$ENDIF}
+  begin
+    rgBoundaryType.Enabled := False;
+    pcCfp.Enabled := False;
+    cbTimeDependent.Enabled := False;
+  end;
   cbTimeDependent.Checked := False;
   cbTimeDependentClick(nil);
   rgBoundaryType.ItemIndex := 0;
@@ -252,10 +266,10 @@ begin
             edFixedHead.Enabled := True;
             btnFixedHead.Enabled := True;
 
-            lblValue2.Caption := StrCellToWellConduct;
-            lblValue2.Enabled := True;
-            edValue2.Enabled := True;
-            btnValue2.Enabled := True;
+//            lblValue2.Caption := StrCellToWellConduct;
+            lblValue2.Enabled := False;
+            edValue2.Enabled := False;
+            btnValue2.Enabled := False;
 
             lblValue3.Enabled := False;
             edValue3.Enabled := False;

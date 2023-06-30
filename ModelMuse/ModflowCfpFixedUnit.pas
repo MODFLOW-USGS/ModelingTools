@@ -25,7 +25,8 @@ type
     procedure RecordStrings(Strings: TStringList);
   end;
 
-  TCfpBoundaryType = (cbtFixedHead, cbtWell, cbtCauchy, cbtLimitedHead);
+  TCfpBoundaryType = (cbtFixedHead, cbtWell, cbtCauchy, cbtLimitedHead,
+    cbtFixedHeadLimitedFlow);
 
   TCfpTimeItem = class(TCustomBoundaryItem)
   private

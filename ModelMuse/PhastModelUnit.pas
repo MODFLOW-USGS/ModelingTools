@@ -10048,7 +10048,6 @@ function GenerateNewName(Root: string = '';
 var
   Names: TStringList;
   Index: integer;
-  DataSet: TDataArray;
   DataArrayManager: TDataArrayManager;
   GlobalVariable: IGlobalVariable;
   Compiler: TRbwParser;
@@ -10081,18 +10080,6 @@ begin
 
     DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
     DataArrayManager.AddNamesOfAllDataSets(Names);
-//    for Index := 0 to DataArrayManager.DataSetCount - 1 do
-//    begin
-//      DataSet := DataArrayManager.DataSets[Index];
-//      Names.Add(DataSet.Name);
-//    end;
-//
-//    // Don't allow the name to be the same as a deleted data set.
-//    for Index := 0 to DataArrayManager.FDeletedDataSets.Count - 1 do
-//    begin
-//      DataSet := DataArrayManager.FDeletedDataSets[Index];
-//      Names.Add(DataSet.Name);
-//    end;
 
     // Names now includes the names of all the data sets.
 
@@ -12996,7 +12983,7 @@ var
 begin
   Formula := Item.BoundaryFormula[DataIndex];
 
-  ATimeSeries := nil;
+//  ATimeSeries := nil;
   ADynamicTimeSeries := nil;
   if IGlobalModel <> nil then
   begin
