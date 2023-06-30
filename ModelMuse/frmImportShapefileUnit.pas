@@ -1151,6 +1151,8 @@ resourcestring
   StrSpecifiedFlows = 'Specified Flows in ';
   StrOneOrMorePointsW = 'One or more points were skipped because they would ' +
   'have caused an imported object to intersect itself.';
+  StrTheBoundingBoxOf = 'The bounding box of the Shapefile does not overlap ' +
+  'with the  model discretization. Do you want to continue?';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -1662,8 +1664,11 @@ var
   DSIndex: Integer;
   DataArray: TDataArray;
   DataArrayManager: TDataArrayManager;
+  ModelLimits: TGridLimit;
+  FileHeader: TShapefileHeader;
 begin
   inherited;
+  ModelLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
   try
     dgFields.DefaultRowHeight := dgFields.Canvas.TextHeight('Fields')+4;
 
@@ -1735,6 +1740,25 @@ begin
           end;
         finally
           frmProgressMM.Hide;
+        end;
+
+        if (ModelLimits.MaxX > ModelLimits.MinX)
+          and (ModelLimits.MaxY > ModelLimits.MinY) then
+        begin
+          FileHeader := FGeometryFile.FileHeader;
+          if (FileHeader.BoundingBoxXMin > ModelLimits.MaxX)
+            or (FileHeader.BoundingBoxXMax < ModelLimits.MinX)
+            or (FileHeader.BoundingBoxYMin > ModelLimits.MaxY)
+            or (FileHeader.BoundingBoxYMax < ModelLimits.MinY)
+            then
+          begin
+            if (MessageDlg(StrTheBoundingBoxOf, mtConfirmation, [mbYes, mbNo],
+              0, mbNo) = mrNo) then
+            begin
+              result := False;
+              Exit;
+            end;
+          end;
         end;
 
         if FGeometryFile.NumberOfPoints > 10000 then
