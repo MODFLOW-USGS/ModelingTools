@@ -9967,6 +9967,9 @@ const
 //                simultaneously.
 
 //               Bug fix: Fixed bugs in assigning data for MODFLOW 6 IST package.
+//               Enhancement: When importing Shapefiles, ModelMuse now checks
+//                to see if the grid or mesh overlaps with the shapes in the
+//                shapeFile.
 
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
