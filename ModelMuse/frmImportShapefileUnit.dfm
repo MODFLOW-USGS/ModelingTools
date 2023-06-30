@@ -18,8 +18,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 553
-    ExplicitWidth = 763
     DesignSize = (
       755
       41)
@@ -39,7 +37,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 611
     end
     object btnOK: TBitBtn
       Left = 462
@@ -69,7 +66,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 490
     end
     object btnHelp: TBitBtn
       Left = 341
@@ -81,7 +77,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 369
     end
   end
   object pcImportShape: TPageControl
@@ -93,8 +88,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Align = alClient
     TabOrder = 0
     OnChange = pcImportShapeChange
-    ExplicitWidth = 763
-    ExplicitHeight = 553
     object tabOptions: TTabSheet
       Caption = 'Options 1'
       ImageIndex = 3
@@ -518,17 +511,17 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       inline frameCSV: TframeGrid
         Left = 0
         Top = 0
-        Width = 755
-        Height = 518
+        Width = 747
+        Height = 517
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 755
-        ExplicitHeight = 520
+        ExplicitWidth = 747
+        ExplicitHeight = 517
         inherited Panel: TPanel
-          Top = 480
-          Width = 759
-          ExplicitTop = 479
-          ExplicitWidth = 755
+          Top = 476
+          Width = 747
+          ExplicitTop = 476
+          ExplicitWidth = 747
           inherited lbNumber: TLabel
             Width = 142
             Height = 18
@@ -537,21 +530,21 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 498
+            Left = 490
             Hint = 
               'Add space for CSV file|Add space for CSV file after the last CSV' +
               ' file.'
             ExplicitLeft = 500
           end
           inherited sbInsert: TSpeedButton
-            Left = 526
+            Left = 518
             Hint = 
               'Insert space for CSV file|Insert a space for a CSV file above th' +
               'e selected CSV file.'
             ExplicitLeft = 529
           end
           inherited sbDelete: TSpeedButton
-            Left = 555
+            Left = 546
             Hint = 'Delete CSV file|Delete the selected CSV file.'
             ExplicitLeft = 565
           end
@@ -561,8 +554,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 759
-          Height = 480
+          Width = 747
+          Height = 476
           OnButtonClick = frameGrid1GridButtonClick
           OnEndUpdate = frameCSVGridEndUpdate
           Columns = <
@@ -590,8 +583,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 755
-          ExplicitHeight = 479
+          ExplicitWidth = 747
+          ExplicitHeight = 476
           ColWidths = (
             717)
           RowHeights = (
@@ -840,15 +833,16 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object pnlBoundaryCondition: TPanel
         Left = 0
         Top = 0
-        Width = 755
-        Height = 518
+        Width = 747
+        Height = 517
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 755
         ExplicitHeight = 520
         object splitterBoundary: TSplitter
           Left = 1
-          Top = 247
-          Width = 753
+          Top = 246
+          Width = 745
           Height = 5
           Cursor = crVSplit
           Align = alBottom
@@ -858,10 +852,11 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         object pnlBoundaryControls: TPanel
           Left = 1
           Top = 1
-          Width = 753
+          Width = 745
           Height = 41
           Align = alTop
           TabOrder = 0
+          ExplicitWidth = 753
           object lblBoundaryTimeCount: TLabel
             Left = 602
             Top = 11
@@ -1047,7 +1042,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           object jvspNone: TJvStandardPage
             Left = 0
             Top = 0
-            Width = 753
+            Width = 745
             Height = 265
             Caption = 'jvspNone'
             ExplicitWidth = 761
@@ -1055,9 +1050,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           object jvspPhastSpecifiedHead: TJvStandardPage
             Left = 0
             Top = 0
-            Width = 753
+            Width = 745
             Height = 265
             Caption = 'jvspPhastSpecifiedHead'
+            ExplicitWidth = 753
             object lblSolutionType: TLabel
               Left = 16
               Top = 6
@@ -1468,11 +1464,12 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pcSFR: TPageControl
               Left = 0
               Top = 0
-              Width = 753
+              Width = 745
               Height = 265
               ActivePage = tabSfrBasic
               Align = alClient
               TabOrder = 0
+              ExplicitWidth = 753
               object tabSfrBasic: TTabSheet
                 Caption = 'Basic'
                 object lblSfrSegmentNumber: TLabel
@@ -2045,11 +2042,12 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pcMnw2: TPageControl
               Left = 0
               Top = 0
-              Width = 753
+              Width = 745
               Height = 265
               ActivePage = tabBasic
               Align = alClient
               TabOrder = 0
+              ExplicitWidth = 753
               object tabBasic: TTabSheet
                 HelpType = htKeyword
                 HelpKeyword = 'MNW2_Basic_Tab'
@@ -2618,11 +2616,12 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pgcSfrMf6: TPageControl
               Left = 0
               Top = 0
-              Width = 753
+              Width = 745
               Height = 265
               ActivePage = tabSfrMf6Properties
               Align = alClient
               TabOrder = 0
+              ExplicitWidth = 753
               object tabSfrMf6Properties: TTabSheet
                 Caption = 'Properties'
                 object lblSegNum: TLabel
@@ -2736,7 +2735,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 inline frameDownstreamSegmentsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
-                  Width = 745
+                  Width = 737
                   Height = 232
                   Align = alClient
                   TabOrder = 0
@@ -2744,7 +2743,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   ExplicitHeight = 232
                   inherited Panel: TPanel
                     Top = 191
-                    Width = 745
+                    Width = 737
                     ExplicitTop = 191
                     ExplicitWidth = 753
                     inherited lbNumber: TLabel
@@ -2779,7 +2778,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                     end
                   end
                   inherited Grid: TRbwDataGrid4
-                    Width = 745
+                    Width = 737
                     Height = 191
                     Columns = <
                       item
@@ -2950,11 +2949,12 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             object pgcModflowMAW: TPageControl
               Left = 0
               Top = 0
-              Width = 753
+              Width = 745
               Height = 265
               ActivePage = tabMawBasic
               Align = alClient
               TabOrder = 0
+              ExplicitWidth = 753
               object tabMawBasic: TTabSheet
                 Caption = 'Basic'
                 object lblMawRadius: TLabel
