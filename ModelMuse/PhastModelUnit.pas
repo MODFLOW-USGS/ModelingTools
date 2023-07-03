@@ -9966,7 +9966,7 @@ const
 //               Bug fix: Fixed loss of data when editing multiple MNW2 wells
 //                simultaneously.
 
-//               Bug fix: Fixed bugs in assigning data for MODFLOW 6 IST package.
+//    '5.1.1.33' Bug fix: Fixed bugs in assigning data for MODFLOW 6 IST package.
 //               Enhancement: When importing Shapefiles, ModelMuse now checks
 //                to see if the grid or mesh overlaps with the shapes in the
 //                shapeFile.
@@ -9976,7 +9976,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.32';
+  IIModelVersion = '5.1.1.33';
 
 function IModelVersion: string;
 begin

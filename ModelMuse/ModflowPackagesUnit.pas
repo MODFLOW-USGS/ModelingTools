@@ -91,6 +91,7 @@ type
     FFarmSalinityFlush: TFarmProcess4SalinityFlush;
     FFarmClimate4: TFarmProcess4Climate;
     FFarmWells4: TFarmProcess4Wells;
+    FBuoyancyPackage: TBuoyancyPackage;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -172,6 +173,7 @@ type
     procedure SetFarmSoil4(const Value: TFarmProcess4Soil);
     procedure SetFarmSurfaceWater4(const Value: TFarmProcess4SurfaceWater);
     procedure SetFarmWells4(const Value: TFarmProcess4Wells);
+    procedure SetBuoyancyPackage(const Value: TBuoyancyPackage);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -356,6 +358,12 @@ type
       stored False
     {$ENDIF}
       ;
+    property BuoyancyPackage: TBuoyancyPackage read FBuoyancyPackage
+      write SetBuoyancyPackage
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
 
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
@@ -477,6 +485,7 @@ resourcestring
   StrLANDUSEFarmProce = 'LAND_USE: Farm Process V4 Land Use Options';
   StrSALINITYFLUSHIRRIG = 'SALINITY_FLUSH_IRRIGATION: Farm Process V4 Salini' +
   'ty Flush Irrigation Options';
+  StrBUYBuoyancyPackag = 'BUY: Buoyancy Package)';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -571,6 +580,8 @@ begin
     FarmAllotments := SourcePackages.FarmAllotments;
     FarmLandUse := SourcePackages.FarmLandUse;
     FarmSalinityFlush := SourcePackages.FarmSalinityFlush;
+    BuoyancyPackage := SourcePackages.BuoyancyPackage;
+
   end
   else
   begin
@@ -974,10 +985,16 @@ begin
   FFarmSalinityFlush.Classification := StrFarmProcessClassification;
   FFarmSalinityFlush.SelectionType := stCheckBox;
 
+  FBuoyancyPackage := TBuoyancyPackage.Create(Model);
+  FBuoyancyPackage.PackageIdentifier := StrBUYBuoyancyPackag;
+  FBuoyancyPackage.Classification := StrFlowPackages;
+  FBuoyancyPackage.SelectionType := stCheckBox;
+
 end;
 
 destructor TModflowPackages.Destroy;
 begin
+  FBuoyancyPackage.Free;
   FFarmSalinityFlush.Free;
   FFarmLandUse.Free;
   FFarmAllotments.Free;
@@ -1153,6 +1170,8 @@ begin
   FarmAllotments.InitializeVariables;
   FarmLandUse.InitializeVariables;
   FarmSalinityFlush.InitializeVariables;
+
+  BuoyancyPackage.InitializeVariables;
 end;
 
 
@@ -1447,6 +1466,11 @@ end;
 procedure TModflowPackages.SetBcfPackage(const Value: TModflowPackageSelection);
 begin
   FBcfPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetBuoyancyPackage(const Value: TBuoyancyPackage);
+begin
+  FBuoyancyPackage.Assign(Value);
 end;
 
 procedure TModflowPackages.SetChdBoundary(

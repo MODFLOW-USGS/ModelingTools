@@ -7249,19 +7249,15 @@ Type
       write SetItem; default;
   end;
 
-  TBuoyancyChoice = (bcCenter, bcTop, bcSpecify);
-
   TBuoyancyPackage = class(TModflowPackageSelection)
   private
     FDensityUsed: Boolean;
-    FElevationUsed: TBuoyancyChoice;
     procedure SetDensityUsed(const Value: Boolean);
-    procedure SetElevationUsed(const Value: TBuoyancyChoice);
   public
     Constructor Create(Model: TBaseModel);
+    procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
   published
-    property ElevationUsed: TBuoyancyChoice read FElevationUsed write SetElevationUsed;
     Property DensityUsed: Boolean read FDensityUsed write SetDensityUsed;
   end;
 
@@ -7458,6 +7454,9 @@ resourcestring
   StrAddedDemandsS = 'FMP4 Added Demand %s';
   StrHasSalinityDemandsS = 'FMP4 Crop Has Salinity Demand %s';
   StrFMP4CropHasSalini = 'FMP4 Crop_Has_Salinity_Demand';
+
+const
+  KDensity = 'Density';
 
 { TModflowPackageSelection }
 
@@ -29781,6 +29780,15 @@ end;
 
 { TBuoyancyPackage }
 
+procedure TBuoyancyPackage.Assign(Source: TPersistent);
+begin
+  if Source is TBuoyancyPackage then
+  begin
+    DensityUsed := TBuoyancyPackage(Source).DensityUsed
+  end;
+  inherited;
+end;
+
 constructor TBuoyancyPackage.Create(Model: TBaseModel);
 begin
   inherited;
@@ -29791,20 +29799,23 @@ procedure TBuoyancyPackage.InitializeVariables;
 begin
   inherited;
   FDensityUsed := False;
-  FElevationUsed := bcCenter;
 end;
 
 procedure TBuoyancyPackage.SetDensityUsed(const Value: Boolean);
+var
+  LocalModel: TCustomModel;
+  Density: TMobileChemSpeciesItem;
 begin
   SetBooleanProperty(FDensityUsed, Value);
-end;
-
-procedure TBuoyancyPackage.SetElevationUsed(const Value: TBuoyancyChoice);
-begin
-  if FElevationUsed <> Value then
+  if FDensityUsed and IsSelected and (FModel <> nil) then
   begin
-    FElevationUsed := Value;
-    InvalidateModel;
+    LocalModel := FModel as TCustomModel;
+    Density := LocalModel.MobileComponents.GetItemByName(KDensity);
+    if Density = nil then
+    begin
+      Density := LocalModel.MobileComponents.Add;
+      Density.Name := KDensity;
+    end;
   end;
 end;
 
