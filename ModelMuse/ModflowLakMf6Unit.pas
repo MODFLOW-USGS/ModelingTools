@@ -240,6 +240,7 @@ type
     FEvaporation: IFormulaObject;
     FInflow: IFormulaObject;
     FWithdrawal: IFormulaObject;
+    FDensity: IFormulaObject;
     // GWT
     FGwtStatus: TGwtBoundaryStatusCollection;
     FSpecifiedConcentrations: TLktGwtConcCollection;
@@ -266,6 +267,8 @@ type
     procedure SetRainfallConcentrations(const Value: TLktGwtConcCollection);
     procedure SetRunoffConcentrations(const Value: TLktGwtConcCollection);
     procedure SetSpecifiedConcentrations(const Value: TLktGwtConcCollection);
+    function GetDensity: string;
+    procedure SetDensity(const Value: string);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -288,6 +291,7 @@ type
     property Runoff: string read GetRunoff write SetRunoff;
     property Inflow: string read GetInflow write SetInflow;
     property Withdrawal: string read GetWithdrawal write SetWithdrawal;
+    property Density: string read GetDensity write SetDensity;
     // GWT
     property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
     property SpecifiedConcentrations: TLktGwtConcCollection read FSpecifiedConcentrations
@@ -310,6 +314,7 @@ type
     procedure InvalidateRunoff(Sender: TObject);
     procedure InvalidateInflow(Sender: TObject);
     procedure InvalidateWithdrawal(Sender: TObject);
+    procedure InvalidateDensity(Sender: TObject);
     // GWT
     procedure InvalidateGwtStatus(Sender: TObject);
     procedure InvalidateSpecifiedConcentrations(Sender: TObject);
@@ -326,15 +331,12 @@ type
   TLakeMf6 = class(TModflowBoundary)
   private
   const
-    BottomElevationPosition = 6;
-    TopElevationPosition = 7;
-    BedKPosition = 8;
-    BedThicknessPosition = 9;
-    ConnectionLengthPosition = 10;
-    StartingStagePosition = 11;
-    function GetStartingConcentrations: TStringConcCollection;
-//    FGwtStatus: TGwtBoundaryStatusCollection;
-//    procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
+    BottomElevationPosition = 7;
+    TopElevationPosition = 8;
+    BedKPosition = 9;
+    BedThicknessPosition = 10;
+    ConnectionLengthPosition = 11;
+    StartingStagePosition = 12;
   var
     FPestRainfallMethod: TPestParamMethod;
     FPestRunoffMethod: TPestParamMethod;
@@ -353,6 +355,11 @@ type
     FPestEvaporationConcentrations: TLktGwtConcCollection;
     FPestInflowConcentrationMethods: TGwtPestMethodCollection;
     FPestEvaporationConcentrationMethods: TGwtPestMethodCollection;
+    FPestDensityMethod: TPestParamMethod;
+    function GetStartingConcentrations: TStringConcCollection;
+    function GetPestDensityFormula: string;
+    procedure SetPestDensityFormula(const Value: string);
+    procedure SetPestDensityMethod(const Value: TPestParamMethod);
     function GetPestEvaporationFormula: string;
     function GetPestEvaporationObserver: TObserver;
     function GetPestInflowFormula: string;
@@ -432,6 +439,7 @@ type
     FPestEvaporationFormula: IFormulaObject;
     FPestInflowFormula: IFormulaObject;
     FPestWithdrawalFormula: IFormulaObject;
+    FPestDensityFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestEvaporationObserver: TObserver;
     FPestInflowObserver: TObserver;
@@ -566,6 +574,10 @@ type
       write SetPestWithdrawalFormula;
     property PestWithdrawalMethod: TPestParamMethod read FPestWithdrawalMethod
       write SetPestWithdrawalMethod;
+    property PestDensityFormula: string read GetPestDensityFormula
+      write SetPestDensityFormula;
+    property PestDensityMethod: TPestParamMethod read FPestDensityMethod
+      write SetPestDensityMethod;
     property StartingConcentrations: TStringConcCollection
       read GetStartingConcentrations
       write SetStartingConcentrations;
@@ -606,7 +618,8 @@ const
   Lak6EvaporationPosition = 3;
   Lak6InflowPosition = 4;
   Lak6WithdrawalPosition = 5;
-  Lak6GwtPestStartPosition = 6;
+  LakeDensityPosition = 6;
+  Lak6GwtPestStartPosition = 7;
 
 implementation
 
@@ -725,6 +738,7 @@ begin
     Runoff := LakeItem.Runoff;
     Inflow := LakeItem.Inflow;
     Withdrawal := LakeItem.Withdrawal;
+    Density := LakeItem.Density;
     GwtStatus := LakeItem.GwtStatus;
     SpecifiedConcentrations := LakeItem.SpecifiedConcentrations;
     RainfallConcentrations := LakeItem.RainfallConcentrations;
@@ -743,6 +757,7 @@ var
   RunoffObserver: TObserver;
   EvaporationObserver: TObserver;
   WithdrawalObserver: TObserver;
+  DensityObserver: TObserver;
   InflowObserver: TObserver;
   ConcIndex: Integer;
 begin
@@ -767,6 +782,9 @@ begin
 
   WithdrawalObserver := FObserverList[Lak6WithdrawalPosition];
   WithdrawalObserver.OnUpToDateSet := ParentCollection.InvalidateWithdrawal;
+
+  DensityObserver := FObserverList[LakeDensityPosition];
+  DensityObserver.OnUpToDateSet := ParentCollection.InvalidateDensity;
 
 //  for ConcIndex := 0 to GwtStatus.Count - 1 do
 //  begin
@@ -844,6 +862,7 @@ begin
   FEvaporation := CreateFormulaObject(dsoTop);
   FInflow := CreateFormulaObject(dsoTop);
   FWithdrawal := CreateFormulaObject(dsoTop);
+  FDensity := CreateFormulaObject(dsoTop);
 end;
 
 destructor TLakeTimeItem.Destroy;
@@ -895,6 +914,7 @@ begin
     Lak6EvaporationPosition: result := Evaporation;
     Lak6InflowPosition: result := Inflow;
     Lak6WithdrawalPosition: result := Withdrawal;
+    LakeDensityPosition: result := Density;
     else
       begin
         // GWT
@@ -965,6 +985,12 @@ begin
   end;
 end;
 
+function TLakeTimeItem.GetDensity: string;
+begin
+  Result := FDensity.Formula;
+  ResetItemObserver(LakeDensityPosition);
+end;
+
 function TLakeTimeItem.GetEvaporation: string;
 begin
   Result := FEvaporation.Formula;
@@ -1006,6 +1032,10 @@ begin
   if Sender = FWithdrawal as TObject then
   begin
     List.Add(FObserverList[Lak6WithdrawalPosition]);
+  end;
+  if Sender = FDensity as TObject then
+  begin
+    List.Add(FObserverList[LakeDensityPosition]);
   end;
 
   // GWT
@@ -1097,6 +1127,7 @@ begin
       and (Runoff = LakeItem.Runoff)
       and (Inflow = LakeItem.Inflow)
       and (Withdrawal = LakeItem.Withdrawal)
+      and (Density = LakeItem.Density)
       and LakeItem.SpecifiedConcentrations.IsSame(SpecifiedConcentrations)
       and LakeItem.RainfallConcentrations.IsSame(RainfallConcentrations)
       and LakeItem.EvapConcentrations.IsSame(EvapConcentrations)
@@ -1127,6 +1158,9 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FWithdrawal,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FDensity,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 procedure TLakeTimeItem.SetBoundaryFormula(Index: integer; const Value: string);
@@ -1146,6 +1180,8 @@ begin
       Inflow := Value;
     Lak6WithdrawalPosition:
       Withdrawal := Value;
+    LakeDensityPosition:
+      Density := Value;
     else
       begin
         // GWT
@@ -1214,6 +1250,11 @@ begin
         end
       end;
   end;
+end;
+
+procedure TLakeTimeItem.SetDensity(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, LakeDensityPosition, FWithdrawal);
 end;
 
 procedure TLakeTimeItem.SetEvapConcentrations(
@@ -1819,6 +1860,11 @@ begin
   Assert(False);
 end;
 
+procedure TLakTimeCollection.InvalidateDensity(Sender: TObject);
+begin
+
+end;
+
 procedure TLakTimeCollection.InvalidateEvapConcentrations(Sender: TObject);
 begin
 
@@ -1917,7 +1963,7 @@ begin
     PestInflowConcentrations := LakeSource.PestInflowConcentrations;
     PestInflowConcentrationMethods := LakeSource.PestInflowConcentrationMethods;
 
-    for Index := Lak6StagePosition to Lak6WithdrawalPosition do
+    for Index := Lak6StagePosition to LakeDensityPosition do
     begin
       PestBoundaryFormula[Index] := LakeSource.PestBoundaryFormula[Index];
       PestBoundaryMethod[Index] := LakeSource.PestBoundaryMethod[Index];
@@ -1997,8 +2043,9 @@ begin
   PestEvaporationFormula := '';
   PestInflowFormula := '';
   PestWithdrawalFormula := '';
+  PestDensityFormula := '';
 
-  for Index := Lak6StagePosition to Lak6WithdrawalPosition do
+  for Index := Lak6StagePosition to LakeDensityPosition do
   begin
     PestBoundaryMethod[Index] := DefaultBoundaryMethod(Index);
   end;
@@ -2015,6 +2062,7 @@ begin
   FPestEvaporationFormula := CreateFormulaObjectBlocks(dso3D);
   FPestInflowFormula := CreateFormulaObjectBlocks(dso3D);
   FPestWithdrawalFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDensityFormula := CreateFormulaObjectBlocks(dso3D);
 
   FBottomElevation := CreateFormulaObjectBlocks(dso3D);
   FTopElevation := CreateFormulaObjectBlocks(dso3D);
@@ -2119,6 +2167,10 @@ begin
         result := ppmMultiply;
       end;
     Lak6WithdrawalPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    LakeDensityPosition:
       begin
         result := ppmMultiply;
       end;
@@ -2345,6 +2397,10 @@ begin
       begin
         result := PestWithdrawalFormula;
       end;
+    LakeDensityPosition:
+      begin
+        result := PestDensityFormula;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
@@ -2440,6 +2496,10 @@ begin
       begin
         result := PestWithdrawalMethod;
       end;
+    LakeDensityPosition:
+      begin
+        result := PestDensityMethod;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
@@ -2502,6 +2562,15 @@ begin
         result := inherited;
         Assert(False);
       end;
+  end;
+end;
+
+function TLakeMf6.GetPestDensityFormula: string;
+begin
+  Result := FPestDensityFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(LakeDensityPosition);
   end;
 end;
 
@@ -2721,6 +2790,10 @@ begin
   else if Sender = FPestWithdrawalFormula as TObject then
   begin
     List.Add(FObserverList[Lak6WithdrawalPosition]);
+  end
+  else if Sender = FPestDensityFormula as TObject then
+  begin
+    List.Add(FObserverList[LakeDensityPosition]);
   end
   else if Sender = FBottomElevation as TObject then
   begin
@@ -2990,6 +3063,10 @@ begin
       begin
         PestWithdrawalFormula := Value;
       end;
+    LakeDensityPosition:
+      begin
+        PestDensityFormula := Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
@@ -3085,6 +3162,10 @@ begin
       begin
         PestWithdrawalMethod := Value;
       end;
+    LakeDensityPosition:
+      begin
+        PestDensityMethod := Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex - Lak6GwtPestStartPosition;
@@ -3148,6 +3229,16 @@ begin
         Assert(False);
       end;
   end;
+end;
+
+procedure TLakeMf6.SetPestDensityFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, LakeDensityPosition, FPestDensityFormula);
+end;
+
+procedure TLakeMf6.SetPestDensityMethod(const Value: TPestParamMethod);
+begin
+  FPestDensityMethod := Value;
 end;
 
 procedure TLakeMf6.SetPestEvaporationConcentrationMethods(

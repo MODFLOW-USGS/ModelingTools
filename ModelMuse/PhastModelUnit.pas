@@ -2143,6 +2143,7 @@ that affects the model output should also have a comment. }
     function GetClearing: Boolean;
     function GetMf6TimesSeriesI: ITimesSeriesCollections;
     function GetGridI: ICustomModelGrid;
+    function GetBuoyancyDensityUsed: Boolean;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
@@ -3066,6 +3067,7 @@ that affects the model output should also have a comment. }
     function DoSutraUnsatRegionUsed(Sender: TObject): boolean;
     property SutraUnsatRegionUsed: TObjectUsedEvent read GetSutraUnsatRegionUsed;
     procedure GetPestParameterNames(ParameterNames: TStringList);
+    property BuoyancyDensityUsed: Boolean read GetBuoyancyDensityUsed;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -35409,6 +35411,14 @@ end;
 function TCustomModel.GetBcfUsed: TObjectUsedEvent;
 begin
   result := DoBcfUsed
+end;
+
+function TCustomModel.GetBuoyancyDensityUsed: Boolean;
+var
+  Buoyancy: TBuoyancyPackage;
+begin
+  Buoyancy := ModflowPackages.BuoyancyPackage;
+  Result := Buoyancy.IsSelected and Buoyancy.DensityUsed;
 end;
 
 function TCustomModel.GetCapillaryFringeUsed: TObjectUsedEvent;

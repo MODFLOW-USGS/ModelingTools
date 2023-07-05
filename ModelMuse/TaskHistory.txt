@@ -338,7 +338,7 @@ object TTaskHistory
     end
     item
       Name = 'MF-2015'
-      Display = False
+      Display = True
     end
     item
       Name = 'NPF'
@@ -31417,5 +31417,15 @@ object TTaskHistory
       Date = 45110.000000000000000000
       Categories.Strings = (
         'Buoyancy')
+    end
+    item
+      Date = 45111.000000000000000000
+    end
+    item
+      Date = 45112.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'Buoyancy'
+        'MF-2015')
     end>
 end

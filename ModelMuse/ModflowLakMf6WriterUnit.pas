@@ -124,6 +124,7 @@ type
     Runoff: double;
     Inflow: double;
     Withdrawal: double;
+    Density: double;
 
     StagePest: string;
     RainfallPest: string;
@@ -131,6 +132,7 @@ type
     RunoffPest: string;
     InflowPest: string;
     WithdrawalPest: string;
+    DensityPest: string;
 
     StagePestSeries: string;
     RainfallPestSeries: string;
@@ -138,6 +140,7 @@ type
     RunoffPestSeries: string;
     InflowPestSeries: string;
     WithdrawalPestSeries: string;
+    DensityPestSeries: string;
 
     StagePestMethod: TPestParamMethod;
     RainfallPestMethod: TPestParamMethod;
@@ -145,6 +148,7 @@ type
     RunoffPestMethod: TPestParamMethod;
     InflowPestMethod: TPestParamMethod;
     WithdrawalPestMethod: TPestParamMethod;
+    DensityPestMethod: TPestParamMethod;
 
     StageTimeSeriesName: string;
     RainfallTimeSeriesName: string;
@@ -152,6 +156,7 @@ type
     RunoffTimeSeriesName: string;
     InflowTimeSeriesName: string;
     WithdrawalTimeSeriesName: string;
+    DensityTimeSeriesName: string;
 
     // GWT
     GwtStatus: TGwtBoundaryStatusArray;
@@ -332,6 +337,7 @@ resourcestring
   StrLakeEvaporationAt = 'Lake Evaporation at %0:g';
   StrLakeRunoffAt0g = 'Lake Runoff at %0:g';
   StrLakeWithdrawalAt = 'Lake Withdrawal at %0:g';
+  StrLakeDensityAt = 'Lake Density at %0:g';
   StrLakeStartingStage = 'Lake Starting Stage';
   StrLakeInflowAt0g = 'Lake Inflow at %0:g';
   StrSAndThenRaised = '%s  and then raised to the cell bottom';
@@ -1655,6 +1661,10 @@ begin
       AssignValue(Lak6RunoffPosition, StrLakeRunoffAt0g);
       AssignValue(Lak6InflowPosition, StrLakeInflowAt0g);
       AssignValue(Lak6WithdrawalPosition, StrLakeWithdrawalAt);
+      if Model.BuoyancyDensityUsed then
+      begin
+        AssignValue(LakeDensityPosition, StrLakeDensityAt);
+      end;
 
       if Model.GwtUsed then
       begin
@@ -2463,6 +2473,12 @@ var
   end;
 begin
   WriteBeginOptions;
+
+  if Model.BuoyancyDensityUsed then
+  begin
+    WriteString('  AUXILIARY Density');
+    NewLine;
+  end;
   // [AUXILIARY <auxiliary(naux)>]
   WriteBoundNamesOption;
   PrintListInputOption;
@@ -2754,13 +2770,10 @@ begin
     WriteInteger(ALake.FLakeCellList.Count);
 
     // aux
-//    if Model.GwtUsed then
-//    begin
-//      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-//      begin
-//        WriteFloat(0);
-//      end;
-//    end;
+    if Model.BuoyancyDensityUsed then
+    begin
+      WriteFloat(0);
+    end;
 
     BoundName := Copy(ALake.FScreenObject.Name, 1, MaxBoundNameLength);
     BoundName := ' ''' + BoundName + ''' ';
@@ -2987,19 +3000,15 @@ begin
             WriteLakeValueOrFormula(ALakeSetting, Lak6WithdrawalPosition);
             NewLine;
 
-//            if Model.GwtUsed then
-//            begin
-//              for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-//              begin
-//                WriteString('  ');
-//                WriteInteger(LakeIndex+1);
-//                WriteString(' AUXILIARY ');
-//                ASpecies := Model.MobileComponents[SpeciesIndex];
-//                WriteString(' ' + ASpecies.Name);
-//                WriteFloat(0);
-//                NewLine;
-//              end;
-//            end;
+            if Model.BuoyancyDensityUsed then
+            begin
+              WriteString('  ');
+              WriteInteger(LakeIndex+1);
+              WriteString(' AUXILIARY Density');
+              WriteFloat(0);
+              WriteLakeValueOrFormula(ALakeSetting, LakeDensityPosition);
+              NewLine;
+            end;
 
           end;
         end;
@@ -3177,6 +3186,10 @@ begin
       begin
         result :=  WithdrawalPestMethod;
       end;
+    LakeDensityPosition:
+      begin
+        result := DensityPestMethod;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3256,6 +3269,10 @@ begin
     Lak6WithdrawalPosition:
       begin
         result :=  WithdrawalPest;
+      end;
+    LakeDensityPosition:
+      begin
+        result := DensityPest;
       end;
     else
     begin
@@ -3337,6 +3354,10 @@ begin
       begin
         result :=  WithdrawalPestSeries;
       end;
+    LakeDensityPosition:
+      begin
+        result :=  DensityPestSeries;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3416,6 +3437,10 @@ begin
     Lak6WithdrawalPosition:
       begin
         result :=  WithdrawalTimeSeriesName;
+      end;
+    LakeDensityPosition:
+      begin
+        result :=  DensityTimeSeriesName;
       end;
     else
     begin
@@ -3497,6 +3522,10 @@ begin
       begin
         result :=  Withdrawal;
       end;
+    LakeDensityPosition:
+      begin
+        result :=  Density;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3577,6 +3606,10 @@ begin
     Lak6WithdrawalPosition:
       begin
         WithdrawalPestMethod  := Value;
+      end;
+    LakeDensityPosition:
+      begin
+        DensityPestMethod := Value;
       end;
     else
     begin
@@ -3661,6 +3694,10 @@ begin
       begin
         WithdrawalPest  := Value;
       end;
+    LakeDensityPosition:
+      begin
+        DensityPest := Value;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3743,6 +3780,10 @@ begin
     Lak6WithdrawalPosition:
       begin
         WithdrawalPestSeries  := Value;
+      end;
+    LakeDensityPosition:
+      begin
+        DensityPestSeries  := Value;
       end;
     else
     begin
@@ -3827,6 +3868,10 @@ begin
       begin
         WithdrawalTimeSeriesName  := Value;
       end;
+    LakeDensityPosition:
+      begin
+        DensityTimeSeriesName  := Value;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3909,6 +3954,10 @@ begin
     Lak6WithdrawalPosition:
       begin
         Withdrawal  := Value;
+      end;
+    LakeDensityPosition:
+      begin
+        Density  := Value;
       end;
     else
     begin

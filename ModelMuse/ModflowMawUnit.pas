@@ -59,6 +59,7 @@ type
     MaxRateAnnotation: string;
     PumpElevationAnnotation: string;
     ScalingLengthAnnotation: string;
+
     MvrUsed: Boolean;
     MvrIndex: Integer;
 
@@ -97,6 +98,10 @@ type
 
     RateTimeSeriesName: string;
     WellHeadTimeSeriesName: string;
+
+    // Buyancy
+    // Species count should always be 1 for Density
+    Density: TGwtCellData;
 
     // GWT
     GwtStatus: TGwtBoundaryStatusArray;
@@ -349,6 +354,7 @@ type
     function GetGwtStatus: TGwtBoundaryStatusArray;
     function GetSpecifiedConcentrations: TGwtCellData;
     function GetInjectionConcentrations: TGwtCellData;
+    function GetDensity: TGwtCellData;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -414,6 +420,8 @@ type
     Property GwtStatus: TGwtBoundaryStatusArray read GetGwtStatus;
     Property SpecifiedConcentrations: TGwtCellData read GetSpecifiedConcentrations;
     Property InjectionConcentrations: TGwtCellData read GetInjectionConcentrations;
+    // Buoyancy
+    Property Density: TGwtCellData read GetDensity;
   end;
 
   TMawSteadyWellRecord = record
@@ -884,8 +892,9 @@ const
   MawMaxRatePosition = 6;
   MawPumpElevationPosition = 7;
   MawScalingLengthPosition = 8;
-  MawFlowingWellReductionLengthPosition = 9;
-  MawGwtStart = 10;
+  MawDensityPosition = 9;
+  MawFlowingWellReductionLengthPosition = 10;
+  MawGwtStart = 11;
 
   MawRadiusPosition = 0;
   MawBottomPosition = 1;
@@ -3605,6 +3614,7 @@ begin
   SetLength(GwtStatus, Length(GwtStatus));
   SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
   InjectionConcentrations.Assign(Item.InjectionConcentrations);
+  Density.Assign(Item.Density);
 end;
 
 procedure TMawTransientRecord.Cache(Comp: TCompressionStream;
@@ -3687,6 +3697,7 @@ begin
 
   SpecifiedConcentrations.Cache(Comp, Strings);
   InjectionConcentrations.Cache(Comp, Strings);
+  Density.Cache(Comp, Strings);
 
   GwtStatusCount := Length(GwtStatus);
   WriteCompInt(Comp, GwtStatusCount);
@@ -3738,6 +3749,7 @@ begin
   // GWT
   SpecifiedConcentrations.RecordStrings(Strings);
   InjectionConcentrations.RecordStrings(Strings);
+  Density.RecordStrings(Strings);
 
 end;
 
@@ -3821,6 +3833,7 @@ begin
   // GWT
   SpecifiedConcentrations.Restore(Decomp, Annotations);
   InjectionConcentrations.Restore(Decomp, Annotations);
+  Density.Restore(Decomp, Annotations);
 
   GwtStatusCount := ReadCompInt(Decomp);
   SetLength(GwtStatus, GwtStatusCount);
@@ -3872,6 +3885,7 @@ begin
     SetLength(FMawTransientArray[Index].GwtStatus, FSpeciesCount);
     FMawTransientArray[Index].SpecifiedConcentrations.SpeciesCount := FSpeciesCount;
     FMawTransientArray[Index].InjectionConcentrations.SpeciesCount := FSpeciesCount;
+    FMawTransientArray[Index].Density.SpeciesCount := 1;
   end;
 end;
 
@@ -5167,6 +5181,15 @@ begin
             ScalingLengthPestSeriesName := PestSeriesName;
             ScalingLengthPestSeriesMethod := PestSeriesMethod;
           end;
+        MawDensityPosition:
+          begin
+            Density.Values[FormulaIndex] := Expression.DoubleResult;
+            Density.ValueAnnotations[FormulaIndex] := ACell.Annotation;
+            Density.ValuePestNames[FormulaIndex] := PestName;
+            Density.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
+            Density.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
+            Density.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
+          end;
         MawFlowingWellReductionLengthPosition:
           begin
             FlowingWellReductionLength := Expression.DoubleResult;
@@ -5712,6 +5735,11 @@ begin
   result := FValues.Cell.Column
 end;
 
+function TMawCell.GetDensity: TGwtCellData;
+begin
+  result := FValues.Density
+end;
+
 function TMawCell.GetFlowingWell: TFlowingWell;
 begin
   result := FValues.FlowingWell
@@ -5835,6 +5863,8 @@ begin
         result := inherited;
     MawScalingLengthPosition:
         result := inherited;
+    MawDensityPosition:
+        result := FValues.Density.ValueTimeSeriesNames[0];
     MawFlowingWellReductionLengthPosition:
         result := inherited;
     else
@@ -5905,6 +5935,8 @@ begin
       result := FValues.PumpElevationPest;
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPest;
+    MawDensityPosition:
+      result := result := FValues.Density.ValuePestNames[0];
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPest;
     else
@@ -5955,6 +5987,8 @@ begin
       result := FValues.PumpElevationPestSeriesMethod;
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPestSeriesMethod;
+    MawDensityPosition:
+      result := FValues.Density.ValuePestSeriesMethods[0]
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPestSeriesMethod;
     else
@@ -6008,6 +6042,8 @@ begin
       result := FValues.PumpElevationPestSeriesName;
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPestSeriesName;
+    MawDensityPosition:
+      result := FValues.Density.ValuePestSeriesNames[0]
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPestSeriesName;
     else
@@ -6083,6 +6119,8 @@ begin
       result := PumpElevationAnnotation;
     MawScalingLengthPosition:
       result := ScalingLengthAnnotation;
+    MawDensityPosition:
+      result := FValues.Density.ValueAnnotations[0];
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLengthAnnotation;
     else
@@ -6134,6 +6172,8 @@ begin
       result := PumpElevation;
     MawScalingLengthPosition:
       result := ScalingLength;
+    MawDensityPosition:
+      result := FValues.Density.Values[0];
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLength;
     else
@@ -6256,6 +6296,8 @@ begin
         inherited;
     MawScalingLengthPosition:
         inherited;
+    MawDesityPosition:
+        FValues.Density.ValueTimeSeriesNames[0] := Value;;
     MawFlowingWellReductionLengthPosition:
         inherited;
     else

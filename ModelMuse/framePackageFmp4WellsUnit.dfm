@@ -9,7 +9,7 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
   object lblPumpSpread: TLabel [2]
     Left = 271
     Top = 290
-    Width = 300
+    Width = 272
     Height = 30
     Caption = 
       'Specify how pumping demand should be allocated among MNW well no' +

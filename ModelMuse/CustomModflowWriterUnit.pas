@@ -476,7 +476,7 @@ end;
     procedure WriteBoundNamesOption;
     procedure WriteTimeSeriesFiles(InputFileName: string);
     procedure PrintConcentrationOption;
-    procedure WriteGwtlAuxVariables;
+//    procedure WriteGwtlAuxVariables;
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -11235,22 +11235,25 @@ begin
   end;
 end;
 
-procedure TCustomPackageWriter.WriteGwtlAuxVariables;
-var
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
-begin
-  if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
-  begin
-    WriteString('  AUXILIARY');
-    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-    begin
-      ASpecies := Model.MobileComponents[SpeciesIndex];
-      WriteString(' ' + ASpecies.Name);
-    end;
-    NewLine;
-  end;
-end;
+//procedure TCustomPackageWriter.WriteGwtlAuxVariables;
+//var
+//  SpeciesIndex: Integer;
+//  ASpecies: TMobileChemSpeciesItem;
+//  BuoyancyPackage: TBuoyancyPackage;
+//begin
+//  BuoyancyPackage := Model.ModflowPackages.BuoyancyPackage;
+//  if ((Model.GwtUsed) or (BuoyancyPackage.IsSelected and BuoyancyPackage.DensityUsed))
+//    and (Model.MobileComponents.Count > 0) then
+//  begin
+//    WriteString('  AUXILIARY');
+//    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//    begin
+//      ASpecies := Model.MobileComponents[SpeciesIndex];
+//      WriteString(' ' + ASpecies.Name);
+//    end;
+//    NewLine;
+//  end;
+//end;
 
 { TMf6GwtNameWriter }
 

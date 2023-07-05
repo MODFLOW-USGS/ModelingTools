@@ -216,15 +216,15 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           end
           inherited sbAdd: TSpeedButton
             Left = 382
-            ExplicitLeft = 269
+            ExplicitLeft = 382
           end
           inherited sbInsert: TSpeedButton
             Left = 436
-            ExplicitLeft = 307
+            ExplicitLeft = 436
           end
           inherited sbDelete: TSpeedButton
             Left = 488
-            ExplicitLeft = 344
+            ExplicitLeft = 488
           end
           inherited seNumber: TJvSpinEdit
             Height = 28
@@ -350,7 +350,8 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 179
+        ExplicitTop = 190
+        ExplicitWidth = 542
         DesignSize = (
           541
           46)
@@ -365,7 +366,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           Left = 9
           Top = 5
           Width = 49
-          Height = 28
+          Height = 23
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0
@@ -374,7 +375,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         object btnDelete: TBitBtn
           Left = 453
           Top = 6
-          Width = 82
+          Width = 83
           Height = 33
           Anchors = [akTop, akRight]
           Cancel = True
@@ -408,11 +409,12 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
           TabOrder = 2
           OnClick = btnDeleteClick
+          ExplicitLeft = 454
         end
         object btnInsert: TBitBtn
           Left = 365
           Top = 6
-          Width = 82
+          Width = 83
           Height = 33
           Anchors = [akTop, akRight]
           Cancel = True
@@ -428,6 +430,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             FF0FFFFF0FFFFFFFFF0FFFFF00000000000FFFFFFFFFFFFFFFFF}
           TabOrder = 1
           OnClick = btnInsertClick
+          ExplicitLeft = 366
         end
       end
       object pnlGrid: TPanel
@@ -437,7 +440,8 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Height = 184
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 179
+        ExplicitWidth = 542
+        ExplicitHeight = 190
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -446,6 +450,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
+          ExplicitWidth = 541
           object lblFormula: TLabel
             Left = 232
             Top = 5
@@ -986,8 +991,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Top = 0
         Width = 5
         Height = 230
-        ExplicitLeft = 8
-        ExplicitHeight = 225
+        ExplicitHeight = 236
       end
       object tvGwt: TJvPageListTreeView
         Left = 0
@@ -1001,6 +1005,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
+        ExplicitHeight = 236
       end
       object jplGwt: TJvPageList
         Left = 126
@@ -1009,7 +1014,8 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Height = 230
         PropagateEnable = False
         Align = alClient
-        ExplicitHeight = 225
+        ExplicitWidth = 416
+        ExplicitHeight = 236
       end
     end
   end

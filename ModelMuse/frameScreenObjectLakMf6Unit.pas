@@ -14,7 +14,7 @@ uses
 
 type
   TLakeColumns = (lcStart, lcEnd, lcStatus, lcStage, lcRainfall, lcEvaporation,
-    lcRunoff, lcInflow, lcWithdrawal);
+    lcRunoff, lcInflow, lcWithdrawal, lcDensity);
 
   TLakeTableColumns = (ltcStage, ltcVolume, ltcSurfaceArea, ltcExchangeArea);
 
@@ -107,6 +107,7 @@ resourcestring
   StrExchangeArea = 'Exchange area';
   StrNone = 'none';
   StrInflow = 'Inflow';
+  StrDensity = 'Density';
 
 const NonOutletTabs = 4;
 
@@ -254,10 +255,23 @@ var
   APage: TJvCustomPage;
   AGwtFrame: TframeLakeGwtConcentrations;
   ANode: TJvPageIndexNode;
+  DensityUsed: Boolean;
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   FGettingData := True;
   try
     FreeAndNil(FOtherLakes);
+    if DensityUsed then
+    begin
+      rdgModflowBoundary.ColCount := 10;
+      rdgModflowBoundary.Columns[Ord(lcDensity)] :=
+        rdgModflowBoundary.Columns[Ord(lcWithdrawal)];
+      rdgModflowBoundary.Cells[Ord(lcDensity), 0] := StrDensity;
+    end
+    else
+    begin
+      rdgModflowBoundary.ColCount := 9;
+    end;
     ClearGrid(rdgModflowBoundary);
     seNumberOfTimes.AsInteger := 0;
     seNumberOfTimesChange(seNumberOfTimes);
@@ -280,6 +294,11 @@ begin
       TLakeMf6.DefaultBoundaryMethod(Lak6InflowPosition);
     PestMethod[Ord(lcWithdrawal)] :=
       TLakeMf6.DefaultBoundaryMethod(Lak6WithdrawalPosition);
+    if DensityUsed then
+    begin
+      PestMethod[Ord(lcDensity)] :=
+        TLakeMf6.DefaultBoundaryMethod(LakeDensityPosition);
+    end;
 
     ClearGrid(frameLakeTable.Grid);
     ALake := nil;
@@ -354,6 +373,11 @@ begin
           PestMethod[Ord(lcInflow)] := ALake.PestInflowMethod;
           PestModifier[Ord(lcWithdrawal)] := ALake.PestWithdrawalFormula;
           PestMethod[Ord(lcWithdrawal)] := ALake.PestWithdrawalMethod;
+          if DensityUsed then
+          begin
+            PestModifier[Ord(lcDensity)] := ALake.PestDensityFormula;
+            PestMethod[Ord(lcDensity)] := ALake.PestDensityMethod;
+          end;
 
           seNumberOfTimes.AsInteger := ALake.Values.Count;
           for TimeIndex := 0 to ALake.Values.Count - 1 do
@@ -369,6 +393,10 @@ begin
             rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1+PestRowOffset] := ALakeItem.Runoff;
             rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1+PestRowOffset] := ALakeItem.Inflow;
             rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1+PestRowOffset] := ALakeItem.Withdrawal;
+            if DensityUsed then
+            begin
+              rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset] := ALakeItem.Density;
+            end;
           end;
 
           cbHorizontal.Checked := lctHorizontal in ALake.LakeConnections;
@@ -439,6 +467,18 @@ begin
           if ALake.PestWithdrawalMethod <> FirstLake.PestWithdrawalMethod then
           begin
             PestMethodAssigned[Ord(lcWithdrawal)] := False;
+          end;
+
+          if DensityUsed then
+          begin
+            if ALake.PestDensityFormula <> FirstLake.PestDensityFormula then
+            begin
+              PestModifierAssigned[Ord(lcDensity)] := False
+            end;
+            if ALake.PestDensityMethod <> FirstLake.PestDensityMethod then
+            begin
+              PestMethodAssigned[Ord(lcDensity)] := False;
+            end;
           end;
 
           if  (cbHorizontal.State <> cbGrayed) and
@@ -742,7 +782,9 @@ var
   LakeConnections: TLakeConnectionTypes;
   SpeciesIndex: Integer;
   AGwtFrame: TframeLakeGwtConcentrations;
+  DensityUsed: Boolean;
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   LakeTimes := nil;
   Outlets := nil;
   ListOfScreenObjects := TList.Create;
@@ -846,6 +888,10 @@ begin
               ALakeItem.Runoff := rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1+PestRowOffset];
               ALakeItem.Inflow := rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1+PestRowOffset];
               ALakeItem.Withdrawal := rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1+PestRowOffset];
+              if DensityUsed then
+              begin
+                ALakeItem.Density := rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset];
+              end;
             end;
           end;
         end;
@@ -935,6 +981,18 @@ begin
         if PestMethodAssigned[Ord(lcWithdrawal)] then
         begin
           ALake.PestWithdrawalMethod := PestMethod[Ord(lcWithdrawal)];
+        end;
+
+        if DensityUsed then
+        begin
+          if PestModifierAssigned[Ord(lcDensity)] then
+          begin
+            ALake.PestDensityFormula := PestModifier[Ord(lcDensity)];
+          end;
+          if PestMethodAssigned[Ord(lcDensity)] then
+          begin
+            ALake.PestDensityMethod := PestMethod[Ord(lcDensity)];
+          end;
         end;
 
         if Outlets <> nil then

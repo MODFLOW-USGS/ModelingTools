@@ -13,7 +13,6 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     Top = 111
     Width = 422
     Height = 405
-    VertScrollBar.Position = 401
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -24,10 +23,11 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlDataSets: TCategoryPanel
-      Top = -61
+      Top = 340
       Height = 547
       Caption = 'Land Use Data Sets'
       TabOrder = 0
+      ExplicitWidth = 418
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -225,6 +225,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 395
         ColWidths = (
           146
           64
@@ -236,10 +237,11 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = -174
+      Top = 227
       Height = 113
       Caption = 'Land Use Options'
       TabOrder = 1
+      ExplicitWidth = 418
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
@@ -305,10 +307,11 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       end
     end
     object cpnlPrint: TCategoryPanel
-      Top = -401
+      Top = 0
       Height = 227
       Caption = 'Print'
       TabOrder = 2
+      ExplicitWidth = 418
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0

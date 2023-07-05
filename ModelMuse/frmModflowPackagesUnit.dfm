@@ -11603,7 +11603,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 568
               FixedCols = 0
               OnButtonClick = OwhmFrameButtonClick
-              ExplicitWidth = 568
+              ExplicitWidth = 564
             end
           end
           inherited cpnlOptions: TCategoryPanel
@@ -11862,7 +11862,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 484
-          ExplicitWidth = 480
+          ExplicitWidth = 484
         end
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 591
@@ -12139,7 +12139,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 568
               FixedCols = 0
               OnButtonClick = OwhmFrameButtonClick
-              ExplicitWidth = 568
+              ExplicitWidth = 564
             end
           end
           inherited cpnlOptions: TCategoryPanel
@@ -12274,7 +12274,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Width = 568
               FixedCols = 0
               OnButtonClick = OwhmFrameButtonClick
-              ExplicitWidth = 568
+              ExplicitWidth = 564
             end
           end
         end

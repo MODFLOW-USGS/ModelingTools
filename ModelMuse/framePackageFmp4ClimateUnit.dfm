@@ -188,8 +188,6 @@ inherited framePackageFmp4Climate: TframePackageFmp4Climate
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitLeft = 3
-    ExplicitTop = 188
   end
   object rdeRefEtToBare: TRbwDataEntry [5]
     Left = 16

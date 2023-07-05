@@ -17,7 +17,6 @@ inherited framePackageFmp4: TframePackageFmp4
     Top = 103
     Width = 575
     Height = 397
-    VertScrollBar.Position = 393
     VertScrollBar.Tracking = True
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -28,10 +27,11 @@ inherited framePackageFmp4: TframePackageFmp4
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlWaterBalanceRegions: TCategoryPanel
-      Top = 69
+      Top = 462
       Height = 377
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
+      ExplicitWidth = 571
       object rdgFarms: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -229,13 +229,15 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 548
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = -53
+      Top = 340
       Height = 122
       Caption = 'Options'
       TabOrder = 1
+      ExplicitWidth = 571
       object cbAllowPrinting: TCheckBox
         Left = 8
         Top = 8
@@ -268,11 +270,12 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlMnw2: TCategoryPanel
-      Top = -83
+      Top = 310
       Height = 30
       Caption = 'MNW2 Closure Criteria'
       Collapsed = True
       TabOrder = 2
+      ExplicitWidth = 571
       ExpandedHeight = 242
       object lblQClose: TLabel
         Left = 74
@@ -363,10 +366,11 @@ inherited framePackageFmp4: TframePackageFmp4
       end
     end
     object cpnlOutput: TCategoryPanel
-      Top = -393
+      Top = 0
       Height = 310
       Caption = 'Print'
       TabOrder = 3
+      ExplicitWidth = 571
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0

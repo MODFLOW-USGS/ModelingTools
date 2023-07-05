@@ -28,6 +28,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       Caption = 'Print'
       Collapsed = True
       TabOrder = 0
+      ExplicitWidth = 185
       ExpandedHeight = 81
       object clbPrint: TCheckListBox
         Left = 0
@@ -49,6 +50,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
       Height = 379
       Caption = 'Options'
       TabOrder = 1
+      ExplicitWidth = 185
       object pnl1: TPanel
         Left = 0
         Top = 0
@@ -251,6 +253,7 @@ inherited framePackageFmp4SalinityFlush: TframePackageFmp4SalinityFlush
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 395
       end
     end
   end

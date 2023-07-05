@@ -572,32 +572,34 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Height = 305
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 477
-        ExplicitHeight = 305
+        ExplicitWidth = 478
+        ExplicitHeight = 311
         inherited Panel: TPanel
           Top = 264
           Width = 477
-          ExplicitTop = 264
-          ExplicitWidth = 477
+          ExplicitTop = 270
+          ExplicitWidth = 478
           inherited lbNumber: TLabel
             Width = 152
             Caption = 'Number of rows in lake table'
             ExplicitWidth = 152
           end
           inherited sbAdd: TSpeedButton
-            Left = 387
+            Left = 388
             Anchors = [akTop, akRight]
-            ExplicitLeft = 278
+            ExplicitLeft = 389
           end
           inherited sbInsert: TSpeedButton
             Left = 417
+            Width = 24
             Anchors = [akTop, akRight]
-            ExplicitLeft = 308
+            ExplicitLeft = 418
+            ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
-            Left = 447
+            Left = 448
             Anchors = [akTop, akRight]
-            ExplicitLeft = 338
+            ExplicitLeft = 449
           end
         end
         inherited Grid: TRbwDataGrid4
@@ -707,10 +709,11 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         inherited pnlTop: TPanel
           Width = 477
-          ExplicitWidth = 477
+          ExplicitWidth = 478
           inherited edFormula: TLabeledEdit
-            EditLabel.ExplicitTop = -16
-            EditLabel.ExplicitWidth = 50
+            EditLabel.ExplicitLeft = 128
+            EditLabel.ExplicitTop = 12
+            EditLabel.ExplicitWidth = 44
           end
         end
       end
@@ -723,8 +726,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Top = 0
         Width = 5
         Height = 305
-        ExplicitLeft = 178
-        ExplicitHeight = 420
+        ExplicitHeight = 311
       end
       object tvGwt: TJvPageListTreeView
         Left = 0
@@ -738,6 +740,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
+        ExplicitHeight = 311
       end
       object jplGwt: TJvPageList
         Left = 126
@@ -746,6 +749,8 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Height = 305
         PropagateEnable = False
         Align = alClient
+        ExplicitWidth = 352
+        ExplicitHeight = 311
       end
     end
   end
