@@ -96,6 +96,8 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="Modflow6ConstantsUnit.pas"/>
+        <DCCReference Include="Mf6Variables.pas"/>
+        <DCCReference Include="Mf6Functions.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

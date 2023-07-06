@@ -5936,7 +5936,7 @@ begin
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPest;
     MawDensityPosition:
-      result := result := FValues.Density.ValuePestNames[0];
+      result := FValues.Density.ValuePestNames[0];
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPest;
     else
@@ -5988,7 +5988,7 @@ begin
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPestSeriesMethod;
     MawDensityPosition:
-      result := FValues.Density.ValuePestSeriesMethods[0]
+      result := FValues.Density.ValuePestSeriesMethods[0];
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPestSeriesMethod;
     else
@@ -6043,7 +6043,7 @@ begin
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPestSeriesName;
     MawDensityPosition:
-      result := FValues.Density.ValuePestSeriesNames[0]
+      result := FValues.Density.ValuePestSeriesNames[0];
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPestSeriesName;
     else
@@ -6296,8 +6296,8 @@ begin
         inherited;
     MawScalingLengthPosition:
         inherited;
-    MawDesityPosition:
-        FValues.Density.ValueTimeSeriesNames[0] := Value;;
+    MawDensityPosition:
+        FValues.Density.ValueTimeSeriesNames[0] := Value;
     MawFlowingWellReductionLengthPosition:
         inherited;
     else

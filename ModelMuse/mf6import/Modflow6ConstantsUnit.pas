@@ -61,6 +61,8 @@ const
   BMI_LENVARTYPE = LENMEMTYPE + 1; //< max. length for variable type C-strings
   BMI_LENVERSION = 256; //< length of version string, e.g. '6.3.1' or '6.4.1-dev'
 
+  Mf6Undefined = -842150451;
+
 implementation
 
 end.
