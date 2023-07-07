@@ -1375,6 +1375,7 @@ var
   Observer: TObserver;
   DivIndex: Integer;
   ConcIndex: Integer;
+  DensityIndex: Integer;
 begin
   ParentCollection := Collection as TSfrMf6Collection;
   Observer := FObserverList[SfrMf6InflowPosition];
@@ -1398,8 +1399,11 @@ begin
   Observer := FObserverList[SfrMf6RoughnessPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateRoughnessData;
 
-  Observer := FObserverList[SfrMg6DensityPosition];
-  Observer.OnUpToDateSet := ParentCollection.InvalidateDensity;
+  for DensityIndex := 0 to Density.Count - 1 do
+  begin
+    Density[DensityIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateDensity;
+  end;
 
   for DivIndex := 0 to DiversionCount - 1 do
   begin
@@ -1447,6 +1451,10 @@ end;
 function TSfrMf6Item.BoundaryFormulaCount: integer;
 begin
   result := DiversionCount + 7;
+  if frmGoPhast.PhastModel.BuoyancyDensityUsed then
+  begin
+    result := result + 1;
+  end;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     result := result + frmGoPhast.PhastModel.MobileComponents.Count * SfrGwtConcCount;
@@ -1460,6 +1468,7 @@ begin
   FDiversions := TStringList.Create;
   FDiversionFormulas := TIformulaList.Create;
 
+  // GWT
   SfrCollection := Collection as TSfrMf6Collection;
   FSpecifiedConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
@@ -1470,6 +1479,10 @@ begin
   FRunoffConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
   FInflowConcentrations := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
+    SfrCollection);
+
+  // Buoyancy
+  FDensity := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     SfrCollection);
 
   inherited;
@@ -1534,6 +1547,12 @@ begin
     FInflowConcentrations[Index].Value := '0';
   end;
   FInflowConcentrations.Free;
+
+  for Index := 0 to FDensity.Count - 1 do
+  begin
+    FDensity[Index].Value := '0';
+  end;
+  FDensity.Free;
 
   DiversionCount := 0;
   inherited;
@@ -3742,6 +3761,10 @@ begin
   FPestRunoffConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
   FPestInflowConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 
+  FPestDensity := TSftGwtConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
+  FPestDensity.UsedForPestSeries := True;
+  FPestDensityMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+
   if Model = nil then
   begin
     InvalidateEvent := nil;
@@ -3953,11 +3976,15 @@ begin
   FPestRunoffConcentrationMethods.Free;
   FPestInflowConcentrationMethods.Free;
 
+  FPestDensityMethods.Free;
+
   FPestSpecifiedConcentrations.Free;
   FPestRainfallConcentrations.Free;
   FPestEvaporationConcentrations.Free;
   FPestRunoffConcentrations.Free;
   FPestInflowConcentrations.Free;
+
+  FPestDensity.Free;
 
   FPestSpecifiedConcentrationObservers.Free;
   FPestRainfallConcentrationObservers.Free;

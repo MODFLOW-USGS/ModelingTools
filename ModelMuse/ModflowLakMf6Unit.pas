@@ -240,7 +240,6 @@ type
     FEvaporation: IFormulaObject;
     FInflow: IFormulaObject;
     FWithdrawal: IFormulaObject;
-    FDensity: IFormulaObject;
     // GWT
     FGwtStatus: TGwtBoundaryStatusCollection;
     FSpecifiedConcentrations: TLktGwtConcCollection;
@@ -248,6 +247,7 @@ type
     FEvapConcentrations: TLktGwtConcCollection;
     FRunoffConcentrations: TLktGwtConcCollection;
     FInflowConcentrations: TLktGwtConcCollection;
+    FDensity: TLktGwtConcCollection;
     function GetStage: string;
     procedure SetStage(const Value: string);
     function GetRainfall: string;
@@ -267,8 +267,7 @@ type
     procedure SetRainfallConcentrations(const Value: TLktGwtConcCollection);
     procedure SetRunoffConcentrations(const Value: TLktGwtConcCollection);
     procedure SetSpecifiedConcentrations(const Value: TLktGwtConcCollection);
-    function GetDensity: string;
-    procedure SetDensity(const Value: string);
+    procedure SetDensity(const Value: TLktGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -291,7 +290,8 @@ type
     property Runoff: string read GetRunoff write SetRunoff;
     property Inflow: string read GetInflow write SetInflow;
     property Withdrawal: string read GetWithdrawal write SetWithdrawal;
-    property Density: string read GetDensity write SetDensity;
+    // Buoyancy
+    property Density: TLktGwtConcCollection read FDensity write SetDensity;
     // GWT
     property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
     property SpecifiedConcentrations: TLktGwtConcCollection read FSpecifiedConcentrations
@@ -760,6 +760,7 @@ var
   DensityObserver: TObserver;
   InflowObserver: TObserver;
   ConcIndex: Integer;
+  DensityIndex: Integer;
 begin
   inherited;
 //  inherited;
@@ -783,8 +784,13 @@ begin
   WithdrawalObserver := FObserverList[Lak6WithdrawalPosition];
   WithdrawalObserver.OnUpToDateSet := ParentCollection.InvalidateWithdrawal;
 
-  DensityObserver := FObserverList[LakeDensityPosition];
-  DensityObserver.OnUpToDateSet := ParentCollection.InvalidateDensity;
+  for DensityIndex := 0 to Density.Count - 1 do
+  begin
+    Density[DensityIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateDensity;
+  end;
+//  DensityObserver := FObserverList[LakeDensityPosition];
+//  DensityObserver.OnUpToDateSet := ParentCollection.InvalidateDensity;
 
 //  for ConcIndex := 0 to GwtStatus.Count - 1 do
 //  begin
@@ -838,6 +844,10 @@ var
   LakCollection: TLakTimeCollection;
 begin
   LakCollection := Collection as TLakTimeCollection;
+  // Buoyancy
+  FDensity := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
+    LakCollection);
+  // GWT
   FSpecifiedConcentrations := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     LakCollection);
   FRainfallConcentrations := TLktGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
@@ -862,7 +872,6 @@ begin
   FEvaporation := CreateFormulaObject(dsoTop);
   FInflow := CreateFormulaObject(dsoTop);
   FWithdrawal := CreateFormulaObject(dsoTop);
-  FDensity := CreateFormulaObject(dsoTop);
 end;
 
 destructor TLakeTimeItem.Destroy;
@@ -900,6 +909,12 @@ begin
   end;
   FInflowConcentrations.Free;
 
+  for Index := 0 to FDensity.Count - 1 do
+  begin
+    FDensity[Index].Value := '0';
+  end;
+  FDensity.Free;
+
   inherited;
 end;
 
@@ -914,7 +929,14 @@ begin
     Lak6EvaporationPosition: result := Evaporation;
     Lak6InflowPosition: result := Inflow;
     Lak6WithdrawalPosition: result := Withdrawal;
-    LakeDensityPosition: result := Density;
+    LakeDensityPosition:
+      begin
+        if Density.Count < 1 then
+        begin
+          Density.Add;
+        end;
+        result := Density[0].Value;
+      end
     else
       begin
         // GWT
@@ -983,12 +1005,6 @@ begin
         end;
       end;
   end;
-end;
-
-function TLakeTimeItem.GetDensity: string;
-begin
-  Result := FDensity.Formula;
-  ResetItemObserver(LakeDensityPosition);
 end;
 
 function TLakeTimeItem.GetEvaporation: string;
@@ -1158,9 +1174,6 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FWithdrawal,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
-  frmGoPhast.PhastModel.FormulaManager.Remove(FDensity,
-    GlobalRemoveModflowBoundaryItemSubscription,
-    GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 procedure TLakeTimeItem.SetBoundaryFormula(Index: integer; const Value: string);
@@ -1181,7 +1194,13 @@ begin
     Lak6WithdrawalPosition:
       Withdrawal := Value;
     LakeDensityPosition:
-      Density := Value;
+      begin
+        if Density.Count < 1 then
+        begin
+          Density.Add;
+        end;
+        Density[0].Value := Value;
+      end;
     else
       begin
         // GWT
@@ -1252,9 +1271,9 @@ begin
   end;
 end;
 
-procedure TLakeTimeItem.SetDensity(const Value: string);
+procedure TLakeTimeItem.SetDensity(const Value: TLktGwtConcCollection);
 begin
-  UpdateFormulaBlocks(Value, LakeDensityPosition, FWithdrawal);
+  FDensity.Assign(Value);
 end;
 
 procedure TLakeTimeItem.SetEvapConcentrations(

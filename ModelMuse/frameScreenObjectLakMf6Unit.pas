@@ -395,7 +395,11 @@ begin
             rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1+PestRowOffset] := ALakeItem.Withdrawal;
             if DensityUsed then
             begin
-              rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset] := ALakeItem.Density;
+              if ALakeItem.Density.Count < 1 then
+              begin
+                ALakeItem.Density.Add;
+              end;
+              rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset] := ALakeItem.Density[0].Value;
             end;
           end;
 
@@ -890,7 +894,11 @@ begin
               ALakeItem.Withdrawal := rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1+PestRowOffset];
               if DensityUsed then
               begin
-                ALakeItem.Density := rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset];
+                if ALakeItem.Density.Count < 1 then
+                begin
+                  ALakeItem.Density.Add;
+                end;
+                ALakeItem.Density[0].Value := rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset];
               end;
             end;
           end;
