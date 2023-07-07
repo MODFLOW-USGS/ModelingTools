@@ -538,7 +538,6 @@ type
     procedure LinkStreambedTop;
     procedure LinkStreambedThickness;
     procedure LinkHydraulicConductivity;
-    procedure LenkDensity;
     procedure InvalidateInflowData(Sender: TObject);
     procedure InvalidateRainfallData(Sender: TObject);
     procedure InvalidateEvaporationData(Sender: TObject);
@@ -3766,8 +3765,7 @@ begin
   LinkStreambedTop;
   LinkStreambedThickness;
   LinkHydraulicConductivity;
-  LenkDensity;
-
+  
   ReachLength := StrObjectIntersectLength;
   ReachWidth := '1';
   Gradient := '0.001';
@@ -4789,12 +4787,6 @@ begin
   end;
 end;
 
-procedure TSfrMf6Boundary.LenkDensity;
-begin
-  Assert(False);
-  // This needs to be implemented.
-end;
-
 procedure TSfrMf6Boundary.LinkGradient;
 var
   LocalScreenObject: TScreenObject;
@@ -4931,7 +4923,6 @@ begin
   LinkStreambedTop;
   LinkStreambedThickness;
   LinkHydraulicConductivity;
-  LenkDensity;
 end;
 
 procedure TSfrMf6Boundary.RemoveFormulaObjects;
