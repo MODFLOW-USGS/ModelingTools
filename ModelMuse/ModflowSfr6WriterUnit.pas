@@ -1886,8 +1886,31 @@ var
   NameOfFile: string;
   CsvFile: string;
   BaseFileName: string;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
   WriteBeginOptions;
+
+  if Model.BuoyancyUsed then
+  begin
+    if Model.BuoyancyDensityUsed then
+    begin
+      WriteString('  AUXILIARY DENSITY');
+      if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
+      begin
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          ASpecies := Model.MobileComponents[SpeciesIndex];
+          WriteString(' ' + ASpecies.Name);
+        end;
+      end;
+      NewLine;
+    end;
+  end
+  else
+  begin
+    WriteAdditionalAuxVariables
+  end;
 
   PrintListInputOption;
 
@@ -1980,8 +2003,6 @@ begin
       NewLine
     end;
   end;
-
-  WriteAdditionalAuxVariables;
 
   WriteEndOptions
 end;
@@ -2082,6 +2103,11 @@ begin
         ndiv := 0;
       end;
       WriteInteger(ndiv);
+
+      if Model.BuoyancyDensityUsed then
+      begin
+        WriteFloat(0);
+      end;
 
       if Model.GwtUsed then
       begin
@@ -2582,6 +2608,15 @@ begin
           WriteValueOrFormula(ACell, SfrMf6RoughnessPosition);
           NewLine;
         end;
+
+        if Model.BuoyancyDensityUsed then
+        begin
+          WriteInteger(ReachNumber);
+          WriteString(' AUXILIARY DENSITY');
+          WriteValueOrFormula(ACell, SfrMg6DensityPosition);
+          NewLine;
+        end;
+
 
         if ACell.Values.Status <> ssInactive then
         begin

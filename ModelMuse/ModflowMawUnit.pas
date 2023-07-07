@@ -158,6 +158,7 @@ type
     FInjectionConcentrations: TMawGwtConcCollection;
     FSpecifiedConcentrations: TMawGwtConcCollection;
     FGwtStatus: TGwtBoundaryStatusCollection;
+    FDensity: TMawGwtConcCollection;
     function GetFlowingWellConductance: string;
     function GetFlowingWellElevation: string;
     function GetFlowingWellReductionLength: string;
@@ -187,6 +188,7 @@ type
     procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
     procedure SetInjectionConcentrations(const Value: TMawGwtConcCollection);
     procedure SetSpecifiedConcentrations(const Value: TMawGwtConcCollection);
+    procedure SetDensity(const Value: TMawGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -249,6 +251,12 @@ type
       write SetSpecifiedConcentrations;
     property InjectionConcentrations: TMawGwtConcCollection read FInjectionConcentrations
       write SetInjectionConcentrations;
+    // Buoyancy
+    property Density: TMawGwtConcCollection read FDensity write SetDensity
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
   TMawTimeListLink = class(TTimeListsModelLink)
@@ -266,6 +274,7 @@ type
     FMaxRate: TModflowTimeList;
     FPumpElevation: TModflowTimeList;
     FScalingLength: TModflowTimeList;
+    FDensity: TModflowTimeList;
     // GWT
     FGwtStatusList: TModflowTimeLists;
     FSpecifiedConcList: TModflowTimeLists;
@@ -292,6 +301,8 @@ type
     procedure InvalidateGwtStatus(Sender: TObject);
     procedure InvalidateSpecifiedConcentrations(Sender: TObject);
     procedure InvalidateInjectionConcentrations(Sender: TObject);
+    // Buoyancy
+    procedure InvalidateDensity(Sender: TObject);
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -611,7 +622,6 @@ type
       RadiusPosition = 10;
       BottomPosition = 11;
       InitialHeadPosition = 12;
-    function GetStartingConcentrations: TStringConcCollection;
     var
     FPestFlowingWellElevationMethod: TPestParamMethod;
     FPestPumpElevationMethod: TPestParamMethod;
@@ -660,6 +670,13 @@ type
     FPestSpecifiedConcentrations: TMawGwtConcCollection;
     FPestInjectionConcentrationMethods: TGwtPestMethodCollection;
     FPestSpecifiedConcentrationMethods: TGwtPestMethodCollection;
+    FPestDensity: TMawGwtConcCollection;
+    FPestDensityMethods: TGwtPestMethodCollection;
+    FPestDensityObservers: TObserverList;
+    function GetStartingConcentrations: TStringConcCollection;
+    procedure SetPestDensity(const Value: TMawGwtConcCollection);
+    procedure SetPestDensityMethods(const Value: TGwtPestMethodCollection);
+    function GetPestDensityObserver(const Index: Integer): TObserver;
     procedure SetWellNumber(const Value: Integer);
     function GetBottom: string;
     function GetInitialHead: string;
@@ -744,6 +761,7 @@ type
     function GetPestSpecifiedConcentrationObserver(const Index: Integer): TObserver;
     procedure InvalidatePestSpecConcData(Sender: TObject);
     procedure InvalidatePestInjConcData(Sender: TObject);
+    procedure InvalidatePestDensityData(Sender: TObject);
   protected
     property RadiusObserver: TObserver read GetRadiusObserver;
     property BottomObserver: TObserver read GetBottomObserver;
@@ -757,9 +775,6 @@ type
     procedure HandleChangedValue(Observer: TObserver); //override;
     function GetUsedObserver: TObserver; //override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
-//    procedure CreateFormulaObjects; //override;
-//    function BoundaryObserverPrefix: string; override;
-//    procedure CreateObservers; //override;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
@@ -785,6 +800,8 @@ type
       read GetPestSpecifiedConcentrationObserver;
     property PestInjectionConcentrationObserver[const Index: Integer]: TObserver
       read GetPestInjectionConcentrationObserver;
+    property PestDensityObserver[const Index: Integer]: TObserver
+      read GetPestDensityObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -876,11 +893,16 @@ type
         read FPestInjectionConcentrations write SetPestInjectionConcentrations;
       property PestSpecifiedConcentrations: TMawGwtConcCollection
         read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations;
-    property PestInjectionConcentrationMethods: TGwtPestMethodCollection
-      read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods;
-    property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
-      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
-  end;
+      property PestInjectionConcentrationMethods: TGwtPestMethodCollection
+        read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods;
+      property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
+        read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
+        // Buoyancy
+      property PestDensity: TMawGwtConcCollection
+        read FPestDensity write SetPestDensity;
+      property PestDensityMethods: TGwtPestMethodCollection
+        read FPestDensityMethods write SetPestDensityMethods;
+    end;
 
 const
   MawFlowingWellElevationPosition = 0;
@@ -892,8 +914,8 @@ const
   MawMaxRatePosition = 6;
   MawPumpElevationPosition = 7;
   MawScalingLengthPosition = 8;
-  MawDensityPosition = 9;
-  MawFlowingWellReductionLengthPosition = 10;
+  MawFlowingWellReductionLengthPosition = 9;
+  MawDensityPosition = 10;
   MawGwtStart = 11;
 
   MawRadiusPosition = 0;
@@ -1030,6 +1052,7 @@ resourcestring
   StrMaximumPumpingRate = 'Maximum_Pumping_Rate';
   StrPumpElevation = 'Pump_Elevation';
   StrScalingLength = 'Scaling_Length';
+  StrMawFluidDensity = 'Maw_Fluid_Density';
 
 { TMawSteadyConnectionRecord }
 
@@ -2043,12 +2066,17 @@ begin
   inherited;
   FPestInjectionConcentrationObservers := TObserverList.Create;
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
+  FPestDensityObservers := TObserverList.Create;
   FPestInjectionConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestInjectionConcentrations.UsedForPestSeries := True;
   FPestSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestSpecifiedConcentrations.UsedForPestSeries := True;
   FPestInjectionConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
   FPestSpecifiedConcentrationMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+
+  FPestDensity := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestDensity.UsedForPestSeries := True;
+  FPestDensityMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 
   FStartingConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   CreateFormulaObjects;
@@ -2084,15 +2112,23 @@ begin
   FInitialHead := CreateFormulaObjectBlocks(dso3D);
 
   LocalModel := ParentModel as TCustomModel;
-  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  if (LocalModel <> nil) then
   begin
-    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    if LocalModel.BuoyancyDensityUsed then
     begin
-      FPestSpecifiedConcentrations.Add;
+      PestDensity.Add;
     end;
-    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+
+    if LocalModel.GwtUsed then
     begin
-      FPestInjectionConcentrations.Add;
+      for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+      begin
+        FPestSpecifiedConcentrations.Add;
+      end;
+      for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+      begin
+        FPestInjectionConcentrations.Add;
+      end;
     end;
   end;
 
@@ -2118,6 +2154,11 @@ begin
     FObserverList.Add(RadiusObserver);
     FObserverList.Add(BottomObserver);
     FObserverList.Add(InitialHeadObserver);
+
+    for Index := 0 to PestDensity.Count - 1 do
+    begin
+      FObserverList.Add(PestDensityObserver[Index]);
+    end;
 
     for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
     begin
@@ -2175,6 +2216,10 @@ begin
       begin
         result := ppmMultiply;
       end;
+    MawDensityPosition:
+      begin
+        result := ppmMultiply;
+      end;
     else
       begin
         result := inherited;
@@ -2207,6 +2252,10 @@ begin
   FPestSpecifiedConcentrations.Free;
   FPestInjectionConcentrationObservers.Free;
   FPestSpecifiedConcentrationObservers.Free;
+
+  FPestDensityMethods.Free;
+  PestDensity.Free;
+  FPestDensityObservers.Free;
 end;
 
 function TMawBoundary.GetBottom: string;
@@ -2321,6 +2370,14 @@ begin
       begin
         result := PestFlowingWellReductionLengthFormula;
       end;
+    MawDensityPosition:
+      begin
+        if PestDensity.Count < 1 then
+        begin
+          PestDensity.Add;
+        end;
+        result := PestDensity[0].Value;
+      end
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -2397,6 +2454,14 @@ begin
       begin
         result := PestFlowingWellReductionLengthMethod;
       end;
+    MawDensityPosition:
+      begin
+        if PestDensityMethods.Count < 1 then
+        begin
+          PestDensityMethods.Add;
+        end;
+        result := PestDensityMethods[0].PestParamMethod;
+      end
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -2426,6 +2491,19 @@ begin
         Assert(False);
       end;
   end;
+end;
+
+function TMawBoundary.GetPestDensityObserver(const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FPestDensityObservers.Count do
+  begin
+    CreateObserver(Format('MawPestDensity_%d', [Index+1]), AObserver, nil);
+    FPestDensityObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestDensityData;
+  end;
+  result := FPestDensityObservers[Index];
 end;
 
 function TMawBoundary.GetPestFlowingWellConductanceFormula: string;
@@ -2700,6 +2778,14 @@ begin
     if MawFlowingWellReductionLengthPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[MawFlowingWellReductionLengthPosition]);
+    end;
+  end;
+
+  for Index := 0 to FPestDensity.Count - 1 do
+  begin
+    if FPestDensity[Index].ValueObject as TObject = Sender then
+    begin
+      List.Add(FObserverList[MawDensityPosition]);
     end;
   end;
 
@@ -3027,6 +3113,12 @@ begin
   end;
 end;
 
+procedure TMawBoundary.InvalidatePestDensityData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+  //Assert(False);
+end;
+
 procedure TMawBoundary.InvalidatePestInjConcData(Sender: TObject);
 begin
   { TODO -cGWT : This needs to be implemented }
@@ -3344,6 +3436,14 @@ begin
       begin
         PestFlowingWellReductionLengthFormula := Value;
       end;
+    MawDensityPosition:
+      begin
+        if PestDensity.Count < 1 then
+        begin
+          PestDensity.Add;
+        end;
+        PestDensity[0].Value := Value;
+      end
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -3420,6 +3520,14 @@ begin
       begin
         PestFlowingWellReductionLengthMethod := Value;
       end;
+    MawDensityPosition:
+      begin
+        if PestDensityMethods.Count < 1 then
+        begin
+          PestDensityMethods.Add;
+        end;
+        PestDensityMethods[0].PestParamMethod := Value;
+      end
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -3448,6 +3556,17 @@ begin
         Assert(False);
       end;
   end;
+end;
+
+procedure TMawBoundary.SetPestDensity(const Value: TMawGwtConcCollection);
+begin
+  FPestDensity.Assign(Value);
+end;
+
+procedure TMawBoundary.SetPestDensityMethods(
+  const Value: TGwtPestMethodCollection);
+begin
+  FPestDensityMethods.Assign(Value);
 end;
 
 procedure TMawBoundary.SetPestFlowingWellConductanceFormula(
@@ -3833,6 +3952,7 @@ begin
   // GWT
   SpecifiedConcentrations.Restore(Decomp, Annotations);
   InjectionConcentrations.Restore(Decomp, Annotations);
+  // Buoyancy
   Density.Restore(Decomp, Annotations);
 
   GwtStatusCount := ReadCompInt(Decomp);
@@ -4181,6 +4301,7 @@ begin
     GwtStatus := MawSource.GwtStatus;
     SpecifiedConcentrations := MawSource.SpecifiedConcentrations;
     InjectionConcentrations := MawSource.InjectionConcentrations;
+    Density := MawSource.Density;
   end
   else
   if Source is TMnw2TimeItem then
@@ -4232,6 +4353,7 @@ var
   ParentCollection: TMawWellCollection;
   AnObserver: TObserver;
   ConcIndex: Integer;
+  DensityIndex: Integer;
 begin
   ParentCollection := Collection as TMawWellCollection;
 
@@ -4265,6 +4387,12 @@ begin
   AnObserver := FObserverList[MawFlowingWellReductionLengthPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateFlowingWellReductionLengthData;
 
+  for DensityIndex := 0 to Density.Count - 1 do
+  begin
+    Density[DensityIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateDensity;
+  end;
+
 //  for ConcIndex := 0 to GwtStatus.Count - 1 do
 //  begin
 //    GwtStatus[ConcIndex].Observer.OnUpToDateSet
@@ -4282,7 +4410,6 @@ begin
     InjectionConcentrations[ConcIndex].Observer.OnUpToDateSet
       := ParentCollection.InvalidateInjectionConcentrations;
   end;
-
 end;
 
 function TMawItem.BoundaryFormulaCount: integer;
@@ -4303,6 +4430,8 @@ begin
   FSpecifiedConcentrations := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     MawCollection);
   FInjectionConcentrations := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
+    MawCollection);
+  FDensity := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     MawCollection);
 
   inherited;
@@ -4348,6 +4477,12 @@ begin
   end;
   FInjectionConcentrations.Free;
 
+  for Index := 0 to FDensity.Count - 1 do
+  begin
+    FDensity[Index].Value := '0';
+  end;
+  FDensity.Free;
+
   Rate := '0';
   WellHead := '0';
   FlowingWellElevation := '0';
@@ -4387,6 +4522,17 @@ begin
       result := ScalingLength;
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLength;
+    MawDensityPosition:
+      begin
+        if frmGoPhast.PhastModel.BuoyancyDensityUsed then
+        begin
+          if Density.Count < 1 then
+          begin
+            Density.Add
+          end;
+          result := Density[0].Value;
+        end;
+      end
     else
       begin
         // GWT
@@ -4466,6 +4612,7 @@ procedure TMawItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
   ConcIndex: Integer;
   Item: TGwtConcStringValueItem;
+  DensityIndex: Integer;
 begin
   inherited;
   if Sender = FFlowingWellConductance as TObject then
@@ -4507,6 +4654,15 @@ begin
   else if Sender = FWellHead as TObject then
   begin
     List.Add(FObserverList[MawWellHeadPosition]);
+  end;
+  // Buoyancy
+  for DensityIndex := 0 to Density.Count - 1 do
+  begin
+    Item := Density.Items[DensityIndex];
+    if Item.ValueObject as TObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
   end;
   // GWT
   for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
@@ -4619,6 +4775,7 @@ begin
       and (HeadLimitChoice = SourceItem.HeadLimitChoice)
       and SpecifiedConcentrations.IsSame(SourceItem.SpecifiedConcentrations)
       and InjectionConcentrations.IsSame(SourceItem.InjectionConcentrations)
+      and Density.IsSame(SourceItem.Density)
       and GwtStatus.IsSame(SourceItem.GwtStatus);
   end;
 end;
@@ -4682,6 +4839,17 @@ begin
       ScalingLength := Value;
     MawFlowingWellReductionLengthPosition:
       FlowingWellReductionLength := Value;
+    MawDensityPosition:
+      begin
+        if frmGoPhast.PhastModel.BuoyancyDensityUsed then
+        begin
+          if Density.Count < 1 then
+          begin
+            Density.Add;
+          end;
+          Density[0].Value := Value;
+        end;
+      end
     else
       begin
         // GWT
@@ -4717,6 +4885,11 @@ begin
         end;
       end;
   end;
+end;
+
+procedure TMawItem.SetDensity(const Value: TMawGwtConcCollection);
+begin
+  FDensity.Assign(Value);
 end;
 
 procedure TMawItem.SetFlowingWell(const Value: TFlowingWell);
@@ -4918,6 +5091,15 @@ begin
     FFlowingWellReductionLength.OnInvalidate := (Model as TCustomModel).InvalidateMawWell_Head;
   end;
   AddTimeList(FFlowingWellReductionLength);
+
+  FDensity := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FDensity.NonParamDescription := StrMawFluidDensity;
+  FDensity.ParamDescription := StrMawFluidDensity;
+  if Model <> nil then
+  begin
+    FDensity.OnInvalidate := (Model as TCustomModel).InvalidateMawDensityc;
+  end;
+  AddTimeList(FDensity);
 
   FGwtStatusList := TModflowTimeLists.Create;
   FSpecifiedConcList := TModflowTimeLists.Create;
@@ -5181,15 +5363,6 @@ begin
             ScalingLengthPestSeriesName := PestSeriesName;
             ScalingLengthPestSeriesMethod := PestSeriesMethod;
           end;
-        MawDensityPosition:
-          begin
-            Density.Values[FormulaIndex] := Expression.DoubleResult;
-            Density.ValueAnnotations[FormulaIndex] := ACell.Annotation;
-            Density.ValuePestNames[FormulaIndex] := PestName;
-            Density.ValuePestSeriesNames[FormulaIndex] := PestSeriesName;
-            Density.ValuePestSeriesMethods[FormulaIndex] := PestSeriesMethod;
-            Density.ValueTimeSeriesNames[FormulaIndex] := TimeSeriesName;
-          end;
         MawFlowingWellReductionLengthPosition:
           begin
             FlowingWellReductionLength := Expression.DoubleResult;
@@ -5197,7 +5370,16 @@ begin
             FlowingWellReductionLengthPest := PestName;
             FlowingWellReductionLengthPestSeriesName := PestSeriesName;
             FlowingWellReductionLengthPestSeriesMethod := PestSeriesMethod;
-          end
+          end;
+        MawDensityPosition:
+          begin
+            Density.Values[0] := Expression.DoubleResult;
+            Density.ValueAnnotations[0] := ACell.Annotation;
+            Density.ValuePestNames[0] := PestName;
+            Density.ValuePestSeriesNames[0] := PestSeriesName;
+            Density.ValuePestSeriesMethods[0] := PestSeriesMethod;
+            Density.ValueTimeSeriesNames[0] := TimeSeriesName;
+          end;
         else
           begin
             FormulaIndex := BoundaryFunctionIndex - MawGwtStart;
@@ -5317,6 +5499,34 @@ end;
 class function TMawWellCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMawTimeListLink;
+end;
+
+procedure TMawWellCollection.InvalidateDensity(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TMawTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TMawTimeListLink;
+    Link.FDensity.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FDensity.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TMawWellCollection.InvalidateFlowingWellConductanceData(
@@ -5863,10 +6073,10 @@ begin
         result := inherited;
     MawScalingLengthPosition:
         result := inherited;
-    MawDensityPosition:
-        result := FValues.Density.ValueTimeSeriesNames[0];
     MawFlowingWellReductionLengthPosition:
         result := inherited;
+    MawDensityPosition:
+        result := FValues.Density.ValueTimeSeriesNames[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -5935,10 +6145,10 @@ begin
       result := FValues.PumpElevationPest;
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPest;
-    MawDensityPosition:
-      result := FValues.Density.ValuePestNames[0];
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPest;
+    MawDensityPosition:
+      result := FValues.Density.ValuePestNames[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -5987,10 +6197,10 @@ begin
       result := FValues.PumpElevationPestSeriesMethod;
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPestSeriesMethod;
-    MawDensityPosition:
-      result := FValues.Density.ValuePestSeriesMethods[0];
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPestSeriesMethod;
+    MawDensityPosition:
+      result := FValues.Density.ValuePestSeriesMethods[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6042,10 +6252,10 @@ begin
       result := FValues.PumpElevationPestSeriesName;
     MawScalingLengthPosition:
       result := FValues.ScalingLengthPestSeriesName;
-    MawDensityPosition:
-      result := FValues.Density.ValuePestSeriesNames[0];
     MawFlowingWellReductionLengthPosition:
       result := FValues.FlowingWellReductionLengthPestSeriesName;
+    MawDensityPosition:
+      result := FValues.Density.ValuePestSeriesNames[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6119,10 +6329,10 @@ begin
       result := PumpElevationAnnotation;
     MawScalingLengthPosition:
       result := ScalingLengthAnnotation;
-    MawDensityPosition:
-      result := FValues.Density.ValueAnnotations[0];
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLengthAnnotation;
+    MawDensityPosition:
+      result := FValues.Density.ValueAnnotations[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6172,10 +6382,10 @@ begin
       result := PumpElevation;
     MawScalingLengthPosition:
       result := ScalingLength;
-    MawDensityPosition:
-      result := FValues.Density.Values[0];
     MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLength;
+    MawDensityPosition:
+      result := FValues.Density.Values[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6296,10 +6506,10 @@ begin
         inherited;
     MawScalingLengthPosition:
         inherited;
-    MawDensityPosition:
-        FValues.Density.ValueTimeSeriesNames[0] := Value;
     MawFlowingWellReductionLengthPosition:
         inherited;
+    MawDensityPosition:
+        FValues.Density.ValueTimeSeriesNames[0] := Value;
     else
       begin
         Index := Index-MawGwtStart;

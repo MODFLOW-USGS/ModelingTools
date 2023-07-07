@@ -2144,6 +2144,7 @@ that affects the model output should also have a comment. }
     function GetMf6TimesSeriesI: ITimesSeriesCollections;
     function GetGridI: ICustomModelGrid;
     function GetBuoyancyDensityUsed: Boolean;
+    function GetBuoyancyUsed: Boolean;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
@@ -2820,6 +2821,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMawPumpElevation(Sender: TObject);
     procedure InvalidateMawScalingLength(Sender: TObject);
     procedure InvalidateMawGwtConc(Sender: TObject);
+    procedure InvalidateMawDensityc(Sender: TObject);
 
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
@@ -3067,6 +3069,7 @@ that affects the model output should also have a comment. }
     function DoSutraUnsatRegionUsed(Sender: TObject): boolean;
     property SutraUnsatRegionUsed: TObjectUsedEvent read GetSutraUnsatRegionUsed;
     procedure GetPestParameterNames(ParameterNames: TStringList);
+    property BuoyancyUsed: Boolean read GetBuoyancyUsed;
     property BuoyancyDensityUsed: Boolean read GetBuoyancyDensityUsed;
   published
     // @name defines the grid used with PHAST.
@@ -26551,6 +26554,11 @@ begin
   ModflowPackages.MawPackage.InvalidateConcentrations;
 end;
 
+procedure TCustomModel.InvalidateMawDensityc(Sender: TObject);
+begin
+
+end;
+
 procedure TCustomModel.InvalidateMawFlowingWellConductance(Sender: TObject);
 begin
   ModflowPackages.MawPackage.FlowingWellConductance.Invalidate;
@@ -35419,6 +35427,11 @@ var
 begin
   Buoyancy := ModflowPackages.BuoyancyPackage;
   Result := Buoyancy.IsSelected and Buoyancy.DensityUsed;
+end;
+
+function TCustomModel.GetBuoyancyUsed: Boolean;
+begin
+  Result := ModflowPackages.BuoyancyPackage.IsSelected
 end;
 
 function TCustomModel.GetCapillaryFringeUsed: TObjectUsedEvent;

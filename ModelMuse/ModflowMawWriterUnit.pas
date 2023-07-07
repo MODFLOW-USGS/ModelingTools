@@ -69,6 +69,7 @@ type
       SpeciesIndex: Integer): Boolean;
 //    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
     function Mf6ObservationsUsed: Boolean; override;
+    procedure WriteAdditionalAuxVariables;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -1096,6 +1097,21 @@ begin
 
 end;
 
+procedure TModflowMAW_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
+end;
+
 procedure TModflowMAW_Writer.WriteConnectionData;
 var
   ConnectionIndex: Integer;
@@ -1263,6 +1279,21 @@ var
 begin
   WriteBeginOptions;
 
+  if Model.BuoyancyUsed then
+  begin
+    if Model.BuoyancyDensityUsed then
+    begin
+      WriteString('  AUXILIARY DENSITY');
+      NewLine;
+    end
+    else
+    begin
+      WriteString('  AUXILIARY');
+      WriteAdditionalAuxVariables;
+      NewLine;
+    end;
+  end;
+
   WriteBoundNamesOption;
 
   PrintListInputOption;
@@ -1351,6 +1382,7 @@ var
   WellIndex: Integer;
   AWell: TMawSteadyWellRecord;
   BoundName: string;
+  SpeciesIndex: Integer;
 begin
   WriteBeginPackageData;
 
@@ -1409,6 +1441,21 @@ begin
     end;
     WriteInteger(AWell.CellCount);
 
+    if Model.BuoyancyUsed then
+    begin
+      if Model.BuoyancyDensityUsed then
+      begin
+        WriteFloat(0);
+      end
+      else if Model.GwtUsed then
+      begin
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          WriteFloat(0);
+        end;
+      end;
+    end;
+
     BoundName := Copy(AWell.BoundName, 1, MaxBoundNameLength);
     BoundName := ' ''' + BoundName + ''' ';
     WriteString(BoundName);
@@ -1429,6 +1476,8 @@ var
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
   AScreenObject: TScreenObject;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
   if MvrWriter <> nil then
   begin
@@ -1572,19 +1621,33 @@ begin
         NewLine;
       end;
 
-//      if Model.GwtUsed then
-//      begin
-//        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-//        begin
-//          WriteString('  ');
-//          WriteInteger(ACell.WellNumber);
-//          WriteString(' AUXILIARY ');
-//          ASpecies := Model.MobileComponents[SpeciesIndex];
-//          WriteString(' ' + ASpecies.Name);
-//          WriteFloat(0);
-//          NewLine;
-//        end;
-//      end;
+      if Model.BuoyancyUsed then
+      begin
+        if Model.BuoyancyDensityUsed then
+        begin
+          WriteString('  ');
+          WriteInteger(ACell.WellNumber);
+          WriteString('  AUXILIARY Density');
+          WriteValueOrFormula(ACell, MawDensityPosition);
+          NewLine;
+        end
+        else
+        begin
+          if Model.GwtUsed then
+          begin
+            for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+            begin
+              WriteString('  ');
+              WriteInteger(ACell.WellNumber);
+              WriteString('  AUXILIARY ');
+              ASpecies := Model.MobileComponents[SpeciesIndex];
+              WriteString(' ' + ASpecies.Name);
+              WriteFloat(0);
+              NewLine;
+            end;
+          end;
+        end;
+      end;
 
       if ACell.MvrUsed and (MvrWriter <> nil)
         and (ACell.MawStatus <> mwInactive) and not WritingTemplate then

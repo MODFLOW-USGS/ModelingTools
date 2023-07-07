@@ -26,6 +26,7 @@ type
   // ssActive = stage is calculated.
   // ssSimple = stage is specified.
   TStreamStatus = (ssInactive, ssActive, ssSimple);
+
   TSfrMF6Record = record
     Cell: TCellLocation;
     Inflow: double;
@@ -94,6 +95,10 @@ type
     RunoffConcentrations: TGwtCellData;
     InflowConcentrations: TGwtCellData;
 
+    // Buyancy
+    // Species count should always be 1 for Density
+    Density: TGwtCellData;
+
     procedure Assign(const Item: TSfrMF6Record);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -144,6 +149,7 @@ type
     FEvapConcentrations: TSftGwtConcCollection;
     FRunoffConcentrations: TSftGwtConcCollection;
     FInflowConcentrations: TSftGwtConcCollection;
+    FDensity: TSftGwtConcCollection;
     function GetDiversions: TStrings;
     function GetEvaporation: string;
     function GetInflow: string;
@@ -172,6 +178,7 @@ type
     procedure SetRainfallConcentrations(const Value: TSftGwtConcCollection);
     procedure SetRunoffConcentrations(const Value: TSftGwtConcCollection);
     procedure SetSpecifiedConcentrations(const Value: TSftGwtConcCollection);
+    procedure SetDensity(const Value: TSftGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -224,6 +231,8 @@ type
       write SetRunoffConcentrations;
     property InflowConcentrations: TSftGwtConcCollection read FInflowConcentrations
       write SetInflowConcentrations;
+    // Buoyancy
+    property Density: TSftGwtConcCollection read FDensity write SetDensity;
   end;
 
   TSfrMf6TimeListLink = class(TTimeListsModelLink)
@@ -237,6 +246,8 @@ type
     FRoughness: TModflowTimeList;
     FStreamStatus: TModflowTimeList;
     FReachNumber: TModflowTimeList;
+    // Buoyancy
+    FDensity: TModflowTimeList;
     // GWT
     FGwtStatusList: TModflowTimeLists;
     FSpecifiedConcList: TModflowTimeLists;
@@ -249,7 +260,8 @@ type
     procedure CreateTimeLists; override;
     procedure UpdateGwtTimeLists; override;
   public
-    Destructor Destroy; override;
+    Destructor
+    Destroy; override;
   end;
 
   TSfrMf6Boundary = class;
@@ -272,6 +284,8 @@ type
     procedure InvalidateEvapConcentrations(Sender: TObject);
     procedure InvalidateRunoffConcentrations(Sender: TObject);
     procedure InvalidateInflowConcentrations(Sender: TObject);
+    // buoyancy
+    procedure InvalidateDensity(Sender: TObject);
   protected
     class function ItemClass: TBoundaryItemClass; override;
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -304,6 +318,7 @@ type
     function GetRainfallConcentrations: TGwtCellData;
     function GetRunoffConcentrations: TGwtCellData;
     function GetSpecifiedConcentrations: TGwtCellData;
+    function GetDensity: TGwtCellData;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -335,6 +350,8 @@ type
     Property EvapConcentrations: TGwtCellData read GetEvapConcentrations;
     Property RunoffConcentrations: TGwtCellData read GetRunoffConcentrations;
     Property InflowConcentrations: TGwtCellData read GetInflowConcentrations;
+    // Buoyancy
+    property Density: TGwtCellData read GetDensity;
   end;
 
   TDivisionPriority = (cpFraction, cpExcess, cpThreshold, cpUpTo);
@@ -487,6 +504,9 @@ type
     FPestEvaporationConcentrationObservers: TObserverList;
     FPestInflowConcentrationObservers: TObserverList;
     FPestRunoffConcentrationObservers: TObserverList;
+    FPestDensity: TSftGwtConcCollection;
+    FPestDensityMethods: TGwtPestMethodCollection;
+    FDensityObserver: TObserver;
     procedure SetDiversions(const Value: TDiversionCollection);
     procedure SetDownstreamSegments(const Value: TIntegerCollection);
     procedure SetSegmentNumber(const Value: Integer);
@@ -510,6 +530,7 @@ type
     function GetReachWidthObserver: TObserver;
     function GetStreambedThicknessObserver: TObserver;
     function GetStreambedTopObserver: TObserver;
+    function GetDensityObserver: TObserver;
     procedure InvalidateDisplayTimeLists;
     procedure LinkReachLength;
     procedure LinkReachWidth;
@@ -517,6 +538,7 @@ type
     procedure LinkStreambedTop;
     procedure LinkStreambedThickness;
     procedure LinkHydraulicConductivity;
+    procedure LenkDensity;
     procedure InvalidateInflowData(Sender: TObject);
     procedure InvalidateRainfallData(Sender: TObject);
     procedure InvalidateEvaporationData(Sender: TObject);
@@ -586,6 +608,8 @@ type
     procedure InvalidatePestInflowConcData(Sender: TObject);
     procedure InvalidatePestRunoffConcData(Sender: TObject);
     function GetStartingConcentrations: TStringConcCollection;
+    procedure SetPestDensity(const Value: TSftGwtConcCollection);
+    procedure SetPestDensityMethods(const Value: TGwtPestMethodCollection);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -626,6 +650,7 @@ type
       read GetPestRunoffConcentrationObserver;
     property PestInflowConcentrationObserver[const Index: Integer]: TObserver
       read GetPestInflowConcentrationObserver;
+    property PestDensityObserver: TObserver read GetDensityObserver;
   public
     Constructor Create(Model: IModelForTOrderedCollection; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -694,8 +719,8 @@ type
         read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations;
     property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
       read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
-      property PestRainfallConcentrations: TSftGwtConcCollection
-        read FPestRainfallConcentrations write SetPestRainfallConcentrations;
+    property PestRainfallConcentrations: TSftGwtConcCollection
+      read FPestRainfallConcentrations write SetPestRainfallConcentrations;
     property PestRainfallConcentrationMethods: TGwtPestMethodCollection
       read FPestRainfallConcentrationMethods write SetPestRainfallConcentrationMethods;
       property PestEvaporationConcentrations: TSftGwtConcCollection
@@ -710,6 +735,19 @@ type
         read FPestInflowConcentrations write SetPestInflowConcentrations;
     property PestInflowConcentrationMethods: TGwtPestMethodCollection
       read FPestInflowConcentrationMethods write SetPestInflowConcentrationMethods;
+    // Buoyancy
+    property PestDensity: TSftGwtConcCollection
+      read FPestDensity write SetPestDensity
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property PestDensityMethods: TGwtPestMethodCollection
+      read FPestDensityMethods write SetPestDensityMethods
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
 end;
 
 const
@@ -720,7 +758,8 @@ const
   SfrMf6UpstreamFractionPosition = 4;
   SfrMf6StagePosition = 5;
   SfrMf6RoughnessPosition = 6;
-  SfrMf6DiversionStartPosition = 7;
+  SfrMg6DensityPosition = 7;
+  SfrMf6DiversionStartPosition = 8;
 
   SfrMf6ReachLengthPosition = 0;
   SfrMf6ReachWidthPosition = 1;
@@ -860,6 +899,7 @@ resourcestring
   StrSFTEvaporationCon = ' SFT Evaporation Concentration';
   StrSFTRunoffConcentr = ' SFT Runoff Concentration';
   StrSFTInflowConcentr = ' SFT Inflow Concentration';
+  StrSFRFluidDensity = 'SFR Fluid Density';
 
 { TStrMF6Record }
 
@@ -873,6 +913,7 @@ begin
   EvapConcentrations.Assign(Item.EvapConcentrations);
   RunoffConcentrations.Assign(Item.RunoffConcentrations);
   InflowConcentrations.Assign(Item.InflowConcentrations);
+  Density.Assign(Item.Density);
   SetLength(GwtStatus, Length(GwtStatus));
 end;
 
@@ -977,6 +1018,9 @@ begin
   RunoffConcentrations.Cache(Comp, Strings);
   InflowConcentrations.Cache(Comp, Strings);
 
+  // buoyancy
+  Density.Cache(Comp, Strings);
+
   GwtStatusCount := Length(GwtStatus);
   WriteCompInt(Comp, GwtStatusCount);
   for SpeciesIndex := 0 to GwtStatusCount - 1 do
@@ -1042,6 +1086,9 @@ begin
   EvapConcentrations.RecordStrings(Strings);
   RunoffConcentrations.RecordStrings(Strings);
   InflowConcentrations.RecordStrings(Strings);
+
+  // Buoyancy
+  Density.RecordStrings(Strings);
 end;
 
 procedure TSfrMF6Record.Restore(Decomp: TDecompressionStream;
@@ -1150,6 +1197,9 @@ begin
   RunoffConcentrations.Restore(Decomp, Annotations);
   InflowConcentrations.Restore(Decomp, Annotations);
 
+  // buoyancy
+  Density.Restore(Decomp, Annotations);
+
   GwtStatusCount := ReadCompInt(Decomp);
   SetLength(GwtStatus, GwtStatusCount);
   for SpeciesIndex := 0 to GwtStatusCount - 1 do
@@ -1203,6 +1253,7 @@ begin
     FSfrMF6Array[Index].EvapConcentrations.SpeciesCount := FSpeciesCount;
     FSfrMF6Array[Index].RunoffConcentrations.SpeciesCount := FSpeciesCount;
     FSfrMF6Array[Index].InflowConcentrations.SpeciesCount := FSpeciesCount;
+    FSfrMF6Array[Index].Density.SpeciesCount := 1;
   end;
 end;
 
@@ -1347,6 +1398,9 @@ begin
 
   Observer := FObserverList[SfrMf6RoughnessPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateRoughnessData;
+
+  Observer := FObserverList[SfrMg6DensityPosition];
+  Observer.OnUpToDateSet := ParentCollection.InvalidateDensity;
 
   for DivIndex := 0 to DiversionCount - 1 do
   begin
@@ -1502,6 +1556,14 @@ begin
     SfrMf6UpstreamFractionPosition: result := UpstreamFraction;
     SfrMf6StagePosition: result := Stage;
     SfrMf6RoughnessPosition: result := Roughness;
+    SfrMg6DensityPosition:
+      begin
+        if Density.Count < 1 then
+        begin
+          Density.Add;
+        end;
+        result := Density[0].Value
+      end
     else
       begin
         Index := Index-SfrMf6DiversionStartPosition;
@@ -1633,6 +1695,7 @@ procedure TSfrMf6Item.GetPropertyObserver(Sender: TObject; List: TList);
 var
   ConcIndex: Integer;
   Item: TGwtConcStringValueItem;
+  DensityIndex: Integer;
 begin
   if Sender = FInflow as TObject then
   begin
@@ -1662,6 +1725,16 @@ begin
   begin
     List.Add(FObserverList[SfrMf6RoughnessPosition]);
   end;
+
+  for DensityIndex := 0 to Density.Count - 1 do
+  begin
+    Item := Density.Items[DensityIndex];
+    if Item.ValueObject as TObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+
   if FDiversionFormulas.IndexOf(Sender as TFormulaObject) >= 0 then
   begin
     List.Add(FObserverList[SfrMf6DiversionStartPosition]);
@@ -1879,7 +1952,10 @@ begin
       Stage := Value;
     SfrMf6RoughnessPosition:
       Roughness := Value;
-
+    SfrMg6DensityPosition:
+      begin
+        Density[0].Value := Value;
+      end
     else
       begin
         Index := Index-SfrMf6DiversionStartPosition;
@@ -1955,6 +2031,11 @@ begin
         end;
       end;
   end;
+end;
+
+procedure TSfrMf6Item.SetDensity(const Value: TSftGwtConcCollection);
+begin
+  FDensity.Assign(Value);
 end;
 
 procedure TSfrMf6Item.SetDiversionCount(const Value: Integer);
@@ -2408,6 +2489,18 @@ begin
             RoughnessPestSeriesMethod := PestSeriesMethod;
             RoughnessTimeSeriesName := TimeSeriesName;
           end;
+        SfrMg6DensityPosition:
+          begin
+              with Sfr6Storage.SfrMF6Array[Index] do
+              begin
+                SpecifiedConcentrations.Values[0] := Expression.DoubleResult;
+                SpecifiedConcentrations.ValueAnnotations[0] := ACell.Annotation;
+                SpecifiedConcentrations.ValuePestNames[0] := PestName;
+                SpecifiedConcentrations.ValuePestSeriesNames[0] := PestSeriesName;
+                SpecifiedConcentrations.ValuePestSeriesMethods[0] := PestSeriesMethod;
+                SpecifiedConcentrations.ValueTimeSeriesNames[0] := TimeSeriesName;
+              end;
+          end
         else
           begin
             DiversionCount := FSfrMf6Boundary.Diversions.Count;
@@ -2609,6 +2702,34 @@ end;
 class function TSfrMf6Collection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TSfrMf6TimeListLink;
+end;
+
+procedure TSfrMf6Collection.InvalidateDensity(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TSfrMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TSfrMf6TimeListLink;
+    Link.FDensity.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TSfrMf6TimeListLink;
+        Link.FDensity.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TSfrMf6Collection.InvalidateDiversionsData(Sender: TObject);
@@ -3233,6 +3354,9 @@ begin
     PestRunoffConcentrationMethods := SourceSfr6.PestRunoffConcentrationMethods;
     PestInflowConcentrations := SourceSfr6.PestInflowConcentrations;
     PestInflowConcentrationMethods := SourceSfr6.PestInflowConcentrationMethods;
+
+    PestDensity := SourceSfr6.PestDensity;
+    PestDensityMethods := SourceSfr6.PestDensityMethods;
   end
   else if Source is TSfrBoundary then
   begin
@@ -3642,6 +3766,7 @@ begin
   LinkStreambedTop;
   LinkStreambedThickness;
   LinkHydraulicConductivity;
+  LenkDensity;
 
   ReachLength := StrObjectIntersectLength;
   ReachWidth := '1';
@@ -3685,27 +3810,35 @@ begin
   FRoughnessFormula := CreateFormulaObjectBlocks(dso3D);
 
   LocalModel := ParentModel as TCustomModel;
-  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  if (LocalModel <> nil) then
   begin
-    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    if LocalModel.GwtUsed then
     begin
-      FPestSpecifiedConcentrations.Add;
+      for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+      begin
+        FPestSpecifiedConcentrations.Add;
+      end;
+      for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+      begin
+        FPestRainfallConcentrations.Add;
+      end;
+      for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+      begin
+        FPestEvaporationConcentrations.Add;
+      end;
+      for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+      begin
+        FPestRunoffConcentrations.Add;
+      end;
+      for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+      begin
+        FPestInflowConcentrations.Add;
+      end;
     end;
-    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+
+    if LocalModel.BuoyancyDensityUsed then
     begin
-      FPestRainfallConcentrations.Add;
-    end;
-    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
-    begin
-      FPestEvaporationConcentrations.Add;
-    end;
-    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
-    begin
-      FPestRunoffConcentrations.Add;
-    end;
-    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
-    begin
-      FPestInflowConcentrations.Add;
+      FPestDensity.Add;
     end;
   end;
 
@@ -3731,6 +3864,7 @@ begin
     FObserverList.Add(PestUpstreamFractionObserver);
     FObserverList.Add(PestStageObserver);
     FObserverList.Add(PestRoughnessObserver);
+    FObserverList.Add(PestDensityObserver);
 
     for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
     begin
@@ -3784,6 +3918,10 @@ begin
         result := ppmAdd;
       end;
     SfrMf6RoughnessPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    SfrMg6DensityPosition:
       begin
         result := ppmMultiply;
       end;
@@ -3846,6 +3984,15 @@ begin
     BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TSfrMf6Storage;
     AssignCells(BoundaryStorage, ValueTimeList, AModel);
   end;
+end;
+
+function TSfrMf6Boundary.GetDensityObserver: TObserver;
+begin
+  if FDensityObserver = nil then
+  begin
+    CreateObserver('SFR6_Fluid_Density_', FDensityObserver, nil);
+  end;
+  result := FDensityObserver;
 end;
 
 function TSfrMf6Boundary.GetGradient: string;
@@ -3917,6 +4064,14 @@ begin
       begin
         result := PestRoughnessFormula;
       end;
+    SfrMg6DensityPosition:
+      begin
+        if PestDensity.Count < 1 then
+        begin
+          PestDensity.Add
+        end;
+        Result := PestDensity[0].Value;
+      end
     else
       begin
         FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
@@ -4022,6 +4177,14 @@ begin
       begin
         result := PestRoughnessMethod;
       end;
+    SfrMg6DensityPosition:
+      begin
+        if PestDensityMethods.Count < 1 then
+        begin
+          PestDensityMethods.Add;
+        end;
+        result := PestDensityMethods[0].PestParamMethod;
+      end
     else
       begin
         FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
@@ -4355,6 +4518,15 @@ begin
     List.Add(FObserverList[SfrMf6RoughnessPosition + SfrMf6PestBoundaryOffset]);
   end;
 
+  for Index := 0 to PestDensity.Count - 1 do
+  begin
+    if PestDensity[Index].ValueObject as TObject = Sender then
+    begin
+      List.Add(FObserverList[SfrMg6DensityPosition + SfrMf6PestBoundaryOffset]);
+    end;
+  end;
+
+
   StartIndex := SfrMf6DiversionStartPosition + Diversions.Count;
   for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
   begin
@@ -4617,6 +4789,12 @@ begin
   end;
 end;
 
+procedure TSfrMf6Boundary.LenkDensity;
+begin
+  Assert(False);
+  // This needs to be implemented.
+end;
+
 procedure TSfrMf6Boundary.LinkGradient;
 var
   LocalScreenObject: TScreenObject;
@@ -4753,6 +4931,7 @@ begin
   LinkStreambedTop;
   LinkStreambedThickness;
   LinkHydraulicConductivity;
+  LenkDensity;
 end;
 
 procedure TSfrMf6Boundary.RemoveFormulaObjects;
@@ -4856,6 +5035,14 @@ begin
       begin
         PestRoughnessFormula := Value;
       end;
+    SfrMg6DensityPosition:
+      begin
+        if PestDensity.Count < 1 then
+        begin
+          PestDensity.Add;
+        end;
+        PestDensity[0].Value := Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-SfrMf6PestBoundaryOffset;
@@ -4944,6 +5131,14 @@ begin
       begin
         PestRoughnessMethod := Value;
       end;
+    SfrMg6DensityPosition:
+      begin
+        if PestDensityMethods.Count < 1 then
+        begin
+          PestDensityMethods.Add;
+        end;
+        PestDensityMethods[0].PestParamMethod := Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-SfrMf6DiversionStartPosition;
@@ -5007,6 +5202,17 @@ begin
         Assert(False);
       end;
   end;
+end;
+
+procedure TSfrMf6Boundary.SetPestDensity(const Value: TSftGwtConcCollection);
+begin
+  FPestDensity.Assign(Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestDensityMethods(
+  const Value: TGwtPestMethodCollection);
+begin
+  FPestDensityMethods.Assign(Value);
 end;
 
 procedure TSfrMf6Boundary.SetPestEvaporationConcentrationMethods(
@@ -5218,6 +5424,11 @@ begin
   result := FValues.Cell.Column;
 end;
 
+function TSfrMf6_Cell.GetDensity: TGwtCellData;
+begin
+  result := FValues.Density
+end;
+
 function TSfrMf6_Cell.GetEvapConcentrations: TGwtCellData;
 begin
   result := FValues.EvapConcentrations
@@ -5276,6 +5487,10 @@ begin
     SfrMf6UpstreamFractionPosition: result := inherited;
     SfrMf6StagePosition: result := FValues.StageTimeSeriesName;
     SfrMf6RoughnessPosition: result := FValues.RoughnessTimeSeriesName;
+    SfrMg6DensityPosition:
+      begin
+        result := FValues.Density.ValueTimeSeriesNames[0];
+      end
     else
       begin
         Index := Index - SfrMf6DiversionStartPosition;
@@ -5340,6 +5555,10 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPest;
     SfrMf6StagePosition: result := FValues.StagePest;
     SfrMf6RoughnessPosition: result := FValues.RoughnessPest;
+    SfrMg6DensityPosition:
+      begin
+        result := FValues.Density.ValuePestNames[0];
+      end;
     else
       begin
         Index := Index - SfrMf6DiversionStartPosition;
@@ -5395,6 +5614,10 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPestSeriesMethod;
     SfrMf6StagePosition: result := FValues.StagePestSeriesMethod;
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesMethod;
+    SfrMg6DensityPosition:
+      begin
+        result := FValues.Density.ValuePestSeriesMethods[0]
+      end;
     else
       begin
         Index := Index - SfrMf6DiversionStartPosition;
@@ -5453,6 +5676,10 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPestSeriesName;
     SfrMf6StagePosition: result := FValues.StagePestSeriesName;
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesName;
+    SfrMg6DensityPosition:
+      begin
+        result := FValues.Density.ValuePestSeriesNames[0];
+      end;
     else
       begin
         Index := Index - SfrMf6DiversionStartPosition;
@@ -5514,6 +5741,10 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionAnnotation;
     SfrMf6StagePosition: result := FValues.StageAnnotation;
     SfrMf6RoughnessPosition: result := FValues.RoughnessAnnotation;
+    SfrMg6DensityPosition:
+      begin
+        result := FValues.Density.ValueAnnotations[0]
+      end
     else
       begin
         Index := Index-SfrMf6DiversionStartPosition;
@@ -5570,6 +5801,10 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFraction;
     SfrMf6StagePosition: result := FValues.Stage;
     SfrMf6RoughnessPosition: result := FValues.Roughness;
+    SfrMg6DensityPosition:
+      begin
+        Result := FValues.Density.Values[0]
+      end
     else
       begin
         Index := Index-SfrMf6DiversionStartPosition;
@@ -5678,6 +5913,10 @@ begin
       FValues.StageTimeSeriesName := Value;
     SfrMf6RoughnessPosition:
       FValues.RoughnessTimeSeriesName := Value;
+    SfrMg6DensityPosition:
+      begin
+        FValues.Density.ValueTimeSeriesNames[0] := Value;
+      end
     else
       begin
         Index := Index - SfrMf6DiversionStartPosition;
@@ -6176,6 +6415,10 @@ begin
   FReachNumber.NonParamDescription := StrSFR6ReachNumber;
   FReachNumber.ParamDescription := StrSFR6ReachNumber;
 
+  FDensity := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FDensity.NonParamDescription := StrSFRFluidDensity;
+  FDensity.ParamDescription := StrSFRFluidDensity;
+
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -6226,6 +6469,7 @@ begin
   FRunoffConcList.Free;
   FInflowConcList.Free;
 
+  FDensity.Free;
   FReachNumber.Free;
   FStreamStatus.Free;
   FRoughness.Free;

@@ -247,6 +247,7 @@ type
     procedure WriteGwtFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
+    procedure WriteAdditionalAuxVariables;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -423,6 +424,21 @@ function TModflowLAKMf6Writer.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.LakMf6Package;
 
+end;
+
+procedure TModflowLAKMf6Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
 end;
 
 procedure TModflowLAKMf6Writer.WriteConnectionData;
@@ -2474,10 +2490,19 @@ var
 begin
   WriteBeginOptions;
 
-  if Model.BuoyancyDensityUsed then
+  if Model.BuoyancyUsed then
   begin
-    WriteString('  AUXILIARY Density');
-    NewLine;
+    if Model.BuoyancyDensityUsed then
+    begin
+      WriteString('  AUXILIARY Density');
+      NewLine;
+    end
+    else
+    begin
+      WriteString('  AUXILIARY');
+      WriteAdditionalAuxVariables;
+      NewLine;
+    end
   end;
   // [AUXILIARY <auxiliary(naux)>]
   WriteBoundNamesOption;
@@ -2752,7 +2777,7 @@ var
   LakeIndex: Integer;
   ALake: TLake;
   BoundName: string;
-//  SpeciesIndex: Integer;
+  SpeciesIndex: Integer;
 begin
   WriteBeginPackageData;
   WriteString('# <lakeno> <strt> <nlakeconn> [<aux(naux)>] [<boundname>]');
@@ -2773,6 +2798,21 @@ begin
     if Model.BuoyancyDensityUsed then
     begin
       WriteFloat(0);
+    end;
+
+    if Model.BuoyancyUsed then
+    begin
+      if Model.BuoyancyDensityUsed then
+      begin
+        WriteFloat(0);
+      end
+      else if Model.GwtUsed then
+      begin
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          WriteFloat(0);
+        end;
+      end;
     end;
 
     BoundName := Copy(ALake.FScreenObject.Name, 1, MaxBoundNameLength);
@@ -2806,6 +2846,8 @@ var
   MvrUsed: Boolean;
   UsedOutlets: TGenericIntegerList;
   ReceiverItem: TReceiverItem;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 //  SpeciesIndex: Integer;
 //  ASpecies: TMobileChemSpeciesItem;
 begin
@@ -3000,14 +3042,32 @@ begin
             WriteLakeValueOrFormula(ALakeSetting, Lak6WithdrawalPosition);
             NewLine;
 
-            if Model.BuoyancyDensityUsed then
+            if Model.BuoyancyUsed then
             begin
-              WriteString('  ');
-              WriteInteger(LakeIndex+1);
-              WriteString(' AUXILIARY Density');
-              WriteFloat(0);
-              WriteLakeValueOrFormula(ALakeSetting, LakeDensityPosition);
-              NewLine;
+              if Model.BuoyancyDensityUsed then
+              begin
+                WriteString('  ');
+                WriteInteger(LakeIndex+1);
+                WriteString('  AUXILIARY Density');
+                WriteLakeValueOrFormula(ALakeSetting, LakeDensityPosition);
+                NewLine;
+              end
+              else
+              begin
+                if Model.GwtUsed then
+                begin
+                  for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+                  begin
+                    WriteString('  ');
+                    WriteInteger(LakeIndex+1);
+                    WriteString('  AUXILIARY ');
+                    ASpecies := Model.MobileComponents[SpeciesIndex];
+                    WriteString(' ' + ASpecies.Name);
+                    WriteFloat(0);
+                    NewLine;
+                  end;
+                end;
+              end;
             end;
 
           end;

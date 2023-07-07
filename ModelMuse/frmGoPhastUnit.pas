@@ -13564,7 +13564,7 @@ begin
         if DotPosition > 0 then
         begin
           Beep;
-          MessageDlg(StrSorryPESTDoesnt, mtError, [mbOK], 0);
+          MessageDlg(StrSorryPESTDoesnt + sLineBreak + TempFileName, mtError, [mbOK], 0);
           Exit;
         end;
       end;

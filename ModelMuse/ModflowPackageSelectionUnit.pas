@@ -2973,6 +2973,7 @@ Type
     FScalingLength: TModflowBoundaryDisplayTimeList;
     FPumpElevation: TModflowBoundaryDisplayTimeList;
     FFlowingWellReductionLength: TModflowBoundaryDisplayTimeList;
+    FDensity: TModflowBoundaryDisplayTimeList;
     FSaveGwtBudget: Boolean;
     FSaveGwtConcentration: Boolean;
     FSaveGwtBudgetCsv: Boolean;
@@ -3009,6 +3010,8 @@ Type
       NewUseList: TStringList);
     procedure GetMfFlowingWellReductionLengthUseList(Sender: TObject;
       NewUseList: TStringList);
+    procedure GetMfDensityUseList(Sender: TObject;
+      NewUseList: TStringList);
     procedure SetSaveGwtBudget(const Value: Boolean);
     procedure SetSaveGwtConcentration(const Value: Boolean);
     procedure SetSaveGwtBudgetCsv(const Value: Boolean);
@@ -3018,6 +3021,7 @@ Type
     procedure GetGwtRateUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMawUseList(DataIndex: integer; NewUseList: TStringList;
       const DisplayName: string);
+    function DensityUsed(Sender: TObject): boolean;
   public
     procedure InitializeVariables; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -3051,6 +3055,8 @@ Type
       FPumpElevation;
     property ScalingLength: TModflowBoundaryDisplayTimeList read
       FScalingLength;
+    property Density: TModflowBoundaryDisplayTimeList read
+      FDensity;
     procedure InvalidateConcentrations;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
@@ -7454,6 +7460,7 @@ resourcestring
   StrAddedDemandsS = 'FMP4 Added Demand %s';
   StrHasSalinityDemandsS = 'FMP4 Crop Has Salinity Demand %s';
   StrFMP4CropHasSalini = 'FMP4 Crop_Has_Salinity_Demand';
+  StrMAWFluidDensity = 'MAW Fluid Density';
 
 const
   KDensity = 'Density';
@@ -22290,6 +22297,12 @@ begin
     FlowingWellReductionLength.Name := StrMAWWellRedLength;
     AddTimeList(FlowingWellReductionLength);
 
+    FDensity := TModflowBoundaryDisplayTimeList.Create(Model);
+    Density.OnInitialize := InitializeMawDisplay;
+    Density.OnGetUseList := GetMfDensityUseList;
+    Density.OnTimeListUsed := DensityUsed;
+    Density.Name := StrMAWFluidDensity;
+    AddTimeList(Density);
 
     FGwtSpecifiedConc := TMfBoundDispObjectList.Create;
     FGwtRate := TMfBoundDispObjectList.Create;
@@ -22298,6 +22311,22 @@ begin
 
 
   InitializeVariables;
+end;
+
+function TMawPackage.DensityUsed(Sender: TObject): boolean;
+begin
+  result := PackageUsed(Sender);
+  if result then
+  begin
+    if (FModel <> nil) then
+    begin
+      result := (FModel as TCustomModel).BuoyancyDensityUsed;
+    end
+    else
+    begin
+      result := False;
+    end;
+  end;
 end;
 
 destructor TMawPackage.Destroy;
@@ -22432,6 +22461,12 @@ procedure TMawPackage.GetMaximumPumpRateUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
   GetMawUseList(MawMaxRatePosition, NewUseList, StrMAWPumpingRate);
+end;
+
+procedure TMawPackage.GetMfDensityUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+
 end;
 
 procedure TMawPackage.GetMfFlowingWellConductanceUseList(Sender: TObject;
