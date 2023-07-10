@@ -58,7 +58,7 @@ uses System.UITypes,
   framePackageFmp4SoilsUnit, framePackageFmp4ClimateUnit,
   framePackageFmp4SurfaceWaterUnit, framePackageFmp4WellsUnit,
   framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit,
-  framePackageFmp4SalinityFlushUnit;
+  framePackageFmp4SalinityFlushUnit, framePackageBuoyancyUnit;
 
 type
 
@@ -300,6 +300,8 @@ type
     jvspFmp4SalinityFlush: TJvStandardPage;
     framePkgFmp4SalinityFlush: TframePackageFmp4SalinityFlush;
     dlgOpenSelectExternalFile: TOpenDialog;
+    jvspBuoy: TJvStandardPage;
+    framePkgBuoyancy: TframePackageBuoyancy;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -2180,6 +2182,10 @@ procedure TfrmModflowPackages.frameGridMobileGridSetEditText(Sender: TObject;
 begin
   inherited;
   UpdateGwtFrames;
+  if (ACol = 0) and (ARow >= 1) then
+  begin
+    framePkgBuoyancy.rdgChemDensity.Cells[Ord(ccName), ARow] := Value;
+  end;
 end;
 
 procedure TfrmModflowPackages.frameGridMobileGridStateChange(Sender: TObject;
@@ -2196,6 +2202,8 @@ begin
   frameChemSpecies.frameGridMobile.seNumberChange(Sender);
   UpdateSpeciesNames;
   UpdateGwtFrames;
+  framePkgBuoyancy.rdgChemDensity.RowCount :=
+    frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1;
 end;
 
 procedure TfrmModflowPackages.frameGwtProcessrcSelectionControllerEnabledChange(
@@ -2906,6 +2914,9 @@ begin
     frameChemSpecies.GetMt3dmsChemSpecies(
       frmGoPhast.PhastModel.MobileComponents,
       frmGoPhast.PhastModel.ImmobileComponents);
+
+    framePkgBuoyancy.GetMt3dmsChemSpecies(
+      frmGoPhast.PhastModel.MobileComponents);
 
     frameSFRParameterDefinitiondgParametersSetEditText(
       frameSFRParameterDefinition.dgParameters, 0, 1,
@@ -4014,6 +4025,9 @@ begin
   frameChemSpecies.SetMt3dmsChemSpecies(
     frmGoPhast.PhastModel.MobileComponents,
     frmGoPhast.PhastModel.ImmobileComponents);
+  framePkgBuoyancy.SetMt3dmsChemSpecies(
+    frmGoPhast.PhastModel.MobileComponents);
+
   Undo.UpdateMt3dmsChemSpecies;
 
   frmGoPhast.UndoStack.Submit(Undo);
@@ -4477,11 +4491,15 @@ begin
 
     Packages.StoPackage.Frame := framePkgSto;
     FPackageList.Add(Packages.StoPackage);
+
+    Packages.BuoyancyPackage.Frame := framePkgBuoyancy;
+    FPackageList.Add(Packages.BuoyancyPackage);
   end
   else
   begin
     framePkgNpf.NilNode;
     framePkgSto.NilNode;
+    framePkgBuoyancy.NilNode;
   end;
 
   if frmGoPhast.DisvUsed then

@@ -7258,13 +7258,30 @@ Type
   TBuoyancyPackage = class(TModflowPackageSelection)
   private
     FDensityUsed: Boolean;
+    FStoredRefDensity: TRealStorage;
+    FRightHandSide: Boolean;
+    FWriteDensity: Boolean;
     procedure SetDensityUsed(const Value: Boolean);
+    procedure SetStoredRefDensity(const Value: TRealStorage);
+    function GetRefDensity: double;
+    procedure SetRefDensity(const Value: double);
+    procedure SetRightHandSide(const Value: Boolean);
+    procedure SetWriteDensity(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
+    property RefDensity: double read GetRefDensity write SetRefDensity;
   published
     Property DensityUsed: Boolean read FDensityUsed write SetDensityUsed;
+    // denseref
+    property StoredRefDensity: TRealStorage read FStoredRefDensity
+      write SetStoredRefDensity;
+    // HHFORMULATION_RHS
+    property RightHandSide: Boolean read FRightHandSide write SetRightHandSide;
+    // densityfile
+    property WriteDensity: Boolean read FWriteDensity write SetWriteDensity;
   end;
 
 const
@@ -29816,24 +29833,56 @@ end;
 { TBuoyancyPackage }
 
 procedure TBuoyancyPackage.Assign(Source: TPersistent);
+var
+  OtherBuoyancy: TBuoyancyPackage;
 begin
   if Source is TBuoyancyPackage then
   begin
-    DensityUsed := TBuoyancyPackage(Source).DensityUsed
+    OtherBuoyancy := TBuoyancyPackage(Source);
+    DensityUsed := OtherBuoyancy.DensityUsed;
+    RefDensity := OtherBuoyancy.RefDensity;
+    RightHandSide := OtherBuoyancy.RightHandSide;
+    WriteDensity := OtherBuoyancy.WriteDensity;
   end;
   inherited;
 end;
 
 constructor TBuoyancyPackage.Create(Model: TBaseModel);
+var
+  OnChangeEvent: TNotifyEvent;
 begin
   inherited;
+  if Model <> nil then
+  begin
+    OnChangeEvent := Model.Invalidate;
+  end
+  else
+  begin
+    OnChangeEvent := nil;
+  end;
+  FStoredRefDensity := TRealStorage.Create(OnChangeEvent);
+
   InitializeVariables;
+end;
+
+destructor TBuoyancyPackage.Destroy;
+begin
+  FStoredRefDensity.Free;
+  inherited;
+end;
+
+function TBuoyancyPackage.GetRefDensity: double;
+begin
+  result := StoredRefDensity.Value;
 end;
 
 procedure TBuoyancyPackage.InitializeVariables;
 begin
   inherited;
+  FStoredRefDensity.Value := 1000;
   FDensityUsed := False;
+  RightHandSide := False;
+  WriteDensity := False;
 end;
 
 procedure TBuoyancyPackage.SetDensityUsed(const Value: Boolean);
@@ -29852,6 +29901,26 @@ begin
       Density.Name := KDensity;
     end;
   end;
+end;
+
+procedure TBuoyancyPackage.SetRefDensity(const Value: double);
+begin
+  StoredRefDensity.Value := Value;
+end;
+
+procedure TBuoyancyPackage.SetRightHandSide(const Value: Boolean);
+begin
+  SetBooleanProperty(FRightHandSide, Value);
+end;
+
+procedure TBuoyancyPackage.SetStoredRefDensity(const Value: TRealStorage);
+begin
+  FStoredRefDensity.Assign(Value);
+end;
+
+procedure TBuoyancyPackage.SetWriteDensity(const Value: Boolean);
+begin
+  SetBooleanProperty(FWriteDensity, Value);
 end;
 
 end.

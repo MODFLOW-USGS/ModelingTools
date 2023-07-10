@@ -1449,6 +1449,11 @@ begin
     Inc(Result);
   end;
 
+  if BuoyancyPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
   LocalModel := Model as TCustomModel;
   if LocalModel.GwtUsed then
   begin

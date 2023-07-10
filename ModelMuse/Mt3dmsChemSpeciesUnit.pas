@@ -197,10 +197,18 @@ type
       write SetImmobileDistCoeficients;
     // Buoyancy package drhodc
     property StoredDensitySlope: TRealStorage read FStoredDensitySlope
-      write SetStoredDensitySlope;
+      write SetStoredDensitySlope
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
     // Buoyancy package crhoref
     property StoredRefConcentration: TRealStorage read FStoredRefConcentration
-      write SetStoredRefConcentration;
+      write SetStoredRefConcentration
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)

@@ -25,6 +25,7 @@ type
       ARow: Integer; const Value: TCheckBoxState);
   private
     FOnEnableTimeControls: TNotifyEvent;
+    FOnMobileChemSpeciesCountChanged: TNotifyEvent;
     procedure GetMt3dComponents(Mt3DComponents: TCustomChemSpeciesCollection;
       AFrame: TframeGrid);
     procedure SetMt3dComponents(Mt3DComponents: TCustomChemSpeciesCollection;
@@ -135,6 +136,10 @@ begin
   if dlgOpenSelectFile.Execute then
   begin
     Grid.Cells[ACol, ARow] := dlgOpenSelectFile.FileName;
+  end;
+  if Grid = frameGridMobile.Grid then
+  begin
+
   end;
 end;
 

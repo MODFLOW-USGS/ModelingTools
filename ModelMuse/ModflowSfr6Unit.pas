@@ -1450,11 +1450,11 @@ end;
 
 function TSfrMf6Item.BoundaryFormulaCount: integer;
 begin
-  result := DiversionCount + 7;
-  if frmGoPhast.PhastModel.BuoyancyDensityUsed then
-  begin
-    result := result + 1;
-  end;
+  result := DiversionCount + Succ(SfrMg6DensityPosition);
+//  if frmGoPhast.PhastModel.BuoyancyDensityUsed then
+//  begin
+//    result := result + 1;
+//  end;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     result := result + frmGoPhast.PhastModel.MobileComponents.Count * SfrGwtConcCount;

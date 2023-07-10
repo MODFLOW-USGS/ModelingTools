@@ -82,14 +82,6 @@ resourcestring
 
 { TframeMt3dBasicPkg }
 
-//procedure TframeMt3dBasicPkg.frameGridSpeciesGridButtonClick(Sender: TObject;
-//  ACol, ARow: Integer);
-//var
-//  Grid: TStringGrid;
-//begin
-//  inherited;
-//end;
-
 procedure TframeMt3dBasicPkg.GetData(Package: TModflowPackageSelection);
 var
   BasicPackage: TMt3dBasic;

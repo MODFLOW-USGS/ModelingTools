@@ -4414,7 +4414,7 @@ end;
 
 function TMawItem.BoundaryFormulaCount: integer;
 begin
-  Result := 10;
+  Result := Succ(MawDensityPosition);
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     result := result + frmGoPhast.PhastModel.MobileComponents.Count*2;
@@ -4524,6 +4524,7 @@ begin
       result := FlowingWellReductionLength;
     MawDensityPosition:
       begin
+        result := '0';
         if frmGoPhast.PhastModel.BuoyancyDensityUsed then
         begin
           if Density.Count < 1 then
@@ -4536,6 +4537,7 @@ begin
     else
       begin
         // GWT
+        result := '0';
         if frmGoPhast.PhastModel.GwtUsed then
         begin
           Index := Index-MawGwtStart;

@@ -872,7 +872,9 @@ uses
   AbstractGridInterfaceUnit in 'AbstractGridInterfaceUnit.pas',
   ModelCellInterfaceUnit in 'ModelCellInterfaceUnit.pas',
   frmFmpFormulaEditorUnit in 'frmFmpFormulaEditorUnit.pas' {frmFmpFormulaEditor},
-  frameLeachUnit in 'frameLeachUnit.pas' {frameLeach: TFrame};
+  frameLeachUnit in 'frameLeachUnit.pas' {frameLeach: TFrame},
+  framePackageBuoyancyUnit in 'framePackageBuoyancyUnit.pas' {framePackageBuoyancy: TFrame},
+  ModflowBuoyancyWriterUnit in 'ModflowBuoyancyWriterUnit.pas';
 
 {$R *.res}
 

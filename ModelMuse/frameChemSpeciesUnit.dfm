@@ -21,15 +21,14 @@ object frameChemSpecies: TframeChemSpecies
     Align = alClient
     Enabled = False
     TabOrder = 0
-    ExplicitLeft = 254
-    ExplicitTop = 1
-    ExplicitWidth = 385
-    ExplicitHeight = 198
+    ExplicitLeft = 253
+    ExplicitWidth = 387
+    ExplicitHeight = 480
     inherited Panel: TPanel
       Top = 439
       Width = 387
-      ExplicitTop = 157
-      ExplicitWidth = 385
+      ExplicitTop = 439
+      ExplicitWidth = 387
       inherited sbAdd: TSpeedButton
         Left = 199
         ExplicitLeft = 147
@@ -41,10 +40,6 @@ object frameChemSpecies: TframeChemSpecies
       inherited sbDelete: TSpeedButton
         Left = 273
         ExplicitLeft = 204
-      end
-      inherited seNumber: TJvSpinEdit
-        Height = 28
-        ExplicitHeight = 28
       end
     end
     inherited Grid: TRbwDataGrid4
@@ -140,14 +135,12 @@ object frameChemSpecies: TframeChemSpecies
     Align = alLeft
     Enabled = False
     TabOrder = 1
-    ExplicitLeft = 1
-    ExplicitTop = 1
     ExplicitWidth = 248
-    ExplicitHeight = 198
+    ExplicitHeight = 480
     inherited Panel: TPanel
       Top = 439
       Width = 248
-      ExplicitTop = 157
+      ExplicitTop = 439
       ExplicitWidth = 248
       inherited sbAdd: TSpeedButton
         Left = 123
@@ -160,10 +153,6 @@ object frameChemSpecies: TframeChemSpecies
       inherited sbDelete: TSpeedButton
         Left = 171
         ExplicitLeft = 171
-      end
-      inherited seNumber: TJvSpinEdit
-        Height = 28
-        ExplicitHeight = 28
       end
     end
     inherited Grid: TRbwDataGrid4

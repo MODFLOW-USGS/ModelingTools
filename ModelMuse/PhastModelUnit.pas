@@ -5224,7 +5224,7 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit,
   ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit,
   ModflowTimeInterfaceUnit, Modflow6TimeSeriesUnit,
-  LockedGlobalVariableChangers;
+  LockedGlobalVariableChangers, ModflowBuoyancyWriterUnit;
 
 
 
@@ -43064,6 +43064,7 @@ var
   SrcWriter: TModflowSrcWriter;
   ExchangeWriter: TModflowGwfGwtExchangeWriter;
   FmiWriter: TModflowFmiWriter;
+  BuoyancyWriter: TBuoyancyWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -43707,6 +43708,21 @@ begin
           end;
           FDataArrayManager.CacheDataArrays;
           Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.MawPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          BuoyancyWriter := TBuoyancyWriter.Create(self, etExport);
+          try
+            BuoyancyWriter.WriteFile(FileName);
+          finally
+            BuoyancyWriter.Free;
+          end;
           if not frmProgressMM.ShouldContinue then
           begin
             Exit;

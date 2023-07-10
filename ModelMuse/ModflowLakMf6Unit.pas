@@ -832,7 +832,7 @@ end;
 
 function TLakeTimeItem.BoundaryFormulaCount: integer;
 begin
-  result := 6;
+  result := Succ(LakeDensityPosition);
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     result := result + frmGoPhast.PhastModel.MobileComponents.Count *5;

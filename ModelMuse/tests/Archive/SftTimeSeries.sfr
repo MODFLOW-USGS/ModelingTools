@@ -1,5 +1,6 @@
-# SFR: MODFLOW-6 Stream Flow Routing package file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+# SFR: MODFLOW-6 Stream Flow Routing package file created on 7/7/2023 by ModelMuse version 5.1.1.33.
 BEGIN OPTIONS
+  AUXILIARY Chem
     PRINT_INPUT
     PRINT_STAGE
     PRINT_FLOWS
@@ -14,7 +15,6 @@ BEGIN OPTIONS
     UNIT_CONVERSION  1.283833650957E+005 
     OBS6 FILEIN SftTimeSeries.ob_sfr
   MOVER
-  AUXILIARY Chem
 END OPTIONS
 
 BEGIN DIMENSIONS
