@@ -4,8 +4,8 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   Caption = 'Export Model Outline'
   ClientHeight = 310
   ClientWidth = 342
-  ExplicitWidth = 358
-  ExplicitHeight = 349
+  ExplicitWidth = 354
+  ExplicitHeight = 348
   TextHeight = 18
   object lblModel: TLabel
     Left = 8
@@ -25,7 +25,7 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   object rgExportChoice: TRadioGroup
     Left = 8
     Top = 64
-    Width = 318
+    Width = 314
     Height = 153
     Anchors = [akLeft, akTop, akRight]
     Caption = 'What to export'
@@ -39,6 +39,7 @@ inherited frmExportModelOutline: TfrmExportModelOutline
       'Active area grid lines')
     TabOrder = 1
     OnClick = rgExportChoiceClick
+    ExplicitWidth = 310
   end
   object pnlBottom: TPanel
     Left = 0
@@ -48,7 +49,8 @@ inherited frmExportModelOutline: TfrmExportModelOutline
     Align = alBottom
     ParentColor = True
     TabOrder = 3
-    ExplicitTop = 239
+    ExplicitTop = 263
+    ExplicitWidth = 338
     object btnCancel: TBitBtn
       Left = 207
       Top = 6

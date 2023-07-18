@@ -1026,6 +1026,7 @@ var
   LocalFormulaObject: TFormulaObject;
 begin
   LocalFormulaObject := FormulaObject as TFormulaObject;
+  FormulaObject := nil;
   ChangeFormula(LocalFormulaObject, NewFormula, Parser, OnRemoveSubscription,
     OnRestoreSubscription, Subject);
   FormulaObject := LocalFormulaObject;

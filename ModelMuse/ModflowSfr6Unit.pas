@@ -757,7 +757,7 @@ const
   SfrMf6UpstreamFractionPosition = 4;
   SfrMf6StagePosition = 5;
   SfrMf6RoughnessPosition = 6;
-  SfrMg6DensityPosition = 7;
+  SfrMf6DensityPosition = 7;
   SfrMf6DiversionStartPosition = 8;
 
   SfrMf6ReachLengthPosition = 0;
@@ -1450,7 +1450,7 @@ end;
 
 function TSfrMf6Item.BoundaryFormulaCount: integer;
 begin
-  result := DiversionCount + Succ(SfrMg6DensityPosition);
+  result := DiversionCount + Succ(SfrMf6DensityPosition);
 //  if frmGoPhast.PhastModel.BuoyancyDensityUsed then
 //  begin
 //    result := result + 1;
@@ -1574,7 +1574,7 @@ begin
     SfrMf6UpstreamFractionPosition: result := UpstreamFraction;
     SfrMf6StagePosition: result := Stage;
     SfrMf6RoughnessPosition: result := Roughness;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         if Density.Count < 1 then
         begin
@@ -1970,7 +1970,7 @@ begin
       Stage := Value;
     SfrMf6RoughnessPosition:
       Roughness := Value;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         Density[0].Value := Value;
       end
@@ -2507,11 +2507,12 @@ begin
             RoughnessPestSeriesMethod := PestSeriesMethod;
             RoughnessTimeSeriesName := TimeSeriesName;
           end;
-        SfrMg6DensityPosition:
+        SfrMf6DensityPosition:
           begin
-            if Length(Sfr6Storage.SfrMF6Array[Index]) < 1 then
+            if Length(Sfr6Storage.SfrMF6Array) < 1 then
             begin
-              SetLength(Sfr6Storage.SfrMF6Array, 1);
+              Sfr6Storage.SpeciesCount := 1;
+//              SetLength(Sfr6Storage.FSfrMF6Array, 1);
             end;
             with Sfr6Storage.SfrMF6Array[Index] do
             begin
@@ -3946,7 +3947,7 @@ begin
       begin
         result := ppmMultiply;
       end;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         result := ppmMultiply;
       end;
@@ -4093,7 +4094,7 @@ begin
       begin
         result := PestRoughnessFormula;
       end;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         if PestDensity.Count < 1 then
         begin
@@ -4206,7 +4207,7 @@ begin
       begin
         result := PestRoughnessMethod;
       end;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         if PestDensityMethods.Count < 1 then
         begin
@@ -4551,7 +4552,7 @@ begin
   begin
     if PestDensity[Index].ValueObject as TObject = Sender then
     begin
-      List.Add(FObserverList[SfrMg6DensityPosition + SfrMf6PestBoundaryOffset]);
+      List.Add(FObserverList[SfrMf6DensityPosition + SfrMf6PestBoundaryOffset]);
     end;
   end;
 
@@ -5057,7 +5058,7 @@ begin
       begin
         PestRoughnessFormula := Value;
       end;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         if PestDensity.Count < 1 then
         begin
@@ -5153,7 +5154,7 @@ begin
       begin
         PestRoughnessMethod := Value;
       end;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         if PestDensityMethods.Count < 1 then
         begin
@@ -5509,7 +5510,7 @@ begin
     SfrMf6UpstreamFractionPosition: result := inherited;
     SfrMf6StagePosition: result := FValues.StageTimeSeriesName;
     SfrMf6RoughnessPosition: result := FValues.RoughnessTimeSeriesName;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         result := FValues.Density.ValueTimeSeriesNames[0];
       end
@@ -5577,7 +5578,7 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPest;
     SfrMf6StagePosition: result := FValues.StagePest;
     SfrMf6RoughnessPosition: result := FValues.RoughnessPest;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         result := FValues.Density.ValuePestNames[0];
       end;
@@ -5636,7 +5637,7 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPestSeriesMethod;
     SfrMf6StagePosition: result := FValues.StagePestSeriesMethod;
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesMethod;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         result := FValues.Density.ValuePestSeriesMethods[0]
       end;
@@ -5698,7 +5699,7 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPestSeriesName;
     SfrMf6StagePosition: result := FValues.StagePestSeriesName;
     SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesName;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         result := FValues.Density.ValuePestSeriesNames[0];
       end;
@@ -5763,7 +5764,7 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionAnnotation;
     SfrMf6StagePosition: result := FValues.StageAnnotation;
     SfrMf6RoughnessPosition: result := FValues.RoughnessAnnotation;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         result := FValues.Density.ValueAnnotations[0]
       end
@@ -5823,7 +5824,7 @@ begin
     SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFraction;
     SfrMf6StagePosition: result := FValues.Stage;
     SfrMf6RoughnessPosition: result := FValues.Roughness;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         Result := FValues.Density.Values[0]
       end
@@ -5935,7 +5936,7 @@ begin
       FValues.StageTimeSeriesName := Value;
     SfrMf6RoughnessPosition:
       FValues.RoughnessTimeSeriesName := Value;
-    SfrMg6DensityPosition:
+    SfrMf6DensityPosition:
       begin
         FValues.Density.ValueTimeSeriesNames[0] := Value;
       end

@@ -4097,10 +4097,10 @@ begin
   // Get rid of the model.
 //  FreeAndNil(FPhastModel);
   // Formula manager needs FPhastModel to be defined during FPhastModel.Free;
-  FPhastModel.Free;
-  FPhastModel := nil;
   FreeAndNil(FObjectsExpanded);
   FreeAndNil(FDataSetsExpanded);
+  FPhastModel.Free;
+  FPhastModel := nil;
 //  FPhastModel := nil;
   inherited;
 //  OutputDebugString('SAMPLING OFF');

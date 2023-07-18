@@ -2613,7 +2613,7 @@ begin
         begin
           WriteInteger(ReachNumber);
           WriteString(' AUXILIARY DENSITY');
-          WriteValueOrFormula(ACell, SfrMg6DensityPosition);
+          WriteValueOrFormula(ACell, SfrMf6DensityPosition);
           NewLine;
         end;
 

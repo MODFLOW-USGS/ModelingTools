@@ -11859,6 +11859,10 @@ constructor TScreenObject.Create(AnOwner: TComponent);
 var
   InvalidateModelEvent: TNotifyEvent;
 begin
+  FElevationFormulaObject:= nil;
+  FHigherElevationFormulaObject:= nil;
+  FLowerElevationFormulaObject:= nil;
+
   inherited Create(nil);
   FObjectLabel := TObjectLabel.Create;
   FObjectLabel.OnChange := RefreshGui;

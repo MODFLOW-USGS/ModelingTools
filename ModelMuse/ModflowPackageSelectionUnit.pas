@@ -22350,6 +22350,7 @@ destructor TMawPackage.Destroy;
 begin
   FGwtSpecifiedConc.Free;
   FGwtRate.Free;
+  FDensity.Free;
   FFlowingWellReductionLength.Free;
   FPumpElevation.Free;
   FScalingLength.Free;

@@ -462,20 +462,22 @@ begin
   Model := frmGoPhast.PhastModel;
   if Model.ModelSelection in SutraSelection then
   begin
-    rgExportChoice.Items[0] := 'Mesh outline';
-    rgExportChoice.Items[1] := 'Active elements';
-    rgExportChoice.Controls[1].Enabled := False;
-    rgExportChoice.Items[2] := 'Active and inactive elements';
-    rgExportChoice.Controls[2].Enabled := False;
-    rgExportChoice.Controls[3].Enabled := False;
-    rgExportChoice.Controls[4].Enabled := False;
+    rgExportChoice.Items[Ord(ecEntireGrid)] := 'Mesh outline';
+    rgExportChoice.Items[Ord(edOutlinecurrentLayer)] := 'Active elements';
+    rgExportChoice.Controls[Ord(edOutlinecurrentLayer)].Enabled := False;
+    rgExportChoice.Items[Ord(ecActiveCells)] := 'Active and inactive elements';
+    rgExportChoice.Controls[Ord(ecActiveCells)].Enabled := False;
+    rgExportChoice.Controls[Ord(ecActiveAndInactive)].Enabled := False;
+    rgExportChoice.Controls[Ord(ecGridLinesAll)].Enabled := False;
   end
   else if Model.DisvUsed then
   begin
-    rgExportChoice.Controls[3].Enabled := False;
-    rgExportChoice.Controls[4].Enabled := False;
+    rgExportChoice.Controls[Ord(ecGridLinesAll)].Enabled := False;
+    rgExportChoice.Controls[Ord(ecGridLinesActive)].Enabled := False;
   end;
 end;
+//(ecEntireGrid, edOutlinecurrentLayer, ecActiveCells,
+//    ecActiveAndInactive, ecGridLinesAll, ecGridLinesActive);
 
 procedure TfrmExportModelOutline.GetActiveOutlineOfCurrentLayer(
   var ActiveCells: TGpcPolygonClass;
