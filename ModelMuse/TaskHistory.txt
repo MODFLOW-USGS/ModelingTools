@@ -31452,5 +31452,31 @@ object TTaskHistory
         'Testing'
         'Buoyancy'
         'MF-2015')
+    end
+    item
+      Date = 45118.000000000000000000
+    end
+    item
+      Date = 45119.000000000000000000
+    end
+    item
+      Date = 45120.000000000000000000
+    end
+    item
+      Date = 45121.000000000000000000
+    end
+    item
+      Date = 45122.000000000000000000
+    end
+    item
+      Date = 45123.000000000000000000
+    end
+    item
+      Date = 45124.000000000000000000
+    end
+    item
+      Date = 45125.000000000000000000
+      Categories.Strings = (
+        'Bug fix')
     end>
 end

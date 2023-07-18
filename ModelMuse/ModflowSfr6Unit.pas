@@ -2509,15 +2509,19 @@ begin
           end;
         SfrMg6DensityPosition:
           begin
-              with Sfr6Storage.SfrMF6Array[Index] do
-              begin
-                SpecifiedConcentrations.Values[0] := Expression.DoubleResult;
-                SpecifiedConcentrations.ValueAnnotations[0] := ACell.Annotation;
-                SpecifiedConcentrations.ValuePestNames[0] := PestName;
-                SpecifiedConcentrations.ValuePestSeriesNames[0] := PestSeriesName;
-                SpecifiedConcentrations.ValuePestSeriesMethods[0] := PestSeriesMethod;
-                SpecifiedConcentrations.ValueTimeSeriesNames[0] := TimeSeriesName;
-              end;
+            if Length(Sfr6Storage.SfrMF6Array[Index]) < 1 then
+            begin
+              SetLength(Sfr6Storage.SfrMF6Array, 1);
+            end;
+            with Sfr6Storage.SfrMF6Array[Index] do
+            begin
+              SpecifiedConcentrations.Values[0] := Expression.DoubleResult;
+              SpecifiedConcentrations.ValueAnnotations[0] := ACell.Annotation;
+              SpecifiedConcentrations.ValuePestNames[0] := PestName;
+              SpecifiedConcentrations.ValuePestSeriesNames[0] := PestSeriesName;
+              SpecifiedConcentrations.ValuePestSeriesMethods[0] := PestSeriesMethod;
+              SpecifiedConcentrations.ValueTimeSeriesNames[0] := TimeSeriesName;
+            end;
           end
         else
           begin
