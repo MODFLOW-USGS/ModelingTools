@@ -2509,19 +2509,19 @@ begin
           end;
         SfrMf6DensityPosition:
           begin
-            if Length(Sfr6Storage.SfrMF6Array) < 1 then
+            if Sfr6Storage.SpeciesCount < 1 then
             begin
               Sfr6Storage.SpeciesCount := 1;
 //              SetLength(Sfr6Storage.FSfrMF6Array, 1);
             end;
             with Sfr6Storage.SfrMF6Array[Index] do
             begin
-              SpecifiedConcentrations.Values[0] := Expression.DoubleResult;
-              SpecifiedConcentrations.ValueAnnotations[0] := ACell.Annotation;
-              SpecifiedConcentrations.ValuePestNames[0] := PestName;
-              SpecifiedConcentrations.ValuePestSeriesNames[0] := PestSeriesName;
-              SpecifiedConcentrations.ValuePestSeriesMethods[0] := PestSeriesMethod;
-              SpecifiedConcentrations.ValueTimeSeriesNames[0] := TimeSeriesName;
+              Density.Values[0] := Expression.DoubleResult;
+              Density.ValueAnnotations[0] := ACell.Annotation;
+              Density.ValuePestNames[0] := PestName;
+              Density.ValuePestSeriesNames[0] := PestSeriesName;
+              Density.ValuePestSeriesMethods[0] := PestSeriesMethod;
+              Density.ValueTimeSeriesNames[0] := TimeSeriesName;
             end;
           end
         else
@@ -3327,6 +3327,19 @@ var
   STopParen: string;
   LocalScreenObject: TScreenObject;
   EFormula: string;
+  ISFROPT: Integer;
+  ICALC: Integer;
+  HCondUsed: Boolean;
+  ThickUsed: Boolean;
+  ElevUsed: Boolean;
+  WidthUsed: Boolean;
+  DepthUsed: Boolean;
+  PriorStageUsed: Boolean;
+  PriorStage: string;
+  PriorElevationUsed: Boolean;
+  PriorDepthUsed: Boolean;
+  PriorElevation: string;
+  PriorDepth: string;
 //  DiversionSeg: TSDiversionItem;
 begin
   if Source is TSfrMf6Boundary then
@@ -3388,29 +3401,83 @@ begin
     SourceSfrMf2005 := TSfrBoundary(Source);
     SegmentNumber := SourceSfrMf2005.SegmentNumber;
     LocalModel := frmGoPhast.PhastModel;
+    ISFROPT := LocalModel.ModflowPackages.SfrPackage.Isfropt;
+
     DefineByReach := LocalModel.ModflowPackages.SfrPackage.ISFROPT in [1,2,3];
 
     SfrItem := SourceSfrMf2005.Values[0] as TSfrItem;
     ReachLength := SfrItem.ReachLength;
 
+    ParamItem := SourceSfrMf2005.ParamIcalc[0] as TSfrParamIcalcItem;
+    ICALC := ParamItem.ICalc;
+
+    case ISFROPT of
+      1:
+        begin
+          WidthUsed := ICALC  <= 1;
+        end;
+      2,3, 4:
+        begin
+          if ICALC <= 0 then
+          begin
+            WidthUsed := True;
+          end
+          else if ICALC >= 2 then
+          begin
+            WidthUsed := False;
+          end
+          else
+          begin
+            WidthUsed := True;
+          end;
+        end;
+      5:
+        begin
+          if ICALC <= 0 then
+          begin
+            WidthUsed := True;
+          end
+          else if ICALC = 1 then
+          begin
+            WidthUsed := True;
+          end
+          else
+          begin
+            WidthUsed := False;
+          end;
+        end;
+      else
+        begin
+          WidthUsed := ICALC  <= 1;
+        end;
+    end;
+
+
     UpstreamSegment := SourceSfrMf2005.UpstreamSegmentValues[0] as TSfrSegmentItem;
     DownstreamSegment := SourceSfrMf2005.DownstreamSegmentValues[0] as TSfrSegmentItem;
-    if UpstreamSegment.StreamWidth = DownstreamSegment.StreamWidth then
+    if WidthUsed then
     begin
-      ReachWidth := UpstreamSegment.StreamWidth
+      if UpstreamSegment.StreamWidth = DownstreamSegment.StreamWidth then
+      begin
+        ReachWidth := UpstreamSegment.StreamWidth
+      end
+      else
+      begin
+        ReachWidth := 'Interpolate(FractionOfObjectLength, '
+          + UpstreamSegment.StreamWidth
+          + ', 0, '
+          + DownstreamSegment.StreamWidth
+          + ', 1)';
+        if LocalScreenObject.Count <= 1 then
+        begin
+          ReachWidth := '(' +UpstreamSegment.StreamWidth + ' + '
+            + DownstreamSegment.StreamWidth + ')/2';
+        end;
+      end;
     end
     else
     begin
-      ReachWidth := 'Interpolate(FractionOfObjectLength, '
-        + UpstreamSegment.StreamWidth
-        + ', 0, '
-        + DownstreamSegment.StreamWidth
-        + ', 1)';
-      if LocalScreenObject.Count <= 1 then
-      begin
-        ReachWidth := '(' +UpstreamSegment.StreamWidth + ' + '
-          + DownstreamSegment.StreamWidth + ')/2';
-      end;
+      ReachWidth := '1';
     end;
 
 
@@ -3519,75 +3586,169 @@ begin
       end;            
     end;
 
-//    ChannelItem := SourceSfrMf2005.ChannelValues[0];
-//    Roughness := ChannelItem.ChannelRoughness;
-
-//    UpstreamFraction := '1';
-
     ParamItem := SourceSfrMf2005.ParamIcalc[0] as TSfrParamIcalcItem;
+    ICALC := ParamItem.ICalc;
+
     DownstreamSegments.Clear;
     if ParamItem.OutflowSegment <> 0 then
     begin
       DownstreamSegments.Add.Value := ParamItem.OutflowSegment;
     end;
 
-//    Diversions.Clear;
-//    if ParamItem.DiversionSegment <> 0 then
-//    begin
-//      DiversionItem := Diversions.Add;
-//      DiversionItem.DownstreamSegment := ParamItem.DiversionSegment;
-//      case Abs(ParamItem.IPRIOR) of
-//        0:
-//          begin
-//            DiversionItem.Priority := cpUpTo;
-//          end;
-//        1:
-//          begin
-//            DiversionItem.Priority := cpThreshold;
-//          end;
-//        2:
-//          begin
-//            DiversionItem.Priority := cpFraction;
-//          end;
-//        3:
-//          begin
-//            DiversionItem.Priority := cpExcess;
-//          end;
-//      end;
-//    end;
-
     Values.Assign(SourceSfrMf2005.ParamIcalc);
     Assert(Values.Count = SourceSfrMf2005.UpstreamSegmentValues.Count);
     Assert(Values.Count = SourceSfrMf2005.SegmentFlows.Count);
     Assert(Values.Count = SourceSfrMf2005.ChannelValues.Count);
 
+    PriorStageUsed := False;
+    PriorElevationUsed := False;
+    PriorDepthUsed := False;
+    PriorStage := '';
+    PriorElevation := '';
+    PriorDepth := '';
     for ItemIndex := 0 to Values.Count - 1 do
     begin
       SfrMf6Item := Values[ItemIndex] as TSfrMf6Item;
 
+      HCondUsed := not (ISFROPT in [1,2,3]);
+      case ISFROPT of
+        1, 2, 3:
+          begin
+            ThickUsed := False;
+          end;
+        4, 5:
+          begin
+            case ICALC of
+              1, 2:
+                begin
+                  ThickUsed := ItemIndex = 0;
+                end;
+              else
+                begin
+                  ThickUsed := True;
+                end;
+            end;
+          end;
+        else
+          begin
+            ThickUsed := True;
+          end;
+      end;
+      ElevUsed := ThickUsed;
+
+      case ISFROPT of
+        1:
+          begin
+            WidthUsed := ICALC  <= 1;
+          end;
+        2,3, 4:
+          begin
+            if ICALC <= 0 then
+            begin
+              WidthUsed := True;
+            end
+            else if ICALC >= 2 then
+            begin
+              WidthUsed := False;
+            end
+            else
+            begin
+              WidthUsed := ItemIndex = 0;
+            end;
+          end;
+        5:
+          begin
+            if ICALC <= 0 then
+            begin
+              WidthUsed := True;
+            end
+            else if ICALC = 1 then
+            begin
+              WidthUsed := ItemIndex = 0;
+            end
+            else
+            begin
+              WidthUsed := False;
+            end;
+          end;
+        else
+          begin
+            WidthUsed := ICALC  <= 1;
+          end;
+      end;
+
+      DepthUsed := ICALC <= 0;
+
       UpstreamSegment := SourceSfrMf2005.UpstreamSegmentValues[ItemIndex] as TSfrSegmentItem;
       DownstreamSegment := SourceSfrMf2005.DownstreamSegmentValues[ItemIndex] as TSfrSegmentItem;
-      if (UpstreamSegment.StreambedElevation = DownstreamSegment.StreambedElevation)
-        and (UpstreamSegment.StreamDepth = DownstreamSegment.StreamDepth)
-        then
+      if ElevUsed and DepthUsed then
       begin
-        SfrMf6Item.Stage := '(' + UpstreamSegment.StreambedElevation + ') + ('
-          + UpstreamSegment.StreamDepth + ')';
+        PriorElevationUsed := True;
+        PriorDepthUsed := True;
+        if (UpstreamSegment.StreambedElevation = DownstreamSegment.StreambedElevation)
+          and (UpstreamSegment.StreamDepth = DownstreamSegment.StreamDepth)
+          then
+        begin
+          PriorElevation := UpstreamSegment.StreambedElevation;
+          PriorDepth := UpstreamSegment.StreamDepth;
+          SfrMf6Item.Stage := '(' + UpstreamSegment.StreambedElevation + ') + ('
+            + UpstreamSegment.StreamDepth + ')';
+        end
+        else
+        begin
+          PriorElevation :=  'Interpolate(FractionOfObjectLength, ('
+            + '(' + UpstreamSegment.StreambedElevation
+            + '), 0, ('
+            + DownstreamSegment.StreambedElevation
+            + '), 1)';
+
+          PriorDepth := 'Interpolate(FractionOfObjectLength, ('
+            + '(' + UpstreamSegment.StreamDepth
+            + '), 0, ('
+            + DownstreamSegment.StreamDepth
+            + '), 1)';
+
+          SfrMf6Item.Stage := 'Interpolate(FractionOfObjectLength, ('
+            + '(' + UpstreamSegment.StreambedElevation + ') + ('
+              + UpstreamSegment.StreamDepth + ')'
+            + '), 0, ('
+            + '(' + DownstreamSegment.StreambedElevation + ') + ('
+              + DownstreamSegment.StreamDepth + ')'
+            + '), 1)';
+          if LocalScreenObject.Count <= 1 then
+          begin
+            SfrMf6Item.Stage := '(' +UpstreamSegment.StreamDepth + ' + '
+              + DownstreamSegment.StreamDepth + ')/2';
+          end;
+        end;
+        PriorStageUsed := True;
+        PriorStage := SfrMf6Item.Stage;
+      end
+      else if DepthUsed and PriorElevationUsed then
+      begin
+          PriorDepth := 'Interpolate(FractionOfObjectLength, ('
+            + '(' + UpstreamSegment.StreamDepth
+            + '), 0, ('
+            + DownstreamSegment.StreamDepth
+            + '), 1)';
+        SfrMf6Item.Stage := PriorElevation + ' + ' + PriorDepth;
+      end
+      else if ElevUsed and PriorDepthUsed then
+      begin
+          PriorElevation :=  'Interpolate(FractionOfObjectLength, ('
+            + '(' + UpstreamSegment.StreambedElevation
+            + '), 0, ('
+            + DownstreamSegment.StreambedElevation
+            + '), 1)';
+        SfrMf6Item.Stage := PriorElevation + ' + ' + PriorDepth;
+      end
+      else if PriorStageUsed then
+      begin
+        SfrMf6Item.Stage := PriorStage;
       end
       else
       begin
-        SfrMf6Item.Stage := 'Interpolate(FractionOfObjectLength, ('
-          + '(' + UpstreamSegment.StreambedElevation + ') + ('
-            + UpstreamSegment.StreamDepth + ')'
-          + '), 0, ('
-          + '(' + DownstreamSegment.StreambedElevation + ') + ('
-            + DownstreamSegment.StreamDepth + ')'
-          + '), 1)';
-        if LocalScreenObject.Count <= 1 then
-        begin
-          SfrMf6Item.Stage := '(' +UpstreamSegment.StreamDepth + ' + '
-            + DownstreamSegment.StreamDepth + ')/2';
-        end;
+        SfrMf6Item.Stage := '0';
       end;
 
       FlowItem := SourceSfrMf2005.SegmentFlows[ItemIndex] as TSfrSegmentFlowItem;
@@ -4006,11 +4167,9 @@ var
   ValueIndex: Integer;
   BoundaryStorage: TSfrMf6Storage;
 begin
-//  inherited;
   EvaluateListBoundaries(AModel);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
-//    Item := Values[ValueIndex] as TCustomModflowBoundaryItem;
     BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TSfrMf6Storage;
     AssignCells(BoundaryStorage, ValueTimeList, AModel);
   end;

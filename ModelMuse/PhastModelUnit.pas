@@ -9970,11 +9970,13 @@ const
 //                opening the MODFLOW Packages and Programs dialog box.
 //               Bug fix: Fixed loss of data when editing multiple MNW2 wells
 //                simultaneously.
-
 //    '5.1.1.33' Bug fix: Fixed bugs in assigning data for MODFLOW 6 IST package.
 //               Enhancement: When importing Shapefiles, ModelMuse now checks
 //                to see if the grid or mesh overlaps with the shapes in the
 //                shapeFile.
+
+//               Enhancement: Improved conversion of SFR package from MODFLOW-
+//                2005 to MODFLOW 6.
 
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.

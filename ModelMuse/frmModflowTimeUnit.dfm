@@ -810,7 +810,7 @@ inherited frmModflowTime: TfrmModflowTime
         Left = 0
         Top = 41
         Width = 746
-        Height = 218
+        Height = 433
         Align = alClient
         ColCount = 7
         DefaultColWidth = 100
@@ -1001,6 +1001,7 @@ inherited frmModflowTime: TfrmModflowTime
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 218
       end
       object pnlAts: TPanel
         Left = 0
