@@ -390,6 +390,7 @@ type
     procedure TimerBringToFrontTimer(Sender: TObject);
     procedure frameGridMobileGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure framePkgBuoyancycbSpecifyDensityClick(Sender: TObject);
     procedure OwhmFrameButtonClick(Sender: TObject; ACol,
         ARow: Integer);
     procedure framePkgFmp4SoilsrdgSoilsSelectCell(Sender: TObject; ACol,
@@ -4492,8 +4493,12 @@ begin
     Packages.StoPackage.Frame := framePkgSto;
     FPackageList.Add(Packages.StoPackage);
 
+  {$IFDEF Buoyancy}
     Packages.BuoyancyPackage.Frame := framePkgBuoyancy;
     FPackageList.Add(Packages.BuoyancyPackage);
+  {$ELSE}
+    framePkgBuoyancy.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5059,6 +5064,37 @@ begin
     for IstIndex := 0 to FframePkgSmsObjectList.Count - 1 do
     begin
       FframePkgSmsObjectList[IstIndex].NilNode;
+    end;
+  end;
+
+end;
+
+procedure TfrmModflowPackages.framePkgBuoyancycbSpecifyDensityClick(Sender:
+    TObject);
+var
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  DensityFound: Boolean;
+begin
+  inherited;
+  if framePkgBuoyancy.cbSpecifyDensity.Checked then
+  begin
+    Grid := frameChemSpecies.frameGridMobile.Grid;
+    DensityFound := False;
+    for RowIndex := 1 to Grid.RowCount - 1 do
+    begin
+      if SameText(Grid.Cells[0,RowIndex], 'Density') then
+      begin
+        DensityFound := True;
+        Break;
+      end;
+    end;
+    if not DensityFound then
+    begin
+      frameChemSpecies.frameGridMobile.seNumber.AsInteger
+        := frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1;
+      frameChemSpecies.frameGridMobile.seNumber.OnChange(nil);
+      Grid.Cells[0,Grid.RowCount-1] := 'Density'
     end;
   end;
 

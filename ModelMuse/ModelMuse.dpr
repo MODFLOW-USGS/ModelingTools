@@ -874,7 +874,8 @@ uses
   frmFmpFormulaEditorUnit in 'frmFmpFormulaEditorUnit.pas' {frmFmpFormulaEditor},
   frameLeachUnit in 'frameLeachUnit.pas' {frameLeach: TFrame},
   framePackageBuoyancyUnit in 'framePackageBuoyancyUnit.pas' {framePackageBuoyancy: TFrame},
-  ModflowBuoyancyWriterUnit in 'ModflowBuoyancyWriterUnit.pas';
+  ModflowBuoyancyWriterUnit in 'ModflowBuoyancyWriterUnit.pas',
+  frmImportSurferGridFilesUnit in 'frmImportSurferGridFilesUnit.pas' {frmImportSurferGridFiles};
 
 {$R *.res}
 
@@ -890,6 +891,7 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
+  Application.CreateForm(TfrmImportSurferGridFiles, frmImportSurferGridFiles);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

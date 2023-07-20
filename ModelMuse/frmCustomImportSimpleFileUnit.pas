@@ -94,7 +94,7 @@ type
     procedure HandleAPoint(APoint3D: TPoint3D; ImportMethod: TImportMethod;
       EvalAt: TEvaluatedAt; Grid: TCustomModelGrid; Mesh: IMesh3D);
     // @name updates the contents of rgEvaluatedAt to the appropriate
-    // values depending on what model (PHAST or MODFLOW) is selected.
+    // values depending on what model (PHAST, MODFLOW, or SUTRA) is selected.
     procedure UpdateEvalAt;
     // @name fills @link(comboDataSets) with the names of
     // @link(TDataArray)s that can be used by the imported
@@ -174,7 +174,6 @@ var
   ChildDataSet: TDataArray;
 begin
   Assert(SizeOf(TObject) = SizeOf(TInterpolatorType));
-//  if comboDataSets.ItemIndex = 0 then
   if NewDataSetNeeded then
   begin
     if FileName = '' then

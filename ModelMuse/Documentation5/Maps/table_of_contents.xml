@@ -781,6 +781,9 @@
       <topicref type="topic" id="402374599660898" build="ALL" modified="2022-01-24T16:30:59.755Z" icon="0" href="Import_Surfer_Grid_File">
         <caption translate="true">Import Surfer Grid File Dialog Box</caption>
       </topicref>
+      <topicref type="topic" id="451274764691102" build="ALL" modified="2023-07-20T15:21:01.037Z" icon="0" href="Import-Multiple-Surfer-Grid-Fi">
+        <caption translate="true">Import Multiple Surfer Grid Files Dialog Box</caption>
+      </topicref>
       <topicref type="topic" id="402543537332700" build="ALL" modified="2022-01-24T16:30:59.760Z" icon="0" href="Sample_Digital_Elevation_Model">
         <caption translate="true">Sample Digital Elevation Model Dialog Box</caption>
       </topicref>

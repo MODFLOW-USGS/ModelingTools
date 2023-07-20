@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4502</config-value>
+      <config-value name="autohelpstart">4503</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1176,6 +1176,7 @@ document.write('</frameset>');
       <helpcontext-number href="Importing_GWT_model" value="4092"/>
       <helpcontext-number href="Importing_Meshes" value="4019"/>
       <helpcontext-number href="Importing_MODFLOW_Models" value="3485"/>
+      <helpcontext-number href="Import-Multiple-Surfer-Grid-Fi" value="4503"/>
       <helpcontext-number href="Import-Vertex-Values-Dialog-Bo" value="4410"/>
       <helpcontext-number href="IMS_variable_values_for_the_av" value="4128"/>
       <helpcontext-number href="Inefficiency_Losses_to_Surface" value="3813"/>

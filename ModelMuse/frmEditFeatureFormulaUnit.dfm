@@ -4,8 +4,8 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   Caption = 'Edit Feature Formula'
   ClientHeight = 497
   ClientWidth = 593
-  ExplicitWidth = 609
-  ExplicitHeight = 536
+  ExplicitWidth = 605
+  ExplicitHeight = 535
   TextHeight = 18
   object spl1: TSplitter
     Left = 248
@@ -23,13 +23,13 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     Height = 34
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 464
-    ExplicitWidth = 597
+    ExplicitTop = 462
+    ExplicitWidth = 589
     DesignSize = (
       593
       34)
     object btnCancel: TBitBtn
-      Left = 493
+      Left = 489
       Top = 2
       Width = 83
       Height = 27
@@ -37,10 +37,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 505
+      ExplicitLeft = 485
     end
     object btnOK: TBitBtn
-      Left = 405
+      Left = 401
       Top = 2
       Width = 82
       Height = 27
@@ -68,10 +68,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 417
+      ExplicitLeft = 397
     end
     object btnHelp: TBitBtn
-      Left = 317
+      Left = 313
       Top = 2
       Width = 82
       Height = 27
@@ -80,7 +80,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 329
+      ExplicitLeft = 309
     end
   end
   object pnlTop: TPanel
@@ -90,16 +90,17 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     Height = 463
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 260
-    ExplicitHeight = 464
+    ExplicitLeft = 252
+    ExplicitHeight = 462
     object memoFormula: TMemo
       Left = 1
       Top = 162
       Width = 335
-      Height = 301
+      Height = 300
       Align = alClient
       TabOrder = 1
       OnChange = memoFormulaChange
+      ExplicitHeight = 299
     end
     object pnlControls: TPanel
       Left = 1
@@ -184,5 +185,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     TabOrder = 0
     OnChange = tvFeaturesChange
     OnHint = tvFeaturesHint
+    ExplicitWidth = 244
+    ExplicitHeight = 462
   end
 end

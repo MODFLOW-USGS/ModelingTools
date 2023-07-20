@@ -176,6 +176,12 @@ var
   ScreenObject: TScreenObject;
   MvrSourceCell: TMvrSourceCell;
   MvrSource: TMvrSource;
+  MvrItems: TMvrItems;
+  StartTime: Double;
+  EndTime: Double;
+  ItemIndex: Integer;
+  AnItem: TMvrItem;
+  MvrDefined: Boolean;
 begin
   if not ShouldEvaluate then
   begin
@@ -189,6 +195,28 @@ begin
   MvrSource.Receivers := ScreenObject.ModflowMvr.Receivers;
   Assert(RegisterKey.StressPeriod >= 0);
   Assert(RegisterKey.StressPeriod < FSourceCellDictionaries.Count);
+
+  StartTime := Model.ModflowFullStressPeriods[RegisterKey.StressPeriod].StartTime;
+  EndTime := Model.ModflowFullStressPeriods[RegisterKey.StressPeriod].EndTime;
+
+  Assert(ScreenObject.ModflowMvr <> nil);
+  MvrItems := ScreenObject.ModflowMvr.Values as TMvrItems;
+  MvrDefined := False;
+  for ItemIndex := 0 to MvrItems.Count - 1 do
+  begin
+    AnItem := MvrItems[ItemIndex];
+    if (AnItem.StartTime <= EndTime) and (AnItem.EndTime > StartTime) then
+    begin
+      MvrDefined := True;
+      break;
+    end;
+  end;
+
+  if not MvrDefined then
+  begin
+    Exit;
+  end;
+
   try
     MvrSourceCell := FSourceCellDictionaries[RegisterKey.StressPeriod][RegisterKey.SourceKey];
   except on E: EListError do

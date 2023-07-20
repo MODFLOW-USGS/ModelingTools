@@ -4,10 +4,10 @@ inherited frmCustomImportSimpleFile: TfrmCustomImportSimpleFile
   HelpType = htKeyword
   ActiveControl = comboDataSets
   Caption = 'frmCustomImportSimpleFile'
-  ClientHeight = 268
-  ClientWidth = 560
-  ExplicitWidth = 572
-  ExplicitHeight = 306
+  ClientHeight = 266
+  ClientWidth = 552
+  ExplicitWidth = 564
+  ExplicitHeight = 304
   TextHeight = 18
   object lblDataSet: TLabel
     Left = 8
@@ -52,7 +52,7 @@ inherited frmCustomImportSimpleFile: TfrmCustomImportSimpleFile
   end
   object cbIntersectedCells: TCheckBox
     Left = 8
-    Top = 149
+    Top = 144
     Width = 395
     Height = 31
     Caption = 'Set values of intersected elements'

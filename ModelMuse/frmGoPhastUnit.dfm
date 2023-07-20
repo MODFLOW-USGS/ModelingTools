@@ -672,7 +672,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 208
+      Left = 465
       Top = 130
       Width = 212
       Height = 28
@@ -774,7 +774,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 433
+      Left = 208
       Top = 130
       Width = 244
       Height = 28
@@ -1197,6 +1197,9 @@ inherited frmGoPhast: TfrmGoPhast
           HelpContext = 3563
           Hint = 'Import objects from a SURFER grid file'
           OnClick = SurferGridFile1Click
+        end
+        object miMultipleSurferGridFiles: TMenuItem
+          Action = acImportSurferGridFiles
         end
         object SampleDEMData1: TMenuItem
           Caption = 'Sample DEM Data...'
@@ -3756,6 +3759,12 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'Model'
       Caption = 'Irrigation Types...'
       OnExecute = acFarmIrrigationTypesExecute
+    end
+    object acImportSurferGridFiles: TAction
+      Category = 'File'
+      Caption = 'Multiple Surfer Grid Files...'
+      Hint = 'Import objects from multiple SURFER grid files'
+      OnExecute = acImportSurferGridFilesExecute
     end
   end
   object ilDisabledImageList: TImageList

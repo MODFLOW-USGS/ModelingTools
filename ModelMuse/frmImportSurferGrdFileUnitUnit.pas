@@ -322,10 +322,6 @@ var
   FromUnits: TSupportedLengthConv;
   ToUnits: TSupportedLengthConv;
   APoint2D: TPoint2D;
-//  X: array of Double;
-//  ColIndex: Integer;
-//  Y: array of Pointer;
-//  RowIndex: Integer;
   function ConvertPoint2(ASurferPoint: TSurferPoint): TPoint3D;
   begin
     Result.x := ASurferPoint.X;
@@ -525,7 +521,7 @@ begin
                       begin
                         if FGrd7.Z[XIndex,YIndex] < FGrd7.Header.BlankValue then
                         begin
-                          Inc(Count);
+//                          Inc(Count);
 //                          APoint2D.x := X[XIndex];
                           APoint2D := ConvertPoint(FGrd7.Points[XIndex,YIndex]);
                           if ConvertUnits then

@@ -558,6 +558,8 @@ type
     dlgSaveBoundaryCsv: TSaveDialog;
     acFarmIrrigationTypes: TAction;
     IrrigationTypes1: TMenuItem;
+    acImportSurferGridFiles: TAction;
+    miMultipleSurferGridFiles: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -765,6 +767,7 @@ type
     procedure acRunModflowOWHM_V2Execute(Sender: TObject);
     procedure WellsToCsv1Click(Sender: TObject);
     procedure acFarmIrrigationTypesExecute(Sender: TObject);
+    procedure acImportSurferGridFilesExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2178,7 +2181,7 @@ uses
   frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
   frmTimeSeriesUnit, frmIrrigationTypesUnit,
   frmLayersToExportUnit, DataArrayManagerUnit, DataSetNamesUnit,
-  PhastModelInterfaceUnit;
+  PhastModelInterfaceUnit, frmImportSurferGridFilesUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -14265,6 +14268,21 @@ begin
 //    PhastModel.ModelMateProjectFileName := odModelMate.FileName;
     PhastModel.ModelMateProjectFileName :=
       ExtractRelativePath(sdSaveDialog.FileName, odModelMate.FileName);
+  end;
+end;
+
+procedure TfrmGoPhast.acImportSurferGridFilesExecute(Sender: TObject);
+begin
+  with TfrmImportSurferGridFiles.Create(nil) do
+  begin
+    try
+      if GetData then
+      begin
+        ShowModal;
+      end;
+    finally
+      Free;
+    end;
   end;
 end;
 

@@ -13,6 +13,8 @@ uses SysUtils, Classes, RasterValuesAlongSegmentsUnit, FastGEO, System.IOUtils,
 type
   TSurferFileType = (sft6, sft7, sftAscii);
 
+  TSurferFileTypes = TList<TSurferFileType>;
+
   TGridData6Header = record
     ID: array [0..3] of AnsiChar;
     nx: Smallint;

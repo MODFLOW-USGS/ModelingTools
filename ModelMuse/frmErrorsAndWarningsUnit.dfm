@@ -21,7 +21,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       472
       41)
     object btnClose: TBitBtn
-      Left = 346
+      Left = 342
       Top = 4
       Width = 89
       Height = 33
@@ -29,9 +29,10 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 338
     end
     object btnHelp: TBitBtn
-      Left = 251
+      Left = 247
       Top = 4
       Width = 89
       Height = 33
@@ -40,6 +41,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 243
     end
     object btnSave: TButton
       Left = 88

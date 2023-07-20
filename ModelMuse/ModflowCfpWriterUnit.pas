@@ -578,6 +578,7 @@ begin
                       ANode.FLayer, ANode.FRow, ANode.FColumn];
                   end;
                 end;
+            {$IFDEF OWHMV2}
               cbtWell:
                 begin
                   if WellFlowArray.IsValue[
@@ -658,6 +659,7 @@ begin
                     Assert(False);
                   end;
                 end;
+            {$ENDIF}
 //              cbtWellConductance:
 //                begin
 //                  if WellFlowArray.IsValue[
@@ -1147,8 +1149,8 @@ begin
 //            end;
         end;
       end
-    {$ENDIF}
       else
+    {$ENDIF}
       begin
         N_HEAD := ANode.FFixedHead;
         if N_HEAD <= -1 then
@@ -1169,10 +1171,12 @@ begin
     else
     begin
       WriteInteger(-1);
+    {$IFDEF OWHMV2}
       if Model.ModelSelection = msModflowOwhm2 then
       begin
         WriteString('    X');
       end;
+    {$ENDIF}
     end;
     NewLine;
   end;
@@ -1850,10 +1854,12 @@ begin
           begin
             WriteFloat(0);
           end;
+        {$IFDEF OWHMV2}
           if ANode.FCfpBoundaryType = cbtWell then
           begin
             WriteFloat(ANode.FWellFlow);
           end;
+        {$ENDIF}
           NewLine;
         end;
       end;

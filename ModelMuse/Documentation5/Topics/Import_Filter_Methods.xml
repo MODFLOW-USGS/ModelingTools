@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-07-20T15:29:24.454-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Import Filter Methods</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Import Filter Methods</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The points from each file that are imported will set the values of either a new data set or an existing 2D top data set. The points can set values of either the intersected cells or elements or be interpolated to all the cells or elements. The user can choose to import all the points in the file or to filter the points. If the points are more closely spaced than the grid spacing, filtering is recommended. When filtering the points, the user can choose to import the lowest value in a cell or element, the highest value in a cell or element, the mean average value in a cell or element, or the value of the point closest to the center of a cell or element.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The points from each file that is imported will set the values of either a new data set or an existing 2D top data set. The points can set values of either the intersected cells or elements or be interpolated to all the cells or elements. The user can choose to import all the points in the file or to filter the points. If the points are more closely spaced than the grid spacing, filtering is recommended. When filtering the points, the user can choose to import the lowest value in a cell or element, the highest value in a cell or element, the mean average value in a cell or element, or the value of the point closest to the center of a cell or element.</text></para>
   </body>
 </topic>

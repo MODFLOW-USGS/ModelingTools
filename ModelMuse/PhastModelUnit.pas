@@ -9974,16 +9974,22 @@ const
 //               Enhancement: When importing Shapefiles, ModelMuse now checks
 //                to see if the grid or mesh overlaps with the shapes in the
 //                shapeFile.
-
-//               Enhancement: Improved conversion of SFR package from MODFLOW-
+//    '5.1.1.34' Enhancement: Improved conversion of SFR package from MODFLOW-
 //                2005 to MODFLOW 6.
+//               Enhancement: It is now possible to import multiple Surfer grid
+//                files simultaneously.
+//               Enhancement: Improved conversion of SFR package when switching
+//                to MODFLOW 6 from earlier versions of MODFLOW.
+//               Bug fix: ModelMuse no longer generates an error message for the
+//                MVR package if the MVR input in an object does not include
+//                all stress periods.
 
 //               Enhancement: Added support for MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.33';
+  IIModelVersion = '5.1.1.34';
 
 function IModelVersion: string;
 begin
