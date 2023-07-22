@@ -850,29 +850,19 @@ var
   ASpecies: TMobileChemSpeciesItem;
   budgetfile: string;
   BaseFileName: string;
-//  concentrationfile: string;
   budgetCsvFile: string;
   MvrPackage: TMvrPackage;
-//  MawPackage: TMawPackage;
 begin
   WriteBeginOptions;
   try
-//    WriteString('    FLOW_PACKAGE_NAME ');
-//    WriteString('MVR-1');
-//    NewLine;
-
     Assert(FSpeciesIndex >= 0);
     Assert(FSpeciesIndex < Model.MobileComponents.Count);
-    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+//    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
     ASpecies := Model.MobileComponents[FSpeciesIndex];
-    WriteString(' ' + ASpecies.Name);
-    NewLine;
-
-//    WriteString('    BOUNDNAMES');
+//    WriteString(' ' + ASpecies.Name);
 //    NewLine;
 
     PrintListInputOption;
-//    PrintConcentrationOption;
     PrintFlowsOption;
     WriteSaveFlowsOption;
 
@@ -880,15 +870,6 @@ begin
     BaseFileName := ChangeFileExt(FNameOfFile, '');
     BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
 
-//    if MvrPackage.SaveGwtConcentration then
-//    begin
-//      WriteString('    CONCENTRATION FILEOUT ');
-//      concentrationfile := BaseFileName + '.mvt_conc';
-//      Model.AddModelOutputFile(concentrationfile);
-//      concentrationfile := ExtractFileName(concentrationfile);
-//      WriteString(concentrationfile);
-//      NewLine;
-//    end;
 
     if MvrPackage.SaveBudgetFile then
     begin
@@ -909,9 +890,6 @@ begin
       WriteString(budgetCsvFile);
       NewLine;
     end;
-
-  //  [TS6 FILEIN <ts6_filename>]
-  //  [OBS6 FILEIN <obs6_filename>]
   finally
     WriteEndOptions
   end;

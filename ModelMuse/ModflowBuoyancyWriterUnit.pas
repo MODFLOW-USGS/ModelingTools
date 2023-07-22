@@ -3,11 +3,13 @@ unit ModflowBuoyancyWriterUnit;
 interface
 
 uses
-  CustomModflowWriterUnit, Vcl.Forms, ModflowPackageSelectionUnit;
+  CustomModflowWriterUnit, Vcl.Forms, ModflowPackageSelectionUnit,
+  System.SysUtils;
 
 type
   TBuoyancyWriter = class(TCustomPackageWriter)
   private
+    FBuoyancyPackage: TBuoyancyPackage;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WritePackageData;
@@ -22,7 +24,7 @@ type
 implementation
 
 uses
-  ModflowUnitNumbers, frmProgressUnit, GoPhastTypes;
+  ModflowUnitNumbers, frmProgressUnit, GoPhastTypes, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrEvaluatingBUY6Pack = 'Evaluating BUY6 Package data.';
@@ -41,7 +43,14 @@ end;
 
 procedure TBuoyancyWriter.WriteDimensions;
 begin
-
+  WriteBeginDimensions;
+  try
+    WriteString('  NRHOSPECIES');
+    WriteInteger(Model.MobileComponents.Count);
+    NewLine;
+  finally
+    WriteEndDimensions;
+  end;
 end;
 
 procedure TBuoyancyWriter.WriteFile(const AFileName: string);
@@ -58,6 +67,8 @@ begin
   begin
     Exit;
   end;
+
+  FBuoyancyPackage := Package as TBuoyancyPackage;
 
   frmProgressMM.AddMessage(StrEvaluatingBUY6Pack);
   Application.ProcessMessages;
@@ -114,13 +125,63 @@ begin
 end;
 
 procedure TBuoyancyWriter.WriteOptions;
+var
+  FileOut: string;
 begin
+  WriteBeginOptions;
+  try
+    if FBuoyancyPackage.RightHandSide then
+    begin
+      WriteString('  HHFORMULATION_RHS');
+      NewLine;
+    end;
 
+    WriteString('  DENSEREF');
+    WriteFloat(FBuoyancyPackage.RefDensity);
+    NewLine;
+
+    if FBuoyancyPackage.WriteDensity then
+    begin
+      FileOut := ChangeFileExt(FNameOfFile, '.density');
+      Model.AddModelOutputFile(FileOut);
+
+      FileOut := ExtractFileName(FileOut);
+      WriteString('  DENSITY FILEOUT ');
+      WriteString(FileOut);
+      NewLine;
+    end;
+  finally
+    WriteEndOptions
+  end;
 end;
 
 procedure TBuoyancyWriter.WritePackageData;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
-
+  WriteBeginPackageData;
+  try
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteInteger(SpeciesIndex+1);
+      WriteFloat(ASpecies.DensitySlope);
+      WriteFloat(ASpecies.RefConcentration);
+      if Model.GWTUsed then
+      begin
+        WriteString(' ' + ASpecies.Name);
+      end
+      else
+      begin
+        WriteString(' MODFLOW');
+      end;
+      WriteString(' ' + ASpecies.Name);
+      NewLine;
+    end;
+  finally
+    WriteEndPackageData;
+  end;
 end;
 
 end.

@@ -87,6 +87,7 @@ type
     FValuesCleared: Boolean;
     FOnCheckPestCell: TSelectCellEvent;
     FGwtFrameList: TSfrGwtObjectList;
+    FBuoyancyOffset: Integer;
     procedure LayoutMultiRowEditControls;
     function GetDeletedCells(ACol, ARow: integer): boolean;
     procedure SetDeletedCells(ACol, ARow: integer; const Value: boolean);
@@ -122,6 +123,9 @@ resourcestring
 
 var
   frameScreenObjectSfr6: TframeScreenObjectSfr6;
+
+const
+  BuoyancyColumn = s6cDiversionStart;
 
 implementation
 
@@ -240,13 +244,13 @@ begin
   inherited;
   frmgrdDiversions.seNumberChange(Sender);
   rdgModflowBoundary.ColCount := frmgrdDiversions.seNumber.AsInteger
-    + Ord(s6cDiversionStart);
+    + Ord(s6cDiversionStart)+FBuoyancyOffset;
 
   for ColIndex := 0 to frmgrdDiversions.seNumber.AsInteger - 1 do
   begin
-    rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + ColIndex, 0]
+    rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + ColIndex + FBuoyancyOffset, 0]
       := Format('Diversion rate %d', [ColIndex+1]);
-    AColumn := rdgModflowBoundary.Columns[Ord(s6cDiversionStart) + ColIndex];
+    AColumn := rdgModflowBoundary.Columns[Ord(s6cDiversionStart) + ColIndex + FBuoyancyOffset];
     AColumn.WordWrapCaptions := True;
     AColumn.ButtonUsed := True;
     AColumn.ButtonCaption := 'F()';
@@ -293,7 +297,12 @@ var
   APage: TJvStandardPage;
   AGwtFrame: TframeSfrGwtConcentrations;
   ANode: TJvPageIndexNode;
+  DensityUsed: Boolean;
 begin
+
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+
+
   Changing := True;
   tabDownstreamSegments.TabVisible := True;
   tabDiversions.TabVisible := True;
@@ -371,6 +380,19 @@ begin
             PestMethod[rdgModflowBoundary, Ord(s6cRoughness)] := Sf6Boundary.PestRoughnessMethod;
             PestModifier[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := Sf6Boundary.PestUpstreamFractionFormula;
             PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := Sf6Boundary.PestUpstreamFractionMethod;
+            if DensityUsed then
+            begin
+              if Sf6Boundary.PestDensity.Count = 0 then
+              begin
+                Sf6Boundary.PestDensity.Add
+              end;
+              PestModifier[rdgModflowBoundary, Ord(BuoyancyColumn)] := Sf6Boundary.PestDensity[0].Value;
+              if Sf6Boundary.PestDensityMethods.Count = 0 then
+              begin
+                Sf6Boundary.PestDensityMethods.Add;
+              end;
+              PestMethod[rdgModflowBoundary, Ord(BuoyancyColumn)] := Sf6Boundary.PestDensityMethods[0].PestParamMethod;
+            end;
 
             FirstBoundary := Sf6Boundary;
 
@@ -402,9 +424,20 @@ begin
               rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.Roughness;
 
+              if DensityUsed then
+              begin
+                if Sfr6Item.Density.Count = 0 then
+                begin
+                  Sfr6Item.Density.Add;
+                end;
+                rdgModflowBoundary.Cells[Ord(BuoyancyColumn), TimeIndex+1+PestRowOffset]
+                  := Sfr6Item.Density[0].Value;
+              end;
+
               for DiverIndex := 0 to Sfr6Item.Diversions.Count - 1 do
               begin
-                rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1+PestRowOffset]
+                rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + FBuoyancyOffset + DiverIndex,
+                  TimeIndex+1+PestRowOffset]
                   := Sfr6Item.Diversions[DiverIndex];
               end;
             end;
@@ -468,6 +501,18 @@ begin
             if Sf6Boundary.PestUpstreamFractionMethod <> FirstBoundary.PestUpstreamFractionMethod then
             begin
               PestMethodAssigned[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := False;
+            end;
+
+            if DensityUsed then
+            begin
+              if not Sf6Boundary.PestDensity.IsSame(FirstBoundary.PestDensity) then
+              begin
+                PestModifierAssigned[rdgModflowBoundary, Ord(BuoyancyColumn)] := False;
+              end;
+              if not Sf6Boundary.PestDensityMethods.IsSame(FirstBoundary.PestDensityMethods) then
+              begin
+                PestMethodAssigned[rdgModflowBoundary, Ord(BuoyancyColumn)] := False;
+              end;
             end;
 
             if not Values.isSame(Sf6Boundary.Values) then
@@ -596,10 +641,25 @@ var
   ColIndex: Integer;
   AColumn: TRbwColumn4;
   PickList: TStrings;
+  DensityUsed: Boolean;
+
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   rdgModflowBoundary.BeginUpdate;
   try
-    rdgModflowBoundary.ColCount := Ord(s6cDiversionStart);
+    if DensityUsed then
+    begin
+      rdgModflowBoundary.ColCount := Ord(s6cDiversionStart) + 1;
+      FBuoyancyOffset := 1;
+//      rdgModflowBoundary.Columns[Ord(BuoyancyColumn)] :=
+//        rdgModflowBoundary.Columns[Ord(s6cUpstreamFraction)];
+      rdgModflowBoundary.Cells[Ord(BuoyancyColumn), 0] := StrDensity;
+    end
+    else
+    begin
+      rdgModflowBoundary.ColCount := Ord(s6cDiversionStart);
+      FBuoyancyOffset := 0;
+    end;
 
     ClearGrid(rdgModflowBoundary);
     seNumberOfTimes.AsInteger := 0;
@@ -1061,7 +1121,9 @@ var
   ItemIndex: Integer;
   SpeciesIndex: Integer;
   AGwtFrame: TframeSfrGwtConcentrations;
+  DensityUsed: Boolean;
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   for Index := 0 to List.Count - 1 do
   begin
     Item := List.Items[Index];
@@ -1212,6 +1274,26 @@ begin
           Boundary.PestUpstreamFractionMethod := PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)];
         end;
 
+        if DensityUsed then
+        begin
+          if PestModifierAssigned[rdgModflowBoundary, Ord(BuoyancyColumn)] then
+          begin
+            if Boundary.PestDensity.Count = 0 then
+            begin
+              Boundary.PestDensity.Add
+            end;
+            Boundary.PestDensity[0].Value := PestModifier[rdgModflowBoundary, Ord(BuoyancyColumn)];
+          end;
+          if PestMethodAssigned[rdgModflowBoundary, Ord(BuoyancyColumn)] then
+          begin
+            if Boundary.PestDensityMethods.Count = 0 then
+            begin
+              Boundary.PestDensityMethods.Add;
+            end;
+            Boundary.PestDensityMethods[0].PestParamMethod := PestMethod[rdgModflowBoundary, Ord(BuoyancyColumn)];
+          end;
+        end;
+
         if not FValuesCleared then
         begin
           Boundary.Values.Count := seNumberOfTimes.AsInteger;
@@ -1256,12 +1338,23 @@ begin
               Sfr6Item.Roughness := rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1+PestRowOffset];
             end;
 
+            if DensityUsed then
+            begin
+              if Sfr6Item.Density.Count = 0 then
+              begin
+                Sfr6Item.Density.Add;
+              end;
+              Sfr6Item.Density[0].Value :=
+                rdgModflowBoundary.Cells[Ord(BuoyancyColumn), TimeIndex+1+PestRowOffset];
+            end;
+
             if tabDiversions.TabVisible then
             begin
               Sfr6Item.DiversionCount := frmgrdDiversions.seNumber.AsInteger;
               for DiverIndex := 0 to frmgrdDiversions.seNumber.AsInteger - 1 do
               begin
-                RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1+PestRowOffset];
+                RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + FBuoyancyOffset + DiverIndex,
+                  TimeIndex+1+PestRowOffset];
                 if RateFormula <> '' then
                 begin
                   Sfr6Item.DiversionFormulas[DiverIndex] := RateFormula;

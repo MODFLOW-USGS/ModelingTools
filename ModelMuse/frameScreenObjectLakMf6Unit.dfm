@@ -572,13 +572,13 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Height = 305
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 478
-        ExplicitHeight = 311
+        ExplicitWidth = 477
+        ExplicitHeight = 305
         inherited Panel: TPanel
           Top = 264
           Width = 477
-          ExplicitTop = 270
-          ExplicitWidth = 478
+          ExplicitTop = 264
+          ExplicitWidth = 477
           inherited lbNumber: TLabel
             Width = 152
             Caption = 'Number of rows in lake table'
@@ -709,7 +709,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         inherited pnlTop: TPanel
           Width = 477
-          ExplicitWidth = 478
+          ExplicitWidth = 477
           inherited edFormula: TLabeledEdit
             EditLabel.ExplicitLeft = 128
             EditLabel.ExplicitTop = 12
@@ -740,7 +740,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
-        ExplicitHeight = 311
       end
       object jplGwt: TJvPageList
         Left = 126
@@ -749,8 +748,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Height = 305
         PropagateEnable = False
         Align = alClient
-        ExplicitWidth = 352
-        ExplicitHeight = 311
       end
     end
   end

@@ -107,7 +107,6 @@ resourcestring
   StrExchangeArea = 'Exchange area';
   StrNone = 'none';
   StrInflow = 'Inflow';
-  StrDensity = 'Density';
 
 const NonOutletTabs = 4;
 

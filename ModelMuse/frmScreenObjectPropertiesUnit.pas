@@ -3036,18 +3036,30 @@ var
   UsedEvalAt: TEvaluatedAt;
   SpeciesIndex: Byte;
   AGrid: TRbwDataGrid4;
+  DensityUsed: Boolean;
 begin
   ParametersOnly := False;
   PestParameterColumns := [];
   UsedEvalAt := eaBlocks;
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
    {Support PEST here }
 
-  if (Sender = frameGhbParam.rdgModflowBoundary)
-    or (Sender = frameChdParam.rdgModflowBoundary)
-    then
+  if (Sender = frameChdParam.rdgModflowBoundary) then
   begin
     PestParameterColumns := [2,3];
     if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        Include(PestParameterColumns, SpeciesIndex + 4);
+      end;
+    end;
+  end
+  else if (Sender = frameGhbParam.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [2,3];
+    if frmGoPhast.PhastModel.GwtUsed
+      or frmGoPhast.PhastModel.BuoyancyDensityUsed then
     begin
       for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
       begin
@@ -3089,12 +3101,21 @@ begin
   begin
     PestParameterColumns := [2];
   end
-  else if (Sender = frameRivParam.rdgModflowBoundary)
-    or (Sender = frameEtsParam.rdgModflowBoundary)
-    then
+  else if (Sender = frameEtsParam.rdgModflowBoundary) then
   begin
     PestParameterColumns := [2,3,4];
     if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        Include(PestParameterColumns, SpeciesIndex + 5);
+      end;
+    end;
+  end
+  else if (Sender = frameRivParam.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [2,3,4];
+    if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.BuoyancyDensityUsed then
     begin
       for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
       begin
@@ -3127,16 +3148,23 @@ begin
   end
   else if (Sender = frameScreenObjectSfr6.rdgModflowBoundary) then
   begin
-    PestParameterColumns := [3..9];
+    if DensityUsed then
+    begin
+      PestParameterColumns := [3..10];
+    end
+    else
+    begin
+      PestParameterColumns := [3..9];
+    end;
   end
   else if (Sender = frameMAW.rdgModflowBoundary) then
   begin
-    PestParameterColumns := [3, 4, 6, 7, 8, 10..13, 15];
+    PestParameterColumns := [3, 4, 6, 7, 8, 10..13, 15, 16];
   end
   else if (Sender = frameLakMf6.rdgModflowBoundary) then
   begin
     ParametersOnly := True;
-    PestParameterColumns := [3..8];
+    PestParameterColumns := [3..9];
   end
   else if (Sender = frameLak.rdgModflowBoundary) then
   begin
@@ -7494,12 +7522,22 @@ procedure TfrmScreenObjectProperties.SetModflowBoundaryColCount;
 var
   CropIrrigationRequirement: TCropIrrigationRequirement;
   MobileSpeciesCount: Integer;
+  DensityColCount: Integer;
 begin
   MobileSpeciesCount := GwtColumnCount;
+  if frmGoPhast.PhastModel.BuoyancyDensityUsed
+     and not frmGoPhast.PhastModel.GwtUsed then
+  begin
+    DensityColCount :=1;
+  end
+  else
+  begin
+    DensityColCount := 0
+  end;
   frameChdParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
-  frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
+  frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount + DensityColCount;
   frameWellParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
-  frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
+  frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount + DensityColCount;
   frameDrnParam.rdgModflowBoundary.ColCount := 4;
   frameDrtParam.rdgModflowBoundary.ColCount := 5;
   CropIrrigationRequirement :=
@@ -21338,7 +21376,7 @@ begin
     TGhbBoundary.DefaultBoundaryMethod(HeadPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
     TGhbBoundary.DefaultBoundaryMethod(ConductancePosition);
-  if frmGoPhast.PhastModel.GwtUsed then
+  if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.BuoyancyDensityUsed then
   begin
     for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
     begin
@@ -29971,7 +30009,10 @@ end;
 
 function TfrmScreenObjectProperties.GetPestParameterAllowed(
   DataGrid: TCustomRBWDataGrid; ACol: Integer): boolean;
+var
+  DensityUsed: Boolean;
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
  { Support PEST here }
   result :=
     (DataGrid = frameDrnParam.rdgModflowBoundary)
@@ -29990,8 +30031,9 @@ begin
     or (DataGrid = frameScreenObjectUZF.rdgModflowBoundary)
     or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
     or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol in [3..9]))
-    or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3, 4, 6, 7, 8, 10..13, 15]))
-    or ((DataGrid = frameLakMf6.rdgModflowBoundary) and (ACol in [3..8]))
+    or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol = 10) and DensityUsed)
+    or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3, 4, 6, 7, 8, 10..13, 15, 16]))
+    or ((DataGrid = frameLakMf6.rdgModflowBoundary) and (ACol in [3..9]))
     or (DataGrid = frameCSUB.rdgModflowBoundary)
     or ((DataGrid = frameHfbMf6.rdgModflowBoundary) and (frameHfbMf6.comboHfbParameters.ItemIndex <= 0))
     or (DataGrid = frameLak.rdgModflowBoundary)

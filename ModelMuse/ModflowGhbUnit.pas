@@ -440,11 +440,11 @@ begin
   result := 2;
   if GwtConcentrations <> nil then
   begin
-    if (Model <> nil) and Model.GwtUsed then
+    if (Model <> nil) and (Model.GwtUsed or (Model as TCustomModel).BuoyancyDensityUsed) then
     begin
       GwtConcentrations.Count := (Model as TCustomModel).MobileComponents.Count;
     end;
-    if frmGoPhast.PhastModel.GwtUsed then
+    if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.BuoyancyDensityUsed then
     begin
       result := result + GwtConcentrations.Count;
     end;
@@ -758,7 +758,7 @@ begin
 
   AllowedIndicies := [GhbHeadPosition,GhbConductancePosition];
   LocalModel := AModel as TCustomModel;
-  if LocalModel.GwtUsed then
+  if LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed then
   begin
     for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
     begin
@@ -944,7 +944,7 @@ var
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TGhbStorage).FGhbArray, BoundaryCount);
   LocalModel := Model as TCustomModel;
-  if LocalModel.GwtUsed then
+  if LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed then
   begin
     for Index := 0 to BoundaryCount - 1 do
     begin
@@ -1578,7 +1578,7 @@ begin
   FPestHeadFormula := CreateFormulaObjectBlocks(dso3D);
   FPestConductanceFormula := CreateFormulaObjectBlocks(dso3D);
   LocalModel := ParentModel as TPhastModel;
-  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  if (LocalModel <> nil) and (LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed) then
   begin
     for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
     begin
@@ -2285,7 +2285,7 @@ begin
   end;
 
   PhastModel := frmGoPhast.PhastModel;
-  if PhastModel.GwtUsed then
+  if PhastModel.GwtUsed or PhastModel.BuoyancyDensityUsed then
   begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
@@ -2317,7 +2317,7 @@ var
   SpeciesIndex: Integer;
 begin
   LocalModel := Model as TCustomModel;
-  if LocalModel.GwtUsed then
+  if LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed then
   begin
     for SpeciesIndex := FConcList.Count to
       LocalModel.MobileComponents.Count - 1 do

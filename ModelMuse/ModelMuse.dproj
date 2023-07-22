@@ -158,6 +158,7 @@
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
         <DCC_UseMSBuildExternally>false</DCC_UseMSBuildExternally>
+        <VerInfo_Keys>FileVersion=5.1.1.33;ProductVersion=5.1.1.33</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <BRCC_Defines>STR_Package;FullDebugMode;$(BRCC_Defines)</BRCC_Defines>

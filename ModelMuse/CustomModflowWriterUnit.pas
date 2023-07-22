@@ -10163,10 +10163,13 @@ procedure TCustomTransientWriter.WriteDimensionsMF6;
 begin
   CountCells(MAXBOUND);
   WriteBeginDimensions;
-  WriteString('  MAXBOUND');
-  WriteInteger(MAXBOUND);
-  NewLine;
-  WriteEndDimensions;
+  try
+    WriteString('  MAXBOUND');
+    WriteInteger(MAXBOUND);
+    NewLine;
+  finally
+    WriteEndDimensions;
+  end;
 end;
 
 procedure TCustomTransientWriter.WriteMF6ObsOption(InputFileName: string);

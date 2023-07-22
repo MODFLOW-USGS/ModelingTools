@@ -149,6 +149,7 @@ type
     FEvapConcentrations: TSftGwtConcCollection;
     FRunoffConcentrations: TSftGwtConcCollection;
     FInflowConcentrations: TSftGwtConcCollection;
+    // buoyancy
     FDensity: TSftGwtConcCollection;
     function GetDiversions: TStrings;
     function GetEvaporation: string;
@@ -737,13 +738,13 @@ type
     // Buoyancy
     property PestDensity: TSftGwtConcCollection
       read FPestDensity write SetPestDensity
-    {$IFNDEF OWHMV2}
+    {$IFNDEF Buoyancy}
       stored False
     {$ENDIF}
       ;
     property PestDensityMethods: TGwtPestMethodCollection
       read FPestDensityMethods write SetPestDensityMethods
-    {$IFNDEF OWHMV2}
+    {$IFNDEF Buoyancy}
       stored False
     {$ENDIF}
       ;
@@ -1321,6 +1322,7 @@ begin
     EvapConcentrations := StrSource.EvapConcentrations;
     RunoffConcentrations := StrSource.RunoffConcentrations;
     InflowConcentrations := StrSource.InflowConcentrations;
+    Density := StrSource.Density;
   end
   else if Source is TSfrParamIcalcItem then
   begin
@@ -1889,8 +1891,9 @@ begin
       and Item.EvapConcentrations.IsSame(EvapConcentrations)
       and Item.RunoffConcentrations.IsSame(RunoffConcentrations)
       and Item.InflowConcentrations.IsSame(InflowConcentrations)
-      and Item.GwtStatus.IsSame(GwtStatus);
-      
+      and Item.GwtStatus.IsSame(GwtStatus)
+      and Item.Density.IsSame(Density);
+
     if result then
     begin
       for Index := 0 to DiversionCount - 1 do
@@ -3378,6 +3381,7 @@ begin
     PestStageMethod := SourceSfr6.PestStageMethod;
     PestRoughnessFormula := SourceSfr6.PestRoughnessFormula;
     PestRoughnessMethod := SourceSfr6.PestRoughnessMethod;
+
     StartingConcentrations := SourceSfr6.StartingConcentrations;
 
     PestSpecifiedConcentrations := SourceSfr6.PestSpecifiedConcentrations;

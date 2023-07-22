@@ -253,7 +253,7 @@ type
       write SetInjectionConcentrations;
     // Buoyancy
     property Density: TMawGwtConcCollection read FDensity write SetDensity
-    {$IFNDEF OWHMV2}
+    {$IFNDEF Buoyancy}
       stored False
     {$ENDIF}
       ;
@@ -899,9 +899,17 @@ type
         read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
         // Buoyancy
       property PestDensity: TMawGwtConcCollection
-        read FPestDensity write SetPestDensity;
+        read FPestDensity write SetPestDensity
+      {$IFNDEF Buoyancy}
+        stored False
+      {$ENDIF}
+        ;
       property PestDensityMethods: TGwtPestMethodCollection
-        read FPestDensityMethods write SetPestDensityMethods;
+        read FPestDensityMethods write SetPestDensityMethods
+      {$IFNDEF Buoyancy}
+        stored False
+      {$ENDIF}
+        ;
     end;
 
 const
@@ -1887,6 +1895,9 @@ begin
     PestSpecifiedConcentrationMethods := SourceMAW.PestSpecifiedConcentrationMethods;
     PestInjectionConcentrations := SourceMAW.PestInjectionConcentrations;
     PestInjectionConcentrationMethods := SourceMAW.PestInjectionConcentrationMethods;
+
+    PestDensity := SourceMAW.PestDensity;
+    PestDensityMethods := SourceMAW.PestDensityMethods;
 
     inherited;
   end
@@ -5124,6 +5135,7 @@ begin
   FSpecifiedConcList.Free;
   FInjectionConcList.Free;
 
+  FDensity.Free;
   FFlowingWellElevation.Free;
   FFlowingWellConductance.Free;
   FRate.Free;

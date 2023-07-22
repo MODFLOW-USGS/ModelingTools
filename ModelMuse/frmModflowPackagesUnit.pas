@@ -657,6 +657,8 @@ resourcestring
   StrTheSaveSaturationGwt = 'The Save Saturation option in the NPF package i' +
   's required with GWT when the transport simulation is separate from the fl' +
   'ow simulation. Do you want to fix this?';
+  StrTheGroundwaterTran = 'The Groundwater Transport package is required whe' +
+  'n using the Buoyancy package and has been activated.';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -4215,6 +4217,19 @@ begin
             Beep;
             MessageDlg(StrMODFLOWDoesNotAll, mtWarning, [mbOK], 0);
           end;
+          if (Frame = framePkgBuoyancy) and framePkgBuoyancy.Selected then
+          begin
+            if not frameGwtProcess.Selected then
+            begin
+              frameGwtProcess.Selected := True;
+              Beep;
+              MessageDlg(StrTheGroundwaterTran, mtInformation, [mbOK], 0);
+            end;
+          end;
+          if (Frame = frameGwtProcess) and not frameGwtProcess.Selected then
+          begin
+            framePkgBuoyancy.Selected := False;
+          end;
         end;
       stRadioButton:
         begin
@@ -5075,20 +5090,25 @@ var
   Grid: TRbwDataGrid4;
   RowIndex: Integer;
   DensityFound: Boolean;
+  DensityRow: Integer;
+  GridRect: TGridRect;
 begin
   inherited;
+  DensityRow := -1;
+  Grid := frameChemSpecies.frameGridMobile.Grid;
+  DensityFound := False;
+  for RowIndex := 1 to Grid.RowCount - 1 do
+  begin
+    if SameText(Grid.Cells[0,RowIndex], 'Density') then
+    begin
+      DensityFound := True;
+      DensityRow := RowIndex;
+      Break;
+    end;
+  end;
+
   if framePkgBuoyancy.cbSpecifyDensity.Checked then
   begin
-    Grid := frameChemSpecies.frameGridMobile.Grid;
-    DensityFound := False;
-    for RowIndex := 1 to Grid.RowCount - 1 do
-    begin
-      if SameText(Grid.Cells[0,RowIndex], 'Density') then
-      begin
-        DensityFound := True;
-        Break;
-      end;
-    end;
     if not DensityFound then
     begin
       frameChemSpecies.frameGridMobile.seNumber.AsInteger
@@ -5096,8 +5116,18 @@ begin
       frameChemSpecies.frameGridMobile.seNumber.OnChange(nil);
       Grid.Cells[0,Grid.RowCount-1] := 'Density'
     end;
+  end
+  else
+  begin
+    if DensityFound then
+    begin
+      GridRect := frameChemSpecies.frameGridMobile.Grid.Selection;
+      GridRect.Top := DensityRow;
+      GridRect.Bottom := DensityRow;
+      frameChemSpecies.frameGridMobile.Grid.Selection := GridRect;
+      frameChemSpecies.frameGridMobile.sbDelete.OnClick(nil);
+    end;
   end;
-
 end;
 
 procedure TfrmModflowPackages.OwhmFrameButtonClick(

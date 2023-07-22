@@ -1759,10 +1759,10 @@ begin
 
   Assert(FSpeciesIndex >= 0);
   Assert(FSpeciesIndex < Model.MobileComponents.Count);
-//  WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
+  WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
   ASpecies := Model.MobileComponents[FSpeciesIndex];
-//  WriteString(' ' + ASpecies.Name);
-//  NewLine;
+  WriteString(' ' + ASpecies.Name);
+  NewLine;
 
   WriteBoundNamesOption;
   //[BOUNDNAMES]

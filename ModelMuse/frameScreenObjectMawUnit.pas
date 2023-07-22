@@ -16,7 +16,7 @@ type
   TWellFlow = (wfStartTime, wfEndTime, wfStatus, wfRate, wfSpecifiedHead,
     wfFlowingWell, wfFlowingWellElev, wfFlowingWellCond, wfFlowingWellReductionLength,
     wtRateLimitation, wtPumpElev, wtScalingLength,
-    wtMinRate, wtMaxRate, wtHeadLimitChoice, wtHeadLimit);
+    wtMinRate, wtMaxRate, wtHeadLimitChoice, wtHeadLimit, wfDensity);
 
   TframeScreenObjectMAW = class(TframeScreenObject)
     pnlBottom: TPanel;
@@ -232,7 +232,9 @@ var
   APage: TJvStandardPage;
   AGwtFrame: TframeMawGwtConcentrations;
   ANode: TJvPageIndexNode;
+  DensityUsed: Boolean;
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   pgcMain.ActivePageIndex := 0;
   FGettingData := True;
   try
@@ -311,6 +313,15 @@ begin
                 := MawItem.HeadLimitChoice;
               rdgModflowBoundary.Cells[Ord(wtHeadLimit), TimeIndex+1 + PestRowOffset]
                 := MawItem.HeadLimit;
+              if DensityUsed then
+              begin
+                if MawItem.Density.Count = 0 then
+                begin
+                  MawItem.Density.Add;
+                end;
+                rdgModflowBoundary.Cells[Ord(wfDensity), TimeIndex+1 + PestRowOffset]
+                  := MawItem.Density[0].Value;
+              end;
             end;
 
             PestModifier[rdgModflowBoundary, Ord(wfRate)] := MawBound.PestRateFormula;
@@ -342,6 +353,23 @@ begin
 
             PestModifier[rdgModflowBoundary, Ord(wtHeadLimit)] := MawBound.PestHeadLimitFormula;
             PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)] := MawBound.PestHeadLimitMethod;
+
+            if DensityUsed then
+            begin
+              if MawBound.PestDensity.Count = 0 then
+              begin
+                MawBound.PestDensity.Add
+              end;
+              PestModifier[rdgModflowBoundary, Ord(wfDensity)] :=
+                MawBound.PestDensity[0].Value;
+
+              if MawBound.PestDensityMethods.Count = 0 then
+              begin
+                MawBound.PestDensityMethods.Add
+              end;
+              PestMethod[rdgModflowBoundary, Ord(wfDensity)] :=
+                MawBound.PestDensityMethods[0].PestParamMethod;
+            end;
           end
           else
           begin
@@ -459,6 +487,15 @@ begin
             if FirstMawBound.PestHeadLimitMethod <> MawBound.PestHeadLimitMethod then
             begin
               PestMethodAssigned[rdgModflowBoundary, Ord(wtHeadLimit)] := False;
+            end;
+
+            if not MawBound.PestDensity.IsSame(MawBound.PestDensity) then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wfDensity)] := False
+            end;
+            if not MawBound.PestDensityMethods.IsSame(MawBound.PestDensityMethods) then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wfDensity)] := False
             end;
 
             if not FWellTimeDataCleared then
@@ -731,6 +768,7 @@ var
   ItemBool: Boolean;
   SpeciesIndex: Integer;
   AGwtFrame: TframeMawGwtConcentrations;
+  DensityUsed: Boolean;
   function NonBlank(const Formula: string): string;
   begin
     if Formula = '' then
@@ -743,6 +781,7 @@ var
     end;
   end;
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   for Index := 0 to List.Count - 1 do
   begin
     Item := List.Items[Index];
@@ -873,6 +912,28 @@ begin
         Boundary.PestHeadLimitMethod := PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)];
       end;
 
+      if DensityUsed then
+      begin
+        if PestModifierAssigned[rdgModflowBoundary, Ord(wfDensity)] then
+        begin
+          if Boundary.PestDensity.Count = 0 then
+          begin
+            Boundary.PestDensity.Add;
+          end;
+          Boundary.PestDensity[0].Value :=
+            PestModifier[rdgModflowBoundary, Ord(wfDensity)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(wfDensity)] then
+        begin
+          if Boundary.PestDensityMethods.Count = 0 then
+          begin
+            Boundary.PestDensityMethods.Add;
+          end;
+          Boundary.PestDensityMethods[0].PestParamMethod :=
+            PestMethod[rdgModflowBoundary, Ord(wfDensity)];
+        end;
+      end;
+
       if not FWellScreensCleared then
       begin
         Boundary.WellScreens.Count := frameWellScreens.seNumber.AsInteger;
@@ -918,6 +979,14 @@ begin
           MawItem.MaxRate := NonBlank(rdgModflowBoundary.Cells[Ord(wtMaxRate), TimeIndex+1 + PestRowOffset]);
           MawItem.HeadLimitChoice := rdgModflowBoundary.Checked[Ord(wtHeadLimitChoice), TimeIndex+1 + PestRowOffset];
           MawItem.HeadLimit := NonBlank(rdgModflowBoundary.Cells[Ord(wtHeadLimit), TimeIndex+1 + PestRowOffset]);
+          if DensityUsed then
+          begin
+            if MawItem.Density.Count = 0 then
+            begin
+              MawItem.Density.Add;
+            end;
+            MawItem.Density[0].Value := NonBlank(rdgModflowBoundary.Cells[Ord(wfDensity), TimeIndex+1 + PestRowOffset]);
+          end;
         end;
       end;
     end;
@@ -980,7 +1049,9 @@ end;
 procedure TframeScreenObjectMAW.InitializeLabels;
 var
   ColIndex: Integer;
+  DensityUsed: Boolean;
 begin
+  DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   rdgModflowBoundary.BeginUpdate;
   try
     ClearGrid(frameWellScreens.Grid);
@@ -989,6 +1060,18 @@ begin
     frameWellScreens.Grid.Cells[Ord(wscBottom), 0] := StrScreenBottom;
     frameWellScreens.Grid.Cells[Ord(wscSkinK), 0] := StrSkinK;
     frameWellScreens.Grid.Cells[Ord(wscSkinRadius), 0] := StrSkinRadius;
+
+    if DensityUsed then
+    begin
+      rdgModflowBoundary.ColCount := 17;
+      rdgModflowBoundary.Columns[Ord(wfDensity)]
+        := rdgModflowBoundary.Columns[Ord(wfRate)];
+      rdgModflowBoundary.Cells[Ord(wfDensity), 0] := StrDensity;
+    end
+    else
+    begin
+      rdgModflowBoundary.ColCount := 16;
+    end;
 
     ClearGrid(rdgModflowBoundary);
     seNumberOfTimes.AsInteger := 0;
@@ -1042,6 +1125,11 @@ begin
       TMawBoundary.DefaultBoundaryMethod(MawMaxRatePosition);
     PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)] :=
       TMawBoundary.DefaultBoundaryMethod(MawHeadLimitPosition);
+    if DensityUsed then
+    begin
+      PestMethod[rdgModflowBoundary, Ord(wfDensity)] :=
+        TMawBoundary.DefaultBoundaryMethod(MawDensityPosition);
+    end;
   finally
     rdgModflowBoundary.EndUpdate
   end;
