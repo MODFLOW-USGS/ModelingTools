@@ -174,6 +174,7 @@ const
   KLowerCriticalR = 'LowerCriticalR';
   KUpperCriticalR = 'UpperCriticalR';
   KPipeConductanceOrPer = 'PipeConductanceOrPermeabilty';
+  KDrainableStorageWidth = 'DrainableStorageWidth';
   KCfpNodeElevation = 'CfpNodeElevation';
   KCfpFixedHeads = 'CfpFixedHeads';
   KCfpBoundaryType = 'CfpBoundaryType';
@@ -1279,6 +1280,7 @@ resourcestring
   StrLowerCriticalR = 'LowerCriticalR';
   StrUpperCriticalR = 'UpperCriticalR';
   StrPipeConductanceOrPer = 'PipeConductanceOrPermeabilty';
+  StrDrainableStorageWidth = KDrainableStorageWidth;
   StrCfpNodeElevation = 'CfpNodeElevation';
   StrCfpFixedHeads = KCfpFixedHeads;
   StrCfpBoundaryType = KCfpBoundaryType;

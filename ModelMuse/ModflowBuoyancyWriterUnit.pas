@@ -168,14 +168,7 @@ begin
       WriteInteger(SpeciesIndex+1);
       WriteFloat(ASpecies.DensitySlope);
       WriteFloat(ASpecies.RefConcentration);
-      if Model.GWTUsed then
-      begin
-        WriteString(' ' + ASpecies.Name);
-      end
-      else
-      begin
-        WriteString(' MODFLOW');
-      end;
+      WriteString(' ' + ASpecies.Name);
       WriteString(' ' + ASpecies.Name);
       NewLine;
     end;

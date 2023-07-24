@@ -1,0 +1,12 @@
+# Output Control file created on 7/24/2023 by ModelMuse version 5.1.1.34.
+BEGIN OPTIONS
+  BUDGET FILEOUT 'SaltLake.Chem.cbc'
+  CONCENTRATION FILEOUT 'SaltLake.Chem.conc'
+END OPTIONS
+
+BEGIN PERIOD      1
+  SAVE CONCENTRATION ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+

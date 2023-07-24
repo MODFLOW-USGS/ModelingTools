@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="UztTimeSeries" FileType="bin">
-    <FileName Model_Name="UztTimeSeries" FileType="bin">..\..\..\WRDAPP\mf6.4.1\bin\mf6.exe</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="UztTimeSeries" FileType="ancillary">
     <FileName Model_Name="UztTimeSeries" FileType="ancillary">UztTimeSeries.gpt</FileName>

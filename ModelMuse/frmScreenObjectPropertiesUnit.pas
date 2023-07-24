@@ -8585,6 +8585,7 @@ var
   UpperCriticalRDataArray: TDataArray;
   CondOrPermDataArray: TDataArray;
   PipeElevation: TDataArray;
+  DrainableStorageWidth: TDataArray;
   CfpFixedHeadsDataArray: TDataArray;
   CfpLimitedFlowDataArray: TDataArray;
   CfpBoundaryTypeDataArray: TDataArray;
@@ -8923,6 +8924,10 @@ begin
     CfpEdit := FDataEdits[DataSetIndex];
     PipeElevation := CfpEdit.DataArray;
 
+    DataSetIndex := self.GetDataSetIndexByName(KDrainableStorageWidth);
+    CfpEdit := FDataEdits[DataSetIndex];
+    DrainableStorageWidth := CfpEdit.DataArray;
+
     for PipeIndex := 0 to FNewProperties.Count - 1 do
     begin
       AnEdit := FNewProperties[PipeIndex];
@@ -8964,6 +8969,17 @@ begin
           else
           begin
             AnEdit.ScreenObject.RemoveDataSet(PipeElevation);
+          end;
+
+          if frameCfpPipes.edCads.Enabled then
+          begin
+            DataSetIndex := AnEdit.ScreenObject.AddDataSet(DrainableStorageWidth);
+            AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+              Pipes.DrainableStorageWidth;
+          end
+          else
+          begin
+            AnEdit.ScreenObject.RemoveDataSet(DrainableStorageWidth);
           end;
         end
         else
@@ -24768,6 +24784,12 @@ begin
   begin
     ed := frameCfpPipes.edElevation;
   end
+
+  else if Sender = frameCfpPipes.btnCads then
+  begin
+    ed := frameCfpPipes.edCads;
+  end
+
   else if Sender = frameCfpFixedHeads.btnFixedHead then
   begin
     ed := frameCfpFixedHeads.edFixedHead;
@@ -25161,6 +25183,7 @@ begin
     or (ed = frameCfpPipes.edHigherCriticalR)
     or (ed = frameCfpPipes.edConductancePermeability)
     or (ed = frameCfpPipes.edElevation)
+    or (ed = frameCfpPipes.edCads)
     or (ed = frameCfpFixedHeads.edFixedHead)
     or (ed = frameSwrReach.edReachLength)
     then
@@ -25380,6 +25403,7 @@ begin
     or (ed = frameCfpPipes.edHigherCriticalR)
     or (ed = frameCfpPipes.edConductancePermeability)
     or (ed = frameCfpPipes.edElevation)
+    or (ed = frameCfpPipes.edCads)
     or (ed = frameCfpFixedHeads.edFixedHead)
     or (ed = frameSwrReach.edReachLength)
     or (ed = frameScreenObjectFootprintWell.edPumpingRate)

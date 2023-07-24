@@ -1,11 +1,11 @@
 inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
   Width = 407
-  Height = 415
+  Height = 467
   ExplicitWidth = 407
-  ExplicitHeight = 415
+  ExplicitHeight = 467
   DesignSize = (
     407
-    415)
+    467)
   object pnlCaption: TPanel
     Left = 0
     Top = 0
@@ -55,7 +55,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Left = 3
     Top = 39
     Width = 300
-    Height = 24
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 114
     EditLabel.Height = 15
@@ -68,7 +68,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Left = 3
     Top = 88
     Width = 300
-    Height = 24
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 128
     EditLabel.Height = 15
@@ -81,7 +81,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Left = 3
     Top = 138
     Width = 300
-    Height = 24
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 154
     EditLabel.Height = 15
@@ -94,7 +94,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Left = 3
     Top = 188
     Width = 300
-    Height = 24
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 356
     EditLabel.Height = 15
@@ -109,7 +109,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Left = 3
     Top = 237
     Width = 300
-    Height = 24
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 359
     EditLabel.Height = 15
@@ -133,7 +133,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Left = 3
     Top = 287
     Width = 300
-    Height = 24
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 238
     EditLabel.Height = 15
@@ -155,7 +155,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Left = 3
     Top = 335
     Width = 300
-    Height = 24
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 143
     EditLabel.Height = 15
@@ -190,5 +190,27 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Caption = 'Save flow and head values at nodes (NODE_NUMBERS)'
     TabOrder = 16
     OnClick = cbRecordNodesClick
+  end
+  object edCads: TLabeledEdit
+    Left = 3
+    Top = 431
+    Width = 300
+    Height = 23
+    Anchors = [akLeft, akTop, akRight]
+    EditLabel.Width = 291
+    EditLabel.Height = 15
+    EditLabel.Caption = 'Conduit-Associated Drainable Storage width (W_CADS)'
+    TabOrder = 17
+    Text = ''
+    OnChange = edConductancePermeabilityChange
+  end
+  object btnCads: TButton
+    Left = 309
+    Top = 428
+    Width = 90
+    Height = 30
+    Anchors = [akTop, akRight]
+    Caption = 'Edit F()...'
+    TabOrder = 18
   end
 end

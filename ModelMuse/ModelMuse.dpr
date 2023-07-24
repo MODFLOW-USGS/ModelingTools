@@ -882,6 +882,8 @@ uses
 begin
   // This line is to help ensure consistent results on different machines.
   // See http://qc.embarcadero.com/wc/qcmain.aspx?d=8399
+//  http://web.archive.org/web/20111204191830/http://qc.embarcadero.com/wc/qcmain.aspx?d=8399
+//  http://web.archive.org/web/20171220165642/http://qc.embarcadero.com/wc/qcmain.aspx?d=8399
   Set8087CW($1332);
 
   Application.Initialize;
@@ -891,7 +893,6 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
-  Application.CreateForm(TfrmImportSurferGridFiles, frmImportSurferGridFiles);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

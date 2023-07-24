@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SaltLake" FileType="bin">
+    <FileName Model_Name="SaltLake" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SaltLake" FileType="ancillary">
+    <FileName Model_Name="SaltLake" FileType="ancillary">SaltLake.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SaltLake" FileType="Model Input">
+    <FileName Model_Name="SaltLake" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.buy</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.chd</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.adv</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.cnc</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.dis</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.dsp</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.ic</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.ims</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.mst</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.oc</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.Chem.ssm</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.dis</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.gsf</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.ic</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.ims</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.nam.archive</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.npf</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.oc</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.rch</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.sto</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">SaltLake.tdis</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Input">usgs.SaltLake.reference</FileName>
+  </model>
+  <output Model_Name="SaltLake" FileType="Model Output">
+    <FileName Model_Name="SaltLake" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.bhd</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.cbc</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.Chem.cbc</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.Chem.lst</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.dis.grb</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.InnerSolution.CSV</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.lst</FileName>
+    <FileName Model_Name="SaltLake" FileType="Model Output">SaltLake.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

@@ -4,7 +4,7 @@ for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (
    set /A "start=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"
 )
 @echo on
-C:\WRDAPP\mf6.4.1\bin\mf6.exe
+C:\WRDAPP\mf6.4.2_win64\bin\mf6.exe
 @echo off
 rem Get end time:
 for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (

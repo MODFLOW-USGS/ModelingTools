@@ -25,6 +25,7 @@ type
     FCauchyConductance: double;
     FCauchyLimitedInflow: double;
     FLimitedHead: double;
+    CadWidth: double;
   {$ENDIF}
     FPipes: TList<TCfpPipe>;
     FExchange: Double;
@@ -174,6 +175,8 @@ resourcestring
   StrCFPSpecifiedHeads = 'CFP Specified heads less than -1 are not allowed' +
   '.';
   StrTheCFPSpecifiedHe = 'The CFP specified head defined by %0:s is %1:g. (Layer, Row, Column) = (%2:d, %3:d, %4:d)';
+  StrCFPDrainableStorag = 'CFP Drainable Storage Width is not assigned in th' +
+  'e following objects';
 
 { TModflowCfpWriter }
 
@@ -271,6 +274,8 @@ var
   CauchyConductanceArray: TDataArray;
   CauchyLimitedInflowArray: TDataArray;
   LimitedHeadArray: TDataArray;
+  DrainableStorageWidth: TDataArray;
+  CfpDrainableStorageWidth: Double;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyConduitsAt);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCFPDiameterIsNot);
@@ -304,6 +309,19 @@ begin
       UpperCriticalR := Model.DataArrayManager.GetDataSetByName(KUpperCriticalR);
       PipeConducOrPerm := Model.DataArrayManager.GetDataSetByName(KPipeConductanceOrPer);
       PipeElevation := Model.DataArrayManager.GetDataSetByName(KCfpNodeElevation);
+    {$IFDEF OWHMV2}
+      if (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads then
+      begin
+        DrainableStorageWidth := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
+        Assert(DrainableStorageWidth <> nil);
+      end
+      else
+      begin
+        DrainableStorageWidth := nil;
+      end;
+    {$ELSE}
+      DrainableStorageWidth := nil;
+    {$ENDIF}
       Assert(Diameter <> nil);
       Assert(Tortuosity <> nil);
       Assert(RoughnessHeight <> nil);
@@ -337,6 +355,10 @@ begin
           TRealSparseDataSetCrack(RoughnessHeight).Clear;
           TRealSparseDataSetCrack(LowerCriticalR).Clear;
           TRealSparseDataSetCrack(UpperCriticalR).Clear;
+          if DrainableStorageWidth <> nil then
+          begin
+            TRealSparseDataSetCrack(DrainableStorageWidth).Clear;
+          end;
           // don't clear PipeConducOrPerm or PipeElevation because
           // they are a cell properties not a pipe properties.
           AScreenObject.AssignValuesToDataSet(Diameter, Model, lctIgnore);
@@ -349,10 +371,13 @@ begin
           begin
             AScreenObject.AssignValuesToDataSet(PipeElevation, Model, lctIgnore);
           end;
+          if DrainableStorageWidth <> nil then
+          begin
+            AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
+          end;
 
           CellList.Clear;
-//          Segments := AScreenObject.Segments[Model];
-          AScreenObject.GetCellsToAssign({Model.ModflowGrid,} '0', OtherData, Diameter, CellList, alAll, Model);
+          AScreenObject.GetCellsToAssign('0', OtherData, Diameter, CellList, alAll, Model);
 
           if CellList.Count > 1 then
           begin
@@ -418,6 +443,11 @@ begin
                 UpperCriticalRValue := (UpperCriticalR.RealData[ACell1.Layer, ACell1.Row, ACell1.Column]
                   + UpperCriticalR.RealData[ACell2.Layer, ACell2.Row, ACell2.Column])/2;
 
+                if DrainableStorageWidth <> nil then
+                begin
+
+                end;
+
                 Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
                 Node2 := FNodeGrid[ACell2.Layer, ACell2.Row, ACell2.Column];
                 NodeCreated := (Node1 = nil) or (Node2 = nil);
@@ -479,6 +509,36 @@ begin
               end;
             end;
           end;
+
+          if DrainableStorageWidth <> nil then
+          begin
+            for CellIndex := 0 to CellList.Count - 1 do
+            begin
+              ACell1 := CellList[CellIndex];
+              if not DrainableStorageWidth.IsValue[ACell1.Layer, ACell1.Row, ACell1.Column] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrCFPDrainableStorag,
+                  AScreenObject.Name, AScreenObject);
+                Break;
+              end;
+              CfpDrainableStorageWidth :=
+                DrainableStorageWidth.RealData[ACell1.Layer, ACell1.Row, ACell1.Column];
+              Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
+              if Node1 = nil then
+              begin
+                Node1 := TCfpNode.Create;
+                FNodes.Add(Node1);
+                Node1.FNumber := FNodes.Count;
+                FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column] := Node1;
+                Node1.FLayer := ACell1.Layer;
+                Node1.FRow := ACell1.Row;
+                Node1.FColumn := ACell1.Column;
+                Node1.FScreenObject := AScreenObject;
+              end;
+              Node1.CadWidth := CfpDrainableStorageWidth;
+            end;
+          end;
+
         end;
       end;
 
@@ -1205,7 +1265,13 @@ var
   ANode: TCfpNode;
   NO_N: Integer;
   K_EXCHANGE: Double;
+  CadsUsed: Boolean;
 begin
+{$IFDEF OWHMV2}
+  CadsUsed := (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads;
+{$ELSE}
+  CadsUsed := False;
+{$ENDIF}
   for NodeIndex := 0 to FNodes.Count - 1 do
   begin
     ANode := FNodes[NodeIndex];
@@ -1213,6 +1279,10 @@ begin
     K_EXCHANGE := ANode.FExchange;
     WriteInteger(NO_N);
     WriteFloat(K_EXCHANGE);
+    if CadsUsed then
+    begin
+      WriteFloat(ANode.CadWidth);
+    end;
     NewLine;
   end;
 end;
@@ -1439,6 +1509,10 @@ begin
   if Model.ModelSelection = msModflowOwhm2 then
   begin
     WriteString('FBC ');
+    if FConduitFlowProcess.UseCads then
+    begin
+      WriteString('CADS ');
+    end;
   end;
 {$ENDIF}
   WriteString('# data for mode 1 (or 3) conduit pipe system');

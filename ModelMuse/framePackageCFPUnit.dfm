@@ -131,7 +131,7 @@ inherited framePackageCFP: TframePackageCFP
         Left = 12
         Top = 239
         Width = 145
-        Height = 24
+        Height = 23
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
@@ -245,6 +245,14 @@ inherited framePackageCFP: TframePackageCFP
         TabOrder = 1
         OnClick = cbLayersClick
       end
+      object cpCADS: TCheckBox
+        Left = 240
+        Top = 3
+        Width = 279
+        Height = 17
+        Caption = 'Conduit-Associated Drainable Storage (CADS)'
+        TabOrder = 11
+      end
     end
     object tabCRCH_COC: TTabSheet
       Caption = 'CRCH, COC'
@@ -269,7 +277,7 @@ inherited framePackageCFP: TframePackageCFP
         Left = 12
         Top = 56
         Width = 121
-        Height = 24
+        Height = 23
         MaxValue = 2147483647.000000000000000000
         Enabled = False
         TabOrder = 1

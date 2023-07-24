@@ -215,9 +215,11 @@ type
     property SoilIDUsed: TObjectUsedEvent read GetSoilIDUsed;
     function GetCfpPipesSelected: TObjectUsedEvent;
     property CfpPipesSelected: TObjectUsedEvent read GetCfpPipesSelected;
-
     function GetCfpPipes2Selected: TObjectUsedEvent;
     property Cfp2PipesSelected: TObjectUsedEvent read GetCfpPipes2Selected;
+
+    function GetCfpCadsSelected: TObjectUsedEvent;
+    property CfpCadsSelected: TObjectUsedEvent read GetCfpCadsSelected;
 
     function GetSwiObsUsed: TObjectUsedEvent;
     property SwiObsUsed: TObjectUsedEvent read GetSwiObsUsed;
@@ -1174,7 +1176,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
   end;
 const
   {$IFDEF OWHMV2}
-  OWHM4DataSets  = 35;
+  OWHM4DataSets  = 36;
   {$ELSE}
   OWHM4DataSets  = 0;
   {$ENDIF}
@@ -2814,6 +2816,23 @@ begin
     StrMODFLOWCFPDataSet_K_EXCHANGE;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
+
+{$IFDEF OWHMV2}
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KDrainableStorageWidth;
+  FDataArrayCreationRecords[Index].DisplayName := StrDrainableStorageWidth;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CfpCadsSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    'MODFLOW-CFP Data Set 29: CADS';
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+{$ENDIF}
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;

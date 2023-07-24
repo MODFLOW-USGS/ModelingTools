@@ -2145,6 +2145,7 @@ that affects the model output should also have a comment. }
     function GetGridI: ICustomModelGrid;
     function GetBuoyancyDensityUsed: Boolean;
     function GetBuoyancyUsed: Boolean;
+    function GetCfpCadsSelected: TObjectUsedEvent;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
@@ -2937,9 +2938,11 @@ that affects the model output should also have a comment. }
     function Mf6ObsIsSelected: Boolean; virtual;
     function DoCfpPipesSelected(Sender: TObject): Boolean;
     function DoCfp2PipesSelected(Sender: TObject): Boolean;
+    function DoCfpCadsSelected(Sender: TObject): Boolean;
     function GetCfpPipesSelected: TObjectUsedEvent;
     function GetCfpPipes2Selected: TObjectUsedEvent;
     property CfpPipesSelected: TObjectUsedEvent read GetCfpPipesSelected;
+    property CfpCadsSelected: TObjectUsedEvent read GetCfpCadsSelected;
     property Cfp2PipesSelected: TObjectUsedEvent read GetCfpPipes2Selected;
     procedure ExportHeadObservationsToShapeFile(const FileName: string);
     property OnHeadOBsChanged: TNotifyEvent read FOnHeadOBsChanged
@@ -9984,7 +9987,9 @@ const
 //                MVR package if the MVR input in an object does not include
 //                all stress periods.
 
-//               Enhancement: Added support for MODFLOW-OWHM version 2.
+//               Enhancement Buoyancy package for MODFLOW 6.
+//               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
+//               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
 const
@@ -12483,6 +12488,17 @@ function TCustomModel.DoCfp2PipesSelected(Sender: TObject): Boolean;
 begin
 {$IFDEF OWHMV2}
   result := DoCfpPipesSelected(Sender) and (ModelSelection = msModflowOwhm2);
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
+function TCustomModel.DoCfpCadsSelected(Sender: TObject): Boolean;
+begin
+{$IFDEF OWHMV2}
+  result := (ModelSelection = msModflowOwhm2) and CfpIsSelected
+    and ModflowPackages.ConduitFlowProcess.PipesUsed
+    and ModflowPackages.ConduitFlowProcess.UseCads;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -35445,6 +35461,11 @@ end;
 function TCustomModel.GetCapillaryFringeUsed: TObjectUsedEvent;
 begin
   result := DoCapillaryFringeUsed;
+end;
+
+function TCustomModel.GetCfpCadsSelected: TObjectUsedEvent;
+begin
+  result := DoCfpCadsSelected
 end;
 
 function TCustomModel.GetCfpPipes2Selected: TObjectUsedEvent;

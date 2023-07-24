@@ -35,6 +35,7 @@ type
     cbConduitRecharge: TCheckBox;
     seOutputInterval: TJvSpinEdit;
     lblOutputInterval: TLabel;
+    cpCADS: TCheckBox;
     procedure cbPipesClick(Sender: TObject);
     procedure cbLayersClick(Sender: TObject);
     procedure comboElevationChoiceChange(Sender: TObject);
@@ -44,6 +45,7 @@ type
     procedure EnablePipeElevationOffset;
     procedure EnablePipeControls;
     procedure EnableLayerTemperature;
+    procedure EnableCads(PipesUsed: Boolean);
     { Private declarations }
   public
     procedure GetData(Package: TModflowPackageSelection); override;
@@ -57,7 +59,7 @@ var
 implementation
 
 uses
-  frmCustomGoPhastUnit;
+  frmCustomGoPhastUnit, frmGoPhastUnit, GoPhastTypes;
 
 {$R *.dfm}
 
@@ -105,6 +107,7 @@ end;
 procedure TframePackageCFP.GetData(Package: TModflowPackageSelection);
 var
   CfpPackage: TConduitFlowProcess;
+  PipesUsed: Boolean;
 begin
   inherited;
   pgcConduits.ActivePageIndex := 0;
@@ -123,6 +126,10 @@ begin
   rdeLayerTemperature.RealValue := CfpPackage.LayerTemperature;
   cbConduitRecharge.Checked := CfpPackage.ConduitRechargeUsed;
   seOutputInterval.AsInteger := CfpPackage.OutputInterval;
+  cpCADS.Checked := CfpPackage.UseCads;
+
+  PipesUsed := cbPipes.Checked and rcSelectionController.Enabled;
+  EnableCads(PipesUsed);
 end;
 
 procedure TframePackageCFP.EnablePipeControls;
@@ -138,6 +145,8 @@ begin
   rdeRelaxationParameter.Enabled := PipesUsed;
   cbPrintIterations.Enabled := PipesUsed;
   seOutputInterval.Enabled := PipesUsed;
+  EnableCads(PipesUsed);
+
   EnablePipeElevationOffset;
 end;
 
@@ -173,6 +182,23 @@ begin
   CfpPackage.LayerTemperature := rdeLayerTemperature.RealValue;
   CfpPackage.ConduitRechargeUsed := cbConduitRecharge.Checked;
   CfpPackage.OutputInterval := seOutputInterval.AsInteger;
+  CfpPackage.UseCads := cpCADS.Checked;
+end;
+
+procedure TframePackageCFP.EnableCads(PipesUsed: Boolean);
+begin
+{$IFDEF OWHMV2}
+  if frmGoPhast.ModelSelection = msModflowOwhm2 then
+  begin
+    cpCADS.Enabled := PipesUsed;
+  end
+  else
+  begin
+    cpCADS.Enabled := False;
+  end;
+{$ELSE}
+  cpCADS.Enabled := False;
+{$ENDIF}
 end;
 
 end.

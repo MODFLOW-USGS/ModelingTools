@@ -26,6 +26,8 @@ type
     btnElevation: TButton;
     cbRecordPipes: TCheckBox;
     cbRecordNodes: TCheckBox;
+    edCads: TLabeledEdit;
+    btnCads: TButton;
     procedure edDiameterChange(Sender: TObject);
     procedure edTortuosityChange(Sender: TObject);
     procedure edRoughnessHeightChange(Sender: TObject);
@@ -57,7 +59,7 @@ implementation
 
 uses
   ScreenObjectUnit, ModflowCfpPipeUnit, frmGoPhastUnit,
-  ModflowPackageSelectionUnit;
+  ModflowPackageSelectionUnit, GoPhastTypes;
 
 resourcestring
   StrConduitWallConduct = 'Conduit wall conductance (L^2/T) (K_EXCHANGE)';
@@ -177,6 +179,10 @@ begin
         end;
         cbRecordPipes.Checked := ABoundary.RecordPipeValues;
         cbRecordNodes.Checked := ABoundary.RecordNodeValues;
+        if edCads.Enabled then
+        begin
+          edCads.Text := ABoundary.DrainableStorageWidth;
+        end;
       end;
       for ScreenObjectIndex := 1 to ListOfScreenObjects.Count - 1 do
       begin
@@ -209,6 +215,10 @@ begin
         begin
           edElevation.Text := ''
         end;
+        if edCads.Enabled and (edCads.Text <> ABoundary.DrainableStorageWidth) then
+        begin
+          edCads.Text := ''
+        end;
         if cbRecordPipes.Checked <> ABoundary.RecordPipeValues then
         begin
           cbRecordPipes.AllowGrayed := True;
@@ -237,6 +247,7 @@ begin
   edHigherCriticalR.Text := '4000';
   edConductancePermeability.Text := '';
   edElevation.Text := '';
+  edCads.Text := '';
   edElevation.Enabled := frmGoPhast.PhastModel.ModflowPackages.
     ConduitFlowProcess.CfpElevationChoice = cecIndividual;
   btnElevation.Enabled := edElevation.Enabled;
@@ -254,6 +265,13 @@ begin
     else
       Assert(False);
   end;
+{$IFDEF OWHMV2}
+  edCads.Enabled := (frmGoPhast.ModelSelection = msModflowOwhm2)
+    and frmGoPhast.PhastModel.ModflowPackages.
+    ConduitFlowProcess.UseCads;
+{$ELSE}
+  edCads.Enabled := False;
+{$ENDIF}
 end;
 
 procedure TframeScreenObjectCfpPipes.SetData(List: TScreenObjectEditCollection;
@@ -315,6 +333,10 @@ begin
         if edElevation.Enabled and (edElevation.Text <> '') then
         begin
           Boundary.Elevation := edElevation.Text;
+        end;
+        if edCads.Enabled and (edCads.Text <> '') then
+        begin
+          Boundary.DrainableStorageWidth := edCads.Text;
         end;
         if cbRecordPipes.State <> cbGrayed then
         begin

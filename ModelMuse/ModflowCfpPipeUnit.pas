@@ -17,6 +17,8 @@ type
     FHigherCriticalR: IFormulaObject;
     FConductancePermeability: IFormulaObject;
     FElevation: IFormulaObject;
+    FDrainableStorageWidth: IFormulaObject;
+
     FConductancePermeabilityObserver: TObserver;
     FDiameterObserver: TObserver;
     FHigherCriticalRObserver: TObserver;
@@ -24,6 +26,8 @@ type
     FRoughnessHeightObserver: TObserver;
     FTortuosityObserver: TObserver;
     FElevationObserver: TObserver;
+    FDrainableStorageWidthObserver: TObserver;
+
     FRecordPipeValues: boolean;
     FRecordNodeValues: boolean;
     function GetConductancePermeability: string;
@@ -51,6 +55,9 @@ type
     procedure SetRecordPipeValues(const Value: boolean);
     function GetBoundaryFormula(Index: Integer): string;
     procedure SetBoundaryFormula(Index: Integer; const Value: string);
+    function GetDrainableStorageWidth: string;
+    procedure SetDrainableStorageWidth(const Value: string);
+    function GetDrainableStorageWidthObserver: TObserver;
   protected
     procedure HandleChangedValue(Observer: TObserver); override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -66,6 +73,7 @@ type
     property ConductancePermeabilityObserver: TObserver
       read GetConductancePermeabilityObserver;
     property ElevationObserver: TObserver read GetElevationObserver;
+    property DrainableStorageWidthObserver: TObserver read GetDrainableStorageWidthObserver;
   public
     Procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -95,6 +103,12 @@ type
       write SetRecordNodeValues;
     property RecordPipeValues: boolean read FRecordPipeValues
       write SetRecordPipeValues;
+    property DrainableStorageWidth: string read GetDrainableStorageWidth
+      write SetDrainableStorageWidth
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
 //procedure RemoveHfbModflowBoundarySubscription(Sender: TObject; Subject: TObject;
@@ -115,19 +129,7 @@ const
   HigherCriticalRPosition = 4;
   ConductancePermeabilityPosition = 5;
   ElevationPosition = 6;
-
-//procedure RemoveHfbModflowBoundarySubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-//begin
-//  (Subject as TCfpPipeBoundary).RemoveSubscription(Sender, AName);
-//end;
-//
-//procedure RestoreHfbModflowBoundarySubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-//begin
-//  (Subject as TCfpPipeBoundary).RestoreSubscription(Sender, AName);
-//end;
-
+  DrainableStorageWidthPosition = 7;
 
 { TCfpPipeBoundary }
 
@@ -145,6 +147,7 @@ begin
     HigherCriticalR := SourceCfp.HigherCriticalR;
     ConductancePermeability := SourceCfp.ConductancePermeability;
     Elevation := SourceCfp.Elevation;
+    DrainableStorageWidth := SourceCfp.DrainableStorageWidth;
     RecordNodeValues := SourceCfp.RecordNodeValues;
     RecordPipeValues := SourceCfp.RecordPipeValues;
   end;
@@ -167,6 +170,7 @@ begin
   HigherCriticalR := '20';
   ConductancePermeability := '5';
   Elevation := '0';
+  DrainableStorageWidth := '1';
 end;
 
 procedure TCfpPipeBoundary.CreateFormulaObjects;
@@ -178,6 +182,7 @@ begin
   FHigherCriticalR := CreateFormulaObjectBlocks(dso3D);
   FConductancePermeability := CreateFormulaObjectBlocks(dso3D);
   FElevation := CreateFormulaObjectBlocks(dso3D);
+  FDrainableStorageWidth := CreateFormulaObjectBlocks(dso3D);
 end;
 
 procedure TCfpPipeBoundary.CreateObservers;
@@ -191,6 +196,7 @@ begin
     FObserverList.Add(HigherCriticalRObserver);
     FObserverList.Add(ConductancePermeabilityObserver);
     FObserverList.Add(ElevationObserver);
+    FObserverList.Add(DrainableStorageWidthObserver);
   end;
 
 end;
@@ -204,6 +210,7 @@ begin
   HigherCriticalR := '0';
   ConductancePermeability := '0';
   Elevation := '0';
+  DrainableStorageWidth := '0';
   inherited;
 end;
 
@@ -217,6 +224,7 @@ begin
     HigherCriticalRPosition: result := HigherCriticalR;
     ConductancePermeabilityPosition: result := ConductancePermeability;
     ElevationPosition: result := Elevation;
+    DrainableStorageWidthPosition: result := DrainableStorageWidth;
     else Assert(False);
   end;
 end;
@@ -279,6 +287,36 @@ begin
     CreateObserver('Cfp_Diameter_', FDiameterObserver, DataArray);
   end;
   result := FDiameterObserver;
+end;
+
+function TCfpPipeBoundary.GetDrainableStorageWidth: string;
+begin
+  Result := FDrainableStorageWidth.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DrainableStorageWidthPosition);
+  end;
+end;
+
+function TCfpPipeBoundary.GetDrainableStorageWidthObserver: TObserver;
+var
+  Model: TPhastModel;
+  DataArray: TDataArray;
+begin
+  if FDrainableStorageWidthObserver = nil then
+  begin
+    if ParentModel <> nil then
+    begin
+      Model := ParentModel as TPhastModel;
+      DataArray := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    CreateObserver('Cfp_DrainableStorageWidth_', FDrainableStorageWidthObserver, DataArray);
+  end;
+  result := FDrainableStorageWidthObserver;
 end;
 
 function TCfpPipeBoundary.GetElevation: string;
@@ -402,6 +440,10 @@ begin
   begin
     List.Add(FObserverList[ElevationPosition]);
   end;
+  if Sender = FDrainableStorageWidth as TObject then
+  begin
+    List.Add(FObserverList[DrainableStorageWidthPosition]);
+  end;
 end;
 
 function TCfpPipeBoundary.GetRoughnessHeight: string;
@@ -499,6 +541,8 @@ begin
       ConductancePermeability := Value;
     ElevationPosition:
       Elevation := Value;
+    DrainableStorageWidthPosition:
+      DrainableStorageWidth := Value;
     else Assert(False);
   end;
 end;
@@ -511,6 +555,11 @@ end;
 procedure TCfpPipeBoundary.SetDiameter(const Value: string);
 begin
   UpdateFormulaBlocks(Value, DiameterPosition, FDiameter);
+end;
+
+procedure TCfpPipeBoundary.SetDrainableStorageWidth(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DrainableStorageWidthPosition, FDrainableStorageWidth);
 end;
 
 procedure TCfpPipeBoundary.SetElevation(const Value: string);

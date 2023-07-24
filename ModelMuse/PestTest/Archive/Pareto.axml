@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Pareto" FileType="bin">
-    <FileName Model_Name="Pareto" FileType="bin">..\..\..\WRDAPP\mf6.4.1\bin\mf6.exe</FileName>
+    <FileName Model_Name="Pareto" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="Pareto" FileType="ancillary">
     <FileName Model_Name="Pareto" FileType="ancillary">Pareto.gpt</FileName>
