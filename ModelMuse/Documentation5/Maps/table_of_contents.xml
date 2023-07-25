@@ -1540,6 +1540,9 @@
             <topicref type="topic" id="430277852438641" build="ALL" modified="2017-10-19T15:30:52.738Z" icon="0" href="STO_Storage_Package_Pane">
               <caption translate="true">STO: Storage Package Pane</caption>
             </topicref>
+            <topicref type="topic" id="451323477666426" build="ALL" modified="2023-07-25T12:51:44.743Z" icon="0" href="BUY-Buoyancy-Package-Pane">
+              <caption translate="true">BUY: Buoyancy Package Pane</caption>
+            </topicref>
             <topicref type="topic" id="433546976615891" build="ALL" modified="2018-09-11T13:34:37.123Z" icon="0" href="GNC_Ghost_Node_Correction_Pack">
               <caption translate="true">GNC: Ghost-Node Correction Package</caption>
             </topicref>

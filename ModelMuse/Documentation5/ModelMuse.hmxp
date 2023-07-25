@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4503</config-value>
+      <config-value name="autohelpstart">4504</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -751,6 +751,7 @@ document.write('</frameset>');
       <helpcontext-number href="BTN_Basic_Transport_Package" value="3640"/>
       <helpcontext-number href="Budget_Pane" value="2530"/>
       <helpcontext-number href="Budget_Pane#SaveCellFlows" value="3818"/>
+      <helpcontext-number href="BUY-Buoyancy-Package-Pane" value="4504"/>
       <helpcontext-number href="Calibration_TabMNW2" value="4179"/>
       <helpcontext-number href="Calibration_tabSfr" value="4178"/>
       <helpcontext-number href="Case" value="560"/>

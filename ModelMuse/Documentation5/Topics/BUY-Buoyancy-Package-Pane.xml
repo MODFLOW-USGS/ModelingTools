@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" modified="2023-07-25T13:21:30.968-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">BUY: Buoyancy Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">BUY: Buoyancy Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Buoyancy package in MODFLOW 6 is used to model variable density flow in a single fluid in MODFLOW 6 models. The </text><text styleclass="Strong" translate="true">BUY: Buoyancy Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Flow Packages</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the Buoyancy package is used, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GWT-Groundwater-Transport" styleclass="Normal" translate="true">Groundwater Transport</link><text styleclass="Normal" translate="true"> process must also be used. In addition, the flow and transport models must be part of the same simulation. These options will be selected automatically when the Buoyancy package is selected if they are not selected already.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Buoyancy package will adjust the conductances in the model based on the solute concentrations. For each chemical species, the user specifies a reference concentration and DRHODC. DRHODC is the slope of the line relating concentration to fluid density. The user also specifies a reference density which is typically the density of fresh water at 25° C. (997.08 kg/m).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Instead of calculated the density of water entering the model through boundary conditions, the user can specify the density directly by checking the </text><text styleclass="Strong" translate="true">Specify density</text><text styleclass="Normal" translate="true"> checkbox. If this is done, a </text></para>
+  </body>
+</topic>

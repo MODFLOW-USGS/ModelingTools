@@ -29890,7 +29890,7 @@ end;
 procedure TBuoyancyPackage.InitializeVariables;
 begin
   inherited;
-  FStoredRefDensity.Value := 1000;
+  FStoredRefDensity.Value := 997.08;
   FDensityUsed := False;
   RightHandSide := False;
   WriteDensity := False;

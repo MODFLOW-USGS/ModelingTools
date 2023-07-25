@@ -395,6 +395,7 @@ type
         ARow: Integer);
     procedure framePkgFmp4SoilsrdgSoilsSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure frameGwtProcessrgSimulationChoiceClick(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -657,8 +658,13 @@ resourcestring
   StrTheSaveSaturationGwt = 'The Save Saturation option in the NPF package i' +
   's required with GWT when the transport simulation is separate from the fl' +
   'ow simulation. Do you want to fix this?';
-  StrTheGroundwaterTran = 'The Groundwater Transport package is required whe' +
+  StrTheGroundwaterTran = 'The Groundwater Transport process is required whe' +
   'n using the Buoyancy package and has been activated.';
+  StrTheFlowAndGroundw = 'The Flow and Groundwater Transport processes must ' +
+  'both be in the same simulation when using the Buoyancy package and has be' +
+  'en activated.';
+  StrTheBuoyancyPackage = 'The Buoyancy package has been deactived because i' +
+  't requires that the flow and transport models be in the same simulation.';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -2216,6 +2222,20 @@ begin
   frameGwtProcess.rcSelectionControllerEnabledChange(Sender);
   EnableChemSpecies;
   EnableGwtPackages;
+end;
+
+procedure TfrmModflowPackages.frameGwtProcessrgSimulationChoiceClick(
+  Sender: TObject);
+begin
+  inherited;
+  frameGwtProcess.rcSelectionControllerEnabledChange(Sender);
+  if framePkgBuoyancy.Selected
+    and (frameGwtProcess.rgSimulationChoice.ItemIndex <> 0) then
+  begin
+    framePkgBuoyancy.Selected := False;
+    Beep;
+    MessageDlg(StrTheBuoyancyPackage, mtWarning, [mbOK], 0);
+  end;
 end;
 
 procedure TfrmModflowPackages.frameModpathrcSelectionControllerEnabledChange(
@@ -4222,8 +4242,15 @@ begin
             if not frameGwtProcess.Selected then
             begin
               frameGwtProcess.Selected := True;
+              frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
               Beep;
               MessageDlg(StrTheGroundwaterTran, mtInformation, [mbOK], 0);
+            end
+            else if frameGwtProcess.rgSimulationChoice.ItemIndex <> 0 then
+            begin
+              frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
+              Beep;
+              MessageDlg(StrTheFlowAndGroundw, mtInformation, [mbOK], 0);
             end;
           end;
           if (Frame = frameGwtProcess) and not frameGwtProcess.Selected then
