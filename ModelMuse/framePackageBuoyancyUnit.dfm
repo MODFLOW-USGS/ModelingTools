@@ -1,20 +1,21 @@
 inherited framePackageBuoyancy: TframePackageBuoyancy
-  Width = 575
-  Height = 377
-  ExplicitWidth = 575
-  ExplicitHeight = 377
+  Width = 715
+  Height = 266
+  ExplicitWidth = 715
+  ExplicitHeight = 266
   DesignSize = (
-    575
-    377)
+    715
+    266)
   object lblRefDensity: TLabel [2]
     Left = 176
     Top = 231
-    Width = 121
+    Width = 93
     Height = 15
     Caption = 'Reference density'
   end
   inherited memoComments: TMemo
-    Width = 544
+    Width = 684
+    ExplicitWidth = 684
   end
   object cbSpecifyDensity: TCheckBox [4]
     Left = 16
@@ -46,8 +47,8 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
   object rdgChemDensity: TRbwDataGrid4 [7]
     Left = 0
     Top = 256
-    Width = 575
-    Height = 121
+    Width = 715
+    Height = 10
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     ColCount = 3
@@ -137,7 +138,6 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 422
   end
   object rdeRefDensity: TRbwDataEntry [8]
     Left = 16

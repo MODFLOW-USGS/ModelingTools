@@ -118,6 +118,8 @@ var
   LenUni: cint;
   LenUniArray: array of cint;
   k: array of Double;
+  Mode: array of cint;
+  ModeString: AnsiString;
 begin
   version := @vstr;
   component := @cname;
@@ -174,6 +176,32 @@ begin
     for NameIndex := 0 to NameList.Count - 1 do
     begin
       Writeln(NameList[NameIndex]);
+    end;
+    if (NameList.Count > 0) and (NameList[0] = 'SIM/ISIM_MODE') then
+    begin
+      SetLength(Mode, 1);
+      ModeString := NameList[0];
+      if get_value_int(PAnsiChar(ModeString), @Mode) = 0 then
+      begin
+        Writeln('Mode: ', Mode[0]);
+        Mode[0] := 0;
+        if set_value_int(PAnsiChar(ModeString), @Mode) = 0 then
+        begin
+          Writeln('success Setting Mode: ');
+        end
+        else
+        begin
+          Writeln('Error Setting Mode: ');
+          get_last_bmi_error(@ErrorMessage);
+          Writeln(ErrorMessage);
+        end;
+      end
+      else
+      begin
+        Writeln('Error Getting Mode: ');
+        get_last_bmi_error(@ErrorMessage);
+        Writeln(ErrorMessage);
+      end;
     end;
     for NameIndex := 0 to cnt - 1 do
     begin
@@ -527,5 +555,6 @@ begin
   Writeln('Current time: ',  currentTime);
 
   finalize();
+  Writeln('Press any key to close');
   Readln;
 end.

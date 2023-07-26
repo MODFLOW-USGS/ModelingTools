@@ -8,43 +8,43 @@ object frameInitialGridPosition: TframeInitialGridPosition
   object lblGridAngle: TLabel
     Left = 208
     Top = 44
-    Width = 101
-    Height = 13
+    Width = 109
+    Height = 15
     Caption = 'Grid angle (degrees) '
   end
   object lblVerticalExaggeration: TLabel
     Left = 208
     Top = 84
-    Width = 102
-    Height = 13
+    Width = 110
+    Height = 15
     Caption = 'Vertical exaggeration'
   end
   object lblGridOrigin: TLabel
     Left = 8
     Top = 8
-    Width = 52
-    Height = 13
+    Width = 59
+    Height = 15
     Caption = 'Grid origin:'
   end
   object lblOriginX: TLabel
     Left = 88
     Top = 44
-    Width = 6
-    Height = 13
+    Width = 7
+    Height = 15
     Caption = 'X'
   end
   object lblOriginY: TLabel
     Left = 88
     Top = 84
-    Width = 6
-    Height = 13
+    Width = 7
+    Height = 15
     Caption = 'Y'
   end
   object lblOriginZ: TLabel
     Left = 88
     Top = 124
-    Width = 6
-    Height = 13
+    Width = 7
+    Height = 15
     Caption = 'Z'
   end
   object rdeAngle: TRbwDataEntry
@@ -53,7 +53,6 @@ object frameInitialGridPosition: TframeInitialGridPosition
     Width = 73
     Height = 28
     Cursor = crIBeam
-    ItemHeight = 13
     TabOrder = 3
     Text = '0'
     DataType = dtReal
@@ -66,7 +65,6 @@ object frameInitialGridPosition: TframeInitialGridPosition
     Width = 73
     Height = 28
     Cursor = crIBeam
-    ItemHeight = 13
     TabOrder = 4
     Text = '20'
     DataType = dtReal
@@ -80,7 +78,6 @@ object frameInitialGridPosition: TframeInitialGridPosition
     Width = 73
     Height = 28
     Cursor = crIBeam
-    ItemHeight = 13
     TabOrder = 0
     Text = '0'
     DataType = dtReal
@@ -93,7 +90,6 @@ object frameInitialGridPosition: TframeInitialGridPosition
     Width = 73
     Height = 28
     Cursor = crIBeam
-    ItemHeight = 13
     TabOrder = 1
     Text = '0'
     DataType = dtReal
@@ -106,7 +102,6 @@ object frameInitialGridPosition: TframeInitialGridPosition
     Width = 73
     Height = 28
     Cursor = crIBeam
-    ItemHeight = 13
     TabOrder = 2
     Text = '0'
     DataType = dtReal

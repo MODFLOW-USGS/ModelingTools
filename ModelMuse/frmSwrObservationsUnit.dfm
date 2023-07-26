@@ -21,7 +21,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       630
       42)
     object btnHelp: TBitBtn
-      Left = 347
+      Left = 343
       Top = 6
       Width = 83
       Height = 33
@@ -29,9 +29,10 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 347
     end
     object btnOK: TBitBtn
-      Left = 436
+      Left = 432
       Top = 6
       Width = 83
       Height = 33
@@ -40,9 +41,10 @@ inherited frmSwrObservations: TfrmSwrObservations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 436
     end
     object btnCancel: TBitBtn
-      Left = 525
+      Left = 521
       Top = 6
       Width = 83
       Height = 33
@@ -50,6 +52,7 @@ inherited frmSwrObservations: TfrmSwrObservations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 525
     end
   end
   inline frameObservations: TframeGrid

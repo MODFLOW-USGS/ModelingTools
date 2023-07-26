@@ -463,9 +463,12 @@ begin
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
-      AGwtFileName := GwtFileName(FNameOfFile, SpeciesIndex);
-      TFile.Copy(FNameOfFile, AGwtFileName, True);
-      WriteToGwtNameFile(FTYPE, AGwtFileName, SpeciesIndex);
+      if Model.MobileComponents[SpeciesIndex].UsedForGWT then
+      begin
+        AGwtFileName := GwtFileName(FNameOfFile, SpeciesIndex);
+        TFile.Copy(FNameOfFile, AGwtFileName, True);
+        WriteToGwtNameFile(FTYPE, AGwtFileName, SpeciesIndex);
+      end;
     end;
   end;
 
@@ -1120,9 +1123,12 @@ begin
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
-      AGwtFileName := GwtFileName(FNameOfFile, SpeciesIndex);
-      TFile.Copy(FNameOfFile, AGwtFileName, True);
-      WriteToGwtNameFile(FTYPE, AGwtFileName, SpeciesIndex);
+      if Model.MobileComponents[SpeciesIndex].UsedForGWT then
+      begin
+        AGwtFileName := GwtFileName(FNameOfFile, SpeciesIndex);
+        TFile.Copy(FNameOfFile, AGwtFileName, True);
+        WriteToGwtNameFile(FTYPE, AGwtFileName, SpeciesIndex);
+      end;
     end;
   end;
 end;

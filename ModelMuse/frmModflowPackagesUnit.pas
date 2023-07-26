@@ -498,6 +498,10 @@ type
     procedure EnableGwtPackages;
     function CheckMt3dSaturation: Boolean;
     function CheckGwtSaturation: Boolean;
+    procedure FillIgnoredNames(var IgnoredNames: TStringList);
+    procedure CreateMstNode;
+    procedure CreateIstNode;
+    procedure CreateGwtImsNode;
 //    function CheckMf6LakeOutlet: Boolean;
     { Private declarations }
   protected
@@ -2188,12 +2192,35 @@ end;
 
 procedure TfrmModflowPackages.frameGridMobileGridSetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
+var
+  IgnoredNames: TStringList;
+  RowIndex: Integer;
+  Index: Integer;
+  AName: string;
 begin
   inherited;
   UpdateGwtFrames;
   if (ACol = 0) and (ARow >= 1) then
   begin
-    framePkgBuoyancy.rdgChemDensity.Cells[Ord(ccName), ARow] := Value;
+    IgnoredNames := TStringList.Create;
+    try
+      FillIgnoredNames(IgnoredNames);
+      RowIndex := 1;
+      for Index := 1 to framePkgBuoyancy.rdgChemDensity.RowCount - 1 do
+      begin
+        AName := framePkgBuoyancy.rdgChemDensity.Cells[Ord(ccName), Index];
+        if IgnoredNames.IndexOf(AName) >= 0 then
+        begin
+          Continue;
+        end;
+        framePkgBuoyancy.rdgChemDensity.Cells[Ord(ccName), RowIndex] := AName;
+        Inc(RowIndex);
+      end;
+    finally
+      IgnoredNames.Free;
+    end;
+
+
   end;
 end;
 
@@ -2206,13 +2233,21 @@ begin
 end;
 
 procedure TfrmModflowPackages.frameGridMobileseNumberChange(Sender: TObject);
+var
+  IgnoredNames: TStringList;
 begin
   inherited;
   frameChemSpecies.frameGridMobile.seNumberChange(Sender);
   UpdateSpeciesNames;
   UpdateGwtFrames;
-  framePkgBuoyancy.rdgChemDensity.RowCount :=
-    frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1;
+  IgnoredNames := TStringList.Create;
+  try
+    FillIgnoredNames(IgnoredNames);
+    framePkgBuoyancy.rdgChemDensity.RowCount :=
+      frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1 - IgnoredNames.Count;
+  finally
+    IgnoredNames.Free;
+  end;
 end;
 
 procedure TfrmModflowPackages.frameGwtProcessrcSelectionControllerEnabledChange(
@@ -2896,7 +2931,13 @@ begin
     FframePackageMSTObjectList.Clear;
     FframePackageIstObjectList.Clear;
     FframePkgSmsObjectList.Clear;
+
+    frameGwtProcess.Selected := frmGoPhast.PhastModel.ModflowPackages.GwtProcess.IsSelected;
+    frameChemSpecies.frameGridMobile.seNumber.AsInteger :=
+      frmGoPhast.PhastModel.MobileComponents.Count;
+
     ReadPackages;
+
     comboModel.ItemIndex := 0;
     comboModelChange(nil);
     if frmGoPhast.ModelSelection = msModflow2015  then
@@ -2951,6 +2992,42 @@ begin
   end;
 
   UpdateGwtFrames;
+end;
+
+procedure TfrmModflowPackages.CreateGwtImsNode;
+begin
+  // IMS Packages
+  if FGwtImsNode = nil then
+  begin
+    FGwtImsNode := tvPackages.Items.AddChild(FGwtParentNode, StrIMSIterativeModel);
+  end;
+end;
+
+procedure TfrmModflowPackages.CreateIstNode;
+begin
+  // IST Package
+  if FIstNode = nil then
+  begin
+    FIstNode := tvPackages.Items.AddChild(FGwtParentNode, StrISTImmobileStorag);
+  end;
+end;
+
+procedure TfrmModflowPackages.CreateMstNode;
+begin
+  // MST package
+  if FMstNode = nil then
+  begin
+    FMstNode := tvPackages.Items.AddChild(FGwtParentNode, StrMSTMobileStorage);
+  end;
+end;
+
+procedure TfrmModflowPackages.FillIgnoredNames(var IgnoredNames: TStringList);
+begin
+  IgnoredNames.CaseSensitive := False;
+  if framePkgBuoyancy.Selected and framePkgBuoyancy.cbSpecifyDensity.Checked then
+  begin
+    IgnoredNames.Add(StrDensity);
+  end;
 end;
 
 function TfrmModflowPackages.CreateMstFrame: TframePackageMST;
@@ -3396,12 +3473,7 @@ begin
       FCurrentPackages.GwtPackages.Count :=
         frameChemSpecies.frameGridMobile.seNumber.AsInteger
     end;
-
-    // MST package
-    if FMstNode = nil then
-    begin
-      FMstNode := tvPackages.Items.AddChild(FGwtParentNode, StrMSTMobileStorage);
-    end;
+    CreateMstNode;
     ChildNode := FMstNode.GetFirstChild;
     for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
     begin
@@ -3443,12 +3515,7 @@ begin
 
       ChildNode := ChildNode.GetnextSibling;
     end;
-
-    // IST Package
-    if FIstNode = nil then
-    begin
-      FIstNode := tvPackages.Items.AddChild(FGwtParentNode, StrISTImmobileStorag);
-    end;
+    CreateIstNode;
 
     ChildNode := FIstNode.GetFirstChild;
     for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
@@ -3490,12 +3557,7 @@ begin
 
       ChildNode := ChildNode.GetnextSibling;
     end;
-
-    // IMS Packages
-    if FGwtImsNode = nil then
-    begin
-      FGwtImsNode := tvPackages.Items.AddChild(FGwtParentNode, StrIMSIterativeModel);
-    end;
+    CreateGwtImsNode;
 
     ChildNode := FGwtImsNode.GetFirstChild;
     for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
@@ -4993,8 +5055,13 @@ begin
     if Packages.GwtPackages.Count < frameChemSpecies.frameGridMobile.seNumber.AsInteger then
     begin
       Packages.GwtPackages.Count := frameChemSpecies.frameGridMobile.seNumber.AsInteger
+    end
+    else
+    begin
+      frameChemSpecies.frameGridMobile.seNumber.AsInteger := Packages.GwtPackages.Count ;
     end;
     // MST Package
+    CreateMstNode;
     MstChildNode := FMstNode.GetFirstChild;
     for MstIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger - 1 do
     begin
@@ -5030,6 +5097,7 @@ begin
 //    end;
 
     // IST Package
+    CreateIstNode;
     IstChildNode := FIstNode.GetFirstChild;
     for IstIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger - 1 do
     begin
@@ -5065,6 +5133,7 @@ begin
 //    end;
 
     // IMS Package
+    CreateGwtImsNode;
     ImsChildNode := FGwtImsNode.GetFirstChild;
     for ImsIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger - 1 do
     begin

@@ -59,12 +59,24 @@ procedure TframePackageBuoyancy.GetMt3dmsChemSpecies(
 var
   ChemIndex: Integer;
   AChemSpecies: TMobileChemSpeciesItem;
+  Index: Integer;
+  UsedSpeciesCount: Integer;
+  RowIndex: Integer;
 begin
   rdgChemDensity.BeginUpdate;
   try
-    if MobileComponents.Count > 0 then
+    UsedSpeciesCount := 0;
+    for Index := 0 to MobileComponents.Count - 1 do
     begin
-      rdgChemDensity.RowCount := MobileComponents.Count + 1;
+      if MobileComponents[Index].UsedForGWT then
+      begin
+        Inc(UsedSpeciesCount)
+      end;
+    end;
+
+    if UsedSpeciesCount > 0 then
+    begin
+      rdgChemDensity.RowCount := UsedSpeciesCount + 1;
     end
     else
     begin
@@ -78,14 +90,19 @@ begin
     rdgChemDensity.Cells[Ord(ccRefConcentration), 0] := 'Reference Concentration (crhoref)';
     rdgChemDensity.Cells[Ord(ccSlope), 0] := 'Slope (drhodc)';
 
+    RowIndex := 1;
     if MobileComponents.Count > 0 then
     begin
       for ChemIndex := 0 to MobileComponents.Count - 1 do
       begin
         AChemSpecies := MobileComponents[ChemIndex];
-        rdgChemDensity.Cells[Ord(ccName), ChemIndex+1] := AChemSpecies.Name;
-        rdgChemDensity.RealValue[Ord(ccRefConcentration), ChemIndex+1] := AChemSpecies.RefConcentration;
-        rdgChemDensity.RealValue[Ord(ccSlope), ChemIndex+1] := AChemSpecies.DensitySlope;
+        if AChemSpecies.UsedForGWT then
+        begin
+          rdgChemDensity.Cells[Ord(ccName), RowIndex] := AChemSpecies.Name;
+          rdgChemDensity.RealValue[Ord(ccRefConcentration), RowIndex] := AChemSpecies.RefConcentration;
+          rdgChemDensity.RealValue[Ord(ccSlope), RowIndex] := AChemSpecies.DensitySlope;
+          Inc(RowIndex);
+        end;
       end;
     end;
   finally
@@ -114,25 +131,31 @@ procedure TframePackageBuoyancy.SetMt3dmsChemSpecies(
 var
   ChemIndex: Integer;
   AChemSpecies: TMobileChemSpeciesItem;
-  AVAlue: Double;
+  AValue: Double;
+  RowIndex: Integer;
 begin
-    for ChemIndex := 0 to MobileComponents.Count - 1 do
+  RowIndex := 1;
+  for ChemIndex := 0 to MobileComponents.Count - 1 do
+  begin
+    AChemSpecies := MobileComponents[ChemIndex];
+    if AChemSpecies.UsedForGWT then
     begin
-      if ChemIndex + 1  >= rdgChemDensity.RowCount then
+      if RowIndex >= rdgChemDensity.RowCount then
       begin
          Break;
       end;
-      AChemSpecies := MobileComponents[ChemIndex];
 
-      if TryStrToFloat(rdgChemDensity.Cells[Ord(ccRefConcentration), ChemIndex+1], AVAlue) then
+      if TryStrToFloat(rdgChemDensity.Cells[Ord(ccRefConcentration), RowIndex], AValue) then
       begin
-        AChemSpecies.RefConcentration := AVAlue;
+        AChemSpecies.RefConcentration := AValue;
       end;
-      if TryStrToFloat(rdgChemDensity.Cells[Ord(ccSlope), ChemIndex+1], AVAlue) then
+      if TryStrToFloat(rdgChemDensity.Cells[Ord(ccSlope), RowIndex], AValue) then
       begin
-        AChemSpecies.DensitySlope := AVAlue;
+        AChemSpecies.DensitySlope := AValue;
       end;
+      Inc(RowIndex)
     end;
+  end;
 end;
 
 end.

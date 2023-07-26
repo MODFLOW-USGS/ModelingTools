@@ -1712,6 +1712,10 @@ begin
   begin
     Exit;
   end;
+  if not Model.MobileComponents[SpeciesIndex].UsedForGWT then
+  begin
+    Exit;
+  end;
   FSpeciesIndex :=  SpeciesIndex;
   SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
   FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.uzt';

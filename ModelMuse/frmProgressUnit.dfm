@@ -27,7 +27,7 @@ inherited frmProgressMM: TfrmProgressMM
     Align = alTop
     ParentColor = True
     TabOrder = 1
-    ExplicitWidth = 414
+    ExplicitWidth = 650
     DesignSize = (
       654
       61)
@@ -41,7 +41,7 @@ inherited frmProgressMM: TfrmProgressMM
     object pbProgress: TProgressBar
       Left = 8
       Top = 8
-      Width = 625
+      Width = 621
       Height = 18
       Anchors = [akLeft, akTop, akRight]
       Step = 1
@@ -49,7 +49,7 @@ inherited frmProgressMM: TfrmProgressMM
       ExplicitWidth = 385
     end
     object btnAbort: TBitBtn
-      Left = 558
+      Left = 554
       Top = 30
       Width = 75
       Height = 25

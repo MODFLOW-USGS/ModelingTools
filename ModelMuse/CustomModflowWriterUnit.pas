@@ -1760,9 +1760,12 @@ begin
           SimFileName := ChangeFileExt(SimFileName, '');
           for ChemIndex := 0 to Model.MobileComponents.Count - 1 do
           begin
-            ChemExt := '.' + Model.MobileComponents[ChemIndex].Name + '.lst';
-            ListFileName := ChangeFileExt(SimFileName, ChemExt);
-            ListFiles.Add(ListFileName);
+            if Model.MobileComponents[ChemIndex].UsedForGWT then
+            begin
+              ChemExt := '.' + Model.MobileComponents[ChemIndex].Name + '.lst';
+              ListFileName := ChangeFileExt(SimFileName, ChemExt);
+              ListFiles.Add(ListFileName);
+            end;
           end;
         end;
       end;
@@ -9826,10 +9829,13 @@ begin
     for SpeciesIndex := 0 to Limit - 1 do
     begin
       FSpeciesIndex := SpeciesIndex;
-      SpeciesName := Model.MobileComponents[SpeciesIndex].Name + '.';
-      BackupFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
-        + FileRoot + SpeciesName + 'mfsim.nam';
-      WriteFileInternal(FileName, BackupFileName);
+      if Model.MobileComponents[SpeciesIndex].UsedForGWT then
+      begin
+        SpeciesName := Model.MobileComponents[SpeciesIndex].Name + '.';
+        BackupFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+          + FileRoot + SpeciesName + 'mfsim.nam';
+        WriteFileInternal(FileName, BackupFileName);
+      end;
     end;
   end;
 

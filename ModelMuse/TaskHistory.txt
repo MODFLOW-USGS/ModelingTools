@@ -442,7 +442,7 @@ object TTaskHistory
     end
     item
       Name = 'GwMounding'
-      Display = False
+      Display = True
     end
     item
       Name = 'PEST Observations'
@@ -31520,5 +31520,13 @@ object TTaskHistory
         'Buoyancy'
         'MF-2015'
         'Design and Planning')
+    end
+    item
+      Date = 45133.000000000000000000
+      Categories.Strings = (
+        'Design and Planning'
+        'Buoyancy'
+        'MF-2015'
+        'GwMounding')
     end>
 end

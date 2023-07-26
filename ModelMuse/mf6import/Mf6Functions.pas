@@ -63,6 +63,7 @@ function get_grid_y(grid_id: pcint; y: pdouble) : cint;cdecl;external 'libmf6.dl
 
 function get_var_shape(c_var_address: PAnsiChar; c_var_shape: pcint) : cint;cdecl;external 'libmf6.dll';
 
+function set_value_int(Variablename: PAnsiChar; AnArray: pcint): cint;cdecl;external 'libmf6.dll';
 
 
 implementation

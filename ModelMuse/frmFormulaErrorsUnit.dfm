@@ -28,7 +28,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       534
       45)
     object btnClose: TBitBtn
-      Left = 409
+      Left = 405
       Top = 6
       Width = 83
       Height = 33
@@ -36,6 +36,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 409
     end
     object btnCopy: TButton
       Left = 8
@@ -50,7 +51,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       OnClick = btnCopyClick
     end
     object btnHelp: TBitBtn
-      Left = 320
+      Left = 316
       Top = 6
       Width = 83
       Height = 33
@@ -59,6 +60,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 320
     end
     object btnClear: TButton
       Left = 182

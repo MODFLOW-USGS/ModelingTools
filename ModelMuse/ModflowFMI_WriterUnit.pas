@@ -47,6 +47,10 @@ begin
   FNameOfFile := NameOfFile;
   for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
   begin
+    if not Model.MobileComponents[SpeciesIndex].UsedForGWT then
+    begin
+      Continue;
+    end;
     SpeciesName := '.' + Model.MobileComponents[SpeciesIndex].Name + Extension;
     NameOfFile := ChangeFileExt(AFileName, SpeciesName);
     FInputFileName := NameOfFile;

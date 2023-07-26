@@ -177,6 +177,10 @@ begin
   begin
     Exit
   end;
+  if not Model.MobileComponents[SpeciesIndex].UsedForGWT then
+  begin
+    Exit;
+  end;
   FCncPackage := Model.ModflowPackages.GwtCncPackage;
   FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;
   FSpeciesIndex := SpeciesIndex;
@@ -397,6 +401,10 @@ begin
   if not Model.GwtUsed then
   begin
     Exit
+  end;
+  if not Model.MobileComponents[SpeciesIndex].UsedForGWT then
+  begin
+    Exit;
   end;
   FSrcPackage := Model.ModflowPackages.GwtSrcPackage;
   FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;

@@ -754,6 +754,10 @@ begin
   begin
     Exit;
   end;
+  if not Model.MobileComponents[SpeciesIndex].UsedForGWT then
+  begin
+    Exit;
+  end;
   FPestParamUsed := False;
   FSpeciesIndex :=  SpeciesIndex;
   SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;

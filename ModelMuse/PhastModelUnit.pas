@@ -43101,7 +43101,10 @@ begin
   begin
     for SpeciesIndex := 0 to MobileComponents.Count - 1 do
     begin
-      GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport));
+      if MobileComponents[SpeciesIndex].UsedForGWT then
+      begin
+        GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport));
+      end;
     end;
   end;
 

@@ -26,7 +26,7 @@ inherited frmStartUp: TfrmStartUp
       743
       47)
     object btnNext: TBitBtn
-      Left = 631
+      Left = 627
       Top = 6
       Width = 86
       Height = 33
@@ -49,10 +49,10 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
-      ExplicitLeft = 627
+      ExplicitLeft = 623
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 444
+      Left = 440
       Top = 6
       Width = 100
       Height = 33
@@ -63,10 +63,10 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
-      ExplicitLeft = 440
+      ExplicitLeft = 436
     end
     object btnHelp: TBitBtn
-      Left = 550
+      Left = 546
       Top = 6
       Width = 75
       Height = 33
@@ -76,7 +76,7 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 546
+      ExplicitLeft = 542
     end
   end
   object pcStartup: TPageControl
@@ -114,8 +114,6 @@ inherited frmStartUp: TfrmStartUp
           'Open an existing ModelMuse project'
           'Import MODFLOW-2005 or MODFLOW-NWT model')
         TabOrder = 0
-        ExplicitWidth = 731
-        ExplicitHeight = 323
       end
     end
     object tabGeoRef: TTabSheet
@@ -546,9 +544,9 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 471
+          Left = 475
           Top = 20
-          Width = 262
+          Width = 258
           Height = 261
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
@@ -706,21 +704,21 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 245
+        Width = 241
         Height = 292
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
         ExplicitLeft = 464
         ExplicitTop = 29
-        ExplicitWidth = 245
-        ExplicitHeight = 292
+        ExplicitWidth = 237
+        ExplicitHeight = 291
         inherited Panel: TPanel
           Top = 227
-          Width = 245
+          Width = 241
           Height = 65
-          ExplicitTop = 227
-          ExplicitWidth = 245
+          ExplicitTop = 226
+          ExplicitWidth = 237
           ExplicitHeight = 65
           inherited lbNumber: TLabel
             Width = 161
@@ -744,7 +742,7 @@ inherited frmStartUp: TfrmStartUp
             ExplicitTop = 38
           end
           inherited sbDelete: TSpeedButton
-            Left = 52
+            Left = 51
             Top = 38
             OnClick = frameModelLayerssbDeleteClick
             ExplicitLeft = 66
@@ -758,7 +756,7 @@ inherited frmStartUp: TfrmStartUp
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 245
+          Width = 241
           Height = 227
           ColCount = 2
           RowCount = 5
@@ -813,8 +811,8 @@ inherited frmStartUp: TfrmStartUp
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 245
-          ExplicitHeight = 227
+          ExplicitWidth = 237
+          ExplicitHeight = 226
           ColWidths = (
             64
             64)
@@ -959,7 +957,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 206
+        Width = 202
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -969,6 +967,7 @@ inherited frmStartUp: TfrmStartUp
           'Saturated'
           'Unsaturated')
         TabOrder = 3
+        ExplicitWidth = 198
       end
     end
     object tabInitialGridFootprint: TTabSheet

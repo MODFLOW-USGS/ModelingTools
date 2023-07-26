@@ -85,6 +85,10 @@ begin
   end
   else
   begin
+    if not Model.MobileComponents[FSpeciesIndex].UsedForGWT then
+    begin
+      Exit;
+    end;
     FNameOfFile := GwtFileName(AFileName, FSpeciesIndex);
     FSpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
   end;

@@ -98,6 +98,7 @@ type
     function GetRefConcentration: double;
     procedure SetRefConcentration(const Value: double);
     procedure SetDensitySlope(const Value: double);
+    function GetUsedForGWT: Boolean;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -111,6 +112,7 @@ type
     // Buoyancy package crhoref
     property RefConcentration: double read GetRefConcentration
       write SetRefConcentration;
+    property UsedForGWT: Boolean read GetUsedForGWT;
   published
     property Name: string read FName write SetName;
     // BTN package, SCONC, GWT IC package, STRT
@@ -764,6 +766,24 @@ end;
 function TChemSpeciesItem.GetRefConcentration: double;
 begin
   result := StoredRefConcentration.Value;
+end;
+
+function TChemSpeciesItem.GetUsedForGWT: Boolean;
+var
+  LocalModel: TCustomModel;
+  BuoyancyPkg: TBuoyancyPackage;
+begin
+  result := True;
+
+  if (Model <> nil) and SameText(Name, StrDensity) and (Model.ModelSelection = msModflow2015) then
+  begin
+    LocalModel := Model as TCustomModel;
+    BuoyancyPkg := LocalModel.ModflowPackages.BuoyancyPackage;
+    if BuoyancyPkg.IsSelected and BuoyancyPkg.DensityUsed then
+    begin
+      result := False;
+    end;
+  end;
 end;
 
 function TChemSpeciesItem.IsSame(AnotherItem: TOrderedItem): boolean;
