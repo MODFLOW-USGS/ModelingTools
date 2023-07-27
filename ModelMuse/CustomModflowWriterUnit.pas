@@ -4162,10 +4162,34 @@ procedure TCustomModflowWriter.WriteToGwtNameFile(const Ftype: string;
 var
   Mf6GwtNameWriters: TMf6GwtNameWriters;
   Mf6GwtNameWriter: TMf6GwtNameWriter;
+  IgnoredNames: TStringList;
+  FileIndex: Integer;
+  SIndex: Integer;
+  SpeciesName: string;
 begin
   Mf6GwtNameWriters := Model.Mf6GwtNameWriters as TMf6GwtNameWriters;
-  Mf6GwtNameWriter := Mf6GwtNameWriters[SpeciesIndex];
-  Mf6GwtNameWriter.AddPackageFile(Ftype, FileName, PackageName);
+  IgnoredNames := TStringList.Create;
+  try
+    Model.GetIgnoredSpeciesNames(IgnoredNames);
+    SpeciesName := Model.MobileComponents[SpeciesIndex].Name;
+    if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+    begin
+      Exit;
+    end;
+    FileIndex := -1;
+    for SIndex := 0 to SpeciesIndex do
+    begin
+      SpeciesName := Model.MobileComponents[SpeciesIndex].Name;
+      if IgnoredNames.IndexOf(SpeciesName) < 0 then
+      begin
+        Inc(FileIndex);
+      end;
+    end;
+    Mf6GwtNameWriter := Mf6GwtNameWriters[FileIndex];
+    Mf6GwtNameWriter.AddPackageFile(Ftype, FileName, PackageName);
+  finally
+    IgnoredNames.Free;
+  end;
 end;
 
 class procedure TCustomModflowWriter.WriteToMt3dMsNameFile(const Ftype: string;

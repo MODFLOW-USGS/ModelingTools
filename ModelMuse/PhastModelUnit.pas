@@ -1603,20 +1603,17 @@ that affects the model output should also have a comment. }
     function GetGwtDispUsedPerSpecies: TObjectUsedEvent;
     function DoLongitudinalDispersionUsedPerSpecies(Sender: TObject): boolean; virtual;
     function GetLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent;
-//    property LongitudinalDispersionUsedPerSpecies: TObjectUsedEvent read GetLongitudinalDispersionUsedPerSpecies;
     function DoHorizontalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; virtual;
     function GetHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
-//    property HorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent read GetHorizontalTransverseDispersionUsedPerSpecies;
     function DoVerticalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; virtual;
     function GetVerticalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
-//    property VerticalTransverseDispersionUsedPerSpecies: TObjectUsedEvent read GetVerticalTransverseDispersionUsedPerSpecies;
     function DoSeparatedLongitudinalDispersionUsedPerSpecies(Sender: TObject): boolean; virtual;
     function GetSeparatedLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent;
-//    property SeparatedLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent read GetSeparatedLongitudinalDispersionUsedPerSpecies;
     function DoSeparatedHorizontalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; virtual;
     function GetSeparatedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
-//    property SeparatedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent
-//      read GetSeparatedHorizontalTransverseDispersionUsedPerSpecies;
+    function DoCombinedHorizontalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; virtual;
+    function GetCombinedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
+
 
 //    function
     procedure UpdateMt3dmsActive(Sender: TObject);
@@ -3102,6 +3099,8 @@ that affects the model output should also have a comment. }
     property SeparatedLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent read GetSeparatedLongitudinalDispersionUsedPerSpecies;
     property SeparatedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent
       read GetSeparatedHorizontalTransverseDispersionUsedPerSpecies;
+    property CombinedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent
+      read GetCombinedHorizontalTransverseDispersionUsedPerSpecies;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3723,6 +3722,7 @@ that affects the model output should also have a comment. }
     function DoVerticalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; override;
     function DoSeparatedLongitudinalDispersionUsedPerSpecies(Sender: TObject): boolean; override;
     function DoSeparatedHorizontalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; override;
+    function DoCombinedHorizontalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; override;
 
     //    function Xt3DUsed(Sender: TObject): boolean; override;
     function DoNpfUsed(Sender: TObject): boolean; override;
@@ -19563,6 +19563,27 @@ begin
   end;
 end;
 
+function TPhastModel.DoCombinedHorizontalTransverseDispersionUsedPerSpecies(
+  Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited DoCombinedHorizontalTransverseDispersionUsedPerSpecies(Sender);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or
+          ChildModel.DoCombinedHorizontalTransverseDispersionUsedPerSpecies(Sender);
+      end;
+    end;
+  end;
+end;
+
 function TPhastModel.DoConfinedStorageCoefUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -33187,8 +33208,8 @@ function TCustomModel.DoSeparatedLongitudinalDispersionUsedPerSpecies(
   Sender: TObject): boolean;
 begin
   result := (GwtDispUsedPerSpecies(Sender)
-    and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate))
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate)
+    and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate)
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate))
 end;
 
 procedure TCustomModel.SetAlternateFlowPackage(const Value: boolean);
@@ -35653,6 +35674,11 @@ end;
 function TPhastModel.GetColorSchemesI: IUserDefinedColorSchemeCollection;
 begin
   result := GetColorSchemes;
+end;
+
+function TCustomModel.GetCombinedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
+begin
+  result := DoCombinedHorizontalTransverseDispersionUsedPerSpecies;
 end;
 
 function TCustomModel.GetCompiler(const Orientation: TDataSetOrientation;
@@ -39110,10 +39136,9 @@ end;
 function TCustomModel.DoVerticalTransverseDispersionUsedPerSpecies(
   Sender: TObject): boolean;
 begin
-  result := DoChemistryUsed(Sender)
-    or (GwtDispUsedPerSpecies(Sender)
-    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow)
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate)
+  result := (GwtDispUsedPerSpecies(Sender)
+    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate))
 end;
 
 function TCustomModel.DoCropHasSalinityDemandUsed(Sender: TObject): Boolean;
@@ -39164,10 +39189,9 @@ end;
 function TCustomModel.DoHorizontalTransverseDispersionUsedPerSpecies(
   Sender: TObject): boolean;
 begin
-  result := DoChemistryUsed(Sender)
-    or (GwtDispUsedPerSpecies(Sender)
-    and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtCombined))
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate)
+  result := (GwtDispUsedPerSpecies(Sender)
+    and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtCombined)
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate))
 end;
 
 function TCustomModel.DoSpecificYieldUsed(Sender: TObject): boolean;
@@ -39422,6 +39446,14 @@ begin
   end;
 end;
 
+function TCustomModel.DoCombinedHorizontalTransverseDispersionUsedPerSpecies(
+  Sender: TObject): boolean;
+begin
+  result := GwtDispUsedPerSpecies(Sender)
+//    and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtCombined)
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate)
+end;
+
 function TCustomModel.DoConfinedStorageCoefUsed(Sender: TObject): boolean;
 begin
   result := False;
@@ -39551,11 +39583,10 @@ end;
 function TCustomModel.DoLongitudinalDispersionUsedPerSpecies(
   Sender: TObject): boolean;
 begin
-  result := DoChemistryUsed(Sender)
-    or (DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
+  result :=(DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
     or (GwtDispUsedPerSpecies(Sender)
-    and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtCombined))
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate)
+//    and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtCombined)
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate))
 end;
 
 function TCustomModel.Mt3dIsSelected: Boolean;
@@ -44673,15 +44704,20 @@ begin
           AdvWriter.Free;
         end;
 
-        DspWriter := TModflowDspWriter.Create(Self, etExport);
-        try
-          DspWriter.WriteFile(FileName);
-        finally
-          DspWriter.Free;
-        end;
-
         for SpeciesIndex := 0 to MobileComponents.Count - 1 do
         begin
+          if not MobileComponents[SpeciesIndex].UsedForGWT then
+          begin
+            Continue;
+          end;
+
+          DspWriter := TModflowDspWriter.Create(Self, etExport);
+          try
+            DspWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            DspWriter.Free;
+          end;
+
           GwtSsmWriter := TModflowGwtSsmWriter.Create(Self, etExport);
           try
             GwtSsmWriter.WriteFile(FileName, SpeciesIndex);

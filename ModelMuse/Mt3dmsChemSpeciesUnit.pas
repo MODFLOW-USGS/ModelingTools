@@ -597,20 +597,26 @@ var
 begin
   if Collection.Model <> nil then
   begin
-    if not (Collection as TCustomChemSpeciesCollection).CanCreateDataSets then
+    if ShouldCreate then
     begin
-      ShouldCreate := False;
-    end;
-    LocalModel := Collection.Model as TCustomModel;
-    IgnoredNames := TStringList.Create;
-    try
-      LocalModel.GetIgnoredSpeciesNames(IgnoredNames);
-      if IgnoredNames.IndexOf(Name) >= 0 then
+      if not (Collection as TCustomChemSpeciesCollection).CanCreateDataSets then
       begin
         ShouldCreate := False;
       end;
-    finally
-      IgnoredNames.Free;
+    end;
+    LocalModel := Collection.Model as TCustomModel;
+    if ShouldCreate then
+    begin
+      IgnoredNames := TStringList.Create;
+      try
+        LocalModel.GetIgnoredSpeciesNames(IgnoredNames);
+        if IgnoredNames.IndexOf(Name) >= 0 then
+        begin
+          ShouldCreate := False;
+        end;
+      finally
+        IgnoredNames.Free;
+      end;
     end;
 
     UpdataDat.Model := LocalModel;
@@ -1721,11 +1727,11 @@ begin
   if (LocalModel <> nil) then
   begin
     DataSetUsed := False;
-    if LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies(nil) then
+    if LocalModel.LongitudinalDispersionUsedPerSpecies(nil) then
     begin
       DataSetUsed := True;
     end;
-    UpdateDataArray(LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies,
+    UpdateDataArray(LocalModel.LongitudinalDispersionUsedPerSpecies,
       FLongDispHDataArrayName, NewName,
       FLongDispHDataArrayDisplayName, '10', StrMODFLOW6Dispersion_ALH,
       DataSetUsed, StrGwtClassification);
@@ -2520,11 +2526,11 @@ begin
   if (LocalModel <> nil) then
   begin
     DataSetUsed := False;
-    if LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies(nil) then
+    if LocalModel.CombinedHorizontalTransverseDispersionUsedPerSpecies(nil) then
     begin
       DataSetUsed := True;
     end;
-    UpdateDataArray(LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies,
+    UpdateDataArray(LocalModel.CombinedHorizontalTransverseDispersionUsedPerSpecies,
       FTransverseDispHDataArrayName, NewName,
       FTransverseDispHDataArrayDisplayName, '1', StrMODFLOW6Dispersion_ATH1,
       DataSetUsed, StrGwtClassification);
@@ -2549,8 +2555,8 @@ begin
       DataSetUsed := True;
     end;
     UpdateDataArray(LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies,
-      FTransverseDispVertDataArrayDisplayName, NewName,
-      FTransverseDispHDataArrayDisplayName, '0.1', StrMODFLOW6Dispersion_ATH2,
+      FTransverseDispVertDataArrayName, NewName,
+      FTransverseDispVertDataArrayDisplayName, '0.1', StrMODFLOW6Dispersion_ATH2,
       DataSetUsed, StrGwtClassification);
   end;
 
