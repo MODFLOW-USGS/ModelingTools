@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, Vcl.Forms, ModflowPackageSelectionUnit,
-  System.SysUtils;
+  System.SysUtils, System.Classes;
 
 type
   TBuoyancyWriter = class(TCustomPackageWriter)
@@ -42,13 +42,18 @@ begin
 end;
 
 procedure TBuoyancyWriter.WriteDimensions;
+var
+  IgnoredNames: TStringList;
 begin
   WriteBeginDimensions;
+  IgnoredNames := TStringList.Create;
   try
+    Model.GetIgnoredSpeciesNames(IgnoredNames);
     WriteString('  NRHOSPECIES');
-    WriteInteger(Model.MobileComponents.Count);
+    WriteInteger(Model.MobileComponents.Count - IgnoredNames.Count);
     NewLine;
   finally
+    IgnoredNames.Free;
     WriteEndDimensions;
   end;
 end;
@@ -159,21 +164,32 @@ procedure TBuoyancyWriter.WritePackageData;
 var
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
+  IgnoredNames: TStringList;
+  SIndex: Integer;
 begin
   WriteBeginPackageData;
+  IgnoredNames := TStringList.Create;
   try
+    Model.GetIgnoredSpeciesNames(IgnoredNames);
+    SIndex := 1;
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
       ASpecies := Model.MobileComponents[SpeciesIndex];
-      WriteInteger(SpeciesIndex+1);
+      if IgnoredNames.IndexOf(ASpecies.Name) >= 0 then
+      begin
+        Continue;
+      end;
+      WriteInteger(SIndex);
       WriteFloat(ASpecies.DensitySlope);
       WriteFloat(ASpecies.RefConcentration);
       WriteString(' ' + ASpecies.Name);
       WriteString(' ' + ASpecies.Name);
       NewLine;
+      Inc(SIndex);
     end;
   finally
     WriteEndPackageData;
+    IgnoredNames.Free;
   end;
 end;
 

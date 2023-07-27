@@ -27,7 +27,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     Top = 33
     Width = 549
     Height = 260
-    ActivePage = tabTransient
+    ActivePage = tabGwt
     Align = alClient
     TabOrder = 1
     object tabWell: TTabSheet

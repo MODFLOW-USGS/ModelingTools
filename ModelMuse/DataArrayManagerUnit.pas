@@ -271,6 +271,7 @@ type
     property Sutra4ProductionUsed: TObjectUsedEvent read GetSutra4ProductionUsed;
     function GetSutra4FreezingUsed: TObjectUsedEvent;
     property Sutra4FreezingUsed: TObjectUsedEvent read GetSutra4FreezingUsed;
+    // dispersion
     function GetGwtDispUsed: TObjectUsedEvent;
     property GwtDispUsed: TObjectUsedEvent read GetGwtDispUsed;
     function GetSeparatedLongitudinalDispersionUsed: TObjectUsedEvent;
@@ -278,6 +279,20 @@ type
     function GetSeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent;
     property SeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent
        read GetSeparatedHorizontalTransverseDispersionUsed;
+
+    function GetLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent;
+    property LongitudinalDispersionUsedPerSpecies: TObjectUsedEvent read GetLongitudinalDispersionUsedPerSpecies;
+    function GetHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
+    property HorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent read GetHorizontalTransverseDispersionUsedPerSpecies;
+    function GetVerticalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
+    property VerticalTransverseDispersionUsedPerSpecies: TObjectUsedEvent read GetVerticalTransverseDispersionUsedPerSpecies;
+    function GetSeparatedLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent;
+    property SeparatedLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent read GetSeparatedLongitudinalDispersionUsedPerSpecies;
+    function GetSeparatedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
+    property SeparatedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent
+      read GetSeparatedHorizontalTransverseDispersionUsedPerSpecies;
+
+
     function GetFarmProcess4SteadyFarmsUsed: TObjectUsedEvent;
     property FarmProcess4SteadyFarmsUsed: TObjectUsedEvent read GetFarmProcess4SteadyFarmsUsed;
     function GetAssignModflow6LakeDisplayArrays: TNotifyEvent;

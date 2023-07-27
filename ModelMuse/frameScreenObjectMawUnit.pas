@@ -233,6 +233,8 @@ var
   AGwtFrame: TframeMawGwtConcentrations;
   ANode: TJvPageIndexNode;
   DensityUsed: Boolean;
+  IgnoredNames: TStringList;
+  FrameIndex: Integer;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   pgcMain.ActivePageIndex := 0;
@@ -520,29 +522,42 @@ begin
     if tabGWT.TabVisible then
     begin
       tvGwt.Items.Clear;
-      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
-      begin
-        ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
-        if SpeciesIndex >= jplGwt.PageCount then
+      IgnoredNames := TStringList.Create;
+      try
+        frmGoPhast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+        FrameIndex := 0;
+        for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
         begin
-          APage := TJvStandardPage.Create(self);
-          APage.PageList := jplGwt;
-          AGwtFrame := TframeMawGwtConcentrations.Create(nil);
-          FGwtFrameList.Add(AGwtFrame);
-          AGwtFrame.Parent := APage;
-          AGwtFrame.Align := alClient;
-        end
-        else
-        begin
-          AGwtFrame := FGwtFrameList[SpeciesIndex];
+          ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
+          if IgnoredNames.IndexOf(ASpecies.Name) >= 0 then
+          begin
+            Continue;
+          end;
+
+          if FrameIndex >= jplGwt.PageCount then
+          begin
+            APage := TJvStandardPage.Create(self);
+            APage.PageList := jplGwt;
+            AGwtFrame := TframeMawGwtConcentrations.Create(nil);
+            FGwtFrameList.Add(AGwtFrame);
+            AGwtFrame.Parent := APage;
+            AGwtFrame.Align := alClient;
+          end
+          else
+          begin
+            AGwtFrame := FGwtFrameList[FrameIndex];
+          end;
+          ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
+          ANode.PageIndex := FrameIndex;
+          AGwtFrame.GetData(ScreenObjectList, FrameIndex);
+          if FrameIndex = 0 then
+          begin
+            ANode.Selected := True;
+          end;
+          Inc(FrameIndex);
         end;
-        ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
-        ANode.PageIndex := SpeciesIndex;
-        AGwtFrame.GetData(ScreenObjectList, SpeciesIndex);
-        if SpeciesIndex = 0 then
-        begin
-          ANode.Selected := True;
-        end;
+      finally
+        IgnoredNames.Free;
       end;
     end;
 
@@ -769,6 +784,9 @@ var
   SpeciesIndex: Integer;
   AGwtFrame: TframeMawGwtConcentrations;
   DensityUsed: Boolean;
+  IgnoredNames: TStringList;
+  FrameIndex: Integer;
+  SpeciesName: string;
   function NonBlank(const Formula: string): string;
   begin
     if Formula = '' then
@@ -993,10 +1011,23 @@ begin
   end;
   if tabGWT.TabVisible then
   begin
-    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
-    begin
-      AGwtFrame := FGwtFrameList[SpeciesIndex];
-      AGwtFrame.setData(List, SpeciesIndex);
+    IgnoredNames := TStringList.Create;
+    try
+      frmGoPhast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+      FrameIndex := 0;
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        SpeciesName := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name;
+        if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+        begin
+          Continue;
+        end;
+        AGwtFrame := FGwtFrameList[FrameIndex];
+        AGwtFrame.setData(List, SpeciesIndex);
+        Inc(FrameIndex);
+      end;
+    finally
+      IgnoredNames.Free;
     end;
   end;
 end;

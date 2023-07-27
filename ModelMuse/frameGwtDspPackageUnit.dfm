@@ -67,6 +67,15 @@ inherited frameGwtDspPackage: TframeGwtDspPackage
     Caption = 'Specify transverse dispersivity for vertical flow'
     TabOrder = 5
   end
+  object cbSeparateDataSets: TCheckBox [8]
+    Left = 16
+    Top = 399
+    Width = 457
+    Height = 17
+    Caption = 'Use separate data sets for each species'
+    Enabled = False
+    TabOrder = 6
+  end
   inherited rcSelectionController: TRbwController
     ControlList = <
       item
@@ -83,6 +92,9 @@ inherited frameGwtDspPackage: TframeGwtDspPackage
       end
       item
         Control = rgTransDisp
+      end
+      item
+        Control = cbSeparateDataSets
       end>
     OnEnabledChange = rcSelectionControllerEnabledChange
   end

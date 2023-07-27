@@ -280,7 +280,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Top = 25
     Width = 485
     Height = 335
-    ActivePage = tabLakeTransientProperties
+    ActivePage = tabGWT
     Align = alClient
     TabOrder = 3
     object tabLakeProperties: TTabSheet

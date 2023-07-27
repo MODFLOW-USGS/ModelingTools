@@ -17,8 +17,7 @@ type
   Tsfr6DiversionCol = (s6dcSegment, d6dcPriority);
 
   TSfr6BoundaryRows = (s6brNone, s6brReachLength, s6brReachWidth, s6brGradient,
-    s6brStreambedTop, s6brStreambedThickness, s6brHydraulicConductivity{,
-    s6brRoughness, s6brUpstreamFraction});
+    s6brStreambedTop, s6brStreambedThickness, s6brHydraulicConductivity);
 
 
   TframeScreenObjectSfr6 = class(TframeScreenObject)
@@ -298,10 +297,10 @@ var
   AGwtFrame: TframeSfrGwtConcentrations;
   ANode: TJvPageIndexNode;
   DensityUsed: Boolean;
+  IgnoredNames: TStringList;
+  FrameIndex: Integer;
 begin
-
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
-
 
   Changing := True;
   tabDownstreamSegments.TabVisible := True;
@@ -573,29 +572,41 @@ begin
     if tabGWT.TabVisible then
     begin
       tvGwt.Items.Clear;
-      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
-      begin
-        ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
-        if SpeciesIndex >= jplGwt.PageCount then
+      IgnoredNames := TStringList.Create;
+      try
+        frmGoPhast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+        FrameIndex := 0;
+        for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
         begin
-          APage := TJvStandardPage.Create(self);
-          APage.PageList := jplGwt;
-          AGwtFrame := TframeSfrGwtConcentrations.Create(nil);
-          FGwtFrameList.Add(AGwtFrame);
-          AGwtFrame.Parent := APage;
-          AGwtFrame.Align := alClient;
-        end
-        else
-        begin
-          AGwtFrame := FGwtFrameList[SpeciesIndex];
+          ASpecies := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex];
+          if IgnoredNames.IndexOf(ASpecies.Name) >= 0 then
+          begin
+            Continue;
+          end;
+          if FrameIndex >= jplGwt.PageCount then
+          begin
+            APage := TJvStandardPage.Create(self);
+            APage.PageList := jplGwt;
+            AGwtFrame := TframeSfrGwtConcentrations.Create(nil);
+            FGwtFrameList.Add(AGwtFrame);
+            AGwtFrame.Parent := APage;
+            AGwtFrame.Align := alClient;
+          end
+          else
+          begin
+            AGwtFrame := FGwtFrameList[FrameIndex];
+          end;
+          ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
+          ANode.PageIndex := FrameIndex;
+          AGwtFrame.GetData(ScreenObjectList, FrameIndex);
+          if FrameIndex = 0 then
+          begin
+            ANode.Selected := True;
+          end;
+          Inc(FrameIndex);
         end;
-        ANode := tvGwt.Items.Add(nil, ASpecies.Name) as TJvPageIndexNode;
-        ANode.PageIndex := SpeciesIndex;
-        AGwtFrame.GetData(ScreenObjectList, SpeciesIndex);
-        if SpeciesIndex = 0 then
-        begin
-          ANode.Selected := True;
-        end;
+      finally
+        IgnoredNames.Free;
       end;
     end;
   finally
@@ -1122,6 +1133,9 @@ var
   SpeciesIndex: Integer;
   AGwtFrame: TframeSfrGwtConcentrations;
   DensityUsed: Boolean;
+  IgnoredNames: TStringList;
+  FrameIndex: Integer;
+  SpeciesName: string;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   for Index := 0 to List.Count - 1 do
@@ -1373,10 +1387,23 @@ begin
 
   if tabGWT.TabVisible then
   begin
-    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
-    begin
-      AGwtFrame := FGwtFrameList[SpeciesIndex];
-      AGwtFrame.setData(List, SpeciesIndex);
+    IgnoredNames := TStringList.Create;
+    try
+      frmGoPhast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+      FrameIndex := 0;
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        SpeciesName := frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name;
+        if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+        begin
+          Continue;
+        end;
+        AGwtFrame := FGwtFrameList[FrameIndex];
+        AGwtFrame.setData(List, SpeciesIndex);
+        Inc(FrameIndex);
+      end;
+    finally
+      IgnoredNames.Free;
     end;
   end;
 end;

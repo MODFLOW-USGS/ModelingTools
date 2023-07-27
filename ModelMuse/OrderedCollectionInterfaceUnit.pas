@@ -43,6 +43,7 @@ type
     function GetPestParameterByNameI(PestParamName: string)
       : IModflowParameter;
     procedure GetPestParameterNames(ParameterNames: TStringList);
+    procedure GetIgnoredSpeciesNames(IgnoredNames: TStringList);
 //    function GetDataArrayManager: TDataArrayManager;
 //    property DataArrayManager: TDataArrayManager read GetDataArrayManager;
   end;

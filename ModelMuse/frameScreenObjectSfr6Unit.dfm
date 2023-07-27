@@ -114,7 +114,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 162
         ColWidths = (
           64
           186)
@@ -143,7 +142,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Height = 171
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 166
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -285,7 +283,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 166
         DesignSize = (
           539
           46)
@@ -300,7 +297,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Left = 8
           Top = 6
           Width = 49
-          Height = 28
+          Height = 23
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 2
@@ -377,11 +374,11 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
-        ExplicitHeight = 212
+        ExplicitHeight = 217
         inherited Panel: TPanel
           Top = 176
           Width = 539
-          ExplicitTop = 171
+          ExplicitTop = 176
           ExplicitWidth = 539
           inherited sbAdd: TSpeedButton
             Left = 280
@@ -396,9 +393,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             ExplicitLeft = 269
           end
           inherited seNumber: TJvSpinEdit
-            Height = 28
             OnChange = frmgrdDownstreamSegmentsseNumberChange
-            ExplicitHeight = 28
           end
         end
         inherited Grid: TRbwDataGrid4
@@ -446,11 +441,11 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
-        ExplicitHeight = 212
+        ExplicitHeight = 217
         inherited Panel: TPanel
           Top = 176
           Width = 539
-          ExplicitTop = 171
+          ExplicitTop = 176
           ExplicitWidth = 539
           inherited sbAdd: TSpeedButton
             Left = 280
@@ -465,9 +460,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             ExplicitLeft = 269
           end
           inherited seNumber: TJvSpinEdit
-            Height = 28
             OnChange = frmgrdDiversionsseNumberChange
-            ExplicitHeight = 28
           end
         end
         inherited Grid: TRbwDataGrid4

@@ -58,6 +58,16 @@ type
     FImmobileMassTransferRates: TStringList;
     FStoredRefConcentration: TRealStorage;
     FStoredDensitySlope: TRealStorage;
+    FDiffusionCoefficientDataArrayName: string;
+    FDiffusionCoefficientDataArrayDisplayName: string;
+    FLongDispHDataArrayName: string;
+    FLongDispHDataArrayDisplayName: string;
+    FLongDispVertDataArrayName: string;
+    FLongDispVertDataArrayDisplayName: string;
+    FTransverseDispHDataArrayName: string;
+    FTransverseDispHDataArrayDisplayName: string;
+    FTransverseDispVertDataArrayName: string;
+    FTransverseDispVertDataArrayDisplayName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
       const OldDataArrayName, NewName, NewDisplayName, NewFormula,
@@ -99,6 +109,11 @@ type
     procedure SetRefConcentration(const Value: double);
     procedure SetDensitySlope(const Value: double);
     function GetUsedForGWT: Boolean;
+    procedure SetDiffusionCoefficientDataArrayName(const NewName: string);
+    procedure SetLongDispHArrayNameDataArrayName(const NewName: string);
+    procedure SetLongDispVertArrayNameDataArrayName(const NewName: string);
+    procedure SetTransverseDispHArrayNameDataArrayName(const NewName: string);
+    procedure SetTransverseDispVertArrayNameDataArrayName(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -173,6 +188,27 @@ type
     //MST package, SP2
     property MobileSorptionCapacityDataArrayName: string read FMobileSorptionCapacityDataArrayName
       write SetMobileSorptionCapacityDataArrayName;
+    // DSP package, diffc
+    property DiffusionCoefficientDataArrayName: string
+      read FDiffusionCoefficientDataArrayName
+      write SetDiffusionCoefficientDataArrayName;
+    // DSP package, alh
+    property LongDispHDataArrayName: string
+      read FLongDispHDataArrayName
+      write SetLongDispHArrayNameDataArrayName;
+    // DSP package, alv
+    property LongDispVertDataArrayName: string
+      read FLongDispVertDataArrayName
+      write SetLongDispVertArrayNameDataArrayName;
+    // DSP package, ath1
+    property TransverseDispHDataArrayName: string
+      read FTransverseDispHDataArrayName
+      write SetTransverseDispHArrayNameDataArrayName;
+    // DSP package, ath2
+    property TransverseDispVertDataArrayName: string
+      read FTransverseDispVertDataArrayName
+      write SetTransverseDispVertArrayNameDataArrayName;
+
     //IST package, CIM
     property ImmobileInitialConcentrations: TStringList
       read FImmobileInitialConcentrations write SetImmobileInitialConcentrations;
@@ -215,9 +251,11 @@ type
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)
   private
+    FCanCreateDataSets: Boolean;
     function GetItem(Index: Integer): TChemSpeciesItem;
     procedure SetItem(Index: Integer; const Value: TChemSpeciesItem);
   public
+    constructor Create(ItemClass: TCollectionItemClass; Model: IModelForTOrderedCollection);
     property Items[Index: Integer] : TChemSpeciesItem read GetItem
       write SetItem; default;
     function Add: TChemSpeciesItem;
@@ -225,6 +263,8 @@ type
     procedure UpdateDataArrays; virtual;
     procedure Loaded;
     function IndexOfName(const AName: string): integer;
+    property CanCreateDataSets: Boolean read FCanCreateDataSets
+      write FCanCreateDataSets;
   end;
 
   TChemSpeciesCollection = class(TCustomChemSpeciesCollection)
@@ -269,7 +309,7 @@ uses
   frmGoPhastUnit, ScreenObjectUnit, Mt3dmsChemUnit, Mt3dmsTobUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit,
   Mt3dLktUnit, Mt3dSftUnit, ModflowPackagesUnit,
-  ModflowGwtSpecifiedConcUnit, UpdateDataArrayUnit;
+  ModflowGwtSpecifiedConcUnit, UpdateDataArrayUnit, DataSetNamesUnit;
 
 const
   kInitConcPrefix = 'Initial_Concentration_';
@@ -408,6 +448,21 @@ begin
     MobileSorptionCapacityDataArrayName := '';
     MobileSorptionCapacityDataArrayName := SourceChem.MobileSorptionCapacityDataArrayName;
 
+    DiffusionCoefficientDataArrayName := '';
+    DiffusionCoefficientDataArrayName := SourceChem.DiffusionCoefficientDataArrayName;
+
+    LongDispHDataArrayName := '';
+    LongDispHDataArrayName := SourceChem.LongDispHDataArrayName;
+
+    LongDispVertDataArrayName := '';
+    LongDispVertDataArrayName := SourceChem.LongDispVertDataArrayName;
+
+    TransverseDispHDataArrayName := '';
+    TransverseDispHDataArrayName := SourceChem.TransverseDispHDataArrayName;
+
+    TransverseDispVertDataArrayName := '';
+    TransverseDispVertDataArrayName := SourceChem.TransverseDispVertDataArrayName;
+
 //    ImmobileInitialConcentrations.Clear;
     ImmobileInitialConcentrations := SourceChem.ImmobileInitialConcentrations;
 //    ImmobilePorosities.Clear;
@@ -458,6 +513,11 @@ begin
     MobileBulkDensityDataArrayName := MobileBulkDensityDataArrayName;
     MobileFreundlichExponentDataArrayName := MobileFreundlichExponentDataArrayName;
     MobileSorptionCapacityDataArrayName := MobileSorptionCapacityDataArrayName;
+    DiffusionCoefficientDataArrayName := DiffusionCoefficientDataArrayName;
+    LongDispHDataArrayName := LongDispHDataArrayName;
+    LongDispVertDataArrayName := LongDispVertDataArrayName;
+    TransverseDispHDataArrayName := TransverseDispHDataArrayName;
+    TransverseDispVertDataArrayName := TransverseDispVertDataArrayName;
 
     TempNames := TStringList.Create;
     try
@@ -532,10 +592,28 @@ procedure TChemSpeciesItem.UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
   const Classification: string);
 var
   UpdataDat: TUpdataDataArrayRecord;
+  IgnoredNames: TStringList;
+  LocalModel: TCustomModel;
 begin
   if Collection.Model <> nil then
   begin
-    UpdataDat.Model := Collection.Model as TCustomModel;
+    if not (Collection as TCustomChemSpeciesCollection).CanCreateDataSets then
+    begin
+      ShouldCreate := False;
+    end;
+    LocalModel := Collection.Model as TCustomModel;
+    IgnoredNames := TStringList.Create;
+    try
+      LocalModel.GetIgnoredSpeciesNames(IgnoredNames);
+      if IgnoredNames.IndexOf(Name) >= 0 then
+      begin
+        ShouldCreate := False;
+      end;
+    finally
+      IgnoredNames.Free;
+    end;
+
+    UpdataDat.Model := LocalModel;
     UpdataDat.OnDataSetUsed := OnDataSetUsed;
     UpdataDat.OldDataArrayName := OldDataArrayName;
     UpdataDat.NewName := NewName;
@@ -771,17 +849,19 @@ end;
 function TChemSpeciesItem.GetUsedForGWT: Boolean;
 var
   LocalModel: TCustomModel;
-  BuoyancyPkg: TBuoyancyPackage;
+  IgnoredNames: TStringList;
 begin
   result := True;
 
-  if (Model <> nil) and SameText(Name, StrDensity) and (Model.ModelSelection = msModflow2015) then
+  if (Model <> nil) and (Model.ModelSelection = msModflow2015) then
   begin
     LocalModel := Model as TCustomModel;
-    BuoyancyPkg := LocalModel.ModflowPackages.BuoyancyPackage;
-    if BuoyancyPkg.IsSelected and BuoyancyPkg.DensityUsed then
-    begin
-      result := False;
+    IgnoredNames := TStringList.Create;
+    try
+      LocalModel.GetIgnoredSpeciesNames(IgnoredNames);
+      result := IgnoredNames.IndexOf(Name) < 0
+    finally
+      IgnoredNames.Free;
     end;
   end;
 end;
@@ -832,6 +912,12 @@ begin
       and (MobileBulkDensityDataArrayName = ChemItem.MobileBulkDensityDataArrayName)
       and (MobileFreundlichExponentDataArrayName = ChemItem.MobileFreundlichExponentDataArrayName)
       and (MobileSorptionCapacityDataArrayName = ChemItem.MobileSorptionCapacityDataArrayName)
+      and (DiffusionCoefficientDataArrayName = ChemItem.DiffusionCoefficientDataArrayName)
+      and (LongDispHDataArrayName = ChemItem.LongDispHDataArrayName)
+      and (LongDispVertDataArrayName = ChemItem.LongDispVertDataArrayName)
+      and (TransverseDispHDataArrayName = ChemItem.TransverseDispHDataArrayName)
+      and (TransverseDispVertDataArrayName = ChemItem.TransverseDispVertDataArrayName)
+
       and SameStrings(ImmobileInitialConcentrations,  ChemItem.ImmobileInitialConcentrations)
       and SameStrings(ImmobilePorosities,  ChemItem.ImmobilePorosities)
       and SameStrings(ImmobileVolumeFractions,  ChemItem.FImmobileVolumeFractions)
@@ -926,6 +1012,30 @@ end;
 procedure TChemSpeciesItem.SetDensitySlope(const Value: double);
 begin
   StoredDensitySlope.Value := Value;
+end;
+
+procedure TChemSpeciesItem.SetDiffusionCoefficientDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GwtDispUsedPerSpecies(nil) then
+    begin
+      DataSetUsed := True;
+    end;
+    UpdateDataArray(LocalModel.GwtDispUsedPerSpecies,
+      FDiffusionCoefficientDataArrayName, NewName,
+      FDiffusionCoefficientDataArrayDisplayName, '0.0', StrMODFLOW6Dispersion_DIFFC,
+      DataSetUsed, StrGwtClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FDiffusionCoefficientDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetFirstSorbParamDataArrayName(const NewName: string);
@@ -1600,6 +1710,54 @@ begin
   end;
 end;
 
+procedure TChemSpeciesItem.SetLongDispHArrayNameDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies(nil) then
+    begin
+      DataSetUsed := True;
+    end;
+    UpdateDataArray(LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies,
+      FLongDispHDataArrayName, NewName,
+      FLongDispHDataArrayDisplayName, '10', StrMODFLOW6Dispersion_ALH,
+      DataSetUsed, StrGwtClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FLongDispHDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetLongDispVertArrayNameDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies(nil) then
+    begin
+      DataSetUsed := True;
+    end;
+    UpdateDataArray(LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies,
+      FLongDispVertDataArrayName, NewName,
+      FLongDispVertDataArrayDisplayName, '1', StrMODFLOW6Dispersion_ALV,
+      DataSetUsed, StrGwtClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FLongDispVertDataArrayName, NewName);
+end;
+
 procedure TChemSpeciesItem.SetMobileBulkDensityDataArrayName(
   const NewName: string);
 var
@@ -1933,6 +2091,41 @@ begin
         MobileSorptionCapacityDataArrayName,
         OldRoot,NewRoot, []);
 
+      FDiffusionCoefficientDataArrayDisplayName := StringReplace(
+        FDiffusionCoefficientDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      DiffusionCoefficientDataArrayName := StringReplace(
+        DiffusionCoefficientDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FLongDispHDataArrayDisplayName := StringReplace(
+        FLongDispHDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      LongDispHDataArrayName := StringReplace(
+        LongDispHDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FLongDispVertDataArrayDisplayName := StringReplace(
+        FLongDispVertDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      LongDispVertDataArrayName := StringReplace(
+        LongDispVertDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FTransverseDispHDataArrayDisplayName := StringReplace(
+        FTransverseDispHDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      TransverseDispHDataArrayName := StringReplace(
+        TransverseDispHDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FTransverseDispVertDataArrayDisplayName := StringReplace(
+        FTransverseDispVertDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      TransverseDispVertDataArrayName := StringReplace(
+        TransverseDispVertDataArrayName,
+        OldRoot,NewRoot, []);
+
       NewImobileDataSetNames.Assign(ImmobileInitialConcentrations);
       for DomainIndex := 0 to ImmobileInitialConcentrations.Count - 1 do
       begin
@@ -2098,6 +2291,31 @@ begin
         GenerateNewRoot(StrSorptionCapacity + Value);
       MobileSorptionCapacityDataArrayName :=
         GenerateNewRoot(KSorptionCapacity + Value);
+
+      FDiffusionCoefficientDataArrayDisplayName :=
+        GenerateNewRoot(StrDiffusionCoefficien + '_' + Value);
+      DiffusionCoefficientDataArrayName :=
+        GenerateNewRoot(KDiffusionCoefficien + '_' + Value);
+
+      FLongDispHDataArrayDisplayName :=
+        GenerateNewRoot(StrLongitudinalDispersH + '_' + Value);
+      LongDispHDataArrayName :=
+        GenerateNewRoot(KLongitudinalDispersH + '_' + Value);
+
+      FLongDispVertDataArrayDisplayName :=
+        GenerateNewRoot(StrLongitudinalDispersV + '_' + Value);
+      LongDispVertDataArrayName :=
+        GenerateNewRoot(KLongitudinalDispersV + '_' + Value);
+
+      FTransverseDispHDataArrayDisplayName :=
+        GenerateNewRoot(StrHorizontalTransvers + '_' + Value);
+      TransverseDispHDataArrayName :=
+        GenerateNewRoot(KHorizontalTransvers + '_' + Value);
+
+      FTransverseDispVertDataArrayDisplayName :=
+        GenerateNewRoot(StrVerticalTransverse + '_' + Value);
+      TransverseDispVertDataArrayName :=
+        GenerateNewRoot(KVerticalTransverse + '_' + Value);
 
       if Index < LocalModel.ModflowPackages.GwtPackages.Count then
       begin
@@ -2291,6 +2509,54 @@ begin
   FStoredRefConcentration.Assign(Value);
 end;
 
+procedure TChemSpeciesItem.SetTransverseDispHArrayNameDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies(nil) then
+    begin
+      DataSetUsed := True;
+    end;
+    UpdateDataArray(LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies,
+      FTransverseDispHDataArrayName, NewName,
+      FTransverseDispHDataArrayDisplayName, '1', StrMODFLOW6Dispersion_ATH1,
+      DataSetUsed, StrGwtClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FTransverseDispHDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetTransverseDispVertArrayNameDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies(nil) then
+    begin
+      DataSetUsed := True;
+    end;
+    UpdateDataArray(LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies,
+      FTransverseDispVertDataArrayDisplayName, NewName,
+      FTransverseDispHDataArrayDisplayName, '0.1', StrMODFLOW6Dispersion_ATH2,
+      DataSetUsed, StrGwtClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FTransverseDispVertDataArrayName, NewName);
+end;
+
 procedure TChemSpeciesItem.SetUseInitialConcentrationFile(const Value: boolean);
 begin
   SetBooleanProperty(FUseInitialConcentrationFile, Value);
@@ -2321,6 +2587,13 @@ end;
 constructor TChemSpeciesCollection.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TChemSpeciesItem, Model);
+end;
+
+constructor TCustomChemSpeciesCollection.Create(ItemClass: TCollectionItemClass;
+  Model: IModelForTOrderedCollection);
+begin
+  FCanCreateDataSets := True;
+  inherited Create(ItemClass, Model);
 end;
 
 function TCustomChemSpeciesCollection.GetItem(Index: Integer): TChemSpeciesItem;

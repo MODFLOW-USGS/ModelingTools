@@ -36,7 +36,6 @@ type
     // same stress period.
     procedure UpdateNextTimeCell(DataGrid: TRbwDataGrid4; ACol, ARow: Integer);
     procedure ClearGrid(Grid: TRbwDataGrid4); virtual;
-
   public
     // @name is used in @link(TframeScreenObjectParam.clbParametersStateChange
     // TframeScreenObjectParam.clbParametersStateChange) to prevent grayed

@@ -7074,12 +7074,15 @@ Type
     FLongitudinalDispTreatement: TDispersivityTreatment;
     FTransverseDispTreatement: TDispersivityTreatment;
     FUseTransverseDispForVertFlow: Boolean;
+    FSeparateDataSetsForEachSpecies: TDispersivityTreatment;
     procedure SetUseXt3d(const Value: Boolean);
     procedure SetXt3dRightHandSide(const Value: Boolean);
     procedure SetLongitudinalDispTreatement(
       const Value: TDispersivityTreatment);
     procedure SetTransverseDispTreatement(const Value: TDispersivityTreatment);
     procedure SetUseTransverseDispForVertFlow(const Value: Boolean);
+    procedure SetSeparateDataSetsForEachSpecies(
+      const Value: TDispersivityTreatment);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -7096,6 +7099,9 @@ Type
       read FTransverseDispTreatement write SetTransverseDispTreatement;
     property UseTransverseDispForVertFlow: Boolean
       read FUseTransverseDispForVertFlow write SetUseTransverseDispForVertFlow;
+    property SeparateDataSetsForEachSpecies: TDispersivityTreatment
+      read FSeparateDataSetsForEachSpecies
+      write SetSeparateDataSetsForEachSpecies;
   end;
 
   TGwtScheme = (gsUpstream, gsCentral, gsTVD);
@@ -24757,6 +24763,7 @@ begin
     LongitudinalDispTreatement := DispSource.LongitudinalDispTreatement;
     TransverseDispTreatement := DispSource.TransverseDispTreatement;
     UseTransverseDispForVertFlow := DispSource.UseTransverseDispForVertFlow;
+    SeparateDataSetsForEachSpecies := DispSource.SeparateDataSetsForEachSpecies;
   end;
   inherited;
 end;
@@ -24773,6 +24780,9 @@ begin
   FUseXt3d := True;
   FXt3dRightHandSide := False;
   UseTransverseDispForVertFlow := False;
+  FLongitudinalDispTreatement := dtCombined;
+  FTransverseDispTreatement := dtCombined;
+  FSeparateDataSetsForEachSpecies := dtCombined;
 end;
 
 procedure TGwtDispersionPackage.SetLongitudinalDispTreatement(
@@ -24781,6 +24791,16 @@ begin
   if FLongitudinalDispTreatement <> Value then
   begin
     FLongitudinalDispTreatement := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TGwtDispersionPackage.SetSeparateDataSetsForEachSpecies(
+  const Value: TDispersivityTreatment);
+begin
+  if FSeparateDataSetsForEachSpecies <> Value then
+  begin
+    FSeparateDataSetsForEachSpecies := Value;
     InvalidateModel;
   end;
 end;

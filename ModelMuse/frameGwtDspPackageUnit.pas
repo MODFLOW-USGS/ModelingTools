@@ -14,6 +14,7 @@ type
     rgLongDisp: TRadioGroup;
     rgTransDisp: TRadioGroup;
     cbVertFlowTransDisp: TCheckBox;
+    cbSeparateDataSets: TCheckBox;
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
     procedure cbUseXT3DClick(Sender: TObject);
   private
@@ -51,6 +52,7 @@ begin
   Disp.LongitudinalDispTreatement := TDispersivityTreatment(rgLongDisp.ItemIndex);
   Disp.TransverseDispTreatement := TDispersivityTreatment(rgTransDisp.ItemIndex);
   Disp.UseTransverseDispForVertFlow := cbVertFlowTransDisp.Checked;
+  Disp.SeparateDataSetsForEachSpecies := TDispersivityTreatment(cbSeparateDataSets.Checked);
 end;
 
 procedure TframeGwtDspPackage.cbUseXT3DClick(Sender: TObject);
@@ -76,6 +78,7 @@ begin
   rgLongDisp.ItemIndex := Ord(Disp.LongitudinalDispTreatement);
   rgTransDisp.ItemIndex := Ord(Disp.TransverseDispTreatement);
   cbVertFlowTransDisp.Checked := Disp.UseTransverseDispForVertFlow;
+  cbSeparateDataSets.Checked := Disp.SeparateDataSetsForEachSpecies = dtSeparate;
 end;
 
 end.

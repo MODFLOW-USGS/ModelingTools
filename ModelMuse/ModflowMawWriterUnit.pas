@@ -1283,19 +1283,11 @@ var
 begin
   WriteBeginOptions;
 
-  if Model.BuoyancyUsed then
+  if Model.GwtUsed then
   begin
-    if Model.BuoyancyDensityUsed then
-    begin
-      WriteString('  AUXILIARY DENSITY');
-      NewLine;
-    end
-    else
-    begin
-      WriteString('  AUXILIARY');
-      WriteAdditionalAuxVariables;
-      NewLine;
-    end;
+    WriteString('  AUXILIARY');
+    WriteAdditionalAuxVariables;
+    NewLine;
   end;
 
   WriteBoundNamesOption;
@@ -1627,28 +1619,24 @@ begin
 
       if Model.BuoyancyUsed then
       begin
-        if Model.BuoyancyDensityUsed then
+        if Model.GwtUsed then
         begin
-          WriteString('  ');
-          WriteInteger(ACell.WellNumber);
-          WriteString('  AUXILIARY Density');
-          WriteValueOrFormula(ACell, MawDensityPosition);
-          NewLine;
-        end
-        else
-        begin
-          if Model.GwtUsed then
+          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
           begin
-            for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+            WriteString('  ');
+            WriteInteger(ACell.WellNumber);
+            WriteString('  AUXILIARY ');
+            ASpecies := Model.MobileComponents[SpeciesIndex];
+            WriteString(' ' + ASpecies.Name);
+            if SameText(ASpecies.Name, StrDensity) then
             begin
-              WriteString('  ');
-              WriteInteger(ACell.WellNumber);
-              WriteString('  AUXILIARY ');
-              ASpecies := Model.MobileComponents[SpeciesIndex];
-              WriteString(' ' + ASpecies.Name);
+              WriteValueOrFormula(ACell, MawDensityPosition);
+            end
+            else
+            begin
               WriteFloat(0);
-              NewLine;
             end;
+            NewLine;
           end;
         end;
       end;

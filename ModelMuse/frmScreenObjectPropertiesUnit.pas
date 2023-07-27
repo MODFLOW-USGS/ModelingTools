@@ -7571,13 +7571,13 @@ begin
   if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
   begin
     frameEtsParam.rdgModflowBoundary.ColCount :=
-      6 + MobileSpeciesCount
+      6 //+ MobileSpeciesCount
       + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
   end
   else
   begin
     frameEtsParam.rdgModflowBoundary.ColCount :=
-      5 + MobileSpeciesCount
+      5 //+ MobileSpeciesCount
       + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
   end;
   frameMT3DMS_SSM.rdgModflowBoundary.ColCount :=
@@ -20580,7 +20580,7 @@ begin
         frameEtsParam.rdgModflowBoundary.WidthNeededToFitText(EtsColCount-1,0);
     end;
 
-    NumberOfSpecies := GwtColumnCount;
+    NumberOfSpecies := 0;
     for Index := 0 to AScreenObject.ModflowEtsBoundary.
       EtsSurfDepthCollection.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
