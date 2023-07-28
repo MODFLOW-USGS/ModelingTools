@@ -2197,7 +2197,6 @@ begin
             begin
               WriteInteger(LakeIndex+1);
               WriteString(' CONCENTRATION');
-              Assert(False);
 
               WriteLakeValueOrFormula(ALakeSetting,
                 Lak6GwtPestStartPosition + FSpeciesIndex);
@@ -2494,19 +2493,11 @@ var
 begin
   WriteBeginOptions;
 
-  if Model.BuoyancyUsed then
+  if Model.GwtUsed then
   begin
-    if Model.BuoyancyDensityUsed then
-    begin
-      WriteString('  AUXILIARY Density');
-      NewLine;
-    end
-    else
-    begin
-      WriteString('  AUXILIARY');
-      WriteAdditionalAuxVariables;
-      NewLine;
-    end
+    WriteString('  AUXILIARY');
+    WriteAdditionalAuxVariables;
+    NewLine;
   end;
   // [AUXILIARY <auxiliary(naux)>]
   WriteBoundNamesOption;
@@ -2799,23 +2790,11 @@ begin
     WriteInteger(ALake.FLakeCellList.Count);
 
     // aux
-    if Model.BuoyancyDensityUsed then
+    if Model.GwtUsed then
     begin
-      WriteFloat(0);
-    end;
-
-    if Model.BuoyancyUsed then
-    begin
-      if Model.BuoyancyDensityUsed then
+      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
       begin
         WriteFloat(0);
-      end
-      else if Model.GwtUsed then
-      begin
-        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-        begin
-          WriteFloat(0);
-        end;
       end;
     end;
 
@@ -3046,31 +3025,17 @@ begin
             WriteLakeValueOrFormula(ALakeSetting, Lak6WithdrawalPosition);
             NewLine;
 
-            if Model.BuoyancyUsed then
+            if Model.GwtUsed then
             begin
-              if Model.BuoyancyDensityUsed then
+              for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
               begin
                 WriteString('  ');
                 WriteInteger(LakeIndex+1);
-                WriteString('  AUXILIARY Density');
-                WriteLakeValueOrFormula(ALakeSetting, LakeDensityPosition);
+                WriteString('  AUXILIARY ');
+                ASpecies := Model.MobileComponents[SpeciesIndex];
+                WriteString(' ' + ASpecies.Name);
+                WriteFloat(0);
                 NewLine;
-              end
-              else
-              begin
-                if Model.GwtUsed then
-                begin
-                  for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-                  begin
-                    WriteString('  ');
-                    WriteInteger(LakeIndex+1);
-                    WriteString('  AUXILIARY ');
-                    ASpecies := Model.MobileComponents[SpeciesIndex];
-                    WriteString(' ' + ASpecies.Name);
-                    WriteFloat(0);
-                    NewLine;
-                  end;
-                end;
               end;
             end;
 

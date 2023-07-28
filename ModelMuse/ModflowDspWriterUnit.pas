@@ -41,7 +41,7 @@ procedure TModflowDspWriter.WriteFile(AFileName: string; SpeciesIndex: Integer);
 var
   Abbreviation: string;
   GwtFile: string;
-  SpeciesGwtFile: string;
+//  SpeciesGwtFile: string;
 begin
   if not Package.IsSelected then
   begin

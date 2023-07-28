@@ -6124,6 +6124,7 @@ Type
     FConduitRechargeUsed: boolean;
     FOutputInterval: integer;
     FUseCads: Boolean;
+    FMfConduitCadsRechargeFraction: TModflowBoundaryDisplayTimeList;
     function GetConduitTemperature: double;
     function GetElevationOffset: double;
     function GetEpsilon: double;
@@ -6151,7 +6152,10 @@ Type
     procedure InitializeRchFractionDisplay(Sender: TObject);
     procedure GetMfRechargeFractionUseList(Sender: TObject;
       NewUseList: TStringList);
+    procedure GetMfCadsRechargeFractionUseList(Sender: TObject;
+      NewUseList: TStringList);
     function RechargeFractionUsed (Sender: TObject): boolean;
+    function CadsRechargeFractionUsed (Sender: TObject): boolean;
     procedure SetUseCads(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
@@ -6175,6 +6179,8 @@ Type
       write SetLayerTemperature;
     property MfConduitRechargeFraction: TModflowBoundaryDisplayTimeList
       read FMfConduitRechargeFraction;
+    property MfConduitCadsRechargeFraction: TModflowBoundaryDisplayTimeList
+      read FMfConduitCadsRechargeFraction;
   published
     // Mode 1 (or 3)
     property PipesUsed: Boolean read FPipesUsed write SetPipesUsed stored True;
@@ -7101,7 +7107,11 @@ Type
       read FUseTransverseDispForVertFlow write SetUseTransverseDispForVertFlow;
     property SeparateDataSetsForEachSpecies: TDispersivityTreatment
       read FSeparateDataSetsForEachSpecies
-      write SetSeparateDataSetsForEachSpecies;
+      write SetSeparateDataSetsForEachSpecies
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
   TGwtScheme = (gsUpstream, gsCentral, gsTVD);
@@ -7383,6 +7393,7 @@ resourcestring
   StrFMPFarmWellFarmI = 'FMP Farm Well Farm ID';
   StrFMPPrecipitation = 'FMP Precipitation';
   StrCFPRechargeFractio = 'CFP Recharge Fraction';
+  StrCFPCadsRechargeFractio = 'CFP CADS Recharge Fraction';
   StrSWRDirectRunoffRe = 'SWR Direct Runoff Reach';
   StrSWRDirectRunoffVa = 'SWR Direct Runoff Value';
   StrSWREvaporation = 'SWR Evaporation';
@@ -17958,6 +17969,25 @@ begin
   inherited;
 end;
 
+function TConduitFlowProcess.CadsRechargeFractionUsed(Sender: TObject): boolean;
+var
+  LocalModel: TCustomModel;
+begin
+
+{$IFDEF OWHMV2}
+  if FModel.ModelSelection = msModflowOwhm2 then
+  begin
+    result := CadsRechargeFractionUsed(Sender);
+  end
+  else
+  begin
+    result := False;
+  end;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 constructor TConduitFlowProcess.Create(Model: TBaseModel);
 begin
   inherited;
@@ -17983,12 +18013,20 @@ begin
     FMfConduitRechargeFraction.OnTimeListUsed := RechargeFractionUsed;
     FMfConduitRechargeFraction.Name := StrCfpRecharge;
     AddTimeList(FMfConduitRechargeFraction);
+
+    FMfConduitCadsRechargeFraction := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfConduitCadsRechargeFraction.OnInitialize := InitializeRchFractionDisplay;
+    FMfConduitCadsRechargeFraction.OnGetUseList := GetMfRechargeFractionUseList;
+    FMfConduitCadsRechargeFraction.OnTimeListUsed := RechargeFractionUsed;
+    FMfConduitCadsRechargeFraction.Name := StrCfpRecharge;
+    AddTimeList(FMfConduitCadsRechargeFraction);
   end;
 
 end;
 
 destructor TConduitFlowProcess.Destroy;
 begin
+  FMfConduitCadsRechargeFraction.Free;
   FMfConduitRechargeFraction.Free;
   FStoredConduitTemperature.Free;
   FStoredEpsilon.Free;
@@ -18016,6 +18054,36 @@ end;
 function TConduitFlowProcess.GetLayerTemperature: double;
 begin
   result := StoredLayerTemperature.Value;
+end;
+
+procedure TConduitFlowProcess.GetMfCadsRechargeFractionUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  PhastModel: TCustomModel;
+  Boundary: TCfpRchFractionBoundary;
+begin
+  PhastModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.ModflowCfpRchFraction;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(1, NewUseList, Item, StrCFPCadsRechargeFractio);
+      end;
+    end;
+  end;
 end;
 
 procedure TConduitFlowProcess.GetMfRechargeFractionUseList(Sender: TObject;
@@ -18061,12 +18129,14 @@ var
   DataArrayIndex: Integer;
 begin
   MfConduitRechargeFraction.CreateDataSets;
+  MfConduitCadsRechargeFraction.CreateDataSets;
 
 
   List := TModflowBoundListOfTimeLists.Create;
   CfpWriter := TModflowCfpWriter.Create(FModel as TCustomModel, etDisplay);
   try
     List.Add(MfConduitRechargeFraction);
+    List.Add(MfConduitCadsRechargeFraction);
     CfpWriter.UpdateDisplay(List);
   finally
     CfpWriter.Free;
@@ -18078,6 +18148,13 @@ begin
     ADataArray.UpToDate := True;
   end;
   MfConduitRechargeFraction.SetUpToDate(True);
+
+  for DataArrayIndex := 0 to MfConduitCadsRechargeFraction.Count - 1 do
+  begin
+    ADataArray := MfConduitCadsRechargeFraction[DataArrayIndex];
+    ADataArray.UpToDate := True;
+  end;
+  MfConduitCadsRechargeFraction.SetUpToDate(True);
 end;
 
 procedure TConduitFlowProcess.InitializeVariables;

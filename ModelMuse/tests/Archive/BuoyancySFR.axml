@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="BuoyancySFR" FileType="bin">
+    <FileName Model_Name="BuoyancySFR" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="BuoyancySFR" FileType="ancillary">
+    <FileName Model_Name="BuoyancySFR" FileType="ancillary">BuoyancySFR.gpt</FileName>
+  </ancillary>
+  <model Model_Name="BuoyancySFR" FileType="Model Input">
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.buy</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.dis</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.ghb</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.gsf</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.ic</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.ims</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.nam.archive</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.npf</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.oc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.adv</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.dis</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.dsp</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.ic</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.ims</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.mst</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.oc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.sft</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Salinity.ssm</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.sfr</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.sto</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.tdis</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.adv</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.cnc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.dis</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.dsp</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.ic</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.ims</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.mst</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.oc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.sft</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.ssm</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.wel</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">usgs.BuoyancySFR.reference</FileName>
+  </model>
+  <output Model_Name="BuoyancySFR" FileType="Model Output">
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.bhd</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.cbc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.density</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Density.cbc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.dis.grb</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.InnerSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.lst</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.cbc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.InnerSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.lst</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.sft_budget</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.sft_budget.csv</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.sft_conc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.sfr_budget</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.stage</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.cbc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.InnerSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.lst</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_budget</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_budget.csv</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_conc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

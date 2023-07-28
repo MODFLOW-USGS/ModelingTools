@@ -1,0 +1,17 @@
+# Transport name file for Salinity file created on 7/28/2023 by ModelMuse version 5.1.1.34.
+BEGIN OPTIONS
+  LIST BuoyancyMAW.Salinity.lst
+    PRINT_INPUT
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6 BuoyancyMAW.Salinity.dis
+  OC6 BuoyancyMAW.Salinity.oc
+  MWT6 BuoyancyMAW.Salinity.mwt
+  ADV6 BuoyancyMAW.Salinity.adv
+  DSP6 BuoyancyMAW.Salinity.dsp
+  SSM6 BuoyancyMAW.Salinity.ssm
+  IC6 BuoyancyMAW.Salinity.ic
+  MST6 BuoyancyMAW.Salinity.mst
+END PACKAGES

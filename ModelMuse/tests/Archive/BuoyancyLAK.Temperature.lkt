@@ -1,0 +1,22 @@
+# LAK: Lake package for MODFLOW 6 file created on 7/28/2023 by ModelMuse version 5.1.1.34.
+BEGIN OPTIONS
+    FLOW_PACKAGE_NAME LAK-1
+    FLOW_PACKAGE_AUXILIARY_NAME  Temperature
+    BOUNDNAMES
+    PRINT_INPUT
+    SAVE_FLOWS
+    CONCENTRATION FILEOUT BuoyancyLAK.Temperature.lkt_conc
+    BUDGET FILEOUT BuoyancyLAK.Temperature.lkt_budget
+    BUDGETCSV FILEOUT BuoyancyLAK.Temperature.lkt_budget.csv
+END OPTIONS
+
+BEGIN PACKAGEDATA
+# <lakeno> <strt> <boundname>
+       1  0.000000000000E+000  'Object2' 
+END PACKAGEDATA
+
+BEGIN PERIOD      1
+     1 STATUS CONSTANT
+     1 CONCENTRATION  6.000000000000E+000 
+END PERIOD 
+

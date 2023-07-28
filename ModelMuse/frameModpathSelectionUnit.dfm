@@ -1,25 +1,26 @@
 inherited frameModpathSelection: TframeModpathSelection
-  Width = 608
+  Width = 589
   Height = 508
-  ExplicitWidth = 608
+  ExplicitWidth = 589
   ExplicitHeight = 508
   DesignSize = (
-    608
+    589
     508)
   inherited memoComments: TMemo
-    Width = 589
+    Width = 570
     Height = 67
-    ExplicitWidth = 589
+    ExplicitWidth = 578
     ExplicitHeight = 67
   end
   object pcModpath: TPageControl [3]
     Left = 3
     Top = 135
-    Width = 600
+    Width = 581
     Height = 364
     ActivePage = tabResponse
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
+    ExplicitWidth = 600
     object tabResponse: TTabSheet
       Caption = 'Response file options'
       ImageIndex = 1
@@ -1107,7 +1108,7 @@ inherited frameModpathSelection: TframeModpathSelection
           Left = 3
           Top = 183
           Width = 57
-          Height = 21
+          Height = 23
           CheckMinValue = True
           ButtonKind = bkClassic
           Enabled = False

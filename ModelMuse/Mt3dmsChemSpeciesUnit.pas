@@ -191,23 +191,43 @@ type
     // DSP package, diffc
     property DiffusionCoefficientDataArrayName: string
       read FDiffusionCoefficientDataArrayName
-      write SetDiffusionCoefficientDataArrayName;
+      write SetDiffusionCoefficientDataArrayName
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
     // DSP package, alh
     property LongDispHDataArrayName: string
       read FLongDispHDataArrayName
-      write SetLongDispHArrayNameDataArrayName;
+      write SetLongDispHArrayNameDataArrayName
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
     // DSP package, alv
     property LongDispVertDataArrayName: string
       read FLongDispVertDataArrayName
-      write SetLongDispVertArrayNameDataArrayName;
+      write SetLongDispVertArrayNameDataArrayName
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
     // DSP package, ath1
     property TransverseDispHDataArrayName: string
       read FTransverseDispHDataArrayName
-      write SetTransverseDispHArrayNameDataArrayName;
+      write SetTransverseDispHArrayNameDataArrayName
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
     // DSP package, ath2
     property TransverseDispVertDataArrayName: string
       read FTransverseDispVertDataArrayName
-      write SetTransverseDispVertArrayNameDataArrayName;
+      write SetTransverseDispVertArrayNameDataArrayName
+    {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
 
     //IST package, CIM
     property ImmobileInitialConcentrations: TStringList

@@ -1437,18 +1437,11 @@ begin
     end;
     WriteInteger(AWell.CellCount);
 
-    if Model.BuoyancyUsed then
+    if Model.GwtUsed then
     begin
-      if Model.BuoyancyDensityUsed then
+      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
       begin
         WriteFloat(0);
-      end
-      else if Model.GwtUsed then
-      begin
-        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-        begin
-          WriteFloat(0);
-        end;
       end;
     end;
 

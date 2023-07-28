@@ -1,0 +1,23 @@
+# MAW: Multi-Aquifer Well package file created on 7/28/2023 by ModelMuse version 5.1.1.34.
+BEGIN OPTIONS
+    FLOW_PACKAGE_NAME MAW-1
+    FLOW_PACKAGE_AUXILIARY_NAME  Salinity
+    BOUNDNAMES
+    PRINT_INPUT
+    SAVE_FLOWS
+    CONCENTRATION FILEOUT BuoyancyMAW.Salinity.mwt_conc
+    BUDGET FILEOUT BuoyancyMAW.Salinity.mwt_budget
+    BUDGETCSV FILEOUT BuoyancyMAW.Salinity.mwt_budget.csv
+END OPTIONS
+
+BEGIN PACKAGEDATA
+# <mawno> <strt> [<boundname>]
+     1  0.000000000000E+000  'Object2' 
+END PACKAGEDATA
+
+BEGIN PERIOD      1
+# <wellno> <<mwtsetting>>
+     1 STATUS ACTIVE
+     1 RATE  3.500000000000E+001 
+END PERIOD 
+

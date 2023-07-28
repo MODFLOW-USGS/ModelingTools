@@ -1891,23 +1891,7 @@ var
 begin
   WriteBeginOptions;
 
-  if Model.BuoyancyUsed then
-  begin
-    if Model.BuoyancyDensityUsed then
-    begin
-      WriteString('  AUXILIARY DENSITY');
-      if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
-      begin
-        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-        begin
-          ASpecies := Model.MobileComponents[SpeciesIndex];
-          WriteString(' ' + ASpecies.Name);
-        end;
-      end;
-      NewLine;
-    end;
-  end
-  else
+  if Model.GwtUsed then
   begin
     WriteAdditionalAuxVariables
   end;
@@ -2422,7 +2406,6 @@ begin
         begin
           WriteInteger(ReachNumber);
           WriteString(' CONCENTRATION');
-          Assert(False);
 
           FormulaIndex := SfrMf6DiversionStartPosition + 1 + DiversionCount
             + SfrGwtConcCount*FSpeciesIndex + SfrGwtSpecifiedConcentrationPosition;

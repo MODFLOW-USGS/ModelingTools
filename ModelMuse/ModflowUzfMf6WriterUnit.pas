@@ -955,7 +955,6 @@ begin
 //              WriteString('  ');
               WriteInteger(CellNumber);
               WriteString(' CONCENTRATION');
-              Assert(False);
 
               FormulaIndex := UzfBoundaryGwtStart
                 + UztGwtConcCount*FSpeciesIndex + UzfGwtSpecifiedConcentrationPosition;
@@ -1502,7 +1501,7 @@ var
   RowIndex: Integer;
   ColumnIndex: Integer;
   MvrKey: TMvrRegisterKey;
-  BoundaryIndex: Integer;
+//  BoundaryIndex: Integer;
   MvrReceiver: TMvrReceiver;
   MoverWriter: TModflowMvrWriter;
   AUzfCellList: TUzfCellList;
@@ -1539,7 +1538,7 @@ begin
       ListOfUzfCellLists.Clear;
       // In each stress period create lists of cells for each screen object
       // and add their numbers to TMvrReceiverValues.UzfCells
-      BoundaryIndex := 0;
+//      BoundaryIndex := 0;
       SetLength(UsedUzfCells, IDOMAINDataArray.LayerCount,
         IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
       for LayerIndex := 0 to IDOMAINDataArray.LayerCount - 1 do
@@ -1630,7 +1629,7 @@ begin
                 NewLine;
                 MvrReceiver.ReceiverKey.ScreenObject := UzfCell.ScreenObject as TScreenObject;
 
-                Inc(BoundaryIndex);
+//                Inc(BoundaryIndex);
 //                MvrReceiver.ReceiverValues.Index := BoundaryIndex;
                 MvrReceiver.ReceiverValues.Index := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
 

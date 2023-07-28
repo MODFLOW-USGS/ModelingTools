@@ -20,7 +20,7 @@ type
   {$IFDEF OWHMV2}
     FLimitedFlow: double;
     FWellFlow: double;
-    FWellConductance: double;
+//    FWellConductance: double;
     FCauchyHead: double;
     FCauchyConductance: double;
     FCauchyLimitedInflow: double;
@@ -36,6 +36,10 @@ type
     FRechargeFraction: array of double;
     FRechargeFractionUsed: array of boolean;
     FRechargeFractionAnnotation: array of string;
+  {$IFDEF OWHMV2}
+    FCadsRechargeFraction: array of double;
+    FCadsRechargeFractionAnnotation: array of string;
+  {$ENDIF}
     // @name is used to indicate that data about this node should be written
     // to an output file. See Conduit Output Control File.
     FRecordData: Boolean;
@@ -800,6 +804,11 @@ begin
       SetLength(ANode.FRechargeFractionUsed, StressPeriodCount);
       SetLength(ANode.FRechargeFraction, StressPeriodCount);
       SetLength(ANode.FRechargeFractionAnnotation, StressPeriodCount);
+
+    {$IFDEF OWHMV2}
+      SetLength(ANode.FCadsRechargeFraction, StressPeriodCount);
+      SetLength(ANode.FCadsRechargeFractionAnnotation, StressPeriodCount);
+    {$ENDIF}
       for StressPeriodIndex := 0 to StressPeriodCount - 1 do
       begin
         ANode.FRechargeFractionUsed[StressPeriodIndex] := False;
@@ -855,6 +864,10 @@ begin
           ANode.FRechargeFractionUsed[StressPeriodIndex] := True;
           ANode.FRechargeFraction[StressPeriodIndex] := ACell.CfpRechargeFraction;
           ANode.FRechargeFractionAnnotation[StressPeriodIndex] := ACell.CfpRechargeFractionAnnotation;
+        {$IFDEF OWHMV2}
+          ANode.FCadsRechargeFraction[StressPeriodIndex] := ACell.CfpCadsRechargeFraction;
+          ANode.FCadsRechargeFractionAnnotation[StressPeriodIndex] := ACell.CfpCadsRechargeFractionAnnotation;
+        {$ENDIF}
         end;
       end;
     end;
@@ -882,6 +895,8 @@ var
   RechFractionsArray: TModflowBoundaryDisplayDataArray;
   NodeIndex: Integer;
   ANode: TCfpNode;
+  CadsRechFractionsTimes: TModflowBoundaryDisplayTimeList;
+  CadsRechFractionsArray: TModflowBoundaryDisplayDataArray;
 begin
   if not (Model as TPhastModel).CfpRechargeIsSelected(nil) then
   begin
@@ -899,11 +914,14 @@ begin
     end;
 
     RechFractionsTimes := TimeLists[0];
+    CadsRechFractionsTimes := TimeLists[1];
 
     StressPeriodCount := Model.ModflowFullStressPeriods.Count;
     for TimeIndex := 0 to StressPeriodCount - 1 do
     begin
       RechFractionsArray := RechFractionsTimes[TimeIndex]
+        as TModflowBoundaryDisplayDataArray;
+      CadsRechFractionsArray := CadsRechFractionsTimes[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
       for NodeIndex := 0 to FNodes.Count - 1 do
       begin
@@ -914,6 +932,10 @@ begin
             ANode.FRechargeFraction[TimeIndex];
           RechFractionsArray.Annotation[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
             ANode.FRechargeFractionAnnotation[TimeIndex];
+          CadsRechFractionsArray.RealData[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
+            ANode.FCadsRechargeFraction[TimeIndex];
+          CadsRechFractionsArray.Annotation[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
+            ANode.FCadsRechargeFractionAnnotation[TimeIndex];
         end;
       end;
     end;
@@ -1134,7 +1156,7 @@ var
   HCY: Double;
   CCY: Double;
   CYLQ: Double;
-  CWC_WELL: Double;
+//  CWC_WELL: Double;
 begin
   for NodeIndex := 0 to FNodes.Count - 1 do
   begin
@@ -1923,6 +1945,12 @@ begin
           if ANode.FRechargeFractionUsed[StressPeriodIndex] then
           begin
             WriteFloat(ANode.FRechargeFraction[StressPeriodIndex]);
+          {$IFDEF OWHMV2}
+            if Model.ModelSelection = msModflowOwhm2 then
+            begin
+              WriteFloat(ANode.FCadsRechargeFraction[StressPeriodIndex]);
+            end;
+          {$ENDIF}
           end
           else
           begin

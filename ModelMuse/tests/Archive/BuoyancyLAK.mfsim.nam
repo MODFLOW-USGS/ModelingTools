@@ -1,0 +1,22 @@
+BEGIN TIMING
+  TDIS6 'BuoyancyLAK.tdis'
+END TIMING
+
+BEGIN MODELS
+  GWF6 'BuoyancyLAK.nam' 'MODFLOW'
+  GWT6 'BuoyancyLAK.Salinity.Gwt_nam' 'Salinity'
+  GWT6 'BuoyancyLAK.Temperature.Gwt_nam' 'Temperature'
+END MODELS
+
+BEGIN EXCHANGES
+  GWF6-GWT6 BuoyancyLAK.Salinity.gwfgwt MODFLOW Salinity
+  GWF6-GWT6 BuoyancyLAK.Temperature.gwfgwt MODFLOW Temperature
+END EXCHANGES
+
+BEGIN SOLUTIONGROUP     1
+  MXITER     1
+  IMS6 'BuoyancyLAK.ims' 'MODFLOW' 
+  IMS6 'BuoyancyLAK.Salinity.ims' 'Salinity' 
+  IMS6 'BuoyancyLAK.Temperature.ims' 'Temperature' 
+END SOLUTIONGROUP
+

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="BuoyancyMAW" FileType="bin">
+    <FileName Model_Name="BuoyancyMAW" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="BuoyancyMAW" FileType="ancillary">
+    <FileName Model_Name="BuoyancyMAW" FileType="ancillary">BuoyancyMAW.gpt</FileName>
+  </ancillary>
+  <model Model_Name="BuoyancyMAW" FileType="Model Input">
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.buy</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.dis</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.ghb</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.gsf</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.ic</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.ims</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.maw6</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.nam.archive</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.npf</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.oc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.adv</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.dis</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.dsp</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.ic</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.ims</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.mst</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.mwt</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.oc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Salinity.ssm</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.sto</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.tdis</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.adv</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.cnc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.dis</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.dsp</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.ic</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.ims</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.mst</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.mwt</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.oc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.ssm</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.wel</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">usgs.BuoyancyMAW.reference</FileName>
+  </model>
+  <output Model_Name="BuoyancyMAW" FileType="Model Output">
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.bhd</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.cbc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.density</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Density.cbc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.dis.grb</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.InnerSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.lst</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.maw_bud</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.maw_head</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.cbc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.InnerSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.lst</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.mwt_budget</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.mwt_budget.csv</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.mwt_conc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.cbc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.InnerSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.lst</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.mwt_budget</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.mwt_budget.csv</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.mwt_conc</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

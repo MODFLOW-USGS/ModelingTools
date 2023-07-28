@@ -675,6 +675,10 @@ begin
     ClearGrid(rdgModflowBoundary);
     seNumberOfTimes.AsInteger := 0;
     seNumberOfTimesChange(seNumberOfTimes);
+    if DensityUsed then
+    begin
+      PestMethod[rdgModflowBoundary, Ord(BuoyancyColumn)] := ppmMultiply;
+    end;
 
     rdgModflowBoundary.Cells[Ord(s6cStartTime),0] := StrStartingTime;
     rdgModflowBoundary.Cells[Ord(s6cEndtime),0] := StrEndingTime;

@@ -20735,7 +20735,7 @@ begin
       frameCfpRechargeFraction.rdgModflowBoundary.DefaultRowHeight;
     AScreenObject.CreateCfpRchFraction;
     frameCfpRechargeFraction.InitializeNoParamFrame(AScreenObject.ModflowCfpRchFraction);
-    frameCfpRechargeFraction.rdgModflowBoundary.ColCount := 3;
+    frameCfpRechargeFraction.rdgModflowBoundary.ColCount := 4;
     if (AScreenObject.ModflowCfpRchFraction <> nil)
       and not AScreenObject.ModflowCfpRchFraction.Used then
     begin

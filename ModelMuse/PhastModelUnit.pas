@@ -2652,6 +2652,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfSfrDownstreamUnsatKz(Sender: TObject);
     procedure InvalidateMfRchLayer(Sender: TObject);
     procedure InvalidateMfConduitRecharge(Sender: TObject);
+    procedure InvalidateMfConduitCadsRecharge(Sender: TObject);
 
     procedure InvalidateMnw1DesiredPumpingRate(Sender: TObject);
     procedure InvalidateMnw1WaterQuality(Sender: TObject);
@@ -26764,6 +26765,11 @@ end;
 procedure TCustomModel.InvalidateMfChdStartingHead(Sender: TObject);
 begin
   ModflowPackages.ChdBoundary.MfChdStartingHead.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfConduitCadsRecharge(Sender: TObject);
+begin
+  ModflowPackages.ConduitFlowProcess.MfConduitCadsRechargeFraction.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfConduitRecharge(Sender: TObject);

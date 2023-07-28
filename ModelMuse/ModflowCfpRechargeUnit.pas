@@ -10,10 +10,14 @@ uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
 type
   TCfpRchFractionRecord = record
     Cell: TCellLocation;
+    //P_CRCH
     CfpRechargeFraction: double;
+    // P_CDSRCH in MODFLOW-OWHM
+    CfpCadsRechargeFraction: Double;
     StartingTime: double;
     EndingTime: double;
     CfpRechargeFractionAnnotation: string;
+    CfpCadsRechargeFractionAnnotation: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -38,9 +42,12 @@ type
   private
     // See @link(CfpRechargeFraction).
     FCfpRechargeFraction: IFormulaObject;
+    FCfpCadsRechargeFraction: IFormulaObject;
     // See @link(CfpRechargeFraction).
     procedure SetCfpRechargeFraction(const Value: string);
     function GetCfpRechargeFraction: string;
+    function GetCfpCadsRechargeFraction: string;
+    procedure SetCfpCadsRechargeFraction(const Value: string);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -60,7 +67,10 @@ type
     procedure Assign(Source: TPersistent);override;
     // @name is the formula used to set the recharge rate
     // or the recharge rate multiplier of this boundary.
-    property CfpRechargeFraction: string read GetCfpRechargeFraction write SetCfpRechargeFraction;
+    property CfpRechargeFraction: string read GetCfpRechargeFraction
+      write SetCfpRechargeFraction;
+    property CfpCadsRechargeFraction: string read GetCfpCadsRechargeFraction
+      write SetCfpCadsRechargeFraction;
   end;
 
   TCfpRchFractionTimeListLink = class(TTimeListsModelLink)
@@ -68,9 +78,11 @@ type
     // @name is used to compute the recharge rates for a series of
     // cells over a series of time intervals.
     FCfpRechargeFractionData: TModflowTimeList;
+    FCfpCadsRechargeFractionData: TModflowTimeList;
   protected
     procedure CreateTimeLists; override;
     property CfpRechargeFractionData: TModflowTimeList read FCfpRechargeFractionData;
+    property CfpCadsRechargeFractionData: TModflowTimeList read FCfpCadsRechargeFractionData;
   public
     Destructor Destroy; override;
   end;
@@ -78,6 +90,7 @@ type
   TCfpRchFractionCollection = class(TCustomMF_ArrayBoundColl)
   private
     procedure InvalidateRechargeData(Sender: TObject);
+    procedure InvalidateCadsRechargeData(Sender: TObject);
   protected
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual;
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -111,6 +124,8 @@ type
     FStressPeriod: integer;
     function GetCfpRechargeFraction: double;
     function GetCfpRechargeFractionAnnotation: string;
+    function GetCadsCfpRechargeFractionAnnotation: string;
+    function GetCfpCadsRechargeFraction: double;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -131,6 +146,8 @@ type
     property Values: TCfpRchFractionRecord read FValues write FValues;
     property CfpRechargeFraction: double read GetCfpRechargeFraction;
     property CfpRechargeFractionAnnotation: string read GetCfpRechargeFractionAnnotation;
+    property CfpCadsRechargeFraction: double read GetCfpCadsRechargeFraction;
+    property CfpCadsRechargeFractionAnnotation: string read GetCadsCfpRechargeFractionAnnotation;
   end;
 
   // @name is used to specify data set 2 in the CRCH in the
@@ -169,8 +186,12 @@ uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit,
   AbstractGridUnit;
 
+resourcestring
+  StrCADSRechargeFracti = 'CADS Recharge Fraction';
+
 const
   RechPosition = 0;
+  CadsRechPosition = 1;
 
   StrRechargeFraction = 'Recharge fraction';
   StrRechargeFractionMulti = ' recharge fraction multiplier';
@@ -186,11 +207,13 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(CfpRechargeFractionAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(CfpCadsRechargeFractionAnnotation));
 end;
 
 procedure TCfpRchFractionRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(CfpRechargeFractionAnnotation);
+  Strings.Add(CfpCadsRechargeFractionAnnotation);
 end;
 
 procedure TCfpRchFractionRecord.Restore(Decomp: TDecompressionStream;
@@ -201,6 +224,7 @@ begin
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   CfpRechargeFractionAnnotation := Annotations[ReadCompInt(Decomp)];
+  CfpCadsRechargeFractionAnnotation := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TCfpRchFractionStorage }
@@ -270,11 +294,15 @@ end;
 { TCfpRchFractionItem }
 
 procedure TCfpRchFractionItem.Assign(Source: TPersistent);
+var
+  CfpSource: TCfpRchFractionItem;
 begin
   // if Assign is updated, update IsSame too.
   if Source is TCfpRchFractionItem then
   begin
-    CfpRechargeFraction := TCfpRchFractionItem(Source).CfpRechargeFraction;
+    CfpSource := TCfpRchFractionItem(Source);
+    CfpRechargeFraction := CfpSource.CfpRechargeFraction;
+    CfpCadsRechargeFraction := CfpSource.CfpCadsRechargeFraction;
   end;
   inherited;
 
@@ -284,26 +312,31 @@ procedure TCfpRchFractionItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TCfpRchFractionCollection;
   RechObserver: TObserver;
+  CadsRechObserver: TObserver;
 begin
   ParentCollection := Collection as TCfpRchFractionCollection;
   RechObserver := FObserverList[RechPosition];
   RechObserver.OnUpToDateSet := ParentCollection.InvalidateRechargeData;
+  CadsRechObserver := FObserverList[CadsRechPosition];
+  CadsRechObserver.OnUpToDateSet := ParentCollection.InvalidateCadsRechargeData;
 end;
 
 function TCfpRchFractionItem.BoundaryFormulaCount: integer;
 begin
-  result := 1;
+  result := 2;
 end;
 
 procedure TCfpRchFractionItem.CreateFormulaObjects;
 begin
   inherited;
   FCfpRechargeFraction := CreateFormulaObject(dso3D);
+  FCfpCadsRechargeFraction := CreateFormulaObject(dso3D);
 end;
 
 destructor TCfpRchFractionItem.Destroy;
 begin
   CfpRechargeFraction := '0';
+  CfpCadsRechargeFraction := '0';
   inherited;
 end;
 
@@ -311,14 +344,32 @@ function TCfpRchFractionItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
     RechPosition: result := CfpRechargeFraction;
+    CadsRechPosition: result := CfpCadsRechargeFraction;
     else Assert(False);
   end;
 end;
 
 procedure TCfpRchFractionItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  Assert(Sender = FCfpRechargeFraction as TObject);
-  List.Add(FObserverList[RechPosition]);
+  if Sender = FCfpRechargeFraction as TObject then
+  begin
+    List.Add(FObserverList[RechPosition]);
+  end
+  else if Sender = FCfpCadsRechargeFraction as TObject then
+  begin
+    List.Add(FObserverList[CadsRechPosition]);
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+function TCfpRchFractionItem.GetCfpCadsRechargeFraction: string;
+begin
+  Result := FCfpCadsRechargeFraction.Formula;
+  ResetItemObserver(CadsRechPosition);
+
 end;
 
 function TCfpRchFractionItem.GetCfpRechargeFraction: string;
@@ -336,12 +387,16 @@ begin
   begin
     Item := TCfpRchFractionItem(AnotherItem);
     result := (Item.CfpRechargeFraction = CfpRechargeFraction)
+      and (Item.CfpCadsRechargeFraction = CfpCadsRechargeFraction)
   end;
 end;
 
 procedure TCfpRchFractionItem.RemoveFormulaObjects;
 begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FCfpRechargeFraction,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FCfpCadsRechargeFraction,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
@@ -351,8 +406,14 @@ procedure TCfpRchFractionItem.SetBoundaryFormula(Index: integer;
 begin
   case Index of
     RechPosition: CfpRechargeFraction := Value;
+    CadsRechPosition: CfpCadsRechargeFraction := Value;
     else Assert(False);
   end;
+end;
+
+procedure TCfpRchFractionItem.SetCfpCadsRechargeFraction(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, CadsRechPosition, FCfpCadsRechargeFraction);
 end;
 
 procedure TCfpRchFractionItem.SetCfpRechargeFraction(const Value: string);
@@ -373,11 +434,20 @@ begin
   begin
     FCfpRechargeFractionData.OnInvalidate := (Model as TCustomModel).InvalidateMfConduitRecharge;
   end;
+  FCfpCadsRechargeFractionData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FCfpCadsRechargeFractionData.NonParamDescription := StrCADSRechargeFracti;
+  FCfpCadsRechargeFractionData.ParamDescription := StrCADSRechargeFracti;
+  AddTimeList(FCfpCadsRechargeFractionData);
+  if Model <> nil then
+  begin
+    FCfpCadsRechargeFractionData.OnInvalidate := (Model as TCustomModel).InvalidateMfConduitCadsRecharge;
+  end;
 end;
 
 destructor TCfpRchFractionTimeListLink.Destroy;
 begin
   FCfpRechargeFractionData.Free;
+  FCfpCadsRechargeFractionData.Free;
   inherited;
 end;
 
@@ -406,10 +476,12 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  CadsRechargeRateArray: TDataArray;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
   RechargeRateArray := DataSets[RechPosition];
+  CadsRechargeRateArray := DataSets[CadsRechPosition];
   Boundary := Boundaries[ItemIndex, AModel] as TCfpRchFractionStorage;
   RechargeRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
@@ -425,6 +497,7 @@ begin
           begin
             if RechargeRateArray.IsValue[LayerIndex, RowIndex, ColIndex] then
             begin
+              Assert(CadsRechargeRateArray.IsValue[LayerIndex, RowIndex, ColIndex]);
               with Boundary.CfpRchFractionArray[BoundaryIndex] do
               begin
                 Cell.Layer := LayerIndex;
@@ -435,6 +508,10 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 CfpRechargeFractionAnnotation := RechargeRateArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                CfpCadsRechargeFraction := CadsRechargeRateArray.
+                  RealData[LayerIndex, RowIndex, ColIndex];
+                CfpCadsRechargeFractionAnnotation := CadsRechargeRateArray.
+                  Annotation[LayerIndex, RowIndex, ColIndex];
               end;
               Inc(BoundaryIndex);
             end;
@@ -444,6 +521,7 @@ begin
     end;
   end;
   RechargeRateArray.CacheData;
+  CadsRechargeRateArray.CacheData;
   Boundary.CacheData;
 end;
 
@@ -470,6 +548,7 @@ var
   ColIndex: Integer;
   LayerIndex: Integer;
   ShouldRemove: Boolean;
+  CadsRechargeRateData: TModflowTimeList;
 begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -483,6 +562,10 @@ begin
   RechargeRateData := ALink.FCfpRechargeFractionData;
   RechargeRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(RechargeRateData.Count = Count);
+
+  CadsRechargeRateData := ALink.FCfpCadsRechargeFractionData;
+  CadsRechargeRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(CadsRechargeRateData.Count = Count);
 
   if PackageAssignmentMethod(AModel) = umAdd then
   begin
@@ -509,7 +592,30 @@ begin
         end;
       end;
     end;
+    for DataArrayIndex := 0 to CadsRechargeRateData.Count - 1 do
+    begin
+      DataArray := CadsRechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
+      for RowIndex := 0 to Grid.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Grid.ColumnCount - 1 do
+        begin
+          ShouldRemove := False;
+          for LayerIndex := Grid.LayerCount -1 downto 0 do
+          begin
+            if ShouldRemove then
+            begin
+              DataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
+            end
+            else
+            begin
+              ShouldRemove := DataArray.IsValue[LayerIndex, RowIndex, ColIndex];
+            end;
+          end;
+        end;
+      end;
+    end;
   end;
+
 
   ClearBoundaries(AModel);
   SetBoundaryCapacity(RechargeRateData.Count, AModel);
@@ -518,6 +624,35 @@ begin
     AddBoundary(TCfpRchFractionStorage.Create(AModel));
   end;
   ListOfTimeLists.Add(RechargeRateData);
+  ListOfTimeLists.Add(CadsRechargeRateData);
+end;
+
+procedure TCfpRchFractionCollection.InvalidateCadsRechargeData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TCfpRchFractionTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TCfpRchFractionTimeListLink;
+    Link.FCfpCadsRechargeFractionData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TCfpRchFractionTimeListLink;
+        Link.FCfpCadsRechargeFractionData.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TCfpRchFractionCollection.InvalidateRechargeData(Sender: TObject);
@@ -607,6 +742,7 @@ begin
   result := '';
   case Index of
     RechPosition: result := CfpRechargeFractionAnnotation;
+    CadsRechPosition: result := CfpCadsRechargeFractionAnnotation;
     else Assert(False);
   end;
 end;
@@ -617,8 +753,19 @@ begin
   result := 0;
   case Index of
     RechPosition: result := CfpRechargeFraction;
+    CadsRechPosition: result := CfpCadsRechargeFraction;
     else Assert(False);
   end;
+end;
+
+function TCfpRchFraction_Cell.GetCadsCfpRechargeFractionAnnotation: string;
+begin
+  result := Values.CfpCadsRechargeFractionAnnotation;
+end;
+
+function TCfpRchFraction_Cell.GetCfpCadsRechargeFraction: double;
+begin
+  result := Values.CfpCadsRechargeFraction;
 end;
 
 function TCfpRchFraction_Cell.GetCfpRechargeFraction: double;
@@ -765,6 +912,7 @@ begin
   begin
     Model := ParentModel as TCustomModel;
     Model.InvalidateMfConduitRecharge(self);
+    Model.InvalidateMfConduitCadsRecharge(self);
   end;
 
 end;

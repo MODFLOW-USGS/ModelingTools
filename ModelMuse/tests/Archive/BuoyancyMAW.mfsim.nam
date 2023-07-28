@@ -1,0 +1,22 @@
+BEGIN TIMING
+  TDIS6 'BuoyancyMAW.tdis'
+END TIMING
+
+BEGIN MODELS
+  GWF6 'BuoyancyMAW.nam' 'MODFLOW'
+  GWT6 'BuoyancyMAW.Salinity.Gwt_nam' 'Salinity'
+  GWT6 'BuoyancyMAW.Temperature.Gwt_nam' 'Temperature'
+END MODELS
+
+BEGIN EXCHANGES
+  GWF6-GWT6 BuoyancyMAW.Salinity.gwfgwt MODFLOW Salinity
+  GWF6-GWT6 BuoyancyMAW.Temperature.gwfgwt MODFLOW Temperature
+END EXCHANGES
+
+BEGIN SOLUTIONGROUP     1
+  MXITER     1
+  IMS6 'BuoyancyMAW.ims' 'MODFLOW' 
+  IMS6 'BuoyancyMAW.Salinity.ims' 'Salinity' 
+  IMS6 'BuoyancyMAW.Temperature.ims' 'Temperature' 
+END SOLUTIONGROUP
+
