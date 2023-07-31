@@ -16819,9 +16819,24 @@ begin
     and (AScreenObject.ElevationCount in [ecOne, ecTwo])
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
-      StrCFPFixedHeads)
-      as TJvPageIndexNode;
+  {$IFDEF OWHMV2}
+    if frmGoPhast.ModelSelection = msModflowOwhm2 then
+    begin
+      Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+        'CFP: Boundary Conditions')
+        as TJvPageIndexNode;
+    end
+    else
+    begin
+      Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+        StrCFPFixedHeads)
+        as TJvPageIndexNode;
+    end;
+  {$ELSE}
+      Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+        StrCFPFixedHeads)
+        as TJvPageIndexNode;
+  {$ENDIF}
     Node.PageIndex := jvspCfpFixedHeads.PageIndex;
     frameCfpFixedHeads.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;

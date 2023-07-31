@@ -1946,9 +1946,12 @@ begin
           begin
             WriteFloat(ANode.FRechargeFraction[StressPeriodIndex]);
           {$IFDEF OWHMV2}
-            if Model.ModelSelection = msModflowOwhm2 then
+            if (Model.ModelSelection = msModflowOwhm2) then
             begin
-              WriteFloat(ANode.FCadsRechargeFraction[StressPeriodIndex]);
+              if FConduitFlowProcess.UseCads then
+              begin
+                WriteFloat(ANode.FCadsRechargeFraction[StressPeriodIndex]);
+              end;
             end;
           {$ENDIF}
           end

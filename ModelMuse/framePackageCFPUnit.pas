@@ -35,7 +35,7 @@ type
     cbConduitRecharge: TCheckBox;
     seOutputInterval: TJvSpinEdit;
     lblOutputInterval: TLabel;
-    cpCADS: TCheckBox;
+    cbCADS: TCheckBox;
     procedure cbPipesClick(Sender: TObject);
     procedure cbLayersClick(Sender: TObject);
     procedure comboElevationChoiceChange(Sender: TObject);
@@ -126,7 +126,7 @@ begin
   rdeLayerTemperature.RealValue := CfpPackage.LayerTemperature;
   cbConduitRecharge.Checked := CfpPackage.ConduitRechargeUsed;
   seOutputInterval.AsInteger := CfpPackage.OutputInterval;
-  cpCADS.Checked := CfpPackage.UseCads;
+  cbCADS.Checked := CfpPackage.UseCads;
 
   PipesUsed := cbPipes.Checked and rcSelectionController.Enabled;
   EnableCads(PipesUsed);
@@ -182,7 +182,7 @@ begin
   CfpPackage.LayerTemperature := rdeLayerTemperature.RealValue;
   CfpPackage.ConduitRechargeUsed := cbConduitRecharge.Checked;
   CfpPackage.OutputInterval := seOutputInterval.AsInteger;
-  CfpPackage.UseCads := cpCADS.Checked;
+  CfpPackage.UseCads := cbCADS.Checked;
 end;
 
 procedure TframePackageCFP.EnableCads(PipesUsed: Boolean);
@@ -190,14 +190,14 @@ begin
 {$IFDEF OWHMV2}
   if frmGoPhast.ModelSelection = msModflowOwhm2 then
   begin
-    cpCADS.Enabled := PipesUsed;
+    cbCADS.Enabled := PipesUsed;
   end
   else
   begin
-    cpCADS.Enabled := False;
+    cbCADS.Enabled := False;
   end;
 {$ELSE}
-  cpCADS.Enabled := False;
+  cbCADS.Enabled := False;
 {$ENDIF}
 end;
 

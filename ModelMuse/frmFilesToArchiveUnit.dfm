@@ -4,16 +4,16 @@ inherited frmFilesToArchive: TfrmFilesToArchive
   Caption = ' Files To Archive'
   ClientWidth = 631
   ExplicitWidth = 643
-  ExplicitHeight = 272
+  ExplicitHeight = 270
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 161
+    Top = 159
     Width = 631
     Height = 73
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 160
+    ExplicitTop = 158
     ExplicitWidth = 627
     DesignSize = (
       631
@@ -29,7 +29,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       OnLinkClick = JvLinkLabel1LinkClick
     end
     object btnCancel: TBitBtn
-      Left = 525
+      Left = 521
       Top = 30
       Width = 83
       Height = 32
@@ -37,10 +37,10 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 5
-      ExplicitLeft = 521
+      ExplicitLeft = 517
     end
     object btnOK: TBitBtn
-      Left = 436
+      Left = 432
       Top = 30
       Width = 83
       Height = 32
@@ -49,10 +49,10 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
-      ExplicitLeft = 432
+      ExplicitLeft = 428
     end
     object btnHelp: TBitBtn
-      Left = 349
+      Left = 345
       Top = 30
       Width = 81
       Height = 32
@@ -61,7 +61,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 345
+      ExplicitLeft = 341
     end
     object btnArchive: TButton
       Left = 8
@@ -95,19 +95,21 @@ inherited frmFilesToArchive: TfrmFilesToArchive
     Left = 0
     Top = 0
     Width = 631
-    Height = 161
+    Height = 159
     Align = alClient
     DragMode = dmAutomatic
     Indent = 19
     MultiSelect = True
+    MultiSelectStyle = [msControlSelect, msShiftSelect]
     PopupMenu = pm1
     ReadOnly = True
     TabOrder = 0
     OnCustomDrawItem = tvArchiveCustomDrawItem
     OnDragDrop = tvArchiveDragDrop
     OnDragOver = tvArchiveDragOver
+    OnKeyUp = tvArchiveKeyUp
     ExplicitWidth = 627
-    ExplicitHeight = 160
+    ExplicitHeight = 158
   end
   object sdArchive: TSaveDialog
     DefaultExt = '.zip'

@@ -39,6 +39,7 @@ type
       State: TDragState; var Accept: Boolean);
     procedure mniAddFilesClick(Sender: TObject);
     procedure mniDeleteClick(Sender: TObject);
+    procedure tvArchiveKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
 //    FFilesToArchive: TStringList;
     FBinaryFileNode: TTreeNode;
@@ -509,6 +510,7 @@ begin
   finally
     NodesToDelete.Free;
   end;
+  tvArchive.Selected := nil;
   EnableCreateArchive;
 end;
 
@@ -672,6 +674,16 @@ begin
   Dst := tvArchive.GetNodeAt(X,Y);
   Accept := (Sender = Source) and Assigned(Dst) and (Src<>Dst)
     and (FRootNodes.IndexOf(Src) < 0);
+end;
+
+procedure TfrmFilesToArchive.tvArchiveKeyUp(Sender: TObject; var Key: Word;
+    Shift: TShiftState);
+begin
+  inherited;
+  if Key = VK_DELETE  then
+  begin
+    mniDeleteClick(Sender);
+  end;
 end;
 
 { TFileLists }

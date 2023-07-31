@@ -9,14 +9,15 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
   object lblHint: TLabel
     Left = 159
     Top = 104
-    Width = 314
-    Height = 75
+    Width = 310
+    Height = 105
     Caption = 
-      'CFP Fixed heads must be greater than or equal to -1. It is only ' +
-      'necessary to specify CFP fixed heads for nodes that are CFP fixe' +
-      'd head nodes. Other nodes will automatically have their fixed he' +
-      'ads set to -1 which is used to indicate that the head in the nod' +
-      'e should be calculated.'
+      'CFP boundary condition values (N_HEAD) must be greater than or e' +
+      'qual to -1. It is only necessary to specify CFP boundary conditi' +
+      'on values for nodes that are CFP boundary condition nodes. Other' +
+      ' nodes will automatically have their boundary condition N_HEAD v' +
+      'alues set to -1 which is used to indicate that the head in the n' +
+      'ode should be calculated.'
     WordWrap = True
   end
   object pnlCaption: TPanel
@@ -27,7 +28,6 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 350
   end
   object edFixedHead: TLabeledEdit
     Left = 159
@@ -77,9 +77,9 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
   end
   object pcCfp: TPageControl
     Left = 0
-    Top = 200
+    Top = 215
     Width = 563
-    Height = 247
+    Height = 232
     ActivePage = tabSteady
     Align = alBottom
     TabOrder = 5
@@ -141,27 +141,34 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
         Left = 0
         Top = 0
         Width = 555
-        Height = 237
+        Height = 222
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 8
-        ExplicitTop = 8
+        ExplicitWidth = 555
+        ExplicitHeight = 237
         inherited Panel: TPanel
-          Top = 196
+          Top = 181
           Width = 555
+          ExplicitTop = 196
+          ExplicitWidth = 555
           inherited sbAdd: TSpeedButton
             Left = 290
+            ExplicitLeft = 290
           end
           inherited sbInsert: TSpeedButton
             Left = 343
+            ExplicitLeft = 343
           end
           inherited sbDelete: TSpeedButton
             Left = 396
+            ExplicitLeft = 396
           end
         end
         inherited Grid: TRbwDataGrid4
           Width = 555
-          Height = 196
+          Height = 181
+          ExplicitWidth = 555
+          ExplicitHeight = 196
         end
       end
     end

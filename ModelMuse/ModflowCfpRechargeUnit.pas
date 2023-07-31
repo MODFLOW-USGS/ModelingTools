@@ -204,6 +204,7 @@ procedure TCfpRchFractionRecord.Cache(Comp: TCompressionStream;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, CfpRechargeFraction);
+  WriteCompReal(Comp, CfpCadsRechargeFraction);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(CfpRechargeFractionAnnotation));
@@ -221,6 +222,7 @@ procedure TCfpRchFractionRecord.Restore(Decomp: TDecompressionStream;
 begin
   Cell := ReadCompCell(Decomp);
   CfpRechargeFraction := ReadCompReal(Decomp);
+  CfpCadsRechargeFraction := ReadCompReal(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   CfpRechargeFractionAnnotation := Annotations[ReadCompInt(Decomp)];
@@ -563,6 +565,12 @@ begin
   RechargeRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(RechargeRateData.Count = Count);
 
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index] as TCfpRchFractionItem;
+    BoundaryValues[Index].Time := Item.StartTime;
+    BoundaryValues[Index].Formula := Item.CfpCadsRechargeFraction;
+  end;
   CadsRechargeRateData := ALink.FCfpCadsRechargeFractionData;
   CadsRechargeRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(CadsRechargeRateData.Count = Count);
@@ -592,6 +600,13 @@ begin
         end;
       end;
     end;
+  end;
+
+  {$IFDEF OWHMV2}
+  if (PackageAssignmentMethod(AModel) = umAdd) and (Model.ModelSelection = msModflowOwhm2)
+    and (AModel as TCustomModel).ModflowPackages.ConduitFlowProcess.UseCads then
+  begin
+    Grid := (AModel as TCustomModel).Grid;
     for DataArrayIndex := 0 to CadsRechargeRateData.Count - 1 do
     begin
       DataArray := CadsRechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
@@ -615,7 +630,7 @@ begin
       end;
     end;
   end;
-
+  {$ENDIF}
 
   ClearBoundaries(AModel);
   SetBoundaryCapacity(RechargeRateData.Count, AModel);
