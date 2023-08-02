@@ -539,7 +539,9 @@ begin
                 Node1.FColumn := ACell1.Column;
                 Node1.FScreenObject := AScreenObject;
               end;
+            {$IFDEF OWHMV2}
               Node1.CadWidth := CfpDrainableStorageWidth;
+            {$ENDIF}
             end;
           end;
 
@@ -932,10 +934,12 @@ begin
             ANode.FRechargeFraction[TimeIndex];
           RechFractionsArray.Annotation[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
             ANode.FRechargeFractionAnnotation[TimeIndex];
+        {$IFDEF OWHMV2}
           CadsRechFractionsArray.RealData[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
             ANode.FCadsRechargeFraction[TimeIndex];
           CadsRechFractionsArray.Annotation[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
             ANode.FCadsRechargeFractionAnnotation[TimeIndex];
+        {$ENDIF}
         end;
       end;
     end;
@@ -1301,10 +1305,12 @@ begin
     K_EXCHANGE := ANode.FExchange;
     WriteInteger(NO_N);
     WriteFloat(K_EXCHANGE);
+  {$IFDEF OWHMV2}
     if CadsUsed then
     begin
       WriteFloat(ANode.CadWidth);
     end;
+  {$ENDIF}
     NewLine;
   end;
 end;
