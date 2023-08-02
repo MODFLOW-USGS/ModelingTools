@@ -822,6 +822,9 @@ var
   NUBC1: Integer;
   NPBG1: Integer;
   NUBG1: Integer;
+  NodeArray: TArray<TGeneralTransportNode>;
+  NodeIndex: Integer;
+  ANode: TGeneralTransportNode;
 begin
   WriteCommentLine('Data set 2; Time = ' + FloatToStr(FTimes[TimeIndex]));
   NodeList := FGeneralBoundaries[TimeIndex];
@@ -831,7 +834,17 @@ begin
   NPBC1 := 0;
   NUBC1 := 0;
   NPBG1 := 0;
-  NUBG1 := NodeList.Count;
+//  NUBG1 := NodeList.Count;
+  NUBG1 := 0;
+  NodeArray := FGeneralBoundaries[TimeIndex].ToArray;
+  for NodeIndex := 0 to Length(NodeArray) - 1 do
+  begin
+    ANode := NodeArray[NodeIndex];
+    if not FUseBctime[ANode.FLayer, 0, ANode.FCol] then
+    begin
+      Inc(NUBG1);
+    end;
+  end;
 
   WriteString(BCSID);
   WriteInteger(NSOP1);
@@ -858,55 +871,58 @@ begin
     for NodeIndex := 0 to Length(NodeArray) - 1 do
     begin
       ANode := NodeArray[NodeIndex];
-      if ANode.Active then
+      if not FUseBctime[ANode.FLayer, 0, ANode.FCol] then
       begin
-        WriteInteger(ANode.NodeNumber+1);
-        if WritingTemplate and (ANode.FUValue1.Formula <> '') then
+        if ANode.Active then
         begin
-          WriteString(ANode.FUValue1.Formula);
-          FPestParamUsed := True;
+          WriteInteger(ANode.NodeNumber+1);
+          if WritingTemplate and (ANode.FUValue1.Formula <> '') then
+          begin
+            WriteString(ANode.FUValue1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.FUValue1.Value);
+          end;
+          if WritingTemplate and (ANode.FSoluteEnergyInflow.Formula <> '') then
+          begin
+            WriteString(ANode.FSoluteEnergyInflow.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.FSoluteEnergyInflow.Value);
+          end;
+          if WritingTemplate and (ANode.FUValue2.Formula <> '') then
+          begin
+            WriteString(ANode.FUValue2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.FUValue2.Value);
+          end;
+          if WritingTemplate and (ANode.FSoluteEnergyOutflow.Formula <> '') then
+          begin
+            WriteString(ANode.FSoluteEnergyOutflow.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.FSoluteEnergyOutflow.Value);
+          end;
+  //        WriteFloat(ANode.FUValue1.Value);
+  //        WriteFloat(ANode.FSoluteEnergyInflow.Value);
+  //        WriteFloat(ANode.FUValue2.Value);
+  //        WriteFloat(ANode.FSoluteEnergyOutflow.Value);
         end
         else
         begin
-          WriteFloat(ANode.FUValue1.Value);
+          WriteInteger(-(ANode.NodeNumber+1));
         end;
-        if WritingTemplate and (ANode.FSoluteEnergyInflow.Formula <> '') then
-        begin
-          WriteString(ANode.FSoluteEnergyInflow.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.FSoluteEnergyInflow.Value);
-        end;
-        if WritingTemplate and (ANode.FUValue2.Formula <> '') then
-        begin
-          WriteString(ANode.FUValue2.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.FUValue2.Value);
-        end;
-        if WritingTemplate and (ANode.FSoluteEnergyOutflow.Formula <> '') then
-        begin
-          WriteString(ANode.FSoluteEnergyOutflow.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.FSoluteEnergyOutflow.Value);
-        end;
-//        WriteFloat(ANode.FUValue1.Value);
-//        WriteFloat(ANode.FSoluteEnergyInflow.Value);
-//        WriteFloat(ANode.FUValue2.Value);
-//        WriteFloat(ANode.FSoluteEnergyOutflow.Value);
-      end
-      else
-      begin
-        WriteInteger(-(ANode.NodeNumber+1));
+        NewLine;
       end;
-      NewLine;
     end;
     WriteString('0');
     NewLine;

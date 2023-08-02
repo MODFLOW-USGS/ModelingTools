@@ -87,7 +87,7 @@ type
     property MinIncrement: double read GetMinIncrement write SetMinIncrement;
     // TCMAX
     property MaxIncrement: double read GetMaxIncrement write SetMaxIncrement;
-    function TimeValues(InitialTime: double; AllSchedules: TSutraTimeSchedules)
+    function TimeValues(TimeStepsInitialTime: double; AllSchedules: TSutraTimeSchedules)
       : TOneDRealArray;
   published
     // SCHNAM - maximum 10 characters, spaces are allowed.
@@ -534,7 +534,7 @@ begin
   SetIntegerProperty(FTimeStepIncrement, Value);
 end;
 
-function TSutraTimeSchedule.TimeValues(InitialTime: double;
+function TSutraTimeSchedule.TimeValues(TimeStepsInitialTime: double;
   AllSchedules: TSutraTimeSchedules): TOneDRealArray;
 var
   Index: integer;
@@ -553,7 +553,7 @@ begin
           result[Index] := Times[Index].Value * ScaleFactor;
           if SutraTimeChoice = stcElapsed then
           begin
-            result[Index] := result[Index] + InitialTime;
+            result[Index] := result[Index] + TimeStepsInitialTime;
           end;
         end;
       end;
@@ -601,13 +601,13 @@ begin
           end;
           if SutraTimeChoice = stcElapsed then
           begin
-            result[Index] := result[Index] + InitialTime;
+            result[Index] := result[Index] + TimeStepsInitialTime;
           end;
         end;
       end;
     stStepList:
       begin
-        TimeSteps := AllSchedules[0].Schedule.TimeValues(InitialTime,
+        TimeSteps := AllSchedules[0].Schedule.TimeValues(TimeStepsInitialTime,
           AllSchedules);
 
         SetLength(result, Steps.Count);
@@ -628,7 +628,7 @@ begin
       end;
     stStepCycle:
       begin
-        TimeSteps := AllSchedules[0].Schedule.TimeValues(InitialTime,
+        TimeSteps := AllSchedules[0].Schedule.TimeValues(TimeStepsInitialTime,
           AllSchedules);
 
         SetLength(result, Min(MaxSteps, Length(TimeSteps)));

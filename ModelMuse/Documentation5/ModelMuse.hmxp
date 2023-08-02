@@ -760,6 +760,7 @@ document.write('</frameset>');
       <helpcontext-number href="CaseR" value="590"/>
       <helpcontext-number href="CaseT" value="600"/>
       <helpcontext-number href="CFP_Conduit_Flow_Process" value="3827"/>
+      <helpcontext-number href="CFP_Conduit_Flow_Process#CADS" value="4505"/>
       <helpcontext-number href="CFP_Conduit_Flow_Process#ConduitRecharge" value="3837"/>
       <helpcontext-number href="CFP_Conduit_Flow_Process#GEOHEIGHT" value="3834"/>
       <helpcontext-number href="CFP_Conduit_Flow_Process#Mode" value="3832"/>

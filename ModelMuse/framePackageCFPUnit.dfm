@@ -277,7 +277,7 @@ inherited framePackageCFP: TframePackageCFP
       object cbCADS: TCheckBox
         Left = 12
         Top = 85
-        Width = 279
+        Width = 381
         Height = 17
         Caption = 'Conduit-Associated Drainable Storage (CADS)'
         TabOrder = 2

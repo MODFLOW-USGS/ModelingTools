@@ -950,7 +950,7 @@ end;
 
 procedure TSutraGeneralFlowWriter.WriteDataSet2(TimeIndex: integer);
 var
-  NodeList: IGeneralFlowNodes;
+//  NodeList: IGeneralFlowNodes;
   BCSID: String;
   NSOP1: Integer;
   NSOU1: Integer;
@@ -958,15 +958,29 @@ var
   NUBC1: Integer;
   NPBG1: Integer;
   NUBG1: Integer;
+  NodeArray: TArray<TGeneralFlowNode>;
+  NodeIndex: Integer;
+  ANode: TGeneralFlowNode;
 begin
   WriteCommentLine('Data set 2; Time = ' + FloatToStr(FTimes[TimeIndex]));
-  NodeList := FGeneralBoundaries[TimeIndex];
+//  NodeList := FGeneralBoundaries[TimeIndex];
   BCSID := '''generalized flow boundaries''';
   NSOP1 := 0;
   NSOU1 := 0;
   NPBC1 := 0;
   NUBC1 := 0;
-  NPBG1 := NodeList.Count;
+
+//  NPBG1 := NodeList.Count;
+  NPBG1 := 0;
+  NodeArray := FGeneralBoundaries[TimeIndex].ToArray;
+  for NodeIndex := 0 to Length(NodeArray) - 1 do
+  begin
+    ANode := NodeArray[NodeIndex];
+    if not FUseBctime[ANode.FLayer, 0, ANode.FCol] then
+    begin
+      Inc(NPBG1);
+    end;
+  end;
   NUBG1 := 0;
 
   WriteString(BCSID);
@@ -994,72 +1008,75 @@ begin
     for NodeIndex := 0 to Length(NodeArray) - 1 do
     begin
       ANode := NodeArray[NodeIndex];
-      if ANode.Active then
+      if not FUseBctime[ANode.FLayer, 0, ANode.FCol] then
       begin
-        WriteInteger(ANode.NodeNumber+1);
-        if WritingTemplate and (ANode.P1.Formula <> '') then
+        if ANode.Active then
         begin
-          WriteString(ANode.P1.Formula);
-          FPestParamUsed := True;
+          WriteInteger(ANode.NodeNumber+1);
+          if WritingTemplate and (ANode.P1.Formula <> '') then
+          begin
+            WriteString(ANode.P1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.P1.Value);
+          end;
+          if WritingTemplate and (ANode.Q1.Formula <> '') then
+          begin
+            WriteString(ANode.Q1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.Q1.Value);
+          end;
+          if WritingTemplate and (ANode.P2.Formula <> '') then
+          begin
+            WriteString(ANode.P2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.P2.Value);
+          end;
+          if WritingTemplate and (ANode.Q2.Formula <> '') then
+          begin
+            WriteString(ANode.Q2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.Q2.Value);
+          end;
+          WriteLimit(ANode.Limit1);
+          WriteLimit(ANode.Limit2);
+          if WritingTemplate and (ANode.U1.Formula <> '') then
+          begin
+            WriteString(ANode.U1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.U1.Value);
+          end;
+          WriteExitSpec(ANode.ExitSpecification);
+          if WritingTemplate and (ANode.U2.Formula <> '') then
+          begin
+            WriteString(ANode.U2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
+            WriteFloat(ANode.U2.Value);
+          end;
         end
         else
         begin
-          WriteFloat(ANode.P1.Value);
+          WriteInteger(-(ANode.NodeNumber+1));
         end;
-        if WritingTemplate and (ANode.Q1.Formula <> '') then
-        begin
-          WriteString(ANode.Q1.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.Q1.Value);
-        end;
-        if WritingTemplate and (ANode.P2.Formula <> '') then
-        begin
-          WriteString(ANode.P2.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.P2.Value);
-        end;
-        if WritingTemplate and (ANode.Q2.Formula <> '') then
-        begin
-          WriteString(ANode.Q2.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.Q2.Value);
-        end;
-        WriteLimit(ANode.Limit1);
-        WriteLimit(ANode.Limit2);
-        if WritingTemplate and (ANode.U1.Formula <> '') then
-        begin
-          WriteString(ANode.U1.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.U1.Value);
-        end;
-        WriteExitSpec(ANode.ExitSpecification);
-        if WritingTemplate and (ANode.U2.Formula <> '') then
-        begin
-          WriteString(ANode.U2.Formula);
-          FPestParamUsed := True;
-        end
-        else
-        begin
-          WriteFloat(ANode.U2.Value);
-        end;
-      end
-      else
-      begin
-        WriteInteger(-(ANode.NodeNumber+1));
+        NewLine;
       end;
-      NewLine;
     end;
     WriteString('0');
     NewLine;

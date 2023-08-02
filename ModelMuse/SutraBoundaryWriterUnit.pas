@@ -1464,7 +1464,21 @@ begin
   NUBG1 := 0;
   if TimeIndex = 0 then
   begin
-    Count := FCount;
+    Count := 0;
+    for LayerIndex := FNodeNumbers.MinLayer to FNodeNumbers.MaxLayer do
+    begin
+      for RowIndex := FNodeNumbers.MinRow to FNodeNumbers.MaxRow do
+      begin
+        for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
+        begin
+          if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex]
+            and not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+          begin
+            Inc(Count);
+          end;
+        end;
+      end;
+    end;
   end
   else
   begin
@@ -1515,7 +1529,8 @@ begin
           for ColIndex := StartCol to
             Max(PriorUDataArray.MaxColumn, UDataArray.MaxColumn) do
           begin
-            if FNodeNumbers.IsValue[LayerIndex, RowIndex, ColIndex] then
+            if FNodeNumbers.IsValue[LayerIndex, RowIndex, ColIndex]
+              and not FUseBctime[LayerIndex, RowIndex,ColIndex] then
             begin
               if UDataArray.IsValue[LayerIndex, RowIndex, ColIndex]
                 <> PriorUDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
@@ -1748,7 +1763,10 @@ begin
               QINC1 := 0.0;
               UINC1 := 0.0;
             end;
-            WriteALine;
+            if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+            begin
+              WriteALine;
+            end;
             if PQTimeList.Times[0] > FTime1 then
             begin
               QINC1 := 0.0;
@@ -1878,7 +1896,10 @@ begin
                 QINC1 := 0.0;
                 UINC1 := 0.0;
               end;
-              WriteALine;
+              if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+              begin
+                WriteALine;
+              end;
             end;
           end;
         end;
@@ -2008,7 +2029,10 @@ begin
               Assert(IQCU1 < 0);
               QUINC1 := 0.0;
             end;
-            WriteALine;
+            if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+            begin
+              WriteALine;
+            end;
             if UTimeList.Times[0] > FTime1 then
             begin
               QUINC1 := 0.0;
@@ -2097,7 +2121,10 @@ begin
                 Assert(IQCU1 < 0);
                 QUINC1 := 0.0;
               end;
-              WriteALine;
+              if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+              begin
+                WriteALine;
+              end;
             end;
           end;
         end;
@@ -2273,7 +2300,10 @@ begin
                 PBC1 := 0.0;
                 UBC1 := 0.0;
               end;
-              WriteALine;
+              if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+              begin
+                WriteALine;
+              end;
               if PQTimeList.Times[0] > FTime1 then
               begin
                 PBC1 := 0.0;
@@ -2304,7 +2334,8 @@ begin
         begin
           for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
           begin
-            if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
+            if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex]
+              and not FUseBctime[LayerIndex, RowIndex,ColIndex] then
             begin
               Changed := False;
               if PriorUDataArray.IsValue[LayerIndex, RowIndex,ColIndex]
@@ -2415,7 +2446,10 @@ begin
                   PBC1 := 0.0;
                   UBC1 := 0.0;
                 end;
-                WriteALine;
+                if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  WriteALine;
+                end;
               end;
             end;
           end;
@@ -2540,7 +2574,10 @@ begin
               Assert(IUBC1 < 0);
               UBC1 := 0.0;
             end;
-            WriteALine;
+            if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+            begin
+              WriteALine;
+            end;
             if UTimeList.Times[0] > FTime1 then
             begin
               UBC1 := 0.0;
@@ -2629,7 +2666,10 @@ begin
                 Assert(IUBC1 < 0);
                 UBC1 := 0.0;
               end;
-              WriteALine;
+              if not FUseBctime[LayerIndex, RowIndex,ColIndex] then
+              begin
+                WriteALine;
+              end;
             end;
           end;
         end;

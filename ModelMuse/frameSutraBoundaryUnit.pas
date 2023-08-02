@@ -820,7 +820,7 @@ begin
               Break;
             end;
 //            rdgSutraFeature.InsertRow(RowIndex);
-            rdgSutraFeature.Cells[0,RowIndex] := FloatToStr(TimeList[RowIndex-1]);
+            rdgSutraFeature.Cells[0,RowIndex] := FloatToStr(TimeList[RowIndex-1-PestRowOffset]);
             rdgSutraFeature.Checked[1,RowIndex] := False;
           end;
           Inc(RowIndex);

@@ -1214,8 +1214,8 @@
           <topicref type="topic" id="417545903835045" build="ALL" modified="2014-04-25T10:36:20.280Z" icon="0" href="CFP_Conduit_Flow_Process_Pane">
             <caption translate="true">CFP: Conduit Flow Process Pane</caption>
           </topicref>
-          <topicref type="topic" id="417543943922213" build="ALL" modified="2014-04-25T10:36:55.076Z" icon="0" href="CFP_Fixed_Heads_Pane">
-            <caption translate="true">CFP: Fixed Heads Pane</caption>
+          <topicref type="topic" id="417543943922213" build="ALL" modified="2023-08-02T09:29:20.478Z" icon="0" href="CFP_Fixed_Heads_Pane">
+            <caption translate="true">CFP: Boundary Conditions or Fixed Heads Pane</caption>
           </topicref>
           <topicref type="topic" id="41754878515762" build="ALL" modified="2014-04-25T14:38:12.726Z" icon="0" href="CFP_Conduit_Recharge_Pane">
             <caption translate="true">CRCH: Conduit Recharge Pane</caption>

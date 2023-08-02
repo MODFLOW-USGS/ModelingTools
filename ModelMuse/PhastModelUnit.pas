@@ -10022,10 +10022,14 @@ const
 //               Bug fix: ModelMuse no longer generates an error message for the
 //                MVR package if the MVR input in an object does not include
 //                all stress periods.
-
-//               Bug fix: Fixed bug that caused an access violation when editing
+ //    '5.1.1.35' Bug fix: Fixed bug that caused an access violation when editing
 //                evapotranspiration bounddaries in MODFLOW 6 models in which
 //                the groundwater transport process was active.
+//               Bug fix: Fixed bug in defining SUTRA step TIME CYCLE time
+//                schedules whent the initial time for the time schedule is not
+//                zero.
+//               Bug fix: Fixed exporting SUTRA input files when BCTIME has been
+//                modified.
 
 //               Enhancement Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
@@ -10034,7 +10038,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.34';
+  IIModelVersion = '5.1.1.35';
 
 function IModelVersion: string;
 begin
