@@ -13,11 +13,6 @@ type
 
   TframeScreenObjectCfpFixed = class(TframeScreenObject)
     pnlCaption: TPanel;
-    edFixedHead: TLabeledEdit;
-    btnFixedHead: TButton;
-    lblHint: TLabel;
-    rgBoundaryType: TRadioGroup;
-    cbTimeDependent: TCheckBox;
     pcCfp: TPageControl;
     tabSteady: TTabSheet;
     lblValue2: TLabel;
@@ -28,10 +23,18 @@ type
     btnValue3: TButton;
     tabTransient: TTabSheet;
     frameTimeDependent: TframeGrid;
+    lblHint: TLabel;
+    btnFixedHead: TButton;
+    edFixedHead: TLabeledEdit;
+    cbTimeDependent: TCheckBox;
+    rgBoundaryType: TRadioGroup;
     procedure cbTimeDependentClick(Sender: TObject);
     procedure edFixedHeadChange(Sender: TObject);
     procedure edValue2Change(Sender: TObject);
     procedure edValue3Change(Sender: TObject);
+    procedure frameTimeDependentGridEndUpdate(Sender: TObject);
+    procedure frameTimeDependentGridSetEditText(Sender: TObject; ACol, ARow:
+        Integer; const Value: string);
     procedure rgBoundaryTypeClick(Sender: TObject);
     procedure StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer; const
         Value: string);
@@ -40,6 +43,7 @@ type
     FOnChange: TNotifyEvent;
     FValue2Set: Boolean;
     FValue3Set: Boolean;
+    FTransientGridCleared: Boolean;
     property Changing: Boolean read FChanging write FChanging;
     procedure DoChange;
     procedure InitializeControls;
@@ -58,7 +62,7 @@ var
 implementation
 
 uses
-  ScreenObjectUnit, ModflowCfpFixedUnit, GoPhastTypes;
+  ScreenObjectUnit, ModflowCfpFixedUnit, GoPhastTypes, ModflowBoundaryUnit;
 
 resourcestring
   StrDefinedHead = 'Defined Head';
@@ -76,14 +80,7 @@ resourcestring
 procedure TframeScreenObjectCfpFixed.cbTimeDependentClick(Sender: TObject);
 begin
   inherited;
-  if cbTimeDependent.Checked then
-  begin
-    pcCfp.ActivePageIndex := 1;
-  end
-  else
-  begin
-    pcCfp.ActivePageIndex := 0;
-  end;
+  tabTransient.TabVisible := cbTimeDependent.State in [cbChecked, cbGrayed];
   DoChange;
 
   if not Changing then
@@ -132,6 +129,20 @@ begin
   end;
 end;
 
+procedure TframeScreenObjectCfpFixed.frameTimeDependentGridEndUpdate(Sender:
+    TObject);
+begin
+  inherited;
+  frameTimeDependent.GridEndUpdate(Sender);
+end;
+
+procedure TframeScreenObjectCfpFixed.frameTimeDependentGridSetEditText(Sender:
+    TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  FTransientGridCleared := False;
+end;
+
 procedure TframeScreenObjectCfpFixed.GetData(
   ScreenObjectList: TScreenObjectEditCollection);
 var
@@ -141,11 +152,18 @@ var
   AScreenObject: TScreenObject;
   ABoundary: TCfpFixedBoundary;
   ScreenObjectIndex: Integer;
+  FirstTimeDependentBoundary: TCfpFixedBoundary;
+  TimeIndex: Integer;
+  AnItem: TCustomBoundaryItem;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  BoundIndex: Integer;
 begin
   Assert(ScreenObjectList.Count >= 1);
   Changing := True;
   try
     InitializeControls;
+    FirstTimeDependentBoundary := nil;
     ListOfScreenObjects := TScreenObjectList.Create;
     try
       FValue2Set := True;
@@ -160,6 +178,7 @@ begin
           ListOfScreenObjects.Add(AScreenObject);
         end;
       end;
+      FTransientGridCleared := False;
       if ListOfScreenObjects.Count > 0 then
       begin
         ABoundary := ListOfScreenObjects[0].ModflowCfpFixedHeads;
@@ -168,6 +187,29 @@ begin
         edValue3.Text := ABoundary.Value3;
         rgBoundaryType.ItemIndex := Ord(ABoundary.BoundaryType);
         cbTimeDependent.Checked := ABoundary.TimeDependent;
+        FirstTimeDependentBoundary := ABoundary;
+        if ABoundary.TimeDependent then
+        begin
+          frameTimeDependent.seNumber.AsInteger :=
+            FirstTimeDependentBoundary.Values.Count;
+          frameTimeDependent.seNumber.OnChange(nil);
+          for TimeIndex := 0 to FirstTimeDependentBoundary.Values.Count - 1 do
+          begin
+            AnItem := FirstTimeDependentBoundary.Values[TimeIndex];
+            RowIndex := TimeIndex + 1;
+            frameTimeDependent.Grid.Cells[Ord(ccTime), RowIndex] := FloatToStr(AnItem.StartTime);
+            for ColIndex := 1 to frameTimeDependent.Grid.ColCount - 1 do
+            begin
+              BoundIndex := ColIndex -1;
+              frameTimeDependent.Grid.Cells[ColIndex, RowIndex] :=
+                AnItem.BoundaryFormula[BoundIndex];
+            end;
+          end;
+        end
+        else
+        begin
+          frameTimeDependent.seNumber.AsInteger := 0;
+        end;
       end;
       for ScreenObjectIndex := 1 to ListOfScreenObjects.Count - 1 do
       begin
@@ -192,10 +234,22 @@ begin
         end;
         if cbTimeDependent.State <> cbGrayed then
         begin
+          if ABoundary.TimeDependent then
+          begin
+            if not FirstTimeDependentBoundary.Values.IsSame(ABoundary.Values) then
+            begin
+              ClearGrid(frameTimeDependent.Grid);
+              FTransientGridCleared := True;
+            end;
+          end;
           if cbTimeDependent.Checked <> ABoundary.TimeDependent then
           begin
             cbTimeDependent.AllowGrayed := True;
             cbTimeDependent.State := cbGrayed
+          end;
+          if not FTransientGridCleared and not ABoundary.TimeDependent then
+          begin
+            frameTimeDependent.seNumber.AsInteger := 0;
           end;
         end;
       end;
@@ -211,6 +265,8 @@ procedure TframeScreenObjectCfpFixed.InitializeControls;
 begin
   edFixedHead.Text := '';
 {$IFDEF OWHMV2}
+  ClearGrid(frameTimeDependent.Grid);
+  frameTimeDependent.seNumber.AsInteger := 0;
   if IGlobalModel.ModelSelection = msModflowOwhm2 then
   begin
     rgBoundaryType.Enabled := True;
@@ -255,10 +311,10 @@ begin
             edValue3.Enabled := False;
             btnValue3.Enabled := False;
 
-            frameTimeDependent.Grid.ColCount := 3;
+            frameTimeDependent.Grid.ColCount := 2;
             frameTimeDependent.Grid.Cells[Ord(ccTime),0] := StrTime;
             frameTimeDependent.Grid.Cells[Ord(ccHead),0] := StrDefinedHead;
-            frameTimeDependent.Grid.Cells[Ord(ccValue1),0] := StrLimitedFlowValue;
+//            frameTimeDependent.Grid.Cells[Ord(ccValue1),0] := StrLimitedFlowValue;
           end;
         1:  // well
           begin
@@ -275,10 +331,10 @@ begin
             edValue3.Enabled := False;
             btnValue3.Enabled := False;
 
-            frameTimeDependent.Grid.ColCount := 3;
+            frameTimeDependent.Grid.ColCount := 2;
             frameTimeDependent.Grid.Cells[Ord(ccTime),0] := StrTime;
             frameTimeDependent.Grid.Cells[Ord(ccHead),0] := StrDefinedDischarge;
-            frameTimeDependent.Grid.Cells[Ord(ccValue1),0] := StrCellToWellConduct;
+//            frameTimeDependent.Grid.Cells[Ord(ccValue1),0] := StrCellToWellConduct;
           end;
         2:  // Cauchy
           begin
@@ -295,11 +351,11 @@ begin
             edValue3.Enabled := True;
             btnValue3.Enabled := True;
 
-            frameTimeDependent.Grid.ColCount := 4;
+            frameTimeDependent.Grid.ColCount := 2;
             frameTimeDependent.Grid.Cells[Ord(ccTime),0] := StrTime;
             frameTimeDependent.Grid.Cells[Ord(ccHead),0] := StrRobinCauchyHead;
-            frameTimeDependent.Grid.Cells[Ord(ccValue1),0] := StrCellToWellConduct;
-            frameTimeDependent.Grid.Cells[Ord(ccValue2),0] := StrCauchyLimitedInflo;
+//            frameTimeDependent.Grid.Cells[Ord(ccValue1),0] := StrCellToWellConduct;
+//            frameTimeDependent.Grid.Cells[Ord(ccValue2),0] := StrCauchyLimitedInflo;
           end;
         3:  // limited head
           begin
@@ -318,6 +374,11 @@ begin
             frameTimeDependent.Grid.ColCount := 2;
             frameTimeDependent.Grid.Cells[Ord(ccTime),0] := StrTime;
             frameTimeDependent.Grid.Cells[Ord(ccHead),0] := StrLimitedHead;
+          end;
+        else
+          begin
+            ClearGrid(frameTimeDependent.Grid);
+            FTransientGridCleared := True;
           end;
        end;
     end
@@ -339,6 +400,7 @@ begin
       AColumn.ButtonWidth := 35;
       AColumn.WordWrapCaptions := True;
       AColumn.AutoAdjustCaptionRowHeights := True;
+      AColumn.AutoAdjustRowHeights := True;
       AColumn.AutoAdjustColWidths := True;
       AColumn.Format := rcf4String;
     end;
@@ -359,6 +421,12 @@ var
   ScreenObject: TScreenObject;
   Boundary: TCfpFixedBoundary;
   BoundaryUsed: Boolean;
+  TransientData: TCustomMF_BoundColl;
+  TimeIndex: Integer;
+  AnItem: TCustomBoundaryItem;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  BoundIndex: Integer;
 begin
   for ScreenObjectIndex := 0 to List.Count - 1 do
   begin
@@ -402,6 +470,23 @@ begin
         if cbTimeDependent.State <> cbGrayed then
         begin
           Boundary.TimeDependent := cbTimeDependent.Checked;
+          if not FTransientGridCleared then
+          begin
+            TransientData := Boundary.Values;
+            TransientData.Count := frameTimeDependent.seNumber.AsInteger;
+            for TimeIndex := 0 to frameTimeDependent.seNumber.AsInteger - 1 do
+            begin
+              RowIndex := TimeIndex + 1;
+              AnItem := Boundary.Values[TimeIndex];
+              AnItem.StartTime := frameTimeDependent.Grid.RealValueDefault[Ord(ccTime), RowIndex, 0];
+              for ColIndex := 1 to frameTimeDependent.Grid.ColCount - 1 do
+              begin
+                BoundIndex := ColIndex -1;
+                AnItem.BoundaryFormula[BoundIndex] :=
+                  frameTimeDependent.Grid.Cells[ColIndex, RowIndex];
+              end;
+            end;
+          end;
         end;
       end;
     end;

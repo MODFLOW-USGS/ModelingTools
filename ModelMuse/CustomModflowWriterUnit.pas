@@ -140,7 +140,11 @@ type
       ChangeSign: Boolean = False); overload;
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID, Prefix: string);
+    // @name creates a new file whose name is FileName and writes all values
+    // written to file to that file until @link(CloseTempFile) is called.
     procedure OpenTempFile(const FileName: string);
+    // @name closes the last file created with @link(OpenTempFile) and reverts
+    // to writing data to the prior location.
     procedure CloseTempFile;
     property NameOfFile: string read FNameOfFile;
     function GetPestNonTransientTemplateFormula(DataArray: TDataArray;

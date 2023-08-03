@@ -46,12 +46,10 @@ type
       override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function BoundaryFormulaCount: integer; override;
+  public
+    procedure Assign(Source: TPersistent); override;
   published
     property Value1: string index Value1Position read GetBoundaryFormula
-      write SetBoundaryFormula;
-    property Value2: string index Value2Position read GetBoundaryFormula
-      write SetBoundaryFormula;
-    property Value3: string index Value3Position read GetBoundaryFormula
       write SetBoundaryFormula;
   end;
 
@@ -412,6 +410,23 @@ end;
 
 { TCfpTimeItem }
 
+procedure TCfpTimeItem.Assign(Source: TPersistent);
+var
+  CpfItem: TCfpTimeItem;
+  FormulaIndex: Integer;
+begin
+  if Source is TCfpTimeItem then
+  begin
+    CpfItem := TCfpTimeItem(Source);
+    for FormulaIndex := 0 to BoundaryFormulaCount - 1 do
+    begin
+      BoundaryFormula[FormulaIndex] := CpfItem.BoundaryFormula[FormulaIndex];
+    end;
+  end;
+  inherited;
+
+end;
+
 procedure TCfpTimeItem.AssignObserverEvents(Collection: TCollection);
 begin
 //  inherited;
@@ -421,7 +436,7 @@ end;
 
 function TCfpTimeItem.BoundaryFormulaCount: integer;
 begin
-  result := 3;
+  result := 1;
 end;
 
 procedure TCfpTimeItem.CreateFormulaObjects;
@@ -470,9 +485,7 @@ begin
   if result then
   begin
     OtherCfp := TCfpTimeItem(AnotherItem);
-    result := (Value1 = OtherCfp.Value1)
-      and (Value2 = OtherCfp.Value2)
-      and (Value3 = OtherCfp.Value3);
+    result := (Value1 = OtherCfp.Value1);
   end;
 end;
 

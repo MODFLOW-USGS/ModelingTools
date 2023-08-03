@@ -6,7 +6,7 @@ uses System.UITypes,
   Winapi.Windows, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
   Generics.Collections, PhastModelUnit, ScreenObjectUnit, DataSetUnit,
   GoPhastTypes, SysUtils, Classes, ModflowBoundaryDisplayUnit, Vcl.Dialogs,
-  ModflowCfpFixedUnit;
+  ModflowCfpFixedUnit, SparseDataSets;
 
 type
   TCfpPipe = class;
@@ -20,12 +20,12 @@ type
   {$IFDEF OWHMV2}
     FLimitedFlow: double;
     FWellFlow: double;
-//    FWellConductance: double;
     FCauchyHead: double;
     FCauchyConductance: double;
     FCauchyLimitedInflow: double;
     FLimitedHead: double;
     CadWidth: double;
+    FTransient: Boolean;
   {$ENDIF}
     FPipes: TList<TCfpPipe>;
     FExchange: Double;
@@ -87,6 +87,8 @@ type
     FShouldWriteCRCH: Boolean;
     FShouldWriteCOC: Boolean;
     NameOfFile: string;
+    FTempFileNumber: Integer;
+    FScreenObjects: T3DSparsePointerArray;
     procedure Evaluate;
     procedure EvaluateConduitRecharge;
     procedure WriteDataSet0;
@@ -126,6 +128,7 @@ type
     procedure WriteCrchFile(NameOfFile: string);
     procedure WriteCocFile(NameOfFile: string);
     procedure ClearTimeLists(AModel: TBaseModel);
+    function WriteTransientBoundaryFile(ANode: TCfpNode): Integer;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -143,7 +146,8 @@ uses
   ModflowGridUnit, ModflowCfpPipeUnit, Forms, frmProgressUnit,
   frmErrorsAndWarningsUnit, Math,
   LayerStructureUnit, ModflowCfpRechargeUnit, Contnrs, ModflowCellUnit,
-  ModflowUnitNumbers, AbstractGridUnit, DataSetNamesUnit, CellLocationUnit;
+  ModflowUnitNumbers, AbstractGridUnit, DataSetNamesUnit, CellLocationUnit,
+  ModflowBoundaryUnit, RbwParser, GIS_Functions, SparseArrayUnit;
 
 resourcestring
   StrTooManyConduitsAt = 'Too many conduits at a node. The following cells h' +
@@ -216,6 +220,9 @@ var
   Grid: TModflowGrid;
 begin
   inherited;
+  FScreenObjects := T3DSparsePointerArray.Create(GetQuantum(Model.LayerCount),
+    GetQuantum(Model.RowCount), GetQuantum(Model.ColumnCount));
+  FTempFileNumber := 1;
   FConduitFlowProcess := Model.ModflowPackages.ConduitFlowProcess;
   FPipes := TObjectList<TCfpPipe>.Create;
   FNodes := TObjectList<TCfpNode>.Create;
@@ -229,6 +236,7 @@ end;
 
 destructor TModflowCfpWriter.Destroy;
 begin
+  FScreenObjects.Free;
   FValues.Free;
   FPipes.Free;
   FNodes.Free;
@@ -272,7 +280,6 @@ var
   LocalGrid: TCustomModelGrid;
   BoundaryTypeArray: TDataArray;
   LimitedFlowValueArray: TDataArray;
-//  WellConductanceArray: TDataArray;
   WellFlowArray: TDataArray;
   WellCauchyHeadArray: TDataArray;
   CauchyConductanceArray: TDataArray;
@@ -280,6 +287,7 @@ var
   LimitedHeadArray: TDataArray;
   DrainableStorageWidth: TDataArray;
   CfpDrainableStorageWidth: Double;
+  CfpCollection: TCfpCollection;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyConduitsAt);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCFPDiameterIsNot);
@@ -305,6 +313,25 @@ begin
   begin
     OtherData := nil;
     CellList := TCellAssignmentList.Create;
+
+    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.Deleted
+        or not AScreenObject.UsedModels.UsesModel(Model)
+        or (AScreenObject.ModflowCfpFixedHeads = nil) then
+      begin
+        Continue;
+      end;
+      CellList.Clear;
+      AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
+      for CellIndex := 0 to CellList.Count - 1 do
+      begin
+        ACell1 := CellList[CellIndex];
+        FScreenObjects[ACell1.Layer, ACell1.Row, ACell1.Column] := AScreenObject;
+      end;
+    end;
+
     try
       Diameter := Model.DataArrayManager.GetDataSetByName(KPipeDiameter);
       Tortuosity := Model.DataArrayManager.GetDataSetByName(KTortuosity);
@@ -447,10 +474,10 @@ begin
                 UpperCriticalRValue := (UpperCriticalR.RealData[ACell1.Layer, ACell1.Row, ACell1.Column]
                   + UpperCriticalR.RealData[ACell2.Layer, ACell2.Row, ACell2.Column])/2;
 
-                if DrainableStorageWidth <> nil then
-                begin
-
-                end;
+//                if DrainableStorageWidth <> nil then
+//                begin
+//
+//                end;
 
                 Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
                 Node2 := FNodeGrid[ACell2.Layer, ACell2.Row, ACell2.Column];
@@ -632,6 +659,19 @@ begin
             ANode.FCfpBoundaryType :=
               TCfpBoundaryType(BoundaryTypeArray.IntegerData[
               ANode.FLayer, ANode.FRow, ANode.FColumn]);
+
+            AScreenObject := FScreenObjects[ANode.FLayer, ANode.FRow, ANode.FColumn];
+            Assert(AScreenObject.ModflowCfpFixedHeads <> nil);
+            Assert(AScreenObject.ModflowCfpFixedHeads.BoundaryType
+              = ANode.FCfpBoundaryType);
+            ANode.FTransient := AScreenObject.ModflowCfpFixedHeads.TimeDependent;
+            CfpCollection := nil;
+//            if ANode.FTransient then
+//            begin
+//              CfpCollection := AScreenObject.ModflowCfpFixedHeads.Values as TCfpCollection;
+//              SetLength(ANode.FTimes, CfpCollection.Count);
+//            end;
+
             case ANode.FCfpBoundaryType of
               cbtFixedHead:
                 begin
@@ -726,30 +766,6 @@ begin
                   end;
                 end;
             {$ENDIF}
-//              cbtWellConductance:
-//                begin
-//                  if WellFlowArray.IsValue[
-//                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
-//                  begin
-//                    ANode.FWellFlow := WellFlowArray.RealData[
-//                      ANode.FLayer, ANode.FRow, ANode.FColumn];
-//                  end
-//                  else
-//                  begin
-//                    Assert(False);
-//                  end;
-//
-//                  if WellConductanceArray.IsValue[
-//                    ANode.FLayer, ANode.FRow, ANode.FColumn] then
-//                  begin
-//                    ANode.FWellConductance := WellConductanceArray.RealData[
-//                      ANode.FLayer, ANode.FRow, ANode.FColumn];
-//                  end
-//                  else
-//                  begin
-//                    Assert(False);
-//                  end;
-//                end;
               else
                 Assert(False);
             end;
@@ -1160,8 +1176,10 @@ var
   HCY: Double;
   CCY: Double;
   CYLQ: Double;
+  UnitNumber: Integer;
 //  CWC_WELL: Double;
 begin
+
   for NodeIndex := 0 to FNodes.Count - 1 do
   begin
     ANode := FNodes[NodeIndex];
@@ -1186,22 +1204,49 @@ begin
                   Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
                     ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]), ANode.FScreenObject);
               end;
-              WriteFloat(N_HEAD);
-              WriteString('    X');
+              if ANode.FTransient then
+              begin
+                UnitNumber := WriteTransientBoundaryFile(ANode);
+                WriteInteger(UnitNumber);
+                WriteString('   TD');
+              end
+              else
+              begin
+                WriteFloat(N_HEAD);
+                WriteString('    X');
+              end;
             end;
           cbtWell:
             begin
               N_HEAD := -1;
               WriteFloat(N_HEAD);
-              WriteString(' WELL');
+              if ANode.FTransient then
+              begin
+                UnitNumber := WriteTransientBoundaryFile(ANode);
+                WriteString('   WELLTD');
+                WriteInteger(UnitNumber);
+              end
+              else
+              begin
+                WriteString(' WELL');
+              end;
             end;
           cbtCauchy:
             begin
               HCY := ANode.FCauchyHead;
               CCY := ANode.FCauchyConductance;
               CYLQ := ANode.FCauchyLimitedInflow;
-              WriteFloat(HCY);
-              WriteString(' CAUCHY');
+              if ANode.FTransient then
+              begin
+                UnitNumber := WriteTransientBoundaryFile(ANode);
+                WriteInteger(UnitNumber);
+                WriteString('   CAUCHYTD');
+              end
+              else
+              begin
+                WriteFloat(HCY);
+                WriteString(' CAUCHY');
+              end;
               WriteFloat(CCY);
               WriteFloat(CYLQ);
             end;
@@ -1220,8 +1265,17 @@ begin
                   Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
                     ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]), ANode.FScreenObject);
               end;
-              WriteFloat(N_HEAD);
-              WriteString(' FHLQ');
+              if ANode.FTransient then
+              begin
+                UnitNumber := WriteTransientBoundaryFile(ANode);
+                WriteInteger(UnitNumber);
+                WriteString('   FHLQTD');
+              end
+              else
+              begin
+                WriteFloat(N_HEAD);
+                WriteString(' FHLQ');
+              end;
               LQ := ANode.FLimitedFlow;
               WriteFloat(LQ);
             end;
@@ -1799,6 +1853,110 @@ begin
   end;
   WriteCrchFile(NameOfFile);
   WriteCocFile(NameOfFile);
+end;
+
+function TModflowCfpWriter.WriteTransientBoundaryFile(ANode: TCfpNode): Integer;
+var
+  NewFileName: string;
+  CfpBoundary: TCfpFixedBoundary;
+  TimeIndex: Integer;
+  AnItem: TCustomBoundaryItem;
+  AFormula: string;
+  Compiler: TRbwParser;
+  TempFormula: string;
+  Expression: TExpression;
+  UsedVariables: TStringList;
+  VarIndex: Integer;
+  ADataArray: TDataArray;
+  Layer: Integer;
+  ARealVar: TRealVariable;
+  AnIntVar: TIntegerVariable;
+  ABoolVar: TBooleanVariable;
+  AStringVar: TStringVariable;
+  StartTime: Double;
+  AScreenObject: TScreenObject;
+begin
+  Compiler := Model.rpThreeDFormulaCompiler;
+  StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+  NewFileName := ChangeFileExt(NameOfFile, '.cfpTransient') + IntToStr(FTempFileNumber);
+  Inc(FTempFileNumber);
+  result := Model.UnitNumbers.SequentialUnitNumber;
+  WriteToNameFile(StrData, result, ExtractFileName(NewFileName), foInput, Model);
+  OpenTempFile(NewFileName);
+  try
+    AScreenObject := FScreenObjects[ANode.FLayer, ANode.FRow, ANode.FColumn];
+    CfpBoundary := AScreenObject.ModflowCfpFixedHeads;
+    WriteInteger(CfpBoundary.Values.Count);
+    NewLine;
+    for TimeIndex := 0 to CfpBoundary.Values.Count - 1 do
+    begin
+      AnItem := CfpBoundary.Values[TimeIndex];
+      AFormula := AnItem.BoundaryFormula[0];
+      TempFormula := AFormula;
+      try
+        Compiler.Compile(TempFormula);
+      except on E: ERbwParserError do
+        begin
+          TempFormula := '0';
+          Compiler.Compile(TempFormula);
+        end;
+      end;
+      Expression := Compiler.CurrentExpression;
+      UsedVariables := Expression.VariablesUsed;
+      for VarIndex := 0 to UsedVariables.Count - 1 do
+      begin
+        ADataArray := Model.DataArrayManager.GetDataSetByName(UsedVariables[VarIndex]);
+        if ADataArray <> nil then
+        begin
+          ADataArray.Initialize;
+          if ADataArray.Orientation = dsoTop then
+          begin
+            Layer := 0;
+          end
+          else
+          begin
+            Layer := ANode.FLayer;
+          end;
+
+          case ADataArray.DataType of
+            rdtDouble:
+              begin
+                ARealVar := UsedVariables.Objects[VarIndex] as TRealVariable;
+                ARealVar.Value := ADataArray.RealData[Layer, ANode.FRow, ANode.FColumn];
+              end;
+            rdtInteger:
+              begin
+                AnIntVar := UsedVariables.Objects[VarIndex] as TIntegerVariable;
+                AnIntVar.Value := ADataArray.IntegerData[Layer, ANode.FRow, ANode.FColumn];
+              end;
+            rdtBoolean:
+              begin
+                ABoolVar := UsedVariables.Objects[VarIndex] as TBooleanVariable;
+                ABoolVar.Value := ADataArray.BooleanData[Layer, ANode.FRow, ANode.FColumn];
+              end;
+            rdtString:
+              begin
+                AStringVar := UsedVariables.Objects[VarIndex] as TStringVariable;
+                AStringVar.Value := ADataArray.StringData[Layer, ANode.FRow, ANode.FColumn];
+              end;
+            else
+              begin
+                Assert(False)
+              end;
+          end;
+        end;
+      end;
+      UpdateGlobalLocations(ANode.FColumn, ANode.FRow, ANode.FLayer, eaBlocks, Model);
+      UpdateCurrentScreenObject(AScreenObject);
+      Expression.Evaluate;
+      WriteFloat(AnItem.StartTime - StartTime);
+      WriteFloat(Expression.DoubleResult);
+      NewLine;
+    end;
+  finally
+    CloseTempFile;
+  end;
+
 end;
 
 procedure TModflowCfpWriter.WriteCocFile(NameOfFile: string);
