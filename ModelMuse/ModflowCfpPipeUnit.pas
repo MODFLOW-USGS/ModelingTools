@@ -30,6 +30,8 @@ type
 
     FRecordPipeValues: boolean;
     FRecordNodeValues: boolean;
+    FTimesSeriesNodes: Boolean;
+    FTimesSeriesPipes: Boolean;
     function GetConductancePermeability: string;
     function GetDiameter: string;
     function GetHigherCriticalR: string;
@@ -58,6 +60,8 @@ type
     function GetDrainableStorageWidth: string;
     procedure SetDrainableStorageWidth(const Value: string);
     function GetDrainableStorageWidthObserver: TObserver;
+    procedure SetTimesSeriesNodes(const Value: Boolean);
+    procedure SetTimesSeriesPipes(const Value: Boolean);
   protected
     procedure HandleChangedValue(Observer: TObserver); override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -105,6 +109,16 @@ type
       write SetRecordPipeValues;
     property DrainableStorageWidth: string read GetDrainableStorageWidth
       write SetDrainableStorageWidth
+      stored False
+      ;
+    property TimesSeriesPipes: Boolean read FTimesSeriesPipes
+      write SetTimesSeriesPipes
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property TimesSeriesNodes: Boolean read FTimesSeriesNodes
+      write SetTimesSeriesNodes
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -150,6 +164,8 @@ begin
     DrainableStorageWidth := SourceCfp.DrainableStorageWidth;
     RecordNodeValues := SourceCfp.RecordNodeValues;
     RecordPipeValues := SourceCfp.RecordPipeValues;
+    TimesSeriesPipes := SourceCfp.TimesSeriesPipes;
+    TimesSeriesNodes := SourceCfp.TimesSeriesNodes;
   end;
   inherited;
 end;
@@ -598,6 +614,24 @@ end;
 procedure TCfpPipeBoundary.SetRoughnessHeight(const Value: string);
 begin
   UpdateFormulaBlocks(Value, RoughnessHeightPosition, FRoughnessHeight);
+end;
+
+procedure TCfpPipeBoundary.SetTimesSeriesNodes(const Value: Boolean);
+begin
+  if FTimesSeriesNodes <> Value then
+  begin
+   FTimesSeriesNodes := Value;
+   InvalidateModel;
+  end;
+end;
+
+procedure TCfpPipeBoundary.SetTimesSeriesPipes(const Value: Boolean);
+begin
+  if FTimesSeriesPipes <> Value then
+  begin
+   FTimesSeriesPipes := Value;
+   InvalidateModel;
+  end;
 end;
 
 procedure TCfpPipeBoundary.SetTortuosity(const Value: string);

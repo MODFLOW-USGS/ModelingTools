@@ -273,6 +273,7 @@ inherited framePackageCFP: TframePackageCFP
         MaxValue = 2147483647.000000000000000000
         Enabled = False
         TabOrder = 1
+        OnChange = seOutputIntervalChange
       end
       object cbCADS: TCheckBox
         Left = 12
@@ -281,6 +282,14 @@ inherited framePackageCFP: TframePackageCFP
         Height = 17
         Caption = 'Conduit-Associated Drainable Storage (CADS)'
         TabOrder = 2
+      end
+      object cbTimeSeriesAnalysis: TCheckBox
+        Left = 12
+        Top = 108
+        Width = 469
+        Height = 17
+        Caption = 'Record inflow and outflow terms of the conduits (NNODES)'
+        TabOrder = 3
       end
     end
   end

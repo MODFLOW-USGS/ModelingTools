@@ -875,7 +875,8 @@ uses
   frameLeachUnit in 'frameLeachUnit.pas' {frameLeach: TFrame},
   framePackageBuoyancyUnit in 'framePackageBuoyancyUnit.pas' {framePackageBuoyancy: TFrame},
   ModflowBuoyancyWriterUnit in 'ModflowBuoyancyWriterUnit.pas',
-  frmImportSurferGridFilesUnit in 'frmImportSurferGridFilesUnit.pas' {frmImportSurferGridFiles};
+  frmImportSurferGridFilesUnit in 'frmImportSurferGridFilesUnit.pas' {frmImportSurferGridFiles},
+  frameScreenObjectCfpRechargeFractionUnit in 'frameScreenObjectCfpRechargeFractionUnit.pas' {frameScreenObjectCfpRechargeFraction: TFrame};
 
 {$R *.res}
 

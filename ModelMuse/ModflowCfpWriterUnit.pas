@@ -43,6 +43,9 @@ type
     // @name is used to indicate that data about this node should be written
     // to an output file. See Conduit Output Control File.
     FRecordData: Boolean;
+  {$IFDEF OWHMV2}
+    FTimeSeriesAnalysis: Boolean;
+  {$ENDIF}
     FScreenObject: TScreenObject;
     constructor Create;
   public
@@ -62,6 +65,9 @@ type
     // @name is used to indicate that data about this pipe should be written
     // to an output file. See Conduit Output Control File.
     FRecordData: Boolean;
+  {$IFDEF OWHMV2}
+    FTimeSeriesAnalysis: Boolean;
+  {$ENDIF}
     function SameNodes(Node1, Node2: TCfpNode): boolean;
     function OtherNode(ANode: TCfpNode): TCfpNode;
   end;
@@ -250,6 +256,7 @@ var
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
   PipeBoundary: TCfpPipeBoundary;
+  CrchRch: TCfpRchFractionBoundary;
   Diameter: TDataArray;
   PipeDiameter: double;
   Node1: TCfpNode;
@@ -303,34 +310,44 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingObject);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheConduitFlowPro);
 
-    if Model.ModflowPackages.Mt3dBasic.IsSelected then
-    begin
-      frmErrorsAndWarnings.AddWarning(Model, StrTheConduitFlowPro,
-        StrMT3DMSVersion53D);
-    end;
+  if Model.ModflowPackages.Mt3dBasic.IsSelected then
+  begin
+    frmErrorsAndWarnings.AddWarning(Model, StrTheConduitFlowPro,
+      StrMT3DMSVersion53D);
+  end;
   FUseCOC := False;
+
+  CellList := TCellAssignmentList.Create;
+  try
+    OtherData := nil;
+    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.Deleted
+        or not AScreenObject.UsedModels.UsesModel(Model) then
+      begin
+        Continue;
+      end;
+      if AScreenObject.ModflowCfpFixedHeads <> nil then
+      begin
+        CellList.Clear;
+        AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell1 := CellList[CellIndex];
+          FScreenObjects[ACell1.Layer, ACell1.Row, ACell1.Column] := AScreenObject;
+        end;
+      end;
+    end;
+  finally
+    CellList.Free;
+  end;
+
   if FConduitFlowProcess.PipesUsed then
   begin
     OtherData := nil;
     CellList := TCellAssignmentList.Create;
 
-    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-    begin
-      AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-      if AScreenObject.Deleted
-        or not AScreenObject.UsedModels.UsesModel(Model)
-        or (AScreenObject.ModflowCfpFixedHeads = nil) then
-      begin
-        Continue;
-      end;
-      CellList.Clear;
-      AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
-      for CellIndex := 0 to CellList.Count - 1 do
-      begin
-        ACell1 := CellList[CellIndex];
-        FScreenObjects[ACell1.Layer, ACell1.Row, ACell1.Column] := AScreenObject;
-      end;
-    end;
 
     try
       Diameter := Model.DataArrayManager.GetDataSetByName(KPipeDiameter);
@@ -340,19 +357,6 @@ begin
       UpperCriticalR := Model.DataArrayManager.GetDataSetByName(KUpperCriticalR);
       PipeConducOrPerm := Model.DataArrayManager.GetDataSetByName(KPipeConductanceOrPer);
       PipeElevation := Model.DataArrayManager.GetDataSetByName(KCfpNodeElevation);
-    {$IFDEF OWHMV2}
-      if (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads then
-      begin
-        DrainableStorageWidth := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
-        Assert(DrainableStorageWidth <> nil);
-      end
-      else
-      begin
-        DrainableStorageWidth := nil;
-      end;
-    {$ELSE}
-      DrainableStorageWidth := nil;
-    {$ENDIF}
       Assert(Diameter <> nil);
       Assert(Tortuosity <> nil);
       Assert(RoughnessHeight <> nil);
@@ -362,6 +366,9 @@ begin
       Assert(PipeElevation <> nil);
       TRealSparseDataSetCrack(PipeConducOrPerm).Clear;
       TRealSparseDataSetCrack(PipeElevation).Clear;
+
+
+
       for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
       begin
         AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
@@ -372,6 +379,17 @@ begin
         begin
           Continue;
         end;
+
+//        CrchRch := AScreenObject.ModflowCfpRchFraction;
+//        if (CrchRch <> nil) and CrchRch.Used then
+//        begin
+//          if DrainableStorageWidth <> nil then
+//          begin
+//            AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
+//          end;
+//        end;
+
+
         PipeBoundary := AScreenObject.ModflowCfpPipes;
         if (PipeBoundary <> nil) and PipeBoundary.Used then
         begin
@@ -386,10 +404,6 @@ begin
           TRealSparseDataSetCrack(RoughnessHeight).Clear;
           TRealSparseDataSetCrack(LowerCriticalR).Clear;
           TRealSparseDataSetCrack(UpperCriticalR).Clear;
-          if DrainableStorageWidth <> nil then
-          begin
-            TRealSparseDataSetCrack(DrainableStorageWidth).Clear;
-          end;
           // don't clear PipeConducOrPerm or PipeElevation because
           // they are a cell properties not a pipe properties.
           AScreenObject.AssignValuesToDataSet(Diameter, Model, lctIgnore);
@@ -401,10 +415,6 @@ begin
           if FConduitFlowProcess.CfpElevationChoice = cecIndividual then
           begin
             AScreenObject.AssignValuesToDataSet(PipeElevation, Model, lctIgnore);
-          end;
-          if DrainableStorageWidth <> nil then
-          begin
-            AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
           end;
 
           CellList.Clear;
@@ -495,6 +505,10 @@ begin
                 end;
                 Node1.FRecordData :=
                   PipeBoundary.RecordNodeValues or Node1.FRecordData;
+              {$IFDEF OWHMV2}
+                Node1.FTimeSeriesAnalysis :=
+                  PipeBoundary.TimesSeriesNodes or Node1.FTimeSeriesAnalysis;
+              {$ENDIF}
                 if Node2 = nil then
                 begin
                   Node2 := TCfpNode.Create;
@@ -508,6 +522,10 @@ begin
                 end;
                 Node2.FRecordData :=
                   PipeBoundary.RecordNodeValues or Node2.FRecordData;
+              {$IFDEF OWHMV2}
+                Node2.FTimeSeriesAnalysis :=
+                  PipeBoundary.TimesSeriesNodes or Node2.FTimeSeriesAnalysis;
+              {$ENDIF}
                 Pipe := nil;
                 if not NodeCreated then
                 begin
@@ -537,40 +555,14 @@ begin
                 Pipe.FLowerR := LowerCriticalRValue;
                 Pipe.FHigherR := UpperCriticalRValue;
                 Pipe.FRecordData := PipeBoundary.RecordPipeValues;
+              {$IFDEF OWHMV2}
+                Pipe.FTimeSeriesAnalysis := PipeBoundary.TimesSeriesPipes;
+              {$ENDIF}
               end;
             end;
           end;
 
-          if DrainableStorageWidth <> nil then
-          begin
-            for CellIndex := 0 to CellList.Count - 1 do
-            begin
-              ACell1 := CellList[CellIndex];
-              if not DrainableStorageWidth.IsValue[ACell1.Layer, ACell1.Row, ACell1.Column] then
-              begin
-                frmErrorsAndWarnings.AddError(Model, StrCFPDrainableStorag,
-                  AScreenObject.Name, AScreenObject);
-                Break;
-              end;
-              CfpDrainableStorageWidth :=
-                DrainableStorageWidth.RealData[ACell1.Layer, ACell1.Row, ACell1.Column];
-              Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
-              if Node1 = nil then
-              begin
-                Node1 := TCfpNode.Create;
-                FNodes.Add(Node1);
-                Node1.FNumber := FNodes.Count;
-                FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column] := Node1;
-                Node1.FLayer := ACell1.Layer;
-                Node1.FRow := ACell1.Row;
-                Node1.FColumn := ACell1.Column;
-                Node1.FScreenObject := AScreenObject;
-              end;
-            {$IFDEF OWHMV2}
-              Node1.CadWidth := CfpDrainableStorageWidth;
-            {$ENDIF}
-            end;
-          end;
+
 
         end;
       end;
@@ -664,7 +656,9 @@ begin
             Assert(AScreenObject.ModflowCfpFixedHeads <> nil);
             Assert(AScreenObject.ModflowCfpFixedHeads.BoundaryType
               = ANode.FCfpBoundaryType);
+          {$IFDEF OWHMV2}
             ANode.FTransient := AScreenObject.ModflowCfpFixedHeads.TimeDependent;
+          {$ENDIF}
             CfpCollection := nil;
 //            if ANode.FTransient then
 //            begin
@@ -794,6 +788,87 @@ begin
   begin
     EvaluateConduitRecharge
   end;
+
+  if FConduitFlowProcess.ConduitRechargeUsed then
+  begin
+  {$IFDEF OWHMV2}
+    if (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads then
+    begin
+      DrainableStorageWidth := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
+      Assert(DrainableStorageWidth <> nil);
+      TRealSparseDataSetCrack(DrainableStorageWidth).Clear;
+    end
+    else
+    begin
+      DrainableStorageWidth := nil;
+    end;
+
+  {$ELSE}
+    DrainableStorageWidth := nil;
+  {$ENDIF}
+
+    OtherData := nil;
+    CellList := TCellAssignmentList.Create;
+    try
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if AScreenObject.Deleted
+          or not AScreenObject.UsedModels.UsesModel(Model)
+          or (AScreenObject.ModflowCfpRchFraction = nil) then
+        begin
+          Continue;
+        end;
+
+        CrchRch := AScreenObject.ModflowCfpRchFraction;
+        if (CrchRch <> nil) and CrchRch.Used then
+        begin
+          if DrainableStorageWidth <> nil then
+          begin
+            AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
+          end;
+        end;
+
+        CellList.Clear;
+        AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
+
+        if DrainableStorageWidth <> nil then
+        begin
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell1 := CellList[CellIndex];
+            if not DrainableStorageWidth.IsValue[ACell1.Layer, ACell1.Row, ACell1.Column] then
+            begin
+              frmErrorsAndWarnings.AddError(Model, StrCFPDrainableStorag,
+                AScreenObject.Name, AScreenObject);
+              Break;
+            end;
+            CfpDrainableStorageWidth :=
+              DrainableStorageWidth.RealData[ACell1.Layer, ACell1.Row, ACell1.Column];
+            Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
+            if Node1 = nil then
+            begin
+              Node1 := TCfpNode.Create;
+              FNodes.Add(Node1);
+              Node1.FNumber := FNodes.Count;
+              FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column] := Node1;
+              Node1.FLayer := ACell1.Layer;
+              Node1.FRow := ACell1.Row;
+              Node1.FColumn := ACell1.Column;
+              Node1.FScreenObject := AScreenObject;
+            end;
+          {$IFDEF OWHMV2}
+            Node1.CadWidth := CfpDrainableStorageWidth;
+          {$ENDIF}
+          end;
+        end;
+      end;
+
+    finally
+      CellList.Free;
+    end;
+
+  end
 end;
 
 procedure TModflowCfpWriter.EvaluateConduitRecharge;
@@ -1970,6 +2045,8 @@ var
   APipe: TCfpPipe;
   OutputFileName: string;
   OutDir: string;
+  NTSAN: Integer;
+  NTSAT: Integer;
 begin
   CocUsed := FConduitFlowProcess.PipesUsed
     and (FConduitFlowProcess.OutputInterval > 0)
@@ -1977,22 +2054,42 @@ begin
   if CocUsed then
   begin
     NNODES := 0;
+    NTSAN := 0;
     for NodeIndex := 0 to FNodes.Count - 1 do
     begin
       if FNodes[NodeIndex].FRecordData then
       begin
         Inc(NNODES);
       end;
+    {$IFDEF OWHMV2}
+      if Model.ModelSelection = msModflowOwhm2 then
+      begin
+        if FNodes[NodeIndex].FTimeSeriesAnalysis then
+        begin
+          Inc(NTSAN);
+        end;
+      end;
+    {$ENDIF}
     end;
     NPIPES := 0;
+    NTSAT := 0;
     for PipeIndex := 0 to FPipes.Count - 1 do
     begin
       if FPipes[PipeIndex].FRecordData then
       begin
         Inc(NPIPES);
       end;
+    {$IFDEF OWHMV2}
+      if Model.ModelSelection = msModflowOwhm2 then
+      begin
+        if FPipes[PipeIndex].FTimeSeriesAnalysis then
+        begin
+          Inc(NTSAT);
+        end;
+      end;
+    {$ENDIF}
     end;
-    if (NNODES > 0) or (NPIPES > 0) then
+    if (NNODES > 0) or (NPIPES > 0) or (NTSAN > 0) or (NTSAT > 0) then
     begin
       NameOfFile := ChangeFileExt(NameOfFile, '.coc');
       OutDir := ExtractFileDir(NameOfFile);
@@ -2011,7 +2108,20 @@ begin
         // Data Set 1
         WriteCommentLine('Number of nodes for output (NNODES)');
         // Data set 2
+      {$IFDEF OWHMV2}
+        if (Model.ModelSelection = msModflowOwhm2)
+          and FConduitFlowProcess.RecordInputAndOutput then
+        begin
+          NNODES := -NNODES;
+        end;
+      {$ENDIF}
         WriteInteger(NNODES);
+      {$IFDEF OWHMV2}
+        if Model.ModelSelection = msModflowOwhm2  then
+        begin
+          WriteInteger(NTSAN);
+        end;
+      {$ENDIF}
         NewLine;
         // Data set 3
         WriteCommentLine('Node numbers, one per line (NODE_NUMBERS)');
@@ -2040,6 +2150,12 @@ begin
         WriteCommentLine('Number of conduits for output (NPIPES)');
         // Data Set 8
         WriteInteger(NPIPES);
+      {$IFDEF OWHMV2}
+        if Model.ModelSelection = msModflowOwhm2 then
+        begin
+          WriteInteger(NTSAT);
+        end;
+      {$ENDIF}
         NewLine;
         // Data set 9
         WriteCommentLine('Conduit numbers, one per line (PIPE_NUMBERS)');
@@ -2062,6 +2178,67 @@ begin
         // Data set 12
         WriteInteger(FConduitFlowProcess.OutputInterval);
         NewLine;
+
+      {$IFDEF OWHMV2}
+        if Model.ModelSelection = msModflowOwhm2 then
+        begin
+          // data set 13
+          WriteCommentLine('Node numbers, one per line (TSAN_NODE_NUMBERS)');
+          // data set 14
+          for NodeIndex := 0 to FNodes.Count - 1 do
+          begin
+            ANode := FNodes[NodeIndex];
+            if ANode.FTimeSeriesAnalysis then
+            begin
+              WriteInteger(ANode.FNumber);
+              NewLine;
+              OutputFileName := Format('%sTSAN_HCON.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+              OutputFileName := Format('%sTSAN_HMAT.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+              OutputFileName := Format('%sTSAN_QMAT.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+              OutputFileName := Format('%sTSAN_QCDS.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+              OutputFileName := Format('%sTSAN_QDIR.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+              OutputFileName := Format('%sTSAN_QSDR.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+            end;
+          end;
+          // data set 15
+          WriteCommentLine('Node output each n time steps (TSAN_NTS)');
+          // data set 16
+          WriteInteger(FConduitFlowProcess.OutputInterval);
+          NewLine;
+
+          // Data set 17
+          WriteCommentLine('Conduit numbers, one per line (TSAT_TUBE_NUMBERS)');
+          // Data set 18
+          for PipeIndex := 0 to FPipes.Count - 1 do
+          begin
+            APipe := FPipes[PipeIndex];
+            if APipe.FTimeSeriesAnalysis then
+            begin
+              WriteInteger(APipe.FNumber);
+              NewLine;
+              OutputFileName := Format('%sTSAT_FLOW.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+              OutputFileName := Format('%sTSAT_REYN.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+              OutputFileName := Format('%sTSAT_TIME.out', [OutDir]);
+              Model.AddModelOutputFile(OutputFileName);
+            end;
+          end;
+          // Data set 19
+          WriteCommentLine('Node output each n time steps (TSAT_NTS)');
+          // Data set 20
+          WriteInteger(FConduitFlowProcess.OutputInterval);
+          NewLine;
+
+        end;
+      {$ENDIF}
+
 
       finally
         CloseFile;
@@ -2124,7 +2301,7 @@ begin
             WriteFloat(0);
           end;
         {$IFDEF OWHMV2}
-          if ANode.FCfpBoundaryType = cbtWell then
+          if (ANode.FCfpBoundaryType = cbtWell) and not ANode.FTransient then
           begin
             WriteFloat(ANode.FWellFlow);
           end;

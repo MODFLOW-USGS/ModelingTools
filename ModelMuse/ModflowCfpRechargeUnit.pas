@@ -153,6 +153,14 @@ type
   // @name is used to specify data set 2 in the CRCH in the
   // Conduit Flow Process.
   TCfpRchFractionBoundary = class(TModflowBoundary)
+  private
+    FDrainableStorageWidth: IFormulaObject;
+    FDrainableStorageWidthObserver: TObserver;
+    function GetDrainableStorageWidth: string;
+    procedure SetDrainableStorageWidth(const Value: string);
+    function GetBoundaryFormula(Index: Integer): string;
+    procedure SetBoundaryFormula(Index: Integer; const Value: string);
+    function GetDrainableStorageWidthObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -162,7 +170,17 @@ type
     // See @link(TModflowBoundary.BoundaryCollectionClass
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects;
+    property DrainableStorageWidthObserver: TObserver read GetDrainableStorageWidthObserver;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers;
   public
+    Procedure Assign(Source: TPersistent); override;
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
+    property BoundaryFormula[Index: Integer]: string read GetBoundaryFormula
+      write SetBoundaryFormula;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TCfpRchFractionStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -177,6 +195,13 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
+  published
+    property DrainableStorageWidth: string read GetDrainableStorageWidth
+      write SetDrainableStorageWidth
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
 
@@ -184,7 +209,7 @@ implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit,
-  AbstractGridUnit;
+  AbstractGridUnit, DataSetNamesUnit;
 
 resourcestring
   StrCADSRechargeFracti = 'CADS Recharge Fraction';
@@ -195,6 +220,8 @@ const
 
   StrRechargeFraction = 'Recharge fraction';
   StrRechargeFractionMulti = ' recharge fraction multiplier';
+
+  DrainableStorageWidthPosition = 0;
 
 
 { TCfpRchFractionRecord }
@@ -834,6 +861,18 @@ end;
 
 { TCfpRchFractionBoundary }
 
+procedure TCfpRchFractionBoundary.Assign(Source: TPersistent);
+var
+  SourceCfpRchFraction: TCfpRchFractionBoundary;
+begin
+  if Source is TCfpRchFractionBoundary then
+  begin
+    SourceCfpRchFraction := TCfpRchFractionBoundary(Source);
+    DrainableStorageWidth := SourceCfpRchFraction.DrainableStorageWidth;
+  end;
+  inherited;
+end;
+
 procedure TCfpRchFractionBoundary.AssignCells(
   BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
   AModel: TBaseModel);
@@ -893,6 +932,48 @@ begin
   result := TCfpRchFractionCollection;
 end;
 
+function TCfpRchFractionBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'CfpRechargeBoundary_';
+end;
+
+constructor TCfpRchFractionBoundary.Create(Model: TBaseModel;
+  ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+  DrainableStorageWidth := '1';
+end;
+
+procedure TCfpRchFractionBoundary.CreateFormulaObjects;
+begin
+  FDrainableStorageWidth := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TCfpRchFractionBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(DrainableStorageWidthObserver);
+  end;
+end;
+
+destructor TCfpRchFractionBoundary.Destroy;
+begin
+  DrainableStorageWidth := '0';
+  inherited;
+end;
+
+function TCfpRchFractionBoundary.GetBoundaryFormula(Index: Integer): string;
+begin
+  case Index of
+    DrainableStorageWidthPosition: result := DrainableStorageWidth;
+    else Assert(False);
+  end;
+end;
+
 procedure TCfpRchFractionBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
@@ -919,6 +1000,45 @@ begin
 
 end;
 
+function TCfpRchFractionBoundary.GetDrainableStorageWidth: string;
+begin
+  Result := FDrainableStorageWidth.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DrainableStorageWidthPosition);
+  end;
+end;
+
+function TCfpRchFractionBoundary.GetDrainableStorageWidthObserver: TObserver;
+var
+  Model: TPhastModel;
+  DataArray: TDataArray;
+begin
+  if FDrainableStorageWidthObserver = nil then
+  begin
+    if ParentModel <> nil then
+    begin
+      Model := ParentModel as TPhastModel;
+      DataArray := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    CreateObserver('Cfp_DrainableStorageWidth_', FDrainableStorageWidthObserver, DataArray);
+  end;
+  result := FDrainableStorageWidthObserver;
+end;
+
+procedure TCfpRchFractionBoundary.GetPropertyObserver(Sender: TObject;
+  List: TList);
+begin
+  if Sender = FDrainableStorageWidth as TObject then
+  begin
+    List.Add(FObserverList[DrainableStorageWidthPosition]);
+  end;
+end;
+
 procedure TCfpRchFractionBoundary.InvalidateDisplay;
 var
   Model: TCustomModel;
@@ -929,6 +1049,22 @@ begin
     Model.InvalidateMfConduitRecharge(self);
     Model.InvalidateMfConduitCadsRecharge(self);
   end;
+
+end;
+
+procedure TCfpRchFractionBoundary.SetBoundaryFormula(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    DrainableStorageWidthPosition:
+      DrainableStorageWidth := Value;
+    else Assert(False);
+  end;
+end;
+
+procedure TCfpRchFractionBoundary.SetDrainableStorageWidth(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DrainableStorageWidthPosition, FDrainableStorageWidth);
 
 end;
 

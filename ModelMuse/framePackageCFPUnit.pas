@@ -36,10 +36,12 @@ type
     seOutputInterval: TJvSpinEdit;
     lblOutputInterval: TLabel;
     cbCADS: TCheckBox;
+    cbTimeSeriesAnalysis: TCheckBox;
     procedure cbPipesClick(Sender: TObject);
     procedure cbLayersClick(Sender: TObject);
     procedure comboElevationChoiceChange(Sender: TObject);
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
+    procedure seOutputIntervalChange(Sender: TObject);
   private
     procedure EmphasizeModeCheckBoxes;
     procedure EnablePipeElevationOffset;
@@ -127,6 +129,7 @@ begin
   cbConduitRecharge.Checked := CfpPackage.ConduitRechargeUsed;
   seOutputInterval.AsInteger := CfpPackage.OutputInterval;
   cbCADS.Checked := CfpPackage.UseCads;
+  cbTimeSeriesAnalysis.Checked := CfpPackage.RecordInputAndOutput;
 
   PipesUsed := cbPipes.Checked and rcSelectionController.Enabled;
   EnableCads(PipesUsed);
@@ -183,6 +186,7 @@ begin
   CfpPackage.ConduitRechargeUsed := cbConduitRecharge.Checked;
   CfpPackage.OutputInterval := seOutputInterval.AsInteger;
   CfpPackage.UseCads := cbCADS.Checked;
+  CfpPackage.RecordInputAndOutput := cbTimeSeriesAnalysis.Checked;
 end;
 
 procedure TframePackageCFP.EnableCads(PipesUsed: Boolean);
@@ -199,6 +203,25 @@ begin
 {$ELSE}
   cbCADS.Enabled := False;
 {$ENDIF}
+
+end;
+
+procedure TframePackageCFP.seOutputIntervalChange(Sender: TObject);
+begin
+  inherited;
+{$IFDEF OWHMV2}
+  if frmGoPhast.ModelSelection = msModflowOwhm2 then
+  begin
+    cbTimeSeriesAnalysis.Enabled := seOutputInterval.AsInteger > 0
+  end
+  else
+  begin
+    cbTimeSeriesAnalysis.Enabled := False;
+  end;
+{$ELSE}
+    cbTimeSeriesAnalysis.Enabled := False;
+{$ENDIF}
+
 end;
 
 end.

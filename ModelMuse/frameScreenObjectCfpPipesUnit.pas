@@ -5,29 +5,32 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, frameScreenObjectUnit, ExtCtrls,
-  StdCtrls, RbwEdit, UndoItemsScreenObjects, Vcl.Mask;
+  StdCtrls, RbwEdit, UndoItemsScreenObjects, Vcl.Mask, Vcl.ComCtrls;
 
 type
   TframeScreenObjectCfpPipes = class(TframeScreenObject)
     pnlCaption: TPanel;
-    btnDiameter: TButton;
-    btnTortuosity: TButton;
-    btnRoughnessHeight: TButton;
-    btnLowerCriticalR: TButton;
+    pcCfpPipes: TPageControl;
+    tabProperties: TTabSheet;
+    tabOutput: TTabSheet;
+    cbRecordPipes: TCheckBox;
+    cbRecordNodes: TCheckBox;
     edDiameter: TLabeledEdit;
+    btnDiameter: TButton;
     edTortuosity: TLabeledEdit;
+    btnTortuosity: TButton;
     edRoughnessHeight: TLabeledEdit;
+    btnRoughnessHeight: TButton;
     edLowerCriticalR: TLabeledEdit;
+    btnLowerCriticalR: TButton;
     edHigherCriticalR: TLabeledEdit;
     btnHigherCriticalR: TButton;
     edConductancePermeability: TLabeledEdit;
     btnConductancePermeability: TButton;
     edElevation: TLabeledEdit;
     btnElevation: TButton;
-    cbRecordPipes: TCheckBox;
-    cbRecordNodes: TCheckBox;
-    edCads: TLabeledEdit;
-    btnCads: TButton;
+    cbRecordTimeSeriesPipes: TCheckBox;
+    cbRecordTimeSeriesNodes: TCheckBox;
     procedure edDiameterChange(Sender: TObject);
     procedure edTortuosityChange(Sender: TObject);
     procedure edRoughnessHeightChange(Sender: TObject);
@@ -37,6 +40,8 @@ type
     procedure edElevationChange(Sender: TObject);
     procedure cbRecordPipesClick(Sender: TObject);
     procedure cbRecordNodesClick(Sender: TObject);
+    procedure cbRecordTimeSeriesNodesClick(Sender: TObject);
+    procedure cbRecordTimeSeriesPipesClick(Sender: TObject);
   private
     FChanging: Boolean;
     FOnChange: TNotifyEvent;
@@ -80,6 +85,20 @@ procedure TframeScreenObjectCfpPipes.cbRecordPipesClick(Sender: TObject);
 begin
   inherited;
   cbRecordPipes.AllowGrayed := False;
+  DoChange;
+end;
+
+procedure TframeScreenObjectCfpPipes.cbRecordTimeSeriesNodesClick(Sender:
+    TObject);
+begin
+  cbRecordTimeSeriesNodes.AllowGrayed := False;
+  DoChange;
+end;
+
+procedure TframeScreenObjectCfpPipes.cbRecordTimeSeriesPipesClick(Sender:
+    TObject);
+begin
+  cbRecordTimeSeriesPipes.AllowGrayed := False;
   DoChange;
 end;
 
@@ -148,6 +167,7 @@ var
   ABoundary: TCfpPipeBoundary;
   ScreenObjectIndex: Integer;
 begin
+  pcCfpPipes.ActivePageIndex := 0;
   Assert(ScreenObjectList.Count >= 1);
   Changing := True;
   try
@@ -179,10 +199,8 @@ begin
         end;
         cbRecordPipes.Checked := ABoundary.RecordPipeValues;
         cbRecordNodes.Checked := ABoundary.RecordNodeValues;
-        if edCads.Enabled then
-        begin
-          edCads.Text := ABoundary.DrainableStorageWidth;
-        end;
+        cbRecordTimeSeriesPipes.Checked := ABoundary.TimesSeriesPipes;
+        cbRecordTimeSeriesNodes.Checked := ABoundary.TimesSeriesNodes;
       end;
       for ScreenObjectIndex := 1 to ListOfScreenObjects.Count - 1 do
       begin
@@ -215,10 +233,6 @@ begin
         begin
           edElevation.Text := ''
         end;
-        if edCads.Enabled and (edCads.Text <> ABoundary.DrainableStorageWidth) then
-        begin
-          edCads.Text := ''
-        end;
         if cbRecordPipes.Checked <> ABoundary.RecordPipeValues then
         begin
           cbRecordPipes.AllowGrayed := True;
@@ -228,6 +242,17 @@ begin
         begin
           cbRecordNodes.AllowGrayed := True;
           cbRecordNodes.State := cbGrayed;
+        end;
+
+        if cbRecordTimeSeriesPipes.Checked <> ABoundary.TimesSeriesPipes then
+        begin
+          cbRecordPipes.AllowGrayed := True;
+          cbRecordPipes.State := cbGrayed;
+        end;
+        if cbRecordTimeSeriesPipes.Checked <> ABoundary.TimesSeriesNodes then
+        begin
+          cbRecordTimeSeriesNodes.AllowGrayed := True;
+          cbRecordTimeSeriesNodes.State := cbGrayed;
         end;
       end;
     finally
@@ -247,7 +272,6 @@ begin
   edHigherCriticalR.Text := '4000';
   edConductancePermeability.Text := '';
   edElevation.Text := '';
-  edCads.Text := '';
   edElevation.Enabled := frmGoPhast.PhastModel.ModflowPackages.
     ConduitFlowProcess.CfpElevationChoice = cecIndividual;
   btnElevation.Enabled := edElevation.Enabled;
@@ -266,12 +290,13 @@ begin
       Assert(False);
   end;
 {$IFDEF OWHMV2}
-  edCads.Enabled := (frmGoPhast.ModelSelection = msModflowOwhm2)
+  cbRecordTimeSeriesPipes.Enabled := (frmGoPhast.ModelSelection = msModflowOwhm2)
     and frmGoPhast.PhastModel.ModflowPackages.
     ConduitFlowProcess.UseCads;
 {$ELSE}
-  edCads.Enabled := False;
+  cbRecordTimeSeriesPipes.Enabled := False;
 {$ENDIF}
+  cbRecordTimeSeriesNodes.Enabled := cbRecordTimeSeriesPipes.Enabled;
 end;
 
 procedure TframeScreenObjectCfpPipes.SetData(List: TScreenObjectEditCollection;
@@ -334,10 +359,6 @@ begin
         begin
           Boundary.Elevation := edElevation.Text;
         end;
-        if edCads.Enabled and (edCads.Text <> '') then
-        begin
-          Boundary.DrainableStorageWidth := edCads.Text;
-        end;
         if cbRecordPipes.State <> cbGrayed then
         begin
           Boundary.RecordPipeValues := cbRecordPipes.Checked;
@@ -345,6 +366,15 @@ begin
         if cbRecordNodes.State <> cbGrayed then
         begin
           Boundary.RecordNodeValues := cbRecordNodes.Checked;
+        end;
+
+        if cbRecordTimeSeriesPipes.State <> cbGrayed then
+        begin
+          Boundary.TimesSeriesPipes := cbRecordTimeSeriesPipes.Checked;
+        end;
+        if cbRecordTimeSeriesNodes.State <> cbGrayed then
+        begin
+          Boundary.TimesSeriesNodes := cbRecordTimeSeriesNodes.Checked;
         end;
       end;
     end;

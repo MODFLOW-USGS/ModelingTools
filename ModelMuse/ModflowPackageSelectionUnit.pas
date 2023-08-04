@@ -6125,6 +6125,7 @@ Type
     FOutputInterval: integer;
     FUseCads: Boolean;
     FMfConduitCadsRechargeFraction: TModflowBoundaryDisplayTimeList;
+    FRecordInputAndOutput: Boolean;
     function GetConduitTemperature: double;
     function GetElevationOffset: double;
     function GetEpsilon: double;
@@ -6157,6 +6158,7 @@ Type
     function RechargeFractionUsed (Sender: TObject): boolean;
     function CadsRechargeFractionUsed (Sender: TObject): boolean;
     procedure SetUseCads(const Value: Boolean);
+    procedure SetRecordInputAndOutput(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -6219,6 +6221,12 @@ Type
       write SetOutputInterval stored True;
     // Conduit-Associated Drainable Storage (CADS)
     property UseCads: Boolean read FUseCads write SetUseCads
+    {$IFNDEF OWHMV2}
+      stored False
+    {$ENDIF}
+      ;
+    property RecordInputAndOutput: Boolean read FRecordInputAndOutput
+      write SetRecordInputAndOutput
     {$IFNDEF OWHMV2}
       stored False
     {$ENDIF}
@@ -17965,6 +17973,7 @@ begin
     ConduitRechargeUsed := ConduitSource.ConduitRechargeUsed;
     OutputInterval := ConduitSource.OutputInterval;
     UseCads := ConduitSource.UseCads;
+    RecordInputAndOutput := ConduitSource.RecordInputAndOutput;
   end;
   inherited;
 end;
@@ -18173,6 +18182,7 @@ begin
   CfpPrintIterations := cpiPrint;
   FOutputInterval := 1;
   FUseCads := False;
+  FRecordInputAndOutput := False;
 end;
 
 function TConduitFlowProcess.RechargeFractionUsed(Sender: TObject): boolean;
@@ -18256,6 +18266,11 @@ end;
 procedure TConduitFlowProcess.SetPipesUsed(const Value: Boolean);
 begin
   SetBooleanProperty(FPipesUsed, Value);
+end;
+
+procedure TConduitFlowProcess.SetRecordInputAndOutput(const Value: Boolean);
+begin
+  SetBooleanProperty(FRecordInputAndOutput, Value);
 end;
 
 procedure TConduitFlowProcess.SetRelax(const Value: double);
