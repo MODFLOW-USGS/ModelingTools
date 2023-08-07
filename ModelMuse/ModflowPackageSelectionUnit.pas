@@ -5,7 +5,8 @@ interface
 uses SysUtils, Classes, GoPhastTypes, OrderedCollectionUnit, DataSetUnit,
   ModpathParticleUnit, ModflowBoundaryDisplayUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections,
-  Mt3dSftUnit, ModflowCSubInterbed, OrderedCollectionInterfaceUnit;
+  Mt3dSftUnit, ModflowCSubInterbed, OrderedCollectionInterfaceUnit,
+  Mt3dmsChemSpeciesInterfaceUnit;
 
 const
   KSfrDefaultPicardIterations = 100;
@@ -7289,11 +7290,11 @@ Type
 
   TBuoyancyPackage = class(TModflowPackageSelection)
   private
-    FDensityUsed: Boolean;
+    FDensitySpecified: Boolean;
     FStoredRefDensity: TRealStorage;
     FRightHandSide: Boolean;
     FWriteDensity: Boolean;
-    procedure SetDensityUsed(const Value: Boolean);
+    procedure SetDensitySpecified(const Value: Boolean);
     procedure SetStoredRefDensity(const Value: TRealStorage);
     function GetRefDensity: double;
     procedure SetRefDensity(const Value: double);
@@ -7306,7 +7307,8 @@ Type
     procedure InitializeVariables; override;
     property RefDensity: double read GetRefDensity write SetRefDensity;
   published
-    Property DensityUsed: Boolean read FDensityUsed write SetDensityUsed;
+    Property DensityUsed: Boolean read FDensitySpecified write SetDensitySpecified stored False;
+    Property DensitySpecified: Boolean read FDensitySpecified write SetDensitySpecified;
     // denseref
     property StoredRefDensity: TRealStorage read FStoredRefDensity
       write SetStoredRefDensity;
@@ -7314,6 +7316,56 @@ Type
     property RightHandSide: Boolean read FRightHandSide write SetRightHandSide;
     // densityfile
     property WriteDensity: Boolean read FWriteDensity write SetWriteDensity;
+  end;
+
+  TThermalFormulation = (tfLinear, tfNonLinear);
+
+  TViscosityPackage = class(TModflowPackageSelection)
+  private
+    FStoredRefViscosity: TRealStorage;
+    FWriteViscosity: Boolean;
+    FViscositySpecified: Boolean;
+    FStoredThermalA2: TRealStorage;
+    FStoredThermalA3: TRealStorage;
+    FStoredThermalA4: TRealStorage;
+    FThermalFormulation: TThermalFormulation;
+    FThermalSpecies: IChemSpeciesItem;
+    FThermalSpeciesName: string;
+    function GetRefViscosity: double;
+    procedure SetRefViscosity(const Value: double);
+    procedure SetStoredRefViscosity(const Value: TRealStorage);
+    procedure SetViscositySpecified(const Value: Boolean);
+    procedure SetWriteViscosity(const Value: Boolean);
+    function GetThermalA2: double;
+    function GetThermalA3: double;
+    function GetThermalA4: double;
+    function GetThermalSpecies: string;
+    procedure SetStoredThermalA2(const Value: TRealStorage);
+    procedure SetStoredThermalA3(const Value: TRealStorage);
+    procedure SetStoredThermalA4(const Value: TRealStorage);
+    procedure SetThermalA2(const Value: double);
+    procedure SetThermalA3(const Value: double);
+    procedure SetThermalA4(const Value: double);
+    procedure SetThermalFormulation(const Value: TThermalFormulation);
+    procedure SetThermalSpecies(const Value: string);
+  public
+    Constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+    property RefViscosity: double read GetRefViscosity write SetRefViscosity;
+    property ThermalA2: double read GetThermalA2 write SetThermalA2;
+    property ThermalA3: double read GetThermalA3 write SetThermalA3;
+    property ThermalA4: double read GetThermalA4 write SetThermalA4;
+  published
+    property ViscositySpecified: Boolean read FViscositySpecified write SetViscositySpecified;
+    property StoredRefViscosity: TRealStorage read FStoredRefViscosity write SetStoredRefViscosity;
+    property WriteViscosity: Boolean read FWriteViscosity write SetWriteViscosity;
+    property ThermalSpecies: string read GetThermalSpecies write SetThermalSpecies;
+    property ThermalFormulation: TThermalFormulation read FThermalFormulation write SetThermalFormulation;
+    property StoredThermalA2: TRealStorage read FStoredThermalA2 write SetStoredThermalA2;
+    property StoredThermalA3: TRealStorage read FStoredThermalA3 write SetStoredThermalA3;
+    property StoredThermalA4: TRealStorage read FStoredThermalA4 write SetStoredThermalA4;
   end;
 
 const
@@ -29962,7 +30014,7 @@ begin
   if Source is TBuoyancyPackage then
   begin
     OtherBuoyancy := TBuoyancyPackage(Source);
-    DensityUsed := OtherBuoyancy.DensityUsed;
+    DensitySpecified := OtherBuoyancy.DensitySpecified;
     RefDensity := OtherBuoyancy.RefDensity;
     RightHandSide := OtherBuoyancy.RightHandSide;
     WriteDensity := OtherBuoyancy.WriteDensity;
@@ -30003,18 +30055,18 @@ procedure TBuoyancyPackage.InitializeVariables;
 begin
   inherited;
   FStoredRefDensity.Value := 997.08;
-  FDensityUsed := False;
+  FDensitySpecified := False;
   RightHandSide := False;
   WriteDensity := False;
 end;
 
-procedure TBuoyancyPackage.SetDensityUsed(const Value: Boolean);
+procedure TBuoyancyPackage.SetDensitySpecified(const Value: Boolean);
 var
   LocalModel: TCustomModel;
   Density: TMobileChemSpeciesItem;
 begin
-  SetBooleanProperty(FDensityUsed, Value);
-  if FDensityUsed and IsSelected and (FModel <> nil) then
+  SetBooleanProperty(FDensitySpecified, Value);
+  if FDensitySpecified and IsSelected and (FModel <> nil) then
   begin
     LocalModel := FModel as TCustomModel;
     Density := LocalModel.MobileComponents.GetItemByName(KDensity);
@@ -30044,6 +30096,176 @@ end;
 procedure TBuoyancyPackage.SetWriteDensity(const Value: Boolean);
 begin
   SetBooleanProperty(FWriteDensity, Value);
+end;
+
+{ TViscosityPackage }
+
+procedure TViscosityPackage.Assign(Source: TPersistent);
+var
+  ViscSource: TViscosityPackage;
+begin
+  if Source is TViscosityPackage then
+  begin
+    ViscSource := TViscosityPackage(Source);
+    RefViscosity := ViscSource.RefViscosity;
+    ThermalA2 := ViscSource.ThermalA2;
+    ThermalA3 := ViscSource.ThermalA3;
+    ThermalA4 := ViscSource.ThermalA4;
+    ViscositySpecified := ViscSource.ViscositySpecified;
+    ThermalSpecies := ViscSource.ThermalSpecies;
+    WriteViscosity := ViscSource.WriteViscosity;
+    ThermalFormulation := ViscSource.ThermalFormulation;
+  end;
+  inherited;
+end;
+
+constructor TViscosityPackage.Create(Model: TBaseModel);
+var
+  OnChangeEvent: TNotifyEvent;
+begin
+  OnChangeEvent := OnValueChanged;
+  FStoredRefViscosity := TRealStorage.Create(OnChangeEvent);
+  FStoredThermalA2 := TRealStorage.Create(OnChangeEvent);
+  FStoredThermalA3 := TRealStorage.Create(OnChangeEvent);
+  FStoredThermalA4 := TRealStorage.Create(OnChangeEvent);
+end;
+
+destructor TViscosityPackage.Destroy;
+begin
+  FStoredThermalA4.Free;
+  FStoredThermalA3.Free;
+  FStoredThermalA2.Free;
+  FStoredRefViscosity.Free;
+  inherited;
+end;
+
+function TViscosityPackage.GetRefViscosity: double;
+begin
+  result := StoredRefViscosity.Value
+end;
+
+function TViscosityPackage.GetThermalA2: double;
+begin
+  result := StoredThermalA2.Value;
+end;
+
+function TViscosityPackage.GetThermalA3: double;
+begin
+  result := StoredThermalA3.Value;
+end;
+
+function TViscosityPackage.GetThermalA4: double;
+begin
+  result := StoredThermalA4.Value;
+end;
+
+function TViscosityPackage.GetThermalSpecies: string;
+begin
+  if FThermalSpecies <> nil then
+  begin
+    FThermalSpeciesName := FThermalSpecies.Name;
+  end;
+  result := FThermalSpeciesName;
+end;
+
+procedure TViscosityPackage.InitializeVariables;
+begin
+  inherited;
+  RefViscosity := 8.904E-04;
+  ThermalA2 := 10;
+  ThermalA3 := 248.7;
+  ThermalA4 := 133.15;
+  FViscositySpecified := False;
+  FWriteViscosity := False;
+  ThermalSpecies := '';
+  FThermalFormulation := tfLinear;
+end;
+
+procedure TViscosityPackage.SetRefViscosity(const Value: double);
+begin
+  StoredRefViscosity.Value := Value
+end;
+
+procedure TViscosityPackage.SetStoredRefViscosity(const Value: TRealStorage);
+begin
+  FStoredRefViscosity.Assign(Value);
+end;
+
+procedure TViscosityPackage.SetStoredThermalA2(const Value: TRealStorage);
+begin
+  FStoredThermalA2.Assign(Value);
+end;
+
+procedure TViscosityPackage.SetStoredThermalA3(const Value: TRealStorage);
+begin
+  FStoredThermalA3.Assign(Value);
+end;
+
+procedure TViscosityPackage.SetStoredThermalA4(const Value: TRealStorage);
+begin
+  FStoredThermalA4.Assign(Value);
+end;
+
+procedure TViscosityPackage.SetThermalA2(const Value: double);
+begin
+  StoredThermalA2.Value := Value
+end;
+
+procedure TViscosityPackage.SetThermalA3(const Value: double);
+begin
+  StoredThermalA3.Value := Value
+end;
+
+procedure TViscosityPackage.SetThermalA4(const Value: double);
+begin
+  StoredThermalA4.Value := Value
+end;
+
+procedure TViscosityPackage.SetThermalFormulation(
+  const Value: TThermalFormulation);
+begin
+  if FThermalFormulation <> Value then
+  begin
+    FThermalFormulation := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TViscosityPackage.SetThermalSpecies(const Value: string);
+var
+  ChemIndex: Integer;
+  LocalModel: TCustomModel;
+begin
+  if (Value = '') or (FModel = nil) then
+  begin
+    FThermalSpecies := nil;
+    FThermalSpeciesName := Value;
+  end
+  else
+  begin
+    LocalModel := FModel as TCustomModel;
+    ChemIndex := LocalModel.MobileComponents.IndexOfName(Value);
+    if ChemIndex >= 0 then
+    begin
+      FThermalSpecies := LocalModel.MobileComponents[ChemIndex];
+      FThermalSpeciesName := FThermalSpecies.Name;
+    end
+    else
+    begin
+      FThermalSpecies := nil;
+      FThermalSpeciesName := '';
+    end;
+  end;
+end;
+
+procedure TViscosityPackage.SetViscositySpecified(const Value: Boolean);
+begin
+  SetBooleanProperty(FViscositySpecified, Value);
+end;
+
+procedure TViscosityPackage.SetWriteViscosity(const Value: Boolean);
+begin
+  SetBooleanProperty(FWriteViscosity, Value);
 end;
 
 end.

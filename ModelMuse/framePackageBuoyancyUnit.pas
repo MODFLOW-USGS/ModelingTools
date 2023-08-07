@@ -48,7 +48,7 @@ var
 begin
   inherited;
   Buoyancy := Package as TBuoyancyPackage;
-  cbSpecifyDensity.Checked := Buoyancy.DensityUsed;
+  cbSpecifyDensity.Checked := Buoyancy.DensitySpecified;
   cbRHS.Checked := Buoyancy.RightHandSide;
   rdeRefDensity.RealValue := Buoyancy.RefDensity;
   cbWriteDensity.Checked := Buoyancy.WriteDensity;
@@ -117,7 +117,7 @@ var
 begin
   inherited;
   Buoyancy := Package as TBuoyancyPackage;
-  Buoyancy.DensityUsed := cbSpecifyDensity.Checked;
+  Buoyancy.DensitySpecified := cbSpecifyDensity.Checked;
   Buoyancy.RightHandSide := cbRHS.Checked;
   if rdeRefDensity.TryGetRealValue(AValue) then
   begin

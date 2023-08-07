@@ -347,8 +347,6 @@ begin
   begin
     OtherData := nil;
     CellList := TCellAssignmentList.Create;
-
-
     try
       Diameter := Model.DataArrayManager.GetDataSetByName(KPipeDiameter);
       Tortuosity := Model.DataArrayManager.GetDataSetByName(KTortuosity);
@@ -367,8 +365,6 @@ begin
       TRealSparseDataSetCrack(PipeConducOrPerm).Clear;
       TRealSparseDataSetCrack(PipeElevation).Clear;
 
-
-
       for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
       begin
         AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
@@ -379,16 +375,6 @@ begin
         begin
           Continue;
         end;
-
-//        CrchRch := AScreenObject.ModflowCfpRchFraction;
-//        if (CrchRch <> nil) and CrchRch.Used then
-//        begin
-//          if DrainableStorageWidth <> nil then
-//          begin
-//            AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
-//          end;
-//        end;
-
 
         PipeBoundary := AScreenObject.ModflowCfpPipes;
         if (PipeBoundary <> nil) and PipeBoundary.Used then
@@ -484,11 +470,6 @@ begin
                 UpperCriticalRValue := (UpperCriticalR.RealData[ACell1.Layer, ACell1.Row, ACell1.Column]
                   + UpperCriticalR.RealData[ACell2.Layer, ACell2.Row, ACell2.Column])/2;
 
-//                if DrainableStorageWidth <> nil then
-//                begin
-//
-//                end;
-
                 Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
                 Node2 := FNodeGrid[ACell2.Layer, ACell2.Row, ACell2.Column];
                 NodeCreated := (Node1 = nil) or (Node2 = nil);
@@ -561,9 +542,6 @@ begin
               end;
             end;
           end;
-
-
-
         end;
       end;
 
@@ -586,10 +564,6 @@ begin
         WellFlowArray := Model.DataArrayManager.GetDataSetByName(KCfpWellFlow);
         Assert(WellFlowArray <> nil);
         WellFlowArray.Initialize;
-
-//        WellConductanceArray := Model.DataArrayManager.GetDataSetByName(KCfpWellConductance);
-//        Assert(WellConductanceArray <> nil);
-//        WellConductanceArray.Initialize;
 
         WellCauchyHeadArray := Model.DataArrayManager.GetDataSetByName(KCfpCauchyHead);
         Assert(WellCauchyHeadArray <> nil);
@@ -781,6 +755,7 @@ begin
       CellList.Free;
     end;
   end;
+
   FCrchUsed := FConduitFlowProcess.PipesUsed
     and FConduitFlowProcess.ConduitRechargeUsed
     and Model.ModflowPackages.RchPackage.IsSelected;
@@ -802,72 +777,69 @@ begin
     begin
       DrainableStorageWidth := nil;
     end;
-
   {$ELSE}
     DrainableStorageWidth := nil;
   {$ENDIF}
 
-    OtherData := nil;
-    CellList := TCellAssignmentList.Create;
-    try
-      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-      begin
-        AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-        if AScreenObject.Deleted
-          or not AScreenObject.UsedModels.UsesModel(Model)
-          or (AScreenObject.ModflowCfpRchFraction = nil) then
+    if DrainableStorageWidth <> nil then
+    begin
+      OtherData := nil;
+      CellList := TCellAssignmentList.Create;
+      try
+        for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
         begin
-          Continue;
-        end;
+          AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+          if AScreenObject.Deleted
+            or not AScreenObject.UsedModels.UsesModel(Model)
+            or (AScreenObject.ModflowCfpRchFraction = nil) then
+          begin
+            Continue;
+          end;
 
-        CrchRch := AScreenObject.ModflowCfpRchFraction;
-        if (CrchRch <> nil) and CrchRch.Used then
-        begin
-          if DrainableStorageWidth <> nil then
+          CrchRch := AScreenObject.ModflowCfpRchFraction;
+          if (CrchRch <> nil) and CrchRch.Used then
           begin
             AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
           end;
-        end;
 
-        CellList.Clear;
-        AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
+          CellList.Clear;
+          AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
 
-        if DrainableStorageWidth <> nil then
-        begin
-          for CellIndex := 0 to CellList.Count - 1 do
+          if DrainableStorageWidth <> nil then
           begin
-            ACell1 := CellList[CellIndex];
-            if not DrainableStorageWidth.IsValue[ACell1.Layer, ACell1.Row, ACell1.Column] then
+            for CellIndex := 0 to CellList.Count - 1 do
             begin
-              frmErrorsAndWarnings.AddError(Model, StrCFPDrainableStorag,
-                AScreenObject.Name, AScreenObject);
-              Break;
+              ACell1 := CellList[CellIndex];
+              if not DrainableStorageWidth.IsValue[ACell1.Layer, ACell1.Row, ACell1.Column] then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrCFPDrainableStorag,
+                  AScreenObject.Name, AScreenObject);
+                Break;
+              end;
+              CfpDrainableStorageWidth :=
+                DrainableStorageWidth.RealData[ACell1.Layer, ACell1.Row, ACell1.Column];
+              Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
+              if Node1 = nil then
+              begin
+                Node1 := TCfpNode.Create;
+                FNodes.Add(Node1);
+                Node1.FNumber := FNodes.Count;
+                FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column] := Node1;
+                Node1.FLayer := ACell1.Layer;
+                Node1.FRow := ACell1.Row;
+                Node1.FColumn := ACell1.Column;
+                Node1.FScreenObject := AScreenObject;
+              end;
+            {$IFDEF OWHMV2}
+              Node1.CadWidth := CfpDrainableStorageWidth;
+            {$ENDIF}
             end;
-            CfpDrainableStorageWidth :=
-              DrainableStorageWidth.RealData[ACell1.Layer, ACell1.Row, ACell1.Column];
-            Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
-            if Node1 = nil then
-            begin
-              Node1 := TCfpNode.Create;
-              FNodes.Add(Node1);
-              Node1.FNumber := FNodes.Count;
-              FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column] := Node1;
-              Node1.FLayer := ACell1.Layer;
-              Node1.FRow := ACell1.Row;
-              Node1.FColumn := ACell1.Column;
-              Node1.FScreenObject := AScreenObject;
-            end;
-          {$IFDEF OWHMV2}
-            Node1.CadWidth := CfpDrainableStorageWidth;
-          {$ENDIF}
           end;
         end;
+      finally
+        CellList.Free;
       end;
-
-    finally
-      CellList.Free;
     end;
-
   end
 end;
 

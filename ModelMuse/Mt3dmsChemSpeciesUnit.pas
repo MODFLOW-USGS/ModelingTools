@@ -4,12 +4,12 @@ interface
 
 uses
   OrderedCollectionUnit, DataSetUnit, Classes,
-  GoPhastTypes, OrderedCollectionInterfaceUnit;
+  GoPhastTypes, OrderedCollectionInterfaceUnit, Mt3dmsChemSpeciesInterfaceUnit;
 
 type
   TCustomChemSpeciesCollection = class;
 
-  TChemSpeciesItem = class(TOrderedItem)
+  TChemSpeciesItem = class(TOrderedItem, IChemSpeciesItem)
   private
     FName: string;
     FInitialConcDataArrayName: string;
@@ -68,6 +68,7 @@ type
     FTransverseDispHDataArrayDisplayName: string;
     FTransverseDispVertDataArrayName: string;
     FTransverseDispVertDataArrayDisplayName: string;
+    function GetName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
       const OldDataArrayName, NewName, NewDisplayName, NewFormula,
@@ -129,7 +130,7 @@ type
       write SetRefConcentration;
     property UsedForGWT: Boolean read GetUsedForGWT;
   published
-    property Name: string read FName write SetName;
+    property Name: string read GetName write SetName;
     // BTN package, SCONC, GWT IC package, STRT
     property InitialConcDataArrayName: string read FInitialConcDataArrayName
       write SetInitialConcDataArrayName;
@@ -865,6 +866,11 @@ end;
 function TChemSpeciesItem.GetDensitySlope: double;
 begin
   result := StoredDensitySlope.Value;
+end;
+
+function TChemSpeciesItem.GetName: string;
+begin
+  result := FName;
 end;
 
 function TChemSpeciesItem.GetRefConcentration: double;

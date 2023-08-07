@@ -66,6 +66,48 @@ function get_var_shape(c_var_address: PAnsiChar; c_var_shape: pcint) : cint;cdec
 function set_value_int(Variablename: PAnsiChar; AnArray: pcint): cint;cdecl;external 'libmf6.dll';
 
 
+function get_var_type(c_var_address: PAnsiChar; c_var_type: PAnsiChar): cint; cdecl; external 'libmf6.dll';
+function get_var_rank(c_var_address: PAnsiChar; Var c_var_rank: Integer): cint; cdecl; external 'libmf6.dll';
+function get_value_string(c_var_address: PAnsiChar; c_arr_ptr: PAnsiChar): cint; cdecl; external 'libmf6.dll';
+function get_value_bool(c_var_address: PAnsiChar; c_arr_ptr: PLongBool): cint; cdecl; external 'libmf6.dll';
+function get_var_nbytes(c_var_address: PAnsiChar; var var_nbytes: Integer): cint; cdecl; external 'libmf6.dll';
+//function get_var_shape(c_var_address: PAnsiChar; var c_var_shape: TGridShape) result(bmi_status)
+
+function get_var_itemsize(c_var_address: PAnsiChar; var var_size: integer): cint; cdecl; external 'libmf6.dll';
+
+// other functions
+{
+function bmi_initialize() result(bmi_status)
+function bmi_update() result(bmi_status)
+function bmi_finalize() result(bmi_status)
+function get_start_time(var start_time: double) result(bmi_status)
+function get_end_time(var end_time: double) result(bmi_status)
+function get_current_time(var current_time: double) result(bmi_status)
+
+// time-step represents the length of the current time step not the time step number.
+function get_time_step(var time_step: double) result(bmi_status)
+
+function get_input_item_count(var count: Integer) result(bmi_status)
+function get_output_item_count(var count: Integer) result(bmi_status)
+// Returns all input variables in the simulation
+function get_input_var_names(c_names) result(bmi_status)
+function get_output_var_names(c_names) result(bmi_status)
+//  the size (in bytes) of a single element of a variable
+function get_var_itemsize(c_var_address, var_size) result(bmi_status)
+function get_var_nbytes(c_var_address, var_nbytes) result(bmi_status)
+function get_var_type(c_var_address, c_var_type) result(bmi_status)
+function get_var_rank(c_var_address, c_var_rank) result(bmi_status)
+function get_var_shape(c_var_address, c_var_shape) result(bmi_status)
+
+function get_value_bool(c_var_address, c_arr_ptr) result(bmi_status)
+function get_value_string(c_var_address, c_arr_ptr) result(bmi_status)
+function get_value(c_var_address, c_arr_ptr) result(bmi_status)
+function get_value_ptr(c_var_address, c_arr_ptr) result(bmi_status)
+function get_value_ptr_double(c_var_address, c_arr_ptr) result(bmi_status)
+function get_value_ptr_int(c_var_address, c_arr_ptr) result(bmi_status)
+function get_value_ptr_bool(c_var_address, c_arr_ptr) result(bmi_status)
+}
+
 implementation
 
 end.

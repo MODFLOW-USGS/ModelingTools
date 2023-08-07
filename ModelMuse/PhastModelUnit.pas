@@ -35643,7 +35643,7 @@ var
   Buoyancy: TBuoyancyPackage;
 begin
   Buoyancy := ModflowPackages.BuoyancyPackage;
-  Result := Buoyancy.IsSelected and Buoyancy.DensityUsed;
+  Result := Buoyancy.IsSelected and Buoyancy.DensitySpecified;
 end;
 
 function TCustomModel.GetBuoyancyUsed: Boolean;
@@ -41774,7 +41774,7 @@ var
 begin
   IgnoredNames.CaseSensitive := False;
   Buoy := ModflowPackages.BuoyancyPackage;
-  if Buoy.IsSelected and Buoy.DensityUsed then
+  if Buoy.IsSelected and Buoy.DensitySpecified then
   begin
     IgnoredNames.Add(StrDensity);
   end;

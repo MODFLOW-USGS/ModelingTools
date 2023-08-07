@@ -98,6 +98,7 @@
         <DCCReference Include="Modflow6ConstantsUnit.pas"/>
         <DCCReference Include="Mf6Variables.pas"/>
         <DCCReference Include="Mf6Functions.pas"/>
+        <DCCReference Include="ImportModelUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

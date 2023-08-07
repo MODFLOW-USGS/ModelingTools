@@ -876,7 +876,8 @@ uses
   framePackageBuoyancyUnit in 'framePackageBuoyancyUnit.pas' {framePackageBuoyancy: TFrame},
   ModflowBuoyancyWriterUnit in 'ModflowBuoyancyWriterUnit.pas',
   frmImportSurferGridFilesUnit in 'frmImportSurferGridFilesUnit.pas' {frmImportSurferGridFiles},
-  frameScreenObjectCfpRechargeFractionUnit in 'frameScreenObjectCfpRechargeFractionUnit.pas' {frameScreenObjectCfpRechargeFraction: TFrame};
+  frameScreenObjectCfpRechargeFractionUnit in 'frameScreenObjectCfpRechargeFractionUnit.pas' {frameScreenObjectCfpRechargeFraction: TFrame},
+  Mt3dmsChemSpeciesInterfaceUnit in 'Mt3dmsChemSpeciesInterfaceUnit.pas';
 
 {$R *.res}
 
