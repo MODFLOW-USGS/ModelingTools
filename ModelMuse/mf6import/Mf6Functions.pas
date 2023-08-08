@@ -68,7 +68,7 @@ function set_value_int(Variablename: PAnsiChar; AnArray: pcint): cint;cdecl;exte
 
 function get_var_type(c_var_address: PAnsiChar; c_var_type: PAnsiChar): cint; cdecl; external 'libmf6.dll';
 function get_var_rank(c_var_address: PAnsiChar; Var c_var_rank: Integer): cint; cdecl; external 'libmf6.dll';
-function get_value_string(c_var_address: PAnsiChar; c_arr_ptr: PAnsiChar): cint; cdecl; external 'libmf6.dll';
+function get_value_string(c_var_address: PAnsiChar; c_arr_ptr: PPAnsiChar): cint; cdecl; external 'libmf6.dll';
 function get_value_bool(c_var_address: PAnsiChar; c_arr_ptr: PLongBool): cint; cdecl; external 'libmf6.dll';
 function get_var_nbytes(c_var_address: PAnsiChar; var var_nbytes: Integer): cint; cdecl; external 'libmf6.dll';
 //function get_var_shape(c_var_address: PAnsiChar; var c_var_shape: TGridShape) result(bmi_status)

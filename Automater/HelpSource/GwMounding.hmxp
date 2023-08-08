@@ -1,11 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="1.5" isskin="false" isrepository="false">
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="2.0" isskin="false" isrepository="false">
   <config>
     <namespaces/>
+    <export-task-groups>
+      <export-task-group name="Recent Publishes">
+        <export-tasks>
+          <export-task name="Publish as HTM" format="HTM">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">.\HTML\index.html</task-config-value>
+              <task-config-value name="skin">$(HMSYS)Templates\HTML Skins\HM8-Help-Webhelp-Responsive.hmskin</task-config-value>
+              <task-config-value name="make3include">HTML,CUSTOMBASINSHAPE</task-config-value>
+              <task-config-value name="make3status">*</task-config-value>
+            </task-config-group>
+          </export-task>
+        </export-tasks>
+      </export-task-group>
+    </export-task-groups>
     <helpwindows>
       <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
         <caption translate="true">&lt;%TITLE%&gt;</caption>
-        <window-options-hlp autosize="true" maximize="false" posabsolute="false" keepontop="false" buttons="0" headercolor="#F0F0F0" textcolor="#FFFFFF"/>
         <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
           <user-button name="jump1">
             <caption translate="true">jump1</caption>
@@ -245,6 +258,7 @@ document.write('</frameset>');
       <config-value name="contentindent">20</config-value>
       <config-value name="defaulticons">1</config-value>
       <config-value name="htmlpopup">0</config-value>
+      <config-value name="skin">$(HMSYS)Templates\HTML Skins\HM8-Help-Webhelp-Responsive.hmskin</config-value>
     </config-group>
     <variables/>
     <helpcontext-numbers/>

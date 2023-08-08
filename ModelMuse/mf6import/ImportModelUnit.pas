@@ -12,7 +12,46 @@ procedure ImportModel;
 implementation
 
 uses
-  Vcl.Dialogs;
+  Vcl.Dialogs, System.AnsiStrings, JclAnsiStrings;
+
+const
+  StrLEN = 'LEN=';
+
+type
+  TAnsiStringArray = Array of AnsiString;
+
+procedure ExtractStrArray(AString: AnsiString; out Strings: TAnsiStringArray);
+var
+  StringList: TJclAnsiStringList;
+  index: Integer;
+  StartIndex: Integer;
+  CharIndex: Integer;
+  NewString: AnsiString;
+begin
+  StringList := TAnsiStringList.Create;
+  try
+    StartIndex := 1;
+    for CharIndex := StartIndex to Length(AString) do
+    begin
+      if AString[CharIndex] = #0 then
+      begin
+        NewString := Trim(Copy(AString,StartIndex, CharIndex - StartIndex));
+        if NewString <> '' then
+        begin
+          StringList.Add(NewString);
+        end;
+        StartIndex := CharIndex + 1;
+      end;
+    end;
+    SetLength(Strings, StringList.Count);
+    for index := 0 to StringList.Count - 1 do
+    begin
+      Strings[index] := StringList[index];
+    end;
+  finally
+    StringList.Free;
+  end;
+end;
 
 procedure GetPackageNames(Names: TStringList);
 var
@@ -22,13 +61,19 @@ var
   CharIndex: Integer;
   Rank: Integer;
   Size: Integer;
+  VariableTypeAddress: PAnsiChar;
+  StrLengthPos: Integer;
+  StringLength: Integer;
+  ParenPos: Integer;
+  VarLength: AnsiString;
 begin
-  Exit;
+//  Exit;
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
     if Pos('PACKAGE_TYPE', VarName) > 0 then
     begin
+      Writeln;
       SetLength(VariableType, BMI_LENVARTYPE);
       for CharIndex := 1 to BMI_LENVARTYPE do
       begin
@@ -46,17 +91,34 @@ begin
       begin
         Writeln('Size: ', Size);
       end;
-      SetLength(VariableType, BMI_LENERRMESSAGE);
-      for CharIndex := 1 to BMI_LENERRMESSAGE do
+      StrLengthPos := Pos(StrLEN, VariableType);
+      Assert(StrLengthPos > 0);
+      Inc(StrLengthPos, Length(StrLEN));
+      VariableType := Trim(Copy(VariableType, StrLengthPos, MAXINT));
+      ParenPos := Pos('(', VariableType);
+      if ParenPos > 0 then
+      begin
+        VarLength := Trim(Copy(VariableType,1,ParenPos-1));
+      end
+      else
+      begin
+        VarLength := VariableType;
+      end;
+      StringLength := StrToInt(VarLength);
+
+      SetLength(VariableType, StringLength);
+      for CharIndex := 1 to StringLength do
       begin
         VariableType[CharIndex] := AnsiChar(nil);
       end;
-      if get_value_string(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
+      VariableTypeAddress := PAnsiChar(VariableType);
+      if get_value_string(PAnsiChar(VarName), @VariableTypeAddress) = 0 then
       begin
         Writeln(VarName, ': ', VariableType);
       end;
     end;
   end;
+  Writeln;
 end;
 
 
@@ -65,7 +127,75 @@ var
   Value: array[0..355*6] of Ansichar;
   ABool: array of LongBool;
   ASize: Integer;
+  VariableType: AnsiString;
+  CharIndex: Integer;
+  VarName: AnsiString;
+  StrLengthPos: Integer;
+  ParenPos: Integer;
+  VarLength: AnsiString;
+  StringLength: Integer;
+  TypeNames: array of AnsiString;
+  NameIndex: Integer;
+  TypeNamesAddr: array of PAnsiChar;
+  NameTypes: TAnsiStringArray;
+  NIndex: Integer;
 begin
+  VarName := '__INPUT__/MODFLOW/NAM/FTYPE';
+  if Names.IndexOf(VarName) >= 0 then
+  begin
+    SetLength(VariableType, BMI_LENVARTYPE);
+    for CharIndex := 1 to BMI_LENVARTYPE do
+    begin
+      VariableType[CharIndex] := AnsiChar(nil);
+    end;
+    if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
+    begin
+      Writeln(VarName, ': ', VariableType);
+    end;
+    StrLengthPos := Pos(StrLEN, VariableType);
+    Assert(StrLengthPos > 0);
+    Inc(StrLengthPos, Length(StrLEN));
+    VariableType := Trim(Copy(VariableType, StrLengthPos, MAXINT));
+    ParenPos := Pos('(', VariableType);
+    if ParenPos > 0 then
+    begin
+      VarLength := Trim(Copy(VariableType,1,ParenPos-1));
+    end
+    else
+    begin
+      VarLength := VariableType;
+    end;
+    StringLength := StrToInt(VarLength);
+    SetLength(TypeNames, 1);
+//    SetLength(TypeNamesAddr, 6);
+
+    for NameIndex := 0 to Length(TypeNames) - 1 do
+    begin
+      SetLength(TypeNames[NameIndex], (StringLength+1)*6);
+      for CharIndex := 1 to (StringLength+1)*6 do
+      begin
+        TypeNames[NameIndex][CharIndex] := AnsiChar(nil);
+      end;
+//      TypeNamesAddr[NameIndex] := @TypeNames[NameIndex];
+    end;
+    if get_value_string(PAnsiChar(VarName), @TypeNames[0]) = 0 then
+    begin
+      for NameIndex := 0 to Length(TypeNames) - 1 do
+      begin
+        Writeln(Length(TypeNames[NameIndex]));
+        ExtractStrArray(TypeNames[NameIndex], NameTypes);
+        for NIndex := 0 to Length(NameTypes) - 1 do
+        begin
+          WriteLn(Trim(NameTypes[NIndex]));
+        end;
+      end;
+    end
+    else
+    begin
+      WriteLn('Failed get_value_string');
+    end;
+  end;
+
 
   if Names.IndexOf('TDIS/ENDOFPERIOD') >= 0 then
   begin
@@ -86,7 +216,7 @@ begin
       writeln('faiure get_var_nbytes');
     end;
     SetLength(ABool, 1);
-    get_value_bool('TDIS/ENDOFPERIOD', @ABool[0]);
+    get_value_bool('TDIS/ENDOFPERIOD', @ABool);
     WriteLn(ABool[0]);
   end
   else

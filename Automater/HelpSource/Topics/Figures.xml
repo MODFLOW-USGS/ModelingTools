@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-08-08T12:17:23.736-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Figures</title>
   <body>
     <header>
@@ -10,7 +10,7 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GwMound" anchor="RunNumericalModel" styleclass="Normal" translate="true">Back</link></para>
-          <para styleclass="Normal"><image src="Profile.bmp" scale="50.00%" width="249" height="184" styleclass="Image Caption"></image></para>
+          <para styleclass="Normal"><image src="Profile.bmp" scale="80.00%" width="398" height="294" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Plot showing maximum rise of the water table as a function of distance from the center of infiltration</title></image></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -23,7 +23,7 @@
     <para styleclass="Normal"><table styleclass="Default" rowcount="2" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><image src="SummaryTable.bmp" scale="50.00%" width="249" height="184" styleclass="Image Caption"></image></para>
+          <para styleclass="Normal"><image src="SummaryTable.bmp" scale="80.00%" width="398" height="294" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Table summarizing model results</title></image></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -36,7 +36,7 @@
     <para styleclass="Normal"><table styleclass="Default" rowcount="2" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><image src="ProfileTable.bmp" scale="50.00%" width="278" height="184" styleclass="Image Caption"></image></para>
+          <para styleclass="Normal"><image src="ProfileTable.bmp" scale="80.00%" width="446" height="294" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Table with the maximum water table rise and time of maximum water table rise as a funciton of distance from the center of infiltration</title></image></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
