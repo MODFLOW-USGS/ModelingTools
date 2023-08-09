@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="hellomf6.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="HelloMf6"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="69"/>
+        <CursorPos X="29" Y="96"/>
+        <UsageCount Value="27"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\ctypes.pp"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="26"/>
+        <CursorPos X="48" Y="44"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="130" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="132" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="40" TopLine="19"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="135" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="136" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="140" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="87" TopLine="66"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="88" TopLine="66"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="123" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="136" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="23" Column="70" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="10" Column="4"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="33" Column="69"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="87" TopLine="69"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="88" TopLine="69"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="123" TopLine="105"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="136" TopLine="105"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="52" Column="57" TopLine="34"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="145" TopLine="109"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="87" TopLine="69"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="88" TopLine="69"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="141" TopLine="105"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="45" Column="40" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="35" Column="28" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="21" Column="28" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="11" Column="42"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="76" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="50" Column="11" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="64" Column="30" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="hellomf6.pas"/>
+        <Caret Line="62" Column="14" TopLine="44"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

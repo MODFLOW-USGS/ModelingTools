@@ -12,13 +12,14 @@ procedure ImportModel;
 implementation
 
 uses
-  Vcl.Dialogs, System.AnsiStrings, JclAnsiStrings;
+  Vcl.Dialogs, System.AnsiStrings, JclAnsiStrings, System.Math;
 
 const
   StrLEN = 'LEN=';
 
 type
   TAnsiStringArray = Array of AnsiString;
+  TAnsiCharArray = array[0..255*10] of AnsiChar;
 
 procedure ExtractStrArray(AString: AnsiString; out Strings: TAnsiStringArray);
 var
@@ -41,6 +42,46 @@ begin
           StringList.Add(NewString);
         end;
         StartIndex := CharIndex + 1;
+      end;
+    end;
+    SetLength(Strings, StringList.Count);
+    for index := 0 to StringList.Count - 1 do
+    begin
+      Strings[index] := StringList[index];
+    end;
+  finally
+    StringList.Free;
+  end;
+end;
+
+procedure ExtractStrArray2(AString: TAnsiCharArray; out Strings: TAnsiStringArray);
+var
+  StringList: TJclAnsiStringList;
+  index: Integer;
+//  StartIndex: Integer;
+  CharIndex: Integer;
+  NewString: AnsiString;
+  StringBuilder: TStringBuilder;
+begin
+  StringList := TAnsiStringList.Create;
+  StringBuilder := TStringBuilder.Create;
+  try
+//    StartIndex := 0;
+    for CharIndex := 0 to Length(AString) -1 do
+    begin
+      if AString[CharIndex] = #0 then
+      begin
+        NewString := Trim(StringBuilder.ToString);
+        if NewString <> '' then
+        begin
+          StringList.Add(NewString);
+        end;
+//        StartIndex := CharIndex + 1;
+        StringBuilder.Clear;
+      end
+      else
+      begin
+        StringBuilder.Append(AString[CharIndex])
       end;
     end;
     SetLength(Strings, StringList.Count);
@@ -121,6 +162,260 @@ begin
   Writeln;
 end;
 
+procedure GetStringVariable(VarName: AnsiString);
+var
+  VariableType: AnsiString;
+  CharIndex: Integer;
+  StrLengthPos: Integer;
+  ParenPos: Integer;
+  VarLength: string;
+  StringLength: Integer;
+//  TypeNames: array of AnsiString;
+  Rank: Integer;
+  NameTypes: TAnsiStringArray;
+  NIndex: Integer;
+  SavedVarType: AnsiString;
+  RankIndex: Integer;
+  VariableValues: TAnsiCharArray;
+  PVarVal: PAnsiChar;
+  PPVarVal: PPAnsiChar;
+begin
+  SetLength(VariableType, BMI_LENVARTYPE);
+  for CharIndex := 1 to BMI_LENVARTYPE do
+  begin
+    VariableType[CharIndex] := AnsiChar(nil);
+  end;
+  if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
+  begin
+//      Writeln(VarName, ': ', VariableType);
+    if Pos('STRING', VariableType) = 1 then
+    begin
+      Writeln;
+      Writeln(VarName);
+      StrLengthPos := Pos(StrLEN, VariableType);
+      if StrLengthPos > 0 then
+      begin
+        Inc(StrLengthPos, Length(StrLEN));
+        SavedVarType := VariableType;
+        VariableType := Trim(Copy(VariableType, StrLengthPos, MAXINT));
+        ParenPos := Pos('(', VariableType);
+        if ParenPos > 0 then
+        begin
+          VarLength := Trim(Copy(VariableType,1,ParenPos-1));
+          VariableType := Copy(VariableType, ParenPos+1, MAXINT);
+          ParenPos := Pos(')', VariableType);
+          Assert(ParenPos > 0);
+          VariableType := Trim(Copy(VariableType,1,ParenPos-1));
+          Rank := StrToInt(VariableType);
+          if Rank = 0 then
+          begin
+            WriteLn('  empty');
+            Exit;
+          end;
+        end
+        else
+        begin
+          VarLength := VariableType;
+          Rank := 1;
+        end;
+        StringLength := Max(StrToInt(VarLength), 255);
+      end
+      else
+      begin
+        StringLength := BMI_LENVARTYPE;
+        if get_var_rank(PAnsiChar(VarName), Rank) = 0 then
+        begin
+          Writeln('Rank: ', Rank);
+        end
+        else
+        begin
+          WriteLn('Failed to get Rank for "', VarName, '".');
+        end;
+      end;
+//        StringLength := StrToInt(VarLength);
+//        Rank := 1;
+      RankIndex := 0;
+//        SetLength(TypeNames, Rank);
+//        SetLength(VariableValues, (StringLength+1)*Rank);
+//        for RankIndex := 0 to Rank - 1 do
+      begin
+//          SetLength(TypeNames[RankIndex], (StringLength+1)*Rank);
+        for CharIndex := 0 to Length(VariableValues) -1 do
+        begin
+//            TypeNames[RankIndex][CharIndex] := AnsiChar(nil);
+          VariableValues[CharIndex] := #0;
+        end;
+      end;
+      PVarVal := @VariableValues;
+      PPVarVal := @PVarVal;
+      if get_value_string(PAnsiChar(VarName), PPVarVal) = 0 then
+      begin
+//          for RankIndex := 0 to Rank - 1 do
+        begin
+          ExtractStrArray2(VariableValues, NameTypes);
+//            ExtractStrArray(TypeNames[RankIndex], NameTypes);
+          if Length(NameTypes) > 0 then
+          begin
+            for NIndex := 0 to Length(NameTypes) - 1 do
+            begin
+              WriteLn('  ', Trim(NameTypes[NIndex]));
+            end;
+          end
+          else
+          begin
+            WriteLn('  no values extracted from "', VarName, '."');
+            Writeln(SavedVarType);
+            for CharIndex := 0 to Length(VariableValues) - 1 do
+            begin
+              Write(VariableValues[CharIndex]);
+            end;
+            Writeln;
+          end;
+        end;
+      end
+      else
+      begin
+        WriteLn('Failed to get values for "', VarName, '."');
+      end;
+    end;
+  end
+  else
+  begin
+    WriteLn;
+    WriteLn('Failed to get variable type for "', VarName, '".');
+  end;
+end;
+
+procedure GetStringVariables(Names: TStringList);
+var
+  Index: Integer;
+  VarName: AnsiString;
+  VariableType: AnsiString;
+  CharIndex: Integer;
+  StrLengthPos: Integer;
+  ParenPos: Integer;
+  VarLength: string;
+  StringLength: Integer;
+//  TypeNames: array of AnsiString;
+  Rank: Integer;
+  NameTypes: TAnsiStringArray;
+  NIndex: Integer;
+  SavedVarType: AnsiString;
+  RankIndex: Integer;
+  VariableValues: TAnsiCharArray;
+  PVarVal: PAnsiChar;
+  PPVarVal: PPAnsiChar;
+begin
+  for Index := 0 to Names.Count - 1 do
+  begin
+    VarName := AnsiString(Names[Index]);
+    GetStringVariable(VarName);
+//    SetLength(VariableType, BMI_LENVARTYPE);
+//    for CharIndex := 1 to BMI_LENVARTYPE do
+//    begin
+//      VariableType[CharIndex] := AnsiChar(nil);
+//    end;
+//    if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
+//    begin
+////      Writeln(VarName, ': ', VariableType);
+//      if Pos('STRING', VariableType) = 1 then
+//      begin
+//        Writeln;
+//        Writeln(VarName);
+//        StrLengthPos := Pos(StrLEN, VariableType);
+//        if StrLengthPos > 0 then
+//        begin
+//          Inc(StrLengthPos, Length(StrLEN));
+//          SavedVarType := VariableType;
+//          VariableType := Trim(Copy(VariableType, StrLengthPos, MAXINT));
+//          ParenPos := Pos('(', VariableType);
+//          if ParenPos > 0 then
+//          begin
+//            VarLength := Trim(Copy(VariableType,1,ParenPos-1));
+//            VariableType := Copy(VariableType, ParenPos+1, MAXINT);
+//            ParenPos := Pos(')', VariableType);
+//            Assert(ParenPos > 0);
+//            VariableType := Trim(Copy(VariableType,1,ParenPos-1));
+//            Rank := StrToInt(VariableType);
+//            if Rank = 0 then
+//            begin
+//              WriteLn('  empty');
+//              Continue;
+//            end;
+//          end
+//          else
+//          begin
+//            VarLength := VariableType;
+//            Rank := 1;
+//          end;
+//          StringLength := Max(StrToInt(VarLength), 255);
+//        end
+//        else
+//        begin
+//          StringLength := BMI_LENVARTYPE;
+//          if get_var_rank(PAnsiChar(VarName), Rank) = 0 then
+//          begin
+//            Writeln('Rank: ', Rank);
+//          end
+//          else
+//          begin
+//            WriteLn('Failed to get Rank for "', VarName, '".');
+//          end;
+//        end;
+////        StringLength := StrToInt(VarLength);
+////        Rank := 1;
+//        RankIndex := 0;
+////        SetLength(TypeNames, Rank);
+////        SetLength(VariableValues, (StringLength+1)*Rank);
+////        for RankIndex := 0 to Rank - 1 do
+//        begin
+////          SetLength(TypeNames[RankIndex], (StringLength+1)*Rank);
+//          for CharIndex := 0 to Length(VariableValues) -1 do
+//          begin
+////            TypeNames[RankIndex][CharIndex] := AnsiChar(nil);
+//            VariableValues[CharIndex] := #0;
+//          end;
+//        end;
+//        PVarVal := @VariableValues;
+//        PPVarVal := @PVarVal;
+//        if get_value_string(PAnsiChar(VarName), PPVarVal) = 0 then
+//        begin
+////          for RankIndex := 0 to Rank - 1 do
+//          begin
+//            ExtractStrArray2(VariableValues, NameTypes);
+////            ExtractStrArray(TypeNames[RankIndex], NameTypes);
+//            if Length(NameTypes) > 0 then
+//            begin
+//              for NIndex := 0 to Length(NameTypes) - 1 do
+//              begin
+//                WriteLn('  ', Trim(NameTypes[NIndex]));
+//              end;
+//            end
+//            else
+//            begin
+//              WriteLn('  no values extracted from "', VarName, '."');
+//              Writeln(SavedVarType);
+//              for CharIndex := 0 to Length(VariableValues) - 1 do
+//              begin
+//                Write(VariableValues[CharIndex]);
+//              end;
+//              Writeln;
+//            end;
+//          end;
+//        end
+//        else
+//        begin
+//          WriteLn('Failed to get values for "', VarName, '."');
+//        end;
+//      end;
+//    end
+//    else
+//    begin
+//      WriteLn;
+//      WriteLn('Failed to get variable type for "', VarName, '".');
+//    end;
+  end;
+end;
 
 procedure GetSimulationInputs(Names: TStringList);
 var
@@ -143,6 +438,7 @@ begin
   VarName := '__INPUT__/MODFLOW/NAM/FTYPE';
   if Names.IndexOf(VarName) >= 0 then
   begin
+    Writeln(VarName);
     SetLength(VariableType, BMI_LENVARTYPE);
     for CharIndex := 1 to BMI_LENVARTYPE do
     begin
@@ -196,6 +492,119 @@ begin
     end;
   end;
 
+  VarName := '__INPUT__/MODFLOW/PKGNAMES';
+  if Names.IndexOf(VarName) >= 0 then
+  begin
+    Writeln(VarName);
+    SetLength(VariableType, BMI_LENVARTYPE);
+    for CharIndex := 1 to BMI_LENVARTYPE do
+    begin
+      VariableType[CharIndex] := AnsiChar(nil);
+    end;
+    if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
+    begin
+      Writeln(VarName, ': ', VariableType);
+    end;
+    StrLengthPos := Pos(StrLEN, VariableType);
+    Assert(StrLengthPos > 0);
+    Inc(StrLengthPos, Length(StrLEN));
+    VariableType := Trim(Copy(VariableType, StrLengthPos, MAXINT));
+    ParenPos := Pos('(', VariableType);
+    if ParenPos > 0 then
+    begin
+      VarLength := Trim(Copy(VariableType,1,ParenPos-1));
+    end
+    else
+    begin
+      VarLength := VariableType;
+    end;
+    StringLength := StrToInt(VarLength);
+    SetLength(TypeNames, 1);
+//    SetLength(TypeNamesAddr, 6);
+
+    for NameIndex := 0 to Length(TypeNames) - 1 do
+    begin
+      SetLength(TypeNames[NameIndex], (StringLength+1)*6);
+      for CharIndex := 1 to (StringLength+1)*6 do
+      begin
+        TypeNames[NameIndex][CharIndex] := AnsiChar(nil);
+      end;
+//      TypeNamesAddr[NameIndex] := @TypeNames[NameIndex];
+    end;
+    if get_value_string(PAnsiChar(VarName), @TypeNames[0]) = 0 then
+    begin
+      for NameIndex := 0 to Length(TypeNames) - 1 do
+      begin
+        Writeln(Length(TypeNames[NameIndex]));
+        ExtractStrArray(TypeNames[NameIndex], NameTypes);
+        for NIndex := 0 to Length(NameTypes) - 1 do
+        begin
+          WriteLn(Trim(NameTypes[NIndex]));
+        end;
+      end;
+    end
+    else
+    begin
+      WriteLn('Failed get_value_string');
+    end;
+  end;
+
+  VarName := '__INPUT__/MODFLOW/NAM/PNAME';
+  if Names.IndexOf(VarName) >= 0 then
+  begin
+    Writeln(VarName);
+    SetLength(VariableType, BMI_LENVARTYPE);
+    for CharIndex := 1 to BMI_LENVARTYPE do
+    begin
+      VariableType[CharIndex] := AnsiChar(nil);
+    end;
+    if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
+    begin
+      Writeln(VarName, ': ', VariableType);
+    end;
+    StrLengthPos := Pos(StrLEN, VariableType);
+    Assert(StrLengthPos > 0);
+    Inc(StrLengthPos, Length(StrLEN));
+    VariableType := Trim(Copy(VariableType, StrLengthPos, MAXINT));
+    ParenPos := Pos('(', VariableType);
+    if ParenPos > 0 then
+    begin
+      VarLength := Trim(Copy(VariableType,1,ParenPos-1));
+    end
+    else
+    begin
+      VarLength := VariableType;
+    end;
+    StringLength := StrToInt(VarLength);
+    SetLength(TypeNames, 1);
+//    SetLength(TypeNamesAddr, 6);
+
+    for NameIndex := 0 to Length(TypeNames) - 1 do
+    begin
+      SetLength(TypeNames[NameIndex], (StringLength+1)*6);
+      for CharIndex := 1 to (StringLength+1)*6 do
+      begin
+        TypeNames[NameIndex][CharIndex] := AnsiChar(nil);
+      end;
+//      TypeNamesAddr[NameIndex] := @TypeNames[NameIndex];
+    end;
+    if get_value_string(PAnsiChar(VarName), @TypeNames[0]) = 0 then
+    begin
+      for NameIndex := 0 to Length(TypeNames) - 1 do
+      begin
+        Writeln(Length(TypeNames[NameIndex]));
+        ExtractStrArray(TypeNames[NameIndex], NameTypes);
+        for NIndex := 0 to Length(NameTypes) - 1 do
+        begin
+          WriteLn(Trim(NameTypes[NIndex]));
+        end;
+      end;
+    end
+    else
+    begin
+      WriteLn('Failed get_value_string');
+    end;
+  end;
 
   if Names.IndexOf('TDIS/ENDOFPERIOD') >= 0 then
   begin
@@ -315,6 +724,10 @@ begin
     if Execute then
     begin
      SetCurrentDir(FileName);
+    end
+    else
+    begin
+      Exit;
     end;
   finally
     Free;
@@ -405,8 +818,12 @@ begin
       end;
     end;
 
+    GetStringVariable('MODFLOW/CHD-1/BOUNDNAME_CST');
+
+
     GetSimulationInputs(NameList);
     GetPackageNames(NameList);
+    GetStringVariables(NameList);
     for Index := 0 to NameList.Count - 1 do
     begin
       VariableName := AnsiString(NameList[Index]);
