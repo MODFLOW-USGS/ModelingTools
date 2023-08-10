@@ -25,8 +25,9 @@ function get_output_item_count(count : pcint) : cint;cdecl;external;
 function get_value_int(c_var_address : pchar; c_arr_ptr: ppcint) : cint;cdecl;external;
 function set_value_int(c_var_address : pchar; c_arr_ptr: ppcint) : cint;cdecl;external;
 function get_value_string(c_var_address : pchar; c_arr_ptr: ppcchar) : cint;cdecl;external;
-function get_last_bmi_error(c_error : pchar) : cint;cdecl;external;
+function get_last_bmi_error(c_error : PErrorMessage) : cint;cdecl;external;
 function get_var_type(c_var_address: pchar; c_var_type: pchar): cint; cdecl; external;
+function get_var_rank(c_var_address: pchar; Var c_var_rank: Integer): cint; cdecl; external;
 
 
 Procedure GetAndWriteStringVariable(Name: string);
@@ -36,6 +37,7 @@ var
   pVar : pcchar;
   ppVar : ppcchar;
   ErrorMessage: TErrorMessage;
+  Rank: Integer;
   procedure InitializeVariableType;
   var
     Index: Integer;
@@ -48,6 +50,18 @@ var
 begin
   InitializeVariableType;
   Writeln;
+  Rank := -1;
+  if get_var_rank(Pchar(Name), Rank) = 0 then
+  begin
+    WriteLn('Variable rank for ', Name, ': ', Rank);
+  end
+  else
+  begin
+    Writeln('Failed to get variable rank for "', Name, '".');
+    get_last_bmi_error(@ErrorMessage);
+    Writeln(ErrorMessage);
+  end;
+
   if get_var_type(Pchar(Name), PChar(VariableType)) = 0 then
   begin
     // If you get here, the variable exists.
@@ -79,6 +93,7 @@ begin
     Writeln(ErrorMessage);
   end;
 
+
 end;
 
 var
@@ -91,17 +106,17 @@ var
   mode : pcint;
   pmode : ppcint;
   m : cint;
-  err : array[0..255] of char;
+  //err : array[0..255] of char;
   tdis6_varaddress : array[0..23] of char = '__INPUT__/SIM/NAM/TDIS6';
   tdis6_fname : array[0..301] of char;
   ptdis : pcchar;
   pptdis : ppcchar;
-  Sto6_VarAddress : array[0..23] of char = 'MODFLOW/STO/INPUT_FNAME';
-  Sto6_fname : array[0..255] of char;
-  psto : pcchar;
-  ppsto : ppcchar;
-  VariableType: array[0..255] of char;
-  Index: Integer;
+//  Sto6_VarAddress : array[0..23] of char = 'MODFLOW/STO/INPUT_FNAME';
+//  Sto6_fname : array[0..255] of char;
+//  psto : pcchar;
+//  ppsto : ppcchar;
+//  VariableType: array[0..255] of char;
+//  Index: Integer;
 begin
   version := @vstr; 
   component := @cname;

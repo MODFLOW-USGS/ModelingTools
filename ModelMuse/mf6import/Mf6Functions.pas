@@ -71,9 +71,9 @@ function get_var_rank(c_var_address: PAnsiChar; Var c_var_rank: Integer): cint; 
 function get_value_string(c_var_address: PAnsiChar; c_arr_ptr: PPAnsiChar): cint; cdecl; external 'libmf6.dll';
 function get_value_bool(c_var_address: PAnsiChar; c_arr_ptr: PLongBool): cint; cdecl; external 'libmf6.dll';
 function get_var_nbytes(c_var_address: PAnsiChar; var var_nbytes: Integer): cint; cdecl; external 'libmf6.dll';
-//function get_var_shape(c_var_address: PAnsiChar; var c_var_shape: TGridShape) result(bmi_status)
 
 function get_var_itemsize(c_var_address: PAnsiChar; var var_size: integer): cint; cdecl; external 'libmf6.dll';
+function get_value(c_var_address: PAnsiChar; dest: Pointer): cint; cdecl; external 'libmf6.dll';
 
 // other functions
 {

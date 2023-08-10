@@ -3,6 +3,11 @@ program HelloMf6;
 {$APPTYPE CONSOLE}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   System.SysUtils,
   Classes,
   Modflow6ConstantsUnit in 'Modflow6ConstantsUnit.pas',
