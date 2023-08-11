@@ -13,6 +13,30 @@ type
   TDoubleArray = array of double;
   TLongBoolArray = array of LongBool;
 
+  TPackage = record
+    PackageType: AnsiString;
+    PackageName: AnsiString
+  end;
+
+  TPackages = array of TPackage;
+
+  TVertex = record
+    VertexNumber: Integer;
+    X: double;
+    Y: double;
+  end;
+
+  TVertices = array of TVertex;
+
+  TCell = record
+    CellNumber: integer;
+    CellX: double;
+    CellY: double;
+    VertexNumbers: TCIntArray;
+  end;
+
+  TCells = array of TCell;
+
 procedure ImportModel;
 
 procedure GetStringVariable(VarName: AnsiString; var NameTypes: TAnsiStringArray);
@@ -30,6 +54,7 @@ const
 
 var
   ErrorMessages: TStringList;
+  NameList: TAnsiStringList;
 
 type
   TAnsiCharArray = array[0..255*10] of AnsiChar;
@@ -107,27 +132,18 @@ begin
   end;
 end;
 
-function GetModelType: string;
+function GetModelType: TAnsiStringArray;
 Const
   ModelTypeVarName = '__INPUT__/SIM/NAM/MTYPE';
-var
-  NameTypes: TAnsiStringArray;
 begin
-  GetStringVariable(ModelTypeVarName, NameTypes);
-  Assert(Length(NameTypes) = 1);
-  result := Trim(NameTypes[0]);
-  Assert((result = 'GWF6') or (result = 'GWT6'));
+  GetStringVariable(ModelTypeVarName, result);
 end;
 
-function GetModelName: string;
+function GetModelName: TAnsiStringArray;
 const
   ModelNameVarName = '__INPUT__/SIM/NAM/MNAME';
-var
-  NameTypes: TAnsiStringArray;
 begin
-  GetStringVariable(ModelNameVarName, NameTypes);
-  Assert(Length(NameTypes) = 1);
-  result := Trim(NameTypes[0]);
+  GetStringVariable(ModelNameVarName, result);
 end;
 
 function GetNumberOfPeriods: Integer;
@@ -174,42 +190,619 @@ begin
 end;
 
 
-procedure GetPackageNames(Names: TAnsiStringList);
+function GetPackageNames(ModelName: AnsiString): TPackages;
 var
   Index: Integer;
-  VarName: AnsiString;
-  VariableType: AnsiString;
-  CharIndex: Integer;
-  Rank: Integer;
-  Size: Integer;
-  VariableTypeAddress: PAnsiChar;
-  StrLengthPos: Integer;
-  StringLength: Integer;
-  ParenPos: Integer;
-  VarLength: AnsiString;
-  Pkgtype: AnsiString;
-  NameTypes: TAnsiStringArray;
-  NameIndex: Integer;
+  PackageNameString: AnsiString;
+  PackageTypeString: AnsiString;
+  PackageTypes: TAnsiStringArray;
+  PackageNames: TAnsiStringArray;
 begin
-  Pkgtype:= 'PACKAGE_TYPE';
-  for Index := 0 to Names.Count - 1 do
+  PackageTypeString := '__INPUT__/' + ModelName + '/PKGTYPES';
+  PackageNameString := '__INPUT__/' + ModelName + '/PKGNAMES';
+  GetStringVariable(PackageTypeString, PackageTypes);
+  GetStringVariable(PackageNameString, PackageNames);
+  Assert(Length(PackageNames) = Length(PackageTypes));
+  SetLength(Result, Length(PackageNames));
+  for Index := 0 to Length(PackageNames) - 1 do
   begin
-    VarName := AnsiString(Names[Index]);
-    if AnsiPos(Pkgtype, VarName) > 0 then
+    Result[Index].PackageType := PackageTypes[Index];
+    Result[Index].PackageName := PackageNames[Index];
+  end;
+
+  for Index := 0 to Length(PackageNames) - 1 do
+  begin
+    Writeln(PackageTypes[Index], ' ', PackageNames[Index])
+  end;
+
+end;
+
+function GetModflowGridType(ModelName: AnsiString; var GridShape: TCIntArray): TMf6GridType;
+var
+  MShapeName: AnsiString;
+begin
+  MShapeName := '__INPUT__/' + ModelName + '/MODEL_SHAPE';
+  GetIntegerVariable(MShapeName, GridShape);
+  Assert(Length(GridShape) in [1..3]);
+  result := TMf6GridType(Length(GridShape) -1);
+end;
+
+function GetTimeUnits: TMf6TimeUnits;
+var
+  TimeUnits: TCIntArray;
+  VarName: AnsiString;
+begin
+  VarName := 'TDIS/ITMUNI';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, TimeUnits);
+    Assert(Length(TimeUnits) = 1);
+    Assert(TimeUnits[0] in [0..5]);
+    result := TMf6TimeUnits(TimeUnits[0]);
+  end
+  else
+  begin
+    result := mtuUndefined;
+  end;
+end;
+
+function GetLengthUnit(ModelName, DisPackageName: AnsiString): Tmf6LengthUnit;
+var
+  VarName: AnsiString;
+  LengthUnits: TAnsiStringArray;
+begin
+  Result := mluUndefined;
+  VarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/LENGTH_UNITS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetStringVariable(VarName, LengthUnits);
+    Assert(Length(LengthUnits) = 1);
+    if LengthUnits[0] = 'UNDEFINED' then
     begin
+      Result := mluUndefined;
+    end
+    else if LengthUnits[0] = 'FEET' then
+    begin
+      Result := mluFeet;
+    end
+    else if LengthUnits[0] = 'METERS' then
+    begin
+      Result := mluMeters;
+    end
+    else if LengthUnits[0] = 'CENTIMETERS' then
+    begin
+      Result := mluCentimeters;
+    end
+    else
+    begin
+      Assert(False)
+    end;
+  end
+  else
+  begin
+    Result := mluUndefined;
+  end;
+end;
 
-      GetStringVariable(VarName, NameTypes);
-      for NameIndex := 0 to Length(NameTypes) - 1 do
-      begin
-        Writeln(NameTypes[NameIndex]);
-        if Trim(NameTypes[NameIndex]) = 'CHD' then
-        begin
+function GetXOrigin(ModelName, DisPackageName: AnsiString): Double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + DisPackageName + '/XORIGIN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
 
-        end;
-      end;
+function GetYOrigin(ModelName, DisPackageName: AnsiString): Double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + DisPackageName + '/YORIGIN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetGridRotation(ModelName, DisPackageName: AnsiString): Double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + DisPackageName + '/ANGROT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+// Get column widths
+function GetDelR(ModelName, DisPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/DELR';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+// Get row widths
+function GetDelc(ModelName, DisPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/DELC';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+function GetTop(ModelName, DisPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/TOP';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+function GetBottom(ModelName, DisPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/BOTM';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+function GetIDomain(ModelName, DisPackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/IDOMAIN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetVertices(ModelName, DisPackageName: AnsiString): TVertices;
+var
+  IVarName: AnsiString;
+  XVarName: AnsiString;
+  YVarName: AnsiString;
+  IArray: TCIntArray;
+  XArray: TDoubleArray;
+  YArray: TDoubleArray;
+  Index: Integer;
+begin
+  IVarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/IV';
+  XVarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/XV';
+  YVarName := '__INPUT__/' + ModelName + '/' + DisPackageName + '/YV';
+  Assert(NameList.IndexOf(IVarName) >= 0);
+  Assert(NameList.IndexOf(XVarName) >= 0);
+  Assert(NameList.IndexOf(YVarName) >= 0);
+  GetIntegerVariable(IVarName, IArray);
+  GetDoubleVariable(XVarName, XArray);
+  GetDoubleVariable(YVarName, YArray);
+  Assert(Length(IArray) = Length(XArray));
+  Assert(Length(IArray) = Length(YArray));
+  SetLength(result, Length(IArray));
+  for Index := 0 to Length(result) - 1 do
+  begin
+    result[Index].VertexNumber := IArray[Index];
+    result[Index].X := XArray[Index];
+    result[Index].Y := YArray[Index];
+  end;
+end;
+
+function GetDisvCells(ModelName, DisPackageName: AnsiString): TCells;
+var
+  ICellVarName: AnsiString;
+  XCellVarName: AnsiString;
+  YCellVarName: AnsiString;
+  NVertCellVarName: AnsiString;
+  IVertCellVarName: AnsiString;
+  ICell: TCIntArray;
+  XCell: TDoubleArray;
+  YCell: TDoubleArray;
+  NVert: TCIntArray;
+  IVert: TCIntArray;
+  CellIndex: Integer;
+  VertIndex: Integer;
+  VertexCount: cint;
+  VIndex: Integer;
+  VertexArrayLength: Integer;
+begin
+  ICellVarName := '__INPUT__/'+ ModelName +'/' + DisPackageName + '/ICELL2D';
+  XCellVarName := '__INPUT__/'+ ModelName +'/' + DisPackageName + '/XC';
+  YCellVarName := '__INPUT__/'+ ModelName +'/' + DisPackageName + '/YC';
+  NVertCellVarName := '__INPUT__/'+ ModelName +'/' + DisPackageName + '/NCVERT';
+  IVertCellVarName := '__INPUT__/'+ ModelName +'/' + DisPackageName + '/ICVERT';
+
+  Assert(NameList.IndexOf(ICellVarName) >= 0);
+  Assert(NameList.IndexOf(XCellVarName) >= 0);
+  Assert(NameList.IndexOf(YCellVarName) >= 0);
+  Assert(NameList.IndexOf(NVertCellVarName) >= 0);
+  Assert(NameList.IndexOf(IVertCellVarName) >= 0);
+
+  GetIntegerVariable(ICellVarName, ICell);
+  GetDoubleVariable(XCellVarName, XCell);
+  GetDoubleVariable(YCellVarName, YCell);
+  GetIntegerVariable(NVertCellVarName, NVert);
+  GetIntegerVariable(IVertCellVarName, IVert);
+
+  Assert(Length(ICell) = Length(XCell));
+  Assert(Length(ICell) = Length(YCell));
+  Assert(Length(ICell) = Length(NVert));
+
+  VertIndex := 0;
+  SetLength(result, Length(ICell));
+  VertexArrayLength := Length(IVert);
+  for CellIndex := 0 to Length(result) - 1 do
+  begin
+    result[CellIndex].CellNumber := ICell[CellIndex];
+    result[CellIndex].CellX := XCell[CellIndex];
+    result[CellIndex].CellY := YCell[CellIndex];
+    VertexCount := NVert[CellIndex];
+    SetLength(result[CellIndex].VertexNumbers, VertexCount);
+    for VIndex := 0 to VertexCount - 1 do
+    begin
+      Assert(VertIndex < VertexArrayLength);
+      result[CellIndex].VertexNumbers[VIndex] := IVert[VertIndex];
+      Inc(VertIndex);
     end;
   end;
-  Writeln;
+  Assert(VertIndex = VertexArrayLength);
+end;
+
+function GetNpfAveraging(ModelName, NpfPackageName: AnsiString): TNpfAveraging;
+var
+  VarName: AnsiString;
+  Values: TAnsiStringArray;
+begin
+  VarName := '__INPUT__/'+ ModelName + '/' + NpfPackageName +'/CELLAVG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetStringVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    if Values[0] = 'LOGARITHMIC' then
+    begin
+      Result := naLog
+    end
+    else if Values[0] = 'AMT-LMK' then
+    begin
+      Result := naAritimeticLog
+    end
+    else if Values[0] = 'AMT-HMK' then
+    begin
+      Result := naHarmonicLog
+    end
+    else
+    begin
+      Assert(False)
+    end;
+  end
+  else
+  begin
+    Result := naHarmonic;
+  end;
+end;
+
+function UseTHICKSTRT(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/ITHICKSTRT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function UseVARIABLECV(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IVARCV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function UseDEWATERED(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IDEWATCV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function UsePerched(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IPERCHED';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function UseREWET(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IREWET';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function GetWETFCT(ModelName, NpfPackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+//  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/WETFCT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+function GetIWETIT(ModelName, NpfPackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+//  Values: TDoubleArray;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IWETIT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+function GetIHDWET(ModelName, NpfPackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+//  Values: TDoubleArray;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IHDWET';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+function UseK22OVERK(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IK22OVERK';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function UseK33OVERK(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IK33OVERK';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function GetICELLTYPE(ModelName, NpfPackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/ICELLTYPE';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetIntegerVariable(VarName, result);
+end;
+
+function GetK(ModelName, NpfPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/K';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+function GetK22(ModelName, NpfPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/K22';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetK33(ModelName, NpfPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/K33';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetAngle1(ModelName, NpfPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/ANGLE1';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetAngle2(ModelName, NpfPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/ANGLE2';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetAngle3(ModelName, NpfPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/ANGLE3';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetWetDry(ModelName, NpfPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName +'/WETDRY';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
 end;
 
 procedure AlternateGetStringVariable2(VarName: AnsiString);
@@ -332,7 +925,7 @@ begin
     if get_last_bmi_error(@Error) = 0 then
     begin
       Writeln(Error);
-      ErrorMessages.Add(Error);
+      ErrorMessages.Add(string(Error));
     end
     else
     begin
@@ -488,30 +1081,18 @@ var
   ParenPos: Integer;
   VarLength: string;
   StringLength: Integer;
-//  TypeNames: array of AnsiString;
   Rank: Integer;
-//  NameTypes: TAnsiStringArray;
   NIndex: Integer;
   SavedVarType: AnsiString;
-//  RankIndex: Integer;
   VariableValues: AnsiString;
   PVarVal: PAnsiChar;
   PPVarVal: PPAnsiChar;
 begin
   InitializeVariableType(VariableType);
-//  SetLength(VariableType, BMI_LENVARTYPE);
-//  for CharIndex := 1 to BMI_LENVARTYPE do
-//  begin
-//    VariableType[CharIndex] := #0;
-//  end;
   if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
   begin
-//      Writeln(VarName, ': ', VariableType);
     if AnsiPos('STRING', VariableType) = 1 then
     begin
-//      Writeln;
-//      Writeln(VarName);
-//      AlternateGetStringVariable2(VarName);
       StrLengthPos := AnsiPos(StrLEN, VariableType);
       if StrLengthPos > 0 then
       begin
@@ -552,27 +1133,17 @@ begin
           WriteLn('Failed to get Rank for "', VarName, '".');
         end;
       end;
-//        StringLength := StrToInt(VarLength);
-//        Rank := 1;
-//      RankIndex := 0;
-//        SetLength(TypeNames, Rank);
         SetLength(VariableValues, (StringLength+1)*Rank);
-//        for RankIndex := 0 to Rank - 1 do
       begin
-//          SetLength(TypeNames[RankIndex], (StringLength+1)*Rank);
         for CharIndex := 1 to Length(VariableValues) do
         begin
-//            TypeNames[RankIndex][CharIndex] := AnsiChar(nil);
           VariableValues[CharIndex] := #0;
         end;
       end;
-//      PVarVal := @VariableValues;
-//      PVarVal := @VariableValues[1];
       PVarVal := PAnsiChar(VariableValues);
       PPVarVal := @PVarVal;
       if get_value_string(PAnsiChar(VarName), PPVarVal) = 0 then
       begin
-//          for RankIndex := 0 to Rank - 1 do
         begin
         try
           ExtractStrArray(VariableValues, NameTypes);
@@ -591,12 +1162,6 @@ begin
           else
           begin
             WriteLn('  no values extracted from "', VarName, '."');
-//            Writeln(SavedVarType);
-//            for CharIndex := 0 to Length(VariableValues) - 1 do
-//            begin
-//              Write(VariableValues[CharIndex]);
-//            end;
-//            Writeln;
           end;
         end;
       end
@@ -754,6 +1319,7 @@ var
   IntArray: TCIntArray;
   RealArray: TDoubleArray;
   BoolArray: TLongBoolArray;
+  WriteValues: Boolean;
   procedure InitializeVarType;
   var
     CharIndex: Integer;
@@ -768,6 +1334,11 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
+    WriteValues := Pos('NPF', VarName) > 0;
+    if not WriteValues then
+    begin
+      Continue;
+    end;
     InitializeVarType;
     if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
     begin
@@ -1037,6 +1608,110 @@ begin
   end;
 end;
 
+procedure GetTimeDiscretization;
+var
+  Nper: Integer;
+  NStep: TCIntArray;
+  PerLen: TDoubleArray;
+  Tsmult: TDoubleArray;
+  PeriodIndex: Integer;
+begin
+  Nper := GetNumberOfPeriods;
+  Writeln(Nper);
+  NStep := GetNumberOfSteps;
+  PerLen := GetPerLen;
+  Tsmult := GetTsmult;
+  for PeriodIndex := 0 to Nper - 1 do
+  begin
+    Writeln(PerLen[PeriodIndex], ' ', NStep[PeriodIndex], ' ', Tsmult[PeriodIndex]);
+  end;
+  Writeln(Ord(GetTimeUnits));
+end;
+
+procedure GetDiscretization(ModelNames: TAnsiStringArray;
+  Packages: TPackages; Mf6GridType: TMf6GridType);
+var
+  DisPackageName: AnsiString;
+  PackageIndex: Integer;
+  LengthUnit: Tmf6LengthUnit;
+  RotationAngle: Double;
+  Vertices: TVertices;
+  Cells: TCells;
+  ACell: TCell;
+  VIndex: Integer;
+  DelR: TDoubleArray;
+  DelC: TDoubleArray;
+  GridTop: TDoubleArray;
+  GridBottom: TDoubleArray;
+  IDomain: TCIntArray;
+  Index: Integer;
+  PackageID: AnsiString;
+begin
+  case Mf6GridType of
+    gtDISU: PackageID := 'DISU6';
+    gtDISV: PackageID := 'DISV6';
+    gtDIS: PackageID := 'DIS6';
+  end;
+  DisPackageName := '';
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = PackageID then
+    begin
+      DisPackageName := Packages[PackageIndex].PackageName;
+      Break;
+    end;
+  end;
+  Assert(DisPackageName <> '');
+  LengthUnit := GetLengthUnit(ModelNames[0], DisPackageName);
+  WriteLn(Ord(LengthUnit));
+  Writeln(GetXOrigin(ModelNames[0], DisPackageName));
+  Writeln(GetYOrigin(ModelNames[0], DisPackageName));
+  RotationAngle := GetGridRotation(ModelNames[0], DisPackageName);
+  Writeln(RotationAngle);
+  case Mf6GridType of
+    gtDISU:
+      Assert(False);
+    gtDISV:
+      begin
+        Vertices := GetVertices(ModelNames[0], DisPackageName);
+        for Index := 0 to Length(Vertices) - 1 do
+        begin
+          WriteLn(Vertices[Index].VertexNumber, ''#9'', Vertices[Index].X, ''#9'', Vertices[Index].Y);
+        end;
+        Cells := GetDisvCells(ModelNames[0], DisPackageName);
+        for Index := 0 to Length(Cells) - 1 do
+        begin
+          ACell := Cells[Index];
+          Write(ACell.CellNumber, ''#9'', ACell.CellX, ''#9'', ACell.CellY);
+          for VIndex := 0 to Length(ACell.VertexNumbers) - 1 do
+          begin
+            Write(''#9'', ACell.VertexNumbers[VIndex]);
+          end;
+          WriteLn;
+        end;
+      end;
+    gtDIS:
+      begin
+        DelR := GetDelR(ModelNames[0], DisPackageName);
+        WriteLn('DelR');
+        for Index := 0 to Length(DelR) - 1 do
+        begin
+          Write(' ', DelR[Index]);
+        end;
+        Writeln;
+        DelC := GetDelC(ModelNames[0], DisPackageName);
+        WriteLn('DelC');
+        for Index := 0 to Length(DelC) - 1 do
+        begin
+          Write(' ', DelC[Index]);
+        end;
+      end;
+  end;
+  GridTop := GetTop(ModelNames[0], DisPackageName);
+  GridBottom := GetBottom(ModelNames[0], DisPackageName);
+  IDomain := GetIDomain(ModelNames[0], DisPackageName);
+end;
+
 procedure ImportModel;
 var
   version : PAnsiChar;
@@ -1050,7 +1725,6 @@ var
   Names: array of AnsiChar;
   NameIndex: Integer;
   NameBuilder: TStringBuilder;
-  NameList: TAnsiStringList;
 //  NameList2: TStringList;
   CharIndex: Integer;
   AChar: AnsiChar;
@@ -1093,19 +1767,28 @@ var
   ArrayLength: Integer;
 //  LenUni: cint;
   LenUniArray: array of cint;
-  k: array of Double;
+//  k: array of Double;
   Mode: array of cint;
   ModeString: AnsiString;
   VariableName: AnsiString;
   VariableType: AnsiString;
   Rank: Integer;
   RankIndex: Integer;
-  Nper: Integer;
-  PeriodIndex: Integer;
-  StepIndex: Integer;
-  NStep: TCIntArray;
-  PerLen: TDoubleArray;
-  Tsmult: TDoubleArray;
+  ModelNames: TAnsiStringArray;
+  ModelTypes: TAnsiStringArray;
+  MFGridShape: TCIntArray;
+  Packages: TPackages;
+  PackageID: Ansistring;
+  PackageIndex: Integer;
+  NpfPackageName: AnsiString;
+  CellType: TCIntArray;
+  K: TDoubleArray;
+  K22: TDoubleArray;
+  K33: TDoubleArray;
+  Angle1: TDoubleArray;
+  Angle2: TDoubleArray;
+  Angle3: TDoubleArray;
+  WetDry: TDoubleArray;
 begin
   with TFileOpenDialog.Create(nil) do
   try
@@ -1206,39 +1889,73 @@ begin
       end;
     end;
 
-    WriteLn(GetModelType);
-    Writeln(GetModelName);
-    Nper := GetNumberOfPeriods;
-    Writeln(Nper);
-    NStep := GetNumberOfSteps;
-    PerLen := GetPerLen ;
-    Tsmult := GetTsmult;
-    for PeriodIndex := 0 to Nper - 1 do
+    ModelTypes := GetModelType;
+    ModelNames := GetModelName;
+    Assert(Length(ModelNames) = Length(ModelTypes));
+    for Index := 0 to Length(ModelNames) - 1 do
     begin
-      Writeln(PerLen[PeriodIndex], ' ', NStep[PeriodIndex], ' ', Tsmult[PeriodIndex]);
+      WriteLn(ModelNames[Index], ' ', ModelTypes[Index]);
     end;
-//    for PeriodIndex := 0 to Nper - 2 do
-//    begin
-//      for StepIndex := 0 to NStep - 1 do
-//      begin
-//        if StepIndex = 0 then
-//        begin
-//          NStep := GetNumberOfSteps;
-//          PerLen := GetPerLen ;
-//          Tsmult := GetTsmult;
-//          Writeln(PerLen, ' ', NStep, ' ', Tsmult);
-//        end;
-//      end;
-//
-//    end;
+    GetTimeDiscretization;
 //    GetStringVariable('MODFLOW/CHD-1/BOUNDNAME_CST');
 
     update();
 
     GetSimulationValues(NameList);
     GetSimulationInputs(NameList);
-    GetPackageNames(NameList);
-//    GetStringVariables(NameList);
+    Packages := GetPackageNames(ModelNames[0]);
+    Mf6GridType := GetModflowGridType(ModelNames[0], MFGridShape);
+    Writeln(Ord(Mf6GridType));
+    GetDiscretization(ModelNames, Packages, Mf6GridType);
+
+    NpfPackageName := '';
+    for PackageIndex := 0 to Length(Packages) - 1 do
+    begin
+      if Packages[PackageIndex].PackageType = 'NPF6' then
+      begin
+        NpfPackageName := Packages[PackageIndex].PackageName;
+        break;
+      end;
+    end;
+    Assert(NpfPackageName <> '');
+
+    Writeln(Ord(GetNpfAveraging(ModelNames[0], NpfPackageName)));
+    WriteLn(UseTHICKSTRT(ModelNames[0], NpfPackageName));
+    if UseVARIABLECV(ModelNames[0], NpfPackageName) then
+    begin
+      WriteLn(True, UseDEWATERED(ModelNames[0], NpfPackageName));
+    end
+    else
+    begin
+      WriteLn(False);
+    end;
+    WriteLn(UsePerched(ModelNames[0], NpfPackageName));
+
+    if UseREWET(ModelNames[0], NpfPackageName) then
+    begin
+      WriteLn(True,
+        GetWETFCT(ModelNames[0], NpfPackageName),
+        GetIWETIT(ModelNames[0], NpfPackageName),
+        GetIHDWET(ModelNames[0], NpfPackageName));
+    end
+    else
+    begin
+      WriteLn(False);
+    end;
+    WriteLn(UseK22OVERK(ModelNames[0], NpfPackageName));
+    WriteLn(UseK33OVERK(ModelNames[0], NpfPackageName));
+
+    CellType := GetICELLTYPE(ModelNames[0], NpfPackageName);
+    K := GetK(ModelNames[0], NpfPackageName);
+    K22 := GetK22(ModelNames[0], NpfPackageName);
+    K33 := GetK33(ModelNames[0], NpfPackageName);
+    Angle1 := GetAngle1(ModelNames[0], NpfPackageName);
+    Angle2 := GetAngle2(ModelNames[0], NpfPackageName);
+    Angle3 := GetAngle3(ModelNames[0], NpfPackageName);
+    WetDry := GetWetDry(ModelNames[0], NpfPackageName);
+
+//    ModelName
+
     for Index := 0 to NameList.Count - 1 do
     begin
       VariableName := AnsiString(NameList[Index]);
@@ -1453,6 +2170,7 @@ begin
       end;
     end;
   end;
+
 
   DimCount := 0;
   if MODEL_SHAPE <> '' then

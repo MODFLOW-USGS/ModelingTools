@@ -24,6 +24,9 @@ type
   TVanName = array[0..BMI_LENVARADDRESS-1] of AnsiChar;
   TVarNames = array of TVanName;
   TMf6GridType = (gtDISU, gtDISV, gtDIS);
+  TMf6TimeUnits = (mtuUndefined, mtuSeconds, mtuMinutes, mtuHours, mtuDays, mtuYears);
+  Tmf6LengthUnit = (mluUndefined, mluFeet, mluMeters, mluCentimeters);
+  TNpfAveraging = (naHarmonic, naLog, naAritimeticLog, naHarmonicLog);
 
 function initialize () : cint;cdecl;external 'libmf6.dll';
 function update () : cint;cdecl;external 'libmf6.dll';
