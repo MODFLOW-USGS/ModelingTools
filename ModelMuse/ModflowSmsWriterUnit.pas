@@ -117,7 +117,7 @@ begin
       srmNone:
         WriteString('NONE');
       srmReverseCuthillMcKee:
-        WriteString('RKM');
+        WriteString('RCM');
       srmMinimumDegreeOrdering:
         WriteString('MD');
     else

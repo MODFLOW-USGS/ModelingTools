@@ -13,6 +13,15 @@ type
   TDoubleArray = array of double;
   TLongBoolArray = array of LongBool;
 
+  TStressPeriod = record
+    Length: Double;
+    NStep: Integer;
+    TSMult: double;
+    Transient: Boolean;
+  end;
+
+  TStressPeriods = array of TStressPeriod;
+
   TPackage = record
     PackageType: AnsiString;
     PackageName: AnsiString
@@ -37,6 +46,12 @@ type
 
   TCells = array of TCell;
 
+  TMfCell = record
+    Layer: Integer;
+    Row: Integer;
+    Column: Integer;
+  end;
+
 procedure ImportModel;
 
 procedure GetStringVariable(VarName: AnsiString; var NameTypes: TAnsiStringArray);
@@ -47,17 +62,20 @@ procedure GetLogicalVariable(VarName: AnsiString; var BoolArray: TLongBoolArray)
 implementation
 
 uses
-  Vcl.Dialogs, System.AnsiStrings, JclAnsiStrings, System.Math;
+  Vcl.Dialogs, System.AnsiStrings, JclAnsiStrings, System.Math,
+  System.Generics.Collections;
 
 const
   StrLEN: Ansistring = 'LEN=';
 
+type
+  TAnsiCharArray = array[0..255*10] of AnsiChar;
+  TDisvCellDict = TDictionary<Integer, TMfCell>;
+
 var
   ErrorMessages: TStringList;
   NameList: TAnsiStringList;
-
-type
-  TAnsiCharArray = array[0..255*10] of AnsiChar;
+  DisvCellDict: TDisvCellDict = nil;
 
 procedure ExtractStrArray(AString: AnsiString; out Strings: TAnsiStringArray);
 var
@@ -697,6 +715,42 @@ begin
   end;
 end;
 
+function UseXT3D(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IXT3D';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function UseXT3D_RHS(ModelName, NpfPackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IXT3DRHS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0] <> 0;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
 function GetICELLTYPE(ModelName, NpfPackageName: AnsiString): TCIntArray;
 var
   VarName: AnsiString;
@@ -802,6 +856,631 @@ begin
   else
   begin
     result := nil;
+  end;
+end;
+
+function GetImsPrintOption(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IPRIMS', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Assert(Values[0] in [0..2]);
+    result := Values[0];
+    // 0 = NONE
+    // 1 = Summary
+    // 2 = All
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetImsNoPTC(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IALLOWPTC', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Assert(Values[0] in [0..1]);
+    result := Values[0];
+    // 0 = All
+    // 1 = First
+  end
+  else
+  begin
+    result := -1;
+    // -1 = not active
+  end;
+end;
+
+function GetImsATS_OUTER_MAXIMUM_FRACTION(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/ATSFRAC', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := 1/3;
+  end;
+end;
+
+function GetImsOUTER_DVCLOSE(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/DVCLOSE', [SolutionNumber]));
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, Values);
+  Assert(Length(Values) = 1);
+  result := Values[0];
+end;
+
+function GetImsOUTER_MAXIMUM(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/MXITER', [SolutionNumber]));
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetIntegerVariable(VarName, Values);
+  Assert(Length(Values) = 1);
+  result := Values[0];
+end;
+
+function GetImsUNDER_RELAXATION(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/NONMETH', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+    assert(result in [0..3]);
+    // 0 = none
+    // 1 = SIMPLE
+    // 2 = COOLEY
+    // 3 = DBD
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetImsUNDER_RELAXATION_GAMMA(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/GAMMA', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0.2;
+  end;
+end;
+
+function GetImsUNDER_RELAXATION_THETA(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/THETA', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0.7;
+  end;
+end;
+
+function GetImsUNDER_RELAXATION_KAPPA(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/AKAPPA', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0.1;
+  end;
+end;
+
+function GetImsUNDER_RELAXATION_MOMENTUM(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/AMOMENTUM', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0.001;
+  end;
+end;
+
+function GetImsBACKTRACKING_NUMBER(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IBFLAG', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  10;
+  end;
+end;
+
+function GetImsBACKTRACKING_TOLERANCE(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/BTOL', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  1E4;
+  end;
+end;
+
+function GetImsBACKTRACKING_REDUCTION_FACTOR(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/BREDUC', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0.2;
+  end;
+end;
+
+function GetImsBACKTRACKING_RESIDUAL_LIMIT(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/RES_LIM', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  100;
+  end;
+end;
+
+function GetImsINNER_MAXIMUM(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/ITER1', [SolutionNumber]));
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetIntegerVariable(VarName, Values);
+  Assert(Length(Values) = 1);
+  result := Values[0];
+end;
+
+function GetImsINNER_DVCLOSE(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/DVCLOSE', [SolutionNumber]));
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, Values);
+  Assert(Length(Values) = 1);
+  result := Values[0];
+end;
+
+function GetImsINNER_RCLOSE(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/RCLOSE', [SolutionNumber]));
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, Values);
+  Assert(Length(Values) = 1);
+  result := Values[0];
+end;
+
+function GetImsLINEAR_ACCELERATION(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/ILINMETH', [SolutionNumber]));
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetIntegerVariable(VarName, Values);
+  Assert(Length(Values) = 1);
+  result := Values[0];
+  Assert(result in [1,2])
+  // 1 = CG
+  // 2 = BICGSTAB
+end;
+
+function GetImsRELAXATION_FACTOR(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/RELAX', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0;
+  end;
+end;
+
+function GetImsPRECONDITIONER_LEVELS(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/LEVEL', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0;
+  end;
+end;
+
+function GetImsPRECONDITIONER_DROP_TOLERANCE(SolutionNumber: integer): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/DROPTOL', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  0;
+  end;
+end;
+
+function GetImsNUMBER_ORTHOGONALIZATIONS(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/NORTH', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result :=  7;
+  end;
+end;
+
+function GetImsSCALING_METHOD(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/ISCL', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+    Assert(result in [0..2]);
+    // 0 = NONE
+    // 1 = DIAGONAL
+    // 2 = L2NORM
+  end
+  else
+  begin
+    result :=  0;
+  end;
+end;
+
+function GetImsREORDERING_METHOD(SolutionNumber: integer): integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := AnsiString(Format('SLN_%d/IMSLINEAR/IORD', [SolutionNumber]));
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+    Assert(result in [0..2]);
+    // 0 = NONE
+    // 1 = RCM
+    // 2 = MD
+  end
+  else
+  begin
+    result :=  0;
+  end;
+end;
+
+function GetStoSTORAGECOEFFICIENT(ModelName, StoPackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + StoPackageName + '/ISTOR_COEF';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+    Assert(result in [0..1]);
+    // 1 = STORAGECOEFFICIENT
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetStoSS_CONFINED_ONLY(ModelName, StoPackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + StoPackageName + '/ICONF_SS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+    Assert(result in [0..1]);
+    // 1 = SS_CONFINED_ONLY
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetStoICONVERT(ModelName, StoPackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + StoPackageName +'/ICONVERT';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetIntegerVariable(VarName, result);
+end;
+
+function GetStoSS(ModelName, StoPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + StoPackageName +'/SS';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+function GetStoSY(ModelName, StoPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + StoPackageName +'/SY';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+function GetIcSTRT(ModelName, IcPackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + IcPackageName +'/STRT';
+  Assert(NameList.IndexOf(VarName) >= 0);
+  GetDoubleVariable(VarName, result);
+end;
+
+function GetAuxName(ModelName, PackageName: AnsiString): TAnsiStringArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/AUXNAME_CST';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetStringVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetAuxMult(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IAUXMULTCOL';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    result := Values[0];
+  end
+  else
+  begin
+    result := -1;
+  end;
+end;
+
+function GetBoundNames(ModelName, PackageName: AnsiString): TAnsiStringArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/BOUNDNAME_CST';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetStringVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetBound(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/BOUND';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetNodeList(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/NODELIST';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetAuxValue(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/AUXVAR';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetTransient(ModelName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + 'ISS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Assert(Values[0] in [0..1]);
+    result := Values[0] = 1;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function GetNewDataRead(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName + '/IONPER';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := -1;
   end;
 end;
 
@@ -916,7 +1595,7 @@ begin
   result := -1;
   if get_var_rank(PAnsiChar(VarName), Rank) = 0 then
   begin
-    Writeln('Rank: ', Rank);
+//    Writeln('Rank: ', Rank);
   end
   else
   begin
@@ -986,10 +1665,10 @@ begin
       SetLength(BoolArray, ArraySize);
       if get_value_bool(PAnsiChar(PAnsiChar(VarName)), @BoolArray) = 0 then
       begin
-        for ValueIndex := 0 to Min(10, Length(BoolArray)) - 1 do
-        begin
-          Writeln(BoolArray[ValueIndex])
-        end;
+//        for ValueIndex := 0 to Min(10, Length(BoolArray)) - 1 do
+//        begin
+//          Writeln(BoolArray[ValueIndex])
+//        end;
       end
       else
       begin
@@ -1021,10 +1700,10 @@ begin
       SetLength(RealArray, ArraySize);
       if get_value_double(PAnsiChar(PAnsiChar(VarName)), @RealArray) = 0 then
       begin
-        for ValueIndex := 0 to Min(10, Length(RealArray)) - 1 do
-        begin
-          Writeln(RealArray[ValueIndex])
-        end;
+//        for ValueIndex := 0 to Min(10, Length(RealArray)) - 1 do
+//        begin
+//          Writeln(RealArray[ValueIndex])
+//        end;
       end
       else
       begin
@@ -1056,10 +1735,10 @@ begin
       SetLength(IntArray, ArraySize);
       if get_value_int(PAnsiChar(PAnsiChar(VarName)), @IntArray) = 0 then
       begin
-        for ValueIndex := 0 to Min(10, Length(IntArray)) - 1 do
-        begin
-          Writeln(IntArray[ValueIndex])
-        end;
+//        for ValueIndex := 0 to Min(10, Length(IntArray)) - 1 do
+//        begin
+//          Writeln(IntArray[ValueIndex])
+//        end;
       end
       else
       begin
@@ -1334,7 +2013,8 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('NPF', VarName) > 0;
+    WriteValues := Pos('/CHD', VarName) > 0;
+//    WriteValues := True;
     if not WriteValues then
     begin
       Continue;
@@ -1608,7 +2288,7 @@ begin
   end;
 end;
 
-procedure GetTimeDiscretization;
+function GetTimeDiscretization: TStressPeriods;
 var
   Nper: Integer;
   NStep: TCIntArray;
@@ -1617,19 +2297,22 @@ var
   PeriodIndex: Integer;
 begin
   Nper := GetNumberOfPeriods;
-  Writeln(Nper);
+  SetLength(Result, Nper);
+//  Writeln(Nper);
   NStep := GetNumberOfSteps;
   PerLen := GetPerLen;
   Tsmult := GetTsmult;
   for PeriodIndex := 0 to Nper - 1 do
   begin
-    Writeln(PerLen[PeriodIndex], ' ', NStep[PeriodIndex], ' ', Tsmult[PeriodIndex]);
+    Result[PeriodIndex].Length := PerLen[PeriodIndex];
+    Result[PeriodIndex].NStep := NStep[PeriodIndex];
+    Result[PeriodIndex].TSMult := Tsmult[PeriodIndex];
   end;
   Writeln(Ord(GetTimeUnits));
 end;
 
 procedure GetDiscretization(ModelNames: TAnsiStringArray;
-  Packages: TPackages; Mf6GridType: TMf6GridType);
+  Packages: TPackages; Mf6GridType: TMf6GridType; var IDomain: TCIntArray);
 var
   DisPackageName: AnsiString;
   PackageIndex: Integer;
@@ -1643,7 +2326,6 @@ var
   DelC: TDoubleArray;
   GridTop: TDoubleArray;
   GridBottom: TDoubleArray;
-  IDomain: TCIntArray;
   Index: Integer;
   PackageID: AnsiString;
 begin
@@ -1676,7 +2358,8 @@ begin
         Vertices := GetVertices(ModelNames[0], DisPackageName);
         for Index := 0 to Length(Vertices) - 1 do
         begin
-          WriteLn(Vertices[Index].VertexNumber, ''#9'', Vertices[Index].X, ''#9'', Vertices[Index].Y);
+          WriteLn(Vertices[Index].VertexNumber, ''#9'',
+            Vertices[Index].X, ''#9'', Vertices[Index].Y);
         end;
         Cells := GetDisvCells(ModelNames[0], DisPackageName);
         for Index := 0 to Length(Cells) - 1 do
@@ -1710,6 +2393,387 @@ begin
   GridTop := GetTop(ModelNames[0], DisPackageName);
   GridBottom := GetBottom(ModelNames[0], DisPackageName);
   IDomain := GetIDomain(ModelNames[0], DisPackageName);
+end;
+
+procedure GetNPF(ModelNames: TAnsiStringArray; Packages: TPackages);
+var
+  NpfPackageName: AnsiString;
+  PackageIndex: Integer;
+  CellType: TCIntArray;
+  K: TDoubleArray;
+  K22: TDoubleArray;
+  K33: TDoubleArray;
+  Angle1: TDoubleArray;
+  Angle2: TDoubleArray;
+  Angle3: TDoubleArray;
+  WetDry: TDoubleArray;
+begin
+  NpfPackageName := '';
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'NPF6' then
+    begin
+      NpfPackageName := Packages[PackageIndex].PackageName;
+      break;
+    end;
+  end;
+  Assert(NpfPackageName <> '');
+  Writeln(Ord(GetNpfAveraging(ModelNames[0], NpfPackageName)));
+  WriteLn(UseTHICKSTRT(ModelNames[0], NpfPackageName));
+  if UseVARIABLECV(ModelNames[0], NpfPackageName) then
+  begin
+    WriteLn(True, UseDEWATERED(ModelNames[0], NpfPackageName));
+  end
+  else
+  begin
+    WriteLn(False);
+  end;
+  WriteLn(UsePerched(ModelNames[0], NpfPackageName));
+  if UseREWET(ModelNames[0], NpfPackageName) then
+  begin
+    WriteLn(True, GetWETFCT(ModelNames[0], NpfPackageName),
+      GetIWETIT(ModelNames[0], NpfPackageName),
+      GetIHDWET(ModelNames[0], NpfPackageName));
+  end
+  else
+  begin
+    WriteLn(False);
+  end;
+  WriteLn(UseK22OVERK(ModelNames[0], NpfPackageName));
+  WriteLn(UseK33OVERK(ModelNames[0], NpfPackageName));
+  WriteLn(UseXT3D(ModelNames[0], NpfPackageName));
+  WriteLn(UseXT3D_RHS(ModelNames[0], NpfPackageName));
+  CellType := GetICELLTYPE(ModelNames[0], NpfPackageName);
+  K := GetK(ModelNames[0], NpfPackageName);
+  K22 := GetK22(ModelNames[0], NpfPackageName);
+  K33 := GetK33(ModelNames[0], NpfPackageName);
+  Angle1 := GetAngle1(ModelNames[0], NpfPackageName);
+  Angle2 := GetAngle2(ModelNames[0], NpfPackageName);
+  Angle3 := GetAngle3(ModelNames[0], NpfPackageName);
+  WetDry := GetWetDry(ModelNames[0], NpfPackageName);
+end;
+
+procedure GetIms(ImsNumber: Integer);
+var
+  UnderRelax: Integer;
+  BackTrackNumber: Integer;
+  SimpleMatch: integer;
+  ModelerateMatch: Integer;
+  ComplexMatch: integer;
+  OUTER_DVCLOSE: Double;
+  OUTER_MAXIMUM: Integer;
+  Gamma: Double;
+  INNER_MAXIMUM: Integer;
+  INNER_DVCLOSE: Double;
+  INNER_RCLOSE: Double;
+  LINEAR_ACCELERATION: Integer;
+  RELAXATION_FACTOR: Double;
+  PRECONDITIONER_LEVELS: Integer;
+  PRECONDITIONER_DROP_TOLERANCE: Double;
+  NUMBER_ORTHOGONALIZATIONS: Integer;
+  Method: Integer;
+const
+  Epsilon = 1E-10;
+begin
+  Method := 1;
+  SimpleMatch := 0;
+  ModelerateMatch := 0;
+  ComplexMatch := 0;
+  WriteLn(GetImsPrintOption(ImsNumber));
+  WriteLn(GetImsNoPTC(ImsNumber));
+  WriteLn(GetImsATS_OUTER_MAXIMUM_FRACTION(ImsNumber));
+  OUTER_DVCLOSE := GetImsOUTER_DVCLOSE(ImsNumber);
+  if Abs(OUTER_DVCLOSE - 1E-3) < Epsilon then
+  begin
+    Inc(SimpleMatch)
+  end
+  else if Abs(OUTER_DVCLOSE - 1E-2) < Epsilon then
+  begin
+    Inc(ModelerateMatch)
+  end
+  else if Abs(OUTER_DVCLOSE - 1E-1) < Epsilon then
+  begin
+    Inc(ComplexMatch);
+  end;
+  WriteLn(OUTER_DVCLOSE);
+  OUTER_MAXIMUM := GetImsOUTER_MAXIMUM(ImsNumber);
+  if OUTER_MAXIMUM = 25 then
+  begin
+    Inc(SimpleMatch);
+  end
+  else if OUTER_MAXIMUM = 50 then
+  begin
+    Inc(ModelerateMatch);
+  end
+  else if OUTER_MAXIMUM = 100 then
+  begin
+    Inc(ComplexMatch);
+  end;
+  WriteLn(OUTER_MAXIMUM);
+
+  UnderRelax := GetImsUNDER_RELAXATION(ImsNumber);
+  WriteLn(UnderRelax);
+  if UnderRelax <> 0 then
+  begin
+    Inc(ModelerateMatch);
+    Inc(ComplexMatch);
+    Gamma := GetImsUNDER_RELAXATION_GAMMA(ImsNumber);
+    WriteLn(GetImsUNDER_RELAXATION_GAMMA(ImsNumber));
+    if Gamma = 0 then
+    begin
+      Inc(ModelerateMatch);
+      Inc(ComplexMatch);
+    end;
+  end;
+  if UnderRelax = 3 then
+  begin
+    Inc(ComplexMatch);
+    WriteLn(GetImsUNDER_RELAXATION_THETA(ImsNumber));
+    WriteLn(GetImsUNDER_RELAXATION_KAPPA(ImsNumber));
+    WriteLn(GetImsUNDER_RELAXATION_MOMENTUM(ImsNumber));
+  end;
+  if UnderRelax = 0 then
+  begin
+    Inc(SimpleMatch);
+  end;
+
+  BackTrackNumber := GetImsBACKTRACKING_NUMBER(ImsNumber);
+  if BackTrackNumber = 0 then
+  begin
+    Inc(SimpleMatch);
+    Inc(ModelerateMatch);
+  end
+  else if BackTrackNumber = 20 then
+  begin
+    Inc(ComplexMatch);
+  end;
+  Writeln(BackTrackNumber);
+  if BackTrackNumber > 0 then
+  begin
+    WriteLn(BackTrackNumber);
+    WriteLn(GetImsBACKTRACKING_TOLERANCE(ImsNumber));
+    WriteLn(GetImsBACKTRACKING_REDUCTION_FACTOR(ImsNumber));
+    WriteLn(GetImsBACKTRACKING_RESIDUAL_LIMIT(ImsNumber));
+  end;
+
+  INNER_MAXIMUM := GetImsINNER_MAXIMUM(ImsNumber);
+  if INNER_MAXIMUM = 50 then
+  begin
+    Inc(SimpleMatch);
+  end
+  else if INNER_MAXIMUM = 100 then
+  begin
+    Inc(ModelerateMatch);
+  end
+  else if INNER_MAXIMUM = 500 then
+  begin
+    Inc(ComplexMatch);
+  end;
+  WriteLn(INNER_MAXIMUM);
+  
+  INNER_DVCLOSE := GetImsINNER_DVCLOSE(ImsNumber);
+  WriteLn(INNER_DVCLOSE);
+  if Abs(INNER_DVCLOSE - 1E-3) < Epsilon then
+  begin
+    Inc(SimpleMatch)
+  end
+  else if Abs(INNER_DVCLOSE - 1E-2) < Epsilon then
+  begin
+    Inc(ModelerateMatch);
+  end
+  else if Abs(INNER_DVCLOSE - 1E-1) < Epsilon then
+  begin
+    Inc(ComplexMatch);
+  end;
+  
+  INNER_RCLOSE := GetImsINNER_RCLOSE(ImsNumber);
+  WriteLn(INNER_RCLOSE);
+  
+  LINEAR_ACCELERATION := GetImsLINEAR_ACCELERATION(ImsNumber);
+  if LINEAR_ACCELERATION = 1 then
+  begin
+    Inc(SimpleMatch)
+  end
+  else if LINEAR_ACCELERATION = 2 then
+  begin
+    Inc(ModelerateMatch);
+    Inc(ComplexMatch);
+  end;
+  WriteLn(LINEAR_ACCELERATION);
+  
+  RELAXATION_FACTOR := GetImsRELAXATION_FACTOR(ImsNumber);
+  if Abs(RELAXATION_FACTOR - 0) < Epsilon then
+  begin
+    Inc(SimpleMatch);
+    Inc(ComplexMatch);
+  end
+  else if Abs(RELAXATION_FACTOR - 0.97) < Epsilon then
+  begin
+    Inc(ModelerateMatch);
+  end;
+  WriteLn(GetImsRELAXATION_FACTOR(ImsNumber));
+  
+  PRECONDITIONER_LEVELS := GetImsPRECONDITIONER_LEVELS(ImsNumber);
+  if Abs(PRECONDITIONER_LEVELS - 0) < Epsilon then
+  begin
+    Inc(SimpleMatch);
+    Inc(ModelerateMatch);
+  end
+  else if Abs(PRECONDITIONER_LEVELS - 5) < Epsilon then
+  begin
+    Inc(ComplexMatch);
+  end;
+  WriteLn(PRECONDITIONER_LEVELS);
+  
+  PRECONDITIONER_DROP_TOLERANCE := GetImsPRECONDITIONER_DROP_TOLERANCE(ImsNumber);
+  if Abs(PRECONDITIONER_DROP_TOLERANCE - 0) < Epsilon then
+  begin
+    Inc(SimpleMatch);
+    Inc(ModelerateMatch);
+  end
+  else if Abs(PRECONDITIONER_DROP_TOLERANCE - 0.0001) < Epsilon then
+  begin
+    Inc(ComplexMatch);
+  end;
+  WriteLn(PRECONDITIONER_DROP_TOLERANCE);
+  
+  NUMBER_ORTHOGONALIZATIONS := GetImsNUMBER_ORTHOGONALIZATIONS(ImsNumber);
+  if NUMBER_ORTHOGONALIZATIONS = 0 then
+  begin
+    Inc(SimpleMatch);
+    Inc(ModelerateMatch);
+  end
+  else if NUMBER_ORTHOGONALIZATIONS = 2 then
+  begin
+    Inc(ComplexMatch);
+  end;
+  WriteLn(NUMBER_ORTHOGONALIZATIONS);
+  
+  WriteLn(GetImsSCALING_METHOD(ImsNumber));
+  WriteLn(GetImsREORDERING_METHOD(ImsNumber));
+  if ModelerateMatch > SimpleMatch then
+  begin
+    Method := 2;
+  end;
+  if (Method = 2) and (ComplexMatch > ModelerateMatch) then
+  begin
+    Method := 3;
+  end;
+  case Method of
+    1: WriteLn('Simple');
+    2: WriteLn('Moderate');
+    3: WriteLn('Complex');
+    else Assert(False);
+  end;
+       
+end;
+
+procedure GetStoragePackage(ModelNames: TAnsiStringArray; Packages: TPackages; var StoPackageName: string);
+var
+  PackageIndex: Integer;
+begin
+  StoPackageName := '';
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'STO6' then
+    begin
+      StoPackageName := Packages[PackageIndex].PackageName;
+      break;
+    end;
+  end;
+  if (StoPackageName <> '') then
+  begin
+    WriteLn(GetStoSTORAGECOEFFICIENT(ModelNames[0], StoPackageName));
+    WriteLn(GetStoSS_CONFINED_ONLY(ModelNames[0], StoPackageName));
+    GetStoICONVERT(ModelNames[0], StoPackageName);
+    GetStoSS(ModelNames[0], StoPackageName);
+    GetStoSY(ModelNames[0], StoPackageName);
+  end;
+end;
+
+procedure GetInitialConditions(ModelNames: TAnsiStringArray; Packages: TPackages);
+var
+  ICPackageName: AnsiString;
+  PackageIndex: Integer;
+begin
+  ICPackageName := '';
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'IC6' then
+    begin
+      ICPackageName := Packages[PackageIndex].PackageName;
+      break;
+    end;
+  end;
+  if ICPackageName <> '' then
+  begin
+    GetIcSTRT(ModelNames[0], ICPackageName);
+  end;
+end;
+
+procedure GetCell(NodeNumber: Integer; MFGridShape, IDomain: TCIntArray; var MfCell: TMfCell);
+var
+  Layer: Integer;
+  Row: Integer;
+  Col: Integer;
+  CellIndex: Integer;
+  CellNumber: Integer;
+begin
+  case Length(MFGridShape) of
+    1:
+      begin
+        // DISU
+        MfCell.Layer := 0;
+        MfCell.Row := 0;
+        MfCell.Column := 0;
+      end;
+    2:
+      begin
+        if DisvCellDict = nil then
+        begin
+          DisvCellDict := TDisvCellDict.Create;
+          Layer := -1;
+          Col := -1;
+          CellNumber := 0;
+          for CellIndex := 0 to Length(IDomain) - 1 do
+          begin
+            if (CellIndex mod MFGridShape[1]) = 0 then
+            begin
+              Inc(Layer);
+              Col := -1;
+            end;
+            Inc(Col);
+            if IDomain[CellIndex] > 0 then
+            begin
+              Inc(CellNumber);
+              MfCell.Layer := Layer + 1;
+              MfCell.Row := 1;
+              MfCell.Column := Col + 1;
+              DisvCellDict.Add(CellNumber, MfCell)
+            end;
+          end;
+        end;
+        // DISV
+        if not DisvCellDict.TryGetValue(NodeNumber, MfCell) then
+        begin
+          MfCell.Layer := 0;
+          MfCell.Row := 0;
+          MfCell.Column := 0;
+        end;
+      end;
+    3:
+      begin
+        // DIS
+        Layer := (NodeNumber -1) mod MFGridShape[0];
+        NodeNumber := NodeNumber - Layer * MFGridShape[0];
+        Row := (NodeNumber -1) mod MFGridShape[1];
+        NodeNumber := NodeNumber - Row * MFGridShape[1];
+        Col := NodeNumber;
+        MfCell.Layer := Layer + 1;
+        MfCell.Row := Row + 1;
+        MfCell.Column := Col + 1;
+      end;
+  end;
 end;
 
 procedure ImportModel;
@@ -1779,16 +2843,29 @@ var
   MFGridShape: TCIntArray;
   Packages: TPackages;
   PackageID: Ansistring;
-  PackageIndex: Integer;
-  NpfPackageName: AnsiString;
-  CellType: TCIntArray;
   K: TDoubleArray;
-  K22: TDoubleArray;
-  K33: TDoubleArray;
-  Angle1: TDoubleArray;
-  Angle2: TDoubleArray;
-  Angle3: TDoubleArray;
-  WetDry: TDoubleArray;
+  ImsNumber: Integer;
+  StoPackageName: string;
+  current_time: Double;
+  TimeStep: Double;
+  NStep: TCIntArray;
+  PeriodIndex: Integer;
+  StepIndex: Integer;
+  NewStressPeriodTransientDataRead: Integer;
+  Transient: Boolean;
+  TDIS: TStressPeriods;
+  PackageIndex: Integer;
+  ChdPackageName: AnsiString;
+  AuxNames: TAnsiStringArray;
+  AuxMult: Integer;
+  BoundNames: TAnsiStringArray;
+  SetMode: Boolean;
+  ChdBound: TDoubleArray;
+  AuxValues: TDoubleArray;
+  NodeList: TCIntArray;
+  CellIndex: Integer;
+  IDomain: TCIntArray;
+  MfCell: TMfCell;
 begin
   with TFileOpenDialog.Create(nil) do
   try
@@ -1862,30 +2939,36 @@ begin
     begin
       Writeln(NameList[NameIndex]);
     end;
-    if (NameList.Count > 0) and (NameList[0] = 'SIM/ISIM_MODE') then
+
+    // Set mode
+    SetMode := True;
+    if SetMode then
     begin
-      SetLength(Mode, 1);
-      ModeString := AnsiString(NameList[0]);
-      if get_value_int(PAnsiChar(ModeString), @Mode) = 0 then
+      if (NameList.Count > 0) and (NameList[0] = 'SIM/ISIM_MODE') then
       begin
-        Writeln('Mode: ', Mode[0]);
-        Mode[0] := 0;
-        if set_value_int(PAnsiChar(ModeString), @Mode) = 0 then
+        SetLength(Mode, 1);
+        ModeString := AnsiString(NameList[0]);
+        if get_value_int(PAnsiChar(ModeString), @Mode) = 0 then
         begin
-          Writeln('success Setting Mode: ');
+          Writeln('Mode: ', Mode[0]);
+          Mode[0] := 0;
+          if set_value_int(PAnsiChar(ModeString), @Mode) = 0 then
+          begin
+            Writeln('success Setting Mode: ');
+          end
+          else
+          begin
+            Writeln('Error Setting Mode: ');
+            get_last_bmi_error(@ErrorMessage);
+            Writeln(ErrorMessage);
+          end;
         end
         else
         begin
-          Writeln('Error Setting Mode: ');
+          Writeln('Error Getting Mode: ');
           get_last_bmi_error(@ErrorMessage);
           Writeln(ErrorMessage);
         end;
-      end
-      else
-      begin
-        Writeln('Error Getting Mode: ');
-        get_last_bmi_error(@ErrorMessage);
-        Writeln(ErrorMessage);
       end;
     end;
 
@@ -1896,63 +2979,119 @@ begin
     begin
       WriteLn(ModelNames[Index], ' ', ModelTypes[Index]);
     end;
-    GetTimeDiscretization;
+    TDIS := GetTimeDiscretization;
 //    GetStringVariable('MODFLOW/CHD-1/BOUNDNAME_CST');
 
-    update();
+//    update();
 
-    GetSimulationValues(NameList);
-    GetSimulationInputs(NameList);
+//    GetSimulationValues(NameList);
+//    GetSimulationInputs(NameList);
     Packages := GetPackageNames(ModelNames[0]);
     Mf6GridType := GetModflowGridType(ModelNames[0], MFGridShape);
     Writeln(Ord(Mf6GridType));
-    GetDiscretization(ModelNames, Packages, Mf6GridType);
+    GetDiscretization(ModelNames, Packages, Mf6GridType, IDomain);
+    GetNPF(ModelNames, Packages);
 
-    NpfPackageName := '';
+    ImsNumber := 1;
+    GetIms(ImsNumber);
+    GetStoragePackage(ModelNames, Packages, StoPackageName);
+    GetInitialConditions(ModelNames, Packages);
+
+    ChdPackageName := '';
     for PackageIndex := 0 to Length(Packages) - 1 do
     begin
-      if Packages[PackageIndex].PackageType = 'NPF6' then
+      if Packages[PackageIndex].PackageType = 'CHD6' then
       begin
-        NpfPackageName := Packages[PackageIndex].PackageName;
+        ChdPackageName := Packages[PackageIndex].PackageName;
         break;
       end;
     end;
-    Assert(NpfPackageName <> '');
-
-    Writeln(Ord(GetNpfAveraging(ModelNames[0], NpfPackageName)));
-    WriteLn(UseTHICKSTRT(ModelNames[0], NpfPackageName));
-    if UseVARIABLECV(ModelNames[0], NpfPackageName) then
+    if ChdPackageName <> '' then
     begin
-      WriteLn(True, UseDEWATERED(ModelNames[0], NpfPackageName));
-    end
-    else
-    begin
-      WriteLn(False);
+      AuxNames := GetAuxName(ModelNames[0], ChdPackageName);
+      AuxMult := GetAuxMult(ModelNames[0], ChdPackageName);
     end;
-    WriteLn(UsePerched(ModelNames[0], NpfPackageName));
 
-    if UseREWET(ModelNames[0], NpfPackageName) then
+    NStep := GetNumberOfSteps;
+    NewStressPeriodTransientDataRead := 1;
+
+    for PeriodIndex := 0 to Length(NStep) - 1 do
     begin
-      WriteLn(True,
-        GetWETFCT(ModelNames[0], NpfPackageName),
-        GetIWETIT(ModelNames[0], NpfPackageName),
-        GetIHDWET(ModelNames[0], NpfPackageName));
-    end
-    else
-    begin
-      WriteLn(False);
+      for StepIndex := 0 to NStep[PeriodIndex] - 1 do
+      begin
+        if not GetEndOfSimulation then
+        begin
+          update;
+        end;
+
+        GetSimulationValues(NameList);
+
+        if ChdPackageName <> '' then
+        begin
+          NodeList := GetNodeList(ModelNames[0], ChdPackageName);
+          ChdBound := GetBound(ModelNames[0], ChdPackageName);
+          BoundNames := GetBoundNames(ModelNames[0], ChdPackageName);
+          AuxValues := GetAuxValue(ModelNames[0], ChdPackageName);
+          Assert(Length(NodeList) = Length(ChdBound));
+          if BoundNames <> nil then
+          begin
+            Assert(Length(NodeList) = Length(BoundNames));
+          end;
+          if AuxValues <> nil then
+          begin
+            Assert(Length(NodeList) = Length(AuxValues));
+          end;
+          for CellIndex := 0 to Length(NodeList)  - 1 do
+          begin
+            GetCell(NodeList[CellIndex], MFGridShape, IDomain, MfCell);
+            Write(NodeList[CellIndex], ' ', MfCell.Layer, ' ', MfCell.Row, ' ',
+              MfCell.Column, ' ', ChdBound[CellIndex]);
+            if AuxValues <> nil then
+            begin
+              Write(' ', AuxValues[CellIndex]);
+            end;
+            if BoundNames <> nil then
+            begin
+              Write(' ', BoundNames[CellIndex]);
+            end;
+            Writeln;
+          end
+        end;
+
+        if (StepIndex = NStep[PeriodIndex] - 1) then
+        begin
+          if StoPackageName <> '' then
+          begin
+            NewStressPeriodTransientDataRead :=
+              GetNewDataRead(ModelNames[0], StoPackageName);
+
+            if NewStressPeriodTransientDataRead = PeriodIndex+1 then
+            begin
+              Transient := GetTransient(ModelNames[0]);
+            end;
+            TDIS[PeriodIndex].Transient := Transient;
+          end
+          else
+          begin
+            TDIS[PeriodIndex].Transient := False;
+          end;
+        end;
+      end;
     end;
-    WriteLn(UseK22OVERK(ModelNames[0], NpfPackageName));
-    WriteLn(UseK33OVERK(ModelNames[0], NpfPackageName));
+    for PeriodIndex := 0 to Length(TDIS) - 1 do
+    begin
+      if TDIS[PeriodIndex].Transient then
+      begin
+        Writeln(TDIS[PeriodIndex].Length, ' ', TDIS[PeriodIndex].NStep, ' ',
+           TDIS[PeriodIndex].TSMult, ' Transient')
+      end
+      else
+      begin
+        Writeln(TDIS[PeriodIndex].Length, ' ', TDIS[PeriodIndex].NStep, ' ',
+           TDIS[PeriodIndex].TSMult, ' Steady-State')
+      end;
+    end;
 
-    CellType := GetICELLTYPE(ModelNames[0], NpfPackageName);
-    K := GetK(ModelNames[0], NpfPackageName);
-    K22 := GetK22(ModelNames[0], NpfPackageName);
-    K33 := GetK33(ModelNames[0], NpfPackageName);
-    Angle1 := GetAngle1(ModelNames[0], NpfPackageName);
-    Angle2 := GetAngle2(ModelNames[0], NpfPackageName);
-    Angle3 := GetAngle3(ModelNames[0], NpfPackageName);
-    WetDry := GetWetDry(ModelNames[0], NpfPackageName);
 
 //    ModelName
 
@@ -2069,6 +3208,8 @@ begin
 //    NameList2.Free;
     NameList.Free;
     NameBuilder.Free;
+    DisvCellDict.Free;
+    DisvCellDict := nil;
   end;
 
   if NPF_K <> '' then
@@ -2353,7 +3494,10 @@ begin
     writeln('Failure get_grid_size');
   end;
 
-  update();
+  if not GetEndOfSimulation then
+  begin
+    update;
+  end;
 
   get_output_item_count(cnt);
   write('MF6 output item count: ');
@@ -2370,5 +3514,6 @@ initialization
 
 finalization
   ErrorMessages.Free;
+
 
 end.

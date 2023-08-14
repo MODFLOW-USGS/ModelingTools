@@ -77,6 +77,7 @@ function get_var_nbytes(c_var_address: PAnsiChar; var var_nbytes: Integer): cint
 
 function get_var_itemsize(c_var_address: PAnsiChar; var var_size: integer): cint; cdecl; external 'libmf6.dll';
 function get_value(c_var_address: PAnsiChar; dest: Pointer): cint; cdecl; external 'libmf6.dll';
+function get_time_step(var time_step: double): cint; cdecl; external 'libmf6.dll';
 
 // other functions
 {
