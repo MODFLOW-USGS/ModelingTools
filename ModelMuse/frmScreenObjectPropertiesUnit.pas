@@ -22552,7 +22552,7 @@ begin
   TimeList := TParameterTimeList.Create;
   try
     GetModflowBoundaryTimes(ScreenObjectList, Parameter, TimeList);
-    ColumnOffset := 3 + NumberOfSpecies;
+    ColumnOffset := 3;// + NumberOfSpecies;
     ValuesFunction := GetEtsSurfaceDepth;
 
     GetModflowBoundaryCollection(Frame.rdgModflowBoundary, ValuesFunction,
@@ -29225,14 +29225,14 @@ var
       begin
         for BoundaryIndex := 1 to 2 do
         begin
-          if DataGrid.Cells[ColumnOffset+BoundaryIndex+NumberOfSpecies,PestMethodRow] <> '' then
+          if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
           begin
             Boundary.PestBoundaryMethod[BoundaryIndex] :=
-              PestMethod[DataGrid, ColumnOffset+BoundaryIndex+NumberOfSpecies];
+              PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
           end;
-          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex+NumberOfSpecies] then
+          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex] then
           begin
-            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex+NumberOfSpecies];
+            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
@@ -29297,7 +29297,7 @@ begin
       Item.ScreenObject.CreateEtsBoundary;
       Boundary := Item.ScreenObject.ModflowEtsBoundary;
       Assert(Boundary <> nil);
-      ColumnOffset := 3 + NumberOfSpecies;
+      ColumnOffset := 3;
       BoundaryLayers := Boundary.EtsSurfDepthCollection;
       if ShouldStoreBoundary(FETS_Node, Boundary) then
       begin

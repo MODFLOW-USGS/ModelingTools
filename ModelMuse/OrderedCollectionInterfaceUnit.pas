@@ -44,6 +44,8 @@ type
       : IModflowParameter;
     procedure GetPestParameterNames(ParameterNames: TStringList);
     procedure GetIgnoredSpeciesNames(IgnoredNames: TStringList);
+    function GetBuoyancyDensityUsed: Boolean;
+    property BuoyancyDensityUsed: Boolean read GetBuoyancyDensityUsed;
 //    function GetDataArrayManager: TDataArrayManager;
 //    property DataArrayManager: TDataArrayManager read GetDataArrayManager;
   end;

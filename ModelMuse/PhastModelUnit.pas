@@ -10031,6 +10031,11 @@ const
 //               Bug fix: Fixed exporting SUTRA input files when BCTIME has been
 //                modified.
 
+//               Bug fix: Fixed editing of ETS information in the Object
+//                Properties dialog box.
+//               Bug fix: Fixed editing of MAX information in the Object
+//                Properties dialog box.
+
 //               Enhancement Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.

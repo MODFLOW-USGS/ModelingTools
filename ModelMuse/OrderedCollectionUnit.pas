@@ -1950,9 +1950,10 @@ function TGwtPestMethodCollection.GetCount: Integer;
 var
   MobileComponentCount: Integer;
 begin
-  if (Model <> nil) and Model.GwtUsed  then
+  if (IGlobalModelForOrderedCollection <> nil) and IGlobalModelForOrderedCollection.GwtUsed then
   begin
-    MobileComponentCount := (Model as IModelForTGwtPestMethodCollection).GetMobileComponentCount;
+    MobileComponentCount := (IGlobalModelForOrderedCollection
+      as IModelForTGwtPestMethodCollection).GetMobileComponentCount;
     if inherited GetCount < MobileComponentCount then
     begin
       inherited Count := MobileComponentCount
