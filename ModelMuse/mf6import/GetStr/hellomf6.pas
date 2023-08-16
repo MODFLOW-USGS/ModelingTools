@@ -9,12 +9,18 @@ uses
 const
   LENERRMESSAGE = 1024; //< max length for the error message
   BMI_LENERRMESSAGE = LENERRMESSAGE + 1; // max. length for the (exported) C-style error message
+  LENMEMTYPE = 50; //< maximum length of a memory manager type
+  BMI_LENVARTYPE = LENMEMTYPE + 1; //< max. length for variable type C-strings
+  Mf6Undefined = -842150451;
 
 type
    ppcint = ^cint;
    ppcchar = ^pcchar;
    TErrorMessage = Array[0..BMI_LENERRMESSAGE-1] of AnsiChar;
    PErrorMessage = ^TErrorMessage;
+
+   TCIntArray = array of cint;
+
 
 function initialize () : cint;cdecl;external;
 function update () : cint;cdecl;external;
@@ -28,6 +34,7 @@ function get_value_string(c_var_address : pchar; c_arr_ptr: ppcchar) : cint;cdec
 function get_last_bmi_error(c_error : PErrorMessage) : cint;cdecl;external;
 function get_var_type(c_var_address: pchar; c_var_type: pchar): cint; cdecl; external;
 function get_var_rank(c_var_address: pchar; Var c_var_rank: Integer): cint; cdecl; external;
+function get_var_shape(c_var_address: PAnsiChar; c_var_shape: pcint) : cint;cdecl;external;
 
 
 Procedure GetAndWriteStringVariable(Name: string);
@@ -96,6 +103,127 @@ begin
 
 end;
 
+procedure InitializeVariableType(out VariableType: AnsiString);
+var
+  CharIndex: Integer;
+begin
+  SetLength(VariableType, BMI_LENVARTYPE);
+  for CharIndex := 1 to BMI_LENVARTYPE do
+  begin
+    VariableType[CharIndex] := #0;
+  end;
+end;
+
+function GetArraySize(VarName: AnsiString): integer;
+var
+  Rank: Integer;
+  Shape: array of cint;
+  RankIndex: Integer;
+  Error: TErrorMessage;
+begin
+  Rank := -1;
+  result := -1;
+  if get_var_rank(PAnsiChar(VarName), Rank) = 0 then
+  begin
+//    Writeln('Rank: ', Rank);
+  end
+  else
+  begin
+    //ErrorMessages.Add('Failed to get Rank for "' + VarName + '".');
+    WriteLn('Failed to get Rank for "', VarName, '".');
+    if get_last_bmi_error(@Error) = 0 then
+    begin
+      Writeln(Error);
+      //ErrorMessages.Add(string(Error));
+    end
+    else
+    begin
+      Assert(False);
+    end;
+    Exit
+  end;
+
+  Shape := nil;
+  if Rank > 0 then
+  begin
+    SetLength(Shape, Rank);
+    for RankIndex := 0 to Length(Shape) - 1 do
+    begin
+      Shape[RankIndex] := Mf6Undefined;
+    end;
+    if get_var_shape(PAnsiChar(VarName), @Shape[0]) = 0 then
+    begin
+      result := 1;
+      for RankIndex := 0 to Length(Shape) - 1 do
+      begin
+        if Shape[RankIndex] <= 0 then
+        begin
+          WriteLn(VarName, ' ', Shape[RankIndex]);
+          Assert(Shape[RankIndex] = 0);
+        end;
+        result := result*Shape[RankIndex];
+      end;
+    end
+    else
+    begin
+      //ErrorMessages.Add('Failed to get shape for "' + VarName + '".');
+      //ErrorMessages.Add(Error);
+
+      WriteLn('Failed to get shape for "', VarName, '".');
+      Assert(False);
+    end;
+  end
+  else if Rank = 0 then
+  begin
+    result := 1;
+  end;
+end;
+
+
+procedure GetIntegerVariable(VarName: AnsiString; var IntArray: TCIntArray);
+var
+  VariableType: AnsiString;
+//  IntArray: TCIntArray;
+  ArraySize: Integer;
+  ValueIndex: Integer;
+begin
+  InitializeVariableType(VariableType);
+  if get_var_type(PAnsiChar(VarName), PAnsiChar(VariableType)) = 0 then
+  begin
+    Assert(AnsiPos('INTEGER', VariableType) = 1);
+    ArraySize := GetArraySize(VarName);
+
+    if ArraySize > 0 then
+    begin
+      SetLength(IntArray, ArraySize);
+      if get_value_int(PAnsiChar(PAnsiChar(VarName)), @IntArray) = 0 then
+      begin
+//        for ValueIndex := 0 to Min(10, Length(IntArray)) - 1 do
+//        begin
+//          Writeln(IntArray[ValueIndex])
+//        end;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+
+function GetNumberOfSteps: TCIntArray;
+const
+  NStepVanName = 'TDIS/NSTP';
+begin
+  result := nil;
+  GetIntegerVariable(NStepVanName, result);
+end;
+
 var
   version : pchar;
   vstr : array[0..255] of char;
@@ -111,6 +239,10 @@ var
   tdis6_fname : array[0..301] of char;
   ptdis : pcchar;
   pptdis : ppcchar;
+  Steps: TCintArray;
+
+  PeriodIndex: Integer;
+  StepIndex: Integer;
 //  Sto6_VarAddress : array[0..23] of char = 'MODFLOW/STO/INPUT_FNAME';
 //  Sto6_fname : array[0..255] of char;
 //  psto : pcchar;
@@ -142,36 +274,46 @@ begin
   writeln('MF6 DLL version: ' + version);
   writeln('MF6 DLL component: ' + component);
 
-  // update
-  update();
+  finalize();
 
-  // get_value_string
-  ptdis := @tdis6_fname;
-  pptdis := @ptdis;
-  get_value_string(tdis6_varaddress, pptdis);
-  write('TDIS6 FNAME: ');
-  writeln(tdis6_fname);
 
-  // this works.
-  GetAndWriteStringVariable('__INPUT__/SIM/NAM/TDIS6');
-  // These return empty strings.
-  GetAndWriteStringVariable('MODFLOW/STO/INPUT_FNAME');
-  GetAndWriteStringVariable('MODFLOW/IC/INPUT_FNAME');
-  GetAndWriteStringVariable('MODFLOW/CHD-1/INPUT_FNAME');
+  //Steps := GetNumberOfSteps;
+  //for PeriodIndex := 0 to Length(Steps) -1 do
+  //begin
+  //  for StepIndex := 0 to Steps[PeriodIndex] -1 do
+  //  begin
+  //    // update
+  //    update();
+  //  end;
+  //end;
 
-  // The following doesn't get a value at all.
-  GetAndWriteStringVariable('MODFLOW/CHD-1/AUXNAME');
-  // This however does work.
-  GetAndWriteStringVariable('MODFLOW/CHD-1/AUXNAME_CST');
-
-  // The following doesn't get a value at all.
-  GetAndWriteStringVariable('MODFLOW/CHD-1/BOUNDNAME');
-  // This gets 1 value but it should probably get two values.
-  GetAndWriteStringVariable('MODFLOW/CHD-1/BOUNDNAME_CST');
+  //// get_value_string
+  //ptdis := @tdis6_fname;
+  //pptdis := @ptdis;
+  //get_value_string(tdis6_varaddress, pptdis);
+  //write('TDIS6 FNAME: ');
+  //writeln(tdis6_fname);
+  //
+  //// this works.
+  //GetAndWriteStringVariable('__INPUT__/SIM/NAM/TDIS6');
+  //// These return empty strings.
+  //GetAndWriteStringVariable('MODFLOW/STO/INPUT_FNAME');
+  //GetAndWriteStringVariable('MODFLOW/IC/INPUT_FNAME');
+  //GetAndWriteStringVariable('MODFLOW/CHD-1/INPUT_FNAME');
+  //
+  //// The following doesn't get a value at all.
+  //GetAndWriteStringVariable('MODFLOW/CHD-1/AUXNAME');
+  //// This however does work.
+  //GetAndWriteStringVariable('MODFLOW/CHD-1/AUXNAME_CST');
+  //
+  //// The following doesn't get a value at all.
+  //GetAndWriteStringVariable('MODFLOW/CHD-1/BOUNDNAME');
+  //// This gets 1 value but it should probably get two values.
+  //GetAndWriteStringVariable('MODFLOW/CHD-1/BOUNDNAME_CST');
 
 
   // finalize
-  finalize();
+  //finalize();
 
   Writeln('Press any key to close');
   Readln;

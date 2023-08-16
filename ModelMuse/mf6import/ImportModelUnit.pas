@@ -52,6 +52,102 @@ type
     Column: Integer;
   end;
 
+  TImportedPackage = class(TObject)
+    PackageName: AnsiString;
+  end;
+
+  TImportedDiscretization = class(TImportedPackage)
+    Mf6GridType: TMf6GridType;
+    PackageID: AnsiString;
+    MFGridShape: TCIntArray;
+    LengthUnit: Tmf6LengthUnit;
+    RotationAngle: Double;
+    XOrigin: Double;
+    YOrigin: Double;
+    Vertices: TVertices;
+    Cells: TCells;
+    DelR: TDoubleArray;
+    DelC: TDoubleArray;
+    GridTop: TDoubleArray;
+    GridBottom: TDoubleArray;
+    IDomain: TCIntArray;
+  end;
+
+  TImportedNpf = class(TImportedPackage)
+    NpfAveraging: TNpfAveraging;
+    THICKSTRT: Boolean;
+    VARIABLECV: Boolean;
+    DEWATERED: Boolean;
+    Perched: Boolean;
+    REWET: Boolean;
+    WETFCT: Double;
+    IWETIT: Integer;
+    IHDWET: Integer;
+    K22OVERK: Boolean;
+    K33OVERK: Boolean;
+    XT3D: Boolean;
+    XT3D_RHS: Boolean;
+    CellType: TCIntArray;
+    K: TDoubleArray;
+    K22: TDoubleArray;
+    K33: TDoubleArray;
+    Angle1: TDoubleArray;
+    Angle2: TDoubleArray;
+    Angle3: TDoubleArray;
+    WetDry: TDoubleArray;
+  end;
+
+  TImportedIms = class(TObject)
+    PrintOption: Integer;
+    NoPtc: Integer;
+    ATS_OUTER_MAXIMUM_FRACTION: Double;
+    OUTER_DVCLOSE: Double;
+    OUTER_MAXIMUM: Integer;
+    Gamma: Double;
+    INNER_MAXIMUM: Integer;
+    INNER_DVCLOSE: Double;
+    INNER_RCLOSE: Double;
+    LINEAR_ACCELERATION: Integer;
+    RELAXATION_FACTOR: Double;
+    PRECONDITIONER_LEVELS: Integer;
+    PRECONDITIONER_DROP_TOLERANCE: Double;
+    NUMBER_ORTHOGONALIZATIONS: Integer;
+    Method: Integer;
+    UnderRelax: Integer;
+    UNDER_RELAXATION_THETA: Double;
+    UNDER_RELAXATION_KAPPA: Double;
+    UNDER_RELAXATION_MOMENTUM: Double;
+    BackTrackNumber: Integer;
+    BACKTRACKING_TOLERANCE: Double;
+    BACKTRACKING_REDUCTION_FACTOR: Double;
+    BACKTRACKING_RESIDUAL_LIMIT: Double;
+    SCALING_METHOD: Integer;
+    REORDERING_METHOD: Integer;
+  end;
+
+  TImportedStorage = class(TImportedPackage)
+    STORAGECOEFFICIENT: Integer;
+    SS_CONFINED_ONLY: Integer;
+    ICONVERT: TCIntArray;
+    SS: TDoubleArray;
+    SY: TDoubleArray;
+  end;
+
+  TImportedInitialConditions = class(TImportedPackage)
+    STRT: TDoubleArray;
+  end;
+
+  TImportedChd = class(TImportedPackage)
+    Naux: Integer;
+    AuxNames: TAnsiStringArray;
+    AuxMult: Integer;
+    NodeList: TCIntArray;
+    Bound: TDoubleArray;
+    BoundNames: TAnsiStringArray;
+    AuxValues: TDoubleArray;
+
+  end;
+
 procedure ImportModel;
 
 procedure GetStringVariable(VarName: AnsiString; var NameTypes: TAnsiStringArray);
@@ -1355,6 +1451,24 @@ begin
   GetDoubleVariable(VarName, result);
 end;
 
+function GetNAUX(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NAUX';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
 function GetAuxName(ModelName, PackageName: AnsiString): TAnsiStringArray;
 var
   VarName: AnsiString;
@@ -1665,10 +1779,10 @@ begin
       SetLength(BoolArray, ArraySize);
       if get_value_bool(PAnsiChar(PAnsiChar(VarName)), @BoolArray) = 0 then
       begin
-//        for ValueIndex := 0 to Min(10, Length(BoolArray)) - 1 do
-//        begin
-//          Writeln(BoolArray[ValueIndex])
-//        end;
+        for ValueIndex := 0 to Min(10, Length(BoolArray)) - 1 do
+        begin
+          Writeln(BoolArray[ValueIndex])
+        end;
       end
       else
       begin
@@ -1700,10 +1814,10 @@ begin
       SetLength(RealArray, ArraySize);
       if get_value_double(PAnsiChar(PAnsiChar(VarName)), @RealArray) = 0 then
       begin
-//        for ValueIndex := 0 to Min(10, Length(RealArray)) - 1 do
-//        begin
-//          Writeln(RealArray[ValueIndex])
-//        end;
+        for ValueIndex := 0 to Min(10, Length(RealArray)) - 1 do
+        begin
+          Writeln(RealArray[ValueIndex])
+        end;
       end
       else
       begin
@@ -1735,10 +1849,10 @@ begin
       SetLength(IntArray, ArraySize);
       if get_value_int(PAnsiChar(PAnsiChar(VarName)), @IntArray) = 0 then
       begin
-//        for ValueIndex := 0 to Min(10, Length(IntArray)) - 1 do
-//        begin
-//          Writeln(IntArray[ValueIndex])
-//        end;
+        for ValueIndex := 0 to Min(10, Length(IntArray)) - 1 do
+        begin
+          Writeln(IntArray[ValueIndex])
+        end;
       end
       else
       begin
@@ -2013,7 +2127,7 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('/CHD', VarName) > 0;
+    WriteValues := Pos('GHB', VarName) > 0;
 //    WriteValues := True;
     if not WriteValues then
     begin
@@ -2311,60 +2425,54 @@ begin
   Writeln(Ord(GetTimeUnits));
 end;
 
-procedure GetDiscretization(ModelNames: TAnsiStringArray;
-  Packages: TPackages; Mf6GridType: TMf6GridType; var IDomain: TCIntArray);
+function GetDiscretization(ModelNames: TAnsiStringArray;
+  Packages: TPackages): TImportedDiscretization;
 var
-  DisPackageName: AnsiString;
   PackageIndex: Integer;
-  LengthUnit: Tmf6LengthUnit;
-  RotationAngle: Double;
-  Vertices: TVertices;
-  Cells: TCells;
   ACell: TCell;
   VIndex: Integer;
-  DelR: TDoubleArray;
-  DelC: TDoubleArray;
-  GridTop: TDoubleArray;
-  GridBottom: TDoubleArray;
   Index: Integer;
-  PackageID: AnsiString;
 begin
-  case Mf6GridType of
-    gtDISU: PackageID := 'DISU6';
-    gtDISV: PackageID := 'DISV6';
-    gtDIS: PackageID := 'DIS6';
+  result := TImportedDiscretization.Create;
+  result.Mf6GridType := GetModflowGridType(ModelNames[0], result.MFGridShape);
+  case result.Mf6GridType of
+    gtDISU: result.PackageID := 'DISU6';
+    gtDISV: result.PackageID := 'DISV6';
+    gtDIS: result.PackageID := 'DIS6';
   end;
-  DisPackageName := '';
+  result.PackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
-    if Packages[PackageIndex].PackageType = PackageID then
+    if Packages[PackageIndex].PackageType = result.PackageID then
     begin
-      DisPackageName := Packages[PackageIndex].PackageName;
+      result.PackageName := Packages[PackageIndex].PackageName;
       Break;
     end;
   end;
-  Assert(DisPackageName <> '');
-  LengthUnit := GetLengthUnit(ModelNames[0], DisPackageName);
-  WriteLn(Ord(LengthUnit));
-  Writeln(GetXOrigin(ModelNames[0], DisPackageName));
-  Writeln(GetYOrigin(ModelNames[0], DisPackageName));
-  RotationAngle := GetGridRotation(ModelNames[0], DisPackageName);
-  Writeln(RotationAngle);
-  case Mf6GridType of
+  Assert(result.PackageName <> '');
+  result.LengthUnit := GetLengthUnit(ModelNames[0], result.PackageName);
+  WriteLn(Ord(result.LengthUnit));
+  result.XOrigin := GetXOrigin(ModelNames[0], result.PackageName);
+  Writeln(result.XOrigin);
+  result.YOrigin := GetYOrigin(ModelNames[0], result.PackageName);
+  Writeln(result.YOrigin);
+  result.RotationAngle := GetGridRotation(ModelNames[0], result.PackageName);
+  Writeln(result.RotationAngle);
+  case result.Mf6GridType of
     gtDISU:
       Assert(False);
     gtDISV:
       begin
-        Vertices := GetVertices(ModelNames[0], DisPackageName);
-        for Index := 0 to Length(Vertices) - 1 do
+        result.Vertices := GetVertices(ModelNames[0], result.PackageName);
+        for Index := 0 to Length(result.Vertices) - 1 do
         begin
-          WriteLn(Vertices[Index].VertexNumber, ''#9'',
-            Vertices[Index].X, ''#9'', Vertices[Index].Y);
+          WriteLn(result.Vertices[Index].VertexNumber, ''#9'',
+            result.Vertices[Index].X, ''#9'', result.Vertices[Index].Y);
         end;
-        Cells := GetDisvCells(ModelNames[0], DisPackageName);
-        for Index := 0 to Length(Cells) - 1 do
+        result.Cells := GetDisvCells(ModelNames[0], result.PackageName);
+        for Index := 0 to Length(result.Cells) - 1 do
         begin
-          ACell := Cells[Index];
+          ACell := result.Cells[Index];
           Write(ACell.CellNumber, ''#9'', ACell.CellX, ''#9'', ACell.CellY);
           for VIndex := 0 to Length(ACell.VertexNumbers) - 1 do
           begin
@@ -2375,291 +2483,305 @@ begin
       end;
     gtDIS:
       begin
-        DelR := GetDelR(ModelNames[0], DisPackageName);
+        result.DelR := GetDelR(ModelNames[0], result.PackageName);
         WriteLn('DelR');
-        for Index := 0 to Length(DelR) - 1 do
+        for Index := 0 to Length(result.DelR) - 1 do
         begin
-          Write(' ', DelR[Index]);
+          Write(' ', result.DelR[Index]);
         end;
         Writeln;
-        DelC := GetDelC(ModelNames[0], DisPackageName);
+        result.DelC := GetDelC(ModelNames[0], result.PackageName);
         WriteLn('DelC');
-        for Index := 0 to Length(DelC) - 1 do
+        for Index := 0 to Length(result.DelC) - 1 do
         begin
-          Write(' ', DelC[Index]);
+          Write(' ', result.DelC[Index]);
         end;
       end;
   end;
-  GridTop := GetTop(ModelNames[0], DisPackageName);
-  GridBottom := GetBottom(ModelNames[0], DisPackageName);
-  IDomain := GetIDomain(ModelNames[0], DisPackageName);
+  result.GridTop := GetTop(ModelNames[0], result.PackageName);
+  result.GridBottom := GetBottom(ModelNames[0], result.PackageName);
+  result.IDomain := GetIDomain(ModelNames[0], result.PackageName);
 end;
 
-procedure GetNPF(ModelNames: TAnsiStringArray; Packages: TPackages);
+function GetNPF(ModelNames: TAnsiStringArray; Packages: TPackages): TImportedNpf;
 var
-  NpfPackageName: AnsiString;
   PackageIndex: Integer;
-  CellType: TCIntArray;
-  K: TDoubleArray;
-  K22: TDoubleArray;
-  K33: TDoubleArray;
-  Angle1: TDoubleArray;
-  Angle2: TDoubleArray;
-  Angle3: TDoubleArray;
-  WetDry: TDoubleArray;
 begin
-  NpfPackageName := '';
+  result := TImportedNpf.Create;
+  result.PackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
     if Packages[PackageIndex].PackageType = 'NPF6' then
     begin
-      NpfPackageName := Packages[PackageIndex].PackageName;
+      result.PackageName := Packages[PackageIndex].PackageName;
       break;
     end;
   end;
-  Assert(NpfPackageName <> '');
-  Writeln(Ord(GetNpfAveraging(ModelNames[0], NpfPackageName)));
-  WriteLn(UseTHICKSTRT(ModelNames[0], NpfPackageName));
-  if UseVARIABLECV(ModelNames[0], NpfPackageName) then
+  Assert(result.PackageName <> '');
+  result.NpfAveraging := GetNpfAveraging(ModelNames[0], result.PackageName);
+  Writeln(Ord(result.NpfAveraging));
+  result.THICKSTRT := UseTHICKSTRT(ModelNames[0], result.PackageName);
+  WriteLn(result.THICKSTRT);
+  result.VARIABLECV := UseVARIABLECV(ModelNames[0], result.PackageName);
+  if result.VARIABLECV then
   begin
-    WriteLn(True, UseDEWATERED(ModelNames[0], NpfPackageName));
+    result.DEWATERED := UseDEWATERED(ModelNames[0], result.PackageName);
+    WriteLn(True, result.DEWATERED);
   end
   else
   begin
+    result.DEWATERED := False;
     WriteLn(False);
   end;
-  WriteLn(UsePerched(ModelNames[0], NpfPackageName));
-  if UseREWET(ModelNames[0], NpfPackageName) then
+  result.Perched := UsePerched(ModelNames[0], result.PackageName);
+  WriteLn(result.Perched);
+  result.REWET := UseREWET(ModelNames[0], result.PackageName);
+  if result.REWET then
   begin
-    WriteLn(True, GetWETFCT(ModelNames[0], NpfPackageName),
-      GetIWETIT(ModelNames[0], NpfPackageName),
-      GetIHDWET(ModelNames[0], NpfPackageName));
+    result.WETFCT := GetWETFCT(ModelNames[0], result.PackageName);
+    result.IWETIT := GetIWETIT(ModelNames[0], result.PackageName);
+    result.IHDWET := GetIHDWET(ModelNames[0], result.PackageName);
+    WriteLn(True, result.WETFCT, result.IWETIT, result.IHDWET);
   end
   else
   begin
+    result.WETFCT := 0;
+    result.IWETIT := 0;
+    result.IHDWET := 0;
     WriteLn(False);
   end;
-  WriteLn(UseK22OVERK(ModelNames[0], NpfPackageName));
-  WriteLn(UseK33OVERK(ModelNames[0], NpfPackageName));
-  WriteLn(UseXT3D(ModelNames[0], NpfPackageName));
-  WriteLn(UseXT3D_RHS(ModelNames[0], NpfPackageName));
-  CellType := GetICELLTYPE(ModelNames[0], NpfPackageName);
-  K := GetK(ModelNames[0], NpfPackageName);
-  K22 := GetK22(ModelNames[0], NpfPackageName);
-  K33 := GetK33(ModelNames[0], NpfPackageName);
-  Angle1 := GetAngle1(ModelNames[0], NpfPackageName);
-  Angle2 := GetAngle2(ModelNames[0], NpfPackageName);
-  Angle3 := GetAngle3(ModelNames[0], NpfPackageName);
-  WetDry := GetWetDry(ModelNames[0], NpfPackageName);
+  result.K22OVERK := UseK22OVERK(ModelNames[0], result.PackageName);
+  WriteLn(result.K22OVERK);
+  result.K33OVERK := UseK33OVERK(ModelNames[0], result.PackageName);
+  WriteLn(result.K33OVERK);
+  result.XT3D := UseXT3D(ModelNames[0], result.PackageName);
+  WriteLn(result.XT3D);
+  result.XT3D_RHS := UseXT3D_RHS(ModelNames[0], result.PackageName);
+  WriteLn(result.XT3D_RHS);
+  result.CellType := GetICELLTYPE(ModelNames[0], result.PackageName);
+  result.K := GetK(ModelNames[0], result.PackageName);
+  result.K22 := GetK22(ModelNames[0], result.PackageName);
+  result.K33 := GetK33(ModelNames[0], result.PackageName);
+  result.Angle1 := GetAngle1(ModelNames[0], result.PackageName);
+  result.Angle2 := GetAngle2(ModelNames[0], result.PackageName);
+  result.Angle3 := GetAngle3(ModelNames[0], result.PackageName);
+  result.WetDry := GetWetDry(ModelNames[0], result.PackageName);
 end;
 
-procedure GetIms(ImsNumber: Integer);
+function GetIms(ImsNumber: Integer): TImportedIms;
 var
-  UnderRelax: Integer;
-  BackTrackNumber: Integer;
   SimpleMatch: integer;
   ModelerateMatch: Integer;
   ComplexMatch: integer;
-  OUTER_DVCLOSE: Double;
-  OUTER_MAXIMUM: Integer;
-  Gamma: Double;
-  INNER_MAXIMUM: Integer;
-  INNER_DVCLOSE: Double;
-  INNER_RCLOSE: Double;
-  LINEAR_ACCELERATION: Integer;
-  RELAXATION_FACTOR: Double;
-  PRECONDITIONER_LEVELS: Integer;
-  PRECONDITIONER_DROP_TOLERANCE: Double;
-  NUMBER_ORTHOGONALIZATIONS: Integer;
-  Method: Integer;
 const
   Epsilon = 1E-10;
 begin
-  Method := 1;
+  Result := TImportedIms.Create;
+  result.Method := 1;
   SimpleMatch := 0;
   ModelerateMatch := 0;
   ComplexMatch := 0;
-  WriteLn(GetImsPrintOption(ImsNumber));
-  WriteLn(GetImsNoPTC(ImsNumber));
-  WriteLn(GetImsATS_OUTER_MAXIMUM_FRACTION(ImsNumber));
-  OUTER_DVCLOSE := GetImsOUTER_DVCLOSE(ImsNumber);
-  if Abs(OUTER_DVCLOSE - 1E-3) < Epsilon then
+  result.PrintOption := GetImsPrintOption(ImsNumber);
+  WriteLn(result.PrintOption);
+  result.NoPtc := GetImsNoPTC(ImsNumber);
+  WriteLn(result.NoPtc);
+  result.ATS_OUTER_MAXIMUM_FRACTION := GetImsATS_OUTER_MAXIMUM_FRACTION(ImsNumber);
+  WriteLn(result.ATS_OUTER_MAXIMUM_FRACTION);
+  result.OUTER_DVCLOSE := GetImsOUTER_DVCLOSE(ImsNumber);
+  if Abs(result.OUTER_DVCLOSE - 1E-3) < Epsilon then
   begin
     Inc(SimpleMatch)
   end
-  else if Abs(OUTER_DVCLOSE - 1E-2) < Epsilon then
+  else if Abs(result.OUTER_DVCLOSE - 1E-2) < Epsilon then
   begin
     Inc(ModelerateMatch)
   end
-  else if Abs(OUTER_DVCLOSE - 1E-1) < Epsilon then
+  else if Abs(result.OUTER_DVCLOSE - 1E-1) < Epsilon then
   begin
     Inc(ComplexMatch);
   end;
-  WriteLn(OUTER_DVCLOSE);
-  OUTER_MAXIMUM := GetImsOUTER_MAXIMUM(ImsNumber);
-  if OUTER_MAXIMUM = 25 then
+  WriteLn(result.OUTER_DVCLOSE);
+  result.OUTER_MAXIMUM := GetImsOUTER_MAXIMUM(ImsNumber);
+  if result.OUTER_MAXIMUM = 25 then
   begin
     Inc(SimpleMatch);
   end
-  else if OUTER_MAXIMUM = 50 then
+  else if result.OUTER_MAXIMUM = 50 then
   begin
     Inc(ModelerateMatch);
   end
-  else if OUTER_MAXIMUM = 100 then
+  else if result.OUTER_MAXIMUM = 100 then
   begin
     Inc(ComplexMatch);
   end;
-  WriteLn(OUTER_MAXIMUM);
+  WriteLn(result.OUTER_MAXIMUM);
 
-  UnderRelax := GetImsUNDER_RELAXATION(ImsNumber);
-  WriteLn(UnderRelax);
-  if UnderRelax <> 0 then
+  result.UnderRelax := GetImsUNDER_RELAXATION(ImsNumber);
+  WriteLn(result.UnderRelax);
+  if result.UnderRelax <> 0 then
   begin
     Inc(ModelerateMatch);
     Inc(ComplexMatch);
-    Gamma := GetImsUNDER_RELAXATION_GAMMA(ImsNumber);
-    WriteLn(GetImsUNDER_RELAXATION_GAMMA(ImsNumber));
-    if Gamma = 0 then
+    result.Gamma := GetImsUNDER_RELAXATION_GAMMA(ImsNumber);
+    WriteLn(result.Gamma);
+    if result.Gamma = 0 then
     begin
       Inc(ModelerateMatch);
       Inc(ComplexMatch);
     end;
   end;
-  if UnderRelax = 3 then
+  if result.UnderRelax = 3 then
   begin
     Inc(ComplexMatch);
-    WriteLn(GetImsUNDER_RELAXATION_THETA(ImsNumber));
-    WriteLn(GetImsUNDER_RELAXATION_KAPPA(ImsNumber));
-    WriteLn(GetImsUNDER_RELAXATION_MOMENTUM(ImsNumber));
+    result.UNDER_RELAXATION_THETA := GetImsUNDER_RELAXATION_THETA(ImsNumber);
+    WriteLn(result.UNDER_RELAXATION_THETA);
+    result.UNDER_RELAXATION_KAPPA := GetImsUNDER_RELAXATION_KAPPA(ImsNumber);
+    WriteLn(result.UNDER_RELAXATION_KAPPA);
+    result.UNDER_RELAXATION_MOMENTUM := GetImsUNDER_RELAXATION_MOMENTUM(ImsNumber);
+    WriteLn(result.UNDER_RELAXATION_MOMENTUM);
   end;
-  if UnderRelax = 0 then
+  if result.UnderRelax = 0 then
   begin
     Inc(SimpleMatch);
+    result.UNDER_RELAXATION_THETA := 0.2;
+    result.UNDER_RELAXATION_KAPPA := 0.7;
+    result.UNDER_RELAXATION_MOMENTUM := 0.001;
   end;
 
-  BackTrackNumber := GetImsBACKTRACKING_NUMBER(ImsNumber);
-  if BackTrackNumber = 0 then
+  result.BackTrackNumber := GetImsBACKTRACKING_NUMBER(ImsNumber);
+  if result.BackTrackNumber = 0 then
   begin
     Inc(SimpleMatch);
     Inc(ModelerateMatch);
   end
-  else if BackTrackNumber = 20 then
+  else if result.BackTrackNumber = 20 then
   begin
     Inc(ComplexMatch);
   end;
-  Writeln(BackTrackNumber);
-  if BackTrackNumber > 0 then
+  Writeln(result.BackTrackNumber);
+  if result.BackTrackNumber > 0 then
   begin
-    WriteLn(BackTrackNumber);
-    WriteLn(GetImsBACKTRACKING_TOLERANCE(ImsNumber));
-    WriteLn(GetImsBACKTRACKING_REDUCTION_FACTOR(ImsNumber));
-    WriteLn(GetImsBACKTRACKING_RESIDUAL_LIMIT(ImsNumber));
+    WriteLn(result.BackTrackNumber);
+    result.BACKTRACKING_TOLERANCE := GetImsBACKTRACKING_TOLERANCE(ImsNumber);
+    WriteLn(result.BACKTRACKING_TOLERANCE);
+    result.BACKTRACKING_REDUCTION_FACTOR := GetImsBACKTRACKING_REDUCTION_FACTOR(ImsNumber);
+    WriteLn(result.BACKTRACKING_REDUCTION_FACTOR);
+    result.BACKTRACKING_RESIDUAL_LIMIT := GetImsBACKTRACKING_RESIDUAL_LIMIT(ImsNumber);
+    WriteLn(result.BACKTRACKING_RESIDUAL_LIMIT);
+  end
+  else
+  begin
+    result.BACKTRACKING_TOLERANCE := 1E4;
+    result.BACKTRACKING_REDUCTION_FACTOR := 0.2;
+    result.BACKTRACKING_RESIDUAL_LIMIT := 100;
   end;
 
-  INNER_MAXIMUM := GetImsINNER_MAXIMUM(ImsNumber);
-  if INNER_MAXIMUM = 50 then
+  result.INNER_MAXIMUM := GetImsINNER_MAXIMUM(ImsNumber);
+  if result.INNER_MAXIMUM = 50 then
   begin
     Inc(SimpleMatch);
   end
-  else if INNER_MAXIMUM = 100 then
+  else if result.INNER_MAXIMUM = 100 then
   begin
     Inc(ModelerateMatch);
   end
-  else if INNER_MAXIMUM = 500 then
+  else if result.INNER_MAXIMUM = 500 then
   begin
     Inc(ComplexMatch);
   end;
-  WriteLn(INNER_MAXIMUM);
+  WriteLn(result.INNER_MAXIMUM);
   
-  INNER_DVCLOSE := GetImsINNER_DVCLOSE(ImsNumber);
-  WriteLn(INNER_DVCLOSE);
-  if Abs(INNER_DVCLOSE - 1E-3) < Epsilon then
+  result.INNER_DVCLOSE := GetImsINNER_DVCLOSE(ImsNumber);
+  WriteLn(result.INNER_DVCLOSE);
+  if Abs(result.INNER_DVCLOSE - 1E-3) < Epsilon then
   begin
     Inc(SimpleMatch)
   end
-  else if Abs(INNER_DVCLOSE - 1E-2) < Epsilon then
+  else if Abs(result.INNER_DVCLOSE - 1E-2) < Epsilon then
   begin
     Inc(ModelerateMatch);
   end
-  else if Abs(INNER_DVCLOSE - 1E-1) < Epsilon then
+  else if Abs(result.INNER_DVCLOSE - 1E-1) < Epsilon then
   begin
     Inc(ComplexMatch);
   end;
   
-  INNER_RCLOSE := GetImsINNER_RCLOSE(ImsNumber);
-  WriteLn(INNER_RCLOSE);
+  result.INNER_RCLOSE := GetImsINNER_RCLOSE(ImsNumber);
+  WriteLn(result.INNER_RCLOSE);
   
-  LINEAR_ACCELERATION := GetImsLINEAR_ACCELERATION(ImsNumber);
-  if LINEAR_ACCELERATION = 1 then
+  result.LINEAR_ACCELERATION := GetImsLINEAR_ACCELERATION(ImsNumber);
+  if result.LINEAR_ACCELERATION = 1 then
   begin
     Inc(SimpleMatch)
   end
-  else if LINEAR_ACCELERATION = 2 then
+  else if result.LINEAR_ACCELERATION = 2 then
   begin
     Inc(ModelerateMatch);
     Inc(ComplexMatch);
   end;
-  WriteLn(LINEAR_ACCELERATION);
+  WriteLn(result.LINEAR_ACCELERATION);
   
-  RELAXATION_FACTOR := GetImsRELAXATION_FACTOR(ImsNumber);
-  if Abs(RELAXATION_FACTOR - 0) < Epsilon then
+  result.RELAXATION_FACTOR := GetImsRELAXATION_FACTOR(ImsNumber);
+  if Abs(result.RELAXATION_FACTOR - 0) < Epsilon then
   begin
     Inc(SimpleMatch);
     Inc(ComplexMatch);
   end
-  else if Abs(RELAXATION_FACTOR - 0.97) < Epsilon then
+  else if Abs(result.RELAXATION_FACTOR - 0.97) < Epsilon then
   begin
     Inc(ModelerateMatch);
   end;
   WriteLn(GetImsRELAXATION_FACTOR(ImsNumber));
   
-  PRECONDITIONER_LEVELS := GetImsPRECONDITIONER_LEVELS(ImsNumber);
-  if Abs(PRECONDITIONER_LEVELS - 0) < Epsilon then
+  result.PRECONDITIONER_LEVELS := GetImsPRECONDITIONER_LEVELS(ImsNumber);
+  if Abs(result.PRECONDITIONER_LEVELS - 0) < Epsilon then
   begin
     Inc(SimpleMatch);
     Inc(ModelerateMatch);
   end
-  else if Abs(PRECONDITIONER_LEVELS - 5) < Epsilon then
+  else if Abs(result.PRECONDITIONER_LEVELS - 5) < Epsilon then
   begin
     Inc(ComplexMatch);
   end;
-  WriteLn(PRECONDITIONER_LEVELS);
+  WriteLn(result.PRECONDITIONER_LEVELS);
   
-  PRECONDITIONER_DROP_TOLERANCE := GetImsPRECONDITIONER_DROP_TOLERANCE(ImsNumber);
-  if Abs(PRECONDITIONER_DROP_TOLERANCE - 0) < Epsilon then
+  result.PRECONDITIONER_DROP_TOLERANCE := GetImsPRECONDITIONER_DROP_TOLERANCE(ImsNumber);
+  if Abs(result.PRECONDITIONER_DROP_TOLERANCE - 0) < Epsilon then
   begin
     Inc(SimpleMatch);
     Inc(ModelerateMatch);
   end
-  else if Abs(PRECONDITIONER_DROP_TOLERANCE - 0.0001) < Epsilon then
+  else if Abs(result.PRECONDITIONER_DROP_TOLERANCE - 0.0001) < Epsilon then
   begin
     Inc(ComplexMatch);
   end;
-  WriteLn(PRECONDITIONER_DROP_TOLERANCE);
+  WriteLn(result.PRECONDITIONER_DROP_TOLERANCE);
   
-  NUMBER_ORTHOGONALIZATIONS := GetImsNUMBER_ORTHOGONALIZATIONS(ImsNumber);
-  if NUMBER_ORTHOGONALIZATIONS = 0 then
+  result.NUMBER_ORTHOGONALIZATIONS := GetImsNUMBER_ORTHOGONALIZATIONS(ImsNumber);
+  if result.NUMBER_ORTHOGONALIZATIONS = 0 then
   begin
     Inc(SimpleMatch);
     Inc(ModelerateMatch);
   end
-  else if NUMBER_ORTHOGONALIZATIONS = 2 then
+  else if result.NUMBER_ORTHOGONALIZATIONS = 2 then
   begin
     Inc(ComplexMatch);
   end;
-  WriteLn(NUMBER_ORTHOGONALIZATIONS);
-  
-  WriteLn(GetImsSCALING_METHOD(ImsNumber));
-  WriteLn(GetImsREORDERING_METHOD(ImsNumber));
+  WriteLn(result.NUMBER_ORTHOGONALIZATIONS);
+
+  result.SCALING_METHOD := GetImsSCALING_METHOD(ImsNumber);
+  WriteLn(result.SCALING_METHOD);
+  result.REORDERING_METHOD := GetImsREORDERING_METHOD(ImsNumber);
+  WriteLn(result.REORDERING_METHOD);
   if ModelerateMatch > SimpleMatch then
   begin
-    Method := 2;
+    result.Method := 2;
   end;
-  if (Method = 2) and (ComplexMatch > ModelerateMatch) then
+  if (result.Method = 2) and (ComplexMatch > ModelerateMatch) then
   begin
-    Method := 3;
+    result.Method := 3;
   end;
-  case Method of
+  case result.Method of
     1: WriteLn('Simple');
     2: WriteLn('Moderate');
     3: WriteLn('Complex');
@@ -2668,10 +2790,12 @@ begin
        
 end;
 
-procedure GetStoragePackage(ModelNames: TAnsiStringArray; Packages: TPackages; var StoPackageName: string);
+function GetStoragePackage(ModelNames: TAnsiStringArray; Packages: TPackages;
+ var StoPackageName: string): TImportedStorage;
 var
   PackageIndex: Integer;
 begin
+  result := nil;
   StoPackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
@@ -2683,19 +2807,24 @@ begin
   end;
   if (StoPackageName <> '') then
   begin
-    WriteLn(GetStoSTORAGECOEFFICIENT(ModelNames[0], StoPackageName));
-    WriteLn(GetStoSS_CONFINED_ONLY(ModelNames[0], StoPackageName));
-    GetStoICONVERT(ModelNames[0], StoPackageName);
-    GetStoSS(ModelNames[0], StoPackageName);
-    GetStoSY(ModelNames[0], StoPackageName);
+    result := TImportedStorage.Create;
+    result.PackageName := StoPackageName;
+    result.STORAGECOEFFICIENT := GetStoSTORAGECOEFFICIENT(ModelNames[0], StoPackageName);
+    WriteLn(result.STORAGECOEFFICIENT);
+    result.SS_CONFINED_ONLY := GetStoSS_CONFINED_ONLY(ModelNames[0], StoPackageName);
+    WriteLn(result.SS_CONFINED_ONLY);
+    result.ICONVERT := GetStoICONVERT(ModelNames[0], StoPackageName);
+    result.SS := GetStoSS(ModelNames[0], StoPackageName);
+    result.SY := GetStoSY(ModelNames[0], StoPackageName);
   end;
 end;
 
-procedure GetInitialConditions(ModelNames: TAnsiStringArray; Packages: TPackages);
+function GetInitialConditions(ModelNames: TAnsiStringArray; Packages: TPackages): TImportedInitialConditions;
 var
   ICPackageName: AnsiString;
   PackageIndex: Integer;
 begin
+  Result := nil;
   ICPackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
@@ -2707,7 +2836,9 @@ begin
   end;
   if ICPackageName <> '' then
   begin
-    GetIcSTRT(ModelNames[0], ICPackageName);
+    result := TImportedInitialConditions.Create;
+    result.PackageName := ICPackageName;
+    Result.STRT := GetIcSTRT(ModelNames[0], ICPackageName);
   end;
 end;
 
@@ -2773,6 +2904,84 @@ begin
         MfCell.Row := Row + 1;
         MfCell.Column := Col + 1;
       end;
+  end;
+end;
+
+function GetImportedChd(ModelNames: TAnsiStringArray; Packages: TPackages): TImportedChd;
+var
+  ChdPackageName: AnsiString;
+  PackageIndex: Integer;
+begin
+  result := nil;
+  ChdPackageName := '';
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'CHD6' then
+    begin
+      ChdPackageName := Packages[PackageIndex].PackageName;
+      break;
+    end;
+  end;
+  if ChdPackageName <> '' then
+  begin
+    result := TImportedChd.Create;
+    result.PackageName := ChdPackageName;
+    result.Naux := GetNAUX(ModelNames[0], result.PackageName);
+    if result.Naux > 0 then
+    begin
+      result.AuxNames := GetAuxName(ModelNames[0], result.PackageName);
+      Assert(Length(result.AuxNames) = result.Naux);
+      result.AuxMult := GetAuxMult(ModelNames[0], result.PackageName);
+    end
+    else
+    begin
+      result.AuxNames := nil;
+      result.AuxMult := -1;
+    end;
+  end;
+end;
+
+procedure UpdateChd(ModelNames: TAnsiStringArray; MFGridShape: TCIntArray;
+  IDomain: TCIntArray; ImportedChd: TImportedChd);
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+begin
+  if ImportedChd <> nil then
+  begin
+    ImportedChd.NodeList := GetNodeList(ModelNames[0], ImportedChd.PackageName);
+    ImportedChd.Bound := GetBound(ModelNames[0], ImportedChd.PackageName);
+    ImportedChd.BoundNames := GetBoundNames(ModelNames[0], ImportedChd.PackageName);
+    ImportedChd.AuxValues := GetAuxValue(ModelNames[0], ImportedChd.PackageName);
+    Assert(Length(ImportedChd.NodeList) = Length(ImportedChd.Bound));
+    if ImportedChd.BoundNames <> nil then
+    begin
+      Assert(Length(ImportedChd.NodeList) = Length(ImportedChd.BoundNames));
+    end;
+    if ImportedChd.AuxValues <> nil then
+    begin
+      Assert((Length(ImportedChd.AuxValues) div Length(ImportedChd.NodeList))
+        = ImportedChd.Naux);
+    end;
+    AuxIndex := 0;
+    for CellIndex := 0 to Length(ImportedChd.NodeList) - 1 do
+    begin
+      GetCell(ImportedChd.NodeList[CellIndex], MFGridShape, IDomain, MfCell);
+      Write(ImportedChd.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+        MfCell.Row, ' ', MfCell.Column, ' ', ImportedChd.Bound[CellIndex]);
+      for AIndex := 0 to ImportedChd.Naux - 1 do
+      begin
+        Write(' ', ImportedChd.AuxValues[AuxIndex]);
+        Inc(AuxIndex);
+      end;
+      if ImportedChd.BoundNames <> nil then
+      begin
+        Write(' ', ImportedChd.BoundNames[CellIndex]);
+      end;
+      Writeln;
+    end;
   end;
 end;
 
@@ -2855,17 +3064,18 @@ var
   Transient: Boolean;
   TDIS: TStressPeriods;
   PackageIndex: Integer;
-  ChdPackageName: AnsiString;
-  AuxNames: TAnsiStringArray;
-  AuxMult: Integer;
-  BoundNames: TAnsiStringArray;
+//  ChdPackageName: AnsiString;
+//  ChdAuxNames: TAnsiStringArray;
+//  ChdAuxMult: Integer;
+//  BoundNames: TAnsiStringArray;
   SetMode: Boolean;
-  ChdBound: TDoubleArray;
-  AuxValues: TDoubleArray;
-  NodeList: TCIntArray;
-  CellIndex: Integer;
   IDomain: TCIntArray;
-  MfCell: TMfCell;
+  ImportedChd: TImportedChd;
+  ImportedDis: TImportedDiscretization;
+  ImportedNpf: TImportedNpf;
+  ImportedIms: TImportedIms;
+  ImportedSTO: TImportedStorage;
+  ImportedIc: TImportedInitialConditions;
 begin
   with TFileOpenDialog.Create(nil) do
   try
@@ -2899,7 +3109,7 @@ begin
 
   SetLength(Names, (cnt+1)*BMI_LENVARADDRESS);
   SetLength(varNames,  cnt+1);
-
+//
 //  NamesP := @Names;
   get_output_var_names(Addr(Names[0]));
 
@@ -2948,6 +3158,7 @@ begin
       begin
         SetLength(Mode, 1);
         ModeString := AnsiString(NameList[0]);
+//        ModeString := 'SIM/ISIM_MODE';
         if get_value_int(PAnsiChar(ModeString), @Mode) = 0 then
         begin
           Writeln('Mode: ', Mode[0]);
@@ -2989,28 +3200,16 @@ begin
     Packages := GetPackageNames(ModelNames[0]);
     Mf6GridType := GetModflowGridType(ModelNames[0], MFGridShape);
     Writeln(Ord(Mf6GridType));
-    GetDiscretization(ModelNames, Packages, Mf6GridType, IDomain);
-    GetNPF(ModelNames, Packages);
+    ImportedDis := GetDiscretization(ModelNames, Packages);
+    IDomain := ImportedDis.IDomain;
+    ImportedNpf := GetNPF(ModelNames, Packages);
 
     ImsNumber := 1;
-    GetIms(ImsNumber);
-    GetStoragePackage(ModelNames, Packages, StoPackageName);
-    GetInitialConditions(ModelNames, Packages);
+    ImportedIms := GetIms(ImsNumber);
+    ImportedSTO := GetStoragePackage(ModelNames, Packages, StoPackageName);
+    ImportedIc := GetInitialConditions(ModelNames, Packages);
 
-    ChdPackageName := '';
-    for PackageIndex := 0 to Length(Packages) - 1 do
-    begin
-      if Packages[PackageIndex].PackageType = 'CHD6' then
-      begin
-        ChdPackageName := Packages[PackageIndex].PackageName;
-        break;
-      end;
-    end;
-    if ChdPackageName <> '' then
-    begin
-      AuxNames := GetAuxName(ModelNames[0], ChdPackageName);
-      AuxMult := GetAuxMult(ModelNames[0], ChdPackageName);
-    end;
+    ImportedChd := GetImportedChd(ModelNames, Packages);
 
     NStep := GetNumberOfSteps;
     NewStressPeriodTransientDataRead := 1;
@@ -3025,38 +3224,7 @@ begin
         end;
 
         GetSimulationValues(NameList);
-
-        if ChdPackageName <> '' then
-        begin
-          NodeList := GetNodeList(ModelNames[0], ChdPackageName);
-          ChdBound := GetBound(ModelNames[0], ChdPackageName);
-          BoundNames := GetBoundNames(ModelNames[0], ChdPackageName);
-          AuxValues := GetAuxValue(ModelNames[0], ChdPackageName);
-          Assert(Length(NodeList) = Length(ChdBound));
-          if BoundNames <> nil then
-          begin
-            Assert(Length(NodeList) = Length(BoundNames));
-          end;
-          if AuxValues <> nil then
-          begin
-            Assert(Length(NodeList) = Length(AuxValues));
-          end;
-          for CellIndex := 0 to Length(NodeList)  - 1 do
-          begin
-            GetCell(NodeList[CellIndex], MFGridShape, IDomain, MfCell);
-            Write(NodeList[CellIndex], ' ', MfCell.Layer, ' ', MfCell.Row, ' ',
-              MfCell.Column, ' ', ChdBound[CellIndex]);
-            if AuxValues <> nil then
-            begin
-              Write(' ', AuxValues[CellIndex]);
-            end;
-            if BoundNames <> nil then
-            begin
-              Write(' ', BoundNames[CellIndex]);
-            end;
-            Writeln;
-          end
-        end;
+        UpdateChd(ModelNames, MFGridShape, IDomain, ImportedChd);
 
         if (StepIndex = NStep[PeriodIndex] - 1) then
         begin
@@ -3210,6 +3378,13 @@ begin
     NameBuilder.Free;
     DisvCellDict.Free;
     DisvCellDict := nil;
+
+    ImportedIc.Free;
+    ImportedSTO.Free;
+    ImportedIms.Free;
+    ImportedNpf.Free;
+    ImportedDis.Free;
+    ImportedChd.Free;
   end;
 
   if NPF_K <> '' then

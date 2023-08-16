@@ -10,9 +10,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="HelloMf6"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="26"/>
-        <CursorPos Y="63"/>
-        <UsageCount Value="92"/>
+        <TopLine Value="255"/>
+        <CursorPos X="96" Y="267"/>
+        <UsageCount Value="94"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,130 +20,130 @@
         <EditorIndex Value="1"/>
         <TopLine Value="26"/>
         <CursorPos X="48" Y="44"/>
-        <UsageCount Value="45"/>
+        <UsageCount Value="46"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="136" TopLine="100"/>
+        <Caret Line="282" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="23" Column="70" TopLine="18"/>
+        <Caret Line="280" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="10" Column="4"/>
+        <Caret Line="282" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="33" Column="69"/>
+        <Caret Line="285" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="87" TopLine="69"/>
+        <Caret Line="282" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="88" TopLine="69"/>
+        <Caret Line="285" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="123" TopLine="105"/>
+        <Caret Line="315" TopLine="282"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="136" TopLine="105"/>
+        <Caret Line="317" TopLine="282"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="52" Column="57" TopLine="34"/>
+        <Caret Line="279" TopLine="260"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="145" TopLine="109"/>
+        <Caret Line="315" TopLine="282"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="87" TopLine="69"/>
+        <Caret Line="317" TopLine="282"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="88" TopLine="69"/>
+        <Caret Line="318" TopLine="282"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="141" TopLine="105"/>
+        <Caret Line="252" TopLine="233"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="45" Column="40" TopLine="28"/>
+        <Caret Line="279" TopLine="260"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="35" Column="28" TopLine="23"/>
+        <Caret Line="315" TopLine="282"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="21" Column="28" TopLine="6"/>
+        <Caret Line="317" TopLine="282"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="11" Column="42"/>
+        <Caret Line="288" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="76" TopLine="43"/>
+        <Caret Line="279" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="50" Column="11" TopLine="30"/>
+        <Caret Line="280" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="64" Column="30" TopLine="42"/>
+        <Caret Line="279" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="62" Column="14" TopLine="44"/>
+        <Caret Line="280" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="57" TopLine="32"/>
+        <Caret Line="282" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="36" Column="25" TopLine="33"/>
+        <Caret Line="285" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="30" Column="92" TopLine="11"/>
+        <Caret Line="282" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="40" Column="17" TopLine="22"/>
+        <Caret Line="280" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="106" Column="8" TopLine="92"/>
+        <Caret Line="282" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="117" Column="7" TopLine="99"/>
+        <Caret Line="285" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="53" Column="14" TopLine="35"/>
+        <Caret Line="282" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="28" Column="52"/>
+        <Caret Line="280" TopLine="258"/>
       </Position>
       <Position>
         <Filename Value="hellomf6.pas"/>
-        <Caret Line="157" Column="51" TopLine="136"/>
+        <Caret Line="316" Column="15" TopLine="283"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -151,4 +151,29 @@
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="hellomf6.pas"/>
+        <Line Value="280"/>
+      </Item>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="hellomf6.pas"/>
+        <Line Value="316"/>
+      </Item>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="hellomf6.pas"/>
+        <Line Value="277"/>
+      </Item>
+    </BreakPoints>
+  </Debugging>
 </CONFIG>

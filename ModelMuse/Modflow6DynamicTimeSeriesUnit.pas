@@ -474,8 +474,6 @@ var
   Formula: string;
   Compiler: TRbwParser;
   Expression: TExpression;
-//  VariablesUsed: TStringList;
-//  VariableIndex: Integer;
   TimeSeriesI: ITimeSeries;
 begin
   if not FTimeSeriesLocationDictionary.TryGetValue(Location, result) then
@@ -485,7 +483,6 @@ begin
     begin
       Assert(False);
     end;
-//    result := FGroup.StaticGroup.AddI.TimeSeriesI;
     Assert(FGroup.FStaticCollection <> nil);
     result.SeriesName := FGroup.FStaticCollection.DefaultTimeSeriesName;
     result.ScaleFactor := ScaleFactor;
