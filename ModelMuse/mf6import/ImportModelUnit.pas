@@ -5,7 +5,7 @@ interface
 uses
   Modflow6ConstantsUnit,
   Mf6Variables,
-  Mf6Functions, System.Classes, System.SysUtils;
+  Mf6Functions, System.Classes, System.SysUtils, System.Generics.Collections;
 
 type
   TAnsiStringArray = Array of AnsiString;
@@ -137,16 +137,141 @@ type
     STRT: TDoubleArray;
   end;
 
-  TImportedChd = class(TImportedPackage)
+  TCustomBoundaryStressPeriod = class(TObject)
+    NodeList: TCIntArray;
+    BoundNames: TAnsiStringArray;
+    AuxValues: TDoubleArray;
+    Bound: TDoubleArray;
+  end;
+
+  TCustomImportedBoundary = class(TImportedPackage)
     Naux: Integer;
     AuxNames: TAnsiStringArray;
     AuxMult: Integer;
-    NodeList: TCIntArray;
-    Bound: TDoubleArray;
-    BoundNames: TAnsiStringArray;
-    AuxValues: TDoubleArray;
-
+    Mover: Integer;
+    procedure GetPackageValues(ModelName: AnsiString); virtual;
   end;
+
+  TChdStressPeriod = class(TCustomBoundaryStressPeriod)
+  end;
+
+  TChdStressPeriods = TObjectList<TChdStressPeriod>;
+
+  TImportedChd = class(TCustomImportedBoundary)
+    StressPeriods: TChdStressPeriods;
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+  TImportedChdList = TObjectList<TImportedChd>;
+
+  TGhbStressPeriod = class(TCustomBoundaryStressPeriod)
+    function BHead(CellIndex: Integer): double;
+    function Cond(CellIndex: Integer): double;
+  end;
+
+  TGhbStressPeriods = TObjectList<TGhbStressPeriod>;
+
+  TImportedGhb = class(TCustomImportedBoundary)
+    StressPeriods: TGhbStressPeriods;
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+  TImportedGhbList = TObjectList<TImportedGhb>;
+
+  TRivStressPeriod = class(TCustomBoundaryStressPeriod)
+    function Stage(CellIndex: Integer): double;
+    function Cond(CellIndex: Integer): double;
+    function RBot(CellIndex: Integer): double;
+  end;
+
+  TRivStressPeriods = TObjectList<TRivStressPeriod>;
+
+  TImportedRiv = class(TCustomImportedBoundary)
+    StressPeriods: TRivStressPeriods;
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+  TImportedRivList = TObjectList<TImportedRiv>;
+
+  TWelStressPeriod = class(TCustomBoundaryStressPeriod)
+  end;
+
+  TWelStressPeriods = TObjectList<TWelStressPeriod>;
+
+  TImportedWel = class(TCustomImportedBoundary)
+    StressPeriods: TWelStressPeriods;
+    AUTO_FLOW_REDUCE: Double;
+    constructor Create;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  end;
+
+  TImportedWelList = TObjectList<TImportedWel>;
+
+  TDrnStressPeriod = class(TCustomBoundaryStressPeriod)
+    function Elev(CellIndex: Integer): double;
+    function Cond(CellIndex: Integer): double;
+  end;
+
+  TDrnStressPeriods = TObjectList<TDrnStressPeriod>;
+
+  TImportedDrn = class(TCustomImportedBoundary)
+    StressPeriods: TDrnStressPeriods;
+    AUXDEPTHNAME: Integer;
+    constructor Create;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  end;
+
+  TImportedDrnList = TObjectList<TImportedDrn>;
+
+  TRchStressPeriod = class(TCustomBoundaryStressPeriod)
+  end;
+
+  TRchStressPeriods = TObjectList<TRchStressPeriod>;
+
+  TImportedRch = class(TCustomImportedBoundary)
+    StressPeriods: TRchStressPeriods;
+    AUTO_FLOW_REDUCE: Double;
+    constructor Create;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  end;
+
+  TImportedRchList = TObjectList<TImportedRch>;
+
+
+
+  TImportedModel = class(TObject)
+    ModelName: AnsiString;
+    ModelType: AnsiString;
+    ModelNumber: Integer;
+    StoPackageName: string;
+    Packages: TPackages;
+    ImportedIms: TImportedIms;
+    ImportedDis: TImportedDiscretization;
+    ImportedNpf: TImportedNpf;
+    ImportedSTO: TImportedStorage;
+    ImportedIc: TImportedInitialConditions;
+    ImportedChdList: TImportedChdList;
+    ImportedGhbList: TImportedGhbList;
+    ImportedRivList: TImportedRivList;
+    ImportedWelList: TImportedWelList;
+    ImportedDrnList: TImportedDrnList;
+    ImportedRchList: TImportedRchList;
+    procedure UpdateChd;
+    procedure UpdateGhb;
+    procedure UpdateRiv;
+    procedure UpdateWel;
+    procedure UpdateDrn;
+    procedure UpdateRch;
+    destructor Destroy; override;
+  end;
+
+  TImportedModels = TObjectList<TImportedModel>;
 
 procedure ImportModel;
 
@@ -158,8 +283,7 @@ procedure GetLogicalVariable(VarName: AnsiString; var BoolArray: TLongBoolArray)
 implementation
 
 uses
-  Vcl.Dialogs, System.AnsiStrings, JclAnsiStrings, System.Math,
-  System.Generics.Collections;
+  Vcl.Dialogs, System.AnsiStrings, JclAnsiStrings, System.Math;
 
 const
   StrLEN: Ansistring = 'LEN=';
@@ -303,30 +427,88 @@ begin
   result := BoolArray[0];
 end;
 
+function GetPackageType(VarName: AnsiString): AnsiString; overload;
+var
+  Values: TAnsiStringArray;
+begin
+  GetStringVariable(VarName,  Values);
+  Assert(Length(Values) = 1);
+  result := Values[0];
+end;
 
-function GetPackageNames(ModelName: AnsiString): TPackages;
+function GetPackageType(ModelName, PackageName: AnsiString): AnsiString; overload;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/'+ PackageName + '/PACKAGE_TYPE';
+  result := GetPackageType(VarName)
+end;
+
+function GetPackages(ModelName: AnsiString): TPackages;
 var
   Index: Integer;
   PackageNameString: AnsiString;
   PackageTypeString: AnsiString;
   PackageTypes: TAnsiStringArray;
   PackageNames: TAnsiStringArray;
+  PackageName: WideString;
+  PackageType: AnsiString;
+  PIndex: Integer;
+  AVarName: AnsiString;
+  ModelNamePosition: Integer;
+  PackageTypePostion: Integer;
+  StartIndex: Integer;
+  VarLength: Integer;
 begin
   PackageTypeString := '__INPUT__/' + ModelName + '/PKGTYPES';
   PackageNameString := '__INPUT__/' + ModelName + '/PKGNAMES';
   GetStringVariable(PackageTypeString, PackageTypes);
   GetStringVariable(PackageNameString, PackageNames);
-  Assert(Length(PackageNames) = Length(PackageTypes));
-  SetLength(Result, Length(PackageNames));
-  for Index := 0 to Length(PackageNames) - 1 do
+  if Length(PackageNames) = Length(PackageTypes) then
   begin
-    Result[Index].PackageType := PackageTypes[Index];
-    Result[Index].PackageName := PackageNames[Index];
+    SetLength(Result, Length(PackageNames));
+    for Index := 0 to Length(PackageNames) - 1 do
+    begin
+      Result[Index].PackageType := PackageTypes[Index];
+      Result[Index].PackageName := PackageNames[Index];
+    end;
+  end
+  else
+  begin
+    SetLength(Result, Length(PackageTypes));
+    for Index := 0 to Length(Result) - 1 do
+    begin
+      Result[Index].PackageType := '';
+      Result[Index].PackageName := '';
+    end;
+    PIndex := 0;
+    for Index := 0 to NameList.Count - 1 do
+    begin
+      AVarName := NameList[Index];
+      ModelNamePosition := Pos(ModelName + '/', AVarName);
+      PackageTypePostion := Pos('/PACKAGE_TYPE', AVarName);
+      if (ModelNamePosition = 1) and (PackageTypePostion > 1) then
+      begin
+        PackageType := GetPackageType(AVarName);
+        StartIndex:= Length(ModelName + '/')+1;
+        VarLength := PackageTypePostion - StartIndex;
+        PackageName := MidStr(AVarName, StartIndex, VarLength);
+        Assert(PIndex < Length(Result));
+        Result[PIndex].PackageType := PackageType + '6';
+        Result[PIndex].PackageName := PackageName;
+        Inc(PIndex);
+      end;
+    end;
+    if PIndex < Length(result) then
+    begin
+      SetLength(Result, PIndex);
+    end;
+
   end;
 
-  for Index := 0 to Length(PackageNames) - 1 do
+  for Index := 0 to Length(result) - 1 do
   begin
-    Writeln(PackageTypes[Index], ' ', PackageNames[Index])
+    Writeln(result[Index].PackageType, ' ', result[Index].PackageName)
   end;
 
 end;
@@ -600,6 +782,7 @@ var
   VarName: AnsiString;
   Values: TAnsiStringArray;
 begin
+  Result := naHarmonic;
   VarName := '__INPUT__/'+ ModelName + '/' + NpfPackageName +'/CELLAVG';
   if NameList.IndexOf(VarName) >= 0 then
   begin
@@ -724,6 +907,7 @@ var
   Values: TDoubleArray;
 //  Values: TCIntArray;
 begin
+  result := Mf6Undefined;
   VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/WETFCT';
   if NameList.IndexOf(VarName) >= 0 then
   begin
@@ -743,6 +927,7 @@ var
 //  Values: TDoubleArray;
   Values: TCIntArray;
 begin
+  Result := -1;
   VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IWETIT';
   if NameList.IndexOf(VarName) >= 0 then
   begin
@@ -762,6 +947,7 @@ var
 //  Values: TDoubleArray;
   Values: TCIntArray;
 begin
+  result := -1;
   VarName := '__INPUT__/' + ModelName + '/' + NpfPackageName + '/IHDWET';
   if NameList.IndexOf(VarName) >= 0 then
   begin
@@ -1469,6 +1655,72 @@ begin
   end;
 end;
 
+function GetMOVER(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IMOVER';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetAUTO_FLOW_REDUCE(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+  RValues: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IFLOWRED';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    if Values[0] = 1 then
+    begin
+      VarName := ModelName + '/' + PackageName +'/FLOWRED';
+      GetDoubleVariable(VarName, RValues);
+      Assert(Length(RValues) = 1);
+      result := RValues[0];
+    end
+    else
+    begin
+      result := 0;
+    end;
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetAUXDEPTHNAME(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IAUXDDRNCOL';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+
 function GetAuxName(ModelName, PackageName: AnsiString): TAnsiStringArray;
 var
   VarName: AnsiString;
@@ -2127,7 +2379,7 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('GHB', VarName) > 0;
+    WriteValues := Pos('RCH', VarName) > 0;
 //    WriteValues := True;
     if not WriteValues then
     begin
@@ -2425,147 +2677,167 @@ begin
   Writeln(Ord(GetTimeUnits));
 end;
 
-function GetDiscretization(ModelNames: TAnsiStringArray;
+function GetDiscretization(ModelName: AnsiString;
   Packages: TPackages): TImportedDiscretization;
 var
   PackageIndex: Integer;
   ACell: TCell;
   VIndex: Integer;
   Index: Integer;
+  DisPackageName: AnsiString;
+  PackageType: AnsiString;
 begin
-  result := TImportedDiscretization.Create;
-  result.Mf6GridType := GetModflowGridType(ModelNames[0], result.MFGridShape);
-  case result.Mf6GridType of
-    gtDISU: result.PackageID := 'DISU6';
-    gtDISV: result.PackageID := 'DISV6';
-    gtDIS: result.PackageID := 'DIS6';
-  end;
-  result.PackageName := '';
+  result := nil;
+  DisPackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
-    if Packages[PackageIndex].PackageType = result.PackageID then
+    PackageType := Packages[PackageIndex].PackageType;
+    if (PackageType = 'DISU6') or (PackageType = 'DISV6') or (PackageType = 'DIS6') then
     begin
-      result.PackageName := Packages[PackageIndex].PackageName;
+      DisPackageName := Packages[PackageIndex].PackageName;
       Break;
     end;
   end;
-  Assert(result.PackageName <> '');
-  result.LengthUnit := GetLengthUnit(ModelNames[0], result.PackageName);
-  WriteLn(Ord(result.LengthUnit));
-  result.XOrigin := GetXOrigin(ModelNames[0], result.PackageName);
-  Writeln(result.XOrigin);
-  result.YOrigin := GetYOrigin(ModelNames[0], result.PackageName);
-  Writeln(result.YOrigin);
-  result.RotationAngle := GetGridRotation(ModelNames[0], result.PackageName);
-  Writeln(result.RotationAngle);
-  case result.Mf6GridType of
-    gtDISU:
-      Assert(False);
-    gtDISV:
-      begin
-        result.Vertices := GetVertices(ModelNames[0], result.PackageName);
-        for Index := 0 to Length(result.Vertices) - 1 do
-        begin
-          WriteLn(result.Vertices[Index].VertexNumber, ''#9'',
-            result.Vertices[Index].X, ''#9'', result.Vertices[Index].Y);
-        end;
-        result.Cells := GetDisvCells(ModelNames[0], result.PackageName);
-        for Index := 0 to Length(result.Cells) - 1 do
-        begin
-          ACell := result.Cells[Index];
-          Write(ACell.CellNumber, ''#9'', ACell.CellX, ''#9'', ACell.CellY);
-          for VIndex := 0 to Length(ACell.VertexNumbers) - 1 do
+  if DisPackageName <> '' then
+  begin
+    result := TImportedDiscretization.Create;
+    result.PackageName := DisPackageName;
+    result.Mf6GridType := GetModflowGridType(ModelName, result.MFGridShape);
+    case result.Mf6GridType of
+      gtDISU: result.PackageID := 'DISU6';
+      gtDISV: result.PackageID := 'DISV6';
+      gtDIS: result.PackageID := 'DIS6';
+    end;
+    result.Vertices := nil;
+    result.Cells := nil;
+    result.DelR := nil;
+    result.DelC := nil;
+    result.GridTop := nil;
+    result.GridBottom := nil;
+    result.IDomain := nil;
+    if result.PackageName <> '' then
+    begin
+      result.LengthUnit := GetLengthUnit(ModelName, result.PackageName);
+      WriteLn(Ord(result.LengthUnit));
+      result.XOrigin := GetXOrigin(ModelName, result.PackageName);
+      Writeln(result.XOrigin);
+      result.YOrigin := GetYOrigin(ModelName, result.PackageName);
+      Writeln(result.YOrigin);
+      result.RotationAngle := GetGridRotation(ModelName, result.PackageName);
+      Writeln(result.RotationAngle);
+      case result.Mf6GridType of
+        gtDISU:
+          Assert(False);
+        gtDISV:
           begin
-            Write(''#9'', ACell.VertexNumbers[VIndex]);
+            result.Vertices := GetVertices(ModelName, result.PackageName);
+            for Index := 0 to Length(result.Vertices) - 1 do
+            begin
+              WriteLn(result.Vertices[Index].VertexNumber, ''#9'',
+                result.Vertices[Index].X, ''#9'', result.Vertices[Index].Y);
+            end;
+            result.Cells := GetDisvCells(ModelName, result.PackageName);
+            for Index := 0 to Length(result.Cells) - 1 do
+            begin
+              ACell := result.Cells[Index];
+              Write(ACell.CellNumber, ''#9'', ACell.CellX, ''#9'', ACell.CellY);
+              for VIndex := 0 to Length(ACell.VertexNumbers) - 1 do
+              begin
+                Write(''#9'', ACell.VertexNumbers[VIndex]);
+              end;
+              WriteLn;
+            end;
           end;
-          WriteLn;
-        end;
+        gtDIS:
+          begin
+            result.DelR := GetDelR(ModelName, result.PackageName);
+            WriteLn('DelR');
+            for Index := 0 to Length(result.DelR) - 1 do
+            begin
+              Write(' ', result.DelR[Index]);
+            end;
+            Writeln;
+            result.DelC := GetDelC(ModelName, result.PackageName);
+            WriteLn('DelC');
+            for Index := 0 to Length(result.DelC) - 1 do
+            begin
+              Write(' ', result.DelC[Index]);
+            end;
+          end;
       end;
-    gtDIS:
-      begin
-        result.DelR := GetDelR(ModelNames[0], result.PackageName);
-        WriteLn('DelR');
-        for Index := 0 to Length(result.DelR) - 1 do
-        begin
-          Write(' ', result.DelR[Index]);
-        end;
-        Writeln;
-        result.DelC := GetDelC(ModelNames[0], result.PackageName);
-        WriteLn('DelC');
-        for Index := 0 to Length(result.DelC) - 1 do
-        begin
-          Write(' ', result.DelC[Index]);
-        end;
-      end;
+      result.GridTop := GetTop(ModelName, result.PackageName);
+      result.GridBottom := GetBottom(ModelName, result.PackageName);
+      result.IDomain := GetIDomain(ModelName, result.PackageName);
+    end;
   end;
-  result.GridTop := GetTop(ModelNames[0], result.PackageName);
-  result.GridBottom := GetBottom(ModelNames[0], result.PackageName);
-  result.IDomain := GetIDomain(ModelNames[0], result.PackageName);
 end;
 
-function GetNPF(ModelNames: TAnsiStringArray; Packages: TPackages): TImportedNpf;
+function GetNPF(ModelName: AnsiString; Packages: TPackages): TImportedNpf;
 var
   PackageIndex: Integer;
 begin
-  result := TImportedNpf.Create;
-  result.PackageName := '';
+  Result := nil;
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
     if Packages[PackageIndex].PackageType = 'NPF6' then
     begin
+      result := TImportedNpf.Create;
       result.PackageName := Packages[PackageIndex].PackageName;
       break;
     end;
   end;
-  Assert(result.PackageName <> '');
-  result.NpfAveraging := GetNpfAveraging(ModelNames[0], result.PackageName);
-  Writeln(Ord(result.NpfAveraging));
-  result.THICKSTRT := UseTHICKSTRT(ModelNames[0], result.PackageName);
-  WriteLn(result.THICKSTRT);
-  result.VARIABLECV := UseVARIABLECV(ModelNames[0], result.PackageName);
-  if result.VARIABLECV then
+  if result <> nil then
   begin
-    result.DEWATERED := UseDEWATERED(ModelNames[0], result.PackageName);
-    WriteLn(True, result.DEWATERED);
-  end
-  else
-  begin
-    result.DEWATERED := False;
-    WriteLn(False);
+    Assert(result.PackageName <> '');
+    result.NpfAveraging := GetNpfAveraging(ModelName, result.PackageName);
+    Writeln(Ord(result.NpfAveraging));
+    result.THICKSTRT := UseTHICKSTRT(ModelName, result.PackageName);
+    WriteLn(result.THICKSTRT);
+    result.VARIABLECV := UseVARIABLECV(ModelName, result.PackageName);
+    if result.VARIABLECV then
+    begin
+      result.DEWATERED := UseDEWATERED(ModelName, result.PackageName);
+      WriteLn(True, result.DEWATERED);
+    end
+    else
+    begin
+      result.DEWATERED := False;
+      WriteLn(False);
+    end;
+    result.Perched := UsePerched(ModelName, result.PackageName);
+    WriteLn(result.Perched);
+    result.REWET := UseREWET(ModelName, result.PackageName);
+    if result.REWET then
+    begin
+      result.WETFCT := GetWETFCT(ModelName, result.PackageName);
+      result.IWETIT := GetIWETIT(ModelName, result.PackageName);
+      result.IHDWET := GetIHDWET(ModelName, result.PackageName);
+      WriteLn(True, result.WETFCT, result.IWETIT, result.IHDWET);
+    end
+    else
+    begin
+      result.WETFCT := 0;
+      result.IWETIT := 0;
+      result.IHDWET := 0;
+      WriteLn(False);
+    end;
+    result.K22OVERK := UseK22OVERK(ModelName, result.PackageName);
+    WriteLn(result.K22OVERK);
+    result.K33OVERK := UseK33OVERK(ModelName, result.PackageName);
+    WriteLn(result.K33OVERK);
+    result.XT3D := UseXT3D(ModelName, result.PackageName);
+    WriteLn(result.XT3D);
+    result.XT3D_RHS := UseXT3D_RHS(ModelName, result.PackageName);
+    WriteLn(result.XT3D_RHS);
+    result.CellType := GetICELLTYPE(ModelName, result.PackageName);
+    result.K := GetK(ModelName, result.PackageName);
+    result.K22 := GetK22(ModelName, result.PackageName);
+    result.K33 := GetK33(ModelName, result.PackageName);
+    result.Angle1 := GetAngle1(ModelName, result.PackageName);
+    result.Angle2 := GetAngle2(ModelName, result.PackageName);
+    result.Angle3 := GetAngle3(ModelName, result.PackageName);
+    result.WetDry := GetWetDry(ModelName, result.PackageName);
   end;
-  result.Perched := UsePerched(ModelNames[0], result.PackageName);
-  WriteLn(result.Perched);
-  result.REWET := UseREWET(ModelNames[0], result.PackageName);
-  if result.REWET then
-  begin
-    result.WETFCT := GetWETFCT(ModelNames[0], result.PackageName);
-    result.IWETIT := GetIWETIT(ModelNames[0], result.PackageName);
-    result.IHDWET := GetIHDWET(ModelNames[0], result.PackageName);
-    WriteLn(True, result.WETFCT, result.IWETIT, result.IHDWET);
-  end
-  else
-  begin
-    result.WETFCT := 0;
-    result.IWETIT := 0;
-    result.IHDWET := 0;
-    WriteLn(False);
-  end;
-  result.K22OVERK := UseK22OVERK(ModelNames[0], result.PackageName);
-  WriteLn(result.K22OVERK);
-  result.K33OVERK := UseK33OVERK(ModelNames[0], result.PackageName);
-  WriteLn(result.K33OVERK);
-  result.XT3D := UseXT3D(ModelNames[0], result.PackageName);
-  WriteLn(result.XT3D);
-  result.XT3D_RHS := UseXT3D_RHS(ModelNames[0], result.PackageName);
-  WriteLn(result.XT3D_RHS);
-  result.CellType := GetICELLTYPE(ModelNames[0], result.PackageName);
-  result.K := GetK(ModelNames[0], result.PackageName);
-  result.K22 := GetK22(ModelNames[0], result.PackageName);
-  result.K33 := GetK33(ModelNames[0], result.PackageName);
-  result.Angle1 := GetAngle1(ModelNames[0], result.PackageName);
-  result.Angle2 := GetAngle2(ModelNames[0], result.PackageName);
-  result.Angle3 := GetAngle3(ModelNames[0], result.PackageName);
-  result.WetDry := GetWetDry(ModelNames[0], result.PackageName);
 end;
 
 function GetIms(ImsNumber: Integer): TImportedIms;
@@ -2790,7 +3062,7 @@ begin
        
 end;
 
-function GetStoragePackage(ModelNames: TAnsiStringArray; Packages: TPackages;
+function GetStoragePackage(ModelName: AnsiString; Packages: TPackages;
  var StoPackageName: string): TImportedStorage;
 var
   PackageIndex: Integer;
@@ -2809,17 +3081,17 @@ begin
   begin
     result := TImportedStorage.Create;
     result.PackageName := StoPackageName;
-    result.STORAGECOEFFICIENT := GetStoSTORAGECOEFFICIENT(ModelNames[0], StoPackageName);
+    result.STORAGECOEFFICIENT := GetStoSTORAGECOEFFICIENT(ModelName, StoPackageName);
     WriteLn(result.STORAGECOEFFICIENT);
-    result.SS_CONFINED_ONLY := GetStoSS_CONFINED_ONLY(ModelNames[0], StoPackageName);
+    result.SS_CONFINED_ONLY := GetStoSS_CONFINED_ONLY(ModelName, StoPackageName);
     WriteLn(result.SS_CONFINED_ONLY);
-    result.ICONVERT := GetStoICONVERT(ModelNames[0], StoPackageName);
-    result.SS := GetStoSS(ModelNames[0], StoPackageName);
-    result.SY := GetStoSY(ModelNames[0], StoPackageName);
+    result.ICONVERT := GetStoICONVERT(ModelName, StoPackageName);
+    result.SS := GetStoSS(ModelName, StoPackageName);
+    result.SY := GetStoSY(ModelName, StoPackageName);
   end;
 end;
 
-function GetInitialConditions(ModelNames: TAnsiStringArray; Packages: TPackages): TImportedInitialConditions;
+function GetInitialConditions(ModelName: AnsiString; Packages: TPackages): TImportedInitialConditions;
 var
   ICPackageName: AnsiString;
   PackageIndex: Integer;
@@ -2838,17 +3110,23 @@ begin
   begin
     result := TImportedInitialConditions.Create;
     result.PackageName := ICPackageName;
-    Result.STRT := GetIcSTRT(ModelNames[0], ICPackageName);
+    Result.STRT := GetIcSTRT(ModelName, ICPackageName);
   end;
 end;
 
 procedure GetCell(NodeNumber: Integer; MFGridShape, IDomain: TCIntArray; var MfCell: TMfCell);
 var
   Layer: Integer;
-  Row: Integer;
+//  Row: Integer;
   Col: Integer;
   CellIndex: Integer;
   CellNumber: Integer;
+  NLay: Integer;
+  NRow: cint;
+  NCol: cint;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
 begin
   case Length(MFGridShape) of
     1:
@@ -2894,94 +3172,280 @@ begin
       end;
     3:
       begin
-        // DIS
-        Layer := (NodeNumber -1) mod MFGridShape[0];
-        NodeNumber := NodeNumber - Layer * MFGridShape[0];
-        Row := (NodeNumber -1) mod MFGridShape[1];
-        NodeNumber := NodeNumber - Row * MFGridShape[1];
-        Col := NodeNumber;
-        MfCell.Layer := Layer + 1;
-        MfCell.Row := Row + 1;
-        MfCell.Column := Col + 1;
+        if DisvCellDict = nil then
+        begin
+          DisvCellDict := TDisvCellDict.Create;
+          // DIS
+          Dec(NodeNumber);
+          NLay := MFGridShape[0];
+          NRow := MFGridShape[1];
+          NCol := MFGridShape[2];
+          Assert(Length(IDomain) = NLay*NRow*NCol);
+          CellNumber := 0;
+          CellIndex := 0;
+          for LayerIndex := 0 to NLay - 1 do
+          begin
+            for RowIndex := 0 to NRow - 1 do
+            begin
+              for ColIndex := 0 to NCol - 1 do
+              begin
+                if IDomain[CellIndex] > 0 then
+                begin
+                  Inc(CellNumber);
+                  MfCell.Layer := LayerIndex + 1;
+                  MfCell.Row := RowIndex+1;
+                  MfCell.Column := ColIndex + 1;
+                  DisvCellDict.Add(CellNumber, MfCell)
+                end;
+                Inc(CellIndex);
+              end;
+            end;
+          end;
+        end;
+        if not DisvCellDict.TryGetValue(NodeNumber, MfCell) then
+        begin
+          MfCell.Layer := 0;
+          MfCell.Row := 0;
+          MfCell.Column := 0;
+        end;
       end;
   end;
 end;
 
-function GetImportedChd(ModelNames: TAnsiStringArray; Packages: TPackages): TImportedChd;
+function GetChdPackages(ModelName: AnsiString; Packages: TPackages): TImportedChdList;
 var
   ChdPackageName: AnsiString;
   PackageIndex: Integer;
+  ImportedPackage: TImportedChd;
 begin
   result := nil;
-  ChdPackageName := '';
+//  ChdPackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
     if Packages[PackageIndex].PackageType = 'CHD6' then
     begin
       ChdPackageName := Packages[PackageIndex].PackageName;
-      break;
-    end;
-  end;
-  if ChdPackageName <> '' then
-  begin
-    result := TImportedChd.Create;
-    result.PackageName := ChdPackageName;
-    result.Naux := GetNAUX(ModelNames[0], result.PackageName);
-    if result.Naux > 0 then
-    begin
-      result.AuxNames := GetAuxName(ModelNames[0], result.PackageName);
-      Assert(Length(result.AuxNames) = result.Naux);
-      result.AuxMult := GetAuxMult(ModelNames[0], result.PackageName);
-    end
-    else
-    begin
-      result.AuxNames := nil;
-      result.AuxMult := -1;
+      if result = nil then
+      begin
+        result := TImportedChdList.Create;
+      end;
+      ImportedPackage := TImportedChd.Create;
+      result.Add(ImportedPackage);
+      ImportedPackage.PackageName := Packages[PackageIndex].PackageName;
+      ImportedPackage.GetPackageValues(ModelName);
     end;
   end;
 end;
 
-procedure UpdateChd(ModelNames: TAnsiStringArray; MFGridShape: TCIntArray;
+function GetRchPackages(ModelName: AnsiString; Packages: TPackages): TImportedRchList;
+var
+  RchPackageName: AnsiString;
+  PackageIndex: Integer;
+  ImportedPackage: TImportedRch;
+begin
+  result := nil;
+//  RchPackageName := '';
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'RCH6' then
+    begin
+      RchPackageName := Packages[PackageIndex].PackageName;
+      if result = nil then
+      begin
+        result := TImportedRchList.Create;
+      end;
+      ImportedPackage := TImportedRch.Create;
+      result.Add(ImportedPackage);
+      ImportedPackage.PackageName := Packages[PackageIndex].PackageName;
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
+function GetGhbPackages(ModelName: AnsiString; Packages: TPackages): TImportedGhbList;
+var
+  GhbPackageName: AnsiString;
+  PackageIndex: Integer;
+  ImportedGhb: TImportedGhb;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'GHB6' then
+    begin
+      GhbPackageName := Packages[PackageIndex].PackageName;
+      if result = nil then
+      begin
+        result := TImportedGhbList.Create;
+      end;
+      ImportedGhb := TImportedGhb.Create;
+      result.Add(ImportedGhb);
+      ImportedGhb.PackageName := GhbPackageName;
+      ImportedGhb.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
+function GetDrnPackages(ModelName: AnsiString; Packages: TPackages): TImportedDrnList;
+var
+  DrnPackageName: AnsiString;
+  PackageIndex: Integer;
+  ImportedDrn: TImportedDrn;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'DRN6' then
+    begin
+      DrnPackageName := Packages[PackageIndex].PackageName;
+      if result = nil then
+      begin
+        result := TImportedDrnList.Create;
+      end;
+      ImportedDrn := TImportedDrn.Create;
+      result.Add(ImportedDrn);
+      ImportedDrn.PackageName := DrnPackageName;
+      ImportedDrn.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
+function GetRivPackages(ModelName: AnsiString; Packages: TPackages): TImportedRivList;
+var
+  RivPackageName: AnsiString;
+  PackageIndex: Integer;
+  ImportedPackage: TImportedRiv;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'RIV6' then
+    begin
+      RivPackageName := Packages[PackageIndex].PackageName;
+      if result = nil then
+      begin
+        result := TImportedRivList.Create;
+      end;
+      ImportedPackage := TImportedRiv.Create;
+      result.Add(ImportedPackage);
+      ImportedPackage.PackageName := RivPackageName;
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
+function GetWelPackages(ModelName: AnsiString; Packages: TPackages): TImportedWelList;
+var
+  WelPackageName: AnsiString;
+  PackageIndex: Integer;
+  ImportedPackage: TImportedWel;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'WEL6' then
+    begin
+      WelPackageName := Packages[PackageIndex].PackageName;
+      if result = nil then
+      begin
+        result := TImportedWelList.Create;
+      end;
+      ImportedPackage := TImportedWel.Create;
+      result.Add(ImportedPackage);
+      ImportedPackage.PackageName := WelPackageName;
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
+procedure UpdateChd(ModelName: AnsiString; MFGridShape: TCIntArray;
   IDomain: TCIntArray; ImportedChd: TImportedChd);
 var
   AuxIndex: Integer;
   CellIndex: Integer;
   MfCell: TMfCell;
   AIndex: Integer;
+  StressPeriod: TChdStressPeriod;
 begin
   if ImportedChd <> nil then
   begin
-    ImportedChd.NodeList := GetNodeList(ModelNames[0], ImportedChd.PackageName);
-    ImportedChd.Bound := GetBound(ModelNames[0], ImportedChd.PackageName);
-    ImportedChd.BoundNames := GetBoundNames(ModelNames[0], ImportedChd.PackageName);
-    ImportedChd.AuxValues := GetAuxValue(ModelNames[0], ImportedChd.PackageName);
-    Assert(Length(ImportedChd.NodeList) = Length(ImportedChd.Bound));
-    if ImportedChd.BoundNames <> nil then
+    StressPeriod := TChdStressPeriod.Create;
+    ImportedChd.StressPeriods.Add(StressPeriod);
+    StressPeriod.NodeList := GetNodeList(ModelName, ImportedChd.PackageName);
+    StressPeriod.Bound := GetBound(ModelName, ImportedChd.PackageName);
+    StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedChd.PackageName);
+    StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedChd.PackageName);
+    Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.Bound));
+    if StressPeriod.BoundNames <> nil then
     begin
-      Assert(Length(ImportedChd.NodeList) = Length(ImportedChd.BoundNames));
+      Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
     end;
-    if ImportedChd.AuxValues <> nil then
+    if StressPeriod.AuxValues <> nil then
     begin
-      Assert((Length(ImportedChd.AuxValues) div Length(ImportedChd.NodeList))
+      Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
         = ImportedChd.Naux);
     end;
     AuxIndex := 0;
-    for CellIndex := 0 to Length(ImportedChd.NodeList) - 1 do
+    for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
     begin
-      GetCell(ImportedChd.NodeList[CellIndex], MFGridShape, IDomain, MfCell);
-      Write(ImportedChd.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
-        MfCell.Row, ' ', MfCell.Column, ' ', ImportedChd.Bound[CellIndex]);
+      GetCell(StressPeriod.NodeList[CellIndex], MFGridShape, IDomain, MfCell);
+      Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+        MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.Bound[CellIndex]);
       for AIndex := 0 to ImportedChd.Naux - 1 do
       begin
-        Write(' ', ImportedChd.AuxValues[AuxIndex]);
+        Write(' ', StressPeriod.AuxValues[AuxIndex]);
         Inc(AuxIndex);
       end;
-      if ImportedChd.BoundNames <> nil then
+      if StressPeriod.BoundNames <> nil then
       begin
-        Write(' ', ImportedChd.BoundNames[CellIndex]);
+        Write(' ', StressPeriod.BoundNames[CellIndex]);
       end;
       Writeln;
     end;
+  end;
+end;
+
+function GetModels(var ModelNames: TAnsiStringArray): TImportedModels;
+var
+  ModelTypes: TAnsiStringArray;
+  ModelIndex: Integer;
+  ImportedModel: TImportedModel;
+begin
+  Result := TImportedModels.Create;
+  ModelTypes := GetModelType;
+  ModelNames := GetModelName;
+  Assert(Length(ModelNames) = Length(ModelTypes));
+  for ModelIndex := 0 to Length(ModelNames) - 1 do
+  begin
+    ImportedModel := TImportedModel.Create;
+    Result.Add(ImportedModel);
+    ImportedModel.ModelName := ModelNames[ModelIndex];
+    ImportedModel.ModelType := ModelTypes[ModelIndex];
+    ImportedModel.ModelNumber := ModelIndex+1;
+    WriteLn(ModelNames[ModelIndex], ' ', ModelTypes[ModelIndex]);
+    ImportedModel.Packages := GetPackages(ModelNames[ModelIndex]);
+    ImportedModel.ImportedDis := GetDiscretization(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedNpf := GetNPF(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedIms := GetIms(ImportedModel.ModelNumber);
+    ImportedModel.ImportedSTO := GetStoragePackage(ModelNames[ModelIndex],
+      ImportedModel.Packages, ImportedModel.StoPackageName);
+    ImportedModel.ImportedIc := GetInitialConditions(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedChdList := GetChdPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedGhbList := GetGhbPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedRivList := GetRivPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedWelList := GetWelPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedDrnList := GetDrnPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedRchList := GetRchPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+
   end;
 end;
 
@@ -3048,26 +3512,21 @@ var
   Rank: Integer;
   RankIndex: Integer;
   ModelNames: TAnsiStringArray;
-  ModelTypes: TAnsiStringArray;
   MFGridShape: TCIntArray;
   Packages: TPackages;
-  PackageID: Ansistring;
+//  PackageID: Ansistring;
   K: TDoubleArray;
   ImsNumber: Integer;
   StoPackageName: string;
-  current_time: Double;
-  TimeStep: Double;
+//  current_time: Double;
+//  TimeStep: Double;
   NStep: TCIntArray;
   PeriodIndex: Integer;
   StepIndex: Integer;
   NewStressPeriodTransientDataRead: Integer;
   Transient: Boolean;
   TDIS: TStressPeriods;
-  PackageIndex: Integer;
-//  ChdPackageName: AnsiString;
-//  ChdAuxNames: TAnsiStringArray;
-//  ChdAuxMult: Integer;
-//  BoundNames: TAnsiStringArray;
+//  PackageIndex: Integer;
   SetMode: Boolean;
   IDomain: TCIntArray;
   ImportedChd: TImportedChd;
@@ -3076,6 +3535,9 @@ var
   ImportedIms: TImportedIms;
   ImportedSTO: TImportedStorage;
   ImportedIc: TImportedInitialConditions;
+  ImportedModels: TImportedModels;
+  ModelIndex: Integer;
+  ImportedChdList: TImportedChdList;
 begin
   with TFileOpenDialog.Create(nil) do
   try
@@ -3124,6 +3586,8 @@ begin
   DIS_BOT := '';
   DIS_LENUNI := '';
   NPF_K := '';
+  ImportedModels := nil;
+  ImportedDis := nil;
   NameBuilder := TStringBuilder.Create;
   NameList := TAnsiStringList.Create;
 //  NameList2 := TStringList.Create;
@@ -3149,6 +3613,7 @@ begin
     begin
       Writeln(NameList[NameIndex]);
     end;
+        GetSimulationValues(NameList);
 
     // Set mode
     SetMode := True;
@@ -3182,14 +3647,8 @@ begin
         end;
       end;
     end;
+    ImportedModels := GetModels(ModelNames);
 
-    ModelTypes := GetModelType;
-    ModelNames := GetModelName;
-    Assert(Length(ModelNames) = Length(ModelTypes));
-    for Index := 0 to Length(ModelNames) - 1 do
-    begin
-      WriteLn(ModelNames[Index], ' ', ModelTypes[Index]);
-    end;
     TDIS := GetTimeDiscretization;
 //    GetStringVariable('MODFLOW/CHD-1/BOUNDNAME_CST');
 
@@ -3197,23 +3656,39 @@ begin
 
 //    GetSimulationValues(NameList);
 //    GetSimulationInputs(NameList);
-    Packages := GetPackageNames(ModelNames[0]);
+    Packages := GetPackages(ModelNames[0]);
     Mf6GridType := GetModflowGridType(ModelNames[0], MFGridShape);
     Writeln(Ord(Mf6GridType));
-    ImportedDis := GetDiscretization(ModelNames, Packages);
-    IDomain := ImportedDis.IDomain;
-    ImportedNpf := GetNPF(ModelNames, Packages);
+    ImportedDis := GetDiscretization(ModelNames[0], Packages);
+    if ImportedDis = nil then
+    begin
+      IDomain := nil;
+    end
+    else
+    begin
+      IDomain := ImportedDis.IDomain;
+    end;
+    ImportedNpf := GetNPF(ModelNames[0], Packages);
 
     ImsNumber := 1;
     ImportedIms := GetIms(ImsNumber);
-    ImportedSTO := GetStoragePackage(ModelNames, Packages, StoPackageName);
-    ImportedIc := GetInitialConditions(ModelNames, Packages);
+    ImportedSTO := GetStoragePackage(ModelNames[0], Packages, StoPackageName);
+    ImportedIc := GetInitialConditions(ModelNames[0], Packages);
 
-    ImportedChd := GetImportedChd(ModelNames, Packages);
+    ImportedChdList := GetChdPackages(ModelNames[0], Packages);
+    if ImportedChdList <> nil then
+    begin
+      ImportedChd := ImportedChdList[0];
+    end
+    else
+    begin
+      ImportedChd := nil;
+    end;
 
     NStep := GetNumberOfSteps;
-    NewStressPeriodTransientDataRead := 1;
+//    NewStressPeriodTransientDataRead := 1;
 
+    Transient := False;
     for PeriodIndex := 0 to Length(NStep) - 1 do
     begin
       for StepIndex := 0 to NStep[PeriodIndex] - 1 do
@@ -3224,7 +3699,19 @@ begin
         end;
 
         GetSimulationValues(NameList);
-        UpdateChd(ModelNames, MFGridShape, IDomain, ImportedChd);
+        if StepIndex = 0 then
+        begin
+          for ModelIndex := 0 to ImportedModels.Count - 1 do
+          begin
+            ImportedModels[ModelIndex].UpdateChd;
+            ImportedModels[ModelIndex].UpdateGhb;
+            ImportedModels[ModelIndex].UpdateRiv;
+            ImportedModels[ModelIndex].UpdateWel;
+            ImportedModels[ModelIndex].UpdateDrn;
+            ImportedModels[ModelIndex].UpdateRch;
+
+          end;
+        end;
 
         if (StepIndex = NStep[PeriodIndex] - 1) then
         begin
@@ -3379,6 +3866,7 @@ begin
     DisvCellDict.Free;
     DisvCellDict := nil;
 
+    ImportedModels.Free;
     ImportedIc.Free;
     ImportedSTO.Free;
     ImportedIms.Free;
@@ -3682,6 +4170,519 @@ begin
   Writeln('Current time: ',  currentTime);
 
   finalize();
+end;
+
+{ TImportedModel }
+
+destructor TImportedModel.Destroy;
+begin
+  ImportedRchList.Free;
+  ImportedDrnList.Free;
+  ImportedWelList.Free;
+  ImportedRivList.Free;
+  ImportedGhbList.Free;
+  ImportedChdList.Free;
+  ImportedIc.Free;
+  ImportedSTO.Free;
+  ImportedDis.Free;
+  ImportedNpf.Free;
+  ImportedIms.Free;
+  inherited;
+end;
+
+procedure TImportedModel.UpdateChd;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TChdStressPeriod;
+  PackageIndex: Integer;
+  ImportedChd: TImportedChd;
+begin
+  if ImportedChdList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedChdList.Count - 1 do
+    begin
+      ImportedChd := ImportedChdList[PackageIndex];
+      StressPeriod := TChdStressPeriod.Create;
+      ImportedChd.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedChd.PackageName);
+      StressPeriod.Bound := GetBound(ModelName, ImportedChd.PackageName);
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedChd.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedChd.PackageName);
+      Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.Bound));
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedChd.Naux);
+      end;
+      AuxIndex := 0;
+      if ImportedDis <> nil then
+      begin
+        for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+        begin
+          GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+          Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+            MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.Bound[CellIndex]);
+          for AIndex := 0 to ImportedChd.Naux - 1 do
+          begin
+            Write(' ', StressPeriod.AuxValues[AuxIndex]);
+            Inc(AuxIndex);
+          end;
+          if StressPeriod.BoundNames <> nil then
+          begin
+            Write(' ', StressPeriod.BoundNames[CellIndex]);
+          end;
+          Writeln;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateDrn;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TDrnStressPeriod;
+  PackageIndex: Integer;
+  ImportedDrn: TImportedDrn;
+begin
+  if ImportedDrnList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedDrnList.Count - 1 do
+    begin
+      ImportedDrn := ImportedDrnList[PackageIndex];
+      StressPeriod := TDrnStressPeriod.Create;
+      ImportedDrn.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedDrn.PackageName);
+
+      StressPeriod.Bound := GetBound(ModelName, ImportedDrn.PackageName);
+
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedDrn.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedDrn.PackageName);
+
+      Assert(Length(StressPeriod.NodeList)*2 = Length(StressPeriod.Bound));
+
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedDrn.Naux);
+      end;
+      AuxIndex := 0;
+      for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+      begin
+        GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+        Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+          MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.Elev(CellIndex),
+          ' ', StressPeriod.Cond(CellIndex));
+        for AIndex := 0 to ImportedDrn.Naux - 1 do
+        begin
+          Write(' ', StressPeriod.AuxValues[AuxIndex]);
+          Inc(AuxIndex);
+        end;
+        if StressPeriod.BoundNames <> nil then
+        begin
+          Write(' ', StressPeriod.BoundNames[CellIndex]);
+        end;
+        Writeln;
+      end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateGhb;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TGhbStressPeriod;
+  PackageIndex: Integer;
+  ImportedGhb: TImportedGhb;
+begin
+  if ImportedGhbList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedGhbList.Count - 1 do
+    begin
+      ImportedGhb := ImportedGhbList[PackageIndex];
+      StressPeriod := TGhbStressPeriod.Create;
+      ImportedGhb.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedGhb.PackageName);
+
+      StressPeriod.Bound := GetBound(ModelName, ImportedGhb.PackageName);
+
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedGhb.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedGhb.PackageName);
+
+      Assert(Length(StressPeriod.NodeList)*2 = Length(StressPeriod.Bound));
+
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedGhb.Naux);
+      end;
+      AuxIndex := 0;
+      for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+      begin
+        GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+        Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+          MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.BHead(CellIndex),
+          ' ', StressPeriod.Cond(CellIndex));
+        for AIndex := 0 to ImportedGhb.Naux - 1 do
+        begin
+          Write(' ', StressPeriod.AuxValues[AuxIndex]);
+          Inc(AuxIndex);
+        end;
+        if StressPeriod.BoundNames <> nil then
+        begin
+          Write(' ', StressPeriod.BoundNames[CellIndex]);
+        end;
+        Writeln;
+      end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateRch;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TRchStressPeriod;
+  PackageIndex: Integer;
+  ImportedRch: TImportedRch;
+begin
+  if ImportedRchList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedRchList.Count - 1 do
+    begin
+      ImportedRch := ImportedRchList[PackageIndex];
+      StressPeriod := TRchStressPeriod.Create;
+      ImportedRch.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedRch.PackageName);
+      StressPeriod.Bound := GetBound(ModelName, ImportedRch.PackageName);
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedRch.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedRch.PackageName);
+      Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.Bound));
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedRch.Naux);
+      end;
+      AuxIndex := 0;
+      if ImportedDis <> nil then
+      begin
+        for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+        begin
+          GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+          Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+            MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.Bound[CellIndex]);
+          for AIndex := 0 to ImportedRch.Naux - 1 do
+          begin
+            Write(' ', StressPeriod.AuxValues[AuxIndex]);
+            Inc(AuxIndex);
+          end;
+          if StressPeriod.BoundNames <> nil then
+          begin
+            Write(' ', StressPeriod.BoundNames[CellIndex]);
+          end;
+          Writeln;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateRiv;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TRivStressPeriod;
+  PackageIndex: Integer;
+  ImportedRiv: TImportedRiv;
+begin
+  if ImportedRivList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedRivList.Count - 1 do
+    begin
+      ImportedRiv := ImportedRivList[PackageIndex];
+      StressPeriod := TRivStressPeriod.Create;
+      ImportedRiv.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedRiv.PackageName);
+
+      StressPeriod.Bound := GetBound(ModelName, ImportedRiv.PackageName);
+
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedRiv.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedRiv.PackageName);
+
+      Assert(Length(StressPeriod.NodeList)*3 = Length(StressPeriod.Bound));
+
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedRiv.Naux);
+      end;
+      AuxIndex := 0;
+      for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+      begin
+        GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+        Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+          MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.Stage(CellIndex),
+          ' ', StressPeriod.Cond(CellIndex),  ' ', StressPeriod.RBot(CellIndex));
+        for AIndex := 0 to ImportedRiv.Naux - 1 do
+        begin
+          Write(' ', StressPeriod.AuxValues[AuxIndex]);
+          Inc(AuxIndex);
+        end;
+        if StressPeriod.BoundNames <> nil then
+        begin
+          Write(' ', StressPeriod.BoundNames[CellIndex]);
+        end;
+        Writeln;
+      end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateWel;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TWelStressPeriod;
+  PackageIndex: Integer;
+  ImportedWel: TImportedWel;
+begin
+  if ImportedWelList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedWelList.Count - 1 do
+    begin
+      ImportedWel := ImportedWelList[PackageIndex];
+      StressPeriod := TWelStressPeriod.Create;
+      ImportedWel.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedWel.PackageName);
+      StressPeriod.Bound := GetBound(ModelName, ImportedWel.PackageName);
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedWel.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedWel.PackageName);
+      Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.Bound));
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedWel.Naux);
+      end;
+      AuxIndex := 0;
+      if ImportedDis <> nil then
+      begin
+        for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+        begin
+          GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape,
+            ImportedDis.IDomain, MfCell);
+          Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+            MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.Bound[CellIndex]);
+          for AIndex := 0 to ImportedWel.Naux - 1 do
+          begin
+            Write(' ', StressPeriod.AuxValues[AuxIndex]);
+            Inc(AuxIndex);
+          end;
+          if StressPeriod.BoundNames <> nil then
+          begin
+            Write(' ', StressPeriod.BoundNames[CellIndex]);
+          end;
+          Writeln;
+        end;
+      end;
+    end;
+  end;
+end;
+
+{ TImportedChd }
+
+constructor TImportedChd.Create;
+begin
+  inherited;
+  StressPeriods := TChdStressPeriods.Create;
+end;
+
+destructor TImportedChd.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+{ TImportedGhb }
+
+constructor TImportedGhb.Create;
+begin
+  StressPeriods := TGhbStressPeriods.Create
+end;
+
+destructor TImportedGhb.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+{ TGhbStressPeriod }
+
+function TGhbStressPeriod.BHead(CellIndex: Integer): double;
+begin
+  result := Bound[CellIndex*2];
+end;
+
+function TGhbStressPeriod.Cond(CellIndex: Integer): double;
+begin
+  result := Bound[CellIndex*2+1];
+end;
+
+{ TRivStressPeriod }
+
+function TRivStressPeriod.Cond(CellIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*3+1];
+end;
+
+function TRivStressPeriod.RBot(CellIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*3+2];
+end;
+
+function TRivStressPeriod.Stage(CellIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*3];
+end;
+
+{ TImportedRiv }
+
+constructor TImportedRiv.Create;
+begin
+  StressPeriods:= TRivStressPeriods.Create;
+end;
+
+destructor TImportedRiv.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+{ TCustomImportedBoundary }
+
+procedure TCustomImportedBoundary.GetPackageValues(ModelName: AnsiString);
+begin
+  Naux := GetNAUX(ModelName, PackageName);
+  Mover := GetMOVER(ModelName, PackageName);
+  if Naux > 0 then
+  begin
+    AuxNames := GetAuxName(ModelName, PackageName);
+    Assert(Length(AuxNames) = Naux);
+    AuxMult := GetAuxMult(ModelName, PackageName);
+  end
+  else
+  begin
+    AuxNames := nil;
+    AuxMult := -1;
+  end;
+end;
+
+{ TImportedWelv }
+
+constructor TImportedWel.Create;
+begin
+  inherited;
+  StressPeriods := TWelStressPeriods.Create;
+end;
+
+destructor TImportedWel.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedWel.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  AUTO_FLOW_REDUCE := GetAUTO_FLOW_REDUCE(ModelName, PackageName);
+end;
+
+{ TImportedDrn }
+
+constructor TImportedDrn.Create;
+begin
+  StressPeriods := TDrnStressPeriods.Create
+end;
+
+destructor TImportedDrn.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedDrn.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  AUXDEPTHNAME := GetAUXDEPTHNAME(ModelName, PackageName);
+end;
+
+{ TDrnStressPeriod }
+
+function TDrnStressPeriod.Cond(CellIndex: Integer): double;
+begin
+  result := Bound[CellIndex*2+1];
+end;
+
+function TDrnStressPeriod.Elev(CellIndex: Integer): double;
+begin
+  result := Bound[CellIndex*2];
+end;
+
+{ TImportedRch }
+
+constructor TImportedRch.Create;
+begin
+  StressPeriods := TRchStressPeriods.Create;
+end;
+
+destructor TImportedRch.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedRch.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  // FIXED_CELL is not available through the API
 end;
 
 initialization
