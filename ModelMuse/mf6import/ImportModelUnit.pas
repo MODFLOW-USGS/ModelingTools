@@ -54,6 +54,7 @@ type
 
   TImportedPackage = class(TObject)
     PackageName: AnsiString;
+    constructor Create(APackageName: AnsiString); virtual;
   end;
 
   TImportedDiscretization = class(TImportedPackage)
@@ -142,6 +143,7 @@ type
     BoundNames: TAnsiStringArray;
     AuxValues: TDoubleArray;
     Bound: TDoubleArray;
+    NBOUND: Integer;
   end;
 
   TCustomImportedBoundary = class(TImportedPackage)
@@ -149,6 +151,7 @@ type
     AuxNames: TAnsiStringArray;
     AuxMult: Integer;
     Mover: Integer;
+    MAXBOUND: Integer;
     procedure GetPackageValues(ModelName: AnsiString); virtual;
   end;
 
@@ -159,7 +162,7 @@ type
 
   TImportedChd = class(TCustomImportedBoundary)
     StressPeriods: TChdStressPeriods;
-    constructor Create;
+    constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
   end;
 
@@ -174,7 +177,7 @@ type
 
   TImportedGhb = class(TCustomImportedBoundary)
     StressPeriods: TGhbStressPeriods;
-    constructor Create;
+    constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
   end;
 
@@ -190,7 +193,7 @@ type
 
   TImportedRiv = class(TCustomImportedBoundary)
     StressPeriods: TRivStressPeriods;
-    constructor Create;
+    constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
   end;
 
@@ -204,7 +207,7 @@ type
   TImportedWel = class(TCustomImportedBoundary)
     StressPeriods: TWelStressPeriods;
     AUTO_FLOW_REDUCE: Double;
-    constructor Create;
+    constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
     procedure GetPackageValues(ModelName: AnsiString); override;
   end;
@@ -221,13 +224,14 @@ type
   TImportedDrn = class(TCustomImportedBoundary)
     StressPeriods: TDrnStressPeriods;
     AUXDEPTHNAME: Integer;
-    constructor Create;
+    constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
     procedure GetPackageValues(ModelName: AnsiString); override;
   end;
 
   TImportedDrnList = TObjectList<TImportedDrn>;
 
+  // note, the rate is the volumetric rate = rate * surface area.
   TRchStressPeriod = class(TCustomBoundaryStressPeriod)
   end;
 
@@ -236,12 +240,84 @@ type
   TImportedRch = class(TCustomImportedBoundary)
     StressPeriods: TRchStressPeriods;
     AUTO_FLOW_REDUCE: Double;
-    constructor Create;
+    constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
     procedure GetPackageValues(ModelName: AnsiString); override;
   end;
 
   TImportedRchList = TObjectList<TImportedRch>;
+
+  TEvtStressPeriod = class(TCustomBoundaryStressPeriod)
+    NSEG: Integer;
+    SURF_RATE_SPECIFIED: Integer;
+    ValuesPerBoundary: integer;
+    function Surface(CellIndex: Integer): double;
+  // note, the rate is the volumetric rate = rate * surface area.
+    function Rate(CellIndex: Integer): double;
+    function Depth(CellIndex: Integer): double;
+    function Pxdp(CellIndex, SegIndex: Integer): double;
+    function Petm(CellIndex, SegIndex: Integer): double;
+    function Petm0(CellIndex: Integer): double;
+  end;
+
+  TEvtStressPeriods = TObjectList<TEvtStressPeriod>;
+
+  TImportedEvt = class(TCustomImportedBoundary)
+    NSEG: Integer;
+    StressPeriods: TEvtStressPeriods;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  end;
+
+  TImportedEvtList = TObjectList<TImportedEvt>;
+
+  TMawStressPeriod = class(TCustomBoundaryStressPeriod)
+    // can't get well status.
+    Rate: TDoubleArray;
+    // fwelev, fwcond, and fwrlen are all set to zero for non-flowing wells.
+    fwelev: TDoubleArray;
+    fwcond: TDoubleArray;
+    fwrlen: TDoubleArray;
+    WELL_HEAD: TDoubleArray;
+    // head limit is set 1E20 if there is no head limit
+    HEAD_LIMIT: TDoubleArray;
+    // minrate and maxrate are zero in no shut off.
+    minrate: TDoubleArray;
+    maxrate: TDoubleArray;
+    // pump_elevation and scaling_length are set to 1E20 if there is no RATE_SCALING
+    pump_elevation: TDoubleArray;
+    scaling_length: TDoubleArray;
+  end;
+
+  TMawStressPeriods = TObjectList<TMawStressPeriod>;
+
+  TImportedMaw = class(TCustomImportedBoundary)
+    NMAWWELLS: Integer;
+    NO_WELL_STORAGE: Integer;
+    FLOW_CORRECTION: Boolean;
+    FLOWING_WELLS: Integer;
+    SHUTDOWN_THETA: double;
+    SHUTDOWN_KAPPA: double;
+    StressPeriods: TMawStressPeriods;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  private
+    Radius: TDoubleArray;
+    Bottom: TDoubleArray;
+    Strt: TDoubleArray;
+    // CondEqn = 0 -> SPECIFIED
+    // CondEqn = 1 -> THIEM
+    // CondEqn = 2 -> SKIN
+    // CondEqn = 3 -> CUMULATIVE
+    // CondEqn = 4 -> MEAN
+    CondEqn: TCIntArray;
+    NGWFNODES: TCIntArray;
+    PckgAux: TDoubleArray;
+  end;
+
+  TImportedMawList = TObjectList<TImportedMaw>;
 
 
 
@@ -249,7 +325,7 @@ type
     ModelName: AnsiString;
     ModelType: AnsiString;
     ModelNumber: Integer;
-    StoPackageName: string;
+    StoPackageName: AnsiString;
     Packages: TPackages;
     ImportedIms: TImportedIms;
     ImportedDis: TImportedDiscretization;
@@ -262,12 +338,16 @@ type
     ImportedWelList: TImportedWelList;
     ImportedDrnList: TImportedDrnList;
     ImportedRchList: TImportedRchList;
+    ImportedEvtList: TImportedEvtList;
+    ImportedMawList: TImportedMawList;
     procedure UpdateChd;
     procedure UpdateGhb;
     procedure UpdateRiv;
     procedure UpdateWel;
     procedure UpdateDrn;
     procedure UpdateRch;
+    procedure UpdateEvt;
+    procedure UpdateMaw;
     destructor Destroy; override;
   end;
 
@@ -451,7 +531,7 @@ var
   PackageTypeString: AnsiString;
   PackageTypes: TAnsiStringArray;
   PackageNames: TAnsiStringArray;
-  PackageName: WideString;
+  PackageName: AnsiString;
   PackageType: AnsiString;
   PIndex: Integer;
   AVarName: AnsiString;
@@ -1655,6 +1735,24 @@ begin
   end;
 end;
 
+function GetMAXBOUND(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/MAXBOUND';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
 function GetMOVER(ModelName, PackageName: AnsiString): Integer;
 var
   VarName: AnsiString;
@@ -1720,6 +1818,227 @@ begin
   end;
 end;
 
+function GetNSEG(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NSEG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 1;
+  end;
+end;
+
+function GetNMAWWELLS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NMAWWELLS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetFLOWING_WELLS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IFLOWINGWELLS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetSHUTDOWN_THETA(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/THETA';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0.7;
+  end;
+end;
+
+function GetSHUTDOWN_KAPPA(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/KAPPA';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0.0001;
+  end;
+end;
+
+
+function GetNO_WELL_STORAGE(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IMAWISSOPT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+function GetFLOW_CORRECTION(ModelName, PackageName: AnsiString): Boolean;
+var
+  VarName: AnsiString;
+  Values: TLongBoolArray;
+//  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/CORRECT_FLOW';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetLogicalVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+function GetMAW_Radius(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/RADIUS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetMAW_Bottom(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/BOT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetMAW_STRT(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/STRT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetMAW_CondEqn(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/IEQN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetMAW_NGWFNODES(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/NGWFNODES';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetNBOUND(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NBOUND';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
 
 function GetAuxName(ModelName, PackageName: AnsiString): TAnsiStringArray;
 var
@@ -1773,6 +2092,156 @@ var
   VarName: AnsiString;
 begin
   VarName := ModelName + '/' + PackageName +'/BOUND';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetRate(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/RATE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetFwElev(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/FWELEV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetFwCond(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/FWCONDS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetFwRlen(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/FWRLEN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetWELL_HEAD(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/WELL_HEAD';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetHEAD_LIMIT(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/SHUTOFFLEVEL';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetMinRate(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/SHUTOFFMIN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetMaxRate(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/SHUTOFFMAX';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetPumpElevation(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/PUMPELEV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    SetLength(result, 0);
+  end;
+end;
+
+function GetScalingLength(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/REDUCTION_LENGTH';
   if NameList.IndexOf(VarName) >= 0 then
   begin
     GetDoubleVariable(VarName, result);
@@ -2379,7 +2848,7 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('RCH', VarName) > 0;
+    WriteValues := Pos('MAW', VarName) > 0;
 //    WriteValues := True;
     if not WriteValues then
     begin
@@ -2684,90 +3153,87 @@ var
   ACell: TCell;
   VIndex: Integer;
   Index: Integer;
-  DisPackageName: AnsiString;
+//  DisPackageName: AnsiString;
   PackageType: AnsiString;
 begin
   result := nil;
-  DisPackageName := '';
+//  DisPackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
     PackageType := Packages[PackageIndex].PackageType;
     if (PackageType = 'DISU6') or (PackageType = 'DISV6') or (PackageType = 'DIS6') then
     begin
-      DisPackageName := Packages[PackageIndex].PackageName;
-      Break;
-    end;
-  end;
-  if DisPackageName <> '' then
-  begin
-    result := TImportedDiscretization.Create;
-    result.PackageName := DisPackageName;
-    result.Mf6GridType := GetModflowGridType(ModelName, result.MFGridShape);
-    case result.Mf6GridType of
-      gtDISU: result.PackageID := 'DISU6';
-      gtDISV: result.PackageID := 'DISV6';
-      gtDIS: result.PackageID := 'DIS6';
-    end;
-    result.Vertices := nil;
-    result.Cells := nil;
-    result.DelR := nil;
-    result.DelC := nil;
-    result.GridTop := nil;
-    result.GridBottom := nil;
-    result.IDomain := nil;
-    if result.PackageName <> '' then
-    begin
-      result.LengthUnit := GetLengthUnit(ModelName, result.PackageName);
-      WriteLn(Ord(result.LengthUnit));
-      result.XOrigin := GetXOrigin(ModelName, result.PackageName);
-      Writeln(result.XOrigin);
-      result.YOrigin := GetYOrigin(ModelName, result.PackageName);
-      Writeln(result.YOrigin);
-      result.RotationAngle := GetGridRotation(ModelName, result.PackageName);
-      Writeln(result.RotationAngle);
+//      DisPackageName := Packages[PackageIndex].PackageName;
+      result := TImportedDiscretization.Create(Packages[PackageIndex].PackageName);
+//      result.PackageName := DisPackageName;
+      result.Mf6GridType := GetModflowGridType(ModelName, result.MFGridShape);
       case result.Mf6GridType of
-        gtDISU:
-          Assert(False);
-        gtDISV:
-          begin
-            result.Vertices := GetVertices(ModelName, result.PackageName);
-            for Index := 0 to Length(result.Vertices) - 1 do
-            begin
-              WriteLn(result.Vertices[Index].VertexNumber, ''#9'',
-                result.Vertices[Index].X, ''#9'', result.Vertices[Index].Y);
-            end;
-            result.Cells := GetDisvCells(ModelName, result.PackageName);
-            for Index := 0 to Length(result.Cells) - 1 do
-            begin
-              ACell := result.Cells[Index];
-              Write(ACell.CellNumber, ''#9'', ACell.CellX, ''#9'', ACell.CellY);
-              for VIndex := 0 to Length(ACell.VertexNumbers) - 1 do
-              begin
-                Write(''#9'', ACell.VertexNumbers[VIndex]);
-              end;
-              WriteLn;
-            end;
-          end;
-        gtDIS:
-          begin
-            result.DelR := GetDelR(ModelName, result.PackageName);
-            WriteLn('DelR');
-            for Index := 0 to Length(result.DelR) - 1 do
-            begin
-              Write(' ', result.DelR[Index]);
-            end;
-            Writeln;
-            result.DelC := GetDelC(ModelName, result.PackageName);
-            WriteLn('DelC');
-            for Index := 0 to Length(result.DelC) - 1 do
-            begin
-              Write(' ', result.DelC[Index]);
-            end;
-          end;
+        gtDISU: result.PackageID := 'DISU6';
+        gtDISV: result.PackageID := 'DISV6';
+        gtDIS: result.PackageID := 'DIS6';
       end;
-      result.GridTop := GetTop(ModelName, result.PackageName);
-      result.GridBottom := GetBottom(ModelName, result.PackageName);
-      result.IDomain := GetIDomain(ModelName, result.PackageName);
+      result.Vertices := nil;
+      result.Cells := nil;
+      result.DelR := nil;
+      result.DelC := nil;
+      result.GridTop := nil;
+      result.GridBottom := nil;
+      result.IDomain := nil;
+      if result.PackageName <> '' then
+      begin
+        result.LengthUnit := GetLengthUnit(ModelName, result.PackageName);
+        WriteLn(Ord(result.LengthUnit));
+        result.XOrigin := GetXOrigin(ModelName, result.PackageName);
+        Writeln(result.XOrigin);
+        result.YOrigin := GetYOrigin(ModelName, result.PackageName);
+        Writeln(result.YOrigin);
+        result.RotationAngle := GetGridRotation(ModelName, result.PackageName);
+        Writeln(result.RotationAngle);
+        case result.Mf6GridType of
+          gtDISU:
+            Assert(False);
+          gtDISV:
+            begin
+              result.Vertices := GetVertices(ModelName, result.PackageName);
+              for Index := 0 to Length(result.Vertices) - 1 do
+              begin
+                WriteLn(result.Vertices[Index].VertexNumber, ''#9'',
+                  result.Vertices[Index].X, ''#9'', result.Vertices[Index].Y);
+              end;
+              result.Cells := GetDisvCells(ModelName, result.PackageName);
+              for Index := 0 to Length(result.Cells) - 1 do
+              begin
+                ACell := result.Cells[Index];
+                Write(ACell.CellNumber, ''#9'', ACell.CellX, ''#9'', ACell.CellY);
+                for VIndex := 0 to Length(ACell.VertexNumbers) - 1 do
+                begin
+                  Write(''#9'', ACell.VertexNumbers[VIndex]);
+                end;
+                WriteLn;
+              end;
+            end;
+          gtDIS:
+            begin
+              result.DelR := GetDelR(ModelName, result.PackageName);
+              WriteLn('DelR');
+              for Index := 0 to Length(result.DelR) - 1 do
+              begin
+                Write(' ', result.DelR[Index]);
+              end;
+              Writeln;
+              result.DelC := GetDelC(ModelName, result.PackageName);
+              WriteLn('DelC');
+              for Index := 0 to Length(result.DelC) - 1 do
+              begin
+                Write(' ', result.DelC[Index]);
+              end;
+            end;
+        end;
+        result.GridTop := GetTop(ModelName, result.PackageName);
+        result.GridBottom := GetBottom(ModelName, result.PackageName);
+        result.IDomain := GetIDomain(ModelName, result.PackageName);
+      end;
+      Break;
     end;
   end;
 end;
@@ -2781,8 +3247,7 @@ begin
   begin
     if Packages[PackageIndex].PackageType = 'NPF6' then
     begin
-      result := TImportedNpf.Create;
-      result.PackageName := Packages[PackageIndex].PackageName;
+      result := TImportedNpf.Create(Packages[PackageIndex].PackageName);
       break;
     end;
   end;
@@ -3063,7 +3528,7 @@ begin
 end;
 
 function GetStoragePackage(ModelName: AnsiString; Packages: TPackages;
- var StoPackageName: string): TImportedStorage;
+ var StoPackageName: AnsiString): TImportedStorage;
 var
   PackageIndex: Integer;
 begin
@@ -3074,43 +3539,35 @@ begin
     if Packages[PackageIndex].PackageType = 'STO6' then
     begin
       StoPackageName := Packages[PackageIndex].PackageName;
+      result := TImportedStorage.Create(Packages[PackageIndex].PackageName);
+      result.STORAGECOEFFICIENT := GetStoSTORAGECOEFFICIENT(ModelName, result.PackageName);
+      WriteLn(result.STORAGECOEFFICIENT);
+      result.SS_CONFINED_ONLY := GetStoSS_CONFINED_ONLY(ModelName, result.PackageName);
+      WriteLn(result.SS_CONFINED_ONLY);
+      result.ICONVERT := GetStoICONVERT(ModelName, result.PackageName);
+      result.SS := GetStoSS(ModelName, result.PackageName);
+      result.SY := GetStoSY(ModelName, result.PackageName);
       break;
     end;
   end;
   if (StoPackageName <> '') then
   begin
-    result := TImportedStorage.Create;
-    result.PackageName := StoPackageName;
-    result.STORAGECOEFFICIENT := GetStoSTORAGECOEFFICIENT(ModelName, StoPackageName);
-    WriteLn(result.STORAGECOEFFICIENT);
-    result.SS_CONFINED_ONLY := GetStoSS_CONFINED_ONLY(ModelName, StoPackageName);
-    WriteLn(result.SS_CONFINED_ONLY);
-    result.ICONVERT := GetStoICONVERT(ModelName, StoPackageName);
-    result.SS := GetStoSS(ModelName, StoPackageName);
-    result.SY := GetStoSY(ModelName, StoPackageName);
   end;
 end;
 
 function GetInitialConditions(ModelName: AnsiString; Packages: TPackages): TImportedInitialConditions;
 var
-  ICPackageName: AnsiString;
   PackageIndex: Integer;
 begin
   Result := nil;
-  ICPackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
     if Packages[PackageIndex].PackageType = 'IC6' then
     begin
-      ICPackageName := Packages[PackageIndex].PackageName;
+      result := TImportedInitialConditions.Create(Packages[PackageIndex].PackageName);
+      Result.STRT := GetIcSTRT(ModelName, result.PackageName);
       break;
     end;
-  end;
-  if ICPackageName <> '' then
-  begin
-    result := TImportedInitialConditions.Create;
-    result.PackageName := ICPackageName;
-    Result.STRT := GetIcSTRT(ModelName, ICPackageName);
   end;
 end;
 
@@ -3214,7 +3671,6 @@ end;
 
 function GetChdPackages(ModelName: AnsiString; Packages: TPackages): TImportedChdList;
 var
-  ChdPackageName: AnsiString;
   PackageIndex: Integer;
   ImportedPackage: TImportedChd;
 begin
@@ -3224,12 +3680,11 @@ begin
   begin
     if Packages[PackageIndex].PackageType = 'CHD6' then
     begin
-      ChdPackageName := Packages[PackageIndex].PackageName;
       if result = nil then
       begin
         result := TImportedChdList.Create;
       end;
-      ImportedPackage := TImportedChd.Create;
+      ImportedPackage := TImportedChd.Create(Packages[PackageIndex].PackageName);
       result.Add(ImportedPackage);
       ImportedPackage.PackageName := Packages[PackageIndex].PackageName;
       ImportedPackage.GetPackageValues(ModelName);
@@ -3239,22 +3694,19 @@ end;
 
 function GetRchPackages(ModelName: AnsiString; Packages: TPackages): TImportedRchList;
 var
-  RchPackageName: AnsiString;
   PackageIndex: Integer;
   ImportedPackage: TImportedRch;
 begin
   result := nil;
-//  RchPackageName := '';
   for PackageIndex := 0 to Length(Packages) - 1 do
   begin
     if Packages[PackageIndex].PackageType = 'RCH6' then
     begin
-      RchPackageName := Packages[PackageIndex].PackageName;
       if result = nil then
       begin
         result := TImportedRchList.Create;
       end;
-      ImportedPackage := TImportedRch.Create;
+      ImportedPackage := TImportedRch.Create(Packages[PackageIndex].PackageName);
       result.Add(ImportedPackage);
       ImportedPackage.PackageName := Packages[PackageIndex].PackageName;
       ImportedPackage.GetPackageValues(ModelName);
@@ -3262,9 +3714,51 @@ begin
   end;
 end;
 
+function GetEvtPackages(ModelName: AnsiString; Packages: TPackages): TImportedEvtList;
+var
+//  EvtPackageName: AnsiString;
+  PackageIndex: Integer;
+  ImportedPackage: TImportedEvt;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'EVT6' then
+    begin
+      if result = nil then
+      begin
+        result := TImportedEvtList.Create;
+      end;
+      ImportedPackage := TImportedEvt.Create(Packages[PackageIndex].PackageName);
+      result.Add(ImportedPackage);
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
+function GetMawPackages(ModelName: AnsiString; Packages: TPackages): TImportedMawList;
+var
+  PackageIndex: Integer;
+  ImportedPackage: TImportedMaw;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'MAW6' then
+    begin
+      if result = nil then
+      begin
+        result := TImportedMawList.Create;
+      end;
+      ImportedPackage := TImportedMaw.Create(Packages[PackageIndex].PackageName);
+      result.Add(ImportedPackage);
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
 function GetGhbPackages(ModelName: AnsiString; Packages: TPackages): TImportedGhbList;
 var
-  GhbPackageName: AnsiString;
   PackageIndex: Integer;
   ImportedGhb: TImportedGhb;
 begin
@@ -3273,14 +3767,12 @@ begin
   begin
     if Packages[PackageIndex].PackageType = 'GHB6' then
     begin
-      GhbPackageName := Packages[PackageIndex].PackageName;
       if result = nil then
       begin
         result := TImportedGhbList.Create;
       end;
-      ImportedGhb := TImportedGhb.Create;
+      ImportedGhb := TImportedGhb.Create(Packages[PackageIndex].PackageName);
       result.Add(ImportedGhb);
-      ImportedGhb.PackageName := GhbPackageName;
       ImportedGhb.GetPackageValues(ModelName);
     end;
   end;
@@ -3288,7 +3780,6 @@ end;
 
 function GetDrnPackages(ModelName: AnsiString; Packages: TPackages): TImportedDrnList;
 var
-  DrnPackageName: AnsiString;
   PackageIndex: Integer;
   ImportedDrn: TImportedDrn;
 begin
@@ -3297,14 +3788,12 @@ begin
   begin
     if Packages[PackageIndex].PackageType = 'DRN6' then
     begin
-      DrnPackageName := Packages[PackageIndex].PackageName;
       if result = nil then
       begin
         result := TImportedDrnList.Create;
       end;
-      ImportedDrn := TImportedDrn.Create;
+      ImportedDrn := TImportedDrn.Create(Packages[PackageIndex].PackageName);
       result.Add(ImportedDrn);
-      ImportedDrn.PackageName := DrnPackageName;
       ImportedDrn.GetPackageValues(ModelName);
     end;
   end;
@@ -3312,7 +3801,6 @@ end;
 
 function GetRivPackages(ModelName: AnsiString; Packages: TPackages): TImportedRivList;
 var
-  RivPackageName: AnsiString;
   PackageIndex: Integer;
   ImportedPackage: TImportedRiv;
 begin
@@ -3321,14 +3809,12 @@ begin
   begin
     if Packages[PackageIndex].PackageType = 'RIV6' then
     begin
-      RivPackageName := Packages[PackageIndex].PackageName;
       if result = nil then
       begin
         result := TImportedRivList.Create;
       end;
-      ImportedPackage := TImportedRiv.Create;
+      ImportedPackage := TImportedRiv.Create(Packages[PackageIndex].PackageName);
       result.Add(ImportedPackage);
-      ImportedPackage.PackageName := RivPackageName;
       ImportedPackage.GetPackageValues(ModelName);
     end;
   end;
@@ -3336,7 +3822,6 @@ end;
 
 function GetWelPackages(ModelName: AnsiString; Packages: TPackages): TImportedWelList;
 var
-  WelPackageName: AnsiString;
   PackageIndex: Integer;
   ImportedPackage: TImportedWel;
 begin
@@ -3345,14 +3830,12 @@ begin
   begin
     if Packages[PackageIndex].PackageType = 'WEL6' then
     begin
-      WelPackageName := Packages[PackageIndex].PackageName;
       if result = nil then
       begin
         result := TImportedWelList.Create;
       end;
-      ImportedPackage := TImportedWel.Create;
+      ImportedPackage := TImportedWel.Create(Packages[PackageIndex].PackageName);
       result.Add(ImportedPackage);
-      ImportedPackage.PackageName := WelPackageName;
       ImportedPackage.GetPackageValues(ModelName);
     end;
   end;
@@ -3445,7 +3928,10 @@ begin
       ImportedModel.Packages);
     ImportedModel.ImportedRchList := GetRchPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
-
+    ImportedModel.ImportedEvtList := GetEvtPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedMawList := GetMawPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
   end;
 end;
 
@@ -3517,7 +4003,7 @@ var
 //  PackageID: Ansistring;
   K: TDoubleArray;
   ImsNumber: Integer;
-  StoPackageName: string;
+  StoPackageName: AnsiString;
 //  current_time: Double;
 //  TimeStep: Double;
   NStep: TCIntArray;
@@ -3709,7 +4195,8 @@ begin
             ImportedModels[ModelIndex].UpdateWel;
             ImportedModels[ModelIndex].UpdateDrn;
             ImportedModels[ModelIndex].UpdateRch;
-
+            ImportedModels[ModelIndex].UpdateEvt;
+            ImportedModels[ModelIndex].UpdateMaw;
           end;
         end;
 
@@ -4176,6 +4663,8 @@ end;
 
 destructor TImportedModel.Destroy;
 begin
+  ImportedMawList.Free;
+  ImportedEvtList.Free;
   ImportedRchList.Free;
   ImportedDrnList.Free;
   ImportedWelList.Free;
@@ -4206,6 +4695,7 @@ begin
     begin
       ImportedChd := ImportedChdList[PackageIndex];
       StressPeriod := TChdStressPeriod.Create;
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedChd.PackageName);
       ImportedChd.StressPeriods.Add(StressPeriod);
       StressPeriod.NodeList := GetNodeList(ModelName, ImportedChd.PackageName);
       StressPeriod.Bound := GetBound(ModelName, ImportedChd.PackageName);
@@ -4262,6 +4752,7 @@ begin
       ImportedDrn := ImportedDrnList[PackageIndex];
       StressPeriod := TDrnStressPeriod.Create;
       ImportedDrn.StressPeriods.Add(StressPeriod);
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedDrn.PackageName);
       StressPeriod.NodeList := GetNodeList(ModelName, ImportedDrn.PackageName);
 
       StressPeriod.Bound := GetBound(ModelName, ImportedDrn.PackageName);
@@ -4302,6 +4793,84 @@ begin
   end;
 end;
 
+procedure TImportedModel.UpdateEvt;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TEvtStressPeriod;
+  PackageIndex: Integer;
+  ImportedEvt: TImportedEvt;
+  SegIndex: Integer;
+begin
+  if ImportedEvtList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedEvtList.Count - 1 do
+    begin
+      ImportedEvt := ImportedEvtList[PackageIndex];
+      StressPeriod := TEvtStressPeriod.Create;
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedEvt.PackageName);
+      StressPeriod.NSEG := ImportedEvt.NSEG;
+
+      ImportedEvt.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedEvt.PackageName);
+
+      StressPeriod.Bound := GetBound(ModelName, ImportedEvt.PackageName);
+      StressPeriod.SURF_RATE_SPECIFIED := (Length(StressPeriod.Bound) div ImportedEvt.MAXBOUND)
+        - 3 - (ImportedEvt.NSEG -1)*2;
+      Assert(StressPeriod.SURF_RATE_SPECIFIED in [0,1]);
+      StressPeriod.ValuesPerBoundary := 3 + (ImportedEvt.NSEG -1)*2
+        + StressPeriod.SURF_RATE_SPECIFIED;
+
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedEvt.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedEvt.PackageName);
+
+//      Assert(Length(StressPeriod.NodeList)*2 = Length(StressPeriod.Bound));
+
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedEvt.Naux);
+      end;
+      AuxIndex := 0;
+      for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+      begin
+        GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+        Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+          MfCell.Row, ' ', MfCell.Column,
+          ' ', StressPeriod.Surface(CellIndex),
+          ' ', StressPeriod.Rate(CellIndex),
+          ' ', StressPeriod.Depth(CellIndex));
+        for SegIndex := 0 to StressPeriod.NSEG - 2 do
+        begin
+          Write(
+            ' ', StressPeriod.Pxdp(CellIndex, SegIndex),
+            ' ', StressPeriod.Petm(CellIndex, SegIndex));
+        end;
+        if StressPeriod.SURF_RATE_SPECIFIED <> 0 then
+        begin
+          Write(' ', StressPeriod.Petm0(CellIndex));
+        end;
+        for AIndex := 0 to ImportedEvt.Naux - 1 do
+        begin
+          Write(' ', StressPeriod.AuxValues[AuxIndex]);
+          Inc(AuxIndex);
+        end;
+        if StressPeriod.BoundNames <> nil then
+        begin
+          Write(' ', StressPeriod.BoundNames[CellIndex]);
+        end;
+        Writeln;
+      end;
+    end;
+  end;
+end;
+
 procedure TImportedModel.UpdateGhb;
 var
   AuxIndex: Integer;
@@ -4318,6 +4887,7 @@ begin
     begin
       ImportedGhb := ImportedGhbList[PackageIndex];
       StressPeriod := TGhbStressPeriod.Create;
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedGhb.PackageName);
       ImportedGhb.StressPeriods.Add(StressPeriod);
       StressPeriod.NodeList := GetNodeList(ModelName, ImportedGhb.PackageName);
 
@@ -4359,6 +4929,74 @@ begin
   end;
 end;
 
+procedure TImportedModel.UpdateMaw;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TMawStressPeriod;
+  PackageIndex: Integer;
+  ImportedMaw: TImportedMaw;
+begin
+  if ImportedMawList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedMawList.Count - 1 do
+    begin
+      ImportedMaw := ImportedMawList[PackageIndex];
+      StressPeriod := TMawStressPeriod.Create;
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedMaw.PackageName);
+      ImportedMaw.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedMaw.PackageName);
+
+      StressPeriod.Bound := GetBound(ModelName, ImportedMaw.PackageName);
+      StressPeriod.Rate := GetRate(ModelName, ImportedMaw.PackageName);
+      StressPeriod.fwelev := GetFwElev(ModelName, ImportedMaw.PackageName);
+      StressPeriod.fwcond := GetFwCond(ModelName, ImportedMaw.PackageName);
+      StressPeriod.fwrlen := GetFwRlen(ModelName, ImportedMaw.PackageName);
+      StressPeriod.WELL_HEAD := GetWELL_HEAD(ModelName, ImportedMaw.PackageName);
+      StressPeriod.HEAD_LIMIT := GetHEAD_LIMIT(ModelName, ImportedMaw.PackageName);
+      StressPeriod.minrate := GetMinRate(ModelName, ImportedMaw.PackageName);
+      StressPeriod.maxrate := GetMaxRate(ModelName, ImportedMaw.PackageName);
+      StressPeriod.pump_elevation := GetPumpElevation(ModelName, ImportedMaw.PackageName);
+      StressPeriod.scaling_length := GetScalingLength(ModelName, ImportedMaw.PackageName);
+
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedMaw.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedMaw.PackageName);
+
+//      Assert(Length(StressPeriod.NodeList)*3 = Length(StressPeriod.Bound));
+
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedMaw.Naux);
+      end;
+      AuxIndex := 0;
+      for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+      begin
+        GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+//        Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+//          MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.Stage(CellIndex),
+//          ' ', StressPeriod.Cond(CellIndex),  ' ', StressPeriod.RBot(CellIndex));
+        for AIndex := 0 to ImportedMaw.Naux - 1 do
+        begin
+          Write(' ', StressPeriod.AuxValues[AuxIndex]);
+          Inc(AuxIndex);
+        end;
+        if StressPeriod.BoundNames <> nil then
+        begin
+          Write(' ', StressPeriod.BoundNames[CellIndex]);
+        end;
+        Writeln;
+      end;
+    end;
+  end;
+end;
+
 procedure TImportedModel.UpdateRch;
 var
   AuxIndex: Integer;
@@ -4376,6 +5014,7 @@ begin
       ImportedRch := ImportedRchList[PackageIndex];
       StressPeriod := TRchStressPeriod.Create;
       ImportedRch.StressPeriods.Add(StressPeriod);
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedRch.PackageName);
       StressPeriod.NodeList := GetNodeList(ModelName, ImportedRch.PackageName);
       StressPeriod.Bound := GetBound(ModelName, ImportedRch.PackageName);
       StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedRch.PackageName);
@@ -4430,6 +5069,7 @@ begin
     begin
       ImportedRiv := ImportedRivList[PackageIndex];
       StressPeriod := TRivStressPeriod.Create;
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedRiv.PackageName);
       ImportedRiv.StressPeriods.Add(StressPeriod);
       StressPeriod.NodeList := GetNodeList(ModelName, ImportedRiv.PackageName);
 
@@ -4488,6 +5128,7 @@ begin
       ImportedWel := ImportedWelList[PackageIndex];
       StressPeriod := TWelStressPeriod.Create;
       ImportedWel.StressPeriods.Add(StressPeriod);
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedWel.PackageName);
       StressPeriod.NodeList := GetNodeList(ModelName, ImportedWel.PackageName);
       StressPeriod.Bound := GetBound(ModelName, ImportedWel.PackageName);
       StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedWel.PackageName);
@@ -4545,6 +5186,7 @@ end;
 
 constructor TImportedGhb.Create;
 begin
+  inherited;
   StressPeriods := TGhbStressPeriods.Create
 end;
 
@@ -4587,6 +5229,7 @@ end;
 
 constructor TImportedRiv.Create;
 begin
+  inherited;
   StressPeriods:= TRivStressPeriods.Create;
 end;
 
@@ -4601,6 +5244,7 @@ end;
 procedure TCustomImportedBoundary.GetPackageValues(ModelName: AnsiString);
 begin
   Naux := GetNAUX(ModelName, PackageName);
+  MAXBOUND := GetMAXBOUND(ModelName, PackageName);
   Mover := GetMOVER(ModelName, PackageName);
   if Naux > 0 then
   begin
@@ -4639,6 +5283,7 @@ end;
 
 constructor TImportedDrn.Create;
 begin
+  inherited;
   StressPeriods := TDrnStressPeriods.Create
 end;
 
@@ -4670,6 +5315,7 @@ end;
 
 constructor TImportedRch.Create;
 begin
+  inherited;
   StressPeriods := TRchStressPeriods.Create;
 end;
 
@@ -4683,6 +5329,103 @@ procedure TImportedRch.GetPackageValues(ModelName: AnsiString);
 begin
   inherited;
   // FIXED_CELL is not available through the API
+end;
+
+{ TEvtStressPeriod }
+
+
+function TEvtStressPeriod.Depth(CellIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*ValuesPerBoundary+2];
+end;
+
+function TEvtStressPeriod.Petm(CellIndex, SegIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*ValuesPerBoundary+3 + SegIndex*2 + 1];
+end;
+
+function TEvtStressPeriod.Petm0(CellIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*ValuesPerBoundary+3 + (NSEG-1) *2];
+end;
+
+function TEvtStressPeriod.Pxdp(CellIndex, SegIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*ValuesPerBoundary+3 + SegIndex*2];
+end;
+
+function TEvtStressPeriod.Rate(CellIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*ValuesPerBoundary+1];
+end;
+
+function TEvtStressPeriod.Surface(CellIndex: Integer): double;
+begin
+  Result := Bound[CellIndex*ValuesPerBoundary];
+end;
+
+{ TImportedEvt }
+
+constructor TImportedEvt.Create;
+begin
+  inherited;
+  StressPeriods := TEvtStressPeriods.Create;
+end;
+
+destructor TImportedEvt.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedEvt.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  NSEG := GetNSEG(ModelName, PackageName);
+  // can't get SURF_RATE_SPECIFIED
+  // can't get FIXED_CELL
+end;
+
+{ TImportedMaw }
+
+constructor TImportedMaw.Create;
+begin
+  inherited;
+  StressPeriods := TMawStressPeriods.Create;
+end;
+
+destructor TImportedMaw.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedMaw.GetPackageValues(ModelName: AnsiString);
+var
+  BoundNames: TAnsiStringArray;
+begin
+  inherited;
+  NMAWWELLS := GetNMAWWELLS(ModelName, PackageName);
+  NO_WELL_STORAGE := GetNO_WELL_STORAGE(ModelName, PackageName);
+  FLOW_CORRECTION := GetFLOW_CORRECTION(ModelName, PackageName);
+  FLOWING_WELLS := GetFLOWING_WELLS(ModelName, PackageName);
+  SHUTDOWN_THETA := GetSHUTDOWN_THETA(ModelName, PackageName);
+  SHUTDOWN_KAPPA := GetSHUTDOWN_KAPPA(ModelName, PackageName);
+  Radius := GetMAW_Radius(ModelName, PackageName);
+  Bottom := GetMAW_Bottom(ModelName, PackageName);
+  Strt := GetMAW_STRT(ModelName, PackageName);
+  CondEqn := GetMAW_CondEqn(ModelName, PackageName);
+  NGWFNODES := GetMAW_NGWFNODES(ModelName, PackageName);
+  PckgAux := GetAuxValue(ModelName, PackageName);
+  BoundNames := GetBoundNames(ModelName, PackageName);
+end;
+
+{ TImportedPackage }
+
+constructor TImportedPackage.Create(APackageName: AnsiString);
+begin
+  inherited Create;
+  PackageName := APackageName;
 end;
 
 initialization
