@@ -1,0 +1,28 @@
+# Name File for MODFLOW created on 8/21/2023 by ModelMuse Version 5.1.1.35
+BEGIN OPTIONS
+  LIST Mf6Model.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         Mf6Model.dis  DIS
+  IC6          Mf6Model.ic  IC
+  NPF6         Mf6Model.npf  NPF
+  STO6         Mf6Model.sto  STO
+  OC6          Mf6Model.oc  OC
+  CHD6         Mf6Model.chd  CHD-1
+  GHB6         Mf6Model.ghb  GHB-1
+  WEL6         Mf6Model.wel  WEL-1
+  RIV6         Mf6Model.riv  RIV-1
+  DRN6         Mf6Model.drn  DRN-1
+  SFR6         Mf6Model.sfr  SFR-1
+  MAW6         Mf6Model.maw6  MAW-1
+  BUY6         Mf6Model.buy  BUY6
+  RCH6         Mf6Model.rch  RCH-1
+  EVT6         Mf6Model.evt  EVT-1
+  LAK6         Mf6Model.lak6  LAK-1
+  UZF6         Mf6Model.uzf  UZF-1
+  HFB6         Mf6Model.hfb  HFB
+  MVR6         Mf6Model.mvr  MVR-1
+END PACKAGES

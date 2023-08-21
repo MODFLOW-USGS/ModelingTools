@@ -643,6 +643,10 @@ end;
 procedure TValueCell.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(Mf6ObsName);
+  if FScreenObject <> nil then
+  begin
+    Strings.Add(FScreenObject.Name);
+  end;
 end;
 
 procedure TValueCell.Restore(Decomp: TDecompressionStream;

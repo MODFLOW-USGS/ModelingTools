@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Mf6Model" FileType="bin">
+    <FileName Model_Name="Mf6Model" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Mf6Model" FileType="ancillary">
+    <FileName Model_Name="Mf6Model" FileType="ancillary">Mf6Model.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Mf6Model" FileType="Model Input">
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.buy</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.chd</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.1.ist</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.adv</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.cnc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.dis</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.dsp</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.ic</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.ims</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.lkt</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.mst</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.mvt</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.mwt</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.oc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.sft</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.src</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.ssm</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.Chem.uzt</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.dis</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.drn</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.evt</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.ghb</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.gsf</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.hfb</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.ic</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.ims</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.lak6</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.maw6</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.mvr</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.nam.archive</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.npf</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.oc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.rch</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.riv</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.sfr</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.sto</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.tdis</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.uzf</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">Mf6Model.wel</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Input">usgs.Mf6Model.reference</FileName>
+  </model>
+  <output Model_Name="Mf6Model" FileType="Model Output">
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.bhd</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.cbc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.cbc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.lkt_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.lkt_budget.csv</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.lkt_conc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.lst</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.mvt_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.mvt_budget.csv</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.mwt_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.mwt_budget.csv</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.mwt_conc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.sft_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.sft_budget.csv</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.sft_conc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.uzt_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.Chem.uzt_conc</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.dis.grb</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.InnerSolution.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.LakConvergence.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.lst</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.maw_bud</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.maw_head</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.mvr_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.mvr_budget.csv</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.OuterSolution.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.sfr_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.stage</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.uzf_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.UzfConvergence.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

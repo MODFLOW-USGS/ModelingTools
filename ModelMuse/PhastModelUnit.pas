@@ -10035,6 +10035,11 @@ const
 //                Properties dialog box.
 //               Bug fix: Fixed editing of MAX information in the Object
 //                Properties dialog box.
+//               Bug fix: Fixed export of UPSTREAM_FRACTION in MODFLOW 6 SFR
+//                packages for diversion reaches.
+//               Bug fix: Fixed importing MODFLOW-2005 and MODFLOW-NWT models
+//                in which the number of segments in the ETS package was set
+//                to 1.
 
 //               Enhancement Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.

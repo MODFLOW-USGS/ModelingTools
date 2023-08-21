@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5443
+5491
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5443,3 +5443,51 @@ Buoyancy.gpt
 	Archive\Buoyancy.Temperature.ssm
 	Archive\Buoyancy.wel
 	Archive\usgs.Buoyancy.reference
+Mf6Model.gpt
+	Archive\Mf6Model.axml
+	Archive\Mf6Model.buy
+	Archive\Mf6Model.chd
+	Archive\Mf6Model.Chem.1.ist
+	Archive\Mf6Model.Chem.adv
+	Archive\Mf6Model.Chem.cnc
+	Archive\Mf6Model.Chem.dis
+	Archive\Mf6Model.Chem.dsp
+	Archive\Mf6Model.Chem.gwfgwt
+	Archive\Mf6Model.Chem.Gwt_nam
+	Archive\Mf6Model.Chem.ic
+	Archive\Mf6Model.Chem.ims
+	Archive\Mf6Model.Chem.lkt
+	Archive\Mf6Model.Chem.mst
+	Archive\Mf6Model.Chem.mvt
+	Archive\Mf6Model.Chem.mwt
+	Archive\Mf6Model.Chem.oc
+	Archive\Mf6Model.Chem.sft
+	Archive\Mf6Model.Chem.src
+	Archive\Mf6Model.Chem.ssm
+	Archive\Mf6Model.Chem.uzt
+	Archive\Mf6Model.dis
+	Archive\Mf6Model.drn
+	Archive\Mf6Model.evt
+	Archive\Mf6Model.ghb
+	Archive\Mf6Model.gsf
+	Archive\Mf6Model.hfb
+	Archive\Mf6Model.ic
+	Archive\Mf6Model.ims
+	Archive\Mf6Model.lak6
+	Archive\Mf6Model.maw6
+	Archive\Mf6Model.mfsim.nam
+	Archive\Mf6Model.mvr
+	Archive\Mf6Model.nam
+	Archive\Mf6Model.nam.archive
+	Archive\Mf6Model.npf
+	Archive\Mf6Model.oc
+	Archive\Mf6Model.rch
+	Archive\Mf6Model.riv
+	Archive\Mf6Model.RunModel.Bat
+	Archive\Mf6Model.RunModflow.Bat
+	Archive\Mf6Model.sfr
+	Archive\Mf6Model.sto
+	Archive\Mf6Model.tdis
+	Archive\Mf6Model.uzf
+	Archive\Mf6Model.wel
+	Archive\usgs.Mf6Model.reference

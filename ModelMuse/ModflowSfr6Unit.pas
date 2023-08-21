@@ -3877,6 +3877,7 @@ begin
         Cell := TSfrMF6_Cell.Create;
         Assert(ScreenObject <> nil);
         Cell.IFace := (ScreenObject as TScreenObject).IFace;
+        Cell.ScreenObject := ScreenObject as TScreenObject;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.FValues.Assign(BoundaryValues);
@@ -5601,6 +5602,7 @@ end;
 
 procedure TSfrMf6_Cell.Cache(Comp: TCompressionStream; Strings: TStringList);
 begin
+  inherited;
   WriteCompInt(Comp, StressPeriod);
   FValues.Cache(Comp, Strings);
 end;
@@ -5654,6 +5656,8 @@ var
   GwtPosition: Integer;
   GwtSource: Integer;
   SpeciesIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  DiversionCount: Integer;
 
   {
     InflowTimeSeriesName: string;
@@ -5679,13 +5683,15 @@ begin
       end
     else
       begin
+        LocalScreenObject := ScreenObject as TScreenObject;
+        DiversionCount := LocalScreenObject.ModflowSfr6Boundary.Diversions.Count;
         Index := Index - SfrMf6DiversionStartPosition;
-        if Index < Length(FValues.Diversions) then
+        if Index < DiversionCount then
         begin
           result := FValues.DiversionTimeSeriesName[Index];
           Exit;
         end;
-        GwtPosition := Index - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - DiversionCount - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition mod SfrGwtConcCount;
         SpeciesIndex := GwtPosition div SfrGwtConcCount;
@@ -5732,6 +5738,8 @@ var
   GwtPosition: Integer;
   GwtSource: Integer;
   SpeciesIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  DiversionCount: Integer;
 begin
   case Index of
     SfrMf6InflowPosition: result := FValues.InflowPest;
@@ -5747,13 +5755,15 @@ begin
       end;
     else
       begin
+        LocalScreenObject := ScreenObject as TScreenObject;
+        DiversionCount := LocalScreenObject.ModflowSfr6Boundary.Diversions.Count;
         Index := Index - SfrMf6DiversionStartPosition;
-        if Index < Length(FValues.Diversions) then
+        if Index < DiversionCount then
         begin
           result := '';
           Exit;
         end;
-        GwtPosition := Index - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - DiversionCount - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition mod SfrGwtConcCount;
         SpeciesIndex := GwtPosition div SfrGwtConcCount;
@@ -5791,6 +5801,8 @@ var
   GwtPosition: Integer;
   GwtSource: Integer;
   SpeciesIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  DiversionCount: Integer;
 begin
   case Index of
     SfrMf6InflowPosition: result := FValues.InflowPestSeriesMethod;
@@ -5806,13 +5818,15 @@ begin
       end;
     else
       begin
+        LocalScreenObject := ScreenObject as TScreenObject;
+        DiversionCount := LocalScreenObject.ModflowSfr6Boundary.Diversions.Count;
         Index := Index - SfrMf6DiversionStartPosition;
-        if Index < Length(FValues.Diversions) then
+        if Index < DiversionCount then
         begin
           result := inherited;
           Exit;
         end;
-        GwtPosition := Index - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - DiversionCount - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition mod SfrGwtConcCount;
         SpeciesIndex := GwtPosition div SfrGwtConcCount;
@@ -5853,6 +5867,8 @@ var
   GwtPosition: Integer;
   GwtSource: Integer;
   SpeciesIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  DiversionCount: Integer;
 begin
   case Index of
     SfrMf6InflowPosition: result := FValues.InflowPestSeriesName;
@@ -5868,13 +5884,15 @@ begin
       end;
     else
       begin
+        LocalScreenObject := ScreenObject as TScreenObject;
+        DiversionCount := LocalScreenObject.ModflowSfr6Boundary.Diversions.Count;
         Index := Index - SfrMf6DiversionStartPosition;
-        if Index < Length(FValues.Diversions) then
+        if Index < DiversionCount then
         begin
           result := '';
           Exit;
         end;
-        GwtPosition := Index - Length(FValues.Diversions) - 1;
+        GwtPosition := Index - DiversionCount - 1;
         Assert(GwtPosition >= 0);
         GwtSource := GwtPosition mod SfrGwtConcCount;
         SpeciesIndex := GwtPosition div SfrGwtConcCount;
@@ -5917,6 +5935,8 @@ var
   GwtPosition: Integer;
   GwtSource: Integer;
   SpeciesIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  DiversionCount: Integer;
 begin
   result := '';
   case Index of
@@ -5933,14 +5953,16 @@ begin
       end
     else
       begin
+        LocalScreenObject := ScreenObject as TScreenObject;
+        DiversionCount := LocalScreenObject.ModflowSfr6Boundary.Diversions.Count;
         Index := Index-SfrMf6DiversionStartPosition;
-        if Index < Length(FValues.Diversions) then
+        if Index < DiversionCount then
         begin
           result := FValues.DiversionAnnotations[Index];
         end
         else
         begin
-          GwtPosition := Index - Length(FValues.Diversions) - 1;
+          GwtPosition := Index - DiversionCount - 1;
           GwtSource := GwtPosition mod SfrGwtConcCount;
           SpeciesIndex := GwtPosition div SfrGwtConcCount;
           case GwtSource of
@@ -5977,6 +5999,8 @@ var
   GwtPosition: Integer;
   GwtSource: Integer;
   SpeciesIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  DiversionCount: Integer;
 begin
 //  result := 0;
   case Index of
@@ -5993,14 +6017,16 @@ begin
       end
     else
       begin
+        LocalScreenObject := ScreenObject as TScreenObject;
+        DiversionCount := LocalScreenObject.ModflowSfr6Boundary.Diversions.Count;
         Index := Index-SfrMf6DiversionStartPosition;
-        if Index < Length(FValues.Diversions) then
+        if Index < DiversionCount then
         begin
           result := FValues.Diversions[Index];
         end
         else
         begin
-          GwtPosition := Index - Length(FValues.Diversions) - 1;
+          GwtPosition := Index - DiversionCount - 1;
           GwtSource := GwtPosition mod SfrGwtConcCount;
           SpeciesIndex := GwtPosition div SfrGwtConcCount;
           case GwtSource of
@@ -6057,14 +6083,16 @@ end;
 
 procedure TSfrMf6_Cell.RecordStrings(Strings: TStringList);
 begin
+  inherited;
   FValues.RecordStrings(Strings);
 end;
 
 procedure TSfrMf6_Cell.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
 begin
- StressPeriod := ReadCompInt(Decomp);
- FValues.Restore(Decomp, Annotations);
+  inherited;
+  StressPeriod := ReadCompInt(Decomp);
+  FValues.Restore(Decomp, Annotations);
 end;
 
 procedure TSfrMf6_Cell.SetColumn(const Value: integer);

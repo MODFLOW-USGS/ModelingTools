@@ -5,7 +5,7 @@ interface
 uses Windows, Types, SysUtils, Classes, Contnrs, Forms, CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, PhastModelUnit, System.Generics.Collections,
   ScreenObjectUnit, ModflowSfr6Unit, ModflowBoundaryDisplayUnit,
-  Modflow6ObsUnit;
+  Modflow6ObsUnit, IntListUnit;
 
 type
   TSfr6Observation = record
@@ -72,6 +72,7 @@ type
     FFileNameLines: TStrings;
     FCalculatedObsLines: TStrings;
     FSpeciesIndex: Integer;
+    FDiversionReaches: TIntegerList;
     procedure Evaluate;
     procedure EvaluateSteadyData;
     procedure AssignSteadyData(ASegment: TSfr6Segment);
@@ -435,6 +436,7 @@ begin
           begin
             AReach := ASegment.Last;
             OtherReach := OtherSegment.First;
+            FDiversionReaches.AddUnique(OtherReach.ReachNumber);
             if not AReach.IsConnected(-OtherReach.ReachNumber) then
             begin
               NewLength := Length(AReach.ConnectedReaches)+1;
@@ -805,6 +807,7 @@ begin
   DirectObsLines := Model.DirectObservationLines;
   CalculatedObsLines := Model.DerivedObservationLines;
   FileNameLines := Model.FileNameLines;
+  FDiversionReaches := TIntegerList.Create;
   if Model.GwtUsed then
   begin
     for index := 0 to Model.MobileComponents.Count - 1 do
@@ -812,11 +815,13 @@ begin
       FGwtObservations.Add(TSft6ObservationList.Create);
     end;
   end;
+  FDiversionReaches.Sorted := True;
 end;
 
 destructor TModflowSFR_MF6_Writer.Destroy;
 begin
   FGwtObservations.Free;
+  FDiversionReaches.Free;
   FObsList.Free;
   FSegments.Free;
   FValues.Free;
@@ -2554,7 +2559,15 @@ begin
 
         WriteInteger(ReachNumber);
         WriteString(' UPSTREAM_FRACTION');
-        WriteValueOrFormula(ACell, SfrMf6UpstreamFractionPosition);
+
+        if FDiversionReaches.IndexOf(ReachNumber) < 0 then
+        begin
+          WriteValueOrFormula(ACell, SfrMf6UpstreamFractionPosition);
+        end
+        else
+        begin
+          WriteFloat(0);
+        end;
         NewLine;
 
         if ACell.Values.Status = ssSimple then

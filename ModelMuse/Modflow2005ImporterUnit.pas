@@ -18451,6 +18451,10 @@ var
   StressPeriodString: string;
   SPIndex: Integer;
 begin
+  if FReuseSegmentDefinition = nil then
+  begin
+    Exit;
+  end;
   StressPeriodString := '';
   for SPIndex := StressPeriodIndex downto 0 do
   begin
@@ -18851,7 +18855,6 @@ begin
     else
     begin
       ScreenObject.ElevationFormula := kModelTop;
-//      ScreenObject.ElevationCount := ecZero;
     end;
 
     CreateBoundary(ScreenObject);
@@ -18876,7 +18879,7 @@ begin
       begin
         NewItemNeeded := True;
       end;
-      if not FReuseSegmentDefinition[StressPeriodIndex] then
+      if (FReuseSegmentDefinition <> nil) and not FReuseSegmentDefinition[StressPeriodIndex] then
       begin
         NewItemNeeded := True;
       end;

@@ -319,6 +319,64 @@ type
 
   TImportedMawList = TObjectList<TImportedMaw>;
 
+  TSfrStressPeriod = class(TCustomBoundaryStressPeriod)
+    // if NCROSSPTS[i] = 1, there is no cross section for reach i
+    NCROSSPTS: TCIntArray;
+    IACROSS: TCIntArray;
+    STATION: TDoubleArray;
+    XSHEIGHT: TDoubleArray;
+    XSROUGH: TDoubleArray;
+    MANNING: TDoubleArray;
+    STAGE: TDoubleArray;
+    INFLOW: TDoubleArray;
+    RAINFALL: TDoubleArray;
+    EVAPORATION: TDoubleArray;
+    RUNOFF: TDoubleArray;
+    DIVREACH: TCIntArray;
+    divflow: TDoubleArray;
+    UPSTREAM_FRACTION: TDoubleArray;
+  end;
+
+  TSfrStressPeriods = TObjectList<TSfrStressPeriod>;
+
+  TImportedSfr = class(TCustomImportedBoundary)
+    MAXIMUM_PICARD_ITERATIONS: Integer;
+    MAXIMUM_ITERATIONS: Integer;
+    MAXIMUM_DEPTH_CHANGE: double;
+    LENGTH_CONVERSION: double;
+    TIME_CONVERSION: double;
+    rlen: TDoubleArray;
+    rwid: TDoubleArray;
+    rgrd: TDoubleArray;
+    rtp: TDoubleArray;
+    rbth: TDoubleArray;
+    rhk: TDoubleArray;
+    man: TDoubleArray;
+    ncon: TCIntArray;
+    ustrf: TDoubleArray;
+    ndv: TCIntArray;
+    // Cross sections come from NCROSSPTS, IACROSS, STATION, XSHEIGHT, and  XSROUGH
+    NCROSSPTS: TCIntArray;
+    IACROSS: TCIntArray;
+    STATION: TDoubleArray;
+    XSHEIGHT: TDoubleArray;
+    XSROUGH: TDoubleArray;
+
+    // ic comes from a combination of ja and idir
+    ja: TCIntArray;
+    idir: TCIntArray;
+    idv: TCIntArray;
+    iconr: TCIntArray;
+    // can't get cprior
+    cprior: TAnsiStringArray;
+    StressPeriods: TSfrStressPeriods;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  private
+  end;
+
+  TImportedSfrList = TObjectList<TImportedSfr>;
 
 
   TImportedModel = class(TObject)
@@ -340,6 +398,7 @@ type
     ImportedRchList: TImportedRchList;
     ImportedEvtList: TImportedEvtList;
     ImportedMawList: TImportedMawList;
+    ImportedSfrList: TImportedSfrList;
     procedure UpdateChd;
     procedure UpdateGhb;
     procedure UpdateRiv;
@@ -348,6 +407,7 @@ type
     procedure UpdateRch;
     procedure UpdateEvt;
     procedure UpdateMaw;
+    procedure UpdateSfr;
     destructor Destroy; override;
   end;
 
@@ -2021,6 +2081,456 @@ begin
   end;
 end;
 
+function GetSfrMAXIMUM_PICARD_ITERATIONS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/MAXSFRPICARD';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetSfrMAXIMUM_ITERATIONS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/MAXSFRIT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetSfrMAXIMUM_DEPTH_CHANGE(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/DMAXCHG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetSfrLENGTH_CONVERSION(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/LENGTHCONV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetSfrTIME_CONVERSION(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/TIMECONV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetSfrReachLength(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/LENGTH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachWidth(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/WIDTH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachGradient(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/SLOPE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachTop(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/STRTOP';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachBedThickness(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/BTHICK';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachK(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/HK';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachManning(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/ROUGH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachNConn(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/NCONNREACH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrUpstreamFraction(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/USTRF';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrReachNDiv(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/NDIV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrJA(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/JA';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrIDIR(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/IDIR';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrDIVREACH(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/DIVREACH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrNCROSSPTS(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/NCROSSPTS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrIACROSS(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/IACROSS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrSTATION(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/STATION';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrXSHEIGHT(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/XSHEIGHT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrXSROUGH(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/XSROUGH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrSTAGE(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/STAGE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrRAINFALL(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/RAIN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrEVAPORATION(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/EVAP';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+function GetSfrRUNOFF(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/RUNOFF';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
+//function GetSfrDIVREACH(ModelName, PackageName: AnsiString): TCIntArray;
+//var
+//  VarName: AnsiString;
+//begin
+//  VarName := ModelName + '/' + PackageName +'/DIVREACH';
+//  if NameList.IndexOf(VarName) >= 0 then
+//  begin
+//    GetIntegerVariable(VarName, result);
+//  end
+//  else
+//  begin
+//    result := nil
+//  end;
+//end;
+
+function GetSfrDivFlow(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/DIVFLOW';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil
+  end;
+end;
+
 function GetNBOUND(ModelName, PackageName: AnsiString): Integer;
 var
   VarName: AnsiString;
@@ -2848,7 +3358,7 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('MAW', VarName) > 0;
+    WriteValues := Pos('SFR', VarName) > 0;
 //    WriteValues := True;
     if not WriteValues then
     begin
@@ -3757,6 +4267,27 @@ begin
   end;
 end;
 
+function GetSfrPackages(ModelName: AnsiString; Packages: TPackages): TImportedSfrList;
+var
+  PackageIndex: Integer;
+  ImportedPackage: TImportedSfr;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'SFR6' then
+    begin
+      if result = nil then
+      begin
+        result := TImportedSfrList.Create;
+      end;
+      ImportedPackage := TImportedSfr.Create(Packages[PackageIndex].PackageName);
+      result.Add(ImportedPackage);
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
 function GetGhbPackages(ModelName: AnsiString; Packages: TPackages): TImportedGhbList;
 var
   PackageIndex: Integer;
@@ -3931,6 +4462,8 @@ begin
     ImportedModel.ImportedEvtList := GetEvtPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
     ImportedModel.ImportedMawList := GetMawPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedSfrList := GetSfrPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
   end;
 end;
@@ -4197,6 +4730,8 @@ begin
             ImportedModels[ModelIndex].UpdateRch;
             ImportedModels[ModelIndex].UpdateEvt;
             ImportedModels[ModelIndex].UpdateMaw;
+            ImportedModels[ModelIndex].UpdateSfr;
+
           end;
         end;
 
@@ -4663,6 +5198,7 @@ end;
 
 destructor TImportedModel.Destroy;
 begin
+  ImportedSfrList.Free;
   ImportedMawList.Free;
   ImportedEvtList.Free;
   ImportedRchList.Free;
@@ -5111,6 +5647,101 @@ begin
   end;
 end;
 
+procedure TImportedModel.UpdateSfr;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TSfrStressPeriod;
+  PackageIndex: Integer;
+  ImportedSfr: TImportedSfr;
+  DivIndex: Integer;
+  DIndex: Integer;
+begin
+  if ImportedSfrList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedSfrList.Count - 1 do
+    begin
+      ImportedSfr := ImportedSfrList[PackageIndex];
+      StressPeriod := TSfrStressPeriod.Create;
+      ImportedSfr.StressPeriods.Add(StressPeriod);
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedSfr.PackageName);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedSfr.PackageName);
+      StressPeriod.Bound := GetBound(ModelName, ImportedSfr.PackageName);
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedSfr.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedSfr.PackageName);
+//      Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.Bound));
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedSfr.Naux);
+      end;
+
+      StressPeriod.NCROSSPTS := GetSfrNCROSSPTS(ModelName, ImportedSfr.PackageName);
+      StressPeriod.IACROSS := GetSfrIACROSS(ModelName, ImportedSfr.PackageName);
+      StressPeriod.STATION := GetSfrSTATION(ModelName, ImportedSfr.PackageName);
+      StressPeriod.XSHEIGHT := GetSfrXSHEIGHT(ModelName, ImportedSfr.PackageName);
+      StressPeriod.XSROUGH := GetSfrXSROUGH(ModelName, ImportedSfr.PackageName);
+      StressPeriod.MANNING := GetSfrReachManning(ModelName, ImportedSfr.PackageName);
+      StressPeriod.STAGE := GetSfrSTAGE(ModelName, ImportedSfr.PackageName);
+      StressPeriod.RAINFALL := GetSfrRAINFALL(ModelName, ImportedSfr.PackageName);
+      StressPeriod.EVAPORATION := GetSfrEVAPORATION(ModelName, ImportedSfr.PackageName);
+      StressPeriod.RUNOFF := GetSfrRUNOFF(ModelName, ImportedSfr.PackageName);
+      StressPeriod.DIVREACH := GetSfrDIVREACH(ModelName, ImportedSfr.PackageName);
+      StressPeriod.divflow := GetSfrDivFlow(ModelName, ImportedSfr.PackageName);
+      StressPeriod.UPSTREAM_FRACTION := GetSfrUpstreamFraction(ModelName, ImportedSfr.PackageName);
+
+      DivIndex := 0;
+      AuxIndex := 0;
+      if ImportedDis <> nil then
+      begin
+        for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+        begin
+          GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape,
+            ImportedDis.IDomain, MfCell);
+          Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+            MfCell.Row, ' ', MfCell.Column,
+            ' ', StressPeriod.MANNING[CellIndex],
+            ' ', StressPeriod.STAGE[CellIndex],
+            ' ', StressPeriod.RAINFALL[CellIndex],
+            ' ', StressPeriod.EVAPORATION[CellIndex],
+            ' ', StressPeriod.RUNOFF[CellIndex],
+            ' ', StressPeriod.UPSTREAM_FRACTION[CellIndex]);
+
+          for DIndex := 0 to ImportedSfr.ndv[CellIndex] - 1 do
+          begin
+            Write(
+              ' ', StressPeriod.DIVREACH[DivIndex],
+              ' ', StressPeriod.divflow[DivIndex]);
+            Inc(DivIndex);
+          end;
+
+
+          for AIndex := 0 to ImportedSfr.Naux - 1 do
+          begin
+            Write(' ', StressPeriod.AuxValues[AuxIndex]);
+            Inc(AuxIndex);
+          end;
+          if StressPeriod.BoundNames <> nil then
+          begin
+            Write(' ', StressPeriod.BoundNames[CellIndex]);
+          end;
+          Writeln;
+//            ' ', StressPeriod.idv[CellIndex],
+//            ' ', StressPeriod.divflow[CellIndex],
+
+
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TImportedModel.UpdateWel;
 var
   AuxIndex: Integer;
@@ -5426,6 +6057,50 @@ constructor TImportedPackage.Create(APackageName: AnsiString);
 begin
   inherited Create;
   PackageName := APackageName;
+end;
+
+{ TImportedSfr }
+
+constructor TImportedSfr.Create(APackageName: AnsiString);
+begin
+  inherited;
+  StressPeriods := TSfrStressPeriods.Create;
+end;
+
+destructor TImportedSfr.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedSfr.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  MAXIMUM_PICARD_ITERATIONS := GetSfrMAXIMUM_PICARD_ITERATIONS(ModelName, PackageName);
+  MAXIMUM_ITERATIONS := GetSfrMAXIMUM_ITERATIONS(ModelName, PackageName);
+  MAXIMUM_DEPTH_CHANGE := GetSfrMAXIMUM_DEPTH_CHANGE(ModelName, PackageName);
+  LENGTH_CONVERSION := GetSfrLENGTH_CONVERSION(ModelName, PackageName);
+  TIME_CONVERSION := GetSfrTIME_CONVERSION(ModelName, PackageName);
+  rlen := GetSfrReachLength(ModelName, PackageName);
+  rwid := GetSfrReachWidth(ModelName, PackageName);
+  rgrd := GetSfrReachGradient(ModelName, PackageName);
+  rtp := GetSfrReachTop(ModelName, PackageName);
+  rbth := GetSfrReachBedThickness(ModelName, PackageName);
+  rhk := GetSfrReachK(ModelName, PackageName);
+  man := GetSfrReachManning(ModelName, PackageName);
+  ncon := GetSfrReachNConn(ModelName, PackageName);
+  ustrf := GetSfrUpstreamFraction(ModelName, PackageName);
+  ndv := GetSfrReachNDiv(ModelName, PackageName);
+  ja := GetSfrJA(ModelName, PackageName);
+  idir := GetSfrIDIR(ModelName, PackageName);
+  iconr := GetSfrDIVREACH(ModelName, PackageName);
+
+  NCROSSPTS := GetSfrNCROSSPTS(ModelName, PackageName);
+  IACROSS := GetSfrIACROSS(ModelName, PackageName);
+  STATION := GetSfrSTATION(ModelName, PackageName);
+  XSHEIGHT := GetSfrXSHEIGHT(ModelName, PackageName);
+  XSROUGH := GetSfrXSROUGH(ModelName, PackageName);
+
 end;
 
 initialization

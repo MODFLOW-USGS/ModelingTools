@@ -1,0 +1,5 @@
+# ADV: GWT Advection Package file created on 8/21/2023 by ModelMuse version 5.1.1.35.
+BEGIN OPTIONS
+  SCHEME upstream
+END OPTIONS
+
