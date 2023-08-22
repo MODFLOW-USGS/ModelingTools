@@ -1011,11 +1011,6 @@ begin
         end;
       4:
         begin
-          //MODFLOW-CFP
-          frmGoPhast.ModelSelection := msModflowCfp;
-        end;
-      5:
-        begin
           //MODFLOW-LGR
           frmGoPhast.ModelSelection := msModflowLGR2;
         end;

@@ -11,18 +11,15 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 407
   end
   object pcCfpPipes: TPageControl
     Left = 0
     Top = 17
     Width = 545
     Height = 450
-    ActivePage = tabOutput
+    ActivePage = tabProperties
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 407
-    ExplicitHeight = 448
     object tabProperties: TTabSheet
       Caption = 'Properties'
       DesignSize = (
@@ -40,6 +37,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
         TabOrder = 0
         Text = ''
         OnChange = edDiameterChange
+        OnExit = edDiameterExit
       end
       object btnDiameter: TButton
         Left = 447

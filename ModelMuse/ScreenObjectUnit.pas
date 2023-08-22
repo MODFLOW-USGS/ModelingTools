@@ -3960,6 +3960,7 @@ view. }
     // IndexOfDataSet returns the position of DataSet in
     // @Link(DataSets).
     function IndexOfDataSet(const DataSet: TDataArray): integer;
+    function IndexOfDataSetName(const DataSetName: string): integer;
     // @name returns the first position of APoint in Points.
     // An exact match is required.
     function IndexOfPoint(const APoint: TPoint2D): integer;
@@ -9002,6 +9003,38 @@ begin
   begin
     ADataArray := FDataSets[Index];
     if ADataArray.Name = DataSet.Name then
+    begin
+      result := Index;
+      FCachedDataSetIndex := result;
+    end;
+  end;
+end;
+
+function TScreenObject.IndexOfDataSetName(const DataSetName: string): integer;
+var
+  ADataArray: TDataArray;
+  Index: Integer;
+begin
+  result := -1;
+  if DataSetName = '' then
+  begin
+    Exit;
+  end;
+  if (FCachedDataSetIndex >= 0)
+    and (FCachedDataSetIndex < FDataSets.Count) then
+//    and (FDataSets[FCachedDataSetIndex] = DataSet) then
+  begin
+    ADataArray := FDataSets[FCachedDataSetIndex];
+    if SameText(ADataArray.Name, DataSetName) then
+    begin
+      result := FCachedDataSetIndex;
+      Exit;
+    end;
+  end;
+  for Index := 0 to FDataSets.Count - 1 do
+  begin
+    ADataArray := FDataSets[Index];
+    if SameText(ADataArray.Name, DataSetName) then
     begin
       result := Index;
       FCachedDataSetIndex := result;

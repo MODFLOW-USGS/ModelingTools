@@ -18221,7 +18221,7 @@ end;
 procedure TConduitFlowProcess.InitializeVariables;
 begin
   inherited;
-  ConduitTemperature := 25;
+  ConduitTemperature := 10;
   ElevationOffset := 0;
   Epsilon := 1e-10;
   Relax := 1;

@@ -378,6 +378,79 @@ type
 
   TImportedSfrList = TObjectList<TImportedSfr>;
 
+  TLakStressPeriod = class(TCustomBoundaryStressPeriod)
+    // can't get STATUS
+    STAGE: TDoubleArray;
+    RAINFALL: TDoubleArray;
+    EVAPORATION: TDoubleArray;
+    RUNOFF: TDoubleArray;
+    INFLOW: TDoubleArray;
+    WITHDRAWAL: TDoubleArray;
+    OUTRATE: TDoubleArray;
+    OUTINVERT: TDoubleArray;
+    OUTWIDTH: TDoubleArray;
+    OUTROUGH: TDoubleArray;
+    OUTSLOPE: TDoubleArray;
+  end;
+
+  TLakStressPeriods = TObjectList<TLakStressPeriod>;
+
+  TImportedLak = class(TCustomImportedBoundary)
+    // Options
+    SURFDEP: Double;
+    MAXIMUM_ITERATIONS: Integer;
+    MAXIMUM_STAGE_CHANGE: Double;
+    TIME_CONVERSION: Double;
+    LENGTH_CONVERSION: Double;
+    StressPeriods: TLakStressPeriods;
+    // Dimensions
+    NLAKES: Integer;
+    NOUTLETS: Integer;
+    NTABLES: Integer;
+    // Package data
+    strt: TDoubleArray;
+    nlakeconn: TCIntArray;
+    aux: TDoubleArray;
+    BoundNames: TAnsiStringArray;
+    // Connection data
+    // @name is the lake number for each lake connection
+    IMAP: TCIntArray;
+    CELLID: TCIntArray;
+    // @name is the connection type for each lake connection
+    // 0 = vertical
+    // 1 = horizontal
+    // 2 = EMBEDDEDH
+    // 3 = EMBEDDEDV
+    ICTYPE: TCIntArray;
+    BEDLEAK: TDoubleArray;
+    BELEV: TDoubleArray;
+    TELEV: TDoubleArray;
+    CONNLENGTH: TDoubleArray;
+    CONNWIDTH: TDoubleArray;
+    // Table data;
+    // @name is the number of rows in the table for each lake.
+    NTABROW: TCIntArray;
+    TABSTAGE: TDoubleArray;
+    TABVOLUME: TDoubleArray;
+    TABSAREA: TDoubleArray;
+    // Outlet data
+    LAKEIN: TCIntArray;
+    LAKEOUT: TCIntArray;
+    // 0 = SPECIFIED
+    // 1 = MANNING
+    // 2 = WEIR
+    IOUTTYPE: TCIntArray;
+    OUTINVERT: TDoubleArray;
+    OUTWIDTH: TDoubleArray;
+    OUTROUGH: TDoubleArray;
+    OUTSLOPE: TDoubleArray;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  private
+  end;
+
+  TImportedLakList = TObjectList<TImportedLak>;
 
   TImportedModel = class(TObject)
     ModelName: AnsiString;
@@ -399,6 +472,7 @@ type
     ImportedEvtList: TImportedEvtList;
     ImportedMawList: TImportedMawList;
     ImportedSfrList: TImportedSfrList;
+    ImportedLakList: TImportedLakList;
     procedure UpdateChd;
     procedure UpdateGhb;
     procedure UpdateRiv;
@@ -408,6 +482,7 @@ type
     procedure UpdateEvt;
     procedure UpdateMaw;
     procedure UpdateSfr;
+    procedure UpdateLak;
     destructor Destroy; override;
   end;
 
@@ -2036,7 +2111,7 @@ begin
   end;
 end;
 
-function GetMAW_STRT(ModelName, PackageName: AnsiString): TDoubleArray;
+function GetSTRT(ModelName, PackageName: AnsiString): TDoubleArray;
 var
   VarName: AnsiString;
 begin
@@ -2441,7 +2516,7 @@ begin
   end;
 end;
 
-function GetSfrSTAGE(ModelName, PackageName: AnsiString): TDoubleArray;
+function GetSTAGE(ModelName, PackageName: AnsiString): TDoubleArray;
 var
   VarName: AnsiString;
 begin
@@ -2486,7 +2561,7 @@ begin
   end;
 end;
 
-function GetSfrRUNOFF(ModelName, PackageName: AnsiString): TDoubleArray;
+function GetRUNOFF(ModelName, PackageName: AnsiString): TDoubleArray;
 var
   VarName: AnsiString;
 begin
@@ -2501,21 +2576,6 @@ begin
   end;
 end;
 
-//function GetSfrDIVREACH(ModelName, PackageName: AnsiString): TCIntArray;
-//var
-//  VarName: AnsiString;
-//begin
-//  VarName := ModelName + '/' + PackageName +'/DIVREACH';
-//  if NameList.IndexOf(VarName) >= 0 then
-//  begin
-//    GetIntegerVariable(VarName, result);
-//  end
-//  else
-//  begin
-//    result := nil
-//  end;
-//end;
-
 function GetSfrDivFlow(ModelName, PackageName: AnsiString): TDoubleArray;
 var
   VarName: AnsiString;
@@ -2528,6 +2588,526 @@ begin
   else
   begin
     result := nil
+  end;
+end;
+
+function GetLakSURFDEP(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/SURFDEP';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakMAXIMUM_STAGE_CHANGE(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/DMAXCHG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakTIME_CONVERSION(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/CONVTIME';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakLENGTH_CONVERSION(ModelName, PackageName: AnsiString): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/CONVLENGTH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakMAXIMUM_ITERATIONS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/MAXLAKIT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakNLAKES(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NLAKES';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakNOUTLETS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NOUTLETS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakNTABLES(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NTABLES';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetLakNLAKECONN(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/NLAKECONN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakIMAP(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/IMAP';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakCELLID(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/CELLID';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakNTABROW(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/NTABROW';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakLAKEIN(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/LAKEIN';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakLAKEOUT(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/LAKEOUT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakIOUTTYPE(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/IOUTTYPE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+
+function GetLakICTYPE(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/ICTYPE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakBEDLEAK(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/BEDLEAK';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakBELEV(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/BELEV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakTELEV(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/TELEV';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakCONNLENGTH(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/CONNLENGTH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakCONNWIDTH(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/CONNWIDTH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakTABSTAGE(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/TABSTAGE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakOUTINVERT(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/OUTINVERT';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakOUTWIDTH(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/OUTWIDTH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakOUTROUGH(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/OUTROUGH';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakOUTSLOPE(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/OUTSLOPE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakTABVOLUME(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/TABVOLUME';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakTABSAREA(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/TABSAREA';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakRAINFALL(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/RAINFALL';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakEVAPORATION(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/EVAPORATION';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakINFLOW(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/INFLOW';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakWITHDRAWAL(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/WITHDRAWAL';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetLakOUTRATE(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/OUTRATE';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
   end;
 end;
 
@@ -2548,7 +3128,6 @@ begin
     result := 0
   end;
 end;
-
 
 function GetAuxName(ModelName, PackageName: AnsiString): TAnsiStringArray;
 var
@@ -3358,7 +3937,7 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('SFR', VarName) > 0;
+    WriteValues := Pos('LAK', VarName) > 0;
 //    WriteValues := True;
     if not WriteValues then
     begin
@@ -4288,6 +4867,27 @@ begin
   end;
 end;
 
+function GetLakPackages(ModelName: AnsiString; Packages: TPackages): TImportedLakList;
+var
+  PackageIndex: Integer;
+  ImportedPackage: TImportedLak;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'LAK6' then
+    begin
+      if result = nil then
+      begin
+        result := TImportedLakList.Create;
+      end;
+      ImportedPackage := TImportedLak.Create(Packages[PackageIndex].PackageName);
+      result.Add(ImportedPackage);
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
 function GetGhbPackages(ModelName: AnsiString; Packages: TPackages): TImportedGhbList;
 var
   PackageIndex: Integer;
@@ -4464,6 +5064,8 @@ begin
     ImportedModel.ImportedMawList := GetMawPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
     ImportedModel.ImportedSfrList := GetSfrPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedLakList := GetLakPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
   end;
 end;
@@ -4731,7 +5333,7 @@ begin
             ImportedModels[ModelIndex].UpdateEvt;
             ImportedModels[ModelIndex].UpdateMaw;
             ImportedModels[ModelIndex].UpdateSfr;
-
+            ImportedModels[ModelIndex].UpdateLak;
           end;
         end;
 
@@ -5198,6 +5800,7 @@ end;
 
 destructor TImportedModel.Destroy;
 begin
+  ImportedLakList.Free;
   ImportedSfrList.Free;
   ImportedMawList.Free;
   ImportedEvtList.Free;
@@ -5465,6 +6068,76 @@ begin
   end;
 end;
 
+procedure TImportedModel.UpdateLak;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TLakStressPeriod;
+  PackageIndex: Integer;
+  ImportedLak: TImportedLak;
+begin
+  if ImportedLakList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedLakList.Count - 1 do
+    begin
+      ImportedLak := ImportedLakList[PackageIndex];
+      StressPeriod := TLakStressPeriod.Create;
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedLak.PackageName);
+      ImportedLak.StressPeriods.Add(StressPeriod);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedLak.PackageName);
+
+      StressPeriod.STAGE := GetSTAGE(ModelName, ImportedLak.PackageName);
+      StressPeriod.RAINFALL := GetLakRAINFALL(ModelName, ImportedLak.PackageName);
+      StressPeriod.EVAPORATION := GetLakEVAPORATION(ModelName, ImportedLak.PackageName);
+      StressPeriod.RUNOFF := GetRUNOFF(ModelName, ImportedLak.PackageName);
+      StressPeriod.INFLOW := GetLakINFLOW(ModelName, ImportedLak.PackageName);
+      StressPeriod.WITHDRAWAL := GetLakWITHDRAWAL(ModelName, ImportedLak.PackageName);
+      StressPeriod.OUTRATE := GetLakOUTRATE(ModelName, ImportedLak.PackageName);
+      StressPeriod.OUTINVERT := GetLakOUTINVERT(ModelName, ImportedLak.PackageName);
+      StressPeriod.OUTWIDTH := GetLakOUTWIDTH(ModelName, ImportedLak.PackageName);
+      StressPeriod.OUTROUGH := GetLakOUTROUGH(ModelName, ImportedLak.PackageName);
+      StressPeriod.OUTSLOPE := GetLakOUTSLOPE(ModelName, ImportedLak.PackageName);
+
+      StressPeriod.Bound := GetBound(ModelName, ImportedLak.PackageName);
+
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedLak.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedLak.PackageName);
+
+//      Assert(Length(StressPeriod.NodeList)*2 = Length(StressPeriod.Bound));
+
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedLak.Naux);
+      end;
+      AuxIndex := 0;
+      for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+      begin
+        GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+//        Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+//          MfCell.Row, ' ', MfCell.Column, ' ', StressPeriod.BHead(CellIndex),
+//          ' ', StressPeriod.Cond(CellIndex));
+        for AIndex := 0 to ImportedLak.Naux - 1 do
+        begin
+          Write(' ', StressPeriod.AuxValues[AuxIndex]);
+          Inc(AuxIndex);
+        end;
+        if StressPeriod.BoundNames <> nil then
+        begin
+          Write(' ', StressPeriod.BoundNames[CellIndex]);
+        end;
+        Writeln;
+      end;
+    end;
+  end;
+end;
+
 procedure TImportedModel.UpdateMaw;
 var
   AuxIndex: Integer;
@@ -5688,10 +6361,10 @@ begin
       StressPeriod.XSHEIGHT := GetSfrXSHEIGHT(ModelName, ImportedSfr.PackageName);
       StressPeriod.XSROUGH := GetSfrXSROUGH(ModelName, ImportedSfr.PackageName);
       StressPeriod.MANNING := GetSfrReachManning(ModelName, ImportedSfr.PackageName);
-      StressPeriod.STAGE := GetSfrSTAGE(ModelName, ImportedSfr.PackageName);
+      StressPeriod.STAGE := GetSTAGE(ModelName, ImportedSfr.PackageName);
       StressPeriod.RAINFALL := GetSfrRAINFALL(ModelName, ImportedSfr.PackageName);
       StressPeriod.EVAPORATION := GetSfrEVAPORATION(ModelName, ImportedSfr.PackageName);
-      StressPeriod.RUNOFF := GetSfrRUNOFF(ModelName, ImportedSfr.PackageName);
+      StressPeriod.RUNOFF := GetRUNOFF(ModelName, ImportedSfr.PackageName);
       StressPeriod.DIVREACH := GetSfrDIVREACH(ModelName, ImportedSfr.PackageName);
       StressPeriod.divflow := GetSfrDivFlow(ModelName, ImportedSfr.PackageName);
       StressPeriod.UPSTREAM_FRACTION := GetSfrUpstreamFraction(ModelName, ImportedSfr.PackageName);
@@ -6044,7 +6717,7 @@ begin
   SHUTDOWN_KAPPA := GetSHUTDOWN_KAPPA(ModelName, PackageName);
   Radius := GetMAW_Radius(ModelName, PackageName);
   Bottom := GetMAW_Bottom(ModelName, PackageName);
-  Strt := GetMAW_STRT(ModelName, PackageName);
+  Strt := GetSTRT(ModelName, PackageName);
   CondEqn := GetMAW_CondEqn(ModelName, PackageName);
   NGWFNODES := GetMAW_NGWFNODES(ModelName, PackageName);
   PckgAux := GetAuxValue(ModelName, PackageName);
@@ -6101,6 +6774,62 @@ begin
   XSHEIGHT := GetSfrXSHEIGHT(ModelName, PackageName);
   XSROUGH := GetSfrXSROUGH(ModelName, PackageName);
 
+end;
+
+{ TImportedLak }
+
+constructor TImportedLak.Create(APackageName: AnsiString);
+begin
+  inherited;
+  StressPeriods := TLakStressPeriods.Create;
+end;
+
+destructor TImportedLak.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedLak.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  // Options
+  SURFDEP := GetLakSURFDEP(ModelName, PackageName);
+  MAXIMUM_ITERATIONS := GetLakMAXIMUM_ITERATIONS(ModelName, PackageName);
+  MAXIMUM_STAGE_CHANGE := GetLakMAXIMUM_STAGE_CHANGE(ModelName, PackageName);
+  TIME_CONVERSION := GetLakTIME_CONVERSION(ModelName, PackageName);
+  LENGTH_CONVERSION := GetLakLENGTH_CONVERSION(ModelName, PackageName);
+  // Dimensions
+  NLAKES := GetLakNLAKES(ModelName, PackageName);
+  NOUTLETS := GetLakNOUTLETS(ModelName, PackageName);
+  NTABLES := GetLakNTABLES(ModelName, PackageName);
+  // Package data
+  strt := GetSTRT(ModelName, PackageName);
+  nlakeconn := GetLakNLAKECONN(ModelName, PackageName);
+  aux := GetAuxValue(ModelName, PackageName);
+  BoundNames := GetBoundNames(ModelName, PackageName);
+  // Connection data
+  IMAP := GetLakIMAP(ModelName, PackageName);
+  CELLID := GetLakCELLID(ModelName, PackageName);
+  ICTYPE := GetLakICTYPE(ModelName, PackageName);
+  BEDLEAK := GetLakBEDLEAK(ModelName, PackageName);
+  BELEV := GetLakBELEV(ModelName, PackageName);
+  TELEV := GetLakTELEV(ModelName, PackageName);
+  CONNLENGTH := GetLakCONNLENGTH(ModelName, PackageName);
+  CONNWIDTH := GetLakCONNWIDTH(ModelName, PackageName);
+  // Table data
+  NTABROW := GetLakNTABROW(ModelName, PackageName);
+  TABSTAGE := GetLakTABSTAGE(ModelName, PackageName);
+  TABVOLUME := GetLakTABVOLUME(ModelName, PackageName);
+  TABSAREA := GetLakTABSAREA(ModelName, PackageName);
+  // Outlet data
+  LAKEIN := GetLakLAKEIN(ModelName, PackageName);
+  LAKEOUT := GetLakLAKEOUT(ModelName, PackageName);
+  IOUTTYPE := GetLakIOUTTYPE(ModelName, PackageName);
+  OUTINVERT := GetLakOUTINVERT(ModelName, PackageName);
+  OUTWIDTH := GetLakOUTWIDTH(ModelName, PackageName);
+  OUTROUGH := GetLakOUTROUGH(ModelName, PackageName);
+  OUTSLOPE := GetLakOUTSLOPE(ModelName, PackageName);
 end;
 
 initialization

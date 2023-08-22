@@ -415,6 +415,9 @@ type
     procedure btnWithinLayerPriorClick(Sender: TObject);
     procedure btnBetweenLayerPriorClick(Sender: TObject);
     procedure rdePilotPointSpacingChange(Sender: TObject);
+    procedure comboArrayPatternChange(Sender: TObject);
+    procedure framePilotPointsseNumberChange(Sender: TObject);
+    procedure rdePilotPointBufferChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -470,6 +473,8 @@ type
     procedure SetSearchDistanceColor;
     procedure AssignParetoObsReports(ParetoProperties: TParetoProperties);
     procedure CheckAllFirstCol(Grid: TRbwDataGrid4);
+    function PilotPointsDefined: Boolean;
+    procedure HighlightPilotPointBuffer;
     { Private declarations }
   public
     { Public declarations }
@@ -1033,6 +1038,12 @@ begin
   end;
 end;
 
+procedure TfrmPEST.rdePilotPointBufferChange(Sender: TObject);
+begin
+  inherited;
+  HighlightPilotPointBuffer;
+end;
+
 procedure TfrmPEST.rdePilotPointSpacingChange(Sender: TObject);
 var
   AValue: Double;
@@ -1043,6 +1054,7 @@ begin
   begin
     comboArrayPattern.ItemIndex := 1;
   end;
+  HighlightPilotPointBuffer;
 end;
 
 procedure TfrmPEST.rdeREGSINGTHRESHChange(Sender: TObject);
@@ -1462,6 +1474,7 @@ begin
     PointList.Free;
     ResultPointList.Free;
     QuadTree.Free;
+    HighlightPilotPointBuffer;
   end;
 end;
 
@@ -1479,6 +1492,7 @@ begin
   if dlgOpenPilotPoints.Execute then
   begin
     ImportPilotPoints(dlgOpenPilotPoints.FileName);
+    HighlightPilotPointBuffer;
   end;
 end;
 
@@ -1489,6 +1503,7 @@ begin
   if dlgOpenPilotPoints.Execute then
   begin
     ImportPilotPoints(dlgOpenPilotPoints.FileName);
+    HighlightPilotPointBuffer;
   end;
 end;
 
@@ -1608,6 +1623,12 @@ begin
   end;
 end;
 
+
+procedure TfrmPEST.comboArrayPatternChange(Sender: TObject);
+begin
+  inherited;
+  HighlightPilotPointBuffer;
+end;
 
 procedure TfrmPEST.comboParetoGroupChange(Sender: TObject);
 var
@@ -1935,6 +1956,13 @@ procedure TfrmPEST.frameObservationGroupsseNumberChange(Sender: TObject);
 begin
   inherited;
   ChangeObsGroupNumber(frameObservationGroups, FLocalObsGroups);
+end;
+
+procedure TfrmPEST.framePilotPointsseNumberChange(Sender: TObject);
+begin
+  inherited;
+  framePilotPoints.seNumberChange(Sender);
+  HighlightPilotPointBuffer;
 end;
 
 procedure TfrmPEST.framePriorInfoObservationGroupsGridBeforeDrawCell(
@@ -2504,6 +2532,8 @@ begin
   rdeAltThreshold.RealValue := ParetoProperties.AltThreshold;
   seAltIterations.AsInteger := ParetoProperties.AltIterations;
   {$ENDREGION}
+
+  HighlightPilotPointBuffer;
 end;
 
 function TfrmPEST.GetIREGADJ: Integer;
@@ -3170,6 +3200,29 @@ begin
 end;
 
 
+function TfrmPEST.PilotPointsDefined: Boolean;
+begin
+  result := False;
+  if (comboArrayPattern = nil) or (rdePilotPointSpacing = nil)
+    or (framePilotPoints = nil) or (framePilotPoints.seNumber = nil)
+    or (rdgBetweenObs = nil) then
+  begin
+    Exit;
+  end;
+  if (comboArrayPattern.ItemIndex > 0) and (rdePilotPointSpacing.RealValueDefault(0) > 0) then
+  begin
+    result := True;
+  end
+  else if framePilotPoints.seNumber.asInteger > 0 then
+  begin
+    result := True;
+  end
+  else if rdgBetweenObs.RowCount > 1 then
+  begin
+    result := True;
+  end;
+end;
+
 procedure TfrmPEST.GetObsGroups(ObsGroupFrame: TframeGrid;
   ObsGroups, EditedObsGroups: TPestObservationGroups);
 var
@@ -3475,6 +3528,29 @@ begin
       ChildNode.MoveTo(FNoNameNode, naAddChild);
       ChildNode := TreeNode.getFirstChild;
     end;
+  end;
+end;
+
+procedure TfrmPEST.HighlightPilotPointBuffer;
+begin
+  if rdePilotPointBuffer = nil then
+  begin
+    Exit;
+  end;
+  if PilotPointsDefined then
+  begin
+    if rdePilotPointBuffer.RealValueDefault(0) > 0 then
+    begin
+      rdePilotPointBuffer.Color := clWindow;
+    end
+    else
+    begin
+      rdePilotPointBuffer.Color := clRed;
+    end;
+  end
+  else
+  begin
+    rdePilotPointBuffer.Color := clRed;
   end;
 end;
 

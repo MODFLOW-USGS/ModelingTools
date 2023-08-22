@@ -42,9 +42,11 @@ type
     procedure cbRecordNodesClick(Sender: TObject);
     procedure cbRecordTimeSeriesNodesClick(Sender: TObject);
     procedure cbRecordTimeSeriesPipesClick(Sender: TObject);
+    procedure edDiameterExit(Sender: TObject);
   private
     FChanging: Boolean;
     FOnChange: TNotifyEvent;
+    FVariableRoughness: Boolean;
     property Changing: Boolean read FChanging write FChanging;
     procedure DoChange;
     procedure InitializeControls;
@@ -127,6 +129,18 @@ begin
   DoChange;
 end;
 
+procedure TframeScreenObjectCfpPipes.edDiameterExit(Sender: TObject);
+begin
+  inherited;
+  if not Changing and not FVariableRoughness then
+  begin
+    if (edRoughnessHeight.Text = '') and (edDiameter.Text <> '') then
+    begin
+      edRoughnessHeight.Text := edDiameter.Text + '/10';
+    end;
+  end;
+end;
+
 procedure TframeScreenObjectCfpPipes.edElevationChange(Sender: TObject);
 begin
   inherited;
@@ -167,6 +181,7 @@ var
   ABoundary: TCfpPipeBoundary;
   ScreenObjectIndex: Integer;
 begin
+  FVariableRoughness := False;
   pcCfpPipes.ActivePageIndex := 0;
   Assert(ScreenObjectList.Count >= 1);
   Changing := True;
@@ -215,7 +230,8 @@ begin
         end;
         if edRoughnessHeight.Text <> ABoundary.RoughnessHeight then
         begin
-          edRoughnessHeight.Text := ''
+          edRoughnessHeight.Text := '';
+          FVariableRoughness := True;
         end;
         if edLowerCriticalR.Text <> ABoundary.LowerCriticalR then
         begin
@@ -270,6 +286,7 @@ begin
   edRoughnessHeight.Text := '';
   edLowerCriticalR.Text := '2000';
   edHigherCriticalR.Text := '4000';
+  edTortuosity.Text := '1';
   edConductancePermeability.Text := '';
   edElevation.Text := '';
   edElevation.Enabled := frmGoPhast.PhastModel.ModflowPackages.

@@ -10022,7 +10022,7 @@ const
 //               Bug fix: ModelMuse no longer generates an error message for the
 //                MVR package if the MVR input in an object does not include
 //                all stress periods.
- //    '5.1.1.35' Bug fix: Fixed bug that caused an access violation when editing
+ //   '5.1.1.35' Bug fix: Fixed bug that caused an access violation when editing
 //                evapotranspiration bounddaries in MODFLOW 6 models in which
 //                the groundwater transport process was active.
 //               Bug fix: Fixed bug in defining SUTRA step TIME CYCLE time
@@ -10030,8 +10030,7 @@ const
 //                zero.
 //               Bug fix: Fixed exporting SUTRA input files when BCTIME has been
 //                modified.
-
-//               Bug fix: Fixed editing of ETS information in the Object
+//    '5.1.1.36' Bug fix: Fixed editing of ETS information in the Object
 //                Properties dialog box.
 //               Bug fix: Fixed editing of MAX information in the Object
 //                Properties dialog box.
@@ -10048,7 +10047,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.35';
+  IIModelVersion = '5.1.1.36';
 
 function IModelVersion: string;
 begin

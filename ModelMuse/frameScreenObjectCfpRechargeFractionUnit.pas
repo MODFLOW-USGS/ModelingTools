@@ -225,7 +225,6 @@ begin
         TimeCount := 0;
         for TimeIndex := 0 to seNumberOfTimes.AsInteger - 1 do
         begin
-
           if TryStrToFloat(rdgModflowBoundary.Cells[Ord(crcStartTime),
             TimeIndex+PestRowOffset+1], StartTime)
             and TryStrToFloat(rdgModflowBoundary.Cells[Ord(crcEndTime),
@@ -239,6 +238,8 @@ begin
             begin
               AnItem := Boundary.Values.Add as TCfpRchFractionItem;
             end;
+            AnItem.StartTime := StartTime;
+            AnItem.EndTime := EndTime;
             AnItem.CfpRechargeFraction := rdgModflowBoundary.Cells[Ord(crcFrac), TimeIndex+PestRowOffset+1];
             AnItem.CfpCadsRechargeFraction := rdgModflowBoundary.Cells[Ord(crcCADS), TimeIndex+PestRowOffset+1];
             Inc(TimeCount);

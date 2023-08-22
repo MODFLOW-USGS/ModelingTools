@@ -17,7 +17,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
     Top = 17
     Width = 563
     Height = 430
-    ActivePage = tabTransient
+    ActivePage = tabSteady
     Align = alClient
     TabOrder = 1
     object tabSteady: TTabSheet
@@ -108,8 +108,8 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
         OnChange = edFixedHeadChange
       end
       object cbTimeDependent: TCheckBox
-        Left = 159
-        Top = 31
+        Left = 3
+        Top = 23
         Width = 185
         Height = 17
         Caption = 'Time Dependent'
@@ -118,13 +118,13 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
       end
       object rgBoundaryType: TRadioGroup
         Left = 3
-        Top = 23
+        Top = 55
         Width = 150
         Height = 113
         Caption = 'Boundary type'
         ItemIndex = 0
         Items.Strings = (
-          'Fixed head'
+          'Defined head'
           'Well'
           'Robin (Cauchy)'
           'Limited Head')
@@ -143,11 +143,11 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 555
-        ExplicitHeight = 222
+        ExplicitHeight = 400
         inherited Panel: TPanel
           Top = 359
           Width = 555
-          ExplicitTop = 181
+          ExplicitTop = 359
           ExplicitWidth = 555
           inherited sbAdd: TSpeedButton
             Left = 290
@@ -168,7 +168,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
           OnSetEditText = frameTimeDependentGridSetEditText
           OnEndUpdate = frameTimeDependentGridEndUpdate
           ExplicitWidth = 555
-          ExplicitHeight = 181
+          ExplicitHeight = 359
         end
       end
     end

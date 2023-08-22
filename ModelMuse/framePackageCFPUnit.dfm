@@ -245,6 +245,15 @@ inherited framePackageCFP: TframePackageCFP
         TabOrder = 1
         OnClick = cbLayersClick
       end
+      object cbCADS: TCheckBox
+        Left = 294
+        Top = 3
+        Width = 225
+        Height = 40
+        Caption = 'Conduit-Associated Drainable Storage (CADS)'
+        TabOrder = 11
+        WordWrap = True
+      end
     end
     object tabCRCH_COC: TTabSheet
       Caption = 'CRCH, COC'
@@ -275,21 +284,13 @@ inherited framePackageCFP: TframePackageCFP
         TabOrder = 1
         OnChange = seOutputIntervalChange
       end
-      object cbCADS: TCheckBox
-        Left = 12
-        Top = 85
-        Width = 381
-        Height = 17
-        Caption = 'Conduit-Associated Drainable Storage (CADS)'
-        TabOrder = 2
-      end
       object cbTimeSeriesAnalysis: TCheckBox
         Left = 12
-        Top = 108
+        Top = 85
         Width = 469
         Height = 17
         Caption = 'Record inflow and outflow terms of the conduits (NNODES)'
-        TabOrder = 3
+        TabOrder = 2
       end
     end
   end

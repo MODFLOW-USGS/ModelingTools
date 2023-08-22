@@ -8,8 +8,8 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 404
   ClientWidth = 743
   OnClose = FormClose
-  ExplicitWidth = 755
-  ExplicitHeight = 442
+  ExplicitWidth = 759
+  ExplicitHeight = 443
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -20,8 +20,6 @@ inherited frmStartUp: TfrmStartUp
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 356
-    ExplicitWidth = 739
     DesignSize = (
       743
       47)
@@ -49,7 +47,6 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
-      ExplicitLeft = 623
     end
     object btnDontCreateGrid: TBitBtn
       Left = 440
@@ -63,7 +60,6 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
-      ExplicitLeft = 436
     end
     object btnHelp: TBitBtn
       Left = 546
@@ -76,7 +72,6 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 542
     end
   end
   object pcStartup: TPageControl
@@ -86,12 +81,10 @@ inherited frmStartUp: TfrmStartUp
     Height = 357
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
-    ActivePage = tabInitialSutraMesh
+    ActivePage = tabInitialModflowGrid
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
-    ExplicitWidth = 739
-    ExplicitHeight = 356
     object tabModelChoice: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Start_Up_Dialog_Box'
@@ -633,7 +626,7 @@ inherited frmStartUp: TfrmStartUp
         Align = alTop
         TabOrder = 1
         object lblModflowSelection: TLabel
-          Left = 175
+          Left = 195
           Top = 10
           Width = 140
           Height = 18
@@ -642,18 +635,15 @@ inherited frmStartUp: TfrmStartUp
         object comboModflowSelection: TComboBox
           Left = 11
           Top = 7
-          Width = 158
+          Width = 178
           Height = 26
           Style = csDropDownList
-          ItemIndex = 0
           TabOrder = 0
-          Text = 'MODFLOW 6'
           Items.Strings = (
             'MODFLOW 6'
             'MODFLOW-2005'
             'MODFLOW-NWT'
             'MODFLOW-OWHM'
-            'MODFLOW-CFP'
             'MODFLOW-LGR')
         end
       end
@@ -711,14 +701,14 @@ inherited frmStartUp: TfrmStartUp
         TabOrder = 2
         ExplicitLeft = 464
         ExplicitTop = 29
-        ExplicitWidth = 237
-        ExplicitHeight = 291
+        ExplicitWidth = 241
+        ExplicitHeight = 292
         inherited Panel: TPanel
           Top = 227
           Width = 241
           Height = 65
-          ExplicitTop = 226
-          ExplicitWidth = 237
+          ExplicitTop = 227
+          ExplicitWidth = 241
           ExplicitHeight = 65
           inherited lbNumber: TLabel
             Width = 161
@@ -811,8 +801,8 @@ inherited frmStartUp: TfrmStartUp
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 237
-          ExplicitHeight = 226
+          ExplicitWidth = 241
+          ExplicitHeight = 227
           ColWidths = (
             64
             64)
@@ -967,7 +957,6 @@ inherited frmStartUp: TfrmStartUp
           'Saturated'
           'Unsaturated')
         TabOrder = 3
-        ExplicitWidth = 198
       end
     end
     object tabInitialGridFootprint: TTabSheet

@@ -263,6 +263,7 @@ end;
 
 procedure TframeScreenObjectCfpFixed.InitializeControls;
 begin
+  pcCfp.ActivePageIndex := 0;
   edFixedHead.Text := '';
 {$IFDEF OWHMV2}
   ClearGrid(frameTimeDependent.Grid);

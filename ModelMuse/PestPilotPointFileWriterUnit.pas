@@ -36,6 +36,10 @@ resourcestring
   StrPilotPointsWillNo = 'Pilot points will not be used with %0:s because no' +
   ' pilot points have been defined in the "Model|Pest Properties" dialog box' +
   '.';
+  StrThePilotPointBuff = 'The Pilot Point Buffer must be greater than zero f' +
+  'or pilot points to be employed.';
+  StrThePilotPointBuffExpl = 'The Pilot Point buffer is specified on the Pil' +
+  'ot Points pane of the PEST Properties dialog box.';
 
 { TPilotPointWriter }
 
@@ -181,6 +185,11 @@ begin
 //    Exit;
   end;
   CriticalDistance := Model.PilotPointBuffer;
+  if CriticalDistance <= 0 then
+  begin
+    frmErrorsAndWarnings.AddWarning(Model, StrThePilotPointBuff,
+      StrThePilotPointBuffExpl, nil)
+  end;
   FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
   DisLimits := Model.DiscretizationLimits(vdTop);
 
