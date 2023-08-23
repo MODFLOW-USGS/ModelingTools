@@ -138,6 +138,21 @@ type
     STRT: TDoubleArray;
   end;
 
+  TImportedBuy = class(TImportedPackage)
+    // 1 = HHFORMULATION_RHS used
+    // 2 = HHFORMULATION_RHS not used
+    HHFORMULATION_RHS: Integer;
+    DENSEREF: double;
+    NRHOSPECIES: Integer;
+    DRHODC: TDoubleArray;
+    CRHOREF: TDoubleArray;
+    // can't get ModelNames or SpeciesNames
+    ModelNames: TAnsiStringArray;
+    SpeciesNames: TAnsiStringArray;
+    procedure GetPackageValues(ModelName: AnsiString);
+  end;
+
+
   TCustomBoundaryStressPeriod = class(TObject)
     NodeList: TCIntArray;
     BoundNames: TAnsiStringArray;
@@ -447,10 +462,56 @@ type
     constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
     procedure GetPackageValues(ModelName: AnsiString); override;
-  private
   end;
 
   TImportedLakList = TObjectList<TImportedLak>;
+
+  TUzfStressPeriod = class(TCustomBoundaryStressPeriod)
+    finf: TDoubleArray;
+    pet: TDoubleArray;
+    extdp: TDoubleArray;
+    extwc: TDoubleArray;
+    ha: TDoubleArray;
+    hroot: TDoubleArray;
+    rootact: TDoubleArray;
+  end;
+
+  TUzfStressPeriods = TObjectList<TUzfStressPeriod>;
+
+  TImportedUzf = class(TCustomImportedBoundary)
+    // 1 = SIMULATE_ET, UNSAT_ETWC
+    // 2 = SIMULATE_ET, UNSAT_ETAE
+    IETFLAG: Integer;
+    // 1 = LINEAR_GWET
+    // 2 = SQUARE_GWET
+    IGWETFLAG: Integer;
+    // iseepflag = 1
+    SIMULATE_GWSEEP: Integer;
+    // nodes
+    NUZFCELLS: Integer;
+    // ntrail
+    NTRAILWAVES: Integer;
+    // nsets
+    NWAVESETS: Integer;
+    landflag: TCintArray;
+    ivertcon: TCintArray;
+    surfdep: TDoubleArray;
+    vks: TDoubleArray;
+    thtr: TDoubleArray;
+    thts: TDoubleArray;
+    thti: TDoubleArray;
+    eps: TDoubleArray;
+    StressPeriods: TUzfStressPeriods;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  private
+  end;
+
+  TImportedUzfList = TObjectList<TImportedUzf>;
+
+
+
 
   TImportedModel = class(TObject)
     ModelName: AnsiString;
@@ -463,6 +524,7 @@ type
     ImportedNpf: TImportedNpf;
     ImportedSTO: TImportedStorage;
     ImportedIc: TImportedInitialConditions;
+    ImportedBuy: TImportedBuy;
     ImportedChdList: TImportedChdList;
     ImportedGhbList: TImportedGhbList;
     ImportedRivList: TImportedRivList;
@@ -473,6 +535,7 @@ type
     ImportedMawList: TImportedMawList;
     ImportedSfrList: TImportedSfrList;
     ImportedLakList: TImportedLakList;
+    ImportedUzfList: TImportedUzfList;
     procedure UpdateChd;
     procedure UpdateGhb;
     procedure UpdateRiv;
@@ -483,6 +546,7 @@ type
     procedure UpdateMaw;
     procedure UpdateSfr;
     procedure UpdateLak;
+    procedure UpdateUzf;
     destructor Destroy; override;
   end;
 
@@ -664,8 +728,8 @@ var
   Index: Integer;
   PackageNameString: AnsiString;
   PackageTypeString: AnsiString;
-  PackageTypes: TAnsiStringArray;
-  PackageNames: TAnsiStringArray;
+  PackageTypes: TAnsiStringList;
+  PackageNames: TAnsiStringList;
   PackageName: AnsiString;
   PackageType: AnsiString;
   PIndex: Integer;
@@ -674,28 +738,53 @@ var
   PackageTypePostion: Integer;
   StartIndex: Integer;
   VarLength: Integer;
+  PackageTypesArray: TAnsiStringArray;
+  PackageNamesArray: TAnsiStringArray;
 begin
   PackageTypeString := '__INPUT__/' + ModelName + '/PKGTYPES';
   PackageNameString := '__INPUT__/' + ModelName + '/PKGNAMES';
-  GetStringVariable(PackageTypeString, PackageTypes);
-  GetStringVariable(PackageNameString, PackageNames);
-  if Length(PackageNames) = Length(PackageTypes) then
-  begin
-    SetLength(Result, Length(PackageNames));
-    for Index := 0 to Length(PackageNames) - 1 do
+  GetStringVariable(PackageTypeString, PackageTypesArray);
+  GetStringVariable(PackageNameString, PackageNamesArray);
+  PackageNames := TAnsiStringList.Create;
+  PackageTypes := TAnsiStringList.Create;
+  try
+//  if Length(PackageNames) = Length(PackageTypes) then
+//  begin
+//    SetLength(Result, Length(PackageNames));
+    for Index := 0 to Length(PackageTypesArray) - 1 do
     begin
-      Result[Index].PackageType := PackageTypes[Index];
-      Result[Index].PackageName := PackageNames[Index];
+      PackageType := PackageTypesArray[Index];
+      if (PackageType = 'DIS6') then
+      begin
+        PackageTypes.Add(PackageType);
+        PackageNames.Add('DIS');
+        break;
+      end
+      else if (PackageType = 'DISV6') then
+      begin
+        PackageTypes.Add(PackageType);
+        PackageNames.Add('DISV');
+        Break;
+      end
+      else if (PackageType = 'DISU6') then
+      begin
+        PackageTypes.Add(PackageType);
+        PackageNames.Add('DISU');
+        Break;
+      end;
+//      Result[Index].PackageType := PackageTypesArray[Index];
+//      Result[Index].PackageName := PackageNamesArray[Index];
     end;
-  end
-  else
-  begin
-    SetLength(Result, Length(PackageTypes));
-    for Index := 0 to Length(Result) - 1 do
-    begin
-      Result[Index].PackageType := '';
-      Result[Index].PackageName := '';
-    end;
+    Assert(PackageTypes.Count = 1);
+//  end
+//  else
+//  begin
+//    SetLength(Result, Length(PackageTypes));
+//    for Index := 0 to Length(Result) - 1 do
+//    begin
+//      Result[Index].PackageType := '';
+//      Result[Index].PackageName := '';
+//    end;
     PIndex := 0;
     for Index := 0 to NameList.Count - 1 do
     begin
@@ -705,25 +794,39 @@ begin
       if (ModelNamePosition = 1) and (PackageTypePostion > 1) then
       begin
         PackageType := GetPackageType(AVarName);
+        PackageTypes.Add(PackageType + '6');
         StartIndex:= Length(ModelName + '/')+1;
         VarLength := PackageTypePostion - StartIndex;
         PackageName := MidStr(AVarName, StartIndex, VarLength);
-        Assert(PIndex < Length(Result));
-        Result[PIndex].PackageType := PackageType + '6';
-        Result[PIndex].PackageName := PackageName;
-        Inc(PIndex);
+        PackageNames.Add(PackageName);
+
+//
+//        Assert(PIndex < Length(Result));
+//        Result[PIndex].PackageType := PackageType + '6';
+//        Result[PIndex].PackageName := PackageName;
+//        Inc(PIndex);
       end;
     end;
-    if PIndex < Length(result) then
+    SetLength(result, PackageTypes.Count);
+    for Index := 0 to PackageTypes.Count - 1 do
     begin
-      SetLength(Result, PIndex);
+      Result[Index].PackageType := PackageTypes[Index];
+      Result[Index].PackageName := PackageNames[Index];
     end;
+//    if PIndex < Length(result) then
+//    begin
+//      SetLength(Result, PIndex);
+//    end;
 
-  end;
+  //  end;
 
-  for Index := 0 to Length(result) - 1 do
-  begin
-    Writeln(result[Index].PackageType, ' ', result[Index].PackageName)
+    for Index := 0 to Length(result) - 1 do
+    begin
+      Writeln(result[Index].PackageType, ' ', result[Index].PackageName)
+    end;
+  finally
+    PackageNames.Free;
+    PackageTypes.Free;
   end;
 
 end;
@@ -3111,6 +3214,224 @@ begin
   end;
 end;
 
+function GetUzfIETFLAG(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IETFLAG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetUzfIGWETFLAG(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/IGWETFLAG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetUzfSIMULATE_GWSEEP(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/ISEEPFLAG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetUzfNUZFCELLS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NODES';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetUzfNTRAILWAVES(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NTRAIL';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetUzfNWAVESETS(ModelName, PackageName: AnsiString): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  VarName := ModelName + '/' + PackageName +'/NSETS';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, Values);
+    Assert(Length(Values) = 1);
+    Result := Values[0];
+  end
+  else
+  begin
+    result := 0
+  end;
+end;
+
+function GetUzfLANDFLAG(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/LANDFLAG';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetUzfIVERTCON(ModelName, PackageName: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/IVERTCON';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetUzfSURFDEP(ModelName, PackageName: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/SURFDEP';
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetPackageDoubleArray(ModelName, PackageName, Variable: AnsiString): TDoubleArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/' + Variable;
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetDoubleVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetPackageDouble(ModelName, PackageName, Variable: AnsiString; Default: double = 0.0): double;
+var
+  VarName: AnsiString;
+  Values: TDoubleArray;
+begin
+  Values := GetPackageDoubleArray(ModelName, PackageName, Variable);
+  if Values <> nil then
+  begin
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := Default;
+  end;
+end;
+
+function GetPackageIntArray(ModelName, PackageName, Variable: AnsiString): TCIntArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/' + Variable;
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetIntegerVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetPackageInteger(ModelName, PackageName, Variable: AnsiString; Default: Integer = 0): Integer;
+var
+  VarName: AnsiString;
+  Values: TCIntArray;
+begin
+  Values := GetPackageIntArray(ModelName, PackageName, Variable);
+  if Values <> nil then
+  begin
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := Default;
+  end;
+end;
+
+
 function GetNBOUND(ModelName, PackageName: AnsiString): Integer;
 var
   VarName: AnsiString;
@@ -3937,7 +4258,7 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('LAK', VarName) > 0;
+    WriteValues := Pos('BUY', VarName) > 0;
 //    WriteValues := True;
     if not WriteValues then
     begin
@@ -4660,6 +4981,23 @@ begin
   end;
 end;
 
+function GetBuy(ModelName: AnsiString; Packages: TPackages): TImportedBuy;
+var
+  PackageIndex: Integer;
+begin
+  Result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'BUY6' then
+    begin
+      result := TImportedBuy.Create(Packages[PackageIndex].PackageName);
+      result.GetPackageValues(ModelName);
+      break;
+    end;
+  end;
+end;
+
+
 procedure GetCell(NodeNumber: Integer; MFGridShape, IDomain: TCIntArray; var MfCell: TMfCell);
 var
   Layer: Integer;
@@ -4888,6 +5226,27 @@ begin
   end;
 end;
 
+function GetUzfPackages(ModelName: AnsiString; Packages: TPackages): TImportedUzfList;
+var
+  PackageIndex: Integer;
+  ImportedPackage: TImportedUzf;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'UZF6' then
+    begin
+      if result = nil then
+      begin
+        result := TImportedUzfList.Create;
+      end;
+      ImportedPackage := TImportedUzf.Create(Packages[PackageIndex].PackageName);
+      result.Add(ImportedPackage);
+      ImportedPackage.GetPackageValues(ModelName);
+    end;
+  end;
+end;
+
 function GetGhbPackages(ModelName: AnsiString; Packages: TPackages): TImportedGhbList;
 var
   PackageIndex: Integer;
@@ -5047,6 +5406,8 @@ begin
       ImportedModel.Packages, ImportedModel.StoPackageName);
     ImportedModel.ImportedIc := GetInitialConditions(ModelNames[ModelIndex],
       ImportedModel.Packages);
+    ImportedModel.ImportedBuy := GetBuy(ModelNames[ModelIndex],
+      ImportedModel.Packages);
     ImportedModel.ImportedChdList := GetChdPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
     ImportedModel.ImportedGhbList := GetGhbPackages(ModelNames[ModelIndex],
@@ -5066,6 +5427,8 @@ begin
     ImportedModel.ImportedSfrList := GetSfrPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
     ImportedModel.ImportedLakList := GetLakPackages(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedUzfList := GetUzfPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
   end;
 end;
@@ -5334,6 +5697,8 @@ begin
             ImportedModels[ModelIndex].UpdateMaw;
             ImportedModels[ModelIndex].UpdateSfr;
             ImportedModels[ModelIndex].UpdateLak;
+            ImportedModels[ModelIndex].UpdateUzf;
+
           end;
         end;
 
@@ -5800,6 +6165,7 @@ end;
 
 destructor TImportedModel.Destroy;
 begin
+  ImportedUzfList.Free;
   ImportedLakList.Free;
   ImportedSfrList.Free;
   ImportedMawList.Free;
@@ -6405,10 +6771,81 @@ begin
             Write(' ', StressPeriod.BoundNames[CellIndex]);
           end;
           Writeln;
-//            ' ', StressPeriod.idv[CellIndex],
-//            ' ', StressPeriod.divflow[CellIndex],
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateUzf;
+var
+  AuxIndex: Integer;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: TUzfStressPeriod;
+  PackageIndex: Integer;
+  ImportedUzf: TImportedUzf;
+begin
+  if ImportedUzfList <> nil then
+  begin
+    for PackageIndex := 0 to ImportedUzfList.Count - 1 do
+    begin
+      ImportedUzf := ImportedUzfList[PackageIndex];
+      StressPeriod := TUzfStressPeriod.Create;
+      ImportedUzf.StressPeriods.Add(StressPeriod);
+      StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedUzf.PackageName);
+      StressPeriod.NodeList := GetNodeList(ModelName, ImportedUzf.PackageName);
+      StressPeriod.Bound := GetBound(ModelName, ImportedUzf.PackageName);
+      StressPeriod.BoundNames := GetBoundNames(ModelName, ImportedUzf.PackageName);
+      StressPeriod.AuxValues := GetAuxValue(ModelName, ImportedUzf.PackageName);
+//      Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.Bound));
+      if StressPeriod.BoundNames <> nil then
+      begin
+        Assert(Length(StressPeriod.NodeList) = Length(StressPeriod.BoundNames));
+      end;
+      if StressPeriod.AuxValues <> nil then
+      begin
+        Assert((Length(StressPeriod.AuxValues) div Length(StressPeriod.NodeList))
+          = ImportedUzf.Naux);
+      end;
+
+      StressPeriod.finf := GetPackageDoubleArray(ModelName, ImportedUzf.PackageName, 'FINF');
+      StressPeriod.pet := GetPackageDoubleArray(ModelName, ImportedUzf.PackageName, 'PET');
+      StressPeriod.extdp := GetPackageDoubleArray(ModelName, ImportedUzf.PackageName, 'EXTDP');
+      StressPeriod.extwc := GetPackageDoubleArray(ModelName, ImportedUzf.PackageName, 'EXTWC');
+      StressPeriod.ha := GetPackageDoubleArray(ModelName, ImportedUzf.PackageName, 'HA');
+      StressPeriod.hroot := GetPackageDoubleArray(ModelName, ImportedUzf.PackageName, 'HROOT');
+      StressPeriod.rootact := GetPackageDoubleArray(ModelName, ImportedUzf.PackageName, 'ROOTACT');
 
 
+      AuxIndex := 0;
+      if ImportedDis <> nil then
+      begin
+        for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+        begin
+          GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape,
+            ImportedDis.IDomain, MfCell);
+          Write(StressPeriod.NodeList[CellIndex], ' ', MfCell.Layer, ' ',
+            MfCell.Row, ' ', MfCell.Column,
+            ' ', StressPeriod.finf[CellIndex],
+            ' ', StressPeriod.pet[CellIndex],
+            ' ', StressPeriod.extdp[CellIndex],
+            ' ', StressPeriod.extwc[CellIndex],
+            ' ', StressPeriod.ha[CellIndex],
+            ' ', StressPeriod.hroot[CellIndex],
+            ' ', StressPeriod.rootact[CellIndex]);
+
+          for AIndex := 0 to ImportedUzf.Naux - 1 do
+          begin
+            Write(' ', StressPeriod.AuxValues[AuxIndex]);
+            Inc(AuxIndex);
+          end;
+          if StressPeriod.BoundNames <> nil then
+          begin
+            Write(' ', StressPeriod.BoundNames[CellIndex]);
+          end;
+          Writeln;
         end;
       end;
     end;
@@ -6830,6 +7267,50 @@ begin
   OUTWIDTH := GetLakOUTWIDTH(ModelName, PackageName);
   OUTROUGH := GetLakOUTROUGH(ModelName, PackageName);
   OUTSLOPE := GetLakOUTSLOPE(ModelName, PackageName);
+end;
+
+{ TImportedUzf }
+
+constructor TImportedUzf.Create(APackageName: AnsiString);
+begin
+  inherited;
+  StressPeriods := TUzfStressPeriods.Create;
+end;
+
+destructor TImportedUzf.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedUzf.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  IETFLAG := GetUzfIETFLAG(ModelName, PackageName);
+  IGWETFLAG := GetUzfIGWETFLAG(ModelName, PackageName);
+  SIMULATE_GWSEEP := GetUzfSIMULATE_GWSEEP(ModelName, PackageName);
+  NUZFCELLS := GetUzfNUZFCELLS(ModelName, PackageName);
+  NTRAILWAVES := GetUzfNTRAILWAVES(ModelName, PackageName);
+  NWAVESETS := GetUzfNWAVESETS(ModelName, PackageName);
+  landflag := GetUzfLANDFLAG(ModelName, PackageName);
+  ivertcon := GetUzfIVERTCON(ModelName, PackageName);
+  surfdep := GetUzfSURFDEP(ModelName, PackageName);
+  vks := GetPackageDoubleArray(ModelName, PackageName, 'VKS');
+  thtr := GetPackageDoubleArray(ModelName, PackageName, 'THTR');
+  thts := GetPackageDoubleArray(ModelName, PackageName, 'THTS');
+  thti := GetPackageDoubleArray(ModelName, PackageName, 'THTI');
+  eps := GetPackageDoubleArray(ModelName, PackageName, 'EPS');
+end;
+
+{ TImportedBuy }
+
+procedure TImportedBuy.GetPackageValues(ModelName: AnsiString);
+begin
+  HHFORMULATION_RHS := GetPackageInteger(ModelName, PackageName, 'IFORM');
+  DENSEREF := GetPackageDouble(ModelName, PackageName, 'DENSEREF');
+  NRHOSPECIES := GetPackageInteger(ModelName, PackageName, 'NRHOSPECIES');
+  DRHODC := GetPackageDoubleArray(ModelName, PackageName, 'DRHODC');
+  CRHOREF := GetPackageDoubleArray(ModelName, PackageName, 'CRHOREF');
 end;
 
 initialization

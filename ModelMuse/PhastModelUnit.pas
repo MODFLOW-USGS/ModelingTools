@@ -10040,6 +10040,9 @@ const
 //                in which the number of segments in the ETS package was set
 //                to 1.
 
+//               Bug fixed: Fixed bug in Mf2005ObsExtractor that caused simulated
+//                from the HOB package to be incorrectly read as zero.
+
 //               Enhancement Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.

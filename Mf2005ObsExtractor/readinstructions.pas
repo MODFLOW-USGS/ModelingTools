@@ -753,6 +753,7 @@ var
   StartIndex: Integer;
   ObsName: string;
   SimulatedValue: double;
+  ObservedValue: double;
   Obs: TCustomWeightedObsValue;
   PrintString: string;
   LineIndex: integer;
@@ -794,11 +795,17 @@ begin
               [LineIndex+1, InstructionFileName]));
             ObsName := Splitter[2];
             SimulatedValue := FortranStrToFloat(Splitter[0]);
+            try
+               ObservedValue := FortranStrToFloat(Splitter[1]);
+            except on EConvertError do
+              ObservedValue := 1E9;
+            end;
             Obs := TCustomWeightedObsValue.Create;
             FObsList.Add(Obs);
             Obs.ObsName := ObsName;
             Obs.ObsTime := 0;
             Obs.SimulatedValue := SimulatedValue;
+            Obs.ObservedValue := ObservedValue;
             Obs.Weight := 1;
             Obs.Print := True;
             if not FGenerateInstructionFile then
