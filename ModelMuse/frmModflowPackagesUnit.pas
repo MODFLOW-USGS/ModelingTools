@@ -58,7 +58,8 @@ uses System.UITypes,
   framePackageFmp4SoilsUnit, framePackageFmp4ClimateUnit,
   framePackageFmp4SurfaceWaterUnit, framePackageFmp4WellsUnit,
   framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit,
-  framePackageFmp4SalinityFlushUnit, framePackageBuoyancyUnit;
+  framePackageFmp4SalinityFlushUnit, framePackageBuoyancyUnit,
+  framePackageViscosityUnit;
 
 type
 
@@ -302,6 +303,8 @@ type
     dlgOpenSelectExternalFile: TOpenDialog;
     jvspBuoy: TJvStandardPage;
     framePkgBuoyancy: TframePackageBuoyancy;
+    jvspVSC: TJvStandardPage;
+    framePkgViscosity: TframePackageViscosity;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -396,6 +399,7 @@ type
     procedure framePkgFmp4SoilsrdgSoilsSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
     procedure frameGwtProcessrgSimulationChoiceClick(Sender: TObject);
+    procedure framePkgViscositycbSpecifyViscosityClick(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -663,12 +667,13 @@ resourcestring
   's required with GWT when the transport simulation is separate from the fl' +
   'ow simulation. Do you want to fix this?';
   StrTheGroundwaterTran = 'The Groundwater Transport process is required whe' +
-  'n using the Buoyancy package and has been activated.';
+  'n using the Buoyancy or Viscosity packages.';
   StrTheFlowAndGroundw = 'The Flow and Groundwater Transport processes must ' +
-  'both be in the same simulation when using the Buoyancy package and has be' +
-  'en activated.';
+  'both be in the same simulation when using the Buoyancy or Viscosity packages.';
   StrTheBuoyancyPackage = 'The Buoyancy package has been deactived because i' +
   't requires that the flow and transport models be in the same simulation.';
+  StrTheViscosityPackag = 'The Viscosity package has been deactived because ' +
+  'it requires that the flow and transport models be in the same simulation.';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -2194,9 +2199,24 @@ procedure TfrmModflowPackages.frameGridMobileGridSetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
 var
   IgnoredNames: TStringList;
-  RowIndex: Integer;
-  Index: Integer;
-  AName: string;
+  procedure UpdateGrid(Grid: TRbwDataGrid4);
+  var
+    RowIndex: Integer;
+    Index: Integer;
+    AName: string;
+  begin
+    RowIndex := 1;
+    for Index := 1 to Grid.RowCount - 1 do
+    begin
+      AName := Grid.Cells[Ord(ccName), Index];
+      if IgnoredNames.IndexOf(AName) >= 0 then
+      begin
+        Continue;
+      end;
+      Grid.Cells[Ord(ccName), RowIndex] := AName;
+      Inc(RowIndex);
+    end;
+  end;
 begin
   inherited;
   UpdateGwtFrames;
@@ -2205,22 +2225,11 @@ begin
     IgnoredNames := TStringList.Create;
     try
       FillIgnoredNames(IgnoredNames, False);
-      RowIndex := 1;
-      for Index := 1 to framePkgBuoyancy.rdgChemDensity.RowCount - 1 do
-      begin
-        AName := framePkgBuoyancy.rdgChemDensity.Cells[Ord(ccName), Index];
-        if IgnoredNames.IndexOf(AName) >= 0 then
-        begin
-          Continue;
-        end;
-        framePkgBuoyancy.rdgChemDensity.Cells[Ord(ccName), RowIndex] := AName;
-        Inc(RowIndex);
-      end;
+      UpdateGrid(framePkgBuoyancy.rdgChemDensity);
+      UpdateGrid(framePkgViscosity.rdgChemViscosity);
     finally
       IgnoredNames.Free;
     end;
-
-
   end;
 end;
 
@@ -2244,6 +2253,8 @@ begin
   try
     FillIgnoredNames(IgnoredNames, False);
     framePkgBuoyancy.rdgChemDensity.RowCount :=
+      frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1 - IgnoredNames.Count;
+    framePkgViscosity.rdgChemViscosity.RowCount :=
       frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1 - IgnoredNames.Count;
   finally
     IgnoredNames.Free;
@@ -2270,6 +2281,13 @@ begin
     framePkgBuoyancy.Selected := False;
     Beep;
     MessageDlg(StrTheBuoyancyPackage, mtWarning, [mbOK], 0);
+  end;
+  if framePkgViscosity.Selected
+    and (frameGwtProcess.rgSimulationChoice.ItemIndex <> 0) then
+  begin
+    framePkgViscosity.Selected := False;
+    Beep;
+    MessageDlg(StrTheViscosityPackag, mtWarning, [mbOK], 0);
   end;
 end;
 
@@ -2957,6 +2975,8 @@ begin
       frmGoPhast.PhastModel.ImmobileComponents);
 
 
+    framePkgViscosity.GetMt3dmsChemSpecies(
+      frmGoPhast.PhastModel.MobileComponents);
     ReadPackages;
 
     comboModel.ItemIndex := 0;
@@ -3050,6 +3070,10 @@ begin
     if framePkgBuoyancy.Selected and framePkgBuoyancy.cbSpecifyDensity.Checked then
     begin
       IgnoredNames.Add(StrDensity);
+    end;
+    if framePkgViscosity.Selected and framePkgViscosity.cbSpecifyViscosity.Checked then
+    begin
+      IgnoredNames.Add(StrViscosity);
     end;
   end;
 end;
@@ -4158,6 +4182,8 @@ begin
         frmGoPhast.PhastModel.ImmobileComponents);
       framePkgBuoyancy.SetMt3dmsChemSpecies(
         frmGoPhast.PhastModel.MobileComponents);
+      framePkgViscosity.SetMt3dmsChemSpecies(
+        frmGoPhast.PhastModel.MobileComponents);
 
       Undo.UpdateMt3dmsChemSpecies;
     finally
@@ -4364,9 +4390,26 @@ begin
               MessageDlg(StrTheFlowAndGroundw, mtInformation, [mbOK], 0);
             end;
           end;
+          if (Frame = framePkgViscosity) and framePkgViscosity.Selected then
+          begin
+            if not frameGwtProcess.Selected then
+            begin
+              frameGwtProcess.Selected := True;
+              frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
+              Beep;
+              MessageDlg(StrTheGroundwaterTran, mtInformation, [mbOK], 0);
+            end
+            else if frameGwtProcess.rgSimulationChoice.ItemIndex <> 0 then
+            begin
+              frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
+              Beep;
+              MessageDlg(StrTheFlowAndGroundw, mtInformation, [mbOK], 0);
+            end;
+          end;
           if (Frame = frameGwtProcess) and not frameGwtProcess.Selected then
           begin
             framePkgBuoyancy.Selected := False;
+            framePkgViscosity.Selected := False;
           end;
         end;
       stRadioButton:
@@ -4654,12 +4697,21 @@ begin
   {$ELSE}
     framePkgBuoyancy.NilNode;
   {$ENDIF}
+
+  {$IFDEF Viscosity}
+    Packages.ViscosityPackage.Frame := framePkgViscosity;
+    FPackageList.Add(Packages.ViscosityPackage);
+  {$ELSE}
+    framePkgViscosity.NilNode;
+  {$ENDIF}
+
   end
   else
   begin
     framePkgNpf.NilNode;
     framePkgSto.NilNode;
     framePkgBuoyancy.NilNode;
+    framePkgViscosity.NilNode;
   end;
 
   if frmGoPhast.DisvUsed then
@@ -5299,6 +5351,56 @@ begin
       GridRect := frameChemSpecies.frameGridMobile.Grid.Selection;
       GridRect.Top := DensityRow;
       GridRect.Bottom := DensityRow;
+      frameChemSpecies.frameGridMobile.Grid.Selection := GridRect;
+      frameChemSpecies.frameGridMobile.sbDelete.OnClick(nil);
+    end;
+  end;
+end;
+
+procedure TfrmModflowPackages.framePkgViscositycbSpecifyViscosityClick(Sender:
+    TObject);
+var
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  ViscosityFound: Boolean;
+  ViscosityRow: Integer;
+  GridRect: TGridRect;
+begin
+  inherited;
+  ViscosityRow := -1;
+  Grid := frameChemSpecies.frameGridMobile.Grid;
+  ViscosityFound := False;
+  for RowIndex := 1 to Grid.RowCount - 1 do
+  begin
+    if SameText(Grid.Cells[0,RowIndex], StrViscosity) then
+    begin
+      ViscosityFound := True;
+      ViscosityRow := RowIndex;
+      Break;
+    end;
+  end;
+
+  if framePkgViscosity.cbSpecifyViscosity.Checked then
+  begin
+    if not ViscosityFound then
+    begin
+      // Put Viscosity in the grid before increasing the
+      // number of rows in the grid so that extra GWT frames
+      // won't be created when the grid row count is increased.
+      Grid.Cells[0,Grid.RowCount] := StrViscosity;
+      frameChemSpecies.frameGridMobile.seNumber.AsInteger
+        := frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1;
+      frameChemSpecies.frameGridMobile.seNumber.OnChange(nil);
+      frameGridMobileGridSetEditText(nil, 0,Grid.RowCount-1, StrViscosity);
+    end;
+  end
+  else
+  begin
+    if ViscosityFound then
+    begin
+      GridRect := frameChemSpecies.frameGridMobile.Grid.Selection;
+      GridRect.Top := ViscosityRow;
+      GridRect.Bottom := ViscosityRow;
       frameChemSpecies.frameGridMobile.Grid.Selection := GridRect;
       frameChemSpecies.frameGridMobile.sbDelete.OnClick(nil);
     end;

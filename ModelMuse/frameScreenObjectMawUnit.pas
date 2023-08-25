@@ -141,6 +141,9 @@ resourcestring
   StrSkinK = 'Skin K (hk_skin)';
   StrSkinRadius = 'Skin radius (radius_skin)';
 
+var
+  ViscosityColumn: integer = Ord(wfDensity);
+
 {$R *.dfm}
 
 { TframeScreenObjectMAW }
@@ -235,8 +238,10 @@ var
   DensityUsed: Boolean;
   IgnoredNames: TStringList;
   FrameIndex: Integer;
+  ViscosityUsed: Boolean;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
   pgcMain.ActivePageIndex := 0;
   FGettingData := True;
   try
@@ -324,6 +329,15 @@ begin
                 rdgModflowBoundary.Cells[Ord(wfDensity), TimeIndex+1 + PestRowOffset]
                   := MawItem.Density[0].Value;
               end;
+              if ViscosityUsed then
+              begin
+                if MawItem.Viscosity.Count = 0 then
+                begin
+                  MawItem.Viscosity.Add;
+                end;
+                rdgModflowBoundary.Cells[ViscosityColumn, TimeIndex+1 + PestRowOffset]
+                  := MawItem.Viscosity[0].Value;
+              end;
             end;
 
             PestModifier[rdgModflowBoundary, Ord(wfRate)] := MawBound.PestRateFormula;
@@ -371,6 +385,22 @@ begin
               end;
               PestMethod[rdgModflowBoundary, Ord(wfDensity)] :=
                 MawBound.PestDensityMethods[0].PestParamMethod;
+            end;
+            if ViscosityUsed then
+            begin
+              if MawBound.PestViscosity.Count = 0 then
+              begin
+                MawBound.PestViscosity.Add
+              end;
+              PestModifier[rdgModflowBoundary, ViscosityColumn] :=
+                MawBound.PestViscosity[0].Value;
+
+              if MawBound.PestViscosityMethods.Count = 0 then
+              begin
+                MawBound.PestViscosityMethods.Add
+              end;
+              PestMethod[rdgModflowBoundary, ViscosityColumn] :=
+                MawBound.PestViscosityMethods[0].PestParamMethod;
             end;
           end
           else
@@ -498,6 +528,15 @@ begin
             if not MawBound.PestDensityMethods.IsSame(MawBound.PestDensityMethods) then
             begin
               PestMethodAssigned[rdgModflowBoundary, Ord(wfDensity)] := False
+            end;
+
+            if not MawBound.PestViscosity.IsSame(MawBound.PestViscosity) then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, ViscosityColumn] := False
+            end;
+            if not MawBound.PestViscosityMethods.IsSame(MawBound.PestViscosityMethods) then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, ViscosityColumn] := False
             end;
 
             if not FWellTimeDataCleared then
@@ -787,6 +826,7 @@ var
   IgnoredNames: TStringList;
   FrameIndex: Integer;
   SpeciesName: string;
+  ViscosityUsed: Boolean;
   function NonBlank(const Formula: string): string;
   begin
     if Formula = '' then
@@ -800,6 +840,7 @@ var
   end;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
   for Index := 0 to List.Count - 1 do
   begin
     Item := List.Items[Index];
@@ -952,6 +993,28 @@ begin
         end;
       end;
 
+      if ViscosityUsed then
+      begin
+        if PestModifierAssigned[rdgModflowBoundary, ViscosityColumn] then
+        begin
+          if Boundary.PestViscosity.Count = 0 then
+          begin
+            Boundary.PestViscosity.Add;
+          end;
+          Boundary.PestViscosity[0].Value :=
+            PestModifier[rdgModflowBoundary, ViscosityColumn];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, ViscosityColumn] then
+        begin
+          if Boundary.PestViscosityMethods.Count = 0 then
+          begin
+            Boundary.PestViscosityMethods.Add;
+          end;
+          Boundary.PestViscosityMethods[0].PestParamMethod :=
+            PestMethod[rdgModflowBoundary, ViscosityColumn];
+        end;
+      end;
+
       if not FWellScreensCleared then
       begin
         Boundary.WellScreens.Count := frameWellScreens.seNumber.AsInteger;
@@ -1004,6 +1067,15 @@ begin
               MawItem.Density.Add;
             end;
             MawItem.Density[0].Value := NonBlank(rdgModflowBoundary.Cells[Ord(wfDensity), TimeIndex+1 + PestRowOffset]);
+          end;
+          if ViscosityUsed then
+          begin
+            if MawItem.Viscosity.Count = 0 then
+            begin
+              MawItem.Viscosity.Add;
+            end;
+            MawItem.Viscosity[0].Value := NonBlank(rdgModflowBoundary.Cells[ViscosityColumn,
+              TimeIndex+1 + PestRowOffset]);
           end;
         end;
       end;
@@ -1081,8 +1153,10 @@ procedure TframeScreenObjectMAW.InitializeLabels;
 var
   ColIndex: Integer;
   DensityUsed: Boolean;
+  ViscosityUsed: Boolean;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
   rdgModflowBoundary.BeginUpdate;
   try
     ClearGrid(frameWellScreens.Grid);
@@ -1102,6 +1176,15 @@ begin
     else
     begin
       rdgModflowBoundary.ColCount := 16;
+    end;
+
+    if ViscosityUsed then
+    begin
+      rdgModflowBoundary.ColCount := rdgModflowBoundary.ColCount + 1;
+      ViscosityColumn := rdgModflowBoundary.ColCount -1;
+      rdgModflowBoundary.Columns[ViscosityColumn]
+        := rdgModflowBoundary.Columns[Ord(wfRate)];
+      rdgModflowBoundary.Cells[ViscosityColumn, 0] := StrViscosity;
     end;
 
     ClearGrid(rdgModflowBoundary);
@@ -1160,6 +1243,11 @@ begin
     begin
       PestMethod[rdgModflowBoundary, Ord(wfDensity)] :=
         TMawBoundary.DefaultBoundaryMethod(MawDensityPosition);
+    end;
+    if ViscosityUsed then
+    begin
+      PestMethod[rdgModflowBoundary, ViscosityColumn] :=
+        TMawBoundary.DefaultBoundaryMethod(MawViscosityPosition);
     end;
   finally
     rdgModflowBoundary.EndUpdate

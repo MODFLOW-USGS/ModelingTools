@@ -68,6 +68,8 @@ type
     FTransverseDispHDataArrayDisplayName: string;
     FTransverseDispVertDataArrayName: string;
     FTransverseDispVertDataArrayDisplayName: string;
+    FStoredRefViscosity: TRealStorage;
+    FStoredViscositySlope: TRealStorage;
     function GetName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -115,6 +117,12 @@ type
     procedure SetLongDispVertArrayNameDataArrayName(const NewName: string);
     procedure SetTransverseDispHArrayNameDataArrayName(const NewName: string);
     procedure SetTransverseDispVertArrayNameDataArrayName(const NewName: string);
+    function GetRefViscosity: Double;
+    procedure SetRefViscosity(const Value: Double);
+    procedure SetStoredRefViscosity(const Value: TRealStorage);
+    function GetViscositySlope: double;
+    procedure SetStoredViscositySlope(const Value: TRealStorage);
+    procedure SetViscositySlope(const Value: double);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -128,6 +136,12 @@ type
     // Buoyancy package crhoref
     property RefConcentration: double read GetRefConcentration
       write SetRefConcentration;
+    // Buoyancy package drhodc
+    property ViscositySlope: double read GetViscositySlope
+      write SetViscositySlope;
+    // Viscosity package cviscref
+    property RefViscosity: Double read GetRefViscosity
+      write SetRefViscosity;
     property UsedForGWT: Boolean read GetUsedForGWT;
   published
     property Name: string read GetName write SetName;
@@ -265,6 +279,19 @@ type
     property StoredRefConcentration: TRealStorage read FStoredRefConcentration
       write SetStoredRefConcentration
     {$IFNDEF Buoyancy}
+      stored False
+    {$ENDIF}
+      ;
+    property StoredViscositySlope: TRealStorage read FStoredViscositySlope
+      write SetStoredViscositySlope
+    {$IFNDEF Viscosity}
+      stored False
+    {$ENDIF}
+      ;
+    // Viscosity package cviscref
+    property StoredRefViscosity: TRealStorage read FStoredRefViscosity
+      write SetStoredRefViscosity
+    {$IFNDEF Viscosity}
       stored False
     {$ENDIF}
       ;
@@ -503,6 +530,8 @@ begin
 
     DensitySlope := SourceChem.DensitySlope;
     RefConcentration := SourceChem.RefConcentration;
+    ViscositySlope := SourceChem.ViscositySlope;
+    RefViscosity := SourceChem.RefViscosity;
   end;
   inherited;
 end;
@@ -688,6 +717,8 @@ begin
 
   FStoredDensitySlope := TRealStorage.Create(OnInvalidateModelEvent);
   FStoredRefConcentration := TRealStorage.Create(OnInvalidateModelEvent);
+  FStoredViscositySlope := TRealStorage.Create(OnInvalidateModelEvent);
+  FStoredRefViscosity := TRealStorage.Create(OnInvalidateModelEvent);
 
   if (Model <> nil) and not (csLoading in (Model as TComponent).ComponentState) then
   begin
@@ -765,6 +796,8 @@ var
   GwtCncBoundary: TCncBoundary;
   GwtSrcBoundary: TSrcBoundary;
 begin
+  FStoredRefViscosity.Free;
+  FStoredViscositySlope.Free;
   FStoredDensitySlope.Free;
   FStoredRefConcentration.Free;
 
@@ -878,6 +911,11 @@ begin
   result := StoredRefConcentration.Value;
 end;
 
+function TChemSpeciesItem.GetRefViscosity: Double;
+begin
+  result := StoredRefViscosity.Value;
+end;
+
 function TChemSpeciesItem.GetUsedForGWT: Boolean;
 var
   LocalModel: TCustomModel;
@@ -896,6 +934,11 @@ begin
       IgnoredNames.Free;
     end;
   end;
+end;
+
+function TChemSpeciesItem.GetViscositySlope: double;
+begin
+  result := StoredViscositySlope.Value;
 end;
 
 function TChemSpeciesItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -1039,6 +1082,11 @@ end;
 procedure TChemSpeciesItem.SetRefConcentration(const Value: double);
 begin
   StoredRefConcentration.Value := Value;
+end;
+
+procedure TChemSpeciesItem.SetRefViscosity(const Value: Double);
+begin
+  StoredRefViscosity.Value := Value;
 end;
 
 procedure TChemSpeciesItem.SetDensitySlope(const Value: double);
@@ -2541,6 +2589,16 @@ begin
   FStoredRefConcentration.Assign(Value);
 end;
 
+procedure TChemSpeciesItem.SetStoredRefViscosity(const Value: TRealStorage);
+begin
+  FStoredRefViscosity.Assign(Value)    ;
+end;
+
+procedure TChemSpeciesItem.SetStoredViscositySlope(const Value: TRealStorage);
+begin
+  FStoredViscositySlope.Assign(Value)    ;
+end;
+
 procedure TChemSpeciesItem.SetTransverseDispHArrayNameDataArrayName(
   const NewName: string);
 var
@@ -2607,6 +2665,11 @@ begin
       LocalModel.AnyUzfInitialConcentrationUsed, StrGwtClassification);
   end;
   SetCaseSensitiveStringProperty(FUztInitialConcDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetViscositySlope(const Value: double);
+begin
+  StoredViscositySlope.Value := Value;
 end;
 
 { TConcentrationCollection }

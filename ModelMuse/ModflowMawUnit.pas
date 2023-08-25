@@ -100,8 +100,9 @@ type
     WellHeadTimeSeriesName: string;
 
     // Buyancy
-    // Species count should always be 1 for Density
+    // Species count should always be 1 for Density and Viscosity
     Density: TGwtCellData;
+    Viscosity: TGwtCellData;
 
     // GWT
     GwtStatus: TGwtBoundaryStatusArray;
@@ -159,6 +160,7 @@ type
     FSpecifiedConcentrations: TMawGwtConcCollection;
     FGwtStatus: TGwtBoundaryStatusCollection;
     FDensity: TMawGwtConcCollection;
+    FViscosity: TMawGwtConcCollection;
     function GetFlowingWellConductance: string;
     function GetFlowingWellElevation: string;
     function GetFlowingWellReductionLength: string;
@@ -189,6 +191,7 @@ type
     procedure SetInjectionConcentrations(const Value: TMawGwtConcCollection);
     procedure SetSpecifiedConcentrations(const Value: TMawGwtConcCollection);
     procedure SetDensity(const Value: TMawGwtConcCollection);
+    procedure SetViscosity(const Value: TMawGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -257,6 +260,12 @@ type
       stored False
     {$ENDIF}
       ;
+    // Viscosity
+    property Viscosity: TMawGwtConcCollection read FViscosity write SetViscosity
+    {$IFNDEF Viscosity}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
   TMawTimeListLink = class(TTimeListsModelLink)
@@ -275,6 +284,7 @@ type
     FPumpElevation: TModflowTimeList;
     FScalingLength: TModflowTimeList;
     FDensity: TModflowTimeList;
+    FViscosity: TModflowTimeList;
     // GWT
     FGwtStatusList: TModflowTimeLists;
     FSpecifiedConcList: TModflowTimeLists;
@@ -303,6 +313,7 @@ type
     procedure InvalidateInjectionConcentrations(Sender: TObject);
     // Buoyancy
     procedure InvalidateDensity(Sender: TObject);
+    procedure InvalidateViscosity(Sender: TObject);
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -366,6 +377,7 @@ type
     function GetSpecifiedConcentrations: TGwtCellData;
     function GetInjectionConcentrations: TGwtCellData;
     function GetDensity: TGwtCellData;
+    function GetViscosity: TGwtCellData;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -433,6 +445,8 @@ type
     Property InjectionConcentrations: TGwtCellData read GetInjectionConcentrations;
     // Buoyancy
     Property Density: TGwtCellData read GetDensity;
+    // Viscosity
+    Property Viscosity: TGwtCellData read GetViscosity;
   end;
 
   TMawSteadyWellRecord = record
@@ -673,10 +687,16 @@ type
     FPestDensity: TMawGwtConcCollection;
     FPestDensityMethods: TGwtPestMethodCollection;
     FPestDensityObservers: TObserverList;
+    FPestViscosity: TMawGwtConcCollection;
+    FPestViscosityMethods: TGwtPestMethodCollection;
+    FPestViscosityObservers: TObserverList;
     function GetStartingConcentrations: TStringConcCollection;
     procedure SetPestDensity(const Value: TMawGwtConcCollection);
     procedure SetPestDensityMethods(const Value: TGwtPestMethodCollection);
     function GetPestDensityObserver(const Index: Integer): TObserver;
+    procedure SetPestViscosity(const Value: TMawGwtConcCollection);
+    procedure SetPestViscosityMethods(const Value: TGwtPestMethodCollection);
+    function GetPestViscosityObserver(const Index: Integer): TObserver;
     procedure SetWellNumber(const Value: Integer);
     function GetBottom: string;
     function GetInitialHead: string;
@@ -762,6 +782,7 @@ type
     procedure InvalidatePestSpecConcData(Sender: TObject);
     procedure InvalidatePestInjConcData(Sender: TObject);
     procedure InvalidatePestDensityData(Sender: TObject);
+    procedure InvalidatePestViscosityData(Sender: TObject);
   protected
     property RadiusObserver: TObserver read GetRadiusObserver;
     property BottomObserver: TObserver read GetBottomObserver;
@@ -802,6 +823,8 @@ type
       read GetPestInjectionConcentrationObserver;
     property PestDensityObserver[const Index: Integer]: TObserver
       read GetPestDensityObserver;
+    property PestViscosityObserver[const Index: Integer]: TObserver
+      read GetPestViscosityObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
@@ -910,6 +933,19 @@ type
         stored False
       {$ENDIF}
         ;
+        // Viscosity
+      property PestViscosity: TMawGwtConcCollection
+        read FPestViscosity write SetPestViscosity
+      {$IFNDEF Viscosity}
+        stored False
+      {$ENDIF}
+        ;
+      property PestViscosityMethods: TGwtPestMethodCollection
+        read FPestViscosityMethods write SetPestViscosityMethods
+      {$IFNDEF Viscosity}
+        stored False
+      {$ENDIF}
+        ;
     end;
 
 const
@@ -924,7 +960,8 @@ const
   MawScalingLengthPosition = 8;
   MawFlowingWellReductionLengthPosition = 9;
   MawDensityPosition = 10;
-  MawGwtStart = 11;
+  MawViscosityPosition = 11;
+  MawGwtStart = 12;
 
   MawRadiusPosition = 0;
   MawBottomPosition = 1;
@@ -1061,6 +1098,7 @@ resourcestring
   StrPumpElevation = 'Pump_Elevation';
   StrScalingLength = 'Scaling_Length';
   StrMawFluidDensity = 'Maw_Fluid_Density';
+  StrMawFluidViscosity = 'Maw_Fluid_Viscosity';
 
 { TMawSteadyConnectionRecord }
 
@@ -1899,6 +1937,9 @@ begin
     PestDensity := SourceMAW.PestDensity;
     PestDensityMethods := SourceMAW.PestDensityMethods;
 
+    PestViscosity := SourceMAW.PestViscosity;
+    PestViscosityMethods := SourceMAW.PestViscosityMethods;
+
     inherited;
   end
   else if Source is TMnw2Boundary then
@@ -2078,6 +2119,7 @@ begin
   FPestInjectionConcentrationObservers := TObserverList.Create;
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
   FPestDensityObservers := TObserverList.Create;
+  FPestViscosityObservers := TObserverList.Create;
   FPestInjectionConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestInjectionConcentrations.UsedForPestSeries := True;
   FPestSpecifiedConcentrations := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
@@ -2088,6 +2130,10 @@ begin
   FPestDensity := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestDensity.UsedForPestSeries := True;
   FPestDensityMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
+
+  FPestViscosity := TMawGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestViscosity.UsedForPestSeries := True;
+  FPestViscosityMethods := TGwtPestMethodCollection.Create(Model as TCustomModel);
 
   FStartingConcentrations := TStringConcCollection.Create(Model as TCustomModel, ScreenObject, nil);
   CreateFormulaObjects;
@@ -2129,6 +2175,10 @@ begin
     begin
       PestDensity.Add;
     end;
+    if LocalModel.ViscosityPkgViscUsed then
+    begin
+      PestViscosity.Add;
+    end;
 
     if LocalModel.GwtUsed then
     begin
@@ -2169,6 +2219,10 @@ begin
     for Index := 0 to PestDensity.Count - 1 do
     begin
       FObserverList.Add(PestDensityObserver[Index]);
+    end;
+    for Index := 0 to PestViscosity.Count - 1 do
+    begin
+      FObserverList.Add(PestViscosityObserver[Index]);
     end;
 
     for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
@@ -2231,6 +2285,10 @@ begin
       begin
         result := ppmMultiply;
       end;
+    MawViscosityPosition:
+      begin
+        result := ppmMultiply;
+      end;
     else
       begin
         result := inherited;
@@ -2267,6 +2325,10 @@ begin
   FPestDensityMethods.Free;
   PestDensity.Free;
   FPestDensityObservers.Free;
+
+  FPestViscosityMethods.Free;
+  PestViscosity.Free;
+  FPestViscosityObservers.Free;
 end;
 
 function TMawBoundary.GetBottom: string;
@@ -2388,7 +2450,15 @@ begin
           PestDensity.Add;
         end;
         result := PestDensity[0].Value;
-      end
+      end;
+    MawViscosityPosition:
+      begin
+        if PestViscosity.Count < 1 then
+        begin
+          PestViscosity.Add;
+        end;
+        result := PestViscosity[0].Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -2472,7 +2542,15 @@ begin
           PestDensityMethods.Add;
         end;
         result := PestDensityMethods[0].PestParamMethod;
-      end
+      end;
+    MawViscosityPosition:
+      begin
+        if PestViscosityMethods.Count < 1 then
+        begin
+          PestViscosityMethods.Add;
+        end;
+        result := PestViscosityMethods[0].PestParamMethod;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -2800,6 +2878,14 @@ begin
     end;
   end;
 
+  for Index := 0 to FPestViscosity.Count - 1 do
+  begin
+    if FPestViscosity[Index].ValueObject as TObject = Sender then
+    begin
+      List.Add(FObserverList[MawViscosityPosition]);
+    end;
+  end;
+
   StartIndex := MawGwtStart;
   for Index := 0 to FPestSpecifiedConcentrations.Count - 1 do
   begin
@@ -2868,6 +2954,19 @@ begin
     AObserver.OnUpToDateSet := InvalidatePestSpecConcData;
   end;
   result := FPestSpecifiedConcentrationObservers[Index];
+end;
+
+function TMawBoundary.GetPestViscosityObserver(const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FPestViscosityObservers.Count do
+  begin
+    CreateObserver(Format('MawPestViscosity_%d', [Index+1]), AObserver, nil);
+    FPestViscosityObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidatePestViscosityData;
+  end;
+  result := FPestViscosityObservers[Index];
 end;
 
 function TMawBoundary.GetUsedObserver: TObserver;
@@ -3137,6 +3236,12 @@ begin
 end;
 
 procedure TMawBoundary.InvalidatePestSpecConcData(Sender: TObject);
+begin
+  { TODO -cGWT : This needs to be implemented }
+  //Assert(False);
+end;
+
+procedure TMawBoundary.InvalidatePestViscosityData(Sender: TObject);
 begin
   { TODO -cGWT : This needs to be implemented }
   //Assert(False);
@@ -3454,7 +3559,15 @@ begin
           PestDensity.Add;
         end;
         PestDensity[0].Value := Value;
-      end
+      end;
+    MawViscosityPosition:
+      begin
+        if PestViscosity.Count < 1 then
+        begin
+          PestViscosity.Add;
+        end;
+        PestViscosity[0].Value := Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -3538,7 +3651,15 @@ begin
           PestDensityMethods.Add;
         end;
         PestDensityMethods[0].PestParamMethod := Value;
-      end
+      end;
+    MawViscosityPosition:
+      begin
+        if PestViscosityMethods.Count < 1 then
+        begin
+          PestViscosityMethods.Add;
+        end;
+        PestViscosityMethods[0].PestParamMethod := Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-MawGwtStart;
@@ -3701,6 +3822,17 @@ begin
   FPestSpecifiedConcentrations.Assign(Value);
 end;
 
+procedure TMawBoundary.SetPestViscosity(const Value: TMawGwtConcCollection);
+begin
+  FPestViscosity.Assign(Value);
+end;
+
+procedure TMawBoundary.SetPestViscosityMethods(
+  const Value: TGwtPestMethodCollection);
+begin
+  FPestViscosityMethods.Assign(Value);
+end;
+
 procedure TMawBoundary.SetPestWellHeadFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, MawWellHeadPosition, FPestWellHeadFormula);
@@ -3745,6 +3877,7 @@ begin
   SpecifiedConcentrations.Assign(Item.SpecifiedConcentrations);
   InjectionConcentrations.Assign(Item.InjectionConcentrations);
   Density.Assign(Item.Density);
+  Viscosity.Assign(Item.Viscosity);
 end;
 
 procedure TMawTransientRecord.Cache(Comp: TCompressionStream;
@@ -3828,6 +3961,7 @@ begin
   SpecifiedConcentrations.Cache(Comp, Strings);
   InjectionConcentrations.Cache(Comp, Strings);
   Density.Cache(Comp, Strings);
+  Viscosity.Cache(Comp, Strings);
 
   GwtStatusCount := Length(GwtStatus);
   WriteCompInt(Comp, GwtStatusCount);
@@ -3880,7 +4014,7 @@ begin
   SpecifiedConcentrations.RecordStrings(Strings);
   InjectionConcentrations.RecordStrings(Strings);
   Density.RecordStrings(Strings);
-
+  Viscosity.RecordStrings(Strings);
 end;
 
 procedure TMawTransientRecord.Restore(Decomp: TDecompressionStream;
@@ -3965,6 +4099,8 @@ begin
   InjectionConcentrations.Restore(Decomp, Annotations);
   // Buoyancy
   Density.Restore(Decomp, Annotations);
+  // Viscosity
+  Viscosity.Restore(Decomp, Annotations);
 
   GwtStatusCount := ReadCompInt(Decomp);
   SetLength(GwtStatus, GwtStatusCount);
@@ -4017,6 +4153,7 @@ begin
     FMawTransientArray[Index].SpecifiedConcentrations.SpeciesCount := FSpeciesCount;
     FMawTransientArray[Index].InjectionConcentrations.SpeciesCount := FSpeciesCount;
     FMawTransientArray[Index].Density.SpeciesCount := 1;
+    FMawTransientArray[Index].Viscosity.SpeciesCount := 1;
   end;
 end;
 
@@ -4313,6 +4450,7 @@ begin
     SpecifiedConcentrations := MawSource.SpecifiedConcentrations;
     InjectionConcentrations := MawSource.InjectionConcentrations;
     Density := MawSource.Density;
+    Viscosity := MawSource.Viscosity;
   end
   else
   if Source is TMnw2TimeItem then
@@ -4365,6 +4503,7 @@ var
   AnObserver: TObserver;
   ConcIndex: Integer;
   DensityIndex: Integer;
+  ViscosityIndex: Integer;
 begin
   ParentCollection := Collection as TMawWellCollection;
 
@@ -4403,6 +4542,11 @@ begin
     Density[DensityIndex].Observer.OnUpToDateSet
       := ParentCollection.InvalidateDensity;
   end;
+  for ViscosityIndex := 0 to Viscosity.Count - 1 do
+  begin
+    Viscosity[ViscosityIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateViscosity;
+  end;
 
 //  for ConcIndex := 0 to GwtStatus.Count - 1 do
 //  begin
@@ -4425,7 +4569,7 @@ end;
 
 function TMawItem.BoundaryFormulaCount: integer;
 begin
-  Result := Succ(MawDensityPosition);
+  Result := Succ(MawViscosityPosition);
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     result := result + frmGoPhast.PhastModel.MobileComponents.Count*2;
@@ -4443,6 +4587,8 @@ begin
   FInjectionConcentrations := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     MawCollection);
   FDensity := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
+    MawCollection);
+  FViscosity := TMawGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     MawCollection);
 
   inherited;
@@ -4494,6 +4640,12 @@ begin
   end;
   FDensity.Free;
 
+  for Index := 0 to FViscosity.Count - 1 do
+  begin
+    FViscosity[Index].Value := '0';
+  end;
+  FViscosity.Free;
+
   Rate := '0';
   WellHead := '0';
   FlowingWellElevation := '0';
@@ -4544,7 +4696,19 @@ begin
           end;
           result := Density[0].Value;
         end;
-      end
+      end;
+    MawViscosityPosition:
+      begin
+        result := '0';
+        if frmGoPhast.PhastModel.ViscosityPkgViscUsed then
+        begin
+          if Viscosity.Count < 1 then
+          begin
+            Viscosity.Add
+          end;
+          result := Viscosity[0].Value;
+        end;
+      end;
     else
       begin
         // GWT
@@ -4626,6 +4790,7 @@ var
   ConcIndex: Integer;
   Item: TGwtConcStringValueItem;
   DensityIndex: Integer;
+  ViscosityIndex: Integer;
 begin
   inherited;
   if Sender = FFlowingWellConductance as TObject then
@@ -4672,6 +4837,15 @@ begin
   for DensityIndex := 0 to Density.Count - 1 do
   begin
     Item := Density.Items[DensityIndex];
+    if Item.ValueObject as TObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
+  // Viscosity
+  for ViscosityIndex := 0 to Viscosity.Count - 1 do
+  begin
+    Item := Viscosity.Items[ViscosityIndex];
     if Item.ValueObject as TObject = Sender then
     begin
       List.Add(Item.Observer);
@@ -4789,6 +4963,7 @@ begin
       and SpecifiedConcentrations.IsSame(SourceItem.SpecifiedConcentrations)
       and InjectionConcentrations.IsSame(SourceItem.InjectionConcentrations)
       and Density.IsSame(SourceItem.Density)
+      and Viscosity.IsSame(SourceItem.Viscosity)
       and GwtStatus.IsSame(SourceItem.GwtStatus);
   end;
 end;
@@ -4862,7 +5037,18 @@ begin
           end;
           Density[0].Value := Value;
         end;
-      end
+      end;
+    MawViscosityPosition:
+      begin
+        if frmGoPhast.PhastModel.ViscosityPkgViscUsed then
+        begin
+          if Viscosity.Count < 1 then
+          begin
+            Viscosity.Add;
+          end;
+          Viscosity[0].Value := Value;
+        end;
+      end;
     else
       begin
         // GWT
@@ -4997,6 +5183,11 @@ begin
   FSpecifiedConcentrations.Assign(Value);
 end;
 
+procedure TMawItem.SetViscosity(const Value: TMawGwtConcCollection);
+begin
+  FViscosity.Assign(Value);
+end;
+
 procedure TMawItem.SetWellHead(const Value: string);
 begin
   FWellHead.ScreenObject := ScreenObjectI;
@@ -5110,9 +5301,18 @@ begin
   FDensity.ParamDescription := StrMawFluidDensity;
   if Model <> nil then
   begin
-    FDensity.OnInvalidate := (Model as TCustomModel).InvalidateMawDensityc;
+    FDensity.OnInvalidate := (Model as TCustomModel).InvalidateMawDensity;
   end;
   AddTimeList(FDensity);
+
+  FViscosity := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FViscosity.NonParamDescription := StrMawFluidViscosity;
+  FViscosity.ParamDescription := StrMawFluidViscosity;
+  if Model <> nil then
+  begin
+    FViscosity.OnInvalidate := (Model as TCustomModel).InvalidateMawViscosity;
+  end;
+  AddTimeList(FViscosity);
 
   FGwtStatusList := TModflowTimeLists.Create;
   FSpecifiedConcList := TModflowTimeLists.Create;
@@ -5135,6 +5335,7 @@ begin
   FSpecifiedConcList.Free;
   FInjectionConcList.Free;
 
+  FViscosity.Free;
   FDensity.Free;
   FFlowingWellElevation.Free;
   FFlowingWellConductance.Free;
@@ -5393,6 +5594,15 @@ begin
             Density.ValuePestSeriesNames[0] := PestSeriesName;
             Density.ValuePestSeriesMethods[0] := PestSeriesMethod;
             Density.ValueTimeSeriesNames[0] := TimeSeriesName;
+          end;
+        MawViscosityPosition:
+          begin
+            Viscosity.Values[0] := Expression.DoubleResult;
+            Viscosity.ValueAnnotations[0] := ACell.Annotation;
+            Viscosity.ValuePestNames[0] := PestName;
+            Viscosity.ValuePestSeriesNames[0] := PestSeriesName;
+            Viscosity.ValuePestSeriesMethods[0] := PestSeriesMethod;
+            Viscosity.ValueTimeSeriesNames[0] := TimeSeriesName;
           end;
         else
           begin
@@ -5902,6 +6112,34 @@ begin
   end;
 end;
 
+procedure TMawWellCollection.InvalidateViscosity(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TMawTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TMawTimeListLink;
+    Link.FViscosity.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+        Link.FViscosity.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TMawWellCollection.InvalidateWellHeadData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -6091,6 +6329,8 @@ begin
         result := inherited;
     MawDensityPosition:
         result := FValues.Density.ValueTimeSeriesNames[0];
+    MawViscosityPosition:
+        result := FValues.Viscosity.ValueTimeSeriesNames[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6163,6 +6403,8 @@ begin
       result := FValues.FlowingWellReductionLengthPest;
     MawDensityPosition:
       result := FValues.Density.ValuePestNames[0];
+    MawViscosityPosition:
+      result := FValues.Viscosity.ValuePestNames[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6215,6 +6457,8 @@ begin
       result := FValues.FlowingWellReductionLengthPestSeriesMethod;
     MawDensityPosition:
       result := FValues.Density.ValuePestSeriesMethods[0];
+    MawViscosityPosition:
+      result := FValues.Viscosity.ValuePestSeriesMethods[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6270,6 +6514,8 @@ begin
       result := FValues.FlowingWellReductionLengthPestSeriesName;
     MawDensityPosition:
       result := FValues.Density.ValuePestSeriesNames[0];
+    MawViscosityPosition:
+      result := FValues.Viscosity.ValuePestSeriesNames[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6347,6 +6593,8 @@ begin
       result := FlowingWellReductionLengthAnnotation;
     MawDensityPosition:
       result := FValues.Density.ValueAnnotations[0];
+    MawViscosityPosition:
+      result := FValues.Viscosity.ValueAnnotations[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6400,6 +6648,8 @@ begin
       result := FlowingWellReductionLength;
     MawDensityPosition:
       result := FValues.Density.Values[0];
+    MawViscosityPosition:
+      result := FValues.Viscosity.Values[0];
     else
       begin
         Index := Index-MawGwtStart;
@@ -6454,6 +6704,11 @@ end;
 function TMawCell.GetSpecifiedConcentrations: TGwtCellData;
 begin
   result := FValues.SpecifiedConcentrations
+end;
+
+function TMawCell.GetViscosity: TGwtCellData;
+begin
+  result := FValues.Viscosity
 end;
 
 function TMawCell.GetWellHead: double;
@@ -6524,6 +6779,8 @@ begin
         inherited;
     MawDensityPosition:
         FValues.Density.ValueTimeSeriesNames[0] := Value;
+    MawViscosityPosition:
+        FValues.Viscosity.ValueTimeSeriesNames[0] := Value;
     else
       begin
         Index := Index-MawGwtStart;

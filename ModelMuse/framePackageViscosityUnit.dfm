@@ -1,52 +1,154 @@
-inherited framePackageBuoyancy: TframePackageBuoyancy
+inherited framePackageViscosity: TframePackageViscosity
   Width = 715
-  Height = 405
+  Height = 524
   ExplicitWidth = 715
-  ExplicitHeight = 405
+  ExplicitHeight = 524
   DesignSize = (
     715
-    405)
-  object lblRefDensity: TLabel [2]
+    524)
+  object lblRefViscosity: TLabel [2]
     Left = 176
-    Top = 231
-    Width = 93
+    Top = 208
+    Width = 153
     Height = 15
-    Caption = 'Reference density'
+    Caption = 'Reference viscosity'
+  end
+  object lblThermalSpecies: TLabel [3]
+    Left = 176
+    Top = 236
+    Width = 177
+    Height = 15
+    Caption = 'Thermal species'
+  end
+  object lblThermalFormulation: TLabel [4]
+    Left = 176
+    Top = 267
+    Width = 109
+    Height = 15
+    Caption = 'Thermal formulation'
+  end
+  object lblThermalA2: TLabel [5]
+    Left = 176
+    Top = 296
+    Width = 109
+    Height = 15
+    Caption = 'Thermal A2'
+  end
+  object lblThermalA3: TLabel [6]
+    Left = 176
+    Top = 324
+    Width = 109
+    Height = 15
+    Caption = 'Thermal A3'
+  end
+  object lblThermalA4: TLabel [7]
+    Left = 176
+    Top = 352
+    Width = 109
+    Height = 15
+    Caption = 'Thermal A4'
   end
   inherited memoComments: TMemo
     Width = 684
-    ExplicitWidth = 684
   end
-  object cbSpecifyDensity: TCheckBox [4]
+  object cbSpecifyViscosity: TCheckBox [9]
     Left = 16
     Top = 160
-    Width = 137
-    Height = 26
-    Caption = 'Specify density'
+    Width = 185
+    Height = 17
+    Caption = 'Specify viscosity'
     Enabled = False
     TabOrder = 1
   end
-  object cbRHS: TCheckBox [5]
+  object rdeRefViscosity: TRbwDataEntry [10]
     Left = 16
-    Top = 183
-    Width = 544
-    Height = 26
-    Caption = 'Add off-diagonal terms to right-hand-side (HHFORMULATION_RHS)'
+    Top = 205
+    Width = 145
+    Height = 22
+    Color = clBtnFace
     Enabled = False
     TabOrder = 2
+    Text = '0'
+    DataType = dtReal
+    Max = 1.000000000000000000
+    CheckMin = True
+    ChangeDisabledColor = True
   end
-  object cbWriteDensity: TCheckBox [6]
+  object cbWriteViscosity: TCheckBox [11]
     Left = 16
-    Top = 206
+    Top = 183
     Width = 209
     Height = 26
-    Caption = 'Write density'
+    Caption = 'Write viscosity'
     Enabled = False
     TabOrder = 3
   end
-  object rdgChemDensity: TRbwDataGrid4 [7]
+  object comboThermalSpecies: TComboBox [12]
+    Left = 16
+    Top = 233
+    Width = 145
+    Height = 23
+    Style = csDropDownList
+    Enabled = False
+    TabOrder = 4
+  end
+  object comboThermalFormulation: TComboBox [13]
+    Left = 16
+    Top = 264
+    Width = 145
+    Height = 23
+    Style = csDropDownList
+    Enabled = False
+    TabOrder = 5
+    Items.Strings = (
+      'LINEAR'
+      'NONLINEAR')
+  end
+  object rdeThermalA2: TRbwDataEntry [14]
+    Left = 16
+    Top = 293
+    Width = 145
+    Height = 22
+    Color = clBtnFace
+    Enabled = False
+    TabOrder = 6
+    Text = '0'
+    DataType = dtReal
+    Max = 1.000000000000000000
+    CheckMin = True
+    ChangeDisabledColor = True
+  end
+  object rdeThermalA3: TRbwDataEntry [15]
+    Left = 16
+    Top = 321
+    Width = 145
+    Height = 22
+    Color = clBtnFace
+    Enabled = False
+    TabOrder = 7
+    Text = '0'
+    DataType = dtReal
+    Max = 1.000000000000000000
+    CheckMin = True
+    ChangeDisabledColor = True
+  end
+  object rdeThermalA4: TRbwDataEntry [16]
+    Left = 16
+    Top = 349
+    Width = 145
+    Height = 22
+    Color = clBtnFace
+    Enabled = False
+    TabOrder = 8
+    Text = '0'
+    DataType = dtReal
+    Max = 1.000000000000000000
+    CheckMin = True
+    ChangeDisabledColor = True
+  end
+  object rdgChemViscosity: TRbwDataGrid4 [17]
     Left = 0
-    Top = 256
+    Top = 375
     Width = 715
     Height = 149
     Align = alBottom
@@ -55,7 +157,7 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
     Enabled = False
     FixedCols = 1
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
-    TabOrder = 4
+    TabOrder = 9
     ExtendedAutoDistributeText = False
     AutoMultiEdit = False
     AutoDistributeText = False
@@ -138,21 +240,7 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitHeight = 10
-  end
-  object rdeRefDensity: TRbwDataEntry [8]
-    Left = 16
-    Top = 228
-    Width = 145
-    Height = 22
-    Color = clBtnFace
-    Enabled = False
-    TabOrder = 5
-    Text = '0'
-    DataType = dtReal
-    Max = 1.000000000000000000
-    CheckMin = True
-    ChangeDisabledColor = True
+    ExplicitTop = 373
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -163,19 +251,31 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
         Control = memoComments
       end
       item
-        Control = cbSpecifyDensity
+        Control = cbSpecifyViscosity
       end
       item
-        Control = cbRHS
+        Control = cbWriteViscosity
       end
       item
-        Control = cbWriteDensity
+        Control = rdeRefViscosity
       end
       item
-        Control = rdeRefDensity
+        Control = comboThermalSpecies
       end
       item
-        Control = rdgChemDensity
+        Control = comboThermalFormulation
+      end
+      item
+        Control = rdeThermalA2
+      end
+      item
+        Control = rdeThermalA3
+      end
+      item
+        Control = rdeThermalA4
+      end
+      item
+        Control = rdgChemViscosity
       end>
   end
 end

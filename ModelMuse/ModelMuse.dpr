@@ -877,7 +877,9 @@ uses
   ModflowBuoyancyWriterUnit in 'ModflowBuoyancyWriterUnit.pas',
   frmImportSurferGridFilesUnit in 'frmImportSurferGridFilesUnit.pas' {frmImportSurferGridFiles},
   frameScreenObjectCfpRechargeFractionUnit in 'frameScreenObjectCfpRechargeFractionUnit.pas' {frameScreenObjectCfpRechargeFraction: TFrame},
-  Mt3dmsChemSpeciesInterfaceUnit in 'Mt3dmsChemSpeciesInterfaceUnit.pas';
+  Mt3dmsChemSpeciesInterfaceUnit in 'Mt3dmsChemSpeciesInterfaceUnit.pas',
+  framePackageViscosityUnit in 'framePackageViscosityUnit.pas' {framePackageViscosity: TFrame},
+  ModflowViscosityWriterUnit in 'ModflowViscosityWriterUnit.pas';
 
 {$R *.res}
 

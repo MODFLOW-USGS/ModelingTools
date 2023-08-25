@@ -8,8 +8,8 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 404
   ClientWidth = 743
   OnClose = FormClose
-  ExplicitWidth = 759
-  ExplicitHeight = 443
+  ExplicitWidth = 755
+  ExplicitHeight = 442
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -20,11 +20,13 @@ inherited frmStartUp: TfrmStartUp
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 356
+    ExplicitWidth = 739
     DesignSize = (
       743
       47)
     object btnNext: TBitBtn
-      Left = 627
+      Left = 623
       Top = 6
       Width = 86
       Height = 33
@@ -47,9 +49,10 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
+      ExplicitLeft = 619
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 440
+      Left = 436
       Top = 6
       Width = 100
       Height = 33
@@ -60,9 +63,10 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
+      ExplicitLeft = 432
     end
     object btnHelp: TBitBtn
-      Left = 546
+      Left = 542
       Top = 6
       Width = 75
       Height = 33
@@ -72,6 +76,7 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 538
     end
   end
   object pcStartup: TPageControl
@@ -85,6 +90,8 @@ inherited frmStartUp: TfrmStartUp
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
+    ExplicitWidth = 739
+    ExplicitHeight = 356
     object tabModelChoice: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Start_Up_Dialog_Box'
@@ -432,6 +439,8 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 731
+        ExplicitHeight = 282
         object Label8: TLabel
           Left = 344
           Top = 68
@@ -537,9 +546,9 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 475
+          Left = 479
           Top = 20
-          Width = 258
+          Width = 254
           Height = 261
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
@@ -607,6 +616,8 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitWidth = 250
+          ExplicitHeight = 260
           ColWidths = (
             64
             64)
@@ -625,6 +636,7 @@ inherited frmStartUp: TfrmStartUp
         Height = 41
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 731
         object lblModflowSelection: TLabel
           Left = 195
           Top = 10
@@ -634,11 +646,13 @@ inherited frmStartUp: TfrmStartUp
         end
         object comboModflowSelection: TComboBox
           Left = 11
-          Top = 7
+          Top = 10
           Width = 178
           Height = 26
           Style = csDropDownList
+          ItemIndex = 0
           TabOrder = 0
+          Text = 'MODFLOW 6'
           Items.Strings = (
             'MODFLOW 6'
             'MODFLOW-2005'
@@ -694,21 +708,21 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 241
+        Width = 237
         Height = 292
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
         ExplicitLeft = 464
         ExplicitTop = 29
-        ExplicitWidth = 241
+        ExplicitWidth = 237
         ExplicitHeight = 292
         inherited Panel: TPanel
           Top = 227
-          Width = 241
+          Width = 237
           Height = 65
           ExplicitTop = 227
-          ExplicitWidth = 241
+          ExplicitWidth = 237
           ExplicitHeight = 65
           inherited lbNumber: TLabel
             Width = 161
@@ -725,14 +739,14 @@ inherited frmStartUp: TfrmStartUp
             ExplicitTop = 38
           end
           inherited sbInsert: TSpeedButton
-            Left = 28
+            Left = 27
             Top = 38
             OnClick = frameModelLayerssbInsertClick
             ExplicitLeft = 37
             ExplicitTop = 38
           end
           inherited sbDelete: TSpeedButton
-            Left = 51
+            Left = 50
             Top = 38
             OnClick = frameModelLayerssbDeleteClick
             ExplicitLeft = 66
@@ -746,7 +760,7 @@ inherited frmStartUp: TfrmStartUp
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 241
+          Width = 237
           Height = 227
           ColCount = 2
           RowCount = 5
@@ -801,7 +815,7 @@ inherited frmStartUp: TfrmStartUp
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 241
+          ExplicitWidth = 237
           ExplicitHeight = 227
           ColWidths = (
             64
@@ -947,7 +961,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 202
+        Width = 198
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'

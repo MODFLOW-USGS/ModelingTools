@@ -87,6 +87,7 @@ type
     FOnCheckPestCell: TSelectCellEvent;
     FGwtFrameList: TSfrGwtObjectList;
     FBuoyancyOffset: Integer;
+    FViscosityOffset: Integer;
     procedure LayoutMultiRowEditControls;
     function GetDeletedCells(ACol, ARow: integer): boolean;
     procedure SetDeletedCells(ACol, ARow: integer; const Value: boolean);
@@ -125,6 +126,8 @@ var
 
 const
   BuoyancyColumn = s6cDiversionStart;
+var
+  ViscosityColumn: Integer = Ord(BuoyancyColumn) + 1;
 
 implementation
 
@@ -243,13 +246,13 @@ begin
   inherited;
   frmgrdDiversions.seNumberChange(Sender);
   rdgModflowBoundary.ColCount := frmgrdDiversions.seNumber.AsInteger
-    + Ord(s6cDiversionStart)+FBuoyancyOffset;
+    + Ord(s6cDiversionStart)+FBuoyancyOffset+FViscosityOffset;
 
   for ColIndex := 0 to frmgrdDiversions.seNumber.AsInteger - 1 do
   begin
-    rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + ColIndex + FBuoyancyOffset, 0]
+    rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + ColIndex + FBuoyancyOffset+FViscosityOffset, 0]
       := Format('Diversion rate %d', [ColIndex+1]);
-    AColumn := rdgModflowBoundary.Columns[Ord(s6cDiversionStart) + ColIndex + FBuoyancyOffset];
+    AColumn := rdgModflowBoundary.Columns[Ord(s6cDiversionStart) + ColIndex + FBuoyancyOffset+FViscosityOffset];
     AColumn.WordWrapCaptions := True;
     AColumn.ButtonUsed := True;
     AColumn.ButtonCaption := 'F()';
@@ -435,7 +438,7 @@ begin
 
               for DiverIndex := 0 to Sfr6Item.Diversions.Count - 1 do
               begin
-                rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + FBuoyancyOffset + DiverIndex,
+                rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + FBuoyancyOffset+FViscosityOffset + DiverIndex,
                   TimeIndex+1+PestRowOffset]
                   := Sfr6Item.Diversions[DiverIndex];
               end;
@@ -653,23 +656,35 @@ var
   AColumn: TRbwColumn4;
   PickList: TStrings;
   DensityUsed: Boolean;
+  ViscosityUsed: Boolean;
 
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
   rdgModflowBoundary.BeginUpdate;
   try
     if DensityUsed then
     begin
       rdgModflowBoundary.ColCount := Ord(s6cDiversionStart) + 1;
       FBuoyancyOffset := 1;
-//      rdgModflowBoundary.Columns[Ord(BuoyancyColumn)] :=
-//        rdgModflowBoundary.Columns[Ord(s6cUpstreamFraction)];
       rdgModflowBoundary.Cells[Ord(BuoyancyColumn), 0] := StrDensity;
     end
     else
     begin
       rdgModflowBoundary.ColCount := Ord(s6cDiversionStart);
       FBuoyancyOffset := 0;
+    end;
+
+    if ViscosityUsed then
+    begin
+      rdgModflowBoundary.ColCount := + 1;
+      FViscosityOffset := 1;
+      ViscosityColumn := Ord(BuoyancyColumn) + FBuoyancyOffset;
+      rdgModflowBoundary.Cells[ViscosityColumn, 0] := StrViscosity;
+    end
+    else
+    begin
+      FViscosityOffset := 0;
     end;
 
     ClearGrid(rdgModflowBoundary);
@@ -1371,7 +1386,8 @@ begin
               Sfr6Item.DiversionCount := frmgrdDiversions.seNumber.AsInteger;
               for DiverIndex := 0 to frmgrdDiversions.seNumber.AsInteger - 1 do
               begin
-                RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + FBuoyancyOffset + DiverIndex,
+                RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart)
+                  + FBuoyancyOffset+FViscosityOffset + DiverIndex,
                   TimeIndex+1+PestRowOffset];
                 if RateFormula <> '' then
                 begin

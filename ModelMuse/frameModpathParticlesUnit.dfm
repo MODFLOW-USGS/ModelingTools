@@ -21,14 +21,14 @@ object frameModpathParticles: TframeModpathParticles
       311)
     object lblTimeCount: TLabel
       Left = 468
-      Top = 245
+      Top = 229
       Width = 33
       Height = 15
       Caption = 'Count'
     end
     object sbAddTime: TSpeedButton
       Left = 400
-      Top = 272
+      Top = 256
       Width = 23
       Height = 22
       Hint = 'Add row|Add a row below the bottom row.'
@@ -48,7 +48,7 @@ object frameModpathParticles: TframeModpathParticles
     end
     object sbInsertTime: TSpeedButton
       Left = 433
-      Top = 272
+      Top = 256
       Width = 23
       Height = 22
       Hint = 'Insert row|Insert a row above the selected row.'
@@ -68,7 +68,7 @@ object frameModpathParticles: TframeModpathParticles
     end
     object sbDeleteTime: TSpeedButton
       Left = 466
-      Top = 272
+      Top = 256
       Width = 23
       Height = 22
       Hint = 'Delete row|Delete the selected row.'
@@ -134,7 +134,7 @@ object frameModpathParticles: TframeModpathParticles
       Left = 9
       Top = 150
       Width = 128
-      Height = 144
+      Height = 128
       Camera = GLCamera
       FieldOfView = 104.002532958984400000
       PenAsTouch = False
@@ -315,7 +315,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 87
           Width = 57
-          Height = 24
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000
@@ -326,7 +326,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 122
           Width = 57
-          Height = 24
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000
@@ -337,7 +337,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 154
           Width = 57
-          Height = 24
+          Height = 23
           ButtonKind = bkClassic
           Increment = 0.100000000000000000
           MaxValue = 0.500000000000000000
@@ -392,7 +392,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 87
           Width = 57
-          Height = 24
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000
@@ -403,7 +403,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 122
           Width = 57
-          Height = 24
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 2.000000000000000000
@@ -416,7 +416,7 @@ object frameModpathParticles: TframeModpathParticles
           Left = 9
           Top = 157
           Width = 57
-          Height = 24
+          Height = 23
           ButtonKind = bkClassic
           Increment = 0.100000000000000000
           MaxValue = 0.500000000000000000
@@ -654,7 +654,7 @@ object frameModpathParticles: TframeModpathParticles
             Left = 3
             Top = 10
             Width = 62
-            Height = 24
+            Height = 23
             CheckMinValue = True
             ButtonKind = bkClassic
             TabOrder = 0
@@ -671,7 +671,7 @@ object frameModpathParticles: TframeModpathParticles
     end
     object seTimeCount: TJvSpinEdit
       Left = 400
-      Top = 242
+      Top = 226
       Width = 62
       Height = 23
       CheckMaxValue = False
@@ -684,7 +684,7 @@ object frameModpathParticles: TframeModpathParticles
       Left = 400
       Top = 27
       Width = 129
-      Height = 209
+      Height = 193
       ColCount = 2
       DefaultColWidth = 20
       FixedCols = 1
@@ -757,12 +757,12 @@ object frameModpathParticles: TframeModpathParticles
     XMax = 1.000000000000000000
     YMax = 1.000000000000000000
     ZMax = 1.000000000000000000
-    Left = 144
-    Top = 264
+    Left = 304
+    Top = 224
   end
   object GLScene1: TGLScene
-    Left = 176
-    Top = 264
+    Left = 336
+    Top = 224
     object GLDummyCube: TGLDummyCube
       Direction.Coordinates = {D36D79B2D7B35DBF010000BF00000000}
       PitchAngle = -120.000000000000000000

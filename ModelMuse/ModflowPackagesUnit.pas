@@ -92,6 +92,7 @@ type
     FFarmClimate4: TFarmProcess4Climate;
     FFarmWells4: TFarmProcess4Wells;
     FBuoyancyPackage: TBuoyancyPackage;
+    FViscosityPackage: TViscosityPackage;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -174,6 +175,7 @@ type
     procedure SetFarmSurfaceWater4(const Value: TFarmProcess4SurfaceWater);
     procedure SetFarmWells4(const Value: TFarmProcess4Wells);
     procedure SetBuoyancyPackage(const Value: TBuoyancyPackage);
+    procedure SetViscosityPackage(const Value: TViscosityPackage);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -364,7 +366,12 @@ type
       stored False
     {$ENDIF}
       ;
-
+    property ViscosityPackage: TViscosityPackage read FViscosityPackage
+      write SetViscosityPackage
+    {$IFNDEF Viscosity}
+      stored False
+    {$ENDIF}
+      ;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
@@ -486,6 +493,7 @@ resourcestring
   StrSALINITYFLUSHIRRIG = 'SALINITY_FLUSH_IRRIGATION: Farm Process V4 Salini' +
   'ty Flush Irrigation Options';
   StrBUYBuoyancyPackag = 'BUY: Buoyancy Package)';
+  StrVSCViscosityPacka = 'VSC: Viscosity Package';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -581,6 +589,8 @@ begin
     FarmLandUse := SourcePackages.FarmLandUse;
     FarmSalinityFlush := SourcePackages.FarmSalinityFlush;
     BuoyancyPackage := SourcePackages.BuoyancyPackage;
+    ViscosityPackage := SourcePackages.ViscosityPackage;
+
 
   end
   else
@@ -990,10 +1000,15 @@ begin
   FBuoyancyPackage.Classification := StrFlowPackages;
   FBuoyancyPackage.SelectionType := stCheckBox;
 
+  FViscosityPackage := TViscosityPackage.Create(Model);
+  FViscosityPackage.PackageIdentifier := StrVSCViscosityPacka;
+  FViscosityPackage.Classification := StrFlowPackages;
+  FViscosityPackage.SelectionType := stCheckBox;
 end;
 
 destructor TModflowPackages.Destroy;
 begin
+  FViscosityPackage.Free;
   FBuoyancyPackage.Free;
   FFarmSalinityFlush.Free;
   FFarmLandUse.Free;
@@ -1172,6 +1187,7 @@ begin
   FarmSalinityFlush.InitializeVariables;
 
   BuoyancyPackage.InitializeVariables;
+  ViscosityPackage.InitializeVariables;
 end;
 
 
@@ -1453,6 +1469,12 @@ begin
   begin
     Inc(Result);
   end;
+
+  if ViscosityPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
 
   LocalModel := Model as TCustomModel;
   if LocalModel.GwtUsed then
@@ -1897,6 +1919,11 @@ end;
 procedure TModflowPackages.SetUzfPackage(const Value: TUzfPackageSelection);
 begin
   FUzfPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetViscosityPackage(const Value: TViscosityPackage);
+begin
+  FViscosityPackage.Assign(Value);
 end;
 
 procedure TModflowPackages.SetWelPackage(const Value: TWellPackage);

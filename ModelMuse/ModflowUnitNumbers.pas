@@ -115,6 +115,7 @@ const
   StrSFT                    = 'SFT';
   StrCTS                    = 'CTS';
   StrBuy                    = 'BUY6';
+  StrVsc                    = 'VSC6';
 //  SrtCTO                    = 'CTO';
 
   StrSTR_OUT = 'STR_OUT';

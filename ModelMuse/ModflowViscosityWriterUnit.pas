@@ -1,4 +1,4 @@
-unit ModflowBuoyancyWriterUnit;
+unit ModflowViscosityWriterUnit;
 
 interface
 
@@ -7,9 +7,9 @@ uses
   System.SysUtils, System.Classes;
 
 type
-  TBuoyancyWriter = class(TCustomPackageWriter)
+  TViscosityWriter = class(TCustomPackageWriter)
   private
-    FBuoyancyPackage: TBuoyancyPackage;
+    FViscosityPackage: TViscosityPackage;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WritePackageData;
@@ -18,8 +18,8 @@ type
   public
     class function Extension: string; override;
     procedure WriteFile(const AFileName: string);
-
   end;
+
 
 implementation
 
@@ -27,21 +27,21 @@ uses
   ModflowUnitNumbers, frmProgressUnit, GoPhastTypes, Mt3dmsChemSpeciesUnit;
 
 resourcestring
-  StrEvaluatingBUY6Pack = 'Evaluating BUY6 Package data.';
+  StrEvaluatingVSC6Pack = 'Evaluating VSC6 Package data.';
 
-{ TBuoyancyWriter }
+{ TViscosityWriter }
 
-class function TBuoyancyWriter.Extension: string;
+class function TViscosityWriter.Extension: string;
 begin
-  result := '.buy';
+  result := '.vsc'
 end;
 
-function TBuoyancyWriter.Package: TModflowPackageSelection;
+function TViscosityWriter.Package: TModflowPackageSelection;
 begin
-  Result := Model.ModflowPackages.BuoyancyPackage;
+  Result := Model.ModflowPackages.ViscosityPackage;
 end;
 
-procedure TBuoyancyWriter.WriteDimensions;
+procedure TViscosityWriter.WriteDimensions;
 var
   IgnoredNames: TStringList;
 begin
@@ -49,7 +49,7 @@ begin
   IgnoredNames := TStringList.Create;
   try
     Model.GetIgnoredSpeciesNames(IgnoredNames);
-    WriteString('  NRHOSPECIES');
+    WriteString('  NVISCSPECIES');
     WriteInteger(Model.MobileComponents.Count - IgnoredNames.Count);
     NewLine;
   finally
@@ -58,7 +58,7 @@ begin
   end;
 end;
 
-procedure TBuoyancyWriter.WriteFile(const AFileName: string);
+procedure TViscosityWriter.WriteFile(const AFileName: string);
 begin
   if Model.ModelSelection <> msModflow2015 then
   begin
@@ -68,14 +68,14 @@ begin
   begin
     Exit
   end;
-  if Model.PackageGeneratedExternally(StrBuy) then
+  if Model.PackageGeneratedExternally(StrVsc) then
   begin
     Exit;
   end;
 
-  FBuoyancyPackage := Package as TBuoyancyPackage;
+  FViscosityPackage := Package as TViscosityPackage;
 
-  frmProgressMM.AddMessage(StrEvaluatingBUY6Pack);
+  frmProgressMM.AddMessage(StrEvaluatingVSC6Pack);
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
   begin
@@ -83,7 +83,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrBuy, 0, FNameOfFile, foInput, Model, False, StrBuy);
+  WriteToNameFile(StrVsc, 0, FNameOfFile, foInput, Model, False, StrVsc);
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
   begin
@@ -129,29 +129,50 @@ begin
   end;
 end;
 
-procedure TBuoyancyWriter.WriteOptions;
+procedure TViscosityWriter.WriteOptions;
 var
   FileOut: string;
 begin
   WriteBeginOptions;
   try
-    if FBuoyancyPackage.RightHandSide then
+    WriteString('  VISCREF');
+    WriteFloat(FViscosityPackage.RefViscosity);
+    NewLine;
+
+    if FViscosityPackage.ThermalSpecies <> '' then
     begin
-      WriteString('  HHFORMULATION_RHS');
+      WriteString('  TEMPERATURE_SPECIES_NAME ');
+      WriteString(FViscosityPackage.ThermalSpecies);
       NewLine;
     end;
 
-    WriteString('  DENSEREF');
-    WriteFloat(FBuoyancyPackage.RefDensity);
+    WriteString('  THERMAL_FORMULATION ');
+    case FViscosityPackage.ThermalFormulation of
+      tfLinear: WriteString('LINEAR');
+      tfNonLinear: WriteString('NONLINEAR');
+    end;
     NewLine;
 
-    if FBuoyancyPackage.WriteDensity then
+    if FViscosityPackage.ThermalFormulation = tfNonLinear then
     begin
-      FileOut := ChangeFileExt(FNameOfFile, '.density');
+      WriteString('  THERMAL_A2');
+      WriteFloat(FViscosityPackage.ThermalA2);
+      NewLine;
+      WriteString('  THERMAL_A3');
+      WriteFloat(FViscosityPackage.ThermalA3);
+      NewLine;
+      WriteString('  THERMAL_A4');
+      WriteFloat(FViscosityPackage.ThermalA4);
+      NewLine;
+    end;
+
+    if FViscosityPackage.WriteViscosity then
+    begin
+      FileOut := ChangeFileExt(FNameOfFile, '.viscosity');
       Model.AddModelOutputFile(FileOut);
 
       FileOut := ExtractFileName(FileOut);
-      WriteString('  DENSITY FILEOUT ');
+      WriteString('  VISCOSITY FILEOUT ');
       WriteString(FileOut);
       NewLine;
     end;
@@ -160,7 +181,7 @@ begin
   end;
 end;
 
-procedure TBuoyancyWriter.WritePackageData;
+procedure TViscosityWriter.WritePackageData;
 var
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
@@ -181,8 +202,8 @@ begin
         Continue;
       end;
       WriteInteger(SIndex);
-      WriteFloat(ASpecies.DensitySlope);
-      WriteFloat(ASpecies.RefConcentration);
+      WriteFloat(ASpecies.ViscositySlope);
+      WriteFloat(ASpecies.RefViscosity);
       WriteString(' ' + ASpecies.Name);
       WriteString(' ' + ASpecies.Name);
       NewLine;

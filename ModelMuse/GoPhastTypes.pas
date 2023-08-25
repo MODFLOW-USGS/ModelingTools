@@ -1105,7 +1105,9 @@ resourcestring
   StrAssignedBy0sWit = 'Assigned by %0:s with formula = "%1:s."';
   StrAllTheActiveCells = 'All the active cells in the following layers have ' +
   'thicknesses less than or equal to zero.';
+const
   StrDensity = 'Density';
+  StrViscosity = 'Viscosity';
 
 var
   FxButton: TBitMap;

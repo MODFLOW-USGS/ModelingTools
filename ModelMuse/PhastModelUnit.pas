@@ -2163,6 +2163,8 @@ that affects the model output should also have a comment. }
     function GetBuoyancyDensityUsed: Boolean;
     function GetBuoyancyUsed: Boolean;
     function GetCfpCadsSelected: TObjectUsedEvent;
+    function GetViscosityPkgUsedUsed: Boolean;
+    function GetViscosityPkgViscUsed: Boolean;
   public
     function ChdIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
@@ -2840,7 +2842,8 @@ that affects the model output should also have a comment. }
     procedure InvalidateMawPumpElevation(Sender: TObject);
     procedure InvalidateMawScalingLength(Sender: TObject);
     procedure InvalidateMawGwtConc(Sender: TObject);
-    procedure InvalidateMawDensityc(Sender: TObject);
+    procedure InvalidateMawDensity(Sender: TObject);
+    procedure InvalidateMawViscosity(Sender: TObject);
 
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
@@ -3092,6 +3095,9 @@ that affects the model output should also have a comment. }
     procedure GetPestParameterNames(ParameterNames: TStringList);
     property BuoyancyUsed: Boolean read GetBuoyancyUsed;
     property BuoyancyDensityUsed: Boolean read GetBuoyancyDensityUsed;
+    property ViscosityPkgUsed: Boolean read GetViscosityPkgUsedUsed;
+    property ViscosityPkgViscUsed: Boolean read GetViscosityPkgViscUsed;
+
     procedure GetIgnoredSpeciesNames(IgnoredNames: TStringList);
     property GwtDispUsedPerSpecies: TObjectUsedEvent read GetGwtDispUsedPerSpecies;
     property LongitudinalDispersionUsedPerSpecies: TObjectUsedEvent read GetLongitudinalDispersionUsedPerSpecies;
@@ -5263,7 +5269,8 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMstWriterUnit, ModflowIstWriterUnit, ModflowCncWriterUnit,
   ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit,
   ModflowTimeInterfaceUnit, Modflow6TimeSeriesUnit,
-  LockedGlobalVariableChangers, ModflowBuoyancyWriterUnit;
+  LockedGlobalVariableChangers, ModflowBuoyancyWriterUnit,
+  ModflowViscosityWriterUnit;
 
 
 
@@ -10039,8 +10046,7 @@ const
 //               Bug fix: Fixed importing MODFLOW-2005 and MODFLOW-NWT models
 //                in which the number of segments in the ETS package was set
 //                to 1.
-
-//               Bug fixed: Fixed bug in Mf2005ObsExtractor that caused simulated
+//    '5.1.1.37' Bug fixed: Fixed bug in Mf2005ObsExtractor that caused simulated
 //                from the HOB package to be incorrectly read as zero.
 
 //               Enhancement Buoyancy package for MODFLOW 6.
@@ -10050,7 +10056,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.36';
+  IIModelVersion = '5.1.1.37';
 
 function IModelVersion: string;
 begin
@@ -26718,7 +26724,7 @@ begin
   ModflowPackages.MawPackage.InvalidateConcentrations;
 end;
 
-procedure TCustomModel.InvalidateMawDensityc(Sender: TObject);
+procedure TCustomModel.InvalidateMawDensity(Sender: TObject);
 begin
 
 end;
@@ -26756,6 +26762,11 @@ end;
 procedure TCustomModel.InvalidateMawScalingLength(Sender: TObject);
 begin
   ModflowPackages.MawPackage.ScalingLength.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMawViscosity(Sender: TObject);
+begin
+
 end;
 
 procedure TCustomModel.InvalidateMawWell_Head(Sender: TObject);
@@ -41783,12 +41794,18 @@ end;
 procedure TCustomModel.GetIgnoredSpeciesNames(IgnoredNames: TStringList);
 var
   Buoy: TBuoyancyPackage;
+  Visc: TViscosityPackage;
 begin
   IgnoredNames.CaseSensitive := False;
   Buoy := ModflowPackages.BuoyancyPackage;
+  Visc := ModflowPackages.ViscosityPackage;
   if Buoy.IsSelected and Buoy.DensitySpecified then
   begin
     IgnoredNames.Add(StrDensity);
+  end;
+  if Visc.IsSelected and Visc.ViscositySpecified then
+  begin
+    IgnoredNames.Add(StrViscosity);
   end;
 end;
 
@@ -43372,6 +43389,7 @@ var
   ExchangeWriter: TModflowGwfGwtExchangeWriter;
   FmiWriter: TModflowFmiWriter;
   BuoyancyWriter: TBuoyancyWriter;
+  ViscosityWriter: TViscosityWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -44032,6 +44050,21 @@ begin
             BuoyancyWriter.WriteFile(FileName);
           finally
             BuoyancyWriter.Free;
+          end;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.MawPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          ViscosityWriter := TViscosityWriter.Create(self, etExport);
+          try
+            ViscosityWriter.WriteFile(FileName);
+          finally
+            ViscosityWriter.Free;
           end;
           if not frmProgressMM.ShouldContinue then
           begin
@@ -49450,6 +49483,19 @@ end;
 function TCustomModel.GetVerticalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
 begin
   result := DoVerticalTransverseDispersionUsedPerSpecies;
+end;
+
+function TCustomModel.GetViscosityPkgUsedUsed: Boolean;
+begin
+  Result := ModflowPackages.ViscosityPackage.IsSelected
+end;
+
+function TCustomModel.GetViscosityPkgViscUsed: Boolean;
+var
+  Viscosity: TViscosityPackage;
+begin
+  Viscosity := ModflowPackages.ViscosityPackage;
+  Result := Viscosity.IsSelected and Viscosity.ViscositySpecified;
 end;
 
 function TCustomModel.GetWetDryUsed: TObjectUsedEvent;

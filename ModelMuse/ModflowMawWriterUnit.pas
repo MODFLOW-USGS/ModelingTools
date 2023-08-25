@@ -1629,6 +1629,14 @@ begin
             begin
               WriteFloat(0);
             end;
+            if SameText(ASpecies.Name, StrViscosity) then
+            begin
+              WriteValueOrFormula(ACell, MawViscosityPosition);
+            end
+            else
+            begin
+              WriteFloat(0);
+            end;
             NewLine;
           end;
         end;

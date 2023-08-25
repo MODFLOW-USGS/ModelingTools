@@ -152,7 +152,6 @@ type
     procedure GetPackageValues(ModelName: AnsiString);
   end;
 
-
   TCustomBoundaryStressPeriod = class(TObject)
     NodeList: TCIntArray;
     BoundNames: TAnsiStringArray;
@@ -505,12 +504,100 @@ type
     constructor Create(APackageName: AnsiString); override;
     destructor Destroy; override;
     procedure GetPackageValues(ModelName: AnsiString); override;
-  private
   end;
 
   TImportedUzfList = TObjectList<TImportedUzf>;
 
+  THfbStressPeriod = class(TCustomBoundaryStressPeriod)
+    NHFB: Integer;
+    NODEN: TCIntArray;
+    NODEM: TCIntArray;
+    HYDCHR: TDoubleArray;
+  end;
 
+  THfbStressPeriods = TObjectList<THfbStressPeriod>;
+
+  TImportedHfb = class(TImportedPackage)
+    MAXHFB: Integer;
+    StressPeriods: THfbStressPeriods;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString);
+  end;
+
+  TMVRStressPeriod = class(TCustomBoundaryStressPeriod)
+    NMVR: Integer;
+    // can't get mname1 or pname1.
+    mname1: TAnsiStringArray;
+    pname1: TAnsiStringArray;
+    id1: TCIntArray;
+    // can't get mname2 or pname3.
+    mname2: TAnsiStringArray;
+    pname2: TAnsiStringArray;
+    id2: TCIntArray;
+    mvrtype: TCIntArray;
+    value: TDoubleArray;
+  end;
+
+  TMVRStressPeriods = TObjectList<TMVRStressPeriod>;
+
+  TImportedMVR = class(TImportedPackage)
+    MODELNAMES: Integer;
+    MAXMVR: Integer;
+    MAXPACKAGES: Integer;
+    // can't get mname or pname
+    mname: TAnsiStringArray;
+    pname: TAnsiStringArray;
+    StressPeriods: TMVRStressPeriods;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString);
+  end;
+
+  TCsubStressPeriod = class(TCustomBoundaryStressPeriod)
+    sig0: TDoubleArray;
+  end;
+
+  TCsubStressPeriods = TObjectList<TCsubStressPeriod>;
+
+  TImportedCsub = class(TCustomImportedBoundary)
+    GAMMAW: double;
+    BETA: double;
+    HEAD_BASED: Boolean;
+    INITIAL_PRECONSOLIDATION_HEAD: Integer;
+    NDELAYCELLS: Integer;
+    // 0 means COMPRESSION_INDICES is specified.
+    COMPRESSION_INDICES: Integer;
+    UPDATE_MATERIAL_PROPERTIES: Integer;
+    CELL_FRACTION: integer;
+//    SPECIFIED_INITIAL_INTERBED_STATE: integer;
+    SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS: integer;
+    SPECIFIED_INITIAL_DELAY_HEAD: Integer;
+    EFFECTIVE_STRESS_LAG: Integer;
+    NINTERBEDS: Integer;
+    MAXSIG0: Integer;
+    CG_SKE_CR: TDoubleArray;
+    CG_THETA: TDoubleArray;
+    SGM: TDoubleArray;
+    SGS: TDoubleArray;
+    // 0 means NODELAY
+    // >0 meand DELAY
+    cdelay: TCintArray;
+    pcs0: TDoubleArray;
+    // divide thick_frac by the cell thickness to get the fraction.
+    thick_frac: TDoubleArray;
+    rnb: TDoubleArray;
+    ssv_cc: TDoubleArray;
+    sse_cr: TDoubleArray;
+    theta: TDoubleArray;
+    kv: TDoubleArray;
+    h0: TDoubleArray;
+
+    StressPeriods: TCsubStressPeriods;
+    constructor Create(APackageName: AnsiString); override;
+    destructor Destroy; override;
+    procedure GetPackageValues(ModelName: AnsiString); override;
+  end;
 
 
   TImportedModel = class(TObject)
@@ -525,6 +612,9 @@ type
     ImportedSTO: TImportedStorage;
     ImportedIc: TImportedInitialConditions;
     ImportedBuy: TImportedBuy;
+    ImportedHfb: TImportedHfb;
+    ImportedMVR: TImportedMVR;
+    ImportedCsub: TImportedCsub;
     ImportedChdList: TImportedChdList;
     ImportedGhbList: TImportedGhbList;
     ImportedRivList: TImportedRivList;
@@ -547,6 +637,9 @@ type
     procedure UpdateSfr;
     procedure UpdateLak;
     procedure UpdateUzf;
+    procedure UpdateHfb;
+    procedure UpdateMvr;
+    procedure UpdateCsub;
     destructor Destroy; override;
   end;
 
@@ -3431,6 +3524,39 @@ begin
   end;
 end;
 
+function GetPackageBooleanArray(ModelName, PackageName, Variable: AnsiString): TLongBoolArray;
+var
+  VarName: AnsiString;
+begin
+  VarName := ModelName + '/' + PackageName +'/' + Variable;
+  if NameList.IndexOf(VarName) >= 0 then
+  begin
+    GetLogicalVariable(VarName, result);
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function GetPackageBoolean(ModelName, PackageName, Variable: AnsiString; Default: Boolean = False): Boolean;
+var
+  VarName: AnsiString;
+  Values: TLongBoolArray;
+//  Values: TCIntArray;
+begin
+  Values := GetPackageBooleanArray(ModelName, PackageName, Variable);
+  if Values <> nil then
+  begin
+    Assert(Length(Values) = 1);
+    result := Values[0];
+  end
+  else
+  begin
+    result := Default;
+  end;
+end;
+
 
 function GetNBOUND(ModelName, PackageName: AnsiString): Integer;
 var
@@ -4258,7 +4384,7 @@ begin
   for Index := 0 to Names.Count - 1 do
   begin
     VarName := AnsiString(Names[Index]);
-    WriteValues := Pos('BUY', VarName) > 0;
+    WriteValues := Pos('ATS', VarName) > 0;
 //    WriteValues := True;
     if not WriteValues then
     begin
@@ -5247,6 +5373,54 @@ begin
   end;
 end;
 
+function GetHfbPackage(ModelName: AnsiString; Packages: TPackages): TImportedHfb;
+var
+  PackageIndex: Integer;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'HFB6' then
+    begin
+      result := TImportedHfb.Create(Packages[PackageIndex].PackageName);
+      result.GetPackageValues(ModelName);
+      break;
+    end;
+  end;
+end;
+
+function GetMvrPackage(ModelName: AnsiString; Packages: TPackages): TImportedMvr;
+var
+  PackageIndex: Integer;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'MVR6' then
+    begin
+      result := TImportedMvr.Create(Packages[PackageIndex].PackageName);
+      result.GetPackageValues(ModelName);
+      break;
+    end;
+  end;
+end;
+
+function GetCsubPackage(ModelName: AnsiString; Packages: TPackages): TImportedCsub;
+var
+  PackageIndex: Integer;
+begin
+  result := nil;
+  for PackageIndex := 0 to Length(Packages) - 1 do
+  begin
+    if Packages[PackageIndex].PackageType = 'CSUB6' then
+    begin
+      result := TImportedCsub.Create(Packages[PackageIndex].PackageName);
+      result.GetPackageValues(ModelName);
+      break;
+    end;
+  end;
+end;
+
 function GetGhbPackages(ModelName: AnsiString; Packages: TPackages): TImportedGhbList;
 var
   PackageIndex: Integer;
@@ -5408,6 +5582,13 @@ begin
       ImportedModel.Packages);
     ImportedModel.ImportedBuy := GetBuy(ModelNames[ModelIndex],
       ImportedModel.Packages);
+    ImportedModel.ImportedHfb := GetHfbPackage(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedMvr := GetMvrPackage(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+    ImportedModel.ImportedCsub := GetCsubPackage(ModelNames[ModelIndex],
+      ImportedModel.Packages);
+
     ImportedModel.ImportedChdList := GetChdPackages(ModelNames[ModelIndex],
       ImportedModel.Packages);
     ImportedModel.ImportedGhbList := GetGhbPackages(ModelNames[ModelIndex],
@@ -5698,7 +5879,9 @@ begin
             ImportedModels[ModelIndex].UpdateSfr;
             ImportedModels[ModelIndex].UpdateLak;
             ImportedModels[ModelIndex].UpdateUzf;
-
+            ImportedModels[ModelIndex].UpdateHfb;
+            ImportedModels[ModelIndex].UpdateMvr;
+            ImportedModels[ModelIndex].UpdateCsub;
           end;
         end;
 
@@ -6181,6 +6364,10 @@ begin
   ImportedDis.Free;
   ImportedNpf.Free;
   ImportedIms.Free;
+  ImportedBuy.Free;
+  ImportedHfb.Free;
+  ImportedMVR.Free;
+  ImportedCsub.Free;
   inherited;
 end;
 
@@ -6236,6 +6423,32 @@ begin
           Writeln;
         end;
       end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateCsub;
+var
+  StressPeriod: TCsubStressPeriod;
+  CellIndex: Integer;
+  MfCell: TMfCell;
+begin
+  if ImportedCsub <> nil then
+  begin
+    StressPeriod := TCsubStressPeriod.Create;
+    ImportedCsub.StressPeriods.Add(StressPeriod);
+    StressPeriod.NBOUND := GetNBOUND(ModelName, ImportedCsub.PackageName);
+    StressPeriod.NodeList := GetPackageIntArray(ModelName, ImportedCsub.PackageName, 'NODELISTSIG0');
+    StressPeriod.sig0 := GetPackageDoubleArray(ModelName, ImportedCsub.PackageName, 'SIG0');
+
+    for CellIndex := 0 to Length(StressPeriod.NodeList) - 1 do
+    begin
+      GetCell(StressPeriod.NodeList[CellIndex], ImportedDis.MFGridShape, ImportedDis.IDomain, MfCell);
+      Writeln(StressPeriod.NodeList[CellIndex],
+        ' ', MfCell.Layer,
+        ' ', MfCell.Row,
+        ' ', MfCell.Column,
+        ' ', StressPeriod.sig0[CellIndex]);
     end;
   end;
 end;
@@ -6434,6 +6647,42 @@ begin
   end;
 end;
 
+procedure TImportedModel.UpdateHfb;
+var
+  CellIndex: Integer;
+//  MfCell: TMfCell;
+  AIndex: Integer;
+  StressPeriod: THfbStressPeriod;
+  MfCell1: TMfCell;
+  MfCell2: TMfCell;
+begin
+  if ImportedHfb <> nil then
+  begin
+    StressPeriod := THfbStressPeriod.Create;
+    ImportedHfb.StressPeriods.Add(StressPeriod);
+    StressPeriod.NHFB := GetPackageInteger(ModelName, ImportedHfb.PackageName, 'NHFB');
+    StressPeriod.NODEN := GetPackageIntArray(ModelName, ImportedHfb.PackageName, 'NODEN');
+    StressPeriod.NODEM := GetPackageIntArray(ModelName, ImportedHfb.PackageName, 'NODEM');
+    StressPeriod.HYDCHR := GetPackageDoubleArray(ModelName, ImportedHfb.PackageName, 'HYDCHR');
+
+    if ImportedDis <> nil then
+    begin
+      for CellIndex := 0 to Length(StressPeriod.NODEN) - 1 do
+      begin
+        GetCell(StressPeriod.NODEN[CellIndex], ImportedDis.MFGridShape,
+          ImportedDis.IDomain, MfCell1);
+        GetCell(StressPeriod.NODEm[CellIndex], ImportedDis.MFGridShape,
+          ImportedDis.IDomain, MfCell2);
+        Writeln(StressPeriod.NODEM[CellIndex], ' ', MfCell1.Layer, ' ',
+          MfCell1.Row, ' ', MfCell1.Column,
+          ' ', StressPeriod.NODEM[CellIndex], ' ', MfCell2.Layer, ' ',
+          MfCell2.Row, ' ', MfCell2.Column,
+          ' ', StressPeriod.HYDCHR[CellIndex]);
+      end;
+    end;
+  end;
+end;
+
 procedure TImportedModel.UpdateLak;
 var
   AuxIndex: Integer;
@@ -6568,6 +6817,34 @@ begin
         end;
         Writeln;
       end;
+    end;
+  end;
+end;
+
+procedure TImportedModel.UpdateMvr;
+var
+  CellIndex: Integer;
+  AIndex: Integer;
+  StressPeriod: TMvrStressPeriod;
+  MfCell1: TMfCell;
+  MfCell2: TMfCell;
+begin
+  if ImportedMvr <> nil then
+  begin
+    StressPeriod := TMvrStressPeriod.Create;
+    ImportedMvr.StressPeriods.Add(StressPeriod);
+    StressPeriod.NMVR := GetPackageInteger(ModelName, ImportedMvr.PackageName, 'NMVR');
+    StressPeriod.id1 := GetPackageIntArray(ModelName, ImportedMvr.PackageName, 'ID1');
+    StressPeriod.id2 := GetPackageIntArray(ModelName, ImportedMvr.PackageName, 'ID2');
+    StressPeriod.mvrtype := GetPackageIntArray(ModelName, ImportedMvr.PackageName, 'IMVRTYPE');
+    StressPeriod.value := GetPackageDoubleArray(ModelName, ImportedMvr.PackageName, 'VALUE');
+
+    for CellIndex := 0 to Length(StressPeriod.id1) - 1 do
+    begin
+      Writeln(StressPeriod.id1[CellIndex],
+        ' ', StressPeriod.id2[CellIndex],
+        ' ', StressPeriod.mvrtype[CellIndex],
+        ' ', StressPeriod.value[CellIndex]);
     end;
   end;
 end;
@@ -7311,6 +7588,91 @@ begin
   NRHOSPECIES := GetPackageInteger(ModelName, PackageName, 'NRHOSPECIES');
   DRHODC := GetPackageDoubleArray(ModelName, PackageName, 'DRHODC');
   CRHOREF := GetPackageDoubleArray(ModelName, PackageName, 'CRHOREF');
+end;
+
+{ TImportedHfb }
+
+constructor TImportedHfb.Create(APackageName: AnsiString);
+begin
+  inherited;
+  StressPeriods := THfbStressPeriods.Create;
+end;
+
+destructor TImportedHfb.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedHfb.GetPackageValues(ModelName: AnsiString);
+begin
+  MAXHFB := GetPackageInteger(ModelName, PackageName, 'MAXHFB');
+end;
+
+{ TImportedMVR }
+
+constructor TImportedMVR.Create(APackageName: AnsiString);
+begin
+  inherited;
+  StressPeriods := TMVRStressPeriods.Create;
+end;
+
+destructor TImportedMVR.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedMVR.GetPackageValues(ModelName: AnsiString);
+begin
+  MODELNAMES := GetPackageInteger(ModelName, PackageName, 'IMODELNAMES');
+  MAXMVR := GetPackageInteger(ModelName, PackageName, 'MAXMVR');
+  MAXPACKAGES := GetPackageInteger(ModelName, PackageName, 'MAXPACKAGES');
+end;
+
+{ TImportedCsub }
+
+constructor TImportedCsub.Create(APackageName: AnsiString);
+begin
+  inherited;
+  StressPeriods := TCsubStressPeriods.Create;
+end;
+
+destructor TImportedCsub.Destroy;
+begin
+  StressPeriods.Free;
+  inherited;
+end;
+
+procedure TImportedCsub.GetPackageValues(ModelName: AnsiString);
+begin
+  inherited;
+  GAMMAW := GetPackageDouble(ModelName, PackageName, 'GAMMAW', 9806.65);
+  BETA := GetPackageDouble(ModelName, PackageName, 'BETA', 4.6512e-10);
+  HEAD_BASED := GetPackageBoolean(ModelName, PackageName, 'LHEAD_BASED');
+  INITIAL_PRECONSOLIDATION_HEAD := GetPackageInteger(ModelName, PackageName, 'IPCH');
+  NDELAYCELLS := GetPackageInteger(ModelName, PackageName, 'NDELAYCELLS');
+  COMPRESSION_INDICES := GetPackageInteger(ModelName, PackageName, 'ISTORAGEC');
+  UPDATE_MATERIAL_PROPERTIES := GetPackageInteger(ModelName, PackageName, 'IUPDATEMATPROP');
+  CELL_FRACTION := GetPackageInteger(ModelName, PackageName, 'ICELLF');
+  SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS := GetPackageInteger(ModelName, PackageName, 'ISPECIFIED_PCS');
+  SPECIFIED_INITIAL_DELAY_HEAD := GetPackageInteger(ModelName, PackageName, 'ISPECIFIED_DBH');
+  EFFECTIVE_STRESS_LAG := GetPackageInteger(ModelName, PackageName, 'IESLAG');
+  NINTERBEDS := GetPackageInteger(ModelName, PackageName, 'NINTERBEDS');
+  MAXSIG0 := GetPackageInteger(ModelName, PackageName, 'MAXSIG0');
+  CG_SKE_CR := GetPackageDoubleArray(ModelName, PackageName, 'CG_SKE_CR');
+  CG_THETA := GetPackageDoubleArray(ModelName, PackageName, 'CG_THETAINI');
+  SGM := GetPackageDoubleArray(ModelName, PackageName, 'SGM');
+  SGS := GetPackageDoubleArray(ModelName, PackageName, 'SGS');
+  cdelay := GetPackageIntArray(ModelName, PackageName, 'IDELAY');
+  pcs0 := GetPackageDoubleArray(ModelName, PackageName, 'PCS');
+  thick_frac := GetPackageDoubleArray(ModelName, PackageName, 'THICKINI');
+  rnb := GetPackageDoubleArray(ModelName, PackageName, 'RNB');
+  ssv_cc := GetPackageDoubleArray(ModelName, PackageName, 'CI');
+  sse_cr := GetPackageDoubleArray(ModelName, PackageName, 'RCI');
+  theta := GetPackageDoubleArray(ModelName, PackageName, 'THETAINI');
+  kv := GetPackageDoubleArray(ModelName, PackageName, 'KV');
+  h0 := GetPackageDoubleArray(ModelName, PackageName, 'H0');
 end;
 
 initialization

@@ -110,6 +110,8 @@ resourcestring
 
 const NonOutletTabs = 4;
 
+var
+  ViscosityColumn: Integer = Ord(lcDensity);
 
 {$R *.dfm}
 
@@ -257,8 +259,10 @@ var
   DensityUsed: Boolean;
   IgnoredNames: TStringList;
   FrameIndex: Integer;
+  ViscosityUsed: Boolean;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
   FGettingData := True;
   try
     FreeAndNil(FOtherLakes);
@@ -273,6 +277,16 @@ begin
     begin
       rdgModflowBoundary.ColCount := 9;
     end;
+
+    if ViscosityUsed then
+    begin
+      rdgModflowBoundary.ColCount := rdgModflowBoundary.ColCount + 1;
+      ViscosityColumn := rdgModflowBoundary.ColCount -1;
+      rdgModflowBoundary.Columns[ViscosityColumn] :=
+        rdgModflowBoundary.Columns[Ord(lcWithdrawal)];
+      rdgModflowBoundary.Cells[ViscosityColumn, 0] := StrViscosity;
+    end;
+
     ClearGrid(rdgModflowBoundary);
     seNumberOfTimes.AsInteger := 0;
     seNumberOfTimesChange(seNumberOfTimes);
@@ -299,6 +313,11 @@ begin
     begin
       PestMethod[Ord(lcDensity)] :=
         TLakeMf6.DefaultBoundaryMethod(LakeDensityPosition);
+    end;
+    if ViscosityUsed then
+    begin
+      PestMethod[ViscosityColumn] :=
+        TLakeMf6.DefaultBoundaryMethod(LakeViscosityPosition);
     end;
 
     ClearGrid(frameLakeTable.Grid);
@@ -379,6 +398,11 @@ begin
             PestModifier[Ord(lcDensity)] := ALake.PestDensityFormula;
             PestMethod[Ord(lcDensity)] := ALake.PestDensityMethod;
           end;
+          if ViscosityUsed then
+          begin
+            PestModifier[ViscosityColumn] := ALake.PestViscosityFormula;
+            PestMethod[ViscosityColumn] := ALake.PestViscosityMethod;
+          end;
 
           seNumberOfTimes.AsInteger := ALake.Values.Count;
           for TimeIndex := 0 to ALake.Values.Count - 1 do
@@ -401,6 +425,14 @@ begin
                 ALakeItem.Density.Add;
               end;
               rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset] := ALakeItem.Density[0].Value;
+            end;
+            if ViscosityUsed then
+            begin
+              if ALakeItem.Viscosity.Count < 1 then
+              begin
+                ALakeItem.Viscosity.Add;
+              end;
+              rdgModflowBoundary.Cells[ViscosityColumn, TimeIndex+1+PestRowOffset] := ALakeItem.Viscosity[0].Value;
             end;
           end;
 
@@ -483,6 +515,18 @@ begin
             if ALake.PestDensityMethod <> FirstLake.PestDensityMethod then
             begin
               PestMethodAssigned[Ord(lcDensity)] := False;
+            end;
+          end;
+
+          if ViscosityUsed then
+          begin
+            if ALake.PestViscosityFormula <> FirstLake.PestViscosityFormula then
+            begin
+              PestModifierAssigned[ViscosityColumn] := False
+            end;
+            if ALake.PestViscosityMethod <> FirstLake.PestViscosityMethod then
+            begin
+              PestMethodAssigned[ViscosityColumn] := False;
             end;
           end;
 
@@ -804,8 +848,10 @@ var
   IgnoredNames: TStringList;
   FrameIndex: Integer;
   SpeciesName: string;
+  ViscosityUsed: Boolean;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
   LakeTimes := nil;
   Outlets := nil;
   ListOfScreenObjects := TList.Create;
@@ -917,6 +963,14 @@ begin
                 end;
                 ALakeItem.Density[0].Value := rdgModflowBoundary.Cells[Ord(lcDensity), TimeIndex+1+PestRowOffset];
               end;
+              if ViscosityUsed then
+              begin
+                if ALakeItem.Viscosity.Count < 1 then
+                begin
+                  ALakeItem.Viscosity.Add;
+                end;
+                ALakeItem.Viscosity[0].Value := rdgModflowBoundary.Cells[ViscosityColumn, TimeIndex+1+PestRowOffset];
+              end;
             end;
           end;
         end;
@@ -1017,6 +1071,18 @@ begin
           if PestMethodAssigned[Ord(lcDensity)] then
           begin
             ALake.PestDensityMethod := PestMethod[Ord(lcDensity)];
+          end;
+        end;
+
+        if ViscosityUsed then
+        begin
+          if PestModifierAssigned[ViscosityColumn] then
+          begin
+            ALake.PestViscosityFormula := PestModifier[ViscosityColumn];
+          end;
+          if PestMethodAssigned[ViscosityColumn] then
+          begin
+            ALake.PestViscosityMethod := PestMethod[ViscosityColumn];
           end;
         end;
 
