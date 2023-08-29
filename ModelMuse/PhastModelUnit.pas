@@ -10049,6 +10049,10 @@ const
 //    '5.1.1.37' Bug fixed: Fixed bug in Mf2005ObsExtractor that caused simulated
 //                from the HOB package to be incorrectly read as zero.
 
+//               Bug fix: Switching from a MODFLOW-NWT to a MODFLOW-OWHM model
+//                no longer results in the NWT and UPW packages being
+//                deactivated.
+
 //               Enhancement Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
@@ -13505,9 +13509,9 @@ begin
       else Assert(False);
     end;
     if (FModelSelection in [msModflow, msModflowLgr, msModflowLGR2,
-      msModflowFmp, msModflowCfp
+      {msModflowFmp,} msModflowCfp
       {$IFDEF OWHMV2}
-      , msModflowOwhm2
+//      , msModflowOwhm2
       {$ENDIF}
       ]) then
     begin
