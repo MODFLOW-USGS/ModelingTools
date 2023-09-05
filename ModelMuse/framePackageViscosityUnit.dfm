@@ -8,48 +8,49 @@ inherited framePackageViscosity: TframePackageViscosity
     524)
   object lblRefViscosity: TLabel [2]
     Left = 176
-    Top = 208
-    Width = 153
+    Top = 218
+    Width = 100
     Height = 15
     Caption = 'Reference viscosity'
   end
   object lblThermalSpecies: TLabel [3]
     Left = 176
-    Top = 236
-    Width = 177
+    Top = 246
+    Width = 84
     Height = 15
     Caption = 'Thermal species'
   end
   object lblThermalFormulation: TLabel [4]
     Left = 176
-    Top = 267
+    Top = 277
     Width = 109
     Height = 15
     Caption = 'Thermal formulation'
   end
   object lblThermalA2: TLabel [5]
     Left = 176
-    Top = 296
-    Width = 109
+    Top = 306
+    Width = 60
     Height = 15
     Caption = 'Thermal A2'
   end
   object lblThermalA3: TLabel [6]
     Left = 176
-    Top = 324
-    Width = 109
+    Top = 334
+    Width = 60
     Height = 15
     Caption = 'Thermal A3'
   end
   object lblThermalA4: TLabel [7]
     Left = 176
-    Top = 352
-    Width = 109
+    Top = 362
+    Width = 60
     Height = 15
     Caption = 'Thermal A4'
   end
   inherited memoComments: TMemo
     Width = 684
+    ExplicitWidth = 684
   end
   object cbSpecifyViscosity: TCheckBox [9]
     Left = 16
@@ -62,7 +63,7 @@ inherited framePackageViscosity: TframePackageViscosity
   end
   object rdeRefViscosity: TRbwDataEntry [10]
     Left = 16
-    Top = 205
+    Top = 215
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -85,7 +86,7 @@ inherited framePackageViscosity: TframePackageViscosity
   end
   object comboThermalSpecies: TComboBox [12]
     Left = 16
-    Top = 233
+    Top = 243
     Width = 145
     Height = 23
     Style = csDropDownList
@@ -94,7 +95,7 @@ inherited framePackageViscosity: TframePackageViscosity
   end
   object comboThermalFormulation: TComboBox [13]
     Left = 16
-    Top = 264
+    Top = 274
     Width = 145
     Height = 23
     Style = csDropDownList
@@ -106,7 +107,7 @@ inherited framePackageViscosity: TframePackageViscosity
   end
   object rdeThermalA2: TRbwDataEntry [14]
     Left = 16
-    Top = 293
+    Top = 303
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -120,7 +121,7 @@ inherited framePackageViscosity: TframePackageViscosity
   end
   object rdeThermalA3: TRbwDataEntry [15]
     Left = 16
-    Top = 321
+    Top = 331
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -134,7 +135,7 @@ inherited framePackageViscosity: TframePackageViscosity
   end
   object rdeThermalA4: TRbwDataEntry [16]
     Left = 16
-    Top = 349
+    Top = 359
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -148,9 +149,9 @@ inherited framePackageViscosity: TframePackageViscosity
   end
   object rdgChemViscosity: TRbwDataGrid4 [17]
     Left = 0
-    Top = 375
+    Top = 384
     Width = 715
-    Height = 149
+    Height = 140
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     ColCount = 3
@@ -240,7 +241,6 @@ inherited framePackageViscosity: TframePackageViscosity
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitTop = 373
   end
   inherited rcSelectionController: TRbwController
     ControlList = <

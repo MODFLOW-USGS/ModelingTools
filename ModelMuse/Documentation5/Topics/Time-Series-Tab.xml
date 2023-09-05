@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-01T13:35:19.529-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" modified="2023-09-05T13:14:57.221-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Time Series Tab</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Time Series Tab</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Time Series tab is used for specifying MODFLOW 6 Time Series. It differs from time series defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Time_Series_Dialog_Box" styleclass="Strong" translate="true">Time Series</link><text styleclass="Normal" translate="true"> dialog box in that formulas can be used to specify individual values in the series. These time series can be used for many transient data in MODFLOW 6 such as well pumping rates. These formulas in the time series will be evaluated at each location at which the time series is used when exporting the MODFLOW 6 input files and will result in a separate time series for each location. Thus use of these &quot;dynamic&quot; time series can result in a large number of time series being defined in the MODFLOW 6 input files. Limited testing with MODFLOW 6 version 6.4.1 indicates that with 10,000 time series, MODFLOW 6 execution time is not greatly affected but that with 100,000 time series MODFLOW 6 execution time is slowed substantially. The use of &quot;static&quot; time series defined in the &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Time_Series_Dialog_Box" styleclass="Strong" translate="true">Time Series</link><text styleclass="Normal" translate="true"> dialog box does not result in the proliferation of times series in the MODFLOW input files. Thus, static time series do not affect execution time substantially when used at multiple locations.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">See the help for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Time_Series_Dialog_Box" styleclass="Strong" translate="true">Time Series</link><text styleclass="Normal" translate="true"> dialog box for more explanations about time series.</text></para>
+    <para styleclass="Normal"><snippet src="Time-Series-Properties" inline="false"/></para>
   </body>
 </topic>

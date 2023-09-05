@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-06T14:03:04.046-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-05T17:02:49.007-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Root Depth in LAND_USE: Farm Process V4 Land Use Options</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Root Depth in LAND_USE: Farm Process V4 Land Use Options</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">ROOT_DEPTH &#160;is &#160;the crop root depth below land surface. If specified, it must be &gt; 0.0 unless </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Groundwater-Root-Interaction-P" styleclass="Normal" translate="true">GROUNDWATER_ROOT_INTERACTION</link><text styleclass="Normal" translate="true"> = 0 or 1</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ROOT_DEPTH  is  the crop root depth below land surface. If specified, it must be &gt; 0.0 unless </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Groundwater-Root-Interaction-P" styleclass="Normal" translate="true">GROUNDWATER_ROOT_INTERACTION</link><text styleclass="Normal" translate="true"> = 0 or 1</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

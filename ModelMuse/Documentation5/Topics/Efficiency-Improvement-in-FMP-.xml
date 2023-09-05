@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-06T12:38:09.608-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-05T17:02:48.943-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Efficiency Improvement in FMP: Farm Process V4</title>
   <body>
     <header>
@@ -11,7 +11,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">EFFICIENCY_IMPROVEMENT is a flag to indicate if efficiency improvement is allowed.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">False</text><text styleclass="Normal" translate="true"> - Efficiency remains the same, crop transpiration reduced due to supply shortfall</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">True</text><text styleclass="Normal" translate="true"> - Efficiency improves until it reaches 1.0, then crop transpiration reduced</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified, EFFICIENCY_IMPROVEMENT is automatically set to 0, so OFE is held constant based on user input.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified, EFFICIENCY_IMPROVEMENT is automatically set to False, so OFE is held constant based on user input.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

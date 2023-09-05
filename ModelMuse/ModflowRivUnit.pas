@@ -508,11 +508,11 @@ begin
   result := 3;
   if GwtConcentrations <> nil then
   begin
-    if (Model <> nil) and (Model.GwtUsed or (Model as TCustomModel).BuoyancyDensityUsed) then
+    if (Model <> nil) and Model.GwtUsed then
     begin
       GwtConcentrations.Count := (Model as TCustomModel).MobileComponents.Count;
     end;
-    if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.BuoyancyDensityUsed then
+    if frmGoPhast.PhastModel.GwtUsed then
     begin
       result := result + GwtConcentrations.Count;
     end;
@@ -847,7 +847,7 @@ begin
 
   AllowedIndicies := [RivStagePosition,RivConductancePosition, RivBottomPosition];
   LocalModel := AModel as TCustomModel;
-  if LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed then
+  if LocalModel.GwtUsed then
   begin
     for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
     begin
@@ -1062,7 +1062,7 @@ var
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TRivStorage).FRivArray, BoundaryCount);
   LocalModel := Model as TCustomModel;
-  if LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed then
+  if LocalModel.GwtUsed then
   begin
     for Index := 0 to BoundaryCount - 1 do
     begin
@@ -1743,7 +1743,7 @@ begin
   FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
   FPestRiverBottomFormula := CreateFormulaObjectBlocks(dso3D);
   LocalModel := ParentModel as TPhastModel;
-  if (LocalModel <> nil) and (LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed) then
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
   begin
     for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
     begin
@@ -2676,7 +2676,7 @@ begin
   AddTimeList(FRiverBottomData);
 
   PhastModel := frmGoPhast.PhastModel;
-  if PhastModel.GwtUsed or PhastModel.BuoyancyDensityUsed then
+  if PhastModel.GwtUsed then
   begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
@@ -2709,7 +2709,7 @@ var
   SpeciesIndex: Integer;
 begin
   LocalModel := Model as TCustomModel;
-  if LocalModel.GwtUsed or LocalModel.BuoyancyDensityUsed then
+  if LocalModel.GwtUsed then
   begin
     for SpeciesIndex := FConcList.Count to
       LocalModel.MobileComponents.Count - 1 do

@@ -30172,7 +30172,7 @@ end;
 procedure TViscosityPackage.InitializeVariables;
 begin
   inherited;
-  RefViscosity := 1;
+  RefViscosity := 8.904E-04;
   ThermalA2 := 10;
   ThermalA3 := 248.37;
   ThermalA4 := 133.15;

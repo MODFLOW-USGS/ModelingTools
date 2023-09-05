@@ -3682,6 +3682,12 @@ begin
 end;
 
 procedure TfrmModflowPackages.EnableChemSpecies;
+var
+  IgnoredNames: TStringList;
+  RowIndex: Integer;
+  FoundASpecies: Boolean;
+  AName: string;
+  LastRow: Integer;
 begin
   frameChemSpecies.frameGridMobile.Enabled :=
     frameGwtProcess.rcSelectionController.Enabled
@@ -3690,23 +3696,54 @@ begin
     framePkgMt3dBasic.rcSelectionController.Enabled;
   if IsLoaded and frameChemSpecies.frameGridMobile.Enabled then
   begin
-    if (frameChemSpecies.frameGridMobile.seNumber.AsInteger = 0) then
-    begin
-      frameChemSpecies.frameGridMobile.seNumber.AsInteger := 1;
-      if Assigned(frameChemSpecies.frameGridMobile.seNumber.OnChange) then
+    IgnoredNames := TStringList.Create;
+    try
+      FillIgnoredNames(IgnoredNames, False);
+      if (frameChemSpecies.frameGridMobile.seNumber.AsInteger = 0) then
       begin
-        frameChemSpecies.frameGridMobile.seNumber.OnChange(Self)
-      end;
-    end;
-    if (frameChemSpecies.frameGridMobile.Grid.Cells[0,1] = '') then
-    begin
-      frameChemSpecies.frameGridMobile.Grid.Cells[0,1] := 'Chem';
-      if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+        frameChemSpecies.frameGridMobile.seNumber.AsInteger := 1;
+        if Assigned(frameChemSpecies.frameGridMobile.seNumber.OnChange) then
+        begin
+          frameChemSpecies.frameGridMobile.seNumber.OnChange(Self)
+        end;
+      end
+      else if IgnoredNames.Count > 0 then
       begin
-        frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, 1,  'Chem');
+        FoundASpecies := False;
+        for RowIndex := 1 to frameChemSpecies.frameGridMobile.Grid.RowCount - 1 do
+        begin
+          AName := frameChemSpecies.frameGridMobile.Grid.Cells[0,RowIndex];
+          if (AName <> '') and (IgnoredNames.IndexOf(AName) < 0) then
+          begin
+            FoundASpecies := True;
+            break;
+          end;
+        end;
+        if not FoundASpecies then
+        begin
+          frameChemSpecies.frameGridMobile.seNumber.AsInteger :=
+            frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1;
+          if Assigned(frameChemSpecies.frameGridMobile.seNumber.OnChange) then
+          begin
+            frameChemSpecies.frameGridMobile.seNumber.OnChange(Self)
+          end;
+        end;
       end;
+
+      LastRow := frameChemSpecies.frameGridMobile.Grid.RowCount -1;
+      Assert(LastRow >= 1);
+      if (frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] = '') then
+      begin
+        frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] := 'Chem';
+        if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+        begin
+          frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, LastRow,  'Chem');
+        end;
+      end;
+      UpdateGwtFrames;
+    finally
+      IgnoredNames.Free;
     end;
-    UpdateGwtFrames;
   end;
 end;
 

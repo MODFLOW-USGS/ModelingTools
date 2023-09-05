@@ -9,9 +9,9 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
   object lblRefDensity: TLabel [2]
     Left = 176
     Top = 231
-    Width = 93
+    Width = 249
     Height = 15
-    Caption = 'Reference density'
+    Caption = 'Reference density (denseref)'
   end
   inherited memoComments: TMemo
     Width = 684
@@ -138,7 +138,6 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitHeight = 10
   end
   object rdeRefDensity: TRbwDataEntry [8]
     Left = 16

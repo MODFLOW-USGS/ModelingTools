@@ -191,7 +191,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
       object cbRecordPipes: TCheckBox
         Left = 3
         Top = 3
-        Width = 401
+        Width = 531
         Height = 17
         Caption = 'Save conduit flow rates and Reynolds numbers (PIPE_NUMBERS)'
         TabOrder = 0
@@ -200,7 +200,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
       object cbRecordNodes: TCheckBox
         Left = 3
         Top = 26
-        Width = 366
+        Width = 531
         Height = 17
         Caption = 'Save flow and head values at nodes (NODE_NUMBERS)'
         TabOrder = 1
@@ -209,7 +209,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
       object cbRecordTimeSeriesPipes: TCheckBox
         Left = 3
         Top = 49
-        Width = 478
+        Width = 531
         Height = 17
         Caption = 'Record all input and output terms for pipes (TSAT_TUBE_NUMBERS)'
         TabOrder = 2
@@ -218,7 +218,7 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
       object cbRecordTimeSeriesNodes: TCheckBox
         Left = 3
         Top = 72
-        Width = 502
+        Width = 531
         Height = 17
         Caption = 'Record all input and output terms for nodes (TSAT_NTS)'
         TabOrder = 3

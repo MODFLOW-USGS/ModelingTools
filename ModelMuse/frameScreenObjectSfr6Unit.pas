@@ -302,8 +302,10 @@ var
   DensityUsed: Boolean;
   IgnoredNames: TStringList;
   FrameIndex: Integer;
+  ViscosityUsed: Boolean;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
 
   Changing := True;
   tabDownstreamSegments.TabVisible := True;
@@ -395,6 +397,19 @@ begin
               end;
               PestMethod[rdgModflowBoundary, Ord(BuoyancyColumn)] := Sf6Boundary.PestDensityMethods[0].PestParamMethod;
             end;
+            if ViscosityUsed then
+            begin
+              if Sf6Boundary.PestViscosity.Count = 0 then
+              begin
+                Sf6Boundary.PestViscosity.Add
+              end;
+              PestModifier[rdgModflowBoundary, Ord(ViscosityColumn)] := Sf6Boundary.PestViscosity[0].Value;
+              if Sf6Boundary.PestViscosityMethods.Count = 0 then
+              begin
+                Sf6Boundary.PestViscosityMethods.Add;
+              end;
+              PestMethod[rdgModflowBoundary, Ord(ViscosityColumn)] := Sf6Boundary.PestViscosityMethods[0].PestParamMethod;
+            end;
 
             FirstBoundary := Sf6Boundary;
 
@@ -434,6 +449,16 @@ begin
                 end;
                 rdgModflowBoundary.Cells[Ord(BuoyancyColumn), TimeIndex+1+PestRowOffset]
                   := Sfr6Item.Density[0].Value;
+              end;
+
+              if ViscosityUsed then
+              begin
+                if Sfr6Item.Viscosity.Count = 0 then
+                begin
+                  Sfr6Item.Viscosity.Add;
+                end;
+                rdgModflowBoundary.Cells[Ord(ViscosityColumn), TimeIndex+1+PestRowOffset]
+                  := Sfr6Item.Viscosity[0].Value;
               end;
 
               for DiverIndex := 0 to Sfr6Item.Diversions.Count - 1 do
@@ -514,6 +539,18 @@ begin
               if not Sf6Boundary.PestDensityMethods.IsSame(FirstBoundary.PestDensityMethods) then
               begin
                 PestMethodAssigned[rdgModflowBoundary, Ord(BuoyancyColumn)] := False;
+              end;
+            end;
+
+            if ViscosityUsed then
+            begin
+              if not Sf6Boundary.PestViscosity.IsSame(FirstBoundary.PestViscosity) then
+              begin
+                PestModifierAssigned[rdgModflowBoundary, Ord(ViscosityColumn)] := False;
+              end;
+              if not Sf6Boundary.PestViscosityMethods.IsSame(FirstBoundary.PestViscosityMethods) then
+              begin
+                PestMethodAssigned[rdgModflowBoundary, Ord(ViscosityColumn)] := False;
               end;
             end;
 
@@ -677,7 +714,7 @@ begin
 
     if ViscosityUsed then
     begin
-      rdgModflowBoundary.ColCount := + 1;
+      rdgModflowBoundary.ColCount := rdgModflowBoundary.ColCount + 1;
       FViscosityOffset := 1;
       ViscosityColumn := Ord(BuoyancyColumn) + FBuoyancyOffset;
       rdgModflowBoundary.Cells[ViscosityColumn, 0] := StrViscosity;
@@ -693,6 +730,10 @@ begin
     if DensityUsed then
     begin
       PestMethod[rdgModflowBoundary, Ord(BuoyancyColumn)] := ppmMultiply;
+    end;
+    if ViscosityUsed then
+    begin
+      PestMethod[rdgModflowBoundary, Ord(ViscosityColumn)] := ppmMultiply;
     end;
 
     rdgModflowBoundary.Cells[Ord(s6cStartTime),0] := StrStartingTime;
@@ -1155,8 +1196,11 @@ var
   IgnoredNames: TStringList;
   FrameIndex: Integer;
   SpeciesName: string;
+  ViscosityUsed: Boolean;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
+  ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
+
   for Index := 0 to List.Count - 1 do
   begin
     Item := List.Items[Index];
@@ -1327,6 +1371,26 @@ begin
           end;
         end;
 
+        if ViscosityUsed then
+        begin
+          if PestModifierAssigned[rdgModflowBoundary, Ord(ViscosityColumn)] then
+          begin
+            if Boundary.PestViscosity.Count = 0 then
+            begin
+              Boundary.PestViscosity.Add
+            end;
+            Boundary.PestViscosity[0].Value := PestModifier[rdgModflowBoundary, Ord(ViscosityColumn)];
+          end;
+          if PestMethodAssigned[rdgModflowBoundary, Ord(ViscosityColumn)] then
+          begin
+            if Boundary.PestViscosityMethods.Count = 0 then
+            begin
+              Boundary.PestViscosityMethods.Add;
+            end;
+            Boundary.PestViscosityMethods[0].PestParamMethod := PestMethod[rdgModflowBoundary, Ord(ViscosityColumn)];
+          end;
+        end;
+
         if not FValuesCleared then
         begin
           Boundary.Values.Count := seNumberOfTimes.AsInteger;
@@ -1379,6 +1443,16 @@ begin
               end;
               Sfr6Item.Density[0].Value :=
                 rdgModflowBoundary.Cells[Ord(BuoyancyColumn), TimeIndex+1+PestRowOffset];
+            end;
+
+            if ViscosityUsed then
+            begin
+              if Sfr6Item.Viscosity.Count = 0 then
+              begin
+                Sfr6Item.Viscosity.Add;
+              end;
+              Sfr6Item.Viscosity[0].Value :=
+                rdgModflowBoundary.Cells[Ord(ViscosityColumn), TimeIndex+1+PestRowOffset];
             end;
 
             if tabDiversions.TabVisible then

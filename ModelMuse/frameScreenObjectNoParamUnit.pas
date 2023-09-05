@@ -201,19 +201,22 @@ begin
     for Index := 0 to Boundary.Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
       ColIndex := FLastTimeColumn+1+Index;
-      TimeList := Boundary.Values.TimeLists[Index, frmGoPhast.PhastModel];
-      if Index = ConductanceColumn then
+      if ColIndex < rdgModflowBoundary.ColCount then
       begin
-        rdgModflowBoundary.Cells[ColIndex, 0] :=
-          ConductanceCaption(TimeList.NonParamDescription);
-      end
-      else
-      begin
-        rdgModflowBoundary.Cells[ColIndex, 0] := TimeList.NonParamDescription;
+        TimeList := Boundary.Values.TimeLists[Index, frmGoPhast.PhastModel];
+        if Index = ConductanceColumn then
+        begin
+          rdgModflowBoundary.Cells[ColIndex, 0] :=
+            ConductanceCaption(TimeList.NonParamDescription);
+        end
+        else
+        begin
+          rdgModflowBoundary.Cells[ColIndex, 0] := TimeList.NonParamDescription;
+        end;
+        rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := False;
+        rdgModflowBoundary.ColWidths[ColIndex] :=
+          rdgModflowBoundary.WidthNeededToFitText(ColIndex,0);
       end;
-      rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := False;
-      rdgModflowBoundary.ColWidths[ColIndex] :=
-        rdgModflowBoundary.WidthNeededToFitText(ColIndex,0);
     end;
   end;
   rdgModflowBoundary.HideEditor;

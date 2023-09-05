@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4504</config-value>
+      <config-value name="autohelpstart">4507</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1976,6 +1976,7 @@ document.write('</frameset>');
       <helpcontext-number href="Time_Tab" value="2090"/>
       <helpcontext-number href="Time_Tab#ICALC" value="2100"/>
       <helpcontext-number href="Time_Units_Converter" value="3941"/>
+      <helpcontext-number href="Time-Series-Properties" value="4507"/>
       <helpcontext-number href="Time-Series-Tab" value="4425"/>
       <helpcontext-number href="Title_and_Units_Dialog_Box" value="2820"/>
       <helpcontext-number href="Title_Pane" value="3753"/>
@@ -2044,6 +2045,7 @@ document.write('</frameset>');
       <helpcontext-number href="Visualizing_Data#RunModelEx1" value="3010"/>
       <helpcontext-number href="Visualizing_Modified_Model_Inp" value="4228"/>
       <helpcontext-number href="Visualizing_Residuals" value="4289"/>
+      <helpcontext-number href="VSC-Viscosity-Package-Pane" value="4506"/>
       <helpcontext-number href="Water_Policy_Flags" value="3797"/>
       <helpcontext-number href="Water_Policy_Flags#IDEFFL" value="3820"/>
       <helpcontext-number href="Water_Rights" value="3807"/>
@@ -2114,6 +2116,7 @@ document.write('</frameset>');
       <file-mod href="FMP-List-and-Array-Options.xml"/>
       <file-mod href="CROP_LEACHING_REQUIREMENT-and-.xml"/>
       <file-mod href="Predefined-Variables-Salinity-.xml"/>
+      <file-mod href="Time-Series-Properties.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>

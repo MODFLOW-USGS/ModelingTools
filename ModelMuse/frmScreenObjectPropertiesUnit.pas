@@ -7525,22 +7525,12 @@ procedure TfrmScreenObjectProperties.SetModflowBoundaryColCount;
 var
   CropIrrigationRequirement: TCropIrrigationRequirement;
   MobileSpeciesCount: Integer;
-  DensityColCount: Integer;
 begin
   MobileSpeciesCount := GwtColumnCount;
-  if frmGoPhast.PhastModel.BuoyancyDensityUsed
-     and not frmGoPhast.PhastModel.GwtUsed then
-  begin
-    DensityColCount :=1;
-  end
-  else
-  begin
-    DensityColCount := 0
-  end;
   frameChdParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
-  frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount + DensityColCount;
+  frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
   frameWellParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
-  frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount + DensityColCount;
+  frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
   frameDrnParam.rdgModflowBoundary.ColCount := 4;
   frameDrtParam.rdgModflowBoundary.ColCount := 5;
   CropIrrigationRequirement :=
