@@ -1,15 +1,23 @@
 inherited frameScreenObjectMvr: TframeScreenObjectMvr
+  Width = 412
   Height = 439
+  ExplicitWidth = 412
   ExplicitHeight = 439
   inherited pnlTop: TPanel [0]
+    Width = 412
+    inherited pnlCaption: TPanel
+      Width = 410
+    end
   end
   inherited pnlGrid: TPanel [1]
     Top = 304
+    Width = 412
     Height = 135
     Align = alBottom
     ExplicitTop = 304
     ExplicitHeight = 135
     inherited pnlEditGrid: TPanel
+      Width = 410
       object lblMvrType: TLabel [1]
         Left = 199
         Top = 5
@@ -35,6 +43,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       end
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
+      Width = 410
       Height = 83
       ColCount = 4
       Columns = <
@@ -150,11 +159,12 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
   object pcMain: TPageControl [2]
     Left = 0
     Top = 25
-    Width = 320
+    Width = 412
     Height = 239
     ActivePage = tabConnections
     Align = alClient
     TabOrder = 2
+    ExplicitWidth = 320
     object tabConnections: TTabSheet
       Caption = 'Connections'
       ImageIndex = 1
@@ -188,7 +198,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         AlignWithMargins = True
         Left = 0
         Top = 64
-        Width = 312
+        Width = 404
         Height = 145
         Margins.Left = 0
         Margins.Top = 64
@@ -198,11 +208,11 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         TabOrder = 1
         ExplicitTop = 64
         ExplicitWidth = 312
-        ExplicitHeight = 147
+        ExplicitHeight = 145
         inherited Panel: TPanel
           Top = 104
-          Width = 312
-          ExplicitTop = 106
+          Width = 404
+          ExplicitTop = 104
           ExplicitWidth = 312
           inherited lbNumber: TLabel
             Width = 107
@@ -210,25 +220,25 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             ExplicitWidth = 107
           end
           inherited sbAdd: TSpeedButton
-            Left = 158
-            ExplicitLeft = 158
+            Left = 308
+            ExplicitLeft = 308
           end
           inherited sbInsert: TSpeedButton
-            Left = 188
+            Left = 337
             OnClick = frameReceiverssbInsertClick
-            ExplicitLeft = 188
+            ExplicitLeft = 337
           end
           inherited sbDelete: TSpeedButton
-            Left = 218
+            Left = 366
             OnClick = frameReceiverssbDeleteClick
-            ExplicitLeft = 218
+            ExplicitLeft = 366
           end
           inherited seNumber: TJvSpinEdit
             OnChange = frameReceiversseNumberChange
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 312
+          Width = 404
           Height = 104
           ColCount = 4
           OnSelectCell = frameReceiversGridSelectCell
@@ -354,12 +364,19 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
   end
   inherited pnlBottom: TPanel [3]
     Top = 264
+    Width = 412
     Height = 40
     TabOrder = 3
     ExplicitTop = 264
     ExplicitHeight = 40
     DesignSize = (
-      320
+      412
       40)
+    inherited btnDelete: TBitBtn
+      Left = 324
+    end
+    inherited btnInsert: TBitBtn
+      Left = 240
+    end
   end
 end

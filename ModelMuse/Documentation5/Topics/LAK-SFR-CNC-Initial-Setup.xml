@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-20T12:03:08.195-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T17:01:00.511-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">LAK SFR CNC: Initial Setup</title>
   <body>
     <header>
@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Start a new MODFLOW model and select &quot;Feet&quot; and &quot;Days&quot; as the length and time units respectively.</text></para>
     <para styleclass="Normal"><image src="LakSfrCncUnits.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Initial Grid dialog box illustrating the specification of the length and time units.</title><caption translate="true"><![CDATA[Screen capture of the Initial Grid dialog box illustrating the specification of the length and time units.]]></caption></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">After clicking &quot;Next&quot;, set the number of layers to 8 and set the top of the model to 100. The other elevations will be specified after the grid is created. Click the No Grid button to close the dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After clicking &quot;Next&quot;, set the number of layers to 8 and set the top of the model to 100. The other elevations will be specified after the grid is created. Click the </text><text styleclass="Strong" translate="true">No Grid</text><text styleclass="Normal" translate="true"> button to close the dialog box.</text></para>
     <para styleclass="Normal"><image src="LakSfrCncNoGrid.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Initial Grid dialog box illustrating specifying the number of layers and the elevation of the top of the model.</title><caption translate="true"><![CDATA[Screen capture of the Initial Grid dialog box illustrating specifying the number of layers and the elevation of the top of the model.]]></caption></image></para>
   </body>
 </topic>

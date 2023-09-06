@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-05-30T11:11:18.010-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T09:45:49.830-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">FMP: Farm Process Pane</title>
   <body>
     <header>
@@ -19,7 +19,7 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Mandatory Print Flags 2</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Optional_Print_Flags" styleclass="Normal" translate="true">Optional Print Flags</link></li>
     </list>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Farm Process simulates a variety of effects of Farms on groundwater and vice versa. For instance, some of the irrigation water applied to fields may contribute to recharge. On the other hand, farms may operate wells to supply irrigation water and may thus act as a sink for groundwater. If Irrigation water is supplied from streams (as simulated by the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Stream_Flow_Routing_Package" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> package), the flow in those streams will be decreased thus affecting availability of water to downstream users. In some places, such as some parts of the western United States, the right to divert water from a surface water source is governed by prior appropriation rules. The Farm process can simulate all of these effects.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Farm Process simulates a variety of effects of Land use (including but not limited to farms) on groundwater and vice versa. For instance, some of the irrigation water applied to fields may contribute to recharge. On the other hand, farms may operate wells to supply irrigation water and may thus act as a sink for groundwater. If Irrigation water is supplied from streams (as simulated by the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Stream_Flow_Routing_Package" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> package), the flow in those streams will be decreased thus affecting availability of water to downstream users. In some places, such as some parts of the western United States, the right to divert water from a surface water source is governed by prior appropriation rules. The Farm process can simulate these effects.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Farm Process </text></para>
     <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">estimates consumptive use of water by crops,</text></li>

@@ -471,6 +471,8 @@ resourcestring
   StrMT3DConcentrations = 'MT3D Concentrations can only be imported if MT3D ' +
   'is selected.';
   StrGWTConcentrationFi = 'GWT concentration files';
+  StrDensityFiles = 'Density files';
+  StrViscosityFiles = 'Viscosity files';
 
 {$R *.dfm}
 
@@ -3591,6 +3593,12 @@ begin
     FilterDescriptions.Add(StrGWTConcentrationFi);
     FileExtensions.Add(StrConc);
 
+    FilterDescriptions.Add(StrDensityFiles);
+    FileExtensions.Add(StrDensityExt);
+
+    FilterDescriptions.Add(StrViscosityFiles);
+    FileExtensions.Add(StrViscosityExt);
+
     FilterDescriptions.Add(StrFormattedHUFHeadF);
     FileExtensions.Add(StrHuffhd);
 
@@ -3729,9 +3737,6 @@ begin
 
     SubsidenceDescriptions.Add(StrCSUBZDisplacement);
     SubsidenceExtensions.Add(StrCsubzdis);
-
-
-
 
     odSelectFiles.Filter := StrCommonSupportedFil + Trim(FileExtensions[0]);
     for index := 1 to FileExtensions.Count - 1 do
@@ -5121,6 +5126,8 @@ begin
   if (SameText(Extension, StrBdn))
     or (SameText(Extension, StrBhd))
     or (SameText(Extension, StrConc))
+    or (SameText(Extension, StrDensityExt))
+    or (SameText(Extension, StrViscosityExt))
     then
   begin
     FResultFormat := mrBinary;

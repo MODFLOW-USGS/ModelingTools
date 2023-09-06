@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-21T10:56:36.895-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T12:10:39.314-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Water Balance Subregions Dialog Box</title>
   <body>
     <header>
@@ -10,10 +10,10 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the left is a list of water balance subregions identified by the Farm ID (</text><text styleclass="Strong" translate="true">FID</text><text styleclass="Normal" translate="true">) and an optional </text><text styleclass="Strong" translate="true">WBS name</text><text styleclass="Normal" translate="true">. The main part of the dialog box contains tabs each of which are used to define properties of a farm. Farms can be edited individually by selecting a single farm from the list on the left. Multiple farms can be edited by selecting more than one farm from the list on the left. If PEST is active, PEST parameters can be used define many of the land use properties</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This dialog box has several tabs that are used to define the properties of farms. Only those tabs that can be used in the current model will be visible.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM version 1</text></para>
-    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Name" styleclass="Normal" translate="true">Name</link><text styleclass="Normal" translate="true"> tab</text></li>
     </list>
-    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_Efficiencies" styleclass="Normal" translate="true">Crop Efficiencies</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Costs" styleclass="Normal" translate="true">Costs</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Non_Routed_Delivery" styleclass="Normal" translate="true">Non-Routed Delivery</link><text styleclass="Normal" translate="true"> tab</text></li>
@@ -23,7 +23,7 @@
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GW_Allocation_Tab" styleclass="Normal" translate="true">GW Allocation</link><text styleclass="Normal" translate="true"> tab</text></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM Version 2</text></para>
-    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Name" styleclass="Normal" translate="true">Name</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Irrigation-Efficiencies" styleclass="Normal" translate="true">Irrigation Efficiencies</link><text styleclass="Normal" translate="true"> tab</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Efficiency-Improvement" styleclass="Normal" translate="true">Efficiency Improvement</link><text styleclass="Normal" translate="true"> tab</text></li>

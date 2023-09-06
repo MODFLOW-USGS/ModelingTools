@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-21T14:14:48.027-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T17:01:00.696-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">LAK SFR CNC: Specify Lake Transport Observations</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Specify Lake Transport Observations</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Edit each Lake in the Object Properties dialog box. For Lake1, specify Lake transport observations of concentration, from MVR, and to MVR. For Lake2, only specify lake transport concentration.</text></para>
-    <para styleclass="Normal"><image src="LakSfrCncLktObs.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box illustrating the specification of lake transport observations.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box illustrating the specification of lake transport observations.]]></caption></image><text styleclass="Normal" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><image src="LakSfrCncLktObs.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the Object Properties dialog box illustrating the specification of lake transport observations.</title><caption translate="true"><![CDATA[Screen capture of the Object Properties dialog box illustrating the specification of lake transport observations.]]></caption></image><text styleclass="Normal" translate="true"> </text></para>
   </body>
 </topic>

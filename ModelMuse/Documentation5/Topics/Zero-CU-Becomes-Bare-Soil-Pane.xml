@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-02T15:09:19.057-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T10:53:20.886-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Zero CU Becomes Bare Soil Pane</title>
   <body>
     <header>
@@ -8,9 +8,9 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Given that:</text></para>
-    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">CF &#160; &#160;= </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Consumptive-Use-Pane" styleclass="Normal" translate="true">CONSUMPTIVE_USE</link></li>
-      <li styleclass="Normal"><text styleclass="Normal" translate="true">Kc &#160; &#160;= </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop-Coefficient-Pane" styleclass="Normal" translate="true">CROP_COEFFICIENT</link></li>
+    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">CF    = </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Consumptive-Use-Pane" styleclass="Normal" translate="true">CONSUMPTIVE_USE</link></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Kc    = </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop-Coefficient-Pane" styleclass="Normal" translate="true">CROP_COEFFICIENT</link></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">ETref = </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CLIMATE-Farm-Process-V4-Climat" anchor="REFERENCE_ET" styleclass="Normal" translate="true">REFERENCE_ET</link></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If the Potential Consumptive Use is CU = CF + Kc*ETref = 0,</text></para>

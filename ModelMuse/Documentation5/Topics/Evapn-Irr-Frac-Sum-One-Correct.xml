@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-02T15:14:56.743-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T10:53:20.890-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Evap Irr Frac Sum One Correction Pane</title>
   <body>
     <header>
@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION causes the FMP package to check if FEI needs to be corrected so FEI + FTR = 1 when FEI + FTR &gt; 1</text></para>
-    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">FEI = </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Irrigation-Pane" styleclass="Normal" translate="true">EVAPORATION_IRRIGATION_FRACTION</link></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">FTR = </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Transpiration-Fraction-Pane" styleclass="Normal" translate="true">TRANSPIRATION_FRACTION</link></li>
     </list>

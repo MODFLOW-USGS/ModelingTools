@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T12:04:49.363-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T12:10:08.214-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Efficiency Improvement</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Efficiency Improvement</text></para>
     </header>
-    <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text style="font-family:'Times New Roman'; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">When water supply does not meet demand the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Irrigation-Efficiencies" styleclass="Normal" translate="true">EFFICIENCY</link><text styleclass="Normal" translate="true"> (OFE) can improve to 1.0 or remain the same.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">EFFICIENCY_IMPROVEMENT is a flag to indicate if efficiency improvement is allowed.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">False - Efficiency remains the same, crop transpiration reduced due to supply shortfall</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">True - Efficiency improves until it reaches 1.0, then crop transpiration reduced</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified then automatically set to False, so OFE is held constant based on user input.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified, EFFICIENCY_IMPROVEMENT is automatically set to False, so OFE is held constant based on user input.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The efficiency improvement is specified for each irrigation type. Irrigation types are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm-Irrigation-Types--Dialog-" styleclass="Strong" translate="true">Farm Irrigation Types</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"></para>
   </body>

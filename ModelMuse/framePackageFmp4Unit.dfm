@@ -27,15 +27,16 @@ inherited framePackageFmp4: TframePackageFmp4
     HeaderFont.Style = []
     TabOrder = 1
     object cpnlWaterBalanceRegions: TCategoryPanel
-      Top = 462
-      Height = 377
+      Top = 460
+      Height = 376
       Caption = 'Water Balance Subregion Options (Farm Options)'
       TabOrder = 0
-      ExplicitWidth = 571
+      ExplicitTop = 478
+      ExplicitWidth = 550
       object rdgFarms: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 552
+        Width = 548
         Height = 351
         Align = alClient
         ColCount = 7
@@ -229,15 +230,143 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 548
+      end
+    end
+    object cpnlMnw2: TCategoryPanel
+      Top = 430
+      Height = 30
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'MNW2 Closure Criteria'
+      Collapsed = True
+      TabOrder = 1
+      ExplicitWidth = 550
+      ExpandedHeight = 242
+      object lblQClose: TLabel
+        Left = 93
+        Top = 103
+        Width = 547
+        Height = 37
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Caption = 
+          'Criterion for actual MNW pumping rate to converge to FMP pumping' +
+          ' requirement (QCLOSE) '
+        WordWrap = True
+      end
+      object lblHPCT: TLabel
+        Left = 93
+        Top = 159
+        Width = 565
+        Height = 19
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Caption = 
+          'Fraction of reduction of head-change closure criterion if QCLOSE' +
+          ' was not met (HPCT)'
+        WordWrap = True
+      end
+      object lblRPCT: TLabel
+        Left = 93
+        Top = 219
+        Width = 536
+        Height = 37
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Caption = 
+          'Fraction of reduction of residual-change closure criterion if QC' +
+          'LOSE was not met (RPCT)'
+        WordWrap = True
+      end
+      object cbMnwClose: TCheckBox
+        Left = 4
+        Top = -4
+        Width = 667
+        Height = 95
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Caption = 
+          'Adjust solver closure criteria to allow convergence of the FMP p' +
+          'umping requirement to pumping simulated by the linked MNW2 packa' +
+          'ge (MNWCLOSE option)'
+        Enabled = False
+        TabOrder = 0
+        WordWrap = True
+      end
+      object rdeQClose: TRbwDataEntry
+        Left = 4
+        Top = 99
+        Width = 81
+        Height = 27
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Color = clBtnFace
+        Enabled = False
+        TabOrder = 1
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeHPCT: TRbwDataEntry
+        Left = 4
+        Top = 159
+        Width = 81
+        Height = 27
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Color = clBtnFace
+        Enabled = False
+        TabOrder = 2
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMax = True
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeRPCT: TRbwDataEntry
+        Left = 4
+        Top = 216
+        Width = 81
+        Height = 28
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Color = clBtnFace
+        Enabled = False
+        TabOrder = 3
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMax = True
+        CheckMin = True
+        ChangeDisabledColor = True
       end
     end
     object cpnlOptions: TCategoryPanel
-      Top = 340
-      Height = 122
+      Top = 309
+      Height = 121
       Caption = 'Options'
-      TabOrder = 1
-      ExplicitWidth = 571
+      TabOrder = 2
+      ExplicitTop = 315
+      ExplicitWidth = 550
       object cbAllowPrinting: TCheckBox
         Left = 8
         Top = 8
@@ -269,116 +398,20 @@ inherited framePackageFmp4: TframePackageFmp4
         TabOrder = 2
       end
     end
-    object cpnlMnw2: TCategoryPanel
-      Top = 310
-      Height = 30
-      Caption = 'MNW2 Closure Criteria'
-      Collapsed = True
-      TabOrder = 2
-      ExplicitWidth = 571
-      ExpandedHeight = 242
-      object lblQClose: TLabel
-        Left = 74
-        Top = 82
-        Width = 438
-        Height = 30
-        Caption = 
-          'Criterion for actual MNW pumping rate to converge to FMP pumping' +
-          ' requirement (QCLOSE) '
-        WordWrap = True
-      end
-      object lblHPCT: TLabel
-        Left = 74
-        Top = 127
-        Width = 452
-        Height = 15
-        Caption = 
-          'Fraction of reduction of head-change closure criterion if QCLOSE' +
-          ' was not met (HPCT)'
-        WordWrap = True
-      end
-      object lblRPCT: TLabel
-        Left = 74
-        Top = 175
-        Width = 429
-        Height = 30
-        Caption = 
-          'Fraction of reduction of residual-change closure criterion if QC' +
-          'LOSE was not met (RPCT)'
-        WordWrap = True
-      end
-      object cbMnwClose: TCheckBox
-        Left = 3
-        Top = -3
-        Width = 534
-        Height = 76
-        Caption = 
-          'Adjust solver closure criteria to allow convergence of the FMP p' +
-          'umping requirement to pumping simulated by the linked MNW2 packa' +
-          'ge (MNWCLOSE option)'
-        Enabled = False
-        TabOrder = 0
-        WordWrap = True
-      end
-      object rdeQClose: TRbwDataEntry
-        Left = 3
-        Top = 79
-        Width = 65
-        Height = 22
-        Color = clBtnFace
-        Enabled = False
-        TabOrder = 1
-        Text = '0'
-        DataType = dtReal
-        Max = 1.000000000000000000
-        CheckMin = True
-        ChangeDisabledColor = True
-      end
-      object rdeHPCT: TRbwDataEntry
-        Left = 3
-        Top = 127
-        Width = 65
-        Height = 22
-        Color = clBtnFace
-        Enabled = False
-        TabOrder = 2
-        Text = '0'
-        DataType = dtReal
-        Max = 1.000000000000000000
-        CheckMax = True
-        CheckMin = True
-        ChangeDisabledColor = True
-      end
-      object rdeRPCT: TRbwDataEntry
-        Left = 3
-        Top = 173
-        Width = 65
-        Height = 22
-        Color = clBtnFace
-        Enabled = False
-        TabOrder = 3
-        Text = '0'
-        DataType = dtReal
-        Max = 1.000000000000000000
-        CheckMax = True
-        CheckMin = True
-        ChangeDisabledColor = True
-      end
-    end
     object cpnlOutput: TCategoryPanel
       Top = 0
-      Height = 310
+      Height = 309
       Caption = 'Print'
       TabOrder = 3
-      ExplicitWidth = 571
+      ExplicitWidth = 550
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0
         Width = 552
-        Height = 244
+        Height = 243
         Align = alClient
         Enabled = False
-        ItemHeight = 15
+        ItemHeight = 17
         Items.Strings = (
           'WBS_WATER_USE'
           'FARM_DEMAND_SUPPLY_SUMMARY'
@@ -393,20 +426,23 @@ inherited framePackageFmp4: TframePackageFmp4
           'LANDSCAPE_RUNOFF [COMPACT]'
           'DEEP_PERCOLATION    [COMPACT]')
         TabOrder = 0
+        ExplicitWidth = 548
       end
       object Panel1: TPanel
         Left = 0
-        Top = 244
+        Top = 243
         Width = 552
         Height = 40
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 250
+        ExplicitWidth = 554
         object lblPrintRouting: TLabel
           Left = 168
-          Top = 8
-          Width = 67
+          Top = 9
+          Width = 358
           Height = 15
-          Caption = 'Print routing'
+          Caption = 'Print routing (ROUTING_INFORMATION)'
         end
         object comboPrintRouting: TComboBox
           Left = 17

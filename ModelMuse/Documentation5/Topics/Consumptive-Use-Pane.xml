@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-02T12:03:57.941-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T10:53:20.844-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Consumptive Use Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Consumptive Use Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">CONSUMPTIVE_USE &#160;(CF) directly specifies the potential consumptive use (CU)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CONSUMPTIVE_USE  (CF) directly specifies the potential consumptive use (CU)</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">CROP_COEFFICIENT and CONSUMPTIVE_USE can both be specified for the same location. If both are specified the potential consumptive use is the sum of their respective contributions.</text></para>
   </body>
 </topic>

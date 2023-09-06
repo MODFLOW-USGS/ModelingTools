@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-11T10:30:01.943-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T12:38:21.012-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: UZF Inflow</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: UZF Inflow</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The infiltration rate in the top layer of the model is 0.1 m/d. However, the infiltration is only applied to the top layer. The object should covering the full thickness of the grid to specify the steady UZF. The UZF package should apply to columns 2 through 39.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The infiltration rate in the top layer of the model is 0.1 m/d. However, the infiltration is only applied to the top layer. The object should covering the full vertical thickness of the grid to specify the steady UZF. The UZF package should apply to columns 2 through 39.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">You will set the following steady UZF properties for the object or objects specifying the UZF properties.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">surfdep = 0.1</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">vks = 0.5</text></para>

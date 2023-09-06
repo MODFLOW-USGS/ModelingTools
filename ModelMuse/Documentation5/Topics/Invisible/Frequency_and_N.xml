@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
-<topic template="Popup" modified="2022-10-06T17:08:27.472-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd" status="Needs Review">
+<topic template="Popup" modified="2023-09-06T17:03:31.231-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
   <title translate="true">Frequency and N</title>
   <body>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Togther </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Frequency</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">N</text><text styleclass="Normal" translate="true"> control when heads, drawdowns, or budget terms will be saved. For </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Frequency</text><text styleclass="Normal" translate="true"> there are two choices</text></para>

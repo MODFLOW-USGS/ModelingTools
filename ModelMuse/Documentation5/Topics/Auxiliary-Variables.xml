@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-09-05T15:34:35.030-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T08:16:44.953-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Auxiliary Variables</title>
   <body>
     <header>
@@ -9,5 +9,6 @@
     <para styleclass="Heading1"><text styleclass="Strong" translate="true">Auxiliary Variables </text><text styleclass="Normal" translate="true">If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GWT-Groundwater-Transport" styleclass="Normal" translate="true">Groundwater Transport</link><text styleclass="Normal" translate="true"> process in MODFLOW 6 is active, auxiliary variables will be included. They represent the concentration of flow into the groundwater from the boundary. Flow out of the groundwater will be at the concentration in the cell containing the boundary.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Density</text><text styleclass="Normal" translate="true">: Density is the density of fluid entering groundwater from the boundary. Density is only present if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BUY-Buoyancy-Package-Pane" styleclass="Normal" translate="true">Buoyancy</link><text styleclass="Normal" translate="true"> package is active and Specify Density is selected.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Viscosity</text><text styleclass="Normal" translate="true">: Viscosity is the viscosity of fluid entering groundwater from the boundary. Viscosity is only present if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="VSC-Viscosity-Package-Pane" styleclass="Normal" translate="true">Viscosity</link><text styleclass="Normal" translate="true"> package is active and Specify Viscosity is selected.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Density and Viscosity are only used with the General Head Boundary, River, Lake, Stream, and Multiaquifer Well packages. However, they may also appear in other packages where they will be treated as auxiliary variables but not used by MODFLOW.</text></para>
   </body>
 </topic>

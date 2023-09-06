@@ -147,7 +147,7 @@ begin
 
     if FBuoyancyPackage.WriteDensity then
     begin
-      FileOut := ChangeFileExt(FNameOfFile, '.density');
+      FileOut := ChangeFileExt(FNameOfFile, StrDensityExt);
       Model.AddModelOutputFile(FileOut);
 
       FileOut := ExtractFileName(FileOut);

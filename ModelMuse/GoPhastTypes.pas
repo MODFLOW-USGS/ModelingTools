@@ -1068,6 +1068,8 @@ resourcestring
   'Gradient,';
 
   StrModelResults = 'Model Results';
+  StrDensityExt = '.density';
+  StrViscosityExt = '.viscosity';
 
 const
   // On Linux, @name is used to control the access permissions of files.

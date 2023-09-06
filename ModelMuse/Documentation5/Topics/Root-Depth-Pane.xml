@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-02T14:09:32.655-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T10:53:20.854-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Root Depth Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Root Depth Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Land Use Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The root depth is distance from the land surface to the bottom of the root zone. The root depth must be greater than zero unless GROUNDWATER_ROOT_INTERACTION = 0 or 1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The root depth is distance from the land surface to the bottom of the root zone. The root depth must be greater than zero unless </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Groundwater-Root-Interaction-P" styleclass="Normal" translate="true">GROUNDWATER_ROOT_INTERACTION</link><text styleclass="Normal" translate="true"> = 0 or 1 (no transpiration or no groundwater root interaction).</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

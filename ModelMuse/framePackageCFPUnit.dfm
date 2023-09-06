@@ -17,56 +17,56 @@ inherited framePackageCFP: TframePackageCFP
     Top = 128
     Width = 530
     Height = 379
-    ActivePage = tabCRCH_COC
+    ActivePage = tabCFP
     Align = alBottom
     TabOrder = 1
     object tabCFP: TTabSheet
       Caption = 'CFP'
       object lblLayerTemperature: TLabel
         Left = 163
-        Top = 320
+        Top = 85
         Width = 252
         Height = 15
         Caption = 'Temperature of water in layers (Celsius) (LTEMP)'
       end
       object lblRelaxationParameter: TLabel
         Left = 163
-        Top = 269
+        Top = 301
         Width = 157
         Height = 15
         Caption = 'Relaxation parameter (RELAX)'
       end
       object lblMaxIterations: TLabel
         Left = 163
-        Top = 242
+        Top = 274
         Width = 208
         Height = 15
         Caption = 'Maximum number of iterations (NITER)'
       end
       object lblEpsilon: TLabel
         Left = 163
-        Top = 214
+        Top = 246
         Width = 198
         Height = 15
         Caption = 'Pipe convergence criterion (EPSILON)'
       end
       object lblPipeExchange: TLabel
         Left = 12
-        Top = 163
+        Top = 195
         Width = 295
         Height = 15
         Caption = 'Method used to specify pipe exchange (SA_EXCHANGE)'
       end
       object lblPipeElevationOffset: TLabel
         Left = 163
-        Top = 133
+        Top = 165
         Width = 188
         Height = 15
         Caption = 'Node elevation offset (GEOHEIGHT)'
       end
       object lblElevationChoice: TLabel
         Left = 12
-        Top = 82
+        Top = 114
         Width = 276
         Height = 15
         Caption = 'Method used to specify pipe elevation (GEOHEIGHT)'
@@ -92,7 +92,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object rdeLayerTemperature: TRbwDataEntry
         Left = 12
-        Top = 317
+        Top = 82
         Width = 145
         Height = 22
         Color = clBtnFace
@@ -107,7 +107,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object cbPrintIterations: TCheckBox
         Left = 12
-        Top = 294
+        Top = 326
         Width = 268
         Height = 17
         Caption = 'Print solution information (P_NR)'
@@ -116,7 +116,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object rdeRelaxationParameter: TRbwDataEntry
         Left = 12
-        Top = 266
+        Top = 298
         Width = 145
         Height = 22
         Color = clBtnFace
@@ -129,7 +129,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object seMaxIterations: TJvSpinEdit
         Left = 12
-        Top = 239
+        Top = 271
         Width = 145
         Height = 23
         MaxValue = 2147483647.000000000000000000
@@ -140,7 +140,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object rdeEpsilon: TRbwDataEntry
         Left = 12
-        Top = 211
+        Top = 243
         Width = 145
         Height = 22
         Color = clBtnFace
@@ -153,7 +153,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object comboPipeExchange: TJvImageComboBox
         Left = 12
-        Top = 182
+        Top = 214
         Width = 361
         Height = 25
         Style = csOwnerDrawVariable
@@ -181,7 +181,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object rdePipeElevationOffset: TRbwDataEntry
         Left = 12
-        Top = 130
+        Top = 162
         Width = 145
         Height = 22
         Color = clBtnFace
@@ -194,7 +194,7 @@ inherited framePackageCFP: TframePackageCFP
       end
       object comboElevationChoice: TJvImageComboBox
         Left = 12
-        Top = 101
+        Top = 133
         Width = 361
         Height = 25
         Style = csOwnerDrawVariable
@@ -245,15 +245,6 @@ inherited framePackageCFP: TframePackageCFP
         TabOrder = 1
         OnClick = cbLayersClick
       end
-      object cbCADS: TCheckBox
-        Left = 294
-        Top = 3
-        Width = 225
-        Height = 40
-        Caption = 'Conduit-Associated Drainable Storage (CADS)'
-        TabOrder = 11
-        WordWrap = True
-      end
     end
     object tabCRCH_COC: TTabSheet
       Caption = 'CRCH, COC'
@@ -291,6 +282,15 @@ inherited framePackageCFP: TframePackageCFP
         Height = 17
         Caption = 'Record inflow and outflow terms of the conduits (NNODES)'
         TabOrder = 2
+      end
+      object cbCADS: TCheckBox
+        Left = 12
+        Top = 108
+        Width = 225
+        Height = 40
+        Caption = 'Conduit-Associated Drainable Storage (CADS)'
+        TabOrder = 3
+        WordWrap = True
       end
     end
   end

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-05T12:11:28.887-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T12:10:08.219-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Deficiency Scenario</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Deficiency Scenario</text></para>
     </header>
-    <para styleclass="Normal"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-    <para styleclass="Normal"><text styleclass="Strong" translate="true">Deficiency Scenario</text><text styleclass="Normal" translate="true"> should be set to False if Irrigated Crop Consumptive Use (CU) is always satisfied, if shortfall, bring in external from the simulation water. &#160;--External Water</text></para>
+    <para styleclass="Normal"><text style="font-family:'Times New Roman'; font-size:12pt; color:#000000;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Water Balance Subregions</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Deficiency Scenario</text><text styleclass="Normal" translate="true"> should be set to False if Irrigated Crop Consumptive Use (CU) is always satisfied, if shortfall, bring in external from the simulation water.  --External Water</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Deficiency Scenario</text><text styleclass="Normal" translate="true"> should be set to True if Irrigated Crop Consumptive Use (CU) is reduced to water supply, if there is a water supply shortfall. --Deficit Irrigation</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If not specified, Deficit Irrigation is used by default.</text></para>
     <para styleclass="Normal"></para>

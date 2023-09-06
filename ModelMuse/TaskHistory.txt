@@ -31747,5 +31747,12 @@ object TTaskHistory
       Categories.Strings = (
         'Dialog boxes'
         'Documentation')
+    end
+    item
+      Date = 45175.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Dialog boxes'
+        'Import')
     end>
 end

@@ -9,7 +9,7 @@ inherited framePackageBuoyancy: TframePackageBuoyancy
   object lblRefDensity: TLabel [2]
     Left = 176
     Top = 231
-    Width = 249
+    Width = 149
     Height = 15
     Caption = 'Reference density (denseref)'
   end

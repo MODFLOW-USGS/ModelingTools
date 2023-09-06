@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-10-25T13:23:15.127-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
-  <title translate="true">RMA: Animating the MT3DMS Results</title>
+<topic template="Default" modified="2023-09-06T12:17:14.892-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Animating the MT3D Results</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Animating the MT3DMS Results</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Animating the MT3D Results</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">It can be interesting the animate the contours of the concentration. First select </text><text styleclass="Strong" translate="true">Data|Data Visualization</text><text styleclass="Normal" translate="true"> and contour the first concentration data set. Then Set the </text><text styleclass="Strong" translate="true">Contour interval</text><text styleclass="Normal" translate="true"> to 50. and click </text><text styleclass="Strong" translate="true">Apply</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Then click the </text><text styleclass="Strong" translate="true">Specify contours</text><text styleclass="Normal" translate="true"> check box and then click the </text><text styleclass="Strong" translate="true">Edit contours</text><text styleclass="Normal" translate="true"> button. In the </text><text styleclass="Strong" translate="true">Specify Contours</text><text styleclass="Normal" translate="true"> dialog box, delete the 0 and 1000 contours. Select the </text><text styleclass="Strong" translate="true">Retain limits and legend</text><text styleclass="Normal" translate="true"> option. Click </text><text styleclass="Strong" translate="true">Apply</text><text styleclass="Normal" translate="true">.</text></para>

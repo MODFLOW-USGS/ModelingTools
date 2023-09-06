@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-11T10:07:08.844-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T12:38:20.973-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">UZF GWT: Stress Periods</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UZF GWT: Stress Periods</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a single steady-state stress periods with a duration of 60 days and 120 time steps. Specify that in the &quot;Model|MODFLOW Time&quot; dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a single steady-state stress periods with a duration of 60 days and 120 time steps. Specify that in the &quot;Model|MODFLOW Time&quot; dialog box. You can ignore the warning message when you close the dialog box.</text></para>
     <para styleclass="Normal"><image src="UzfGwtFlowStressPeriods.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Time dialog box illustrating the specification of a single steady-state stress period.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Time dialog box illustrating the specification of a single steady-state stress period.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">You may ignore about the number of times steps when you close the dialog box.</text></para>
   </body>

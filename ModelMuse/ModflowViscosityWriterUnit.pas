@@ -168,7 +168,7 @@ begin
 
     if FViscosityPackage.WriteViscosity then
     begin
-      FileOut := ChangeFileExt(FNameOfFile, '.viscosity');
+      FileOut := ChangeFileExt(FNameOfFile, StrViscosityExt);
       Model.AddModelOutputFile(FileOut);
 
       FileOut := ExtractFileName(FileOut);

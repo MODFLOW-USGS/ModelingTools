@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2022-10-21T14:38:51.386-04:00" lasteditedby="Richard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T17:01:00.648-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">LAK SFR CNC: Activate Groundwater Transport</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LAK SFR CNC: Activate Groundwater Transport</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Packages and Programs dialog box, activate the groundwater transport process and choose to have separate flow and transport simulations. By doing this, we can specify multiple time steps for the transport simulation while there is only a single time step in the flow simulation.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Packages and Programs dialog box, activate the groundwater transport process and choose to have separate flow and transport simulations. By doing this, we can specify multiple time steps for the transport simulation while there is only a single time step in the flow simulation. Also active the Advection, Dispersion, Source and Sink Mixing, and Constant Concentration packages.</text></para>
     <para styleclass="Normal"><image src="LakSfrCncActivateGwt.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs dialog box illustrating the activation of the GWT Process and related packages.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs dialog box illustrating the activation of the GWT Process and related packages.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Advection package, select the Total Variation Diminishing advection scheme.</text></para>
     <para styleclass="Normal"><image src="LakSfrCncTvd.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs dialog box illustrating the activation of the GWT Process and related packages.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs dialog box illustrating the activation of the TVD option in the Advection package.]]></caption></image></para>
@@ -19,6 +19,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the Linear tab the IMS solver for the solute transport override the following variables.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Linear acceleration = BICGSTAB</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Relaxation factor = 0.97</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Inner DVClose = 0.0001</text></para>
     <para styleclass="Normal"><image src="LakSfrCncSolver.png" scale="-99.90%" styleclass="Image Caption" figurelistinclude="0"><title translate="true">Screen capture of the MODFLOW Packages and Programs dialog box showing specification of some options for the IMS package for the solute transport model.</title><caption translate="true"><![CDATA[Screen capture of the MODFLOW Packages and Programs dialog box showing specification of some options for the IMS package for the solute transport model.]]></caption></image></para>
   </body>
 </topic>

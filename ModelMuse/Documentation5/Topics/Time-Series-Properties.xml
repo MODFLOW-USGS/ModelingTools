@@ -1,15 +1,20 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-09-05T13:21:25.529-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T08:22:39.822-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Time Series Properties</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Time Series Properties</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">A video about this topic is available at </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://www.usgs.gov/media/videos/using-modflow-6-times-series-modelmuse</link><text styleclass="Normal" translate="true">.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">A time series is an alternative method in MODFLOW 6 for specifying time-varying data. The modeler specifies a series of times along with a corresponding series of values. The times do not need to correspond to the beginning and ending times of any stress period. Instead, MODFLOW will interpolate the values in the time series to determine the value applied to any time step. Three different interpolation methods can be used: STEPWISE, LINEAR, and LINEAREND. With STEPWISE, the values are change abruptly at each new time and the value that is applied to a time step is a weighted average of the values for a time step. With LINEAR, values are interpolated linearly among the times and the value applied to any time step is a weighted average of the values for that time step. With LINEAREND, the values are also interpolated linearly but the value applied is the value for the end of the time step. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A time series is an alternative method in MODFLOW 6 for specifying time-varying data. The modeler specifies a series of times along with a corresponding series of values. The times do not need to correspond to the beginning and ending times of any stress period. Instead, MODFLOW will interpolate the values in the time series to determine the value applied to any time step. Three different interpolation methods can be used: STEPWISE, LINEAR, and LINEAREND. </text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">With STEPWISE, the values change abruptly at each new time and the value that is applied to a time step is a weighted average of the values for a time step. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">With LINEAR, values are interpolated linearly among the times and the value applied to any time step is a weighted average of the values for that time step. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">With LINEAREND, the values are also interpolated linearly but the value applied is the value for the end of the time step. </text></li>
+    </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The times must be in ascending order. The value 3E30 can be used to indicate missing values in a time series.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">For example, suppose that the following time series was specified as the well pumping rate in which the time steps each had a length of 1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For example, suppose that the following time series was specified as the well pumping rate in which the time steps each had a length of 1 and the starting time of the first time step was zero.</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
       <tr style="vertical-align:top">
         <td>

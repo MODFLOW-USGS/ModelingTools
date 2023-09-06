@@ -245,6 +245,9 @@ var
            or (Description = ' NDSYS INEL CMPT')
            or (Description = '  DSYS INEL CMPT')
            or (Description = 'HEAD            ')
+           or (Description = '         DENSITY')
+           or (Description = '         VISCOSI')
+           or (Description = '       VISCOSITY')
   end;
 begin
   Assert(AFile.Position = 0);

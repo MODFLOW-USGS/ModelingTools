@@ -118,8 +118,8 @@ begin
     ClearGrid(rdgChemViscosity);
 
     rdgChemViscosity.Cells[Ord(ccvName), 0] := 'Chem. Species';
-    rdgChemViscosity.Cells[Ord(ccvRefConcentration), 0] := 'Reference Concentration (crhoref)';
-    rdgChemViscosity.Cells[Ord(ccvSlope), 0] := 'Slope (drhodc)';
+    rdgChemViscosity.Cells[Ord(ccvRefConcentration), 0] := 'Reference Concentration or Temperature (cviscref)';
+    rdgChemViscosity.Cells[Ord(ccvSlope), 0] := 'Slope (dviscdc)';
 
     RowIndex := 1;
     if MobileComponents.Count > 0 then
@@ -147,7 +147,6 @@ end;
 procedure TframePackageViscosity.SetData(Package: TModflowPackageSelection);
 var
   Vicosity: TViscosityPackage;
-  ItemIndex: Integer;
 begin
   inherited;
   Vicosity := Package as TViscosityPackage;

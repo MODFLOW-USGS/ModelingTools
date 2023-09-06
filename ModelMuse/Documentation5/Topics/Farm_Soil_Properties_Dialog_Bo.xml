@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" modified="2023-06-21T10:03:28.388-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-06T11:51:28.560-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Farm Soil Properties Dialog Box</title>
   <body>
     <header>
@@ -18,12 +18,12 @@
     <para styleclass="Normal"><anchor id="EFFECTIVE_PRECIPITATION_TABLE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">In MODFLOW-OWHM version 4, the user may also specify an Effective Precipitation table. This limits how much precipitation can be consumed as evaporation and transpiration based on the quantity of rainfall and is analogous to specifying an effective precipitation, which represents the quantity of rainfall that is not runoff nor deep percolation. Precipitation that is not available for consumption becomes either runoff or deep percolation. Precipitation that is available for consumption, but is not consumed as ET becomes either runoff or deep percolation.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Effective Precipitation table has two columns: </text><text styleclass="Strong" translate="true">Precipitation Rate</text><text styleclass="Normal" translate="true">, and </text><text styleclass="Strong" translate="true">Effective Precipitation</text><text styleclass="Normal" translate="true">. The effective precipitation can be specified either as a rate or a fraction depending on the choice made in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SOIL-Farm-Process-V4-Soil-Opti" anchor="EFFECTIVE_PRECIPITATION_TABLE" styleclass="Normal" translate="true">SOIL: Farm Process V4 Soil Options</link><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Each Effective Precipitation table has a </text><text styleclass="Strong" translate="true">Method</text><text styleclass="Normal" translate="true"> for that defines how the table returns results.</text></para>
-    <para styleclass="Normal"><text styleclass="Strong" translate="true">INTERPOLATE</text><text styleclass="Normal" translate="true">: &#160;Linear interpolate using lookup values and return values. &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">INTERPOLATE</text><text styleclass="Normal" translate="true">:  Linear interpolate using lookup values and return values.                  </text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">STEP_FUNCTION</text><text styleclass="Normal" translate="true">; Search for the closest-previous lookup value and its associated return value.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">NEAREST</text><text styleclass="Normal" translate="true">: Search for the closest lookup value and its associated return value.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">CONSTANT</text><text styleclass="Normal" translate="true">: Lookup Table always returns the first </text><text styleclass="Strong" translate="true">Effective Precipitation</text><text styleclass="Normal" translate="true"> value in the table.</text></para>
     <para styleclass="Normal"></para>
     <para styleclass="Normal"></para>
-    <para styleclass="Normal"><text styleclass="Reference" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><text styleclass="Reference" translate="true"> </text></para>
   </body>
 </topic>
