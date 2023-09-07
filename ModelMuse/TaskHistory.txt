@@ -31754,5 +31754,10 @@ object TTaskHistory
         'Documentation'
         'Dialog boxes'
         'Import')
+    end
+    item
+      Date = 45176.000000000000000000
+      Categories.Strings = (
+        'Installer')
     end>
 end

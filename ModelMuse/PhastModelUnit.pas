@@ -10048,19 +10048,19 @@ const
 //                to 1.
 //    '5.1.1.37' Bug fixed: Fixed bug in Mf2005ObsExtractor that caused simulated
 //                from the HOB package to be incorrectly read as zero.
-
-//               Bug fix: Switching from a MODFLOW-NWT to a MODFLOW-OWHM model
+//    '5.1.1.38' Bug fix: Switching from a MODFLOW-NWT to a MODFLOW-OWHM model
 //                no longer results in the NWT and UPW packages being
 //                deactivated.
 
 //               Enhancement Buoyancy package for MODFLOW 6.
+//               Enhancement Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
 //               Enhancement: Added suport for SUTRA 4.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.37';
+  IIModelVersion = '5.1.1.38';
 
 function IModelVersion: string;
 begin

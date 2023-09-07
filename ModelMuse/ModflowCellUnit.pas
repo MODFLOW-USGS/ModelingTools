@@ -382,6 +382,7 @@ begin
         try
           Strings.Sorted := True;
           Strings.Duplicates := dupIgnore;
+          Strings.CaseSensitive := True;
           for Index := 0 to LocalCount - 1 do
           begin
             Cell := inherited Items[Index] as TValueCell;

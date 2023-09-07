@@ -60,6 +60,7 @@ type
     procedure Restore(DecompressionStream: TDecompressionStream; Annotations: TStringList); virtual; abstract;
     procedure Store(Compressor: TCompressionStream); virtual; abstract;
     procedure RestoreData;
+    procedure InitializeStrings(Strings: TStringList);
   public
     StartingTime: double;
     EndingTime: double;
@@ -5365,6 +5366,13 @@ begin
       CellList.Delete(EliminateIndicies[Index]);
     end;
   end;
+end;
+
+procedure TCustomBoundaryStorage.InitializeStrings(Strings: TStringList);
+begin
+  Strings.Sorted := True;
+  Strings.Duplicates := dupIgnore;
+  Strings.CaseSensitive := True;
 end;
 
 end.

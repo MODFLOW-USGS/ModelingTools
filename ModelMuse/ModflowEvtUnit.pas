@@ -3136,8 +3136,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FEvtArray);
     for Index := 0 to Count - 1 do
     begin
@@ -3200,8 +3199,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FEvtLayerArray);
     for Index := 0 to Count - 1 do
     begin
@@ -3264,8 +3262,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FEvtSurfDepthArray);
     for Index := 0 to Count - 1 do
     begin

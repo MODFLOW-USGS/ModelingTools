@@ -2297,11 +2297,9 @@ var
   Count: Integer;
   Strings: TStringList;
 begin
-
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FExtinctDepthArray);
     for Index := 0 to Count - 1 do
     begin
@@ -2362,8 +2360,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FWaterContentArray);
     for Index := 0 to Count - 1 do
     begin

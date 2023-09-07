@@ -2436,8 +2436,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FRchArray);
     for Index := 0 to Count - 1 do
     begin
@@ -2499,8 +2498,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FRchLayerArray);
     for Index := 0 to Count - 1 do
     begin

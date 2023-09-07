@@ -4,6 +4,10 @@ program SwiObsExtractor;
 
 {$R *.res}
 
+{#BACKUP SwiObsExtractor.lpr}
+{#BACKUP SwiObsExtractor.lp1}
+{#BACKUP SimpleTextWriter.pas}
+
 uses
   System.SysUtils,
   SwiObsInputReader in 'SwiObsInputReader.pas',

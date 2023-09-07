@@ -2007,8 +2007,7 @@ begin
   Strings := TStringList.Create;
   try
     Count := Length(FChdArray);
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     for Index := 0 to Count - 1 do
     begin
       FChdArray[Index].RecordStrings(Strings);

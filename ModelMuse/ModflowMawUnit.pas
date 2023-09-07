@@ -626,7 +626,7 @@ type
       PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
-    procedure Loaded; 
+    procedure Loaded;
     property Items[Index: Integer]: TMawWellScreenItem read GetItems write SetItems; default;
   end;
 
@@ -1199,8 +1199,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FMawSteadyConnectionArray);
     for Index := 0 to Count - 1 do
     begin
@@ -1397,7 +1396,7 @@ var
 begin
   ParentCollection := Collection as TMawWellScreenCollection;
   ScreenObject := ParentCollection.ScreenObject as TScreenObject;
-  
+
   ScreenBottomObserver := FObserverList[ScreenBottomPosition];
   ScreenObject.TalksTo(ScreenBottomObserver);
   ScreenBottomObserver.OnUpToDateSet := ParentCollection.InvalidateScreenBottomData;
@@ -4165,8 +4164,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FMawTransientArray);
     for Index := 0 to Count - 1 do
     begin

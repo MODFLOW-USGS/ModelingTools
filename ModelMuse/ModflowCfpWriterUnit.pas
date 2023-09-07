@@ -186,8 +186,7 @@ resourcestring
   'S.';
   StrMT3DMSVersion53D = 'MT3DMS version 5.3 and MT3D-USGS do not suppport the Conduit Fl' +
   'ow Process.';
-  StrCFPSpecifiedHeads = 'CFP Specified heads less than -1 are not allowed' +
-  '.';
+  StrCFPSpecifiedHeads = 'CFP Specified heads equal to -1 are not allowed.';
   StrTheCFPSpecifiedHe = 'The CFP specified head defined by %0:s is %1:g. (Layer, Row, Column) = (%2:d, %3:d, %4:d)';
   StrCFPDrainableStorag = 'CFP Drainable Storage Width is not assigned in th' +
   'e following objects';
@@ -1245,7 +1244,7 @@ begin
           cbtFixedHead:
             begin
               N_HEAD := ANode.FFixedHead;
-              if N_HEAD <= -1 then
+              if N_HEAD = -1 then
               begin
                 frmErrorsAndWarnings.AddError(Model, StrCFPSpecifiedHeads,
                   Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
@@ -1306,7 +1305,7 @@ begin
           cbtFixedHeadLimitedFlow:
             begin
               N_HEAD := ANode.FFixedHead;
-              if N_HEAD <= -1 then
+              if N_HEAD = -1 then
               begin
                 frmErrorsAndWarnings.AddError(Model, StrCFPSpecifiedHeads,
                   Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,
@@ -1340,7 +1339,7 @@ begin
     {$ENDIF}
       begin
         N_HEAD := ANode.FFixedHead;
-        if N_HEAD <= -1 then
+        if N_HEAD = -1 then
         begin
           frmErrorsAndWarnings.AddError(Model, StrCFPSpecifiedHeads,
             Format(StrTheCFPSpecifiedHe, [ANode.FScreenObject.Name, N_HEAD,

@@ -960,8 +960,7 @@ var
 begin
   Strings := TStringList.Create;
   try
-    Strings.Sorted := true;
-    Strings.Duplicates := dupIgnore;
+    InitializeStrings(Strings);
     Count := Length(FResArray);
     for Index := 0 to Count - 1 do
     begin

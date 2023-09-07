@@ -1,3 +1,5 @@
+{#BACKUP SutraObsExtractor.lpr}
+{#BACKUP SutraObsExtractor.lpi}
 unit SutraInputFileReader;
 
 {$IFDEF FPC}
