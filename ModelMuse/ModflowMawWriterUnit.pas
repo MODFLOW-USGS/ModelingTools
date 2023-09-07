@@ -1625,11 +1625,7 @@ begin
             begin
               WriteValueOrFormula(ACell, MawDensityPosition);
             end
-            else
-            begin
-              WriteFloat(0);
-            end;
-            if SameText(ASpecies.Name, StrViscosity) then
+            else if SameText(ASpecies.Name, StrViscosity) then
             begin
               WriteValueOrFormula(ACell, MawViscosityPosition);
             end
