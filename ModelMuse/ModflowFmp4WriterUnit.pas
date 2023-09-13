@@ -8900,10 +8900,7 @@ procedure TModflowFmp4Writer.WriteFile(const AFileName: string);
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmProcess);
   if (not FFarmProcess4.IsSelected)
-{$IFDEF OWHMV2}
-  or (Model.ModelSelection <> msModflowOwhm2)
-{$ENDIF}
-  then
+    or (Model.ModelSelection <> msModflowOwhm2) then
   begin
     Exit
   end;

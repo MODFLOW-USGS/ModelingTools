@@ -29,7 +29,7 @@ inherited frmGoTo: TfrmGoTo
         285
         204)
       object lblX: TLabel
-        Left = 255
+        Left = 252
         Top = 11
         Width = 11
         Height = 18
@@ -38,7 +38,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblY: TLabel
-        Left = 255
+        Left = 252
         Top = 52
         Width = 9
         Height = 18
@@ -47,7 +47,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblZ: TLabel
-        Left = 255
+        Left = 252
         Top = 92
         Width = 9
         Height = 18
@@ -56,7 +56,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblXPrime: TLabel
-        Left = 255
+        Left = 252
         Top = 132
         Width = 14
         Height = 18
@@ -65,7 +65,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 271
       end
       object lblYPrime: TLabel
-        Left = 255
+        Left = 252
         Top = 172
         Width = 12
         Height = 18
@@ -76,7 +76,7 @@ inherited frmGoTo: TfrmGoTo
       object rdeX: TRbwDataEntry
         Left = 8
         Top = 8
-        Width = 239
+        Width = 235
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -85,11 +85,12 @@ inherited frmGoTo: TfrmGoTo
         DataType = dtReal
         Max = 1.000000000000000000
         ChangeDisabledColor = True
+        ExplicitWidth = 231
       end
       object rdeY: TRbwDataEntry
         Left = 8
         Top = 48
-        Width = 239
+        Width = 235
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -98,11 +99,12 @@ inherited frmGoTo: TfrmGoTo
         DataType = dtReal
         Max = 1.000000000000000000
         ChangeDisabledColor = True
+        ExplicitWidth = 231
       end
       object rdeZ: TRbwDataEntry
         Left = 8
         Top = 88
-        Width = 239
+        Width = 235
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -111,11 +113,12 @@ inherited frmGoTo: TfrmGoTo
         DataType = dtReal
         Max = 1.000000000000000000
         ChangeDisabledColor = True
+        ExplicitWidth = 231
       end
       object rdeXPrime: TRbwDataEntry
         Left = 8
         Top = 128
-        Width = 239
+        Width = 235
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -124,11 +127,12 @@ inherited frmGoTo: TfrmGoTo
         DataType = dtReal
         Max = 1.000000000000000000
         ChangeDisabledColor = True
+        ExplicitWidth = 231
       end
       object rdeYPrime: TRbwDataEntry
         Left = 8
         Top = 168
-        Width = 239
+        Width = 235
         Height = 28
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -137,6 +141,7 @@ inherited frmGoTo: TfrmGoTo
         DataType = dtReal
         Max = 1.000000000000000000
         ChangeDisabledColor = True
+        ExplicitWidth = 231
       end
     end
     object tabCell: TTabSheet
@@ -148,7 +153,7 @@ inherited frmGoTo: TfrmGoTo
         285
         204)
       object lblCol: TLabel
-        Left = 220
+        Left = 216
         Top = 41
         Width = 53
         Height = 18
@@ -157,7 +162,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object lblRow: TLabel
-        Left = 220
+        Left = 216
         Top = 73
         Width = 31
         Height = 18
@@ -166,7 +171,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object lblLay: TLabel
-        Left = 220
+        Left = 216
         Top = 105
         Width = 39
         Height = 18
@@ -175,7 +180,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object lblModel: TLabel
-        Left = 220
+        Left = 216
         Top = 12
         Width = 43
         Height = 18
@@ -184,7 +189,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 221
       end
       object seCol: TJvSpinEdit
-        Left = 2
+        Left = -2
         Top = 42
         Width = 212
         Height = 26
@@ -197,7 +202,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 14
       end
       object seRow: TJvSpinEdit
-        Left = 2
+        Left = -2
         Top = 72
         Width = 212
         Height = 26
@@ -210,7 +215,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 14
       end
       object seLayer: TJvSpinEdit
-        Left = 2
+        Left = -2
         Top = 104
         Width = 212
         Height = 26
@@ -225,12 +230,13 @@ inherited frmGoTo: TfrmGoTo
       object comboModel: TComboBox
         Left = 3
         Top = 9
-        Width = 211
+        Width = 207
         Height = 26
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         OnChange = comboModelChange
+        ExplicitWidth = 203
       end
     end
     object tabMesh: TTabSheet
@@ -276,7 +282,7 @@ inherited frmGoTo: TfrmGoTo
         285
         204)
       object lblDisvCell: TLabel
-        Left = 220
+        Left = 216
         Top = 6
         Width = 27
         Height = 18
@@ -285,7 +291,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 232
       end
       object lblDisvLayer: TLabel
-        Left = 220
+        Left = 216
         Top = 38
         Width = 39
         Height = 18
@@ -294,7 +300,7 @@ inherited frmGoTo: TfrmGoTo
         ExplicitLeft = 232
       end
       object seDisvLayer: TJvSpinEdit
-        Left = 2
+        Left = -2
         Top = 35
         Width = 212
         Height = 26
@@ -304,10 +310,9 @@ inherited frmGoTo: TfrmGoTo
         Value = 1.000000000000000000
         Anchors = [akTop, akRight]
         TabOrder = 0
-        ExplicitLeft = -2
       end
       object seDisvCell: TJvSpinEdit
-        Left = 2
+        Left = -2
         Top = 3
         Width = 212
         Height = 26
@@ -317,7 +322,6 @@ inherited frmGoTo: TfrmGoTo
         Value = 1.000000000000000000
         Anchors = [akTop, akRight]
         TabOrder = 1
-        ExplicitLeft = -2
       end
     end
     object tabObject: TTabSheet

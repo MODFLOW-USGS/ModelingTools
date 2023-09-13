@@ -593,12 +593,7 @@ end;
 procedure TfrmSutraOptions.FormShow(Sender: TObject);
 begin
   inherited;
-  {$IFDEF SUTRA4}
   rgTransport.Buttons[3].Enabled := frmGoPhast.ModelSelection = msSutra40;
-  {$ELSE}
-  // Delete Freezing
-  rgTransport.Items.Delete(3);
-  {$ENDIF}
 end;
 
 procedure TfrmSutraOptions.GetData;

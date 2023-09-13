@@ -523,11 +523,7 @@ begin
     begin
       Exit
     end;
-    if not (Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    ]) then
+    if not (Model.ModelSelection in [msModflowFmp, msModflowOwhm2]) then
     begin
       Exit
     end;

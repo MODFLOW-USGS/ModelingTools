@@ -283,11 +283,7 @@ type
   // The type of model should never be set to msUndefined.
   TModelSelection = (msUndefined, msPhast, msModflow, msModflowLGR,
     msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp, msSutra22,
-    msSutra30, msSutra40, msFootPrint, msModflow2015
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    );
+    msSutra30, msSutra40, msFootPrint, msModflow2015, msModflowOwhm2);
 
   TPestParamMethod = (ppmMultiply, ppmAdd);
 
@@ -335,24 +331,13 @@ type
 
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-    msModflowFmp, msModflowCfp, msModflow2015
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ];
+    msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2];
   Modflow2005Selection =  [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-    msModflowFmp, msModflowCfp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ];
+    msModflowFmp, msModflowCfp, msModflowOwhm2];
   SutraSelection = [msSutra22, msSutra30, msSutra40];
   ModelsWithGrid  = [msPhast, msModflow, msModflowLGR, msModflowLGR2,
-    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ];
+    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflow2015,
+    msModflowOwhm2];
   HighGradient = 0.01;
 
 type
@@ -1551,11 +1536,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015, msModflowOwhm2:
       begin
         case Eval of
           eaBlocks:

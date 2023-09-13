@@ -740,11 +740,7 @@ begin
   begin
     Exit;
   end;
-  if not (Model.ModelSelection in [msModflow, msModflowNWT, msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-  ]) then
+  if not (Model.ModelSelection in [msModflow, msModflowNWT, msModflowFmp, msModflowOwhm2]) then
   begin
     frmErrorsAndWarnings.AddWarning(Model, StrSWINotSupported, StrTheSWIPackageIsN);
     Exit;

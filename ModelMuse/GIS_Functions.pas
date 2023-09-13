@@ -4061,11 +4061,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         Assert(GlobalEvaluatedAt = eaBlocks);
         if not TCustomModel(GlobalCurrentModel).DisvUsed then
@@ -4181,11 +4177,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         if TCustomModel(GlobalCurrentModel).DisvUsed then
         begin
@@ -4546,11 +4538,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         LocalModel := TCustomModel(GlobalCurrentModel);
         if (Lay < 0) or (Lay > LocalModel.ModflowGrid.LayerCount - 1)
@@ -4646,11 +4634,7 @@ begin
   result := 0;
   case frmGoPhast.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         result := _ColumnWidth([Values[0]]) * _RowWidth([Values[1]]);
       end;
@@ -4738,11 +4722,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         if Values[2] = nil then
         begin
@@ -4890,11 +4870,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         if TCustomModel(GlobalCurrentModel).DisvUsed then
         begin
@@ -4969,11 +4945,7 @@ begin
   ExtractColRowLayer(Lay, Row, Col, Values);
   case frmGoPhast.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         if TCustomModel(GlobalCurrentModel).DisvUsed then
         begin
@@ -5111,11 +5083,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         if TCustomModel(GlobalCurrentModel).DisvUsed then
         begin
@@ -5231,11 +5199,7 @@ begin
   result := 0;
   case GlobalCurrentModel.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         BelowValue := GetLayerPosition(Lay, Row, Col, InvalidIndex);
         if InvalidIndex then

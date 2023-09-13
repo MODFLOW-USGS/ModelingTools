@@ -1190,17 +1190,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  {$IFDEF OWHMV2}
-  OWHM4DataSets  = 36;
-  {$ELSE}
-  OWHM4DataSets  = 0;
-  {$ENDIF}
-//  GWTDataSets = 5;
-{$IFDEF SUTRA4}
-  ArrayCount = 172 + OWHM4DataSets;
-{$ELSE}
-  ArrayCount = 162 + OWHM4DataSets;
-{$ENDIF}
+  ArrayCount = 208;
 var
   Index: integer;
 begin
@@ -2832,7 +2822,6 @@ begin
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
 
-{$IFDEF OWHMV2}
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
@@ -2847,7 +2836,6 @@ begin
     'MODFLOW-CFP Data Set 29: CADS';
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
-{$ENDIF}
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -2879,7 +2867,6 @@ begin
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
 
-{$IFDEF OWHMV2}
   FDataArrayCreationRecords[Index].DataSetType := TIntegerSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtInteger;
@@ -2910,21 +2897,6 @@ begin
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
 
-//  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
-//  FDataArrayCreationRecords[Index].Orientation := dso3D;
-//  FDataArrayCreationRecords[Index].DataType := rdtDouble;
-//  FDataArrayCreationRecords[Index].Name := KCfpWellConductance;
-//  FDataArrayCreationRecords[Index].DisplayName := StrCfpWellConductance;
-//  FDataArrayCreationRecords[Index].Formula := '0';
-//  FDataArrayCreationRecords[Index].Classification := StrCFPClassifiation;
-//  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Cfp2PipesSelected;
-//  FDataArrayCreationRecords[Index].Lock := StandardLock;
-//  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
-//  FDataArrayCreationRecords[Index].AssociatedDataSets :=
-//    StrMODFLOWCFPDataSetCWC_WELL;
-//  FDataArrayCreationRecords[Index].Visible := False;
-//  Inc(Index);
-
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
@@ -2939,7 +2911,6 @@ begin
     StrMODFLOWCFPDataSetCWC_WELL;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
-
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -2956,7 +2927,6 @@ begin
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
 
-
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
@@ -2971,7 +2941,6 @@ begin
     StrMODFLOWCFPDataSetCWC_WELL;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
-
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -3002,8 +2971,6 @@ begin
     StrMODFLOWCFPDataSetCWC_WELL;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
-
-{$ENDIF}
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -3837,7 +3804,6 @@ begin
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
-  {$IFDEF SUTRA4}
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
@@ -3977,7 +3943,6 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrSUTRADataSet15B_SIGMAA;
   Inc(Index);
-  {$ENDIF}
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
@@ -4049,7 +4014,6 @@ begin
     StrMODFLOW6Dispersion_ATH2;
   Inc(Index);
 
-  {$IFDEF OWHMV2}
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dsoTop;
   FDataArrayCreationRecords[Index].DataType := rdtInteger;
@@ -4448,9 +4412,6 @@ begin
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     'MODFLOW-OWHM version 2, LAND_USE: PRINT ROW_COLUMN';
   Inc(Index);
-
-
-  {$ENDIF}
 
   // See ArrayCount above.
   Assert(Length(FDataArrayCreationRecords) = Index);

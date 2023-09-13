@@ -976,10 +976,6 @@ begin
   begin
     Exit;
   end;
-          {$IFDEF OWHMV2}
-          // fix this
-          Assert(False);
-          {$ENDIF}
 
   FoundFirst := False;
   ShortStepLength := 0;

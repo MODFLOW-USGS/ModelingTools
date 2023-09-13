@@ -169,21 +169,15 @@ begin
   frameGWT.GetData(OutputControl.ConcentrationOC);
   MemoComments.Lines.Assign(OutputControl.Comments);
   cbSaveBudgetSummary.Checked := OutputControl.SaveBudgetSummary;
-  cbSaveBudgetSummary.Enabled := frmGoPhast.ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ];
+  cbSaveBudgetSummary.Enabled := frmGoPhast.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
 
   comboFrequency.ItemIndex := Ord(OutputControl.BudgetFrequencyChoice);
   spN.AsInteger := OutputControl.BudgetFrequency;
 
   comboOutputSuppression.ItemIndex := Ord(OutputControl.OutputSuppression);
-  comboOutputSuppression.Enabled := frmGoPhast.ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-          ];
+  comboOutputSuppression.Enabled := frmGoPhast.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin

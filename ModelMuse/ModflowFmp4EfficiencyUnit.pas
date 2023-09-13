@@ -74,12 +74,10 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-  {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4Efficiency(self);
     end
-  {$ENDIF}
     ;
   end;
 end;

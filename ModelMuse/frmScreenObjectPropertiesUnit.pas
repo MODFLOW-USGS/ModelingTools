@@ -9006,7 +9006,6 @@ begin
     CfpCauchyConductivityDataArray := nil;
     CfpCauchyLimitedInflowDataArray := nil;
     CfpLimitedHeadDataArray := nil;
-  {$IFDEF OWHMV2}
     if frmGoPhast.ModelSelection = msModflowOwhm2 then
     begin
       BoundaryTypeDataSetIndex := self.GetDataSetIndexByName(KCfpBoundaryType);
@@ -9041,7 +9040,6 @@ begin
       CfpEdit := FDataEdits[DataSetIndex];
       CfpLimitedHeadDataArray := CfpEdit.DataArray;
     end;
-  {$ENDIF}
 
     for FixedHeadIndex := 0 to FNewProperties.Count - 1 do
     begin
@@ -9066,7 +9064,6 @@ begin
                 DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpFixedHeadsDataArray);
                 AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
                   CfpFixedHeads.FixedHead;
-              {$IFDEF OWHMV2}
                 if (CfpFixedHeads.Value2 <> '') then
                 begin
                   DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpLimitedFlowDataArray);
@@ -9086,27 +9083,12 @@ begin
                 AnEdit.ScreenObject.RemoveDataSet(CfpCauchyConductivityDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpCauchyLimitedInflowDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpLimitedHeadDataArray);
-              {$ENDIF}
               end;
-          {$IFDEF OWHMV2}
             cbtWell:
               begin
                 DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpWellFlowDataArray);
                 AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
                   CfpFixedHeads.FixedHead;
-//                if (CfpFixedHeads.Value2 <> '') then
-//                begin
-//                  DataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpWellConductanceDataArray);
-//                  AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
-//                    CfpFixedHeads.Value2;
-//                  BoundaryTypeDataSetIndex := AnEdit.ScreenObject.AddDataSet(CfpBoundaryTypeDataArray);
-//                  AnEdit.ScreenObject.DataSetFormulas[BoundaryTypeDataSetIndex] :=
-//                    IntToStr(Ord(cbtWellConductance));
-//                end
-//                else
-//                begin
-//                  AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
-//                end;
                 AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpCauchyHeadDataArray);
@@ -9128,7 +9110,6 @@ begin
                 AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpWellFlowDataArray);
-//                AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpLimitedHeadDataArray);
               end;
             cbtLimitedHead:
@@ -9139,12 +9120,10 @@ begin
                 AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpWellFlowDataArray);
-//                AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpCauchyHeadDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpCauchyConductivityDataArray);
                 AnEdit.ScreenObject.RemoveDataSet(CfpCauchyLimitedInflowDataArray);
               end;
-          {$ENDIF}
             else
               Assert(False);
           end;
@@ -9153,16 +9132,13 @@ begin
       else
       begin
         AnEdit.ScreenObject.RemoveDataSet(CfpBoundaryTypeDataArray);
-      {$IFDEF OWHMV2}
         AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
         AnEdit.ScreenObject.RemoveDataSet(CfpLimitedFlowDataArray);
         AnEdit.ScreenObject.RemoveDataSet(CfpWellFlowDataArray);
-//        AnEdit.ScreenObject.RemoveDataSet(CfpWellConductanceDataArray);
         AnEdit.ScreenObject.RemoveDataSet(CfpCauchyHeadDataArray);
         AnEdit.ScreenObject.RemoveDataSet(CfpCauchyConductivityDataArray);
         AnEdit.ScreenObject.RemoveDataSet(CfpCauchyLimitedInflowDataArray);
         AnEdit.ScreenObject.RemoveDataSet(CfpLimitedHeadDataArray);
-      {$ENDIF}
       end;
     end;
 
@@ -16835,7 +16811,6 @@ begin
     and (AScreenObject.ElevationCount in [ecOne, ecTwo])
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
-  {$IFDEF OWHMV2}
     if frmGoPhast.ModelSelection = msModflowOwhm2 then
     begin
       Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
@@ -16848,11 +16823,6 @@ begin
         StrCFPFixedHeads)
         as TJvPageIndexNode;
     end;
-  {$ELSE}
-      Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
-        StrCFPFixedHeads)
-        as TJvPageIndexNode;
-  {$ENDIF}
     Node.PageIndex := jvspCfpFixedHeads.PageIndex;
     frameCfpFixedHeads.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
@@ -23426,11 +23396,7 @@ begin
   end;
   rdeDrtLay.Text := '1';
   rdeDrtLay.Min := 1;
-  if frmGoPhast.ModelSelection in [msModflowFmp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ] then
+  if frmGoPhast.ModelSelection in [msModflowFmp, msModflowOwhm2] then
   begin
     if frmGoPhast.PhastModel.ModflowPackages.FarmProcess.IsSelected then
     begin
@@ -26188,11 +26154,7 @@ begin
         lblGridCellSize.Caption := StrGridElementSize;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015, msModflowOwhm2:
       begin
         cbSetGridCellSize.Caption := StrUseToSetGridCell;
         lblGridCellSize.Caption := StrGridCellSize;

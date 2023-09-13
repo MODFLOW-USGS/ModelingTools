@@ -62,19 +62,17 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   object htlblSutra4: TJvHTLabel
     Left = 105
     Top = 129
-    Width = 821
+    Width = 388
     Height = 19
     Caption = 
-      '<a href="https://www.usgs.gov/software/sutra-model-2d-or-3d-satu' +
-      'rated-unsaturated-variable-density-ground-water-flow-solute-or">' +
-      'https://www.usgs.gov/software/sutra-model-2d-or-3d-saturated-uns' +
-      'aturated-variable-density-ground-water-flow-solute-or</a>'
+      '<a href="https://github.com/aprovost-usgs/SUTRA_4/tree/develop">' +
+      'https://github.com/aprovost-usgs/SUTRA_4/tree/develop</a>'
     SuperSubScriptRatio = 0.666666666666666600
   end
   object fedSutra22: TJvFilenameEdit
     Left = 16
     Top = 38
-    Width = 963
+    Width = 959
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -83,7 +81,7 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 0
     Text = ''
     OnChange = fedSutra22Change
-    ExplicitWidth = 959
+    ExplicitWidth = 955
   end
   object pnlBottom: TPanel
     Left = 0
@@ -99,7 +97,7 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       992
       41)
     object btnHelp: TBitBtn
-      Left = 724
+      Left = 720
       Top = 6
       Width = 82
       Height = 27
@@ -109,10 +107,10 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 720
+      ExplicitLeft = 716
     end
     object btnOK: TBitBtn
-      Left = 812
+      Left = 808
       Top = 6
       Width = 82
       Height = 27
@@ -121,10 +119,10 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 808
+      ExplicitLeft = 804
     end
     object btnCancel: TBitBtn
-      Left = 900
+      Left = 896
       Top = 6
       Width = 83
       Height = 27
@@ -132,13 +130,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 896
+      ExplicitLeft = 892
     end
   end
   object fedTextEditor: TJvFilenameEdit
     Left = 16
     Top = 198
-    Width = 963
+    Width = 959
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -147,12 +145,12 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 1
     Text = ''
     OnChange = fedTextEditorChange
-    ExplicitWidth = 959
+    ExplicitWidth = 955
   end
   object fedSutra30: TJvFilenameEdit
     Left = 16
     Top = 97
-    Width = 963
+    Width = 959
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -161,12 +159,12 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 3
     Text = ''
     OnChange = fedSutra30Change
-    ExplicitWidth = 959
+    ExplicitWidth = 955
   end
   object fedSutra40: TJvFilenameEdit
     Left = 16
     Top = 150
-    Width = 963
+    Width = 959
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -175,6 +173,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 4
     Text = ''
     OnChange = fedSutra40Change
-    ExplicitWidth = 959
+    ExplicitWidth = 955
   end
 end

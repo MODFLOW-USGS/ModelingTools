@@ -272,11 +272,7 @@ begin
 //  WriteFloat(Drt_Cell.Elevation);
 //  WriteFloat(Drt_Cell.Conductance);
   WriteInteger(Drt_Cell.ReturnCell.Layer);
-  if Model.ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
   begin
     Limit := -2;
   end

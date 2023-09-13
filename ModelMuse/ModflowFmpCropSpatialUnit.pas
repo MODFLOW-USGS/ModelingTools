@@ -900,12 +900,10 @@ begin
     begin
       FCropIDData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpCropID;
     end
-    {$IFDEF OWHMV2}
     else if Model.ModelSelection = msModflowOwhm2 then
     begin
       FCropIDData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmp4CropID;
-    end
-    {$ENDIF}
+    end;
   end
 end;
 

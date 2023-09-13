@@ -2,15 +2,15 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
   HelpType = htKeyword
   HelpKeyword = 'Farm-Irrigation-Types--Dialog-'
   Caption = 'Irrigation Types'
-  ClientHeight = 432
-  ClientWidth = 585
+  ClientHeight = 431
+  ClientWidth = 581
   ExplicitWidth = 597
   ExplicitHeight = 470
   TextHeight = 18
   object splitterMain: TJvNetscapeSplitter
     Left = 105
     Top = 0
-    Height = 383
+    Height = 382
     Align = alLeft
     Maximized = False
     Minimized = False
@@ -21,19 +21,18 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 383
-    Width = 585
+    Top = 382
+    Width = 581
     Height = 49
     Align = alBottom
     ParentColor = True
     TabOrder = 0
-    ExplicitTop = 382
     ExplicitWidth = 491
     DesignSize = (
-      585
+      581
       49)
     object btnCancel: TBitBtn
-      Left = 438
+      Left = 430
       Top = 6
       Width = 83
       Height = 33
@@ -44,7 +43,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       ExplicitLeft = 344
     end
     object btnOK: TBitBtn
-      Left = 349
+      Left = 341
       Top = 6
       Width = 83
       Height = 33
@@ -56,7 +55,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       ExplicitLeft = 255
     end
     object btnHelp: TBitBtn
-      Left = 260
+      Left = 252
       Top = 6
       Width = 83
       Height = 33
@@ -72,7 +71,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     Left = 0
     Top = 0
     Width = 105
-    Height = 383
+    Height = 382
     ShowButtons = True
     PageDefault = 0
     PageList = jvplMain
@@ -83,29 +82,27 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     OnChange = jvpltvMainChange
     OnCustomDrawItem = jvpltvMainCustomDrawItem
     Items.Links = {00000000}
-    ExplicitHeight = 382
   end
   object jvplMain: TJvPageList
     Left = 115
     Top = 0
-    Width = 470
-    Height = 383
+    Width = 466
+    Height = 382
     ActivePage = jvspEvapFraction
     PropagateEnable = False
     Align = alClient
     ExplicitWidth = 376
-    ExplicitHeight = 382
     object jvspIrrigationTypes: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 470
+      Width = 474
       Height = 383
       Caption = 'jvspIrrigationTypes'
       ExplicitWidth = 380
       inline frameIrrigationTypes: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 470
+        Width = 474
         Height = 383
         Align = alClient
         TabOrder = 0
@@ -113,7 +110,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         ExplicitHeight = 383
         inherited Panel: TPanel
           Top = 342
-          Width = 470
+          Width = 474
           ExplicitTop = 342
           ExplicitWidth = 380
           inherited lbNumber: TLabel
@@ -142,7 +139,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 470
+          Width = 474
           Height = 285
           ColCount = 2
           DefaultColWidth = 65
@@ -201,8 +198,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           ExplicitHeight = 285
         end
         inherited pnlTop: TPanel
-          Width = 470
-          ExplicitWidth = 380
+          Width = 474
+          ExplicitWidth = 509
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -222,23 +219,23 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     object jvspEvapFraction: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 470
-      Height = 383
+      Width = 466
+      Height = 382
       Caption = 'jvspEvapFraction'
-      ExplicitWidth = 376
-      ExplicitHeight = 382
+      ExplicitWidth = 509
+      ExplicitHeight = 392
       inline frameEvaporationFractions: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 470
+        Width = 474
         Height = 383
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 376
-        ExplicitHeight = 382
+        ExplicitWidth = 509
+        ExplicitHeight = 392
         inherited Panel: TPanel
           Top = 342
-          Width = 470
+          Width = 474
           ExplicitTop = 341
           ExplicitWidth = 376
           inherited lbNumber: TLabel
@@ -265,7 +262,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 470
+          Width = 474
           Height = 285
           OnSelectCell = frameEvaporationFractionsGridSelectCell
           OnSetEditText = GridSetEditText
@@ -276,8 +273,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           ExplicitHeight = 285
         end
         inherited pnlTop: TPanel
-          Width = 470
-          ExplicitWidth = 376
+          Width = 474
+          ExplicitWidth = 509
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57

@@ -315,63 +315,23 @@ type
     property GwtPackages: TGwtPackageCollection read FGwtPackages
       write SetGwtPackges;
     property FarmProcess4: TFarmProcess4 read FFarmProcess4
-      write SetFarmProcess4
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
-    property FarmSoil4: TFarmProcess4Soil read FFarmSoil4 write SetFarmSoil4
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetFarmProcess4;
+    property FarmSoil4: TFarmProcess4Soil read FFarmSoil4 write SetFarmSoil4;
     property FarmClimate4: TFarmProcess4Climate read FFarmClimate4
-      write SetFarmClimate4
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetFarmClimate4;
     property FarmSurfaceWater4: TFarmProcess4SurfaceWater
-      read FFarmSurfaceWater4 write SetFarmSurfaceWater4
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      read FFarmSurfaceWater4 write SetFarmSurfaceWater4;
     property FarmWells4: TFarmProcess4Wells read FFarmWells4
-      write SetFarmWells4
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetFarmWells4;
     property FarmAllotments: TFarmProcess4Allotments read FFarmAllotments
-      write SetFarmAllotments
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
-    property FarmLandUse: TFarmProcess4LandUse read FFarmLandUse write SetFarmLandUse
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetFarmAllotments;
+    property FarmLandUse: TFarmProcess4LandUse read FFarmLandUse write SetFarmLandUse;
     property FarmSalinityFlush: TFarmProcess4SalinityFlush read FFarmSalinityFlush
-      write SetFarmSalinityFlush
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetFarmSalinityFlush;
     property BuoyancyPackage: TBuoyancyPackage read FBuoyancyPackage
-      write SetBuoyancyPackage
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetBuoyancyPackage;
     property ViscosityPackage: TViscosityPackage read FViscosityPackage
-      write SetViscosityPackage
-    {$IFNDEF Viscosity}
-      stored False
-    {$ENDIF}
-      ;
+      write SetViscosityPackage;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
@@ -1364,27 +1324,19 @@ begin
     Inc(Result);
   end;
 
-  {$IFDEF OWHMV2}
   if FarmProcess4.IsSelected and (Model.ModelSelection = msModflowOwhm2) then
   begin
     Inc(Result);
   end;
-  {$ENDIF}
 
-  if RipPackage.IsSelected and (Model.ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ]) then
+  if RipPackage.IsSelected and (Model.ModelSelection in
+    [msModflowFmp, msModflowOwhm2]) then
   begin
     Inc(Result);
   end;
 
-  if ConduitFlowProcess.IsSelected and (Model.ModelSelection in [msModflowCfp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ]) then
+  if ConduitFlowProcess.IsSelected and (Model.ModelSelection in
+    [msModflowCfp, msModflowOwhm2]) then
   begin
     Inc(Result);
   end;
@@ -1396,11 +1348,8 @@ begin
   end;
 
   if SwrPackage.IsSelected
-    and (Model.ModelSelection in [msModflow, msModflowNWT, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-    ]) then
+    and (Model.ModelSelection in
+    [msModflow, msModflowNWT, msModflowFmp, msModflowOwhm2]) then
   begin
     Inc(Result);
   end;

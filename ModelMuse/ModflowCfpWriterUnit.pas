@@ -17,7 +17,6 @@ type
     FNumber: Integer;
     FIsFixed: Boolean;
     FFixedHead: double;
-  {$IFDEF OWHMV2}
     FLimitedFlow: double;
     FWellFlow: double;
     FCauchyHead: double;
@@ -26,7 +25,6 @@ type
     FLimitedHead: double;
     CadWidth: double;
     FTransient: Boolean;
-  {$ENDIF}
     FPipes: TList<TCfpPipe>;
     FExchange: Double;
     FLayer: integer;
@@ -36,16 +34,12 @@ type
     FRechargeFraction: array of double;
     FRechargeFractionUsed: array of boolean;
     FRechargeFractionAnnotation: array of string;
-  {$IFDEF OWHMV2}
     FCadsRechargeFraction: array of double;
     FCadsRechargeFractionAnnotation: array of string;
-  {$ENDIF}
     // @name is used to indicate that data about this node should be written
     // to an output file. See Conduit Output Control File.
     FRecordData: Boolean;
-  {$IFDEF OWHMV2}
     FTimeSeriesAnalysis: Boolean;
-  {$ENDIF}
     FScreenObject: TScreenObject;
     constructor Create;
   public
@@ -65,9 +59,7 @@ type
     // @name is used to indicate that data about this pipe should be written
     // to an output file. See Conduit Output Control File.
     FRecordData: Boolean;
-  {$IFDEF OWHMV2}
     FTimeSeriesAnalysis: Boolean;
-  {$ENDIF}
     function SameNodes(Node1, Node2: TCfpNode): boolean;
     function OtherNode(ANode: TCfpNode): TCfpNode;
   end;
@@ -485,10 +477,8 @@ begin
                 end;
                 Node1.FRecordData :=
                   PipeBoundary.RecordNodeValues or Node1.FRecordData;
-              {$IFDEF OWHMV2}
                 Node1.FTimeSeriesAnalysis :=
                   PipeBoundary.TimesSeriesNodes or Node1.FTimeSeriesAnalysis;
-              {$ENDIF}
                 if Node2 = nil then
                 begin
                   Node2 := TCfpNode.Create;
@@ -502,10 +492,8 @@ begin
                 end;
                 Node2.FRecordData :=
                   PipeBoundary.RecordNodeValues or Node2.FRecordData;
-              {$IFDEF OWHMV2}
                 Node2.FTimeSeriesAnalysis :=
                   PipeBoundary.TimesSeriesNodes or Node2.FTimeSeriesAnalysis;
-              {$ENDIF}
                 Pipe := nil;
                 if not NodeCreated then
                 begin
@@ -535,9 +523,7 @@ begin
                 Pipe.FLowerR := LowerCriticalRValue;
                 Pipe.FHigherR := UpperCriticalRValue;
                 Pipe.FRecordData := PipeBoundary.RecordPipeValues;
-              {$IFDEF OWHMV2}
                 Pipe.FTimeSeriesAnalysis := PipeBoundary.TimesSeriesPipes;
-              {$ENDIF}
               end;
             end;
           end;
@@ -549,7 +535,6 @@ begin
       Assert(FixedHeadsArray <> nil);
       FixedHeadsArray.Initialize;
       BoundaryTypeArray := nil;
-    {$IFDEF OWHMV2}
       if Model.ModelSelection  = msModflowOwhm2 then
       begin
         BoundaryTypeArray := Model.DataArrayManager.GetDataSetByName(KCfpBoundaryType);
@@ -580,7 +565,6 @@ begin
         Assert(LimitedHeadArray <> nil);
         LimitedHeadArray.Initialize;
       end;
-    {$ENDIF}
       for NodeIndex := 0 to FNodes.Count - 1 do
       begin
         ANode := FNodes[NodeIndex];
@@ -629,15 +613,8 @@ begin
             Assert(AScreenObject.ModflowCfpFixedHeads <> nil);
             Assert(AScreenObject.ModflowCfpFixedHeads.BoundaryType
               = ANode.FCfpBoundaryType);
-          {$IFDEF OWHMV2}
             ANode.FTransient := AScreenObject.ModflowCfpFixedHeads.TimeDependent;
-          {$ENDIF}
             CfpCollection := nil;
-//            if ANode.FTransient then
-//            begin
-//              CfpCollection := AScreenObject.ModflowCfpFixedHeads.Values as TCfpCollection;
-//              SetLength(ANode.FTimes, CfpCollection.Count);
-//            end;
 
             case ANode.FCfpBoundaryType of
               cbtFixedHead:
@@ -651,7 +628,6 @@ begin
                       ANode.FLayer, ANode.FRow, ANode.FColumn];
                   end;
                 end;
-            {$IFDEF OWHMV2}
               cbtWell:
                 begin
                   if WellFlowArray.IsValue[
@@ -732,7 +708,6 @@ begin
                     Assert(False);
                   end;
                 end;
-            {$ENDIF}
               else
                 Assert(False);
             end;
@@ -765,7 +740,6 @@ begin
 
   if FConduitFlowProcess.ConduitRechargeUsed then
   begin
-  {$IFDEF OWHMV2}
     if (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads then
     begin
       DrainableStorageWidth := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
@@ -776,9 +750,6 @@ begin
     begin
       DrainableStorageWidth := nil;
     end;
-  {$ELSE}
-    DrainableStorageWidth := nil;
-  {$ENDIF}
 
     if DrainableStorageWidth <> nil then
     begin
@@ -829,9 +800,7 @@ begin
                 Node1.FColumn := ACell1.Column;
                 Node1.FScreenObject := AScreenObject;
               end;
-            {$IFDEF OWHMV2}
               Node1.CadWidth := CfpDrainableStorageWidth;
-            {$ENDIF}
             end;
           end;
         end;
@@ -869,10 +838,8 @@ begin
       SetLength(ANode.FRechargeFraction, StressPeriodCount);
       SetLength(ANode.FRechargeFractionAnnotation, StressPeriodCount);
 
-    {$IFDEF OWHMV2}
       SetLength(ANode.FCadsRechargeFraction, StressPeriodCount);
       SetLength(ANode.FCadsRechargeFractionAnnotation, StressPeriodCount);
-    {$ENDIF}
       for StressPeriodIndex := 0 to StressPeriodCount - 1 do
       begin
         ANode.FRechargeFractionUsed[StressPeriodIndex] := False;
@@ -928,10 +895,8 @@ begin
           ANode.FRechargeFractionUsed[StressPeriodIndex] := True;
           ANode.FRechargeFraction[StressPeriodIndex] := ACell.CfpRechargeFraction;
           ANode.FRechargeFractionAnnotation[StressPeriodIndex] := ACell.CfpRechargeFractionAnnotation;
-        {$IFDEF OWHMV2}
           ANode.FCadsRechargeFraction[StressPeriodIndex] := ACell.CfpCadsRechargeFraction;
           ANode.FCadsRechargeFractionAnnotation[StressPeriodIndex] := ACell.CfpCadsRechargeFractionAnnotation;
-        {$ENDIF}
         end;
       end;
     end;
@@ -996,12 +961,10 @@ begin
             ANode.FRechargeFraction[TimeIndex];
           RechFractionsArray.Annotation[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
             ANode.FRechargeFractionAnnotation[TimeIndex];
-        {$IFDEF OWHMV2}
           CadsRechFractionsArray.RealData[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
             ANode.FCadsRechargeFraction[TimeIndex];
           CadsRechFractionsArray.Annotation[ANode.FLayer, ANode.FRow, ANode.FColumn] :=
             ANode.FCadsRechargeFractionAnnotation[TimeIndex];
-        {$ENDIF}
         end;
       end;
     end;
@@ -1231,13 +1194,8 @@ begin
     ANode := FNodes[NodeIndex];
     NO_N := ANode.FNumber;
     WriteInteger(NO_N);
-    if ANode.FIsFixed
-    {$IFDEF OWHMV2}
-      or (ANode.FCfpBoundaryType <> cbtFixedHead)
-    {$ENDIF}
-      then
+    if ANode.FIsFixed or (ANode.FCfpBoundaryType <> cbtFixedHead) then
     begin
-    {$IFDEF OWHMV2}
       if Model.ModelSelection = msModflowOwhm2 then
       begin
         case ANode.FCfpBoundaryType of
@@ -1325,18 +1283,9 @@ begin
               LQ := ANode.FLimitedFlow;
               WriteFloat(LQ);
             end;
-//          cbtWellConductance:
-//            begin
-//              N_HEAD := -1;
-//              WriteFloat(N_HEAD);
-//              WriteString(' WELL');
-//              CWC_WELL := ANode.FWellConductance;
-//              WriteFloat(CWC_WELL);
-//            end;
         end;
       end
       else
-    {$ENDIF}
       begin
         N_HEAD := ANode.FFixedHead;
         if N_HEAD = -1 then
@@ -1346,23 +1295,19 @@ begin
               ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]), ANode.FScreenObject);
         end;
         WriteFloat(N_HEAD);
-      {$IFDEF OWHMV2}
         if Model.ModelSelection = msModflowOwhm2 then
         begin
           WriteString('    X');
         end;
-        {$ENDIF}
       end;
     end
     else
     begin
       WriteInteger(-1);
-    {$IFDEF OWHMV2}
       if Model.ModelSelection = msModflowOwhm2 then
       begin
         WriteString('    X');
       end;
-    {$ENDIF}
     end;
     NewLine;
   end;
@@ -1393,11 +1338,7 @@ var
   K_EXCHANGE: Double;
   CadsUsed: Boolean;
 begin
-{$IFDEF OWHMV2}
   CadsUsed := (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads;
-{$ELSE}
-  CadsUsed := False;
-{$ENDIF}
   for NodeIndex := 0 to FNodes.Count - 1 do
   begin
     ANode := FNodes[NodeIndex];
@@ -1405,12 +1346,10 @@ begin
     K_EXCHANGE := ANode.FExchange;
     WriteInteger(NO_N);
     WriteFloat(K_EXCHANGE);
-  {$IFDEF OWHMV2}
     if CadsUsed then
     begin
       WriteFloat(ANode.CadWidth);
     end;
-  {$ENDIF}
     NewLine;
   end;
 end;
@@ -1483,7 +1422,6 @@ end;
 
 procedure TModflowCfpWriter.WriteDataSet35;
 begin
-{$IFDEF OWHMV2}
   if Model.ModelSelection = msModflowOwhm2 then
   begin
     WriteString('# undocumented flag: IRADFLAG');
@@ -1496,33 +1434,22 @@ begin
     WriteString('# Water temperature, in degrees Celsius (LTEMP)');
     NewLine;
   end;
-{$ELSE}
-  WriteString('# Water temperature, in degrees Celsius (LTEMP)');
-  NewLine;
-{$ENDIF}
 end;
 
 procedure TModflowCfpWriter.WriteDataSet36;
 var
   LTEMP: Double;
 begin
-{$IFDEF OWHMV2}
   if Model.ModelSelection <> msModflowOwhm2 then
   begin
     LTEMP := FConduitFlowProcess.LayerTemperature;
     WriteFloat(LTEMP);
     NewLine;
   end;
-{$else}
-  LTEMP := FConduitFlowProcess.LayerTemperature;
-  WriteFloat(LTEMP);
-  NewLine;
-{$ENDIF}
 end;
 
 procedure TModflowCfpWriter.WriteDataSet37;
 begin
-{$IFDEF OWHMV2}
   if Model.ModelSelection <> msModflowOwhm2 then
   begin
     WriteString('# mean void diameter (VOID), '
@@ -1530,12 +1457,6 @@ begin
       + 'Upper critical Reynolds number (laminar to turbulent) (TCRITREY_L)');
     NewLine;
   end;
-{$ELSE}
-    WriteString('# mean void diameter (VOID), '
-      + 'lower critical Reynolds number (turbulent to laminar) (LCRITREY_L), '
-      + 'Upper critical Reynolds number (laminar to turbulent) (TCRITREY_L)');
-    NewLine;
-{$ENDIF}
 end;
 
 procedure TModflowCfpWriter.WriteDataSet4;
@@ -1633,7 +1554,6 @@ end;
 
 procedure TModflowCfpWriter.WriteDataSets2and3;
 begin
-{$IFDEF OWHMV2}
   if Model.ModelSelection = msModflowOwhm2 then
   begin
     WriteString('FBC ');
@@ -1642,7 +1562,6 @@ begin
       WriteString('CADS ');
     end;
   end;
-{$ENDIF}
   WriteString('# data for mode 1 (or 3) conduit pipe system');
   NewLine;
   WriteString('# number of nodes (NNODES), number of conduits (NPIPES), number of layers (NLAYERS)');
@@ -1671,13 +1590,11 @@ var
   LayerID: string;
   LTEMP: Double;
 begin
-{$IFDEF OWHMV2}
   if Model.ModelSelection = msModflowOwhm2 then
   begin
     WriteString('TURBULENT FLOW PARAMETER ARRAYS (undocumented)');
     NewLine;
   end;
-{$ENDIF}
   ModelLayer := 0;
   CL := 0;
   LTEMP := FConduitFlowProcess.LayerTemperature;
@@ -1698,7 +1615,6 @@ begin
             LCRITREY_L := AConduitLayer.LowerCriticalReynoldsNumber;
             TCRITREY_L := AConduitLayer.HigherCriticalReynoldsNumber;
 
-          {$IFDEF OWHMV2}
             if Model.ModelSelection = msModflowOwhm2 then
             begin
               Inc(CL);
@@ -1750,29 +1666,11 @@ begin
               WriteString(Format('# conduit layer %0:d, (Model layer %1:d)', [CL, ModelLayer]));
               NewLine;
               // Data Set 39
-//              VOID := AConduitLayer.Void;
-//              LCRITREY_L := AConduitLayer.LowerCriticalReynoldsNumber;
-//              TCRITREY_L := AConduitLayer.HigherCriticalReynoldsNumber;
               WriteFloat(VOID);
               WriteFloat(LCRITREY_L);
               WriteFloat(TCRITREY_L);
               NewLine;
             end;
-          {$else}
-            // Data Set 38
-            Inc(CL);
-            WriteString(Format('# conduit layer %0:d, (Model layer %1:d)', [CL, ModelLayer]));
-            NewLine;
-            // Data Set 39
-//            VOID := AConduitLayer.Void;
-//            LCRITREY_L := AConduitLayer.LowerCriticalReynoldsNumber;
-//            TCRITREY_L := AConduitLayer.HigherCriticalReynoldsNumber;
-            WriteFloat(VOID);
-            WriteFloat(LCRITREY_L);
-            WriteFloat(TCRITREY_L);
-            NewLine;
-          {$ENDIF}
-
           end;
         end;
       end;
@@ -1809,11 +1707,8 @@ procedure TModflowCfpWriter.WriteFile(const AFileName: string);
 var
   ShouldWriteFile: boolean;
 begin
-  if not Package.IsSelected or not (Model.ModelSelection in [msModflowCfp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ]) then
+  if not Package.IsSelected or not (Model.ModelSelection in
+    [msModflowCfp, msModflowOwhm2]) then
   begin
     Exit
   end;
@@ -2032,7 +1927,6 @@ begin
       begin
         Inc(NNODES);
       end;
-    {$IFDEF OWHMV2}
       if Model.ModelSelection = msModflowOwhm2 then
       begin
         if FNodes[NodeIndex].FTimeSeriesAnalysis then
@@ -2040,7 +1934,6 @@ begin
           Inc(NTSAN);
         end;
       end;
-    {$ENDIF}
     end;
     NPIPES := 0;
     NTSAT := 0;
@@ -2050,7 +1943,6 @@ begin
       begin
         Inc(NPIPES);
       end;
-    {$IFDEF OWHMV2}
       if Model.ModelSelection = msModflowOwhm2 then
       begin
         if FPipes[PipeIndex].FTimeSeriesAnalysis then
@@ -2058,7 +1950,6 @@ begin
           Inc(NTSAT);
         end;
       end;
-    {$ENDIF}
     end;
     if (NNODES > 0) or (NPIPES > 0) or (NTSAN > 0) or (NTSAT > 0) then
     begin
@@ -2079,20 +1970,16 @@ begin
         // Data Set 1
         WriteCommentLine('Number of nodes for output (NNODES)');
         // Data set 2
-      {$IFDEF OWHMV2}
         if (Model.ModelSelection = msModflowOwhm2)
           and FConduitFlowProcess.RecordInputAndOutput then
         begin
           NNODES := -NNODES;
         end;
-      {$ENDIF}
         WriteInteger(NNODES);
-      {$IFDEF OWHMV2}
         if Model.ModelSelection = msModflowOwhm2  then
         begin
           WriteInteger(NTSAN);
         end;
-      {$ENDIF}
         NewLine;
         // Data set 3
         WriteCommentLine('Node numbers, one per line (NODE_NUMBERS)');
@@ -2121,12 +2008,10 @@ begin
         WriteCommentLine('Number of conduits for output (NPIPES)');
         // Data Set 8
         WriteInteger(NPIPES);
-      {$IFDEF OWHMV2}
         if Model.ModelSelection = msModflowOwhm2 then
         begin
           WriteInteger(NTSAT);
         end;
-      {$ENDIF}
         NewLine;
         // Data set 9
         WriteCommentLine('Conduit numbers, one per line (PIPE_NUMBERS)');
@@ -2150,7 +2035,6 @@ begin
         WriteInteger(FConduitFlowProcess.OutputInterval);
         NewLine;
 
-      {$IFDEF OWHMV2}
         if Model.ModelSelection = msModflowOwhm2 then
         begin
           // data set 13
@@ -2208,9 +2092,6 @@ begin
           NewLine;
 
         end;
-      {$ENDIF}
-
-
       finally
         CloseFile;
       end;
@@ -2257,7 +2138,6 @@ begin
           if ANode.FRechargeFractionUsed[StressPeriodIndex] then
           begin
             WriteFloat(ANode.FRechargeFraction[StressPeriodIndex]);
-          {$IFDEF OWHMV2}
             if (Model.ModelSelection = msModflowOwhm2) then
             begin
               if FConduitFlowProcess.UseCads then
@@ -2265,18 +2145,15 @@ begin
                 WriteFloat(ANode.FCadsRechargeFraction[StressPeriodIndex]);
               end;
             end;
-          {$ENDIF}
           end
           else
           begin
             WriteFloat(0);
           end;
-        {$IFDEF OWHMV2}
           if (ANode.FCfpBoundaryType = cbtWell) and not ANode.FTransient then
           begin
             WriteFloat(ANode.FWellFlow);
           end;
-        {$ENDIF}
           NewLine;
         end;
       end;

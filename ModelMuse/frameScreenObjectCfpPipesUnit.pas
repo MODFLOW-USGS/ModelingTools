@@ -306,13 +306,9 @@ begin
     else
       Assert(False);
   end;
-{$IFDEF OWHMV2}
   cbRecordTimeSeriesPipes.Enabled := (frmGoPhast.ModelSelection = msModflowOwhm2)
     and frmGoPhast.PhastModel.ModflowPackages.
     ConduitFlowProcess.UseCads;
-{$ELSE}
-  cbRecordTimeSeriesPipes.Enabled := False;
-{$ENDIF}
   cbRecordTimeSeriesNodes.Enabled := cbRecordTimeSeriesPipes.Enabled;
 end;
 

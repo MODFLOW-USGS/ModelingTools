@@ -35,7 +35,7 @@ inherited frmDataSets: TfrmDataSets
       620
       41)
     object btnOK: TBitBtn
-      Left = 389
+      Left = 385
       Top = 2
       Width = 91
       Height = 33
@@ -63,10 +63,9 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOKClick
-      ExplicitLeft = 385
     end
     object btnCancel: TBitBtn
-      Left = 486
+      Left = 482
       Top = 2
       Width = 91
       Height = 33
@@ -75,7 +74,6 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnCancelClick
-      ExplicitLeft = 482
     end
     object btnAdd: TButton
       Left = 8
@@ -96,7 +94,7 @@ inherited frmDataSets: TfrmDataSets
       OnClick = btnDeleteClick
     end
     object btnHelp: TBitBtn
-      Left = 292
+      Left = 288
       Top = 2
       Width = 91
       Height = 33
@@ -105,7 +103,6 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
-      ExplicitLeft = 288
     end
   end
   object sbStatusBar: TStatusBar
@@ -568,6 +565,7 @@ inherited frmDataSets: TfrmDataSets
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitHeight = 163
         object lblComment: TLabel
           AlignWithMargins = True
           Left = 3
@@ -590,6 +588,7 @@ inherited frmDataSets: TfrmDataSets
           WordWrap = False
           OnEnter = reCommentEnter
           OnExit = reCommentExit
+          ExplicitHeight = 132
         end
       end
       object pnlDescription: TPanel
@@ -604,11 +603,10 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 306
+          Width = 164
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
-          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

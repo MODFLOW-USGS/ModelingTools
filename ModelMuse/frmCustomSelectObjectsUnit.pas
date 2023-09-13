@@ -642,11 +642,7 @@ begin
             Data.Caption := StrSetGridElementSize;
           end;
         msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-          msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-          :
+          msModflowFmp, msModflowCfp, msFootPrint, msModflow2015, msModflowOwhm2:
           begin
             Data.Caption := StrSetGridCellSize;
           end;
@@ -895,7 +891,6 @@ begin
 
     else if Node = FvstModflowFarmNode then
     begin
-    {$IFDEF OWHMV2}
       if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
       begin
         Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);
@@ -904,14 +899,10 @@ begin
       begin
         Data.Caption := 'FMP4: WBS IDs';
       end;
-    {$ELSE}
-        Data.Caption := Format(StrFarmsIn, [Packages.FarmProcess.PackageIdentifier]);
-    {$ENDIF}
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmWellNode then
     begin
-    {$IFDEF OWHMV2}
       if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
       begin
         Data.Caption := Format(StrFarmWellsIn, [Packages.FarmProcess.PackageIdentifier]);
@@ -920,14 +911,10 @@ begin
       begin
         Data.Caption :=  'FMP4: Farm Wells';
       end;
-    {$ELSE}
-        Data.Caption := Format(StrFarmWellsIn, [Packages.FarmProcess.PackageIdentifier]);
-    {$ENDIF}
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmPrecipNode then
     begin
-    {$IFDEF OWHMV2}
       if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
       begin
         Data.Caption := Format(StrPrecipInS, [Packages.FarmProcess.PackageIdentifier]);
@@ -936,14 +923,10 @@ begin
       begin
         Data.Caption := 'FMP4 Climate: Precipitation';
       end;
-    {$ELSE}
-        Data.Caption := Format(StrPrecipInS, [Packages.FarmProcess.PackageIdentifier]);
-    {$ENDIF}
         Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmRefEvapNode then
     begin
-    {$IFDEF OWHMV2}
       if frmGoPhast.PhastModel.ModelSelection = msModflowFMP then
       begin
         Data.Caption := Format(StrRefEvapInS, [Packages.FarmProcess.PackageIdentifier]);
@@ -952,9 +935,6 @@ begin
       begin
         Data.Caption := 'FMP4 Climate: Reference Evaporation';
       end;
-    {$ELSE}
-        Data.Caption := Format(StrRefEvapInS, [Packages.FarmProcess.PackageIdentifier]);
-    {$ENDIF}
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstModflowFarmCropIDNode then

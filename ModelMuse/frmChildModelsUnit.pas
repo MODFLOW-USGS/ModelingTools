@@ -323,11 +323,7 @@ begin
         begin
           seCellCount.Increment := 2;
         end;
-      msModflowLGR2, msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         begin
           seCellCount.Increment := 1;
         end;
@@ -336,11 +332,6 @@ begin
   end;
   FChildModels.Capacity := frmGoPhast.PhastModel.ChildModels.Count;
   FChildModels.Assign(frmGoPhast.PhastModel.ChildModels);
-//  for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
-//  begin
-//    Edit := FChildModels.Add as TChildModelEdit;
-//    Edit.Assign(frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel);
-//  end;
   Node := nil;
   for ChildIndex := 0 to FChildModels.Count - 1 do
   begin
@@ -506,11 +497,7 @@ begin
             seCellCount.AsInteger := 3;
           end;
         end;
-      msModflowLGR2, msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         begin
           if seCellCount.AsInteger <= 1 then
           begin

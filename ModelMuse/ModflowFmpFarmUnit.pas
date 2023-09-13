@@ -668,11 +668,7 @@ type
       read GetCurrentFarmEfficiencyCollection
       write SetCurrentFarmEfficiencyCollection;
   published
-    property FarmGUID: string read FFarmGUID write SetFarmGUID
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+    property FarmGUID: string read FFarmGUID write SetFarmGUID;
     // FID, FMP Data set 6.
     property FarmId: Integer read FFarmId write SetFarmId;
     // FMP Data sets 7 or 27.
@@ -703,97 +699,41 @@ type
     // irrigation efficiency in OWHM verison 2
     property FarmIrrigationEfficiencyCollection: TFarmEfficiencyCollection
       read FFarmIrrigationEfficiencyCollection
-      write SetFarmIrrigationEfficiencyCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetFarmIrrigationEfficiencyCollection;
     // irrigation efficiency improvement in OWHM verison 2
     property FarmIrrigationEfficiencyImprovementCollection: TFarmEfficiencyCollection
       read FFarmIrrigationEfficiencyImprovementCollection
-      write SetFarmIrrigationEfficiencyImprovementCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetFarmIrrigationEfficiencyImprovementCollection;
     // ADDED_DEMAND_RUNOFF_SPLIT in OWHM verison 2
     property AddedDemandRunoffSplitCollection: TFarmEfficiencyCollection
       read FAddedDemandRunoffSplitCollection
-      write SetAddedDemandRunoffSplitCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetAddedDemandRunoffSplitCollection;
       // WBS_IRRIGATION_UNIFORMITY in OWHM verison 2
       property IrrigationUniformity: TFarmEfficiencyCollection
-        read FIrrigationUniformity write SetIrrigationUniformity
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        read FIrrigationUniformity write SetIrrigationUniformity;
       property DeficiencyScenario: TDeficiencyScenarioCollection
-        read FDeficiencyScenario write SetDeficiencyScenario
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        read FDeficiencyScenario write SetDeficiencyScenario;
       property WaterSource: TWaterSourceCollection read FWaterSource
-        write SetWaterSource
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        write SetWaterSource;
       property BareRunoffFraction: TBareRunoffFractionCollection
-        read FBareRunoffFraction write SetBareRunoffFraction
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        read FBareRunoffFraction write SetBareRunoffFraction;
       property AddedCropDemandFlux: TFarmEfficiencyCollection
-        read FAddedCropDemandFlux write SetAddedCropDemandFlux
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        read FAddedCropDemandFlux write SetAddedCropDemandFlux;
       property AddedCropDemandRate: TFarmEfficiencyCollection
-        read FAddedCropDemandRate write SetAddedCropDemandRate
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        read FAddedCropDemandRate write SetAddedCropDemandRate;
       property NoReturnFlow: TNoReturnCollection read FNoReturnFlow
-        write SetNoReturnFlow
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        write SetNoReturnFlow;
       // SEMI_ROUTED_DELIVERY
-      property MultiSrDeliveries: TMultiSrdCollection read FMultiSrd write SetMultiSrd
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      property MultiSrDeliveries: TMultiSrdCollection read FMultiSrd write SetMultiSrd;
       // SEMI_ROUTED_RETURN
       property MultiSrReturns: TMultiSrdCollection read FMultiSrReturns
-        write SetMultiSrReturns
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        write SetMultiSrReturns;
       // SURFACE_WATER in ALLOCATIONS
     property SWAllotment: TAllotmentCollection read FSWAllotment
-      write SetSWAllotment
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetSWAllotment;
       property SaltSupplyConcentrationCollection: TSaltSupplyConcentrationCollection
         read FSaltSupplyConcentrationCollection
-        write SetSaltSupplyConcentrationCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+        write SetSaltSupplyConcentrationCollection;
     property PumpSpreadChoice: TOwhmV2PumpSpreadChoice read FPumpSpreadChoice
       write SetPumpSpreadChoice;
   end;
@@ -1799,12 +1739,7 @@ begin
   end
   else
   begin
-    {$IFDEF OWHMV2}
     result := FarmIrrigationEfficiencyCollection;
-    {$ELSE}
-      result := nil;
-    Assert(False);
-    {$ENDIF}
   end;
 end;
 
@@ -1912,11 +1847,7 @@ begin
   end
   else
   begin
-    {$IFDEF OWHMV2}
     FarmIrrigationEfficiencyCollection := Value;
-    {$ELSE}
-    Assert(False);
-    {$ENDIF}
   end;
 end;
 
@@ -2076,7 +2007,6 @@ begin
       StartRangeExtended, EndRangeExtended);
   end;
 
-  {$IFDEF OWHMV2}
   for EffIndex := 0 to FarmIrrigationEfficiencyCollection.Count - 1 do
   begin
     EfficiencyCol := FarmIrrigationEfficiencyCollection[EffIndex].CropEfficiency;
@@ -2125,15 +2055,12 @@ begin
     AddBoundaryTimes(EfficiencyCol, Times, StartTestTime, EndTestTime,
       StartRangeExtended, EndRangeExtended);
   end;
-  {$ENDIF}
 end;
 
 function TFarm.Used: boolean;
 begin
   result := (FarmEfficiencyCollection.Count > 0)
-  {$IFDEF OWHMV2}
     or (FarmIrrigationEfficiencyCollection.Count > 0)
-  {$ENDIF}
 end;
 
 { TWaterRightsItem }

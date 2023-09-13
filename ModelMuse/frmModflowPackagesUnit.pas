@@ -1398,11 +1398,8 @@ begin
     frmGoPhast.acLayersExecute(nil);
   end;
 
-  if frmGoPhast.ModelSelection in [msModflow, msModflowNWT, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if frmGoPhast.ModelSelection in
+    [msModflow, msModflowNWT, msModflowFmp, msModflowOwhm2] then
   begin
     if frmGoPhast.PhastModel.ModflowPackages.SwrPackage.IsSelected
       and (frmGoPhast.PhastModel.SwrReachGeometry.Count = 0) then
@@ -1413,11 +1410,7 @@ begin
 
   if frmGoPhast.PhastModel.RipIsSelected
     and (frmGoPhast.PhastModel.RipPlantGroups.Count = 0)
-    and (frmGoPhast.ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-    ]) then
+    and (frmGoPhast.ModelSelection in [msModflowFmp, msModflowOwhm2]) then
   begin
     frmGoPhast.acRipPlantGroupsExecute(nil);
   end;
@@ -2748,29 +2741,18 @@ begin
       AddNode(StrOutput, StrOutput, PriorNode);
     end;
 
-    if frmGoPhast.ModelSelection in [msModflow, msModflowNWT, msModflowFMP
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-    ] then
+    if frmGoPhast.ModelSelection in
+      [msModflow, msModflowNWT, msModflowFMP, msModflowOwhm2] then
     begin
       AddNode(StrSurfaceWaterRoutin, StrSurfaceWaterRoutin, PriorNode);
     end;
 
-    if frmGoPhast.ModelSelection in [msModflowCFP
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      ] then
+    if frmGoPhast.ModelSelection in [msModflowCFP, msModflowOwhm2] then
     begin
       AddNode(StrConduitFlowProcess, StrConduitFlowProcess, PriorNode);
     end;
 
-    if frmGoPhast.ModelSelection in [msModflowFMP
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ] then
+    if frmGoPhast.ModelSelection in [msModflowFMP, msModflowOwhm2] then
     begin
       AddNode(StrFarmProcess, StrFarmProcess, PriorNode);
     end;
@@ -4706,11 +4688,8 @@ begin
     framePkgHuf.NilNode;
   end;
 
-  if frmGoPhast.ModelSelection in [msModflowNWT, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if frmGoPhast.ModelSelection in
+    [msModflowNWT, msModflowFmp, msModflowOwhm2] then
   begin
     Packages.UpwPackage.Frame := framePkgUPW;
     FPackageList.Add(Packages.UpwPackage);
@@ -4728,19 +4707,11 @@ begin
     Packages.StoPackage.Frame := framePkgSto;
     FPackageList.Add(Packages.StoPackage);
 
-  {$IFDEF Buoyancy}
     Packages.BuoyancyPackage.Frame := framePkgBuoyancy;
     FPackageList.Add(Packages.BuoyancyPackage);
-  {$ELSE}
-    framePkgBuoyancy.NilNode;
-  {$ENDIF}
 
-  {$IFDEF Viscosity}
     Packages.ViscosityPackage.Frame := framePkgViscosity;
     FPackageList.Add(Packages.ViscosityPackage);
-  {$ELSE}
-    framePkgViscosity.NilNode;
-  {$ENDIF}
 
   end
   else
@@ -4787,11 +4758,8 @@ begin
     framePkgDE4.NilNode;
   end;
 
-  if frmGoPhast.ModelSelection in [msModflowNWT, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if frmGoPhast.ModelSelection in
+    [msModflowNWT, msModflowFmp, msModflowOwhm2] then
   begin
     Packages.NwtPackage.Frame := framePkgNwt;
     FPackageList.Add(Packages.NwtPackage);
@@ -4846,11 +4814,7 @@ begin
     framePkgRES.NilNode;
   end;
 
-  if frmGoPhast.ModelSelection in [msModflowFMP
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if frmGoPhast.ModelSelection in [msModflowFMP, msModflowOwhm2] then
   begin
     Packages.RipPackage.Frame := framePkgRIP;
     FPackageList.Add(Packages.RipPackage);
@@ -5036,7 +5000,6 @@ begin
     framePkgFrm.NilNode;
   end;
 
-          {$IFDEF OWHMV2}
   if frmGoPhast.ModelSelection = msModflowOwhm2 then
   begin
     Packages.FarmProcess4.Frame := framePkgFMP4;
@@ -5074,13 +5037,8 @@ begin
     framePkgFmp4LandUse.NilNode;
     framePkgFmp4SalinityFlush.NilNode;
   end;
-          {$ENDIF}
 
-  if frmGoPhast.ModelSelection in [msModflowCFP
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ] then
+  if frmGoPhast.ModelSelection in [msModflowCFP, msModflowOwhm2] then
   begin
     Packages.ConduitFlowProcess.Frame := framePkgCFP;
     FPackageList.Add(Packages.ConduitFlowProcess);
@@ -5090,11 +5048,8 @@ begin
     framePkgCFP.NilNode;
   end;
 
-  if frmGoPhast.ModelSelection in [msModflow, msModflowNWT, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if frmGoPhast.ModelSelection in
+    [msModflow, msModflowNWT, msModflowFmp, msModflowOwhm2] then
   begin
     Packages.SwiPackage.Frame := framePackageSWI;
     FPackageList.Add(Packages.SwiPackage);
@@ -5104,11 +5059,8 @@ begin
     framePackageSWI.NilNode;
   end;
 
-  if frmGoPhast.ModelSelection in [msModflow, msModflowNWT, msModflowFMP
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if frmGoPhast.ModelSelection in
+    [msModflow, msModflowNWT, msModflowFMP, msModflowOwhm2] then
   begin
     Packages.SwrPackage.Frame := framePkgSWR;
     FPackageList.Add(Packages.SwrPackage);

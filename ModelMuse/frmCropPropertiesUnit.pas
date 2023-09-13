@@ -781,7 +781,6 @@ begin
     end;
   end;
 
-{$IFDEF OWHMV2}
   if (frmGoPhast.ModelSelection = msModflowOwhm2)
       and FFarmProcess4.IsSelected and FFarmLandUse.IsSelected then
   begin
@@ -918,9 +917,7 @@ begin
       ANode.PageIndex := jvspLeach.PageIndex;
       ANode.Data := ACrop.SalinityAppliedWater;
     end;
-//
   end;
-{$ENDIF}
 
 end;
 
@@ -2203,7 +2200,6 @@ begin
   end;
 
   FPrintStart := -1;
-{$IFDEF OWHMV2}
   if Model.ModelSelection = msModflowOwhm2 then
   begin
     if FFarmLandUse.IsSelected
@@ -2213,7 +2209,6 @@ begin
       FLastCol := FPrintStart  + Ord(High(TPrintCol));
     end;
   end;
-{$ENDIF}
 end;
 
 procedure TfrmCropProperties.GetGlobalVariables;
@@ -2558,12 +2553,10 @@ procedure TfrmCropProperties.frameCropNameGridSelectCell(Sender: TObject; ACol,
     ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
-{$IFDEF OWHMV2}
   if frmGoPhast.ModelSelection = msModflowOwhm2 then
   begin
 //    FFarmLandUse
   end;
-{$ENDIF}
 end;
 
 procedure TfrmCropProperties.frameCropNameGridStateChange(Sender: TObject;

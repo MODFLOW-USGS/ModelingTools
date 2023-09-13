@@ -103,13 +103,10 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-  {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4RootDepth(self);
-    end
-  {$ENDIF}
-    ;
+    end;
   end;
 end;
 
@@ -141,7 +138,6 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -152,7 +148,6 @@ begin
       and (LandUse.RootDepth.FarmOption = foTransient)
       and (LandUse.RootDepth.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 { TFmp4MultRootDepthCollection }
@@ -168,7 +163,6 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -179,7 +173,6 @@ begin
       and (LandUse.RootDepth.FarmOption = foTransient)
       and (LandUse.RootDepth.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 { TFmp4MultRootDepthBoundary }
@@ -203,13 +196,10 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-  {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4RootDepth(self);
-    end
-  {$ENDIF}
-    ;
+    end;
   end;
 end;
 
@@ -219,7 +209,6 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if ParentModel <> nil then
   begin
     LocalModel := ParentModel as TCustomModel;
@@ -230,7 +219,6 @@ begin
       and (LandUse.RootDepth.FarmOption = foTransient)
       and (LandUse.RootDepth.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 class function TFmp4MultRootDepthBoundary.ValueDescription: string;

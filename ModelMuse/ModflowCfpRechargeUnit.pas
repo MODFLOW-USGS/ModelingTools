@@ -197,11 +197,7 @@ type
     procedure InvalidateDisplay; override;
   published
     property DrainableStorageWidth: string read GetDrainableStorageWidth
-      write SetDrainableStorageWidth
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetDrainableStorageWidth;
   end;
 
 
@@ -628,7 +624,6 @@ begin
     end;
   end;
 
-  {$IFDEF OWHMV2}
   if (PackageAssignmentMethod(AModel) = umAdd) and (Model.ModelSelection = msModflowOwhm2)
     and (AModel as TCustomModel).ModflowPackages.ConduitFlowProcess.UseCads then
   begin
@@ -656,7 +651,6 @@ begin
       end;
     end;
   end;
-  {$ENDIF}
 
   ClearBoundaries(AModel);
   SetBoundaryCapacity(RechargeRateData.Count, AModel);

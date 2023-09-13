@@ -5375,11 +5375,9 @@ SectionStarts.}
     constructor Create(ScreenObject: TScreenObject); override;
   end;
 
-{$IFDEF OWHMV2}
   TModflowFmp4Delegate = class(TModflowDelegate)
     constructor Create(ScreenObject: TScreenObject); override;
   end;
-{$ENDIF}
 
   TCustomMeshDelegate = class(TCustomScreenObjectDelegate)
   private
@@ -8537,11 +8535,7 @@ begin
           Draw1ElevPhast(Direction, Bitmap32, DrawAsSelected);
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        :
+        msModflowFmp, msModflowCfp, msModflowOwhm2:
         begin
           Draw1ElevModflow(Direction, Bitmap32, DrawAsSelected,
             (Model as TPhastModel).SelectedModel);
@@ -13120,11 +13114,7 @@ var
             end;
           end;
         msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-          msModflowFmp, msModflowCfp, msModflow2015
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-          :
+          msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
           begin
             Assert(EvaluatedAt = eaBlocks);
             BlockTop := LocalModel.ModflowGrid.
@@ -15925,11 +15915,7 @@ begin
           Draw2ElevPhast(Direction, Bitmap32);
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-        :
+        msModflowFmp, msModflowCfp, msModflowOwhm2:
         begin
           Draw2ElevModflow(Direction, Bitmap32, (Model as TPhastModel).SelectedModel);
         end;
@@ -25183,12 +25169,10 @@ begin
           begin
             Item.DelegateClass := TModflow6Delegate.ClassName;
           end;
-          {$IFDEF OWHMV2}
         msModflowOwhm2:
           begin
             Item.DelegateClass := TModflowFmp4Delegate.ClassName;
           end;
-          {$ENDIF}
           // For selecting Item.DelegateClass, the delegate class must
           // be registered. This can be done in the initialization
           // section of this unit at the end of the unit.
@@ -33042,54 +33026,34 @@ end;
 
 function TScreenObject.StoreFmp4AddedDemandRunoffSplitBoundary: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (Fmp4AddedDemandRunoffSplitBoundary <> nil) and Fmp4AddedDemandRunoffSplitBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreFmp4BarePrecipitationConsumptionFractionBoundary: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (Fmp4BarePrecipitationConsumptionFractionBoundary <> nil)
     and Fmp4BarePrecipitationConsumptionFractionBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreFmp4BareRunoffFractionBoundary: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (Fmp4BareRunoffFractionBoundary <> nil)
     and Fmp4BareRunoffFractionBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreFmp4EfficiencyBoundary: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (Fmp4EfficiencyBoundary <> nil) and Fmp4EfficiencyBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreFmp4EfficiencyImprovementBoundary: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (Fmp4EfficiencyImprovementBoundary <> nil) and Fmp4EfficiencyImprovementBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreFootprintWell: Boolean;
@@ -33215,242 +33179,146 @@ end;
 
 function TScreenObject.StoreModflowFmp4AddedDemand: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4AddedDemand <> nil) and ModflowFmp4AddedDemand.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4ConsumptiveUse: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4ConsumptiveUse <> nil) and ModflowFmp4ConsumptiveUse.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4CropCoefficient: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4CropCoefficient <> nil) and ModflowFmp4CropCoefficient.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4CropHasSalinityDemand: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4CropHasSalinityDemand <> nil) and ModflowFmp4CropHasSalinityDemand.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4EvaporationIrrigationFraction: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4EvaporationIrrigationFraction <> nil) and ModflowFmp4EvaporationIrrigationFraction.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4FractionOfIrrigToSurfaceWater: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4FractionOfIrrigToSurfaceWater <> nil) and ModflowFmp4FractionOfIrrigToSurfaceWater.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4FractionOfPrecipToSurfaceWater: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4FractionOfPrecipToSurfaceWater <> nil) and ModflowFmp4FractionOfPrecipToSurfaceWater.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4Irrigation: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4Irrigation <> nil) and ModflowFmp4Irrigation.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4LandUseAreaFraction: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4LandUseAreaFraction <> nil) and ModflowFmp4LandUseAreaFraction.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultAddedDemand: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultAddedDemand <> nil) and ModflowFmp4MultAddedDemand.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultConsumptiveUse: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultConsumptiveUse <> nil) and ModflowFmp4MultConsumptiveUse.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultCropCoefficient: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultCropCoefficient <> nil) and ModflowFmp4MultCropCoefficient.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultCropHasSalinityDemand: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultCropHasSalinityDemand <> nil) and ModflowFmp4MultCropHasSalinityDemand.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultEvaporationIrrigationFraction: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultEvaporationIrrigationFraction <> nil) and ModflowFmp4MultEvaporationIrrigationFraction.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultFractionOfIrrigToSurfaceWater: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultFractionOfIrrigToSurfaceWater <> nil) and ModflowFmp4MultFractionOfIrrigToSurfaceWater.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultFractionOfPrecipToSurfaceWater: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultFractionOfPrecipToSurfaceWater <> nil) and ModflowFmp4MultFractionOfPrecipToSurfaceWater.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultIrrigation: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultIrrigation <> nil) and ModflowFmp4MultIrrigation.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultLandUseAreaFraction: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultLandUseAreaFraction <> nil) and ModflowFmp4MultLandUseAreaFraction.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultRootDepth: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultRootDepth <> nil) and ModflowFmp4MultRootDepth.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4MultTranspirationFraction: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4MultTranspirationFraction <> nil) and ModflowFmp4MultTranspirationFraction.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4NrdInfilLocationBoundary: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4NrdInfilLocationBoundary <> nil) and ModflowFmp4NrdInfilLocationBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4RootDepth: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4RootDepth <> nil) and ModflowFmp4RootDepth.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmp4TranspirationFraction: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmp4TranspirationFraction <> nil) and ModflowFmp4TranspirationFraction.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmpBareEvap: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmpBareEvap <> nil) and ModflowFmpBareEvap.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmpCropID: Boolean;
@@ -33461,12 +33329,8 @@ end;
 
 function TScreenObject.StoreModflowFmpDirectRecharge: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmpDirectRecharge <> nil) and ModflowFmpDirectRecharge.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmpFarmID: Boolean;
@@ -33483,12 +33347,8 @@ end;
 
 function TScreenObject.StoreModflowFmpPrecipPotConsumption: Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (FModflowBoundaries <> nil)
     and (ModflowFmpPrecipPotConsumption <> nil) and ModflowFmpPrecipPotConsumption.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowFmpRefEvap: Boolean;
@@ -50634,13 +50494,11 @@ end;
 
 { TModflowFmp4Delegate }
 
-{$IFDEF OWHMV2}
 constructor TModflowFmp4Delegate.Create(ScreenObject: TScreenObject);
 begin
   inherited;
   FModelSelection := msModflowOwhm2;
 end;
-{$ENDIF}
 
 initialization
   RegisterClass(TScreenObject);
@@ -50658,10 +50516,7 @@ initialization
   RegisterClass(TMultiValueScreenObject);
   RegisterClass(TScreenObjectClipboard);
   RegisterClass(TModflow6Delegate);
-  {$IFDEF OWHMV2}
   RegisterClass(TModflowFmp4Delegate);
-  {$ENDIF}
-
 
 end.
 

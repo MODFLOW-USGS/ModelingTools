@@ -206,8 +206,6 @@ function TfrmExportCSV.ExportTitle(DataArrayList: TList): string;
 var
   EvaluatedAt: TEvaluatedAt;
   Orientation: TDataSetOrientation;
-//  Grid: TCustomModelGrid;
-//  Mesh: TSutraMesh3D;
   LocalModel: TCustomModel;
   ExportOptions: TDataToExportSet;
   Index: Integer;
@@ -220,11 +218,7 @@ begin
   Mesh := nil;
   case LocalModel.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
 //        Grid := LocalModel.Grid;
       end;
@@ -298,14 +292,6 @@ begin
       ADataArray.Initialize;
     end;
   end;
-//  Str2DXY = 'X, Y';
-//StrZ
-//  StrPrimes = ', X_Prime, Y_Prime';
-//  Str2D_CellLocation = 'Column, Row';
-//  Str3DPrimes = 'X, Y, Z, X_Prime, Y_Prime';
-//  StrLayer = ', Layer';
-//  StrElement = 'Element';
-//  StrNode = 'Node';
 end;
 
 function TfrmExportCSV.GetExportOptions: TDataToExportSet;
@@ -522,11 +508,7 @@ begin
   Mesh := nil;
   case LocalModel.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         Grid := LocalModel.Grid;
         if (Grid.ColumnCount = 0)

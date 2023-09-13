@@ -5,8 +5,10 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
   ExplicitHeight = 439
   inherited pnlTop: TPanel [0]
     Width = 412
+    ExplicitWidth = 412
     inherited pnlCaption: TPanel
       Width = 410
+      ExplicitWidth = 410
     end
   end
   inherited pnlGrid: TPanel [1]
@@ -15,9 +17,11 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     Height = 135
     Align = alBottom
     ExplicitTop = 304
+    ExplicitWidth = 412
     ExplicitHeight = 135
     inherited pnlEditGrid: TPanel
       Width = 410
+      ExplicitWidth = 410
       object lblMvrType: TLabel [1]
         Left = 199
         Top = 5
@@ -148,6 +152,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
+      ExplicitWidth = 410
       ExplicitHeight = 83
       ColWidths = (
         64
@@ -353,7 +358,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 312
+          ExplicitWidth = 404
           ExplicitHeight = 104
         end
       end
@@ -368,15 +373,18 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     Height = 40
     TabOrder = 3
     ExplicitTop = 264
+    ExplicitWidth = 412
     ExplicitHeight = 40
     DesignSize = (
       412
       40)
     inherited btnDelete: TBitBtn
       Left = 324
+      ExplicitLeft = 324
     end
     inherited btnInsert: TBitBtn
       Left = 240
+      ExplicitLeft = 240
     end
   end
 end

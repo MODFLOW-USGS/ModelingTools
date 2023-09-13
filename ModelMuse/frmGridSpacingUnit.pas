@@ -428,11 +428,7 @@ begin
         // do nothing
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015, msModflowOwhm2:
       begin
         rdeSpacingRows.Text := '-100';
       end;

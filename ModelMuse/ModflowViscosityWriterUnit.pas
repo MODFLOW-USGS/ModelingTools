@@ -94,7 +94,7 @@ begin
 
   OpenFile(FNameOfFile);
   try
-    frmProgressMM.AddMessage('Writing Buoyancy Package');
+    frmProgressMM.AddMessage('Writing Viscosity Package');
     Application.ProcessMessages;
 
     WriteTemplateHeader;

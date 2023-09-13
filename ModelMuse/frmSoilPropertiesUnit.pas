@@ -438,7 +438,6 @@ begin
   FSoils := TSoilCollection.Create(nil);
   FSoils.Assign(frmGoPhast.PhastModel.FmpSoils);
 
-{$IFDEF OWHMV2}
   if frmGoPhast.ModelSelection = msModflowOwhm2 then
   begin
     FFarmSoil4 := frmGoPhast.PhastModel.ModflowPackages.FarmSoil4;
@@ -447,9 +446,6 @@ begin
   begin
     FFarmSoil4 := nil;
   end;
-{$ELSE}
-  FFarmSoil4 := nil;
-{$ENDIF}
 
 //    Owhm1SoilTypes := TStringList.Create;
 //  Owhm2SoilTypes := TStringList.Create;
@@ -462,10 +458,8 @@ begin
   end
   else
   begin
-  {$IFDEF OWHMV2}
     Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
     frameSoils.Grid.Columns[Ord(scSoiltype)].PickList := Owhm2SoilTypes;
-  {$ENDIF}
   end;
 
   frameSoils.seNumber.AsInteger := FSoils.Count;
@@ -506,13 +500,9 @@ begin
   Dummy := True;
   frameSoilsGridSelectCell(Grid, Ord(scName), 1, Dummy);
 
-{$IFDEF OWHMV2}
   frameSoilEffectivePrecip.Visible := (FFarmSoil4 <> nil)
     and (frmGoPhast.ModelSelection = msModflowOwhm2)
     and (FFarmSoil4.EffPrecipTable.FarmOption <> foNotUsed);
-{$ELSE}
-  frameSoilEffectivePrecip.Visible := False;
-{$ENDIF}
   splitterSoil.Visible := frameSoilEffectivePrecip.Visible;
   if not frameSoilEffectivePrecip.Visible then
   begin

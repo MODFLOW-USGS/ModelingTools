@@ -754,29 +754,13 @@ type
       read FPestInflowConcentrationMethods write SetPestInflowConcentrationMethods;
     // Buoyancy
     property PestDensity: TSftGwtConcCollection
-      read FPestDensity write SetPestDensity
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      read FPestDensity write SetPestDensity;
     property PestDensityMethods: TGwtPestMethodCollection
-      read FPestDensityMethods write SetPestDensityMethods
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      read FPestDensityMethods write SetPestDensityMethods;
     property PestViscosity: TSftGwtConcCollection
-      read FPestViscosity write SetPestViscosity
-    {$IFNDEF Viscosity}
-      stored False
-    {$ENDIF}
-      ;
+      read FPestViscosity write SetPestViscosity;
     property PestViscosityMethods: TGwtPestMethodCollection
-      read FPestViscosityMethods write SetPestViscosityMethods
-    {$IFNDEF Viscosity}
-      stored False
-    {$ENDIF}
-      ;
+      read FPestViscosityMethods write SetPestViscosityMethods;
 end;
 
 const

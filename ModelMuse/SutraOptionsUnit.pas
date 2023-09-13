@@ -901,32 +901,16 @@ type
 
     // Data set 9: COMPI
     property StoredIceCompressibility: TRealStorage
-      read FStoredIceCompressibility write SetStoredIceCompressibility
-    {$IFNDEF SUTRA4}
-      stored False
-    {$ENDIF}
-      ;
+      read FStoredIceCompressibility write SetStoredIceCompressibility;
     // Data set 9: CI
     property StoredIceSpecificHeat: TRealStorage read FStoredIceSpecificHeat
-      write SetStoredIceSpecificHeat
-    {$IFNDEF SUTRA4}
-      stored False
-    {$ENDIF}
-      ;
+      write SetStoredIceSpecificHeat;
     // Data set 9: SIGMAI
     property StoredIceThermalConductivity: TRealStorage
-      read FStoredIceThermalConductivity write SetStoredIceThermalConductivity
-    {$IFNDEF SUTRA4}
-      stored False
-    {$ENDIF}
-      ;
+      read FStoredIceThermalConductivity write SetStoredIceThermalConductivity;
     // Data set 9: RHOI
     property StoredIceDensity: TRealStorage read FStoredIceDensity
-      write SetStoredIceDensity
-    {$IFNDEF SUTRA4}
-      stored False
-    {$ENDIF}
-      ;
+      write SetStoredIceDensity;
 
     // Data Set 10: COMPMA
     property StoredMatrixCompressibility: TRealStorage
@@ -985,11 +969,7 @@ type
     property PestAnisotropyOptions: TSutraPestAnisotropyOptions
       read FPestAnisotropyOptions write SetPestAnisotropyOptions;
     property RegionalProperties: TRegionalProperties read GetRegionalProperties
-      write SetRegionalProperties
-    {$IFNDEF SUTRA4}
-      stored False
-    {$ENDIF}
-      ;
+      write SetRegionalProperties;
     property ProductionUsed: Boolean read FProductionUsed write SetProductionUsed;
   end;
 

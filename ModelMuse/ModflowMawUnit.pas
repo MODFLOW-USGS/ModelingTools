@@ -255,17 +255,9 @@ type
     property InjectionConcentrations: TMawGwtConcCollection read FInjectionConcentrations
       write SetInjectionConcentrations;
     // Buoyancy
-    property Density: TMawGwtConcCollection read FDensity write SetDensity
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+    property Density: TMawGwtConcCollection read FDensity write SetDensity;
     // Viscosity
-    property Viscosity: TMawGwtConcCollection read FViscosity write SetViscosity
-    {$IFNDEF Viscosity}
-      stored False
-    {$ENDIF}
-      ;
+    property Viscosity: TMawGwtConcCollection read FViscosity write SetViscosity;
   end;
 
   TMawTimeListLink = class(TTimeListsModelLink)
@@ -922,30 +914,14 @@ type
         read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
         // Buoyancy
       property PestDensity: TMawGwtConcCollection
-        read FPestDensity write SetPestDensity
-      {$IFNDEF Buoyancy}
-        stored False
-      {$ENDIF}
-        ;
+        read FPestDensity write SetPestDensity;
       property PestDensityMethods: TGwtPestMethodCollection
-        read FPestDensityMethods write SetPestDensityMethods
-      {$IFNDEF Buoyancy}
-        stored False
-      {$ENDIF}
-        ;
+        read FPestDensityMethods write SetPestDensityMethods;
         // Viscosity
       property PestViscosity: TMawGwtConcCollection
-        read FPestViscosity write SetPestViscosity
-      {$IFNDEF Viscosity}
-        stored False
-      {$ENDIF}
-        ;
+        read FPestViscosity write SetPestViscosity;
       property PestViscosityMethods: TGwtPestMethodCollection
-        read FPestViscosityMethods write SetPestViscosityMethods
-      {$IFNDEF Viscosity}
-        stored False
-      {$ENDIF}
-        ;
+        read FPestViscosityMethods write SetPestViscosityMethods;
     end;
 
 const

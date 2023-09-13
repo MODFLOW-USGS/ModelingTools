@@ -1619,13 +1619,10 @@ begin
         begin
           ModflowLocation := ProgramLocations.Modflow6Location;
         end;
-      {$IFDEF OWHMV2}
       msModflowOwhm2:
         begin
           ModflowLocation := ProgramLocations.ModflowOwhmV2Location;
         end;
-      {$ENDIF}
-
       else Assert(False);
     end;
 
@@ -4716,11 +4713,7 @@ begin
   AddNameFileComment(Format(StrNameFileForMODFLO,
     [DateToStr(Now), Model.ProgramName + ' Version ' + IModelVersion]));
   OutputListFileName := ChangeFileExt(FileName, '.lst');
-  if Model.ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
   begin
     WriteToNameFile(StrLIST, Model.UnitNumbers.UnitNumber(StrLIST),
       OutputListFileName, foOutput,
@@ -5542,12 +5535,10 @@ begin
 
 
       CheckParameters := True;
-    {$IFDEF OWHMV2}
       if (ParameterType = ptQMAX) and (Model.ModelSelection = msModflowOwhm2) then
       begin
         CheckParameters := False;
       end;
-    {$ENDIF}
       // loop over the parameters
       if CheckParameters then
       begin
@@ -6068,12 +6059,10 @@ begin
         end
         else
         begin
-        {$IFDEF OWHMV2}
           if (Model.ModelSelection = msModflowOwhm2) then
           begin
             ShouldWriteITMP := ITMPUsed;
           end;
-        {$ENDIF}
         end;
 
         if ShouldWriteITMP then
@@ -6101,12 +6090,10 @@ begin
         end;
         // data set 6
         WriteCells := (ITMP > 0) or ((ITMP < 0) and (FEvaluationType = etExportCsv));
-        {$IFDEF OWHMV2}
         if (Model.ModelSelection = msModflowOwhm2) and not ITMPUsed and (ITMP < 0) then
         begin
           WriteCells := True;
         end;
-        {$ENDIF}
 
         if WriteCells then
         begin
@@ -7276,11 +7263,7 @@ var
     end;
   end;
 begin
-  if Model.ModelSelection in [msModflowLGR2, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-  ] then
+  if Model.ModelSelection in [msModflowLGR2, msModflowFmp, msModflowOwhm2] then
   begin
     AdjustForLGR := False;
   end;

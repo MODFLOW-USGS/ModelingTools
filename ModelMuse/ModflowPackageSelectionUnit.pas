@@ -6221,17 +6221,9 @@ Type
     property OutputInterval: integer read FOutputInterval
       write SetOutputInterval stored True;
     // Conduit-Associated Drainable Storage (CADS)
-    property UseCads: Boolean read FUseCads write SetUseCads
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+    property UseCads: Boolean read FUseCads write SetUseCads;
     property RecordInputAndOutput: Boolean read FRecordInputAndOutput
-      write SetRecordInputAndOutput
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetRecordInputAndOutput;
   end;
 
   TDensityChoice = (dcLinear, dcZoned);
@@ -7116,11 +7108,7 @@ Type
       read FUseTransverseDispForVertFlow write SetUseTransverseDispForVertFlow;
     property SeparateDataSetsForEachSpecies: TDispersivityTreatment
       read FSeparateDataSetsForEachSpecies
-      write SetSeparateDataSetsForEachSpecies
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetSeparateDataSetsForEachSpecies;
   end;
 
   TGwtScheme = (gsUpstream, gsCentral, gsTVD);
@@ -18034,8 +18022,6 @@ function TConduitFlowProcess.CadsRechargeFractionUsed(Sender: TObject): boolean;
 var
   LocalModel: TCustomModel;
 begin
-
-{$IFDEF OWHMV2}
   if FModel.ModelSelection = msModflowOwhm2 then
   begin
     result := CadsRechargeFractionUsed(Sender);
@@ -18044,9 +18030,6 @@ begin
   begin
     result := False;
   end;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 constructor TConduitFlowProcess.Create(Model: TBaseModel);

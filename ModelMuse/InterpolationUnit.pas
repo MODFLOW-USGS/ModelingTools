@@ -599,11 +599,8 @@ begin
                 AScreenObject.ViewDirection, DataSet.EvaluatedAt);
             end;
           msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            :
+            msModflowFmp, msModflowCfp, msFootPrint, msModflow2015,
+            msModflowOwhm2:
             begin
               TopCell := LocalModel.Grid.TopContainingCell(ClosestLocation,
                 DataSet.EvaluatedAt);
@@ -1339,11 +1336,7 @@ begin
           AScreenObject.ViewDirection, DataSet.EvaluatedAt);
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015, msModflowOwhm2:
       begin
         // With MODFLOW, the only 2D data sets are in the top view.
         Assert(DataSet.Orientation = dsoTop);
@@ -1413,11 +1406,7 @@ begin
   end;
   case Model.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015, msModflowOwhm2:
       begin
         case DataSet.EvaluatedAt of
           eaBlocks:

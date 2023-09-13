@@ -257,15 +257,11 @@ begin
     fedModflow6.FileName := '';
   end;
 
-  {$IFDEF OWHMV2}
   try
     fedModflowOwhm2.FileName := Locations.ModflowOwhmV2Location;
   except on EComboEditError do
     fedModflowOwhm2.FileName := '';
   end;
-  {$ELSE}
-  fedModflowOwhm2.Enabled := False;
-  {$ENDIF}
 
   HighlightControls;
 end;
@@ -304,9 +300,7 @@ begin
     Locations.Mt3dmsLocation := fedMt3dms.FileName;
     Locations.Mt3dUsgsLocation := fedMt3dUsgs.FileName;
     Locations.Modflow6Location := fedModflow6.FileName;
-    {$IFDEF OWHMV2}
     Locations.ModflowOwhmV2Location := fedModflowOwhm2.FileName;
-    {$ENDIF}
     Undo := TUndoChangeProgramLocations.Create(Locations);
     frmGoPhast.UndoStack.Submit(Undo);
   finally
@@ -402,14 +396,10 @@ begin
   ModflowNwtOK := CheckControl(fedModflowNWT)
     or (frmGoPhast.PhastModel.ModelSelection  <> msModflowNWT);
 
-  {$ifdef OWHMV2}
   jvrltModflowOwhmV2.Collapsed :=
     (frmGoPhast.PhastModel.ModelSelection  <> msModflowOwhm2);
   ModflowOwhmV2OK := CheckControl(fedModflowOwhm2)
     or (frmGoPhast.PhastModel.ModelSelection  <> msModflowOwhm2);
-  {$else}
-  ModflowOwhmV2OK := True;
-  {$ENDIF}
 
   jvrltModflowFmp.Collapsed :=
     (frmGoPhast.PhastModel.ModelSelection  <> msModflowFMP);

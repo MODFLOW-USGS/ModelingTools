@@ -112,17 +112,9 @@ type
       stored False
       ;
     property TimesSeriesPipes: Boolean read FTimesSeriesPipes
-      write SetTimesSeriesPipes
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetTimesSeriesPipes;
     property TimesSeriesNodes: Boolean read FTimesSeriesNodes
-      write SetTimesSeriesNodes
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetTimesSeriesNodes;
   end;
 
 //procedure RemoveHfbModflowBoundarySubscription(Sender: TObject; Subject: TObject;

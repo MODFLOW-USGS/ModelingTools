@@ -545,16 +545,11 @@ begin
     SalinityFlush := Packages.FarmSalinityFlush;
     FarmSurfaceWater4 := Packages.FarmSurfaceWater4;
 
-  {$IFDEF OWHMV2}
     tabCrops.TabVisible := (frmGoPhast.ModelSelection = msModflowFmp)
       or  ((frmGoPhast.ModelSelection = msModflowOwhm2)
       and (FarmProcess4.EfficiencyOptions.FarmOption <> foNotUsed)
       and (FarmProcess4.EfficiencyOptions.ArrayList = alList));
     tabCrops.HelpKeyword := 'Irrigation-Efficiencies';
-  {$ELSE}
-    tabCrops.TabVisible := True;
-    tabCrops.HelpKeyword := 'Crop_Efficiencies';
-  {$ENDIF}
 
     tabCosts.TabVisible := (frmGoPhast.ModelSelection = msModflowFmp)
       and (FarmProcess.DeficiencyPolicy in
@@ -562,26 +557,16 @@ begin
       and (FarmProcess.DeficiencyPolicy in
       [dpAcreageOptimization, dpAcreageOptimizationWithConservationPool]);
 
-  {$IFDEF OWHMV2}
     tabNoReturnFlow.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
       and FarmSurfaceWater4.IsSelected
       and (FarmSurfaceWater4.NoReturnFlow.FarmOption <> foNotUsed);
-  {$ELSE}
-    tabNoReturnFlow.TabVisible := False;
-  {$ENDIF}
-
-//    SfrPackage := Packages.SfrPackage;
 
     tabWaterRights.TabVisible := (frmGoPhast.ModelSelection = msModflowFmp)
       and (FarmProcess.SurfaceWaterAllotment = swaPriorWithCalls);
 
-  {$IFDEF OWHMV2}
     tabWaterSupplyConcentration.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
       and SalinityFlush.IsSelected
       and (SalinityFlush.FarmSaltConcentrationsChoice.FarmOption <> foNotUsed);
-  {$ELSE}
-     tabWaterSupplyConcentration.TabVisible := False;
-  {$ENDIF}
 
     try
       frameFormulaGridCrops.Grid.BeginUpdate;
@@ -864,44 +849,28 @@ begin
       frameDelivery.GetData_OwhmV1(FarmList);
       tabNonRoutedDelivery.tabVisible := ((frmGoPhast.ModelSelection = msModflowFmp)
         and FarmProcess.IsSelected)
-      {$IFDEF OWHMV2}
         or ((frmGoPhast.ModelSelection = msModflowOwhm2)
         and FarmProcess4.IsSelected and FarmSurfaceWater4.IsSelected
-        and (FarmSurfaceWater4.Non_Routed_Delivery.FarmOption <> foNotUsed))
-      {$ENDIF}
-        ;
+        and (FarmSurfaceWater4.Non_Routed_Delivery.FarmOption <> foNotUsed));
 
       frameDiversionsOwhm2.GetData(FarmList, dtDiversion);
       frameReturnFlowsOwhm2.GetData(FarmList, dtReturnFlow);
 
-    {$IFDEF OWHMV2}
       tabEfficiencyImprovement.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
         and FarmProcess4.IsSelected
         and (FarmProcess4.EfficiencyImprovement.FarmOption <> foNotUsed)
         and (FarmProcess4.EfficiencyImprovement.ArrayList = alList);
-    {$ELSE}
-      tabEfficiencyImprovement.TabVisible := False;
-    {$ENDIF}
 
-    {$IFDEF OWHMV2}
       tabAddedDemandRunoffSplit.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
         and FarmProcess4.IsSelected
         and (FarmProcess4.Added_Demand_Runoff_Split.FarmOption <> foNotUsed)
         and (FarmProcess4.Added_Demand_Runoff_Split.ArrayList = alList);
-    {$ELSE}
-      tabAddedDemandRunoffSplit.TabVisible := False;
-    {$ENDIF}
 
-    {$IFDEF OWHMV2}
       tabIrrigationUniformity.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
         and FarmProcess4.IsSelected
         and SalinityFlush.IsSelected
         and (SalinityFlush.FarmIrrigationUniformityChoice.FarmOption <> foNotUsed);
-    {$ELSE}
-      tabIrrigationUniformity.TabVisible := False;
-    {$ENDIF}
 
-    {$IFDEF OWHMV2}
       tabDeficiencyScenario.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
         and FarmProcess4.IsSelected
         and (FarmProcess4.DeficiencyScenario.FarmOption <> foNotUsed);
@@ -922,15 +891,6 @@ begin
       tabAddedCropDemandRate.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
         and  FarmProcess4.IsSelected
         and (FarmProcess4.Added_Crop_Demand_Rate.FarmOption <> foNotUsed);
-    {$ELSE}
-      tabDeficiencyScenario.TabVisible := False;
-      tabWaterSource.TabVisible := False;
-      tabBareRunoffFractions.TabVisible := False;
-      tabAddedCropDemandFlux.TabVisible := False;
-      tabAddedCropDemandRate.TabVisible := False;
-    {$ENDIF}
-
-
     finally
       FChangedCrops := False;
       FChangedCosts := False;
@@ -2222,7 +2182,6 @@ begin
     and (frmGoPhast.ModelSelection = msModflowFmp);
   tabReturnFlowLocation.TabVisible := tabDiversionLocation.TabVisible;
 
-{$IFDEF OWHMV2}
   tabDiversionsOwhm2.TabVisible := (frmGoPhast.ModelSelection = msModflowOwhm2)
     and frmGoPhast.PhastModel.SfrIsSelected
     and Packages.FarmSurfaceWater4.IsSelected and
@@ -2231,13 +2190,6 @@ begin
     and frmGoPhast.PhastModel.SfrIsSelected
     and Packages.FarmSurfaceWater4.IsSelected and
     (Packages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed);
-{$ELSE}
-  tabDiversionsOwhm2.TabVisible := False;
-  tabReturnFlowOwhm2.TabVisible := False;
-{$ENDIF}
-//    tabReturnFlowLocation.TabVisible := frmGoPhast.PhastModel.SfrIsSelected
-//      and Packages.FarmSurfaceWater4.IsSelected and
-//      (Packages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption <> foNotUsed);
   frameDiversionsOwhm2.InitializeControls;
   frameReturnFlowsOwhm2.InitializeControls;
 
@@ -2249,21 +2201,15 @@ begin
   end
   else
   begin
-    {$IFDEF OWHMV2}
     Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
-    {$ENDIF}
     tabGW_Allocation.Caption := 'GW Allotment';
     tabGW_Allocation.TabVisible := Packages.FarmAllotments.IsSelected
       and (Packages.FarmAllotments.GroundWater.FarmOption <> foNotUsed);
   end;
 
 
-{$IFDEF OWHMV2}
   tabSwAllotment.TabVisible := Packages.FarmAllotments.IsSelected
       and (Packages.FarmAllotments.SurfaceWater.FarmOption <> foNotUsed);
-{$ELSE}
-  tabSwAllotment.TabVisible := False;
-{$ENDIF}
 
   pcMain.ActivePageIndex := 0;
   StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
@@ -2315,11 +2261,7 @@ begin
     end
     else
     begin
-    {$IFDEF OWHMV2}
       Assert(frmGoPhast.ModelSelection = msModflowOwhm2);
-    {$ELSE}
-      Assert(False);
-    {$ENDIF}
       Grid.ColCount := IrrigationTypes.Count + 2;
       Grid.BeginUpdate;
       try

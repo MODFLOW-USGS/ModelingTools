@@ -206,43 +206,23 @@ type
     // DSP package, diffc
     property DiffusionCoefficientDataArrayName: string
       read FDiffusionCoefficientDataArrayName
-      write SetDiffusionCoefficientDataArrayName
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetDiffusionCoefficientDataArrayName;
     // DSP package, alh
     property LongDispHDataArrayName: string
       read FLongDispHDataArrayName
-      write SetLongDispHArrayNameDataArrayName
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetLongDispHArrayNameDataArrayName;
     // DSP package, alv
     property LongDispVertDataArrayName: string
       read FLongDispVertDataArrayName
-      write SetLongDispVertArrayNameDataArrayName
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetLongDispVertArrayNameDataArrayName;
     // DSP package, ath1
     property TransverseDispHDataArrayName: string
       read FTransverseDispHDataArrayName
-      write SetTransverseDispHArrayNameDataArrayName
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetTransverseDispHArrayNameDataArrayName;
     // DSP package, ath2
     property TransverseDispVertDataArrayName: string
       read FTransverseDispVertDataArrayName
-      write SetTransverseDispVertArrayNameDataArrayName
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetTransverseDispVertArrayNameDataArrayName;
 
     //IST package, CIM
     property ImmobileInitialConcentrations: TStringList
@@ -270,31 +250,15 @@ type
       write SetImmobileDistCoeficients;
     // Buoyancy package drhodc
     property StoredDensitySlope: TRealStorage read FStoredDensitySlope
-      write SetStoredDensitySlope
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetStoredDensitySlope;
     // Buoyancy package crhoref
     property StoredRefConcentration: TRealStorage read FStoredRefConcentration
-      write SetStoredRefConcentration
-    {$IFNDEF Buoyancy}
-      stored False
-    {$ENDIF}
-      ;
+      write SetStoredRefConcentration;
     property StoredViscositySlope: TRealStorage read FStoredViscositySlope
-      write SetStoredViscositySlope
-    {$IFNDEF Viscosity}
-      stored False
-    {$ENDIF}
-      ;
+      write SetStoredViscositySlope;
     // Viscosity package cviscref
     property StoredRefViscosity: TRealStorage read FStoredRefViscosity
-      write SetStoredRefViscosity
-    {$IFNDEF Viscosity}
-      stored False
-    {$ENDIF}
-      ;
+      write SetStoredRefViscosity;
   end;
 
   TCustomChemSpeciesCollection= class(TEnhancedOrderedCollection)

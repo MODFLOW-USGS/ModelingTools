@@ -2,15 +2,15 @@ inherited frmCropProperties: TfrmCropProperties
   HelpType = htKeyword
   HelpKeyword = 'Farm_Crop_Properties_Dialog_Bo'
   Caption = 'Farm Land Use Properties'
-  ClientHeight = 521
-  ClientWidth = 862
+  ClientHeight = 520
+  ClientWidth = 858
   ExplicitWidth = 874
   ExplicitHeight = 559
   TextHeight = 18
   object splitterMain: TJvNetscapeSplitter
     Left = 285
     Top = 0
-    Height = 477
+    Height = 476
     Align = alLeft
     Maximized = False
     Minimized = False
@@ -23,7 +23,7 @@ inherited frmCropProperties: TfrmCropProperties
     Left = 0
     Top = 0
     Width = 285
-    Height = 477
+    Height = 476
     ShowButtons = True
     PageDefault = 0
     PageList = jplMain
@@ -35,39 +35,38 @@ inherited frmCropProperties: TfrmCropProperties
     OnChanging = jvpltvMainChanging
     OnCustomDrawItem = jvpltvMainCustomDrawItem
     Items.Links = {00000000}
-    ExplicitHeight = 476
   end
   object jplMain: TJvPageList
     Left = 295
     Top = 0
-    Width = 567
-    Height = 477
+    Width = 563
+    Height = 476
     ActivePage = jvspBoolCollection
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
-    ExplicitWidth = 563
-    ExplicitHeight = 476
     object jvspCropName: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
+      Width = 571
       Height = 477
       HelpType = htKeyword
       HelpKeyword = 'Crops_Pane'
       Caption = 'jvspCropName'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameCropName: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -101,7 +100,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSelectCell = frameCropNameGridSelectCell
           OnSetEditText = frameCropNameGridSetEditText
@@ -112,8 +111,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -133,23 +132,25 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspEvapFractions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       HelpType = htKeyword
       HelpKeyword = 'Consumptive_Use_Factors_Pane'
       Caption = 'jvspEvapFractions'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameEvapFractions: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -176,7 +177,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
@@ -185,8 +186,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -206,23 +207,25 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspLosses: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       HelpType = htKeyword
       HelpKeyword = 'Inefficiency_Losses_to_Surface'
       Caption = 'jvspLosses'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameLosses: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -249,7 +252,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
@@ -258,8 +261,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -279,23 +282,25 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspCropFunction: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       HelpType = htKeyword
       HelpKeyword = 'Crop_Price_Function_Pane'
       Caption = 'jvspCropFunction'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameCropFunction: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -322,7 +327,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
@@ -331,8 +336,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -352,23 +357,25 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspCropWaterUse: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       HelpType = htKeyword
       HelpKeyword = 'Consumptive_Use_Flux_or_Crop_C'
       Caption = 'jvspCropWaterUse'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameCropWaterUse: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -395,7 +402,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSetEditText = GridSetEditText
           OnBeforeDrawCell = frameCropWaterUseGridBeforeDrawCell
@@ -405,8 +412,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -426,21 +433,23 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspIrrigation: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       Caption = 'jvspIrrigation'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameIrrigation: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -467,7 +476,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSelectCell = frameIrrigationGridSelectCell
           OnSetEditText = GridSetEditText
@@ -477,8 +486,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -498,13 +507,15 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspOwhmCollection: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       Caption = 'jvspOwhmCollection'
+      ExplicitWidth = 567
+      ExplicitHeight = 477
       inline frameOwhmCollection: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
@@ -512,7 +523,7 @@ inherited frmCropProperties: TfrmCropProperties
         ExplicitHeight = 477
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -539,7 +550,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           ColCount = 3
           OnSetEditText = GridSetEditText
@@ -622,8 +633,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -643,23 +654,23 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspRootPressure: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       Caption = 'jvspRootPressure'
-      ExplicitWidth = 563
-      ExplicitHeight = 476
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameRootPressure: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 563
-        ExplicitHeight = 476
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 435
           ExplicitWidth = 563
           inherited lbNumber: TLabel
@@ -686,7 +697,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSelectCell = frameRootPressureGridSelectCell
           OnSetEditText = GridSetEditText
@@ -696,8 +707,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 378
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 563
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -717,12 +728,14 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspGwRootInteraction: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       HelpType = htKeyword
       HelpKeyword = 'Groundwater-Root-Interaction-P'
       Caption = 'jvspGwRootInteraction'
       OnShow = jvspGwRootInteractionShow
+      ExplicitWidth = 567
+      ExplicitHeight = 477
       object rdgGwRootInteraction: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -778,23 +791,25 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspAddedDemand: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       HelpType = htKeyword
       HelpKeyword = 'Added-Demand-Pane'
       Caption = 'jvspAddedDemand'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameAddedDemand: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -821,7 +836,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
@@ -830,8 +845,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -851,21 +866,23 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspLeach: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       Caption = 'jvspLeach'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameLeach: TframeLeach
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -892,7 +909,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSetEditText = GridSetEditText
           OnButtonClick = frameLeachGridButtonClick
@@ -1012,8 +1029,8 @@ inherited frmCropProperties: TfrmCropProperties
             224)
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -1033,21 +1050,23 @@ inherited frmCropProperties: TfrmCropProperties
     object jvspBoolCollection: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 567
-      Height = 477
+      Width = 563
+      Height = 476
       Caption = 'jvspBoolCollection'
+      ExplicitWidth = 329
+      ExplicitHeight = 397
       inline frameBoolCollection: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 567
+        Width = 571
         Height = 477
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 567
-        ExplicitHeight = 477
+        ExplicitWidth = 329
+        ExplicitHeight = 397
         inherited Panel: TPanel
           Top = 436
-          Width = 567
+          Width = 571
           ExplicitTop = 436
           ExplicitWidth = 567
           inherited lbNumber: TLabel
@@ -1074,7 +1093,7 @@ inherited frmCropProperties: TfrmCropProperties
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 567
+          Width = 571
           Height = 379
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
@@ -1083,8 +1102,8 @@ inherited frmCropProperties: TfrmCropProperties
           ExplicitHeight = 379
         end
         inherited pnlTop: TPanel
-          Width = 567
-          ExplicitWidth = 567
+          Width = 571
+          ExplicitWidth = 329
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57
@@ -1104,14 +1123,12 @@ inherited frmCropProperties: TfrmCropProperties
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 477
-    Width = 862
+    Top = 476
+    Width = 858
     Height = 44
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 476
-    ExplicitWidth = 858
     object btnCancel: TBitBtn
       Left = 502
       Top = 6

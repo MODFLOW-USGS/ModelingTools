@@ -2,15 +2,15 @@ inherited frmSutraOptions: TfrmSutraOptions
   HelpType = htKeyword
   HelpKeyword = 'SUTRA_Options_Dialog_Box'
   Caption = 'SUTRA Options'
-  ClientHeight = 562
-  ClientWidth = 784
+  ClientHeight = 561
+  ClientWidth = 780
   ExplicitWidth = 796
   ExplicitHeight = 600
   TextHeight = 18
   object splttrVertical: TJvNetscapeSplitter
     Left = 179
     Top = 0
-    Height = 512
+    Height = 511
     Align = alLeft
     Maximized = False
     Minimized = False
@@ -21,16 +21,14 @@ inherited frmSutraOptions: TfrmSutraOptions
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 512
-    Width = 784
+    Top = 511
+    Width = 780
     Height = 50
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 511
-    ExplicitWidth = 780
     DesignSize = (
-      784
+      780
       50)
     object lblRegionCount: TLabel
       Left = 89
@@ -44,7 +42,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       Caption = 'Number of regions'
     end
     object btnCancel: TBitBtn
-      Left = 670
+      Left = 662
       Top = 7
       Width = 91
       Height = 33
@@ -55,7 +53,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       ExplicitLeft = 666
     end
     object btnOK: TBitBtn
-      Left = 573
+      Left = 565
       Top = 6
       Width = 91
       Height = 33
@@ -67,7 +65,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       ExplicitLeft = 569
     end
     object btnHelp: TBitBtn
-      Left = 476
+      Left = 468
       Top = 7
       Width = 91
       Height = 33
@@ -123,26 +121,24 @@ inherited frmSutraOptions: TfrmSutraOptions
   object jplMain: TJvPageList
     Left = 189
     Top = 0
-    Width = 595
-    Height = 512
+    Width = 591
+    Height = 511
     ActivePage = jvspConfiguration
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
-    ExplicitWidth = 591
-    ExplicitHeight = 511
     object jvspConfiguration: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
+      Width = 599
       Height = 512
       HelpType = htKeyword
       HelpKeyword = 'Configuration_Pane'
       ExplicitWidth = 591
       ExplicitHeight = 511
       DesignSize = (
-        595
-        512)
+        591
+        511)
       object lblGravX: TLabel
         Left = 106
         Top = 66
@@ -182,7 +178,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgSaturation: TRadioGroup
         Left = 263
         Top = 147
-        Width = 315
+        Width = 307
         Height = 96
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -212,7 +208,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgSimulationType: TRadioGroup
         Left = 6
         Top = 249
-        Width = 572
+        Width = 564
         Height = 105
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Simulation type (CSSFLO, CSSTRA)'
@@ -264,11 +260,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspTitle: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Title_Pane'
       Caption = 'jvspTitle'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object jvedTitle: TJvEditor
         Left = 0
         Top = 49
@@ -313,14 +311,16 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspInitialCondition: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Initial_Conditions_Pane'
       Caption = 'jvspInitialCondition'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       DesignSize = (
-        595
-        512)
+        591
+        511)
       object lblRestartFile: TLabel
         Left = 6
         Top = 119
@@ -345,7 +345,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgStartType: TRadioGroup
         Left = 6
         Top = 3
-        Width = 574
+        Width = 566
         Height = 78
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Starting type (CREAD)'
@@ -360,7 +360,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object fedRestartFile: TJvFilenameEdit
         Left = 6
         Top = 143
-        Width = 574
+        Width = 566
         Height = 26
         DefaultExt = '.rst'
         Filter = 'Restart Files (*.rst)|*.rst|All files (*.*)|*.*'
@@ -403,7 +403,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object fedRestartInitialConditions: TJvFilenameEdit
         Left = 6
         Top = 358
-        Width = 574
+        Width = 566
         Height = 26
         DefaultExt = '.rst'
         Filter = 'Restart Files (*.rst)|*.rst|All files (*.*)|*.*'
@@ -418,11 +418,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspNumericalControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Numerical_Controls_Pane'
       Caption = 'jvspNumericalControls'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object lblFractionalUpstreamWeight: TLabel
         Left = 79
         Top = 16
@@ -551,14 +553,16 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspSolverControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Solver_Pane'
       Caption = 'jvspSolverControls'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       DesignSize = (
-        595
-        512)
+        591
+        511)
       object lblMaxPressureIterations: TLabel
         Left = 111
         Top = 114
@@ -602,7 +606,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgPressureSolution: TRadioGroup
         Left = 6
         Top = 3
-        Width = 582
+        Width = 574
         Height = 105
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Pressure solution solver (CSOLVP)'
@@ -637,7 +641,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgUSolutionMethod: TRadioGroup
         Left = 6
         Top = 207
-        Width = 582
+        Width = 574
         Height = 90
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Transport solution solver (CSOLVU)'
@@ -672,11 +676,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspFluidProperties: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Fluid_Properties_Pane'
       Caption = 'jvspFluidProperties'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object lblFluidCompressibility: TLabel
         Left = 106
         Top = 14
@@ -971,11 +977,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspSolidAdsorption: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Solid_Matrix__Adsorption_Pane'
       Caption = 'jvspSolidAdsorption'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object grpSolidMatrix: TGroupBox
         Left = 0
         Top = 0
@@ -1064,11 +1072,12 @@ inherited frmSutraOptions: TfrmSutraOptions
       object grpAdsorption: TGroupBox
         Left = 0
         Top = 145
-        Width = 595
+        Width = 591
         Height = 193
         Align = alTop
         Caption = 'Adsorption parameters'
         TabOrder = 1
+        ExplicitWidth = 595
         object lblFirstDistributionCoefficient: TLabel
           Left = 106
           Top = 132
@@ -1126,11 +1135,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspProdGrav: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Production_Pane'
       Caption = 'jvspProdGrav'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object lblZeroFluidProd: TLabel
         Left = 106
         Top = 14
@@ -1212,11 +1223,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspLake: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Lakes_Pane'
       Caption = 'jvspLake'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object grpLakeDataset2: TGroupBox
         Left = 0
         Top = 89
@@ -1293,10 +1306,11 @@ inherited frmSutraOptions: TfrmSutraOptions
       object grpGeneral: TGroupBox
         Left = 0
         Top = 0
-        Width = 595
+        Width = 591
         Height = 89
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 595
         object cbUseLakes: TCheckBox
           Left = 6
           Top = 16
@@ -1329,11 +1343,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspDefaultLakeInteractions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Lake_Boundary_Interaction'
       Caption = 'jvspDefaultLakeInteractions'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object grpLakeFluidSources: TGroupBox
         Left = 3
         Top = 3
@@ -1568,11 +1584,13 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspAnisotropy: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Anisotropy_Pane'
       Caption = 'jvspAnisotropy'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object gbAnisotropy: TGroupBox
         Left = 0
         Top = 0
@@ -1634,8 +1652,8 @@ inherited frmSutraOptions: TfrmSutraOptions
     object jvspProductionSutra4: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 595
-      Height = 512
+      Width = 591
+      Height = 511
       HelpType = htKeyword
       HelpKeyword = 'Production_Pane'
       Margins.Left = 4
@@ -1643,6 +1661,8 @@ inherited frmSutraOptions: TfrmSutraOptions
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspProductionSutra4'
+      ExplicitWidth = 595
+      ExplicitHeight = 512
       object cbProductionUsed: TCheckBox
         Left = 16
         Top = 22
@@ -1661,7 +1681,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Left = 0
     Top = 0
     Width = 179
-    Height = 512
+    Height = 511
     AutoExpand = False
     ShowButtons = True
     PageDefault = 0
@@ -1681,7 +1701,6 @@ inherited frmSutraOptions: TfrmSutraOptions
       FF000000000200000000000000011149006E0069007400690061006C0043006F
       006E0064006900740069006F006E007300}
     Items.Links = {03000000000000000100000002000000}
-    ExplicitHeight = 511
   end
   object rcLakes: TRbwController
     ControlList = <

@@ -93,16 +93,8 @@ type
     property ECoeff: string index ECoeffPosition read GetBoundaryFormula
       write SetBoundaryFormula;
     property SurfVK: string index SurfVKPosition read GetBoundaryFormula
-      write SetBoundaryFormula
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
-    property LookUpTable: TLookUpTable read FLookUpTable write SetLookUpTable
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetBoundaryFormula;
+    property LookUpTable: TLookUpTable read FLookUpTable write SetLookUpTable;
   end;
 
   TSoilRecord = record

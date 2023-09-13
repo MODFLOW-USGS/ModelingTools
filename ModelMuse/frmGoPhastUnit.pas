@@ -3535,14 +3535,6 @@ begin
   FDataSetsPosition.Create(Point(0,0));
   FObjectsPosition.Create(Point(0,0));
   FDefaultCreateArchive := dcaUnknown;
-  {$IFNDEF SUTRA4}
-  acSutra40Active.Visible := False;
-  {$ENDIF}
-  {$ifndef OWHMV2}
-  acModflowOwhmV2.Visible := False;
-  acRunModflowOWHM_V2.Visible := False;
-  acFarmIrrigationTypes.Visible := False;
-  {$ENDIF}
   tbarEditScreenObjects.Width := 227;
   tbarView.Width := 176;
   tbarCreateScreenObject.Width := 231;
@@ -4253,11 +4245,7 @@ begin
   case ModelSelection of
     msPhast: ;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         with TfrmSelectResultToImport.Create(nil) do
         begin
@@ -4344,11 +4332,7 @@ begin
         acEditSutraFluxObs.Visible := False;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         frameSideView.Visible := not DisvUsed;
         splitVertTop.Visible := not DisvUsed;
@@ -4448,11 +4432,7 @@ begin
   acStructuredGrid.Visible := ModelSelection = msModflow2015;
 
   acFootprintProperties.Visible := ModelSelection = msFootPrint;
-  acRipPlantGroups.Visible := ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
+  acRipPlantGroups.Visible := ModelSelection in [msModflowFmp, msModflowOwhm2];
   comboZCount.Enabled := ModelSelection <> msFootPrint;
   if not comboZCount.Enabled then
   begin
@@ -4484,40 +4464,20 @@ begin
   EnableSwrActions;
 //  miSWR.Visible := ModelSelection in [msModflow, msModflowNWT, msModflowFmp];
 
-  acFarmCrops.Visible := PhastModel.ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
-  acFarmSoils.Visible := PhastModel.ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
-  acFarmClimate.Visible := PhastModel.ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
-  acFarmAllotment.Visible := PhastModel.ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
-  acEditFarms.Visible := PhastModel.ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
-  miFarmProcessDialogBoxes.Visible := PhastModel.ModelSelection in [msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
+  acFarmCrops.Visible := PhastModel.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
+  acFarmSoils.Visible := PhastModel.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
+  acFarmClimate.Visible := PhastModel.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
+  acFarmAllotment.Visible := PhastModel.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
+  acEditFarms.Visible := PhastModel.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
+  miFarmProcessDialogBoxes.Visible := PhastModel.ModelSelection in
+    [msModflowFmp, msModflowOwhm2];
 
-  {$IFDEF OWHMV2}
   acFarmIrrigationTypes.Visible := PhastModel.ModelSelection = msModflowOwhm2;
-  {$ENDIF}
 
   EnableFarmMenuItems;
 
@@ -4527,11 +4487,7 @@ begin
   acImportModelResults.Enabled :=
     PhastModel.ModelSelection in [msModflow, msModflowLGR, msModflowLGR2,
       msModflowNWT, msModflowFmp, msModflowCfp, msSutra22, msSutra30,
-      msSutra40, msFootPrint, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      ];
+      msSutra40, msFootPrint, msModflow2015, msModflowOwhm2];
   acImportSutraModelResults.Enabled :=
     PhastModel.ModelSelection  in SutraSelection;
 
@@ -4544,11 +4500,7 @@ begin
     PhastModel.ModelSelection in ModflowSelection;
   miImportDistributedDatabyZone.Enabled := PhastModel.ModelSelection = msPhast;
   miChildModels.Enabled := PhastModel.ModelSelection in [msModflowLGR,
-    msModflowLGR2, msModflowFmp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ];
+    msModflowLGR2, msModflowFmp, msModflowOwhm2];
 
   acExportPhastInputFile.Enabled := PhastModel.ModelSelection = msPhast;
   acRunModflow.Enabled := PhastModel.ModelSelection = msModflow;
@@ -4557,9 +4509,7 @@ begin
   acRunModflowNWT.Enabled := PhastModel.ModelSelection = msModflowNWT;
   acRunSutra.Enabled := PhastModel.ModelSelection  in SutraSelection;
   acRunModflowFmp.Enabled := PhastModel.ModelSelection = msModflowFmp;
-  {$IFDEF OWHMV2}
   acRunModflowOWHM_V2.Enabled := PhastModel.ModelSelection = msModflowOwhm2;
-  {$ENDIF}
   acRunModflowCfp.Enabled := PhastModel.ModelSelection = msModflowCfp;
   acRunFootprint.Enabled := PhastModel.ModelSelection = msFootPrint;
   acRunModflow6.Enabled := PhastModel.ModelSelection = msModflow2015;
@@ -4626,10 +4576,7 @@ begin
     ControlList.Add(acExportZoneBudget);
     ControlList.Add(acRunMt3dms);
     ControlList.Add(acRunModflow6);
-  {$IFDEF OWHMV2}
     ControlList.Add(acRunModflowOWHM_V2);
-  {$ENDIF}
-
 
     ShowControls := PhastModel.ModelSelection in ModflowSelection;
     for ControlIndex := 0 to ControlList.Count - 1 do
@@ -4815,10 +4762,8 @@ begin
         acFootPrintActive.Checked := True;
     msModflow2015:
         acModflow6Active.Checked := True;
-    {$IFDEF OWHMV2}
     msModflowOwhm2:
       acModflowOwhmV2.Checked := True;
-    {$ENDIF}
     else
       Assert(False);
   end;
@@ -4885,9 +4830,7 @@ begin
   UpdateRunShortCut(acRunSUTRA);
   UpdateRunShortCut(acRunFootprint);
   UpdateRunShortCut(acRunModflow6);
-    {$IFDEF OWHMV2}
   UpdateRunShortCut(acRunModflowOWHM_V2);
-    {$ENDIF}
 
   if DisvUsed then
   begin
@@ -4939,9 +4882,7 @@ begin
     msModflowFmp: result := MfOwhmUpToDate;
     msModflowCFP: result := MfCfpUpToDate;
     msModflow2015: result := Mf6UpToDate;
-    {$IFDEF OWHMV2}
     msModflowOwhm2: result := MfOwhmV2UpToDate;
-    {$ENDIF}
     else Assert(False);
   end;
 end;
@@ -5563,13 +5504,11 @@ end;
 
 procedure TfrmGoPhast.acModflowOwhmV2Execute(Sender: TObject);
 begin
-    {$IFDEF OWHMV2}
   if ModelSelection <> msModflowOwhm2 then
   begin
     UndoStack.Submit(TUndoModelSelectionChange.Create(msModflowOwhm2));
     HaveUsersDefineModflowLayers;
   end;
-    {$ENDIF}
 end;
 
 procedure TfrmGoPhast.acMoveColumnOrRowExecute(Sender: TObject);
@@ -6774,11 +6713,8 @@ end;
 
 procedure TfrmGoPhast.EnableSwrActions;
 begin
-  miSWR.Visible := ModelSelection in [msModflow, msModflowNWT, msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ];
+  miSWR.Visible := ModelSelection in [msModflow, msModflowNWT, msModflowFmp,
+    msModflowOwhm2];
   EnableSwrObs;
 end;
 
@@ -6793,11 +6729,7 @@ begin
   end;
   case ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         LocalGrid := Grid;
         acDisplayData.Enabled := (LocalGrid <> nil)
@@ -7026,11 +6958,7 @@ begin
           end;
         end;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    :
+    msModflowLGR, msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         NewFileName := PhastModel.FixFileName(ChangeFileExt(FileName, '.lgr'));
         if PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
@@ -7131,11 +7059,7 @@ begin
       begin
         WriteModflowFile;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    :
+    msModflowLGR, msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         if not PhastModel.LgrUsed then
         begin
@@ -9750,11 +9674,7 @@ begin
       msUndefined: Assert(False);
       msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
         msModflowFmp, msModflowCfp, msSutra22, msSutra30, msSutra40,
-        msFootPrint, msModflow2015
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        :
+        msFootPrint, msModflow2015, msModflowOwhm2:
         begin
           InvalidateViewOfModel;
           InvalidateAllViews;
@@ -9822,12 +9742,10 @@ begin
       begin
         acModflow6Active.Checked := True;
       end;
-    {$IFDEF OWHMV2}
     msModflowOwhm2:
       begin
         acModflowOwhmV2.Checked := True;
       end;
-    {$ENDIF}
     else Assert(False);
   end;
 end;
@@ -10066,9 +9984,7 @@ procedure TfrmGoPhast.acEditFarmsExecute(Sender: TObject);
 begin
   inherited;
   if
-    {$IFDEF OWHMV2}
     (ModelSelection = msModflowOwhm2) or
-    {$ENDIF}
     (PhastModel.FmpCrops.Count > 0) then
   begin
     frmFarm := TfrmFarm.Create(nil, PhastModel);
@@ -12382,9 +12298,7 @@ begin
         msSutra40: acSutra40Active.Checked := True;
         msFootPrint: acFootPrintActive.Checked := True;
         msModflow2015: acModflow6Active.Checked := True;
-        {$IFDEF OWHMV2}
         msModflowOwhm2: acModflowOwhmV2.Checked := True;
-        {$ENDIF}
         else Assert(False);
       end;
       EnableModpathToShapefile;
@@ -13624,9 +13538,7 @@ begin
             msModflowFmp: ModflowVersionName := StrMODFLOWOWHM;
             msModflowCfp: ModflowVersionName := StrMODFLOWCFP;
             msModflow2015: ModflowVersionName := StrMODFLOW6;
-            {$IFDEF OWHMV2}
             msModflowOwhm2: ModflowVersionName := StrMODFLOWOWHMV2;
-            {$ENDIF}
             else Assert(False);
           end;
           if MessageDlg(Format(StrSDoesNotExistAt, [ModflowVersionName]),
@@ -13971,10 +13883,8 @@ begin
           PhastModel.ProgramLocations.ModflowOwhmLocation;
         msModflowCfp: ModflowLocation :=
           PhastModel.ProgramLocations.ModflowCfpLocation;
-        {$IFDEF OWHMV2}
         msModflowOwhm2: ModflowLocation :=
           PhastModel.ProgramLocations.ModflowOwhmV2Location;
-        {$ENDIF}
         else
           Assert(False);
       end;
@@ -14905,11 +14815,7 @@ begin
       end
       else
       begin
-        Assert(ModelSelection in [msModflowLGR2, msModflowFmp
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        ]);
+        Assert(ModelSelection in [msModflowLGR2, msModflowFmp, msModflowOwhm2]);
         ModelFileExists := False;
         case ModelSelection of
           msModflowLGR2:
@@ -14920,12 +14826,10 @@ begin
             begin
               ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
             end;
-          {$IFDEF OWHMV2}
           msModflowOwhm2:
             begin
               ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmV2Location);
             end;
-          {$ENDIF}
           else
             Assert(False);
         end;
@@ -14951,12 +14855,10 @@ begin
               begin
                 ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
               end;
-            {$IFDEF OWHMV2}
             msModflowOwhm2:
               begin
                 ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmV2Location);
               end;
-            {$ENDIF}
             else
               Assert(False);
           end;
@@ -14985,7 +14887,6 @@ begin
                 Exit;
               end;
             end;
-          {$IFDEF OWHMV2}
           msModflowOwhm2:
             begin
               if not MfOwhmV2UpToDate then
@@ -14993,7 +14894,6 @@ begin
                 Exit;
               end;
             end;
-          {$ENDIF}
           else
             Assert(False);
           end;
@@ -15009,11 +14909,7 @@ begin
       end
       else
       begin
-        Assert(ModelSelection in [msModflowLGR2, msModflowFmp
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        ]);
+        Assert(ModelSelection in [msModflowLGR2, msModflowFmp, msModflowOwhm2]);
         case ModelSelection of
           msModflowLGR2:
             begin
@@ -15023,12 +14919,10 @@ begin
             begin
               ModelFile := PhastModel.ProgramLocations.ModflowOwhmLocation;
             end;
-        {$IFDEF OWHMV2}
           msModflowOwhm2:
             begin
               ModelFile := PhastModel.ProgramLocations.ModflowOwhmV2Location;
             end
-        {$ENDIF}
           else
             Assert(False);
         end;

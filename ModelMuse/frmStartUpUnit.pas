@@ -484,11 +484,7 @@ begin
   PhastModel.SutraOptions.SaturationChoice :=
     TSaturationChoice(rgSaturation.ItemIndex);
 
-{$IFDEF SUTRA4}
   PhastModel.ModelSelection := msSutra40;
-{$ELSE}
-  PhastModel.ModelSelection := msSutra30;
-{$ENDIF}
   Values:= TRealList.Create;
   try
     if PhastModel.SutraMesh.MeshType = mt3D then
@@ -656,13 +652,6 @@ var
   Grid: TRbwDataGrid4;
 begin
   inherited;
-
-{$IFNDEF SUTRA4}
-  if rgTransport.Items.Count = 4 then
-  begin
-    rgTransport.Items.Delete(3);
-  end;
-{$ENDIF}
 
   jvtmdtSimStartTime.Time := 0;
 
@@ -1003,11 +992,7 @@ begin
       3:
         begin
           //MODFLOW-OWHM
-        {$IFDEF OWHMV2}
           frmGoPhast.ModelSelection := msModflowOwhm2;
-        {$ELSE}
-          frmGoPhast.ModelSelection := msModflowFmp;
-        {$ENDIF}
         end;
       4:
         begin

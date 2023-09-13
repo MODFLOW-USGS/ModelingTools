@@ -2,8 +2,8 @@ inherited frmSoilProperties: TfrmSoilProperties
   HelpType = htKeyword
   HelpKeyword = 'Farm_Soil_Properties_Dialog_Bo'
   Caption = 'Farm Soil Properties'
-  ClientHeight = 562
-  ClientWidth = 788
+  ClientHeight = 561
+  ClientWidth = 784
   OnResize = FormResize
   ExplicitWidth = 800
   ExplicitHeight = 600
@@ -11,22 +11,21 @@ inherited frmSoilProperties: TfrmSoilProperties
   object splitterSoil: TSplitter
     Left = 0
     Top = 256
-    Width = 788
+    Width = 784
     Height = 5
     Cursor = crVSplit
     Align = alTop
     ExplicitTop = 200
+    ExplicitWidth = 788
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 518
-    Width = 788
+    Top = 517
+    Width = 784
     Height = 44
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 517
-    ExplicitWidth = 784
     object btnCancel: TBitBtn
       Left = 586
       Top = 6
@@ -60,7 +59,7 @@ inherited frmSoilProperties: TfrmSoilProperties
   inline frameSoils: TframeFormulaGrid
     Left = 0
     Top = 0
-    Width = 788
+    Width = 784
     Height = 256
     Align = alTop
     TabOrder = 0
@@ -68,7 +67,7 @@ inherited frmSoilProperties: TfrmSoilProperties
     ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 215
-      Width = 788
+      Width = 792
       ExplicitTop = 215
       ExplicitWidth = 784
       inherited lbNumber: TLabel
@@ -97,7 +96,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 788
+      Width = 792
       Height = 158
       ColCount = 10
       FixedCols = 1
@@ -360,7 +359,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       ExplicitHeight = 158
     end
     inherited pnlTop: TPanel
-      Width = 788
+      Width = 792
       ExplicitWidth = 784
       inherited edFormula: TLabeledEdit
         Height = 26
@@ -390,8 +389,8 @@ inherited frmSoilProperties: TfrmSoilProperties
   inline frameSoilEffectivePrecip: TframeSoilEffectivePrecip
     Left = 0
     Top = 261
-    Width = 788
-    Height = 257
+    Width = 784
+    Height = 256
     Align = alClient
     Enabled = False
     TabOrder = 3
@@ -400,11 +399,11 @@ inherited frmSoilProperties: TfrmSoilProperties
     ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 216
-      Width = 788
+      Width = 792
       ExplicitTop = 215
       ExplicitWidth = 784
       DesignSize = (
-        788
+        784
         41)
       inherited lbNumber: TLabel
         Width = 163
@@ -414,15 +413,15 @@ inherited frmSoilProperties: TfrmSoilProperties
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 606
+        Left = 600
         ExplicitLeft = 630
       end
       inherited sbInsert: TSpeedButton
-        Left = 645
+        Left = 638
         ExplicitLeft = 677
       end
       inherited sbDelete: TSpeedButton
-        Left = 701
+        Left = 694
         ExplicitLeft = 725
       end
       inherited lblMethod: TLabel
@@ -447,15 +446,15 @@ inherited frmSoilProperties: TfrmSoilProperties
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 788
-      Height = 135
+      Width = 784
+      Height = 134
       OnExit = frameSoilEffectivePrecipGridExit
       OnButtonClick = frameSoilsGridButtonClick
       ExplicitWidth = 784
       ExplicitHeight = 134
     end
     inherited pnlTop: TPanel
-      Width = 788
+      Width = 784
       ExplicitWidth = 784
       inherited lblSoil: TLabel
         Width = 233

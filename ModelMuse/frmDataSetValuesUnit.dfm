@@ -2,20 +2,22 @@ inherited frmDataSetValues: TfrmDataSetValues
   HelpType = htKeyword
   HelpKeyword = 'Data_Set_Values_Dialog_Box'
   Caption = 'Data Set Values'
-  ClientHeight = 303
-  ClientWidth = 544
-  ExplicitWidth = 560
-  ExplicitHeight = 342
+  ClientHeight = 302
+  ClientWidth = 540
+  ExplicitWidth = 556
+  ExplicitHeight = 341
   TextHeight = 18
   object Panel1: TPanel
     Left = 0
-    Top = 159
-    Width = 544
+    Top = 158
+    Width = 540
     Height = 144
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 159
+    ExplicitWidth = 544
     DesignSize = (
-      544
+      540
       144)
     object lblDataSet: TLabel
       Left = 4
@@ -32,7 +34,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       Caption = 'Model'
     end
     object btnClose: TBitBtn
-      Left = 447
+      Left = 439
       Top = 108
       Width = 75
       Height = 25
@@ -43,7 +45,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       ExplicitLeft = 451
     end
     object btnHelp: TBitBtn
-      Left = 447
+      Left = 439
       Top = 76
       Width = 75
       Height = 25
@@ -55,7 +57,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       ExplicitLeft = 451
     end
     object btnCopy: TButton
-      Left = 447
+      Left = 439
       Top = 45
       Width = 75
       Height = 25
@@ -69,7 +71,7 @@ inherited frmDataSetValues: TfrmDataSetValues
     object comboModel: TComboBox
       Left = 81
       Top = 43
-      Width = 344
+      Width = 336
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
@@ -79,7 +81,7 @@ inherited frmDataSetValues: TfrmDataSetValues
     object treecomboDataSets: TRbwStringTreeCombo
       Left = 81
       Top = 75
-      Width = 344
+      Width = 336
       Height = 26
       Tree.Left = 0
       Tree.Top = 0
@@ -158,7 +160,7 @@ inherited frmDataSetValues: TfrmDataSetValues
         'Column')
     end
     object btnSave: TButton
-      Left = 447
+      Left = 439
       Top = 13
       Width = 75
       Height = 25
@@ -183,19 +185,22 @@ inherited frmDataSetValues: TfrmDataSetValues
   object pcDataSet: TPageControl
     Left = 97
     Top = 0
-    Width = 447
-    Height = 159
+    Width = 443
+    Height = 158
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 447
+    ExplicitHeight = 159
   end
   object Panel2: TPanel
     Left = 0
     Top = 0
     Width = 97
-    Height = 159
+    Height = 158
     Align = alLeft
     Caption = 'Panel2'
     TabOrder = 0
+    ExplicitHeight = 159
     object lblLayer: TLabel
       AlignWithMargins = True
       Left = 4
@@ -211,7 +216,7 @@ inherited frmDataSetValues: TfrmDataSetValues
       Left = 1
       Top = 25
       Width = 95
-      Height = 134
+      Height = 133
       Align = alClient
       ItemHeight = 18
       Background.FillMode = bfmTile

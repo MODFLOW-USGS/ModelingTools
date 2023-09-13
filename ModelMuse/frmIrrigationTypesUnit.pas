@@ -165,7 +165,6 @@ procedure TfrmIrrigationTypes.CreateChildNodes(IrrigationItem: TIrrigationItem;
 var
   ANode: TJvPageIndexNode;
 begin
-{$IFDEF OWHMV2}
   if (frmGoPhast.ModelSelection = msModflowOwhm2)
     and FFarmProcess4.IsSelected and FFarmLandUse.IsSelected
     and (FFarmLandUse.IrrigationListUsed
@@ -177,7 +176,6 @@ begin
     ANode.PageIndex := jvspEvapFraction.PageIndex;
     ANode.Data := IrrigationItem.EvapFraction;
   end;
-{$ENDIF}
 end;
 
 destructor TfrmIrrigationTypes.Destroy;

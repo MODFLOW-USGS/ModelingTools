@@ -109,13 +109,10 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-  {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4CropHasSalinityDemand(self);
-    end
-  {$ENDIF}
-    ;
+    end;
   end;
 end;
 
@@ -153,7 +150,6 @@ var
   FarmSalinityFlush: TFarmProcess4SalinityFlush;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -166,7 +162,6 @@ begin
       and (FarmSalinityFlush.CropSalinityDemandChoice.FarmOption = foTransient)
       and (FarmSalinityFlush.CropSalinityDemandChoice.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 { TFmp4MultCropHasSalinityDemandCollection }
@@ -183,7 +178,6 @@ var
   FarmSalinityFlush: TFarmProcess4SalinityFlush;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -196,7 +190,6 @@ begin
       and (FarmSalinityFlush.CropSalinityDemandChoice.FarmOption = foTransient)
       and (FarmSalinityFlush.CropSalinityDemandChoice.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 { TFmp4MultCropHasSalinityDemandBoundary }
@@ -220,13 +213,10 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-  {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4CropHasSalinityDemand(self);
-    end
-  {$ENDIF}
-    ;
+    end;
   end;
 end;
 
@@ -237,7 +227,6 @@ var
   FarmSalinityFlush: TFarmProcess4SalinityFlush;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if ParentModel <> nil then
   begin
     LocalModel := ParentModel as TCustomModel;
@@ -250,7 +239,6 @@ begin
       and (FarmSalinityFlush.CropSalinityDemandChoice.FarmOption = foTransient)
       and (FarmSalinityFlush.CropSalinityDemandChoice.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 class function TFmp4MultCropHasSalinityDemandBoundary.ValueDescription: string;

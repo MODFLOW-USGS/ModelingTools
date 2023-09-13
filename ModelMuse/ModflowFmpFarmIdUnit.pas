@@ -746,20 +746,13 @@ begin
     begin
       Model.InvalidateMfFmpFarmID(self);
     end
-  {$IFDEF OWHMV2}
     else if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4FarmID(self);
     end
-  {$ENDIF}
     ;
   end;
 end;
-
-//class function TFmpPrecipBoundary.ModflowParamItemClass: TModflowParamItemClass;
-//begin
-//  result := TFmpPrecipParamItem;
-//end;
 
 function TFmpFarmIDBoundary.NonParameterColumns: integer;
 begin

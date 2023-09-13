@@ -1030,11 +1030,8 @@ var
     end
     else
     begin
-      Assert(Model.ModelSelection in [msModflowLGR2, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-      ]);
+      Assert(Model.ModelSelection in
+        [msModflowLGR2, msModflowFmp, msModflowOwhm2]);
       result := False;
     end;
   end;
@@ -1078,11 +1075,8 @@ begin
     end
     else
     begin
-      Assert(Model.ModelSelection in [msModflowLGR2, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-      ]);
+      Assert(Model.ModelSelection in
+        [msModflowLGR2, msModflowFmp, msModflowOwhm2]);
       OverlapWidth := 0;
     end;
     MaxOverlappedColumn := LocalChildModel.Grid.ColumnCount - OverlapWidth;
@@ -4788,11 +4782,7 @@ var
 begin
   SfrPackage := Package as TSfrPackageSelection;
   Result := (Model.ModelSelection in [msModflow, msModflowNWT, msModflowLGR2,
-    msModflowFmp {, msModflowCfp}
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-    ])
+    msModflowFmp, msModflowOwhm2])
     or SfrPackage.UseGsflowFormat;
 end;
 

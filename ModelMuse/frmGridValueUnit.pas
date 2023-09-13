@@ -376,11 +376,7 @@ begin
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel)
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-    :
+    msModflowLGR, msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel);
         for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
@@ -1375,11 +1371,7 @@ begin
   result := False;
   case frmGoPhast.ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         Grid := frmGoPhast.Grid;
         result := (Grid <> nil) and (Grid.LayerCount >= 1)

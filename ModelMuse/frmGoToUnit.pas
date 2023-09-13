@@ -706,11 +706,7 @@ begin
             SetGridSpinEditValue(seLayer,FrontCell.Lay+1);
           end;
         msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-          msModflowFmp, msModflowCfp, msModflow2015
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-          :
+          msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
           begin
             Layer := frmGoPhast.ModflowGrid.NearestLayerPosition(seCol.AsInteger-1,
               frmGoPhast.ModflowGrid.SelectedRow, APoint.Y);
@@ -1076,11 +1072,7 @@ begin
     msUndefined: Assert(False);
     msPhast, msSutra22, msSutra30, msSutra40: tabCell.Caption := StrElement;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015, msModflowOwhm2:
       begin
         tabCell.Caption := StrBlock;
       end

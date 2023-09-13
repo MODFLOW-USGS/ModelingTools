@@ -5,28 +5,26 @@ inherited frmStartUp: TfrmStartUp
   HelpKeyword = 'Start_Up_Dialog_Box'
   ActiveControl = btnNext
   Caption = 'GoPhast'
-  ClientHeight = 404
-  ClientWidth = 743
+  ClientHeight = 403
+  ClientWidth = 739
   OnClose = FormClose
   ExplicitWidth = 755
   ExplicitHeight = 442
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 357
-    Width = 743
+    Top = 356
+    Width = 739
     Height = 47
     Align = alBottom
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 356
-    ExplicitWidth = 739
     DesignSize = (
-      743
+      739
       47)
     object btnNext: TBitBtn
-      Left = 623
+      Left = 611
       Top = 6
       Width = 86
       Height = 33
@@ -52,7 +50,7 @@ inherited frmStartUp: TfrmStartUp
       ExplicitLeft = 619
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 436
+      Left = 424
       Top = 6
       Width = 100
       Height = 33
@@ -66,7 +64,7 @@ inherited frmStartUp: TfrmStartUp
       ExplicitLeft = 432
     end
     object btnHelp: TBitBtn
-      Left = 542
+      Left = 530
       Top = 6
       Width = 75
       Height = 33
@@ -82,16 +80,14 @@ inherited frmStartUp: TfrmStartUp
   object pcStartup: TPageControl
     Left = 0
     Top = 0
-    Width = 743
-    Height = 357
+    Width = 739
+    Height = 356
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
     ActivePage = tabInitialModflowGrid
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
-    ExplicitWidth = 739
-    ExplicitHeight = 356
     object tabModelChoice: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Start_Up_Dialog_Box'
@@ -124,11 +120,13 @@ inherited frmStartUp: TfrmStartUp
       object grpGeoRef: TGroupBox
         Left = 0
         Top = 0
-        Width = 735
+        Width = 739
         Height = 324
         Align = alClient
         Caption = 'Geo Reference and Model Description'
         TabOrder = 0
+        ExplicitWidth = 731
+        ExplicitHeight = 323
         object lblSimStartTime: TLabel
           Left = 11
           Top = 267
@@ -146,7 +144,7 @@ inherited frmStartUp: TfrmStartUp
         object lblModelDescription: TLabel
           Left = 2
           Top = 20
-          Width = 731
+          Width = 735
           Height = 18
           Align = alTop
           Caption = 'Model description'
@@ -201,10 +199,11 @@ inherited frmStartUp: TfrmStartUp
         object mmoModelDescription: TMemo
           Left = 2
           Top = 38
-          Width = 731
+          Width = 735
           Height = 156
           Align = alTop
           TabOrder = 0
+          ExplicitWidth = 731
         end
         object calSimStartDate: TJvDateTimePicker
           Left = 11
@@ -242,11 +241,13 @@ inherited frmStartUp: TfrmStartUp
       object gbInitialGrid: TGroupBox
         Left = 0
         Top = 0
-        Width = 735
+        Width = 739
         Height = 324
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 616
+        ExplicitHeight = 361
         object lblZDist: TLabel
           Left = 520
           Top = 110
@@ -430,7 +431,7 @@ inherited frmStartUp: TfrmStartUp
       object gbInitialGridModflow: TGroupBox
         Left = 0
         Top = 41
-        Width = 735
+        Width = 739
         Height = 283
         Margins.Left = 0
         Margins.Top = 40
@@ -546,10 +547,10 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 479
+          Left = 487
           Top = 20
-          Width = 254
-          Height = 261
+          Width = 242
+          Height = 260
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
           ColCount = 2
@@ -616,8 +617,8 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitLeft = 479
           ExplicitWidth = 250
-          ExplicitHeight = 260
           ColWidths = (
             64
             64)
@@ -632,11 +633,10 @@ inherited frmStartUp: TfrmStartUp
       object pnlModflowChoice: TPanel
         Left = 0
         Top = 0
-        Width = 735
+        Width = 731
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 731
         object lblModflowSelection: TLabel
           Left = 195
           Top = 10
@@ -668,8 +668,8 @@ inherited frmStartUp: TfrmStartUp
       Caption = 'tabInitialSutraMesh'
       ImageIndex = 3
       DesignSize = (
-        735
-        324)
+        731
+        323)
       object lblLayerGroups: TLabel
         Left = 464
         Top = 8
@@ -708,8 +708,8 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 237
-        Height = 292
+        Width = 225
+        Height = 291
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
@@ -961,7 +961,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 198
+        Width = 186
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -971,6 +971,7 @@ inherited frmStartUp: TfrmStartUp
           'Saturated'
           'Unsaturated')
         TabOrder = 3
+        ExplicitWidth = 198
       end
     end
     object tabInitialGridFootprint: TTabSheet
@@ -986,6 +987,8 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 731
+        ExplicitHeight = 323
         object lblRowCountFootprint: TLabel
           Left = 91
           Top = 68

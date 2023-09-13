@@ -261,11 +261,7 @@ type
       write SetModflow6Location;
     property PestDirectory: string read FPestDirectory write SetPestDirectory;
     property ModflowOwhmV2Location: string read FModflowOwhmV2Location
-      write SetModflowOwhmV2Location
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-      ;
+      write SetModflowOwhmV2Location;
   end;
 
   {
@@ -2185,11 +2181,7 @@ that affects the model output should also have a comment. }
        write SetFmpAllotment;
     property Farms: TFarmCollection read GetFarms write SetFarms;
     property IrrigationTypes: TIrrigationCollection read GetIrrigationTypes
-      write SetIrrigationTypes
-      {$IFNDEF OWHMV2}
-      stored False
-      {$ENDIF}
-      ;
+      write SetIrrigationTypes;
     property ParentModel: TCustomModel read GetParentModel;
     procedure DrawSfrStreamLinkages(const BitMap: TPersistent;
       const ZoomBox: TQRbwZoomBox2);
@@ -4650,9 +4642,7 @@ that affects the model output should also have a comment. }
     property FmpAllotment: TAllotmentCollection read GetFmpAllotment
        write SetFmpAllotment;
     property Farms: TFarmCollection read GetFarms write SetFarms;
-//  {$IFDEF OWHMV2}
     property IrrigationTypes;
-//  {$ENDIF}
   {$IFDEF LinkedRasters}
     property LinkedRasters;
   {$ENDIF}
@@ -10046,17 +10036,17 @@ const
 //               Bug fix: Fixed importing MODFLOW-2005 and MODFLOW-NWT models
 //                in which the number of segments in the ETS package was set
 //                to 1.
-//    '5.1.1.37' Bug fixed: Fixed bug in Mf2005ObsExtractor that caused simulated
+//    '5.1.1.37' Bug fix: Fixed bug in Mf2005ObsExtractor that caused simulated
 //                from the HOB package to be incorrectly read as zero.
 //    '5.1.1.38' Bug fix: Switching from a MODFLOW-NWT to a MODFLOW-OWHM model
 //                no longer results in the NWT and UPW packages being
 //                deactivated.
 
-//               Enhancement Buoyancy package for MODFLOW 6.
-//               Enhancement Viscosity package for MODFLOW 6.
+//               Enhancement: Added support for Buoyancy package for MODFLOW 6.
+//               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
-//               Enhancement: Added suport for SUTRA 4.
+//               Enhancement: Added support for SUTRA version 4.
 
 const
   // version number of ModelMuse.
@@ -11847,11 +11837,7 @@ begin
   case ModelSelection of
     msUndefined, msPhast, msFootPrint: Exit;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         DataArray := Sender as TDataArray;
         for Index := 0 to LayerStructure.Count - 1 do
@@ -12499,13 +12485,9 @@ end;
 
 function TCustomModel.DoCapillaryFringeUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmSoil4.CapFringeArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.CellToPoint(ACell: TCellLocation; EvalAt: TEvaluatedAt): TPoint3D;
@@ -12562,33 +12544,20 @@ end;
 
 function TCustomModel.CfpIsSelected: Boolean;
 begin
-  result := (ModelSelection in [msModflowCfp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    ]
-  ) and
+  result := (ModelSelection in [msModflowCfp, msModflowOwhm2]) and
     ModflowPackages.ConduitFlowProcess.IsSelected;
 end;
 
 function TCustomModel.DoCfp2PipesSelected(Sender: TObject): Boolean;
 begin
-{$IFDEF OWHMV2}
   result := DoCfpPipesSelected(Sender) and (ModelSelection = msModflowOwhm2);
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.DoCfpCadsSelected(Sender: TObject): Boolean;
 begin
-{$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2) and CfpIsSelected
     and ModflowPackages.ConduitFlowProcess.PipesUsed
     and ModflowPackages.ConduitFlowProcess.UseCads;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.DoCfpPipesSelected(Sender: TObject): Boolean;
@@ -13284,18 +13253,12 @@ begin
     msUndefined: ;
     msPhast: ;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         if not (csLoading in ComponentState) then
         begin
           if LayerStructure.Count = 0 then
           begin
-//            LayerGroup := LayerStructure.Add as TCustomLayerGroup;
-//            LayerGroup.AquiferName := kModelTop;
             ModflowGrid.RowCount := -1;
             ModflowGrid.ColumnCount := -1;
             ModflowGrid.LayerCount := -1;
@@ -13341,11 +13304,7 @@ begin
     msUndefined: ; // do nothing
     msPhast: ;  // do nothing
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         ModflowGrid.NotifyGridChanged(Sender);
       end;
@@ -13430,11 +13389,7 @@ begin
           PhastGrid.ThreeDGridObserver := nil;
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        :
+        msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
         begin
           ModflowGrid.TopGridObserver := nil;
           ModflowGrid.ThreeDGridObserver := nil;
@@ -13467,18 +13422,13 @@ begin
           FGrid := PhastGrid;
         end;
       msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        :
+        msModflowFmp, msModflowCfp, msModflowOwhm2:
         begin
           FGrid := ModflowGrid;
-//          ThreeDGridObserver.OnUpToDateSet := ModflowGrid.NotifyGridChanged;
         end;
         msModflow2015:
         begin
-          if DisvUsed {and not DisvGrid.AssigningQuadRefinement} then
+          if DisvUsed then
           begin
             FGrid := nil;
             InvalidateScreenObjects;
@@ -13509,11 +13459,7 @@ begin
       else Assert(False);
     end;
     if (FModelSelection in [msModflow, msModflowLgr, msModflowLGR2,
-      {msModflowFmp,} msModflowCfp
-      {$IFDEF OWHMV2}
-//      , msModflowOwhm2
-      {$ENDIF}
-      ]) then
+      msModflowCfp]) then
     begin
       if ModflowPackages.UpwPackage.IsSelected then
       begin
@@ -14670,11 +14616,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         Grid.ThreeDContourDataSet := Value;
       end;
@@ -14707,11 +14649,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         Grid.ThreeDDataSet := Value;
       end;
@@ -15434,11 +15372,8 @@ begin
       ModelFile := ProgramLocations.FootprintLocation;
     msModflow2015:
       ModelFile := ProgramLocations.Modflow6Location;
-    {$IFDEF OWHMV2}
     msModflowOwhm2:
       ModelFile := ProgramLocations.ModflowOwhmV2Location;
-    {$ENDIF}
-
   else
     Assert(False);
   end;
@@ -16240,14 +16175,13 @@ begin
     msUndefined: Assert(False);
     msPhast: result := 'PHAST';
     msModflow, msModflowNWT, msModflowCfp, msModflow2015:
-        begin
-          result := 'MODFLOW';
-        end;
-    msModflowLGR, msModflowLGR2, msModflowFmp
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    : result := 'Parent model';
+      begin
+        result := 'MODFLOW';
+      end;
+    msModflowLGR, msModflowLGR2, msModflowFmp, msModflowOwhm2:
+      begin
+        result := 'Parent model';
+      end;
     msSutra22, msSutra30, msSutra40: result := 'SUTRA';
     msFootprint: Result := 'WellFootprint';
     else Assert(False);
@@ -16263,11 +16197,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         if Grid <> nil then
         begin
@@ -16332,11 +16262,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         result := Grid.ThreeDDataSet;
       end;
@@ -18471,11 +18397,7 @@ begin
       begin
         result := ModflowGrid.ColumnCount;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    :
+    msModflowLGR, msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         result := 0;
         for ColIndex := 0 to ModflowGrid.ColumnCount - 1 do
@@ -18585,11 +18507,7 @@ begin
       begin
         result := ModflowGrid.RowCount;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    :
+    msModflowLGR, msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         result := 0;
         for RowIndex := 0 to ModflowGrid.RowCount - 1 do
@@ -18640,11 +18558,7 @@ begin
           result := ModflowGrid.LayerCount;
         end;
       end;
-    msModflowLGR, msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    :
+    msModflowLGR, msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         result := 0;
         for LayerIndex := 0 to ModflowGrid.LayerCount - 1 do
@@ -19871,11 +19785,7 @@ begin
         Result := PhastGrid.LayerCount;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         result := LayerStructure.LayerCount;
       end;
@@ -20017,11 +19927,8 @@ end;
 
 function TPhastModel.LgrUsed: boolean;
 begin
-  result := (ModelSelection in [msModflowLGR, msModflowLGR2, msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ])
+  result := (ModelSelection in [msModflowLGR, msModflowLGR2, msModflowFmp,
+    msModflowOwhm2])
     and (ChildModels.Count > 0);
 end;
 
@@ -21369,11 +21276,7 @@ begin
           result := True;
           Exit;
         end;
-        if ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-          ] then
+        if ModelSelection in [msModflowFmp, msModflowOwhm2] then
         begin
           if (NoDelayItem.InitialElasticCompactionDataArrayName = DataArray.Name)
             or (NoDelayItem.InitialInelasticCompactionDataArrayName = DataArray.Name)
@@ -21414,11 +21317,7 @@ begin
           result := ModflowPackages.SubPackage.ReadDelayRestartFileName = '';
           Exit;
         end;
-        if ModelSelection in [msModflowFmp
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-          ] then
+        if ModelSelection in [msModflowFmp, msModflowOwhm2] then
         begin
           if (DelayItem.InterbedStartingElasticCompactionDataArrayName = DataArray.Name)
             or (DelayItem.InterbedStartingInelasticCompactionDataArrayName = DataArray.Name)
@@ -23287,7 +23186,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected;
   if not result and LgrUsed then
@@ -23302,9 +23200,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.DoFarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
@@ -23312,7 +23207,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23330,9 +23224,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.DoFarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
@@ -23340,7 +23231,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23358,9 +23248,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientAddedDemandIsSelected: Boolean;
@@ -23368,7 +23255,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23386,9 +23272,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientAddedDemandMultIsSelected: Boolean;
@@ -23396,7 +23279,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23414,9 +23296,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected: Boolean;
@@ -23424,7 +23303,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -23441,9 +23319,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientBareEvapArrayIsSelected: Boolean;
@@ -23451,7 +23326,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientBareEvapArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -23468,9 +23342,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean;
@@ -23478,7 +23349,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -23495,9 +23365,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean;
@@ -23505,7 +23372,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientBareRunoffFractionArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -23522,9 +23388,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientConsumptiveUseIsSelected: Boolean;
@@ -23532,7 +23395,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23550,9 +23412,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientConsumptiveUseMultIsSelected: Boolean;
@@ -23560,7 +23419,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23578,9 +23436,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientCropCoefficientIsSelected: Boolean;
@@ -23588,7 +23443,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23606,9 +23460,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientCropCoefficientMultIsSelected: Boolean;
@@ -23616,7 +23467,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23634,9 +23484,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientCropsUsed(Sender: TObject): boolean;
@@ -23644,7 +23491,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23662,9 +23508,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean;
@@ -23672,7 +23515,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientDirectRechargeArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -23689,21 +23531,14 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
     result := (ModelSelection =  msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmProcess4.EfficiencyOptions.FarmOption = foTransient)
     and (ModflowPackages.FarmProcess4.EfficiencyOptions.ArrayList  = alArray)
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientEfficiencyArrayIsSelected: Boolean;
@@ -23715,7 +23550,6 @@ var
     result := Model.FarmProcess4TransientEfficiencyArrayIsSelected;
   end;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientEfficiencyArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -23732,9 +23566,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientEfficiencyArrayUsed(
@@ -23748,7 +23579,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientEfficiencyImprovementArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -23765,9 +23595,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected: Boolean;
@@ -23775,7 +23602,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23793,9 +23619,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected: Boolean;
@@ -23803,7 +23626,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23821,9 +23643,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientFarmIsSelected: Boolean;
@@ -23832,7 +23651,6 @@ var
   LocalModflowPackages: TModflowPackages;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
@@ -23854,9 +23672,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientFarmsUsed(Sender: TObject): boolean;
@@ -23869,7 +23684,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23887,9 +23701,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected: Boolean;
@@ -23897,7 +23708,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23915,9 +23725,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterIsSelected: Boolean;
@@ -23925,7 +23732,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23943,9 +23749,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterMultIsSelected: Boolean;
@@ -23953,7 +23756,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23971,9 +23773,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientCropHasSalinityDemandIsSelected: Boolean;
@@ -23981,7 +23780,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -23999,9 +23797,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected: Boolean;
@@ -24009,7 +23804,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24027,9 +23821,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientIrrigationIsSelected: Boolean;
@@ -24037,7 +23828,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24055,9 +23845,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientIrrigationMultIsSelected: Boolean;
@@ -24065,7 +23852,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24083,9 +23869,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean;
@@ -24093,7 +23876,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24111,9 +23893,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientLandUseAreaFractionMultIsSelected: Boolean;
@@ -24121,7 +23900,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24139,9 +23917,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientNrdInfilLocIsSelected: Boolean;
@@ -24149,7 +23924,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24166,9 +23940,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientPrecipIsSelected: Boolean;
@@ -24177,7 +23948,6 @@ var
   LocalModflowPackages: TModflowPackages;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.TransientPrecipUsed(nil);
@@ -24199,9 +23969,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean;
@@ -24209,7 +23976,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited FarmProcess4TransientPrecipPotConsumptionArrayIsSelected;
   if not result and LgrUsed then
   begin
@@ -24226,9 +23992,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientRefEtIsSelected: Boolean;
@@ -24237,7 +24000,6 @@ var
   LocalModflowPackages: TModflowPackages;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection =  msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.TransientEvapUsed(nil);
@@ -24259,9 +24021,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientRootDepthIsSelected: Boolean;
@@ -24269,7 +24028,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24287,9 +24045,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientRootDepthMultIsSelected: Boolean;
@@ -24297,7 +24052,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24315,9 +24069,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientTranspirationFractionIsSelected: Boolean;
@@ -24325,7 +24076,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24343,9 +24093,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean;
@@ -24353,7 +24100,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  {$IFDEF OWHMV2}
   result := inherited;
   if not result and LgrUsed then
   begin
@@ -24371,9 +24117,6 @@ begin
       end;
     end;
   end;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TPhastModel.FarmProcess4WellSelected: Boolean;
@@ -24381,8 +24124,6 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-
-{$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2);
   if result then
   begin
@@ -24406,9 +24147,6 @@ begin
       end;
     end;
   end;
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TPhastModel.Farm4ProcessUsed(Sender: TObject): boolean;
@@ -27217,13 +26955,9 @@ end;
 
 function TCustomModel.DoDirectRechargeUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.StaticDirectRechargeUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 procedure TCustomModel.DischargeRoutingUpdate;
@@ -27272,11 +27006,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         Grid.GridChanged;
       end;
@@ -27403,11 +27133,7 @@ begin
               end;
             end;
           msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            :
+            msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
             begin
               if DisvUsed then
               begin
@@ -27521,11 +27247,7 @@ begin
         case ModelSelection of
           msUndefined: Assert(False);
           msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            :
+            msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
             begin
               if DisvUsed then
               begin
@@ -27633,11 +27355,7 @@ begin
   case ModelSelection of
     msUndefined, msPhast: Assert(False);
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         if DisVUsed then
         begin
@@ -27732,11 +27450,7 @@ begin
               end;
             end;
           msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            :
+            msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
             begin
               if DisvUsed then
               begin
@@ -27838,11 +27552,8 @@ begin
         case ModelSelection of
           msUndefined: Assert(False);
           msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msFootprint, msModflow2015
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            :
+            msModflowFmp, msModflowCfp, msFootprint, msModflow2015,
+            msModflowOwhm2:
             begin
               if DisvUsed then
               begin
@@ -27965,11 +27676,7 @@ begin
               end;
             end;
           msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msModflow2015
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            :
+            msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2:
             begin
               if DisvUsed then
               begin
@@ -28071,11 +27778,8 @@ begin
         case ModelSelection of
           msUndefined: Assert(False);
           msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-            msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            :
+            msModflowFmp, msModflowCfp, msFootPrint, msModflow2015,
+            msModflowOwhm2:
             begin
               if DisvUsed then
               begin
@@ -28515,13 +28219,9 @@ end;
 
 function TCustomModel.DoPrecipPotConsumptionUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.StaticPrecipPotConsumptionUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.PrepareModflowFullStressPeriods(ShowWarning: boolean): Boolean;
@@ -29268,13 +28968,9 @@ end;
 
 function TCustomModel.DoIrrigationUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticIrrigationArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.IsLayerConfined(const LayerID: integer): boolean;
@@ -31372,9 +31068,7 @@ begin
     Sutra30Location := SourceLocations.Sutra30Location;
     Sutra40Location := SourceLocations.Sutra40Location;
     PestDirectory := SourceLocations.PestDirectory;
-    {$IFDEF OWHMV2}
     ModflowOwhmV2Location := SourceLocations.ModflowOwhmV2Location;
-    {$ENDIF}
   end
   else
   begin
@@ -31407,9 +31101,7 @@ begin
   GeompackLocation := StrDefaultGeompackPath;
   Modflow6Location := StrDefaultModflow6Path;
   PestDirectory := StrPestDefaultDir;
-  {$IFDEF OWHMV2}
   ModflowOwhmV2Location := StrDefaultOwhmV2Path;
-  {$ENDIF}
   ADirectory := GetCurrentDir;
   try
     SetCurrentDir(ExtractFileDir(ParamStr(0)));
@@ -31757,7 +31449,6 @@ begin
     end;
   end;
 
-  {$IFDEF OWHMV2}
   ModflowOwhmV2Location := IniFile.ReadString(StrProgramLocations, strModflowOWHM_V2,
     StrDefaultOwhmV2Path);
   if (ModflowOwhmV2Location = '') or not FileExists(ModflowOwhmV2Location) then
@@ -31771,8 +31462,6 @@ begin
       ModflowOwhmV2Location := AlternatePath(StrDefaultOwhmV2Path);
     end;
   end;
-  {$ENDIF}
-
 
   PestDirectory := IniFile.ReadString(StrProgramLocations, StrPestDir,
     StrPestDefaultDir);
@@ -31995,9 +31684,7 @@ begin
   IniFile.WriteString(StrProgramLocations, StrFootprint, FootprintLocation);
   IniFile.WriteString(StrProgramLocations, StrModflow6, Modflow6Location);
   IniFile.WriteString(StrProgramLocations, StrPestDir, PestDirectory);
-  {$IFDEF OWHMV2}
   IniFile.WriteString(StrProgramLocations, strModflowOWHM_V2, ModflowOwhmV2Location);
-  {$ENDIF}
 end;
 
 { TLookUpList }
@@ -33148,13 +32835,9 @@ end;
 
 function TCustomModel.DoTranspirationFractionUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticTranspirationFractionArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.TRPT: TOneDRealArray;
@@ -33195,10 +32878,8 @@ begin
       ProgramLocations.ModflowCfpLocation := Value;
     msModflow2015:
       ProgramLocations.Modflow6Location := Value;
-{$IFDEF OWHMV2}
    msModflowOwhm2:
       ProgramLocations.ModflowOwhmV2Location := Value;
-{$ENDIF}
     else Assert(False);
   end;
 end;
@@ -33430,11 +33111,7 @@ procedure TCustomModel.SetSelectedColumn(const Value: integer);
 begin
   case ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint, msModflowOwhm2:
       begin
         if not DisvUsed then
         begin
@@ -33490,11 +33167,7 @@ procedure TCustomModel.SetSelectedRow(const Value: integer);
 begin
   case ModelSelection of
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflow2015, msFootPrint, msModflowOwhm2:
       begin
         if not DisvUsed then
         begin
@@ -33518,11 +33191,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         Grid.SideContourDataSet := Value;
       end;
@@ -33551,11 +33220,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         Grid.SideDataSet := Value;
       end;
@@ -33621,11 +33286,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         Grid.TopContourDataSet := Value;
       end;
@@ -33658,11 +33319,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         Grid.TopDataSet := Value;
       end;
@@ -33743,11 +33400,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         Grid.FrontContourDataSet := Value;
       end;
@@ -33777,11 +33430,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         Grid.FrontDataSet := Value;
       end;
@@ -34276,13 +33925,9 @@ end;
 
 function TCustomModel.DoAddedDemandUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticAddedDemandArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 procedure TCustomModel.AddExternalFile(AFileName: string);
@@ -36085,11 +35730,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         if Grid <> nil then
         begin
@@ -36129,11 +35770,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         result := Grid.SideDataSet;
       end;
@@ -36352,483 +35989,311 @@ end;
 
 function TCustomModel.Farm4ProcessUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFarmProcess4SteadyCropsUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
     and (ModflowPackages.FarmLandUse.CropLocation = rstStatic)
     and (ModflowPackages.FarmLandUse.LandUseOption = luoSingle);
     ;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFarmProcess4SteadyFarmsUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and not (ModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFarmProcess4SteadyPrecipUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmClimate4.StaticPrecipUsed(Sender));
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 
 function TCustomModel.DoFarmProcess4SteadArrayAddedDemandRunoffSplitUsed(
   Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmProcess4.SteadyArrayAddedDemandRunoffSplitDisplayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFarmProcess4SteadArrayBarePrecipitationConsumptionFractionUsed(
   Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmProcess4.SteadyArrayBarePrecipitationConsumptionFractionDisplayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFarmProcess4SteadArrayBareRunoffFractionUsed(
   Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmProcess4.SteadyArrayBareRunoffFractionDisplayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFarmProcess4SteadArrayEfficiencyImprovementUsed(
   Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmProcess4.SteadyArrayEfficiencyImprovmentUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFarmProcess4SteadArrayEfficiencyUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmProcess4.SteadyArrayEfficiencyUsed;
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 
 function TCustomModel.DoFarmProcess4SteadyRefETUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmClimate4.StaticEvapUsed(Sender));
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientAddedDemandIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientAddedDemandArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientAddedDemandMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientAddedDemandMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.TransientArrayAddedDemandRunoffSplitDisplayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientBareEvapArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.TransientBareEvapUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientBarePrecipitationConsumptionFractionArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.TransientArrayBarePrecipitationConsumptionFractionDisplayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientBareRunoffFractionArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.TransientArrayBareRunoffFractionDisplayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientConsumptiveUseIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientConsumptiveUseArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientConsumptiveUseMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientConsumptiveUseMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientCropCoefficientIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientCropCoefficientarrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientCropCoefficientMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientCropCoefficientMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientCropsUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
     and (ModflowPackages.FarmLandUse.CropLocation = rstTransient)
     and (ModflowPackages.FarmLandUse.LandUseOption = luoSingle);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientDirectRechargeArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.TransientDirectRechargeUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientEfficiencyArrayUsed(
   Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and FarmProcess4TransientEfficiencyArrayIsSelected
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientEfficiencyImprovementArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.TransientArrayEfficiencyImprovementUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientEvaporationIrrigationFractionIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientEvaporationIrrigationFractionArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientEvaporationIrrigationFractionMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientEvaporationIrrigationFractionMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientFarmsUsed(Sender: TObject): boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and (ModflowPackages.FarmProcess4.Farms.FarmOption = foTransient);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientFractionOfIrrigToSurfaceWaterArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientFractionOfIrrigToSurfaceWaterMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientFractionOfIrrigToSurfaceWaterMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientFractionOfPrecipToSurfaceWaterArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientFractionOfPrecipToSurfaceWaterMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientFractionOfPrecipToSurfaceWaterMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientCropHasSalinityDemandIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
     and ModflowPackages.FarmSalinityFlush.TransientCropHasSalinityDemandArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientCropHasSalinityDemandMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
     and ModflowPackages.FarmSalinityFlush.TransientCropHasSalinityDemandMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientIrrigationIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientIrrigationArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientIrrigationMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientIrrigationMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientLandUseAreaFractionIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientLandUseAreaFractionArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientLandUseAreaFractionMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientLandUseAreaFractionMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientNrdInfilLocIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmSurfaceWater4.TransientNrdInfilLocationUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientPrecipPotConsumptionArrayIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.TransientPrecipPotConsumptionUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientRootDepthIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientRootDepthArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientRootDepthMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientRootDepthMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientTranspirationFractionIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientTranspirationFractionArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcess4TransientTranspirationFractionMultIsSelected: Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.TransientTranspirationFractionMultArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.FarmProcessUsed(Sender: TObject): boolean;
@@ -37402,11 +36867,7 @@ begin
       Exit;
     end;
     FirstLine := IntToStr(FPValFile.Count);
-    if (ModelSelection in [msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    ])
+    if (ModelSelection in [msModflowFmp, msModflowOwhm2])
       and ModflowOutputControl.PrintInputArrays then
     begin
       FirstLine := FirstLine + ' PROPPRINT';
@@ -37903,13 +37364,9 @@ end;
 
 function TCustomModel.DoCropCoefficientUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticCropCoefficientArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.CropCount: integer;
@@ -38120,25 +37577,17 @@ end;
 function TCustomModel.DoFractionOfIrrigToSurfaceWaterUsed(
   Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticFractionOfIrrigToSurfaceWaterArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoFractionOfPrecipToSurfaceWaterUsed(
   Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticFractionOfPrecipToSurfaceWaterArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 procedure TCustomModel.FreeGridNotifiers;
@@ -38259,11 +37708,7 @@ begin
     msUndefined: result := false;
     msPhast: result := True;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowCfp, msModflowOwhm2:
       begin
         result := ModflowPackages.LpfPackage.IsSelected
           or ModflowPackages.UpwPackage.IsSelected;
@@ -38294,11 +37739,7 @@ begin
     msUndefined: result := False;
     msPhast: result := True;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         if ModflowPackages.HufPackage.IsSelected then
         begin
@@ -38374,11 +37815,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2,
-    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    :
+      msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         result := Grid.TopContainingCell(APoint, EvalAt, False);
       end;
@@ -38447,13 +37884,9 @@ end;
 
 function TCustomModel.DoPotentialEvapBareUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmClimate4.StaticBareEvapUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoSpecificStorageUsed(Sender: TObject): boolean;
@@ -38463,11 +37896,7 @@ begin
     msUndefined: result := False;
     msPhast: result := True;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         if ModflowPackages.LpfPackage.IsSelected
           or ModflowPackages.BcfPackage.IsSelected
@@ -38510,13 +37939,9 @@ end;
 
 function TCustomModel.DoSurfaceKUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmSoil4.SurfaceKArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoSurfacesUsed(Sender: TObject): boolean;
@@ -38684,7 +38109,6 @@ end;
 function TCustomModel.DoSoilIDUsed(Sender: TObject): boolean;
 begin
   result := FarmProcessUsed(Sender);
-{$IFDEF OWHMV2}
   if not result then
   begin
     result := (ModelSelection = msModflowOwhm2)
@@ -38692,8 +38116,6 @@ begin
       and ModflowPackages.FarmSoil4.IsSelected
       and (FmpSoils.Count > 0);
   end;
-{$ENDIF}
-
 end;
 
 function TCustomModel.DoSolidSolutionUsed(Sender: TObject): boolean;
@@ -38756,25 +38178,17 @@ end;
 
 function TCustomModel.DoLandUseAreaFractionUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticLandUseAreaFractionArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoLandUseCellsToPrintUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
     and (lupPrintRowCol IN ModflowPackages.FarmLandUse.LandUsePrints);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoUzfPackageUsed(Sender: TObject): boolean;
@@ -38790,11 +38204,7 @@ begin
   begin
       result := ModflowPackages.UzfPackage.SpecifyResidualWaterContent
         and (ModelSelection in [msModflow, msModflowLGR2,  msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        ]);
+        msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2]);
   end;
 end;
 
@@ -38857,13 +38267,9 @@ end;
 
 function TCustomModel.DoRootDepthUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticRootDepthArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoRouteUzfDischarge(Sender: TObject): boolean;
@@ -38896,11 +38302,7 @@ begin
       result := ModflowStressPeriods.CompletelyTransient or
         (ModflowPackages.UzfPackage.SpecifyInitialWaterContent
         and (ModelSelection in [msModflow, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        ]));
+        msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2]));
   end;
 end;
 
@@ -38985,13 +38387,9 @@ end;
 
 function TCustomModel.DoConsumptiveUseUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticConsumptiveUseArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 procedure TCustomModel.ConvertSfr;
@@ -39180,14 +38578,10 @@ end;
 
 function TCustomModel.DoCropHasSalinityDemandUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.IsSelected
     and ModflowPackages.FarmSalinityFlush.StaticCropHasSalinityDemandArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoHorizAnisotropyMf6Used(Sender: TObject): boolean;
@@ -39402,11 +38796,8 @@ end;
 function TCustomModel.DoWetDryUsed(Sender: TObject): boolean;
 begin
   result := ModflowWettingOptions.WettingActive;
-  if result and (ModelSelection in [msModflowNWT, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-  ]) then
+  if result and (ModelSelection in
+    [msModflowNWT, msModflowFmp, msModflowOwhm2]) then
   begin
     result := not ModflowPackages.UpwPackage.IsSelected;
   end;
@@ -39498,11 +38889,7 @@ begin
     msUndefined: result := False;
     msPhast, msSutra22, msSutra30, msSutra40, msFootPrint: result := False;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         if ModflowPackages.BcfPackage.IsSelected then
         begin
@@ -39671,45 +39058,33 @@ function TCustomModel.MultipleAddedDemandUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.AddedDemand.FarmOption = foStatic)
     and (FarmLandUse.AddedDemand.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleConsumptiveUseUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.ConsumptiveUse.FarmOption = foStatic)
     and (FarmLandUse.ConsumptiveUse.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleCropCoefficientUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.CropCoeff.FarmOption = foStatic)
     and (FarmLandUse.CropCoeff.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleEvaporationIrrigationUsed(
@@ -39717,15 +39092,11 @@ function TCustomModel.MultipleEvaporationIrrigationUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.EvapIrrigationFraction.FarmOption = foStatic)
     and (FarmLandUse.EvapIrrigationFraction.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleGroundwaterRootInteractionUsed(
@@ -39733,15 +39104,11 @@ function TCustomModel.MultipleGroundwaterRootInteractionUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.GroundwaterRootInteraction.FarmOption = foStatic)
     and (FarmLandUse.GroundwaterRootInteraction.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleCropHasSalinityDemandUsed(Sender: TObject): Boolean;
@@ -39749,7 +39116,6 @@ var
   FarmLandUse: TFarmProcess4LandUse;
   FarmSalinityFlush: TFarmProcess4SalinityFlush;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   FarmSalinityFlush := ModflowPackages.FarmSalinityFlush;
   result := (ModelSelection = msModflowOwhm2)
@@ -39758,16 +39124,12 @@ begin
     and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmSalinityFlush.CropSalinityDemandChoice.FarmOption = foStatic)
     and (FarmSalinityFlush.CropSalinityDemandChoice.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleIrrigationUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
@@ -39775,39 +39137,28 @@ begin
     and (FarmLandUse.Irrigation.ArrayList = alArray)
     and (IrrigationTypes.Count > 0)
     ;
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleLandUseFractionsUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.LandUseFraction.FarmOption = foStatic)
     and (FarmLandUse.LandUseFraction.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleRootDepthUsed(Sender: TObject): Boolean;
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.RootDepth.FarmOption = foStatic)
     and (FarmLandUse.RootDepth.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleSWLossFractionIrrigationUsed(
@@ -39815,15 +39166,11 @@ function TCustomModel.MultipleSWLossFractionIrrigationUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.FractionOfIrrigationToSurfaceWater.FarmOption = foStatic)
     and (FarmLandUse.FractionOfIrrigationToSurfaceWater.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleSWLossFractionPrecipUsed(
@@ -39831,15 +39178,11 @@ function TCustomModel.MultipleSWLossFractionPrecipUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.FractionOfPrecipToSurfaceWater.FarmOption = foStatic)
     and (FarmLandUse.FractionOfPrecipToSurfaceWater.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.MultipleTranspirationFractionUsed(
@@ -39847,15 +39190,11 @@ function TCustomModel.MultipleTranspirationFractionUsed(
 var
   FarmLandUse: TFarmProcess4LandUse;
 begin
-{$IFDEF OWHMV2}
   FarmLandUse := ModflowPackages.FarmLandUse;
   result := (ModelSelection = msModflowOwhm2)
     and FarmLandUse.IsSelected and (FarmLandUse.LandUseOption = luoMultiple)
     and (FarmLandUse.TranspirationFraction.FarmOption = foStatic)
     and (FarmLandUse.TranspirationFraction.ArrayList = alArray);
-{$ELSE}
-   result := False;
-{$ENDIF}
 end;
 
 function TCustomModel.DoNpfUsed(Sender: TObject): boolean;
@@ -39866,13 +39205,9 @@ end;
 
 function TCustomModel.DoNrdInfilLocationUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmSurfaceWater4.StaticNrdInfilLocationUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 procedure TCustomModel.NotifyHufKx;
@@ -40448,10 +39783,8 @@ begin
 
     if ((ModelSelection = msModflowFmp) and
       ModflowPackages.FarmProcess.IsSelected)
-      {$IFDEF OWHMV2}
       or ((ModelSelection = msModflowOwhm2) and
       ModflowPackages.FarmProcess4.IsSelected)
-      {$ENDIF}
       then
     begin
       { TODO -cOWHMV2 : The following may need to be updated for MODFLOW OWHM version 2. }
@@ -41168,9 +40501,7 @@ begin
     msModflowFmp: result := ProgramLocations.ModflowOwhmLocation;
     msModflowCfp: result := ProgramLocations.ModflowCfpLocation;
     msModflow2015: result := ProgramLocations.Modflow6Location;
-      {$IFDEF OWHMV2}
     msModflowOwhm2: result := ProgramLocations.ModflowOwhmV2Location;
-      {$ENDIF}
     else result := ProgramLocations.ModflowLocation;
   end;
 end;
@@ -41660,11 +40991,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         result := Grid;
       end;
@@ -41842,11 +41169,7 @@ begin
         Assert(False);
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2,
-    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint
-    {$IFDEF OWHMV2}
-    , msModflowOwhm2
-    {$ENDIF}
-    :
+      msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         result := Grid.ItemTopLocation[EvalAt, Column, Row];
       end;
@@ -43243,13 +42566,9 @@ end;
 function TCustomModel.DoEvaporationIrrigationFractionUsed(
   Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticEvaporationIrrigationFractionArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 procedure TCustomModel.ExportFarmProcess(const FileName: string);
@@ -43274,14 +42593,11 @@ begin
   begin
     frmProgressMM.StepIt;
   end
-  {$IFDEF OWHMV2}
   else if ModflowPackages.FarmProcess4.IsSelected
     and (ModelSelection = msModflowOwhm2) then
   begin
     frmProgressMM.StepIt;
-  end
-  {$ENDIF}
-  ;
+  end;
 end;
 
 procedure TCustomModel.ExportSfrPackage(const FileName: string);
@@ -44212,11 +43528,7 @@ begin
             Exit;
           end;
           if ModflowPackages.ConduitFlowProcess.IsSelected
-            and (ModelSelection in [msModflowCFP
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            ]) then
+            and (ModelSelection in [msModflowCFP, msModflowOwhm2]) then
           begin
             frmProgressMM.StepIt;
           end;
@@ -44270,11 +43582,7 @@ begin
             Exit;
           end;
           if ModflowPackages.RipPackage.IsSelected
-            and (ModelSelection in [msModflowFmp
-            {$IFDEF OWHMV2}
-            , msModflowOwhm2
-            {$ENDIF}
-            ]) then
+            and (ModelSelection in [msModflowFmp, msModflowOwhm2]) then
           begin
             frmProgressMM.StepIt;
           end;
@@ -45374,11 +44682,7 @@ begin
                 begin
                   ANameFileWriter.WriteToNameFile('BFH', IUPBHSV, HeadFile, foInputAlreadyExists, self);
                 end;
-              msModflowLGR2, msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-              :
+              msModflowLGR2, msModflowFmp, msModflowOwhm2:
                 begin
                   ANameFileWriter.WriteToNameFile('BFH2', IUPBHSV, HeadFile, foInputAlreadyExists, self);
                 end;
@@ -45395,11 +44699,7 @@ begin
                 begin
                   ANameFileWriter.WriteToNameFile('BFH', IUPBFSV, FlowFile, foInputAlreadyExists, self);
                 end;
-              msModflowLGR2, msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-              :
+              msModflowLGR2, msModflowFmp, msModflowOwhm2:
                 begin
                   ANameFileWriter.WriteToNameFile('BFH2', IUPBFSV, FlowFile, foInputAlreadyExists, self);
                 end;
@@ -45858,11 +45158,7 @@ var
   Row: Integer;
   Layer: Integer;
 begin
-  if ModelSelection in [msModflowLgr2, msModflowFmp
-  {$IFDEF OWHMV2}
-  , msModflowOwhm2
-  {$ENDIF}
-  ] then
+  if ModelSelection in [msModflowLgr2, msModflowFmp, msModflowOwhm2] then
   begin
     Exit;
   end;
@@ -45917,11 +45213,7 @@ end;
 
 procedure TChildModel.AdjustCellPosition(var Column, Row, Layer: integer);
 begin
-  if ModelSelection in [msModflowLgr2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-  ] then
+  if ModelSelection in [msModflowLgr2, msModflowFmp, msModflowOwhm2] then
   begin
     Exit;
   end;
@@ -46610,11 +45902,7 @@ begin
       msModflowLGR:
         result := ((ACol + (ChildCellsPerParentCell div 2))
            div ChildCellsPerParentCell) + FFirstCol;
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         result := (ACol div ChildCellsPerParentCell) + FFirstCol;
       else
         Assert(False);
@@ -46695,11 +45983,7 @@ begin
       msModflowLGR:
         result := ((ARow + (ChildCellsPerParentCell div 2))
            div ChildCellsPerParentCell) + FFirstRow;
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp , msModflowOwhm2:
         result := (ARow div ChildCellsPerParentCell) + FFirstRow;
       else
         Assert(False);
@@ -47279,11 +46563,7 @@ begin
   case ModelSelection of
     msModflowLGR:
       NewLength := (EndPosition - StartPosition)*ChildCellsPerParentCell + 2;
-    msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    :
+    msModflowLGR2, msModflowFmp, msModflowOwhm2:
       NewLength := (EndPosition - StartPosition + 1)*ChildCellsPerParentCell+1;
     else
       begin
@@ -47323,11 +46603,7 @@ begin
         StartParentIndex := StartPosition+1;
         EndParentIndex := EndPosition-1;
       end;
-    msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    :
+    msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         StartParentIndex := StartPosition;
         EndParentIndex := EndPosition;
@@ -47364,11 +46640,7 @@ begin
           (Start + ParentPositions[EndPosition+1])/2;
         Inc(PositionIndex);
       end;
-    msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    :
+    msModflowLGR2, msModflowFmp, msModflowOwhm2:
       begin
         ChildPostions[PositionIndex] := ParentPositions[EndPosition+1];
         Inc(PositionIndex);
@@ -48099,11 +47371,7 @@ begin
     Exit;
   end;
   if not (FParentModel.ModelSelection in
-    [msModflowLGR, msModflowLGR2, msModflowFMP
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-    ]) then
+    [msModflowLGR, msModflowLGR2, msModflowFMP, msModflowOwhm2]) then
   begin
     Exit;
   end;
@@ -48561,11 +47829,7 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.Last := (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         result.Last := (ChildCellsPerParentCell - 1);
       else
         result.Last := (ChildCellsPerParentCell div 2);
@@ -48577,11 +47841,7 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.First := result.Last - (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         result.First := result.Last - (ChildCellsPerParentCell - 1);
       else
         result.First := result.Last - (ChildCellsPerParentCell div 2);
@@ -48593,11 +47853,7 @@ begin
       msModflowLGR:
         result.Last := (ACol-FFirstCol+1)*ChildCellsPerParentCell
           - (ChildCellsPerParentCell div 2) - 1;
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         result.Last := (ACol-FFirstCol+1)*ChildCellsPerParentCell - 1;
       else
         result.Last := (ACol-FFirstCol+1)*ChildCellsPerParentCell
@@ -48684,11 +47940,7 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.Last := (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         result.Last := (ChildCellsPerParentCell -1);
       else
         result.Last := (ChildCellsPerParentCell div 2);
@@ -48700,11 +47952,7 @@ begin
     case ModelSelection of
       msModflowLGR:
         result.First := result.Last - (ChildCellsPerParentCell div 2);
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         result.First := result.Last - (ChildCellsPerParentCell - 1);
       else
         result.First := result.Last - (ChildCellsPerParentCell div 2);
@@ -48716,11 +47964,7 @@ begin
       msModflowLGR:
         result.Last := (ARow-FFirstRow+1)*ChildCellsPerParentCell
           - (ChildCellsPerParentCell div 2) - 1;
-      msModflowLGR2, msModflowFmp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowLGR2, msModflowFmp, msModflowOwhm2:
         result.Last := (ARow-FFirstRow+1)*ChildCellsPerParentCell - 1;
       else
         result.Last := (ARow-FFirstRow+1)*ChildCellsPerParentCell
@@ -49343,11 +48587,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         if Grid <> nil then
         begin
@@ -49390,11 +48630,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msFootPrint, msModflowOwhm2:
       begin
         if Grid <> nil then
         begin
@@ -49524,13 +48760,9 @@ end;
 
 function TCustomModel.DoGwRootInteractionUsed(Sender: TObject): Boolean;
 begin
-  {$IFDEF OWHMV2}
   result := (ModelSelection = msModflowOwhm2)
     and ModflowPackages.FarmProcess4.IsSelected
     and ModflowPackages.FarmLandUse.StaticGwRootInteractionArrayUsed(nil);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
 end;
 
 function TCustomModel.DoGwtDispUsed(Sender: TObject): boolean;
@@ -49657,11 +48889,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         if Grid <> nil then
         begin
@@ -49705,11 +48933,7 @@ begin
         result := nil;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp
-      {$IFDEF OWHMV2}
-      , msModflowOwhm2
-      {$ENDIF}
-      :
+      msModflowFmp, msModflowCfp, msModflowOwhm2:
       begin
         result := Grid.FrontDataSet;
       end;

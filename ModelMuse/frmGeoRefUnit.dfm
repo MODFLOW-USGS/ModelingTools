@@ -2,16 +2,16 @@ inherited frmGeoRef: TfrmGeoRef
   HelpType = htKeyword
   HelpKeyword = 'Geo_Reference_Dialog_Box'
   Caption = 'Geo Reference'
-  ClientHeight = 341
-  ClientWidth = 298
+  ClientHeight = 340
+  ClientWidth = 294
   ExplicitWidth = 310
   ExplicitHeight = 379
   TextHeight = 18
   object rrdgGeoRef: TRbwRowDataGrid
     Left = 0
     Top = 0
-    Width = 298
-    Height = 297
+    Width = 294
+    Height = 296
     Align = alClient
     ColCount = 2
     FixedCols = 1
@@ -293,19 +293,15 @@ inherited frmGeoRef: TfrmGeoRef
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
-    ExplicitWidth = 294
-    ExplicitHeight = 296
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 297
-    Width = 298
+    Top = 296
+    Width = 294
     Height = 44
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 296
-    ExplicitWidth = 294
     object btnCancel: TBitBtn
       Left = 199
       Top = 6

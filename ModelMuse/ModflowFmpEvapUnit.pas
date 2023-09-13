@@ -1161,13 +1161,10 @@ begin
     begin
       FRefEvapRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmpEvap;
     end
-    {$IFDEF OWHMV2}
     else if Model.ModelSelection = msModflowOwhm2 then
     begin
       FRefEvapRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfFmp4Evap;
-    end
-    {$ENDIF}
-    ;
+    end;
   end;
 end;
 

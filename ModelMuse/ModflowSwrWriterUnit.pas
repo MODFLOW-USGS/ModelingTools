@@ -3159,11 +3159,8 @@ var
 begin
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrUnusedSWRReachGeo);
   { TODO -cFMP : This needs to be finished. }
-  if not (Model.ModelSelection in [msModflow, msModflowNWT, msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-  ]) then
+  if not (Model.ModelSelection in
+    [msModflow, msModflowNWT, msModflowFmp, msModflowOwhm2]) then
   begin
     Exit
   end;

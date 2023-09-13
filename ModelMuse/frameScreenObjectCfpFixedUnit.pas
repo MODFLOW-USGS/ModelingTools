@@ -265,7 +265,6 @@ procedure TframeScreenObjectCfpFixed.InitializeControls;
 begin
   pcCfp.ActivePageIndex := 0;
   edFixedHead.Text := '';
-{$IFDEF OWHMV2}
   ClearGrid(frameTimeDependent.Grid);
   frameTimeDependent.seNumber.AsInteger := 0;
   if IGlobalModel.ModelSelection = msModflowOwhm2 then
@@ -275,7 +274,6 @@ begin
     cbTimeDependent.Enabled := True;
   end
   else
-{$ENDIF}
   begin
     rgBoundaryType.Enabled := False;
     pcCfp.Enabled := False;

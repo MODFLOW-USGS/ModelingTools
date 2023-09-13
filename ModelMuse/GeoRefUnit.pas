@@ -333,11 +333,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-      :
+      msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         case ModflowLengthUnits of
           0:
@@ -384,9 +380,7 @@ begin
     msSutra40: Result := 'SUTRA 4.0';
     msFootPrint: Result := 'WellFootprint';
     msModflow2015: Result := 'MODFLOW 6';
-              {$IFDEF OWHMV2}
     msModflowOwhm2: Result := 'MODFLOW-OWM version 2';
-              {$ENDIF}
     else
       Assert(False);
   end;
@@ -480,11 +474,7 @@ begin
         end;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-      :
+      msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         case ModflowTimeUnits of
           0:

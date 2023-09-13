@@ -608,11 +608,7 @@ begin
   UpdateTalksTo(PreconsolidationHeadDataArrayName);
   UpdateTalksTo(ElasticSkeletalStorageCoefficientDataArrayName);
   UpdateTalksTo(InelasticSkeletalStorageCoefficientDataArrayName);
-  if not (PhastModel.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-  ]) then
+  if not (PhastModel.ModelSelection in [msModflowFmp, msModflowOwhm2]) then
   begin
     UpdateTalksTo(InitialCompactionDataArrayName);
   end
@@ -656,12 +652,8 @@ procedure TSubNoDelayBedLayerItem.SetInitialCompactionDataArrayName(
 begin
   SetDataArrayName(FInitialCompactionDataArrayName,
     Value, FInitialCompactionDisplayName,
-    (Model = nil) or (Model.ModelSelection in (ModflowSelection - [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    ])));
-
+    (Model = nil) or (Model.ModelSelection in
+    (ModflowSelection - [msModflowFmp, msModflowOwhm2])));
 end;
 
 procedure TSubNoDelayBedLayerItem.SetInitialElasticCompactionDataArrayName(
@@ -669,12 +661,7 @@ procedure TSubNoDelayBedLayerItem.SetInitialElasticCompactionDataArrayName(
 begin
   SetDataArrayName(FInitialElasticCompactionDataArrayName,
     Value, FInitialElasticCompactionDisplayName,
-    (Model = nil) or (Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    ] ));
-//  FInitialElasticCompactionDataArrayName := Value;
+    (Model = nil) or (Model.ModelSelection in [msModflowFmp, msModflowOwhm2]));
 end;
 
 procedure TSubNoDelayBedLayerItem.SetInitialInelasticCompactionDataArrayName(
@@ -682,12 +669,7 @@ procedure TSubNoDelayBedLayerItem.SetInitialInelasticCompactionDataArrayName(
 begin
   SetDataArrayName(FInitialInelasticCompactionDataArrayName,
     Value, FInitialInelasticCompactionDisplayName,
-    (Model = nil) or (Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    ] ));
-//  FInitialInelasticCompactionDataArrayName := Value;
+    (Model = nil) or (Model.ModelSelection in [msModflowFmp, msModflowOwhm2]));
 end;
 
 procedure TSubNoDelayBedLayerItem.SetPreconsolidationHeadDataArrayName(
@@ -872,20 +854,12 @@ begin
   UpdateTalksTo(InelasticSpecificStorageDataArrayName);
   UpdateTalksTo(InterbedStartingHeadDataArrayName);
   UpdateTalksTo(InterbedPreconsolidationHeadDataArrayName);
-  if not (PhastModel.ModelSelection in [msModflowFMP
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-  ]) then
+  if not (PhastModel.ModelSelection in [msModflowFMP, msModflowOwhm2]) then
   begin
     UpdateTalksTo(InterbedStartingCompactionDataArrayName);
   end;
   UpdateTalksTo(InterbedEquivalentThicknessDataArrayName);
-  if PhastModel.ModelSelection in [msModflowFMP
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-  ] then
+  if PhastModel.ModelSelection in [msModflowFMP, msModflowOwhm2] then
   begin
     UpdateTalksTo(InterbedStartingElasticCompactionDataArrayName);
     UpdateTalksTo(InterbedStartingInelasticCompactionDataArrayName);
@@ -955,11 +929,8 @@ procedure TSubDelayBedLayerItem.SetInterbedStartingCompactionDataArrayName(
 begin
   SetDataArrayName(FInterbedStartingCompactionDataArrayName,
     Value, FInterbedStartingCompactionDisplayName,
-    (Model = nil) or (Model.ModelSelection in (ModflowSelection - [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    ])));
+    (Model = nil) or (Model.ModelSelection in
+    (ModflowSelection - [msModflowFmp, msModflowOwhm2])));
 end;
 
 procedure TSubDelayBedLayerItem.SetInterbedStartingElasticCompactionDataArrayName(
@@ -967,11 +938,7 @@ procedure TSubDelayBedLayerItem.SetInterbedStartingElasticCompactionDataArrayNam
 begin
   SetDataArrayName(FInterbedStartingElasticCompactionDataArrayName,
     Value, FInterbedStartingElasticCompactionDisplayName,
-    (Model = nil) or (Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    ]));
+    (Model = nil) or (Model.ModelSelection in [msModflowFmp, msModflowOwhm2]));
 end;
 
 procedure TSubDelayBedLayerItem.SetInterbedStartingHeadDataArrayName(
@@ -990,11 +957,7 @@ procedure TSubDelayBedLayerItem.SetInterbedStartingInelasticCompactionDataArrayN
 begin
   SetDataArrayName(FInterbedStartingInelasticCompactionDataArrayName,
     Value, FInterbedStartingInelasticCompactionDisplayName,
-    (Model = nil) or (Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    ]));
+    (Model = nil) or (Model.ModelSelection in [msModflowFmp, msModflowOwhm2]));
 end;
 
 procedure TSubDelayBedLayerItem.SetVerticalHydraulicConductivityDataArrayName(

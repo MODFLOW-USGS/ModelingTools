@@ -705,11 +705,7 @@ begin
           NoDelayItem.InelasticSkeletalStorageCoefficientDataArrayName);
         Assert(InelasticSkeletalStorageCoefficientDataArray <> nil);
 
-        if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+        if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
         begin
           InitialCompactionDataArray := nil;
           InitialCompactionElasticDataArray := Model.DataArrayManager.GetDataSetByName(
@@ -807,11 +803,7 @@ begin
           Assert(InterbedPreconsolidationHeadDataArray <> nil);
         end;
 
-        if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+        if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
         begin
           InterbedStartingCompactionDataArray := nil;
           InterbedStartingElasticCompactionDataArray := Model.DataArrayManager.GetDataSetByName(
@@ -995,21 +987,13 @@ begin
   WriteInteger(IDSAVE);
   WriteInteger(IDREST);
 
-  if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+  if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
   begin
     WriteInteger(SUBLNK);
   end;
 
   WriteString(' # ISUBCB ISUBOC NNDB NDB NMZ NN AC1 AC2 ITMIN IDSAVE IDREST');
-  if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+  if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
   begin
     WriteString(' SUBLNK');
   end;
@@ -1353,11 +1337,7 @@ begin
     WriteInteger(Iun5);
     WriteInteger(Ifm6);
     WriteInteger(Iun6);
-    if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+    if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
     begin
       WriteInteger(Ifm7);
       WriteInteger(Iun7);
@@ -1370,11 +1350,7 @@ begin
     end;
 
     WriteString(' # Ifm1 Iun1 Ifm2 Iun2 Ifm3 Iun3 Ifm4 Iun4 Ifm5 Iun5 Ifm6 Iun6');
-    if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+    if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
     begin
       WriteString(' Ifm7 Iun7 Ifm8 Iun8 Ifm9 Iun9 Ifm10 Iun10');
     end;
@@ -1457,11 +1433,7 @@ begin
       WriteInteger(Ifl12);
       WriteInteger(Ifl13);
 
-      if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+      if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
       begin
         WriteInteger(Ifl14);
         WriteInteger(Ifl15);
@@ -1474,11 +1446,7 @@ begin
       end;
 
       WriteString(' # ISP1 ISP2 ITS1 ITS2 Ifl1 Ifl2 Ifl3 Ifl4 Ifl5 Ifl6 Ifl7 Ifl8 Ifl9 Ifl10 Ifl11 Ifl12 Ifl13');
-      if Model.ModelSelection in [msModflowFmp
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-        ] then
+      if Model.ModelSelection in [msModflowFmp, msModflowOwhm2] then
       begin
         WriteString(' Ifl14 Ifl15 Ifl16 Ifl17 Ifl18 Ifl19 Ifl20 Ifl21');
       end;

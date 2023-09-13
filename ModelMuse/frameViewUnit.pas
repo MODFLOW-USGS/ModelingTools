@@ -4081,11 +4081,8 @@ begin
     begin
       case frmGoPhast.PhastModel.ModelSelection of
         msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-          msModflowFmp, msModflowCfp, msFootPrint, msModflow2015
-          {$IFDEF OWHMV2}
-          , msModflowOwhm2
-          {$ENDIF}
-          :
+          msModflowFmp, msModflowCfp, msFootPrint, msModflow2015,
+          msModflowOwhm2:
         begin
           ShowValue := (Layer <= frmGoPhast.PhastModel.SelectedModel.Grid.LayerCount);
         end;
@@ -4162,11 +4159,7 @@ begin
     begin
       case frmGoPhast.PhastModel.ModelSelection of
         msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015, msFootPrint
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        :
+        msModflowFmp, msModflowCfp, msModflow2015, msFootPrint, msModflowOwhm2:
         begin
           Layer := frmGoPhast.PhastModel.SelectedModel.SelectedLayer;
         end;
@@ -4196,11 +4189,7 @@ begin
       ShowValue := False;
       case frmGoPhast.PhastModel.ModelSelection of
         msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-        msModflowFmp, msModflowCfp, msModflow2015, msFootPrint
-        {$IFDEF OWHMV2}
-        , msModflowOwhm2
-        {$ENDIF}
-        :
+        msModflowFmp, msModflowCfp, msModflow2015, msFootPrint, msModflowOwhm2:
         begin
           ShowValue := (Layer < frmGoPhast.PhastModel.SelectedModel.LayerCount);
         end;

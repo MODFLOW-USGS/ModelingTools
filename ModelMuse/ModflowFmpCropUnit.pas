@@ -712,86 +712,35 @@ type
       read FCropWaterUseCollection write SetCropWaterUseCollection;
   // FMP4
     property LandUseAreaFractionDataArrayName: string
-      read FLandUseAreaFractionDataArrayName write SetLandUseAreaFractionDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FLandUseAreaFractionDataArrayName write SetLandUseAreaFractionDataArrayName;
     property CropCoefficientDataArrayName: string
-      read FCropCoefficientDataArrayName write SetCropCoefficientDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FCropCoefficientDataArrayName write SetCropCoefficientDataArrayName;
     property ConsumptiveUseDataArrayName: string
-      read FConsumptiveUseDataArrayName write SetConsumptiveUseDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FConsumptiveUseDataArrayName write SetConsumptiveUseDataArrayName;
     property IrrigationDataArrayName: string
-      read FIrrigationDataArrayName write SetIrrigationDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FIrrigationDataArrayName write SetIrrigationDataArrayName;
     property RootDepthDataArrayName: string
-      read FRootDepthDataArrayName write SetRootDepthDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FRootDepthDataArrayName write SetRootDepthDataArrayName;
     property GroundwaterRootInteractionDataArrayName: string
-      read FGroundwaterRootInteractionDataArrayName write SetGroundwaterRootInteractionDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FGroundwaterRootInteractionDataArrayName
+      write SetGroundwaterRootInteractionDataArrayName;
     property TranspirationFractionDataArrayName: string
-      read FTranspirationFractionDataArrayName write SetTranspirationFractionDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FTranspirationFractionDataArrayName write SetTranspirationFractionDataArrayName;
     property EvaporationIrrigationDataArrayName: string
-      read FEvaporationIrrigationDataArrayName write SetEvaporationIrrigationDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FEvaporationIrrigationDataArrayName write SetEvaporationIrrigationDataArrayName;
     property SWLossFractionPrecipDataArrayName: string
-      read FSWLossFractionPrecipDataArrayName write SetSWLossFractionPrecipDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FSWLossFractionPrecipDataArrayName write SetSWLossFractionPrecipDataArrayName;
     property SWLossFractionIrrigationDataArrayName: string
       read FSWLossFractionIrrigationDataArrayName
-      write SetSWLossFractionIrrigationDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      write SetSWLossFractionIrrigationDataArrayName;
     property AddedDemandDataArrayName: string
-      read FAddedDemandDataArrayName write SetAddedDemandDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FAddedDemandDataArrayName write SetAddedDemandDataArrayName;
     property CropHasSalinityDemandDataArrayName: string
       read FCropHasSalinityDemandDataArrayName
-      write SetCropHasSalinityDemandDataArrayName
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      write SetCropHasSalinityDemandDataArrayName;
     // EVAPORATION_IRRIGATION_FRACTION and SURFACEWATER_LOSS_FRACTION_IRRIGATION
     property IrrigationCollection: TIrrigationCollection
-      read FIrrigationCollection write SetIrrigationCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FIrrigationCollection write SetIrrigationCollection;
     { TODO : SW_LossFractionIrrigationCollection can be deleted upon publication }
     property SW_LossFractionIrrigationCollection: TIrrigationCollection
       read FIrrigationCollection write SetIrrigationCollection
@@ -799,134 +748,58 @@ type
 
     // LAND_USE_AREA_FRACTION
     property LandUseFractionCollection: TOwhmCollection
-      read FLandUseFractionCollection write SetLandUseFractionCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      read FLandUseFractionCollection write SetLandUseFractionCollection;
     // CROP_COEFFICIENT
     property CropCoefficientCollection: TOwhmCollection
-      read FCropCoefficientCollection write SetCropCoefficientCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      read FCropCoefficientCollection write SetCropCoefficientCollection;
     // CONSUMPTIVE_USE
     property ConsumptiveUseCollection: TOwhmCollection
-      read FConsumptiveUseCollection write SetConsumptiveUseCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      read FConsumptiveUseCollection write SetConsumptiveUseCollection;
     // ROOT_PRESSURE
     property RootPressureCollection: TRootPressureCollection
-      read FRootPressureCollection write SetRootPressureCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      read FRootPressureCollection write SetRootPressureCollection;
     // GROUNDWATER_ROOT_INTERACTION
     property GroundwaterRootInteraction: TGroundwaterRootInteraction
-      read FGroundwaterRootInteraction write SetGroundwaterRootInteraction
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      read FGroundwaterRootInteraction write SetGroundwaterRootInteraction;
     // TRANSPIRATION_FRACTION
     property TranspirationFractionCollection: TOwhmCollection
       read FTranspirationFractionCollection
-      write SetTranspirationFractionCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      write SetTranspirationFractionCollection;
     // SURFACEWATER_LOSS_FRACTION_PRECIPITATION
     property SWLossFractionPrecipCollection: TOwhmCollection
       read FSWLossFractionPrecipCollection
-      write SetSWLossFractionPrecipCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      write SetSWLossFractionPrecipCollection;
     // POND_DEPTH
     property PondDepthCollection: TOwhmCollection read FPondDepthCollection
-      write SetPondDepthCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-
+      write SetPondDepthCollection;
     // ADDED_DEMAND
     property AddedDemandCollection: TAddedDemandCollection
-      read FAddedDemandCollection write SetAddedDemandCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FAddedDemandCollection write SetAddedDemandCollection;
     // ZERO_CONSUMPTIVE_USE_BECOMES_BARE_SOIL
     property ConvertToBareSoilCollection: TBoolFarmCollection
-      read FConvertToBareSoilCollection write SetConvertToBareSoilCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FConvertToBareSoilCollection write SetConvertToBareSoilCollection;
     //EVAPORATION_IRRIGATION_FRACTION_SUM_ONE_CORRECTION
     property UseEvapFractionCorrectionCollection: TBoolFarmCollection
       read FUseEvapFractionCorrectionCollection
-      write SetUseEvapFractionCorrectionCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      write SetUseEvapFractionCorrectionCollection;
     // CROP_SALINITY_TOLERANCE
     property SalinityToleranceCollection: TOwhmCollection
-      read FSalinityToleranceCollection write SetSalinityToleranceCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FSalinityToleranceCollection write SetSalinityToleranceCollection;
     // CROP_MAX_LEACHING_REQUIREMENT
     property MaxLeachingRequirementCollection: TOwhmCollection
       read FMaxLeachingRequirementCollection
-      write SetMaxLeachingRequirementCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      write SetMaxLeachingRequirementCollection;
     // CROP_LEACHING_REQUIREMENT
     property LeachingRequirementCollection: TLeachCollection
       read FLeachingRequirementCollection
-      write SetLeachingRequirementCollection
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      write SetLeachingRequirementCollection;
     // CROP_SALINITY_APPLIED_WATER
     property SalinityAppliedWater: TLeachCollection read FSalinityAppliedWater
-      write SetSalinityAppliedWater
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
-    property Print: Boolean read FPrint write SetPrint
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-     ;
+      write SetSalinityAppliedWater;
+    property Print: Boolean read FPrint write SetPrint;
     //CROP_HAS_SALINITY_DEMAND
     property CropHasSalinityDemand: TBoolFarmCollection
-      read FCropHasSalinityDemand write SetCropHasSalinityDemand
-    {$IFNDEF OWHMV2}
-      stored False
-    {$ENDIF}
-    ;
+      read FCropHasSalinityDemand write SetCropHasSalinityDemand;
   end;
 
   TCropCollection = class(TCustomFarmCollection)
@@ -2292,11 +2165,7 @@ begin
     UpdateDat.NewDisplayName := FAddedDemandDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: ADDED_DEMAND';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -2341,11 +2210,7 @@ begin
     UpdateDat.NewDisplayName := FConsumptiveUseDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: CONSUMPTIVE_USE';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -2384,11 +2249,7 @@ begin
     UpdateDat.NewDisplayName := FCropCoefficientDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: CROP_COEFFICIENT';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -2429,11 +2290,7 @@ begin
     UpdateDat.NewDisplayName := FCropHasSalinityDemandDisplayName;
     UpdateDat.NewFormula := 'False';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: CROP_HAS_SALINITY_DEMAND';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtBoolean;
@@ -2700,11 +2557,7 @@ begin
     UpdateDat.NewDisplayName := FEvaporationIrrigationDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: EVAPORATION_IRRIGATION_FRACTION';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -2754,11 +2607,7 @@ begin
     + '4 = Has Root-Groundwater Uptake and Soil Stress Loss, NO Anoxia Loss' + sLineBreak
     + '5 = Full Interaction' + sLineBreak
     + 'It is recommended to only use option 1, 3, or 5. If keyword is not specified, the default value is 5.';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtInteger;
@@ -2811,11 +2660,7 @@ begin
     UpdateDat.NewDisplayName := FIrrigationDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: IRRIGATION';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtInteger;
@@ -2845,11 +2690,7 @@ begin
     UpdateDat.NewDisplayName := FLandUseAreaFractionDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: LAND_USE_AREA_FRACTION';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -2911,11 +2752,7 @@ begin
     UpdateDat.NewDisplayName := FRootDepthDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: ROOT_DEPTH';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -2952,11 +2789,7 @@ begin
     UpdateDat.NewDisplayName := FSWLossFractionIrrigationDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: SURFACEWATER_LOSS_FRACTION_IRRIGATION';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -2992,11 +2825,7 @@ begin
     UpdateDat.NewDisplayName := FSWLossFractionPrecipDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: SURFACEWATER_LOSS_FRACTION_PRECIPITATION';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;
@@ -3031,11 +2860,7 @@ begin
     UpdateDat.NewDisplayName := FTranspirationFractionDisplayName;
     UpdateDat.NewFormula := '0';
     UpdateDat.AssociatedDataSets := 'MODFLOW-OWHM FMP: ROOT_DEPTH';
-  {$IFDEF OWHMV2}
     UpdateDat.ShouldCreate := UpdateDat.OnDataSetUsed(nil);
-  {$ELSE}
-    UpdateDat.ShouldCreate := False;
-  {$ENDIF}
     UpdateDat.Classification := StrFmp2Classifiation;
     UpdateDat.Orientation := dsoTop;
     UpdateDat.DataType := rdtDouble;

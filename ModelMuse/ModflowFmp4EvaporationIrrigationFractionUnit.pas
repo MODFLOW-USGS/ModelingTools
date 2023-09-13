@@ -102,13 +102,10 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-  {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4EvaporationIrrigationFraction(self);
-    end
-  {$ENDIF}
-    ;
+    end;
   end;
 end;
 
@@ -140,7 +137,6 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -151,7 +147,6 @@ begin
       and (LandUse.EvapIrrigationFraction.FarmOption = foTransient)
       and (LandUse.EvapIrrigationFraction.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 { TFmp4MultEvaporationIrrigationFractionCollection }
@@ -167,7 +162,6 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
@@ -178,7 +172,6 @@ begin
       and (LandUse.EvapIrrigationFraction.FarmOption = foTransient)
       and (LandUse.EvapIrrigationFraction.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 { TFmp4MultEvaporationIrrigationFractionBoundary }
@@ -202,13 +195,10 @@ begin
   if Used and (ParentModel <> nil) then
   begin
     Model := ParentModel as TCustomModel;
-  {$IFDEF OWHMV2}
     if Model.ModelSelection = msModflowOwhm2 then
     begin
       Model.InvalidateMfFmp4EvaporationIrrigationFraction(self);
-    end
-  {$ENDIF}
-    ;
+    end;
   end;
 end;
 
@@ -218,7 +208,6 @@ var
   LandUse: TFarmProcess4LandUse;
 begin
   result := False;
-{$IFDEF OWHMV2}
   if ParentModel <> nil then
   begin
     LocalModel := ParentModel as TCustomModel;
@@ -229,7 +218,6 @@ begin
       and (LandUse.EvapIrrigationFraction.FarmOption = foTransient)
       and (LandUse.EvapIrrigationFraction.ArrayList = alArray)
   end;
-{$ENDIF}
 end;
 
 class function TFmp4MultEvaporationIrrigationFractionBoundary.ValueDescription: string;

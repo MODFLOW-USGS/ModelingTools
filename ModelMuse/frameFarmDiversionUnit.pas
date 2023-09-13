@@ -171,7 +171,6 @@ begin
             Grid.Columns[Ord(docVertex)+2].CheckMin := True;
             Grid.Columns[Ord(docVertex)+2].Min := 1;
 
-          {$IFDEF OWHMV2}
             if frmGoPhast.ModelSelection = msModflowOwhm2 then
             begin
               for ColIndex := Ord(docFraction)+2 to Ord(docUpperLimit)+2 do
@@ -185,7 +184,6 @@ begin
               Grid.Cells[Ord(docLowerLimit)+2, 0] := StrLowerLimit;
               Grid.Cells[Ord(docUpperLimit)+2, 0] := StrUpperLimit;
             end;
-          {$ENDIF}
             FLowerLimitCol := Ord(docLowerLimit)+2;
             FUpperLimitCol := Ord(docUpperLimit)+2;
           end;
@@ -211,7 +209,6 @@ begin
             Grid.Columns[Ord(docChoice)+2].LimitToList := False;
             Grid.Columns[Ord(docObject)+2].ComboUsed := False;
             Grid.Columns[Ord(docChoice)+2].ComboUsed := False;
-          {$IFDEF OWHMV2}
             if frmGoPhast.ModelSelection = msModflowOwhm2 then
             begin
               for ColIndex := Ord(dlFraction)+2 to Ord(dlUpperLimit)+2 do
@@ -227,7 +224,6 @@ begin
             end;
             FLowerLimitCol := Ord(dlLowerLimit)+2;
             FUpperLimitCol := Ord(dlUpperLimit)+2;
-          {$ENDIF}
           end;
         rtCell:
           begin
@@ -256,7 +252,6 @@ begin
             Grid.Columns[Ord(docChoice)+2].LimitToList := False;
             Grid.Columns[Ord(docObject)+2].ComboUsed := False;
             Grid.Columns[Ord(docChoice)+2].ComboUsed := False;
-          {$IFDEF OWHMV2}
             if frmGoPhast.ModelSelection = msModflowOwhm2 then
             begin
               for ColIndex := Ord(dccFraction)+2 to Ord(dccUpperLimit)+2 do
@@ -270,7 +265,6 @@ begin
               Grid.Cells[Ord(dccLowerLimit)+2, 0] := StrLowerLimit;
               Grid.Cells[Ord(dccUpperLimit)+2, 0] := StrUpperLimit;
             end;
-          {$ENDIF}
             FLowerLimitCol := Ord(dccLowerLimit)+2;
             FUpperLimitCol := Ord(dccUpperLimit)+2;
           end;
@@ -610,7 +604,6 @@ begin
                 DiversionObject.DiversionVertex :=
                   StrToIntDef(Grid.Cells[Ord(docVertex) + PropertyColOffset, TimeIndex], 1);
               end;
-            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 DelivRetItem.Frac := Grid.Cells[Ord(docFraction) + PropertyColOffset, TimeIndex];
@@ -620,7 +613,6 @@ begin
                   DelivRetItem.UpperLimit := Grid.Cells[Ord(docUpperLimit) + PropertyColOffset, TimeIndex];
                 end;
               end;
-            {$ENDIF}
             end;
           rtLocation:
             begin
@@ -628,7 +620,6 @@ begin
               DiversionLocation.X := StrToFloatDef(Grid.Cells[Ord(dlcX) + PropertyColOffset, TimeIndex], 0);
               DiversionLocation.Y := StrToFloatDef(Grid.Cells[Ord(dlcY) + PropertyColOffset, TimeIndex], 0);
               DiversionLocation.Z := 0;
-            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 DelivRetItem.Frac := Grid.Cells[Ord(dlFraction) + 2, TimeIndex];
@@ -642,7 +633,6 @@ begin
                   DelivRetItem.UpperLimit := Grid.Cells[Ord(dlUpperLimit) + PropertyColOffset, TimeIndex];
                 end;
               end;
-            {$ENDIF}
             end;
           rtCell:
             begin
@@ -650,7 +640,6 @@ begin
               DiversionCell.Row := StrToIntDef(Grid.Cells[Ord(dccRow) + PropertyColOffset, TimeIndex], 1);
               DiversionCell.Col := StrToIntDef(Grid.Cells[Ord(dccColumn) + PropertyColOffset, TimeIndex], 1);
               DiversionCell.Lay := 0;
-            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 Fraction := Grid.Cells[Ord(dccFraction) + PropertyColOffset, TimeIndex];
@@ -665,7 +654,6 @@ begin
                   DelivRetItem.UpperLimit := Grid.Cells[Ord(dccUpperLimit) + PropertyColOffset, TimeIndex];
                 end;
               end;
-            {$ENDIF}
             end;
         else
           Assert(False);
@@ -904,7 +892,6 @@ begin
               begin
                 Grid.Cells[Ord(docVertex) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := '';
               end;
-            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 Grid.Cells[Ord(docFraction) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
@@ -917,14 +904,12 @@ begin
                   PestUsedOnCol[Ord(docUpperLimit) + PropertyColOffset] := True;
                 end;
               end;
-            {$ENDIF}
             end;
           rtLocation:
             begin
               DiversionLocation := LinkedStream.DiversionLocation;
               Grid.Cells[Ord(dlcX) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.X);
               Grid.Cells[Ord(dlcY) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := FloatToStr(DiversionLocation.Y);
-            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 Grid.Cells[Ord(dlFraction) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
@@ -937,14 +922,12 @@ begin
                   PestUsedOnCol[Ord(dlUpperLimit) + PropertyColOffset] := True;
                 end;
               end;
-            {$ENDIF}
             end;
           rtCell:
             begin
               DiversionCell := LinkedStream.DiversionCell;
               Grid.Cells[Ord(dccRow) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Row);
               Grid.Cells[Ord(dccColumn) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := IntToStr(DiversionCell.Col);
-            {$IFDEF OWHMV2}
               if ModelSelection = msModflowOwhm2 then
               begin
                 Grid.Cells[Ord(dccFraction) + PropertyColOffset, ItemIndex + 1+PestRowOffset] := AnItem.Frac;
@@ -957,7 +940,6 @@ begin
                   PestUsedOnCol[Ord(dccUpperLimit) + PropertyColOffset] := True;
                 end;
               end;
-            {$ENDIF}
             end;
         else
           Assert(False);

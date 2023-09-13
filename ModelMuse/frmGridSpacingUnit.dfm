@@ -28,12 +28,13 @@ inherited frmGridSpacing: TfrmGridSpacing
       object pnlColumns: TPanel
         Left = 0
         Top = 169
-        Width = 457
+        Width = 453
         Height = 81
         Align = alBottom
         ParentColor = True
         TabOrder = 1
-        ExplicitWidth = 453
+        ExplicitTop = 168
+        ExplicitWidth = 449
         DesignSize = (
           453
           81)
@@ -52,7 +53,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Caption = 'Default spacing'
         end
         object rdeSpacingColumns: TRbwDataEntry
-          Left = 342
+          Left = 338
           Top = 40
           Width = 102
           Height = 28
@@ -63,9 +64,10 @@ inherited frmGridSpacing: TfrmGridSpacing
           DataType = dtReal
           Max = 1.000000000000000000
           ChangeDisabledColor = True
+          ExplicitLeft = 334
         end
         object seColumns: TJvSpinEdit
-          Left = 342
+          Left = 338
           Top = 9
           Width = 102
           Height = 26
@@ -166,12 +168,13 @@ inherited frmGridSpacing: TfrmGridSpacing
       object pnlRows: TPanel
         Left = 0
         Top = 169
-        Width = 457
+        Width = 453
         Height = 81
         Align = alBottom
         ParentColor = True
         TabOrder = 1
-        ExplicitWidth = 453
+        ExplicitTop = 168
+        ExplicitWidth = 449
         DesignSize = (
           453
           81)
@@ -190,7 +193,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Caption = 'Default spacing'
         end
         object rdeSpacingRows: TRbwDataEntry
-          Left = 342
+          Left = 338
           Top = 40
           Width = 102
           Height = 28
@@ -201,9 +204,10 @@ inherited frmGridSpacing: TfrmGridSpacing
           DataType = dtReal
           Max = 1.000000000000000000
           ChangeDisabledColor = True
+          ExplicitLeft = 334
         end
         object seRows: TJvSpinEdit
-          Left = 342
+          Left = 338
           Top = 9
           Width = 102
           Height = 26
@@ -329,7 +333,7 @@ inherited frmGridSpacing: TfrmGridSpacing
           Caption = 'Default spacing'
         end
         object rdeSpacingLayers: TRbwDataEntry
-          Left = 342
+          Left = 338
           Top = 40
           Width = 102
           Height = 28
@@ -340,10 +344,10 @@ inherited frmGridSpacing: TfrmGridSpacing
           DataType = dtReal
           Max = 1.000000000000000000
           ChangeDisabledColor = True
-          ExplicitLeft = 338
+          ExplicitLeft = 334
         end
         object seLayers: TJvSpinEdit
-          Left = 342
+          Left = 338
           Top = 9
           Width = 102
           Height = 26
@@ -352,7 +356,6 @@ inherited frmGridSpacing: TfrmGridSpacing
           Anchors = [akTop, akRight]
           TabOrder = 0
           OnChange = seLayersChange
-          ExplicitLeft = 338
         end
       end
       object dgLayers: TRbwDataGrid4
@@ -455,7 +458,7 @@ inherited frmGridSpacing: TfrmGridSpacing
       461
       41)
     object btnCancel: TBitBtn
-      Left = 357
+      Left = 353
       Top = 2
       Width = 91
       Height = 33
@@ -463,10 +466,9 @@ inherited frmGridSpacing: TfrmGridSpacing
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 353
     end
     object btnOK: TBitBtn
-      Left = 260
+      Left = 256
       Top = 2
       Width = 91
       Height = 33
@@ -475,10 +477,9 @@ inherited frmGridSpacing: TfrmGridSpacing
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 256
     end
     object btnHelp: TBitBtn
-      Left = 164
+      Left = 160
       Top = 2
       Width = 91
       Height = 33
@@ -487,7 +488,6 @@ inherited frmGridSpacing: TfrmGridSpacing
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 160
     end
   end
   object pnlDescribe: TPanel
@@ -505,7 +505,7 @@ inherited frmGridSpacing: TfrmGridSpacing
     object lblDescribe: TLabel
       Left = 8
       Top = 8
-      Width = 440
+      Width = 419
       Height = 54
       Anchors = [akLeft, akTop, akRight]
       Caption = 
@@ -513,10 +513,10 @@ inherited frmGridSpacing: TfrmGridSpacing
         ' end and change the number of items to delete them.  Use Ctrl-V ' +
         'to paste.'
       WordWrap = True
-      ExplicitWidth = 422
+      ExplicitWidth = 423
     end
     object lblModel: TLabel
-      Left = 405
+      Left = 401
       Top = 100
       Width = 43
       Height = 18
@@ -527,13 +527,13 @@ inherited frmGridSpacing: TfrmGridSpacing
     object comboModel: TComboBox
       Left = 8
       Top = 97
-      Width = 391
+      Width = 387
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       OnChange = comboModelChange
-      ExplicitWidth = 387
+      ExplicitWidth = 383
     end
   end
 end

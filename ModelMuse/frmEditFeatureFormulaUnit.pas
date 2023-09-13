@@ -284,11 +284,7 @@ begin
 
   case frmGoPhast.ModelSelection of
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-    msModflowCfp, msModflow2015
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-    :
+      msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithStartTimes(comboStartingTime.Items);
         frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithEndTimes(comboEndingTime.Items);
@@ -345,11 +341,7 @@ begin
 
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
-      msModflowCfp, msModflow2015
-              {$IFDEF OWHMV2}
-              , msModflowOwhm2
-              {$ENDIF}
-      :
+      msModflowCfp, msModflow2015, msModflowOwhm2:
       begin
         PackageList := TList<TModflowPackages>.Create;
         try

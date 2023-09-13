@@ -191,7 +191,6 @@ end;
 
 procedure TframePackageCFP.EnableCads(PipesUsed: Boolean);
 begin
-{$IFDEF OWHMV2}
   if frmGoPhast.ModelSelection = msModflowOwhm2 then
   begin
     cbCADS.Enabled := PipesUsed;
@@ -200,16 +199,11 @@ begin
   begin
     cbCADS.Enabled := False;
   end;
-{$ELSE}
-  cbCADS.Enabled := False;
-{$ENDIF}
-
 end;
 
 procedure TframePackageCFP.seOutputIntervalChange(Sender: TObject);
 begin
   inherited;
-{$IFDEF OWHMV2}
   if frmGoPhast.ModelSelection = msModflowOwhm2 then
   begin
     cbTimeSeriesAnalysis.Enabled := seOutputInterval.AsInteger > 0
@@ -218,10 +212,6 @@ begin
   begin
     cbTimeSeriesAnalysis.Enabled := False;
   end;
-{$ELSE}
-    cbTimeSeriesAnalysis.Enabled := False;
-{$ENDIF}
-
 end;
 
 end.
