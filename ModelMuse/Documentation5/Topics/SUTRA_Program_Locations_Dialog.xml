@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-14T11:04:38.154-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SUTRA Program Location Dialog Box</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUTRA Program Location Dialog Box</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Program Location</text><text styleclass="Normal" translate="true"> dialog box is used to specify the location of the SUTRA program on the user&apos;s computer. It also provides a link to the web page for SUTRA. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Program Location</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting</text><text styleclass="Normal" style="font-weight:normal;" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|SUTRA Program Location...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">At the time of release of ModelMuse 5.2, a provisional release of SUTRA version 4 was available from </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://github.com/aprovost-usgs/SUTRA_4/tree/develop</link><text styleclass="Normal" translate="true">. The compiled version of SUTRA 4 is in the msvs\bin_PROVISIONAL directory. When a final release is available, it will probably be available from </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated-unsaturated-variable-density-ground-water-flow-solute-or</link><text styleclass="Normal" translate="true">.</text></para>
   </body>
 </topic>

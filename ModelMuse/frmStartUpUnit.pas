@@ -699,17 +699,22 @@ begin
   rdgInitialLayers.Col := 1;
 
   Grid := frameModelLayers.Grid;
-  Grid.Cells[0,0] := StrLayerGroupName;
-  Grid.Cells[1,0] := StrBottomElevation;
-  Grid.Cells[0,1] := StrSUTRAMeshTop;
-  Grid.Cells[1,1] := '0';
-  Grid.Cells[0,2] := StrUpperAquifer;
-  Grid.Cells[1,2] := '-10';
-  Grid.Cells[0,3] := StrMiddleAquifer;
-  Grid.Cells[1,3] := '-20';
-  Grid.Cells[0,4] := StrLowerAquifer;
-  Grid.Cells[1,4] := '-30';
-  Grid.Row := 2;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[0,0] := StrLayerGroupName;
+    Grid.Cells[1,0] := StrBottomElevation;
+    Grid.Cells[0,1] := StrSUTRAMeshTop;
+    Grid.Cells[1,1] := '0';
+    Grid.Cells[0,2] := StrUpperAquifer;
+    Grid.Cells[1,2] := '-10';
+    Grid.Cells[0,3] := StrMiddleAquifer;
+    Grid.Cells[1,3] := '-20';
+    Grid.Cells[0,4] := StrLowerAquifer;
+    Grid.Cells[1,4] := '-30';
+    Grid.Row := 2;
+  finally
+    Grid.EndUpdate;
+  end;
 
   rdgLocation.Cells[1,0] := StrLower;
   rdgLocation.Cells[2,0] := StrHigher;

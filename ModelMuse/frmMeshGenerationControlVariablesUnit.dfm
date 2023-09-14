@@ -4,8 +4,8 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
   Caption = 'Mesh Generation Control Variables'
   ClientHeight = 401
   ClientWidth = 415
-  ExplicitWidth = 427
-  ExplicitHeight = 439
+  ExplicitWidth = 431
+  ExplicitHeight = 440
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -240,7 +240,7 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
       object rrdgGeompackOptions: TRbwRowDataGrid
         Left = 0
         Top = 65
-        Width = 419
+        Width = 415
         Height = 146
         Align = alClient
         ColCount = 2
@@ -626,7 +626,6 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
             CaseSensitivePicklist = False
             CheckStyle = csCheck
           end>
-        ExplicitWidth = 415
         ColWidths = (
           64
           168)
@@ -634,11 +633,10 @@ inherited frmMeshGenerationControlVariables: TfrmMeshGenerationControlVariables
       object pnlGeompack: TPanel
         Left = 0
         Top = 0
-        Width = 419
+        Width = 415
         Height = 65
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 415
         DesignSize = (
           415
           65)

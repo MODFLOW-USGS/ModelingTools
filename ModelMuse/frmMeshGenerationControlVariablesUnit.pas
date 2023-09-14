@@ -469,7 +469,7 @@ begin
 end;
 
 initialization
-  // See also StrDefaultGmshPath in PhastModelUnit
-  GMshDate := EncodeDate(2022, 11, 6);
+  // See also StrDefaultGmshPath in DataSetNamesUnit
+  GMshDate := EncodeDate(2022, 12, 21);
 
 end.

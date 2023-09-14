@@ -15962,8 +15962,8 @@ initialization
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
-  PestDate := EncodeDate(2022,11,4);
-  MfOwhmV2Date := EncodeDate(2022,2,14);
+  PestDate := EncodeDate(2023,7,14);
+  MfOwhmV2Date := EncodeDate(2023,4,23);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

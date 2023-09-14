@@ -452,7 +452,7 @@ resourcestring
   StrLANDUSEFarmProce = 'LAND_USE: Farm Process V4 Land Use Options';
   StrSALINITYFLUSHIRRIG = 'SALINITY_FLUSH_IRRIGATION: Farm Process V4 Salini' +
   'ty Flush Irrigation Options';
-  StrBUYBuoyancyPackag = 'BUY: Buoyancy Package)';
+  StrBUYBuoyancyPackag = 'BUY: Buoyancy Package';
   StrVSCViscosityPacka = 'VSC: Viscosity Package';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 

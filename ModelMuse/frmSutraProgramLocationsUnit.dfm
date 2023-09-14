@@ -4,19 +4,19 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   Caption = 'SUTRA Program Location'
   ClientHeight = 308
   ClientWidth = 992
-  ExplicitWidth = 1004
-  ExplicitHeight = 346
+  ExplicitWidth = 1008
+  ExplicitHeight = 347
   TextHeight = 18
   object htlblSutra22: TJvHTLabel
     Left = 105
     Top = 17
-    Width = 821
+    Width = 835
     Height = 19
     Caption = 
-      '<a href="https://www.usgs.gov/software/sutra-model-2d-or-3d-satu' +
-      'rated-unsaturated-variable-density-ground-water-flow-solute-or">' +
-      'https://www.usgs.gov/software/sutra-model-2d-or-3d-saturated-uns' +
-      'aturated-variable-density-ground-water-flow-solute-or</a>'
+      '<a href="https://www.usgs.gov/software/sutra-a-model-2d-or-3d-sa' +
+      'turated-unsaturated-variable-density-ground-water-flow-solute-or' +
+      '">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated' +
+      '-unsaturated-variable-density-ground-water-flow-solute-or</a>'
     SuperSubScriptRatio = 0.666666666666666600
   end
   object lblSutra22: TLabel
@@ -36,13 +36,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   object htlblSutra3: TJvHTLabel
     Left = 106
     Top = 76
-    Width = 821
+    Width = 835
     Height = 19
     Caption = 
-      '<a href="https://www.usgs.gov/software/sutra-model-2d-or-3d-satu' +
-      'rated-unsaturated-variable-density-ground-water-flow-solute-or">' +
-      'https://www.usgs.gov/software/sutra-model-2d-or-3d-saturated-uns' +
-      'aturated-variable-density-ground-water-flow-solute-or</a>'
+      '<a href="https://www.usgs.gov/software/sutra-a-model-2d-or-3d-sa' +
+      'turated-unsaturated-variable-density-ground-water-flow-solute-or' +
+      '">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated' +
+      '-unsaturated-variable-density-ground-water-flow-solute-or</a>'
     SuperSubScriptRatio = 0.666666666666666600
   end
   object lblSutra3: TLabel
@@ -81,7 +81,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 0
     Text = ''
     OnChange = fedSutra22Change
-    ExplicitWidth = 955
   end
   object pnlBottom: TPanel
     Left = 0
@@ -91,8 +90,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 266
-    ExplicitWidth = 988
     DesignSize = (
       992
       41)
@@ -107,7 +104,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 716
     end
     object btnOK: TBitBtn
       Left = 808
@@ -119,7 +115,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 804
     end
     object btnCancel: TBitBtn
       Left = 896
@@ -130,7 +125,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 892
     end
   end
   object fedTextEditor: TJvFilenameEdit
@@ -145,7 +139,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 1
     Text = ''
     OnChange = fedTextEditorChange
-    ExplicitWidth = 955
   end
   object fedSutra30: TJvFilenameEdit
     Left = 16
@@ -159,7 +152,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 3
     Text = ''
     OnChange = fedSutra30Change
-    ExplicitWidth = 955
   end
   object fedSutra40: TJvFilenameEdit
     Left = 16
@@ -173,6 +165,5 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 4
     Text = ''
     OnChange = fedSutra40Change
-    ExplicitWidth = 955
   end
 end

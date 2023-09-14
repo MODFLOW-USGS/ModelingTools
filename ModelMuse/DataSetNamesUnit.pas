@@ -1141,7 +1141,8 @@ resourcestring
 
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
   KSutra30DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe';
-  KSutra40DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_4_0.exe';
+//  KSutra40DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_4_0.exe';
+  KSutra40DefaultPath = 'C:\WRDAPP\SUTRA_4-develop\msvs\bin_PROVISIONAL\sutra_4_0_0_PROVISIONAL_2023-02-28_8b569f6.exe';
   StrMpathDefaultPath = 'C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe';
   StrMpathDefaultPathVersion6 = 'C:\WRDAPP\modpath.6_0\bin\mp6.exe';
   StrMpathDefaultPathVersion7 = 'C:\WRDAPP\modpath_7_2_001\bin\mpath7.exe';
@@ -1164,7 +1165,7 @@ resourcestring
   StrPestDefaultDir = 'C:\Pest17\';
 
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
-  StrDefaultGmshPath = 'C:\gmsh-4.11.0-Windows64\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.11.1-Windows64\gmsh.exe';
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';

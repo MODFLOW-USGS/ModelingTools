@@ -132,7 +132,8 @@ implementation
 uses
   Contnrs, frmGoPhastUnit, PhastModelUnit,
   ScreenObjectUnit, frmShowHideObjectsUnit, ModflowPackagesUnit, ReadPvalUnit,
-  IntListUnit, PestPropertiesUnit, DataArrayManagerUnit, DataSetNamesUnit;
+  IntListUnit, PestPropertiesUnit, DataArrayManagerUnit, DataSetNamesUnit,
+  ModelMuseUtilities;
 
 resourcestring
   StrErrorReadingPvalF = 'Error reading %0:s file. Check that it is a valid ' +
@@ -906,6 +907,7 @@ var
   PGroup: TPestParamGroup;
   ItemIndex: Integer;
   TreeNode: TTreeNode;
+  AValue: Extended;
 begin
   inherited;
   if (ARow >= 1) and (ACol >= 0) then
@@ -948,16 +950,16 @@ begin
         end;
       pgcIncrement:
         begin
-          if Grid.Cells[ACol, ARow] <> '' then
+          if TryFortranStrToFloat(Grid.Cells[ACol, ARow], AValue) then
           begin
-            PGroup.ParamIncrement := Grid.RealValue[ACol, ARow];
+            PGroup.ParamIncrement := AValue;
           end;
         end;
       pgcMinIncrement:
         begin
-          if Grid.Cells[ACol, ARow] <> '' then
+          if TryFortranStrToFloat(Grid.Cells[ACol, ARow], AValue) then
           begin
-            PGroup.MinParamIncrement := Grid.RealValue[ACol, ARow];
+            PGroup.MinParamIncrement := AValue;
           end;
         end;
       pgcForceCentral:
@@ -970,9 +972,9 @@ begin
         end;
       pgcParamIncrementMultiplier:
         begin
-          if Grid.Cells[ACol, ARow] <> '' then
+          if TryFortranStrToFloat(Grid.Cells[ACol, ARow], AValue) then
           begin
-            PGroup.ParamIncrementMultiplier := Grid.RealValue[ACol, ARow];
+            PGroup.ParamIncrementMultiplier := AValue;
           end;
         end;
       pgcDM3:
@@ -997,16 +999,16 @@ begin
         end;
       pgcSplitThreshold:
         begin
-          if Grid.Cells[ACol, ARow] <> '' then
+          if TryFortranStrToFloat(Grid.Cells[ACol, ARow], AValue) then
           begin
-            PGroup.SplitThreshold := Grid.RealValue[ACol, ARow];
+            PGroup.SplitThreshold := AValue;
           end;
         end;
       pgcSplitDifference:
         begin
-          if Grid.Cells[ACol, ARow] <> '' then
+          if TryFortranStrToFloat(Grid.Cells[ACol, ARow], AValue) then
           begin
-            PGroup.RelSlopeDif := Grid.RealValue[ACol, ARow];
+            PGroup.RelSlopeDif := AValue;
           end;
         end;
       pgcSplitAction:

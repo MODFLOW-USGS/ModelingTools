@@ -47,7 +47,6 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
-      ExplicitLeft = 619
     end
     object btnDontCreateGrid: TBitBtn
       Left = 424
@@ -61,7 +60,6 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
-      ExplicitLeft = 432
     end
     object btnHelp: TBitBtn
       Left = 530
@@ -74,7 +72,6 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 538
     end
   end
   object pcStartup: TPageControl
@@ -84,7 +81,7 @@ inherited frmStartUp: TfrmStartUp
     Height = 356
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
-    ActivePage = tabInitialModflowGrid
+    ActivePage = tabInitialSutraMesh
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
@@ -95,8 +92,8 @@ inherited frmStartUp: TfrmStartUp
       object rgChoice: TRadioGroup
         Left = 0
         Top = 0
-        Width = 735
-        Height = 324
+        Width = 731
+        Height = 323
         HelpType = htKeyword
         HelpKeyword = 'Start_Up_Dialog_Box'
         Align = alClient
@@ -120,13 +117,11 @@ inherited frmStartUp: TfrmStartUp
       object grpGeoRef: TGroupBox
         Left = 0
         Top = 0
-        Width = 739
-        Height = 324
+        Width = 731
+        Height = 323
         Align = alClient
         Caption = 'Geo Reference and Model Description'
         TabOrder = 0
-        ExplicitWidth = 731
-        ExplicitHeight = 323
         object lblSimStartTime: TLabel
           Left = 11
           Top = 267
@@ -144,7 +139,7 @@ inherited frmStartUp: TfrmStartUp
         object lblModelDescription: TLabel
           Left = 2
           Top = 20
-          Width = 735
+          Width = 727
           Height = 18
           Align = alTop
           Caption = 'Model description'
@@ -199,11 +194,10 @@ inherited frmStartUp: TfrmStartUp
         object mmoModelDescription: TMemo
           Left = 2
           Top = 38
-          Width = 735
+          Width = 727
           Height = 156
           Align = alTop
           TabOrder = 0
-          ExplicitWidth = 731
         end
         object calSimStartDate: TJvDateTimePicker
           Left = 11
@@ -241,13 +235,11 @@ inherited frmStartUp: TfrmStartUp
       object gbInitialGrid: TGroupBox
         Left = 0
         Top = 0
-        Width = 739
-        Height = 324
+        Width = 731
+        Height = 323
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
-        ExplicitWidth = 616
-        ExplicitHeight = 361
         object lblZDist: TLabel
           Left = 520
           Top = 110
@@ -431,8 +423,8 @@ inherited frmStartUp: TfrmStartUp
       object gbInitialGridModflow: TGroupBox
         Left = 0
         Top = 41
-        Width = 739
-        Height = 283
+        Width = 731
+        Height = 282
         Margins.Left = 0
         Margins.Top = 40
         Margins.Right = 0
@@ -440,8 +432,6 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
-        ExplicitWidth = 731
-        ExplicitHeight = 282
         object Label8: TLabel
           Left = 344
           Top = 68
@@ -617,8 +607,6 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitLeft = 479
-          ExplicitWidth = 250
           ColWidths = (
             64
             64)
@@ -708,21 +696,21 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 225
+        Width = 264
         Height = 291
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
         ExplicitLeft = 464
         ExplicitTop = 29
-        ExplicitWidth = 237
-        ExplicitHeight = 292
+        ExplicitWidth = 264
+        ExplicitHeight = 291
         inherited Panel: TPanel
-          Top = 227
-          Width = 237
+          Top = 226
+          Width = 264
           Height = 65
-          ExplicitTop = 227
-          ExplicitWidth = 237
+          ExplicitTop = 226
+          ExplicitWidth = 225
           ExplicitHeight = 65
           inherited lbNumber: TLabel
             Width = 161
@@ -732,21 +720,21 @@ inherited frmStartUp: TfrmStartUp
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 4
+            Left = 5
             Top = 38
             OnClick = frameModelLayerssbAddClick
             ExplicitLeft = 8
             ExplicitTop = 38
           end
           inherited sbInsert: TSpeedButton
-            Left = 27
+            Left = 31
             Top = 38
             OnClick = frameModelLayerssbInsertClick
             ExplicitLeft = 37
             ExplicitTop = 38
           end
           inherited sbDelete: TSpeedButton
-            Left = 50
+            Left = 57
             Top = 38
             OnClick = frameModelLayerssbDeleteClick
             ExplicitLeft = 66
@@ -760,16 +748,16 @@ inherited frmStartUp: TfrmStartUp
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 237
-          Height = 227
+          Width = 264
+          Height = 226
           ColCount = 2
           RowCount = 5
           OnSelectCell = frameModelLayersGridSelectCell
           OnEndUpdate = frameModelLayersGridEndUpdate
           Columns = <
             item
-              AutoAdjustRowHeights = False
-              AutoAdjustCaptionRowHeights = False
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -792,8 +780,8 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end
             item
-              AutoAdjustRowHeights = False
-              AutoAdjustCaptionRowHeights = False
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -809,14 +797,14 @@ inherited frmStartUp: TfrmStartUp
               LimitToList = False
               MaxLength = 0
               ParentButtonFont = False
-              WordWrapCaptions = False
+              WordWrapCaptions = True
               WordWrapCells = False
               CaseSensitivePicklist = False
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 237
-          ExplicitHeight = 227
+          ExplicitWidth = 225
+          ExplicitHeight = 226
           ColWidths = (
             64
             64)
@@ -971,7 +959,6 @@ inherited frmStartUp: TfrmStartUp
           'Saturated'
           'Unsaturated')
         TabOrder = 3
-        ExplicitWidth = 198
       end
     end
     object tabInitialGridFootprint: TTabSheet
@@ -982,13 +969,11 @@ inherited frmStartUp: TfrmStartUp
       object gbFootprint: TGroupBox
         Left = 0
         Top = 0
-        Width = 735
-        Height = 324
+        Width = 731
+        Height = 323
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
-        ExplicitWidth = 731
-        ExplicitHeight = 323
         object lblRowCountFootprint: TLabel
           Left = 91
           Top = 68

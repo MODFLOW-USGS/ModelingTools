@@ -10041,8 +10041,7 @@ const
 //    '5.1.1.38' Bug fix: Switching from a MODFLOW-NWT to a MODFLOW-OWHM model
 //                no longer results in the NWT and UPW packages being
 //                deactivated.
-
-//               Enhancement: Added support for Buoyancy package for MODFLOW 6.
+//    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
@@ -10050,7 +10049,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.38';
+  IIModelVersion = '5.2.0.0';
 
 function IModelVersion: string;
 begin
