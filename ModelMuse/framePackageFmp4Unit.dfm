@@ -36,8 +36,8 @@ inherited framePackageFmp4: TframePackageFmp4
       object rdgFarms: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 548
-        Height = 351
+        Width = 552
+        Height = 350
         Align = alClient
         ColCount = 7
         Enabled = False
@@ -230,6 +230,7 @@ inherited framePackageFmp4: TframePackageFmp4
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 548
       end
     end
     object cpnlMnw2: TCategoryPanel
@@ -242,13 +243,13 @@ inherited framePackageFmp4: TframePackageFmp4
       Caption = 'MNW2 Closure Criteria'
       Collapsed = True
       TabOrder = 1
-      ExplicitWidth = 550
+      ExplicitWidth = 571
       ExpandedHeight = 242
       object lblQClose: TLabel
         Left = 93
         Top = 103
-        Width = 547
-        Height = 37
+        Width = 493
+        Height = 15
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -261,8 +262,8 @@ inherited framePackageFmp4: TframePackageFmp4
       object lblHPCT: TLabel
         Left = 93
         Top = 159
-        Width = 565
-        Height = 19
+        Width = 452
+        Height = 15
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -275,8 +276,8 @@ inherited framePackageFmp4: TframePackageFmp4
       object lblRPCT: TLabel
         Left = 93
         Top = 219
-        Width = 536
-        Height = 37
+        Width = 465
+        Height = 15
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -365,8 +366,7 @@ inherited framePackageFmp4: TframePackageFmp4
       Height = 121
       Caption = 'Options'
       TabOrder = 2
-      ExplicitTop = 315
-      ExplicitWidth = 550
+      ExplicitWidth = 571
       object cbAllowPrinting: TCheckBox
         Left = 8
         Top = 8
@@ -411,7 +411,7 @@ inherited framePackageFmp4: TframePackageFmp4
         Height = 243
         Align = alClient
         Enabled = False
-        ItemHeight = 17
+        ItemHeight = 15
         Items.Strings = (
           'WBS_WATER_USE'
           'FARM_DEMAND_SUPPLY_SUMMARY'
@@ -440,7 +440,7 @@ inherited framePackageFmp4: TframePackageFmp4
         object lblPrintRouting: TLabel
           Left = 168
           Top = 9
-          Width = 358
+          Width = 212
           Height = 15
           Caption = 'Print routing (ROUTING_INFORMATION)'
         end

@@ -83,7 +83,7 @@ inherited framePackageCFP: TframePackageCFP
         Top = 3
         Width = 361
         Height = 17
-        Caption = 'Conduit pipes active (MODE)'
+        Caption = 'Conduit pipes active (MODE 1 or 3)'
         Color = clBtnFace
         Enabled = False
         ParentColor = False
@@ -240,7 +240,7 @@ inherited framePackageCFP: TframePackageCFP
         Top = 26
         Width = 369
         Height = 17
-        Caption = 'Conduit layers active (MODE)'
+        Caption = 'Conduit layers active (MODE 2 or 3)'
         Enabled = False
         TabOrder = 1
         OnClick = cbLayersClick
