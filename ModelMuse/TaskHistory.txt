@@ -31795,5 +31795,18 @@ object TTaskHistory
       Categories.Strings = (
         'CFP'
         'Dialog boxes')
+    end
+    item
+      Date = 45185.000000000000000000
+    end
+    item
+      Date = 45186.000000000000000000
+    end
+    item
+      Date = 45187.000000000000000000
+      Categories.Strings = (
+        'MF-2015'
+        'GW_Chart'
+        'List File Analyzer')
     end>
 end

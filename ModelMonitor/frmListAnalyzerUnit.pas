@@ -64,6 +64,7 @@ type
     tabSorted: TTabSheet;
     frameSorted: TframeFileListHandler;
     AppEvnt1: TApplicationEvents;
+    btnSettings: TButton;
     procedure btnOpenFileClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -93,6 +94,7 @@ type
     procedure frameSortedvstIndexLinesCompareNodes(Sender: TBaseVirtualTree;
       Node1, Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
     procedure AppEvnt1Idle(Sender: TObject; var Done: Boolean);
+    procedure btnSettingsClick(Sender: TObject);
   private
     FListFile: TFileIndex;
     FChangingPosition: Boolean;
@@ -145,7 +147,7 @@ implementation
 
 uses
   ModflowIdentifiersUnit, Math, ErrorMessages, ExtractObservationsUnit,
-  BMSearch, System.StrUtils, System.IOUtils;
+  BMSearch, System.StrUtils, System.IOUtils, frmSettingsUnit;
 
 resourcestring
   StrListingAnalyst = 'ListingAnalyst';
@@ -3005,6 +3007,12 @@ begin
   finally
     FIdling := False;
   end;
+end;
+
+procedure TfrmMain.btnSettingsClick(Sender: TObject);
+begin
+  frmSettings.GetData;
+  frmSettings.ShowModal;
 end;
 
 end.

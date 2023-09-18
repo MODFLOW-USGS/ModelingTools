@@ -80,6 +80,8 @@ type
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WritePackageData;
+    procedure WriteCrossSections;
+    procedure WriteACrossSection(CrossSection: TSfr6CrossSection; const FileName: string);
     procedure WriteConnections;
     procedure WriteDiversions;
     procedure WriteStressPeriods;
@@ -1457,6 +1459,16 @@ begin
       Exit;
     end;
 
+  {$IFDEF SfrCrossSection}
+    frmProgressMM.AddMessage('Writing SFR Package Cross Sections');
+    WriteCrossSections
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  {$ENDIF}
+
     frmProgressMM.AddMessage(StrWritingSFRConnec);
     WriteConnections;
     Application.ProcessMessages;
@@ -1684,6 +1696,56 @@ begin
   end;
 end;
 
+procedure TModflowSFR_MF6_Writer.WriteACrossSection(
+  CrossSection: TSfr6CrossSection; const FileName: string);
+var
+  Index: Integer;
+  AnItem: TSfr6CrossSectionPoint;
+begin
+  OpenTempFile(FileName);
+
+  WriteBeginDimensions;
+  try
+    WriteString('  NROW';
+    WriteInteger(CrossSection.Count);
+    NewLine;
+
+    WriteString('  NCOL';
+    if CrossSection.UseManningFraction then
+    begin
+      WriteInteger(3);
+    end
+    else
+    begin
+      WriteInteger(2);
+    end;
+    NewLine;
+  finally
+    WriteEndDimensions;
+  end;
+
+  WriteString('BEGIN TABLE')
+  NewLine;
+  try
+    for Index := 0 to CrossSection.Count - 1 do
+    begin
+      AnItem := CrossSection[Index];
+      WriteFloat(AnItem.XFraction);
+      WriteFloat(AnItem.Height);
+      if CrossSection.UseManningFraction then
+      begin
+        WriteFloat(AnItem.ManningsFraction);
+      end;
+      NewLine;
+    end;
+  finally
+    WriteString('END TABLE')
+    NewLine;
+  end;
+
+  CloseTempFile;
+end;
+
 procedure TModflowSFR_MF6_Writer.WriteAdditionalAuxVariables;
 var
   SpeciesIndex: Integer;
@@ -1727,6 +1789,69 @@ begin
     end;
   end;
   WriteEndConnectionData;
+end;
+
+procedure TModflowSFR_MF6_Writer.WriteCrossSections;
+var
+  ScreenObject: TScreenObject;
+  Sfr6Boundary: TSfrMf6Boundary;
+  SegmentIndex: Integer;
+  ASegment: TSfr6Segment;
+  ReachNumber: Integer;
+  ReachIndex: Integer;
+  CrossSectionUsed: Boolean;
+  CrossSectionDictionary: TDictionary<TSfr6CrossSection, string>;
+  AFileName: string;
+  FileIndex: Integer;
+begin
+  FileIndex := 1;
+  CrossSectionDictionary := TDictionary<TSfr6CrossSection, string>.Create;
+  try
+    CrossSectionUsed := False;
+    ReachNumber := 0;
+    for SegmentIndex := 0 to FSegments.Count - 1 do
+    begin
+      ASegment := FSegments[SegmentIndex];
+      ACellList := ASegment.FReaches[0];
+      Assert(ACellList.Count = Length(ASegment.SteadyValues));
+      for ReachIndex := 0 to Length(ASegment.SteadyValues) - 1 do
+      begin
+        Inc(ReachNumber);
+        ACell := ACellList[ReachIndex] as TSfrMF6_Cell;
+
+        ScreenObject := ACell.ScreenObject as TScreenObject;
+        Assert(ScreenObject <> nil);
+        Sfr6Boundary := ScreenObject.ModflowSfr6Boundary;
+        if Sfr6Boundary.CrossSection.UseCrossSection then
+        begin
+          if not CrossSectionUsed then
+          begin
+            CrossSectionUsed := True;
+            WriteString('BEGIN CROSSSECTIONS');
+            NewLine;
+          end;
+          if not CrossSectionDictionary.TryGetValue(Sfr6Boundary.CrossSection, AFileName) then
+          begin
+            AFileName := ChangeFileExt(FInputFileName, Format('.xsec%d', [FileIndex]));
+            WriteACrossSection(Sfr6Boundary.CrossSection, AFileName);
+            Model.AddModelInputFile(AFileName);
+            CrossSectionDictionary.Add(Sfr6Boundary.CrossSection, AFileName);
+          end;
+          WriteInteger(ReachNumber);
+          WriteString(' TAB6 FILEIN ');
+          WriteString(ExtractFileName(AFileName));
+          NewLine;
+        end;
+      end;
+    end;
+    if CrossSectionUsed then
+    begin
+      WriteString('END CROSSSECTIONS');
+      NewLine;
+    end;
+  finally
+     CrossSectionDictionar.Free;
+  end;
 end;
 
 procedure TModflowSFR_MF6_Writer.WriteDimensions;

@@ -3,7 +3,7 @@ unit ModflowIdentifiersUnit;
 interface
 
 uses
-  SysUtils, Classes, ErrorMessages;
+  SysUtils, Classes, ErrorMessages, JclAnsiStrings;
 
 var
   PackageIdentifiers: TAnsiStringList;
@@ -128,10 +128,6 @@ begin
   PackageIdentifiers.Add('PROCESSING TIME SERIES');
   PackageIdentifiers.Add('Stream Gages:');
   PackageIdentifiers.Add('MEMORY MANAGER TOTAL STORAGE');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 
 //// MODFLOW 6
   PackageIdentifiers.Add('DIS -- STRUCTURED GRID DISCRETIZATION PACKAGE');
@@ -141,14 +137,37 @@ begin
   PackageIdentifiers.Add('RCH   -- RCH PACKAGE');
   PackageIdentifiers.Add('CHD   -- CHD PACKAGE');
   PackageIdentifiers.Add('IC -- INITIAL CONDITIONS PACKAGE');
-//  PackageIdentifiers.Add('BEGIN READING OUTPUT CONTROL FOR STRESS PERIOD');
   PackageIdentifiers.Add('EVT   -- EVT PACKAGE');
   PackageIdentifiers.Add('STO -- STORAGE PACKAGE');
   PackageIdentifiers.Add('GHB   -- GHB PACKAGE');
   PackageIdentifiers.Add('CSUB -- COMPACTION PACKAGE');
   PackageIdentifiers.Add('DISU -- UNSTRUCTURED GRID DISCRETIZATION PACKAGE');
   PackageIdentifiers.Add('DISV -- VERTEX GRID DISCRETIZATION PACKAGE');
-//  PackageIdentifiers.Add('IMSLINEAR -- UNSTRUCTURED LINEAR SOLUTION PACKAGE');
+  PackageIdentifiers.Add('VSC -- Viscosity Package');
+  PackageIdentifiers.Add('BUY -- Buoyancy Package');
+  PackageIdentifiers.Add('DSP-- DISPERSION PACKAGE');
+  PackageIdentifiers.Add('FMI -- FLOW MODEL INTERFACE');
+  PackageIdentifiers.Add('ADV-- ADVECTION PACKAGE');
+  PackageIdentifiers.Add('MST -- MOBILE STORAGE AND TRANSFER PACKAGE');
+  PackageIdentifiers.Add('SSM -- SOURCE-SINK MIXING PACKAGE');
+  PackageIdentifiers.Add('CNC   -- CNC PACKAGE');
+  PackageIdentifiers.Add('IST   -- IMMOBILE DOMAIN PACKAGE');
+  PackageIdentifiers.Add('SRC   -- SRC PACKAGE');
+  PackageIdentifiers.Add('LKT   -- LKT PACKAGE');
+  PackageIdentifiers.Add('SFT   -- SFT PACKAGE');
+  PackageIdentifiers.Add('MWT   -- MWT PACKAGE');
+  PackageIdentifiers.Add('UZT   -- UZT PACKAGE');
+  PackageIdentifiers.Add('APT -- ADVANCED PACKAGE TRANSPORT');
+  PackageIdentifiers.Add('MVT -- MOVER TRANSPORT PACKAGE');
+  PackageIdentifiers.Add('ATS -- ADAPTIVE TIME STEP PACKAGE');
+  PackageIdentifiers.Add('TVK -- TIME-VARYING K PACKAGE');
+  PackageIdentifiers.Add('TVS -- TIME-VARYING S PACKAGE');
+  PackageIdentifiers.Add('READING SIMULATION MODEL');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+
   PackageIdentifiers.Add('READING WATER MOVERS ');
 
 //  PackageIdentifiers.Add('CALLS TO NUMERICAL SOLUTION IN TIME STEP');
@@ -547,7 +566,16 @@ begin
   BoundaryIdentifiers.Add('DIVERSION SEGMENTS     PERIOD');
   BoundaryIdentifiers.Add('SW IRRIGATION     PERIOD');
   BoundaryIdentifiers.Add('GW IRRIGATION     PERIOD');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('CNC NO.');
+  BoundaryIdentifiers.Add('FMI READING BUDGET TERMS');
+  BoundaryIdentifiers.Add('SRC NO.');
+  BoundaryIdentifiers.Add('LKT PACKAGE (');
+  BoundaryIdentifiers.Add('SFT PACKAGE (');
+  BoundaryIdentifiers.Add('UZT PACKAGE (');
+  BoundaryIdentifiers.Add('CIM IN ');
+  BoundaryIdentifiers.Add('PROCESSING');
+  BoundaryIdentifiers.Add('SETTING');
+  BoundaryIdentifiers.Add('ATS PERIOD DATA');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
@@ -714,195 +742,12 @@ begin
 //  NonIdentifiers.Add('StrRECHARGE');
 end;
 
-//procedure InitializeShortBoundaryIdentifiers;
-//begin
-//  ShortBoundaryIdentifiers := TAnsiStringList.Create;
-//  ShortBoundaryIdentifiers.Add('LAYER');
-//  ShortBoundaryIdentifiers.Add(':');
-//  ShortBoundaryIdentifiers.Add(' HK ');
-//  ShortBoundaryIdentifiers.Add(' HANI ');
-//  ShortBoundaryIdentifiers.Add(' SS ');
-//  ShortBoundaryIdentifiers.Add(' SY ');
-//  ShortBoundaryIdentifiers.Add(' ETS ');
-//  ShortBoundaryIdentifiers.Add(' EVT ');
-//  ShortBoundaryIdentifiers.Add(' RCH ');
-//  ShortBoundaryIdentifiers.Add('STREAM');
-//  ShortBoundaryIdentifiers.Add('USING');
-//  ShortBoundaryIdentifiers.Add('LAKE');
-//  ShortBoundaryIdentifiers.Add('RATE');
-//  ShortBoundaryIdentifiers.Add('PROPORTION');
-//  ShortBoundaryIdentifiers.Add('ET');
-//  ShortBoundaryIdentifiers.Add('EXTINCT');
-//  ShortBoundaryIdentifiers.Add('RECHARGE');
-//  ShortBoundaryIdentifiers.Add('WELLID');
-//  ShortBoundaryIdentifiers.Add('Lay');
-//  ShortBoundaryIdentifiers.Add('TOP');
-//  ShortBoundaryIdentifiers.Add('THICKNESS');
-//  ShortBoundaryIdentifiers.Add('PARAMETER');
-//  ShortBoundaryIdentifiers.Add('OF');
-//  ShortBoundaryIdentifiers.Add('ROW');
-//  ShortBoundaryIdentifiers.Add('HYD');
-//  ShortBoundaryIdentifiers.Add('PERIOD');
-//  ShortBoundaryIdentifiers.Add('ARRAY');
-//  ShortBoundaryIdentifiers.Add('HEAD');
-//  ShortBoundaryIdentifiers.Add('SPECIFIC');
-//  ShortBoundaryIdentifiers.Add('OVERLAND');
-//  ShortBoundaryIdentifiers.Add('SATURATED');
-//  ShortBoundaryIdentifiers.Add('BROOKS');
-//  ShortBoundaryIdentifiers.Add('DATA');
-//  ShortBoundaryIdentifiers.Add('BUDGET');
-//  ShortBoundaryIdentifiers.Add('AT');
-//
-//end;
-
-//procedure InitializeKeyWords;
-//var
-//  Splitter: TStringList;
-//  TempKeyWords: TStringList;
-//  Storage: TStringList;
-//  LineIndex: Integer;
-//  MaxWordCount: Integer;
-//  WordIndex: Integer;
-//  AWord: string;
-//  WordCount: Integer;
-//  MaxWordIndex: Integer;
-//  BadCharIndex: Integer;
-//  AValue: Extended;
-//  ErrorCode: integer;
-//  procedure AddStrings(List: TAnsiStringList);
-//  var
-//    index: Integer;
-//  begin
-//    for index := 0 to List.Count - 1 do
-//    begin
-//      Storage.Add(string(List[index]))
-//    end;
-//  end;
-//begin
-//  KeyWords := TAnsiStringList.Create;
-//  TempKeyWords := TStringList.Create;
-//  Splitter := TStringList.Create;
-//  Storage := TStringList.Create;
-//  try
-//    Storage.Add(StressPeriodID1);
-//    Storage.Add(StressPeriodID2);
-//    Storage.Add(StartNewTimeStep);
-//    Storage.Add(TransportStep);
-//    Storage.Add(IterationID1);
-//    Storage.Add(IterationID2);
-//    Storage.Add(ArrayID1);
-//    Storage.Add(ArrayID2);
-//    Storage.Add(ArrayID3);
-//    Storage.Add(ArrayID4);
-//    Storage.Add(BudgetID);
-//    Storage.Add(TimeSummary);
-//    Storage.Add(EndModel);
-//    Storage.Add(StrParameterName);
-//    Storage.Add(StrINSTANCE);
-//    Storage.Add(StrParameter);
-//    Storage.Add(StrINSTANCE2);
-//    Storage.Add(StrCLASSIFICATIONCOU);
-//
-//    AddStrings(PackageIdentifiers);
-//    AddStrings(ObsIdentifiers);
-//    AddStrings(BoundaryIdentifiers);
-//    AddStrings(ErrorValues);
-//    AddStrings(NumberErrorValues);
-//    AddStrings(WarningValues);
-//
-//    Splitter.Delimiter := ' ';
-//    TempKeyWords.Duplicates := dupIgnore;
-//    TempKeyWords.Sorted := True;
-//
-//    for LineIndex := 0 to Storage.Count - 1 do
-//    begin
-//      Splitter.DelimitedText := Storage[LineIndex];
-//      TempKeyWords.AddStrings(Splitter);
-//    end;
-//
-//    BadCharIndex := TempKeyWords.IndexOf('E');
-//    if BadCharIndex >= 0 then
-//    begin
-//      TempKeyWords.Delete(BadCharIndex);
-//    end;
-//    BadCharIndex := TempKeyWords.IndexOf('+');
-//    if BadCharIndex >= 0 then
-//    begin
-//      TempKeyWords.Delete(BadCharIndex);
-//    end;
-//    BadCharIndex := TempKeyWords.IndexOf('-');
-//    if BadCharIndex >= 0 then
-//    begin
-//      TempKeyWords.Delete(BadCharIndex);
-//    end;
-//    BadCharIndex := TempKeyWords.IndexOf('.');
-//    if BadCharIndex >= 0 then
-//    begin
-//      TempKeyWords.Delete(BadCharIndex);
-//    end;
-//    for WordIndex := TempKeyWords.Count - 1 downto 0 do
-//    begin
-////      if Length(TempKeyWords[WordIndex]) = 1 then
-////      begin
-////        TempKeyWords.Delete(WordIndex);
-////      end
-////      else
-////      begin
-//        Val(TempKeyWords[WordIndex], AValue, ErrorCode);
-//        if ErrorCode = 0 then
-//        begin
-//          TempKeyWords.Delete(WordIndex);
-//        end;
-////      end;
-//    end;
-//
-//    while Storage.Count > 0 do
-//    begin
-//      MaxWordCount := 0;
-//      MaxWordIndex := -1;
-//      for WordIndex := 0 to TempKeyWords.Count - 1 do
-//      begin
-//        AWord := TempKeyWords[WordIndex];
-//        WordCount := 0;
-//        for LineIndex := 0 to Storage.Count - 1 do
-//        begin
-//          if Pos(AWord, Storage[LineIndex]) > 0  then
-//          begin
-//            Inc(WordCount);
-//          end;
-//        end;
-//        if WordCount > MaxWordCount then
-//        begin
-//          MaxWordCount := WordCount;
-//          MaxWordIndex := WordIndex;
-//        end;
-//      end;
-//      Assert(MaxWordIndex >= 0);
-//      AWord := TempKeyWords[MaxWordIndex];
-//      TempKeyWords.Delete(MaxWordIndex);
-//      KeyWords.Add(AnsiString(AWord));
-//      for LineIndex := Storage.Count - 1 downto 0 do
-//      begin
-//        if Pos(AWord, Storage[LineIndex]) > 0  then
-//        begin
-//          Storage.Delete(LineIndex);
-//        end;
-//      end;
-//    end;
-//  finally
-//    Storage.Free;
-//    TempKeyWords.Free;
-//    Splitter.Free;
-//  end;
-//end;
 
 initialization
   InitializePackageIdentifiers;
   InitializeObsIdentifiers;
   InitializeBoundaryIdentifiers;
   InitializeNonIdenfiers;
-//  InitializeShortBoundaryIdentifiers;
-//  InitializeKeyWords;
 
 finalization;
   PackageIdentifiers.Free;
@@ -911,6 +756,4 @@ finalization;
   BoundaryIdentifiers.Free;
   NumberBoundaryIdentifiers.Free;
   NonIdentifiers.Free;
-//  ShortBoundaryIdentifiers.Free;
-//  KeyWords.Free;
 end.

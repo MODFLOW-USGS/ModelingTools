@@ -2,8 +2,8 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'ListingAnalyst'
-  ClientHeight = 495
-  ClientWidth = 792
+  ClientHeight = 524
+  ClientWidth = 797
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object frmMain: TfrmMain
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 273
     Top = 79
-    Height = 393
+    Height = 422
     Align = alLeft
     MinSize = 1
     Maximized = False
@@ -33,7 +33,7 @@ object frmMain: TfrmMain
     Left = 0
     Top = 79
     Width = 273
-    Height = 393
+    Height = 422
     ActivePage = tabErrors
     Align = alLeft
     Images = ilTabFaces
@@ -47,14 +47,14 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 356
+        Height = 385
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
         ExplicitHeight = 356
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 356
+          Height = 385
           DefaultNodeHeight = 19
           OnNodeDblClick = frameListingvstIndexLinesNodeDblClick
           ExplicitWidth = 265
@@ -69,14 +69,14 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 356
+        Height = 385
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
         ExplicitHeight = 356
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 356
+          Height = 385
           DefaultNodeHeight = 19
           OnCompareNodes = frameSortedvstIndexLinesCompareNodes
           ExplicitWidth = 265
@@ -92,14 +92,14 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 356
+        Height = 385
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
         ExplicitHeight = 355
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 356
+          Height = 385
           DefaultNodeHeight = 19
           ExplicitWidth = 265
           ExplicitHeight = 356
@@ -114,14 +114,14 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 356
+        Height = 385
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
         ExplicitHeight = 356
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 356
+          Height = 385
           DefaultNodeHeight = 19
           TreeOptions.SelectionOptions = [toSimpleDrawSelection]
           ExplicitWidth = 265
@@ -133,14 +133,14 @@ object frmMain: TfrmMain
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 792
+    Width = 797
     Height = 79
     Align = alTop
     TabOrder = 0
     ExplicitWidth = 788
     object lblLineCount: TLabel
-      Left = 311
-      Top = 21
+      Left = 272
+      Top = 19
       Width = 190
       Height = 19
       Caption = 'Number of lines to retrieve'
@@ -170,7 +170,7 @@ object frmMain: TfrmMain
       OnClick = btnOpenFileClick
     end
     object btnReadMoreLines: TBitBtn
-      Left = 150
+      Left = 111
       Top = 8
       Width = 73
       Height = 65
@@ -180,7 +180,7 @@ object frmMain: TfrmMain
       OnClick = btnReadMoreLinesClick
     end
     object btnReadEarlierLines: TBitBtn
-      Left = 229
+      Left = 190
       Top = 8
       Width = 76
       Height = 65
@@ -190,8 +190,8 @@ object frmMain: TfrmMain
       OnClick = btnReadEarlierLinesClick
     end
     object spinLineCount: TJvSpinEdit
-      Left = 311
-      Top = 43
+      Left = 272
+      Top = 41
       Width = 114
       Height = 27
       Thousands = True
@@ -201,7 +201,7 @@ object frmMain: TfrmMain
       TabOrder = 7
     end
     object btnIndex: TButton
-      Left = 507
+      Left = 559
       Top = 8
       Width = 57
       Height = 65
@@ -212,8 +212,8 @@ object frmMain: TfrmMain
       OnClick = btnIndexClick
     end
     object rdeLineTarget: TRbwDataEntry
-      Left = 591
-      Top = 43
+      Left = 629
+      Top = 42
       Width = 82
       Height = 27
       TabOrder = 8
@@ -225,8 +225,8 @@ object frmMain: TfrmMain
       ChangeDisabledColor = True
     end
     object btnGoTo: TButton
-      Left = 591
-      Top = 8
+      Left = 629
+      Top = 7
       Width = 81
       Height = 30
       Caption = 'Go to line'
@@ -245,7 +245,7 @@ object frmMain: TfrmMain
       OnClick = btnAbortClick
     end
     object btnFind: TBitBtn
-      Left = 704
+      Left = 716
       Top = 8
       Width = 75
       Height = 30
@@ -269,7 +269,7 @@ object frmMain: TfrmMain
       OnClick = btnFindClick
     end
     object btnFont: TButton
-      Left = 704
+      Left = 716
       Top = 43
       Width = 75
       Height = 30
@@ -277,25 +277,34 @@ object frmMain: TfrmMain
       TabOrder = 9
       OnClick = btnFontClick
     end
+    object btnSettings: TButton
+      Left = 480
+      Top = 8
+      Width = 73
+      Height = 25
+      Caption = 'Settings'
+      TabOrder = 10
+      OnClick = btnSettingsClick
+    end
   end
   object pgcDisplay: TPageControl
     Left = 283
     Top = 79
-    Width = 509
-    Height = 393
+    Width = 514
+    Height = 422
     ActivePage = tabLines
     Align = alClient
     TabOrder = 2
     ExplicitWidth = 505
-    ExplicitHeight = 392
+    ExplicitHeight = 226
     object tabLines: TTabSheet
       Caption = 'Lines'
       TabVisible = False
       object sbLines: TScrollBar
-        Left = 479
+        Left = 484
         Top = 0
         Width = 22
-        Height = 383
+        Height = 412
         Align = alRight
         Kind = sbVertical
         LargeChange = 10
@@ -309,8 +318,8 @@ object frmMain: TfrmMain
       object jvrchdtLines: TJvRichEdit
         Left = 89
         Top = 0
-        Width = 390
-        Height = 383
+        Width = 395
+        Height = 412
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -326,6 +335,8 @@ object frmMain: TfrmMain
         OnClick = memoLinesClick
         OnSelectionChange = redtLines1SelectionChange
         OnVerticalScroll = jvrchdtLinesVerticalScroll
+        ExplicitLeft = 95
+        ExplicitTop = -75
         ExplicitWidth = 386
         ExplicitHeight = 382
       end
@@ -333,7 +344,7 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 89
-        Height = 383
+        Height = 412
         Align = alLeft
         Enabled = False
         Font.Charset = ANSI_CHARSET
@@ -356,8 +367,8 @@ object frmMain: TfrmMain
       object rdgTable: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 501
-        Height = 351
+        Width = 506
+        Height = 380
         Align = alClient
         ColCount = 4
         FixedCols = 1
@@ -470,6 +481,8 @@ object frmMain: TfrmMain
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 501
+        ExplicitHeight = 351
         ColWidths = (
           64
           64
@@ -484,8 +497,8 @@ object frmMain: TfrmMain
       end
       object pnlTableBottom: TPanel
         Left = 0
-        Top = 351
-        Width = 501
+        Top = 380
+        Width = 506
         Height = 32
         Margins.Left = 2
         Margins.Top = 2
@@ -493,6 +506,8 @@ object frmMain: TfrmMain
         Margins.Bottom = 2
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 351
+        ExplicitWidth = 501
         object btnCopy: TButton
           Left = 2
           Top = 6
@@ -511,8 +526,8 @@ object frmMain: TfrmMain
   end
   object Panel2: TPanel
     Left = 0
-    Top = 472
-    Width = 792
+    Top = 501
+    Width = 797
     Height = 23
     Align = alBottom
     TabOrder = 3
@@ -527,7 +542,7 @@ object frmMain: TfrmMain
     object ProgressBar1: TProgressBar
       Left = 136
       Top = 1
-      Width = 655
+      Width = 660
       Height = 21
       Align = alRight
       Anchors = [akLeft, akTop, akRight, akBottom]

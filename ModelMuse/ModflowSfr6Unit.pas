@@ -458,6 +458,54 @@ type
     function Add: TSDiversionItem;
   end;
 
+  TSfr6CrossSectionPoint = class(TOrderedItem)
+  private
+    FStoredManningsFraction: TRealStorage;
+    FStoredHeight: TRealStorage;
+    FStoredXFraction: TRealStorage;
+    procedure SetStoredHeight(const Value: TRealStorage);
+    procedure SetStoredManningsFraction(const Value: TRealStorage);
+    procedure SetStoredXFraction(const Value: TRealStorage);
+    function GetHeight: Double;
+    function GetManningsFraction: Double;
+    function GetXFraction: Double;
+    procedure SetHeight(const Value: Double);
+    procedure SetManningsFraction(const Value: Double);
+    procedure SetXFraction(const Value: Double);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    property XFraction: Double read GetXFraction Write SetXFraction;
+    property Height: Double read GetHeight Write SetHeight;
+    property ManningsFraction: Double read GetManningsFraction Write SetManningsFraction;
+  published
+    property StoredXFraction: TRealStorage read FStoredXFraction write SetStoredXFraction;
+    property StoredHeight: TRealStorage read FStoredHeight write SetStoredHeight;
+    property StoredManningsFraction: TRealStorage read FStoredManningsFraction
+      write SetStoredManningsFraction;
+  end;
+
+  TSfr6CrossSection = class(TOrderedCollection)
+  private
+    FUseManningFraction: Boolean;
+    FUseCrossSection: Boolean;
+    function GetItem(Index: Integer): TSfr6CrossSectionPoint;
+    procedure SetItem(Index: Integer; const Value: TSfr6CrossSectionPoint);
+    procedure SetUseCrossSection(const Value: Boolean);
+    procedure SetUseManningFraction(const Value: Boolean);
+  public
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+    constructor Create(Model: IModelForTOrderedCollection);
+    property Items[Index: Integer]: TSfr6CrossSectionPoint read GetItem write SetItem; default;
+    function Add: TSfr6CrossSectionPoint;
+  published
+    property UseCrossSection: Boolean read FUseCrossSection write SetUseCrossSection;
+    property UseManningFraction: Boolean read FUseManningFraction write SetUseManningFraction;
+  end;
+
   TSfrMf6Boundary = class(TModflowBoundary)
   private
     FDiversions: TDiversionCollection;
@@ -521,6 +569,7 @@ type
     FPestViscosity: TSftGwtConcCollection;
     FPestViscosityMethods: TGwtPestMethodCollection;
     FViscosityObserver: TObserver;
+    FCrossSection: TSfr6CrossSection;
     procedure SetDiversions(const Value: TDiversionCollection);
     procedure SetDownstreamSegments(const Value: TIntegerCollection);
     procedure SetSegmentNumber(const Value: Integer);
@@ -626,6 +675,7 @@ type
     procedure SetPestViscosity(const Value: TSftGwtConcCollection);
     procedure SetPestViscosityMethods(const Value: TGwtPestMethodCollection);
     function GetViscosityObserver: TObserver;
+    procedure SetCrossSection(const Value: TSfr6CrossSection);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -757,10 +807,18 @@ type
       read FPestDensity write SetPestDensity;
     property PestDensityMethods: TGwtPestMethodCollection
       read FPestDensityMethods write SetPestDensityMethods;
+    // Viscosity
     property PestViscosity: TSftGwtConcCollection
       read FPestViscosity write SetPestViscosity;
     property PestViscosityMethods: TGwtPestMethodCollection
       read FPestViscosityMethods write SetPestViscosityMethods;
+
+    property CrossSection: TSfr6CrossSection read FCrossSection
+      write SetCrossSection
+    {$IFNDEF SfrCrossSection}
+      stored False
+    {$ENDIF}
+      ;
 end;
 
 const
@@ -3504,6 +3562,8 @@ begin
     PestDensityMethods := SourceSfr6.PestDensityMethods;
     PestViscosity := SourceSfr6.PestViscosity;
     PestViscosityMethods := SourceSfr6.PestViscosityMethods;
+
+    CrossSection := SourceSfr6.CrossSection;
   end
   else if Source is TSfrBoundary then
   begin
@@ -4015,7 +4075,9 @@ var
   InvalidateEvent: TNotifyEvent;
   Index: Integer;
 begin
-  inherited Create(Model as TCustomModel, ScreenObject); ;
+  inherited Create(Model as TCustomModel, ScreenObject);
+  FCrossSection := TSfr6CrossSection.Create(Model);;
+
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
   FPestRainfallConcentrationObservers := TObserverList.Create;
   FPestEvaporationConcentrationObservers := TObserverList.Create;
@@ -4285,6 +4347,7 @@ begin
   FPestRunoffConcentrationObservers.Free;
   FPestInflowConcentrationObservers.Free;
 
+  FCrossSection.Free;
   inherited;
 end;
 
@@ -5317,6 +5380,11 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FRoughnessFormula,
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
+end;
+
+procedure TSfrMf6Boundary.SetCrossSection(const Value: TSfr6CrossSection);
+begin
+  FCrossSection.Assign(Value);
 end;
 
 procedure TSfrMf6Boundary.SetDiversions(const Value: TDiversionCollection);
@@ -7013,6 +7081,162 @@ constructor TSftGwtConcCollection.Create(Model: TBaseModel;
   AScreenObject: TObject; ParentCollection: TSfrMf6Collection);
 begin
   inherited Create(Model, AScreenObject, ParentCollection);
+end;
+
+{ TSfr6CrossSectionPoint }
+
+procedure TSfr6CrossSectionPoint.Assign(Source: TPersistent);
+var
+  SrcXSect: TSfr6CrossSectionPoint;
+begin
+  if Source is TSfr6CrossSectionPoint then
+  begin
+    SrcXSect := TSfr6CrossSectionPoint(Source);
+    XFraction := SrcXSect.XFraction;
+    Height := SrcXSect.Height;
+    ManningsFraction := SrcXSect.ManningsFraction;
+  end;
+  inherited;
+end;
+
+constructor TSfr6CrossSectionPoint.Create(Collection: TCollection);
+begin
+  inherited;
+  FStoredManningsFraction := TRealStorage.Create;
+  FStoredHeight := TRealStorage.Create;
+  FStoredXFraction := TRealStorage.Create;
+
+  ManningsFraction := 1;
+  Height := 0;
+  XFraction := 0;
+
+  FStoredManningsFraction.OnChange := OnInvalidateModelEvent;
+  FStoredHeight.OnChange := OnInvalidateModelEvent;
+  FStoredXFraction.OnChange := OnInvalidateModelEvent;
+end;
+
+destructor TSfr6CrossSectionPoint.Destroy;
+begin
+  FStoredManningsFraction.Free;
+  FStoredHeight.Free;
+  FStoredXFraction.Free;
+  inherited;
+end;
+
+function TSfr6CrossSectionPoint.GetHeight: Double;
+begin
+  result := StoredHeight.Value;
+end;
+
+function TSfr6CrossSectionPoint.GetManningsFraction: Double;
+begin
+  result := StoredManningsFraction.Value;
+end;
+
+function TSfr6CrossSectionPoint.GetXFraction: Double;
+begin
+  result := StoredXFraction.Value;
+end;
+
+function TSfr6CrossSectionPoint.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  SrcXSect: TSfr6CrossSectionPoint;
+begin
+  result := (AnotherItem is TSfr6CrossSectionPoint);
+  if result then
+  begin
+    SrcXSect := TSfr6CrossSectionPoint(AnotherItem);
+    result := (XFraction = SrcXSect.XFraction) and
+      (Height = SrcXSect.Height) and
+      ( ManningsFraction = SrcXSect.ManningsFraction);
+  end;
+end;
+
+procedure TSfr6CrossSectionPoint.SetHeight(const Value: Double);
+begin
+  StoredHeight.Value := Value;
+end;
+
+procedure TSfr6CrossSectionPoint.SetManningsFraction(const Value: Double);
+begin
+  StoredManningsFraction.Value := Value;
+end;
+
+procedure TSfr6CrossSectionPoint.SetStoredHeight(const Value: TRealStorage);
+begin
+  FStoredHeight.Assign(Value);
+end;
+
+procedure TSfr6CrossSectionPoint.SetStoredManningsFraction(
+  const Value: TRealStorage);
+begin
+  FStoredManningsFraction.Assign(Value);
+end;
+
+procedure TSfr6CrossSectionPoint.SetStoredXFraction(const Value: TRealStorage);
+begin
+  FStoredXFraction.Assign(Value);
+end;
+
+procedure TSfr6CrossSectionPoint.SetXFraction(const Value: Double);
+begin
+  StoredXFraction.Value := Value;
+end;
+
+{ TSfr6CrossSection }
+
+function TSfr6CrossSection.Add: TSfr6CrossSectionPoint;
+begin
+
+end;
+
+constructor TSfr6CrossSection.Create(Model: IModelForTOrderedCollection);
+begin
+  inherited Create(TSfr6CrossSectionPoint, Model);
+end;
+
+function TSfr6CrossSection.GetItem(Index: Integer): TSfr6CrossSectionPoint;
+begin
+  result := inherited Items[Index] as TSfr6CrossSectionPoint;
+end;
+
+function TSfr6CrossSection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  SfrXSect: TSfr6CrossSection;
+begin
+  result := inherited IsSame(AnOrderedCollection)
+    and (AnOrderedCollection is TSfr6CrossSection);
+  if result then
+  begin
+    SfrXSect := TSfr6CrossSection(AnOrderedCollection);
+    result := (UseCrossSection = SfrXSect.UseCrossSection)
+      and (UseManningFraction = SfrXSect.UseManningFraction)
+  end;
+end;
+
+procedure TSfr6CrossSection.SetItem(Index: Integer;
+  const Value: TSfr6CrossSectionPoint);
+begin
+  inherited Items[Index] := Value
+end;
+
+procedure TSfr6CrossSection.SetUseCrossSection(const Value: Boolean);
+begin
+  if FUseCrossSection <> Value then
+  begin
+    FUseCrossSection := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TSfr6CrossSection.SetUseManningFraction(const Value: Boolean);
+begin
+  if FUseManningFraction <> Value then
+  begin
+    FUseManningFraction := Value;
+    InvalidateModel;
+  end;
 end;
 
 initialization

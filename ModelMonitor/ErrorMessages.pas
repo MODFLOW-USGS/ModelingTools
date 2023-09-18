@@ -2,10 +2,10 @@ unit ErrorMessages;
 
 interface
 
-uses Classes, Generics.Collections;
+uses Classes, Generics.Collections, JclAnsiStrings;
 
-type
-  TAnsiStringList = TList<AnsiString>;
+//type
+//  TAnsiStringList = TList<AnsiString>;
 
 var
   ErrorValues: TAnsiStringList;

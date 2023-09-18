@@ -17,7 +17,8 @@ uses
   IntListUnit in '..\ModelMuse\IntListUnit.pas',
   CustomExtendedDialogForm in 'CustomExtendedDialogForm.pas',
   frmIndexFileUnit in 'frmIndexFileUnit.pas' {frmIndexFile},
-  SearchTrie in 'SearchTrie.pas';
+  SearchTrie in 'SearchTrie.pas',
+  frmSettingsUnit in 'frmSettingsUnit.pas' {frmSettings};
 
 {$R *.res}
 {#BACKUP ListingAnalyst.cfg}
@@ -27,5 +28,6 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmMain, frmMain);
   Application.CreateForm(TfrmIndexFile, frmIndexFile);
+  Application.CreateForm(TfrmSettings, frmSettings);
   Application.Run;
 end.
