@@ -31806,7 +31806,15 @@ object TTaskHistory
       Date = 45187.000000000000000000
       Categories.Strings = (
         'MF-2015'
-        'GW_Chart'
-        'List File Analyzer')
+        'List File Analyzer'
+        'SFR MODFLOW-6')
+    end
+    item
+      Date = 45188.000000000000000000
+      Categories.Strings = (
+        'Dialog boxes'
+        'CFP'
+        'SFR MODFLOW-6'
+        'MF-2015')
     end>
 end

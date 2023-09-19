@@ -498,6 +498,7 @@ type
     procedure SetUseManningFraction(const Value: Boolean);
   public
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+    procedure Assign(Source: TPersistent); override;
     constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TSfr6CrossSectionPoint read GetItem write SetItem; default;
     function Add: TSfr6CrossSectionPoint;
@@ -3506,6 +3507,17 @@ var
   PriorDepthUsed: Boolean;
   PriorElevation: string;
   PriorDepth: string;
+  BankFraction: double;
+  XSecItem: TSfr6CrossSectionPoint;
+  Compiler: TRbwParser;
+  Formula: string;
+  ChannelRoughness: Double;
+  BankRoughness: Double;
+  X: Double;
+  MinZ: double;
+  XSecWidth: Double;
+  XSecIndex: Integer;
+  Z: Double;
 //  DiversionSeg: TSDiversionItem;
 begin
   if Source is TSfrMf6Boundary then
@@ -3582,12 +3594,13 @@ begin
     ParamItem := SourceSfrMf2005.ParamIcalc[0] as TSfrParamIcalcItem;
     ICALC := ParamItem.ICalc;
 
+    // ICALC = 2 -> 8-point channel.
     case ISFROPT of
       1:
         begin
           WidthUsed := ICALC  <= 1;
         end;
-      2,3, 4:
+      2, 3, 4:
         begin
           if ICALC <= 0 then
           begin
@@ -3651,7 +3664,6 @@ begin
       ReachWidth := '1';
     end;
 
-
     if DefineByReach then
     begin
       Gradient := SfrItem.StreamSlope;
@@ -3668,13 +3680,13 @@ begin
           + '))/'
           + ReachLength;
       end
-	  else
-	  begin
-        Gradient := '((' + UpstreamSegment.StreambedElevation
-          + ') - (' + DownstreamSegment.StreambedElevation
-          + '))/'
-          + StrObjectLength;
-	  end;
+      else
+      begin
+          Gradient := '((' + UpstreamSegment.StreambedElevation
+            + ') - (' + DownstreamSegment.StreambedElevation
+            + '))/'
+            + StrObjectLength;
+      end;
 
       if UpstreamSegment.StreambedThickness <> DownstreamSegment.StreambedThickness then
       begin
@@ -3942,6 +3954,76 @@ begin
 
       ChannelItem := SourceSfrMf2005.ChannelValues[ItemIndex];
       SfrMf6Item.Roughness := ChannelItem.ChannelRoughness;
+
+      if (ItemIndex = 0) and (ICALC = 2) then
+      begin
+        Compiler := frmGoPhast.PhastModel.GetCompiler(dso3D, eaBlocks);
+        try
+          CrossSection.UseCrossSection := True;
+          CrossSection.UseManningFraction := True;
+
+          Formula := ChannelItem.x[7];
+          Compiler.Compile(Formula);
+          ReachWidth := Formula;
+          XSecWidth := Compiler.CurrentExpression.DoubleResult;
+
+          Formula := ChannelItem.ChannelRoughness;
+          Compiler.Compile(Formula);
+          ChannelRoughness := Compiler.CurrentExpression.DoubleResult;
+
+          Formula := ChannelItem.BankRoughness;
+          Compiler.Compile(Formula);
+          BankRoughness := Compiler.CurrentExpression.DoubleResult;
+
+          BankFraction := BankRoughness/ChannelRoughness;
+
+          MinZ := 0.;
+          for XSecIndex := 0 to 7 do
+          begin
+            Formula := ChannelItem.X[XSecIndex];
+            Compiler.Compile(Formula);
+            X := Compiler.CurrentExpression.DoubleResult;
+
+            Formula := ChannelItem.Z[XSecIndex];
+            Compiler.Compile(Formula);
+            Z := Compiler.CurrentExpression.DoubleResult;
+            if XSecIndex = 0 then
+            begin
+              MinZ := Z
+            end
+            else if Z < MinZ then
+            begin
+              MinZ := Z
+            end;
+
+            XSecItem := CrossSection.Add;
+            XSecItem.XFraction := X/XSecWidth;
+            XSecItem.Height := Z;
+            case XSecIndex of
+              0,1,5,6,7:
+                begin
+                  XSecItem.ManningsFraction := BankFraction
+                end;
+              2,3,4:
+                begin
+                  XSecItem.ManningsFraction := 1
+                end;
+            end;
+          end;
+          if MinZ <> 0 then
+          begin
+            for XSecIndex := 0 to CrossSection.Count - 1 do
+            begin
+              XSecItem := CrossSection[XSecIndex];
+              XSecItem.Height := XSecItem.Height - MinZ;
+            end;
+          end;
+        except on ERbwParserError do
+          begin
+            CrossSection.UseCrossSection := False;
+          end;
+        end
+      end;
     end;
 
     Exit;
@@ -7187,6 +7269,20 @@ end;
 
 function TSfr6CrossSection.Add: TSfr6CrossSectionPoint;
 begin
+  result := inherited Add as TSfr6CrossSectionPoint;
+end;
+
+procedure TSfr6CrossSection.Assign(Source: TPersistent);
+var
+  XSec: TSfr6CrossSection;
+begin
+  if Source is TSfr6CrossSection then
+  begin
+    XSec := TSfr6CrossSection(Source);
+    UseCrossSection := XSec.UseCrossSection;
+    UseManningFraction := XSec.UseManningFraction;
+  end;
+  inherited;
 
 end;
 

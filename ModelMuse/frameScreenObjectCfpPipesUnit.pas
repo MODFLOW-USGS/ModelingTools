@@ -31,6 +31,8 @@ type
     btnElevation: TButton;
     cbRecordTimeSeriesPipes: TCheckBox;
     cbRecordTimeSeriesNodes: TCheckBox;
+    edCads: TLabeledEdit;
+    btnCads: TButton;
     procedure edDiameterChange(Sender: TObject);
     procedure edTortuosityChange(Sender: TObject);
     procedure edRoughnessHeightChange(Sender: TObject);
@@ -216,6 +218,10 @@ begin
         cbRecordNodes.Checked := ABoundary.RecordNodeValues;
         cbRecordTimeSeriesPipes.Checked := ABoundary.TimesSeriesPipes;
         cbRecordTimeSeriesNodes.Checked := ABoundary.TimesSeriesNodes;
+        if edCads.Enabled then
+        begin
+          edCads.Text := ABoundary.DrainableStorageWidth;
+        end;
       end;
       for ScreenObjectIndex := 1 to ListOfScreenObjects.Count - 1 do
       begin
@@ -270,7 +276,13 @@ begin
           cbRecordTimeSeriesNodes.AllowGrayed := True;
           cbRecordTimeSeriesNodes.State := cbGrayed;
         end;
+
+        if edCads.Enabled and (edCads.Text <> ABoundary.DrainableStorageWidth) then
+        begin
+          edCads.Text := ''
+        end;
       end;
+
     finally
       ListOfScreenObjects.Free;
     end;
@@ -310,6 +322,7 @@ begin
     and frmGoPhast.PhastModel.ModflowPackages.
     ConduitFlowProcess.UseCads;
   cbRecordTimeSeriesNodes.Enabled := cbRecordTimeSeriesPipes.Enabled;
+  edCads.Enabled := cbRecordTimeSeriesPipes.Enabled;
 end;
 
 procedure TframeScreenObjectCfpPipes.SetData(List: TScreenObjectEditCollection;
@@ -336,6 +349,10 @@ begin
     end
     else if SetAll or BoundaryUsed then
     begin
+      if edCads.Enabled and (edCads.Text <> '') then
+      begin
+        Boundary.DrainableStorageWidth := edCads.Text;
+      end;
       if Boundary = nil then
       begin
         ScreenObject.CreateCfpBoundary;

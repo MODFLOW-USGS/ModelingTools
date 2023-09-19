@@ -1557,8 +1557,8 @@ end;
 procedure TfrmModflowPackages.framePkgCFPcbPipesClick(Sender: TObject);
 begin
   inherited;
-  framePkgCFP.cbPipesClick(Sender);
   EnableConduitRecharge;
+  framePkgCFP.cbPipesClick(Sender);
 end;
 
 procedure TfrmModflowPackages.framePkgCFPrcSelectionControllerEnabledChange(

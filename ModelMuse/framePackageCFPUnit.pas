@@ -37,6 +37,7 @@ type
     lblOutputInterval: TLabel;
     cbCADS: TCheckBox;
     cbTimeSeriesAnalysis: TCheckBox;
+    cbCadsRecharge: TCheckBox;
     procedure cbPipesClick(Sender: TObject);
     procedure cbLayersClick(Sender: TObject);
     procedure comboElevationChoiceChange(Sender: TObject);
@@ -129,6 +130,7 @@ begin
   cbConduitRecharge.Checked := CfpPackage.ConduitRechargeUsed;
   seOutputInterval.AsInteger := CfpPackage.OutputInterval;
   cbCADS.Checked := CfpPackage.UseCads;
+  cbCadsRecharge.Checked := CfpPackage.UseCadsRecharge;
   cbTimeSeriesAnalysis.Checked := CfpPackage.RecordInputAndOutput;
 
   PipesUsed := cbPipes.Checked and rcSelectionController.Enabled;
@@ -186,6 +188,7 @@ begin
   CfpPackage.ConduitRechargeUsed := cbConduitRecharge.Checked;
   CfpPackage.OutputInterval := seOutputInterval.AsInteger;
   CfpPackage.UseCads := cbCADS.Checked;
+  CfpPackage.UseCadsRecharge := cbCadsRecharge.Checked;
   CfpPackage.RecordInputAndOutput := cbTimeSeriesAnalysis.Checked;
 end;
 
@@ -199,6 +202,9 @@ begin
   begin
     cbCADS.Enabled := False;
   end;
+  cbTimeSeriesAnalysis.Enabled := cbCADS.Enabled;
+  cbCadsRecharge.Enabled := cbCADS.Enabled and cbCADS.Checked
+    and cbConduitRecharge.Enabled and cbConduitRecharge.Checked;
 end;
 
 procedure TframePackageCFP.seOutputIntervalChange(Sender: TObject);

@@ -286,6 +286,7 @@ var
   DrainableStorageWidth: TDataArray;
   CfpDrainableStorageWidth: Double;
   CfpCollection: TCfpCollection;
+  Pipes: TCfpPipeBoundary;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyConduitsAt);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrCFPDiameterIsNot);
@@ -738,77 +739,74 @@ begin
     EvaluateConduitRecharge
   end;
 
-  if FConduitFlowProcess.ConduitRechargeUsed then
+  if (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads then
   begin
-    if (Model.ModelSelection = msModflowOwhm2) and FConduitFlowProcess.UseCads then
-    begin
-      DrainableStorageWidth := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
-      Assert(DrainableStorageWidth <> nil);
-      TRealSparseDataSetCrack(DrainableStorageWidth).Clear;
-    end
-    else
-    begin
-      DrainableStorageWidth := nil;
-    end;
+    DrainableStorageWidth := Model.DataArrayManager.GetDataSetByName(KDrainableStorageWidth);
+    Assert(DrainableStorageWidth <> nil);
+    TRealSparseDataSetCrack(DrainableStorageWidth).Clear;
+  end
+  else
+  begin
+    DrainableStorageWidth := nil;
+  end;
 
-    if DrainableStorageWidth <> nil then
-    begin
-      OtherData := nil;
-      CellList := TCellAssignmentList.Create;
-      try
-        for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+  if DrainableStorageWidth <> nil then
+  begin
+    OtherData := nil;
+    CellList := TCellAssignmentList.Create;
+    try
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if AScreenObject.Deleted
+          or not AScreenObject.UsedModels.UsesModel(Model)
+          or (AScreenObject.ModflowCfpPipes = nil) then
         begin
-          AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-          if AScreenObject.Deleted
-            or not AScreenObject.UsedModels.UsesModel(Model)
-            or (AScreenObject.ModflowCfpRchFraction = nil) then
-          begin
-            Continue;
-          end;
+          Continue;
+        end;
 
-          CrchRch := AScreenObject.ModflowCfpRchFraction;
-          if (CrchRch <> nil) and CrchRch.Used then
-          begin
-            AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
-          end;
+        Pipes := AScreenObject.ModflowCfpPipes;
+        if (Pipes <> nil) and Pipes.Used then
+        begin
+          AScreenObject.AssignValuesToDataSet(DrainableStorageWidth, Model, lctIgnore);
+        end;
 
-          CellList.Clear;
-          AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
+        CellList.Clear;
+        AScreenObject.GetCellsToAssign('0', OtherData, nil, CellList, alAll, Model);
 
-          if DrainableStorageWidth <> nil then
+        if DrainableStorageWidth <> nil then
+        begin
+          for CellIndex := 0 to CellList.Count - 1 do
           begin
-            for CellIndex := 0 to CellList.Count - 1 do
+            ACell1 := CellList[CellIndex];
+            if not DrainableStorageWidth.IsValue[ACell1.Layer, ACell1.Row, ACell1.Column] then
             begin
-              ACell1 := CellList[CellIndex];
-              if not DrainableStorageWidth.IsValue[ACell1.Layer, ACell1.Row, ACell1.Column] then
-              begin
-                frmErrorsAndWarnings.AddError(Model, StrCFPDrainableStorag,
-                  AScreenObject.Name, AScreenObject);
-                Break;
-              end;
-              CfpDrainableStorageWidth :=
-                DrainableStorageWidth.RealData[ACell1.Layer, ACell1.Row, ACell1.Column];
-              Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
-              if Node1 = nil then
-              begin
-                Node1 := TCfpNode.Create;
-                FNodes.Add(Node1);
-                Node1.FNumber := FNodes.Count;
-                FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column] := Node1;
-                Node1.FLayer := ACell1.Layer;
-                Node1.FRow := ACell1.Row;
-                Node1.FColumn := ACell1.Column;
-                Node1.FScreenObject := AScreenObject;
-              end;
-              Node1.CadWidth := CfpDrainableStorageWidth;
+              frmErrorsAndWarnings.AddError(Model, StrCFPDrainableStorag,
+                AScreenObject.Name, AScreenObject);
+              Break;
             end;
+            CfpDrainableStorageWidth :=
+              DrainableStorageWidth.RealData[ACell1.Layer, ACell1.Row, ACell1.Column];
+            Node1 := FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column];
+            if Node1 = nil then
+            begin
+              Node1 := TCfpNode.Create;
+              FNodes.Add(Node1);
+              Node1.FNumber := FNodes.Count;
+              FNodeGrid[ACell1.Layer, ACell1.Row, ACell1.Column] := Node1;
+              Node1.FLayer := ACell1.Layer;
+              Node1.FRow := ACell1.Row;
+              Node1.FColumn := ACell1.Column;
+              Node1.FScreenObject := AScreenObject;
+            end;
+            Node1.CadWidth := CfpDrainableStorageWidth;
           end;
         end;
-      finally
-        CellList.Free;
       end;
+    finally
+      CellList.Free;
     end;
-  end
+  end;
 end;
 
 procedure TModflowCfpWriter.EvaluateConduitRecharge;
@@ -2140,7 +2138,8 @@ begin
             WriteFloat(ANode.FRechargeFraction[StressPeriodIndex]);
             if (Model.ModelSelection = msModflowOwhm2) then
             begin
-              if FConduitFlowProcess.UseCads then
+              if FConduitFlowProcess.UseCads
+                and FConduitFlowProcess.UseCadsRecharge then
               begin
                 WriteFloat(ANode.FCadsRechargeFraction[StressPeriodIndex]);
               end;

@@ -10,7 +10,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     Top = 0
     Width = 561
     Height = 506
-    ActivePage = tabSegment
+    ActivePage = tabChannel
     Align = alClient
     TabOrder = 0
     object tabBasic: TTabSheet
@@ -668,7 +668,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Left = 11
           Top = 6
           Width = 57
-          Height = 25
+          Height = 23
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           Value = 1.000000000000000000
@@ -1883,7 +1883,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Exaggeration = 1.000000000000000000
         HorizontalDirection = hdRight
         Image32.Left = 0
-        Image32.Top = 68
+        Image32.Top = 0
         Image32.Width = 553
         Image32.Height = 109
         Image32.Anchors = [akLeft, akBottom]
@@ -1894,7 +1894,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Image32.Scale = 1.000000000000000000
         Image32.ScaleMode = smNormal
         Image32.TabOrder = 0
-        Image32.ExplicitTop = 0
         ImmediateResize = True
         Magnification = 1.000000000000000000
         VerticalDirection = vdUp
@@ -2131,12 +2130,11 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Height = 319
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 321
         object dgTableTime: TRbwDataGrid4
           Left = 1
           Top = 1
           Width = 216
-          Height = 319
+          Height = 317
           Align = alClient
           ColCount = 2
           FixedCols = 0
@@ -2246,7 +2244,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 108
+          Image32.Top = 0
           Image32.Width = 269
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2257,7 +2255,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
-          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp
@@ -2277,7 +2274,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 108
+          Image32.Top = 0
           Image32.Width = 270
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2288,7 +2285,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
-          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp
@@ -2307,20 +2303,20 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         TabStop = True
         ExplicitLeft = 226
         ExplicitWidth = 327
-        ExplicitHeight = 321
+        ExplicitHeight = 319
         inherited dgSfrTable: TRbwDataGrid4
           Width = 327
-          Height = 249
+          Height = 247
           OnSelectCell = dgSfrTableSelectCell
           OnSetEditText = frameFlowTable1dgSfrTableSetEditText
           OnButtonClick = frameFlowTable1dgSfrTableButtonClick
           ExplicitWidth = 327
-          ExplicitHeight = 249
+          ExplicitHeight = 247
         end
         inherited pnl1: TPanel
-          Top = 249
+          Top = 247
           Width = 327
-          ExplicitTop = 249
+          ExplicitTop = 247
           ExplicitWidth = 327
           inherited lblNumberOfPoints: TLabel
             Anchors = [akLeft, akTop, akBottom]
@@ -2672,17 +2668,17 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Left = 0
         Top = 145
         Width = 553
-        Height = 333
+        Height = 331
         Align = alClient
         Enabled = False
         TabOrder = 1
         ExplicitTop = 145
         ExplicitWidth = 553
-        ExplicitHeight = 333
+        ExplicitHeight = 331
         inherited Panel: TPanel
-          Top = 292
+          Top = 290
           Width = 553
-          ExplicitTop = 292
+          ExplicitTop = 290
           ExplicitWidth = 553
           inherited sbAdd: TSpeedButton
             Left = 288
@@ -2699,7 +2695,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         end
         inherited Grid: TRbwDataGrid4
           Width = 553
-          Height = 292
+          Height = 290
           Color = clBtnFace
           ColCount = 2
           Columns = <
@@ -2752,7 +2748,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 553
-          ExplicitHeight = 292
+          ExplicitHeight = 290
         end
       end
       object pnlFlowFile: TPanel
@@ -2799,7 +2795,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Left = 3
           Top = 111
           Width = 547
-          Height = 21
+          Height = 23
           DisabledColor = clBtnFace
           Filter = 'Text and .sfr_ff (*.txt;*.sfr_ff)|*.txt;*.tab|All Files|*.*'
           Enabled = False
@@ -2961,7 +2957,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             inherited Panel: TPanel
               Top = 248
               Width = 549
-              ExplicitTop = 252
+              ExplicitTop = 248
               ExplicitWidth = 549
             end
             inherited Grid: TRbwDataGrid4
@@ -2984,6 +2980,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             ExplicitHeight = 153
             inherited Panel: TPanel
               Width = 549
+              ExplicitTop = 118
               ExplicitWidth = 549
             end
             inherited Grid: TRbwDataGrid4

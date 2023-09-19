@@ -12,8 +12,6 @@ type
   TCfpRechargeFracColumns = (crcStartTime, crcEndTime, crcFrac, crcCADS);
 
   TframeScreenObjectCfpRechargeFraction = class(TframeScreenObjectNoParam)
-    edCads: TLabeledEdit;
-    btnCads: TButton;
     procedure edCadsChange(Sender: TObject);
     procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol, ARow: Integer;
         const Value: string);
@@ -111,10 +109,10 @@ begin
       begin
         ABoundary := ListOfScreenObjects[0].ModflowCfpRchFraction;
         FirstBoundary := ABoundary;
-        if edCads.Enabled then
-        begin
-          edCads.Text := ABoundary.DrainableStorageWidth;
-        end;
+//        if edCads.Enabled then
+//        begin
+//          edCads.Text := ABoundary.DrainableStorageWidth;
+//        end;
         seNumberOfTimes.AsInteger := ABoundary.Values.Count;
         for TimeIndex := 0 to ABoundary.Values.Count - 1 do
         begin
@@ -132,10 +130,10 @@ begin
       for ScreenObjectIndex := 1 to ListOfScreenObjects.Count - 1 do
       begin
         ABoundary := ListOfScreenObjects[ScreenObjectIndex].ModflowCfpRchFraction;
-        if edCads.Enabled and (edCads.Text <> ABoundary.DrainableStorageWidth) then
-        begin
-          edCads.Text := ''
-        end;
+//        if edCads.Enabled and (edCads.Text <> ABoundary.DrainableStorageWidth) then
+//        begin
+//          edCads.Text := ''
+//        end;
         if FGridCleared then
         begin
           Continue;
@@ -215,10 +213,10 @@ begin
       end;
       if Boundary <> nil then
       begin
-        if edCads.Enabled and (edCads.Text <> '') then
-        begin
-          Boundary.DrainableStorageWidth := edCads.Text;
-        end;
+//        if edCads.Enabled and (edCads.Text <> '') then
+//        begin
+//          Boundary.DrainableStorageWidth := edCads.Text;
+//        end;
       end;
       if not FGridCleared then
       begin

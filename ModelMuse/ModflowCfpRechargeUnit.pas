@@ -196,8 +196,8 @@ type
       AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
   published
-    property DrainableStorageWidth: string read GetDrainableStorageWidth
-      write SetDrainableStorageWidth;
+    property DrainableStorageWidthX: string read GetDrainableStorageWidth
+      write SetDrainableStorageWidth stored False;
   end;
 
 
@@ -205,7 +205,7 @@ implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit,
-  AbstractGridUnit, DataSetNamesUnit;
+  AbstractGridUnit, DataSetNamesUnit, ModflowPackageSelectionUnit;
 
 resourcestring
   StrCADSRechargeFracti = 'CADS Recharge Fraction';
@@ -573,6 +573,7 @@ var
   LayerIndex: Integer;
   ShouldRemove: Boolean;
   CadsRechargeRateData: TModflowTimeList;
+  ConduitFlowProcess: TConduitFlowProcess;
 begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -624,8 +625,9 @@ begin
     end;
   end;
 
+  ConduitFlowProcess := (AModel as TCustomModel).ModflowPackages.ConduitFlowProcess;
   if (PackageAssignmentMethod(AModel) = umAdd) and (Model.ModelSelection = msModflowOwhm2)
-    and (AModel as TCustomModel).ModflowPackages.ConduitFlowProcess.UseCads then
+    and ConduitFlowProcess.UseCads and ConduitFlowProcess.UseCadsRecharge then
   begin
     Grid := (AModel as TCustomModel).Grid;
     for DataArrayIndex := 0 to CadsRechargeRateData.Count - 1 do
@@ -861,7 +863,7 @@ begin
   if Source is TCfpRchFractionBoundary then
   begin
     SourceCfpRchFraction := TCfpRchFractionBoundary(Source);
-    DrainableStorageWidth := SourceCfpRchFraction.DrainableStorageWidth;
+    DrainableStorageWidthX := SourceCfpRchFraction.DrainableStorageWidthX;
   end;
   inherited;
 end;
@@ -937,7 +939,7 @@ begin
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;
-  DrainableStorageWidth := '1';
+  DrainableStorageWidthX := '1';
 end;
 
 procedure TCfpRchFractionBoundary.CreateFormulaObjects;
@@ -955,14 +957,14 @@ end;
 
 destructor TCfpRchFractionBoundary.Destroy;
 begin
-  DrainableStorageWidth := '0';
+  DrainableStorageWidthX := '0';
   inherited;
 end;
 
 function TCfpRchFractionBoundary.GetBoundaryFormula(Index: Integer): string;
 begin
   case Index of
-    DrainableStorageWidthPosition: result := DrainableStorageWidth;
+    DrainableStorageWidthPosition: result := DrainableStorageWidthX;
     else Assert(False);
   end;
 end;
@@ -1050,7 +1052,7 @@ procedure TCfpRchFractionBoundary.SetBoundaryFormula(Index: Integer;
 begin
   case Index of
     DrainableStorageWidthPosition:
-      DrainableStorageWidth := Value;
+      DrainableStorageWidthX := Value;
     else Assert(False);
   end;
 end;

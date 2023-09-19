@@ -108,9 +108,7 @@ type
     property RecordPipeValues: boolean read FRecordPipeValues
       write SetRecordPipeValues;
     property DrainableStorageWidth: string read GetDrainableStorageWidth
-      write SetDrainableStorageWidth
-      stored False
-      ;
+      write SetDrainableStorageWidth;
     property TimesSeriesPipes: Boolean read FTimesSeriesPipes
       write SetTimesSeriesPipes;
     property TimesSeriesNodes: Boolean read FTimesSeriesNodes

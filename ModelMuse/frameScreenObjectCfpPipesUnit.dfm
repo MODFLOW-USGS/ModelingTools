@@ -184,6 +184,27 @@ inherited frameScreenObjectCfpPipes: TframeScreenObjectCfpPipes
         Caption = 'Edit F()...'
         TabOrder = 13
       end
+      object edCads: TLabeledEdit
+        Left = 3
+        Top = 372
+        Width = 438
+        Height = 23
+        Anchors = [akLeft, akTop, akRight]
+        EditLabel.Width = 291
+        EditLabel.Height = 15
+        EditLabel.Caption = 'Conduit-Associated Drainable Storage width (W_CADS)'
+        TabOrder = 14
+        Text = ''
+      end
+      object btnCads: TButton
+        Left = 447
+        Top = 363
+        Width = 82
+        Height = 30
+        Anchors = [akTop, akRight]
+        Caption = 'Edit F()...'
+        TabOrder = 15
+      end
     end
     object tabOutput: TTabSheet
       Caption = 'Output'

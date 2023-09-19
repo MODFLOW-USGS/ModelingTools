@@ -31,28 +31,6 @@ inherited frameScreenObjectCfpRechargeFraction: TframeScreenObjectCfpRechargeFra
       ExplicitLeft = 357
       ExplicitTop = 57
     end
-    object edCads: TLabeledEdit
-      Left = 9
-      Top = 28
-      Width = 426
-      Height = 23
-      Anchors = [akLeft, akTop, akRight]
-      EditLabel.Width = 291
-      EditLabel.Height = 15
-      EditLabel.Caption = 'Conduit-Associated Drainable Storage width (W_CADS)'
-      TabOrder = 3
-      Text = ''
-      OnChange = edCadsChange
-    end
-    object btnCads: TButton
-      Left = 441
-      Top = 19
-      Width = 82
-      Height = 30
-      Anchors = [akTop, akRight]
-      Caption = 'Edit F()...'
-      TabOrder = 4
-    end
   end
   inherited pnlTop: TPanel
     Width = 529

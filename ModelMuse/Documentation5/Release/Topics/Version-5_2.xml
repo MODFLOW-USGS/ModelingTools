@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-09-14T11:32:51.962-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-09-19T17:15:09.500-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.2</title>
   <body>
     <header>
@@ -35,6 +35,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved conversion of SFR package from MODFLOW-2005 to MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to import multiple Surfer grid files simultaneously.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved conversion of SFR package when switching to MODFLOW 6 from earlier versions of MODFLOW.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for SFR cross sections in MODFLOW 6.</text></para>
               </td>
             </tr>
           </table></para>

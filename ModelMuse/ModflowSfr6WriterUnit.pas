@@ -81,7 +81,8 @@ type
     procedure WriteDimensions;
     procedure WritePackageData;
     procedure WriteCrossSections;
-    procedure WriteACrossSection(CrossSection: TSfr6CrossSection; const FileName: string);
+    procedure WriteACrossSection(CrossSection: TSfr6CrossSection;
+      const FileName: string; ScreenObject: TScreenObject);
     procedure WriteConnections;
     procedure WriteDiversions;
     procedure WriteStressPeriods;
@@ -206,6 +207,9 @@ resourcestring
   'ntersect any active cells.';
   StrStartingConcentratio = 'StartingConcentration_%s';
   StrDivideByZeroInSF = 'Divide by zero in SFR package';
+  StrInvalidMinimumCros = 'Invalid minimum cross section height';
+  StrTheMinimumHeightI = 'The minimum height in any SFR cross section must b' +
+  'e zero. This isn''t true in %s.';
 
 { TModflowSFR_MF6_Writer }
 
@@ -874,6 +878,8 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheRoughnessIsLes);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorAssigningDive);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheStreambedMinusThe);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidMinimumCros);
+
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
   EndTime := Model.ModflowFullStressPeriods.Last.Endtime;
@@ -1461,7 +1467,7 @@ begin
 
   {$IFDEF SfrCrossSection}
     frmProgressMM.AddMessage('Writing SFR Package Cross Sections');
-    WriteCrossSections
+    WriteCrossSections;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin
@@ -1697,20 +1703,21 @@ begin
 end;
 
 procedure TModflowSFR_MF6_Writer.WriteACrossSection(
-  CrossSection: TSfr6CrossSection; const FileName: string);
+  CrossSection: TSfr6CrossSection; const FileName: string; ScreenObject: TScreenObject);
 var
   Index: Integer;
   AnItem: TSfr6CrossSectionPoint;
+  MinHeight: Double;
 begin
   OpenTempFile(FileName);
 
   WriteBeginDimensions;
   try
-    WriteString('  NROW';
+    WriteString('  NROW');
     WriteInteger(CrossSection.Count);
     NewLine;
 
-    WriteString('  NCOL';
+    WriteString('  NCOL');
     if CrossSection.UseManningFraction then
     begin
       WriteInteger(3);
@@ -1724,22 +1731,39 @@ begin
     WriteEndDimensions;
   end;
 
-  WriteString('BEGIN TABLE')
+  WriteString('BEGIN TABLE');
   NewLine;
   try
+    MinHeight := 0;
     for Index := 0 to CrossSection.Count - 1 do
     begin
       AnItem := CrossSection[Index];
       WriteFloat(AnItem.XFraction);
       WriteFloat(AnItem.Height);
+      if Index = 0  then
+      begin
+        MinHeight := AnItem.Height;
+      end
+      else
+      begin
+        if AnItem.Height < MinHeight then
+        begin
+          MinHeight := AnItem.Height;
+        end;
+      end;
       if CrossSection.UseManningFraction then
       begin
         WriteFloat(AnItem.ManningsFraction);
       end;
       NewLine;
     end;
+    if MinHeight <> 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrInvalidMinimumCros,
+        Format(StrTheMinimumHeightI, [ScreenObject.Name]), ScreenObject);
+    end;
   finally
-    WriteString('END TABLE')
+    WriteString('END TABLE');
     NewLine;
   end;
 
@@ -1803,6 +1827,8 @@ var
   CrossSectionDictionary: TDictionary<TSfr6CrossSection, string>;
   AFileName: string;
   FileIndex: Integer;
+  ACellList: TValueCellList;
+  ACell: TSfrMf6_Cell;
 begin
   FileIndex := 1;
   CrossSectionDictionary := TDictionary<TSfr6CrossSection, string>.Create;
@@ -1833,9 +1859,10 @@ begin
           if not CrossSectionDictionary.TryGetValue(Sfr6Boundary.CrossSection, AFileName) then
           begin
             AFileName := ChangeFileExt(FInputFileName, Format('.xsec%d', [FileIndex]));
-            WriteACrossSection(Sfr6Boundary.CrossSection, AFileName);
+            WriteACrossSection(Sfr6Boundary.CrossSection, AFileName, ScreenObject);
             Model.AddModelInputFile(AFileName);
             CrossSectionDictionary.Add(Sfr6Boundary.CrossSection, AFileName);
+            Inc(FileIndex);
           end;
           WriteInteger(ReachNumber);
           WriteString(' TAB6 FILEIN ');
@@ -1848,9 +1875,10 @@ begin
     begin
       WriteString('END CROSSSECTIONS');
       NewLine;
+      NewLine;
     end;
   finally
-     CrossSectionDictionar.Free;
+     CrossSectionDictionary.Free;
   end;
 end;
 

@@ -377,7 +377,6 @@ begin
     end;
     CreateObserver('HFB_AdjustmentMethod_', FAdjustmentMethodObserver,
       Observer);
-//    FObserverList.Add(FAdjustmentMethodObserver);
   end;
   result := FAdjustmentMethodObserver;
 end;

@@ -8986,6 +8986,38 @@ begin
         AnEdit.ScreenObject.RemoveDataSet(PipeElevation);
       end;
     end;
+
+    DataSetIndex := self.GetDataSetIndexByName(KDrainableStorageWidth);
+    if DataSetIndex >= 0 then
+    begin
+      CfpEdit := FDataEdits[DataSetIndex];
+      DrainableStorageWidth := CfpEdit.DataArray;
+
+      for CfpRchIndex := 0 to FNewProperties.Count - 1 do
+      begin
+        AnEdit := FNewProperties[CfpRchIndex];
+//        CfpRch := AnEdit.ScreenObject.ModflowCfpRchFraction;
+        Pipes := AnEdit.ScreenObject.ModflowCfpPipes;
+        if (Pipes <> nil) and Pipes.Used then
+        begin
+          if frameCfpPipes.edCads.Enabled then
+          begin
+            DataSetIndex := AnEdit.ScreenObject.AddDataSet(DrainableStorageWidth);
+            AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
+              Pipes.DrainableStorageWidth;
+          end
+          else
+          begin
+            AnEdit.ScreenObject.RemoveDataSet(DrainableStorageWidth);
+          end;
+        end
+        else
+        begin
+          AnEdit.ScreenObject.RemoveDataSet(DrainableStorageWidth);
+        end;
+      end
+    end;
+
   end;
 
   if (FCfpFixedHead_Node <> nil) then
@@ -9150,32 +9182,6 @@ begin
       (FCRCH_Node.StateIndex = 2),
       (FCRCH_Node.StateIndex = 1)
         and frmGoPhast.PhastModel.CfpRechargeIsSelected(nil));
-
-    DataSetIndex := self.GetDataSetIndexByName(KDrainableStorageWidth);
-    if DataSetIndex >= 0 then
-    begin
-      CfpEdit := FDataEdits[DataSetIndex];
-      DrainableStorageWidth := CfpEdit.DataArray;
-
-      for CfpRchIndex := 0 to FNewProperties.Count - 1 do
-      begin
-        AnEdit := FNewProperties[CfpRchIndex];
-        CfpRch := AnEdit.ScreenObject.ModflowCfpRchFraction;
-        if (CfpRch <> nil) and CfpRch.Used then
-        begin
-          if frameCfpRechargeFraction1.edCads.Enabled then
-          begin
-            DataSetIndex := AnEdit.ScreenObject.AddDataSet(DrainableStorageWidth);
-            AnEdit.ScreenObject.DataSetFormulas[DataSetIndex] :=
-              CfpRch.DrainableStorageWidth;
-          end
-        end
-        else
-        begin
-          AnEdit.ScreenObject.RemoveDataSet(DrainableStorageWidth);
-        end;
-      end
-    end;
   end;
 
   if FSubPestObs_Node <> nil then
@@ -24660,9 +24666,9 @@ begin
     ed := frameCfpPipes.edElevation;
   end
 
-  else if Sender = frameCfpRechargeFraction1.btnCads then
+  else if Sender = frameCfpPipes.btnCads then
   begin
-    ed := frameCfpRechargeFraction1.edCads;
+    ed := frameCfpPipes.edCads;
   end
 
   else if Sender = frameCfpFixedHeads.btnFixedHead then
@@ -24903,7 +24909,7 @@ begin
         end;
       end;
     end
-    else if Sender = frameCfpRechargeFraction1.btnCads then
+    else if Sender = frameCfpPipes.btnCads then
     begin
       for ScreenObjectIndex := 0 to FScreenObjectList.Count - 1 do
       begin
@@ -25072,7 +25078,7 @@ begin
     or (ed = frameCfpPipes.edHigherCriticalR)
     or (ed = frameCfpPipes.edConductancePermeability)
     or (ed = frameCfpPipes.edElevation)
-    or (ed = frameCfpRechargeFraction1.edCads)
+    or (ed = frameCfpPipes.edCads)
     or (ed = frameCfpFixedHeads.edFixedHead)
     or (ed = frameSwrReach.edReachLength)
     then
@@ -25292,7 +25298,7 @@ begin
     or (ed = frameCfpPipes.edHigherCriticalR)
     or (ed = frameCfpPipes.edConductancePermeability)
     or (ed = frameCfpPipes.edElevation)
-    or (ed = frameCfpRechargeFraction1.edCads)
+    or (ed = frameCfpPipes.edCads)
     or (ed = frameCfpFixedHeads.edFixedHead)
     or (ed = frameSwrReach.edReachLength)
     or (ed = frameScreenObjectFootprintWell.edPumpingRate)
