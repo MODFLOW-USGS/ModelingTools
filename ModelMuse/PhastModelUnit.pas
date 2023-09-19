@@ -10046,6 +10046,7 @@ const
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for SUTRA version 4.
+//               Enhancement: Added support for SFR cross sections in MODFLOW 6.
 
 const
   // version number of ModelMuse.
