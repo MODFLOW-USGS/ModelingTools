@@ -233,6 +233,7 @@ type
     function ItemByStartTime(ATime: double): TCustomBoundaryItem;
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean);
+    function GetItemByStartTime(StartTime: Double): TCustomBoundaryItem;
   end;
 
   TCustomMF_BoundColl = class;
@@ -1084,6 +1085,7 @@ type
     function DataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean; virtual;
     // If @link(Used) is overriden @name will probably have to be overriden too.
     procedure Clear; virtual;
+    class function BFCount: Integer; virtual;
   published
     // @name stores the MODFLOW boundaries that are NOT
     // associated with parameters.
@@ -2330,6 +2332,11 @@ begin
   end;
 end;
 
+class function TModflowBoundary.BFCount: Integer;
+begin
+  result := 0;
+end;
+
 function TModflowBoundary.BoundaryObserverPrefix: string;
 begin
   result := '';
@@ -2603,6 +2610,31 @@ function TCustomNonSpatialBoundColl.GetItem(
   Index: Integer): TCustomBoundaryItem;
 begin
   result := inherited Items[Index] as TCustomBoundaryItem
+end;
+
+function TCustomNonSpatialBoundColl.GetItemByStartTime(
+  StartTime: Double): TCustomBoundaryItem;
+var
+  ItemIndex: Integer;
+  AnItem: TCustomBoundaryItem;
+begin
+  result := nil;
+  if Count > 0 then
+  begin
+    AnItem := Last as TCustomBoundaryItem;
+    if AnItem.StartTime >= StartTime then
+    begin
+      for ItemIndex := 0 to Count - 1 do
+      begin
+        AnItem := Items[ItemIndex] as TCustomBoundaryItem;
+        if AnItem.StartTime >= StartTime then
+        begin
+          result := AnItem;
+          break;
+        end;
+      end;
+    end;
+  end;
 end;
 
 function TCustomNonSpatialBoundColl.ItemByStartTime(

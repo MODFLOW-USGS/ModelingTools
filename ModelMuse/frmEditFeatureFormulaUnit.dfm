@@ -3,43 +3,44 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   HelpKeyword = 'Edit_Feature_Formula_Dialog_Bo'
   Caption = 'Edit Feature Formula'
   ClientHeight = 496
-  ClientWidth = 589
-  ExplicitWidth = 605
-  ExplicitHeight = 535
+  ClientWidth = 610
+  ExplicitWidth = 622
+  ExplicitHeight = 534
   TextHeight = 18
   object spl1: TSplitter
-    Left = 244
+    Left = 301
     Top = 0
     Width = 8
-    Height = 462
-    Align = alRight
+    Height = 408
     ExplicitLeft = 0
     ExplicitHeight = 601
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 462
-    Width = 589
-    Height = 34
+    Top = 408
+    Width = 610
+    Height = 88
     Align = alBottom
-    TabOrder = 2
+    TabOrder = 1
+    ExplicitTop = 407
+    ExplicitWidth = 606
     DesignSize = (
-      589
-      34)
+      610
+      88)
     object btnCancel: TBitBtn
-      Left = 481
-      Top = 2
+      Left = 522
+      Top = 42
       Width = 83
       Height = 27
       Anchors = [akTop, akRight]
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 485
+      ExplicitLeft = 518
     end
     object btnOK: TBitBtn
-      Left = 393
-      Top = 2
+      Left = 434
+      Top = 42
       Width = 82
       Height = 27
       Anchors = [akTop, akRight]
@@ -66,11 +67,11 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 397
+      ExplicitLeft = 430
     end
     object btnHelp: TBitBtn
-      Left = 305
-      Top = 2
+      Left = 346
+      Top = 42
       Width = 82
       Height = 27
       Anchors = [akTop, akRight]
@@ -78,102 +79,27 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 309
     end
-  end
-  object pnlTop: TPanel
-    Left = 252
-    Top = 0
-    Width = 337
-    Height = 462
-    Align = alRight
-    TabOrder = 1
-    object memoFormula: TMemo
-      Left = 1
-      Top = 162
-      Width = 335
-      Height = 300
-      Align = alClient
-      TabOrder = 1
-      OnChange = memoFormulaChange
-      ExplicitHeight = 299
-    end
-    object pnlControls: TPanel
-      Left = 1
-      Top = 1
-      Width = 335
-      Height = 161
-      Align = alTop
-      BevelOuter = bvNone
-      TabOrder = 0
-      object lblTotalObjects: TLabel
-        Left = 14
-        Top = 106
-        Width = 116
-        Height = 18
-        Caption = 'Selected objects'
-      end
-      object lblStartingTime: TLabel
-        Left = 188
-        Top = 45
-        Width = 88
-        Height = 18
-        Caption = 'Starting time'
-      end
-      object lblEndingTime: TLabel
-        Left = 188
-        Top = 77
-        Width = 83
-        Height = 18
-        Caption = 'Ending time'
-      end
-      object btnEditFormula: TButton
-        Left = 5
-        Top = 130
-        Width = 99
-        Height = 25
-        Caption = 'Edit formula'
-        TabOrder = 3
-        OnClick = btnEditFormulaClick
-      end
-      object comboEndingTime: TComboBox
-        Left = 14
-        Top = 74
-        Width = 168
-        Height = 26
-        Enabled = False
-        TabOrder = 2
-      end
-      object comboStartingTime: TComboBox
-        Left = 14
-        Top = 42
-        Width = 168
-        Height = 26
-        Enabled = False
-        TabOrder = 1
-      end
-      object comboAllTimes: TComboBox
-        Left = 14
-        Top = 10
-        Width = 168
-        Height = 26
-        Style = csDropDownList
-        ItemIndex = 0
-        TabOrder = 0
-        Text = 'Use all times'
-        OnChange = comboAllTimesChange
-        Items.Strings = (
-          'Use all times'
-          'Use selected times')
-      end
+    object rgChoice: TRadioGroup
+      Left = 16
+      Top = 6
+      Width = 313
+      Height = 75
+      Caption = 'Edit choice'
+      ItemIndex = 0
+      Items.Strings = (
+        'Apply the same formula to all objects'
+        'Apply a separate formula to each object.')
+      TabOrder = 3
+      OnClick = rgChoiceClick
     end
   end
   object tvFeatures: TTreeView
     Left = 0
     Top = 0
-    Width = 244
-    Height = 462
-    Align = alClient
+    Width = 301
+    Height = 408
+    Align = alLeft
     HideSelection = False
     Indent = 19
     ParentShowHint = False
@@ -181,5 +107,220 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     TabOrder = 0
     OnChange = tvFeaturesChange
     OnHint = tvFeaturesHint
+    ExplicitWidth = 297
+    ExplicitHeight = 407
+  end
+  object jvplEdit: TJvPageList
+    Left = 309
+    Top = 0
+    Width = 301
+    Height = 408
+    ActivePage = JvStandardPage2
+    PropagateEnable = False
+    Align = alClient
+    ExplicitLeft = 305
+    ExplicitHeight = 407
+    object JvStandardPage1: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 301
+      Height = 408
+      Caption = 'JvStandardPage1'
+      object pnlTop: TPanel
+        Left = 0
+        Top = 0
+        Width = 301
+        Height = 408
+        Align = alClient
+        TabOrder = 0
+        object memoFormula: TMemo
+          Left = 1
+          Top = 162
+          Width = 299
+          Height = 245
+          Align = alClient
+          TabOrder = 1
+          OnChange = memoFormulaChange
+        end
+        object pnlControls: TPanel
+          Left = 1
+          Top = 1
+          Width = 299
+          Height = 161
+          Align = alTop
+          BevelOuter = bvNone
+          TabOrder = 0
+          object lblTotalObjects: TLabel
+            Left = 14
+            Top = 106
+            Width = 116
+            Height = 18
+            Caption = 'Selected objects'
+          end
+          object lblStartingTime: TLabel
+            Left = 188
+            Top = 45
+            Width = 88
+            Height = 18
+            Caption = 'Starting time'
+          end
+          object lblEndingTime: TLabel
+            Left = 188
+            Top = 77
+            Width = 83
+            Height = 18
+            Caption = 'Ending time'
+          end
+          object btnEditFormula: TButton
+            Left = 5
+            Top = 130
+            Width = 99
+            Height = 25
+            Caption = 'Edit formula'
+            TabOrder = 3
+            OnClick = btnEditFormulaClick
+          end
+          object comboEndingTime: TComboBox
+            Left = 14
+            Top = 74
+            Width = 168
+            Height = 26
+            Enabled = False
+            TabOrder = 2
+          end
+          object comboStartingTime: TComboBox
+            Left = 14
+            Top = 42
+            Width = 168
+            Height = 26
+            Enabled = False
+            TabOrder = 1
+          end
+          object comboAllTimes: TComboBox
+            Left = 14
+            Top = 10
+            Width = 168
+            Height = 26
+            Style = csDropDownList
+            ItemIndex = 0
+            TabOrder = 0
+            Text = 'Use all times'
+            OnChange = comboAllTimesChange
+            Items.Strings = (
+              'Use all times'
+              'Use selected times')
+          end
+        end
+      end
+    end
+    object JvStandardPage2: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 301
+      Height = 408
+      Caption = 'JvStandardPage2'
+      ExplicitHeight = 407
+      inline frameObjectProperties: TframeGrid
+        Left = 0
+        Top = 0
+        Width = 301
+        Height = 408
+        Align = alClient
+        TabOrder = 0
+        ExplicitHeight = 407
+        inherited Panel: TPanel
+          Top = 367
+          ExplicitTop = 366
+          inherited lbNumber: TLabel
+            Width = 55
+            Height = 18
+            ExplicitWidth = 55
+            ExplicitHeight = 18
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 26
+            ExplicitHeight = 26
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Height = 367
+          ColCount = 3
+          Columns = <
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
+          ExplicitHeight = 366
+        end
+      end
+    end
   end
 end

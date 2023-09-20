@@ -428,6 +428,7 @@ type
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
     procedure CreateGwtTimeLists(AModel: TBaseModel);
+    class function BFCount: Integer; override;
   published
     property RechargeLayers: TRchLayerCollection read FRechargeLayers
       write SetRechargeLayers;
@@ -1562,6 +1563,15 @@ begin
     end;
   end;
   LocalBoundaryStorage.CacheData;
+end;
+
+class function TRchBoundary.BFCount: Integer;
+begin
+  result := 1;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count;
+  end;
 end;
 
 class function TRchBoundary.BoundaryCollectionClass: TMF_BoundCollClass;

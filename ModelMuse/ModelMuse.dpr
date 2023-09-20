@@ -879,7 +879,8 @@ uses
   frameScreenObjectCfpRechargeFractionUnit in 'frameScreenObjectCfpRechargeFractionUnit.pas' {frameScreenObjectCfpRechargeFraction: TFrame},
   Mt3dmsChemSpeciesInterfaceUnit in 'Mt3dmsChemSpeciesInterfaceUnit.pas',
   framePackageViscosityUnit in 'framePackageViscosityUnit.pas' {framePackageViscosity: TFrame},
-  ModflowViscosityWriterUnit in 'ModflowViscosityWriterUnit.pas';
+  ModflowViscosityWriterUnit in 'ModflowViscosityWriterUnit.pas',
+  ModflowTvkUnit in 'ModflowTvkUnit.pas';
 
 {$R *.res}
 

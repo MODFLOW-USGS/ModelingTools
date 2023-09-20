@@ -2,23 +2,22 @@ inherited frmLinkRaster: TfrmLinkRaster
   Caption = 'Links to Rasters'
   ClientWidth = 583
   ExplicitWidth = 595
-  ExplicitHeight = 272
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 184
+    Top = 173
     Width = 583
     Height = 50
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 183
+    ExplicitTop = 172
     ExplicitWidth = 579
     DesignSize = (
       583
       50)
     object btnCancel: TBitBtn
-      Left = 469
+      Left = 465
       Top = 7
       Width = 91
       Height = 33
@@ -26,10 +25,10 @@ inherited frmLinkRaster: TfrmLinkRaster
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 465
+      ExplicitLeft = 461
     end
     object btnOK: TBitBtn
-      Left = 372
+      Left = 368
       Top = 6
       Width = 91
       Height = 33
@@ -38,10 +37,10 @@ inherited frmLinkRaster: TfrmLinkRaster
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnOKClick
-      ExplicitLeft = 368
+      ExplicitLeft = 364
     end
     object btnHelp: TBitBtn
-      Left = 275
+      Left = 271
       Top = 7
       Width = 91
       Height = 33
@@ -49,23 +48,23 @@ inherited frmLinkRaster: TfrmLinkRaster
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 271
+      ExplicitLeft = 267
     end
   end
   inline frameRasters: TframeGrid
     Left = 0
     Top = 0
     Width = 583
-    Height = 184
+    Height = 173
     Align = alClient
     AutoScroll = True
     TabOrder = 0
     ExplicitWidth = 579
-    ExplicitHeight = 183
+    ExplicitHeight = 172
     inherited Panel: TPanel
-      Top = 143
+      Top = 132
       Width = 583
-      ExplicitTop = 142
+      ExplicitTop = 131
       ExplicitWidth = 579
       inherited lbNumber: TLabel
         Width = 55
@@ -74,15 +73,15 @@ inherited frmLinkRaster: TfrmLinkRaster
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 303
+        Left = 301
         ExplicitLeft = 305
       end
       inherited sbInsert: TSpeedButton
-        Left = 359
+        Left = 357
         ExplicitLeft = 361
       end
       inherited sbDelete: TSpeedButton
-        Left = 414
+        Left = 411
         ExplicitLeft = 417
       end
       inherited seNumber: TJvSpinEdit
@@ -92,7 +91,7 @@ inherited frmLinkRaster: TfrmLinkRaster
     end
     inherited Grid: TRbwDataGrid4
       Width = 583
-      Height = 143
+      Height = 132
       ColCount = 3
       OnBeforeDrawCell = frameRastersGridBeforeDrawCell
       OnButtonClick = frameRastersGridButtonClick
@@ -173,7 +172,7 @@ inherited frmLinkRaster: TfrmLinkRaster
           AutoAdjustColWidths = True
         end>
       ExplicitWidth = 579
-      ExplicitHeight = 142
+      ExplicitHeight = 131
       ColWidths = (
         64
         64

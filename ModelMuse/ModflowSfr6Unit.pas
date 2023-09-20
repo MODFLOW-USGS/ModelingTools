@@ -256,7 +256,7 @@ type
     FDensity: TModflowTimeList;
     FViscosity: TModflowTimeList;
     // GWT
-    FGwtStatusList: TModflowTimeLists;
+//    FGwtStatusList: TModflowTimeLists;
     FSpecifiedConcList: TModflowTimeLists;
     FRainfallConcList: TModflowTimeLists;
     FEvapConcList: TModflowTimeLists;
@@ -7026,7 +7026,7 @@ begin
   AddTimeList(FStreamStatus);
   AddTimeList(FReachNumber);
 
-  FGwtStatusList := TModflowTimeLists.Create;
+//  FGwtStatusList := TModflowTimeLists.Create;
   FSpecifiedConcList := TModflowTimeLists.Create;
   FRainfallConcList := TModflowTimeLists.Create;
   FEvapConcList := TModflowTimeLists.Create;
@@ -7045,7 +7045,7 @@ end;
 
 destructor TSfrMf6TimeListLink.Destroy;
 begin
-  FGwtStatusList.Free;
+//  FGwtStatusList.Free;
   FSpecifiedConcList.Free;
   FRainfallConcList.Free;
   FEvapConcList.Free;
@@ -7089,17 +7089,17 @@ var
   PhastModel: TPhastModel;
 begin
   PhastModel := frmGoPhast.PhastModel;
-  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-  ConcTimeList.NonParamDescription :=
-    PhastModel.MobileComponents[SpeciesIndex].Name + StrSFTStatus;
-  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
-  if Model <> nil then
-  begin
-    LocalModel := Model as TCustomModel;
-    ConcTimeList.OnInvalidate := LocalModel.InvalidateSfr6GwtConc;
-  end;
-  AddTimeList(ConcTimeList);
-  FGwtStatusList.Add(ConcTimeList);
+//  ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+//  ConcTimeList.NonParamDescription :=
+//    PhastModel.MobileComponents[SpeciesIndex].Name + StrSFTStatus;
+//  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+//  if Model <> nil then
+//  begin
+//    LocalModel := Model as TCustomModel;
+//    ConcTimeList.OnInvalidate := LocalModel.InvalidateSfr6GwtConc;
+//  end;
+//  AddTimeList(ConcTimeList);
+//  FGwtStatusList.Add(ConcTimeList);
   ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   ConcTimeList.NonParamDescription :=
     PhastModel.MobileComponents[SpeciesIndex].Name + StrSFTSpecifiedConce;

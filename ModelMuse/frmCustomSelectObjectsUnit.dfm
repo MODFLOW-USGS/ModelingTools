@@ -2,8 +2,8 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
   Caption = 'frmCustomSelectObjects'
   ClientHeight = 409
   ClientWidth = 406
-  ExplicitWidth = 422
-  ExplicitHeight = 448
+  ExplicitWidth = 418
+  ExplicitHeight = 447
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -13,11 +13,12 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitWidth = 412
     DesignSize = (
       406
       41)
     object btnClose: TBitBtn
-      Left = 254
+      Left = 248
       Top = 4
       Width = 89
       Height = 33
@@ -28,7 +29,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       ExplicitLeft = 258
     end
     object btnHelp: TBitBtn
-      Left = 161
+      Left = 155
       Top = 4
       Width = 89
       Height = 33

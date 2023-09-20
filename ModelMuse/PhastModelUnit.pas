@@ -2842,6 +2842,10 @@ that affects the model output should also have a comment. }
     procedure InvalidateCncConcentration(Sender: TObject);
     procedure InvalidateMassSrc(Sender: TObject);
 
+    procedure InvalidateTransientKx(Sender: TObject);
+    procedure InvalidateTransientKy(Sender: TObject);
+    procedure InvalidateTransientKz(Sender: TObject);
+
     property NameFileWriter: TObject read FNameFileWriter write SetNameFileWriter;
     property SimNameWriter: IMf6_SimNameFileWriter read FSimNameWriter write FSimNameWriter;
     function ModflowLayerCount: integer; virtual;
@@ -28903,6 +28907,21 @@ end;
 procedure TCustomModel.InvalidateSwiObs(Sender: TObject);
 begin
   { TODO -cSWI Obs : This needs to be finished }
+end;
+
+procedure TCustomModel.InvalidateTransientKx(Sender: TObject);
+begin
+  Assert(False);
+end;
+
+procedure TCustomModel.InvalidateTransientKy(Sender: TObject);
+begin
+  Assert(False);
+end;
+
+procedure TCustomModel.InvalidateTransientKz(Sender: TObject);
+begin
+  Assert(False);
 end;
 
 procedure TCustomModel.InvalidateUzfGwtConc(Sender: TObject);

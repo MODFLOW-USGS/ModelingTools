@@ -9,7 +9,7 @@ uses
   Vcl.Buttons, Vcl.ExtCtrls, ScreenObjectUnit, System.Generics.Collections,
   ModflowEvtUnit, ModflowRchUnit, ModflowBoundaryUnit, ModflowEtsUnit,
   ModflowSfrUnit, ModflowUzfUnit, UndoItemsScreenObjects, Vcl.ComCtrls,
-  SutraBoundaryUnit;
+  SutraBoundaryUnit, JvPageList, JvExControls, frameGridUnit;
 
 type
   TMfFeatureType = (ftCHD, ftFhbHead, ftFhbFlow, ftRCH, ftWEL, ftDRN, ftDRT,
@@ -72,6 +72,11 @@ type
     comboAllTimes: TComboBox;
     lblStartingTime: TLabel;
     lblEndingTime: TLabel;
+    rgChoice: TRadioGroup;
+    jvplEdit: TJvPageList;
+    JvStandardPage1: TJvStandardPage;
+    JvStandardPage2: TJvStandardPage;
+    frameObjectProperties: TframeGrid;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
@@ -81,6 +86,7 @@ type
     procedure tvFeaturesHint(Sender: TObject; const Node: TTreeNode;
       var Hint: string);
     procedure memoFormulaChange(Sender: TObject);
+    procedure rgChoiceClick(Sender: TObject);
   private
     FMfFeatureTypes: TMfFeatureTypes;
     FSutraFeatureTypes: TSutraFeatureTypes;
@@ -124,7 +130,8 @@ uses
   RbwParser, ModflowMnw2Unit,
   ModflowCfpFixedUnit, ModflowCfpPipeUnit, frmFormulaUnit, DataSetUnit,
   ModflowStrUnit, RealListUnit, SutraBoundariesUnit, ModflowMawUnit,
-  Modflow6TimeSeriesUnit, DataArrayManagerUnit, DataSetNamesUnit;
+  Modflow6TimeSeriesUnit, DataArrayManagerUnit, DataSetNamesUnit,
+  ModelMuseUtilities;
 
 resourcestring
   StrNoObjectsOfTheSe = 'No objects of the selected type were selected for e' +
@@ -280,7 +287,11 @@ var
   TimeIndex: Integer;
 begin
   inherited;
+  jvplEdit.ActivePageIndex := 0;
   FSelectedFeatureTypes := TCustomFeatureSelectionObjectList.Create;
+  frameObjectProperties.Grid.Cells[0,0] := StrStartingTime;
+  frameObjectProperties.Grid.Cells[1,0] := StrEndingTime;
+
 
   case frmGoPhast.ModelSelection of
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp,
@@ -288,6 +299,8 @@ begin
       begin
         frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithStartTimes(comboStartingTime.Items);
         frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithEndTimes(comboEndingTime.Items);
+        frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithStartTimes(frameObjectProperties.Grid.Columns[0].PickList);
+        frmGoPhast.PhastModel.ModflowStressPeriods.FillStringsWithEndTimes(frameObjectProperties.Grid.Columns[1].PickList);
       end;
     msSutra22, msSutra30, msSutra40:
       begin
@@ -303,6 +316,8 @@ begin
 
           comboStartingTime.Items := TimeStrings;
           comboEndingTime.Items := TimeStrings;
+          frameObjectProperties.Grid.Columns[0].PickList := TimeStrings;
+          frameObjectProperties.Grid.Columns[1].PickList := TimeStrings;
         finally
           TimeStrings.Free;
         end;
@@ -330,8 +345,25 @@ var
   MaxScreenObjectsObjects: Integer;
   SutraFeatureType: TSutraFeatureType;
   SutraFeatureSelection: TSutraFeatureTypeSelection;
+  index: Integer;
+  AScreenObject: TScreenObject;
 begin
   FScreenObjects := ScreenObjects;
+
+  frameObjectProperties.Grid.BeginUpdate;
+  try
+    frameObjectProperties.Grid.ColCount := FScreenObjects.Count + 2;
+    for index := 0 to FScreenObjects.Count - 1 do
+    begin
+      AScreenObject := FScreenObjects[index];
+      frameObjectProperties.Grid.Columns[index+2].AutoAdjustColWidths := True;
+      frameObjectProperties.Grid.Cells[index+2,0] := AScreenObject.Name;
+      frameObjectProperties.Grid.Objects[index+2,0] := AScreenObject;
+    end;
+  finally
+    frameObjectProperties.Grid.EndUpdate;
+  end;
+
   lblTotalObjects.Caption := Format(StrSelectedObjectsD,
     [FScreenObjects.Count]);
   Model := frmGoPhast.PhastModel;
@@ -897,10 +929,19 @@ var
   Node: TTreeNode;
 begin
   Node := tvFeatures.Selected;
-  btnOK.Enabled := (Node <> nil)
-    and (Node.Parent <> nil)
-    and (Node.Parent.Data <> nil)
-    and (memoFormula.Text <> '');
+  if rgChoice.ItemIndex = 0 then
+  begin
+    btnOK.Enabled := (Node <> nil)
+      and (Node.Parent <> nil)
+      and (Node.Parent.Data <> nil)
+      and (memoFormula.Text <> '');
+  end
+  else
+  begin
+    btnOK.Enabled := (Node <> nil)
+      and (Node.Parent <> nil)
+      and (Node.Parent.Data <> nil)
+  end;
 end;
 
 procedure TfrmEditFeatureFormula.AddBoundaryParam2(Boundary: TModflowBoundary; ANode: TTreeNode);
@@ -1315,8 +1356,6 @@ var
   ValueCount: Integer;
   ScreenIndex: Integer;
   AnMF6TimeSeries: TMf6TimeSeries;
-//  ModflowUzfMf6Boundary: TUzfMf6Boundary;
-//  UzfFormulaIndex: Integer;
   procedure SetItemFormula(AnItem: TCustomBoundaryItem;
     FormulaIndex: Integer);
   begin
@@ -1348,11 +1387,44 @@ var
   var
     TimeIndex: Integer;
     AnItem: TCustomBoundaryItem;
+    ColumnIndex: Integer;
+    RowIndex: Integer;
+    STime: Extended;
+    ETime: Extended;
   begin
-    for TimeIndex := 0 to Collection.Count - 1 do
+    if rgChoice.ItemIndex = 0 then
     begin
-      AnItem := Collection[TimeIndex] as TCustomBoundaryItem;
-      SetItemFormula(AnItem, FormulaIndex);
+      for TimeIndex := 0 to Collection.Count - 1 do
+      begin
+        AnItem := Collection[TimeIndex] as TCustomBoundaryItem;
+        SetItemFormula(AnItem, FormulaIndex);
+      end;
+    end
+    else
+    begin
+      UseAllTimes := True;
+      ColumnIndex := frameObjectProperties.Grid.Rows[0].IndexOfObject(ScreenObject);
+      for RowIndex := 1 to frameObjectProperties.Grid.RowCount - 1 do
+      begin
+        if TryFortranStrToFloat(frameObjectProperties.Grid.Cells[0, RowIndex], STime)
+          and TryFortranStrToFloat(frameObjectProperties.Grid.Cells[0, RowIndex], ETime) then
+        begin
+          StartTime := STime;
+          EndTime := ETime;
+          Formula := frameObjectProperties.Grid.Cells[ColumnIndex, RowIndex];
+          AnItem := Collection.GetItemByStartTime(StartTime);
+          if AnItem = nil then
+          begin
+            AnItem := Collection.Add as TCustomBoundaryItem;
+            AnItem.StartTime := StartTime;
+            if AnItem is TCustomModflowBoundaryItem then
+            begin
+              TCustomModflowBoundaryItem(AnItem).EndTime := EndTime;
+            end;
+          end;
+          SetItemFormula(AnItem, FormulaIndex);
+        end;
+      end;
     end;
   end;
   procedure SetValueParamFormula(Boundary: TModflowBoundary);
@@ -1388,29 +1460,32 @@ begin
   end;
 
 
-  Formula := memoFormula.Text;
-  AnMF6TimeSeries := nil;
-  if Mf6TimeSeriesAllowed then
+  if rgChoice.ItemIndex = 0 then
   begin
-    AnMF6TimeSeries := frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(Formula)
-  end;
+    Formula := memoFormula.Text;
+    AnMF6TimeSeries := nil;
+    if Mf6TimeSeriesAllowed then
+    begin
+      AnMF6TimeSeries := frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(Formula)
+    end;
 
-  if AnMF6TimeSeries = nil then
-  begin
-    try
-      if frmGoPhast.ModelSelection in ModelsWithGrid then
-      begin
-        frmGoPhast.PhastModel.rpThreeDFormulaCompiler.Compile(Formula);
-      end
-      else
-      begin
-        frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes.Compile(Formula);
-      end;
-    except on ERbwParserError do
-      begin
-        Beep;
-        MessageDlg('Invalid Formula', mtError, [mbOK], 0);
-        Exit;
+    if AnMF6TimeSeries = nil then
+    begin
+      try
+        if frmGoPhast.ModelSelection in ModelsWithGrid then
+        begin
+          frmGoPhast.PhastModel.rpThreeDFormulaCompiler.Compile(Formula);
+        end
+        else
+        begin
+          frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes.Compile(Formula);
+        end;
+      except on ERbwParserError do
+        begin
+          Beep;
+          MessageDlg('Invalid Formula', mtError, [mbOK], 0);
+          Exit;
+        end;
       end;
     end;
   end;
@@ -1454,22 +1529,19 @@ begin
           ftRCH:
             begin
               RchBoundary := ScreenObject.ModflowRchBoundary;
-              case FormulaIndex of
-                0:
-                  begin
-                    SetValueParamFormula(RchBoundary);
-                  end;
-                1:
-                  begin
-                    SetCollectionFormula(RchBoundary.RechargeLayers, 0);
-                  end;
-                else Assert(False);
-              end;
+              if FormulaIndex < RchBoundary.BFCount then
+              begin
+                SetValueParamFormula(RchBoundary);
+              end
+              else
+              begin
+                SetCollectionFormula(RchBoundary.RechargeLayers, 0);
+              end
             end;
           ftETS:
             begin
               EtsBoundary := ScreenObject.ModflowEtsBoundary;
-              if FormulaIndex = 0 then
+              if FormulaIndex < EtsBoundary.BFCount then
               begin
                 SetValueParamFormula(EtsBoundary);
               end
@@ -1480,26 +1552,24 @@ begin
               end
               else
               begin
-                SetCollectionFormula(EtsBoundary.EtsSurfDepthCollection, FormulaIndex-1);
+                SetCollectionFormula(EtsBoundary.EtsSurfDepthCollection, FormulaIndex-EtsBoundary.BFCount);
               end;
             end;
           ftEVT:
             begin
               EvtBoundary := ScreenObject.ModflowEvtBoundary;
-              case FormulaIndex of
-                0:
-                  begin
-                    SetValueParamFormula(EvtBoundary);
-                  end;
-                1,2:
-                  begin
-                    SetCollectionFormula(EvtBoundary.EvtSurfDepthCollection,
-                      FormulaIndex-1);
-                  end;
-                3:
-                  begin
-                    SetCollectionFormula(EvtBoundary.EvapotranspirationLayers, 0);
-                  end;
+              if FormulaIndex < EvtBoundary.BFCount then
+              begin
+                SetValueParamFormula(EvtBoundary);
+              end
+              else if FormulaIndex < EvtBoundary.BFCount + 2 then
+              begin
+                SetCollectionFormula(EvtBoundary.EvtSurfDepthCollection,
+                  FormulaIndex-EvtBoundary.BFCount);
+              end
+              else
+              begin
+                SetCollectionFormula(EvtBoundary.EvapotranspirationLayers, 0);
               end;
             end;
           ftMNW2:
@@ -2308,6 +2378,13 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TfrmEditFeatureFormula.rgChoiceClick(Sender: TObject);
+begin
+  inherited;
+  jvplEdit.ActivePageIndex := rgChoice.ItemIndex;
+  EnableOkButton;
 end;
 
 { TModflowFeatureTypeSelection }

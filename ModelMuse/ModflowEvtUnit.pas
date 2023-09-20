@@ -624,6 +624,7 @@ type
     procedure Clear; override;
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
+    class function BFCount: Integer; override;
   published
     property EvapotranspirationLayers: TEvtLayerCollection
       read FEvapotranspirationLayers write SetEvapotranspirationLayers;
@@ -1589,6 +1590,15 @@ begin
     end;
   end;
   LocalBoundaryStorage.CacheData;
+end;
+
+class function TEvtBoundary.BFCount: Integer;
+begin
+  result := 1;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    result := result + frmGoPhast.PhastModel.MobileComponents.Count;
+  end;
 end;
 
 class function TEvtBoundary.BoundaryCollectionClass: TMF_BoundCollClass;

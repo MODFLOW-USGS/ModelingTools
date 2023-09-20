@@ -54,12 +54,6 @@ type
     RiverBottomTimeSeriesName: string;
     // GWT Concentrations
     GwtConcentrations: TGwtCellData;
-//    Concentrations: array of double;
-//    ConcentrationAnnotations: array of string;
-//    ConcentrationPestNames: array of string;
-//    ConcentrationPestSeriesNames: array of string;
-//    ConcentrationPestSeriesMethods: array of TPestParamMethod;
-//    ConcentrationTimeSeriesNames: array of string;
     procedure Assign(const Item: TRivRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -2460,8 +2454,6 @@ begin
 end;
 
 procedure TRivRecord.RecordStrings(Strings: TStringList);
-//var
-//  Index: Integer;
 begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(RiverStageAnnotation);
@@ -2474,7 +2466,6 @@ begin
   Strings.Add(RiverStagePestSeriesName);
   Strings.Add(RiverBottomPestSeriesName);
 
-//  Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
 
   Strings.Add(ConductanceTimeSeriesName);
@@ -2482,23 +2473,6 @@ begin
   Strings.Add(RiverBottomTimeSeriesName);
 
   GwtConcentrations.RecordStrings(Strings);
-
-//  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
-//  begin
-//    Strings.Add(ConcentrationAnnotations[Index]);
-//  end;
-//  for Index := 0 to Length(ConcentrationPestNames) - 1 do
-//  begin
-//    Strings.Add(ConcentrationPestNames[Index]);
-//  end;
-//  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
-//  begin
-//    Strings.Add(ConcentrationPestSeriesNames[Index]);
-//  end;
-//  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
-//  begin
-//    Strings.Add(ConcentrationTimeSeriesNames[Index]);
-//  end;
 end;
 
 procedure TRivRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);

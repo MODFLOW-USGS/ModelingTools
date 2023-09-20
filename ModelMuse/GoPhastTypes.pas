@@ -329,6 +329,32 @@ type
     Property LandUseCount: Integer read FLandUseCount write SetLandUseCount;
   end;
 
+  TCellData = record
+  public
+    Value: double;
+    ValueAnnotation: string;
+    ValuePestName: string;
+    ValuePestSeriesName: string;
+    ValuePestSeriesMethod: TPestParamMethod;
+    ValueTimeSeriesName: string;
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList);
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+    procedure RecordStrings(Strings: TStringList);
+  end;
+
+  TCellDataArray = record
+  private
+    procedure SetPropertyCount(const Value: Integer);
+    function GetPropertyCount: Integer;
+  public
+    Values: array of TCellData;
+    procedure Assign(const Item: TCellDataArray);
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList);
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+    procedure RecordStrings(Strings: TStringList);
+    property PropertyCount: Integer read GetPropertyCount write SetPropertyCount;
+  end;
+
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
     msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2];
@@ -2701,6 +2727,88 @@ begin
     SetLength(ValuePestSeriesMethods, FLandUseCount);
     SetLength(ValueTimeSeriesNames, FLandUseCount);
   end;
+end;
+
+{ TCellData }
+
+procedure TCellData.Cache(Comp: TCompressionStream; Strings: TStringList);
+begin
+  WriteCompReal(Comp, Value);
+  WriteCompInt(Comp, Strings.IndexOf(ValueAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(ValuePestName));
+  WriteCompInt(Comp, Strings.IndexOf(ValuePestSeriesName));
+  WriteCompInt(Comp, Ord(ValuePestSeriesMethod));
+  WriteCompInt(Comp, Strings.IndexOf(ValueTimeSeriesName));
+end;
+
+procedure TCellData.RecordStrings(Strings: TStringList);
+begin
+  Strings.Add(ValueAnnotation);
+  Strings.Add(ValuePestName);
+  Strings.Add(ValuePestSeriesName);
+  Strings.Add(ValueTimeSeriesName);
+end;
+
+procedure TCellData.Restore(Decomp: TDecompressionStream;
+  Annotations: TStringList);
+begin
+  Value := ReadCompReal(Decomp);
+  ValueAnnotation := Annotations[ReadCompInt(Decomp)];
+  ValuePestName := Annotations[ReadCompInt(Decomp)];
+  ValuePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  ValuePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  ValueTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+end;
+
+{ TCellDataArray }
+
+procedure TCellDataArray.Assign(const Item: TCellDataArray);
+begin
+  Self := Item;
+  PropertyCount := Item.PropertyCount;
+end;
+
+procedure TCellDataArray.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Index: Integer;
+begin
+  WriteCompInt(Comp, PropertyCount);
+  for Index := 0 to Length(Values) - 1 do
+  begin
+    Values[Index].Cache(Comp, Strings)
+  end;
+end;
+
+function TCellDataArray.GetPropertyCount: Integer;
+begin
+  Result := Length(Values);
+end;
+
+procedure TCellDataArray.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
+begin
+  for Index := 0 to Length(Values) - 1 do
+  begin
+    Values[Index].RecordStrings(Strings)
+  end;
+end;
+
+procedure TCellDataArray.Restore(Decomp: TDecompressionStream;
+  Annotations: TStringList);
+var
+  Index: Integer;
+begin
+  PropertyCount := ReadCompInt(Decomp);
+  for Index := 0 to PropertyCount - 1 do
+  begin
+    Values[Index].Restore(Decomp, Annotations);
+  end;
+end;
+
+procedure TCellDataArray.SetPropertyCount(const Value: Integer);
+begin
+  SetLength(Values, Value)
 end;
 
 initialization

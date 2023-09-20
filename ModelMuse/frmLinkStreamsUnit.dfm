@@ -2,10 +2,10 @@ inherited frmLinkStreams: TfrmLinkStreams
   HelpType = htKeyword
   HelpKeyword = 'Link_Streams_Dialog_Box'
   Caption = 'Link Streams'
-  ClientHeight = 308
+  ClientHeight = 306
   ClientWidth = 246
   ExplicitWidth = 258
-  ExplicitHeight = 346
+  ExplicitHeight = 344
   TextHeight = 18
   object lblTolerance: TLabel
     Left = 7
