@@ -900,10 +900,6 @@ var
   DensityUsed: Boolean;
   ViscosityUsed: Boolean;
 begin
-{$IFNDEF SfrCrossSection}
-  cbSpecifyCrossSection.Visible := False;
-{$ENDIF}
-
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
   rdgModflowBoundary.BeginUpdate;

@@ -10045,6 +10045,10 @@ const
 //    '5.1.1.38' Bug fix: Switching from a MODFLOW-NWT to a MODFLOW-OWHM model
 //                no longer results in the NWT and UPW packages being
 //                deactivated.
+//    '5.1.1.39' Enhancement: The "Edit Feature Formula" dialog box has been
+//                modified to allow the user to specify a different formula for
+//                each edited object.
+
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
@@ -10054,7 +10058,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.0';
+  IIModelVersion = '5.1.1.39';
 
 function IModelVersion: string;
 begin

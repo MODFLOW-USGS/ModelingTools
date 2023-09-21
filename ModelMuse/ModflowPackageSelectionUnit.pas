@@ -7359,6 +7359,27 @@ Type
     property StoredThermalA4: TRealStorage read FStoredThermalA4 write SetStoredThermalA4;
   end;
 
+  TTvkPackage = class(TModflowPackageSelection)
+  private
+    FTransientKz: TModflowBoundaryDisplayTimeList;
+    FTransientKx: TModflowBoundaryDisplayTimeList;
+    FTransientKy: TModflowBoundaryDisplayTimeList;
+    procedure GetUseList(ParameterIndex: Integer; NewUseList: TStringList;
+      const DisplayName: string);
+    procedure GetKxUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetKyUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetKzUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InitializeTvkDisplay(Sender: TObject);
+  public
+    Constructor Create(Model: TBaseModel); override;
+    Destructor Destroy; override;
+    property TransientKx: TModflowBoundaryDisplayTimeList read FTransientKx;
+    property TransientKy: TModflowBoundaryDisplayTimeList read FTransientKy;
+    property TransientKz: TModflowBoundaryDisplayTimeList read FTransientKz;
+
+  end;
+
+
 const
   KMaxRainfallForStepAdjustment = 0.15;
   KMaxStageChangePerStep = 0.5;
@@ -7405,7 +7426,9 @@ uses Contnrs , PhastModelUnit, ModflowOptionsUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
   ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit, ModflowCsubUnit,
   ModflowCSubWriterUnit,
-  ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit, DataSetNamesUnit;
+  ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit, DataSetNamesUnit,
+  ModflowTvkUnit,
+  ModflowTvkWriterUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -30260,6 +30283,116 @@ end;
 procedure TViscosityPackage.SetWriteViscosity(const Value: Boolean);
 begin
   SetBooleanProperty(FWriteViscosity, Value);
+end;
+
+{ TTvkPackage }
+
+constructor TTvkPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  if Model <> nil then
+  begin
+    FTransientKx := TModflowBoundaryDisplayTimeList.Create(Model);
+    FTransientKx.OnInitialize := InitializeTvkDisplay;
+    FTransientKx.OnGetUseList := GetKxUseList;
+    FTransientKx.OnTimeListUsed := PackageUsed;
+    FTransientKx.Name := StrTransientKx;
+    AddTimeList(FTransientKx);
+
+    FTransientKy := TModflowBoundaryDisplayTimeList.Create(Model);
+    FTransientKy.OnInitialize := InitializeTvkDisplay;
+    FTransientKy.OnGetUseList := GetKyUseList;
+    FTransientKy.OnTimeListUsed := PackageUsed;
+    FTransientKy.Name := StrTransientKy;
+    AddTimeList(FTransientKy);
+
+    FTransientKz := TModflowBoundaryDisplayTimeList.Create(Model);
+    FTransientKz.OnInitialize := InitializeTvkDisplay;
+    FTransientKz.OnGetUseList := GetKzUseList;
+    FTransientKz.OnTimeListUsed := PackageUsed;
+    FTransientKz.Name := StrTransientKz;
+    AddTimeList(FTransientKz);
+  end;
+  InitializeVariables;
+end;
+
+destructor TTvkPackage.Destroy;
+begin
+  FTransientKx.Free;
+  FTransientKy.Free;
+  FTransientKz.Free;
+  inherited;
+end;
+
+procedure TTvkPackage.GetKxUseList(Sender: TObject; NewUseList: TStringList);
+begin
+  GetUseList(0, NewUseList, 'Transient Kx');
+end;
+
+procedure TTvkPackage.GetKyUseList(Sender: TObject; NewUseList: TStringList);
+begin
+  GetUseList(1, NewUseList, 'Transient Ky');
+end;
+
+procedure TTvkPackage.GetKzUseList(Sender: TObject; NewUseList: TStringList);
+begin
+  GetUseList(2, NewUseList, 'Transient Kz');
+end;
+
+procedure TTvkPackage.GetUseList(ParameterIndex: Integer;
+  NewUseList: TStringList; const DisplayName: string);
+var
+  ScreenObjectIndex: Integer;
+  LocalModel: TCustomModel;
+  ScreenObject: TScreenObject;
+  ValueIndex: Integer;
+  Boundary: TTvkBoundary;
+  Item: TTvkItem;
+begin
+  { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.ModflowTvkBoundary;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count - 1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TTvkItem;
+        UpdateUseList(ParameterIndex, NewUseList, Item, DisplayName);
+      end;
+    end;
+  end;
+end;
+
+procedure TTvkPackage.InitializeTvkDisplay(Sender: TObject);
+var
+  TvkWriter: TModflowTvk_Writer;
+  List: TModflowBoundListOfTimeLists;
+  CoverageIndex: Integer;
+begin
+  TransientKx.CreateDataSets;
+  TransientKy.CreateDataSets;
+  TransientKz.CreateDataSets;
+  List := TModflowBoundListOfTimeLists.Create;
+  TvkWriter := TModflowTvk_Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(TransientKx);
+    List.Add(TransientKy);
+    List.Add(TransientKz);
+    TvkWriter.UpdateDisplay(List);
+  finally
+    TvkWriter.Free;
+    List.Free;
+  end;
+  TransientKx.ComputeAverage;
+  TransientKy.ComputeAverage;
+  TransientKz.ComputeAverage;
 end;
 
 end.

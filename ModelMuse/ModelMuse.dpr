@@ -880,7 +880,9 @@ uses
   Mt3dmsChemSpeciesInterfaceUnit in 'Mt3dmsChemSpeciesInterfaceUnit.pas',
   framePackageViscosityUnit in 'framePackageViscosityUnit.pas' {framePackageViscosity: TFrame},
   ModflowViscosityWriterUnit in 'ModflowViscosityWriterUnit.pas',
-  ModflowTvkUnit in 'ModflowTvkUnit.pas';
+  ModflowTvkUnit in 'ModflowTvkUnit.pas',
+  ModflowTvkWriterUnit in 'ModflowTvkWriterUnit.pas',
+  frameScreenObjectTransientKUnit in 'frameScreenObjectTransientKUnit.pas' {frameScreenObjectTransientK: TFrame};
 
 {$R *.res}
 

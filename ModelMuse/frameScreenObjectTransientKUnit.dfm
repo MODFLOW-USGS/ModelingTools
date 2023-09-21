@@ -1,0 +1,2 @@
+inherited frameScreenObjectTransientK: TframeScreenObjectTransientK
+end

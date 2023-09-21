@@ -77,6 +77,8 @@ type
     JvStandardPage1: TJvStandardPage;
     JvStandardPage2: TJvStandardPage;
     frameObjectProperties: TframeGrid;
+    Panel1: TPanel;
+    rgTreatment: TRadioGroup;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
@@ -350,19 +352,6 @@ var
 begin
   FScreenObjects := ScreenObjects;
 
-  frameObjectProperties.Grid.BeginUpdate;
-  try
-    frameObjectProperties.Grid.ColCount := FScreenObjects.Count + 2;
-    for index := 0 to FScreenObjects.Count - 1 do
-    begin
-      AScreenObject := FScreenObjects[index];
-      frameObjectProperties.Grid.Columns[index+2].AutoAdjustColWidths := True;
-      frameObjectProperties.Grid.Cells[index+2,0] := AScreenObject.Name;
-      frameObjectProperties.Grid.Objects[index+2,0] := AScreenObject;
-    end;
-  finally
-    frameObjectProperties.Grid.EndUpdate;
-  end;
 
   lblTotalObjects.Caption := Format(StrSelectedObjectsD,
     [FScreenObjects.Count]);
@@ -1391,6 +1380,12 @@ var
     RowIndex: Integer;
     STime: Extended;
     ETime: Extended;
+    LastItem: TCustomBoundaryItem;
+    LastStart: Double;
+    LastEnd: Double;
+    LastEndFound: Boolean;
+    Epsilon: Extended;
+    FirstTime: Double;
   begin
     if rgChoice.ItemIndex = 0 then
     begin
@@ -1402,26 +1397,83 @@ var
     end
     else
     begin
+      LastStart := -1e30;
+      LastEnd := -1e30;
+      LastEndFound := False;
+      Epsilon := 1e-10;
+      if rgTreatment.ItemIndex = 0 then
+      begin
+        // Append
+        FirstTime := (Collection.First as TCustomBoundaryItem).StartTime;
+        LastItem := Collection.Last as TCustomBoundaryItem;
+        LastStart := LastItem.StartTime;
+        if LastItem is TCustomModflowBoundaryItem then
+        begin
+          LastEnd := TCustomModflowBoundaryItem(LastItem).EndTime;
+          LastEndFound := True;
+        end
+        else
+        begin
+          LastEnd := LastStart;
+          LastEndFound := False;
+        end;
+        if FirstTime <> LastEnd then
+        begin
+          Epsilon := (LastEnd-FirstTime)/1e6;
+        end;
+      end
+      else
+      begin
+        // Replace
+        while Collection.Count > frameObjectProperties.Grid.RowCount - 1 do
+        begin
+          Collection.Last.Free;
+        end;
+      end;
+
       UseAllTimes := True;
       ColumnIndex := frameObjectProperties.Grid.Rows[0].IndexOfObject(ScreenObject);
       for RowIndex := 1 to frameObjectProperties.Grid.RowCount - 1 do
       begin
         if TryFortranStrToFloat(frameObjectProperties.Grid.Cells[0, RowIndex], STime)
-          and TryFortranStrToFloat(frameObjectProperties.Grid.Cells[0, RowIndex], ETime) then
+          and TryFortranStrToFloat(frameObjectProperties.Grid.Cells[1, RowIndex], ETime) then
         begin
           StartTime := STime;
           EndTime := ETime;
-          Formula := frameObjectProperties.Grid.Cells[ColumnIndex, RowIndex];
-          AnItem := Collection.GetItemByStartTime(StartTime);
-          if AnItem = nil then
+          if rgTreatment.ItemIndex = 0  then
           begin
-            AnItem := Collection.Add as TCustomBoundaryItem;
-            AnItem.StartTime := StartTime;
-            if AnItem is TCustomModflowBoundaryItem then
+            if LastEndFound then
             begin
-              TCustomModflowBoundaryItem(AnItem).EndTime := EndTime;
+              if EndTime <= LastEnd then
+              begin
+                Continue
+              end;
+            end
+            else
+            begin
+              if StartTime <= LastStart-Epsilon then
+              begin
+                Continue
+              end;
             end;
           end;
+
+          Formula := frameObjectProperties.Grid.Cells[ColumnIndex, RowIndex];
+
+          if ((RowIndex-1) < Collection.Count) then
+          begin
+            AnItem := Collection[RowIndex-1] as TCustomBoundaryItem;
+          end
+          else
+          begin
+            AnItem := Collection.Add as TCustomBoundaryItem;
+          end;
+          AnItem.StartTime := StartTime;
+          if AnItem is TCustomModflowBoundaryItem then
+          begin
+            TCustomModflowBoundaryItem(AnItem).EndTime := EndTime;
+          end;
+
           SetItemFormula(AnItem, FormulaIndex);
         end;
       end;
@@ -1884,6 +1936,8 @@ procedure TfrmEditFeatureFormula.tvFeaturesChange(Sender: TObject;
   Node: TTreeNode);
 var
   SelectedType: TCustomFeatureTypeSelection;
+  index: Integer;
+  AScreenObject: TScreenObject;
 begin
   inherited;
   EnableOkButton;
@@ -1894,11 +1948,27 @@ begin
     SelectedType := tvFeatures.Selected.Parent.Data;
     lblTotalObjects.Caption := Format(Str0dOutOf1dSel,
       [SelectedType.FScreenObjects.Count, FScreenObjects.Count]);
+
+    frameObjectProperties.Grid.BeginUpdate;
+    try
+      frameObjectProperties.Grid.ColCount := SelectedType.FScreenObjects.Count + 2;
+      for index := 0 to FScreenObjects.Count - 1 do
+      begin
+        AScreenObject := SelectedType.FScreenObjects[index];
+        frameObjectProperties.Grid.Columns[index+2].AutoAdjustColWidths := True;
+        frameObjectProperties.Grid.Cells[index+2,0] := AScreenObject.Name;
+        frameObjectProperties.Grid.Objects[index+2,0] := AScreenObject;
+      end;
+    finally
+      frameObjectProperties.Grid.EndUpdate;
+    end;
+
   end
   else
   begin
     lblTotalObjects.Caption := Format(StrSelectedObjectsD,
       [FScreenObjects.Count]);
+    frameObjectProperties.Grid.ColCount := 2;
   end;
 end;
 

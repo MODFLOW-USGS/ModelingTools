@@ -28,7 +28,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       610
       88)
     object btnCancel: TBitBtn
-      Left = 522
+      Left = 518
       Top = 42
       Width = 83
       Height = 27
@@ -36,10 +36,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 518
+      ExplicitLeft = 514
     end
     object btnOK: TBitBtn
-      Left = 434
+      Left = 430
       Top = 42
       Width = 82
       Height = 27
@@ -67,10 +67,10 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 430
+      ExplicitLeft = 426
     end
     object btnHelp: TBitBtn
-      Left = 346
+      Left = 342
       Top = 42
       Width = 82
       Height = 27
@@ -79,6 +79,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 338
     end
     object rgChoice: TRadioGroup
       Left = 16
@@ -107,7 +108,6 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     TabOrder = 0
     OnChange = tvFeaturesChange
     OnHint = tvFeaturesHint
-    ExplicitWidth = 297
     ExplicitHeight = 407
   end
   object jvplEdit: TJvPageList
@@ -118,7 +118,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     ActivePage = JvStandardPage2
     PropagateEnable = False
     Align = alClient
-    ExplicitLeft = 305
+    ExplicitWidth = 297
     ExplicitHeight = 407
     object JvStandardPage1: TJvStandardPage
       Left = 0
@@ -219,18 +219,21 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Width = 301
       Height = 408
       Caption = 'JvStandardPage2'
+      ExplicitWidth = 297
       ExplicitHeight = 407
       inline frameObjectProperties: TframeGrid
         Left = 0
-        Top = 0
+        Top = 81
         Width = 301
-        Height = 408
+        Height = 327
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 297
         ExplicitHeight = 407
         inherited Panel: TPanel
-          Top = 367
+          Top = 286
           ExplicitTop = 366
+          ExplicitWidth = 297
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -243,7 +246,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
           end
         end
         inherited Grid: TRbwDataGrid4
-          Height = 367
+          Height = 286
           ColCount = 3
           Columns = <
             item
@@ -318,7 +321,28 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitWidth = 297
           ExplicitHeight = 366
+        end
+      end
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 301
+        Height = 81
+        Align = alTop
+        TabOrder = 1
+        object rgTreatment: TRadioGroup
+          Left = 6
+          Top = 2
+          Width = 185
+          Height = 73
+          Caption = 'Treatment'
+          ItemIndex = 0
+          Items.Strings = (
+            'Append new data'
+            'Replace all data')
+          TabOrder = 0
         end
       end
     end

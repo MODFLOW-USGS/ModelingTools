@@ -565,6 +565,9 @@ const
   OldHorizontal_Transv_Dispersivity = 'Horizontal_Transv_Dispersivity';
   OldVertical_Transv_Dispersivity = 'Vertical_Transv_Dispersivity';
   kHufThickness = '_Thickness';
+  StrTransientKx = 'Transient Kx';
+  StrTransientKy = 'Transient Ky';
+  StrTransientKz = 'Transient Kz';
 
 resourcestring
   StrActiveSurfaceEleva = 'Active_Surface_Elevation';

@@ -1465,7 +1465,6 @@ begin
       Exit;
     end;
 
-  {$IFDEF SfrCrossSection}
     frmProgressMM.AddMessage('Writing SFR Package Cross Sections');
     WriteCrossSections;
     Application.ProcessMessages;
@@ -1473,7 +1472,6 @@ begin
     begin
       Exit;
     end;
-  {$ENDIF}
 
     frmProgressMM.AddMessage(StrWritingSFRConnec);
     WriteConnections;

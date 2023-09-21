@@ -44,7 +44,7 @@ type
     btSutraSpecConcTemp, btSutraFluidFlux, btMassEnergyFlux, btSutraGeneralFlow,
     btSutraGenTransp, btMfFhb, btCFP, btMfFarm, btSWR, btMnw1, btMtmsObs, btRIP,
     btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6,
-    btSft, btCSub, btMvr, btCnc, btSrc);
+    btSft, btCSub, btMvr, btCnc, btSrc, btTransK);
 
   TBoundaryTypes = set of TBoundaryType;
 
@@ -1791,6 +1791,7 @@ resourcestring
   'he interpolation algorithm "%1:s." The error message was %2:s"';
   StrMODFLOW6CNC = 'MODFLOW 6 CNC';
   StrMODFLOW6SRC = 'MODFLOW 6 SRC';
+  StrMODFLOWTVK = 'MODFLOW TVK';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -7975,6 +7976,13 @@ begin
   begin
     result := btMvr;
   end
+  else if (Name = StrTransientKx)
+    or (Name = StrTransientKy)
+    or (Name = StrTransientKz)
+    then
+  begin
+    result := btTransK;
+  end
   else if Pos('CNC', Name) = 1 then
   begin
     result := btCNC;
@@ -8180,7 +8188,10 @@ begin
         begin
           result := StrMODFLOW6SRC;
         end;
-
+      btTransK:
+        begin
+          result := StrMODFLOWTVK;
+        end
       else
         Assert(False);
     end;

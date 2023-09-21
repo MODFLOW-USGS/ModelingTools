@@ -305,6 +305,8 @@ type
     framePkgBuoyancy: TframePackageBuoyancy;
     jvspVSC: TJvStandardPage;
     framePkgViscosity: TframePackageViscosity;
+    jvspTVK: TJvStandardPage;
+    framePkgTvk: TframePackage;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -4707,6 +4709,13 @@ begin
     Packages.StoPackage.Frame := framePkgSto;
     FPackageList.Add(Packages.StoPackage);
 
+  {$IFDEF VariableK}
+    Packages.TvkPackage.Frame := framePkgTvk;
+    FPackageList.Add(Packages.TvkPackage);
+  {$ELSE}
+    framePkgTvk.nilNode;
+  {$ENDIF}
+
     Packages.BuoyancyPackage.Frame := framePkgBuoyancy;
     FPackageList.Add(Packages.BuoyancyPackage);
 
@@ -4718,6 +4727,7 @@ begin
   begin
     framePkgNpf.NilNode;
     framePkgSto.NilNode;
+    framePkgTvk.NilNode;
     framePkgBuoyancy.NilNode;
     framePkgViscosity.NilNode;
   end;

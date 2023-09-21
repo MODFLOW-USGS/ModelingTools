@@ -815,11 +815,7 @@ type
       read FPestViscosityMethods write SetPestViscosityMethods;
 
     property CrossSection: TSfr6CrossSection read FCrossSection
-      write SetCrossSection
-    {$IFNDEF SfrCrossSection}
-      stored False
-    {$ENDIF}
-      ;
+      write SetCrossSection;
 end;
 
 const

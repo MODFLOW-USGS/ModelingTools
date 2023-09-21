@@ -400,13 +400,21 @@ var
 begin
   if frmGoPhast.ModelSelection = msSutra40 then
   begin
+    seRegionCount.Enabled := True;
+    btnAddRegion.Enabled := True;
     TransportChoice := TTransportChoice(rgTransport.ItemIndex);
     SaturationChoice := TSaturationChoice(rgSaturation.ItemIndex);
     for RegionIndex := 0 to FRegionList.Count - 1 do
     begin
       FRegionList[RegionIndex].EnableTabs(TransportChoice, SaturationChoice)
     end;
+  end
+  else
+  begin
+    seRegionCount.Enabled := False;
+    btnAddRegion.Enabled := False;
   end;
+  EnableDeleteNode(jvpltvNavigation.Selected);
 end;
 
 procedure TfrmSutraOptions.CreateNewRegionPage(RegionNumber: Integer;
@@ -480,7 +488,8 @@ end;
 
 procedure TfrmSutraOptions.EnableDeleteNode(Node: TTreeNode);
 begin
-  btnDeleteRegion.Enabled := (Node <> nil) and (Node.Parent = FRegionNode)
+  btnDeleteRegion.Enabled := (frmGoPhast.ModelSelection = msSutra40)
+    and (Node <> nil) and (Node.Parent = FRegionNode)
     and (FRegionList.Count > 1);
 end;
 
