@@ -3095,7 +3095,6 @@ view. }
     function GetModflowTvkBoundary: TTvkBoundary;
     procedure SetModflowTvkBoundary(const Value: TTvkBoundary);
     function StoreModflowTvkBoundary: Boolean;
-    procedure CreateModflowTvkBoundary;
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -3719,6 +3718,8 @@ view. }
     procedure CreateSwtObservations;
     procedure CreateGwtCncBoundary;
     procedure CreateGwtSrcBoundary;
+    procedure CreateTvkBoundary;
+
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     function ModflowDataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -15663,7 +15664,7 @@ begin
   end
   else
   begin
-    CreateModflowTvkBoundary;
+    CreateTvkBoundary;
     ModflowBoundaries.FTvkBoundary.Assign(Value);
   end;
 end;
@@ -35314,7 +35315,7 @@ begin
   if (FModel = nil)
     or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
   begin
-    CreateModflowTvkBoundary;
+    CreateTvkBoundary;
   end;
   if FModflowBoundaries = nil then
   begin
@@ -39764,7 +39765,7 @@ begin
   end;
 end;
 
-procedure TScreenObject.CreateModflowTvkBoundary;
+procedure TScreenObject.CreateTvkBoundary;
 begin
   if (ModflowBoundaries.FTvkBoundary = nil) then
   begin

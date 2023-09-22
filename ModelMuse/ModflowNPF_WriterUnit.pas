@@ -9,7 +9,7 @@ type
   TNpfWriter = class(TCustomFlowPackageWriter)
   private
     FNpfPackage: TNpfPackage;
-    procedure WriteDataSet1;
+    procedure WriteOptions;
     procedure WriteIcelltype;
     procedure WriteHK;
     procedure WriteVK;
@@ -30,7 +30,7 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit, GoPhastTypes,
   ModflowOptionsUnit, PhastModelUnit,
-  System.SysUtils, PestParamRoots, DataSetNamesUnit;
+  System.SysUtils, PestParamRoots, DataSetNamesUnit, ModflowTvkWriterUnit;
 
 resourcestring
   StrWritingNPFPackage = 'Writing NPF Package input.';
@@ -77,7 +77,7 @@ begin
   WritePestZones(DataArray, FInputFileName, NPF_Angle3, 'AN3');
 end;
 
-procedure TNpfWriter.WriteDataSet1;
+procedure TNpfWriter.WriteOptions;
 var
   NpfPackage: TNpfPackage;
   Wetting: TWettingOptions;
@@ -85,6 +85,8 @@ var
   IWETIT: Integer;
   IHDWET: Integer;
   ModflowOptions: TModflowOptions;
+  TvkWriter: TModflowTvk_Writer;
+  TvkFileName: string;
 begin
   ModflowOptions := Model.ModflowOptions;
   WriteBeginOptions;
@@ -183,6 +185,28 @@ begin
     NewLine;
   end;
 
+  if Model.ModflowPackages.TvkPackage.IsSelected then
+  begin
+    TvkWriter := TModflowTvk_Writer.Create(Model, etExport);
+    try
+      TvkFileName := TvkWriter.WriteFile(FInputFileName);
+    finally
+      TvkWriter.Free;
+    end;
+    Model.DataArrayManager.CacheDataArrays;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+    if TvkFileName <> '' then
+    begin
+      WriteString('  TVK6 FILEIN ');
+      WriteString(ExtractFileName(TvkFileName));
+      NewLine;
+    end;
+  end;
+
   WriteEndOptions;
 end;
 
@@ -217,7 +241,7 @@ begin
       end;
 
       frmProgressMM.AddMessage(StrWritingOptions);
-      WriteDataSet1;
+      WriteOptions;
       Application.ProcessMessages;
       if not frmProgressMM.ShouldContinue then
       begin

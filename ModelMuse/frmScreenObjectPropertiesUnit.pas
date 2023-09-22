@@ -81,7 +81,7 @@ uses System.UITypes, Windows,
   frameScreenObjectMultCropHasSalinityDemandUnit,
   frameScreenObjectAddedDemandRunoffSplitUnit,
   frameDynamicScreenObjectsContainerUnit, Modflow6DynamicTimeSeriesUnit,
-  frameScreenObjectCfpRechargeFractionUnit;
+  frameScreenObjectCfpRechargeFractionUnit, frameScreenObjectTransientKUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -503,6 +503,8 @@ type
     tabDynamicTimeSeries: TTabSheet;
     frameDynamicTimeSeries: TframeDynamicScreenObjectsContainer;
     frameCfpRechargeFraction1: TframeScreenObjectCfpRechargeFraction;
+    jvspTvk: TJvStandardPage;
+    frameScreenObjectTvk: TframeScreenObjectTransientK;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -844,6 +846,8 @@ type
     procedure frameFmp4EfficiencyseNumberOfTimesChange(Sender: TObject);
     procedure btnImportVertexValuesClick(Sender: TObject);
     procedure frameDynamicTimeSeriesbtnAddGroupClick(Sender: TObject);
+    procedure frameScreenObjectTvkrdgModflowBoundarySetEditText(Sender: TObject;
+        ACol, ARow: Integer; const Value: string);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -1685,6 +1689,7 @@ type
     FMf6Obs_Node: TJvPageIndexNode;
     FSubPestObs_Node: TJvPageIndexNode;
     FSwtPestObs_Node: TJvPageIndexNode;
+    FTvkNode: TJvPageIndexNode;
     // @name is used to store the column that the user last selected
     // in one of the grids for boundary-condition, time-varying stress.
     // For boundary conditions that allow PHAST-style interpolation,
@@ -2492,6 +2497,8 @@ type
     procedure CreateFmp4AddedDemandRunoffSplitNode;
     procedure GetFmp4AddedDemandRunoffSplitBoundary(const ScreenObjectList: TList);
 
+    procedure GetTvkBoundary(const ScreenObjectList: TList);
+
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
     property IsLoaded: boolean read FIsLoaded write SetIsLoaded;
@@ -2580,6 +2587,7 @@ type
     procedure CreateCSubNode;
     procedure CreateSubPestObsNode(AScreenObject: TScreenObject);
     procedure CreateSwtPestObsNode(AScreenObject: TScreenObject);
+    procedure CreateTvkNode;
     procedure InitializeVertexGrid;
     procedure InitializePhastSpecifiedHeadGrid;
     procedure InitializePhastSpecifiedFluxGrid;
@@ -2799,7 +2807,8 @@ uses Math, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowFmp4FractionOfPrecipToSurfaceWaterUnit,
   ModflowFmp4FractionOfIrrigToSurfaceWaterUnit, ModflowFmp4AddedDemandUnit,
   ModflowFmp4CropHasSalinityDemandUnit, ModflowFmp4AddedDemandRunoffSplitUnit,
-  DataArrayManagerUnit, DataSetNamesUnit, frameModflow6DynamicTimeSeriesUnit;
+  DataArrayManagerUnit, DataSetNamesUnit, frameModflow6DynamicTimeSeriesUnit,
+  ModflowTvkUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -3255,6 +3264,10 @@ begin
   begin
     PestParameterColumns := [2..5];
     UsedEvalAt := eaNodes;
+  end
+  else if (Sender = frameScreenObjectTvk.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [2..4];
   end
   ;
 
@@ -4423,6 +4436,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FTvkNode then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -4557,6 +4574,7 @@ begin
   CreateStobNode;
   CreateGageNode;
   CreateSwiObsNode(AScreenObject);
+  CreateTvkNode;
   CreateUzfNode(AScreenObject);
   CreateUzMf6fNode(AScreenObject);
   CreateWelNode;
@@ -5471,6 +5489,7 @@ begin
         BoundaryNodeList.Add(FFmp4CropHasSalinityDemandNode);
         BoundaryNodeList.Add(FFmp4MultCropHasSalinityDemandNode);
         BoundaryNodeList.Add(FFmp4AddedDemandRunoffSplitNode);
+        BoundaryNodeList.Add(FTvkNode);
 
         BoundaryNodeList.Pack;
         ShowError := False;
@@ -6861,6 +6880,8 @@ begin
   frameMultLandUseAreaFraction.OnCheckPestCell := EnablePestCells;
   frameFmp4MultTranspirationFraction.OnCheckPestCell := EnablePestCells;
   frameFmp4MultRootDepth.OnCheckPestCell := EnablePestCells;
+
+  frameScreenObjectTvk.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -8098,6 +8119,10 @@ begin
     AllowChange := True;
   end
   else if (Node = FFmp4AddedDemandRunoffSplitNode) then
+  begin
+    AllowChange := True;
+  end
+  else if (Node = FTvkNode) then
   begin
     AllowChange := True;
   end
@@ -9468,6 +9493,14 @@ begin
       (FFmp4AddedDemandRunoffSplitNode.StateIndex = 1)
       and frmGoPhast.PhastModel.FarmProcess4TransientAddedDemandRunoffSplitArrayIsSelected);
   end;
+
+  if (FTvkNode <> nil) then
+  begin
+    frameScreenObjectTvk.SetData(FNewProperties,
+      (FTvkNode.StateIndex = 2),
+      (FTvkNode.StateIndex = 1) and frmGoPhast.PhastModel.TvkIsSelected);
+  end;
+
 end;
 
 procedure TfrmScreenObjectProperties.UpdateVertices;
@@ -11140,6 +11173,32 @@ begin
       jvplModflowBoundaries.ActivePage := jvspBlank;
     end;
   end;
+end;
+
+procedure TfrmScreenObjectProperties.GetTvkBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TTvkBoundary;
+begin
+  if not frmGoPhast.PhastModel.TvkIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowTvkBoundary;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FTvkNode <> nil then
+  begin
+    FTvkNode.StateIndex := Ord(State)+1;
+  end;
+  frameScreenObjectTvk.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.GetSwrDirectRunoffBoundaryCollection(
@@ -15272,6 +15331,24 @@ begin
     framePestObsSwt.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FSwtPestObs_Node := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateTvkNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FTvkNode := nil;
+  if frmGoPhast.PhastModel.TvkIsSelected
+    and  (frmGoPhast.ModelSelection = msModflow2015) then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+      frmGoPhast.PhastModel.ModflowPackages.TvkPackage.PackageIdentifier)
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspTvk.PageIndex;
+    frameScreenObjectTvk.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FTvkNode := Node;
   end;
 end;
 
@@ -20170,6 +20247,8 @@ begin
   GetFmp4CropHasSalinityDemandBoundary(AScreenObjectList);
   GetFmp4MultCropHasSalinityDemandBoundary(AScreenObjectList);
 
+  GetTvkBoundary(AScreenObjectList);
+
 
   SetSelectedMfBoundaryNode;
 
@@ -23836,6 +23915,11 @@ begin
     ResultType := rdtDouble;
   end
   else if (DataGrid = frameObsMf6.framePestObs.frameObservations.Grid)
+    then
+  begin
+    ResultType := rdtDouble;
+  end
+  else if (DataGrid = frameScreenObjectTvk.rdgModflowBoundary)
     then
   begin
     ResultType := rdtDouble;
@@ -29938,6 +30022,7 @@ begin
     or (DataGrid = frameMultLandUseAreaFraction.rdgModflowBoundary)
     or (DataGrid = frameFmp4MultTranspirationFraction.rdgModflowBoundary)
     or (DataGrid = frameFmp4MultRootDepth.rdgModflowBoundary)
+    or (DataGrid = frameScreenObjectTvk.rdgModflowBoundary)
     ;
 end;
 
@@ -29985,7 +30070,6 @@ begin
       or (DataGrid = frameFarmID.rdgModflowBoundary)
       or (DataGrid = frameFarmPrecip.rdgModflowBoundary)
       or (DataGrid = frameFarmRefEvap.rdgModflowBoundary)
-      or (DataGrid = frameFarmID.rdgModflowBoundary)
       or (DataGrid = frameMAW.rdgModflowBoundary)
       or (DataGrid = frameMAW.frameWellScreens.Grid)
       then
@@ -32715,6 +32799,15 @@ procedure TfrmScreenObjectProperties.frameDynamicTimeSeriesbtnAddGroupClick(
 begin
   inherited;
   frameDynamicTimeSeries.btnAddGroupClick(Sender);
+end;
+
+procedure
+    TfrmScreenObjectProperties.frameScreenObjectTvkrdgModflowBoundarySetEditText(
+    Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  frameScreenObjectTvk.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
+  UpdateNodeState(FTvkNode);
 end;
 
 procedure TfrmScreenObjectProperties.SetMultipleScreenObjects(

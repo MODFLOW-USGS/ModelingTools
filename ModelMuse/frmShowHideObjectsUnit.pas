@@ -39,6 +39,7 @@ type
     miDeselect: TMenuItem;
     miAddToSelection: TMenuItem;
     btnEditAllSelected: TButton;
+    procedure btnCloseClick(Sender: TObject);
     // @name calls Release and sets frmShowHideObjects to nil.
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     // @name is the event handler for the OnCreate event of @classname.
@@ -115,6 +116,10 @@ resourcestring
   StrSelect = 'Select';
 
 {$R *.dfm}
+
+procedure TfrmShowHideObjects.btnCloseClick(Sender: TObject);
+begin
+end;
 
 { TfrmShowHideObjects }
 
@@ -620,43 +625,16 @@ var
   end;
 begin
   inherited;
-  Data := vstObjects.GetNodeData(vstObjects.NodeParent[Node]);
-  if (Data <> nil) and (Data.ScreenObjects <> nil) then
-  begin
-    ScreenObject := Data.ScreenObjects[Node.Index];
-    if ScreenObject = nil then
-    begin
-      TargetCanvas.Font.Style := [];
-    end
-    else if ScreenObject.Selected then
-    begin
-      TargetCanvas.Font.Style := [fsBold];
-    end
-    else
-    begin
-      TargetCanvas.Font.Style := [];
-    end;
-  end
-  else if vsExpanded in Node.States then
-  begin
-    TargetCanvas.Font.Style := [];
-  end
-  else
-  begin
-    Data := vstObjects.GetNodeData(Node);
+  try
+    Data := vstObjects.GetNodeData(vstObjects.NodeParent[Node]);
     if (Data <> nil) and (Data.ScreenObjects <> nil) then
     begin
-      HasSelected := False;
-      for Index := 0 to Data.ScreenObjects.Count - 1 do
+      ScreenObject := Data.ScreenObjects[Node.Index];
+      if ScreenObject = nil then
       begin
-        ScreenObject := Data.ScreenObjects[Index];
-        if (ScreenObject <> nil) and ScreenObject.Selected then
-        begin
-          HasSelected := True;
-          break;
-        end;
-      end;
-      if HasSelected then
+        TargetCanvas.Font.Style := [];
+      end
+      else if ScreenObject.Selected then
       begin
         TargetCanvas.Font.Style := [fsBold];
       end
@@ -665,37 +643,24 @@ begin
         TargetCanvas.Font.Style := [];
       end;
     end
+    else if vsExpanded in Node.States then
+    begin
+      TargetCanvas.Font.Style := [];
+    end
     else
     begin
-      if Node.ChildCount > 0 then
+      Data := vstObjects.GetNodeData(Node);
+      if (Data <> nil) and (Data.ScreenObjects <> nil) then
       begin
         HasSelected := False;
-        ChildNodes := TList.Create;
-        try
-          GetChildNodes(Node, ChildNodes);
-          for NodeIndex := 0 to ChildNodes.Count - 1 do
+        for Index := 0 to Data.ScreenObjects.Count - 1 do
+        begin
+          ScreenObject := Data.ScreenObjects[Index];
+          if (ScreenObject <> nil) and ScreenObject.Selected then
           begin
-            ChildNode := ChildNodes[NodeIndex];
-            Data := vstObjects.GetNodeData(ChildNode);
-            if (Data <> nil) and (Data.ScreenObjects <> nil) then
-            begin
-              for Index := 0 to Data.ScreenObjects.Count - 1 do
-              begin
-                ScreenObject := Data.ScreenObjects[Index];
-                if (ScreenObject <> nil) and ScreenObject.Selected then
-                begin
-                  HasSelected := True;
-                  break;
-                end;
-              end;
-              if HasSelected then
-              begin
-                break;
-              end;
-            end;
+            HasSelected := True;
+            break;
           end;
-        finally
-          ChildNodes.Free;
         end;
         if HasSelected then
         begin
@@ -705,10 +670,53 @@ begin
         begin
           TargetCanvas.Font.Style := [];
         end;
+      end
+      else
+      begin
+        if Node.ChildCount > 0 then
+        begin
+          HasSelected := False;
+          ChildNodes := TList.Create;
+          try
+            GetChildNodes(Node, ChildNodes);
+            for NodeIndex := 0 to ChildNodes.Count - 1 do
+            begin
+              ChildNode := ChildNodes[NodeIndex];
+              Data := vstObjects.GetNodeData(ChildNode);
+              if (Data <> nil) and (Data.ScreenObjects <> nil) then
+              begin
+                for Index := 0 to Data.ScreenObjects.Count - 1 do
+                begin
+                  ScreenObject := Data.ScreenObjects[Index];
+                  if (ScreenObject <> nil) and ScreenObject.Selected then
+                  begin
+                    HasSelected := True;
+                    break;
+                  end;
+                end;
+                if HasSelected then
+                begin
+                  break;
+                end;
+              end;
+            end;
+          finally
+            ChildNodes.Free;
+          end;
+          if HasSelected then
+          begin
+            TargetCanvas.Font.Style := [fsBold];
+          end
+          else
+          begin
+            TargetCanvas.Font.Style := [];
+          end;
+        end;
       end;
     end;
+  except
+    Close;
   end;
-
 end;
 
 function TfrmShowHideObjects.ShouldCheckBoxBeChecked(

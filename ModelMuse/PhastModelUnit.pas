@@ -2163,6 +2163,7 @@ that affects the model output should also have a comment. }
     function GetViscosityPkgViscUsed: Boolean;
   public
     function ChdIsSelected: Boolean; virtual;
+    function TvkIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
     function DoMt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
     property Mt3dMS_StrictUsed: TObjectUsedEvent read GetMt3dMS_StrictUsed;
@@ -4311,6 +4312,7 @@ that affects the model output should also have a comment. }
     function LgrV1Used: boolean;
     function BcfIsSelected: Boolean;
     function ChdIsSelected: Boolean; override;
+    function TvkIsSelected: Boolean; override;
     function ChobIsSelected: Boolean;
     function De4IsSelected: Boolean;
     function DrnIsSelected: Boolean;
@@ -12254,6 +12256,29 @@ begin
       if ChildModel <> nil then
       begin
         result := result or ChildModel.ModflowPackages.Mt3dmsTransObs.IsSelected;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.TvkIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and frmGoPhast.PhastModel.LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.TvkIsSelected;
+        if result then
+        begin
+          break;
+        end;
       end;
     end;
   end;
@@ -28915,17 +28940,17 @@ end;
 
 procedure TCustomModel.InvalidateTransientKx(Sender: TObject);
 begin
-  Assert(False);
+  ModflowPackages.TvkPackage.TransientKx.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateTransientKy(Sender: TObject);
 begin
-  Assert(False);
+  ModflowPackages.TvkPackage.TransientKy.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateTransientKz(Sender: TObject);
 begin
-  Assert(False);
+  ModflowPackages.TvkPackage.TransientKz.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateUzfGwtConc(Sender: TObject);
@@ -39312,6 +39337,11 @@ end;
 function TCustomModel.Trpy: TOneDRealArray;
 begin
   result := LayerStructure.Trpy;
+end;
+
+function TCustomModel.TvkIsSelected: Boolean;
+begin
+  result := ModflowPackages.TvkPackage.IsSelected;
 end;
 
 function TCustomModel.TwoDElementCenter(const Column, Row: integer): TPoint2D;
