@@ -13104,7 +13104,7 @@ var
 begin
   Formula := Item.BoundaryFormula[DataIndex];
 
-//  ATimeSeries := nil;
+  ATimeSeries := nil;
   ADynamicTimeSeries := nil;
   if IGlobalModel <> nil then
   begin
@@ -13129,7 +13129,7 @@ begin
   begin
     NewUseList.AddStrings(ADynamicTimeSeries.UsesList);
   end
-  else
+  else if ATimeSeries = nil then
   begin
     try
       rpThreeDFormulaCompiler.Compile(Formula);

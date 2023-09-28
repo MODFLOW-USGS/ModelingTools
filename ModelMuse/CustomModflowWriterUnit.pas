@@ -10241,7 +10241,7 @@ begin
       WriteString(ExtractFileName(FTimeSeriesFileNames[FileIndex]));
       NewLine;
     end;
-    FTimeSeriesFileNames.Clear;
+//    FTimeSeriesFileNames.Clear;
   end;
 end;
 

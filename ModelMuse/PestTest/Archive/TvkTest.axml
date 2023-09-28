@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="TvkTest" FileType="bin">
+    <FileName Model_Name="TvkTest" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="TvkTest" FileType="ancillary">
+    <FileName Model_Name="TvkTest" FileType="ancillary">TvkTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="TvkTest" FileType="Model Input">
+    <FileName Model_Name="TvkTest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.chd</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.dis</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.gsf</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.ic</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.ims</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.jtf</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.nam.archive</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.npf</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.ob_chob</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.oc</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.ptf</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.pval</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.sto</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.tdis</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.tvk</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">TvkTest.tvk.KValues.ts</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Input">usgs.TvkTest.reference</FileName>
+  </model>
+  <output Model_Name="TvkTest" FileType="Model Output">
+    <FileName Model_Name="TvkTest" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Output">TvkTest.bhd</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Output">TvkTest.cbc</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Output">TvkTest.chob_out_chd.csv</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Output">TvkTest.dis.grb</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Output">TvkTest.InnerSolution.CSV</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Output">TvkTest.lst</FileName>
+    <FileName Model_Name="TvkTest" FileType="Model Output">TvkTest.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

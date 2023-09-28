@@ -67,7 +67,7 @@ inherited framePackageNpf: TframePackageNpf
         WordWrapCells = True
         CaseSensitivePicklist = False
         CheckStyle = csCheck
-        AutoAdjustColWidths = True
+        AutoAdjustColWidths = False
       end>
     WordWrapRowCaptions = False
     ColWidths = (

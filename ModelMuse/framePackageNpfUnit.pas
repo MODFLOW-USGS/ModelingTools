@@ -81,7 +81,7 @@ procedure TframePackageNpf.FrameResize(Sender: TObject);
 begin
   inherited;
   rdgOptions.BeginUpdate;
-  rdgOptions.ColWidths[0] := rdgOptions.Width-4;
+  rdgOptions.ColWidths[0] := rdgOptions.Width-28;
   rdgOptions.EndUpdate;
 end;
 

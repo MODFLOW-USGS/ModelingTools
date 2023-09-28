@@ -20116,6 +20116,7 @@ begin
     or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
     or (DataGrid = frameGwtCnc.rdgModflowBoundary)
     or (DataGrid = frameGwtSrc.rdgModflowBoundary)
+    or (DataGrid = frameScreenObjectTvk.rdgModflowBoundary)
     or (DataGrid.Parent is TframeLakeOutlet)
     )
   ;

@@ -1,0 +1,9 @@
+# OBS: Observation Utility file created on 9/28/2023 by ModelMuse version 5.1.1.39.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT TvkTest.chob_out_chd.csv
+  'chd_chdobs' chd Object1
+END CONTINUOUS

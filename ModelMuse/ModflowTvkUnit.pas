@@ -100,6 +100,8 @@ type
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
     procedure InvalidateModel; override;
+    function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
+      override;
   end;
 
   TTvk_Cell = class(TValueCell)
@@ -539,6 +541,15 @@ begin
   AddBoundary(TTvkStorage.Create(AModel));
 end;
 
+function TTvkCollection.AdjustedFormula(FormulaIndex,
+  ItemIndex: integer): string;
+var
+  Item: TTvkItem;
+begin
+  Item := Items[ItemIndex] as TTvkItem;
+  result := Item.BoundaryFormula[FormulaIndex];
+end;
+
 procedure TTvkCollection.AssignCellList(
   CellAssignmentData: TCellAssignmentData);
 var
@@ -627,6 +638,7 @@ begin
 
     try
       Expression.Evaluate;
+      TvkStorage.TvkArray[Index].CellData.PropertyCount := 3;
       with TvkStorage.TvkArray[Index].CellData.Values[BoundaryFunctionIndex] do
       begin
         Value := Expression.DoubleResult;
