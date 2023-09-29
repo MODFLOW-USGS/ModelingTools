@@ -882,7 +882,11 @@ uses
   ModflowViscosityWriterUnit in 'ModflowViscosityWriterUnit.pas',
   ModflowTvkUnit in 'ModflowTvkUnit.pas',
   ModflowTvkWriterUnit in 'ModflowTvkWriterUnit.pas',
-  frameScreenObjectTransientKUnit in 'frameScreenObjectTransientKUnit.pas' {frameScreenObjectTransientK: TFrame};
+  frameScreenObjectTransientKUnit in 'frameScreenObjectTransientKUnit.pas' {frameScreenObjectTransientK: TFrame},
+  ModflowTvsUnit in 'ModflowTvsUnit.pas',
+  ModflowTvsWriterUnit in 'ModflowTvsWriterUnit.pas',
+  framePackageTvsUnit in 'framePackageTvsUnit.pas' {framePackageTvs: TFrame},
+  frameScreenObjectTransientSUnit in 'frameScreenObjectTransientSUnit.pas' {frameScreenObjectTransientS: TFrame};
 
 {$R *.res}
 

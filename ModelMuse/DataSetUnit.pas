@@ -44,7 +44,7 @@ type
     btSutraSpecConcTemp, btSutraFluidFlux, btMassEnergyFlux, btSutraGeneralFlow,
     btSutraGenTransp, btMfFhb, btCFP, btMfFarm, btSWR, btMnw1, btMtmsObs, btRIP,
     btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6,
-    btSft, btCSub, btMvr, btCnc, btSrc, btTransK);
+    btSft, btCSub, btMvr, btCnc, btSrc, btTransK, btTransS);
 
   TBoundaryTypes = set of TBoundaryType;
 
@@ -7982,6 +7982,12 @@ begin
     then
   begin
     result := btTransK;
+  end
+  else if (Name = StrTransientSS)
+    or (Name = StrTransientSY)
+    then
+  begin
+    result := btTransS;
   end
   else if Pos('CNC', Name) = 1 then
   begin

@@ -668,72 +668,72 @@ begin
         end;
       end;
 
-    GWT_Start:= 7;
-    if Model.GwtUsed and (TimeLists.Count > GWT_Start) then
-    begin
-      SpecConcList.Capacity := Model.MobileComponents.Count;
-      ImfiltrationConcList.Capacity := Model.MobileComponents.Count;
-      ET_ConcList.Capacity := Model.MobileComponents.Count;
-
-      for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+      GWT_Start:= 7;
+      if Model.GwtUsed and (TimeLists.Count > GWT_Start) then
       begin
-        SpecConcList.Add(TimeLists[GWT_Start]);
-        Inc(GWT_Start);
-        ImfiltrationConcList.Add(TimeLists[GWT_Start]);
-        Inc(GWT_Start);
-        ET_ConcList.Add(TimeLists[GWT_Start]);
-        Inc(GWT_Start);
+        SpecConcList.Capacity := Model.MobileComponents.Count;
+        ImfiltrationConcList.Capacity := Model.MobileComponents.Count;
+        ET_ConcList.Capacity := Model.MobileComponents.Count;
+
+        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          SpecConcList.Add(TimeLists[GWT_Start]);
+          Inc(GWT_Start);
+          ImfiltrationConcList.Add(TimeLists[GWT_Start]);
+          Inc(GWT_Start);
+          ET_ConcList.Add(TimeLists[GWT_Start]);
+          Inc(GWT_Start);
+        end;
+
+        GWT_Start := UzfBoundaryGwtStart;
+        for SpeciesIndex := 0 to SpecConcList.Count - 1 do
+        begin
+          AList := SpecConcList[SpeciesIndex];
+  //        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex;
+          for TimeIndex := 0 to Values.Count - 1 do
+          begin
+            AnArray := AList[TimeIndex]
+              as TModflowBoundaryDisplayDataArray;
+            CellList := Values[TimeIndex];
+            AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
+              rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            Model.AdjustDataArray(AnArray);
+            CellList.Cache;
+          end;
+          Inc(GWT_Start);
+
+          AList := ImfiltrationConcList[SpeciesIndex];
+  //        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex
+  //          + Model.MobileComponents.Count;
+          for TimeIndex := 0 to Values.Count - 1 do
+          begin
+            AnArray := AList[TimeIndex]
+              as TModflowBoundaryDisplayDataArray;
+            CellList := Values[TimeIndex];
+            AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
+              rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            Model.AdjustDataArray(AnArray);
+            CellList.Cache;
+          end;
+          Inc(GWT_Start);
+
+          AList := ET_ConcList[SpeciesIndex];
+  //        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex
+  //          + Model.MobileComponents.Count * 2;
+          for TimeIndex := 0 to Values.Count - 1 do
+          begin
+            AnArray := AList[TimeIndex]
+              as TModflowBoundaryDisplayDataArray;
+            CellList := Values[TimeIndex];
+            AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
+              rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            Model.AdjustDataArray(AnArray);
+            CellList.Cache;
+          end;
+          Inc(GWT_Start);
+        end;
+
       end;
-
-      GWT_Start := UzfBoundaryGwtStart;
-      for SpeciesIndex := 0 to SpecConcList.Count - 1 do
-      begin
-        AList := SpecConcList[SpeciesIndex];
-//        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex;
-        for TimeIndex := 0 to Values.Count - 1 do
-        begin
-          AnArray := AList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          CellList := Values[TimeIndex];
-          AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
-          Model.AdjustDataArray(AnArray);
-          CellList.Cache;
-        end;
-        Inc(GWT_Start);
-
-        AList := ImfiltrationConcList[SpeciesIndex];
-//        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex
-//          + Model.MobileComponents.Count;
-        for TimeIndex := 0 to Values.Count - 1 do
-        begin
-          AnArray := AList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          CellList := Values[TimeIndex];
-          AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
-          Model.AdjustDataArray(AnArray);
-          CellList.Cache;
-        end;
-        Inc(GWT_Start);
-
-        AList := ET_ConcList[SpeciesIndex];
-//        GWT_Start := UzfBoundaryGwtStart + SpeciesIndex
-//          + Model.MobileComponents.Count * 2;
-        for TimeIndex := 0 to Values.Count - 1 do
-        begin
-          AnArray := AList[TimeIndex]
-            as TModflowBoundaryDisplayDataArray;
-          CellList := Values[TimeIndex];
-          AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
-          Model.AdjustDataArray(AnArray);
-          CellList.Cache;
-        end;
-        Inc(GWT_Start);
-      end;
-
-    end;
 
 
     except on E: EInvalidTime do

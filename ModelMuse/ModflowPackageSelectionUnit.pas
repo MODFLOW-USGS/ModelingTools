@@ -7376,9 +7376,32 @@ Type
     property TransientKx: TModflowBoundaryDisplayTimeList read FTransientKx;
     property TransientKy: TModflowBoundaryDisplayTimeList read FTransientKy;
     property TransientKz: TModflowBoundaryDisplayTimeList read FTransientKz;
-
   end;
 
+  TTvsPackage = class(TModflowPackageSelection)
+  private
+    FTransientSS: TModflowBoundaryDisplayTimeList;
+    FTransientSY: TModflowBoundaryDisplayTimeList;
+    FEnable_Storage_Change_Integration: Boolean;
+    procedure GetUseList(ParameterIndex: Integer; NewUseList: TStringList;
+      const DisplayName: string);
+    procedure GetSSUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetSYUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InitializeTvsDisplay(Sender: TObject);
+    procedure SetEnable_Storage_Change_Integration(const Value: Boolean);
+  public
+    Constructor Create(Model: TBaseModel); override;
+    Destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+    property TransientSS: TModflowBoundaryDisplayTimeList read FTransientSS;
+    property TransientSY: TModflowBoundaryDisplayTimeList read FTransientSY;
+  published
+    // Inverse of DISABLE_STORAGE_CHANGE_INTEGRATION
+    property Enable_Storage_Change_Integration: Boolean
+      read FEnable_Storage_Change_Integration
+      write SetEnable_Storage_Change_Integration default True;
+  end;
 
 const
   KMaxRainfallForStepAdjustment = 0.15;
@@ -7427,8 +7450,8 @@ uses Contnrs , PhastModelUnit, ModflowOptionsUnit,
   ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit, ModflowCsubUnit,
   ModflowCSubWriterUnit,
   ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit, DataSetNamesUnit,
-  ModflowTvkUnit,
-  ModflowTvkWriterUnit;
+  ModflowTvkUnit, ModflowTvsUnit,
+  ModflowTvkWriterUnit, ModflowTvsWriterUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -30393,6 +30416,122 @@ begin
   TransientKx.ComputeAverage;
   TransientKy.ComputeAverage;
   TransientKz.ComputeAverage;
+end;
+
+{ TTvsPackage }
+
+procedure TTvsPackage.Assign(Source: TPersistent);
+begin
+  if Source is TTvsPackage then
+  begin
+    Enable_Storage_Change_Integration :=
+      TTvsPackage(Source).Enable_Storage_Change_Integration;
+  end;
+  inherited;
+end;
+
+constructor TTvsPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  if Model <> nil then
+  begin
+    FTransientSS := TModflowBoundaryDisplayTimeList.Create(Model);
+    FTransientSS.OnInitialize := InitializeTvsDisplay;
+    FTransientSS.OnGetUseList := GetSSUseList;
+    FTransientSS.OnTimeListUsed := PackageUsed;
+    FTransientSS.Name := StrTransientSS;
+    AddTimeList(FTransientSS);
+
+    FTransientSY := TModflowBoundaryDisplayTimeList.Create(Model);
+    FTransientSY.OnInitialize := InitializeTvsDisplay;
+    FTransientSY.OnGetUseList := GetSYUseList;
+    FTransientSY.OnTimeListUsed := PackageUsed;
+    FTransientSY.Name := StrTransientSY;
+    AddTimeList(FTransientSY);
+  end;
+  InitializeVariables;
+end;
+
+destructor TTvsPackage.Destroy;
+begin
+  FTransientSS.Free;
+  FTransientSY.Free;
+  inherited;
+end;
+
+procedure TTvsPackage.GetSSUseList(Sender: TObject; NewUseList: TStringList);
+begin
+  GetUseList(0, NewUseList, 'Transient SS');
+end;
+
+procedure TTvsPackage.GetSYUseList(Sender: TObject; NewUseList: TStringList);
+begin
+  GetUseList(1, NewUseList, 'Transient SY');
+end;
+
+procedure TTvsPackage.GetUseList(ParameterIndex: Integer;
+  NewUseList: TStringList; const DisplayName: string);
+var
+  ScreenObjectIndex: Integer;
+  LocalModel: TCustomModel;
+  ScreenObject: TScreenObject;
+  ValueIndex: Integer;
+  Boundary: TTvsBoundary;
+  Item: TTvsItem;
+begin
+  { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.ModflowTvsBoundary;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count - 1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TTvsItem;
+        UpdateUseList(ParameterIndex, NewUseList, Item, DisplayName);
+      end;
+    end;
+  end;
+end;
+
+procedure TTvsPackage.InitializeTvsDisplay(Sender: TObject);
+var
+  TvsWriter: TModflowTvs_Writer;
+  List: TModflowBoundListOfTimeLists;
+  CoverageIndex: Integer;
+begin
+  TransientSS.CreateDataSets;
+  TransientSY.CreateDataSets;
+  List := TModflowBoundListOfTimeLists.Create;
+  TvsWriter := TModflowTvs_Writer.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(TransientSS);
+    List.Add(TransientSY);
+    TvsWriter.UpdateDisplay(List);
+  finally
+    TvsWriter.Free;
+    List.Free;
+  end;
+  TransientSS.ComputeAverage;
+  TransientSY.ComputeAverage;
+end;
+
+procedure TTvsPackage.InitializeVariables;
+begin
+  inherited;
+  FEnable_Storage_Change_Integration := True;
+end;
+
+procedure TTvsPackage.SetEnable_Storage_Change_Integration(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FEnable_Storage_Change_Integration, Value)
 end;
 
 end.

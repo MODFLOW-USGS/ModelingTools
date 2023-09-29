@@ -65,7 +65,7 @@ uses
   OrderedCollectionInterfaceUnit, ScreenObjectInterfaceUnit,
   FormulaManagerInterfaceUnit, ModflowBoundaryInterfaceUnit,
   GlobalVariablesInterfaceUnit, Modflow6DynamicTimeSeriesUnit, CellLocationUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit, ModflowTvkUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, ModflowTvkUnit, ModflowTvsUnit;
 
 type
   //
@@ -1501,6 +1501,7 @@ view. }
     FFmpMultCropHasSalinityDemandBoundary: TFmp4MultCropHasSalinityDemandBoundary;
     FFmp4AddedDemandRunoffSplitBoundary: TFmp4AddedDemandRunoffSplitBoundary;
     FTvkBoundary: TTvkBoundary;
+    FTvsBoundary: TTvsBoundary;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1686,6 +1687,7 @@ view. }
     property FmpMultCropHasSalinityDemandBoundary: TFmp4MultCropHasSalinityDemandBoundary
       read FFmpMultCropHasSalinityDemandBoundary write FFmpMultCropHasSalinityDemandBoundary;
     property TvkBoundary: TTvkBoundary read FTvkBoundary write FTvkBoundary;
+    property TvsBoundary: TTvsBoundary read FTvsBoundary write FTvsBoundary;
 
     // When adding a new property, be sure to update
     // TModflowBoundaries.Invalidate,
@@ -3096,6 +3098,10 @@ view. }
     procedure SetModflowTvkBoundary(const Value: TTvkBoundary);
     function StoreModflowTvkBoundary: Boolean;
 
+    function GetModflowTvsBoundary: TTvsBoundary;
+    procedure SetModflowTvsBoundary(const Value: TTvsBoundary);
+    function StoreModflowTvsBoundary: Boolean;
+
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -3719,7 +3725,7 @@ view. }
     procedure CreateGwtCncBoundary;
     procedure CreateGwtSrcBoundary;
     procedure CreateTvkBoundary;
-
+    procedure CreateTvsBoundary;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     function ModflowDataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -4587,7 +4593,9 @@ view. }
     property ModflowTvkBoundary: TTvkBoundary
       read GetModflowTvkBoundary write SetModflowTvkBoundary
       Stored StoreModflowTvkBoundary;
-
+    property ModflowTvsBoundary: TTvsBoundary
+      read GetModflowTvsBoundary write SetModflowTvsBoundary
+      Stored StoreModflowTvsBoundary;
 
     { TODO :
 Consider making SectionStarts private and only exposing SectionStart,
@@ -7282,6 +7290,7 @@ begin
   ModflowFmp4MultCropHasSalinityDemand := AScreenObject.ModflowFmp4MultCropHasSalinityDemand;
   Fmp4AddedDemandRunoffSplitBoundary := AScreenObject.Fmp4AddedDemandRunoffSplitBoundary;
   ModflowTvkBoundary := AScreenObject.ModflowTvkBoundary;
+  ModflowTvsBoundary := AScreenObject.ModflowTvsBoundary;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -10270,6 +10279,10 @@ begin
       ModflowTvkBoundary.InvalidateDisplay;
     end;
 
+    if ModflowTvsBoundary <> nil then
+    begin
+      ModflowTvsBoundary.InvalidateDisplay;
+    end;
     //    if Mt3dmsTransObservations <> nil then
 //    begin
 //      Mt3dmsTransObservations.InvalidateDisplay;
@@ -15666,6 +15679,23 @@ begin
   begin
     CreateTvkBoundary;
     ModflowBoundaries.FTvkBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowTvsBoundary(const Value: TTvsBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FTvsBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FTvsBoundary);
+  end
+  else
+  begin
+    CreateTvsBoundary;
+    ModflowBoundaries.FTvsBoundary.Assign(Value);
   end;
 end;
 
@@ -33540,6 +33570,16 @@ begin
 {$ENDIF}
 end;
 
+function TScreenObject.StoreModflowTvsBoundary: Boolean;
+begin
+{$IFDEF VariableK}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowTvsBoundary <> nil) and ModflowTvsBoundary.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowUzfBoundary: Boolean;
 begin
   result := (FModflowBoundaries <> nil)
@@ -35324,6 +35364,23 @@ begin
   else
   begin
     result := ModflowBoundaries.TvkBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowTvsBoundary: TTvsBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateTvsBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.TvsBoundary;
   end;
 end;
 
@@ -39773,6 +39830,14 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateTvsBoundary;
+begin
+  if (ModflowBoundaries.FTvsBoundary = nil) then
+  begin
+    ModflowBoundaries.FTvsBoundary := TTvsBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateModflowUzfMf6Boundary;
 begin
   if (ModflowBoundaries.FModflowUzfMf6Boundary = nil) then
@@ -43466,6 +43531,18 @@ begin
     FTvkBoundary.Assign(Source.FTvkBoundary);
   end;
 
+  if Source.FTvsBoundary = nil then
+  begin
+    FreeAndNil(FTvsBoundary);
+  end
+  else
+  begin
+    if FTvsBoundary = nil then
+    begin
+      FTvsBoundary := TTvsBoundary.Create(Model, FScreenObject);
+    end;
+    FTvsBoundary.Assign(Source.FTvsBoundary);
+  end;
 
   FreeUnusedBoundaries;
 end;
@@ -43485,6 +43562,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FTvsBoundary.Free;
   FTvkBoundary.Free;
   FFmp4AddedDemandRunoffSplitBoundary.Free;
   FFmpMultCropHasSalinityDemandBoundary.Free;
@@ -44005,6 +44083,12 @@ begin
     FreeAndNil(FTvkBoundary);
   end;
 
+  if (FTvsBoundary <> nil)
+    and not FTvsBoundary.Used then
+  begin
+    FreeAndNil(FTvsBoundary);
+  end;
+
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -44442,6 +44526,11 @@ begin
   if FTvkBoundary <> nil then
   begin
     FTvkBoundary.Invalidate;
+  end;
+
+  if FTvsBoundary <> nil then
+  begin
+    FTvsBoundary.Invalidate;
   end;
 end;
 
@@ -44920,6 +45009,11 @@ begin
   if FTvkBoundary <> nil then
   begin
     FTvkBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FTvsBoundary <> nil then
+  begin
+    FTvsBoundary.RemoveModelLink(AModel);
   end;
 
   {
@@ -45402,6 +45496,11 @@ begin
   if FTvkBoundary <> nil then
   begin
     FTvkBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FTvsBoundary <> nil then
+  begin
+    FTvsBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
   Invalidate;
@@ -45888,6 +45987,10 @@ begin
     FTvkBoundary.StopTalkingToAnyone;
   end;
 
+  if FTvsBoundary <> nil then
+  begin
+    FTvsBoundary.StopTalkingToAnyone;
+  end;
 
 end;
 
@@ -46676,6 +46779,14 @@ begin
     end;
   end;
 
+  if FTvsBoundary <> nil then
+  begin
+    Result := FTvsBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
 
 end;
 

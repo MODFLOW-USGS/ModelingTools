@@ -9,8 +9,8 @@ inherited frmImportPoints: TfrmImportPoints
   ClientWidth = 573
   KeyPreview = True
   OnKeyUp = FormKeyUp
-  ExplicitWidth = 589
-  ExplicitHeight = 554
+  ExplicitWidth = 585
+  ExplicitHeight = 553
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -20,13 +20,13 @@ inherited frmImportPoints: TfrmImportPoints
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 467
-    ExplicitWidth = 577
+    ExplicitTop = 465
+    ExplicitWidth = 569
     DesignSize = (
       573
       49)
     object btnCancel: TBitBtn
-      Left = 460
+      Left = 452
       Top = 6
       Width = 83
       Height = 33
@@ -34,10 +34,10 @@ inherited frmImportPoints: TfrmImportPoints
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 472
+      ExplicitLeft = 448
     end
     object btnOK: TBitBtn
-      Left = 371
+      Left = 363
       Top = 6
       Width = 83
       Height = 33
@@ -46,10 +46,10 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 383
+      ExplicitLeft = 359
     end
     object btnHelp: TBitBtn
-      Left = 282
+      Left = 274
       Top = 6
       Width = 83
       Height = 33
@@ -58,7 +58,7 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 294
+      ExplicitLeft = 270
     end
   end
   object pcImportPoints: TPageControl
@@ -69,19 +69,18 @@ inherited frmImportPoints: TfrmImportPoints
     ActivePage = tabControls
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 577
-    ExplicitHeight = 467
+    ExplicitWidth = 569
+    ExplicitHeight = 465
     object tabControls: TTabSheet
       Caption = 'Controls'
       object pnlRadioGroups: TPanel
-        Left = 180
+        Left = 172
         Top = 0
         Width = 393
-        Height = 434
+        Height = 433
         Align = alRight
         ParentColor = True
         TabOrder = 1
-        ExplicitLeft = 176
         object lblRoot: TLabel
           Left = 207
           Top = 255
@@ -255,19 +254,16 @@ inherited frmImportPoints: TfrmImportPoints
         Align = alClient
         Caption = 'pnlData'
         TabOrder = 0
-        ExplicitWidth = 176
-        ExplicitHeight = 434
         object jvclbDataSets: TJvxCheckListBox
           Left = 1
           Top = 26
-          Width = 178
-          Height = 407
+          Width = 170
+          Height = 406
           Align = alClient
           Color = clRed
           ItemHeight = 18
           TabOrder = 1
           OnClickCheck = jvclbDataSetsClickCheck
-          ExplicitWidth = 174
           InternalVersion = 202
         end
         object pnlLabelDataSets: TPanel
@@ -279,7 +275,6 @@ inherited frmImportPoints: TfrmImportPoints
           Caption = 'Data sets'
           ParentColor = True
           TabOrder = 0
-          ExplicitWidth = 174
         end
       end
     end
@@ -288,13 +283,13 @@ inherited frmImportPoints: TfrmImportPoints
       ImageIndex = 1
       object pnlDataTabControls: TPanel
         Left = 0
-        Top = 388
-        Width = 573
-        Height = 46
+        Top = 384
+        Width = 565
+        Height = 49
         Align = alBottom
         ParentColor = True
         TabOrder = 1
-        ExplicitTop = 389
+        ExplicitTop = 352
         object lblRows: TLabel
           Left = 115
           Top = 13
@@ -340,9 +335,9 @@ inherited frmImportPoints: TfrmImportPoints
       end
       object dgData: TRbwDataGrid4
         Left = 0
-        Top = 0
-        Width = 573
-        Height = 388
+        Top = 73
+        Width = 565
+        Height = 311
         Align = alClient
         ColCount = 2
         FixedColor = 14803425
@@ -410,13 +405,54 @@ inherited frmImportPoints: TfrmImportPoints
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 389
+        ExplicitWidth = 561
+        ExplicitHeight = 278
         ColWidths = (
           64
           64)
         RowHeights = (
           24
           24)
+      end
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 565
+        Height = 73
+        Align = alTop
+        TabOrder = 2
+        ExplicitWidth = 561
+        object lblTimePeriods: TLabel
+          Left = 271
+          Top = 17
+          Width = 163
+          Height = 18
+          Caption = 'Number of time periods'
+        end
+        object rgFeatureDataFormat: TRadioGroup
+          Left = 16
+          Top = 0
+          Width = 249
+          Height = 67
+          Caption = 'Feature data format'
+          ItemIndex = 0
+          Items.Strings = (
+            'One row per time period'
+            'One row per location')
+          TabOrder = 0
+          OnClick = comboBoundaryChoiceChange
+        end
+        object seTimePeriods: TJvSpinEdit
+          Left = 271
+          Top = 41
+          Width = 121
+          Height = 26
+          MaxValue = 10000000000.000000000000000000
+          MinValue = 1.000000000000000000
+          Value = 1.000000000000000000
+          TabOrder = 1
+          OnChange = comboBoundaryChoiceChange
+        end
       end
     end
   end

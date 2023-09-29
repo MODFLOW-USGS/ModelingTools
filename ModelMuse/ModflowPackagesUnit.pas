@@ -94,6 +94,7 @@ type
     FBuoyancyPackage: TBuoyancyPackage;
     FViscosityPackage: TViscosityPackage;
     FTvkPackage: TTvkPackage;
+    FTvsPackage: TTvsPackage;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -178,6 +179,7 @@ type
     procedure SetBuoyancyPackage(const Value: TBuoyancyPackage);
     procedure SetViscosityPackage(const Value: TViscosityPackage);
     procedure SetTvkPackage(const Value: TTvkPackage);
+    procedure SetTvsPackage(const Value: TTvsPackage);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -339,6 +341,11 @@ type
       stored False
     {$ENDIF}
       ;
+    property TvsPackage: TTvsPackage read FTvsPackage write SetTvsPackage
+    {$IFNDEF VariableK}
+      stored False
+    {$ENDIF}
+      ;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
@@ -462,6 +469,7 @@ resourcestring
   StrBUYBuoyancyPackag = 'BUY: Buoyancy Package';
   StrVSCViscosityPacka = 'VSC: Viscosity Package';
   StrTVKTimeVaryingHy = 'TVK: Time-Varying Hydraulic Conductivity Package';
+  StrTVSTimeVaryingSt = 'TVS: Time-Varying Storage Package';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -559,6 +567,7 @@ begin
     BuoyancyPackage := SourcePackages.BuoyancyPackage;
     ViscosityPackage := SourcePackages.ViscosityPackage;
     TvkPackage := SourcePackages.TvkPackage;
+    TvsPackage := SourcePackages.TvsPackage;
 
   end
   else
@@ -977,10 +986,16 @@ begin
   FTvkPackage.PackageIdentifier := StrTVKTimeVaryingHy;
   FTvkPackage.Classification := StrFlowPackages;
   FTvkPackage.SelectionType := stCheckBox;
+
+  FTvsPackage := TTvsPackage.Create(Model);
+  FTvsPackage.PackageIdentifier := StrTVSTimeVaryingSt;
+  FTvsPackage.Classification := StrFlowPackages;
+  FTvsPackage.SelectionType := stCheckBox;
 end;
 
 destructor TModflowPackages.Destroy;
 begin
+  FTvsPackage.Free;
   FTvkPackage.Free;
   FViscosityPackage.Free;
   FBuoyancyPackage.Free;
@@ -1163,6 +1178,7 @@ begin
   BuoyancyPackage.InitializeVariables;
   ViscosityPackage.InitializeVariables;
   TvkPackage.InitializeVariables;
+  TvsPackage.InitializeVariables;
 end;
 
 
@@ -1440,6 +1456,11 @@ begin
   end;
 
   if TvkPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+  if TvsPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
   begin
     Inc(Result);
   end;
@@ -1876,6 +1897,11 @@ end;
 procedure TModflowPackages.SetTvkPackage(const Value: TTvkPackage);
 begin
   FTvkPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetTvsPackage(const Value: TTvsPackage);
+begin
+  FTvsPackage.Assign(Value);
 end;
 
 procedure TModflowPackages.SetUpwPackage(const Value: TUpwPackageSelection);

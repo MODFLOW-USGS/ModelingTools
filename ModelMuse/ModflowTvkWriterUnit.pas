@@ -4,7 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Classes, Vcl.Forms, CustomModflowWriterUnit,
-  ModflowBoundaryDisplayUnit, ModflowPackageSelectionUnit;
+  ModflowBoundaryDisplayUnit, ModflowPackageSelectionUnit, Vcl.Dialogs,
+  System.UITypes;
 
 type
   TModflowTvk_Writer = class(TCustomTransientWriter)
@@ -25,7 +26,8 @@ implementation
 
 uses
   frmProgressUnit, ScreenObjectUnit, ModflowTvkUnit, CellLocationUnit,
-  ModflowCellUnit, GoPhastTypes, frmErrorsAndWarningsUnit;
+  ModflowCellUnit, GoPhastTypes, frmErrorsAndWarningsUnit, RbwParser,
+  DataSetUnit;
 
 resourcestring
   StrEvaluatingTVKPacka = 'Evaluating TVK Package data.';
@@ -99,8 +101,88 @@ end;
 
 procedure TModflowTvk_Writer.UpdateDisplay(
   TimeLists: TModflowBoundListOfTimeLists);
+var
+  KxLists: TModflowBoundListOfTimeLists;
+  KyLists: TModflowBoundListOfTimeLists;
+  KzLists: TModflowBoundListOfTimeLists;
+  KxList: TModflowBoundaryDisplayTimeList;
+  KyList: TModflowBoundaryDisplayTimeList;
+  KzList: TModflowBoundaryDisplayTimeList;
+  TimeIndex: Integer;
+  KxArray: TModflowBoundaryDisplayDataArray;
+  KyArray: TModflowBoundaryDisplayDataArray;
+  KzArray: TModflowBoundaryDisplayDataArray;
+  CellList: TValueCellList;
 begin
+  if not Package.IsSelected then
+  begin
+    UpdateNotUsedDisplay(TimeLists);
+    Exit;
+  end;
+  Evaluate;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+  if Values.Count = 0 then
+  begin
+    SetTimeListsUpToDate(TimeLists);
+    Exit;
+  end;
 
+  KxLists := TModflowBoundListOfTimeLists.Create;
+  KyLists := TModflowBoundListOfTimeLists.Create;
+  KzLists := TModflowBoundListOfTimeLists.Create;
+  try
+    try
+      KxList := TimeLists[0];
+      for TimeIndex := 0 to Values.Count - 1 do
+      begin
+        KxArray := KxList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        CellList := Values[TimeIndex];
+        AssignTransient2DArray(KxArray, 0, CellList, 0,
+          rdtDouble, umAssign);
+        Model.AdjustDataArray(KxArray);
+        CellList.Cache;
+      end;
+
+      KyList := TimeLists[1];
+      for TimeIndex := 0 to Values.Count - 1 do
+      begin
+        KyArray := KyList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        CellList := Values[TimeIndex];
+        AssignTransient2DArray(KyArray, 1, CellList, 0,
+          rdtDouble, umAssign);
+        Model.AdjustDataArray(KyArray);
+        CellList.Cache;
+      end;
+
+      KzList := TimeLists[2];
+      for TimeIndex := 0 to Values.Count - 1 do
+      begin
+        KzArray := KzList[TimeIndex]
+          as TModflowBoundaryDisplayDataArray;
+        CellList := Values[TimeIndex];
+        AssignTransient2DArray(KzArray, 2, CellList, 0,
+          rdtDouble, umAssign);
+        Model.AdjustDataArray(KzArray);
+        CellList.Cache;
+      end;
+
+    except on E: EInvalidTime do
+      begin
+        Beep;
+        MessageDlg(E.Message, mtError, [mbOK], 0);
+      end;
+    end;
+  finally
+    KxLists.Free;
+    KyLists.Free;
+    KzLists.Free;
+    Model.InvalidateAllDynamicLists;
+  end
 end;
 
 function TModflowTvk_Writer.WriteFile(const AFileName: string): string;
@@ -156,8 +238,15 @@ end;
 
 procedure TModflowTvk_Writer.WriteFileInternal;
 begin
-  WriteOptions;
-  WriteStressPeriods;
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+    WriteDataSet0;
+    WriteOptions;
+    WriteStressPeriods;
+  finally
+    CloseFile;
+  end;
 end;
 
 procedure TModflowTvk_Writer.WriteOptions;
@@ -177,12 +266,12 @@ var
   AScreenObject: TScreenObject;
   procedure WriteCellID;
   begin
-    WriteInteger(ACell.CellLocation.Layer);
+    WriteInteger(ACell.CellLocation.Layer+1);
     if not Model.DisvUsed then
     begin
-      WriteInteger(ACell.CellLocation.Row);
+      WriteInteger(ACell.CellLocation.Row+1);
     end;
-    WriteInteger(ACell.CellLocation.Column);
+    WriteInteger(ACell.CellLocation.Column+1);
   end;
 begin
   for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do

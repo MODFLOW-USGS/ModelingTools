@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 9/29/2023 by ModelMuse Version 5.1.1.39
+BEGIN OPTIONS
+  LIST TvsTest.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         TvsTest.dis  DIS
+  IC6          TvsTest.ic  IC
+  NPF6         TvsTest.npf  NPF
+  STO6         TvsTest.sto  STO
+  OC6          TvsTest.oc  OC
+  CHD6         TvsTest.chd  CHD-1
+END PACKAGES

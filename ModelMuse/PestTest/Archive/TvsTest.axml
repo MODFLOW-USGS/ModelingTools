@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="TvsTest" FileType="bin">
+    <FileName Model_Name="TvsTest" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="TvsTest" FileType="ancillary">
+    <FileName Model_Name="TvsTest" FileType="ancillary">TvsTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="TvsTest" FileType="Model Input">
+    <FileName Model_Name="TvsTest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.chd</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.dis</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.gsf</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.ic</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.ims</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.jtf</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.nam.archive</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.npf</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.ob_chob</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.oc</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.ptf</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.pval</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.sto</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.tdis</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.tvs</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">TvsTest.tvs.SSValues.ts</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Input">usgs.TvsTest.reference</FileName>
+  </model>
+  <output Model_Name="TvsTest" FileType="Model Output">
+    <FileName Model_Name="TvsTest" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Output">TvsTest.bhd</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Output">TvsTest.cbc</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Output">TvsTest.chob_out_chd.csv</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Output">TvsTest.dis.grb</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Output">TvsTest.InnerSolution.CSV</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Output">TvsTest.lst</FileName>
+    <FileName Model_Name="TvsTest" FileType="Model Output">TvsTest.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

@@ -3,7 +3,8 @@ unit ModflowStoWriterUnit;
 interface
 
 uses
-  System.Classes, CustomModflowWriterUnit, ModflowPackageSelectionUnit, Vcl.Forms;
+  System.Classes, CustomModflowWriterUnit, ModflowPackageSelectionUnit, Vcl.Forms,
+  System.SysUtils;
 
 type
   TStoPackageWriter = class(TCustomPackageWriter)
@@ -24,7 +25,8 @@ implementation
 
 uses
   GoPhastTypes, frmProgressUnit, DataSetUnit,
-  PhastModelUnit, ModflowTimeUnit, PestParamRoots, DataSetNamesUnit;
+  PhastModelUnit, ModflowTimeUnit, PestParamRoots, DataSetNamesUnit,
+  ModflowTvsWriterUnit;
 
 { TStoPackageWriter }
 
@@ -121,6 +123,8 @@ end;
 procedure TStoPackageWriter.WriteOptions;
 var
   StoPackage: TStoPackage;
+  TvsWriter: TModflowTvs_Writer;
+  TvsFileName: string;
 begin
   WriteBeginOptions;
   WriteSaveFlowsOption;
@@ -132,12 +136,27 @@ begin
     NewLine;
   end;
 
-//  WriteNoNewtown;
-//  if StoPackage.NewtonFormulation = nfOff then
-//  begin
-//    WriteString('  NO_NEWTON');
-//    NewLine;
-//  end;
+  if Model.ModflowPackages.TvsPackage.IsSelected then
+  begin
+    TvsWriter := TModflowTvs_Writer.Create(Model, etExport);
+    try
+      TvsFileName := TvsWriter.WriteFile(FInputFileName);
+    finally
+      TvsWriter.Free;
+    end;
+    Model.DataArrayManager.CacheDataArrays;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+    if TvsFileName <> '' then
+    begin
+      WriteString('  TVS6 FILEIN ');
+      WriteString(ExtractFileName(TvsFileName));
+      NewLine;
+    end;
+  end;
 
   WriteEndOptions;
 end;

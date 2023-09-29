@@ -32,12 +32,8 @@ var
 implementation
 
 uses
-  GoPhastTypes, ScreenObjectUnit, ModflowTvkUnit, frmGoPhastUnit;
-
-resourcestring
-  StrTransientKx = 'Transient Kx';
-  StrTransientKy = 'Transient Ky';
-  StrTransientKz = 'Transient Kz';
+  GoPhastTypes, ScreenObjectUnit, ModflowTvkUnit, frmGoPhastUnit,
+  DataSetNamesUnit;
 
 {$R *.dfm}
 

@@ -188,6 +188,10 @@ type
     FFmp4CropHasSalinityDemandNode: PVirtualNode;
     FFmp4CropHasSalinityDemandList: TList;
 
+    FTvkNode: PVirtualNode;
+    FTvkList: TList;
+    FTvsNode: PVirtualNode;
+    FTvsList: TList;
 
 
     procedure RecordExpandedNodes;
@@ -499,7 +503,8 @@ uses StrUtils, ModflowPackagesUnit, ModflowPackageSelectionUnit,
   ModpathParticleUnit, ModflowUzfUnit, ModflowHobUnit, ModflowRchUnit,
   ModflowEtsUnit, ModflowBoundaryUnit, ClassificationUnit, ModflowDrtUnit,
   SutraOptionsUnit, Modflow6ObsUnit, ModflowSfr6Unit, ModflowLakMf6Unit,
-  ModflowMawUnit, ModflowUzfMf6Unit, DataArrayManagerUnit;
+  ModflowMawUnit, ModflowUzfMf6Unit, DataArrayManagerUnit, ModflowTvkUnit,
+  ModflowTvsUnit;
 
 resourcestring
   StrSUTRAFeatures = 'SUTRA Features';
@@ -1267,6 +1272,16 @@ begin
     else if Node = FFmp4CropHasSalinityDemandNode then
     begin
       Data.Caption := 'FMP4 Salinity Flush: Crop has Salinity Demand';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FTvkNode then
+    begin
+      Data.Caption := Packages.TvkPackage.PackageIdentifier;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FTvsNode then
+    begin
+      Data.Caption := Packages.TvsPackage.PackageIdentifier;
       Node.CheckType := ctTriStateCheckBox;
     end
 
@@ -2349,6 +2364,19 @@ begin
       InitializeData(FFmp4CropHasSalinityDemandNode);
     end;
 
+    if ((AScreenObject.ModflowTvkBoundary <> nil)
+      and AScreenObject.ModflowTvkBoundary.Used)
+      then
+    begin
+      InitializeData(FTvkNode);
+    end;
+
+    if ((AScreenObject.ModflowTvsBoundary <> nil)
+      and AScreenObject.ModflowTvsBoundary.Used)
+      then
+    begin
+      InitializeData(FTvsNode);
+    end;
 
 
     if PutInOtherObjects then
@@ -2537,6 +2565,8 @@ begin
     vstCheckDeleteNode(FFmp4FractionOfIrrigToSurfaceWaterNode);
     vstCheckDeleteNode(FFmp4AddedDemandNode);
     vstCheckDeleteNode(FFmp4CropHasSalinityDemandNode);
+    vstCheckDeleteNode(FTvkNode);
+    vstCheckDeleteNode(FTvsNode);
 
 
 
@@ -3012,6 +3042,8 @@ begin
     InitializeMF_BoundaryNode(FFmp4FractionOfIrrigToSurfaceWaterNode, PriorNode, FFmp4FractionOfIrrigToSurfaceWaterList);
     InitializeMF_BoundaryNode(FFmp4AddedDemandNode, PriorNode, FFmp4AddedDemandList);
     InitializeMF_BoundaryNode(FFmp4CropHasSalinityDemandNode, PriorNode, FFmp4CropHasSalinityDemandList);
+    InitializeMF_BoundaryNode(FTvkNode, PriorNode, FTvkList);
+    InitializeMF_BoundaryNode(FTvsNode, PriorNode, FTvsList);
 
 
 
@@ -3373,6 +3405,8 @@ begin
   FFmp4FractionOfIrrigToSurfaceWaterList.Free;
   FFmp4AddedDemandList.Free;
   FFmp4CropHasSalinityDemandList.Free;
+  FTvkList.Free;
+  FTvsList.Free;
   inherited;
 end;
 
@@ -3517,6 +3551,8 @@ begin
   FFmp4FractionOfIrrigToSurfaceWaterList := TList.Create;
   FFmp4AddedDemandList := TList.Create;
   FFmp4CropHasSalinityDemandList := TList.Create;
+  FTvkList := TList.Create;
+  FTvsList := TList.Create;
 
   FCanEdit := True;
 
@@ -3676,6 +3712,8 @@ begin
   FFmp4FractionOfIrrigToSurfaceWaterNode := nil;
   FFmp4AddedDemandNode := nil;
   FFmp4CropHasSalinityDemandNode := nil;
+  FTvkNode := nil;
+  FTvsNode := nil;
 end;
 
 function TfrmCustomSelectObjects.NodeString(ANode: PVirtualNode): string;
@@ -3952,6 +3990,8 @@ begin
   FFmp4FractionOfIrrigToSurfaceWaterList.Sort(ScreenObjectCompare);
   FFmp4AddedDemandList.Sort(ScreenObjectCompare);
   FFmp4CropHasSalinityDemandList.Sort(ScreenObjectCompare);
+  FTvkList.Sort(ScreenObjectCompare);
+  FTvsList.Sort(ScreenObjectCompare);
 
   for Index := 0 to FDataSetLists.Count - 1 do
   begin

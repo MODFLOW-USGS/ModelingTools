@@ -2164,6 +2164,7 @@ that affects the model output should also have a comment. }
   public
     function ChdIsSelected: Boolean; virtual;
     function TvkIsSelected: Boolean; virtual;
+    function TvsIsSelected: Boolean; virtual;
     function FhbIsSelected: Boolean; virtual;
     function DoMt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
     property Mt3dMS_StrictUsed: TObjectUsedEvent read GetMt3dMS_StrictUsed;
@@ -2846,6 +2847,8 @@ that affects the model output should also have a comment. }
     procedure InvalidateTransientKx(Sender: TObject);
     procedure InvalidateTransientKy(Sender: TObject);
     procedure InvalidateTransientKz(Sender: TObject);
+    procedure InvalidateTransientSS(Sender: TObject);
+    procedure InvalidateTransientSY(Sender: TObject);
 
     property NameFileWriter: TObject read FNameFileWriter write SetNameFileWriter;
     property SimNameWriter: IMf6_SimNameFileWriter read FSimNameWriter write FSimNameWriter;
@@ -4313,6 +4316,7 @@ that affects the model output should also have a comment. }
     function BcfIsSelected: Boolean;
     function ChdIsSelected: Boolean; override;
     function TvkIsSelected: Boolean; override;
+    function TvsIsSelected: Boolean; override;
     function ChobIsSelected: Boolean;
     function De4IsSelected: Boolean;
     function DrnIsSelected: Boolean;
@@ -10050,6 +10054,9 @@ const
 //    '5.1.1.39' Enhancement: The "Edit Feature Formula" dialog box has been
 //                modified to allow the user to specify a different formula for
 //                each edited object.
+//    '5.1.1.40' Enhancement: The Import Points dialog box has been changed to
+//                allow more more flexibility in import model features.
+//
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10060,7 +10067,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.39';
+  IIModelVersion = '5.1.1.40';
 
 function IModelVersion: string;
 begin
@@ -12284,6 +12291,29 @@ begin
   end;
 end;
 
+function TPhastModel.TvsIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and frmGoPhast.PhastModel.LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.TvsIsSelected;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TPhastModel.InternalClear;
 var
   ChildIndex: Integer;
@@ -13104,7 +13134,7 @@ var
 begin
   Formula := Item.BoundaryFormula[DataIndex];
 
-//  ATimeSeries := nil;
+  ATimeSeries := nil;
   ADynamicTimeSeries := nil;
   if IGlobalModel <> nil then
   begin
@@ -13129,7 +13159,7 @@ begin
   begin
     NewUseList.AddStrings(ADynamicTimeSeries.UsesList);
   end
-  else
+  else if ATimeSeries = nil then
   begin
     try
       rpThreeDFormulaCompiler.Compile(Formula);
@@ -28953,6 +28983,16 @@ begin
   ModflowPackages.TvkPackage.TransientKz.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateTransientSS(Sender: TObject);
+begin
+  ModflowPackages.TvsPackage.TransientSS.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateTransientSY(Sender: TObject);
+begin
+  ModflowPackages.TvsPackage.TransientSY.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateUzfGwtConc(Sender: TObject);
 begin
   ModflowPackages.UzfMf6Package.InvalidateConcentrations;
@@ -39342,6 +39382,11 @@ end;
 function TCustomModel.TvkIsSelected: Boolean;
 begin
   result := ModflowPackages.TvkPackage.IsSelected;
+end;
+
+function TCustomModel.TvsIsSelected: Boolean;
+begin
+  result := ModflowPackages.TvsPackage.IsSelected;
 end;
 
 function TCustomModel.TwoDElementCenter(const Column, Row: integer): TPoint2D;

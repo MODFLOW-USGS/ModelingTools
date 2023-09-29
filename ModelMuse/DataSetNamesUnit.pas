@@ -568,6 +568,8 @@ const
   StrTransientKx = 'Transient Kx';
   StrTransientKy = 'Transient Ky';
   StrTransientKz = 'Transient Kz';
+  StrTransientSS = 'Transient SS';
+  StrTransientSY = 'Transient SY';
 
 resourcestring
   StrActiveSurfaceEleva = 'Active_Surface_Elevation';
