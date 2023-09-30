@@ -3783,6 +3783,7 @@ that affects the model output should also have a comment. }
     function GetColorSchemes: TUserDefinedColorSchemeCollection;
     function GetColorSchemesI: IUserDefinedColorSchemeCollection;
     procedure SetColorSchemesI(const Value: IUserDefinedColorSchemeCollection);
+    procedure FixMvr;
     property ColorSchemesI: IUserDefinedColorSchemeCollection
       read GetColorSchemesI write SetColorSchemesI;
   protected
@@ -5270,7 +5271,7 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit,
   ModflowTimeInterfaceUnit, Modflow6TimeSeriesUnit,
   LockedGlobalVariableChangers, ModflowBuoyancyWriterUnit,
-  ModflowViscosityWriterUnit;
+  ModflowViscosityWriterUnit, ModflowMvrUnit;
 
 
 
@@ -10056,7 +10057,8 @@ const
 //                each edited object.
 //    '5.1.1.40' Enhancement: The Import Points dialog box has been changed to
 //                allow more more flexibility in import model features.
-//
+//    '5.1.1.41' Bug fix: Fixed a bug that could cause an assertion failure when
+//                exporting the MVR package input file.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10067,7 +10069,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.40';
+  IIModelVersion = '5.1.1.41';
 
 function IModelVersion: string;
 begin
@@ -21642,6 +21644,37 @@ begin
   FmpCrops.UpdateFarmProperties;
 end;
 
+procedure TPhastModel.FixMvr;
+var
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  ModflowMvr: TMvrBoundary;
+  ReceiverCount: Integer;
+  TimeIndex: Integer;
+  MvrItem: TMvrItem;
+begin
+  if (ModelSelection = msModflow2015) and ModflowPackages.MvrPackage.IsSelected then
+  begin
+    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+    begin
+      AScreenObject := ScreenObjects[ScreenObjectIndex];
+      ModflowMvr := AScreenObject.ModflowMvr;
+      if ModflowMvr <> nil then
+      begin
+        ReceiverCount := ModflowMvr.Receivers.Count;
+        for TimeIndex := 0 to ModflowMvr.Values.Count - 1 do
+        begin
+          MvrItem := ModflowMvr.Values[TimeIndex] as TMvrItem;
+          if ReceiverCount < MvrItem.Items.Count then
+          begin
+            MvrItem.Items.Count := ReceiverCount;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TPhastModel.FixOldModel;
 var
   ModpathZone: TDataArray;
@@ -21683,6 +21716,7 @@ var
   UpdatedDataArray: TDataArray;
 begin
 
+  FixMvr;
   UpdateFarmProperties;
 
   CheckObservationGUIDs;

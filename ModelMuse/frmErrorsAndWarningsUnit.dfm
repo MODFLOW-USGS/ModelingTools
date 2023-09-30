@@ -1,9 +1,12 @@
 inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
+  Left = 0
+  Top = 0
   HelpType = htKeyword
   HelpKeyword = 'Errors_and_Warnings_Dialog_Box'
   Caption = 'Errors and Warnings'
   ClientHeight = 235
   ClientWidth = 472
+  Position = poDefaultPosOnly
   OnResize = FormResize
   ExplicitWidth = 484
   ExplicitHeight = 273
@@ -21,7 +24,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       472
       41)
     object btnClose: TBitBtn
-      Left = 338
+      Left = 334
       Top = 4
       Width = 89
       Height = 33
@@ -29,9 +32,10 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
+      ExplicitLeft = 330
     end
     object btnHelp: TBitBtn
-      Left = 243
+      Left = 239
       Top = 4
       Width = 89
       Height = 33
@@ -40,6 +44,7 @@ inherited frmErrorsAndWarnings: TfrmErrorsAndWarnings
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
+      ExplicitLeft = 235
     end
     object btnSave: TButton
       Left = 88

@@ -482,6 +482,7 @@ begin
             Ord(ModflowMvr.SourcePackageChoice);
           Receivers := ModflowMvr.Receivers;
           frameReceivers.seNumber.AsInteger := Receivers.Count;
+          frameReceiversseNumberChange(nil);
           for ReceiverIndex := 0 to Receivers.Count - 1 do
           begin
             ReceiverItem := Receivers[ReceiverIndex];
@@ -505,6 +506,12 @@ begin
                MvrItem.StartTime;
             rdgModflowBoundary.RealValue[Ord(mtcEndTime), TimeIndex+1+PestRowOffset] :=
               MvrItem.EndTime;
+
+
+            if frameReceivers.seNumber.AsInteger < MvrItem.Items.Count then
+            begin
+              MvrItem.Items.Count := frameReceivers.seNumber.AsInteger;
+            end;
 
             for ReceiverIndex := 0 to MvrItem.Items.Count - 1 do
             begin
