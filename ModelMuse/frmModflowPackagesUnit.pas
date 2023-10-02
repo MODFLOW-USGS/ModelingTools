@@ -4434,6 +4434,14 @@ begin
             framePkgBuoyancy.Selected := False;
             framePkgViscosity.Selected := False;
           end;
+          if (Frame = framePkgTvs) and framePkgTvs.Selected then
+          begin
+            framePkgSto.Selected := True;
+          end;
+          if (Frame = framePkgSto) and not framePkgSto.Selected then
+          begin
+            framePkgTvs.Selected := False;
+          end;
         end;
       stRadioButton:
         begin

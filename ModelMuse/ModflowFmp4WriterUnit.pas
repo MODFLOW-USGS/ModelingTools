@@ -8704,6 +8704,13 @@ var
   AFileName: string;
   RequiredValues: TRequiredValues;
 begin
+  // As of MODFLOW-OWHM version 4.3, this option has not been implemented
+  // so FSurfaceWater4.Nrd_Infiltration_Location.FarmOption = foNotUsed
+  // is always true and FMP SURFACE_WATER: NRD_INFILTRATION_LOCATION
+  // is never written to the input file.
+  // If it is implemented in the future, the help for this feature will
+  // need to be updated in both the MODFLOW Packages and Programs dialog box
+  // and in the Object Properties dialog box.
   if FSurfaceWater4.Nrd_Infiltration_Location.FarmOption = foNotUsed then
   begin
     Exit;

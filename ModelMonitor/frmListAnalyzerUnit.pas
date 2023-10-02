@@ -65,6 +65,7 @@ type
     frameSorted: TframeFileListHandler;
     AppEvnt1: TApplicationEvents;
     btnSettings: TButton;
+    lblDescription: TLabel;
     procedure btnOpenFileClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -1876,7 +1877,19 @@ begin
               for LineIndex := 0 to Lines.Count - 1 do
               begin
                 ALine := Lines[LineIndex];
-                if (Trim(ALine) = '') or ((Trim(ALine) = '1')) then
+                if (Trim(ALine) = '') then
+                begin
+                  if (LineIndex > 0) then
+                  begin
+                    EndFound := True;
+                    break;
+                  end
+                  else
+                  begin
+                    Continue;
+                  end;
+                end;
+                if ((Trim(ALine) = '1')) then
                 begin
                   EndFound := True;
                   break;

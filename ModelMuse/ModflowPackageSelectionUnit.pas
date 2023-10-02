@@ -30326,14 +30326,14 @@ begin
     FTransientKy.OnInitialize := InitializeTvkDisplay;
     FTransientKy.OnGetUseList := GetKyUseList;
     FTransientKy.OnTimeListUsed := PackageUsed;
-    FTransientKy.Name := StrTransientKy;
+    FTransientKy.Name := StrTransientKy + ' or ' + StrTransientKyKx;
     AddTimeList(FTransientKy);
 
     FTransientKz := TModflowBoundaryDisplayTimeList.Create(Model);
     FTransientKz.OnInitialize := InitializeTvkDisplay;
     FTransientKz.OnGetUseList := GetKzUseList;
     FTransientKz.OnTimeListUsed := PackageUsed;
-    FTransientKz.Name := StrTransientKz;
+    FTransientKz.Name := StrTransientKz + ' or ' + StrTransientKzKx;
     AddTimeList(FTransientKz);
   end;
   InitializeVariables;

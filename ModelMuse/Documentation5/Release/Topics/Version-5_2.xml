@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-09-19T17:15:09.500-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-10-02T12:17:08.538-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.2</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 5.2</text></para>
     </header>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.2 September 15, 2023]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.2 October 3, 2023]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -15,10 +15,13 @@
             <tr style="vertical-align:top">
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for FMP4 package MODFLOW-OWHM version 2.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for CFP2 package MODFLOW-OWHM version 2.Enhancement: ModelMuse can now import FHB boundaries from Shapefiles.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for CFP2 package MODFLOW-OWHM version 2.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for Buoyancy package for MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for Viscosity package for MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for Transient Hydraulic Conductivity package for MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for Transient Storage package for MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for SUTRA version 4.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import FHB boundaries from Shapefiles.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The Show and Hide Objects dialog &#160;box now has &quot;Calibration Data Sets&quot; as a new category.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now export FHB data to shapefiles in the &quot;File|Export|Shapefile|Objects to Shapefile&quot; dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The RunModel.bat file used by PEST now has code to show the elapsed time for generating the input files, running the model, and extracting the model results.</text></para>
@@ -36,6 +39,8 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to import multiple Surfer grid files simultaneously.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Improved conversion of SFR package when switching to MODFLOW 6 from earlier versions of MODFLOW.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for SFR cross sections in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;Edit Feature Formula&quot; dialog box has been modified to allow the user to specify a different formula for each edited object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Import Points dialog box has been changed to allow more more flexibility in import model features.</text></para>
               </td>
             </tr>
           </table></para>
@@ -79,8 +84,9 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed editing of MAX information in the Object Properties dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of UPSTREAM_FRACTION in MODFLOW 6 SFR packages for diversion reaches.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed importing MODFLOW-2005 and MODFLOW-NWT models in which the number of segments in the ETS package was set to 1.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in Mf2005ObsExtractor that caused simulated from the HOB package to be incorrectly read as zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in Mf2005ObsExtractor that caused simulated from the HOB package to be incorrectly read as zero.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Switching from a MODFLOW-NWT to a MODFLOW-OWHM model no longer results in the NWT and UPW packages being deactivated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failure when exporting the MVR package input file.</text></para>
               </td>
             </tr>
           </table></para>

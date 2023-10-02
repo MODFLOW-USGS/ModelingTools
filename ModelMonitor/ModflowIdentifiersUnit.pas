@@ -737,7 +737,7 @@ begin
   NonIdentifiers.Add('END PROCESSING AG OPTIONS');
   NonIdentifiers.Add('END PROCESSING AG STRESS PERIOD DATA');
   NonIdentifiers.Add('RECHARGE     =');
-//  NonIdentifiers.Add('StrRECHARGE');
+  NonIdentifiers.Add('USGS');
 //  NonIdentifiers.Add('StrRECHARGE');
 //  NonIdentifiers.Add('StrRECHARGE');
 end;

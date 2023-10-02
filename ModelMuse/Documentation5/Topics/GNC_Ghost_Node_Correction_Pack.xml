@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">GNC: Ghost-Node Correction Package</title>
+<topic template="Default" modified="2023-10-02T11:11:15.119-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GNC: Ghost-Node Correction Package Pane</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GNC: Ghost-Node Correction Package</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GNC: Ghost-Node Correction Package Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Ghost-Node Correction package is used to specify the ghost nodes in MODFLOW 6 DISV models. The </text><text styleclass="Strong" translate="true">GNC: Ghost-Node Correction Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Flow Packages</link><text styleclass="Normal" translate="true">. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The user must specify whether to use an implicit or explicit formulation for ghost nodes. See the MODFLOW 6 documentation for further details. The locations and weights for ghost nodes are assigned automatically by ModelMuse. The implicit option may make the solution less stable but should result if a more accurate solution if the model does converge.</text></para>

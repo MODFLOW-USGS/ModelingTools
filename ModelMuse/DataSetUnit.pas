@@ -1792,6 +1792,7 @@ resourcestring
   StrMODFLOW6CNC = 'MODFLOW 6 CNC';
   StrMODFLOW6SRC = 'MODFLOW 6 SRC';
   StrMODFLOWTVK = 'MODFLOW TVK';
+  StrMODFLOWTVS = 'MODFLOW TVS';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -7979,6 +7980,10 @@ begin
   else if (Name = StrTransientKx)
     or (Name = StrTransientKy)
     or (Name = StrTransientKz)
+    or (Name = StrTransientKyKx)
+    or (Name = StrTransientKzKx)
+    or (Pos(StrTransientKy, Name) > 0)
+    or (Pos(StrTransientKz, Name) > 0)
     then
   begin
     result := btTransK;
@@ -8197,7 +8202,11 @@ begin
       btTransK:
         begin
           result := StrMODFLOWTVK;
-        end
+        end;
+      btTransS:
+        begin
+          result := StrMODFLOWTVS;
+        end;
       else
         Assert(False);
     end;

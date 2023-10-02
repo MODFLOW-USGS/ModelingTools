@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-09-20T09:39:21.724-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-10-02T12:37:53.607-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RCH: Recharge Package Pane</title>
   <body>
     <header>
@@ -13,7 +13,7 @@
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Recharge layer</text><text styleclass="Normal" style="font-weight:normal;" translate="true">&#32;</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">is the layer indicator variable. For each horizontal location, it indicates the layer to which recharge is removed. If some layers are </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Basics_Tab" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">nonsimulated</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">, it is important to remember that </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Recharge layer</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> represents the MODFLOW layer not the layer in the ModelMuse model. ModelMuse layers include both simulated and nonsimulated layers.</text></para>
     <para styleclass="Normal"><snippet src="Auxiliary-Variables" inline="false"/></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:normal;" translate="true">If parameters are used with an object, a multiplier for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Recharge rate </text><text styleclass="Normal" style="font-weight:normal;" translate="true">must be defined for each parameter. MODFLOW will multiply the multiplier by the parameter value (specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH_Recharge_Package_Pane" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" style="font-weight:normal;" translate="true"> dialog box) to determine the recharge rate to apply.</text></para>
-    <para styleclass="Normal"><snippet src="Time_series_interpolation" inline="false"/></para>
+    <para styleclass="Normal"></para>
     <para styleclass="Normal"><snippet src="For_MODFLOW_Experts" inline="false"/></para>
   </body>
 </topic>

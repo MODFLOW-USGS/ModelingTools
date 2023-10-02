@@ -33,7 +33,7 @@ implementation
 
 uses
   GoPhastTypes, ScreenObjectUnit, ModflowTvkUnit, frmGoPhastUnit,
-  DataSetNamesUnit;
+  DataSetNamesUnit, ModflowPackageSelectionUnit;
 
 {$R *.dfm}
 
@@ -143,9 +143,11 @@ procedure TframeScreenObjectTransientK.InitializeControls;
 var
   ColIndex: Integer;
   AColumn: TRbwColumn4;
+  NpfPackage: TNpfPackage;
 begin
   rdgModflowBoundary.BeginUpdate;
   try
+    NpfPackage := frmGoPhast.PhastModel.ModflowPackages.NpfPackage;
     frmGoPhast.PhastModel.ModflowStressPeriods.
       FillPickListWithStartTimes(rdgModflowBoundary, Ord(tcStartTime));
     frmGoPhast.PhastModel.ModflowStressPeriods.
@@ -159,8 +161,22 @@ begin
     rdgModflowBoundary.Cells[Ord(tcStartTime), 0] := StrStartingTime;
     rdgModflowBoundary.Cells[Ord(tcEndTime), 0] := StrEndingTime;
     rdgModflowBoundary.Cells[Ord(tcKx), 0] := StrTransientKx;
-    rdgModflowBoundary.Cells[Ord(tcKy), 0] := StrTransientKy;
-    rdgModflowBoundary.Cells[Ord(tcKz), 0] := StrTransientKz;
+    if NpfPackage.UseHorizontalAnisotropy then
+    begin
+      rdgModflowBoundary.Cells[Ord(tcKy), 0] := StrTransientKyKx;
+    end
+    else
+    begin
+      rdgModflowBoundary.Cells[Ord(tcKy), 0] := StrTransientKy;
+    end;
+    if NpfPackage.UseVerticalAnisotropy then
+    begin
+      rdgModflowBoundary.Cells[Ord(tcKz), 0] := StrTransientKzKx;
+    end
+    else
+    begin
+      rdgModflowBoundary.Cells[Ord(tcKz), 0] := StrTransientKz;
+    end;
     rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
     rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
   finally

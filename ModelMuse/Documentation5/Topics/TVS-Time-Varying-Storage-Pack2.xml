@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-10-02T12:09:10.164-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">TVS: Time-Varying Storage Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">TVS: Time-Varying Storage Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">TVK: Time-Varying Storage Package </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. This pane is only visible if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="TVS-Time-Varying-Storage-Packa" styleclass="Normal" translate="true">TVS</link><text styleclass="Normal" translate="true"> package in MODFLOW 6 is selected.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane allows the users to specify new values of specific storage and specific yield for specific time periods. The new values will remain in effect in all subsequent time periods unless changed. New values of specific yield will only be applied to convertible cells. </text></para>
+  </body>
+</topic>

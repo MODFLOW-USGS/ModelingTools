@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-09-20T09:37:15.875-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-10-02T12:37:45.278-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">GHB: General-Head Boundary Package Pane</title>
   <body>
     <header>
@@ -13,6 +13,6 @@
     <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><snippet src="Conductance_Interpretation" inline="false"/></para>
     <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
     <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><snippet src="Auxiliary-Variables" inline="false"/></para>
-    <para styleclass="Normal"><snippet src="Time_series_interpolation" inline="false"/><text styleclass="Normal" style="font-weight:normal;" translate="true">Of all the head-dependant flux boundaries, only the General-Head Boundary package has a linear relationship between head at the boundary and flux through the boundary. This linear characteristic is advantageous for automated calibration of models.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:normal;" translate="true">Of all the head-dependant flux boundaries, only the General-Head Boundary package has a linear relationship between head at the boundary and flux through the boundary. This linear characteristic is advantageous for automated calibration of models.</text></para>
   </body>
 </topic>

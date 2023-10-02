@@ -567,7 +567,9 @@ const
   kHufThickness = '_Thickness';
   StrTransientKx = 'Transient Kx';
   StrTransientKy = 'Transient Ky';
+  StrTransientKyKx = 'Transient Ky/Kx';
   StrTransientKz = 'Transient Kz';
+  StrTransientKzKx = 'Transient Kz/Kx';
   StrTransientSS = 'Transient SS';
   StrTransientSY = 'Transient SY';
 

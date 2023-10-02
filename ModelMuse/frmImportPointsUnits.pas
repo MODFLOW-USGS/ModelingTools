@@ -108,7 +108,7 @@ type
     comboParameter: TComboBox;
     cbLayer: TCheckBox;
     cbRowCol: TCheckBox;
-    Panel1: TPanel;
+    pnlFeatureOptions: TPanel;
     rgFeatureDataFormat: TRadioGroup;
     seTimePeriods: TJvSpinEdit;
     lblTimePeriods: TLabel;
@@ -2975,6 +2975,7 @@ begin
   inherited;
   if comboBoundaryChoice.ItemIndex > 0 then
   begin
+    pnlFeatureOptions.Visible := True;
     dgData.Options := dgData.Options - [goColMoving];
     cbImportAsSingleObject.Checked := False;
     cbImportAsSingleObject.Enabled := False;
@@ -3074,6 +3075,7 @@ begin
   end
   else
   begin
+    pnlFeatureOptions.Visible := False;
     dgData.Options := dgData.Options + [goColMoving];
     comboParameter.ItemIndex := 0;
     comboParameter.Enabled := False;

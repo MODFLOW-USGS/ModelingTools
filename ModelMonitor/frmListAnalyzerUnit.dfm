@@ -19,8 +19,8 @@ object frmMain: TfrmMain
   TextHeight = 19
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 273
-    Top = 79
-    Height = 422
+    Top = 129
+    Height = 372
     Align = alLeft
     MinSize = 1
     Maximized = False
@@ -31,15 +31,16 @@ object frmMain: TfrmMain
   end
   object pgcIndex: TPageControl
     Left = 0
-    Top = 79
+    Top = 129
     Width = 273
-    Height = 422
-    ActivePage = tabErrors
+    Height = 372
+    ActivePage = tabIndex
     Align = alLeft
     Images = ilTabFaces
     MultiLine = True
     TabOrder = 1
-    ExplicitHeight = 392
+    ExplicitTop = 79
+    ExplicitHeight = 421
     object tabIndex: TTabSheet
       Caption = 'Contents'
       ImageIndex = -1
@@ -47,18 +48,18 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 385
+        Height = 335
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 356
+        ExplicitHeight = 385
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 385
+          Height = 335
           DefaultNodeHeight = 19
           OnNodeDblClick = frameListingvstIndexLinesNodeDblClick
           ExplicitWidth = 265
-          ExplicitHeight = 356
+          ExplicitHeight = 385
         end
       end
     end
@@ -69,18 +70,18 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 385
+        Height = 335
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 356
+        ExplicitHeight = 385
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 385
+          Height = 335
           DefaultNodeHeight = 19
           OnCompareNodes = frameSortedvstIndexLinesCompareNodes
           ExplicitWidth = 265
-          ExplicitHeight = 356
+          ExplicitHeight = 385
         end
       end
     end
@@ -92,17 +93,18 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 385
+        Height = 335
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 355
+        ExplicitHeight = 384
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 385
+          Height = 335
           DefaultNodeHeight = 19
+          ExplicitLeft = -2
           ExplicitWidth = 265
-          ExplicitHeight = 356
+          ExplicitHeight = 385
         end
       end
     end
@@ -114,18 +116,18 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 265
-        Height = 385
+        Height = 335
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 356
+        ExplicitHeight = 385
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
-          Height = 385
+          Height = 335
           DefaultNodeHeight = 19
           TreeOptions.SelectionOptions = [toSimpleDrawSelection]
           ExplicitWidth = 265
-          ExplicitHeight = 356
+          ExplicitHeight = 385
         end
       end
     end
@@ -134,16 +136,25 @@ object frmMain: TfrmMain
     Left = 0
     Top = 0
     Width = 797
-    Height = 79
+    Height = 129
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 788
     object lblLineCount: TLabel
       Left = 272
       Top = 19
       Width = 190
       Height = 19
       Caption = 'Number of lines to retrieve'
+    end
+    object lblDescription: TLabel
+      Left = 289
+      Top = 79
+      Width = 494
+      Height = 38
+      Caption = 
+        'Use outer scroll bar to navigate within entire document.'#13#10'Use in' +
+        'ner scroll bar to navigate within displayed portion of document.'
+      WordWrap = True
     end
     object btnOpenFile: TBitBtn
       Left = 4
@@ -289,14 +300,15 @@ object frmMain: TfrmMain
   end
   object pgcDisplay: TPageControl
     Left = 283
-    Top = 79
+    Top = 129
     Width = 514
-    Height = 422
-    ActivePage = tabLines
+    Height = 372
+    ActivePage = tabTable
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 505
-    ExplicitHeight = 226
+    ExplicitTop = 79
+    ExplicitWidth = 510
+    ExplicitHeight = 421
     object tabLines: TTabSheet
       Caption = 'Lines'
       TabVisible = False
@@ -304,7 +316,7 @@ object frmMain: TfrmMain
         Left = 484
         Top = 0
         Width = 22
-        Height = 412
+        Height = 362
         Align = alRight
         Kind = sbVertical
         LargeChange = 10
@@ -312,14 +324,14 @@ object frmMain: TfrmMain
         PageSize = 0
         TabOrder = 2
         OnScroll = sbLinesScroll
-        ExplicitLeft = 475
-        ExplicitHeight = 382
+        ExplicitLeft = 480
+        ExplicitHeight = 411
       end
       object jvrchdtLines: TJvRichEdit
         Left = 89
         Top = 0
         Width = 395
-        Height = 412
+        Height = 362
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -335,16 +347,14 @@ object frmMain: TfrmMain
         OnClick = memoLinesClick
         OnSelectionChange = redtLines1SelectionChange
         OnVerticalScroll = jvrchdtLinesVerticalScroll
-        ExplicitLeft = 95
-        ExplicitTop = -75
-        ExplicitWidth = 386
-        ExplicitHeight = 382
+        ExplicitWidth = 391
+        ExplicitHeight = 411
       end
       object jreLineNumbers: TJvRichEdit
         Left = 0
         Top = 0
         Width = 89
-        Height = 412
+        Height = 362
         Align = alLeft
         Enabled = False
         Font.Charset = ANSI_CHARSET
@@ -357,7 +367,7 @@ object frmMain: TfrmMain
         SelText = ''
         TabOrder = 0
         WordWrap = False
-        ExplicitHeight = 382
+        ExplicitHeight = 411
       end
     end
     object tabTable: TTabSheet
@@ -368,7 +378,7 @@ object frmMain: TfrmMain
         Left = 0
         Top = 0
         Width = 506
-        Height = 380
+        Height = 330
         Align = alClient
         ColCount = 4
         FixedCols = 1
@@ -481,8 +491,7 @@ object frmMain: TfrmMain
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 501
-        ExplicitHeight = 351
+        ExplicitHeight = 380
         ColWidths = (
           64
           64
@@ -497,7 +506,7 @@ object frmMain: TfrmMain
       end
       object pnlTableBottom: TPanel
         Left = 0
-        Top = 380
+        Top = 330
         Width = 506
         Height = 32
         Margins.Left = 2
@@ -506,8 +515,7 @@ object frmMain: TfrmMain
         Margins.Bottom = 2
         Align = alBottom
         TabOrder = 1
-        ExplicitTop = 351
-        ExplicitWidth = 501
+        ExplicitTop = 380
         object btnCopy: TButton
           Left = 2
           Top = 6
@@ -531,8 +539,8 @@ object frmMain: TfrmMain
     Height = 23
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 471
-    ExplicitWidth = 788
+    ExplicitTop = 500
+    ExplicitWidth = 793
     object lblFileCount: TLabel
       Left = 4
       Top = 2
@@ -549,7 +557,7 @@ object frmMain: TfrmMain
       Max = 1000
       Step = 1
       TabOrder = 0
-      ExplicitWidth = 651
+      ExplicitWidth = 656
     end
   end
   object OpenDialog1: TOpenDialog

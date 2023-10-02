@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-09-05T17:02:48.953-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">Bare Precipitation Consumption Fraction in FMP: Farm Process V4</title>
+<topic template="Default" modified="2023-10-02T11:26:37.529-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Bare Precipitation Consumption Fraction in FMP: Farm Process V4 Pane</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Bare Precipitation Consumption Fraction in FMP: Farm Process V4</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Bare Precipitation Consumption Fraction in FMP: Farm Process V4 Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If there is over-consumption through evaporation of precipitation over bare soil, BARE_PRECIPITATION_CONSUMPTION_FRACTION imposes a limit on that consumption. BARE_PRECIPITATION_CONSUMPTION_FRACTION is defined as a fraction of precipitation that falls on bare surface that is available for consumption (evaporation).</text></para>

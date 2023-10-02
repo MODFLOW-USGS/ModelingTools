@@ -12,7 +12,7 @@ inherited framePackageTvs: TframePackageTvs
     Left = 16
     Top = 208
     Width = 391
-    Height = 33
+    Height = 45
     Caption = 
       'Enable storage change integration (Inverse of DISABLE_STORAGE_CH' +
       'ANGE_INTEGRATION)'

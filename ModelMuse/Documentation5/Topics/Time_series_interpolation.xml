@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2023-10-02T12:35:33.495-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Time-series interpolation</title>
   <body>
     <header>
@@ -12,6 +12,6 @@
     <para styleclass="Normal"><text styleclass=" " style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:line-through; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">The supported interpolation methods are STEPWISE, LINEAR, and LINEAREND. When the STEPWISE interpolation method is used, the value is assumed to remain constant at the value specified in one time-series record until the time listed in the subsequent record, when the value changes abruptly to the new value. In the LINEAR interpolation method, the value is assumed to change linearly between times listed in sequential records. LINEAREND is like LINEAR, except that instead of using the average value over a time step, the value at the end of a time step is used.</text></para>
     <para styleclass="Normal"><text styleclass=" " style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:line-through; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ModelMuse uses time-series interpolation when parameters are used. The parameter value becomes the SFAC (scale factor) in the time-series file.</text></para>
     <para styleclass="Normal"><text styleclass=" " style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:line-through; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ModelMuse sets the interpolation method to STEPWISE for all boundary conditions in which it is used except for the CHD package in which it is set to LINEAREND.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse does not currently support time-series interpolation because it slows down MODFLOW to much as implemented in ModelMuse. Support for time-series interpolation may be supported in a future version of ModelMuse but in a different form.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse does not currently support time-series interpolation because it slows down MODFLOW too much as implemented in ModelMuse. Support for time-series interpolation may be supported in a future version of ModelMuse but in a different form.</text></para>
   </body>
 </topic>

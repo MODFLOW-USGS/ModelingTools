@@ -102,11 +102,11 @@ object frameModflow6DynamicTimeSeries: TframeModflow6DynamicTimeSeries
     FixedCols = 1
     RowCount = 6
     FixedRows = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
     TabOrder = 2
     OnSelectCell = rrdgTimeSeriesSelectCell
     ExtendedAutoDistributeText = False
-    AutoMultiEdit = False
+    AutoMultiEdit = True
     AutoDistributeText = True
     AutoIncreaseColCount = True
     AutoIncreaseRowCount = True
@@ -269,5 +269,6 @@ object frameModflow6DynamicTimeSeries: TframeModflow6DynamicTimeSeries
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
+    ExplicitTop = 43
   end
 end

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-10-02T12:09:00.185-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">TVK: Time-Varying Hydraulic Conductivity Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">TVK: Time-Varying Hydraulic Conductivity Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Time-Varying Hydraulic Conductivity Package</text><text styleclass="Normal" translate="true"> is used to specify time-varying values of hydraulic conductivity at individual cells. The </text><text styleclass="Strong" translate="true">TVK: Time-Varying Hydraulic Conductivity Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Flow Packages</link><text styleclass="Normal" translate="true">. </text><text styleclass="Strong" translate="true">Time-Varying Hydraulic Conductivity Package</text><text styleclass="Normal" translate="true"> is documented in chapter 6 of mf6suptechinfo.pdf distributed with MODFLOW 6.</text></para>
+  </body>
+</topic>

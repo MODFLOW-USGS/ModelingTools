@@ -10062,6 +10062,8 @@ const
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
+//               Enhancement: Added support for Transient Hydraulic Conductivity package for MODFLOW 6.
+//               Enhancement: Added support for Transient Storage package for MODFLOW 6.
 //               Enhancement: Added support for FMP4 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for SUTRA version 4.
@@ -39420,7 +39422,8 @@ end;
 
 function TCustomModel.TvsIsSelected: Boolean;
 begin
-  result := ModflowPackages.TvsPackage.IsSelected;
+  result := ModflowPackages.TvsPackage.IsSelected
+    and ModflowPackages.StoPackage.IsSelected;
 end;
 
 function TCustomModel.TwoDElementCenter(const Column, Row: integer): TPoint2D;

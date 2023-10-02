@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2023-10-02T12:09:00.191-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">TVS: Time-Varying Storage Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">TVS: Time-Varying Storage Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Time-Varying Storage Package</text><text styleclass="Normal" translate="true"> is used to specify time-varying values of specific storage and specific yield at individual cells. The </text><text styleclass="Strong" translate="true">TVS: Time-Varying Storage Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Flow Packages</link><text styleclass="Normal" translate="true">. </text><text styleclass="Strong" translate="true">Time-Varying Storage Package</text><text styleclass="Normal" translate="true"> is documented in chapter 6 of mf6suptechinfo.pdf distributed with MODFLOW 6.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing the storage properties affects the head. For example, increasing the specific yield in a convertible cell under unconfined conditions will cause the head in the cell to decrease. By default, he TVS package will automatically adjust the head to account for the change in the storage properties. However, this effect can be disabled by unchecking the checkbox labeled &quot;</text><text styleclass="Strong" translate="true">Enable storage change integration (Inverse of DISABLE_STORAGE_CHANGE_INTEGRATION)</text><text styleclass="Normal" translate="true">.&quot; If the check box is checked, the head will be unaffected by changes in the storage properties.</text></para>
+  </body>
+</topic>
