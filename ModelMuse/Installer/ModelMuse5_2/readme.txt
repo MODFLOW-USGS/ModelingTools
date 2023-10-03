@@ -128,7 +128,7 @@ or help are in the "ModelMuse Examples\data" folder.
 E. COMPILING
 
 The 32 and 64-bit version of ModelMuse and ModelMonitor are compiled with 
-Delphi 11.2 from Embarcadero.
+Delphi 11.3 from Embarcadero.
 http://www.embarcadero.com/ 
 It can also be compiled using the free community edition
 of Delphi from Embarcadero.

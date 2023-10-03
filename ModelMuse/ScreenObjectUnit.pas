@@ -33562,22 +33562,14 @@ end;
 
 function TScreenObject.StoreModflowTvkBoundary: Boolean;
 begin
-{$IFDEF VariableK}
   result := (FModflowBoundaries <> nil)
     and (ModflowTvkBoundary <> nil) and ModflowTvkBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowTvsBoundary: Boolean;
 begin
-{$IFDEF VariableK}
   result := (FModflowBoundaries <> nil)
     and (ModflowTvsBoundary <> nil) and ModflowTvsBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowUzfBoundary: Boolean;

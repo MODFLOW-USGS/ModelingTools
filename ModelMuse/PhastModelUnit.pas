@@ -10071,7 +10071,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.41';
+  IIModelVersion = '5.2.0.0';
 
 function IModelVersion: string;
 begin

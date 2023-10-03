@@ -31881,5 +31881,10 @@ object TTaskHistory
         'Documentation'
         'Import'
         'List File Analyzer')
+    end
+    item
+      Date = 45202.000000000000000000
+      Categories.Strings = (
+        'Installer')
     end>
 end

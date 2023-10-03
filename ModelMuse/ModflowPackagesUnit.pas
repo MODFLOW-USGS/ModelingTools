@@ -336,16 +336,8 @@ type
       write SetBuoyancyPackage;
     property ViscosityPackage: TViscosityPackage read FViscosityPackage
       write SetViscosityPackage;
-    property TvkPackage: TTvkPackage read FTvkPackage write SetTvkPackage
-    {$IFNDEF VariableK}
-      stored False
-    {$ENDIF}
-      ;
-    property TvsPackage: TTvsPackage read FTvsPackage write SetTvsPackage
-    {$IFNDEF VariableK}
-      stored False
-    {$ENDIF}
-      ;
+    property TvkPackage: TTvkPackage read FTvkPackage write SetTvkPackage;
+    property TvsPackage: TTvsPackage read FTvsPackage write SetTvsPackage;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.

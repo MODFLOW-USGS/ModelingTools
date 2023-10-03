@@ -4719,15 +4719,10 @@ begin
     Packages.StoPackage.Frame := framePkgSto;
     FPackageList.Add(Packages.StoPackage);
 
-  {$IFDEF VariableK}
     Packages.TvkPackage.Frame := framePkgTvk;
     FPackageList.Add(Packages.TvkPackage);
     Packages.TvsPackage.Frame := framePkgTvs;
     FPackageList.Add(Packages.TvsPackage);
-  {$ELSE}
-    framePkgTvk.nilNode;
-    framePkgTvs.nilNode;
-  {$ENDIF}
 
     Packages.BuoyancyPackage.Frame := framePkgBuoyancy;
     FPackageList.Add(Packages.BuoyancyPackage);
