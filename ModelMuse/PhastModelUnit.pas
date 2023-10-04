@@ -26492,7 +26492,7 @@ begin
   for index := 0 to ScreenObjectCount - 1 do
   begin
     AScreenObject := ScreenObjects[index];
-    AScreenObject.DyanmicTimesSeriesCollections.Invalidate;
+    AScreenObject.DynamicTimesSeriesCollections.Invalidate;
   end;
   Mf6TimesSeries.ResetDictionaries;
 end;

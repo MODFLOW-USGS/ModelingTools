@@ -10211,6 +10211,8 @@ var
   AGroup: TTimesSeriesCollection;
   FileIndex: Integer;
   TimeSeriesWriter: TMf6TimeSeriesWriter;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
 begin
   if FTimeSeriesNames.Count > 0 then
   begin
@@ -10229,6 +10231,11 @@ begin
           finally
             TimeSeriesWriter.Free;
           end;
+        end;
+        for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+        begin
+          AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+          AScreenObject.DynamicTimesSeriesCollections.ClearLocations;
         end;
       finally
         Groups.Free;

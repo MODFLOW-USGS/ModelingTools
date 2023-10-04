@@ -13,7 +13,8 @@ uses
   System.SysUtils,
   Vcl.Dialogs,
   System.IOUtils,
-  SimulationNameFileReaderUnit in 'SimulationNameFileReaderUnit.pas';
+  SimulationNameFileReaderUnit in 'SimulationNameFileReaderUnit.pas',
+  CustomMf6PersistentUnit in 'CustomMf6PersistentUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

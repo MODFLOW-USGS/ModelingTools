@@ -214,12 +214,12 @@ begin
 
     Assert(ScreenObjectList.Count > 0);
     AScreenObject := ScreenObjectList[0].ScreenObject;
-    FTimesSeries.Assign(AScreenObject.DyanmicTimesSeriesCollections);
+    FTimesSeries.Assign(AScreenObject.DynamicTimesSeriesCollections);
 
     for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
     begin
       AScreenObject := ScreenObjectList[ScreenObjectIndex].ScreenObject;
-      Result := FTimesSeries.IsSame(AScreenObject.DyanmicTimesSeriesCollections);
+      Result := FTimesSeries.IsSame(AScreenObject.DynamicTimesSeriesCollections);
       if not Result then
       begin
         Exit;
@@ -287,7 +287,7 @@ begin
   for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
   begin
     AScreenObject := ScreenObjectList[ScreenObjectIndex].ScreenObject;
-    AScreenObject.DyanmicTimesSeriesCollections := FTimesSeries;
+    AScreenObject.DynamicTimesSeriesCollections := FTimesSeries;
   end;
 end;
 

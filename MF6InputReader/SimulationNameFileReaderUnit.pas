@@ -3,12 +3,13 @@ unit SimulationNameFileReaderUnit;
 interface
 
 uses
-  System.Classes, System.IOUtils, System.SysUtils;
+  System.Classes, System.IOUtils, System.SysUtils, CustomMf6PersistentUnit,
+  System.Generics.Collections;
 
 type
   TMemPrint = (mpNone, mpSummary, mpAll);
 
-  TSimulationOptions = class(TPersistent)
+  TSimulationOptions = class(TCustomMf6Persistent)
   private
     FContinueOption: Boolean;
     FNoCheckOption: Boolean;
@@ -20,25 +21,55 @@ type
     procedure SetMemPrint(const Value: TMemPrint);
     procedure SetNoCheckOption(const Value: Boolean);
     procedure SetPrintInputOption(const Value: Boolean);
-    procedure Initialize;
   protected
-    function StripFollowingComments(AValue: string): string;
+    procedure Initialize; override;
   public
-    constructor Create;
     property ContinueOption: Boolean read FContinueOption write SetContinueOption;
     property NoCheckOption: Boolean read FNoCheckOption write SetNoCheckOption;
     property MemPrint: TMemPrint read FMemPrint write SetMemPrint;
     property MaxErrors: Integer read FMaxErrors write SetMaxErrors;
     property PrintInputOption: Boolean read FPrintInputOption write SetPrintInputOption;
-    procedure ReadOptions(Stream: TStreamReader; Unhandled: TStreamWriter);
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
-  TMf6Simulation = class(TPersistent)
+  TTiming = class(TCustomMf6Persistent)
+  private
+    FTisFileName: string;
+  protected
+    procedure Initialize; override;
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  end;
+
+  TModel = class(TObject)
+    ModelType: string;
+    NameFile: string;
+    ModelName: string;
+  end;
+
+  TModelList = TObjectList<TModel>;
+
+  TModels = class(TCustomMf6Persistent)
+  private
+    FModels: TModelList;
+  protected
+    procedure Initialize; override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  end;
+
+  TMf6Simulation = class(TCustomMf6Persistent)
   private
     FSimulationOptions: TSimulationOptions;
+    FTiming: TTiming;
+    FModels: TModels;
     FSimulationFile: TStreamReader;
+  protected
+    procedure Initialize; override;
   public
-    constructor Create;
+    constructor Create; override;
     destructor Destroy; override;
     procedure ReadSimulation(NameFile: string);
   end;
@@ -53,26 +84,67 @@ constructor TMf6Simulation.Create;
 begin
   inherited;
   FSimulationOptions := TSimulationOptions.Create;
+  FTiming := TTiming.Create;
+  FModels := FModels.Create;
 end;
 
 destructor TMf6Simulation.Destroy;
 begin
-  FSimulationFile.Free;
+  FModels.Free;
+  FTiming.Free;
   FSimulationOptions.Free;
+  FSimulationFile.Free;
   inherited;
 end;
 
-procedure TMf6Simulation.ReadSimulation(NameFile: string);
+procedure TMf6Simulation.Initialize;
 begin
-  FSimulationFile := TFile.OpenText(NameFile)
+
+end;
+
+procedure TMf6Simulation.ReadSimulation(NameFile: string);
+var
+  FOutFile: TStreamWriter;
+  ALine: string;
+begin
+  FSimulationFile := TFile.OpenText(NameFile);
+  FOutFile := TFile.CreateText(ChangeFileExt(NameFile, '.lst'));
+  try
+    while not FSimulationFile.EndOfStream do
+    begin
+      ALine := FSimulationFile.ReadLine;
+      ALine := StripFollowingComments(Trim(ALine));
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+
+      if Pos('BEGIN', ALine) = 1 then
+      begin
+        ALine := Trim(Copy(ALine, 6, MaxInt)) ;
+        if Pos('OPTIONS', ALine) = 1 then
+        begin
+          FSimulationOptions.Read(FSimulationFile, FOutFile)
+        end;
+
+        if Pos('TIMING', ALine) = 1 then
+        begin
+          FTiming.Read(FSimulationFile, FOutFile)
+        end;
+
+        if Pos('MODELS', ALine) = 1 then
+        begin
+          FModels.Read(FSimulationFile, FOutFile);
+        end;
+      end;
+    end;
+  finally
+    FSimulationFile.Free;
+    FOutFile.Free;
+  end;
 end;
 
 { TSimulationOptions }
-
-constructor TSimulationOptions.Create;
-begin
-  Initialize;
-end;
 
 procedure TSimulationOptions.Initialize;
 begin
@@ -83,22 +155,21 @@ begin
   FPrintInputOption := False;
 end;
 
-procedure TSimulationOptions.ReadOptions(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TSimulationOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
   Splitter: TStringList;
   AValue: string;
-  CommentPosition: Integer;
   IntValue: Integer;
-
 begin
   Initialize;
   Splitter := TStringList.Create;
   try
     Splitter.QuoteChar := '''';
     Splitter.Delimiter := ',';
-    repeat
+    while not Stream.EndOfStream do
+    begin
       ALine := Stream.ReadLine;
       ErrorLine := ALine;
       ALine := StripFollowingComments(ALine);
@@ -157,29 +228,11 @@ begin
       begin
         PrintInputOption := True;
       end
-      else if AValue = 'END' then
+      else if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
       begin
-        AValue := Splitter[1];
-        if AValue = 'OPTIONS' then
-        begin
-          Break;
-        end
-        else
-        begin
-          Unhandled.WriteLine('Unrecognized option in ');
-          Unhandled.WriteLine(ErrorLine);
-        end;
-      end
-      else
-      begin
-        Unhandled.WriteLine('Unrecognized option in ');
-        Unhandled.WriteLine(ErrorLine);
+        Exit
       end;
-      if Stream.EndOfStream then
-      begin
-        break;
-      end;
-    until False;
+    end;
   finally
     Splitter.Free;
   end;
@@ -210,99 +263,127 @@ begin
   FPrintInputOption := Value;
 end;
 
-function TSimulationOptions.StripFollowingComments(AValue: string): string;
-var
-  CommentPosition: Integer;
-  SingleQuotePostion: Integer;
-  CharIndex: Integer;
-  QuoteCount: Integer;
+{ TTiming }
+
+procedure TTiming.Initialize;
 begin
-  SingleQuotePostion := Pos('''', AValue);
-  if SingleQuotePostion = 0 then
+  FTisFileName := ''
+end;
+
+procedure TTiming.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+begin
+  Initialize;
+  while not Stream.EndOfStream do
   begin
-    CommentPosition := Pos('#', AValue);
-    if CommentPosition > 0 then
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(Trim(ALine));
+    if ALine = '' then
     begin
-      AValue := Trim(Copy(AValue, 1, CommentPosition-1));
-    end;
-    CommentPosition := Pos('!', AValue);
-    if CommentPosition > 0 then
-    begin
-      AValue := Trim(Copy(AValue, 1, CommentPosition-1));
-    end;
-    CommentPosition := Pos('//', AValue);
-    if CommentPosition > 0 then
-    begin
-      AValue := Trim(Copy(AValue, 1, CommentPosition-1));
-    end;
-  end
-  else
-  begin
-    CommentPosition := Pos('#', AValue);
-    if CommentPosition > 0 then
-    begin
-      QuoteCount := 0;
-      for CharIndex := 1 to Length(AValue) do
-      begin
-        if AValue[CharIndex] = '''' then
-        begin
-          Inc(QuoteCount);
-        end;
-        if AValue[CharIndex] = '#' then
-        begin
-          if not Odd(QuoteCount) then
-          begin
-            AValue := Copy(AValue, 1, CharIndex-1);
-            Break;
-          end;
-        end;
-      end;
+      Continue;
     end;
 
-    CommentPosition := Pos('!', AValue);
-    if CommentPosition > 0 then
+    if Pos('TDIS6', ALine) = 1 then
     begin
-      QuoteCount := 0;
-      for CharIndex := 1 to Length(AValue) do
+      ALine := Trim(Copy(ALine, 6, MaxInt));
+      if ALine[1] = '''' then
       begin
-        if AValue[CharIndex] = '''' then
-        begin
-          Inc(QuoteCount);
-        end;
-        if AValue[CharIndex] = '!' then
-        begin
-          if not Odd(QuoteCount) then
-          begin
-            AValue := Copy(AValue, 1, CharIndex-1);
-            Break;
-          end;
-        end;
+        Assert(ALine[Length(ALine)] = '''');
+        ALine := Copy(ALine, 2, Length(ALine) -2);
       end;
-    end;
-
-    CommentPosition := Pos('//', AValue);
-    if CommentPosition > 0 then
+      FTisFileName := ALine;
+      Continue;
+    end
+    else if ReadEndOfSection(ALine, ErrorLine, 'TIMING', Unhandled) then
     begin
-      QuoteCount := 0;
-      for CharIndex := 1 to Length(AValue) do
-      begin
-        if AValue[CharIndex] = '''' then
-        begin
-          Inc(QuoteCount);
-        end;
-        if Copy(AValue, CharIndex, 2) = '//' then
-        begin
-          if not Odd(QuoteCount) then
-          begin
-            AValue := Copy(AValue, 1, CharIndex-1);
-            Break;
-          end;
-        end;
-      end;
+      Exit
+    end
+    else
+    begin
+      Unhandled.WriteLine('Error reading the following timing line.');
+      Unhandled.WriteLine(ErrorLine);
     end;
   end;
 
-  result := AValue;
+end;
+
+{ TModels }
+
+constructor TModels.Create;
+begin
+  FModels := TModelList.Create;
+  inherited
+end;
+
+destructor TModels.Destroy;
+begin
+  FModels.Free;
+  inherited;
+end;
+
+procedure TModels.Initialize;
+begin
+  inherited;
+
+end;
+
+procedure TModels.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  Splitter: TStringList;
+  ErrorLine: string;
+  AModel: TModel;
+  SectionName: string;
+begin
+  Initialize;
+  Splitter := TStringList.Create;
+  try
+    Splitter.QuoteChar := '''';
+    Splitter.Delimiter := ',';
+    while not Stream.EndOfStream do
+    begin
+      ALine := Stream.ReadLine;
+      ErrorLine := ALine;
+      ALine := StripFollowingComments(Trim(ALine));
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+
+      Splitter.DelimitedText := ALine;
+
+      SectionName := 'MODELS';
+      if ReadEndOfSection(ALine, ErrorLine, SectionName, Unhandled) then
+      begin
+        Exit;
+      end;
+
+      if Splitter.Count = 3 then
+      begin
+        AModel := TModel.Create;
+        FModels.Add(AModel);
+        AModel.ModelType := UpperCase(Splitter[0]);
+        AModel.NameFile := Splitter[1];
+        AModel.ModelName := Splitter[2];
+        ALine := UpperCase(Splitter[0]);
+        if (ALine <> 'GWF6') and (ALine <> 'GWT6') then
+        begin
+          Unhandled.WriteLine('Error reading the model type in the following line.');
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine('Error reading the following model line.');
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end;
+  finally
+    Splitter.Free;
+  end;
 end;
 
 end.

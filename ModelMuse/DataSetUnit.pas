@@ -565,6 +565,7 @@ type
     procedure SetPilotPointsUsed(const Value: Boolean);
     function GetPestArrayFileNames: TStringList;
     procedure SetTemplateNeeded(const Value: Boolean);
+    function GetDataType: TRbwDataType;
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -923,7 +924,7 @@ type
     property Comment: string read FComment write SetComment;
     // @name indicates whether the data stored in @classname are
     // real numbers, integers, booleans, or strings.
-    property DataType: TRbwDataType read FDataType write SetDataType;
+    property DataType: TRbwDataType read GetDataType write SetDataType;
     // @name indicates whether the data in @classname are evaluated at
     // element centers or nodes.
     property EvaluatedAt: TEvaluatedAt read FEvaluatedAt write SetEvaluatedAt;
@@ -4456,6 +4457,11 @@ begin
     end;
   end;
   result := LocalModel.GetCompiler(Orientation, EvaluatedAt);
+end;
+
+function TDataArray.GetDataType: TRbwDataType;
+begin
+  result := FDataType
 end;
 
 function TDataArray.GetDisplayFormula: string;

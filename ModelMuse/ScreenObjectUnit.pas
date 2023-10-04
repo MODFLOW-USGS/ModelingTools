@@ -2074,7 +2074,7 @@ view. }
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
     FSutraScheduleName: string;
-    FDyanmicTimesSeriesCollections: TDynamicTimesSeriesCollections;
+    FDynamicTimesSeriesCollections: TDynamicTimesSeriesCollections;
     procedure CreateLastSubPolygon;
     procedure DestroyLastSubPolygon;
     function GetSubPolygonCount: integer;
@@ -4666,8 +4666,12 @@ SectionStarts.}
       write SetQuadtreeRefinementLevel;
 //    property VerticesArePilotPoints: Boolean read FVerticesArePilotPoints
 //      write SetVerticesArePilotPoints;
+    property DynamicTimesSeriesCollections: TDynamicTimesSeriesCollections
+      read FDynamicTimesSeriesCollections write SetDyanmicTimesSeriesCollection;
+    // @name is for backwards compatiblity.
     property DyanmicTimesSeriesCollections: TDynamicTimesSeriesCollections
-      read FDyanmicTimesSeriesCollections write SetDyanmicTimesSeriesCollection;
+      read FDynamicTimesSeriesCollections write SetDyanmicTimesSeriesCollection
+      stored False;
   end;
 
   // @name does not own its @link(TScreenObject)s.
@@ -7295,7 +7299,7 @@ begin
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
   FootprintWell := AScreenObject.FootprintWell;
-  DyanmicTimesSeriesCollections := AScreenObject.DyanmicTimesSeriesCollections;
+  DynamicTimesSeriesCollections := AScreenObject.DynamicTimesSeriesCollections;
 
   // avoid creating AScreenObject.FPointPositionValues if it
   // hasn't been created yet.
@@ -12003,7 +12007,7 @@ begin
   FStoredMinimumFraction := TRealStorage.Create;
   FStoredMinimumFraction.OnChange := InvalidateSelf;
 
-  FDyanmicTimesSeriesCollections := TDynamicTimesSeriesCollections.Create(Model as TCustomModel, self);
+  FDynamicTimesSeriesCollections := TDynamicTimesSeriesCollections.Create(Model as TCustomModel, self);
 //  FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
 end;
 
@@ -20226,7 +20230,7 @@ var
   FormulaIndex: Integer;
   FormulaObject: IFormulaObject;
 begin
-  FDyanmicTimesSeriesCollections.Free;
+  FDynamicTimesSeriesCollections.Free;
 //  FSubObservations.Free;
   FStoredMinimumFraction.Free;
   FreeAndNil(FFootprintWell);
@@ -20495,7 +20499,7 @@ end;
 function TScreenObject.GetDynamicTimeSeriesIByName(
   const Value: string): IDynamicTimeSeries;
 begin
-  result := DyanmicTimesSeriesCollections.GetTimeSeriesByName(Value);
+  result := DynamicTimesSeriesCollections.GetTimeSeriesByName(Value);
 end;
 
 function TScreenObject.GetCount: integer;
@@ -21018,10 +21022,10 @@ end;
 procedure TScreenObject.SetDyanmicTimesSeriesCollection(
   const Value: TDynamicTimesSeriesCollections);
 begin
-  if not FDyanmicTimesSeriesCollections.IsSame(Value) then
+  if not FDynamicTimesSeriesCollections.IsSame(Value) then
   begin
-    FDyanmicTimesSeriesCollections.Assign(Value);
-    FDyanmicTimesSeriesCollections.Invalidate;
+    FDynamicTimesSeriesCollections.Assign(Value);
+    FDynamicTimesSeriesCollections.Invalidate;
   end;
 end;
 
@@ -23614,9 +23618,9 @@ begin
       SegList.FLower3DElevationsNeedsUpdating := True;
     end;
 
-    if FDyanmicTimesSeriesCollections <> nil then
+    if FDynamicTimesSeriesCollections <> nil then
     begin
-      DyanmicTimesSeriesCollections.Invalidate;
+      DynamicTimesSeriesCollections.Invalidate;
     end;
 
     FCachedCells.Invalidate;

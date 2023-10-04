@@ -79,6 +79,7 @@ type
     function GetUsesList: TStringList;
     procedure Invalidate;
     function IsSameI(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
+    procedure ClearLocations;
   public
     constructor Create(ModelInterface: IModelForDynamicTimeSeries;
       ScreenObject: IScreenObject; Group: TDynamicTimeSeriesItem);
@@ -124,6 +125,7 @@ type
     function GetTimeSeriesI: ITimeSeries;
     procedure SetTimeSeries(const Value: TDynamicTimeSeries);
     function GetStaticGroup: ITimesSeriesCollection;
+    procedure ClearLocations;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function GetTimesSeriesCollectionI: IDyanmicTimesSeriesCollection;
@@ -153,6 +155,7 @@ type
     function GetItem(Index: Integer): TDynamicTimeSeriesItem;
     procedure SetItem(Index: Integer; const Value: TDynamicTimeSeriesItem);
     procedure Invalidate;
+    procedure ClearLocations;
   public
     Constructor Create(Model: IModelMuseModel; ScreenObject: IScreenObject);
     Destructor Destroy; override;
@@ -172,6 +175,7 @@ type
     FTimesSeriesCollection: TDyanmicTimesSeriesCollection;
     function GetTimesSeriesCollectionI: ITimesSeriesCollection;
     procedure SetTimesSeriesCollection(const Value: TDyanmicTimesSeriesCollection);
+    procedure ClearLocations;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -211,6 +215,7 @@ type
     property TimeSeriesNames: TStringList read GetTimeSeriesNames;
     procedure Loaded;
     procedure Invalidate;
+    procedure ClearLocations;
   end;
 
 
@@ -221,6 +226,9 @@ procedure DynamicTimeItemRestoreSubscription(Sender: TObject; Subject: TObject;
   const AName: string);
 
 implementation
+
+uses
+  DataArrayInterfaceUnit, GIS_Functions;
 
 { TDynamicTimeSeriesItem }
 
@@ -377,6 +385,11 @@ begin
   inherited;
 end;
 
+procedure TDynamicTimeSeries.ClearLocations;
+begin
+  FTimeSeriesLocationDictionary.Clear;
+end;
+
 constructor TDynamicTimeSeries.Create(
   ModelInterface: IModelForDynamicTimeSeries; ScreenObject: IScreenObject;
   Group: TDynamicTimeSeriesItem);
@@ -475,6 +488,13 @@ var
   Compiler: TRbwParser;
   Expression: TExpression;
   TimeSeriesI: ITimeSeries;
+  TempUseList: TStringList;
+  UseIndex: Integer;
+  AName: string;
+  DataArrayI: IDataArray;
+  VarIndex: Integer;
+  AVariable: TCustomValue;
+  Layer: Integer;
 begin
   if not FTimeSeriesLocationDictionary.TryGetValue(Location, result) then
   begin
@@ -511,11 +531,67 @@ begin
         Compiler.Compile(Formula);
         Expression := Compiler.CurrentExpression;
       end;
+
+      TempUseList := TStringList.Create;
+      try
+        TempUseList.Assign(UsesList);
+        for UseIndex := 0 to TempUseList.Count - 1 do
+        begin
+          AName := TempUseList[UseIndex];
+          DataArrayI := Model.GetDataArrayInterface.GetDataSetByNameI(AName);
+          if DataArrayI.LayerCount = 1 then
+          begin
+            Layer := 0;
+          end
+          else
+          begin
+            Layer := Location.Layer;
+          end;
+          if DataArrayI <> nil then
+          begin
+            DataArrayI.Initialize;
+            VarIndex := Compiler.IndexOfVariable(AName);
+            if VarIndex >= 0 then
+            begin
+              AVariable := Compiler.Variables[VarIndex];
+
+              case DataArrayI.DataType of
+                rdtDouble:
+                  begin
+                    (AVariable as TRealVariable).Value :=
+                      DataArrayI.RealData[Layer, Location.Row, Location.Column];
+                  end;
+                rdtInteger:
+                  begin
+                    (AVariable as TIntegerVariable).Value :=
+                      DataArrayI.IntegerData[Layer, Location.Row, Location.Column];
+                  end;
+                rdtBoolean:
+                  begin
+                    (AVariable as TBooleanVariable).Value :=
+                      DataArrayI.BooleanData[Layer, Location.Row, Location.Column];
+                  end;
+                rdtString:
+                  begin
+                    (AVariable as TStringVariable).Value :=
+                      DataArrayI.StringData[Layer, Location.Row, Location.Column];
+                  end;
+              end;
+            end;
+          end;
+        end;
+      finally
+        TempUseList.Free;
+      end;
+
+      UpdateGlobalLocations(Location.Column, Location.Row, Location.Layer,
+        eaBlocks, Model as TBaseModel);
+
       Expression.Evaluate;
       result.Values[Index] := Expression.DoubleResult;
     end;
 
-    FTimeSeriesLocationDictionary.Add(Location, result)
+    FTimeSeriesLocationDictionary.Add(Location, result);
   end;
 end;
 
@@ -702,6 +778,11 @@ begin
   end;
 end;
 
+procedure TDynamicTimeSeriesItem.ClearLocations;
+begin
+  FDynamicTimeSeries.ClearLocations;
+end;
+
 constructor TDynamicTimeSeriesItem.Create(Collection: TCollection);
 begin
   Assert(Collection <> nil);
@@ -781,6 +862,18 @@ procedure TDyanmicTimesSeriesCollection.Assign(Source: TPersistent);
 begin
   FTimeSeriesDictionary.Clear;
   inherited;
+end;
+
+procedure TDyanmicTimesSeriesCollection.ClearLocations;
+var
+  index: Integer;
+  Item: TDynamicTimeSeriesItem;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Item := Items[index];
+    Item.ClearLocations;
+  end;
 end;
 
 constructor TDyanmicTimesSeriesCollection.Create(Model: IModelMuseModel;
@@ -954,6 +1047,11 @@ begin
   end;
 end;
 
+procedure TDynamicTimeSeriesCollectionItem.ClearLocations;
+begin
+  FTimesSeriesCollection.ClearLocations;
+end;
+
 constructor TDynamicTimeSeriesCollectionItem.Create(Collection: TCollection);
 var
   ScreenObject: IScreenObject;
@@ -1005,6 +1103,18 @@ begin
   inherited;
   FTimeSeriesGroupsDictionary.Clear;
   FTimeSeriesDictionary.Clear;
+end;
+
+procedure TDynamicTimesSeriesCollections.ClearLocations;
+var
+  index: Integer;
+  TimeSeriesCollection: TDyanmicTimesSeriesCollection;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    TimeSeriesCollection := Items[index].TimesSeriesCollection;
+    TimeSeriesCollection.ClearLocations;
+  end;
 end;
 
 constructor TDynamicTimesSeriesCollections.Create(

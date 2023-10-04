@@ -92,6 +92,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="SimulationNameFileReaderUnit.pas"/>
+        <DCCReference Include="CustomMf6PersistentUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
