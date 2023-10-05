@@ -8,18 +8,23 @@ uses
 type
   TCustomMf6Persistent = class(TPersistent)
   protected
-    procedure Initialize; virtual; abstract;
+    procedure Initialize; virtual;
     function StripFollowingComments(AValue: string): string;
     function ReadEndOfSection(ALine: string; const ErrorLine: string;
       const SectionName: string; Unhandled: TStreamWriter): boolean;
+
+  var
+    FSplitter: TStringList;
   public
     constructor Create; virtual;
+    destructor Destroy; override;
   end;
 
 implementation
 
 constructor TCustomMf6Persistent.Create;
 begin
+  FSplitter := TStringList.Create;
   Initialize;
 end;
 
@@ -36,17 +41,17 @@ begin
     CommentPosition := Pos('#', AValue);
     if CommentPosition > 0 then
     begin
-      AValue := Trim(Copy(AValue, 1, CommentPosition - 1));
+      AValue := Copy(AValue, 1, CommentPosition - 1);
     end;
     CommentPosition := Pos('!', AValue);
     if CommentPosition > 0 then
     begin
-      AValue := Trim(Copy(AValue, 1, CommentPosition - 1));
+      AValue := Copy(AValue, 1, CommentPosition - 1);
     end;
     CommentPosition := Pos('//', AValue);
     if CommentPosition > 0 then
     begin
-      AValue := Trim(Copy(AValue, 1, CommentPosition - 1));
+      AValue := Copy(AValue, 1, CommentPosition - 1);
     end;
   end
   else
@@ -112,7 +117,19 @@ begin
       end;
     end;
   end;
-  result := AValue;
+  result := Trim(AValue);
+end;
+
+destructor TCustomMf6Persistent.Destroy;
+begin
+  FSplitter.Free;
+  inherited;
+end;
+
+procedure TCustomMf6Persistent.Initialize;
+begin
+  FSplitter.QuoteChar := '''';
+  FSplitter.Delimiter := ',';
 end;
 
 function TCustomMf6Persistent.ReadEndOfSection(ALine: string;
@@ -120,19 +137,34 @@ function TCustomMf6Persistent.ReadEndOfSection(ALine: string;
   Unhandled: TStreamWriter): boolean;
 begin
   result := False;
-  ALine := UpperCase(ALine);
-  if Pos('END', ALine) = 1 then
+  FSplitter.DelimitedText := StripFollowingComments(UpperCase(ALine));
+  if FSplitter.Count > 0 then
   begin
-    ALine := Trim(Copy(ALine, 4, MAXINT));
-    if ALine = SectionName then
+    if FSplitter[0] = 'END' then
     begin
-      result := True;
-    end
-    else
-    begin
-      Unhandled.WriteLine(Format('Error reading the following %s line.', [SectionName]));
-      Unhandled.WriteLine(ErrorLine);
+      if FSplitter.Count > 1 then
+      begin
+        if FSplitter[1] = SectionName then
+        begin
+          result := True;
+        end
+        else
+        begin
+          Unhandled.WriteLine(Format('Error reading the following %s line.', [SectionName]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format('Error reading the following %s line.', [SectionName]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
     end;
+  end
+  else
+  begin
+    Unhandled.WriteLine(Format('Error reading the following %s line.', [SectionName]));
+    Unhandled.WriteLine(ErrorLine);
   end;
 end;
 

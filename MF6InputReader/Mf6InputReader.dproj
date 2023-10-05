@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{60AA5D30-A55A-4697-A6CA-8B4C933035DC}</ProjectGuid>
         <ProjectVersion>19.5</ProjectVersion>
-        <FrameworkType>None</FrameworkType>
+        <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
@@ -47,7 +47,7 @@
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <SanitizedProjectName>Mf6InputReader</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
@@ -93,6 +93,11 @@
         </DelphiCompile>
         <DCCReference Include="SimulationNameFileReaderUnit.pas"/>
         <DCCReference Include="CustomMf6PersistentUnit.pas"/>
+        <DCCReference Include="TDisFileReaderUnit.pas"/>
+        <DCCReference Include="..\ModelMuse\ModelMuseUtilities.pas"/>
+        <DCCReference Include="..\ModelMuse\FastGEO.pas"/>
+        <DCCReference Include="AtsFileReaderUnit.pas"/>
+        <DCCReference Include="NameFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

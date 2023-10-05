@@ -14,7 +14,12 @@ uses
   Vcl.Dialogs,
   System.IOUtils,
   SimulationNameFileReaderUnit in 'SimulationNameFileReaderUnit.pas',
-  CustomMf6PersistentUnit in 'CustomMf6PersistentUnit.pas';
+  CustomMf6PersistentUnit in 'CustomMf6PersistentUnit.pas',
+  TDisFileReaderUnit in 'TDisFileReaderUnit.pas',
+  ModelMuseUtilities in '..\ModelMuse\ModelMuseUtilities.pas',
+  FastGEO in '..\ModelMuse\FastGEO.pas',
+  AtsFileReaderUnit in 'AtsFileReaderUnit.pas',
+  NameFileReaderUnit in 'NameFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;
@@ -28,6 +33,10 @@ begin
       if OpenDialog.Execute then
       begin
         FileName := OpenDialog.FileName;
+      end
+      else
+      begin
+        Exit;
       end;
     finally
       OpenDialog.Free;
@@ -40,6 +49,10 @@ begin
       finally
         Mf6Simulation.Free;
       end;
+    end
+    else
+    begin
+      WriteLn(Format('The file "FileName" does not exist.', [FileName]));
     end;
     { TODO -oUser -cConsole Main : Insert code here }
   except
