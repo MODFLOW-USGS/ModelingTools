@@ -123,20 +123,7 @@ begin
 //    ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
 
-    if FSplitter.Count = 2 then
-    begin
-      if UpperCase(FSplitter[0]) = 'LIST' then
-      begin
-        ListingFileName := FSplitter[1]
-      end
-      else
-      begin
-        ALine := UpperCase(ALine);
-        FSplitter.DelimitedText := ALine;
-        HandleAdditionalDoubleOptions(ErrorLine, Unhandled);
-      end;
-    end
-    else if FSplitter.Count = 1 then
+    if FSplitter.Count >= 1 then
     begin
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
@@ -152,6 +139,19 @@ begin
       else if AValue = 'SAVE_FLOWS' then
       begin
         SAVE_FLOWS := True;
+      end
+      else if FSplitter.Count >= 2 then
+      begin
+        if UpperCase(FSplitter[0]) = 'LIST' then
+        begin
+          ListingFileName := FSplitter[1]
+        end
+        else
+        begin
+          ALine := UpperCase(ALine);
+          FSplitter.DelimitedText := ALine;
+          HandleAdditionalDoubleOptions(ErrorLine, Unhandled);
+        end;
       end
       else
       begin
@@ -281,13 +281,13 @@ begin
 
     FSplitter.DelimitedText := ALine;
 
-    if FSplitter.Count in [2,3] then
+    if FSplitter.Count >= 2 then
     begin
       APackage := TPackage.Create;
       FPackages.Add(APackage);
       APackage.FileType := UpperCase(FSplitter[0]);
       APackage.FileName := FSplitter[1];
-      if FSplitter.Count = 3 then
+      if FSplitter.Count >= 3 then
       begin
         APackage.PackageName := FSplitter[2];
       end;

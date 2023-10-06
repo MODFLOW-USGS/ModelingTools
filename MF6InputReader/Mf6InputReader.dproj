@@ -49,6 +49,9 @@
         <DCC_K>false</DCC_K>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <SanitizedProjectName>Mf6InputReader</SanitizedProjectName>
+        <DCC_Define>MF6Import;$(DCC_Define)</DCC_Define>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>FireDACIBDriver;vclwinx;RbwEdit11_2;fmx;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;FireDACCommonODBC;FireDACCommonDriver;AbbreviaD;appanalytics;IndyProtocols;vclx;ModelCube11_2;IndyIPClient;dbxcds;vcledge;bindcompvclwinx;FmxTeeUI;Ade11_2;bindcompfmx;madBasic_;RbwRollupPanel11_2;JvBands;inetdb;ZoomBox2_11_2;DynamicCursor11_2;JvAppFrm;FireDACSqliteDriver;DbxClientDriver;Tee;soapmidas;JclVcl;GR32_DSGN_RS11_2;vclactnband;TeeUI;fmxFireDAC;dbexpress;Jcl;JvManagedThreads;RbwRuler11_2;DBXMySQLDriver;VclSmp;inet;JvPascalInterpreter;datagrid11_2;vcltouch;fmxase;JvPluginSystem;JvDB;JvTimeFramework;dbrtl;RbwParser11_2;fmxdae;TeeDB;FireDACMSAccDriver;JvCustom;CustomIPTransport;JvSystem;AbbreviaVCLD;ButtonEdit11_2;JclDeveloperTools;JvControls;GlWidget11_2;vcldsnap;JvCrypt;DBXInterBaseDriver;JvJans;madExcept_;JvMM;IndySystem;JvWizards;JvGlobus;vcldb;JclContainers;JvPageComps;vclFireDAC;JvCore;madDisAsm_;bindcomp;FireDACCommon;AbbreviaFMXDDesign;RbwDataGridD11_2;IndyCore;RESTBackendComponents;bindcompdbx;rtl;FireDACMySQLDriver;FireDACADSDriver;RESTComponents;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;adortl;JvDotNetCtrls;JvHMI;VirtualTreesDR;MMJLabel11_2;MostRecentFiles11_2;QuadTreePkg11_2;JvRuntimeDesign;JvXPCtrls;vclimg;FireDACPgDriver;FireDAC;inetdbxpress;JvDlgs;xmlrtl;tethering;JvStdCtrls;JvDocking;JvPrintPreview;bindcompvcl;dsnap;addbtn95_D11_2;JvCmp;CloudService;fmxobj;bindcompvclsmp;FMXTee;GLScene_RT;soaprtl;RbwControllerPackage11_2;soapserver;JvNet;$(DCC_UsePackage)</DCC_UsePackage>
@@ -80,6 +83,9 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
         <DCC_MapFile>3</DCC_MapFile>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Manifest_File>(None)</Manifest_File>
+        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -91,13 +97,15 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="SimulationNameFileReaderUnit.pas"/>
+        <DCCReference Include="simulationnamefilereaderunit.pas"/>
         <DCCReference Include="CustomMf6PersistentUnit.pas"/>
         <DCCReference Include="TDisFileReaderUnit.pas"/>
         <DCCReference Include="..\ModelMuse\ModelMuseUtilities.pas"/>
         <DCCReference Include="..\ModelMuse\FastGEO.pas"/>
         <DCCReference Include="AtsFileReaderUnit.pas"/>
         <DCCReference Include="NameFileReaderUnit.pas"/>
+        <DCCReference Include="ImsFileReaderUnit.pas"/>
+        <DCCReference Include="..\ModelMuse\ReadModflowArrayUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -118,6 +126,10 @@
                 <Source>
                     <Source Name="MainSource">Mf6InputReader.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="4">
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule">

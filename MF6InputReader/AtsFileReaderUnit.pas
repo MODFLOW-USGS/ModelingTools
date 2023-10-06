@@ -88,7 +88,7 @@ begin
 
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if FSplitter.Count = 2 then
+    if FSplitter.Count >= 2 then
     begin
       if FSplitter[0] = 'MAXATS' then
       begin
@@ -218,7 +218,6 @@ var
   ErrorLine: string;
   SectionName: string;
   APeriod: TAtsPeriod;
-  ModelIndex: Integer;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -239,7 +238,7 @@ begin
 
     FSplitter.DelimitedText := ALine;
 
-    if FSplitter.Count = 6 then
+    if FSplitter.Count >= 6 then
     begin
       APeriod := TAtsPeriod.Create;
       FPeriods.Add(APeriod);

@@ -111,7 +111,7 @@ begin
 
         FSplitter.DelimitedText := ALine;
         Assert(FSplitter.Count > 0);
-        if FSplitter.Count = 2 then
+        if FSplitter.Count >= 2 then
         begin
           if FSplitter[0] = 'TIME_UNITS' then
           begin
@@ -121,17 +121,17 @@ begin
           begin
             StartDate := FSplitter[1];
           end
-          else
+          else if FSplitter.Count >= 3 then
           begin
-            Unhandled.WriteLine(StrUnrecognizedTDISOp);
-            Unhandled.WriteLine(ErrorLine);
-          end;
-        end
-        else if FSplitter.Count = 3 then
-        begin
-          if (FSplitter[0] = 'ATS6') and (FSplitter[1] = 'FILEIN') then
-          begin
-            ATS6_FileName := FSplitter[2];
+            if (FSplitter[0] = 'ATS6') and (FSplitter[1] = 'FILEIN') then
+            begin
+              ATS6_FileName := FSplitter[2];
+            end
+            else
+            begin
+              Unhandled.WriteLine(StrUnrecognizedTDISOp);
+              Unhandled.WriteLine(ErrorLine);
+            end;
           end
           else
           begin
@@ -187,7 +187,7 @@ begin
 
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if FSplitter.Count = 2 then
+    if FSplitter.Count >= 2 then
     begin
       if FSplitter[0] = 'NPER' then
       begin
@@ -238,7 +238,6 @@ var
   ErrorLine: string;
   SectionName: string;
   APeriod: TPeriod;
-  ModelIndex: Integer;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -259,7 +258,7 @@ begin
 
     FSplitter.DelimitedText := ALine;
 
-    if FSplitter.Count = 3 then
+    if FSplitter.Count >= 3 then
     begin
       APeriod := TPeriod.Create;
       FPeriods.Add(APeriod);
@@ -392,20 +391,27 @@ begin
   begin
     if TFile.Exists(FOptions.ATS6_FileName) then
     begin
-      AtsFile := TFile.OpenText(FOptions.ATS6_FileName);
       try
+        AtsFile := TFile.OpenText(FOptions.ATS6_FileName);
         try
-          FAts := TAts.Create;
-          FAts.Read(AtsFile, Unhandled)
-        except on E: Exception do
-          begin
-            Unhandled.WriteLine('ERROR');
-            Unhandled.WriteLine(E.Message);
+          try
+            FAts := TAts.Create;
+            FAts.Read(AtsFile, Unhandled)
+          except on E: Exception do
+            begin
+              Unhandled.WriteLine('ERROR');
+              Unhandled.WriteLine(E.Message);
+            end;
           end;
+        finally
+          AtsFile.Free;
         end;
-      finally
-        AtsFile.Free;
-      end;
+      except on E: Exception do
+        begin
+          Unhandled.WriteLine('ERROR');
+          Unhandled.WriteLine(E.Message);
+        end;
+      end
     end
     else
     begin

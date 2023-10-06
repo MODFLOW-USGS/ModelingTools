@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, CustomMf6PersistentUnit,
-  System.Generics.Collections, TDisFileReaderUnit, NameFileReaderUnit;
+  System.Generics.Collections, TDisFileReaderUnit, NameFileReaderUnit,
+  ImsFileReaderUnit;
 
 type
   TMemPrint = (mpNone, mpSummary, mpAll);
@@ -90,8 +91,10 @@ type
     SolutionType: string;
     SolutionFileName: string;
     FSolutionModelNames: TStringList;
+    FIms: TIms;
     constructor Create;
     destructor Destroy; override;
+    procedure ReadInput(Unhandled: TStreamWriter);
   end;
 
   TSolutionList = TObjectList<TSolution>;
@@ -107,6 +110,7 @@ type
     constructor Create(SolutionNumber: Integer); reintroduce;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    procedure ReadInput(Unhandled: TStreamWriter);
   end;
 
   TSolutionGroups = TObjectList<TSolutionGroup>;
@@ -158,108 +162,120 @@ var
   GroupNumber: Integer;
   SolutionGroup: TSolutionGroup;
   ErrorLine: string;
+  GroupIndex: Integer;
 begin
   SetCurrentDir(ExtractFileDir(NameFile));
-  FSimulationFile := TFile.OpenText(NameFile);
-  FOutFile := TFile.CreateText(ChangeFileExt(NameFile, '.lst'));
   try
-    while not FSimulationFile.EndOfStream do
-    begin
-      ALine := FSimulationFile.ReadLine;
-      ErrorLine := ALine;
-      ALine := StripFollowingComments(ALine);
-      if ALine = '' then
+    FSimulationFile := TFile.OpenText(NameFile);
+    FOutFile := TFile.CreateText(ChangeFileExt(NameFile, '.lst'));
+    try
+      while not FSimulationFile.EndOfStream do
       begin
-        Continue;
-      end;
-
-      ALine := UpperCase(ALine);
-      if Pos('BEGIN', ALine) = 1 then
-      begin
-        if Trim(Copy(ALine,Length('BEGIN')+1,1)) <> '' then
+        ALine := FSimulationFile.ReadLine;
+        ErrorLine := ALine;
+        ALine := StripFollowingComments(ALine);
+        if ALine = '' then
         begin
-          FOutFile.WriteLine('Unrecognized simulation option in the following line.');
-          FOutFile.WriteLine(ErrorLine);
           Continue;
         end;
-        ALine := Trim(Copy(ALine, Length('BEGIN')+1, MaxInt)) ;
-        if Pos('OPTIONS', ALine) = 1 then
+
+        ALine := UpperCase(ALine);
+        if Pos('BEGIN', ALine) = 1 then
         begin
-          if Trim(Copy(ALine,Length('OPTIONS')+1,1)) <> '' then
+          if Trim(Copy(ALine,Length('BEGIN')+1,1)) <> '' then
           begin
             FOutFile.WriteLine('Unrecognized simulation option in the following line.');
             FOutFile.WriteLine(ErrorLine);
             Continue;
           end;
-          FSimulationOptions.Read(FSimulationFile, FOutFile)
-        end
-        else if Pos('TIMING', ALine) = 1 then
-        begin
-          if Trim(Copy(ALine,Length('TIMING')+1,1)) <> '' then
+          ALine := Trim(Copy(ALine, Length('BEGIN')+1, MaxInt)) ;
+          if Pos('OPTIONS', ALine) = 1 then
           begin
-            FOutFile.WriteLine('Unrecognized simulation option in the following line.');
-            FOutFile.WriteLine(ErrorLine);
-            Continue;
-          end;
-          FTiming.Read(FSimulationFile, FOutFile)
-        end
-        else if Pos('MODELS', ALine) = 1 then
-        begin
-          if Trim(Copy(ALine,Length('MODELS')+1,1)) <> '' then
+            if Trim(Copy(ALine,Length('OPTIONS')+1,1)) <> '' then
+            begin
+              FOutFile.WriteLine('Unrecognized simulation option in the following line.');
+              FOutFile.WriteLine(ErrorLine);
+              Continue;
+            end;
+            FSimulationOptions.Read(FSimulationFile, FOutFile)
+          end
+          else if Pos('TIMING', ALine) = 1 then
           begin
-            FOutFile.WriteLine('Unrecognized simulation option in the following line.');
-            FOutFile.WriteLine(ErrorLine);
-            Continue;
-          end;
-          FModels.Read(FSimulationFile, FOutFile);
-        end
-        else if Pos('EXCHANGES', ALine) = 1 then
-        begin
-          if Trim(Copy(ALine,Length('EXCHANGES')+1,1)) <> '' then
+            if Trim(Copy(ALine,Length('TIMING')+1,1)) <> '' then
+            begin
+              FOutFile.WriteLine('Unrecognized simulation option in the following line.');
+              FOutFile.WriteLine(ErrorLine);
+              Continue;
+            end;
+            FTiming.Read(FSimulationFile, FOutFile)
+          end
+          else if Pos('MODELS', ALine) = 1 then
           begin
-            FOutFile.WriteLine('Unrecognized simulation option in the following line.');
-            FOutFile.WriteLine(ErrorLine);
-            Continue;
-          end;
-          FExchanges.Read(FSimulationFile, FOutFile);
-        end
-        else if Pos('SOLUTIONGROUP', ALine) = 1 then
-        begin
-          if Trim(Copy(ALine,Length('SOLUTIONGROUP')+1,1)) <> '' then
+            if Trim(Copy(ALine,Length('MODELS')+1,1)) <> '' then
+            begin
+              FOutFile.WriteLine('Unrecognized simulation option in the following line.');
+              FOutFile.WriteLine(ErrorLine);
+              Continue;
+            end;
+            FModels.Read(FSimulationFile, FOutFile);
+          end
+          else if Pos('EXCHANGES', ALine) = 1 then
           begin
-            FOutFile.WriteLine('Unrecognized simulation option in the following line.');
-            FOutFile.WriteLine(ErrorLine);
-            Continue;
-          end;
-          FSplitter.DelimitedText := ALine;
-          if TryStrToInt(FSplitter[1], GroupNumber) then
+            if Trim(Copy(ALine,Length('EXCHANGES')+1,1)) <> '' then
+            begin
+              FOutFile.WriteLine('Unrecognized simulation option in the following line.');
+              FOutFile.WriteLine(ErrorLine);
+              Continue;
+            end;
+            FExchanges.Read(FSimulationFile, FOutFile);
+          end
+          else if Pos('SOLUTIONGROUP', ALine) = 1 then
           begin
-            SolutionGroup := TSolutionGroup.Create(GroupNumber);
-            FSolutionGroups.Add(SolutionGroup);
-            SolutionGroup.Read(FSimulationFile, FOutFile);
+            if Trim(Copy(ALine,Length('SOLUTIONGROUP')+1,1)) <> '' then
+            begin
+              FOutFile.WriteLine('Unrecognized simulation option in the following line.');
+              FOutFile.WriteLine(ErrorLine);
+              Continue;
+            end;
+            FSplitter.DelimitedText := ALine;
+            if TryStrToInt(FSplitter[1], GroupNumber) then
+            begin
+              SolutionGroup := TSolutionGroup.Create(GroupNumber);
+              FSolutionGroups.Add(SolutionGroup);
+              SolutionGroup.Read(FSimulationFile, FOutFile);
+            end
+            else
+            begin
+              FOutFile.WriteLine('Unable to read solution group number in the following line.');
+              FOutFile.WriteLine(ErrorLine);
+            end;
           end
           else
           begin
-            FOutFile.WriteLine('Unable to read solution group number in the following line.');
+            FOutFile.WriteLine('Unrecognized simulation option in the following line.');
             FOutFile.WriteLine(ErrorLine);
           end;
-        end
-        else
-        begin
-          FOutFile.WriteLine('Unrecognized simulation option in the following line.');
-          FOutFile.WriteLine(ErrorLine);
         end;
       end;
+
+      FTiming.ReadInput(FOutFile);
+      FModels.ReadInput(FOutFile);
+      for GroupIndex := 0 to FSolutionGroups.Count - 1 do
+      begin
+        FSolutionGroups[GroupIndex].ReadInput(FOutFile);
+      end;
+
+      FSimulationFile.Close;
+      FOutFile.Close;
+    finally
+      FSimulationFile.Free;
+      FOutFile.Free;
     end;
-
-    FTiming.ReadInput(FOutFile);
-    FModels.ReadInput(FOutFile);
-
-    FSimulationFile.Close;
-    FOutFile.Close;
-  finally
-    FSimulationFile.Free;
-    FOutFile.Free;
+  except on E: Exception do
+    begin
+      WriteLn('ERROR');
+      WriteLn(E.Message);
+    end;
   end;
 end;
 
@@ -415,6 +431,8 @@ begin
     if Pos('TDIS6', UpperCase(ALine)) = 1 then
     begin
       ALine := Trim(Copy(ALine, Length('TDIS6')+1, MaxInt));
+      FSplitter.DelimitedText := ALine;
+      ALine := FSplitter[0];
       if ALine[1] = '''' then
       begin
         Assert(ALine[Length(ALine)] = '''');
@@ -442,20 +460,27 @@ var
 begin
   if TFile.Exists(FTisFileName) then
   begin
-    TDisFile := TFile.OpenText(FTisFileName);
     try
+      TDisFile := TFile.OpenText(FTisFileName);
       try
-        FTDis := TTDis.Create;
-        FTDis.Read(TDisFile, Unhandled);
-        FTDis.ReadInput(Unhandled);
-      except on E: Exception do
-        begin
-          Unhandled.WriteLine('ERROR');
-          Unhandled.WriteLine(E.Message);
+        try
+          FTDis := TTDis.Create;
+          FTDis.Read(TDisFile, Unhandled);
+          FTDis.ReadInput(Unhandled);
+        except on E: Exception do
+          begin
+            Unhandled.WriteLine('ERROR');
+            Unhandled.WriteLine(E.Message);
+          end;
         end;
+      finally
+        TDisFile.Free;
       end;
-    finally
-      TDisFile.Free;
+    except on E: Exception do
+      begin
+        Unhandled.WriteLine('ERROR');
+        Unhandled.WriteLine(E.Message);
+      end;
     end;
   end
   else
@@ -505,7 +530,8 @@ begin
       Exit;
     end;
 
-    if FSplitter.Count = 3 then
+
+    if FSplitter.Count >= 3 then
     begin
       AModel := TModel.Create;
       FModels.Add(AModel);
@@ -584,7 +610,7 @@ begin
       Exit;
     end;
 
-    if FSplitter.Count = 4 then
+    if FSplitter.Count >= 4 then
     begin
       AnExchange := TExchange.Create;
       FExchanges.Add(AnExchange);
@@ -617,8 +643,38 @@ end;
 
 destructor TSolution.Destroy;
 begin
+  FIms.Free;
   FSolutionModelNames.Free;
   inherited;
+end;
+
+procedure TSolution.ReadInput(Unhandled: TStreamWriter);
+var
+  ImsFileStream: TStreamReader;
+begin
+  FreeAndNil(FIms);
+  if TFile.Exists(SolutionFileName) then
+  begin
+    try
+      ImsFileStream := TFile.OpenText(SolutionFileName);
+      try
+        FIms := TIms.Create;
+        FIms.Read(ImsFileStream, Unhandled);
+      finally
+        ImsFileStream.Free;
+      end;
+    except on E: Exception do
+      begin
+        Unhandled.WriteLine('ERROR');
+        Unhandled.WriteLine(E.Message);
+      end;
+    end;
+  end
+  else
+  begin
+    Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+      [SolutionFileName]));
+  end;
 end;
 
 { TSolutionGroup }
@@ -670,7 +726,7 @@ begin
       Exit;
     end;
 
-    if FSplitter.Count = 2 then
+    if FSplitter.Count >= 2 then
     begin
       if UpperCase(FSplitter[0]) = 'MXITER' then
       begin
@@ -680,27 +736,27 @@ begin
           Unhandled.WriteLine(ErrorLine);
         end;
       end
+      else if FSplitter.Count >= 3 then
+      begin
+        ASolution := TSolution.Create;
+        FSolutions.Add(ASolution);
+        ASolution.SolutionType := UpperCase(FSplitter[0]);
+        ASolution.SolutionFileName := FSplitter[1];
+        ASolution.FSolutionModelNames.Capacity := FSplitter.Count-2;
+        for ModelIndex := 2 to FSplitter.Count - 1 do
+        begin
+          ASolution.FSolutionModelNames.Add(FSplitter[ModelIndex]);
+        end;
+        if ASolution.SolutionType <> 'IMS6' then
+        begin
+          Unhandled.WriteLine(Format('Unrecognized solution type option "%s" in the following line',
+            [ASolution.SolutionType]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
       else
       begin
         Unhandled.WriteLine('Unrecognized solution group option in the following line');
-        Unhandled.WriteLine(ErrorLine);
-      end;
-    end
-    else if FSplitter.Count >= 3 then
-    begin
-      ASolution := TSolution.Create;
-      FSolutions.Add(ASolution);
-      ASolution.SolutionType := UpperCase(FSplitter[0]);
-      ASolution.SolutionFileName := FSplitter[1];
-      ASolution.FSolutionModelNames.Capacity := FSplitter.Count-2;
-      for ModelIndex := 2 to FSplitter.Count - 1 do
-      begin
-        ASolution.FSolutionModelNames.Add(FSplitter[ModelIndex]);
-      end;
-      if ASolution.SolutionType <> 'IMS6' then
-      begin
-        Unhandled.WriteLine(Format('Unrecognized solution type option "%s" in the following line',
-          [ASolution.SolutionType]));
         Unhandled.WriteLine(ErrorLine);
       end;
     end
@@ -709,6 +765,16 @@ begin
       Unhandled.WriteLine('Unrecognized solution group option in the following line');
       Unhandled.WriteLine(ErrorLine);
     end;
+  end
+end;
+
+procedure TSolutionGroup.ReadInput(Unhandled: TStreamWriter);
+var
+  SolutionIndex: Integer;
+begin
+  for SolutionIndex := 0 to FSolutions.Count - 1 do
+  begin
+    FSolutions[SolutionIndex].ReadInput(Unhandled);
   end;
 end;
 
@@ -727,27 +793,34 @@ begin
   FreeAndNil(FName);
   if TFile.Exists(NameFile) then
   begin
-    NameFileStream := TFile.OpenText(NameFile);
     try
-      if ModelType = 'GWF6' then
-      begin
-        FName := TFlowNameFile.Create;
-      end
-      else if ModelType = 'GWT6' then
-      begin
-        FName := TTransportNameFile.Create;
-      end
-      else
-      begin
-        Unhandled.WriteLine(Format('Unable read unrecognized file type %s', [ModelType]));
+      NameFileStream := TFile.OpenText(NameFile);
+      try
+        if ModelType = 'GWF6' then
+        begin
+          FName := TFlowNameFile.Create;
+        end
+        else if ModelType = 'GWT6' then
+        begin
+          FName := TTransportNameFile.Create;
+        end
+        else
+        begin
+          Unhandled.WriteLine(Format('Unable read unrecognized file type %s', [ModelType]));
+        end;
+        if FName <> nil then
+        begin
+          FName.Read(NameFileStream, Unhandled);
+        end;
+      finally
+        NameFileStream.Free;
       end;
-      if FName <> nil then
+    except on E: Exception do
       begin
-        FName.Read(NameFileStream, Unhandled);
+        Unhandled.WriteLine('ERROR');
+        Unhandled.WriteLine(E.Message);
       end;
-    finally
-      NameFileStream.Free;
-    end;
+    end
   end
   else
   begin

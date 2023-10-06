@@ -178,6 +178,10 @@ implementation
 
 {#BACKUP SwiObsUtilities.pas}
 
+{$IFDEF  MF6Import}
+uses
+  ModelMuseUtilities;
+{$ELSE}
 uses
 {$IFDEF FPC}
   SwiObsUtilities;
@@ -187,6 +191,7 @@ uses
   {$ELSE}
   {ModelMuseUtilities,} GoPhastTypes;
   {$ENDIF}
+{$ENDIF}
 {$ENDIF}
 
 resourcestring

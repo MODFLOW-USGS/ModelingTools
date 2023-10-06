@@ -3,24 +3,87 @@ unit CustomMf6PersistentUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes;
+  System.SysUtils, System.Classes, System.IOUtils;
 
 type
   TCustomMf6Persistent = class(TPersistent)
   protected
+    FSplitter: TStringList;
     procedure Initialize; virtual;
     function StripFollowingComments(AValue: string): string;
     function ReadEndOfSection(ALine: string; const ErrorLine: string;
       const SectionName: string; Unhandled: TStreamWriter): boolean;
-
-  var
-    FSplitter: TStringList;
   public
     constructor Create; virtual;
     destructor Destroy; override;
   end;
 
+  TDataType = (dtReal, dtInteger);
+  TDimensions = record
+    NLay: Integer;
+    NRow: Integer;
+    NCol: Integer;
+  end;
+
+  TArrayType = (atConstant, atInternal, atExternal, atUndefined);
+
+  TCustomArrayReader<DataType: record> = class(TCustomMf6Persistent)
+  private
+  const
+    StrErrorReadingArray = 'Error reading array control line in the following ' +
+    'line.';
+  var
+    ArrayType: TArrayType;
+    FFactor: DataType;
+    IPRN: Integer;
+    FExternalFileName: string;
+    FBinary: Boolean;
+    FConstantValue: DataType;
+    function StrToDataType(AValue: string): DataType; virtual; abstract;
+    procedure ReadControlLine(Stream: TStreamReader; Unhandled: TStreamWriter);
+  protected
+    procedure Initialize; override;
+  end;
+
+  T1DArrayReader<DataType: record> = class(TCustomArrayReader<DataType>)
+  private
+    Data: array of DataType;
+    FDimension: Integer;
+  public
+    constructor Create(Dimension: Integer); reintroduce;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  end;
+
+  TDouble1DArrayReader = class(T1DArrayReader<Double>)
+  private
+    procedure ReadDataFromTextFile(Stream: TStreamReader);
+    function StrToDataType(AValue: string): Double; override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  end;
+
+  T3DArrayReader<DataType: record> = class(TCustomArrayReader<DataType>)
+  private
+    Data: array of array of array of DataType;
+    FDimensions: TDimensions;
+    FLayered: Boolean;
+  public
+    constructor Create(Dimensions: TDimensions;
+      Layered: Boolean); reintroduce;
+  end;
+
+  TDouble3DArrayReader = class(T3DArrayReader<Double>)
+    function StrToDataType(AValue: string): Double; override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  private
+    procedure Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Integer);
+    procedure Read3DArrayFromTextFile(Stream: TStreamReader);
+  end;
+
 implementation
+
+uses
+  ModelMuseUtilities, ReadModflowArrayUnit;
+
 
 constructor TCustomMf6Persistent.Create;
 begin
@@ -166,6 +229,530 @@ begin
     Unhandled.WriteLine(Format('Error reading the following %s line.', [SectionName]));
     Unhandled.WriteLine(ErrorLine);
   end;
+end;
+
+{ TArrayReader }
+
+constructor T3DArrayReader<DataType>.Create(Dimensions: TDimensions;
+  Layered: Boolean);
+begin
+  inherited Create;
+  FLayered := Layered;
+  FDimensions := Dimensions;
+  SetLength(Data, Dimensions.NLay, Dimensions.NRow, Dimensions.NCol);
+end;
+
+
+{ T1DArrayReader }
+
+constructor T1DArrayReader<DataType>.Create(Dimension: Integer);
+begin
+  inherited Create;
+  FDimension := Dimension;
+  SetLength(Data, Dimension);
+end;
+
+procedure T1DArrayReader<DataType>.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+begin
+  ReadControlLine(Stream, Unhandled);
+
+end;
+
+{ TCustomArrayReader }
+
+procedure TCustomArrayReader<DataType>.Initialize;
+begin
+  inherited;
+  ArrayType := atUndefined;
+  FFactor := StrToDataType('1');;
+  IPRN := -1;
+  FExternalFileName := '';
+  FBinary := False;
+  FConstantValue := StrToDataType('0');
+end;
+
+procedure TCustomArrayReader<DataType>.ReadControlLine(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+  Option: string;
+  OptionIndex: Integer;
+  Factor: string;
+begin
+  while not Stream.EndOfStream do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(ALine);
+    if ALine = '' then
+    begin
+      Continue;
+    end;
+
+    ALine := UpperCase(ALine);
+    FSplitter.DelimitedText := ALine;
+
+    if FSplitter[0] = 'CONSTANT' then
+    begin
+      ArrayType := atConstant;
+    end
+    else if FSplitter[0] = 'INTERNAL' then
+    begin
+      ArrayType := atInternal;
+    end
+    else if FSplitter[0] = 'OPEN/CLOSE' then
+    begin
+      ArrayType := atExternal;
+    end
+    else
+    begin
+      Unhandled.WriteLine(StrErrorReadingArray);
+      Unhandled.WriteLine(ErrorLine);
+      Exit;
+    end;
+
+    case ArrayType of
+      atConstant:
+        begin
+          FConstantValue := StrToDataType(FSplitter[1])
+        end;
+      atInternal:
+        begin
+          if FSplitter.Count >= 3 then
+          begin
+            Option := FSplitter[1];
+            if Option = 'FACTOR' then
+            begin
+              FFactor := StrToDataType(FSplitter[2]);
+            end
+            else if Option = 'IPRN' then
+            begin
+              if not TryStrToInt(FSplitter[2], IPRN) then
+              begin
+                Unhandled.WriteLine('Error reading IPRN in an array control line in the following line.');
+                Unhandled.WriteLine(ErrorLine);
+              end;
+            end
+            else
+            begin
+              Exit;
+            end;
+            if FSplitter.Count >= 5 then
+            begin
+              Option := FSplitter[3];
+              if Option = 'FACTOR' then
+              begin
+                FFactor := StrToDataType(FSplitter[4]);
+              end
+              else if Option = 'IPRN' then
+              begin
+                if not TryStrToInt(FSplitter[4], IPRN) then
+                begin
+                  Unhandled.WriteLine('Error reading IPRN in an array control line in the following line.');
+                  Unhandled.WriteLine(ErrorLine);
+                end;
+              end
+              else
+              begin
+                Exit;
+              end;
+            end;
+          end;
+        end;
+      atExternal:
+        begin
+          FExternalFileName := FSplitter[1];
+          OptionIndex := 2;
+          while OptionIndex < FSplitter.Count do
+          begin
+            Option := FSplitter[OptionIndex];
+            if Option = 'FACTOR' then
+            begin
+              Inc(OptionIndex);
+              FFactor := StrToDataType(FSplitter[OptionIndex]);
+            end
+            else if Option = 'IPRN' then
+            begin
+              Inc(OptionIndex);
+              if not TryStrToInt(FSplitter[OptionIndex], IPRN) then
+              begin
+                Unhandled.WriteLine('Error reading IPRN in an array control line in the following line.');
+                Unhandled.WriteLine(ErrorLine);
+              end;
+            end
+            else if Option = '(BINARY)' then
+            begin
+              FBinary := True;
+            end
+            else
+            begin
+              Exit;
+            end;
+          end;
+        end;
+    end;
+
+    Exit;
+  end;
+
+end;
+
+procedure TDouble1DArrayReader.Read(Stream: TStreamReader;
+  Unhandled: TStreamWriter);
+var
+  Index: Integer;
+  ExternalFileStream: TStreamReader;
+begin
+  inherited;
+  case ArrayType of
+    atConstant:
+      begin
+        for Index := 0 to FDimension - 1 do
+        begin
+          Data[Index] := FConstantValue
+        end;
+      end;
+    atInternal:
+      begin
+        ReadDataFromTextFile(Stream);
+      end;
+    atExternal:
+      begin
+        if FBinary then
+        begin
+          Assert(False);
+        end
+        else
+        begin
+          if TFile.Exists(FExternalFileName) then
+          begin
+            try
+              ExternalFileStream := TFile.OpenText(FExternalFileName);
+              try
+                ReadDataFromTextFile(ExternalFileStream)
+              finally
+                ExternalFileStream.Free;
+              end;
+            except on E: Exception do
+              begin
+                Unhandled.WriteLine('ERROR');
+                Unhandled.WriteLine(E.Message);
+              end;
+            end;
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+              [FExternalFileName]));
+          end;
+        end;
+      end;
+    else
+      begin
+        Unhandled.WriteLine('Error reading array control line.');
+      end;
+  end;
+
+end;
+
+procedure TDouble1DArrayReader.ReadDataFromTextFile(Stream: TStreamReader);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  Index: Integer;
+begin
+  Index := 0;
+  while Index < FDimension do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      Data[Index] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      Inc(Index);
+    end;
+  end;
+end;
+
+function TDouble1DArrayReader.StrToDataType(AValue: string): Double;
+begin
+  result := FortranStrToFloat(AValue);
+end;
+
+
+{ TDouble3DArrayReader }
+
+procedure TDouble3DArrayReader.Read(Stream: TStreamReader;
+  Unhandled: TStreamWriter);
+var
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ExternalFileStream: TStreamReader;
+  ExternalBinaryFileStream: TFileStream;
+  KSTP: Integer;
+  KPER: Integer;
+  PERTIM: TModflowDouble;
+  TOTIM: TModflowDouble;
+  DESC: TModflowDesc;
+  NCOL: Integer;
+  NROW: Integer;
+  ILAY: Integer;
+  AnArray: TModflowDoubleArray;
+begin
+  inherited;
+  if FLayered then
+  begin
+    for LayerIndex := 0 to FDimensions.NLay - 1 - 1 do
+    begin
+      ReadControlLine(Stream, Unhandled);
+      case ArrayType of
+        atConstant:
+          begin
+            for RowIndex := 0 to FDimensions.NRow - 1 do
+            begin
+              for ColIndex := 0 to FDimensions.NCol - 1 do
+              begin
+                Data[LayerIndex,RowIndex, ColIndex] := FConstantValue;
+              end;
+            end;
+          end;
+        atInternal:
+          begin
+            Read2DArrayFromTextFile(Stream, LayerIndex);
+          end;
+        atExternal:
+          begin
+          if FBinary then
+          begin
+            if TFile.Exists(FExternalFileName) then
+            begin
+              try
+                ExternalBinaryFileStream := TFile.Create(FExternalFileName,
+                  fmOpenRead or fmShareDenyWrite);
+                try
+                  ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+                  for RowIndex := 0 to FDimensions.NRow - 1 do
+                  begin
+                    for ColIndex := 0 to FDimensions.NCol - 1 do
+                    begin
+                      Data[LayerIndex,RowIndex, ColIndex] :=
+                        AnArray[RowIndex, ColIndex] * FFactor;
+                    end;
+                  end;
+                finally
+                  ExternalBinaryFileStream.Free;
+                end;
+              except on E: Exception do
+                begin
+                  Unhandled.WriteLine('ERROR');
+                  Unhandled.WriteLine(E.Message);
+                end;
+              end;
+            end
+            else
+            begin
+              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+                [FExternalFileName]));
+            end;
+          end
+          else
+          begin
+            if TFile.Exists(FExternalFileName) then
+            begin
+              try
+                ExternalFileStream := TFile.OpenText(FExternalFileName);
+                try
+                  Read2DArrayFromTextFile(ExternalFileStream, LayerIndex);
+                finally
+                  ExternalFileStream.Free;
+                end;
+              except on E: Exception do
+                begin
+                  Unhandled.WriteLine('ERROR');
+                  Unhandled.WriteLine(E.Message);
+                end;
+              end;
+            end
+            else
+            begin
+              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+                [FExternalFileName]));
+            end;
+          end;
+      end;
+        else
+          begin
+            Assert(False);
+          end;
+      end;
+    end;
+  end
+  else
+  begin
+    ReadControlLine(Stream, Unhandled);
+    case ArrayType of
+      atConstant:
+        begin
+          for LayerIndex := 0 to FDimensions.NLay - 1 do
+          begin
+            for RowIndex := 0 to FDimensions.NRow - 1 do
+            begin
+              for ColIndex := 0 to FDimensions.NCol - 1 do
+              begin
+                Data[LayerIndex,RowIndex, ColIndex] := FConstantValue;
+              end;
+            end;
+          end;
+        end;
+      atInternal:
+        begin
+          Read3DArrayFromTextFile(Stream);
+        end;
+      atExternal:
+        begin
+          if FBinary then
+          begin
+            if TFile.Exists(FExternalFileName) then
+            begin
+              try
+                ExternalBinaryFileStream := TFile.Create(FExternalFileName,
+                  fmOpenRead or fmShareDenyWrite);
+                try
+                  for LayerIndex := 0 to FDimensions.NLay - 1 do
+                  begin
+                    ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+                    KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+                    for RowIndex := 0 to FDimensions.NRow - 1 do
+                    begin
+                      for ColIndex := 0 to FDimensions.NCol - 1 do
+                      begin
+                        Data[LayerIndex,RowIndex, ColIndex] :=
+                          AnArray[RowIndex, ColIndex] * FFactor;
+                      end;
+                    end;
+                  end;
+                finally
+                  ExternalBinaryFileStream.Free;
+                end;
+              except on E: Exception do
+                begin
+                  Unhandled.WriteLine('ERROR');
+                  Unhandled.WriteLine(E.Message);
+                end;
+              end;
+            end
+            else
+            begin
+              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+                [FExternalFileName]));
+            end;
+          end
+          else
+          begin
+            if TFile.Exists(FExternalFileName) then
+            begin
+              try
+                ExternalFileStream := TFile.OpenText(FExternalFileName);
+                try
+                  Read3DArrayFromTextFile(ExternalFileStream);
+                finally
+                  ExternalFileStream.Free;
+                end;
+              except on E: Exception do
+                begin
+                  Unhandled.WriteLine('ERROR');
+                  Unhandled.WriteLine(E.Message);
+                end;
+              end;
+            end
+            else
+            begin
+              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+                [FExternalFileName]));
+            end;
+          end;
+        end;
+      else
+        begin
+          Unhandled.WriteLine('Error reading array control line.');
+        end;
+    end;
+  end;
+
+end;
+
+procedure TDouble3DArrayReader.Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Integer);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  RowIndex := 0;
+  ColIndex := 0;
+  while (RowIndex < FDimensions.NRow) and (ColIndex < FDimensions.NCol) do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      Data[LayerIndex, RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      Inc(ColIndex);
+      if ColIndex = FDimensions.NCol then
+      begin
+        ColIndex := 0;
+        Inc(RowIndex);
+      end;
+    end;
+  end;
+end;
+
+procedure TDouble3DArrayReader.Read3DArrayFromTextFile(Stream: TStreamReader);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  LayerIndex := 0;
+  RowIndex := 0;
+  ColIndex := 0;
+  while (LayerIndex < FDimensions.NLay) and (RowIndex < FDimensions.NRow)
+    and (ColIndex < FDimensions.NCol) do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      Data[LayerIndex, RowIndex, ColIndex] :=
+        StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      Inc(ColIndex);
+      if ColIndex = FDimensions.NCol then
+      begin
+        ColIndex := 0;
+        Inc(RowIndex);
+        if RowIndex = FDimensions.NRow then
+        begin
+          RowIndex := 0;
+          Inc(LayerIndex);
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TDouble3DArrayReader.StrToDataType(AValue: string): Double;
+begin
+  result := FortranStrToFloat(AValue);
 end;
 
 end.

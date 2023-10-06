@@ -62,7 +62,7 @@ procedure SubtractVectors(const v1, v2: TPoint3D; out result: TPoint3D);
 
 //function FortranFloatToStr(Value: Extended): string;
 
-//function FortranStrToFloat(AString: string): Extended;
+function FortranStrToFloat(AString: string): Extended;
 function FortranStrToFloatDef(AString: string; Value: Extended): Extended;
 function TryFortranStrToFloat(AString: string; out Value: Extended): Boolean;
 
@@ -277,30 +277,30 @@ begin
   end;
 end;
 
-//function FortranStrToFloat(AString: string): Extended;
-//var
-//  OldDecimalSeparator: Char;
-//  SignPos: Integer;
-//begin
-//  AString := Trim(AString);
-//  OldDecimalSeparator := FormatSettings.DecimalSeparator;
-//  try
-//    FormatSettings.DecimalSeparator := '.';
-//    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
-//    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
-//    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
-//    if SignPos > 0 then
-//    begin
-//      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
-//      begin
-//        Insert('E', AString, SignPos);
-//      end;
-//    end;
-//    result := StrToFloat(AString);
-//  finally
-//    FormatSettings.DecimalSeparator := OldDecimalSeparator;
-//  end;
-//end;
+function FortranStrToFloat(AString: string): Extended;
+var
+  OldDecimalSeparator: Char;
+  SignPos: Integer;
+begin
+  AString := Trim(AString);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  try
+    FormatSettings.DecimalSeparator := '.';
+    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
+    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
+    if SignPos > 0 then
+    begin
+      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
+      begin
+        Insert('E', AString, SignPos);
+      end;
+    end;
+    result := StrToFloat(AString);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
+end;
 
 function FortranStrToFloatDef(AString: string; Value: Extended): Extended;
 var

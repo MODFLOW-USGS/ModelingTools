@@ -19,7 +19,9 @@ uses
   ModelMuseUtilities in '..\ModelMuse\ModelMuseUtilities.pas',
   FastGEO in '..\ModelMuse\FastGEO.pas',
   AtsFileReaderUnit in 'AtsFileReaderUnit.pas',
-  NameFileReaderUnit in 'NameFileReaderUnit.pas';
+  NameFileReaderUnit in 'NameFileReaderUnit.pas',
+  ImsFileReaderUnit in 'ImsFileReaderUnit.pas',
+  ReadModflowArrayUnit in '..\ModelMuse\ReadModflowArrayUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;
