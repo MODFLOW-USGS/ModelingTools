@@ -3,7 +3,7 @@ unit CustomMf6PersistentUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.IOUtils;
+  System.SysUtils, System.Classes, System.IOUtils, System.Generics.Collections;
 
 type
   TCustomMf6Persistent = class(TPersistent)
@@ -23,6 +23,8 @@ type
     NLay: Integer;
     NRow: Integer;
     NCol: Integer;
+    procedure Initialize;
+    function DimensionCount: Integer;
   end;
 
   TArrayType = (atConstant, atInternal, atExternal, atUndefined);
@@ -47,43 +49,89 @@ type
 
   T1DArrayReader<DataType: record> = class(TCustomArrayReader<DataType>)
   private
-    Data: array of DataType;
     FDimension: Integer;
   public
+    FData: TArray<DataType>;
     constructor Create(Dimension: Integer); reintroduce;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
+
+  TDArray1D = TArray<double>;
+  TDArray2D = TArray<TDArray1D>;
+  TDArray3D = TArray<TDArray2D>;
+
+  TIArray1D = TArray<Integer>;
+  TIArray2D = TArray<TIArray1D>;
+  TIArray3D = TArray<TIArray2D>;
 
   TDouble1DArrayReader = class(T1DArrayReader<Double>)
   private
     procedure ReadDataFromTextFile(Stream: TStreamReader);
     function StrToDataType(AValue: string): Double; override;
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  end;
+
+  T2DArrayReader<DataType: record> = class(TCustomArrayReader<DataType>)
+  private
+    FDimensions: TDimensions;
+  public
+    FData: TArray<TArray<DataType>>;
+    constructor Create(Dimensions: TDimensions); reintroduce;
+  end;
+
+  TDouble2DArrayReader = class(T2DArrayReader<Double>)
+  private
+    function StrToDataType(AValue: string): Double; override;
+    procedure Read2DArrayFromTextFile(Stream: TStreamReader);
+  public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
   T3DArrayReader<DataType: record> = class(TCustomArrayReader<DataType>)
   private
-    Data: array of array of array of DataType;
     FDimensions: TDimensions;
     FLayered: Boolean;
   public
+    FData: TArray<TArray<TArray<DataType>>>;
     constructor Create(Dimensions: TDimensions;
       Layered: Boolean); reintroduce;
   end;
 
   TDouble3DArrayReader = class(T3DArrayReader<Double>)
-    function StrToDataType(AValue: string): Double; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   private
+    function StrToDataType(AValue: string): Double; override;
     procedure Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Integer);
     procedure Read3DArrayFromTextFile(Stream: TStreamReader);
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
+
+  TInteger3DArrayReader = class(T3DArrayReader<Integer>)
+  private
+    function StrToDataType(AValue: string): Integer; override;
+    procedure Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Integer);
+    procedure Read3DArrayFromTextFile(Stream: TStreamReader);
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  end;
+
+  TCellId = record
+    Layer: Integer;
+    Row: Integer;
+    Column: Integer;
+    procedure Initialize;
+  end;
+
+  TExtendedList = TList<Extended>;
 
 implementation
 
 uses
   ModelMuseUtilities, ReadModflowArrayUnit;
 
+resourcestring
+  StrUnrecognizedTDISOp = 'Unrecognized TDIS option in the following line.';
 
 constructor TCustomMf6Persistent.Create;
 begin
@@ -239,7 +287,7 @@ begin
   inherited Create;
   FLayered := Layered;
   FDimensions := Dimensions;
-  SetLength(Data, Dimensions.NLay, Dimensions.NRow, Dimensions.NCol);
+  SetLength(FData, Dimensions.NLay, Dimensions.NRow, Dimensions.NCol);
 end;
 
 
@@ -249,13 +297,12 @@ constructor T1DArrayReader<DataType>.Create(Dimension: Integer);
 begin
   inherited Create;
   FDimension := Dimension;
-  SetLength(Data, Dimension);
+  SetLength(FData, Dimension);
 end;
 
 procedure T1DArrayReader<DataType>.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 begin
   ReadControlLine(Stream, Unhandled);
-
 end;
 
 { TCustomArrayReader }
@@ -409,7 +456,7 @@ begin
       begin
         for Index := 0 to FDimension - 1 do
         begin
-          Data[Index] := FConstantValue
+          FData[Index] := FConstantValue
         end;
       end;
     atInternal:
@@ -470,7 +517,7 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      Data[Index] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      FData[Index] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
       Inc(Index);
     end;
   end;
@@ -515,7 +562,7 @@ begin
             begin
               for ColIndex := 0 to FDimensions.NCol - 1 do
               begin
-                Data[LayerIndex,RowIndex, ColIndex] := FConstantValue;
+                FData[LayerIndex,RowIndex, ColIndex] := FConstantValue;
               end;
             end;
           end;
@@ -539,7 +586,7 @@ begin
                   begin
                     for ColIndex := 0 to FDimensions.NCol - 1 do
                     begin
-                      Data[LayerIndex,RowIndex, ColIndex] :=
+                      FData[LayerIndex,RowIndex, ColIndex] :=
                         AnArray[RowIndex, ColIndex] * FFactor;
                     end;
                   end;
@@ -603,7 +650,7 @@ begin
             begin
               for ColIndex := 0 to FDimensions.NCol - 1 do
               begin
-                Data[LayerIndex,RowIndex, ColIndex] := FConstantValue;
+                FData[LayerIndex,RowIndex, ColIndex] := FConstantValue;
               end;
             end;
           end;
@@ -630,7 +677,7 @@ begin
                     begin
                       for ColIndex := 0 to FDimensions.NCol - 1 do
                       begin
-                        Data[LayerIndex,RowIndex, ColIndex] :=
+                        FData[LayerIndex,RowIndex, ColIndex] :=
                           AnArray[RowIndex, ColIndex] * FFactor;
                       end;
                     end;
@@ -702,7 +749,7 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      Data[LayerIndex, RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      FData[LayerIndex, RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
       Inc(ColIndex);
       if ColIndex = FDimensions.NCol then
       begin
@@ -733,7 +780,7 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      Data[LayerIndex, RowIndex, ColIndex] :=
+      FData[LayerIndex, RowIndex, ColIndex] :=
         StrToDataType(FSplitter[ItemIndex]) * FFactor;
       Inc(ColIndex);
       if ColIndex = FDimensions.NCol then
@@ -753,6 +800,462 @@ end;
 function TDouble3DArrayReader.StrToDataType(AValue: string): Double;
 begin
   result := FortranStrToFloat(AValue);
+end;
+
+{ TCellId }
+
+procedure TCellId.Initialize;
+begin
+  Layer := 0;
+  Row := 0;
+  Column := 0;
+end;
+
+{ TDimensions }
+
+function TDimensions.DimensionCount: Integer;
+begin
+  result := 0;
+  if NLay >= 1 then
+  begin
+    Inc(Result);
+  end;
+  if NRow >= 1 then
+  begin
+    Inc(Result);
+  end;
+  if NCol >= 1 then
+  begin
+    Inc(Result);
+  end;
+end;
+
+procedure TDimensions.Initialize;
+begin
+  NLay := 0;
+  NRow := 0;
+  NCol := 0;
+end;
+
+{ T2DArrayReader<DataType> }
+
+constructor T2DArrayReader<DataType>.Create(Dimensions: TDimensions);
+begin
+  inherited Create;
+  FDimensions := Dimensions;
+  SetLength(FData, Dimensions.NRow, Dimensions.NCol);
+end;
+
+{ TDouble2DArrayReader }
+
+procedure TDouble2DArrayReader.Read(Stream: TStreamReader;
+  Unhandled: TStreamWriter);
+var
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ExternalFileStream: TStreamReader;
+  ExternalBinaryFileStream: TFileStream;
+  KSTP: Integer;
+  KPER: Integer;
+  PERTIM: TModflowDouble;
+  TOTIM: TModflowDouble;
+  DESC: TModflowDesc;
+  NCOL: Integer;
+  NROW: Integer;
+  ILAY: Integer;
+  AnArray: TModflowDoubleArray;
+begin
+  ReadControlLine(Stream, Unhandled);
+  case ArrayType of
+    atConstant:
+      begin
+        for RowIndex := 0 to FDimensions.NRow - 1 do
+        begin
+          for ColIndex := 0 to FDimensions.NCol - 1 do
+          begin
+            FData[RowIndex, ColIndex] := FConstantValue;
+          end;
+        end;
+      end;
+    atInternal:
+      begin
+        Read2DArrayFromTextFile(Stream);
+      end;
+    atExternal:
+      begin
+        if FBinary then
+        begin
+          if TFile.Exists(FExternalFileName) then
+          begin
+            try
+              ExternalBinaryFileStream := TFile.Create(FExternalFileName,
+                fmOpenRead or fmShareDenyWrite);
+              try
+                ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+                KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+                for RowIndex := 0 to FDimensions.NRow - 1 do
+                begin
+                  for ColIndex := 0 to FDimensions.NCol - 1 do
+                  begin
+                    FData[RowIndex, ColIndex] :=
+                      AnArray[RowIndex, ColIndex] * FFactor;
+                  end;
+                end;
+              finally
+                ExternalBinaryFileStream.Free;
+              end;
+            except on E: Exception do
+              begin
+                Unhandled.WriteLine('ERROR');
+                Unhandled.WriteLine(E.Message);
+              end;
+            end;
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+              [FExternalFileName]));
+          end;
+        end
+        else
+        begin
+          if TFile.Exists(FExternalFileName) then
+          begin
+            try
+              ExternalFileStream := TFile.OpenText(FExternalFileName);
+              try
+                Read2DArrayFromTextFile(ExternalFileStream);
+              finally
+                ExternalFileStream.Free;
+              end;
+            except on E: Exception do
+              begin
+                Unhandled.WriteLine('ERROR');
+                Unhandled.WriteLine(E.Message);
+              end;
+            end;
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+              [FExternalFileName]));
+          end;
+        end;
+      end;
+    else
+      begin
+        Unhandled.WriteLine('Error reading array control line.');
+      end;
+  end;
+end;
+
+procedure TDouble2DArrayReader.Read2DArrayFromTextFile(Stream: TStreamReader);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  RowIndex := 0;
+  ColIndex := 0;
+  while (RowIndex < FDimensions.NRow) and (ColIndex < FDimensions.NCol) do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      FData[RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      Inc(ColIndex);
+      if ColIndex = FDimensions.NCol then
+      begin
+        ColIndex := 0;
+        Inc(RowIndex);
+      end;
+    end;
+  end;
+end;
+
+function TDouble2DArrayReader.StrToDataType(AValue: string): Double;
+begin
+  result := FortranStrToFloat(AValue);
+end;
+
+{ TInteger3DArrayReader }
+
+procedure TInteger3DArrayReader.Read(Stream: TStreamReader;
+  Unhandled: TStreamWriter);
+var
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ExternalFileStream: TStreamReader;
+  ExternalBinaryFileStream: TFileStream;
+  KSTP: Integer;
+  KPER: Integer;
+  PERTIM: TModflowDouble;
+  TOTIM: TModflowDouble;
+  DESC: TModflowDesc;
+  NCOL: Integer;
+  NROW: Integer;
+  ILAY: Integer;
+  AnArray: TModflowDoubleArray;
+begin
+  inherited;
+  if FLayered then
+  begin
+    for LayerIndex := 0 to FDimensions.NLay - 1 - 1 do
+    begin
+      ReadControlLine(Stream, Unhandled);
+      case ArrayType of
+        atConstant:
+          begin
+            for RowIndex := 0 to FDimensions.NRow - 1 do
+            begin
+              for ColIndex := 0 to FDimensions.NCol - 1 do
+              begin
+                FData[LayerIndex,RowIndex, ColIndex] := FConstantValue;
+              end;
+            end;
+          end;
+        atInternal:
+          begin
+            Read2DArrayFromTextFile(Stream, LayerIndex);
+          end;
+        atExternal:
+          begin
+          if FBinary then
+          begin
+            Assert(False);
+//            if TFile.Exists(FExternalFileName) then
+//            begin
+//              try
+//                ExternalBinaryFileStream := TFile.Create(FExternalFileName,
+//                  fmOpenRead or fmShareDenyWrite);
+//                try
+//                  ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+//                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+//                  for RowIndex := 0 to FDimensions.NRow - 1 do
+//                  begin
+//                    for ColIndex := 0 to FDimensions.NCol - 1 do
+//                    begin
+//                      FData[LayerIndex,RowIndex, ColIndex] :=
+//                        AnArray[RowIndex, ColIndex] * FFactor;
+//                    end;
+//                  end;
+//                finally
+//                  ExternalBinaryFileStream.Free;
+//                end;
+//              except on E: Exception do
+//                begin
+//                  Unhandled.WriteLine('ERROR');
+//                  Unhandled.WriteLine(E.Message);
+//                end;
+//              end;
+//            end
+//            else
+//            begin
+//              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+//                [FExternalFileName]));
+//            end;
+          end
+          else
+          begin
+            if TFile.Exists(FExternalFileName) then
+            begin
+              try
+                ExternalFileStream := TFile.OpenText(FExternalFileName);
+                try
+                  Read2DArrayFromTextFile(ExternalFileStream, LayerIndex);
+                finally
+                  ExternalFileStream.Free;
+                end;
+              except on E: Exception do
+                begin
+                  Unhandled.WriteLine('ERROR');
+                  Unhandled.WriteLine(E.Message);
+                end;
+              end;
+            end
+            else
+            begin
+              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+                [FExternalFileName]));
+            end;
+          end;
+      end;
+        else
+          begin
+            Assert(False);
+          end;
+      end;
+    end;
+  end
+  else
+  begin
+    ReadControlLine(Stream, Unhandled);
+    case ArrayType of
+      atConstant:
+        begin
+          for LayerIndex := 0 to FDimensions.NLay - 1 do
+          begin
+            for RowIndex := 0 to FDimensions.NRow - 1 do
+            begin
+              for ColIndex := 0 to FDimensions.NCol - 1 do
+              begin
+                FData[LayerIndex,RowIndex, ColIndex] := FConstantValue;
+              end;
+            end;
+          end;
+        end;
+      atInternal:
+        begin
+          Read3DArrayFromTextFile(Stream);
+        end;
+      atExternal:
+        begin
+          if FBinary then
+          begin
+            Assert(False);
+//            if TFile.Exists(FExternalFileName) then
+//            begin
+//              try
+//                ExternalBinaryFileStream := TFile.Create(FExternalFileName,
+//                  fmOpenRead or fmShareDenyWrite);
+//                try
+//                  for LayerIndex := 0 to FDimensions.NLay - 1 do
+//                  begin
+//                    ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+//                    KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+//                    for RowIndex := 0 to FDimensions.NRow - 1 do
+//                    begin
+//                      for ColIndex := 0 to FDimensions.NCol - 1 do
+//                      begin
+//                        FData[LayerIndex,RowIndex, ColIndex] :=
+//                          AnArray[RowIndex, ColIndex] * FFactor;
+//                      end;
+//                    end;
+//                  end;
+//                finally
+//                  ExternalBinaryFileStream.Free;
+//                end;
+//              except on E: Exception do
+//                begin
+//                  Unhandled.WriteLine('ERROR');
+//                  Unhandled.WriteLine(E.Message);
+//                end;
+//              end;
+//            end
+//            else
+//            begin
+//              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+//                [FExternalFileName]));
+//            end;
+          end
+          else
+          begin
+            if TFile.Exists(FExternalFileName) then
+            begin
+              try
+                ExternalFileStream := TFile.OpenText(FExternalFileName);
+                try
+                  Read3DArrayFromTextFile(ExternalFileStream);
+                finally
+                  ExternalFileStream.Free;
+                end;
+              except on E: Exception do
+                begin
+                  Unhandled.WriteLine('ERROR');
+                  Unhandled.WriteLine(E.Message);
+                end;
+              end;
+            end
+            else
+            begin
+              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+                [FExternalFileName]));
+            end;
+          end;
+        end;
+      else
+        begin
+          Unhandled.WriteLine('Error reading array control line.');
+        end;
+    end;
+  end;
+
+end;
+
+procedure TInteger3DArrayReader.Read2DArrayFromTextFile(Stream: TStreamReader;
+  LayerIndex: Integer);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  RowIndex := 0;
+  ColIndex := 0;
+  while (RowIndex < FDimensions.NRow) and (ColIndex < FDimensions.NCol) do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      FData[LayerIndex, RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      Inc(ColIndex);
+      if ColIndex = FDimensions.NCol then
+      begin
+        ColIndex := 0;
+        Inc(RowIndex);
+      end;
+    end;
+  end;
+end;
+
+procedure TInteger3DArrayReader.Read3DArrayFromTextFile(Stream: TStreamReader);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  LayerIndex := 0;
+  RowIndex := 0;
+  ColIndex := 0;
+  while (LayerIndex < FDimensions.NLay) and (RowIndex < FDimensions.NRow)
+    and (ColIndex < FDimensions.NCol) do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      FData[LayerIndex, RowIndex, ColIndex] :=
+        StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      Inc(ColIndex);
+      if ColIndex = FDimensions.NCol then
+      begin
+        ColIndex := 0;
+        Inc(RowIndex);
+        if RowIndex = FDimensions.NRow then
+        begin
+          RowIndex := 0;
+          Inc(LayerIndex);
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TInteger3DArrayReader.StrToDataType(AValue: string): Integer;
+begin
+  result := StrToInt(AValue);
 end;
 
 end.

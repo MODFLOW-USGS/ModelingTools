@@ -7,7 +7,7 @@ uses
   System.Generics.Collections, AtsFileReaderUnit;
 
 type
-  TDisOptions = class(TCustomMf6Persistent)
+  TTDisOptions = class(TCustomMf6Persistent)
   public
     TimeUnits: string;
     StartDate: string;
@@ -16,7 +16,7 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
-  TDisDimensions = class(TCustomMf6Persistent)
+  TTDisDimensions = class(TCustomMf6Persistent)
   public
     NPER: Integer;
     procedure Initialize; override;
@@ -43,8 +43,8 @@ type
 
   TTDis = class(TCustomMf6Persistent)
   private
-    FOptions: TDisOptions;
-    FDimensions: TDisDimensions;
+    FOptions: TTDisOptions;
+    FDimensions: TTDisDimensions;
     FPeriodData: TTDisPeriodData;
     FAts: TAts;
   public
@@ -53,7 +53,6 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
   end;
-
 
 implementation
 
@@ -69,7 +68,7 @@ resourcestring
 
 { TDisOptions }
 
-procedure TDisOptions.Initialize;
+procedure TTDisOptions.Initialize;
 begin
   inherited;
   TimeUnits := 'UNKNOWN';
@@ -77,7 +76,7 @@ begin
   ATS6_FileName := '';
 end;
 
-procedure TDisOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTDisOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -158,13 +157,13 @@ end;
 
 { TDisDimensions }
 
-procedure TDisDimensions.Initialize;
+procedure TTDisDimensions.Initialize;
 begin
   inherited;
   NPER := 0;
 end;
 
-procedure TDisDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTDisDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -294,8 +293,8 @@ end;
 
 constructor TTDis.Create;
 begin
-  FOptions := TDisOptions.Create;
-  FDimensions := TDisDimensions.Create;
+  FOptions := TTDisOptions.Create;
+  FDimensions := TTDisDimensions.Create;
   FPeriodData := TTDisPeriodData.Create;
 
   inherited;
