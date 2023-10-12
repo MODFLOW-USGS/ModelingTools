@@ -18,6 +18,11 @@ type
     destructor Destroy; override;
   end;
 
+  TPackageReader = class(TCustomMf6Persistent)
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); virtual; abstract;
+  end;
+
   TDataType = (dtReal, dtInteger);
   TDimensions = record
     NLay: Integer;
@@ -68,6 +73,14 @@ type
   private
     procedure ReadDataFromTextFile(Stream: TStreamReader);
     function StrToDataType(AValue: string): Double; override;
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  end;
+
+  TInteger1DArrayReader = class(T1DArrayReader<Integer>)
+  private
+    procedure ReadDataFromTextFile(Stream: TStreamReader);
+    function StrToDataType(AValue: string): Integer; override;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -287,7 +300,15 @@ begin
   inherited Create;
   FLayered := Layered;
   FDimensions := Dimensions;
-  SetLength(FData, Dimensions.NLay, Dimensions.NRow, Dimensions.NCol);
+  if FDimensions.NRow = 0 then
+  begin
+    FDimensions.NRow := 1;
+  end;
+  if FDimensions.NLay = 0 then
+  begin
+    FDimensions.NLay := 1;
+  end;
+  SetLength(FData, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
 end;
 
 
@@ -552,7 +573,7 @@ begin
   inherited;
   if FLayered then
   begin
-    for LayerIndex := 0 to FDimensions.NLay - 1 - 1 do
+    for LayerIndex := 0 to FDimensions.NLay - 1 do
     begin
       ReadControlLine(Stream, Unhandled);
       case ArrayType of
@@ -843,7 +864,11 @@ constructor T2DArrayReader<DataType>.Create(Dimensions: TDimensions);
 begin
   inherited Create;
   FDimensions := Dimensions;
-  SetLength(FData, Dimensions.NRow, Dimensions.NCol);
+  if FDimensions.NRow = 0 then
+  begin
+    FDimensions.NRow := 1;
+  end;
+  SetLength(FData, FDimensions.NRow, FDimensions.NCol);
 end;
 
 { TDouble2DArrayReader }
@@ -991,21 +1016,21 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   ExternalFileStream: TStreamReader;
-  ExternalBinaryFileStream: TFileStream;
-  KSTP: Integer;
-  KPER: Integer;
-  PERTIM: TModflowDouble;
-  TOTIM: TModflowDouble;
-  DESC: TModflowDesc;
-  NCOL: Integer;
-  NROW: Integer;
-  ILAY: Integer;
-  AnArray: TModflowDoubleArray;
+//  ExternalBinaryFileStream: TFileStream;
+//  KSTP: Integer;
+//  KPER: Integer;
+//  PERTIM: TModflowDouble;
+//  TOTIM: TModflowDouble;
+//  DESC: TModflowDesc;
+//  NCOL: Integer;
+//  NROW: Integer;
+//  ILAY: Integer;
+//  AnArray: TModflowDoubleArray;
 begin
   inherited;
   if FLayered then
   begin
-    for LayerIndex := 0 to FDimensions.NLay - 1 - 1 do
+    for LayerIndex := 0 to FDimensions.NLay - 1 do
     begin
       ReadControlLine(Stream, Unhandled);
       case ArrayType of
@@ -1254,6 +1279,92 @@ begin
 end;
 
 function TInteger3DArrayReader.StrToDataType(AValue: string): Integer;
+begin
+  result := StrToInt(AValue);
+end;
+
+{ TInteger1DArrayReader }
+
+procedure TInteger1DArrayReader.Read(Stream: TStreamReader;
+  Unhandled: TStreamWriter);
+var
+  Index: Integer;
+  ExternalFileStream: TStreamReader;
+begin
+  inherited;
+  case ArrayType of
+    atConstant:
+      begin
+        for Index := 0 to FDimension - 1 do
+        begin
+          FData[Index] := FConstantValue
+        end;
+      end;
+    atInternal:
+      begin
+        ReadDataFromTextFile(Stream);
+      end;
+    atExternal:
+      begin
+        if FBinary then
+        begin
+          Assert(False);
+        end
+        else
+        begin
+          if TFile.Exists(FExternalFileName) then
+          begin
+            try
+              ExternalFileStream := TFile.OpenText(FExternalFileName);
+              try
+                ReadDataFromTextFile(ExternalFileStream)
+              finally
+                ExternalFileStream.Free;
+              end;
+            except on E: Exception do
+              begin
+                Unhandled.WriteLine('ERROR');
+                Unhandled.WriteLine(E.Message);
+              end;
+            end;
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+              [FExternalFileName]));
+          end;
+        end;
+      end;
+    else
+      begin
+        Unhandled.WriteLine('Error reading array control line.');
+      end;
+  end;
+
+end;
+
+procedure TInteger1DArrayReader.ReadDataFromTextFile(Stream: TStreamReader);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  Index: Integer;
+begin
+  Index := 0;
+  while Index < FDimension do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      FData[Index] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      Inc(Index);
+    end;
+  end;
+end;
+
+function TInteger1DArrayReader.StrToDataType(AValue: string): Integer;
 begin
   result := StrToInt(AValue);
 end;

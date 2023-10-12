@@ -127,13 +127,13 @@ end;
 
 function TArchiveNode._AddRef: Integer;
 begin
-  Result := 1;
+  Result := -1;
   // do nothing;
 end;
 
 function TArchiveNode._Release: Integer;
 begin
-  result := 1;
+  result := -1;
   // do nothing;
 end;
 

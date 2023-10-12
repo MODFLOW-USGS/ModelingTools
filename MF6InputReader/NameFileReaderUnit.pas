@@ -38,9 +38,14 @@ type
   end;
 
   TPackage = class(TObject)
+  private
     FileType: string;
     FileName: string;
     PackageName: string;
+    FPackage: TPackageReader;
+    procedure ReadPackage(Unhandled: TStreamWriter);
+  public
+    destructor Destroy; override;
   end;
 
   TPackageList = TObjectList<TPackage>;
@@ -66,18 +71,22 @@ type
 
   TCustomNameFile = class(TCustomMf6Persistent)
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); virtual; abstract;
+    procedure ReadInput(Unhandled: TStreamWriter); virtual; abstract;
   end;
 
   TNameFile<Options: TCustomNameFileOptions; Packages: TCustomPackages> = class(TCustomNameFile)
   private
-    FOptions: Options;
-    FPackages: Packages;
     const
     StrUnrecognizedNameOption = 'Unrecognized Name file option in the following line.';
+    var
+    FOptions: Options;
+    FPackages: Packages;
+    FDimensions: TDimensions;
   public
     constructor Create; override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure ReadInput(Unhandled: TStreamWriter); override;
   end;
 
   TFlowNameFile = TNameFile<TFlowNameFileOptions, TFlowPackages>;
@@ -85,6 +94,8 @@ type
 
 implementation
 
+uses
+  DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -431,6 +442,87 @@ begin
         Unhandled.WriteLine(StrUnrecognizedNameOption);
         Unhandled.WriteLine(ErrorLine);
       end;
+    end;
+  end;
+end;
+
+procedure TNameFile<Options, Packages>.ReadInput(Unhandled: TStreamWriter);
+var
+  PackageIndex: Integer;
+  APackage: TPackage;
+  DisReader: TDis;
+  DisvReader: TDisv;
+  DisuReader: TDisu;
+begin
+  // First read discretization
+  for PackageIndex := 0 to FPackages.FPackages.Count - 1 do
+  begin
+    APackage := FPackages.FPackages[PackageIndex];
+    if APackage.FileType = 'DIS6' then
+    begin
+      DisReader := TDis.Create;
+      APackage.FPackage := DisReader;
+      APackage.ReadPackage(Unhandled);
+      FDimensions := DisReader.Dimensions;
+    end
+    else if APackage.FileType = 'DISV6' then
+    begin
+      DisvReader := TDisv.Create;
+      APackage.FPackage := DisvReader;
+      APackage.ReadPackage(Unhandled);
+      FDimensions := DisvReader.Dimensions;
+    end
+    else if APackage.FileType = 'DISU6' then
+    begin
+      DisuReader := TDisu.Create;
+      APackage.FPackage := DisuReader;
+      APackage.ReadPackage(Unhandled);
+      FDimensions := DisuReader.Dimensions;
+    end;
+  end;
+end;
+
+{ TPackage }
+
+destructor TPackage.Destroy;
+begin
+  FPackage.Free;
+  inherited;
+end;
+
+procedure TPackage.ReadPackage(Unhandled: TStreamWriter);
+var
+  PackageFile: TStreamReader;
+begin
+  if FileName <> '' then
+  begin
+    if TFile.Exists(FileName) then
+    begin
+      try
+        PackageFile := TFile.OpenText(FileName);
+        try
+          try
+            FPackage.Read(PackageFile, Unhandled);
+          except on E: Exception do
+            begin
+              Unhandled.WriteLine('ERROR');
+              Unhandled.WriteLine(E.Message);
+            end;
+          end;
+        finally
+          PackageFile.Free;
+        end;
+      except on E: Exception do
+        begin
+          Unhandled.WriteLine('ERROR');
+          Unhandled.WriteLine(E.Message);
+        end;
+      end
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+        [FileName]));
     end;
   end;
 end;

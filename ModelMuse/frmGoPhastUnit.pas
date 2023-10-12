@@ -1668,7 +1668,7 @@ type
     procedure SetGridLineDrawingChoice(Sender: TObject);
   private
     // See @link(CanDraw).
-    FCanDraw: boolean;
+    FCanDraw: Boolean;
     // See @link(CanEdit).
     FCanEdit: boolean;
     // See @link(ClickedRuler).

@@ -811,6 +811,7 @@ begin
         if FName <> nil then
         begin
           FName.Read(NameFileStream, Unhandled);
+          FName.ReadInput(Unhandled);
         end;
       finally
         NameFileStream.Free;

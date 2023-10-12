@@ -7,17 +7,22 @@ uses
   System.Generics.Collections, AtsFileReaderUnit;
 
 type
-  TDisOptions = class(TCustomMf6Persistent)
+
+  TCustomDisOptions = class(TCustomMf6Persistent)
   private
     LENGTH_UNITS: string;
     NOGRB: Boolean;
     XORIGIN: Extended;
     YORIGIN: Extended;
     ANGROT: Extended;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+    procedure HandleOption(ErrorLine: string; Unhandled: TStreamWriter);  virtual;
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
+
+  TDisOptions = class(TCustomDisOptions);
 
   TDisDimensions = class(TCustomMf6Persistent)
   private
@@ -35,21 +40,26 @@ type
     TOP: TDArray2D;
     BOTM: TDArray3D;
     IDOMAIN: TIArray3D;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
     procedure Initialize; override;
   end;
 
-  TDis = class(TCustomMf6Persistent)
+  TDis = class(TPackageReader)
   private
     FOptions: TDisOptions;
     FDimensions: TDisDimensions;
     FGridData: TDisGridData;
+    function GetDimensions: TDimensions;
   public
     constructor Create; override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Dimensions: TDimensions read GetDimensions;
   end;
+
+resourcestring
+  StrUnrecognizedDISOp = 'Unrecognized Discretization option in the following line.';
 
 implementation
 
@@ -57,13 +67,12 @@ uses
   ModelMuseUtilities;
 
 resourcestring
-  StrUnrecognizedTDISOp = 'Unrecognized DIS option in the following line.';
-  StrUnrecognizedTDISDI = 'Unrecognized DIS DIMENSION option in the followi' +
+  StrUnrecognizedDISDI = 'Unrecognized DIS DIMENSION option in the followi' +
   'ng line.';
 
 { TDisOptions }
 
-procedure TDisOptions.Initialize;
+procedure TCustomDisOptions.Initialize;
 begin
   LENGTH_UNITS := '';
   NOGRB := False;
@@ -73,7 +82,7 @@ begin
   inherited;
 end;
 
-procedure TDisOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TCustomDisOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -97,12 +106,12 @@ begin
         begin
           Continue;
         end;
-        ALine := UpperCase(ALine);
         if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
         begin
           Exit
         end;
 
+        ALine := UpperCase(ALine);
         FSplitter.DelimitedText := ALine;
         Assert(FSplitter.Count > 0);
         if FSplitter[0] = 'NOGRB' then
@@ -119,7 +128,7 @@ begin
           begin
             if not TryFortranStrToFloat(FSplitter[1], XORIGIN) then
             begin
-              Unhandled.WriteLine(StrUnrecognizedTDISOp);
+              Unhandled.WriteLine(StrUnrecognizedDISOp);
               Unhandled.WriteLine(ErrorLine);
             end;
           end
@@ -127,7 +136,7 @@ begin
           begin
             if not TryFortranStrToFloat(FSplitter[1], YORIGIN) then
             begin
-              Unhandled.WriteLine(StrUnrecognizedTDISOp);
+              Unhandled.WriteLine(StrUnrecognizedDISOp);
               Unhandled.WriteLine(ErrorLine);
             end;
           end
@@ -135,20 +144,17 @@ begin
           begin
             if not TryFortranStrToFloat(FSplitter[1], ANGROT) then
             begin
-              Unhandled.WriteLine(StrUnrecognizedTDISOp);
-              Unhandled.WriteLine(ErrorLine);
+              HandleOption(ErrorLine, Unhandled);
             end;
           end
           else
           begin
-            Unhandled.WriteLine(StrUnrecognizedTDISOp);
-            Unhandled.WriteLine(ErrorLine);
+            HandleOption(ErrorLine, Unhandled);
           end;
         end
         else
         begin
-          Unhandled.WriteLine(StrUnrecognizedTDISOp);
-          Unhandled.WriteLine(ErrorLine);
+          HandleOption(ErrorLine, Unhandled);
         end;
       end;
     finally
@@ -160,6 +166,12 @@ begin
   finally
     ValidUnits.Free;
   end;
+end;
+
+procedure TCustomDisOptions.HandleOption(ErrorLine: string; Unhandled: TStreamWriter);
+begin
+  Unhandled.WriteLine(StrUnrecognizedDISOp);
+  Unhandled.WriteLine(ErrorLine);
 end;
 
 { TDisDimensions }
@@ -185,12 +197,12 @@ begin
     begin
       Continue;
     end;
-    ALine := UpperCase(ALine);
     if ReadEndOfSection(ALine, ErrorLine, 'DIMENSIONS', Unhandled) then
     begin
       Exit
     end;
 
+    ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
     if FSplitter.Count >= 2 then
@@ -199,7 +211,7 @@ begin
       begin
         if not TryStrToInt(FSplitter[1], FDimensions.NLAY) then
         begin
-          Unhandled.WriteLine(StrUnrecognizedTDISDI);
+          Unhandled.WriteLine(StrUnrecognizedDISDI);
           Unhandled.WriteLine(ErrorLine);
         end;
       end
@@ -207,7 +219,7 @@ begin
       begin
         if not TryStrToInt(FSplitter[1], FDimensions.NROW) then
         begin
-          Unhandled.WriteLine(StrUnrecognizedTDISDI);
+          Unhandled.WriteLine(StrUnrecognizedDISDI);
           Unhandled.WriteLine(ErrorLine);
         end;
       end
@@ -215,19 +227,19 @@ begin
       begin
         if not TryStrToInt(FSplitter[1], FDimensions.NCOL) then
         begin
-          Unhandled.WriteLine(StrUnrecognizedTDISDI);
+          Unhandled.WriteLine(StrUnrecognizedDISDI);
           Unhandled.WriteLine(ErrorLine);
         end;
       end
       else
       begin
-        Unhandled.WriteLine(StrUnrecognizedTDISDI);
+        Unhandled.WriteLine(StrUnrecognizedDISDI);
         Unhandled.WriteLine(ErrorLine);
       end;
     end
     else
     begin
-      Unhandled.WriteLine(StrUnrecognizedTDISDI);
+      Unhandled.WriteLine(StrUnrecognizedDISDI);
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
@@ -245,7 +257,8 @@ begin
   inherited;
 end;
 
-procedure TDisGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TDisGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+  Dimensions: TDimensions);
 var
   ALine: string;
   ErrorLine: string;
@@ -256,6 +269,7 @@ var
   ThreeDReader: TDouble3DArrayReader;
   ThreeIReader: TInteger3DArrayReader;
 begin
+  FDimensions := Dimensions;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -273,6 +287,7 @@ begin
       Exit;
     end;
 
+    ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     if FSplitter[0] = 'DELR' then
     begin
@@ -352,9 +367,73 @@ begin
   inherited;
 end;
 
-procedure TDis.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+function TDis.GetDimensions: TDimensions;
 begin
+  result := FDimensions.FDimensions;
+end;
 
+procedure TDis.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+begin
+  while not Stream.EndOfStream do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(ALine);
+    if ALine = '' then
+    begin
+      Continue;
+    end;
+
+    ALine := UpperCase(ALine);
+    if Pos('BEGIN', ALine) = 1 then
+    begin
+      if Trim(Copy(ALine,Length('BEGIN')+1,1)) <> '' then
+      begin
+        Unhandled.WriteLine(StrUnrecognizedDISOp);
+        Unhandled.WriteLine(ErrorLine);
+        Continue;
+      end;
+      ALine := Trim(Copy(ALine, Length('BEGIN')+1, MaxInt)) ;
+      if Pos('OPTIONS', ALine) = 1 then
+      begin
+        if Trim(Copy(ALine,Length('OPTIONS')+1,1)) <> '' then
+        begin
+          Unhandled.WriteLine(StrUnrecognizedDISOp);
+          Unhandled.WriteLine(ErrorLine);
+          Continue;
+        end;
+        FOptions.Read(Stream, Unhandled)
+      end
+      else if Pos('DIMENSIONS', ALine) = 1 then
+      begin
+        if Trim(Copy(ALine,Length('DIMENSIONS')+1,1)) <> '' then
+        begin
+          Unhandled.WriteLine(StrUnrecognizedDISOp);
+          Unhandled.WriteLine(ErrorLine);
+          Continue;
+        end;
+        FDimensions.Read(Stream, Unhandled)
+      end
+      else if Pos('GRIDDATA', ALine) = 1 then
+      begin
+        if Trim(Copy(ALine,Length('GRIDDATA')+1,1)) <> '' then
+        begin
+          Unhandled.WriteLine(StrUnrecognizedDISOp);
+          Unhandled.WriteLine(ErrorLine);
+          Continue;
+        end;
+        FGridData.Read(Stream, Unhandled, FDimensions.FDimensions);
+      end
+      else
+      begin
+        Unhandled.WriteLine(StrUnrecognizedDISOp);
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end;
+  end;
 end;
 
 end.

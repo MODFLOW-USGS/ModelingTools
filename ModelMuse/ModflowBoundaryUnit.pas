@@ -4933,12 +4933,12 @@ end;
 
 function TFormulaProperty._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TFormulaProperty._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 procedure TModflowParamBoundary.SetInterp(const Value

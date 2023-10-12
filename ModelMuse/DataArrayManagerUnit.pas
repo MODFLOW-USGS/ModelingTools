@@ -5112,12 +5112,12 @@ end;
 
 function TDataArrayManager._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TDataArrayManager._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 end.

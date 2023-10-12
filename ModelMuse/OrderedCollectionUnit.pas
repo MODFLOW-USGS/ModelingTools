@@ -673,12 +673,12 @@ end;
 
 function TOrderedCollection._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TOrderedCollection._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 procedure TOrderedCollection.Assign(Source: TPersistent);
@@ -1750,12 +1750,12 @@ end;
 
 function TOrderedItem._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TOrderedItem._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 procedure TOrderedItem.SetCaseInsensitiveStringProperty(var AField: string;

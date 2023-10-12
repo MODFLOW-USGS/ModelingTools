@@ -823,12 +823,12 @@ end;
 
 function TFormulaObject._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TFormulaObject._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 { TFormulaManager }

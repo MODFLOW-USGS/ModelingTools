@@ -2148,7 +2148,7 @@ that affects the model output should also have a comment. }
     function GetContourLabelSpacing: Integer; virtual; abstract;
     procedure SetContourLabelSpacing(const Value: Integer);virtual; abstract;
   private
-    FGlobalVariables: TGlobalVariables;
+//    FGlobalVariables: TGlobalVariables;
     function GetMt3dMS_StrictUsed: TObjectUsedEvent;
     function GetCrossSection: TCrossSection;
     function GetModflowOptions: TModflowOptions;
@@ -10059,6 +10059,8 @@ const
 //                allow more more flexibility in import model features.
 //    '5.1.1.41' Bug fix: Fixed a bug that could cause an assertion failure when
 //                exporting the MVR package input file.
+//    '5.1.1.42' Enhancement: The Mesh|Specify Mesh dialog box has been modified
+//                to allow the user to specify a 3D mesh.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10071,7 +10073,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.0';
+  IIModelVersion = '5.1.1.42';
 
 function IModelVersion: string;
 begin
@@ -11480,6 +11482,7 @@ var
 //  DataArray: TDataArray;
   Variable: IGlobalVariable;
   ScreenObject: TScreenObject;
+//  TempI: IGlobalVariables;
 begin
   SetGlobals(nil);
   frmFileProgress:= TfrmProgressMM.Create(nil);
@@ -11530,7 +11533,7 @@ begin
     FLinkedRasters.Free;
 
     frmFileProgress.pbProgress.Position := 0;
-    frmFileProgress.pbProgress.Max := FDataArrayManager.DataSetCount + GlobalVariablesI.Count
+    frmFileProgress.pbProgress.Max := FDataArrayManager.DataSetCount + GlobalVariables.Count
       + ScreenObjectCount;
     frmFileProgress.Show;
 
@@ -11543,9 +11546,9 @@ begin
     FTop2DBoundaryType.StopTalkingToAnyone;
 
 
-    for Index := 0 to GlobalVariablesI.Count - 1 do
+    for Index := 0 to GlobalVariables.Count - 1 do
     begin
-      Variable := GlobalVariablesI[Index];
+      Variable := GlobalVariables[Index];
       Variable.StopTalkingToAnyone;
       frmFileProgress.pbProgress.StepIt;
       // calling Application.ProcessMessages during
@@ -12415,7 +12418,7 @@ begin
     ModflowPackages.Reset;
     ModflowSteadyParameters.Clear;
     ModflowTransientParameters.Clear;
-    GlobalVariablesI.Clear;
+    GlobalVariables.Clear;
     ModflowOutputControl.Initialize;
     Mt3dmsOutputControl.Initialize;
     FootprintProperties.Initialize;

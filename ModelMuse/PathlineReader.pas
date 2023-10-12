@@ -5076,12 +5076,12 @@ end;
 
 function TEndPointReader._AddRef: Integer;
 begin
-  Result := 1;
+  Result := -1;
 end;
 
 function TEndPointReader._Release: Integer;
 begin
-  Result := 1;
+  Result := -1;
 end;
 
 procedure TEndPointReader.SetPoints(const Value: TEndPoints);

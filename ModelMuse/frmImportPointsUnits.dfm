@@ -26,7 +26,7 @@ inherited frmImportPoints: TfrmImportPoints
       573
       49)
     object btnCancel: TBitBtn
-      Left = 448
+      Left = 444
       Top = 6
       Width = 83
       Height = 33
@@ -34,10 +34,10 @@ inherited frmImportPoints: TfrmImportPoints
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 444
+      ExplicitLeft = 440
     end
     object btnOK: TBitBtn
-      Left = 359
+      Left = 355
       Top = 6
       Width = 83
       Height = 33
@@ -46,10 +46,10 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 355
+      ExplicitLeft = 351
     end
     object btnHelp: TBitBtn
-      Left = 270
+      Left = 266
       Top = 6
       Width = 83
       Height = 33
@@ -58,7 +58,7 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 266
+      ExplicitLeft = 262
     end
   end
   object pcImportPoints: TPageControl
@@ -74,7 +74,7 @@ inherited frmImportPoints: TfrmImportPoints
     object tabControls: TTabSheet
       Caption = 'Controls'
       object pnlRadioGroups: TPanel
-        Left = 172
+        Left = 176
         Top = 0
         Width = 393
         Height = 433
@@ -261,7 +261,7 @@ inherited frmImportPoints: TfrmImportPoints
         object jvclbDataSets: TJvxCheckListBox
           Left = 1
           Top = 26
-          Width = 170
+          Width = 174
           Height = 406
           Align = alClient
           Color = clRed
@@ -296,6 +296,8 @@ inherited frmImportPoints: TfrmImportPoints
         Align = alBottom
         ParentColor = True
         TabOrder = 1
+        ExplicitTop = 383
+        ExplicitWidth = 561
         object lblRows: TLabel
           Left = 115
           Top = 13
@@ -411,6 +413,8 @@ inherited frmImportPoints: TfrmImportPoints
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 561
+        ExplicitHeight = 310
         ColWidths = (
           64
           64)
@@ -426,6 +430,7 @@ inherited frmImportPoints: TfrmImportPoints
         Align = alTop
         TabOrder = 2
         Visible = False
+        ExplicitWidth = 561
         object lblTimePeriods: TLabel
           Left = 271
           Top = 17

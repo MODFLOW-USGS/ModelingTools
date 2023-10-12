@@ -395,7 +395,7 @@ begin
         try
           try
             FAts := TAts.Create;
-            FAts.Read(AtsFile, Unhandled)
+            FAts.Read(AtsFile, Unhandled);
           except on E: Exception do
             begin
               Unhandled.WriteLine('ERROR');

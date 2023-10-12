@@ -5376,13 +5376,13 @@ end;
 
 function TBoundary._AddRef: Integer;
 begin
-  Inc(FRefCount);
+  InterlockedIncrement(FRefCount);
   result := FRefCount;
 end;
 
 function TBoundary._Release: Integer;
 begin
-  Dec(FRefCount);
+  InterlockedDecrement(FRefCount);
   result := FRefCount;
   if result = 0 then
     Destroy;
@@ -11044,13 +11044,13 @@ end;
 
 function TQuadMeshCreator._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
   // do nothing
 end;
 
 function TQuadMeshCreator._Release: Integer;
 begin
-  result := 1;
+  result := -1;
   // do nothing
 end;
 

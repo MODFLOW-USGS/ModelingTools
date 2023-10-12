@@ -5,10 +5,15 @@ program Mf6InputReader;
 {$R *.res}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   System.SysUtils,
   Vcl.Dialogs,
   System.IOUtils,
-  SimulationNameFileReaderUnit in 'SimulationNameFileReaderUnit.pas',
+  simulationnamefilereaderunit in 'simulationnamefilereaderunit.pas',
   CustomMf6PersistentUnit in 'CustomMf6PersistentUnit.pas',
   TDisFileReaderUnit in 'TDisFileReaderUnit.pas',
   ModelMuseUtilities in '..\ModelMuse\ModelMuseUtilities.pas',
@@ -18,7 +23,9 @@ uses
   ImsFileReaderUnit in 'ImsFileReaderUnit.pas',
   ReadModflowArrayUnit in '..\ModelMuse\ReadModflowArrayUnit.pas',
   GWFlowExchangeReaderUnit in 'GWFlowExchangeReaderUnit.pas',
-  DisFileReaderUnit in 'DisFileReaderUnit.pas';
+  DisFileReaderUnit in 'DisFileReaderUnit.pas',
+  DisvFileReaderUnit in 'DisvFileReaderUnit.pas',
+  DisuFileReaderUnit in 'DisuFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

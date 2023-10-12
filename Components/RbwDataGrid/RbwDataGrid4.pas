@@ -4371,6 +4371,7 @@ var
   CharIndex: Integer;
   CellFormat: TRbwColumnFormat4;
   NewCol: Integer;
+  Splitter: TStringList;
   function ExtractWord(var AString: string): string;
   var
     TabPos: integer;
@@ -4444,9 +4445,11 @@ var
 begin
   BeginUpdate;
   AStringList := TStringList.Create;
+  Splitter := TStringList.Create;
   try
     AStringList.Text := CellContents;
-    result := (AStringList.Count > 1) or (Pos(#9, CellContents) > 0);
+    result := (AStringList.Count > 1) or (Pos(#9, CellContents) > 0)
+      or (Pos(',', CellContents) > 0) or (Pos(' ', CellContents) > 0);
     if result then
     begin
       if FDistributingText then
@@ -4464,9 +4467,10 @@ begin
           While LineIndex < AStringList.Count do
           begin
             AString := AStringList[LineIndex];
-            while Length(AString) > 0 do
+            Splitter.DelimitedText := AString;
+            for WordIndex := 0 to Splitter.Count - 1 do
             begin
-              NewString := ExtractWord(AString);
+              NewString := Splitter[WordIndex];
               AssignTextToCell;
               Inc(NewCol);
               if NewCol >= ColCount then
@@ -4477,9 +4481,24 @@ begin
                 begin
                   RowCount := RowCount + 1;
                 end;
-                break;
               end;
             end;
+//            while Length(AString) > 0 do
+//            begin
+//              NewString := ExtractWord(AString);
+//              AssignTextToCell;
+//              Inc(NewCol);
+//              if NewCol >= ColCount then
+//              begin
+//                NewCol := ACol;
+//                Inc(NewRow);
+//                if AutoIncreaseRowCount and (NewRow >= RowCount) then
+//                begin
+//                  RowCount := RowCount + 1;
+//                end;
+//                break;
+//              end;
+//            end;
             Inc(LineIndex);
             if Assigned(FOnDistributeTextProgress) then
             begin
@@ -4503,27 +4522,23 @@ begin
             begin
               TabCount := 0;
               AString := AStringList[LineIndex];
-              for CharIndex := 1 to Length(AString) do
-              begin
-                if AString[CharIndex] = #9 then
-                begin
-                  Inc(TabCount);
-                end;
-              end;
+              Splitter.DelimitedText := AString;
+              TabCount := Splitter.Count;
               if TabCount > MaxTabCount then
               begin
                 MaxTabCount := TabCount;
               end;
             end;
-            if ColCount <= ACol + MaxTabCount+1 then
+            if ColCount <= ACol + MaxTabCount then
             begin
-              ColCount := ACol + MaxTabCount+1
+              ColCount := ACol + MaxTabCount
             end;
           end;
           for LineIndex := 0 to AStringList.Count -1 do
           begin
             AString := AStringList[LineIndex];
             NewRow := ARow + LineIndex;
+            Splitter.DelimitedText := AString;
             WordIndex := 0;
             if AString = '' then
             begin
@@ -4535,13 +4550,19 @@ begin
             end
             else
             begin
-              while Length(AString) > 0 do
+              for WordIndex := 0 to Splitter.Count - 1 do
               begin
-                NewString := ExtractWord(AString);
+                NewString := Splitter[WordIndex];
                 NewCol := ACol + WordIndex;
                 AssignTextToCell;
-                Inc(WordIndex);
               end;
+//              while Length(AString) > 0 do
+//              begin
+//                NewString := ExtractWord(AString);
+//                NewCol := ACol + WordIndex;
+//                AssignTextToCell;
+//                Inc(WordIndex);
+//              end;
             end;
             if Assigned(FOnDistributeTextProgress) then
             begin
@@ -4559,6 +4580,7 @@ begin
   finally
     FdgRow := ARow;
     fdgColumn := ACol;
+    Splitter.Free;
     AStringList.Free;
     EndUpdate;
   end;

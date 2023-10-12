@@ -1321,12 +1321,12 @@ end;
 
 function TPhastCollection._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TPhastCollection._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 { TRealStorage }
@@ -1519,12 +1519,12 @@ end;
 
 function TGoPhastPersistent._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TGoPhastPersistent._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function EvalAtToString(const Eval: TEvaluatedAt; const Model: TModelSelection;
@@ -1806,12 +1806,12 @@ end;
 
 function TBaseModel._AddRef: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 function TBaseModel._Release: Integer;
 begin
-  result := 1;
+  result := -1;
 end;
 
 procedure TBaseModel.DoInvalidate(Sender: TObject);
