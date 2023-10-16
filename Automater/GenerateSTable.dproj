@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{77753165-152F-429B-9447-7538BCD7D8AA}</ProjectGuid>
         <MainSource>GenerateSTable.dpr</MainSource>
-        <ProjectVersion>18.8</ProjectVersion>
+        <ProjectVersion>19.5</ProjectVersion>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <AppType>Application</AppType>
@@ -96,15 +96,15 @@
         </DCCReference>
         <DCCReference Include="HantushUnit.pas"/>
         <DCCReference Include="RealListUnit.pas"/>
-        <BuildConfiguration Include="Release">
-            <Key>Cfg_2</Key>
-            <CfgParent>Base</CfgParent>
-        </BuildConfiguration>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
     </ItemGroup>

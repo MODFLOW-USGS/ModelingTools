@@ -2,190 +2,146 @@ object frmAutomate: TfrmAutomate
   Left = 0
   Top = 0
   Caption = 'Automater'
-  ClientHeight = 749
-  ClientWidth = 856
+  ClientHeight = 599
+  ClientWidth = 688
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -20
+  Font.Height = -16
   Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
-  OldCreateOrder = False
   ShowHint = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 120
-  TextHeight = 24
+  TextHeight = 19
   object pcMain: TPageControl
     Left = 0
-    Top = 29
-    Width = 856
-    Height = 720
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Top = 23
+    Width = 688
+    Height = 576
     ActivePage = tabRunModels
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 684
+    ExplicitHeight = 575
     object tabRunModels: TTabSheet
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
       Caption = 'Run Models'
       object Label1: TLabel
-        Left = 10
-        Top = 13
-        Width = 171
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 8
+        Top = 10
+        Width = 137
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'MODFLOW location'
       end
       object Label2: TLabel
-        Left = 10
-        Top = 87
-        Width = 175
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 8
+        Top = 70
+        Width = 138
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'ModelMuse location'
       end
       object Label3: TLabel
-        Left = 10
-        Top = 157
-        Width = 208
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 8
+        Top = 126
+        Width = 164
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'ModelMuse file location'
       end
       object Label4: TLabel
-        Left = 10
-        Top = 225
-        Width = 299
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 8
+        Top = 180
+        Width = 236
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'Ratio of rectangle length to width'
       end
       object Label9: TLabel
-        Left = 364
-        Top = 219
-        Width = 313
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 291
+        Top = 175
+        Width = 248
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'Time-out time for ModelMuse (sec)'
       end
       object Label10: TLabel
-        Left = 201
-        Top = 489
-        Width = 168
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 161
+        Top = 391
+        Width = 132
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'Warning messages'
       end
       object Label5: TLabel
-        Left = 685
-        Top = 505
-        Width = 143
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 548
+        Top = 404
+        Width = 117
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'NSTP in first SP '
       end
       object Label6: TLabel
-        Left = 685
-        Top = 568
-        Width = 155
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 548
+        Top = 454
+        Width = 123
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'Processors to use'
       end
       object lblStart: TLabel
         Left = 0
-        Top = 537
-        Width = 205
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Top = 430
+        Width = 164
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'Starting model number'
       end
       object lblEnd: TLabel
-        Left = 4
-        Top = 606
-        Width = 195
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
+        Left = 3
+        Top = 485
+        Width = 158
+        Height = 19
+        Margins.Bottom = 2
         Caption = 'Ending model number'
       end
       object feMODFLOW: TJvFilenameEdit
-        Left = 10
-        Top = 40
-        Width = 833
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 8
+        Top = 32
+        Width = 666
+        Height = 27
         Filter = 'Executables (*.exe)|*.exe'
         ButtonWidth = 27
         TabOrder = 0
         Text = 'C:\WRDAPP\MF2005.1_10\bin\mf2005dbl.exe'
       end
       object feModelMuseApplication: TJvFilenameEdit
-        Left = 10
-        Top = 115
-        Width = 833
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 8
+        Top = 92
+        Width = 666
+        Height = 27
         Filter = 'Executables (*.exe)|*.exe'
         ButtonWidth = 27
         TabOrder = 1
         Text = '"C:\Program Files\USGS\ModelMuse2_19_1\bin\ModelMuse.exe"'
       end
       object feModelMuseFile: TJvFilenameEdit
-        Left = 11
-        Top = 184
-        Width = 833
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 9
+        Top = 147
+        Width = 666
+        Height = 27
         Filter = 'ModelMuse file (*.gpt)|*.gpt'
         ButtonWidth = 27
         TabOrder = 2
         Text = ''
       end
       object rdeRatio: TRbwDataEntry
-        Left = 10
-        Top = 253
-        Width = 72
-        Height = 27
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 8
+        Top = 202
+        Width = 58
+        Height = 22
         TabOrder = 5
         Text = '2'
         DataType = dtReal
@@ -195,15 +151,13 @@ object frmAutomate: TfrmAutomate
         ChangeDisabledColor = True
       end
       object rdgBasinAreas: TRbwDataGrid4
-        Left = 10
-        Top = 288
-        Width = 183
-        Height = 241
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 8
+        Top = 230
+        Width = 146
+        Height = 193
         ColCount = 1
+        DefaultColWidth = 51
+        DefaultRowHeight = 19
         FixedCols = 0
         RowCount = 21
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -219,6 +173,7 @@ object frmAutomate: TfrmAutomate
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -242,37 +197,33 @@ object frmAutomate: TfrmAutomate
           end>
         WordWrapRowCaptions = False
         RowHeights = (
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28
-          28)
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23
+          23)
       end
       object seTimeOut: TJvSpinEdit
-        Left = 364
-        Top = 246
-        Width = 134
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 291
+        Top = 197
+        Width = 107
+        Height = 27
         Increment = 60.000000000000000000
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
@@ -280,15 +231,13 @@ object frmAutomate: TfrmAutomate
         TabOrder = 3
       end
       object rdgKv: TRbwDataGrid4
-        Left = 201
-        Top = 288
-        Width = 183
-        Height = 193
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 161
+        Top = 230
+        Width = 146
+        Height = 155
         ColCount = 1
+        DefaultColWidth = 51
+        DefaultRowHeight = 19
         FixedCols = 0
         RowCount = 6
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -304,6 +253,7 @@ object frmAutomate: TfrmAutomate
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -327,37 +277,31 @@ object frmAutomate: TfrmAutomate
           end>
         WordWrapRowCaptions = False
         RowHeights = (
-          28
-          28
-          28
-          28
-          28
-          28)
+          23
+          23
+          23
+          23
+          23
+          23)
       end
       object cbRunModflow: TCheckBox
-        Left = 528
-        Top = 246
-        Width = 315
-        Height = 22
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 422
+        Top = 197
+        Width = 252
+        Height = 17
         Caption = 'Run MODFLOW automatically'
         Checked = True
         State = cbChecked
         TabOrder = 4
       end
       object rdgSy: TRbwDataGrid4
-        Left = 392
-        Top = 285
-        Width = 183
-        Height = 194
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 314
+        Top = 228
+        Width = 146
+        Height = 155
         ColCount = 1
+        DefaultColWidth = 51
+        DefaultRowHeight = 19
         FixedCols = 0
         RowCount = 3
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -373,6 +317,7 @@ object frmAutomate: TfrmAutomate
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -396,20 +341,18 @@ object frmAutomate: TfrmAutomate
           end>
         WordWrapRowCaptions = False
         RowHeights = (
-          28
-          28
-          28)
+          23
+          23
+          23)
       end
       object rdgBasinDepth: TRbwDataGrid4
-        Left = 582
-        Top = 288
-        Width = 183
-        Height = 193
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 466
+        Top = 230
+        Width = 146
+        Height = 155
         ColCount = 1
+        DefaultColWidth = 51
+        DefaultRowHeight = 19
         FixedCols = 0
         RowCount = 6
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -425,6 +368,7 @@ object frmAutomate: TfrmAutomate
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -448,35 +392,27 @@ object frmAutomate: TfrmAutomate
           end>
         WordWrapRowCaptions = False
         RowHeights = (
-          28
-          28
-          28
-          28
-          28
-          28)
+          23
+          23
+          23
+          23
+          23
+          23)
       end
       object btnRun: TButton
-        Left = 422
-        Top = 635
-        Width = 95
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 338
+        Top = 508
+        Width = 76
+        Height = 26
         Caption = 'Run'
         TabOrder = 18
         OnClick = btnTestThreadClick
       end
       object btnAbort: TBitBtn
-        Left = 525
-        Top = 634
-        Width = 95
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 420
+        Top = 507
+        Width = 76
+        Height = 26
         Enabled = False
         Kind = bkAbort
         NumGlyphs = 2
@@ -484,26 +420,18 @@ object frmAutomate: TfrmAutomate
         OnClick = btnAbortClick
       end
       object memoErrors: TMemo
-        Left = 215
-        Top = 517
-        Width = 462
-        Height = 87
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 172
+        Top = 414
+        Width = 370
+        Height = 69
         ScrollBars = ssBoth
         TabOrder = 10
       end
       object FillTable: TButton
-        Left = 379
-        Top = 634
-        Width = 21
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 303
+        Top = 507
+        Width = 17
+        Height = 26
         Caption = 'Fill results table without generating output'
         Enabled = False
         TabOrder = 17
@@ -511,14 +439,10 @@ object frmAutomate: TfrmAutomate
         OnClick = btnRunClick
       end
       object rdeNSTP: TRbwDataEntry
-        Left = 685
-        Top = 533
-        Width = 125
-        Height = 28
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 548
+        Top = 426
+        Width = 100
+        Height = 23
         TabOrder = 11
         Text = '40'
         DataType = dtInteger
@@ -528,27 +452,19 @@ object frmAutomate: TfrmAutomate
         ChangeDisabledColor = True
       end
       object pb1: TProgressBar
-        Left = 423
-        Top = 605
-        Width = 190
-        Height = 22
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 338
+        Top = 484
+        Width = 152
+        Height = 18
         Max = 2
         Step = 1
         TabOrder = 14
       end
       object seProcessors: TJvSpinEdit
-        Left = 685
-        Top = 592
-        Width = 120
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 548
+        Top = 474
+        Width = 96
+        Height = 27
         CheckMaxValue = False
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
@@ -557,50 +473,42 @@ object frmAutomate: TfrmAutomate
         TabOrder = 13
       end
       object cbRestart: TCheckBox
-        Left = 643
-        Top = 639
-        Width = 122
-        Height = 22
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 514
+        Top = 511
+        Width = 98
+        Height = 18
         Caption = 'Restart'
         TabOrder = 20
       end
       object seStart: TJvSpinEdit
         Left = 0
-        Top = 565
-        Width = 163
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Top = 452
+        Width = 130
+        Height = 27
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
         TabOrder = 12
       end
       object seEnd: TJvSpinEdit
-        Left = 4
-        Top = 634
-        Width = 159
-        Height = 32
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 3
+        Top = 507
+        Width = 127
+        Height = 27
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 2147483647.000000000000000000
         TabOrder = 16
       end
       object rgMethod: TRadioGroup
-        Left = 215
-        Top = 610
-        Width = 158
-        Height = 68
+        Left = 172
+        Top = 488
+        Width = 126
+        Height = 54
+        Margins.Left = 2
+        Margins.Top = 2
+        Margins.Right = 2
+        Margins.Bottom = 2
         Caption = 'Method'
         ItemIndex = 0
         Items.Strings = (
@@ -610,45 +518,29 @@ object frmAutomate: TfrmAutomate
       end
     end
     object tabAnalyzeResults: TTabSheet
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
       Caption = 'Analyze Results'
       ImageIndex = 1
       object Panel1: TPanel
         Left = 0
-        Top = 629
-        Width = 848
-        Height = 52
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Top = 500
+        Width = 680
+        Height = 42
         Align = alBottom
         TabOrder = 1
         object btnAnalyze: TButton
-          Left = 10
-          Top = 6
-          Width = 123
-          Height = 32
-          Margins.Left = 4
-          Margins.Top = 4
-          Margins.Right = 4
-          Margins.Bottom = 4
+          Left = 8
+          Top = 5
+          Width = 98
+          Height = 25
           Caption = 'Get results'
           TabOrder = 0
           OnClick = btnAnalyzeClick
         end
         object Button2: TButton
-          Left = 140
-          Top = 8
-          Width = 225
-          Height = 31
-          Margins.Left = 4
-          Margins.Top = 4
-          Margins.Right = 4
-          Margins.Bottom = 4
+          Left = 112
+          Top = 6
+          Width = 180
+          Height = 25
           Caption = 'Copy table to clipboard'
           TabOrder = 1
           OnClick = Button2Click
@@ -657,36 +549,26 @@ object frmAutomate: TfrmAutomate
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 848
-        Height = 629
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Width = 680
+        Height = 500
         Align = alClient
         TabOrder = 0
         object Splitter1: TSplitter
-          Left = 153
+          Left = 122
           Top = 1
-          Width = 6
-          Height = 627
-          Margins.Left = 4
-          Margins.Top = 4
-          Margins.Right = 4
-          Margins.Bottom = 4
-          ExplicitHeight = 609
+          Width = 5
+          Height = 498
+          ExplicitHeight = 501
         end
         object rdgResults: TRbwDataGrid4
-          Left = 159
+          Left = 127
           Top = 1
-          Width = 688
-          Height = 627
-          Margins.Left = 4
-          Margins.Top = 4
-          Margins.Right = 4
-          Margins.Bottom = 4
+          Width = 552
+          Height = 498
           Align = alClient
           ColCount = 13
+          DefaultColWidth = 51
+          DefaultRowHeight = 19
           FixedCols = 0
           RowCount = 2
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -703,6 +585,7 @@ object frmAutomate: TfrmAutomate
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -726,6 +609,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -749,6 +633,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -772,6 +657,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -795,6 +681,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -818,6 +705,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -841,6 +729,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -864,6 +753,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -887,6 +777,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -910,6 +801,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -933,6 +825,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -956,6 +849,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -979,6 +873,7 @@ object frmAutomate: TfrmAutomate
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1002,20 +897,18 @@ object frmAutomate: TfrmAutomate
             end>
           WordWrapRowCaptions = False
           RowHeights = (
-            28
-            28)
+            23
+            23)
         end
         object rdgFixedDistances: TRbwDataGrid4
           Left = 1
           Top = 1
-          Width = 152
-          Height = 627
-          Margins.Left = 4
-          Margins.Top = 4
-          Margins.Right = 4
-          Margins.Bottom = 4
+          Width = 121
+          Height = 498
           Align = alLeft
           ColCount = 1
+          DefaultColWidth = 51
+          DefaultRowHeight = 19
           FixedCols = 0
           RowCount = 20
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -1031,6 +924,7 @@ object frmAutomate: TfrmAutomate
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1054,26 +948,26 @@ object frmAutomate: TfrmAutomate
             end>
           WordWrapRowCaptions = False
           RowHeights = (
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28
-            28)
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23
+            23)
         end
       end
     end
@@ -1081,15 +975,24 @@ object frmAutomate: TfrmAutomate
   object ToolBar: TToolBar
     Left = 0
     Top = 0
-    Width = 856
-    Height = 29
+    Width = 688
+    Height = 23
+    Margins.Left = 2
+    Margins.Top = 2
+    Margins.Right = 2
+    Margins.Bottom = 2
     Caption = 'ToolBar'
     Images = ImageList1
     TabOrder = 0
+    ExplicitWidth = 684
     object ToolButton1: TToolButton
       Left = 0
       Top = 0
       Hint = 'Open Automater file'
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Open'
       ImageIndex = 0
       MenuItem = Open1
@@ -1098,6 +1001,10 @@ object frmAutomate: TfrmAutomate
       Left = 23
       Top = 0
       Hint = 'Save Automater file'
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Save'
       ImageIndex = 1
       MenuItem = Save1
@@ -1106,6 +1013,10 @@ object frmAutomate: TfrmAutomate
       Left = 46
       Top = 0
       Hint = 'Exit'
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Exit'
       ImageIndex = 2
       MenuItem = Exit1

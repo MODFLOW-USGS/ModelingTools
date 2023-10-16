@@ -158,22 +158,6 @@ type
     FAnalyticResults: TGridCellCollection;
     FNumericSummaryTable: TGridCellCollection;
     FNumericProfile: TGridCellCollection;
-//    function GetArea: Double;
-//    function GetAreaUnits: string;
-//    function GetFraction: Double;
-//    procedure SetArea(const Value: Double);
-//    procedure SetAreaUnits(const Value: string);
-//    procedure SetFraction(const Value: Double);
-//    function GetDesignStorm: Double;
-//    procedure SetDesignStorm(const Value: Double);
-//    function GetDesignStormUnits: string;
-//    function GetVolumeUnits: string;
-//    procedure SetDesignStormUnits(const Value: string);
-//    procedure SetVolumeUnits(const Value: string);
-//    function GetStormDuration: Double;
-//    procedure SetStormDuration(const Value: Double);
-//    function GetStormDurationUnits: string;
-//    procedure SetStormDurationUnits(const Value: string);
     function GetKv: Double;
     procedure SetKv(const Value: Double);
     function GetKvUnits: string;
@@ -190,8 +174,6 @@ type
     procedure SetDistanceToWaterTableUnits(const Value: string);
     procedure SetSimulationLengthAnalytic(const Value: double);
     procedure SetSimulationLengthUnitsAnalytic(const Value: string);
-//    function GetMaxBasinDepth: double;
-//    procedure SetMaxBasinDepth(const Value: double);
     function GetMaxBasinDepthUnits: string;
     procedure SetMaxBasinDepthUnits(const Value: string);
     function GetBasinAreaUnits: string;
@@ -249,8 +231,6 @@ type
     function GetMaxDistanceNumericUnits: string;
     procedure SetMaxDistanceNumeric(const Value: double);
     procedure SetMaxDistanceNumericUnits(const Value: string);
-//    function GetVolume: Double;
-//    procedure SetVolume(const Value: Double);
     function GetSimulationLengthNumeric: double;
     function GetSimulationLengthUnitsNumeric: string;
     procedure SetSimulationLengthNumeric(const Value: double);
@@ -261,6 +241,8 @@ type
     function GetInfiltrationTimeUnits: string;
     procedure SetInfiltrationTime(const Value: Double);
     procedure SetInfiltrationTimeUnits(const Value: string);
+    function GetRelativeModelMuseFileLocation: string;
+    procedure SetRelativeModelMuseFileLocation(const Value: string);
   protected
     procedure Loaded; override;
   public
@@ -268,15 +250,6 @@ type
     constructor Create(AnOwner: TComponent); override;
     destructor Destroy; override;
   published
-//    property Area: Double read GetArea write SetArea;
-//    property AreaUnits: string read GetAreaUnits write SetAreaUnits;
-//    property Fraction: Double read GetFraction write SetFraction;
-//    property DesignStorm: Double read GetDesignStorm write SetDesignStorm;
-//    property DesignStormUnits: string read GetDesignStormUnits write SetDesignStormUnits;
-//    property Volume: Double read GetVolume write SetVolume;
-//    property VolumeUnits: string read GetVolumeUnits write SetVolumeUnits;
-//    property StormDuration: Double read GetStormDuration write SetStormDuration;
-//    property StormDurationUnits: string read GetStormDurationUnits write SetStormDurationUnits;
     property Kv: Double read GetKv write SetKv;
     property KvUnits: string read GetKvUnits write SetKvUnits;
     property Kx: Double read GetVertAnisotropy write SetVertAnisotropy;
@@ -295,7 +268,6 @@ type
     property SimulationLengthUnitsNumeric: string
       read GetSimulationLengthUnitsNumeric
       write SetSimulationLengthUnitsNumeric;
-//    property MaxBasinDepth: double read GetMaxBasinDepth write SetMaxBasinDepth;
     property BasinDepth: double read GetBasinDepth write SetBasinDepth;
     property MaxBasinDepthUnits: string read GetMaxBasinDepthUnits write SetMaxBasinDepthUnits;
     property BasinAreaUnits: string read GetBasinAreaUnits write SetBasinAreaUnits;
@@ -318,13 +290,14 @@ type
     property BrooksCorey: Double read GetBrooksCorey write SetBrooksCorey;
     property SaturatedWaterContent: double read GetSaturatedWaterContent write SetSaturatedWaterContent;
     property InitialWaterContent: double read GetInitialWaterContent write SetInitialWaterContent;
-    property ModelMuseFileLocation: string read GetModelMuseFileLocation write SetModelMuseFileLocation;
+    property ModelMuseFileLocation: string read GetModelMuseFileLocation write SetModelMuseFileLocation stored False;
     property NumericSummaryTable: TGridCellCollection read GetNumericSummaryTable write SetNumericSummaryTable;
     property NumericProfile: TGridCellCollection read GetNumericProfile write SetNumericProfile;
     property MaxDistanceNumeric: double read GetMaxDistanceNumeric write SetMaxDistanceNumeric;
     property MaxDistanceNumericUnits: string read GetMaxDistanceNumericUnits write SetMaxDistanceNumericUnits;
     property InfiltrationTimeUnits: string read GetInfiltrationTimeUnits write SetInfiltrationTimeUnits;
     property InfiltrationTime: Double read GetInfiltrationTime write SetInfiltrationTime;
+    property RelativeModelMuseFileLocation: string read GetRelativeModelMuseFileLocation write SetRelativeModelMuseFileLocation;
   end;
 
   TRunModelThread = class;
@@ -573,11 +546,7 @@ type
     FIniltrationTimeUnits: Integer;
     function GetTimeUnit(ItemIndex: Integer): TConvType;
 
-    procedure UpdateEdVolume;
-//    procedure UpdateEdMinBasinArea;
-
     function GetRechargeVolume: double;
-//    function MinimumBasinArea: double;
     procedure InitializeComboKzUnits;
     function GetBasinArea: double;
     function GetAquiferThickness: Double;
@@ -587,13 +556,7 @@ type
     function GetCircleDiameter: Double;
     function GetMaxDistance: Double;
     function GetKz: Double;
-//    function GetMaxDepth: Double;
-//    function GetMaxDuration: Double;
-//    function GetDevelopmentArea: Double;
-//    function GetRainfall: Double;
-//    function GetFractionImpervious: Double;
     function GetPolygon: TPolygon2D;
-//    function GetAnisotropy: Double;
     function GetKx: Double;
     function GetAnalyticSimulationLength: double;
     function GetDistanceToWaterTable: double;
@@ -623,7 +586,7 @@ type
     procedure EraseNumericResults;
     procedure UpdateNodeStateIndex;
     function GetHelpUrl(Keyword: string): string;
-    procedure DisplayMoundToHighMesssage;
+    procedure DisplayMoundTooHighMesssage;
     procedure DisplayRiseToHigh;
     function GetNumericSimulationLength: double;
     function GetAreaUnitsExtended(ItemIndex: Integer): TConvType;
@@ -707,8 +670,9 @@ resourcestring
   StrProgramLocations = 'Program Locations';
   StrMODFLOW = 'MODFLOW';
   StrModelMuse = 'ModelMuse';
-  StrBecauseTheRiseIn = 'Because the rise in the water table is greater than' +
-  ' the distance to the water table, the simulation results are unreliable.';
+  StrBecauseTheRiseIn = 'The simulated rise in the water table is greater than' +
+  ' the distance to the water table. That impossible situation means that ' +
+  'the simulation results are unreliable.';
   StrRiseToHigh = 'Because the rise in the water table is greater than 50% o' +
   'f the aquifer thickness, the simulation results are unreliable.';
   StrTheSimulationLengt = 'The simulation length is less than the time requi' +
@@ -746,23 +710,13 @@ const
 var
   cbVelocity : TConvFamily;
 
-//  vuInchesPerSecond: TConvType;
-//  vuInchesPerMinute: TConvType;
   vuInchesPerHour: TConvType;
-//  vuInchesPerDay: TConvType;
-
   vuFeetPerSecond: TConvType;
-//  vuFeetPerMinute: TConvType;
-//  vuFeetPerHour: TConvType;
   vuFeetPerDay: TConvType;
-
   vuCentimetersPerSecond: TConvType;
-//  vuCentimetersPerMinute: TConvType;
   vuCentimetersPerHour: TConvType;
   vuCentimetersPerDay: TConvType;
-
   vuMetersPerSecond: TConvType;
-//  vuMetersPerMinute: TConvType;
   vuMetersPerHour: TConvType;
   vuMetersPerDay: TConvType;
 
@@ -774,50 +728,6 @@ const
 var
   DirectoryLock: TCriticalSection;
 
-{function GetTSMULT(const PERLEN: double; var FirstStep: double;
-  const NSTP: integer): double;
-  function GetPerLen(TSMULT: double): double;
-  begin
-    if TSMULT = 1 then
-    begin
-      result := FirstStep*NSTP;
-    end
-    else
-    begin
-      result := FirstStep * (Power(TSMULT, NSTP)-1)/(TSMULT-1);
-    end;
-  end;
-var
-  LowerTestValue: double;
-  HigherTestValue: double;
-  TestLength: double;
-begin
-  if PERLEN/NSTP < FirstStep then
-  begin
-    FirstStep := PERLEN/NSTP;
-    result := 1;
-    Exit;
-  end;
-  LowerTestValue := 1;
-  HigherTestValue := 1;
-  Assert(GetPerLen(LowerTestValue) < PERLEN);
-  repeat
-    HigherTestValue := HigherTestValue * 2;
-  until GetPerLen(HigherTestValue) >= PERLEN;
-  repeat
-    result := (LowerTestValue+HigherTestValue)/2;
-    TestLength := GetPerLen(result);
-    if TestLength > PERLEN then
-    begin
-      HigherTestValue := result;
-    end
-    else
-    begin
-      LowerTestValue := result;
-    end;
-  until Abs(TestLength-PERLEN)/PERLEN < 1e-6;
-end;  }
-
 function GetMyDocuments: string;
 // from http://delphi.about.com/od/delphitips2007/qt/mydocuments.htm
  var
@@ -828,20 +738,6 @@ function GetMyDocuments: string;
   if not r then raise Exception.Create('Could not find MyDocuments folder location.') ;
   Result := Path;
  end;
-
-//procedure TfrmGwMound.UpdateEdMinBasinArea;
-//var
-//  AreaUnits: TConvType;
-//begin
-//  if csLoading in ComponentState then
-//  begin
-//    Exit;
-//  end;
-////  ItemIndex := comboMinBasinAreaUnits.ItemIndex;
-//  AreaUnits := GetAreaUnitsExtended(comboMinBasinAreaUnits.ItemIndex);
-//  edMinBasinArea.Text := FloatToStr(ConvertTo(MinimumBasinArea, AreaUnits));
-//  UpdateDisplayedBasinArea;
-//end;
 
 function TfrmGwMound.IniFileName: string;
 begin
@@ -876,32 +772,16 @@ end;
 
 procedure TfrmGwMound.InitializeComboKzUnits;
 begin
-//  comboKzUnits.Items.Add(ConvTypeToDescription(vuInchesPerSecond));
-//  comboKzUnits.Items.Add(ConvTypeToDescription(vuInchesPerMinute));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuInchesPerHour));
-//  comboKzUnits.Items.Add(ConvTypeToDescription(vuInchesPerDay));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuFeetPerSecond));
-//  comboKzUnits.Items.Add(ConvTypeToDescription(vuFeetPerMinute));
-//  comboKzUnits.Items.Add(ConvTypeToDescription(vuFeetPerHour));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuFeetPerDay));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuCentimetersPerSecond));
-//  comboKzUnits.Items.Add(ConvTypeToDescription(vuCentimetersPerMinute));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuCentimetersPerHour));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuCentimetersPerDay));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuMetersPerSecond));
-//  comboKzUnits.Items.Add(ConvTypeToDescription(vuMetersPerMinute));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuMetersPerHour));
   comboKzUnits.Items.Add(ConvTypeToDescription(vuMetersPerDay));
   comboKzUnits.ItemIndex := comboKzUnits.Items.IndexOf(ConvTypeToDescription(vuMetersPerSecond));
-end;
-
-procedure TfrmGwMound.UpdateEdVolume;
-begin
-//  if csLoading in ComponentState then
-//  begin
-//    Exit;
-//  end;
-//  UpdateEdMinBasinArea;
 end;
 
 function TfrmGwMound.GetBasinWidth: double;
@@ -955,47 +835,26 @@ begin
       begin
         SideLength := GetSquareSideLength;
         result := Sqr(SideLength);
-        // Square
       end;
     bsRectangle:
       begin
-        // Rectangular
         RectLength := GetRectangleLength;
         RectWidth := GetRectangleWidth;
         result := RectLength*RectWidth;
       end;
     bsCircle:
       begin
-        // circular
         Diameter := GetCircleDiameter;
         result := Pi*Sqr(Diameter/2);
       end;
     bsCustom:
       begin
-        // custom
         Polygon := GetPolygon;
         result := Abs(Area(Polygon));
       end;
     else Assert(False);
   end;
 end;
-
-//function TfrmGwMound.GetLengthUnits(ItemIndex: Integer): TConvType;
-//begin
-//  result := duMeters;
-//  case ItemIndex of
-//    0:
-//      result := duInches;
-//    1:
-//      result := duFeet;
-//    2:
-//      result := duCentimeters;
-//    3:
-//      result := duMeters;
-//  else
-//    Assert(False);
-//  end;
-//end;
 
 function TfrmGwMound.GetAquiferThickness: Double;
 var
@@ -1064,15 +923,6 @@ begin
   result := ConvertFrom(VelUnits, result);
 end;
 
-//function TfrmGwMound.GetMaxDepth: Double;
-//var
-//  MaxDepthUnits: TConvType;
-//begin
-//  result := StrToFloatDef(rdeMaxDepth.Text, 0);
-//  MaxDepthUnits := GetLengthUnits(comboMaxDepthUnits.ItemIndex);
-//  result := ConvertFrom(MaxDepthUnits, result);
-//end;
-
 function TfrmGwMound.GetTimeUnit(ItemIndex: Integer): TConvType;
 begin
   result := tuDays;
@@ -1090,24 +940,6 @@ begin
   end;
 end;
 
-//function TfrmGwMound.GetMaxDuration: Double;
-//var
-//  TimeUnit: TConvType;
-//begin
-//  result := StrToFloatDef(rdeDuration.Text, 0);
-//  TimeUnit := GetTimeUnit(comboDuration.ItemIndex);
-//  result := ConvertFrom(TimeUnit, result);
-//end;
-
-//function TfrmGwMound.GetDevelopmentArea: Double;
-//var
-//  AreaUnits: TConvType;
-//begin
-//  result := StrToFloatDef(rdeDevelopmentArea.Text, 0);
-//  AreaUnits := GetAreaUnits(comboDevelopmentAreaUnit.ItemIndex);
-//  result := ConvertFrom(AreaUnits, result);
-//end;
-
 function TfrmGwMound.GetDistanceToWaterTable: double;
 var
   DistanceUnits: TConvType;
@@ -1117,15 +949,6 @@ begin
   result := ConvertFrom(DistanceUnits, result);
 end;
 
-//function TfrmGwMound.GetRainfall: Double;
-//var
-//  StormUnits: TConvType;
-//begin
-//  result := StrToFloatDef(rdeDesignStorm.Text, 0);
-//  StormUnits := GetLengthUnits(comboDesignStormUnits.ItemIndex);
-//  result := ConvertFrom(StormUnits, result);
-//end;
-
 procedure TfrmGwMound.GetFilePositions(ModelMuseFile: TStringList;
   var FileIndexes: TFileIndexes; var FileConstants: TConstantFileValues);
 var
@@ -1134,6 +957,7 @@ var
   ValueLine: string;
   EqPos: Integer;
   AChar: Char;
+  TestIndex: Integer;
 begin
   AChar := FormatSettings.DecimalSeparator;
   try
@@ -1196,11 +1020,21 @@ begin
 
   SearchTerm := '      ScreenObject.ModflowRchBoundary.Parameters = <';
   PositionIndex := ModelMuseFile.IndexOf(SearchTerm);
-  FileIndexes.ParamEndTimePosition1 := PositionIndex + 5;
+  FileIndexes.ParamEndTimePosition1 := PositionIndex + 4;
   ValueLine := ModelMuseFile[FileIndexes.ParamEndTimePosition1];
+  if Pos('              EndTime = ', ValueLine) <= 0 then
+  begin
+    Inc(FileIndexes.ParamEndTimePosition1);
+    ValueLine := ModelMuseFile[FileIndexes.ParamEndTimePosition1];
+  end;
   Assert(Pos('              EndTime = ', ValueLine) > 0);
   FileIndexes.ParamStartTimePosition2 := FileIndexes.ParamEndTimePosition1+4;
   ValueLine := ModelMuseFile[FileIndexes.ParamStartTimePosition2];
+  if Pos('              StartTime =', ValueLine) <= 0 then
+  begin
+    Inc(FileIndexes.ParamStartTimePosition2);
+    ValueLine := ModelMuseFile[FileIndexes.ParamStartTimePosition2];
+  end;
   Assert(Pos('              StartTime =', ValueLine) > 0);
   FileIndexes.ParamEndTimePosition2 := FileIndexes.ParamStartTimePosition2+1;
   ValueLine := ModelMuseFile[FileIndexes.ParamEndTimePosition2];
@@ -1214,6 +1048,11 @@ begin
   Assert(Pos('          EndTime = ', ValueLine) > 0);
   FileIndexes.UzfStartTimePosition2 := FileIndexes.UzfEndTimePosition1+4;
   ValueLine := ModelMuseFile[FileIndexes.UzfStartTimePosition2];
+  if Pos('          StartTime =', ValueLine) <= 0 then
+  begin
+    Inc(FileIndexes.UzfStartTimePosition2);
+    ValueLine := ModelMuseFile[FileIndexes.UzfStartTimePosition2];
+  end;
   Assert(Pos('          StartTime =', ValueLine) > 0);
   FileIndexes.UzfEndTimePosition2 := FileIndexes.UzfStartTimePosition2+1;
   ValueLine := ModelMuseFile[FileIndexes.UzfEndTimePosition2];
@@ -1253,11 +1092,33 @@ begin
   Assert(Pos('Value = ', ValueLine) > 0);
 
   FileIndexes.KvPosition := FileIndexes.KhPosition + 8;
+  if ModelMuseFile[FileIndexes.KvPosition-2] <> '      ParameterName = ''VK_Par1''' then
+  begin
+    for TestIndex := 0 to 40 do
+    begin
+      Inc(FileIndexes.KvPosition);
+      if ModelMuseFile[FileIndexes.KvPosition-2] = '      ParameterName = ''VK_Par1''' then
+      begin
+        Break;
+      end;
+    end;
+  end;
   Assert(ModelMuseFile[FileIndexes.KvPosition-2] = '      ParameterName = ''VK_Par1''');
   ValueLine := ModelMuseFile[FileIndexes.KvPosition];
   Assert(Pos('Value = ', ValueLine) > 0);
 
   FileIndexes.SyPosition := FileIndexes.KvPosition + 8;
+  if ModelMuseFile[FileIndexes.SyPosition-2] <> '      ParameterName = ''SY_Par1''' then
+  begin
+    for TestIndex := 0 to 40 do
+    begin
+      Inc(FileIndexes.SyPosition);
+      if ModelMuseFile[FileIndexes.SyPosition-2] = '      ParameterName = ''SY_Par1''' then
+      begin
+        Break;
+      end;
+    end;
+  end;
   Assert(ModelMuseFile[FileIndexes.SyPosition-2] = '      ParameterName = ''SY_Par1''');
   ValueLine := ModelMuseFile[FileIndexes.SyPosition];
   Assert(Pos('Value = ', ValueLine) > 0);
@@ -1292,6 +1153,18 @@ begin
 
   FileIndexes.EndtimePosition2 := FileIndexes.EndtimePosition1 + 8;
   ValueLine := ModelMuseFile[FileIndexes.EndtimePosition2];
+  if Pos('EndTime = ', ValueLine) <= 0 then
+  begin
+    for TestIndex := 0 to 40 do
+    begin
+      Inc(FileIndexes.EndtimePosition2);
+        ValueLine := ModelMuseFile[FileIndexes.EndtimePosition2];
+      if Pos('EndTime = ', ValueLine) > 0 then
+      begin
+        Break;
+      end;
+    end;
+  end;
   Assert(Pos('EndTime = ', ValueLine) > 0);
 
   FileIndexes.FirstTimeStepPosition2 := FileIndexes.EndtimePosition2+1;
@@ -1371,11 +1244,6 @@ begin
 
 end;
 
-//function TfrmGwMound.GetFractionImpervious: double;
-//begin
-//  result := StrToFloatDef(rdeImperviousFraction.Text, 0);
-//end;
-//
 function TfrmGwMound.GetPolygon: TPolygon2D;
 var
   Y: Double;
@@ -1457,6 +1325,14 @@ begin
   if tvNavigation.Selected <> nil then
   begin
     tvNavigation.Selected := tvNavigation.Items[tvNavigation.Selected.Index+1];
+    if plMain.ActivePage = jvspRunAnalyticalModel then
+    begin
+      pgcAnalytic.ActivePageIndex := 0;
+    end;
+    if plMain.ActivePage = jvspRunNumeric then
+    begin
+      pgcNumeric.ActivePageIndex := 0;
+    end;
   end;
 end;
 
@@ -1481,9 +1357,6 @@ var
   RechargeTime: double;
   MaxDistance: double;
   MaxDistanceUnits: TConvType;
-//  MaxHeight: double;
-//  PriorMoundHeight: Double;
-//  MaxDuration: Double;
   SimulationLength: Double;
   SimulationTime: Double;
   LineSeries: TLineSeries;
@@ -1493,7 +1366,7 @@ var
   CriteriaMet: Boolean;
   RowIndex: Integer;
   ColIndex: Integer;
-  MoundToHigh: boolean;
+  MoundTooHigh: boolean;
   DistanceToWaterTable: double;
   RiseToMuch: Boolean;
   Units: string;
@@ -1506,7 +1379,7 @@ begin
   Screen.Cursor := crHourGlass;
   FAbortAnalytic := False;
   rdgAnalytic.BeginUpdate;
-  MoundToHigh := False;
+  MoundTooHigh := False;
   RiseToMuch := False;
   DistanceToWaterTable := GetDistanceToWaterTable;
   btnAbort.Enabled := True;
@@ -1524,13 +1397,6 @@ begin
 
       RechargeTime := SimulationLength;
     end;
-//    MaxDuration := GetMaxDuration;
-//    if RechargeTime > MaxDuration then
-//    begin
-//      Beep;
-//      MessageDlg(StrBecauseTheTimeReq, mtWarning, [mbOK], 0);
-//      Exit;
-//    end;
 
     Kx := GetKx;
     if Kx <= 0 then
@@ -1648,7 +1514,6 @@ begin
         chrtAnalytical.LeftAxis.Automatic := True;
         chrtAnalytical.BottomAxis.Automatic := True;
         MaxDistanceUnits := GetStandardLengthUnits(comboMaxDistanceUnits.ItemIndex);
-//        rdgAnalytic.ColCount := MaxStep+1;
         rdgAnalytic.RowCount := Distances.Count+1;
         rdgAnalytic.ColCount := 2;
         for ColIndex := 0 to rdgAnalytic.ColCount - 1 do
@@ -1657,7 +1522,6 @@ begin
         end;
         rdgAnalytic.Cells[0,0] := 'Distance \ Time';
         rdgAnalytic.Cells[1,0] := FloatToStr(RechargeTime);
-//        for Index := 0 to MaxStep do
         for Index := 0 to Distances.Count-1 do
         begin
           if FAbortAnalytic then
@@ -1665,9 +1529,7 @@ begin
             Exit;
           end;
           X := Distances[Index];
-//          X := Index/MaxStep*MaxDistance;
           MoundHeight:= 0;
-  //        InifiltrationRadius := 0;
           case BasinShape of
             bsSquare, bsRectangle:
               begin
@@ -1689,7 +1551,7 @@ begin
           X := ConvertTo(X, MaxDistanceUnits);
           if MoundHeight >= DistanceToWaterTable then
           begin
-            MoundToHigh := True;
+            MoundTooHigh := True;
           end;
           if MoundHeight > AquiferThickness/2 then
           begin
@@ -1704,7 +1566,6 @@ begin
           end
           else
           begin
-//            rdgAnalytic.Cells[0,Index+1] := '';
             rdgAnalytic.Cells[1,Index+1] := '';
           end;
         end;
@@ -1751,7 +1612,6 @@ begin
           + ' ' + comboTimeIncrementUnits.Text;
         LineSeries.BeginUpdate;
         try
-//          for Index := 0 to MaxStep do
           for Index := 0 to Distances.Count-1 do
           begin
           if FAbortAnalytic then
@@ -1760,7 +1620,6 @@ begin
           end;
             X := Distances[Index];
             MoundHeight := 0;
-//            X := Index/MaxStep*MaxDistance;
             case BasinShape of
               bsSquare, bsRectangle:
                 begin
@@ -1807,9 +1666,9 @@ begin
     rdgAnalytic.EndUpdate;
     UpdateNodeStateIndex;
     Screen.Cursor := crDefault;
-    if MoundToHigh then
+    if MoundTooHigh then
     begin
-      DisplayMoundToHighMesssage;
+      DisplayMoundTooHighMesssage;
       chrtAnalytical.Color := clRed;
     end
     else
@@ -1841,21 +1700,13 @@ var
   FileIndexes: TFileIndexes;
   FileConstants: TConstantFileValues;
   SimValues: TSimValues;
-//  AThread: TRunModelThread;
   Directory: string;
   Units: string;
   RechargeTime: Double;
   RechargeRate: Double;
-//  DistanceToWaterTable: double;
-//  MaxDuration: Double;
 begin
-//  DistanceToWaterTable := GetDistanceToWaterTable;
-//  if DistanceToWaterTable <= 0 then
-//  begin
-//    Beep;
-//    MessageDlg(StrInvalidValueOfDisWatTable, mtError, [mbOK], 0);
-//    Exit;
-//  end;
+  EraseNumericResults;
+
   GetRechargeRateAndTime(RechargeTime, RechargeRate);
   if RechargeRate <= 0 then
   begin
@@ -1869,17 +1720,9 @@ begin
     MessageDlg(StrInvalidValueOfSiz, mtError, [mbOK], 0);
     Exit;
   end;
-//  MaxDuration := GetMaxDuration;
-//  if RechargeTime > MaxDuration then
-//  begin
-//    Beep;
-//    MessageDlg(StrBecauseTheTimeReq, mtWarning, [mbOK], 0);
-//    Exit;
-//  end;
 
   if not CheckFile(feMODFLOW.FileName)
     or not CheckFile(feModelMuseApplication.FileName) then
-//    or not CheckFile(feModelMuseFile.FileName) then
   begin
     Exit
   end;
@@ -2105,14 +1948,12 @@ procedure TfrmGwMound.comboDesignStormUnitsChange(Sender: TObject);
 begin
   EraseAnalyticResults;
   EraseNumericResults;
-  UpdateEdVolume;
 end;
 
 procedure TfrmGwMound.comboDevelopmentAreaUnitChange(Sender: TObject);
 begin
   EraseAnalyticResults;
   EraseNumericResults;
-  UpdateEdVolume;
 end;
 
 procedure TfrmGwMound.comboDurationChange(Sender: TObject);
@@ -2165,12 +2006,10 @@ begin
   EraseNumericResults;
   UpdateInfiltrationTime;
   ShowKxUnits;
-//  UpdateEdMinBasinArea;
 end;
 
 procedure TfrmGwMound.comboMaxDepthUnitsChange(Sender: TObject);
 begin
-//  UpdateEdMinBasinArea;
   EraseAnalyticResults;
   EraseNumericResults;
 end;
@@ -2188,7 +2027,6 @@ end;
 procedure TfrmGwMound.comboMinBasinAreaUnitsChange(Sender: TObject);
 begin
   UpdateDisplayedBasinArea;
-//  UpdateEdMinBasinArea;
 end;
 
 procedure TfrmGwMound.comboRectUnitsChange(Sender: TObject);
@@ -2225,7 +2063,6 @@ end;
 
 procedure TfrmGwMound.comboVolumeUnitsChange(Sender: TObject);
 begin
-  UpdateEdVolume;
   EraseAnalyticResults;
   EraseNumericResults;
 end;
@@ -2248,6 +2085,7 @@ begin
     Exit;
   end;
   seriesAnayltical.Clear;
+  chrtAnalytical.Color := clWhite;
   FTimeSeries.Clear;
   if rdgAnalytic.Cells[1,1] <> '' then
   begin
@@ -2272,6 +2110,7 @@ begin
     Exit;
   end;
   seriesNumeric.Clear;
+  frmGwMound.chrtNumeric.Color := clWhite;
   if rdgProfileNumeric.Cells[0,1] <> '' then
   begin
     rdgProfileNumeric.BeginUpdate;
@@ -2365,7 +2204,7 @@ begin
   end;
 end;
 
-procedure TfrmGwMound.DisplayMoundToHighMesssage;
+procedure TfrmGwMound.DisplayMoundTooHighMesssage;
 begin
   Beep;
   MessageDlg(StrBecauseTheRiseIn, mtWarning, [mbOK], 0);
@@ -2399,6 +2238,7 @@ begin
   if FileExists(feModelMuseFile.FileName) or (feModelMuseFile.FileName = '') then
   begin
     feModelMuseFile.Color := clWindow;
+    EraseNumericResults;
   end
   else
   begin
@@ -2500,11 +2340,12 @@ begin
   {$ENDIF}
 
   {$IFNDEF CustomTemplate}
+  // Using custom templates may require using an older version of ModelMuse
+  // to create the template or debugging issues with the templates..
   lblModelMuseFile.Visible := False;
   feModelMuseFile.Visible := False;
   {$ENDIF}
 
-//  tvNavigation.Items.AddChildObject(nil, 'Development', jvspDevelopment);
   tvNavigation.Items.AddChildObject(nil, 'Basin Design', jvspBasinDesign);
   tvNavigation.Items.AddChildObject(nil, 'Aquifer Properties', jvspAquiferProperties);
   FRunAnalytic := tvNavigation.Items.AddChildObject(nil, 'Run Analytical Model', jvspRunAnalyticalModel);
@@ -2519,7 +2360,6 @@ begin
   InitializeComboKzUnits;
 
   rgBasinShapeClick(nil);
-  UpdateEdVolume;
 
   // Get a default value for the location of ModelMuse.
   MMLocation := GetModelMuseLocation;
@@ -2600,31 +2440,6 @@ begin
     tvNavigation.Selected := ANode;
   end;
 end;
-
-//function TfrmGwMound.MinimumBasinArea: double;
-//var
-//  Kz: double;
-//  RechVol: Double;
-//  MaxDepth: Double;
-//  Duration: double;
-//begin
-//  result := 0;
-//  if csLoading in ComponentState then
-//  begin
-//    Exit;
-//  end;
-//  Kz := GetKz;
-//  MaxDepth := GetMaxDepth;
-//  Duration := GetMaxDuration;
-//  if (Kz = 0) or (MaxDepth = 0) or (Duration = 0) then
-//  begin
-//    Exit;
-//  end;
-//
-//  RechVol := GetRechargeVolume;
-//
-//  result := Max(RechVol/(Kz*Duration), RechVol/MaxDepth);
-//end;
 
 procedure TfrmGwMound.UpdateAnalyticGraph;
 var
@@ -2721,6 +2536,8 @@ var
 begin
   if dlgOpenFile.Execute then
   begin
+    SetCurrentDir(ExtractFileDir(dlgOpenFile.FileName));
+    Caption := ExtractFileName(dlgOpenFile.FileName) + ' Groundwater Mounding Calculator';
     rdeDurationOfInfiltration.Min := 0;
     FileStream := TFileStream.Create(dlgOpenFile.FileName,
       fmOpenRead or fmShareDenyWrite);
@@ -2742,7 +2559,6 @@ begin
       FileStream.Free;
     end;
     dlgSaveFile.FileName := dlgOpenFile.FileName;
-    UpdateEdVolume;
     SetMinForInfiltrationTime;
 
     UpdateAnalyticGraph;
@@ -2780,18 +2596,6 @@ begin
   begin
     GetRechargeRateAndTime(RTime, RRate);
     TimeUnit := GetTimeUnit(comboSimulationLengthUnitsAnalytic.ItemIndex);
-//    if RTime > GetMaxDuration then
-//    begin
-//      lblDurationOfInfiltrationAnalytic.Font.Style :=
-//        lblDurationOfInfiltrationAnalytic.Font.Style + [fsBold];
-//      lblDurationOfInfiltrationAnalytic.Font.Color := clRed;
-//    end
-//    else
-//    begin
-//      lblDurationOfInfiltrationAnalytic.Font.Style :=
-//        lblDurationOfInfiltrationAnalytic.Font.Style - [fsBold];
-//      lblDurationOfInfiltrationAnalytic.Font.Color := clBlack;
-//    end;
     RTime := ConvertTo(RTime, TimeUnit);
 
     lblDurationOfInfiltrationAnalytic.Caption := 'Duration of infiltration = '
@@ -2801,18 +2605,6 @@ begin
   begin
     GetRechargeRateAndTime(RTime, RRate);
     TimeUnit := GetTimeUnit(comboSimulationLengthUnitsNumeric.ItemIndex);
-//    if RTime > GetMaxDuration then
-//    begin
-//      lblDurationOfInfiltrationNumeric.Font.Style :=
-//        lblDurationOfInfiltrationNumeric.Font.Style + [fsBold];
-//      lblDurationOfInfiltrationNumeric.Font.Color := clRed;
-//    end
-//    else
-//    begin
-//      lblDurationOfInfiltrationNumeric.Font.Style :=
-//        lblDurationOfInfiltrationNumeric.Font.Style - [fsBold];
-//      lblDurationOfInfiltrationNumeric.Font.Color := clBlack;
-//    end;
     RTime := ConvertTo(RTime, TimeUnit);
     Simlength := StrToFloat(rdeSimulationLengthNumeric.Text);
     if Simlength <= RTime*(1+ 1e-8) then
@@ -2854,14 +2646,12 @@ procedure TfrmGwMound.rdeDesignStormChange(Sender: TObject);
 begin
   EraseAnalyticResults;
   EraseNumericResults;
-  UpdateEdVolume;
 end;
 
 procedure TfrmGwMound.rdeDevelopmentAreaChange(Sender: TObject);
 begin
   EraseAnalyticResults;
   EraseNumericResults;
-  UpdateEdVolume;
 end;
 
 procedure TfrmGwMound.rdeDurationChange(Sender: TObject);
@@ -2889,7 +2679,6 @@ procedure TfrmGwMound.rdeImperviousFractionChange(Sender: TObject);
 begin
   EraseAnalyticResults;
   EraseNumericResults;
-  UpdateEdVolume;
 end;
 
 procedure TfrmGwMound.rdeInitialWaterContentClick(Sender: TObject);
@@ -2932,7 +2721,6 @@ begin
   EraseAnalyticResults;
   EraseNumericResults;
   UpdateInfiltrationTime;
-//  UpdateEdMinBasinArea;
   ResetColor(Sender);
 end;
 
@@ -2952,7 +2740,6 @@ end;
 
 procedure TfrmGwMound.rdeMaxDepthChange(Sender: TObject);
 begin
-//  UpdateEdMinBasinArea;
   EraseAnalyticResults;
   EraseNumericResults;
 end;
@@ -3074,7 +2861,6 @@ begin
   inherited;
   EraseAnalyticResults;
   EraseNumericResults;
-//  UpdateEdMinBasinArea;
 end;
 
 procedure TfrmGwMound.rdeExceededBounds(Sender: TObject);
@@ -3175,11 +2961,6 @@ begin
   Area := GetBasinArea;
 
   Result := Depth*Area
-
-//  result := StrToFloatDef(rdeVolume.Text, 0);
-//  VolumeUnits := GetVolumeUnits(comboVolumeUnits.ItemIndex);
-//  result := ConvertFrom(VolumeUnits, result);
-
 end;
 
 procedure TfrmGwMound.rgBasinShapeClick(Sender: TObject);
@@ -3207,6 +2988,7 @@ procedure TfrmGwMound.SaveAs1Click(Sender: TObject);
 begin
   if dlgSaveFile.Execute then
   begin
+    Caption := ExtractFileName(dlgSaveFile.FileName) + ' Groundwater Mounding Calculator';
     SaveFile;
   end;
 end;
@@ -3228,7 +3010,6 @@ var
   Index: Integer;
   RowIndex: Integer;
   DistanceToWaterTable: Double;
-//  AquiferThickness: Double;
 begin
   FSeries.Clear;
   for Index := 0 to Length(Fresults.Distances) - 1 do
@@ -3304,19 +3085,13 @@ begin
   DistanceToWaterTable := frmGwMound.GetDistanceToWaterTable;
   if -Fresults.MaxDrawdown > DistanceToWaterTable then
   begin
-    frmGwMound.DisplayMoundToHighMesssage;
+    frmGwMound.DisplayMoundTooHighMesssage;
     frmGwMound.chrtNumeric.Color := clRed;
   end
   else
   begin
     frmGwMound.chrtNumeric.Color := clWhite;
   end;
-
-//  AquiferThickness := frmGwMound.GetAquiferThickness;
-//  if -Fresults.MaxDrawdown > AquiferThickness/2  then
-//  begin
-//    frmGwMound.DisplayRiseToHigh;
-//  end;
 end;
 
 procedure TRunModelThread.SetModelVariables;
@@ -3446,14 +3221,10 @@ function TfrmGwMound.GetAreaUnitsExtended(ItemIndex: Integer): TConvType;
 begin
   result := auSquareMeters;
   case ItemIndex of
-//    0:
-//      result := auSquareInches;
     0:
       result := auSquareFeet;
     1:
       result := auAcres;
-//    3:
-//      result := auSquareCentimeters;
     2:
       result := auSquareMeters;
     3:
@@ -3468,10 +3239,6 @@ procedure TfrmGwMound.UpdateDisplayedBasinArea;
 var
   BasinArea: Double;
   AreaUnits: TConvType;
-//  RechargeVolume: Double;
-//  BasinDepth: Extended;
-//  MaxDepthUnits: TConvType;
-//  MaxDepth: Double;
 begin
   if csReading in ComponentState then
   begin
@@ -3479,41 +3246,9 @@ begin
   end;
   BasinArea := GetBasinArea;
   AreaUnits := GetAreaUnitsExtended(comboMinBasinAreaUnits.ItemIndex);
-//  if MinimumBasinArea <= BasinArea then
-//  begin
-//    lbledBasinArea.Color := clWindow;
-//  end
-//  else
-//  begin
-//    lbledBasinArea.Color := clRed;
-//  end;
   lbledBasinArea.Text := FloatToStr(ConvertTo(BasinArea, AreaUnits));
   UpdateInfiltrationTime;
 
-
-//  RechargeVolume := GetRechargeVolume;
-//  if BasinArea = 0 then
-//  begin
-//    BasinDepth := 0
-//  end
-//  else
-//  begin
-//    BasinDepth := RechargeVolume/BasinArea;
-//  end;
-//
-//  MaxDepthUnits := GetLengthUnits(comboMaxDepthUnits.ItemIndex);
-//
-//  MaxDepth := GetMaxDepth;
-//  if BasinDepth > MaxDepth then
-//  begin
-//    lbledBasinDepth.Color := clRed;
-//  end
-//  else
-//  begin
-//    lbledBasinDepth.Color := clWindow;
-//  end;
-//
-//  lbledBasinDepth.Text := FloatToStr(ConvertTo(BasinDepth, MaxDepthUnits));
 end;
 
 function TfrmGwMound.GetSimulationIncrement: double;
@@ -3603,26 +3338,9 @@ end;
 procedure TfrmGwMound.GetRechargeRateAndTime(var RechargeTime,
   RechargeRate: Double);
 var
-//  RechargeDepth: Double;
-//  Kz: Double;
-//  BasinArea: Double;
-//  Volume: Double;
   InfiltrationTime: Double;
 begin
   GetDefaultRechargeRateAndTime(RechargeTime, RechargeRate);
-//  Kz := GetKz;
-//  RechargeRate := Kz;
-//  BasinArea := GetBasinArea;
-//  if (BasinArea = 0) or (RechargeRate = 0) then
-//  begin
-//    RechargeTime := 0;
-//  end
-//  else
-//  begin
-//    Volume := GetRechargeVolume;
-//    RechargeDepth := Volume / BasinArea;
-//    RechargeTime := RechargeDepth / RechargeRate;
-//  end;
 
   InfiltrationTime := GetInfiltrationTime;
   if InfiltrationTime <> RechargeTime then
@@ -3682,11 +3400,6 @@ begin
 
   SimValues.ModelBottom := -GetAquiferThickness;
 end;
-
-//function TfrmGwMound.GetAnisotropy: Double;
-//begin
-//  result := StrToFloat(rdeRatio.Text);
-//end;
 
 function TfrmGwMound.GetKx: Double;
 var
@@ -3839,32 +3552,12 @@ var
 begin
   cbVelocity := RegisterConversionFamily('Velocity');
   VelIndex := 0;
-//  vuInchesPerSecond := RegisterConversionType(cbVelocity, 'inches per second', 1/(InchesPerFoot*FeetPerMeter)*HoursPerDay*SecondsPerHour);
-//  VelocityConvTypes[VelIndex] := vuInchesPerSecond;
-
-//  Inc(VelIndex);
-//  vuInchesPerMinute := RegisterConversionType(cbVelocity, 'inches per minute', 1/(InchesPerFoot*FeetPerMeter)*HoursPerDay*MinutesPerHour);
-//  VelocityConvTypes[VelIndex] := vuInchesPerMinute;
-
-//  Inc(VelIndex);
   vuInchesPerHour := RegisterConversionType(cbVelocity, 'inches per hour', 1/(InchesPerFoot*FeetPerMeter)*HoursPerDay);
   VelocityConvTypes[VelIndex] := vuInchesPerHour;
-
-//  Inc(VelIndex);
-//  vuInchesPerDay := RegisterConversionType(cbVelocity, 'inches per day', 1/(InchesPerFoot*FeetPerMeter));
-//  VelocityConvTypes[VelIndex] := vuInchesPerDay;
 
   Inc(VelIndex);
   vuFeetPerSecond := RegisterConversionType(cbVelocity, 'feet per second', 1/FeetPerMeter*HoursPerDay*SecondsPerHour);
   VelocityConvTypes[VelIndex] := vuFeetPerSecond;
-
-//  Inc(VelIndex);
-//  vuFeetPerMinute := RegisterConversionType(cbVelocity, 'feet per minute', 1/FeetPerMeter * HoursPerDay*MinutesPerHour);
-//  VelocityConvTypes[VelIndex] := vuFeetPerMinute;
-
-//  Inc(VelIndex);
-//  vuFeetPerHour := RegisterConversionType(cbVelocity, 'feet per hour', 1/FeetPerMeter * HoursPerDay);
-//  VelocityConvTypes[VelIndex] := vuFeetPerHour;
 
   Inc(VelIndex);
   vuFeetPerDay := RegisterConversionType(cbVelocity, 'feet per day', 1/FeetPerMeter);
@@ -3873,10 +3566,6 @@ begin
   Inc(VelIndex);
   vuCentimetersPerSecond := RegisterConversionType(cbVelocity, 'centimeters per second', 1/CmPerM * HoursPerDay*SecondsPerHour);
   VelocityConvTypes[VelIndex] := vuCentimetersPerSecond;
-
-//  Inc(VelIndex);
-//  vuCentimetersPerMinute := RegisterConversionType(cbVelocity, 'centimeters per minute', 1/CmPerM * HoursPerDay*MinutesPerHour);
-//  VelocityConvTypes[VelIndex] := vuCentimetersPerMinute;
 
   Inc(VelIndex);
   vuCentimetersPerHour := RegisterConversionType(cbVelocity, 'centimeters per hour', 1/CmPerM * HoursPerDay);
@@ -3889,10 +3578,6 @@ begin
   Inc(VelIndex);
   vuMetersPerSecond := RegisterConversionType(cbVelocity, 'meters per second', HoursPerDay*SecondsPerHour);
   VelocityConvTypes[VelIndex] := vuMetersPerSecond;
-
-//  Inc(VelIndex);
-//  vuMetersPerMinute := RegisterConversionType(cbVelocity, 'meters per minute', 1/(HoursPerDay*MinutesPerHour));
-//  VelocityConvTypes[VelIndex] := vuMetersPerMinute;
 
   Inc(VelIndex);
   vuMetersPerHour := RegisterConversionType(cbVelocity, 'meters per hour', HoursPerDay);
@@ -3910,7 +3595,6 @@ constructor TRunModelThread.Create(Directory: string;
   FileConstants: TConstantFileValues; Series: TLIneSeries;
   DistanceUnits, TimeUnits: TConvType; SummaryGrid, ProfileGrid: TRbwDataGrid4);
 var
-//  Files: TStringDynArray;
   FileNumber: Integer;
   Directories: TStringDynArray;
 begin
@@ -3934,8 +3618,6 @@ begin
   end;
   ForceDirectories(FDirectory);
 
-//  Files := TDirectory.GetFiles(FDirectory, 'Model*.gpt');
-//  FileNumber := Length(Files)+1;
   FModelMuseFileName := IncludeTrailingPathDelimiter(FDirectory)
     + 'Model' + IntToStr(FileNumber) + '.gpt';
   while FileExists(FModelMuseFileName) do
@@ -4024,31 +3706,14 @@ var
   Distance: Double;
   TimeIndex: Integer;
   HydCell: THydCell;
-//  CellIndex: Integer;
-//  TestDistIndex: Integer;
   HydModResults: THydModData;
-//  ACell: THydCell;
   LabelPositions: TIntegerList;
-
 begin
   HydModResults := THydModData.Create;
   try
     HydModFile := ChangeFileExt(FModelMuseFileName, '.hyd_out');
     HydModResults.ReadFile(HydModFile);
-//    for TestDistIndex := 0 to FFixedDistances.Count - 1 do
-//    begin
-//      ACell := FixedDistanceCells[TestDistIndex];
-//      CellIndex := HydModResults.IndexOfLabel(ACell.Name);
-//      Assert(CellIndex >= 0);
-//      FResults.FixedDistanceDrawDowns[TestDistIndex] := HydModResults.Values[CellIndex, 0];
-//      for TimeIndex := 0 to HydModResults.TimeCount - 1 do
-//      begin
-//        if HydModResults.Values[CellIndex, TimeIndex] < FResults.FixedDistanceDrawDowns[TestDistIndex] then
-//        begin
-//          FResults.FixedDistanceDrawDowns[TestDistIndex] := HydModResults.Values[CellIndex, TimeIndex];
-//        end;
-//      end;
-//    end;
+
     LabelPositions := TIntegerList.Create;
     try
       LabelPositions.Capacity := HydModResults.LabelCount;
@@ -4231,7 +3896,6 @@ begin
           end;
         until (BudStart = 0);
       until (ListFile.EndOfStream);
-//      StringBuilder.Clear;
     finally
       StringBuilder.Free;
     end;
@@ -4248,32 +3912,6 @@ var
   HydInput: TStringList;
   Index: Integer;
 begin
-{
-   Variables to get:
-
-   Included in TVariableFileValues:
-     Shape
-     Basin area
-     Kv
-     Sy
-     Basin depth
-
-   Calculated:
-     Kx
-
-   Extracted from Listing file:
-     Max cummulative percent discrepancy
-     Max percent discrepancy for a time step
-
-   Extracted from hydmod output
-     Max drawdown
-
-   Determined using a combination of the .dis, hydmod input, and hydmod output
-     Highest row number with drawdown < -0.05
-     Maximum distance with drawdown < -0.05
-     Drawdown at fixed distances
-}
-
   FResults.MaxCumulativePercentDiscrepancy := 0;
   FResults.MaxTimeStepPercentDiscrepancy := 0;
   FResults.ErrorLine := '';
@@ -4302,8 +3940,6 @@ begin
       end;
       HydInput.Free;
     end;
-
-
   finally
     FormatSettings.DecimalSeparator := OldDecSeparator;
   end;
@@ -4396,11 +4032,6 @@ var
   X: Double;
   HydModFile: TStreamReader;
   HydCell: THydCell;
-//  TestDistances: array of double;
-//  DistIndex: Integer;
-//  FixedDist: Double;
-//  CellIndex: Integer;
-//  TestDist: double;
 begin
   HydModInputFile := ChangeFileExt(FModelMuseFileName, '.hyd');
   HydModFile := TFile.OpenText(HydModInputFile);
@@ -4411,7 +4042,6 @@ begin
       ALine := HydModFile.ReadLine;
     end;
     // Skip a line to get to Data Set 2;
-//    HydModFile.ReadLine;
     Splitter := TStringList.Create;
     try
       Splitter.Delimiter := ' ';
@@ -4467,36 +4097,6 @@ begin
     HydModFile.Free;
   end;
   HydInput.Sorted := True;
-//  SetLength(TestDistances, FFixedDistances.Count);
-//  if HydInput.Count > 0 then
-//  begin
-//    HydCell := HydInput.Objects[0] as THydCell;
-//    for DistIndex := 0 to FFixedDistances.Count - 1 do
-//    begin
-//      FixedDist := FFixedDistances[DistIndex];
-//      TestDistances[DistIndex] := Abs(Abs(FCenterY-HydCell.Y)-FixedDist);
-//      FixedDistanceCells[DistIndex] := HydCell;
-//    end;
-//    for CellIndex := 1 to HydInput.Count - 1 do
-//    begin
-//      HydCell := HydInput.Objects[CellIndex] as THydCell;
-//      for DistIndex := 0 to FFixedDistances.Count - 1 do
-//      begin
-//        FixedDist := FFixedDistances[DistIndex];
-//        TestDist := Abs(Abs(FCenterY-HydCell.Y)-FixedDist);
-//        if TestDist < TestDistances[DistIndex] then
-//        begin
-//          TestDistances[DistIndex] := TestDist;
-//          FixedDistanceCells[DistIndex] := HydCell;
-//        end
-//        else if (TestDist = TestDistances[DistIndex])
-//          and (HydCell.Layer < FixedDistanceCells[DistIndex].Layer) then
-//        begin
-//          FixedDistanceCells[DistIndex] := HydCell;
-//        end;
-//      end;
-//    end;
-//  end;
 end;
 
 procedure TRunModelThread.RunModelMuse;
@@ -4536,14 +4136,6 @@ begin
   if Source is TGwMoundFile then
   begin
     GwMoundSource := TGwMoundFile(Source);
-//    Area := GwMoundSource.Area;
-//    AreaUnits := GwMoundSource.AreaUnits;
-//    Fraction := GwMoundSource.Fraction;
-//    DesignStorm := GwMoundSource.DesignStorm;
-//    DesignStormUnits := GwMoundSource.DesignStormUnits;
-//    VolumeUnits := GwMoundSource.VolumeUnits;
-//    StormDuration := GwMoundSource.StormDuration;
-//    StormDurationUnits := GwMoundSource.StormDurationUnits;
     Kv := GwMoundSource.Kv;
     KvUnits := GwMoundSource.KvUnits;
     Kx := GwMoundSource.Kx;
@@ -4554,7 +4146,6 @@ begin
     AquiferThicknessUnits := GwMoundSource.AquiferThicknessUnits;
     SimulationLengthAnalytic := GwMoundSource.SimulationLengthAnalytic;
     SimulationLengthUnitsAnalytic := GwMoundSource.SimulationLengthUnitsAnalytic;
-//    MaxBasinDepth := GwMoundSource.MaxBasinDepth;
     BasinDepth := GwMoundSource.BasinDepth;
     MaxBasinDepthUnits := GwMoundSource.MaxBasinDepthUnits;
     BasinAreaUnits := GwMoundSource.BasinAreaUnits;
@@ -4633,16 +4224,6 @@ begin
   result := frmGwMound.comboAquiferThicknessUnits.Text;
 end;
 
-//function TGwMoundFile.GetArea: Double;
-//begin
-//  result := StrToFloat(frmCalculateVolume.rdeDevelopmentArea.Text);
-//end;
-
-//function TGwMoundFile.GetAreaUnits: string;
-//begin
-//  result := frmCalculateVolume.comboDevelopmentAreaUnit.Text;
-//end;
-
 function TGwMoundFile.GetBasinAreaUnits: string;
 begin
   result := frmGwMound.comboMinBasinAreaUnits.Text;
@@ -4709,16 +4290,6 @@ begin
   result := frmGwMound.comboCustomUnits.Text;
 end;
 
-//function TGwMoundFile.GetDesignStorm: Double;
-//begin
-//  result := StrToFloat(frmCalculateVolume.rdeDesignStorm.Text);
-//end;
-//
-//function TGwMoundFile.GetDesignStormUnits: string;
-//begin
-//  result := frmCalculateVolume.comboDesignStormUnits.Text;
-//end;
-
 function TGwMoundFile.GetDistanceToWaterTable: double;
 begin
   result := StrToFloat(frmGwMound.rdeHeightAboveWaterTable.Text);
@@ -4728,11 +4299,6 @@ function TGwMoundFile.GetDistanceToWaterTableUnits: string;
 begin
   result := frmGwMound.comboHeightAboveWaterTableUnits.Text;
 end;
-
-//function TGwMoundFile.GetFraction: Double;
-//begin
-//  result := StrToFloat(frmCalculateVolume.rdeImperviousFraction.Text);
-//end;
 
 function TGwMoundFile.GetInfiltrationTime: Double;
 begin
@@ -4759,11 +4325,6 @@ begin
   result := frmGwMound.comboKzUnits.Text;
 end;
 
-//function TGwMoundFile.GetMaxBasinDepth: double;
-//begin
-//  result := StrToFloat(frmGwMound.rdeMaxDepth.Text);
-//end;
-//
 function TGwMoundFile.GetMaxBasinDepthUnits: string;
 begin
   result := frmGwMound.comboMaxDepthUnits.Text;
@@ -4806,6 +4367,11 @@ begin
   result := FNumericSummaryTable;
 end;
 
+function TGwMoundFile.GetRelativeModelMuseFileLocation: string;
+begin
+  Result := ExtractRelativePath(frmGwMound.dlgSaveFile.FileName, ModelMuseFileLocation)
+end;
+
 function TGwMoundFile.GetSaturatedWaterContent: double;
 begin
   result := StrToFloat(frmGwMound.rdeSaturatedWaterFraction.Text);
@@ -4836,16 +4402,6 @@ begin
   result := StrToFloat(frmGwMound.rdeSpecificYield.Text);
 end;
 
-//function TGwMoundFile.GetStormDuration: Double;
-//begin
-//  result := StrToFloat(frmGwMound.rdeDuration.Text);
-//end;
-
-//function TGwMoundFile.GetStormDurationUnits: string;
-//begin
-//  result := frmGwMound.comboDuration.Text;
-//end;
-
 function TGwMoundFile.GetTimeIncrement: double;
 begin
   result := StrToFloat(frmGwMound.rdeTimeIncrement.Text);
@@ -4865,16 +4421,6 @@ function TGwMoundFile.GetVertAnisotropy: Double;
 begin
   result := StrToFloat(frmGwMound.rdeKx.Text);
 end;
-
-//function TGwMoundFile.GetVolume: Double;
-//begin
-//  result := StrToFloat(frmGwMound.rdeVolume.Text)
-//end;
-//
-//function TGwMoundFile.GetVolumeUnits: string;
-//begin
-//  result := frmGwMound.comboVolumeUnits.Text;
-//end;
 
 procedure TGwMoundFile.Loaded;
 begin
@@ -4900,16 +4446,6 @@ procedure TGwMoundFile.SetAquiferThicknessUnits(const Value: string);
 begin
   SetUnits(frmGwMound.comboAquiferThicknessUnits, Value);
 end;
-
-//procedure TGwMoundFile.SetArea(const Value: Double);
-//begin
-//  frmCalculateVolume.rdeDevelopmentArea.Text := FloatToStr(Value);
-//end;
-
-//procedure TGwMoundFile.SetAreaUnits(const Value: string);
-//begin
-//  SetUnits(frmCalculateVolume.comboDevelopmentAreaUnit, Value);
-//end;
 
 procedure TGwMoundFile.SetBasinAreaUnits(const Value: string);
 begin
@@ -4977,16 +4513,6 @@ begin
   SetUnits(frmGwMound.comboCustomUnits, Value);
 end;
 
-//procedure TGwMoundFile.SetDesignStorm(const Value: Double);
-//begin
-//  frmCalculateVolume.rdeDesignStorm.Text := FloatToStr(Value);
-//end;
-//
-//procedure TGwMoundFile.SetDesignStormUnits(const Value: string);
-//begin
-//  SetUnits(frmCalculateVolume.comboDesignStormUnits, Value);
-//end;
-
 procedure TGwMoundFile.SetDistanceToWaterTable(const Value: double);
 begin
   frmGwMound.rdeHeightAboveWaterTable.Text := FloatToStr(Value);
@@ -4996,11 +4522,6 @@ procedure TGwMoundFile.SetDistanceToWaterTableUnits(const Value: string);
 begin
   SetUnits(frmGwMound.comboHeightAboveWaterTableUnits, Value);
 end;
-
-//procedure TGwMoundFile.SetFraction(const Value: Double);
-//begin
-//  frmCalculateVolume.rdeImperviousFraction.Text := FloatToStr(Value);
-//end;
 
 procedure TGwMoundFile.SetInfiltrationTime(const Value: Double);
 begin
@@ -5027,11 +4548,6 @@ begin
   SetUnits(frmGwMound.comboKzUnits, Value);
 end;
 
-//procedure TGwMoundFile.SetMaxBasinDepth(const Value: double);
-//begin
-//  frmGwMound.rdeMaxDepth.Text := FloatToStr(Value);
-//end;
-//
 procedure TGwMoundFile.SetMaxBasinDepthUnits(const Value: string);
 begin
   SetUnits(frmGwMound.comboMaxDepthUnits, Value);
@@ -5074,6 +4590,11 @@ begin
   FNumericSummaryTable.UpdateGrid;
 end;
 
+procedure TGwMoundFile.SetRelativeModelMuseFileLocation(const Value: string);
+begin
+  ModelMuseFileLocation := ExpandFileName(Value);
+end;
+
 procedure TGwMoundFile.SetSaturatedWaterContent(const Value: double);
 begin
   frmGwMound.rdeSaturatedWaterFraction.Text := FloatToStr(Value);
@@ -5104,16 +4625,6 @@ begin
   frmGwMound.rdeSpecificYield.Text := FloatToStr(Value);
 end;
 
-//procedure TGwMoundFile.SetStormDuration(const Value: Double);
-//begin
-//  frmGwMound.rdeDuration.Text := FloatToStr(Value);
-//end;
-//
-//procedure TGwMoundFile.SetStormDurationUnits(const Value: string);
-//begin
-//  SetUnits(frmGwMound.comboDuration, Value);
-//end;
-
 procedure TGwMoundFile.SetTimeIncrement(const Value: double);
 begin
   frmGwMound.rdeTimeIncrement.Text := FloatToStr(Value);
@@ -5133,16 +4644,6 @@ procedure TGwMoundFile.SetVertAnisotropy(const Value: Double);
 begin
   frmGwMound.rdeKx.Text := FloatToStr(Value);
 end;
-
-//procedure TGwMoundFile.SetVolume(const Value: Double);
-//begin
-//  frmGwMound.rdeVolume.Text := FloatToStr(Value)
-//end;
-//
-//procedure TGwMoundFile.SetVolumeUnits(const Value: string);
-//begin
-//  SetUnits(frmGwMound.comboVolumeUnits, Value);
-//end;
 
 { TGridCell }
 

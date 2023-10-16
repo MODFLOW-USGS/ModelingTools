@@ -1227,6 +1227,7 @@ begin
       end;
     end;
 
+//    ModelCount := BasinDepthList.Count*SyList.Count*KvList.Count*AreaList.Count;
     ModelCount := 4*BasinDepthList.Count*SyList.Count*KvList.Count*AreaList.Count;
     if ModelCount = 0 then
     begin
@@ -1486,6 +1487,7 @@ begin
 //              SimpleFileName := ExtractFileName(feModelMuseFile.FileName);
 //              try
                 ResultRowIndex := 0;
+//                for ShapeIndex := 0 to 0 do
                 for ShapeIndex := 0 to 1 do
                 begin
                   if ShapeIndex = 0 then
@@ -1511,6 +1513,7 @@ begin
   //                      if TryStrToFloat(rdgKv.Cells[0,KvIndex], FileVariables.Kv) then
                         begin
                           KvName := 'Kv' + IntToStr(KvIndex) + '\';
+//                          for RatioIndex := 0 to 0 do
                           for RatioIndex := 0 to 1 do
                           begin
                             if RatioIndex = 0 then
@@ -1603,7 +1606,7 @@ begin
               end;
               pb1.Position := 0;
 
-              FThreadCount := seProcessors.AsInteger ;
+              FThreadCount := Max(ModelCount, seProcessors.AsInteger) ;
 
               FThreadList.Clear;
               for ThreadIndex := 0 to FThreadCount - 1 do

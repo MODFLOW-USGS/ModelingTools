@@ -26,7 +26,7 @@ inherited frmImportPoints: TfrmImportPoints
       573
       49)
     object btnCancel: TBitBtn
-      Left = 444
+      Left = 440
       Top = 6
       Width = 83
       Height = 33
@@ -34,10 +34,10 @@ inherited frmImportPoints: TfrmImportPoints
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 440
+      ExplicitLeft = 436
     end
     object btnOK: TBitBtn
-      Left = 355
+      Left = 351
       Top = 6
       Width = 83
       Height = 33
@@ -46,10 +46,10 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 351
+      ExplicitLeft = 347
     end
     object btnHelp: TBitBtn
-      Left = 266
+      Left = 262
       Top = 6
       Width = 83
       Height = 33
@@ -58,7 +58,7 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 262
+      ExplicitLeft = 258
     end
   end
   object pcImportPoints: TPageControl
@@ -66,7 +66,7 @@ inherited frmImportPoints: TfrmImportPoints
     Top = 0
     Width = 573
     Height = 466
-    ActivePage = tabData
+    ActivePage = tabControls
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 569
@@ -74,15 +74,13 @@ inherited frmImportPoints: TfrmImportPoints
     object tabControls: TTabSheet
       Caption = 'Controls'
       object pnlRadioGroups: TPanel
-        Left = 176
+        Left = 172
         Top = 0
         Width = 393
         Height = 433
         Align = alRight
         ParentColor = True
         TabOrder = 1
-        ExplicitLeft = 168
-        ExplicitHeight = 432
         object lblRoot: TLabel
           Left = 207
           Top = 255
@@ -256,20 +254,16 @@ inherited frmImportPoints: TfrmImportPoints
         Align = alClient
         Caption = 'pnlData'
         TabOrder = 0
-        ExplicitWidth = 168
-        ExplicitHeight = 432
         object jvclbDataSets: TJvxCheckListBox
           Left = 1
           Top = 26
-          Width = 174
+          Width = 170
           Height = 406
           Align = alClient
           Color = clRed
           ItemHeight = 18
           TabOrder = 1
           OnClickCheck = jvclbDataSetsClickCheck
-          ExplicitWidth = 166
-          ExplicitHeight = 405
           InternalVersion = 202
         end
         object pnlLabelDataSets: TPanel
@@ -281,7 +275,6 @@ inherited frmImportPoints: TfrmImportPoints
           Caption = 'Data sets'
           ParentColor = True
           TabOrder = 0
-          ExplicitWidth = 166
         end
       end
     end

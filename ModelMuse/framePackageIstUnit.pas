@@ -15,6 +15,7 @@ type
   TframePackageIst = class(TframePackage)
     frameIst: TframeRowGrid;
     procedure frameIstseNumberChange(Sender: TObject);
+    procedure FrameResize(Sender: TObject);
   private
     procedure InitializeGrid;
     { Private declarations }
@@ -45,6 +46,12 @@ begin
   begin
     frameIst.Grid.Cells[ColIndex, Ord(IrName)] := IntToStr(ColIndex);
   end;
+end;
+
+procedure TframePackageIst.FrameResize(Sender: TObject);
+begin
+  inherited;
+  memoComments.Width := Width -23;
 end;
 
 procedure TframePackageIst.GetData(Package: TModflowPackageSelection);

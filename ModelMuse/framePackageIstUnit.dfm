@@ -1,5 +1,6 @@
 inherited framePackageIst: TframePackageIst
   Height = 417
+  OnResize = FrameResize
   ExplicitHeight = 417
   inline frameIst: TframeRowGrid [3]
     Left = 0
@@ -19,11 +20,11 @@ inherited framePackageIst: TframePackageIst
       ExplicitTop = 219
       ExplicitWidth = 422
       inherited lblNumber: TLabel
-        Width = 182
-        Height = 40
+        Width = 145
+        Height = 30
         Caption = 'Number of immobile zones'#13#10
-        ExplicitWidth = 182
-        ExplicitHeight = 40
+        ExplicitWidth = 145
+        ExplicitHeight = 30
       end
       inherited sbAdd: TSpeedButton
         Left = 326
@@ -38,9 +39,11 @@ inherited framePackageIst: TframePackageIst
         ExplicitLeft = 384
       end
       inherited seNumber: TJvSpinEdit
+        Height = 23
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
         OnChange = frameIstseNumberChange
+        ExplicitHeight = 23
       end
     end
     inherited Grid: TRbwRowDataGrid

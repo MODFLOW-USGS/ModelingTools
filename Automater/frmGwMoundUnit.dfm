@@ -7,9 +7,9 @@ inherited frmGwMound: TfrmGwMound
   OnDestroy = FormDestroy
   OnMouseWheelDown = FormMouseWheelDown
   OnMouseWheelUp = FormMouseWheelUp
-  ExplicitWidth = 748
-  ExplicitHeight = 603
-  PixelsPerInch = 96
+  ExplicitWidth = 744
+  ExplicitHeight = 602
+  PixelsPerInch = 120
   TextHeight = 19
   object splitLeft: TJvNetscapeSplitter
     Left = 209
@@ -59,11 +59,13 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 492
+    ExplicitWidth = 728
     DesignSize = (
       732
       51)
     object btnBack: TBitBtn
-      Left = 527
+      Left = 519
       Top = 7
       Width = 95
       Height = 32
@@ -89,9 +91,10 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnBackClick
+      ExplicitLeft = 515
     end
     object btnNext: TBitBtn
-      Left = 630
+      Left = 622
       Top = 7
       Width = 95
       Height = 32
@@ -118,6 +121,7 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnNextClick
+      ExplicitLeft = 618
     end
     object btnMetric: TButton
       Left = 16
@@ -153,6 +157,7 @@ inherited frmGwMound: TfrmGwMound
     StateImages = ilStates
     TabOrder = 0
     OnChange = tvNavigationChange
+    ExplicitHeight = 370
   end
   object pnlHelp: TPanel
     Left = 0
@@ -165,6 +170,8 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 383
+    ExplicitWidth = 728
     object wbHelp: TWebBrowser
       Left = 1
       Top = 1
@@ -177,8 +184,7 @@ inherited frmGwMound: TfrmGwMound
       Margins.Bottom = 4
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 584
-      ExplicitHeight = 86
+      ExplicitWidth = 726
       ControlData = {
         4C000000734B00000F0B00000000000000000000000000000000000000000000
         000000004C000000000000000000000001000000E0D057007335CF11AE690800
@@ -200,6 +206,8 @@ inherited frmGwMound: TfrmGwMound
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
+    ExplicitWidth = 507
+    ExplicitHeight = 370
     object jvspBasinDesign: TJvStandardPage
       Left = 0
       Top = 0
@@ -293,7 +301,7 @@ inherited frmGwMound: TfrmGwMound
       object plBasin: TJvPageList
         Left = 8
         Top = 119
-        Width = 471
+        Width = 463
         Height = 244
         Margins.Left = 4
         Margins.Top = 4
@@ -305,7 +313,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspSquareBasin: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 471
+          Width = 463
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -386,7 +394,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspRectangle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 471
+          Width = 463
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -508,7 +516,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspCircle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 471
+          Width = 463
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -607,7 +615,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspCustom: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 471
+          Width = 463
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -615,7 +623,7 @@ inherited frmGwMound: TfrmGwMound
           Margins.Bottom = 4
           Caption = 'jvspCustom'
           DesignSize = (
-            471
+            463
             244)
           object lblBasinCoordinates: TLabel
             Left = 0
@@ -663,11 +671,13 @@ inherited frmGwMound: TfrmGwMound
             AutoIncreaseRowCount = True
             SelectedRowOrColumnColor = clAqua
             UnselectableColor = clBtnFace
+            OnEndUpdate = rdgBasinCoordinatesEndUpdate
             ColorRangeSelection = False
             ColorSelectedRow = False
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -691,6 +701,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -712,7 +723,6 @@ inherited frmGwMound: TfrmGwMound
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            OnEndUpdate = rdgBasinCoordinatesEndUpdate
             WordWrapRowCaptions = False
             ColWidths = (
               64
@@ -785,6 +795,7 @@ inherited frmGwMound: TfrmGwMound
         EditLabel.Caption = 'Basin Area (read only)'
         ReadOnly = True
         TabOrder = 3
+        Text = ''
         OnEnter = ControlEnter
       end
       object rdeBasinDepth: TRbwDataEntry
@@ -1122,6 +1133,8 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspRunAnalyticalModel'
+      ExplicitWidth = 507
+      ExplicitHeight = 370
       object pgcAnalytic: TPageControl
         Left = 0
         Top = 0
@@ -1135,6 +1148,8 @@ inherited frmGwMound: TfrmGwMound
         Align = alClient
         TabOrder = 0
         OnChange = pgcAnalyticChange
+        ExplicitWidth = 507
+        ExplicitHeight = 370
         object tabAnalyticControls: TTabSheet
           Caption = 'Controls'
           ImageIndex = 2
@@ -1386,6 +1401,7 @@ inherited frmGwMound: TfrmGwMound
             DefaultCanvas = 'TGDIPlusCanvas'
             ColorPaletteIndex = 13
             object seriesAnayltical: TLineSeries
+              HoverElement = [heCurrent]
               Title = 'End of infiltration'
               Brush.BackColor = clDefault
               LinePen.Color = 10708548
@@ -1457,6 +1473,7 @@ inherited frmGwMound: TfrmGwMound
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1480,6 +1497,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1503,6 +1521,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1526,6 +1545,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1549,6 +1569,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1831,7 +1852,7 @@ inherited frmGwMound: TfrmGwMound
       object feMODFLOW: TJvFilenameEdit
         Left = 10
         Top = 51
-        Width = 493
+        Width = 485
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'MODFLOW'
@@ -1850,7 +1871,7 @@ inherited frmGwMound: TfrmGwMound
       object feModelMuseApplication: TJvFilenameEdit
         Left = 10
         Top = 138
-        Width = 493
+        Width = 485
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'ModelMuse'
@@ -1869,7 +1890,7 @@ inherited frmGwMound: TfrmGwMound
       object feModelMuseFile: TJvFilenameEdit
         Left = 10
         Top = 202
-        Width = 493
+        Width = 485
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'Template'
@@ -1993,7 +2014,7 @@ inherited frmGwMound: TfrmGwMound
           end
           object btnRunNumericModel: TButton
             Left = 8
-            Top = 92
+            Top = 93
             Width = 183
             Height = 31
             Margins.Left = 4
@@ -2108,6 +2129,7 @@ inherited frmGwMound: TfrmGwMound
             DefaultCanvas = 'TGDIPlusCanvas'
             ColorPaletteIndex = 13
             object seriesNumeric: TLineSeries
+              HoverElement = [heCurrent]
               Brush.BackColor = clDefault
               LinePen.Color = 10708548
               Pointer.InflateMargins = True
@@ -2204,6 +2226,7 @@ inherited frmGwMound: TfrmGwMound
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2227,6 +2250,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2294,6 +2318,7 @@ inherited frmGwMound: TfrmGwMound
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2317,6 +2342,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2340,6 +2366,7 @@ inherited frmGwMound: TfrmGwMound
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
