@@ -2963,7 +2963,14 @@ begin
 
     framePkgViscosity.GetMt3dmsChemSpecies(
       frmGoPhast.PhastModel.MobileComponents);
+
     ReadPackages;
+//    IsLoaded := True;
+//    try
+//      UpdateGwtFrames;
+//    finally
+//      IsLoaded := False;
+//    end;
 
     comboModel.ItemIndex := 0;
     comboModelChange(nil);
@@ -3494,6 +3501,7 @@ var
   AnImsframe: TframePkgSms;
   MemoWidth: Integer;
   IgnoredNames: TStringList;
+  SpeciesCount: Integer;
 begin
   if not IsLoaded then
   begin
@@ -3506,14 +3514,19 @@ begin
       {and (framePkgMt3dBasic.comboVersion.ItemIndex = 2)} then
     begin
       FillIgnoredNames(IgnoredNames, not IsLoaded);
-      if FCurrentPackages.GwtPackages.Count <
-        frameChemSpecies.frameGridMobile.seNumber.AsInteger then
+
+      if FCurrentPackages <> nil then
       begin
-        FCurrentPackages.GwtPackages.Count :=
-          frameChemSpecies.frameGridMobile.seNumber.AsInteger
+        if FCurrentPackages.GwtPackages.Count <
+          frameChemSpecies.frameGridMobile.seNumber.AsInteger then
+        begin
+          FCurrentPackages.GwtPackages.Count :=
+            frameChemSpecies.frameGridMobile.seNumber.AsInteger
+        end;
       end;
       CreateMstNode;
       ChildNode := FMstNode.GetFirstChild;
+      SpeciesCount := -1;
       for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
       begin
         SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
@@ -3521,6 +3534,7 @@ begin
         begin
           Continue;
         end;
+        Inc(SpeciesCount);
 
         if ChildNode = nil then
         begin
@@ -3531,21 +3545,31 @@ begin
           ChildNode.Text := SpeciesName;
         end;
 
-        MstPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtMst;
+        if FCurrentPackages <> nil then
+        begin
+          MstPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtMst;
+        end
+        else
+        begin
+          MstPackage := nil;
+        end;
   //      ChildNode.Data := MstPackage
                           ;
-        if SpeciesIndex < FframePackageMSTObjectList.Count then
+        if SpeciesCount < FframePackageMSTObjectList.Count then
         begin
-          AMstFrame := FframePackageMSTObjectList[SpeciesIndex];
+          AMstFrame := FframePackageMSTObjectList[SpeciesCount];
         end
         else
         begin
           AMstFrame := CreateMstFrame;
 
-          MstPackage.Node := ChildNode;
-          MemoWidth := AMstFrame.MemoComments.Width;
-          AMstFrame.GetData(MstPackage);
-          AMstFrame.MemoComments.Width := MemoWidth;
+          if MstPackage <> nil then
+          begin
+            MstPackage.Node := ChildNode;
+            MemoWidth := AMstFrame.MemoComments.Width;
+            AMstFrame.GetData(MstPackage);
+            AMstFrame.MemoComments.Width := MemoWidth;
+          end;
 
           Link := TFrameNodeLink.Create;
           Link.Frame := AMstFrame;
@@ -3561,6 +3585,7 @@ begin
       CreateIstNode;
 
       ChildNode := FIstNode.GetFirstChild;
+      SpeciesCount := -1;
       for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
       begin
         SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
@@ -3568,6 +3593,7 @@ begin
         begin
           Continue;
         end;
+        Inc(SpeciesCount);
 
         if ChildNode = nil then
         begin
@@ -3578,19 +3604,29 @@ begin
           ChildNode.Text := SpeciesName;
         end;
 
-        IstPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtIst;
+        if FCurrentPackages <> nil then
+        begin
+          IstPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtIst;
+        end
+        else
+        begin
+          IstPackage := nil;
+        end;
   //      ChildNode.Data := IstPackage
                           ;
-        if SpeciesIndex < FframePackageISTObjectList.Count then
+        if SpeciesCount < FframePackageISTObjectList.Count then
         begin
-          AnIstframe := FframePackageISTObjectList[SpeciesIndex];
+          AnIstframe := FframePackageISTObjectList[SpeciesCount];
         end
         else
         begin
           AnIstframe := CreateIstFrame;
 
-          IstPackage.Node := ChildNode;
-          AnIstframe.GetData(IstPackage);
+          if IstPackage <> nil then
+          begin
+            IstPackage.Node := ChildNode;
+            AnIstframe.GetData(IstPackage);
+          end;
 
           Link := TFrameNodeLink.Create;
           Link.Frame := AnIstframe;
@@ -3607,6 +3643,7 @@ begin
       CreateGwtImsNode;
 
       ChildNode := FGwtImsNode.GetFirstChild;
+      SpeciesCount := -1;
       for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
       begin
         SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
@@ -3614,6 +3651,7 @@ begin
         begin
           Continue;
         end;
+        Inc(SpeciesCount);
 
         if ChildNode = nil then
         begin
@@ -3624,22 +3662,32 @@ begin
           ChildNode.Text := SpeciesName;
         end;
 
-        ImsPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtIms;
+        if FCurrentPackages <> nil then
+        begin
+          ImsPackage := FCurrentPackages.GwtPackages[SpeciesIndex].GwtIms;
+        end
+        else
+        begin
+          ImsPackage := nil;
+        end;
   //      ChildNode.Data := ImsPackage
 
-        if SpeciesIndex < FframePkgSmsObjectList.Count then
+        if SpeciesCount < FframePkgSmsObjectList.Count then
         begin
-          AnImsframe := FframePkgSmsObjectList[SpeciesIndex];
+          AnImsframe := FframePkgSmsObjectList[SpeciesCount];
         end
         else
         begin
           AnImsframe := CreateImsGwtFrame;
 
-          ImsPackage.Node := ChildNode;
           // New frames get their value from the flow model
           // IMS frame.
-          AnImsframe.GetData(ImsPackage);
-          AnImsframe.AssignFrame(framePkgIMS);
+          if ImsPackage <> nil then
+          begin
+            ImsPackage.Node := ChildNode;
+            AnImsframe.GetData(ImsPackage);
+            AnImsframe.AssignFrame(framePkgIMS);
+          end;
 
           Link := TFrameNodeLink.Create;
           Link.Frame := AnImsframe;
@@ -4618,6 +4666,8 @@ var
   AnImsFrame: TframePkgSms;
   IgnoredNames: TStringList;
   FrameIndex: Integer;
+  Link: TFrameNodeLink;
+  ChildNode: TTreeNode;
 begin
   FPackageList.Clear;
 
@@ -5203,6 +5253,20 @@ begin
 
         MstPackage.Frame := AFrame;
         MstPackage.Node := MstChildNode;
+        if FLinkDictionary.TryGetValue(AFrame, Link) then
+        begin
+          Link.Node := MstChildNode;
+          Link.AlternateNode := MstChildNode;
+        end
+        else
+        begin
+          Link := TFrameNodeLink.Create;
+          Link.Frame := AFrame;
+          Link.Node := MstChildNode;
+          Link.AlternateNode := MstChildNode;
+          FFrameNodeLinks.Add(Link);
+          FLinkDictionary.Add(Link.Frame, Link);
+        end;
 
         FPackageList.Add(MstPackage);
 
@@ -5245,6 +5309,21 @@ begin
 
         IstPackage.Frame := AnIstFrame;
         IstPackage.Node := IstChildNode;
+        if FLinkDictionary.TryGetValue(AnIstFrame, Link) then
+        begin
+          Link.Frame := AnIstFrame;
+          Link.Node := IstChildNode;
+          Link.AlternateNode := IstChildNode;
+        end
+        else
+        begin
+          Link := TFrameNodeLink.Create;
+          Link.Frame := AnIstFrame;
+          Link.Node := IstChildNode;
+          Link.AlternateNode := IstChildNode;
+          FFrameNodeLinks.Add(Link);
+          FLinkDictionary.Add(Link.Frame, Link);
+        end;
 
         FPackageList.Add(IstPackage);
 
@@ -5287,6 +5366,21 @@ begin
 
         ImsPackage.Frame := AnImsFrame;
         ImsPackage.Node := ImsChildNode;
+        if FLinkDictionary.TryGetValue(AnImsFrame, Link) then
+        begin
+          Link.Frame := AnImsFrame;
+          Link.Node := ImsChildNode;
+          Link.AlternateNode := ImsChildNode;
+        end
+        else
+        begin
+          Link := TFrameNodeLink.Create;
+          Link.Frame := AnImsFrame;
+          Link.Node := ImsChildNode;
+          Link.AlternateNode := ImsChildNode;
+          FFrameNodeLinks.Add(Link);
+          FLinkDictionary.Add(Link.Frame, Link);
+        end;
 
         FPackageList.Add(ImsPackage);
 

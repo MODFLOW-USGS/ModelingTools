@@ -19,6 +19,35 @@ type
   TWelColumns = (wcStartTime, wcEndTime, wcPumpingRate);
   THobColumns = (hcName, hcTime, hcHead, hcStatistic, hcStatFlag);
   TFootprintWellColumns = (fwcWithdrawal, fwcObjectName);
+  TBoundaryArrangment = (baOneSP_PerLine, bsOneBoundaryPerLine);
+  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
+    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
+    u6scBrooksCoreyEpsilon);
+  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
+    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
+    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
+
+{
+    SurfaceDepressionDepth
+    VerticalSaturatedK
+    ResidualWaterContent
+    SaturatedWaterContent
+    InitialWaterContent
+    BrooksCoreyEpsilon
+
+    Infiltration: double;
+    PotentialET: double;
+    ExtinctionDepth: double;
+    ExtinctionWaterContent: double;
+    AirEntryPotential: double;
+    RootPotential: double;
+    RootActivity: double;
+
+    GwtStatus
+    SpecifiedConcentrations: TGwtCellData;
+    InfiltrationConcentrations: TGwtCellData;
+    EvapConcentrations: TGwtCellData;
+}
 
   TObsUtilColumns = (oucName, oucObsType);
   TCalibObsColumns = (cocGroup, cocTime, cocValue, cocWeight);
@@ -172,6 +201,7 @@ type
     FObsCount: Integer;
     FObsRoot: string;
     FFirstColumn: Integer;
+    FFirstUzf6SteadyColumn: Integer;
     // @name updates the contents of @link(jvclbDataSets).
     procedure UpdateDataSets;
     // @name updates the column captions for the columns that specify
@@ -190,6 +220,7 @@ type
     procedure UpdateWelColumns;
     procedure UpdateHobColumns;
     procedure UpdateObsUtilColumns;
+    procedure UpdateUzfMf6Columns;
     procedure SetBoundaryColumnFormats;
     procedure ImportDataArrayValues(var InvalidRow: Boolean;
       RowIndex: Integer;
@@ -201,6 +232,7 @@ type
     procedure GetData;
     procedure UpdateFootprintWellColumns;
     procedure EnableRowCol;
+    function GwtColumnCount: Integer;
     { Private declarations }
   public
     { Public declarations }
@@ -272,6 +304,15 @@ begin
   GetData;
 end;
 
+function TfrmImportPoints.GwtColumnCount: Integer;
+begin
+  result := 0;
+  if frmGoPhast.PhastModel.Mf6GwtUsed(nil) then
+  begin
+    result := frmGoPhast.PhastModel.MobileComponents.Count;
+  end;
+end;
+
 procedure TfrmImportPoints.UpdateChdColumns;
 const
   RequiredColumns = 4;
@@ -279,50 +320,76 @@ var
   ColIndex: TChdColumns;
   ACol: Integer;
   Index: Integer;
+  GwtColumns: Integer;
+  FirstGwtCol: Integer;
+  GwtIndex: Integer;
 begin
+  GwtColumns := GwtColumnCount;
   FFirstColumn := rgElevationCount.ItemIndex + 2;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
-  begin
-    dgData.ColCount := FFirstColumn + RequiredColumns;
-  end
-  else
-  begin
-    dgData.ColCount := FFirstColumn + RequiredColumns * seTimePeriods.AsInteger;
+  Assert(rgFeatureDataFormat.ItemIndex >= 0);
+
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
+      begin
+        dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns;
+      end;
+    bsOneBoundaryPerLine:
+      begin
+        dgData.ColCount := FFirstColumn +
+          (RequiredColumns + GwtColumns) * seTimePeriods.AsInteger;
+      end;
+    else
+      Assert(False);
   end;
   SetBoundaryColumnFormats;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
-  begin
-    for ColIndex := Low(TChdColumns) to High(TChdColumns) do
-    begin
-      ACol := FFirstColumn + Ord(ColIndex);
-      Assert(ACol < dgData.ColCount);
-      case ColIndex of
-        ccStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
-        ccEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
-        ccStartHead: dgData.Cells[ACol, 0] := StrStartingHead;
-        ccEndHead: dgData.Cells[ACol, 0] := StrEndingHead;
-        else Assert(False);
-      end;
-    end;
-  end
-  else
-  begin
-    ACol := FFirstColumn;
-    for Index := 1 to seTimePeriods.AsInteger do
-    begin
-      for ColIndex := Low(TChdColumns) to High(TChdColumns) do
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
       begin
-        Assert(ACol < dgData.ColCount);
-        case ColIndex of
-          ccStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
-          ccEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
-          ccStartHead: dgData.Cells[ACol, 0] := StrStartingHead + IntToStr(Index);
-          ccEndHead: dgData.Cells[ACol, 0] := StrEndingHead + IntToStr(Index);
-          else Assert(False);
+        FirstGwtCol := FFirstColumn + Ord(High(TChdColumns)) + 1;
+        for ColIndex := Low(TChdColumns) to High(TChdColumns) do
+        begin
+          ACol := FFirstColumn + Ord(ColIndex);
+          Assert(ACol < dgData.ColCount);
+          case ColIndex of
+            ccStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
+            ccEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
+            ccStartHead: dgData.Cells[ACol, 0] := StrStartingHead;
+            ccEndHead: dgData.Cells[ACol, 0] := StrEndingHead;
+            else Assert(False);
+          end;
         end;
-        Inc(ACol)
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          ACol := FirstGwtCol + GwtIndex;
+          dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+        end;
       end;
-    end;
+    bsOneBoundaryPerLine:
+      begin
+        ACol := FFirstColumn;
+        for Index := 1 to seTimePeriods.AsInteger do
+        begin
+          for ColIndex := Low(TChdColumns) to High(TChdColumns) do
+          begin
+            Assert(ACol < dgData.ColCount);
+            case ColIndex of
+              ccStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
+              ccEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
+              ccStartHead: dgData.Cells[ACol, 0] := StrStartingHead + IntToStr(Index);
+              ccEndHead: dgData.Cells[ACol, 0] := StrEndingHead + IntToStr(Index);
+              else Assert(False);
+            end;
+            Inc(ACol)
+          end;
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name + IntToStr(Index);
+            Inc(ACol);
+          end;
+        end;
+      end;
+    else
+      Assert(False);
   end;
 end;
 
@@ -993,48 +1060,73 @@ var
   ColIndex: TGhbColumns;
   ACol: Integer;
   Index: Integer;
+  GwtColumns: Integer;
+  FirstGwtCol: Integer;
+  GwtIndex: Integer;
 begin
+  GwtColumns := GwtColumnCount;
   FFirstColumn := rgElevationCount.ItemIndex + 2;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
-  begin
-    dgData.ColCount := FFirstColumn + RequiredColumns;
-  end
-  else
-  begin
-    dgData.ColCount := FFirstColumn + RequiredColumns * seTimePeriods.AsInteger;
+
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
+      begin
+        dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns;
+      end;
+    bsOneBoundaryPerLine:
+      begin
+        dgData.ColCount := FFirstColumn +
+          (RequiredColumns + GwtColumns) * seTimePeriods.AsInteger;
+      end;
+    else
+      Assert(False);
   end;
   SetBoundaryColumnFormats;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
-  begin
-    for ColIndex := Low(TGhbColumns) to High(TGhbColumns) do
-    begin
-      ACol := FFirstColumn + Ord(ColIndex);
-      Assert(ACol < dgData.ColCount);
-      case ColIndex of
-        gcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
-        gcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
-        gcBoundaryHead: dgData.Cells[ACol, 0] := StrBoundaryHead;
-        gcConductance: dgData.Cells[ACol, 0] := StrConductance;
-      end;
-    end;
-  end
-  else
-  begin
-    ACol := FFirstColumn;
-    for Index := 1 to seTimePeriods.AsInteger do
-    begin
-      for ColIndex := Low(TGhbColumns) to High(TGhbColumns) do
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
       begin
-        Assert(ACol < dgData.ColCount);
-        case ColIndex of
-          gcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
-          gcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
-          gcBoundaryHead: dgData.Cells[ACol, 0] := StrBoundaryHead + IntToStr(Index);
-          gcConductance: dgData.Cells[ACol, 0] := StrConductance + IntToStr(Index);
+        FirstGwtCol := FFirstColumn + Ord(High(TGhbColumns)) + 1;
+        for ColIndex := Low(TGhbColumns) to High(TGhbColumns) do
+        begin
+          ACol := FFirstColumn + Ord(ColIndex);
+          Assert(ACol < dgData.ColCount);
+          case ColIndex of
+            gcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
+            gcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
+            gcBoundaryHead: dgData.Cells[ACol, 0] := StrBoundaryHead;
+            gcConductance: dgData.Cells[ACol, 0] := StrConductance;
+          end;
         end;
-        Inc(ACol)
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          ACol := FirstGwtCol + GwtIndex;
+          dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+        end;
       end;
-    end
+    bsOneBoundaryPerLine:
+      begin
+        ACol := FFirstColumn;
+        for Index := 1 to seTimePeriods.AsInteger do
+        begin
+          for ColIndex := Low(TGhbColumns) to High(TGhbColumns) do
+          begin
+            Assert(ACol < dgData.ColCount);
+            case ColIndex of
+              gcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
+              gcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
+              gcBoundaryHead: dgData.Cells[ACol, 0] := StrBoundaryHead + IntToStr(Index);
+              gcConductance: dgData.Cells[ACol, 0] := StrConductance + IntToStr(Index);
+            end;
+            Inc(ACol)
+          end;
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name + IntToStr(Index);
+            Inc(ACol);
+          end;
+        end
+      end;
+    else
+      Assert(False);
   end;
 end;
 
@@ -1045,51 +1137,246 @@ var
   ColIndex: TRivColumns;
   ACol: Integer;
   Index: Integer;
+  GwtColumns: Integer;
+  FirstGwtCol: Integer;
+  GwtIndex: Integer;
 begin
+  GwtColumns := GwtColumnCount;
   FFirstColumn := rgElevationCount.ItemIndex + 2;
+
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
+      begin
+        dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns;
+      end;
+    bsOneBoundaryPerLine:
+      begin
+        dgData.ColCount := FFirstColumn +
+          (RequiredColumns + GwtColumns) * seTimePeriods.AsInteger;
+      end;
+    else
+      Assert(False);
+  end;
+
+  SetBoundaryColumnFormats;
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
+      begin
+        FirstGwtCol := FFirstColumn + Ord(High(TRivColumns)) + 1;
+        for ColIndex := Low(TRivColumns) to High(TRivColumns) do
+        begin
+          ACol := FFirstColumn + Ord(ColIndex);
+          Assert(ACol < dgData.ColCount);
+          case ColIndex of
+            rcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
+            rcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
+            rcStage: dgData.Cells[ACol, 0] := StrRiverStage;
+            rcConductance: dgData.Cells[ACol, 0] := StrConductance;
+            rcBottom: dgData.Cells[ACol, 0] := StrRiverBottom;
+          end;
+        end;
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          ACol := FirstGwtCol + GwtIndex;
+          dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+        end;
+      end;
+    bsOneBoundaryPerLine:
+      begin
+        ACol := FFirstColumn;
+        for Index := 1 to seTimePeriods.AsInteger do
+        begin
+          for ColIndex := Low(TRivColumns) to High(TRivColumns) do
+          begin
+            Assert(ACol < dgData.ColCount);
+            case ColIndex of
+              rcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
+              rcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
+              rcStage: dgData.Cells[ACol, 0] := StrRiverStage + IntToStr(Index);
+              rcConductance: dgData.Cells[ACol, 0] := StrConductance + IntToStr(Index);
+              rcBottom: dgData.Cells[ACol, 0] := StrRiverBottom + IntToStr(Index);
+            end;
+            Inc(ACol);
+          end;
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name + IntToStr(Index);
+            Inc(ACol);
+          end;
+        end
+      end;
+    else
+      Assert(False);
+  end;
   if rgFeatureDataFormat.ItemIndex  = 0 then
   begin
-    dgData.ColCount := FFirstColumn + RequiredColumns;
   end
   else
   begin
-    dgData.ColCount := FFirstColumn + RequiredColumns * seTimePeriods.AsInteger;
+  end;
+end;
+
+procedure TfrmImportPoints.UpdateUzfMf6Columns;
+const
+  RequiredColumns = 9;
+var
+  GwtColumns: Integer;
+  FirstGwtCol: Integer;
+  SteadyColIndex: TUzf6SteadyColumns;
+  ACol: Integer;
+  ColIndex: TUzf6TransientColumns;
+  GwtIndex: Integer;
+  SpeciesName: string;
+  Index: Integer;
+  TimeString: string;
+begin
+  GwtColumns := GwtColumnCount;
+  FFirstUzf6SteadyColumn := rgElevationCount.ItemIndex + 2;
+  FFirstColumn := FFirstUzf6SteadyColumn + Ord(High(TUzf6SteadyColumns))+1;
+
+  Assert(rgFeatureDataFormat.ItemIndex >= 0);
+
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
+      begin
+        dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns*4;
+      end;
+    bsOneBoundaryPerLine:
+      begin
+        dgData.ColCount := FFirstColumn +
+          (RequiredColumns + GwtColumns*4) * seTimePeriods.AsInteger;
+      end;
+    else
+      Assert(False);
   end;
   SetBoundaryColumnFormats;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
+  for SteadyColIndex := Low(TUzf6SteadyColumns) to High(TUzf6SteadyColumns) do
   begin
-    for ColIndex := Low(TRivColumns) to High(TRivColumns) do
-    begin
-      ACol := FFirstColumn + Ord(ColIndex);
-      Assert(ACol < dgData.ColCount);
-      case ColIndex of
-        rcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
-        rcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
-        rcStage: dgData.Cells[ACol, 0] := StrRiverStage;
-        rcConductance: dgData.Cells[ACol, 0] := StrConductance;
-        rcBottom: dgData.Cells[ACol, 0] := StrRiverBottom;
-      end;
+    ACol := FFirstUzf6SteadyColumn + Ord(SteadyColIndex);
+    Assert(ACol < dgData.ColCount);
+    case SteadyColIndex of
+      u6scSurfaceDepressionDepth: dgData.Cells[ACol, 0] := 'Surface Depression Depth';
+      u6scVerticalSaturatedK: dgData.Cells[ACol, 0] := 'Vertical Saturated K';
+      u6scResidualWaterContent: dgData.Cells[ACol, 0] := 'Residual Water Content';
+      u6scSaturatedWaterContent: dgData.Cells[ACol, 0] := 'Saturated Water Content';
+      u6scInitialWaterContent: dgData.Cells[ACol, 0] := 'Initial Water Content';
+      u6scBrooksCoreyEpsilon: dgData.Cells[ACol, 0] := 'Brooks-Corey Epsilon';
     end;
-  end
-  else
-  begin
-    ACol := FFirstColumn;
-    for Index := 1 to seTimePeriods.AsInteger do
-    begin
-      for ColIndex := Low(TRivColumns) to High(TRivColumns) do
-      begin
-        Assert(ACol < dgData.ColCount);
-        case ColIndex of
-          rcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
-          rcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
-          rcStage: dgData.Cells[ACol, 0] := StrRiverStage + IntToStr(Index);
-          rcConductance: dgData.Cells[ACol, 0] := StrConductance + IntToStr(Index);
-          rcBottom: dgData.Cells[ACol, 0] := StrRiverBottom + IntToStr(Index);
-        end;
-        Inc(ACol);
-      end;
-    end
   end;
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
+      begin
+//  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
+//    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
+//    u6scBrooksCoreyEpsilon);
+
+//  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
+//    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
+//    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
+
+        FirstGwtCol := FFirstColumn + Ord(High(TUzf6TransientColumns)) + 1;
+        for ColIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
+        begin
+          ACol := FFirstColumn + Ord(ColIndex);
+          Assert(ACol < dgData.ColCount);
+          case ColIndex of
+            u6tcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
+            u6tcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
+            u6tcInfiltration: dgData.Cells[ACol, 0] := 'Infiltration';
+            u6tcPotentialET: dgData.Cells[ACol, 0] := 'Potential ET';
+            u6tcExtinctionDepth: dgData.Cells[ACol, 0] := 'Extinction Depth';
+            u6tcExtinctionWaterContent: dgData.Cells[ACol, 0] := 'Extinction Water Content';
+            u6tcAirEntryPotential: dgData.Cells[ACol, 0] := 'Air Entry Potential';
+            u6tcRootPotential: dgData.Cells[ACol, 0] := 'Root Potential';
+            u6tcRootActivity: dgData.Cells[ACol, 0] := 'Root Activity';
+            else Assert(False);
+          end;
+        end;
+        ACol := FirstGwtCol;
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+          dgData.Cells[ACol, 0] := 'Status ' + SpeciesName;
+          Inc(ACol);
+          dgData.Cells[ACol, 0] := 'Specified Conc ' + SpeciesName;
+          Inc(ACol);
+          dgData.Cells[ACol, 0] := 'Infiltration Conc ' + SpeciesName;
+          Inc(ACol);
+          dgData.Cells[ACol, 0] := 'Evap Conc ' + SpeciesName;
+          Inc(ACol);
+        end;
+      end;
+    bsOneBoundaryPerLine:
+      begin
+        ACol := FFirstColumn;
+        for Index := 1 to seTimePeriods.AsInteger do
+        begin
+          TimeString := ' ' + IntToStr(Index);
+          for ColIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
+          begin
+            Assert(ACol < dgData.ColCount);
+            case ColIndex of
+              u6tcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + TimeString;
+              u6tcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + TimeString;
+              u6tcInfiltration: dgData.Cells[ACol, 0] := 'Infiltration' + TimeString;
+              u6tcPotentialET: dgData.Cells[ACol, 0] := 'Potential ET' + TimeString;
+              u6tcExtinctionDepth: dgData.Cells[ACol, 0] := 'Extinction Depth' + TimeString;
+              u6tcExtinctionWaterContent: dgData.Cells[ACol, 0] := 'Extinction Water Content' + TimeString;
+              u6tcAirEntryPotential: dgData.Cells[ACol, 0] := 'Air Entry Potential' + TimeString;
+              u6tcRootPotential: dgData.Cells[ACol, 0] := 'Root Potential' + TimeString;
+              u6tcRootActivity: dgData.Cells[ACol, 0] := 'Root Activity' + TimeString;
+              else Assert(False);
+            end;
+            Inc(ACol)
+          end;
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name + TimeString;
+            dgData.Cells[ACol, 0] := 'Status ' + SpeciesName;
+            Inc(ACol);
+            dgData.Cells[ACol, 0] := 'Specified Conc ' + SpeciesName;
+            Inc(ACol);
+            dgData.Cells[ACol, 0] := 'Infiltration Conc ' + SpeciesName;
+            Inc(ACol);
+            dgData.Cells[ACol, 0] := 'Evap Conc ' + SpeciesName;
+            Inc(ACol);
+          end;
+        end;
+      end;
+    else
+      Assert(False);
+  end;
+
+{
+  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
+    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
+    u6scBrooksCoreyEpsilon);
+  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
+    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
+    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
+
+    SurfaceDepressionDepth
+    VerticalSaturatedK
+    ResidualWaterContent
+    SaturatedWaterContent
+    InitialWaterContent
+    BrooksCoreyEpsilon
+
+    Infiltration: double;
+    PotentialET: double;
+    ExtinctionDepth: double;
+    ExtinctionWaterContent: double;
+    AirEntryPotential: double;
+    RootPotential: double;
+    RootActivity: double;
+
+    GwtStatus
+    SpecifiedConcentrations: TGwtCellData;
+    InfiltrationConcentrations: TGwtCellData;
+    EvapConcentrations: TGwtCellData;
+
+
+}
 end;
 
 procedure TfrmImportPoints.UpdateWelColumns;
@@ -1099,46 +1386,70 @@ var
   ColIndex: TWelColumns;
   ACol: Integer;
   Index: Integer;
+  GwtColumns: Integer;
+  FirstGwtCol: Integer;
+  GwtIndex: Integer;
 begin
+  GwtColumns := GwtColumnCount;
   FFirstColumn := rgElevationCount.ItemIndex + 2;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
-  begin
-    dgData.ColCount := FFirstColumn + RequiredColumns;
-  end
-  else
-  begin
-    dgData.ColCount := FFirstColumn + RequiredColumns * seTimePeriods.AsInteger;
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
+      begin
+        dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns;
+      end;
+    bsOneBoundaryPerLine:
+      begin
+        dgData.ColCount := FFirstColumn +
+          (RequiredColumns + GwtColumns) * seTimePeriods.AsInteger;
+      end;
+    else
+      Assert(False);
   end;
   SetBoundaryColumnFormats;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
-  begin
-    for ColIndex := Low(TWelColumns) to High(TWelColumns) do
-    begin
-      ACol := FFirstColumn + Ord(ColIndex);
-      Assert(ACol < dgData.ColCount);
-      case ColIndex of
-        wcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
-        wcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
-        wcPumpingRate: dgData.Cells[ACol, 0] := StrPumpingRate;
-      end;
-    end;
-  end
-  else
-  begin
-    ACol := FFirstColumn;
-    for Index := 1 to seTimePeriods.AsInteger do
-    begin
-      for ColIndex := Low(TWelColumns) to High(TWelColumns) do
+  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+    baOneSP_PerLine:
       begin
-        Assert(ACol < dgData.ColCount);
-        case ColIndex of
-          wcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
-          wcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
-          wcPumpingRate: dgData.Cells[ACol, 0] := StrPumpingRate + IntToStr(Index);
+        FirstGwtCol := FFirstColumn + Ord(High(TWelColumns)) + 1;
+        for ColIndex := Low(TWelColumns) to High(TWelColumns) do
+        begin
+          ACol := FFirstColumn + Ord(ColIndex);
+          Assert(ACol < dgData.ColCount);
+          case ColIndex of
+            wcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
+            wcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
+            wcPumpingRate: dgData.Cells[ACol, 0] := StrPumpingRate;
+          end;
         end;
-        Inc(ACol);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          ACol := FirstGwtCol + GwtIndex;
+          dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+        end;
       end;
-    end
+    bsOneBoundaryPerLine:
+      begin
+        ACol := FFirstColumn;
+        for Index := 1 to seTimePeriods.AsInteger do
+        begin
+          for ColIndex := Low(TWelColumns) to High(TWelColumns) do
+          begin
+            Assert(ACol < dgData.ColCount);
+            case ColIndex of
+              wcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + IntToStr(Index);
+              wcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + IntToStr(Index);
+              wcPumpingRate: dgData.Cells[ACol, 0] := StrPumpingRate + IntToStr(Index);
+            end;
+            Inc(ACol);
+          end;
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            dgData.Cells[ACol, 0] := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name + IntToStr(Index);
+            Inc(ACol);
+          end;
+        end
+      end;
+    else
+      Assert(False);
   end;
 end;
 
@@ -1350,9 +1661,13 @@ var
   ObsWeight: Extended;
   CalibObs: TMf6CalibrationObs;
   AnItem: TModflowParamItem;
+  GwtColumns: Integer;
+  GwtIndex: Integer;
+  DummyValue: Extended;
 begin
   if frmGoPhast.ModelSelection in ModflowSelection then
   begin
+    GwtColumns := GwtColumnCount;
     Package := comboBoundaryChoice.Items.Objects[comboBoundaryChoice.ItemIndex]
       as TModflowPackageSelection;
     Packages := frmGoPhast.PhastModel.ModflowPackages;
@@ -1364,14 +1679,6 @@ begin
     begin
       AScreenObject.CreateChdBoundary;
       ABoundary := AScreenObject.ModflowBoundaries.ModflowChdBoundary;
-//
-//      SpecifiedHeadArray := frmGoPhast.PhastModel.DataArrayManager.
-//        GetDataSetByName(rsModflowSpecifiedHead);
-//      if SpecifiedHeadArray <> nil then
-//      begin
-//        FormulaPosition := AScreenObject.AddDataSet(SpecifiedHeadArray);
-//        AScreenObject.DataSetFormulas[FormulaPosition] := 'True';
-//      end;
     end
     else if Package = Packages.GhbBoundary then
     begin
@@ -1403,22 +1710,10 @@ begin
         NewObsName := FObsRoot + IntToStr(FObsCount) + '_';
         Inc(FObsCount);
         NewItemName := NewObsName {+ IntToStr(ObsCount+1)};
-//          while (Length(NewItemName) > 12) and (FObsRoot <> '') do
-//          begin
-//            FObsRoot := Copy(FObsRoot, 1, Length(FObsRoot) -1);
-//            NewObsName := FObsRoot + IntToStr(FObsCount) + '_';
-//            NewItemName := NewObsName + IntToStr(ObsCount+1);
-//          end;
       end
       else
       begin
         NewItemName := LocalObsRoot {+ IntToStr(ObsCount+1)};
-//          while (Length(NewItemName) > 12) and (LocalObsRoot <> '') do
-//          begin
-//            LocalObsRoot := Copy(LocalObsRoot, 1, Length(LocalObsRoot) -1);
-//            NewObsName := LocalObsRoot + IntToStr(FObsCount) + '_';
-//            NewItemName := NewObsName + IntToStr(ObsCount+1);
-//          end;
         NewObsName := LocalObsRoot;
       end;
       HobBoundary.ObservationName := NewObsName;
@@ -1440,6 +1735,10 @@ begin
         Mf6Obs.General := Mf6Obs.General + [ObGeneral];
       end;
     end
+    else if Package = Packages.UzfMf6Package then
+    begin
+
+    end
     else
     begin
       Assert(False);
@@ -1460,7 +1759,7 @@ begin
           and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccEndTime), RowIndex], ETime)
           and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccStartHead), RowIndex], Shead)
           and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccEndHead), RowIndex], EHead)
-           then
+          then
         begin
           if AParam <> nil then
           begin
@@ -1481,8 +1780,24 @@ begin
           ChdItem.EndTime := ETime;
           ChdItem.StartHead := dgData.Cells[ACol+Ord(ccStartHead), RowIndex];
           ChdItem.EndHead := dgData.Cells[ACol+Ord(ccEndHead), RowIndex];
+        end
+        else
+        begin
+          ChdItem := nil;
         end;
         Inc(ACol, 4);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          if ChdItem <> nil then
+          begin
+            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+            begin
+              ChdItem.GwtConcentrations[GwtIndex].Value
+                := dgData.Cells[ACol, RowIndex];
+            end;
+          end;
+          Inc(ACol);
+        end;
       end
       else if Package = Packages.GhbBoundary then
       begin
@@ -1510,8 +1825,24 @@ begin
           GhbItem.EndTime := ETime;
           GhbItem.BoundaryHead := dgData.Cells[ACol+Ord(gcBoundaryHead), RowIndex];
           GhbItem.Conductance := dgData.Cells[ACol+Ord(gcConductance), RowIndex];
+        end
+        else
+        begin
+          GhbItem := nil;
         end;
         Inc(ACol, 4);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          if GhbItem <> nil then
+          begin
+            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+            begin
+              GhbItem.GwtConcentrations[GwtIndex].Value
+                := dgData.Cells[ACol, RowIndex];
+            end;
+          end;
+          Inc(ACol);
+        end;
       end
       else if Package = Packages.WelPackage then
       begin
@@ -1537,8 +1868,24 @@ begin
           WelItem.StartTime := STime;
           WelItem.EndTime := ETime;
           WelItem.PumpingRate := dgData.Cells[ACol+Ord(wcPumpingRate), RowIndex];
+        end
+        else
+        begin
+          WelItem := nil;
         end;
         Inc(ACol, 3);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          if WelItem <> nil then
+          begin
+            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+            begin
+              WelItem.GwtConcentrations[GwtIndex].Value
+                := dgData.Cells[ACol, RowIndex];
+            end;
+          end;
+          Inc(ACol);
+        end;
       end
       else if Package = Packages.RivPackage then
       begin
@@ -1568,8 +1915,24 @@ begin
           RivItem.RiverBottom := dgData.Cells[ACol+Ord(rcBottom), RowIndex];
           RivItem.Conductance := dgData.Cells[ACol+Ord(rcConductance), RowIndex];
           RivItem.RiverStage := dgData.Cells[ACol+Ord(rcStage), RowIndex];
+        end
+        else
+        begin
+          RivItem := nil;
         end;
         Inc(ACol, 5);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          if RivItem <> nil then
+          begin
+            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+            begin
+              RivItem.GwtConcentrations[GwtIndex].Value
+                := dgData.Cells[ACol, RowIndex];
+            end;
+          end;
+          Inc(ACol);
+        end;
       end
       else if Package = Packages.DrnPackage then
       begin
@@ -1648,6 +2011,10 @@ begin
         end;
         Inc(ACol, 4);
       end
+      else if Package = Packages.UzfMf6Package then
+      begin
+
+      end
       else
       begin
         Assert(False);
@@ -1705,7 +2072,11 @@ var
   SpecifiedHeadArray: TDataArray;
   FormulaPosition: Integer;
   CalibObs: TMf6CalibrationObs;
+  GwtColumns: Integer;
+  GwtIndex: Integer;
+  GwtStart: Integer;
 begin
+  GwtColumns := GwtColumnCount;
   InvalidRow := False;
   Values := TRealList.Create;
   IntValues := TIntegerList.Create;
@@ -1773,14 +2144,6 @@ begin
       begin
         AScreenObject.CreateChdBoundary;
         ABoundary := AScreenObject.ModflowBoundaries.ModflowChdBoundary;
-
-        SpecifiedHeadArray := frmGoPhast.PhastModel.DataArrayManager.
-          GetDataSetByName(rsModflowSpecifiedHead);
-        if SpecifiedHeadArray <> nil then
-        begin
-          FormulaPosition := AScreenObject.AddDataSet(SpecifiedHeadArray);
-          AScreenObject.DataSetFormulas[FormulaPosition] := 'True';
-        end;
       end
       else if Package = Packages.GhbBoundary then
       begin
@@ -1922,35 +2285,68 @@ begin
       end;
       if Package = Packages.ChdBoundary then
       begin
+        GwtStart := Ord(ccEndHead) + 1;
         ChdItem := BoundaryItem as TChdItem;
         ChdItem.StartTime := Values[Ord(ccStartTime)];
         ChdItem.EndTime := Values[Ord(ccEndTime)];
         ChdItem.StartHead := FortranFloatToStr(Values[Ord(ccStartHead)]);
         ChdItem.EndHead := FortranFloatToStr(Values[Ord(ccEndHead)]);
+        ChdItem.GwtConcentrations.Count := GwtColumns;
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          ChdItem.GwtConcentrations[GwtIndex].Value
+            := FortranFloatToStr(Values[GwtIndex + GwtStart])
+        end;
+
+        SpecifiedHeadArray := frmGoPhast.PhastModel.DataArrayManager.
+          GetDataSetByName(rsModflowSpecifiedHead);
+        if SpecifiedHeadArray <> nil then
+        begin
+          FormulaPosition := AScreenObject.AddDataSet(SpecifiedHeadArray);
+          AScreenObject.DataSetFormulas[FormulaPosition] := 'True';
+        end;
       end
       else if Package = Packages.GhbBoundary then
       begin
+        GwtStart := Ord(gcConductance) + 1;
         GhbItem := BoundaryItem as TGhbItem;
         GhbItem.StartTime := Values[Ord(gcStartTime)];
         GhbItem.EndTime := Values[Ord(gcEndTime)];
         GhbItem.BoundaryHead := FortranFloatToStr(Values[Ord(gcBoundaryHead)]);
         GhbItem.Conductance := FortranFloatToStr(Values[Ord(gcConductance)]);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          GhbItem.GwtConcentrations[GwtIndex].Value
+            := FortranFloatToStr(Values[GwtIndex + GwtStart])
+        end;
       end
       else if Package = Packages.WelPackage then
       begin
+        GwtStart := Ord(wcPumpingRate) + 1;
         WelItem := BoundaryItem as TWellItem;
         WelItem.StartTime := Values[Ord(wcStartTime)];
         WelItem.EndTime := Values[Ord(wcEndTime)];
         WelItem.PumpingRate := FortranFloatToStr(Values[Ord(wcPumpingRate)]);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          WelItem.GwtConcentrations[GwtIndex].Value
+            := FortranFloatToStr(Values[GwtIndex + GwtStart])
+        end;
       end
       else if Package = Packages.RivPackage then
       begin
+        GwtStart := Ord(rcBottom) + 1;
         RivItem := BoundaryItem as TRivItem;
         RivItem.StartTime := Values[Ord(rcStartTime)];
         RivItem.EndTime := Values[Ord(rcEndTime)];
         RivItem.RiverStage := FortranFloatToStr(Values[Ord(rcStage)]);
         RivItem.Conductance := FortranFloatToStr(Values[Ord(rcConductance)]);
         RivItem.RiverBottom := FortranFloatToStr(Values[Ord(rcBottom)]);
+        for GwtIndex := 0 to GwtColumns - 1 do
+        begin
+          RivItem.GwtConcentrations[GwtIndex].Value
+            := FortranFloatToStr(Values[GwtIndex + GwtStart])
+        end;
       end
       else if Package = Packages.DrnPackage then
       begin
@@ -1979,6 +2375,10 @@ begin
       else if Package = Packages.Mf6ObservationUtility then
       begin
         // do nothing
+      end
+      else if Package = Packages.UzfMf6Package then
+      begin
+
       end
       else
       begin
@@ -2060,12 +2460,19 @@ begin
       comboBoundaryChoice.Items.AddObject(
         Packages.HobPackage.PackageIdentifier, Packages.HobPackage);
     end;
-    if Packages.Mf6ObservationUtility.IsSelected
-      and (frmGoPhast.PhastModel.ModelSelection = msModflow2015) then
+    if frmGoPhast.PhastModel.ModelSelection = msModflow2015 then
     begin
-      comboBoundaryChoice.Items.AddObject(
-        Packages.Mf6ObservationUtility.PackageIdentifier,
-        Packages.Mf6ObservationUtility);
+      if Packages.Mf6ObservationUtility.IsSelected then
+      begin
+        comboBoundaryChoice.Items.AddObject(
+          Packages.Mf6ObservationUtility.PackageIdentifier,
+          Packages.Mf6ObservationUtility);
+      end;
+      if Packages.UzfMf6Package.IsSelected then
+      begin
+        comboBoundaryChoice.Items.AddObject(
+          Packages.UzfMf6Package.PackageIdentifier, Packages.UzfMf6Package);
+      end;
     end;
   end
   else if frmGoPhast.PhastModel.ModelSelection = msFootPrint then
@@ -2973,6 +3380,7 @@ var
   AParam: TModflowTransientListParameter;
 begin
   inherited;
+  seTimePeriods.Enabled := rgFeatureDataFormat.ItemIndex = 1;
   if comboBoundaryChoice.ItemIndex > 0 then
   begin
     pnlFeatureOptions.Visible := True;
@@ -3061,6 +3469,10 @@ begin
       else if Package = Packages.Mf6ObservationUtility then
       begin
         UpdateObsUtilColumns;
+      end
+      else if Package = Packages.UzfMf6Package then
+      begin
+        UpdateUzfMf6Columns;
       end
       else
       begin
