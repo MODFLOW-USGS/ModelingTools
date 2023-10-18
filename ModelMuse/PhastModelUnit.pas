@@ -41265,16 +41265,19 @@ var
   Buoy: TBuoyancyPackage;
   Visc: TViscosityPackage;
 begin
-  IgnoredNames.CaseSensitive := False;
-  Buoy := ModflowPackages.BuoyancyPackage;
-  Visc := ModflowPackages.ViscosityPackage;
-  if Buoy.IsSelected and Buoy.DensitySpecified then
+  if ModelSelection = msModflow2015 then
   begin
-    IgnoredNames.Add(StrDensity);
-  end;
-  if Visc.IsSelected and Visc.ViscositySpecified then
-  begin
-    IgnoredNames.Add(StrViscosity);
+    IgnoredNames.CaseSensitive := False;
+    Buoy := ModflowPackages.BuoyancyPackage;
+    Visc := ModflowPackages.ViscosityPackage;
+    if Buoy.IsSelected and Buoy.DensitySpecified then
+    begin
+      IgnoredNames.Add(StrDensity);
+    end;
+    if Visc.IsSelected and Visc.ViscositySpecified then
+    begin
+      IgnoredNames.Add(StrViscosity);
+    end;
   end;
 end;
 

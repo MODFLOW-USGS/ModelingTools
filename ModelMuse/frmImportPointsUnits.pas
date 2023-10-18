@@ -250,7 +250,8 @@ uses Clipbrd, GoPhastTypes, frmGoPhastUnit, RbwParser,
   frameHeadObservationsUnit, IntListUnit, ModflowHobUnit,
   frameCustomCellObservationUnit, FootprintPropertiesUnit, FootprintBoundary,
   System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit,
-  Modflow6ObsUnit, PestPropertiesUnit, DataArrayManagerUnit, DataSetNamesUnit;
+  Modflow6ObsUnit, PestPropertiesUnit, DataArrayManagerUnit, DataSetNamesUnit,
+  ModflowUzfMf6Unit;
 
 {$R *.dfm}
 
@@ -1208,12 +1209,6 @@ begin
     else
       Assert(False);
   end;
-  if rgFeatureDataFormat.ItemIndex  = 0 then
-  begin
-  end
-  else
-  begin
-  end;
 end;
 
 procedure TfrmImportPoints.UpdateUzfMf6Columns;
@@ -1229,110 +1224,112 @@ var
   SpeciesName: string;
   Index: Integer;
   TimeString: string;
+  IgnoredNames: TStringList;
+  NumberOfSpecies: Integer;
+  StatusChoices: TStringList;
+  AColumn: TRbwColumn4;
 begin
-  GwtColumns := GwtColumnCount;
-  FFirstUzf6SteadyColumn := rgElevationCount.ItemIndex + 2;
-  FFirstColumn := FFirstUzf6SteadyColumn + Ord(High(TUzf6SteadyColumns))+1;
+  StatusChoices := TStringList.Create;
+  IgnoredNames := TStringList.Create;
+  try
+    StatusChoices.Add('Active');
+    StatusChoices.Add('Inactive');
+    StatusChoices.Add('Constant');
+    frmGophast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+    NumberOfSpecies := GwtColumnCount;
+    GwtColumns := NumberOfSpecies - IgnoredNames.Count;
+    FFirstUzf6SteadyColumn := rgElevationCount.ItemIndex + 2;
+    FFirstColumn := FFirstUzf6SteadyColumn + Ord(High(TUzf6SteadyColumns))
+      + GwtColumns + 1;
 
-  Assert(rgFeatureDataFormat.ItemIndex >= 0);
+  //  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
+  //    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
+  //    u6scBrooksCoreyEpsilon);
 
-  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
-    baOneSP_PerLine:
-      begin
-        dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns*4;
-      end;
-    bsOneBoundaryPerLine:
-      begin
-        dgData.ColCount := FFirstColumn +
-          (RequiredColumns + GwtColumns*4) * seTimePeriods.AsInteger;
-      end;
-    else
-      Assert(False);
-  end;
-  SetBoundaryColumnFormats;
-  for SteadyColIndex := Low(TUzf6SteadyColumns) to High(TUzf6SteadyColumns) do
-  begin
-    ACol := FFirstUzf6SteadyColumn + Ord(SteadyColIndex);
-    Assert(ACol < dgData.ColCount);
-    case SteadyColIndex of
-      u6scSurfaceDepressionDepth: dgData.Cells[ACol, 0] := 'Surface Depression Depth';
-      u6scVerticalSaturatedK: dgData.Cells[ACol, 0] := 'Vertical Saturated K';
-      u6scResidualWaterContent: dgData.Cells[ACol, 0] := 'Residual Water Content';
-      u6scSaturatedWaterContent: dgData.Cells[ACol, 0] := 'Saturated Water Content';
-      u6scInitialWaterContent: dgData.Cells[ACol, 0] := 'Initial Water Content';
-      u6scBrooksCoreyEpsilon: dgData.Cells[ACol, 0] := 'Brooks-Corey Epsilon';
+    Assert(rgFeatureDataFormat.ItemIndex >= 0);
+
+    case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+      baOneSP_PerLine:
+        begin
+          dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns*4-1;
+        end;
+      bsOneBoundaryPerLine:
+        begin
+          dgData.ColCount := FFirstColumn +
+            (RequiredColumns + GwtColumns*4) * seTimePeriods.AsInteger;
+        end;
+      else
+        Assert(False);
     end;
-  end;
-  case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
-    baOneSP_PerLine:
-      begin
-//  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
-//    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
-//    u6scBrooksCoreyEpsilon);
-
-//  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
-//    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
-//    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
-
-        FirstGwtCol := FFirstColumn + Ord(High(TUzf6TransientColumns)) + 1;
-        for ColIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
-        begin
-          ACol := FFirstColumn + Ord(ColIndex);
-          Assert(ACol < dgData.ColCount);
-          case ColIndex of
-            u6tcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
-            u6tcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
-            u6tcInfiltration: dgData.Cells[ACol, 0] := 'Infiltration';
-            u6tcPotentialET: dgData.Cells[ACol, 0] := 'Potential ET';
-            u6tcExtinctionDepth: dgData.Cells[ACol, 0] := 'Extinction Depth';
-            u6tcExtinctionWaterContent: dgData.Cells[ACol, 0] := 'Extinction Water Content';
-            u6tcAirEntryPotential: dgData.Cells[ACol, 0] := 'Air Entry Potential';
-            u6tcRootPotential: dgData.Cells[ACol, 0] := 'Root Potential';
-            u6tcRootActivity: dgData.Cells[ACol, 0] := 'Root Activity';
-            else Assert(False);
-          end;
-        end;
-        ACol := FirstGwtCol;
-        for GwtIndex := 0 to GwtColumns - 1 do
-        begin
-          SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
-          dgData.Cells[ACol, 0] := 'Status ' + SpeciesName;
-          Inc(ACol);
-          dgData.Cells[ACol, 0] := 'Specified Conc ' + SpeciesName;
-          Inc(ACol);
-          dgData.Cells[ACol, 0] := 'Infiltration Conc ' + SpeciesName;
-          Inc(ACol);
-          dgData.Cells[ACol, 0] := 'Evap Conc ' + SpeciesName;
-          Inc(ACol);
-        end;
+    SetBoundaryColumnFormats;
+    for SteadyColIndex := Low(TUzf6SteadyColumns) to High(TUzf6SteadyColumns) do
+    begin
+      ACol := FFirstUzf6SteadyColumn + Ord(SteadyColIndex);
+      Assert(ACol < dgData.ColCount);
+      case SteadyColIndex of
+        u6scSurfaceDepressionDepth: dgData.Cells[ACol, 0] := 'Surface Depression Depth';
+        u6scVerticalSaturatedK: dgData.Cells[ACol, 0] := 'Vertical Saturated K';
+        u6scResidualWaterContent: dgData.Cells[ACol, 0] := 'Residual Water Content';
+        u6scSaturatedWaterContent: dgData.Cells[ACol, 0] := 'Saturated Water Content';
+        u6scInitialWaterContent: dgData.Cells[ACol, 0] := 'Initial Water Content';
+        u6scBrooksCoreyEpsilon: dgData.Cells[ACol, 0] := 'Brooks-Corey Epsilon';
       end;
-    bsOneBoundaryPerLine:
+    end;
+    ACol := FFirstUzf6SteadyColumn + Ord(High(TUzf6SteadyColumns)) + 1;
+    for GwtIndex := 0 to NumberOfSpecies - 1 do
+    begin
+      SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+      if IgnoredNames.IndexOf(SpeciesName) >= 0 then
       begin
-        ACol := FFirstColumn;
-        for Index := 1 to seTimePeriods.AsInteger do
+        Continue
+      end;
+      dgData.Cells[ACol, 0] := 'Initial Concentration ' + SpeciesName;
+      Inc(ACol);
+    end;
+
+    case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
+      baOneSP_PerLine:
         begin
-          TimeString := ' ' + IntToStr(Index);
+  //  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
+  //    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
+  //    u6scBrooksCoreyEpsilon);
+
+  //  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
+  //    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
+  //    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
+
+//          FirstGwtCol := ACol;
           for ColIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
           begin
+            ACol := FFirstColumn + Ord(ColIndex);
             Assert(ACol < dgData.ColCount);
             case ColIndex of
-              u6tcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + TimeString;
-              u6tcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + TimeString;
-              u6tcInfiltration: dgData.Cells[ACol, 0] := 'Infiltration' + TimeString;
-              u6tcPotentialET: dgData.Cells[ACol, 0] := 'Potential ET' + TimeString;
-              u6tcExtinctionDepth: dgData.Cells[ACol, 0] := 'Extinction Depth' + TimeString;
-              u6tcExtinctionWaterContent: dgData.Cells[ACol, 0] := 'Extinction Water Content' + TimeString;
-              u6tcAirEntryPotential: dgData.Cells[ACol, 0] := 'Air Entry Potential' + TimeString;
-              u6tcRootPotential: dgData.Cells[ACol, 0] := 'Root Potential' + TimeString;
-              u6tcRootActivity: dgData.Cells[ACol, 0] := 'Root Activity' + TimeString;
+              u6tcStartTime: dgData.Cells[ACol, 0] := StrStartingTime;
+              u6tcEndTime: dgData.Cells[ACol, 0] := StrEndingTime;
+              u6tcInfiltration: dgData.Cells[ACol, 0] := 'Infiltration';
+              u6tcPotentialET: dgData.Cells[ACol, 0] := 'Potential ET';
+              u6tcExtinctionDepth: dgData.Cells[ACol, 0] := 'Extinction Depth';
+              u6tcExtinctionWaterContent: dgData.Cells[ACol, 0] := 'Extinction Water Content';
+              u6tcAirEntryPotential: dgData.Cells[ACol, 0] := 'Air Entry Potential';
+              u6tcRootPotential: dgData.Cells[ACol, 0] := 'Root Potential';
+              u6tcRootActivity: dgData.Cells[ACol, 0] := 'Root Activity';
               else Assert(False);
             end;
-            Inc(ACol)
           end;
-          for GwtIndex := 0 to GwtColumns - 1 do
+          FirstGwtCol := ACol + 1;
+          for GwtIndex := 0 to NumberOfSpecies - 1 do
           begin
-            SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name + TimeString;
+            SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+            if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+            begin
+              Continue
+            end;
             dgData.Cells[ACol, 0] := 'Status ' + SpeciesName;
+            AColumn := dgData.Columns[ACol];
+            AColumn.Format := rcf4String;
+            AColumn.PickList := StatusChoices;
+            AColumn.ComboUsed := True;
+            AColumn.LimitToList := True;
             Inc(ACol);
             dgData.Cells[ACol, 0] := 'Specified Conc ' + SpeciesName;
             Inc(ACol);
@@ -1342,41 +1339,91 @@ begin
             Inc(ACol);
           end;
         end;
-      end;
-    else
-      Assert(False);
+      bsOneBoundaryPerLine:
+        begin
+          ACol := FFirstColumn;
+          for Index := 1 to seTimePeriods.AsInteger do
+          begin
+            TimeString := ' Period ' + IntToStr(Index);
+            for ColIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
+            begin
+              Assert(ACol < dgData.ColCount);
+              case ColIndex of
+                u6tcStartTime: dgData.Cells[ACol, 0] := StrStartingTime + TimeString;
+                u6tcEndTime: dgData.Cells[ACol, 0] := StrEndingTime + TimeString;
+                u6tcInfiltration: dgData.Cells[ACol, 0] := 'Infiltration' + TimeString;
+                u6tcPotentialET: dgData.Cells[ACol, 0] := 'Potential ET' + TimeString;
+                u6tcExtinctionDepth: dgData.Cells[ACol, 0] := 'Extinction Depth' + TimeString;
+                u6tcExtinctionWaterContent: dgData.Cells[ACol, 0] := 'Extinction Water Content' + TimeString;
+                u6tcAirEntryPotential: dgData.Cells[ACol, 0] := 'Air Entry Potential' + TimeString;
+                u6tcRootPotential: dgData.Cells[ACol, 0] := 'Root Potential' + TimeString;
+                u6tcRootActivity: dgData.Cells[ACol, 0] := 'Root Activity' + TimeString;
+                else Assert(False);
+              end;
+              Inc(ACol)
+            end;
+            for GwtIndex := 0 to NumberOfSpecies - 1 do
+            begin
+              SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
+              if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+              begin
+                Continue
+              end;
+              SpeciesName := SpeciesName + TimeString;
+              dgData.Cells[ACol, 0] := 'Status ' + SpeciesName;
+              AColumn := dgData.Columns[ACol];
+              AColumn.Format := rcf4String;
+              AColumn.PickList := StatusChoices;
+              AColumn.ComboUsed := True;
+              AColumn.LimitToList := True;
+              Inc(ACol);
+              dgData.Cells[ACol, 0] := 'Specified Conc ' + SpeciesName;
+              Inc(ACol);
+              dgData.Cells[ACol, 0] := 'Infiltration Conc ' + SpeciesName;
+              Inc(ACol);
+              dgData.Cells[ACol, 0] := 'Evap Conc ' + SpeciesName;
+              Inc(ACol);
+            end;
+          end;
+        end;
+      else
+        Assert(False);
+    end;
+
+  {
+    TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
+      u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
+      u6scBrooksCoreyEpsilon);
+    TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
+      u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
+      u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
+
+      SurfaceDepressionDepth
+      VerticalSaturatedK
+      ResidualWaterContent
+      SaturatedWaterContent
+      InitialWaterContent
+      BrooksCoreyEpsilon
+
+      Infiltration: double;
+      PotentialET: double;
+      ExtinctionDepth: double;
+      ExtinctionWaterContent: double;
+      AirEntryPotential: double;
+      RootPotential: double;
+      RootActivity: double;
+
+      GwtStatus
+      SpecifiedConcentrations: TGwtCellData;
+      InfiltrationConcentrations: TGwtCellData;
+      EvapConcentrations: TGwtCellData;
+
+
+  }
+  finally
+    IgnoredNames.Free;
+    StatusChoices.Free;
   end;
-
-{
-  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
-    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
-    u6scBrooksCoreyEpsilon);
-  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
-    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
-    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
-
-    SurfaceDepressionDepth
-    VerticalSaturatedK
-    ResidualWaterContent
-    SaturatedWaterContent
-    InitialWaterContent
-    BrooksCoreyEpsilon
-
-    Infiltration: double;
-    PotentialET: double;
-    ExtinctionDepth: double;
-    ExtinctionWaterContent: double;
-    AirEntryPotential: double;
-    RootPotential: double;
-    RootActivity: double;
-
-    GwtStatus
-    SpecifiedConcentrations: TGwtCellData;
-    InfiltrationConcentrations: TGwtCellData;
-    EvapConcentrations: TGwtCellData;
-
-
-}
 end;
 
 procedure TfrmImportPoints.UpdateWelColumns;
@@ -2075,6 +2122,18 @@ var
   GwtColumns: Integer;
   GwtIndex: Integer;
   GwtStart: Integer;
+  UzfMf6Boundary: TUzfMf6Boundary;
+  UzfSteadyValues: array[Low(TUzf6SteadyColumns) .. High(TUzf6SteadyColumns)] of double;
+  UzfSteadyIndex: TUzf6SteadyColumns;
+  FSteadyOK: Boolean;
+  StartTimeColumn: Integer;
+  StartingTime: Double;
+  EndingTime: Double;
+  Uzf6Item: TUzfMf6Item;
+  UzfTransientIndex: TUzf6TransientColumns;
+  ACol: Integer;
+  UzfTransientValues: array[Low(TUzf6TransientColumns) .. High(TUzf6TransientColumns)] of double;
+  TransientOK: Boolean;
 begin
   GwtColumns := GwtColumnCount;
   InvalidRow := False;
@@ -2106,24 +2165,39 @@ begin
           // skip the name column.
           Values.Add(0);
         end
-        else if (Package = Packages.Mf6ObservationUtility) and (ColIndex = FRequiredCols +1) then
+        else if (Package = Packages.Mf6ObservationUtility) then
         begin
-          ObsType := dgData.ItemIndex[ColIndex, RowIndex];
-          if ObsType < 0 then
+          if (ColIndex = FRequiredCols +1) then
           begin
-            InvalidRow := True;
-            Exit;
+            ObsType := dgData.ItemIndex[ColIndex, RowIndex];
+            if ObsType < 0 then
+            begin
+              InvalidRow := True;
+              Exit;
+            end;
+          end
+          else
+          if (ColIndex = FRequiredCols) then
+          begin
+            // skip the name column.
+            Values.Add(0);
+          end
+          else if (ColIndex > FRequiredCols+1) then
+          begin
+            // skip the calibration observations columns.
+          end
+        end
+        else if (Package = Packages. UzfMf6Package) and (ColIndex <= FRequiredCols) then
+        begin
+          try
+            Values.Add(StrToFloat(Trim(dgData.Cells[ColIndex, RowIndex])));
+          except
+            on E: EConvertError do
+            begin
+              InvalidRow := True;
+              Exit;
+            end;
           end;
-        end
-        else
-        if (Package = Packages.Mf6ObservationUtility) and (ColIndex = FRequiredCols) then
-        begin
-          // skip the name column.
-          Values.Add(0);
-        end
-        else if (Package = Packages.Mf6ObservationUtility) and (ColIndex > FRequiredCols+1) then
-        begin
-          // skip the calibration observations columns.
         end
         else
         begin
@@ -2140,6 +2214,7 @@ begin
       end;
       ABoundary := nil;
       HobBoundary := nil;
+      UzfMf6Boundary := nil;
       if Package = Packages.ChdBoundary then
       begin
         AScreenObject.CreateChdBoundary;
@@ -2248,6 +2323,11 @@ begin
             CalibObs.ObGeneral := ObGeneral;
           end;
         end;
+      end
+      else if Package = Packages.UzfMf6Package then
+      begin
+        AScreenObject.CreateModflowUzfMf6Boundary;
+        UzfMf6Boundary := AScreenObject.ModflowUzfMf6Boundary;
       end
       else
       begin
@@ -2378,7 +2458,65 @@ begin
       end
       else if Package = Packages.UzfMf6Package then
       begin
+        Assert(UzfMf6Boundary <> nil);
+        FSteadyOK := True;
+        for UzfSteadyIndex := Low(TUzf6SteadyColumns) to High(TUzf6SteadyColumns) do
+        begin
+          if not TryStrToFloat(dgData.Cells[FRequiredCols + Ord(UzfSteadyIndex), RowIndex],
+            UzfSteadyValues[UzfSteadyIndex]) then
+          begin
+            FSteadyOK := False;
+          end;
+        end;
+        if FSteadyOK then
+        begin
+          UzfMf6Boundary.SurfaceDepressionDepth :=
+            FortranFloatToStr(UzfSteadyValues[u6scSurfaceDepressionDepth]);
+          UzfMf6Boundary.VerticalSaturatedK :=
+            FortranFloatToStr(UzfSteadyValues[u6scVerticalSaturatedK]);
+          UzfMf6Boundary.ResidualWaterContent :=
+            FortranFloatToStr(UzfSteadyValues[u6scResidualWaterContent]);
+          UzfMf6Boundary.SaturatedWaterContent :=
+            FortranFloatToStr(UzfSteadyValues[u6scSaturatedWaterContent]);
+          UzfMf6Boundary.InitialWaterContent :=
+            FortranFloatToStr(UzfSteadyValues[u6scInitialWaterContent]);
+          UzfMf6Boundary.BrooksCoreyEpsilon :=
+            FortranFloatToStr(UzfSteadyValues[u6scBrooksCoreyEpsilon]);
+        end;
+        StartTimeColumn := FRequiredCols + Ord(u6scBrooksCoreyEpsilon) + 1;
+        TransientOK := True;
+        for UzfTransientIndex := u6tcInfiltration to u6tcRootActivity do
+        begin
+          ACol := StartTimeColumn + Ord(UzfTransientIndex);
+          if not TryStrToFloat(dgData.Cells[StartTimeColumn + Ord(UzfTransientIndex),
+            RowIndex], UzfTransientValues[UzfTransientIndex]) then
+          begin
+            TransientOK := False
+          end;
+        end;
+        if TransientOK then
+        begin
+          Uzf6Item := UzfMf6Boundary.Values.Add as TUzfMf6Item;
+          Uzf6Item.StartTime := UzfTransientValues[u6tcStartTime];
+          Uzf6Item.EndTime := UzfTransientValues[u6tcEndTime];
+          Uzf6Item.Infiltration := FortranFloatToStr(UzfTransientValues[u6tcInfiltration]);
+          Uzf6Item.PotentialET := FortranFloatToStr(UzfTransientValues[u6tcPotentialET]);
+          Uzf6Item.ExtinctionDepth := FortranFloatToStr(UzfTransientValues[u6tcExtinctionDepth]);
+          Uzf6Item.ExtinctionWaterContent := FortranFloatToStr(UzfTransientValues[u6tcExtinctionWaterContent]);
+          Uzf6Item.AirEntryPotential := FortranFloatToStr(UzfTransientValues[u6tcAirEntryPotential]);
+          Uzf6Item.RootPotential := FortranFloatToStr(UzfTransientValues[u6tcRootPotential]);
+          Uzf6Item.RootActivity := FortranFloatToStr(UzfTransientValues[u6tcRootActivity]);
+        end;
+//        begin
+//  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
+//    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
+//    u6scBrooksCoreyEpsilon);
+//  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
+//    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
+//    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
 
+//        end;
+//        ABoundary
       end
       else
       begin
