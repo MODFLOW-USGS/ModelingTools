@@ -510,6 +510,7 @@ type
     procedure CreateMstNode;
     procedure CreateIstNode;
     procedure CreateGwtImsNode;
+    procedure MakeIgnoredSpeciesLast;
 //    function CheckMf6LakeOutlet: Boolean;
     { Private declarations }
   protected
@@ -568,7 +569,7 @@ uses Contnrs, JvListComb, frmGoPhastUnit, ScreenObjectUnit,
   ModflowTimeUnit, ModflowDiscretizationWriterUnit, Mt3dUztRchUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit,
   ModflowCsubUnit, System.Math, AbstractGridUnit,
-  frmDisplayDataUnit;
+  frmDisplayDataUnit, IntListUnit;
 
 resourcestring
   StrLPFParameters = 'LPF or NWT Parameters';
@@ -2256,6 +2257,7 @@ begin
   finally
     IgnoredNames.Free;
   end;
+  MakeIgnoredSpeciesLast;
 end;
 
 procedure TfrmModflowPackages.frameGwtProcessrcSelectionControllerEnabledChange(
@@ -3022,6 +3024,57 @@ begin
   end;
 
   UpdateGwtFrames;
+end;
+
+procedure TfrmModflowPackages.MakeIgnoredSpeciesLast;
+var
+  Grid: TRbwDataGrid4;
+  IgnoredNames: TStringList;
+  IntList: TIntegerList;
+  IgnoreIndex: Integer;
+  AnIgnoreRow: Integer;
+  TempRow: TStringList;
+begin
+  if not IsLoaded then
+  begin
+    Exit;
+  end;
+  Grid := frameChemSpecies.frameGridMobile.Grid;
+  IgnoredNames := TStringList.Create;
+  try
+    FillIgnoredNames(IgnoredNames, False);
+    if IgnoredNames.Count > 0 then
+    begin
+      IntList := TIntegerList.Create;
+      try
+        for IgnoreIndex := 0 to IgnoredNames.Count - 1 do
+        begin
+          IntList.Add(Grid.Cols[0].IndexOf(IgnoredNames[IgnoreIndex]));
+        end;
+        IntList.Sort;
+        AnIgnoreRow := Grid.RowCount - 1;
+        for IgnoreIndex := IntList.Count - 1 downto 0 do
+        begin
+          if IntList[IgnoreIndex] <> AnIgnoreRow then
+          begin
+            TempRow := TStringList.Create;
+            try
+              TempRow.Assign(Grid.Rows[AnIgnoreRow]);
+              Grid.Rows[AnIgnoreRow].Assign(Grid.Rows[IntList[IgnoreIndex]]);
+              Grid.Rows[IntList[IgnoreIndex]].Assign(TempRow);
+            finally
+              TempRow.Free;
+            end;
+          end;
+          Dec(AnIgnoreRow);
+        end;
+      finally
+        IntList.Free;
+      end;
+    end;
+  finally
+    IgnoredNames.Free;
+  end;
 end;
 
 procedure TfrmModflowPackages.CreateGwtImsNode;
@@ -4248,6 +4301,7 @@ begin
     ParamGroups, FNewPackages);
     frmGoPhast.PhastModel.MobileComponents.CanCreateDataSets := False;
     try
+      MakeIgnoredSpeciesLast;
       frameChemSpecies.SetMt3dmsChemSpecies(
         frmGoPhast.PhastModel.MobileComponents,
         frmGoPhast.PhastModel.ImmobileComponents);
@@ -4667,7 +4721,6 @@ var
   IgnoredNames: TStringList;
   FrameIndex: Integer;
   Link: TFrameNodeLink;
-  ChildNode: TTreeNode;
 begin
   FPackageList.Clear;
 

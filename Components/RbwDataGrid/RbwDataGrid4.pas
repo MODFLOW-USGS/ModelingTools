@@ -800,12 +800,12 @@ type
   TRbwDataGrid4 = class(TCustomRBWDataGrid)
   private
     FColumns: TRbwDataGridColumns4;
-    FWordWrapColTitles: boolean;
+//    FWordWrapColTitles: boolean;
     FWordWrapRowCaptions: Boolean;
     FRequiredWidthCol: Integer;
     FRequiredWidth: integer;
     procedure SetColumns(const Value: TRbwDataGridColumns4);
-    procedure SetWordWrapColTitles(const Value: boolean);
+//    procedure SetWordWrapColTitles(const Value: boolean);
     procedure SetWordWrapRowCaptions(const Value: Boolean);
     procedure ReadNothing(Reader: TReader);
     procedure WriteNothing(Writer: TWriter);
@@ -1466,17 +1466,17 @@ begin
   FixedCols := TempFixedCols;
 end;
 
-procedure TRbwDataGrid4.SetWordWrapColTitles(const Value: boolean);
-var
-  Index: integer;
-begin
-  FWordWrapColTitles := Value;
-  for Index := 0 to Columns.Count -1 do
-  begin
-    Columns[Index].WordWrapCaptions := Value;
-  end;
-  Invalidate;
-end;
+//procedure TRbwDataGrid4.SetWordWrapColTitles(const Value: boolean);
+//var
+//  Index: integer;
+//begin
+//  FWordWrapColTitles := Value;
+//  for Index := 0 to Columns.Count -1 do
+//  begin
+//    Columns[Index].WordWrapCaptions := Value;
+//  end;
+//  Invalidate;
+//end;
 
 procedure TRbwDataGrid4.SetWordWrapRowCaptions(const Value: Boolean);
 begin
@@ -4372,6 +4372,7 @@ var
   CellFormat: TRbwColumnFormat4;
   NewCol: Integer;
   Splitter: TStringList;
+  ColOffset: Integer;
   function ExtractWord(var AString: string): string;
   var
     TabPos: integer;
@@ -4520,7 +4521,7 @@ begin
             MaxTabCount := 0;
             for LineIndex := 0 to AStringList.Count -1 do
             begin
-              TabCount := 0;
+//              TabCount := 0;
               AString := AStringList[LineIndex];
               Splitter.DelimitedText := AString;
               TabCount := Splitter.Count;
@@ -4539,7 +4540,7 @@ begin
             AString := AStringList[LineIndex];
             NewRow := ARow + LineIndex;
             Splitter.DelimitedText := AString;
-            WordIndex := 0;
+//            WordIndex := 0;
             if AString = '' then
             begin
               if SelectCell(ACol, NewRow) then
@@ -4550,10 +4551,22 @@ begin
             end
             else
             begin
+              ColOffset := 0;
+              for CharIndex := 1 to Length(AString) do
+              begin
+                if AString[CharIndex] = #9 then
+                begin
+                  Inc(ColOffset);
+                end
+                else
+                begin
+                  Break;
+                end;
+              end;
               for WordIndex := 0 to Splitter.Count - 1 do
               begin
                 NewString := Splitter[WordIndex];
-                NewCol := ACol + WordIndex;
+                NewCol := ACol + WordIndex + ColOffset;
                 AssignTextToCell;
               end;
 //              while Length(AString) > 0 do

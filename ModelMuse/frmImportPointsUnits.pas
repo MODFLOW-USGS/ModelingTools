@@ -251,7 +251,7 @@ uses Clipbrd, GoPhastTypes, frmGoPhastUnit, RbwParser,
   frameCustomCellObservationUnit, FootprintPropertiesUnit, FootprintBoundary,
   System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit,
   Modflow6ObsUnit, PestPropertiesUnit, DataArrayManagerUnit, DataSetNamesUnit,
-  ModflowUzfMf6Unit;
+  ModflowUzfMf6Unit, Mt3dmsChemSpeciesUnit, GwtStatusUnit;
 
 {$R *.dfm}
 
@@ -1216,7 +1216,6 @@ const
   RequiredColumns = 9;
 var
   GwtColumns: Integer;
-  FirstGwtCol: Integer;
   SteadyColIndex: TUzf6SteadyColumns;
   ACol: Integer;
   ColIndex: TUzf6TransientColumns;
@@ -1242,16 +1241,12 @@ begin
     FFirstColumn := FFirstUzf6SteadyColumn + Ord(High(TUzf6SteadyColumns))
       + GwtColumns + 1;
 
-  //  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
-  //    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
-  //    u6scBrooksCoreyEpsilon);
-
     Assert(rgFeatureDataFormat.ItemIndex >= 0);
 
     case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
       baOneSP_PerLine:
         begin
-          dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns*4-1;
+          dgData.ColCount := FFirstColumn + RequiredColumns + GwtColumns*4;
         end;
       bsOneBoundaryPerLine:
         begin
@@ -1290,15 +1285,6 @@ begin
     case TBoundaryArrangment(rgFeatureDataFormat.ItemIndex) of
       baOneSP_PerLine:
         begin
-  //  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
-  //    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
-  //    u6scBrooksCoreyEpsilon);
-
-  //  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
-  //    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
-  //    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
-
-//          FirstGwtCol := ACol;
           for ColIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
           begin
             ACol := FFirstColumn + Ord(ColIndex);
@@ -1316,7 +1302,7 @@ begin
               else Assert(False);
             end;
           end;
-          FirstGwtCol := ACol + 1;
+          Inc(ACol);
           for GwtIndex := 0 to NumberOfSpecies - 1 do
           begin
             SpeciesName := frmGoPhast.PhastModel.MobileComponents[GwtIndex].Name;
@@ -1389,37 +1375,6 @@ begin
       else
         Assert(False);
     end;
-
-  {
-    TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
-      u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
-      u6scBrooksCoreyEpsilon);
-    TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
-      u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
-      u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
-
-      SurfaceDepressionDepth
-      VerticalSaturatedK
-      ResidualWaterContent
-      SaturatedWaterContent
-      InitialWaterContent
-      BrooksCoreyEpsilon
-
-      Infiltration: double;
-      PotentialET: double;
-      ExtinctionDepth: double;
-      ExtinctionWaterContent: double;
-      AirEntryPotential: double;
-      RootPotential: double;
-      RootActivity: double;
-
-      GwtStatus
-      SpecifiedConcentrations: TGwtCellData;
-      InfiltrationConcentrations: TGwtCellData;
-      EvapConcentrations: TGwtCellData;
-
-
-  }
   finally
     IgnoredNames.Free;
     StatusChoices.Free;
@@ -1711,377 +1666,577 @@ var
   GwtColumns: Integer;
   GwtIndex: Integer;
   DummyValue: Extended;
+  UzfMf6Boundary: TUzfMf6Boundary;
+  IgnoredNames: TStringList;
+  NumberOfSpecies: Integer;
+  StartTimeColumn: Integer;
+  UzfTransientIndex: TUzf6TransientColumns;
+  UzfTransientValues: array[Low(TUzf6TransientColumns) .. High(TUzf6TransientColumns)] of double;
+  TransientOK: Boolean;
+  Uzf6Item: TUzfMf6Item;
+  SpeciesIndex: Integer;
+  MobileComponents: TMobileChemSpeciesCollection;
+  SpeciesName: string;
+  AValue: Double;
+  FSteadyOK: Boolean;
+  UzfSteadyIndex: TUzf6SteadyColumns;
+  UzfSteadyValues: array[Low(TUzf6SteadyColumns) .. High(TUzf6SteadyColumns)] of double;
+  AFormula: string;
+  SurfaceDepressionDepthDataArray: TDataArray;
+  VerticalSaturatedKDataArray: TDataArray;
+  ReisidualWaterContentDataArray: TDataArray;
+  SaturatedWaterContentDataArray: TDataArray;
+  InitialUnsaturatedWaterContentDataArray: TDataArray;
+  BrooksCoreyEpsilonDataArray: TDataArray;
 begin
   if frmGoPhast.ModelSelection in ModflowSelection then
   begin
-    GwtColumns := GwtColumnCount;
-    Package := comboBoundaryChoice.Items.Objects[comboBoundaryChoice.ItemIndex]
-      as TModflowPackageSelection;
-    Packages := frmGoPhast.PhastModel.ModflowPackages;
-    ABoundary := nil;
-    HobBoundary := nil;
-    Mf6Obs := nil;
-    ObGeneral := ogUndefined;
-    if Package = Packages.ChdBoundary then
-    begin
-      AScreenObject.CreateChdBoundary;
-      ABoundary := AScreenObject.ModflowBoundaries.ModflowChdBoundary;
-    end
-    else if Package = Packages.GhbBoundary then
-    begin
-      AScreenObject.CreateGhbBoundary;
-      ABoundary := AScreenObject.ModflowBoundaries.ModflowGhbBoundary;
-    end
-    else if Package = Packages.WelPackage then
-    begin
-      AScreenObject.CreateWelBoundary;
-      ABoundary := AScreenObject.ModflowBoundaries.ModflowWellBoundary;
-    end
-    else if Package = Packages.RivPackage then
-    begin
-      AScreenObject.CreateRivBoundary;
-      ABoundary := AScreenObject.ModflowBoundaries.ModflowRivBoundary;
-    end
-    else if Package = Packages.DrnPackage then
-    begin
-      AScreenObject.CreateDrnBoundary;
-      ABoundary := AScreenObject.ModflowBoundaries.ModflowDrnBoundary;
-    end
-    else if Package = Packages.HobPackage then
-    begin
-      AScreenObject.CreateHeadObservations;
-      HobBoundary := AScreenObject.ModflowBoundaries.ModflowHeadObservations;
-      LocalObsRoot := Trim(dgData.Cells[FRequiredCols + Ord(hcName), RowIndex]);
-      if LocalObsRoot = '' then
-      begin
-        NewObsName := FObsRoot + IntToStr(FObsCount) + '_';
-        Inc(FObsCount);
-        NewItemName := NewObsName {+ IntToStr(ObsCount+1)};
-      end
-      else
-      begin
-        NewItemName := LocalObsRoot {+ IntToStr(ObsCount+1)};
-        NewObsName := LocalObsRoot;
-      end;
-      HobBoundary.ObservationName := NewObsName;
-      if CharInSet(NewObsName[1], ['0'..'9']) then
-      begin
-        NewObsName := 'Obs_' + NewObsName;
-      end;
-      AScreenObject.Name := TScreenObject.ValidName(NewObsName);
-    end
-    else if Package = Packages.Mf6ObservationUtility then
-    begin
-      AScreenObject.CreateMf6Obs;
-      Mf6Obs := AScreenObject.Modflow6Obs;
-      Mf6Obs.Name :=  dgData.Cells[FRequiredCols,RowIndex];
-      ObsType := dgData.ItemIndex[FRequiredCols +1, RowIndex];
-      if (ObsType >= 0) and (ObsType < Ord(ogUndefined)) then
-      begin
-        ObGeneral := TObGeneral(ObsType);
-        Mf6Obs.General := Mf6Obs.General + [ObGeneral];
-      end;
-    end
-    else if Package = Packages.UzfMf6Package then
-    begin
-
-    end
-    else
-    begin
-      Assert(False);
-    end;
-
-    if (ABoundary <> nil) and (ABoundary is TSpecificModflowBoundary) then
-    begin
-      TSpecificModflowBoundary(ABoundary).FormulaInterpretation := fiDirect;
-    end;
-    AParam := comboParameter.Items.Objects[comboParameter.ItemIndex]
-      as TModflowTransientListParameter;
-    ACol := FFirstColumn;
-    for TimeIndex := 1 to seTimePeriods.AsInteger do
-    begin
+    MobileComponents  := frmGoPhast.PhastModel.MobileComponents;
+    IgnoredNames := TStringList.Create;
+    try
+      GwtColumns := GwtColumnCount;
+      Package := comboBoundaryChoice.Items.Objects[comboBoundaryChoice.ItemIndex]
+        as TModflowPackageSelection;
+      Packages := frmGoPhast.PhastModel.ModflowPackages;
+      ABoundary := nil;
+      HobBoundary := nil;
+      Mf6Obs := nil;
+      ObGeneral := ogUndefined;
+      UzfMf6Boundary := nil;
       if Package = Packages.ChdBoundary then
       begin
-        if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccEndTime), RowIndex], ETime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccStartHead), RowIndex], Shead)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccEndHead), RowIndex], EHead)
-          then
-        begin
-          if AParam <> nil then
-          begin
-            AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
-            if AnItem = nil then
-            begin
-              AnItem := ABoundary.Parameters.Add;
-              AnItem.Param.Param := AParam;
-            end;
-            ChdItem := AnItem.Param.Add as TChdItem;
-          end
-          else
-          begin
-            ChdItem := ABoundary.Values.Add as TChdItem;
-          end;
-
-          ChdItem.StartTime := STime;
-          ChdItem.EndTime := ETime;
-          ChdItem.StartHead := dgData.Cells[ACol+Ord(ccStartHead), RowIndex];
-          ChdItem.EndHead := dgData.Cells[ACol+Ord(ccEndHead), RowIndex];
-        end
-        else
-        begin
-          ChdItem := nil;
-        end;
-        Inc(ACol, 4);
-        for GwtIndex := 0 to GwtColumns - 1 do
-        begin
-          if ChdItem <> nil then
-          begin
-            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
-            begin
-              ChdItem.GwtConcentrations[GwtIndex].Value
-                := dgData.Cells[ACol, RowIndex];
-            end;
-          end;
-          Inc(ACol);
-        end;
+        AScreenObject.CreateChdBoundary;
+        ABoundary := AScreenObject.ModflowBoundaries.ModflowChdBoundary;
       end
       else if Package = Packages.GhbBoundary then
       begin
-        if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(gcEndTime), RowIndex], ETime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(gcBoundaryHead), RowIndex], Bhead)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(gcConductance), RowIndex], Conductance)
-          then
-        begin
-          if AParam <> nil then
-          begin
-            AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
-            if AnItem = nil then
-            begin
-              AnItem := ABoundary.Parameters.Add;
-              AnItem.Param.Param := AParam;
-            end;
-            GhbItem := AnItem.Param.Add as TGhbItem;
-          end
-          else
-          begin
-            GhbItem := ABoundary.Values.Add as TGhbItem;
-          end;
-          GhbItem.StartTime := STime;
-          GhbItem.EndTime := ETime;
-          GhbItem.BoundaryHead := dgData.Cells[ACol+Ord(gcBoundaryHead), RowIndex];
-          GhbItem.Conductance := dgData.Cells[ACol+Ord(gcConductance), RowIndex];
-        end
-        else
-        begin
-          GhbItem := nil;
-        end;
-        Inc(ACol, 4);
-        for GwtIndex := 0 to GwtColumns - 1 do
-        begin
-          if GhbItem <> nil then
-          begin
-            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
-            begin
-              GhbItem.GwtConcentrations[GwtIndex].Value
-                := dgData.Cells[ACol, RowIndex];
-            end;
-          end;
-          Inc(ACol);
-        end;
+        AScreenObject.CreateGhbBoundary;
+        ABoundary := AScreenObject.ModflowBoundaries.ModflowGhbBoundary;
       end
       else if Package = Packages.WelPackage then
       begin
-        if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(wcEndTime), RowIndex], ETime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(wcPumpingRate), RowIndex], Pump)
-          then
-        begin
-          if AParam <> nil then
-          begin
-            AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
-            if AnItem = nil then
-            begin
-              AnItem := ABoundary.Parameters.Add;
-              AnItem.Param.Param := AParam;
-            end;
-            WelItem := AnItem.Param.Add as TWellItem;
-          end
-          else
-          begin
-            WelItem := ABoundary.Values.Add as TWellItem;
-          end;
-          WelItem.StartTime := STime;
-          WelItem.EndTime := ETime;
-          WelItem.PumpingRate := dgData.Cells[ACol+Ord(wcPumpingRate), RowIndex];
-        end
-        else
-        begin
-          WelItem := nil;
-        end;
-        Inc(ACol, 3);
-        for GwtIndex := 0 to GwtColumns - 1 do
-        begin
-          if WelItem <> nil then
-          begin
-            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
-            begin
-              WelItem.GwtConcentrations[GwtIndex].Value
-                := dgData.Cells[ACol, RowIndex];
-            end;
-          end;
-          Inc(ACol);
-        end;
+        AScreenObject.CreateWelBoundary;
+        ABoundary := AScreenObject.ModflowBoundaries.ModflowWellBoundary;
       end
       else if Package = Packages.RivPackage then
       begin
-        if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcEndTime), RowIndex], ETime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcStage), RowIndex], Stage)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcConductance), RowIndex], Conductance)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcBottom), RowIndex], Bottom)
-          then
-        begin
-          if AParam <> nil then
-          begin
-            AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
-            if AnItem = nil then
-            begin
-              AnItem := ABoundary.Parameters.Add;
-              AnItem.Param.Param := AParam;
-            end;
-            RivItem := AnItem.Param.Add as TRivItem;
-          end
-          else
-          begin
-            RivItem := ABoundary.Values.Add as TRivItem;
-          end;
-          RivItem.StartTime := STime;
-          RivItem.EndTime := ETime;
-          RivItem.RiverBottom := dgData.Cells[ACol+Ord(rcBottom), RowIndex];
-          RivItem.Conductance := dgData.Cells[ACol+Ord(rcConductance), RowIndex];
-          RivItem.RiverStage := dgData.Cells[ACol+Ord(rcStage), RowIndex];
-        end
-        else
-        begin
-          RivItem := nil;
-        end;
-        Inc(ACol, 5);
-        for GwtIndex := 0 to GwtColumns - 1 do
-        begin
-          if RivItem <> nil then
-          begin
-            if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
-            begin
-              RivItem.GwtConcentrations[GwtIndex].Value
-                := dgData.Cells[ACol, RowIndex];
-            end;
-          end;
-          Inc(ACol);
-        end;
+        AScreenObject.CreateRivBoundary;
+        ABoundary := AScreenObject.ModflowBoundaries.ModflowRivBoundary;
       end
       else if Package = Packages.DrnPackage then
       begin
-        if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(dcEndTime), RowIndex], ETime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(dcElevation), RowIndex], Elevation)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(dcConductance), RowIndex], Conductance)
-          then
-        begin
-          if AParam <> nil then
-          begin
-            AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
-            if AnItem = nil then
-            begin
-              AnItem := ABoundary.Parameters.Add;
-              AnItem.Param.Param := AParam;
-            end;
-            DrnItem := AnItem.Param.Add as TDrnItem;
-          end
-          else
-          begin
-            DrnItem := ABoundary.Values.Add as TDrnItem;
-          end;
-          DrnItem.StartTime := STime;
-          DrnItem.EndTime := ETime;
-          DrnItem.Elevation := dgData.Cells[ACol+Ord(dcElevation), RowIndex];
-          DrnItem.Conductance := dgData.Cells[ACol+Ord(dcConductance), RowIndex];
-        end;
-        Inc(ACol, 4);
+        AScreenObject.CreateDrnBoundary;
+        ABoundary := AScreenObject.ModflowBoundaries.ModflowDrnBoundary;
       end
       else if Package = Packages.HobPackage then
       begin
-        if (dgData.Cells[ACol, RowIndex] <> '')
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(hcTime), RowIndex], ObsTime)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(hcHead), RowIndex], Head)
-          and TryFortranStrToFloat(dgData.Cells[ACol+Ord(hcStatistic), RowIndex], Statistic)
-          and TryStrToInt(dgData.Cells[ACol+Ord(hcStatistic), RowIndex], StatFlag)
-          then
+        AScreenObject.CreateHeadObservations;
+        HobBoundary := AScreenObject.ModflowBoundaries.ModflowHeadObservations;
+        LocalObsRoot := Trim(dgData.Cells[FRequiredCols + Ord(hcName), RowIndex]);
+        if LocalObsRoot = '' then
         begin
-          HobItem := HobBoundary.Values.Add as THobItem;
-          HobItem.Time := ObsTime;
-          HobItem.Head := Head;
-          HobItem.Statistic := Statistic;
-          if StatFlag < Ord(Low(TStatFlag)) then
-          begin
-            StatFlag := Ord(Low(TStatFlag))
-          end;
-          if StatFlag > Ord(High(TStatFlag)) then
-          begin
-            StatFlag := Ord(High(TStatFlag))
-          end;
-          HobItem.StatFlag := TStatFlag(StatFlag);
+          NewObsName := FObsRoot + IntToStr(FObsCount) + '_';
+          Inc(FObsCount);
+          NewItemName := NewObsName {+ IntToStr(ObsCount+1)};
+        end
+        else
+        begin
+          NewItemName := LocalObsRoot {+ IntToStr(ObsCount+1)};
+          NewObsName := LocalObsRoot;
         end;
-        Inc(ACol, 4);
+        HobBoundary.ObservationName := NewObsName;
+        if CharInSet(NewObsName[1], ['0'..'9']) then
+        begin
+          NewObsName := 'Obs_' + NewObsName;
+        end;
+        AScreenObject.Name := TScreenObject.ValidName(NewObsName);
       end
       else if Package = Packages.Mf6ObservationUtility then
       begin
-        if frmGoPhast.PhastModel.PestProperties.PestStatus <> psInactive then
+        AScreenObject.CreateMf6Obs;
+        Mf6Obs := AScreenObject.Modflow6Obs;
+        Mf6Obs.Name :=  dgData.Cells[FRequiredCols,RowIndex];
+        ObsType := dgData.ItemIndex[FRequiredCols +1, RowIndex];
+        if (ObsType >= 0) and (ObsType < Ord(ogUndefined)) then
         begin
-          Group := dgData.Cells[ACol+2,RowIndex];
-          if TryFortranStrToFloat(dgData.Cells[ACol+2 + Ord(cocTime),RowIndex], ObsTime)
-            and TryFortranStrToFloat(dgData.Cells[ACol+2 + Ord(cocValue),RowIndex], ObsValue)
-            and TryFortranStrToFloat(dgData.Cells[ACol+2 + Ord(cocWeight),RowIndex], ObsWeight)
-            then
-          begin
-            CalibObs := Mf6Obs.CalibrationObservations.Add;
-            CalibObs.Name := Mf6Obs.Name + '_'
-              + IntToStr(Mf6Obs.CalibrationObservations.Count);
-            CalibObs.Time := ObsTime;
-            CalibObs.ObservedValue := ObsValue;
-            CalibObs.Weight := ObsWeight;
-            CalibObs.ObSeries := osGeneral;
-            CalibObs.ObGeneral := ObGeneral;
-            CalibObs.ObservationGroup := Group;
-          end;
+          ObGeneral := TObGeneral(ObsType);
+          Mf6Obs.General := Mf6Obs.General + [ObGeneral];
         end;
-        Inc(ACol, 4);
       end
       else if Package = Packages.UzfMf6Package then
       begin
+        AScreenObject.CreateModflowUzfMf6Boundary;
+        UzfMf6Boundary := AScreenObject.ModflowUzfMf6Boundary;
+        frmGophast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+        NumberOfSpecies := GwtColumns;
+        GwtColumns := GwtColumns - IgnoredNames.Count;
+        StartTimeColumn := FRequiredCols + Ord(u6scBrooksCoreyEpsilon)
+          + NumberOfSpecies + 1;
+        ACol := StartTimeColumn;
 
       end
       else
       begin
         Assert(False);
       end;
-    end;
-    if Package = Packages.ChdBoundary then
-    begin
-      ABoundary := AScreenObject.ModflowBoundaries.ModflowChdBoundary;
 
-      if (ABoundary <> nil) and (ABoundary.Values <> nil) then
+      if (ABoundary <> nil) and (ABoundary is TSpecificModflowBoundary) then
       begin
-        SpecifiedHeadArray := frmGoPhast.PhastModel.DataArrayManager.
-          GetDataSetByName(rsModflowSpecifiedHead);
-        if SpecifiedHeadArray <> nil then
+        TSpecificModflowBoundary(ABoundary).FormulaInterpretation := fiDirect;
+      end;
+      AParam := comboParameter.Items.Objects[comboParameter.ItemIndex]
+        as TModflowTransientListParameter;
+      ACol := FFirstColumn;
+      for TimeIndex := 1 to seTimePeriods.AsInteger do
+      begin
+        if Package = Packages.ChdBoundary then
         begin
-          FormulaPosition := AScreenObject.AddDataSet(SpecifiedHeadArray);
-          AScreenObject.DataSetFormulas[FormulaPosition] := 'True';
+          if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccEndTime), RowIndex], ETime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccStartHead), RowIndex], Shead)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(ccEndHead), RowIndex], EHead)
+            then
+          begin
+            if AParam <> nil then
+            begin
+              AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
+              if AnItem = nil then
+              begin
+                AnItem := ABoundary.Parameters.Add;
+                AnItem.Param.Param := AParam;
+              end;
+              ChdItem := AnItem.Param.Add as TChdItem;
+            end
+            else
+            begin
+              ChdItem := ABoundary.Values.Add as TChdItem;
+            end;
+
+            ChdItem.StartTime := STime;
+            ChdItem.EndTime := ETime;
+            ChdItem.StartHead := dgData.Cells[ACol+Ord(ccStartHead), RowIndex];
+            ChdItem.EndHead := dgData.Cells[ACol+Ord(ccEndHead), RowIndex];
+          end
+          else
+          begin
+            ChdItem := nil;
+          end;
+          Inc(ACol, 4);
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            if ChdItem <> nil then
+            begin
+              if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+              begin
+                ChdItem.GwtConcentrations[GwtIndex].Value
+                  := dgData.Cells[ACol, RowIndex];
+              end;
+            end;
+            Inc(ACol);
+          end;
+        end
+        else if Package = Packages.GhbBoundary then
+        begin
+          if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(gcEndTime), RowIndex], ETime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(gcBoundaryHead), RowIndex], Bhead)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(gcConductance), RowIndex], Conductance)
+            then
+          begin
+            if AParam <> nil then
+            begin
+              AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
+              if AnItem = nil then
+              begin
+                AnItem := ABoundary.Parameters.Add;
+                AnItem.Param.Param := AParam;
+              end;
+              GhbItem := AnItem.Param.Add as TGhbItem;
+            end
+            else
+            begin
+              GhbItem := ABoundary.Values.Add as TGhbItem;
+            end;
+            GhbItem.StartTime := STime;
+            GhbItem.EndTime := ETime;
+            GhbItem.BoundaryHead := dgData.Cells[ACol+Ord(gcBoundaryHead), RowIndex];
+            GhbItem.Conductance := dgData.Cells[ACol+Ord(gcConductance), RowIndex];
+          end
+          else
+          begin
+            GhbItem := nil;
+          end;
+          Inc(ACol, 4);
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            if GhbItem <> nil then
+            begin
+              if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+              begin
+                GhbItem.GwtConcentrations[GwtIndex].Value
+                  := dgData.Cells[ACol, RowIndex];
+              end;
+            end;
+            Inc(ACol);
+          end;
+        end
+        else if Package = Packages.WelPackage then
+        begin
+          if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(wcEndTime), RowIndex], ETime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(wcPumpingRate), RowIndex], Pump)
+            then
+          begin
+            if AParam <> nil then
+            begin
+              AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
+              if AnItem = nil then
+              begin
+                AnItem := ABoundary.Parameters.Add;
+                AnItem.Param.Param := AParam;
+              end;
+              WelItem := AnItem.Param.Add as TWellItem;
+            end
+            else
+            begin
+              WelItem := ABoundary.Values.Add as TWellItem;
+            end;
+            WelItem.StartTime := STime;
+            WelItem.EndTime := ETime;
+            WelItem.PumpingRate := dgData.Cells[ACol+Ord(wcPumpingRate), RowIndex];
+          end
+          else
+          begin
+            WelItem := nil;
+          end;
+          Inc(ACol, 3);
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            if WelItem <> nil then
+            begin
+              if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+              begin
+                WelItem.GwtConcentrations[GwtIndex].Value
+                  := dgData.Cells[ACol, RowIndex];
+              end;
+            end;
+            Inc(ACol);
+          end;
+        end
+        else if Package = Packages.RivPackage then
+        begin
+          if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcEndTime), RowIndex], ETime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcStage), RowIndex], Stage)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcConductance), RowIndex], Conductance)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(rcBottom), RowIndex], Bottom)
+            then
+          begin
+            if AParam <> nil then
+            begin
+              AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
+              if AnItem = nil then
+              begin
+                AnItem := ABoundary.Parameters.Add;
+                AnItem.Param.Param := AParam;
+              end;
+              RivItem := AnItem.Param.Add as TRivItem;
+            end
+            else
+            begin
+              RivItem := ABoundary.Values.Add as TRivItem;
+            end;
+            RivItem.StartTime := STime;
+            RivItem.EndTime := ETime;
+            RivItem.RiverBottom := dgData.Cells[ACol+Ord(rcBottom), RowIndex];
+            RivItem.Conductance := dgData.Cells[ACol+Ord(rcConductance), RowIndex];
+            RivItem.RiverStage := dgData.Cells[ACol+Ord(rcStage), RowIndex];
+          end
+          else
+          begin
+            RivItem := nil;
+          end;
+          Inc(ACol, 5);
+          for GwtIndex := 0 to GwtColumns - 1 do
+          begin
+            if RivItem <> nil then
+            begin
+              if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], DummyValue) then
+              begin
+                RivItem.GwtConcentrations[GwtIndex].Value
+                  := dgData.Cells[ACol, RowIndex];
+              end;
+            end;
+            Inc(ACol);
+          end;
+        end
+        else if Package = Packages.DrnPackage then
+        begin
+          if TryFortranStrToFloat(dgData.Cells[ACol, RowIndex], STime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(dcEndTime), RowIndex], ETime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(dcElevation), RowIndex], Elevation)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(dcConductance), RowIndex], Conductance)
+            then
+          begin
+            if AParam <> nil then
+            begin
+              AnItem := ABoundary.Parameters.GetParamByName(AParam.ParameterName);
+              if AnItem = nil then
+              begin
+                AnItem := ABoundary.Parameters.Add;
+                AnItem.Param.Param := AParam;
+              end;
+              DrnItem := AnItem.Param.Add as TDrnItem;
+            end
+            else
+            begin
+              DrnItem := ABoundary.Values.Add as TDrnItem;
+            end;
+            DrnItem.StartTime := STime;
+            DrnItem.EndTime := ETime;
+            DrnItem.Elevation := dgData.Cells[ACol+Ord(dcElevation), RowIndex];
+            DrnItem.Conductance := dgData.Cells[ACol+Ord(dcConductance), RowIndex];
+          end;
+          Inc(ACol, 4);
+        end
+        else if Package = Packages.HobPackage then
+        begin
+          if (dgData.Cells[ACol, RowIndex] <> '')
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(hcTime), RowIndex], ObsTime)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(hcHead), RowIndex], Head)
+            and TryFortranStrToFloat(dgData.Cells[ACol+Ord(hcStatistic), RowIndex], Statistic)
+            and TryStrToInt(dgData.Cells[ACol+Ord(hcStatistic), RowIndex], StatFlag)
+            then
+          begin
+            HobItem := HobBoundary.Values.Add as THobItem;
+            HobItem.Time := ObsTime;
+            HobItem.Head := Head;
+            HobItem.Statistic := Statistic;
+            if StatFlag < Ord(Low(TStatFlag)) then
+            begin
+              StatFlag := Ord(Low(TStatFlag))
+            end;
+            if StatFlag > Ord(High(TStatFlag)) then
+            begin
+              StatFlag := Ord(High(TStatFlag))
+            end;
+            HobItem.StatFlag := TStatFlag(StatFlag);
+          end;
+          Inc(ACol, 4);
+        end
+        else if Package = Packages.Mf6ObservationUtility then
+        begin
+          if frmGoPhast.PhastModel.PestProperties.PestStatus <> psInactive then
+          begin
+            Group := dgData.Cells[ACol+2,RowIndex];
+            if TryFortranStrToFloat(dgData.Cells[ACol+2 + Ord(cocTime),RowIndex], ObsTime)
+              and TryFortranStrToFloat(dgData.Cells[ACol+2 + Ord(cocValue),RowIndex], ObsValue)
+              and TryFortranStrToFloat(dgData.Cells[ACol+2 + Ord(cocWeight),RowIndex], ObsWeight)
+              then
+            begin
+              CalibObs := Mf6Obs.CalibrationObservations.Add;
+              CalibObs.Name := Mf6Obs.Name + '_'
+                + IntToStr(Mf6Obs.CalibrationObservations.Count);
+              CalibObs.Time := ObsTime;
+              CalibObs.ObservedValue := ObsValue;
+              CalibObs.Weight := ObsWeight;
+              CalibObs.ObSeries := osGeneral;
+              CalibObs.ObGeneral := ObGeneral;
+              CalibObs.ObservationGroup := Group;
+            end;
+          end;
+          Inc(ACol, 4);
+        end
+        else if Package = Packages.UzfMf6Package then
+        begin
+          Assert(UzfMf6Boundary <> nil);
+          TransientOK := True;
+          for UzfTransientIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
+          begin
+            if not TryStrToFloat(dgData.Cells[ACol, RowIndex], UzfTransientValues[UzfTransientIndex]) then
+            begin
+              TransientOK := False;
+              if UzfMf6Boundary.Values.Count = 0 then
+              begin
+                InvalidRow := True;
+              end;
+              Exit;
+            end;
+            Inc(ACol);
+          end;
+          if TransientOK then
+          begin
+            Uzf6Item := UzfMf6Boundary.Values.Add as TUzfMf6Item;
+            Uzf6Item.StartTime := UzfTransientValues[u6tcStartTime];
+            Uzf6Item.EndTime := UzfTransientValues[u6tcEndTime];
+            Uzf6Item.Infiltration := FortranFloatToStr(UzfTransientValues[u6tcInfiltration]);
+            Uzf6Item.PotentialET := FortranFloatToStr(UzfTransientValues[u6tcPotentialET]);
+            Uzf6Item.ExtinctionDepth := FortranFloatToStr(UzfTransientValues[u6tcExtinctionDepth]);
+            Uzf6Item.ExtinctionWaterContent := FortranFloatToStr(UzfTransientValues[u6tcExtinctionWaterContent]);
+            Uzf6Item.AirEntryPotential := FortranFloatToStr(UzfTransientValues[u6tcAirEntryPotential]);
+            Uzf6Item.RootPotential := FortranFloatToStr(UzfTransientValues[u6tcRootPotential]);
+            Uzf6Item.RootActivity := FortranFloatToStr(UzfTransientValues[u6tcRootActivity]);
+            if GwtColumns > 0 then
+            begin
+              Uzf6Item.GwtStatus.Count := NumberOfSpecies;
+              Uzf6Item.SpecifiedConcentrations.Count := NumberOfSpecies;
+              Uzf6Item.InfiltrationConcentrations.Count := NumberOfSpecies;
+              Uzf6Item.EvapConcentrations.Count := NumberOfSpecies;
+  //            ACol := StartTimeColumn + Ord(High(TUzf6TransientColumns)) + 1;
+              for SpeciesIndex := 0 to NumberOfSpecies - 1 do
+              begin
+                SpeciesName := MobileComponents[SpeciesIndex].Name;
+                if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+                begin
+                  Continue;
+                end;
+                if dgData.ItemIndex[ACol, RowIndex] >= 0 then
+                begin
+                  Uzf6Item.GwtStatus[SpeciesIndex].GwtBoundaryStatus :=
+                    TGwtBoundaryStatus(dgData.ItemIndex[ACol, RowIndex]);
+                end;
+                Inc(ACol);
+                if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue)  then
+                begin
+                  Uzf6Item.SpecifiedConcentrations[SpeciesIndex].Value
+                    := FortranFloatToStr(AValue);
+                end;
+                Inc(ACol);
+                if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue)  then
+                begin
+                  Uzf6Item.InfiltrationConcentrations[SpeciesIndex].Value
+                    := FortranFloatToStr(AValue);
+                end;
+                Inc(ACol);
+                if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue)  then
+                begin
+                  Uzf6Item.EvapConcentrations[SpeciesIndex].Value
+                    := FortranFloatToStr(AValue);
+                end;
+                Inc(ACol);
+              end;
+            end;
+
+          end;
+        end
+        else
+        begin
+          Assert(False);
         end;
       end;
-    end
+      if Package = Packages.ChdBoundary then
+      begin
+        ABoundary := AScreenObject.ModflowBoundaries.ModflowChdBoundary;
+
+        if (ABoundary <> nil) and (ABoundary.Values <> nil) then
+        begin
+          SpecifiedHeadArray := frmGoPhast.PhastModel.DataArrayManager.
+            GetDataSetByName(rsModflowSpecifiedHead);
+          if SpecifiedHeadArray <> nil then
+          begin
+            FormulaPosition := AScreenObject.AddDataSet(SpecifiedHeadArray);
+            AScreenObject.DataSetFormulas[FormulaPosition] := 'True';
+          end;
+        end;
+      end
+      else if Package = Packages.UzfMf6Package then
+      begin
+        FSteadyOK := True;
+        for UzfSteadyIndex := Low(TUzf6SteadyColumns) to High(TUzf6SteadyColumns) do
+        begin
+          if not TryStrToFloat(dgData.Cells[FRequiredCols + Ord(UzfSteadyIndex), RowIndex],
+            UzfSteadyValues[UzfSteadyIndex]) then
+          begin
+            FSteadyOK := False;
+          end;
+        end;
+        if FSteadyOK then
+        begin
+          AFormula := FortranFloatToStr(UzfSteadyValues[u6scSurfaceDepressionDepth]);
+  //            FormulaObject = UzfMf6Boundary.SurfaceDepressionDepth;
+          SurfaceDepressionDepthDataArray :=
+            frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
+          if SurfaceDepressionDepthDataArray <> nil then
+          begin
+            FormulaPosition := AScreenObject.AddDataSet(SurfaceDepressionDepthDataArray);
+            AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+          end;
+          UzfMf6Boundary.SurfaceDepressionDepth :=  AFormula;
+
+          AFormula := FortranFloatToStr(UzfSteadyValues[u6scVerticalSaturatedK]);
+          VerticalSaturatedKDataArray :=
+            frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6VerticalSaturatedK);
+          if VerticalSaturatedKDataArray <> nil then
+          begin
+            FormulaPosition := AScreenObject.AddDataSet(VerticalSaturatedKDataArray);
+            AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+          end;
+          UzfMf6Boundary.VerticalSaturatedK := AFormula;
+
+          AFormula := FortranFloatToStr(UzfSteadyValues[u6scResidualWaterContent]);
+          UzfMf6Boundary.ResidualWaterContent := AFormula;
+          ReisidualWaterContentDataArray :=
+            frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6ReisidualWaterContent);
+          if ReisidualWaterContentDataArray <> nil then
+          begin
+            FormulaPosition := AScreenObject.AddDataSet(ReisidualWaterContentDataArray);
+            AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+          end;
+
+          AFormula := FortranFloatToStr(UzfSteadyValues[u6scSaturatedWaterContent]);
+          UzfMf6Boundary.SaturatedWaterContent := AFormula;
+          SaturatedWaterContentDataArray :=
+            frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6SaturatedWaterContent);
+          if SaturatedWaterContentDataArray <> nil then
+          begin
+            FormulaPosition := AScreenObject.AddDataSet(SaturatedWaterContentDataArray);
+            AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+          end;
+
+          AFormula := FortranFloatToStr(UzfSteadyValues[u6scInitialWaterContent]);
+          UzfMf6Boundary.InitialWaterContent := AFormula;
+          InitialUnsaturatedWaterContentDataArray :=
+            frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6InitialUnsaturatedWaterContent);
+          if InitialUnsaturatedWaterContentDataArray <> nil then
+          begin
+            FormulaPosition := AScreenObject.AddDataSet(InitialUnsaturatedWaterContentDataArray);
+            AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+          end;
+
+          AFormula := FortranFloatToStr(UzfSteadyValues[u6scBrooksCoreyEpsilon]);
+          UzfMf6Boundary.BrooksCoreyEpsilon := AFormula;
+          BrooksCoreyEpsilonDataArray :=
+            frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
+          if BrooksCoreyEpsilonDataArray <> nil then
+          begin
+            FormulaPosition := AScreenObject.AddDataSet(BrooksCoreyEpsilonDataArray);
+            AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+          end;
+        end;
+        ACol := FRequiredCols + Ord(u6scBrooksCoreyEpsilon) + 1;
+        if GwtColumns > 0 then
+        begin
+          UzfMf6Boundary.StartingConcentrations.Count := NumberOfSpecies;
+          for SpeciesIndex := 0 to NumberOfSpecies - 1 do
+          begin
+            SpeciesName := MobileComponents[SpeciesIndex].Name;
+            if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+            begin
+              Continue;
+            end;
+            if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue) then
+            begin
+              UzfMf6Boundary.StartingConcentrations[SpeciesIndex].Value :=
+                FortranFloatToStr(AValue);
+            end;
+            Inc(ACol);
+          end;
+        end;
+
+      end;
+    finally
+      IgnoredNames.Free;
+    end;
   end;
 end;
 
@@ -2127,13 +2282,22 @@ var
   UzfSteadyIndex: TUzf6SteadyColumns;
   FSteadyOK: Boolean;
   StartTimeColumn: Integer;
-  StartingTime: Double;
-  EndingTime: Double;
   Uzf6Item: TUzfMf6Item;
   UzfTransientIndex: TUzf6TransientColumns;
   ACol: Integer;
   UzfTransientValues: array[Low(TUzf6TransientColumns) .. High(TUzf6TransientColumns)] of double;
-  TransientOK: Boolean;
+  IgnoredNames: TStringList;
+  NumberOfSpecies: Integer;
+  SpeciesIndex: Integer;
+  MobileComponents: TMobileChemSpeciesCollection;
+  SpeciesName: string;
+  SurfaceDepressionDepthDataArray: TDataArray;
+  VerticalSaturatedKDataArray: TDataArray;
+  ReisidualWaterContentDataArray: TDataArray;
+  SaturatedWaterContentDataArray: TDataArray;
+  InitialUnsaturatedWaterContentDataArray: TDataArray;
+  BrooksCoreyEpsilonDataArray: TDataArray;
+  AFormula: string;
 begin
   GwtColumns := GwtColumnCount;
   InvalidRow := False;
@@ -2187,17 +2351,9 @@ begin
             // skip the calibration observations columns.
           end
         end
-        else if (Package = Packages. UzfMf6Package) and (ColIndex <= FRequiredCols) then
+        else if (Package = Packages. UzfMf6Package) then
         begin
-          try
-            Values.Add(StrToFloat(Trim(dgData.Cells[ColIndex, RowIndex])));
-          except
-            on E: EConvertError do
-            begin
-              InvalidRow := True;
-              Exit;
-            end;
-          end;
+          // do nothing
         end
         else
         begin
@@ -2458,44 +2614,43 @@ begin
       end
       else if Package = Packages.UzfMf6Package then
       begin
-        Assert(UzfMf6Boundary <> nil);
-        FSteadyOK := True;
-        for UzfSteadyIndex := Low(TUzf6SteadyColumns) to High(TUzf6SteadyColumns) do
-        begin
-          if not TryStrToFloat(dgData.Cells[FRequiredCols + Ord(UzfSteadyIndex), RowIndex],
-            UzfSteadyValues[UzfSteadyIndex]) then
+        IgnoredNames := TStringList.Create;
+        try
+          frmGophast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+          NumberOfSpecies := GwtColumns;
+          GwtColumns := GwtColumns - IgnoredNames.Count;
+          Assert(UzfMf6Boundary <> nil);
+          ACol := FRequiredCols + Ord(u6scBrooksCoreyEpsilon) + 1;
+          MobileComponents  := frmGoPhast.PhastModel.MobileComponents;
+          if GwtColumns > 0 then
           begin
-            FSteadyOK := False;
+            UzfMf6Boundary.StartingConcentrations.Count := NumberOfSpecies;
+            for SpeciesIndex := 0 to NumberOfSpecies - 1 do
+            begin
+              SpeciesName := MobileComponents[SpeciesIndex].Name;
+              if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+              begin
+                Continue;
+              end;
+              if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue) then
+              begin
+                UzfMf6Boundary.StartingConcentrations[SpeciesIndex].Value :=
+                  FortranFloatToStr(AValue);
+              end;
+              Inc(ACol);
+            end;
           end;
-        end;
-        if FSteadyOK then
-        begin
-          UzfMf6Boundary.SurfaceDepressionDepth :=
-            FortranFloatToStr(UzfSteadyValues[u6scSurfaceDepressionDepth]);
-          UzfMf6Boundary.VerticalSaturatedK :=
-            FortranFloatToStr(UzfSteadyValues[u6scVerticalSaturatedK]);
-          UzfMf6Boundary.ResidualWaterContent :=
-            FortranFloatToStr(UzfSteadyValues[u6scResidualWaterContent]);
-          UzfMf6Boundary.SaturatedWaterContent :=
-            FortranFloatToStr(UzfSteadyValues[u6scSaturatedWaterContent]);
-          UzfMf6Boundary.InitialWaterContent :=
-            FortranFloatToStr(UzfSteadyValues[u6scInitialWaterContent]);
-          UzfMf6Boundary.BrooksCoreyEpsilon :=
-            FortranFloatToStr(UzfSteadyValues[u6scBrooksCoreyEpsilon]);
-        end;
-        StartTimeColumn := FRequiredCols + Ord(u6scBrooksCoreyEpsilon) + 1;
-        TransientOK := True;
-        for UzfTransientIndex := u6tcInfiltration to u6tcRootActivity do
-        begin
-          ACol := StartTimeColumn + Ord(UzfTransientIndex);
-          if not TryStrToFloat(dgData.Cells[StartTimeColumn + Ord(UzfTransientIndex),
-            RowIndex], UzfTransientValues[UzfTransientIndex]) then
+          StartTimeColumn := FRequiredCols + Ord(u6scBrooksCoreyEpsilon)
+            + GwtColumns + 1;
+          for UzfTransientIndex := Low(TUzf6TransientColumns) to High(TUzf6TransientColumns) do
           begin
-            TransientOK := False
+            ACol := StartTimeColumn + Ord(UzfTransientIndex);
+            if not TryStrToFloat(dgData.Cells[ACol, RowIndex], UzfTransientValues[UzfTransientIndex]) then
+            begin
+              InvalidRow := True;
+              Exit;
+            end;
           end;
-        end;
-        if TransientOK then
-        begin
           Uzf6Item := UzfMf6Boundary.Values.Add as TUzfMf6Item;
           Uzf6Item.StartTime := UzfTransientValues[u6tcStartTime];
           Uzf6Item.EndTime := UzfTransientValues[u6tcEndTime];
@@ -2506,17 +2661,141 @@ begin
           Uzf6Item.AirEntryPotential := FortranFloatToStr(UzfTransientValues[u6tcAirEntryPotential]);
           Uzf6Item.RootPotential := FortranFloatToStr(UzfTransientValues[u6tcRootPotential]);
           Uzf6Item.RootActivity := FortranFloatToStr(UzfTransientValues[u6tcRootActivity]);
-        end;
-//        begin
-//  TUzf6SteadyColumns = (u6scSurfaceDepressionDepth, u6scVerticalSaturatedK,
-//    u6scResidualWaterContent,u6scSaturatedWaterContent,u6scInitialWaterContent,
-//    u6scBrooksCoreyEpsilon);
-//  TUzf6TransientColumns = (u6tcStartTime,u6tcEndTime,u6tcInfiltration,
-//    u6tcPotentialET,u6tcExtinctionDepth, u6tcExtinctionWaterContent,
-//    u6tcAirEntryPotential,u6tcRootPotential, u6tcRootActivity);
+          if GwtColumns > 0 then
+          begin
+            Uzf6Item.GwtStatus.Count := NumberOfSpecies;
+            Uzf6Item.SpecifiedConcentrations.Count := NumberOfSpecies;
+            Uzf6Item.InfiltrationConcentrations.Count := NumberOfSpecies;
+            Uzf6Item.EvapConcentrations.Count := NumberOfSpecies;
+            ACol := StartTimeColumn + Ord(High(TUzf6TransientColumns)) + 1;
+            for SpeciesIndex := 0 to NumberOfSpecies - 1 do
+            begin
+              SpeciesName := MobileComponents[SpeciesIndex].Name;
+              if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+              begin
+                Continue;
+              end;
+              if dgData.ItemIndex[ACol, RowIndex] >= 0 then
+              begin
+                Uzf6Item.GwtStatus[SpeciesIndex].GwtBoundaryStatus :=
+                  TGwtBoundaryStatus(dgData.ItemIndex[ACol, RowIndex]);
+              end;
+              Inc(ACol);
+              if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue)  then
+              begin
+                Uzf6Item.SpecifiedConcentrations[SpeciesIndex].Value
+                  := FortranFloatToStr(AValue);
+              end;
+              Inc(ACol);
+              if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue)  then
+              begin
+                Uzf6Item.InfiltrationConcentrations[SpeciesIndex].Value
+                  := FortranFloatToStr(AValue);
+              end;
+              Inc(ACol);
+              if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue)  then
+              begin
+                Uzf6Item.EvapConcentrations[SpeciesIndex].Value
+                  := FortranFloatToStr(AValue);
+              end;
+              Inc(ACol);
+            end;
+          end;
+          FSteadyOK := True;
+          for UzfSteadyIndex := Low(TUzf6SteadyColumns) to High(TUzf6SteadyColumns) do
+          begin
+            if not TryStrToFloat(dgData.Cells[FRequiredCols + Ord(UzfSteadyIndex), RowIndex],
+              UzfSteadyValues[UzfSteadyIndex]) then
+            begin
+              FSteadyOK := False;
+            end;
+          end;
+          if FSteadyOK then
+          begin
+            AFormula := FortranFloatToStr(UzfSteadyValues[u6scSurfaceDepressionDepth]);
+//            FormulaObject = UzfMf6Boundary.SurfaceDepressionDepth;
+            SurfaceDepressionDepthDataArray :=
+              frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
+            if SurfaceDepressionDepthDataArray <> nil then
+            begin
+              FormulaPosition := AScreenObject.AddDataSet(SurfaceDepressionDepthDataArray);
+              AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+            end;
+            UzfMf6Boundary.SurfaceDepressionDepth :=  AFormula;
 
-//        end;
-//        ABoundary
+            AFormula := FortranFloatToStr(UzfSteadyValues[u6scVerticalSaturatedK]);
+            VerticalSaturatedKDataArray :=
+              frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6VerticalSaturatedK);
+            if VerticalSaturatedKDataArray <> nil then
+            begin
+              FormulaPosition := AScreenObject.AddDataSet(VerticalSaturatedKDataArray);
+              AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+            end;
+            UzfMf6Boundary.VerticalSaturatedK := AFormula;
+
+            AFormula := FortranFloatToStr(UzfSteadyValues[u6scResidualWaterContent]);
+            UzfMf6Boundary.ResidualWaterContent := AFormula;
+            ReisidualWaterContentDataArray :=
+              frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6ReisidualWaterContent);
+            if ReisidualWaterContentDataArray <> nil then
+            begin
+              FormulaPosition := AScreenObject.AddDataSet(ReisidualWaterContentDataArray);
+              AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+            end;
+
+            AFormula := FortranFloatToStr(UzfSteadyValues[u6scSaturatedWaterContent]);
+            UzfMf6Boundary.SaturatedWaterContent := AFormula;
+            SaturatedWaterContentDataArray :=
+              frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6SaturatedWaterContent);
+            if SaturatedWaterContentDataArray <> nil then
+            begin
+              FormulaPosition := AScreenObject.AddDataSet(SaturatedWaterContentDataArray);
+              AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+            end;
+
+            AFormula := FortranFloatToStr(UzfSteadyValues[u6scInitialWaterContent]);
+            UzfMf6Boundary.InitialWaterContent := AFormula;
+            InitialUnsaturatedWaterContentDataArray :=
+              frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6InitialUnsaturatedWaterContent);
+            if InitialUnsaturatedWaterContentDataArray <> nil then
+            begin
+              FormulaPosition := AScreenObject.AddDataSet(InitialUnsaturatedWaterContentDataArray);
+              AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+            end;
+
+            AFormula := FortranFloatToStr(UzfSteadyValues[u6scBrooksCoreyEpsilon]);
+            UzfMf6Boundary.BrooksCoreyEpsilon := AFormula;
+            BrooksCoreyEpsilonDataArray :=
+              frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
+            if BrooksCoreyEpsilonDataArray <> nil then
+            begin
+              FormulaPosition := AScreenObject.AddDataSet(BrooksCoreyEpsilonDataArray);
+              AScreenObject.DataSetFormulas[FormulaPosition] := AFormula;
+            end;
+          end;
+          ACol := FRequiredCols + Ord(u6scBrooksCoreyEpsilon) + 1;
+          MobileComponents  := frmGoPhast.PhastModel.MobileComponents;
+          if GwtColumns > 0 then
+          begin
+            UzfMf6Boundary.StartingConcentrations.Count := NumberOfSpecies;
+            for SpeciesIndex := 0 to NumberOfSpecies - 1 do
+            begin
+              SpeciesName := MobileComponents[SpeciesIndex].Name;
+              if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+              begin
+                Continue;
+              end;
+              if TryStrToFloat(dgData.Cells[ACol, RowIndex], AValue) then
+              begin
+                UzfMf6Boundary.StartingConcentrations[SpeciesIndex].Value :=
+                  FortranFloatToStr(AValue);
+              end;
+              Inc(ACol);
+            end;
+          end;
+        finally
+          IgnoredNames.Free;
+        end;
       end
       else
       begin

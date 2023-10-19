@@ -10061,6 +10061,9 @@ const
 //                exporting the MVR package input file.
 //    '5.1.1.42' Enhancement: The Mesh|Specify Mesh dialog box has been modified
 //                to allow the user to specify a 3D mesh.
+//    '5.1.1.43' The Import Points dialog box has been changed to allow
+//                allow importing GWT concentrations and UZF boundaries for
+//                MODFLOW 6.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10073,7 +10076,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.42';
+  IIModelVersion = '5.1.1.43';
 
 function IModelVersion: string;
 begin

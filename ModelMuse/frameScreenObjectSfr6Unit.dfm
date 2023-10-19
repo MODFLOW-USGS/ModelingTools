@@ -285,7 +285,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitHeight = 119
         end
       end
       object pnlBottom: TPanel
@@ -440,7 +439,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 539
-          ExplicitHeight = 176
+          ExplicitHeight = 339
         end
       end
     end
@@ -537,7 +536,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 539
-          ExplicitHeight = 176
+          ExplicitHeight = 339
           ColWidths = (
             64
             79)
@@ -674,9 +673,8 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 368
-          ExplicitWidth = 171
-          ExplicitHeight = 135
+          ExplicitWidth = 539
+          ExplicitHeight = 184
         end
       end
       object Panel1: TPanel

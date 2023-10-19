@@ -1294,6 +1294,7 @@ begin
   BrooksCoreyEpsilonDataArray :=
     Model.DataArrayManager.GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
 
+  IDOMAINDataArray.Initialize;
   SurfaceDepressionDepthDataArray.Initialize;
   VerticalSaturatedKDataArray.Initialize;
   ReisidualWaterContentDataArray.Initialize;

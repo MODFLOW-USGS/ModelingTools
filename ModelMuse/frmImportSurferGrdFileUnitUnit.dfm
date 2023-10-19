@@ -1,10 +1,12 @@
 inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   HelpKeyword = 'Import_Surfer_Grid_File'
   Caption = 'Import Surfer Grid File'
-  ClientHeight = 472
-  ClientWidth = 590
-  ExplicitWidth = 602
-  ExplicitHeight = 510
+  ClientHeight = 471
+  ClientWidth = 586
+  ExplicitLeft = 3
+  ExplicitTop = 3
+  ExplicitWidth = 598
+  ExplicitHeight = 509
   TextHeight = 18
   inherited lblDataSet: TLabel
     Top = 156
@@ -37,11 +39,11 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   end
   inherited comboDataSets: TComboBox
     Top = 178
-    Width = 562
+    Width = 550
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
     ExplicitTop = 178
-    ExplicitWidth = 558
+    ExplicitWidth = 546
   end
   inherited comboInterpolators: TComboBox
     Top = 245
@@ -102,7 +104,7 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   object rdgLimits: TRbwDataGrid4 [14]
     Left = 8
     Top = 29
-    Width = 562
+    Width = 550
     Height = 121
     Anchors = [akLeft, akTop, akRight]
     ColCount = 4
@@ -216,12 +218,11 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 558
   end
   object rgFilterMethod: TRadioGroup [15]
     Left = 343
     Top = 210
-    Width = 227
+    Width = 215
     Height = 140
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Filter method'
@@ -233,7 +234,7 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
       'Point closest to cell center'
       'None')
     TabOrder = 2
-    ExplicitWidth = 223
+    ExplicitWidth = 211
   end
   object comboFromUnits: TComboBox [16]
     Left = 271
