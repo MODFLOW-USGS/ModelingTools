@@ -4448,9 +4448,11 @@ begin
   AStringList := TStringList.Create;
   Splitter := TStringList.Create;
   try
+    Splitter.StrictDelimiter := True;
     AStringList.Text := CellContents;
     result := (AStringList.Count > 1) or (Pos(#9, CellContents) > 0)
-      or (Pos(',', CellContents) > 0) or (Pos(' ', CellContents) > 0);
+      or (Pos(',', CellContents) > 0);
+//      or (Pos(' ', CellContents) > 0);
     if result then
     begin
       if FDistributingText then
@@ -4703,6 +4705,8 @@ var
   ConversionOK : boolean;
   AFloat : extended;
   E : integer;
+  ColOrRow: TCustomRowOrColumn;
+  ShouldDistribute: Boolean;
 begin
   if fDeleting then
   begin
@@ -4711,11 +4715,24 @@ begin
   end;
   BeginUpdate;
   try
-    if AutoDistributeText then
+    if AutoDistributeText  then
     begin
-      if DistributeText(ACol, ARow, Value) then
+      ColOrRow := CollectionItem(ACol, ARow);
+
+      if ColOrRow.LimitToList and ColOrRow.ComboUsed then
       begin
-        Exit;
+        ShouldDistribute := False;
+      end
+      else
+      begin
+        ShouldDistribute := True;
+      end;
+      if ShouldDistribute then
+      begin
+        if DistributeText(ACol, ARow, Value) then
+        begin
+          Exit;
+        end;
       end;
     end;
 

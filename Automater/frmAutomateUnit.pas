@@ -1372,10 +1372,31 @@ begin
 
               ValueLine := ModelMuseFile[FileIndexes.ParamEndTimePosition1];
               Assert(Pos('              EndTime = ', ValueLine) > 0);
+              PositionIndex := FileIndexes.ParamEndTimePosition1+4;
               FileIndexes.ParamStartTimePosition2 := FileIndexes.ParamEndTimePosition1+4;
+              for TestIndex := PositionIndex to ModelMuseFile.Count - 1 do
+              begin
+                ValueLine := ModelMuseFile[TestIndex];
+                if Pos('              StartTime =', ValueLine) > 0 then
+                begin
+                  FileIndexes.ParamStartTimePosition2 := TestIndex;
+                  break;
+                end;
+              end;
+
               ValueLine := ModelMuseFile[FileIndexes.ParamStartTimePosition2];
               Assert(Pos('              StartTime =', ValueLine) > 0);
-              FileIndexes.ParamEndTimePosition2 := FileIndexes.ParamStartTimePosition2+1;
+              PositionIndex := FileIndexes.ParamStartTimePosition2+1;
+              FileIndexes.ParamEndTimePosition2 := PositionIndex;
+              for TestIndex := PositionIndex to ModelMuseFile.Count - 1 do
+              begin
+                ValueLine := ModelMuseFile[TestIndex];
+                if Pos('              EndTime =', ValueLine) > 0 then
+                begin
+                  FileIndexes.ParamEndTimePosition2 := TestIndex;
+                  break;
+                end;
+              end;
               ValueLine := ModelMuseFile[FileIndexes.ParamEndTimePosition2];
               Assert(Pos('              EndTime =', ValueLine) > 0);
 
@@ -1388,12 +1409,32 @@ begin
               ValueLine := ModelMuseFile[FileIndexes.KhPosition];
               Assert(Pos('Value = ', ValueLine) > 0);
 
-              FileIndexes.KvPosition := FileIndexes.KhPosition + 8;
+              PositionIndex := FileIndexes.KhPosition + 8;
+              FileIndexes.KvPosition := PositionIndex;
+              for TestIndex := PositionIndex to ModelMuseFile.Count - 1 do
+              begin
+                ValueLine := ModelMuseFile[TestIndex];
+                if Pos('      ParameterName = ''VK_Par1''', ValueLine) > 0 then
+                begin
+                  FileIndexes.KvPosition := TestIndex+2;
+                  break;
+                end;
+              end;
               Assert(ModelMuseFile[FileIndexes.KvPosition-2] = '      ParameterName = ''VK_Par1''');
               ValueLine := ModelMuseFile[FileIndexes.KvPosition];
               Assert(Pos('Value = ', ValueLine) > 0);
 
-              FileIndexes.SyPosition := FileIndexes.KvPosition + 8;
+              PositionIndex := FileIndexes.KvPosition + 8;
+              FileIndexes.SyPosition := PositionIndex;
+              for TestIndex := PositionIndex to ModelMuseFile.Count - 1 do
+              begin
+                ValueLine := ModelMuseFile[TestIndex];
+                if Pos('      ParameterName = ''SY_Par1''', ValueLine) > 0 then
+                begin
+                  FileIndexes.SyPosition := TestIndex+2;
+                  break;
+                end;
+              end;
               Assert(ModelMuseFile[FileIndexes.SyPosition-2] = '      ParameterName = ''SY_Par1''');
               ValueLine := ModelMuseFile[FileIndexes.SyPosition];
               Assert(Pos('Value = ', ValueLine) > 0);
@@ -1425,8 +1466,17 @@ begin
               ValueLine := ModelMuseFile[FileIndexes.TSMultPosition1];
               Assert(Pos('TimeStepMultiplier = ', ValueLine) > 0);
 
-
-              FileIndexes.EndtimePosition2 := FileIndexes.EndtimePosition1 + 8;
+              PositionIndex := FileIndexes.EndtimePosition1 + 8;
+              FileIndexes.EndtimePosition2 := PositionIndex;
+              for TestIndex := PositionIndex to ModelMuseFile.Count - 1 do
+              begin
+                ValueLine := ModelMuseFile[TestIndex];
+                if Pos('EndTime = ', ValueLine) > 0 then
+                begin
+                  FileIndexes.EndtimePosition2 := TestIndex;
+                  break;
+                end;
+              end;
               ValueLine := ModelMuseFile[FileIndexes.EndtimePosition2];
               Assert(Pos('EndTime = ', ValueLine) > 0);
 
@@ -1446,8 +1496,17 @@ begin
               ValueLine := ModelMuseFile[FileIndexes.TSMultPosition2];
               Assert(Pos('TimeStepMultiplier = ', ValueLine) > 0);
 
-
-              FileIndexes.EndtimePosition3 := FileIndexes.EndtimePosition2 + 9;
+              PositionIndex := FileIndexes.EndtimePosition2 + 9;
+              FileIndexes.EndtimePosition3 := PositionIndex;
+              for TestIndex := PositionIndex to ModelMuseFile.Count - 1 do
+              begin
+                ValueLine := ModelMuseFile[TestIndex];
+                if Pos('EndTime = ', ValueLine) > 0 then
+                begin
+                  FileIndexes.EndtimePosition3 := TestIndex;
+                  break;
+                end;
+              end;
               ValueLine := ModelMuseFile[FileIndexes.EndtimePosition3];
               Assert(Pos('EndTime = ', ValueLine) > 0);
 
@@ -2407,8 +2466,8 @@ begin
         end;
       end;
       Assert(RowPositions.Count = NROW+1);
-      FCenterX := (ColPositions[0] + ColPositions[ColPositions.Count-1])/2;
-      FCenterY := (RowPositions[0] + RowPositions[RowPositions.Count-1])/2;
+//      FCenterX := (ColPositions[0] + ColPositions[ColPositions.Count-1])/2;
+//      FCenterY := (RowPositions[0] + RowPositions[RowPositions.Count-1])/2;
     finally
       Splitter.Free;
     end;
@@ -2639,7 +2698,26 @@ var
   TSMULT: Double;
   PointLines: TStringList;
   PointLineIndex: Integer;
+  FirstRowIndex: Integer;
+  FirstRowPosition: double;
+  ObsPointIndex: Integer;
+  ObsLine: string;
+  EqualIndex: Integer;
+  ObsPosition: double;
 begin
+  FirstRowIndex := FModelMuseFile.IndexOf('  ModflowGrid.RowPositions = (');
+  Assert(FirstRowIndex >= 0);
+  Inc(FirstRowIndex);
+  FirstRowPosition := StrToFloat(Trim(FModelMuseFile[FirstRowIndex]));
+  ObsPointIndex := FModelMuseFile.IndexOf('      ScreenObject.Name = ''Center''');
+  Assert(ObsPointIndex >= 0);
+  Dec(ObsPointIndex, 2);
+  ObsLine := FModelMuseFile[ObsPointIndex];
+  EqualIndex := Pos('=', ObsLine);
+  ObsLine := Copy(ObsLine, EqualIndex+1, MaxInt);
+  ObsPosition := StrToFloat(Trim(ObsLine));
+  FCenterY := FirstRowPosition - ObsPosition;
+
   CurrentFileValues := FFileValues[FFileIndex];
   YOffset := Sqrt(CurrentFileValues.BasinArea/CurrentFileValues.ShapeFactor)/2;
   XOffset := YOffset*CurrentFileValues.ShapeFactor;
@@ -2661,6 +2739,7 @@ begin
     FResults.StressPeriodLength := CurrentFileValues.BasinDepth/CurrentFileValues.Kv;
     TSMULT := GetTSMULT(FResults.StressPeriodLength, FConstants.FirstStepLength, FConstants.NSTP);
 
+    Assert(FResults.StressPeriodLength*2 > 0);
     FResults.Kx := CurrentFileValues.Ratio*CurrentFileValues.Kv;
     FModelMuseFile[FIndicies.KhPosition] := '      Value = ' + FloatToStr(FResults.Kx);
     FModelMuseFile[FIndicies.KvPosition] := '      Value = ' + FloatToStr(CurrentFileValues.Kv);
@@ -2683,7 +2762,7 @@ begin
     FModelMuseFile[FIndicies.FirstTimeStepPosition2] := '      MaxLengthOfFirstTimeStep = ' + FloatToStr(FConstants.FirstStepLength);
     FModelMuseFile[FIndicies.StartTimePos2] := '      StartTime = ' + FloatToStr(FResults.StressPeriodLength);
 
-
+    Assert(10-FResults.StressPeriodLength*2 > 0);
     FModelMuseFile[FIndicies.EndtimePosition3] := '      EndTime = ' + FloatToStr(10-FResults.StressPeriodLength*2);
     FModelMuseFile[FIndicies.PeriodLengthPosition3] := '      PeriodLength = ' + FloatToStr(10-FResults.StressPeriodLength*2);
     FModelMuseFile[FIndicies.TSMultPosition3] := '      TimeStepMultiplier = 1';// + FloatToStr(TSMULT);
