@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, Mask, JvExMask, JvToolEdit, ArgusDataEntry, Grids,
   RbwDataGrid4, JvSpin, Menus, Buttons, ExtCtrls, ComCtrls, ToolWin,
   ImgList, JvComponentBase, JvCreateProcess, IOUtils, RealListUnit, Types,
-  AbBase, AbBrowse, AbZBrows, AbZipper;
+  AbBase, AbBrowse, AbZBrows, AbZipper, System.ImageList;
 
 type
   TResultsColumns = (rcDirectory, rcShape, rcBasinArea, rcKv, rcKx, rcSy,
@@ -1174,20 +1174,41 @@ begin
     if not FileExists(feMODFLOW.FileName) then
     begin
       Beep;
-      MessageDlg(feMODFLOW.FileName + ' does not exist.', mtError, [mbOK], 0);
+      if feMODFLOW.FileName = '' then
+      begin
+        MessageDlg('No MODFLOW file has been specified..', mtError, [mbOK], 0);
+      end
+      else
+      begin
+        MessageDlg(feMODFLOW.FileName + ' does not exist.', mtError, [mbOK], 0);
+      end;
       Exit;
     end;
     if not FileExists(feModelMuseApplication.FileName) then
     begin
       Beep;
-      MessageDlg(feModelMuseApplication.FileName + ' does not exist.', mtError, [mbOK], 0);
+      if feModelMuseApplication.FileName = '' then
+      begin
+        MessageDlg('No ModelMuse program file has been specified..', mtError, [mbOK], 0);
+      end
+      else
+      begin
+        MessageDlg(feModelMuseApplication.FileName + ' does not exist.', mtError, [mbOK], 0);
+      end;
       Exit;
     end;
   end;
   if not FileExists(feModelMuseFile.FileName) then
   begin
     Beep;
-    MessageDlg(feModelMuseFile.FileName + ' does not exist.', mtError, [mbOK], 0);
+    if feModelMuseFile.FileName = '' then
+    begin
+      MessageDlg('No ModelMuse model file has been specified..', mtError, [mbOK], 0);
+    end
+    else
+    begin
+      MessageDlg(feModelMuseFile.FileName + ' does not exist.', mtError, [mbOK], 0);
+    end;
     Exit;
   end;
   AreaList := TRealList.Create;
@@ -1319,10 +1340,13 @@ begin
               FOutputFile.Write('"Length of first stress period"');
               FOutputFile.Write(#9);
 
-              FOutputFile.Write('"Max cummulative percent discrepancy"');
-              FOutputFile.Write(#9);
-              FOutputFile.Write('"Max percent discrepancy for a time step"');
-              FOutputFile.Write(#9);
+              if rgMethod.ItemIndex = 0 then
+              begin
+                FOutputFile.Write('"Max cummulative percent discrepancy"');
+                FOutputFile.Write(#9);
+                FOutputFile.Write('"Max percent discrepancy for a time step"');
+                FOutputFile.Write(#9);
+              end;
 //              FOutputFile.Write('"Highest row number with drawdown < -0.05"');
 //              FOutputFile.Write(#9);
 //              FOutputFile.Write('"Maximum distance with drawdown < -0.05"');
@@ -1336,16 +1360,27 @@ begin
 //              FOutputFile.Write('"Maximum distance with drawdown < -1.00"');
 //              FOutputFile.Write(#9);
 
-              for ModelIndex := 0 to FixedDistances.Count - 1 do
+              if rgMethod.ItemIndex = 1 then
               begin
-                FOutputFile.Write('"Drawdown at '
-                  + FloatToStr(FixedDistances[ModelIndex]) + '"');
+                for ModelIndex := 0 to FixedDistances.Count - 1 do
+                begin
+                  FOutputFile.Write('"Drawdown at '
+                    + FloatToStr(FixedDistances[ModelIndex]) + '"');
+                  FOutputFile.Write(#9);
+                end;
+              end;
+              if rgMethod.ItemIndex = 0 then
+              begin
+                FOutputFile.Write('"Drawdown at the end of stress period 1"');
+                FOutputFile.Write(#9);
+                FOutputFile.Write('"Drawdown at the end of stress period 2"');
+                FOutputFile.Write(#9);
+              end
+              else
+              begin
+                FOutputFile.Write('"Mound height at the end of stress period 1"');
                 FOutputFile.Write(#9);
               end;
-              FOutputFile.Write('"Drawdown at the end of stress period 1"');
-              FOutputFile.Write(#9);
-              FOutputFile.Write('"Drawdown at the end of stress period 2"');
-              FOutputFile.Write(#9);
               FOutputFile.WriteLine;
             end;
 
@@ -1599,7 +1634,7 @@ begin
               end;
               pb1.Position := 0;
 
-              FThreadCount := seProcessors.AsInteger ;
+              FThreadCount := Min(ModelCount, seProcessors.AsInteger) ;
 
               FThreadList.Clear;
               for ThreadIndex := 0 to FThreadCount - 1 do
@@ -1682,7 +1717,7 @@ begin
   FThreadList := TList.Create;
   rdgResults.BeginUpdate;
   try
-    rdgResults.Cells[Ord(rcDirectory), 0] := 'Directory';
+    rdgResults.Cells[Ord(rcDirectory), 0] := 'Simulation Number';
     rdgResults.Cells[Ord(rcShape), 0] := 'Shape';
     rdgResults.Cells[Ord(rcBasinArea), 0] := 'Basin area';
     rdgResults.Cells[Ord(rcKv), 0] := 'Kv';
@@ -2134,7 +2169,7 @@ var
   AValue: TModflowDouble;
   LabelPos: Integer;
   LabelIndex: Integer;
-//  Distance: Double;
+  Distance: Double;
   TimeIndex: Integer;
   HydCell: THydCell;
   CellIndex: Integer;
@@ -2197,6 +2232,7 @@ begin
               begin
                 FResults.MaxDrawdown := AValue;
               end;
+			  
               if Abs((FResults.StressPeriodLength-ATime)/FResults.StressPeriodLength) < 1e-7 then
               begin
                 FResults.DrawdownStressPeriod1 := AValue;
@@ -2260,7 +2296,9 @@ var
   FixedDist: Double;
   CellIndex: Integer;
   TestDist: double;
+  FoundFirst: Boolean;
 begin
+  FoundFirst := False;
   HydModInputFile := ChangeFileExt(FModelMuseFileName, '.hyd');
   HydModFile := TFile.OpenText(HydModInputFile);
   try
@@ -2288,6 +2326,7 @@ begin
           HydCell.Name := HydCell.Name + Splitter[3] + Splitter[6];
           X := StrToFloat(Splitter[4]);
           Y := StrToFloat(Splitter[5]);
+          Y := RowPositions[RowPositions.count-1]-Y;
           ClosestBoundary := ColPositions.IndexOfClosest(X);
           if ColPositions[ClosestBoundary] < ClosestBoundary then
           begin
@@ -2298,7 +2337,7 @@ begin
             HydCell.Col := ClosestBoundary;
           end;
           ClosestBoundary := RowPositions.IndexOfClosest(y);
-          if RowPositions[ClosestBoundary] < ClosestBoundary then
+          if RowPositions[ClosestBoundary] >= ClosestBoundary then
           begin
             HydCell.Row := ClosestBoundary + 1;
           end
@@ -2317,6 +2356,13 @@ begin
             HydCell.Y := Y;
           end;
           HydInput.AddObject(HydCell.Name, HydCell);
+          if not FoundFirst then
+          begin
+            Assert(Pos('Observations', HydCell.Name) > 0);
+            FCenterX := HydCell.X;
+            FCenterY := HydCell.Y;
+            FoundFirst := True;
+          end;
         end;
       until (HydModFile.EndOfStream);
     finally
@@ -2325,7 +2371,7 @@ begin
   finally
     HydModFile.Free;
   end;
-  HydInput.Sorted := True;
+//  HydInput.Sorted := True;
   SetLength(TestDistances, FFixedDistances.Count);
   if HydInput.Count > 0 then
   begin
@@ -2428,8 +2474,8 @@ begin
         end;
       end;
       Assert(RowPositions.Count = NROW+1);
-      FCenterX := (ColPositions[0] + ColPositions[ColPositions.Count-1])/2;
-      FCenterY := (RowPositions[0] + RowPositions[RowPositions.Count-1])/2;
+//      FCenterX := (ColPositions[0] + ColPositions[ColPositions.Count-1])/2;
+//      FCenterY := (RowPositions[0] + RowPositions[RowPositions.Count-1])/2;
     finally
       Splitter.Free;
     end;
@@ -2794,6 +2840,7 @@ begin
 
   SetLength(SimulationTimes, FConstants.NSTP*2);
   SimulationTime := 0;
+  StepLength := 0;
   for TimeIndex := 0 to FConstants.NSTP - 1 do
   begin
     if TimeIndex = 0 then
@@ -2852,6 +2899,13 @@ begin
   begin
     FResults.FixedDistanceDrawDowns[XIndex] := 0;
   end;
+
+  MoundHeight := IterateHantushRectangular(InitialHead, RechargeRate, FResults.Kx, AquiferThickness,
+    CurrentFileValues.SpecificYield, RechargeTime, FResults.StressPeriodLength, XOffset,
+    YOffset, 0, 0);
+  MoundHeight := MoundHeight - InitialHead;
+  FResults.DrawdownStressPeriod1 := MoundHeight;
+
 
   for TimeIndex := 0 to Length(SimulationTimes) -1 do
   begin
@@ -2990,10 +3044,13 @@ begin
   FOutputFile.Write(#9);
   FOutputFile.Write(FResults.StressPeriodLength);
   FOutputFile.Write(#9);
-  FOutputFile.Write(FResults.MaxCumulativePercentDiscrepancy);
-  FOutputFile.Write(#9);
-  FOutputFile.Write(FResults.MaxTimeStepPercentDiscrepancy);
-  FOutputFile.Write(#9);
+  if FMethod = mModflow then
+  begin
+    FOutputFile.Write(FResults.MaxCumulativePercentDiscrepancy);
+    FOutputFile.Write(#9);
+    FOutputFile.Write(FResults.MaxTimeStepPercentDiscrepancy);
+    FOutputFile.Write(#9);
+  end;
 //  FOutputFile.Write(FResults.RowForDrawdown005);
 //  FOutputFile.Write(#9);
 //  FOutputFile.Write(FResults.DistanceForDrawdown005);
@@ -3006,18 +3063,24 @@ begin
 //  FOutputFile.Write(#9);
 //  FOutputFile.Write(FResults.DistanceForDrawdown100);
 //  FOutputFile.Write(#9);
-  for DistIndex := 0 to Length(FResults.FixedDistanceDrawDowns) - 1 do
+  if FMethod = mAnalytic then
   begin
-    FOutputFile.Write(FResults.FixedDistanceDrawDowns[DistIndex]);
-    FOutputFile.Write(#9);
+    for DistIndex := 0 to Length(FResults.FixedDistanceDrawDowns) - 1 do
+    begin
+      FOutputFile.Write(FResults.FixedDistanceDrawDowns[DistIndex]);
+      FOutputFile.Write(#9);
+    end;
   end;
 
 //  for TimeIndex := 0 to Length(FResults.Drawdowns) - 1 do
 //  begin
     FOutputFile.Write(FResults.DrawdownStressPeriod1);
     FOutputFile.Write(#9);
-    FOutputFile.Write(FResults.DrawdownStressPeriod2);
-    FOutputFile.Write(#9);
+    if FMethod = mModflow then
+    begin
+      FOutputFile.Write(FResults.DrawdownStressPeriod2);
+      FOutputFile.Write(#9);
+    end;
 //  end;
 
   FOutputFile.WriteLine;

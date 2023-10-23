@@ -127,6 +127,9 @@ function CheckBudgetPrecision(AFile: TFileStream; out HufFormat: boolean): TModf
 
 implementation
 
+uses
+  System.IOUtils;
+
 resourcestring
   StrUnableToReadFile = 'Unable to read file. Check that the file is an unstructured, non-formatted file. In MODFLOW-2005, this is determined in OPENSPEC.inc';
 
@@ -1474,10 +1477,20 @@ var
   HydIndex: Integer;
   ASingle: TModflowFloat;
   ADouble: TModflowDouble;
+//  HydModCsvFile: TTextWriter;
+  Joiner: TStringList;
+  HydModCsvFile: TStreamWriter;
+  ALabel: string;
 begin
   FileStream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite,
     fmShareDenyWrite);
+  HydModCsvFile := TFile.CreateText(FileName + '.csv');
+  Joiner := TStringList.Create;
   try
+    FormatSettings.DecimalSeparator := '.';
+    Joiner.Delimiter := ',';
+    Joiner.StrictDelimiter := True;
+    Joiner.QuoteChar := '"';
     FileStream.Read(NHYDTOT, SizeOf(NHYDTOT));
     if NHYDTOT < 0 then
     begin
@@ -1488,14 +1501,27 @@ begin
     begin
       Precision := mpSingle;
     end;
+
+    HydModCsvFile.Write('NHYDTOT = ');
+    HydModCsvFile.Write(NHYDTOT);
     FLabels.Capacity := NHYDTOT;
+
     FileStream.Read(FTimeUnit, SizeOf(FTimeUnit));
+    HydModCsvFile.Write('; TimeUnit = ');
+    HydModCsvFile.WriteLine(FTimeUnit);
+
     FileStream.Read(TimeLabel, SizeOf(TimeLabel));
+    ALabel := Trim(string(TimeLabel));
+    Joiner.Add(ALabel);
+
     for Index := 0 to NHYDTOT - 1 do
     begin
       FileStream.Read(HydLabel, SizeOf(HydLabel));
-      FLabels.Add(Trim(string(HydLabel)));
+      ALabel := Trim(string(HydLabel));
+      FLabels.Add(ALabel);
+      Joiner.Add('"' + ALabel + '"');
     end;
+    HydModCsvFile.WriteLine(Joiner.DelimitedText);
 
     RecordLength := 0;
     case Precision of
@@ -1508,32 +1534,39 @@ begin
     SetLength(FTimes, RecordCount);
     for TimeIndex := 0 to RecordCount - 1 do
     begin
+      Joiner.Clear;
       case Precision of
         mpSingle:
           begin
             FileStream.Read(ASingle, SizeOf(ASingle));
             FTimes[TimeIndex] := ASingle;
+            Joiner.Add(FloatToStr(ASingle));
             for HydIndex := 0 to FLabels.Count - 1 do
             begin
               FileStream.Read(ASingle, SizeOf(ASingle));
               FValues[HydIndex, TimeIndex] := ASingle;
+              Joiner.Add(FloatToStr(ASingle));
             end;
           end;
         mpDouble:
           begin
             FileStream.Read(ADouble, SizeOf(ADouble));
             FTimes[TimeIndex] := ADouble;
+            Joiner.Add(FloatToStr(ADouble));
             for HydIndex := 0 to FLabels.Count - 1 do
             begin
               FileStream.Read(ADouble, SizeOf(ADouble));
               FValues[HydIndex, TimeIndex] := ADouble;
+              Joiner.Add(FloatToStr(ADouble));
             end;
           end;
       end;
+      HydModCsvFile.WriteLine(Joiner.DelimitedText);
     end;
-
   finally
     FileStream.Free;
+    HydModCsvFile.Free;
+    Joiner.Free;
   end;
 end;
 

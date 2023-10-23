@@ -2,7 +2,7 @@ object frmAutomate: TfrmAutomate
   Left = 0
   Top = 0
   Caption = 'Automater'
-  ClientHeight = 599
+  ClientHeight = 604
   ClientWidth = 688
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,8 +19,8 @@ object frmAutomate: TfrmAutomate
     Left = 0
     Top = 23
     Width = 688
-    Height = 576
-    ActivePage = tabRunModels
+    Height = 581
+    ActivePage = tabAnalyzeResults
     Align = alClient
     TabOrder = 1
     ExplicitWidth = 684
@@ -522,11 +522,13 @@ object frmAutomate: TfrmAutomate
       ImageIndex = 1
       object Panel1: TPanel
         Left = 0
-        Top = 500
+        Top = 505
         Width = 680
         Height = 42
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 499
+        ExplicitWidth = 676
         object btnAnalyze: TButton
           Left = 8
           Top = 5
@@ -550,21 +552,23 @@ object frmAutomate: TfrmAutomate
         Left = 0
         Top = 0
         Width = 680
-        Height = 500
+        Height = 505
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 676
+        ExplicitHeight = 499
         object Splitter1: TSplitter
           Left = 122
           Top = 1
           Width = 5
-          Height = 498
+          Height = 503
           ExplicitHeight = 501
         end
         object rdgResults: TRbwDataGrid4
           Left = 127
           Top = 1
           Width = 552
-          Height = 498
+          Height = 503
           Align = alClient
           ColCount = 13
           DefaultColWidth = 51
@@ -896,6 +900,7 @@ object frmAutomate: TfrmAutomate
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitHeight = 498
           RowHeights = (
             23
             23)
@@ -904,7 +909,7 @@ object frmAutomate: TfrmAutomate
           Left = 1
           Top = 1
           Width = 121
-          Height = 498
+          Height = 503
           Align = alLeft
           ColCount = 1
           DefaultColWidth = 51
@@ -947,6 +952,7 @@ object frmAutomate: TfrmAutomate
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitHeight = 497
           RowHeights = (
             23
             23

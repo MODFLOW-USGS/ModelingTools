@@ -648,8 +648,10 @@ begin
             BudgetFrequency, TimeStepIndex);
         end;
 
-        ShouldExportOverallBudget := ShouldExport(BudgetFrequencyChoice,
-          BudgetFrequency, TimeStepIndex);
+        // Print the budget on every time step.
+//        ShouldExportOverallBudget := ShouldExport(BudgetFrequencyChoice,
+//          BudgetFrequency, TimeStepIndex);
+        ShouldExportOverallBudget := True;
 
         SetDDREFERENCE := StressPeriod.DrawDownReference
           and (TimeStepIndex = StressPeriod.NumberOfSteps - 1);

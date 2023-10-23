@@ -1170,20 +1170,41 @@ begin
     if not FileExists(feMODFLOW.FileName) then
     begin
       Beep;
-      MessageDlg(feMODFLOW.FileName + ' does not exist.', mtError, [mbOK], 0);
+      if feMODFLOW.FileName = '' then
+      begin
+        MessageDlg('No MODFLOW file has been specified..', mtError, [mbOK], 0);
+      end
+      else
+      begin
+        MessageDlg(feMODFLOW.FileName + ' does not exist.', mtError, [mbOK], 0);
+      end;
       Exit;
     end;
     if not FileExists(feModelMuseApplication.FileName) then
     begin
       Beep;
-      MessageDlg(feModelMuseApplication.FileName + ' does not exist.', mtError, [mbOK], 0);
+      if feModelMuseApplication.FileName = '' then
+      begin
+        MessageDlg('No ModelMuse program file has been specified..', mtError, [mbOK], 0);
+      end
+      else
+      begin
+        MessageDlg(feModelMuseApplication.FileName + ' does not exist.', mtError, [mbOK], 0);
+      end;
       Exit;
     end;
   end;
   if not FileExists(feModelMuseFile.FileName) then
   begin
     Beep;
-    MessageDlg(feModelMuseFile.FileName + ' does not exist.', mtError, [mbOK], 0);
+    if feModelMuseFile.FileName = '' then
+    begin
+      MessageDlg('No ModelMuse model file has been specified..', mtError, [mbOK], 0);
+    end
+    else
+    begin
+      MessageDlg(feModelMuseFile.FileName + ' does not exist.', mtError, [mbOK], 0);
+    end;
     Exit;
   end;
   AreaList := TRealList.Create;
@@ -1665,7 +1686,7 @@ begin
               end;
               pb1.Position := 0;
 
-              FThreadCount := Max(ModelCount, seProcessors.AsInteger) ;
+              FThreadCount := Min(ModelCount, seProcessors.AsInteger) ;
 
               FThreadList.Clear;
               for ThreadIndex := 0 to FThreadCount - 1 do
@@ -1748,7 +1769,7 @@ begin
   FThreadList := TList.Create;
   rdgResults.BeginUpdate;
   try
-    rdgResults.Cells[Ord(rcDirectory), 0] := 'Directory';
+    rdgResults.Cells[Ord(rcDirectory), 0] := 'Simulation Number';
     rdgResults.Cells[Ord(rcShape), 0] := 'Shape';
     rdgResults.Cells[Ord(rcBasinArea), 0] := 'Basin area';
     rdgResults.Cells[Ord(rcKv), 0] := 'Kv';
@@ -2295,7 +2316,8 @@ begin
   end;
 end;
 
-procedure TRunModelThread.ReadHydmodInput(RowPositions: TRealList; ColPositions: TRealList; var HydInput: TStringList);
+procedure TRunModelThread.ReadHydmodInput(RowPositions: TRealList;
+  ColPositions: TRealList; var HydInput: TStringList);
 var
   Y: Double;
   Splitter: TStringList;
@@ -2310,7 +2332,9 @@ var
   FixedDist: Double;
   CellIndex: Integer;
   TestDist: double;
+  FoundFirst: Boolean;
 begin
+  FoundFirst := False;
   HydModInputFile := ChangeFileExt(FModelMuseFileName, '.hyd');
   HydModFile := TFile.OpenText(HydModInputFile);
   try
@@ -2338,6 +2362,7 @@ begin
           HydCell.Name := HydCell.Name + Splitter[3] + Splitter[6];
           X := StrToFloat(Splitter[4]);
           Y := StrToFloat(Splitter[5]);
+          Y := RowPositions[RowPositions.count-1]-Y;
           ClosestBoundary := ColPositions.IndexOfClosest(X);
           if ColPositions[ClosestBoundary] < ClosestBoundary then
           begin
@@ -2348,7 +2373,7 @@ begin
             HydCell.Col := ClosestBoundary;
           end;
           ClosestBoundary := RowPositions.IndexOfClosest(y);
-          if RowPositions[ClosestBoundary] < ClosestBoundary then
+          if RowPositions[ClosestBoundary] >= ClosestBoundary then
           begin
             HydCell.Row := ClosestBoundary + 1;
           end
@@ -2367,6 +2392,13 @@ begin
             HydCell.Y := Y;
           end;
           HydInput.AddObject(HydCell.Name, HydCell);
+          if not FoundFirst then
+          begin
+            Assert(Pos('Observations', HydCell.Name) > 0);
+            FCenterX := HydCell.X;
+            FCenterY := HydCell.Y;
+            FoundFirst := True;
+          end;
         end;
       until (HydModFile.EndOfStream);
     finally
@@ -2375,7 +2407,7 @@ begin
   finally
     HydModFile.Free;
   end;
-  HydInput.Sorted := True;
+//  HydInput.Sorted := True;
   SetLength(TestDistances, FFixedDistances.Count);
   if HydInput.Count > 0 then
   begin
@@ -2698,25 +2730,29 @@ var
   TSMULT: Double;
   PointLines: TStringList;
   PointLineIndex: Integer;
-  FirstRowIndex: Integer;
-  FirstRowPosition: double;
+  LastRowIndex: Integer;
+  LastRowPosition: double;
   ObsPointIndex: Integer;
   ObsLine: string;
   EqualIndex: Integer;
   ObsPosition: double;
+  LastRowLine: string;
 begin
-  FirstRowIndex := FModelMuseFile.IndexOf('  ModflowGrid.RowPositions = (');
-  Assert(FirstRowIndex >= 0);
-  Inc(FirstRowIndex);
-  FirstRowPosition := StrToFloat(Trim(FModelMuseFile[FirstRowIndex]));
-  ObsPointIndex := FModelMuseFile.IndexOf('      ScreenObject.Name = ''Center''');
-  Assert(ObsPointIndex >= 0);
-  Dec(ObsPointIndex, 2);
-  ObsLine := FModelMuseFile[ObsPointIndex];
-  EqualIndex := Pos('=', ObsLine);
-  ObsLine := Copy(ObsLine, EqualIndex+1, MaxInt);
-  ObsPosition := StrToFloat(Trim(ObsLine));
-  FCenterY := FirstRowPosition - ObsPosition;
+//  LastRowIndex := FModelMuseFile.IndexOf('  ModflowPackages.ChdBoundary.IsSelected = False');
+//  Assert(LastRowIndex >= 0);
+//  Dec(LastRowIndex);
+//  LastRowLine := Trim(FModelMuseFile[LastRowIndex]);
+//  LastRowLine := Copy(LastRowLine, 1, Length(LastRowLine)-1);
+//  LastRowPosition := StrToFloat(LastRowLine);
+//  ObsPointIndex := FModelMuseFile.IndexOf('      ScreenObject.Name = ''Center''');
+//  Assert(ObsPointIndex >= 0);
+//  Dec(ObsPointIndex, 2);
+//  ObsLine := FModelMuseFile[ObsPointIndex];
+//  EqualIndex := Pos('=', ObsLine);
+//  ObsLine := Trim(Copy(ObsLine, EqualIndex+1, MaxInt));
+////  ObsLine := Copy(ObsLine, 1, Length(ObsLine)-1);
+//  ObsPosition := StrToFloat(ObsLine);
+//  FCenterY := ObsPosition -LastRowPosition;
 
   CurrentFileValues := FFileValues[FFileIndex];
   YOffset := Sqrt(CurrentFileValues.BasinArea/CurrentFileValues.ShapeFactor)/2;
@@ -2826,6 +2862,7 @@ begin
 
   SetLength(SimulationTimes, FConstants.NSTP*2);
   SimulationTime := 0;
+  StepLength := 0;
   for TimeIndex := 0 to FConstants.NSTP - 1 do
   begin
     if TimeIndex = 0 then
