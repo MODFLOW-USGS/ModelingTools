@@ -236,7 +236,7 @@ begin
     end
     else if FSplitter[0] = 'BOTM' then
     begin
-      Layered := (FSplitter.Count <= 2) and (FSplitter[1] = 'LAYERED');
+      Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
       try
         ThreeDReader.Read(Stream, Unhandled);
@@ -247,7 +247,7 @@ begin
     end
     else if FSplitter[0] = 'IDOMAIN' then
     begin
-      Layered := (FSplitter.Count <= 2) and (FSplitter[1] = 'LAYERED');
+      Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       ThreeIReader := TInteger3DArrayReader.Create(FDimensions, Layered);
       try
         ThreeIReader.Read(Stream, Unhandled);
@@ -258,7 +258,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized GRIDDATA in the following line');
+      Unhandled.WriteLine('Unrecognized DISV GRIDDATA in the following line');
       Unhandled.WriteLine(ErrorLine);
     end;
   end;

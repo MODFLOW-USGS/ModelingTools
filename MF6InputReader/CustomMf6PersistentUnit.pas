@@ -3,24 +3,31 @@ unit CustomMf6PersistentUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.IOUtils, System.Generics.Collections;
+  System.SysUtils, System.Classes, System.IOUtils,
+  System.Generics.Collections;
 
 type
+  TPrintFormat = record
+    Columns: Integer;
+    Width: Integer;
+    Digits: Integer;
+    Format: string;
+    Used: Boolean;
+    procedure Initialize;
+  end;
+
   TCustomMf6Persistent = class(TPersistent)
   protected
     FSplitter: TStringList;
     procedure Initialize; virtual;
     function StripFollowingComments(AValue: string): string;
     function ReadEndOfSection(ALine: string; const ErrorLine: string;
-      const SectionName: string; Unhandled: TStreamWriter): boolean;
+      const SectionName: string; Unhandled: TStreamWriter): Boolean;
+    procedure ReadPrintFormat(ErrorLine: string; Unhandled: TStreamWriter;
+      PackageName: string; var PrintFormat: TPrintFormat);
   public
     constructor Create; virtual;
     destructor Destroy; override;
-  end;
-
-  TPackageReader = class(TCustomMf6Persistent)
-  public
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); virtual; abstract;
   end;
 
   TDataType = (dtReal, dtInteger);
@@ -30,6 +37,18 @@ type
     NCol: Integer;
     procedure Initialize;
     function DimensionCount: Integer;
+  end;
+
+  TPackageReader = class(TCustomMf6Persistent)
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); virtual; abstract;
+  end;
+
+  TDimensionedPackageReader = class(TPackageReader)
+  protected
+    FDimensions: TDimensions;
+  public
+    property Dimensions: TDimensions read FDimensions write FDimensions;
   end;
 
   TArrayType = (atConstant, atInternal, atExternal, atUndefined);
@@ -137,6 +156,9 @@ type
   end;
 
   TExtendedList = TList<Extended>;
+
+resourcestring
+  StrUnrecognizedOCOpti = 'Unrecognized %S option in the following line.';
 
 implementation
 
@@ -1367,6 +1389,49 @@ end;
 function TInteger1DArrayReader.StrToDataType(AValue: string): Integer;
 begin
   result := StrToInt(AValue);
+end;
+
+{ TPrintFormat }
+
+procedure TPrintFormat.Initialize;
+begin
+  Used := False;
+end;
+
+procedure TCustomMf6Persistent.ReadPrintFormat(ErrorLine: string;
+  Unhandled: TStreamWriter; PackageName: string; var PrintFormat: TPrintFormat);
+begin
+  if FSplitter.Count >= 9 then
+  begin
+    if (FSplitter[2] = 'COLUMNS') and (FSplitter[4] = 'WIDTH') and
+      (FSplitter[6] = 'DIGITS') then
+    begin
+      PrintFormat.Used := True;
+      PrintFormat.Columns := StrToInt(FSplitter[3]);
+      PrintFormat.Width := StrToInt(FSplitter[5]);
+      PrintFormat.Digits := StrToInt(FSplitter[7]);
+      PrintFormat.Format := FSplitter[8];
+      if (PrintFormat.Format <> 'EXPONENTIAL') and
+        (PrintFormat.Format <> 'FIXED') and (PrintFormat.Format <> 'GENERAL')
+        and (PrintFormat.Format <> 'SCIENTIFIC') then
+      begin
+        Unhandled.WriteLine
+          (Format('Unrecognized format option in %s option "PRINT_FORMAT" in the following line.',
+          [PackageName]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format( StrUnrecognizedOCOpti, [PackageName]));
+      Unhandled.WriteLine(ErrorLine);
+    end;
+  end
+  else
+  begin
+    Unhandled.WriteLine(Format( StrUnrecognizedOCOpti, [PackageName]));
+    Unhandled.WriteLine(ErrorLine);
+  end;
 end;
 
 end.

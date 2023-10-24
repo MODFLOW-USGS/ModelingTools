@@ -95,7 +95,8 @@ type
 implementation
 
 uses
-  DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit;
+  DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit, IcFileReaderUnit,
+  OcFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -453,31 +454,57 @@ var
   DisReader: TDis;
   DisvReader: TDisv;
   DisuReader: TDisu;
+  IcReader: TIc;
+  OcReader: TOc;
 begin
   // First read discretization
+  FDimensions.Initialize;
   for PackageIndex := 0 to FPackages.FPackages.Count - 1 do
   begin
     APackage := FPackages.FPackages[PackageIndex];
-    if APackage.FileType = 'DIS6' then
+    if (APackage.FileType = 'DIS6') then
     begin
       DisReader := TDis.Create;
       APackage.FPackage := DisReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisReader.Dimensions;
     end
-    else if APackage.FileType = 'DISV6' then
+    else if (APackage.FileType = 'DISV6') then
     begin
       DisvReader := TDisv.Create;
       APackage.FPackage := DisvReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisvReader.Dimensions;
     end
-    else if APackage.FileType = 'DISU6' then
+    else if (APackage.FileType = 'DISU6') then
     begin
       DisuReader := TDisu.Create;
       APackage.FPackage := DisuReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisuReader.Dimensions;
+    end;
+  end;
+  for PackageIndex := 0 to FPackages.FPackages.Count - 1 do
+  begin
+    APackage := FPackages.FPackages[PackageIndex];
+    if (APackage.FileType = 'DIS6')
+      or (APackage.FileType = 'DISV6')
+      or (APackage.FileType = 'DISU6') then
+    begin
+      Continue;
+    end;
+    if APackage.FileType = 'IC6' then
+    begin
+      IcReader := TIc.Create;
+      IcReader.Dimensions := FDimensions;
+      APackage.FPackage := IcReader;
+      APackage.ReadPackage(Unhandled);
+    end;
+    if APackage.FileType = 'OC6' then
+    begin
+      OcReader := TOc.Create;
+      APackage.FPackage := OcReader;
+      APackage.ReadPackage(Unhandled);
     end;
   end;
 end;

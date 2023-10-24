@@ -1,11 +1,6 @@
 program Automater2;
 
 uses
-  madExcept,
-  madLinkDisAsm,
-  madListHardware,
-  madListProcesses,
-  madListModules,
   Forms,
   frmAutomateUnit in 'frmAutomateUnit.pas' {frmAutomate},
   ReadModflowArrayUnit in 'ReadModflowArrayUnit.pas',

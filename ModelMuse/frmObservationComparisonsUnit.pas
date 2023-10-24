@@ -203,6 +203,7 @@ begin
 //    CanSelect := False;
     FCol := ACol;
     FRow := ARow;
+    frameObsComparisons.Grid.HideEditor;
     treecomboInPlaceEditor.Visible := True;
     CellRect := frameObsComparisons.Grid.CellRect(ACol, ARow);
     treecomboInPlaceEditor.Width := CellRect.Right - CellRect.Left;

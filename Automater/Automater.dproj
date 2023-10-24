@@ -3,7 +3,7 @@
         <ProjectGuid>{F25F1386-64A3-48B5-B2BE-FB4EB6E5696B}</ProjectGuid>
         <MainSource>Automater.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>

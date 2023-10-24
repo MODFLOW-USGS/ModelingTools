@@ -277,7 +277,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized GRIDDATA in the following line');
+      Unhandled.WriteLine('Unrecognized DISU GRIDDATA in the following line');
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
