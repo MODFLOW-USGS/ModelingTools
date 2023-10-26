@@ -195,6 +195,7 @@ var
   AStep: Integer;
   StepArray: TArray<Integer>;
 begin
+  Initialize;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

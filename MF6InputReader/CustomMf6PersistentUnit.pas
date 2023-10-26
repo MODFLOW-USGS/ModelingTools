@@ -16,6 +16,14 @@ type
     procedure Initialize;
   end;
 
+  TCellId = record
+    Layer: Integer;
+    Row: Integer;
+    Column: Integer;
+    procedure Initialize;
+  end;
+
+
   TCustomMf6Persistent = class(TPersistent)
   protected
     FSplitter: TStringList;
@@ -25,6 +33,8 @@ type
       const SectionName: string; Unhandled: TStreamWriter): Boolean;
     procedure ReadPrintFormat(ErrorLine: string; Unhandled: TStreamWriter;
       PackageName: string; var PrintFormat: TPrintFormat);
+    function ReadCellID(var Cell: TCellId;
+      StartIndex, DimensionCount: Integer): Boolean;
   public
     constructor Create; virtual;
     destructor Destroy; override;
@@ -148,14 +158,37 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
-  TCellId = record
+  TCellIdType = (citCell, citName);
+
+  TNamedCellId = record
+    IdType: TCellIdType;
     Layer: Integer;
     Row: Integer;
     Column: Integer;
+    Name: string;
     procedure Initialize;
   end;
 
   TExtendedList = TList<Extended>;
+
+  TPackage = class(TObject)
+  private
+    FFileType: string;
+    FFileName: string;
+    FPackageName: string;
+    FPackage: TPackageReader;
+  public
+    destructor Destroy; override;
+    property FileType: string read FFileType write FFileType;
+    property FileName: string read FFileName write FFileName;
+    property PackageName: string read FPackageName write FPackageName;
+    property Package: TPackageReader read FPackage write FPackage;
+    procedure ReadPackage(Unhandled: TStreamWriter);
+  end;
+
+  TPackageList = TObjectList<TPackage>;
+
+
 
 resourcestring
   StrUnrecognizedOCOpti = 'Unrecognized %S option in the following line.';
@@ -871,6 +904,7 @@ begin
   begin
     Inc(Result);
   end;
+  Assert(Result in [1..3]);
 end;
 
 procedure TDimensions.Initialize;
@@ -1431,6 +1465,97 @@ begin
   begin
     Unhandled.WriteLine(Format( StrUnrecognizedOCOpti, [PackageName]));
     Unhandled.WriteLine(ErrorLine);
+  end;
+end;
+
+{ TNamedCellId }
+
+procedure TNamedCellId.Initialize;
+begin
+  IdType := citCell;
+  Layer := 0;
+  Row := 0;
+  Column := 0;
+  Name := '';
+end;
+
+function TCustomMf6Persistent.ReadCellID(var Cell: TCellId;
+  StartIndex, DimensionCount: Integer): Boolean;
+begin
+  result := FSplitter.Count >= StartIndex + DimensionCount;
+  if result then
+  begin
+    case DimensionCount of
+      1:
+        begin
+          if not TryStrToInt(FSplitter[StartIndex], Cell.Column) then
+          begin
+            result := False;
+          end;
+        end;
+      2:
+        begin
+          if not TryStrToInt(FSplitter[StartIndex], Cell.Layer) or
+            not TryStrToInt(FSplitter[StartIndex + 1], Cell.Column) then
+          begin
+            result := False;
+          end;
+        end;
+      3:
+        begin
+          if not TryStrToInt(FSplitter[StartIndex], Cell.Layer) or
+            not TryStrToInt(FSplitter[StartIndex + 1], Cell.Row) or
+            not TryStrToInt(FSplitter[StartIndex + 2], Cell.Column) then
+          begin
+            result := False;
+          end;
+        end;
+    end
+  end;
+end;
+
+{ TPackage }
+
+destructor TPackage.Destroy;
+begin
+  FPackage.Free;
+  inherited;
+end;
+
+procedure TPackage.ReadPackage(Unhandled: TStreamWriter);
+var
+  PackageFile: TStreamReader;
+begin
+  if FFileName <> '' then
+  begin
+    if TFile.Exists(FFileName) then
+    begin
+      try
+        PackageFile := TFile.OpenText(FFileName);
+        try
+          try
+            FPackage.Read(PackageFile, Unhandled);
+          except on E: Exception do
+            begin
+              Unhandled.WriteLine('ERROR');
+              Unhandled.WriteLine(E.Message);
+            end;
+          end;
+        finally
+          PackageFile.Free;
+        end;
+      except on E: Exception do
+        begin
+          Unhandled.WriteLine('ERROR');
+          Unhandled.WriteLine(E.Message);
+        end;
+      end
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+        [FFileName]));
+    end;
   end;
 end;
 

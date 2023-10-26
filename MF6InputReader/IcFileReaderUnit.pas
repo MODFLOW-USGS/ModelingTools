@@ -127,23 +127,11 @@ begin
     end;
 
     ALine := UpperCase(ALine);
-    if Pos('BEGIN', ALine) = 1 then
+    FSplitter.DelimitedText := ALine;
+    if FSplitter[0] = 'BEGIN' then
     begin
-      if Trim(Copy(ALine,Length('BEGIN')+1,1)) <> '' then
+      if FSplitter[1] ='GRIDDATA' then
       begin
-        Unhandled.WriteLine(StrUnrecognizedICOpti);
-        Unhandled.WriteLine(ErrorLine);
-        Continue;
-      end;
-      ALine := Trim(Copy(ALine, Length('BEGIN')+1, MaxInt)) ;
-      if Pos('GRIDDATA', ALine) = 1 then
-      begin
-        if Trim(Copy(ALine,Length('GRIDDATA')+1,1)) <> '' then
-        begin
-          Unhandled.WriteLine(StrUnrecognizedICOpti);
-          Unhandled.WriteLine(ErrorLine);
-          Continue;
-        end;
         FGridData.Read(Stream, Unhandled, FDimensions);
       end
       else

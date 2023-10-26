@@ -5,6 +5,11 @@ program Mf6InputReader;
 {$R *.res}
 
 uses
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   System.SysUtils,
   Vcl.Dialogs,
   System.IOUtils,
@@ -22,7 +27,10 @@ uses
   DisvFileReaderUnit in 'DisvFileReaderUnit.pas',
   DisuFileReaderUnit in 'DisuFileReaderUnit.pas',
   IcFileReaderUnit in 'IcFileReaderUnit.pas',
-  OcFileReaderUnit in 'OcFileReaderUnit.pas';
+  OcFileReaderUnit in 'OcFileReaderUnit.pas',
+  ObsFileReaderUnit in 'ObsFileReaderUnit.pas',
+  NpfFileReaderUnit in 'NpfFileReaderUnit.pas',
+  TvkFileReaderUnit in 'TvkFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

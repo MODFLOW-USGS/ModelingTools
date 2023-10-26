@@ -37,18 +37,18 @@ type
   TTransportNameFileOptions = class(TCustomNameFileOptions)
   end;
 
-  TPackage = class(TObject)
-  private
-    FileType: string;
-    FileName: string;
-    PackageName: string;
-    FPackage: TPackageReader;
-    procedure ReadPackage(Unhandled: TStreamWriter);
-  public
-    destructor Destroy; override;
-  end;
-
-  TPackageList = TObjectList<TPackage>;
+//  TPackage = class(TObject)
+//  private
+//    FileType: string;
+//    FileName: string;
+//    PackageName: string;
+//    FPackage: TPackageReader;
+//    procedure ReadPackage(Unhandled: TStreamWriter);
+//  public
+//    destructor Destroy; override;
+//  end;
+//
+//  TPackageList = TObjectList<TPackage>;
 
   TCustomPackages = class(TCustomMf6Persistent)
   private
@@ -96,7 +96,7 @@ implementation
 
 uses
   DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit, IcFileReaderUnit,
-  OcFileReaderUnit;
+  OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -456,6 +456,8 @@ var
   DisuReader: TDisu;
   IcReader: TIc;
   OcReader: TOc;
+  GwfObsReader: TObs;
+  NpfReader: TNpf;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -465,23 +467,26 @@ begin
     if (APackage.FileType = 'DIS6') then
     begin
       DisReader := TDis.Create;
-      APackage.FPackage := DisReader;
+      APackage.Package := DisReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisReader.Dimensions;
+      Break;
     end
     else if (APackage.FileType = 'DISV6') then
     begin
       DisvReader := TDisv.Create;
-      APackage.FPackage := DisvReader;
+      APackage.Package := DisvReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisvReader.Dimensions;
+      Break;
     end
     else if (APackage.FileType = 'DISU6') then
     begin
       DisuReader := TDisu.Create;
-      APackage.FPackage := DisuReader;
+      APackage.Package := DisuReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisuReader.Dimensions;
+      Break;
     end;
   end;
   for PackageIndex := 0 to FPackages.FPackages.Count - 1 do
@@ -493,64 +498,34 @@ begin
     begin
       Continue;
     end;
+
     if APackage.FileType = 'IC6' then
     begin
       IcReader := TIc.Create;
       IcReader.Dimensions := FDimensions;
-      APackage.FPackage := IcReader;
+      APackage.Package := IcReader;
       APackage.ReadPackage(Unhandled);
-    end;
-    if APackage.FileType = 'OC6' then
+    end
+    else if APackage.FileType = 'OC6' then
     begin
       OcReader := TOc.Create;
-      APackage.FPackage := OcReader;
+      APackage.Package := OcReader;
       APackage.ReadPackage(Unhandled);
-    end;
-  end;
-end;
-
-{ TPackage }
-
-destructor TPackage.Destroy;
-begin
-  FPackage.Free;
-  inherited;
-end;
-
-procedure TPackage.ReadPackage(Unhandled: TStreamWriter);
-var
-  PackageFile: TStreamReader;
-begin
-  if FileName <> '' then
-  begin
-    if TFile.Exists(FileName) then
-    begin
-      try
-        PackageFile := TFile.OpenText(FileName);
-        try
-          try
-            FPackage.Read(PackageFile, Unhandled);
-          except on E: Exception do
-            begin
-              Unhandled.WriteLine('ERROR');
-              Unhandled.WriteLine(E.Message);
-            end;
-          end;
-        finally
-          PackageFile.Free;
-        end;
-      except on E: Exception do
-        begin
-          Unhandled.WriteLine('ERROR');
-          Unhandled.WriteLine(E.Message);
-        end;
-      end
     end
-    else
+    else if APackage.FileType = 'OBS6' then
     begin
-      Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
-        [FileName]));
-    end;
+      GwfObsReader := TObs.Create;
+      GwfObsReader.Dimensions := FDimensions;
+      APackage.Package := GwfObsReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'NPF6' then
+    begin
+      NpfReader := TNpf.Create;
+      NpfReader.Dimensions := FDimensions;
+      APackage.Package := NpfReader;
+      APackage.ReadPackage(Unhandled);
+    end
   end;
 end;
 
