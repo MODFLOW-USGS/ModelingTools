@@ -146,6 +146,7 @@ type
     procedure ExtractedHydmodResults(HydInput: TStringList);
     procedure RunHantush;
     procedure ResetResults;
+    function GetModelMuseFileName: string;
   protected
     procedure Execute; override;
   public
@@ -2588,6 +2589,9 @@ end;
 procedure TRunModelThread.Execute;
 var
   FileIndex: Integer;
+  ZipFileName: string;
+  ZipFileDir: string;
+  ParentDirStart: Integer;
 begin
   inherited;
   FileIndex := GetFileVarIndex;
@@ -2597,6 +2601,16 @@ begin
     if Terminated then Exit;
     if FMethod = mModflow then
     begin
+      // Check if results have already been extracted
+      ZipFileName := GetModelMuseFileName;
+      ParentDirStart := Pos('Thread', ZipFileName);
+      ZipFileDir := Copy(ZipFileName, 1, ParentDirStart-1);
+      ZipFileName := ZipFileDir + ChangeFileExt(ExtractFileName(GetModelMuseFileName), '.zip');
+      if FileExists(ZipFileName) then
+      begin
+        FileIndex := GetFileVarIndex;
+        Continue;
+      end;
       if not PrepareModelMuseFile then
       begin
         if Terminated then Exit;
@@ -2788,8 +2802,7 @@ begin
     FModelMuseFile[FIndicies.DepthPosition] := '      Variable.RealValue = ' +
       FloatToStr(-CurrentFileValues.BasinDepth);
 
-    FModelMuseFileName := IncludeTrailingPathDelimiter(FDirectory)
-      + 'Model' + IntToStr(FFileIndex+1) + '.gpt';
+    FModelMuseFileName := GetModelMuseFileName;
     FModelMuseFile.SaveToFile(FModelMuseFileName);
   finally
     PointLines.Free;
@@ -3095,6 +3108,12 @@ begin
   begin
     FCreateProcess.Terminate
   end;
+end;
+
+function TRunModelThread.GetModelMuseFileName: string;
+begin
+  result := IncludeTrailingPathDelimiter(FDirectory) + 'Model'
+    + IntToStr(FFileIndex + 1) + '.gpt';
 end;
 
 procedure TRunModelThread.UpdateProgressBar;

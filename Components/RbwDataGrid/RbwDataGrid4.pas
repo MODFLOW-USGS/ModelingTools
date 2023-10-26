@@ -4371,17 +4371,82 @@ var
   CharIndex: Integer;
   CellFormat: TRbwColumnFormat4;
   NewCol: Integer;
-  Splitter: TStringList;
-  ColOffset: Integer;
+//  Splitter: TStringList;
+//  ColOffset: Integer;
+  QuoteCount: Integer;
   function ExtractWord(var AString: string): string;
   var
     TabPos: integer;
+    CommaPosition: Integer;
+    QuotePosition: Integer;
+    SplitPosition: Integer;
+    QuotePosition2: Integer;
+    TempString: string;
   begin
     TabPos := Pos(#9, AString);
+    CommaPosition := Pos(',', AString);
+    QuotePosition := Pos('"', AString);
+
+    SplitPosition := 0;
     if TabPos > 0 then
     begin
-      result := Copy(AString, 1, TabPos -1);
-      AString := Copy(AString, TabPos +1, MAXINT);
+      SplitPosition := TabPos;
+    end;
+
+    if CommaPosition > 0 then
+    begin
+      if (SplitPosition > 0) and (CommaPosition < SplitPosition) then
+      begin
+        SplitPosition := CommaPosition;
+      end
+      else
+      begin
+        SplitPosition := CommaPosition;
+      end;
+    end;
+
+    QuotePosition2 := 0;
+    if QuotePosition > 0 then
+    begin
+      QuotePosition2 := PosEx('"', AString, QuotePosition+1);
+      if (SplitPosition > 0) and (QuotePosition < SplitPosition) then
+      begin
+        SplitPosition := QuotePosition;
+      end
+      else
+      begin
+        SplitPosition := QuotePosition;
+      end;
+    end;
+
+    if SplitPosition > 0 then
+    begin
+      if (SplitPosition = QuotePosition) and (QuotePosition2 > 0) then
+      begin
+        Result :=  Copy(AString, 1, SplitPosition -1);
+        if Trim(Result) <> '' then
+        begin
+          AString := Copy(AString, SplitPosition +1, MAXINT);
+        end
+        else
+        begin
+          Result := Copy(AString, QuotePosition+1, QuotePosition2 -QuotePosition -1);
+          AString := Copy(AString, QuotePosition2 +1, MAXINT);
+          TempString := Trim(AString);
+          if TempString <> '' then
+          begin
+            if (TempString[1] = #9) or (TempString[1] = ',') then
+            begin
+              AString := Copy(TempString, 2, MAXINT);
+            end;
+          end;
+        end;
+      end
+      else
+      begin
+        result := Copy(AString, 1, SplitPosition -1);
+        AString := Copy(AString, SplitPosition +1, MAXINT);
+      end;
     end
     else
     begin
@@ -4446,9 +4511,9 @@ var
 begin
   BeginUpdate;
   AStringList := TStringList.Create;
-  Splitter := TStringList.Create;
+//  Splitter := TStringList.Create;
   try
-    Splitter.StrictDelimiter := True;
+//    Splitter.StrictDelimiter := False;
     AStringList.Text := CellContents;
     result := (AStringList.Count > 1) or (Pos(#9, CellContents) > 0)
       or (Pos(',', CellContents) > 0);
@@ -4470,25 +4535,10 @@ begin
           While LineIndex < AStringList.Count do
           begin
             AString := AStringList[LineIndex];
-            Splitter.DelimitedText := AString;
-            for WordIndex := 0 to Splitter.Count - 1 do
-            begin
-              NewString := Splitter[WordIndex];
-              AssignTextToCell;
-              Inc(NewCol);
-              if NewCol >= ColCount then
-              begin
-                NewCol := ACol;
-                Inc(NewRow);
-                if AutoIncreaseRowCount and (NewRow >= RowCount) then
-                begin
-                  RowCount := RowCount + 1;
-                end;
-              end;
-            end;
-//            while Length(AString) > 0 do
+//            Splitter.DelimitedText := AString;
+//            for WordIndex := 0 to Splitter.Count - 1 do
 //            begin
-//              NewString := ExtractWord(AString);
+//              NewString := Splitter[WordIndex];
 //              AssignTextToCell;
 //              Inc(NewCol);
 //              if NewCol >= ColCount then
@@ -4499,9 +4549,24 @@ begin
 //                begin
 //                  RowCount := RowCount + 1;
 //                end;
-//                break;
 //              end;
 //            end;
+            while Length(AString) > 0 do
+            begin
+              NewString := ExtractWord(AString);
+              AssignTextToCell;
+              Inc(NewCol);
+              if NewCol >= ColCount then
+              begin
+                NewCol := ACol;
+                Inc(NewRow);
+                if AutoIncreaseRowCount and (NewRow >= RowCount) then
+                begin
+                  RowCount := RowCount + 1;
+                end;
+                break;
+              end;
+            end;
             Inc(LineIndex);
             if Assigned(FOnDistributeTextProgress) then
             begin
@@ -4523,10 +4588,26 @@ begin
             MaxTabCount := 0;
             for LineIndex := 0 to AStringList.Count -1 do
             begin
-//              TabCount := 0;
+              TabCount := 0;
               AString := AStringList[LineIndex];
-              Splitter.DelimitedText := AString;
-              TabCount := Splitter.Count;
+//              Splitter.DelimitedText := AString;
+//              TabCount := Splitter.Count;
+              QuoteCount := 0;
+              for CharIndex := 1 to Length(AString) do
+              begin
+                if AString[CharIndex] = '"' then
+                begin
+                  Inc(QuoteCount);
+                end;
+                if (AString[CharIndex] = #9) or (AString[CharIndex] = ',') then
+                begin
+                  if not Odd(QuoteCount) then
+                  begin
+                    Inc(TabCount);
+                  end;
+                end;
+              end;
+              TabCount := TabCount + QuoteCount div 2;
               if TabCount > MaxTabCount then
               begin
                 MaxTabCount := TabCount;
@@ -4541,8 +4622,8 @@ begin
           begin
             AString := AStringList[LineIndex];
             NewRow := ARow + LineIndex;
-            Splitter.DelimitedText := AString;
-//            WordIndex := 0;
+//            Splitter.DelimitedText := AString;
+            WordIndex := 0;
             if AString = '' then
             begin
               if SelectCell(ACol, NewRow) then
@@ -4553,31 +4634,31 @@ begin
             end
             else
             begin
-              ColOffset := 0;
-              for CharIndex := 1 to Length(AString) do
-              begin
-                if AString[CharIndex] = #9 then
-                begin
-                  Inc(ColOffset);
-                end
-                else
-                begin
-                  Break;
-                end;
-              end;
-              for WordIndex := 0 to Splitter.Count - 1 do
-              begin
-                NewString := Splitter[WordIndex];
-                NewCol := ACol + WordIndex + ColOffset;
-                AssignTextToCell;
-              end;
-//              while Length(AString) > 0 do
+//              ColOffset := 0;
+//              for CharIndex := 1 to Length(AString) do
 //              begin
-//                NewString := ExtractWord(AString);
-//                NewCol := ACol + WordIndex;
-//                AssignTextToCell;
-//                Inc(WordIndex);
+//                if AString[CharIndex] = #9 then
+//                begin
+//                  Inc(ColOffset);
+//                end
+//                else
+//                begin
+//                  Break;
+//                end;
 //              end;
+//              for WordIndex := 0 to Splitter.Count - 1 do
+//              begin
+//                NewString := Splitter[WordIndex];
+//                NewCol := ACol + WordIndex + ColOffset;
+//                AssignTextToCell;
+//              end;
+              while Length(AString) > 0 do
+              begin
+                NewString := ExtractWord(AString);
+                NewCol := ACol + WordIndex;
+                AssignTextToCell;
+                Inc(WordIndex);
+              end;
             end;
             if Assigned(FOnDistributeTextProgress) then
             begin
@@ -4595,7 +4676,7 @@ begin
   finally
     FdgRow := ARow;
     fdgColumn := ACol;
-    Splitter.Free;
+//    Splitter.Free;
     AStringList.Free;
     EndUpdate;
   end;

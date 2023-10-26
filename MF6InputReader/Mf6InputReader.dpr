@@ -30,7 +30,8 @@ uses
   OcFileReaderUnit in 'OcFileReaderUnit.pas',
   ObsFileReaderUnit in 'ObsFileReaderUnit.pas',
   NpfFileReaderUnit in 'NpfFileReaderUnit.pas',
-  TvkFileReaderUnit in 'TvkFileReaderUnit.pas';
+  TvkFileReaderUnit in 'TvkFileReaderUnit.pas',
+  TimeSeriesFileReaderUnit in 'TimeSeriesFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

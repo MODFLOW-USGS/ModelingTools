@@ -23,6 +23,7 @@ type
     procedure Initialize;
   end;
 
+  TDoubleList = TList<Double>;
 
   TCustomMf6Persistent = class(TPersistent)
   protected

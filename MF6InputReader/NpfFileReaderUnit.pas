@@ -31,10 +31,13 @@ type
     SAVE_SATURATION: Boolean;
     K22OVERK: Boolean;
     K33OVERK: Boolean;
-    TVK6_FileName: string;
+    TVK6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
   end;
 
   TNpfGridData = class(TCustomMf6Persistent)
@@ -59,7 +62,7 @@ type
   private
     FOptions: TNpfOptions;
     FGridData: TNpfGridData;
-    TvkPackage: TPackage;
+    TvkPackages: TPackageList;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -80,6 +83,19 @@ end;
 
 { TNpfOptions }
 
+constructor TNpfOptions.Create;
+begin
+  TVK6_FileNames := TStringList.Create;
+  inherited;
+
+end;
+
+destructor TNpfOptions.Destroy;
+begin
+  TVK6_FileNames.Free;
+  inherited;
+end;
+
 procedure TNpfOptions.Initialize;
 begin
   inherited;
@@ -97,7 +113,7 @@ begin
   SAVE_SATURATION := False;
   K22OVERK := False;
   K33OVERK := False;
-  TVK6_FileName := '';
+  TVK6_FileNames.Clear;
 
 end;
 
@@ -105,6 +121,8 @@ procedure TNpfOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
+  CaseSensitiveLine: string;
+  TVK6_FileName: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -121,6 +139,7 @@ begin
       Exit
     end;
 
+    CaseSensitiveLine := ALine;
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
@@ -192,7 +211,9 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEIN') then
     begin
+      FSplitter.DelimitedText := CaseSensitiveLine;
       TVK6_FileName := FSplitter[2];
+      TVK6_FileNames.Add(TVK6_FileName);
     end
     else
     begin
@@ -364,12 +385,12 @@ begin
   inherited;
   FOptions := TNpfOptions.Create;
   FGridData := TNpfGridData.Create;
-  TvkPackage := nil;
+  TvkPackages := TPackageList.Create;
 end;
 
 destructor TNpf.Destroy;
 begin
-  TvkPackage.Free;
+  TvkPackages.Free;
   FOptions.Free;
   FGridData.Free;
   inherited;
@@ -380,6 +401,8 @@ var
   ALine: string;
   ErrorLine: string;
   TvkReader: Tvk;
+  PackageIndex: Integer;
+  TvkPackage: TPackage;
 begin
   while not Stream.EndOfStream do
   begin
@@ -411,11 +434,12 @@ begin
     end;
   end;
 
-  if FOptions.TVK6_FileName <> '' then
+  for PackageIndex := 0 to FOptions.TVK6_FileNames.Count - 1 do
   begin
     TvkPackage := TPackage.Create;
+    TvkPackages.Add(TvkPackage);
     TvkPackage.FileType := 'TVK6';
-    TvkPackage.FileName := FOptions.TVK6_FileName;
+    TvkPackage.FileName := FOptions.TVK6_FileNames[PackageIndex];
     TvkPackage.PackageName := '';
 
     TvkReader := Tvk.Create;

@@ -10,10 +10,13 @@ type
   TvkOptions = class(TCustomMf6Persistent)
   private
     PRINT_INPUT: Boolean;
-    TS6_FileName: string;
+    TS6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
   end;
 
   TValueType = (vtNumeric, vtString);
@@ -47,6 +50,7 @@ type
   private
     FOptions: TvkOptions;
     FPeriods: TPeriodList;
+    FTimeSeriesPackages: TPackageList;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -55,19 +59,36 @@ type
 
 implementation
 
+uses
+  TimeSeriesFileReaderUnit;
+
 { TvkOptions }
+
+constructor TvkOptions.Create;
+begin
+  TS6_FileNames := TStringList.Create;
+  inherited;
+end;
+
+destructor TvkOptions.Destroy;
+begin
+  TS6_FileNames.Free;
+  inherited;
+end;
 
 procedure TvkOptions.Initialize;
 begin
   inherited;
   PRINT_INPUT := False;
-  TS6_FileName := '';
+  TS6_FileNames.Clear;
 end;
 
 procedure TvkOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
+  CaseSensitiveLine: string;
+  TS6_FileName: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -84,6 +105,7 @@ begin
       Exit
     end;
 
+    CaseSensitiveLine := ALine;
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
@@ -95,7 +117,9 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEIN') then
     begin
+      FSplitter.DelimitedText := CaseSensitiveLine;
       TS6_FileName := FSplitter[2];
+      TS6_FileNames.Add(TS6_FileName);
     end
     else
     begin
@@ -144,6 +168,7 @@ var
   Cell: TvkCell;
   ALine: string;
   ErrorLine: string;
+  CaseSensitiveLine: string;
 begin
   DimensionCount := Dimensions.DimensionCount;
   Initialize;
@@ -163,6 +188,7 @@ begin
     end;
 
     Cell.Initialize;
+    CaseSensitiveLine := ALine;
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     if FSplitter.Count >= DimensionCount + 2 then
@@ -177,6 +203,7 @@ begin
         else
         begin
           Cell.ValueType := vtString;
+          FSplitter.DelimitedText := CaseSensitiveLine;
           Cell.StringValue := FSplitter[DimensionCount+1];
         end;
         FCells.Add(Cell);
@@ -203,10 +230,12 @@ begin
   inherited;
   FOptions := TvkOptions.Create;
   FPeriods := TPeriodList.Create;
+  FTimeSeriesPackages := TPackageList.Create;
 end;
 
 destructor Tvk.Destroy;
 begin
+  FTimeSeriesPackages.Free;
   FOptions.Free;
   FPeriods.Free;
   inherited;
@@ -218,6 +247,10 @@ var
   ErrorLine: string;
   IPER: Integer;
   APeriod: TvkPeriodData;
+  Index: Integer;
+  TsPackage: TPackage;
+  PackageIndex: Integer;
+  TsReader: TTimeSeries;
 begin
   while not Stream.EndOfStream do
   begin
@@ -258,6 +291,18 @@ begin
         Unhandled.WriteLine(ErrorLine);
       end;
     end;
+  end;
+  for PackageIndex := 0 to FOptions.TS6_FileNames.Count - 1 do
+  begin
+    TsPackage := TPackage.Create;
+    FTimeSeriesPackages.Add(TsPackage);
+    TsPackage.FileType := 'Time Series';
+    TsPackage.FileName := FOptions.TS6_FileNames[PackageIndex];
+    TsPackage.PackageName := '';
+
+    TsReader := TTimeSeries.Create;
+    TsPackage.Package := TsReader;
+    TsPackage.ReadPackage(Unhandled);
   end;
 end;
 

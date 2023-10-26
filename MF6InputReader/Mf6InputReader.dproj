@@ -115,6 +115,7 @@
         <DCCReference Include="ObsFileReaderUnit.pas"/>
         <DCCReference Include="NpfFileReaderUnit.pas"/>
         <DCCReference Include="TvkFileReaderUnit.pas"/>
+        <DCCReference Include="TimeSeriesFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

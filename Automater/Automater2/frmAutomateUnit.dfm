@@ -23,8 +23,8 @@ object frmAutomate: TfrmAutomate
     ActivePage = tabRunModels
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 684
-    ExplicitHeight = 575
+    ExplicitWidth = 682
+    ExplicitHeight = 572
     object tabRunModels: TTabSheet
       Caption = 'Run Models'
       object Label1: TLabel
@@ -527,7 +527,6 @@ object frmAutomate: TfrmAutomate
         Height = 42
         Align = alBottom
         TabOrder = 1
-        ExplicitTop = 500
         object btnAnalyze: TButton
           Left = 8
           Top = 5
@@ -554,7 +553,6 @@ object frmAutomate: TfrmAutomate
         Height = 505
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 500
         object Splitter1: TSplitter
           Left = 122
           Top = 1
@@ -898,7 +896,6 @@ object frmAutomate: TfrmAutomate
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitHeight = 498
           RowHeights = (
             23
             23)
@@ -950,7 +947,6 @@ object frmAutomate: TfrmAutomate
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitHeight = 498
           RowHeights = (
             23
             23
@@ -988,7 +984,7 @@ object frmAutomate: TfrmAutomate
     Caption = 'ToolBar'
     Images = ImageList1
     TabOrder = 0
-    ExplicitWidth = 684
+    ExplicitWidth = 682
     object ToolButton1: TToolButton
       Left = 0
       Top = 0

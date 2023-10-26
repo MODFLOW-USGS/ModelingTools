@@ -31986,5 +31986,11 @@ object TTaskHistory
       Date = 45224.000000000000000000
       Categories.Strings = (
         'Import')
+    end
+    item
+      Date = 45225.000000000000000000
+      Categories.Strings = (
+        'Components'
+        'Import')
     end>
 end
