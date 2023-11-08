@@ -143,7 +143,7 @@ https://winlibs.com/
 
 EnhancedTemplateProcessor, Mf6ObsExtractor, Mf2005ObsExtractor, and 
 SutraObsExtractor are compiled with Lazarus (https://www.lazarus-ide.org/).
-They can also be compiled with Delphi 11.2
+They can also be compiled with Delphi 11.3
 
 ModelMuse uses a number of custom components that must be installed 
 in Delphi before compiling ModelMuse.  Some are included  
@@ -154,7 +154,7 @@ can be used with ModelMuse. The required changes are listed below.
 Installing some components may require administrative permissions on your computer.
 
 
-General instructions for installing packages in Delphi 11.1 and the
+General instructions for installing packages in Delphi 11.3 and the
 Delphi Community Edition.
 1. If the component can be installed with the "Tools|GetIt Package Manager", 
 do so.
@@ -183,6 +183,11 @@ installer programs. The installer programs, when run will install the JCL
 and JVCL in the account of the user from which the installer programs were 
 run. This might be different from the account that was used to run the GetIt 
 Package Manager.
+
+When using the Delphi Community Edition, the GetIt Package Manager can not 
+be use to install JCL or JVCL.
+Instructions on how to install them can be found at
+https://stackoverflow.com/questions/76801479/how-install-jcl-and-jvcl-on-delphi-11-3-ce-version
 
 Install Graphics32 (see below) before installing GLScene
 
@@ -304,7 +309,7 @@ http://www.madshi.net/
 Abbrevia
 http://sourceforge.net/projects/tpabbrevia/
 Deactivate UnzipZipxSupport in AbDefine.inc
-Abbrevia is also available through the GetIt Package Manager in Delphi 11.1 and later.
+Abbrevia is also available through the GetIt Package Manager in Delphi 11.3 and later.
 
 The Components directory has additional components that need to be installed. 
 They are in the following subdirectories of the Components directory.
