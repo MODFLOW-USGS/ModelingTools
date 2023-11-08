@@ -32,8 +32,7 @@ package GR32_DSGN_RS11_1;
 requires
   designide,
   vcl,
-  rtl,
-  GLScene_DT_D11;
+  rtl;
 
 contains
   GR32_Dsgn_Bitmap in '..\GR32_Dsgn_Bitmap.pas' {PictureEditorForm},

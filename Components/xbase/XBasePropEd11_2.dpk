@@ -29,7 +29,8 @@ package XBasePropEd11_2;
 {$IMPLICITBUILD OFF}
 
 requires
-  designide;
+  designide,
+  XBasePkg11_2;
 
 contains
   XBase1PropEd in 'XBase1PropEd.pas';
