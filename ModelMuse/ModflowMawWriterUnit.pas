@@ -164,6 +164,7 @@ resourcestring
   StrInactiveMAWPeriod = 'Inactive MAW period added';
   StrIn0sThereWasA = 'In %0:s, there was a gap in time from %1:g to %2:g. An' +
   ' inactive period has been inserted to fill that time.';
+  StrMawhead = '.maw_head';
 
 { TModflowMAW_Writer }
 
@@ -1304,7 +1305,7 @@ begin
   if  FMawPackage.SaveMnwHeads then
   begin
     WriteString('  HEAD FILEOUT ');
-    AFileName := ChangeFileExt(BaseName, '.maw_head');
+    AFileName := ChangeFileExt(BaseName, StrMawhead);
     Model.AddModelOutputFile(AFileName);
     AFileName := ExtractFileName(AFileName);
     WriteString(AFileName);

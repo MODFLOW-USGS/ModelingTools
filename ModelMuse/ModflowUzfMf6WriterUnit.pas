@@ -1150,6 +1150,7 @@ var
   CsvFile: string;
   BaseName: string;
   budget_csv_file: string;
+  WaterContentfile: string;
 begin
   WriteBeginOptions;
 
@@ -1158,6 +1159,16 @@ begin
   WriteSaveFlowsOption;
 
   BaseName := ChangeFileExt(FNameOfFile, '');
+  if FUzfPackage.SaveWaterContent then
+  begin
+    WriteString('  WATER_CONTENT FILEOUT ');
+    WaterContentfile := ChangeFileExt(BaseName, StrWatercontent);
+    Model.AddModelOutputFile(WaterContentfile);
+    WaterContentfile := ExtractFileName(WaterContentfile);
+    WriteString(WaterContentfile);
+    NewLine;
+  end;
+
   if FUzfPackage.SaveBudgetFile or Model.SeparateGwtUsed then
   begin
     WriteString('  BUDGET FILEOUT ');

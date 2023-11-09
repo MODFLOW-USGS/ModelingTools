@@ -3053,6 +3053,7 @@ that affects the model output should also have a comment. }
     property ItemTopLocation[const EvalAt: TEvaluatedAt; const Column,
       Row: integer]: TPoint2D read GetItemTopLocation;
     function PointToCell(EvalAt: TEvaluatedAt; APoint: TPoint2D): T2DTopCell;
+    // ACell uses 1-based indexing not 0-based indexing in CellToPoint.
     function CellToPoint(ACell: TCellLocation; EvalAt: TEvaluatedAt): TPoint3D;
     property PestProperties: TPestProperties read GetPestProperties
       write SetPestProperties;
@@ -5181,6 +5182,9 @@ const
   StrCsubcrscmpct = '.csub_crs_cmpct';
   StrCsubzdis = '.csub_z_dis';
   StrPtf = '.ptf';
+  StrStage = '.stage';
+  StrMawhead = '.maw_head';
+  StrWatercontent = '.water_content';
 
 
   MaxString12 = 12;

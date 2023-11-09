@@ -31992,5 +31992,51 @@ object TTaskHistory
       Categories.Strings = (
         'Components'
         'Import')
+    end
+    item
+      Date = 45226.000000000000000000
+    end
+    item
+      Date = 45227.000000000000000000
+    end
+    item
+      Date = 45228.000000000000000000
+    end
+    item
+      Date = 45229.000000000000000000
+    end
+    item
+      Date = 45230.000000000000000000
+    end
+    item
+      Date = 45231.000000000000000000
+    end
+    item
+      Date = 45232.000000000000000000
+    end
+    item
+      Date = 45233.000000000000000000
+    end
+    item
+      Date = 45234.000000000000000000
+    end
+    item
+      Date = 45235.000000000000000000
+    end
+    item
+      Date = 45236.000000000000000000
+    end
+    item
+      Date = 45237.000000000000000000
+    end
+    item
+      Date = 45238.000000000000000000
+    end
+    item
+      Date = 45239.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'MF-2015'
+        'Dialog boxes')
     end>
 end

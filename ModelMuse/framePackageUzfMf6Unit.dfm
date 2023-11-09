@@ -8,7 +8,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
     526)
   object lblNumberOfTrailingWaves: TLabel [2]
     Left = 16
-    Top = 127
+    Top = 128
     Width = 203
     Height = 15
     Caption = 'Number of trailing waves (ntrailwaves)'
@@ -16,17 +16,17 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object lblNumberOfWaveSets: TLabel [3]
     Left = 16
-    Top = 174
+    Top = 175
     Width = 176
     Height = 15
     Caption = 'Number of wave sets (nwavesets)'
     Enabled = False
   end
   inherited memoComments: TMemo
-    Width = 564
-    Height = 59
-    ExplicitWidth = 564
-    ExplicitHeight = 59
+    Width = 285
+    Height = 60
+    ExplicitWidth = 285
+    ExplicitHeight = 60
   end
   object rgEvapotranspiration: TRadioGroup [5]
     Left = 16
@@ -62,7 +62,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbSeepage: TCheckBox [7]
     Left = 323
-    Top = 127
+    Top = 79
     Width = 257
     Height = 36
     Caption = 'Simulate groundwater seepage (SIMULATE_GWSEEP)'
@@ -72,7 +72,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbSaveBudget: TCheckBox [8]
     Left = 323
-    Top = 162
+    Top = 114
     Width = 257
     Height = 46
     Caption = 'Save binary UZF budget file (.uzf_budget)'
@@ -82,7 +82,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object rdeNumberOfTrailingWaves: TRbwDataEntry [9]
     Left = 16
-    Top = 146
+    Top = 147
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -97,7 +97,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object rdeNumberOfWaveSets: TRbwDataEntry [10]
     Left = 16
-    Top = 193
+    Top = 194
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -121,12 +121,22 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbBudgetCsv: TCheckBox [12]
     Left = 323
-    Top = 206
+    Top = 158
     Width = 222
     Height = 35
     Caption = 'Save text UZF budget file (.uzf_budget.csv)'
     Enabled = False
     TabOrder = 8
+    WordWrap = True
+  end
+  object cbSaveWaterContent: TCheckBox [13]
+    Left = 323
+    Top = 198
+    Width = 257
+    Height = 33
+    Caption = 'Save binary water content (WATER_CONTENT)'
+    Enabled = False
+    TabOrder = 9
     WordWrap = True
   end
   inherited rcSelectionController: TRbwController
@@ -163,6 +173,9 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
       end
       item
         Control = cbBudgetCsv
+      end
+      item
+        Control = cbSaveWaterContent
       end>
     OnEnabledChange = rcSelectionControllerEnabledChange
   end

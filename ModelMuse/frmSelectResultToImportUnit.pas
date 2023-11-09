@@ -10,13 +10,14 @@ uses System.UITypes,
   ModflowGridUnit, ExtCtrls, EdgeDisplayUnit, GoPhastTypes, Grids, RbwDataGrid4,
   PhastModelUnit, Types, ModflowSwrWriterUnit, ReadSwrOutputUnit,
   JvExControls, JvxCheckListBox, RbwEdit, ModflowIrregularMeshUnit,
-  DataArrayManagerUnit;
+  DataArrayManagerUnit, ModflowCellUnit;
 
 type
   TModflowResultFormat = (mrBinary, mrAscii, mrFlux, mrHufAscii, mrHufBinary,
     mrHufFlux, mfSubBinary, mfMt3dConc, mfSwrStageAscii, mfSwrStageBinary,
     mfSwrReachExchangeAscii, mfSwrReachExchangeBinary,
-    mfSwrReachGroupBudgetAscii, mfSwrReachGroupBudgetBinary, mfCSubBinary);
+    mfSwrReachGroupBudgetAscii, mfSwrReachGroupBudgetBinary, mfCSubBinary,
+    mfAdvPackage);
 
   TModelColumns = (mcModelName, mcUse, mcFileName);
 
@@ -177,6 +178,7 @@ type
     FItemDescriptions: TStringList;
     FItemTimes: TStringList;
 
+    FAdvancedFeatureCells: TCellLocationList;
 
     FSPeciesName: string;
     function DefaultFileName(AModel: TCustomModel; Directory: string = ''): string;
@@ -204,7 +206,7 @@ type
       LayerNumbers: TIntegerList; LayerDataSets: TList;
       out New3DArray: TDataArray; out OldComment: string; FluxData: boolean;
       NewDataSets: TList; FileNames: string; AModel: TCustomModel;
-      Precision: TModflowPrecision);
+      Precision: TModflowPrecision; DefaultFormula: string = '');
     procedure CloseFiles;
     procedure Read3DArray(var NLAY: Integer; var EndReached: Boolean;
       var KPER, KSTP: Integer; var TOTIM: TModflowDouble;
@@ -286,6 +288,11 @@ type
     function GetPrefix: string;
     procedure UpdateModelAndPackageNames(var ModelName1, ModelName2,
       PackageName1, PackageName2: string);
+    procedure GetSfr6Cells;
+    procedure GetMaw6Cells;
+    procedure GetUzf6Cells;
+    procedure CreateMf6AdvPackageScreenObject(AModel: TCustomModel;
+      out ScreenObject: TScreenObject; Root: string; FileName: string);
   public
     function ShowDataSets(AFileName: string): boolean;
     function SelectFiles: boolean;
@@ -319,7 +326,7 @@ uses Math, frmGoPhastUnit, RbwParser,
   Mt3dmsChemSpeciesUnit, IOUtils,
   SwrReachObjectUnit, frmProgressUnit, Generics.Collections,
   frmBudgetPrecisionQueryUnit, ModflowBoundaryDisplayUnit, VectorDisplayUnit,
-  DataSetNamesUnit;
+  DataSetNamesUnit, CellLocationUnit, FastGEO;
 
 resourcestring
   StrHead = 'Head';
@@ -473,6 +480,11 @@ resourcestring
   StrGWTConcentrationFi = 'GWT concentration files';
   StrDensityFiles = 'Density files';
   StrViscosityFiles = 'Viscosity files';
+  StrStreamStage = 'Stream Stage';
+  StrTheFileYouAreTryFeaturesCount = 'The file you are trying to read has a ' +
+  'different number of model features than are in your model';
+  StrMAWHeadDesc = 'MAW Head';
+  StrUZFWAterConent = 'UZF WAter Conent';
 
 {$R *.dfm}
 
@@ -533,6 +545,58 @@ begin
           result := Trim(comboClassification.Text);
         end;
       end;
+  end;
+end;
+
+procedure TfrmSelectResultToImport.GetMaw6Cells;
+var
+  Model: TPhastModel;
+  IDomain: TDataArray;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  SfrReach: TCellLocation;
+begin
+  FAdvancedFeatureCells.Clear;
+  Model := frmGoPhast.PhastModel;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  if not Model.ModflowPackages.MawPackage.IsSelected then
+  begin
+    Exit;
+  end;
+  IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  IDomain.Initialize;
+  for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+  begin
+    AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+    if AScreenObject.Deleted or not AScreenObject.UsedModels.UsesModel(Model)
+      or (AScreenObject.ModflowMawBoundary = nil)
+      or not AScreenObject.ModflowMawBoundary.Used then
+    begin
+      Continue;
+    end;
+    CellList := TCellAssignmentList.Create;
+    try
+      AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+      for CellIndex := 0 to CellList.Count - 1 do
+      begin
+        ACell := CellList[CellIndex];
+        if IDomain.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+        begin
+          SfrReach.Layer := ACell.Layer+1;
+          SfrReach.Row := ACell.Row+1;
+          SfrReach.Column := ACell.Column+1;
+          FAdvancedFeatureCells.Add(SfrReach);
+        end;
+      end;
+    finally
+      CellList.Free;
+    end;
   end;
 end;
 
@@ -2123,10 +2187,73 @@ begin
   ParentLayerData.Limits.Update;
 end;
 
+procedure TfrmSelectResultToImport.CreateMf6AdvPackageScreenObject(
+  AModel: TCustomModel; out ScreenObject: TScreenObject; Root: string;
+  FileName: string);
+var
+  UndoCreateScreenObject: TCustomUndo;
+  ExistingObjectCount: Integer;
+  ElevValues: TValueArrayStorage;
+  CellIndex: Integer;
+  ALocation: TCellLocation;
+  APoint3D: TPoint3D;
+  APoint2D: TPoint2D;
+  UndoCreateObject: TUndoCreateScreenObject;
+begin
+  ScreenObject := TScreenObject.CreateWithViewDirection(
+    frmGoPhast.PhastModel, vdTop,
+    UndoCreateScreenObject, False);
+  ScreenObject.Comment := 'Imported from ' + FileName +' on ' + DateTimeToStr(Now);
+  frmGoPhast.PhastModel.AddScreenObject(ScreenObject);
+  ScreenObject.ElevationCount := ecOne;
+  ScreenObject.SetValuesOfIntersectedCells := True;
+
+  Root := Root + StrObject;
+  ExistingObjectCount := frmGoPhast.PhastModel.
+    NumberOfLargestScreenObjectsStartingWith(Root);
+  Inc(ExistingObjectCount);
+  ScreenObject.Name := Root + IntToStr(ExistingObjectCount);
+
+  if frmGoPhast.PhastModel.LgrUsed then
+  begin
+    ScreenObject.UsedModels.UsedWithAllModels := False;
+    ScreenObject.UsedModels.AddModel(AModel);
+  end;
+
+  ScreenObject.EvaluatedAt := eaBlocks;
+  ScreenObject.Visible := False;
+  ScreenObject.Capacity := FAdvancedFeatureCells.Count;
+  ElevValues := TValueArrayStorage.Create;
+  try
+    ElevValues.Count := FAdvancedFeatureCells.Count;
+
+    for CellIndex := 0 to FAdvancedFeatureCells.Count - 1 do
+    begin
+      ALocation := FAdvancedFeatureCells[CellIndex];
+      APoint3D := AModel.CellToPoint(ALocation, eaBlocks);
+      APoint2D.X := APoint3D.X;
+      APoint2D.Y := APoint3D.Y;
+      ScreenObject.AddPoint(APoint2D, True);
+      ElevValues.RealValues[CellIndex] := APoint3D.Z;
+
+    end;
+    ScreenObject.ImportedSectionElevations := ElevValues;
+    ScreenObject.ImportedSectionElevations.CacheData;
+    ScreenObject.ElevationFormula := rsObjectImportedValuesR
+      + '("' + StrImportedElevations + '")';
+  finally
+    ElevValues.Free;
+  end;
+  UndoCreateObject := TUndoCreateScreenObject.Create(ScreenObject);
+  UndoCreateObject.UpdateObservations;
+  NewCreateScreenObjects.Add(UndoCreateObject);
+end;
+
 procedure TfrmSelectResultToImport.CreateOrRetrieve3DDataSet(Description: string;
   NTRANS, KPER, KSTP: integer; TOTIM: TModflowDouble; LayerNumbers: TIntegerList;
   LayerDataSets: TList; out New3DArray: TDataArray; out OldComment: string; FluxData: boolean;
-  NewDataSets: TList; FileNames: string; AModel: TCustomModel; Precision: TModflowPrecision);
+  NewDataSets: TList; FileNames: string; AModel: TCustomModel; Precision: TModflowPrecision;
+  DefaultFormula: string = '');
 var
   NewName: string;
   NewFormula: string;
@@ -2241,51 +2368,58 @@ begin
         + sLineBreak + StrTransportStep + IntToStr(NTRANS)
     end;
   end;
-  if Grid.LayerCount = 1 then
+  if DefaultFormula = '' then
   begin
-    LayerPosition := LayerNumbers.IndexOf(1);
-    Assert(LayerPosition = 0);
-    DataArray := LayerDataSets[LayerPosition];
-    NewFormula := DataArray.Name;
-  end
-  else
-  begin
-    NewFormula := 'CaseR(Layer, ';
-    for LayerIndex := 1 to Grid.LayerCount do
+    if Grid.LayerCount = 1 then
     begin
-      LayerPosition := LayerNumbers.IndexOf(LayerIndex);
-      if LayerPosition >= 0 then
+      LayerPosition := LayerNumbers.IndexOf(1);
+      Assert(LayerPosition = 0);
+      DataArray := LayerDataSets[LayerPosition];
+      NewFormula := DataArray.Name;
+    end
+    else
+    begin
+      NewFormula := 'CaseR(Layer, ';
+      for LayerIndex := 1 to Grid.LayerCount do
       begin
-        DataArray := LayerDataSets[LayerPosition];
-        NewFormula := NewFormula + DataArray.Name;
-        if LayerIndex < Grid.LayerCount then
+        LayerPosition := LayerNumbers.IndexOf(LayerIndex);
+        if LayerPosition >= 0 then
         begin
-          NewFormula := NewFormula + ', ';
-        end;
-      end
-      else
-      begin
-        if FluxData then
-        begin
-          NewFormula := NewFormula + '0, ';
+          DataArray := LayerDataSets[LayerPosition];
+          NewFormula := NewFormula + DataArray.Name;
+          if LayerIndex < Grid.LayerCount then
+          begin
+            NewFormula := NewFormula + ', ';
+          end;
         end
         else
         begin
-          LayerPosition := LayerNumbers.IndexOf(LayerIndex-1);
-          Assert(LayerPosition >= 0);
-          DataArray := LayerDataSets[LayerPosition];
-          NewFormula := NewFormula + '((' + DataArray.Name + ' + ';
+          if FluxData then
+          begin
+            NewFormula := NewFormula + '0, ';
+          end
+          else
+          begin
+            LayerPosition := LayerNumbers.IndexOf(LayerIndex-1);
+            Assert(LayerPosition >= 0);
+            DataArray := LayerDataSets[LayerPosition];
+            NewFormula := NewFormula + '((' + DataArray.Name + ' + ';
 
-          LayerPosition := LayerNumbers.IndexOf(LayerIndex+1);
-          Assert(LayerPosition >= 0);
-          DataArray := LayerDataSets[LayerPosition];
-          NewFormula := NewFormula + DataArray.Name + ') / 2.), ';
+            LayerPosition := LayerNumbers.IndexOf(LayerIndex+1);
+            Assert(LayerPosition >= 0);
+            DataArray := LayerDataSets[LayerPosition];
+            NewFormula := NewFormula + DataArray.Name + ') / 2.), ';
+          end;
         end;
       end;
+      NewFormula := NewFormula + ')';
+      NewFormula := 'If(((Layer > 0) and (Layer <= ' + IntToStr(Grid.LayerCount)
+        + ')), ' + NewFormula + ', 0)'
     end;
-    NewFormula := NewFormula + ')';
-    NewFormula := 'If(((Layer > 0) and (Layer <= ' + IntToStr(Grid.LayerCount)
-      + ')), ' + NewFormula + ', 0)'
+  end
+  else
+  begin
+    NewFormula := DefaultFormula;
   end;
   Assigner := FFormulaAssigners[Parent3DArray];
   Assigner.AddFormula(NewFormula, AModel);
@@ -2593,8 +2727,16 @@ var
   ModelName2: string;
   PackageName1: string;
   PackageName2: string;
+  PeriodTime: TModflowDouble;
+  DESC: TModflowDesc;
+  Data: TMf6DoubleArraay;
+  SkipItem: TSkipReal;
+  AdvScreenObject: TScreenObject;
+  ValueItem: TValueArrayItem;
+  DataIndex: Integer;
 begin
   inherited;
+  AdvScreenObject := nil;
   ModelName1 :='';
   ModelName2 :='';
   PackageName1 :='';
@@ -3363,6 +3505,73 @@ begin
                       end;
 
                     end;
+                  mfAdvPackage:
+                    begin
+                      if Index > LastItem then
+                      begin
+                        Break;
+                      end;
+                      if Index = 0 then
+                      begin
+                        if SameText(ExtractFileExt(AFileName), StrStage) then
+                        begin
+                          GetSfr6Cells;
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrMawhead) then
+                        begin
+                          GetMaw6Cells;
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrWatercontent) then
+                        begin
+                          GetUzf6Cells
+                        end
+                        else
+                        begin
+                          Assert(False);
+                        end;
+                      end;
+                      ReadMf6AdvancedPackageList(FFileStream, KSTP, KPER, PeriodTime,
+                        TOTIM, DESC, Data);
+                      Description := Trim(string(DESC));
+                      Description := ValidName(Description);
+
+                      if Length(Data) <> FAdvancedFeatureCells.Count then
+                      begin
+                        Beep;
+                        MessageDlg(StrTheFileYouAreTryFeaturesCount, mtError, [mbOK], 0);
+                        Exit;
+                      end;
+
+                      if clData.Checked[Index] then
+                      begin
+                        CreateOrRetrieve3DDataSet(Description, NTRANS, KPER, KSTP, TOTIM,
+                          AltLayerNumbers, AltLayerDataSets, New3DArray, OldComment, True,
+                          NewDataSets, FileNames, AModel, Precision, '1.0e30');
+                        SkipItem := New3DArray.Limits.RealValuesToSkip.Add as TSkipReal;
+                        SkipItem.RealValue := 1E30;
+
+                        comboColorGrid.Items.Objects[comboColorGrid.ItemIndex] := New3DArray;
+
+                        if AdvScreenObject = nil then
+                        begin
+                          CreateMf6AdvPackageScreenObject(AModel,
+                            AdvScreenObject, Description, AFileName);
+                        end;
+                        ValueItem := AdvScreenObject.ImportedValues.Add;
+                        ValueItem.Name := New3DArray.Name;
+                        ValueItem.Values.DataType := rdtDouble;
+                        ValueItem.Values.Count := Length(Data);
+                        for DataIndex := 0 to Length(Data) - 1 do
+                        begin
+                          ValueItem.Values.RealValues[DataIndex] := Data[DataIndex];
+                        end;
+
+                        DataIndex := AdvScreenObject.AddDataSet(New3DArray);
+                        AdvScreenObject.DataSetFormulas[DataIndex] :=
+                          rsObjectImportedValuesR + '("' + ValueItem.Name + '")';
+                      end;
+
+                    end
                   else Assert(False);
                 end;
               end;
@@ -3542,6 +3751,8 @@ var
   SubsidenceExtensions: TStringList;
 begin
   inherited;
+  FAdvancedFeatureCells := TCellLocationList.Create;
+
   comboClassification.Items.Add(StrModelResults);
   comboClassification.Items.Add(StrUserDefined);
   comboClassification.ItemIndex := 0;
@@ -3637,6 +3848,16 @@ begin
 
     FilterDescriptions.Add(StrUZFDischarge);
     FileExtensions.Add(StrUzfDisch);
+
+    FilterDescriptions.Add(StrStreamStage);
+    FileExtensions.Add(StrStage);
+
+    FilterDescriptions.Add(StrMAWHeadDesc);
+    FileExtensions.Add(StrMawhead);
+
+    FilterDescriptions.Add(StrUZFWAterConent);
+    FileExtensions.Add(StrWatercontent);
+
 
     SubsidenceDescriptions.Add(StrCombinedSUBOutput);
     SubsidenceExtensions.Add(StrSubOut);
@@ -3790,6 +4011,7 @@ begin
   FModifiedParentDataSets.Free;
   FItemDescriptions.Free;
   FItemTimes.Free;
+  FAdvancedFeatureCells.Free;
 end;
 
 procedure TfrmSelectResultToImport.FormShow(Sender: TObject);
@@ -4016,6 +4238,8 @@ var
   AuxArray: TAuxArrays;
   Mf6Description: string;
   ModelName1, ModelName2, PackageName1, PackageName2: string;
+  PeriodTime: TModflowDouble;
+  Data: TMf6DoubleArraay;
   procedure RecordItem(Description: String;
     ModelName1, ModelName2, PackageName1, PackageName2: String);
   var
@@ -4655,6 +4879,16 @@ begin
               ReachGroupWaterBudgets.Free;
             end;
           end;
+        mfAdvPackage:
+          begin
+            while FFileStream.Position < FFileStream.Size do
+            begin
+              ReadMf6AdvancedPackageList(FFileStream, KSTP, KPER, PeriodTime,
+                TOTIM, DESC, Data);
+              RecordItem(string(DESC),
+                ModelName1, ModelName2, PackageName1, PackageName2);
+            end;
+          end;
         else Assert(False);
       end;
 
@@ -4822,6 +5056,58 @@ begin
   end;
 end;
 
+procedure TfrmSelectResultToImport.GetSfr6Cells;
+var
+  Model: TPhastModel;
+  IDomain: TDataArray;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  SfrReach: TCellLocation;
+begin
+  FAdvancedFeatureCells.Clear;
+  Model := frmGoPhast.PhastModel;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  if not Model.ModflowPackages.SfrModflow6Package.IsSelected then
+  begin
+    Exit;
+  end;
+  IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  IDomain.Initialize;
+  for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+  begin
+    AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+    if AScreenObject.Deleted or not AScreenObject.UsedModels.UsesModel(Model)
+      or (AScreenObject.ModflowSfr6Boundary = nil)
+      or not AScreenObject.ModflowSfr6Boundary.Used then
+    begin
+      Continue;
+    end;
+    CellList := TCellAssignmentList.Create;
+    try
+      AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+      for CellIndex := 0 to CellList.Count - 1 do
+      begin
+        ACell := CellList[CellIndex];
+        if IDomain.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+        begin
+          SfrReach.Layer := ACell.Layer+1;
+          SfrReach.Row := ACell.Row+1;
+          SfrReach.Column := ACell.Column+1;
+          FAdvancedFeatureCells.Add(SfrReach);
+        end;
+      end;
+    finally
+      CellList.Free;
+    end;
+  end;
+end;
+
 procedure TfrmSelectResultToImport.GetShouldIgnore(
   ValuesToIgnore: TOneDRealArray; Temp: TModflowFloat;
   var ShouldIgnore: Boolean);
@@ -4849,6 +5135,55 @@ begin
       Break;
     end;
   end;
+end;
+
+procedure TfrmSelectResultToImport.GetUzf6Cells;
+var
+  Model: TPhastModel;
+  IDomain: TDataArray;
+  SurfaceDepressionDepthDataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColumnIndex: Integer;
+  UzfCell: TCellLocation;
+begin
+  FAdvancedFeatureCells.Clear;
+  Model := frmGoPhast.PhastModel;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  if not Model.ModflowPackages.UzfMf6Package.IsSelected then
+  begin
+    Exit;
+  end;
+  IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  IDomain.Initialize;
+
+  SurfaceDepressionDepthDataArray :=
+    Model.DataArrayManager.GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
+  SurfaceDepressionDepthDataArray.Initialize;
+
+  FAdvancedFeatureCells.Capacity := IDomain.LayerCount *
+    IDomain.RowCount * IDomain.ColumnCount;
+  for LayerIndex := 0 to IDomain.LayerCount - 1 do
+  begin
+    for RowIndex := 0 to IDomain.RowCount - 1 do
+    begin
+      for ColumnIndex := 0 to IDomain.ColumnCount - 1 do
+      begin
+        if SurfaceDepressionDepthDataArray.IsValue[LayerIndex, RowIndex, ColumnIndex]
+          and (IDomain.IntegerData[LayerIndex, RowIndex, ColumnIndex] > 0) then
+        begin
+          UzfCell.Layer := LayerIndex+1;
+          UzfCell.Row := RowIndex+1;
+          UzfCell.Column := ColumnIndex+1;
+          FAdvancedFeatureCells.Add(UzfCell);
+        end;
+      end;
+    end;
+  end;
+
 end;
 
 procedure TfrmSelectResultToImport.UpdateCombo;
@@ -5314,6 +5649,15 @@ begin
     FResultFormat := mfCSubBinary;
   end
 
+  else if SameText(Extension, StrStage)
+    or SameText(Extension, StrMawhead)
+    or SameText(Extension, StrWatercontent)
+    then
+  begin
+    FResultFormat := mfAdvPackage;
+  end
+
+
   else
   begin
     result := False;
@@ -5440,6 +5784,11 @@ begin
         end;
       end;
     mfCSubBinary:
+      begin
+        Precision := mpDouble;
+        FFileStream := TFileStream.Create(AFileName, fmOpenRead or fmShareDenyWrite);
+      end;
+    mfAdvPackage:
       begin
         Precision := mpDouble;
         FFileStream := TFileStream.Create(AFileName, fmOpenRead or fmShareDenyWrite);

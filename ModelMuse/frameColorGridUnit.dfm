@@ -82,12 +82,12 @@ inherited frameColorGrid: TframeColorGrid
         Left = 369
         Top = 26
         Width = 16
-        Height = 21
+        Height = 23
         Associate = virttreecomboDataSets
         ExplicitLeft = 369
         ExplicitTop = 26
         ExplicitWidth = 16
-        ExplicitHeight = 21
+        ExplicitHeight = 23
       end
       inherited rgUpdateLimitChoice: TRadioGroup
         Left = 10
@@ -160,7 +160,7 @@ inherited frameColorGrid: TframeColorGrid
       end
       inherited seNumberOfValuesToIgnore: TJvSpinEdit
         Top = 437
-        ExplicitTop = 440
+        ExplicitTop = 437
       end
     end
     inherited tabLegend: TTabSheet
@@ -178,7 +178,7 @@ inherited frameColorGrid: TframeColorGrid
       end
       inherited pnlLegend: TPanel
         Height = 471
-        ExplicitHeight = 473
+        ExplicitHeight = 471
         DesignSize = (
           201
           471)

@@ -10,7 +10,7 @@ object frameCustomColor: TframeCustomColor
     Top = 0
     Width = 570
     Height = 428
-    ActivePage = tabSelection
+    ActivePage = tabFilters
     Align = alClient
     TabOrder = 0
     object tabSelection: TTabSheet
@@ -95,7 +95,7 @@ object frameCustomColor: TframeCustomColor
         Left = 456
         Top = 297
         Width = 101
-        Height = 28
+        Height = 23
         ButtonKind = bkClassic
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
@@ -121,7 +121,7 @@ object frameCustomColor: TframeCustomColor
         Left = 160
         Top = 363
         Width = 65
-        Height = 28
+        Height = 23
         ButtonKind = bkClassic
         Increment = 0.010000000000000000
         MaxValue = 2.000000000000000000
@@ -143,7 +143,7 @@ object frameCustomColor: TframeCustomColor
       object udDataSets: TJvUpDown
         Left = 479
         Top = 28
-        Width = 21
+        Width = 17
         Height = 25
         Anchors = [akTop, akRight]
         TabOrder = 1
@@ -166,11 +166,11 @@ object frameCustomColor: TframeCustomColor
         Left = 8
         Top = 25
         Width = 465
-        Height = 28
+        Height = 23
         Tree.Left = 0
         Tree.Top = 0
-        Tree.Width = 628
-        Tree.Height = 442
+        Tree.Width = 624
+        Tree.Height = 441
         Tree.Align = alClient
         Tree.Colors.BorderColor = 15987699
         Tree.Colors.DisabledColor = clGray
@@ -390,7 +390,7 @@ object frameCustomColor: TframeCustomColor
         Left = 8
         Top = 364
         Width = 121
-        Height = 28
+        Height = 23
         CheckMinValue = True
         ButtonKind = bkClassic
         Anchors = [akLeft, akBottom]
@@ -442,7 +442,6 @@ object frameCustomColor: TframeCustomColor
         BevelInner = bvRaised
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitHeight = 393
         DesignSize = (
           201
           398)
@@ -479,7 +478,7 @@ object frameCustomColor: TframeCustomColor
           Left = 8
           Top = 322
           Width = 121
-          Height = 28
+          Height = 23
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000

@@ -2079,7 +2079,7 @@ begin
   if SfrMf6Package.SaveStageFile then
   begin
     WriteString('    STAGE FILEOUT ');
-    stagefile := ChangeFileExt(BaseFileName, '.stage');
+    stagefile := ChangeFileExt(BaseFileName, StrStage);
     Model.AddModelOutputFile(stagefile);
     stagefile := ExtractFileName(stagefile);
     WriteString(stagefile);

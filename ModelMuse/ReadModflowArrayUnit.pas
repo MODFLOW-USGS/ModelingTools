@@ -19,6 +19,7 @@ type
   TModflowSingleArray = array of array of TModflowFloat;
   TModflowDoubleArray = array of array of TModflowDouble;
   T3DTModflowArray = array of TModflowDoubleArray;
+  TMf6DoubleArraay = array of TModflowDouble;
 
   TAuxArray = record
     Name: string;
@@ -173,6 +174,10 @@ function CheckArrayPrecision(AFile: TFileStream): TModflowPrecision;
 // be at the beginning when the function returns.
 function CheckBudgetPrecision(AFile: TFileStream; out HufFormat: boolean;
   IsModflow6: Boolean): TModflowPrecision;
+
+procedure ReadMf6AdvancedPackageList(AFile: TFileStream;
+  var Step, Period: Integer; var PeriodTime, Totaltime: TModflowDouble;
+  var Text: TModflowDesc; var Data: TMf6DoubleArraay);
 
 implementation
 
@@ -2723,6 +2728,30 @@ begin
 
   finally
     FileStream.Free;
+  end;
+end;
+
+procedure ReadMf6AdvancedPackageList(AFile: TFileStream;
+  var Step, Period: Integer; var PeriodTime, Totaltime: TModflowDouble;
+  var Text: TModflowDesc; var Data: TMf6DoubleArraay);
+var
+  MaxBound: Integer;
+  Dummy: Integer;
+  AValue: TModflowDouble;
+  DataIndex: Integer;
+begin
+  AFile.Read(Step, SizeOf(Step));
+  AFile.Read(Period, SizeOf(Period));
+  AFile.Read(PeriodTime, SizeOf(PeriodTime));
+  AFile.Read(Totaltime, SizeOf(Totaltime));
+  AFile.Read(Text, SizeOf(Text));
+  AFile.Read(MaxBound, SizeOf(MaxBound));
+  AFile.Read(Dummy, SizeOf(Dummy));
+  AFile.Read(Dummy, SizeOf(Dummy));
+  SetLength(Data, MaxBound);
+  for DataIndex := 0 to MaxBound - 1 do
+  begin
+    AFile.Read(Data[DataIndex], SizeOf(TModflowDouble));
   end;
 end;
 

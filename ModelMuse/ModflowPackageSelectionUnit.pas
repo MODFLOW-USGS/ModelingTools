@@ -2495,6 +2495,7 @@ Type
     FGwtSpecConcList: TMfBoundDispObjectList;
     FGwtInfiltrationConcList: TMfBoundDispObjectList;
     FGwtET_ConcList: TMfBoundDispObjectList;
+    FSaveWaterContent: Boolean;
     procedure SetGroundwaterET(const Value: TUzfGwEtChoice);
     procedure SetSimulateGroundwaterSeepage(const Value: Boolean);
     procedure SetUnsatET(const Value: TUzfUnsatEtChoice);
@@ -2529,6 +2530,7 @@ Type
     procedure GetGwtSpecConcUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetGwtInfilitrationConcUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetGwtEt_ConcUseList(Sender: TObject; NewUseList: TStringList);
+    procedure SetSaveWaterContent(const Value: Boolean);
 
   public
     procedure Assign(Source: TPersistent); override;
@@ -2583,6 +2585,9 @@ Type
     // [CONCENTRATION FILEOUT <concfile>]
     property SaveGwtConcentration: Boolean read FSaveGwtConcentration
       write SetSaveGwtConcentration
+      stored True;
+    property SaveWaterContent: Boolean read FSaveWaterContent
+      write SetSaveWaterContent
       stored True;
   end;
 
@@ -23250,6 +23255,7 @@ begin
     NumberOfWaveSets := Uzf6Source.NumberOfWaveSets;
     WriteConvergenceData := Uzf6Source.WriteConvergenceData;
     SaveGwtConcentration := Uzf6Source.SaveGwtConcentration;
+    SaveWaterContent := Uzf6Source.SaveWaterContent;
   end
   else if Source is TUzfPackageSelection then
   begin
@@ -23667,6 +23673,7 @@ begin
   FWriteConvergenceData := True;
   FSaveBudgetCsvFile := False;
   FSaveGwtConcentration := True;
+  FSaveWaterContent := True;
 end;
 
 procedure TUzfMf6PackageSelection.InvalidateConcentrations;
@@ -23742,6 +23749,11 @@ end;
 procedure TUzfMf6PackageSelection.SetSaveGwtConcentration(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveGwtConcentration, Value);
+end;
+
+procedure TUzfMf6PackageSelection.SetSaveWaterContent(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveWaterContent, Value);
 end;
 
 procedure TUzfMf6PackageSelection.SetSimulateGroundwaterSeepage(
