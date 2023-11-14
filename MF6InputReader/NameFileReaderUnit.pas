@@ -96,7 +96,7 @@ implementation
 
 uses
   DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit, IcFileReaderUnit,
-  OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit;
+  OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit, HfbFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -458,6 +458,7 @@ var
   OcReader: TOc;
   GwfObsReader: TObs;
   NpfReader: TNpf;
+  hFBReader: THfb;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -524,6 +525,13 @@ begin
       NpfReader := TNpf.Create;
       NpfReader.Dimensions := FDimensions;
       APackage.Package := NpfReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'HFB6' then
+    begin
+      hFBReader := ThFB.Create;
+      hFBReader.Dimensions := FDimensions;
+      APackage.Package := hFBReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

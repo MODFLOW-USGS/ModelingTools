@@ -1,11 +1,12 @@
 ptf @
 etf %
 %ReadArrays(MF6_TestSfrMawLakMvrUzf.uzf.txt)%
-# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 11/29/2021 by ModelMuse version 4.3.0.74.
+# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 11/14/2023 by ModelMuse version 5.1.1.45.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     PRINT_INPUT
     SAVE_FLOWS
+  WATER_CONTENT FILEOUT MF6_TestSfrMawLakMvrUzf.water_content
   BUDGET FILEOUT MF6_TestSfrMawLakMvrUzf.uzf_budget
   PACKAGE_CONVERGENCE FILEOUT MF6_TestSfrMawLakMvrUzf.UzfConvergence.CSV
     BOUNDNAMES

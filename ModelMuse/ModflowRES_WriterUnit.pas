@@ -592,6 +592,7 @@ var
   EndHeadFormula: string;
   ExtendedTemplateCharacter: Char;
   Fraction: Extended;
+  OldDecimalSeparator: Char;
 begin
   ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
   Reservoirs := TList.Create;
@@ -718,10 +719,14 @@ begin
               EndHeadFormula := GetPestTemplateFormulaOrValue(EndHead,
                 EndHeadPest.PestName, EndHeadPest.PestSeriesName,
                 EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
-              ExportedStartHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
-                [StartHeadFormula, Fraction, EndHeadFormula]);
-//              ExportedStartHeadPest := Format(' %0:s          %1:s%0:s',
-//                [ExtendedTemplateCharacter, ExportedStartHeadPest]);
+              OldDecimalSeparator := FormatSettings.DecimalSeparator;
+              FormatSettings.DecimalSeparator := '.';
+              try
+                ExportedStartHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
+                  [StartHeadFormula, Fraction, EndHeadFormula]);
+              finally
+                FormatSettings.DecimalSeparator := OldDecimalSeparator;
+              end;
 
             end;
           end;
@@ -754,10 +759,14 @@ begin
               EndHeadFormula := GetPestTemplateFormulaOrValue(EndHead,
                 EndHeadPest.PestName, EndHeadPest.PestSeriesName,
                 EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
-              ExportedEndHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
-                [StartHeadFormula, Fraction, EndHeadFormula]);
-//              ExportedEndHeadPest := Format(' %0:s          %1:s%0:s',
-//                [ExtendedTemplateCharacter, ExportedEndHeadPest]);
+              OldDecimalSeparator := FormatSettings.DecimalSeparator;
+              FormatSettings.DecimalSeparator := '.';
+              try
+                ExportedEndHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
+                  [StartHeadFormula, Fraction, EndHeadFormula]);
+              finally
+                FormatSettings.DecimalSeparator := OldDecimalSeparator;
+              end;
             end;
           end;
         end;

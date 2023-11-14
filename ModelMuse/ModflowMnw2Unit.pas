@@ -822,6 +822,7 @@ var
   PestSeriesMethod: TPestParamMethod;
   WellBoundary: TMnw2Boundary;
   SeriesParam: TModflowSteadyParameter;
+  OldDecimalSeparator: Char;
 begin
 // Set the following
 //    FHlim: double;
@@ -860,15 +861,21 @@ begin
       begin
         SeriesParam.IsUsedInTemplate := True;
         PestSeriesMethod := WellBoundary.PestBoundaryMethod[FormulaIndex];
-        case PestSeriesMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g', [Formula, SeriesParam.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %:g', [Formula, SeriesParam.Value]);
-            end;
+        OldDecimalSeparator := FormatSettings.DecimalSeparator;
+        FormatSettings.DecimalSeparator := '.';
+        try
+          case PestSeriesMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:g', [Formula, SeriesParam.Value]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %:g', [Formula, SeriesParam.Value]);
+              end;
+          end;
+        finally
+          FormatSettings.DecimalSeparator := OldDecimalSeparator;
         end;
 //      end
 //      else

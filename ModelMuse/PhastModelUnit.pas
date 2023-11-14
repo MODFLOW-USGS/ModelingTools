@@ -10083,6 +10083,10 @@ const
 //                files created by the MAW, MWT, SFR, SFT, UZF, and UZT
 //                packages in HODFLOW 6.
 
+//               Bug fix: Fixed export of PEST input files on computers in
+//                which a character other than the period is used as a
+//                decimal separator.
+
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for Transient Hydraulic Conductivity package for MODFLOW 6.

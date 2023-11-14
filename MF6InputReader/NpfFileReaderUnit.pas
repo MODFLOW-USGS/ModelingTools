@@ -8,7 +8,7 @@ uses
 
 type
   TRewet = record
-    WETFCT: double;
+    WETFCT: Extended;
     IWETIT: Integer;
     IHDWET: Integer;
     Used: Boolean;
@@ -70,6 +70,9 @@ type
   end;
 
 implementation
+
+uses
+  ModelMuseUtilities;
 
 { TRewet }
 
@@ -176,7 +179,7 @@ begin
       and (FSplitter[1] >= 'WETFCT')
       and (FSplitter[3] >= 'IWETIT')
       and (FSplitter[5] >= 'IHDWET')
-      and TryStrToFloat(FSplitter[2], REWET.WETFCT)
+      and TryFortranStrToFloat(FSplitter[2], REWET.WETFCT)
       and TryStrToInt(FSplitter[4], REWET.IWETIT)
       and TryStrToInt(FSplitter[6], REWET.IHDWET)
       then
@@ -400,7 +403,7 @@ procedure TNpf.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
-  TvkReader: Tvk;
+  TvkReader: TTvk;
   PackageIndex: Integer;
   TvkPackage: TPackage;
 begin
@@ -442,7 +445,7 @@ begin
     TvkPackage.FileName := FOptions.TVK6_FileNames[PackageIndex];
     TvkPackage.PackageName := '';
 
-    TvkReader := Tvk.Create;
+    TvkReader := TTvk.Create;
     TvkReader.Dimensions := FDimensions;
     TvkPackage.Package := TvkReader;
     TvkPackage.ReadPackage(Unhandled);

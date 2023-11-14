@@ -106,7 +106,7 @@ var
   PIndex: Integer;
   ActiveDataSet: TDataArray;
   PPCovWriter: TPilotPointCovarinceFileWriter;
-//  PilotPointsDefined: Boolean;
+  OldDecimalSeparator: Char;
   function IsActive(LayerIndex, RowIndex, ColIndex: Integer): boolean;
   var
     ANode3D: TSutraNode3D;
@@ -140,156 +140,177 @@ var
     end;
   end;
 begin
-  Assert(DataArray <> nil);
-  Assert(DataArray.PestParametersUsed);
-  PestProperties := Model.PestProperties;
-  ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
-    DataArray.ParamDataSetName);
-  if Model.ModelSelection = msModflow2015 then
-  begin
-    ActiveDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-  end
-  else if Model.ModelSelection in SutraSelection then
-  begin
-    ActiveDataSet := nil;
-  end
-  else
-  begin
-    ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
-  end;
-  if Model.PilotPointCount = 0 then
-  begin
-    frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
-      Format(StrPilotPointsWillNo, [DataArray.Name]));
-    for LayerIndex := 0 to DataArray.LayerCount - 1 do
-    begin
-      for RowIndex := 0 to DataArray.RowCount - 1 do
-      begin
-        for ColIndex := 0 to DataArray.ColumnCount - 1 do
-        begin
-          if IsActive(LayerIndex, RowIndex, ColIndex) then
-          begin
-            ParamName := UpperCase(
-              ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
-            AParam := Model.GetPestParameterByName(ParamName);
-            if (AParam <> nil) and AParam.UsePilotPoints then
-            begin
-              frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
-                Format(StrPilotPointsWillNo, [DataArray.Name]));
-              Exit;
-            end;
-          end;
-        end;
-      end;
-    end;
-//    Exit;
-  end;
-  CriticalDistance := Model.PilotPointBuffer;
-  if CriticalDistance <= 0 then
-  begin
-    frmErrorsAndWarnings.AddWarning(Model, StrThePilotPointBuff,
-      StrThePilotPointBuffExpl, nil)
-  end;
-  FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
-  DisLimits := Model.DiscretizationLimits(vdTop);
-
-  ParamList := TList<TModflowSteadyParameter>.Create;
-  QuadTreeList := TObjectList<TRbwQuadTree>.Create;
-  ParamQuadDictionary := TDictionary<TModflowSteadyParameter, TRbwQuadTree>.Create;
-  ParamNameDictionary := TDictionary<string, TModflowSteadyParameter>.Create;
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
   try
-    for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+    Assert(DataArray <> nil);
+    Assert(DataArray.PestParametersUsed);
+    PestProperties := Model.PestProperties;
+    ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
+      DataArray.ParamDataSetName);
+    if Model.ModelSelection = msModflow2015 then
     begin
-      AParam := Model.ModflowSteadyParameters[ParamIndex];
-      if AParam.UsePilotPoints then
-      begin
-        ParamList.Add(AParam);
-        ParamNameDictionary.Add(UpperCase(AParam.ParameterName), AParam);
-        AQuadTree := TRbwQuadTree.Create(nil);
-        QuadTreeList.Add(AQuadTree);
-        AQuadTree.XMax := DisLimits.MaxX;
-        AQuadTree.YMax := DisLimits.MaxY;
-        AQuadTree.XMin := DisLimits.MinX;
-        AQuadTree.YMin := DisLimits.MinY;
-        ParamQuadDictionary.Add(AParam, AQuadTree);
-      end;
+      ActiveDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    end
+    else if Model.ModelSelection in SutraSelection then
+    begin
+      ActiveDataSet := nil;
+    end
+    else
+    begin
+      ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
     end;
-    SetLength(Values, DataArray.RowCount * DataArray.ColumnCount);
-
-    for LayerIndex := 0 to DataArray.LayerCount - 1 do
+    if Model.PilotPointCount = 0 then
     begin
-      for QuadTreeIndex := 0 to QuadTreeList.Count - 1 do
+      frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
+        Format(StrPilotPointsWillNo, [DataArray.Name]));
+      for LayerIndex := 0 to DataArray.LayerCount - 1 do
       begin
-        AQuadTree := QuadTreeList[QuadTreeIndex];
-        AQuadTree.Clear;
-      end;
-
-      ValueIndex := 0;
-      for RowIndex := 0 to DataArray.RowCount - 1 do
-      begin
-        for ColIndex := 0 to DataArray.ColumnCount - 1 do
+        for RowIndex := 0 to DataArray.RowCount - 1 do
         begin
-          if IsActive(LayerIndex, RowIndex, ColIndex) then
+          for ColIndex := 0 to DataArray.ColumnCount - 1 do
           begin
-            ParamName := UpperCase(
-              ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
-            if ParamNameDictionary.TryGetValue(ParamName, AParam) then
+            if IsActive(LayerIndex, RowIndex, ColIndex) then
             begin
-              APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,ColIndex, RowIndex];
-              Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
-              Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
-              AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex]));
+              ParamName := UpperCase(
+                ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
+              AParam := Model.GetPestParameterByName(ParamName);
+              if (AParam <> nil) and AParam.UsePilotPoints then
+              begin
+                frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
+                  Format(StrPilotPointsWillNo, [DataArray.Name]));
+                Exit;
+              end;
             end;
-
-            Inc(ValueIndex);
           end;
         end;
       end;
+  //    Exit;
+    end;
+    CriticalDistance := Model.PilotPointBuffer;
+    if CriticalDistance <= 0 then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrThePilotPointBuff,
+        StrThePilotPointBuffExpl, nil)
+    end;
+    FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
+    DisLimits := Model.DiscretizationLimits(vdTop);
 
-      for ParamIndex := 0 to ParamList.Count - 1 do
+    ParamList := TList<TModflowSteadyParameter>.Create;
+    QuadTreeList := TObjectList<TRbwQuadTree>.Create;
+    ParamQuadDictionary := TDictionary<TModflowSteadyParameter, TRbwQuadTree>.Create;
+    ParamNameDictionary := TDictionary<string, TModflowSteadyParameter>.Create;
+    try
+      for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
       begin
-        AParam := ParamList[ParamIndex];
-        AQuadTree := QuadTreeList[ParamIndex];
-        if AQuadTree.Count > 0 then
+        AParam := Model.ModflowSteadyParameters[ParamIndex];
+        if AParam.UsePilotPoints then
         begin
-//          AFileName := FFileName + '.' + AParam.ParameterName + '.' + IntToStr(LayerIndex+1) + Extension;
-          AFileName := Format('%0:s.%1:s.%2:d%3:s',
-            [FFileName,AParam.ParameterName,LayerIndex+1,Extension]);
+          ParamList.Add(AParam);
+          ParamNameDictionary.Add(UpperCase(AParam.ParameterName), AParam);
+          AQuadTree := TRbwQuadTree.Create(nil);
+          QuadTreeList.Add(AQuadTree);
+          AQuadTree.XMax := DisLimits.MaxX;
+          AQuadTree.YMax := DisLimits.MaxY;
+          AQuadTree.XMin := DisLimits.MinX;
+          AQuadTree.YMin := DisLimits.MinY;
+          ParamQuadDictionary.Add(AParam, AQuadTree);
+        end;
+      end;
+      SetLength(Values, DataArray.RowCount * DataArray.ColumnCount);
 
-          FileProperties := TPilotPointFileObject.Create;
-          FileProperties.DataArray := DataArray;
-          FileProperties.Parameter := AParam;
-          FileProperties.ParameterIndex := ParamIndex+1;
-          FileProperties.FileName := AFileName;
-          FileProperties.Layer := LayerIndex;
-          FileProperties.ParamFamily := Format('%s%d_',
-            [Prefix, PilotPointFiles.Count+1 + + Model.PilotPointData.Count]);
-//          FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
-//            [DataArrayID, ParamIndex+1, LayerIndex+1]);
+      for LayerIndex := 0 to DataArray.LayerCount - 1 do
+      begin
+        for QuadTreeIndex := 0 to QuadTreeList.Count - 1 do
+        begin
+          AQuadTree := QuadTreeList[QuadTreeIndex];
+          AQuadTree.Clear;
+        end;
 
-          PIndex := 1;
-          OpenFile(AFileName);
-          OpenTemplateFile(AFileName);
-          try
-            SwitchToTemplate;
-            WriteString('ptf ');
-            WriteString(PestProperties.TemplateCharacter);
-            NewLine;
-
-            ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
-              DataArray.ParamDataSetName);
-            for PilotPointIndex := 0 to Model.PilotPointCount - 1 do
+        ValueIndex := 0;
+        for RowIndex := 0 to DataArray.RowCount - 1 do
+        begin
+          for ColIndex := 0 to DataArray.ColumnCount - 1 do
+          begin
+            if IsActive(LayerIndex, RowIndex, ColIndex) then
             begin
-              APilotPoint := Model.PilotPoints[PilotPointIndex];
-              ACell := Model.PointToCell(DataArray.EvaluatedAt, APilotPoint);
-              if (ACell.Col >= 0) and (ACell.Row >= 0)
-                and IsActive(LayerIndex, ACell.Row, ACell.Col) then
+              ParamName := UpperCase(
+                ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
+              if ParamNameDictionary.TryGetValue(ParamName, AParam) then
               begin
-                ParamName := UpperCase(ParamNameDataArray.StringData[
-                  LayerIndex, ACell.Row, ACell.Col]);
-                if UpperCase(AParam.ParameterName) = ParamName then
+                APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,ColIndex, RowIndex];
+                Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+                Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
+                AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex]));
+              end;
+
+              Inc(ValueIndex);
+            end;
+          end;
+        end;
+
+        for ParamIndex := 0 to ParamList.Count - 1 do
+        begin
+          AParam := ParamList[ParamIndex];
+          AQuadTree := QuadTreeList[ParamIndex];
+          if AQuadTree.Count > 0 then
+          begin
+  //          AFileName := FFileName + '.' + AParam.ParameterName + '.' + IntToStr(LayerIndex+1) + Extension;
+            AFileName := Format('%0:s.%1:s.%2:d%3:s',
+              [FFileName,AParam.ParameterName,LayerIndex+1,Extension]);
+
+            FileProperties := TPilotPointFileObject.Create;
+            FileProperties.DataArray := DataArray;
+            FileProperties.Parameter := AParam;
+            FileProperties.ParameterIndex := ParamIndex+1;
+            FileProperties.FileName := AFileName;
+            FileProperties.Layer := LayerIndex;
+            FileProperties.ParamFamily := Format('%s%d_',
+              [Prefix, PilotPointFiles.Count+1 + + Model.PilotPointData.Count]);
+  //          FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
+  //            [DataArrayID, ParamIndex+1, LayerIndex+1]);
+
+            PIndex := 1;
+            OpenFile(AFileName);
+            OpenTemplateFile(AFileName);
+            try
+              SwitchToTemplate;
+              WriteString('ptf ');
+              WriteString(PestProperties.TemplateCharacter);
+              NewLine;
+
+              ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
+                DataArray.ParamDataSetName);
+              for PilotPointIndex := 0 to Model.PilotPointCount - 1 do
+              begin
+                APilotPoint := Model.PilotPoints[PilotPointIndex];
+                ACell := Model.PointToCell(DataArray.EvaluatedAt, APilotPoint);
+                if (ACell.Col >= 0) and (ACell.Row >= 0)
+                  and IsActive(LayerIndex, ACell.Row, ACell.Col) then
                 begin
-                  Value := DataArray.RealData[LayerIndex, ACell.Row, ACell.Col]
+                  ParamName := UpperCase(ParamNameDataArray.StringData[
+                    LayerIndex, ACell.Row, ACell.Col]);
+                  if UpperCase(AParam.ParameterName) = ParamName then
+                  begin
+                    Value := DataArray.RealData[LayerIndex, ACell.Row, ACell.Col]
+                  end
+                  else
+                  begin
+                    PointToTest := APilotPoint;
+                    AQuadTree.FirstNearestPoint(PointToTest.x, PointToTest.y,
+                      resultPointer);
+                    if Distance(PointToTest, APilotPoint) <= CriticalDistance then
+                    begin
+                      ValuePointer := resultPointer;
+                      Value := ValuePointer^;
+                    end
+                    else
+                    begin
+                      // This point is not on the active area for this parameter
+                      // and there is at least one other point that is closer.
+                      Continue;
+                    end;
+                  end;
                 end
                 else
                 begin
@@ -308,84 +329,69 @@ begin
                     Continue;
                   end;
                 end;
+
+                FileProperties.Count := PIndex;
+                FileProperties.AddValue(Value);
+                FileProperties.Points.AddPoint2D(APilotPoint);
+
+                SwitchToMain;
+                WriteString(Format('%0:s%1:d', [FileProperties.ParamFamily, PIndex]));
+  //              WriteInteger(PIndex);
+                WriteFloat(APilotPoint.x);
+                WriteFloat(APilotPoint.y);
+                WriteInteger(ParamIndex + 1);
+                WriteFloat(Value);
+                NewLine;
+
+                SwitchToTemplate;
+                WriteString(Format('%0:s%1:d', [FileProperties.ParamFamily, PIndex]));
+  //              WriteInteger(PIndex);
+                WriteFloat(APilotPoint.x);
+                WriteFloat(APilotPoint.y);
+                WriteInteger(ParamIndex + 1);
+                WriteString(' ');
+                WriteString(PestProperties.TemplateCharacter);
+                WriteString('           ');
+                WriteString(FileProperties.ParameterName(PIndex));
+                WriteString(PestProperties.TemplateCharacter);
+                NewLine;
+
+                Inc(PIndex);
+              end;
+            finally
+              CloseTemplateFile;
+              CloseFile;
+
+              if PIndex = 1 then
+              begin
+                TFile.Delete(AFileName);
+                TFile.Delete(AFileName + '.tpl');
+                FileProperties.Free;
+                // no pilot points.
               end
               else
               begin
-                PointToTest := APilotPoint;
-                AQuadTree.FirstNearestPoint(PointToTest.x, PointToTest.y,
-                  resultPointer);
-                if Distance(PointToTest, APilotPoint) <= CriticalDistance then
-                begin
-                  ValuePointer := resultPointer;
-                  Value := ValuePointer^;
-                end
-                else
-                begin
-                  // This point is not on the active area for this parameter
-                  // and there is at least one other point that is closer.
-                  Continue;
+                PPCovWriter := TPilotPointCovarinceFileWriter.Create;
+                try
+                  PPCovWriter.WriteConvarianceFiles(FileProperties);
+                finally
+                  PPCovWriter.Free;
                 end;
+                PilotPointFiles.Add(FileProperties);
               end;
-
-              FileProperties.Count := PIndex;
-              FileProperties.AddValue(Value);
-              FileProperties.Points.AddPoint2D(APilotPoint);
-
-              SwitchToMain;
-              WriteString(Format('%0:s%1:d', [FileProperties.ParamFamily, PIndex]));
-//              WriteInteger(PIndex);
-              WriteFloat(APilotPoint.x);
-              WriteFloat(APilotPoint.y);
-              WriteInteger(ParamIndex + 1);
-              WriteFloat(Value);
-              NewLine;
-
-              SwitchToTemplate;
-              WriteString(Format('%0:s%1:d', [FileProperties.ParamFamily, PIndex]));
-//              WriteInteger(PIndex);
-              WriteFloat(APilotPoint.x);
-              WriteFloat(APilotPoint.y);
-              WriteInteger(ParamIndex + 1);
-              WriteString(' ');
-              WriteString(PestProperties.TemplateCharacter);
-              WriteString('           ');
-              WriteString(FileProperties.ParameterName(PIndex));
-              WriteString(PestProperties.TemplateCharacter);
-              NewLine;
-
-              Inc(PIndex);
             end;
-          finally
-            CloseTemplateFile;
-            CloseFile;
 
-            if PIndex = 1 then
-            begin
-              TFile.Delete(AFileName);
-              TFile.Delete(AFileName + '.tpl');
-              FileProperties.Free;
-              // no pilot points.
-            end
-            else
-            begin
-              PPCovWriter := TPilotPointCovarinceFileWriter.Create;
-              try
-                PPCovWriter.WriteConvarianceFiles(FileProperties);
-              finally
-                PPCovWriter.Free;
-              end;
-              PilotPointFiles.Add(FileProperties);
-            end;
           end;
-
         end;
       end;
+    finally
+      ParamList.Free;
+      QuadTreeList.Free;
+      ParamNameDictionary.Free;
+      ParamQuadDictionary.Free;
     end;
   finally
-    ParamList.Free;
-    QuadTreeList.Free;
-    ParamNameDictionary.Free;
-    ParamQuadDictionary.Free;
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 

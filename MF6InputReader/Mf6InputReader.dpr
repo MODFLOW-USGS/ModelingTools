@@ -5,11 +5,6 @@ program Mf6InputReader;
 {$R *.res}
 
 uses
-  madExcept,
-  madLinkDisAsm,
-  madListHardware,
-  madListProcesses,
-  madListModules,
   System.SysUtils,
   Vcl.Dialogs,
   System.IOUtils,
@@ -31,7 +26,8 @@ uses
   ObsFileReaderUnit in 'ObsFileReaderUnit.pas',
   NpfFileReaderUnit in 'NpfFileReaderUnit.pas',
   TvkFileReaderUnit in 'TvkFileReaderUnit.pas',
-  TimeSeriesFileReaderUnit in 'TimeSeriesFileReaderUnit.pas';
+  TimeSeriesFileReaderUnit in 'TimeSeriesFileReaderUnit.pas',
+  HfbFileReaderUnit in 'HfbFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

@@ -1356,6 +1356,7 @@ function TPestControlFileWriter.WriteFile(const AFileName: string; SetNOPTMAX: B
 var
   PestProperties: TPestProperties;
   ArraysDir: string;
+  OldDecimalSeparator: Char;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParametersHaveB);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationGroup);
@@ -1377,51 +1378,57 @@ begin
     Exit;
   end;
 
-  ArraysDir := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName)) + 'arrays';
-  if not TDirectory.Exists(ArraysDir) then
-  begin
-    TDirectory.CreateDirectory(ArraysDir);
-  end;
-
-  if Model.ModelSelection in SutraSelection then
-  begin
-    PestProperties := Model.PestProperties;
-    if (PestProperties.TemplateCharacter = '@')
-      or (PestProperties.ExtendedTemplateCharacter = '@')
-      or (PestProperties.ArrayTemplateCharacter = '@') then
-    begin
-      frmErrorsAndWarnings.AddError(Model, StrInvalidPESTDelimit,
-        StrUseOfAsADeli)
-    end;
-  end;
-
-  FNameOfFile := FileName(AFileName);
-  result := FNameOfFile;
-  OpenFile(FNameOfFile);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
   try
-    WriteFirstLine;
-    WriteControlSection(SetNOPTMAX);
-    // The Sensitivity Reuse Section is not currently supported.
-    WriteSensitivityReuse;
-    WriteSingularValueDecomposition;
-    WriteLsqr;
-    // The Automatic User Intervention Section is not currently supported.
-    WriteAutomaticUserIntervention;
-    // Writing the SVD Assist Section is not currently supported.
-    WriteSVD_Assist;
-    WriteParameterGroups;
-    WriteParameters;
-    WriteObservationGroups;
-    WriteObservations;
-    WriteDerivatives;
-    WriteCommandLine;
-    WriteModelInputOutput;
-    WritePriorInformation;
-    WritePredictiveAnalysis;
-    WriteRegularisation;
-    WritePareto;
+    ArraysDir := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName)) + 'arrays';
+    if not TDirectory.Exists(ArraysDir) then
+    begin
+      TDirectory.CreateDirectory(ArraysDir);
+    end;
+
+    if Model.ModelSelection in SutraSelection then
+    begin
+      PestProperties := Model.PestProperties;
+      if (PestProperties.TemplateCharacter = '@')
+        or (PestProperties.ExtendedTemplateCharacter = '@')
+        or (PestProperties.ArrayTemplateCharacter = '@') then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrInvalidPESTDelimit,
+          StrUseOfAsADeli)
+      end;
+    end;
+
+    FNameOfFile := FileName(AFileName);
+    result := FNameOfFile;
+    OpenFile(FNameOfFile);
+    try
+      WriteFirstLine;
+      WriteControlSection(SetNOPTMAX);
+      // The Sensitivity Reuse Section is not currently supported.
+      WriteSensitivityReuse;
+      WriteSingularValueDecomposition;
+      WriteLsqr;
+      // The Automatic User Intervention Section is not currently supported.
+      WriteAutomaticUserIntervention;
+      // Writing the SVD Assist Section is not currently supported.
+      WriteSVD_Assist;
+      WriteParameterGroups;
+      WriteParameters;
+      WriteObservationGroups;
+      WriteObservations;
+      WriteDerivatives;
+      WriteCommandLine;
+      WriteModelInputOutput;
+      WritePriorInformation;
+      WritePredictiveAnalysis;
+      WriteRegularisation;
+      WritePareto;
+    finally
+      CloseFile;
+    end;
   finally
-    CloseFile;
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 

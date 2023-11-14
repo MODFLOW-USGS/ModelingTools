@@ -3728,6 +3728,7 @@ var
   TimeSeriesName: string;
   CellAssignmentData: TCellAssignmentData;
   DynamicTimeSeries: IDynamicTimeSeries;
+  OldDecimalSeparator: Char;
 begin
   if Count = 0 then
   begin
@@ -3978,16 +3979,22 @@ begin
             else
             begin
               PestParam.IsUsedInTemplate := True;
-              Case Method of
-                ppmMultiply:
-                  begin
-                    Formula := Format('(%0:s) * %1:g', [Formula, PestParam.Value]);
-                  end;
-                ppmAdd:
-                  begin
-                    Formula := Format('(%0:s) + %1:g', [Formula, PestParam.Value]);
-                  end;
-              End;
+              OldDecimalSeparator := FormatSettings.DecimalSeparator;
+              FormatSettings.DecimalSeparator := '.';
+              try
+                Case Method of
+                  ppmMultiply:
+                    begin
+                      Formula := Format('(%0:s) * %1:g', [Formula, PestParam.Value]);
+                    end;
+                  ppmAdd:
+                    begin
+                      Formula := Format('(%0:s) + %1:g', [Formula, PestParam.Value]);
+                    end;
+                End;
+              finally
+                FormatSettings.DecimalSeparator := OldDecimalSeparator;
+              end;
               PestSeriesName := PestParam.ParameterName;
             end;
           end;
@@ -4262,16 +4269,22 @@ begin
                       else
                       begin
                         PestParam.IsUsedInTemplate := True;
-                        Case Method of
-                          ppmMultiply:
-                            begin
-                              Formula := Format('(%0:s) * %1:g', [Formula, PestParam.Value]);
-                            end;
-                          ppmAdd:
-                            begin
-                              Formula := Format('(%0:s) + %1:g', [Formula, PestParam.Value]);
-                            end;
-                        End;
+                        OldDecimalSeparator := FormatSettings.DecimalSeparator;
+                        FormatSettings.DecimalSeparator := '.';
+                        try
+                          Case Method of
+                            ppmMultiply:
+                              begin
+                                Formula := Format('(%0:s) * %1:g', [Formula, PestParam.Value]);
+                              end;
+                            ppmAdd:
+                              begin
+                                Formula := Format('(%0:s) + %1:g', [Formula, PestParam.Value]);
+                              end;
+                          End;
+                        finally
+                          FormatSettings.DecimalSeparator := OldDecimalSeparator;
+                        end;
                         PestSeriesName := PestParam.ParameterName;
                       end;
                     end;
@@ -4965,6 +4978,7 @@ var
   TimeSeries: TMf6TimeSeries;
   LocalScreenObject: IScreenObjectForDynamicTimeSeries;
   DynamicTimeSeries: IDynamicTimeSeries;
+  OldDecimalSeparator: Char;
 begin
   CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
@@ -5039,17 +5053,23 @@ begin
       else
       begin
         PestParamSeries.IsUsedInTemplate := True;
-        case SeriesMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g',
-                [Formula, PestParamSeries.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g',
-                [Formula, PestParamSeries.Value]);
-            end;
+        OldDecimalSeparator := FormatSettings.DecimalSeparator;
+        FormatSettings.DecimalSeparator := '.';
+        try
+          case SeriesMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:g',
+                  [Formula, PestParamSeries.Value]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:g',
+                  [Formula, PestParamSeries.Value]);
+              end;
+          end;
+        finally
+          FormatSettings.DecimalSeparator := OldDecimalSeparator;
         end;
       end;
     end;

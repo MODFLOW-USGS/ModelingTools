@@ -7,7 +7,7 @@ uses
   System.Generics.Collections;
 
 type
-  TvkOptions = class(TCustomMf6Persistent)
+  TTvkOptions = class(TCustomMf6Persistent)
   private
     PRINT_INPUT: Boolean;
     TS6_FileNames: TStringList;
@@ -21,21 +21,21 @@ type
 
   TValueType = (vtNumeric, vtString);
 
-  TvkCell = record
+  TTvkCell = record
     ValueType: TValueType;
     CellId: TCellId;
     VariableName: string;
     StringValue: string;
-    NumericValue: Double;
+    NumericValue: Extended;
     procedure Initialize;
   end;
 
-  TvkCellList = TList<TvkCell>;
+  TTvkCellList = TList<TTvkCell>;
 
-  TvkPeriodData = class(TCustomMf6Persistent)
+  TTvkPeriodData = class(TCustomMf6Persistent)
   private
     IPer: Integer;
-    FCells: TvkCellList;
+    FCells: TTvkCellList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
     procedure Initialize; override;
@@ -44,11 +44,11 @@ type
     destructor Destroy; override;
   end;
 
-  TPeriodList = TObjectList<TvkPeriodData>;
+  TPeriodList = TObjectList<TTvkPeriodData>;
 
-  Tvk = class(TDimensionedPackageReader)
+  TTvk = class(TDimensionedPackageReader)
   private
-    FOptions: TvkOptions;
+    FOptions: TTvkOptions;
     FPeriods: TPeriodList;
     FTimeSeriesPackages: TPackageList;
   public
@@ -60,30 +60,30 @@ type
 implementation
 
 uses
-  TimeSeriesFileReaderUnit;
+  TimeSeriesFileReaderUnit, ModelMuseUtilities;
 
-{ TvkOptions }
+{ TTvkOptions }
 
-constructor TvkOptions.Create;
+constructor TTvkOptions.Create;
 begin
   TS6_FileNames := TStringList.Create;
   inherited;
 end;
 
-destructor TvkOptions.Destroy;
+destructor TTvkOptions.Destroy;
 begin
   TS6_FileNames.Free;
   inherited;
 end;
 
-procedure TvkOptions.Initialize;
+procedure TTvkOptions.Initialize;
 begin
   inherited;
   PRINT_INPUT := False;
   TS6_FileNames.Clear;
 end;
 
-procedure TvkOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTvkOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -129,9 +129,9 @@ begin
   end
 end;
 
-{ TvkCell }
+{ TTvkCell }
 
-procedure TvkCell.Initialize;
+procedure TTvkCell.Initialize;
 begin
   ValueType := vtNumeric;
   CellId.Initialize;
@@ -140,32 +140,32 @@ begin
   NumericValue := 0;
 end;
 
-{ TvkPeriodData }
+{ TTvkPeriodData }
 
-constructor TvkPeriodData.Create;
+constructor TTvkPeriodData.Create;
 begin
-  FCells := TvkCellList.Create;
+  FCells := TTvkCellList.Create;
   inherited;
 
 end;
 
-destructor TvkPeriodData.Destroy;
+destructor TTvkPeriodData.Destroy;
 begin
   FCells.Free;
   inherited;
 end;
 
-procedure TvkPeriodData.Initialize;
+procedure TTvkPeriodData.Initialize;
 begin
   inherited;
   FCells.Clear;
 end;
 
-procedure TvkPeriodData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+procedure TTvkPeriodData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions);
 var
   DimensionCount: Integer;
-  Cell: TvkCell;
+  Cell: TTvkCell;
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
@@ -196,7 +196,7 @@ begin
       if ReadCellID(Cell.CellId, 0, DimensionCount) then
       begin
         Cell.VariableName := FSplitter[DimensionCount];
-        if TryStrToFloat(FSplitter[DimensionCount+1], Cell.NumericValue) then
+        if TryFortranStrToFloat(FSplitter[DimensionCount+1], Cell.NumericValue) then
         begin
           Cell.ValueType := vtNumeric;
         end
@@ -223,17 +223,17 @@ begin
 
 end;
 
-{ Tvk }
+{ TTvk }
 
-constructor Tvk.Create;
+constructor TTvk.Create;
 begin
   inherited;
-  FOptions := TvkOptions.Create;
+  FOptions := TTvkOptions.Create;
   FPeriods := TPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
 end;
 
-destructor Tvk.Destroy;
+destructor TTvk.Destroy;
 begin
   FTimeSeriesPackages.Free;
   FOptions.Free;
@@ -241,12 +241,12 @@ begin
   inherited;
 end;
 
-procedure Tvk.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTvk.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
   IPER: Integer;
-  APeriod: TvkPeriodData;
+  APeriod: TTvkPeriodData;
   Index: Integer;
   TsPackage: TPackage;
   PackageIndex: Integer;
@@ -274,7 +274,7 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
-          APeriod := TvkPeriodData.Create;
+          APeriod := TTvkPeriodData.Create;
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions);

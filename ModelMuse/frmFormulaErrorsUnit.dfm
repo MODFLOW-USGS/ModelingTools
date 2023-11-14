@@ -28,7 +28,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       534
       45)
     object btnClose: TBitBtn
-      Left = 405
+      Left = 401
       Top = 6
       Width = 83
       Height = 33
@@ -36,7 +36,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
-      ExplicitLeft = 409
+      ExplicitLeft = 397
     end
     object btnCopy: TButton
       Left = 8
@@ -51,7 +51,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       OnClick = btnCopyClick
     end
     object btnHelp: TBitBtn
-      Left = 316
+      Left = 312
       Top = 6
       Width = 83
       Height = 33
@@ -60,7 +60,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 320
+      ExplicitLeft = 308
     end
     object btnClear: TButton
       Left = 182
@@ -96,11 +96,13 @@ inherited frmFormulaErrors: TfrmFormulaErrors
     object Label1: TLabel
       Left = 1
       Top = 1
-      Width = 459
-      Height = 19
+      Width = 532
+      Height = 63
       Align = alClient
       Caption = 'The following formulas were invalid. They may have been reset.'
       WordWrap = True
+      ExplicitWidth = 459
+      ExplicitHeight = 19
     end
   end
   object sgErrors: TRbwDataGrid4

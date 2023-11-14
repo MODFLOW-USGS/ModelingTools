@@ -104,7 +104,7 @@ uses
   frmGoPhastUnit, SutraTimeScheduleUnit,
   RbwParser, SutraMeshUnit, SparseArrayUnit, Math, SutraFileWriterUnit,
   frmErrorsAndWarningsUnit, System.Generics.Defaults,
-  ModflowCellUnit, CellLocationUnit;
+  ModflowCellUnit, CellLocationUnit, ModelMuseUtilities;
 
 resourcestring
   StrFluidSource = 'Fluid Source';
@@ -516,6 +516,7 @@ var
   MergedUsedDataArray: TDataArray;
   UsedBoundary: Boolean;
   MergedUsed: Boolean;
+  OldDecimalSeparator: Char;
   procedure SaveFormulaOrValue(PestSeriesName, PestName: string;
     PestSeriesMethod: TPestParamMethod;
     DataSet: TDataArray; FormulasUsed: T2DSparseBooleanArray;
@@ -557,6 +558,7 @@ var
     const Multiplier: string ='');
   var
     ModifiedValue: Double;
+    OldDecimalSeparator: Char;
   begin
     if (PestSeriesName <> '') or (PestName <> '') then
     begin
@@ -577,10 +579,16 @@ var
     begin
       if FormulasUsed[LayerIndex, ColIndex] then
       begin
-        Formulas[LayerIndex, RowIndex, ColIndex] :=
-          Format('%0:s + (%1:g)',
-          [Formulas[LayerIndex, RowIndex, ColIndex],
-          DataSet.RealData[LayerIndex, RowIndex, ColIndex]]);
+        OldDecimalSeparator := FormatSettings.DecimalSeparator;
+        FormatSettings.DecimalSeparator := '.';
+        try
+          Formulas[LayerIndex, RowIndex, ColIndex] :=
+            Format('%0:s + (%1:g)',
+            [Formulas[LayerIndex, RowIndex, ColIndex],
+            DataSet.RealData[LayerIndex, RowIndex, ColIndex]]);
+        finally
+          FormatSettings.DecimalSeparator := OldDecimalSeparator;
+        end;
       end
       else
       begin
@@ -977,10 +985,16 @@ begin
                         end
                         else
                         begin
-                          UFormulas[LayerIndex, RowIndex, ColIndex]
-                            := Format('(%0:s) / %1:g',
-                            [UFormulas[LayerIndex, RowIndex, ColIndex],
-                            PositiveDataSet.RealData[LayerIndex, RowIndex, ColIndex]]);
+                          OldDecimalSeparator := FormatSettings.DecimalSeparator;
+                          FormatSettings.DecimalSeparator := '.';
+                          try
+                            UFormulas[LayerIndex, RowIndex, ColIndex]
+                              := Format('(%0:s) / %1:g',
+                              [UFormulas[LayerIndex, RowIndex, ColIndex],
+                              PositiveDataSet.RealData[LayerIndex, RowIndex, ColIndex]]);
+                          finally
+                            FormatSettings.DecimalSeparator := OldDecimalSeparator;
+                          end;
                         end;
 
                       end;
@@ -1449,7 +1463,7 @@ var
 begin
   if TimeIndex < PQTimeList.Count then
   begin
-    WriteCommentLine('Data set 2; Time = ' + FloatToStr(PQTimeList.Times[TimeIndex]));
+    WriteCommentLine('Data set 2; Time = ' + FortranFloatToStr(PQTimeList.Times[TimeIndex]));
   end
   else
   begin
@@ -1666,7 +1680,7 @@ begin
   end;
   if TimeIndex < PQTimeList.Count then
   begin
-    WriteCommentLine('Data set 3; Time = ' + FloatToStr(PQTimeList.Times[TimeIndex]));
+    WriteCommentLine('Data set 3; Time = ' + FortranFloatToStr(PQTimeList.Times[TimeIndex]));
   end
   else
   begin
@@ -1962,7 +1976,7 @@ begin
   end;
   if TimeIndex < UTimeList.Count then
   begin
-    WriteCommentLine('Data set 4; Time = ' + FloatToStr(UTimeList.Times[TimeIndex]));
+    WriteCommentLine('Data set 4; Time = ' + FortranFloatToStr(UTimeList.Times[TimeIndex]));
   end
   else
   begin
@@ -2199,7 +2213,7 @@ begin
   end;
   if TimeIndex < PQTimeList.Count then
   begin
-    WriteCommentLine('Data set 5; Time = ' + FloatToStr(PQTimeList.Times[TimeIndex]));
+    WriteCommentLine('Data set 5; Time = ' + FortranFloatToStr(PQTimeList.Times[TimeIndex]));
   end
   else
   begin
@@ -2510,7 +2524,7 @@ begin
   end;
   if TimeIndex < UTimeList.Count then
   begin
-    WriteCommentLine('Data set 6; Time = ' + FloatToStr(UTimeList.Times[TimeIndex]));
+    WriteCommentLine('Data set 6; Time = ' + FortranFloatToStr(UTimeList.Times[TimeIndex]));
   end
   else
   begin

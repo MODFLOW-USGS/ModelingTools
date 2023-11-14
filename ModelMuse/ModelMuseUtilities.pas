@@ -1247,7 +1247,13 @@ initialization
   ShowElapsedTimeCmdLines.Add('if %mm% lss 10 set mm=0%mm%');
   ShowElapsedTimeCmdLines.Add('if %ss% lss 10 set ss=0%ss%');
   ShowElapsedTimeCmdLines.Add('if %cc% lss 10 set cc=0%cc%');
+{$IFDEF DEBUG}
+  // Using a period instead of a decimal separator facilitates testing
+  // when using comma as the decimal separator.
+  ShowElapsedTimeCmdLines.Add('echo elapsed time: %hh% hours, %mm% minutes %ss%' + '.' + '%cc% seconds');
+{$ELSE}
   ShowElapsedTimeCmdLines.Add('echo elapsed time: %hh% hours, %mm% minutes %ss%' + FormatSettings.DecimalSeparator + '%cc% seconds');
+{$ENDIF}
   ShowElapsedTimeCmdLines.Add('');
 
 finalization

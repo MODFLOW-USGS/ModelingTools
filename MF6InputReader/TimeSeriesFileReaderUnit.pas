@@ -48,6 +48,9 @@ type
 
 implementation
 
+uses
+  ModelMuseUtilities;
+
 { TTimeSeriesOptions }
 
 constructor TTsAttributes.Create;
@@ -86,7 +89,7 @@ var
   Index: Integer;
   ItemIndex: Integer;
   Method: TTsMethod;
-  AValue: Double;
+  AValue: Extended;
 begin
   ValidMethods := TStringList.Create;
   try
@@ -179,7 +182,7 @@ begin
         SFACS.Capacity := FSplitter.Count;
         for Index := 0 to FSplitter.Count - 1 do
         begin
-          if TryStrToFloat(FSplitter[Index], AValue) then
+          if TryFortranStrToFloat(FSplitter[Index], AValue) then
           begin
             SFACS.Add(AValue)
           end
@@ -198,7 +201,7 @@ begin
       begin
         FSplitter.Delete(0);
         SFACS.Capacity := Names.Count;
-        if TryStrToFloat(FSplitter[0], AValue) then
+        if TryFortranStrToFloat(FSplitter[0], AValue) then
         begin
           for Index := 0 to Names.Count - 1 do
           begin
@@ -245,7 +248,7 @@ var
   ALine: string;
   ErrorLine: string;
   TimeValues: TDoubleList;
-  AValue: Double;
+  AValue: Extended;
   Index: Integer;
 begin
   Initialize;
@@ -267,7 +270,7 @@ begin
     TimeValues := TDoubleList.Create;
     Values.Add(TimeValues);
 
-    if TryStrToFloat(FSplitter[0], AValue) then
+    if TryFortranStrToFloat(FSplitter[0], AValue) then
     begin
       Times.Add(AValue);
     end
@@ -279,7 +282,7 @@ begin
 
     for Index := 1 to FSplitter.Count - 1 do
     begin
-      if TryStrToFloat(FSplitter[Index], AValue) then
+      if TryFortranStrToFloat(FSplitter[Index], AValue) then
       begin
         TimeValues.Add(AValue);
       end

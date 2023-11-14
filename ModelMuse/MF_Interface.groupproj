@@ -24,6 +24,9 @@
         <Projects Include="..\SutraObsExtractor\SutraObsExtractor.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\MF6InputReader\Mf6InputReader.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -95,14 +98,23 @@
     <Target Name="SutraObsExtractor:Make">
         <MSBuild Projects="..\SutraObsExtractor\SutraObsExtractor.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Mf6InputReader">
+        <MSBuild Projects="..\MF6InputReader\Mf6InputReader.dproj"/>
+    </Target>
+    <Target Name="Mf6InputReader:Clean">
+        <MSBuild Projects="..\MF6InputReader\Mf6InputReader.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Mf6InputReader:Make">
+        <MSBuild Projects="..\MF6InputReader\Mf6InputReader.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor;Mf6ObsExtractor;Mf2005ObsExtractor;SutraObsExtractor"/>
+        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor;Mf6ObsExtractor;Mf2005ObsExtractor;SutraObsExtractor;Mf6InputReader"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean;Mf6ObsExtractor:Clean;Mf2005ObsExtractor:Clean;SutraObsExtractor:Clean"/>
+        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean;Mf6ObsExtractor:Clean;Mf2005ObsExtractor:Clean;SutraObsExtractor:Clean;Mf6InputReader:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make;Mf6ObsExtractor:Make;Mf2005ObsExtractor:Make;SutraObsExtractor:Make"/>
+        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make;Mf6ObsExtractor:Make;Mf2005ObsExtractor:Make;SutraObsExtractor:Make;Mf6InputReader:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
