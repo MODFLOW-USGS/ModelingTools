@@ -92,7 +92,6 @@ type
 
 const
   KUZF1 = 'UZF-1';
-  StrUzfbudget = '.uzf_budget';
 
 implementation
 

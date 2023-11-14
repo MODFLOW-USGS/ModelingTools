@@ -27,6 +27,19 @@ type
   end;
   TAuxArrays = array of TAuxArray;
 
+  TMf6AuxList = record
+    Name: string;
+    Values: array of TModflowDouble;
+  end;
+  TAuxLists = array of TMf6AuxList;
+
+  TMf6ListItem = record
+    ID1: Integer;
+    ID2: Integer;
+    Value: TModflowDouble;
+  end;
+  TMf6List = array of TMf6ListItem;
+
   TStructCell = class(TObject)
     Layer: Integer;
     Row: integer;
@@ -146,6 +159,15 @@ procedure ReadModflowSinglePrecFluxList(AFile: TFileStream;
   HufFormat: boolean;
   ReadList: Boolean = True
   );
+
+procedure ReadModflowDoublePrecFluxValues(AFile: TFileStream;
+  var KSTP, KPER: Integer;
+  var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
+  var NCOL, NROW, NLAY: Integer; var AnArray: TMf6List;
+  var AuxArray: TAuxLists;
+  var ModelName1, ModelName2, PackageName1, PackageName2: string;
+  ReadArray: Boolean = True);
+
 
 // AFile needs to be open before being passed to this procedure.
 // The other variables will be returned from the procedure.
@@ -2552,6 +2574,335 @@ begin
     else Assert(False);
   end;
 end;
+
+procedure ReadModflowDoublePrecFluxValues(AFile: TFileStream;
+  var KSTP, KPER: Integer;
+  var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
+  var NCOL, NROW, NLAY: Integer; var AnArray: TMf6List;
+  var AuxArray: TAuxLists; {const AltNLay, AltNRow, AltNCol: integer;}
+//  HufFormat: boolean;
+  var ModelName1, ModelName2, PackageName1, PackageName2: string;
+  ReadArray: Boolean = True);
+  procedure ReadModflow6Name(var AName: string);
+  var
+    NameArray: TModflowDesc;
+  begin
+    AFile.Read(NameArray, SizeOf(NameArray));
+    AName := string(NameArray);
+  end;
+var
+  NeedToUpdateDimensions: Boolean;
+  Mf6Description: string;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ITYPE: Integer;
+  DELT: TModflowDouble;
+  AValue: TModflowDouble;
+  NVAL: Integer;
+  NumVariable: Integer;
+  AuxVarIndex: Integer;
+  AuxName: string;
+  NLIST: Integer;
+  NRC: Integer;
+  NodeIndex: Integer;
+  N1: Integer;
+  N2: Integer;
+  Value: TModflowDouble;
+  AuxValue: TModflowDouble;
+begin
+  ModelName1 := '';
+  ModelName2 := '';
+  PackageName1 := '';
+  PackageName2 := '';
+  AFile.Read(KSTP, SizeOf(KSTP));
+  AFile.Read(KPER, SizeOf(KPER));
+  AFile.Read(DESC, SizeOf(DESC));
+  AFile.Read(NCOL, SizeOf(NCOL));
+  AFile.Read(NROW, SizeOf(NROW));
+  AFile.Read(NLAY, SizeOf(NLAY));
+  NeedToUpdateDimensions := False;
+  if ReadArray then
+  begin
+    Mf6Description := Trim(string(DESC));
+//    if (Mf6Description = 'CSUB-ELASTIC')
+//      or (Mf6Description = 'CSUB-INELASTIC') then
+//    begin
+//      NeedToUpdateDimensions := True;
+//      SetLength(AnArray, Abs(AltNLay), AltNRow, AltNCol);
+//      for LayerIndex := 0 to Abs(AltNLay) - 1 do
+//      begin
+//        for RowIndex := 0 to AltNRow - 1 do
+//        begin
+//          for ColIndex := 0 to AltNCol - 1 do
+//          begin
+//            AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+//          end;
+//        end;
+//      end;
+//    end
+//    else
+    begin
+      SetLength(AnArray, {NROW,} NCOL);
+//      for LayerIndex := 0 to Abs(NLAY) - 1 do
+      begin
+//        for RowIndex := 0 to NROW - 1 do
+        begin
+          for ColIndex := 0 to NCOL - 1 do
+          begin
+            AnArray[{LayerIndex, RowIndex,} ColIndex].ID1 := 0;
+            AnArray[{LayerIndex, RowIndex,} ColIndex].ID2 := 0;
+            AnArray[{LayerIndex, RowIndex,} ColIndex].Value := 0;
+          end;
+        end;
+      end;
+    end;
+  end;
+  PERTIM := -1;
+  TOTIM := -1;
+
+  ITYPE := 0;
+//  if (NLAY < 0) or HufFormat then
+  begin
+    AFile.Read(ITYPE, SizeOf(ITYPE));
+    AFile.Read(DELT, SizeOf(DELT));
+    AFile.Read(AValue, SizeOf(AValue));
+    PERTIM := AValue;
+    AFile.Read(AValue, SizeOf(AValue));
+    TOTIM := AValue;
+    NVAL := 1;
+//    if ITYPE = 5 then
+//    begin
+//      AFile.Read(NVAL, SizeOf(NVAL));
+//      if NVAL > 1 then
+//      begin
+//        for Index := 2 to NVAL do
+//        begin
+//          AFile.Read(CTMP, SizeOf(CTMP));
+//        end;
+//      end;
+//    end;
+//    if (ITYPE = 2) or (ITYPE = 5) then
+//    begin
+//      AFile.Read(NLIST, SizeOf(NLIST));
+//    end;
+  end;
+  case ITYPE of
+//    0,1: // full 3D array
+//      begin
+//        if ReadArray then
+//        begin
+//          for LayerIndex := 0 to Abs(NLAY) - 1 do
+//          begin
+//            for RowIndex := 0 to NROW - 1 do
+//            begin
+//              for ColIndex := 0 to NCOL - 1 do
+//              begin
+//                AFile.Read(AValue, SizeOf(TModflowDouble));
+//                AnArray[LayerIndex, RowIndex, ColIndex] := AValue;
+//              end;
+//            end;
+//          end;
+//        end
+//        else
+//        begin
+//          GridSize := Abs(NLAY) * NROW * NCOL;
+//          ValueSize := SizeOf(TModflowDouble);
+//          AFile.Position := AFile.Position +
+//            GridSize * ValueSize;
+//        end;
+//      end;
+//    2,5:
+//      begin
+//        if NLIST > 0 then
+//        begin
+//          NRC := NROW*NCOL;
+//          if ReadArray then
+//          begin
+//            SetLength(Values, NVAL);
+//            for Index := 0 to NLIST - 1 do
+//            begin
+//              AFile.Read(ICELL, SizeOf(ICELL));
+//              for ValIndex := 0 to NVAL - 1 do
+//              begin
+//                AFile.Read(Values[ValIndex], SizeOf(TModflowDouble));
+//              end;
+//              LayerIndex :=  (ICELL-1) div NRC;
+//              RowIndex := ( (ICELL - LayerIndex*NRC)-1 ) div NCOL;
+//              ColIndex := ICELL - (LayerIndex)*NRC - (RowIndex)*NCOL-1;
+//              if ((ColIndex >= 0) AND (RowIndex >= 0) AND (LayerIndex >= 0)
+//                AND (ColIndex < ncol) AND (RowIndex < NROW)
+//                AND (LayerIndex < Abs(NLAY))) then
+//              begin
+//                AnArray[LayerIndex, RowIndex, ColIndex] :=
+//                  AnArray[LayerIndex, RowIndex, ColIndex] + Values[0];
+//              end;
+//            end;
+//          end
+//          else
+//          begin
+//            AFile.Position := AFile.Position +
+//              NLIST * (SizeOf(ICELL) + NVAL * SizeOf(TModflowDouble));
+//          end;
+//        end;
+//      end;
+//    3: // 1 layer array with layer indicator array
+//      begin
+//        if ReadArray then
+//        begin
+//          SetLength(FluxArray, NROW, NCOL);
+//          SetLength(LayerIndicatorArray, NROW, NCOL);
+//          for RowIndex := 0 to NROW - 1 do
+//          begin
+//            for ColIndex := 0 to NCOL - 1 do
+//            begin
+//              AFile.Read(LayerIndicatorArray[RowIndex, ColIndex],
+//                SizeOf(integer));
+//            end;
+//          end;
+//          for RowIndex := 0 to NROW - 1 do
+//          begin
+//            for ColIndex := 0 to NCOL - 1 do
+//            begin
+//              AFile.Read(FluxArray[RowIndex, ColIndex],
+//                SizeOf(TModflowDouble));
+//            end;
+//          end;
+//          for RowIndex := 0 to NROW - 1 do
+//          begin
+//            for ColIndex := 0 to NCOL - 1 do
+//            begin
+//              AnArray[LayerIndicatorArray[RowIndex, ColIndex]-1,
+//                RowIndex, ColIndex] := FluxArray[RowIndex, ColIndex];
+//            end;
+//          end;
+//        end
+//        else
+//        begin
+//          AFile.Position := AFile.Position +
+//            NROW * NCOL * (SizeOf(integer) + SizeOf(TModflowDouble));
+//        end;
+//      end;
+//    4: // 1-layer array that defines layer 1.
+//      begin
+//        if ReadArray then
+//        begin
+//          for LayerIndex := 1 to Abs(NLAY) - 1 do
+//          begin
+//            for RowIndex := 0 to NROW - 1 do
+//            begin
+//              for ColIndex := 0 to NCOL - 1 do
+//              begin
+//                AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+//              end;
+//            end;
+//          end;
+//          for RowIndex := 0 to NROW - 1 do
+//          begin
+//            for ColIndex := 0 to NCOL - 1 do
+//            begin
+//              AFile.Read(AValue, SizeOf(TModflowDouble));
+//              AnArray[0, RowIndex, ColIndex] := AValue;
+//            end;
+//          end;
+//        end
+//        else
+//        begin
+//          AFile.Position := AFile.Position +
+//            NROW * NCOL * SizeOf(TModflowDouble);
+//        end;
+//      end;
+    6:
+      begin
+        ReadModflow6Name(ModelName1);
+        ReadModflow6Name(PackageName1);
+        ReadModflow6Name(ModelName2);
+        ReadModflow6Name(PackageName2);
+        // NumVariable is the number of auxilliary variables + 1.
+        AFile.Read(NumVariable, SizeOf(NumVariable));
+        Assert( (NumVariable >= 0) and (NumVariable <= 20));
+        if ReadArray then
+        begin
+          SetLength(AuxArray, NumVariable - 1);
+        end;
+        for AuxVarIndex := 1 to NumVariable - 1 do
+        begin
+          ReadModflow6Name(AuxName);
+          if ReadArray then
+          begin
+            AuxArray[AuxVarIndex-1].Name := AuxName;
+          end;
+        end;
+        AFile.Read(NLIST, SizeOf(NLIST));
+
+        if NeedToUpdateDimensions then
+        begin
+//          Assert(AltNRow >= 1);
+//          Assert(AltNCol >= 1);
+//          Assert(AltNLay >= 1);
+//          Assert(NROW * NCOL <= AltNRow * AltNCol * AltNLay);
+//          NROW := AltNRow;;
+//          NCOL := AltNCol;
+//          NLAY := AltNLay;
+        end;
+
+        if ReadArray then
+        begin
+          NRC := NROW*NCOL;
+          for AuxVarIndex := 1 to NumVariable - 1 do
+          begin
+            SetLength(AuxArray[AuxVarIndex-1].Values, {Abs(NLAY), NROW,} NCOL);
+//            for LayerIndex := 0 to Abs(NLAY) - 1 do
+            begin
+//              for RowIndex := 0 to NROW - 1 do
+              begin
+                for ColIndex := 0 to NCOL - 1 do
+                begin
+                  AuxArray[AuxVarIndex-1].Values[{LayerIndex, RowIndex,} ColIndex] := 0;
+                end;
+              end;
+            end;
+          end;
+          for NodeIndex := 0 to NLIST - 1 do
+          begin
+            AFile.Read(N1, SizeOf(N1));
+            AFile.Read(N2, SizeOf(N2));
+            AFile.Read(Value, SizeOf(Value));
+//            LayerIndex :=  (N1-1) div NRC;
+//            RowIndex := ( (N1 - {LayerIndex*}NRC)-1 ) div NCOL;
+//            ColIndex := N1 - {(LayerIndex)*}NRC - (RowIndex)*NCOL-1;
+//            if ((ColIndex >= 0) AND (RowIndex >= 0) //AND (LayerIndex >= 0)
+//              AND (ColIndex < ncol) AND (RowIndex < NROW))
+//              AND (LayerIndex < Abs(NLAY)))
+//              then
+            begin
+              AnArray[{LayerIndex, RowIndex,} NodeIndex].ID1 :=  N1;
+              AnArray[{LayerIndex, RowIndex,} NodeIndex].ID2 :=  N2;
+              AnArray[{LayerIndex, RowIndex,} NodeIndex].Value :=  Value;
+//                AnArray[{LayerIndex,} RowIndex, ColIndex] + Value;
+//            end
+//            else
+//            begin
+//              Assert(False);
+//              Exit;
+            end;
+            for AuxVarIndex := 1 to NumVariable - 1 do
+            begin
+              AFile.Read(AuxValue, SizeOf(AuxValue));
+              AuxArray[AuxVarIndex-1].Values[{LayerIndex, RowIndex,} NodeIndex] := AuxValue;
+//                AuxArray[AuxVarIndex-1].Values[{LayerIndex, RowIndex, NodeIndex] + AuxValue;
+            end;
+          end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position +
+            NLIST * (SizeOf(N1) + SizeOf(N2) + (NumVariable * SizeOf(TModflowDouble)));
+        end;
+      end
+    else Assert(False);
+  end;
+end;
+
 
 procedure ReadModflowAsciiRealArray(F: TFileVariable; var KSTP, KPER: Integer;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc2;

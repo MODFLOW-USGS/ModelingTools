@@ -21,7 +21,8 @@ implementation
 
 uses
   ModflowPackageSelectionUnit, ModflowLakMf6WriterUnit, ModflowMawWriterUnit,
-  ModflowSfr6WriterUnit, ModflowUzfMf6WriterUnit, ModflowMvrWriterUnit;
+  ModflowSfr6WriterUnit, ModflowUzfMf6WriterUnit, ModflowMvrWriterUnit,
+  PhastModelUnit;
 
 { TModflowFmiWriter }
 

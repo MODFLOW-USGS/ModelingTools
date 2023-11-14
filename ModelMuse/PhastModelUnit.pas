@@ -5185,6 +5185,9 @@ const
   StrStage = '.stage';
   StrMawhead = '.maw_head';
   StrWatercontent = '.water_content';
+  StrMawbud = '.maw_bud';
+  StrUzfbudget = '.uzf_budget';
+  StrSfrbudget = '.sfr_budget';
 
 
   MaxString12 = 12;
@@ -10070,6 +10073,8 @@ const
 //                MODFLOW 6.
 //    '5.1.1.44' Not in released version. Bug Fix. Fixed editing of calibration
 //                observation comparisons.
+//    '5.1.1.45' Enhancement: ModelMuse can now import data from binary output
+//                files created by the MAW, SFR and UZF packages in HODFLOW 6.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10082,7 +10087,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.44';
+  IIModelVersion = '5.1.1.45';
 
 function IModelVersion: string;
 begin

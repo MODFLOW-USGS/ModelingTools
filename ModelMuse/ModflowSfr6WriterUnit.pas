@@ -119,7 +119,6 @@ type
 
 const
   StrSfrFlowPackageName = 'SFR-1';
-  StrSfrbudget = '.sfr_budget';
 
 implementation
 

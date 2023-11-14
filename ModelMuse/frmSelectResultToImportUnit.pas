@@ -10,14 +10,14 @@ uses System.UITypes,
   ModflowGridUnit, ExtCtrls, EdgeDisplayUnit, GoPhastTypes, Grids, RbwDataGrid4,
   PhastModelUnit, Types, ModflowSwrWriterUnit, ReadSwrOutputUnit,
   JvExControls, JvxCheckListBox, RbwEdit, ModflowIrregularMeshUnit,
-  DataArrayManagerUnit, ModflowCellUnit;
+  DataArrayManagerUnit, ModflowCellUnit, System.Generics.Collections;
 
 type
   TModflowResultFormat = (mrBinary, mrAscii, mrFlux, mrHufAscii, mrHufBinary,
     mrHufFlux, mfSubBinary, mfMt3dConc, mfSwrStageAscii, mfSwrStageBinary,
     mfSwrReachExchangeAscii, mfSwrReachExchangeBinary,
     mfSwrReachGroupBudgetAscii, mfSwrReachGroupBudgetBinary, mfCSubBinary,
-    mfAdvPackage);
+    mfAdvPackage, mfAdvPackBudget);
 
   TModelColumns = (mcModelName, mcUse, mcFileName);
 
@@ -179,6 +179,7 @@ type
     FItemTimes: TStringList;
 
     FAdvancedFeatureCells: TCellLocationList;
+    FCellLocationDictionary: TDictionary<Integer, TCellLocation>;
 
     FSPeciesName: string;
     function DefaultFileName(AModel: TCustomModel; Directory: string = ''): string;
@@ -291,8 +292,11 @@ type
     procedure GetSfr6Cells;
     procedure GetMaw6Cells;
     procedure GetUzf6Cells;
+    function CellNumberToCell(CellNumber: Integer; out CellLocation: TCellLocation): Boolean;
     procedure CreateMf6AdvPackageScreenObject(AModel: TCustomModel;
       out ScreenObject: TScreenObject; Root: string; FileName: string);
+    procedure CreateMf6AdvPackageBudgetScreenObject(AModel: TCustomModel;
+      out ScreenObject: TScreenObject; Root: string; FileName: string; BoundaryArray: TMf6List);
   public
     function ShowDataSets(AFileName: string): boolean;
     function SelectFiles: boolean;
@@ -485,6 +489,7 @@ resourcestring
   'different number of model features than are in your model';
   StrMAWHeadDesc = 'MAW Head';
   StrUZFWAterConent = 'UZF WAter Conent';
+  StrMAWBudget = 'MAW Budget';
 
 {$R *.dfm}
 
@@ -2187,6 +2192,73 @@ begin
   ParentLayerData.Limits.Update;
 end;
 
+procedure TfrmSelectResultToImport.CreateMf6AdvPackageBudgetScreenObject(
+  AModel: TCustomModel; out ScreenObject: TScreenObject; Root, FileName: string;
+  BoundaryArray: TMf6List);
+var
+  UndoCreateScreenObject: TCustomUndo;
+  ExistingObjectCount: Integer;
+  ElevValues: TValueArrayStorage;
+  CellIndex: Integer;
+  ALocation: TCellLocation;
+  APoint3D: TPoint3D;
+  APoint2D: TPoint2D;
+  UndoCreateObject: TUndoCreateScreenObject;
+  CellNumber: Integer;
+begin
+  ScreenObject := TScreenObject.CreateWithViewDirection(
+    frmGoPhast.PhastModel, vdTop,
+    UndoCreateScreenObject, False);
+  ScreenObject.Comment := 'Imported from ' + FileName +' on ' + DateTimeToStr(Now);
+  frmGoPhast.PhastModel.AddScreenObject(ScreenObject);
+  ScreenObject.ElevationCount := ecOne;
+  ScreenObject.SetValuesOfIntersectedCells := True;
+
+  Root := Root + StrObject;
+  ExistingObjectCount := frmGoPhast.PhastModel.
+    NumberOfLargestScreenObjectsStartingWith(Root);
+  Inc(ExistingObjectCount);
+  ScreenObject.Name := Root + IntToStr(ExistingObjectCount);
+
+  if frmGoPhast.PhastModel.LgrUsed then
+  begin
+    ScreenObject.UsedModels.UsedWithAllModels := False;
+    ScreenObject.UsedModels.AddModel(AModel);
+  end;
+
+  ScreenObject.EvaluatedAt := eaBlocks;
+  ScreenObject.Visible := False;
+  ScreenObject.Capacity := FAdvancedFeatureCells.Count;
+  ElevValues := TValueArrayStorage.Create;
+  try
+    ElevValues.Count := Length(BoundaryArray);
+
+    for CellIndex := 0 to Length(BoundaryArray) - 1 do
+    begin
+      CellNumber := BoundaryArray[CellIndex].ID2;
+      Assert(CellNumberToCell(CellNumber, ALocation));
+      Inc(ALocation.Layer);
+      Inc(ALocation.Row);
+      Inc(ALocation.Column);
+      APoint3D := AModel.CellToPoint(ALocation, eaBlocks);
+      APoint2D.X := APoint3D.X;
+      APoint2D.Y := APoint3D.Y;
+      ScreenObject.AddPoint(APoint2D, True);
+      ElevValues.RealValues[CellIndex] := APoint3D.Z;
+
+    end;
+    ScreenObject.ImportedSectionElevations := ElevValues;
+    ScreenObject.ImportedSectionElevations.CacheData;
+    ScreenObject.ElevationFormula := rsObjectImportedValuesR
+      + '("' + StrImportedElevations + '")';
+  finally
+    ElevValues.Free;
+  end;
+  UndoCreateObject := TUndoCreateScreenObject.Create(ScreenObject);
+  UndoCreateObject.UpdateObservations;
+  NewCreateScreenObjects.Add(UndoCreateObject);
+end;
+
 procedure TfrmSelectResultToImport.CreateMf6AdvPackageScreenObject(
   AModel: TCustomModel; out ScreenObject: TScreenObject; Root: string;
   FileName: string);
@@ -2491,6 +2563,45 @@ begin
   UpdateCombo;
 end;
 
+function TfrmSelectResultToImport.CellNumberToCell(
+  CellNumber: Integer;out CellLocation: TCellLocation): Boolean;
+var
+  Model: TPhastModel;
+  IDomain: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ICellNumber: Integer;
+  ACell: TCellLocation;
+begin
+  if FCellLocationDictionary.Count = 0 then
+  begin
+    Model := frmGoPhast.Phastmodel;
+    Assert(Model.ModelSelection = msModflow2015);
+    IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    IDomain.Initialize;
+    ICellNumber := 1;
+    for LayerIndex := 0 to IDomain.LayerCount - 1 do
+    begin
+      ACell.Layer := LayerIndex;
+      for RowIndex := 0 to IDomain.RowCount - 1 do
+      begin
+        ACell.Row := RowIndex;
+        for ColIndex := 0 to IDomain.ColumnCount - 1 do
+        begin
+          ACell.Column := ColIndex;
+          if IDomain.IntegerData[LayerIndex,RowIndex,ColIndex] > 0 then
+          begin
+            FCellLocationDictionary.Add(ICellNumber, ACell);
+            Inc(ICellNumber);
+          end;
+        end;
+      end;
+    end;
+  end;
+  result := FCellLocationDictionary.TryGetValue(CellNumber, CellLocation)
+end;
+
 procedure TfrmSelectResultToImport.AssignLimits( MinValues, MaxValues: TRealList;
   New3DArray: TDataArray; ValuesToIgnore: TOneDRealArray);
 var
@@ -2734,9 +2845,19 @@ var
   AdvScreenObject: TScreenObject;
   ValueItem: TValueArrayItem;
   DataIndex: Integer;
+  PERTIM: TModflowDouble;
+  NCOL: Integer;
+  NROW: Integer;
+  BoundaryArray: TMf6List;
+  BoundaryAuxArray: TAuxLists;
+  StringDes: string;
+  AdvBudgetScreenObject: TScreenObject;
+  Mf6Description: WideString;
+  Prefix: string;
 begin
   inherited;
   AdvScreenObject := nil;
+  AdvBudgetScreenObject := nil;
   ModelName1 :='';
   ModelName2 :='';
   PackageName1 :='';
@@ -3571,7 +3692,94 @@ begin
                           rsObjectImportedValuesR + '("' + ValueItem.Name + '")';
                       end;
 
-                    end
+                    end;
+                  mfAdvPackBudget:
+                    begin
+                      if Index > LastItem then
+                      begin
+                        Break;
+                      end;
+                      if Index = 0 then
+                      begin
+                        if SameText(ExtractFileExt(AFileName), StrSfrbudget) then
+                        begin
+                          GetSfr6Cells;
+                          Prefix := 'SFR_';
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrMawbud) then
+                        begin
+                          GetMaw6Cells;
+                          Prefix := 'MAW_';
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrUzfbudget) then
+                        begin
+                          GetUzf6Cells;
+                          Prefix := 'UZF_';
+                        end
+                        else
+                        begin
+                          Assert(False);
+                        end;
+                      end;
+                        ReadModflowDoublePrecFluxValues(FFileStream, KSTP, KPER,
+                          PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, BoundaryArray, BoundaryAuxArray,
+                          ModelName1, ModelName2, PackageName1, PackageName2, clData.Checked[Index]);
+                        Mf6Description := Trim(string(DESC));
+                        if Mf6Description = 'FLOW-JA-FACE' then
+                        begin
+                          ReadModflowDoublePrecFluxValues(FFileStream, KSTP, KPER,
+                            PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, BoundaryArray, BoundaryAuxArray,
+                            ModelName1, ModelName2, PackageName1, PackageName2, clData.Checked[Index]);
+                        end;
+                        if clData.Checked[Index] then
+                        begin
+                          Description := Trim(string(DESC));
+                          StringDes := Description;
+                          Description := ValidName(Prefix+Description);
+
+                          CreateOrRetrieve3DDataSet(Description, NTRANS, KPER, KSTP, TOTIM,
+                            AltLayerNumbers, AltLayerDataSets, New3DArray, OldComment, True,
+                            NewDataSets, FileNames, AModel, Precision, '1.0e30');
+                          SkipItem := New3DArray.Limits.RealValuesToSkip.Add as TSkipReal;
+                          SkipItem.RealValue := 1E30;
+
+                          comboColorGrid.Items.Objects[comboColorGrid.ItemIndex] := New3DArray;
+
+                          if StringDes = 'GWF' then
+                          begin
+                            if AdvBudgetScreenObject = nil then
+                            begin
+                              CreateMf6AdvPackageBudgetScreenObject(AModel,
+                                AdvBudgetScreenObject, Description, AFileName, BoundaryArray);
+                            end;
+                            ScreenObject := AdvBudgetScreenObject;
+                          end
+                          else
+                          begin
+                            if AdvScreenObject = nil then
+                            begin
+                              CreateMf6AdvPackageScreenObject(AModel,
+                                AdvScreenObject, Description, AFileName);
+                            end;
+                            ScreenObject := AdvScreenObject;
+                          end;
+
+                          ValueItem := ScreenObject.ImportedValues.Add;
+                          ValueItem.Name := New3DArray.Name;
+                          ValueItem.Values.DataType := rdtDouble;
+                          ValueItem.Values.Count := Length(BoundaryArray);
+                          for DataIndex := 0 to Length(BoundaryArray) - 1 do
+                          begin
+                            ValueItem.Values.RealValues[DataIndex] := BoundaryArray[DataIndex].Value;
+                          end;
+
+                          DataIndex := ScreenObject.AddDataSet(New3DArray);
+                          ScreenObject.DataSetFormulas[DataIndex] :=
+                            rsObjectImportedValuesR + '("' + ValueItem.Name + '")';
+
+                        end;
+
+                    end;
                   else Assert(False);
                 end;
               end;
@@ -3752,6 +3960,7 @@ var
 begin
   inherited;
   FAdvancedFeatureCells := TCellLocationList.Create;
+  FCellLocationDictionary := TDictionary<Integer, TCellLocation>.Create;
 
   comboClassification.Items.Add(StrModelResults);
   comboClassification.Items.Add(StrUserDefined);
@@ -3852,12 +4061,20 @@ begin
     FilterDescriptions.Add(StrStreamStage);
     FileExtensions.Add(StrStage);
 
+    FilterDescriptions.Add('Stream Budget');
+    FileExtensions.Add(StrSfrbudget);
+
     FilterDescriptions.Add(StrMAWHeadDesc);
     FileExtensions.Add(StrMawhead);
+
+    FilterDescriptions.Add(StrMAWBudget);
+    FileExtensions.Add(StrMawbud);
 
     FilterDescriptions.Add(StrUZFWAterConent);
     FileExtensions.Add(StrWatercontent);
 
+    FilterDescriptions.Add('UZF Budget');
+    FileExtensions.Add(StrUzfbudget);
 
     SubsidenceDescriptions.Add(StrCombinedSUBOutput);
     SubsidenceExtensions.Add(StrSubOut);
@@ -4011,6 +4228,7 @@ begin
   FModifiedParentDataSets.Free;
   FItemDescriptions.Free;
   FItemTimes.Free;
+  FCellLocationDictionary.Free;
   FAdvancedFeatureCells.Free;
 end;
 
@@ -4240,6 +4458,8 @@ var
   ModelName1, ModelName2, PackageName1, PackageName2: string;
   PeriodTime: TModflowDouble;
   Data: TMf6DoubleArraay;
+  BoundaryArray: TMf6List;
+  BoundaryAuxArray: TAuxLists;
   procedure RecordItem(Description: String;
     ModelName1, ModelName2, PackageName1, PackageName2: String);
   var
@@ -4885,8 +5105,26 @@ begin
             begin
               ReadMf6AdvancedPackageList(FFileStream, KSTP, KPER, PeriodTime,
                 TOTIM, DESC, Data);
-              RecordItem(string(DESC),
-                ModelName1, ModelName2, PackageName1, PackageName2);
+              RecordItem(string(DESC), '', '', '' ,'');
+//                ModelName1, ModelName2, PackageName1, PackageName2);
+            end;
+          end;
+        mfAdvPackBudget:
+          begin
+            while FFileStream.Position < FFileStream.Size do
+            begin
+              ReadModflowDoublePrecFluxValues(FFileStream, KSTP, KPER,
+                PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, BoundaryArray, BoundaryAuxArray,
+//                AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
+//                HufFormat,
+                ModelName1, ModelName2, PackageName1, PackageName2, False);
+              Mf6Description := Trim(string(DESC));
+              if Mf6Description = 'FLOW-JA-FACE' then
+              begin
+                Continue;
+              end;
+              RecordItem(string(DESC), '', '', '' ,'');
+//                ModelName1, ModelName2, PackageName1, PackageName2);
             end;
           end;
         else Assert(False);
@@ -5656,7 +5894,13 @@ begin
   begin
     FResultFormat := mfAdvPackage;
   end
-
+  else if (SameText(Extension, StrMawbud))
+    or (SameText(Extension, StrSfrbudget))
+    or (SameText(Extension, StrUzfbudget))
+    then
+  begin
+    FResultFormat := mfAdvPackBudget
+  end
 
   else
   begin
@@ -5789,6 +6033,11 @@ begin
         FFileStream := TFileStream.Create(AFileName, fmOpenRead or fmShareDenyWrite);
       end;
     mfAdvPackage:
+      begin
+        Precision := mpDouble;
+        FFileStream := TFileStream.Create(AFileName, fmOpenRead or fmShareDenyWrite);
+      end;
+    mfAdvPackBudget:
       begin
         Precision := mpDouble;
         FFileStream := TFileStream.Create(AFileName, fmOpenRead or fmShareDenyWrite);

@@ -83,7 +83,6 @@ type
 
 const
   StrMAW1 = 'MAW-1';
-  StrMawbud = '.maw_bud';
 
 implementation
 
