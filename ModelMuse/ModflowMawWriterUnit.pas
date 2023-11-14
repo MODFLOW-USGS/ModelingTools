@@ -530,7 +530,7 @@ begin
     if MawPackage.SaveGwtConcentration then
     begin
       WriteString('    CONCENTRATION FILEOUT ');
-      concentrationfile := BaseFileName + '.mwt_conc';
+      concentrationfile := BaseFileName + StrMwtconc;
       Model.AddModelOutputFile(concentrationfile);
       concentrationfile := ExtractFileName(concentrationfile);
       WriteString(concentrationfile);
@@ -540,7 +540,7 @@ begin
     if MawPackage.SaveGwtBudget then
     begin
       WriteString('    BUDGET FILEOUT ');
-      budgetfile := BaseFileName + '.mwt_budget';
+      budgetfile := BaseFileName + StrMwtbudget;
       Model.AddModelOutputFile(budgetfile);
       budgetfile := ExtractFileName(budgetfile);
       WriteString(budgetfile);

@@ -1796,7 +1796,7 @@ begin
   if UzfMf6Package.SaveGwtConcentration then
   begin
     WriteString('    CONCENTRATION FILEOUT ');
-    concentrationfile := BaseFileName + '.uzt_conc';
+    concentrationfile := BaseFileName + StrUztconc;
     Model.AddModelOutputFile(concentrationfile);
     concentrationfile := ExtractFileName(concentrationfile);
     WriteString(concentrationfile);
@@ -1806,7 +1806,7 @@ begin
   if FUzfPackage.SaveBudgetFile then
   begin
     WriteString('    BUDGET FILEOUT ');
-    budgetfile := BaseFileName + '.uzt_budget';
+    budgetfile := BaseFileName + StrUztbudget;
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);

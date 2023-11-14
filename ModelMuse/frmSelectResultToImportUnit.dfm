@@ -35,7 +35,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     ExplicitTop = 280
   end
   object btnHelp: TBitBtn
-    Left = 295
+    Left = 291
     Top = 402
     Width = 91
     Height = 47
@@ -44,11 +44,11 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     NumGlyphs = 2
     TabOrder = 7
     OnClick = btnHelpClick
-    ExplicitLeft = 291
+    ExplicitLeft = 287
     ExplicitTop = 401
   end
   object btnOK: TBitBtn
-    Left = 392
+    Left = 388
     Top = 402
     Width = 91
     Height = 47
@@ -58,11 +58,11 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     NumGlyphs = 2
     TabOrder = 8
     OnClick = btnOKClick
-    ExplicitLeft = 388
+    ExplicitLeft = 384
     ExplicitTop = 401
   end
   object btnCancel: TBitBtn
-    Left = 489
+    Left = 485
     Top = 402
     Width = 91
     Height = 47
@@ -70,19 +70,19 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 9
-    ExplicitLeft = 485
+    ExplicitLeft = 481
     ExplicitTop = 401
   end
   object comboColorGrid: TComboBox
     Left = 8
     Top = 370
-    Width = 571
+    Width = 567
     Height = 26
     Style = csDropDownList
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 4
     ExplicitTop = 369
-    ExplicitWidth = 567
+    ExplicitWidth = 563
   end
   object btnSelectAll: TButton
     Left = 8
@@ -111,7 +111,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   object rgDisplayChoice: TRadioGroup
     Left = 8
     Top = 302
-    Width = 571
+    Width = 567
     Height = 42
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Display choice'
@@ -123,7 +123,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       'Neither')
     TabOrder = 3
     ExplicitTop = 301
-    ExplicitWidth = 567
+    ExplicitWidth = 563
   end
   object pnlSelections: TPanel
     AlignWithMargins = True

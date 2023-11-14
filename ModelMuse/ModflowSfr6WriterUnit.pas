@@ -2372,7 +2372,7 @@ begin
     if SfrMf6Package.SaveGwtConcentration then
     begin
       WriteString('    CONCENTRATION FILEOUT ');
-      concentrationfile := BaseFileName + '.sft_conc';
+      concentrationfile := BaseFileName + StrSftconc;
       Model.AddModelOutputFile(concentrationfile);
       concentrationfile := ExtractFileName(concentrationfile);
       WriteString(concentrationfile);
@@ -2382,7 +2382,7 @@ begin
     if SfrMf6Package.SaveGwtBudget then
     begin
       WriteString('    BUDGET FILEOUT ');
-      budgetfile := BaseFileName + '.sft_budget';
+      budgetfile := BaseFileName + StrSftbudget;
       Model.AddModelOutputFile(budgetfile);
       budgetfile := ExtractFileName(budgetfile);
       WriteString(budgetfile);

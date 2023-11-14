@@ -5188,6 +5188,12 @@ const
   StrMawbud = '.maw_bud';
   StrUzfbudget = '.uzf_budget';
   StrSfrbudget = '.sfr_budget';
+  StrSftconc = '.sft_conc';
+  StrSftbudget = '.sft_budget';
+  StrMwtconc = '.mwt_conc';
+  StrMwtbudget = '.mwt_budget';
+  StrUztconc = '.uzt_conc';
+  StrUztbudget = '.uzt_budget';
 
 
   MaxString12 = 12;
@@ -10074,7 +10080,8 @@ const
 //    '5.1.1.44' Not in released version. Bug Fix. Fixed editing of calibration
 //                observation comparisons.
 //    '5.1.1.45' Enhancement: ModelMuse can now import data from binary output
-//                files created by the MAW, SFR and UZF packages in HODFLOW 6.
+//                files created by the MAW, MWT, SFR, SFT, UZF, and UZT
+//                packages in HODFLOW 6.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.

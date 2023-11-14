@@ -3634,17 +3634,43 @@ begin
                       end;
                       if Index = 0 then
                       begin
-                        if SameText(ExtractFileExt(AFileName), StrStage) then
+                        if SameText(ExtractFileExt(AFileName), StrStage)
+                          then
                         begin
                           GetSfr6Cells;
+                          Prefix := 'SFR_';
                         end
-                        else if SameText(ExtractFileExt(AFileName), StrMawhead) then
+                        else if SameText(ExtractFileExt(AFileName), StrSftconc)
+                          then
+                        begin
+                          GetSfr6Cells;
+                          Prefix := 'SFT_';
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrMawhead)
+                          then
                         begin
                           GetMaw6Cells;
+                          Prefix := 'MAW_';
                         end
-                        else if SameText(ExtractFileExt(AFileName), StrWatercontent) then
+                        else if SameText(ExtractFileExt(AFileName), StrMwtconc)
+                          then
                         begin
-                          GetUzf6Cells
+                          GetMaw6Cells;
+                          Prefix := 'MWT_';
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrWatercontent)
+                          or SameText(ExtractFileExt(AFileName), StrUztconc)
+                          then
+                        begin
+                          GetUzf6Cells;
+                          Prefix := 'UZF_';
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrWatercontent)
+                          or SameText(ExtractFileExt(AFileName), StrUztconc)
+                          then
+                        begin
+                          GetUzf6Cells;
+                          Prefix := 'UZT_';
                         end
                         else
                         begin
@@ -3654,7 +3680,7 @@ begin
                       ReadMf6AdvancedPackageList(FFileStream, KSTP, KPER, PeriodTime,
                         TOTIM, DESC, Data);
                       Description := Trim(string(DESC));
-                      Description := ValidName(Description);
+                      Description := ValidName(Prefix + Description);
 
                       if Length(Data) <> FAdvancedFeatureCells.Count then
                       begin
@@ -3706,15 +3732,30 @@ begin
                           GetSfr6Cells;
                           Prefix := 'SFR_';
                         end
+                        else if SameText(ExtractFileExt(AFileName), StrSftbudget) then
+                        begin
+                          GetSfr6Cells;
+                          Prefix := 'SFT_';
+                        end
                         else if SameText(ExtractFileExt(AFileName), StrMawbud) then
                         begin
                           GetMaw6Cells;
                           Prefix := 'MAW_';
                         end
+                        else if SameText(ExtractFileExt(AFileName), StrMwtbudget) then
+                        begin
+                          GetMaw6Cells;
+                          Prefix := 'MWT_';
+                        end
                         else if SameText(ExtractFileExt(AFileName), StrUzfbudget) then
                         begin
                           GetUzf6Cells;
                           Prefix := 'UZF_';
+                        end
+                        else if SameText(ExtractFileExt(AFileName), StrUztbudget) then
+                        begin
+                          GetUzf6Cells;
+                          Prefix := 'UZT_';
                         end
                         else
                         begin
@@ -4064,17 +4105,35 @@ begin
     FilterDescriptions.Add('Stream Budget');
     FileExtensions.Add(StrSfrbudget);
 
+    FilterDescriptions.Add('Stream Concentration');
+    FileExtensions.Add(StrSftconc);
+
+    FilterDescriptions.Add('Stream Transport Budget');
+    FileExtensions.Add(StrSftbudget);
+
     FilterDescriptions.Add(StrMAWHeadDesc);
     FileExtensions.Add(StrMawhead);
 
     FilterDescriptions.Add(StrMAWBudget);
     FileExtensions.Add(StrMawbud);
 
+    FilterDescriptions.Add('MWT Concentration');
+    FileExtensions.Add(StrMwtconc);
+
+    FilterDescriptions.Add('MWT Budget');
+    FileExtensions.Add(StrMwtbudget);
+
     FilterDescriptions.Add(StrUZFWAterConent);
     FileExtensions.Add(StrWatercontent);
 
     FilterDescriptions.Add('UZF Budget');
     FileExtensions.Add(StrUzfbudget);
+
+    FilterDescriptions.Add('UZT Concentration');
+    FileExtensions.Add(StrUztconc);
+
+    FilterDescriptions.Add('UZT Budget');
+    FileExtensions.Add(StrUztbudget);
 
     SubsidenceDescriptions.Add(StrCombinedSUBOutput);
     SubsidenceExtensions.Add(StrSubOut);
@@ -5890,6 +5949,9 @@ begin
   else if SameText(Extension, StrStage)
     or SameText(Extension, StrMawhead)
     or SameText(Extension, StrWatercontent)
+    or SameText(Extension, StrSftconc)
+    or SameText(Extension, StrMwtconc)
+    or SameText(Extension, StrUztconc)
     then
   begin
     FResultFormat := mfAdvPackage;
@@ -5897,6 +5959,9 @@ begin
   else if (SameText(Extension, StrMawbud))
     or (SameText(Extension, StrSfrbudget))
     or (SameText(Extension, StrUzfbudget))
+    or (SameText(Extension, StrSftbudget))
+    or (SameText(Extension, StrMwtbudget))
+    or (SameText(Extension, StrUztbudget))
     then
   begin
     FResultFormat := mfAdvPackBudget
