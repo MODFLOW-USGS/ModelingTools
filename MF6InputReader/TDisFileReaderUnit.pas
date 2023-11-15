@@ -35,7 +35,7 @@ type
   private
     FPeriods: TPeriodList;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Initialize; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -48,7 +48,7 @@ type
     FPeriodData: TTDisPeriodData;
     FAts: TAts;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
@@ -212,7 +212,7 @@ end;
 
 { TDisPeriodData }
 
-constructor TTDisPeriodData.Create;
+constructor TTDisPeriodData.Create(PackageType: string);
 begin
   FPeriods := TPeriodList.Create;
   inherited;
@@ -291,11 +291,11 @@ end;
 
 { TTDis }
 
-constructor TTDis.Create;
+constructor TTDis.Create(PackageType: string);
 begin
-  FOptions := TTDisOptions.Create;
-  FDimensions := TTDisDimensions.Create;
-  FPeriodData := TTDisPeriodData.Create;
+  FOptions := TTDisOptions.Create(PackageType);
+  FDimensions := TTDisDimensions.Create(PackageType);
+  FPeriodData := TTDisPeriodData.Create(PackageType);
 
   inherited;
 
@@ -394,7 +394,7 @@ begin
         AtsFile := TFile.OpenText(FOptions.ATS6_FileName);
         try
           try
-            FAts := TAts.Create;
+            FAts := TAts.Create('ATS');
             FAts.Read(AtsFile, Unhandled);
           except on E: Exception do
             begin

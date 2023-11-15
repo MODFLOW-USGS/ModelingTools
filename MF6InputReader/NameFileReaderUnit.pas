@@ -56,7 +56,7 @@ type
     FValidPackageTypes: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Initialize; override;
   end;
@@ -83,7 +83,7 @@ type
     FPackages: Packages;
     FDimensions: TDimensions;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     procedure ReadInput(Unhandled: TStreamWriter); override;
@@ -96,7 +96,8 @@ implementation
 
 uses
   DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit, IcFileReaderUnit,
-  OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit, HfbFileReaderUnit;
+  OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit, HfbFileReaderUnit,
+  StoFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -245,7 +246,7 @@ end;
 
 { TCustomPackages }
 
-constructor TCustomPackages.Create;
+constructor TCustomPackages.Create(PackageType: string);
 begin
   FPackages := TPackageList.Create;
   FValidPackageTypes := TStringList.Create;
@@ -378,11 +379,11 @@ end;
 
 { TNameFile<Options, Packages> }
 
-constructor TNameFile<Options, Packages>.Create;
+constructor TNameFile<Options, Packages>.Create(PackageType: string);
 begin
   inherited;
-  FOptions := Options.Create;
-  FPackages := Packages.Create;
+  FOptions := Options.Create(PackageType);
+  FPackages := Packages.Create(PackageType);
 end;
 
 destructor TNameFile<Options, Packages>.Destroy;
@@ -458,7 +459,8 @@ var
   OcReader: TOc;
   GwfObsReader: TObs;
   NpfReader: TNpf;
-  hFBReader: THfb;
+  HfbReader: THfb;
+  StoReader: TSto;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -467,7 +469,7 @@ begin
     APackage := FPackages.FPackages[PackageIndex];
     if (APackage.FileType = 'DIS6') then
     begin
-      DisReader := TDis.Create;
+      DisReader := TDis.Create(APackage.FileType);
       APackage.Package := DisReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisReader.Dimensions;
@@ -475,7 +477,7 @@ begin
     end
     else if (APackage.FileType = 'DISV6') then
     begin
-      DisvReader := TDisv.Create;
+      DisvReader := TDisv.Create(APackage.FileType);
       APackage.Package := DisvReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisvReader.Dimensions;
@@ -483,7 +485,7 @@ begin
     end
     else if (APackage.FileType = 'DISU6') then
     begin
-      DisuReader := TDisu.Create;
+      DisuReader := TDisu.Create(APackage.FileType);
       APackage.Package := DisuReader;
       APackage.ReadPackage(Unhandled);
       FDimensions := DisuReader.Dimensions;
@@ -502,36 +504,43 @@ begin
 
     if APackage.FileType = 'IC6' then
     begin
-      IcReader := TIc.Create;
+      IcReader := TIc.Create(APackage.FileType);
       IcReader.Dimensions := FDimensions;
       APackage.Package := IcReader;
       APackage.ReadPackage(Unhandled);
     end
     else if APackage.FileType = 'OC6' then
     begin
-      OcReader := TOc.Create;
+      OcReader := TOc.Create(APackage.FileType);
       APackage.Package := OcReader;
       APackage.ReadPackage(Unhandled);
     end
     else if APackage.FileType = 'OBS6' then
     begin
-      GwfObsReader := TObs.Create;
+      GwfObsReader := TObs.Create(APackage.FileType);
       GwfObsReader.Dimensions := FDimensions;
       APackage.Package := GwfObsReader;
       APackage.ReadPackage(Unhandled);
     end
     else if APackage.FileType = 'NPF6' then
     begin
-      NpfReader := TNpf.Create;
+      NpfReader := TNpf.Create(APackage.FileType);
       NpfReader.Dimensions := FDimensions;
       APackage.Package := NpfReader;
       APackage.ReadPackage(Unhandled);
     end
     else if APackage.FileType = 'HFB6' then
     begin
-      hFBReader := ThFB.Create;
-      hFBReader.Dimensions := FDimensions;
-      APackage.Package := hFBReader;
+      HfbReader := THfb.Create(APackage.FileType);
+      HfbReader.Dimensions := FDimensions;
+      APackage.Package := HfbReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'STO6' then
+    begin
+      StoReader := TSto.Create(APackage.FileType);
+      StoReader.Dimensions := FDimensions;
+      APackage.Package := StoReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

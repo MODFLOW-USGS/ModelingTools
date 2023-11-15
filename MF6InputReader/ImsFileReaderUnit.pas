@@ -63,7 +63,7 @@ type
     FNonLinear: TImsNonLinear;
     FLinear: TImsLinear;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -516,11 +516,11 @@ end;
 
 { TIms }
 
-constructor TIms.Create;
+constructor TIms.Create(PackageType: string);
 begin
-  FOptions := TImsOptions.Create;
-  FNonLinear := TImsNonLinear.Create;
-  FLinear := TImsLinear.Create;
+  FOptions := TImsOptions.Create(PackageType);
+  FNonLinear := TImsNonLinear.Create(PackageType);
+  FLinear := TImsLinear.Create(PackageType);
   inherited;
 
 end;

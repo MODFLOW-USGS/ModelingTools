@@ -15,14 +15,14 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
   end;
 
   TIc = class(TDimensionedPackageReader)
   private
     FGridData: TIcGridData;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
 
@@ -35,7 +35,7 @@ resourcestring
 
 { TIcGridData }
 
-constructor TIcGridData.Create;
+constructor TIcGridData.Create(PackageType: string);
 begin
   FDimensions.Initialize;
   inherited;
@@ -80,7 +80,7 @@ begin
     if FSplitter[0] = 'STRT' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeDReader.Read(Stream, Unhandled);
         STRT := ThreeDReader.FData;
@@ -98,9 +98,9 @@ end;
 
 { TIc }
 
-constructor TIc.Create;
+constructor TIc.Create(PackageType: string);
 begin
-  FGridData := TIcGridData.Create;
+  FGridData := TIcGridData.Create(PackageType);
   inherited;
 
 end;

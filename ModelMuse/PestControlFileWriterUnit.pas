@@ -313,6 +313,7 @@ var
   PilotPointItem1: TStoredPilotParamDataItem;
   PilotPointItem2: TStoredPilotParamDataItem;
   CommentCount: Integer;
+  OldDecimalSeparator: Char;
   function NewGroupName: string;
   var
     Index: Integer;
@@ -630,6 +631,8 @@ begin
   GetUsedTypes(UsedTypes);
 
   EquationCount := 0;
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
   LinkQuadQuadTree := TRbwQuadTree.Create(nil);
   LocationQuadTree := TRbwQuadTree.Create(nil);
   ObservationGroupNames := TStringList.Create;
@@ -817,6 +820,7 @@ begin
     ObservationGroupNames.Free;
     LocationQuadTree.Free;
     LinkQuadQuadTree.Free;
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
   // prior information will be added by the running ADDREG1 or a program in the
   // Groundwater Utility suite,

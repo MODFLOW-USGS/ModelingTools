@@ -116,6 +116,9 @@
         <DCCReference Include="TvkFileReaderUnit.pas"/>
         <DCCReference Include="TimeSeriesFileReaderUnit.pas"/>
         <DCCReference Include="HfbFileReaderUnit.pas"/>
+        <DCCReference Include="StoFileReaderUnit.pas"/>
+        <DCCReference Include="TvsFileReaderUnit.pas"/>
+        <DCCReference Include="CSubFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

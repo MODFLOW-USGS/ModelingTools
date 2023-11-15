@@ -36,7 +36,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
   end;
 
@@ -47,7 +47,7 @@ type
     FOptions: TObsOptions;
     FObsFiles: TObsFileList;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
   end;
@@ -111,7 +111,7 @@ end;
 
 { TObsFile }
 
-constructor TObsFile.Create;
+constructor TObsFile.Create(PackageType: string);
 begin
   FObservations := TObservationList.Create;
   inherited;
@@ -199,10 +199,10 @@ end;
 
 { TObs }
 
-constructor TObs.Create;
+constructor TObs.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TObsOptions.Create;
+  FOptions := TObsOptions.Create(PackageType);
   FObsFiles := TObsFileList.Create;
 end;
 
@@ -243,7 +243,7 @@ begin
           and (FSplitter[1] = 'CONTINUOUS')
           and (FSplitter[2] = 'FILEOUT') then
         begin
-          ObsFile := TObsFile.Create;
+          ObsFile := TObsFile.Create(FPackageType);
           FObsFiles.Add(ObsFile);
           ObsFile.FOutputFileName := FSplitter[3];
           ObsFile.FBinary := (FSplitter.Count >= 5) and (FSplitter[4] = 'BINARY');

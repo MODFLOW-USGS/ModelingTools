@@ -36,7 +36,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
   end;
 
@@ -55,7 +55,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
   end;
 
   TNpf = class(TDimensionedPackageReader)
@@ -64,7 +64,7 @@ type
     FGridData: TNpfGridData;
     TvkPackages: TPackageList;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
   end;
@@ -86,7 +86,7 @@ end;
 
 { TNpfOptions }
 
-constructor TNpfOptions.Create;
+constructor TNpfOptions.Create(PackageType: string);
 begin
   TVK6_FileNames := TStringList.Create;
   inherited;
@@ -230,7 +230,7 @@ end;
 
 { TNpfGridData }
 
-constructor TNpfGridData.Create;
+constructor TNpfGridData.Create(PackageType: string);
 begin
   FDimensions.Initialize;
   inherited;
@@ -282,7 +282,7 @@ begin
     if FSplitter[0] = 'ICELLTYPE' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      IntThreeDReader := TInteger3DArrayReader.Create(FDimensions, Layered);
+      IntThreeDReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         IntThreeDReader.Read(Stream, Unhandled);
         ICELLTYPE := IntThreeDReader.FData;
@@ -293,7 +293,7 @@ begin
     else if FSplitter[0] = 'K' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         K := DoubleThreeDReader.FData;
@@ -305,7 +305,7 @@ begin
     begin
       SetLength(K22, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         K22 := DoubleThreeDReader.FData;
@@ -317,7 +317,7 @@ begin
     begin
       SetLength(K33, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         K33 := DoubleThreeDReader.FData;
@@ -329,7 +329,7 @@ begin
     begin
       SetLength(ANGLE1, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         ANGLE1 := DoubleThreeDReader.FData;
@@ -341,7 +341,7 @@ begin
     begin
       SetLength(ANGLE2, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         ANGLE2 := DoubleThreeDReader.FData;
@@ -353,7 +353,7 @@ begin
     begin
       SetLength(ANGLE3, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         ANGLE3 := DoubleThreeDReader.FData;
@@ -365,7 +365,7 @@ begin
     begin
       SetLength(WETDRY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         WETDRY := DoubleThreeDReader.FData;
@@ -383,11 +383,11 @@ end;
 
 { TNpf }
 
-constructor TNpf.Create;
+constructor TNpf.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TNpfOptions.Create;
-  FGridData := TNpfGridData.Create;
+  FOptions := TNpfOptions.Create(PackageType);
+  FGridData := TNpfGridData.Create(PackageType);
   TvkPackages := TPackageList.Create;
 end;
 
@@ -431,7 +431,7 @@ begin
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized NPF sction on the following Line');
+        Unhandled.WriteLine('Unrecognized NPF section on the following Line');
         Unhandled.WriteLine(ErrorLine);
       end;
     end;
@@ -445,7 +445,7 @@ begin
     TvkPackage.FileName := FOptions.TVK6_FileNames[PackageIndex];
     TvkPackage.PackageName := '';
 
-    TvkReader := TTvk.Create;
+    TvkReader := TTvk.Create(TvkPackage.FileType);
     TvkReader.Dimensions := FDimensions;
     TvkPackage.Package := TvkReader;
     TvkPackage.ReadPackage(Unhandled);

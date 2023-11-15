@@ -40,7 +40,7 @@ private
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
   end;
 
@@ -52,7 +52,7 @@ private
     FDimensionsHfb: THfbDimensions;
     FStressPeriods: THfbStressPeriodList;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
 
@@ -157,7 +157,7 @@ end;
 
 { THfbStressPeriod }
 
-constructor THfbStressPeriod.Create;
+constructor THfbStressPeriod.Create(PackageType: string);
 begin
   FSettings := THfbCellPairList.Create;
   inherited;
@@ -228,10 +228,10 @@ end;
 
 { THfb }
 
-constructor THfb.Create;
+constructor THfb.Create(PackageType: string);
 begin
-  FOptions := THfbOptions.Create;
-  FDimensionsHfb := THfbDimensions.Create;
+  FOptions := THfbOptions.Create(PackageType);
+  FDimensionsHfb := THfbDimensions.Create(PackageType);
   FStressPeriods := THfbStressPeriodList.Create;
   inherited;
 
@@ -281,7 +281,7 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
-          APeriod := THfbStressPeriod.Create;
+          APeriod := THfbStressPeriod.Create(FPackageType);
           FStressPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions);

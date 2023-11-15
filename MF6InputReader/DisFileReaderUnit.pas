@@ -52,7 +52,7 @@ type
     FGridData: TDisGridData;
     function GetDimensions: TDimensions;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     property Dimensions: TDimensions read GetDimensions;
@@ -291,7 +291,7 @@ begin
     FSplitter.DelimitedText := ALine;
     if FSplitter[0] = 'DELR' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FDimensions.NCol);
+      OneDReader := TDouble1DArrayReader.Create(FDimensions.NCol, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         DELR := OneDReader.FData;
@@ -301,7 +301,7 @@ begin
     end
     else if FSplitter[0] = 'DELC' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FDimensions.NRow);
+      OneDReader := TDouble1DArrayReader.Create(FDimensions.NRow, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         DELC := OneDReader.FData;
@@ -311,7 +311,7 @@ begin
     end
     else if FSplitter[0] = 'TOP' then
     begin
-      TwoDReader := TDouble2DArrayReader.Create(FDimensions);
+      TwoDReader := TDouble2DArrayReader.Create(FDimensions, FPackageType);
       try
         TwoDReader.Read(Stream, Unhandled);
         TOP := TwoDReader.FData;
@@ -322,7 +322,7 @@ begin
     else if FSplitter[0] = 'BOTM' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeDReader.Read(Stream, Unhandled);
         BOTM := ThreeDReader.FData;
@@ -333,7 +333,7 @@ begin
     else if FSplitter[0] = 'IDOMAIN' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      ThreeIReader := TInteger3DArrayReader.Create(FDimensions, Layered);
+      ThreeIReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeIReader.Read(Stream, Unhandled);
         IDOMAIN := ThreeIReader.FData;
@@ -351,11 +351,11 @@ end;
 
 { TDis }
 
-constructor TDis.Create;
+constructor TDis.Create(PackageType: string);
 begin
-  FOptions := TDisOptions.Create;
-  FDimensions := TDisDimensions.Create;
-  FGridData := TDisGridData.Create;
+  FOptions := TDisOptions.Create(PackageType);
+  FDimensions := TDisDimensions.Create(PackageType);
+  FGridData := TDisGridData.Create(PackageType);
   inherited;
 end;
 

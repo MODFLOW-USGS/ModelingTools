@@ -18,7 +18,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
   end;
 
@@ -33,7 +33,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
   end;
 
@@ -42,7 +42,7 @@ type
     FTimeSeries: TTsTimeSeries;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
   end;
 
@@ -53,7 +53,7 @@ uses
 
 { TTimeSeriesOptions }
 
-constructor TTsAttributes.Create;
+constructor TTsAttributes.Create(PackageType: string);
 begin
   Names := TStringList.Create;
   Methods := TTsMethodList.Create;
@@ -222,11 +222,11 @@ end;
 
 { TTsTimeSeries }
 
-constructor TTsTimeSeries.Create;
+constructor TTsTimeSeries.Create(PackageType: string);
 begin
   Times := TDoubleList.Create;
   Values := TTimeValues.Create;
-  inherited Create;
+  inherited Create(PackageType);
 end;
 
 destructor TTsTimeSeries.Destroy;
@@ -301,10 +301,10 @@ end;
 
 { TTimeSeries }
 
-constructor TTimeSeries.Create;
+constructor TTimeSeries.Create(PackageType: string);
 begin
-  FAttributes := TTsAttributes.Create;
-  FTimeSeries := TTsTimeSeries.Create;
+  FAttributes := TTsAttributes.Create(PackageType);
+  FTimeSeries := TTsTimeSeries.Create(PackageType);
   inherited;
 end;
 

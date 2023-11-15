@@ -525,6 +525,7 @@ var
   Species: Integer;
   GwtObs: TObGwts;
   ChemIndex: Integer;
+  OldDecimalSeparator: Char;
   function GetLocation(ACell: TCellLocation): TPoint2D;
   begin
     if Model.DisvUsed then
@@ -568,6 +569,8 @@ begin
   StartTime := Model.ModflowStressPeriods.First.StartTime;
   OtherObsDefined := False;
 
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
   MultiLayerFormulaList:= TObjectList<TStringBuilder>.Create;
   try
 
@@ -1190,6 +1193,7 @@ begin
     end;
   finally
     MultiLayerFormulaList.Free;
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 
   if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0)
@@ -3778,8 +3782,11 @@ var
   FormulaBuilder: TStringBuilder;
   ID: string;
   StartTime: double;
+  OldDecimalSeparator: Char;
 begin
   StartTime := Model.ModflowStressPeriods.First.StartTime;
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
   FormulaBuilder := TStringBuilder.Create;
   try
     for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
@@ -3818,6 +3825,7 @@ begin
     end;
   finally
     FormulaBuilder.Free;
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
 end;
 

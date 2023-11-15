@@ -69,7 +69,7 @@ type
     FCells: TDisuCells;
     function GetDimensions: TDimensions;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     property Dimensions: TDimensions read GetDimensions;
@@ -237,7 +237,7 @@ begin
     FSplitter.DelimitedText := ALine;
     if FSplitter[0] = 'TOP' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes);
+      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         TOP := OneDReader.FData;
@@ -247,7 +247,7 @@ begin
     end
     else if FSplitter[0] = 'BOT' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes);
+      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         BOT := OneDReader.FData;
@@ -257,7 +257,7 @@ begin
     end
     else if FSplitter[0] = 'AREA' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes);
+      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         AREA := OneDReader.FData;
@@ -267,7 +267,7 @@ begin
     end
     else if FSplitter[0] = 'IDOMAIN' then
     begin
-      OneIReader := TInteger1DArrayReader.Create(FNodes);
+      OneIReader := TInteger1DArrayReader.Create(FNodes, FPackageType);
       try
         OneIReader.Read(Stream, Unhandled);
         IDOMAIN := OneIReader.FData;
@@ -328,7 +328,7 @@ begin
     FSplitter.DelimitedText := ALine;
     if FSplitter[0] = 'IAC' then
     begin
-      OneIReader := TInteger1DArrayReader.Create(FNodes);
+      OneIReader := TInteger1DArrayReader.Create(FNodes, FPackageType);
       try
         OneIReader.Read(Stream, Unhandled);
         IAC := OneIReader.FData;
@@ -338,7 +338,7 @@ begin
     end
     else if FSplitter[0] = 'JA' then
     begin
-      OneIReader := TInteger1DArrayReader.Create(FNJA);
+      OneIReader := TInteger1DArrayReader.Create(FNJA, FPackageType);
       try
         OneIReader.Read(Stream, Unhandled);
         JA := OneIReader.FData;
@@ -348,7 +348,7 @@ begin
     end
     else if FSplitter[0] = 'IHC' then
     begin
-      OneIReader := TInteger1DArrayReader.Create(FNodes);
+      OneIReader := TInteger1DArrayReader.Create(FNodes, FPackageType);
       try
         OneIReader.Read(Stream, Unhandled);
         IHC := OneIReader.FData;
@@ -358,7 +358,7 @@ begin
     end
     else if FSplitter[0] = 'CL12' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes);
+      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         CL12 := OneDReader.FData;
@@ -368,7 +368,7 @@ begin
     end
     else if FSplitter[0] = 'HWVA' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes);
+      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         HWVA := OneDReader.FData;
@@ -378,7 +378,7 @@ begin
     end
     else if FSplitter[0] = 'ANGLDEGX' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes);
+      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         ANGLDEGX := OneDReader.FData;
@@ -396,15 +396,15 @@ end;
 
 { TDisu }
 
-constructor TDisu.Create;
+constructor TDisu.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TDisuOptions.Create;
-  FDimensions := TDisuDimensions.Create;
-  FGridData := TDisuGridData.Create;
-  FConnections := TDisuConnectionData.Create;
-  FVertices := TDisuVertices.Create;
-  FCells := TDisuCells.Create;
+  FOptions := TDisuOptions.Create(PackageType);
+  FDimensions := TDisuDimensions.Create(PackageType);
+  FGridData := TDisuGridData.Create(PackageType);
+  FConnections := TDisuConnectionData.Create(PackageType);
+  FVertices := TDisuVertices.Create(PackageType);
+  FCells := TDisuCells.Create(PackageType);
 end;
 
 destructor TDisu.Destroy;

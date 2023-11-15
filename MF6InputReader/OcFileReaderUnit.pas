@@ -39,7 +39,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -51,7 +51,7 @@ type
     FOptions: TOcOptions;
     FPeriods: TOcPeriodList;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
   end;
@@ -154,7 +154,7 @@ end;
 
 { TOcPeriod }
 
-constructor TOcPeriod.Create;
+constructor TOcPeriod.Create(PackageType: string);
 begin
   FPrintBudget := TPrintSaveList.Create;
   FSaveBudget := TPrintSaveList.Create;
@@ -330,9 +330,9 @@ end;
 
 { TOc }
 
-constructor TOc.Create;
+constructor TOc.Create(PackageType: string);
 begin
-  FOptions := TOcOptions.Create;
+  FOptions := TOcOptions.Create(PackageType);
   FPeriods := TOcPeriodList.Create;
   inherited;
 
@@ -378,7 +378,7 @@ begin
           if (FSplitter.Count >= 3)
             and TryStrToInt(FSplitter[2], IPer) then
           begin
-            APeriod := TOcPeriod.Create;
+            APeriod := TOcPeriod.Create(FPackageType);
             FPeriods.Add(APeriod);
             APeriod.IPer := IPer;
             APeriod.Read(Stream, Unhandled);

@@ -407,6 +407,7 @@ var
   var
     PestSeriesItem: string;
     Param: TModflowSteadyParameter;
+    OldDecimalSeparator: Char;
   begin
     Param := LocalModel.GetPestParameterByName(Formula);
     if Param <> nil then
@@ -430,15 +431,21 @@ var
         CurrentRecord.PestSeriesItem[PropertyIndex] := PestSeriesItem;
         CurrentRecord.PestSeriesMethod[PropertyIndex] :=
           SfrBoundary.PestBoundaryMethod[PropertyIndex+Offset];
-        case CurrentRecord.PestSeriesMethod[PropertyIndex] of
-          ppmMultiply:
-            begin
-              Formula := Format('%0:g * (%1:s)', [Param.Value, Formula]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('%0:g + (%1:s)', [Param.Value, Formula]);
-            end;
+        OldDecimalSeparator := FormatSettings.DecimalSeparator;
+        FormatSettings.DecimalSeparator := '.';
+        try
+          case CurrentRecord.PestSeriesMethod[PropertyIndex] of
+            ppmMultiply:
+              begin
+                Formula := Format('%0:g * (%1:s)', [Param.Value, Formula]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('%0:g + (%1:s)', [Param.Value, Formula]);
+              end;
+          end;
+        finally
+          FormatSettings.DecimalSeparator := OldDecimalSeparator;
         end;
       end
       else

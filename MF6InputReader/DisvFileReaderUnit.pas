@@ -47,7 +47,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; NVERT: Integer);
   end;
@@ -70,7 +70,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -86,7 +86,7 @@ type
     FCells: TDisvCells;
     function GetDimensions: TDimensions;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     property Dimensions: TDimensions read GetDimensions;
@@ -226,7 +226,7 @@ begin
     FSplitter.DelimitedText := ALine;
     if FSplitter[0] = 'TOP' then
     begin
-      TwoDReader := TDouble2DArrayReader.Create(FDimensions);
+      TwoDReader := TDouble2DArrayReader.Create(FDimensions, FPackageType);
       try
         TwoDReader.Read(Stream, Unhandled);
         TOP := TwoDReader.FData;
@@ -237,7 +237,7 @@ begin
     else if FSplitter[0] = 'BOTM' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered);
+      ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeDReader.Read(Stream, Unhandled);
         BOTM := ThreeDReader.FData;
@@ -248,7 +248,7 @@ begin
     else if FSplitter[0] = 'IDOMAIN' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      ThreeIReader := TInteger3DArrayReader.Create(FDimensions, Layered);
+      ThreeIReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeIReader.Read(Stream, Unhandled);
         IDOMAIN := ThreeIReader.FData;
@@ -266,7 +266,7 @@ end;
 
 { TDisvVerticies }
 
-constructor TCustomVertices.Create;
+constructor TCustomVertices.Create(PackageType: string);
 begin
   FVerticies := TVertexList.Create;
   inherited;
@@ -347,7 +347,7 @@ end;
 
 { TDisvCells }
 
-constructor TCustomCells.Create;
+constructor TCustomCells.Create(PackageType: string);
 begin
   FCells := TDisvCellList.Create;
   inherited;
@@ -445,14 +445,14 @@ end;
 
 { TDisv }
 
-constructor TDisv.Create;
+constructor TDisv.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TDisvOptions.Create;
-  FDimensions := TDisvDimensions.Create;
-  FGridData := TDisvGridData.Create;
-  FVerticies := TDisvVertices.Create;
-  FCells := TDisvCells.Create;
+  FOptions := TDisvOptions.Create(PackageType);
+  FDimensions := TDisvDimensions.Create(PackageType);
+  FGridData := TDisvGridData.Create(PackageType);
+  FVerticies := TDisvVertices.Create(PackageType);
+  FCells := TDisvCells.Create(PackageType);
 end;
 
 destructor TDisv.Destroy;

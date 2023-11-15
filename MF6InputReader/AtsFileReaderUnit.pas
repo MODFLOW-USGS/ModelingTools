@@ -29,7 +29,7 @@ type
   private
     FPeriods: TAtsPeriodList;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Initialize; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -40,7 +40,7 @@ type
     FDimensions: TAtsDimensions;
     FPeriodData: TAtsPeriodData;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -115,11 +115,11 @@ end;
 
 { TAts }
 
-constructor TAts.Create;
+constructor TAts.Create(PackageType: string);
 begin
   inherited;
-  FDimensions := TAtsDimensions.Create;
-  FPeriodData := TAtsPeriodData.Create;
+  FDimensions := TAtsDimensions.Create(PackageType);
+  FPeriodData := TAtsPeriodData.Create(PackageType);
 end;
 
 destructor TAts.Destroy;
@@ -193,7 +193,7 @@ end;
 
 { TAtsPeriodData }
 
-constructor TAtsPeriodData.Create;
+constructor TAtsPeriodData.Create(PackageType: string);
 begin
   FPeriods := TAtsPeriodList.Create;
   inherited;

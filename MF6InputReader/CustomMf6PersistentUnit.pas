@@ -7,6 +7,24 @@ uses
   System.Generics.Collections;
 
 type
+   TRealOption = record
+     Value: Extended;
+     Used: Boolean;
+     procedure Initialize;
+   end;
+
+   TIntegerOption = record
+     Value: Integer;
+     Used: Boolean;
+     procedure Initialize;
+   end;
+
+   TStringOption = record
+     Value: string;
+     Used: Boolean;
+     procedure Initialize;
+   end;
+
   TPrintFormat = record
     Columns: Integer;
     Width: Integer;
@@ -23,11 +41,25 @@ type
     procedure Initialize;
   end;
 
+  TValueType = (vtNumeric, vtString);
+
+  TTimeVariableCell = record
+    ValueType: TValueType;
+    CellId: TCellId;
+    VariableName: string;
+    StringValue: string;
+    NumericValue: Extended;
+    procedure Initialize;
+  end;
+
+  TTimeVariableCellList = TList<TTimeVariableCell>;
+
   TDoubleList = TList<Double>;
 
   TCustomMf6Persistent = class(TPersistent)
   protected
     FSplitter: TStringList;
+    FPackageType: string;
     procedure Initialize; virtual;
     function StripFollowingComments(AValue: string): string;
     function ReadEndOfSection(ALine: string; const ErrorLine: string;
@@ -37,7 +69,7 @@ type
     function ReadCellID(var Cell: TCellId;
       StartIndex, DimensionCount: Integer): Boolean;
   public
-    constructor Create; virtual;
+    constructor Create(PackageType: string); virtual;
     destructor Destroy; override;
   end;
 
@@ -87,7 +119,7 @@ type
     FDimension: Integer;
   public
     FData: TArray<DataType>;
-    constructor Create(Dimension: Integer); reintroduce;
+    constructor Create(Dimension: Integer; PackageType: string); reintroduce;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
@@ -120,7 +152,7 @@ type
     FDimensions: TDimensions;
   public
     FData: TArray<TArray<DataType>>;
-    constructor Create(Dimensions: TDimensions); reintroduce;
+    constructor Create(Dimensions: TDimensions; PackageType: string); reintroduce;
   end;
 
   TDouble2DArrayReader = class(T2DArrayReader<Double>)
@@ -138,7 +170,7 @@ type
   public
     FData: TArray<TArray<TArray<DataType>>>;
     constructor Create(Dimensions: TDimensions;
-      Layered: Boolean); reintroduce;
+      Layered: Boolean; PackageType: string); reintroduce;
   end;
 
   TDouble3DArrayReader = class(T3DArrayReader<Double>)
@@ -189,8 +221,6 @@ type
 
   TPackageList = TObjectList<TPackage>;
 
-
-
 resourcestring
   StrUnrecognizedOCOpti = 'Unrecognized %S option in the following line.';
 
@@ -202,8 +232,9 @@ uses
 resourcestring
   StrUnrecognizedTDISOp = 'Unrecognized TDIS option in the following line.';
 
-constructor TCustomMf6Persistent.Create;
+constructor TCustomMf6Persistent.Create(PackageType: string);
 begin
+  FPackageType := PackageType;
   FSplitter := TStringList.Create;
   Initialize;
 end;
@@ -351,9 +382,9 @@ end;
 { TArrayReader }
 
 constructor T3DArrayReader<DataType>.Create(Dimensions: TDimensions;
-  Layered: Boolean);
+  Layered: Boolean; PackageType: string);
 begin
-  inherited Create;
+  inherited Create(PackageType);
   FLayered := Layered;
   FDimensions := Dimensions;
   if FDimensions.NRow = 0 then
@@ -370,9 +401,9 @@ end;
 
 { T1DArrayReader }
 
-constructor T1DArrayReader<DataType>.Create(Dimension: Integer);
+constructor T1DArrayReader<DataType>.Create(Dimension: Integer; PackageType: string);
 begin
-  inherited Create;
+  inherited Create(PackageType);
   FDimension := Dimension;
   SetLength(FData, Dimension);
 end;
@@ -917,9 +948,9 @@ end;
 
 { T2DArrayReader<DataType> }
 
-constructor T2DArrayReader<DataType>.Create(Dimensions: TDimensions);
+constructor T2DArrayReader<DataType>.Create(Dimensions: TDimensions; PackageType: string);
 begin
-  inherited Create;
+  inherited Create(PackageType);
   FDimensions := Dimensions;
   if FDimensions.NRow = 0 then
   begin
@@ -1558,6 +1589,41 @@ begin
         [FFileName]));
     end;
   end;
+end;
+
+{ TTimeVariableCell }
+
+procedure TTimeVariableCell.Initialize;
+begin
+  ValueType := vtNumeric;
+  CellId.Initialize;
+  VariableName := '';
+  StringValue := '';
+  NumericValue := 0;
+end;
+
+{ TRealOption }
+
+procedure TRealOption.Initialize;
+begin
+  Value := 0;
+  Used := False;
+end;
+
+{ TIntegerOption }
+
+procedure TIntegerOption.Initialize;
+begin
+  Value := 0;
+  Used := False;
+end;
+
+{ TStringOption }
+
+procedure TStringOption.Initialize;
+begin
+  Value := '';
+  Used := False;
 end;
 
 end.

@@ -1,4 +1,4 @@
-unit TvkFileReaderUnit;
+unit TvsFileReaderUnit;
 
 interface
 
@@ -7,8 +7,9 @@ uses
   System.Generics.Collections;
 
 type
-  TTvkOptions = class(TCustomMf6Persistent)
+  TTvsOptions = class(TCustomMf6Persistent)
   private
+    DISABLE_STORAGE_CHANGE_INTEGRATION: Boolean;
     PRINT_INPUT: Boolean;
     TS6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -19,7 +20,7 @@ type
     destructor Destroy; override;
   end;
 
-  TTvkPeriodData = class(TCustomMf6Persistent)
+  TTvsPeriodData = class(TCustomMf6Persistent)
   private
     IPer: Integer;
     FCells: TTimeVariableCellList;
@@ -31,12 +32,12 @@ type
     destructor Destroy; override;
   end;
 
-  TTvkPeriodList = TObjectList<TTvkPeriodData>;
+  TTvsPeriodList = TObjectList<TTvsPeriodData>;
 
-  TTvk = class(TDimensionedPackageReader)
+  TTvs = class(TDimensionedPackageReader)
   private
-    FOptions: TTvkOptions;
-    FPeriods: TTvkPeriodList;
+    FOptions: TTvsOptions;
+    FPeriods: TTvsPeriodList;
     FTimeSeriesPackages: TPackageList;
   public
     constructor Create(PackageType: string); override;
@@ -44,33 +45,36 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
   end;
 
+
 implementation
 
 uses
-  TimeSeriesFileReaderUnit, ModelMuseUtilities;
+  ModelMuseUtilities, TimeSeriesFileReaderUnit;
 
-{ TTvkOptions }
+{ TTvsOptions }
 
-constructor TTvkOptions.Create(PackageType: string);
+constructor TTvsOptions.Create(PackageType: string);
 begin
   TS6_FileNames := TStringList.Create;
   inherited;
+
 end;
 
-destructor TTvkOptions.Destroy;
+destructor TTvsOptions.Destroy;
 begin
   TS6_FileNames.Free;
   inherited;
 end;
 
-procedure TTvkOptions.Initialize;
+procedure TTvsOptions.Initialize;
 begin
   inherited;
+  DISABLE_STORAGE_CHANGE_INTEGRATION := False;
   PRINT_INPUT := False;
   TS6_FileNames.Clear;
 end;
 
-procedure TTvkOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTvsOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -100,6 +104,10 @@ begin
     begin
       PRINT_INPUT := True;
     end
+    else if FSplitter[0] = 'DISABLE_STORAGE_CHANGE_INTEGRATION' then
+    begin
+      DISABLE_STORAGE_CHANGE_INTEGRATION := True;
+    end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEIN') then
@@ -110,34 +118,34 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized TVK option in the following line.');
+      Unhandled.WriteLine('Unrecognized TVS option in the following line.');
       Unhandled.WriteLine(ErrorLine);
     end;
   end
 end;
 
-{ TTvkPeriodData }
+{ TTvsPeriodData }
 
-constructor TTvkPeriodData.Create(PackageType: string);
+constructor TTvsPeriodData.Create(PackageType: string);
 begin
   FCells := TTimeVariableCellList.Create;
   inherited;
 
 end;
 
-destructor TTvkPeriodData.Destroy;
+destructor TTvsPeriodData.Destroy;
 begin
   FCells.Free;
   inherited;
 end;
 
-procedure TTvkPeriodData.Initialize;
+procedure TTvsPeriodData.Initialize;
 begin
   inherited;
   FCells.Clear;
 end;
 
-procedure TTvkPeriodData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+procedure TTvsPeriodData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions);
 var
   DimensionCount: Integer;
@@ -186,30 +194,30 @@ begin
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized TVK PERIOD data in the following line.');
+        Unhandled.WriteLine('Unrecognized TVS PERIOD data in the following line.');
         Unhandled.WriteLine(ErrorLine);
       end;
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized TVK PERIOD data in the following line.');
+      Unhandled.WriteLine('Unrecognized TVS PERIOD data in the following line.');
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
 
 end;
 
-{ TTvk }
+{ TTvs }
 
-constructor TTvk.Create(PackageType: string);
+constructor TTvs.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TTvkOptions.Create(PackageType);
-  FPeriods := TTvkPeriodList.Create;
+  FOptions := TTvsOptions.Create(PackageType);
+  FPeriods := TTvsPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
 end;
 
-destructor TTvk.Destroy;
+destructor TTvs.Destroy;
 begin
   FTimeSeriesPackages.Free;
   FOptions.Free;
@@ -217,12 +225,12 @@ begin
   inherited;
 end;
 
-procedure TTvk.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTvs.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
   IPER: Integer;
-  APeriod: TTvkPeriodData;
+  APeriod: TTvsPeriodData;
   Index: Integer;
   TsPackage: TPackage;
   PackageIndex: Integer;
@@ -250,20 +258,20 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
-          APeriod := TTvkPeriodData.Create(FPackageType);
+          APeriod := TTvsPeriodData.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions);
         end
         else
         begin
-          Unhandled.WriteLine('Unrecognized TVK data in the following line.');
+          Unhandled.WriteLine('Unrecognized TVS data in the following line.');
           Unhandled.WriteLine(ErrorLine);
         end;
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized TVK data in the following line.');
+        Unhandled.WriteLine('Unrecognized TVS data in the following line.');
         Unhandled.WriteLine(ErrorLine);
       end;
     end;

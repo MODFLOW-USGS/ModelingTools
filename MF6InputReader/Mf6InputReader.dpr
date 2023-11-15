@@ -27,7 +27,10 @@ uses
   NpfFileReaderUnit in 'NpfFileReaderUnit.pas',
   TvkFileReaderUnit in 'TvkFileReaderUnit.pas',
   TimeSeriesFileReaderUnit in 'TimeSeriesFileReaderUnit.pas',
-  HfbFileReaderUnit in 'HfbFileReaderUnit.pas';
+  HfbFileReaderUnit in 'HfbFileReaderUnit.pas',
+  StoFileReaderUnit in 'StoFileReaderUnit.pas',
+  TvsFileReaderUnit in 'TvsFileReaderUnit.pas',
+  CSubFileReaderUnit in 'CSubFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;
@@ -51,7 +54,7 @@ begin
     end;
     if TFile.Exists(FileName) then
     begin
-      Mf6Simulation := TMf6Simulation.Create;
+      Mf6Simulation := TMf6Simulation.Create('Simulation');
       try
         Mf6Simulation.ReadSimulation(FileName);
       finally

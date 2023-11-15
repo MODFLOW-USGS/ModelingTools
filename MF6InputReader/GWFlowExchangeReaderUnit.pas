@@ -19,7 +19,7 @@ Type
     procedure Initialize; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); virtual; abstract;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
 
   end;
@@ -88,7 +88,7 @@ procedure Initialize; override;
     procedure Initialize; override;
   public
     constructor Create(DimensionsM1, DimensionsM2: TDimensions;
-      Auxiliary: TStringList); reintroduce;
+      Auxiliary: TStringList; PackageType: string); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -101,18 +101,18 @@ procedure Initialize; override;
     FDimensionsM2: TDimensions;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
-    constructor Create(DimensionsM1, DimensionsM2: TDimensions); reintroduce; virtual;
+    constructor Create(DimensionsM1, DimensionsM2: TDimensions; PackageType: string); reintroduce; virtual;
     destructor Destroy; override;
   end;
 
   TGWFlowExchange = class(TCustomExchange)
   public
-    constructor Create(DimensionsM1, DimensionsM2: TDimensions); override;
+    constructor Create(DimensionsM1, DimensionsM2: TDimensions; PackageType: string); override;
   end;
 
   TGWTransportwExchange = class(TCustomExchange)
   public
-    constructor Create(DimensionsM1, DimensionsM2: TDimensions); override;
+    constructor Create(DimensionsM1, DimensionsM2: TDimensions; PackageType: string); override;
   end;
 
 implementation
@@ -129,7 +129,7 @@ resourcestring
 
 { TGWFlowExchangeOptions }
 
-constructor TCustomExchangeOptions.Create;
+constructor TCustomExchangeOptions.Create(PackageType: string);
 begin
   FAuxiliary := TStringList.Create;
   inherited;
@@ -332,13 +332,13 @@ end;
 { TGWFlowExchangeData }
 
 constructor TGWFlowExchangeData.Create(DimensionsM1, DimensionsM2: TDimensions;
-  Auxiliary: TStringList);
+  Auxiliary: TStringList; PackageType: string);
 begin
   FData := TGwFlowExchangeList.Create;
   FDimensionsM1 := DimensionsM1;
   FDimensionsM2 := DimensionsM2;
   FAuxiliary := Auxiliary;
-  inherited Create;
+  inherited Create(PackageType);
 
 end;
 
@@ -589,10 +589,10 @@ end;
 
 { TGWFlowExchange }
 
-constructor TGWFlowExchange.Create(DimensionsM1, DimensionsM2: TDimensions);
+constructor TGWFlowExchange.Create(DimensionsM1, DimensionsM2: TDimensions; PackageType: string);
 begin
-  FOptions := TGWFlowExchangeOptions.Create;
-  inherited Create(DimensionsM1, DimensionsM2);
+  FOptions := TGWFlowExchangeOptions.Create(PackageType);
+  inherited Create(DimensionsM1, DimensionsM2, PackageType);
 end;
 
 
@@ -685,10 +685,10 @@ end;
 { TGWTransportwExchange }
 
 constructor TGWTransportwExchange.Create(DimensionsM1,
-  DimensionsM2: TDimensions);
+  DimensionsM2: TDimensions; PackageType: string);
 begin
-  FOptions := TGWTransportExchangeOptions.Create;
-  inherited Create(DimensionsM1, DimensionsM2);
+  FOptions := TGWTransportExchangeOptions.Create(PackageType);
+  inherited Create(DimensionsM1, DimensionsM2, PackageType);
 end;
 
 
@@ -811,15 +811,15 @@ end;
 
 { TCustomExchange }
 
-constructor TCustomExchange.Create(DimensionsM1, DimensionsM2: TDimensions);
+constructor TCustomExchange.Create(DimensionsM1, DimensionsM2: TDimensions; PackageType: string);
 begin
   FDimensionsM1 := DimensionsM1;
   FDimensionsM2 := DimensionsM2;
 
-  FDimensions := TGWFlowExchangeDimensions.Create;
+  FDimensions := TGWFlowExchangeDimensions.Create(PackageType);
   FData := TGWFlowExchangeData.Create(DimensionsM1, DimensionsM2,
-    FOptions.FAuxiliary);
-  inherited Create;
+    FOptions.FAuxiliary, PackageType);
+  inherited Create(PackageType);
 end;
 
 destructor TCustomExchange.Destroy;

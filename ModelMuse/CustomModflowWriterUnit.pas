@@ -10886,6 +10886,7 @@ var
   TemplateCharacter: string;
   ExtendedTemplateCharacter: string;
   Operation: string;
+  OldDecimalSeparator: Char;
 begin
   TemplateCharacter := Model.PestProperties.TemplateCharacter;
   ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
@@ -10899,10 +10900,16 @@ begin
         Operation := '+';
       end;
   end;
-  WriteString
-    (Format(StrPestFormulaFormat,
-    [ExtendedTemplateCharacter, TemplateCharacter, ParameterName,
-    ModifierValue, Operation]));
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  FormatSettings.DecimalSeparator := '.';
+  try
+    WriteString
+      (Format(StrPestFormulaFormat,
+      [ExtendedTemplateCharacter, TemplateCharacter, ParameterName,
+      ModifierValue, Operation]));
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
 end;
 
 procedure TCustomParameterTransientWriter.WriteBoundaryArrayParams;

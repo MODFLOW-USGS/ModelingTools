@@ -61,7 +61,7 @@ type
     FModels: TModelList;
   protected
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
@@ -82,7 +82,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -107,7 +107,7 @@ type
   protected
     procedure Initialize; override;
   public
-    constructor Create(SolutionNumber: Integer); reintroduce;
+    constructor Create(SolutionNumber: Integer; PackageType: string); reintroduce;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
@@ -124,7 +124,7 @@ type
     FSimulationFile: TStreamReader;
     FSolutionGroups: TSolutionGroups;
   public
-    constructor Create; override;
+    constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure ReadSimulation(NameFile: string);
   end;
@@ -135,13 +135,13 @@ implementation
 
 { TMf6Simulation }
 
-constructor TMf6Simulation.Create;
+constructor TMf6Simulation.Create(PackageType: string);
 begin
   inherited;
-  FSimulationOptions := TSimulationOptions.Create;
-  FTiming := TTiming.Create;
-  FModels := TModels.Create;
-  FExchanges := TExchanges.Create;
+  FSimulationOptions := TSimulationOptions.Create(PackageType);
+  FTiming := TTiming.Create(PackageType);
+  FModels := TModels.Create(PackageType);
+  FExchanges := TExchanges.Create(PackageType);
   FSolutionGroups := TSolutionGroups.Create;
 end;
 
@@ -240,7 +240,7 @@ begin
             FSplitter.DelimitedText := ALine;
             if TryStrToInt(FSplitter[1], GroupNumber) then
             begin
-              SolutionGroup := TSolutionGroup.Create(GroupNumber);
+              SolutionGroup := TSolutionGroup.Create(GroupNumber, 'SolutionGroup-' + GroupNumber.ToString);
               FSolutionGroups.Add(SolutionGroup);
               SolutionGroup.Read(FSimulationFile, FOutFile);
             end
@@ -464,7 +464,7 @@ begin
       TDisFile := TFile.OpenText(FTisFileName);
       try
         try
-          FTDis := TTDis.Create;
+          FTDis := TTDis.Create('DIS6');
           FTDis.Read(TDisFile, Unhandled);
           FTDis.ReadInput(Unhandled);
         except on E: Exception do
@@ -492,7 +492,7 @@ end;
 
 { TModels }
 
-constructor TModels.Create;
+constructor TModels.Create(PackageType: string);
 begin
   FModels := TModelList.Create;
   inherited
@@ -565,7 +565,7 @@ end;
 
 { TExchanges }
 
-constructor TExchanges.Create;
+constructor TExchanges.Create(PackageType: string);
 begin
   FExchanges := TExchangeList.Create;
   inherited;
@@ -658,7 +658,7 @@ begin
     try
       ImsFileStream := TFile.OpenText(SolutionFileName);
       try
-        FIms := TIms.Create;
+        FIms := TIms.Create('IMS');
         FIms.Read(ImsFileStream, Unhandled);
       finally
         ImsFileStream.Free;
@@ -679,11 +679,11 @@ end;
 
 { TSolutionGroup }
 
-constructor TSolutionGroup.Create(SolutionNumber: Integer);
+constructor TSolutionGroup.Create(SolutionNumber: Integer; PackageType: string);
 begin
   FSolutionNumber := SolutionNumber;
   FSolutions := TSolutionList.Create;
-  inherited Create;
+  inherited Create(PackageType);
 end;
 
 destructor TSolutionGroup.Destroy;
@@ -798,11 +798,11 @@ begin
       try
         if ModelType = 'GWF6' then
         begin
-          FName := TFlowNameFile.Create;
+          FName := TFlowNameFile.Create(ModelType);
         end
         else if ModelType = 'GWT6' then
         begin
-          FName := TTransportNameFile.Create;
+          FName := TTransportNameFile.Create(ModelType);
         end
         else
         begin
