@@ -97,7 +97,7 @@ implementation
 uses
   DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit, IcFileReaderUnit,
   OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit, HfbFileReaderUnit,
-  StoFileReaderUnit;
+  StoFileReaderUnit, CSubFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -153,6 +153,10 @@ begin
       begin
         SAVE_FLOWS := True;
       end
+      else if AValue = 'SAVE_FLOWS' then
+      begin
+        SAVE_FLOWS := True;
+      end
       else if FSplitter.Count >= 2 then
       begin
         if UpperCase(FSplitter[0]) = 'LIST' then
@@ -168,7 +172,7 @@ begin
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized name file option in the following line.');
+//        Unhandled.WriteLine('Unrecognized name file option in the following line.');
         HandleAdditionalSingleOptions(ErrorLine, Unhandled);
       end;
     end
@@ -461,6 +465,7 @@ var
   NpfReader: TNpf;
   HfbReader: THfb;
   StoReader: TSto;
+  CSubReader: TCSub;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -541,6 +546,13 @@ begin
       StoReader := TSto.Create(APackage.FileType);
       StoReader.Dimensions := FDimensions;
       APackage.Package := StoReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'CSUB6' then
+    begin
+      CSubReader := TCSub.Create(APackage.FileType);
+      CSubReader.Dimensions := FDimensions;
+      APackage.Package := CSubReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

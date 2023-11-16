@@ -119,6 +119,7 @@
         <DCCReference Include="StoFileReaderUnit.pas"/>
         <DCCReference Include="TvsFileReaderUnit.pas"/>
         <DCCReference Include="CSubFileReaderUnit.pas"/>
+        <DCCReference Include="BuyFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -110,6 +110,7 @@ type
 
   TCSubPeriod = class(TCustomMf6Persistent)
   private
+    IPer: Integer;
     FCells: TCSubTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
@@ -122,10 +123,25 @@ type
 
   TCSubPeriodList = TObjectList<TCSubPeriod>;
 
+  TCSub = class(TDimensionedPackageReader)
+  private
+    FOptions: TCSubOptions;
+    FCSubDimensions: TCSubDimensions;
+    FGridData: TCSubGridData;
+    FPackageData: TCSubPackageData;
+    FPeriods: TCSubPeriodList;
+    FTimeSeriesPackages: TPackageList;
+    FObservationsPackages: TPackageList;
+  public
+    constructor Create(PackageType: string); override;
+    destructor Destroy; override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+  end;
+
 implementation
 
 uses
-  ModelMuseUtilities;
+  ModelMuseUtilities, TimeSeriesFileReaderUnit, ObsFileReaderUnit;
 
 { TCSubOptions }
 
@@ -352,7 +368,7 @@ begin
     begin
       Continue;
     end;
-    if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
+    if ReadEndOfSection(ALine, ErrorLine, 'DIMENSIONS', Unhandled) then
     begin
       Exit
     end;
@@ -360,7 +376,7 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'GAMMAW') and (FSplitter.Count >= 2)
+    if (FSplitter[0] = 'NINTERBEDS') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], NINTERBEDS) then
     begin
     end
@@ -694,7 +710,7 @@ begin
     CaseSensitiveLine := ALine;
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
-    if FSplitter.Count >= DimensionCount + 2 then
+    if FSplitter.Count >= DimensionCount + 1 then
     begin
       if ReadCellID(Cell.CellId, 0, DimensionCount) then
       begin
@@ -731,6 +747,124 @@ procedure TCSubTimeItem.Initialize;
 begin
   cellid.Initialize;
   sig0 := 0;
+end;
+
+{ TCSub }
+
+constructor TCSub.Create(PackageType: string);
+begin
+  FOptions := TCSubOptions.Create(PackageType);
+  FCSubDimensions := TCSubDimensions.Create(PackageType);
+  FGridData := TCSubGridData.Create(PackageType);
+  FPackageData := TCSubPackageData.Create(PackageType);
+  FPeriods := TCSubPeriodList.Create;
+  FTimeSeriesPackages := TPackageList.Create;
+  FObservationsPackages := TPackageList.Create;
+  inherited;
+
+end;
+
+destructor TCSub.Destroy;
+begin
+  FOptions.Free;
+  FCSubDimensions.Free;
+  FGridData.Free;
+  FPackageData.Free;
+  FPeriods.Free;
+  FTimeSeriesPackages.Free;
+  FObservationsPackages.Free;
+  inherited;
+end;
+
+procedure TCSub.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+  IPER: Integer;
+  APeriod: TCSubPeriod;
+  Index: Integer;
+  TsPackage: TPackage;
+  PackageIndex: Integer;
+  TsReader: TTimeSeries;
+  ObsReader: TObs;
+begin
+  while not Stream.EndOfStream do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(ALine);
+    if ALine = '' then
+    begin
+      Continue;
+    end;
+
+    ALine := UpperCase(ALine);
+    FSplitter.DelimitedText := ALine;
+    if FSplitter[0] = 'BEGIN' then
+    begin
+      if FSplitter[1] ='OPTIONS' then
+      begin
+        FOptions.Read(Stream, Unhandled);
+      end
+      else if FSplitter[1] ='DIMENSIONS' then
+      begin
+        FCSubDimensions.Read(Stream, Unhandled);
+      end
+      else if FSplitter[1] ='GRIDDATA' then
+      begin
+        FGridData.Read(Stream, Unhandled, FDimensions);
+      end
+      else if FSplitter[1] ='PACKAGEDATA' then
+      begin
+        FPackageData.Read(Stream, Unhandled, FDimensions);
+      end
+      else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
+      begin
+        if TryStrToInt(FSplitter[2], IPER) then
+        begin
+          APeriod := TCSubPeriod.Create(FPackageType);
+          FPeriods.Add(APeriod);
+          APeriod.IPer := IPER;
+          APeriod.Read(Stream, Unhandled, FDimensions);
+        end
+        else
+        begin
+          Unhandled.WriteLine('Unrecognized CSUB data in the following line.');
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine('Unrecognized CSUB data in the following line.');
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end;
+  end;
+  for PackageIndex := 0 to FOptions.TS6_FileNames.Count - 1 do
+  begin
+    TsPackage := TPackage.Create;
+    FTimeSeriesPackages.Add(TsPackage);
+    TsPackage.FileType := 'CSUB';
+    TsPackage.FileName := FOptions.TS6_FileNames[PackageIndex];
+    TsPackage.PackageName := '';
+
+    TsReader := TTimeSeries.Create(FPackageType);
+    TsPackage.Package := TsReader;
+    TsPackage.ReadPackage(Unhandled);
+  end;
+  for PackageIndex := 0 to FOptions.Obs6_FileNames.Count - 1 do
+  begin
+    TsPackage := TPackage.Create;
+    FTimeSeriesPackages.Add(TsPackage);
+    TsPackage.FileType := 'CSUB';
+    TsPackage.FileName := FOptions.Obs6_FileNames[PackageIndex];
+    TsPackage.PackageName := '';
+
+    ObsReader := TObs.Create(FPackageType);
+    ObsReader.Dimensions := FDimensions;
+    TsPackage.Package := ObsReader;
+    TsPackage.ReadPackage(Unhandled);
+  end;
 end;
 
 end.
