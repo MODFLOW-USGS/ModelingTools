@@ -1,0 +1,39 @@
+# Discretization File created on 11/17/2023 by ModelMuse version 5.1.1.45.
+# Test of Viscosity
+# Upper left corner: (0, 0)
+# Lower left corner: (0, -10)
+# Upper right corner: (80, 0)
+# Lower right corner: (80, -10)
+# Grid angle (in degrees counterclockwise): 0
+# Number of active cells = 800.
+BEGIN OPTIONS
+  LENGTH_UNITS CENTIMETERS
+  XORIGIN  0.000000000000E+000 
+  YORIGIN -1.000000000000E+001 
+  ANGROT  0.000000000000E+000 
+END OPTIONS
+
+BEGIN DIMENSIONS
+  NLAY      1
+  NROW     10
+  NCOL     80
+END DIMENSIONS
+
+
+BEGIN GRIDDATA
+  DELR IPRN    12
+    CONSTANT   1.000000000000E+000  # DELR
+
+  DELC IPRN    12
+    CONSTANT   1.000000000000E+000  # DELC
+
+  TOP LAYERED IPRN    12
+    CONSTANT   1.000000000000E+000  # TOP
+
+  BOTM LAYERED IPRN    12
+    CONSTANT   0.000000000000E+000  # BOTM, Aquifer
+
+  IDOMAIN LAYERED IPRN     5
+    CONSTANT      1 # IDOMAIN 1
+END GRIDDATA
+

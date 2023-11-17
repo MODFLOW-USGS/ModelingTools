@@ -97,7 +97,8 @@ implementation
 uses
   DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit, IcFileReaderUnit,
   OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit, HfbFileReaderUnit,
-  StoFileReaderUnit, CSubFileReaderUnit;
+  StoFileReaderUnit, CSubFileReaderUnit, BuyFileReaderUnit, VscFileReaderUnit,
+  ChdFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -204,7 +205,7 @@ procedure TFlowNameFileOptions.HandleAdditionalDoubleOptions(ErrorLine: string;
 var
   AValue: string;
 begin
-  inherited;
+//  inherited;
   AValue := FSplitter[0];
   if AValue = 'NEWTON' then
   begin
@@ -466,6 +467,9 @@ var
   HfbReader: THfb;
   StoReader: TSto;
   CSubReader: TCSub;
+  BuyReader: TBuy;
+  VscReader: TVsc;
+  ChdReader: TChd;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -553,6 +557,27 @@ begin
       CSubReader := TCSub.Create(APackage.FileType);
       CSubReader.Dimensions := FDimensions;
       APackage.Package := CSubReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'BUY6' then
+    begin
+      BuyReader := TBuy.Create(APackage.FileType);
+      BuyReader.Dimensions := FDimensions;
+      APackage.Package := BuyReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'VSC6' then
+    begin
+      VscReader := TVsc.Create(APackage.FileType);
+      VscReader.Dimensions := FDimensions;
+      APackage.Package := VscReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'CHD6' then
+    begin
+      ChdReader := TChd.Create(APackage.FileType);
+      ChdReader.Dimensions := FDimensions;
+      APackage.Package := ChdReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

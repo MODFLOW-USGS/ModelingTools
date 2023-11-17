@@ -1,0 +1,12 @@
+# Output Control file created on 11/17/2023 by ModelMuse version 5.1.1.45.
+BEGIN OPTIONS
+  BUDGET FILEOUT 'Viscosity.Temperature.cbc'
+  CONCENTRATION FILEOUT 'Viscosity.Temperature.conc'
+END OPTIONS
+
+BEGIN PERIOD      1
+  SAVE CONCENTRATION ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+

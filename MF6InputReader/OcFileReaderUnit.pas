@@ -12,7 +12,9 @@ type
     FBudgetFile: string;
     FBudgetCsvFile: string;
     FHeadFile: string;
-    FPrintFormat: TPrintFormat;
+    FHeadPrintFormat: TPrintFormat;
+    FConcentrationFile: string;
+    FConcentrationPrintFormat: TPrintFormat;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -36,6 +38,8 @@ type
     FSaveBudget: TPrintSaveList;
     FPrintHead: TPrintSaveList;
     FSaveHead: TPrintSaveList;
+    FPrintConcentration: TPrintSaveList;
+    FSaveConcentration: TPrintSaveList;
   protected
     procedure Initialize; override;
   public
@@ -68,7 +72,8 @@ resourcestring
 
 procedure TOcOptions.Initialize;
 begin
-  FPrintFormat.Initialize;
+  FHeadPrintFormat.Initialize;
+  FConcentrationPrintFormat.Initialize;
   inherited;
 end;
 
@@ -77,6 +82,7 @@ var
   ALine: string;
   ErrorLine: string;
   PackageName: string;
+  CaseSensitiveLine: string;
 begin
   Initialize;
   PackageName := 'OC';
@@ -94,6 +100,7 @@ begin
       Exit
     end;
 
+    CaseSensitiveLine := ALine;
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     if FSplitter.Count >= 3 then
@@ -102,6 +109,7 @@ begin
       begin
         if FSplitter[1] = 'FILEOUT' then
         begin
+          FSplitter.DelimitedText := CaseSensitiveLine;
           FBudgetFile := FSplitter[2]
         end
         else
@@ -114,6 +122,7 @@ begin
       begin
         if FSplitter[1] = 'FILEOUT' then
         begin
+          FSplitter.DelimitedText := CaseSensitiveLine;
           FBudgetCsvFile := FSplitter[2]
         end
         else
@@ -126,11 +135,29 @@ begin
       begin
         if FSplitter[1] = 'FILEOUT' then
         begin
+          FSplitter.DelimitedText := CaseSensitiveLine;
           FHeadFile := FSplitter[2]
         end
         else if FSplitter[1] = 'PRINT_FORMAT' then
         begin
-          ReadPrintFormat(ErrorLine, Unhandled, PackageName, FPrintFormat);
+          ReadPrintFormat(ErrorLine, Unhandled, PackageName, FHeadPrintFormat);
+        end
+        else
+        begin
+          Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [PackageName]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else if FSplitter[0] = 'CONCENTRATION' then
+      begin
+        if FSplitter[1] = 'FILEOUT' then
+        begin
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          FConcentrationFile := FSplitter[2]
+        end
+        else if FSplitter[1] = 'PRINT_FORMAT' then
+        begin
+          ReadPrintFormat(ErrorLine, Unhandled, PackageName, FConcentrationPrintFormat);
         end
         else
         begin
@@ -160,6 +187,8 @@ begin
   FSaveBudget := TPrintSaveList.Create;
   FPrintHead := TPrintSaveList.Create;
   FSaveHead := TPrintSaveList.Create;
+  FPrintConcentration := TPrintSaveList.Create;
+  FSaveConcentration := TPrintSaveList.Create;
   inherited;
 
 end;
@@ -170,7 +199,8 @@ begin
   FSaveBudget.Free;
   FPrintHead.Free;
   FSaveHead.Free;
-
+  FPrintConcentration.Free;
+  FSaveConcentration.Free;
   inherited;
 end;
 
@@ -181,7 +211,8 @@ begin
   FSaveBudget.Clear;
   FPrintHead.Clear;
   FSaveHead.Clear;
-
+  FPrintConcentration.Clear;
+  FSaveConcentration.Clear;
 end;
 
 procedure TOcPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -193,7 +224,6 @@ var
   Steps: TList<Integer>;
   StepIndex: Integer;
   AStep: Integer;
-  StepArray: TArray<Integer>;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -225,6 +255,10 @@ begin
         begin
           List := FSaveHead;
         end
+        ELSE if FSplitter[1] = 'CONCENTRATION' then
+        begin
+          List := FSaveConcentration;
+        end
         else
         begin
           Unhandled.WriteLine(StrUnrecognizedOCPERI);
@@ -240,6 +274,10 @@ begin
         ELSE if FSplitter[1] = 'HEAD' then
         begin
           List := FPrintHead;
+        end
+        ELSE if FSplitter[1] = 'CONCENTRATION' then
+        begin
+          List := FPrintConcentration;
         end
         else
         begin

@@ -1,4 +1,4 @@
-unit BuyFileReaderUnit;
+unit VscFileReaderUnit;
 
 interface
 
@@ -7,40 +7,44 @@ uses
   System.Generics.Collections;
 
 type
-  TBuyOptions = class(TCustomMf6Persistent)
+  TVscOptions = class(TCustomMf6Persistent)
   private
-    HHFORMULATION_RHS: TBooleanOption;
-    DENSEREF: TRealOption;
-    DENSITY: TBooleanOption;
+    VISCREF: TRealOption;
+    VISCOSITY: TBooleanOption;
+    TEMPERATURE_SPECIES_NAME: TStringOption;
+    THERMAL_FORMULATION: TStringOption;
+    THERMAL_A2: TRealOption;
+    THERMAL_A3: TRealOption;
+    THERMAL_A4: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   public
   end;
 
-  TBuyDimensions = class(TCustomMf6Persistent)
+  TVscDimensions = class(TCustomMf6Persistent)
   private
-    nrhospecies: Integer;
+    NVISCSPECIES: Integer;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   end;
 
-  TBuyItem = record
+  TVscItem = record
   private
-    irhospec: Integer;
-    drhodc: Extended;
-    crhoref: Extended;
+    iviscspec: Integer;
+    dviscdc: Extended;
+    cviscref: Extended;
     modelname: string;
     auxspeciesname: string;
     procedure Initialize;
   end;
 
-  TBuyItemList = TList<TBuyItem>;
+  TVscItemList = TList<TVscItem>;
 
-  TBuyPackageData = class(TCustomMf6Persistent)
+  TVscPackageData = class(TCustomMf6Persistent)
   private
-    FItems: TBuyItemList;
+    FItems: TVscItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -49,11 +53,11 @@ type
     destructor Destroy; override;
   end;
 
-  TBuy = class(TDimensionedPackageReader)
+  TVsc = class(TDimensionedPackageReader)
   private
-    FOptions: TBuyOptions;
-    FBuyDimensions: TBuyDimensions;
-    FPackageData: TBuyPackageData;
+    FOptions: TVscOptions;
+    FVscDimensions: TVscDimensions;
+    FPackageData: TVscPackageData;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -65,17 +69,16 @@ implementation
 uses
   ModelMuseUtilities;
 
-{ TBuyOptions }
+{ TVscOptions }
 
-procedure TBuyOptions.Initialize;
+procedure TVscOptions.Initialize;
 begin
-  HHFORMULATION_RHS.Initialize;
-  DENSEREF.Initialize;
-  DENSITY.Initialize;
+  VISCREF.Initialize;
+  VISCOSITY.Initialize;
   inherited;
 end;
 
-procedure TBuyOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TVscOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -100,20 +103,48 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'HHFORMULATION_RHS' then
+    if FSplitter[0] = 'VISCOSITY' then
     begin
-      HHFORMULATION_RHS.Value := True;
-      HHFORMULATION_RHS.Used := True;
+      VISCOSITY.Value := True;
+      VISCOSITY.Used := True;
     end
-    else if FSplitter[0] = 'DENSITY' then
+    else if (FSplitter.Count >= 2) then
     begin
-      DENSITY.Value := True;
-      DENSITY.Used := True;
-    end
-    else if (FSplitter[0] = 'DENSEREF') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], DENSEREF.Value) then
-    begin
-      DENSEREF.Used := True;
+      if (FSplitter[0] = 'VISCREF')
+        and TryFortranStrToFloat(FSplitter[1], VISCREF.Value) then
+      begin
+        VISCREF.Used := True;
+      end
+      else if (FSplitter[0] = 'TEMPERATURE_SPECIES_NAME') then
+      begin
+        TEMPERATURE_SPECIES_NAME.Value := FSplitter[1];
+        TEMPERATURE_SPECIES_NAME.Used := True;
+      end
+      else if (FSplitter[0] = 'THERMAL_FORMULATION') then
+      begin
+        THERMAL_FORMULATION.Value := FSplitter[1];
+        THERMAL_FORMULATION.Used := True;
+      end
+      else if (FSplitter[0] = 'THERMAL_A2')
+        and TryFortranStrToFloat(FSplitter[1], THERMAL_A2.Value) then
+      begin
+        THERMAL_A2.Used := True;
+      end
+      else if (FSplitter[0] = 'THERMAL_A3')
+        and TryFortranStrToFloat(FSplitter[1], THERMAL_A3.Value) then
+      begin
+        THERMAL_A3.Used := True;
+      end
+      else if (FSplitter[0] = 'THERMAL_A4')
+        and TryFortranStrToFloat(FSplitter[1], THERMAL_A4.Value) then
+      begin
+        THERMAL_A4.Used := True;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
     end
     else
     begin
@@ -123,15 +154,15 @@ begin
   end
 end;
 
-{ TBuyDimensions }
+{ TVscDimensions }
 
-procedure TBuyDimensions.Initialize;
+procedure TVscDimensions.Initialize;
 begin
   inherited;
-  nrhospecies := 0;
+  NVISCSPECIES := 0;
 end;
 
-procedure TBuyDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TVscDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -154,8 +185,8 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'NRHOSPECIES') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NRHOSPECIES) then
+    if (FSplitter[0] = 'NVISCSPECIES') and (FSplitter.Count >= 2)
+      and TryStrToInt(FSplitter[1], NVISCSPECIES) then
     begin
     end
     else
@@ -166,43 +197,43 @@ begin
   end
 end;
 
-{ TBuyItem }
+{ TVscItem }
 
-procedure TBuyItem.Initialize;
+procedure TVscItem.Initialize;
 begin
-  irhospec := 0;
-  drhodc := 0;
-  crhoref := 0;
+  iviscspec := 0;
+  dviscdc := 0;
+  cviscref := 0;
   modelname := '';
   auxspeciesname := '';
 end;
 
-{ TBuyPackageData }
+{ TVscPackageData }
 
-constructor TBuyPackageData.Create(PackageType: string);
+constructor TVscPackageData.Create(PackageType: string);
 begin
-  FItems := TBuyItemList.Create;
+  FItems := TVscItemList.Create;
   inherited;
 
 end;
 
-destructor TBuyPackageData.Destroy;
+destructor TVscPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TBuyPackageData.Initialize;
+procedure TVscPackageData.Initialize;
 begin
   FItems.Clear;
   inherited;
 end;
 
-procedure TBuyPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TVscPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
-  Item: TBuyItem;
+  Item: TVscItem;
   CaseSensitiveLine: string;
 begin
   Initialize;
@@ -227,9 +258,9 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     if (FSplitter.Count >= 5)
-      and TryStrToInt(FSplitter[0],Item.irhospec)
-      and TryFortranStrToFloat(FSplitter[1], Item.drhodc)
-      and TryFortranStrToFloat(FSplitter[2], Item.crhoref)
+      and TryStrToInt(FSplitter[0],Item.iviscspec)
+      and TryFortranStrToFloat(FSplitter[1], Item.dviscdc)
+      and TryFortranStrToFloat(FSplitter[2], Item.cviscref)
       then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
@@ -245,25 +276,25 @@ begin
   end;
 end;
 
-{ TBuy }
+{ TVsc }
 
-constructor TBuy.Create(PackageType: string);
+constructor TVsc.Create(PackageType: string);
 begin
-  FOptions := TBuyOptions.Create(PackageType);
-  FBuyDimensions := TBuyDimensions.Create(PackageType);
-  FPackageData := TBuyPackageData.Create(PackageType);
+  FOptions := TVscOptions.Create(PackageType);
+  FVscDimensions := TVscDimensions.Create(PackageType);
+  FPackageData := TVscPackageData.Create(PackageType);
   inherited;
 end;
 
-destructor TBuy.Destroy;
+destructor TVsc.Destroy;
 begin
   FOptions.Free;
-  FBuyDimensions.Free;
+  FVscDimensions.Free;
   FPackageData.Free;
   inherited;
 end;
 
-procedure TBuy.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TVsc.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -288,7 +319,7 @@ begin
       end
       else if FSplitter[1] ='DIMENSIONS' then
       begin
-        FBuyDimensions.Read(Stream, Unhandled);
+        FVscDimensions.Read(Stream, Unhandled);
       end
       else if FSplitter[1] ='PACKAGEDATA' then
       begin

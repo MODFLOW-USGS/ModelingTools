@@ -31,7 +31,9 @@ uses
   StoFileReaderUnit in 'StoFileReaderUnit.pas',
   TvsFileReaderUnit in 'TvsFileReaderUnit.pas',
   CSubFileReaderUnit in 'CSubFileReaderUnit.pas',
-  BuyFileReaderUnit in 'BuyFileReaderUnit.pas';
+  BuyFileReaderUnit in 'BuyFileReaderUnit.pas',
+  VscFileReaderUnit in 'VscFileReaderUnit.pas',
+  ChdFileReaderUnit in 'ChdFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

@@ -1,0 +1,9 @@
+# SSM: GWT Source and Sink Mixing Package file created on 11/17/2023 by ModelMuse version 5.1.1.45.
+BEGIN OPTIONS
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN SOURCES
+  CHD-1 AUX Temperature
+  GHB-1 AUX Temperature
+END SOURCES

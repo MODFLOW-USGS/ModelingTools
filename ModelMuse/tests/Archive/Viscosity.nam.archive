@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 11/17/2023 by ModelMuse Version 5.1.1.45
+BEGIN OPTIONS
+  LIST ..\..\output\output.Viscosity\Viscosity.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.Viscosity\Viscosity.dis  DIS
+  IC6          ..\..\model\model.Viscosity\Viscosity.ic  IC
+  NPF6         ..\..\model\model.Viscosity\Viscosity.npf  NPF
+  STO6         ..\..\model\model.Viscosity\Viscosity.sto  STO
+  OC6          ..\..\model\model.Viscosity\Viscosity.oc  OC
+  CHD6         ..\..\model\model.Viscosity\Viscosity.chd  CHD-1
+  GHB6         ..\..\model\model.Viscosity\Viscosity.ghb  GHB-1
+  VSC6         ..\..\model\model.Viscosity\Viscosity.vsc  VSC6
+END PACKAGES

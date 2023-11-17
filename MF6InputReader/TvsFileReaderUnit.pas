@@ -231,7 +231,6 @@ var
   ErrorLine: string;
   IPER: Integer;
   APeriod: TTvsPeriodData;
-  Index: Integer;
   TsPackage: TPackage;
   PackageIndex: Integer;
   TsReader: TTimeSeries;

@@ -157,31 +157,31 @@ begin
             Unhandled.WriteLine(StrUnrecognizedImsOp);
           end;
         end
-        else
+        else if FSplitter.Count >= 3 then
         begin
-          Unhandled.WriteLine(StrUnrecognizedImsOp);
-          Unhandled.WriteLine(ErrorLine);
-        end;
-      end
-      else if FSplitter.Count >= 3 then
-      begin
-        if (UpperCase(FSplitter[0]) = 'CSV_OUTER_OUTPUT') then
-        begin
-          if (UpperCase(FSplitter[1]) = 'FILEOUT') then
+          if (UpperCase(FSplitter[0]) = 'CSV_OUTER_OUTPUT') then
           begin
-            CSV_OUTER_OUTPUT := FSplitter[2];
+            if (UpperCase(FSplitter[1]) = 'FILEOUT') then
+            begin
+              CSV_OUTER_OUTPUT := FSplitter[2];
+            end
+            else
+            begin
+              Unhandled.WriteLine(StrUnrecognizedImsOp);
+              Unhandled.WriteLine(ErrorLine);
+            end;
           end
-          else
+          else if (UpperCase(FSplitter[0]) = 'CSV_INNER_OUTPUT') then
           begin
-            Unhandled.WriteLine(StrUnrecognizedImsOp);
-            Unhandled.WriteLine(ErrorLine);
-          end;
-        end
-        else if (UpperCase(FSplitter[0]) = 'CSV_INNER_OUTPUT') then
-        begin
-          if (UpperCase(FSplitter[1]) = 'FILEOUT') then
-          begin
-            CSV_INNER_OUTPUT := FSplitter[2];
+            if (UpperCase(FSplitter[1]) = 'FILEOUT') then
+            begin
+              CSV_INNER_OUTPUT := FSplitter[2];
+            end
+            else
+            begin
+              Unhandled.WriteLine(StrUnrecognizedImsOp);
+              Unhandled.WriteLine(ErrorLine);
+            end;
           end
           else
           begin

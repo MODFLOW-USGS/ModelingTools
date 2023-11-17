@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5491
+5520
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5491,3 +5491,32 @@ Mf6Model.gpt
 	Archive\Mf6Model.uzf
 	Archive\Mf6Model.wel
 	Archive\usgs.Mf6Model.reference
+Viscosity.gpt
+	Archive\Viscosity.axml
+	Archive\Viscosity.chd
+	Archive\Viscosity.dis
+	Archive\Viscosity.ghb
+	Archive\Viscosity.gsf
+	Archive\Viscosity.ic
+	Archive\Viscosity.ims
+	Archive\Viscosity.mfsim.nam
+	Archive\Viscosity.nam
+	Archive\Viscosity.nam.archive
+	Archive\Viscosity.npf
+	Archive\Viscosity.oc
+	Archive\Viscosity.RunModel.Bat
+	Archive\Viscosity.RunModflow.Bat
+	Archive\Viscosity.sto
+	Archive\Viscosity.tdis
+	Archive\Viscosity.Temperature.adv
+	Archive\Viscosity.Temperature.dis
+	Archive\Viscosity.Temperature.dsp
+	Archive\Viscosity.Temperature.gwfgwt
+	Archive\Viscosity.Temperature.Gwt_nam
+	Archive\Viscosity.Temperature.ic
+	Archive\Viscosity.Temperature.ims
+	Archive\Viscosity.Temperature.mst
+	Archive\Viscosity.Temperature.oc
+	Archive\Viscosity.Temperature.ssm
+	Archive\Viscosity.vsc
+	Archive\usgs.Viscosity.reference

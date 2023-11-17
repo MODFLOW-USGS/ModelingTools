@@ -25,6 +25,13 @@ type
      procedure Initialize;
    end;
 
+   TBooleanOption= record
+     Value: Boolean;
+     Used: Boolean;
+     procedure Initialize;
+   end;
+
+
   TPrintFormat = record
     Columns: Integer;
     Width: Integer;
@@ -51,6 +58,14 @@ type
     NumericValue: Extended;
     procedure Initialize;
   end;
+
+  TBoundaryValue = record
+    ValueType: TValueType;
+    StringValue: string;
+    NumericValue: Extended;
+    procedure Initialize;
+  end;
+
 
   TTimeVariableCellList = TList<TTimeVariableCell>;
 
@@ -223,6 +238,9 @@ type
 
 resourcestring
   StrUnrecognizedOCOpti = 'Unrecognized %S option in the following line.';
+  StrUnrecognizedSPACK = 'Unrecognized %s PACKAGEDATA in the following line';
+  StrUnrecognizedSData = 'Unrecognized %s data in the following line.';
+  StrUnrecognizedSPERI = 'Unrecognized %s PERIOD data in the following line.';
 
 implementation
 
@@ -1467,7 +1485,7 @@ end;
 procedure TCustomMf6Persistent.ReadPrintFormat(ErrorLine: string;
   Unhandled: TStreamWriter; PackageName: string; var PrintFormat: TPrintFormat);
 begin
-  if FSplitter.Count >= 9 then
+  if FSplitter.Count >= 8 then
   begin
     if (FSplitter[2] = 'COLUMNS') and (FSplitter[4] = 'WIDTH') and
       (FSplitter[6] = 'DIGITS') then
@@ -1476,15 +1494,22 @@ begin
       PrintFormat.Columns := StrToInt(FSplitter[3]);
       PrintFormat.Width := StrToInt(FSplitter[5]);
       PrintFormat.Digits := StrToInt(FSplitter[7]);
-      PrintFormat.Format := FSplitter[8];
-      if (PrintFormat.Format <> 'EXPONENTIAL') and
-        (PrintFormat.Format <> 'FIXED') and (PrintFormat.Format <> 'GENERAL')
-        and (PrintFormat.Format <> 'SCIENTIFIC') then
+      if FSplitter.Count >= 9 then
       begin
-        Unhandled.WriteLine
-          (Format('Unrecognized format option in %s option "PRINT_FORMAT" in the following line.',
-          [PackageName]));
-        Unhandled.WriteLine(ErrorLine);
+        PrintFormat.Format := FSplitter[8];
+        if (PrintFormat.Format <> 'EXPONENTIAL') and
+          (PrintFormat.Format <> 'FIXED') and (PrintFormat.Format <> 'GENERAL')
+          and (PrintFormat.Format <> 'SCIENTIFIC') then
+        begin
+          Unhandled.WriteLine
+            (Format('Unrecognized format option in %s option "PRINT_FORMAT" in the following line.',
+            [PackageName]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else
+      begin
+        PrintFormat.Format := 'GENERAL';
       end;
     end
     else
@@ -1624,6 +1649,23 @@ procedure TStringOption.Initialize;
 begin
   Value := '';
   Used := False;
+end;
+
+{ TBooleanOption }
+
+procedure TBooleanOption.Initialize;
+begin
+  Value := False;
+  Used := False;
+end;
+
+{ TBoundaryValue }
+
+procedure TBoundaryValue.Initialize;
+begin
+  ValueType := vtNumeric;
+  StringValue := '';
+  NumericValue := 0;
 end;
 
 end.

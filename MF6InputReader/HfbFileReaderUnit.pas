@@ -183,7 +183,6 @@ var
   ErrorLine: string;
   CellPair: THfbCellPair;
   DimensionCount: Integer;
-  AValue: Extended;
 begin
   DimensionCount := Dimensions.DimensionCount;
   while not Stream.EndOfStream do
@@ -251,9 +250,6 @@ var
   ErrorLine: string;
   IPER: Integer;
   APeriod: THfbStressPeriod;
-  Index: Integer;
-  TsPackage: TPackage;
-  PackageIndex: Integer;
 begin
   while not Stream.EndOfStream do
   begin

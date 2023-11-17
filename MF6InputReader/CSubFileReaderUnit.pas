@@ -197,6 +197,7 @@ var
   ErrorLine: string;
   CaseSensitiveLine: string;
   TS6_FileName: string;
+  Obs_FileName: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -333,12 +334,12 @@ begin
       and (FSplitter[1] = 'FILEIN') then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      TS6_FileName := FSplitter[2];
-      Obs6_FileNames.Add(TS6_FileName);
+      Obs_FileName := FSplitter[2];
+      Obs6_FileNames.Add(Obs_FileName);
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized CSUB option in the following line.');
+      Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end
@@ -387,7 +388,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized CSUB option in the following line.');
+      Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end
@@ -596,6 +597,7 @@ begin
                         begin
                           Item.boundname.Value := FSplitter[ItemStart];
                           Item.boundname.Used := True;
+                          FItems.Add(Item);
                         end;
                       end
                       else
@@ -728,13 +730,13 @@ begin
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized CSUB PERIOD data in the following line.');
+        Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
       end;
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized CSUB PERIOD data in the following line.');
+      Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
@@ -782,11 +784,11 @@ var
   ErrorLine: string;
   IPER: Integer;
   APeriod: TCSubPeriod;
-  Index: Integer;
   TsPackage: TPackage;
   PackageIndex: Integer;
   TsReader: TTimeSeries;
   ObsReader: TObs;
+  ObsPackage: TPackage;
 begin
   while not Stream.EndOfStream do
   begin
@@ -829,22 +831,27 @@ begin
         end
         else
         begin
-          Unhandled.WriteLine('Unrecognized CSUB data in the following line.');
+          Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
           Unhandled.WriteLine(ErrorLine);
         end;
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized CSUB data in the following line.');
+        Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
       end;
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
     end;
   end;
   for PackageIndex := 0 to FOptions.TS6_FileNames.Count - 1 do
   begin
     TsPackage := TPackage.Create;
     FTimeSeriesPackages.Add(TsPackage);
-    TsPackage.FileType := 'CSUB';
+    TsPackage.FileType := FPackageType;
     TsPackage.FileName := FOptions.TS6_FileNames[PackageIndex];
     TsPackage.PackageName := '';
 
@@ -854,16 +861,16 @@ begin
   end;
   for PackageIndex := 0 to FOptions.Obs6_FileNames.Count - 1 do
   begin
-    TsPackage := TPackage.Create;
-    FTimeSeriesPackages.Add(TsPackage);
-    TsPackage.FileType := 'CSUB';
-    TsPackage.FileName := FOptions.Obs6_FileNames[PackageIndex];
-    TsPackage.PackageName := '';
+    ObsPackage := TPackage.Create;
+    FObservationsPackages.Add(ObsPackage);
+    ObsPackage.FileType := FPackageType;
+    ObsPackage.FileName := FOptions.Obs6_FileNames[PackageIndex];
+    ObsPackage.PackageName := '';
 
     ObsReader := TObs.Create(FPackageType);
     ObsReader.Dimensions := FDimensions;
-    TsPackage.Package := ObsReader;
-    TsPackage.ReadPackage(Unhandled);
+    ObsPackage.Package := ObsReader;
+    ObsPackage.ReadPackage(Unhandled);
   end;
 end;
 

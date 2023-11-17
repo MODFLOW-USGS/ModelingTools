@@ -120,6 +120,8 @@
         <DCCReference Include="TvsFileReaderUnit.pas"/>
         <DCCReference Include="CSubFileReaderUnit.pas"/>
         <DCCReference Include="BuyFileReaderUnit.pas"/>
+        <DCCReference Include="VscFileReaderUnit.pas"/>
+        <DCCReference Include="ChdFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

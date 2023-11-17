@@ -107,6 +107,8 @@ var
   end;
   procedure WritePrintFormat(HeadDrawdownOC: THeadDrawdownOutputControl;
     const DataLabel: string);
+  var
+    Format: string;
   begin
     if HeadDrawdownOC.PrintInListing then
     begin
@@ -129,108 +131,126 @@ var
         COLUMNS := 0;
         WIDTH := 0;
         DIGITS := 0;
+        Format := ' GENERAL';
         case HeadDrawdownOC.PrintFormat of
           nf11G_10_3:
             begin
               COLUMNS := 11;
               WIDTH := 10;
               DIGITS := 3;
+              Format := ' GENERAL';
             end;
           nf9G_13_6:
             begin
               COLUMNS := 9;
               WIDTH := 13;
               DIGITS := 6;
+              Format := ' GENERAL';
             end;
           nf15F_7_1:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 1;
+              Format := ' FIXED';
             end;
           nf15F_7_2:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 2;
+              Format := ' FIXED';
             end;
           nf15F_7_3:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 3;
+              Format := ' FIXED';
             end;
           nf15F_7_4:
             begin
               COLUMNS := 15;
               WIDTH := 7;
               DIGITS := 4;
+              Format := ' FIXED';
             end;
           nf20F_5_0:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 0;
+              Format := ' FIXED';
             end;
           nf20F_5_1:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 1;
+              Format := ' FIXED';
             end;
           nf20F_5_2:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 2;
+              Format := ' FIXED';
             end;
           nf20F_5_3:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 3;
+              Format := ' FIXED';
             end;
           nf20F_5_4:
             begin
               COLUMNS := 20;
               WIDTH := 5;
               DIGITS := 4;
+              Format := ' FIXED';
             end;
           nf10G_11_4:
             begin
               COLUMNS := 10;
               WIDTH := 11;
               DIGITS := 4;
+              Format := ' GENERAL';
             end;
           nf10F_6_0:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 0;
+              Format := ' FIXED';
             end;
           nf10F_6_1:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 1;
+              Format := ' FIXED';
             end;
           nf10F_6_2:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 2;
+              Format := ' FIXED';
             end;
           nf10F_6_3:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 3;
+              Format := ' FIXED';
             end;
           nf10F_6_4:
             begin
               COLUMNS := 10;
               WIDTH := 6;
               DIGITS := 4;
+              Format := ' FIXED';
             end;
           else
             Assert(False);
@@ -265,7 +285,7 @@ var
         WriteInteger(WIDTH);
         WriteString(' DIGITS ');
         WriteInteger(DIGITS);
-
+        WriteString(Format);
       end
       else
       begin

@@ -223,7 +223,6 @@ var
   ErrorLine: string;
   IPER: Integer;
   APeriod: TTvkPeriodData;
-  Index: Integer;
   TsPackage: TPackage;
   PackageIndex: Integer;
   TsReader: TTimeSeries;

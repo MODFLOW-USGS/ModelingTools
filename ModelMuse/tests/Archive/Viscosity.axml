@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Viscosity" FileType="bin">
+    <FileName Model_Name="Viscosity" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Viscosity" FileType="ancillary">
+    <FileName Model_Name="Viscosity" FileType="ancillary">Viscosity.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Viscosity" FileType="Model Input">
+    <FileName Model_Name="Viscosity" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">usgs.Viscosity.reference</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.chd</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.dis</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.ghb</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.gsf</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.ic</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.ims</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.nam.archive</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.npf</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.oc</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.sto</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.tdis</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.adv</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.dis</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.dsp</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.ic</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.ims</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.mst</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.oc</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.Temperature.ssm</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Input">Viscosity.vsc</FileName>
+  </model>
+  <output Model_Name="Viscosity" FileType="Model Output">
+    <FileName Model_Name="Viscosity" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.bhd</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.cbc</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.dis.grb</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.InnerSolution.CSV</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.lst</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.OuterSolution.CSV</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.Temperature.cbc</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.Temperature.InnerSolution.CSV</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.Temperature.lst</FileName>
+    <FileName Model_Name="Viscosity" FileType="Model Output">Viscosity.Temperature.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

@@ -255,7 +255,6 @@ procedure TNpfGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
 var
   ALine: string;
   ErrorLine: string;
-  SectionName: string;
   Layered: Boolean;
   DoubleThreeDReader: TDouble3DArrayReader;
   IntThreeDReader: TInteger3DArrayReader;

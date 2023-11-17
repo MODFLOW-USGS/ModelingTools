@@ -114,6 +114,8 @@ end;
 
 procedure TModflowStartingHeadsWriter.WriteOptions;
 begin
+  Exit;
+  // There is no options block in the Initial Conditions file.
   WriteBeginOptions;
   WriteEndOptions;
 end;
