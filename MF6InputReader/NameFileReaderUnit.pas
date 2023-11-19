@@ -99,7 +99,8 @@ uses
   OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit, HfbFileReaderUnit,
   StoFileReaderUnit, CSubFileReaderUnit, BuyFileReaderUnit, VscFileReaderUnit,
   ChdFileReaderUnit, WelFileReaderUnit, DrnFileReaderUnit, RivFileReaderUnit,
-  RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit;
+  RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit, SfrFileReaderUnit,
+  GhbFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -477,6 +478,8 @@ var
   RchReader: TRch;
   EvtReader: TEvt;
   MawReader: TMaw;
+  SfrReader: TSfr;
+  GhbReader: TGhb;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -601,6 +604,13 @@ begin
       APackage.Package := DrnReader;
       APackage.ReadPackage(Unhandled);
     end
+    else if APackage.FileType = 'Ghb6' then
+    begin
+      GhbReader := TGhb.Create(APackage.FileType);
+      GhbReader.Dimensions := FDimensions;
+      APackage.Package := GhbReader;
+      APackage.ReadPackage(Unhandled);
+    end
     else if APackage.FileType = 'RIV6' then
     begin
       RivReader := TRiv.Create(APackage.FileType);
@@ -627,6 +637,13 @@ begin
       MawReader := TMaw.Create(APackage.FileType);
       MawReader.Dimensions := FDimensions;
       APackage.Package := MawReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'SFR6' then
+    begin
+      SfrReader := TSfr.Create(APackage.FileType);
+      SfrReader.Dimensions := FDimensions;
+      APackage.Package := SfrReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

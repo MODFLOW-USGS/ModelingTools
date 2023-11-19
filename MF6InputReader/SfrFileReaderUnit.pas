@@ -174,7 +174,8 @@ type
 implementation
 
 uses
-  ModelMuseUtilities, System.Generics.Defaults;
+  ModelMuseUtilities, System.Generics.Defaults, TimeSeriesFileReaderUnit,
+  ObsFileReaderUnit, CrossSectionFileReaderUnit;
 
 resourcestring
   StrUnrecognizedSCROS = 'Unrecognized %s CROSSSECTIONS data in the followin' +
@@ -372,7 +373,7 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'NMAWWELLS') and (FSplitter.Count >= 2)
+    if (FSplitter[0] = 'NREACHES') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], NREACHES) then
     begin
     end
@@ -445,6 +446,7 @@ var
   NumberOfItems: Integer;
 begin
   DimensionCount := Dimensions.DimensionCount;
+  NumberOfItems := 11 + naux + DimensionCount;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -472,13 +474,8 @@ begin
     Item := TSfrPackageItem.Create;
     try
       ALine := UpperCase(ALine);
-      NumberOfItems := 11 + naux + DimensionCount;
-      if BOUNDNAMES then
-      begin
-        Inc(NumberOfItems);
-      end;
       FSplitter.DelimitedText := ALine;
-      if (FSplitter.Count >= 11 + naux + DimensionCount)
+      if (FSplitter.Count >= NumberOfItems)
         and TryStrToInt(FSplitter[0],Item.rno)
         and ReadCellID(Item.cellid, 1, DimensionCount)
         and TryFortranStrToFloat(FSplitter[DimensionCount+1],Item.rlen)
@@ -527,7 +524,7 @@ begin
           Item.aux.Add(AVAlue);
           Inc(ItemStart);
         end;
-        if BOUNDNAMES then
+        if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
         begin
           Item.boundname := FSplitter[ItemStart];
         end;
@@ -916,19 +913,147 @@ end;
 constructor TSfr.Create(PackageType: string);
 begin
   inherited;
+  FOptions := TSfrOptions.Create(PackageType);
+  FSfrDimensions := TSfrDimensions.Create(PackageType);
+  FPackageData := TSfrPackageData.Create(PackageType);
+  FSfrCrossSections := TSfrCrossSections.Create(PackageType);
+  FConnections := TSfrConnections.Create(PackageType);
+  FSfrDiversions := TSfrDiversions.Create(PackageType);
+  FPeriods := TSfrPeriodList.Create;
+  FTimeSeriesPackages := TPackageList.Create;
+  FObservationsPackages := TPackageList.Create;
+  FTabFilePackages := TPackageList.Create;
 
 end;
 
 destructor TSfr.Destroy;
 begin
-
+  FOptions.Free;
+  FSfrDimensions.Free;
+  FPackageData.Free;
+  FSfrCrossSections.Free;
+  FConnections.Free;
+  FSfrDiversions.Free;
+  FPeriods.Free;
+  FTimeSeriesPackages.Free;
+  FObservationsPackages.Free;
+  FTabFilePackages.Free;
   inherited;
 end;
 
 procedure TSfr.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+  IPER: Integer;
+  APeriod: TSfrPeriod;
+  TsPackage: TPackage;
+  PackageIndex: Integer;
+  TsReader: TTimeSeries;
+  ObsReader: TObs;
+  ObsPackage: TPackage;
+  CrossSectionPackage: TPackage;
+  CrossSectionReader: TCrossSection;
 begin
-  inherited;
+  while not Stream.EndOfStream do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(ALine);
+    if ALine = '' then
+    begin
+      Continue;
+    end;
 
+    ALine := UpperCase(ALine);
+    FSplitter.DelimitedText := ALine;
+    if FSplitter[0] = 'BEGIN' then
+    begin
+      if FSplitter[1] ='OPTIONS' then
+      begin
+        FOptions.Read(Stream, Unhandled);
+      end
+      else if FSplitter[1] ='DIMENSIONS' then
+      begin
+        FSfrDimensions.Read(Stream, Unhandled);
+      end
+      else if FSplitter[1] ='PACKAGEDATA' then
+      begin
+        FPackageData.Read(Stream, Unhandled, FOptions.AUXILIARY.Count,
+          FOptions.BOUNDNAMES, FDimensions);
+      end
+      else if FSplitter[1] ='CROSSSECTIONS' then
+      begin
+        FSfrCrossSections.Read(Stream, Unhandled);
+      end
+      else if FSplitter[1] ='CONNECTIONDATA' then
+      begin
+        FConnections.Read(Stream, Unhandled, FPackageData.FItems);
+      end
+      else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
+      begin
+        if TryStrToInt(FSplitter[2], IPER) then
+        begin
+          APeriod := TSfrPeriod.Create(FPackageType);
+          FPeriods.Add(APeriod);
+          APeriod.IPer := IPER;
+          APeriod.Read(Stream, Unhandled);
+        end
+        else
+        begin
+          Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
+    end;
+  end;
+  for PackageIndex := 0 to FOptions.TS6_FileNames.Count - 1 do
+  begin
+    TsPackage := TPackage.Create;
+    FTimeSeriesPackages.Add(TsPackage);
+    TsPackage.FileType := FPackageType;
+    TsPackage.FileName := FOptions.TS6_FileNames[PackageIndex];
+    TsPackage.PackageName := '';
+
+    TsReader := TTimeSeries.Create(FPackageType);
+    TsPackage.Package := TsReader;
+    TsPackage.ReadPackage(Unhandled);
+  end;
+  for PackageIndex := 0 to FOptions.Obs6_FileNames.Count - 1 do
+  begin
+    ObsPackage := TPackage.Create;
+    FObservationsPackages.Add(ObsPackage);
+    ObsPackage.FileType := FPackageType;
+    ObsPackage.FileName := FOptions.Obs6_FileNames[PackageIndex];
+    ObsPackage.PackageName := '';
+
+    ObsReader := TObs.Create(FPackageType);
+    ObsReader.Dimensions := FDimensions;
+    ObsPackage.Package := ObsReader;
+    ObsPackage.ReadPackage(Unhandled);
+  end;
+  for PackageIndex := 0 to FSfrCrossSections.FItems.Count - 1 do
+  begin
+    CrossSectionPackage := TPackage.Create;
+    FObservationsPackages.Add(CrossSectionPackage);
+    CrossSectionPackage.FileType := FPackageType;
+    CrossSectionPackage.FileName := FSfrCrossSections.FItems[PackageIndex].tab6_filename;
+    CrossSectionPackage.PackageName := '';
+
+    CrossSectionReader := TCrossSection.Create(FPackageType);
+    CrossSectionPackage.Package := CrossSectionReader;
+    CrossSectionPackage.ReadPackage(Unhandled);
+  end;
 end;
 
 end.

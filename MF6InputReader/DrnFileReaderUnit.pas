@@ -66,7 +66,7 @@ type
   TDrn = class(TDimensionedPackageReader)
   private
     FOptions: TDrnOptions;
-    FChdDimensions: TDrnDimensions;
+    FDrnDimensions: TDrnDimensions;
     FPeriods: TDrnPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
@@ -306,8 +306,10 @@ var
   Aux: TBoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
+  NumberOfColumns: Integer;
 begin
   DimensionCount := Dimensions.DimensionCount;
+  NumberOfColumns := DimensionCount + 2 + naux;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -329,7 +331,7 @@ begin
       CaseSensitiveLine := ALine;
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
-      if FSplitter.Count >= DimensionCount + 1 then
+      if FSplitter.Count >= NumberOfColumns then
       begin
         if ReadCellID(Cell.CellId, 0, DimensionCount) then
         begin
@@ -370,7 +372,7 @@ begin
             Inc(StartIndex);
             Cell.aux.Add(Aux);
           end;
-          if BOUNDNAMES then
+          if BOUNDNAMES and (FSplitter.Count >= NumberOfColumns+1) then
           begin
             Cell.boundname := FSplitter[StartIndex];
           end;
@@ -401,7 +403,7 @@ constructor TDrn.Create(PackageType: string);
 begin
   inherited;
   FOptions := TDrnOptions.Create(PackageType);
-  FChdDimensions := TDrnDimensions.Create(PackageType);
+  FDrnDimensions := TDrnDimensions.Create(PackageType);
   FPeriods := TDrnPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
@@ -411,7 +413,7 @@ end;
 destructor TDrn.Destroy;
 begin
   FOptions.Free;
-  FChdDimensions.Free;
+  FDrnDimensions.Free;
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
@@ -450,7 +452,7 @@ begin
       end
       else if FSplitter[1] ='DIMENSIONS' then
       begin
-        FChdDimensions.Read(Stream, Unhandled);
+        FDrnDimensions.Read(Stream, Unhandled);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin

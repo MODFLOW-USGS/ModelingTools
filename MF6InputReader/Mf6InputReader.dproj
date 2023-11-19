@@ -131,6 +131,7 @@
         <DCCReference Include="EvtFileReaderUnit.pas"/>
         <DCCReference Include="MawFileReaderUnit.pas"/>
         <DCCReference Include="SfrFileReaderUnit.pas"/>
+        <DCCReference Include="CrossSectionFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

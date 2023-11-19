@@ -296,8 +296,10 @@ var
   Aux: TBoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
+  NumberOfColumns: Integer;
 begin
   DimensionCount := Dimensions.DimensionCount;
+  NumberOfColumns := DimensionCount + 3 + naux;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -319,7 +321,7 @@ begin
       CaseSensitiveLine := ALine;
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
-      if FSplitter.Count >= DimensionCount + 1 then
+      if FSplitter.Count >= NumberOfColumns then
       begin
         if ReadCellID(Cell.CellId, 0, DimensionCount) then
         begin
@@ -373,7 +375,7 @@ begin
             Inc(StartIndex);
             Cell.aux.Add(Aux);
           end;
-          if BOUNDNAMES then
+          if BOUNDNAMES and (FSplitter.Count >= NumberOfColumns+1) then
           begin
             Cell.boundname := FSplitter[StartIndex];
           end;

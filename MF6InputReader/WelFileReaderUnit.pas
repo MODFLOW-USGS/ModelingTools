@@ -37,7 +37,7 @@ type
 
   TWelTimeItem = class(TObject)
     cellid: TCellId;
-    head: TBoundaryValue;
+    q: TBoundaryValue;
     aux: TList<TBoundaryValue>;
     boundname: string;
   public
@@ -216,7 +216,7 @@ end;
 constructor TWelTimeItem.Create;
 begin
   cellid.Initialize;
-  head.Initialize;
+  q.Initialize;
   aux := TList<TBoundaryValue>.Create;
   boundname := '';
 end;
@@ -301,8 +301,10 @@ var
   Aux: TBoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
+  NumberOfItems: Integer;
 begin
   DimensionCount := Dimensions.DimensionCount;
+  NumberOfItems := DimensionCount + 1 + naux;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -324,19 +326,19 @@ begin
       CaseSensitiveLine := ALine;
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
-      if FSplitter.Count >= DimensionCount + 1 then
+      if FSplitter.Count >= NumberOfItems then
       begin
         if ReadCellID(Cell.CellId, 0, DimensionCount) then
         begin
-          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.head.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.q.NumericValue) then
           begin
-            Cell.head.ValueType := vtNumeric;
+            Cell.q.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.head.ValueType := vtString;
+            Cell.q.ValueType := vtString;
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Cell.head.StringValue := FSplitter[DimensionCount];
+            Cell.q.StringValue := FSplitter[DimensionCount];
           end;
           StartIndex := DimensionCount + 1;
           for AuxIndex := 0 to naux - 1 do
@@ -355,7 +357,7 @@ begin
             Inc(StartIndex);
             Cell.aux.Add(Aux);
           end;
-          if BOUNDNAMES then
+          if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
           begin
             Cell.boundname := FSplitter[StartIndex];
           end;

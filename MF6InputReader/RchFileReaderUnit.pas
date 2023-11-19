@@ -323,9 +323,11 @@ var
   AuxList: TArrayItemList;
   RowIndex: Integer;
   ColIndex: Integer;
+  NumberOfColumns: Integer;
 begin
   DimensionCount := Dimensions.DimensionCount;
   Initialize;
+  NumberOfColumns := DimensionCount + 1 + naux;
   if READASARRAYS then
   begin
     LocalDim := Dimensions;
@@ -475,7 +477,7 @@ begin
         CaseSensitiveLine := ALine;
         ALine := UpperCase(ALine);
         FSplitter.DelimitedText := ALine;
-        if FSplitter.Count >= DimensionCount + 1 then
+        if FSplitter.Count >= NumberOfColumns then
         begin
           if ReadCellID(Cell.CellId, 0, DimensionCount) then
           begin
@@ -506,7 +508,7 @@ begin
               Inc(StartIndex);
               Cell.aux.Add(Aux);
             end;
-            if BOUNDNAMES then
+            if BOUNDNAMES and (FSplitter.Count >= NumberOfColumns+1) then
             begin
               Cell.boundname := FSplitter[StartIndex];
             end;

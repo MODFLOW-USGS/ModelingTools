@@ -395,8 +395,10 @@ var
   AuxIndex: Integer;
   AValue: TBoundaryValue;
   CaseSensitiveLine: string;
+  NumberOfItems: Integer;
 begin
   Initialize;
+  NumberOfItems := 6 + naux;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
@@ -417,7 +419,7 @@ begin
     try
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
-      if (FSplitter.Count >= 7 + naux)
+      if (FSplitter.Count >= NumberOfItems)
         and TryStrToInt(FSplitter[0],Item.wellno)
         and TryFortranStrToFloat(FSplitter[1],Item.radius)
         and TryFortranStrToFloat(FSplitter[2],Item.bottom)
@@ -443,7 +445,7 @@ begin
           Item.aux.Add(AVAlue);
           Inc(ItemStart);
         end;
-        if BOUNDNAMES then
+        if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
         begin
           Item.boundname := FSplitter[ItemStart];
         end;
@@ -605,9 +607,9 @@ begin
         else if (MawItem.Name = 'FLOWING_WELL') and (FSplitter.Count >= 5)  then
         begin
           SetLength(MawItem.FloatValues, 3);
-          if TryFortranStrToFloat(FSplitter[3], MawItem.FloatValues[0])
-            and TryFortranStrToFloat(FSplitter[4], MawItem.FloatValues[1])
-            and TryFortranStrToFloat(FSplitter[5], MawItem.FloatValues[2])
+          if TryFortranStrToFloat(FSplitter[2], MawItem.FloatValues[0])
+            and TryFortranStrToFloat(FSplitter[3], MawItem.FloatValues[1])
+            and TryFortranStrToFloat(FSplitter[4], MawItem.FloatValues[2])
             then
           begin
 
@@ -623,18 +625,18 @@ begin
           or (MawItem.Name = 'AUXILIARY')
           then
         begin
-          if TryFortranStrToFloat(FSplitter[3], MawItem.FloatValue) then
+          if TryFortranStrToFloat(FSplitter[2], MawItem.FloatValue) then
           begin
 
           end
           else
           begin
-            MawItem.StringValue := FSplitter[3]
+            MawItem.StringValue := FSplitter[2]
           end;
         end
         else if MawItem.Name = 'HEAD_LIMIT' then
         begin
-          if TryFortranStrToFloat(FSplitter[3], MawItem.FloatValue) then
+          if TryFortranStrToFloat(FSplitter[2], MawItem.FloatValue) then
           begin
 
           end
@@ -648,8 +650,8 @@ begin
           or (MawItem.Name = 'RATE_SCALING') then
         begin
           SetLength(MawItem.FloatValues, 2);
-          if TryFortranStrToFloat(FSplitter[3], MawItem.FloatValues[0])
-            and TryFortranStrToFloat(FSplitter[4], MawItem.FloatValues[1])
+          if TryFortranStrToFloat(FSplitter[2], MawItem.FloatValues[0])
+            and TryFortranStrToFloat(FSplitter[3], MawItem.FloatValues[1])
             then
           begin
 

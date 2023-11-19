@@ -42,7 +42,8 @@ uses
   TimeArraySeriesFileReaderUnit in 'TimeArraySeriesFileReaderUnit.pas',
   EvtFileReaderUnit in 'EvtFileReaderUnit.pas',
   MawFileReaderUnit in 'MawFileReaderUnit.pas',
-  SfrFileReaderUnit in 'SfrFileReaderUnit.pas';
+  SfrFileReaderUnit in 'SfrFileReaderUnit.pas',
+  CrossSectionFileReaderUnit in 'CrossSectionFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;
