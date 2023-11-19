@@ -577,10 +577,6 @@ var
   ALine: string;
   ErrorLine: string;
   Item: TCrossSectionItem;
-  ItemStart: Integer;
-  AuxIndex: Integer;
-  AValue: TBoundaryValue;
-  CaseSensitiveLine: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -650,9 +646,7 @@ procedure TSfrConnections.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
 var
   ALine: string;
   ErrorLine: string;
-  DimensionCount: Integer;
   Item: TSfrConnectionItem;
-  CaseSensitiveLine: string;
   IcIndex: Integer;
   ncon: Integer;
 begin
@@ -753,11 +747,7 @@ procedure TSfrDiversions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
-  DimensionCount: Integer;
   Item: TSfrDiversionItem;
-  CaseSensitiveLine: string;
-  IcIndex: Integer;
-  ncon: Integer;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -989,6 +979,10 @@ begin
       else if FSplitter[1] ='CONNECTIONDATA' then
       begin
         FConnections.Read(Stream, Unhandled, FPackageData.FItems);
+      end
+      else if FSplitter[1] ='DIVERSIONS' then
+      begin
+        FDiversions.Read(Stream, Unhandled, FPackageData.FItems);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin
