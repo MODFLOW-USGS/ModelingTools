@@ -33,7 +33,16 @@ uses
   CSubFileReaderUnit in 'CSubFileReaderUnit.pas',
   BuyFileReaderUnit in 'BuyFileReaderUnit.pas',
   VscFileReaderUnit in 'VscFileReaderUnit.pas',
-  ChdFileReaderUnit in 'ChdFileReaderUnit.pas';
+  ChdFileReaderUnit in 'ChdFileReaderUnit.pas',
+  WelFileReaderUnit in 'WelFileReaderUnit.pas',
+  DrnFileReaderUnit in 'DrnFileReaderUnit.pas',
+  RivFileReaderUnit in 'RivFileReaderUnit.pas',
+  GhbFileReaderUnit in 'GhbFileReaderUnit.pas',
+  RchFileReaderUnit in 'RchFileReaderUnit.pas',
+  TimeArraySeriesFileReaderUnit in 'TimeArraySeriesFileReaderUnit.pas',
+  EvtFileReaderUnit in 'EvtFileReaderUnit.pas',
+  MawFileReaderUnit in 'MawFileReaderUnit.pas',
+  SfrFileReaderUnit in 'SfrFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

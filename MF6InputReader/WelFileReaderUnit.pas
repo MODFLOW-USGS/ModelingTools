@@ -1,4 +1,4 @@
-unit ChdFileReaderUnit;
+unit WelFileReaderUnit;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   System.Generics.Collections;
 
 type
-  TChdOptions = class(TCustomMf6Persistent)
+  TWelOptions = class(TCustomMf6Persistent)
   private
     AUXILIARY: TStringList;
     AUXMULTNAME: TStringList;
@@ -17,6 +17,8 @@ type
     SAVE_FLOWS: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
+    AUTO_FLOW_REDUCE: TRealOption;
+    AUTO_FLOW_REDUCE_CSV: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -25,7 +27,7 @@ type
     destructor Destroy; override;
   end;
 
-  TChdDimensions = class(TCustomMf6Persistent)
+  TWelDimensions = class(TCustomMf6Persistent)
   private
     MAXBOUND: Integer;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -33,7 +35,7 @@ type
     procedure Initialize; override;
   end;
 
-  TChdTimeItem = class(TObject)
+  TWelTimeItem = class(TObject)
     cellid: TCellId;
     head: TBoundaryValue;
     aux: TList<TBoundaryValue>;
@@ -43,12 +45,12 @@ type
     destructor Destroy; override;
   end;
 
-  TChdTimeItemList = TList<TChdTimeItem>;
+  TWelTimeItemList = TList<TWelTimeItem>;
 
-  TChdPeriod = class(TCustomMf6Persistent)
+  TWelPeriod = class(TCustomMf6Persistent)
   private
     IPer: Integer;
-    FCells: TChdTimeItemList;
+    FCells: TWelTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
   protected
@@ -58,13 +60,13 @@ type
     destructor Destroy; override;
   end;
 
-  TChdPeriodList = TObjectList<TChdPeriod>;
+  TWelPeriodList = TObjectList<TWelPeriod>;
 
-  TChd = class(TDimensionedPackageReader)
+  TWel = class(TDimensionedPackageReader)
   private
-    FOptions: TChdOptions;
-    FChdDimensions: TChdDimensions;
-    FPeriods: TChdPeriodList;
+    FOptions: TWelOptions;
+    FWelDimensions: TWelDimensions;
+    FPeriods: TWelPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
   public
@@ -79,9 +81,9 @@ implementation
 uses
   ModelMuseUtilities, TimeSeriesFileReaderUnit, ObsFileReaderUnit;
 
-{ TChdOptions }
+{ TWelOptions }
 
-constructor TChdOptions.Create(PackageType: string);
+constructor TWelOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
   AUXMULTNAME := TStringList.Create;
@@ -91,7 +93,7 @@ begin
 
 end;
 
-destructor TChdOptions.Destroy;
+destructor TWelOptions.Destroy;
 begin
   AUXILIARY.Free;
   AUXMULTNAME.Free;
@@ -100,7 +102,7 @@ begin
   inherited;
 end;
 
-procedure TChdOptions.Initialize;
+procedure TWelOptions.Initialize;
 begin
   inherited;
   AUXILIARY.Clear;
@@ -111,9 +113,11 @@ begin
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
+  AUTO_FLOW_REDUCE.Initialize;
+  AUTO_FLOW_REDUCE_CSV := False;
 end;
 
-procedure TChdOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TWelOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -154,6 +158,10 @@ begin
     begin
       PRINT_FLOWS := True;
     end
+    else if FSplitter[0] = 'AUTO_FLOW_REDUCE_CSV' then
+    begin
+      AUTO_FLOW_REDUCE_CSV := True;
+    end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
       SAVE_FLOWS := True;
@@ -180,6 +188,13 @@ begin
       TS6_FileName := FSplitter[2];
       TS6_FileNames.Add(TS6_FileName);
     end
+
+    else if (FSplitter[0] = 'AUTO_FLOW_REDUCE')
+      and (FSplitter.Count >= 2)
+      and TryFortranStrToFloat(FSplitter[1], AUTO_FLOW_REDUCE.Value) then
+    begin
+      AUTO_FLOW_REDUCE.Used := True;
+    end
     else if (FSplitter[0] = 'OBS6')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEIN') then
@@ -196,9 +211,9 @@ begin
   end;
 end;
 
-{ TChdDTimeItem }
+{ TWelTimeItem }
 
-constructor TChdTimeItem.Create;
+constructor TWelTimeItem.Create;
 begin
   cellid.Initialize;
   head.Initialize;
@@ -206,21 +221,21 @@ begin
   boundname := '';
 end;
 
-destructor TChdTimeItem.Destroy;
+destructor TWelTimeItem.Destroy;
 begin
   aux.Free;
   inherited;
 end;
 
-{ TChdDimensions }
+{ TWelDimensions }
 
-procedure TChdDimensions.Initialize;
+procedure TWelDimensions.Initialize;
 begin
   inherited;
   MAXBOUND := 0;
 end;
 
-procedure TChdDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TWelDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -255,31 +270,31 @@ begin
   end
 end;
 
-{ TChdPeriod }
+{ TWelPeriod }
 
-constructor TChdPeriod.Create(PackageType: string);
+constructor TWelPeriod.Create(PackageType: string);
 begin
-  FCells := TChdTimeItemList.Create;
+  FCells := TWelTimeItemList.Create;
   inherited;
 end;
 
-destructor TChdPeriod.Destroy;
+destructor TWelPeriod.Destroy;
 begin
   FCells.Free;
   inherited;
 end;
 
-procedure TChdPeriod.Initialize;
+procedure TWelPeriod.Initialize;
 begin
   inherited;
   FCells.Clear;
 end;
 
-procedure TChdPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+procedure TWelPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
 var
   DimensionCount: Integer;
-  Cell: TChdTimeItem;
+  Cell: TWelTimeItem;
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
@@ -304,7 +319,7 @@ begin
       Exit;
     end;
 
-    Cell := TChdTimeItem.Create;;
+    Cell := TWelTimeItem.Create;;
     try
       CaseSensitiveLine := ALine;
       ALine := UpperCase(ALine);
@@ -365,35 +380,35 @@ begin
 
 end;
 
-{ TChd }
+{ TWel }
 
-constructor TChd.Create(PackageType: string);
+constructor TWel.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TChdOptions.Create(PackageType);
-  FChdDimensions := TChdDimensions.Create(PackageType);
-  FPeriods := TChdPeriodList.Create;
+  FOptions := TWelOptions.Create(PackageType);
+  FWelDimensions := TWelDimensions.Create(PackageType);
+  FPeriods := TWelPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
 
 end;
 
-destructor TChd.Destroy;
+destructor TWel.Destroy;
 begin
   FOptions.Free;
-  FChdDimensions.Free;
+  FWelDimensions.Free;
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   inherited;
 end;
 
-procedure TChd.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TWel.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
   IPER: Integer;
-  APeriod: TChdPeriod;
+  APeriod: TWelPeriod;
   TsPackage: TPackage;
   PackageIndex: Integer;
   TsReader: TTimeSeries;
@@ -420,13 +435,13 @@ begin
       end
       else if FSplitter[1] ='DIMENSIONS' then
       begin
-        FChdDimensions.Read(Stream, Unhandled);
+        FWelDimensions.Read(Stream, Unhandled);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
-          APeriod := TChdPeriod.Create(FPackageType);
+          APeriod := TWelPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,

@@ -1,6 +1,7 @@
 unit TimeSeriesFileReaderUnit;
 
 interface
+
 uses
   System.Classes, System.IOUtils, System.SysUtils, CustomMf6PersistentUnit,
   System.Generics.Collections;
@@ -38,6 +39,7 @@ type
   end;
 
   TTimeSeries = class(TPackageReader)
+  private
     FAttributes: TTsAttributes;
     FTimeSeries: TTsTimeSeries;
   public

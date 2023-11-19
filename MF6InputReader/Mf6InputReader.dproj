@@ -122,6 +122,15 @@
         <DCCReference Include="BuyFileReaderUnit.pas"/>
         <DCCReference Include="VscFileReaderUnit.pas"/>
         <DCCReference Include="ChdFileReaderUnit.pas"/>
+        <DCCReference Include="WelFileReaderUnit.pas"/>
+        <DCCReference Include="DrnFileReaderUnit.pas"/>
+        <DCCReference Include="RivFileReaderUnit.pas"/>
+        <DCCReference Include="GhbFileReaderUnit.pas"/>
+        <DCCReference Include="RchFileReaderUnit.pas"/>
+        <DCCReference Include="TimeArraySeriesFileReaderUnit.pas"/>
+        <DCCReference Include="EvtFileReaderUnit.pas"/>
+        <DCCReference Include="MawFileReaderUnit.pas"/>
+        <DCCReference Include="SfrFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

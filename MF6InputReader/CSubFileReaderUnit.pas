@@ -602,61 +602,61 @@ begin
                       end
                       else
                       begin
-                        Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+                        Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
                         Unhandled.WriteLine(ErrorLine);
                       end;
                     end
                     else
                     begin
-                      Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+                      Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
                       Unhandled.WriteLine(ErrorLine);
                     end;
                   end
                   else
                   begin
-                    Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+                    Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
                     Unhandled.WriteLine(ErrorLine);
                   end;
                 end
                 else
                 begin
-                  Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+                  Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
                   Unhandled.WriteLine(ErrorLine);
                 end;
               end
               else
               begin
-                Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+                Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
                 Unhandled.WriteLine(ErrorLine);
               end;
             end
             else
             begin
-              Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+              Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
               Unhandled.WriteLine(ErrorLine);
             end;
           end
           else
           begin
-            Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+            Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
             Unhandled.WriteLine(ErrorLine);
           end;
         end
         else
         begin
-          Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+          Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
           Unhandled.WriteLine(ErrorLine);
         end;
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+        Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
       end;
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized CSUB PACKAGEDATA in the following line');
+      Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
@@ -763,7 +763,6 @@ begin
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
   inherited;
-
 end;
 
 destructor TCSub.Destroy;

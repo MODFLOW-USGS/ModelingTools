@@ -20,6 +20,7 @@ type
   TModflowDoubleArray = array of array of TModflowDouble;
   T3DTModflowArray = array of TModflowDoubleArray;
   TMf6DoubleArraay = array of TModflowDouble;
+  TModflowIntegerArray = array of array of Integer;
 
   TAuxArray = record
     Name: string;

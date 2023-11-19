@@ -1,4 +1,4 @@
-unit ChdFileReaderUnit;
+unit GhbFileReaderUnit;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   System.Generics.Collections;
 
 type
-  TChdOptions = class(TCustomMf6Persistent)
+  TGhbOptions = class(TCustomMf6Persistent)
   private
     AUXILIARY: TStringList;
     AUXMULTNAME: TStringList;
@@ -17,6 +17,7 @@ type
     SAVE_FLOWS: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
+    MOVER: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -25,7 +26,7 @@ type
     destructor Destroy; override;
   end;
 
-  TChdDimensions = class(TCustomMf6Persistent)
+  TGhbDimensions = class(TCustomMf6Persistent)
   private
     MAXBOUND: Integer;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -33,9 +34,10 @@ type
     procedure Initialize; override;
   end;
 
-  TChdTimeItem = class(TObject)
+  TGhbTimeItem = class(TObject)
     cellid: TCellId;
-    head: TBoundaryValue;
+    bhead: TBoundaryValue;
+    cond: TBoundaryValue;
     aux: TList<TBoundaryValue>;
     boundname: string;
   public
@@ -43,12 +45,12 @@ type
     destructor Destroy; override;
   end;
 
-  TChdTimeItemList = TList<TChdTimeItem>;
+  TGhbTimeItemList = TList<TGhbTimeItem>;
 
-  TChdPeriod = class(TCustomMf6Persistent)
+  TGhbvPeriod = class(TCustomMf6Persistent)
   private
     IPer: Integer;
-    FCells: TChdTimeItemList;
+    FCells: TGhbTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
   protected
@@ -58,13 +60,13 @@ type
     destructor Destroy; override;
   end;
 
-  TChdPeriodList = TObjectList<TChdPeriod>;
+  TGhbPeriodList = TObjectList<TGhbvPeriod>;
 
-  TChd = class(TDimensionedPackageReader)
+  TGhb = class(TDimensionedPackageReader)
   private
-    FOptions: TChdOptions;
-    FChdDimensions: TChdDimensions;
-    FPeriods: TChdPeriodList;
+    FOptions: TGhbOptions;
+    FGhbDimensions: TGhbDimensions;
+    FPeriods: TGhbPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
   public
@@ -79,9 +81,9 @@ implementation
 uses
   ModelMuseUtilities, TimeSeriesFileReaderUnit, ObsFileReaderUnit;
 
-{ TChdOptions }
+{ TGhbOptions }
 
-constructor TChdOptions.Create(PackageType: string);
+constructor TGhbOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
   AUXMULTNAME := TStringList.Create;
@@ -91,7 +93,7 @@ begin
 
 end;
 
-destructor TChdOptions.Destroy;
+destructor TGhbOptions.Destroy;
 begin
   AUXILIARY.Free;
   AUXMULTNAME.Free;
@@ -100,7 +102,7 @@ begin
   inherited;
 end;
 
-procedure TChdOptions.Initialize;
+procedure TGhbOptions.Initialize;
 begin
   inherited;
   AUXILIARY.Clear;
@@ -111,9 +113,10 @@ begin
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
+  MOVER := False;
 end;
 
-procedure TChdOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TGhbOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -158,6 +161,10 @@ begin
     begin
       SAVE_FLOWS := True;
     end
+    else if FSplitter[0] = 'MOVER' then
+    begin
+      MOVER := True;
+    end
     else if (FSplitter[0] = 'AUXILIARY')
       and (FSplitter.Count >= 2) then
     begin
@@ -198,29 +205,30 @@ end;
 
 { TChdDTimeItem }
 
-constructor TChdTimeItem.Create;
+constructor TGhbTimeItem.Create;
 begin
   cellid.Initialize;
-  head.Initialize;
+  bhead.Initialize;
+  cond.Initialize;
   aux := TList<TBoundaryValue>.Create;
   boundname := '';
 end;
 
-destructor TChdTimeItem.Destroy;
+destructor TGhbTimeItem.Destroy;
 begin
   aux.Free;
   inherited;
 end;
 
-{ TChdDimensions }
+{ TGhbDimensions }
 
-procedure TChdDimensions.Initialize;
+procedure TGhbDimensions.Initialize;
 begin
   inherited;
   MAXBOUND := 0;
 end;
 
-procedure TChdDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TGhbDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -255,31 +263,31 @@ begin
   end
 end;
 
-{ TChdPeriod }
+{ TGhbvPeriod }
 
-constructor TChdPeriod.Create(PackageType: string);
+constructor TGhbvPeriod.Create(PackageType: string);
 begin
-  FCells := TChdTimeItemList.Create;
+  FCells := TGhbTimeItemList.Create;
   inherited;
 end;
 
-destructor TChdPeriod.Destroy;
+destructor TGhbvPeriod.Destroy;
 begin
   FCells.Free;
   inherited;
 end;
 
-procedure TChdPeriod.Initialize;
+procedure TGhbvPeriod.Initialize;
 begin
   inherited;
   FCells.Clear;
 end;
 
-procedure TChdPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+procedure TGhbvPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
 var
   DimensionCount: Integer;
-  Cell: TChdTimeItem;
+  Cell: TGhbTimeItem;
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
@@ -304,7 +312,7 @@ begin
       Exit;
     end;
 
-    Cell := TChdTimeItem.Create;;
+    Cell := TGhbTimeItem.Create;;
     try
       CaseSensitiveLine := ALine;
       ALine := UpperCase(ALine);
@@ -313,17 +321,30 @@ begin
       begin
         if ReadCellID(Cell.CellId, 0, DimensionCount) then
         begin
-          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.head.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.bhead.NumericValue) then
           begin
-            Cell.head.ValueType := vtNumeric;
+            Cell.bhead.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.head.ValueType := vtString;
+            Cell.bhead.ValueType := vtString;
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Cell.head.StringValue := FSplitter[DimensionCount];
+            Cell.bhead.StringValue := FSplitter[DimensionCount];
           end;
-          StartIndex := DimensionCount + 1;
+
+          if TryFortranStrToFloat(FSplitter[DimensionCount+1], Cell.cond.NumericValue) then
+          begin
+            Cell.cond.ValueType := vtNumeric;
+          end
+          else
+          begin
+            Cell.cond.ValueType := vtString;
+            FSplitter.DelimitedText := CaseSensitiveLine;
+            Cell.cond.StringValue := FSplitter[DimensionCount+1];
+          end;
+
+
+          StartIndex := DimensionCount + 2;
           for AuxIndex := 0 to naux - 1 do
           begin
             Aux.Initialize;
@@ -365,35 +386,35 @@ begin
 
 end;
 
-{ TChd }
+{ TGhb }
 
-constructor TChd.Create(PackageType: string);
+constructor TGhb.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TChdOptions.Create(PackageType);
-  FChdDimensions := TChdDimensions.Create(PackageType);
-  FPeriods := TChdPeriodList.Create;
+  FOptions := TGhbOptions.Create(PackageType);
+  FGhbDimensions := TGhbDimensions.Create(PackageType);
+  FPeriods := TGhbPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
 
 end;
 
-destructor TChd.Destroy;
+destructor TGhb.Destroy;
 begin
   FOptions.Free;
-  FChdDimensions.Free;
+  FGhbDimensions.Free;
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   inherited;
 end;
 
-procedure TChd.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TGhb.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
   IPER: Integer;
-  APeriod: TChdPeriod;
+  APeriod: TGhbvPeriod;
   TsPackage: TPackage;
   PackageIndex: Integer;
   TsReader: TTimeSeries;
@@ -420,13 +441,13 @@ begin
       end
       else if FSplitter[1] ='DIMENSIONS' then
       begin
-        FChdDimensions.Read(Stream, Unhandled);
+        FGhbDimensions.Read(Stream, Unhandled);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
-          APeriod := TChdPeriod.Create(FPackageType);
+          APeriod := TGhbvPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,

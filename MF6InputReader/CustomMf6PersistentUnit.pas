@@ -59,6 +59,8 @@ type
     procedure Initialize;
   end;
 
+  TTimeVariableCellList = TList<TTimeVariableCell>;
+
   TBoundaryValue = record
     ValueType: TValueType;
     StringValue: string;
@@ -66,8 +68,7 @@ type
     procedure Initialize;
   end;
 
-
-  TTimeVariableCellList = TList<TTimeVariableCell>;
+  TBoundaryValueList = TList<TBoundaryValue>;
 
   TDoubleList = TList<Double>;
 
@@ -146,6 +147,14 @@ type
   TIArray2D = TArray<TIArray1D>;
   TIArray3D = TArray<TIArray2D>;
 
+  TArrayItem = record
+    value: TDArray2D;
+    TimeArraySeries: string;
+    procedure Initialize;
+  end;
+
+  TArrayItemList = TList<TArrayItem>;
+
   TDouble1DArrayReader = class(T1DArrayReader<Double>)
   private
     procedure ReadDataFromTextFile(Stream: TStreamReader);
@@ -217,6 +226,18 @@ type
     procedure Initialize;
   end;
 
+  TNumberedItem = record
+    IdNumber: Integer;
+    Name: string;
+    AuxName: string;
+    FloatValue: Extended;
+    StringValue: string;
+    FloatValues: array of Extended;
+    procedure Initialize;
+  end;
+
+  TNumberedItemList = TList<TNumberedItem>;
+
   TExtendedList = TList<Extended>;
 
   TPackage = class(TObject)
@@ -241,6 +262,8 @@ resourcestring
   StrUnrecognizedSPACK = 'Unrecognized %s PACKAGEDATA in the following line';
   StrUnrecognizedSData = 'Unrecognized %s data in the following line.';
   StrUnrecognizedSPERI = 'Unrecognized %s PERIOD data in the following line.';
+  StrUnrecognizedSCONN = 'Unrecognized %s CONNECTIONDATA in the following li' +
+  'ne';
 
 implementation
 
@@ -1666,6 +1689,26 @@ begin
   ValueType := vtNumeric;
   StringValue := '';
   NumericValue := 0;
+end;
+
+{ TArrayItem }
+
+procedure TArrayItem.Initialize;
+begin
+  value := nil;
+  TimeArraySeries := '';
+end;
+
+{ TNumberedItem }
+
+procedure TNumberedItem.Initialize;
+begin
+  IdNumber := 0;
+  FloatValue := 0;
+  StringValue := '';
+  FloatValues := nil;
+  Name := '';
+  AuxName := '';
 end;
 
 end.

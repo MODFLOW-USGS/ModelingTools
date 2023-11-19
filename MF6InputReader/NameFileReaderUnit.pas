@@ -98,7 +98,8 @@ uses
   DisFileReaderUnit, DisvFileReaderUnit, DisuFileReaderUnit, IcFileReaderUnit,
   OcFileReaderUnit, ObsFileReaderUnit, NpfFileReaderUnit, HfbFileReaderUnit,
   StoFileReaderUnit, CSubFileReaderUnit, BuyFileReaderUnit, VscFileReaderUnit,
-  ChdFileReaderUnit;
+  ChdFileReaderUnit, WelFileReaderUnit, DrnFileReaderUnit, RivFileReaderUnit,
+  RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -470,6 +471,12 @@ var
   BuyReader: TBuy;
   VscReader: TVsc;
   ChdReader: TChd;
+  WelReader: TWel;
+  DrnReader: TDrn;
+  RivReader: TRiv;
+  RchReader: TRch;
+  EvtReader: TEvt;
+  MawReader: TMaw;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -578,6 +585,48 @@ begin
       ChdReader := TChd.Create(APackage.FileType);
       ChdReader.Dimensions := FDimensions;
       APackage.Package := ChdReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'WEL6' then
+    begin
+      WelReader := TWel.Create(APackage.FileType);
+      WelReader.Dimensions := FDimensions;
+      APackage.Package := WelReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'DRN6' then
+    begin
+      DrnReader := TDrn.Create(APackage.FileType);
+      DrnReader.Dimensions := FDimensions;
+      APackage.Package := DrnReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'RIV6' then
+    begin
+      RivReader := TRiv.Create(APackage.FileType);
+      RivReader.Dimensions := FDimensions;
+      APackage.Package := RivReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'RCH6' then
+    begin
+      RchReader := TRch.Create(APackage.FileType);
+      RchReader.Dimensions := FDimensions;
+      APackage.Package := RchReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'EVT6' then
+    begin
+      EvtReader := TEvt.Create(APackage.FileType);
+      EvtReader.Dimensions := FDimensions;
+      APackage.Package := EvtReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'MAW6' then
+    begin
+      MawReader := TMaw.Create(APackage.FileType);
+      MawReader.Dimensions := FDimensions;
+      APackage.Package := MawReader;
       APackage.ReadPackage(Unhandled);
     end
   end;
