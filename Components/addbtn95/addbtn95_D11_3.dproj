@@ -1,8 +1,8 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{AA425773-6B10-4ECB-AC04-27646C0C429E}</ProjectGuid>
-        <MainSource>RbwRuler11_2.dpk</MainSource>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <ProjectGuid>{76BD3D85-7353-44E8-BBFC-2768A6B2E514}</ProjectGuid>
+        <MainSource>addbtn95_D11_3.dpk</MainSource>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.5</ProjectVersion>
         <Base>True</Base>
@@ -29,15 +29,15 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
-        <Cfg_1_Win32>true</Cfg_1_Win32>
-        <CfgParent>Cfg_1</CfgParent>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
@@ -48,9 +48,9 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_ImageBase>00400000</DCC_ImageBase>
         <GenPackage>true</GenPackage>
-        <DCC_DependencyCheckOutputName>C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\RbwRulerPkg2009.bpl</DCC_DependencyCheckOutputName>
+        <DCC_DependencyCheckOutputName>C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\addbtn95_D10pkg.bpl</DCC_DependencyCheckOutputName>
         <DCC_Platform>x86</DCC_Platform>
-        <DCC_Description>RBW Ruler component</DCC_Description>
+        <DCC_Description>Checbox and Radio button with additional formatting.</DCC_Description>
         <DCC_S>false</DCC_S>
         <DCC_OutputNeverBuildDcps>true</DCC_OutputNeverBuildDcps>
         <GenDll>true</GenDll>
@@ -58,17 +58,17 @@
         <DCC_E>false</DCC_E>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
-        <SanitizedProjectName>RbwRuler11_2</SanitizedProjectName>
+        <SanitizedProjectName>addbtn95_D11_3</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <Icon_MainIcon>RbwRulerPkgXE_Icon.ico</Icon_MainIcon>
+        <Icon_MainIcon>addbtn95_DXEpkg_Icon.ico</Icon_MainIcon>
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <DCC_UsePackage>vcl;RbwRulerPkgXE2;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>vcl;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <Icon_MainIcon>RbwRulerPkgXE_Icon.ico</Icon_MainIcon>
+        <Icon_MainIcon>addbtn95_DXEpkg_Icon.ico</Icon_MainIcon>
         <DCC_UsePackage>vcl;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -77,22 +77,19 @@
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <DCC_MapFile>3</DCC_MapFile>
-        <DCC_DebugInformation>2</DCC_DebugInformation>
-        <DCC_LocalDebugSymbols>true</DCC_LocalDebugSymbols>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <DCC_MapFile>3</DCC_MapFile>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="RbwRuler.dcr"/>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
-        <DCCReference Include="RbwRuler.pas"/>
+        <DCCReference Include="Addbtn95.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -113,7 +110,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">RbwRuler11_2.dpk</Source>
+                    <Source Name="MainSource">addbtn95_D11_3.dpk</Source>
                 </Source>
                 <Parameters/>
                 <VersionInfo>
@@ -143,21 +140,16 @@
                     <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
                     <VersionInfoKeys Name="Comments"/>
                 </VersionInfoKeys>
-                <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-                </Excluded_Packages>
             </Delphi.Personality>
             <Platforms>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
             <Deployment Version="4">
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\RbwRuler11_2.bpl" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\RbwRuler11_2.bpl" Configuration="Release" Class="ProjectOutput"/>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\RbwRuler11_2.bpl" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\addbtn95_D11_2.bpl" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\addbtn95_D11_3.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>RbwRuler11_2.bpl</RemoteName>
+                        <RemoteName>addbtn95_D11_3.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

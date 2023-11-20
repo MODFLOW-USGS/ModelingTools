@@ -228,8 +228,9 @@ is only being installed in Delphi. If asked whether to add the
 Graphics 32 to the project, select yes.
 
 To compile the design-time package, you may need to edit the search path for 
-the design time Project (Project|Options|Delphi compiler|Search path) so that 
-it includes the dcp and/or bpl
+the design time Project 
+(Project|Options|Delphi compiler|Search path) 
+so that it includes the dcp and/or bpl
 output directories. For example:
 C:\Users\Public\Documents\Embarcadero\Studio\22.0\DCP
 and 

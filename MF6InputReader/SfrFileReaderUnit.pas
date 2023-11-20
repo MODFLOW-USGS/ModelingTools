@@ -982,7 +982,7 @@ begin
       end
       else if FSplitter[1] ='DIVERSIONS' then
       begin
-        FDiversions.Read(Stream, Unhandled, FPackageData.FItems);
+        FSfrDiversions.Read(Stream, Unhandled);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin

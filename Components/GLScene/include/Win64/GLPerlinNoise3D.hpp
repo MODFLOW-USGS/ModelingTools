@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2021 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLPerlinNoise3D.pas' rev: 34.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLPerlinNoise3D.pas' rev: 35.00 (Windows)
 
 #ifndef Glperlinnoise3dHPP
 #define Glperlinnoise3dHPP

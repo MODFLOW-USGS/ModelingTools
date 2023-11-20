@@ -316,20 +316,20 @@
 #include <Vcl.Menus.hpp>	// (vcl)
 #include <Winapi.MsCTF.hpp>	// (rtl)
 #include <Vcl.Controls.hpp>	// (vcl)
-#include <GR32_System.hpp>
-#include <GR32_Bindings.hpp>
-#include <GR32_LowLevel.hpp>
-#include <GR32_Blend.hpp>
-#include <GR32_Filters.hpp>
-#include <GR32_Rasterizers.hpp>
-#include <GR32_Transforms.hpp>
-#include <GR32_Resamplers.hpp>
-#include <GR32_XPThemes.hpp>
-#include <GR32_MicroTiles.hpp>
-#include <GR32_Image.hpp>
-#include <GR32_Backends_Generic.hpp>
-#include <GR32_Backends_VCL.hpp>
-#include <GR32.hpp>
+#include <GR32_System.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Blend.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Filters.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Image.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32.hpp>	// (GR32_DSGN_RS11_3)
 #include <Vcl.Buttons.hpp>	// (vcl)
 #include <Vcl.ExtDlgs.hpp>	// (vcl)
 #include <Vcl.Imaging.jpeg.hpp>	// (vclimg)
@@ -338,15 +338,6 @@
 #include <Xml.xmldom.hpp>	// (xmlrtl)
 #include <Xml.XMLSchema.hpp>	// (xmlrtl)
 #include <Xml.xmlutil.hpp>	// (xmlrtl)
-#include <GR32_DrawingEx.hpp>
-#include <GR32_Backends.hpp>
-#include <GR32_RepaintOpt.hpp>
-#include <GR32_Layers.hpp>
-#include <GR32_Containers.hpp>
-#include <GR32_OrdinalMaps.hpp>
-#include <GR32_VectorMaps.hpp>
-#include <GR32_RangeBars.hpp>
-#include <GR32_Math.hpp>
 // PRG_EXT: .bpl
 // BPI_DIR: ..\..\lib\Win32
 // OBJ_DIR: ..\..\lib\Win32
