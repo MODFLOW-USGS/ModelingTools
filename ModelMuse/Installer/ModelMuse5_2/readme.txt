@@ -169,6 +169,8 @@ package and then build and install the design-time package.
 
 Install JCL and JVCL. They can be obtained from http://www.delphi-jedi.org/
 or from the "Tools|GetIt Package Manager".
+They may also be downloaded and installed from their GIT repositories.
+https://github.com/project-jedi/jcl and https://github.com/project-jedi/jvcl.
 If installing with the GetIt Package Manager, the installer source code will 
 be downloaded and built and started. You must close Delphi before starting 
 the installation process with the installer. With JCL, you must accept the 
