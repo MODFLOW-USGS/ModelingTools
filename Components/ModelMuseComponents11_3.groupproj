@@ -1,0 +1,252 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{9C1DB3C1-4C00-4C23-9D0A-01E9274FD050}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="addbtn95\addbtn95_D11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ade\Ade11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ButtonEdit\ButtonEdit11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="datagrid\datagrid11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="GLWidget\GlWidget11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MMJLabel\MMJLabel11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ModelCube\ModelCube11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QMostRecentlyUsedFiles\MostRecentFiles11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Quadtree\QuadTreePkg11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QZoomBox2\ZoomBox2_11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwController\RbwControllerPackage11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwDataGrid\RbwDataGridD11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwDynamicCursor\DynamicCursor11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwEdit\RbwEdit11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwParser\RbwParser11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwRollup\RbwRollupPanel11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwRuler\RbwRuler11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="xbase\XBasePkg11_3.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="xbase\XBasePropEd11_3.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="addbtn95_D11_3">
+        <MSBuild Projects="addbtn95\addbtn95_D11_3.dproj"/>
+    </Target>
+    <Target Name="addbtn95_D11_3:Clean">
+        <MSBuild Projects="addbtn95\addbtn95_D11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="addbtn95_D11_3:Make">
+        <MSBuild Projects="addbtn95\addbtn95_D11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Ade11_3">
+        <MSBuild Projects="ade\Ade11_3.dproj"/>
+    </Target>
+    <Target Name="Ade11_3:Clean">
+        <MSBuild Projects="ade\Ade11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Ade11_3:Make">
+        <MSBuild Projects="ade\Ade11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ButtonEdit11_3">
+        <MSBuild Projects="ButtonEdit\ButtonEdit11_3.dproj"/>
+    </Target>
+    <Target Name="ButtonEdit11_3:Clean">
+        <MSBuild Projects="ButtonEdit\ButtonEdit11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ButtonEdit11_3:Make">
+        <MSBuild Projects="ButtonEdit\ButtonEdit11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="datagrid11_3">
+        <MSBuild Projects="datagrid\datagrid11_3.dproj"/>
+    </Target>
+    <Target Name="datagrid11_3:Clean">
+        <MSBuild Projects="datagrid\datagrid11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="datagrid11_3:Make">
+        <MSBuild Projects="datagrid\datagrid11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GlWidget11_3">
+        <MSBuild Projects="GLWidget\GlWidget11_3.dproj"/>
+    </Target>
+    <Target Name="GlWidget11_3:Clean">
+        <MSBuild Projects="GLWidget\GlWidget11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GlWidget11_3:Make">
+        <MSBuild Projects="GLWidget\GlWidget11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MMJLabel11_3">
+        <MSBuild Projects="MMJLabel\MMJLabel11_3.dproj"/>
+    </Target>
+    <Target Name="MMJLabel11_3:Clean">
+        <MSBuild Projects="MMJLabel\MMJLabel11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MMJLabel11_3:Make">
+        <MSBuild Projects="MMJLabel\MMJLabel11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ModelCube11_3">
+        <MSBuild Projects="ModelCube\ModelCube11_3.dproj"/>
+    </Target>
+    <Target Name="ModelCube11_3:Clean">
+        <MSBuild Projects="ModelCube\ModelCube11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModelCube11_3:Make">
+        <MSBuild Projects="ModelCube\ModelCube11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MostRecentFiles11_3">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFiles11_3.dproj"/>
+    </Target>
+    <Target Name="MostRecentFiles11_3:Clean">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFiles11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MostRecentFiles11_3:Make">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFiles11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="QuadTreePkg11_3">
+        <MSBuild Projects="Quadtree\QuadTreePkg11_3.dproj"/>
+    </Target>
+    <Target Name="QuadTreePkg11_3:Clean">
+        <MSBuild Projects="Quadtree\QuadTreePkg11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="QuadTreePkg11_3:Make">
+        <MSBuild Projects="Quadtree\QuadTreePkg11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ZoomBox2_11_3">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_11_3.dproj"/>
+    </Target>
+    <Target Name="ZoomBox2_11_3:Clean">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ZoomBox2_11_3:Make">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwControllerPackage11_3">
+        <MSBuild Projects="RbwController\RbwControllerPackage11_3.dproj"/>
+    </Target>
+    <Target Name="RbwControllerPackage11_3:Clean">
+        <MSBuild Projects="RbwController\RbwControllerPackage11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwControllerPackage11_3:Make">
+        <MSBuild Projects="RbwController\RbwControllerPackage11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwDataGridD11_3">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridD11_3.dproj"/>
+    </Target>
+    <Target Name="RbwDataGridD11_3:Clean">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridD11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwDataGridD11_3:Make">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridD11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DynamicCursor11_3">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursor11_3.dproj"/>
+    </Target>
+    <Target Name="DynamicCursor11_3:Clean">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursor11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DynamicCursor11_3:Make">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursor11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwEdit11_3">
+        <MSBuild Projects="RbwEdit\RbwEdit11_3.dproj"/>
+    </Target>
+    <Target Name="RbwEdit11_3:Clean">
+        <MSBuild Projects="RbwEdit\RbwEdit11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwEdit11_3:Make">
+        <MSBuild Projects="RbwEdit\RbwEdit11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwParser11_3">
+        <MSBuild Projects="RbwParser\RbwParser11_3.dproj"/>
+    </Target>
+    <Target Name="RbwParser11_3:Clean">
+        <MSBuild Projects="RbwParser\RbwParser11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwParser11_3:Make">
+        <MSBuild Projects="RbwParser\RbwParser11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwRollupPanel11_3">
+        <MSBuild Projects="RbwRollup\RbwRollupPanel11_3.dproj"/>
+    </Target>
+    <Target Name="RbwRollupPanel11_3:Clean">
+        <MSBuild Projects="RbwRollup\RbwRollupPanel11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwRollupPanel11_3:Make">
+        <MSBuild Projects="RbwRollup\RbwRollupPanel11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwRuler11_3">
+        <MSBuild Projects="RbwRuler\RbwRuler11_3.dproj"/>
+    </Target>
+    <Target Name="RbwRuler11_3:Clean">
+        <MSBuild Projects="RbwRuler\RbwRuler11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwRuler11_3:Make">
+        <MSBuild Projects="RbwRuler\RbwRuler11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="XBasePkg11_3">
+        <MSBuild Projects="xbase\XBasePkg11_3.dproj"/>
+    </Target>
+    <Target Name="XBasePkg11_3:Clean">
+        <MSBuild Projects="xbase\XBasePkg11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="XBasePkg11_3:Make">
+        <MSBuild Projects="xbase\XBasePkg11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="XBasePropEd11_3">
+        <MSBuild Projects="xbase\XBasePropEd11_3.dproj"/>
+    </Target>
+    <Target Name="XBasePropEd11_3:Clean">
+        <MSBuild Projects="xbase\XBasePropEd11_3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="XBasePropEd11_3:Make">
+        <MSBuild Projects="xbase\XBasePropEd11_3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="addbtn95_D11_3;Ade11_3;ButtonEdit11_3;datagrid11_3;GlWidget11_3;MMJLabel11_3;ModelCube11_3;MostRecentFiles11_3;QuadTreePkg11_3;ZoomBox2_11_3;RbwControllerPackage11_3;RbwDataGridD11_3;DynamicCursor11_3;RbwEdit11_3;RbwParser11_3;RbwRollupPanel11_3;RbwRuler11_3;XBasePkg11_3;XBasePropEd11_3"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="addbtn95_D11_3:Clean;Ade11_3:Clean;ButtonEdit11_3:Clean;datagrid11_3:Clean;GlWidget11_3:Clean;MMJLabel11_3:Clean;ModelCube11_3:Clean;MostRecentFiles11_3:Clean;QuadTreePkg11_3:Clean;ZoomBox2_11_3:Clean;RbwControllerPackage11_3:Clean;RbwDataGridD11_3:Clean;DynamicCursor11_3:Clean;RbwEdit11_3:Clean;RbwParser11_3:Clean;RbwRollupPanel11_3:Clean;RbwRuler11_3:Clean;XBasePkg11_3:Clean;XBasePropEd11_3:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="addbtn95_D11_3:Make;Ade11_3:Make;ButtonEdit11_3:Make;datagrid11_3:Make;GlWidget11_3:Make;MMJLabel11_3:Make;ModelCube11_3:Make;MostRecentFiles11_3:Make;QuadTreePkg11_3:Make;ZoomBox2_11_3:Make;RbwControllerPackage11_3:Make;RbwDataGridD11_3:Make;DynamicCursor11_3:Make;RbwEdit11_3:Make;RbwParser11_3:Make;RbwRollupPanel11_3:Make;RbwRuler11_3:Make;XBasePkg11_3:Make;XBasePropEd11_3:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

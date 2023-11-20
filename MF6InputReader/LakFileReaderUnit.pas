@@ -1,4 +1,4 @@
-unit SfrFileReaderUnit;
+unit LakFileReaderUnit;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   System.Generics.Collections;
 
 type
-  TSfrOptions = class(TCustomMf6Persistent)
+  TLakOptions = class(TCustomMf6Persistent)
   private
     AUXILIARY: TStringList;
     BOUNDNAMES: Boolean;
@@ -22,7 +22,7 @@ type
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     MOVER: Boolean;
-    MAXIMUM_PICARD_ITERATIONS: TIntegerOption;
+    MAXIMUM_STAGE_CHANGE: TRealOption;
     MAXIMUM_ITERATIONS: TIntegerOption;
     LENGTH_CONVERSION: TRealOption;
     TIME_CONVERSION: TRealOption;
@@ -34,28 +34,21 @@ type
     destructor Destroy; override;
   end;
 
-  TSfrDimensions = class(TCustomMf6Persistent)
+  TLakDimensions = class(TCustomMf6Persistent)
   private
-    NREACHES: Integer;
+    NLAKES: Integer;
+    NOUTLETS: Integer;
+    NTABLES: Integer;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   end;
 
-  TSfrPackageItem = class(TObject)
+  TLakrPackageItem = class(TObject)
   private
-    rno: Integer;
-    cellid: TCellId;
-    rlen: Extended;
-    rwid: Extended;
-    rgrd: Extended;
-    rtp: Extended;
-    rbth: Extended;
-    rhk: Extended;
-    man: TBoundaryValue;
-    ncon: Integer;
-    ustrf: TBoundaryValue;
-    ndv: Integer;
+    lakeno: Integer;
+    strt: Extended;
+    nlakeconn: Integer;
     aux: TBoundaryValueList;
     boundname: string;
   public
@@ -63,13 +56,13 @@ type
     destructor Destroy; override;
   end;
 
-  TSfrPackageItemList= TObjectList<TSfrPackageItem>;
+  TLakrPackageItemList= TObjectList<TLakrPackageItem>;
 
-  TSfrPackageData = class(TCustomMf6Persistent)
+  TLakPackageData = class(TCustomMf6Persistent)
   private
-    FItems: TSfrPackageItemList;
+    FItems: TLakrPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
-      BOUNDNAMES: Boolean; Dimensions: TDimensions);
+      BOUNDNAMES: Boolean);
   protected
     procedure Initialize; override;
   public
@@ -77,17 +70,45 @@ type
     destructor Destroy; override;
   end;
 
-  TCrossSectionItem = record
-    rno: Integer;
+  TLakConnectionItem = record
+  private
+    lakeno: Integer;
+    iconn: Integer;
+    cellid: TCellId;
+    claktype: string;
+    bedleak: string;
+    belev: Extended;
+    telev: Extended;
+    connlen: Extended;
+    connwidth: Extended;
+    procedure Initialize;
+  end;
+
+  TLakConnectionItemList = TList<TLakConnectionItem>;
+
+  TLakConnections = class(TCustomMf6Persistent)
+  private
+    FItems: TLakConnectionItemList;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      Dimensions: TDimensions);
+  protected
+    procedure Initialize; override;
+  public
+    constructor Create(PackageType: string); override;
+    destructor Destroy; override;
+  end;
+
+  TLakeTableItem = record
+    lakeno: Integer;
     tab6_filename: string;
     procedure Initialize;
   end;
 
-  TCrossSectionItemList = TList<TCrossSectionItem>;
+  TLakeTableItemList = TList<TLakeTableItem>;
 
-  TSfrCrossSections = class(TCustomMf6Persistent)
+  TLakTables = class(TCustomMf6Persistent)
   private
-    FItems: TCrossSectionItemList;
+    FItems: TLakeTableItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -96,40 +117,23 @@ type
     destructor Destroy; override;
   end;
 
-  TSfrConnectionItem = record
-  private
-    rno: Integer;
-    ic: array of Integer;
+  TLakOutletItem = record
+    outletno: Integer;
+    lakein: Integer;
+    lakeout: Integer;
+    couttype: string;
+    invert: TBoundaryValue;
+    width: TBoundaryValue;
+    rough: TBoundaryValue;
+    slope: TBoundaryValue;
     procedure Initialize;
   end;
 
-  TSfrConnectionItemList = TList<TSfrConnectionItem>;
+  TLakOutletItemList = TList<TLakOutletItem>;
 
-  TSfrConnections = class(TCustomMf6Persistent)
+  TLakOutlets = class(TCustomMf6Persistent)
   private
-    FItems: TSfrConnectionItemList;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-      PackageItems: TSfrPackageItemList);
-  protected
-    procedure Initialize; override;
-  public
-    constructor Create(PackageType: string); override;
-    destructor Destroy; override;
-  end;
-
-  TSfrDiversionItem = record
-    rno: Integer;
-    idv: Integer;
-    iconr: Integer;
-    cprior: string;
-    procedure Initialize;
-  end;
-
-  TSfrDiversionItemList = TList<TSfrDiversionItem>;
-
-  TSfrDiversions = class(TCustomMf6Persistent)
-  private
-    FItems: TSfrDiversionItemList;
+    FItems: TLakOutletItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -138,7 +142,7 @@ type
     destructor Destroy; override;
   end;
 
-  TSfrPeriod = class(TCustomMf6Persistent)
+  TLakPeriod = class(TCustomMf6Persistent)
   private
     IPER: Integer;
     FItems: TNumberedItemList;
@@ -150,16 +154,16 @@ type
     destructor Destroy; override;
   end;
 
-  TSfrPeriodList = TObjectList<TSfrPeriod>;
+  TSfrPeriodList = TObjectList<TLakPeriod>;
 
-  TSfr = class(TDimensionedPackageReader)
+  TLak = class(TDimensionedPackageReader)
   private
-    FOptions: TSfrOptions;
-    FSfrDimensions: TSfrDimensions;
-    FPackageData: TSfrPackageData;
-    FSfrCrossSections: TSfrCrossSections;
-    FConnections: TSfrConnections;
-    FSfrDiversions: TSfrDiversions;
+    FOptions: TLakOptions;
+    FLakrDimensions: TLakDimensions;
+    FPackageData: TLakPackageData;
+    FLakCrossSections: TLakTables;
+    FConnections: TLakConnections;
+    FLakDiversions: TLakOutlets;
     FPeriods: TSfrPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
@@ -181,9 +185,9 @@ resourcestring
   StrUnrecognizedSCROS = 'Unrecognized %s CROSSSECTIONS data in the followin' +
   'g line';
 
-{ TSfrOptions }
+{ TLakOptions }
 
-constructor TSfrOptions.Create(PackageType: string);
+constructor TLakOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
   TS6_FileNames := TStringList.Create;
@@ -192,7 +196,7 @@ begin
 
 end;
 
-destructor TSfrOptions.Destroy;
+destructor TLakOptions.Destroy;
 begin
   AUXILIARY.Free;
   TS6_FileNames.Free;
@@ -200,7 +204,7 @@ begin
   inherited;
 end;
 
-procedure TSfrOptions.Initialize;
+procedure TLakOptions.Initialize;
 begin
   inherited;
   AUXILIARY.Clear;
@@ -216,13 +220,13 @@ begin
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   MOVER := False;
-  MAXIMUM_PICARD_ITERATIONS.Initialize;
+  MAXIMUM_STAGE_CHANGE.Initialize;
   MAXIMUM_ITERATIONS.Initialize;
   LENGTH_CONVERSION.Initialize;
   TIME_CONVERSION.Initialize;
 end;
 
-procedure TSfrOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TLakOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -297,10 +301,10 @@ begin
     begin
       MOVER := True;
     end
-    else if (FSplitter[0] = 'MAXIMUM_PICARD_ITERATIONS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], MAXIMUM_PICARD_ITERATIONS.Value) then
+    else if (FSplitter[0] = 'MAXIMUM_STAGE_CHANGE') and (FSplitter.Count >= 2)
+      and TryFortranStrToFloat(FSplitter[1], MAXIMUM_STAGE_CHANGE.Value) then
     begin
-      MAXIMUM_PICARD_ITERATIONS.Used := True;
+      MAXIMUM_STAGE_CHANGE.Used := True;
     end
     else if (FSplitter[0] = 'MAXIMUM_ITERATIONS') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], MAXIMUM_ITERATIONS.Value) then
@@ -342,15 +346,17 @@ begin
   end
 end;
 
-{ TSfrDimensions }
+{ TLakDimensions }
 
-procedure TSfrDimensions.Initialize;
+procedure TLakDimensions.Initialize;
 begin
   inherited;
-  NREACHES := 0;
+  NLAKES := 0;
+  NOUTLETS := 0;
+  NTABLES := 0;
 end;
 
-procedure TSfrDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TLakDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -373,8 +379,16 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'NREACHES') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NREACHES) then
+    if (FSplitter[0] = 'NLAKES') and (FSplitter.Count >= 2)
+      and TryStrToInt(FSplitter[1], NLAKES) then
+    begin
+    end
+    else if (FSplitter[0] = 'NOUTLETS') and (FSplitter.Count >= 2)
+      and TryStrToInt(FSplitter[1], NOUTLETS) then
+    begin
+    end
+    else if (FSplitter[0] = 'NTABLES') and (FSplitter.Count >= 2)
+      and TryStrToInt(FSplitter[1], NTABLES) then
     begin
     end
     else
@@ -385,68 +399,57 @@ begin
   end
 end;
 
-{ TSfrPackageItem }
+{ TLakrPackageItem }
 
-constructor TSfrPackageItem.Create;
+constructor TLakrPackageItem.Create;
 begin
-  rno := 0;
-  cellid.Initialize;
-  rlen := 0;
-  rwid := 0;
-  rgrd := 0;
-  rtp := 0;
-  rbth := 0;
-  rhk := 0;
-  man.Initialize;
-  ncon := 0;
-  ustrf.Initialize;
-  ndv := 0;
+  lakeno := 0;
+  strt := 0;
+  nlakeconn := 0;
   aux := TBoundaryValueList.Create;
   boundname := ''
 end;
 
-destructor TSfrPackageItem.Destroy;
+destructor TLakrPackageItem.Destroy;
 begin
   aux.Free;
   inherited;
 end;
 
-{ TSfrPackageData }
+{ TLakPackageData }
 
-constructor TSfrPackageData.Create(PackageType: string);
+constructor TLakPackageData.Create(PackageType: string);
 begin
-  FItems := TSfrPackageItemList.Create;
+  FItems := TLakrPackageItemList.Create;
   inherited;
 
 end;
 
-destructor TSfrPackageData.Destroy;
+destructor TLakPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TSfrPackageData.Initialize;
+procedure TLakPackageData.Initialize;
 begin
   inherited;
   FItems.Clear;
 end;
 
-procedure TSfrPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-  naux: Integer; BOUNDNAMES: Boolean; Dimensions: TDimensions);
+procedure TLakPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+  naux: Integer; BOUNDNAMES: Boolean);
 var
   ALine: string;
   ErrorLine: string;
-  Item: TSfrPackageItem;
+  Item: TLakrPackageItem;
   ItemStart: Integer;
   AuxIndex: Integer;
   AValue: TBoundaryValue;
   CaseSensitiveLine: string;
-  DimensionCount: Integer;
   NumberOfItems: Integer;
 begin
-  DimensionCount := Dimensions.DimensionCount;
-  NumberOfItems := 11 + naux + DimensionCount;
+  NumberOfItems := 3 + naux;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -461,53 +464,28 @@ begin
     if ReadEndOfSection(ALine, ErrorLine, 'PACKAGEDATA', Unhandled) then
     begin
       FItems.Sort(
-        TComparer<TSfrPackageItem>.Construct(
-          function(const Left, Right: TSfrPackageItem): Integer
+        TComparer<TLakrPackageItem>.Construct(
+          function(const Left, Right: TLakrPackageItem): Integer
           begin
-            Result := Left.rno - Right.rno;
+            Result := Left.lakeno - Right.lakeno;
           end
         ));
       Exit;
     end;
 
     CaseSensitiveLine := ALine;
-    Item := TSfrPackageItem.Create;
+    Item := TLakrPackageItem.Create;
     try
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
       if (FSplitter.Count >= NumberOfItems)
-        and TryStrToInt(FSplitter[0],Item.rno)
-        and ReadCellID(Item.cellid, 1, DimensionCount)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+1],Item.rlen)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+2],Item.rwid)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+3],Item.rgrd)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+4],Item.rtp)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+5],Item.rbth)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+6],Item.rhk)
-        and TryStrToInt(FSplitter[DimensionCount+8],Item.ncon)
-        and TryStrToInt(FSplitter[DimensionCount+10],Item.ndv)
+        and TryStrToInt(FSplitter[0],Item.lakeno)
+        and TryFortranStrToFloat(FSplitter[1],Item.strt)
+        and TryStrToInt(FSplitter[2],Item.nlakeconn)
         then
       begin
-        if TryFortranStrToFloat(FSplitter[DimensionCount+7],Item.man.NumericValue) then
-        begin
-          Item.man.ValueType := vtNumeric;
-        end
-        else
-        begin
-          Item.man.ValueType := vtString;
-          Item.man.StringValue := FSplitter[DimensionCount+7];
-        end;
-        if TryFortranStrToFloat(FSplitter[DimensionCount+9],Item.ustrf.NumericValue) then
-        begin
-          Item.ustrf.ValueType := vtNumeric;
-        end
-        else
-        begin
-          Item.ustrf.ValueType := vtString;
-          Item.ustrf.StringValue := FSplitter[DimensionCount+7];
-        end;
 
-        ItemStart := DimensionCount+11;
+        ItemStart := 3;
         for AuxIndex := 0 to naux - 1 do
         begin
           AValue.Initialize;
@@ -544,39 +522,39 @@ end;
 
 { TTabFileItem }
 
-procedure TCrossSectionItem.Initialize;
+procedure TLakeTableItem.Initialize;
 begin
-  rno := 0;
+  lakeno := 0;
   tab6_filename := '';
 end;
 
-{ TSfrCrossSections }
+{ TLakTables }
 
-constructor TSfrCrossSections.Create(PackageType: string);
+constructor TLakTables.Create(PackageType: string);
 begin
-  FItems := TCrossSectionItemList.Create;
+  FItems := TLakeTableItemList.Create;
   inherited;
 
 end;
 
-destructor TSfrCrossSections.Destroy;
+destructor TLakTables.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TSfrCrossSections.Initialize;
+procedure TLakTables.Initialize;
 begin
   inherited;
   FItems.Clear;
 end;
 
-procedure TSfrCrossSections.Read(Stream: TStreamReader;
+procedure TLakTables.Read(Stream: TStreamReader;
   Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
-  Item: TCrossSectionItem;
+  Item: TLakeTableItem;
   CaseSensitiveLine: string;
 begin
   Initialize;
@@ -590,7 +568,7 @@ begin
       Continue;
     end;
 
-    if ReadEndOfSection(ALine, ErrorLine, 'CROSSSECTIONS', Unhandled) then
+    if ReadEndOfSection(ALine, ErrorLine, 'TABLES', Unhandled) then
     begin
       Exit;
     end;
@@ -601,7 +579,7 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     if (FSplitter.Count >= 4)
-      and TryStrToInt(FSplitter[0],Item.rno)
+      and TryStrToInt(FSplitter[0],Item.lakeno)
       and (FSplitter[1] = 'TAB6')
       and (FSplitter[2] = 'FILEIN')
       then
@@ -618,44 +596,55 @@ begin
   end;
 end;
 
-{ TSfrConnectionItem }
+{ TLakConnectionItem }
 
-procedure TSfrConnectionItem.Initialize;
+procedure TLakConnectionItem.Initialize;
 begin
-  rno := 0;
-  SetLength(ic, 0);
+  lakeno := 0;
+  iconn := 0;
+  cellid.Initialize;
+  claktype := '';
+  bedleak := '';
+  belev := 0;
+  telev := 0;
+  connlen := 0;
+  connwidth := 0;
 end;
 
-{ TSfrConnections }
+{ TLakConnections }
 
-constructor TSfrConnections.Create(PackageType: string);
+constructor TLakConnections.Create(PackageType: string);
 begin
-  FItems := TSfrConnectionItemList.Create;
+  FItems := TLakConnectionItemList.Create;
   inherited;
 
 end;
 
-destructor TSfrConnections.Destroy;
+destructor TLakConnections.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TSfrConnections.Initialize;
+procedure TLakConnections.Initialize;
 begin
   inherited;
   FItems.Clear;
 end;
 
-procedure TSfrConnections.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-  PackageItems: TSfrPackageItemList);
+procedure TLakConnections.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+  Dimensions: TDimensions);
 var
   ALine: string;
   ErrorLine: string;
-  Item: TSfrConnectionItem;
+  Item: TLakConnectionItem;
   IcIndex: Integer;
   ncon: Integer;
+  DimensionCount: Integer;
+  ItemCount: Integer;
 begin
+  DimensionCount := Dimensions.DimensionCount;
+  ItemCount := 8 + DimensionCount;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -672,43 +661,19 @@ begin
       Exit;
     end;
 
-    Item.Initialize;;
+    Item.Initialize;
     FSplitter.DelimitedText := ALine;
-    if TryStrToInt(FSplitter[0],Item.rno) then
+    if (FSplitter.Count >= ItemCount) and TryStrToInt(FSplitter[0],Item.lakeno)
+      and ReadCellId(Item.cellid, 1, DimensionCount)
+      and TryFortranStrToFloat(FSplitter[3+DimensionCount], Item.belev)
+      and TryFortranStrToFloat(FSplitter[4+DimensionCount], Item.telev)
+      and TryFortranStrToFloat(FSplitter[5+DimensionCount], Item.connlen)
+      and TryFortranStrToFloat(FSplitter[6+DimensionCount], Item.connwidth)
+      then
     begin
-
-      if (Item.rno >= 1) and (Item.rno <= PackageItems.Count) then
-      begin
-        ncon := PackageItems[Item.rno-1].ncon;
-        if FSplitter.Count >= ncon+1 then
-        begin
-          SetLength(Item.ic, ncon);
-          for IcIndex := 0 to Length(Item.ic) - 1 do
-          begin
-            Item.ic[IcIndex] := 0;
-          end;
-          for IcIndex := 0 to Length(Item.ic) - 1 do
-          begin
-            if not TryStrToInt(FSplitter[IcIndex+1], Item.ic[IcIndex]) then
-            begin
-              Unhandled.WriteLine(Format(StrUnrecognizedSCONN, [FPackageType]));
-              Unhandled.WriteLine(ErrorLine);
-              Break;
-            end;
-          end;
-          FItems.Add(Item);
-        end
-        else
-        begin
-          Unhandled.WriteLine(Format(StrUnrecognizedSCONN, [FPackageType]));
-          Unhandled.WriteLine(ErrorLine);
-        end;
-      end
-      else
-      begin
-        Unhandled.WriteLine(Format(StrUnrecognizedSCONN, [FPackageType]));
-        Unhandled.WriteLine(ErrorLine);
-      end;
+      Item.claktype := FSplitter[1+DimensionCount];
+      Item.bedleak := FSplitter[2+DimensionCount];
+      FItems.Add(Item);
     end
     else
     begin
@@ -718,42 +683,46 @@ begin
   end;
 end;
 
-{ TSfrDiversionItem }
+{ TLakOutletItem }
 
-procedure TSfrDiversionItem.Initialize;
+procedure TLakOutletItem.Initialize;
 begin
-  rno := 0;
-  idv := 0;
-  iconr := 0;
-  cprior := '';
+  outletno := 0;
+  lakein := 0;
+  lakeout := 0;
+  couttype := '';
+  invert.Initialize;
+  width.Initialize;
+  rough.Initialize;
+  slope.Initialize;
 end;
 
-{ TSfrDiversions }
+{ TLakOutlets }
 
-constructor TSfrDiversions.Create(PackageType: string);
+constructor TLakOutlets.Create(PackageType: string);
 begin
-  FItems := TSfrDiversionItemList.Create;
+  FItems := TLakOutletItemList.Create;
   inherited;
 
 end;
 
-destructor TSfrDiversions.Destroy;
+destructor TLakOutlets.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TSfrDiversions.Initialize;
+procedure TLakOutlets.Initialize;
 begin
   inherited;
   FItems.Clear;
 end;
 
-procedure TSfrDiversions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TLakOutlets.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
-  Item: TSfrDiversionItem;
+  Item: TLakOutletItem;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -775,12 +744,12 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     if (FSplitter.Count >- 4)
-      and TryStrToInt(FSplitter[0],Item.rno)
-      and TryStrToInt(FSplitter[1],Item.idv)
-      and TryStrToInt(FSplitter[2],Item.iconr)
+      and TryStrToInt(FSplitter[0],Item.outletno)
+      and TryStrToInt(FSplitter[1],Item.lakein)
+      and TryStrToInt(FSplitter[2],Item.lakeout)
       then
     begin
-      Item.cprior := FSplitter[3];
+      Item.couttype := FSplitter[3];
       FItems.Add(Item);
     end
     else
@@ -791,28 +760,28 @@ begin
   end;
 end;
 
-{ TSfrPeriod }
+{ TLakPeriod }
 
-constructor TSfrPeriod.Create(PackageType: string);
+constructor TLakPeriod.Create(PackageType: string);
 begin
   FItems := TNumberedItemList.Create;
   inherited;
 
 end;
 
-destructor TSfrPeriod.Destroy;
+destructor TLakPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TSfrPeriod.Initialize;
+procedure TLakPeriod.Initialize;
 begin
   inherited;
   FItems.Clear;
 end;
 
-procedure TSfrPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TLakPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   SfrItem: TNumberedItem;
   ALine: string;
@@ -904,17 +873,17 @@ begin
 
 end;
 
-{ TSfr }
+{ TLak }
 
-constructor TSfr.Create(PackageType: string);
+constructor TLak.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TSfrOptions.Create(PackageType);
-  FSfrDimensions := TSfrDimensions.Create(PackageType);
-  FPackageData := TSfrPackageData.Create(PackageType);
-  FSfrCrossSections := TSfrCrossSections.Create(PackageType);
-  FConnections := TSfrConnections.Create(PackageType);
-  FSfrDiversions := TSfrDiversions.Create(PackageType);
+  FOptions := TLakOptions.Create(PackageType);
+  FLakrDimensions := TLakDimensions.Create(PackageType);
+  FPackageData := TLakPackageData.Create(PackageType);
+  FLakCrossSections := TLakTables.Create(PackageType);
+  FConnections := TLakConnections.Create(PackageType);
+  FLakDiversions := TLakOutlets.Create(PackageType);
   FPeriods := TSfrPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
@@ -922,14 +891,14 @@ begin
 
 end;
 
-destructor TSfr.Destroy;
+destructor TLak.Destroy;
 begin
   FOptions.Free;
-  FSfrDimensions.Free;
+  FLakrDimensions.Free;
   FPackageData.Free;
-  FSfrCrossSections.Free;
+  FLakCrossSections.Free;
   FConnections.Free;
-  FSfrDiversions.Free;
+  FLakDiversions.Free;
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
@@ -937,12 +906,12 @@ begin
   inherited;
 end;
 
-procedure TSfr.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TLak.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
   IPER: Integer;
-  APeriod: TSfrPeriod;
+  APeriod: TLakPeriod;
   TsPackage: TPackage;
   PackageIndex: Integer;
   TsReader: TTimeSeries;
@@ -971,30 +940,30 @@ begin
       end
       else if FSplitter[1] ='DIMENSIONS' then
       begin
-        FSfrDimensions.Read(Stream, Unhandled);
+        FLakrDimensions.Read(Stream, Unhandled);
       end
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
         FPackageData.Read(Stream, Unhandled, FOptions.AUXILIARY.Count,
-          FOptions.BOUNDNAMES, FDimensions);
+          FOptions.BOUNDNAMES);
       end
       else if FSplitter[1] ='CROSSSECTIONS' then
       begin
-        FSfrCrossSections.Read(Stream, Unhandled);
+        FLakCrossSections.Read(Stream, Unhandled);
       end
       else if FSplitter[1] ='CONNECTIONDATA' then
       begin
-        FConnections.Read(Stream, Unhandled, FPackageData.FItems);
+        FConnections.Read(Stream, Unhandled, FDimensions);
       end
       else if FSplitter[1] ='DIVERSIONS' then
       begin
-        FSfrDiversions.Read(Stream, Unhandled);
+        FLakDiversions.Read(Stream, Unhandled);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
-          APeriod := TSfrPeriod.Create(FPackageType);
+          APeriod := TLakPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled);
@@ -1042,12 +1011,12 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
-  for PackageIndex := 0 to FSfrCrossSections.FItems.Count - 1 do
+  for PackageIndex := 0 to FLakCrossSections.FItems.Count - 1 do
   begin
     CrossSectionPackage := TPackage.Create;
     FObservationsPackages.Add(CrossSectionPackage);
     CrossSectionPackage.FileType := FPackageType;
-    CrossSectionPackage.FileName := FSfrCrossSections.FItems[PackageIndex].tab6_filename;
+    CrossSectionPackage.FileName := FLakCrossSections.FItems[PackageIndex].tab6_filename;
     CrossSectionPackage.PackageName := '';
 
     CrossSectionReader := TCrossSection.Create(FPackageType);

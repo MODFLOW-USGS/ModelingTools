@@ -43,7 +43,8 @@ uses
   EvtFileReaderUnit in 'EvtFileReaderUnit.pas',
   MawFileReaderUnit in 'MawFileReaderUnit.pas',
   SfrFileReaderUnit in 'SfrFileReaderUnit.pas',
-  CrossSectionFileReaderUnit in 'CrossSectionFileReaderUnit.pas';
+  CrossSectionFileReaderUnit in 'CrossSectionFileReaderUnit.pas',
+  LakFileReaderUnit in 'LakFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;
