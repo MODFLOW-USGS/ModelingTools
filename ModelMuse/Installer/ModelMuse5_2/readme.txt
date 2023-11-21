@@ -79,7 +79,9 @@ be created in the installation directory:
    |  |--doc          : Documentation files
 
 ModelMuse will also create a subdirectory of the "Public Documents" directory named 
-"ModelMuse Examples" containing sample models and data.
+"ModelMuse Examples" containing sample models and data. For computers in which the 
+language is not English, the name of the "Public Documents" directory may be 
+a translation of "Public Documents."
 
    |  |--data         : Data files and example models described in the 
    |  |                   documentation or the ModelMuse help.

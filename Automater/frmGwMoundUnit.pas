@@ -3368,7 +3368,7 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
 begin
-  dlgSaveResults.FileName := '';
+  dlgSaveResults.FileName := ChangeFileExt(dlgSaveFile.FileName, '.csv');
   if dlgSaveResults.Execute then
   begin
     StringBuilder := TStringBuilder.Create;

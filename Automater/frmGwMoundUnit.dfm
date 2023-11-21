@@ -1579,8 +1579,6 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = False
               end>
             WordWrapRowCaptions = False
-            ExplicitLeft = 4
-            ExplicitTop = 28
           end
           object pnl1: TPanel
             Left = 0
@@ -2280,7 +2278,6 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = False
               end>
             WordWrapRowCaptions = False
-            ExplicitLeft = 4
             ColWidths = (
               200
               276)
@@ -2397,7 +2394,6 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
-            ExplicitLeft = 4
             ColWidths = (
               64
               64
