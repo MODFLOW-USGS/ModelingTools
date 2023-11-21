@@ -32091,6 +32091,8 @@ object TTaskHistory
       Date = 45250.000000000000000000
       Categories.Strings = (
         'Dialog boxes'
-        'GwMounding')
+        'GwMounding'
+        'Testing'
+        'Documentation')
     end>
 end
