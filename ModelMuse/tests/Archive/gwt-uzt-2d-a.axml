@@ -46,6 +46,7 @@
     <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.OuterSolution.CSV</FileName>
     <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.uzf_budget</FileName>
     <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.UzfConvergence.CSV</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">gwt-uzt-2d-a.water_content</FileName>
     <FileName Model_Name="gwt-uzt-2d-a" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

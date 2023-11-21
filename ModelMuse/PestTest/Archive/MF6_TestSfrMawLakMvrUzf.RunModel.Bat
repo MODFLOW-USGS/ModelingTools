@@ -93,6 +93,7 @@ if exist "MF6_TestSfrMawLakMvrUzf.uzf-gwd_ob.csv" del "MF6_TestSfrMawLakMvrUzf.u
 if exist "MF6_TestSfrMawLakMvrUzf.uzf-gwd-to-mvr_ob.csv" del "MF6_TestSfrMawLakMvrUzf.uzf-gwd-to-mvr_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.uzf-gwet_ob.csv" del "MF6_TestSfrMawLakMvrUzf.uzf-gwet_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.uzf-gwrch_ob.csv" del "MF6_TestSfrMawLakMvrUzf.uzf-gwrch_ob.csv"
+if exist "MF6_TestSfrMawLakMvrUzf.water_content" del "MF6_TestSfrMawLakMvrUzf.water_content"
 if exist "MF6_TestSfrMawLakMvrUzf.water-content_ob.csv" del "MF6_TestSfrMawLakMvrUzf.water-content_ob.csv"
 if exist "mfsim.lst" del "mfsim.lst"
 "plproc.exe" MF6_TestSfrMawLakMvrUzf.UZF6_Surface_Depression_Depth.script

@@ -1,7 +1,7 @@
-# Output Control file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+# Output Control file created on 11/21/2023 by ModelMuse version 5.1.1.45.
 BEGIN OPTIONS
   BUDGET FILEOUT 'mt3dsupp82.cbc'
-  HEAD PRINT_FORMAT  COLUMNS     10 WIDTH     11 DIGITS      4
+  HEAD PRINT_FORMAT  COLUMNS     10 WIDTH     11 DIGITS      4 GENERAL
   HEAD FILEOUT 'mt3dsupp82.bhd'
 END OPTIONS
 

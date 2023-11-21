@@ -1,11 +1,6 @@
 program GwMounding;
 
 uses
-  madExcept,
-  madLinkDisAsm,
-  madListHardware,
-  madListProcesses,
-  madListModules,
   Forms,
   frmGwMoundUnit in 'frmGwMoundUnit.pas' {frmGwMound},
   HantushUnit in 'HantushUnit.pas',
