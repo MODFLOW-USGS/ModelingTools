@@ -131,6 +131,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.uzf-gwd-to-mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.uzf-gwet_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.uzf-gwrch_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.water_content</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.water-content_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">mfsim.lst</FileName>
   </output>

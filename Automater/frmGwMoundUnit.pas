@@ -449,6 +449,10 @@ type
     rdeDurationOfInfiltration: TRbwDataEntry;
     comboDurationOfInfiltration: TComboBox;
     lblWarning: TLabel;
+    btnSaveAnalytic: TButton;
+    dlgSaveResults: TSaveDialog;
+    btnSaveSummary: TButton;
+    btnSaveNumericProfile: TButton;
     procedure rdgBasinCoordinatesEndUpdate(Sender: TObject);
     procedure seCoordCountChange(Sender: TObject);
     procedure cbSimulateUnsatClick(Sender: TObject);
@@ -532,6 +536,9 @@ type
     procedure comboDurationOfInfiltrationEnter(Sender: TObject);
     procedure comboDurationOfInfiltrationChange(Sender: TObject);
     procedure rdeDurationOfInfiltrationChange(Sender: TObject);
+    procedure btnSaveAnalyticClick(Sender: TObject);
+    procedure btnSaveSummaryClick(Sender: TObject);
+    procedure btnSaveNumericProfileClick(Sender: TObject);
   private
     FTimeSeries: TList;
 {$IFDEF UNSAT}
@@ -601,6 +608,7 @@ type
     procedure UpdateInfiltrationTime;
     function GetInfiltrationTime: double;
     procedure SetMinForInfiltrationTime;
+    procedure SaveResults(Grid: TRbwDataGrid4);
     { Private declarations }
   public
     { Public declarations }
@@ -1831,6 +1839,24 @@ begin
   chrtNumeric.BottomAxis.Title.Caption := 'Position' + Units;
   pgcNumeric.ActivePage := tabGraphNumeric;
 
+end;
+
+procedure TfrmGwMound.btnSaveAnalyticClick(Sender: TObject);
+begin
+  inherited;
+  SaveResults(rdgAnalytic);
+end;
+
+procedure TfrmGwMound.btnSaveNumericProfileClick(Sender: TObject);
+begin
+  inherited;
+  SaveResults(rdgProfileNumeric);
+end;
+
+procedure TfrmGwMound.btnSaveSummaryClick(Sender: TObject);
+begin
+  inherited;
+  SaveResults(rdgSummaryNumeric);
 end;
 
 procedure TfrmGwMound.btnCustomBasinClick(Sender: TObject);
@@ -3333,6 +3359,39 @@ begin
   RechargeTime := ConvertTo(RechargeTime, TimeUnit);
   // The double conversion is to avoid round-off error.
   rdeDurationOfInfiltration.Min := StrToFloat(FloatToStr(RechargeTime));
+end;
+
+procedure TfrmGwMound.SaveResults(Grid: TRbwDataGrid4);
+var
+  StringBuilder: TStringBuilder;
+  Writer: TStreamWriter;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  dlgSaveResults.FileName := ChangeFileExt(dlgSaveFile.FileName, '.csv');
+  if dlgSaveResults.Execute then
+  begin
+    StringBuilder := TStringBuilder.Create;
+    Writer := TFile.CreateText(dlgSaveResults.FileName);
+    try
+      for RowIndex := 0 to Grid.RowCount - 1 do
+      begin
+        StringBuilder.Clear;
+        for ColIndex := 0 to Grid.ColCount - 1 do
+        begin
+          StringBuilder.Append(Grid.Cells[ColIndex, RowIndex]);
+          if ColIndex < Grid.ColCount - 1 then
+          begin
+            StringBuilder.Append(',');
+          end;
+        end;
+        Writer.WriteLine(StringBuilder.ToString);
+      end;
+    finally
+      StringBuilder.Free;
+      Writer.Free;
+    end;
+  end;
 end;
 
 procedure TfrmGwMound.GetRechargeRateAndTime(var RechargeTime,

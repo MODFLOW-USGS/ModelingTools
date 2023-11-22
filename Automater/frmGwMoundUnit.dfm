@@ -7,8 +7,8 @@ inherited frmGwMound: TfrmGwMound
   OnDestroy = FormDestroy
   OnMouseWheelDown = FormMouseWheelDown
   OnMouseWheelUp = FormMouseWheelUp
-  ExplicitWidth = 744
-  ExplicitHeight = 602
+  ExplicitWidth = 748
+  ExplicitHeight = 603
   PixelsPerInch = 120
   TextHeight = 19
   object splitLeft: TJvNetscapeSplitter
@@ -59,8 +59,6 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 492
-    ExplicitWidth = 728
     DesignSize = (
       732
       51)
@@ -91,7 +89,6 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnBackClick
-      ExplicitLeft = 515
     end
     object btnNext: TBitBtn
       Left = 622
@@ -121,7 +118,6 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnNextClick
-      ExplicitLeft = 618
     end
     object btnMetric: TButton
       Left = 16
@@ -157,7 +153,6 @@ inherited frmGwMound: TfrmGwMound
     StateImages = ilStates
     TabOrder = 0
     OnChange = tvNavigationChange
-    ExplicitHeight = 370
   end
   object pnlHelp: TPanel
     Left = 0
@@ -170,8 +165,6 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 383
-    ExplicitWidth = 728
     object wbHelp: TWebBrowser
       Left = 1
       Top = 1
@@ -206,8 +199,6 @@ inherited frmGwMound: TfrmGwMound
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
-    ExplicitWidth = 507
-    ExplicitHeight = 370
     object jvspBasinDesign: TJvStandardPage
       Left = 0
       Top = 0
@@ -1133,8 +1124,6 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspRunAnalyticalModel'
-      ExplicitWidth = 507
-      ExplicitHeight = 370
       object pgcAnalytic: TPageControl
         Left = 0
         Top = 0
@@ -1144,12 +1133,10 @@ inherited frmGwMound: TfrmGwMound
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ActivePage = tabAnalyticControls
+        ActivePage = tabProfileAnalytic
         Align = alClient
         TabOrder = 0
         OnChange = pgcAnalyticChange
-        ExplicitWidth = 507
-        ExplicitHeight = 370
         object tabAnalyticControls: TTabSheet
           Caption = 'Controls'
           ImageIndex = 2
@@ -1617,6 +1604,15 @@ inherited frmGwMound: TfrmGwMound
               TabOrder = 0
               OnClick = btnCopyAnalyticClick
             end
+            object btnSaveAnalytic: TButton
+              Left = 231
+              Top = 0
+              Width = 154
+              Height = 32
+              Caption = 'Save to File'
+              TabOrder = 1
+              OnClick = btnSaveAnalyticClick
+            end
           end
         end
       end
@@ -1928,7 +1924,7 @@ inherited frmGwMound: TfrmGwMound
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ActivePage = tabNumericControls
+        ActivePage = tabTableNumeric
         Align = alClient
         TabOrder = 0
         OnChange = pgcNumericChange
@@ -2197,6 +2193,15 @@ inherited frmGwMound: TfrmGwMound
               TabOrder = 0
               OnClick = btnCopySummaryClick
             end
+            object btnSaveSummary: TButton
+              Left = 231
+              Top = 13
+              Width = 154
+              Height = 31
+              Caption = 'Save to File'
+              TabOrder = 1
+              OnClick = btnSaveSummaryClick
+            end
           end
           object rdgSummaryNumeric: TRbwDataGrid4
             Left = 0
@@ -2423,6 +2428,15 @@ inherited frmGwMound: TfrmGwMound
               Caption = 'Copy to Clipboard'
               TabOrder = 0
               OnClick = btnCopyNumericProfileClick
+            end
+            object btnSaveNumericProfile: TButton
+              Left = 231
+              Top = 13
+              Width = 154
+              Height = 31
+              Caption = 'Save to File'
+              TabOrder = 1
+              OnClick = btnSaveNumericProfileClick
             end
           end
         end
@@ -10386,5 +10400,11 @@ inherited frmGwMound: TfrmGwMound
       1F110000FF1F1F119F830000FF8F9F838FC30000FFC78FC3C7C70000FFE3C7C7
       E00F0000FFF8E00FF83F0000FFFFF83F00000000000000000000000000000000
       000000000000}
+  end
+  object dlgSaveResults: TSaveDialog
+    DefaultExt = '.csv'
+    Filter = 'Comma Separated Values (*.csv)|*.csv'
+    Left = 313
+    Top = 198
   end
 end

@@ -1745,6 +1745,7 @@ procedure TfrmModflowPackages.TimerBringToFrontTimer(Sender: TObject);
 begin
   inherited;
   BringToFront;
+  framePkgLPF.FrameResize(self);
   TimerBringToFront.Enabled := False;
 end;
 

@@ -56,7 +56,7 @@ procedure TframePackageLpf.FrameResize(Sender: TObject);
 begin
   inherited;
   rdgOptions.BeginUpdate;
-  rdgOptions.ColWidths[0] := rdgOptions.Width-4;
+  rdgOptions.ColWidths[0] := rdgOptions.Width-45;
   rdgOptions.EndUpdate;
 end;
 
@@ -75,6 +75,7 @@ begin
   rdgOptions.Checked[0, Ord(lorNoVFC)] := LpfPackage.UseVerticalFlowCorrection;
   rdgOptions.Checked[0, Ord(lorNoParCheck)] := LpfPackage.NoParCheck;
 
+  FrameResize(self);
 end;
 
 procedure TframePackageLpf.Loaded;
