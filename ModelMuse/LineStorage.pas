@@ -200,6 +200,7 @@ Type
     // lines are at the same or nearly the same location.
     // @link(TLine.TriangleNumber) is no longer valid after @name is called.
     procedure MergeLines;
+    procedure EliminateZeroLengthLines;
   end;
 
   // @name stores a series of @link(TLineList)s. 
@@ -386,6 +387,30 @@ begin
   inherited;
 end;
 
+procedure TLineList.EliminateZeroLengthLines;
+var
+  LineIndex: Integer;
+  Line: TLine;
+  LineStartPoint: TLocation;
+  LineEndPoint: TLocation;
+begin
+  for LineIndex := Count - 1 downto 0 do
+  begin
+    Line := Items[LineIndex];
+
+    if Line.Count <= 2 then
+    begin
+      LineStartPoint := Line.Items[0];
+      LineEndPoint := Line.Items[Line.Count -1];
+      if LineStartPoint.Equal(LineEndPoint) then
+      begin
+        FLines[LineIndex] := nil;
+      end;
+    end;
+  end;
+  FLines.Pack;
+end;
+
 function TLineList.Equal(const LineList: TLineList): boolean;
 var
   Index: integer;
@@ -552,7 +577,7 @@ begin
               MatchLineStartPoint := MatchLine.Items[0];
               MatchLineEndPoint := MatchLine.Items[MatchLine.Count-1];
               MergedTwoLines := False;
-              if MatchLineStartPoint.Equal(MatchLineEndPoint) then
+              if MatchLineStartPoint.Equal(MatchLineEndPoint) and (MatchLine.Count > 2) then
               begin
                 Continue;
               end;
@@ -628,7 +653,7 @@ begin
             MatchLineStartPoint := MatchLine.Items[0];
             MatchLineEndPoint := MatchLine.Items[MatchLine.Count-1];
             MergedTwoLines := False;
-            if MatchLineStartPoint.Equal(MatchLineEndPoint) then
+            if MatchLineStartPoint.Equal(MatchLineEndPoint) and (MatchLine.Count > 2) then
             begin
               Continue;
             end;

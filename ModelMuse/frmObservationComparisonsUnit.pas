@@ -541,7 +541,6 @@ procedure TfrmObservationComparisons.InitializeObsItemDictionary;
 var
   AnObs: IObservationItem;
   ItemIndex: Integer;
-  ObsName: string;
 begin
   for ItemIndex := 0 to FObsItemList.Count - 1 do
   begin
@@ -711,7 +710,7 @@ var
   Node: PVirtualNode;
 begin
   inherited;
-  treecomboInPlaceEditor.Tree.GetHitTestInfoAt(X, Y, False, HitInfo);
+  treecomboInPlaceEditor.Tree.GetHitTestInfoAt(X, Y, True, HitInfo);
   if (hiOnItemLabel in HitInfo.HitPositions) then
   begin
     Node := treecomboInPlaceEditor.Tree.GetNodeAt(X, Y);

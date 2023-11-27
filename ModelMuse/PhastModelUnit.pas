@@ -10083,9 +10083,11 @@ const
 //                files created by the MAW, MWT, SFR, SFT, UZF, and UZT
 //                packages in HODFLOW 6.
 
-//               Bug fix: Fixed export of PEST input files on computers in
+//    '5.1.1.46' Bug fix: Fixed export of PEST input files on computers in
 //                which a character other than the period is used as a
 //                decimal separator.
+//               Bug fix: Fixed export of shapefiles of contours for MODFLOW
+//                DISV models in which the active area varies among layers.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10098,7 +10100,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.45';
+  IIModelVersion = '5.1.1.46';
 
 function IModelVersion: string;
 begin

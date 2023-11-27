@@ -8693,6 +8693,7 @@ begin
                           begin
                             LocalModel.SelectedLayer := LayerIndex;
                             Application.ProcessMessages;
+                            Screen.Cursor := crHourGlass;
                             if frmLayersToExport.rgExportAs.ItemIndex = 1 then
                             begin
                               FileName := ChangeFileExt(sdShapefile.FileName,
@@ -8716,6 +8717,7 @@ begin
                         begin
                           LocalModel.SelectedLayer := LayerIndex;
                           Application.ProcessMessages;
+                          Screen.Cursor := crHourGlass;
                           if frmLayersToExport.rgExportAs.ItemIndex = 1 then
                           begin
                             FileName := ChangeFileExt(sdShapefile.FileName,

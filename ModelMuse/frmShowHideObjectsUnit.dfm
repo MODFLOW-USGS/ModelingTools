@@ -15,25 +15,25 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     Top = 251
     Width = 418
     Height = 158
-    ExplicitTop = 242
-    ExplicitWidth = 412
+    ExplicitTop = 250
+    ExplicitWidth = 414
     ExplicitHeight = 158
     DesignSize = (
       418
       158)
     inherited btnClose: TBitBtn
-      Left = 318
+      Left = 314
       Top = 109
       TabOrder = 2
-      ExplicitLeft = 318
+      ExplicitLeft = 310
       ExplicitTop = 109
     end
     inherited btnHelp: TBitBtn
-      Left = 318
+      Left = 314
       Top = 70
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 318
+      ExplicitLeft = 310
       ExplicitTop = 70
     end
     object grpShowOrSelect: TGroupBox
@@ -91,7 +91,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
       end
     end
     object btnEditAllSelected: TButton
-      Left = 318
+      Left = 314
       Top = 6
       Width = 89
       Height = 58
@@ -100,6 +100,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
       TabOrder = 3
       WordWrap = True
       OnClick = btnEditAllSelectedClick
+      ExplicitLeft = 310
     end
   end
   inherited vstObjects: TVirtualStringTree

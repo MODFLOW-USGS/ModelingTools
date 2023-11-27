@@ -2,23 +2,25 @@ inherited frmObservationComparisons: TfrmObservationComparisons
   HelpType = htKeyword
   HelpKeyword = 'Observation_Comparisons_Dialog'
   Caption = 'Comparison Observations'
-  ClientHeight = 312
-  ClientWidth = 784
-  ExplicitWidth = 800
-  ExplicitHeight = 351
+  ClientHeight = 311
+  ClientWidth = 780
+  ExplicitWidth = 796
+  ExplicitHeight = 350
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 277
-    Width = 784
+    Top = 276
+    Width = 780
     Height = 35
     Align = alBottom
     TabOrder = 0
+    ExplicitTop = 277
+    ExplicitWidth = 784
     DesignSize = (
-      784
+      780
       35)
     object btnCancel: TBitBtn
-      Left = 688
+      Left = 680
       Top = 2
       Width = 83
       Height = 27
@@ -26,9 +28,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 688
     end
     object btnOK: TBitBtn
-      Left = 600
+      Left = 592
       Top = 2
       Width = 82
       Height = 27
@@ -37,9 +40,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 600
     end
     object btnHelp: TBitBtn
-      Left = 512
+      Left = 504
       Top = 6
       Width = 82
       Height = 27
@@ -48,6 +52,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 512
     end
   end
   object treecomboInPlaceEditor: TRbwStringTreeCombo
@@ -119,15 +124,15 @@ inherited frmObservationComparisons: TfrmObservationComparisons
   inline frameObsComparisons: TframeGrid
     Left = 0
     Top = 0
-    Width = 784
-    Height = 277
+    Width = 780
+    Height = 276
     Align = alClient
     TabOrder = 2
     ExplicitWidth = 784
     ExplicitHeight = 277
     inherited Panel: TPanel
       Top = 236
-      Width = 784
+      Width = 788
       ExplicitTop = 236
       ExplicitWidth = 784
       inherited lbNumber: TLabel
@@ -154,7 +159,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 784
+      Width = 788
       Height = 236
       ColCount = 7
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]

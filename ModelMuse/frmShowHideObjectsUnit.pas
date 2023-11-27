@@ -568,7 +568,7 @@ var
   Node: PVirtualNode;
 begin
   inherited;
-  vstObjects.GetHitTestInfoAt(X, Y, False, HitInfo);
+  vstObjects.GetHitTestInfoAt(X, Y, True, HitInfo);
   if hiOnNormalIcon in HitInfo.HitPositions then
   begin
     if (frmGoPhast.PhastModel.ModelSelection in SutraSelection) then

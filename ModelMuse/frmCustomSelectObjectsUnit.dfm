@@ -19,7 +19,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       406
       41)
     object btnClose: TBitBtn
-      Left = 244
+      Left = 240
       Top = 4
       Width = 89
       Height = 33
@@ -27,10 +27,10 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 240
+      ExplicitLeft = 236
     end
     object btnHelp: TBitBtn
-      Left = 151
+      Left = 147
       Top = 4
       Width = 89
       Height = 33
@@ -38,7 +38,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 147
+      ExplicitLeft = 143
     end
   end
   object vstObjects: TVirtualStringTree
@@ -78,6 +78,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
     OnStateChange = vstObjectsStateChange
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitTop = -2
     Columns = <>
   end
 end

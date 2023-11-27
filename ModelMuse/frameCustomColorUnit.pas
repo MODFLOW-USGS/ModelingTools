@@ -987,7 +987,7 @@ var
   HitInfo: THitInfo;
   Node: PVirtualNode;
 begin
-  virttreecomboDataSets.Tree.GetHitTestInfoAt(X, Y, False, HitInfo);
+  virttreecomboDataSets.Tree.GetHitTestInfoAt(X, Y, True, HitInfo);
   if (hiOnItemLabel in HitInfo.HitPositions) then
   begin
     Node := virttreecomboDataSets.Tree.GetNodeAt(X, Y);

@@ -498,6 +498,7 @@ var
     Assert(PlotList.Count = 1);
     APlot := PlotList[0];
     APlot.MergeLines;
+    APlot.EliminateZeroLengthLines;
     FShapeFileWriter.Capacity := FShapeFileWriter.Count + APlot.Count;
     for ContourIndex := 0 to APlot.Count - 1 do
     begin
