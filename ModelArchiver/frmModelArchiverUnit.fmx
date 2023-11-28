@@ -1212,6 +1212,8 @@ object frmModelArchiver: TfrmModelArchiver
           Size.Height = 287.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
+          ParentShowHint = False
+          ShowHint = True
           OnDragDrop = lstArchivesDragDrop
           OnMouseDown = lstArchivesMouseDown
           OnMouseMove = lstArchivesMouseMove
@@ -1221,8 +1223,6 @@ object frmModelArchiver: TfrmModelArchiver
           DefaultItemStyles.GroupHeaderStyle = ''
           DefaultItemStyles.GroupFooterStyle = ''
           MultiSelectStyle = Default
-          ParentShowHint = False
-          ShowHint = True
           Viewport.Width = 293.000000000000000000
           Viewport.Height = 283.000000000000000000
         end
@@ -1428,14 +1428,14 @@ object frmModelArchiver: TfrmModelArchiver
           Size.Height = 284.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
+          ParentShowHint = False
+          ShowHint = True
           OnDragDrop = tvArchiveDragDrop
           OnClick = tvArchiveClick
           OnMouseDown = tvArchiveMouseDown
           OnMouseUp = tvArchiveMouseUp
           ItemHeight = 25.000000000000000000
           MultiSelect = True
-          ParentShowHint = False
-          ShowHint = True
           Viewport.Width = 277.000000000000000000
           Viewport.Height = 280.000000000000000000
         end
