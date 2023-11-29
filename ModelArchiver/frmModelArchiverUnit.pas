@@ -12,7 +12,7 @@ uses Winapi.Windows,
   FMX.Graphics, FMX.ScrollBox, FMX.Memo, System.Actions, FMX.ActnList,
   ExtensionTypeUnit, FMX.Platform, Math, System.RegularExpressions,
   FMX.TabControl, Web.HTTPApp, Web.DBWeb, FMX.Edit, System.ImageList,
-  FMX.ImgList;
+  FMX.ImgList, FMX.Memo.Types;
 
 type
   TFileSource = (fsUnknown, fsManual, fsArchiveList, fsArchiveListEdited,
