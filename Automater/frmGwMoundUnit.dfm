@@ -7,8 +7,8 @@ inherited frmGwMound: TfrmGwMound
   OnDestroy = FormDestroy
   OnMouseWheelDown = FormMouseWheelDown
   OnMouseWheelUp = FormMouseWheelUp
-  ExplicitWidth = 748
-  ExplicitHeight = 603
+  ExplicitWidth = 744
+  ExplicitHeight = 602
   PixelsPerInch = 120
   TextHeight = 19
   object splitLeft: TJvNetscapeSplitter
@@ -59,11 +59,13 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 492
+    ExplicitWidth = 728
     DesignSize = (
       732
       51)
     object btnBack: TBitBtn
-      Left = 519
+      Left = 515
       Top = 7
       Width = 95
       Height = 32
@@ -89,9 +91,10 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnBackClick
+      ExplicitLeft = 511
     end
     object btnNext: TBitBtn
-      Left = 622
+      Left = 618
       Top = 7
       Width = 95
       Height = 32
@@ -118,6 +121,7 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnNextClick
+      ExplicitLeft = 614
     end
     object btnMetric: TButton
       Left = 16
@@ -153,6 +157,7 @@ inherited frmGwMound: TfrmGwMound
     StateImages = ilStates
     TabOrder = 0
     OnChange = tvNavigationChange
+    ExplicitHeight = 370
   end
   object pnlHelp: TPanel
     Left = 0
@@ -165,6 +170,8 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 383
+    ExplicitWidth = 728
     object wbHelp: TWebBrowser
       Left = 1
       Top = 1
@@ -195,10 +202,12 @@ inherited frmGwMound: TfrmGwMound
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ActivePage = jvspRunAnalyticalModel
+    ActivePage = jvspRunNumeric
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
+    ExplicitWidth = 507
+    ExplicitHeight = 370
     object jvspBasinDesign: TJvStandardPage
       Left = 0
       Top = 0
@@ -292,7 +301,7 @@ inherited frmGwMound: TfrmGwMound
       object plBasin: TJvPageList
         Left = 8
         Top = 119
-        Width = 463
+        Width = 459
         Height = 244
         Margins.Left = 4
         Margins.Top = 4
@@ -304,7 +313,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspSquareBasin: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 463
+          Width = 459
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -385,7 +394,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspRectangle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 463
+          Width = 459
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -507,7 +516,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspCircle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 463
+          Width = 459
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -606,7 +615,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspCustom: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 463
+          Width = 459
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -614,7 +623,7 @@ inherited frmGwMound: TfrmGwMound
           Margins.Bottom = 4
           Caption = 'jvspCustom'
           DesignSize = (
-            463
+            459
             244)
           object lblBasinCoordinates: TLabel
             Left = 0
@@ -1124,6 +1133,8 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspRunAnalyticalModel'
+      ExplicitWidth = 507
+      ExplicitHeight = 370
       object pgcAnalytic: TPageControl
         Left = 0
         Top = 0
@@ -1137,6 +1148,8 @@ inherited frmGwMound: TfrmGwMound
         Align = alClient
         TabOrder = 0
         OnChange = pgcAnalyticChange
+        ExplicitWidth = 507
+        ExplicitHeight = 370
         object tabAnalyticControls: TTabSheet
           Caption = 'Controls'
           ImageIndex = 2
@@ -1579,6 +1592,8 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = False
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 499
+            ExplicitHeight = 304
           end
           object pnl1: TPanel
             Left = 0
@@ -1591,6 +1606,7 @@ inherited frmGwMound: TfrmGwMound
             Margins.Bottom = 4
             Align = alTop
             TabOrder = 0
+            ExplicitWidth = 499
             object btnCopyAnalytic: TButton
               Left = 3
               Top = 0
@@ -1848,7 +1864,7 @@ inherited frmGwMound: TfrmGwMound
       object feMODFLOW: TJvFilenameEdit
         Left = 10
         Top = 51
-        Width = 485
+        Width = 481
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'MODFLOW'
@@ -1867,7 +1883,7 @@ inherited frmGwMound: TfrmGwMound
       object feModelMuseApplication: TJvFilenameEdit
         Left = 10
         Top = 138
-        Width = 485
+        Width = 481
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'ModelMuse'
@@ -1886,7 +1902,7 @@ inherited frmGwMound: TfrmGwMound
       object feModelMuseFile: TJvFilenameEdit
         Left = 10
         Top = 202
-        Width = 485
+        Width = 481
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'Template'
@@ -1924,7 +1940,7 @@ inherited frmGwMound: TfrmGwMound
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ActivePage = tabTableNumeric
+        ActivePage = TabTableNumericTime
         Align = alClient
         TabOrder = 0
         OnChange = pgcNumericChange
@@ -2438,6 +2454,155 @@ inherited frmGwMound: TfrmGwMound
               TabOrder = 1
               OnClick = btnSaveNumericProfileClick
             end
+          end
+        end
+        object TabTableNumericTime: TTabSheet
+          Caption = 'Profile v Time'
+          ImageIndex = 4
+          object Panel1: TPanel
+            Left = 0
+            Top = 0
+            Width = 503
+            Height = 52
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Align = alTop
+            TabOrder = 0
+            ExplicitTop = 8
+            object btnCopyNumericProfileTime: TButton
+              Left = 3
+              Top = 13
+              Width = 221
+              Height = 31
+              Margins.Left = 4
+              Margins.Top = 4
+              Margins.Right = 4
+              Margins.Bottom = 4
+              Caption = 'Copy to Clipboard'
+              TabOrder = 0
+              OnClick = btnCopyNumericProfileTimeClick
+            end
+            object btnSaveNumericProfileTime: TButton
+              Left = 231
+              Top = 13
+              Width = 154
+              Height = 31
+              Caption = 'Save to File'
+              TabOrder = 1
+              OnClick = btnSaveNumericProfileTimeClick
+            end
+          end
+          object rdgProfileNumericTime: TRbwDataGrid4
+            Left = 0
+            Top = 52
+            Width = 503
+            Height = 285
+            Margins.Left = 4
+            Margins.Top = 4
+            Margins.Right = 4
+            Margins.Bottom = 4
+            Align = alClient
+            ColCount = 3
+            FixedCols = 1
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goAlwaysShowEditor]
+            TabOrder = 1
+            ExtendedAutoDistributeText = False
+            AutoMultiEdit = False
+            AutoDistributeText = False
+            AutoIncreaseColCount = False
+            AutoIncreaseRowCount = False
+            SelectedRowOrColumnColor = clAqua
+            UnselectableColor = clBtnFace
+            ColorRangeSelection = False
+            ColorSelectedRow = False
+            Columns = <
+              item
+                AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -13
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end>
+            WordWrapRowCaptions = False
+            ExplicitLeft = 4
+            ExplicitTop = 51
+            ColWidths = (
+              64
+              64
+              64)
+            RowHeights = (
+              25
+              24
+              24
+              24
+              24)
           end
         end
       end

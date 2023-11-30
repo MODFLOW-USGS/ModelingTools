@@ -3,13 +3,13 @@ unit frmGwMoundUnit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Windows, Messages, System.UITypes, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, JvExExtCtrls, JvNetscapeSplitter, ComCtrls, StdCtrls,
   ArgusDataEntry, JvPageList, JvExControls, Grids, RbwDataGrid4, Mask, JvExMask,
   JvSpin, TeEngine, TeeProcs, Chart, Series, ConvUtils, JvToolEdit, FastGEO,
   JvCreateProcess, JvStringHolder, Types, RealListUnit, OleCtrls, SHDocVw,
   Buttons, AppEvnts, Menus, ImgList, frmAncestorUnit, JvExStdCtrls, JvHtControls,
-  JvLabel, VclTee.TeeGDIPlus, System.ImageList;
+  JvLabel, VclTee.TeeGDIPlus, System.ImageList, ReadModflowArrayUnit;
 
 type
   TBasinShape = (bsSquare, bsRectangle, bsCircle, bsCustom);
@@ -105,6 +105,8 @@ type
     DistanceForDrawdown100: double;
     // Type of termination
     ErrorLine: string;
+    FTimes: TDoubleDynArray;
+    FValues: TModflowDoubleArray;
   end;
 
   THydCell = Class(TObject)
@@ -158,6 +160,7 @@ type
     FAnalyticResults: TGridCellCollection;
     FNumericSummaryTable: TGridCellCollection;
     FNumericProfile: TGridCellCollection;
+    FNumericProfileTime: TGridCellCollection;
     function GetKv: Double;
     procedure SetKv(const Value: Double);
     function GetKvUnits: string;
@@ -243,6 +246,8 @@ type
     procedure SetInfiltrationTimeUnits(const Value: string);
     function GetRelativeModelMuseFileLocation: string;
     procedure SetRelativeModelMuseFileLocation(const Value: string);
+    function GetNumericProfileTime: TGridCellCollection;
+    procedure SetNumericProfileTime(const Value: TGridCellCollection);
   protected
     procedure Loaded; override;
   public
@@ -293,6 +298,7 @@ type
     property ModelMuseFileLocation: string read GetModelMuseFileLocation write SetModelMuseFileLocation stored False;
     property NumericSummaryTable: TGridCellCollection read GetNumericSummaryTable write SetNumericSummaryTable;
     property NumericProfile: TGridCellCollection read GetNumericProfile write SetNumericProfile;
+    property NumericProfileTime: TGridCellCollection read GetNumericProfileTime write SetNumericProfileTime;
     property MaxDistanceNumeric: double read GetMaxDistanceNumeric write SetMaxDistanceNumeric;
     property MaxDistanceNumericUnits: string read GetMaxDistanceNumericUnits write SetMaxDistanceNumericUnits;
     property InfiltrationTimeUnits: string read GetInfiltrationTimeUnits write SetInfiltrationTimeUnits;
@@ -453,6 +459,11 @@ type
     dlgSaveResults: TSaveDialog;
     btnSaveSummary: TButton;
     btnSaveNumericProfile: TButton;
+    TabTableNumericTime: TTabSheet;
+    Panel1: TPanel;
+    btnCopyNumericProfileTime: TButton;
+    btnSaveNumericProfileTime: TButton;
+    rdgProfileNumericTime: TRbwDataGrid4;
     procedure rdgBasinCoordinatesEndUpdate(Sender: TObject);
     procedure seCoordCountChange(Sender: TObject);
     procedure cbSimulateUnsatClick(Sender: TObject);
@@ -539,6 +550,8 @@ type
     procedure btnSaveAnalyticClick(Sender: TObject);
     procedure btnSaveSummaryClick(Sender: TObject);
     procedure btnSaveNumericProfileClick(Sender: TObject);
+    procedure btnCopyNumericProfileTimeClick(Sender: TObject);
+    procedure btnSaveNumericProfileTimeClick(Sender: TObject);
   private
     FTimeSeries: TList;
 {$IFDEF UNSAT}
@@ -609,6 +622,7 @@ type
     function GetInfiltrationTime: double;
     procedure SetMinForInfiltrationTime;
     procedure SaveResults(Grid: TRbwDataGrid4);
+    procedure OpenFile;
     { Private declarations }
   public
     { Public declarations }
@@ -631,6 +645,7 @@ type
     FTimeUnits: TConvType;
     FSummaryGrid: TRbwDataGrid4;
     FProfileGrid: TRbwDataGrid4;
+    FProfileNumericTime: TRbwDataGrid4;
     procedure ProcessDone(Sender: TObject; ExitCode: DWORD);
     procedure SetModelVariables;
     procedure RunModelMuse;
@@ -642,7 +657,7 @@ type
     procedure ExtractFromListingFile;
     procedure GetColRowPositions(var ColPositions: TRealList; var RowPositions: TRealList);
     procedure ReadHydmodInput(RowPositions: TRealList; ColPositions: TRealList; var HydInput: TStringList);
-    procedure ExtractedHydmodResults(HydInput: TStringList);
+    procedure ExtractHydmodResults(HydInput: TStringList);
     procedure DisableAbort;
   protected
     procedure Execute; override;
@@ -650,7 +665,7 @@ type
     constructor Create(Directory: string; ModelMuseFile: TStringList;
       FileIndexes: TFileIndexes; SimValues: TSimValues;
       FileConstants: TConstantFileValues; Series: TLIneSeries;
-      DistanceUnits, TimeUnits: TConvType; SummaryGrid, ProfileGrid: TRbwDataGrid4);
+      DistanceUnits, TimeUnits: TConvType; SummaryGrid, ProfileGrid, ProfileNumericTime: TRbwDataGrid4);
     destructor Destroy; override;
     constructor NilSelf;
     procedure Terminate;
@@ -664,7 +679,7 @@ implementation
 
 uses
   StdConvs, Math, HantushUnit, WellFunctionUnit, fmath, Contnrs, RootFinder,
-  SyncObjs, BMSearch, IOUtils, ReadModflowArrayUnit, IntListUnit, IniFiles,
+  SyncObjs, BMSearch, IOUtils, IntListUnit, IniFiles,
   IniFileUtilities, frmCustomBasinUnit, Winapi.ShlObj,
   System.Win.Registry, System.Generics.Collections;
 
@@ -1323,6 +1338,13 @@ begin
   rdgProfileNumeric.CopyAllCellsToClipboard;
 end;
 
+procedure TfrmGwMound.btnCopyNumericProfileTimeClick(Sender: TObject);
+begin
+  inherited;
+  rdgProfileNumericTime.CopyAllCellsToClipboard;
+
+end;
+
 procedure TfrmGwMound.btnCopySummaryClick(Sender: TObject);
 begin
   rdgSummaryNumeric.CopyAllCellsToClipboard;
@@ -1824,7 +1846,7 @@ begin
       SimValues, FileConstants, seriesNumeric,
       GetStandardLengthUnits(comboMaxNumericDistanceUnits.ItemIndex),
       GetTimeUnit(comboSimulationLengthUnitsNumeric.ItemIndex),
-      rdgSummaryNumeric, rdgProfileNumeric);
+      rdgSummaryNumeric, rdgProfileNumeric, rdgProfileNumericTime);
 
     FThread.Start;
 
@@ -1848,6 +1870,12 @@ begin
 end;
 
 procedure TfrmGwMound.btnSaveNumericProfileClick(Sender: TObject);
+begin
+  inherited;
+  SaveResults(rdgProfileNumeric);
+end;
+
+procedure TfrmGwMound.btnSaveNumericProfileTimeClick(Sender: TObject);
 begin
   inherited;
   SaveResults(rdgProfileNumeric);
@@ -2421,6 +2449,11 @@ begin
   FIniltrationTimeUnits := comboDurationOfInfiltration.ItemIndex;
   UpdateInfiltrationTime;
 
+  if TFile.Exists(ParamStr(1))  then
+  begin
+    dlgOpenFile.FileName := ParamStr(1);
+    OpenFile;
+  end;
 end;
 
 procedure TfrmGwMound.FormDestroy(Sender: TObject);
@@ -2555,41 +2588,10 @@ begin
 end;
 
 procedure TfrmGwMound.Open1Click(Sender: TObject);
-var
-  FileStream: TFileStream;
-  MemStream: TMemoryStream;
-  GwMound: TGwMoundFile;
 begin
   if dlgOpenFile.Execute then
   begin
-    SetCurrentDir(ExtractFileDir(dlgOpenFile.FileName));
-    Caption := ExtractFileName(dlgOpenFile.FileName) + ' Groundwater Mounding Calculator';
-    rdeDurationOfInfiltration.Min := 0;
-    FileStream := TFileStream.Create(dlgOpenFile.FileName,
-      fmOpenRead or fmShareDenyWrite);
-    try
-      MemStream := TMemoryStream.Create;
-      try
-        ObjectTextToBinary(FileStream, MemStream);
-        MemStream.Position := 0;
-        GwMound := TGwMoundFile.Create(nil);
-        try
-          MemStream.ReadComponent(GwMound);
-        finally
-          GwMound.Free;
-        end;
-      finally
-        MemStream.Free;
-      end;
-    finally
-      FileStream.Free;
-    end;
-    dlgSaveFile.FileName := dlgOpenFile.FileName;
-    SetMinForInfiltrationTime;
-
-    UpdateAnalyticGraph;
-    UpdateNumericGraph;
-
+    OpenFile;
   end;
 end;
 
@@ -3036,6 +3038,7 @@ var
   Index: Integer;
   RowIndex: Integer;
   DistanceToWaterTable: Double;
+  ColIndex: Integer;
 begin
   FSeries.Clear;
   for Index := 0 to Length(Fresults.Distances) - 1 do
@@ -3105,6 +3108,33 @@ begin
   finally
     FProfileGrid.EndUpdate;
   end;
+
+  FProfileNumericTime.BeginUpdate;
+  try
+    FProfileNumericTime.ColCount := Length(Fresults.FTimes) + 1;
+    FProfileNumericTime.RowCount := Length(Fresults.Distances) + 1;
+    FProfileNumericTime.Cells[0,0] := 'Distance/Time';
+    FProfileNumericTime.Columns[0].AutoAdjustColWidths := True;
+    for ColIndex := 1 to Length(Fresults.FTimes) do
+    begin
+      FProfileNumericTime.Columns[ColIndex].AutoAdjustColWidths := True;
+      FProfileNumericTime.Cells[ColIndex, 0] := FloatToStr(ConvertTo(Fresults.FTimes[ColIndex-1],FTimeUnits));
+    end;
+    for RowIndex := 1 to Length(Fresults.Distances) do
+    begin
+      FProfileNumericTime.Cells[0, RowIndex] := FloatToStr(ConvertTo(Fresults.Distances[RowIndex-1],FDistanceUnits));
+    end;
+    for RowIndex := 1 to Length(Fresults.Distances) do
+    begin
+      for ColIndex := 1 to Length(Fresults.FTimes) do
+      begin
+        FProfileNumericTime.Cells[ColIndex, RowIndex] := FloatToStr(ConvertTo(Fresults.FValues[RowIndex-1, ColIndex-1],FDistanceUnits));
+      end;
+    end;
+  finally
+    FProfileNumericTime.EndUpdate;
+  end;
+
   frmGwMound.UpdateNodeStateIndex;
   frmGwMound.rdeMaxDistanceNumericChange(nil);
 
@@ -3394,6 +3424,39 @@ begin
   end;
 end;
 
+procedure TfrmGwMound.OpenFile;
+var
+  FileStream: TFileStream;
+  MemStream: TMemoryStream;
+  GwMound: TGwMoundFile;
+begin
+  SetCurrentDir(ExtractFileDir(dlgOpenFile.FileName));
+  Caption := ExtractFileName(dlgOpenFile.FileName) + ' Groundwater Mounding Calculator';
+  rdeDurationOfInfiltration.Min := 0;
+  FileStream := TFileStream.Create(dlgOpenFile.FileName, fmOpenRead or fmShareDenyWrite);
+  try
+    MemStream := TMemoryStream.Create;
+    try
+      ObjectTextToBinary(FileStream, MemStream);
+      MemStream.Position := 0;
+      GwMound := TGwMoundFile.Create(nil);
+      try
+        MemStream.ReadComponent(GwMound);
+      finally
+        GwMound.Free;
+      end;
+    finally
+      MemStream.Free;
+    end;
+  finally
+    FileStream.Free;
+  end;
+  dlgSaveFile.FileName := dlgOpenFile.FileName;
+  SetMinForInfiltrationTime;
+  UpdateAnalyticGraph;
+  UpdateNumericGraph;
+end;
+
 procedure TfrmGwMound.GetRechargeRateAndTime(var RechargeTime,
   RechargeRate: Double);
 var
@@ -3652,7 +3715,7 @@ end;
 constructor TRunModelThread.Create(Directory: string;
   ModelMuseFile: TStringList; FileIndexes: TFileIndexes; SimValues: TSimValues;
   FileConstants: TConstantFileValues; Series: TLIneSeries;
-  DistanceUnits, TimeUnits: TConvType; SummaryGrid, ProfileGrid: TRbwDataGrid4);
+  DistanceUnits, TimeUnits: TConvType; SummaryGrid, ProfileGrid, ProfileNumericTime: TRbwDataGrid4);
 var
   FileNumber: Integer;
   Directories: TStringDynArray;
@@ -3699,6 +3762,7 @@ begin
   FTimeUnits := TimeUnits;
   FSummaryGrid := SummaryGrid;
   FProfileGrid := ProfileGrid;
+  FProfileNumericTime := ProfileNumericTime;
 end;
 
 constructor TRunModelThread.NilSelf;
@@ -3752,7 +3816,7 @@ begin
   end;
 end;
 
-procedure TRunModelThread.ExtractedHydmodResults(HydInput: TStringList);
+procedure TRunModelThread.ExtractHydmodResults(HydInput: TStringList);
 const
   Point05Feet = -0.05*0.3048;
   Point25Feet = -0.25*0.3048;
@@ -3792,6 +3856,9 @@ begin
         FResults.DistanceForDrawdown025 := 0;
         FResults.RowForDrawdown100 := 0;
         FResults.DistanceForDrawdown100 := 0;
+
+        FResults.FTimes := HydModResults.TimeArray;
+        FResults.FValues := HydModResults.ValueArray;
         for LabelIndex := 0 to LabelPositions.Count - 1 do
         begin
           LabelPos := LabelPositions[LabelIndex];
@@ -3990,7 +4057,7 @@ begin
         RowPositions.Free;
         ColPositions.Free;
       end;
-      ExtractedHydmodResults(HydInput);
+      ExtractHydmodResults(HydInput);
 
     finally
       for Index := 0 to HydInput.Count - 1 do
@@ -4250,6 +4317,8 @@ begin
   FNumericSummaryTable.Grid := frmGwMound.rdgSummaryNumeric;
   FNumericProfile := TGridCellCollection.Create;
   FNumericProfile.Grid := frmGwMound.rdgProfileNumeric;
+  FNumericProfileTime := TGridCellCollection.Create;
+  FNumericProfileTime.Grid := frmGwMound.rdgProfileNumericTime;
 end;
 
 destructor TGwMoundFile.Destroy;
@@ -4258,6 +4327,7 @@ begin
   FAnalyticResults.Free;
   FNumericSummaryTable.Free;
   FNumericProfile.Free;
+  FNumericProfileTime.Free;
   inherited;
 end;
 
@@ -4420,6 +4490,12 @@ begin
   result := FNumericProfile;
 end;
 
+function TGwMoundFile.GetNumericProfileTime: TGridCellCollection;
+begin
+  FNumericProfileTime.UpdateItems;
+  result := FNumericProfileTime;
+end;
+
 function TGwMoundFile.GetNumericSummaryTable: TGridCellCollection;
 begin
   FNumericSummaryTable.UpdateItems;
@@ -4488,6 +4564,7 @@ begin
   FAnalyticResults.UpdateGrid;
   FNumericSummaryTable.UpdateGrid;
   FNumericProfile.UpdateGrid;
+  FNumericProfileTime.UpdateGrid;
 end;
 
 procedure TGwMoundFile.SetAnalyticResults(const Value: TGridCellCollection);
@@ -4641,6 +4718,12 @@ procedure TGwMoundFile.SetNumericProfile(const Value: TGridCellCollection);
 begin
   FNumericProfile.Assign(Value);
   FNumericProfile.UpdateGrid;
+end;
+
+procedure TGwMoundFile.SetNumericProfileTime(const Value: TGridCellCollection);
+begin
+  FNumericProfileTime.Assign(Value);
+  FNumericProfileTime.UpdateGrid;
 end;
 
 procedure TGwMoundFile.SetNumericSummaryTable(const Value: TGridCellCollection);

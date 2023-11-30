@@ -4,7 +4,7 @@ unit ReadModflowArrayUnit;
 
 interface
 
-uses SysUtils, Classes;
+uses System.Types, SysUtils, Classes;
 
 type
   TModflowFloat = single;
@@ -14,6 +14,7 @@ type
   TModflowSingleArray = array of array of TModflowFloat;
   TModflowDoubleArray = array of array of TModflowDouble;
   T3DTModflowArray = array of TModflowDoubleArray;
+  TModflowDoubleArray1d = array of TModflowDouble;
 
   TModflowPrecision = (mpSingle, mpDouble);
 
@@ -25,7 +26,7 @@ type
 
   THydModData = class(TObject)
   private
-    FTimes: Array of TModflowDouble;
+    FTimes: TDoubleDynArray;
     FLabels: TStringList;
     FValues: TModflowDoubleArray;
     FTimeUnit: integer;
@@ -45,6 +46,8 @@ type
     property TimeUnit: integer Read FTimeUnit;
     property Times[Index: Integer]: double read GetTime;
     function IndexOfLabel(const ALabel: string): integer;
+    property TimeArray: TDoubleDynArray read FTimes;
+    property ValueArray: TModflowDoubleArray read FValues;
   end;
 
 procedure ReadSinglePrecisionMt3dmsBinaryRealArray(AFile: TFileStream;
