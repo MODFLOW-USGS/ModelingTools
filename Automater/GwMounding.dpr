@@ -4,7 +4,6 @@ uses
   Forms,
   frmGwMoundUnit in 'frmGwMoundUnit.pas' {frmGwMound},
   HantushUnit in 'HantushUnit.pas',
-  fmath in 'fmath.pas',
   WellFunctionUnit in 'WellFunctionUnit.pas',
   FastGEO in 'FastGEO.pas',
   S_StarValues in 'S_StarValues.pas',

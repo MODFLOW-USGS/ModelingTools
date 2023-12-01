@@ -61,7 +61,7 @@ begin
       begin
         RealList.Add(2*Index/100);
       end;
-      for Index := 0 to 1000 do
+      for Index := 1 to 1000 do
       begin
         Value := 1 + Index/40;
         RealList.Add(Value);

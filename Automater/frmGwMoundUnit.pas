@@ -678,7 +678,7 @@ var
 implementation
 
 uses
-  StdConvs, Math, HantushUnit, WellFunctionUnit, fmath, Contnrs, RootFinder,
+  StdConvs, Math, HantushUnit, WellFunctionUnit,  Contnrs, RootFinder,
   SyncObjs, BMSearch, IOUtils, IntListUnit, IniFiles,
   IniFileUtilities, frmCustomBasinUnit, Winapi.ShlObj,
   System.Win.Registry, System.Generics.Collections;

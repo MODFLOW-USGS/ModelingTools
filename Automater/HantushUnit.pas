@@ -19,13 +19,21 @@ function IntS(Alpha, Beta: Double; Precision: Double = 1e-8): double;
 implementation
 
 uses
-  fmath, WellFunctionUnit {$IFNDEF NoInterpolate}, RealListUnit
+//  fmath,
+//  uigamma,
+  WellFunctionUnit {$IFNDEF NoInterpolate}, RealListUnit
   , S_StarValues, RootFinder {$ENDIF};
 
 {$IFNDEF NoInterpolate}
 var
   KeyValues: TRealList;
 {$ENDIF}
+
+function Erf(X : double) : double; stdcall; external 'dmath.dll' name 'Erf';
+{ Error function }
+
+function Erfc(X : double) : double; stdcall; external 'dmath.dll' name 'Erfc';
+
 
 function i2erfc(x: Double): double;
 begin

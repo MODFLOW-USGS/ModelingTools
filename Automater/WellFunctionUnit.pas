@@ -10,9 +10,6 @@ const
 
 implementation
 
-uses
-  fmath;
-
 function W(u: Double): double;
 const
   Tolerance = 1e-20;

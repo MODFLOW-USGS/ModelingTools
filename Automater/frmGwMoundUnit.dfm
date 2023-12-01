@@ -1931,6 +1931,8 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspRunNumeric'
+      ExplicitWidth = 507
+      ExplicitHeight = 370
       object pgcNumeric: TPageControl
         Left = 0
         Top = 0
@@ -1944,6 +1946,8 @@ inherited frmGwMound: TfrmGwMound
         Align = alClient
         TabOrder = 0
         OnChange = pgcNumericChange
+        ExplicitWidth = 507
+        ExplicitHeight = 370
         object tabNumericControls: TTabSheet
           Caption = 'Controls'
           ImageIndex = 3
@@ -2470,7 +2474,7 @@ inherited frmGwMound: TfrmGwMound
             Margins.Bottom = 4
             Align = alTop
             TabOrder = 0
-            ExplicitTop = 8
+            ExplicitWidth = 499
             object btnCopyNumericProfileTime: TButton
               Left = 3
               Top = 13
@@ -2591,8 +2595,8 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
-            ExplicitLeft = 4
-            ExplicitTop = 51
+            ExplicitWidth = 499
+            ExplicitHeight = 284
             ColWidths = (
               64
               64
