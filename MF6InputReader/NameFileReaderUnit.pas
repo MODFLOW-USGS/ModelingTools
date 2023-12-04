@@ -37,19 +37,6 @@ type
   TTransportNameFileOptions = class(TCustomNameFileOptions)
   end;
 
-//  TPackage = class(TObject)
-//  private
-//    FileType: string;
-//    FileName: string;
-//    PackageName: string;
-//    FPackage: TPackageReader;
-//    procedure ReadPackage(Unhandled: TStreamWriter);
-//  public
-//    destructor Destroy; override;
-//  end;
-//
-//  TPackageList = TObjectList<TPackage>;
-
   TCustomPackages = class(TCustomMf6Persistent)
   private
     FPackages: TPackageList;
@@ -100,7 +87,7 @@ uses
   StoFileReaderUnit, CSubFileReaderUnit, BuyFileReaderUnit, VscFileReaderUnit,
   ChdFileReaderUnit, WelFileReaderUnit, DrnFileReaderUnit, RivFileReaderUnit,
   RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit, SfrFileReaderUnit,
-  GhbFileReaderUnit;
+  GhbFileReaderUnit, LakFileReaderUnit, UzfFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -480,6 +467,8 @@ var
   MawReader: TMaw;
   SfrReader: TSfr;
   GhbReader: TGhb;
+  LakReader: TLak;
+  UzfReader: TUzf;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -644,6 +633,20 @@ begin
       SfrReader := TSfr.Create(APackage.FileType);
       SfrReader.Dimensions := FDimensions;
       APackage.Package := SfrReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'LAK6' then
+    begin
+      LakReader := TLak.Create(APackage.FileType);
+      LakReader.Dimensions := FDimensions;
+      APackage.Package := LakReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'UZF6' then
+    begin
+      UzfReader := TUzf.Create(APackage.FileType);
+      UzfReader.Dimensions := FDimensions;
+      APackage.Package := UzfReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

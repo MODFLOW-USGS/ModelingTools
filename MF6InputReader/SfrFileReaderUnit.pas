@@ -229,6 +229,8 @@ var
   CaseSensitiveLine: string;
   TS6_FileName: string;
   Obs_FileName: string;
+  AuxIndex: Integer;
+  AUXILIARY_Name: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -249,7 +251,17 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'BOUNDNAMES' then
+    if (FSplitter[0] = 'AUXILIARY')
+      and (FSplitter.Count >= 2) then
+    begin
+      FSplitter.DelimitedText := CaseSensitiveLine;
+      for AuxIndex := 1 to FSplitter.Count - 1 do
+      begin
+        AUXILIARY_Name := FSplitter[AuxIndex];
+        AUXILIARY.Add(AUXILIARY_Name);
+      end;
+    end
+    else if FSplitter[0] = 'BOUNDNAMES' then
     begin
       BOUNDNAMES := True;
     end
@@ -526,6 +538,7 @@ begin
         end;
         if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
         begin
+          FSplitter.DelimitedText := CaseSensitiveLine;
           Item.boundname := FSplitter[ItemStart];
         end;
         FItems.Add(Item);
@@ -857,13 +870,13 @@ begin
           or (SfrItem.Name = 'UPSTREAM_FRACTION')
           then
         begin
-          if TryFortranStrToFloat(FSplitter[3], SfrItem.FloatValue) then
+          if TryFortranStrToFloat(FSplitter[2], SfrItem.FloatValue) then
           begin
 
           end
           else
           begin
-            SfrItem.StringValue := FSplitter[3]
+            SfrItem.StringValue := FSplitter[2]
           end;
         end
         else if (SfrItem.Name = 'CROSS_SECTION')

@@ -180,6 +180,8 @@ var
   TS6_FileName: string;
   Obs_FileName: string;
   Aux: string;
+  AuxIndex: Integer;
+  AUXILIARY_Name: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -270,8 +272,11 @@ begin
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      Aux := FSplitter[1];
-      AUXILIARY.Add(Aux);
+      for AuxIndex := 1 to FSplitter.Count - 1 do
+      begin
+        AUXILIARY_Name := FSplitter[AuxIndex];
+        AUXILIARY.Add(AUXILIARY_Name);
+      end;
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)

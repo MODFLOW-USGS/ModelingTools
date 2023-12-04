@@ -130,6 +130,7 @@ var
   AUXILIARY_Name: string;
   AUXMULTNAME_Name: string;
   AUXDEPTHNAME_Name: string;
+  AuxIndex: Integer;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -174,8 +175,11 @@ begin
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXILIARY_Name := FSplitter[1];
-      AUXILIARY.Add(AUXILIARY_Name);
+      for AuxIndex := 1 to FSplitter.Count - 1 do
+      begin
+        AUXILIARY_Name := FSplitter[AuxIndex];
+        AUXILIARY.Add(AUXILIARY_Name);
+      end;
     end
     else if (FSplitter[0] = 'AUXMULTNAME')
       and (FSplitter.Count >= 2) then

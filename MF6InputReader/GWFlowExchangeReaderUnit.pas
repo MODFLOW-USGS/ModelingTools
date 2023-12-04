@@ -33,9 +33,13 @@ Type
     XT3D: Boolean;
     gnc6_filename: string;
     mvr6_filename: string;
+    AUXILIARY: TStringList;
   protected
     procedure Initialize; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+  public
+    constructor Create(PackageType: string);
+    destructor Destroy; override;
   end;
 
   TGWTransportExchangeOptions = class(TCustomExchangeOptions)
@@ -141,6 +145,18 @@ begin
   inherited;
 end;
 
+constructor TGWFlowExchangeOptions.Create(PackageType: string);
+begin
+  AUXILIARY := TStringList.Create;
+  inherited;
+end;
+
+destructor TGWFlowExchangeOptions.Destroy;
+begin
+  AUXILIARY.Free;
+  inherited;
+end;
+
 procedure TGWFlowExchangeOptions.Initialize;
 begin
   inherited;
@@ -158,6 +174,9 @@ var
   ALine: string;
   ErrorLine: string;
   ValidOptions: TStringList;
+  CaseSensitiveLine: string;
+  AuxIndex: Integer;
+  AUXILIARY_Name: string;
 begin
   Initialize;
   ValidOptions := TStringList.Create;
@@ -177,6 +196,7 @@ begin
         begin
           Continue;
         end;
+        CaseSensitiveLine := ALine;
         ALine := UpperCase(ALine);
         if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
         begin
@@ -237,6 +257,16 @@ begin
                 Unhandled.WriteLine(Format('Unrecognized cell averaging method "%s".', [CELL_AVERAGING]));
               end;
             end
+            else if (FSplitter[0] = 'AUXILIARY') then
+            begin
+              FSplitter.DelimitedText := CaseSensitiveLine;
+              for AuxIndex := 1 to FSplitter.Count - 1 do
+              begin
+                AUXILIARY_Name := FSplitter[AuxIndex];
+                AUXILIARY.Add(AUXILIARY_Name);
+              end;
+            end
+
             else if FSplitter.Count >= 3 then
             begin
               if (FSplitter[0] = 'GNC6') and (FSplitter[1] = 'FILEIN') then

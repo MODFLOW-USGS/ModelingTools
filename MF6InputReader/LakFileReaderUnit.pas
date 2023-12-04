@@ -22,8 +22,9 @@ type
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     MOVER: Boolean;
-    MAXIMUM_STAGE_CHANGE: TRealOption;
+    SURFDEP: TRealOption;
     MAXIMUM_ITERATIONS: TIntegerOption;
+    MAXIMUM_STAGE_CHANGE: TRealOption;
     LENGTH_CONVERSION: TRealOption;
     TIME_CONVERSION: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -159,11 +160,11 @@ type
   TLak = class(TDimensionedPackageReader)
   private
     FOptions: TLakOptions;
-    FLakrDimensions: TLakDimensions;
+    FLakDimensions: TLakDimensions;
     FPackageData: TLakPackageData;
-    FLakCrossSections: TLakTables;
+    FLakTables: TLakTables;
     FConnections: TLakConnections;
-    FLakDiversions: TLakOutlets;
+    FLakOutlets: TLakOutlets;
     FPeriods: TSfrPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
@@ -179,7 +180,7 @@ implementation
 
 uses
   ModelMuseUtilities, System.Generics.Defaults, TimeSeriesFileReaderUnit,
-  ObsFileReaderUnit, CrossSectionFileReaderUnit;
+  ObsFileReaderUnit, LakeTableFileReaderUnit;
 
 resourcestring
   StrUnrecognizedSCROS = 'Unrecognized %s CROSSSECTIONS data in the followin' +
@@ -220,8 +221,9 @@ begin
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   MOVER := False;
-  MAXIMUM_STAGE_CHANGE.Initialize;
+  SURFDEP.Initialize;
   MAXIMUM_ITERATIONS.Initialize;
+  MAXIMUM_STAGE_CHANGE.Initialize;
   LENGTH_CONVERSION.Initialize;
   TIME_CONVERSION.Initialize;
 end;
@@ -233,6 +235,8 @@ var
   CaseSensitiveLine: string;
   TS6_FileName: string;
   Obs_FileName: string;
+  AuxIndex: Integer;
+  AUXILIARY_Name: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -253,7 +257,17 @@ begin
     ALine := UpperCase(ALine);
     FSplitter.DelimitedText := ALine;
     Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'BOUNDNAMES' then
+    if (FSplitter[0] = 'AUXILIARY')
+      and (FSplitter.Count >= 2) then
+    begin
+      FSplitter.DelimitedText := CaseSensitiveLine;
+      for AuxIndex := 1 to FSplitter.Count - 1 do
+      begin
+        AUXILIARY_Name := FSplitter[AuxIndex];
+        AUXILIARY.Add(AUXILIARY_Name);
+      end;
+    end
+    else if FSplitter[0] = 'BOUNDNAMES' then
     begin
       BOUNDNAMES := True;
     end
@@ -301,15 +315,20 @@ begin
     begin
       MOVER := True;
     end
-    else if (FSplitter[0] = 'MAXIMUM_STAGE_CHANGE') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], MAXIMUM_STAGE_CHANGE.Value) then
+    else if (FSplitter[0] = 'SURFDEP') and (FSplitter.Count >= 2)
+      and TryFortranStrToFloat(FSplitter[1], SURFDEP.Value) then
     begin
-      MAXIMUM_STAGE_CHANGE.Used := True;
+      SURFDEP.Used := True;
     end
     else if (FSplitter[0] = 'MAXIMUM_ITERATIONS') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], MAXIMUM_ITERATIONS.Value) then
     begin
       MAXIMUM_ITERATIONS.Used := True;
+    end
+    else if (FSplitter[0] = 'MAXIMUM_STAGE_CHANGE') and (FSplitter.Count >= 2)
+      and TryFortranStrToFloat(FSplitter[1], MAXIMUM_STAGE_CHANGE.Value) then
+    begin
+      MAXIMUM_STAGE_CHANGE.Used := True;
     end
 
     else if (FSplitter[0] = 'LENGTH_CONVERSION') and (FSplitter.Count >= 2)
@@ -484,7 +503,6 @@ begin
         and TryStrToInt(FSplitter[2],Item.nlakeconn)
         then
       begin
-
         ItemStart := 3;
         for AuxIndex := 0 to naux - 1 do
         begin
@@ -638,8 +656,6 @@ var
   ALine: string;
   ErrorLine: string;
   Item: TLakConnectionItem;
-  IcIndex: Integer;
-  ncon: Integer;
   DimensionCount: Integer;
   ItemCount: Integer;
 begin
@@ -663,16 +679,18 @@ begin
 
     Item.Initialize;
     FSplitter.DelimitedText := ALine;
-    if (FSplitter.Count >= ItemCount) and TryStrToInt(FSplitter[0],Item.lakeno)
-      and ReadCellId(Item.cellid, 1, DimensionCount)
-      and TryFortranStrToFloat(FSplitter[3+DimensionCount], Item.belev)
-      and TryFortranStrToFloat(FSplitter[4+DimensionCount], Item.telev)
-      and TryFortranStrToFloat(FSplitter[5+DimensionCount], Item.connlen)
-      and TryFortranStrToFloat(FSplitter[6+DimensionCount], Item.connwidth)
+    if (FSplitter.Count >= ItemCount)
+      and TryStrToInt(FSplitter[0],Item.lakeno)
+      and TryStrToInt(FSplitter[1],Item.iconn)
+      and ReadCellId(Item.cellid, 2, DimensionCount)
+      and TryFortranStrToFloat(FSplitter[4+DimensionCount], Item.belev)
+      and TryFortranStrToFloat(FSplitter[5+DimensionCount], Item.telev)
+      and TryFortranStrToFloat(FSplitter[6+DimensionCount], Item.connlen)
+      and TryFortranStrToFloat(FSplitter[7+DimensionCount], Item.connwidth)
       then
     begin
-      Item.claktype := FSplitter[1+DimensionCount];
-      Item.bedleak := FSplitter[2+DimensionCount];
+      Item.claktype := FSplitter[2+DimensionCount];
+      Item.bedleak := FSplitter[3+DimensionCount];
       FItems.Add(Item);
     end
     else
@@ -735,7 +753,7 @@ begin
       Continue;
     end;
 
-    if ReadEndOfSection(ALine, ErrorLine, 'DIVERSIONS', Unhandled) then
+    if ReadEndOfSection(ALine, ErrorLine, 'OUTLETS', Unhandled) then
     begin
       Exit;
     end;
@@ -747,14 +765,35 @@ begin
       and TryStrToInt(FSplitter[0],Item.outletno)
       and TryStrToInt(FSplitter[1],Item.lakein)
       and TryStrToInt(FSplitter[2],Item.lakeout)
+
       then
     begin
       Item.couttype := FSplitter[3];
+      if not TryFortranStrToFloat(FSplitter[4],Item.invert.NumericValue) then
+      begin
+        Item.invert.StringValue := FSplitter[4];
+        Item.invert.ValueType := vtString;
+      end;
+      if not TryFortranStrToFloat(FSplitter[5],Item.width.NumericValue) then
+      begin
+        Item.width.StringValue := FSplitter[5];
+        Item.width.ValueType := vtString;
+      end;
+      if not TryFortranStrToFloat(FSplitter[6],Item.rough.NumericValue) then
+      begin
+        Item.rough.StringValue := FSplitter[6];
+        Item.rough.ValueType := vtString;
+      end;
+      if not TryFortranStrToFloat(FSplitter[7],Item.slope.NumericValue) then
+      begin
+        Item.slope.StringValue := FSplitter[7];
+        Item.slope.ValueType := vtString;
+      end;
       FItems.Add(Item);
     end
     else
     begin
-      Unhandled.WriteLine(Format('Unrecognized %s DIVERSIONS in the following line', [FPackageType]));
+      Unhandled.WriteLine(Format('Unrecognized %s OUTLETS in the following line', [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
@@ -815,34 +854,29 @@ begin
         SfrItem.Name := FSplitter[1];
         if SfrItem.Name = 'STATUS' then
         begin
+          // lakes
           SfrItem.StringValue := FSplitter[2];
         end
-        else if (SfrItem.Name = 'MANNING')
-          or  (SfrItem.Name = 'STAGE')
-          or (SfrItem.Name = 'INFLOW')
+        else if
+          // lakes
+          (SfrItem.Name = 'STAGE')
           or (SfrItem.Name = 'RAINFALL')
           or (SfrItem.Name = 'EVAPORATION')
           or (SfrItem.Name = 'RUNOFF')
-          or (SfrItem.Name = 'UPSTREAM_FRACTION')
+          or (SfrItem.Name = 'INFLOW')
+          or (SfrItem.Name = 'WITHDRAWAL')
+          or (SfrItem.Name = 'RATE')
+          // Outlets
+          or (SfrItem.Name = 'INVERT')
+          or (SfrItem.Name = 'WIDTH')
+          or (SfrItem.Name = 'SLOPE')
+          or (SfrItem.Name = 'ROUGH')
           then
         begin
-          if TryFortranStrToFloat(FSplitter[3], SfrItem.FloatValue) then
+          if not TryFortranStrToFloat(FSplitter[2], SfrItem.FloatValue) then
           begin
-
-          end
-          else
-          begin
-            SfrItem.StringValue := FSplitter[3]
+            SfrItem.StringValue := FSplitter[2]
           end;
-        end
-        else if (SfrItem.Name = 'CROSS_SECTION')
-          and (FSplitter.Count >= 5)
-          and (FSplitter[2] = 'TAB6')
-          and (FSplitter[3] = 'FILEIN')
-          then
-        begin
-          FSplitter.DelimitedText := CaseSensitiveLine;
-          SfrItem.StringValue := FSplitter[4]
         end
         else if (SfrItem.Name = 'AUXILIARY')
           and TryFortranStrToFloat(FSplitter[3], SfrItem.FloatValue)
@@ -879,11 +913,11 @@ constructor TLak.Create(PackageType: string);
 begin
   inherited;
   FOptions := TLakOptions.Create(PackageType);
-  FLakrDimensions := TLakDimensions.Create(PackageType);
+  FLakDimensions := TLakDimensions.Create(PackageType);
   FPackageData := TLakPackageData.Create(PackageType);
-  FLakCrossSections := TLakTables.Create(PackageType);
+  FLakTables := TLakTables.Create(PackageType);
   FConnections := TLakConnections.Create(PackageType);
-  FLakDiversions := TLakOutlets.Create(PackageType);
+  FLakOutlets := TLakOutlets.Create(PackageType);
   FPeriods := TSfrPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
@@ -894,11 +928,11 @@ end;
 destructor TLak.Destroy;
 begin
   FOptions.Free;
-  FLakrDimensions.Free;
+  FLakDimensions.Free;
   FPackageData.Free;
-  FLakCrossSections.Free;
+  FLakTables.Free;
   FConnections.Free;
-  FLakDiversions.Free;
+  FLakOutlets.Free;
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
@@ -917,8 +951,8 @@ var
   TsReader: TTimeSeries;
   ObsReader: TObs;
   ObsPackage: TPackage;
-  CrossSectionPackage: TPackage;
-  CrossSectionReader: TCrossSection;
+  LakeTablePackage: TPackage;
+  LakeTableReader: TLakeTable;
 begin
   while not Stream.EndOfStream do
   begin
@@ -940,24 +974,24 @@ begin
       end
       else if FSplitter[1] ='DIMENSIONS' then
       begin
-        FLakrDimensions.Read(Stream, Unhandled);
+        FLakDimensions.Read(Stream, Unhandled);
       end
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
         FPackageData.Read(Stream, Unhandled, FOptions.AUXILIARY.Count,
           FOptions.BOUNDNAMES);
       end
-      else if FSplitter[1] ='CROSSSECTIONS' then
-      begin
-        FLakCrossSections.Read(Stream, Unhandled);
-      end
       else if FSplitter[1] ='CONNECTIONDATA' then
       begin
         FConnections.Read(Stream, Unhandled, FDimensions);
       end
-      else if FSplitter[1] ='DIVERSIONS' then
+      else if FSplitter[1] ='TABLES' then
       begin
-        FLakDiversions.Read(Stream, Unhandled);
+        FLakTables.Read(Stream, Unhandled);
+      end
+      else if FSplitter[1] ='OUTLETS' then
+      begin
+        FLakOutlets.Read(Stream, Unhandled);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin
@@ -1011,17 +1045,17 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
-  for PackageIndex := 0 to FLakCrossSections.FItems.Count - 1 do
+  for PackageIndex := 0 to FLakTables.FItems.Count - 1 do
   begin
-    CrossSectionPackage := TPackage.Create;
-    FObservationsPackages.Add(CrossSectionPackage);
-    CrossSectionPackage.FileType := FPackageType;
-    CrossSectionPackage.FileName := FLakCrossSections.FItems[PackageIndex].tab6_filename;
-    CrossSectionPackage.PackageName := '';
+    LakeTablePackage := TPackage.Create;
+    FObservationsPackages.Add(LakeTablePackage);
+    LakeTablePackage.FileType := FPackageType;
+    LakeTablePackage.FileName := FLakTables.FItems[PackageIndex].tab6_filename;
+    LakeTablePackage.PackageName := '';
 
-    CrossSectionReader := TCrossSection.Create(FPackageType);
-    CrossSectionPackage.Package := CrossSectionReader;
-    CrossSectionPackage.ReadPackage(Unhandled);
+    LakeTableReader := TLakeTable.Create(FPackageType);
+    LakeTablePackage.Package := LakeTableReader;
+    LakeTablePackage.ReadPackage(Unhandled);
   end;
 end;
 

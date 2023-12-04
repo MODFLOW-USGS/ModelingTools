@@ -44,7 +44,9 @@ uses
   MawFileReaderUnit in 'MawFileReaderUnit.pas',
   SfrFileReaderUnit in 'SfrFileReaderUnit.pas',
   CrossSectionFileReaderUnit in 'CrossSectionFileReaderUnit.pas',
-  LakFileReaderUnit in 'LakFileReaderUnit.pas';
+  LakFileReaderUnit in 'LakFileReaderUnit.pas',
+  LakeTableFileReaderUnit in 'LakeTableFileReaderUnit.pas',
+  UzfFileReaderUnit in 'UzfFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

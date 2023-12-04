@@ -133,6 +133,8 @@
         <DCCReference Include="SfrFileReaderUnit.pas"/>
         <DCCReference Include="CrossSectionFileReaderUnit.pas"/>
         <DCCReference Include="LakFileReaderUnit.pas"/>
+        <DCCReference Include="LakeTableFileReaderUnit.pas"/>
+        <DCCReference Include="UzfFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
