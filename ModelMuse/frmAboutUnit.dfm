@@ -5,8 +5,8 @@ inherited frmAbout: TfrmAbout
   ClientHeight = 527
   ClientWidth = 732
   FormStyle = fsStayOnTop
-  ExplicitWidth = 744
-  ExplicitHeight = 565
+  ExplicitWidth = 748
+  ExplicitHeight = 566
   TextHeight = 18
   object pnlTop: TPanel
     Left = 0
@@ -16,7 +16,6 @@ inherited frmAbout: TfrmAbout
     Align = alTop
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 728
     DesignSize = (
       732
       305)
@@ -3109,13 +3108,11 @@ inherited frmAbout: TfrmAbout
       HeaderFont.Name = 'Tahoma'
       HeaderFont.Style = []
       TabOrder = 0
-      ExplicitWidth = 393
       object ctgrypnl2: TCategoryPanel
         Top = 30
         Height = 250
         Caption = 'References'
         TabOrder = 1
-        ExplicitWidth = 389
         object reReference: TRichEdit
           Left = 0
           Top = 0
@@ -3148,7 +3145,6 @@ inherited frmAbout: TfrmAbout
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
-          ExplicitWidth = 387
         end
       end
       object ctgrypnl1: TCategoryPanel
@@ -3157,7 +3153,6 @@ inherited frmAbout: TfrmAbout
         Caption = 'Disclaimer'
         Collapsed = True
         TabOrder = 0
-        ExplicitWidth = 389
         object memoDisclaimer: TMemo
           Left = 0
           Top = 0
@@ -3175,11 +3170,11 @@ inherited frmAbout: TfrmAbout
               'nor shall the fact of release constitute any such warranty. Furt' +
               'hermore, the software is released on condition that neither the ' +
               'USGS nor the U.S. Government shall be held liable for any damage' +
-              's resulting from its authorized or unauthorized use.')
+              's resulting from its authorized or unauthorized use. https://wat' +
+              'er.usgs.gov/software/help/notice/')
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
-          ExplicitWidth = 387
         end
       end
     end
@@ -3192,8 +3187,6 @@ inherited frmAbout: TfrmAbout
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 477
-    ExplicitWidth = 728
     DesignSize = (
       732
       49)
@@ -3220,7 +3213,6 @@ inherited frmAbout: TfrmAbout
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 632
     end
     object btnGoToWeb: TBitBtn
       Left = 475
@@ -3291,7 +3283,6 @@ inherited frmAbout: TfrmAbout
         0800000000000000000000000000000000000000080808080800}
       TabOrder = 0
       OnClick = btnGoToWebClick
-      ExplicitLeft = 471
     end
   end
   object dgCredit: TRbwDataGrid4
@@ -3388,7 +3379,5 @@ inherited frmAbout: TfrmAbout
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 728
-    ExplicitHeight = 172
   end
 end

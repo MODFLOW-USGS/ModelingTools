@@ -1,4 +1,4 @@
-program GwMounding;
+program GwMound;
 
 uses
   Forms,

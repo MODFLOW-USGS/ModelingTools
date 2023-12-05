@@ -1,72 +1,96 @@
-﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-		<PropertyGroup>
-			<ProjectGuid>{BAC51DDA-451D-4A72-82A3-77394A835E16}</ProjectGuid>
-		</PropertyGroup>
-		<ItemGroup>
-			<Projects Include="Automater.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="GwMounding.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="GenerateSTable.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="Automater2\Automater2.dproj">
-				<Dependencies/>
-			</Projects>
-		</ItemGroup>
-		<ProjectExtensions>
-			<Borland.Personality>Default.Personality.12</Borland.Personality>
-			<Borland.ProjectType/>
-			<BorlandProject>
-				<Default.Personality/>
-			</BorlandProject>
-		</ProjectExtensions>
-		<Target Name="Automater">
-			<MSBuild Projects="Automater.dproj"/>
-		</Target>
-		<Target Name="Automater:Clean">
-			<MSBuild Projects="Automater.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="Automater:Make">
-			<MSBuild Projects="Automater.dproj" Targets="Make"/>
-		</Target>
-		<Target Name="GwMounding">
-			<MSBuild Projects="GwMounding.dproj"/>
-		</Target>
-		<Target Name="GwMounding:Clean">
-			<MSBuild Projects="GwMounding.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="GwMounding:Make">
-			<MSBuild Projects="GwMounding.dproj" Targets="Make"/>
-		</Target>
-		<Target Name="GenerateSTable">
-			<MSBuild Projects="GenerateSTable.dproj"/>
-		</Target>
-		<Target Name="GenerateSTable:Clean">
-			<MSBuild Projects="GenerateSTable.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="GenerateSTable:Make">
-			<MSBuild Projects="GenerateSTable.dproj" Targets="Make"/>
-		</Target>
-		<Target Name="Automater2">
-			<MSBuild Projects="Automater2\Automater2.dproj"/>
-		</Target>
-		<Target Name="Automater2:Clean">
-			<MSBuild Projects="Automater2\Automater2.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="Automater2:Make">
-			<MSBuild Projects="Automater2\Automater2.dproj" Targets="Make"/>
-		</Target>
-		<Target Name="Build">
-			<CallTarget Targets="Automater;GwMounding;GenerateSTable;Automater2"/>
-		</Target>
-		<Target Name="Clean">
-			<CallTarget Targets="Automater:Clean;GwMounding:Clean;GenerateSTable:Clean;Automater2:Clean"/>
-		</Target>
-		<Target Name="Make">
-			<CallTarget Targets="Automater:Make;GwMounding:Make;GenerateSTable:Make;Automater2:Make"/>
-		</Target>
-		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
-	</Project>
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{BAC51DDA-451D-4A72-82A3-77394A835E16}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Automater.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="GwMound.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="GenerateSTable.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Automater2\Automater2.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\ConvertHydMod\ConvertHydMod.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="DMath\Dmath\dll\dmath.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Automater">
+        <MSBuild Projects="Automater.dproj"/>
+    </Target>
+    <Target Name="Automater:Clean">
+        <MSBuild Projects="Automater.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Automater:Make">
+        <MSBuild Projects="Automater.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GwMound">
+        <MSBuild Projects="GwMound.dproj"/>
+    </Target>
+    <Target Name="GwMound:Clean">
+        <MSBuild Projects="GwMound.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GwMound:Make">
+        <MSBuild Projects="GwMound.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GenerateSTable">
+        <MSBuild Projects="GenerateSTable.dproj"/>
+    </Target>
+    <Target Name="GenerateSTable:Clean">
+        <MSBuild Projects="GenerateSTable.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GenerateSTable:Make">
+        <MSBuild Projects="GenerateSTable.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Automater2">
+        <MSBuild Projects="Automater2\Automater2.dproj"/>
+    </Target>
+    <Target Name="Automater2:Clean">
+        <MSBuild Projects="Automater2\Automater2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Automater2:Make">
+        <MSBuild Projects="Automater2\Automater2.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ConvertHydMod">
+        <MSBuild Projects="..\ConvertHydMod\ConvertHydMod.dproj"/>
+    </Target>
+    <Target Name="ConvertHydMod:Clean">
+        <MSBuild Projects="..\ConvertHydMod\ConvertHydMod.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ConvertHydMod:Make">
+        <MSBuild Projects="..\ConvertHydMod\ConvertHydMod.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dmath">
+        <MSBuild Projects="DMath\Dmath\dll\dmath.dproj"/>
+    </Target>
+    <Target Name="dmath:Clean">
+        <MSBuild Projects="DMath\Dmath\dll\dmath.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dmath:Make">
+        <MSBuild Projects="DMath\Dmath\dll\dmath.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Automater;GwMound;GenerateSTable;Automater2;ConvertHydMod;dmath"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Automater:Clean;GwMound:Clean;GenerateSTable:Clean;Automater2:Clean;ConvertHydMod:Clean;dmath:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Automater:Make;GwMound:Make;GenerateSTable:Make;Automater2:Make;ConvertHydMod:Make;dmath:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

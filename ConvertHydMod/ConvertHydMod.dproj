@@ -1,15 +1,14 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{9DAACF67-BD57-4E27-A7D0-50A3B5DADF44}</ProjectGuid>
+        <ProjectGuid>{54E9CF35-A14E-455F-9657-872CE75D8F3D}</ProjectGuid>
         <ProjectVersion>19.5</ProjectVersion>
-        <MainSource>GwMounding.dpr</MainSource>
-        <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
-        <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
-        <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
+        <AppType>Application</AppType>
+        <MainSource>ConvertHydMod.dpr</MainSource>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -47,51 +46,49 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <Manifest_File>None</Manifest_File>
-        <DCC_Define>CustomShape;$(DCC_Define)</DCC_Define>
-        <Icon_MainIcon>GwMounding_Icon.ico</Icon_MainIcon>
-        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;VCLTee;$(DCC_Namespace)</DCC_Namespace>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
+        <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
+        <DCC_E>false</DCC_E>
+        <DCC_N>false</DCC_N>
+        <DCC_S>false</DCC_S>
+        <DCC_F>false</DCC_F>
+        <DCC_K>false</DCC_K>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
+        <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <SanitizedProjectName>ConvertHydMod</SanitizedProjectName>
+        <DCC_Define>Mf2005ObsExtractor;$(DCC_Define)</DCC_Define>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=U.S. Geological Survey;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=public domain;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;Last Compile=2012-05-29 13:20</VerInfo_Keys>
-        <DCC_ImageBase>00400000</DCC_ImageBase>
-        <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
-        <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
-        <SanitizedProjectName>GwMounding</SanitizedProjectName>
-        <DCC_UnitSearchPath>C:\ModelingTools\Automater\DMath\Dmath\units;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_UsePackage>MMJLabel11_1;FireDACIBDriver;JvNet;vclwinx;GR32_DSGN_RS11_1;ButtonEdit11_1;fmx;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;FireDACCommonODBC;FireDACCommonDriver;appanalytics;IndyProtocols;vclx;IndyIPClient;dbxcds;vcledge;bindcompvclwinx;FmxTeeUI;activeAppPkg11_1;bindcompfmx;madBasic_;JvBands;inetdb;JvAppFrm;XBasePkg11_1;FireDACSqliteDriver;DbxClientDriver;GlWidget11_1;Tee;soapmidas;JclVcl;vclactnband;TeeUI;fmxFireDAC;dbexpress;Jcl;RbwRuler11_2;JvManagedThreads;DBXMySQLDriver;VclSmp;inet;JvPascalInterpreter;vcltouch;fmxase;JvPluginSystem;JvDB;JvTimeFramework;dbrtl;RbwControllerPackage11_1;Ade11_1;fmxdae;TeeDB;FireDACMSAccDriver;JvCustom;CustomIPTransport;JvSystem;RbwDataGridD11_1;AbbreviaVCLD;JclDeveloperTools;JvControls;vcldsnap;addbtn95_D11_1;DBXInterBaseDriver;JvCrypt;JvJans;JvMM;IndySystem;JvWizards;madExcept_;MostRecentFiles11_1;QuadTreePkg11_1;JvGlobus;vcldb;datagrid11_1;RbwRollupPanel11_1;RbwParser11_1;JclContainers;JvPageComps;vclFireDAC;JvCore;madDisAsm_;bindcomp;FireDACCommon;IndyCore;RESTBackendComponents;DOSCommandDR;bindcompdbx;ModelCube11_1;rtl;FireDACMySQLDriver;FireDACADSDriver;RESTComponents;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;adortl;VirtualTreesDR;JvDotNetCtrls;JvHMI;JvRuntimeDesign;RbwEdit11_1;JvXPCtrls;vclimg;FireDACPgDriver;FireDAC;inetdbxpress;JvDlgs;xmlrtl;tethering;JvStdCtrls;JvDocking;JvPrintPreview;bindcompvcl;dsnap;JvCmp;CloudService;fmxobj;bindcompvclsmp;FMXTee;soaprtl;ZoomBox2_11_1;soapserver;DynamicCursor11_1;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <Icon_MainIcon>GwMounding_Icon.ico</Icon_MainIcon>
-        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_Keys>CompanyName=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
-        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <Icon_MainIcon>GwMounding_Icon.ico</Icon_MainIcon>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
-        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <DCC_UsePackage>FireDACIBDriver;vclwinx;fmx;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;FireDACCommonODBC;FireDACCommonDriver;appanalytics;IndyProtocols;vclx;IndyIPClient;dbxcds;vcledge;bindcompvclwinx;FmxTeeUI;bindcompfmx;inetdb;FireDACSqliteDriver;DbxClientDriver;Tee;soapmidas;vclactnband;TeeUI;fmxFireDAC;dbexpress;DBXMySQLDriver;VclSmp;inet;vcltouch;fmxase;dbrtl;fmxdae;TeeDB;FireDACMSAccDriver;CustomIPTransport;AbbreviaVCLD;vcldsnap;DBXInterBaseDriver;IndySystem;QuadTreePkg11_1;vcldb;vclFireDAC;bindcomp;FireDACCommon;IndyCore;RESTBackendComponents;DOSCommandDR;bindcompdbx;rtl;FireDACMySQLDriver;FireDACADSDriver;RESTComponents;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;adortl;VirtualTreesDR;vclimg;FireDACPgDriver;FireDAC;inetdbxpress;xmlrtl;tethering;bindcompvcl;dsnap;CloudService;fmxobj;bindcompvclsmp;FMXTee;soaprtl;soapserver;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
-        <DCC_Define>DEBUG;CustomTemplate;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+        <DCC_RemoteDebug>true</DCC_RemoteDebug>
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
         <DCC_RangeChecking>true</DCC_RangeChecking>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_Keys>CompanyName=;FileVersion=0.3.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=0.3.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <DCC_MapFile>3</DCC_MapFile>
-        <BT_BuildType>Debug</BT_BuildType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -100,37 +97,18 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_Keys>CompanyName=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
-        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
-        <BT_BuildType>Debug</BT_BuildType>
+        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="frmGwMoundUnit.pas">
-            <Form>frmGwMound</Form>
+        <DCCReference Include="frmConvertHydModUnit.pas">
+            <Form>frmConvertHydMod</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="HantushUnit.pas"/>
-        <DCCReference Include="WellFunctionUnit.pas"/>
-        <DCCReference Include="FastGEO.pas"/>
-        <DCCReference Include="S_StarValues.pas"/>
-        <DCCReference Include="RealListUnit.pas"/>
-        <DCCReference Include="RootFinder.pas"/>
-        <DCCReference Include="BMSearch.pas"/>
-        <DCCReference Include="ReadModflowArrayUnit.pas"/>
-        <DCCReference Include="IntListUnit.pas"/>
-        <DCCReference Include="frmCustomBasinUnit.pas">
-            <Form>frmCustomBasin</Form>
-        </DCCReference>
-        <DCCReference Include="BigCanvasMethods.pas"/>
-        <DCCReference Include="IniFileUtilities.pas"/>
-        <DCCReference Include="InteractiveTools.pas"/>
-        <DCCReference Include="CursorsFoiledAgain.pas"/>
-        <DCCReference Include="frmAncestorUnit.pas">
-            <Form>frmAncestor</Form>
-        </DCCReference>
+        <DCCReference Include="..\ModelMuse\ReadModflowArrayUnit.pas"/>
+        <DCCReference Include="..\SWI_ObsExtractor\SwiObsUtilities.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -143,57 +121,23 @@
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
     </ItemGroup>
-    <Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
-    <Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
     <ProjectExtensions>
         <Borland.Personality>Delphi.Personality.12</Borland.Personality>
-        <Borland.ProjectType/>
+        <Borland.ProjectType>Application</Borland.ProjectType>
         <BorlandProject>
             <Delphi.Personality>
-                <VersionInfo>
-                    <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
-                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
-                    <VersionInfo Name="MajorVer">0</VersionInfo>
-                    <VersionInfo Name="MinorVer">1</VersionInfo>
-                    <VersionInfo Name="Release">0</VersionInfo>
-                    <VersionInfo Name="Build">0</VersionInfo>
-                    <VersionInfo Name="Debug">False</VersionInfo>
-                    <VersionInfo Name="PreRelease">False</VersionInfo>
-                    <VersionInfo Name="Special">False</VersionInfo>
-                    <VersionInfo Name="Private">False</VersionInfo>
-                    <VersionInfo Name="DLL">False</VersionInfo>
-                    <VersionInfo Name="Locale">1033</VersionInfo>
-                    <VersionInfo Name="CodePage">1252</VersionInfo>
-                </VersionInfo>
-                <VersionInfoKeys>
-                    <VersionInfoKeys Name="CompanyName"/>
-                    <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">0.1.0.0</VersionInfoKeys>
-                    <VersionInfoKeys Name="InternalName"/>
-                    <VersionInfoKeys Name="LegalCopyright"/>
-                    <VersionInfoKeys Name="LegalTrademarks"/>
-                    <VersionInfoKeys Name="OriginalFilename"/>
-                    <VersionInfoKeys Name="ProductName"/>
-                    <VersionInfoKeys Name="ProductVersion">0.1.0.0</VersionInfoKeys>
-                    <VersionInfoKeys Name="Comments"/>
-                    <VersionInfoKeys Name="Last Compile">2012-05-29 13:20</VersionInfoKeys>
-                </VersionInfoKeys>
+                <Source>
+                    <Source Name="MainSource">ConvertHydMod.dpr</Source>
+                </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
-                <Source>
-                    <Source Name="MainSource">GwMounding.dpr</Source>
-                </Source>
             </Delphi.Personality>
-            <Platforms>
-                <Platform value="Win32">True</Platform>
-                <Platform value="Win64">False</Platform>
-            </Platforms>
             <Deployment Version="4">
-                <DeployFile LocalName="Release\Win32\GwMounding.exe" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="Win32\Debug\ConvertHydMod.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>GwMounding.exe</RemoteName>
+                        <RemoteName>ConvertHydMod.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1020,8 +964,14 @@
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
             </Deployment>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
 </Project>
