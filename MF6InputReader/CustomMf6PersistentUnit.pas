@@ -48,6 +48,8 @@ type
     procedure Initialize;
   end;
 
+  TCellIdList = TList<TCellId>;
+
   TValueType = (vtNumeric, vtString);
 
   TTimeVariableCell = record
@@ -71,6 +73,7 @@ type
   TBoundaryValueList = TList<TBoundaryValue>;
 
   TDoubleList = TList<Double>;
+
 
   TCustomMf6Persistent = class(TPersistent)
   protected

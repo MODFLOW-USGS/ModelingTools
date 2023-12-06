@@ -7003,7 +7003,9 @@ Type
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
   published
-    property EquationFormulation: TEquationFormulation read FEquationFormulation write SetEquationFormulation;
+    // EXPLICIT
+    property EquationFormulation: TEquationFormulation read FEquationFormulation
+      write SetEquationFormulation;
   end;
 
   TOutputPrecision = (opSingle, opDouble);

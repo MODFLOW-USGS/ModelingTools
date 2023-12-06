@@ -45,7 +45,7 @@ type
     procedure Initialize; override;
   end;
 
-  TLakrPackageItem = class(TObject)
+  TLakPackageItem = class(TObject)
   private
     lakeno: Integer;
     strt: Extended;
@@ -57,11 +57,11 @@ type
     destructor Destroy; override;
   end;
 
-  TLakrPackageItemList= TObjectList<TLakrPackageItem>;
+  TLakPackageItemList= TObjectList<TLakPackageItem>;
 
   TLakPackageData = class(TCustomMf6Persistent)
   private
-    FItems: TLakrPackageItemList;
+    FItems: TLakPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
       BOUNDNAMES: Boolean);
   protected
@@ -418,9 +418,9 @@ begin
   end
 end;
 
-{ TLakrPackageItem }
+{ TLakPackageItem }
 
-constructor TLakrPackageItem.Create;
+constructor TLakPackageItem.Create;
 begin
   lakeno := 0;
   strt := 0;
@@ -429,7 +429,7 @@ begin
   boundname := ''
 end;
 
-destructor TLakrPackageItem.Destroy;
+destructor TLakPackageItem.Destroy;
 begin
   aux.Free;
   inherited;
@@ -439,7 +439,7 @@ end;
 
 constructor TLakPackageData.Create(PackageType: string);
 begin
-  FItems := TLakrPackageItemList.Create;
+  FItems := TLakPackageItemList.Create;
   inherited;
 
 end;
@@ -461,7 +461,7 @@ procedure TLakPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
 var
   ALine: string;
   ErrorLine: string;
-  Item: TLakrPackageItem;
+  Item: TLakPackageItem;
   ItemStart: Integer;
   AuxIndex: Integer;
   AValue: TBoundaryValue;
@@ -483,8 +483,8 @@ begin
     if ReadEndOfSection(ALine, ErrorLine, 'PACKAGEDATA', Unhandled) then
     begin
       FItems.Sort(
-        TComparer<TLakrPackageItem>.Construct(
-          function(const Left, Right: TLakrPackageItem): Integer
+        TComparer<TLakPackageItem>.Construct(
+          function(const Left, Right: TLakPackageItem): Integer
           begin
             Result := Left.lakeno - Right.lakeno;
           end
@@ -493,7 +493,7 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    Item := TLakrPackageItem.Create;
+    Item := TLakPackageItem.Create;
     try
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;

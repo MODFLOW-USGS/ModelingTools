@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="GncTest" FileType="bin">
+    <FileName Model_Name="GncTest" FileType="bin">..\..\..\WRDAPP\mf6.4.2_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="GncTest" FileType="ancillary">
+    <FileName Model_Name="GncTest" FileType="ancillary">GncTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="GncTest" FileType="Model Input">
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.chd</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.disv</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.gnc</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.ic</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.ims</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.nam.archive</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.npf</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.oc</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">GncTest.tdis</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Input">usgs.GncTest.reference</FileName>
+  </model>
+  <output Model_Name="GncTest" FileType="Model Output">
+    <FileName Model_Name="GncTest" FileType="Model Output">GncTest.bhd</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Output">GncTest.cbc</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Output">GncTest.disv.grb</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Output">GncTest.InnerSolution.CSV</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Output">GncTest.lst</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Output">GncTest.OuterSolution.CSV</FileName>
+    <FileName Model_Name="GncTest" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

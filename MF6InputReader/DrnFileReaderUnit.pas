@@ -330,7 +330,7 @@ begin
       Exit;
     end;
 
-    Cell := TDrnTimeItem.Create;;
+    Cell := TDrnTimeItem.Create;
     try
       CaseSensitiveLine := ALine;
       ALine := UpperCase(ALine);

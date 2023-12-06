@@ -23,6 +23,8 @@ object frmAutomate: TfrmAutomate
     ActivePage = tabRunModels
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 684
+    ExplicitHeight = 580
     object tabRunModels: TTabSheet
       Caption = 'Run Models'
       object Label1: TLabel
@@ -113,7 +115,7 @@ object frmAutomate: TfrmAutomate
         Filter = 'Executables (*.exe)|*.exe'
         ButtonWidth = 27
         TabOrder = 0
-        Text = 'C:\WRDAPP\MF2005.1_10\bin\mf2005dbl.exe'
+        Text = 'C:\WRDAPP\MF2005.1_12\bin\mf2005dbl.exe'
       end
       object feModelMuseApplication: TJvFilenameEdit
         Left = 8
@@ -123,7 +125,7 @@ object frmAutomate: TfrmAutomate
         Filter = 'Executables (*.exe)|*.exe'
         ButtonWidth = 27
         TabOrder = 1
-        Text = '"C:\Program Files\USGS\ModelMuse2_19_1\bin\ModelMuse.exe"'
+        Text = 'C:\Program Files\USGS\ModelMuse5\bin\ModelMuse.exe"'
       end
       object feModelMuseFile: TJvFilenameEdit
         Left = 9
@@ -982,6 +984,7 @@ object frmAutomate: TfrmAutomate
     Caption = 'ToolBar'
     Images = ImageList1
     TabOrder = 0
+    ExplicitWidth = 684
     object ToolButton1: TToolButton
       Left = 0
       Top = 0

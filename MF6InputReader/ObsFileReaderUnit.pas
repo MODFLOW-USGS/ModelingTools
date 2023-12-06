@@ -187,20 +187,10 @@ begin
 //    FSplitter.DelimitedText := ALine;
     if FPackagetype = 'OBS6' then
     begin
-      if Observation.ObsType = 'head' then
-      begin
-        if ReadCellID(Observation.CellId1, 2, DimensionCount) then
-        begin
-          Observation.IdType1:= itCell;
-          FObservations.Add(Observation);
-        end
-        else
-        begin
-          Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
-          Unhandled.WriteLine(ErrorLine);
-        end;
-      end
-      else if Observation.ObsType = 'drawdown' then
+      if (Observation.ObsType = 'head')
+        or (Observation.ObsType = 'drawdown')
+        or (Observation.ObsType = 'concentration')
+        then
       begin
         if ReadCellID(Observation.CellId1, 2, DimensionCount) then
         begin

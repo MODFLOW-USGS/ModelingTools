@@ -179,7 +179,6 @@ var
   CaseSensitiveLine: string;
   TS6_FileName: string;
   Obs_FileName: string;
-  Aux: string;
   AuxIndex: Integer;
   AUXILIARY_Name: string;
 begin

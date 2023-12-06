@@ -10089,6 +10089,11 @@ const
 //               Bug fix: Fixed export of shapefiles of contours for MODFLOW
 //                DISV models in which the active area varies among layers.
 
+//               Enhancement: In MODFLOW 6 models, the BICGSTAB solver option
+//                will be used automatically for models that use the XT3D option
+//                in the NPF package or DISV models in which the GNC package is
+//                used and the EXPLICIT option is not used in the GNC package.
+
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for Transient Hydraulic Conductivity package for MODFLOW 6.

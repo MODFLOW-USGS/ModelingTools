@@ -23,8 +23,8 @@ object frmAutomate: TfrmAutomate
     ActivePage = tabRunModels
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 682
-    ExplicitHeight = 572
+    ExplicitWidth = 684
+    ExplicitHeight = 580
     object tabRunModels: TTabSheet
       Caption = 'Run Models'
       object Label1: TLabel
@@ -115,7 +115,7 @@ object frmAutomate: TfrmAutomate
         Filter = 'Executables (*.exe)|*.exe'
         ButtonWidth = 27
         TabOrder = 0
-        Text = 'C:\WRDAPP\MF2005.1_10\bin\mf2005dbl.exe'
+        Text = 'C:\WRDAPP\MF2005.1_12\bin\mf2005dbl.exe'
       end
       object feModelMuseApplication: TJvFilenameEdit
         Left = 8
@@ -125,7 +125,7 @@ object frmAutomate: TfrmAutomate
         Filter = 'Executables (*.exe)|*.exe'
         ButtonWidth = 27
         TabOrder = 1
-        Text = '"C:\Program Files\USGS\ModelMuse2_19_1\bin\ModelMuse.exe"'
+        Text = 'C:\Program Files\USGS\ModelMuse5\bin\ModelMuse.exe"'
       end
       object feModelMuseFile: TJvFilenameEdit
         Left = 9
@@ -400,7 +400,7 @@ object frmAutomate: TfrmAutomate
           23)
       end
       object btnRun: TButton
-        Left = 338
+        Left = 330
         Top = 508
         Width = 76
         Height = 26
@@ -409,7 +409,7 @@ object frmAutomate: TfrmAutomate
         OnClick = btnTestThreadClick
       end
       object btnAbort: TBitBtn
-        Left = 420
+        Left = 412
         Top = 507
         Width = 76
         Height = 26
@@ -452,7 +452,7 @@ object frmAutomate: TfrmAutomate
         ChangeDisabledColor = True
       end
       object pb1: TProgressBar
-        Left = 338
+        Left = 330
         Top = 484
         Width = 152
         Height = 18
@@ -984,7 +984,7 @@ object frmAutomate: TfrmAutomate
     Caption = 'ToolBar'
     Images = ImageList1
     TabOrder = 0
-    ExplicitWidth = 682
+    ExplicitWidth = 684
     object ToolButton1: TToolButton
       Left = 0
       Top = 0

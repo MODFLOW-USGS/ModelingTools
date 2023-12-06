@@ -135,6 +135,8 @@
         <DCCReference Include="LakFileReaderUnit.pas"/>
         <DCCReference Include="LakeTableFileReaderUnit.pas"/>
         <DCCReference Include="UzfFileReaderUnit.pas"/>
+        <DCCReference Include="MvrFileReaderUnit.pas"/>
+        <DCCReference Include="GncFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

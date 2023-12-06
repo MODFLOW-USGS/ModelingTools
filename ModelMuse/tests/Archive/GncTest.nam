@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 12/6/2023 by ModelMuse Version 5.1.1.46
+BEGIN OPTIONS
+  LIST GncTest.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DISV6        GncTest.disv  DISV
+  IC6          GncTest.ic  IC
+  NPF6         GncTest.npf  NPF
+  GNC6         GncTest.gnc  GNC
+  OC6          GncTest.oc  OC
+  CHD6         GncTest.chd  CHD-1
+END PACKAGES

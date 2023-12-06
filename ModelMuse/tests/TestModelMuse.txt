@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5520
+5536
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5520,3 +5520,19 @@ Viscosity.gpt
 	Archive\Viscosity.Temperature.ssm
 	Archive\Viscosity.vsc
 	Archive\usgs.Viscosity.reference
+GncTest.gpt
+	Archive\GncTest.axml
+	Archive\GncTest.chd
+	Archive\GncTest.disv
+	Archive\GncTest.gnc
+	Archive\GncTest.ic
+	Archive\GncTest.ims
+	Archive\GncTest.mfsim.nam
+	Archive\GncTest.nam
+	Archive\GncTest.nam.archive
+	Archive\GncTest.npf
+	Archive\GncTest.oc
+	Archive\GncTest.RunModel.Bat
+	Archive\GncTest.RunModflow.Bat
+	Archive\GncTest.tdis
+	Archive\usgs.GncTest.reference

@@ -40,6 +40,14 @@ resourcestring
   StrINNERDVCLOSEIsTyp = 'INNER_DVCLOSE is typically and order of magnitude ' +
   'less than OUTER_DVCLOSE. In this model INNER_DVCLOSE is %0:g and OUTER_DV' +
   'CLOSE is %1:g.';
+  StrBICGSTABLinearacce = 'BICGSTAB linear_acceleration option used instead ' +
+  'of CG';
+  StrTheCGLinearaccele = 'The CG linear_acceleration was selected in the IMS' +
+  ' solver but BICGSTAB will be used instead because the Ghost Node Correcti' +
+  'on package was used with the implicit option';
+  StrTheCGLinearacceleXt = 'The CG linear_acceleration was selected in the IMS' +
+  ' solver but BICGSTAB will be used instead because the XT3D option was sel' +
+  'ected in the NPF package.';
 
 { TSmsWriter }
 
@@ -78,6 +86,7 @@ begin
     Exit;
   end;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrIMSSolverProblem);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrBICGSTABLinearacce);
   if FSpeciesIndex < 0 then
   begin
     FNameOfFile := FileName(AFileName);
@@ -206,6 +215,8 @@ begin
 end;
 
 procedure TImsWriter.WriteLinearBlock;
+var
+  GncPackage: TGncPackage;
 begin
   WriteString('BEGIN LINEAR');
   NewLine;
@@ -237,7 +248,27 @@ begin
 
   WriteString('  LINEAR_ACCELERATION ');
   case FImsPackage.UsedLinAccel of
-    sllaCg: WriteString('CG');
+    sllaCg:
+      begin
+        GncPackage := Model.ModflowPackages.GncPackage;
+        if Model.DisvUsed and GncPackage.IsSelected
+          and (GncPackage.EquationFormulation <> efExplicit) then
+        begin
+          WriteString('BICGSTAB');
+          frmErrorsAndWarnings.AddWarning(Model, StrBICGSTABLinearacce,
+            StrTheCGLinearaccele)
+        end
+        else if Model.ModflowPackages.NpfPackage.UseXT3D then
+        begin
+          WriteString('BICGSTAB');
+          frmErrorsAndWarnings.AddWarning(Model, StrBICGSTABLinearacce,
+            StrTheCGLinearacceleXt)
+        end
+        else
+        begin
+          WriteString('CG');
+        end;
+      end;
     sllaBiCgStab: WriteString('BICGSTAB');
     else Assert(False);
   end;

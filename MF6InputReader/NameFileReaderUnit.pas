@@ -87,7 +87,8 @@ uses
   StoFileReaderUnit, CSubFileReaderUnit, BuyFileReaderUnit, VscFileReaderUnit,
   ChdFileReaderUnit, WelFileReaderUnit, DrnFileReaderUnit, RivFileReaderUnit,
   RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit, SfrFileReaderUnit,
-  GhbFileReaderUnit, LakFileReaderUnit, UzfFileReaderUnit;
+  GhbFileReaderUnit, LakFileReaderUnit, UzfFileReaderUnit, MvrFileReaderUnit,
+  GncFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -469,6 +470,8 @@ var
   GhbReader: TGhb;
   LakReader: TLak;
   UzfReader: TUzf;
+  MovReader: TMvr;
+  GncReader: TGnc;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -647,6 +650,19 @@ begin
       UzfReader := TUzf.Create(APackage.FileType);
       UzfReader.Dimensions := FDimensions;
       APackage.Package := UzfReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'MVR6' then
+    begin
+      MovReader := TMvr.Create(APackage.FileType);
+      APackage.Package := MovReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'GNC6' then
+    begin
+      GncReader := TGnc.Create(APackage.FileType);
+      GncReader.Dimensions := FDimensions;
+      APackage.Package := GncReader;
       APackage.ReadPackage(Unhandled);
     end
   end;
