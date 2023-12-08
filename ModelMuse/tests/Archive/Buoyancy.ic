@@ -1,7 +1,4 @@
-# Initial Conditions Package file created on 7/28/2023 by ModelMuse version 5.1.1.34.
-BEGIN OPTIONS
-END OPTIONS
-
+# Initial Conditions Package file created on 12/8/2023 by ModelMuse version 5.1.1.46.
 BEGIN GRIDDATA
   STRT LAYERED IPRN    12
     CONSTANT   1.000000000000E+003  # STRT Aquifer Layer 1

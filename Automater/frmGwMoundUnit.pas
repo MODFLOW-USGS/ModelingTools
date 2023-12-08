@@ -1878,7 +1878,7 @@ end;
 procedure TfrmGwMound.btnSaveNumericProfileTimeClick(Sender: TObject);
 begin
   inherited;
-  SaveResults(rdgProfileNumeric);
+  SaveResults(rdgProfileNumericTime);
 end;
 
 procedure TfrmGwMound.btnSaveSummaryClick(Sender: TObject);

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Fmp2Example" FileType="bin">
-    <FileName Model_Name="Fmp2Example" FileType="bin">..\..\..\WRDAPP\mf-owhm-release\bin3\mf-owhm.exe</FileName>
+    <FileName Model_Name="Fmp2Example" FileType="bin">..\..\..\WRDAPP\mf-owhm-release\bin\mf-owhm.exe</FileName>
   </bin>
   <ancillary Model_Name="Fmp2Example" FileType="ancillary">
     <FileName Model_Name="Fmp2Example" FileType="ancillary">Fmp2Example.gpt</FileName>

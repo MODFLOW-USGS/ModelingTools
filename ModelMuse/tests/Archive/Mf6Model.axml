@@ -84,6 +84,7 @@
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.stage</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.uzf_budget</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.UzfConvergence.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.water_content</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

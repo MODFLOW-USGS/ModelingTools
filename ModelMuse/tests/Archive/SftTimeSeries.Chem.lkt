@@ -1,8 +1,9 @@
-# LAK: Lake package for MODFLOW 6 file created on 7/20/2023 by ModelMuse version 5.1.1.33.
+# LAK: Lake package for MODFLOW 6 file created on 12/8/2023 by ModelMuse version 5.1.1.46.
 BEGIN OPTIONS
     FLOW_PACKAGE_NAME LAK-1
     FLOW_PACKAGE_AUXILIARY_NAME  Chem
     BOUNDNAMES
+    TS6 FILEIN SftTimeSeries.lak6.MyGroup.ts
     TS6 FILEIN SftTimeSeries.Chem.lkt.MyGroup.ts
     PRINT_INPUT
     SAVE_FLOWS

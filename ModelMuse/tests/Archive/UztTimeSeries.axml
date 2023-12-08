@@ -49,5 +49,6 @@
     <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.OuterSolution.CSV</FileName>
     <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.uzf_budget</FileName>
     <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.UzfConvergence.CSV</FileName>
+    <FileName Model_Name="UztTimeSeries" FileType="Model Output">UztTimeSeries.water_content</FileName>
   </output>
 </Model_Archive_List>

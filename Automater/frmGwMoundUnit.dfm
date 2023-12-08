@@ -65,7 +65,7 @@ inherited frmGwMound: TfrmGwMound
       732
       51)
     object btnBack: TBitBtn
-      Left = 515
+      Left = 507
       Top = 7
       Width = 95
       Height = 32
@@ -91,10 +91,10 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnBackClick
-      ExplicitLeft = 511
+      ExplicitLeft = 503
     end
     object btnNext: TBitBtn
-      Left = 618
+      Left = 610
       Top = 7
       Width = 95
       Height = 32
@@ -121,7 +121,7 @@ inherited frmGwMound: TfrmGwMound
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnNextClick
-      ExplicitLeft = 614
+      ExplicitLeft = 606
     end
     object btnMetric: TButton
       Left = 16
@@ -202,7 +202,7 @@ inherited frmGwMound: TfrmGwMound
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ActivePage = jvspRunNumeric
+    ActivePage = jvspBasinDesign
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -301,7 +301,7 @@ inherited frmGwMound: TfrmGwMound
       object plBasin: TJvPageList
         Left = 8
         Top = 119
-        Width = 459
+        Width = 451
         Height = 244
         Margins.Left = 4
         Margins.Top = 4
@@ -313,7 +313,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspSquareBasin: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 459
+          Width = 451
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -394,7 +394,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspRectangle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 459
+          Width = 451
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -516,7 +516,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspCircle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 459
+          Width = 451
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -615,7 +615,7 @@ inherited frmGwMound: TfrmGwMound
         object jvspCustom: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 459
+          Width = 451
           Height = 244
           Margins.Left = 4
           Margins.Top = 4
@@ -623,7 +623,7 @@ inherited frmGwMound: TfrmGwMound
           Margins.Bottom = 4
           Caption = 'jvspCustom'
           DesignSize = (
-            459
+            451
             244)
           object lblBasinCoordinates: TLabel
             Left = 0
@@ -1133,8 +1133,6 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspRunAnalyticalModel'
-      ExplicitWidth = 507
-      ExplicitHeight = 370
       object pgcAnalytic: TPageControl
         Left = 0
         Top = 0
@@ -1148,8 +1146,6 @@ inherited frmGwMound: TfrmGwMound
         Align = alClient
         TabOrder = 0
         OnChange = pgcAnalyticChange
-        ExplicitWidth = 507
-        ExplicitHeight = 370
         object tabAnalyticControls: TTabSheet
           Caption = 'Controls'
           ImageIndex = 2
@@ -1336,7 +1332,7 @@ inherited frmGwMound: TfrmGwMound
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = 'Get model results'
+            Caption = 'Run Analytical Model'
             TabOrder = 6
             OnClick = btnRunHantushClick
           end
@@ -1592,8 +1588,6 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = False
               end>
             WordWrapRowCaptions = False
-            ExplicitWidth = 499
-            ExplicitHeight = 304
           end
           object pnl1: TPanel
             Left = 0
@@ -1606,7 +1600,6 @@ inherited frmGwMound: TfrmGwMound
             Margins.Bottom = 4
             Align = alTop
             TabOrder = 0
-            ExplicitWidth = 499
             object btnCopyAnalytic: TButton
               Left = 3
               Top = 0
@@ -1864,7 +1857,7 @@ inherited frmGwMound: TfrmGwMound
       object feMODFLOW: TJvFilenameEdit
         Left = 10
         Top = 51
-        Width = 481
+        Width = 473
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'MODFLOW'
@@ -1883,7 +1876,7 @@ inherited frmGwMound: TfrmGwMound
       object feModelMuseApplication: TJvFilenameEdit
         Left = 10
         Top = 138
-        Width = 481
+        Width = 473
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'ModelMuse'
@@ -1902,7 +1895,7 @@ inherited frmGwMound: TfrmGwMound
       object feModelMuseFile: TJvFilenameEdit
         Left = 10
         Top = 202
-        Width = 481
+        Width = 473
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'Template'
@@ -1942,7 +1935,7 @@ inherited frmGwMound: TfrmGwMound
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ActivePage = TabTableNumericTime
+        ActivePage = tabNumericControls
         Align = alClient
         TabOrder = 0
         OnChange = pgcNumericChange
@@ -2037,7 +2030,7 @@ inherited frmGwMound: TfrmGwMound
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = 'Run numeric model'
+            Caption = 'Run Numerical Model'
             TabOrder = 2
             OnClick = btnRunNumericModelClick
           end
@@ -2595,8 +2588,8 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
-            ExplicitWidth = 499
-            ExplicitHeight = 284
+            ExplicitLeft = 4
+            ExplicitTop = 51
             ColWidths = (
               64
               64
@@ -10292,6 +10285,7 @@ inherited frmGwMound: TfrmGwMound
   object dlgSaveFile: TSaveDialog
     DefaultExt = '.gwm'
     Filter = 'GwMounding File (*.gwm)|*.gwm'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
     Left = 128
     Top = 248
   end
@@ -10573,7 +10567,8 @@ inherited frmGwMound: TfrmGwMound
   object dlgSaveResults: TSaveDialog
     DefaultExt = '.csv'
     Filter = 'Comma Separated Values (*.csv)|*.csv'
-    Left = 313
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Left = 417
     Top = 198
   end
 end
