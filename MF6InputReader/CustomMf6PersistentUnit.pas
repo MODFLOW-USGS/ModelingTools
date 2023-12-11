@@ -261,7 +261,7 @@ type
   TPackageList = TObjectList<TPackage>;
 
 resourcestring
-  StrUnrecognizedOCOpti = 'Unrecognized %S option in the following line.';
+  StrUnrecognizedOpti = 'Unrecognized %S option in the following line.';
   StrUnrecognizedSPACK = 'Unrecognized %s PACKAGEDATA in the following line';
   StrUnrecognizedSData = 'Unrecognized %s data in the following line.';
   StrUnrecognizedSPERI = 'Unrecognized %s PERIOD data in the following line.';
@@ -1540,13 +1540,13 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine(Format( StrUnrecognizedOCOpti, [PackageName]));
+      Unhandled.WriteLine(Format( StrUnrecognizedOpti, [PackageName]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end
   else
   begin
-    Unhandled.WriteLine(Format( StrUnrecognizedOCOpti, [PackageName]));
+    Unhandled.WriteLine(Format( StrUnrecognizedOpti, [PackageName]));
     Unhandled.WriteLine(ErrorLine);
   end;
 end;

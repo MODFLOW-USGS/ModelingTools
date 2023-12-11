@@ -47,7 +47,7 @@ type
 
   TGhbTimeItemList = TList<TGhbTimeItem>;
 
-  TGhbvPeriod = class(TCustomMf6Persistent)
+  TGhbPeriod = class(TCustomMf6Persistent)
   private
     IPer: Integer;
     FCells: TGhbTimeItemList;
@@ -60,7 +60,7 @@ type
     destructor Destroy; override;
   end;
 
-  TGhbPeriodList = TObjectList<TGhbvPeriod>;
+  TGhbPeriodList = TObjectList<TGhbPeriod>;
 
   TGhb = class(TDimensionedPackageReader)
   private
@@ -201,7 +201,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [FPackageType]));
+      Unhandled.WriteLine(Format(StrUnrecognizedOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
@@ -261,33 +261,33 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [FPackageType]));
+      Unhandled.WriteLine(Format(StrUnrecognizedOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end
 end;
 
-{ TGhbvPeriod }
+{ TGhbPeriod }
 
-constructor TGhbvPeriod.Create(PackageType: string);
+constructor TGhbPeriod.Create(PackageType: string);
 begin
   FCells := TGhbTimeItemList.Create;
   inherited;
 end;
 
-destructor TGhbvPeriod.Destroy;
+destructor TGhbPeriod.Destroy;
 begin
   FCells.Free;
   inherited;
 end;
 
-procedure TGhbvPeriod.Initialize;
+procedure TGhbPeriod.Initialize;
 begin
   inherited;
   FCells.Clear;
 end;
 
-procedure TGhbvPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+procedure TGhbPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
 var
   DimensionCount: Integer;
@@ -382,7 +382,7 @@ begin
       end
       else
       begin
-          Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
+        Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
       end;
     finally
@@ -420,7 +420,7 @@ var
   ALine: string;
   ErrorLine: string;
   IPER: Integer;
-  APeriod: TGhbvPeriod;
+  APeriod: TGhbPeriod;
   TsPackage: TPackage;
   PackageIndex: Integer;
   TsReader: TTimeSeries;
@@ -453,7 +453,7 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
-          APeriod := TGhbvPeriod.Create(FPackageType);
+          APeriod := TGhbPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,

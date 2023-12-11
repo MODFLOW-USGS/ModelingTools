@@ -194,7 +194,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [FPackageType]));
+      Unhandled.WriteLine(Format(StrUnrecognizedOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
@@ -253,7 +253,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [FPackageType]));
+      Unhandled.WriteLine(Format(StrUnrecognizedOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end

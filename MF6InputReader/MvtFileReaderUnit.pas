@@ -1,0 +1,153 @@
+unit MvtFileReaderUnit;
+
+interface
+
+uses
+  System.Classes, System.IOUtils, System.SysUtils, CustomMf6PersistentUnit,
+  System.Generics.Collections;
+
+type
+  TMvtOptions = class(TCustomMf6Persistent)
+  private
+    PRINT_INPUT: Boolean;
+    PRINT_FLOWS: Boolean;
+    SAVE_FLOWS: Boolean;
+    BUDGET: Boolean;
+    BUDGETCSV: Boolean;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  protected
+    procedure Initialize; override;
+  end;
+
+  TMvt = class(TPackageReader)
+  private
+    FOptions: TMvtOptions;
+  public
+    constructor Create(PackageType: string); override;
+    destructor Destroy; override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+  end;
+
+
+implementation
+
+{ TMvtOptions }
+
+procedure TMvtOptions.Initialize;
+begin
+  inherited;
+  PRINT_INPUT := False;
+  PRINT_FLOWS := False;
+  SAVE_FLOWS := False;
+  BUDGET := False;
+  BUDGETCSV := False;
+
+end;
+
+procedure TMvtOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+begin
+  Initialize;
+  while not Stream.EndOfStream do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(ALine);
+    if ALine = '' then
+    begin
+      Continue;
+    end;
+    if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
+    begin
+      Exit
+    end;
+
+    ALine := UpperCase(ALine);
+    FSplitter.DelimitedText := ALine;
+    Assert(FSplitter.Count > 0);
+    if FSplitter[0] = 'PRINT_INPUT' then
+    begin
+      PRINT_INPUT := True;
+    end
+    else if FSplitter[0] = 'PRINT_FLOWS' then
+    begin
+      PRINT_FLOWS := True;
+    end
+    else if FSplitter[0] = 'SAVE_FLOWS' then
+    begin
+      SAVE_FLOWS := True;
+    end
+    else if (FSplitter[0] = 'BUDGET')
+      and (FSplitter.Count >= 3)
+      and (FSplitter[1] = 'FILEOUT') then
+    begin
+      BUDGET := True;
+    end
+    else if (FSplitter[0] = 'BUDGETCSV')
+      and (FSplitter.Count >= 3)
+      and (FSplitter[1] = 'FILEOUT') then
+    begin
+      BUDGETCSV := True;
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format(StrUnrecognizedOpti, [FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
+    end;
+  end
+end;
+
+{ TMvt }
+
+constructor TMvt.Create(PackageType: string);
+begin
+  inherited;
+  FOptions := TMvtOptions.Create(PackageType);
+end;
+
+destructor TMvt.Destroy;
+begin
+  FOptions.Free;
+  inherited;
+end;
+
+procedure TMvt.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+begin
+  while not Stream.EndOfStream do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(ALine);
+    if ALine = '' then
+    begin
+      Continue;
+    end;
+
+    ALine := UpperCase(ALine);
+    FSplitter.DelimitedText := ALine;
+    if FSplitter[0] = 'BEGIN' then
+    begin
+      if FSplitter[1] ='OPTIONS' then
+      begin
+        FOptions.Read(Stream, Unhandled);
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format(StrUnrecognizedSData, [FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
+    end;
+  end;
+end;
+
+end.

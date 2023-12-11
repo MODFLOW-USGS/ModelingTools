@@ -513,13 +513,13 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         Height = 517
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 743
-        ExplicitHeight = 516
+        ExplicitWidth = 747
+        ExplicitHeight = 517
         inherited Panel: TPanel
           Top = 476
           Width = 747
-          ExplicitTop = 475
-          ExplicitWidth = 743
+          ExplicitTop = 476
+          ExplicitWidth = 747
           inherited lbNumber: TLabel
             Width = 142
             Height = 18
@@ -581,8 +581,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 743
-          ExplicitHeight = 475
+          ExplicitWidth = 747
+          ExplicitHeight = 476
           ColWidths = (
             717)
           RowHeights = (
@@ -828,6 +828,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         Height = 517
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 743
+        ExplicitHeight = 516
         object splitterBoundary: TSplitter
           Left = 1
           Top = 246
@@ -845,6 +847,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Height = 41
           Align = alTop
           TabOrder = 0
+          ExplicitWidth = 741
           object lblBoundaryTimeCount: TLabel
             Left = 602
             Top = 11
@@ -1006,6 +1009,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitWidth = 741
+          ExplicitHeight = 203
           ColWidths = (
             64
             64
@@ -1023,6 +1028,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           ActivePage = jvspModflowHOB
           PropagateEnable = False
           Align = alBottom
+          ExplicitTop = 250
+          ExplicitWidth = 741
           object jvspNone: TJvStandardPage
             Left = 0
             Top = 0
@@ -1930,6 +1937,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Width = 745
             Height = 265
             Caption = 'jvspModflowHOB'
+            ExplicitWidth = 741
             object lblHeadObservationNames: TLabel
               Left = 13
               Top = 9

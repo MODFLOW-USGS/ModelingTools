@@ -74,6 +74,7 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     procedure ReadInput(Unhandled: TStreamWriter); override;
+    property Dimensions: TDimensions read FDimensions;
   end;
 
   TFlowNameFile = TNameFile<TFlowNameFileOptions, TFlowPackages>;
@@ -88,7 +89,7 @@ uses
   ChdFileReaderUnit, WelFileReaderUnit, DrnFileReaderUnit, RivFileReaderUnit,
   RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit, SfrFileReaderUnit,
   GhbFileReaderUnit, LakFileReaderUnit, UzfFileReaderUnit, MvrFileReaderUnit,
-  GncFileReaderUnit;
+  GncFileReaderUnit, ExchangeFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -344,6 +345,7 @@ begin
   FValidPackageTypes.Add('MVR6');
   FValidPackageTypes.Add('GNC6');
   FValidPackageTypes.Add('OBS6');
+  FValidPackageTypes.Add('GWF6-GWF6');
 end;
 
 { TTransportPackages }
@@ -370,6 +372,7 @@ begin
   FValidPackageTypes.Add('UZT6');
   FValidPackageTypes.Add('MVT6');
   FValidPackageTypes.Add('OBS6');
+  FValidPackageTypes.Add('GWT6-GWT6');
 end;
 
 { TNameFile<Options, Packages> }
@@ -472,6 +475,8 @@ var
   UzfReader: TUzf;
   MovReader: TMvr;
   GncReader: TGnc;
+  GwfGwfReader: TGwfGwf;
+  GwtGwtReader: TGwtGwt;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -663,6 +668,22 @@ begin
       GncReader := TGnc.Create(APackage.FileType);
       GncReader.Dimensions := FDimensions;
       APackage.Package := GncReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'GWF6-GWF6' then
+    begin
+      GwfGwfReader := TGwfGwf.Create(APackage.FileType);
+      GwfGwfReader.Dimensions := FDimensions;
+      GwfGwfReader.FDimensions2 := FDimensions;
+      APackage.Package := GwfGwfReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'GWT6-GWT6' then
+    begin
+      GwtGwtReader := TGwtGwt.Create(APackage.FileType);
+      GwtGwtReader.Dimensions := FDimensions;
+      GwtGwtReader.FDimensions2 := FDimensions;
+      APackage.Package := GwtGwtReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

@@ -114,7 +114,7 @@ begin
         end
         else
         begin
-          Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [PackageName]));
+          Unhandled.WriteLine(Format(StrUnrecognizedOpti, [PackageName]));
           Unhandled.WriteLine(ErrorLine);
         end;
       end
@@ -127,7 +127,7 @@ begin
         end
         else
         begin
-          Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [PackageName]));
+          Unhandled.WriteLine(Format(StrUnrecognizedOpti, [PackageName]));
           Unhandled.WriteLine(ErrorLine);
         end;
       end
@@ -144,7 +144,7 @@ begin
         end
         else
         begin
-          Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [PackageName]));
+          Unhandled.WriteLine(Format(StrUnrecognizedOpti, [PackageName]));
           Unhandled.WriteLine(ErrorLine);
         end;
       end
@@ -161,19 +161,19 @@ begin
         end
         else
         begin
-          Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [PackageName]));
+          Unhandled.WriteLine(Format(StrUnrecognizedOpti, [PackageName]));
           Unhandled.WriteLine(ErrorLine);
         end;
       end
       else
       begin
-        Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [PackageName]));
+        Unhandled.WriteLine(Format(StrUnrecognizedOpti, [PackageName]));
         Unhandled.WriteLine(ErrorLine);
       end;
     end
     else
     begin
-      Unhandled.WriteLine(Format(StrUnrecognizedOCOpti, [PackageName]));
+      Unhandled.WriteLine(Format(StrUnrecognizedOpti, [PackageName]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end

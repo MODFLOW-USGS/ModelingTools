@@ -105,7 +105,6 @@
         <DCCReference Include="NameFileReaderUnit.pas"/>
         <DCCReference Include="ImsFileReaderUnit.pas"/>
         <DCCReference Include="..\ModelMuse\ReadModflowArrayUnit.pas"/>
-        <DCCReference Include="GWFlowExchangeReaderUnit.pas"/>
         <DCCReference Include="DisFileReaderUnit.pas"/>
         <DCCReference Include="DisvFileReaderUnit.pas"/>
         <DCCReference Include="DisuFileReaderUnit.pas"/>
@@ -137,6 +136,8 @@
         <DCCReference Include="UzfFileReaderUnit.pas"/>
         <DCCReference Include="MvrFileReaderUnit.pas"/>
         <DCCReference Include="GncFileReaderUnit.pas"/>
+        <DCCReference Include="ExchangeFileReaderUnit.pas"/>
+        <DCCReference Include="MvtFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

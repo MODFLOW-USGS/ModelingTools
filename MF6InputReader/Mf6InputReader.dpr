@@ -17,7 +17,6 @@ uses
   NameFileReaderUnit in 'NameFileReaderUnit.pas',
   ImsFileReaderUnit in 'ImsFileReaderUnit.pas',
   ReadModflowArrayUnit in '..\ModelMuse\ReadModflowArrayUnit.pas',
-  GWFlowExchangeReaderUnit in 'GWFlowExchangeReaderUnit.pas',
   DisFileReaderUnit in 'DisFileReaderUnit.pas',
   DisvFileReaderUnit in 'DisvFileReaderUnit.pas',
   DisuFileReaderUnit in 'DisuFileReaderUnit.pas',
@@ -48,7 +47,9 @@ uses
   LakeTableFileReaderUnit in 'LakeTableFileReaderUnit.pas',
   UzfFileReaderUnit in 'UzfFileReaderUnit.pas',
   MvrFileReaderUnit in 'MvrFileReaderUnit.pas',
-  GncFileReaderUnit in 'GncFileReaderUnit.pas';
+  GncFileReaderUnit in 'GncFileReaderUnit.pas',
+  ExchangeFileReaderUnit in 'ExchangeFileReaderUnit.pas',
+  MvtFileReaderUnit in 'MvtFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

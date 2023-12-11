@@ -10082,17 +10082,17 @@ const
 //    '5.1.1.45' Enhancement: ModelMuse can now import data from binary output
 //                files created by the MAW, MWT, SFR, SFT, UZF, and UZT
 //                packages in HODFLOW 6.
-
 //    '5.1.1.46' Bug fix: Fixed export of PEST input files on computers in
 //                which a character other than the period is used as a
 //                decimal separator.
 //               Bug fix: Fixed export of shapefiles of contours for MODFLOW
 //                DISV models in which the active area varies among layers.
-
-//               Enhancement: In MODFLOW 6 models, the BICGSTAB solver option
+//    '5.1.1.47' Enhancement: In MODFLOW 6 models, the BICGSTAB solver option
 //                will be used automatically for models that use the XT3D option
 //                in the NPF package or DISV models in which the GNC package is
 //                used and the EXPLICIT option is not used in the GNC package.
+//               Bug fix: Fixed bug in importing Shapefiles that contain null
+//                shapes.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10105,7 +10105,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.46';
+  IIModelVersion = '5.1.1.47';
 
 function IModelVersion: string;
 begin

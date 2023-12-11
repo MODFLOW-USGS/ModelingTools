@@ -9552,6 +9552,7 @@ var
   ErrorMessages: TStringList;
   FieldIndex: Integer;
   SkippedPoint: Boolean;
+  FirstObject: Boolean;
 begin
   SkippedPoint := False;
   CombinedPointIndex := -1;
@@ -9826,6 +9827,7 @@ begin
                   AScreenObject := nil;
                   DeleteCount := 0;
                   AddCount := 0;
+                  FirstObject := False;
                   for Index := 0 to FGeometryFile.Count - 1 do
                   begin
                     if not frmProgressMM.ShouldContinue then
@@ -9837,14 +9839,16 @@ begin
                     if ShapeObject.FShapeType = stNull then
                     begin
                       xbShapeDataBase.GoToNext;
+                      Inc(DeleteCount);
                       Continue;
                     end;
                     FNumPointsInCurrentShape := ShapeObject.FNumPoints;
-                    if not FCombinedObjects or (Index = 0) then
+                    if not FCombinedObjects or (AScreenObject = nil) then
                     begin
                       AScreenObject := TScreenObject.CreateWithViewDirection(
                         frmGoPhast.PhastModel, vdTop,
                         UndoCreateScreenObject, False);
+                      FirstObject := True;
                       AScreenObject.Comment := 'Imported from ' + FGeometryFileName +' on ' + DateTimeToStr(Now);
                       AScreenObject.ElevationCount :=
                         TElevationCount(rgElevationCount.ItemIndex);
@@ -9977,7 +9981,7 @@ begin
                         for DataSetIndex := 0 to DataSets.Count - 1 do
                         begin
                           DataSet := DataSets[DataSetIndex];
-                          if not FCombinedObjects or (Index = 0) then
+                          if not FCombinedObjects or FirstObject then
                           begin
                             if DataSet <> nil then
                             begin

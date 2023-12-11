@@ -65,6 +65,7 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
+    function GetModelByName(ModelName: string): TModel;
   end;
 
   TExchange = class(TObject)
@@ -123,6 +124,7 @@ type
     FExchanges: TExchanges;
     FSimulationFile: TStreamReader;
     FSolutionGroups: TSolutionGroups;
+    FExchangePackages: TPackageList;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -130,6 +132,9 @@ type
   end;
 
 implementation
+
+uses
+  ExchangeFileReaderUnit;
 
 
 
@@ -143,10 +148,12 @@ begin
   FModels := TModels.Create(PackageType);
   FExchanges := TExchanges.Create(PackageType);
   FSolutionGroups := TSolutionGroups.Create;
+  FExchangePackages := TPackageList.Create;
 end;
 
 destructor TMf6Simulation.Destroy;
 begin
+  FExchangePackages.Free;
   FSolutionGroups.Free;
   FExchanges.Free;
   FModels.Free;
@@ -163,6 +170,12 @@ var
   SolutionGroup: TSolutionGroup;
   ErrorLine: string;
   GroupIndex: Integer;
+  ExcIndex: Integer;
+  ExcPackage: TPackage;
+  GwfGwfReader: TGwfGwf;
+  GwtGwtReader: TGwtGwt;
+  Model1: TModel;
+  Model2: TModel;
 begin
   SetCurrentDir(ExtractFileDir(NameFile));
   try
@@ -265,13 +278,61 @@ begin
         FSolutionGroups[GroupIndex].ReadInput(FOutFile);
       end;
 
+      for ExcIndex := 0 to FExchanges.FExchanges.Count - 1 do
+      begin
+        ExcPackage := TPackage.Create;
+        FExchangePackages.Add(ExcPackage);
+        ExcPackage.FileType := FExchanges.FExchanges[ExcIndex].ExchangeType;
+        ExcPackage.FileName := FExchanges.FExchanges[ExcIndex].ExchangeFile;
+        Model1 := FModels.GetModelByName(FExchanges.FExchanges[ExcIndex].ExchangeModelNameA);
+        Model2 := FModels.GetModelByName(FExchanges.FExchanges[ExcIndex].ExchangeModelNameB);
+        if (Model1 = nil) or (Model2 = nil) then
+        begin
+          FOutFile.WriteLine('One or more of the following model names was not recognized in a simulation exchange.');
+          FOutFile.WriteLine(FExchanges.FExchanges[ExcIndex].ExchangeModelNameA);
+          FOutFile.WriteLine(FExchanges.FExchanges[ExcIndex].ExchangeModelNameB);
+        end;
+        ExcPackage.PackageName := '';
+
+
+        if ExcPackage.FileType = 'GWF6-GWF6' then
+        begin
+
+          GwfGwfReader := TGwfGwf.Create(FPackageType);
+
+          GwfGwfReader.Dimensions := (Model1.FName as TFlowNameFile).Dimensions;
+          GwfGwfReader.FDimensions2 := (Model2.FName as TFlowNameFile).Dimensions;
+          ExcPackage.Package := GwfGwfReader;
+          ExcPackage.ReadPackage(FOutFile);
+        end
+        else if ExcPackage.FileType = 'GWT6-GWT6' then
+        begin
+          GwtGwtReader := TGwtGwt.Create(FPackageType);
+          GwtGwtReader.Dimensions := (Model1.FName as TTransportNameFile).Dimensions;
+          GwtGwtReader.FDimensions2 := (Model2.FName as TTransportNameFile).Dimensions;
+          ExcPackage.Package := GwtGwtReader;
+          ExcPackage.ReadPackage(FOutFile);
+        end
+        else if ExcPackage.FileType = 'GWF6-GWT6' then
+        begin
+
+        end
+        else
+        begin
+          FOutFile.WriteLine('Unrecognized groundwater exchange type.');
+          FOutFile.WriteLine(ExcPackage.FileType);
+        end;
+
+      end;
+
       FSimulationFile.Close;
       FOutFile.Close;
     finally
       FSimulationFile.Free;
       FOutFile.Free;
     end;
-  except on E: Exception do
+
+    except on E: Exception do
     begin
       WriteLn('ERROR');
       WriteLn(E.Message);
@@ -502,6 +563,23 @@ destructor TModels.Destroy;
 begin
   FModels.Free;
   inherited;
+end;
+
+function TModels.GetModelByName(ModelName: string): TModel;
+var
+  Index: Integer;
+  AModel: TModel;
+begin
+  result := nil;
+  for Index := 0 to FModels.Count - 1 do
+  begin
+    AModel := FModels[Index];
+    if AnsiSameText(ModelName, AModel.ModelName) then
+    begin
+      result := AModel;
+      Exit;
+    end;
+  end;
 end;
 
 procedure TModels.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
