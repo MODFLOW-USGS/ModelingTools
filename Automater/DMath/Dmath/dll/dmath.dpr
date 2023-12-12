@@ -21,7 +21,75 @@ uses
   {$ELSE}
   uplot;
   {$ENDIF}
-  
+
+  {#BACKUP ..\changes.txt}
+  {#BACKUP ..\dmath.pdf}
+  {#BACKUP ..\dmath.txt}
+  {#BACKUP ..\lgpl.txt}
+  {#BACKUP ..\units\*.pas}
+  {#BACKUP ..\units\filelist.txt}
+  {#BACKUP ..\units\types.inc}
+  {#BACKUP ..\demo\bgi\curfit\*.pas}
+  {#BACKUP ..\demo\bgi\fmath\*.pas}
+  {#BACKUP ..\demo\bgi\fourier\*.pas}
+  {#BACKUP ..\demo\bgi\nist\*.pas}
+  {#BACKUP ..\demo\bgi\nist\*.dat}
+  {#BACKUP ..\demo\bgi\regmodel\*.pas}
+  {#BACKUP ..\demo\bgi\regmodel\*.dat}
+  {#BACKUP ..\demo\bgi\stat\*.pas}
+  {#BACKUP ..\demo\console\complex\*.pas}
+  {#BACKUP ..\demo\console\curfit\*.pas}
+  {#BACKUP ..\demo\console\equation\*.pas}
+  {#BACKUP ..\demo\console\equation\*.inc}
+  {#BACKUP ..\demo\console\fmath\*.pas}
+  {#BACKUP ..\demo\console\fmath\*.dat}
+  {#BACKUP ..\demo\console\fourier\*.pas}
+  {#BACKUP ..\demo\console\integral\*.pas}
+  {#BACKUP ..\demo\console\integral\*.dat}
+  {#BACKUP ..\demo\console\matrices\*.pas}
+  {#BACKUP ..\demo\console\matrices\*.dat}
+  {#BACKUP ..\demo\console\optim\*.pas}
+  {#BACKUP ..\demo\console\optim\*.inc}
+  {#BACKUP ..\demo\console\polynom\*.pas}
+  {#BACKUP ..\demo\console\proba\*.pas}
+  {#BACKUP ..\demo\console\random\*.pas}
+  {#BACKUP ..\demo\console\random\*.txt}
+  {#BACKUP ..\demo\console\random\*.dat}
+  {#BACKUP ..\demo\console\stat\*.pas}
+  {#BACKUP ..\demo\gui\calc\*.pas}
+  {#BACKUP ..\demo\gui\calc\*.dpr}
+  {#BACKUP ..\demo\gui\calc\*.dfm}
+  {#BACKUP ..\demo\gui\curfit\*.pas}
+  {#BACKUP ..\demo\gui\curfit\*.dpr}
+  {#BACKUP ..\demo\gui\curfit\*.dfm}
+  {#BACKUP ..\demo\gui\curfit\*.dat}
+  {#BACKUP ..\demo\gui\curfit\*.gcf}
+  {#BACKUP ..\demo\gui\dialogs\*.pas}
+  {#BACKUP ..\demo\gui\dialogs\*.dpr}
+  {#BACKUP ..\demo\gui\dialogs\*.dfm}
+  {#BACKUP ..\demo\gui\fplot\*.pas}
+  {#BACKUP ..\demo\gui\fplot\*.dpr}
+  {#BACKUP ..\demo\gui\fplot\*.dfm}
+  {#BACKUP ..\demo\gui\hsv_rgb\*.pas}
+  {#BACKUP ..\demo\gui\hsv_rgb\*.dpr}
+  {#BACKUP ..\demo\gui\hsv_rgb\*.dfm}
+  {#BACKUP ..\demo\gui\linsolve\*.pas}
+  {#BACKUP ..\demo\gui\linsolve\*.dpr}
+  {#BACKUP ..\demo\gui\linsolve\*.dfm}
+  {#BACKUP ..\demo\gui\mandel\*.pas}
+  {#BACKUP ..\demo\gui\mandel\*.dpr}
+  {#BACKUP ..\demo\gui\mandel\*.dfm}
+  {#BACKUP ..\demo\gui\mandel\*.par}
+  {#BACKUP ..\demo\gui\polysolve\*.pas}
+  {#BACKUP ..\demo\gui\polysolve\*.dpr}
+  {#BACKUP ..\demo\gui\polysolve\*.dfm}
+  {#BACKUP ..\demo\gui\polysolve\*.dat}
+  {#BACKUP ..\demo\gui\probcalc\*.pas}
+  {#BACKUP ..\demo\gui\probcalc\*.dpr}
+  {#BACKUP ..\demo\gui\probcalc\*.dfm}
+  {#BACKUP ..\demo\gui\quadrit\*.pas}
+  {#BACKUP ..\demo\gui\quadrit\*.dpr}
+  {#BACKUP ..\demo\gui\quadrit\*.dfm}
 
 exports
   SetErrCode,                  { Sets error code }

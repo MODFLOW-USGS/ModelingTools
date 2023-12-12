@@ -92,11 +92,11 @@ end;
 procedure TframeMultSemiRouted.GetData(FarmList: TFarmList;
   DiversionType: TDiversionType);
 var
-  SrList: TSrCollList;
+//  SrList: TSrCollList;
   FarmIndex: Integer;
   AFarm: TFarm;
   SRIndex: Integer;
-  SRCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
+//  SRCollection: TSemiRoutedDeliveriesAndReturnFlowCollection;
   FarmNode: TTreeNode;
   SRItem: TMultiSrdItem;
   MultiSrd: TMultiSrdCollection;
@@ -117,7 +117,7 @@ begin
     for SRIndex := 0 to MultiSrd.Count - 1 do
     begin
       SRItem := MultiSrd[SRIndex];
-      SRCollection := MultiSrd[SRIndex].SemiRouted;
+//      SRCollection := MultiSrd[SRIndex].SemiRouted;
       tvSRCollections.Items.AddChildObject(FarmNode, SRItem.Name, SRItem);
     end;
   end;
@@ -144,10 +144,10 @@ begin
 end;
 
 procedure TframeMultSemiRouted.sbAddClick(Sender: TObject);
-var
-  AFarm: TFarm;
-  MultiSrd: TMultiSrdCollection;
-  ANode: TTreeNode;
+//var
+////  AFarm: TFarm;
+////  MultiSrd: TMultiSrdCollection;
+////  ANode: TTreeNode;
 begin
   seNumber.AsInteger := seNumber.AsInteger + 1;
   seNumberChange(nil);
@@ -155,7 +155,7 @@ end;
 
 procedure TframeMultSemiRouted.sbDeleteClick(Sender: TObject);
 var
-  SrdItem: TMultiSrdItem;
+//  SrdItem: TMultiSrdItem;
   NodeIndex: Integer;
   ANode: TTreeNode;
   NodeList: TList<TTreeNode>;
@@ -218,6 +218,8 @@ end;
 procedure TframeMultSemiRouted.SetData(FarmList: TFarmList;
   DiversionType: TDiversionType);
 begin
+  // do nothing
+  // Setting data is handled by frameFarmDiversionsGridExit.
 end;
 
 procedure TframeMultSemiRouted.tvSRCollectionsChange(Sender: TObject;

@@ -554,6 +554,7 @@ var
   DelivReturn: TSemiRoutedDeliveriesAndReturnFlowCollection;
   Fraction: string;
   ItemIndex: Integer;
+  ARow: Integer;
 begin
   ModelSelection := frmGoPhast.ModelSelection;
   for index := 0 to SrList.Count - 1 do
@@ -562,8 +563,9 @@ begin
     Count := 0;
     for TimeIndex := 1 to seNumber.AsInteger do
     begin
-      if TryStrToFloat(Grid.Cells[Ord(dtcStart), TimeIndex], StartTime)
-        and TryStrToFloat(Grid.Cells[Ord(dtcEnd), TimeIndex], EndTime) then
+      ARow := TimeIndex+PestRowOffset;
+      if TryStrToFloat(Grid.Cells[Ord(dtcStart), ARow], StartTime)
+        and TryStrToFloat(Grid.Cells[Ord(dtcEnd), ARow], EndTime) then
       begin
         if Count < DelivReturn.Count then
         begin
@@ -583,7 +585,7 @@ begin
           rtObject:
             begin
               DiversionObject := LinkedStream.DiversionObject;
-              GridItemIndex := Grid.ItemIndex[Ord(docObject) + PropertyColOffset, TimeIndex];
+              GridItemIndex := Grid.ItemIndex[Ord(docObject) + PropertyColOffset, ARow];
               if GridItemIndex >= 0 then
               begin
                 DiversionObject.ScreenObject :=
@@ -593,7 +595,7 @@ begin
               begin
                 DiversionObject.ScreenObject := nil;
               end;
-              ItemIndex := Grid.ItemIndex[Ord(docChoice) + PropertyColOffset, TimeIndex];
+              ItemIndex := Grid.ItemIndex[Ord(docChoice) + PropertyColOffset, ARow];
               if ItemIndex >= 0 then
               begin
                 DiversionObject.DiversionPosition :=
@@ -602,47 +604,47 @@ begin
               if DiversionObject.DiversionPosition = dpMiddle then
               begin
                 DiversionObject.DiversionVertex :=
-                  StrToIntDef(Grid.Cells[Ord(docVertex) + PropertyColOffset, TimeIndex], 1);
+                  StrToIntDef(Grid.Cells[Ord(docVertex) + PropertyColOffset, ARow], 1);
               end;
               if ModelSelection = msModflowOwhm2 then
               begin
-                DelivRetItem.Frac := Grid.Cells[Ord(docFraction) + PropertyColOffset, TimeIndex];
+                DelivRetItem.Frac := Grid.Cells[Ord(docFraction) + PropertyColOffset, ARow];
                 if DiversionType = dtDiversion then
                 begin
-                  DelivRetItem.LowerLimit := Grid.Cells[Ord(docLowerLimit) + PropertyColOffset, TimeIndex];
-                  DelivRetItem.UpperLimit := Grid.Cells[Ord(docUpperLimit) + PropertyColOffset, TimeIndex];
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(docLowerLimit) + PropertyColOffset, ARow];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(docUpperLimit) + PropertyColOffset, ARow];
                 end;
               end;
             end;
           rtLocation:
             begin
               DiversionLocation := LinkedStream.DiversionLocation;
-              DiversionLocation.X := StrToFloatDef(Grid.Cells[Ord(dlcX) + PropertyColOffset, TimeIndex], 0);
-              DiversionLocation.Y := StrToFloatDef(Grid.Cells[Ord(dlcY) + PropertyColOffset, TimeIndex], 0);
+              DiversionLocation.X := StrToFloatDef(Grid.Cells[Ord(dlcX) + PropertyColOffset, ARow], 0);
+              DiversionLocation.Y := StrToFloatDef(Grid.Cells[Ord(dlcY) + PropertyColOffset, ARow], 0);
               DiversionLocation.Z := 0;
               if ModelSelection = msModflowOwhm2 then
               begin
-                DelivRetItem.Frac := Grid.Cells[Ord(dlFraction) + 2, TimeIndex];
+                DelivRetItem.Frac := Grid.Cells[Ord(dlFraction) + 2, ARow];
                 if DelivRetItem.Frac = '' then
                 begin
                   DelivRetItem.Frac := '1';
                 end;
                 if DiversionType = dtDiversion then
                 begin
-                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dlLowerLimit) + PropertyColOffset, TimeIndex];
-                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dlUpperLimit) + PropertyColOffset, TimeIndex];
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dlLowerLimit) + PropertyColOffset, ARow];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dlUpperLimit) + PropertyColOffset, ARow];
                 end;
               end;
             end;
           rtCell:
             begin
               DiversionCell := LinkedStream.DiversionCell;
-              DiversionCell.Row := StrToIntDef(Grid.Cells[Ord(dccRow) + PropertyColOffset, TimeIndex], 1);
-              DiversionCell.Col := StrToIntDef(Grid.Cells[Ord(dccColumn) + PropertyColOffset, TimeIndex], 1);
+              DiversionCell.Row := StrToIntDef(Grid.Cells[Ord(dccRow) + PropertyColOffset, ARow], 1);
+              DiversionCell.Col := StrToIntDef(Grid.Cells[Ord(dccColumn) + PropertyColOffset, ARow], 1);
               DiversionCell.Lay := 0;
               if ModelSelection = msModflowOwhm2 then
               begin
-                Fraction := Grid.Cells[Ord(dccFraction) + PropertyColOffset, TimeIndex];
+                Fraction := Grid.Cells[Ord(dccFraction) + PropertyColOffset, ARow];
                 if Fraction = '' then
                 begin
                   Fraction := '1';
@@ -650,8 +652,8 @@ begin
                 DelivRetItem.Frac := Fraction;
                 if DiversionType = dtDiversion then
                 begin
-                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dccLowerLimit) + PropertyColOffset, TimeIndex];
-                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dccUpperLimit) + PropertyColOffset, TimeIndex];
+                  DelivRetItem.LowerLimit := Grid.Cells[Ord(dccLowerLimit) + PropertyColOffset, ARow];
+                  DelivRetItem.UpperLimit := Grid.Cells[Ord(dccUpperLimit) + PropertyColOffset, ARow];
                 end;
               end;
             end;
@@ -808,8 +810,6 @@ begin
     begin
       seNumber.AsInteger := DelivReturns.Count;
       seNumber.OnChange(seNumber);
-      AnItem := DelivReturns[0];
-
       AnItem := DelivReturns[0];
       LinkedStream := AnItem.LinkedStream;
       case LinkedStream.DiversionChoice of

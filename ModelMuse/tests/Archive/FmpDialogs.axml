@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="FmpDialogs" FileType="bin">
-    <FileName Model_Name="FmpDialogs" FileType="bin">..\..\..\WRDAPP\mf-owhm-release\bin3\mf-owhm.exe</FileName>
+    <FileName Model_Name="FmpDialogs" FileType="bin">..\..\..\WRDAPP\MF_OWHM_v23\mf-owhm.exe</FileName>
   </bin>
   <ancillary Model_Name="FmpDialogs" FileType="ancillary">
     <FileName Model_Name="FmpDialogs" FileType="ancillary">FmpDialogs.gpt</FileName>
@@ -40,6 +40,7 @@
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.groundwater_root_interaction</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.gsf</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.irrigation</FileName>
+    <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.jtf</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.land_use_area_fraction</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.lpf</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.nam.archive</FileName>
@@ -51,6 +52,8 @@
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.pond_depth</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.potential_evaporation_bare</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.precipitation_potential_consumption</FileName>
+    <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.ptf</FileName>
+    <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.pval</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.root_depth</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.root_pressure</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.semi_routed_delivery</FileName>
@@ -59,6 +62,7 @@
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.semi_routed_return</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.sfr</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.soil_id</FileName>
+    <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.supply_well</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.surface_vertical_hydraulic_conductivity</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.surface_water_allotment</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Input">FmpDialogs.surfacewater_loss_fraction_irrigation</FileName>
@@ -79,5 +83,6 @@
     <FileName Model_Name="FmpDialogs" FileType="Model Output">FmpDialogs.lst</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Output">FmpDialogs.Salinity_Flush_Input</FileName>
     <FileName Model_Name="FmpDialogs" FileType="Model Output">FmpDialogs.wbgt</FileName>
+    <FileName Model_Name="FmpDialogs" FileType="Model Output">FmpDialogs.Well_Data_Input</FileName>
   </output>
 </Model_Archive_List>

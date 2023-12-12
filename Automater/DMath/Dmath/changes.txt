@@ -2,6 +2,9 @@ Changes made by Richard B. Winston (rbwinst@usgs.gov).
 Dec. 1, 2023.
 Units uwinplot and uwinstr were modified to make them compatible 
 with the current version of Delphi (version 11.3).
+dmath.dpr was modified to include #BACKUP comments to cause the other files 
+that are part of dmath to be automatically backed up when the GExperts Backup project
+command is used.
 ------------
 
 Version 0.90

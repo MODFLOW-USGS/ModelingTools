@@ -32171,6 +32171,9 @@ object TTaskHistory
     end
     item
       Date = 45267.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'GwMounding')
     end
     item
       Date = 45268.000000000000000000
@@ -32190,5 +32193,10 @@ object TTaskHistory
       Categories.Strings = (
         'Import'
         'MF-2015')
+    end
+    item
+      Date = 45272.000000000000000000
+      Categories.Strings = (
+        'Testing')
     end>
 end

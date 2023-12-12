@@ -240,23 +240,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Caption = 'Column'
       Enabled = False
     end
-    object rdeX: TRbwDataEntry [7]
-      Left = 151
-      Top = 27
-      Width = 51
-      Height = 22
-      Color = clBtnFace
-      Enabled = False
-      TabOrder = 4
-      Text = '1'
-      OnChange = rdeXChange
-      DataType = dtReal
-      Max = 1.000000000000000000
-      Min = 1.000000000000000000
-      CheckMin = True
-      ChangeDisabledColor = True
-    end
-    object rdeY: TRbwDataEntry [8]
+    object rdeY: TRbwDataEntry [7]
       Left = 175
       Top = 27
       Width = 51
@@ -272,7 +256,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeRow: TRbwDataEntry [9]
+    object rdeRow: TRbwDataEntry [8]
       Left = 232
       Top = 27
       Width = 51
@@ -288,7 +272,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object rdeCol: TRbwDataEntry [10]
+    object rdeCol: TRbwDataEntry [9]
       Left = 289
       Top = 27
       Width = 51
@@ -304,7 +288,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       CheckMin = True
       ChangeDisabledColor = True
     end
-    object comboSfrObjects: TComboBox [11]
+    object comboSfrObjects: TComboBox [10]
       Left = 40
       Top = 27
       Width = 65
@@ -314,7 +298,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
       TabOrder = 1
       OnChange = comboSfrObjectsChange
     end
-    object comboPositionChoice: TComboBox [12]
+    object comboPositionChoice: TComboBox [11]
       Left = 80
       Top = 27
       Width = 65
@@ -328,7 +312,7 @@ inherited frameFarmDiversion: TframeFarmDiversion
         'A middle vertex'
         'Last vertex')
     end
-    object rdeVertexNumber: TRbwDataEntry [13]
+    object rdeVertexNumber: TRbwDataEntry [12]
       Left = 118
       Top = 27
       Width = 51
@@ -339,6 +323,22 @@ inherited frameFarmDiversion: TframeFarmDiversion
       Text = '1'
       OnChange = rdeVertexNumberChange
       DataType = dtInteger
+      Max = 1.000000000000000000
+      Min = 1.000000000000000000
+      CheckMin = True
+      ChangeDisabledColor = True
+    end
+    object rdeX: TRbwDataEntry [13]
+      Left = 151
+      Top = 27
+      Width = 51
+      Height = 22
+      Color = clBtnFace
+      Enabled = False
+      TabOrder = 4
+      Text = '1'
+      OnChange = rdeXChange
+      DataType = dtReal
       Max = 1.000000000000000000
       Min = 1.000000000000000000
       CheckMin = True
