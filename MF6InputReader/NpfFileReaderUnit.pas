@@ -220,7 +220,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized NPF option in the following line.');
+      Unhandled.WriteLine(Format(StrUnrecognizedOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end
@@ -374,7 +374,7 @@ begin
     end
     else
     begin
-      Unhandled.WriteLine('Unrecognized NPF GRIDDATA in the following line');
+      Unhandled.WriteLine(Format(StrUnrecognizedSGRID, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
@@ -430,9 +430,14 @@ begin
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized NPF section on the following Line');
+        Unhandled.WriteLine(Format(StrUnrecognizedSSect, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
       end;
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format(StrUnrecognizedSSect, [FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
     end;
   end;
 

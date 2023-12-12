@@ -74,7 +74,7 @@ resourcestring
 
 procedure TCustomDisOptions.Initialize;
 begin
-  LENGTH_UNITS := '';
+  LENGTH_UNITS := 'UNKNOWN';
   NOGRB := False;
   XORIGIN := 0;
   YORIGIN := 0;

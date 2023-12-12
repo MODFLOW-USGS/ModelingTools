@@ -89,7 +89,8 @@ uses
   ChdFileReaderUnit, WelFileReaderUnit, DrnFileReaderUnit, RivFileReaderUnit,
   RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit, SfrFileReaderUnit,
   GhbFileReaderUnit, LakFileReaderUnit, UzfFileReaderUnit, MvrFileReaderUnit,
-  GncFileReaderUnit, ExchangeFileReaderUnit;
+  GncFileReaderUnit, ExchangeFileReaderUnit, AdvFileReaderUnit,
+  DspFileReaderUnit, SsmFileReaderUnit, MstFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -477,6 +478,10 @@ var
   GncReader: TGnc;
   GwfGwfReader: TGwfGwf;
   GwtGwtReader: TGwtGwt;
+  AdvReader: TAdv;
+  DspReader: TDsp;
+  SsmReader: TSsm;
+  MstReader: TMst;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -684,6 +689,33 @@ begin
       GwtGwtReader.Dimensions := FDimensions;
       GwtGwtReader.FDimensions2 := FDimensions;
       APackage.Package := GwtGwtReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'ADV6' then
+    begin
+      AdvReader := TAdv.Create(APackage.FileType);
+      APackage.Package := AdvReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'DSP6' then
+    begin
+      DspReader := TDsp.Create(APackage.FileType);
+      DspReader.Dimensions := FDimensions;
+      APackage.Package := DspReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'SSM6' then
+    begin
+      SsmReader := TSsm.Create(APackage.FileType);
+      SsmReader.Dimensions := FDimensions;
+      APackage.Package := SsmReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'MST6' then
+    begin
+      MstReader := TMst.Create(APackage.FileType);
+      MstReader.Dimensions := FDimensions;
+      APackage.Package := MstReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

@@ -267,6 +267,12 @@ resourcestring
   StrUnrecognizedSPERI = 'Unrecognized %s PERIOD data in the following line.';
   StrUnrecognizedSCONN = 'Unrecognized %s CONNECTIONDATA in the following li' +
   'ne';
+  StrUnrecognizedSGRID = 'Unrecognized %s GRIDDATA in the following line';
+  StrUnrecognizedSSect = 'Unrecognized %s section on the following Line';
+  StrUnrecognizedSSOUR = 'Unrecognized %s SOURCES data in the following line' +
+  '.';
+  StrUnrecognizedSFILE = 'Unrecognized %s FILEINPUT data in the following li' +
+  'ne.';
 
 implementation
 

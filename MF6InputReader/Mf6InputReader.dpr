@@ -49,7 +49,12 @@ uses
   MvrFileReaderUnit in 'MvrFileReaderUnit.pas',
   GncFileReaderUnit in 'GncFileReaderUnit.pas',
   ExchangeFileReaderUnit in 'ExchangeFileReaderUnit.pas',
-  MvtFileReaderUnit in 'MvtFileReaderUnit.pas';
+  MvtFileReaderUnit in 'MvtFileReaderUnit.pas',
+  AdvFileReaderUnit in 'AdvFileReaderUnit.pas',
+  DspFileReaderUnit in 'DspFileReaderUnit.pas',
+  SsmFileReaderUnit in 'SsmFileReaderUnit.pas',
+  SpcFileReaderUnit in 'SpcFileReaderUnit.pas',
+  MstFileReaderUnit in 'MstFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

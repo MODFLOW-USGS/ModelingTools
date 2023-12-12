@@ -325,7 +325,7 @@ begin
       Exit;
     end;
 
-    Cell := TWelTimeItem.Create;;
+    Cell := TWelTimeItem.Create;
     try
       CaseSensitiveLine := ALine;
       ALine := UpperCase(ALine);
@@ -376,7 +376,7 @@ begin
       end
       else
       begin
-          Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
+        Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
       end;
     finally
