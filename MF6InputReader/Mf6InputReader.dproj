@@ -143,6 +143,12 @@
         <DCCReference Include="SsmFileReaderUnit.pas"/>
         <DCCReference Include="SpcFileReaderUnit.pas"/>
         <DCCReference Include="MstFileReaderUnit.pas"/>
+        <DCCReference Include="IstFileReaderUnit.pas"/>
+        <DCCReference Include="SrcFileReaderUnit.pas"/>
+        <DCCReference Include="CncFileReaderUnit.pas"/>
+        <DCCReference Include="SftFileReaderUnit.pas"/>
+        <DCCReference Include="LktFileReaderUnit.pas"/>
+        <DCCReference Include="MwtFileReaderUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

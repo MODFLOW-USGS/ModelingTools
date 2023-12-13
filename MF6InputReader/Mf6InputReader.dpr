@@ -54,7 +54,13 @@ uses
   DspFileReaderUnit in 'DspFileReaderUnit.pas',
   SsmFileReaderUnit in 'SsmFileReaderUnit.pas',
   SpcFileReaderUnit in 'SpcFileReaderUnit.pas',
-  MstFileReaderUnit in 'MstFileReaderUnit.pas';
+  MstFileReaderUnit in 'MstFileReaderUnit.pas',
+  IstFileReaderUnit in 'IstFileReaderUnit.pas',
+  SrcFileReaderUnit in 'SrcFileReaderUnit.pas',
+  CncFileReaderUnit in 'CncFileReaderUnit.pas',
+  SftFileReaderUnit in 'SftFileReaderUnit.pas',
+  LktFileReaderUnit in 'LktFileReaderUnit.pas',
+  MwtFileReaderUnit in 'MwtFileReaderUnit.pas';
 
 var
   Mf6Simulation: TMf6Simulation;

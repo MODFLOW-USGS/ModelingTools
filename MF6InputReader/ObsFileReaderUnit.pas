@@ -698,7 +698,7 @@ begin
         Unhandled.WriteLine(ErrorLine);
       end;
     end
-    else if FPackagetype = 'GWF-GWF' then
+    else if FPackagetype = 'GW6F-GWF6' then
     begin
       if (Observation.ObsType = 'flow-ja-face')
         then
@@ -721,9 +721,347 @@ begin
         Unhandled.WriteLine(ErrorLine);
       end;
     end
+    else if FPackagetype = 'GWT6' then
+    begin
+      if (Observation.ObsType = 'concentration')
+        then
+      begin
+        if ReadCellID(Observation.CellId1, 2, DimensionCount) then
+        begin
+          Observation.IdType1:= itCell;
+          FObservations.Add(Observation);
+        end
+        else
+        begin
+          Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else if Observation.ObsType = 'flow-ja-face' then
+      begin
+        if ReadCellID(Observation.CellId1, 2, DimensionCount) then
+        begin
+          Observation.IdType1:= itCell;
+          if ReadCellID(Observation.CellId2, 2+DimensionCount, DimensionCount) then
+          begin
+            Observation.IdType2:= itCell;
+            FObservations.Add(Observation);
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
+            Unhandled.WriteLine(ErrorLine);
+          end;
+        end
+        else
+        begin
+          Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else if FPackagetype = 'CNC6' then
+    begin
+      if (Observation.ObsType = 'cnc')
+        then
+      begin
+        if ReadCellID(Observation.CellId1, 2, DimensionCount) then
+        begin
+          Observation.IdType1:= itCell;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+        FObservations.Add(Observation);
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else if FPackagetype = 'SRC6' then
+    begin
+      if (Observation.ObsType = 'src')
+        then
+      begin
+        if ReadCellID(Observation.CellId1, 2, DimensionCount) then
+        begin
+          Observation.IdType1:= itCell;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+        FObservations.Add(Observation);
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else if FPackagetype = 'SFT6' then
+    begin
+      if (Observation.ObsType = 'concentration')
+        or (Observation.ObsType = 'storage')
+        or (Observation.ObsType = 'constant')
+        or (Observation.ObsType = 'from-mvr')
+        or (Observation.ObsType = 'to-mvr')
+        or (Observation.ObsType = 'sft')
+        or (Observation.ObsType = 'rainfall')
+        or (Observation.ObsType = 'evaporation')
+        or (Observation.ObsType = 'runoff')
+        or (Observation.ObsType = 'ext-inflow')
+        or (Observation.ObsType = 'ext-outflow')
+        then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+        FObservations.Add(Observation);
+      end
+      else if Observation.ObsType = 'flow-ja-face' then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+          if TryStrToInt(FSplitter[3], Observation.Num2) then
+          begin
+            Observation.IdType2:= itNumber;
+            FObservations.Add(Observation);
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
+            Unhandled.WriteLine(ErrorLine);
+          end;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else if FPackagetype = 'LKT6' then
+    begin
+      if (Observation.ObsType = 'concentration')
+        or (Observation.ObsType = 'storage')
+        or (Observation.ObsType = 'constant')
+        or (Observation.ObsType = 'from-mvr')
+        or (Observation.ObsType = 'to-mvr')
+        or (Observation.ObsType = 'lkt')
+        or (Observation.ObsType = 'rainfall')
+        or (Observation.ObsType = 'evaporation')
+        or (Observation.ObsType = 'runoff')
+        or (Observation.ObsType = 'ext-inflow')
+        or (Observation.ObsType = 'withdrawal')
+        or (Observation.ObsType = 'ext-outflow')
+        then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+        FObservations.Add(Observation);
+      end
+      else if Observation.ObsType = 'flow-ja-face' then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+          if TryStrToInt(FSplitter[3], Observation.Num2) then
+          begin
+            Observation.IdType2:= itNumber;
+            FObservations.Add(Observation);
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
+            Unhandled.WriteLine(ErrorLine);
+          end;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else if FPackagetype = 'MWT6' then
+    begin
+      if (Observation.ObsType = 'concentration')
+        or (Observation.ObsType = 'storage')
+        or (Observation.ObsType = 'constant')
+        or (Observation.ObsType = 'from-mvr')
+        or (Observation.ObsType = 'to-mvr')
+        or (Observation.ObsType = 'rate')
+        or (Observation.ObsType = 'fw-rate')
+        or (Observation.ObsType = 'rate-to-mvr')
+        or (Observation.ObsType = 'fw-rate-to-mvr')
+        or (Observation.ObsType = 'withdrawal')
+        or (Observation.ObsType = 'ext-outflow')
+        then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+        FObservations.Add(Observation);
+      end
+      else if Observation.ObsType = 'mwt' then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+          if TryStrToInt(FSplitter[3], Observation.Num2) then
+          begin
+            Observation.IdType2:= itNumber;
+            FObservations.Add(Observation);
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
+            Unhandled.WriteLine(ErrorLine);
+          end;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else if FPackagetype = 'UZT6' then
+    begin
+      if (Observation.ObsType = 'concentration')
+        or (Observation.ObsType = 'storage')
+        or (Observation.ObsType = 'constant')
+        or (Observation.ObsType = 'from-mvr')
+        or (Observation.ObsType = 'uzt')
+//        or (Observation.ObsType = 'to-mvr')
+        or (Observation.ObsType = 'infiltration')
+        or (Observation.ObsType = 'rej-inf')
+        or (Observation.ObsType = 'uzet')
+        or (Observation.ObsType = 'rej-inf-to-mvr')
+        then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+        FObservations.Add(Observation);
+      end
+      else if Observation.ObsType = 'flow-ja-face' then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+          if TryStrToInt(FSplitter[3], Observation.Num2) then
+          begin
+            Observation.IdType2:= itNumber;
+            FObservations.Add(Observation);
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format(StrErrorReadingSObs, [FPackageType]));
+            Unhandled.WriteLine(ErrorLine);
+          end;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
+    else if FPackagetype = 'GWT6-GWT6' then
+    begin
+      if (Observation.ObsType = 'flow-ja-face')
+        then
+      begin
+        if TryStrToInt(FSplitter[2], Observation.Num1) then
+        begin
+          Observation.IdType1:= itNumber;
+        end
+        else
+        begin
+          Observation.IdType1 := itName;
+          FSplitter.DelimitedText := CaseSensitiveLine;
+          Observation.Name1 := FSplitter[2];
+        end;
+        FObservations.Add(Observation);
+      end
+      else
+      begin
+        Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
+    end
     else
     begin
-      Assert(False)
+      Unhandled.WriteLine(Format(StrUnrecognizedSObse, [FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
     end;
   end;
 end;

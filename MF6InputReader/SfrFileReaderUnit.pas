@@ -889,9 +889,17 @@ begin
           SfrItem.StringValue := FSplitter[4]
         end
         else if (SfrItem.Name = 'AUXILIARY')
-          and TryFortranStrToFloat(FSplitter[3], SfrItem.FloatValue)
           then
         begin
+          if TryFortranStrToFloat(FSplitter[3], SfrItem.FloatValue) then
+          begin
+
+          end
+          else
+          begin
+            FSplitter.DelimitedText := CaseSensitiveLine;
+            SfrItem.StringValue := FSplitter[3]
+          end;
           FSplitter.DelimitedText := CaseSensitiveLine;
           SfrItem.AuxName := FSplitter[2];
         end

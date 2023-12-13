@@ -90,7 +90,9 @@ uses
   RchFileReaderUnit, EvtFileReaderUnit, MawFileReaderUnit, SfrFileReaderUnit,
   GhbFileReaderUnit, LakFileReaderUnit, UzfFileReaderUnit, MvrFileReaderUnit,
   GncFileReaderUnit, ExchangeFileReaderUnit, AdvFileReaderUnit,
-  DspFileReaderUnit, SsmFileReaderUnit, MstFileReaderUnit;
+  DspFileReaderUnit, SsmFileReaderUnit, MstFileReaderUnit, IstFileReaderUnit,
+  SrcFileReaderUnit, CncFileReaderUnit, SftFileReaderUnit, LktFileReaderUnit,
+  MwtFileReaderUnit;
 
 { TCustomNameFileOptions }
 
@@ -482,6 +484,12 @@ var
   DspReader: TDsp;
   SsmReader: TSsm;
   MstReader: TMst;
+  IstReader: TIst;
+  SrcReader: TSrc;
+  CncReader: TCnc;
+  SftReader: TSft;
+  LktReader: TLkt;
+  MwtReader: TMwt;
 begin
   // First read discretization
   FDimensions.Initialize;
@@ -716,6 +724,48 @@ begin
       MstReader := TMst.Create(APackage.FileType);
       MstReader.Dimensions := FDimensions;
       APackage.Package := MstReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'IST6' then
+    begin
+      IstReader := TIst.Create(APackage.FileType);
+      IstReader.Dimensions := FDimensions;
+      APackage.Package := IstReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'CNC6' then
+    begin
+      CncReader := TCnc.Create(APackage.FileType);
+      CncReader.Dimensions := FDimensions;
+      APackage.Package := CncReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'SRC6' then
+    begin
+      SrcReader := TSrc.Create(APackage.FileType);
+      SrcReader.Dimensions := FDimensions;
+      APackage.Package := SrcReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'SFT6' then
+    begin
+      SftReader := TSft.Create(APackage.FileType);
+      SftReader.Dimensions := FDimensions;
+      APackage.Package := SftReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'LKT6' then
+    begin
+      LktReader := TLkt.Create(APackage.FileType);
+      LktReader.Dimensions := FDimensions;
+      APackage.Package := LktReader;
+      APackage.ReadPackage(Unhandled);
+    end
+    else if APackage.FileType = 'MWT6' then
+    begin
+      MwtReader := TMwt.Create(APackage.FileType);
+      MwtReader.Dimensions := FDimensions;
+      APackage.Package := MwtReader;
       APackage.ReadPackage(Unhandled);
     end
   end;

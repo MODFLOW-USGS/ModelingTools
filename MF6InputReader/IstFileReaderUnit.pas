@@ -1,4 +1,4 @@
-unit MstFileReaderUnit;
+unit IstFileReaderUnit;
 
 interface
 
@@ -7,25 +7,31 @@ uses
   System.Generics.Collections;
 
 type
-  TMstOptions = class(TCustomMf6Persistent)
+  TIstOptions = class(TCustomMf6Persistent)
   private
     SAVE_FLOWS: Boolean;
+    BUDGET: Boolean;
+    BUDGETCSV: Boolean;
+    SORPTION: Boolean;
     FIRST_ORDER_DECAY: Boolean;
     ZERO_ORDER_DECAY: Boolean;
-    SORPTION: TStringOption;
+    CIM: Boolean;
+    CIM_PRINT_FORMAT: TPrintFormat;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   end;
 
-  TMstGridData = class(TCustomMf6Persistent)
+  TIstGridData = class(TCustomMf6Persistent)
   private
     POROSITY: TDArray3D;
+    VOLFRAC: TDArray3D;
+    ZETAIM: TDArray3D;
+    CIM: TDArray3D;
     DECAY: TDArray3D;
     DECAY_SORBED: TDArray3D;
     BULK_DENSITY: TDArray3D;
     DISTCOEF: TDArray3D;
-    SP2: TDArray3D;
     FDimensions: TDimensions;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
@@ -34,10 +40,10 @@ type
     constructor Create(PackageType: string); override;
   end;
 
-  TMst = class(TDimensionedPackageReader)
+  TIst = class(TDimensionedPackageReader)
   private
-    FOptions: TMstOptions;
-    FGridData: TMstGridData;
+    FOptions: TIstOptions;
+    FGridData: TIstGridData;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -46,18 +52,22 @@ type
 
 implementation
 
-{ TMstOptions }
+{ TIstOptions }
 
-procedure TMstOptions.Initialize;
+procedure TIstOptions.Initialize;
 begin
   inherited;
   SAVE_FLOWS := False;
+  BUDGET := False;
+  BUDGETCSV := False;
+  SORPTION := False;
   FIRST_ORDER_DECAY := False;
   ZERO_ORDER_DECAY := False;
-  SORPTION.Initialize;
+  CIM := False;
+  CIM_PRINT_FORMAT.Initialize;
 end;
 
-procedure TMstOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TIstOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
@@ -85,6 +95,22 @@ begin
     begin
       SAVE_FLOWS := True;
     end
+    else if (FSplitter[0] = 'BUDGET')
+      and (FSplitter.Count >= 3)
+      and (FSplitter[1] = 'FILEOUT') then
+    begin
+      BUDGET := True;
+    end
+    else if (FSplitter[0] = 'BUDGETCSV')
+      and (FSplitter.Count >= 3)
+      and (FSplitter[1] = 'FILEOUT') then
+    begin
+      BUDGETCSV := True;
+    end
+    else if (FSplitter[0] = 'SORPTION') then
+    begin
+      SORPTION := True;
+    end
     else if FSplitter[0] = 'FIRST_ORDER_DECAY' then
     begin
       FIRST_ORDER_DECAY := True;
@@ -93,40 +119,48 @@ begin
     begin
       ZERO_ORDER_DECAY := True;
     end
-    else if (FSplitter[0] = 'SORPTION')
-      and (FSplitter.Count >= 2) then
+    else if (FSplitter[0] = 'CIM')
+      and (FSplitter.Count >= 3)
+      and (FSplitter[1] = 'FILEOUT') then
     begin
-      SORPTION.Value := FSplitter[1];
-      SORPTION.Used := True;
+      CIM := True;
+    end
+    else if (FSplitter[0] = 'CIM')
+      and (FSplitter.Count >= 8)
+      and (FSplitter[1] = 'PRINT_FORMAT') then
+    begin
+      ReadPrintFormat(ErrorLine, Unhandled, FPackageType, CIM_PRINT_FORMAT);
     end
     else
     begin
       Unhandled.WriteLine(Format(StrUnrecognizedOpti, [FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
-  end
+  end;
 end;
 
-{ TMstGridData }
+{ TIstGridData }
 
-constructor TMstGridData.Create(PackageType: string);
+constructor TIstGridData.Create(PackageType: string);
 begin
   inherited;
   FDimensions.Initialize;
 end;
 
-procedure TMstGridData.Initialize;
+procedure TIstGridData.Initialize;
 begin
   inherited;
   SetLength(POROSITY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(VOLFRAC, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(ZETAIM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(CIM, 0);
   SetLength(DECAY, 0);
   SetLength(DECAY_SORBED, 0);
   SetLength(BULK_DENSITY, 0);
   SetLength(DISTCOEF, 0);
-  SetLength(SP2, 0);
 end;
 
-procedure TMstGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+procedure TIstGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions);
 var
   ALine: string;
@@ -161,6 +195,42 @@ begin
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         POROSITY := DoubleThreeDReader.FData;
+      finally
+        DoubleThreeDReader.Free;
+      end;
+    end
+    else if FSplitter[0] = 'VOLFRAC' then
+    begin
+//      SetLength(VOLFRAC, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
+      try
+        DoubleThreeDReader.Read(Stream, Unhandled);
+        VOLFRAC := DoubleThreeDReader.FData;
+      finally
+        DoubleThreeDReader.Free;
+      end;
+    end
+    else if FSplitter[0] = 'ZETAIM' then
+    begin
+//      SetLength(ZETAIM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
+      try
+        DoubleThreeDReader.Read(Stream, Unhandled);
+        ZETAIM := DoubleThreeDReader.FData;
+      finally
+        DoubleThreeDReader.Free;
+      end;
+    end
+    else if FSplitter[0] = 'CIM' then
+    begin
+      SetLength(CIM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
+      try
+        DoubleThreeDReader.Read(Stream, Unhandled);
+        CIM := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -213,18 +283,6 @@ begin
         DoubleThreeDReader.Free;
       end;
     end
-    else if FSplitter[0] = 'SP2' then
-    begin
-      SetLength(SP2, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-      Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
-      try
-        DoubleThreeDReader.Read(Stream, Unhandled);
-        SP2 := DoubleThreeDReader.FData;
-      finally
-        DoubleThreeDReader.Free;
-      end;
-    end
     else
     begin
       Unhandled.WriteLine(Format(StrUnrecognizedSGRID, [FPackageType]));
@@ -233,23 +291,23 @@ begin
   end;
 end;
 
-{ TMst }
+{ TIst }
 
-constructor TMst.Create(PackageType: string);
+constructor TIst.Create(PackageType: string);
 begin
   inherited;
-  FOptions := TMstOptions.Create(PackageType);
-  FGridData := TMstGridData.Create(PackageType);
+  FOptions := TIstOptions.Create(PackageType);
+  FGridData := TIstGridData.Create(PackageType);
 end;
 
-destructor TMst.Destroy;
+destructor TIst.Destroy;
 begin
   FOptions.Free;
   FGridData.Free;
   inherited;
 end;
 
-procedure TMst.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TIst.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
