@@ -5100,7 +5100,7 @@ begin
         TempStream.Write(AGlGrid[ColIndex, RowIndex, 0], LayerCount * SizeOf(TGridPoint));
       end;
     end;
-    TempStream.SaveToStream(Compressor);
+    Compressor.CopyFrom(TempStream)
   finally
     Compressor.Free;
     TempStream.Free;

@@ -2493,7 +2493,8 @@ begin
       ShapeMemoryStream.Write(ShapeRecordHeader, SizeOf(TShapeRecordHeader));
       IndexMemoryStream.Write(IndexRecordHeader, SizeOf(TShapeIndexRecord));
 
-      ShapeStream.SaveToStream(ShapeMemoryStream);
+      ShapeMemoryStream.CopyFrom(ShapeStream);
+//      ShapeStream.SaveToStream(ShapeMemoryStream);
     end;
     ShapeFileHeader.FileCode := ConvertInteger(9994);
     ShapeFileHeader.FileLength := ConvertInteger((SizeOf(TShapefileHeader)
@@ -2510,7 +2511,8 @@ begin
         fmCreate or fmShareDenyWrite);
       try
         MainFileStream.Write(ShapeFileHeader, SizeOf(TShapefileHeader));
-        ShapeMemoryStream.SaveToStream(MainFileStream);
+        MainFileStream.CopyFrom(ShapeMemoryStream);
+//        ShapeMemoryStream.SaveToStream(MainFileStream);
       finally
         MainFileStream.Free;
       end;
@@ -2528,7 +2530,8 @@ begin
         fmCreate or fmShareDenyWrite);
       try
         IndexFileStream.Write(IndexFileHeader, SizeOf(TShapefileHeader));
-        IndexMemoryStream.SaveToStream(IndexFileStream);
+        IndexFileStream.CopyFrom(IndexMemoryStream);
+//        IndexMemoryStream.SaveToStream(IndexFileStream);
       finally
         IndexFileStream.Free;
       end;

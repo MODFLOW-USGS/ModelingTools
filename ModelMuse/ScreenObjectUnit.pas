@@ -23984,127 +23984,6 @@ begin
   inherited Create(TSelectedVertexItem);
 end;
 
-{ TPointCollection }
-
-//procedure TPointCollection.Cache;
-//var
-//  MemStream: TMemoryStream;
-//  Compressor: TZCompressionStream;
-//  TempStream: TMemoryStream;
-//begin
-//  if FCaching then
-//  begin
-//    Exit;
-//  end;
-//  FCaching := True;
-//  try
-//    if FTempFileName = '' then
-//    begin
-//      FTempFileName := TempFileName;
-//    end;
-//    MemStream := TMemoryStream.Create;
-//    try
-//      Compressor := TCompressionStream.Create(ZLib.clDefault, MemStream);
-//      TempStream := TMemoryStream.Create;
-//      try
-//        MemStream.Position := 0;
-//        StoreData(TempStream);
-//        TempStream.SaveToStream(Compressor);
-//      finally
-//        Compressor.Free;
-//        TempStream.Free;
-//      end;
-//      MemStream.Position := 0;
-//      ZipAFile(FTempFileName, MemStream);
-//    finally
-//      MemStream.Free;
-//    end;
-//    Clear;
-//  finally
-//    FCaching := False;
-//  end;
-//end;
-
-//constructor TPointCollection.Create;
-//begin
-//  inherited Create(TPointItem);
-//end;
-
-//procedure TPointCollection.EndUpdate;
-//begin
-//  inherited;
-//  Cache;
-//end;
-
-//function TPointCollection.GetCount: Integer;
-//begin
-//  if FTempFileName <> '' then
-//  begin
-//    Restore;
-//  end;
-//  result := inherited Count;
-//end;
-
-//procedure TPointCollection.ReadData(DecompressionStream: TDecompressionStream);
-//var
-//  LocalCount: Integer;
-//  index: Integer;
-//  Item: TPointItem;
-//  Value: double;
-//begin
-//  Clear;
-//  DecompressionStream.Read(LocalCount, SizeOf(LocalCount));
-//  Capacity := LocalCount;
-//  BeginUpdate;
-//  try
-//    for index := 0 to LocalCount - 1 do
-//    begin
-//      Item := Add as TPointItem;
-//      DecompressionStream.Read(Value, SizeOf(Value));
-//      Item.X := Value;
-//      DecompressionStream.Read(Value, SizeOf(Value));
-//      Item.Y := Value;
-//    end;
-//  finally
-//    inherited EndUpdate;
-//  end;
-//end;
-
-//procedure TPointCollection.Restore;
-//var
-//  MemStream: TMemoryStream;
-//  DecompressionStream: TZDecompressionStream;
-//begin
-//  MemStream := TMemoryStream.Create;
-//  try
-//    ExtractAFile(FTempFileName, MemStream);
-//    DecompressionStream := TDecompressionStream.Create(MemStream);
-//    try
-//      ReadData(DecompressionStream);
-//    finally
-//      DecompressionStream.Free;
-//    end;
-//  finally
-//    MemStream.Free;
-//  end;
-//end;
-
-//procedure TPointCollection.StoreData(Stream: TStream);
-//var
-//  LocalCount: Integer;
-//  index: Integer;
-//  Item: TPointItem;
-//begin
-//  LocalCount := inherited Count;
-//  Stream.Write(LocalCount, SizeOf(LocalCount));
-//  for Index := 0 to inherited Count - 1 do
-//  begin
-//    Item := Items[Index] as TPointItem;
-//    Stream.Write(Item.X, SizeOf(Item.X));
-//    Stream.Write(Item.Y, SizeOf(Item.Y));
-//  end;
-//end;
-
 { TCellElementSegmentList }
 
 function TCellElementSegmentList.Add(ASegment: TCellElementSegment): Integer;
@@ -24132,7 +24011,6 @@ begin
       end;
       FTempMemoryStream.Position := 0;
       Compressor := TCompressionStream.Create(ZLib.clDefault, FTempMemoryStream);
-//      TempSegStorage:= TMemoryStream.Create;
       try
         LocalCount := Count;
         Compressor.Write(LocalCount, SizeOf(LocalCount));
@@ -24140,23 +24018,9 @@ begin
         begin
           Segment := Items[Index];
           Segment.Store(Compressor);
-//          Compressor.Write(Segment.FCol, SizeOf(Segment.FCol));
-//          Compressor.Write(Segment.FEndPosition, SizeOf(Segment.FEndPosition));
-//          Compressor.Write(Segment.FLayer, SizeOf(Segment.FLayer));
-//          Compressor.Write(Segment.FVertexIndex, SizeOf(Segment.FVertexIndex));
-//          Compressor.Write(Segment.FRow, SizeOf(Segment.FRow));
-//          Compressor.Write(Segment.FStartPosition, SizeOf(Segment.FStartPosition));
-//          Compressor.Write(Segment.FX1, SizeOf(Segment.FX1));
-//          Compressor.Write(Segment.FX2, SizeOf(Segment.FX2));
-//          Compressor.Write(Segment.FY1, SizeOf(Segment.FY1));
-//          Compressor.Write(Segment.FY2, SizeOf(Segment.FY2));
-//          Compressor.Write(Segment.FSectionIndex, SizeOf(Segment.FSectionIndex));
         end;
-//        Compressor.SaveToStream(Compressor);
       finally
         Compressor.Free;
-//        Compressor.Free
-//        TempFile.Free;
       end;
       FCached := True;
     end;
@@ -47069,7 +46933,7 @@ begin
       begin
         Items[Index].Store(TempStream);
       end;
-      TempStream.SaveToStream(Compressor);
+      Compressor.CopyFrom(TempStream)
     finally
       Compressor.Free;
       TempStream.Free;

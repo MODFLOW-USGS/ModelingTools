@@ -10093,6 +10093,8 @@ const
 //                used and the EXPLICIT option is not used in the GNC package.
 //               Bug fix: Fixed bug in importing Shapefiles that contain null
 //                shapes.
+//    '5.1.1.48' Bug fix: Fixed a bug that could cause an error when assigning
+//                data with objects that have a large number of cells.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10105,7 +10107,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.47';
+  IIModelVersion = '5.1.1.48';
 
 function IModelVersion: string;
 begin

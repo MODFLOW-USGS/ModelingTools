@@ -8603,7 +8603,8 @@ begin
         try
           MemStream.Position := 0;
           StoreData(TempStream);
-          TempStream.SaveToStream(Compressor);
+          Compressor.CopyFrom(TempStream);
+//          TempStream.SaveToStream(Compressor);
         finally
           Compressor.Free;
           TempStream.Free;

@@ -451,7 +451,8 @@ begin
     StoredStream := CurrentTempItems.StreamFromFileName(FileName, False);
     StoredStream.Position := 0;
     InStream.Position := 0;
-    InStream.SaveToStream(StoredStream);
+    StoredStream.CopyFrom(InStream);
+//    InStream.SaveToStream(StoredStream);
     CurrentTempItems.SetDirtyFile(FileName);
   except on E: EWriteError do
     begin
@@ -471,7 +472,8 @@ begin
   StoredStream := CurrentTempItems.StreamFromFileName(FileName, True);
   StoredStream.Position := 0;
   OutStream.Position := 0;
-  StoredStream.SaveToStream(OutStream);
+  OutStream.CopyFrom(StoredStream);
+//  StoredStream.SaveToStream(OutStream);
   OutStream.Position := 0;
 end;
 
@@ -632,7 +634,7 @@ begin
         InStream.Position := 0;
         if InStream.Size > 0 then
         begin
-          InStream.SaveToStream(FFileStream);
+          FFileStream.CopyFrom(InStream)
         end;
         IsDirty[FileIndex] := False;
         Position := Position + InStream.Size;
