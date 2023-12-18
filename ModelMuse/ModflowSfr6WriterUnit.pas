@@ -2120,9 +2120,10 @@ begin
   WriteFloat(SfrMf6Package.MaxDepthChange);
   NewLine;
 
-  WriteString('    UNIT_CONVERSION');
-  WriteFloat(Model.ModflowOptions.StreamConstant(Model));
-  NewLine;
+  // UNIT_CONVERSION is no longer used.
+//  WriteString('    UNIT_CONVERSION');
+//  WriteFloat(Model.ModflowOptions.StreamConstant(Model));
+//  NewLine;
 
   if FObsList.Count > 0 then
   begin

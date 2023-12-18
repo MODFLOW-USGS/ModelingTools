@@ -66,7 +66,7 @@ uses
 
 var
   Mf6Simulation: TMf6Simulation;
-  OpenDialog: TFileOpenDialog;
+  OpenDialog: TOpenDialog;
   FileName: string;
 begin
   try
@@ -77,8 +77,9 @@ begin
     end
     else
     begin
-      OpenDialog :=  TFileOpenDialog.Create(nil);
+      OpenDialog :=  TOpenDialog.Create(nil);
       try
+        OpenDialog.Filter := '*mfsim.nam|*mfsim.nam';
         if OpenDialog.Execute then
         begin
           FileName := OpenDialog.FileName;

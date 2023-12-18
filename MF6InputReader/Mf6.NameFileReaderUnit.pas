@@ -116,6 +116,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -128,10 +134,11 @@ begin
       Exit
     end;
 
-//    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-
-    if FSplitter.Count >= 1 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 1 then
     begin
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
@@ -278,6 +285,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -291,9 +304,11 @@ begin
       Exit;
     end;
 
-    FSplitter.DelimitedText := ALine;
-
-    if FSplitter.Count >= 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 2 then
     begin
       APackage := TPackage.Create;
       FPackages.Add(APackage);
@@ -617,7 +632,7 @@ begin
       APackage.Package := DrnReader;
       APackage.ReadPackage(Unhandled);
     end
-    else if APackage.FileType = 'Ghb6' then
+    else if APackage.FileType = 'GHB6' then
     begin
       GhbReader := TGhb.Create(APackage.FileType);
       GhbReader.Dimensions := FDimensions;
@@ -790,6 +805,11 @@ begin
       APackage.Package := MvtReader;
       APackage.ReadPackage(Unhandled);
     end
+    else
+    begin
+      Unhandled.WriteLine('Unhandled package type');
+      Unhandled.WriteLine(APackage.FileType);
+    end;
   end;
 end;
 

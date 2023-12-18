@@ -365,6 +365,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -377,8 +383,10 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      Continue;
+    end;
 
     AValue := FSplitter[0];
 
@@ -484,6 +492,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -491,7 +505,17 @@ begin
       Continue;
     end;
 
-    if Pos('TDIS6', UpperCase(ALine)) = 1 then
+    if ReadEndOfSection(ALine, ErrorLine, 'TIMING', Unhandled) then
+    begin
+      Exit
+    end;
+
+
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'TIMING') then
+    begin
+      // do nothing
+    end
+    else if Pos('TDIS6', UpperCase(ALine)) = 1 then
     begin
       ALine := Trim(Copy(ALine, Length('TDIS6')+1, MaxInt));
       FSplitter.DelimitedText := ALine;
@@ -503,10 +527,6 @@ begin
       end;
       FTisFileName := ALine;
       Continue;
-    end
-    else if ReadEndOfSection(ALine, ErrorLine, 'TIMING', Unhandled) then
-    begin
-      Exit
     end
     else
     begin
@@ -595,6 +615,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -611,7 +637,11 @@ begin
     end;
 
 
-    if FSplitter.Count >= 3 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 3 then
     begin
       AModel := TModel.Create;
       FModels.Add(AModel);
@@ -675,6 +705,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -690,7 +726,11 @@ begin
       Exit;
     end;
 
-    if FSplitter.Count >= 4 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 4 then
     begin
       AnExchange := TExchange.Create;
       FExchanges.Add(AnExchange);
@@ -791,6 +831,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -806,7 +852,11 @@ begin
       Exit;
     end;
 
-    if FSplitter.Count >= 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 2 then
     begin
       if UpperCase(FSplitter[0]) = 'MXITER' then
       begin

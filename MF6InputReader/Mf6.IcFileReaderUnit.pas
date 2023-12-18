@@ -130,7 +130,12 @@ begin
     FSplitter.DelimitedText := ALine;
     if FSplitter[0] = 'BEGIN' then
     begin
-      if FSplitter[1] ='GRIDDATA' then
+      if FSplitter[1] ='OPTIONS' then
+      begin
+        // Do nothing
+        // An empty OPTIONS block is no longer required for IC.
+      end
+      else if FSplitter[1] ='GRIDDATA' then
       begin
         FGridData.Read(Stream, Unhandled, FDimensions);
       end

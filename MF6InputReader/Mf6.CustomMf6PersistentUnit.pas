@@ -79,6 +79,7 @@ type
   protected
     FSplitter: TStringList;
     FPackageType: string;
+    FOriginalStream: TStreamReader;
     procedure Initialize; virtual;
     function StripFollowingComments(AValue: string): string;
     function ReadEndOfSection(ALine: string; const ErrorLine: string;
@@ -87,6 +88,8 @@ type
       PackageName: string; var PrintFormat: TPrintFormat);
     function ReadCellID(var Cell: TCellId;
       StartIndex, DimensionCount: Integer): Boolean;
+    function SwitchToAnotherFile(var Stream: TStreamReader; ErrorLine: string;
+      Unhandled: TStreamWriter; var ALine: string; Block: string): Boolean;
   public
     constructor Create(PackageType: string); virtual;
     destructor Destroy; override;
@@ -392,6 +395,7 @@ procedure TCustomMf6Persistent.Initialize;
 begin
   FSplitter.QuoteChar := '''';
   FSplitter.Delimiter := ',';
+  FOriginalStream := nil;
 end;
 
 function TCustomMf6Persistent.ReadEndOfSection(ALine: string;
@@ -1720,6 +1724,37 @@ begin
   FloatValues := nil;
   Name := '';
   AuxName := '';
+end;
+
+function TCustomMf6Persistent.SwitchToAnotherFile(var Stream: TStreamReader;
+  ErrorLine: string; Unhandled: TStreamWriter; var ALine: string;
+  Block: string): Boolean;
+var
+  FileName: string;
+  CaseSensitiveLine: string;
+begin
+  CaseSensitiveLine := ALine;
+  ALine := UpperCase(ALine);
+  FSplitter.DelimitedText := ALine;
+  result := False;
+  if (FSplitter.Count >= 2) and (FSplitter[0] = 'OPEN/CLOSE') then
+  begin
+    Assert(FOriginalStream = nil);
+    FOriginalStream := Stream;
+    FSplitter.DelimitedText := CaseSensitiveLine;
+    FileName := FSplitter[1];
+    if TFile.Exists(FileName) then
+    begin
+      Stream := TFile.OpenText(FileName);
+      result := True;
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format('Nonexistent file for %s in %s',
+        [Block, FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
+    end;
+  end;
 end;
 
 end.

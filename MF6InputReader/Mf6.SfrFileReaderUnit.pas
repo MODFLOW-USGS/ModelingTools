@@ -26,6 +26,7 @@ type
     MAXIMUM_ITERATIONS: TIntegerOption;
     LENGTH_CONVERSION: TRealOption;
     TIME_CONVERSION: TRealOption;
+    UNIT_CONVERSION: TRealOption;
     MAXIMUM_DEPTH_CHANGE: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
@@ -222,6 +223,7 @@ begin
   LENGTH_CONVERSION.Initialize;
   TIME_CONVERSION.Initialize;
   MAXIMUM_DEPTH_CHANGE.Initialize;
+  UNIT_CONVERSION.Initialize;
 end;
 
 procedure TSfrOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -335,6 +337,11 @@ begin
       and TryFortranStrToFloat(FSplitter[1], TIME_CONVERSION.Value) then
     begin
       TIME_CONVERSION.Used := True;
+    end
+    else if (FSplitter[0] = 'UNIT_CONVERSION') and (FSplitter.Count >= 2)
+      and TryFortranStrToFloat(FSplitter[1], UNIT_CONVERSION.Value) then
+    begin
+      UNIT_CONVERSION.Used := True;
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -469,6 +476,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -491,9 +504,11 @@ begin
     CaseSensitiveLine := ALine;
     Item := TSfrPackageItem.Create;
     try
-      ALine := UpperCase(ALine);
-      FSplitter.DelimitedText := ALine;
-      if (FSplitter.Count >= NumberOfItems)
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PACKAGEDATA') then
+      begin
+        // do nothing
+      end
+      else if (FSplitter.Count >= NumberOfItems)
         and TryStrToInt(FSplitter[0],Item.rno)
         and ReadCellID(Item.cellid, 1, DimensionCount)
         and TryFortranStrToFloat(FSplitter[DimensionCount+1],Item.rlen)

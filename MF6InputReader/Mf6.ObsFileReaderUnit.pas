@@ -467,7 +467,7 @@ begin
     end
     else if FPackagetype = 'WEL6' then
     begin
-      if (Observation.ObsType = 'riv')
+      if (Observation.ObsType = 'wel')
         or (Observation.ObsType = 'to-mvr')
         or (Observation.ObsType = 'wel-reduction')
         then
@@ -537,7 +537,7 @@ begin
           FSplitter.DelimitedText := CaseSensitiveLine;
           Observation.Name1 := FSplitter[2]
         end;
-        if TryStrToInt(FSplitter[3], Observation.Num2) then
+        if (FSplitter.Count >= 4) and TryStrToInt(FSplitter[3], Observation.Num2) then
         begin
           Observation.IdType2 := itNumber;
         end;
@@ -588,7 +588,7 @@ begin
           FSplitter.DelimitedText := CaseSensitiveLine;
           Observation.Name1 := FSplitter[2]
         end;
-        if TryStrToInt(FSplitter[3], Observation.Num2) then
+        if (FSplitter.Count >= 4) and  TryStrToInt(FSplitter[3], Observation.Num2) then
         begin
           Observation.IdType2 := itNumber;
         end;

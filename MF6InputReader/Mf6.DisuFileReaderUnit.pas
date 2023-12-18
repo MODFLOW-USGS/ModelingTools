@@ -136,26 +136,35 @@ procedure TDisuDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
+  SectionName: string;
 begin
   Initialize;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
     begin
       Continue;
     end;
-    if ReadEndOfSection(ALine, ErrorLine, 'DIMENSIONS', Unhandled) then
+    SectionName := 'DIMENSIONS';
+    if ReadEndOfSection(ALine, ErrorLine, SectionName, Unhandled) then
     begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter.Count >= 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 2 then
     begin
       if FSplitter[0] = 'NODES' then
       begin
@@ -220,6 +229,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -233,9 +248,11 @@ begin
       Exit;
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter[0] = 'TOP' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'TOP' then
     begin
       OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
       try
@@ -311,6 +328,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -324,9 +347,11 @@ begin
       Exit;
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter[0] = 'IAC' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'IAC' then
     begin
       OneIReader := TInteger1DArrayReader.Create(FNodes, FPackageType);
       try

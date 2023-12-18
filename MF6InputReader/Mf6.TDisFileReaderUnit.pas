@@ -96,21 +96,32 @@ begin
       while not Stream.EndOfStream do
       begin
         ALine := Stream.ReadLine;
+        if Stream.EndOfStream and (FOriginalStream <> nil) then
+        begin
+          Stream.Free;
+          Stream := FOriginalStream;
+          FOriginalStream := nil;
+        end;
         ErrorLine := ALine;
         ALine := StripFollowingComments(ALine);
         if ALine = '' then
         begin
           Continue;
         end;
+
+
+
         ALine := UpperCase(ALine);
         if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
         begin
           Exit
         end;
 
-        FSplitter.DelimitedText := ALine;
-        Assert(FSplitter.Count > 0);
-        if FSplitter.Count >= 2 then
+        if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+        begin
+          // do nothing
+        end
+        else if FSplitter.Count >= 2 then
         begin
           if FSplitter[0] = 'TIME_UNITS' then
           begin
@@ -172,21 +183,31 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
     begin
       Continue;
     end;
+
+
     ALine := UpperCase(ALine);
     if ReadEndOfSection(ALine, ErrorLine, 'DIMENSIONS', Unhandled) then
     begin
       Exit
     end;
 
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter.Count >= 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 2 then
     begin
       if FSplitter[0] = 'NPER' then
       begin
@@ -242,6 +263,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -255,9 +282,11 @@ begin
       Exit;
     end;
 
-    FSplitter.DelimitedText := ALine;
-
-    if FSplitter.Count >= 3 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 3 then
     begin
       APeriod := TPeriod.Create;
       FPeriods.Add(APeriod);

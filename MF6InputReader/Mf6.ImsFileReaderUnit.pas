@@ -99,6 +99,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -110,10 +116,11 @@ begin
       Exit
     end;
 
-//    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter.Count >= 1 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 1 then
     begin
       ALine := UpperCase(ALine);
       FSplitter.DelimitedText := ALine;
@@ -237,6 +244,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -248,10 +261,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter.Count >= 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'NONLINEAR') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 2 then
     begin
       if (FSplitter[0] = 'OUTER_DVCLOSE') or (FSplitter[0] = 'OUTER_HCLOSE') then
       begin
@@ -384,6 +398,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -395,10 +415,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter.Count >= 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'LINEAR') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 2 then
     begin
       if FSplitter[0] = 'INNER_MAXIMUM' then
       begin

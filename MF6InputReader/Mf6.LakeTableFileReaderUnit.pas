@@ -97,7 +97,7 @@ begin
     else if (FSplitter[0] = 'NCOL') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], NCOL) then
     begin
-      if not (NCOL in [2,3]) then
+      if not (NCOL in [3,4]) then
       begin
         Unhandled.WriteLine(Format(StrUnrecognizedSLakeTableD, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);

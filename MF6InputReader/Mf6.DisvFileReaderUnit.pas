@@ -129,6 +129,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -140,10 +146,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter.Count >= 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 2 then
     begin
       if FSplitter[0] = 'NLAY' then
       begin
@@ -209,6 +216,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -222,9 +235,11 @@ begin
       Exit;
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter[0] = 'TOP' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'TOP' then
     begin
       TwoDReader := TDouble2DArrayReader.Create(FDimensions, FPackageType);
       try
@@ -299,6 +314,12 @@ begin
     while not Stream.EndOfStream do
     begin
       ALine := Stream.ReadLine;
+      if Stream.EndOfStream and (FOriginalStream <> nil) then
+      begin
+        Stream.Free;
+        Stream := FOriginalStream;
+        FOriginalStream := nil;
+      end;
       ErrorLine := ALine;
       ALine := StripFollowingComments(ALine);
       if ALine = '' then
@@ -312,30 +333,24 @@ begin
         Exit;
       end;
 
-  //    ALine := UpperCase(ALine);
-      FSplitter.DelimitedText := ALine;
-      if not TryStrToInt(FSplitter[0], Vertex.iv) then
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
       begin
-        Unhandled.WriteLine(StrUnrecognizedVERTICE);
-        Unhandled.WriteLine(ErrorLine);
-        Continue;
-      end;
-
-      if not TryFortranStrToFloat(FSplitter[1], Vertex.xv) then
+        // do nothing
+      end
+      else
       begin
-        Unhandled.WriteLine(StrUnrecognizedVERTICE);
-        Unhandled.WriteLine(ErrorLine);
-        Continue;
-      end;
+        if not TryStrToInt(FSplitter[0], Vertex.iv)
+          or not TryFortranStrToFloat(FSplitter[1], Vertex.xv)
+          or not TryFortranStrToFloat(FSplitter[2], Vertex.yv)
+          then
+        begin
+          Unhandled.WriteLine(StrUnrecognizedVERTICE);
+          Unhandled.WriteLine(ErrorLine);
+          Continue;
+        end;
 
-      if not TryFortranStrToFloat(FSplitter[2], Vertex.yv) then
-      begin
-        Unhandled.WriteLine(StrUnrecognizedVERTICE);
-        Unhandled.WriteLine(ErrorLine);
-        Continue;
+        FVerticies.Add(Vertex);
       end;
-
-      FVerticies.Add(Vertex);
     end;
   finally
     if FVerticies.Count <> FNVERT then
@@ -378,6 +393,12 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    if Stream.EndOfStream and (FOriginalStream <> nil) then
+    begin
+      Stream.Free;
+      Stream := FOriginalStream;
+      FOriginalStream := nil;
+    end;
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -391,55 +412,44 @@ begin
       Exit;
     end;
 
-//    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-
-    if not TryStrToInt(FSplitter[0], Cell.icell2d) then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
     begin
-      Unhandled.WriteLine(StrUnrecognizedCELL2D);
-      Unhandled.WriteLine(ErrorLine);
-      Continue;
-    end;
-
-    if not TryFortranStrToFloat(FSplitter[1], Cell.xc) then
+      // do nothing
+    end
+    else
     begin
-      Unhandled.WriteLine(StrUnrecognizedCELL2D);
-      Unhandled.WriteLine(ErrorLine);
-      Continue;
-    end;
 
-    if not TryFortranStrToFloat(FSplitter[2], Cell.yc) then
-    begin
-      Unhandled.WriteLine(StrUnrecognizedCELL2D);
-      Unhandled.WriteLine(ErrorLine);
-      Continue;
-    end;
-
-    if not TryStrToInt(FSplitter[3], Cell.ncvert) then
-    begin
-      Unhandled.WriteLine(StrUnrecognizedCELL2D);
-      Unhandled.WriteLine(ErrorLine);
-      Continue;
-    end;
-    SetLength(Cell.icvert, Cell.ncvert);
-
-    ErrorFound := False;
-    for VertIndex := 0 to Cell.ncvert - 1 do
-    begin
-      if not TryStrToInt(FSplitter[4 + VertIndex], Cell.icvert[VertIndex]) then
+      if not TryStrToInt(FSplitter[0], Cell.icell2d)
+        or not TryFortranStrToFloat(FSplitter[1], Cell.xc)
+        or not TryFortranStrToFloat(FSplitter[2], Cell.yc)
+        or not TryStrToInt(FSplitter[3], Cell.ncvert)
+        then
       begin
         Unhandled.WriteLine(StrUnrecognizedCELL2D);
         Unhandled.WriteLine(ErrorLine);
-        ErrorFound := True;
-        break;
+        Continue;
       end;
-    end;
-    if ErrorFound then
-    begin
-      Continue;;
-    end;
 
-    FCells.Add(Cell);
+      SetLength(Cell.icvert, Cell.ncvert);
+
+      ErrorFound := False;
+      for VertIndex := 0 to Cell.ncvert - 1 do
+      begin
+        if not TryStrToInt(FSplitter[4 + VertIndex], Cell.icvert[VertIndex]) then
+        begin
+          Unhandled.WriteLine(StrUnrecognizedCELL2D);
+          Unhandled.WriteLine(ErrorLine);
+          ErrorFound := True;
+          break;
+        end;
+      end;
+      if ErrorFound then
+      begin
+        Continue;;
+      end;
+
+      FCells.Add(Cell);
+    end;
   end;
 end;
 
