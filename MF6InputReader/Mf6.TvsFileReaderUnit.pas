@@ -85,6 +85,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -97,10 +98,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'PRINT_INPUT' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'PRINT_INPUT' then
     begin
       PRINT_INPUT := True;
     end
@@ -159,6 +161,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -173,9 +176,11 @@ begin
 
     Cell.Initialize;
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter.Count >= DimensionCount + 2 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= DimensionCount + 2 then
     begin
       if ReadCellID(Cell.CellId, 0, DimensionCount) then
       begin

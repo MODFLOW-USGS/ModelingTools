@@ -131,6 +131,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -143,10 +144,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'SAVE_FLOWS' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
       SAVE_FLOWS := True;
     end
@@ -264,6 +266,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -276,9 +279,11 @@ begin
       Exit;
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter[0] = 'ICELLTYPE' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'GRIDDATA') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'ICELLTYPE' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       IntThreeDReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);

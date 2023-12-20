@@ -136,6 +136,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -148,10 +149,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'BOUNDNAMES' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'BOUNDNAMES' then
     begin
       BOUNDNAMES := True;
     end
@@ -253,6 +255,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -264,10 +267,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'MAXBOUND') and (FSplitter.Count >= 2)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'MAXBOUND') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], MAXBOUND) then
     begin
     end
@@ -318,6 +322,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -333,9 +338,11 @@ begin
     Cell := TDrnTimeItem.Create;
     try
       CaseSensitiveLine := ALine;
-      ALine := UpperCase(ALine);
-      FSplitter.DelimitedText := ALine;
-      if FSplitter.Count >= NumberOfColumns then
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+      begin
+        // do nothing
+      end
+      else if FSplitter.Count >= NumberOfColumns then
       begin
         if ReadCellID(Cell.CellId, 0, DimensionCount) then
         begin

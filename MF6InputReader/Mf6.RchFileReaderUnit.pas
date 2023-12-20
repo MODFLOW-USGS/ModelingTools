@@ -139,6 +139,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -151,10 +152,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'FIXED_CELL' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'FIXED_CELL' then
     begin
       FIXED_CELL := True;
     end
@@ -260,6 +262,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -271,10 +274,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'MAXBOUND') and (FSplitter.Count >= 2)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'MAXBOUND') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], MAXBOUND) then
     begin
     end
@@ -342,6 +346,7 @@ begin
       while not Stream.EndOfStream do
       begin
         ALine := Stream.ReadLine;
+        RestoreStream(Stream);
         ErrorLine := ALine;
         ALine := StripFollowingComments(ALine);
         if ALine = '' then
@@ -356,9 +361,11 @@ begin
 
         IRCH := nil;
         CaseSensitiveLine := ALine;
-        ALine := UpperCase(ALine);
-        FSplitter.DelimitedText := ALine;
-        if FSplitter[0] = 'IRCH' then
+        if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+        begin
+          // do nothing
+        end
+        else if FSplitter[0] = 'IRCH' then
         begin
           Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
           IntThreeDReader := TInteger3DArrayReader.Create(LocalDim, Layered, FPackageType);
@@ -464,6 +471,7 @@ begin
     while not Stream.EndOfStream do
     begin
       ALine := Stream.ReadLine;
+      RestoreStream(Stream);
       ErrorLine := ALine;
       ALine := StripFollowingComments(ALine);
       if ALine = '' then
@@ -479,9 +487,11 @@ begin
       Cell := TRchTimeItem.Create;
       try
         CaseSensitiveLine := ALine;
-        ALine := UpperCase(ALine);
-        FSplitter.DelimitedText := ALine;
-        if FSplitter.Count >= NumberOfColumns then
+        if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+        begin
+          // do nothing
+        end
+        else if FSplitter.Count >= NumberOfColumns then
         begin
           if ReadCellID(Cell.CellId, 0, DimensionCount) then
           begin

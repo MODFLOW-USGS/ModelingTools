@@ -103,6 +103,7 @@ begin
     while not Stream.EndOfStream do
     begin
       ALine := Stream.ReadLine;
+      RestoreStream(Stream);
       ErrorLine := ALine;
       ALine := StripFollowingComments(ALine);
       if ALine = '' then
@@ -119,102 +120,109 @@ begin
         Exit
       end;
 
-      FSplitter.DelimitedText := ALine;
-      Assert(FSplitter.Count > 0);
-      Tag := UpperCase(FSplitter[0]);
-      if (Tag = 'NAMES') or (Tag = 'NAME') then
+      CaseSensitiveLine := ALine;
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'ATTRIBUTES') then
       begin
-        FSplitter.Delete(0);
-        Names.Assign(FSplitter);
-        if (Methods.Count > 0) and (Methods.Count < Names.Count) then
-        begin
-          Method := Methods.Last;
-          while Methods.Count < Names.Count do
-          begin
-            Methods.Add(Method);
-          end;
-        end;
-      end
-      else if (Tag = 'METHODS') then
-      begin
-        ALine := UpperCase(ALine);
-        FSplitter.DelimitedText := ALine;
-        FSplitter.Delete(0);
-        Methods.Capacity := FSplitter.Count;
-        for Index := 0 to FSplitter.Count - 1 do
-        begin
-          ItemIndex := ValidMethods.IndexOf(FSplitter[Index]);
-          if ItemIndex >= 0 then
-          begin
-            Methods.Add(TTsMethod(ItemIndex));
-          end
-          else
-          begin
-            Methods.Add(tsUndefined);
-          end;
-        end;
-      end
-      else if (Tag = 'METHOD') then
-      begin
-        ALine := UpperCase(ALine);
-        FSplitter.DelimitedText := ALine;
-        FSplitter.Delete(0);
-        ItemIndex := ValidMethods.IndexOf(FSplitter[0]);
-        if ItemIndex >= 0 then
-        begin
-          Method := TTsMethod(ItemIndex);
-        end
-        else
-        begin
-          Method := tsUndefined;
-        end;
-        Methods.Capacity := Names.Count;
-        for Index := 0 to Names.Count - 1 do
-        begin
-          Methods.Add(Method);
-        end;
-        if Methods.Count = 0 then
-        begin
-          Methods.Add(Method);
-        end;
-      end
-      else if (Tag = 'SFACS') then
-      begin
-        FSplitter.Delete(0);
-        SFACS.Capacity := FSplitter.Count;
-        for Index := 0 to FSplitter.Count - 1 do
-        begin
-          if TryFortranStrToFloat(FSplitter[Index], AValue) then
-          begin
-            SFACS.Add(AValue)
-          end
-          else
-          begin
-            if SFACS.Count < Names.Count then
-            begin
-              Unhandled.WriteLine('Insufficient number of scale factors in the following line.');
-              Unhandled.WriteLine(ErrorLine);
-            end;
-            Break;
-          end;
-        end;
-      end
-      else if (Tag = 'SFAC') then
-      begin
-        FSplitter.Delete(0);
-        SFACS.Capacity := Names.Count;
-        if TryFortranStrToFloat(FSplitter[0], AValue) then
-        begin
-          for Index := 0 to Names.Count - 1 do
-          begin
-            SFACS.Add(AValue);
-          end;
-        end;
+        // do nothing
       end
       else
       begin
-        Unhandled.WriteLine('Unrecognized Time Series option in the following line.');
-        Unhandled.WriteLine(ErrorLine);
+        FSplitter.DelimitedText := CaseSensitiveLine;
+        Tag := UpperCase(FSplitter[0]);
+        if (Tag = 'NAMES') or (Tag = 'NAME') then
+        begin
+          FSplitter.Delete(0);
+          Names.Assign(FSplitter);
+          if (Methods.Count > 0) and (Methods.Count < Names.Count) then
+          begin
+            Method := Methods.Last;
+            while Methods.Count < Names.Count do
+            begin
+              Methods.Add(Method);
+            end;
+          end;
+        end
+        else if (Tag = 'METHODS') then
+        begin
+          ALine := UpperCase(ALine);
+          FSplitter.DelimitedText := ALine;
+          FSplitter.Delete(0);
+          Methods.Capacity := FSplitter.Count;
+          for Index := 0 to FSplitter.Count - 1 do
+          begin
+            ItemIndex := ValidMethods.IndexOf(FSplitter[Index]);
+            if ItemIndex >= 0 then
+            begin
+              Methods.Add(TTsMethod(ItemIndex));
+            end
+            else
+            begin
+              Methods.Add(tsUndefined);
+            end;
+          end;
+        end
+        else if (Tag = 'METHOD') then
+        begin
+          ALine := UpperCase(ALine);
+          FSplitter.DelimitedText := ALine;
+          FSplitter.Delete(0);
+          ItemIndex := ValidMethods.IndexOf(FSplitter[0]);
+          if ItemIndex >= 0 then
+          begin
+            Method := TTsMethod(ItemIndex);
+          end
+          else
+          begin
+            Method := tsUndefined;
+          end;
+          Methods.Capacity := Names.Count;
+          for Index := 0 to Names.Count - 1 do
+          begin
+            Methods.Add(Method);
+          end;
+          if Methods.Count = 0 then
+          begin
+            Methods.Add(Method);
+          end;
+        end
+        else if (Tag = 'SFACS') then
+        begin
+          FSplitter.Delete(0);
+          SFACS.Capacity := FSplitter.Count;
+          for Index := 0 to FSplitter.Count - 1 do
+          begin
+            if TryFortranStrToFloat(FSplitter[Index], AValue) then
+            begin
+              SFACS.Add(AValue)
+            end
+            else
+            begin
+              if SFACS.Count < Names.Count then
+              begin
+                Unhandled.WriteLine('Insufficient number of scale factors in the following line.');
+                Unhandled.WriteLine(ErrorLine);
+              end;
+              Break;
+            end;
+          end;
+        end
+        else if (Tag = 'SFAC') then
+        begin
+          FSplitter.Delete(0);
+          SFACS.Capacity := Names.Count;
+          if TryFortranStrToFloat(FSplitter[0], AValue) then
+          begin
+            for Index := 0 to Names.Count - 1 do
+            begin
+              SFACS.Add(AValue);
+            end;
+          end;
+        end
+        else
+        begin
+          Unhandled.WriteLine('Unrecognized Time Series option in the following line.');
+          Unhandled.WriteLine(ErrorLine);
+        end;
       end;
     end
   finally
@@ -257,6 +265,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -268,7 +277,10 @@ begin
       Exit
     end;
 
-    FSplitter.DelimitedText := ALine;
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'TIMESERIES') then
+    begin
+      Continue;
+    end;
     TimeValues := TDoubleList.Create;
     Values.Add(TimeValues);
 

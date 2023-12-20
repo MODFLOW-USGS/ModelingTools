@@ -240,6 +240,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -252,10 +253,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'AUXILIARY')
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'AUXILIARY')
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
@@ -384,6 +386,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -395,10 +398,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'NREACHES') and (FSplitter.Count >= 2)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'NREACHES') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], NREACHES) then
     begin
     end
@@ -476,12 +480,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
-    if Stream.EndOfStream and (FOriginalStream <> nil) then
-    begin
-      Stream.Free;
-      Stream := FOriginalStream;
-      FOriginalStream := nil;
-    end;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -617,6 +616,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -632,9 +632,11 @@ begin
     Item.Initialize;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if (FSplitter.Count >= 4)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'CROSSSECTIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter.Count >= 4)
       and TryStrToInt(FSplitter[0],Item.rno)
       and (FSplitter[1] = 'TAB6')
       and (FSplitter[2] = 'FILEIN')
@@ -694,6 +696,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -707,8 +710,11 @@ begin
     end;
 
     Item.Initialize;;
-    FSplitter.DelimitedText := ALine;
-    if TryStrToInt(FSplitter[0],Item.rno) then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'CONNECTIONDATA') then
+    begin
+      // do nothing
+    end
+    else if TryStrToInt(FSplitter[0],Item.rno) then
     begin
 
       if (Item.rno >= 1) and (Item.rno <= PackageItems.Count) then
@@ -793,6 +799,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -806,9 +813,11 @@ begin
     end;
 
     Item.Initialize;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if (FSplitter.Count >- 4)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIVERSIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter.Count >- 4)
       and TryStrToInt(FSplitter[0],Item.rno)
       and TryStrToInt(FSplitter[1],Item.idv)
       and TryStrToInt(FSplitter[2],Item.iconr)
@@ -857,6 +866,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -871,9 +881,11 @@ begin
 
     SfrItem.Initialize;
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter.Count >= 3 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 3 then
     begin
       if TryStrToInt(FSplitter[0], SfrItem.IdNumber) then
       begin

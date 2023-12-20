@@ -254,6 +254,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -266,10 +267,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'CELL_AVERAGING') and (FSplitter.Count >= 2) then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'CELL_AVERAGING') and (FSplitter.Count >= 2) then
     begin
       CELL_AVERAGING := FSplitter[1];
     end
@@ -351,6 +353,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -363,10 +366,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'GWFMODELNAME1') and (FSplitter.Count >= 2) then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'GWFMODELNAME1') and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
       GWFMODELNAME1 := FSplitter[1];
@@ -421,6 +425,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -432,10 +437,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'NEXG') and (FSplitter.Count >= 2)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'NEXG') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], NEXG) then
     begin
     end
@@ -510,6 +516,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -525,9 +532,11 @@ begin
     Exchange := ExcItem.Create;;
     try
       CaseSensitiveLine := ALine;
-      ALine := UpperCase(ALine);
-      FSplitter.DelimitedText := ALine;
-      if FSplitter.Count >= NumberOfColumns then
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'EXCHANGEDATA') then
+      begin
+        // do nothing
+      end
+      else if FSplitter.Count >= NumberOfColumns then
       begin
         if ReadCellID(Exchange.cellidm1, 0, DimensionCount1)
           and ReadCellID(Exchange.cellidm2, DimensionCount1, DimensionCount2)

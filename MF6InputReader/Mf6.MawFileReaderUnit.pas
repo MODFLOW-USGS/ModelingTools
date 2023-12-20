@@ -186,6 +186,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -198,10 +199,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'BOUNDNAMES' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'BOUNDNAMES' then
     begin
       BOUNDNAMES := True;
     end
@@ -322,6 +324,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -333,10 +336,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'NMAWWELLS') and (FSplitter.Count >= 2)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'NMAWWELLS') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], NMAWWELLS) then
     begin
     end
@@ -406,6 +410,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -421,9 +426,11 @@ begin
     CaseSensitiveLine := ALine;
     Item := TMawPackageItem.Create;
     try
-      ALine := UpperCase(ALine);
-      FSplitter.DelimitedText := ALine;
-      if (FSplitter.Count >= NumberOfItems)
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PACKAGEDATA') then
+      begin
+        // do nothing
+      end
+      else if (FSplitter.Count >= NumberOfItems)
         and TryStrToInt(FSplitter[0],Item.wellno)
         and TryFortranStrToFloat(FSplitter[1],Item.radius)
         and TryFortranStrToFloat(FSplitter[2],Item.bottom)
@@ -502,6 +509,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -516,9 +524,11 @@ begin
 
     CaseSensitiveLine := ALine;
     Item.Initialize;;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if (FSplitter.Count >= 6 + DimensionCount)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'CONNECTIONDATA') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter.Count >= 6 + DimensionCount)
       and TryStrToInt(FSplitter[0],Item.wellno)
       and TryStrToInt(FSplitter[1],Item.icon)
       and ReadCellID(Item.cellid, 2, DimensionCount)
@@ -583,6 +593,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -597,9 +608,11 @@ begin
 
     MawItem.Initialize;
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter.Count >= 3 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 3 then
     begin
       if TryStrToInt(FSplitter[0], MawItem.IdNumber) then
       begin

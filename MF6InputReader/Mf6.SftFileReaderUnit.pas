@@ -139,6 +139,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -151,10 +152,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'FLOW_PACKAGE_NAME')
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'FLOW_PACKAGE_NAME')
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
@@ -292,6 +294,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -314,9 +317,11 @@ begin
     CaseSensitiveLine := ALine;
     Item := TSftPackageItem.Create;
     try
-      ALine := UpperCase(ALine);
-      FSplitter.DelimitedText := ALine;
-      if (FSplitter.Count >= NumberOfItems)
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PACKAGEDATA') then
+      begin
+        // do nothing
+      end
+      else if (FSplitter.Count >= NumberOfItems)
         and TryStrToInt(FSplitter[0],Item.rno)
         then
       begin
@@ -397,6 +402,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -411,9 +417,11 @@ begin
 
     SftItem.Initialize;
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter.Count >= 3 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= 3 then
     begin
       if TryStrToInt(FSplitter[0], SftItem.IdNumber) then
       begin

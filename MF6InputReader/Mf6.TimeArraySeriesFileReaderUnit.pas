@@ -74,6 +74,7 @@ begin
     while not Stream.EndOfStream do
     begin
       ALine := Stream.ReadLine;
+      RestoreStream(Stream);
       ErrorLine := ALine;
       ALine := StripFollowingComments(ALine);
       if ALine = '' then
@@ -86,8 +87,10 @@ begin
       end;
 
       CaseSensitiveLine := ALine;
-      FSplitter.DelimitedText := UpperCase(ALine);
-      Assert(FSplitter.Count > 0);
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'ATTRIBUTES') then
+      begin
+        Continue;
+      end;
       Tag := UpperCase(FSplitter[0]);
       if (Tag = 'NAME') then
       begin

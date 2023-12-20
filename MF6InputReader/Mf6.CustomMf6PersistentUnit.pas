@@ -90,6 +90,7 @@ type
       StartIndex, DimensionCount: Integer): Boolean;
     function SwitchToAnotherFile(var Stream: TStreamReader; ErrorLine: string;
       Unhandled: TStreamWriter; var ALine: string; Block: string): Boolean;
+    procedure RestoreStream(var Stream: TStreamReader);
   public
     constructor Create(PackageType: string); virtual;
     destructor Destroy; override;
@@ -1754,6 +1755,16 @@ begin
         [Block, FPackageType]));
       Unhandled.WriteLine(ErrorLine);
     end;
+  end;
+end;
+
+procedure TCustomMf6Persistent.RestoreStream(var Stream: TStreamReader);
+begin
+  if Stream.EndOfStream and (FOriginalStream <> nil) then
+  begin
+    Stream.Free;
+    Stream := FOriginalStream;
+    FOriginalStream := nil;
   end;
 end;
 

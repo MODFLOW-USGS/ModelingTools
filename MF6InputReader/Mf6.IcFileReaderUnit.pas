@@ -62,6 +62,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -75,9 +76,11 @@ begin
       Exit;
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter[0] = 'STRT' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'STRT' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);

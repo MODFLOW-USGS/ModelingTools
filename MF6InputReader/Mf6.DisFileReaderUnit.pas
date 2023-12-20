@@ -17,7 +17,8 @@ type
     ANGROT: Extended;
   protected
     procedure Initialize; override;
-    procedure HandleOption(ErrorLine: string; Unhandled: TStreamWriter);  virtual;
+    procedure HandleOption(ErrorLine: string; Unhandled: TStreamWriter);
+      virtual;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -100,12 +101,7 @@ begin
       while not Stream.EndOfStream do
       begin
         ALine := Stream.ReadLine;
-        if Stream.EndOfStream and (FOriginalStream <> nil) then
-        begin
-          Stream.Free;
-          Stream := FOriginalStream;
-          FOriginalStream := nil;
-        end;
+        RestoreStream(Stream);
         ErrorLine := ALine;
         ALine := StripFollowingComments(ALine);
         if ALine = '' then
@@ -198,12 +194,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
-    if Stream.EndOfStream and (FOriginalStream <> nil) then
-    begin
-      Stream.Free;
-      Stream := FOriginalStream;
-      FOriginalStream := nil;
-    end;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -288,12 +279,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
-    if Stream.EndOfStream and (FOriginalStream <> nil) then
-    begin
-      Stream.Free;
-      Stream := FOriginalStream;
-      FOriginalStream := nil;
-    end;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then

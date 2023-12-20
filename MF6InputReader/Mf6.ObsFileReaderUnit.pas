@@ -89,6 +89,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -102,9 +103,11 @@ begin
       Exit;
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if (FSplitter[0] = 'DIGITS') and (FSplitter.Count >= 2) then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, SectionName) then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'DIGITS') and (FSplitter.Count >= 2) then
     begin
       if not TryStrToInt(FSplitter[1], Digits) then
       begin
@@ -162,6 +165,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -174,7 +178,10 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    FSplitter.DelimitedText := ALine;
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'CONTINUOUS') then
+    begin
+      Continue;
+    end;
 
     Observation.Initialize;
     Observation.ObsName := FSplitter[0];

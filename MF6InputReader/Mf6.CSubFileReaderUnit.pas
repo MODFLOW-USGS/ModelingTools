@@ -203,6 +203,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -215,10 +216,11 @@ begin
     end;
 
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if FSplitter[0] = 'BOUNDNAMES' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'BOUNDNAMES' then
     begin
       BOUNDNAMES := True;
     end
@@ -363,6 +365,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -374,10 +377,11 @@ begin
       Exit
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count > 0);
-    if (FSplitter[0] = 'NINTERBEDS') and (FSplitter.Count >= 2)
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'DIMENSIONS') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter[0] = 'NINTERBEDS') and (FSplitter.Count >= 2)
       and TryStrToInt(FSplitter[1], NINTERBEDS) then
     begin
     end
@@ -425,6 +429,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -437,9 +442,11 @@ begin
       Exit;
     end;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter[0] = 'CG_SKE_CR' then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'GRIDDATA') then
+    begin
+      // do nothing
+    end
+    else if FSplitter[0] = 'CG_SKE_CR' then
     begin
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
@@ -546,6 +553,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -560,9 +568,11 @@ begin
 
     Item.Initialize;
 
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if TryStrToInt(FSplitter[0],Item.icsubno) and (FSplitter.Count >= 10 + DimensionCount)  then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PACKAGEDATA') then
+    begin
+      // do nothing
+    end
+    else if TryStrToInt(FSplitter[0],Item.icsubno) and (FSplitter.Count >= 10 + DimensionCount)  then
     begin
       if ReadCellID(Item.cellid, 1, DimensionCount) then
       begin
@@ -696,6 +706,7 @@ begin
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
+    RestoreStream(Stream);
     ErrorLine := ALine;
     ALine := StripFollowingComments(ALine);
     if ALine = '' then
@@ -710,9 +721,11 @@ begin
 
     Cell.Initialize;
     CaseSensitiveLine := ALine;
-    ALine := UpperCase(ALine);
-    FSplitter.DelimitedText := ALine;
-    if FSplitter.Count >= DimensionCount + 1 then
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
+    begin
+      // do nothing
+    end
+    else if FSplitter.Count >= DimensionCount + 1 then
     begin
       if ReadCellID(Cell.CellId, 0, DimensionCount) then
       begin
