@@ -581,6 +581,7 @@ begin
             begin
               Inc(OptionIndex);
               FFactor := StrToDataType(FSplitter[OptionIndex]);
+              Inc(OptionIndex);
             end
             else if Option = 'IPRN' then
             begin
@@ -590,10 +591,12 @@ begin
                 Unhandled.WriteLine('Error reading IPRN in an array control line in the following line.');
                 Unhandled.WriteLine(ErrorLine);
               end;
+              Inc(OptionIndex);
             end
             else if Option = '(BINARY)' then
             begin
               FBinary := True;
+              Inc(OptionIndex);
             end
             else
             begin
@@ -703,15 +706,15 @@ var
   ColIndex: Integer;
   ExternalFileStream: TStreamReader;
   ExternalBinaryFileStream: TFileStream;
-  KSTP: Integer;
-  KPER: Integer;
-  PERTIM: TModflowDouble;
-  TOTIM: TModflowDouble;
-  DESC: TModflowDesc;
-  NCOL: Integer;
-  NROW: Integer;
-  ILAY: Integer;
-  AnArray: TModflowDoubleArray;
+//  KSTP: Integer;
+//  KPER: Integer;
+//  PERTIM: TModflowDouble;
+//  TOTIM: TModflowDouble;
+//  DESC: TModflowDesc;
+//  NCOL: Integer;
+//  NROW: Integer;
+//  ILAY: Integer;
+//  AnArray: TModflowDoubleArray;
 begin
   inherited;
   if FLayered then
@@ -744,14 +747,15 @@ begin
                 ExternalBinaryFileStream := TFile.Create(FExternalFileName,
                   fmOpenRead or fmShareDenyWrite);
                 try
-                  ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
-                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+//                  ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+//                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
                   for RowIndex := 0 to FDimensions.NRow - 1 do
                   begin
                     for ColIndex := 0 to FDimensions.NCol - 1 do
                     begin
-                      FData[LayerIndex,RowIndex, ColIndex] :=
-                        AnArray[RowIndex, ColIndex] * FFactor;
+                      ExternalBinaryFileStream.Read(FData[LayerIndex,RowIndex, ColIndex], SizeOf(Double));
+//                      FData[LayerIndex,RowIndex, ColIndex] :=
+//                        AnArray[RowIndex, ColIndex] * FFactor;
                     end;
                   end;
                 finally
@@ -835,14 +839,15 @@ begin
                 try
                   for LayerIndex := 0 to FDimensions.NLay - 1 do
                   begin
-                    ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
-                    KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+//                    ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+//                    KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
                     for RowIndex := 0 to FDimensions.NRow - 1 do
                     begin
                       for ColIndex := 0 to FDimensions.NCol - 1 do
                       begin
-                        FData[LayerIndex,RowIndex, ColIndex] :=
-                          AnArray[RowIndex, ColIndex] * FFactor;
+                        ExternalBinaryFileStream.Read(FData[LayerIndex,RowIndex, ColIndex], SizeOf(Double));
+//                        FData[LayerIndex,RowIndex, ColIndex] :=
+//                          AnArray[RowIndex, ColIndex] * FFactor;
                       end;
                     end;
                   end;
@@ -1024,15 +1029,15 @@ var
   ColIndex: Integer;
   ExternalFileStream: TStreamReader;
   ExternalBinaryFileStream: TFileStream;
-  KSTP: Integer;
-  KPER: Integer;
-  PERTIM: TModflowDouble;
-  TOTIM: TModflowDouble;
-  DESC: TModflowDesc;
-  NCOL: Integer;
-  NROW: Integer;
-  ILAY: Integer;
-  AnArray: TModflowDoubleArray;
+//  KSTP: Integer;
+//  KPER: Integer;
+//  PERTIM: TModflowDouble;
+//  TOTIM: TModflowDouble;
+//  DESC: TModflowDesc;
+//  NCOL: Integer;
+//  NROW: Integer;
+//  ILAY: Integer;
+//  AnArray: TModflowDoubleArray;
 begin
   ReadControlLine(Stream, Unhandled);
   case ArrayType of
@@ -1060,14 +1065,15 @@ begin
               ExternalBinaryFileStream := TFile.Create(FExternalFileName,
                 fmOpenRead or fmShareDenyWrite);
               try
-                ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
-                KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
+//                ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
+//                KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
                 for RowIndex := 0 to FDimensions.NRow - 1 do
                 begin
                   for ColIndex := 0 to FDimensions.NCol - 1 do
                   begin
-                    FData[RowIndex, ColIndex] :=
-                      AnArray[RowIndex, ColIndex] * FFactor;
+                    ExternalBinaryFileStream.Read(FData[RowIndex, ColIndex], SizeOf(Double));
+//                    FData[RowIndex, ColIndex] :=
+//                      AnArray[RowIndex, ColIndex] * FFactor;
                   end;
                 end;
               finally

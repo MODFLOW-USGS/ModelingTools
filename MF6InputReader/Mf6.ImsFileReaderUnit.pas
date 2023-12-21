@@ -161,7 +161,9 @@ begin
         end
         else if FSplitter.Count >= 3 then
         begin
-          if (UpperCase(FSplitter[0]) = 'CSV_OUTER_OUTPUT') then
+          if (UpperCase(FSplitter[0]) = 'CSV_OUTER_OUTPUT')
+            or (UpperCase(FSplitter[0]) = 'CSV_OUTPUT')
+            then
           begin
             if (UpperCase(FSplitter[1]) = 'FILEOUT') then
             begin

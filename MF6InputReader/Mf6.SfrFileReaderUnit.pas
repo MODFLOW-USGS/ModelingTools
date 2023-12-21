@@ -507,6 +507,71 @@ begin
       begin
         // do nothing
       end
+      else if (FSplitter.Count >= 12) and (FSplitter[1] = 'NONE') then
+      begin
+        if TryStrToInt(FSplitter[0],Item.rno)
+          and TryFortranStrToFloat(FSplitter[2],Item.rlen)
+          and TryFortranStrToFloat(FSplitter[3],Item.rwid)
+          and TryFortranStrToFloat(FSplitter[4],Item.rgrd)
+          and TryFortranStrToFloat(FSplitter[5],Item.rtp)
+          and TryFortranStrToFloat(FSplitter[6],Item.rbth)
+          and TryFortranStrToFloat(FSplitter[7],Item.rhk)
+          and TryStrToInt(FSplitter[9],Item.ncon)
+          and TryStrToInt(FSplitter[11],Item.ndv)
+          then
+        begin
+          Item.cellid.Layer := -1;
+          Item.cellid.Row := -1;
+          Item.cellid.Column := -1;
+          if TryFortranStrToFloat(FSplitter[8],Item.man.NumericValue) then
+          begin
+            Item.man.ValueType := vtNumeric;
+          end
+          else
+          begin
+            Item.man.ValueType := vtString;
+            Item.man.StringValue := FSplitter[8];
+          end;
+          if TryFortranStrToFloat(FSplitter[10],Item.ustrf.NumericValue) then
+          begin
+            Item.ustrf.ValueType := vtNumeric;
+          end
+          else
+          begin
+            Item.ustrf.ValueType := vtString;
+            Item.ustrf.StringValue := FSplitter[10];
+          end;
+          ItemStart := 12;
+          for AuxIndex := 0 to naux - 1 do
+          begin
+            AValue.Initialize;
+            if TryFortranStrToFloat(FSplitter[ItemStart],AValue.NumericValue) then
+            begin
+              AValue.ValueType := vtNumeric
+            end
+            else
+            begin
+              FSplitter.DelimitedText := CaseSensitiveLine;
+              AValue.ValueType := vtString;
+              AValue.StringValue := FSplitter[ItemStart]
+            end;
+            Item.aux.Add(AVAlue);
+            Inc(ItemStart);
+          end;
+          if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
+          begin
+            FSplitter.DelimitedText := CaseSensitiveLine;
+            Item.boundname := FSplitter[ItemStart];
+          end;
+          FItems.Add(Item);
+          Item := nil;
+        end
+        else
+        begin
+          Unhandled.WriteLine(Format(StrUnrecognizedSPACK, [FPackageType]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end
       else if (FSplitter.Count >= NumberOfItems)
         and TryStrToInt(FSplitter[0],Item.rno)
         and ReadCellID(Item.cellid, 1, DimensionCount)

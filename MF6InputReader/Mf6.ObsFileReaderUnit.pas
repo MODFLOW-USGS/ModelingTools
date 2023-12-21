@@ -156,8 +156,8 @@ var
   ErrorLine: string;
   DimensionCount: Integer;
   Observation: TObservation;
-  StartIndex: Integer;
-  ANumber: Integer;
+//  StartIndex: Integer;
+//  ANumber: Integer;
   CaseSensitiveLine: string;
 begin
   DimensionCount := Dimensions.DimensionCount;
