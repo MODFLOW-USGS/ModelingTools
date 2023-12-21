@@ -94,7 +94,7 @@ begin
     begin
       ZERO_ORDER_DECAY := True;
     end
-    else if (FSplitter[0] = 'SORPTION')
+    else if ((FSplitter[0] = 'SORPTION') or (FSplitter[0] = 'SORBTION'))
       and (FSplitter.Count >= 2) then
     begin
       SORPTION.Value := FSplitter[1];

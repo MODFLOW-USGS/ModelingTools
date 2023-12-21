@@ -349,6 +349,10 @@ begin
           Unhandled.WriteLine(ErrorLine);
         end;
       end
+      else if FSplitter[0] = 'OUTER_RCLOSEBND' then
+      begin
+        // ignore. This option is deprecated.
+      end
       else
       begin
         Unhandled.WriteLine(StrUnrecognizedImsOp);
