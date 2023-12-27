@@ -116,10 +116,15 @@ type
     function NumberOfSteps: integer;
     function LengthOfFirstTimeStep: double;
     function GetTimeStep(Step: Integer): TTimeStep;
+    // <dt0> <dtmin> <dtmax> <dtadj> <dtfailadj
     property AtsInitialStepSize: double read GetAtsInitialStepSize write SetAtsInitialStepSize;
+    // <dtmin>
     property AtsMinimumStepSize: double read GetAtsMinimumStepSize write SetAtsMinimumStepSize;
+    // <dtmax>
     property AtsMaximumStepSize: double read GetAtsMaximumStepSize write SetAtsMaximumStepSize;
+    // <dtadj>
     property AtsAdjustmentFactor: double read GetAtsAdjustmentFactor write SetAtsAdjustmentFactor;
+    // <dtfailadj
     property AtsFailureFactor: double read GetAtsFailureFactor write SetAtsFailureFactor;
     property GwtNumSteps[SpeciesIndex: Integer]: Integer read GetGwtNumSteps
       write SetGwtNumSteps;
@@ -213,6 +218,7 @@ type
     property First: TModflowStressPeriod read GetFirst;
     property Last: TModflowStressPeriod read GetLast;
     function FmpTimeStepSizeWarning(Model: TObject): string;
+    function Add: TModflowStressPeriod;
   end;
 
 function GetNumberOfTimeSteps(const PerLength, MaxFirstTimeStepLength,
@@ -636,6 +642,11 @@ begin
 end;
 
 { TModflowStressPeriods }
+
+function TModflowStressPeriods.Add: TModflowStressPeriod;
+begin
+  result := inherited Add as TModflowStressPeriod;
+end;
 
 procedure TModflowStressPeriods.Assign(Source: TPersistent);
 var

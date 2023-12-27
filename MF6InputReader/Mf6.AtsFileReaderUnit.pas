@@ -39,10 +39,14 @@ type
   private
     FDimensions: TAtsDimensions;
     FPeriodData: TAtsPeriodData;
+    function GetAtsPeriod(Index: Integer): TAtsPeriod;
+    function GetCount: integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    property Count: integer read GetCount;
+    property AtsPeriod[Index: Integer]: TAtsPeriod read GetAtsPeriod;
   end;
 
 implementation
@@ -130,6 +134,16 @@ begin
   FDimensions.Free;
   FPeriodData.Free;
   inherited;
+end;
+
+function TAts.GetAtsPeriod(Index: Integer): TAtsPeriod;
+begin
+  result := FPeriodData.FPeriods[Index];
+end;
+
+function TAts.GetCount: integer;
+begin
+  result := FPeriodData.FPeriods.Count;
 end;
 
 procedure TAts.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

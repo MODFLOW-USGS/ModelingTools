@@ -43,6 +43,7 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
+    property TDis: TTDis read FTDis;
   end;
 
   TModel = class(TObject)
@@ -59,6 +60,8 @@ type
   TModels = class(TCustomMf6Persistent)
   private
     FModels: TModelList;
+    function GetCount: Integer;
+    function GetModel(Index: Integer): TModel;
   protected
   public
     constructor Create(PackageType: string); override;
@@ -66,6 +69,9 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
     function GetModelByName(ModelName: string): TModel;
+    function GetModelByNameFile(NameFile: string): TModel;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TModel read GetModel; default;
   end;
 
   TExchange = class(TObject)
@@ -80,12 +86,14 @@ type
   TExchanges = class(TCustomMf6Persistent)
   private
     FExchanges: TExchangeList;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    property Count: Integer read GetCount;
   end;
 
   TSolution = class(TObject)
@@ -125,10 +133,14 @@ type
     FSimulationFile: TStreamReader;
     FSolutionGroups: TSolutionGroups;
     FExchangePackages: TPackageList;
+    function GetExchanges: TExchanges;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure ReadSimulation(NameFile: string);
+    property Models: TModels read FModels;
+    property Exchanges: TExchanges read GetExchanges;
+    property Timing: TTiming read FTiming;
   end;
 
 implementation
@@ -160,6 +172,11 @@ begin
   FTiming.Free;
   FSimulationOptions.Free;
   inherited;
+end;
+
+function TMf6Simulation.GetExchanges: TExchanges;
+begin
+  result := FExchanges;
 end;
 
 procedure TMf6Simulation.ReadSimulation(NameFile: string);
@@ -577,6 +594,16 @@ begin
   inherited;
 end;
 
+function TModels.GetCount: Integer;
+begin
+  result := FModels.Count;
+end;
+
+function TModels.GetModel(Index: Integer): TModel;
+begin
+  result := FModels[Index];
+end;
+
 function TModels.GetModelByName(ModelName: string): TModel;
 var
   Index: Integer;
@@ -587,6 +614,23 @@ begin
   begin
     AModel := FModels[Index];
     if AnsiSameText(ModelName, AModel.ModelName) then
+    begin
+      result := AModel;
+      Exit;
+    end;
+  end;
+end;
+
+function TModels.GetModelByNameFile(NameFile: string): TModel;
+var
+  Index: Integer;
+  AModel: TModel;
+begin
+  result := nil;
+  for Index := 0 to FModels.Count - 1 do
+  begin
+    AModel := FModels[Index];
+    if AnsiSameText(NameFile, AModel.NameFile) then
     begin
       result := AModel;
       Exit;
@@ -671,6 +715,11 @@ destructor TExchanges.Destroy;
 begin
   FExchanges.Free;
   inherited;
+end;
+
+function TExchanges.GetCount: Integer;
+begin
+  result := FExchanges.Count;
 end;
 
 procedure TExchanges.Initialize;

@@ -3,7 +3,7 @@
         <ProjectGuid>{DBACE99F-0221-4660-936F-15A30233FA90}</ProjectGuid>
         <MainSource>ModelMuse.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
@@ -2224,6 +2224,63 @@
             <Form>frameScreenObjectTransientS</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Modflow6ModelImporter.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.AdvFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.AtsFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.BuyFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.ChdFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.CncFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.CrossSectionFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.CSubFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.CustomMf6PersistentUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.DisFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.DisuFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.DisvFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.DrnFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.DspFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.EvtFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.ExchangeFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.FmiFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.GhbFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.GncFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.HfbFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.IcFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.ImsFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.IstFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.LakeTableFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.LakFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.LktFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.MawFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.MstFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.MvrFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.MvtFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.MwtFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.NameFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.NpfFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.ObsFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.OcFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.RchFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.RivFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.SfrFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.SftFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.SimulationNameFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.SpcFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.SrcFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.SsmFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.StoFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.TDisFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.TimeArraySeriesFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.TimeSeriesFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.TvkFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.TvsFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.UzfFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.UztFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.VscFileReaderUnit.pas"/>
+        <DCCReference Include="..\MF6InputReader\Mf6.WelFileReaderUnit.pas"/>
+        <DCCReference Include="frmSelectFlowModelUnit.pas">
+            <Form>frmSelectFlowModel</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">

@@ -17,10 +17,12 @@ type
   end;
 
   TTDisDimensions = class(TCustomMf6Persistent)
+  private
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+  protected
+    procedure Initialize; override;
   public
     NPER: Integer;
-    procedure Initialize; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
   TPeriod = class(TObject)
@@ -34,11 +36,15 @@ type
   TTDisPeriodData = class(TCustomMf6Persistent)
   private
     FPeriods: TPeriodList;
+    function GetCount: Integer;
+    function GetPeriod(Index: Integer): TPeriod;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Initialize; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    property Count: Integer read GetCount;
+    property Periods[Index: Integer]: TPeriod read GetPeriod; default;
   end;
 
   TTDis = class(TCustomMf6Persistent)
@@ -52,6 +58,10 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
+    property Options: TTDisOptions read FOptions;
+    property Dimensions: TTDisDimensions read FDimensions;
+    property PeriodData: TTDisPeriodData read FPeriodData;
+    property Ats: TAts read FAts;
   end;
 
 implementation
@@ -236,6 +246,16 @@ begin
   inherited;
 end;
 
+function TTDisPeriodData.GetCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TTDisPeriodData.GetPeriod(Index: Integer): TPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
 procedure TTDisPeriodData.Initialize;
 begin
   inherited;
@@ -310,7 +330,7 @@ begin
   FOptions := TTDisOptions.Create(PackageType);
   FDimensions := TTDisDimensions.Create(PackageType);
   FPeriodData := TTDisPeriodData.Create(PackageType);
-
+  FAts := nil;
   inherited;
 
 end;
