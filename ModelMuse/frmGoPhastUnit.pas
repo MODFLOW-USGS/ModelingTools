@@ -560,6 +560,8 @@ type
     IrrigationTypes1: TMenuItem;
     acImportSurferGridFiles: TAction;
     miMultipleSurferGridFiles: TMenuItem;
+    acImportModflow6Model: TAction;
+    ImportMODFLOW6Model1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -768,6 +770,7 @@ type
     procedure WellsToCsv1Click(Sender: TObject);
     procedure acFarmIrrigationTypesExecute(Sender: TObject);
     procedure acImportSurferGridFilesExecute(Sender: TObject);
+    procedure acImportModflow6ModelExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2181,7 +2184,11 @@ uses
   frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
   frmTimeSeriesUnit, frmIrrigationTypesUnit,
   frmLayersToExportUnit, DataArrayManagerUnit, DataSetNamesUnit,
-  PhastModelInterfaceUnit, frmImportSurferGridFilesUnit;
+  PhastModelInterfaceUnit,
+  {$IFDEF ImportMF6}
+  frmImportModflow6Unit,
+  {$ENDIF}
+  frmImportSurferGridFilesUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -3576,6 +3583,10 @@ begin
 
 {$IFNDEF LinkedRasters}
   FreeAndNil(miLinkedRasters);
+{$ENDIF}
+
+{$IFNDEF ImportMF6}
+  acImportModflow6Model.Visible := False;
 {$ENDIF}
 
   FRunSutra := True;
@@ -14181,6 +14192,12 @@ begin
     PhastModel.ModelMateProjectFileName :=
       ExtractRelativePath(sdSaveDialog.FileName, odModelMate.FileName);
   end;
+end;
+
+procedure TfrmGoPhast.acImportModflow6ModelExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmImportModflow6)
 end;
 
 procedure TfrmGoPhast.acImportSurferGridFilesExecute(Sender: TObject);

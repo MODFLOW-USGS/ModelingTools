@@ -46,7 +46,7 @@ type
     destructor Destroy; override;
   end;
 
-  TDrnTimeItemList = TList<TDrnTimeItem>;
+  TDrnTimeItemList = TObjectList<TDrnTimeItem>;
 
   TDrnPeriod = class(TCustomMf6Persistent)
   private

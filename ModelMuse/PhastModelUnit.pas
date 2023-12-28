@@ -10095,6 +10095,10 @@ const
 //                shapes.
 //    '5.1.1.48' Bug fix: Fixed a bug that could cause an error when assigning
 //                data with objects that have a large number of cells.
+//    '5.1.1.49' Enhancement: Added support for exporting CSV budget files in
+//                MODFLOW 6 models.
+//               Bug fix: Fixed a bug that would cause an error when attempting
+//                to read an empty .Values file from PEST.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10107,7 +10111,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.48';
+  IIModelVersion = '5.1.1.49';
 
 function IModelVersion: string;
 begin

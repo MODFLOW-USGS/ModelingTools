@@ -9953,6 +9953,7 @@ procedure TMf6_SimNameFileWriter.WriteOptions;
 var
   SmsPkg: TSmsPackageSelection;
   HasOptions: Boolean;
+  OC: TModflowOutputControl;
   procedure WriteBegin;
   begin
     if not HasOptions then
@@ -10005,6 +10006,14 @@ begin
       end;
     else
       Assert(False);
+  end;
+
+  OC := Model.ModflowOutputControl;
+  if OC.PrintInputArrays or OC.PrintInputCellLists then
+  begin
+    WriteBegin;
+    WriteString('  PRINT_INPUT');
+    NewLine;
   end;
 
   if HasOptions then

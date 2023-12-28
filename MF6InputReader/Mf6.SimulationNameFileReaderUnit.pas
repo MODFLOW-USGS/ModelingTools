@@ -87,6 +87,7 @@ type
   private
     FExchanges: TExchangeList;
     function GetCount: Integer;
+    function GetExchange(Index: Integer): TExchange;
   protected
     procedure Initialize; override;
   public
@@ -94,6 +95,7 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     property Count: Integer read GetCount;
+    property Items[Index: Integer]: TExchange read GetExchange; default;
   end;
 
   TSolution = class(TObject)
@@ -112,7 +114,10 @@ type
   private
     FSolutionNumber: Integer;
     FSolutions: TSolutionList;
-    Mxiter: Integer;
+    FMxiter: Integer;
+    function GetCount: Integer;
+    function GetSolutions(Index: Integer): TSolution;
+    procedure SetSolutions(Index: Integer; const Value: TSolution);
   protected
     procedure Initialize; override;
   public
@@ -120,6 +125,9 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
+    property Count: Integer read GetCount;
+    property Solutions[Index: Integer]: TSolution read GetSolutions write SetSolutions;
+    property Mxiter: Integer read FMxiter;
   end;
 
   TSolutionGroups = TObjectList<TSolutionGroup>;
@@ -134,6 +142,8 @@ type
     FSolutionGroups: TSolutionGroups;
     FExchangePackages: TPackageList;
     function GetExchanges: TExchanges;
+    function GetSolutionGroup(Index: Integer): TSolutionGroup;
+    function GetSolutionGroupCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -141,6 +151,9 @@ type
     property Models: TModels read FModels;
     property Exchanges: TExchanges read GetExchanges;
     property Timing: TTiming read FTiming;
+    property Options: TSimulationOptions read FSimulationOptions;
+    property SolutionGroupCount: Integer read GetSolutionGroupCount;
+    property SolutionGroups[Index: Integer]: TSolutionGroup read GetSolutionGroup;
   end;
 
 implementation
@@ -177,6 +190,16 @@ end;
 function TMf6Simulation.GetExchanges: TExchanges;
 begin
   result := FExchanges;
+end;
+
+function TMf6Simulation.GetSolutionGroup(Index: Integer): TSolutionGroup;
+begin
+  result := FSolutionGroups[Index];
+end;
+
+function TMf6Simulation.GetSolutionGroupCount: Integer;
+begin
+  result := FSolutionGroups.Count;
 end;
 
 procedure TMf6Simulation.ReadSimulation(NameFile: string);
@@ -722,6 +745,11 @@ begin
   result := FExchanges.Count;
 end;
 
+function TExchanges.GetExchange(Index: Integer): TExchange;
+begin
+  result := FExchanges[Index];
+end;
+
 procedure TExchanges.Initialize;
 begin
   inherited;
@@ -841,11 +869,21 @@ begin
   inherited;
 end;
 
+function TSolutionGroup.GetCount: Integer;
+begin
+  result := FSolutions.Count;
+end;
+
+function TSolutionGroup.GetSolutions(Index: Integer): TSolution;
+begin
+  result := FSolutions[Index];
+end;
+
 procedure TSolutionGroup.Initialize;
 begin
   inherited;
   FSolutions.Clear;
-  Mxiter := 1;
+  FMxiter := 1;
 end;
 
 procedure TSolutionGroup.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -884,7 +922,7 @@ begin
     begin
       if UpperCase(FSplitter[0]) = 'MXITER' then
       begin
-        if not TryStrToInt(FSplitter[1], Mxiter) then
+        if not TryStrToInt(FSplitter[1], FMxiter) then
         begin
           Unhandled.WriteLine('Invalid value for MXITER in solution group in the following line');
           Unhandled.WriteLine(ErrorLine);
@@ -930,6 +968,11 @@ begin
   begin
     FSolutions[SolutionIndex].ReadInput(Unhandled);
   end;
+end;
+
+procedure TSolutionGroup.SetSolutions(Index: Integer; const Value: TSolution);
+begin
+
 end;
 
 { TModel }

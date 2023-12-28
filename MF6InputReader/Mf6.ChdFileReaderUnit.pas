@@ -43,7 +43,7 @@ type
     destructor Destroy; override;
   end;
 
-  TChdTimeItemList = TList<TChdTimeItem>;
+  TChdTimeItemList = TObjectList<TChdTimeItem>;
 
   TChdPeriod = class(TCustomMf6Persistent)
   private

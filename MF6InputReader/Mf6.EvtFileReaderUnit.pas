@@ -53,7 +53,7 @@ type
     destructor Destroy; override;
   end;
 
-  TEvtTimeItemList = TList<TEvtTimeItem>;
+  TEvtTimeItemList = TObjectList<TEvtTimeItem>;
 
   TEvtPeriod = class(TCustomMf6Persistent)
   private

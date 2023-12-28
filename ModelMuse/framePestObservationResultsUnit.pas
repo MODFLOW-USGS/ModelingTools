@@ -147,7 +147,7 @@ implementation
 
 uses
   frmGoPhastUnit, UndoItemsScreenObjects, frmGoToUnit, xygraph,
-  System.Math, Contnrs, xycommon;
+  System.Math, Contnrs, xycommon, System.IOUtils;
 
 type
   TGridCrack = class(TRbwDataGrid4);
@@ -930,8 +930,15 @@ begin
   begin
     Exit;
   end;
-  if FileExists(flnmedHeadObsResults.FileName) then
+  if TFile.Exists(flnmedHeadObsResults.FileName) then
   begin
+    if TFile.GetSize(flnmedHeadObsResults.FileName) = 0 then
+    begin
+      Beep;
+      MessageDlg(Format('%s is empty.',
+        [flnmedHeadObsResults.FileName]), mtWarning, [mbOK], 0);
+      Exit;
+    end;
     FImportResult := FObservations.ReadFromFile(flnmedHeadObsResults.FileName);
     FUndoType := utImport;
   end

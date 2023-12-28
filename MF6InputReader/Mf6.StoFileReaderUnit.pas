@@ -42,6 +42,7 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
   end;
 
   TStoStressPeriodList = TObjectList<TStoStressPeriod>;
@@ -238,8 +239,6 @@ begin
   FGridData := TStoGridData.Create(PackageType);
   FStressPeriods := TStoStressPeriodList.Create;
   TvsPackages := TPackageList.Create;
-  inherited;
-
 end;
 
 destructor TSto.Destroy;

@@ -5,6 +5,12 @@ program Mf6InputReader;
 {$R *.res}
 
 uses
+  FastMM4 in '..\ModelMuse\FastMM4.pas',
+  madExcept,
+  madLinkDisAsm,
+  madListHardware,
+  madListProcesses,
+  madListModules,
   System.SysUtils,
   Vcl.Dialogs,
   System.IOUtils,

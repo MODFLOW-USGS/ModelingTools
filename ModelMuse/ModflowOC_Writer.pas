@@ -393,6 +393,17 @@ begin
       WriteSingleQuoteMF6;
       NewLine
     end;
+
+    if FOutputControl.SaveBudgetCSV then
+    begin
+      CellFlowsName := BaseNameOfFile + '.budget.csv';
+      Model.AddModelOutputFile(CellFlowsName);
+      WriteString('  BUDGETCSV FILEOUT ');
+      WriteSingleQuoteMF6;
+      WriteString(ExtractFileName(CellFlowsName));
+      WriteSingleQuoteMF6;
+      NewLine
+    end;
   end;
 
   case FOutputType of

@@ -46,7 +46,7 @@ type
     destructor Destroy; override;
   end;
 
-  TWelTimeItemList = TList<TWelTimeItem>;
+  TWelTimeItemList = TObjectList<TWelTimeItem>;
 
   TWelPeriod = class(TCustomMf6Persistent)
   private

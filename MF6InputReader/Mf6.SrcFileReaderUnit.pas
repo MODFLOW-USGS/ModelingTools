@@ -43,7 +43,7 @@ type
     destructor Destroy; override;
   end;
 
-  TSrcTimeItemList = TList<TSrcTimeItem>;
+  TSrcTimeItemList = TObjectList<TSrcTimeItem>;
 
   TSrcPeriod = class(TCustomMf6Persistent)
   private

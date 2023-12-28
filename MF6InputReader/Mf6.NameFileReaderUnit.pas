@@ -10,8 +10,8 @@ type
   TCustomNameFileOptions = class(TCustomMf6Persistent)
   private
     ListingFileName: string;
-    PRINT_INPUT: Boolean;
-    PRINT_FLOWS: Boolean;
+    FPRINT_INPUT: Boolean;
+    FPRINT_FLOWS: Boolean;
     SAVE_FLOWS: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure HandleAdditionalSingleOptions(ErrorLine: string;
@@ -20,18 +20,24 @@ type
       Unhandled: TStreamWriter); virtual;
   protected
     procedure Initialize; override;
+  public
+    property PRINT_INPUT: Boolean read FPRINT_INPUT;
+    property PRINT_FLOWS: Boolean read FPRINT_FLOWS;
   end;
 
   TFlowNameFileOptions = class(TCustomNameFileOptions)
   private
-    NEWTON: Boolean;
-    UNDER_RELAXATION: Boolean;
+    FNEWTON: Boolean;
+    FUNDER_RELAXATION: Boolean;
     procedure HandleAdditionalSingleOptions(ErrorLine: string;
       Unhandled: TStreamWriter); override;
     procedure HandleAdditionalDoubleOptions(ErrorLine: string;
       Unhandled: TStreamWriter); override;
   protected
     procedure Initialize; override;
+  public
+    property NEWTON: Boolean read FNEWTON;
+    property UNDER_RELAXATION: Boolean read FUNDER_RELAXATION;
   end;
 
   TTransportNameFileOptions = class(TCustomNameFileOptions)
@@ -42,10 +48,15 @@ type
     FPackages: TPackageList;
     FValidPackageTypes: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetPackage(Index: Integer): TPackage;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Initialize; override;
+  public
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TPackage read GetPackage; default;
   end;
 
   TFlowPackages =class(TCustomPackages)
@@ -75,6 +86,8 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     procedure ReadInput(Unhandled: TStreamWriter); override;
     property Dimensions: TDimensions read FDimensions;
+    property NfOptions: Options read FOptions;
+    property NfPackages: Packages read FPackages;
   end;
 
   TFlowNameFile = TNameFile<TFlowNameFileOptions, TFlowPackages>;
@@ -100,8 +113,8 @@ procedure TCustomNameFileOptions.Initialize;
 begin
   inherited;
   ListingFileName := '';
-  PRINT_INPUT := False;
-  PRINT_FLOWS := False;
+  FPRINT_INPUT := False;
+  FPRINT_FLOWS := False;
   SAVE_FLOWS := False;
 end;
 
@@ -140,11 +153,11 @@ begin
       AValue := FSplitter[0];
       if AValue = 'PRINT_INPUT' then
       begin
-        PRINT_INPUT := True;
+        FPRINT_INPUT := True;
       end
       else if AValue = 'PRINT_FLOWS' then
       begin
-        PRINT_FLOWS := True;
+        FPRINT_FLOWS := True;
       end
       else if AValue = 'SAVE_FLOWS' then
       begin
@@ -205,10 +218,10 @@ begin
   AValue := FSplitter[0];
   if AValue = 'NEWTON' then
   begin
-    NEWTON := True;
+    FNEWTON := True;
     if FSplitter[1] = 'UNDER_RELAXATION' then
     begin
-      UNDER_RELAXATION := True;
+      FUNDER_RELAXATION := True;
     end
     else
     begin
@@ -229,7 +242,7 @@ begin
   AValue := FSplitter[0];
   if AValue = 'NEWTON' then
   begin
-    NEWTON := True;
+    FNEWTON := True;
   end
   else
   begin
@@ -241,8 +254,8 @@ end;
 procedure TFlowNameFileOptions.Initialize;
 begin
   inherited;
-  NEWTON := False;
-  UNDER_RELAXATION := False;
+  FNEWTON := False;
+  FUNDER_RELAXATION := False;
 end;
 
 { TCustomPackages }
@@ -260,6 +273,16 @@ begin
   FValidPackageTypes.Free;
   FPackages.Free;
   inherited;
+end;
+
+function TCustomPackages.GetCount: Integer;
+begin
+  result := FPackages.Count;
+end;
+
+function TCustomPackages.GetPackage(Index: Integer): TPackage;
+begin
+  result := FPackages[Index];
 end;
 
 procedure TCustomPackages.Initialize;

@@ -45,7 +45,7 @@ type
     destructor Destroy; override;
   end;
 
-  TGhbTimeItemList = TList<TGhbTimeItem>;
+  TGhbTimeItemList = TObjectList<TGhbTimeItem>;
 
   TGhbPeriod = class(TCustomMf6Persistent)
   private

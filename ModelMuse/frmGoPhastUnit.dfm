@@ -672,7 +672,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 208
+      Left = 465
       Top = 130
       Width = 212
       Height = 28
@@ -774,7 +774,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 433
+      Left = 208
       Top = 130
       Width = 244
       Height = 28
@@ -1248,6 +1248,9 @@ inherited frmGoPhast: TfrmGoPhast
           HelpContext = 3385
           Hint = 'Create a new model by importing and existing MODFLOW-2005 model'
           OnClick = acFileNewModflowModelExecute
+        end
+        object ImportMODFLOW6Model1: TMenuItem
+          Action = acImportModflow6Model
         end
         object miImportModelMate: TMenuItem
           Action = acImportModelMate
@@ -3765,6 +3768,11 @@ inherited frmGoPhast: TfrmGoPhast
       Caption = 'Multiple Surfer Grid Files...'
       Hint = 'Import objects from multiple SURFER grid files'
       OnExecute = acImportSurferGridFilesExecute
+    end
+    object acImportModflow6Model: TAction
+      Category = 'File'
+      Caption = 'Import MODFLOW 6 Model'
+      OnExecute = acImportModflow6ModelExecute
     end
   end
   object ilDisabledImageList: TImageList

@@ -10,17 +10,26 @@ type
 
   TCustomDisOptions = class(TCustomMf6Persistent)
   private
-    LENGTH_UNITS: string;
-    NOGRB: Boolean;
-    XORIGIN: Extended;
-    YORIGIN: Extended;
-    ANGROT: Extended;
+    FLENGTH_UNITS: string;
+    FNOGRB: Boolean;
+    FXORIGIN: Extended;
+    FYORIGIN: Extended;
+    FANGROT: Extended;
+    ValidUnits: TStringList;
+    function GetLengthUnit: Integer;
   protected
     procedure Initialize; override;
     procedure HandleOption(ErrorLine: string; Unhandled: TStreamWriter);
       virtual;
   public
+    constructor Create(PackageType: string); override;
+    Destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    property LENGTH_UNITS: Integer read GetLengthUnit;
+    property NOGRB: Boolean read FNOGRB;
+    property XORIGIN: Extended read FXORIGIN;
+    property YORIGIN: Extended read FYORIGIN;
+    property ANGROT: Extended read FANGROT;
   end;
 
   TDisOptions = class(TCustomDisOptions);
@@ -36,14 +45,20 @@ type
   TDisGridData = class(TCustomMf6Persistent)
   private
     FDimensions: TDimensions;
-    DELR: TDArray1D;
-    DELC: TDArray1D;
-    TOP: TDArray2D;
-    BOTM: TDArray3D;
-    IDOMAIN: TIArray3D;
+    FDELR: TDArray1D;
+    FDELC: TDArray1D;
+    FTOP: TDArray2D;
+    FBOTM: TDArray3D;
+    FIDOMAIN: TIArray3D;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
     procedure Initialize; override;
+  public
+    property DELR: TDArray1D read FDELR;
+    property DELC: TDArray1D read FDELC;
+    property TOP: TDArray2D read FTOP;
+    property BOTM: TDArray3D read FBOTM;
+    property IDOMAIN: TIArray3D read FIDOMAIN;
   end;
 
   TDis = class(TPackageReader)
@@ -57,6 +72,8 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     property Dimensions: TDimensions read GetDimensions;
+    property Options: TDisOptions read FOptions;
+    property GridData: TDisGridData read FGridData;
   end;
 
 resourcestring
@@ -75,11 +92,11 @@ resourcestring
 
 procedure TCustomDisOptions.Initialize;
 begin
-  LENGTH_UNITS := 'UNKNOWN';
-  NOGRB := False;
-  XORIGIN := 0;
-  YORIGIN := 0;
-  ANGROT := 0;
+  FLENGTH_UNITS := 'UNKNOWN';
+  FNOGRB := False;
+  FXORIGIN := 0;
+  FYORIGIN := 0;
+  FANGROT := 0;
   inherited;
 end;
 
@@ -87,70 +104,58 @@ procedure TCustomDisOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter
 var
   ALine: string;
   ErrorLine: string;
-  ValidUnits: TStringList;
 begin
   Initialize;
-  ValidUnits := TStringList.Create;
+
   try
-    ValidUnits.Add('UNKNOWN');
-    ValidUnits.Add('FEET');
-    ValidUnits.Add('METERS');
-    ValidUnits.Add('CENTIMETERS');
-
-    try
-      while not Stream.EndOfStream do
+    while not Stream.EndOfStream do
+    begin
+      ALine := Stream.ReadLine;
+      RestoreStream(Stream);
+      ErrorLine := ALine;
+      ALine := StripFollowingComments(ALine);
+      if ALine = '' then
       begin
-        ALine := Stream.ReadLine;
-        RestoreStream(Stream);
-        ErrorLine := ALine;
-        ALine := StripFollowingComments(ALine);
-        if ALine = '' then
-        begin
-          Continue;
-        end;
-        if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
-        begin
-          Exit
-        end;
+        Continue;
+      end;
+      if ReadEndOfSection(ALine, ErrorLine, 'OPTIONS', Unhandled) then
+      begin
+        Exit
+      end;
 
-        if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+      if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'OPTIONS') then
+      begin
+        // do nothing
+      end
+      else if FSplitter[0] = 'NOGRB' then
+      begin
+        FNOGRB := True;
+      end
+      else if FSplitter.Count >= 2 then
+      begin
+        if FSplitter[0] = 'LENGTH_UNITS' then
         begin
-          // do nothing
+          FLENGTH_UNITS := FSplitter[1];
         end
-        else if FSplitter[0] = 'NOGRB' then
+        else if FSplitter[0] = 'XORIGIN' then
         begin
-          NOGRB := True;
+          if not TryFortranStrToFloat(FSplitter[1], FXORIGIN) then
+          begin
+            Unhandled.WriteLine(StrUnrecognizedDISOp);
+            Unhandled.WriteLine(ErrorLine);
+          end;
         end
-        else if FSplitter.Count >= 2 then
+        else if FSplitter[0] = 'YORIGIN' then
         begin
-          if FSplitter[0] = 'LENGTH_UNITS' then
+          if not TryFortranStrToFloat(FSplitter[1], FYORIGIN) then
           begin
-            LENGTH_UNITS := FSplitter[1];
-          end
-          else if FSplitter[0] = 'XORIGIN' then
-          begin
-            if not TryFortranStrToFloat(FSplitter[1], XORIGIN) then
-            begin
-              Unhandled.WriteLine(StrUnrecognizedDISOp);
-              Unhandled.WriteLine(ErrorLine);
-            end;
-          end
-          else if FSplitter[0] = 'YORIGIN' then
-          begin
-            if not TryFortranStrToFloat(FSplitter[1], YORIGIN) then
-            begin
-              Unhandled.WriteLine(StrUnrecognizedDISOp);
-              Unhandled.WriteLine(ErrorLine);
-            end;
-          end
-          else if FSplitter[0] = 'ANGROT' then
-          begin
-            if not TryFortranStrToFloat(FSplitter[1], ANGROT) then
-            begin
-              HandleOption(ErrorLine, Unhandled);
-            end;
-          end
-          else
+            Unhandled.WriteLine(StrUnrecognizedDISOp);
+            Unhandled.WriteLine(ErrorLine);
+          end;
+        end
+        else if FSplitter[0] = 'ANGROT' then
+        begin
+          if not TryFortranStrToFloat(FSplitter[1], FANGROT) then
           begin
             HandleOption(ErrorLine, Unhandled);
           end;
@@ -159,15 +164,42 @@ begin
         begin
           HandleOption(ErrorLine, Unhandled);
         end;
-      end;
-    finally
-      if ValidUnits.IndexOf(LENGTH_UNITS) < 0 then
+      end
+      else
       begin
-        Unhandled.WriteLine(Format('Unrecognized length unit "%s".', [LENGTH_UNITS]));
+        HandleOption(ErrorLine, Unhandled);
       end;
     end;
   finally
-    ValidUnits.Free;
+    if ValidUnits.IndexOf(FLENGTH_UNITS) < 0 then
+    begin
+      Unhandled.WriteLine(Format('Unrecognized length unit "%s".', [FLENGTH_UNITS]));
+    end;
+  end;
+end;
+
+constructor TCustomDisOptions.Create(PackageType: string);
+begin
+  inherited;
+  ValidUnits := TStringList.Create;
+  ValidUnits.Add('UNKNOWN');
+  ValidUnits.Add('FEET');
+  ValidUnits.Add('METERS');
+  ValidUnits.Add('CENTIMETERS');
+end;
+
+destructor TCustomDisOptions.Destroy;
+begin
+  ValidUnits.Free;
+  inherited;
+end;
+
+function TCustomDisOptions.GetLengthUnit: Integer;
+begin
+  result := ValidUnits.IndexOf(FLENGTH_UNITS);
+  if result < 0 then
+  begin
+    result := 0;
   end;
 end;
 
@@ -254,11 +286,11 @@ end;
 
 procedure TDisGridData.Initialize;
 begin
-  SetLength(DELR, 0);
-  SetLength(DELC, 0);
-  SetLength(TOP, 0);
-  SetLength(BOTM, 0);
-  SetLength(IDOMAIN, 0);
+  SetLength(FDELR, 0);
+  SetLength(FDELC, 0);
+  SetLength(FTOP, 0);
+  SetLength(FBOTM, 0);
+  SetLength(FIDOMAIN, 0);
   inherited;
 end;
 
@@ -302,7 +334,7 @@ begin
       OneDReader := TDouble1DArrayReader.Create(FDimensions.NCol, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
-        DELR := OneDReader.FData;
+        FDELR := OneDReader.FData;
       finally
         OneDReader.Free;
       end;
@@ -312,7 +344,7 @@ begin
       OneDReader := TDouble1DArrayReader.Create(FDimensions.NRow, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
-        DELC := OneDReader.FData;
+        FDELC := OneDReader.FData;
       finally
         OneDReader.Free;
       end;
@@ -322,7 +354,7 @@ begin
       TwoDReader := TDouble2DArrayReader.Create(FDimensions, FPackageType);
       try
         TwoDReader.Read(Stream, Unhandled);
-        TOP := TwoDReader.FData;
+        FTOP := TwoDReader.FData;
       finally
         TwoDReader.Free;
       end;
@@ -333,7 +365,7 @@ begin
       ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeDReader.Read(Stream, Unhandled);
-        BOTM := ThreeDReader.FData;
+        FBOTM := ThreeDReader.FData;
       finally
         ThreeDReader.Free;
       end;
@@ -344,7 +376,7 @@ begin
       ThreeIReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeIReader.Read(Stream, Unhandled);
-        IDOMAIN := ThreeIReader.FData;
+        FIDOMAIN := ThreeIReader.FData;
       finally
         ThreeIReader.Free;
       end;

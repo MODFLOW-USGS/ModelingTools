@@ -26,7 +26,7 @@ object TTaskHistory
     end
     item
       Name = 'Grid/ Geologic Units'
-      Display = False
+      Display = True
     end
     item
       Name = 'Testing'
@@ -42,11 +42,11 @@ object TTaskHistory
     end
     item
       Name = 'Modflow options'
-      Display = False
+      Display = True
     end
     item
       Name = 'DIS'
-      Display = False
+      Display = True
     end
     item
       Name = 'Error checking'
@@ -32263,5 +32263,14 @@ object TTaskHistory
       Categories.Strings = (
         'Import'
         'MF-2015')
+    end
+    item
+      Date = 45288.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'MF-2015'
+        'Grid/ Geologic Units'
+        'Modflow options'
+        'DIS')
     end>
 end

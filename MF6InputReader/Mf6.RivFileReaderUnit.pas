@@ -46,7 +46,7 @@ type
     destructor Destroy; override;
   end;
 
-  TRivTimeItemList = TList<TRivTimeItem>;
+  TRivTimeItemList = TObjectList<TRivTimeItem>;
 
   TRivPeriod = class(TCustomMf6Persistent)
   private
