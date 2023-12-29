@@ -334,6 +334,7 @@ type
     function IntegerArray(Method: TIntTypeMethod): TOneDIntegerArray;
     function FloatArray(Method: TFloatTypeMethod): TOneDRealArray;
   public
+    function Add: TLayerGroup;
     function Last: TLayerGroup;
     function NonSimulatedLayersPresent: boolean;
     procedure AssignAssociatedInputDataSets;
@@ -867,6 +868,11 @@ begin
 end;
 
 { TLayerStructure }
+function TLayerStructure.Add: TLayerGroup;
+begin
+  result := inherited Add as TLayerGroup;
+end;
+
 procedure TLayerStructure.Assign(Source: TPersistent);
 var
   PhastModel: TPhastModel;

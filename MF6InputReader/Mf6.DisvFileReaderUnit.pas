@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections, Mf6.AtsFileReaderUnit, Mf6.DisFileReaderUnit;
+  System.Generics.Collections, Mf6.AtsFileReaderUnit, Mf6.DisFileReaderUnit,
+  System.Generics.Defaults;
 
 type
   TDisvOptions = class(TCustomDisOptions);
@@ -23,13 +24,17 @@ type
   TDisvGridData = class(TCustomMf6Persistent)
   private
     FDimensions: TDimensions;
-    TOP: TDArray2D;
-    BOTM: TDArray3D;
-    IDOMAIN: TIArray3D;
+    FTOP: TDArray2D;
+    FBOTM: TDArray3D;
+    FIDOMAIN: TIArray3D;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
   protected
     procedure Initialize; override;
+  public
+    property TOP: TDArray2D read FTOP;
+    property BOTM: TDArray3D read FBOTM;
+    property IDOMAIN: TIArray3D read FIDOMAIN;
   end;
 
   TVertex = record
@@ -44,12 +49,16 @@ type
   private
     FNVERT: Integer;
     FVerticies: TVertexList;
+    function GetCount: Integer;
+    function GetVertex(Index: Integer): TVertex;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; NVERT: Integer);
+    property Count: Integer read GetCount;
+    property Vertices[Index: Integer]: TVertex read GetVertex; default;
   end;
 
   TDisvVertices = class(TCustomVertices);
@@ -67,12 +76,16 @@ type
   TCustomCells = class(TCustomMf6Persistent)
   private
     FCells: TDisvCellList;
+    function GetCell(Index: Integer): TDisvCell;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TDisvCell read GetCell; default;
   end;
 
   TDisvCells = class(TCustomCells);
@@ -90,6 +103,10 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     property Dimensions: TDimensions read GetDimensions;
+    property Options: TDisvOptions read FOptions;
+    property GridData: TDisvGridData read FGridData;
+    property Verticies: TDisvVertices read FVerticies;
+    property Cells: TDisvCells read FCells;
   end;
 
 implementation
@@ -190,9 +207,9 @@ end;
 procedure TDisvGridData.Initialize;
 begin
   inherited;
-  SetLength(TOP,0);
-  SetLength(BOTM,0);
-  SetLength(IDOMAIN,0);
+  SetLength(FTOP,0);
+  SetLength(FBOTM,0);
+  SetLength(FIDOMAIN,0);
 end;
 
 procedure TDisvGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
@@ -234,7 +251,7 @@ begin
       TwoDReader := TDouble2DArrayReader.Create(FDimensions, FPackageType);
       try
         TwoDReader.Read(Stream, Unhandled);
-        TOP := TwoDReader.FData;
+        FTOP := TwoDReader.FData;
       finally
         TwoDReader.Free;
       end;
@@ -245,7 +262,7 @@ begin
       ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeDReader.Read(Stream, Unhandled);
-        BOTM := ThreeDReader.FData;
+        FBOTM := ThreeDReader.FData;
       finally
         ThreeDReader.Free;
       end;
@@ -256,7 +273,7 @@ begin
       ThreeIReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeIReader.Read(Stream, Unhandled);
-        IDOMAIN := ThreeIReader.FData;
+        FIDOMAIN := ThreeIReader.FData;
       finally
         ThreeIReader.Free;
       end;
@@ -281,6 +298,16 @@ destructor TCustomVertices.Destroy;
 begin
   FVerticies.Free;
   inherited;
+end;
+
+function TCustomVertices.GetCount: Integer;
+begin
+  result := FVerticies.Count;
+end;
+
+function TCustomVertices.GetVertex(Index: Integer): TVertex;
+begin
+  result := FVerticies[Index];
 end;
 
 procedure TCustomVertices.Initialize;
@@ -315,6 +342,13 @@ begin
       SectionName := 'VERTICES';
       if ReadEndOfSection(ALine, ErrorLine, SectionName, Unhandled) then
       begin
+        FVerticies.Sort(
+          TComparer<TVertex>.Construct(
+            function(const Left, Right: TVertex): Integer
+            begin
+              Result := Left.iv - Right.iv;
+            end
+          ));
         Exit;
       end;
 
@@ -359,6 +393,16 @@ begin
   inherited;
 end;
 
+function TCustomCells.GetCell(Index: Integer): TDisvCell;
+begin
+  result := FCells[Index];
+end;
+
+function TCustomCells.GetCount: Integer;
+begin
+  result := FCells.Count;
+end;
+
 procedure TCustomCells.Initialize;
 begin
   inherited;
@@ -389,6 +433,13 @@ begin
     SectionName := 'CELL2D';
     if ReadEndOfSection(ALine, ErrorLine, SectionName, Unhandled) then
     begin
+      FCells.Sort(
+        TComparer<TDisvCell>.Construct(
+          function(const Left, Right: TDisvCell): Integer
+          begin
+            Result := Left.icell2d - Right.icell2d;
+          end
+        ));
       Exit;
     end;
 

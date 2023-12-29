@@ -9,11 +9,13 @@ uses
 type
   TObsOptions = class(TCustomMf6Persistent)
   private
-    Digits: Integer;
+    FDigits: Integer;
     PrintInput: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property Digits: Integer read FDigits;
   end;
 
   TIdType = (itCell, itNumber, itFloat, itName, itAbsent);
@@ -42,11 +44,16 @@ type
     FOutputFileName: string;
     FBinary: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
+    function GetCount: Integer;
+    function GetObservation(Index: Integer): TObservation;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Binary: Boolean read FBinary;
+    property Count: Integer read GetCount;
+    property Observations[Index: Integer]: TObservation read GetObservation; default;
   end;
 
   TObsFileList = TObjectList<TObsFile>;
@@ -55,10 +62,15 @@ type
   private
     FOptions: TObsOptions;
     FObsFiles: TObsFileList;
+    function GetFileCount: Integer;
+    function GetObsFile(Index: Integer): TObsFile;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TObsOptions read FOptions;
+    property FileCount: Integer read GetFileCount;
+    property ObsFiles[Index: Integer]: TObsFile read GetObsFile; default;
   end;
 
 implementation
@@ -74,7 +86,7 @@ resourcestring
 
 procedure TObsOptions.Initialize;
 begin
-  Digits := -1;
+  FDigits := -1;
   PrintInput := False;
   inherited;
 end;
@@ -109,7 +121,7 @@ begin
     end
     else if (FSplitter[0] = 'DIGITS') and (FSplitter.Count >= 2) then
     begin
-      if not TryStrToInt(FSplitter[1], Digits) then
+      if not TryStrToInt(FSplitter[1], FDigits) then
       begin
         Unhandled.WriteLine('Unrecogized Observation Utility option in the following line.');
         Unhandled.WriteLine(ErrorLine);
@@ -141,6 +153,16 @@ destructor TObsFile.Destroy;
 begin
   FObservations.Free;
   inherited;
+end;
+
+function TObsFile.GetCount: Integer;
+begin
+  result := FObservations.Count;
+end;
+
+function TObsFile.GetObservation(Index: Integer): TObservation;
+begin
+  result := FObservations[Index];
 end;
 
 procedure TObsFile.Initialize;
@@ -1106,6 +1128,16 @@ begin
   FOptions.Free;
   FObsFiles.Free;
   inherited;
+end;
+
+function TObs.GetFileCount: Integer;
+begin
+  result := FObsFiles.Count;
+end;
+
+function TObs.GetObsFile(Index: Integer): TObsFile;
+begin
+  result := FObsFiles[Index];
 end;
 
 procedure TObs.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

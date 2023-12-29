@@ -9,13 +9,14 @@ uses
 type
   TIcGridData = class(TCustomMf6Persistent)
   private
-    STRT: TDArray3D;
+    FSTRT: TDArray3D;
     FDimensions: TDimensions;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
+    property STRT: TDArray3D read FSTRT;
   end;
 
   TIc = class(TDimensionedPackageReader)
@@ -25,7 +26,7 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
-
+    property GridData: TIcGridData read FGridData;
   end;
 
 implementation
@@ -44,7 +45,7 @@ end;
 
 procedure TIcGridData.Initialize;
 begin
-  SetLength(STRT, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FSTRT, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
   inherited;
 end;
 
@@ -86,7 +87,7 @@ begin
       ThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         ThreeDReader.Read(Stream, Unhandled);
-        STRT := ThreeDReader.FData;
+        FSTRT := ThreeDReader.FData;
       finally
         ThreeDReader.Free;
       end;

@@ -154,6 +154,9 @@ type
   TIArray2D = TArray<TIArray1D>;
   TIArray3D = TArray<TIArray2D>;
 
+  TBArray1D = TArray<Boolean>;
+  TBArray2D = TArray<TBArray1D>;
+
   TArrayItem = record
     value: TDArray2D;
     TimeArraySeries: string;

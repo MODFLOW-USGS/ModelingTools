@@ -23,6 +23,7 @@ type
       ARow: Integer);
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
+    procedure frameTransportNameFilesGridExit(Sender: TObject);
   private
     procedure Initialize;
     { Private declarations }
@@ -100,6 +101,16 @@ begin
   if odSimFiles.Execute then
   begin
     frameTransportNameFiles.Grid.Cells[ACol, ARow] := odSimFiles.Files.Text;
+  end;
+end;
+
+procedure TfrmImportModflow6.frameTransportNameFilesGridExit(Sender: TObject);
+begin
+  inherited;
+  if (frameTransportNameFiles.seNumber.AsInteger = 1)
+    and (frameTransportNameFiles.Grid.Cells[0,1] = '') then
+  begin
+    frameTransportNameFiles.seNumber.AsInteger := 0;
   end;
 end;
 

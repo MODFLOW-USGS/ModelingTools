@@ -2,8 +2,8 @@ inherited frmImportModflow6: TfrmImportModflow6
   Caption = 'frmImportModflow6'
   ClientHeight = 345
   ClientWidth = 633
-  ExplicitWidth = 649
-  ExplicitHeight = 384
+  ExplicitWidth = 645
+  ExplicitHeight = 383
   TextHeight = 18
   inline frameTransportNameFiles: TframeGrid
     Left = 0
@@ -12,15 +12,14 @@ inherited frmImportModflow6: TfrmImportModflow6
     Height = 236
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 64
-    ExplicitWidth = 617
-    ExplicitHeight = 265
+    ExplicitTop = 68
+    ExplicitWidth = 629
+    ExplicitHeight = 235
     inherited Panel: TPanel
       Top = 195
       Width = 633
-      ExplicitTop = 195
-      ExplicitWidth = 633
+      ExplicitTop = 194
+      ExplicitWidth = 629
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -39,13 +38,18 @@ inherited frmImportModflow6: TfrmImportModflow6
         Left = 454
         ExplicitLeft = 454
       end
+      inherited seNumber: TJvSpinEdit
+        Height = 26
+        ExplicitHeight = 26
+      end
     end
     inherited Grid: TRbwDataGrid4
       Width = 633
       Height = 195
+      OnExit = frameTransportNameFilesGridExit
       OnButtonClick = frameTransportNameFilesGridButtonClick
-      ExplicitWidth = 633
-      ExplicitHeight = 195
+      ExplicitWidth = 629
+      ExplicitHeight = 194
       ColWidths = (
         615)
     end
@@ -57,7 +61,7 @@ inherited frmImportModflow6: TfrmImportModflow6
     Height = 68
     Align = alTop
     TabOrder = 1
-    ExplicitTop = 472
+    ExplicitWidth = 629
     DesignSize = (
       633
       68)
@@ -77,6 +81,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       Text = ''
+      ExplicitWidth = 613
     end
   end
   object pnlBottom: TPanel
@@ -86,8 +91,8 @@ inherited frmImportModflow6: TfrmImportModflow6
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 360
-    ExplicitWidth = 596
+    ExplicitTop = 303
+    ExplicitWidth = 629
     DesignSize = (
       633
       41)
@@ -100,7 +105,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 324
+      ExplicitLeft = 353
     end
     object btnOK: TBitBtn
       Left = 445
@@ -112,7 +117,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 412
+      ExplicitLeft = 441
     end
     object btnCancel: TBitBtn
       Left = 533
@@ -123,7 +128,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 500
+      ExplicitLeft = 529
     end
   end
   object odSimFiles: TOpenDialog

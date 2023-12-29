@@ -8,8 +8,8 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 403
   ClientWidth = 739
   OnClose = FormClose
-  ExplicitWidth = 755
-  ExplicitHeight = 442
+  ExplicitWidth = 751
+  ExplicitHeight = 441
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -20,11 +20,13 @@ inherited frmStartUp: TfrmStartUp
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 355
+    ExplicitWidth = 735
     DesignSize = (
       739
       47)
     object btnNext: TBitBtn
-      Left = 611
+      Left = 607
       Top = 6
       Width = 86
       Height = 33
@@ -47,9 +49,10 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
+      ExplicitLeft = 603
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 424
+      Left = 420
       Top = 6
       Width = 100
       Height = 33
@@ -60,9 +63,10 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
+      ExplicitLeft = 416
     end
     object btnHelp: TBitBtn
-      Left = 530
+      Left = 526
       Top = 6
       Width = 75
       Height = 33
@@ -72,6 +76,7 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 522
     end
   end
   object pcStartup: TPageControl
@@ -85,6 +90,8 @@ inherited frmStartUp: TfrmStartUp
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
+    ExplicitWidth = 735
+    ExplicitHeight = 355
     object tabModelChoice: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Start_Up_Dialog_Box'
@@ -537,9 +544,9 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 487
+          Left = 491
           Top = 20
-          Width = 242
+          Width = 238
           Height = 260
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
@@ -696,21 +703,21 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 264
+        Width = 260
         Height = 291
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
         ExplicitLeft = 464
         ExplicitTop = 29
-        ExplicitWidth = 264
-        ExplicitHeight = 291
+        ExplicitWidth = 256
+        ExplicitHeight = 290
         inherited Panel: TPanel
           Top = 226
-          Width = 264
+          Width = 260
           Height = 65
-          ExplicitTop = 226
-          ExplicitWidth = 225
+          ExplicitTop = 225
+          ExplicitWidth = 256
           ExplicitHeight = 65
           inherited lbNumber: TLabel
             Width = 161
@@ -734,7 +741,7 @@ inherited frmStartUp: TfrmStartUp
             ExplicitTop = 38
           end
           inherited sbDelete: TSpeedButton
-            Left = 57
+            Left = 56
             Top = 38
             OnClick = frameModelLayerssbDeleteClick
             ExplicitLeft = 66
@@ -748,7 +755,7 @@ inherited frmStartUp: TfrmStartUp
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 264
+          Width = 260
           Height = 226
           ColCount = 2
           RowCount = 5
@@ -803,8 +810,8 @@ inherited frmStartUp: TfrmStartUp
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 225
-          ExplicitHeight = 226
+          ExplicitWidth = 256
+          ExplicitHeight = 225
           ColWidths = (
             64
             64)
@@ -949,7 +956,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 186
+        Width = 182
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -959,6 +966,7 @@ inherited frmStartUp: TfrmStartUp
           'Saturated'
           'Unsaturated')
         TabOrder = 3
+        ExplicitWidth = 178
       end
     end
     object tabInitialGridFootprint: TTabSheet

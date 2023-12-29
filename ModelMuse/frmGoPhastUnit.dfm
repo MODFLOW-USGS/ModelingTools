@@ -3771,7 +3771,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acImportModflow6Model: TAction
       Category = 'File'
-      Caption = 'Import MODFLOW 6 Model'
+      Caption = 'MODFLOW 6 Model'
       OnExecute = acImportModflow6ModelExecute
     end
   end

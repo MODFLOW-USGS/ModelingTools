@@ -16,8 +16,19 @@ type
     FConcentrationFile: string;
     FConcentrationPrintFormat: TPrintFormat;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GeConcentrationFile: Boolean;
+    function GetBudgetCsvFile: Boolean;
+    function GetBudgetFile: Boolean;
+    function GetHeadFile: Boolean;
   protected
     procedure Initialize; override;
+  public
+    property BudgetFile: Boolean read GetBudgetFile;
+    property BudgetCsvFile: Boolean read GetBudgetCsvFile;
+    property HeadFile: Boolean read GetHeadFile;
+    property HeadPrintFormat: TPrintFormat read FHeadPrintFormat;
+    property ConcentrationFile: Boolean read GeConcentrationFile;
+    property ConcentrationPrintFormat: TPrintFormat read FConcentrationPrintFormat;
   end;
 
   TPrintSaveOption = (psoAll, psoFirst, psoLast, psoFrequency, psoStep, psoUndefined);
@@ -58,6 +69,7 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TOcOptions read FOptions;
   end;
 
 
@@ -69,6 +81,26 @@ resourcestring
   '.';
 
 { TOcOptions }
+
+function TOcOptions.GeConcentrationFile: Boolean;
+begin
+  result := FConcentrationFile <> ''
+end;
+
+function TOcOptions.GetBudgetCsvFile: Boolean;
+begin
+  result := FBudgetCsvFile <> ''
+end;
+
+function TOcOptions.GetBudgetFile: Boolean;
+begin
+  result := FBudgetFile <> ''
+end;
+
+function TOcOptions.GetHeadFile: Boolean;
+begin
+  result := FHeadFile <> ''
+end;
 
 procedure TOcOptions.Initialize;
 begin
