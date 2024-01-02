@@ -445,16 +445,22 @@ Type
     // specified in the model options. See @link(TModflowOptions.UnderRelaxationMF6).
     property ApplyHeadDampening: boolean read FApplyHeadDampening
       write SetApplyHeadDampening stored False;
+      // XT3D
     property UseXT3D: boolean read FUseXT3D write SetUseXT3D;
+    // RHS
     property Xt3dOnRightHandSide: Boolean read FXt3dOnRightHandSide
       write SetXt3dOnRightHandSide;
+      // SAVE_SPECIFIC_DISCHARGE
     property SaveSpecificDischarge: Boolean read FSaveSpecificDischarge
       write SetSaveSpecificDischarge;
+      // SAVE_SATURATION
+    property SaveSaturation: Boolean read FSaveSaturation write SetSaveSaturation;
+      // K22OVERK
     property UseHorizontalAnisotropy: Boolean read FUseHorizontalAnisotropy
       write SetUseHorizontalAnisotropy;
+      // K33OVERK
     property UseVerticalAnisotropy: Boolean read FUseVerticalAnisotropy
       write SetUseVerticalAnisotropy;
-    property SaveSaturation: Boolean read FSaveSaturation write SetSaveSaturation;
   end;
 
   TStorageChoice = (scSpecificStorage, scStorageCoefficient);

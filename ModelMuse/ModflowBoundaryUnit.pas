@@ -109,7 +109,7 @@ type
     // @classname and in AnotherItem.
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function BoundaryFormulaCount: integer; virtual; abstract;
-    function NonBlankFormulas: boolean;
+    function NonBlankFormulas: boolean; virtual;
     procedure RemoveSubscription(Sender: TObject; const AName: string);
     procedure RestoreSubscription(Sender: TObject; const AName: string);
     function CreateFormulaObject(Orientation:
@@ -348,6 +348,7 @@ type
     // @seealso(GetTimeList)
     // @seealso(TimeLists)
     FTimeListLink: TTimeListModelLinkList;
+    FEmptyFormulaOK: Boolean;
 
     // See @link(Boundaries).
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -472,6 +473,7 @@ type
       AModel: TBaseModel): TCustomBoundaryStorage;
     function GetItemByStartTime(StartTime: Double): TCustomModflowBoundaryItem;
     function GetItemContainingTime(Time: Double): TCustomModflowBoundaryItem;
+    property EmptyFormulaOK: Boolean Read FEmptyFormulaOK write FEmptyFormulaOK;
   published
     // @name is the name of the @link(TModflowTransientListParameter)
     // (if any) associated with this @classname.
@@ -1436,6 +1438,7 @@ constructor TCustomMF_BoundColl.Create(Boundary: TModflowScreenObjectProperty;
   Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
   inherited ;
+  FEmptyFormulaOK := False;
   FTimeListLink:= TTimeListModelLinkList.Create(self);
   FBoundaries:= TBoundaryModelLinkList.Create;
 end;
@@ -2388,10 +2391,12 @@ begin
 end;
 
 procedure TModflowBoundary.EvaluateListBoundaries(AModel: TBaseModel);
+var
+  ListBoundary: TCustomListArrayBoundColl;
 begin
   Mf6TimeSeriesNames.Clear;
-  (Values as TCustomListArrayBoundColl).
-    EvaluateListBoundaries(AModel);
+  ListBoundary := Values as TCustomListArrayBoundColl;
+  ListBoundary.EvaluateListBoundaries(AModel);
 end;
 
 procedure TModflowBoundary.InvalidateDisplay;
@@ -3786,11 +3791,11 @@ begin
         AScreenObject.Name, AScreenObject)
     end;
 
-  if not FSectionDuplicatesAllowed then
-  begin
-    EliminateDuplicateCells(AScreenObject, LocalModel, CellList,
-      EliminateIndicies, FListDuplicatesAllowed, AllowInactiveMf6Cells);
-  end;
+    if not FSectionDuplicatesAllowed then
+    begin
+      EliminateDuplicateCells(AScreenObject, LocalModel, CellList,
+        EliminateIndicies, FListDuplicatesAllowed, AllowInactiveMf6Cells);
+    end;
 
     ClearBoundaries(AModel);
 
@@ -4026,59 +4031,70 @@ begin
           end;
         end;
 
-        if (TimeSeries <> nil) or (DynamicTimeSeries <> nil) then
+        if (TimeSeries <> nil) or (DynamicTimeSeries <> nil)
+          and (Formula <> '') then
         begin
           Formula := '1.';
         end;
 
-        ErrorFormula := Formula;
-        try
-          Compiler.Compile(Formula)
-        except on E: ERbwParserError do
+        if EmptyFormulaOK and (Formula = '') then
+        begin
+          Expression := nil;
+        end
+        else
+        begin
+          ErrorFormula := Formula;
+          try
+            Compiler.Compile(Formula)
+          except on E: ERbwParserError do
+            begin
+              frmFormulaErrors.AddFormulaError(AScreenObject.Name, '',
+                ErrorFormula, E.Message);
+              Formula := '0';
+              Compiler.Compile(Formula);
+              // send error message
+              AnItem.BoundaryFormula[BoundaryFunctionIndex] := Formula;
+            end;
+          end;
+          Expression := Compiler.CurrentExpression;
+          if Expression = nil then
+          begin
+            Formula := '0';
+            Compiler.Compile(Formula);
+            Expression := Compiler.CurrentExpression;
+          end;
+          OKTypes := OkListDataTypes(BoundaryFunctionIndex);
+          if not (Expression.ResultType in OKTypes) then
           begin
             frmFormulaErrors.AddFormulaError(AScreenObject.Name, '',
-              ErrorFormula, E.Message);
-            Formula := '0';
+              ErrorFormula, StrInvalidResultType);
+            if (rdtInteger in OKTypes) or (rdtDouble in OKTypes) then
+            begin
+              Formula := '0';
+            end
+            else if rdtBoolean in OKTypes then
+            begin
+              Formula := 'False';
+            end
+            else if rdtString in OKTypes then
+            begin
+              Formula := '""';
+            end;
+
             Compiler.Compile(Formula);
             // send error message
             AnItem.BoundaryFormula[BoundaryFunctionIndex] := Formula;
+            Expression := Compiler.CurrentExpression;
           end;
-        end;
-        Expression := Compiler.CurrentExpression;
-        if Expression = nil then
-        begin
-          Formula := '0';
-          Compiler.Compile(Formula);
-          Expression := Compiler.CurrentExpression;
-        end;
-        OKTypes := OkListDataTypes(BoundaryFunctionIndex);
-        if not (Expression.ResultType in OKTypes) then
-        begin
-          frmFormulaErrors.AddFormulaError(AScreenObject.Name, '',
-            ErrorFormula, StrInvalidResultType);
-          if (rdtInteger in OKTypes) or (rdtDouble in OKTypes) then
-          begin
-            Formula := '0';
-          end
-          else if rdtBoolean in OKTypes then
-          begin
-            Formula := 'False';
-          end
-          else if rdtString in OKTypes then
-          begin
-            Formula := '""';
-          end;
-
-          Compiler.Compile(Formula);
-          // send error message
-          AnItem.BoundaryFormula[BoundaryFunctionIndex] := Formula;
-          Expression := Compiler.CurrentExpression;
         end;
 
         Variables := TList.Create;
         DataSets := TList.Create;
         try
-          UsedVariables.Assign(Expression.VariablesUsed);
+          if Expression <> nil then
+          begin
+            UsedVariables.Assign(Expression.VariablesUsed);
+          end;
           if (DynamicTimeSeries <> nil) then
           begin
             UsedVariables.AddStrings(DynamicTimeSeries.UsesList);

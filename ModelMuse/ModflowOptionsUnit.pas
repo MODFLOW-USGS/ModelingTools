@@ -119,10 +119,14 @@ Type
   published
     procedure Assign(Source: TPersistent); override;
     constructor Create(InvalidateModelEvent: TNotifyEvent);
+    // REWET
     property WettingActive: boolean read FWettingActive write SetWettingActive;
+    // WETFCT
     property WettingFactor: real read FWettingFactor write SetWettingFactor;
+    // IWETIT
     property WettingIterations: integer read FWettingIterations
       write SetWettingIterations default 1;
+      // IHDWET
     property WettingEquation: integer read FWettingEquation write SetWettingEquation;
   end;
 

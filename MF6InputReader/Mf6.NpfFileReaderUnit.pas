@@ -17,20 +17,20 @@ type
 
   TNpfOptions = class(TCustomMf6Persistent)
   private
-    SAVE_FLOWS: Boolean;
-    PRINT_FLOWS: Boolean;
-    ALTERNATIVE_CELL_AVERAGING: string;
-    THICKSTRT: Boolean;
-    VARIABLECV: Boolean;
-    DEWATERED: Boolean;
-    PERCHED: Boolean;
-    REWET: TRewet;
-    XT3D: Boolean;
-    RHS: Boolean;
-    SAVE_SPECIFIC_DISCHARGE: Boolean;
-    SAVE_SATURATION: Boolean;
-    K22OVERK: Boolean;
-    K33OVERK: Boolean;
+    FSAVE_FLOWS: Boolean;
+    FPRINT_FLOWS: Boolean;
+    FALTERNATIVE_CELL_AVERAGING: string;
+    FTHICKSTRT: Boolean;
+    FVARIABLECV: Boolean;
+    FDEWATERED: Boolean;
+    FPERCHED: Boolean;
+    FREWET: TRewet;
+    FXT3D: Boolean;
+    FRHS: Boolean;
+    FSAVE_SPECIFIC_DISCHARGE: Boolean;
+    FSAVE_SATURATION: Boolean;
+    FK22OVERK: Boolean;
+    FK33OVERK: Boolean;
     TVK6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
@@ -38,35 +38,63 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property SAVE_FLOWS: Boolean read FSAVE_FLOWS;
+    property PRINT_FLOWS: Boolean read FPRINT_FLOWS;
+    property ALTERNATIVE_CELL_AVERAGING: string read FALTERNATIVE_CELL_AVERAGING;
+    property THICKSTRT: Boolean read FTHICKSTRT;
+    property VARIABLECV: Boolean read FVARIABLECV;
+    property DEWATERED: Boolean read FDEWATERED;
+    property PERCHED: Boolean read FPERCHED;
+    property REWET: TRewet read FREWET;
+    property XT3D: Boolean read FXT3D;
+    property RHS: Boolean read FRHS;
+    property SAVE_SPECIFIC_DISCHARGE: Boolean read FSAVE_SPECIFIC_DISCHARGE;
+    property SAVE_SATURATION: Boolean read FSAVE_SATURATION;
+    property K22OVERK: Boolean read FK22OVERK;
+    property K33OVERK: Boolean read FK33OVERK;
   end;
 
   TNpfGridData = class(TCustomMf6Persistent)
   private
-    ICELLTYPE: TIArray3D;
-    K: TDArray3D;
-    K22: TDArray3D;
-    K33: TDArray3D;
-    ANGLE1: TDArray3D;
-    ANGLE2: TDArray3D;
-    ANGLE3: TDArray3D;
-    WETDRY: TDArray3D;
+    FICELLTYPE: TIArray3D;
+    FK: TDArray3D;
+    FK22: TDArray3D;
+    FK33: TDArray3D;
+    FANGLE1: TDArray3D;
+    FANGLE2: TDArray3D;
+    FANGLE3: TDArray3D;
+    FWETDRY: TDArray3D;
     FDimensions: TDimensions;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
+    property ICELLTYPE: TIArray3D read FICELLTYPE;
+    property K: TDArray3D read FK;
+    property K22: TDArray3D read FK22;
+    property K33: TDArray3D read FK33;
+    property ANGLE1: TDArray3D read FANGLE1;
+    property ANGLE2: TDArray3D read FANGLE2;
+    property ANGLE3: TDArray3D read FANGLE3;
+    property WETDRY: TDArray3D read FWETDRY;
   end;
 
   TNpf = class(TDimensionedPackageReader)
   private
     FOptions: TNpfOptions;
     FGridData: TNpfGridData;
-    TvkPackages: TPackageList;
+    FTvkPackages: TPackageList;
+    function GetCount: Integer;
+    function GetTvk(Index: Integer): TPackage;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TNpfOptions read FOptions;
+    property GridData: TNpfGridData read FGridData;
+    property Count: Integer read GetCount;
+    property TvkPackages[Index: Integer]: TPackage read GetTvk; default;
   end;
 
 implementation
@@ -102,20 +130,20 @@ end;
 procedure TNpfOptions.Initialize;
 begin
   inherited;
-  SAVE_FLOWS := False;
-  PRINT_FLOWS := False;
-  ALTERNATIVE_CELL_AVERAGING := '';
-  THICKSTRT := False;
-  VARIABLECV := False;
-  DEWATERED := False;
-  PERCHED := False;
-  REWET.Initialize;
-  XT3D := False;
-  RHS := False;
-  SAVE_SPECIFIC_DISCHARGE := False;
-  SAVE_SATURATION := False;
-  K22OVERK := False;
-  K33OVERK := False;
+  FSAVE_FLOWS := False;
+  FPRINT_FLOWS := False;
+  FALTERNATIVE_CELL_AVERAGING := '';
+  FTHICKSTRT := False;
+  FVARIABLECV := False;
+  FDEWATERED := False;
+  FPERCHED := False;
+  FREWET.Initialize;
+  FXT3D := False;
+  FRHS := False;
+  FSAVE_SPECIFIC_DISCHARGE := False;
+  FSAVE_SATURATION := False;
+  FK22OVERK := False;
+  FK33OVERK := False;
   TVK6_FileNames.Clear;
 
 end;
@@ -150,67 +178,67 @@ begin
     end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
-      SAVE_FLOWS := True;
+      FSAVE_FLOWS := True;
     end
     else if FSplitter[0] = 'PRINT_FLOWS' then
     begin
-      PRINT_FLOWS := True;
+      FPRINT_FLOWS := True;
     end
     else if (FSplitter[0] = 'ALTERNATIVE_CELL_AVERAGING') and (FSplitter.Count >= 2) then
     begin
-      ALTERNATIVE_CELL_AVERAGING := FSplitter[1];
+      FALTERNATIVE_CELL_AVERAGING := FSplitter[1];
     end
     else if (FSplitter[0] = 'THICKSTRT') then
     begin
-      THICKSTRT := True;
+      FTHICKSTRT := True;
     end
     else if (FSplitter[0] = 'VARIABLECV') then
     begin
-      VARIABLECV := True;
+      FVARIABLECV := True;
       if (FSplitter.Count >= 2) then
       begin
-        DEWATERED := (FSplitter[1] = 'DEWATERED')
+        FDEWATERED := (FSplitter[1] = 'DEWATERED')
       end;
     end
     else if (FSplitter[0] = 'PERCHED') then
     begin
-      PERCHED := True;
+      FPERCHED := True;
     end
     else if (FSplitter[0] = 'REWET')
       and (FSplitter.Count >= 7)
       and (FSplitter[1] >= 'WETFCT')
       and (FSplitter[3] >= 'IWETIT')
       and (FSplitter[5] >= 'IHDWET')
-      and TryFortranStrToFloat(FSplitter[2], REWET.WETFCT)
-      and TryStrToInt(FSplitter[4], REWET.IWETIT)
-      and TryStrToInt(FSplitter[6], REWET.IHDWET)
+      and TryFortranStrToFloat(FSplitter[2], FREWET.WETFCT)
+      and TryStrToInt(FSplitter[4], FREWET.IWETIT)
+      and TryStrToInt(FSplitter[6], FREWET.IHDWET)
       then
     begin
-      REWET.Used := True;
+      FREWET.Used := True;
     end
     else if (FSplitter[0] = 'XT3D') then
     begin
-      XT3D := True;
+      FXT3D := True;
       if (FSplitter.Count >= 2) then
       begin
-        RHS := (FSplitter[1] = 'RHS')
+        FRHS := (FSplitter[1] = 'RHS')
       end;
     end
     else if (FSplitter[0] = 'SAVE_SPECIFIC_DISCHARGE') then
     begin
-      SAVE_SPECIFIC_DISCHARGE := True;
+      FSAVE_SPECIFIC_DISCHARGE := True;
     end
     else if (FSplitter[0] = 'SAVE_SATURATION') then
     begin
-      SAVE_SATURATION := True;
+      FSAVE_SATURATION := True;
     end
     else if (FSplitter[0] = 'K22OVERK') then
     begin
-      K22OVERK := True;
+      FK22OVERK := True;
     end
     else if (FSplitter[0] = 'K33OVERK') then
     begin
-      K33OVERK := True;
+      FK33OVERK := True;
     end
     else if (FSplitter[0] = 'TVK6')
       and (FSplitter.Count >= 3)
@@ -241,14 +269,14 @@ end;
 
 procedure TNpfGridData.Initialize;
 begin
-  SetLength(ICELLTYPE, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(K, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(K22, 0);
-  SetLength(K33, 0);
-  SetLength(ANGLE1, 0);
-  SetLength(ANGLE2, 0);
-  SetLength(ANGLE3, 0);
-  SetLength(WETDRY, 0);
+  SetLength(FICELLTYPE, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FK, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FK22, 0);
+  SetLength(FK33, 0);
+  SetLength(FANGLE1, 0);
+  SetLength(FANGLE2, 0);
+  SetLength(FANGLE3, 0);
+  SetLength(FWETDRY, 0);
   inherited;
 end;
 
@@ -289,7 +317,7 @@ begin
       IntThreeDReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         IntThreeDReader.Read(Stream, Unhandled);
-        ICELLTYPE := IntThreeDReader.FData;
+        FICELLTYPE := IntThreeDReader.FData;
       finally
         IntThreeDReader.Free;
       end;
@@ -300,79 +328,79 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        K := DoubleThreeDReader.FData;
+        FK := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'K22' then
     begin
-      SetLength(K22, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FK22, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        K22 := DoubleThreeDReader.FData;
+        FK22 := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'K33' then
     begin
-      SetLength(K33, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FK33, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        K33 := DoubleThreeDReader.FData;
+        FK33 := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'ANGLE1' then
     begin
-      SetLength(ANGLE1, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FANGLE1, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        ANGLE1 := DoubleThreeDReader.FData;
+        FANGLE1 := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'ANGLE2' then
     begin
-      SetLength(ANGLE2, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FANGLE2, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        ANGLE2 := DoubleThreeDReader.FData;
+        FANGLE2 := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'ANGLE3' then
     begin
-      SetLength(ANGLE3, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FANGLE3, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        ANGLE3 := DoubleThreeDReader.FData;
+        FANGLE3 := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'WETDRY' then
     begin
-      SetLength(WETDRY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FWETDRY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        WETDRY := DoubleThreeDReader.FData;
+        FWETDRY := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -392,15 +420,25 @@ begin
   inherited;
   FOptions := TNpfOptions.Create(PackageType);
   FGridData := TNpfGridData.Create(PackageType);
-  TvkPackages := TPackageList.Create;
+  FTvkPackages := TPackageList.Create;
 end;
 
 destructor TNpf.Destroy;
 begin
-  TvkPackages.Free;
+  FTvkPackages.Free;
   FOptions.Free;
   FGridData.Free;
   inherited;
+end;
+
+function TNpf.GetCount: Integer;
+begin
+  result := FTvkPackages.Count;
+end;
+
+function TNpf.GetTvk(Index: Integer): TPackage;
+begin
+  result := FTvkPackages[Index];
 end;
 
 procedure TNpf.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -449,7 +487,7 @@ begin
   for PackageIndex := 0 to FOptions.TVK6_FileNames.Count - 1 do
   begin
     TvkPackage := TPackage.Create;
-    TvkPackages.Add(TvkPackage);
+    FTvkPackages.Add(TvkPackage);
     TvkPackage.FileType := 'TVK6';
     TvkPackage.FileName := FOptions.TVK6_FileNames[PackageIndex];
     TvkPackage.PackageName := '';

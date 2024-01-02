@@ -24,11 +24,16 @@ type
     IPer: Integer;
     FCells: TTimeVariableCellList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
+    function GetCell(Index: Integer): TTimeVariableCell;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cell[Index: Integer]: TTimeVariableCell read GetCell; default;
   end;
 
   TTvkPeriodList = TObjectList<TTvkPeriodData>;
@@ -38,10 +43,18 @@ type
     FOptions: TTvkOptions;
     FPeriods: TTvkPeriodList;
     FTimeSeriesPackages: TPackageList;
+    function GetCount: Integer;
+    function GetPeriod(Index: Integer): TTvkPeriodData;
+    function GetTimeSeriesPackage(Index: Integer): TPackage;
+    function GetTimeSeriesPackageCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Count: Integer read GetCount;
+    property Periods[Index: Integer]: TTvkPeriodData read GetPeriod; default;
+    property TimeSeriesPackageCount: Integer read GetTimeSeriesPackageCount;
+    property TimeSeriesPackages[Index: Integer]: TPackage read GetTimeSeriesPackage;
   end;
 
 implementation
@@ -133,6 +146,16 @@ begin
   inherited;
 end;
 
+function TTvkPeriodData.GetCell(Index: Integer): TTimeVariableCell;
+begin
+  result := FCells[Index];
+end;
+
+function TTvkPeriodData.GetCount: Integer;
+begin
+  result := FCells.Count;
+end;
+
 procedure TTvkPeriodData.Initialize;
 begin
   inherited;
@@ -220,6 +243,26 @@ begin
   FOptions.Free;
   FPeriods.Free;
   inherited;
+end;
+
+function TTvk.GetCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TTvk.GetPeriod(Index: Integer): TTvkPeriodData;
+begin
+  result := FPeriods[Index];
+end;
+
+function TTvk.GetTimeSeriesPackage(Index: Integer): TPackage;
+begin
+  Result := FTimeSeriesPackages[Index];
+end;
+
+function TTvk.GetTimeSeriesPackageCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
 end;
 
 procedure TTvk.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

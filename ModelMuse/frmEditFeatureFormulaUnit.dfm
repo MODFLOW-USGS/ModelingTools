@@ -4,8 +4,8 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   Caption = 'Edit Feature Formula'
   ClientHeight = 496
   ClientWidth = 610
-  ExplicitWidth = 622
-  ExplicitHeight = 534
+  ExplicitWidth = 626
+  ExplicitHeight = 535
   TextHeight = 18
   object spl1: TSplitter
     Left = 301
@@ -22,8 +22,6 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     Height = 88
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 407
-    ExplicitWidth = 606
     DesignSize = (
       610
       88)
@@ -36,7 +34,6 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 514
     end
     object btnOK: TBitBtn
       Left = 430
@@ -67,7 +64,6 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 426
     end
     object btnHelp: TBitBtn
       Left = 342
@@ -79,7 +75,6 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 338
     end
     object rgChoice: TRadioGroup
       Left = 16
@@ -108,7 +103,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     TabOrder = 0
     OnChange = tvFeaturesChange
     OnHint = tvFeaturesHint
-    ExplicitHeight = 407
+    ExplicitLeft = 2
   end
   object jvplEdit: TJvPageList
     Left = 309
@@ -118,8 +113,6 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
     ActivePage = JvStandardPage2
     PropagateEnable = False
     Align = alClient
-    ExplicitWidth = 297
-    ExplicitHeight = 407
     object JvStandardPage1: TJvStandardPage
       Left = 0
       Top = 0
@@ -219,8 +212,6 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
       Width = 301
       Height = 408
       Caption = 'JvStandardPage2'
-      ExplicitWidth = 297
-      ExplicitHeight = 407
       inline frameObjectProperties: TframeGrid
         Left = 0
         Top = 81
@@ -228,12 +219,11 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
         Height = 327
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 297
-        ExplicitHeight = 407
+        ExplicitTop = 81
+        ExplicitHeight = 327
         inherited Panel: TPanel
           Top = 286
-          ExplicitTop = 366
-          ExplicitWidth = 297
+          ExplicitTop = 286
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -321,8 +311,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 297
-          ExplicitHeight = 366
+          ExplicitHeight = 286
         end
       end
       object Panel1: TPanel

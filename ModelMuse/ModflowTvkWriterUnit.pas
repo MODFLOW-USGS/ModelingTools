@@ -292,20 +292,29 @@ begin
     begin
       ACell := Cells[CellIndex] as TTvk_Cell;
 
-      WriteCellID;
-      WriteString(' K');
-      WriteValueOrFormula(ACell, KPosition);
-      NewLine;
+      if ACell.Used[KPosition] then
+      begin
+        WriteCellID;
+        WriteString(' K');
+        WriteValueOrFormula(ACell, KPosition);
+        NewLine;
+      end;
 
-      WriteCellID;
-      WriteString(' K22');
-      WriteValueOrFormula(ACell, K22Position);
-      NewLine;
+      if ACell.Used[K22Position] then
+      begin
+        WriteCellID;
+        WriteString(' K22');
+        WriteValueOrFormula(ACell, K22Position);
+        NewLine;
+      end;
 
-      WriteCellID;
-      WriteString(' K33');
-      WriteValueOrFormula(ACell, K33Position);
-      NewLine;
+      if ACell.Used[K33Position] then
+      begin
+        WriteCellID;
+        WriteString(' K33');
+        WriteValueOrFormula(ACell, K33Position);
+        NewLine;
+      end;
     end;
 
     WriteEndPeriod;

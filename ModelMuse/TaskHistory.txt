@@ -342,7 +342,7 @@ object TTaskHistory
     end
     item
       Name = 'NPF'
-      Display = False
+      Display = True
     end
     item
       Name = 'STO'
@@ -32281,5 +32281,22 @@ object TTaskHistory
         'Import'
         'DIS'
         'MF-2015')
+    end
+    item
+      Date = 45290.000000000000000000
+    end
+    item
+      Date = 45291.000000000000000000
+    end
+    item
+      Date = 45292.000000000000000000
+    end
+    item
+      Date = 45293.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'MF-2015'
+        'NPF'
+        'Import')
     end>
 end

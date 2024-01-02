@@ -10074,7 +10074,7 @@ const
 //                exporting the MVR package input file.
 //    '5.1.1.42' Enhancement: The Mesh|Specify Mesh dialog box has been modified
 //                to allow the user to specify a 3D mesh.
-//    '5.1.1.43' The Import Points dialog box has been changed to allow
+//    '5.1.1.43' Enhancement: The Import Points dialog box has been changed to allow
 //                allow importing GWT concentrations and UZF boundaries for
 //                MODFLOW 6.
 //    '5.1.1.44' Not in released version. Bug Fix. Fixed editing of calibration
@@ -10099,6 +10099,12 @@ const
 //                MODFLOW 6 models.
 //               Bug fix: Fixed a bug that would cause an error when attempting
 //                to read an empty .Values file from PEST.
+//    '5.1.1.50' Not in released version Bug fix: fixed import of GWT data in
+//                the Edit Feature Formula dialog box.
+
+//               Change: When editing the TVK package data in the Object
+//                 Properties dialog box, it is now possible to specify an
+//                 empty formula for Kx, Ky, or Kz.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10111,7 +10117,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.49';
+  IIModelVersion = '5.1.1.50';
 
 function IModelVersion: string;
 begin

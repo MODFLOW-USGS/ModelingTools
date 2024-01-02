@@ -14197,7 +14197,9 @@ end;
 procedure TfrmGoPhast.acImportModflow6ModelExecute(Sender: TObject);
 begin
   inherited;
+{$IFDEF ImportMF6}
   ShowAForm(TfrmImportModflow6)
+{$ENDIF}
 end;
 
 procedure TfrmGoPhast.acImportSurferGridFilesExecute(Sender: TObject);

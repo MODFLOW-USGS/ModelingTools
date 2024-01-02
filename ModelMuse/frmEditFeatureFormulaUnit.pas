@@ -133,7 +133,7 @@ uses
   ModflowCfpFixedUnit, ModflowCfpPipeUnit, frmFormulaUnit, DataSetUnit,
   ModflowStrUnit, RealListUnit, SutraBoundariesUnit, ModflowMawUnit,
   Modflow6TimeSeriesUnit, DataArrayManagerUnit, DataSetNamesUnit,
-  ModelMuseUtilities;
+  ModelMuseUtilities, ModflowUzfMf6Unit;
 
 resourcestring
   StrNoObjectsOfTheSe = 'No objects of the selected type were selected for e' +
@@ -347,8 +347,6 @@ var
   MaxScreenObjectsObjects: Integer;
   SutraFeatureType: TSutraFeatureType;
   SutraFeatureSelection: TSutraFeatureTypeSelection;
-  index: Integer;
-  AScreenObject: TScreenObject;
 begin
   FScreenObjects := ScreenObjects;
 
@@ -1444,7 +1442,7 @@ var
           begin
             if LastEndFound then
             begin
-              if EndTime <= LastEnd then
+              if EndTime >= LastEnd+Epsilon then
               begin
                 Continue
               end;
@@ -1553,6 +1551,14 @@ begin
     FillPropertyCollection(OldProperties, SelectedType.FScreenObjects);
 
     FormulaIndex := tvFeatures.Selected.Parent.IndexOf(tvFeatures.Selected);
+    if (MF_SelectedType <> nil) and (MF_SelectedType.FFeatureType = ftUzfMf6) then
+    begin
+      if FormulaIndex > UzfMf6RootActivityPosition then
+      begin
+        FormulaIndex := FormulaIndex +
+          (UzfBoundaryGwtStart - UzfMf6RootActivityPosition - 2);
+      end;
+    end;
     Assert(FormulaIndex >= 0);
     UseAllTimes := comboAllTimes.ItemIndex = 0;
     if not UseAllTimes then

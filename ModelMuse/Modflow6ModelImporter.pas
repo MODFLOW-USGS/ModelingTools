@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, System.IOUtils, Vcl.Dialogs, System.SysUtils, System.UITypes,
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
-  ScreenObjectUnit, DataSetUnit;
+  ScreenObjectUnit, DataSetUnit, System.Generics.Collections;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -40,8 +40,11 @@ type
     procedure AssignTOP(TOP: TDArray2D);
     procedure ImportIc(Package: TPackage);
     procedure Assign3DRealDataSet(DsName: string; Data: TDArray3D);
+    procedure Assign3DIntegerDataSet(DsName: string; Data: TIArray3D);
     procedure ImportOc(Package: TPackage);
     procedure ImportGwfObs(Package: TPackage);
+    procedure ImportNpf(Package: TPackage);
+    procedure ImportTvk(Package: TPackage);
   public
     procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
   end;
@@ -56,7 +59,8 @@ uses
   UndoItems, FastGEO, AbstractGridUnit, ValueArrayStorageUnit,
   InterpolationUnit, GIS_Functions, RbwParser, DataSetNamesUnit,
   Mf6.DisvFileReaderUnit, ModflowIrregularMeshUnit, Mf6.IcFileReaderUnit,
-  Mf6.OcFileReaderUnit, Mf6.ObsFileReaderUnit, Modflow6ObsUnit;
+  Mf6.OcFileReaderUnit, Mf6.ObsFileReaderUnit, Modflow6ObsUnit,
+  Mf6.NpfFileReaderUnit, Mf6.TvkFileReaderUnit, ModflowTvkUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -588,10 +592,7 @@ begin
       end
       else if APackage.FileType = 'NPF6' then
       begin
-//        NpfReader := TNpf.Create(APackage.FileType);
-//        NpfReader.Dimensions := FDimensions;
-//        APackage.Package := NpfReader;
-//        APackage.ReadPackage(Unhandled);
+        ImportNpf(APackage);
       end
       else if APackage.FileType = 'HFB6' then
       begin
@@ -1093,6 +1094,128 @@ begin
   frmGoPhast.RestoreDefault2DView1Click(nil);
 end;
 
+procedure TModflow6Importer.ImportNpf(Package: TPackage);
+var
+  Npf: TNpf;
+  Model: TPhastModel;
+  NpfPackage: TNpfPackage;
+  Options: TNpfOptions;
+  GridData: TNpfGridData;
+  DataArray: TDataArray;
+  TvkIndex: Integer;
+begin
+  Model := frmGoPhast.PhastModel;
+  Npf := Package.Package as TNpf;
+
+  NpfPackage := Model.ModflowPackages.NpfPackage;
+  Options := Npf.Options;
+  if Options.ALTERNATIVE_CELL_AVERAGING <> '' then
+  begin
+    if Options.ALTERNATIVE_CELL_AVERAGING = 'LOGARITHMIC' then
+    begin
+      NpfPackage.CellAveraging := caLogarithmic;
+    end
+    else if Options.ALTERNATIVE_CELL_AVERAGING = 'AMT-LMK' then
+    begin
+      NpfPackage.CellAveraging := caArithLog;
+    end
+    else if Options.ALTERNATIVE_CELL_AVERAGING = 'AMT-HMK' then
+    begin
+      NpfPackage.CellAveraging := caArithHarm;
+    end
+    else
+    begin
+      FErrorMessages.Add(Format('Unrecognized ALTERNATIVE_CELL_AVERAGING option %s in NPF package',
+        [Options.ALTERNATIVE_CELL_AVERAGING]))
+    end;
+  end;
+  NpfPackage.UseSaturatedThickness := Options.THICKSTRT;
+  NpfPackage.TimeVaryingVerticalConductance := Options.VARIABLECV;
+  NpfPackage.Dewatered := Options.DEWATERED;
+  NpfPackage.Perched := Options.PERCHED;
+  Model.ModflowWettingOptions.WettingActive := Options.REWET.Used;
+  if Options.REWET.Used then
+  begin
+    Model.ModflowWettingOptions.WettingFactor := Options.REWET.WETFCT;
+    Model.ModflowWettingOptions.WettingIterations := Options.REWET.IWETIT;
+    Model.ModflowWettingOptions.WettingEquation := Options.REWET.IHDWET;
+  end;
+  NpfPackage.UseXT3D := Options.XT3D;
+  NpfPackage.Xt3dOnRightHandSide := Options.RHS;
+  NpfPackage.SaveSpecificDischarge := Options.SAVE_SPECIFIC_DISCHARGE;
+  NpfPackage.SaveSaturation := Options.SAVE_SATURATION;
+  NpfPackage.UseHorizontalAnisotropy := Options.K22OVERK;
+  NpfPackage.UseVerticalAnisotropy := Options.K33OVERK;
+
+  GridData := Npf.GridData;
+  Assign3DIntegerDataSet(KCellType, GridData.ICELLTYPE);
+
+  Assign3DRealDataSet(rsKx, GridData.K);
+
+  if GridData.K22 <> nil then
+  begin
+    if NpfPackage.UseHorizontalAnisotropy then
+    begin
+      Assign3DRealDataSet(KKyOverKx, GridData.K22);
+    end
+    else
+    begin
+      Assign3DRealDataSet(rsKy, GridData.K22);
+    end;
+  end
+  else
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(rsKy);
+    DataArray.Formula := rsKx;
+  end;
+
+  if GridData.K33 <> nil then
+  begin
+    if NpfPackage.UseVerticalAnisotropy then
+    begin
+      Assign3DRealDataSet(KKzOverKx, GridData.K33);
+    end
+    else
+    begin
+      Assign3DRealDataSet(rsKz, GridData.K33);
+    end;
+  end
+  else
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(rsKz);
+    DataArray.Formula := rsKx;
+  end;
+
+  if GridData.ANGLE1 <> nil then
+  begin
+    Assign3DRealDataSet(KXT3DAngle1, GridData.ANGLE1);
+  end;
+
+  if GridData.ANGLE2 <> nil then
+  begin
+    Assign3DRealDataSet(KXT3DAngle2, GridData.ANGLE2);
+  end;
+
+  if GridData.ANGLE3 <> nil then
+  begin
+    Assign3DRealDataSet(KXT3DAngle3, GridData.ANGLE3);
+  end;
+
+  if GridData.WETDRY <> nil then
+  begin
+    Assign3DRealDataSet(rsWetDry, GridData.WETDRY);
+  end;
+
+  if Npf.Count > 0 then
+  begin
+    Model.ModflowPackages.TvkPackage.IsSelected := True;
+    for TvkIndex := 0 to Npf.Count - 1 do
+    begin
+      ImportTvk(Npf[TvkIndex])
+    end;
+  end;
+end;
+
 procedure TModflow6Importer.ImportOc(Package: TPackage);
 var
   OC: TOc;
@@ -1119,6 +1242,66 @@ begin
   begin
     OutputControl.ConcentrationOC.SaveInExternalFile := True
   end;
+end;
+
+procedure TModflow6Importer.Assign3DIntegerDataSet(DsName: string;
+  Data: TIArray3D);
+var
+  Formula: string;
+  Model: TPhastModel;
+  LayerIndex: Integer;
+  FirstValue: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  Uniform: Boolean;
+  DataArrayName: string;
+  DataArray: TDataArray;
+  Interpolator: TNearestPoint2DInterpolator;
+  ScreenObject: TScreenObject;
+begin
+  Formula := 'CaseI(Layer';
+  Model := frmGoPhast.PhastModel;
+  for LayerIndex := 1 to Model.LayerStructure.Count - 1 do
+  begin
+    Uniform := True;
+    FirstValue := Data[LayerIndex - 1, 0, 0];
+    for RowIndex := 0 to Model.RowCount - 1 do
+    begin
+      for ColIndex := 0 to Model.ColumnCount - 1 do
+      begin
+        Uniform := FirstValue = Data[LayerIndex - 1, RowIndex, ColIndex];
+        if not Uniform then
+        begin
+          break;
+        end;
+      end;
+    end;
+    DataArrayName := Format('Imported_%s_%d', [DsName, LayerIndex]);
+    Formula := Formula + ',' + DataArrayName;
+    DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
+      DataArrayName, '0', DataArrayName, [dcType], rdtInteger, eaBlocks, dsoTop, '');
+    DataArray.Comment := Format('Imported from %s on %s', [FModelNameFile, DateTimeToStr(Now)]);
+    DataArray.UpdateDimensions(Model.LayerCount, Model.RowCount, Model.ColumnCount);
+    Interpolator := TNearestPoint2DInterpolator.Create(nil);
+    try
+      DataArray.TwoDInterpolator := Interpolator;
+    finally
+      Interpolator.Free;
+    end;
+    if Uniform then
+    begin
+      DataArray.Formula := IntToStr(FirstValue);
+    end
+    else
+    begin
+      ScreenObject := AllTopCellsScreenObject;
+      AssignIntegerValuesToCellCenters(DataArray, ScreenObject, Data[LayerIndex - 1]);
+    end;
+  end;
+  Formula := Formula + ')';
+  Formula := Format('IfI(Layer > %d, 0, %s)', [Model.LayerCount, Formula]);
+  DataArray := Model.DataArrayManager.GetDataSetByName(DsName);
+  DataArray.Formula := Formula;
 end;
 
 procedure TModflow6Importer.Assign3DRealDataSet(DsName: string; Data: TDArray3D);
@@ -1482,6 +1665,117 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TModflow6Importer.ImportTvk(Package: TPackage);
+var
+  Tvk: TTvk;
+  APeriod: TTvkPeriodData;
+  Model: TPhastModel;
+  LastTime: Double;
+  StartTime: Double;
+  PeriodIndex: Integer;
+  BoundIndex: Integer;
+  TvkBound: TTimeVariableCell;
+  KScreenObject: TScreenObject;
+  Item: TTvkItem;
+  CellId: TCellId;
+  KDictionary: TDictionary<string, TScreenObject>;
+  AScreenObject: TScreenObject;
+  Index: Integer;
+  UndoCreateScreenObject: TCustomUndo;
+  APoint: TPoint2D;
+begin
+  Model := frmGoPhast.PhastModel;
+  LastTime := Model.ModflowStressPeriods.Last.EndTime;
+
+  KDictionary := TDictionary<string, TScreenObject>.Create;
+  try
+
+
+    Tvk := Package.Package as TTvk;
+    for PeriodIndex := 0 to Tvk.Count - 1 do
+    begin
+      APeriod := Tvk[PeriodIndex];
+      StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+      if KScreenObject <> nil then
+      begin
+        Item := KScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+        Item.EndTime := StartTime;
+      end;
+      KScreenObject := nil;
+      for AScreenObject in KDictionary.Values do
+      begin
+        Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+        Item.EndTime := StartTime;
+      end;
+      KDictionary.Clear;
+      for BoundIndex := 0 to APeriod.Count - 1 do
+      begin
+        TvkBound := APeriod[BoundIndex];
+        if TvkBound.VariableName = 'K' then
+        begin
+          if TvkBound.ValueType = vtNumeric then
+          begin
+            if KScreenObject = nil then
+            begin
+              KScreenObject := TScreenObject.CreateWithViewDirection(
+                Model, vdTop, UndoCreateScreenObject, False);
+              KScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+              Model.AddScreenObject(KScreenObject);
+              KScreenObject.ElevationCount := ecOne;
+              KScreenObject.SetValuesOfIntersectedCells := True;
+              KScreenObject.EvaluatedAt := eaBlocks;
+              KScreenObject.Visible := False;
+
+              KScreenObject.CreateTvkBoundary;
+              AScreenObject := KScreenObject
+            end;
+          end
+          else
+          begin
+
+          end;
+
+//            CellId := TvkBound.CellId;
+//            if Model.DisvUsed then
+//            begin
+//              Dec(CellId.Column);
+//              CellId.Row := 0;
+//            end
+//            else
+//            begin
+//              Dec(CellId.Column);
+//              Dec(CellId.Row);
+//            end;
+//            APoint := Model.TwoDElementCenter(CellId.Column, CellId.Row);
+//            KScreenObject.AddPoint(APoint, True);
+//            KScreenObject.ElevationFormula := Format('LayerCenter(%d)', [CellId.Layer]);
+//
+//            Item := KScreenObject.ModflowTvkBoundary.Values.Add as TTvkItem;
+//            Item.StartTime := StartTime;
+//            Item.EndTime := LastTime;
+
+        end
+        else if TvkBound.VariableName = 'K22' then
+        begin
+
+        end
+        else if TvkBound.VariableName = 'K33' then
+        begin
+
+        end
+        else
+        begin
+
+        end;
+      end;
+    end;
+  finally
+    KDictionary.Free;
+  end;
+
 end;
 
 end.
