@@ -208,6 +208,7 @@ type
     function ReferenceLength: Double;
     function PointInside(APoint: TPoint2D): Boolean;
     function ShareANode(ACell: TModflowIrregularCell2D): Boolean;
+    function BoundarySegment(OtherCell: TModflowIrregularCell2D; out Segment: TSegment2D): Boolean;
   published
     // @name starts at zero.
     property ElementNumber: integer read GetElementNumber
@@ -1219,6 +1220,35 @@ begin
     ElementNumber := MFIregCell.ElementNumber;
   end;
   inherited;
+end;
+
+function TModflowIrregularCell2D.BoundarySegment(OtherCell: TModflowIrregularCell2D;
+  out Segment: TSegment2D): Boolean;
+var
+  SharedNodeCount: Integer;
+  NodeIndex: Integer;
+  ANode: TModflowNode;
+begin
+  result := False;
+  if OtherCell = self then
+  begin
+    Exit;
+  end;
+  SharedNodeCount := 0;
+  for NodeIndex := 0 to NodeNumbers.Count - 1 do
+  begin
+    ANode := ElementCorners[NodeIndex];
+    if ANode.FCells.IndexOf(OtherCell) >= 0 then
+    begin
+      Inc(SharedNodeCount);
+      Segment[SharedNodeCount] := ANode.Location;
+      if SharedNodeCount = 2 then
+      begin
+        result := True;
+        Exit;
+      end;
+    end;
+  end;
 end;
 
 function TModflowIrregularCell2D.Center: TPoint2D;

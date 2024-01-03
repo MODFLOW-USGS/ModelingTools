@@ -12,6 +12,8 @@ uses
   // transport simulation name files (mfsim.nam)
 
 type
+  TimeSeriesMap = TDictionary<string, string>;
+
   TModflow6Importer = class(TObject)
   private
     FErrorMessages: TStringList;
@@ -19,6 +21,7 @@ type
     FFlowModel: TModel;
     FAllTopCellsScreenObject: TScreenObject;
     FModelNameFile: string;
+    TSIndex: Integer;
     procedure ImportFlowModelTiming;
     procedure ImportSimulationOptions;
     procedure ImportSolutionGroups;
@@ -45,7 +48,10 @@ type
     procedure ImportGwfObs(Package: TPackage);
     procedure ImportNpf(Package: TPackage);
     procedure ImportTvk(Package: TPackage);
+    procedure ImportTimeSeries(Package: TPackage; Map: TimeSeriesMap);
+    procedure ImportHfb(Package: TPackage);
   public
+    Constructor Create;
     procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
   end;
 
@@ -60,7 +66,9 @@ uses
   InterpolationUnit, GIS_Functions, RbwParser, DataSetNamesUnit,
   Mf6.DisvFileReaderUnit, ModflowIrregularMeshUnit, Mf6.IcFileReaderUnit,
   Mf6.OcFileReaderUnit, Mf6.ObsFileReaderUnit, Modflow6ObsUnit,
-  Mf6.NpfFileReaderUnit, Mf6.TvkFileReaderUnit, ModflowTvkUnit;
+  Mf6.NpfFileReaderUnit, Mf6.TvkFileReaderUnit, ModflowTvkUnit,
+  Mf6.TimeSeriesFileReaderUnit, Modflow6TimeSeriesCollectionsUnit,
+  Modflow6TimeSeriesUnit, Mf6.HfbFileReaderUnit, ModflowHfbUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -212,6 +220,11 @@ begin
   end;
   ImportedValues.Values.Count := PointIndex;
   ImportedValues.Values.CacheData;
+end;
+
+constructor TModflow6Importer.Create;
+begin
+  TSIndex := 0;
 end;
 
 procedure TModflow6Importer.CreateAllTopCellsScreenObject;
@@ -596,10 +609,7 @@ begin
       end
       else if APackage.FileType = 'HFB6' then
       begin
-//        HfbReader := THfb.Create(APackage.FileType);
-//        HfbReader.Dimensions := FDimensions;
-//        APackage.Package := HfbReader;
-//        APackage.ReadPackage(Unhandled);
+        ImportHfb(APackage);
       end
       else if APackage.FileType = 'STO6' then
       begin
@@ -928,24 +938,141 @@ begin
       begin
         FErrorMessages.Add(Format('ModelMuse could not import the observation "%s" because it is not a recognized type', [Observation.ObsName] ));
       end;
-
-{
-  TObservation = record
-    ObsName: string;
-    ObsType: string;
-    IdType1: TIdType;
-    IdType2: TIdType;
-    CellId1: TCellId;
-    CellId2: TCellId;
-    Num1: Integer;
-    Num2: Integer;
-    FloatNum1: Extended;
-    FloatNum2: Extended;
-    Name1: string;
-    Name2: string;
-    procedure Initialize;
+    end;
   end;
-}
+end;
+
+procedure TModflow6Importer.ImportHfb(Package: TPackage);
+const
+  KImportedHfbValue = 'ImportedHfbValue';
+var
+  Hfb: THfb;
+  PeriodIndex: Integer;
+  Model: TPhastModel;
+  LastTime: Double;
+  HfbPeriod: THfbStressPeriod;
+  AScreenObject: TScreenObject;
+  UndoCreateScreenObject: TCustomUndo;
+  NewItem: THfbItem;
+  StartTime: Double;
+  Item: THfbItem;
+  ScreenObjects: Array of TScreenObject;
+  LayerIndex: Integer;
+  ItemIndex: Integer;
+  Barrier: THfbCellPair;
+  Layer: Integer;
+  Storage: TValueArrayItem;
+  StorageValues: TValueArrayStorage;
+  Point1: TPoint2D;
+  Point2: TPoint2D;
+  TwoDGrid: TModflowIrregularGrid2D;
+  Cell1: TModflowIrregularCell2D;
+  Cell2: TModflowIrregularCell2D;
+  BoundarySegment: TSegment2D;
+  Column: Integer;
+  Row: Integer;
+  function CreateScreenObject(LayerIndex: Integer): TScreenObject;
+  begin
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    result.Name := Format('Imported_HFB_Layer_%d_Period_%d', [LayerIndex + 1, HfbPeriod.Period]);
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := Format('LayerCenter(%d)', [LayerIndex+1]);
+    ScreenObjects[LayerIndex] := result;
+
+    Storage := result.ImportedValues.Add;
+    Storage.Name := KImportedHfbValue;
+    Storage.Values.DataType := rdtDouble;
+
+    result.CreateHfbBoundary;
+
+    NewItem := result.ModflowHfbBoundary.Values.Add as THfbItem;
+    NewItem.StartTime := StartTime;
+    NewItem.EndTime := LastTime;
+    NewItem.HydraulicConductivity := rsObjectImportedValuesR + '("' + KImportedHfbValue + '")';
+    NewItem.Thickness := '1';
+  end;
+begin
+  Model := frmGoPhast.PhastModel;
+  SetLength(ScreenObjects, Model.LayerCount);
+  Model.ModflowPackages.HfbPackage.IsSelected := True;
+  LastTime := Model.ModflowStressPeriods.Last.EndTime;
+
+  Hfb := Package.Package as THfb;
+
+  for PeriodIndex := 0 to Hfb.Count - 1 do
+  begin
+    HfbPeriod := Hfb[PeriodIndex];
+    StartTime := Model.ModflowStressPeriods[HfbPeriod.Period-1].StartTime;
+    for LayerIndex := 0 to Length(ScreenObjects) - 1 do
+    begin
+      AScreenObject := ScreenObjects[LayerIndex];
+      if AScreenObject <> nil then
+      begin
+        Item := AScreenObject.ModflowHfbBoundary.Values.Last as THfbItem;
+        Item.EndTime := StartTime;
+        ScreenObjects[LayerIndex] := nil;
+      end;
+    end;
+    if HfbPeriod.Count > 0 then
+    begin
+      for ItemIndex := 0 to HfbPeriod.Count - 1 do
+      begin
+        Barrier := HfbPeriod[ItemIndex];
+        Layer := Barrier.CellId1.Layer;
+        Assert(Layer = Barrier.CellId2.Layer);
+        AScreenObject := ScreenObjects[Layer-1];
+        if AScreenObject = nil then
+        begin
+          AScreenObject := CreateScreenObject(Layer-1);
+        end;
+        StorageValues := AScreenObject.ImportedValues.ValuesByName(KImportedHfbValue);
+        StorageValues.Add(Barrier.hydchr);
+
+        if Model.DisvUsed then
+        begin
+          TwoDGrid := Model.DisvGrid.TwoDGrid;
+          Cell1 := TwoDGrid.Cells[Barrier.CellId1.Column-1];
+          Cell2 := TwoDGrid.Cells[Barrier.CellId2.Column-1];
+          if Cell1.BoundarySegment(Cell2, BoundarySegment) then
+          begin
+            AScreenObject.AddPoint(BoundarySegment[1], True);
+            AScreenObject.AddPoint(BoundarySegment[2], False);
+          end
+          else
+          begin
+            FErrorMessages.Add(Format('Error importing HRB because Cells %d and %d are not neighbors', [Barrier.CellId1.Column, Barrier.CellId2.Column]));
+          end;
+        end
+        else
+        begin
+          Assert((Abs(Barrier.CellId1.Column - Barrier.CellId2.Column) = 1)
+            xor (Abs(Barrier.CellId1.Row - Barrier.CellId2.Row) = 1));
+
+          Column := Max(Barrier.CellId1.Column, Barrier.CellId2.Column)-1;
+          Row := Max(Barrier.CellId1.Row, Barrier.CellId2.Row)-1;
+          Point1 := Model.Grid.TwoDElementCorner(Column, Row);
+
+          if Barrier.CellId1.Column = Barrier.CellId2.Column then
+          begin
+            Inc(Column);
+          end
+          else
+          begin
+            Inc(Row);
+          end;
+
+          Point2 := Model.Grid.TwoDElementCorner(Column, Row);
+          AScreenObject.AddPoint(Point1, True);
+          AScreenObject.AddPoint(Point2, False);
+        end;
+      end;
     end;
   end;
 end;
@@ -1667,6 +1794,101 @@ begin
   end;
 end;
 
+procedure TModflow6Importer.ImportTimeSeries(Package: TPackage; Map: TimeSeriesMap);
+var
+  TsReader: TTimeSeries;
+  Model: TPhastModel;
+  Mf6TimesSeries: TTimesSeriesCollections;
+  Attributes: TTsAttributes;
+  GroupName: string;
+  NewGroup: TTimesSeriesCollection;
+  Index: Integer;
+  TSName: string;
+  NewName: string;
+  TimeSeries: TMf6TimeSeries;
+  Method: TTsMethod;
+  ImportedTs: TTsTimeSeries;
+  TimeIndex: Integer;
+  ImportedValues: TDoubleList;
+begin
+  Model := frmGoPhast.PhastModel;
+  Mf6TimesSeries := Model.Mf6TimesSeries;
+
+  GroupName := ExtractFileName(Package.FileName);
+  NewGroup := Mf6TimesSeries.Add.TimesSeriesCollection;
+  NewGroup.GroupName := AnsiString(GroupName);
+
+  TsReader := Package.Package as TTimeSeries;
+  Attributes := TsReader.Attributes;
+  ImportedTs := TsReader.TimeSeries;
+
+  NewGroup.Times.Capacity := ImportedTs.TimeCount;
+  for TimeIndex := 0 to ImportedTs.TimeCount - 1 do
+  begin
+    NewGroup.Times.Add.Value := ImportedTs.Times[TimeIndex];
+  end;
+
+  for Index := 0 to Attributes.NameCount - 1 do
+  begin
+    TSName := Attributes.Names[Index];
+
+    if Mf6TimesSeries.GetTimeSeriesByName(TSName) = nil then
+    begin
+      NewName := TSName;
+    end
+    else
+    begin
+      Inc(TSIndex);
+      NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);
+      while Mf6TimesSeries.GetTimeSeriesByName(TSName) <> nil do
+      begin
+        Inc(TSIndex);
+        NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);
+      end;
+    end;
+
+    Map.Add(TSName, NewName);
+
+    TimeSeries := NewGroup.Add.TimeSeries;
+    TimeSeries.SeriesName := AnsiString(NewName);
+
+    Method := Attributes.Methods[Index];
+    Assert(Method <> tsUndefined);
+    case Method of
+      tmStepWise:
+        begin
+          TimeSeries.InterpolationMethod := mimStepwise;
+        end;
+      tmLinear:
+        begin
+          TimeSeries.InterpolationMethod := mimLinear;
+        end;
+      tmLinearEnd:
+        begin
+          TimeSeries.InterpolationMethod := mimLinearEnd;
+        end;
+      else
+        begin
+          assert(False)
+        end;
+    end;
+    if Attributes.SfacCount > Index then
+    begin
+      TimeSeries.ScaleFactor := Attributes.SFacs[Index];
+    end
+    else
+    begin
+      TimeSeries.ScaleFactor := 1;
+    end;
+    ImportedValues := ImportedTs.TimeSeriesValues[Index];
+    TimeSeries.Capacity := ImportedValues.Count;
+    for TimeIndex := 0 to ImportedValues.Count - 1 do
+    begin
+      TimeSeries.Add.Value := ImportedValues[TimeIndex];
+    end;
+  end;
+end;
+
 procedure TModflow6Importer.ImportTvk(Package: TPackage);
 var
   Tvk: TTvk;
@@ -1682,20 +1904,70 @@ var
   CellId: TCellId;
   KDictionary: TDictionary<string, TScreenObject>;
   AScreenObject: TScreenObject;
-  Index: Integer;
   UndoCreateScreenObject: TCustomUndo;
   APoint: TPoint2D;
+  TimeSeriesName: string;
+  KStorage: TValueArrayItem;
+  ImportedKName: string;
+  K22ScreenObject: TScreenObject;
+  K33ScreenObject: TScreenObject;
+  K22Storage: TValueArrayItem;
+  K22Dictionary: TDictionary<string, TScreenObject>;
+  K33Dictionary: TDictionary<string, TScreenObject>;
+  K33Storage: TValueArrayItem;
+  TimeSeriesIndex: Integer;
+  TimeSeriesPackage: TPackage;
+  Map: TimeSeriesMap;
+  ImportedTimeSeriesName: string;
+  ElementCenter: TDualLocation;
+  function CreateScreenObject(RootName: String): TScreenObject;
+  var
+    NewItem: TTvkItem;
+  begin
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    result.Name := 'ImportedTVK_' + RootName + '_Period_' + IntToStr(APeriod.Period);
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    result.CreateTvkBoundary;
+
+    NewItem := result.ModflowTvkBoundary.Values.Add as TTvkItem;
+    NewItem.StartTime := StartTime;
+    NewItem.EndTime := LastTime;
+  end;
 begin
   Model := frmGoPhast.PhastModel;
   LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
   KDictionary := TDictionary<string, TScreenObject>.Create;
+  K22Dictionary := TDictionary<string, TScreenObject>.Create;
+  K33Dictionary := TDictionary<string, TScreenObject>.Create;
+  Map := TimeSeriesMap.Create;
   try
-
-
     Tvk := Package.Package as TTvk;
+
+    for TimeSeriesIndex := 0 to Tvk.TimeSeriesPackageCount - 1 do
+    begin
+      TimeSeriesPackage := Tvk.TimeSeriesPackages[TimeSeriesIndex];
+      ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+
+    KScreenObject := nil;
+    K22ScreenObject := nil;
+    K33ScreenObject := nil;
     for PeriodIndex := 0 to Tvk.Count - 1 do
     begin
+      KStorage := nil;
+      K22Storage := nil;
+      K33Storage := nil;
+
       APeriod := Tvk[PeriodIndex];
       StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
       if KScreenObject <> nil then
@@ -1704,12 +1976,42 @@ begin
         Item.EndTime := StartTime;
       end;
       KScreenObject := nil;
+
+      if K22ScreenObject <> nil then
+      begin
+        Item := K22ScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+        Item.EndTime := StartTime;
+      end;
+      K22ScreenObject := nil;
+
+      if K33ScreenObject <> nil then
+      begin
+        Item := K33ScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+        Item.EndTime := StartTime;
+      end;
+      K33ScreenObject := nil;
+
       for AScreenObject in KDictionary.Values do
       begin
         Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
         Item.EndTime := StartTime;
       end;
       KDictionary.Clear;
+
+      for AScreenObject in K22Dictionary.Values do
+      begin
+        Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+        Item.EndTime := StartTime;
+      end;
+      K22Dictionary.Clear;
+
+      for AScreenObject in K33Dictionary.Values do
+      begin
+        Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+        Item.EndTime := StartTime;
+      end;
+      K33Dictionary.Clear;
+
       for BoundIndex := 0 to APeriod.Count - 1 do
       begin
         TvkBound := APeriod[BoundIndex];
@@ -1717,63 +2019,144 @@ begin
         begin
           if TvkBound.ValueType = vtNumeric then
           begin
+            ImportedKName := 'ImportedTvk_K_' + IntToStr(APeriod.Period);
             if KScreenObject = nil then
             begin
-              KScreenObject := TScreenObject.CreateWithViewDirection(
-                Model, vdTop, UndoCreateScreenObject, False);
-              KScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
-              Model.AddScreenObject(KScreenObject);
-              KScreenObject.ElevationCount := ecOne;
-              KScreenObject.SetValuesOfIntersectedCells := True;
-              KScreenObject.EvaluatedAt := eaBlocks;
-              KScreenObject.Visible := False;
+              KScreenObject := CreateScreenObject('K');
+              AScreenObject := KScreenObject;
 
-              KScreenObject.CreateTvkBoundary;
-              AScreenObject := KScreenObject
+              KStorage := AScreenObject.ImportedValues.Add;
+              KStorage.Name := ImportedKName;
+              KStorage.Values.DataType := rdtDouble;
+
+              Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+              Item.K := rsObjectImportedValuesR + '("' + ImportedKName + '")';
             end;
+            KStorage.Values.Add(TvkBound.NumericValue);
           end
           else
           begin
+            Assert(TvkBound.ValueType = vtString);
+            TimeSeriesName := TvkBound.StringValue;
+            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            begin
+              Assert(False);
+            end;
+            TimeSeriesName := ImportedTimeSeriesName;
+            if not KDictionary.TryGetValue(TimeSeriesName, AScreenObject) then
+            begin
+              AScreenObject := CreateScreenObject('K_' + TimeSeriesName);
 
+              KDictionary.Add(TimeSeriesName, AScreenObject);
+              Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+              Item.K := TimeSeriesName;
+            end;
           end;
-
-//            CellId := TvkBound.CellId;
-//            if Model.DisvUsed then
-//            begin
-//              Dec(CellId.Column);
-//              CellId.Row := 0;
-//            end
-//            else
-//            begin
-//              Dec(CellId.Column);
-//              Dec(CellId.Row);
-//            end;
-//            APoint := Model.TwoDElementCenter(CellId.Column, CellId.Row);
-//            KScreenObject.AddPoint(APoint, True);
-//            KScreenObject.ElevationFormula := Format('LayerCenter(%d)', [CellId.Layer]);
-//
-//            Item := KScreenObject.ModflowTvkBoundary.Values.Add as TTvkItem;
-//            Item.StartTime := StartTime;
-//            Item.EndTime := LastTime;
-
         end
         else if TvkBound.VariableName = 'K22' then
         begin
+          if TvkBound.ValueType = vtNumeric then
+          begin
+            ImportedKName := 'ImportedTvk_K22_' + IntToStr(APeriod.Period);
+            if K22ScreenObject = nil then
+            begin
 
+              K22ScreenObject := CreateScreenObject('K22');
+              AScreenObject := K22ScreenObject;
+
+              K22Storage := AScreenObject.ImportedValues.Add;
+              K22Storage.Name := ImportedKName;
+              K22Storage.Values.DataType := rdtDouble;
+
+              Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+              Item.K22 := rsObjectImportedValuesR + '("' + ImportedKName + '")';
+            end;
+            K22Storage.Values.Add(TvkBound.NumericValue);
+          end
+          else
+          begin
+            Assert(TvkBound.ValueType = vtString);
+            TimeSeriesName := TvkBound.StringValue;
+            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            begin
+              Assert(False);
+            end;
+            if not K22Dictionary.TryGetValue(TimeSeriesName, AScreenObject) then
+            begin
+              AScreenObject := CreateScreenObject('K22_' + TimeSeriesName);
+
+              K22Dictionary.Add(TimeSeriesName, AScreenObject);
+              Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+              Item.K22 := TimeSeriesName;
+            end;
+          end;
         end
         else if TvkBound.VariableName = 'K33' then
         begin
+          if TvkBound.ValueType = vtNumeric then
+          begin
+            ImportedKName := 'ImportedTvk_K33_' + IntToStr(APeriod.Period);
+            if K33ScreenObject = nil then
+            begin
 
+              K33ScreenObject := CreateScreenObject('K33');
+              AScreenObject := K33ScreenObject;
+
+              K33Storage := AScreenObject.ImportedValues.Add;
+              K33Storage.Name := ImportedKName;
+              K33Storage.Values.DataType := rdtDouble;
+
+              Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+              Item.K33 := rsObjectImportedValuesR + '("' + ImportedKName + '")';
+            end;
+            K33Storage.Values.Add(TvkBound.NumericValue);
+          end
+          else
+          begin
+            Assert(TvkBound.ValueType = vtString);
+            TimeSeriesName := TvkBound.StringValue;
+            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            begin
+              Assert(False);
+            end;
+            if not K33Dictionary.TryGetValue(TimeSeriesName, AScreenObject) then
+            begin
+              AScreenObject := CreateScreenObject('K33_' + TimeSeriesName);
+
+              K33Dictionary.Add(TimeSeriesName, AScreenObject);
+              Item := AScreenObject.ModflowTvkBoundary.Values.Last as TTvkItem;
+              Item.K33 := TimeSeriesName;
+            end;
+          end;
         end
         else
         begin
-
+          Assert(False);
         end;
+        CellId := TvkBound.CellId;
+        if Model.DisvUsed then
+        begin
+          Dec(CellId.Column);
+          CellId.Row := 0;
+        end
+        else
+        begin
+          Dec(CellId.Column);
+          Dec(CellId.Row);
+        end;
+        ElementCenter := Model.ElementLocation[CellId.Layer-1, CellId.Row-1, CellId.Column-1];
+        APoint.x := ElementCenter.RotatedLocation.x;
+        APoint.y := ElementCenter.RotatedLocation.y;
+        AScreenObject.AddPoint(APoint, True);
+        AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
       end;
     end;
   finally
     KDictionary.Free;
+    K22Dictionary.Free;
+    K33Dictionary.Free;
+    Map.Free;
   end;
 
 end;

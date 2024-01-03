@@ -166,7 +166,7 @@ object TTaskHistory
     end
     item
       Name = 'HFB'
-      Display = False
+      Display = True
     end
     item
       Name = 'Export Shapefile'
@@ -32298,5 +32298,12 @@ object TTaskHistory
         'MF-2015'
         'NPF'
         'Import')
+    end
+    item
+      Date = 45294.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'HFB'
+        'MF-2015')
     end>
 end

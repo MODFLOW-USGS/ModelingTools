@@ -3034,6 +3034,7 @@ that affects the model output should also have a comment. }
     // of the model in GoPhast.
     // @name is used in PHAST, MODFLOW, and SUTRA models.
     property Exaggeration: double read GetExaggeration write SetExaggeration;
+    // Layer, Row, and Column are Zero based.
     property ElementLocation[Layer, Row, Column: Integer]: TDualLocation
       read GetElementLocation;
     property ActiveElement[Layer, Row, Column: Integer]: Boolean

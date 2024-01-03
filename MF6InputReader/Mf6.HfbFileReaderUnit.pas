@@ -37,11 +37,16 @@ private
     IPer: Integer;
     FSettings: THfbCellPairList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
+    function GetCellPair(Index: Integer): THfbCellPair;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property CellPairs[Index: Integer]: THfbCellPair read GetCellPair; default;
   end;
 
   THfbStressPeriodList = TObjectList<THfbStressPeriod>;
@@ -51,11 +56,14 @@ private
     FOptions: THfbOptions;
     FDimensionsHfb: THfbDimensions;
     FStressPeriods: THfbStressPeriodList;
+    function GetCount: Integer;
+    function GetStressPeriod(Index: Integer): THfbStressPeriod;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
-
+    property Count: Integer read GetCount;
+    property StressPeriods[Index: Integer]: THfbStressPeriod read GetStressPeriod; default;
   end;
 
 implementation
@@ -174,6 +182,16 @@ begin
   inherited;
 end;
 
+function THfbStressPeriod.GetCellPair(Index: Integer): THfbCellPair;
+begin
+  result := FSettings[Index];
+end;
+
+function THfbStressPeriod.GetCount: Integer;
+begin
+  result := FSettings.Count;
+end;
+
 procedure THfbStressPeriod.Initialize;
 begin
   inherited;
@@ -213,7 +231,7 @@ begin
     else if FSplitter.Count >= DimensionCount*2 + 1 then
     begin
       if ReadCellID(CellPair.CellId1, 0, DimensionCount)
-        and ReadCellID(CellPair.CellId1, DimensionCount, DimensionCount)
+        and ReadCellID(CellPair.CellId2, DimensionCount, DimensionCount)
         and TryFortranStrToFloat(FSplitter[DimensionCount*2], CellPair.hydchr)  then
       begin
         FSettings.Add(CellPair);
@@ -249,6 +267,16 @@ begin
   FDimensionsHfb.Free;
   FStressPeriods.Free;
   inherited;
+end;
+
+function THfb.GetCount: Integer;
+begin
+  result := FStressPeriods.Count;
+end;
+
+function THfb.GetStressPeriod(Index: Integer): THfbStressPeriod;
+begin
+  result := FStressPeriods[Index];
 end;
 
 procedure THfb.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

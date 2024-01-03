@@ -806,7 +806,6 @@ end;
 procedure THfbItem.AssignObserverEvents(Collection: TCollection);
 begin
   inherited;
-
 end;
 
 function THfbItem.BoundaryFormulaCount: integer;

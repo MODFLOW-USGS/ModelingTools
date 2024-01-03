@@ -44,7 +44,7 @@ inherited frmTimeSeries: TfrmTimeSeries
       624
       41)
     object btnHelp: TBitBtn
-      Left = 295
+      Left = 291
       Top = 6
       Width = 91
       Height = 33
@@ -53,10 +53,10 @@ inherited frmTimeSeries: TfrmTimeSeries
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 291
+      ExplicitLeft = 287
     end
     object btnOK: TBitBtn
-      Left = 392
+      Left = 388
       Top = 6
       Width = 91
       Height = 33
@@ -84,10 +84,10 @@ inherited frmTimeSeries: TfrmTimeSeries
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 388
+      ExplicitLeft = 384
     end
     object btnCancel: TBitBtn
-      Left = 488
+      Left = 484
       Top = 6
       Width = 91
       Height = 33
@@ -95,7 +95,7 @@ inherited frmTimeSeries: TfrmTimeSeries
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 484
+      ExplicitLeft = 480
     end
     object btnAddGroup: TButton
       Left = 9

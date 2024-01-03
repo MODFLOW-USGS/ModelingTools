@@ -12,15 +12,27 @@ type
 
   TTsAttributes = class(TCustomMf6Persistent)
   private
-    Names: TStringList;
-    Methods: TTsMethodList;
-    SFACS: TDoubleList;
+    FNames: TStringList;
+    FMethods: TTsMethodList;
+    FSFACS: TDoubleList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetMethod(Index: Integer): TTsMethod;
+    function GetMethodCount: Integer;
+    function GetName(Index: Integer): string;
+    function GetNameCount: Integer;
+    function GetSfac(Index: Integer): double;
+    function GetSfacCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property NameCount: Integer read GetNameCount;
+    property Names[Index: Integer]: string read GetName;
+    property MethodCount: Integer read GetMethodCount;
+    property Methods[Index: Integer]: TTsMethod read GetMethod;
+    property SfacCount: Integer read GetSfacCount;
+    property SFacs[Index: Integer]: double read GetSfac;
   end;
 
   TTimeValues = TObjectList<TDoubleList>;
@@ -28,14 +40,22 @@ type
   TTsTimeSeries = class(TCustomMf6Persistent)
   private
     FNumberOfTimeSeries: Integer;
-    Times: TDoubleList;
-    Values: TTimeValues;
+    FTimes: TDoubleList;
+    FValues: TTimeValues;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetNumberOfTimeSeries: Integer;
+    function GetTime(Index: Integer): double;
+    function GetTimeCount: Integer;
+    function GetTimeSeriesValues(Index: integer): TDoubleList;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property TimeCount: Integer read GetTimeCount;
+    property Times[Index: Integer]: double read GetTime;
+    property NumberOfTimeSeries: Integer read GetNumberOfTimeSeries;
+    property TimeSeriesValues[Index: integer]: TDoubleList read GetTimeSeriesValues;
   end;
 
   TTimeSeries = class(TPackageReader)
@@ -46,6 +66,8 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Attributes: TTsAttributes read FAttributes;
+    property TimeSeries: TTsTimeSeries read FTimeSeries;
   end;
 
 implementation
@@ -57,27 +79,57 @@ uses
 
 constructor TTsAttributes.Create(PackageType: string);
 begin
-  Names := TStringList.Create;
-  Methods := TTsMethodList.Create;
-  SFACS := TDoubleList.Create;
+  FNames := TStringList.Create;
+  FMethods := TTsMethodList.Create;
+  FSFACS := TDoubleList.Create;
   inherited;
 
 end;
 
 destructor TTsAttributes.Destroy;
 begin
-  Names.Free;
-  Methods.Free;
-  SFACS.Free;
+  FNames.Free;
+  FMethods.Free;
+  FSFACS.Free;
   inherited;
+end;
+
+function TTsAttributes.GetMethod(Index: Integer): TTsMethod;
+begin
+  result := FMethods[Index];
+end;
+
+function TTsAttributes.GetMethodCount: Integer;
+begin
+  result := FMethods.Count;
+end;
+
+function TTsAttributes.GetName(Index: Integer): string;
+begin
+  result := FNames[Index];
+end;
+
+function TTsAttributes.GetNameCount: Integer;
+begin
+  result := FNames.Count;
+end;
+
+function TTsAttributes.GetSfac(Index: Integer): double;
+begin
+  result := FSFACS[Index];
+end;
+
+function TTsAttributes.GetSfacCount: Integer;
+begin
+  result := FSFACS.Count;
 end;
 
 procedure TTsAttributes.Initialize;
 begin
   inherited;
-  Names.Clear;
-  Methods.Clear;
-  SFACS.Clear;
+  FNames.Clear;
+  FMethods.Clear;
+  FSFACS.Clear;
 end;
 
 procedure TTsAttributes.Read(Stream: TStreamReader;
@@ -112,10 +164,10 @@ begin
       end;
       if ReadEndOfSection(ALine, ErrorLine, 'ATTRIBUTES', Unhandled) then
       begin
-        Assert(Methods.Count >= Names.Count);
-        if SFACS.Count > 0 then
+        Assert(FMethods.Count >= FNames.Count);
+        if FSFACS.Count > 0 then
         begin
-          Assert(SFACS.Count >= Names.Count);
+          Assert(FSFACS.Count >= FNames.Count);
         end;
         Exit
       end;
@@ -132,13 +184,13 @@ begin
         if (Tag = 'NAMES') or (Tag = 'NAME') then
         begin
           FSplitter.Delete(0);
-          Names.Assign(FSplitter);
-          if (Methods.Count > 0) and (Methods.Count < Names.Count) then
+          FNames.Assign(FSplitter);
+          if (FMethods.Count > 0) and (FMethods.Count < FNames.Count) then
           begin
-            Method := Methods.Last;
-            while Methods.Count < Names.Count do
+            Method := FMethods.Last;
+            while FMethods.Count < FNames.Count do
             begin
-              Methods.Add(Method);
+              FMethods.Add(Method);
             end;
           end;
         end
@@ -147,17 +199,17 @@ begin
           ALine := UpperCase(ALine);
           FSplitter.DelimitedText := ALine;
           FSplitter.Delete(0);
-          Methods.Capacity := FSplitter.Count;
+          FMethods.Capacity := FSplitter.Count;
           for Index := 0 to FSplitter.Count - 1 do
           begin
             ItemIndex := ValidMethods.IndexOf(FSplitter[Index]);
             if ItemIndex >= 0 then
             begin
-              Methods.Add(TTsMethod(ItemIndex));
+              FMethods.Add(TTsMethod(ItemIndex));
             end
             else
             begin
-              Methods.Add(tsUndefined);
+              FMethods.Add(tsUndefined);
             end;
           end;
         end
@@ -175,29 +227,29 @@ begin
           begin
             Method := tsUndefined;
           end;
-          Methods.Capacity := Names.Count;
-          for Index := 0 to Names.Count - 1 do
+          FMethods.Capacity := FNames.Count;
+          for Index := 0 to FNames.Count - 1 do
           begin
-            Methods.Add(Method);
+            FMethods.Add(Method);
           end;
-          if Methods.Count = 0 then
+          if FMethods.Count = 0 then
           begin
-            Methods.Add(Method);
+            FMethods.Add(Method);
           end;
         end
         else if (Tag = 'SFACS') then
         begin
           FSplitter.Delete(0);
-          SFACS.Capacity := FSplitter.Count;
+          FSFACS.Capacity := FSplitter.Count;
           for Index := 0 to FSplitter.Count - 1 do
           begin
             if TryFortranStrToFloat(FSplitter[Index], AValue) then
             begin
-              SFACS.Add(AValue)
+              FSFACS.Add(AValue)
             end
             else
             begin
-              if SFACS.Count < Names.Count then
+              if FSFACS.Count < FNames.Count then
               begin
                 Unhandled.WriteLine('Insufficient number of scale factors in the following line.');
                 Unhandled.WriteLine(ErrorLine);
@@ -209,12 +261,12 @@ begin
         else if (Tag = 'SFAC') then
         begin
           FSplitter.Delete(0);
-          SFACS.Capacity := Names.Count;
+          FSFACS.Capacity := FNames.Count;
           if TryFortranStrToFloat(FSplitter[0], AValue) then
           begin
-            for Index := 0 to Names.Count - 1 do
+            for Index := 0 to FNames.Count - 1 do
             begin
-              SFACS.Add(AValue);
+              FSFACS.Add(AValue);
             end;
           end;
         end
@@ -234,22 +286,42 @@ end;
 
 constructor TTsTimeSeries.Create(PackageType: string);
 begin
-  Times := TDoubleList.Create;
-  Values := TTimeValues.Create;
+  FTimes := TDoubleList.Create;
+  FValues := TTimeValues.Create;
   inherited Create(PackageType);
 end;
 
 destructor TTsTimeSeries.Destroy;
 begin
-  Times.Free;
-  Values.Free;
+  FTimes.Free;
+  FValues.Free;
   inherited;
+end;
+
+function TTsTimeSeries.GetNumberOfTimeSeries: Integer;
+begin
+  result := FValues.Count;
+end;
+
+function TTsTimeSeries.GetTime(Index: Integer): double;
+begin
+  result := FTimes[Index];
+end;
+
+function TTsTimeSeries.GetTimeCount: Integer;
+begin
+  result := FTimes.Count;
+end;
+
+function TTsTimeSeries.GetTimeSeriesValues(Index: integer): TDoubleList;
+begin
+  result := FValues[Index];
 end;
 
 procedure TTsTimeSeries.Initialize;
 begin
-  Times.Clear;
-  Values.Clear;
+  FTimes.Clear;
+  FValues.Clear;
   inherited;
 end;
 
@@ -281,12 +353,10 @@ begin
     begin
       Continue;
     end;
-    TimeValues := TDoubleList.Create;
-    Values.Add(TimeValues);
 
     if TryFortranStrToFloat(FSplitter[0], AValue) then
     begin
-      Times.Add(AValue);
+      FTimes.Add(AValue);
     end
     else
     begin
@@ -294,10 +364,20 @@ begin
       Unhandled.WriteLine(ErrorLine);
     end;
 
+    TimeValues := nil;
     for Index := 1 to FSplitter.Count - 1 do
     begin
       if TryFortranStrToFloat(FSplitter[Index], AValue) then
       begin
+        if Index - 1 < FValues.Count then
+        begin
+          TimeValues := FValues[Index - 1];
+        end
+        else
+        begin
+          TimeValues := TDoubleList.Create;
+          FValues.Add(TimeValues);
+        end;
         TimeValues.Add(AValue);
       end
       else
@@ -305,7 +385,7 @@ begin
         Break;
       end;
     end;
-    if TimeValues.Count < FNumberOfTimeSeries then
+    if (TimeValues = nil) or (TimeValues.Count < FNumberOfTimeSeries) then
     begin
       Unhandled.WriteLine('Invalid or missing tsr-value in a time series in the following line.');
       Unhandled.WriteLine(ErrorLine);
@@ -354,7 +434,7 @@ begin
       end
       else if FSplitter[1] ='TIMESERIES' then
       begin
-        FTimeSeries.FNumberOfTimeSeries := FAttributes.Names.Count;
+        FTimeSeries.FNumberOfTimeSeries := FAttributes.FNames.Count;
         FTimeSeries.Read(Stream, Unhandled);
       end
       else

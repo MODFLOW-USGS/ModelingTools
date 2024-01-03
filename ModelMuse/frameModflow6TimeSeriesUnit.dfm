@@ -252,7 +252,6 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
-    ExplicitHeight = 143
   end
   object pnlTop: TPanel
     Left = 0
@@ -264,7 +263,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     object edGroupName: TEdit
       Left = 8
       Top = 14
-      Width = 121
+      Width = 241
       Height = 23
       TabOrder = 0
       TextHint = 'Group Name'
