@@ -15,6 +15,7 @@ type
   TTvsRecord = record
     Cell: TCellLocation;
     CellData: TCellDataArray;
+    Used: array[0..1] of Boolean;
     procedure Assign(const Item: TTvsRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -51,6 +52,7 @@ type
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
     function BoundaryFormulaCount: integer; override;
+    function NonBlankFormulas: boolean; override;
   public
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
@@ -102,6 +104,7 @@ type
     StressPeriod: integer;
     function GetValue(Index: Integer): double;
     function GetAnnotation(Index: Integer): string;
+    function GetUsed(PropertyIndex: Integer): Boolean;
   protected
     property Values: TTvsRecord read FValues;
     function GetColumn: integer; override;
@@ -125,6 +128,7 @@ type
     procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    property Used[PropertyIndex: Integer]: Boolean read GetUsed;
     property SS: double  index SSPosition read GetValue;
     property SY: double  index SYPosition read GetValue;
 
@@ -233,9 +237,15 @@ begin
 end;
 
 procedure TTvsRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Index: Integer;
 begin
   WriteCompCell(Comp, Cell);
   CellData.Cache(Comp, Strings);
+  for Index := 0 to Length(Used) -1 do
+  begin
+    WriteCompBoolean(Comp, Used[index])
+  end;
 end;
 
 procedure TTvsRecord.RecordStrings(Strings: TStringList);
@@ -245,9 +255,15 @@ end;
 
 procedure TTvsRecord.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
+var
+  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   CellData.Restore(Decomp, Annotations);
+  for Index := 0 to Length(Used) -1 do
+  begin
+    Used[Index] := ReadCompBoolean(Decomp);
+  end;
 end;
 
 { TTvsStorage }
@@ -350,9 +366,14 @@ begin
 end;
 
 constructor TTvsItem.Create(Collection: TCollection);
+var
+  Index: Integer;
 begin
   inherited;
-
+  for Index := 0 to BoundaryFormulaCount - 1 do
+  begin
+    BoundaryFormula[Index] := '';
+  end;
 end;
 
 procedure TTvsItem.CreateFormulaObjects;
@@ -435,6 +456,21 @@ begin
   end;
 end;
 
+function TTvsItem.NonBlankFormulas: boolean;
+var
+  Index: integer;
+begin
+  result := False;
+  for Index := 0 to BoundaryFormulaCount - 1 do
+  begin
+    result := BoundaryFormula[Index] <> '';
+    if result then
+    begin
+      Exit;
+    end;
+  end;
+end;
+
 procedure TTvsItem.RemoveFormulaObjects;
 var
   Index: integer;
@@ -507,7 +543,7 @@ end;
 procedure TTvsCollection.AssignCellList(
   CellAssignmentData: TCellAssignmentData);
 var
-  TvkStorage: TTvsStorage;
+  TvsStorage: TTvsStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
@@ -538,7 +574,7 @@ var
           ErrorMessage :=  'Transient SY set to zero because of a math error';
         end;
     end;
-    with TvkStorage.TvsArray[Index].CellData.Values[BoundaryFunctionIndex] do
+    with TvsStorage.TvsArray[Index].CellData.Values[BoundaryFunctionIndex] do
     begin
       Value := 0;
       ValueAnnotation := ErrorMessage;
@@ -574,9 +610,9 @@ begin
   AllowedIndicies := [SSPosition,SYPosition];
 
   Assert(BoundaryFunctionIndex in AllowedIndicies);
-  Assert(Expression <> nil);
+//  Assert(Expression <> nil);
 
-  TvkStorage := BoundaryStorage as TTvsStorage;
+  TvsStorage := BoundaryStorage as TTvsStorage;
   CellList := ACellList as TCellAssignmentList;
   for Index := 0 to CellList.Count - 1 do
   begin
@@ -586,26 +622,30 @@ begin
 
     AssignDynamicTimeSeries(TimeSeriesName, DynamicTimeSeries, ACell);
 
-    try
-      TvkStorage.TvsArray[Index].CellData.PropertyCount := 2;
-      Expression.Evaluate;
-      with TvkStorage.TvsArray[Index].CellData.Values[BoundaryFunctionIndex] do
-      begin
-        Value := Expression.DoubleResult;
-        ValueAnnotation := ACell.Annotation;
-        ValuePestName := PestName;
-        ValuePestSeriesName := PestSeriesName;
-        ValuePestSeriesMethod := PestSeriesMethod;
-        ValueTimeSeriesName := TimeSeriesName;
-      end;
-    except
-      on E: EMathError do
-      begin
-        HandleError(E);
-      end;
-      on E: ERbwParserError do
-      begin
-        HandleError(E);
+    TvsStorage.TvsArray[Index].Used[BoundaryFunctionIndex] := Expression <> nil;
+    if Expression <> nil then
+    begin
+      try
+        TvsStorage.TvsArray[Index].CellData.PropertyCount := 2;
+        Expression.Evaluate;
+        with TvsStorage.TvsArray[Index].CellData.Values[BoundaryFunctionIndex] do
+        begin
+          Value := Expression.DoubleResult;
+          ValueAnnotation := ACell.Annotation;
+          ValuePestName := PestName;
+          ValuePestSeriesName := PestSeriesName;
+          ValuePestSeriesMethod := PestSeriesMethod;
+          ValueTimeSeriesName := TimeSeriesName;
+        end;
+      except
+        on E: EMathError do
+        begin
+          HandleError(E);
+        end;
+        on E: ERbwParserError do
+        begin
+          HandleError(E);
+        end;
       end;
     end;
   end;
@@ -614,12 +654,12 @@ end;
 procedure TTvsCollection.AssignListCellLocation(
   BoundaryStorage: TCustomBoundaryStorage; ACellList: TObject);
 var
-  TvkStorage: TTvsStorage;
+  TvsStorage: TTvsStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  TvkStorage := BoundaryStorage as TTvsStorage;
+  TvsStorage := BoundaryStorage as TTvsStorage;
   CellList := ACellList as TCellAssignmentList;
   for Index := 0 to CellList.Count - 1 do
   begin
@@ -628,7 +668,7 @@ begin
     begin
       Continue;
     end;
-    with TvkStorage.TvsArray[Index] do
+    with TvsStorage.TvsArray[Index] do
     begin
       Cell.Layer := ACell.Layer;
       Cell.Row := ACell.Row;
@@ -804,6 +844,11 @@ begin
   result := Values.Cell.Section;
 end;
 
+function TTvs_Cell.GetUsed(PropertyIndex: Integer): Boolean;
+begin
+  result := FValues.Used[PropertyIndex];
+end;
+
 function TTvs_Cell.GetValue(Index: Integer): double;
 begin
   result := Values.CellData.Values[Index].Value;
@@ -862,16 +907,16 @@ end;
 
 procedure TTvsBoundary.Assign(Source: TPersistent);
 var
-  SourceTvk: TTvsBoundary;
+  SourceTvs: TTvsBoundary;
 begin
   if Source is TTvsBoundary then
   begin
-    SourceTvk := TTvsBoundary(Source);
+    SourceTvs := TTvsBoundary(Source);
 
-    PestSSFormula := SourceTvk.PestSSFormula;
-    PestSYFormula := SourceTvk.PestSYFormula;
-    PestSSMethod := SourceTvk.PestSSMethod;
-    PestSYMethod := SourceTvk.PestSYMethod;
+    PestSSFormula := SourceTvs.PestSSFormula;
+    PestSYFormula := SourceTvs.PestSYFormula;
+    PestSSMethod := SourceTvs.PestSSMethod;
+    PestSYMethod := SourceTvs.PestSYMethod;
   end;
   inherited;
 end;
@@ -992,6 +1037,7 @@ var
   BoundaryStorage: TTvsStorage;
   ValueCount: Integer;
 begin
+  Values.EmptyFormulaOK := True;
   EvaluateListBoundaries(AModel);
   ValueCount := 0;
   for ValueIndex := 0 to Values.Count - 1 do

@@ -209,6 +209,12 @@ resourcestring
   StrInvalidMinimumCros = 'Invalid minimum cross section height';
   StrTheMinimumHeightI = 'The minimum height in any SFR cross section must b' +
   'e zero. This isn''t true in %s.';
+  StrUndefinedLengthUni = 'Undefined length unit';
+  StrWhenTheSFRPackageLength = 'When the SFR package is used, you must speci' +
+  'fy the length unit so that LENGTH_CONVERSION can be specified correctly';
+  StrUndefinedTimeUnit = 'Undefined time unit';
+  StrWhenTheSFRPackageTime = 'When the SFR package is used, you must specify' +
+  ' the time unit so that TIME_CONVERSION can be specified correctly';
 
 { TModflowSFR_MF6_Writer }
 
@@ -2119,6 +2125,66 @@ begin
   WriteString('    MAXIMUM_DEPTH_CHANGE');
   WriteFloat(SfrMf6Package.MaxDepthChange);
   NewLine;
+
+  case Model.ModflowOptions.LengthUnit of
+    0:
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrUndefinedLengthUni,
+          StrWhenTheSFRPackageLength);
+      end;
+    1: // feet
+      begin
+        WriteString('    LENGTH_CONVERSION');
+        WriteFloat(3.28081);
+        NewLine;
+      end;
+    2: // meters
+      begin
+        // do nothing
+      end;
+    3: // cm
+      begin
+        WriteString('    LENGTH_CONVERSION');
+        WriteFloat(100);
+        NewLine;
+      end;
+  end;
+
+  case Model.ModflowOptions.TimeUnit of
+    0:
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrUndefinedTimeUnit,
+          StrWhenTheSFRPackageTime);
+      end;
+    1: // seconds
+      begin
+        // do nothing
+      end;
+    2: // minutes
+      begin
+        WriteString('    TIME_CONVERSION');
+        WriteFloat(60);
+        NewLine;
+      end;
+    3: // hours
+      begin
+        WriteString('    TIME_CONVERSION');
+        WriteFloat(3600);
+        NewLine;
+      end;
+    4: // days
+      begin
+        WriteString('    TIME_CONVERSION');
+        WriteFloat(86400);
+        NewLine;
+      end;
+    5: // years
+      begin
+        WriteString('    TIME_CONVERSION');
+        WriteFloat(31557600);
+        NewLine;
+      end;
+  end;
 
   // UNIT_CONVERSION is no longer used.
 //  WriteString('    UNIT_CONVERSION');

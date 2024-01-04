@@ -272,7 +272,7 @@ var
 begin
   WriteCompCell(Comp, Cell);
   CellData.Cache(Comp, Strings);
-  for Index := 0 to 2 do
+  for Index := 0 to Length(Used) -1 do
   begin
     WriteCompBoolean(Comp, Used[index])
   end;
@@ -290,7 +290,7 @@ var
 begin
   Cell := ReadCompCell(Decomp);
   CellData.Restore(Decomp, Annotations);
-  for Index := 0 to 2 do
+  for Index := 0 to Length(Used) -1 do
   begin
     Used[Index] := ReadCompBoolean(Decomp);
   end;

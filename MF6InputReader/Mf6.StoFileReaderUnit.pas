@@ -9,23 +9,25 @@ uses
 type
   TStoOptions = class(TCustomMf6Persistent)
   private
-    SAVE_FLOWS: Boolean;
-    STORAGECOEFFICIENT: Boolean;
-    SS_CONFINED_ONLY: Boolean;
-    TVS6_FileNames: TStringList;
+    FSAVE_FLOWS: Boolean;
+    FSTORAGECOEFFICIENT: Boolean;
+    FSS_CONFINED_ONLY: Boolean;
+    FTVS6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property SAVE_FLOWS: Boolean read FSAVE_FLOWS;
+    property STORAGECOEFFICIENT: Boolean read FSTORAGECOEFFICIENT;
   end;
 
   TStoGridData = class(TCustomMf6Persistent)
   private
-    ICONVERT: TIArray3D;
-    SS: TDArray3D;
-    SY: TDArray3D;
+    FICONVERT: TIArray3D;
+    FSS: TDArray3D;
+    FSY: TDArray3D;
     FDimensions: TDimensions;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
@@ -33,16 +35,21 @@ type
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
+    property ICONVERT: TIArray3D read FICONVERT;
+    property SS: TDArray3D read FSS;
+    property SY: TDArray3D read FSY;
   end;
 
   TStoStressPeriod = class(TCustomMf6Persistent)
   private
     IPer: Integer;
-    TRANSIENT: Boolean;
+    FTRANSIENT: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   public
+    property Period: Integer read IPer;
+    property TRANSIENT: Boolean read FTRANSIENT;
   end;
 
   TStoStressPeriodList = TObjectList<TStoStressPeriod>;
@@ -52,11 +59,21 @@ type
     FOptions: TStoOptions;
     FGridData: TStoGridData;
     FStressPeriods: TStoStressPeriodList;
-    TvsPackages: TPackageList;
+    FTvsPackages: TPackageList;
+    function GetCount: Integer;
+    function GetTvsCount: Integer;
+    function GetTvsPackage(Index: Integer): TPackage;
+    function GetStressPeriod(Index: Integer): TStoStressPeriod;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TStoOptions read FOptions;
+    property GridData: TStoGridData read FGridData;
+    property Count: Integer read GetCount;
+    property StressPeriods[Index: Integer]: TStoStressPeriod read GetStressPeriod; default;
+    property TvsCount: Integer read GetTvsCount;
+    property TvsPackages[Index: Integer]: TPackage read GetTvsPackage;
   end;
 
 implementation
@@ -68,21 +85,21 @@ uses
 
 constructor TStoOptions.Create(PackageType: string);
 begin
-  TVS6_FileNames := TStringList.Create;
+  FTVS6_FileNames := TStringList.Create;
   inherited;
 
 end;
 
 destructor TStoOptions.Destroy;
 begin
-  TVS6_FileNames.Free;
+  FTVS6_FileNames.Free;
   inherited;
 end;
 
 procedure TStoOptions.Initialize;
 begin
   inherited;
-  TVS6_FileNames.Clear;
+  FTVS6_FileNames.Clear;
 end;
 
 procedure TStoOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -115,15 +132,15 @@ begin
     end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
-      SAVE_FLOWS := True;
+      FSAVE_FLOWS := True;
     end
     else if FSplitter[0] = 'STORAGECOEFFICIENT' then
     begin
-      STORAGECOEFFICIENT := True;
+      FSTORAGECOEFFICIENT := True;
     end
     else if FSplitter[0] = 'SS_CONFINED_ONLY' then
     begin
-      SS_CONFINED_ONLY := True;
+      FSS_CONFINED_ONLY := True;
     end
     else if (FSplitter[0] = 'TVS6')
       and (FSplitter.Count >= 3)
@@ -131,7 +148,7 @@ begin
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
       TVS6_FileName := FSplitter[2];
-      TVS6_FileNames.Add(TVS6_FileName);
+      FTVS6_FileNames.Add(TVS6_FileName);
     end
     else
     begin
@@ -152,9 +169,9 @@ end;
 
 procedure TStoGridData.Initialize;
 begin
-  SetLength(ICONVERT, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(SS, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(SY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FICONVERT, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FSS, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FSY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
   inherited;
 end;
 
@@ -195,7 +212,7 @@ begin
       IntThreeDReader := TInteger3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         IntThreeDReader.Read(Stream, Unhandled);
-        ICONVERT := IntThreeDReader.FData;
+        FICONVERT := IntThreeDReader.FData;
       finally
         IntThreeDReader.Free;
       end;
@@ -206,7 +223,7 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        SS := DoubleThreeDReader.FData;
+        FSS := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -217,7 +234,7 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        SY := DoubleThreeDReader.FData;
+        FSY := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -238,7 +255,7 @@ begin
   FOptions := TStoOptions.Create(PackageType);
   FGridData := TStoGridData.Create(PackageType);
   FStressPeriods := TStoStressPeriodList.Create;
-  TvsPackages := TPackageList.Create;
+  FTvsPackages := TPackageList.Create;
 end;
 
 destructor TSto.Destroy;
@@ -246,8 +263,28 @@ begin
   FOptions.Free;
   FGridData.Free;
   FStressPeriods.Free;
-  TvsPackages.Free;
+  FTvsPackages.Free;
   inherited;
+end;
+
+function TSto.GetCount: Integer;
+begin
+  result := FStressPeriods.Count;
+end;
+
+function TSto.GetStressPeriod(Index: Integer): TStoStressPeriod;
+begin
+  result := FStressPeriods[Index]
+end;
+
+function TSto.GetTvsCount: Integer;
+begin
+  result := FTvsPackages.Count;
+end;
+
+function TSto.GetTvsPackage(Index: Integer): TPackage;
+begin
+  result := FTvsPackages[Index];
 end;
 
 procedure TSto.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -305,12 +342,12 @@ begin
     end;
   end;
 
-  for PackageIndex := 0 to FOptions.TVS6_FileNames.Count - 1 do
+  for PackageIndex := 0 to FOptions.FTVS6_FileNames.Count - 1 do
   begin
     TvsPackage := TPackage.Create;
-    TvsPackages.Add(TvsPackage);
+    FTvsPackages.Add(TvsPackage);
     TvsPackage.FileType := 'TVS6';
-    TvsPackage.FileName := FOptions.TVS6_FileNames[PackageIndex];
+    TvsPackage.FileName := FOptions.FTVS6_FileNames[PackageIndex];
     TvsPackage.PackageName := '';
 
     TvsReader := TTvs.Create(TvsPackage.FileType);
@@ -325,7 +362,7 @@ end;
 
 procedure TStoStressPeriod.Initialize;
 begin
-  TRANSIENT := False;
+  FTRANSIENT := False;
   inherited;
 
 end;
@@ -357,11 +394,11 @@ begin
     end
     else if FSplitter[0] = 'STEADY-STATE' then
     begin
-      TRANSIENT := False;
+      FTRANSIENT := False;
     end
     else if FSplitter[0] = 'TRANSIENT' then
     begin
-      TRANSIENT := True;
+      FTRANSIENT := True;
     end
     else
     begin

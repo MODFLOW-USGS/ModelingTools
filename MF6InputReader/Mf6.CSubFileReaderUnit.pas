@@ -9,30 +9,30 @@ uses
 type
   TCSubOptions = class(TCustomMf6Persistent)
   private
-    BOUNDNAMES: Boolean;
-    PRINT_INPUT: Boolean;
-    SAVE_FLOWS: Boolean;
-    GAMMAW: TRealOption;
-    BETA: TRealOption;
-    HEAD_BASED: Boolean;
-    INITIAL_PRECONSOLIDATION_HEAD: Boolean;
-    NDELAYCELLS: TIntegerOption;
-    COMPRESSION_INDICES: Boolean;
-    UPDATE_MATERIAL_PROPERTIES: Boolean;
-    CELL_FRACTION: Boolean;
-    SPECIFIED_INITIAL_INTERBED_STATE: Boolean;
-    SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS: Boolean;
-    SPECIFIED_INITIAL_DELAY_HEAD: Boolean;
-    EFFECTIVE_STRESS_LAG: Boolean;
-    STRAIN_CSV_INTERBED: Boolean;
-    STRAIN_CSV_COARSE: Boolean;
-    COMPACTION: Boolean;
-    COMPACTION_ELASTIC: Boolean;
-    COMPACTION_INELASTIC: Boolean;
-    COMPACTION_INTERBED: Boolean;
-    COMPACTION_COARSE: Boolean;
-    ZDISPLACEMENT: Boolean;
-    PACKAGE_CONVERGENCE: Boolean;
+    FBOUNDNAMES: Boolean;
+    FPRINT_INPUT: Boolean;
+    FSAVE_FLOWS: Boolean;
+    FGAMMAW: TRealOption;
+    FBETA: TRealOption;
+    FHEAD_BASED: Boolean;
+    FINITIAL_PRECONSOLIDATION_HEAD: Boolean;
+    FNDELAYCELLS: TIntegerOption;
+    FCOMPRESSION_INDICES: Boolean;
+    FUPDATE_MATERIAL_PROPERTIES: Boolean;
+    FCELL_FRACTION: Boolean;
+    FSPECIFIED_INITIAL_INTERBED_STATE: Boolean;
+    FSPECIFIED_INITIAL_PRECONSOLIDATION_STRESS: Boolean;
+    FSPECIFIED_INITIAL_DELAY_HEAD: Boolean;
+    FEFFECTIVE_STRESS_LAG: Boolean;
+    FSTRAIN_CSV_INTERBED: Boolean;
+    FSTRAIN_CSV_COARSE: Boolean;
+    FCOMPACTION: Boolean;
+    FCOMPACTION_ELASTIC: Boolean;
+    FCOMPACTION_INELASTIC: Boolean;
+    FCOMPACTION_INTERBED: Boolean;
+    FCOMPACTION_COARSE: Boolean;
+    FZDISPLACEMENT: Boolean;
+    FPACKAGE_CONVERGENCE: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -41,23 +41,49 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property BOUNDNAMES: Boolean read FBOUNDNAMES;
+    property PRINT_INPUT: Boolean read FPRINT_INPUT;
+    property SAVE_FLOWS: Boolean read FSAVE_FLOWS;
+    property GAMMAW: TRealOption read FGAMMAW;
+    property BETA: TRealOption read FBETA;
+    property HEAD_BASED: Boolean read FHEAD_BASED;
+    property INITIAL_PRECONSOLIDATION_HEAD: Boolean read FINITIAL_PRECONSOLIDATION_HEAD;
+    property NDELAYCELLS: TIntegerOption read FNDELAYCELLS;
+    property COMPRESSION_INDICES: Boolean read FCOMPRESSION_INDICES;
+    property UPDATE_MATERIAL_PROPERTIES: Boolean read FUPDATE_MATERIAL_PROPERTIES;
+    property CELL_FRACTION: Boolean read FCELL_FRACTION;
+    property SPECIFIED_INITIAL_INTERBED_STATE: Boolean read FSPECIFIED_INITIAL_INTERBED_STATE;
+    property SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS: Boolean read FSPECIFIED_INITIAL_PRECONSOLIDATION_STRESS;
+    property SPECIFIED_INITIAL_DELAY_HEAD: Boolean read FSPECIFIED_INITIAL_DELAY_HEAD;
+    property EFFECTIVE_STRESS_LAG: Boolean read FEFFECTIVE_STRESS_LAG;
+    property STRAIN_CSV_INTERBED: Boolean read FSTRAIN_CSV_INTERBED;
+    property STRAIN_CSV_COARSE: Boolean read FSTRAIN_CSV_COARSE;
+    property COMPACTION: Boolean read FCOMPACTION;
+    property COMPACTION_ELASTIC: Boolean read FCOMPACTION_ELASTIC;
+    property COMPACTION_INELASTIC: Boolean read FCOMPACTION_INELASTIC;
+    property COMPACTION_INTERBED: Boolean read FCOMPACTION_INTERBED;
+    property COMPACTION_COARSE: Boolean read FCOMPACTION_COARSE;
+    property ZDISPLACEMENT: Boolean read FZDISPLACEMENT;
+    property PACKAGE_CONVERGENCE: Boolean read FPACKAGE_CONVERGENCE;
   end;
 
   TCSubDimensions = class(TCustomMf6Persistent)
   private
-    NINTERBEDS: Integer;
-    MAXSIG0: TIntegerOption;
+    FNINTERBEDS: Integer;
+    FMAXSIG0: TIntegerOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+    property NINTERBEDS: Integer read FNINTERBEDS;
+    property MAXSIG0: TIntegerOption read FMAXSIG0;
   end;
 
   TCSubGridData = class(TCustomMf6Persistent)
   private
-    CG_SKE_CR: TDArray3D;
-    CG_THETA: TDArray3D;
-    SGM: TDArray3D;
-    SGS: TDArray3D;
+    FCG_SKE_CR: TDArray3D;
+    FCG_THETA: TDArray3D;
+    FSGM: TDArray3D;
+    FSGS: TDArray3D;
     FDimensions: TDimensions;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
@@ -65,6 +91,10 @@ type
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
+    property CG_SKE_CR: TDArray3D read FCG_SKE_CR;
+    property CG_THETA: TDArray3D read FCG_THETA;
+    property SGM: TDArray3D read FSGM;
+    property SGS: TDArray3D read FSGS;
   end;
 
   TCSubItem = record
@@ -90,11 +120,15 @@ type
     FItems: TCSubItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TCSubItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TCSubItem read GetItem; default;
   end;
 
 
@@ -114,11 +148,16 @@ type
     FCells: TCSubTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
+    function GetCell(Index: Integer): TCSubTimeItem;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TCSubTimeItem read GetCell; default;
   end;
 
   TCSubPeriodList = TObjectList<TCSubPeriod>;
@@ -132,10 +171,26 @@ type
     FPeriods: TCSubPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GetPeriod(Index: Integer): TCSubPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeriesCount: Integer;
+    function GetPackage(Index: Integer): TPackage;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TCSubOptions read FOptions;
+    property CSubDimensions: TCSubDimensions read FCSubDimensions;
+    property GridData: TCSubGridData read FGridData;
+    property PackageData: TCSubPackageData read FPackageData;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TCSubPeriod read GetPeriod; default;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetPackage;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 implementation
@@ -165,30 +220,30 @@ begin
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
 
-  BOUNDNAMES := False;
-  PRINT_INPUT := False;
-  SAVE_FLOWS := False;
-  GAMMAW.Initialize;
-  BETA.Initialize;
-  HEAD_BASED := False;
-  INITIAL_PRECONSOLIDATION_HEAD := False;
-  NDELAYCELLS.Initialize;
-  COMPRESSION_INDICES := False;
-  UPDATE_MATERIAL_PROPERTIES := False;
-  CELL_FRACTION := False;
-  SPECIFIED_INITIAL_INTERBED_STATE := False;
-  SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS := False;
-  SPECIFIED_INITIAL_DELAY_HEAD := False;
-  EFFECTIVE_STRESS_LAG := False;
-  STRAIN_CSV_INTERBED := False;
-  STRAIN_CSV_COARSE := False;
-  COMPACTION := False;
-  COMPACTION_ELASTIC := False;
-  COMPACTION_INELASTIC := False;
-  COMPACTION_INTERBED := False;
-  COMPACTION_COARSE := False;
-  ZDISPLACEMENT := False;
-  PACKAGE_CONVERGENCE := False;
+  FBOUNDNAMES := False;
+  FPRINT_INPUT := False;
+  FSAVE_FLOWS := False;
+  FGAMMAW.Initialize;
+  FBETA.Initialize;
+  FHEAD_BASED := False;
+  FINITIAL_PRECONSOLIDATION_HEAD := False;
+  FNDELAYCELLS.Initialize;
+  FCOMPRESSION_INDICES := False;
+  FUPDATE_MATERIAL_PROPERTIES := False;
+  FCELL_FRACTION := False;
+  FSPECIFIED_INITIAL_INTERBED_STATE := False;
+  FSPECIFIED_INITIAL_PRECONSOLIDATION_STRESS := False;
+  FSPECIFIED_INITIAL_DELAY_HEAD := False;
+  FEFFECTIVE_STRESS_LAG := False;
+  FSTRAIN_CSV_INTERBED := False;
+  FSTRAIN_CSV_COARSE := False;
+  FCOMPACTION := False;
+  FCOMPACTION_ELASTIC := False;
+  FCOMPACTION_INELASTIC := False;
+  FCOMPACTION_INTERBED := False;
+  FCOMPACTION_COARSE := False;
+  FZDISPLACEMENT := False;
+  FPACKAGE_CONVERGENCE := False;
 end;
 
 procedure TCSubOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -222,106 +277,106 @@ begin
     end
     else if FSplitter[0] = 'BOUNDNAMES' then
     begin
-      BOUNDNAMES := True;
+      FBOUNDNAMES := True;
     end
     else if FSplitter[0] = 'PRINT_INPUT' then
     begin
-      PRINT_INPUT := True;
+      FPRINT_INPUT := True;
     end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
-      SAVE_FLOWS := True;
+      FSAVE_FLOWS := True;
     end
     else if (FSplitter[0] = 'GAMMAW') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], GAMMAW.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FGAMMAW.Value) then
     begin
-      GAMMAW.Used := True;
+      FGAMMAW.Used := True;
     end
     else if (FSplitter[0] = 'BETA') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], BETA.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FBETA.Value) then
     begin
-      BETA.Used := True;
+      FBETA.Used := True;
     end
     else if FSplitter[0] = 'HEAD_BASED' then
     begin
-      HEAD_BASED := True;
+      FHEAD_BASED := True;
     end
     else if FSplitter[0] = 'INITIAL_PRECONSOLIDATION_HEAD' then
     begin
-      INITIAL_PRECONSOLIDATION_HEAD := True;
+      FINITIAL_PRECONSOLIDATION_HEAD := True;
     end
     else if (FSplitter[0] = 'NDELAYCELLS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NDELAYCELLS.Value) then
+      and TryStrToInt(FSplitter[1], FNDELAYCELLS.Value) then
     begin
-      NDELAYCELLS.Used := True;
+      FNDELAYCELLS.Used := True;
     end
     else if FSplitter[0] = 'COMPRESSION_INDICES' then
     begin
-      COMPRESSION_INDICES := True;
+      FCOMPRESSION_INDICES := True;
     end
     else if FSplitter[0] = 'UPDATE_MATERIAL_PROPERTIES' then
     begin
-      UPDATE_MATERIAL_PROPERTIES := True;
+      FUPDATE_MATERIAL_PROPERTIES := True;
     end
     else if FSplitter[0] = 'CELL_FRACTION' then
     begin
-      CELL_FRACTION := True;
+      FCELL_FRACTION := True;
     end
     else if FSplitter[0] = 'SPECIFIED_INITIAL_INTERBED_STATE' then
     begin
-      SPECIFIED_INITIAL_INTERBED_STATE := True;
+      FSPECIFIED_INITIAL_INTERBED_STATE := True;
     end
     else if FSplitter[0] = 'SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS' then
     begin
-      SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS := True;
+      FSPECIFIED_INITIAL_PRECONSOLIDATION_STRESS := True;
     end
     else if FSplitter[0] = 'SPECIFIED_INITIAL_DELAY_HEAD' then
     begin
-      SPECIFIED_INITIAL_DELAY_HEAD := True;
+      FSPECIFIED_INITIAL_DELAY_HEAD := True;
     end
     else if FSplitter[0] = 'EFFECTIVE_STRESS_LAG' then
     begin
-      EFFECTIVE_STRESS_LAG := True;
+      FEFFECTIVE_STRESS_LAG := True;
     end
     else if FSplitter[0] = 'STRAIN_CSV_INTERBED' then
     begin
-      STRAIN_CSV_INTERBED := True;
+      FSTRAIN_CSV_INTERBED := True;
     end
     else if FSplitter[0] = 'STRAIN_CSV_COARSE' then
     begin
-      STRAIN_CSV_COARSE := True;
+      FSTRAIN_CSV_COARSE := True;
     end
     else if FSplitter[0] = 'COMPACTION' then
     begin
-      COMPACTION := True;
+      FCOMPACTION := True;
     end
     else if FSplitter[0] = 'COMPACTION_ELASTIC' then
     begin
-      COMPACTION_ELASTIC := True;
+      FCOMPACTION_ELASTIC := True;
     end
     else if FSplitter[0] = 'COMPACTION_INELASTIC' then
     begin
-      COMPACTION_INELASTIC := True;
+      FCOMPACTION_INELASTIC := True;
     end
     else if FSplitter[0] = 'COMPACTION_INTERBED' then
     begin
-      COMPACTION_INTERBED := True;
+      FCOMPACTION_INTERBED := True;
     end
     else if FSplitter[0] = 'COMPACTION_INTERBED' then
     begin
-      COMPACTION_INTERBED := True;
+      FCOMPACTION_INTERBED := True;
     end
     else if FSplitter[0] = 'COMPACTION_COARSE' then
     begin
-      COMPACTION_COARSE := True;
+      FCOMPACTION_COARSE := True;
     end
     else if FSplitter[0] = 'ZDISPLACEMENT' then
     begin
-      ZDISPLACEMENT := True;
+      FZDISPLACEMENT := True;
     end
     else if FSplitter[0] = 'PACKAGE_CONVERGENCE' then
     begin
-      PACKAGE_CONVERGENCE := True;
+      FPACKAGE_CONVERGENCE := True;
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -352,8 +407,8 @@ end;
 procedure TCSubDimensions.Initialize;
 begin
   inherited;
-  NINTERBEDS := 0;
-  MAXSIG0.Initialize;
+  FNINTERBEDS := 0;
+  FMAXSIG0.Initialize;
 end;
 
 procedure TCSubDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -382,13 +437,13 @@ begin
       // do nothing
     end
     else if (FSplitter[0] = 'NINTERBEDS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NINTERBEDS) then
+      and TryStrToInt(FSplitter[1], FNINTERBEDS) then
     begin
     end
     else if (FSplitter[0] = 'MAXSIG0') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], MAXSIG0.Value) then
+      and TryStrToInt(FSplitter[1], FMAXSIG0.Value) then
     begin
-      MAXSIG0.Used := True;
+      FMAXSIG0.Used := True;
     end
     else
     begin
@@ -409,10 +464,10 @@ end;
 
 procedure TCSubGridData.Initialize;
 begin
-  SetLength(CG_SKE_CR, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(CG_THETA, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(SGM, 0);
-  SetLength(SGS, 0);
+  SetLength(FCG_SKE_CR, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FCG_THETA, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FSGM, 0);
+  SetLength(FSGS, 0);
   inherited;
 end;
 
@@ -452,7 +507,7 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        CG_SKE_CR := DoubleThreeDReader.FData;
+        FCG_SKE_CR := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -463,31 +518,31 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        CG_THETA := DoubleThreeDReader.FData;
+        FCG_THETA := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'SGM' then
     begin
-      SetLength(SGM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FSGM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        SGM := DoubleThreeDReader.FData;
+        FSGM := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'SGS' then
     begin
-      SetLength(SGS, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FSGS, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        SGS := DoubleThreeDReader.FData;
+        FSGS := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -531,6 +586,16 @@ destructor TCSubPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TCSubPackageData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TCSubPackageData.GetItem(Index: Integer): TCSubItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TCSubPackageData.Initialize;
@@ -686,6 +751,16 @@ begin
   inherited;
 end;
 
+function TCSubPeriod.GetCell(Index: Integer): TCSubTimeItem;
+begin
+  result := FCells[Index];
+end;
+
+function TCSubPeriod.GetCount: Integer;
+begin
+  result := FCells.Count;
+end;
+
 procedure TCSubPeriod.Initialize;
 begin
   inherited;
@@ -788,6 +863,36 @@ begin
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   inherited;
+end;
+
+function TCSub.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
+end;
+
+function TCSub.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TCSub.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TCSub.GetPackage(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TCSub.GetPeriod(Index: Integer): TCSubPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TCSub.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
 end;
 
 procedure TCSub.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

@@ -35445,7 +35445,7 @@ end;
 
 procedure TScreenObject.SetMinimumFraction(const Value: double);
 begin
-    StoredMinimumFraction.Value := value;
+  StoredMinimumFraction.Value := value;
 end;
 
 procedure TScreenObject.SetMixtureDataSetFormula(const Index: integer;

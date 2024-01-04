@@ -179,14 +179,14 @@ var
   TvkItem: TTvsItem;
   function NonBlank(const Formula: string): string;
   begin
-    if Formula = '' then
-    begin
-      result := '0';
-    end
-    else
-    begin
+//    if Formula = '' then
+//    begin
+//      result := '0';
+//    end
+//    else
+//    begin
       result := Formula;
-    end;
+//    end;
   end;
 begin
   for Index := 0 to List.Count - 1 do

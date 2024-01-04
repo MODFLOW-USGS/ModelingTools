@@ -850,6 +850,13 @@ var
   SideSegment: TSegment2D;
   SideIndex: Integer;
   SegLength: TFloat;
+  function PointOnLine(ASegment: TSegment2D; Point: TPoint2D): Boolean;
+  begin
+    result := (Point.x >= Min(ASegment[1].x, ASegment[2].x))
+      and (Point.x <= Max(ASegment[1].x, ASegment[2].x))
+      and (Point.y >= Min(ASegment[1].y, ASegment[2].y))
+      and (Point.y <= Max(ASegment[1].y, ASegment[2].y))
+  end;
 begin
   if Length(Polygon) = 0 then
   begin
@@ -874,7 +881,9 @@ begin
   for SideIndex := 0 to Length(Polygon) - 1 do
   begin
     SideSegment[1] := Polygon[SideIndex];
-    if Intersect(Segment, SideSegment, APoint.X, APoint.Y) then
+    if Intersect(Segment, SideSegment, APoint.X, APoint.Y)
+      and PointOnLine(Segment, APoint)
+      and PointOnLine(SideSegment, APoint) then
     begin
       if Pos < 2 then
       begin

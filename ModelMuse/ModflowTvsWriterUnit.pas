@@ -286,12 +286,16 @@ begin
     begin
       ACell := Cells[CellIndex] as TTvs_Cell;
 
-      WriteCellID;
-      WriteString(' SS');
-      WriteValueOrFormula(ACell, SSPosition);
-      NewLine;
+      if ACell.Used[SSPosition] then
+      begin
+        WriteCellID;
+        WriteString(' SS');
+        WriteValueOrFormula(ACell, SSPosition);
+        NewLine;
+      end;
 
-      if ConvertibleDataSet.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
+      if ConvertibleDataSet.BooleanData[ACell.Layer, ACell.Row, ACell.Column]
+        and ACell.Used[SYPosition] then
       begin
         WriteCellID;
         WriteString(' SY');

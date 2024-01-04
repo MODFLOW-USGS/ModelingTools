@@ -17920,7 +17920,7 @@ begin
     end
     else
     begin
-      Assert(False);
+      Assert(False, ALabel);
     end;
   end;
 end;

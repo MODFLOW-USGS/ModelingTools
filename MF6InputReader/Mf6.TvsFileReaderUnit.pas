@@ -9,7 +9,7 @@ uses
 type
   TTvsOptions = class(TCustomMf6Persistent)
   private
-    DISABLE_STORAGE_CHANGE_INTEGRATION: Boolean;
+    FDISABLE_STORAGE_CHANGE_INTEGRATION: Boolean;
     PRINT_INPUT: Boolean;
     TS6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -18,6 +18,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property DISABLE_STORAGE_CHANGE_INTEGRATION: Boolean read FDISABLE_STORAGE_CHANGE_INTEGRATION;
   end;
 
   TTvsPeriodData = class(TCustomMf6Persistent)
@@ -25,11 +26,16 @@ type
     IPer: Integer;
     FCells: TTimeVariableCellList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
+    function GetCell(Index: Integer): TTimeVariableCell;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TTimeVariableCell read GetCell; default;
   end;
 
   TTvsPeriodList = TObjectList<TTvsPeriodData>;
@@ -39,10 +45,19 @@ type
     FOptions: TTvsOptions;
     FPeriods: TTvsPeriodList;
     FTimeSeriesPackages: TPackageList;
+    function GetCount: Integer;
+    function GetPeriod(Index: Integer): TTvsPeriodData;
+    function GetTimeSeriesPackage(Index: Integer): TPackage;
+    function GetTimeSeriesPackageCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TTvsOptions read FOptions;
+    property Count: Integer read GetCount;
+    property Periods[Index: Integer]: TTvsPeriodData read GetPeriod; default;
+    property TimeSeriesPackageCount: Integer read GetTimeSeriesPackageCount;
+    property TimeSeriesPackages[Index: Integer]: TPackage read GetTimeSeriesPackage;
   end;
 
 
@@ -69,7 +84,7 @@ end;
 procedure TTvsOptions.Initialize;
 begin
   inherited;
-  DISABLE_STORAGE_CHANGE_INTEGRATION := False;
+  FDISABLE_STORAGE_CHANGE_INTEGRATION := False;
   PRINT_INPUT := False;
   TS6_FileNames.Clear;
 end;
@@ -108,7 +123,7 @@ begin
     end
     else if FSplitter[0] = 'DISABLE_STORAGE_CHANGE_INTEGRATION' then
     begin
-      DISABLE_STORAGE_CHANGE_INTEGRATION := True;
+      FDISABLE_STORAGE_CHANGE_INTEGRATION := True;
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -139,6 +154,16 @@ destructor TTvsPeriodData.Destroy;
 begin
   FCells.Free;
   inherited;
+end;
+
+function TTvsPeriodData.GetCell(Index: Integer): TTimeVariableCell;
+begin
+  result := FCells[Index];
+end;
+
+function TTvsPeriodData.GetCount: Integer;
+begin
+    result := FCells.Count;
 end;
 
 procedure TTvsPeriodData.Initialize;
@@ -228,6 +253,26 @@ begin
   FOptions.Free;
   FPeriods.Free;
   inherited;
+end;
+
+function TTvs.GetCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TTvs.GetPeriod(Index: Integer): TTvsPeriodData;
+begin
+  result := FPeriods[Index];
+end;
+
+function TTvs.GetTimeSeriesPackage(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TTvs.GetTimeSeriesPackageCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
 end;
 
 procedure TTvs.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

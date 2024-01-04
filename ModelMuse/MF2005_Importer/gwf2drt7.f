@@ -373,8 +373,8 @@ C  Read the non-optional values from the line.
    20         CONTINUE
             ENDIF
           ENDIF
-          WRITE(IOUT,*) 'Layer Row Column Elevation Cond
-     + LayR RowR ColR Rfprop:'
+          WRITE(IOUT,*) 'Layer Row Column Elevation Cond',
+     + ' LayR RowR ColR Rfprop:'
           WRITE(IOUT,*) K,I,J,
      &          (DRTF(JJ,II),JJ=4,5),KR,IR,JR,(DRTF(JJ,II),JJ=9,NREAD1)
           DRTF(6,II) = KR
