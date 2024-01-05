@@ -3525,11 +3525,11 @@ Type
     [ZDISPLACEMENT FILEOUT <zdisplacement_filename>]}
     property OutputTypes: TCsubOutputTypes read FOutputTypes
       write SetOutputTypes Stored True;
-    // cdelay
-    property Interbeds: TCSubInterbeds read FInterbeds write SetInterbeds;
     // PACKAGE_CONVERGENCE
     property WriteConvergenceData: Boolean read FWriteConvergenceData
       write SetWriteConvergenceData Stored True;
+    // cdelay
+    property Interbeds: TCSubInterbeds read FInterbeds write SetInterbeds;
   end;
 
   TSwtPrintItem = class(TCustomPrintItem)

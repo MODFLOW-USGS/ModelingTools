@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, System.IOUtils, Vcl.Dialogs, System.SysUtils, System.UITypes,
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
-  ScreenObjectUnit, DataSetUnit, System.Generics.Collections;
+  ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
+  System.Generics.Defaults;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -76,7 +77,7 @@ uses
   Mf6.TimeSeriesFileReaderUnit, Modflow6TimeSeriesCollectionsUnit,
   Modflow6TimeSeriesUnit, Mf6.HfbFileReaderUnit, ModflowHfbUnit,
   Mf6.StoFileReaderUnit, Mf6.TvsFileReaderUnit, ModflowTvsUnit,
-  Mf6.CSubFileReaderUnit;
+  Mf6.CSubFileReaderUnit, ModflowCSubInterbed, ModflowCsubUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -236,14 +237,10 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   APoint: TPoint2D;
-//  UpdateOutline: Boolean;
-//  FoundFirst: Boolean;
   Model: TPhastModel;
-//  Grid: TCustomModelGrid;
 begin
   Assert(FAllTopCellsScreenObject = nil);
     Model := frmGoPhast.PhastModel;
-//    Grid := Model.Grid;
     FAllTopCellsScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
     FAllTopCellsScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -261,53 +258,12 @@ begin
     FAllTopCellsScreenObject.EvaluatedAt := eaBlocks;
     FAllTopCellsScreenObject.Visible := False;
     FAllTopCellsScreenObject.Capacity := Model.RowCount * Model.ColumnCount;
-//    UpdateOutline := (FImporter.FImportParameters.Outline <> nil)
-//      and (FImporter.FImportParameters.FirstCol = 0)
-//      and (FImporter.FImportParameters.LastCol = 0)
-//      and (FImporter.FImportParameters.FirstRow = 0)
-//      and (FImporter.FImportParameters.LastRow = 0);
-//    FoundFirst := False;
     for RowIndex := 0 to Model.RowCount - 1 do
     begin
       for ColIndex := 0 to Model.ColumnCount - 1 do
       begin
         APoint := Model.TwoDElementCenter(ColIndex, RowIndex);
-
-//        if (FImporter.FImportParameters.Outline = nil)
-//          or FImporter.FImportParameters.Outline.PointInside(APoint) then
-        begin
-          FAllTopCellsScreenObject.AddPoint(APoint, True);
-//          if UpdateOutline then
-//          begin
-//            if FoundFirst then
-//            begin
-//              if FImporter.FImportParameters.FirstCol > ColIndex + 1 then
-//              begin
-//                FImporter.FImportParameters.FirstCol := ColIndex + 1;
-//              end;
-//              if FImporter.FImportParameters.LastCol < ColIndex + 1 then
-//              begin
-//                FImporter.FImportParameters.LastCol := ColIndex + 1;
-//              end;
-//              if FImporter.FImportParameters.FirstRow > RowIndex + 1 then
-//              begin
-//                FImporter.FImportParameters.FirstRow := RowIndex + 1;
-//              end;
-//              if FImporter.FImportParameters.LastRow < RowIndex + 1 then
-//              begin
-//                FImporter.FImportParameters.LastRow := RowIndex + 1;
-//              end;
-//            end
-//            else
-//            begin
-//              FoundFirst := True;
-//              FImporter.FImportParameters.FirstCol := ColIndex + 1;
-//              FImporter.FImportParameters.LastCol := ColIndex + 1;
-//              FImporter.FImportParameters.FirstRow := RowIndex + 1;
-//              FImporter.FImportParameters.LastRow := RowIndex + 1;
-//            end;
-//          end;
-        end;
+        FAllTopCellsScreenObject.AddPoint(APoint, True);
       end;
     end;
     FAllTopCellsScreenObject.Name := 'Imported_Arrays';
@@ -329,29 +285,488 @@ var
   CSub: TCSub;
   CSubPackage: TCSubPackageSelection;
   Options: TCSubOptions;
+  OutputTypes: TCsubOutputTypes;
+  DelayCounts: array of array of array of Integer;
+  NoDelayCounts: array of array of array of Integer;
+  PackageData: TMf6CSubPackageData;
+  Index: Integer;
+  Item: TMf6CSubItem;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColumnIndex: Integer;
+  MaxDelay: Integer;
+  MaxNoDelay: Integer;
+  NoDelayLists: TObjectList<TCSubItemList>;
+  DelayLists: TObjectList<TCSubItemList>;
+  List: TCSubItemList;
+  Interbed: TCSubInterbed;
+  GridData: TCSubGridData;
+  DataArrayName: string;
+  Map: TimeSeriesMap;
+  TimeSeriesPackage: TPackage;
+  TimeSeriesIndex: Integer;
+  ObsPackageIndex: Integer;
+  ObsFiles: TObs;
+  ObsFileIndex: Integer;
+  ObsFile: TObsFile;
+  ObsIndex: Integer;
+  Observation: TObservation;
+  IcsubnoObsDictionary: TDictionary<Integer, TObservationList>;
+  BoundNameObsDictionary: TDictionary<string, TObservationList>;
+  CellIdObsDictionary: TDictionary<TCellId, TObservationList>;
+  ObsLists: TObjectList<TObservationList>;
+  ObsList: TObservationList;
+  ListIndex: Integer;
+  ItemIndex: Integer;
+  PriorItem: TMf6CSubItem;
+  PriorBoundName: string;
+  BoundName: string;
+  PriorItemAssigned: Boolean;
+  ObjectCount: Integer;
+  StartTime: double;
+  LastTime: double;
+  AScreenObject: TScreenObject;
+  NoDelayInterbeds: TList<TCSubInterbed>;
+  DelayInterbeds: TList<TCSubInterbed>;
+  PackageItem: TCSubPackageData;
+  InterbedIndex: Integer;
+  pcs0: TValueArrayItem;
+  thick_frac: TValueArrayItem;
+  rnb: TValueArrayItem;
+  ssv_cc: TValueArrayItem;
+  sse_cr: TValueArrayItem;
+  theta: TValueArrayItem;
+  kv: TValueArrayItem;
+  h0: TValueArrayItem;
+  CellId: TCellId;
+  ElementCenter: TDualLocation;
+  APoint: TPoint2D;
+  BName: TStringOption;
+  function CreateScreenObject(BoundName: String; Period: Integer): TScreenObject;
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    NewItem: TCSubItem;
+    CSubPackageData: TCSubPackageDataCollection;
+    Index: Integer;
+    ImportedName: string;
+  begin
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    if BoundName <> '' then
+    begin
+      NewName := 'ImportedCSUB_' + BoundName;
+    end
+    else
+    begin
+      if Period > 0 then
+      begin
+        NewName := 'ImportedCSUB_Period_' + IntToStr(Period);
+      end
+      else
+      begin
+        Inc(ObjectCount);
+        NewName := 'ImportedCSUB_'  + IntToStr(ObjectCount);
+      end;
+    end;
+    result.Name := NewName;
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    result.CreateCsubBoundary;
+
+    if Period > 0 then
+    begin
+      NewItem := result.ModflowCSub.Values.Add as TCsubItem;
+      NewItem.StartTime := StartTime;
+      NewItem.EndTime := LastTime;
+    end
+    else if Period = 0 then
+    begin
+      CSubPackageData := result.ModflowCSub.CSubPackageData;
+      for Index := 0 to CSubPackage.Interbeds.Count - 1 do
+      begin
+        PackageItem := CSubPackageData.Add;
+        PackageItem.InterbedSystemName := CSubPackage.Interbeds[Index].Name;
+      end;
+
+      ImportedName := 'Imported_pcs0';
+      pcs0 := result.ImportedValues.Add;
+      pcs0.Name := ImportedName;
+      pcs0.Values.DataType := rdtDouble;
+
+      ImportedName := 'Imported_thick_frac';
+      thick_frac := result.ImportedValues.Add;
+      thick_frac.Name := ImportedName;
+      thick_frac.Values.DataType := rdtDouble;
+
+      ImportedName := 'Imported_rnb';
+      rnb := result.ImportedValues.Add;
+      rnb.Name := ImportedName;
+      rnb.Values.DataType := rdtDouble;
+
+      ImportedName := 'Imported_ssv_cc';
+      ssv_cc := result.ImportedValues.Add;
+      ssv_cc.Name := ImportedName;
+      ssv_cc.Values.DataType := rdtDouble;
+
+
+      ImportedName := 'Imported_sse_cr';
+      sse_cr := result.ImportedValues.Add;
+      sse_cr.Name := ImportedName;
+      sse_cr.Values.DataType := rdtDouble;
+
+      ImportedName := 'Imported_theta';
+      theta := result.ImportedValues.Add;
+      theta.Name := ImportedName;
+      theta.Values.DataType := rdtDouble;
+
+      ImportedName := 'Imported_kv';
+      kv := result.ImportedValues.Add;
+      kv.Name := ImportedName;
+      kv.Values.DataType := rdtDouble;
+
+      ImportedName := 'Imported_h0';
+      h0 := result.ImportedValues.Add;
+      h0.Name := ImportedName;
+      h0.Values.DataType := rdtDouble;
+
+
+    end;
+  end;
 begin
+  StartTime := 0.0;
+  ObjectCount := 0;
   Model := frmGoPhast.PhastModel;
   CSubPackage := Model.ModflowPackages.CSubPackage;
   CSubPackage.IsSelected := True;
 
   CSub := Package.Package as TCSub;
-  Options := CSub.Options;
-  if Options.GAMMAW.Used then
-  begin
-    CSubPackage.Gamma := Options.GAMMAW.Value;
-  end;
-  if Options.Beta.Used then
-  begin
-    CSubPackage.Beta := Options.Beta.Value;
-  end;
-  CSubPackage.HeadBased := Options.HEAD_BASED;
-  CSubPackage.PreconsolidationHeadUsed := Options.INITIAL_PRECONSOLIDATION_HEAD;
-  if Options.NDELAYCELLS.Used then
-  begin
-    CSubPackage.NumberOfDelayCells := Options.NDELAYCELLS.Value;
-  end;
+
+  NoDelayInterbeds := TList<TCSubInterbed>.Create;
+  DelayInterbeds := TList<TCSubInterbed>.Create;
+  IcsubnoObsDictionary := TDictionary<Integer, TObservationList>.Create;
+  BoundNameObsDictionary := TDictionary<string, TObservationList>.Create;
+  CellIdObsDictionary := TDictionary<TCellId, TObservationList>.Create;
+  ObsLists := TObjectList<TObservationList>.Create;
+  Map := TimeSeriesMap.Create;
+  try
+    for TimeSeriesIndex := 0 to CSub.TimeSeriesCount - 1 do
+    begin
+      TimeSeriesPackage := CSub.TimeSeries[TimeSeriesIndex];
+      ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+
+    for ObsPackageIndex := 0 to CSub.ObservationCount - 1 do
+    begin
+      ObsFiles := CSub.Observations[ObsPackageIndex].Package as TObs;
+      for ObsFileIndex := 0 to ObsFiles.FileCount - 1 do
+      begin
+        ObsFile := ObsFiles[ObsFileIndex];
+        for ObsIndex := 0 to ObsFile.Count - 1 do
+        begin
+          Observation := ObsFile[ObsIndex];
+          case Observation.IdType1 of
+            itCell:
+              begin
+                if not CellIdObsDictionary.TryGetValue(Observation.CellId1, ObsList) then
+                begin
+                  ObsList := TObservationList.Create;
+                  ObsLists.Add(ObsList);
+                  CellIdObsDictionary.Add(Observation.CellId1, ObsList);
+                end;
+                ObsList.Add(Observation);
+              end;
+            itNumber:
+              begin
+                if not IcsubnoObsDictionary.TryGetValue(Observation.Num1, ObsList) then
+                begin
+                  ObsList := TObservationList.Create;
+                  ObsLists.Add(ObsList);
+                  IcsubnoObsDictionary.Add(Observation.Num1, ObsList);
+                end;
+                ObsList.Add(Observation);
+              end;
+            itFloat:
+              begin
+                Assert(False)
+              end;
+            itName:
+              begin
+                if not BoundNameObsDictionary.TryGetValue(UpperCase(Observation.Name1), ObsList) then
+                begin
+                  ObsList := TObservationList.Create;
+                  ObsLists.Add(ObsList);
+                  BoundNameObsDictionary.Add(UpperCase(Observation.Name1), ObsList);
+                end;
+                ObsList.Add(Observation);
+              end;
+            itAbsent:
+              begin
+                Assert(False)
+              end;
+          end;
+
+        end;
+      end;
+    end;
+
+    Options := CSub.Options;
+
+    if Options.GAMMAW.Used then
+    begin
+      CSubPackage.Gamma := Options.GAMMAW.Value;
+    end;
+    if Options.Beta.Used then
+    begin
+      CSubPackage.Beta := Options.Beta.Value;
+    end;
+    CSubPackage.HeadBased := Options.HEAD_BASED;
+    CSubPackage.PreconsolidationHeadUsed := Options.INITIAL_PRECONSOLIDATION_HEAD;
+    if Options.NDELAYCELLS.Used then
+    begin
+      CSubPackage.NumberOfDelayCells := Options.NDELAYCELLS.Value;
+    end;
+    CSubPackage.CompressionMethod := TCompressionMethod(Options.COMPRESSION_INDICES);
+    CSubPackage.UpdateMaterialProperties := Options.UPDATE_MATERIAL_PROPERTIES;
+    CSubPackage.InterbedThicknessMethod := TInterbedThicknessMethod(Options.CELL_FRACTION);
+
+    CSubPackage.SpecifyInitialPreconsolidationStress := Options.SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS;
+    CSubPackage.SpecifyInitialDelayHead := Options.SPECIFIED_INITIAL_DELAY_HEAD;
+    if Options.SPECIFIED_INITIAL_INTERBED_STATE then
+    begin
+      CSubPackage.SpecifyInitialPreconsolidationStress := True;
+      CSubPackage.SpecifyInitialDelayHead := True;
+    end;
+    CSubPackage.EffectiveStressLag := Options.EFFECTIVE_STRESS_LAG;
+    OutputTypes := [];
+    if Options.STRAIN_CSV_INTERBED then
+    begin
+      Include(OutputTypes, coInterbedStrain);
+    end;
+    if Options.STRAIN_CSV_COARSE then
+    begin
+      Include(OutputTypes, coCourseStrain);
+    end;
+    if Options.COMPACTION then
+    begin
+      Include(OutputTypes, coCompaction);
+    end;
+    if Options.COMPACTION_ELASTIC then
+    begin
+      Include(OutputTypes, coElasticComp);
+    end;
+    if Options.COMPACTION_INELASTIC then
+    begin
+      Include(OutputTypes, coInelasticComp);
+    end;
+    if Options.COMPACTION_INTERBED then
+    begin
+      Include(OutputTypes, coInterbedComp);
+    end;
+    if Options.COMPACTION_COARSE then
+    begin
+      Include(OutputTypes, coCoarseComp);
+    end;
+    if Options.ZDISPLACEMENT then
+    begin
+      Include(OutputTypes, coZDisplacement);
+    end;
+    CSubPackage.OutputTypes := OutputTypes;
+    CSubPackage.WriteConvergenceData := Options.PACKAGE_CONVERGENCE;
+
+    SetLength(DelayCounts, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+    SetLength(NoDelayCounts, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColumnIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          DelayCounts[LayerIndex, RowIndex, ColumnIndex] := 0;
+          NoDelayCounts[LayerIndex, RowIndex, ColumnIndex] := 0;
+        end;
+      end;
+    end;
+    MaxDelay := 0;
+    MaxNoDelay := 0;
+    PackageData := CSub.PackageData;
+    for Index := 0 to PackageData.Count - 1 do
+    begin
+      Item := PackageData[Index];
+      if Item.boundname.Used then
+      begin
+        BoundName := UpperCase(Item.boundname.Value);
+      end
+      else
+      begin
+        BoundName := '';
+      end;
+      if BoundName <> '' then
+      begin
+        if not BoundNameObsDictionary.ContainsKey(BoundName) then
+        begin
+          BName := Item.boundname;
+          BName.Used := False;
+          Item.boundname := BName;
+          PackageData[Index] := Item;
+        end;
+      end;
+    end;
+    PackageData.sort;
+    DelayLists := TObjectList<TCSubItemList>.Create;
+    NoDelayLists := TObjectList<TCSubItemList>.Create;
+    try
+      for Index := 0 to PackageData.Count - 1 do
+      begin
+        Item := PackageData[Index];
+        if Item.cdelay = 'DELAY' then
+        begin
+          Inc(DelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1]);
+          if DelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1] > MaxDelay then
+          begin
+            MaxDelay := DelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1];
+            List := TCSubItemList.Create;
+            DelayLists.Add(List);
+          end;
+
+          List := DelayLists[DelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1] -1];
+          List.Add(Item);
+        end
+        else if Item.cdelay = 'NODELAY' then
+        begin
+          Inc(NoDelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1]);
+          if NoDelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1] > MaxNoDelay then
+          begin
+            MaxNoDelay := NoDelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1];
+            List := TCSubItemList.Create;
+            NoDelayLists.Add(List);
+          end;
+
+          List := NoDelayLists[NoDelayCounts[Item.cellid.Layer-1, Item.cellid.Row-1, Item.cellid.Column-1] -1];
+          List.Add(Item);
+        end
+        else
+        begin
+          FErrorMessages.Add(Format('Invalid cdelay value "%s"', [Item.cdelay]))
+        end;
+      end;
+
+      CSubPackage.Interbeds.Capacity := MaxDelay + MaxNoDelay;
+      for Index := 1 to MaxNoDelay do
+      begin
+        Interbed := CSubPackage.Interbeds.Add;
+        Interbed.Name := Format('No_Delay_%d', [Index]);
+        Interbed.InterbedType := itNoDelay;
+        NoDelayInterbeds.Add(Interbed);
+      end;
+      for Index := 1 to MaxDelay do
+      begin
+        Interbed := CSubPackage.Interbeds.Add;
+        Interbed.Name := Format('Delay_%d', [Index]);
+        Interbed.InterbedType := itDelay;
+        DelayInterbeds.Add(Interbed);
+      end;
+
+      Model.DataArrayManager.CreateInitialDataSets;
+
+      GridData := CSub.GridData;
+
+      if CSubPackage.CompressionMethod = coRecompression then
+      begin
+        DataArrayName := KInitialElasticReco;
+      end
+      else
+      begin
+        DataArrayName := KInitialElasticSpec;
+      end;
+      Assign3DRealDataSet(DataArrayName, GridData.CG_SKE_CR);
+      Assign3DRealDataSet(KInitialCoarsePoros, GridData.CG_THETA);
+      Assign3DRealDataSet(KMoistSpecificGravi, GridData.SGM);
+      Assign3DRealDataSet(KSaturatedSpecificG, GridData.SGS);
+
+      Assert(NoDelayLists.Count = NoDelayInterbeds.Count);
+      InterbedIndex := 0;
+      for ListIndex := 0 to NoDelayLists.Count - 1 do
+      begin
+//        Interbed := NoDelayInterbeds[ListIndex];
+        PriorBoundName := '';
+        PriorItemAssigned := False;
+        List := NoDelayLists[ListIndex];
+        AScreenObject := nil;
+        PackageItem := nil;
+        for ItemIndex := 0 to List.Count - 1 do
+        begin
+          Item := List[ItemIndex];
+          if Item.boundname.Used then
+          begin
+            BoundName := UpperCase(Item.boundname.Value);
+          end
+          else
+          begin
+            BoundName := '';
+          end;
+
+          if (not PriorItemAssigned) or (BoundName <> PriorBoundName) then
+          begin
+            AScreenObject := CreateScreenObject(BoundName, 0);
+            PackageItem := AScreenObject.ModflowCSub.CSubPackageData[InterbedIndex];
+
+            PackageItem.Used := True;
+            PackageItem.InitialOffset := rsObjectImportedValuesR + '("' + pcs0.Name + '")';
+            PackageItem.Thickness := rsObjectImportedValuesR + '("' + thick_frac.Name + '")';
+            PackageItem.EquivInterbedNumber := rsObjectImportedValuesR + '("' + rnb.Name + '")';
+            PackageItem.InitialInelasticSpecificStorage := rsObjectImportedValuesR + '("' + ssv_cc.Name + '")';
+            PackageItem.InitialElasticSpecificStorage := rsObjectImportedValuesR + '("' + sse_cr.Name + '")';
+            PackageItem.InitialPorosity := rsObjectImportedValuesR + '("' + theta.Name + '")';
+            PackageItem.DelayKv := rsObjectImportedValuesR + '("' + kv.Name + '")';
+            PackageItem.InitialDelayHeadOffset := rsObjectImportedValuesR + '("' + h0.Name + '")';
+          end;
+
+          pcs0.Values.Add(Item.pcs0);
+          thick_frac.Values.Add(Item.thick_frac);
+          rnb.Values.Add(Item.rnb);
+          ssv_cc.Values.Add(Item.ssv_cc);
+          sse_cr.Values.Add(Item.sse_cr);
+          theta.Values.Add(Item.theta);
+          kv.Values.Add(Item.kv);
+          h0.Values.Add(Item.h0);
+
+          CellId := Item.cellid;
+          ElementCenter := Model.ElementLocation[CellId.Layer-1, CellId.Row-1, CellId.Column-1];
+          APoint.x := ElementCenter.RotatedLocation.x;
+          APoint.y := ElementCenter.RotatedLocation.y;
+          AScreenObject.AddPoint(APoint, True);
+          AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+
+          PriorItem := Item;
+          PriorBoundName := BoundName;
+          PriorItemAssigned := True;
+        end;
+        Inc(InterbedIndex);
+      end;
 
 
+
+    finally
+      DelayLists.Free;
+      NoDelayLists.Free;
+    end;
+  finally
+    Map.Free;
+    IcsubnoObsDictionary.Free;
+    BoundNameObsDictionary.Free;
+    CellIdObsDictionary.Free;
+    ObsLists.Free;
+    NoDelayInterbeds.Free;
+    DelayInterbeds.Free;
+  end;
 end;
 
 procedure TModflow6Importer.ImportDis(Package: TPackage);
@@ -1471,6 +1886,7 @@ begin
     Formula := Format('IfB(Layer > %d, False, %s)', [Model.LayerCount, Formula]);
   end;
   DataArray := Model.DataArrayManager.GetDataSetByName(DsName);
+  Assert(DataArray <> nil);
   DataArray.Formula := Formula;
 end;
 
@@ -1539,6 +1955,7 @@ begin
     Formula := Format('IfI(Layer > %d, 0, %s)', [Model.LayerCount, Formula]);
   end;
   DataArray := Model.DataArrayManager.GetDataSetByName(DsName);
+  Assert(DataArray <> nil);
   DataArray.Formula := Formula;
 end;
 
@@ -1606,6 +2023,7 @@ begin
     Formula := Format('IfR(Layer > %d, 1, %s)', [Model.LayerCount, Formula]);
   end;
   DataArray := Model.DataArrayManager.GetDataSetByName(DsName);
+  Assert(DataArray <> nil);
   DataArray.Formula := Formula;
 end;
 
@@ -2002,7 +2420,6 @@ begin
   end;
 
   Model.DataArrayManager.CreateInitialDataSets;
-
 
   GridData := Sto.GridData;
   Assign3DBooleanDataSet(KConvertible, GridData.ICONVERT);

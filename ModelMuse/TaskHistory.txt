@@ -438,7 +438,7 @@ object TTaskHistory
     end
     item
       Name = 'CSUB'
-      Display = False
+      Display = True
     end
     item
       Name = 'GwMounding'
@@ -32314,5 +32314,14 @@ object TTaskHistory
         'Testing'
         'Import'
         'MF-2015')
+    end
+    item
+      Date = 45296.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'core code'
+        'Import'
+        'MF-2015'
+        'CSUB')
     end>
 end

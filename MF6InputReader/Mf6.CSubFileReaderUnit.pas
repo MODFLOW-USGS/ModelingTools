@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
   TCSubOptions = class(TCustomMf6Persistent)
@@ -97,7 +97,7 @@ type
     property SGS: TDArray3D read FSGS;
   end;
 
-  TCSubItem = record
+  TMf6CSubItem = record
     icsubno: Integer;
     cellid: TCellId;
     cdelay: string;
@@ -113,22 +113,26 @@ type
     procedure Initialize;
   end;
 
-  TCSubItemList = TList<TCSubItem>;
+  TCSubItemList = class (TList<TMf6CSubItem>)
+    procedure SortItems;
+  end;
 
-  TCSubPackageData = class(TCustomMf6Persistent)
+  TMf6CSubPackageData = class(TCustomMf6Persistent)
   private
     FItems: TCSubItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
     function GetCount: Integer;
-    function GetItem(Index: Integer): TCSubItem;
+    function GetItem(Index: Integer): TMf6CSubItem;
+    procedure SetItem(Index: Integer; const Value: TMf6CSubItem);
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     property Count: Integer read GetCount;
-    property Items[Index: Integer]: TCSubItem read GetItem; default;
+    property Items[Index: Integer]: TMf6CSubItem read GetItem write SetItem; default;
+    procedure Sort;
   end;
 
 
@@ -167,14 +171,14 @@ type
     FOptions: TCSubOptions;
     FCSubDimensions: TCSubDimensions;
     FGridData: TCSubGridData;
-    FPackageData: TCSubPackageData;
+    FPackageData: TMf6CSubPackageData;
     FPeriods: TCSubPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
     function GetPeriod(Index: Integer): TCSubPeriod;
     function GetPeriodCount: Integer;
     function GetTimeSeriesCount: Integer;
-    function GetPackage(Index: Integer): TPackage;
+    function GetTimeSeriesPackage(Index: Integer): TPackage;
     function GetObservation(Index: Integer): TPackage;
     function GetObservationCount: Integer;
   public
@@ -184,11 +188,11 @@ type
     property Options: TCSubOptions read FOptions;
     property CSubDimensions: TCSubDimensions read FCSubDimensions;
     property GridData: TCSubGridData read FGridData;
-    property PackageData: TCSubPackageData read FPackageData;
+    property PackageData: TMf6CSubPackageData read FPackageData;
     property PeriodCount: Integer read GetPeriodCount;
     property Periods[Index: Integer]: TCSubPeriod read GetPeriod; default;
     property TimeSeriesCount: Integer read GetTimeSeriesCount;
-    property TimeSeries[Index: Integer]: TPackage read GetPackage;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeriesPackage;
     property ObservationCount: Integer read GetObservationCount;
     property Observations[Index: Integer]: TPackage read GetObservation;
   end;
@@ -557,7 +561,7 @@ end;
 
 { TCSubItem }
 
-procedure TCSubItem.Initialize;
+procedure TMf6CSubItem.Initialize;
 begin
   icsubno := 0;
   cellid.Initialize;
@@ -575,42 +579,42 @@ end;
 
 { TCSubPackageData }
 
-constructor TCSubPackageData.Create(PackageType: string);
+constructor TMf6CSubPackageData.Create(PackageType: string);
 begin
   FItems := TCSubItemList.Create;
   inherited;
 
 end;
 
-destructor TCSubPackageData.Destroy;
+destructor TMf6CSubPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-function TCSubPackageData.GetCount: Integer;
+function TMf6CSubPackageData.GetCount: Integer;
 begin
   result := FItems.Count;
 end;
 
-function TCSubPackageData.GetItem(Index: Integer): TCSubItem;
+function TMf6CSubPackageData.GetItem(Index: Integer): TMf6CSubItem;
 begin
   result := FItems[Index];
 end;
 
-procedure TCSubPackageData.Initialize;
+procedure TMf6CSubPackageData.Initialize;
 begin
   inherited;
   FItems.Clear;
 end;
 
-procedure TCSubPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+procedure TMf6CSubPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions);
 var
   ALine: string;
   ErrorLine: string;
   DimensionCount: Integer;
-  Item: TCSubItem;
+  Item: TMf6CSubItem;
   ItemStart: Integer;
 begin
   DimensionCount := Dimensions.DimensionCount;
@@ -641,6 +645,11 @@ begin
     begin
       if ReadCellID(Item.cellid, 1, DimensionCount) then
       begin
+        if Item.cellid.Row = 0 then
+        begin
+          // DISV
+          Item.cellid.Row := 1;
+        end;
         ItemStart := DimensionCount + 1;
         Item.cdelay := FSplitter[ItemStart];
         Inc(ItemStart);
@@ -735,6 +744,17 @@ begin
       Unhandled.WriteLine(ErrorLine);
     end;
   end;
+end;
+
+procedure TMf6CSubPackageData.SetItem(Index: Integer;
+  const Value: TMf6CSubItem);
+begin
+  FItems[Index] := Value;
+end;
+
+procedure TMf6CSubPackageData.Sort;
+begin
+  FItems.SortItems;
 end;
 
 { TCSubPeriodData }
@@ -846,7 +866,7 @@ begin
   FOptions := TCSubOptions.Create(PackageType);
   FCSubDimensions := TCSubDimensions.Create(PackageType);
   FGridData := TCSubGridData.Create(PackageType);
-  FPackageData := TCSubPackageData.Create(PackageType);
+  FPackageData := TMf6CSubPackageData.Create(PackageType);
   FPeriods := TCSubPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
@@ -870,6 +890,11 @@ begin
   result := FTimeSeriesPackages.Count;
 end;
 
+function TCSub.GetTimeSeriesPackage(Index: Integer): TPackage;
+begin
+  Result := FTimeSeriesPackages[Index]
+end;
+
 function TCSub.GetObservation(Index: Integer): TPackage;
 begin
   result := FObservationsPackages[Index];
@@ -878,11 +903,6 @@ end;
 function TCSub.GetObservationCount: Integer;
 begin
   result := FObservationsPackages.Count;
-end;
-
-function TCSub.GetPackage(Index: Integer): TPackage;
-begin
-  result := FTimeSeriesPackages[Index];
 end;
 
 function TCSub.GetPeriod(Index: Integer): TCSubPeriod;
@@ -989,6 +1009,50 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
+end;
+
+{ TCSubItemList }
+
+procedure TCSubItemList.SortItems;
+begin
+  Sort(
+    TComparer<TMf6CSubItem>.Construct(
+      function(const Left, Right: TMf6CSubItem): Integer
+      var
+        LBoundName: string;
+        RBoundName: string;
+      begin
+        if Left.boundname.Used then
+        begin
+          LBoundName := Left.boundname.Value;
+        end
+        else
+        begin
+          LBoundName := '';
+        end;
+        if Right.boundname.Used then
+        begin
+          RBoundName := Right.boundname.Value;
+        end
+        else
+        begin
+          RBoundName := '';
+        end;
+        Result := AnsiCompareText(LBoundName, RBoundName);
+        if Result = 0 then
+        begin
+          result := Left.cellid.Layer - Right.cellid.Layer;
+          if Result = 0 then
+          begin
+            result := Left.cellid.Row - Right.cellid.Row;
+            if Result = 0 then
+            begin
+              result := Left.cellid.column - Right.cellid.column;
+            end;
+          end;
+        end;
+      end
+    ));
 end;
 
 end.

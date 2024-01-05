@@ -10102,10 +10102,11 @@ const
 //                to read an empty .Values file from PEST.
 //    '5.1.1.50' Not in released version Bug fix: fixed import of GWT data in
 //                the Edit Feature Formula dialog box.
-
-//               Change: When editing the TVK package data in the Object
-//                 Properties dialog box, it is now possible to specify an
-//                 empty formula for Kx, Ky, or Kz.
+//    '5.1.1.51' Change: When editing the TVK and TVS package data in the Object
+//                Properties dialog box, it is now possible to specify an
+//                empty formula for Kx, Ky, or Kz in TVK or for SS or SY in TVS.
+//               Bug fix: Fixed drawing contours on the side view for DISV
+//                meshes.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10118,7 +10119,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.50';
+  IIModelVersion = '5.1.1.51';
 
 function IModelVersion: string;
 begin

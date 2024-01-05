@@ -93,19 +93,19 @@ type
     stress is calculated from the calculated initial effective stress or calculated initial geostatic stress,
     respectively.}
     property InitialOffset: string read GetInitialOffset write SetInitialOffset;
-    {thick frac—is the interbed thickness or cell fraction of the interbed. Interbed thickness is specified as
+    {thick_frac—is the interbed thickness or cell fraction of the interbed. Interbed thickness is specified as
     a fraction of the cell thickness if CELL FRACTION is specified in the OPTIONS block.}
     property Thickness: string read GetThickness write SetThickness;
     {rnb—is the interbed material factor equivalent number of interbeds in the interbed system represented
     by the interbed. RNB must be greater than or equal to 1 if CDELAY is DELAY. Otherwise, RNB
     can be any value.}
     property EquivInterbedNumber: string read GetEquivInterbedNumber write SetEquivInterbedNumber;
-    {ssv cc—is the initial inelastic specific storage or compression index of the interbed. The compression
+    {ssv_cc—is the initial inelastic specific storage or compression index of the interbed. The compression
     index is specified if COMPRESSION INDICES is specified in the OPTIONS block. Specified
     or calculated interbed inelastic specific storage values are not adjusted from initial values if
     HEAD BASED is specified in the OPTIONS block.}
     property InitialInelasticSpecificStorage: string read GetInitialInelasticSpecificStorage write SetInitialInelasticSpecificStorage;
-    //sse cr—is the initial elastic coarse-grained material specific storage or recompression index of the
+    //sse_cr—is the initial elastic coarse-grained material specific storage or recompression index of the
     //interbed. The recompression index is specified if COMPRESSION INDICES is specified in the
     //OPTIONS block. Specified or calculated interbed elastic specific storage values are not adjusted
     //from initial values if HEAD BASED is specified in the OPTIONS block.

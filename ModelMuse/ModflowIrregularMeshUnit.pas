@@ -6626,7 +6626,7 @@ begin
         Contourer.ActiveDataSet :=
           LocalModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
         Contourer.BitMap := BitMap;
-        Contourer.ViewDirection := vdTop;
+        Contourer.ViewDirection := vdFront;
         Contourer.Mesh := Self;
         Contourer.ZoomBox := ZoomBox;
         Contourer.DrawContours(SelectedLayer,
