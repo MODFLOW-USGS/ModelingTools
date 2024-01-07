@@ -51,11 +51,17 @@ type
     FCells: TChdTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
+    function GetCell(Index: Integer): TChdTimeItem;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TChdTimeItem read GetCell;
+
   end;
 
   TChdPeriodList = TObjectList<TChdPeriod>;
@@ -67,10 +73,22 @@ type
     FPeriods: TChdPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GeObservations(Index: Integer): TPackage;
+    function GetObservationsCount: Integer;
+    function GetPeriod(Index: Integer): TChdPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TChdPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationsCount: Integer read GetObservationsCount;
+    property Observations[Index: Integer]: TPackage read GeObservations;
   end;
 
 
@@ -277,6 +295,16 @@ begin
   inherited;
 end;
 
+function TChdPeriod.GetCell(Index: Integer): TChdTimeItem;
+begin
+  result := FCells[Index];
+end;
+
+function TChdPeriod.GetCount: Integer;
+begin
+  result := FCells.Count;
+end;
+
 procedure TChdPeriod.Initialize;
 begin
   inherited;
@@ -399,6 +427,36 @@ begin
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   inherited;
+end;
+
+function TChd.GeObservations(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TChd.GetObservationsCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TChd.GetPeriod(Index: Integer): TChdPeriod;
+begin
+    result := FPeriods[Index];
+end;
+
+function TChd.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TChd.GetTimeSeries(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TChd.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.count
 end;
 
 procedure TChd.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

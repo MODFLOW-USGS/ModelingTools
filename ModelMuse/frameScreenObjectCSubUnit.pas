@@ -532,10 +532,6 @@ begin
     InterBedSystem := CSubPackageData.Add;
     InterBedSystem.Interbed := AnInterBed;
     InterBedSystem.Used := rdgSubGroups.Checked[Ord(icUsed), Index+1];
-//    if InterBedSystem.Used then
-//    begin
-//      FPackageDataCleared := False;
-//    end;
 
     Formula := rdgSubGroups.Cells[Ord(icInitialOffset), Index+1];
 //    if Formula <> '' then

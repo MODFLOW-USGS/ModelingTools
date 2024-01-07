@@ -9,17 +9,24 @@ uses
 type
   TVscOptions = class(TCustomMf6Persistent)
   private
-    VISCREF: TRealOption;
-    VISCOSITY: TBooleanOption;
-    TEMPERATURE_SPECIES_NAME: TStringOption;
-    THERMAL_FORMULATION: TStringOption;
-    THERMAL_A2: TRealOption;
-    THERMAL_A3: TRealOption;
-    THERMAL_A4: TRealOption;
+    FVISCREF: TRealOption;
+    FVISCOSITY: TBooleanOption;
+    FTEMPERATURE_SPECIES_NAME: TStringOption;
+    FTHERMAL_FORMULATION: TStringOption;
+    FTHERMAL_A2: TRealOption;
+    FTHERMAL_A3: TRealOption;
+    FTHERMAL_A4: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   public
+    property VISCREF: TRealOption read FVISCREF;
+    property VISCOSITY: TBooleanOption read FVISCOSITY;
+    property TEMPERATURE_SPECIES_NAME: TStringOption read FTEMPERATURE_SPECIES_NAME;
+    property THERMAL_FORMULATION: TStringOption read FTHERMAL_FORMULATION;
+    property THERMAL_A2: TRealOption read FTHERMAL_A2;
+    property THERMAL_A3: TRealOption read FTHERMAL_A3;
+    property THERMAL_A4: TRealOption read FTHERMAL_A4;
   end;
 
   TVscDimensions = class(TCustomMf6Persistent)
@@ -31,7 +38,6 @@ type
   end;
 
   TVscItem = record
-  private
     iviscspec: Integer;
     dviscdc: Extended;
     cviscref: Extended;
@@ -46,11 +52,15 @@ type
   private
     FItems: TVscItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TVscItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TVscItem read GetItem; default;
   end;
 
   TVsc = class(TDimensionedPackageReader)
@@ -62,6 +72,8 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TVscOptions read FOptions;
+    property PackageData: TVscPackageData read FPackageData;
   end;
 
 implementation
@@ -73,8 +85,8 @@ uses
 
 procedure TVscOptions.Initialize;
 begin
-  VISCREF.Initialize;
-  VISCOSITY.Initialize;
+  FVISCREF.Initialize;
+  FVISCOSITY.Initialize;
   inherited;
 end;
 
@@ -107,40 +119,40 @@ begin
     end
     else if FSplitter[0] = 'VISCOSITY' then
     begin
-      VISCOSITY.Value := True;
-      VISCOSITY.Used := True;
+      FVISCOSITY.Value := True;
+      FVISCOSITY.Used := True;
     end
     else if (FSplitter.Count >= 2) then
     begin
       if (FSplitter[0] = 'VISCREF')
-        and TryFortranStrToFloat(FSplitter[1], VISCREF.Value) then
+        and TryFortranStrToFloat(FSplitter[1], FVISCREF.Value) then
       begin
-        VISCREF.Used := True;
+        FVISCREF.Used := True;
       end
       else if (FSplitter[0] = 'TEMPERATURE_SPECIES_NAME') then
       begin
-        TEMPERATURE_SPECIES_NAME.Value := FSplitter[1];
-        TEMPERATURE_SPECIES_NAME.Used := True;
+        FTEMPERATURE_SPECIES_NAME.Value := FSplitter[1];
+        FTEMPERATURE_SPECIES_NAME.Used := True;
       end
       else if (FSplitter[0] = 'THERMAL_FORMULATION') then
       begin
-        THERMAL_FORMULATION.Value := FSplitter[1];
-        THERMAL_FORMULATION.Used := True;
+        FTHERMAL_FORMULATION.Value := FSplitter[1];
+        FTHERMAL_FORMULATION.Used := True;
       end
       else if (FSplitter[0] = 'THERMAL_A2')
-        and TryFortranStrToFloat(FSplitter[1], THERMAL_A2.Value) then
+        and TryFortranStrToFloat(FSplitter[1], FTHERMAL_A2.Value) then
       begin
-        THERMAL_A2.Used := True;
+        FTHERMAL_A2.Used := True;
       end
       else if (FSplitter[0] = 'THERMAL_A3')
-        and TryFortranStrToFloat(FSplitter[1], THERMAL_A3.Value) then
+        and TryFortranStrToFloat(FSplitter[1], FTHERMAL_A3.Value) then
       begin
-        THERMAL_A3.Used := True;
+        FTHERMAL_A3.Used := True;
       end
       else if (FSplitter[0] = 'THERMAL_A4')
-        and TryFortranStrToFloat(FSplitter[1], THERMAL_A4.Value) then
+        and TryFortranStrToFloat(FSplitter[1], FTHERMAL_A4.Value) then
       begin
-        THERMAL_A4.Used := True;
+        FTHERMAL_A4.Used := True;
       end
       else
       begin
@@ -225,6 +237,16 @@ destructor TVscPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TVscPackageData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TVscPackageData.GetItem(Index: Integer): TVscItem;
+begin
+  Result := FItems[Index];
 end;
 
 procedure TVscPackageData.Initialize;

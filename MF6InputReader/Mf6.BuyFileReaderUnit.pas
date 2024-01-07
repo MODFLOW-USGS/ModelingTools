@@ -9,13 +9,16 @@ uses
 type
   TBuyOptions = class(TCustomMf6Persistent)
   private
-    HHFORMULATION_RHS: TBooleanOption;
-    DENSEREF: TRealOption;
-    DENSITY: TBooleanOption;
+    FHHFORMULATION_RHS: TBooleanOption;
+    FDENSEREF: TRealOption;
+    FDENSITY: TBooleanOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   public
+    property HHFORMULATION_RHS: TBooleanOption read FHHFORMULATION_RHS;
+    property DENSEREF: TRealOption read FDENSEREF;
+    property DENSITY: TBooleanOption read FDENSITY;
   end;
 
   TBuyDimensions = class(TCustomMf6Persistent)
@@ -27,7 +30,6 @@ type
   end;
 
   TBuyItem = record
-  private
     irhospec: Integer;
     drhodc: Extended;
     crhoref: Extended;
@@ -42,11 +44,15 @@ type
   private
     FItems: TBuyItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TBuyItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TBuyItem read GetItem; default;
   end;
 
   TBuy = class(TDimensionedPackageReader)
@@ -58,6 +64,8 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TBuyOptions read FOptions;
+    property PackageData: TBuyPackageData read FPackageData;
   end;
 
 implementation
@@ -69,9 +77,9 @@ uses
 
 procedure TBuyOptions.Initialize;
 begin
-  HHFORMULATION_RHS.Initialize;
-  DENSEREF.Initialize;
-  DENSITY.Initialize;
+  FHHFORMULATION_RHS.Initialize;
+  FDENSEREF.Initialize;
+  FDENSITY.Initialize;
   inherited;
 end;
 
@@ -104,18 +112,18 @@ begin
     end
     else if FSplitter[0] = 'HHFORMULATION_RHS' then
     begin
-      HHFORMULATION_RHS.Value := True;
-      HHFORMULATION_RHS.Used := True;
+      FHHFORMULATION_RHS.Value := True;
+      FHHFORMULATION_RHS.Used := True;
     end
     else if FSplitter[0] = 'DENSITY' then
     begin
-      DENSITY.Value := True;
-      DENSITY.Used := True;
+      FDENSITY.Value := True;
+      FDENSITY.Used := True;
     end
     else if (FSplitter[0] = 'DENSEREF') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], DENSEREF.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FDENSEREF.Value) then
     begin
-      DENSEREF.Used := True;
+      FDENSEREF.Used := True;
     end
     else
     begin
@@ -194,6 +202,16 @@ destructor TBuyPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TBuyPackageData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TBuyPackageData.GetItem(Index: Integer): TBuyItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TBuyPackageData.Initialize;

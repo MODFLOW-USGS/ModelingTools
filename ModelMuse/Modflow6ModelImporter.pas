@@ -57,6 +57,9 @@ type
     procedure ImportSto(Package: TPackage);
     procedure ImportTvs(Package: TPackage);
     procedure ImportCSub(Package: TPackage);
+    procedure ImportBuy(Package: TPackage);
+    procedure ImportVsc(Package: TPackage);
+    procedure ImportChd(Package: TPackage);
   public
     Constructor Create;
     procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
@@ -77,7 +80,9 @@ uses
   Mf6.TimeSeriesFileReaderUnit, Modflow6TimeSeriesCollectionsUnit,
   Modflow6TimeSeriesUnit, Mf6.HfbFileReaderUnit, ModflowHfbUnit,
   Mf6.StoFileReaderUnit, Mf6.TvsFileReaderUnit, ModflowTvsUnit,
-  Mf6.CSubFileReaderUnit, ModflowCSubInterbed, ModflowCsubUnit;
+  Mf6.CSubFileReaderUnit, ModflowCSubInterbed, ModflowCsubUnit,
+  DataArrayManagerUnit, Mf6.BuyFileReaderUnit, Mt3dmsChemSpeciesUnit,
+  Mf6.VscFileReaderUnit, Mf6.ChdFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -279,6 +284,68 @@ begin
   result := FAllTopCellsScreenObject;
 end;
 
+procedure TModflow6Importer.ImportBuy(Package: TPackage);
+var
+  Buy: TBuy;
+  Model: TPhastModel;
+  BuoyancyPackage: TBuoyancyPackage;
+  Options: TBuyOptions;
+  PackageData: TBuyPackageData;
+  index: Integer;
+  Item: TBuyItem;
+  ChemComponents: TMobileChemSpeciesCollection;
+  ChemItem: TMobileChemSpeciesItem;
+begin
+  Model := frmGoPhast.PhastModel;
+  BuoyancyPackage := Model.ModflowPackages.BuoyancyPackage;
+  BuoyancyPackage.IsSelected := True;
+
+  Buy := Package.Package as TBuy;
+  Options := Buy.Options;
+  if Options.HHFORMULATION_RHS.Used then
+  begin
+    BuoyancyPackage.RightHandSide := True;
+  end;
+  if Options.DENSEREF.Used then
+  begin
+    BuoyancyPackage.RefDensity := Options.DENSEREF.Value;
+  end;
+  if Options.DENSITY.Used then
+  begin
+    BuoyancyPackage.WriteDensity := True;
+  end;
+
+  ChemComponents := Model.MobileComponents;
+  PackageData := Buy.PackageData;
+  for index := 0 to PackageData.Count - 1 do
+  begin
+    Item := PackageData[index];
+    ChemItem := ChemComponents.GetItemByName(Item.auxspeciesname);
+    if ChemItem = nil then
+    begin
+      ChemItem := ChemComponents.Add;
+      ChemItem.Name := Item.auxspeciesname;
+    end;
+    if SameText(ChemItem.Name, 'Density') then
+    begin
+      BuoyancyPackage.DensitySpecified := True;
+    end;
+    ChemItem.DensitySlope := Item.drhodc;
+    ChemItem.RefConcentration := Item.crhoref;
+  end;
+end;
+
+procedure TModflow6Importer.ImportChd(Package: TPackage);
+var
+  Model: TPhastModel;
+  Chd: TChd;
+begin
+  Model := frmGoPhast.PhastModel;
+  Model.ModflowPackages.ChdBoundary.IsSelected := True;
+
+  Chd := Package.Package as TChd;
+end;
+
 procedure TModflow6Importer.ImportCSub(Package: TPackage);
 var
   Model: TPhastModel;
@@ -316,8 +383,6 @@ var
   CellIdObsDictionary: TDictionary<TCellId, TObservationList>;
   ObsLists: TObjectList<TObservationList>;
   ObsList: TObservationList;
-  ListIndex: Integer;
-  ItemIndex: Integer;
   PriorItem: TMf6CSubItem;
   PriorBoundName: string;
   BoundName: string;
@@ -342,6 +407,22 @@ var
   ElementCenter: TDualLocation;
   APoint: TPoint2D;
   BName: TStringOption;
+  Obs: TObservation;
+  PeriodIndex: Integer;
+  APeriod: TCSubPeriod;
+  CellIndex: Integer;
+  ACell: TCSubTimeItem;
+  PriorTimeSeriesAssigned: Boolean;
+  PriorTimeSeries: string;
+  TimeSeries: string;
+  PriorScreenObjects: TScreenObjectList;
+  ScreenObjectIndex: Integer;
+  TimeItem: TCSubItem;
+  Formula: string;
+  ImportedTimeSeriesName: String;
+  ImportedName: string;
+  sig0: TValueArrayItem;
+  ObsListIndex: Integer;
   function CreateScreenObject(BoundName: String; Period: Integer): TScreenObject;
   var
     UndoCreateScreenObject: TCustomUndo;
@@ -366,7 +447,7 @@ var
       else
       begin
         Inc(ObjectCount);
-        NewName := 'ImportedCSUB_'  + IntToStr(ObjectCount);
+        NewName := 'ImportedCSUB_Obs'  + IntToStr(ObjectCount);
       end;
     end;
     result.Name := NewName;
@@ -379,16 +460,16 @@ var
     result.Visible := False;
     result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
 
-    result.CreateCsubBoundary;
-
     if Period > 0 then
     begin
+      result.CreateCsubBoundary;
       NewItem := result.ModflowCSub.Values.Add as TCsubItem;
       NewItem.StartTime := StartTime;
       NewItem.EndTime := LastTime;
     end
     else if Period = 0 then
     begin
+      result.CreateCsubBoundary;
       CSubPackageData := result.ModflowCSub.CSubPackageData;
       for Index := 0 to CSubPackage.Interbeds.Count - 1 do
       begin
@@ -436,9 +517,335 @@ var
       h0 := result.ImportedValues.Add;
       h0.Name := ImportedName;
       h0.Values.DataType := rdtDouble;
-
-
+    end
+    else if Period = -1 then
+    begin
+      // do nothing
     end;
+  end;
+  procedure IncludeObservations(ObsList: TObservationList; AScreenObject: TScreenObject);
+  var
+    Modflow6Obs: TModflow6Obs;
+    CSubObsSet: TSubObsSet;
+    ObsIndex: Integer;
+    CSubDelayCells: TIntegerCollection;
+  begin
+    AScreenObject.CreateMf6Obs;
+    Modflow6Obs := AScreenObject.Modflow6Obs;
+    CSubObsSet := Modflow6Obs.CSubObs.CSubObsSet;
+    CSubDelayCells := Modflow6Obs.CSubDelayCells;
+    for ObsIndex := 0 to ObsList.Count - 1 do
+    begin
+      Obs := ObsList[ObsIndex];
+      if Obs.ObsType = 'csub' then
+      begin
+        Include(CSubObsSet, coCSub)
+      end
+      else if Obs.ObsType = 'inelastic-csub' then
+      begin
+        Include(CSubObsSet, coInelastCSub)
+      end
+      else if Obs.ObsType = 'elastic-csub' then
+      begin
+        Include(CSubObsSet, coElastCSub)
+      end
+      else if Obs.ObsType = 'coarse-csub' then
+      begin
+        Include(CSubObsSet, coCoarseCSub)
+      end
+      else if Obs.ObsType = 'csub-cell' then
+      begin
+        Include(CSubObsSet, coCSubCell)
+      end
+      else if Obs.ObsType = 'wcomp-csub-cell' then
+      begin
+        Include(CSubObsSet, coWcompCSubCell)
+      end
+      else if Obs.ObsType = 'sk' then
+      begin
+        Include(CSubObsSet, coSk)
+      end
+      else if Obs.ObsType = 'ske' then
+      begin
+        Include(CSubObsSet, coSke)
+      end
+      else if Obs.ObsType = 'sk-cell' then
+      begin
+        Include(CSubObsSet, coSkCell)
+      end
+      else if Obs.ObsType = 'ske-cell' then
+      begin
+        Include(CSubObsSet, coSkeCell)
+      end
+      else if Obs.ObsType = 'estress-cell' then
+      begin
+        Include(CSubObsSet, coEStressCell)
+      end
+      else if Obs.ObsType = 'gstress-cell' then
+      begin
+        Include(CSubObsSet, coGStressCell)
+      end
+      else if Obs.ObsType = 'interbed-compaction' then
+      begin
+        Include(CSubObsSet, coIntbedComp)
+      end
+      else if Obs.ObsType = 'elastic-compaction' then
+      begin
+        Include(CSubObsSet, coElastComp)
+      end
+      else if Obs.ObsType = 'coarse-compaction' then
+      begin
+        Include(CSubObsSet, coCoarseCompaction)
+      end
+      else if Obs.ObsType = 'inelastic-compaction-cell' then
+      begin
+//        Include(CSubObsSet, coCompCell)
+      end
+      else if Obs.ObsType = 'elastic-compaction-cell' then
+      begin
+//        Include(CSubObsSet, coCompCell)
+      end
+      else if Obs.ObsType = 'compaction-cell' then
+      begin
+        Include(CSubObsSet, coCompCell)
+      end
+      else if Obs.ObsType = 'thickness' then
+      begin
+        Include(CSubObsSet, coThickness)
+      end
+      else if Obs.ObsType = 'coarse-thickness' then
+      begin
+        Include(CSubObsSet, coCoarseThickness)
+      end
+      else if Obs.ObsType = 'thickness-cell' then
+      begin
+        Include(CSubObsSet, coThickCell)
+      end
+      else if Obs.ObsType = 'theta' then
+      begin
+        Include(CSubObsSet, coTheta)
+      end
+      else if Obs.ObsType = 'coarse-theta' then
+      begin
+        Include(CSubObsSet, coCoarseTheta)
+      end
+      else if Obs.ObsType = 'theta-cell' then
+      begin
+        Include(CSubObsSet, coThetaCell)
+      end
+      else if Obs.ObsType = 'delay-flowtop' then
+      begin
+        Include(CSubObsSet, coDelayFlowTop)
+      end
+      else if Obs.ObsType = 'delay-flowbot' then
+      begin
+        Include(CSubObsSet, coDelayFlowBot)
+      end
+      else if Obs.ObsType = 'delay-head' then
+      begin
+        Include(CSubObsSet, coDelayHead);
+        Assert(Obs.IdType2 = itNumber);
+        if CSubDelayCells.IndexOf(Obs.Num2) < 0 then
+        begin
+          CSubDelayCells.Add.Value := Obs.Num2;
+        end;
+      end
+      else if Obs.ObsType = 'delay-gstress' then
+      begin
+        Include(CSubObsSet, coDelayGStress);
+        Assert(Obs.IdType2 = itNumber);
+        if CSubDelayCells.IndexOf(Obs.Num2) < 0 then
+        begin
+          CSubDelayCells.Add.Value := Obs.Num2;
+        end;
+      end
+      else if Obs.ObsType = 'delay-estress' then
+      begin
+        Include(CSubObsSet, coDelayEStress);
+        Assert(Obs.IdType2 = itNumber);
+        if CSubDelayCells.IndexOf(Obs.Num2) < 0 then
+        begin
+          CSubDelayCells.Add.Value := Obs.Num2;
+        end;
+      end
+      else if Obs.ObsType = 'delay-preconstress' then
+      begin
+        Include(CSubObsSet, coDelayPreConStress);
+        Assert(Obs.IdType2 = itNumber);
+        if CSubDelayCells.IndexOf(Obs.Num2) < 0 then
+        begin
+          CSubDelayCells.Add.Value := Obs.Num2;
+        end;
+      end
+      else if Obs.ObsType = 'delay-compaction' then
+      begin
+        Include(CSubObsSet, coDelayComp);
+        Assert(Obs.IdType2 = itNumber);
+        if CSubDelayCells.IndexOf(Obs.Num2) < 0 then
+        begin
+          CSubDelayCells.Add.Value := Obs.Num2;
+        end;
+      end
+      else if Obs.ObsType = 'delay-thickness' then
+      begin
+        Include(CSubObsSet, coDelayThickness);
+        Assert(Obs.IdType2 = itNumber);
+        if CSubDelayCells.IndexOf(Obs.Num2) < 0 then
+        begin
+          CSubDelayCells.Add.Value := Obs.Num2;
+        end;
+      end
+      else if Obs.ObsType = 'delay-theta' then
+      begin
+        Include(CSubObsSet, coDelayTheta);
+        Assert(Obs.IdType2 = itNumber);
+        if CSubDelayCells.IndexOf(Obs.Num2) < 0 then
+        begin
+          CSubDelayCells.Add.Value := Obs.Num2;
+        end;
+      end
+      else if Obs.ObsType = 'preconstress-cell' then
+      begin
+        Include(CSubObsSet, coPreConsStressCell);
+      end
+      else
+      begin
+        FErrorMessages.Add(Format('Unrecognized UZF observation type "%s".', [Obs.ObsType]))
+      end;
+    end;
+    Modflow6Obs.CSubObs.CSubObsSet := CSubObsSet;
+  end;
+  procedure AssignPackageData(PackageDataList: TObjectList<TCSubItemList>);
+  var
+    ListIndex: Integer;
+    ItemIndex: Integer;
+    AnInterBed: TCSubInterbed;
+    DataArrayManager: TDataArrayManager;
+    ADataArray: TDataArray;
+    DataSetIndex: Integer;
+  begin
+    DataArrayManager := Model.DataArrayManager;
+    for ListIndex := 0 to PackageDataList.Count - 1 do
+    begin
+      AnInterBed := CSubPackage.Interbeds[InterbedIndex];
+      PriorBoundName := '';
+      PriorItemAssigned := False;
+      List := PackageDataList[ListIndex];
+      AScreenObject := nil;
+      PackageItem := nil;
+      for ItemIndex := 0 to List.Count - 1 do
+      begin
+        Item := List[ItemIndex];
+        if Item.boundname.Used then
+        begin
+          BoundName := UpperCase(Item.boundname.Value);
+        end
+        else
+        begin
+          BoundName := '';
+        end;
+
+        if (not PriorItemAssigned) or (BoundName <> PriorBoundName) then
+        begin
+          AScreenObject := CreateScreenObject(BoundName, 0);
+          PackageItem := AScreenObject.ModflowCSub.CSubPackageData[InterbedIndex];
+
+          PackageItem.Used := True;
+          PackageItem.InitialOffset := rsObjectImportedValuesR + '("' + pcs0.Name + '")';
+          PackageItem.Thickness := rsObjectImportedValuesR + '("' + thick_frac.Name + '")';
+          PackageItem.EquivInterbedNumber := rsObjectImportedValuesR + '("' + rnb.Name + '")';
+          PackageItem.InitialInelasticSpecificStorage := rsObjectImportedValuesR + '("' + ssv_cc.Name + '")';
+          PackageItem.InitialElasticSpecificStorage := rsObjectImportedValuesR + '("' + sse_cr.Name + '")';
+          PackageItem.InitialPorosity := rsObjectImportedValuesR + '("' + theta.Name + '")';
+          PackageItem.DelayKv := rsObjectImportedValuesR + '("' + kv.Name + '")';
+          PackageItem.InitialDelayHeadOffset := rsObjectImportedValuesR + '("' + h0.Name + '")';
+
+          if BoundName <> '' then
+          begin
+            if not BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
+            begin
+              Assert(False);
+            end;
+            IncludeObservations(ObsList, AScreenObject);
+          end;
+
+          if AnInterBed.InterbedType = itDelay then
+          begin
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.DelayKvName);
+            Assert(ADataArray <> nil);
+            DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+            AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.DelayKv;
+          end;
+
+          if AnInterBed.InterbedType = itDelay then
+          begin
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.EquivInterbedNumberName);
+            Assert(ADataArray <> nil);
+            DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+            AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.EquivInterbedNumber;
+          end;
+
+          if AnInterBed.InterbedType = itDelay then
+          begin
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialDelayHeadOffset);
+            Assert(ADataArray <> nil);
+            DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+            AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.InitialDelayHeadOffset;
+          end;
+
+          ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialElasticSpecificStorage);
+          Assert(ADataArray <> nil);
+          DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+          AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.InitialElasticSpecificStorage;
+
+          ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialInelasticSpecificStorage);
+          Assert(ADataArray <> nil);
+          DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+          AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.InitialInelasticSpecificStorage;
+
+          ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialOffset);
+          Assert(ADataArray <> nil);
+          DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+          AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.InitialOffset;
+
+          ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialPorosity);
+          Assert(ADataArray <> nil);
+          DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+          AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.InitialPorosity;
+
+          ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.Thickness);
+          Assert(ADataArray <> nil);
+          DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+          AScreenObject.DataSetFormulas[DataSetIndex] := PackageItem.Thickness;
+
+          ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.CSubBoundName);
+          Assert(ADataArray <> nil);
+          DataSetIndex := AScreenObject.AddDataSet(ADataArray);
+          AScreenObject.DataSetFormulas[DataSetIndex] := Format('"%s"', [AScreenObject.Name]);
+        end;
+
+        pcs0.Values.Add(Item.pcs0);
+        thick_frac.Values.Add(Item.thick_frac);
+        rnb.Values.Add(Item.rnb);
+        ssv_cc.Values.Add(Item.ssv_cc);
+        sse_cr.Values.Add(Item.sse_cr);
+        theta.Values.Add(Item.theta);
+        kv.Values.Add(Item.kv);
+        h0.Values.Add(Item.h0);
+
+        CellId := Item.cellid;
+        ElementCenter := Model.ElementLocation[CellId.Layer-1, CellId.Row-1, CellId.Column-1];
+        APoint.x := ElementCenter.RotatedLocation.x;
+        APoint.y := ElementCenter.RotatedLocation.y;
+        AScreenObject.AddPoint(APoint, True);
+        AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+
+        PriorItem := Item;
+        PriorBoundName := BoundName;
+        PriorItemAssigned := True;
+      end;
+      Inc(InterbedIndex);
+    end
   end;
 begin
   StartTime := 0.0;
@@ -463,6 +870,10 @@ begin
       ImportTimeSeries(TimeSeriesPackage, Map);
     end;
 
+    if CSub.ObservationCount > 0 then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    end;
     for ObsPackageIndex := 0 to CSub.ObservationCount - 1 do
     begin
       ObsFiles := CSub.Observations[ObsPackageIndex].Package as TObs;
@@ -693,71 +1104,138 @@ begin
 
       Assert(NoDelayLists.Count = NoDelayInterbeds.Count);
       InterbedIndex := 0;
-      for ListIndex := 0 to NoDelayLists.Count - 1 do
-      begin
-//        Interbed := NoDelayInterbeds[ListIndex];
-        PriorBoundName := '';
-        PriorItemAssigned := False;
-        List := NoDelayLists[ListIndex];
-        AScreenObject := nil;
-        PackageItem := nil;
-        for ItemIndex := 0 to List.Count - 1 do
-        begin
-          Item := List[ItemIndex];
-          if Item.boundname.Used then
-          begin
-            BoundName := UpperCase(Item.boundname.Value);
-          end
-          else
-          begin
-            BoundName := '';
-          end;
 
-          if (not PriorItemAssigned) or (BoundName <> PriorBoundName) then
-          begin
-            AScreenObject := CreateScreenObject(BoundName, 0);
-            PackageItem := AScreenObject.ModflowCSub.CSubPackageData[InterbedIndex];
-
-            PackageItem.Used := True;
-            PackageItem.InitialOffset := rsObjectImportedValuesR + '("' + pcs0.Name + '")';
-            PackageItem.Thickness := rsObjectImportedValuesR + '("' + thick_frac.Name + '")';
-            PackageItem.EquivInterbedNumber := rsObjectImportedValuesR + '("' + rnb.Name + '")';
-            PackageItem.InitialInelasticSpecificStorage := rsObjectImportedValuesR + '("' + ssv_cc.Name + '")';
-            PackageItem.InitialElasticSpecificStorage := rsObjectImportedValuesR + '("' + sse_cr.Name + '")';
-            PackageItem.InitialPorosity := rsObjectImportedValuesR + '("' + theta.Name + '")';
-            PackageItem.DelayKv := rsObjectImportedValuesR + '("' + kv.Name + '")';
-            PackageItem.InitialDelayHeadOffset := rsObjectImportedValuesR + '("' + h0.Name + '")';
-          end;
-
-          pcs0.Values.Add(Item.pcs0);
-          thick_frac.Values.Add(Item.thick_frac);
-          rnb.Values.Add(Item.rnb);
-          ssv_cc.Values.Add(Item.ssv_cc);
-          sse_cr.Values.Add(Item.sse_cr);
-          theta.Values.Add(Item.theta);
-          kv.Values.Add(Item.kv);
-          h0.Values.Add(Item.h0);
-
-          CellId := Item.cellid;
-          ElementCenter := Model.ElementLocation[CellId.Layer-1, CellId.Row-1, CellId.Column-1];
-          APoint.x := ElementCenter.RotatedLocation.x;
-          APoint.y := ElementCenter.RotatedLocation.y;
-          AScreenObject.AddPoint(APoint, True);
-          AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
-
-          PriorItem := Item;
-          PriorBoundName := BoundName;
-          PriorItemAssigned := True;
-        end;
-        Inc(InterbedIndex);
-      end;
-
+      AssignPackageData(NoDelayLists);
+      AssignPackageData(DelayLists);
 
 
     finally
       DelayLists.Free;
       NoDelayLists.Free;
     end;
+
+    LastTime := Model.ModflowStressPeriods.Last.EndTime;
+    PriorScreenObjects := TScreenObjectList.Create;
+    try
+      for PeriodIndex := 0 to CSub.PeriodCount - 1 do
+      begin
+        APeriod := CSub[PeriodIndex];
+        StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+        for ScreenObjectIndex := 0 to PriorScreenObjects.Count - 1 do
+        begin
+          TimeItem := PriorScreenObjects[ScreenObjectIndex].ModflowCSub.Values.Last as TCsubItem;
+          TimeItem.EndTime := StartTime;
+        end;
+        PriorScreenObjects.Clear;
+
+        PriorTimeSeriesAssigned := False;
+        PriorTimeSeries := '';
+        AScreenObject := nil;
+        sig0 := nil;
+
+        if APeriod.Count > 0 then
+        begin
+          APeriod.Sort;
+          for CellIndex := 0 to APeriod.Count - 1 do
+          begin
+            ACell := APeriod[CellIndex];
+            case ACell.ValueType of
+              vtNumeric:
+                begin
+                  TimeSeries := '';
+                end;
+              vtString:
+                begin
+                  TimeSeries := ACell.StringValue;
+                end;
+            end;
+
+            if (not PriorTimeSeriesAssigned) or (TimeSeries <> PriorTimeSeries) then
+            begin
+              AScreenObject := CreateScreenObject(TimeSeries, APeriod.Period);
+              PriorScreenObjects.Add(AScreenObject);
+              case ACell.ValueType of
+                vtNumeric:
+                  begin
+                    ImportedName := 'ImportedCSub_sig0_' + IntToStr(APeriod.Period);
+
+                    sig0 := AScreenObject.ImportedValues.Add;
+                    sig0.Name := ImportedName;
+                    sig0.Values.DataType := rdtDouble;
+
+                    Formula := rsObjectImportedValuesR + '("' + ImportedName + '")'
+                  end;
+                vtString:
+                  begin
+                    if not Map.TryGetValue(TimeSeries, ImportedTimeSeriesName) then
+                    begin
+                      Assert(False);
+                    end;
+                    Formula := ImportedTimeSeriesName;
+                  end;
+              end;
+
+              if ACell.ValueType = vtNumeric then
+              begin
+                sig0.Values.Add(ACell.sig0);
+              end;
+
+              CellId := ACell.cellid;
+              if Model.DisvUsed then
+              begin
+                CellId.Row := 1;
+              end;
+
+              ElementCenter := Model.ElementLocation[CellId.Layer-1, CellId.Row-1, CellId.Column-1];
+              APoint.x := ElementCenter.RotatedLocation.x;
+              APoint.y := ElementCenter.RotatedLocation.y;
+              AScreenObject.AddPoint(APoint, True);
+              AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+            end;
+
+            PriorTimeSeries := TimeSeries;
+            PriorTimeSeriesAssigned := True;
+          end;
+        end;
+      end;
+    finally
+      PriorScreenObjects.Free;
+    end;
+
+    for ObsListIndex := 0 to ObsLists.Count - 1 do
+    begin
+      ObsList := ObsLists[ObsListIndex];
+      case ObsList[0].IdType1 of
+        itCell:
+          begin
+            CellId := ObsList[0].CellId1;
+          end;
+        itNumber:
+          begin
+            CellId := PackageData.Items[ObsList[0].Num1-1].cellid;
+          end;
+        itName:
+          begin
+            Continue;
+          end;
+        else
+          Assert(False)
+      end;
+      if Model.DisvUsed then
+      begin
+        CellId.Row := 1;
+      end;
+      AScreenObject := CreateScreenObject('', -1);
+
+      ElementCenter := Model.ElementLocation[CellId.Layer-1, CellId.Row-1, CellId.Column-1];
+      APoint.x := ElementCenter.RotatedLocation.x;
+      APoint.y := ElementCenter.RotatedLocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+
+      IncludeObservations(ObsList, AScreenObject)
+    end;
+
   finally
     Map.Free;
     IcsubnoObsDictionary.Free;
@@ -1070,24 +1548,15 @@ begin
       end
       else if APackage.FileType = 'BUY6' then
       begin
-//        BuyReader := TBuy.Create(APackage.FileType);
-//        BuyReader.Dimensions := FDimensions;
-//        APackage.Package := BuyReader;
-//        APackage.ReadPackage(Unhandled);
+        ImportBuy(APackage);
       end
       else if APackage.FileType = 'VSC6' then
       begin
-//        VscReader := TVsc.Create(APackage.FileType);
-//        VscReader.Dimensions := FDimensions;
-//        APackage.Package := VscReader;
-//        APackage.ReadPackage(Unhandled);
+        ImportVsc(APackage);
       end
       else if APackage.FileType = 'CHD6' then
       begin
-//        ChdReader := TChd.Create(APackage.FileType);
-//        ChdReader.Dimensions := FDimensions;
-//        APackage.Package := ChdReader;
-//        APackage.ReadPackage(Unhandled);
+        ImportChd(APackage);
       end
       else if APackage.FileType = 'WEL6' then
       begin
@@ -3078,6 +3547,82 @@ begin
     Map.Free;
   end;
 
+end;
+
+procedure TModflow6Importer.ImportVsc(Package: TPackage);
+var
+  Vsc: TVsc;
+  Model: TPhastModel;
+  ViscosityPackage: TViscosityPackage;
+  Options: TVscOptions;
+  PackageData: TVscPackageData;
+  index: Integer;
+  Item: TVscItem;
+  ChemComponents: TMobileChemSpeciesCollection;
+  ChemItem: TMobileChemSpeciesItem;
+begin
+  Model := frmGoPhast.PhastModel;
+  ViscosityPackage := Model.ModflowPackages.ViscosityPackage;
+  ViscosityPackage.IsSelected := True;
+  ViscosityPackage.ViscositySpecified := False;
+
+  Vsc := Package.Package as TVsc;
+  Options := Vsc.Options;
+  
+  if Options.VISCREF.Used then
+  begin
+    ViscosityPackage.RefViscosity := Options.VISCREF.Value;
+  end;
+  if Options.TEMPERATURE_SPECIES_NAME.Used then
+  begin
+    ViscosityPackage.ThermalSpecies := Options.TEMPERATURE_SPECIES_NAME.Value;
+  end;
+  if Options.THERMAL_FORMULATION.Used then
+  begin
+    if Options.THERMAL_FORMULATION.Value = 'LINEAR' then
+    begin
+      ViscosityPackage.ThermalFormulation := tfLinear;
+    end
+    else if Options.THERMAL_FORMULATION.Value = 'NONLINEAR' then
+    begin
+      ViscosityPackage.ThermalFormulation := tfNonLinear;
+    end
+    else
+    begin
+      Assert(False)
+    end;
+  end;
+  if Options.THERMAL_A2.Used then
+  begin
+    ViscosityPackage.ThermalA2 := Options.THERMAL_A2.Value;
+  end;
+  if Options.THERMAL_A3.Used then
+  begin
+    ViscosityPackage.ThermalA3 := Options.THERMAL_A3.Value;
+  end;
+  if Options.THERMAL_A4.Used then
+  begin
+    ViscosityPackage.ThermalA4 := Options.THERMAL_A4.Value;
+  end;
+
+  ChemComponents := Model.MobileComponents;
+  PackageData := Vsc.PackageData;
+  for index := 0 to PackageData.Count - 1 do
+  begin
+    Item := PackageData[index];
+    ChemItem := ChemComponents.GetItemByName(Item.auxspeciesname);
+    if ChemItem = nil then
+    begin
+      ChemItem := ChemComponents.Add;
+      ChemItem.Name := Item.auxspeciesname;
+    end;
+    if SameText(ChemItem.Name, 'Viscosity') then
+    begin
+      ViscosityPackage.ViscositySpecified := True;
+    end;
+    ChemItem.RefViscosity := Item.cviscref;
+    ChemItem.ViscositySlope := Item.dviscdc;
+  end;
 end;
 
 end.

@@ -136,7 +136,7 @@ type
     // Buoyancy package crhoref
     property RefConcentration: double read GetRefConcentration
       write SetRefConcentration;
-    // Buoyancy package drhodc
+    // Viscosity package dviscdc
     property ViscositySlope: double read GetViscositySlope
       write SetViscositySlope;
     // Viscosity package cviscref

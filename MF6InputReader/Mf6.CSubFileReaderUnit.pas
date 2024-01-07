@@ -144,7 +144,9 @@ type
     procedure Initialize;
   end;
 
-  TCSubTimeItemList = TList<TCSubTimeItem>;
+  TCSubTimeItemList = class(TList<TCSubTimeItem>)
+    procedure SortItems;
+  end;
 
   TCSubPeriod = class(TCustomMf6Persistent)
   private
@@ -162,6 +164,7 @@ type
     property Period: Integer read IPer;
     property Count: Integer read GetCount;
     property Cells[Index: Integer]: TCSubTimeItem read GetCell; default;
+    procedure Sort;
   end;
 
   TCSubPeriodList = TObjectList<TCSubPeriod>;
@@ -851,6 +854,11 @@ begin
 
 end;
 
+procedure TCSubPeriod.Sort;
+begin
+  FCells.SortItems;
+end;
+
 { TCSubTimeItem }
 
 procedure TCSubTimeItem.Initialize;
@@ -1048,6 +1056,38 @@ begin
             if Result = 0 then
             begin
               result := Left.cellid.column - Right.cellid.column;
+            end;
+          end;
+        end;
+      end
+    ));
+end;
+
+{ TCSubTimeItemList }
+
+procedure TCSubTimeItemList.SortItems;
+begin
+  Sort(
+    TComparer<TCSubTimeItem>.Construct(
+      function(const Left, Right: TCSubTimeItem): Integer
+      var
+        LBoundName: string;
+        RBoundName: string;
+      begin
+        Result := AnsiCompareText(Left.StringValue, Right.StringValue);
+        if Result = 0 then
+        begin
+          Result := AnsiCompareText(LBoundName, RBoundName);
+          if Result = 0 then
+          begin
+            result := Left.cellid.Layer - Right.cellid.Layer;
+            if Result = 0 then
+            begin
+              result := Left.cellid.Row - Right.cellid.Row;
+              if Result = 0 then
+              begin
+                result := Left.cellid.column - Right.cellid.column;
+              end;
             end;
           end;
         end;
