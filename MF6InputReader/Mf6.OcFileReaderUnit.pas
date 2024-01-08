@@ -15,6 +15,8 @@ type
     FHeadPrintFormat: TPrintFormat;
     FConcentrationFile: string;
     FConcentrationPrintFormat: TPrintFormat;
+    FFullBudgetFileName: string;
+    FFullHeadFileName: string;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     function GeConcentrationFile: Boolean;
     function GetBudgetCsvFile: Boolean;
@@ -23,12 +25,18 @@ type
   protected
     procedure Initialize; override;
   public
+    // The name of the budget file in this file can be used
+    // to identify the corresponding model in the flow model interface file (*.fmi).
     property BudgetFile: Boolean read GetBudgetFile;
     property BudgetCsvFile: Boolean read GetBudgetCsvFile;
+    // The name of the head file in this file can be used
+    // to identify the corresponding model in the flow model interface file (*.fmi).
     property HeadFile: Boolean read GetHeadFile;
     property HeadPrintFormat: TPrintFormat read FHeadPrintFormat;
     property ConcentrationFile: Boolean read GeConcentrationFile;
     property ConcentrationPrintFormat: TPrintFormat read FConcentrationPrintFormat;
+    property FullBudgetFileName: string read FFullBudgetFileName;
+    property FullHeadFileName: string read FFullHeadFileName;
   end;
 
   TPrintSaveOption = (psoAll, psoFirst, psoLast, psoFrequency, psoStep, psoUndefined);
@@ -65,11 +73,13 @@ type
   private
     FOptions: TOcOptions;
     FPeriods: TOcPeriodList;
+    function GetFullBudgetFileName: string;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
     property Options: TOcOptions read FOptions;
+    property FullBudgetFileName: string read GetFullBudgetFileName;
   end;
 
 
@@ -145,7 +155,8 @@ begin
         if FSplitter[1] = 'FILEOUT' then
         begin
           FSplitter.DelimitedText := CaseSensitiveLine;
-          FBudgetFile := FSplitter[2]
+          FBudgetFile := FSplitter[2];
+          FFullBudgetFileName := ExpandFileName(FBudgetFile);
         end
         else
         begin
@@ -158,7 +169,7 @@ begin
         if FSplitter[1] = 'FILEOUT' then
         begin
           FSplitter.DelimitedText := CaseSensitiveLine;
-          FBudgetCsvFile := FSplitter[2]
+          FBudgetCsvFile := FSplitter[2];
         end
         else
         begin
@@ -171,7 +182,8 @@ begin
         if FSplitter[1] = 'FILEOUT' then
         begin
           FSplitter.DelimitedText := CaseSensitiveLine;
-          FHeadFile := FSplitter[2]
+          FHeadFile := FSplitter[2];
+          FFullHeadFileName := ExpandFileName(FHeadFile);
         end
         else if FSplitter[1] = 'PRINT_FORMAT' then
         begin
@@ -188,7 +200,7 @@ begin
         if FSplitter[1] = 'FILEOUT' then
         begin
           FSplitter.DelimitedText := CaseSensitiveLine;
-          FConcentrationFile := FSplitter[2]
+          FConcentrationFile := FSplitter[2];
         end
         else if FSplitter[1] = 'PRINT_FORMAT' then
         begin
@@ -419,6 +431,11 @@ begin
   FOptions.Free;
   FPeriods.Free;
   inherited;
+end;
+
+function TOc.GetFullBudgetFileName: string;
+begin
+  result := FOptions.FullBudgetFileName;
 end;
 
 procedure TOc.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

@@ -1,0 +1,52 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_concentration_ob.csv
+ 'stconc_SfrObs_0_1' concentration     1
+ 'stconc_SfrObs_0_2' concentration     2
+ 'stconc_SfrObs_0_3' concentration     3
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_storage_ob.csv
+ 'sts_SfrObs_0' storage Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_constant_ob.csv
+ 'stconst_SfrObs_0' constant Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_from_mvr_ob.csv
+ 'stfm_SfrObs_0' from-mvr Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_to_mvr_ob.csv
+ 'st2m_SfrObs_0' to-mvr Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_mass_flow_ob.csv
+ 'stmf_SfrObs_0' sft Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_rainfall_ob.csv
+ 'stra_SfrObs_0' rainfall Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_evaporation_ob.csv
+ 'ste_SfrObs_0' evaporation Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_runoff_ob.csv
+ 'stru_SfrObs_0' runoff Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_ext_inflow_ob.csv
+ 'stei_SfrObs_0' ext-inflow Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.sft_ext-outflow_ob.csv
+ 'steo_SfrObs_0' ext-outflow Object14 
+END CONTINUOUS
+

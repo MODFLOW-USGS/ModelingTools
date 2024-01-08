@@ -1,0 +1,20 @@
+# SRC: GWT Mass Source Loading Package file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    AUXILIARY IFACE
+    BOUNDNAMES
+    PRINT_INPUT
+    SAVE_FLOWS
+    OBS6 FILEIN Mf6ModelObs.Chem.ob_src
+END OPTIONS
+
+BEGIN DIMENSIONS
+  MAXBOUND     1
+END DIMENSIONS
+
+BEGIN PERIOD      1
+     1     5    10  1.000000000000E-006      0 'Object18'  # Stress periods: Layer Row Column smassrate IFACE boundname
+END PERIOD 
+
+BEGIN PERIOD      2
+END PERIOD 
+

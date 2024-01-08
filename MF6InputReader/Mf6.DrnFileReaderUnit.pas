@@ -10,7 +10,7 @@ type
   TDrnOptions = class(TCustomMf6Persistent)
   private
     AUXILIARY: TStringList;
-    AUXMULTNAME: TStringList;
+    AUXMULTNAME: string;
     AUXDEPTHNAME: TStringList;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
@@ -87,7 +87,6 @@ uses
 constructor TDrnOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
-  AUXMULTNAME := TStringList.Create;
   AUXDEPTHNAME := TStringList.Create;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
@@ -98,7 +97,6 @@ end;
 destructor TDrnOptions.Destroy;
 begin
   AUXILIARY.Free;
-  AUXMULTNAME.Free;
   AUXDEPTHNAME.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
@@ -109,7 +107,6 @@ procedure TDrnOptions.Initialize;
 begin
   inherited;
   AUXILIARY.Clear;
-  AUXMULTNAME.Clear;
   AUXDEPTHNAME.Clear;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
@@ -128,7 +125,6 @@ var
   TS6_FileName: string;
   Obs_FileName: string;
   AUXILIARY_Name: string;
-  AUXMULTNAME_Name: string;
   AUXDEPTHNAME_Name: string;
   AuxIndex: Integer;
 begin
@@ -187,8 +183,7 @@ begin
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME_Name := FSplitter[1];
-      AUXMULTNAME.Add(AUXMULTNAME_Name);
+      AUXMULTNAME := FSplitter[1];
     end
     else if (FSplitter[0] = 'AUXDEPTHNAME')
       and (FSplitter.Count >= 2) then

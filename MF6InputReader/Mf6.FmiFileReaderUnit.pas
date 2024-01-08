@@ -17,8 +17,12 @@ type
   end;
 
   TFmiItem = record
+    // If the flowtype is GWFBUDGET or GWFHEAD, the file name here can be
+    // matched with output file names in the OC package of the flow model and
+    // thus identify the flow model for this transport model.
     flowtype: string;
     fname: string;
+    FFullFileName: string;
     procedure Initialize;
   end;
 
@@ -28,21 +32,25 @@ type
   private
     FItems: TFmiItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetFullBudgetFileName: string;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property FullBudgetFileName: string read GetFullBudgetFileName;
   end;
 
   TFmi = class(TPackageReader)
   private
     FOptions: TFmiOptions;
     FPackageData: TFmiPackageData;
+    function GetFullBudgetFileName: string;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property FullBudgetFileName: string read GetFullBudgetFileName;
   end;
 
 
@@ -113,6 +121,21 @@ begin
   inherited;
 end;
 
+function TFmiPackageData.GetFullBudgetFileName: string;
+var
+  Index: Integer;
+begin
+  result := '';
+  for Index := 0 to FItems.Count - 1 do
+  begin
+    if FItems[Index].flowtype = 'GWFBUDGET' then
+    begin
+      result := FItems[Index].FFullFileName;
+      Exit;
+    end;
+  end;
+end;
+
 procedure TFmiPackageData.Initialize;
 begin
   inherited;
@@ -155,6 +178,7 @@ begin
       Item.flowtype := FSplitter[0];
       FSplitter.DelimitedText := CaseSensitiveLine;
       Item.fname := FSplitter[2];
+      Item.FFullFileName := ExpandFileName(Item.fname);
       FItems.Add(Item);
     end
     else
@@ -171,6 +195,7 @@ procedure TFmiItem.Initialize;
 begin
   flowtype := '';
   fname := '';
+  FFullFileName := '';
 end;
 
 { TFmi }
@@ -187,6 +212,11 @@ begin
   FOptions.Free;
   FPackageData.Free;
   inherited;
+end;
+
+function TFmi.GetFullBudgetFileName: string;
+begin
+  result := FPackageData.FullBudgetFileName;
 end;
 
 procedure TFmi.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

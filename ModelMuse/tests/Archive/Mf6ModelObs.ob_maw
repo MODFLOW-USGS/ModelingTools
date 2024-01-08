@@ -1,0 +1,79 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_head_ob.csv
+ 'mhd_MawObs' head  Object9 
+ 'mhd_MawObs2' head  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_from_mvr_ob.csv
+ 'mfmv_MawObs' from-mvr  Object9 
+ 'mfmv_MawObs2' from-mvr  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_flow_rate_ob.csv
+ 'maw_MawObs' maw  Object9 
+ 'maw_MawObs2' maw  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_cell_flow_rate_ob.csv
+ 'mawc_MawObs_1' maw     1     1
+ 'mawc_MawObs_2' maw     1     2
+ 'mawc_MawObs_3' maw     1     3
+ 'mawc_MawObs2_1' maw     2     1
+ 'mawc_MawObs2_2' maw     2     2
+ 'mawc_MawObs2_3' maw     2     3
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_pump_rate_ob.csv
+ 'mp_MawObs' rate  Object9 
+ 'mp_MawObs2' rate  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_pump_rate_to_mvr_ob.csv
+ 'm2mv_MawObs' rate-to-mvr  Object9 
+ 'm2mv_MawObs2' rate-to-mvr  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_flowing_well_rate_ob.csv
+ 'mfr_MawObs' fw-rate  Object9 
+ 'mfr_MawObs2' fw-rate  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_flowing_well_to_mvr_ob.csv
+ 'mf2mv_MawObs' fw-to-mvr  Object9 
+ 'mf2mv_MawObs2' fw-to-mvr  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_storage_flow_rate_ob.csv
+ 'mst_MawObs' storage  Object9 
+ 'mst_MawObs2' storage  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_constant_flow_rate_ob.csv
+ 'mcr_MawObs' constant  Object9 
+ 'mcr_MawObs2' constant  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_conductance_ob.csv
+ 'mcd_MawObs' conductance  Object9 
+ 'mcd_MawObs2' conductance  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_cell_conductance_ob.csv
+ 'mcdc_MawObs_1' conductance     1     1
+ 'mcdc_MawObs_2' conductance     1     2
+ 'mcdc_MawObs_3' conductance     1     3
+ 'mcdc_MawObs2_1' conductance     2     1
+ 'mcdc_MawObs2_2' conductance     2     2
+ 'mcdc_MawObs2_3' conductance     2     3
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.maw_flowing_well_conductance_ob.csv
+ 'mfcd_MawObs' fw-conductance  Object9 
+ 'mfcd_MawObs2' fw-conductance  Object20 
+END CONTINUOUS
+

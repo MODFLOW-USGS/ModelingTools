@@ -1,0 +1,9 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.drob_out_drn.csv
+  'drn_DrnObs' drn Object6
+END CONTINUOUS

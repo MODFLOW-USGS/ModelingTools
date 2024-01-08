@@ -1,0 +1,60 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_concentration_ob.csv
+ 'mconc_MawObs_0' concentration  Object9 
+ 'mconc_MawObs2_0' concentration  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_storage_ob.csv
+ 'mstor_MawObs_0' storage  Object9 
+ 'mstor_MawObs2_0' storage  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_constant_ob.csv
+ 'mcnst_MawObs_0' constant  Object9 
+ 'mcnst_MawObs2_0' constant  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_from-mvr_ob.csv
+ 'mtfmv_MawObs_0' from-mvr  Object9 
+ 'mtfmv_MawObs2_0' from-mvr  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_mwt_ob.csv
+ 'mmwt_MawObs_0' mwt  Object9 
+ 'mmwt_MawObs2_0' mwt  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_mwt_cells_ob.csv
+ 'mmwtc_MawObs_0_1' mwt     1     1
+ 'mmwtc_MawObs_0_2' mwt     1     2
+ 'mmwtc_MawObs_0_3' mwt     1     3
+ 'mmwtc_MawObs2_0_1' mwt     2     1
+ 'mmwtc_MawObs2_0_2' mwt     2     2
+ 'mmwtc_MawObs2_0_3' mwt     2     3
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_rate_ob.csv
+ 'mr_MawObs_0' rate  Object9 
+ 'mr_MawObs2_0' rate  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_flowing_well_rate_ob.csv
+ 'mfwr_MawObs_0' fw-rate  Object9 
+ 'mfwr_MawObs2_0' fw-rate  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_rate-to-mvr_ob.csv
+ 'mr2mv_MawObs_0' rate-to-mvr  Object9 
+ 'mr2mv_MawObs2_0' rate-to-mvr  Object20 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.mwt_fw-rate-to-mvr_ob.csv
+ 'mfwr2mv_MawObs_0' fw-rate-to-mvr  Object9 
+ 'mfwr2mv_MawObs2_0' fw-rate-to-mvr  Object20 
+END CONTINUOUS
+

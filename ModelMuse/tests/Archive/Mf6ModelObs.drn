@@ -1,0 +1,17 @@
+# DRN: Drain package file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    AUXILIARY IFACE
+    BOUNDNAMES
+    PRINT_INPUT
+    SAVE_FLOWS
+    OBS6 FILEIN Mf6ModelObs.ob_drob
+END OPTIONS
+
+BEGIN DIMENSIONS
+  MAXBOUND     1
+END DIMENSIONS
+
+BEGIN PERIOD      1
+     1     1     7 -1.000000000000E+000   1.000000000000E-008      0 'Object6'  # Data Set 6: Layer Row Column Elevation Cond IFACE boundname
+END PERIOD 
+

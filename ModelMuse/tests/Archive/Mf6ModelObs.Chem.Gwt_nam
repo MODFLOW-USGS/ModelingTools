@@ -1,0 +1,24 @@
+# Transport name file for Chem file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+  LIST Mf6ModelObs.Chem.lst
+    PRINT_INPUT
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6 Mf6ModelObs.Chem.dis
+  OC6 Mf6ModelObs.Chem.oc
+  SFT6 Mf6ModelObs.Chem.sft
+  MWT6 Mf6ModelObs.Chem.mwt
+  LKT6 Mf6ModelObs.Chem.lkt
+  UZT6 Mf6ModelObs.Chem.uzt
+  MVT6 Mf6ModelObs.Chem.mvt
+  ADV6 Mf6ModelObs.Chem.adv
+  DSP6 Mf6ModelObs.Chem.dsp
+  SSM6 Mf6ModelObs.Chem.ssm
+  IC6 Mf6ModelObs.Chem.ic
+  MST6 Mf6ModelObs.Chem.mst
+  IST6 Mf6ModelObs.Chem.1.ist IST-1
+  CNC6 Mf6ModelObs.Chem.cnc
+  SRC6 Mf6ModelObs.Chem.src
+END PACKAGES

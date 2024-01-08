@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5547
+5611
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5547,3 +5547,67 @@ GncTest.gpt
 	Archive\GncTest.RunModflow.Bat
 	Archive\GncTest.tdis
 	Archive\usgs.GncTest.reference
+Mf6ModelObs.gpt
+	Archive\Mf6ModelObs.axml
+	Archive\Mf6ModelObs.buy
+	Archive\Mf6ModelObs.chd
+	Archive\Mf6ModelObs.Chem.1.ist
+	Archive\Mf6ModelObs.Chem.adv
+	Archive\Mf6ModelObs.Chem.cnc
+	Archive\Mf6ModelObs.Chem.dis
+	Archive\Mf6ModelObs.Chem.dsp
+	Archive\Mf6ModelObs.Chem.gwfgwt
+	Archive\Mf6ModelObs.Chem.Gwt_nam
+	Archive\Mf6ModelObs.Chem.ic
+	Archive\Mf6ModelObs.Chem.ims
+	Archive\Mf6ModelObs.Chem.lkt
+	Archive\Mf6ModelObs.Chem.mst
+	Archive\Mf6ModelObs.Chem.mvt
+	Archive\Mf6ModelObs.Chem.mwt
+	Archive\Mf6ModelObs.Chem.ob_cnc
+	Archive\Mf6ModelObs.Chem.ob_lkt
+	Archive\Mf6ModelObs.Chem.ob_mwt
+	Archive\Mf6ModelObs.Chem.ob_sft
+	Archive\Mf6ModelObs.Chem.ob_src
+	Archive\Mf6ModelObs.Chem.ob_uzt
+	Archive\Mf6ModelObs.Chem.oc
+	Archive\Mf6ModelObs.Chem.sft
+	Archive\Mf6ModelObs.Chem.src
+	Archive\Mf6ModelObs.Chem.ssm
+	Archive\Mf6ModelObs.Chem.uzt
+	Archive\Mf6ModelObs.dis
+	Archive\Mf6ModelObs.drn
+	Archive\Mf6ModelObs.evt
+	Archive\Mf6ModelObs.ghb
+	Archive\Mf6ModelObs.gsf
+	Archive\Mf6ModelObs.hfb
+	Archive\Mf6ModelObs.ic
+	Archive\Mf6ModelObs.ims
+	Archive\Mf6ModelObs.lak6
+	Archive\Mf6ModelObs.maw6
+	Archive\Mf6ModelObs.mfsim.nam
+	Archive\Mf6ModelObs.mvr
+	Archive\Mf6ModelObs.nam
+	Archive\Mf6ModelObs.nam.archive
+	Archive\Mf6ModelObs.npf
+	Archive\Mf6ModelObs.ob_chob
+	Archive\Mf6ModelObs.ob_drob
+	Archive\Mf6ModelObs.ob_evt
+	Archive\Mf6ModelObs.ob_gbob
+	Archive\Mf6ModelObs.ob_maw
+	Archive\Mf6ModelObs.ob_rch
+	Archive\Mf6ModelObs.ob_rvob
+	Archive\Mf6ModelObs.ob_sfr
+	Archive\Mf6ModelObs.ob_uzf
+	Archive\Mf6ModelObs.ob_wel
+	Archive\Mf6ModelObs.oc
+	Archive\Mf6ModelObs.rch
+	Archive\Mf6ModelObs.riv
+	Archive\Mf6ModelObs.RunModel.Bat
+	Archive\Mf6ModelObs.RunModflow.Bat
+	Archive\Mf6ModelObs.sfr
+	Archive\Mf6ModelObs.sto
+	Archive\Mf6ModelObs.tdis
+	Archive\Mf6ModelObs.uzf
+	Archive\Mf6ModelObs.wel
+	Archive\usgs.Mf6ModelObs.reference

@@ -1,0 +1,50 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_concentration_ob.csv
+ 'ltconc_LakeObs_0' concentration Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_storage_ob.csv
+ 'lts_LakeObs_0' storage Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_constant_ob.csv
+ 'ltc_LakeObs_0' constant Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_from_MVR_ob.csv
+ 'ltfm_LakeObs_0' from-mvr Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_LKT_ob.csv
+ 'lkt_LakeObs_0' lkt Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_rainfall_ob.csv
+ 'ltra_LakeObs_0' rainfall Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_evaporation_ob.csv
+ 'lte_LakeObs_0' evaporation Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_runoff_ob.csv
+ 'ltru_LakeObs_0' runoff Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_ext-inflow_ob.csv
+ 'ltei_LakeObs_0' ext-inflow Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_withdrawal_ob.csv
+ 'ltw_LakeObs_0' withdrawal Object8 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.lkt_ext-outflow_ob.csv
+ 'lteo_LakeObs_0' ext-outflow Object8 
+END CONTINUOUS
+

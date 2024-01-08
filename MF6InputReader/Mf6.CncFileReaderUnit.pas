@@ -10,7 +10,7 @@ type
   TCncOptions = class(TCustomMf6Persistent)
   private
     AUXILIARY: TStringList;
-    AUXMULTNAME: TStringList;
+    AUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
@@ -83,7 +83,6 @@ uses
 constructor TCncOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
-  AUXMULTNAME := TStringList.Create;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -93,7 +92,6 @@ end;
 destructor TCncOptions.Destroy;
 begin
   AUXILIARY.Free;
-  AUXMULTNAME.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
@@ -103,7 +101,6 @@ procedure TCncOptions.Initialize;
 begin
   inherited;
   AUXILIARY.Clear;
-  AUXMULTNAME.Clear;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   BOUNDNAMES := False;
@@ -120,7 +117,6 @@ var
   TS6_FileName: string;
   Obs_FileName: string;
   AUXILIARY_Name: string;
-  AUXMULTNAME_Name: string;
   AuxIndex: Integer;
 begin
   Initialize;
@@ -174,8 +170,7 @@ begin
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME_Name := FSplitter[1];
-      AUXMULTNAME.Add(AUXMULTNAME_Name);
+      AUXMULTNAME := FSplitter[1];
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)

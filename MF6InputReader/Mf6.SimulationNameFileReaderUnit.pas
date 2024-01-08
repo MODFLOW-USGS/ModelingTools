@@ -47,19 +47,24 @@ type
   end;
 
   TModel = class(TObject)
+  private
+    function GetFullBudgetFileName: string;
+  public
     ModelType: string;
     NameFile: string;
     ModelName: string;
     FName: TCustomNameFile;
     destructor Destroy; override;
     procedure ReadInput(Unhandled: TStreamWriter);
+    property FullBudgetFileName: string read GetFullBudgetFileName;
   end;
 
-  TModelList = TObjectList<TModel>;
+  TModelList = TList<TModel>;
+  TObjectModelList = TObjectList<TModel>;
 
   TModels = class(TCustomMf6Persistent)
   private
-    FModels: TModelList;
+    FModels: TObjectModelList;
     function GetCount: Integer;
     function GetModel(Index: Integer): TModel;
   protected
@@ -159,7 +164,7 @@ type
 implementation
 
 uses
-  Mf6.ExchangeFileReaderUnit;
+  Mf6.ExchangeFileReaderUnit, Mf6.OcFileReaderUnit, Mf6.FmiFileReaderUnit;
 
 
 
@@ -607,7 +612,7 @@ end;
 
 constructor TModels.Create(PackageType: string);
 begin
-  FModels := TModelList.Create;
+  FModels := TObjectModelList.Create;
   inherited
 end;
 
@@ -981,6 +986,43 @@ destructor TModel.Destroy;
 begin
   FName.Free;
   inherited;
+end;
+
+function TModel.GetFullBudgetFileName: string;
+var
+  FlowNameFile: TFlowNameFile;
+  TransportNameFile: TTransportNameFile;
+  PackageIndex: Integer;
+  APackage: TPackage;
+begin
+  if ModelType = 'GWF6' then
+  begin
+    FlowNameFile := FName as TFlowNameFile;
+    for PackageIndex := 0 to FlowNameFile.NfPackages.Count - 1 do
+    begin
+      APackage := FlowNameFile.NfPackages[PackageIndex];
+      if APackage.FileType = 'OC6' then
+      begin
+        result := (APackage.Package as TOc).FullBudgetFileName;
+      end;
+    end;
+  end
+  else if ModelType = 'GWT6' then
+  begin
+    TransportNameFile := FName as TTransportNameFile;
+    for PackageIndex := 0 to TransportNameFile.NfPackages.Count - 1 do
+    begin
+      APackage := TransportNameFile.NfPackages[PackageIndex];
+      if APackage.FileType = 'FMI6' then
+      begin
+        result := (APackage.Package as TFmi).FullBudgetFileName;
+      end;
+    end;
+  end
+  else
+  begin
+    Assert(False)
+  end;
 end;
 
 procedure TModel.ReadInput(Unhandled: TStreamWriter);

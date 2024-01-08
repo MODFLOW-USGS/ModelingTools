@@ -10,7 +10,7 @@ type
   TChdOptions = class(TCustomMf6Persistent)
   private
     AUXILIARY: TStringList;
-    AUXMULTNAME: TStringList;
+    AUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
@@ -102,7 +102,6 @@ uses
 constructor TChdOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
-  AUXMULTNAME := TStringList.Create;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -112,7 +111,6 @@ end;
 destructor TChdOptions.Destroy;
 begin
   AUXILIARY.Free;
-  AUXMULTNAME.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
@@ -122,7 +120,6 @@ procedure TChdOptions.Initialize;
 begin
   inherited;
   AUXILIARY.Clear;
-  AUXMULTNAME.Clear;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   BOUNDNAMES := False;
@@ -139,7 +136,6 @@ var
   TS6_FileName: string;
   Obs_FileName: string;
   AUXILIARY_Name: string;
-  AUXMULTNAME_Name: string;
   AuxIndex: Integer;
 begin
   Initialize;
@@ -192,9 +188,16 @@ begin
     else if (FSplitter[0] = 'AUXMULTNAME')
       and (FSplitter.Count >= 2) then
     begin
-      FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME_Name := FSplitter[1];
-      AUXMULTNAME.Add(AUXMULTNAME_Name);
+      if AUXMULTNAME = '' then
+      begin
+        FSplitter.DelimitedText := CaseSensitiveLine;
+        AUXMULTNAME := FSplitter[1];
+      end
+      else
+      begin
+        Unhandled.WriteLine('AUXMULTNAME was specified more than once in the CHD package in the following line.');
+        Unhandled.WriteLine(ErrorLine);
+      end;
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)

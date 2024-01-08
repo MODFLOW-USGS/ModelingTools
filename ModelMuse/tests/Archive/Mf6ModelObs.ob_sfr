@@ -1,0 +1,60 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_stage_ob.csv
+ 'ss_SfrObs_1' stage     1
+ 'ss_SfrObs_2' stage     2
+ 'ss_SfrObs_3' stage     3
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_ext-inflow_ob.csv
+ 'sei_SfrObs' ext-inflow Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_inflow_ob.csv
+ 'si_SfrObs' inflow Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_from_mvr_ob.csv
+ 'sfm_SfrObs' from-mvr Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_rainfall_ob.csv
+ 'sra_SfrObs' rainfall Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_runoff_ob.csv
+ 'sru_SfrObs' runoff Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_gw_exchange_ob.csv
+ 'sge_SfrObs' sfr Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_evaporation_ob.csv
+ 'se_SfrObs' evaporation Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_outflow_ob.csv
+ 'sof_SfrObs' outflow Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_ext-outflow_ob.csv
+ 'seo_SfrObs' ext-outflow Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_to_mvr_ob.csv
+ 's2m_SfrObs' to-mvr Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_upstream-flow_ob.csv
+ 'suf_SfrObs' upstream-flow Object14 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.sfr_downstream-flow_ob.csv
+ 'sdf_SfrObs' downstream-flow Object14 
+END CONTINUOUS
+

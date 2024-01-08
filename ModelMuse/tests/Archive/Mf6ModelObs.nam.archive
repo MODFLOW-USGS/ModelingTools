@@ -1,0 +1,28 @@
+# Name File for MODFLOW created on 1/8/2024 by ModelMuse Version 5.1.1.51
+BEGIN OPTIONS
+  LIST ..\..\output\output.Mf6ModelObs\Mf6ModelObs.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.dis  DIS
+  IC6          ..\..\model\model.Mf6ModelObs\Mf6ModelObs.ic  IC
+  NPF6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.npf  NPF
+  STO6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.sto  STO
+  OC6          ..\..\model\model.Mf6ModelObs\Mf6ModelObs.oc  OC
+  CHD6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.chd  CHD-1
+  GHB6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.ghb  GHB-1
+  WEL6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.wel  WEL-1
+  RIV6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.riv  RIV-1
+  DRN6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.drn  DRN-1
+  SFR6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.sfr  SFR-1
+  MAW6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.maw6  MAW-1
+  BUY6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.buy  BUY6
+  RCH6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.rch  RCH-1
+  EVT6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.evt  EVT-1
+  LAK6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.lak6  LAK-1
+  UZF6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.uzf  UZF-1
+  HFB6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.hfb  HFB
+  MVR6         ..\..\model\model.Mf6ModelObs\Mf6ModelObs.mvr  MVR-1
+END PACKAGES

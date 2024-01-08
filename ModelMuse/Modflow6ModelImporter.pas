@@ -59,7 +59,7 @@ type
     procedure ImportCSub(Package: TPackage);
     procedure ImportBuy(Package: TPackage);
     procedure ImportVsc(Package: TPackage);
-    procedure ImportChd(Package: TPackage);
+    procedure ImportChd(Package: TPackage; TransportModels: TModelList);
   public
     Constructor Create;
     procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
@@ -82,7 +82,7 @@ uses
   Mf6.StoFileReaderUnit, Mf6.TvsFileReaderUnit, ModflowTvsUnit,
   Mf6.CSubFileReaderUnit, ModflowCSubInterbed, ModflowCsubUnit,
   DataArrayManagerUnit, Mf6.BuyFileReaderUnit, Mt3dmsChemSpeciesUnit,
-  Mf6.VscFileReaderUnit, Mf6.ChdFileReaderUnit;
+  Mf6.VscFileReaderUnit, Mf6.ChdFileReaderUnit, Mf6.CncFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -335,15 +335,42 @@ begin
   end;
 end;
 
-procedure TModflow6Importer.ImportChd(Package: TPackage);
+procedure TModflow6Importer.ImportChd(Package: TPackage; TransportModels: TModelList);
 var
   Model: TPhastModel;
   Chd: TChd;
+  CncList: TList<TCnc>;
+  AModel: TModel;
+  APackage: TPackage;
+  ModelIndex: Integer;
+  TransportModel: TTransportNameFile;
+  PackageIndex: Integer;
 begin
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.ChdBoundary.IsSelected := True;
 
   Chd := Package.Package as TChd;
+  CncList := TList<TCnc>.Create;
+  try
+    for ModelIndex := 0 to TransportModels.Count - 1 do
+    begin
+      AModel := TransportModels[ModelIndex];
+      TransportModel := AModel.FName as TTransportNameFile;
+      for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+      begin
+        APackage := TransportModel.NfPackages[PackageIndex];
+        if APackage.FileType = 'CNC6' then
+        begin
+          CncList.Add(APackage.Package as TCnc)
+        end;
+      end;
+    end;
+
+
+
+  finally
+    CncList.Free;
+  end;
 end;
 
 procedure TModflow6Importer.ImportCSub(Package: TPackage);
@@ -1461,197 +1488,218 @@ var
   OC: TModflowOutputControl;
   PackageIndex: Integer;
   APackage: TPackage;
+  FlowBudgetFileName: string;
+  TransportModels: TModelList;
+  ModelIndex: Integer;
+  ATransportModel: TModel;
 begin
   result := True;
-  if FFlowModel <> nil then
-  begin
-    Model := frmGoPhast.PhastModel;
-
-    NameFile := FFlowModel.FName as TFlowNameFile;
-
-    Options := NameFile.NfOptions;
-    MfOptions := Model.ModflowOptions;
-    MfOptions.NewtonMF6 := Options.NEWTON;
-    MfOptions.UnderRelaxationMF6 := Options.UNDER_RELAXATION;
-    if Options.PRINT_INPUT then
+  TransportModels := TModelList.Create;
+  try
+    if FFlowModel <> nil then
     begin
-      OC := Model.ModflowOutputControl;
-      OC.PrintInputCellLists := True;
-      OC.PrintInputArrays := True;
-    end;
+      Model := frmGoPhast.PhastModel;
 
-    Packages := NameFile.NfPackages;
+      NameFile := FFlowModel.FName as TFlowNameFile;
+      FlowBudgetFileName := FFlowModel.FullBudgetFileName;
 
-    for PackageIndex := 0 to Packages.Count - 1 do
-    begin
-      APackage := Packages[PackageIndex];
-      if APackage.FileType = 'DIS6' then
+      for ModelIndex := 0 to FSimulation.Models.Count - 1 do
       begin
-        ImportDis(APackage);
-        break
-      end
-      else if APackage.FileType = 'DISV6' then
-      begin
-        ImportDisV(APackage);
-        break;
-      end
-      else if APackage.FileType = 'DISU6' then
-      begin
-        MessageDlg('ModelMuse can not import DISU models.', mtError, [mbOK], 0);
-        result := False;
-        Exit
-      end
-      else
-      begin
-        Continue;
-      end;
-    end;
-
-    for PackageIndex := 0 to Packages.Count - 1 do
-    begin
-      APackage := Packages[PackageIndex];
-      if (APackage.FileType = 'DIS6')
-        or (APackage.FileType = 'DISV6')
-        or (APackage.FileType = 'DISU6')
-        then
-      begin
-        Continue;
+        ATransportModel := FSimulation.Models[ModelIndex];
+        if (ATransportModel.ModelType = 'GWT6')
+          and (ATransportModel.FullBudgetFileName = FlowBudgetFileName) then
+        begin
+          TransportModels.Add(ATransportModel);
+        end;
       end;
 
-      if APackage.FileType = 'IC6' then
+
+      Options := NameFile.NfOptions;
+      MfOptions := Model.ModflowOptions;
+      MfOptions.NewtonMF6 := Options.NEWTON;
+      MfOptions.UnderRelaxationMF6 := Options.UNDER_RELAXATION;
+      if Options.PRINT_INPUT then
       begin
-        ImportIc(APackage);
-      end
-      else if APackage.FileType = 'OC6' then
+        OC := Model.ModflowOutputControl;
+        OC.PrintInputCellLists := True;
+        OC.PrintInputArrays := True;
+      end;
+
+      Packages := NameFile.NfPackages;
+
+      for PackageIndex := 0 to Packages.Count - 1 do
       begin
-        ImportOc(APackage)
-      end
-      else if APackage.FileType = 'OBS6' then
+        APackage := Packages[PackageIndex];
+        if APackage.FileType = 'DIS6' then
+        begin
+          ImportDis(APackage);
+          break
+        end
+        else if APackage.FileType = 'DISV6' then
+        begin
+          ImportDisV(APackage);
+          break;
+        end
+        else if APackage.FileType = 'DISU6' then
+        begin
+          MessageDlg('ModelMuse can not import DISU models.', mtError, [mbOK], 0);
+          result := False;
+          Exit
+        end
+        else
+        begin
+          Continue;
+        end;
+      end;
+
+      for PackageIndex := 0 to Packages.Count - 1 do
       begin
-        ImportGwfObs(APackage)
-      end
-      else if APackage.FileType = 'NPF6' then
-      begin
-        ImportNpf(APackage);
-      end
-      else if APackage.FileType = 'HFB6' then
-      begin
-        ImportHfb(APackage);
-      end
-      else if APackage.FileType = 'STO6' then
-      begin
-        ImportSto(APackage);
-      end
-      else if APackage.FileType = 'CSUB6' then
-      begin
-        ImportCSub(APackage);
-      end
-      else if APackage.FileType = 'BUY6' then
-      begin
-        ImportBuy(APackage);
-      end
-      else if APackage.FileType = 'VSC6' then
-      begin
-        ImportVsc(APackage);
-      end
-      else if APackage.FileType = 'CHD6' then
-      begin
-        ImportChd(APackage);
-      end
-      else if APackage.FileType = 'WEL6' then
-      begin
-//        WelReader := TWel.Create(APackage.FileType);
-//        WelReader.Dimensions := FDimensions;
-//        APackage.Package := WelReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'DRN6' then
-      begin
-//        DrnReader := TDrn.Create(APackage.FileType);
-//        DrnReader.Dimensions := FDimensions;
-//        APackage.Package := DrnReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'GHB6' then
-      begin
-//        GhbReader := TGhb.Create(APackage.FileType);
-//        GhbReader.Dimensions := FDimensions;
-//        APackage.Package := GhbReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'RIV6' then
-      begin
-//        RivReader := TRiv.Create(APackage.FileType);
-//        RivReader.Dimensions := FDimensions;
-//        APackage.Package := RivReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'RCH6' then
-      begin
-//        RchReader := TRch.Create(APackage.FileType);
-//        RchReader.Dimensions := FDimensions;
-//        APackage.Package := RchReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'EVT6' then
-      begin
-//        EvtReader := TEvt.Create(APackage.FileType);
-//        EvtReader.Dimensions := FDimensions;
-//        APackage.Package := EvtReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'MAW6' then
-      begin
-//        MawReader := TMaw.Create(APackage.FileType);
-//        MawReader.Dimensions := FDimensions;
-//        APackage.Package := MawReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'SFR6' then
-      begin
-//        SfrReader := TSfr.Create(APackage.FileType);
-//        SfrReader.Dimensions := FDimensions;
-//        APackage.Package := SfrReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'LAK6' then
-      begin
-//        LakReader := TLak.Create(APackage.FileType);
-//        LakReader.Dimensions := FDimensions;
-//        APackage.Package := LakReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'UZF6' then
-      begin
-//        UzfReader := TUzf.Create(APackage.FileType);
-//        UzfReader.Dimensions := FDimensions;
-//        APackage.Package := UzfReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'MVR6' then
-      begin
-//        MovReader := TMvr.Create(APackage.FileType);
-//        APackage.Package := MovReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'GNC6' then
-      begin
-//        GncReader := TGnc.Create(APackage.FileType);
-//        GncReader.Dimensions := FDimensions;
-//        APackage.Package := GncReader;
-//        APackage.ReadPackage(Unhandled);
-      end
-      else if APackage.FileType = 'GWF6-GWF6' then
-      begin
-//        GwfGwfReader := TGwfGwf.Create(APackage.FileType);
-//        GwfGwfReader.Dimensions := FDimensions;
-//        GwfGwfReader.FDimensions2 := FDimensions;
-//        APackage.Package := GwfGwfReader;
-//        APackage.ReadPackage(Unhandled);
-      end
+        APackage := Packages[PackageIndex];
+        if (APackage.FileType = 'DIS6')
+          or (APackage.FileType = 'DISV6')
+          or (APackage.FileType = 'DISU6')
+          then
+        begin
+          Continue;
+        end;
+
+        if APackage.FileType = 'IC6' then
+        begin
+          ImportIc(APackage);
+        end
+        else if APackage.FileType = 'OC6' then
+        begin
+          ImportOc(APackage)
+        end
+        else if APackage.FileType = 'OBS6' then
+        begin
+          ImportGwfObs(APackage)
+        end
+        else if APackage.FileType = 'NPF6' then
+        begin
+          ImportNpf(APackage);
+        end
+        else if APackage.FileType = 'HFB6' then
+        begin
+          ImportHfb(APackage);
+        end
+        else if APackage.FileType = 'STO6' then
+        begin
+          ImportSto(APackage);
+        end
+        else if APackage.FileType = 'CSUB6' then
+        begin
+          ImportCSub(APackage);
+        end
+        else if APackage.FileType = 'BUY6' then
+        begin
+          ImportBuy(APackage);
+        end
+        else if APackage.FileType = 'VSC6' then
+        begin
+          ImportVsc(APackage);
+        end
+        else if APackage.FileType = 'CHD6' then
+        begin
+          ImportChd(APackage, TransportModels);
+        end
+        else if APackage.FileType = 'WEL6' then
+        begin
+  //        WelReader := TWel.Create(APackage.FileType);
+  //        WelReader.Dimensions := FDimensions;
+  //        APackage.Package := WelReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'DRN6' then
+        begin
+  //        DrnReader := TDrn.Create(APackage.FileType);
+  //        DrnReader.Dimensions := FDimensions;
+  //        APackage.Package := DrnReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'GHB6' then
+        begin
+  //        GhbReader := TGhb.Create(APackage.FileType);
+  //        GhbReader.Dimensions := FDimensions;
+  //        APackage.Package := GhbReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'RIV6' then
+        begin
+  //        RivReader := TRiv.Create(APackage.FileType);
+  //        RivReader.Dimensions := FDimensions;
+  //        APackage.Package := RivReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'RCH6' then
+        begin
+  //        RchReader := TRch.Create(APackage.FileType);
+  //        RchReader.Dimensions := FDimensions;
+  //        APackage.Package := RchReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'EVT6' then
+        begin
+  //        EvtReader := TEvt.Create(APackage.FileType);
+  //        EvtReader.Dimensions := FDimensions;
+  //        APackage.Package := EvtReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'MAW6' then
+        begin
+  //        MawReader := TMaw.Create(APackage.FileType);
+  //        MawReader.Dimensions := FDimensions;
+  //        APackage.Package := MawReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'SFR6' then
+        begin
+  //        SfrReader := TSfr.Create(APackage.FileType);
+  //        SfrReader.Dimensions := FDimensions;
+  //        APackage.Package := SfrReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'LAK6' then
+        begin
+  //        LakReader := TLak.Create(APackage.FileType);
+  //        LakReader.Dimensions := FDimensions;
+  //        APackage.Package := LakReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'UZF6' then
+        begin
+  //        UzfReader := TUzf.Create(APackage.FileType);
+  //        UzfReader.Dimensions := FDimensions;
+  //        APackage.Package := UzfReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'MVR6' then
+        begin
+  //        MovReader := TMvr.Create(APackage.FileType);
+  //        APackage.Package := MovReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'GNC6' then
+        begin
+  //        GncReader := TGnc.Create(APackage.FileType);
+  //        GncReader.Dimensions := FDimensions;
+  //        APackage.Package := GncReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+        else if APackage.FileType = 'GWF6-GWF6' then
+        begin
+  //        GwfGwfReader := TGwfGwf.Create(APackage.FileType);
+  //        GwfGwfReader.Dimensions := FDimensions;
+  //        GwfGwfReader.FDimensions2 := FDimensions;
+  //        APackage.Package := GwfGwfReader;
+  //        APackage.ReadPackage(Unhandled);
+        end
+
+      end;
 
     end;
-
+  finally
+    TransportModels.Free;
   end;
 end;
 

@@ -1,0 +1,38 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.uzt-conc_ob.csv
+  utc_UzfObs_0 concentration Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.uzt-storage_ob.csv
+  uts_UzfObs_0 storage Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.uzt-from_mvr_ob.csv
+  utfm_UzfObs_0 from-mvr Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.uzt-uzt_ob.csv
+  utu_UzfObs_0 uzt Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.Uzt_infiltration_ob.csv
+  uti_UzfObs_0 infiltration Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.uzt_rej_infiltration_ob.csv
+  utri_UzfObs_0 rej-inf Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.uzt_uzet_ob.csv
+  ute_UzfObs_0 uzet Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.uzt_rej_infil_to_mvr_ob.csv
+  utri2m_UzfObs_0 rej-inf-to-mvr Object15 
+END CONTINUOUS
+

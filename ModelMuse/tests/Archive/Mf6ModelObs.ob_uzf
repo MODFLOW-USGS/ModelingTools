@@ -1,0 +1,54 @@
+# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.uzf-gwrch_ob.csv
+  ugr_UzfObs uzf-gwrch Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.uzf-gwd_ob.csv
+  ug_UzfObs uzf-gwd Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.uzf-gwd-to-mvr_ob.csv
+  u2m_UzfObs uzf-gwd-to-mvr Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.uzf-gwet_ob.csv
+  uge_UzfObs uzf-gwet Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.infiltration_ob.csv
+  ui_UzfObs infiltration Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.from-mvr_ob.csv
+  ufm_UzfObs from-mvr Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.rej-inf_ob.csv
+  ur_UzfObs rej-inf Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.rej-inf-to-mvr_ob.csv
+  ur2m_UzfObs rej-inf-to-mvr Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.uzet_ob.csv
+  ue_UzfObs uzet Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.storage_ob.csv
+  us_UzfObs storage Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.net-infiltration_ob.csv
+  uni_UzfObs net-infiltration Object15 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT Mf6ModelObs.water-content_ob.csv
+  uw_UzfObs1 water-content     1  5.000000000000E+000 
+END CONTINUOUS
+

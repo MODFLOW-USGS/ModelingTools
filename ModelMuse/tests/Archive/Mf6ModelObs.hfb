@@ -1,0 +1,18 @@
+# HFB: Horizontal Flow Barrier package file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+BEGIN OPTIONS
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN DIMENSIONS
+  MAXHFB     3
+END DIMENSIONS
+
+BEGIN PERIOD      1
+     1     6     5     1     7     5  1.000000000000E-009  # (1E-9 in Object19.)/(1 in Object19.)
+     1     6     6     1     7     6  1.000000000000E-009  # (1E-9 in Object19.)/(1 in Object19.)
+     1     6     7     1     7     7  1.000000000000E-009  # (1E-9 in Object19.)/(1 in Object19.)
+END PERIOD 
+
+BEGIN PERIOD      2
+END PERIOD 
+
