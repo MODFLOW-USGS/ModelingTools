@@ -36,10 +36,10 @@ type
 
   TRivTimeItem = class(TObject)
     cellid: TCellId;
-    stage: TBoundaryValue;
-    cond: TBoundaryValue;
-    rbot: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    stage: TMf6BoundaryValue;
+    cond: TMf6BoundaryValue;
+    rbot: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
@@ -87,6 +87,7 @@ uses
 constructor TRivOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -213,7 +214,7 @@ begin
   stage.Initialize;
   cond.Initialize;
   rbot.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -296,7 +297,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   NumberOfColumns: Integer;

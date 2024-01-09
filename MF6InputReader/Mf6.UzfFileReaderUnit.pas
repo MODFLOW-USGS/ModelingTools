@@ -79,13 +79,13 @@ type
   TUzfPeriodItem = class(TCustomMf6Persistent)
   private
     iuzno: Integer;
-    finf: TBoundaryValue;
-    pet: TBoundaryValue;
-    extdp: TBoundaryValue;
-    extwc: TBoundaryValue;
-    ha: TBoundaryValue;
-    hroot: TBoundaryValue;
-    rootact: TBoundaryValue;
+    finf: TMf6BoundaryValue;
+    pet: TMf6BoundaryValue;
+    extdp: TMf6BoundaryValue;
+    extwc: TMf6BoundaryValue;
+    ha: TMf6BoundaryValue;
+    hroot: TMf6BoundaryValue;
+    rootact: TMf6BoundaryValue;
     aux: TBoundaryValueList;
   protected
     procedure Initialize; override;
@@ -133,6 +133,7 @@ uses
 constructor TUzfOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6 := TStringList.Create;
   OBS6 := TStringList.Create;
   inherited;
@@ -533,7 +534,7 @@ var
   ErrorLine: string;
   AuxIndex: Integer;
   StartIndex: Integer;
-  AuxValue: TBoundaryValue;
+  AuxValue: TMf6BoundaryValue;
 begin
   NumberOfItems := 8 + Naux;
   Initialize;

@@ -30,7 +30,7 @@ type
 
   TSpcTimeItem = record
     bndno: Integer;
-    spcsetting: TBoundaryValue;
+    spcsetting: TMf6BoundaryValue;
     procedure Initialize;
   end;
 

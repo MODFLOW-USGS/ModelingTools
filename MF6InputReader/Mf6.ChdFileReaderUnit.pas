@@ -9,8 +9,8 @@ uses
 type
   TChdOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
-    AUXMULTNAME: string;
+    FAUXILIARY: TStringList;
+    FAUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
@@ -18,11 +18,16 @@ type
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY; default;
+    function IndexOfAUXILIARY(const AName: string): Integer;
   end;
 
   TChdDimensions = class(TCustomMf6Persistent)
@@ -35,20 +40,21 @@ type
 
   TChdTimeItem = class(TObject)
     cellid: TCellId;
-    head: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    head: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
     destructor Destroy; override;
   end;
 
-  TChdTimeItemList = TObjectList<TChdTimeItem>;
+  TChdTimeItemList = TList<TChdTimeItem>;
+  TChdTimeItemObjectList = TObjectList<TChdTimeItem>;
 
   TChdPeriod = class(TCustomMf6Persistent)
   private
     IPer: Integer;
-    FCells: TChdTimeItemList;
+    FCells: TChdTimeItemObjectList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
     function GetCell(Index: Integer): TChdTimeItem;
@@ -60,7 +66,7 @@ type
     destructor Destroy; override;
     property Period: Integer read IPer;
     property Count: Integer read GetCount;
-    property Cells[Index: Integer]: TChdTimeItem read GetCell;
+    property Cells[Index: Integer]: TChdTimeItem read GetCell; default;
 
   end;
 
@@ -74,7 +80,7 @@ type
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
     function GeObservations(Index: Integer): TPackage;
-    function GetObservationsCount: Integer;
+    function GetObservationCount: Integer;
     function GetPeriod(Index: Integer): TChdPeriod;
     function GetPeriodCount: Integer;
     function GetTimeSeries(Index: Integer): TPackage;
@@ -83,11 +89,12 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TChdOptions read FOptions;
     property PeriodCount: Integer read GetPeriodCount;
     property Periods[Index: Integer]: TChdPeriod read GetPeriod;
     property TimeSeriesCount: Integer read GetTimeSeriesCount;
     property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
-    property ObservationsCount: Integer read GetObservationsCount;
+    property ObservationCount: Integer read GetObservationCount;
     property Observations[Index: Integer]: TPackage read GeObservations;
   end;
 
@@ -101,7 +108,8 @@ uses
 
 constructor TChdOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -110,16 +118,31 @@ end;
 
 destructor TChdOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
 end;
 
+function TChdOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  result := FAUXILIARY[Index];
+end;
+
+function TChdOptions.GetCount: Integer;
+begin
+  Result := FAUXILIARY.Count;
+end;
+
+function TChdOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  result := FAUXILIARY.IndexOf(AName)
+end;
+
 procedure TChdOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   BOUNDNAMES := False;
@@ -182,16 +205,16 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if (FSplitter[0] = 'AUXMULTNAME')
       and (FSplitter.Count >= 2) then
     begin
-      if AUXMULTNAME = '' then
+      if FAUXMULTNAME = '' then
       begin
         FSplitter.DelimitedText := CaseSensitiveLine;
-        AUXMULTNAME := FSplitter[1];
+        FAUXMULTNAME := FSplitter[1];
       end
       else
       begin
@@ -229,7 +252,7 @@ constructor TChdTimeItem.Create;
 begin
   cellid.Initialize;
   head.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -288,7 +311,7 @@ end;
 
 constructor TChdPeriod.Create(PackageType: string);
 begin
-  FCells := TChdTimeItemList.Create;
+  FCells := TChdTimeItemObjectList.Create;
   inherited;
 end;
 
@@ -322,7 +345,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   NumberOfItems: Integer;
@@ -437,7 +460,7 @@ begin
   result := FObservationsPackages[Index];
 end;
 
-function TChd.GetObservationsCount: Integer;
+function TChd.GetObservationCount: Integer;
 begin
   result := FObservationsPackages.Count;
 end;
@@ -503,7 +526,7 @@ begin
           APeriod := TChdPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
-          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,
+          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
             FOptions.BOUNDNAMES);
         end
         else

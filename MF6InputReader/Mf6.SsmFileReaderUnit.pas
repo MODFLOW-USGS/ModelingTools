@@ -29,11 +29,15 @@ type
   private
     FItems: TSsmSourcesItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TSsmSourcesItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TSsmSourcesItem read GetItem; default;
   end;
 
   TSsmFileInputItem = record
@@ -49,11 +53,15 @@ type
   private
     FItems: TSsmFileInputItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TSsmFileInputItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TSsmFileInputItem read GetItem; default;
   end;
 
   TSsm = class(TDimensionedPackageReader)
@@ -62,10 +70,16 @@ type
     FSources: TSsmSources;
     FFileInput: TSsmFileInput;
     FSpcPackages: TPackageList;
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TPackage;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Sources: TSsmSources read FSources;
+    property FileInput: TSsmFileInput read FFileInput;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TPackage read GetItem; default;
   end;
 
 implementation
@@ -148,6 +162,16 @@ begin
   inherited;
 end;
 
+function TSsmSources.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSsmSources.GetItem(Index: Integer): TSsmSourcesItem;
+begin
+  Result := FItems[Index];
+end;
+
 procedure TSsmSources.Initialize;
 begin
   inherited;
@@ -225,6 +249,16 @@ destructor TSsmFileInput.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TSsmFileInput.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSsmFileInput.GetItem(Index: Integer): TSsmFileInputItem;
+begin
+  Result := FItems[Index];
 end;
 
 procedure TSsmFileInput.Initialize;
@@ -309,6 +343,16 @@ begin
   FFileInput.Free;
   FSpcPackages.Free;
   inherited;
+end;
+
+function TSsm.GetCount: Integer;
+begin
+  Result := FSpcPackages.Count;
+end;
+
+function TSsm.GetItem(Index: Integer): TPackage;
+begin
+  Result := FSpcPackages[Index];
 end;
 
 procedure TSsm.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

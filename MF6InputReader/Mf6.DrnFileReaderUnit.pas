@@ -37,9 +37,9 @@ type
 
   TDrnTimeItem = class(TObject)
     cellid: TCellId;
-    elev: TBoundaryValue;
-    cond: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    elev: TMf6BoundaryValue;
+    cond: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
@@ -87,6 +87,7 @@ uses
 constructor TDrnOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   AUXDEPTHNAME := TStringList.Create;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
@@ -223,7 +224,7 @@ begin
   cellid.Initialize;
   elev.Initialize;
   cond.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -306,7 +307,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   NumberOfColumns: Integer;

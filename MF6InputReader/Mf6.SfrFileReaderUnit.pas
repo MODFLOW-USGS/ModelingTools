@@ -54,9 +54,9 @@ type
     rtp: Extended;
     rbth: Extended;
     rhk: Extended;
-    man: TBoundaryValue;
+    man: TMf6BoundaryValue;
     ncon: Integer;
-    ustrf: TBoundaryValue;
+    ustrf: TMf6BoundaryValue;
     ndv: Integer;
     aux: TBoundaryValueList;
     boundname: string;
@@ -188,6 +188,7 @@ resourcestring
 constructor TSfrOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -469,7 +470,7 @@ var
   Item: TSfrPackageItem;
   ItemStart: Integer;
   AuxIndex: Integer;
-  AValue: TBoundaryValue;
+  AValue: TMf6BoundaryValue;
   CaseSensitiveLine: string;
   DimensionCount: Integer;
   NumberOfItems: Integer;

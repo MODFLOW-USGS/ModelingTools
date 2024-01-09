@@ -63,14 +63,14 @@ type
 
   TTimeVariableCellList = TList<TTimeVariableCell>;
 
-  TBoundaryValue = record
+  TMf6BoundaryValue = record
     ValueType: TValueType;
     StringValue: string;
     NumericValue: Extended;
     procedure Initialize;
   end;
 
-  TBoundaryValueList = TList<TBoundaryValue>;
+  TBoundaryValueList = TList<TMf6BoundaryValue>;
 
   TDoubleList = TList<Double>;
 
@@ -1708,7 +1708,7 @@ end;
 
 { TBoundaryValue }
 
-procedure TBoundaryValue.Initialize;
+procedure TMf6BoundaryValue.Initialize;
 begin
   ValueType := vtNumeric;
   StringValue := '';

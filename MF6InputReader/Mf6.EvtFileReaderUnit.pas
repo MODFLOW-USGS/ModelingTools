@@ -40,13 +40,13 @@ type
 
   TEvtTimeItem = class(TObject)
     cellid: TCellId;
-    surf: TBoundaryValue;
-    rate: TBoundaryValue;
-    depth: TBoundaryValue;
+    surf: TMf6BoundaryValue;
+    rate: TMf6BoundaryValue;
+    depth: TMf6BoundaryValue;
     pxdp: TBoundaryValueList;
     petm: TBoundaryValueList;
-    petm0: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    petm0: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
@@ -97,6 +97,7 @@ uses
 constructor TEvtOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   TAS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
@@ -248,7 +249,7 @@ begin
   pxdp := TBoundaryValueList.Create;
   petm := TBoundaryValueList.Create;
   petm0.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -339,7 +340,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   LocalDim: TDimensions;
@@ -355,7 +356,7 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   SegIndex: Integer;
-  ABoundValue: TBoundaryValue;
+  ABoundValue: TMf6BoundaryValue;
   NumberOfColumns: Integer;
 begin
   DimensionCount := Dimensions.DimensionCount;

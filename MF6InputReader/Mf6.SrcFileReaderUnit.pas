@@ -35,8 +35,8 @@ type
 
   TSrcTimeItem = class(TObject)
     cellid: TCellId;
-    smassrate: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    smassrate: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
@@ -83,6 +83,7 @@ uses
 constructor TSrcOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -202,7 +203,7 @@ constructor TSrcTimeItem.Create;
 begin
   cellid.Initialize;
   smassrate.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -285,7 +286,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   NumberOfItems: Integer;

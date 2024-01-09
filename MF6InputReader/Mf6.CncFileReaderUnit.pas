@@ -35,8 +35,8 @@ type
 
   TCncTimeItem = class(TObject)
     cellid: TCellId;
-    conc: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    conc: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
@@ -202,7 +202,7 @@ constructor TCncTimeItem.Create;
 begin
   cellid.Initialize;
   conc.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -285,7 +285,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   NumberOfItems: Integer;

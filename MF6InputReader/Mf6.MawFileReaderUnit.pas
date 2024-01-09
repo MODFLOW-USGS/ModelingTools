@@ -136,6 +136,7 @@ uses
 constructor TMawOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -401,7 +402,7 @@ var
   Item: TMawPackageItem;
   ItemStart: Integer;
   AuxIndex: Integer;
-  AValue: TBoundaryValue;
+  AValue: TMf6BoundaryValue;
   CaseSensitiveLine: string;
   NumberOfItems: Integer;
 begin

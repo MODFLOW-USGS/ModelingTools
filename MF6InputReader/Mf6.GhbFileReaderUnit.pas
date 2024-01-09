@@ -36,9 +36,9 @@ type
 
   TGhbTimeItem = class(TObject)
     cellid: TCellId;
-    bhead: TBoundaryValue;
-    cond: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    bhead: TMf6BoundaryValue;
+    cond: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
@@ -86,6 +86,7 @@ uses
 constructor TGhbOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -211,7 +212,7 @@ begin
   cellid.Initialize;
   bhead.Initialize;
   cond.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -294,7 +295,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   NumberOfColumns: Integer;

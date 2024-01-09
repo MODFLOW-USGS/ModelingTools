@@ -123,10 +123,10 @@ type
     lakein: Integer;
     lakeout: Integer;
     couttype: string;
-    invert: TBoundaryValue;
-    width: TBoundaryValue;
-    rough: TBoundaryValue;
-    slope: TBoundaryValue;
+    invert: TMf6BoundaryValue;
+    width: TMf6BoundaryValue;
+    rough: TMf6BoundaryValue;
+    slope: TMf6BoundaryValue;
     procedure Initialize;
   end;
 
@@ -191,6 +191,7 @@ resourcestring
 constructor TLakOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -468,7 +469,7 @@ var
   Item: TLakPackageItem;
   ItemStart: Integer;
   AuxIndex: Integer;
-  AValue: TBoundaryValue;
+  AValue: TMf6BoundaryValue;
   CaseSensitiveLine: string;
   NumberOfItems: Integer;
 begin

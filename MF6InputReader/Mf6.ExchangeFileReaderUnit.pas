@@ -136,6 +136,7 @@ resourcestring
 constructor TCustomExchangeOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   OBS6 := TStringList.Create;
   inherited;
 

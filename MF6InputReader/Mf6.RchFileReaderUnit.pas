@@ -38,8 +38,8 @@ type
 
   TRchTimeItem = class(TObject)
     cellid: TCellId;
-    recharge: TBoundaryValue;
-    aux: TList<TBoundaryValue>;
+    recharge: TMf6BoundaryValue;
+    aux: TList<TMf6BoundaryValue>;
     boundname: string;
   public
     constructor Create;
@@ -89,6 +89,7 @@ uses
 constructor TRchOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   TAS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
@@ -230,7 +231,7 @@ constructor TRchTimeItem.Create;
 begin
   cellid.Initialize;
   recharge.Initialize;
-  aux := TList<TBoundaryValue>.Create;
+  aux := TList<TMf6BoundaryValue>.Create;
   boundname := '';
 end;
 
@@ -313,7 +314,7 @@ var
   ALine: string;
   ErrorLine: string;
   CaseSensitiveLine: string;
-  Aux: TBoundaryValue;
+  Aux: TMf6BoundaryValue;
   StartIndex: Integer;
   AuxIndex: Integer;
   LocalDim: TDimensions;

@@ -298,6 +298,9 @@ var
   ErrorLine: string;
   APackage: TPackage;
   SectionName: string;
+  PackageIndex: Integer;
+  PackageCount: Integer;
+  ExistingPackage: TPackage;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -330,6 +333,21 @@ begin
       if FSplitter.Count >= 3 then
       begin
         APackage.PackageName := FSplitter[2];
+      end
+      else
+      begin
+        PackageCount := 0;
+        for PackageIndex := 0 to FPackages.Count - 1 do
+        begin
+          ExistingPackage := FPackages[PackageIndex];
+          if APackage.FileType = ExistingPackage.FileType then
+          begin
+            Inc(PackageCount);
+          end;
+        end;
+        APackage.PackageName :=
+          Copy(APackage.FileType, 1, Length(APackage.FileType)-1)
+          + '-' + IntToStr(PackageCount);
       end;
 
       if FValidPackageTypes.IndexOf(APackage.FileType) < 0 then

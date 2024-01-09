@@ -6,7 +6,7 @@ uses
   System.Classes, System.IOUtils, Vcl.Dialogs, System.SysUtils, System.UITypes,
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
   ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
-  System.Generics.Defaults;
+  System.Generics.Defaults, Mf6.ObsFileReaderUnit;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -14,6 +14,10 @@ uses
 
 type
   TimeSeriesMap = TDictionary<string, string>;
+  TBoundNameDictionary = TDictionary<string, TObservationList>;
+  TCellIdObsDictionary = TDictionary<TCellId, TObservationList>;
+  TNumberDictionary = TDictionary<Integer, TObservationList>;
+  TObsLists = TObjectList<TObservationList>;
 
   TModflow6Importer = class(TObject)
   private
@@ -23,6 +27,7 @@ type
     FAllTopCellsScreenObject: TScreenObject;
     FModelNameFile: string;
     TSIndex: Integer;
+    FSimulations: TObjectList<TMf6Simulation>;
     procedure ImportFlowModelTiming;
     procedure ImportSimulationOptions;
     procedure ImportSolutionGroups;
@@ -60,8 +65,13 @@ type
     procedure ImportBuy(Package: TPackage);
     procedure ImportVsc(Package: TPackage);
     procedure ImportChd(Package: TPackage; TransportModels: TModelList);
+    procedure GetObservations(NumberObsDictionary: TNumberDictionary;
+      BoundNameObsDictionary: TBoundNameDictionary;
+      CellIdObsDictionary: TCellIdObsDictionary; ObsLists: TObsLists;
+      ObsFiles: TObs);
   public
     Constructor Create;
+    destructor Destroy; override;
     procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
   end;
 
@@ -75,14 +85,15 @@ uses
   UndoItems, FastGEO, AbstractGridUnit, ValueArrayStorageUnit,
   InterpolationUnit, GIS_Functions, RbwParser, DataSetNamesUnit,
   Mf6.DisvFileReaderUnit, ModflowIrregularMeshUnit, Mf6.IcFileReaderUnit,
-  Mf6.OcFileReaderUnit, Mf6.ObsFileReaderUnit, Modflow6ObsUnit,
+  Mf6.OcFileReaderUnit, Modflow6ObsUnit,
   Mf6.NpfFileReaderUnit, Mf6.TvkFileReaderUnit, ModflowTvkUnit,
   Mf6.TimeSeriesFileReaderUnit, Modflow6TimeSeriesCollectionsUnit,
   Modflow6TimeSeriesUnit, Mf6.HfbFileReaderUnit, ModflowHfbUnit,
   Mf6.StoFileReaderUnit, Mf6.TvsFileReaderUnit, ModflowTvsUnit,
   Mf6.CSubFileReaderUnit, ModflowCSubInterbed, ModflowCsubUnit,
   DataArrayManagerUnit, Mf6.BuyFileReaderUnit, Mt3dmsChemSpeciesUnit,
-  Mf6.VscFileReaderUnit, Mf6.ChdFileReaderUnit, Mf6.CncFileReaderUnit;
+  Mf6.VscFileReaderUnit, Mf6.ChdFileReaderUnit, Mf6.CncFileReaderUnit,
+  Mf6.SsmFileReaderUnit, ModflowBoundaryUnit, ModflowConstantHeadBoundaryUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -234,6 +245,7 @@ end;
 constructor TModflow6Importer.Create;
 begin
   TSIndex := 0;
+  FSimulations := TObjectList<TMf6Simulation>.Create;
 end;
 
 procedure TModflow6Importer.CreateAllTopCellsScreenObject;
@@ -273,6 +285,12 @@ begin
     end;
     FAllTopCellsScreenObject.Name := 'Imported_Arrays';
     FAllTopCellsScreenObject.SectionStarts.CacheData;
+end;
+
+destructor TModflow6Importer.Destroy;
+begin
+  FSimulation.Free;
+  inherited;
 end;
 
 function TModflow6Importer.GetAllTopCellsScreenObject: TScreenObject;
@@ -339,37 +357,290 @@ procedure TModflow6Importer.ImportChd(Package: TPackage; TransportModels: TModel
 var
   Model: TPhastModel;
   Chd: TChd;
-  CncList: TList<TCnc>;
   AModel: TModel;
   APackage: TPackage;
   ModelIndex: Integer;
   TransportModel: TTransportNameFile;
   PackageIndex: Integer;
+  BoundNameObsDictionary: TBoundNameDictionary;
+  CellIdObsDictionary: TCellIdObsDictionary;
+  Ssm: TSsm;
+  TimeSeriesIndex: Integer;
+  TimeSeriesPackage: TPackage;
+  Map: TimeSeriesMap;
+  ObsLists: TObsLists;
+  ObsPackageIndex: Integer;
+  ObsFiles: TObs;
+  SourceIndex: Integer;
+  FoundMatch: Boolean;
+  TransportAuxNames: TStringList;
+  PeriodIndex: Integer;
+  APeriod: TChdPeriod;
+  CellIndex: Integer;
+  ACell: TChdTimeItem;
+  IfaceIndex: Integer;
+  KeyStringDictionary: TDictionary<string, TChdTimeItemList>;
+  CellLists: TObjectList<TChdTimeItemList>;
+  ACellList: TChdTimeItemList;
+  Options: TChdOptions;
+  IFace: Integer;
+  LastTime: Double;
+  Imported_Heads: TValueArrayItem;
+  ItemList: TList<TChdItem>;
+  StartTime: Double;
+  ChdIndex: Integer;
+  AnItem: TChdItem;
+  KeyString: string;
+  AuxIndex: Integer;
+  AnAux: TMf6BoundaryValue;
+  TimeSeries: string;
+  ImportedTimeSeries: string;
+  ObjectCount: Integer;
+  ObjectIndex: Integer;
+  function CreateScreenObject(ACell: TChdTimeItem; Period: Integer): TScreenObject;
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    ImportedName: string;
+    ChdItem: TChdItem;
+    AuxIFACE: TMf6BoundaryValue;
+    AuxIndex: Integer;
+    GwtAuxIndex: Integer;
+    Concentrations: TChdGwtConcCollection;
+    Aux: TMf6BoundaryValue;
+    ChemSpeciesName: string;
+    Imported_Chem: TValueArrayItem;
+    ConcItem: TGwtConcStringValueItem;
+  begin
+    Inc(ObjectCount);
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedCHD_%d_Period_%d', [ObjectCount, Period]);
+    result.Name := NewName;
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    result.CreateChdBoundary;
+    if IfaceIndex >= 0 then
+    begin
+      AuxIFACE := ACell.aux[IfaceIndex];
+      Assert(AuxIFACE.ValueType = vtNumeric);
+      IFACE := Round(AuxIFACE.NumericValue);
+    end
+    else
+    begin
+      IFACE := 0;
+    end;
+    result.IFACE := TIface(IFACE+2);
+
+    ChdItem := result.ModflowChdBoundary.Values.Add as TChdItem;
+    ItemList.Add(ChdItem);
+    ChdItem.EndTime := LastTime;
+    ChdItem.StartTime := StartTime;
+
+    if ACell.head.ValueType = vtNumeric then
+    begin
+      ImportedName := 'Imported_Heads';
+      Imported_Heads := result.ImportedValues.Add;
+      Imported_Heads.Name := ImportedName;
+      Imported_Heads.Values.DataType := rdtDouble;
+      ChdItem.StartHead := rsObjectImportedValuesR + '("' + Imported_Heads.Name + '")';
+    end
+    else
+    begin
+      Imported_Heads := nil;
+      TimeSeries := ACell.head.StringValue;
+      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      begin
+        Assert(False);
+      end;
+      ChdItem.StartHead := ImportedTimeSeries;
+    end;
+    ChdItem.EndHead := ChdItem.StartHead;
+
+    if TransportAuxNames.Count > 0 then
+    begin
+      Concentrations := ChdItem.GwtConcentrations;
+      Concentrations.Count := TransportAuxNames.Count;
+      for AuxIndex := 0 to TransportAuxNames.Count - 1 do
+      begin
+        ChemSpeciesName := TransportAuxNames[AuxIndex];
+        ConcItem := Concentrations[AuxIndex];
+
+        GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+        Assert(GwtAuxIndex >= 0);
+        Aux := ACell.aux[GwtAuxIndex];
+        if Aux.ValueType = vtNumeric then
+        begin
+          ImportedName := 'Imported_' + ChemSpeciesName ;
+          Imported_Chem := result.ImportedValues.Add;
+          Imported_Chem.Name := ImportedName;
+          Imported_Chem.Values.DataType := rdtDouble;
+          ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+        end
+        else
+        begin
+          TimeSeries := Aux.StringValue;
+          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          begin
+            Assert(False);
+          end;
+          ConcItem.Value := ImportedTimeSeries;
+        end;
+      end;
+    end;
+
+  end;
 begin
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.ChdBoundary.IsSelected := True;
 
   Chd := Package.Package as TChd;
-  CncList := TList<TCnc>.Create;
+  Options := Chd.Options;
+
+//  ItemList := TList<TChdItem>.Create;
+  BoundNameObsDictionary := TBoundNameDictionary.Create;
+  CellIdObsDictionary := TCellIdObsDictionary.Create;
+  Map := TimeSeriesMap.Create;
+  ObsLists := TObsLists.Create;
+  KeyStringDictionary := TDictionary<string, TChdTimeItemList>.Create;
+  CellLists := TObjectList<TChdTimeItemList>.Create;
   try
-    for ModelIndex := 0 to TransportModels.Count - 1 do
+    IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
+    for TimeSeriesIndex := 0 to Chd.TimeSeriesCount - 1 do
     begin
-      AModel := TransportModels[ModelIndex];
-      TransportModel := AModel.FName as TTransportNameFile;
-      for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
-      begin
-        APackage := TransportModel.NfPackages[PackageIndex];
-        if APackage.FileType = 'CNC6' then
-        begin
-          CncList.Add(APackage.Package as TCnc)
-        end;
-      end;
+      TimeSeriesPackage := Chd.TimeSeries[TimeSeriesIndex];
+      ImportTimeSeries(TimeSeriesPackage, Map);
     end;
 
+    if Chd.ObservationCount > 0 then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    end;
+    for ObsPackageIndex := 0 to Chd.ObservationCount - 1 do
+    begin
+      ObsFiles := Chd.Observations[ObsPackageIndex].Package as TObs;
+      GetObservations(nil, BoundNameObsDictionary,
+        CellIdObsDictionary, ObsLists, ObsFiles);
+    end;
 
+    TransportAuxNames := TStringList.Create;
+    try
+      TransportAuxNames.CaseSensitive := False;
+      for ModelIndex := 0 to TransportModels.Count - 1 do
+      begin
+        AModel := TransportModels[ModelIndex];
+        TransportModel := AModel.FName as TTransportNameFile;
+        for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+        begin
+          APackage := TransportModel.NfPackages[PackageIndex];
+          FoundMatch := False;
+          if APackage.FileType = 'SSM6' then
+          begin
+            Ssm := APackage.Package as TSsm;
+            for SourceIndex := 0 to Ssm.Sources.Count - 1 do
+            begin
+              if SameText(Ssm.Sources[SourceIndex].pname, Package.PackageName) then
+              begin
+                FoundMatch := True;
+                TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+                break;
+              end;
+            end;
+            Assert(FoundMatch);
+          end;
+        end;
+      end;
+
+      LastTime := Model.ModflowStressPeriods.Last.EndTime;
+
+      ObjectCount := 0;
+      for PeriodIndex := 0 to Chd.PeriodCount - 1 do
+      begin
+        APeriod := Chd.Periods[PeriodIndex];
+        StartTime := Model.ModflowStressPeriods[APeriod.Period].StartTime;
+        for ChdIndex := 0 to ItemList.Count - 1 do
+        begin
+          AnItem := ItemList[ChdIndex];
+          AnItem.EndTime := StartTime;
+        end;
+        ItemList.Clear;
+
+        for CellIndex := 0 to APeriod.Count - 1 do
+        begin
+          ACell := APeriod[CellIndex];
+
+          if (ACell.boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(ACell.boundname)) then
+          begin
+            KeyString := 'BN:' + UpperCase(ACell.boundname) + ' ';
+          end
+          else
+          begin
+            KeyString := '';
+          end;
+          KeyString := KeyString + Format('IFACE:%d', [IFace]);
+          if ACell.head.ValueType = vtNumeric then
+          begin
+            KeyString := KeyString + ' Num';
+          end
+          else
+          begin
+            TimeSeries := ACell.head.StringValue;
+            if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+            begin
+              Assert(False);
+            end;
+            KeyString := KeyString + Format(' %s', [UpperCase(TimeSeries)]);
+          end;
+          for AuxIndex := 0 to ACell.aux.Count - 1 do
+          begin
+            AnAux := ACell.aux[AuxIndex];
+            if AnAux.ValueType = vtNumeric then
+            begin
+              KeyString := KeyString + ' Num';
+            end
+            else
+            begin
+              TimeSeries := AnAux.StringValue;
+              if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+              begin
+                Assert(False);
+              end;
+              KeyString := KeyString + Format(' %s', [UpperCase(ImportedTimeSeries)]);
+            end;
+          end;
+          if not KeyStringDictionary.TryGetValue(KeyString, ACellList) then
+          begin
+            ACellList := TChdTimeItemList.Create;
+            CellLists.Add(ACellList);
+          end;
+          ACellList.Add(ACell);
+        end;
+        for ObjectIndex := 0 to CellLists.Count - 1 do
+        begin
+          ACellList := CellLists[ObjectIndex];
+        end;
+      end;
+
+    finally
+      TransportAuxNames.Free;
+    end;
 
   finally
-    CncList.Free;
+    BoundNameObsDictionary.Free;
+    CellIdObsDictionary.Free;
+    Map.Free;
+    ObsLists.Free;
+    KeyStringDictionary.Free;
+    CellLists.Free;
+//    ItemList.Free;
   end;
 end;
 
@@ -401,14 +672,10 @@ var
   TimeSeriesIndex: Integer;
   ObsPackageIndex: Integer;
   ObsFiles: TObs;
-  ObsFileIndex: Integer;
-  ObsFile: TObsFile;
-  ObsIndex: Integer;
-  Observation: TObservation;
-  IcsubnoObsDictionary: TDictionary<Integer, TObservationList>;
-  BoundNameObsDictionary: TDictionary<string, TObservationList>;
-  CellIdObsDictionary: TDictionary<TCellId, TObservationList>;
-  ObsLists: TObjectList<TObservationList>;
+  IcsubnoObsDictionary: TNumberDictionary;
+  BoundNameObsDictionary: TBoundNameDictionary;
+  CellIdObsDictionary: TCellIdObsDictionary;
+  ObsLists: TObsLists;
   ObsList: TObservationList;
   PriorItem: TMf6CSubItem;
   PriorBoundName: string;
@@ -885,10 +1152,10 @@ begin
 
   NoDelayInterbeds := TList<TCSubInterbed>.Create;
   DelayInterbeds := TList<TCSubInterbed>.Create;
-  IcsubnoObsDictionary := TDictionary<Integer, TObservationList>.Create;
-  BoundNameObsDictionary := TDictionary<string, TObservationList>.Create;
-  CellIdObsDictionary := TDictionary<TCellId, TObservationList>.Create;
-  ObsLists := TObjectList<TObservationList>.Create;
+  IcsubnoObsDictionary := TNumberDictionary.Create;
+  BoundNameObsDictionary := TBoundNameDictionary.Create;
+  CellIdObsDictionary := TCellIdObsDictionary.Create;
+  ObsLists := TObsLists.Create;
   Map := TimeSeriesMap.Create;
   try
     for TimeSeriesIndex := 0 to CSub.TimeSeriesCount - 1 do
@@ -904,55 +1171,8 @@ begin
     for ObsPackageIndex := 0 to CSub.ObservationCount - 1 do
     begin
       ObsFiles := CSub.Observations[ObsPackageIndex].Package as TObs;
-      for ObsFileIndex := 0 to ObsFiles.FileCount - 1 do
-      begin
-        ObsFile := ObsFiles[ObsFileIndex];
-        for ObsIndex := 0 to ObsFile.Count - 1 do
-        begin
-          Observation := ObsFile[ObsIndex];
-          case Observation.IdType1 of
-            itCell:
-              begin
-                if not CellIdObsDictionary.TryGetValue(Observation.CellId1, ObsList) then
-                begin
-                  ObsList := TObservationList.Create;
-                  ObsLists.Add(ObsList);
-                  CellIdObsDictionary.Add(Observation.CellId1, ObsList);
-                end;
-                ObsList.Add(Observation);
-              end;
-            itNumber:
-              begin
-                if not IcsubnoObsDictionary.TryGetValue(Observation.Num1, ObsList) then
-                begin
-                  ObsList := TObservationList.Create;
-                  ObsLists.Add(ObsList);
-                  IcsubnoObsDictionary.Add(Observation.Num1, ObsList);
-                end;
-                ObsList.Add(Observation);
-              end;
-            itFloat:
-              begin
-                Assert(False)
-              end;
-            itName:
-              begin
-                if not BoundNameObsDictionary.TryGetValue(UpperCase(Observation.Name1), ObsList) then
-                begin
-                  ObsList := TObservationList.Create;
-                  ObsLists.Add(ObsList);
-                  BoundNameObsDictionary.Add(UpperCase(Observation.Name1), ObsList);
-                end;
-                ObsList.Add(Observation);
-              end;
-            itAbsent:
-              begin
-                Assert(False)
-              end;
-          end;
-
-        end;
-      end;
+      GetObservations(IcsubnoObsDictionary, BoundNameObsDictionary,
+        CellIdObsDictionary, ObsLists, ObsFiles);
     end;
 
     Options := CSub.Options;
@@ -1492,6 +1712,15 @@ var
   TransportModels: TModelList;
   ModelIndex: Integer;
   ATransportModel: TModel;
+  SimulationIndex: Integer;
+  ASimulation: TMf6Simulation;
+  SoluteNames: TStringList;
+  Ssm: TSsm;
+  AModel: TModel;
+  TransportModel: TTransportNameFile;
+  SourceIndex: Integer;
+  AuxName: string;
+  ChemSpeciesItem: TMobileChemSpeciesItem;
 begin
   result := True;
   TransportModels := TModelList.Create;
@@ -1503,16 +1732,57 @@ begin
       NameFile := FFlowModel.FName as TFlowNameFile;
       FlowBudgetFileName := FFlowModel.FullBudgetFileName;
 
-      for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+
+      for SimulationIndex := 0 to FSimulations.Count - 1 do
       begin
-        ATransportModel := FSimulation.Models[ModelIndex];
-        if (ATransportModel.ModelType = 'GWT6')
-          and (ATransportModel.FullBudgetFileName = FlowBudgetFileName) then
+        ASimulation := FSimulations[SimulationIndex];
+        for ModelIndex := 0 to ASimulation.Models.Count - 1 do
         begin
-          TransportModels.Add(ATransportModel);
+          ATransportModel := ASimulation.Models[ModelIndex];
+          if (ATransportModel.ModelType = 'GWT6')
+            and (ATransportModel.FullBudgetFileName = FlowBudgetFileName) then
+          begin
+            TransportModels.Add(ATransportModel);
+          end;
         end;
       end;
 
+      SoluteNames := TStringList.Create;
+      try
+        SoluteNames.CaseSensitive := False;
+        if TransportModels.Count > 0 then
+        begin
+          Model.ModflowPackages.GwtProcess.IsSelected := True;
+
+          for ModelIndex := 0 to TransportModels.Count - 1 do
+          begin
+            AModel := TransportModels[ModelIndex];
+            TransportModel := AModel.FName as TTransportNameFile;
+            for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+            begin
+              APackage := TransportModel.NfPackages[PackageIndex];
+              if APackage.FileType = 'SSM6' then
+              begin
+                Ssm := APackage.Package as TSsm;
+                for SourceIndex := 0 to Ssm.Sources.Count - 1 do
+                begin
+                  AuxName := Ssm.Sources[SourceIndex].auxname;
+                  if SoluteNames.IndexOf(AuxName) < 0 then
+                  begin
+                    SoluteNames.Add(AuxName);
+                    ChemSpeciesItem := Model.MobileComponents.Add;
+                    ChemSpeciesItem.Name := AuxName;
+                    break;
+                  end;
+                end;
+                break;
+              end;
+            end;
+          end;
+        end;
+      finally
+        SoluteNames.Free;
+      end;
 
       Options := NameFile.NfOptions;
       MfOptions := Model.ModflowOptions;
@@ -2080,6 +2350,7 @@ begin
   begin
     FSimulation := TMf6Simulation.Create('Simulation');
     try
+      FSimulations.Add(FSimulation);
       FSimulation.ReadSimulation(NameFiles[FileIndex]);
       OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
       if TFile.Exists(OutFile) then
@@ -2101,7 +2372,15 @@ begin
       begin
         ErrorMessages.Add(OutFile + ' does not exist.')
       end;
+    finally
+      FSimulation := nil;
+    end;
+  end;
 
+  for FileIndex := 0 to FSimulations.Count - 1 do
+  begin
+    FSimulation := FSimulations[FileIndex];
+    try
       for ExchangeIndex := 0 to FSimulation.Exchanges.Count - 1 do
       begin
         Exchange := FSimulation.Exchanges[ExchangeIndex];
@@ -2127,7 +2406,8 @@ begin
         begin
           ErrorMessages.Add('The following error was encountered when reading ' + NameFiles[FileIndex]);
           ErrorMessages.Add('Another flow model name file was already in another simulation name file');
-          Exit;
+          ErrorMessages.Add('ModelMuse can only import a single flow model.');
+          Continue;
         end;
         FModelNameFile := '';
         if FlowModelNames.Count > 1 then
@@ -2173,12 +2453,74 @@ begin
       end;
 
     finally
-      FSimulation.Free;
       FSimulation := nil;
     end;
   end;
   PhastModel.Exaggeration := frmGoPhast.DefaultVE;
   frmGoPhast.RestoreDefault2DView1Click(nil);
+end;
+
+procedure TModflow6Importer.GetObservations(NumberObsDictionary: TNumberDictionary;
+  BoundNameObsDictionary: TBoundNameDictionary;
+  CellIdObsDictionary: TCellIdObsDictionary; ObsLists: TObsLists; ObsFiles: TObs);
+var
+  ObsFileIndex: Integer;
+  ObsFile: TObsFile;
+  ObsIndex: Integer;
+  Observation: TObservation;
+  ObsList: TObservationList;
+begin
+  for ObsFileIndex := 0 to ObsFiles.FileCount - 1 do
+  begin
+    ObsFile := ObsFiles[ObsFileIndex];
+    for ObsIndex := 0 to ObsFile.Count - 1 do
+    begin
+      Observation := ObsFile[ObsIndex];
+      case Observation.IdType1 of
+        itCell:
+          begin
+            Assert(CellIdObsDictionary <> nil);
+            if not CellIdObsDictionary.TryGetValue(Observation.CellId1, ObsList) then
+            begin
+              ObsList := TObservationList.Create;
+              ObsLists.Add(ObsList);
+              CellIdObsDictionary.Add(Observation.CellId1, ObsList);
+            end;
+            ObsList.Add(Observation);
+          end;
+        itNumber:
+          begin
+            Assert(NumberObsDictionary <> nil);
+            if not NumberObsDictionary.TryGetValue(Observation.Num1, ObsList) then
+            begin
+              ObsList := TObservationList.Create;
+              ObsLists.Add(ObsList);
+              NumberObsDictionary.Add(Observation.Num1, ObsList);
+            end;
+            ObsList.Add(Observation);
+          end;
+        itFloat:
+          begin
+            Assert(False);
+          end;
+        itName:
+          begin
+            Assert(BoundNameObsDictionary <> nil);
+            if not BoundNameObsDictionary.TryGetValue(UpperCase(Observation.Name1), ObsList) then
+            begin
+              ObsList := TObservationList.Create;
+              ObsLists.Add(ObsList);
+              BoundNameObsDictionary.Add(UpperCase(Observation.Name1), ObsList);
+            end;
+            ObsList.Add(Observation);
+          end;
+        itAbsent:
+          begin
+            Assert(False);
+          end;
+      end;
+    end;
+  end;
 end;
 
 procedure TModflow6Importer.ImportNpf(Package: TPackage);

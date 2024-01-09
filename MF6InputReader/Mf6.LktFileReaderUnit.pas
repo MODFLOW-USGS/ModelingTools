@@ -33,7 +33,7 @@ type
   TLktPackageItem = class(TObject)
   private
     lakeno: Integer;
-    strt: TBoundaryValue;
+    strt: TMf6BoundaryValue;
     aux: TBoundaryValueList;
     boundname: string;
   public
@@ -94,6 +94,7 @@ uses
 constructor TLktOptions.Create(PackageType: string);
 begin
   AUXILIARY := TStringList.Create;
+  AUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -285,7 +286,7 @@ var
   Item: TLktPackageItem;
   ItemStart: Integer;
   AuxIndex: Integer;
-  AValue: TBoundaryValue;
+  AValue: TMf6BoundaryValue;
   CaseSensitiveLine: string;
   NumberOfItems: Integer;
 begin
