@@ -500,9 +500,9 @@ destructor TSft.Destroy;
 begin
   FOptions.Free;
   FPackageData.Free;
-  FPeriods := TSftPeriodList.Create;
-  FTimeSeriesPackages := TPackageList.Create;
-  FObservationsPackages := TPackageList.Create;
+  FPeriods.Free;
+  FTimeSeriesPackages.Free;
+  FObservationsPackages.Free;
   inherited;
 end;
 

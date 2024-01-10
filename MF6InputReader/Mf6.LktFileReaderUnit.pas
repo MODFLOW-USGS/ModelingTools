@@ -500,9 +500,9 @@ destructor TLkt.Destroy;
 begin
   FOptions.Free;
   FPackageData.Free;
-  FPeriods := TLktPeriodList.Create;
-  FTimeSeriesPackages := TPackageList.Create;
-  FObservationsPackages := TPackageList.Create;
+  FPeriods.Free;
+  FTimeSeriesPackages.Free;
+  FObservationsPackages.Free;
   inherited;
 end;
 

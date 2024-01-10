@@ -69,6 +69,7 @@ type
       BoundNameObsDictionary: TBoundNameDictionary;
       CellIdObsDictionary: TCellIdObsDictionary; ObsLists: TObsLists;
       ObsFiles: TObs);
+    procedure AddPointsToScreenObject(CellIds: TCellIdList; AScreenObject: TScreenObject);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -289,7 +290,7 @@ end;
 
 destructor TModflow6Importer.Destroy;
 begin
-  FSimulation.Free;
+  FSimulations.Free;
   inherited;
 end;
 
@@ -353,6 +354,17 @@ begin
   end;
 end;
 
+type
+  TChdConnection = class(TObject)
+    ScreenObject: TScreenObject;
+    List: TChdTimeItemList;
+    IFACE: Integer;
+    destructor Destroy; override;
+  end;
+
+  TChdConnectionObjectList = TObjectList<TChdConnection>;
+  TChdConnectionObjectLists = TObjectList<TChdConnectionObjectList>;
+
 procedure TModflow6Importer.ImportChd(Package: TPackage; TransportModels: TModelList);
 var
   Model: TPhastModel;
@@ -391,55 +403,39 @@ var
   ChdIndex: Integer;
   AnItem: TChdItem;
   KeyString: string;
-  AuxIndex: Integer;
-  AnAux: TMf6BoundaryValue;
   TimeSeries: string;
   ImportedTimeSeries: string;
   ObjectCount: Integer;
   ObjectIndex: Integer;
-  function CreateScreenObject(ACell: TChdTimeItem; Period: Integer): TScreenObject;
+  FirstCell: TChdTimeItem;
+  BoundName: string;
+  ConnectionObjectLists: TChdConnectionObjectLists;
+  ConnectionDictionary: TDictionary<string, TChdConnectionObjectList>;
+  AConnectionList: TChdConnectionObjectList;
+  ConnectionIndex: Integer;
+  ConnectionItem: TChdConnection;
+  AScreenObject: TScreenObject;
+  AuxIFACE: TMf6BoundaryValue;
+  AuxIndex: Integer;
+  ChemSpeciesName: string;
+  Aux: TMf6BoundaryValue;
+  GwtAuxIndex: Integer;
+  Values: TValueArrayStorage;
+  CellIds: TCellIdList;
+//  DisvUsed: Boolean;
+  procedure AddItem(AScreenObject: TScreenObject; ACell: TChdTimeItem);
   var
-    UndoCreateScreenObject: TCustomUndo;
-    NewName: string;
-    ImportedName: string;
     ChdItem: TChdItem;
-    AuxIFACE: TMf6BoundaryValue;
-    AuxIndex: Integer;
-    GwtAuxIndex: Integer;
+    ImportedName: string;
     Concentrations: TChdGwtConcCollection;
-    Aux: TMf6BoundaryValue;
     ChemSpeciesName: string;
-    Imported_Chem: TValueArrayItem;
     ConcItem: TGwtConcStringValueItem;
+    GwtAuxIndex: Integer;
+    AuxIndex: Integer;
+    Aux: TMf6BoundaryValue;
+    Imported_Chem: TValueArrayItem;
   begin
-    Inc(ObjectCount);
-    result := TScreenObject.CreateWithViewDirection(
-      Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('ImportedCHD_%d_Period_%d', [ObjectCount, Period]);
-    result.Name := NewName;
-    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
-
-    Model.AddScreenObject(result);
-    result.ElevationCount := ecOne;
-    result.SetValuesOfIntersectedCells := True;
-    result.EvaluatedAt := eaBlocks;
-    result.Visible := False;
-    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
-
-    result.CreateChdBoundary;
-    if IfaceIndex >= 0 then
-    begin
-      AuxIFACE := ACell.aux[IfaceIndex];
-      Assert(AuxIFACE.ValueType = vtNumeric);
-      IFACE := Round(AuxIFACE.NumericValue);
-    end
-    else
-    begin
-      IFACE := 0;
-    end;
-    result.IFACE := TIface(IFACE+2);
-
-    ChdItem := result.ModflowChdBoundary.Values.Add as TChdItem;
+    ChdItem := AScreenObject.ModflowChdBoundary.Values.Add as TChdItem;
     ItemList.Add(ChdItem);
     ChdItem.EndTime := LastTime;
     ChdItem.StartTime := StartTime;
@@ -447,7 +443,7 @@ var
     if ACell.head.ValueType = vtNumeric then
     begin
       ImportedName := 'Imported_Heads';
-      Imported_Heads := result.ImportedValues.Add;
+      Imported_Heads := AScreenObject.ImportedValues.Add;
       Imported_Heads.Name := ImportedName;
       Imported_Heads.Values.DataType := rdtDouble;
       ChdItem.StartHead := rsObjectImportedValuesR + '("' + Imported_Heads.Name + '")';
@@ -479,13 +475,15 @@ var
         if Aux.ValueType = vtNumeric then
         begin
           ImportedName := 'Imported_' + ChemSpeciesName ;
-          Imported_Chem := result.ImportedValues.Add;
+          Imported_Chem := AScreenObject.ImportedValues.Add;
           Imported_Chem.Name := ImportedName;
           Imported_Chem.Values.DataType := rdtDouble;
           ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+          TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
         end
         else
         begin
+          TransportAuxNames.Objects[AuxIndex] := nil;
           TimeSeries := Aux.StringValue;
           if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
           begin
@@ -495,7 +493,99 @@ var
         end;
       end;
     end;
+  end;
+  procedure CreateObsScreenObject(ACell: TChdTimeItem);
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    CellId: TCellId;
+    ElementCenter: TDualLocation;
+    APoint: TPoint2D;
+    AScreenObject: TScreenObject;
+  begin
+    Inc(ObjectCount);
+    AScreenObject := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedCHD_Obs_%d', [ObjectCount]);
+    AScreenObject.Name := NewName;
+    AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
+    Model.AddScreenObject(AScreenObject);
+    AScreenObject.ElevationCount := ecOne;
+    AScreenObject.SetValuesOfIntersectedCells := True;
+    AScreenObject.EvaluatedAt := eaBlocks;
+    AScreenObject.Visible := False;
+    AScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    AScreenObject.CreateMf6Obs;
+    AScreenObject.Modflow6Obs.Name := ACell.boundname;
+    AScreenObject.Modflow6Obs.General := [ogCHD];
+
+    CellId := ACell.cellid;
+    if Model.DisvUsed then
+    begin
+      CellId.Row := 1;
+    end;
+    ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
+    APoint.x := ElementCenter.RotatedLocation.x;
+    APoint.y := ElementCenter.RotatedLocation.y;
+    AScreenObject.AddPoint(APoint, True);
+    AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+
+  end;
+  function CreateScreenObject(ACell: TChdTimeItem; Period: Integer): TScreenObject;
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    AuxIFACE: TMf6BoundaryValue;
+    BoundName: string;
+    ObsList: TObservationList;
+    AnObs: TObservation;
+    ObsIndex: Integer;
+  begin
+    Inc(ObjectCount);
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedCHD_%d_Period_%d', [ObjectCount, Period]);
+    result.Name := NewName;
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    result.CreateChdBoundary;
+    if IfaceIndex >= 0 then
+    begin
+      AuxIFACE := ACell.aux[IfaceIndex];
+      Assert(AuxIFACE.ValueType = vtNumeric);
+      IFACE := Round(AuxIFACE.NumericValue);
+    end
+    else
+    begin
+      IFACE := 0;
+    end;
+    result.IFACE := TIface(IFACE+2);
+
+    AddItem(result, ACell);
+
+    BoundName := UpperCase(ACell.boundname);
+    if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+      result.CreateMf6Obs;
+      for ObsIndex := 0 to ObsList.Count - 1 do
+      begin
+        AnObs := ObsList[ObsIndex];
+        Assert(AnsiSameText(AnObs.ObsType, 'chd'));
+      end;
+      result.Modflow6Obs.Name := ACell.boundname;
+      result.Modflow6Obs.General := [ogCHD];
+    end;
   end;
 begin
   Model := frmGoPhast.PhastModel;
@@ -504,7 +594,10 @@ begin
   Chd := Package.Package as TChd;
   Options := Chd.Options;
 
-//  ItemList := TList<TChdItem>.Create;
+  CellIds := TCellIdList.Create;
+  ConnectionObjectLists := TChdConnectionObjectLists.Create;
+  ConnectionDictionary := TDictionary<string, TChdConnectionObjectList>.Create;
+  ItemList := TList<TChdItem>.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
   CellIdObsDictionary := TCellIdObsDictionary.Create;
   Map := TimeSeriesMap.Create;
@@ -554,6 +647,7 @@ begin
               end;
             end;
             Assert(FoundMatch);
+            break;
           end;
         end;
       end;
@@ -564,7 +658,7 @@ begin
       for PeriodIndex := 0 to Chd.PeriodCount - 1 do
       begin
         APeriod := Chd.Periods[PeriodIndex];
-        StartTime := Model.ModflowStressPeriods[APeriod.Period].StartTime;
+        StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
         for ChdIndex := 0 to ItemList.Count - 1 do
         begin
           AnItem := ItemList[ChdIndex];
@@ -585,37 +679,18 @@ begin
           begin
             KeyString := '';
           end;
-          KeyString := KeyString + Format('IFACE:%d', [IFace]);
-          if ACell.head.ValueType = vtNumeric then
+
+          if IfaceIndex < 0 then
           begin
-            KeyString := KeyString + ' Num';
+            IFACE := 0;
           end
           else
           begin
-            TimeSeries := ACell.head.StringValue;
-            if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
-            begin
-              Assert(False);
-            end;
-            KeyString := KeyString + Format(' %s', [UpperCase(TimeSeries)]);
+            AuxIFACE := ACell.aux[IfaceIndex];
+            Assert(AuxIFACE.ValueType = vtNumeric);
+            IFACE := Round(AuxIFACE.NumericValue);
           end;
-          for AuxIndex := 0 to ACell.aux.Count - 1 do
-          begin
-            AnAux := ACell.aux[AuxIndex];
-            if AnAux.ValueType = vtNumeric then
-            begin
-              KeyString := KeyString + ' Num';
-            end
-            else
-            begin
-              TimeSeries := AnAux.StringValue;
-              if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
-              begin
-                Assert(False);
-              end;
-              KeyString := KeyString + Format(' %s', [UpperCase(ImportedTimeSeries)]);
-            end;
-          end;
+          KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
           if not KeyStringDictionary.TryGetValue(KeyString, ACellList) then
           begin
             ACellList := TChdTimeItemList.Create;
@@ -626,6 +701,89 @@ begin
         for ObjectIndex := 0 to CellLists.Count - 1 do
         begin
           ACellList := CellLists[ObjectIndex];
+          FirstCell := ACellList[0];
+          if (FirstCell.boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.boundname)) then
+          begin
+            if IfaceIndex < 0 then
+            begin
+              IFACE := 0;
+            end
+            else
+            begin
+              AuxIFACE := FirstCell.aux[IfaceIndex];
+              Assert(AuxIFACE.ValueType = vtNumeric);
+              IFACE := Round(AuxIFACE.NumericValue);
+            end;
+            BoundName := UpperCase(FirstCell.boundname);
+            if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+            begin
+              AConnectionList := TChdConnectionObjectList.Create;
+              ConnectionObjectLists.Add(AConnectionList);
+              ConnectionDictionary.Add(BoundName, AConnectionList)
+            end;
+            ACellList.SortItems;
+            AScreenObject := nil;
+            for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+            begin
+              ConnectionItem := AConnectionList[ConnectionIndex];
+              if (IFACE = ConnectionItem.IFACE)
+                and ACellList.SameCells(ConnectionItem.List) then
+              begin
+                AScreenObject := ConnectionItem.ScreenObject;
+                Break;
+              end;
+            end;
+            if AScreenObject = nil then
+            begin
+              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+              ConnectionItem := TChdConnection.Create;
+              ConnectionItem.ScreenObject := AScreenObject;
+              ConnectionItem.IFACE := IFACE;
+              ConnectionItem.List := ACellList;
+              AConnectionList.Add(ConnectionItem);
+              CellLists.Extract(ACellList);
+            end
+            else
+            begin
+              AddItem(AScreenObject, FirstCell);
+            end;
+          end
+          else
+          begin
+            AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+          end;
+
+          CellIds.Clear;
+          for CellIndex := 0 to ACellList.Count - 1 do
+          begin
+            ACell := ACellList[CellIndex];
+            if ACell.head.ValueType = vtNumeric then
+            begin
+              Imported_Heads.Values.Add(ACell.head.NumericValue);
+            end;
+
+            for AuxIndex := 0 to TransportAuxNames.Count - 1 do
+            begin
+              ChemSpeciesName := TransportAuxNames[AuxIndex];
+              GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+              Aux := ACell.aux[GwtAuxIndex];
+              if Aux.ValueType = vtNumeric then
+              begin
+                Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                Values.Add(Aux.NumericValue);
+              end;
+            end;
+
+            CellIds.Add(ACell.cellid);
+
+            if CellIdObsDictionary.ContainsKey(ACell.cellid) then
+            begin
+              CreateObsScreenObject(ACell);
+            end;
+          end;
+//          DisvUsed := Model.DisvUsed;
+          AddPointsToScreenObject(CellIds, AScreenObject);
         end;
       end;
 
@@ -640,7 +798,10 @@ begin
     ObsLists.Free;
     KeyStringDictionary.Free;
     CellLists.Free;
-//    ItemList.Free;
+    ItemList.Free;
+    ConnectionObjectLists.Free;
+    ConnectionDictionary.Free;
+    CellIds.Free;
   end;
 end;
 
@@ -2430,7 +2591,14 @@ begin
         end
         else
         begin
-          FModelNameFile := FlowModelNames[0];
+          if FlowModelNames.Count > 0 then
+          begin
+            FModelNameFile := FlowModelNames[0];
+          end
+          else
+          begin
+            FModelNameFile := '';
+          end;
         end;
         if FModelNameFile <> '' then
         begin
@@ -2458,6 +2626,32 @@ begin
   end;
   PhastModel.Exaggeration := frmGoPhast.DefaultVE;
   frmGoPhast.RestoreDefault2DView1Click(nil);
+end;
+
+procedure TModflow6Importer.AddPointsToScreenObject(CellIds: TCellIdList; AScreenObject: TScreenObject);
+var
+  ElementCenter: TDualLocation;
+  APoint: TPoint2D;
+  CellIndex: Integer;
+  Model: TPhastModel;
+  CellId: TCellId;
+  DisvUsed: Boolean;
+begin
+  Model := frmGoPhast.PhastModel;
+  DisvUsed := Model.DisvUsed;
+  for CellIndex := 0 to CellIds.Count - 1 do
+  begin
+    CellId := CellIds[CellIndex];
+    if DisvUsed then
+    begin
+      CellId.Row := 1;
+    end;
+    ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
+    APoint.x := ElementCenter.RotatedLocation.x;
+    APoint.y := ElementCenter.RotatedLocation.y;
+    AScreenObject.AddPoint(APoint, True);
+    AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+  end;
 end;
 
 procedure TModflow6Importer.GetObservations(NumberObsDictionary: TNumberDictionary;
@@ -4013,6 +4207,13 @@ begin
     ChemItem.RefViscosity := Item.cviscref;
     ChemItem.ViscositySlope := Item.dviscdc;
   end;
+end;
+
+{ TConnection }
+
+destructor TChdConnection.Destroy;
+begin
+  List.Free;
 end;
 
 end.

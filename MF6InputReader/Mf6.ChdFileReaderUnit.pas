@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
   TChdOptions = class(TCustomMf6Persistent)
@@ -46,9 +46,13 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+    function Keystring: string;
   end;
 
-  TChdTimeItemList = TList<TChdTimeItem>;
+  TChdTimeItemList = class(TList<TChdTimeItem>)
+    procedure SortItems;
+    function SameCells(OtherList: TChdTimeItemList): Boolean;
+  end;
   TChdTimeItemObjectList = TObjectList<TChdTimeItem>;
 
   TChdPeriod = class(TCustomMf6Persistent)
@@ -260,6 +264,34 @@ destructor TChdTimeItem.Destroy;
 begin
   aux.Free;
   inherited;
+end;
+
+function TChdTimeItem.Keystring: string;
+var
+  AuxIndex: Integer;
+  AnAux: TMf6BoundaryValue;
+begin
+  result := '';
+  if head.ValueType = vtNumeric then
+  begin
+    result := result + ' Num';
+  end
+  else
+  begin
+    result := result + UpperCase(head.StringValue);
+  end;
+  for AuxIndex := 0 to aux.Count - 1 do
+  begin
+    AnAux := aux[AuxIndex];
+    if AnAux.ValueType = vtNumeric then
+    begin
+      result := result + ' Num';
+    end
+    else
+    begin
+      result := result + UpperCase(AnAux.StringValue);
+    end;
+  end;
 end;
 
 { TChdDimensions }
@@ -572,6 +604,50 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
+end;
+
+{ TChdTimeItemList }
+
+function TChdTimeItemList.SameCells(OtherList: TChdTimeItemList): Boolean;
+var
+  index: Integer;
+begin
+  Result := Count = OtherList.Count;
+  if Result then
+  begin
+    for index := 0 to Count - 1 do
+    begin
+      Result := Items[index].cellid.SameLocation(OtherList.Items[index].cellid);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TChdTimeItemList.SortItems;
+begin
+  Sort(
+    TComparer<TChdTimeItem>.Construct(
+      function(const Left, Right: TChdTimeItem): Integer
+      begin
+        Result := AnsiCompareText(Left.boundname, Right.boundname);
+        if Result = 0 then
+        begin
+          result := Left.cellid.Layer - Right.cellid.Layer;
+          if Result = 0 then
+          begin
+            result := Left.cellid.Row - Right.cellid.Row;
+            if Result = 0 then
+            begin
+              result := Left.cellid.column - Right.cellid.column;
+            end;
+          end;
+        end;
+      end
+    ));
+
 end;
 
 end.

@@ -46,6 +46,7 @@ type
     Row: Integer;
     Column: Integer;
     procedure Initialize;
+    function SameLocation(OtherCellID: TCellId): Boolean;
   end;
 
   TCellIdList = TList<TCellId>;
@@ -981,6 +982,13 @@ begin
   Layer := 0;
   Row := 0;
   Column := 0;
+end;
+
+function TCellId.SameLocation(OtherCellID: TCellId): Boolean;
+begin
+  result := (Layer = OtherCellID.Layer)
+    and (Row = OtherCellID.Row)
+    and (Column = OtherCellID.Column)
 end;
 
 { TDimensions }

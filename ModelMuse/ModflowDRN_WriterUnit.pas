@@ -259,7 +259,14 @@ end;
 
 function TModflowDRN_Writer.ObservationPackage: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.DrobPackage;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    result := Model.ModflowPackages.Mf6ObservationUtility;
+  end
+  else
+  begin
+    result := Model.ModflowPackages.DrobPackage;
+  end;
 end;
 
 function TModflowDRN_Writer.ObsFactors: TFluxObservationGroups;

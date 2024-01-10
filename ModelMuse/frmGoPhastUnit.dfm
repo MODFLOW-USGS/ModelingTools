@@ -17,8 +17,8 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   OnResize = FormResize
-  ExplicitWidth = 788
-  ExplicitHeight = 619
+  ExplicitWidth = 784
+  ExplicitHeight = 618
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
@@ -93,7 +93,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 482
         Image32.Height = 137
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 482
         Image32.ExplicitHeight = 137
@@ -160,7 +159,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 178
         Image32.Height = 137
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
         Image32.ExplicitHeight = 137
@@ -252,7 +250,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.Width = 482
         Image32.Height = 77
         Image32.Align = alClient
-        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 482
         Image32.ExplicitHeight = 77
@@ -675,7 +672,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 208
+      Left = 465
       Top = 130
       Width = 212
       Height = 28
@@ -777,7 +774,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 433
+      Left = 208
       Top = 130
       Width = 244
       Height = 28

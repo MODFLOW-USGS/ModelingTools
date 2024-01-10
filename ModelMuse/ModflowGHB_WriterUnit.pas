@@ -255,7 +255,14 @@ end;
 
 function TModflowGHB_Writer.ObservationPackage: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.GbobPackage;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    result := Model.ModflowPackages.Mf6ObservationUtility;
+  end
+  else
+  begin
+    result := Model.ModflowPackages.GbobPackage;
+  end;
 end;
 
 function TModflowGHB_Writer.ObsFactors: TFluxObservationGroups;

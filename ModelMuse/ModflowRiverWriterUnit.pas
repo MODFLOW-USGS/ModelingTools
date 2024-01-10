@@ -311,7 +311,14 @@ end;
 
 function TModflowRIV_Writer.ObservationPackage: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.RvobPackage;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    result := Model.ModflowPackages.Mf6ObservationUtility;
+  end
+  else
+  begin
+    result := Model.ModflowPackages.RvobPackage;
+  end;
 end;
 
 function TModflowRIV_Writer.ObsFactors: TFluxObservationGroups;

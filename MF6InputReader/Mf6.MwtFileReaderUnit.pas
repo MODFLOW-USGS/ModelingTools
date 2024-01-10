@@ -497,9 +497,9 @@ destructor TMwt.Destroy;
 begin
   FOptions.Free;
   FPackageData.Free;
-  FPeriods := TMwtPeriodList.Create;
-  FTimeSeriesPackages := TPackageList.Create;
-  FObservationsPackages := TPackageList.Create;
+  FPeriods.Free;
+  FTimeSeriesPackages.Free;
+  FObservationsPackages.Free;
   inherited;
 end;
 

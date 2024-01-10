@@ -49,7 +49,7 @@ var
   ErrorMessages: TStringList;
 begin
   inherited;
-  if not TFile.Exists(edFlowSimFile.FileName) then
+  if not TFile.Exists(Trim(edFlowSimFile.FileName)) then
   begin
     Beep;
     MessageDlg('You must select a simulation name file for flow to import a MODFLOW 6 model.', mtError, [mbOK], 0);
@@ -58,11 +58,11 @@ begin
   end;
   NameFiles := TStringList.Create;
   try
-    NameFiles.Add(edFlowSimFile.FileName);
+    NameFiles.Add(Trim(edFlowSimFile.FileName));
 
     for FileIndex := 1 to frameTransportNameFiles.seNumber.AsInteger do
     begin
-      FileName := frameTransportNameFiles.Grid.Cells[0,FileIndex];
+      FileName := Trim(frameTransportNameFiles.Grid.Cells[0,FileIndex]);
       if TFile.Exists(FileName) then
       begin
         NameFiles.Add(FileName);
@@ -100,7 +100,7 @@ begin
   inherited;
   if odSimFiles.Execute then
   begin
-    frameTransportNameFiles.Grid.Cells[ACol, ARow] := odSimFiles.Files.Text;
+    frameTransportNameFiles.Grid.Cells[ACol, ARow] := Trim(odSimFiles.Files.Text);
   end;
 end;
 
@@ -111,6 +111,11 @@ begin
     and (frameTransportNameFiles.Grid.Cells[0,1] = '') then
   begin
     frameTransportNameFiles.seNumber.AsInteger := 0;
+  end
+  else
+  begin
+    frameTransportNameFiles.seNumber.AsInteger :=
+      frameTransportNameFiles.Grid.RowCount -1;
   end;
 end;
 

@@ -708,7 +708,14 @@ end;
 
 function TModflowCHD_Writer.ObservationPackage: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.ChobPackage;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    result := Model.ModflowPackages.Mf6ObservationUtility;
+  end
+  else
+  begin
+    result := Model.ModflowPackages.ChobPackage;
+  end;
 end;
 
 function TModflowCHD_Writer.Mf6ObservationsUsed: Boolean;

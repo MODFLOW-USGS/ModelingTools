@@ -27,15 +27,15 @@ inherited frmImportModflow6: TfrmImportModflow6
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 332
+        Left = 330
         ExplicitLeft = 332
       end
       inherited sbInsert: TSpeedButton
-        Left = 393
+        Left = 391
         ExplicitLeft = 393
       end
       inherited sbDelete: TSpeedButton
-        Left = 454
+        Left = 451
         ExplicitLeft = 454
       end
       inherited seNumber: TJvSpinEdit
@@ -48,8 +48,34 @@ inherited frmImportModflow6: TfrmImportModflow6
       Height = 195
       OnExit = frameTransportNameFilesGridExit
       OnButtonClick = frameTransportNameFilesGridButtonClick
-      ExplicitWidth = 629
-      ExplicitHeight = 194
+      Columns = <
+        item
+          AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
+          ButtonCaption = '...'
+          ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -11
+          ButtonFont.Name = 'Tahoma'
+          ButtonFont.Style = []
+          ButtonUsed = True
+          ButtonWidth = 20
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = False
+          Format = rcf4String
+          LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
+          WordWrapCaptions = True
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+          AutoAdjustColWidths = True
+        end>
+      ExplicitTop = 3
+      ExplicitWidth = 633
+      ExplicitHeight = 195
       ColWidths = (
         615)
     end
@@ -75,13 +101,13 @@ inherited frmImportModflow6: TfrmImportModflow6
     object edFlowSimFile: TJvFilenameEdit
       Left = 8
       Top = 32
-      Width = 617
+      Width = 613
       Height = 26
       Filter = 'Simulation Name File|*mfsim.nam'
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       Text = ''
-      ExplicitWidth = 613
+      ExplicitWidth = 609
     end
   end
   object pnlBottom: TPanel
@@ -97,7 +123,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       633
       41)
     object btnHelp: TBitBtn
-      Left = 357
+      Left = 353
       Top = 6
       Width = 82
       Height = 27
@@ -105,10 +131,10 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 353
+      ExplicitLeft = 349
     end
     object btnOK: TBitBtn
-      Left = 445
+      Left = 441
       Top = 6
       Width = 82
       Height = 27
@@ -117,10 +143,10 @@ inherited frmImportModflow6: TfrmImportModflow6
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 441
+      ExplicitLeft = 437
     end
     object btnCancel: TBitBtn
-      Left = 533
+      Left = 529
       Top = 6
       Width = 83
       Height = 27
@@ -128,7 +154,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 529
+      ExplicitLeft = 525
     end
   end
   object odSimFiles: TOpenDialog
