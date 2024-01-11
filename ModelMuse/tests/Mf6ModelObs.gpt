@@ -3752,7 +3752,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = 'Model_Top'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = 'Upper_Aquifer_Bottom'
-      ScreenObject.Selected = False
+      ScreenObject.Selected = True
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -3781,7 +3781,7 @@ object PhastModel: TPhastModel
       ScreenObject.Modflow6Obs.Name = 'WelObs'
       ScreenObject.Modflow6Obs.GroundwaterFlowObs = False
       ScreenObject.Modflow6Obs.GwFlowObsChoices = [gfoNearestNeighbor]
-      ScreenObject.Modflow6Obs.General = [ogWell]
+      ScreenObject.Modflow6Obs.General = [ogWell, ogWellReduction]
       ScreenObject.Modflow6Obs.MawObs = []
       ScreenObject.Modflow6Obs.SfrObs = []
       ScreenObject.Modflow6Obs.LakObs = []

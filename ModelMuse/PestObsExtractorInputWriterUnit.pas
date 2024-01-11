@@ -186,7 +186,7 @@ begin
   begin
     PestUsed := False;
   end;
-  
+
   if PestUsed then
   begin
     GetDerivedObs;
@@ -241,24 +241,11 @@ begin
         Lines.Add('END INPUT_FILES');
         Lines.Add('');
 
-//        Lines.Add('BEGIN IDENTIFIERS');
-//        Lines.AddStrings(FModel.DirectObservationLines);
-//        Lines.Add('END IDENTIFIERS');
-//        Lines.Add('');
-//
-//        if FModel.DerivedObservationLines.Count > 0 then
-//        begin
-//          Lines.Add('BEGIN DERIVED_OBSERVATIONS');
-//          Lines.AddStrings(FModel.DerivedObservationLines);
-//          Lines.Add('END DERIVED_OBSERVATIONS');
-//        end;
-
         FileName := ChangeFileExt(FileName, StrMf2005WriteIns);
         Lines.WriteBOM := False;
         Lines.SaveToFile(FileName);
 
         Lines.Delete(LinePosition);
-//        Lines[LinePosition] := '  OBSERVATIONS_FILE ' + ExtractFileName(ChangeFileExt(FileName, StrMf2005Values));
         FileName := ExtractFileName(ChangeFileExt(FileName, '.Mf2005ExtractValues'));
         Lines.SaveToFile(FileName);
       end

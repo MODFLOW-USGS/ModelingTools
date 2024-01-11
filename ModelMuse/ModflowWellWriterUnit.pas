@@ -49,6 +49,7 @@ type
     class function ObservationExtension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
+    function IsMf6ToWellReductionObservation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
     function Mf6ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
@@ -200,7 +201,6 @@ begin
         FTabFileCount := FTabFileCount + Boundary.MaxTabCells;
         if Boundary.TabFileName <> '' then
         begin
-//          TabLines := 0;
           AStringList := TStringList.Create;
           try
             AStringList.LoadFromFile(Boundary.TabFileName);
@@ -286,8 +286,14 @@ function TModflowWEL_Writer.IsMf6ToMvrObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-//    and AScreenObject.Modflow6Obs.Used
     and (ogMvr in AScreenObject.Modflow6Obs.General);
+end;
+
+function TModflowWEL_Writer.IsMf6ToWellReductionObservation(
+  AScreenObject: TScreenObject): Boolean;
+begin
+  result := (AScreenObject.Modflow6Obs <> nil)
+    and (ogWellReduction in AScreenObject.Modflow6Obs.General);
 end;
 
 class function TModflowWEL_Writer.Mf6ObType: TObGeneral;
@@ -880,15 +886,12 @@ begin
       end;
     end;
 
-//    if FEvaluationType <> etExportCsv then
+    frmProgressMM.AddMessage(StrWritingDataSets3and4);
+    WriteDataSets3And4;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
     begin
-      frmProgressMM.AddMessage(StrWritingDataSets3and4);
-      WriteDataSets3And4;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
+      Exit;
     end;
 
     frmProgressMM.AddMessage(StrWritingDataSets5to7);

@@ -67,7 +67,6 @@ type
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function IsMf6GwtObservation(AScreenObject: TScreenObject;
       SpeciesIndex: Integer): Boolean;
-//    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
     function Mf6ObservationsUsed: Boolean; override;
     procedure WriteAdditionalAuxVariables;
   public

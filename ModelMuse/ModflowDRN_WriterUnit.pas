@@ -736,7 +736,6 @@ function TModflowDRN_Writer.IsMf6ToMvrObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-//    and AScreenObject.Modflow6Obs.Used
     and (ogMvr in AScreenObject.Modflow6Obs.General);
 end;
 

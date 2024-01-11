@@ -12,7 +12,7 @@ type
   TGwFlowObs = set of TGwFlowOb;
 
   TObGeneral = (ogHead, ogDrawdown, ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
-    ogRch, ogEVT, ogMvr, ogUndefined);
+    ogRch, ogEVT, ogMvr, ogWellReduction, ogUndefined);
   TObGenerals = set of TObGeneral;
 
   TObGwt = (ogwtConcentration, ogwtCNC, ogwtSRC, ogwtUndefined);
@@ -243,6 +243,9 @@ type
     procedure Clear;
     // If @name is changed, @link(Clear) should be changed too.
     procedure ReplaceGUID;
+    // @name is the object that defines the observation.
+    // If may be different from the one that defines the boundary
+    // with for the observation.
     property ScreenObject: TObject read FScreenObject;
     property Genus: TGenus read FGenus write SetGenus;
   published
@@ -319,7 +322,7 @@ uses
 
 const
   ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',
-    'Rch', 'EVT', 'Mvr', 'undefined');
+    'Rch', 'EVT', 'Mvr', 'WellReduction', 'undefined');
   ObConcName: array[TObGwt] of string = ('Concentration', 'CNC', 'SRC', 'undefined');
 
   ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak',

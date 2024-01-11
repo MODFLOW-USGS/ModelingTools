@@ -10108,8 +10108,12 @@ const
 //               Bug fix: Fixed drawing contours on the side view for DISV
 //                meshes.
 
-//               bug fix: Fixed export of flow observations in the CHD, DRN,
+//               Bug fix: Fixed export of flow observations in the CHD, DRN,
 //                 GHB, and RIV, packages in MODFLOW 6 models.
+//               Enhancement added support for the wel-reduction observation
+//                type in the MODFLOW 6 Observation Utility.
+//               Bug fix: Fixed export of to-mvr observation types for the
+//                for WEL, DRN, RIV, and GHB packages.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.

@@ -1,7 +1,7 @@
 pcf
 * control data
 restart estimation # RSTFLE PESTMODE
-     6     1     4     6    13     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     6     2     4     6    14     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
      3     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001  -3.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
@@ -41,6 +41,7 @@ RIV_flows
 STR_flows
 Heads
 Head_Changes
+ToMvr
 regul_Grp1
 regul_Grp2
 regul_Grp3
@@ -50,6 +51,7 @@ regul_Grp6
 
 * observation data
 MyCalib  0.000000000000E+000   1.000000000000E+000  CHOB_flows
+NonConnect  1.000000000000E+000   1.000000000000E+000  ToMvr
 
 * model command line
 RunModel.Bat

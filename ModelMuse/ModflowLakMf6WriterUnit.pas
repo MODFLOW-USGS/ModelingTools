@@ -235,7 +235,6 @@ type
     procedure WriteStressPeriods;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean;
     function IsMf6GwtObservation(AScreenObject: TScreenObject; SpeciesIndex: Integer): Boolean;
-//    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean;
     class function ObservationExtension: string; //override;
     class function GwtObservationExtension: string; //override;
     procedure WriteLakeValueOrFormula(LakeSetting: TLakeSetting; Index: integer);

@@ -9,7 +9,7 @@ uses
   framePestObsUnit, framePestObsMf6Unit, Vcl.Mask;
 
 type
-  TFlowObsRows = (forCHD, forDRN, forEVT, forGHB, forRCH, forRIV, forWEL, forToMvr);
+  TFlowObsRows = (forCHD, forDRN, forEVT, forGHB, forRCH, forRIV, forWEL, forToMvr, forWellReduction);
   TMassFlowObsRows = (mforCNC, mforSRC);
 
   TframeScreenObjectObsMf6 = class(TFrame)
@@ -272,6 +272,7 @@ begin
           chklstBoundaryFlow.Checked[Ord(forRIV)] := ogRiv in Mf6Obs.General;
           chklstBoundaryFlow.Checked[Ord(forWEL)] := ogWell in Mf6Obs.General;
           chklstBoundaryFlow.Checked[Ord(forToMvr)] := ogMvr in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forWellReduction)] := ogWellReduction in Mf6Obs.General;
 
           chklstGWT.Checked[Ord(mforCNC)] := ogwtCNC in Mf6Obs.GwtObs;
           chklstGWT.Checked[Ord(mforSRC)] := ogwtSRC in Mf6Obs.GwtObs;
@@ -527,6 +528,12 @@ begin
             TCheckBoxState(ogMvr in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forToMvr)] := cbGrayed;
+          end;
+
+          if chklstBoundaryFlow.State[Ord(forWellReduction)] <>
+            TCheckBoxState(ogWellReduction in Mf6Obs.General) then
+          begin
+            chklstBoundaryFlow.State[Ord(forWellReduction)] := cbGrayed;
           end;
 
           if chklstGWT.State[Ord(mforCNC)] <>
@@ -971,7 +978,6 @@ begin
         begin
           Exclude(NewGeneral, ogDrain);
         end;
-//        Mf6Obs.DrnFlowObs := chklstBoundaryFlow.Checked[Ord(forDRN)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forEVT)] <> cbGrayed then
@@ -984,7 +990,6 @@ begin
         begin
           Exclude(NewGeneral, ogEVT);
         end;
-//        Mf6Obs.EvtFlowObs := chklstBoundaryFlow.Checked[Ord(forEVT)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forGHB)] <> cbGrayed then
@@ -997,7 +1002,6 @@ begin
         begin
           Exclude(NewGeneral, ogGHB);
         end;
-//        Mf6Obs.GhbFlowObs := chklstBoundaryFlow.Checked[Ord(forGHB)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forRCH)] <> cbGrayed then
@@ -1010,7 +1014,6 @@ begin
         begin
           Exclude(NewGeneral, ogRch);
         end;
-//        Mf6Obs.RchFlowObs := chklstBoundaryFlow.Checked[Ord(forRCH)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forRIV)] <> cbGrayed then
@@ -1023,7 +1026,6 @@ begin
         begin
           Exclude(NewGeneral, ogRiv);
         end;
-//        Mf6Obs.RivFlowObs := chklstBoundaryFlow.Checked[Ord(forRIV)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forWEL)] <> cbGrayed then
@@ -1036,7 +1038,6 @@ begin
         begin
           Exclude(NewGeneral, ogWell);
         end;
-//        Mf6Obs.WelFlowObs := chklstBoundaryFlow.Checked[Ord(forWEL)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forToMvr)] <> cbGrayed then
@@ -1048,6 +1049,18 @@ begin
         else
         begin
           Exclude(NewGeneral, ogMvr);
+        end;
+      end;
+
+      if chklstBoundaryFlow.State[Ord(forWellReduction)] <> cbGrayed then
+      begin
+        if chklstBoundaryFlow.Checked[Ord(forWellReduction)] then
+        begin
+          Include(NewGeneral, ogWellReduction);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogWellReduction);
         end;
       end;
       Mf6Obs.General := NewGeneral;

@@ -520,11 +520,10 @@ end;
     FObsLocationCheck: T3DSparseStringArray;
 //    FMf6ObsArray: T3DSparsePointerArray;
     FToMvrFlowObsLocations: TBoundaryFlowObservationLocationList;
+    FWellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
     FDirectObsLines: TStrings;
     FFileNameLines: TStrings;
     FCalculatedObsLines: TStrings;
-//    FMf6ObsArray: TScreenObjectsList3DArray;
-//    FScreenObjectLists: TObjectScreenObjectLists;
     function GetOwnsValueContents: Boolean;
     procedure SetOwnsValueContents(const Value: Boolean);
   protected
@@ -535,6 +534,8 @@ end;
       read FFlowObsLocations;
     property ToMvrFlowObsLocations: TBoundaryFlowObservationLocationList
       read FToMvrFlowObsLocations;
+    property WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList
+      read FWellReductionFlowObsLocations;
     // @name is used for recording the locations of observations for
     // MODFLOW-6 flow observations.
     property ObsLocationCheck: T3DSparseStringArray read FObsLocationCheck;
@@ -592,6 +593,7 @@ end;
     // in a descendant class.
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; virtual;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; virtual;
+    function IsMf6ToWellReductionObservation(AScreenObject: TScreenObject): Boolean; virtual;
     function IsFlowObs(AScreenObject: TScreenObject): Boolean; virtual;
     procedure EnsureMf6CalibObservations(AScreenObject: TScreenObject); virtual;
 //    function ObsFactors: TObservationFactors; virtual;
@@ -815,7 +817,6 @@ end;
     procedure DoBeforeWriteParamCells; virtual;
     procedure WriteListOptions(InputFileName: string); virtual;
     procedure WriteOptionsMF6(InputFileName: string);
-//    procedure WriteBoundName(ACell: TValueCell);
     procedure WriteAndCheckCells(const VariableIdentifiers: string;
       const DataSetIdentifier: string; List: TValueCellList;
       TimeIndex: integer); virtual;
@@ -938,7 +939,6 @@ end;
       ACell: TValueCell; DataSets, Variables: TList;
       ObsFactor: TObservationFactor);
     procedure SavePestInstructionFile(OutputName: string);
-//    procedure WriteListOptions; override;
     function IsFlowObs(AScreenObject: TScreenObject): Boolean; override;
     function ObsFactors: TFluxObservationGroups; virtual;
     procedure EnsureMf6CalibObservations(AScreenObject: TScreenObject); override;
@@ -4869,8 +4869,9 @@ begin
     FObsLocationCheck := T3DSparseStringArray.Create(
       GetQuantum(Model.LayerCount), GetQuantum(Model.RowCount),
       GetQuantum(Model.ColumnCount));
-//    FMf6ObsArray := T3DSparsePointerArray.Create(SPASmall, SPASmall, SPASmall);
+
     FToMvrFlowObsLocations := TBoundaryFlowObservationLocationList.Create;
+    FWellReductionFlowObsLocations := TBoundaryFlowObservationLocationList.Create;
   end;
   DirectObsLines := Model.DirectObservationLines;
   CalculatedObsLines := Model.DerivedObservationLines;
@@ -4882,8 +4883,9 @@ end;
 
 destructor TCustomTransientWriter.Destroy;
 begin
+  FWellReductionFlowObsLocations.Free;
   FToMvrFlowObsLocations.Free;
-//  FMf6ObsArray.Free;
+
   FObsLocationCheck.Free;
   FFlowObsLocations.Free;
   FValues.Free;
@@ -5005,6 +5007,21 @@ begin
 
         if Mf6ObservationsUsed then
         begin
+          if IsMf6ToWellReductionObservation(ScreenObject) then
+          begin
+            Mf6Obs := ScreenObject.Modflow6Obs;
+
+            FlowObs.FName := Mf6Obs.Name;
+            FlowObs.FMf6Obs := Mf6Obs;
+            if Length(FlowObs.FName) > 36 then
+            begin
+              SetLength(FlowObs.FName, 36);
+            end;
+            FlowObs.FName := FlowObs.FName + '_Well_Reduction';
+
+            FlowObs.FBoundName := ScreenObject.Name;
+            WellReductionFlowObsLocations.Add(FlowObs);
+          end;
           if IsMf6ToMvrObservation(ScreenObject) then
           begin
             Mf6Obs := ScreenObject.Modflow6Obs;
@@ -5037,12 +5054,10 @@ begin
       end
       else if Mf6ObservationsUsed and IsMf6Observation(ScreenObject) then
       begin
-
         Mf6Obs := ScreenObject.Modflow6Obs;
         FlowObs.FName := Mf6Obs.Name;
         FlowObs.FMf6Obs := Mf6Obs;
         FlowObs.FBoundName := Mf6Obs.Name;
-        FlowObsLocations.Add(FlowObs);
 
       end;
     end;
@@ -5736,11 +5751,14 @@ var
   FlowObsWriter: TModflow6FlowObsWriter;
 begin
   if ((FlowObsLocations <> nil) and (FlowObsLocations.Count > 0))
-    or ((ToMvrFlowObsLocations <> nil) and (ToMvrFlowObsLocations.Count > 0)) then
+    or ((ToMvrFlowObsLocations <> nil) and (ToMvrFlowObsLocations.Count > 0))
+    or ((WellReductionFlowObsLocations <> nil) and (WellReductionFlowObsLocations.Count > 0))
+    then
   begin
     FileName := ChangeFileExt(FileName, ObservationExtension);
     FlowObsWriter := TModflow6FlowObsWriter.Create(Model, EvaluationType,
       FlowObsLocations, ObsType, ToMvrFlowObsLocations,
+      WellReductionFlowObsLocations,
       ObservationOutputExtension, Mf6ObType);
     try
       FlowObsWriter.DirectObsLines := DirectObsLines;
@@ -5759,11 +5777,12 @@ var
   FlowObsWriter: TModflow6GwtFlowObsWriter;
 begin
   if ((FlowObsLocations <> nil) and (FlowObsLocations.Count > 0))
-    or ((ToMvrFlowObsLocations <> nil) and (ToMvrFlowObsLocations.Count > 0)) then
+    or ((ToMvrFlowObsLocations <> nil) and (ToMvrFlowObsLocations.Count > 0))
+    or ((WellReductionFlowObsLocations <> nil) and (WellReductionFlowObsLocations.Count > 0)) then
   begin
     FileName := ChangeFileExt(FileName, ObservationExtension);
     FlowObsWriter := TModflow6GwtFlowObsWriter.Create(Model, EvaluationType,
-      FlowObsLocations, ObsType, ToMvrFlowObsLocations,
+      FlowObsLocations, ObsType, ToMvrFlowObsLocations, WellReductionFlowObsLocations,
       ObservationOutputExtension, Mf6GwtObType, SpeciesIndex);
     try
       FlowObsWriter.DirectObsLines := DirectObsLines;
@@ -7471,13 +7490,10 @@ var
   ScreenObject: TScreenObject;
   Boundary: TModflowBoundary;
   CellList: TCellAssignmentList;
-//  ACell: TCellAssignment;
-//  Mf6Obs: TModflow6Obs;
   ScreenObjectIndex: Integer;
   Mf6Obs: TModflow6Obs;
   CellIndex: Integer;
   ACell: TCellAssignment;
-//  CellIndex: integer;
   IDomainArray: TDataArray;
 begin
   if not Mf6ObservationsUsed then
@@ -7518,8 +7534,7 @@ begin
             ACell := CellList[CellIndex];
             if (IDomainArray.IntegerData[ACell.Cell.Layer, ACell.Cell.Row,
               ACell.Cell.Column] > 0)
-              {and not ObsLocationCheck.IsValue[ACell.Cell.Layer, ACell.Cell.Row,
-              ACell.Cell.Column]} then
+              then
             begin
               ObsLocationCheck[ACell.Cell.Layer, ACell.Cell.Row,
                 ACell.Cell.Column] := Mf6Obs.Name;
@@ -7815,6 +7830,12 @@ begin
 end;
 
 function TCustomTransientWriter.IsMf6ToMvrObservation(
+  AScreenObject: TScreenObject): Boolean;
+begin
+  result := False;
+end;
+
+function TCustomTransientWriter.IsMf6ToWellReductionObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := False;
@@ -8376,120 +8397,6 @@ begin
   end;
 end;
 
-{procedure TFluxObsWriter.WriteFluxObsFileMF6(const AFileName, OutputUnitId,
-  PackageAbbreviation, DataSet1Comment, DataSet2Comment,
-  DataSet3Comment: string; Observations: TFluxObservationGroups;
-  Purpose: TObservationPurpose);
-var
-  ObsIndex: Integer;
-  ObservationGroup: TFluxObservationGroup;
-  NameOfFile: string;
-  OutputName: string;
-  TimeIndex: Integer;
-  AnObs: TFluxObservation;
-  TimeString: string;
-  obsname: string;
-  ObjectIndex: Integer;
-  ObsFactor: TObservationFactor;
-  ObjectNameIndex: Integer;
-  ID: string;
-begin
-  // No longer supported in MODFLOW 6.
-  Exit;
-  { TODO -cMODFLOW 6 : Add a method of writing continuous observations }
-
-  // if the package is not selected, quit.
-{  if not ObservationPackage.IsSelected then
-  begin
-    Exit;
-  end;
-
-  frmErrorsAndWarnings.BeginUpdate;
-  try
-
-    NameOfFile := ObservationFileName(AFileName);
-    OpenFile(NameOfFile);
-    try
-      WriteDataSet0;
-
-      // Options block
-      WriteBeginOptions;
-      try
-        WriteString('    DIGITS 16');
-        NewLine;
-
-        WriteString('    STRUCTURED');
-        NewLine;
-
-        PrintListInputOption;
-
-      finally
-        WriteEndOptions;
-      end;
-
-      OutputName := ObservationOutputFileName(AFileName);
-      WriteString('BEGIN SINGLE ');
-      WriteString(OutputName);
-      NewLine;
-
-      for ObsIndex := 0 to Observations.Count - 1 do
-      begin
-        ObservationGroup := Observations[ObsIndex];
-
-        if Purpose = ObservationGroup.Purpose then
-        begin
-          for TimeIndex := 0 to ObservationGroup.ObservationTimes.Count - 1 do
-          begin
-            AnObs := ObservationGroup.ObservationTimes[TimeIndex];
-
-            TimeString := AnObs.ObsNameTimeString;
-            obsname := ObservationGroup.ObservationName + '_' + TimeString;
-
-            for ObjectIndex := 0 to ObservationGroup.ObservationFactors.Count - 1 do
-            begin
-              ObsFactor := ObservationGroup.ObservationFactors[ObjectIndex];
-
-              ObjectNameIndex := FObjectNames.IndexOf(ObsFactor.ObjectName);
-              Assert(ObjectNameIndex >= 0);
-              ID := ' ' + FBoundNames[ObjectNameIndex];
-
-              WriteString(obsname);
-              WriteString(ObsTypeMF6);
-              WriteFloat(AnObs.Time);
-              WriteString(ID);
-              NewLine;
-            end;
-
-
-          end;
-
-        end;
-      end;
-
-      WriteString('END SINGLE');
-      NewLine;
-    finally
-      CloseFile;
-    end;
-
-  finally
-    frmErrorsAndWarnings.EndUpdate;
-  end;
-end;       }
-
-//procedure TFluxObsWriter.WriteListOptions;
-//var
-//  NameOfFile: string;
-//begin
-//  inherited;
-//{  if ObservationPackage.IsSelected then
-//  begin
-//    WriteString('    OBS6 ');
-//    NameOfFile := ObservationFileName(FFileName);
-//    WriteString(NameOfFile);
-//    NewLine;
-//  end;  }
-//end;
 
 procedure TFluxObsWriter.WriteZeroConductanceCell(ACell: TValueCell;
   DataSet5: TStringList);
@@ -10202,7 +10109,10 @@ procedure TCustomTransientWriter.WriteMF6ObsOption(InputFileName: string);
 var
   NameOfFile: string;
 begin
-  if (FlowObsLocations <> nil) and (FlowObsLocations.Count > 0) then
+  if (FlowObsLocations <> nil) and (FlowObsLocations.Count > 0)
+    or (ToMvrFlowObsLocations <> nil) and (ToMvrFlowObsLocations.Count > 0)
+    or (WellReductionFlowObsLocations <> nil) and (WellReductionFlowObsLocations.Count > 0)
+  then
   begin
     WriteString('    OBS6 FILEIN ');
     NameOfFile := ObservationFileName(InputFileName);

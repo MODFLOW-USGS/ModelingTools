@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 590
     Height = 448
-    ActivePage = tabUZF
+    ActivePage = tabBasic
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -107,7 +107,8 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           'RCH flows'
           'RIV flows'
           'WEL flows'
-          'To MVR flows')
+          'To MVR flows'
+          'Well Reduction')
         TabOrder = 4
         OnClickCheck = chklstBoundaryFlowClickCheck
       end
@@ -460,9 +461,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             'UZT_ET'
             'UZT_Rej_Infil_to_MVR')
           TabOrder = 1
-          ExplicitLeft = 269
-          ExplicitTop = 35
-          ExplicitHeight = 262
         end
       end
     end

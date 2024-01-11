@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = False
+      Display = True
     end
     item
       Name = 'core code'
@@ -86,7 +86,7 @@ object TTaskHistory
     end
     item
       Name = 'WEL'
-      Display = False
+      Display = True
     end
     item
       Name = 'RIV'
@@ -178,7 +178,7 @@ object TTaskHistory
     end
     item
       Name = 'Flow Observations'
-      Display = False
+      Display = True
     end
     item
       Name = 'ModelMate Interaction'
@@ -402,7 +402,7 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Observation Utility'
-      Display = False
+      Display = True
     end
     item
       Name = 'MVR'
@@ -32347,13 +32347,23 @@ object TTaskHistory
       Date = 45300.000000000000000000
       Categories.Strings = (
         'Import'
-        'MF-2015')
+        'MF-2015'
+        'CHD')
     end
     item
       Date = 45301.000000000000000000
       Categories.Strings = (
         'Import'
         'MF-2015'
-        'Bug fix')
+        'Bug fix'
+        'CHD')
+    end
+    item
+      Date = 45302.000000000000000000
+      Categories.Strings = (
+        'WEL'
+        'MF-2015'
+        'MF6 Observation Utility'
+        'Documentation')
     end>
 end

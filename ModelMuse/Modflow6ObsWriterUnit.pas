@@ -92,6 +92,7 @@ type
     FOutputExtension: string;
     FGeneralObsList: TBoundaryFlowObservationLocationList;
     FToMvrObsList: TBoundaryFlowObservationLocationList;
+    FWellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
     FSpeciesIndex: Integer;
   protected
     function GetPrefix: string; virtual; abstract;
@@ -100,11 +101,13 @@ type
       virtual; abstract;
     procedure AssignCurrentObs(FlowObs: TBoundaryFlowObservationLocation); virtual; abstract;
     procedure WriteFlowObs(ObsType: string;
-      List, ToMvrList: TBoundaryFlowObservationLocationList);
+      List, ToMvrList,
+      WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList);
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
       ObsList: TBoundaryFlowObservationLocationList; ObsType: string;
       ToMvrObsList: TBoundaryFlowObservationLocationList;
+      WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
       OutputExtension: string); reintroduce;
     procedure WriteFile(const AFileName: string);
   end;
@@ -123,6 +126,7 @@ type
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
       ObsList: TBoundaryFlowObservationLocationList; ObsType: string;
       ToMvrObsList: TBoundaryFlowObservationLocationList;
+      WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
       OutputExtension: string; ObGeneral: TObGeneral);
   end;
 
@@ -141,6 +145,7 @@ type
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
       ObsList: TBoundaryFlowObservationLocationList; ObsType: string;
       ToMvrObsList: TBoundaryFlowObservationLocationList;
+      WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
       OutputExtension: string; ObGwt: TObGwt; SpeciesIndex: Integer);
   end;
 
@@ -1905,10 +1910,11 @@ constructor TModflow6FlowObsWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType;
   ObsList: TBoundaryFlowObservationLocationList;  ObsType: string;
   ToMvrObsList: TBoundaryFlowObservationLocationList;
+  WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
   OutputExtension: string; ObGeneral: TObGeneral);
 begin
   inherited Create(Model, EvaluationType,ObsList, ObsType,
-    ToMvrObsList, OutputExtension);
+    ToMvrObsList, WellReductionFlowObsLocations, OutputExtension);
   FObGeneral := ObGeneral;
   FSpeciesIndex := -1;
 end;
@@ -1955,6 +1961,8 @@ begin
       result := 'evt_';
     ogMvr:
       result := 'mvr_';
+    ogWellReduction:
+      result := 'wlr_';
   else
     Assert(False);
   end;
@@ -3832,18 +3840,21 @@ end;
 constructor TCustomMf6FlowObsWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType;
   ObsList: TBoundaryFlowObservationLocationList; ObsType: string;
-  ToMvrObsList: TBoundaryFlowObservationLocationList; OutputExtension: string);
+  ToMvrObsList: TBoundaryFlowObservationLocationList;
+  WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
+  OutputExtension: string);
 begin
   inherited Create(Model, EvaluationType);
-//  FObGeneral := ObGeneral;
   FObsType := ObsType;
   FOutputExtension := OutputExtension;
   FGeneralObsList := ObsList;
   FToMvrObsList := ToMvrObsList;
+  FWellReductionFlowObsLocations := WellReductionFlowObsLocations;
 end;
 
 procedure TCustomMf6FlowObsWriter.WriteFlowObs(ObsType: string;
-  List, ToMvrList: TBoundaryFlowObservationLocationList);
+  List, ToMvrList,
+  WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList);
 var
   ObsIndex: Integer;
   OutputExtension: string;
@@ -3864,7 +3875,8 @@ var
 begin
   Prefix := GetPrefix;
   StartTime := Model.ModflowStressPeriods.First.StartTime;
-  if (List.Count > 0) or (ToMvrList.Count > 0) then
+  if (List.Count > 0) or (ToMvrList.Count > 0)
+    or (WellReductionFlowObsLocations.Count > 0) then
   begin
     CellNames := TStringList.Create;
     try
@@ -3901,6 +3913,7 @@ begin
         WriteString(' BINARY');
       end;
       NewLine;
+
       for ObsIndex := 0 to List.Count - 1 do
       begin
         FlowObs := List[ObsIndex];
@@ -3954,10 +3967,41 @@ begin
           DirectObsLines.Add('');
         end;
       end;
+
+      for ObsIndex := 0 to WellReductionFlowObsLocations.Count - 1 do
+      begin
+        FlowObs := WellReductionFlowObsLocations[ObsIndex];
+        obsnam := 'wlr_' + FlowObs.FName;
+        Assert(Length(obsnam) <= MaxBoundNameLength);
+        WriteString('  ''');
+        WriteString(obsnam);
+        WriteString(''' ');
+        WriteString('wel-reduction');
+        WriteString(' ');
+        WriteString(FlowObs.FBoundName);
+        NewLine;
+        if ogWellReduction in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
+        begin
+          DirectObsLines.Add(Format('  ID %s', [obsnam]));
+          for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.
+            Count - 1 do
+          begin
+            CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
+            if (CalibObs.ObSeries = osGeneral) and (CalibObs.ObGeneral = ogWellReduction)
+            then
+            begin
+              DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+                [CalibObs.Name, CalibObs.Time - StartTime]));
+            end;
+          end;
+          DirectObsLines.Add('');
+        end;
+      end;
+
       for ObsIndex := 0 to ToMvrList.Count - 1 do
       begin
         FlowObs := ToMvrList[ObsIndex];
-        obsnam := FlowObs.FName;
+        obsnam := 'mvr_' + FlowObs.FName;
         Assert(Length(obsnam) <= MaxBoundNameLength);
         WriteString('  ''');
         WriteString(obsnam);
@@ -3983,6 +4027,7 @@ begin
           DirectObsLines.Add('');
         end;
       end;
+
       WriteString('END CONTINUOUS');
       NewLine;
     finally
@@ -4004,14 +4049,15 @@ begin
   FNameOfFile := AFileName;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrObservationNameToo);
   frmProgressMM.AddMessage(StrWritingFlowObserva);
-  Assert((FGeneralObsList.Count > 0) or (FToMvrObsList.Count > 0));
+  Assert((FGeneralObsList.Count > 0) or (FToMvrObsList.Count > 0)
+    or (FWellReductionFlowObsLocations.Count > 0));
   Model.AddModelInputFile(FNameOfFile);
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
     WriteOptions;
-    WriteFlowObs(FObsType, FGeneralObsList, FToMvrObsList);
+    WriteFlowObs(FObsType, FGeneralObsList, FToMvrObsList, FWellReductionFlowObsLocations);
   finally
     CloseFile;
   end;
@@ -4024,17 +4070,18 @@ procedure TModflow6GwtFlowObsWriter.AssignCurrentObs(
 begin
   FCurrentGwts := FlowObs.FMf6Obs.CalibrationObservations.GwtObs[FSpeciesIndex];
   FCurrentGenus := FlowObs.FMf6Obs.Genus;
-  // + FlowObs.FMf6Obs.CalibrationObservations.Genus[osGeneral, FSpeciesIndex];
 end;
 
 constructor TModflow6GwtFlowObsWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType;
   ObsList: TBoundaryFlowObservationLocationList; ObsType: string;
-  ToMvrObsList: TBoundaryFlowObservationLocationList; OutputExtension: string;
+  ToMvrObsList: TBoundaryFlowObservationLocationList;
+  WellReductionFlowObsLocations: TBoundaryFlowObservationLocationList;
+  OutputExtension: string;
   ObGwt: TObGwt; SpeciesIndex: Integer);
 begin
   inherited Create(Model, EvaluationType,ObsList, ObsType,
-    ToMvrObsList, OutputExtension);
+    ToMvrObsList, WellReductionFlowObsLocations, OutputExtension);
   FObGwt := ObGwt;
   FSpeciesIndex := SpeciesIndex;
 end;
