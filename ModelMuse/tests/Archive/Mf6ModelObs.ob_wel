@@ -1,4 +1,4 @@
-# OBS: Observation Utility file created on 1/11/2024 by ModelMuse version 5.1.1.51.
+# OBS: Observation Utility file created on 1/12/2024 by ModelMuse version 5.1.1.51.
 BEGIN OPTIONS
     DIGITS     10
     PRINT_INPUT
@@ -6,5 +6,5 @@ END OPTIONS
 
 BEGIN CONTINUOUS FILEOUT Mf6ModelObs.ob_wel_out_wel.csv
   'wel_WelObs' wel Object16
-  'WelObs_Well_Reduction' wel-reduction Object16
+  'wlr_WelObs' wel-reduction Object16
 END CONTINUOUS

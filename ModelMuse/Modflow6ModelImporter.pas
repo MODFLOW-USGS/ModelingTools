@@ -13,11 +13,41 @@ uses
   // transport simulation name files (mfsim.nam)
 
 type
+  TMvrSourcePackageChoice = (mspcWel, mspcDrn, mspcRiv, mspcGhb, mspcLak, mspcMaw,
+    mspcSfr, mspcUzf);
+
+  TMvrReceiverPackageChoice = (mrpcLak, mrpcMaw, mrpcSfr, mrpcUzf);
+
+
   TimeSeriesMap = TDictionary<string, string>;
   TBoundNameDictionary = TDictionary<string, TObservationList>;
   TCellIdObsDictionary = TDictionary<TCellId, TObservationList>;
   TNumberDictionary = TDictionary<Integer, TObservationList>;
   TObsLists = TObjectList<TObservationList>;
+
+  TMvrSource = record
+    ScreenObject: TScreenObject;
+    PackageName: string;
+    Period: Integer;
+    IDs: TArray<Integer>;
+    SourceType: TMvrSourcePackageChoice;
+  end;
+
+  TMvrSourceList = class(TList<TMvrSource>)
+    procedure Sort;
+  end;
+
+  TMvrReceiver = record
+    ScreenObject: TScreenObject;
+    PackageName: string;
+    Period: Integer;
+    IDs: TArray<Integer>;
+    ReceiverType: TMvrReceiverPackageChoice;
+  end;
+
+  TMvrReceiverList = class(TList<TMvrReceiver>)
+    procedure Sort;
+  end;
 
   TModflow6Importer = class(TObject)
   private
@@ -28,6 +58,8 @@ type
     FModelNameFile: string;
     TSIndex: Integer;
     FSimulations: TObjectList<TMf6Simulation>;
+    FMvrSources: TMvrSourceList;
+    FMvrReceivers: TMvrReceiverList;
     procedure ImportFlowModelTiming;
     procedure ImportSimulationOptions;
     procedure ImportSolutionGroups;
@@ -70,6 +102,7 @@ type
       CellIdObsDictionary: TCellIdObsDictionary; ObsLists: TObsLists;
       ObsFiles: TObs);
     procedure AddPointsToScreenObject(CellIds: TCellIdList; AScreenObject: TScreenObject);
+    procedure ImportWel(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -94,7 +127,8 @@ uses
   Mf6.CSubFileReaderUnit, ModflowCSubInterbed, ModflowCsubUnit,
   DataArrayManagerUnit, Mf6.BuyFileReaderUnit, Mt3dmsChemSpeciesUnit,
   Mf6.VscFileReaderUnit, Mf6.ChdFileReaderUnit, Mf6.CncFileReaderUnit,
-  Mf6.SsmFileReaderUnit, ModflowBoundaryUnit, ModflowConstantHeadBoundaryUnit;
+  Mf6.SsmFileReaderUnit, ModflowBoundaryUnit, ModflowConstantHeadBoundaryUnit,
+  Mf6.WelFileReaderUnit, Mf6.MvrFileReaderUnit, ModflowWellUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -247,6 +281,9 @@ constructor TModflow6Importer.Create;
 begin
   TSIndex := 0;
   FSimulations := TObjectList<TMf6Simulation>.Create;
+  FMvrSources := TMvrSourceList.Create;
+  FMvrReceivers := TMvrReceiverList.Create;
+
 end;
 
 procedure TModflow6Importer.CreateAllTopCellsScreenObject;
@@ -290,6 +327,8 @@ end;
 
 destructor TModflow6Importer.Destroy;
 begin
+  FMvrSources.Free;
+  FMvrReceivers.Free;
   FSimulations.Free;
   inherited;
 end;
@@ -440,7 +479,7 @@ var
     ChdItem.EndTime := LastTime;
     ChdItem.StartTime := StartTime;
 
-    if ACell.head.ValueType = vtNumeric then
+    if ACell.Head.ValueType = vtNumeric then
     begin
       ImportedName := 'Imported_Heads';
       Imported_Heads := AScreenObject.ImportedValues.Add;
@@ -451,7 +490,7 @@ var
     else
     begin
       Imported_Heads := nil;
-      TimeSeries := ACell.head.StringValue;
+      TimeSeries := ACell.Head.StringValue;
       if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
       begin
         Assert(False);
@@ -471,7 +510,7 @@ var
 
         GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
         Assert(GwtAuxIndex >= 0);
-        Aux := ACell.aux[GwtAuxIndex];
+        Aux := ACell[GwtAuxIndex];
         if Aux.ValueType = vtNumeric then
         begin
           ImportedName := 'Imported_' + ChemSpeciesName ;
@@ -519,10 +558,10 @@ var
 
     Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
     AScreenObject.CreateMf6Obs;
-    AScreenObject.Modflow6Obs.Name := ACell.boundname;
+    AScreenObject.Modflow6Obs.Name := ACell.Boundname;
     AScreenObject.Modflow6Obs.General := [ogCHD];
 
-    CellId := ACell.cellid;
+    CellId := ACell.Cellid;
     if Model.DisvUsed then
     begin
       CellId.Row := 1;
@@ -561,7 +600,7 @@ var
     result.CreateChdBoundary;
     if IfaceIndex >= 0 then
     begin
-      AuxIFACE := ACell.aux[IfaceIndex];
+      AuxIFACE := ACell[IfaceIndex];
       Assert(AuxIFACE.ValueType = vtNumeric);
       IFACE := Round(AuxIFACE.NumericValue);
     end
@@ -573,7 +612,7 @@ var
 
     AddItem(result, ACell);
 
-    BoundName := UpperCase(ACell.boundname);
+    BoundName := UpperCase(ACell.Boundname);
     if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
     begin
       Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
@@ -583,7 +622,7 @@ var
         AnObs := ObsList[ObsIndex];
         Assert(AnsiSameText(AnObs.ObsType, 'chd'));
       end;
-      result.Modflow6Obs.Name := ACell.boundname;
+      result.Modflow6Obs.Name := ACell.Boundname;
       result.Modflow6Obs.General := [ogCHD];
     end;
   end;
@@ -670,10 +709,10 @@ begin
         begin
           ACell := APeriod[CellIndex];
 
-          if (ACell.boundname <> '')
-            and BoundNameObsDictionary.ContainsKey(UpperCase(ACell.boundname)) then
+          if (ACell.Boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(ACell.Boundname)) then
           begin
-            KeyString := 'BN:' + UpperCase(ACell.boundname) + ' ';
+            KeyString := 'BN:' + UpperCase(ACell.Boundname) + ' ';
           end
           else
           begin
@@ -686,7 +725,7 @@ begin
           end
           else
           begin
-            AuxIFACE := ACell.aux[IfaceIndex];
+            AuxIFACE := ACell[IfaceIndex];
             Assert(AuxIFACE.ValueType = vtNumeric);
             IFACE := Round(AuxIFACE.NumericValue);
           end;
@@ -702,8 +741,8 @@ begin
         begin
           ACellList := CellLists[ObjectIndex];
           FirstCell := ACellList[0];
-          if (FirstCell.boundname <> '')
-            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.boundname)) then
+          if (FirstCell.Boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
           begin
             if IfaceIndex < 0 then
             begin
@@ -711,18 +750,18 @@ begin
             end
             else
             begin
-              AuxIFACE := FirstCell.aux[IfaceIndex];
+              AuxIFACE := FirstCell[IfaceIndex];
               Assert(AuxIFACE.ValueType = vtNumeric);
               IFACE := Round(AuxIFACE.NumericValue);
             end;
-            BoundName := UpperCase(FirstCell.boundname);
+            BoundName := UpperCase(FirstCell.Boundname);
             if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
             begin
               AConnectionList := TChdConnectionObjectList.Create;
               ConnectionObjectLists.Add(AConnectionList);
               ConnectionDictionary.Add(BoundName, AConnectionList)
             end;
-            ACellList.SortItems;
+            ACellList.Sort;
             AScreenObject := nil;
             for ConnectionIndex := 0 to AConnectionList.Count - 1 do
             begin
@@ -758,16 +797,16 @@ begin
           for CellIndex := 0 to ACellList.Count - 1 do
           begin
             ACell := ACellList[CellIndex];
-            if ACell.head.ValueType = vtNumeric then
+            if ACell.Head.ValueType = vtNumeric then
             begin
-              Imported_Heads.Values.Add(ACell.head.NumericValue);
+              Imported_Heads.Values.Add(ACell.Head.NumericValue);
             end;
 
             for AuxIndex := 0 to TransportAuxNames.Count - 1 do
             begin
               ChemSpeciesName := TransportAuxNames[AuxIndex];
               GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
-              Aux := ACell.aux[GwtAuxIndex];
+              Aux := ACell[GwtAuxIndex];
               if Aux.ValueType = vtNumeric then
               begin
                 Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
@@ -775,14 +814,13 @@ begin
               end;
             end;
 
-            CellIds.Add(ACell.cellid);
+            CellIds.Add(ACell.Cellid);
 
-            if CellIdObsDictionary.ContainsKey(ACell.cellid) then
+            if CellIdObsDictionary.ContainsKey(ACell.Cellid) then
             begin
               CreateObsScreenObject(ACell);
             end;
           end;
-//          DisvUsed := Model.DisvUsed;
           AddPointsToScreenObject(CellIds, AScreenObject);
         end;
       end;
@@ -1882,6 +1920,7 @@ var
   SourceIndex: Integer;
   AuxName: string;
   ChemSpeciesItem: TMobileChemSpeciesItem;
+  MvrPackage: TPackage;
 begin
   result := True;
   TransportModels := TModelList.Create;
@@ -1983,6 +2022,18 @@ begin
         end;
       end;
 
+      MvrPackage := nil;
+      for PackageIndex := 0 to Packages.Count - 1 do
+      begin
+        APackage := Packages[PackageIndex];
+        if APackage.FileType = 'MVR6' then
+        begin
+          MvrPackage := APackage;
+          Break;
+        end
+      end;
+
+
       for PackageIndex := 0 to Packages.Count - 1 do
       begin
         APackage := Packages[PackageIndex];
@@ -2036,10 +2087,7 @@ begin
         end
         else if APackage.FileType = 'WEL6' then
         begin
-  //        WelReader := TWel.Create(APackage.FileType);
-  //        WelReader.Dimensions := FDimensions;
-  //        APackage.Package := WelReader;
-  //        APackage.ReadPackage(Unhandled);
+          ImportWel(APackage, TransportModels, MvrPackage);
         end
         else if APackage.FileType = 'DRN6' then
         begin
@@ -4209,11 +4257,672 @@ begin
   end;
 end;
 
+type
+  TWelConnection = class(TObject)
+    ScreenObject: TScreenObject;
+    List: TWelTimeItemList;
+    IFACE: Integer;
+    destructor Destroy; override;
+  end;
+
+  TWelConnectionObjectList = TObjectList<TWelConnection>;
+  TWelConnectionObjectLists = TObjectList<TWelConnectionObjectList>;
+
+  TWellMvrLink = record
+    WelPeriod: TWelPeriod;
+    MvrPeriod: TMvrPeriod;
+    function Period: Integer;
+  end;
+  TWellMvrLinkList = TList<TWellMvrLink>;
+
+  TMvrWelTimeItemList = Class(TWelTimeItemList)
+    FIds: TGenericIntegerList;
+    constructor Create;
+    destructor Destroy; override;
+    procedure Sort;
+  End;
+
+
+procedure TModflow6Importer.ImportWel(Package: TPackage;
+  TransportModels: TModelList; MvrPackage: TPackage);
+var
+  Model: TPhastModel;
+  Wel: TWel;
+  AModel: TModel;
+  ModelIndex: Integer;
+  TransportModel: TTransportNameFile;
+  PackageIndex: Integer;
+  BoundNameObsDictionary: TBoundNameDictionary;
+  CellIdObsDictionary: TCellIdObsDictionary;
+  Ssm: TSsm;
+  TimeSeriesIndex: Integer;
+  TimeSeriesPackage: TPackage;
+  Map: TimeSeriesMap;
+  ObsLists: TObsLists;
+  ObsPackageIndex: Integer;
+  ObsFiles: TObs;
+  SourceIndex: Integer;
+  FoundMatch: Boolean;
+  TransportAuxNames: TStringList;
+  PeriodIndex: Integer;
+  APeriod: TWelPeriod;
+  CellIndex: Integer;
+  ACell: TWelTimeItem;
+  IfaceIndex: Integer;
+  KeyStringDictionary: TDictionary<string, TMvrWelTimeItemList>;
+  CellLists: TObjectList<TMvrWelTimeItemList>;
+  ACellList: TMvrWelTimeItemList;
+  Options: TWelOptions;
+  IFace: Integer;
+  LastTime: Double;
+  Imported_Heads: TValueArrayItem;
+  ItemList: TList<TWellItem>;
+  StartTime: Double;
+  WelIndex: Integer;
+  AnItem: TWellItem;
+  KeyString: string;
+  TimeSeries: string;
+  ImportedTimeSeries: string;
+  ObjectCount: Integer;
+  ObjectIndex: Integer;
+  FirstCell: TWelTimeItem;
+  BoundName: string;
+  ConnectionObjectLists: TWelConnectionObjectLists;
+  ConnectionDictionary: TDictionary<string, TWelConnectionObjectList>;
+  AConnectionList: TWelConnectionObjectList;
+  ConnectionIndex: Integer;
+  ConnectionItem: TWelConnection;
+  AScreenObject: TScreenObject;
+  AuxIFACE: TMf6BoundaryValue;
+  AuxIndex: Integer;
+  ChemSpeciesName: string;
+  Aux: TMf6BoundaryValue;
+  GwtAuxIndex: Integer;
+  Values: TValueArrayStorage;
+  CellIds: TCellIdList;
+  Mvr: TMvr;
+  Index: Integer;
+  FoundMvr: Boolean;
+  WellMvrLink: TWellMvrLink;
+  WellMvrLinkList: TWellMvrLinkList;
+  MvrIndex: Integer;
+  MvrPeriod: TMvrPeriod;
+  MvrStartIndex: Integer;
+  MvrUsed: Boolean;
+  NewScreenObject: Boolean;
+  MvrSource: TMvrSource;
+  APackage: TPackage;
+  procedure AddItem(AScreenObject: TScreenObject; ACell: TWelTimeItem);
+  var
+    WelItem: TWellItem;
+    ImportedName: string;
+    Concentrations: TWelGwtConcCollection;
+    ChemSpeciesName: string;
+    ConcItem: TGwtConcStringValueItem;
+    GwtAuxIndex: Integer;
+    AuxIndex: Integer;
+    Aux: TMf6BoundaryValue;
+    Imported_Chem: TValueArrayItem;
+  begin
+    WelItem := AScreenObject.ModflowWellBoundary.Values.Add as TWellItem;
+    ItemList.Add(WelItem);
+    WelItem.EndTime := LastTime;
+    WelItem.StartTime := StartTime;
+
+    if ACell.Q.ValueType = vtNumeric then
+    begin
+      ImportedName := 'Imported_Heads';
+      Imported_Heads := AScreenObject.ImportedValues.Add;
+      Imported_Heads.Name := ImportedName;
+      Imported_Heads.Values.DataType := rdtDouble;
+      WelItem.PumpingRate := rsObjectImportedValuesR + '("' + Imported_Heads.Name + '")';
+    end
+    else
+    begin
+      Imported_Heads := nil;
+      TimeSeries := ACell.Q.StringValue;
+      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      begin
+        Assert(False);
+      end;
+      WelItem.PumpingRate := ImportedTimeSeries;
+    end;
+
+    if TransportAuxNames.Count > 0 then
+    begin
+      Concentrations := WelItem.GwtConcentrations;
+      Concentrations.Count := TransportAuxNames.Count;
+      for AuxIndex := 0 to TransportAuxNames.Count - 1 do
+      begin
+        ChemSpeciesName := TransportAuxNames[AuxIndex];
+        ConcItem := Concentrations[AuxIndex];
+
+        GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+        Assert(GwtAuxIndex >= 0);
+        Aux := ACell[GwtAuxIndex];
+        if Aux.ValueType = vtNumeric then
+        begin
+          ImportedName := 'Imported_' + ChemSpeciesName ;
+          Imported_Chem := AScreenObject.ImportedValues.Add;
+          Imported_Chem.Name := ImportedName;
+          Imported_Chem.Values.DataType := rdtDouble;
+          ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+          TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+        end
+        else
+        begin
+          TransportAuxNames.Objects[AuxIndex] := nil;
+          TimeSeries := Aux.StringValue;
+          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          begin
+            Assert(False);
+          end;
+          ConcItem.Value := ImportedTimeSeries;
+        end;
+      end;
+    end;
+  end;
+  procedure CreateObsScreenObject(ACell: TWelTimeItem);
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    CellId: TCellId;
+    ElementCenter: TDualLocation;
+    APoint: TPoint2D;
+    AScreenObject: TScreenObject;
+  begin
+    Inc(ObjectCount);
+    AScreenObject := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedWel_Obs_%d', [ObjectCount]);
+    AScreenObject.Name := NewName;
+    AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(AScreenObject);
+    AScreenObject.ElevationCount := ecOne;
+    AScreenObject.SetValuesOfIntersectedCells := True;
+    AScreenObject.EvaluatedAt := eaBlocks;
+    AScreenObject.Visible := False;
+    AScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    AScreenObject.CreateMf6Obs;
+    AScreenObject.Modflow6Obs.Name := ACell.Boundname;
+    AScreenObject.Modflow6Obs.General := [ogWell];
+
+    CellId := ACell.Cellid;
+    if Model.DisvUsed then
+    begin
+      CellId.Row := 1;
+    end;
+    ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
+    APoint.x := ElementCenter.RotatedLocation.x;
+    APoint.y := ElementCenter.RotatedLocation.y;
+    AScreenObject.AddPoint(APoint, True);
+    AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+
+  end;
+  function CreateScreenObject(ACell: TWelTimeItem; Period: Integer): TScreenObject;
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    AuxIFACE: TMf6BoundaryValue;
+    BoundName: string;
+    ObsList: TObservationList;
+    AnObs: TObservation;
+    ObsIndex: Integer;
+  begin
+    Inc(ObjectCount);
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedWel_%d_Period_%d', [ObjectCount, Period]);
+    result.Name := NewName;
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    result.CreateWelBoundary;
+    if IfaceIndex >= 0 then
+    begin
+      AuxIFACE := ACell[IfaceIndex];
+      Assert(AuxIFACE.ValueType = vtNumeric);
+      IFACE := Round(AuxIFACE.NumericValue);
+    end
+    else
+    begin
+      IFACE := 0;
+    end;
+    result.IFACE := TIface(IFACE+2);
+
+    AddItem(result, ACell);
+
+    BoundName := UpperCase(ACell.Boundname);
+    if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+      result.CreateMf6Obs;
+      for ObsIndex := 0 to ObsList.Count - 1 do
+      begin
+        AnObs := ObsList[ObsIndex];
+        Assert(AnsiSameText(AnObs.ObsType, 'Wel'));
+      end;
+      result.Modflow6Obs.Name := ACell.Boundname;
+      result.Modflow6Obs.General := [ogWell];
+    end;
+  end;
+begin
+  if MvrPackage <> nil then
+  begin
+    Mvr := MvrPackage.Package as TMvr;
+    FoundMvr := False;
+    for Index := 0 to Mvr.Packages.Count - 1 do
+    begin
+      FoundMvr := AnsiSameText(Package.PackageName, Mvr.Packages[Index].pname);
+      if FoundMvr then
+      begin
+        Break;
+      end;
+    end;
+    if not FoundMvr then
+    begin
+      Mvr := nil;
+    end;
+  end;
+
+
+  Model := frmGoPhast.PhastModel;
+  Model.ModflowPackages.WelPackage.IsSelected := True;
+
+  Wel := Package.Package as TWel;
+  Options := Wel.Options;
+
+  WellMvrLinkList := TWellMvrLinkList.Create;
+  CellIds := TCellIdList.Create;
+  ConnectionObjectLists := TWelConnectionObjectLists.Create;
+  ConnectionDictionary := TDictionary<string, TWelConnectionObjectList>.Create;
+  ItemList := TList<TWellItem>.Create;
+  BoundNameObsDictionary := TBoundNameDictionary.Create;
+  CellIdObsDictionary := TCellIdObsDictionary.Create;
+  Map := TimeSeriesMap.Create;
+  ObsLists := TObsLists.Create;
+  KeyStringDictionary := TDictionary<string, TMvrWelTimeItemList>.Create;
+  CellLists := TObjectList<TMvrWelTimeItemList>.Create;
+  try
+    if Mvr = nil then
+    begin
+      WellMvrLink.MvrPeriod := nil;
+      for PeriodIndex := 0 to Wel.PeriodCount - 1 do
+      begin
+        WellMvrLink.WelPeriod := Wel.Periods[PeriodIndex];
+        WellMvrLinkList.Add(WellMvrLink)
+      end;
+    end
+    else
+    begin
+      MvrStartIndex := 0;
+      for PeriodIndex := 0 to Wel.PeriodCount - 1 do
+      begin
+        WellMvrLink.WelPeriod := Wel.Periods[PeriodIndex];
+        MvrPeriod := nil;
+        for MvrIndex := MvrStartIndex to Mvr.PeriodCount - 1 do
+        begin
+          MvrPeriod := Mvr.Periods[MvrIndex];
+          if MvrPeriod.Period > WellMvrLink.WelPeriod.Period then
+          begin
+            MvrStartIndex := MvrIndex;
+            Break;
+          end;
+          WellMvrLink.MvrPeriod  := MvrPeriod;
+        end;
+        WellMvrLinkList.Add(WellMvrLink)
+      end;
+    end;
+
+
+    IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
+    for TimeSeriesIndex := 0 to Wel.TimeSeriesCount - 1 do
+    begin
+      TimeSeriesPackage := Wel.TimeSeries[TimeSeriesIndex];
+      ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+
+    if Wel.ObservationCount > 0 then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    end;
+    for ObsPackageIndex := 0 to Wel.ObservationCount - 1 do
+    begin
+      ObsFiles := Wel.Observations[ObsPackageIndex].Package as TObs;
+      GetObservations(nil, BoundNameObsDictionary,
+        CellIdObsDictionary, ObsLists, ObsFiles);
+    end;
+
+    TransportAuxNames := TStringList.Create;
+    try
+      TransportAuxNames.CaseSensitive := False;
+      for ModelIndex := 0 to TransportModels.Count - 1 do
+      begin
+        AModel := TransportModels[ModelIndex];
+        TransportModel := AModel.FName as TTransportNameFile;
+        for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+        begin
+          APackage := TransportModel.NfPackages[PackageIndex];
+          FoundMatch := False;
+          if APackage.FileType = 'SSM6' then
+          begin
+            Ssm := APackage.Package as TSsm;
+            for SourceIndex := 0 to Ssm.Sources.Count - 1 do
+            begin
+              if SameText(Ssm.Sources[SourceIndex].pname, Package.PackageName) then
+              begin
+                FoundMatch := True;
+                TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+                break;
+              end;
+            end;
+            Assert(FoundMatch);
+            break;
+          end;
+        end;
+      end;
+
+      LastTime := Model.ModflowStressPeriods.Last.EndTime;
+
+      ObjectCount := 0;
+      for PeriodIndex := 0 to WellMvrLinkList.Count - 1 do
+      begin
+        WellMvrLink := WellMvrLinkList[PeriodIndex];
+        APeriod := WellMvrLinkList[PeriodIndex].WelPeriod;
+        StartTime := Model.ModflowStressPeriods[WellMvrLink.Period-1].StartTime;
+        for WelIndex := 0 to ItemList.Count - 1 do
+        begin
+          AnItem := ItemList[WelIndex];
+          AnItem.EndTime := StartTime;
+        end;
+        ItemList.Clear;
+
+        // Assign all cells in the current period to a cell list.
+        for CellIndex := 0 to APeriod.Count - 1 do
+        begin
+          ACell := APeriod[CellIndex];
+
+          if (ACell.Boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(ACell.Boundname)) then
+          begin
+            KeyString := 'BN:' + UpperCase(ACell.Boundname) + ' ';
+          end
+          else
+          begin
+            KeyString := '';
+          end;
+
+          if IfaceIndex < 0 then
+          begin
+            IFACE := 0;
+          end
+          else
+          begin
+            AuxIFACE := ACell[IfaceIndex];
+            Assert(AuxIFACE.ValueType = vtNumeric);
+            IFACE := Round(AuxIFACE.NumericValue);
+          end;
+          KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+
+          MvrUsed := False;
+          if WellMvrLink.MvrPeriod <> nil then
+          begin
+            if WellMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
+            begin
+              KeyString := KeyString + ' MVR';
+              MvrUsed := False;
+            end;
+          end;
+
+          if not KeyStringDictionary.TryGetValue(KeyString, ACellList) then
+          begin
+            ACellList := TMvrWelTimeItemList.Create;
+            CellLists.Add(ACellList);
+          end;
+          ACellList.Add(ACell);
+          if MvrUsed then
+          begin
+            ACellList.FIds.Add(ACell.Id)
+          end;
+        end;
+
+        // After all the cells in the current period have been read,
+        // create a TScreenObject for each cell list
+        for ObjectIndex := 0 to CellLists.Count - 1 do
+        begin
+          NewScreenObject := False;
+          ACellList := CellLists[ObjectIndex];
+          FirstCell := ACellList[0];
+          if (FirstCell.Boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+          begin
+            if IfaceIndex < 0 then
+            begin
+              IFACE := 0;
+            end
+            else
+            begin
+              AuxIFACE := FirstCell[IfaceIndex];
+              Assert(AuxIFACE.ValueType = vtNumeric);
+              IFACE := Round(AuxIFACE.NumericValue);
+            end;
+            BoundName := UpperCase(FirstCell.Boundname);
+            if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+            begin
+              AConnectionList := TWelConnectionObjectList.Create;
+              ConnectionObjectLists.Add(AConnectionList);
+              ConnectionDictionary.Add(BoundName, AConnectionList)
+            end;
+            ACellList.Sort;
+            AScreenObject := nil;
+            for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+            begin
+              ConnectionItem := AConnectionList[ConnectionIndex];
+              if (IFACE = ConnectionItem.IFACE)
+                and ACellList.SameCells(ConnectionItem.List) then
+              begin
+                AScreenObject := ConnectionItem.ScreenObject;
+                Break;
+              end;
+            end;
+            if AScreenObject = nil then
+            begin
+              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+              ConnectionItem := TWelConnection.Create;
+              ConnectionItem.ScreenObject := AScreenObject;
+              ConnectionItem.IFACE := IFACE;
+              ConnectionItem.List := ACellList;
+              AConnectionList.Add(ConnectionItem);
+              CellLists.Extract(ACellList);
+              NewScreenObject := True;
+            end
+            else
+            begin
+              AddItem(AScreenObject, FirstCell);
+            end;
+          end
+          else
+          begin
+            AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+            NewScreenObject := True;
+          end;
+
+          CellIds.Clear;
+          for CellIndex := 0 to ACellList.Count - 1 do
+          begin
+            ACell := ACellList[CellIndex];
+            if ACell.Q.ValueType = vtNumeric then
+            begin
+              Imported_Heads.Values.Add(ACell.Q.NumericValue);
+            end;
+
+            for AuxIndex := 0 to TransportAuxNames.Count - 1 do
+            begin
+              ChemSpeciesName := TransportAuxNames[AuxIndex];
+              GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+              Aux := ACell[GwtAuxIndex];
+              if Aux.ValueType = vtNumeric then
+              begin
+                Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                Values.Add(Aux.NumericValue);
+              end;
+            end;
+
+            if NewScreenObject then
+            begin
+              CellIds.Add(ACell.Cellid);
+            end;
+
+            if CellIdObsDictionary.ContainsKey(ACell.Cellid) then
+            begin
+              CreateObsScreenObject(ACell);
+            end;
+          end;
+
+          if NewScreenObject then
+          begin
+            AddPointsToScreenObject(CellIds, AScreenObject);
+          end;
+
+          if ACellList.FIds.Count > 0 then
+          begin
+            MvrSource.ScreenObject := AScreenObject;
+            MvrSource.PackageName := Package.PackageName;
+            MvrSource.Period := WellMvrLink.Period;
+            MvrSource.IDs := ACellList.FIds.ToArray;
+            MvrSource.SourceType := mspcWel;
+            FMvrSources.Add(MvrSource);
+          end;
+        end;
+      end;
+
+    finally
+      TransportAuxNames.Free;
+    end;
+
+  finally
+    BoundNameObsDictionary.Free;
+    CellIdObsDictionary.Free;
+    Map.Free;
+    ObsLists.Free;
+    KeyStringDictionary.Free;
+    CellLists.Free;
+    ItemList.Free;
+    ConnectionObjectLists.Free;
+    ConnectionDictionary.Free;
+    CellIds.Free;
+    WellMvrLinkList.Free;
+  end;
+end;
+
 { TConnection }
 
 destructor TChdConnection.Destroy;
 begin
   List.Free;
+  inherited;
+end;
+
+{ TWelConnection }
+
+destructor TWelConnection.Destroy;
+begin
+  List.Free;
+  inherited;
+end;
+
+{ TWellMvrLink }
+
+function TWellMvrLink.Period: Integer;
+begin
+  if MvrPeriod = nil then
+  begin
+    result := WelPeriod.Period;
+  end
+  else
+  begin
+    Result := Max(WelPeriod.Period, MvrPeriod.Period);
+  end;
+end;
+
+{ TMvrWelTimeItemList }
+
+constructor TMvrWelTimeItemList.Create;
+begin
+  FIds := TGenericIntegerList.Create;
+end;
+
+destructor TMvrWelTimeItemList.Destroy;
+begin
+  FIds.Free;
+  inherited;
+end;
+
+procedure TMvrWelTimeItemList.Sort;
+var
+  Index: Integer;
+begin
+  inherited Sort;
+  if FIds.Count > 0 then
+  begin
+    FIds.Clear;
+    FIds.Capacity := Count;
+    for Index := 0 to Count - 1 do
+    begin
+      FIds.Add(Items[Index].Id);
+    end;
+  end;
+end;
+
+{ TMvrSourceList }
+
+procedure TMvrSourceList.Sort;
+begin
+  inherited Sort(
+    TComparer<TMvrSource>.Construct(
+      function(const Left, Right: TMvrSource): Integer
+      begin
+        Result := Left.Period - Right.Period;
+        if Result = 0 then
+        begin
+          Result := Ord(Left.SourceType) - Ord(Right.SourceType);
+          if Result = 0 then
+          begin
+            Result := AnsiCompareText(Left.PackageName, Right.PackageName);
+          end;
+        end;
+      end
+    ));
+end;
+
+{ TMvrReceiverList }
+
+procedure TMvrReceiverList.Sort;
+begin
+  inherited Sort(
+    TComparer<TMvrReceiver>.Construct(
+      function(const Left, Right: TMvrReceiver): Integer
+      begin
+        Result := Left.Period - Right.Period;
+        if Result = 0 then
+        begin
+          Result := Ord(Left.ReceiverType) - Ord(Right.ReceiverType);
+          if Result = 0 then
+          begin
+            Result := AnsiCompareText(Left.PackageName, Right.PackageName);
+          end;
+        end;
+      end
+    ));
 end;
 
 end.

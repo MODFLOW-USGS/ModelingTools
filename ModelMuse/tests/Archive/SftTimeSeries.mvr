@@ -1,4 +1,4 @@
-# MVR: Water Mover package file created on 10/3/2022 by ModelMuse version 5.0.0.28.
+# MVR: Water Mover package file created on 1/12/2024 by ModelMuse version 5.1.1.51.
 BEGIN OPTIONS
     PRINT_INPUT
     BUDGET FILEOUT SftTimeSeries.mvr_budget
@@ -14,6 +14,7 @@ BEGIN PACKAGES
   LAK-1
   SFR-1
 END PACKAGES
+
 BEGIN PERIOD      1
   SFR-1     6 LAK-1     1 FACTOR     1.000000000000E+000 
   LAK-1     1 SFR-1     7 FACTOR     1.000000000000E+000 

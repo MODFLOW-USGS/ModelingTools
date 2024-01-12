@@ -10,7 +10,7 @@ uses
   ModflowMvrUnit;
 
 type
-  TReceiverColumn = (rcPackage, rcSfrChoice, rcLakeOutlet, rcObject);
+  TReceiverColumn = (rcPackage, rcDivide, rcSfrChoice, rcLakeOutlet, rcObject);
 
   TGetSourcesEvent = procedure (Sender: TObject;
       var PotentialSources: TSourcePackageChoices) of object;
@@ -108,6 +108,7 @@ resourcestring
   'ce but the object does not define a lake.';
   StrInvalidLakeOutletExplanation = 'The object "%s" defines a Lake MVR sour' +
   'ce but the lake outlet number is invalid.';
+  StrDivideFlowEqually = 'Divide flow equally among UZF receiver cells';
 
 { TframeScreenObjectMvr }
 
@@ -295,6 +296,10 @@ begin
       begin
         case ReceiverColumn of
           rcPackage: ;
+          rcDivide:
+            begin
+              CanSelect := TReceiverPackageChoice(ReceiverPkgIndex) = rpcUzf;
+            end;
           rcSfrChoice:
             begin
               CanSelect := TReceiverPackageChoice(ReceiverPkgIndex) = rpcSfr;
@@ -488,6 +493,8 @@ begin
             ReceiverItem := Receivers[ReceiverIndex];
             frameReceivers.Grid.ItemIndex[Ord(rcPackage), ReceiverIndex+1]
               := Ord(ReceiverItem.ReceiverPackage);
+            frameReceivers.Grid.Checked[Ord(rcDivide), ReceiverIndex+1]
+              := ReceiverItem.DivisionChoice = dcDivide;
             frameReceivers.Grid.IntegerValue[Ord(rcLakeOutlet), ReceiverIndex+1]
              := ReceiverItem.LakeOutlet;
             frameReceivers.Grid.ItemIndex[Ord(rcSfrChoice), ReceiverIndex+1]
@@ -599,9 +606,10 @@ begin
     ClearGrid(frameReceivers.Grid);
     frameReceivers.seNumber.AsInteger := 1;
 
-    frameReceivers.Grid.Cells[Ord(rcLakeOutlet), 0] := StrSourceLakeOutlet;
     frameReceivers.Grid.Cells[Ord(rcPackage), 0] := StrReceiverPackage;
+    frameReceivers.Grid.Cells[Ord(rcDivide), 0] := StrDivideFlowEqually;
     frameReceivers.Grid.Cells[Ord(rcSfrChoice), 0] := StrSFRReceiverReach;
+    frameReceivers.Grid.Cells[Ord(rcLakeOutlet), 0] := StrSourceLakeOutlet;
     frameReceivers.Grid.Cells[Ord(rcObject), 0] := StrReceiverObject;
     rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
     rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
@@ -767,7 +775,7 @@ begin
 
         for ColumnIndex := 0 to rdgModflowBoundary.ColCount - 1 do
         begin
-          if rdgModflowBoundary.Cells[ColumnIndex,RowIndex] = '' then
+          if (rdgModflowBoundary.Cells[ColumnIndex,RowIndex] = '') then
           begin
             RowOk := False;
             break;
@@ -834,6 +842,15 @@ begin
           else
           begin
             ReceiverItem.SfrReceiverChoice := srcFirst;
+          end;
+
+          if frameReceivers.Grid.Checked[Ord(rcDivide), RowIndex] then
+          begin
+            ReceiverItem.DivisionChoice := dcDivide;
+          end
+          else
+          begin
+            ReceiverItem.DivisionChoice := dcDoNotDivide;
           end;
 
           ReceiverItem.LakeOutlet := StrToIntDef(

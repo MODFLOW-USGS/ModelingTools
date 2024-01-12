@@ -1,10 +1,9 @@
-# OBS: Observation Utility file created on 1/8/2024 by ModelMuse version 5.1.1.51.
+# OBS: Observation Utility file created on 1/11/2024 by ModelMuse version 5.1.1.51.
 BEGIN OPTIONS
     DIGITS     10
     PRINT_INPUT
 END OPTIONS
 
 BEGIN CONTINUOUS FILEOUT Mf6ModelObs.Chem.ob_cnc_out_cnc.csv
-  'cnc_ChdObs' cnc ChdObs
   'cnc_CncObs' cnc Object17
 END CONTINUOUS

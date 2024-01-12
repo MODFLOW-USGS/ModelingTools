@@ -162,7 +162,7 @@ resourcestring
   StrEvaluatingSTRPacka = 'Evaluating STR Package data.';
   StrEvaluatingS = '    Evaluating %s';
   StrTheFollowingStream = 'The following Stream observation names may be valid' +
-  ' for MODFLOW but they are not valid for UCODE.';
+  ' for MODFLOW but they are not valid for UCODE.' + StrUcodeExplanation;
   StrTheFollowingStreamPest = 'The following Stream observation names may be valid' +
   ' for MODFLOW but they are not valid for PEST.';
   DupNumbersError = 'The STR segments defined by %0:s and %1:s have '

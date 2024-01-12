@@ -55,6 +55,8 @@ type
     property Count: Integer read GetCount;
   end;
 
+  TDivisionChoice = (dcUnAssigned, dcDoNotDivide, dcDivide);
+
   TReceiverItem = class(TOrderedItem)
   private
     FLakeOutlet: Integer;
@@ -62,6 +64,7 @@ type
     FSfrReceiverChoice: TSfrReceiverChoice;
     FReceiverObject: TObject;
     FReceiverObjectName: string;
+    FDivisionChoice: TDivisionChoice;
     procedure SetLakeOutlet(const Value: Integer);
     procedure SetReceiverPackage(const Value: TReceiverPackageChoice);
     procedure SetSfrReceiverChoice(const Value: TSfrReceiverChoice);
@@ -69,6 +72,7 @@ type
     procedure SetReceiverObjectName(const Value: string);
     function GetReceiverObject: TObject;
     procedure SetReceiverObject(const Value: TObject);
+    procedure SetDivisionChoice(const Value: TDivisionChoice);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -76,12 +80,16 @@ type
     property ReceiverObject: TObject read GetReceiverObject write SetReceiverObject;
     procedure Loaded(AModel: TBaseModel);
   published
-    property ReceiverPackage: TReceiverPackageChoice read FReceiverPackage write SetReceiverPackage;
-    property SfrReceiverChoice: TSfrReceiverChoice read FSfrReceiverChoice write SetSfrReceiverChoice;
+    property ReceiverPackage: TReceiverPackageChoice read FReceiverPackage
+      write SetReceiverPackage;
+    property SfrReceiverChoice: TSfrReceiverChoice read FSfrReceiverChoice
+      write SetSfrReceiverChoice;
     property LakeOutlet: Integer read FLakeOutlet write SetLakeOutlet;
     property ReceiverObjectName: string read GetReceiverObjectName
       write SetReceiverObjectName;
-  end;
+    property DivisionChoice: TDivisionChoice read FDivisionChoice
+      write SetDivisionChoice;
+   end;
 
   TReceiverCollection = class(TOrderedCollection)
   private
@@ -999,6 +1007,7 @@ begin
     SfrReceiverChoice := ReceiveSource.SfrReceiverChoice;
     LakeOutlet := ReceiveSource.LakeOutlet;
     ReceiverObjectName := ReceiveSource.ReceiverObjectName;
+    DivisionChoice := ReceiveSource.DivisionChoice;
   end
   else
   begin
@@ -1045,12 +1054,24 @@ begin
       and (SfrReceiverChoice = ReceiveSource.SfrReceiverChoice)
       and (LakeOutlet = ReceiveSource.LakeOutlet)
       and (ReceiverObjectName = ReceiveSource.ReceiverObjectName)
+      and (DivisionChoice = ReceiveSource.DivisionChoice)
+
   end;
 end;
 
 procedure TReceiverItem.Loaded(AModel: TBaseModel);
 begin
   ReceiverObject := (AModel as TCustomModel).GetScreenObjectByName(FReceiverObjectName);
+end;
+
+procedure TReceiverItem.SetDivisionChoice(
+  const Value: TDivisionChoice);
+begin
+  if FDivisionChoice <> Value then
+  begin
+    FDivisionChoice := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TReceiverItem.SetLakeOutlet(const Value: Integer);

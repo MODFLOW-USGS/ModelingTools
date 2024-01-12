@@ -73,7 +73,7 @@ resourcestring
   StrTheCHDPackageIsA = 'The CHD package is active but no CHD boundaries are' +
   ' assigned';
   StrTheFollowingCHDOb = 'The following CHD observation names may be valid f' +
-  'or MODFLOW but they are not valid for UCODE.';
+  'or MODFLOW but they are not valid for UCODE.' + StrUcodeExplanation;
   StrTheFollowingCHDObPest = 'The following CHD observation names may be valid f' +
   'or MODFLOW but they are not valid for PEST.';
   StrWritingCHDPackage = 'Writing CHD Package input.';

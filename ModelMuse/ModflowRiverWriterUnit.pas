@@ -71,7 +71,7 @@ resourcestring
   'he river bottom.';
   StrLayerDRowDC = 'Layer: %0:d, Row %1:d, Column %2:d. Amount: %3:g.';
   StrTheFollowingRiver = 'The following River observation names may be valid' +
-  ' for MODFLOW but they are not valid for UCODE.';
+  ' for MODFLOW but they are not valid for UCODE.' + StrUcodeExplanation;
   StrTheFollowingRiverPest = 'The following River observation names may be valid' +
   ' for MODFLOW but they are not valid for PEST.';
   StrWritingRIVPackage = 'Writing RIV Package input.';

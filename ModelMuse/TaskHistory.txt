@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = True
+      Display = False
     end
     item
       Name = 'core code'
@@ -406,7 +406,7 @@ object TTaskHistory
     end
     item
       Name = 'MVR'
-      Display = False
+      Display = True
     end
     item
       Name = 'MT3D-USGS LKT'
@@ -32365,5 +32365,15 @@ object TTaskHistory
         'MF-2015'
         'MF6 Observation Utility'
         'Documentation')
+    end
+    item
+      Date = 45303.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'MVR'
+        'MF-2015'
+        'WEL'
+        'Import'
+        'Testing')
     end>
 end

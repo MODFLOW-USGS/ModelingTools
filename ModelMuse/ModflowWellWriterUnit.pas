@@ -917,13 +917,6 @@ begin
   end;
 
   WriteMf6ParamListOption;
-
-//  WriteNoNewtown;
-//  if WellPackage.NewtonFormulation = nfOff then
-//  begin
-//    WriteString('    NO_NEWTON');
-//    NewLine;
-//  end;
 end;
 
 procedure TModflowWEL_Writer.WriteMoverOption;

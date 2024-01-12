@@ -4,28 +4,36 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
   TWelOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
-    AUXMULTNAME: string;
+    FAUXILIARY: TStringList;
+    FAUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
     SAVE_FLOWS: Boolean;
-    MOVER: Boolean;
+    FMOVER: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
-    AUTO_FLOW_REDUCE: TRealOption;
-    AUTO_FLOW_REDUCE_CSV: Boolean;
+    FAUTO_FLOW_REDUCE: TRealOption;
+    FAUTO_FLOW_REDUCE_CSV: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetAUXILIARY(Index: Integer): string;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
+    property AUXMULTNAME: string read FAUXMULTNAME;
+    property AUTO_FLOW_REDUCE: TRealOption read FAUTO_FLOW_REDUCE;
+    property AUTO_FLOW_REDUCE_CSV: Boolean read FAUTO_FLOW_REDUCE_CSV;
+    function IndexOfAUXILIARY(const AName: string): Integer;
   end;
 
   TWelDimensions = class(TCustomMf6Persistent)
@@ -37,16 +45,31 @@ type
   end;
 
   TWelTimeItem = class(TObject)
-    cellid: TCellId;
-    q: TMf6BoundaryValue;
-    aux: TList<TMf6BoundaryValue>;
-    boundname: string;
+    Fcellid: TCellId;
+    Fq: TMf6BoundaryValue;
+    Faux: TList<TMf6BoundaryValue>;
+    Fboundname: string;
+    FId: Integer;
+  private
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: integer;
   public
     constructor Create;
     destructor Destroy; override;
+    function Keystring: string;
+    property CellId: TCellId read Fcellid;
+    property Q: TMf6BoundaryValue read Fq;
+    property Count: integer read GetCount;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
+    property BoundName: string read Fboundname;
+    // Id is used in the MVR package;
+    property Id: Integer read FId;
   end;
 
-  TWelTimeItemList = TObjectList<TWelTimeItem>;
+  TWelTimeItemList = class(TObjectList<TWelTimeItem>)
+    procedure Sort;
+    function SameCells(OtherList: TWelTimeItemList): Boolean;
+  end;
 
   TWelPeriod = class(TCustomMf6Persistent)
   private
@@ -54,11 +77,16 @@ type
     FCells: TWelTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
+    function GetCell(Index: Integer): TWelTimeItem;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TWelTimeItem read GetCell; default;
   end;
 
   TWelPeriodList = TObjectList<TWelPeriod>;
@@ -70,10 +98,23 @@ type
     FPeriods: TWelPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GeObservations(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TWelPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TWelOptions read FOptions;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TWelPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GeObservations;
   end;
 
 
@@ -86,8 +127,8 @@ uses
 
 constructor TWelOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -96,25 +137,40 @@ end;
 
 destructor TWelOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
 end;
 
+function TWelOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  result := FAUXILIARY[Index];
+end;
+
+function TWelOptions.GetCount: Integer;
+begin
+  result := FAUXILIARY.Count;
+end;
+
+function TWelOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  result := FAUXILIARY.IndexOf(AName)
+end;
+
 procedure TWelOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   BOUNDNAMES := False;
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
-  MOVER := False;
-  AUTO_FLOW_REDUCE.Initialize;
-  AUTO_FLOW_REDUCE_CSV := False;
+  FMOVER := False;
+  FAUTO_FLOW_REDUCE.Initialize;
+  FAUTO_FLOW_REDUCE_CSV := False;
 end;
 
 procedure TWelOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -162,7 +218,7 @@ begin
     end
     else if FSplitter[0] = 'AUTO_FLOW_REDUCE_CSV' then
     begin
-      AUTO_FLOW_REDUCE_CSV := True;
+      FAUTO_FLOW_REDUCE_CSV := True;
     end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
@@ -170,7 +226,7 @@ begin
     end
     else if FSplitter[0] = 'MOVER' then
     begin
-      MOVER := True;
+      FMOVER := True;
     end
     else if (FSplitter[0] = 'AUXILIARY')
       and (FSplitter.Count >= 2) then
@@ -179,14 +235,14 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if (FSplitter[0] = 'AUXMULTNAME')
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME := FSplitter[1];
+      FAUXMULTNAME := FSplitter[1];
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -199,9 +255,9 @@ begin
 
     else if (FSplitter[0] = 'AUTO_FLOW_REDUCE')
       and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], AUTO_FLOW_REDUCE.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FAUTO_FLOW_REDUCE.Value) then
     begin
-      AUTO_FLOW_REDUCE.Used := True;
+      FAUTO_FLOW_REDUCE.Used := True;
     end
     else if (FSplitter[0] = 'OBS6')
       and (FSplitter.Count >= 3)
@@ -223,16 +279,54 @@ end;
 
 constructor TWelTimeItem.Create;
 begin
-  cellid.Initialize;
-  q.Initialize;
-  aux := TList<TMf6BoundaryValue>.Create;
-  boundname := '';
+  Fcellid.Initialize;
+  Fq.Initialize;
+  Faux := TList<TMf6BoundaryValue>.Create;
+  Fboundname := '';
 end;
 
 destructor TWelTimeItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TWelTimeItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  result := Faux[Index];
+end;
+
+function TWelTimeItem.GetCount: integer;
+begin
+  result := Faux.Count;
+end;
+
+function TWelTimeItem.Keystring: string;
+var
+  AuxIndex: Integer;
+  AnAux: TMf6BoundaryValue;
+begin
+  result := '';
+  if Q.ValueType = vtNumeric then
+  begin
+    result := result + ' Num';
+  end
+  else
+  begin
+    result := result + UpperCase(Q.StringValue);
+  end;
+  for AuxIndex := 0 to Faux.Count - 1 do
+  begin
+    AnAux := Faux[AuxIndex];
+    if AnAux.ValueType = vtNumeric then
+    begin
+      result := result + ' Num';
+    end
+    else
+    begin
+      result := result + UpperCase(AnAux.StringValue);
+    end;
+  end;
 end;
 
 { TWelDimensions }
@@ -294,6 +388,16 @@ begin
   inherited;
 end;
 
+function TWelPeriod.GetCell(Index: Integer): TWelTimeItem;
+begin
+  result := FCells[Index];
+end;
+
+function TWelPeriod.GetCount: Integer;
+begin
+  result := FCells.Count;
+end;
+
 procedure TWelPeriod.Initialize;
 begin
   inherited;
@@ -341,17 +445,17 @@ begin
       end
       else if FSplitter.Count >= NumberOfItems then
       begin
-        if ReadCellID(Cell.CellId, 0, DimensionCount) then
+        if ReadCellID(Cell.Fcellid, 0, DimensionCount) then
         begin
-          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.q.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.Fq.NumericValue) then
           begin
-            Cell.q.ValueType := vtNumeric;
+            Cell.Fq.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.q.ValueType := vtString;
+            Cell.Fq.ValueType := vtString;
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Cell.q.StringValue := FSplitter[DimensionCount];
+            Cell.Fq.StringValue := FSplitter[DimensionCount];
           end;
           StartIndex := DimensionCount + 1;
           for AuxIndex := 0 to naux - 1 do
@@ -368,13 +472,14 @@ begin
               Aux.StringValue := FSplitter[StartIndex];
             end;
             Inc(StartIndex);
-            Cell.aux.Add(Aux);
+            Cell.Faux.Add(Aux);
           end;
           if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
           begin
-            Cell.boundname := FSplitter[StartIndex];
+            Cell.Fboundname := FSplitter[StartIndex];
           end;
           FCells.Add(Cell);
+          Cell.FId := FCells.Count;
           Cell:= nil;
         end
         else
@@ -418,6 +523,36 @@ begin
   inherited;
 end;
 
+function TWel.GeObservations(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TWel.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TWel.GetPeriod(Index: Integer): TWelPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TWel.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TWel.GetTimeSeries(Index: Integer): TPackage;
+begin
+  Result := FTimeSeriesPackages[Index];
+end;
+
+function TWel.GetTimeSeriesCount: Integer;
+begin
+  Result := FTimeSeriesPackages.Count;
+end;
+
 procedure TWel.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
@@ -459,7 +594,7 @@ begin
           APeriod := TWelPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
-          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,
+          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
             FOptions.BOUNDNAMES);
         end
         else
@@ -505,6 +640,49 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
+end;
+
+{ TWelTimeItemList }
+
+function TWelTimeItemList.SameCells(OtherList: TWelTimeItemList): Boolean;
+var
+  index: Integer;
+begin
+  Result := Count = OtherList.Count;
+  if Result then
+  begin
+    for index := 0 to Count - 1 do
+    begin
+      Result := Items[index].Fcellid.SameLocation(OtherList.Items[index].Fcellid);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TWelTimeItemList.Sort;
+begin
+  inherited Sort(
+    TComparer<TWelTimeItem>.Construct(
+      function(const Left, Right: TWelTimeItem): Integer
+      begin
+        Result := AnsiCompareText(Left.Fboundname, Right.Fboundname);
+        if Result = 0 then
+        begin
+          result := Left.Fcellid.Layer - Right.Fcellid.Layer;
+          if Result = 0 then
+          begin
+            result := Left.Fcellid.Row - Right.Fcellid.Row;
+            if Result = 0 then
+            begin
+              result := Left.Fcellid.column - Right.Fcellid.column;
+            end;
+          end;
+        end;
+      end
+    ));
 end;
 
 end.

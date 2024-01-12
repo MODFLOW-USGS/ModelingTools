@@ -66,7 +66,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers,
 
 resourcestring
   StrTheFollowingGHBOb = 'The following GHB observation names may be valid f' +
-  'or MODFLOW but they are not valid for UCODE.';
+  'or MODFLOW but they are not valid for UCODE.' + StrUcodeExplanation;
   StrTheFollowingGHBObPest = 'The following GHB observation names may be valid f' +
   'or MODFLOW but they are not valid for PEST.';
   StrWritingGHBPackage = 'Writing GHB Package input.';

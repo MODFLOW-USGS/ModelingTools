@@ -1,4 +1,4 @@
-# OBS: Observation Utility file created on 1/11/2024 by ModelMuse version 5.1.1.51.
+# OBS: Observation Utility file created on 1/12/2024 by ModelMuse version 5.1.1.51.
 BEGIN OPTIONS
     DIGITS     10
     PRINT_INPUT
@@ -6,5 +6,5 @@ END OPTIONS
 
 BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.gbob_out_ghb.csv
   'ghb_GHB' ghb GHB
-  'mvr_GHB_MVR' to-mvr GHB
+  'mvr_GHB' to-mvr GHB
 END CONTINUOUS

@@ -39,18 +39,26 @@ type
   end;
 
   TChdTimeItem = class(TObject)
-    cellid: TCellId;
-    head: TMf6BoundaryValue;
-    aux: TList<TMf6BoundaryValue>;
-    boundname: string;
+  private
+    Fcellid: TCellId;
+    Fhead: TMf6BoundaryValue;
+    Faux: TList<TMf6BoundaryValue>;
+    Fboundname: string;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: Integer;
   public
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
+    property CellId: TCellId read Fcellid;
+    property Head: TMf6BoundaryValue read Fhead;
+    property Count: Integer read GetCount;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
+    property BoundName: string read Fboundname;
   end;
 
   TChdTimeItemList = class(TList<TChdTimeItem>)
-    procedure SortItems;
+    procedure Sort;
     function SameCells(OtherList: TChdTimeItemList): Boolean;
   end;
   TChdTimeItemObjectList = TObjectList<TChdTimeItem>;
@@ -254,16 +262,26 @@ end;
 
 constructor TChdTimeItem.Create;
 begin
-  cellid.Initialize;
-  head.Initialize;
-  aux := TList<TMf6BoundaryValue>.Create;
-  boundname := '';
+  Fcellid.Initialize;
+  Fhead.Initialize;
+  Faux := TList<TMf6BoundaryValue>.Create;
+  Fboundname := '';
 end;
 
 destructor TChdTimeItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TChdTimeItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  result := Faux[Index];
+end;
+
+function TChdTimeItem.GetCount: Integer;
+begin
+  result := Faux.Count;
 end;
 
 function TChdTimeItem.Keystring: string;
@@ -272,17 +290,17 @@ var
   AnAux: TMf6BoundaryValue;
 begin
   result := '';
-  if head.ValueType = vtNumeric then
+  if Fhead.ValueType = vtNumeric then
   begin
     result := result + ' Num';
   end
   else
   begin
-    result := result + UpperCase(head.StringValue);
+    result := result + UpperCase(Fhead.StringValue);
   end;
-  for AuxIndex := 0 to aux.Count - 1 do
+  for AuxIndex := 0 to Faux.Count - 1 do
   begin
-    AnAux := aux[AuxIndex];
+    AnAux := Faux[AuxIndex];
     if AnAux.ValueType = vtNumeric then
     begin
       result := result + ' Num';
@@ -410,17 +428,17 @@ begin
       end
       else if FSplitter.Count >= NumberOfItems then
       begin
-        if ReadCellID(Cell.CellId, 0, DimensionCount) then
+        if ReadCellID(Cell.Fcellid, 0, DimensionCount) then
         begin
-          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.head.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.Fhead.NumericValue) then
           begin
-            Cell.head.ValueType := vtNumeric;
+            Cell.Fhead.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.head.ValueType := vtString;
+            Cell.Fhead.ValueType := vtString;
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Cell.head.StringValue := FSplitter[DimensionCount];
+            Cell.Fhead.StringValue := FSplitter[DimensionCount];
           end;
           StartIndex := DimensionCount + 1;
           for AuxIndex := 0 to naux - 1 do
@@ -437,11 +455,11 @@ begin
               Aux.StringValue := FSplitter[StartIndex];
             end;
             Inc(StartIndex);
-            Cell.aux.Add(Aux);
+            Cell.Faux.Add(Aux);
           end;
           if BOUNDNAMES and (FSplitter.Count >= NumberOfItems + 1) then
           begin
-            Cell.boundname := FSplitter[StartIndex];
+            Cell.Fboundname := FSplitter[StartIndex];
           end;
           FCells.Add(Cell);
           Cell:= nil;
@@ -617,7 +635,7 @@ begin
   begin
     for index := 0 to Count - 1 do
     begin
-      Result := Items[index].cellid.SameLocation(OtherList.Items[index].cellid);
+      Result := Items[index].Fcellid.SameLocation(OtherList.Items[index].Fcellid);
       if not result then
       begin
         Exit;
@@ -626,22 +644,22 @@ begin
   end;
 end;
 
-procedure TChdTimeItemList.SortItems;
+procedure TChdTimeItemList.Sort;
 begin
-  Sort(
+  inherited Sort(
     TComparer<TChdTimeItem>.Construct(
       function(const Left, Right: TChdTimeItem): Integer
       begin
-        Result := AnsiCompareText(Left.boundname, Right.boundname);
+        Result := AnsiCompareText(Left.Fboundname, Right.Fboundname);
         if Result = 0 then
         begin
-          result := Left.cellid.Layer - Right.cellid.Layer;
+          result := Left.Fcellid.Layer - Right.Fcellid.Layer;
           if Result = 0 then
           begin
-            result := Left.cellid.Row - Right.cellid.Row;
+            result := Left.Fcellid.Row - Right.Fcellid.Row;
             if Result = 0 then
             begin
-              result := Left.cellid.column - Right.cellid.column;
+              result := Left.Fcellid.column - Right.Fcellid.column;
             end;
           end;
         end;

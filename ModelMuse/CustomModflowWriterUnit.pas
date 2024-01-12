@@ -5017,7 +5017,6 @@ begin
             begin
               SetLength(FlowObs.FName, 36);
             end;
-            FlowObs.FName := FlowObs.FName + '_Well_Reduction';
 
             FlowObs.FBoundName := ScreenObject.Name;
             WellReductionFlowObsLocations.Add(FlowObs);
@@ -5032,7 +5031,6 @@ begin
             begin
               SetLength(FlowObs.FName, 36);
             end;
-            FlowObs.FName := FlowObs.FName + '_MVR';
 
             FlowObs.FBoundName := ScreenObject.Name;
             ToMvrFlowObsLocations.Add(FlowObs);
@@ -10188,12 +10186,9 @@ begin
   NewLine;
 
   PrintListInputOption;
-//  WritePrintFlowsOption;
   WriteSaveFlowsOption;
   WriteMoverOption;
   WriteTimeSeriesFiles(InputFileName);
-  // TIMESERIESFILE not currently supported.
-  // NEWTON not currently supported.
 
   WriteMF6ObsOption(InputFileName)
 end;
@@ -11269,7 +11264,6 @@ begin
   NewLine;
 
   PrintListInputOption;
-//  WritePrintFlowsOption;
   WriteSaveFlowsOption;
 
   WriteEndOptions;

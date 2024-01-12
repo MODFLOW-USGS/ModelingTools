@@ -188,7 +188,6 @@ begin
     Exit
   end;
   ScreenObject := RegisterKey.SourceKey.ScreenObject as TScreenObject;
-//  RegisterKey.MvrIndex := MvrSource.MvrIndex;
 
   MvrSource.Key := RegisterKey;
   MvrSource.SourcePackage := ScreenObject.ModflowMvr.SourcePackageChoice;
@@ -1015,6 +1014,7 @@ begin
               (ReceiverItem.ReceiverPackage = rpcSfr)
               and (ReceiverItem.SfrReceiverChoice in
               [srcNearestEnclosed, srcNearestAnySegment]);
+            ReceiverCount := 1;
 
             if not UseSfrNearestMultipleSegment then
             begin
@@ -1035,10 +1035,6 @@ begin
             if ReceiverItem.ReceiverPackage = rpcUzf then
             begin
               ReceiverCount := Length(ReceiverValues.UzfCells);
-            end
-            else
-            begin
-              ReceiverCount := 1;
             end;
 
             if (ReceiverKey.ScreenObject <> PriorReceiverObject)
@@ -1259,7 +1255,7 @@ begin
                 else Assert(False);
               end;
 
-              WriteFloat(MrvCell.MvrValues[ReceiverIndex]);
+              WriteFloat(MrvCell.MvrValues[ReceiverIndex]/ReceiverCount);
 
               NewLine;
             end;
@@ -1424,6 +1420,7 @@ begin
   end;
 
   WriteString('END PACKAGES');
+  NewLine;
   NewLine;
 
 end;

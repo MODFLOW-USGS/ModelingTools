@@ -66,7 +66,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit,
 
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +
-  ' for MODFLOW but they are not valid for UCODE.';
+  ' for MODFLOW but they are not valid for UCODE.' + StrUcodeExplanation;
   StrTheFollowingDrainPest = 'The following Drain observation names may be valid' +
   ' for MODFLOW but they are not valid for PEST.';
   StrWritingDRNPackage = 'Writing DRN Package input.';

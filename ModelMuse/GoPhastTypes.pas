@@ -868,6 +868,12 @@ const
   StrParameterType = 'Parameter Type';
   StrEnhancedTemplateProc = 'EnhancedTemplateProcessor.exe';
 
+const
+  StrUcodeExplanation = sLineBreak
+  + 'ValidNames must start with a letter, be no more that 20 characters in '
+  + 'length, and contain only letters, numbers, and the characters '
+  + '"_", ".", ":", "&", "#", "@"';
+
 resourcestring
   StrModelTop = kModelTop;
   StrWritingDataSet0 = '  Writing Data Set 0.';

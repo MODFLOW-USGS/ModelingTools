@@ -11,12 +11,13 @@ type
   private
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
-    MODELNAMES: Boolean;
+    FMODELNAMES: Boolean;
     BUDGET: Boolean;
     BUDGETCSV: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+    property MODELNAMES: Boolean read FMODELNAMES;
   end;
 
   TMvrDimensions = class(TCustomMf6Persistent)
@@ -29,9 +30,13 @@ type
   end;
 
   TMvrPackageItem = record
-    mname: string;
-    pname: string;
+  private
+    Fmname: string;
+    Fpname: string;
     procedure Initialize;
+  public
+    property mname: string read Fmname;
+    property pname: string read Fpname;
   end;
 
   TMvrPackageItemList = TList<TMvrPackageItem>;
@@ -41,23 +46,39 @@ type
     FItems: TMvrPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       MODELNAMES: Boolean);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TMvrPackageItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TMvrPackageItem read GetItem; default;
   end;
 
   TMvrPeriodItem = record
-    mname1: string;
-    pname1: string;
-    id1: Integer;
-    mname2: string;
-    pname2: string;
-    id2: Integer;
-    mvrtype: string;
-    value: Extended;
+  private
+    Fmname1: string;
+    Fpname1: string;
+    Fid1: Integer;
+    Fmname2: string;
+    Fpname2: string;
+    Fid2: Integer;
+    Fmvrtype: string;
+    Fvalue: Extended;
     procedure Initialize;
+  public
+    property mname1: string read Fmname1;
+    property pname1: string read Fpname1;
+    property id1: Integer read Fid1;
+    property mname2: string read Fmname2;
+    property pname2: string read Fpname2;
+    property id2: Integer read Fid2;
+    property mvrtype: string read Fmvrtype;
+    property value: Extended read Fvalue;
+    function SourceMatch(PackageName: string; ID: Integer): Boolean;
+    function ReceiverMatch(PackageName: string; ID: Integer): Boolean;
   end;
 
   TMvrPeriodItemList = TList<TMvrPeriodItem>;
@@ -68,11 +89,18 @@ type
     FItems: TMvrPeriodItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       MODELNAMES: Boolean);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TMvrPeriodItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TMvrPeriodItem read GetItem; default;
+    function HasSource(PackageName: string; ID: Integer): Boolean;
+    function HasReceiver(PackageName: string; ID: Integer): Boolean;
   end;
 
   TMvrPeriodList = TObjectList<TMvrPeriod>;
@@ -83,10 +111,16 @@ type
     FMvrDimensions: TMvrDimensions;
     FPackages: TMvrPackages;
     FPeriods: TMvrPeriodList;
+    function GetPeriod(Index: Integer): TMvrPeriod;
+    function GetPeriodCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TMvrOptions read FOptions;
+    property Packages: TMvrPackages read FPackages;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TMvrPeriod read GetPeriod; default;
   end;
 
 implementation
@@ -101,7 +135,7 @@ begin
   inherited;
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
-  MODELNAMES := False;
+  FMODELNAMES := False;
   BUDGET := False;
   BUDGETCSV := False;
 end;
@@ -141,7 +175,7 @@ begin
     end
     else if FSplitter[0] = 'MODELNAMES' then
     begin
-      MODELNAMES := True;
+      FMODELNAMES := True;
     end
     else if (FSplitter[0] = 'BUDGET')
       and (FSplitter.Count >= 3)
@@ -217,8 +251,8 @@ end;
 
 procedure TMvrPackageItem.Initialize;
 begin
-  mname := '';
-  pname := '';
+  Fmname := '';
+  Fpname := '';
 end;
 
 { TMvrPackages }
@@ -234,6 +268,16 @@ destructor TMvrPackages.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TMvrPackages.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TMvrPackages.GetItem(Index: Integer): TMvrPackageItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TMvrPackages.Initialize;
@@ -284,12 +328,12 @@ begin
     begin
       if MODELNAMES then
       begin
-        Item.mname := FSplitter[0];
-        Item.pname := FSplitter[1];
+        Item.Fmname := FSplitter[0];
+        Item.Fpname := FSplitter[1];
       end
       else
       begin
-        Item.pname := FSplitter[0];
+        Item.Fpname := FSplitter[0];
       end;
       FItems.Add(Item);
     end
@@ -305,14 +349,25 @@ end;
 
 procedure TMvrPeriodItem.Initialize;
 begin
-  mname1 := '';
-  pname1 := '';
-  id1 := 0;
-  mname2 := '';
-  pname2 := '';
-  id2 := 0;
-  mvrtype := '';
-  value := 0;
+  Fmname1 := '';
+  Fpname1 := '';
+  Fid1 := 0;
+  Fmname2 := '';
+  Fpname2 := '';
+  Fid2 := 0;
+  Fmvrtype := '';
+  Fvalue := 0;
+end;
+
+function TMvrPeriodItem.ReceiverMatch(PackageName: string;
+  ID: Integer): Boolean;
+begin
+  Result := (ID = ID1) and AnsiSameText(PackageName, pname1)
+end;
+
+function TMvrPeriodItem.SourceMatch(PackageName: string; ID: Integer): Boolean;
+begin
+  Result := (ID = ID2) and AnsiSameText(PackageName, pname2)
 end;
 
 { TMvrPeriod }
@@ -328,6 +383,47 @@ destructor TMvrPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TMvrPeriod.GetCount: Integer;
+begin
+  Result := FItems.Count;
+end;
+
+function TMvrPeriod.GetItem(Index: Integer): TMvrPeriodItem;
+begin
+    Result := FItems[Index];
+end;
+
+function TMvrPeriod.HasReceiver(PackageName: string; ID: Integer): Boolean;
+var
+  Index: Integer;
+begin
+  Result := False;
+  for Index := 0 to Count - 1 do
+  begin
+    Result := Items[Index].SourceMatch(PackageName, ID);
+    if result then
+    begin
+      Exit;
+    end;
+  end;
+end;
+
+function TMvrPeriod.HasSource(PackageName: string; ID: Integer): Boolean;
+var
+  Index: Integer;
+begin
+  Result := False;
+  for Index := 0 to Count - 1 do
+  begin
+    Result := Items[Index].ReceiverMatch(PackageName, ID);
+    if result then
+    begin
+      Exit;
+    end;
+  end;
+
 end;
 
 procedure TMvrPeriod.Initialize;
@@ -378,16 +474,16 @@ begin
     begin
       if MODELNAMES then
       begin
-        if TryStrToInt(FSplitter[2], MovItem.id1)
-          and TryStrToInt(FSplitter[5], MovItem.id2)
-          and TryFortranStrToFloat(FSplitter[7], MovItem.value)
+        if TryStrToInt(FSplitter[2], MovItem.Fid1)
+          and TryStrToInt(FSplitter[5], MovItem.Fid2)
+          and TryFortranStrToFloat(FSplitter[7], MovItem.Fvalue)
           then
         begin
-          MovItem.mname1 := FSplitter[0];
-          MovItem.pname1 := FSplitter[1];
-          MovItem.mname2 := FSplitter[3];
-          MovItem.pname2 := FSplitter[4];
-          MovItem.mvrtype := UpperCase(FSplitter[6]);
+          MovItem.Fmname1 := FSplitter[0];
+          MovItem.Fpname1 := FSplitter[1];
+          MovItem.Fmname2 := FSplitter[3];
+          MovItem.Fpname2 := FSplitter[4];
+          MovItem.Fmvrtype := UpperCase(FSplitter[6]);
           FItems.Add(MovItem);
         end
         else
@@ -398,14 +494,14 @@ begin
       end
       else
       begin
-        if TryStrToInt(FSplitter[1], MovItem.id1)
-          and TryStrToInt(FSplitter[3], MovItem.id2)
-          and TryFortranStrToFloat(FSplitter[5], MovItem.value)
+        if TryStrToInt(FSplitter[1], MovItem.Fid1)
+          and TryStrToInt(FSplitter[3], MovItem.Fid2)
+          and TryFortranStrToFloat(FSplitter[5], MovItem.Fvalue)
           then
         begin
-          MovItem.pname1 := FSplitter[0];
-          MovItem.pname2 := FSplitter[2];
-          MovItem.mvrtype := UpperCase(FSplitter[4]);
+          MovItem.Fpname1 := FSplitter[0];
+          MovItem.Fpname2 := FSplitter[2];
+          MovItem.Fmvrtype := UpperCase(FSplitter[4]);
           FItems.Add(MovItem);
         end
         else
@@ -444,6 +540,16 @@ begin
   inherited;
 end;
 
+function TMvr.GetPeriod(Index: Integer): TMvrPeriod;
+begin
+  Result := FPeriods[Index];
+end;
+
+function TMvr.GetPeriodCount: Integer;
+begin
+  Result := FPeriods.Count;
+end;
+
 procedure TMvr.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
@@ -475,7 +581,7 @@ begin
       end
       else if FSplitter[1] ='PACKAGES' then
       begin
-        FPackages.Read(Stream, Unhandled, FOptions.MODELNAMES);
+        FPackages.Read(Stream, Unhandled, FOptions.FMODELNAMES);
       end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin
@@ -484,7 +590,7 @@ begin
           APeriod := TMvrPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
-          APeriod.Read(Stream, Unhandled, FOptions.MODELNAMES);
+          APeriod.Read(Stream, Unhandled, FOptions.FMODELNAMES);
         end
         else
         begin

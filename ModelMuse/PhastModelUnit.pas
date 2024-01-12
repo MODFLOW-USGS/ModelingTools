@@ -130,6 +130,9 @@ resourcestring
   Str0sMultipliedByT = '%0:s multiplied by the parameter value for "%1:s."';
 
 type
+  // etExportCSV results in exporting data to a .csv file rather than to
+  // a model input file. It is hidden because it does not have general
+  // applicability.
   TEvaluationType = (etExport, etDisplay, etExportCSV);
 
   // @name represents how PHAST results are printed - XY orientation or
@@ -10114,6 +10117,9 @@ const
 //                type in the MODFLOW 6 Observation Utility.
 //               Bug fix: Fixed export of to-mvr observation types for the
 //                for WEL, DRN, RIV, and GHB packages.
+//               Enhancement: When the MVR package receiver is a group of UZF
+//                cells. there is now an option to distribute the MVR flow
+//                equally to the UZF receiver cells.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.

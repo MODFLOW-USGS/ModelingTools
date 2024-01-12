@@ -169,7 +169,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     ActivePage = tabConnections
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 320
     object tabConnections: TTabSheet
       Caption = 'Connections'
       ImageIndex = 1
@@ -212,13 +211,13 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         Align = alClient
         TabOrder = 1
         ExplicitTop = 64
-        ExplicitWidth = 312
+        ExplicitWidth = 404
         ExplicitHeight = 145
         inherited Panel: TPanel
           Top = 104
           Width = 404
           ExplicitTop = 104
-          ExplicitWidth = 312
+          ExplicitWidth = 404
           inherited lbNumber: TLabel
             Width = 107
             Caption = 'Number of receivers'
@@ -245,7 +244,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         inherited Grid: TRbwDataGrid4
           Width = 404
           Height = 104
-          ColCount = 4
+          ColCount = 5
           OnSelectCell = frameReceiversGridSelectCell
           OnSetEditText = frameReceiversGridSetEditText
           OnBeforeDrawCell = frameReceiversGridBeforeDrawCell
@@ -273,6 +272,30 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
                 'MAW'
                 'SFR'
                 'UZF')
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4Boolean
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
               WordWrapCaptions = True
               WordWrapCells = False
               CaseSensitivePicklist = False
