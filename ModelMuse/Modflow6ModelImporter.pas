@@ -2440,6 +2440,10 @@ var
 begin
   Model := frmGoPhast.PhastModel;
   SetLength(ScreenObjects, Model.LayerCount);
+  for LayerIndex := 0 to Length(ScreenObjects) - 1 do
+  begin
+    ScreenObjects[LayerIndex] := nil;
+  end;
   Model.ModflowPackages.HfbPackage.IsSelected := True;
   LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
@@ -4579,7 +4583,15 @@ begin
           end;
           WellMvrLink.MvrPeriod  := MvrPeriod;
         end;
-        WellMvrLinkList.Add(WellMvrLink)
+        WellMvrLinkList.Add(WellMvrLink);
+        if MvrStartIndex < Mvr.PeriodCount - 1 then
+        begin
+          for MvrIndex := MvrStartIndex to Mvr.PeriodCount - 1 do
+          begin
+            WellMvrLink.MvrPeriod  := MvrPeriod;
+            WellMvrLinkList.Add(WellMvrLink);
+          end;
+        end;
       end;
     end;
 
@@ -4633,6 +4645,7 @@ begin
 
       LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
+      ACellList := nil;
       ObjectCount := 0;
       for PeriodIndex := 0 to WellMvrLinkList.Count - 1 do
       begin
@@ -4679,7 +4692,7 @@ begin
             if WellMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
             begin
               KeyString := KeyString + ' MVR';
-              MvrUsed := False;
+              MvrUsed := True;
             end;
           end;
 
@@ -4858,6 +4871,8 @@ end;
 
 constructor TMvrWelTimeItemList.Create;
 begin
+  inherited;
+  OwnsObjects := False;
   FIds := TGenericIntegerList.Create;
 end;
 
