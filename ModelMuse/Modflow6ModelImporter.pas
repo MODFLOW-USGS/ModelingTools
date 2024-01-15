@@ -132,6 +132,10 @@ uses
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
+  StrModelMuseCanNotIm = 'ModelMuse can not import AUXMULTNAME specified as ' +
+  'a time series.';
+  StrModelMuseCanNotAp = 'ModelMuse can not apply AUXMULTNAME values to data' +
+  ' specified as a time series.';
 
 procedure TModflow6Importer.AssignBooleanValuesToCellCenters(
   DataArray: TDataArray; ScreenObject: TScreenObject; ImportedData: TBArray2D);
@@ -4277,6 +4281,7 @@ type
     MvrPeriod: TMvrPeriod;
     function Period: Integer;
   end;
+  TWellMvrLinkArray = TArray<TWellMvrLink>;
   TWellMvrLinkList = TList<TWellMvrLink>;
 
   TMvrWelTimeItemList = Class(TWelTimeItemList)
@@ -4349,13 +4354,18 @@ var
   FoundMvr: Boolean;
   WellMvrLink: TWellMvrLink;
   WellMvrLinkList: TWellMvrLinkList;
-  MvrIndex: Integer;
   MvrPeriod: TMvrPeriod;
-  MvrStartIndex: Integer;
   MvrUsed: Boolean;
   NewScreenObject: Boolean;
   MvrSource: TMvrSource;
   APackage: TPackage;
+  AuxMultIndex: Integer;
+  AuxMultiplier: Extended;
+  WellMvrLinkArray: TWellMvrLinkArray;
+  WellPeriod: TWelPeriod;
+  NextWelPeriod: TWelPeriod;
+  EndPeriod: Integer;
+  NextMvrPeriod: TMvrPeriod;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TWelTimeItem);
   var
     WelItem: TWellItem;
@@ -4367,11 +4377,30 @@ var
     AuxIndex: Integer;
     Aux: TMf6BoundaryValue;
     Imported_Chem: TValueArrayItem;
+    AuxMultiplier: Extended;
   begin
     WelItem := AScreenObject.ModflowWellBoundary.Values.Add as TWellItem;
     ItemList.Add(WelItem);
     WelItem.EndTime := LastTime;
     WelItem.StartTime := StartTime;
+
+    if AuxMultIndex >= 0 then
+    begin
+      Aux := ACell.Aux[AuxMultIndex];
+      if Aux.ValueType = vtNumeric then
+      begin
+        AuxMultiplier := Aux.NumericValue
+      end
+      else
+      begin
+        AuxMultiplier := 1;
+        FErrorMessages.Add(StrModelMuseCanNotIm);
+      end;
+    end
+    else
+    begin
+      AuxMultiplier := 1;
+    end;
 
     if ACell.Q.ValueType = vtNumeric then
     begin
@@ -4390,6 +4419,10 @@ var
         Assert(False);
       end;
       WelItem.PumpingRate := ImportedTimeSeries;
+      if AuxMultiplier <> 1 then
+      begin
+        FErrorMessages.Add(StrModelMuseCanNotAp);
+      end;
     end;
 
     if TransportAuxNames.Count > 0 then
@@ -4520,6 +4553,7 @@ var
     end;
   end;
 begin
+  // Get the MVR package.
   if MvrPackage <> nil then
   begin
     Mvr := MvrPackage.Package as TMvr;
@@ -4538,12 +4572,20 @@ begin
     end;
   end;
 
-
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.WelPackage.IsSelected := True;
 
   Wel := Package.Package as TWel;
   Options := Wel.Options;
+
+  if Options.AUXMULTNAME <> '' then
+  begin
+    AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  end
+  else
+  begin
+    AuxMultIndex := -1;
+  end;
 
   WellMvrLinkList := TWellMvrLinkList.Create;
   CellIds := TCellIdList.Create;
@@ -4568,33 +4610,61 @@ begin
     end
     else
     begin
-      MvrStartIndex := 0;
+      // Make sure that all the stress periods defined in either the MVR or the
+      // WEL package are imported.
+      SetLength(WellMvrLinkArray, Model.ModflowStressPeriods.Count);
+      for PeriodIndex := 0 to Length(WellMvrLinkArray) - 1 do
+      begin
+        WellMvrLink.WelPeriod := nil;
+        WellMvrLink.MvrPeriod := nil;
+      end;
+
       for PeriodIndex := 0 to Wel.PeriodCount - 1 do
       begin
-        WellMvrLink.WelPeriod := Wel.Periods[PeriodIndex];
-        MvrPeriod := nil;
-        for MvrIndex := MvrStartIndex to Mvr.PeriodCount - 1 do
+        WellPeriod := Wel.Periods[PeriodIndex];
+        if PeriodIndex < Wel.PeriodCount - 1 then
         begin
-          MvrPeriod := Mvr.Periods[MvrIndex];
-          if MvrPeriod.Period > WellMvrLink.WelPeriod.Period then
-          begin
-            MvrStartIndex := MvrIndex;
-            Break;
-          end;
-          WellMvrLink.MvrPeriod  := MvrPeriod;
+          NextWelPeriod := Wel.Periods[PeriodIndex+1];
+          EndPeriod := NextWelPeriod.Period;
+        end
+        else
+        begin
+          EndPeriod := Model.ModflowStressPeriods.Count;
         end;
-        WellMvrLinkList.Add(WellMvrLink);
-        if MvrStartIndex < Mvr.PeriodCount - 1 then
+        for Index := WellPeriod.Period  to EndPeriod do
         begin
-          for MvrIndex := MvrStartIndex to Mvr.PeriodCount - 1 do
-          begin
-            WellMvrLink.MvrPeriod  := MvrPeriod;
-            WellMvrLinkList.Add(WellMvrLink);
-          end;
+          WellMvrLinkArray[Index-1].WelPeriod  := WellPeriod;
+        end;
+      end;
+
+      for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
+      begin
+        MvrPeriod := Mvr.Periods[PeriodIndex];
+        if PeriodIndex < Mvr.PeriodCount - 1 then
+        begin
+          NextMvrPeriod := Mvr.Periods[PeriodIndex+1];
+          EndPeriod := NextMvrPeriod.Period;
+        end
+        else
+        begin
+          EndPeriod := Model.ModflowStressPeriods.Count;
+        end;
+        for Index := MvrPeriod.Period  to EndPeriod do
+        begin
+          WellMvrLinkArray[Index-1].MvrPeriod  := MvrPeriod;
+        end;
+      end;
+
+      WellMvrLinkList.Add(WellMvrLinkArray[0]);
+      for Index := 1 to Length(WellMvrLinkArray) - 1 do
+      begin
+        if (WellMvrLinkArray[Index].WelPeriod <> WellMvrLinkArray[Index-1].WelPeriod)
+          or (WellMvrLinkArray[Index].MvrPeriod <> WellMvrLinkArray[Index-1].MvrPeriod) then
+        begin
+          WellMvrLinkList.Add(WellMvrLinkArray[Index]);
         end;
       end;
     end;
-
 
     IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
     for TimeSeriesIndex := 0 to Wel.TimeSeriesCount - 1 do
@@ -4651,6 +4721,10 @@ begin
       begin
         WellMvrLink := WellMvrLinkList[PeriodIndex];
         APeriod := WellMvrLinkList[PeriodIndex].WelPeriod;
+        if APeriod = nil then
+        begin
+          Continue;
+        end;
         StartTime := Model.ModflowStressPeriods[WellMvrLink.Period-1].StartTime;
         for WelIndex := 0 to ItemList.Count - 1 do
         begin
@@ -4775,7 +4849,24 @@ begin
             ACell := ACellList[CellIndex];
             if ACell.Q.ValueType = vtNumeric then
             begin
-              Imported_Heads.Values.Add(ACell.Q.NumericValue);
+              if AuxMultIndex >= 0 then
+              begin
+                Aux := ACell.Aux[AuxMultIndex];
+                if Aux.ValueType = vtNumeric then
+                begin
+                  AuxMultiplier := Aux.NumericValue
+                end
+                else
+                begin
+                  AuxMultiplier := 1;
+                  FErrorMessages.Add(StrModelMuseCanNotIm);
+                end;
+              end
+              else
+              begin
+                AuxMultiplier := 1;
+              end;
+              Imported_Heads.Values.Add(ACell.Q.NumericValue * AuxMultiplier);
             end;
 
             for AuxIndex := 0 to TransportAuxNames.Count - 1 do

@@ -474,7 +474,6 @@ begin
     end;
   end;
   Count := LocalCount -1;
-//  Count := Count -1;
 end;
 
 destructor TValueArrayStorage.Destroy;

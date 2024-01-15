@@ -45,6 +45,7 @@ type
   end;
 
   TWelTimeItem = class(TObject)
+  private
     Fcellid: TCellId;
     Fq: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
@@ -98,7 +99,7 @@ type
     FPeriods: TWelPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
-    function GeObservations(Index: Integer): TPackage;
+    function GetObservation(Index: Integer): TPackage;
     function GetObservationCount: Integer;
     function GetPeriod(Index: Integer): TWelPeriod;
     function GetPeriodCount: Integer;
@@ -114,7 +115,7 @@ type
     property TimeSeriesCount: Integer read GetTimeSeriesCount;
     property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
     property ObservationCount: Integer read GetObservationCount;
-    property Observations[Index: Integer]: TPackage read GeObservations;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 
@@ -523,7 +524,7 @@ begin
   inherited;
 end;
 
-function TWel.GeObservations(Index: Integer): TPackage;
+function TWel.GetObservation(Index: Integer): TPackage;
 begin
   result := FObservationsPackages[Index];
 end;
