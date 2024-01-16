@@ -4,14 +4,14 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
   TRchOptions = class(TCustomMf6Persistent)
   private
-    FIXED_CELL: Boolean;
-    AUXILIARY: TStringList;
-    AUXMULTNAME: string;
+    FFIXED_CELL: Boolean;
+    FAUXILIARY: TStringList;
+    FAUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
@@ -21,11 +21,18 @@ type
     Obs6_FileNames: TStringList;
     READASARRAYS: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property FIXED_CELL: Boolean read FFIXED_CELL;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
+    property AUXMULTNAME: string read FAUXMULTNAME;
+    function IndexOfAUXILIARY(const AName: string): Integer;
   end;
 
   TRchDimensions = class(TCustomMf6Persistent)
@@ -37,16 +44,28 @@ type
   end;
 
   TRchTimeItem = class(TObject)
-    cellid: TCellId;
-    recharge: TMf6BoundaryValue;
-    aux: TList<TMf6BoundaryValue>;
-    boundname: string;
+  private
+    Fcellid: TCellId;
+    Frecharge: TMf6BoundaryValue;
+    Faux: TList<TMf6BoundaryValue>;
+    Fboundname: string;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: integer;
   public
     constructor Create;
     destructor Destroy; override;
+    function Keystring: string;
+    property CellId: TCellId read Fcellid;
+    property Recharge: TMf6BoundaryValue read Frecharge;
+    property Count: integer read GetCount;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
+    property BoundName: string read Fboundname;
   end;
 
-  TRchTimeItemList = TObjectList<TRchTimeItem>;
+  TRchTimeItemList = class(TObjectList<TRchTimeItem>)
+    procedure Sort;
+    function SameCells(OtherList: TRchTimeItemList): Boolean;
+  end;
 
   TRchPeriod = class(TCustomMf6Persistent)
   private
@@ -54,11 +73,16 @@ type
     FCells: TRchTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean; READASARRAYS: Boolean);
+    function GetCell(Index: Integer): TRchTimeItem;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TRchTimeItem read GetCell; default;
   end;
 
   TRchPeriodList = TObjectList<TRchPeriod>;
@@ -71,10 +95,23 @@ type
     FTimeSeriesPackages: TPackageList;
     FTimeSeriesArrayPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TRchPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TRchOptions read FOptions;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TRchPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 
@@ -88,8 +125,8 @@ uses
 
 constructor TRchOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   TAS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
@@ -99,18 +136,33 @@ end;
 
 destructor TRchOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   TAS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
 end;
 
+function TRchOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  result := FAUXILIARY[Index];
+end;
+
+function TRchOptions.GetCount: Integer;
+begin
+  result := FAUXILIARY.Count;
+end;
+
+function TRchOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  result := FAUXILIARY.IndexOf(AName);
+end;
+
 procedure TRchOptions.Initialize;
 begin
   inherited;
-  FIXED_CELL := False;
-  AUXILIARY.Clear;
+  FFIXED_CELL := False;
+  FAUXILIARY.Clear;
   TS6_FileNames.Clear;
   TAS6_FileNames.Clear;
   Obs6_FileNames.Clear;
@@ -155,7 +207,7 @@ begin
     end
     else if FSplitter[0] = 'FIXED_CELL' then
     begin
-      FIXED_CELL := True;
+      FFIXED_CELL := True;
     end
     else if FSplitter[0] = 'BOUNDNAMES' then
     begin
@@ -184,14 +236,14 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if (FSplitter[0] = 'AUXMULTNAME')
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME := FSplitter[1];
+      FAUXMULTNAME := FSplitter[1];
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -229,16 +281,55 @@ end;
 
 constructor TRchTimeItem.Create;
 begin
-  cellid.Initialize;
-  recharge.Initialize;
-  aux := TList<TMf6BoundaryValue>.Create;
-  boundname := '';
+  Fcellid.Initialize;
+  Frecharge.Initialize;
+  Faux := TList<TMf6BoundaryValue>.Create;
+  Fboundname := '';
 end;
 
 destructor TRchTimeItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TRchTimeItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  result := Faux[Index];
+end;
+
+function TRchTimeItem.GetCount: integer;
+begin
+  result := Faux.Count;
+end;
+
+function TRchTimeItem.Keystring: string;
+var
+  AuxIndex: Integer;
+  AnAux: TMf6BoundaryValue;
+begin
+  result := '';
+  if FRecharge.ValueType = vtNumeric then
+  begin
+    result := result + ' Num';
+  end
+  else
+  begin
+    result := result + UpperCase(FRecharge.StringValue);
+  end;
+
+  for AuxIndex := 0 to Faux.Count - 1 do
+  begin
+    AnAux := Faux[AuxIndex];
+    if AnAux.ValueType = vtNumeric then
+    begin
+      result := result + ' Num';
+    end
+    else
+    begin
+      result := result + UpperCase(AnAux.StringValue);
+    end;
+  end;
 end;
 
 { TRchDimensions }
@@ -298,6 +389,16 @@ destructor TRchPeriod.Destroy;
 begin
   FCells.Free;
   inherited;
+end;
+
+function TRchPeriod.GetCell(Index: Integer): TRchTimeItem;
+begin
+  Result := FCells[Index];
+end;
+
+function TRchPeriod.GetCount: Integer;
+begin
+  Result := FCells.Count;
 end;
 
 procedure TRchPeriod.Initialize;
@@ -420,23 +521,23 @@ begin
           Cell := TRchTimeItem.Create;
           if IRCH = nil then
           begin
-            Cell.cellid.Layer := 1;
+            Cell.Fcellid.Layer := 1;
           end
           else
           begin
-            Cell.cellid.Layer := IRCH[0, RowIndex, ColIndex];
+            Cell.Fcellid.Layer := IRCH[0, RowIndex, ColIndex];
           end;
-          Cell.cellid.Row := RowIndex + 1;
-          Cell.cellid.Column := ColIndex + 1;
+          Cell.Fcellid.Row := RowIndex + 1;
+          Cell.Fcellid.Column := ColIndex + 1;
           if RECHARGE.Value <> nil then
           begin
-            Cell.recharge.NumericValue := RECHARGE.Value[RowIndex, ColIndex];
-            Cell.recharge.ValueType := vtNumeric;
+            Cell.Frecharge.NumericValue := RECHARGE.Value[RowIndex, ColIndex];
+            Cell.Frecharge.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.recharge.ValueType := vtString;
-            Cell.recharge.StringValue := RECHARGE.TimeArraySeries + '_'
+            Cell.Frecharge.ValueType := vtString;
+            Cell.Frecharge.StringValue := RECHARGE.TimeArraySeries + '_'
               + IntToStr(RowIndex + 1) + '_' + IntToStr(ColIndex + 1)
           end;
           for AuxIndex := 0 to AuxList.Count - 1 do
@@ -489,17 +590,17 @@ begin
         end
         else if FSplitter.Count >= NumberOfColumns then
         begin
-          if ReadCellID(Cell.CellId, 0, DimensionCount) then
+          if ReadCellID(Cell.Fcellid, 0, DimensionCount) then
           begin
-            if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.recharge.NumericValue) then
+            if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.Frecharge.NumericValue) then
             begin
-              Cell.recharge.ValueType := vtNumeric;
+              Cell.Frecharge.ValueType := vtNumeric;
             end
             else
             begin
-              Cell.recharge.ValueType := vtString;
+              Cell.Frecharge.ValueType := vtString;
               FSplitter.DelimitedText := CaseSensitiveLine;
-              Cell.recharge.StringValue := FSplitter[DimensionCount];
+              Cell.Frecharge.StringValue := FSplitter[DimensionCount];
             end;
             StartIndex := DimensionCount + 1;
             for AuxIndex := 0 to naux - 1 do
@@ -516,11 +617,11 @@ begin
                 Aux.StringValue := FSplitter[StartIndex];
               end;
               Inc(StartIndex);
-              Cell.aux.Add(Aux);
+              Cell.Faux.Add(Aux);
             end;
             if BOUNDNAMES and (FSplitter.Count >= NumberOfColumns+1) then
             begin
-              Cell.boundname := FSplitter[StartIndex];
+              Cell.Fboundname := FSplitter[StartIndex];
             end;
             FCells.Add(Cell);
             Cell:= nil;
@@ -570,6 +671,36 @@ begin
   inherited;
 end;
 
+function TRch.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TRch.GetObservationCount: Integer;
+begin
+    result := FObservationsPackages.Count;
+end;
+
+function TRch.GetPeriod(Index: Integer): TRchPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TRch.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TRch.GetTimeSeries(Index: Integer): TPackage;
+begin
+  Result := FTimeSeriesPackages[Index];
+end;
+
+function TRch.GetTimeSeriesCount: Integer;
+begin
+  Result := FTimeSeriesPackages.Count;
+end;
+
 procedure TRch.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
@@ -613,7 +744,7 @@ begin
           APeriod := TRchPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
-          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,
+          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
             FOptions.BOUNDNAMES, FOptions.READASARRAYS);
         end
         else
@@ -671,6 +802,49 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
+end;
+
+{ TRchTimeItemList }
+
+function TRchTimeItemList.SameCells(OtherList: TRchTimeItemList): Boolean;
+var
+  index: Integer;
+begin
+  Result := Count = OtherList.Count;
+  if Result then
+  begin
+    for index := 0 to Count - 1 do
+    begin
+      Result := Items[index].Fcellid.SameLocation(OtherList.Items[index].Fcellid);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TRchTimeItemList.Sort;
+begin
+  inherited Sort(
+    TComparer<TRchTimeItem>.Construct(
+      function(const Left, Right: TRchTimeItem): Integer
+      begin
+        Result := AnsiCompareText(Left.Fboundname, Right.Fboundname);
+        if Result = 0 then
+        begin
+          result := Left.Fcellid.Layer - Right.Fcellid.Layer;
+          if Result = 0 then
+          begin
+            result := Left.Fcellid.Row - Right.Fcellid.Row;
+            if Result = 0 then
+            begin
+              result := Left.Fcellid.column - Right.Fcellid.column;
+            end;
+          end;
+        end;
+      end
+    ));
 end;
 
 end.

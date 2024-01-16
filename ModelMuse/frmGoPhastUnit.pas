@@ -561,7 +561,7 @@ type
     acImportSurferGridFiles: TAction;
     miMultipleSurferGridFiles: TMenuItem;
     acImportModflow6Model: TAction;
-    ImportMODFLOW6Model1: TMenuItem;
+    miImportMODFLOW6Model: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -14198,7 +14198,7 @@ procedure TfrmGoPhast.acImportModflow6ModelExecute(Sender: TObject);
 begin
   inherited;
 {$IFDEF ImportMF6}
-  ShowAForm(TfrmImportModflow6)
+  ShowAForm(TfrmImportModflow6);
 {$ENDIF}
 end;
 

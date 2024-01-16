@@ -82,7 +82,7 @@ object TTaskHistory
     end
     item
       Name = 'GHB'
-      Display = False
+      Display = True
     end
     item
       Name = 'WEL'
@@ -90,7 +90,7 @@ object TTaskHistory
     end
     item
       Name = 'RIV'
-      Display = False
+      Display = True
     end
     item
       Name = 'DRN'
@@ -102,7 +102,7 @@ object TTaskHistory
     end
     item
       Name = 'RCH'
-      Display = False
+      Display = True
     end
     item
       Name = 'EVT'
@@ -32393,5 +32393,15 @@ object TTaskHistory
         'DRN'
         'MF-2015'
         'Import')
+    end
+    item
+      Date = 45307.000000000000000000
+      Categories.Strings = (
+        'GHB'
+        'RIV'
+        'RCH'
+        'Import'
+        'MF-2015'
+        'DRN')
     end>
 end

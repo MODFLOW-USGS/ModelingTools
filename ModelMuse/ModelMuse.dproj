@@ -2228,7 +2228,6 @@
         <DCCReference Include="frmImportModflow6Unit.pas">
             <Form>frmImportModflow6</Form>
         </DCCReference>
-        <DCCReference Include="Modflow6ModelImporter.pas"/>
         <DCCReference Include="..\MF6InputReader\Mf6.AdvFileReaderUnit.pas"/>
         <DCCReference Include="..\MF6InputReader\Mf6.AtsFileReaderUnit.pas"/>
         <DCCReference Include="..\MF6InputReader\Mf6.BuyFileReaderUnit.pas"/>
@@ -2284,6 +2283,7 @@
         <DCCReference Include="frmSelectFlowModelUnit.pas">
             <Form>frmSelectFlowModel</Form>
         </DCCReference>
+        <DCCReference Include="Modflow6ModelImporter.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

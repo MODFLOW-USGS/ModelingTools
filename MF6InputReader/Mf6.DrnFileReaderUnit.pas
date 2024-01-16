@@ -55,6 +55,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+    function Keystring: string;
     property cellid: TCellId read Fcellid;
     property elev: TMf6BoundaryValue read Felev;
     property cond: TMf6BoundaryValue read Fcond;
@@ -299,6 +300,42 @@ end;
 function TDrnTimeItem.GetCount: integer;
 begin
   result := Faux.Count;
+end;
+
+function TDrnTimeItem.Keystring: string;
+var
+  AuxIndex: Integer;
+  AnAux: TMf6BoundaryValue;
+begin
+  result := '';
+  if elev.ValueType = vtNumeric then
+  begin
+    result := result + ' Num';
+  end
+  else
+  begin
+    result := result + UpperCase(elev.StringValue);
+  end;
+  if cond.ValueType = vtNumeric then
+  begin
+    result := result + ' Num';
+  end
+  else
+  begin
+    result := result + UpperCase(cond.StringValue);
+  end;
+  for AuxIndex := 0 to Faux.Count - 1 do
+  begin
+    AnAux := Faux[AuxIndex];
+    if AnAux.ValueType = vtNumeric then
+    begin
+      result := result + ' Num';
+    end
+    else
+    begin
+      result := result + UpperCase(AnAux.StringValue);
+    end;
+  end;
 end;
 
 { TDrnDimensions }

@@ -5630,7 +5630,8 @@ begin
         Dec(R.Right, PushButtonWidth)
       else
         Inc(R.Left, PushButtonWidth - 2);
-    SendMessage(Handle, EM_SETRECTNP, 0, LongInt(@R));
+//    SendMessage(Handle, EM_SETRECTNP, 0, longint(@R));
+    SendMessage(Handle, EM_SETRECTNP, 0, System.IntPtr(@R));
     SendMessage(Handle, EM_SCROLLCARET, 0, 0);
     if SysLocale.FarEast then
       SetImeCompositionWindow(Font, R.Left, R.Top);

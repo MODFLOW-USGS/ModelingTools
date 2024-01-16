@@ -1249,7 +1249,7 @@ inherited frmGoPhast: TfrmGoPhast
           Hint = 'Create a new model by importing and existing MODFLOW-2005 model'
           OnClick = acFileNewModflowModelExecute
         end
-        object ImportMODFLOW6Model1: TMenuItem
+        object miImportMODFLOW6Model: TMenuItem
           Action = acImportModflow6Model
         end
         object miImportModelMate: TMenuItem

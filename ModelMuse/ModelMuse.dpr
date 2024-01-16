@@ -886,10 +886,8 @@ uses
   ModflowTvsUnit in 'ModflowTvsUnit.pas',
   ModflowTvsWriterUnit in 'ModflowTvsWriterUnit.pas',
   framePackageTvsUnit in 'framePackageTvsUnit.pas' {framePackageTvs: TFrame},
-  frameScreenObjectTransientSUnit in 'frameScreenObjectTransientSUnit.pas' {frameScreenObjectTransientS: TFrame}
-  { $IFDEF ImportMF6},
+  frameScreenObjectTransientSUnit in 'frameScreenObjectTransientSUnit.pas' {frameScreenObjectTransientS: TFrame},
   frmImportModflow6Unit in 'frmImportModflow6Unit.pas' {frmImportModflow6},
-  Modflow6ModelImporter in 'Modflow6ModelImporter.pas',
   Mf6.AdvFileReaderUnit in '..\MF6InputReader\Mf6.AdvFileReaderUnit.pas',
   Mf6.AtsFileReaderUnit in '..\MF6InputReader\Mf6.AtsFileReaderUnit.pas',
   Mf6.BuyFileReaderUnit in '..\MF6InputReader\Mf6.BuyFileReaderUnit.pas',
@@ -942,9 +940,8 @@ uses
   Mf6.UztFileReaderUnit in '..\MF6InputReader\Mf6.UztFileReaderUnit.pas',
   Mf6.VscFileReaderUnit in '..\MF6InputReader\Mf6.VscFileReaderUnit.pas',
   Mf6.WelFileReaderUnit in '..\MF6InputReader\Mf6.WelFileReaderUnit.pas',
-  frmSelectFlowModelUnit in 'frmSelectFlowModelUnit.pas' {frmSelectFlowModel}
-  { $ENDIF}
-  ;
+  frmSelectFlowModelUnit in 'frmSelectFlowModelUnit.pas' {frmSelectFlowModel},
+  Modflow6ModelImporter in 'Modflow6ModelImporter.pas';
 
 {$R *.res}
 

@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, frameGridUnit,
   Vcl.StdCtrls, Vcl.Mask, JvExMask, JvToolEdit, Vcl.ExtCtrls, Vcl.Buttons,
-  System.IOUtils, System.UITypes;
+  System.IOUtils, System.UITypes, Vcl.Grids;
 
 type
   TfrmImportModflow6 = class(TfrmCustomGoPhast)
@@ -24,12 +24,16 @@ type
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure frameTransportNameFilesGridExit(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     procedure Initialize;
     { Private declarations }
   public
     { Public declarations }
   end;
+
+//var
+//  frmImportModflow6: TfrmImportModflow6;
 
 implementation
 
@@ -86,6 +90,12 @@ begin
   finally
     NameFiles.Free;
   end;
+end;
+
+procedure TfrmImportModflow6.FormActivate(Sender: TObject);
+begin
+  inherited;
+//  frameTransportNameFiles.Grid.Options := frameTransportNameFiles.Grid.Options + [goAlwaysShowEditor];
 end;
 
 procedure TfrmImportModflow6.FormCreate(Sender: TObject);

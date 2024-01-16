@@ -4,13 +4,13 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
   TGhbOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
-    AUXMULTNAME: string;
+    FAUXILIARY: TStringList;
+    FAUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
@@ -19,11 +19,17 @@ type
     Obs6_FileNames: TStringList;
     MOVER: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
+    property AUXMULTNAME: string read FAUXMULTNAME;
+    function IndexOfAUXILIARY(const AName: string): Integer;
   end;
 
   TGhbDimensions = class(TCustomMf6Persistent)
@@ -35,17 +41,33 @@ type
   end;
 
   TGhbTimeItem = class(TObject)
-    cellid: TCellId;
-    bhead: TMf6BoundaryValue;
-    cond: TMf6BoundaryValue;
-    aux: TList<TMf6BoundaryValue>;
-    boundname: string;
+  private
+    Fcellid: TCellId;
+    Fbhead: TMf6BoundaryValue;
+    Fcond: TMf6BoundaryValue;
+    Faux: TList<TMf6BoundaryValue>;
+    Fboundname: string;
+    FId: Integer;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: integer;
   public
     constructor Create;
     destructor Destroy; override;
+    function Keystring: string;
+    property CellId: TCellId read Fcellid;
+    property BHead: TMf6BoundaryValue read Fbhead;
+    property Cond: TMf6BoundaryValue read Fcond;
+    property Count: integer read GetCount;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
+    property BoundName: string read Fboundname;
+    // Id is used in the MVR package;
+    property Id: Integer read FId;
   end;
 
-  TGhbTimeItemList = TObjectList<TGhbTimeItem>;
+  TGhbTimeItemList = class(TObjectList<TGhbTimeItem>)
+    procedure Sort;
+    function SameCells(OtherList: TGhbTimeItemList): Boolean;
+  end;
 
   TGhbPeriod = class(TCustomMf6Persistent)
   private
@@ -53,11 +75,16 @@ type
     FCells: TGhbTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
+    function GetCell(Index: Integer): TGhbTimeItem;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TGhbTimeItem read GetCell; default;
   end;
 
   TGhbPeriodList = TObjectList<TGhbPeriod>;
@@ -69,10 +96,23 @@ type
     FPeriods: TGhbPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TGhbPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TGhbOptions read FOptions;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TGhbPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 
@@ -85,26 +125,40 @@ uses
 
 constructor TGhbOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
-
 end;
 
 destructor TGhbOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
 end;
 
+function TGhbOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  result := FAUXILIARY[Index];
+end;
+
+function TGhbOptions.GetCount: Integer;
+begin
+  result := FAUXILIARY.Count;
+end;
+
+function TGhbOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  result := FAUXILIARY.IndexOf(AName)
+end;
+
 procedure TGhbOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   BOUNDNAMES := False;
@@ -172,14 +226,14 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if (FSplitter[0] = 'AUXMULTNAME')
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME := FSplitter[1];
+      FAUXMULTNAME := FSplitter[1];
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -209,17 +263,65 @@ end;
 
 constructor TGhbTimeItem.Create;
 begin
-  cellid.Initialize;
-  bhead.Initialize;
-  cond.Initialize;
-  aux := TList<TMf6BoundaryValue>.Create;
-  boundname := '';
+  Fcellid.Initialize;
+  Fbhead.Initialize;
+  Fcond.Initialize;
+  Faux := TList<TMf6BoundaryValue>.Create;
+  Fboundname := '';
 end;
 
 destructor TGhbTimeItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TGhbTimeItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  Result := Faux[Index];
+end;
+
+function TGhbTimeItem.GetCount: integer;
+begin
+  Result := Faux.Count;
+end;
+
+function TGhbTimeItem.Keystring: string;
+var
+  AuxIndex: Integer;
+  AnAux: TMf6BoundaryValue;
+begin
+  result := '';
+  if Fbhead.ValueType = vtNumeric then
+  begin
+    result := result + ' Num';
+  end
+  else
+  begin
+    result := result + UpperCase(Fbhead.StringValue);
+  end;
+
+  if Fcond.ValueType = vtNumeric then
+  begin
+    result := result + ' Num';
+  end
+  else
+  begin
+    result := result + UpperCase(Fcond.StringValue);
+  end;
+
+  for AuxIndex := 0 to Faux.Count - 1 do
+  begin
+    AnAux := Faux[AuxIndex];
+    if AnAux.ValueType = vtNumeric then
+    begin
+      result := result + ' Num';
+    end
+    else
+    begin
+      result := result + UpperCase(AnAux.StringValue);
+    end;
+  end;
 end;
 
 { TGhbDimensions }
@@ -281,6 +383,16 @@ begin
   inherited;
 end;
 
+function TGhbPeriod.GetCell(Index: Integer): TGhbTimeItem;
+begin
+  result := FCells[Index];
+end;
+
+function TGhbPeriod.GetCount: Integer;
+begin
+  result := FCells.Count;
+end;
+
 procedure TGhbPeriod.Initialize;
 begin
   inherited;
@@ -328,28 +440,28 @@ begin
       end
       else if FSplitter.Count >= NumberOfColumns then
       begin
-        if ReadCellID(Cell.CellId, 0, DimensionCount) then
+        if ReadCellID(Cell.Fcellid, 0, DimensionCount) then
         begin
-          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.bhead.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.Fbhead.NumericValue) then
           begin
-            Cell.bhead.ValueType := vtNumeric;
+            Cell.Fbhead.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.bhead.ValueType := vtString;
+            Cell.Fbhead.ValueType := vtString;
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Cell.bhead.StringValue := FSplitter[DimensionCount];
+            Cell.Fbhead.StringValue := FSplitter[DimensionCount];
           end;
 
-          if TryFortranStrToFloat(FSplitter[DimensionCount+1], Cell.cond.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[DimensionCount+1], Cell.Fcond.NumericValue) then
           begin
-            Cell.cond.ValueType := vtNumeric;
+            Cell.Fcond.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.cond.ValueType := vtString;
+            Cell.Fcond.ValueType := vtString;
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Cell.cond.StringValue := FSplitter[DimensionCount+1];
+            Cell.Fcond.StringValue := FSplitter[DimensionCount+1];
           end;
 
 
@@ -368,13 +480,14 @@ begin
               Aux.StringValue := FSplitter[StartIndex];
             end;
             Inc(StartIndex);
-            Cell.aux.Add(Aux);
+            Cell.Faux.Add(Aux);
           end;
           if BOUNDNAMES and (FSplitter.Count >= NumberOfColumns+1) then
           begin
-            Cell.boundname := FSplitter[StartIndex];
+            Cell.Fboundname := FSplitter[StartIndex];
           end;
           FCells.Add(Cell);
+          Cell.FId := FCells.Count;
           Cell:= nil;
         end
         else
@@ -418,6 +531,36 @@ begin
   inherited;
 end;
 
+function TGhb.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TGhb.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TGhb.GetPeriod(Index: Integer): TGhbPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TGhb.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count
+end;
+
+function TGhb.GetTimeSeries(Index: Integer): TPackage;
+begin
+  Result := FTimeSeriesPackages[Index];
+end;
+
+function TGhb.GetTimeSeriesCount: Integer;
+begin
+  Result := FTimeSeriesPackages.Count;
+end;
+
 procedure TGhb.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
@@ -459,7 +602,7 @@ begin
           APeriod := TGhbPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
-          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,
+          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
             FOptions.BOUNDNAMES);
         end
         else
@@ -505,6 +648,49 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
+end;
+
+{ TGhbTimeItemList }
+
+function TGhbTimeItemList.SameCells(OtherList: TGhbTimeItemList): Boolean;
+var
+  index: Integer;
+begin
+  Result := Count = OtherList.Count;
+  if Result then
+  begin
+    for index := 0 to Count - 1 do
+    begin
+      Result := Items[index].Fcellid.SameLocation(OtherList.Items[index].Fcellid);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TGhbTimeItemList.Sort;
+begin
+  inherited Sort(
+    TComparer<TGhbTimeItem>.Construct(
+      function(const Left, Right: TGhbTimeItem): Integer
+      begin
+        Result := AnsiCompareText(Left.Fboundname, Right.Fboundname);
+        if Result = 0 then
+        begin
+          result := Left.Fcellid.Layer - Right.Fcellid.Layer;
+          if Result = 0 then
+          begin
+            result := Left.Fcellid.Row - Right.Fcellid.Row;
+            if Result = 0 then
+            begin
+              result := Left.Fcellid.column - Right.Fcellid.column;
+            end;
+          end;
+        end;
+      end
+    ));
 end;
 
 end.
