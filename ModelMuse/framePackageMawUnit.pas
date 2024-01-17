@@ -17,6 +17,8 @@ type
     rdeShutDownKappa: TRbwDataEntry;
     lblShutDownTheta: TLabel;
     lblShutDownKappa: TLabel;
+    cbBudgetCsv: TCheckBox;
+    cbFlowCorrection: TCheckBox;
   private
     { Private declarations }
   public
@@ -43,8 +45,10 @@ begin
   inherited;
   MawPackage := Package as TMawPackage;
   cbPrintHeads.Checked := MawPackage.PrintHead;
-  cbSaveHeads.Checked := MawPackage.SaveMnwHeads;
-  cbSaveFlows.Checked := MawPackage.SaveMnwFlows;
+  cbSaveHeads.Checked := MawPackage.SaveMawHeads;
+  cbSaveFlows.Checked := MawPackage.SaveMawFlows;
+  cbBudgetCsv.Checked := MawPackage.SaveBudgetCsv;
+  cbFlowCorrection.Checked := MawPackage.FlowCorrection;
   cbIncludeWellStorage.Checked := MawPackage.IncludeWellStorage;
   rdeShutDownTheta.RealValue := MawPackage.ShutDownTheta;
   rdeShutDownKappa.RealValue := MawPackage.ShutDownKappa;
@@ -57,8 +61,10 @@ begin
   inherited;
   MawPackage := Package as TMawPackage;
   MawPackage.PrintHead := cbPrintHeads.Checked;
-  MawPackage.SaveMnwHeads := cbSaveHeads.Checked;
-  MawPackage.SaveMnwFlows := cbSaveFlows.Checked;
+  MawPackage.SaveMawHeads := cbSaveHeads.Checked;
+  MawPackage.SaveMawFlows := cbSaveFlows.Checked;
+  MawPackage.SaveBudgetCsv := cbBudgetCsv.Checked;
+  MawPackage.FlowCorrection := cbFlowCorrection.Checked;
   MawPackage.IncludeWellStorage := cbIncludeWellStorage.Checked;
   MawPackage.ShutDownTheta := rdeShutDownTheta.RealValue;
   MawPackage.ShutDownKappa := rdeShutDownKappa.RealValue;

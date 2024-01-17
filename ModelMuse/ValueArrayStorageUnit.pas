@@ -2,7 +2,7 @@ unit ValueArrayStorageUnit;
 
 interface
 
-uses Classes, RbwParser;
+uses Classes, RbwParser, System.Generics.Collections;
 
 type
   TValueArrayStorage = class(TPersistent)
@@ -77,6 +77,8 @@ type
     property Name: string read FName write SetName;
     property Values: TValueArrayStorage read FValues write SetValues;
   end;
+
+  TValueArrayItemList = TList<TValueArrayItem>;
 
   TValueCollection = class(TCollection)
   private

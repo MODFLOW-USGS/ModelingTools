@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.IOUtils,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
    TRealOption = record
@@ -248,7 +248,9 @@ type
     procedure Initialize;
   end;
 
-  TNumberedItemList = TList<TNumberedItem>;
+  TNumberedItemList = class(TList<TNumberedItem>)
+    procedure Sort;
+  end;
 
   TExtendedList = TList<Extended>;
 
@@ -1783,6 +1785,23 @@ begin
     Stream := FOriginalStream;
     FOriginalStream := nil;
   end;
+end;
+
+{ TNumberedItemList }
+
+procedure TNumberedItemList.Sort;
+begin
+  inherited Sort(
+    TComparer<TNumberedItem>.Construct(
+      function(const Left, Right: TNumberedItem): Integer
+      begin
+        result := Left.IdNumber - Right.IdNumber;
+        if result = 0 then
+        begin
+          Result := AnsiCompareText(Left.Name, Right.Name);
+        end;
+      end
+    ));
 end;
 
 end.

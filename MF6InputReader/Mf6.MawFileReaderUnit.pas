@@ -4,35 +4,50 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
   TMawOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
+    FAUXILIARY: TStringList;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
-    PRINT_HEAD: Boolean;
+    FPRINT_HEAD: Boolean;
     PRINT_FLOWS: Boolean;
     SAVE_FLOWS: Boolean;
-    HEAD: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
-    NO_WELL_STORAGE: Boolean;
-    FLOW_CORRECTION: Boolean;
-    FLOWING_WELLS: Boolean;
-    SHUTDOWN_THETA: TRealOption;
-    SHUTDOWN_KAPPA: TRealOption;
-    MAW_FLOW_REDUCE_CSV: Boolean;
+    FHEAD: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
+    FNO_WELL_STORAGE: Boolean;
+    FFLOW_CORRECTION: Boolean;
+    FFLOWING_WELLS: Boolean;
+    FSHUTDOWN_THETA: TRealOption;
+    FSHUTDOWN_KAPPA: TRealOption;
+    FMAW_FLOW_REDUCE_CSV: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     MOVER: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
+    function IndexOfAUXILIARY(const AName: string): Integer;
+    property HEAD: Boolean read FHEAD;
+    property PRINT_HEAD: Boolean read FPRINT_HEAD;
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
+    property NO_WELL_STORAGE: Boolean read FNO_WELL_STORAGE;
+    property FLOW_CORRECTION: Boolean read FFLOW_CORRECTION;
+    property FLOWING_WELLS: Boolean read FFLOWING_WELLS;
+    property SHUTDOWN_THETA: TRealOption read FSHUTDOWN_THETA;
+    property SHUTDOWN_KAPPA: TRealOption read FSHUTDOWN_KAPPA;
+    property MAW_FLOW_REDUCE_CSV: Boolean read FMAW_FLOW_REDUCE_CSV;
   end;
 
   TMawDimensions = class(TCustomMf6Persistent)
@@ -45,20 +60,33 @@ type
 
   TMawPackageItem = class(TObject)
   private
-    wellno: Integer;
-    radius: Extended;
-    bottom: Extended;
-    strt: Extended;
-    condeqn: string;
-    ngwfnodes: Integer;
-    aux: TBoundaryValueList;
-    boundname: string;
+    Fwellno: Integer;
+    Fradius: Extended;
+    Fbottom: Extended;
+    Fstrt: Extended;
+    Fcondeqn: string;
+    Fngwfnodes: Integer;
+    Faux: TBoundaryValueList;
+    Fboundname: string;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: Integer;
   public
     constructor Create;
     destructor Destroy; override;
+    property wellno: Integer read Fwellno;
+    property radius: Extended read Fradius;
+    property bottom: Extended read Fbottom;
+    property strt: Extended read Fstrt;
+    property condeqn: string read Fcondeqn;
+    property ngwfnodes: Integer read Fngwfnodes;
+    property Count: Integer read GetCount;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux;
+    property Boundname: string read Fboundname;
   end;
 
-  TMawPackageItemList = TObjectList<TMawPackageItem>;
+  TMawPackageItemList = Class(TObjectList<TMawPackageItem>)
+    procedure Sort;
+  End;
 
   TMawPackageData = class(TCustomMf6Persistent)
   private
@@ -73,28 +101,43 @@ type
   end;
 
   TMawConnectionItem = record
-    wellno: Integer;
-    icon: Integer;
-    cellid: TCellId;
-    scrn_top: Extended;
-    scrn_bot: Extended;
-    hk_skin: Extended;
-    radius_skin: Extended;
+  private
+    Fwellno: Integer;
+    Ficon: Integer;
+    Fcellid: TCellId;
+    Fscrn_top: Extended;
+    Fscrn_bot: Extended;
+    Fhk_skin: Extended;
+    Fradius_skin: Extended;
     procedure Initialize;
+  public
+    property wellno: Integer read Fwellno;
+    property icon: Integer read Ficon;
+    property CellID: TCellId read Fcellid;
+    property scrn_top: Extended read Fscrn_top;
+    property scrn_bot: Extended read Fscrn_bot;
+    property hk_skin: Extended read Fhk_skin;
+    property radius_skin: Extended read Fradius_skin;
   end;
 
-  TMawConnectionItemList = TList<TMawConnectionItem>;
+  TMawConnectionItemList = class(TList<TMawConnectionItem>)
+    procedure Sort;
+  end;
 
   TMawConnectionData = class(TCustomMf6Persistent)
   private
     FItems: TMawConnectionItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TMawConnectionItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TMawConnectionItem read GetItem; default;
   end;
 
   TMawPeriod = class(TCustomMf6Persistent)
@@ -102,11 +145,16 @@ type
     IPER: Integer;
     FItems: TNumberedItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TNumberedItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPER;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TNumberedItem read GetItem; default;
   end;
 
   TMawPeriodList = TObjectList<TMawPeriod>;
@@ -120,10 +168,25 @@ type
     FPeriods: TMawPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TMawPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    property Options: TMawOptions read FOptions;
+    property Connections: TMawConnectionData read FConnections;
+    property PackageData: TMawPackageData read FPackageData;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TMawPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 implementation
@@ -135,8 +198,8 @@ uses
 
 constructor TMawOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -144,30 +207,45 @@ end;
 
 destructor TMawOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
 end;
 
+function TMawOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  result := FAUXILIARY[Index];
+end;
+
+function TMawOptions.GetCount: Integer;
+begin
+  result := FAUXILIARY.Count;
+end;
+
+function TMawOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  result := FAUXILIARY.IndexOf(AName)
+end;
+
 procedure TMawOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   BOUNDNAMES := False;
   PRINT_INPUT := False;
-  PRINT_HEAD := False;
+  FPRINT_HEAD := False;
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
-  HEAD := False;
-  BUDGET := False;
-  BUDGETCSV := False;
-  NO_WELL_STORAGE := False;
-  FLOW_CORRECTION := False;
-  FLOWING_WELLS := False;
-  SHUTDOWN_THETA.Initialize;
-  SHUTDOWN_KAPPA.Initialize;
-  MAW_FLOW_REDUCE_CSV := False;
+  FHEAD := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
+  FNO_WELL_STORAGE := False;
+  FFLOW_CORRECTION := False;
+  FFLOWING_WELLS := False;
+  FSHUTDOWN_THETA.Initialize;
+  FSHUTDOWN_KAPPA.Initialize;
+  FMAW_FLOW_REDUCE_CSV := False;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   MOVER := False;
@@ -214,7 +292,7 @@ begin
     end
     else if FSplitter[0] = 'PRINT_HEAD' then
     begin
-      PRINT_HEAD := True;
+      FPRINT_HEAD := True;
     end
     else if FSplitter[0] = 'PRINT_FLOWS' then
     begin
@@ -228,47 +306,47 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      HEAD := True;
+      FHEAD := True;
     end
     else if (FSplitter[0] = 'BUDGET')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else if FSplitter[0] = 'NO_WELL_STORAGE' then
     begin
-      NO_WELL_STORAGE := True;
+      FNO_WELL_STORAGE := True;
     end
     else if FSplitter[0] = 'FLOW_CORRECTION' then
     begin
-      FLOW_CORRECTION := True;
+      FFLOW_CORRECTION := True;
     end
     else if FSplitter[0] = 'FLOWING_WELLS' then
     begin
-      FLOWING_WELLS := True;
+      FFLOWING_WELLS := True;
     end
     else if (FSplitter[0] = 'SHUTDOWN_THETA') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], SHUTDOWN_THETA.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FSHUTDOWN_THETA.Value) then
     begin
-      SHUTDOWN_THETA.Used := True;
+      FSHUTDOWN_THETA.Used := True;
     end
     else if (FSplitter[0] = 'SHUTDOWN_KAPPA') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], SHUTDOWN_KAPPA.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FSHUTDOWN_KAPPA.Value) then
     begin
-      SHUTDOWN_KAPPA.Used := True;
+      FSHUTDOWN_KAPPA.Used := True;
     end
     else if (FSplitter[0] = 'MAW_FLOW_REDUCE_CSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      MAW_FLOW_REDUCE_CSV := True;
+      FMAW_FLOW_REDUCE_CSV := True;
     end
     else if (FSplitter[0] = 'AUXILIARY')
       and (FSplitter.Count >= 2) then
@@ -277,7 +355,7 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if (FSplitter[0] = 'TS6')
@@ -357,20 +435,30 @@ end;
 
 constructor TMawPackageItem.Create;
 begin
-  aux := TBoundaryValueList.Create;
-  wellno := 0;
-  radius := 0;
-  bottom := 0;
-  strt := 0;
-  condeqn := '';
-  ngwfnodes := 0;
-  boundname := '';
+  Faux := TBoundaryValueList.Create;
+  Fwellno := 0;
+  Fradius := 0;
+  Fbottom := 0;
+  Fstrt := 0;
+  Fcondeqn := '';
+  Fngwfnodes := 0;
+  Fboundname := '';
 end;
 
 destructor TMawPackageItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TMawPackageItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  result := Faux[Index];
+end;
+
+function TMawPackageItem.GetCount: Integer;
+begin
+  result := Faux.Count;
 end;
 
 { TMawPackageData }
@@ -421,6 +509,7 @@ begin
 
     if ReadEndOfSection(ALine, ErrorLine, 'PACKAGEDATA', Unhandled) then
     begin
+      FItems.Sort;
       Exit;
     end;
 
@@ -432,14 +521,14 @@ begin
         // do nothing
       end
       else if (FSplitter.Count >= NumberOfItems)
-        and TryStrToInt(FSplitter[0],Item.wellno)
-        and TryFortranStrToFloat(FSplitter[1],Item.radius)
-        and TryFortranStrToFloat(FSplitter[2],Item.bottom)
-        and TryFortranStrToFloat(FSplitter[3],Item.strt)
-        and TryStrToInt(FSplitter[5],Item.ngwfnodes)
+        and TryStrToInt(FSplitter[0],Item.Fwellno)
+        and TryFortranStrToFloat(FSplitter[1],Item.Fradius)
+        and TryFortranStrToFloat(FSplitter[2],Item.Fbottom)
+        and TryFortranStrToFloat(FSplitter[3],Item.Fstrt)
+        and TryStrToInt(FSplitter[5],Item.Fngwfnodes)
         then
       begin
-        Item.condeqn := FSplitter[4];
+        Item.Fcondeqn := FSplitter[4];
         ItemStart := 6;
         for AuxIndex := 0 to naux - 1 do
         begin
@@ -454,12 +543,12 @@ begin
             AValue.ValueType := vtString;
             AValue.StringValue := FSplitter[ItemStart]
           end;
-          Item.aux.Add(AVAlue);
+          Item.Faux.Add(AVAlue);
           Inc(ItemStart);
         end;
         if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
         begin
-          Item.boundname := FSplitter[ItemStart];
+          Item.Fboundname := FSplitter[ItemStart];
         end;
         FItems.Add(Item);
         Item := nil;
@@ -488,6 +577,16 @@ destructor TMawConnectionData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TMawConnectionData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TMawConnectionData.GetItem(Index: Integer): TMawConnectionItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TMawConnectionData.Initialize;
@@ -520,6 +619,7 @@ begin
 
     if ReadEndOfSection(ALine, ErrorLine, 'CONNECTIONDATA', Unhandled) then
     begin
+      FItems.Sort;
       Exit;
     end;
 
@@ -530,13 +630,13 @@ begin
       // do nothing
     end
     else if (FSplitter.Count >= 6 + DimensionCount)
-      and TryStrToInt(FSplitter[0],Item.wellno)
-      and TryStrToInt(FSplitter[1],Item.icon)
-      and ReadCellID(Item.cellid, 2, DimensionCount)
-      and TryFortranStrToFloat(FSplitter[2+DimensionCount],Item.scrn_top)
-      and TryFortranStrToFloat(FSplitter[3+DimensionCount],Item.scrn_bot)
-      and TryFortranStrToFloat(FSplitter[4+DimensionCount],Item.hk_skin)
-      and TryFortranStrToFloat(FSplitter[5+DimensionCount],Item.radius_skin)
+      and TryStrToInt(FSplitter[0],Item.Fwellno)
+      and TryStrToInt(FSplitter[1],Item.Ficon)
+      and ReadCellID(Item.Fcellid, 2, DimensionCount)
+      and TryFortranStrToFloat(FSplitter[2+DimensionCount],Item.Fscrn_top)
+      and TryFortranStrToFloat(FSplitter[3+DimensionCount],Item.Fscrn_bot)
+      and TryFortranStrToFloat(FSplitter[4+DimensionCount],Item.Fhk_skin)
+      and TryFortranStrToFloat(FSplitter[5+DimensionCount],Item.Fradius_skin)
       then
     begin
       FItems.Add(Item);
@@ -553,13 +653,13 @@ end;
 
 procedure TMawConnectionItem.Initialize;
 begin
-  wellno := 0;
-  icon := 0;
-  cellid.Initialize;
-  scrn_top := 0;
-  scrn_bot := 0;
-  hk_skin := 0;
-  radius_skin := 0;
+  Fwellno := 0;
+  Ficon := 0;
+  Fcellid.Initialize;
+  Fscrn_top := 0;
+  Fscrn_bot := 0;
+  Fhk_skin := 0;
+  Fradius_skin := 0;
 end;
 
 { TMawPeriod }
@@ -575,6 +675,16 @@ destructor TMawPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TMawPeriod.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TMawPeriod.GetItem(Index: Integer): TNumberedItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TMawPeriod.Initialize;
@@ -604,6 +714,7 @@ begin
 
     if ReadEndOfSection(ALine, ErrorLine, 'PERIOD', Unhandled) then
     begin
+      FItems.Sort;
       Exit;
     end;
 
@@ -728,6 +839,36 @@ begin
   inherited;
 end;
 
+function TMaw.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TMaw.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TMaw.GetPeriod(Index: Integer): TMawPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TMaw.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TMaw.GetTimeSeries(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TMaw.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
+end;
+
 procedure TMaw.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
@@ -764,7 +905,7 @@ begin
       end
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
-        FPackageData.Read(Stream, Unhandled, FOptions.AUXILIARY.Count,
+        FPackageData.Read(Stream, Unhandled, FOptions.FAUXILIARY.Count,
           FOptions.BOUNDNAMES);
       end
       else if FSplitter[1] ='CONNECTIONDATA' then
@@ -823,6 +964,36 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled);
   end;
+end;
+
+{ TMawPackageItemList }
+
+procedure TMawPackageItemList.Sort;
+begin
+  inherited Sort(
+    TComparer<TMawPackageItem>.Construct(
+      function(const Left, Right: TMawPackageItem): Integer
+      begin
+        result := Left.Fwellno - Right.Fwellno;
+      end
+    ));
+end;
+
+{ TMawConnectionItemList }
+
+procedure TMawConnectionItemList.Sort;
+begin
+  inherited Sort(
+    TComparer<TMawConnectionItem>.Construct(
+      function(const Left, Right: TMawConnectionItem): Integer
+      begin
+        result := Left.Fwellno - Right.Fwellno;
+        if result = 0 then
+        begin
+          result := Left.Ficon - Right.Ficon;
+        end;
+      end
+    ));
 end;
 
 end.

@@ -5056,7 +5056,17 @@ begin
         FlowObs.FName := Mf6Obs.Name;
         FlowObs.FMf6Obs := Mf6Obs;
         FlowObs.FBoundName := Mf6Obs.Name;
+        FlowObsLocations.Add(FlowObs);
 
+        if IsMf6ToMvrObservation(ScreenObject) then
+        begin
+          ToMvrFlowObsLocations.Add(FlowObs);
+        end;
+
+        if IsMf6ToWellReductionObservation(ScreenObject) then
+        begin
+          WellReductionFlowObsLocations.Add(FlowObs);
+        end;
       end;
     end;
 

@@ -28,6 +28,8 @@ type
   private
     procedure Initialize;
     { Private declarations }
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     { Public declarations }
   end;
@@ -90,6 +92,13 @@ begin
   finally
     NameFiles.Free;
   end;
+end;
+
+procedure TfrmImportModflow6.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
+  Params.WndParent := 0;
 end;
 
 procedure TfrmImportModflow6.FormActivate(Sender: TObject);

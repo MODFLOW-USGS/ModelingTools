@@ -2970,10 +2970,10 @@ Type
   TMawPackage = class(TModflowPackageSelection)
   private
     FStoredShutDownTheta: TRealStorage;
-    FSaveMnwHeads: Boolean;
+    FSaveMawHeads: Boolean;
     FIncludeWellStorage: Boolean;
     FStoredShutDownKappa: TRealStorage;
-    FSaveMnwFlows: Boolean;
+    FSaveMawFlows: Boolean;
     FPrintHead: Boolean;
     FFlowingWellElevation: TModflowBoundaryDisplayTimeList;
     FWell_Head: TModflowBoundaryDisplayTimeList;
@@ -2988,13 +2988,14 @@ Type
     FDensity: TModflowBoundaryDisplayTimeList;
     FSaveGwtBudget: Boolean;
     FSaveGwtConcentration: Boolean;
-    FSaveGwtBudgetCsv: Boolean;
+    FSaveBudgetCsv: Boolean;
     FGwtSpecifiedConc: TMfBoundDispObjectList;
     FGwtRate: TMfBoundDispObjectList;
+    FFlowCorrection: Boolean;
     procedure SetIncludeWellStorage(const Value: Boolean);
     procedure SetPrintHead(const Value: Boolean);
-    procedure SetSaveMnwFlows(const Value: Boolean);
-    procedure SetSaveMnwHeads(const Value: Boolean);
+    procedure SetSaveMawFlows(const Value: Boolean);
+    procedure SetSaveMawHeads(const Value: Boolean);
     procedure SetShutDownKappa(const Value: double);
     procedure SetShutDownTheta(const Value: double);
     procedure SetStoredShutDownKappa(const Value: TRealStorage);
@@ -3026,7 +3027,7 @@ Type
       NewUseList: TStringList);
     procedure SetSaveGwtBudget(const Value: Boolean);
     procedure SetSaveGwtConcentration(const Value: Boolean);
-    procedure SetSaveGwtBudgetCsv(const Value: Boolean);
+    procedure SetSaveBudgetCsv(const Value: Boolean);
 
 
     procedure GetGwtSpecConcUseList(Sender: TObject; NewUseList: TStringList);
@@ -3034,6 +3035,7 @@ Type
     procedure GetMawUseList(DataIndex: integer; NewUseList: TStringList;
       const DisplayName: string);
     function DensityUsed(Sender: TObject): boolean;
+    procedure SetFlowCorrection(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -3075,9 +3077,18 @@ Type
     // PRINT_HEAD
     property PrintHead: Boolean read FPrintHead write SetPrintHead;
     // [HEAD FILEOUT <headfile>]
-    property SaveMnwHeads: Boolean read FSaveMnwHeads write SetSaveMnwHeads;
+    property SaveMawHeads: Boolean read FSaveMawHeads write SetSaveMawHeads;
+    property SaveMnwHeads: Boolean read FSaveMawHeads write SetSaveMawHeads stored False;
     // [BUDGET FILEOUT <budgetfile>]
-    property SaveMnwFlows: Boolean read FSaveMnwFlows write SetSaveMnwFlows;
+    property SaveMawFlows: Boolean read FSaveMawFlows write SetSaveMawFlows;
+    property SaveMnwFlows: Boolean read FSaveMawFlows write SetSaveMawFlows stored False;
+    // [BUDGETCSV FILEOUT <budgetcsvfile>]
+    property SaveBudgetCsv: Boolean read FSaveBudgetCsv write SetSaveBudgetCsv
+      stored True;
+    property SaveGwtBudgetCsv: Boolean read FSaveBudgetCsv write SetSaveBudgetCsv
+      stored False;
+    // FLOW_CORRECTION
+    property FlowCorrection: Boolean read FFlowCorrection write SetFlowCorrection stored True;
     // inverse of NO_WELL_STORAGE
     property IncludeWellStorage: Boolean read FIncludeWellStorage write SetIncludeWellStorage;
     // [SHUTDOWN_THETA <shutdown_theta>]
@@ -3089,9 +3100,6 @@ Type
     // [CONCENTRATION FILEOUT <concfile>]
     property SaveGwtConcentration: Boolean read FSaveGwtConcentration
       write SetSaveGwtConcentration
-      stored True;
-    // [BUDGETCSV FILEOUT <budgetcsvfile>]
-    property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
       stored True;
   end;
 
@@ -22305,7 +22313,7 @@ begin
   FWriteConvergenceData := True;
 
   // GWT
-  FSaveGwtBudgetCsv := True;
+  FSaveGwtBudgetCsv := False;
   FSaveGwtBudget := True;
   FSaveGwtConcentration := True;
 end;
@@ -22434,12 +22442,13 @@ begin
     ShutDownTheta := MawSource.ShutDownTheta;
     ShutDownKappa := MawSource.ShutDownKappa;
     PrintHead := MawSource.PrintHead;
-    SaveMnwHeads := MawSource.SaveMnwHeads;
-    SaveMnwFlows := MawSource.SaveMnwFlows;
+    SaveMawHeads := MawSource.SaveMawHeads;
+    SaveMawFlows := MawSource.SaveMawFlows;
     IncludeWellStorage := MawSource.IncludeWellStorage;
     SaveGwtBudget := MawSource.SaveGwtBudget;
     SaveGwtConcentration := MawSource.SaveGwtConcentration;
-    SaveGwtBudgetCsv := MawSource.SaveGwtBudgetCsv;
+    SaveBudgetCsv := MawSource.SaveBudgetCsv;
+    FlowCorrection := MawSource.FlowCorrection;
   end;
   inherited;
 
@@ -22841,13 +22850,14 @@ begin
   ShutDownTheta := 0.7;
   ShutDownKappa := 0.0001;
   PrintHead := True;
-  SaveMnwHeads := True;
-  SaveMnwFlows := True;
-  IncludeWellStorage := True;
+  SaveMawHeads := True;
+  SaveMawFlows := True;
+  FIncludeWellStorage := True;
+  FFlowCorrection := False;
   // GWT
-  FSaveGwtBudgetCsv := True;
-  FSaveGwtBudget := True;
   FSaveGwtConcentration := True;
+  FSaveBudgetCsv := True;
+  FSaveGwtBudget := True;
 end;
 
 procedure TMawPackage.InvalidateConcentrations;
@@ -22867,6 +22877,11 @@ begin
   end;
 end;
 
+procedure TMawPackage.SetFlowCorrection(const Value: Boolean);
+begin
+  SetBooleanProperty(FFlowCorrection, Value);
+end;
+
 procedure TMawPackage.SetIncludeWellStorage(const Value: Boolean);
 begin
   SetBooleanProperty(FIncludeWellStorage, Value);
@@ -22882,9 +22897,9 @@ begin
   SetBooleanProperty(FSaveGwtBudget, Value);
 end;
 
-procedure TMawPackage.SetSaveGwtBudgetCsv(const Value: Boolean);
+procedure TMawPackage.SetSaveBudgetCsv(const Value: Boolean);
 begin
-  SetBooleanProperty(FSaveGwtBudgetCsv, Value);
+  SetBooleanProperty(FSaveBudgetCsv, Value);
 end;
 
 procedure TMawPackage.SetSaveGwtConcentration(const Value: Boolean);
@@ -22892,14 +22907,14 @@ begin
   SetBooleanProperty(FSaveGwtConcentration, Value);
 end;
 
-procedure TMawPackage.SetSaveMnwFlows(const Value: Boolean);
+procedure TMawPackage.SetSaveMawFlows(const Value: Boolean);
 begin
-  SetBooleanProperty(FSaveMnwFlows, Value);
+  SetBooleanProperty(FSaveMawFlows, Value);
 end;
 
-procedure TMawPackage.SetSaveMnwHeads(const Value: Boolean);
+procedure TMawPackage.SetSaveMawHeads(const Value: Boolean);
 begin
-  SetBooleanProperty(FSaveMnwHeads, Value);
+  SetBooleanProperty(FSaveMawHeads, Value);
 end;
 
 procedure TMawPackage.SetShutDownKappa(const Value: double);

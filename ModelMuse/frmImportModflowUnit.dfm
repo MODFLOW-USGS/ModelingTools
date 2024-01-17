@@ -20,7 +20,7 @@ inherited frmImportModflow: TfrmImportModflow
       487
       105)
     object btnHelp: TBitBtn
-      Left = 210
+      Left = 206
       Top = 4
       Width = 83
       Height = 33
@@ -29,10 +29,10 @@ inherited frmImportModflow: TfrmImportModflow
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 206
+      ExplicitLeft = 202
     end
     object btnOK: TBitBtn
-      Left = 299
+      Left = 295
       Top = 4
       Width = 83
       Height = 33
@@ -42,10 +42,10 @@ inherited frmImportModflow: TfrmImportModflow
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 295
+      ExplicitLeft = 291
     end
     object btnCancel: TBitBtn
-      Left = 388
+      Left = 384
       Top = 4
       Width = 83
       Height = 33
@@ -53,7 +53,7 @@ inherited frmImportModflow: TfrmImportModflow
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 384
+      ExplicitLeft = 380
     end
     object pbProgress: TProgressBar
       Left = 1
@@ -173,7 +173,7 @@ inherited frmImportModflow: TfrmImportModflow
       object fedNameFile: TJvFilenameEdit
         Left = 87
         Top = 72
-        Width = 380
+        Width = 376
         Height = 26
         Filter = 
           'Name files (*.nam, *.mfn, *.modflow.in)|*.nam;*.mfn;*.modflow.in' +
@@ -412,7 +412,7 @@ inherited frmImportModflow: TfrmImportModflow
         object fedHead: TJvFilenameEdit
           Left = 8
           Top = 48
-          Width = 456
+          Width = 452
           Height = 26
           Filter = 
             'Formatted head file (*.fhd)|*.fhd|Binary head file (*.bhd)|*.bhd' +
@@ -420,12 +420,12 @@ inherited frmImportModflow: TfrmImportModflow
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
           Text = ''
-          ExplicitWidth = 452
+          ExplicitWidth = 448
         end
         object fedFlow: TJvFilenameEdit
           Left = 8
           Top = 102
-          Width = 456
+          Width = 452
           Height = 26
           Filter = 
             'Flow Files (*.cbc, *.bud, *.cbb)|*.cbc;*.bud;*.cbb|All files (*.' +
@@ -433,7 +433,7 @@ inherited frmImportModflow: TfrmImportModflow
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 1
           Text = ''
-          ExplicitWidth = 452
+          ExplicitWidth = 448
         end
       end
     end

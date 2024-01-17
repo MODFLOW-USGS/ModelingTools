@@ -107,6 +107,8 @@ type
     procedure ImportRiv(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportGhb(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportRch(Package: TPackage; TransportModels: TModelList);
+    procedure ImportEvt(Package: TPackage; TransportModels: TModelList);
+    procedure ImportMaw(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -134,7 +136,9 @@ uses
   Mf6.SsmFileReaderUnit, ModflowBoundaryUnit, ModflowConstantHeadBoundaryUnit,
   Mf6.WelFileReaderUnit, Mf6.MvrFileReaderUnit, ModflowWellUnit,
   Mf6.DrnFileReaderUnit, ModflowDrnUnit, Mf6.RivFileReaderUnit, ModflowRivUnit,
-  Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit;
+  Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
+  ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
+  ModflowMawUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -144,6 +148,8 @@ resourcestring
   ' specified as a time series.';
   StrModelMuseCanNotApDepth = 'ModelMuse can not apply AUXDEPTHNAME values to dat' +
   'a specified as a time series.';
+  StrModelMuseCanNotSpPetm0 = 'ModelMuse can not specify a separate value fo' +
+  'r petm0 in the EVt package.';
 
 procedure TModflow6Importer.AssignBooleanValuesToCellCenters(
   DataArray: TDataArray; ScreenObject: TScreenObject; ImportedData: TBArray2D);
@@ -697,7 +703,7 @@ begin
                 break;
               end;
             end;
-            Assert(FoundMatch);
+//            Assert(FoundMatch);
             break;
           end;
         end;
@@ -746,6 +752,7 @@ begin
           begin
             ACellList := TChdTimeItemList.Create;
             CellLists.Add(ACellList);
+            KeyStringDictionary.Add(KeyString, ACellList);
           end;
           ACellList.Add(ACell);
         end;
@@ -2407,6 +2414,7 @@ begin
         begin
           ACellList := TMvrDrnTimeItemList.Create;
           CellLists.Add(ACellList);
+          KeyStringDictionary.Add(KeyString, ACellList);
         end;
         ACellList.Add(ACell);
         if MvrUsed then
@@ -2564,6 +2572,619 @@ begin
     ConnectionDictionary.Free;
     CellIds.Free;
     DrnlMvrLinkList.Free;
+  end;
+end;
+
+type
+  TEvtConnection = class(TObject)
+    ScreenObject: TScreenObject;
+    List: TEvtTimeItemList;
+    IFACE: Integer;
+    destructor Destroy; override;
+  end;
+
+  TEvtConnectionObjectList = TObjectList<TEvtConnection>;
+  TEvtConnectionObjectLists = TObjectList<TEvtConnectionObjectList>;
+
+procedure TModflow6Importer.ImportEvt(Package: TPackage;
+  TransportModels: TModelList);
+var
+  Model: TPhastModel;
+  Evt: TEvt;
+  AModel: TModel;
+  APackage: TPackage;
+  ModelIndex: Integer;
+  TransportModel: TTransportNameFile;
+  PackageIndex: Integer;
+  BoundNameObsDictionary: TBoundNameDictionary;
+  CellIdObsDictionary: TCellIdObsDictionary;
+  Ssm: TSsm;
+  TimeSeriesIndex: Integer;
+  TimeSeriesPackage: TPackage;
+  Map: TimeSeriesMap;
+  ObsLists: TObsLists;
+  ObsPackageIndex: Integer;
+  ObsFiles: TObs;
+  SourceIndex: Integer;
+  FoundMatch: Boolean;
+  TransportAuxNames: TStringList;
+  PeriodIndex: Integer;
+  APeriod: TEvtPeriod;
+  CellIndex: Integer;
+  ACell: TEvtTimeItem;
+  IfaceIndex: Integer;
+  KeyStringDictionary: TDictionary<string, TEvtTimeItemList>;
+  CellLists: TObjectList<TEvtTimeItemList>;
+  ACellList: TEvtTimeItemList;
+  Options: TEvtOptions;
+  IFace: Integer;
+  LastTime: Double;
+  Imported_Et: TValueArrayItem;
+  Imported_Et_surf: TValueArrayItem;
+  Imported_Et_Depth: TValueArrayItem;
+  DepthFractions: TValueArrayItemList;
+  EdtFractions: TValueArrayItemList;
+  ItemList: TList<TEvtItem>;
+  SurfDepthList: TList<TEtsSurfDepthItem>;
+  StartTime: Double;
+  EvtIndex: Integer;
+  AnItem: TEvtItem;
+  KeyString: string;
+  TimeSeries: string;
+  ImportedTimeSeries: string;
+  ObjectCount: Integer;
+  ObjectIndex: Integer;
+  FirstCell: TEvtTimeItem;
+  BoundName: string;
+  ConnectionObjectLists: TEvtConnectionObjectLists;
+  ConnectionDictionary: TDictionary<string, TEvtConnectionObjectList>;
+  AConnectionList: TEvtConnectionObjectList;
+  ConnectionIndex: Integer;
+  ConnectionItem: TEvtConnection;
+  AScreenObject: TScreenObject;
+  AuxIFACE: TMf6BoundaryValue;
+  AuxIndex: Integer;
+  ChemSpeciesName: string;
+  Aux: TMf6BoundaryValue;
+  GwtAuxIndex: Integer;
+  Values: TValueArrayStorage;
+  CellIds: TCellIdList;
+  AddCells: Boolean;
+  NSEG: Integer;
+  NumIntermediatePoint: Integer;
+  SurfDepthItem: TEtsSurfDepthItem;
+  IntermediateIndex: Integer;
+  ImportedPxdp: TValueArrayItem;
+  ImportedPetm: TValueArrayItem;
+  procedure AddItem(AScreenObject: TScreenObject; ACell: TEvtTimeItem; Period: Integer);
+  var
+    EvtItem: TEvtItem;
+    ImportedName: string;
+    Concentrations: TEvtGwtConcCollection;
+    ChemSpeciesName: string;
+    ConcItem: TGwtConcStringValueItem;
+    GwtAuxIndex: Integer;
+    AuxIndex: Integer;
+    Aux: TMf6BoundaryValue;
+    Imported_Chem: TValueArrayItem;
+    EtsSurfDepthItem: TEtsSurfDepthItem;
+    EtsItem: TEtsStringValueItem;
+    ImportedPxdp: TValueArrayItem;
+    ImportedPetm: TValueArrayItem;
+    IntermediateIndex: Integer;
+  begin
+    EvtItem := AScreenObject.ModflowEtsBoundary.Values.Add as TEvtItem;
+    ItemList.Add(EvtItem);
+    EvtItem.EndTime := LastTime;
+    EvtItem.StartTime := StartTime;
+
+    if ACell.Rate.ValueType = vtNumeric then
+    begin
+      ImportedName := Format('Imported_Et_Period_%d', [Period]);
+      Imported_Et := AScreenObject.ImportedValues.Add;
+      Imported_Et.Name := ImportedName;
+      Imported_Et.Values.DataType := rdtDouble;
+      EvtItem.EvapotranspirationRate := rsObjectImportedValuesR + '("' + Imported_Et.Name + '")';
+    end
+    else
+    begin
+      Imported_Et := nil;
+      TimeSeries := ACell.Rate.StringValue;
+      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      begin
+        Assert(False);
+      end;
+      EvtItem.EvapotranspirationRate := ImportedTimeSeries;
+    end;
+
+    EtsSurfDepthItem := AScreenObject.ModflowEtsBoundary.EtsSurfDepthCollection.Add as TEtsSurfDepthItem;
+    SurfDepthList.Add(EtsSurfDepthItem);
+    EtsSurfDepthItem.EndTime := LastTime;
+    EtsSurfDepthItem.StartTime := StartTime;
+    if ACell.Surf.ValueType = vtNumeric then
+    begin
+      ImportedName := Format('Imported_Et_Surf_Period_%d', [Period]);
+      Imported_Et_surf := AScreenObject.ImportedValues.Add;
+      Imported_Et_surf.Name := ImportedName;
+      Imported_Et_surf.Values.DataType := rdtDouble;
+      EtsSurfDepthItem.EvapotranspirationSurface := rsObjectImportedValuesR + '("' + Imported_Et_surf.Name + '")';
+    end
+    else
+    begin
+      Imported_Et_surf := nil;
+      TimeSeries := ACell.Surf.StringValue;
+      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      begin
+        Assert(False);
+      end;
+      EtsSurfDepthItem.EvapotranspirationSurface := ImportedTimeSeries;
+    end;
+
+    if ACell.Depth.ValueType = vtNumeric then
+    begin
+      ImportedName := Format('Imported_Et_Depth_Period_%d', [Period]);
+      Imported_Et_Depth := AScreenObject.ImportedValues.Add;
+      Imported_Et_Depth.Name := ImportedName;
+      Imported_Et_Depth.Values.DataType := rdtDouble;
+      EtsSurfDepthItem.EvapotranspirationDepth := rsObjectImportedValuesR + '("' + Imported_Et_Depth.Name + '")';
+    end
+    else
+    begin
+      Imported_Et_Depth := nil;
+      TimeSeries := ACell.Depth.StringValue;
+      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      begin
+        Assert(False);
+      end;
+      EtsSurfDepthItem.EvapotranspirationDepth := ImportedTimeSeries;
+    end;
+
+    for IntermediateIndex := 0 to NumIntermediatePoint - 1 do
+    begin
+      EtsItem := EtsSurfDepthItem.DepthFractions.Add as TEtsStringValueItem;
+      if ACell.Pxdp[IntermediateIndex].ValueType = vtNumeric then
+      begin
+        ImportedName := Format('Imported_Pxdp_%d_Period_%d', [IntermediateIndex+1, Period]);
+        ImportedPxdp := AScreenObject.ImportedValues.Add;
+        ImportedPxdp.Name := ImportedName;
+        ImportedPxdp.Values.DataType := rdtDouble;
+        EtsItem.Value := rsObjectImportedValuesR + '("' + ImportedPxdp.Name + '")';
+      end
+      else
+      begin
+        ImportedPxdp := nil;
+        TimeSeries := ACell.Pxdp[IntermediateIndex].StringValue;
+        if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        EtsItem.Value  := ImportedTimeSeries;
+      end;
+      DepthFractions.Add(ImportedPxdp);
+
+      EtsItem := EtsSurfDepthItem.EtFractions.Add as TEtsStringValueItem;
+      if ACell.Petm[IntermediateIndex].ValueType = vtNumeric then
+      begin
+        ImportedName := Format('Imported_Petm_%d_Period_%d', [IntermediateIndex+1, Period]);
+        ImportedPetm := AScreenObject.ImportedValues.Add;
+        ImportedPetm.Name := ImportedName;
+        ImportedPetm.Values.DataType := rdtDouble;
+        EtsItem.Value := rsObjectImportedValuesR + '("' + ImportedPetm.Name + '")';
+      end
+      else
+      begin
+        ImportedPetm := nil;
+        TimeSeries := ACell.Petm[IntermediateIndex].StringValue;
+        if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        EtsItem.Value  := ImportedTimeSeries;
+      end;
+      EdtFractions.Add(ImportedPetm);
+    end;
+
+    if TransportAuxNames.Count > 0 then
+    begin
+      Concentrations := EvtItem.GwtConcentrations;
+      Concentrations.Count := TransportAuxNames.Count;
+      for AuxIndex := 0 to TransportAuxNames.Count - 1 do
+      begin
+        ChemSpeciesName := TransportAuxNames[AuxIndex];
+        ConcItem := Concentrations[AuxIndex];
+
+        GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+        Assert(GwtAuxIndex >= 0);
+        Aux := ACell[GwtAuxIndex];
+        if Aux.ValueType = vtNumeric then
+        begin
+          ImportedName := Format('Imported_%s_Period_%d', [ChemSpeciesName, Period]);
+          Imported_Chem := AScreenObject.ImportedValues.Add;
+          Imported_Chem.Name := ImportedName;
+          Imported_Chem.Values.DataType := rdtDouble;
+          ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+          TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+        end
+        else
+        begin
+          TransportAuxNames.Objects[AuxIndex] := nil;
+          TimeSeries := Aux.StringValue;
+          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          begin
+            Assert(False);
+          end;
+          ConcItem.Value := ImportedTimeSeries;
+        end;
+      end;
+    end;
+  end;
+  procedure CreateObsScreenObject(ACell: TEvtTimeItem);
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    CellId: TCellId;
+    ElementCenter: TDualLocation;
+    APoint: TPoint2D;
+    AScreenObject: TScreenObject;
+  begin
+    Inc(ObjectCount);
+    AScreenObject := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedEvt_Obs_%d', [ObjectCount]);
+    AScreenObject.Name := NewName;
+    AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(AScreenObject);
+    AScreenObject.ElevationCount := ecOne;
+    AScreenObject.SetValuesOfIntersectedCells := True;
+    AScreenObject.EvaluatedAt := eaBlocks;
+    AScreenObject.Visible := False;
+    AScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    AScreenObject.CreateMf6Obs;
+    AScreenObject.Modflow6Obs.Name := ACell.Boundname;
+    AScreenObject.Modflow6Obs.General := [ogEvt];
+
+    CellId := ACell.Cellid;
+    if Model.DisvUsed then
+    begin
+      CellId.Row := 1;
+    end;
+    ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
+    APoint.x := ElementCenter.RotatedLocation.x;
+    APoint.y := ElementCenter.RotatedLocation.y;
+    AScreenObject.AddPoint(APoint, True);
+    AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+
+  end;
+  function CreateScreenObject(ACell: TEvtTimeItem; Period: Integer): TScreenObject;
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    AuxIFACE: TMf6BoundaryValue;
+    BoundName: string;
+    ObsList: TObservationList;
+    AnObs: TObservation;
+    ObsIndex: Integer;
+  begin
+    Inc(ObjectCount);
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedEvt_%d_Period_%d', [ObjectCount, Period]);
+    result.Name := NewName;
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    result.CreateEtsBoundary;
+    if IfaceIndex >= 0 then
+    begin
+      AuxIFACE := ACell[IfaceIndex];
+      Assert(AuxIFACE.ValueType = vtNumeric);
+      IFACE := Round(AuxIFACE.NumericValue);
+    end
+    else
+    begin
+      IFACE := 0;
+    end;
+    result.IFACE := TIface(IFACE+2);
+
+    AddItem(result, ACell, Period);
+
+    BoundName := UpperCase(ACell.Boundname);
+    if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+      result.CreateMf6Obs;
+      for ObsIndex := 0 to ObsList.Count - 1 do
+      begin
+        AnObs := ObsList[ObsIndex];
+        Assert(AnsiSameText(AnObs.ObsType, 'Evt'));
+      end;
+      result.Modflow6Obs.Name := ACell.Boundname;
+      result.Modflow6Obs.General := [ogEvt];
+    end;
+  end;
+begin
+  Model := frmGoPhast.PhastModel;
+  Model.ModflowPackages.EtsPackage.IsSelected := True;
+
+  Evt := Package.Package as TEvt;
+  NSEG := Evt.EvtDimensions.NSEG;
+  Model.ModflowPackages.EtsPackage.SegmentCount := NSEG;
+  NumIntermediatePoint := NSEG -1;
+
+  Options := Evt.Options;
+  if Options.SURF_RATE_SPECIFIED then
+  begin
+    FErrorMessages.Add(StrModelMuseCanNotSpPetm0)
+  end;
+  if Options.FIXED_CELL then
+  begin
+    Model.ModflowPackages.EtsPackage.LayerOption := loSpecified;
+  end
+  else
+  begin
+    Model.ModflowPackages.EtsPackage.LayerOption := loTopActive;
+  end;
+
+  DepthFractions := TValueArrayItemList.Create;
+  EdtFractions := TValueArrayItemList.Create;
+  CellIds := TCellIdList.Create;
+  ConnectionObjectLists := TEvtConnectionObjectLists.Create;
+  ConnectionDictionary := TDictionary<string, TEvtConnectionObjectList>.Create;
+  ItemList := TList<TEvtItem>.Create;
+  SurfDepthList := TList<TEtsSurfDepthItem>.Create;
+  BoundNameObsDictionary := TBoundNameDictionary.Create;
+  CellIdObsDictionary := TCellIdObsDictionary.Create;
+  Map := TimeSeriesMap.Create;
+  ObsLists := TObsLists.Create;
+  KeyStringDictionary := TDictionary<string, TEvtTimeItemList>.Create;
+  CellLists := TObjectList<TEvtTimeItemList>.Create;
+  try
+    IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
+    for TimeSeriesIndex := 0 to Evt.TimeSeriesCount - 1 do
+    begin
+      TimeSeriesPackage := Evt.TimeSeries[TimeSeriesIndex];
+      ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+
+    if Evt.ObservationCount > 0 then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    end;
+    for ObsPackageIndex := 0 to Evt.ObservationCount - 1 do
+    begin
+      ObsFiles := Evt.Observations[ObsPackageIndex].Package as TObs;
+      GetObservations(nil, BoundNameObsDictionary,
+        CellIdObsDictionary, ObsLists, ObsFiles);
+    end;
+
+    TransportAuxNames := TStringList.Create;
+    try
+      TransportAuxNames.CaseSensitive := False;
+      for ModelIndex := 0 to TransportModels.Count - 1 do
+      begin
+        AModel := TransportModels[ModelIndex];
+        TransportModel := AModel.FName as TTransportNameFile;
+        for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+        begin
+          APackage := TransportModel.NfPackages[PackageIndex];
+          FoundMatch := False;
+          if APackage.FileType = 'SSM6' then
+          begin
+            Ssm := APackage.Package as TSsm;
+            for SourceIndex := 0 to Ssm.Sources.Count - 1 do
+            begin
+              if SameText(Ssm.Sources[SourceIndex].pname, Package.PackageName) then
+              begin
+                FoundMatch := True;
+                TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+                break;
+              end;
+            end;
+//            Assert(FoundMatch);
+            break;
+          end;
+        end;
+      end;
+
+      LastTime := Model.ModflowStressPeriods.Last.EndTime;
+
+      ObjectCount := 0;
+      for PeriodIndex := 0 to Evt.PeriodCount - 1 do
+      begin
+        APeriod := Evt.Periods[PeriodIndex];
+        StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+        for EvtIndex := 0 to ItemList.Count - 1 do
+        begin
+          AnItem := ItemList[EvtIndex];
+          AnItem.EndTime := StartTime;
+        end;
+        ItemList.Clear;
+
+        for EvtIndex := 0 to SurfDepthList.Count - 1 do
+        begin
+          SurfDepthItem := SurfDepthList[EvtIndex];
+          SurfDepthItem.EndTime := StartTime;
+        end;
+        SurfDepthList.Clear;
+
+        for CellIndex := 0 to APeriod.Count - 1 do
+        begin
+          ACell := APeriod[CellIndex];
+
+          if (ACell.Boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(ACell.Boundname)) then
+          begin
+            KeyString := 'BN:' + UpperCase(ACell.Boundname) + ' ';
+          end
+          else
+          begin
+            KeyString := '';
+          end;
+
+          if IfaceIndex < 0 then
+          begin
+            IFACE := 0;
+          end
+          else
+          begin
+            AuxIFACE := ACell[IfaceIndex];
+            Assert(AuxIFACE.ValueType = vtNumeric);
+            IFACE := Round(AuxIFACE.NumericValue);
+          end;
+          KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+          if not KeyStringDictionary.TryGetValue(KeyString, ACellList) then
+          begin
+            ACellList := TEvtTimeItemList.Create;
+            ACellList.OwnsObjects := False;
+            CellLists.Add(ACellList);
+            KeyStringDictionary.Add(KeyString, ACellList)
+          end;
+          ACellList.Add(ACell);
+        end;
+
+        for ObjectIndex := 0 to CellLists.Count - 1 do
+        begin
+          DepthFractions.Clear;
+          EdtFractions.Clear;
+          AddCells := True;
+          ACellList := CellLists[ObjectIndex];
+          FirstCell := ACellList[0];
+          if (FirstCell.Boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+          begin
+            if IfaceIndex < 0 then
+            begin
+              IFACE := 0;
+            end
+            else
+            begin
+              AuxIFACE := FirstCell[IfaceIndex];
+              Assert(AuxIFACE.ValueType = vtNumeric);
+              IFACE := Round(AuxIFACE.NumericValue);
+            end;
+            BoundName := UpperCase(FirstCell.Boundname);
+            if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+            begin
+              AConnectionList := TEvtConnectionObjectList.Create;
+              ConnectionObjectLists.Add(AConnectionList);
+              ConnectionDictionary.Add(BoundName, AConnectionList)
+            end;
+            ACellList.Sort;
+            AScreenObject := nil;
+            for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+            begin
+              ConnectionItem := AConnectionList[ConnectionIndex];
+              if (IFACE = ConnectionItem.IFACE)
+                and ACellList.SameCells(ConnectionItem.List) then
+              begin
+                AScreenObject := ConnectionItem.ScreenObject;
+                AddCells := False;
+                Break;
+              end;
+            end;
+            if AScreenObject = nil then
+            begin
+              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+              ConnectionItem := TEvtConnection.Create;
+              ConnectionItem.ScreenObject := AScreenObject;
+              ConnectionItem.IFACE := IFACE;
+              ConnectionItem.List := ACellList;
+              AConnectionList.Add(ConnectionItem);
+              CellLists.Extract(ACellList);
+            end
+            else
+            begin
+              AddItem(AScreenObject, FirstCell, APeriod.Period);
+            end;
+          end
+          else
+          begin
+            AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+          end;
+
+          CellIds.Clear;
+          for CellIndex := 0 to ACellList.Count - 1 do
+          begin
+            ACell := ACellList[CellIndex];
+            if ACell.Rate.ValueType = vtNumeric then
+            begin
+              Imported_Et.Values.Add(ACell.Rate.NumericValue);
+            end;
+            if ACell.Surf.ValueType = vtNumeric then
+            begin
+              Imported_Et_surf.Values.Add(ACell.Surf.NumericValue);
+            end;
+            if ACell.Depth.ValueType = vtNumeric then
+            begin
+              Imported_Et_Depth.Values.Add(ACell.Depth.NumericValue);
+            end;
+            for IntermediateIndex := 0 to NumIntermediatePoint - 1 do
+            begin
+              if ACell.Pxdp[IntermediateIndex].ValueType = vtNumeric then
+              begin
+                ImportedPxdp := DepthFractions[IntermediateIndex];
+                ImportedPxdp.Values.Add(ACell.Pxdp[IntermediateIndex].NumericValue);
+              end;
+              if ACell.Petm[IntermediateIndex].ValueType = vtNumeric then
+              begin
+                ImportedPetm := EdtFractions[IntermediateIndex];
+                ImportedPetm.Values.Add(ACell.Petm[IntermediateIndex].NumericValue);
+              end;
+            end;
+
+            for AuxIndex := 0 to TransportAuxNames.Count - 1 do
+            begin
+              ChemSpeciesName := TransportAuxNames[AuxIndex];
+              GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+              Aux := ACell[GwtAuxIndex];
+              if Aux.ValueType = vtNumeric then
+              begin
+                Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                Values.Add(Aux.NumericValue);
+              end;
+            end;
+
+            CellIds.Add(ACell.Cellid);
+
+            if CellIdObsDictionary.ContainsKey(ACell.Cellid) then
+            begin
+              CreateObsScreenObject(ACell);
+            end;
+          end;
+          if AddCells then
+          begin
+            AddPointsToScreenObject(CellIds, AScreenObject);
+          end;
+        end;
+      end;
+
+    finally
+      TransportAuxNames.Free;
+    end;
+
+  finally
+    BoundNameObsDictionary.Free;
+    CellIdObsDictionary.Free;
+    Map.Free;
+    ObsLists.Free;
+    KeyStringDictionary.Free;
+    CellLists.Free;
+    ItemList.Free;
+    SurfDepthList.Free;
+    ConnectionObjectLists.Free;
+    ConnectionDictionary.Free;
+    CellIds.Free;
+    DepthFractions.Free;
+    EdtFractions.Free;
   end;
 end;
 
@@ -2777,17 +3398,11 @@ begin
         end
         else if APackage.FileType = 'EVT6' then
         begin
-  //        EvtReader := TEvt.Create(APackage.FileType);
-  //        EvtReader.Dimensions := FDimensions;
-  //        APackage.Package := EvtReader;
-  //        APackage.ReadPackage(Unhandled);
+          ImportEvt(APackage, TransportModels);
         end
         else if APackage.FileType = 'MAW6' then
         begin
-  //        MawReader := TMaw.Create(APackage.FileType);
-  //        MawReader.Dimensions := FDimensions;
-  //        APackage.Package := MawReader;
-  //        APackage.ReadPackage(Unhandled);
+          ImportMaw(APackage, TransportModels, MvrPackage);
         end
         else if APackage.FileType = 'SFR6' then
         begin
@@ -3273,7 +3888,11 @@ var
   end;
 begin
   // Get the MVR package.
-  if MvrPackage <> nil then
+  if MvrPackage = nil then
+  begin
+    Mvr := nil;
+  end
+  else
   begin
     Mvr := MvrPackage.Package as TMvr;
     FoundMvr := False;
@@ -3426,7 +4045,7 @@ begin
                 break;
               end;
             end;
-            Assert(FoundMatch);
+//            Assert(FoundMatch);
             break;
           end;
         end;
@@ -3493,6 +4112,7 @@ begin
           begin
             ACellList := TMvrGhbTimeItemList.Create;
             CellLists.Add(ACellList);
+            KeyStringDictionary.Add(KeyString, ACellList);
           end;
           ACellList.Add(ACell);
           if MvrUsed then
@@ -3891,6 +4511,28 @@ begin
   Assign3DRealDataSet(rsModflow_Initial_Head, IC.GridData.STRT);
 end;
 
+procedure TModflow6Importer.ImportMaw(Package: TPackage;
+  TransportModels: TModelList; MvrPackage: TPackage);
+var
+  Model: TPhastModel;
+  Maw: TMaw;
+  Options: TMawOptions;
+  MawPackage: TMawPackage;
+begin
+  Model := frmGoPhast.PhastModel;
+  MawPackage := Model.ModflowPackages.MawPackage;
+  MawPackage.IsSelected := True;
+
+  Maw := Package.Package as TMaw;
+  Options := Maw.Options;
+  MawPackage.PrintHead := Options.PRINT_HEAD;
+  MawPackage.SaveMawHeads := Options.Head;
+  MawPackage.SaveMawFlows := Options.BUDGET;
+  MawPackage.SaveBudgetCsv := Options.BUDGETCSV;
+  MawPackage.IncludeWellStorage := not Options.NO_WELL_STORAGE;
+
+end;
+
 procedure TModflow6Importer.ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
 var
   FileIndex: Integer;
@@ -4283,32 +4925,6 @@ begin
 end;
 
 type
-  TRivConnection = class(TObject)
-    ScreenObject: TScreenObject;
-    List: TRivTimeItemList;
-    IFACE: Integer;
-    destructor Destroy; override;
-  end;
-
-  TRivConnectionObjectList = TObjectList<TRivConnection>;
-  TRivConnectionObjectLists = TObjectList<TRivConnectionObjectList>;
-
-  TRivMvrLink = record
-    RivPeriod: TRivPeriod;
-    MvrPeriod: TMvrPeriod;
-    function Period: Integer;
-  end;
-  TRivMvrLinkArray = TArray<TRivMvrLink>;
-  TRivMvrLinkList = TList<TRivMvrLink>;
-
-  TMvrRivTimeItemList = Class(TRivTimeItemList)
-    FIds: TGenericIntegerList;
-    constructor Create;
-    destructor Destroy; override;
-    procedure Sort;
-  end;
-
-type
   TRchConnection = class(TObject)
     ScreenObject: TScreenObject;
     List: TRchTimeItemList;
@@ -4608,7 +5224,7 @@ begin
                 break;
               end;
             end;
-            Assert(FoundMatch);
+//            Assert(FoundMatch);
             break;
           end;
         end;
@@ -4658,6 +5274,7 @@ begin
             ACellList := TRchTimeItemList.Create;
             ACellList.OwnsObjects := False;
             CellLists.Add(ACellList);
+            KeyStringDictionary.Add(KeyString, ACellList);
           end;
           ACellList.Add(ACell);
         end;
@@ -4771,6 +5388,32 @@ begin
     CellIds.Free;
   end;
 end;
+
+type
+  TRivConnection = class(TObject)
+    ScreenObject: TScreenObject;
+    List: TRivTimeItemList;
+    IFACE: Integer;
+    destructor Destroy; override;
+  end;
+
+  TRivConnectionObjectList = TObjectList<TRivConnection>;
+  TRivConnectionObjectLists = TObjectList<TRivConnectionObjectList>;
+
+  TRivMvrLink = record
+    RivPeriod: TRivPeriod;
+    MvrPeriod: TMvrPeriod;
+    function Period: Integer;
+  end;
+  TRivMvrLinkArray = TArray<TRivMvrLink>;
+  TRivMvrLinkList = TList<TRivMvrLink>;
+
+  TMvrRivTimeItemList = Class(TRivTimeItemList)
+    FIds: TGenericIntegerList;
+    constructor Create;
+    destructor Destroy; override;
+    procedure Sort;
+  end;
 
 procedure TModflow6Importer.ImportRiv(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
@@ -5097,7 +5740,11 @@ var
   end;
 begin
   // Get the MVR package.
-  if MvrPackage <> nil then
+  if MvrPackage = nil then
+  begin
+    Mvr := nil;
+  end
+  else
   begin
     Mvr := MvrPackage.Package as TMvr;
     FoundMvr := False;
@@ -5250,7 +5897,7 @@ begin
                 break;
               end;
             end;
-            Assert(FoundMatch);
+//            Assert(FoundMatch);
             break;
           end;
         end;
@@ -5317,6 +5964,7 @@ begin
           begin
             ACellList := TMvrRivTimeItemList.Create;
             CellLists.Add(ACellList);
+            KeyStringDictionary.Add(KeyString, ACellList);
           end;
           ACellList.Add(ACell);
           if MvrUsed then
@@ -7129,7 +7777,11 @@ var
   end;
 begin
   // Get the MVR package.
-  if MvrPackage <> nil then
+  if MvrPackage = nil then
+  begin
+    Mvr := nil;
+  end
+  else
   begin
     Mvr := MvrPackage.Package as TMvr;
     FoundMvr := False;
@@ -7282,7 +7934,7 @@ begin
                 break;
               end;
             end;
-            Assert(FoundMatch);
+//            Assert(FoundMatch);
             break;
           end;
         end;
@@ -7349,6 +8001,7 @@ begin
           begin
             ACellList := TMvrWelTimeItemList.Create;
             CellLists.Add(ACellList);
+            KeyStringDictionary.Add(KeyString, ACellList);
           end;
           ACellList.Add(ACell);
           if MvrUsed then
@@ -7769,6 +8422,14 @@ end;
 { TRchConnection }
 
 destructor TRchConnection.Destroy;
+begin
+  List.Free;
+  inherited;
+end;
+
+{ TEvtConnection }
+
+destructor TEvtConnection.Destroy;
 begin
   List.Free;
   inherited;

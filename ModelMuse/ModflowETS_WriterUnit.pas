@@ -845,8 +845,6 @@ begin
       Layer := EvtCell.Layer;
       if OkLocationMF6(IDomain, UsedLocations, Layer, EvtCell.Row,
         EvtCell.Column, FEtsPackage.LayerOption) then
-//      if (IDomain.IntegerData[EvtCell.Layer, EvtCell.Row, EvtCell.Column] > 0)
-//        and (not UsedLocations.IsValue[EvtCell.Row, EvtCell.Column])  then
       begin
         UsedLocations.Items[EvtCell.Row, EvtCell.Column] := True;
         SurfDepthCell := DepthSurfaceCellList[CellIndex] as TEtsSurfDepth_Cell;
@@ -883,9 +881,6 @@ begin
 
         WriteValueOrFormula(SurfDepthCell, EtsSurfacePosition);
 
-
-//        WriteFloat(SurfDepthCell.EvapotranspirationSurface);
-
         if Model.PestUsed and (Model.ModelSelection = msModflow2015)
           and WritingTemplate
           and ( EvtCell.ETParameterName <> '') then
@@ -904,16 +899,15 @@ begin
         else
         begin
           WriteValueOrFormula(EvtCell, EvtRatePosition);
-
         end;
 
         WriteValueOrFormula(SurfDepthCell, EtsDepthPosition);
-//        WriteFloat(SurfDepthCell.EvapotranspirationDepth);
 
         for SegmentIndex := 1 to NETSEG - 1 do
         begin
           WriteFloat(SurfDepthCell.DepthFractions[SegmentIndex-1]);
         end;
+
         for SegmentIndex := 1 to NETSEG - 1 do
         begin
           WriteFloat(SurfDepthCell.EtFractions[SegmentIndex-1]);

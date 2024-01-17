@@ -546,13 +546,19 @@ begin
       NewLine;
     end;
 
-    if MawPackage.SaveGwtBudgetCsv then
+    if MawPackage.SaveBudgetCsv then
     begin
       WriteString('    BUDGETCSV FILEOUT ');
       budgetCsvFile := BaseFileName + '.mwt_budget.csv';
       Model.AddModelOutputFile(budgetCsvFile);
       budgetCsvFile := ExtractFileName(budgetCsvFile);
       WriteString(budgetCsvFile);
+      NewLine;
+    end;
+
+    if MawPackage.FlowCorrection then
+    begin
+      WriteString('    FLOW_CORRECTION');
       NewLine;
     end;
 
@@ -1300,7 +1306,7 @@ begin
   end;
 
   BaseName := ChangeFileExt(FNameOfFile, '');
-  if  FMawPackage.SaveMnwHeads then
+  if  FMawPackage.SaveMawHeads then
   begin
     WriteString('  HEAD FILEOUT ');
     AFileName := ChangeFileExt(BaseName, StrMawhead);
@@ -1315,10 +1321,20 @@ begin
   PrintFlowsOption;
   WriteSaveFlowsOption;
 
-  if  FMawPackage.SaveMnwFlows or Model.SeparateGwtUsed then
+  if  FMawPackage.SaveMawFlows or Model.SeparateGwtUsed then
   begin
     WriteString('  BUDGET FILEOUT ');
     AFileName := ChangeFileExt(BaseName, StrMawbud);
+    Model.AddModelOutputFile(AFileName);
+    AFileName := ExtractFileName(AFileName);
+    WriteString(AFileName);
+    NewLine;
+  end;
+
+  if  FMawPackage.SaveBudgetCsv then
+  begin
+    WriteString('  BUDGET FILEOUT ');
+    AFileName := ChangeFileExt(BaseName, StrMawbudCsv);
     Model.AddModelOutputFile(AFileName);
     AFileName := ExtractFileName(AFileName);
     WriteString(AFileName);

@@ -5190,6 +5190,7 @@ const
   StrMawhead = '.maw_head';
   StrWatercontent = '.water_content';
   StrMawbud = '.maw_bud';
+  StrMawbudCsv = '.maw_bud.csv';
   StrUzfbudget = '.uzf_budget';
   StrSfrbudget = '.sfr_budget';
   StrSftconc = '.sft_conc';
@@ -10113,13 +10114,15 @@ const
 
 //               Bug fix: Fixed export of flow observations in the CHD, DRN,
 //                 GHB, and RIV, packages in MODFLOW 6 models.
-//               Enhancement added support for the wel-reduction observation
+//               Enhancement: Added support for the wel-reduction observation
 //                type in the MODFLOW 6 Observation Utility.
 //               Bug fix: Fixed export of to-mvr observation types for the
 //                for WEL, DRN, RIV, and GHB packages.
 //               Enhancement: When the MVR package receiver is a group of UZF
 //                cells. there is now an option to distribute the MVR flow
 //                equally to the UZF receiver cells.
+//               Enhancement: Added support for BUDGETCSV and FLOWCORRECTION
+//                options in MAW.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
