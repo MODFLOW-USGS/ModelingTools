@@ -10121,8 +10121,8 @@ const
 //               Enhancement: When the MVR package receiver is a group of UZF
 //                cells. there is now an option to distribute the MVR flow
 //                equally to the UZF receiver cells.
-//               Enhancement: Added support for BUDGETCSV and FLOWCORRECTION
-//                options in MAW.
+//               Enhancement: Added support for BUDGETCSV, FLOWCORRECTION,
+//                and MAW_FLOW_REDUCE_CSV options in MAW.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.

@@ -2992,6 +2992,7 @@ Type
     FGwtSpecifiedConc: TMfBoundDispObjectList;
     FGwtRate: TMfBoundDispObjectList;
     FFlowCorrection: Boolean;
+    FFlowReduceCsv: Boolean;
     procedure SetIncludeWellStorage(const Value: Boolean);
     procedure SetPrintHead(const Value: Boolean);
     procedure SetSaveMawFlows(const Value: Boolean);
@@ -3036,6 +3037,7 @@ Type
       const DisplayName: string);
     function DensityUsed(Sender: TObject): boolean;
     procedure SetFlowCorrection(const Value: Boolean);
+    procedure SetFlowReduceCsv(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -3091,6 +3093,8 @@ Type
     property FlowCorrection: Boolean read FFlowCorrection write SetFlowCorrection stored True;
     // inverse of NO_WELL_STORAGE
     property IncludeWellStorage: Boolean read FIncludeWellStorage write SetIncludeWellStorage;
+    // MAW_FLOW_REDUCE_CSV
+    property FlowReduceCsv: Boolean read FFlowReduceCsv write SetFlowReduceCsv;
     // [SHUTDOWN_THETA <shutdown_theta>]
     property StoredShutDownTheta: TRealStorage read FStoredShutDownTheta write SetStoredShutDownTheta;
     // [SHUTDOWN_KAPPA <shutdown_kappa>]
@@ -22449,6 +22453,7 @@ begin
     SaveGwtConcentration := MawSource.SaveGwtConcentration;
     SaveBudgetCsv := MawSource.SaveBudgetCsv;
     FlowCorrection := MawSource.FlowCorrection;
+    FlowReduceCsv := MawSource.FlowReduceCsv;
   end;
   inherited;
 
@@ -22854,9 +22859,10 @@ begin
   SaveMawFlows := True;
   FIncludeWellStorage := True;
   FFlowCorrection := False;
+  FSaveBudgetCsv := False;
+  FFlowReduceCsv := False;
   // GWT
   FSaveGwtConcentration := True;
-  FSaveBudgetCsv := True;
   FSaveGwtBudget := True;
 end;
 
@@ -22880,6 +22886,11 @@ end;
 procedure TMawPackage.SetFlowCorrection(const Value: Boolean);
 begin
   SetBooleanProperty(FFlowCorrection, Value);
+end;
+
+procedure TMawPackage.SetFlowReduceCsv(const Value: Boolean);
+begin
+  SetBooleanProperty(FFlowReduceCsv, Value);
 end;
 
 procedure TMawPackage.SetIncludeWellStorage(const Value: Boolean);

@@ -4539,6 +4539,12 @@ var
   Maw: TMaw;
   Options: TMawOptions;
   MawPackage: TMawPackage;
+  Wells: array of TScreenObject;
+  WellIndex: Integer;
+  PackageItem: TMawPackageItem;
+  AScreenObject: TScreenObject;
+  UndoCreateScreenObject: TCustomUndo;
+  NewName: string;
 begin
   Model := frmGoPhast.PhastModel;
   MawPackage := Model.ModflowPackages.MawPackage;
@@ -4551,6 +4557,42 @@ begin
   MawPackage.SaveMawFlows := Options.BUDGET;
   MawPackage.SaveBudgetCsv := Options.BUDGETCSV;
   MawPackage.IncludeWellStorage := not Options.NO_WELL_STORAGE;
+  MawPackage.FlowCorrection := Options.FLOW_CORRECTION;
+  if Options.SHUTDOWN_THETA.Used then
+  begin
+    MawPackage.ShutDownTheta := Options.SHUTDOWN_THETA.Value;
+  end;
+  if Options.SHUTDOWN_KAPPA.Used then
+  begin
+    MawPackage.ShutDownKappa := Options.SHUTDOWN_KAPPA.Value;
+  end;
+  MawPackage.FlowReduceCsv := Options.MAW_FLOW_REDUCE_CSV;
+
+  SetLength(Wells, Maw.PackageData.Count+1);
+  for WellIndex := 0 to Maw.PackageData.Count - 1 do
+  begin
+    PackageItem := Maw.PackageData[WellIndex];
+
+    AScreenObject := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := Format('ImportedMaw_%d', [WellIndex + 1]);
+    AScreenObject.Name := NewName;
+    AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(AScreenObject);
+    AScreenObject.ElevationCount := ecZero;
+    AScreenObject.SetValuesOfIntersectedCells := True;
+    AScreenObject.EvaluatedAt := eaBlocks;
+    AScreenObject.Visible := False;
+
+
+    Assert(PackageItem.wellno < Length(Wells));
+    Wells[PackageItem.wellno] := AScreenObject;
+
+    AScreenObject.CreateMawBoundary;
+    AScreenObject.ModflowMawBoundary.Radius := FortranFloatToStr(PackageItem.radius);
+  end;
+
 
 end;
 

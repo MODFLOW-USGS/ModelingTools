@@ -1341,9 +1341,25 @@ begin
     NewLine;
   end;
 
+  if  FMawPackage.FlowReduceCsv then
+  begin
+    WriteString('  MAW_FLOW_REDUCE_CSV FILEOUT ');
+    AFileName := ChangeFileExt(BaseName, '.MAW_Flow_Reduce.csv');
+    Model.AddModelOutputFile(AFileName);
+    AFileName := ExtractFileName(AFileName);
+    WriteString(AFileName);
+    NewLine;
+  end;
+
   if not FMawPackage.IncludeWellStorage then
   begin
     WriteString('  NO_WELL_STORAGE');
+    NewLine;
+  end;
+
+  if FMawPackage.FlowCorrection then
+  begin
+    WriteString('  FLOW_CORRECTION');
     NewLine;
   end;
 

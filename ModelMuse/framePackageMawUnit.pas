@@ -19,6 +19,7 @@ type
     lblShutDownKappa: TLabel;
     cbBudgetCsv: TCheckBox;
     cbFlowCorrection: TCheckBox;
+    cbFlowReduceCsv: TCheckBox;
   private
     { Private declarations }
   public
@@ -50,6 +51,7 @@ begin
   cbBudgetCsv.Checked := MawPackage.SaveBudgetCsv;
   cbFlowCorrection.Checked := MawPackage.FlowCorrection;
   cbIncludeWellStorage.Checked := MawPackage.IncludeWellStorage;
+  cbFlowReduceCsv.Checked := MawPackage.FlowReduceCsv;
   rdeShutDownTheta.RealValue := MawPackage.ShutDownTheta;
   rdeShutDownKappa.RealValue := MawPackage.ShutDownKappa;
 end;
@@ -65,6 +67,7 @@ begin
   MawPackage.SaveMawFlows := cbSaveFlows.Checked;
   MawPackage.SaveBudgetCsv := cbBudgetCsv.Checked;
   MawPackage.FlowCorrection := cbFlowCorrection.Checked;
+  MawPackage.FlowReduceCsv := cbFlowReduceCsv.Checked;
   MawPackage.IncludeWellStorage := cbIncludeWellStorage.Checked;
   MawPackage.ShutDownTheta := rdeShutDownTheta.RealValue;
   MawPackage.ShutDownKappa := rdeShutDownKappa.RealValue;
