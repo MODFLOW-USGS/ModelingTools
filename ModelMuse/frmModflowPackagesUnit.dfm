@@ -7,8 +7,8 @@ inherited frmModflowPackages: TfrmModflowPackages
   OnActivate = jvplPackagesChange
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitWidth = 782
-  ExplicitHeight = 592
+  ExplicitWidth = 786
+  ExplicitHeight = 593
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 177
@@ -79,13 +79,13 @@ inherited frmModflowPackages: TfrmModflowPackages
         TabStop = True
         ExplicitLeft = 131
         ExplicitTop = 291
-        ExplicitWidth = 448
-        ExplicitHeight = 221
+        ExplicitWidth = 452
+        ExplicitHeight = 222
         inherited pnlParameterCount: TPanel
           Top = 174
           Width = 452
-          ExplicitTop = 173
-          ExplicitWidth = 448
+          ExplicitTop = 174
+          ExplicitWidth = 452
           inherited lblNumParameters: TLabel
             Width = 156
             Height = 18
@@ -98,7 +98,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             Enabled = True
             TabOrder = 1
             OnClick = frameParameterDefinition_btnDeleteClick
-            ExplicitLeft = 205
+            ExplicitLeft = 209
             ExplicitTop = 9
           end
           inherited seNumberOfParameters: TJvSpinEdit
@@ -210,12 +210,12 @@ inherited frmModflowPackages: TfrmModflowPackages
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 442
-          ExplicitHeight = 110
+          ExplicitWidth = 446
+          ExplicitHeight = 111
         end
         inherited pnlTop: TPanel
           Width = 452
-          ExplicitWidth = 448
+          ExplicitWidth = 452
           inherited lblParamValue: TLabel
             Width = 101
             Height = 18
@@ -236,7 +236,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         ReadOnly = True
         TabOrder = 1
         OnChange = tvLpfParameterTypesChange
-        ExplicitHeight = 221
       end
       inline framePkgLPF: TframePackageLpf
         Left = 0
@@ -262,11 +261,11 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 508
-          ExplicitWidth = 504
+          ExplicitWidth = 508
         end
         inherited rdgOptions: TRbwDataGrid4
           Width = 556
-          ExplicitWidth = 552
+          ExplicitWidth = 556
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -7289,7 +7288,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited lblPackage: TLabel
-          Width = 74
+          Width = 78
           Height = 18
           Anchors = [akLeft, akTop, akRight]
           WordWrap = True
@@ -10315,18 +10314,10 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Width = 553
           ExplicitWidth = 553
-          ExplicitHeight = 276
         end
         inherited cbIncludeWellStorage: TCheckBox
           Width = 553
-          ExplicitTop = 430
           ExplicitWidth = 553
-        end
-        inherited rdeShutDownTheta: TRbwDataEntry
-          ExplicitTop = 453
-        end
-        inherited rdeShutDownKappa: TRbwDataEntry
-          ExplicitTop = 481
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -10353,6 +10344,15 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePkgMAW.rdeShutDownKappa
+            end
+            item
+              Control = framePkgMAW.cbBudgetCsv
+            end
+            item
+              Control = framePkgMAW.cbFlowCorrection
+            end
+            item
+              Control = framePkgMAW.cbFlowReduceCsv
             end>
         end
       end
@@ -12368,7 +12368,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited lblPackage: TLabel
-          Width = 74
+          Width = 78
           Height = 18
           Anchors = [akLeft, akTop, akRight]
           ExplicitWidth = 78
@@ -12749,8 +12749,6 @@ inherited frmModflowPackages: TfrmModflowPackages
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 512
-    ExplicitWidth = 766
     DesignSize = (
       770
       41)
@@ -12764,7 +12762,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 387
     end
     object btnOK: TBitBtn
       Left = 505
@@ -12776,7 +12773,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 501
     end
     object btnCancel: TBitBtn
       Left = 619
@@ -12788,7 +12784,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnCancelClick
-      ExplicitLeft = 615
     end
   end
   object pnlLeft: TPanel
@@ -12798,7 +12793,6 @@ inherited frmModflowPackages: TfrmModflowPackages
     Height = 513
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 512
     object pnlModel: TPanel
       Left = 1
       Top = 1
@@ -12840,7 +12834,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       OnExpanded = tvPackagesExpanded
       OnMouseDown = tvPackagesMouseDown
       OnMouseUp = tvPackagesMouseUp
-      ExplicitHeight = 446
     end
   end
   object rbwLpfParamCountController: TRbwController

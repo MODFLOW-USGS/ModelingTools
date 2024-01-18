@@ -93,11 +93,15 @@ type
     FItems: TMawPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
       BOUNDNAMES: Boolean);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TMawPackageItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TMawPackageItem read GetItem; default;
   end;
 
   TMawConnectionItem = record
@@ -474,6 +478,16 @@ destructor TMawPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TMawPackageData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TMawPackageData.GetItem(Index: Integer): TMawPackageItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TMawPackageData.Initialize;
