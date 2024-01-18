@@ -67,7 +67,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Options: TObsOptions read FOptions;
     property FileCount: Integer read GetFileCount;
     property ObsFiles[Index: Integer]: TObsFile read GetObsFile; default;
@@ -1140,7 +1140,7 @@ begin
   result := FObsFiles[Index];
 end;
 
-procedure TObs.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TObs.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

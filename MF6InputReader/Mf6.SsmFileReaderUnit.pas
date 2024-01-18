@@ -75,7 +75,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Sources: TSsmSources read FSources;
     property FileInput: TSsmFileInput read FFileInput;
     property Count: Integer read GetCount;
@@ -355,7 +355,7 @@ begin
   Result := FSpcPackages[Index];
 end;
 
-procedure TSsm.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TSsm.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -412,7 +412,7 @@ begin
     SpcReader := TSpc.Create(FPackageType);
     SpcReader.Dimensions := FDimensions;
     SpcPackage.Package := SpcReader;
-    SpcPackage.ReadPackage(Unhandled);
+    SpcPackage.ReadPackage(Unhandled, NPER);
   end;
 end;
 

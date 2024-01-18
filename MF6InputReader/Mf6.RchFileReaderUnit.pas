@@ -104,7 +104,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Options: TRchOptions read FOptions;
     property PeriodCount: Integer read GetPeriodCount;
     property Periods[Index: Integer]: TRchPeriod read GetPeriod;
@@ -701,7 +701,7 @@ begin
   Result := FTimeSeriesPackages.Count;
 end;
 
-procedure TRch.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TRch.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -741,6 +741,10 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
+          if IPER > NPER then
+          begin
+            break;
+          end;
           APeriod := TRchPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
@@ -775,7 +779,7 @@ begin
 
     TsReader := TTimeSeries.Create(FPackageType);
     TsPackage.Package := TsReader;
-    TsPackage.ReadPackage(Unhandled);
+    TsPackage.ReadPackage(Unhandled, NPER);
   end;
   for PackageIndex := 0 to FOptions.TAS6_FileNames.Count - 1 do
   begin
@@ -787,7 +791,7 @@ begin
 
     TasReader := TTimeArraySeries.Create(FPackageType);
     TasPackage.Package := TasReader;
-    TasPackage.ReadPackage(Unhandled);
+    TasPackage.ReadPackage(Unhandled, NPER);
   end;
   for PackageIndex := 0 to FOptions.Obs6_FileNames.Count - 1 do
   begin
@@ -800,7 +804,7 @@ begin
     ObsReader := TObs.Create(FPackageType);
     ObsReader.Dimensions := FDimensions;
     ObsPackage.Package := ObsReader;
-    ObsPackage.ReadPackage(Unhandled);
+    ObsPackage.ReadPackage(Unhandled, NPER);
   end;
 end;
 

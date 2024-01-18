@@ -90,7 +90,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Options: TNpfOptions read FOptions;
     property GridData: TNpfGridData read FGridData;
     property Count: Integer read GetCount;
@@ -441,7 +441,7 @@ begin
   result := FTvkPackages[Index];
 end;
 
-procedure TNpf.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TNpf.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -495,7 +495,7 @@ begin
     TvkReader := TTvk.Create(TvkPackage.FileType);
     TvkReader.Dimensions := FDimensions;
     TvkPackage.Package := TvkReader;
-    TvkPackage.ReadPackage(Unhandled);
+    TvkPackage.ReadPackage(Unhandled, NPER);
   end;
 
 end;

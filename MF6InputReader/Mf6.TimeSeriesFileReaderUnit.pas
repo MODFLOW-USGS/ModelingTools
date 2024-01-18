@@ -63,7 +63,7 @@ type
     FAttributes: TTsAttributes;
     FTimeSeries: TTsTimeSeries;
   public
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     property Attributes: TTsAttributes read FAttributes;
@@ -409,7 +409,7 @@ begin
   inherited;
 end;
 
-procedure TTimeSeries.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTimeSeries.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

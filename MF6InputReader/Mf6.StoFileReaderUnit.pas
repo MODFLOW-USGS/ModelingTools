@@ -67,7 +67,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Options: TStoOptions read FOptions;
     property GridData: TStoGridData read FGridData;
     property Count: Integer read GetCount;
@@ -287,7 +287,7 @@ begin
   result := FTvsPackages[Index];
 end;
 
-procedure TSto.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TSto.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -323,6 +323,10 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
+          if IPER > NPER then
+          begin
+            break;
+          end;
           APeriod := TStoStressPeriod.Create(FPackageType);
           FStressPeriods.Add(APeriod);
           APeriod.IPer := IPER;
@@ -353,7 +357,7 @@ begin
     TvsReader := TTvs.Create(TvsPackage.FileType);
     TvsReader.Dimensions := FDimensions;
     TvsPackage.Package := TvsReader;
-    TvsPackage.ReadPackage(Unhandled);
+    TvsPackage.ReadPackage(Unhandled, NPER);
   end;
 
 end;

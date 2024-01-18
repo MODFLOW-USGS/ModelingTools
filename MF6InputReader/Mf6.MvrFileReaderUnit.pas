@@ -116,7 +116,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Options: TMvrOptions read FOptions;
     property Packages: TMvrPackages read FPackages;
     property PeriodCount: Integer read GetPeriodCount;
@@ -550,7 +550,7 @@ begin
   Result := FPeriods.Count;
 end;
 
-procedure TMvr.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TMvr.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -587,6 +587,10 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
+          if IPER > NPER then
+          begin
+            break;
+          end;
           APeriod := TMvrPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;

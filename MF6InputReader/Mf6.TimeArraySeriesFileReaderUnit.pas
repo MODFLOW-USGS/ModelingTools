@@ -33,7 +33,7 @@ type
     FAttributes: TTasAttributes;
     FTimes: TTasTimeList;
   public
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
   end;
@@ -193,7 +193,7 @@ begin
 end;
 
 procedure TTimeArraySeries.Read(Stream: TStreamReader;
-  Unhandled: TStreamWriter);
+  Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

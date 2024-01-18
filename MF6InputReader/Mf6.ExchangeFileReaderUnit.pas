@@ -104,7 +104,7 @@ type
     FDimensions2: TDimensions;
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
   end;
 
   TGwtGwt = class(TDimensionedPackageReader)
@@ -118,7 +118,7 @@ type
     FDimensions2: TDimensions;
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
   end;
 
 implementation
@@ -615,7 +615,7 @@ begin
   inherited;
 end;
 
-procedure TGwfGwf.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TGwfGwf.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -677,7 +677,7 @@ begin
     ObsReader := TObs.Create(FPackageType);
     ObsReader.Dimensions := FDimensions;
     ObsPackage.Package := ObsReader;
-    ObsPackage.ReadPackage(Unhandled);
+    ObsPackage.ReadPackage(Unhandled, NPER);
   end;
 
   for PackageIndex := 0 to FOptions.GNC6.Count - 1 do
@@ -691,7 +691,7 @@ begin
     GncReader := TGnc.Create(FPackageType);
     GncReader.Dimensions := FDimensions;
     GncPackage.Package := GncReader;
-    GncPackage.ReadPackage(Unhandled);
+    GncPackage.ReadPackage(Unhandled, NPER);
   end;
 
   for PackageIndex := 0 to FOptions.MVR6.Count - 1 do
@@ -704,7 +704,7 @@ begin
 
     MvrReader := TMvr.Create(FPackageType);
     MvrPackage.Package := MvrReader;
-    MvrPackage.ReadPackage(Unhandled);
+    MvrPackage.ReadPackage(Unhandled, NPER);
   end;
 
 end;
@@ -732,7 +732,7 @@ begin
   inherited;
 end;
 
-procedure TGwtGwt.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TGwtGwt.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -792,7 +792,7 @@ begin
     ObsReader := TObs.Create(FPackageType);
     ObsReader.Dimensions := FDimensions;
     ObsPackage.Package := ObsReader;
-    ObsPackage.ReadPackage(Unhandled);
+    ObsPackage.ReadPackage(Unhandled, NPER);
   end;
 
   for PackageIndex := 0 to FOptions.MVT6.Count - 1 do
@@ -805,7 +805,7 @@ begin
 
     MvtReader := TMvt.Create(FPackageType);
     MvtPackage.Package := MvtReader;
-    MvtPackage.ReadPackage(Unhandled);
+    MvtPackage.ReadPackage(Unhandled, NPER);
   end;
 
 end;

@@ -71,7 +71,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Dimensions: TDimensions read GetDimensions;
   end;
 
@@ -433,7 +433,7 @@ begin
   result := FDimensions.Dimensions;
 end;
 
-procedure TDisu.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TDisu.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

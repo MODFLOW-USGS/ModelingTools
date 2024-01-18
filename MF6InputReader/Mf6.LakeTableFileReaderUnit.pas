@@ -44,7 +44,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
   end;
 
 implementation
@@ -221,7 +221,7 @@ begin
   inherited;
 end;
 
-procedure TLakeTable.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TLakeTable.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

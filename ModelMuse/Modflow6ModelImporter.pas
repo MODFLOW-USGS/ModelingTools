@@ -802,7 +802,12 @@ begin
               ConnectionItem.IFACE := IFACE;
               ConnectionItem.List := ACellList;
               AConnectionList.Add(ConnectionItem);
-              CellLists.Extract(ACellList);
+              CellLists.OwnsObjects := False;
+              try
+                CellLists[ObjectIndex] := nil;
+              finally
+                CellLists.OwnsObjects := True;
+              end;
             end
             else
             begin
@@ -2470,7 +2475,12 @@ begin
             ConnectionItem.IFACE := IFACE;
             ConnectionItem.List := ACellList;
             AConnectionList.Add(ConnectionItem);
-            CellLists.Extract(ACellList);
+            CellLists.OwnsObjects := False;
+            try
+              CellLists[ObjectIndex] := nil;
+            finally
+              CellLists.OwnsObjects := True;
+            end;
             NewScreenObject := True;
           end
           else
@@ -3099,7 +3109,12 @@ begin
               ConnectionItem.IFACE := IFACE;
               ConnectionItem.List := ACellList;
               AConnectionList.Add(ConnectionItem);
-              CellLists.Extract(ACellList);
+              CellLists.OwnsObjects := False;
+              try
+                CellLists[ObjectIndex] := nil;
+              finally
+                CellLists.OwnsObjects := True;
+              end;
             end
             else
             begin
@@ -4057,6 +4072,7 @@ begin
       ObjectCount := 0;
       for PeriodIndex := 0 to GhbMvrLinkList.Count - 1 do
       begin
+        KeyStringDictionary.Clear;
         GhbMvrLink := GhbMvrLinkList[PeriodIndex];
         APeriod := GhbMvrLinkList[PeriodIndex].GhbPeriod;
         if APeriod = nil then
@@ -4168,7 +4184,12 @@ begin
               ConnectionItem.IFACE := IFACE;
               ConnectionItem.List := ACellList;
               AConnectionList.Add(ConnectionItem);
-              CellLists.Extract(ACellList);
+              CellLists.OwnsObjects := False;
+              try
+                CellLists[ObjectIndex] := nil;
+              finally
+                CellLists.OwnsObjects := True;
+              end;
               NewScreenObject := True;
             end
             else
@@ -5324,7 +5345,12 @@ begin
               ConnectionItem.IFACE := IFACE;
               ConnectionItem.List := ACellList;
               AConnectionList.Add(ConnectionItem);
-              CellLists.Extract(ACellList);
+              CellLists.OwnsObjects := False;
+              try
+                CellLists[ObjectIndex] := nil;
+              finally
+                CellLists.OwnsObjects := True;
+              end;
             end
             else
             begin
@@ -6020,7 +6046,12 @@ begin
               ConnectionItem.IFACE := IFACE;
               ConnectionItem.List := ACellList;
               AConnectionList.Add(ConnectionItem);
-              CellLists.Extract(ACellList);
+              CellLists.OwnsObjects := False;
+              try
+                CellLists[ObjectIndex] := nil;
+              finally
+                CellLists.OwnsObjects := True;
+              end;
               NewScreenObject := True;
             end
             else
@@ -8057,7 +8088,12 @@ begin
               ConnectionItem.IFACE := IFACE;
               ConnectionItem.List := ACellList;
               AConnectionList.Add(ConnectionItem);
-              CellLists.Extract(ACellList);
+              CellLists.OwnsObjects := False;
+              try
+                CellLists[ObjectIndex] := nil;
+              finally
+                CellLists.OwnsObjects := True;
+              end;
               NewScreenObject := True;
             end
             else

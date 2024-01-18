@@ -101,7 +101,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Dimensions: TDimensions read GetDimensions;
     property Options: TDisvOptions read FOptions;
     property GridData: TDisvGridData read FGridData;
@@ -511,7 +511,7 @@ begin
   result := FDimensions.FDimensions;
 end;
 
-procedure TDisv.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TDisv.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

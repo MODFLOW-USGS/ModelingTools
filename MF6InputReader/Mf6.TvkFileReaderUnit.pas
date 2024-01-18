@@ -50,7 +50,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Count: Integer read GetCount;
     property Periods[Index: Integer]: TTvkPeriodData read GetPeriod; default;
     property TimeSeriesPackageCount: Integer read GetTimeSeriesPackageCount;
@@ -265,7 +265,7 @@ begin
   result := FTimeSeriesPackages.Count;
 end;
 
-procedure TTvk.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTvk.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -297,6 +297,10 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
+          if IPER > NPER then
+          begin
+            break;
+          end;
           APeriod := TTvkPeriodData.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
@@ -325,7 +329,7 @@ begin
 
     TsReader := TTimeSeries.Create(FPackageType);
     TsPackage.Package := TsReader;
-    TsPackage.ReadPackage(Unhandled);
+    TsPackage.ReadPackage(Unhandled, NPER);
   end;
 end;
 

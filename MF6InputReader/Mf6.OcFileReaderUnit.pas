@@ -77,7 +77,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Options: TOcOptions read FOptions;
     property FullBudgetFileName: string read GetFullBudgetFileName;
   end;
@@ -438,7 +438,7 @@ begin
   result := FOptions.FullBudgetFileName;
 end;
 
-procedure TOc.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TOc.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -471,6 +471,10 @@ begin
           if (FSplitter.Count >= 3)
             and TryStrToInt(FSplitter[2], IPer) then
           begin
+            if IPER > NPER then
+            begin
+              break;
+            end;
             APeriod := TOcPeriod.Create(FPackageType);
             FPeriods.Add(APeriod);
             APeriod.IPer := IPer;

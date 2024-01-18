@@ -70,7 +70,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Dimensions: TDimensions read GetDimensions;
     property Options: TDisOptions read FOptions;
     property GridData: TDisGridData read FGridData;
@@ -412,7 +412,7 @@ begin
   result := FDimensions.FDimensions;
 end;
 
-procedure TDis.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TDis.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

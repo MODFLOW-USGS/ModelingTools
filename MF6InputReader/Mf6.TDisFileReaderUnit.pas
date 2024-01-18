@@ -53,6 +53,7 @@ type
     FDimensions: TTDisDimensions;
     FPeriodData: TTDisPeriodData;
     FAts: TAts;
+    function GetNPER: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -62,6 +63,7 @@ type
     property Dimensions: TTDisDimensions read FDimensions;
     property PeriodData: TTDisPeriodData read FPeriodData;
     property Ats: TAts read FAts;
+    property NPER: Integer read GetNPER;
   end;
 
 implementation
@@ -344,6 +346,11 @@ begin
   inherited;
 end;
 
+function TTDis.GetNPER: Integer;
+begin
+  result := FDimensions.NPER;
+end;
+
 procedure TTDis.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
@@ -399,6 +406,10 @@ begin
             Continue;
           end;
           FPeriodData.Read(Stream, Unhandled);
+          if FPeriodData.Count = FDimensions.NPER then
+          begin
+            Exit;
+          end;
         end
         else
         begin

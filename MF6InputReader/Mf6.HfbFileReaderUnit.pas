@@ -61,7 +61,7 @@ private
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property Count: Integer read GetCount;
     property StressPeriods[Index: Integer]: THfbStressPeriod read GetStressPeriod; default;
   end;
@@ -279,7 +279,7 @@ begin
   result := FStressPeriods[Index];
 end;
 
-procedure THfb.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure THfb.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -312,6 +312,10 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
+          if IPER > NPER then
+          begin
+            break;
+          end;
           APeriod := THfbStressPeriod.Create(FPackageType);
           FStressPeriods.Add(APeriod);
           APeriod.IPer := IPER;

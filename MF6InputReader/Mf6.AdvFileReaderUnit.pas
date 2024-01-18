@@ -21,7 +21,7 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
   end;
 
 
@@ -86,7 +86,7 @@ begin
   inherited;
 end;
 
-procedure TAdv.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TAdv.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;

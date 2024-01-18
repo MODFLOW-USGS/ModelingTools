@@ -108,7 +108,7 @@ type
 
   TPackageReader = class(TCustomMf6Persistent)
   public
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); virtual; abstract;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); virtual; abstract;
   end;
 
   TDimensionedPackageReader = class(TPackageReader)
@@ -266,7 +266,7 @@ type
     property FileName: string read FFileName write FFileName;
     property PackageName: string read FPackageName write FPackageName;
     property Package: TPackageReader read FPackage write FPackage;
-    procedure ReadPackage(Unhandled: TStreamWriter);
+    procedure ReadPackage(Unhandled: TStreamWriter; const NPER: Integer);
   end;
 
   TPackageList = TObjectList<TPackage>;
@@ -1636,7 +1636,7 @@ begin
   inherited;
 end;
 
-procedure TPackage.ReadPackage(Unhandled: TStreamWriter);
+procedure TPackage.ReadPackage(Unhandled: TStreamWriter; const NPER: Integer);
 var
   PackageFile: TStreamReader;
 begin
@@ -1648,7 +1648,7 @@ begin
         PackageFile := TFile.OpenText(FFileName);
         try
           try
-            FPackage.Read(PackageFile, Unhandled);
+            FPackage.Read(PackageFile, Unhandled, NPER);
           except on E: Exception do
             begin
               Unhandled.WriteLine('ERROR');

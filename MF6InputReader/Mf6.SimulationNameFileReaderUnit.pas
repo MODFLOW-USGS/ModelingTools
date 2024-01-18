@@ -55,7 +55,7 @@ type
     ModelName: string;
     FName: TCustomNameFile;
     destructor Destroy; override;
-    procedure ReadInput(Unhandled: TStreamWriter);
+    procedure ReadInput(Unhandled: TStreamWriter; const NPER: integer);
     property FullBudgetFileName: string read GetFullBudgetFileName;
   end;
 
@@ -72,7 +72,7 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
-    procedure ReadInput(Unhandled: TStreamWriter);
+    procedure ReadInput(Unhandled: TStreamWriter; const NPER: integer);
     function GetModelByName(ModelName: string): TModel;
     function GetModelByNameFile(NameFile: string): TModel;
     property Count: Integer read GetCount;
@@ -221,6 +221,7 @@ var
   GwtGwtReader: TGwtGwt;
   Model1: TModel;
   Model2: TModel;
+  NPER: Integer;
 begin
   SetCurrentDir(ExtractFileDir(NameFile));
   try
@@ -317,7 +318,8 @@ begin
       end;
 
       FTiming.ReadInput(FOutFile);
-      FModels.ReadInput(FOutFile);
+      NPER := FTiming.FTDis.NPER;
+      FModels.ReadInput(FOutFile, NPER);
       for GroupIndex := 0 to FSolutionGroups.Count - 1 do
       begin
         FSolutionGroups[GroupIndex].ReadInput(FOutFile);
@@ -348,7 +350,7 @@ begin
           GwfGwfReader.Dimensions := (Model1.FName as TFlowNameFile).Dimensions;
           GwfGwfReader.FDimensions2 := (Model2.FName as TFlowNameFile).Dimensions;
           ExcPackage.Package := GwfGwfReader;
-          ExcPackage.ReadPackage(FOutFile);
+          ExcPackage.ReadPackage(FOutFile, NPER);
         end
         else if ExcPackage.FileType = 'GWT6-GWT6' then
         begin
@@ -356,7 +358,7 @@ begin
           GwtGwtReader.Dimensions := (Model1.FName as TTransportNameFile).Dimensions;
           GwtGwtReader.FDimensions2 := (Model2.FName as TTransportNameFile).Dimensions;
           ExcPackage.Package := GwtGwtReader;
-          ExcPackage.ReadPackage(FOutFile);
+          ExcPackage.ReadPackage(FOutFile, NPER);
         end
         else if ExcPackage.FileType = 'GWF6-GWT6' then
         begin
@@ -720,13 +722,13 @@ begin
   end;
 end;
 
-procedure TModels.ReadInput(Unhandled: TStreamWriter);
+procedure TModels.ReadInput(Unhandled: TStreamWriter; const NPER: integer);
 var
   ModelIndex: Integer;
 begin
   for ModelIndex := 0 to FModels.Count - 1 do
   begin
-    FModels[ModelIndex].ReadInput(Unhandled);
+    FModels[ModelIndex].ReadInput(Unhandled, NPER);
   end;
 end;
 
@@ -1025,7 +1027,7 @@ begin
   end;
 end;
 
-procedure TModel.ReadInput(Unhandled: TStreamWriter);
+procedure TModel.ReadInput(Unhandled: TStreamWriter; const NPER: integer);
 var
   NameFileStream: TStreamReader;
 begin
@@ -1050,7 +1052,7 @@ begin
         if FName <> nil then
         begin
           FName.Read(NameFileStream, Unhandled);
-          FName.ReadInput(Unhandled);
+          FName.ReadInput(Unhandled, NPER);
         end;
       finally
         NameFileStream.Free;

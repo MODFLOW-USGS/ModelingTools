@@ -69,7 +69,7 @@ type
 
   TCustomNameFile = class(TCustomMf6Persistent)
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); virtual; abstract;
-    procedure ReadInput(Unhandled: TStreamWriter); virtual; abstract;
+    procedure ReadInput(Unhandled: TStreamWriter; const NPER: Integer); virtual; abstract;
   end;
 
   TNameFile<Options: TCustomNameFileOptions; Packages: TCustomPackages> = class(TCustomNameFile)
@@ -84,7 +84,7 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter); override;
-    procedure ReadInput(Unhandled: TStreamWriter); override;
+    procedure ReadInput(Unhandled: TStreamWriter; const NPER: Integer); override;
     property Dimensions: TDimensions read FDimensions;
     property NfOptions: Options read FOptions;
     property NfPackages: Packages read FPackages;
@@ -495,7 +495,7 @@ begin
   end;
 end;
 
-procedure TNameFile<Options, Packages>.ReadInput(Unhandled: TStreamWriter);
+procedure TNameFile<Options, Packages>.ReadInput(Unhandled: TStreamWriter; const NPER: Integer);
 var
   PackageIndex: Integer;
   APackage: TPackage;
@@ -549,7 +549,7 @@ begin
     begin
       DisReader := TDis.Create(APackage.FileType);
       APackage.Package := DisReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
       FDimensions := DisReader.Dimensions;
       Break;
     end
@@ -557,7 +557,7 @@ begin
     begin
       DisvReader := TDisv.Create(APackage.FileType);
       APackage.Package := DisvReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
       FDimensions := DisvReader.Dimensions;
       Break;
     end
@@ -565,7 +565,7 @@ begin
     begin
       DisuReader := TDisu.Create(APackage.FileType);
       APackage.Package := DisuReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
       FDimensions := DisuReader.Dimensions;
       Break;
     end;
@@ -585,152 +585,152 @@ begin
       IcReader := TIc.Create(APackage.FileType);
       IcReader.Dimensions := FDimensions;
       APackage.Package := IcReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'OC6' then
     begin
       OcReader := TOc.Create(APackage.FileType);
       APackage.Package := OcReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'OBS6' then
     begin
       GwfObsReader := TObs.Create(APackage.FileType);
       GwfObsReader.Dimensions := FDimensions;
       APackage.Package := GwfObsReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'NPF6' then
     begin
       NpfReader := TNpf.Create(APackage.FileType);
       NpfReader.Dimensions := FDimensions;
       APackage.Package := NpfReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'HFB6' then
     begin
       HfbReader := THfb.Create(APackage.FileType);
       HfbReader.Dimensions := FDimensions;
       APackage.Package := HfbReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'STO6' then
     begin
       StoReader := TSto.Create(APackage.FileType);
       StoReader.Dimensions := FDimensions;
       APackage.Package := StoReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'CSUB6' then
     begin
       CSubReader := TCSub.Create(APackage.FileType);
       CSubReader.Dimensions := FDimensions;
       APackage.Package := CSubReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'BUY6' then
     begin
       BuyReader := TBuy.Create(APackage.FileType);
       BuyReader.Dimensions := FDimensions;
       APackage.Package := BuyReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'VSC6' then
     begin
       VscReader := TVsc.Create(APackage.FileType);
       VscReader.Dimensions := FDimensions;
       APackage.Package := VscReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'CHD6' then
     begin
       ChdReader := TChd.Create(APackage.FileType);
       ChdReader.Dimensions := FDimensions;
       APackage.Package := ChdReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'WEL6' then
     begin
       WelReader := TWel.Create(APackage.FileType);
       WelReader.Dimensions := FDimensions;
       APackage.Package := WelReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'DRN6' then
     begin
       DrnReader := TDrn.Create(APackage.FileType);
       DrnReader.Dimensions := FDimensions;
       APackage.Package := DrnReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'GHB6' then
     begin
       GhbReader := TGhb.Create(APackage.FileType);
       GhbReader.Dimensions := FDimensions;
       APackage.Package := GhbReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'RIV6' then
     begin
       RivReader := TRiv.Create(APackage.FileType);
       RivReader.Dimensions := FDimensions;
       APackage.Package := RivReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'RCH6' then
     begin
       RchReader := TRch.Create(APackage.FileType);
       RchReader.Dimensions := FDimensions;
       APackage.Package := RchReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'EVT6' then
     begin
       EvtReader := TEvt.Create(APackage.FileType);
       EvtReader.Dimensions := FDimensions;
       APackage.Package := EvtReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'MAW6' then
     begin
       MawReader := TMaw.Create(APackage.FileType);
       MawReader.Dimensions := FDimensions;
       APackage.Package := MawReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'SFR6' then
     begin
       SfrReader := TSfr.Create(APackage.FileType);
       SfrReader.Dimensions := FDimensions;
       APackage.Package := SfrReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'LAK6' then
     begin
       LakReader := TLak.Create(APackage.FileType);
       LakReader.Dimensions := FDimensions;
       APackage.Package := LakReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'UZF6' then
     begin
       UzfReader := TUzf.Create(APackage.FileType);
       UzfReader.Dimensions := FDimensions;
       APackage.Package := UzfReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'MVR6' then
     begin
       MovReader := TMvr.Create(APackage.FileType);
       APackage.Package := MovReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'GNC6' then
     begin
       GncReader := TGnc.Create(APackage.FileType);
       GncReader.Dimensions := FDimensions;
       APackage.Package := GncReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'GWF6-GWF6' then
     begin
@@ -738,7 +738,7 @@ begin
       GwfGwfReader.Dimensions := FDimensions;
       GwfGwfReader.FDimensions2 := FDimensions;
       APackage.Package := GwfGwfReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'GWT6-GWT6' then
     begin
@@ -746,95 +746,95 @@ begin
       GwtGwtReader.Dimensions := FDimensions;
       GwtGwtReader.FDimensions2 := FDimensions;
       APackage.Package := GwtGwtReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'ADV6' then
     begin
       AdvReader := TAdv.Create(APackage.FileType);
       APackage.Package := AdvReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'DSP6' then
     begin
       DspReader := TDsp.Create(APackage.FileType);
       DspReader.Dimensions := FDimensions;
       APackage.Package := DspReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'SSM6' then
     begin
       SsmReader := TSsm.Create(APackage.FileType);
       SsmReader.Dimensions := FDimensions;
       APackage.Package := SsmReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'MST6' then
     begin
       MstReader := TMst.Create(APackage.FileType);
       MstReader.Dimensions := FDimensions;
       APackage.Package := MstReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'IST6' then
     begin
       IstReader := TIst.Create(APackage.FileType);
       IstReader.Dimensions := FDimensions;
       APackage.Package := IstReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'CNC6' then
     begin
       CncReader := TCnc.Create(APackage.FileType);
       CncReader.Dimensions := FDimensions;
       APackage.Package := CncReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'SRC6' then
     begin
       SrcReader := TSrc.Create(APackage.FileType);
       SrcReader.Dimensions := FDimensions;
       APackage.Package := SrcReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'SFT6' then
     begin
       SftReader := TSft.Create(APackage.FileType);
       SftReader.Dimensions := FDimensions;
       APackage.Package := SftReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'LKT6' then
     begin
       LktReader := TLkt.Create(APackage.FileType);
       LktReader.Dimensions := FDimensions;
       APackage.Package := LktReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'MWT6' then
     begin
       MwtReader := TMwt.Create(APackage.FileType);
       MwtReader.Dimensions := FDimensions;
       APackage.Package := MwtReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'UZT6' then
     begin
       UzwtReader := TUzt.Create(APackage.FileType);
       UzwtReader.Dimensions := FDimensions;
       APackage.Package := UzwtReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'FMI6' then
     begin
       FmiReader := TFmi.Create(APackage.FileType);
       APackage.Package := FmiReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else if APackage.FileType = 'MVT6' then
     begin
       MvtReader := TMvt.Create(APackage.FileType);
       APackage.Package := MvtReader;
-      APackage.ReadPackage(Unhandled);
+      APackage.ReadPackage(Unhandled, NPER);
     end
     else
     begin
