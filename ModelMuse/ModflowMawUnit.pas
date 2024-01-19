@@ -236,14 +236,14 @@ type
     // SHUT_OFF, RATE_SCALING
     property RateLimitation: TRateLimitation read FRateLimitation
       write SetRateLimitation;
-    // minrate
+    // minrate with SHUT_OFF
     property MinRate: string read GetMinRate write SetMinRate;
-    // maxrate
+    // maxrate with SHUT_OFF
     property MaxRate: string read GetMaxRate write SetMaxRate;
 
-    // pump_elevation
+    // pump_elevation with RATE_SCALING
     property PumpElevation: string read GetPumpElevation write SetPumpElevation;
-    // scaling_length
+    // scaling_length with RATE_SCALING
     property ScalingLength: string read GetScalingLength write SetScalingLength;
     // HEAD_LIMIT
     property HeadLimitChoice: Boolean read FHeadLimitChoice write SetHeadLimitChoice;
@@ -1506,7 +1506,6 @@ var
   AScreenObject: TObject;
   PestName: string;
   PestSeriesName: string;
-  PestSeriesMethod: TPestParamMethod;
   TimeSeriesName: string;
   DynamicTimeSeries: IDynamicTimeSeries;
 begin
@@ -1520,7 +1519,7 @@ begin
   AScreenObject := CellAssignmentData.AScreenObject;
   PestName := CellAssignmentData.PestName;
   PestSeriesName := CellAssignmentData.PestSeriesName;
-  PestSeriesMethod := CellAssignmentData.PestSeriesMethod;
+//  PestSeriesMethod := CellAssignmentData.PestSeriesMethod;
   TimeSeriesName := CellAssignmentData.TimeSeriesName;
   DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
 

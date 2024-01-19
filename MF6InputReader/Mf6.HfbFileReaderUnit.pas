@@ -234,7 +234,15 @@ begin
         and ReadCellID(CellPair.CellId2, DimensionCount, DimensionCount)
         and TryFortranStrToFloat(FSplitter[DimensionCount*2], CellPair.hydchr)  then
       begin
-        FSettings.Add(CellPair);
+        if CellPair.CellId1.Layer = CellPair.CellId2.Layer then
+        begin
+          FSettings.Add(CellPair);
+        end
+        else
+        begin
+          Unhandled.WriteLine('Unmatched layers in HFB PERIOD data in the following line.');
+          Unhandled.WriteLine(ErrorLine);
+        end;
       end
       else
       begin

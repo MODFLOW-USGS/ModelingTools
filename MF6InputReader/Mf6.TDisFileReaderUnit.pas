@@ -42,7 +42,7 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Initialize; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; NPER: Integer);
     property Count: Integer read GetCount;
     property Periods[Index: Integer]: TPeriod read GetPeriod; default;
   end;
@@ -264,7 +264,7 @@ begin
   FPeriods.Clear;
 end;
 
-procedure TTDisPeriodData.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+procedure TTDisPeriodData.Read(Stream: TStreamReader; Unhandled: TStreamWriter; NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -315,6 +315,10 @@ begin
         Unhandled.WriteLine(Format('Unable to convert %s to a floating point number in the following Line',
           [FSplitter[2]]));
         Unhandled.WriteLine(ErrorLine);
+      end;
+      if FPeriods.Count = NPER then
+      begin
+        Exit;
       end;
     end
     else
@@ -405,11 +409,7 @@ begin
             Unhandled.WriteLine(ErrorLine);
             Continue;
           end;
-          FPeriodData.Read(Stream, Unhandled);
-          if FPeriodData.Count = FDimensions.NPER then
-          begin
-            Exit;
-          end;
+          FPeriodData.Read(Stream, Unhandled, FDimensions.NPER);
         end
         else
         begin
