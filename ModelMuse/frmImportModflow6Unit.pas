@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, frameGridUnit,
   Vcl.StdCtrls, Vcl.Mask, JvExMask, JvToolEdit, Vcl.ExtCtrls, Vcl.Buttons,
-  System.IOUtils, System.UITypes, Vcl.Grids;
+  System.IOUtils, System.UITypes, Vcl.Grids, Vcl.ComCtrls;
 
 type
   TfrmImportModflow6 = class(TfrmCustomGoPhast)
@@ -19,6 +19,7 @@ type
     btnOK: TBitBtn;
     btnCancel: TBitBtn;
     odSimFiles: TOpenDialog;
+    stat1: TStatusBar;
     procedure frameTransportNameFilesGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
     procedure FormCreate(Sender: TObject); override;
@@ -27,6 +28,7 @@ type
     procedure FormActivate(Sender: TObject);
   private
     procedure Initialize;
+    procedure UpdateStatusBar(Sender: TObject; Text: string);
     { Private declarations }
   protected
     procedure CreateParams(var Params: TCreateParams); override;
@@ -84,6 +86,7 @@ begin
     Importer := TModflow6Importer.Create;
     ErrorMessages := TStringList.Create;
     try
+      Importer.OnUpdataStatusBar := UpdateStatusBar;
       Importer.ImportModflow6Model(NameFiles, ErrorMessages);
     finally
       Importer.Free;
@@ -141,6 +144,12 @@ end;
 procedure TfrmImportModflow6.Initialize;
 begin
   frameTransportNameFiles.Grid.Cells[0,0] := 'MODFLOW 6 Simulation Name Files for transport (optional)';
+end;
+
+procedure TfrmImportModflow6.UpdateStatusBar(Sender: TObject; Text: string);
+begin
+  stat1.SimpleText := Text;
+  Application.ProcessMessages;
 end;
 
 end.

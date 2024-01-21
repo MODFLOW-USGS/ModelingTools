@@ -294,6 +294,10 @@ var
   IPER: Integer;
   APeriod: THfbStressPeriod;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading HFB package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

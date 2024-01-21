@@ -975,6 +975,10 @@ var
   LakeTablePackage: TPackage;
   LakeTableReader: TLakeTable;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading LAK package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

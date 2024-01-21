@@ -392,6 +392,10 @@ var
   PackageIndex: Integer;
   TsReader: TTimeSeries;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading SPC package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

@@ -417,6 +417,10 @@ var
   ALine: string;
   ErrorLine: string;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading DIS package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

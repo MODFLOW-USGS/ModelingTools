@@ -297,6 +297,10 @@ var
   IPER: Integer;
   APeriod: TStoStressPeriod;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading STO package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

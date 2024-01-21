@@ -60,6 +60,7 @@ type
     FSimulations: TObjectList<TMf6Simulation>;
     FMvrSources: TMvrSourceList;
     FMvrReceivers: TMvrReceiverList;
+    FOnUpdataStatusBar: TOnUpdataStatusBar;
     procedure ImportFlowModelTiming;
     procedure ImportSimulationOptions;
     procedure ImportSolutionGroups;
@@ -69,6 +70,7 @@ type
     procedure UpdateLayerStructure(NumberOfLayers: Integer);
     procedure CreateAllTopCellsScreenObject;
     function GetAllTopCellsScreenObject: TScreenObject;
+    procedure SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar);
     property AllTopCellsScreenObject: TScreenObject read GetAllTopCellsScreenObject;
     procedure AssignRealValuesToCellCenters(DataArray: TDataArray;
       ScreenObject: TScreenObject; ImportedData: TDArray2D);
@@ -113,6 +115,8 @@ type
     Constructor Create;
     destructor Destroy; override;
     procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
+    property OnUpdataStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
+      write SetOnUpdataStatusBar;
   end;
 
 implementation
@@ -372,6 +376,10 @@ var
   ChemComponents: TMobileChemSpeciesCollection;
   ChemItem: TMobileChemSpeciesItem;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing BUY package');
+  end;
   Model := frmGoPhast.PhastModel;
   BuoyancyPackage := Model.ModflowPackages.BuoyancyPackage;
   BuoyancyPackage.IsSelected := True;
@@ -565,7 +573,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_CHD_Obs_%d', [Package.PackageName, ObjectCount]);
+    NewName := ValidName(Format('Imported_%s_CHD_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -606,7 +614,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_CHD_%d_Period_%d', [Package.PackageName, ObjectCount, Period]);
+    NewName := ValidName(Format('Imported_%s_CHD_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -647,6 +655,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing CHD package');
+  end;
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.ChdBoundary.IsSelected := True;
 
@@ -683,6 +695,10 @@ begin
       ObsFiles := Chd.Observations[ObsPackageIndex].Package as TObs;
       GetObservations(nil, BoundNameObsDictionary,
         CellIdObsDictionary, ObsLists, ObsFiles);
+    end;
+    if Assigned(OnUpdataStatusBar) then
+    begin
+      OnUpdataStatusBar(self, 'importing CHD package');
     end;
 
     TransportAuxNames := TStringList.Create;
@@ -727,6 +743,10 @@ begin
           AnItem.EndTime := StartTime;
         end;
         ItemList.Clear;
+        for CellListIndex := 0 to CellLists.Count - 1 do
+        begin
+          CellLists[CellListIndex].Clear;
+        end;
 
         for CellIndex := 0 to APeriod.Count - 1 do
         begin
@@ -971,18 +991,18 @@ var
       Model, vdTop, UndoCreateScreenObject, False);
     if BoundName <> '' then
     begin
-      NewName := 'ImportedCSUB_' + BoundName;
+      NewName := ValidName('ImportedCSUB_' + BoundName);
     end
     else
     begin
       if Period > 0 then
       begin
-        NewName := 'ImportedCSUB_Period_' + IntToStr(Period);
+        NewName := ValidName('ImportedCSUB_Period_' + IntToStr(Period));
       end
       else
       begin
         Inc(ObjectCount);
-        NewName := 'ImportedCSUB_Obs'  + IntToStr(ObjectCount);
+        NewName := ValidName('ImportedCSUB_Obs'  + IntToStr(ObjectCount));
       end;
     end;
     result.Name := NewName;
@@ -1383,6 +1403,10 @@ var
     end
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing CSUB package');
+  end;
   StartTime := 0.0;
   ObjectCount := 0;
   Model := frmGoPhast.PhastModel;
@@ -1414,6 +1438,10 @@ begin
       ObsFiles := CSub.Observations[ObsPackageIndex].Package as TObs;
       GetObservations(IcsubnoObsDictionary, BoundNameObsDictionary,
         CellIdObsDictionary, ObsLists, ObsFiles);
+    end;
+    if Assigned(OnUpdataStatusBar) then
+    begin
+      OnUpdataStatusBar(self, 'importing CSUB package');
     end;
 
     Options := CSub.Options;
@@ -1757,6 +1785,10 @@ var
   NumberOfLayers: Integer;
   IDOMAIN: TIArray3D;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing DIS package');
+  end;
   Model := frmGoPhast.PhastModel;
   MfOptions := Model.ModflowOptions;
 
@@ -1874,6 +1906,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing DISV package');
+  end;
   Model := frmGoPhast.PhastModel;
   MfOptions := Model.ModflowOptions;
 
@@ -2137,7 +2173,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Drn_Obs_%d', [Package.PackageName, ObjectCount]);
+    NewName := ValidName(Format('Imported_%s_Drn_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -2179,7 +2215,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Drn_%d_Period_%d', [Package.PackageName, ObjectCount, Period]);
+    NewName := ValidName(Format('Imported_%s_Drn_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -2233,6 +2269,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing DRN package');
+  end;
   // Get the MVR package.
   if MvrPackage = nil then
   begin
@@ -2380,6 +2420,11 @@ begin
         CellIdObsDictionary, ObsLists, ObsFiles);
     end;
 
+    if Assigned(OnUpdataStatusBar) then
+    begin
+      OnUpdataStatusBar(self, 'importing DRN package');
+    end;
+
     LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
     ACellList := nil;
@@ -2399,6 +2444,10 @@ begin
         AnItem.EndTime := StartTime;
       end;
       ItemList.Clear;
+      for CellListIndex := 0 to CellLists.Count - 1 do
+      begin
+        CellLists[CellListIndex].Clear;
+      end;
 
       // Assign all cells in the current period to a cell list.
       for CellIndex := 0 to APeriod.Count - 1 do
@@ -2872,7 +2921,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Evt_Obs_%d', [Package.PackageName, ObjectCount]);
+    NewName := ValidName(Format('Imported_%s_Evt_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -2913,7 +2962,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Evt_%d_Period_%d', [Package.PackageName, ObjectCount, Period]);
+    NewName := ValidName(Format('Imported_%s_Evt_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -2954,6 +3003,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing EVT package');
+  end;
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.EtsPackage.IsSelected := True;
 
@@ -3011,6 +3064,11 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
+      if Assigned(OnUpdataStatusBar) then
+      begin
+        OnUpdataStatusBar(self, 'importing EVT package');
+      end;
+
       TransportAuxNames := TStringList.Create;
       try
         TransportAuxNames.CaseSensitive := False;
@@ -3053,6 +3111,10 @@ begin
             AnItem.EndTime := StartTime;
           end;
           ItemList.Clear;
+          for CellListIndex := 0 to CellLists.Count - 1 do
+          begin
+            CellLists[CellListIndex].Clear;
+          end;
 
           for EvtIndex := 0 to SurfDepthList.Count - 1 do
           begin
@@ -3529,8 +3591,11 @@ var
   AtsIndex: Integer;
   AtsPeriod: TAtsPeriod;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing TDIS package');
+  end;
   StressPeriods := FSimulation.Timing.TDis;
-
 
   PhastModel := frmGoPhast.PhastModel;
   MfOptions := PhastModel.ModflowOptions;
@@ -3851,7 +3916,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Ghb_Obs_%d', [Package.PackageName, ObjectCount]);
+    NewName := ValidName(Format('Imported_%s_Ghb_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -3893,7 +3958,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Ghb_%d_Period_%d', [Package.PackageName, ObjectCount, Period]);
+    NewName := ValidName(Format('Imported_%s_Ghb_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -3947,6 +4012,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing GHB package');
+  end;
   // Get the MVR package.
   if MvrPackage = nil then
   begin
@@ -4084,6 +4153,10 @@ begin
       GetObservations(nil, BoundNameObsDictionary,
         CellIdObsDictionary, ObsLists, ObsFiles);
     end;
+    if Assigned(OnUpdataStatusBar) then
+    begin
+      OnUpdataStatusBar(self, 'importing GHB package');
+    end;
 
     TransportAuxNames := TStringList.Create;
     try
@@ -4134,6 +4207,11 @@ begin
           AnItem.EndTime := StartTime;
         end;
         ItemList.Clear;
+
+        for CellListIndex := 0 to CellLists.Count - 1 do
+        begin
+          CellLists[CellListIndex].Clear;
+        end;
 
         for CellListIndex := 0 to CellLists.Count - 1 do
         begin
@@ -4370,6 +4448,10 @@ var
   APoint: TPoint2D;
   CellId: TCellId;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing OBS package');
+  end;
   Obs := Package.Package as TObs;
   Model := frmGoPhast.PhastModel;
   Mf6ObservationUtility := Model.ModflowPackages.Mf6ObservationUtility;
@@ -4504,6 +4586,10 @@ var
     NewItem.Thickness := '1';
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing HFB package');
+  end;
   Model := frmGoPhast.PhastModel;
   SetLength(ScreenObjects, Model.LayerCount);
   for LayerIndex := 0 to Length(ScreenObjects) - 1 do
@@ -4590,6 +4676,10 @@ procedure TModflow6Importer.ImportIc(Package: TPackage);
 var
   IC: TIc;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing IC package');
+  end;
   IC := Package.Package as TIc;
   Assign3DRealDataSet(rsModflow_Initial_Head, IC.GridData.STRT);
 end;
@@ -4709,6 +4799,10 @@ var
     Mf6Obs.MawObs := MawObs;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing MAW package');
+  end;
   Model := frmGoPhast.PhastModel;
   MawPackage := Model.ModflowPackages.MawPackage;
   MawPackage.IsSelected := True;
@@ -4737,6 +4831,11 @@ begin
       ObsFiles := Maw.Observations[ObsPackageIndex].Package as TObs;
       GetObservations(NumberObsDictionary, BoundNameObsDictionary,
         nil, ObsLists, ObsFiles);
+    end;
+
+    if Assigned(OnUpdataStatusBar) then
+    begin
+      OnUpdataStatusBar(self, 'importing MAW package');
     end;
 
 
@@ -4771,7 +4870,7 @@ begin
 
       AScreenObject := TScreenObject.CreateWithViewDirection(
         Model, vdTop, UndoCreateScreenObject, False);
-      NewName := Format('Imported_%s_Maw_%d', [Package.PackageName, WellIndex + 1]);
+      NewName := ValidName(Format('Imported_%s_Maw_%d', [Package.PackageName, WellIndex + 1]));
       AScreenObject.Name := NewName;
       AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -4831,6 +4930,7 @@ begin
     LastTime := Model.ModflowStressPeriods.Last.EndTime;
     for PeriodIndex := 0 to Maw.PeriodCount - 1 do
     begin
+
       APeriod := Maw.Periods[PeriodIndex];
       StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
       for ObjectIndex := 1 to Length(Wells) - 1 do
@@ -5003,6 +5103,7 @@ begin
   begin
     FSimulation := TMf6Simulation.Create('Simulation');
     try
+      FSimulation.OnUpdataStatusBar := OnUpdataStatusBar;
       FSimulations.Add(FSimulation);
       FSimulation.ReadSimulation(NameFiles[FileIndex]);
       OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
@@ -5223,6 +5324,10 @@ var
   DataArray: TDataArray;
   TvkIndex: Integer;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing NPF package');
+  end;
   Model := frmGoPhast.PhastModel;
   Npf := Package.Package as TNpf;
 
@@ -5341,6 +5446,10 @@ var
   Model: TPhastModel;
   OutputControl: TModflowOutputControl;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing OC package');
+  end;
   OC := Package.Package as TOc;
   Model := frmGoPhast.PhastModel;
   OutputControl := Model.ModflowOutputControl;
@@ -5517,7 +5626,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Rch_Obs_%d', [Package.PackageName, ObjectCount]);
+    NewName := ValidName(Format('Imported_%s_Rch_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -5558,7 +5667,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Rch_%d_Period_%d', [Package.PackageName, ObjectCount, Period]);
+    NewName := ValidName(Format('Imported_%s_Rch_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -5599,6 +5708,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing RCH package');
+  end;
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.RchPackage.IsSelected := True;
   Model.ModflowPackages.RchPackage.AssignmentMethod := umAdd;
@@ -5646,6 +5759,11 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
+      if Assigned(OnUpdataStatusBar) then
+      begin
+        OnUpdataStatusBar(self, 'importing RCH package');
+      end;
+
       TransportAuxNames := TStringList.Create;
       try
         TransportAuxNames.CaseSensitive := False;
@@ -5688,6 +5806,10 @@ begin
             AnItem.EndTime := StartTime;
           end;
           ItemList.Clear;
+          for CellListIndex := 0 to CellLists.Count - 1 do
+          begin
+            CellLists[CellListIndex].Clear;
+          end;
 
           for CellIndex := 0 to APeriod.Count - 1 do
           begin
@@ -6103,7 +6225,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Riv_Obs_%d', [Package.PackageName, ObjectCount]);
+    NewName := ValidName(Format('Imported_%s_Riv_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -6145,7 +6267,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Riv_%d_Period_%d', [Package.PackageName, ObjectCount, Period]);
+    NewName := ValidName(Format('Imported_%s_Riv_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -6199,6 +6321,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing RIV package');
+  end;
   // Get the MVR package.
   if MvrPackage = nil then
   begin
@@ -6337,6 +6463,11 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
+      if Assigned(OnUpdataStatusBar) then
+      begin
+        OnUpdataStatusBar(self, 'importing RIV package');
+      end;
+
       TransportAuxNames := TStringList.Create;
       try
         TransportAuxNames.CaseSensitive := False;
@@ -6385,6 +6516,10 @@ begin
             AnItem.EndTime := StartTime;
           end;
           ItemList.Clear;
+          for CellListIndex := 0 to CellLists.Count - 1 do
+          begin
+            CellLists[CellListIndex].Clear;
+          end;
 
           // Assign all cells in the current period to a cell list.
           for CellIndex := 0 to APeriod.Count - 1 do
@@ -7199,6 +7334,10 @@ var
   StressPeriod: TModflowStressPeriod;
   InnerIndex: Integer;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing STO package');
+  end;
   Model := frmGoPhast.PhastModel;
   Sto := Package.Package as TSto;
 
@@ -7304,6 +7443,10 @@ var
   TimeIndex: Integer;
   ImportedValues: TDoubleList;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing TIME SERIES file');
+  end;
   Model := frmGoPhast.PhastModel;
   Mf6TimesSeries := Model.Mf6TimesSeries;
 
@@ -7436,6 +7579,10 @@ var
     NewItem.EndTime := LastTime;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing TVK package');
+  end;
   Model := frmGoPhast.PhastModel;
   LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
@@ -7450,6 +7597,10 @@ begin
     begin
       TimeSeriesPackage := Tvk.TimeSeriesPackages[TimeSeriesIndex];
       ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+    if Assigned(OnUpdataStatusBar) then
+    begin
+      OnUpdataStatusBar(self, 'importing TVK package');
     end;
 
     KScreenObject := nil;
@@ -7705,6 +7856,10 @@ var
     NewItem.EndTime := LastTime;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing TVS package');
+  end;
   Model := frmGoPhast.PhastModel;
   LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
@@ -7721,6 +7876,10 @@ begin
     begin
       TimeSeriesPackage := Tvs.TimeSeriesPackages[TimeSeriesIndex];
       ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+    if Assigned(OnUpdataStatusBar) then
+    begin
+      OnUpdataStatusBar(self, 'importing TVS package');
     end;
 
     SsScreenObject := nil;
@@ -7883,6 +8042,10 @@ var
   ChemComponents: TMobileChemSpeciesCollection;
   ChemItem: TMobileChemSpeciesItem;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing VSC package');
+  end;
   Model := frmGoPhast.PhastModel;
   ViscosityPackage := Model.ModflowPackages.ViscosityPackage;
   ViscosityPackage.IsSelected := True;
@@ -8154,7 +8317,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Wel_Obs_%d', [Package.PackageName, ObjectCount]);
+    NewName := ValidName(Format('Imported_%s_Wel_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -8196,7 +8359,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := Format('Imported_%s_Wel_%d_Period_%d', [Package.PackageName, ObjectCount, Period]);
+    NewName := ValidName(Format('Imported_%s_Wel_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -8254,6 +8417,10 @@ var
     end;
   end;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'importing WEL package');
+  end;
   // Get the MVR package.
   if MvrPackage = nil then
   begin
@@ -8392,6 +8559,11 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
+      if Assigned(OnUpdataStatusBar) then
+      begin
+        OnUpdataStatusBar(self, 'importing WEL package');
+      end;
+
       TransportAuxNames := TStringList.Create;
       try
         TransportAuxNames.CaseSensitive := False;
@@ -8440,6 +8612,10 @@ begin
             AnItem.EndTime := StartTime;
           end;
           ItemList.Clear;
+          for CellListIndex := 0 to CellLists.Count - 1 do
+          begin
+            CellLists[CellListIndex].Clear;
+          end;
 
           // Assign all cells in the current period to a cell list.
           for CellIndex := 0 to APeriod.Count - 1 do
@@ -8648,6 +8824,12 @@ begin
     WellMvrLinkList.Free;
     OtherCellLists.Free;
   end;
+end;
+
+procedure TModflow6Importer.SetOnUpdataStatusBar(
+  const Value: TOnUpdataStatusBar);
+begin
+  FOnUpdataStatusBar := Value;
 end;
 
 { TConnection }

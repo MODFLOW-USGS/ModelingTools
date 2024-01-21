@@ -7,6 +7,8 @@ uses
   System.Generics.Collections, System.Generics.Defaults;
 
 type
+  TOnUpdataStatusBar = procedure(AnObject: TObject; Text: string) of object;
+
    TRealOption = record
      Value: Extended;
      Used: Boolean;
@@ -77,6 +79,8 @@ type
 
 
   TCustomMf6Persistent = class(TPersistent)
+  private
+    FOnUpdataStatusBar: TOnUpdataStatusBar;
   protected
     FSplitter: TStringList;
     FPackageType: string;
@@ -92,9 +96,12 @@ type
     function SwitchToAnotherFile(var Stream: TStreamReader; ErrorLine: string;
       Unhandled: TStreamWriter; var ALine: string; Block: string): Boolean;
     procedure RestoreStream(var Stream: TStreamReader);
+    procedure SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar); virtual;
   public
     constructor Create(PackageType: string); virtual;
     destructor Destroy; override;
+    property OnUpdataStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
+      write SetOnUpdataStatusBar;
   end;
 
   TDataType = (dtReal, dtInteger);
@@ -298,6 +305,12 @@ begin
   FPackageType := PackageType;
   FSplitter := TStringList.Create;
   Initialize;
+end;
+
+procedure TCustomMf6Persistent.SetOnUpdataStatusBar(
+  const Value: TOnUpdataStatusBar);
+begin
+  FOnUpdataStatusBar := Value;
 end;
 
 function TCustomMf6Persistent.StripFollowingComments(AValue: string): string;

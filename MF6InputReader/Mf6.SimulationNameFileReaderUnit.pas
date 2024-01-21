@@ -48,7 +48,9 @@ type
 
   TModel = class(TObject)
   private
+    FOnUpdataStatusBar: TOnUpdataStatusBar;
     function GetFullBudgetFileName: string;
+    procedure SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar);
   public
     ModelType: string;
     NameFile: string;
@@ -57,6 +59,8 @@ type
     destructor Destroy; override;
     procedure ReadInput(Unhandled: TStreamWriter; const NPER: integer);
     property FullBudgetFileName: string read GetFullBudgetFileName;
+    property OnUpdataStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
+      write SetOnUpdataStatusBar;
   end;
 
   TModelList = TList<TModel>;
@@ -67,7 +71,6 @@ type
     FModels: TObjectModelList;
     function GetCount: Integer;
     function GetModel(Index: Integer): TModel;
-  protected
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -104,6 +107,10 @@ type
   end;
 
   TSolution = class(TObject)
+  private
+    FOnUpdataStatusBar: TOnUpdataStatusBar;
+    procedure SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar);
+  public
     SolutionType: string;
     SolutionFileName: string;
     FSolutionModelNames: TStringList;
@@ -111,6 +118,8 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure ReadInput(Unhandled: TStreamWriter);
+    property OnUpdataStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
+      write SetOnUpdataStatusBar;
   end;
 
   TSolutionList = TObjectList<TSolution>;
@@ -149,6 +158,8 @@ type
     function GetExchanges: TExchanges;
     function GetSolutionGroup(Index: Integer): TSolutionGroup;
     function GetSolutionGroupCount: Integer;
+  protected
+    procedure SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar); override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -389,6 +400,15 @@ begin
   end;
 end;
 
+procedure TMf6Simulation.SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar);
+begin
+  inherited;
+  FSimulationOptions.OnUpdataStatusBar := Value;
+  FTiming.OnUpdataStatusBar := Value;
+  FModels.OnUpdataStatusBar := Value;
+  FExchanges.OnUpdataStatusBar := Value;
+end;
+
 { TSimulationOptions }
 
 procedure TSimulationOptions.Initialize;
@@ -409,6 +429,10 @@ var
   IntValue: Integer;
 begin
   Initialize;
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading simulation options');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
@@ -530,6 +554,10 @@ var
   ALine: string;
   ErrorLine: string;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading timing');
+  end;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -578,13 +606,17 @@ procedure TTiming.ReadInput(Unhandled: TStreamWriter);
 var
   TDisFile: TStreamReader;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading timing');
+  end;
   if TFile.Exists(FTisFileName) then
   begin
     try
       TDisFile := TFile.OpenText(FTisFileName);
       try
         try
-          FTDis := TTDis.Create('DIS6');
+          FTDis := TTDis.Create('TDIS6');
           FTDis.Read(TDisFile, Unhandled);
           FTDis.ReadInput(Unhandled);
         except on E: Exception do
@@ -675,6 +707,10 @@ var
   AModel: TModel;
   SectionName: string;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading models');
+  end;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -703,6 +739,7 @@ begin
     else if FSplitter.Count >= 3 then
     begin
       AModel := TModel.Create;
+      AModel.OnUpdataStatusBar := OnUpdataStatusBar;
       FModels.Add(AModel);
       AModel.ModelType := UpperCase(FSplitter[0]);
       AModel.NameFile := FSplitter[1];
@@ -726,6 +763,10 @@ procedure TModels.ReadInput(Unhandled: TStreamWriter; const NPER: integer);
 var
   ModelIndex: Integer;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading model input');
+  end;
   for ModelIndex := 0 to FModels.Count - 1 do
   begin
     FModels[ModelIndex].ReadInput(Unhandled, NPER);
@@ -770,6 +811,10 @@ var
   AnExchange: TExchange;
   SectionName: string;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading exchanges');
+  end;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -836,6 +881,10 @@ procedure TSolution.ReadInput(Unhandled: TStreamWriter);
 var
   ImsFileStream: TStreamReader;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading solution');
+  end;
   FreeAndNil(FIms);
   if TFile.Exists(SolutionFileName) then
   begin
@@ -859,6 +908,11 @@ begin
     Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
       [SolutionFileName]));
   end;
+end;
+
+procedure TSolution.SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar);
+begin
+  FOnUpdataStatusBar := Value;
 end;
 
 { TSolutionGroup }
@@ -901,6 +955,10 @@ var
   ASolution: TSolution;
   ModelIndex: Integer;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading solution group');
+  end;
   Initialize;
   while not Stream.EndOfStream do
   begin
@@ -1031,6 +1089,10 @@ procedure TModel.ReadInput(Unhandled: TStreamWriter; const NPER: integer);
 var
   NameFileStream: TStreamReader;
 begin
+  if Assigned (OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(Self, 'reading model');
+  end;
   FreeAndNil(FName);
   if TFile.Exists(NameFile) then
   begin
@@ -1051,6 +1113,7 @@ begin
         end;
         if FName <> nil then
         begin
+          FName.OnUpdataStatusBar := OnUpdataStatusBar;
           FName.Read(NameFileStream, Unhandled);
           FName.ReadInput(Unhandled, NPER);
         end;
@@ -1069,6 +1132,11 @@ begin
     Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
       [NameFile]));
   end;
+end;
+
+procedure TModel.SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar);
+begin
+  FOnUpdataStatusBar := Value;
 end;
 
 end.

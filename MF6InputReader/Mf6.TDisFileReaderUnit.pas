@@ -360,6 +360,10 @@ var
   ALine: string;
   ErrorLine: string;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading TDIS package');
+  end;
   try
     while not Stream.EndOfStream do
     begin

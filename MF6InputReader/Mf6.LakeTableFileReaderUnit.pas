@@ -151,6 +151,10 @@ var
   ErrorLine: string;
   TableItem: TLakeTableItem;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading LAKE TABLE file');
+  end;
   Initialize;
   while not Stream.EndOfStream do
   begin

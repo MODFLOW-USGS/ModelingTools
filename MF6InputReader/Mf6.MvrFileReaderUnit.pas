@@ -557,6 +557,10 @@ var
   IPER: Integer;
   APeriod: TMvrPeriod;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading MVR package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

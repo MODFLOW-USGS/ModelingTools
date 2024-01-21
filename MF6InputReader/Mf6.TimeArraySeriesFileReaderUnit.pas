@@ -200,6 +200,10 @@ var
   ATime: Extended;
   TasTime: TTasTime;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading time-array-file');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

@@ -547,6 +547,10 @@ var
   ObsReader: TObs;
   ObsPackage: TPackage;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading CHD package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

@@ -1,6 +1,5 @@
 inherited frmSelectFlowModel: TfrmSelectFlowModel
   Caption = 'Select Flow Model'
-  ExplicitWidth = 412
   ExplicitHeight = 258
   TextHeight = 18
   object rgFlowModels: TRadioGroup
@@ -11,10 +10,8 @@ inherited frmSelectFlowModel: TfrmSelectFlowModel
     Align = alClient
     Caption = 'Flow Models'
     TabOrder = 0
-    ExplicitLeft = 72
-    ExplicitTop = 64
-    ExplicitWidth = 185
-    ExplicitHeight = 105
+    ExplicitWidth = 396
+    ExplicitHeight = 128
   end
   object Panel1: TPanel
     Left = 0
@@ -23,6 +20,7 @@ inherited frmSelectFlowModel: TfrmSelectFlowModel
     Height = 49
     Align = alTop
     TabOrder = 1
+    ExplicitWidth = 396
     object Label1: TLabel
       AlignWithMargins = True
       Left = 4
@@ -34,8 +32,6 @@ inherited frmSelectFlowModel: TfrmSelectFlowModel
         'ModelMuse can only import one flow model in a simulation. Pick t' +
         'he flow model to import.'
       WordWrap = True
-      ExplicitLeft = 1
-      ExplicitTop = 1
       ExplicitWidth = 330
       ExplicitHeight = 36
     end
@@ -47,13 +43,13 @@ inherited frmSelectFlowModel: TfrmSelectFlowModel
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitLeft = -40
-    ExplicitWidth = 440
+    ExplicitTop = 177
+    ExplicitWidth = 396
     DesignSize = (
       400
       42)
     object btnHelp: TBitBtn
-      Left = 121
+      Left = 117
       Top = 6
       Width = 83
       Height = 33
@@ -61,10 +57,10 @@ inherited frmSelectFlowModel: TfrmSelectFlowModel
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 161
+      ExplicitLeft = 113
     end
     object btnOK: TBitBtn
-      Left = 210
+      Left = 206
       Top = 6
       Width = 83
       Height = 33
@@ -72,10 +68,10 @@ inherited frmSelectFlowModel: TfrmSelectFlowModel
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 250
+      ExplicitLeft = 202
     end
     object btnCancel: TBitBtn
-      Left = 299
+      Left = 295
       Top = 6
       Width = 83
       Height = 33
@@ -83,7 +79,7 @@ inherited frmSelectFlowModel: TfrmSelectFlowModel
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 339
+      ExplicitLeft = 291
     end
   end
 end

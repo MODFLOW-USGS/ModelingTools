@@ -445,6 +445,10 @@ var
   IPer: Integer;
   APeriod: TOcPeriod;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading OC package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

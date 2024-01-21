@@ -627,6 +627,10 @@ var
   MvrPackage: TPackage;
   MvrReader: TMvr;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading gwf-gwf exchange package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
@@ -742,6 +746,10 @@ var
   MvtPackage: TPackage;
   MvtReader: TMvt;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading gwt-gwt exchange package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

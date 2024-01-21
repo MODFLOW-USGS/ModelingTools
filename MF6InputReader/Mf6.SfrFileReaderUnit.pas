@@ -1092,6 +1092,10 @@ var
   CrossSectionPackage: TPackage;
   CrossSectionReader: TCrossSection;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading SFR package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

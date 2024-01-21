@@ -151,6 +151,10 @@ var
   ALine: string;
   ErrorLine: string;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading Automatic time stepping (ATS)');
+  end;
   try
     while not Stream.EndOfStream do
     begin

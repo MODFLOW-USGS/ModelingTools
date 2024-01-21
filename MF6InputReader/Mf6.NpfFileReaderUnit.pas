@@ -449,6 +449,10 @@ var
   PackageIndex: Integer;
   TvkPackage: TPackage;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading NPF package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

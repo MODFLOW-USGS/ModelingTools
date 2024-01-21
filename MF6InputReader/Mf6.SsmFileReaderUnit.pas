@@ -363,6 +363,10 @@ var
   PackageIndex: Integer;
   SpcReader: TSpc;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading SSM package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;

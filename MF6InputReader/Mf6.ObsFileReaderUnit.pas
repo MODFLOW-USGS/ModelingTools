@@ -1144,6 +1144,10 @@ var
   ErrorLine: string;
   ObsFile: TObsFile;
 begin
+  if Assigned(OnUpdataStatusBar) then
+  begin
+    OnUpdataStatusBar(self, 'reading OBS package');
+  end;
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
