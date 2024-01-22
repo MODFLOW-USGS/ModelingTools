@@ -61,8 +61,12 @@ procedure TframeRulerOptions.SetPreview;
 begin
   if (sePrecision <> nil) and (rdePreviewNumber.Text <> '') then
   begin
-    lblPreview.Caption := FloatToStrF(StrToFloat(rdePreviewNumber.Text),
-      ffNumber, sePrecision.AsInteger, seDigits.AsInteger);
+    try
+      lblPreview.Caption := FloatToStrF(StrToFloat(rdePreviewNumber.Text),
+        ffNumber, sePrecision.AsInteger, seDigits.AsInteger);
+    except on EConvertError do
+      lblPreview.Caption := 'not a number';
+    end;
   end;
 end;
 

@@ -10112,7 +10112,7 @@ const
 //               Bug fix: Fixed drawing contours on the side view for DISV
 //                meshes.
 
-//               Bug fix: Fixed export of flow observations in the CHD, DRN,
+//    '5.1.1.52' Bug fix: Fixed export of flow observations in the CHD, DRN,
 //                 GHB, and RIV, packages in MODFLOW 6 models.
 //               Enhancement: Added support for the wel-reduction observation
 //                type in the MODFLOW 6 Observation Utility.
@@ -10123,6 +10123,9 @@ const
 //                equally to the UZF receiver cells.
 //               Enhancement: Added support for BUDGETCSV, FLOWCORRECTION,
 //                and MAW_FLOW_REDUCE_CSV options in MAW.
+//               Bug fix: Fixed bug in editing the format of text in the rulers
+//                that could cause a bug report to be issued if the text
+//                for the sample number was not a number.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10133,9 +10136,11 @@ const
 //               Enhancement: Added support for SUTRA version 4.
 //               Enhancement: Added support for SFR cross sections in MODFLOW 6.
 
+//               Enhancement: Added the ability to import MODFLOW 6 models.
+
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.51';
+  IIModelVersion = '5.1.1.52';
 
 function IModelVersion: string;
 begin

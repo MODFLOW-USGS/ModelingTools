@@ -142,7 +142,7 @@ uses
   Mf6.DrnFileReaderUnit, ModflowDrnUnit, Mf6.RivFileReaderUnit, ModflowRivUnit,
   Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
-  ModflowMawUnit;
+  ModflowMawUnit, ModflowGridUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -4723,6 +4723,12 @@ var
   ObsList: TObservationList;
   NumberObsDictionary: TNumberDictionary;
   CellIds: TCellIdList;
+  CellId: TCellId;
+  DisvGrid: TModflowDisvGrid;
+  Grid: TModflowGrid;
+  DisvCell: TModflowDisVCell;
+  CellTop: Double;
+  CellBottom: Double;
   procedure AssignObservations(ObsList: TObservationList; Mf6Obs: TModflow6Obs);
   var
     MawObs: TMawObs;
@@ -4837,7 +4843,6 @@ begin
     begin
       OnUpdataStatusBar(self, 'importing MAW package');
     end;
-
 
     Options := Maw.Options;
     MawPackage.PrintHead := Options.PRINT_HEAD;
@@ -5033,6 +5038,15 @@ begin
       end;
     end;
 
+    if Model.DisvUsed then
+    begin
+      DisvGrid := Model.DisvGrid;
+    end
+    else
+    begin
+      Grid := Model.ModflowGrid;
+    end;
+
     ConnectionIndex := 0;
     for WellIndex := 1 to Length(Wells) - 1 do
     begin
@@ -5045,10 +5059,42 @@ begin
         Inc(ConnectionIndex);
         Assert(ConnectionItem.wellno = PackageItem.wellno);
         WellScreen := AScreenObject.ModflowMawBoundary.WellScreens.Add as TMawWellScreenItem;
-        WellScreen.ScreenTop := FortranFloatToStr(ConnectionItem.scrn_top);
-        WellScreen.ScreenBottom := FortranFloatToStr(ConnectionItem.scrn_bot);
+//        WellScreen.ScreenTop := FortranFloatToStr(ConnectionItem.scrn_top);
+//        WellScreen.ScreenBottom := FortranFloatToStr(ConnectionItem.scrn_bot);
         WellScreen.SkinK := FortranFloatToStr(ConnectionItem.hk_skin);
         WellScreen.SkinRadius := FortranFloatToStr(ConnectionItem.radius_skin);
+
+        if AScreenObject.ModflowMawBoundary.ConductanceMethod in
+          [mcmSpecified, mcmThiem, mcmSkin, mcmCumulative, mcmTheim] then
+        begin
+          CellId := ConnectionItem.CellID;
+          if Model.DisvUsed then
+          begin
+            DisvCell := DisvGrid.Cells[CellId.Layer-1, CellId.Column-1];
+            CellTop := DisvCell.Top;
+            CellBottom := DisvCell.Bottom;
+          end
+          else
+          begin
+            CellTop := Grid.CellElevation[CellId.Column-1, CellId.Row-1, CellId.Layer-1];
+            CellBottom := Grid.CellElevation[CellId.Column-1, CellId.Row-1, CellId.Layer];
+          end;
+          if ConnectionItem.scrn_top < CellTop then
+          begin
+            CellTop := ConnectionItem.scrn_top;
+          end;
+          if ConnectionItem.scrn_bot > CellBottom then
+          begin
+            CellBottom := ConnectionItem.scrn_bot
+          end;
+          WellScreen.ScreenTop := FortranFloatToStr(CellTop);
+          WellScreen.ScreenBottom := FortranFloatToStr(CellBottom);
+        end
+        else
+        begin
+          WellScreen.ScreenTop := FortranFloatToStr(ConnectionItem.scrn_top);
+          WellScreen.ScreenBottom := FortranFloatToStr(ConnectionItem.scrn_bot);
+        end;
 
         if CIndex = 0 then
         begin
