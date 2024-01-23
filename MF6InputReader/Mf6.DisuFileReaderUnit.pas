@@ -358,7 +358,7 @@ begin
     end
     else if FSplitter[0] = 'IHC' then
     begin
-      OneIReader := TInteger1DArrayReader.Create(FNodes, FPackageType);
+      OneIReader := TInteger1DArrayReader.Create(FNJA, FPackageType);
       try
         OneIReader.Read(Stream, Unhandled);
         IHC := OneIReader.FData;
@@ -368,7 +368,7 @@ begin
     end
     else if FSplitter[0] = 'CL12' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
+      OneDReader := TDouble1DArrayReader.Create(FNJA, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         CL12 := OneDReader.FData;
@@ -378,7 +378,7 @@ begin
     end
     else if FSplitter[0] = 'HWVA' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
+      OneDReader := TDouble1DArrayReader.Create(FNJA, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         HWVA := OneDReader.FData;
@@ -388,7 +388,7 @@ begin
     end
     else if FSplitter[0] = 'ANGLDEGX' then
     begin
-      OneDReader := TDouble1DArrayReader.Create(FNodes, FPackageType);
+      OneDReader := TDouble1DArrayReader.Create(FNJA, FPackageType);
       try
         OneDReader.Read(Stream, Unhandled);
         ANGLDEGX := OneDReader.FData;

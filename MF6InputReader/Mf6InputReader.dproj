@@ -58,6 +58,7 @@
         <DCC_Define>MF6Import;$(DCC_Define)</DCC_Define>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <DCC_UnitSearchPath>C:\ModelingTools\ModelMuse;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>FireDACIBDriver;vclwinx;RbwEdit11_2;fmx;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;FireDACCommonODBC;FireDACCommonDriver;AbbreviaD;appanalytics;IndyProtocols;vclx;ModelCube11_2;IndyIPClient;dbxcds;vcledge;bindcompvclwinx;FmxTeeUI;Ade11_2;bindcompfmx;madBasic_;RbwRollupPanel11_2;JvBands;inetdb;ZoomBox2_11_2;DynamicCursor11_2;JvAppFrm;FireDACSqliteDriver;DbxClientDriver;Tee;soapmidas;JclVcl;GR32_DSGN_RS11_2;vclactnband;TeeUI;fmxFireDAC;dbexpress;Jcl;JvManagedThreads;RbwRuler11_2;DBXMySQLDriver;VclSmp;inet;JvPascalInterpreter;datagrid11_2;vcltouch;fmxase;JvPluginSystem;JvDB;JvTimeFramework;dbrtl;RbwParser11_2;fmxdae;TeeDB;FireDACMSAccDriver;JvCustom;CustomIPTransport;JvSystem;AbbreviaVCLD;ButtonEdit11_2;JclDeveloperTools;JvControls;GlWidget11_2;vcldsnap;JvCrypt;DBXInterBaseDriver;JvJans;madExcept_;JvMM;IndySystem;JvWizards;JvGlobus;vcldb;JclContainers;JvPageComps;vclFireDAC;JvCore;madDisAsm_;bindcomp;FireDACCommon;AbbreviaFMXDDesign;RbwDataGridD11_2;IndyCore;RESTBackendComponents;bindcompdbx;rtl;FireDACMySQLDriver;FireDACADSDriver;RESTComponents;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;adortl;JvDotNetCtrls;JvHMI;VirtualTreesDR;MMJLabel11_2;MostRecentFiles11_2;QuadTreePkg11_2;JvRuntimeDesign;JvXPCtrls;vclimg;FireDACPgDriver;FireDAC;inetdbxpress;JvDlgs;xmlrtl;tethering;JvStdCtrls;JvDocking;JvPrintPreview;bindcompvcl;dsnap;addbtn95_D11_2;JvCmp;CloudService;fmxobj;bindcompvclsmp;FMXTee;GLScene_RT;soaprtl;RbwControllerPackage11_2;soapserver;JvNet;$(DCC_UsePackage)</DCC_UsePackage>
@@ -78,7 +79,7 @@
         <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
-        <DCC_Define>DEBUG;FullDebugMode;$(DCC_Define)</DCC_Define>
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
@@ -95,7 +96,6 @@
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
-        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
         <DCC_MapFile>3</DCC_MapFile>
         <Manifest_File>(None)</Manifest_File>
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>

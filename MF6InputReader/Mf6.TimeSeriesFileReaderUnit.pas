@@ -332,6 +332,7 @@ var
   TimeValues: TDoubleList;
   AValue: Extended;
   Index: Integer;
+  HasError: Boolean;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -364,6 +365,12 @@ begin
       Unhandled.WriteLine(ErrorLine);
     end;
 
+    while FSplitter.Count > FNumberOfTimeSeries+1 do
+    begin
+      FSplitter.Delete(FSplitter.Count-1)
+    end;
+
+    HasError := False;
     TimeValues := nil;
     for Index := 1 to FSplitter.Count - 1 do
     begin
@@ -382,10 +389,11 @@ begin
       end
       else
       begin
+        HasError := True;
         Break;
       end;
     end;
-    if (TimeValues = nil) or (TimeValues.Count < FNumberOfTimeSeries) then
+    if HasError or (FValues.Count < FNumberOfTimeSeries) then
     begin
       Unhandled.WriteLine('Invalid or missing tsr-value in a time series in the following line.');
       Unhandled.WriteLine(ErrorLine);
