@@ -32453,5 +32453,10 @@ object TTaskHistory
       Date = 45315.000000000000000000
       Categories.Strings = (
         'GwMounding')
+    end
+    item
+      Date = 45316.000000000000000000
+      Categories.Strings = (
+        'GwMounding')
     end>
 end

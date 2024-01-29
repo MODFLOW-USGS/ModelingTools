@@ -1,7 +1,7 @@
 inherited frmGwMound: TfrmGwMound
   Caption = 'Groundwater Mounding Calculator'
-  ClientHeight = 544
-  ClientWidth = 732
+  ClientHeight = 543
+  ClientWidth = 728
   Menu = MenuMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -15,7 +15,7 @@ inherited frmGwMound: TfrmGwMound
     Left = 209
     Top = 0
     Width = 12
-    Height = 371
+    Height = 370
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -31,8 +31,8 @@ inherited frmGwMound: TfrmGwMound
   end
   object splitRight: TJvNetscapeSplitter
     Left = 0
-    Top = 371
-    Width = 732
+    Top = 370
+    Width = 728
     Height = 13
     Cursor = crVSplit
     Margins.Left = 4
@@ -50,8 +50,8 @@ inherited frmGwMound: TfrmGwMound
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 493
-    Width = 732
+    Top = 492
+    Width = 728
     Height = 51
     Margins.Left = 4
     Margins.Top = 4
@@ -59,13 +59,11 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 492
-    ExplicitWidth = 728
     DesignSize = (
-      732
+      728
       51)
     object btnBack: TBitBtn
-      Left = 507
+      Left = 499
       Top = 7
       Width = 95
       Height = 32
@@ -94,7 +92,7 @@ inherited frmGwMound: TfrmGwMound
       ExplicitLeft = 503
     end
     object btnNext: TBitBtn
-      Left = 610
+      Left = 602
       Top = 7
       Width = 95
       Height = 32
@@ -146,7 +144,7 @@ inherited frmGwMound: TfrmGwMound
     Left = 0
     Top = 0
     Width = 209
-    Height = 371
+    Height = 370
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -157,12 +155,11 @@ inherited frmGwMound: TfrmGwMound
     StateImages = ilStates
     TabOrder = 0
     OnChange = tvNavigationChange
-    ExplicitHeight = 370
   end
   object pnlHelp: TPanel
     Left = 0
-    Top = 384
-    Width = 732
+    Top = 383
+    Width = 728
     Height = 109
     Margins.Left = 4
     Margins.Top = 4
@@ -170,8 +167,6 @@ inherited frmGwMound: TfrmGwMound
     Margins.Bottom = 4
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 383
-    ExplicitWidth = 728
     object wbHelp: TWebBrowser
       Left = 1
       Top = 1
@@ -196,8 +191,8 @@ inherited frmGwMound: TfrmGwMound
   object plMain: TJvPageList
     Left = 221
     Top = 0
-    Width = 511
-    Height = 371
+    Width = 507
+    Height = 370
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -206,12 +201,10 @@ inherited frmGwMound: TfrmGwMound
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
-    ExplicitWidth = 507
-    ExplicitHeight = 370
     object jvspBasinDesign: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 511
+      Width = 515
       Height = 371
       HelpType = htKeyword
       HelpKeyword = 'BasinDesign'
@@ -220,9 +213,10 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspBasinDesign'
+      ExplicitWidth = 511
       DesignSize = (
-        511
-        371)
+        507
+        370)
       object lblBasinDepth: TLabel
         Left = 180
         Top = 5
@@ -301,8 +295,8 @@ inherited frmGwMound: TfrmGwMound
       object plBasin: TJvPageList
         Left = 8
         Top = 119
-        Width = 451
-        Height = 244
+        Width = 443
+        Height = 243
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -310,6 +304,8 @@ inherited frmGwMound: TfrmGwMound
         ActivePage = jvspCustom
         PropagateEnable = False
         Anchors = [akLeft, akTop, akRight, akBottom]
+        ExplicitWidth = 451
+        ExplicitHeight = 244
         object jvspSquareBasin: TJvStandardPage
           Left = 0
           Top = 0
@@ -394,13 +390,15 @@ inherited frmGwMound: TfrmGwMound
         object jvspRectangle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 451
-          Height = 244
+          Width = 443
+          Height = 243
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
           Caption = 'jvspRectangle'
+          ExplicitWidth = 451
+          ExplicitHeight = 244
           object lblRectBasinLength: TLabel
             Left = 4
             Top = 11
@@ -516,13 +514,15 @@ inherited frmGwMound: TfrmGwMound
         object jvspCircle: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 451
-          Height = 244
+          Width = 443
+          Height = 243
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
           Caption = 'jvspCircle'
+          ExplicitWidth = 451
+          ExplicitHeight = 244
           object lblBasinCircleDiameter: TLabel
             Left = 4
             Top = 11
@@ -615,16 +615,18 @@ inherited frmGwMound: TfrmGwMound
         object jvspCustom: TJvStandardPage
           Left = 0
           Top = 0
-          Width = 451
-          Height = 244
+          Width = 443
+          Height = 243
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
           Caption = 'jvspCustom'
+          ExplicitWidth = 451
+          ExplicitHeight = 244
           DesignSize = (
-            451
-            244)
+            443
+            243)
           object lblBasinCoordinates: TLabel
             Left = 0
             Top = 17
@@ -651,7 +653,7 @@ inherited frmGwMound: TfrmGwMound
             Left = 4
             Top = 116
             Width = 452
-            Height = 124
+            Height = 123
             HelpType = htKeyword
             HelpKeyword = 'BasinCoordinates'
             Margins.Left = 4
@@ -724,6 +726,7 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitHeight = 124
             ColWidths = (
               64
               64)
@@ -824,14 +827,16 @@ inherited frmGwMound: TfrmGwMound
     object jvspAquiferProperties: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 511
-      Height = 371
+      Width = 507
+      Height = 370
       HelpType = htKeyword
       HelpKeyword = 'AquiferProperties'
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
+      ExplicitWidth = 511
+      ExplicitHeight = 371
       object lblKz: TLabel
         Left = 8
         Top = 4
@@ -1124,8 +1129,8 @@ inherited frmGwMound: TfrmGwMound
     object jvspRunAnalyticalModel: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 511
-      Height = 371
+      Width = 507
+      Height = 370
       HelpType = htKeyword
       HelpKeyword = 'RunAnalyticalModel'
       Margins.Left = 4
@@ -1133,10 +1138,12 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspRunAnalyticalModel'
+      ExplicitWidth = 511
+      ExplicitHeight = 371
       object pgcAnalytic: TPageControl
         Left = 0
         Top = 0
-        Width = 511
+        Width = 515
         Height = 371
         Margins.Left = 4
         Margins.Top = 4
@@ -1146,6 +1153,7 @@ inherited frmGwMound: TfrmGwMound
         Align = alClient
         TabOrder = 0
         OnChange = pgcAnalyticChange
+        ExplicitWidth = 511
         object tabAnalyticControls: TTabSheet
           Caption = 'Controls'
           ImageIndex = 2
@@ -1629,8 +1637,8 @@ inherited frmGwMound: TfrmGwMound
     object jvspUnsaturatedFlow: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 511
-      Height = 371
+      Width = 507
+      Height = 370
       HelpType = htKeyword
       HelpKeyword = 'UnsaturatedFlow'
       Margins.Left = 4
@@ -1638,6 +1646,8 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspUnsaturatedFlow'
+      ExplicitWidth = 511
+      ExplicitHeight = 371
       object lblBrooksCoreyEpsilon: TLabel
         Left = 20
         Top = 125
@@ -1776,8 +1786,8 @@ inherited frmGwMound: TfrmGwMound
     object jvspProgramLocations: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 511
-      Height = 371
+      Width = 507
+      Height = 370
       HelpType = htKeyword
       HelpKeyword = 'ProgramLocations'
       Margins.Left = 4
@@ -1791,9 +1801,11 @@ inherited frmGwMound: TfrmGwMound
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      ExplicitWidth = 515
+      ExplicitHeight = 371
       DesignSize = (
-        511
-        371)
+        507
+        370)
       object lblMODFLOW: TLabel
         Left = 10
         Top = 13
@@ -1857,7 +1869,7 @@ inherited frmGwMound: TfrmGwMound
       object feMODFLOW: TJvFilenameEdit
         Left = 10
         Top = 51
-        Width = 473
+        Width = 465
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'MODFLOW'
@@ -1872,11 +1884,12 @@ inherited frmGwMound: TfrmGwMound
         Text = ''
         OnChange = feMODFLOWChange
         OnEnter = ControlEnter
+        ExplicitWidth = 473
       end
       object feModelMuseApplication: TJvFilenameEdit
         Left = 10
         Top = 138
-        Width = 473
+        Width = 465
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'ModelMuse'
@@ -1891,11 +1904,12 @@ inherited frmGwMound: TfrmGwMound
         Text = ''
         OnChange = feModelMuseApplicationChange
         OnEnter = ControlEnter
+        ExplicitWidth = 473
       end
       object feModelMuseFile: TJvFilenameEdit
         Left = 10
         Top = 202
-        Width = 473
+        Width = 465
         Height = 26
         HelpType = htKeyword
         HelpKeyword = 'Template'
@@ -1910,13 +1924,14 @@ inherited frmGwMound: TfrmGwMound
         Text = ''
         OnChange = feModelMuseFileChange
         OnEnter = ControlEnter
+        ExplicitWidth = 473
       end
     end
     object jvspRunNumeric: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 511
-      Height = 371
+      Width = 507
+      Height = 370
       HelpType = htKeyword
       HelpKeyword = 'RunNumericalModel'
       Margins.Left = 4
@@ -1924,12 +1939,10 @@ inherited frmGwMound: TfrmGwMound
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = 'jvspRunNumeric'
-      ExplicitWidth = 507
-      ExplicitHeight = 370
       object pgcNumeric: TPageControl
         Left = 0
         Top = 0
-        Width = 511
+        Width = 515
         Height = 371
         Margins.Left = 4
         Margins.Top = 4
@@ -2185,7 +2198,7 @@ inherited frmGwMound: TfrmGwMound
           object pnl2: TPanel
             Left = 0
             Top = 0
-            Width = 503
+            Width = 507
             Height = 52
             Margins.Left = 4
             Margins.Top = 4
@@ -2193,6 +2206,7 @@ inherited frmGwMound: TfrmGwMound
             Margins.Bottom = 4
             Align = alTop
             TabOrder = 0
+            ExplicitWidth = 503
             object btnCopySummary: TButton
               Left = 3
               Top = 13
@@ -2219,7 +2233,7 @@ inherited frmGwMound: TfrmGwMound
           object rdgSummaryNumeric: TRbwDataGrid4
             Left = 0
             Top = 52
-            Width = 503
+            Width = 507
             Height = 285
             Margins.Left = 4
             Margins.Top = 4
@@ -2291,6 +2305,7 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = False
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 503
             ColWidths = (
               200
               276)
@@ -2313,7 +2328,7 @@ inherited frmGwMound: TfrmGwMound
           object rdgProfileNumeric: TRbwDataGrid4
             Left = 0
             Top = 52
-            Width = 503
+            Width = 507
             Height = 285
             Margins.Left = 4
             Margins.Top = 4
@@ -2407,6 +2422,7 @@ inherited frmGwMound: TfrmGwMound
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 503
             ColWidths = (
               64
               64
@@ -2421,7 +2437,7 @@ inherited frmGwMound: TfrmGwMound
           object pnl3: TPanel
             Left = 0
             Top = 0
-            Width = 503
+            Width = 507
             Height = 52
             Margins.Left = 4
             Margins.Top = 4
@@ -2429,6 +2445,7 @@ inherited frmGwMound: TfrmGwMound
             Margins.Bottom = 4
             Align = alTop
             TabOrder = 0
+            ExplicitWidth = 503
             object btnCopyNumericProfile: TButton
               Left = 3
               Top = 13
@@ -2459,7 +2476,7 @@ inherited frmGwMound: TfrmGwMound
           object Panel1: TPanel
             Left = 0
             Top = 0
-            Width = 503
+            Width = 507
             Height = 52
             Margins.Left = 4
             Margins.Top = 4
@@ -2494,7 +2511,7 @@ inherited frmGwMound: TfrmGwMound
           object rdgProfileNumericTime: TRbwDataGrid4
             Left = 0
             Top = 52
-            Width = 503
+            Width = 507
             Height = 285
             Margins.Left = 4
             Margins.Top = 4
@@ -2590,6 +2607,7 @@ inherited frmGwMound: TfrmGwMound
             WordWrapRowCaptions = False
             ExplicitLeft = 4
             ExplicitTop = 51
+            ExplicitWidth = 503
             ColWidths = (
               64
               64

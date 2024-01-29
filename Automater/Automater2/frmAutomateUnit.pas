@@ -1762,6 +1762,7 @@ begin
   if OpenDialog1.Execute then
   begin
     SaveDialog1.FileName := OpenDialog1.FileName;
+    SetCurrentDir(ExtractFileDir(OpenDialog1.FileName));
     AutomateFile := TAutomateFile.Create(nil);
     try
       FileStream := TFileStream.Create(OpenDialog1.FileName,
@@ -1819,6 +1820,7 @@ var
 begin
   if SaveDialog1.Execute then
   begin
+    SetCurrentDir(ExtractFileDir(SaveDialog1.FileName));
 
     Automater := TAutomateFile.Create(nil);
     try
@@ -1937,17 +1939,17 @@ end;
 
 function TAutomateFile.GetModelLocation: string;
 begin
-  result := frmAutomate.feModelMuseFile.FileName;
+  result := ExtractRelativePath(frmAutomate.OpenDialog1.filename, frmAutomate.feModelMuseFile.FileName);
 end;
 
 function TAutomateFile.GetModelMuseLocation: string;
 begin
-  result := frmAutomate.feModelMuseApplication.FileName;
+  result := ExtractRelativePath(frmAutomate.OpenDialog1.filename, frmAutomate.feModelMuseApplication.FileName);
 end;
 
 function TAutomateFile.GetModflowLocation: string;
 begin
-  result := frmAutomate.feMODFLOW.FileName;
+  result := ExtractRelativePath(frmAutomate.OpenDialog1.filename, frmAutomate.feMODFLOW.FileName);
 end;
 
 function TAutomateFile.GetNSTP: Integer;
@@ -2003,17 +2005,17 @@ end;
 
 procedure TAutomateFile.SetModelLocation(const Value: string);
 begin
-  frmAutomate.feModelMuseFile.FileName := Value;
+  frmAutomate.feModelMuseFile.FileName := ExpandFileName(Value);
 end;
 
 procedure TAutomateFile.SetModelMuseLocation(const Value: string);
 begin
-  frmAutomate.feModelMuseApplication.FileName := Value;
+  frmAutomate.feModelMuseApplication.FileName := ExpandFileName(Value);
 end;
 
 procedure TAutomateFile.SetModflowLocation(const Value: string);
 begin
-  frmAutomate.feMODFLOW.FileName := Value;
+  frmAutomate.feMODFLOW.FileName := ExpandFileName(Value)
 end;
 
 procedure TAutomateFile.SetNSTP(const Value: Integer);
