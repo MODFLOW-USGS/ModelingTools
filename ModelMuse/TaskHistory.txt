@@ -374,7 +374,7 @@ object TTaskHistory
     end
     item
       Name = 'Metadata Editor'
-      Display = False
+      Display = True
     end
     item
       Name = 'MT3D-USGS UZT'
@@ -32458,5 +32458,29 @@ object TTaskHistory
       Date = 45316.000000000000000000
       Categories.Strings = (
         'GwMounding')
+    end
+    item
+      Date = 45317.000000000000000000
+      Categories.Strings = (
+        'GwMounding')
+    end
+    item
+      Date = 45318.000000000000000000
+    end
+    item
+      Date = 45319.000000000000000000
+    end
+    item
+      Date = 45320.000000000000000000
+      Categories.Strings = (
+        'GwMounding')
+    end
+    item
+      Date = 45321.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'MF-2015'
+        'GwMounding'
+        'Metadata Editor')
     end>
 end

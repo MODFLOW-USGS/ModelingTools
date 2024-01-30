@@ -21,6 +21,7 @@ type
     cbPackageConvergence: TCheckBox;
     sePicard: TJvSpinEdit;
     lblPicard: TLabel;
+    cbSaveBudgetCsv: TCheckBox;
   private
     { Private declarations }
   public
@@ -48,6 +49,7 @@ begin
   cbPrintFlows.Checked := SfrMf6.PrintFlows;
   cbSaveStage.Checked := SfrMf6.SaveStageFile;
   cbSaveBudget.Checked := SfrMf6.SaveBudgetFile;
+  cbSaveBudgetCsv.Checked := SfrMf6.SaveGwtBudgetCsv;
   sePicard.AsInteger := SfrMf6.MaxPicardIteration;
   seMaxIterations.AsInteger := SfrMf6.MaxIteration;
   rdeMaxDepthChange.RealValue := SfrMf6.MaxDepthChange;
@@ -64,6 +66,7 @@ begin
   SfrMf6.PrintFlows := cbPrintFlows.Checked;
   SfrMf6.SaveStageFile := cbSaveStage.Checked;
   SfrMf6.SaveBudgetFile := cbSaveBudget.Checked;
+  SfrMf6.SaveGwtBudgetCsv := cbSaveBudgetCsv.Checked;
   SfrMf6.MaxPicardIteration := sePicard.AsInteger;
   SfrMf6.MaxIteration := seMaxIterations.AsInteger;
   SfrMf6.MaxDepthChange := rdeMaxDepthChange.RealValue;

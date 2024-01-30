@@ -17,8 +17,8 @@ inherited frmImportModflow6: TfrmImportModflow6
     ExplicitWidth = 629
     ExplicitHeight = 235
     inherited Panel: TPanel
-      Top = 175
-      Width = 633
+      Top = 174
+      Width = 625
       ExplicitTop = 194
       ExplicitWidth = 629
       inherited lbNumber: TLabel
@@ -45,8 +45,8 @@ inherited frmImportModflow6: TfrmImportModflow6
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 633
-      Height = 175
+      Width = 625
+      Height = 174
       OnExit = frameTransportNameFilesGridExit
       OnButtonClick = frameTransportNameFilesGridButtonClick
       Columns = <

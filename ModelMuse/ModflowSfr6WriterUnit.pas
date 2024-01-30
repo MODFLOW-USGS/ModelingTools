@@ -2049,6 +2049,7 @@ var
   BaseFileName: string;
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
+  budgetCsvFile: string;
 begin
   WriteBeginOptions;
 
@@ -2098,6 +2099,16 @@ begin
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);
+    NewLine;
+  end;
+
+  if SfrMf6Package.SaveGwtBudgetCsv then
+  begin
+    WriteString('    BUDGETCSV FILEOUT ');
+    budgetCsvFile := BaseFileName + '.sfr_budget.csv';
+    Model.AddModelOutputFile(budgetCsvFile);
+    budgetCsvFile := ExtractFileName(budgetCsvFile);
+    WriteString(budgetCsvFile);
     NewLine;
   end;
 

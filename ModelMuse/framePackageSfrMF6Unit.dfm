@@ -1,14 +1,14 @@
 inherited framePackageSfrMF6: TframePackageSfrMF6
-  Width = 427
-  Height = 429
-  ExplicitWidth = 427
-  ExplicitHeight = 429
+  Width = 492
+  Height = 457
+  ExplicitWidth = 492
+  ExplicitHeight = 457
   DesignSize = (
-    427
-    429)
+    492
+    457)
   object lblMaxIterations: TLabel [2]
     Left = 167
-    Top = 309
+    Top = 325
     Width = 231
     Height = 30
     Caption = 'Maximum number of streamflow iterations (maximum_iteration) '
@@ -16,7 +16,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   object lblMaxDepthChange: TLabel [3]
     Left = 167
-    Top = 357
+    Top = 373
     Width = 165
     Height = 30
     Caption = 'Stream depth  closure criterion (maximum_depth_change)'
@@ -24,19 +24,19 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   object lblPicard: TLabel [4]
     Left = 167
-    Top = 273
+    Top = 289
     Width = 205
     Height = 30
     Caption = 'Maximum number of Picard iterations (maximum_picard_iterations)'
     WordWrap = True
   end
   inherited memoComments: TMemo
-    Width = 396
+    Width = 461
     ExplicitWidth = 396
   end
   object cbSaveStage: TCheckBox [6]
     Left = 16
-    Top = 220
+    Top = 210
     Width = 313
     Height = 20
     Caption = 'Save stage (stagefile)'
@@ -45,7 +45,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   object cbSaveBudget: TCheckBox [7]
     Left = 16
-    Top = 251
+    Top = 236
     Width = 337
     Height = 20
     Caption = 'Save budget (budgetfile)'
@@ -54,7 +54,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   object seMaxIterations: TJvSpinEdit [8]
     Left = 16
-    Top = 314
+    Top = 330
     Width = 145
     Height = 23
     MaxValue = 2147483647.000000000000000000
@@ -65,7 +65,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   object rdeMaxDepthChange: TRbwDataEntry [9]
     Left = 16
-    Top = 357
+    Top = 373
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -97,7 +97,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   object cbPackageConvergence: TCheckBox [12]
     Left = 16
-    Top = 391
+    Top = 407
     Width = 455
     Height = 18
     Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
@@ -106,7 +106,7 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   object sePicard: TJvSpinEdit [13]
     Left = 16
-    Top = 277
+    Top = 293
     Width = 145
     Height = 23
     MaxValue = 2147483647.000000000000000000
@@ -114,6 +114,15 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
     Value = 1.000000000000000000
     Enabled = False
     TabOrder = 8
+  end
+  object cbSaveBudgetCsv: TCheckBox [14]
+    Left = 16
+    Top = 262
+    Width = 461
+    Height = 17
+    Caption = 'Save budget in comma-separated values file (BudgetCsv)'
+    Enabled = False
+    TabOrder = 9
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -146,6 +155,9 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
       end
       item
         Control = sePicard
+      end
+      item
+        Control = cbSaveBudgetCsv
       end>
   end
 end

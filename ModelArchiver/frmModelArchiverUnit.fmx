@@ -871,9 +871,7 @@ object frmModelArchiver: TfrmModelArchiver
         Size.Height = 22.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 3
-        Text = 
-          'Geospatial Metadata Validation Service https://mrdata.usgs.gov/v' +
-          'alidation/'
+        Text = 'Geospatial Metadata Validation Service https://www1.usgs.gov/mp/'
         TextSettings.Font.Size = 16.000000000000000000
         OnClick = btnMetadataParserClick
       end
@@ -934,8 +932,7 @@ object frmModelArchiver: TfrmModelArchiver
             'MetaEditor, the Online Metadata Editor ( https://www1.usgs.gov/c' +
             'sas/ome/), and the Metadata Wizard (https://usgs.github.io/fort-' +
             'pymdwizard/). The Geospatial Metadata Validation Service can be ' +
-            'used to check the metadata file https://mrdata.usgs.gov/validati' +
-            'on/).'
+            'used to check the metadata file https://www1.usgs.gov/mp/).'
           ''
           
             'There is a list of tools and documents you can use to create and' +

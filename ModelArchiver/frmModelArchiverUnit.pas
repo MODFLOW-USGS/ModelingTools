@@ -2719,7 +2719,7 @@ end;
 
 procedure TfrmModelArchiver.btnMetadataParserClick(Sender: TObject);
 begin
-  OpenURL('https://mrdata.usgs.gov/validation/');
+  OpenURL('https://www1.usgs.gov/mp/');
 end;
 
 procedure TfrmModelArchiver.btnModelGeoRefClick(Sender: TObject);

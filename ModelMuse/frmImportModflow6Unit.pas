@@ -86,7 +86,7 @@ begin
     Importer := TModflow6Importer.Create;
     ErrorMessages := TStringList.Create;
     try
-      Importer.OnUpdataStatusBar := UpdateStatusBar;
+      Importer.OnUpdateStatusBar := UpdateStatusBar;
       Importer.ImportModflow6Model(NameFiles, ErrorMessages);
     finally
       Importer.Free;

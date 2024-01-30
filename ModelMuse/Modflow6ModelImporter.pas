@@ -111,11 +111,12 @@ type
     procedure ImportRch(Package: TPackage; TransportModels: TModelList);
     procedure ImportEvt(Package: TPackage; TransportModels: TModelList);
     procedure ImportMaw(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
+    procedure ImportSfr(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
     procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
-    property OnUpdataStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
+    property OnUpdateStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
       write SetOnUpdataStatusBar;
   end;
 
@@ -142,7 +143,7 @@ uses
   Mf6.DrnFileReaderUnit, ModflowDrnUnit, Mf6.RivFileReaderUnit, ModflowRivUnit,
   Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
-  ModflowMawUnit, ModflowGridUnit;
+  ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -376,9 +377,9 @@ var
   ChemComponents: TMobileChemSpeciesCollection;
   ChemItem: TMobileChemSpeciesItem;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing BUY package');
+    OnUpdateStatusBar(self, 'importing BUY package');
   end;
   Model := frmGoPhast.PhastModel;
   BuoyancyPackage := Model.ModflowPackages.BuoyancyPackage;
@@ -655,9 +656,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing CHD package');
+    OnUpdateStatusBar(self, 'importing CHD package');
   end;
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.ChdBoundary.IsSelected := True;
@@ -696,9 +697,9 @@ begin
       GetObservations(nil, BoundNameObsDictionary,
         CellIdObsDictionary, ObsLists, ObsFiles);
     end;
-    if Assigned(OnUpdataStatusBar) then
+    if Assigned(OnUpdateStatusBar) then
     begin
-      OnUpdataStatusBar(self, 'importing CHD package');
+      OnUpdateStatusBar(self, 'importing CHD package');
     end;
 
     TransportAuxNames := TStringList.Create;
@@ -1403,9 +1404,9 @@ var
     end
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing CSUB package');
+    OnUpdateStatusBar(self, 'importing CSUB package');
   end;
   StartTime := 0.0;
   ObjectCount := 0;
@@ -1439,9 +1440,9 @@ begin
       GetObservations(IcsubnoObsDictionary, BoundNameObsDictionary,
         CellIdObsDictionary, ObsLists, ObsFiles);
     end;
-    if Assigned(OnUpdataStatusBar) then
+    if Assigned(OnUpdateStatusBar) then
     begin
-      OnUpdataStatusBar(self, 'importing CSUB package');
+      OnUpdateStatusBar(self, 'importing CSUB package');
     end;
 
     Options := CSub.Options;
@@ -1785,9 +1786,9 @@ var
   NumberOfLayers: Integer;
   IDOMAIN: TIArray3D;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing DIS package');
+    OnUpdateStatusBar(self, 'importing DIS package');
   end;
   Model := frmGoPhast.PhastModel;
   MfOptions := Model.ModflowOptions;
@@ -1906,9 +1907,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing DISV package');
+    OnUpdateStatusBar(self, 'importing DISV package');
   end;
   Model := frmGoPhast.PhastModel;
   MfOptions := Model.ModflowOptions;
@@ -2269,9 +2270,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing DRN package');
+    OnUpdateStatusBar(self, 'importing DRN package');
   end;
   // Get the MVR package.
   if MvrPackage = nil then
@@ -2420,9 +2421,9 @@ begin
         CellIdObsDictionary, ObsLists, ObsFiles);
     end;
 
-    if Assigned(OnUpdataStatusBar) then
+    if Assigned(OnUpdateStatusBar) then
     begin
-      OnUpdataStatusBar(self, 'importing DRN package');
+      OnUpdateStatusBar(self, 'importing DRN package');
     end;
 
     LastTime := Model.ModflowStressPeriods.Last.EndTime;
@@ -3003,9 +3004,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing EVT package');
+    OnUpdateStatusBar(self, 'importing EVT package');
   end;
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.EtsPackage.IsSelected := True;
@@ -3064,9 +3065,9 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
-      if Assigned(OnUpdataStatusBar) then
+      if Assigned(OnUpdateStatusBar) then
       begin
-        OnUpdataStatusBar(self, 'importing EVT package');
+        OnUpdateStatusBar(self, 'importing EVT package');
       end;
 
       TransportAuxNames := TStringList.Create;
@@ -3526,10 +3527,7 @@ begin
         end
         else if APackage.FileType = 'SFR6' then
         begin
-  //        SfrReader := TSfr.Create(APackage.FileType);
-  //        SfrReader.Dimensions := FDimensions;
-  //        APackage.Package := SfrReader;
-  //        APackage.ReadPackage(Unhandled);
+          ImportSfr(APackage, TransportModels, MvrPackage);
         end
         else if APackage.FileType = 'LAK6' then
         begin
@@ -3591,9 +3589,9 @@ var
   AtsIndex: Integer;
   AtsPeriod: TAtsPeriod;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing TDIS package');
+    OnUpdateStatusBar(self, 'importing TDIS package');
   end;
   StressPeriods := FSimulation.Timing.TDis;
 
@@ -4012,9 +4010,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing GHB package');
+    OnUpdateStatusBar(self, 'importing GHB package');
   end;
   // Get the MVR package.
   if MvrPackage = nil then
@@ -4153,9 +4151,9 @@ begin
       GetObservations(nil, BoundNameObsDictionary,
         CellIdObsDictionary, ObsLists, ObsFiles);
     end;
-    if Assigned(OnUpdataStatusBar) then
+    if Assigned(OnUpdateStatusBar) then
     begin
-      OnUpdataStatusBar(self, 'importing GHB package');
+      OnUpdateStatusBar(self, 'importing GHB package');
     end;
 
     TransportAuxNames := TStringList.Create;
@@ -4448,9 +4446,9 @@ var
   APoint: TPoint2D;
   CellId: TCellId;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing OBS package');
+    OnUpdateStatusBar(self, 'importing OBS package');
   end;
   Obs := Package.Package as TObs;
   Model := frmGoPhast.PhastModel;
@@ -4586,9 +4584,9 @@ var
     NewItem.Thickness := '1';
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing HFB package');
+    OnUpdateStatusBar(self, 'importing HFB package');
   end;
   Model := frmGoPhast.PhastModel;
   SetLength(ScreenObjects, Model.LayerCount);
@@ -4676,9 +4674,9 @@ procedure TModflow6Importer.ImportIc(Package: TPackage);
 var
   IC: TIc;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing IC package');
+    OnUpdateStatusBar(self, 'importing IC package');
   end;
   IC := Package.Package as TIc;
   Assign3DRealDataSet(rsModflow_Initial_Head, IC.GridData.STRT);
@@ -4805,9 +4803,9 @@ var
     Mf6Obs.MawObs := MawObs;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing MAW package');
+    OnUpdateStatusBar(self, 'importing MAW package');
   end;
   Model := frmGoPhast.PhastModel;
   MawPackage := Model.ModflowPackages.MawPackage;
@@ -4839,9 +4837,9 @@ begin
         nil, ObsLists, ObsFiles);
     end;
 
-    if Assigned(OnUpdataStatusBar) then
+    if Assigned(OnUpdateStatusBar) then
     begin
-      OnUpdataStatusBar(self, 'importing MAW package');
+      OnUpdateStatusBar(self, 'importing MAW package');
     end;
 
     Options := Maw.Options;
@@ -5149,7 +5147,7 @@ begin
   begin
     FSimulation := TMf6Simulation.Create('Simulation');
     try
-      FSimulation.OnUpdataStatusBar := OnUpdataStatusBar;
+      FSimulation.OnUpdataStatusBar := OnUpdateStatusBar;
       FSimulations.Add(FSimulation);
       FSimulation.ReadSimulation(NameFiles[FileIndex]);
       OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
@@ -5370,9 +5368,9 @@ var
   DataArray: TDataArray;
   TvkIndex: Integer;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing NPF package');
+    OnUpdateStatusBar(self, 'importing NPF package');
   end;
   Model := frmGoPhast.PhastModel;
   Npf := Package.Package as TNpf;
@@ -5492,9 +5490,9 @@ var
   Model: TPhastModel;
   OutputControl: TModflowOutputControl;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing OC package');
+    OnUpdateStatusBar(self, 'importing OC package');
   end;
   OC := Package.Package as TOc;
   Model := frmGoPhast.PhastModel;
@@ -5754,9 +5752,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing RCH package');
+    OnUpdateStatusBar(self, 'importing RCH package');
   end;
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.RchPackage.IsSelected := True;
@@ -5805,9 +5803,9 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
-      if Assigned(OnUpdataStatusBar) then
+      if Assigned(OnUpdateStatusBar) then
       begin
-        OnUpdataStatusBar(self, 'importing RCH package');
+        OnUpdateStatusBar(self, 'importing RCH package');
       end;
 
       TransportAuxNames := TStringList.Create;
@@ -6367,9 +6365,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing RIV package');
+    OnUpdateStatusBar(self, 'importing RIV package');
   end;
   // Get the MVR package.
   if MvrPackage = nil then
@@ -6509,9 +6507,9 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
-      if Assigned(OnUpdataStatusBar) then
+      if Assigned(OnUpdateStatusBar) then
       begin
-        OnUpdataStatusBar(self, 'importing RIV package');
+        OnUpdateStatusBar(self, 'importing RIV package');
       end;
 
       TransportAuxNames := TStringList.Create;
@@ -7296,6 +7294,68 @@ begin
   end;
 end;
 
+procedure TModflow6Importer.ImportSfr(Package: TPackage;
+  TransportModels: TModelList; MvrPackage: TPackage);
+var
+  Model: TPhastModel;
+  SfrPackage: TSfrPackageSelection;
+  Sfr: TSfr;
+  CellIds: TCellIdList;
+  Map: TimeSeriesMap;
+  BoundNameObsDictionary: TBoundNameDictionary;
+  NumberObsDictionary: TNumberDictionary;
+  ObsLists: TObsLists;
+begin
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing SFR package');
+  end;
+  Model := frmGoPhast.PhastModel;
+  SfrPackage := Model.ModflowPackages.SfrPackage;
+  SfrPackage.IsSelected := True;
+  Model.DataArrayManager.CreateInitialDataSets;
+
+  Sfr := Package.Package as TSfr;
+
+  CellIds := TCellIdList.Create;
+  Map := TimeSeriesMap.Create;
+  BoundNameObsDictionary := TBoundNameDictionary.Create;
+  NumberObsDictionary := TNumberDictionary.Create;
+  ObsLists := TObsLists.Create;
+  try
+    for TimeSeriesIndex := 0 to Sfr.TimeSeriesCount - 1 do
+    begin
+      TimeSeriesPackage := Sfr.TimeSeries[TimeSeriesIndex];
+      ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+
+    if Sfr.ObservationCount > 0 then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+    end;
+    for ObsPackageIndex := 0 to Sfr.ObservationCount - 1 do
+    begin
+      ObsFiles := Sfr.Observations[ObsPackageIndex].Package as TObs;
+      GetObservations(NumberObsDictionary, BoundNameObsDictionary,
+        nil, ObsLists, ObsFiles);
+    end;
+
+    if Assigned(OnUpdateStatusBar) then
+    begin
+      OnUpdateStatusBar(self, 'importing SFR package');
+    end;
+
+
+  finally
+    Map.Free;
+    BoundNameObsDictionary.Free;
+    ObsLists.Free;
+    NumberObsDictionary.Free;
+    CellIds.Free;
+  end;
+
+end;
+
 procedure TModflow6Importer.ImportSimulationOptions;
 var
   Model: TPhastModel;
@@ -7380,9 +7440,9 @@ var
   StressPeriod: TModflowStressPeriod;
   InnerIndex: Integer;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing STO package');
+    OnUpdateStatusBar(self, 'importing STO package');
   end;
   Model := frmGoPhast.PhastModel;
   Sto := Package.Package as TSto;
@@ -7489,9 +7549,9 @@ var
   TimeIndex: Integer;
   ImportedValues: TDoubleList;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing TIME SERIES file');
+    OnUpdateStatusBar(self, 'importing TIME SERIES file');
   end;
   Model := frmGoPhast.PhastModel;
   Mf6TimesSeries := Model.Mf6TimesSeries;
@@ -7625,9 +7685,9 @@ var
     NewItem.EndTime := LastTime;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing TVK package');
+    OnUpdateStatusBar(self, 'importing TVK package');
   end;
   Model := frmGoPhast.PhastModel;
   LastTime := Model.ModflowStressPeriods.Last.EndTime;
@@ -7644,9 +7704,9 @@ begin
       TimeSeriesPackage := Tvk.TimeSeriesPackages[TimeSeriesIndex];
       ImportTimeSeries(TimeSeriesPackage, Map);
     end;
-    if Assigned(OnUpdataStatusBar) then
+    if Assigned(OnUpdateStatusBar) then
     begin
-      OnUpdataStatusBar(self, 'importing TVK package');
+      OnUpdateStatusBar(self, 'importing TVK package');
     end;
 
     KScreenObject := nil;
@@ -7902,9 +7962,9 @@ var
     NewItem.EndTime := LastTime;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing TVS package');
+    OnUpdateStatusBar(self, 'importing TVS package');
   end;
   Model := frmGoPhast.PhastModel;
   LastTime := Model.ModflowStressPeriods.Last.EndTime;
@@ -7923,9 +7983,9 @@ begin
       TimeSeriesPackage := Tvs.TimeSeriesPackages[TimeSeriesIndex];
       ImportTimeSeries(TimeSeriesPackage, Map);
     end;
-    if Assigned(OnUpdataStatusBar) then
+    if Assigned(OnUpdateStatusBar) then
     begin
-      OnUpdataStatusBar(self, 'importing TVS package');
+      OnUpdateStatusBar(self, 'importing TVS package');
     end;
 
     SsScreenObject := nil;
@@ -8088,9 +8148,9 @@ var
   ChemComponents: TMobileChemSpeciesCollection;
   ChemItem: TMobileChemSpeciesItem;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing VSC package');
+    OnUpdateStatusBar(self, 'importing VSC package');
   end;
   Model := frmGoPhast.PhastModel;
   ViscosityPackage := Model.ModflowPackages.ViscosityPackage;
@@ -8463,9 +8523,9 @@ var
     end;
   end;
 begin
-  if Assigned(OnUpdataStatusBar) then
+  if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdataStatusBar(self, 'importing WEL package');
+    OnUpdateStatusBar(self, 'importing WEL package');
   end;
   // Get the MVR package.
   if MvrPackage = nil then
@@ -8605,9 +8665,9 @@ begin
           CellIdObsDictionary, ObsLists, ObsFiles);
       end;
 
-      if Assigned(OnUpdataStatusBar) then
+      if Assigned(OnUpdateStatusBar) then
       begin
-        OnUpdataStatusBar(self, 'importing WEL package');
+        OnUpdateStatusBar(self, 'importing WEL package');
       end;
 
       TransportAuxNames := TStringList.Create;

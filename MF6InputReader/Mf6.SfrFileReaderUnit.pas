@@ -9,31 +9,42 @@ uses
 type
   TSfrOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
+    FAUXILIARY: TStringList;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
-    PRINT_STAGE: Boolean;
-    PRINT_FLOWS: Boolean;
-    SAVE_FLOWS: Boolean;
-    STAGE: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
-    PACKAGE_CONVERGENCE: Boolean;
+    FPRINT_STAGE: Boolean;
+    FPRINT_FLOWS: Boolean;
+    FSAVE_FLOWS: Boolean;
+    FSTAGE: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
+    FPACKAGE_CONVERGENCE: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     MOVER: Boolean;
-    MAXIMUM_PICARD_ITERATIONS: TIntegerOption;
-    MAXIMUM_ITERATIONS: TIntegerOption;
-    LENGTH_CONVERSION: TRealOption;
-    TIME_CONVERSION: TRealOption;
+    FMAXIMUM_PICARD_ITERATIONS: TIntegerOption;
+    FMAXIMUM_ITERATIONS: TIntegerOption;
+    FLENGTH_CONVERSION: TRealOption;
+    FTIME_CONVERSION: TRealOption;
     UNIT_CONVERSION: TRealOption;
-    MAXIMUM_DEPTH_CHANGE: TRealOption;
+    FMAXIMUM_DEPTH_CHANGE: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property PRINT_STAGE: Boolean read FPRINT_STAGE;
+    property PRINT_FLOWS: Boolean read FPRINT_FLOWS;
+    property SAVE_FLOWS: Boolean read FSAVE_FLOWS;
+    property STAGE: Boolean read FSTAGE;
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
+    property PACKAGE_CONVERGENCE: Boolean read FPACKAGE_CONVERGENCE;
+    property MAXIMUM_PICARD_ITERATIONS: TIntegerOption read FMAXIMUM_PICARD_ITERATIONS;
+    property MAXIMUM_ITERATIONS: TIntegerOption read FMAXIMUM_ITERATIONS;
+    property LENGTH_CONVERSION: TRealOption read FLENGTH_CONVERSION;
+    property TIME_CONVERSION: TRealOption read FTIME_CONVERSION;
   end;
 
   TSfrDimensions = class(TCustomMf6Persistent)
@@ -46,23 +57,42 @@ type
 
   TSfrPackageItem = class(TObject)
   private
-    rno: Integer;
-    cellid: TCellId;
-    rlen: Extended;
-    rwid: Extended;
-    rgrd: Extended;
-    rtp: Extended;
-    rbth: Extended;
-    rhk: Extended;
-    man: TMf6BoundaryValue;
-    ncon: Integer;
-    ustrf: TMf6BoundaryValue;
-    ndv: Integer;
-    aux: TBoundaryValueList;
-    boundname: string;
+    Frno: Integer;
+    Fcellid: TCellId;
+    Frlen: Extended;
+    Frwid: Extended;
+    Frgrd: Extended;
+    Frtp: Extended;
+    Frbth: Extended;
+    Frhk: Extended;
+    Fman: TMf6BoundaryValue;
+    Fncon: Integer;
+    Fustrf: TMf6BoundaryValue;
+    Fndv: Integer;
+    Faux: TBoundaryValueList;
+    Fboundname: string;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: Integer;
   public
     constructor Create;
     destructor Destroy; override;
+    property rno: Integer read Frno;
+    property cellid: TCellId read Fcellid;
+    property rlen: Extended read Frlen;
+    property rwid: Extended read Frwid;
+    property rgrd: Extended read Frgrd;
+    property rtp: Extended read Frtp;
+    property rbth: Extended read Frbth;
+    property rhk: Extended read Frhk;
+    property man: TMf6BoundaryValue read Fman;
+    property ncon: Integer read Fncon;
+    property ustrf: TMf6BoundaryValue read Fustrf;
+    property ndv: Integer read Fndv;
+    property Count: Integer read GetCount;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux;
+    property Boundname: string read Fboundname;
+
+
   end;
 
   TSfrPackageItemList= TObjectList<TSfrPackageItem>;
@@ -91,11 +121,15 @@ type
   private
     FItems: TCrossSectionItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(index: Integer): TCrossSectionItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[index: Integer]: TCrossSectionItem read GetItem; default;
   end;
 
   TSfrConnectionItem = record
@@ -112,11 +146,15 @@ type
     FItems: TSfrConnectionItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       PackageItems: TSfrPackageItemList);
+    function GetCount: Integer;
+    function GetItem(index: Integer): TSfrConnectionItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[index: Integer]: TSfrConnectionItem read GetItem; default;
   end;
 
   TSfrDiversionItem = record
@@ -133,11 +171,15 @@ type
   private
     FItems: TSfrDiversionItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(index: Integer): TSfrDiversionItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[index: Integer]: TSfrDiversionItem read GetItem; default;
   end;
 
   TSfrPeriod = class(TCustomMf6Persistent)
@@ -145,11 +187,16 @@ type
     IPER: Integer;
     FItems: TNumberedItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TNumberedItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPER;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TNumberedItem read GetItem; default;
   end;
 
   TSfrPeriodList = TObjectList<TSfrPeriod>;
@@ -165,11 +212,25 @@ type
     FPeriods: TSfrPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
-    FTabFilePackages: TPackageList;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TSfrPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    property Options: TSfrOptions read FOptions;
+    property Connections: TSfrConnections read FConnections;
+    property PackageData: TSfrPackageData read FPackageData;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TSfrPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 
@@ -187,8 +248,8 @@ resourcestring
 
 constructor TSfrOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -197,7 +258,7 @@ end;
 
 destructor TSfrOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
@@ -206,24 +267,24 @@ end;
 procedure TSfrOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   BOUNDNAMES := False;
   PRINT_INPUT := False;
-  PRINT_STAGE := False;
-  PRINT_FLOWS := False;
-  SAVE_FLOWS := False;
-  STAGE := False;
-  BUDGET := False;
-  BUDGETCSV := False;
-  PACKAGE_CONVERGENCE := False;
+  FPRINT_STAGE := False;
+  FPRINT_FLOWS := False;
+  FSAVE_FLOWS := False;
+  FSTAGE := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
+  FPACKAGE_CONVERGENCE := False;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   MOVER := False;
-  MAXIMUM_PICARD_ITERATIONS.Initialize;
-  MAXIMUM_ITERATIONS.Initialize;
-  LENGTH_CONVERSION.Initialize;
-  TIME_CONVERSION.Initialize;
-  MAXIMUM_DEPTH_CHANGE.Initialize;
+  FMAXIMUM_PICARD_ITERATIONS.Initialize;
+  FMAXIMUM_ITERATIONS.Initialize;
+  FLENGTH_CONVERSION.Initialize;
+  FTIME_CONVERSION.Initialize;
+  FMAXIMUM_DEPTH_CHANGE.Initialize;
   UNIT_CONVERSION.Initialize;
 end;
 
@@ -265,7 +326,7 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if FSplitter[0] = 'BOUNDNAMES' then
@@ -278,68 +339,68 @@ begin
     end
     else if FSplitter[0] = 'PRINT_STAGE' then
     begin
-      PRINT_STAGE := True;
+      FPRINT_STAGE := True;
     end
     else if FSplitter[0] = 'PRINT_FLOWS' then
     begin
-      PRINT_FLOWS := True;
+      FPRINT_FLOWS := True;
     end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
-      SAVE_FLOWS := True;
+      FSAVE_FLOWS := True;
     end
     else if (FSplitter[0] = 'STAGE')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      STAGE := True;
+      FSTAGE := True;
     end
     else if (FSplitter[0] = 'BUDGET')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else if (FSplitter[0] = 'PACKAGE_CONVERGENCE')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      PACKAGE_CONVERGENCE := True;
+      FPACKAGE_CONVERGENCE := True;
     end
     else if FSplitter[0] = 'MOVER' then
     begin
       MOVER := True;
     end
     else if (FSplitter[0] = 'MAXIMUM_PICARD_ITERATIONS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], MAXIMUM_PICARD_ITERATIONS.Value) then
+      and TryStrToInt(FSplitter[1], FMAXIMUM_PICARD_ITERATIONS.Value) then
     begin
-      MAXIMUM_PICARD_ITERATIONS.Used := True;
+      FMAXIMUM_PICARD_ITERATIONS.Used := True;
     end
     else if (FSplitter[0] = 'MAXIMUM_ITERATIONS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], MAXIMUM_ITERATIONS.Value) then
+      and TryStrToInt(FSplitter[1], FMAXIMUM_ITERATIONS.Value) then
     begin
-      MAXIMUM_ITERATIONS.Used := True;
+      FMAXIMUM_ITERATIONS.Used := True;
     end
     else if (FSplitter[0] = 'MAXIMUM_DEPTH_CHANGE') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], MAXIMUM_DEPTH_CHANGE.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FMAXIMUM_DEPTH_CHANGE.Value) then
     begin
-      MAXIMUM_DEPTH_CHANGE.Used := True;
+      FMAXIMUM_DEPTH_CHANGE.Used := True;
     end
     else if (FSplitter[0] = 'LENGTH_CONVERSION') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], LENGTH_CONVERSION.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FLENGTH_CONVERSION.Value) then
     begin
-      LENGTH_CONVERSION.Used := True;
+      FLENGTH_CONVERSION.Used := True;
     end
     else if (FSplitter[0] = 'TIME_CONVERSION') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], TIME_CONVERSION.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FTIME_CONVERSION.Value) then
     begin
-      TIME_CONVERSION.Used := True;
+      FTIME_CONVERSION.Used := True;
     end
     else if (FSplitter[0] = 'UNIT_CONVERSION') and (FSplitter.Count >= 2)
       and TryFortranStrToFloat(FSplitter[1], UNIT_CONVERSION.Value) then
@@ -419,26 +480,36 @@ end;
 
 constructor TSfrPackageItem.Create;
 begin
-  rno := 0;
-  cellid.Initialize;
-  rlen := 0;
-  rwid := 0;
-  rgrd := 0;
-  rtp := 0;
-  rbth := 0;
-  rhk := 0;
-  man.Initialize;
-  ncon := 0;
-  ustrf.Initialize;
-  ndv := 0;
-  aux := TBoundaryValueList.Create;
-  boundname := ''
+  Frno := 0;
+  Fcellid.Initialize;
+  Frlen := 0;
+  Frwid := 0;
+  Frgrd := 0;
+  Frtp := 0;
+  Frbth := 0;
+  Frhk := 0;
+  Fman.Initialize;
+  Fncon := 0;
+  Fustrf.Initialize;
+  Fndv := 0;
+  Faux := TBoundaryValueList.Create;
+  Fboundname := ''
 end;
 
 destructor TSfrPackageItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TSfrPackageItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  result := Faux[Index];
+end;
+
+function TSfrPackageItem.GetCount: Integer;
+begin
+  result := Faux.Count;
 end;
 
 { TSfrPackageData }
@@ -495,7 +566,7 @@ begin
         TComparer<TSfrPackageItem>.Construct(
           function(const Left, Right: TSfrPackageItem): Integer
           begin
-            Result := Left.rno - Right.rno;
+            Result := Left.Frno - Right.Frno;
           end
         ));
       Exit;
@@ -510,37 +581,37 @@ begin
       end
       else if (FSplitter.Count >= 12) and (FSplitter[1] = 'NONE') then
       begin
-        if TryStrToInt(FSplitter[0],Item.rno)
-          and TryFortranStrToFloat(FSplitter[2],Item.rlen)
-          and TryFortranStrToFloat(FSplitter[3],Item.rwid)
-          and TryFortranStrToFloat(FSplitter[4],Item.rgrd)
-          and TryFortranStrToFloat(FSplitter[5],Item.rtp)
-          and TryFortranStrToFloat(FSplitter[6],Item.rbth)
-          and TryFortranStrToFloat(FSplitter[7],Item.rhk)
-          and TryStrToInt(FSplitter[9],Item.ncon)
-          and TryStrToInt(FSplitter[11],Item.ndv)
+        if TryStrToInt(FSplitter[0],Item.Frno)
+          and TryFortranStrToFloat(FSplitter[2],Item.Frlen)
+          and TryFortranStrToFloat(FSplitter[3],Item.Frwid)
+          and TryFortranStrToFloat(FSplitter[4],Item.Frgrd)
+          and TryFortranStrToFloat(FSplitter[5],Item.Frtp)
+          and TryFortranStrToFloat(FSplitter[6],Item.Frbth)
+          and TryFortranStrToFloat(FSplitter[7],Item.Frhk)
+          and TryStrToInt(FSplitter[9],Item.Fncon)
+          and TryStrToInt(FSplitter[11],Item.Fndv)
           then
         begin
-          Item.cellid.Layer := -1;
-          Item.cellid.Row := -1;
-          Item.cellid.Column := -1;
-          if TryFortranStrToFloat(FSplitter[8],Item.man.NumericValue) then
+          Item.Fcellid.Layer := -1;
+          Item.Fcellid.Row := -1;
+          Item.Fcellid.Column := -1;
+          if TryFortranStrToFloat(FSplitter[8],Item.Fman.NumericValue) then
           begin
-            Item.man.ValueType := vtNumeric;
+            Item.Fman.ValueType := vtNumeric;
           end
           else
           begin
-            Item.man.ValueType := vtString;
-            Item.man.StringValue := FSplitter[8];
+            Item.Fman.ValueType := vtString;
+            Item.Fman.StringValue := FSplitter[8];
           end;
-          if TryFortranStrToFloat(FSplitter[10],Item.ustrf.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[10],Item.Fustrf.NumericValue) then
           begin
-            Item.ustrf.ValueType := vtNumeric;
+            Item.Fustrf.ValueType := vtNumeric;
           end
           else
           begin
-            Item.ustrf.ValueType := vtString;
-            Item.ustrf.StringValue := FSplitter[10];
+            Item.Fustrf.ValueType := vtString;
+            Item.Fustrf.StringValue := FSplitter[10];
           end;
           ItemStart := 12;
           for AuxIndex := 0 to naux - 1 do
@@ -556,13 +627,13 @@ begin
               AValue.ValueType := vtString;
               AValue.StringValue := FSplitter[ItemStart]
             end;
-            Item.aux.Add(AVAlue);
+            Item.Faux.Add(AVAlue);
             Inc(ItemStart);
           end;
           if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Item.boundname := FSplitter[ItemStart];
+            Item.Fboundname := FSplitter[ItemStart];
           end;
           FItems.Add(Item);
           Item := nil;
@@ -574,35 +645,35 @@ begin
         end;
       end
       else if (FSplitter.Count >= NumberOfItems)
-        and TryStrToInt(FSplitter[0],Item.rno)
-        and ReadCellID(Item.cellid, 1, DimensionCount)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+1],Item.rlen)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+2],Item.rwid)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+3],Item.rgrd)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+4],Item.rtp)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+5],Item.rbth)
-        and TryFortranStrToFloat(FSplitter[DimensionCount+6],Item.rhk)
-        and TryStrToInt(FSplitter[DimensionCount+8],Item.ncon)
-        and TryStrToInt(FSplitter[DimensionCount+10],Item.ndv)
+        and TryStrToInt(FSplitter[0],Item.Frno)
+        and ReadCellID(Item.Fcellid, 1, DimensionCount)
+        and TryFortranStrToFloat(FSplitter[DimensionCount+1],Item.Frlen)
+        and TryFortranStrToFloat(FSplitter[DimensionCount+2],Item.Frwid)
+        and TryFortranStrToFloat(FSplitter[DimensionCount+3],Item.Frgrd)
+        and TryFortranStrToFloat(FSplitter[DimensionCount+4],Item.Frtp)
+        and TryFortranStrToFloat(FSplitter[DimensionCount+5],Item.Frbth)
+        and TryFortranStrToFloat(FSplitter[DimensionCount+6],Item.Frhk)
+        and TryStrToInt(FSplitter[DimensionCount+8],Item.Fncon)
+        and TryStrToInt(FSplitter[DimensionCount+10],Item.Fndv)
         then
       begin
-        if TryFortranStrToFloat(FSplitter[DimensionCount+7],Item.man.NumericValue) then
+        if TryFortranStrToFloat(FSplitter[DimensionCount+7],Item.Fman.NumericValue) then
         begin
-          Item.man.ValueType := vtNumeric;
+          Item.Fman.ValueType := vtNumeric;
         end
         else
         begin
-          Item.man.ValueType := vtString;
-          Item.man.StringValue := FSplitter[DimensionCount+7];
+          Item.Fman.ValueType := vtString;
+          Item.Fman.StringValue := FSplitter[DimensionCount+7];
         end;
-        if TryFortranStrToFloat(FSplitter[DimensionCount+9],Item.ustrf.NumericValue) then
+        if TryFortranStrToFloat(FSplitter[DimensionCount+9],Item.Fustrf.NumericValue) then
         begin
-          Item.ustrf.ValueType := vtNumeric;
+          Item.Fustrf.ValueType := vtNumeric;
         end
         else
         begin
-          Item.ustrf.ValueType := vtString;
-          Item.ustrf.StringValue := FSplitter[DimensionCount+7];
+          Item.Fustrf.ValueType := vtString;
+          Item.Fustrf.StringValue := FSplitter[DimensionCount+7];
         end;
 
         ItemStart := DimensionCount+11;
@@ -619,13 +690,13 @@ begin
             AValue.ValueType := vtString;
             AValue.StringValue := FSplitter[ItemStart]
           end;
-          Item.aux.Add(AVAlue);
+          Item.Faux.Add(AVAlue);
           Inc(ItemStart);
         end;
         if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
         begin
           FSplitter.DelimitedText := CaseSensitiveLine;
-          Item.boundname := FSplitter[ItemStart];
+          Item.Fboundname := FSplitter[ItemStart];
         end;
         FItems.Add(Item);
         Item := nil;
@@ -662,6 +733,16 @@ destructor TSfrCrossSections.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TSfrCrossSections.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSfrCrossSections.GetItem(index: Integer): TCrossSectionItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TSfrCrossSections.Initialize;
@@ -743,6 +824,16 @@ begin
   inherited;
 end;
 
+function TSfrConnections.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSfrConnections.GetItem(index: Integer): TSfrConnectionItem;
+begin
+  result := FItems[index];
+end;
+
 procedure TSfrConnections.Initialize;
 begin
   inherited;
@@ -785,7 +876,7 @@ begin
 
       if (Item.rno >= 1) and (Item.rno <= PackageItems.Count) then
       begin
-        ncon := PackageItems[Item.rno-1].ncon;
+        ncon := PackageItems[Item.rno-1].Fncon;
         if FSplitter.Count >= ncon+1 then
         begin
           SetLength(Item.ic, ncon);
@@ -847,6 +938,16 @@ destructor TSfrDiversions.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TSfrDiversions.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSfrDiversions.GetItem(index: Integer): TSfrDiversionItem;
+begin
+  result := FItems[index];
 end;
 
 procedure TSfrDiversions.Initialize;
@@ -913,6 +1014,16 @@ destructor TSfrPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TSfrPeriod.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSfrPeriod.GetItem(Index: Integer): TNumberedItem;
+begin
+  result := FItems[index];
 end;
 
 procedure TSfrPeriod.Initialize;
@@ -1059,8 +1170,6 @@ begin
   FPeriods := TSfrPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
-  FTabFilePackages := TPackageList.Create;
-
 end;
 
 destructor TSfr.Destroy;
@@ -1074,8 +1183,37 @@ begin
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
-  FTabFilePackages.Free;
   inherited;
+end;
+
+function TSfr.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TSfr.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TSfr.GetPeriod(Index: Integer): TSfrPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TSfr.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TSfr.GetTimeSeries(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TSfr.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
 end;
 
 procedure TSfr.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
@@ -1120,7 +1258,7 @@ begin
       end
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
-        FPackageData.Read(Stream, Unhandled, FOptions.AUXILIARY.Count,
+        FPackageData.Read(Stream, Unhandled, FOptions.FAUXILIARY.Count,
           FOptions.BOUNDNAMES, FDimensions);
       end
       else if FSplitter[1] ='CROSSSECTIONS' then

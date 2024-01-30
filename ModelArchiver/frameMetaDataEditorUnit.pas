@@ -8987,7 +8987,8 @@ begin
     + sLineBreak + 'See https://www2.usgs.gov/science/services.html'
     + sLineBreak
     + '*Example authoritative sources for theme keywords include the USGS '
-    + 'Thesaurus, USGS Biocomplexity Thesaurus, and the ISO 19115 Topic '
+    + 'Thesaurus (https://apps.usgs.gov/thesaurus/), USGS Biocomplexity '
+    + 'Thesaurus, and the ISO 19115 Topic '
     + 'Category.';
   MetaDataItem.ShortName := 'themekt';
   MetaDataItem.LongName := 'Theme Keyword Thesaurus';

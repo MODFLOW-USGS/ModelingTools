@@ -1,11 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="1.5" isskin="false" isrepository="false">
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="2.0" isskin="false" isrepository="false">
   <config>
     <namespaces/>
+    <export-task-groups>
+      <export-task-group name="Recent Publishes">
+        <export-tasks>
+          <export-task name="Publish as HTM" format="HTM">
+            <task-config-group name="settings">
+              <task-config-value name="outputfile">.\HTML\index.html</task-config-value>
+              <task-config-value name="skin">$(HMSYS)Templates\HTML Skins\Webhelp, iFrames Responsive, White-Grey.hmskin</task-config-value>
+              <task-config-value name="make3include">HTML</task-config-value>
+              <task-config-value name="make3status">*</task-config-value>
+            </task-config-group>
+          </export-task>
+        </export-tasks>
+      </export-task-group>
+    </export-task-groups>
     <helpwindows>
       <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
         <caption translate="true">&lt;%TITLE%&gt;</caption>
-        <window-options-hlp autosize="true" maximize="false" posabsolute="false" keepontop="false" buttons="0" headercolor="#F0F0F0" textcolor="#FFFFFF"/>
         <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
           <user-button name="jump1">
             <caption translate="true">jump1</caption>
@@ -99,7 +112,7 @@
       <config-value name="bidimode">0</config-value>
       <config-value name="openchildreadonly">1</config-value>
       <config-value name="vcsmanuallycheckout">0</config-value>
-      <config-value name="make3include">HTML,OPT_BREADTRAIL,OPT_TOGTOC,OPT_URL</config-value>
+      <config-value name="make3include">HTML</config-value>
       <config-value name="make3status">*</config-value>
     </config-group>
     <config-group name="user">
@@ -121,7 +134,7 @@
     </config-group>
     <config-group name="html">
       <config-value name="outputfile">.\HTML\index.html</config-value>
-      <config-value name="skin">..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\gold_grey_horiz.hmskin</config-value>
+      <config-value name="skin">$(HMSYS)Templates\HTML Skins\Webhelp, iFrames Responsive, White-Grey.hmskin</config-value>
     </config-group>
     <variables/>
     <helpcontext-numbers>
