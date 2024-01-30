@@ -7305,6 +7305,10 @@ var
   BoundNameObsDictionary: TBoundNameDictionary;
   NumberObsDictionary: TNumberDictionary;
   ObsLists: TObsLists;
+  TimeSeriesIndex: Integer;
+  TimeSeriesPackage: TPackage;
+  ObsPackageIndex: Integer;
+  ObsFiles: TObs;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
