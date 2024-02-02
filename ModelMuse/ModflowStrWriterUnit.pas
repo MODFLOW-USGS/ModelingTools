@@ -2204,6 +2204,7 @@ begin
   begin
     Exit;
   end;
+  FPackageAbbreviation := 'STR';
 
   frmErrorsAndWarnings.BeginUpdate;
   try

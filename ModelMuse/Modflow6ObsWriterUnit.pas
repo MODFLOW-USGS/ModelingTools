@@ -342,6 +342,11 @@ resourcestring
   StrObservationTimeTo = 'Observation time to late.';
   StrAnObservationTime = 'An observation time defined by "%0:s is after the ' +
   'end of the simulation';
+  StrTheFollowingObserv = 'The following observations must not be used as ca' +
+  'libration observations because the starting time is the same as the obser' +
+  'vation time. No simulated values have been calculated at the start of the' +
+  ' model.';
+  StrObjectS0Observ = 'Object: %0:s; Observation name: %:1s';
 
 { TModflow6Obs_Writer }
 
@@ -2231,6 +2236,13 @@ begin
                     begin
                       DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                         [CalibObs.Name, CalibObs.Time - StartTime]));
+                      if CalibObs.Time = StartTime then
+                      begin
+                        frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                          Format(StrObjectS0Observ,
+                          [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                          AnObs.FModflow6Obs.ScreenObject);
+                      end;
                     end;
                   end;
                   DirectObsLines.Add('');
@@ -2248,6 +2260,13 @@ begin
                 begin
                   DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                     [CalibObs.Name, CalibObs.Time - StartTime]));
+                  if CalibObs.Time = StartTime then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                      Format(StrObjectS0Observ,
+                      [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                      AnObs.FModflow6Obs.ScreenObject);
+                  end;
                 end;
               end;
               DirectObsLines.Add('');
@@ -2362,6 +2381,13 @@ var
           begin
             DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
               [CalibObs.Name, CalibObs.Time - StartTime]));
+            if CalibObs.Time = StartTime then
+            begin
+              frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                Format(StrObjectS0Observ,
+                [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                AnObs.FModflow6Obs.ScreenObject);
+            end;
           end;
         end;
         DirectObsLines.Add('');
@@ -2884,6 +2910,13 @@ begin
               begin
                 DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                   [CalibObs.Name, CalibObs.Time - StartTime]));
+                if CalibObs.Time = StartTime then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                    Format(StrObjectS0Observ,
+                    [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                    AnObs.FModflow6Obs.ScreenObject);
+                end;
               end;
             end;
             DirectObsLines.Add('');
@@ -3196,6 +3229,13 @@ begin
                   begin
                     DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                       [CalibObs.Name, CalibObs.Time - StartTime]));
+                    if CalibObs.Time = StartTime then
+                    begin
+                      frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                        Format(StrObjectS0Observ,
+                        [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsname]),
+                        AnObs.FModflow6Obs.ScreenObject);
+                    end;
                   end;
                 end;
                 DirectObsLines.Add('');
@@ -3659,6 +3699,13 @@ begin
                         begin
                           DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                             [CalibObs.Name, CalibObs.Time - StartTime]));
+                          if CalibObs.Time = StartTime then
+                          begin
+                            frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                              Format(StrObjectS0Observ,
+                              [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsname]),
+                              AnObs.FModflow6Obs.ScreenObject);
+                          end;
                         end;
                       end;
                       DirectObsLines.Add('');
@@ -3956,6 +4003,13 @@ begin
               begin
                 DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                   [OBSNAME, CalibObs.Time - StartTime]));
+                if CalibObs.Time = StartTime then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                    Format(StrObjectS0Observ,
+                    [(FlowObs.FMf6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                    FlowObs.FMf6Obs.ScreenObject);
+                end;
               end
               else
               begin
@@ -4217,6 +4271,13 @@ var
           begin
             DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
               [CalibObs.Name, CalibObs.Time - StartTime]));
+            if CalibObs.Time = StartTime then
+            begin
+              frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                Format(StrObjectS0Observ,
+                [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                AnObs.FModflow6Obs.ScreenObject);
+            end;
           end;
         end;
         DirectObsLines.Add('');
@@ -4689,6 +4750,13 @@ begin
               begin
                 DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                   [CalibObs.Name, CalibObs.Time - StartTime]));
+                if CalibObs.Time = StartTime then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                    Format(StrObjectS0Observ,
+                    [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                    AnObs.FModflow6Obs.ScreenObject);
+                end;
               end;
             end;
             DirectObsLines.Add('');
@@ -4949,6 +5017,13 @@ begin
                     begin
                       DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                         [CalibObs.Name, CalibObs.Time - StartTime]));
+                      if CalibObs.Time = StartTime then
+                      begin
+                        frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                          Format(StrObjectS0Observ,
+                          [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                          AnObs.FModflow6Obs.ScreenObject);
+                      end;
                     end;
                   end;
                   DirectObsLines.Add('');
@@ -4966,6 +5041,13 @@ begin
                 begin
                   DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                     [CalibObs.Name, CalibObs.Time - StartTime]));
+                  if CalibObs.Time = StartTime then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                      Format(StrObjectS0Observ,
+                      [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsnam]),
+                      AnObs.FModflow6Obs.ScreenObject);
+                  end;
                 end;
               end;
               DirectObsLines.Add('');
@@ -5235,6 +5317,13 @@ begin
                   begin
                     DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                       [CalibObs.Name, CalibObs.Time - StartTime]));
+                    if CalibObs.Time = StartTime then
+                    begin
+                      frmErrorsAndWarnings.AddError(Model, StrTheFollowingObserv,
+                        Format(StrObjectS0Observ,
+                        [(AnObs.FModflow6Obs.ScreenObject as TScreenObject).Name, obsname]),
+                        AnObs.FModflow6Obs.ScreenObject);
+                    end;
                   end;
                 end;
                 DirectObsLines.Add('');

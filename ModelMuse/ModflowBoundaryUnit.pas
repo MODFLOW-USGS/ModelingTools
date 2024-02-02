@@ -1223,7 +1223,8 @@ resourcestring
   StrErrorOccursInS = 'Error occurs in %s';
   StrStartingAndEnding = 'Starting and ending times are the same.';
   StrAnModelFeatureIn = 'A model feature in %0:s has identical starting and' +
-  ' ending times of %1:g';
+  ' ending times of %1:g. This error message will only disappear after ' +
+  'exporting the model input files.';
   StrItLooksLikeNoStr = 'It looks like no stress periods have been defined f' +
   'or this model. If this is not true, please contact the ModelMuse develope' +
   'r for assistance.';

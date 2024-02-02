@@ -32482,5 +32482,23 @@ object TTaskHistory
         'MF-2015'
         'GwMounding'
         'Metadata Editor')
+    end
+    item
+      Date = 45322.000000000000000000
+      Categories.Strings = (
+        'GwMounding')
+    end
+    item
+      Date = 45323.000000000000000000
+      Categories.Strings = (
+        'List File Analyzer')
+    end
+    item
+      Date = 45324.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Components'
+        'Dialog boxes'
+        'FMP')
     end>
 end

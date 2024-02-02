@@ -1667,6 +1667,7 @@ var
   NewGUID: TGUID;
 begin
   inherited Create(Collection);
+  FPumpSpreadChoice := pscTopNode;
   if CreateGUID(NewGUID) = 0 then
   begin
     FarmGUID := GUIDToString(NewGUID);

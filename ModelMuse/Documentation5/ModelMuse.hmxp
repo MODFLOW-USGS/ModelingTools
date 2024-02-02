@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4511</config-value>
+      <config-value name="autohelpstart">4512</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1854,6 +1854,7 @@ document.write('</frameset>');
       <helpcontext-number href="Subdivide_Columns_Rows_and_Layers" value="1670"/>
       <helpcontext-number href="Subsidence_and_Aquifer_System_" value="4180"/>
       <helpcontext-number href="Subsidence_MM" value="3557"/>
+      <helpcontext-number href="Sum" value="4512"/>
       <helpcontext-number href="Summary" value="3250"/>
       <helpcontext-number href="SupCalc_Options_Dialog_Box" value="4171"/>
       <helpcontext-number href="SUPPLY_WELL-Farm-Process-V4-Su" value="4417"/>

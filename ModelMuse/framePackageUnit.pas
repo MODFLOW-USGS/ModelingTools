@@ -60,9 +60,14 @@ var
   DontUseStatic: TStringlist;
   DontUse_Use: TStringList;
 
+resourcestring
+  StrStatic = 'Static';
+  StrTransient = 'Transient';
+  StrDontUse = 'Don''t use';
+  StrUse = 'Use';
+
+
 implementation
-
-
 
 {$R *.dfm}
 
@@ -297,21 +302,21 @@ end;
 
 initialization
   StaticTransient := TStringlist.Create;
-  StaticTransient.Add('Static');
-  StaticTransient.Add('Transient');
+  StaticTransient.Add(StrStatic);
+  StaticTransient.Add(StrTransient);
 
   DontUseStaticTransient := TStringlist.Create;
-  DontUseStaticTransient.Add('Don''t use');
-  DontUseStaticTransient.Add('Static');
-  DontUseStaticTransient.Add('Transient');
+  DontUseStaticTransient.Add(StrDontUse);
+  DontUseStaticTransient.Add(StrStatic);
+  DontUseStaticTransient.Add(StrTransient);
 
   DontUseStatic := TStringlist.Create;
-  DontUseStatic.Add('Don''t use');
-  DontUseStatic.Add('Static');
+  DontUseStatic.Add(StrDontUse);
+  DontUseStatic.Add(StrStatic);
 
   DontUse_Use := TStringList.Create;
-  DontUse_Use.Add('Don''t use');
-  DontUse_Use.Add('Use');
+  DontUse_Use.Add(StrDontUse);
+  DontUse_Use.Add(StrUse);
 
 finalization
   StaticTransient.Free;

@@ -1293,6 +1293,9 @@ inherited frmGoPhast: TfrmGoPhast
         object miMODFLOWFMP2InputFiles: TMenuItem
           Action = acRunModflowFmp
         end
+        object RunMODFLOWOWHMV21: TMenuItem
+          Action = acRunModflowOWHM_V2
+        end
         object miRunModflowCfp: TMenuItem
           Action = acRunModflowCfp
         end
@@ -3423,7 +3426,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acRunModflowFmp: TAction
       Category = 'File'
-      Caption = 'MODFLOW-OWHM Input Files'
+      Caption = 'MODFLOW-OWHM V1 Input Files'
       Hint = 'Run MODFLOW-OWHM'
       ImageIndex = 72
       OnExecute = acRunModflowFmpExecute
@@ -3753,7 +3756,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acRunModflowOWHM_V2: TAction
       Category = 'File'
-      Caption = 'Run MODFLOW-OWHM V2'
+      Caption = 'MODFLOW-OWHM V2 Input Files'
       Hint = 'Run MODFLOW-OWHM version 2'
       ImageIndex = 72
       OnExecute = acRunModflowOWHM_V2Execute

@@ -155,16 +155,16 @@ type
     lblEigenThreshold: TLabel;
     comboEigenWrite: TComboBox;
     lblEigenWrite: TLabel;
-    jvspLqsr: TJvStandardPage;
-    cbUseLqsr: TCheckBox;
+    jvspLsqr: TJvStandardPage;
+    cbUseLsqr: TCheckBox;
     rdeMatrixTolerance: TRbwDataEntry;
     lblMatrixTolerance: TLabel;
     rdeRightHandSideTolerance: TRbwDataEntry;
     lblRightHandSideTolerance: TLabel;
     rdeConditionNumberLimit: TRbwDataEntry;
     lblConditionNumberLimit: TLabel;
-    rdeMaxLqsrIterations: TRbwDataEntry;
-    lblMaxLqsrIterations: TLabel;
+    rdeMaxLsqrIterations: TRbwDataEntry;
+    lblMaxLsqrIterations: TLabel;
     cbWriteLsqrOutput: TCheckBox;
     jvspObservationGroups: TJvStandardPage;
     frameObservationGroups: TframeGrid;
@@ -327,7 +327,7 @@ type
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
-    procedure cbUseLqsrClick(Sender: TObject);
+    procedure cbUseLsqrClick(Sender: TObject);
     procedure comboSvdModeChange(Sender: TObject);
     procedure frameObservationGroupsGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
@@ -521,7 +521,7 @@ resourcestring
   StrIterationControls = 'Iteration Controls';
   StrOutput = 'Output';
   StrSingularValueDecom = 'Singular Value Decomposition';
-  StrLQSR = 'LQSR';
+  StrLSQR = 'LSQR';
   StrObservations = 'Observation Groups';
   StrObservationGroups = 'Observation Group Properties';
   StrObservationGroupAs = 'Observation Group Assignments';
@@ -1614,10 +1614,10 @@ begin
   rdeIREGADJ.IntegerValue := IREGADJ;
 end;
 
-procedure TfrmPEST.cbUseLqsrClick(Sender: TObject);
+procedure TfrmPEST.cbUseLsqrClick(Sender: TObject);
 begin
   inherited;
-  if cbUseLqsr.Checked then
+  if cbUseLsqr.Checked then
   begin
     comboSvdMode.ItemIndex := 0;
   end;
@@ -1692,7 +1692,7 @@ begin
   inherited;
   if comboSvdMode.ItemIndex > 0 then
   begin
-    cbUseLqsr.Checked := False;
+    cbUseLsqr.Checked := False;
   end;
 end;
 
@@ -1777,8 +1777,8 @@ begin
   NewNode.PageIndex := jvspSingularValueDecomp.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    nil, StrLQSR) as TJvPageIndexNode;
-  NewNode.PageIndex := jvspLqsr.PageIndex;
+    nil, StrLSQR) as TJvPageIndexNode;
+  NewNode.PageIndex := jvspLsqr.PageIndex;
 
   ObservationNode := tvPEST.Items.AddChild(
     nil, StrObservations) as TJvPageIndexNode;
@@ -2241,13 +2241,13 @@ begin
   comboEigenWrite.ItemIndex := Ord(SvdProperties.EigenWrite);
   {$ENDREGION}
 
-  {$REGION 'LQSR'}
+  {$REGION 'LSQR'}
   LsqrProperties := PestProperties.LsqrProperties;
-  cbUseLqsr.Checked := Boolean(LsqrProperties.Mode);
+  cbUseLsqr.Checked := Boolean(LsqrProperties.Mode);
   rdeMatrixTolerance.RealValue := LsqrProperties.MatrixTolerance;
   rdeRightHandSideTolerance.RealValue := LsqrProperties.RightHandSideTolerance;
   rdeConditionNumberLimit.RealValue := LsqrProperties.ConditionNumberLimit;
-  rdeMaxLqsrIterations.IntegerValue := LsqrProperties.MaxIteration;
+  rdeMaxLsqrIterations.IntegerValue := LsqrProperties.MaxIteration;
   cbWriteLsqrOutput.Checked := Boolean(LsqrProperties.LsqrWrite);
   {$ENDREGION}
 
@@ -2821,9 +2821,9 @@ begin
     SvdProperties.EigenWrite := TEigenWrite(comboEigenWrite.ItemIndex);
     {$ENDREGION}
 
-    {$REGION 'LQSR'}
+    {$REGION 'LSQR'}
     LsqrProperties := PestProperties.LsqrProperties;
-    LsqrProperties.Mode := TLsqrMode(cbUseLqsr.Checked);
+    LsqrProperties.Mode := TLsqrMode(cbUseLsqr.Checked);
     if rdeMatrixTolerance.Text <> '' then
     begin
       LsqrProperties.MatrixTolerance := rdeMatrixTolerance.RealValue;
@@ -2836,9 +2836,9 @@ begin
     begin
       LsqrProperties.ConditionNumberLimit := rdeConditionNumberLimit.RealValue;
     end;
-    if rdeMaxLqsrIterations.Text <> '' then
+    if rdeMaxLsqrIterations.Text <> '' then
     begin
-      LsqrProperties.MaxIteration := rdeMaxLqsrIterations.IntegerValue;
+      LsqrProperties.MaxIteration := rdeMaxLsqrIterations.IntegerValue;
     end;
     LsqrProperties.LsqrWrite := TLsqrWrite(cbWriteLsqrOutput.Checked);
     {$ENDREGION}

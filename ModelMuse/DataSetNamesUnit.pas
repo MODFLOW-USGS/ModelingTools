@@ -1177,7 +1177,7 @@ resourcestring
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
   StrDefaultModflow6Path = 'C:\WRDAPP\mf6.4.2_win64\bin\mf6.exe';
-  StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-release\bin\mf-owhm.exe';
+  StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-2.3.0\bin\mf-owhm.exe';
 
   StrProgramLocations = 'Program Locations';
   StrMODFLOW2005 = 'MODFLOW-2005';

@@ -27236,7 +27236,7 @@ procedure TFarmProcess4Wells.InitializeVariables;
 begin
   inherited;
   FFarmWellPrints := [];
-  FMnwPumpSpread := pscConductance;
+  FMnwPumpSpread := pscTopNode;
   FWellXY := xyCells;
   FWellLayerChoice := plcLayer;
   FWellFormat := wfTimeFrame;

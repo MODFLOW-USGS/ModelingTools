@@ -2504,6 +2504,7 @@ var
   StrToIntDefFunction: TFunctionRecord;
   StrToFloatFunction: TFunctionRecord;
   StrToFloatDefFunction: TFunctionRecord;
+  SumFunction: TFunctionRecord;
   TanFunction: TFunctionRecord;
   TanhFunction: TFunctionRecord;
   TrimMunction: TFunctionRecord;
@@ -7061,6 +7062,20 @@ end;
 {$WARNINGS ON}
 
 {$WARNINGS OFF}
+function _Sum(Values: array of pointer): double;
+var
+  Index: Integer;
+begin
+  result := PDouble(Values[0])^;
+  for Index := 1 to Length(Values) - 1 do
+  begin
+    result := result + PDouble(Values[Index])^;
+  end;
+end;
+{$WARNINGS ON}
+
+
+{$WARNINGS OFF}
 function _Tan(Values: array of pointer): double;
 begin
   result := tan(PDouble(Values[0])^);
@@ -8477,6 +8492,16 @@ begin
   SetLength(StrToFloatDefFunction.Synonyms, 1);
   StrToFloatDefFunction.Synonyms[0] := 'StrToFloatDef';
   Add(StrToFloatDefFunction);
+
+  SumFunction.ResultType := rdtDouble;
+  SumFunction.Name := 'Sum';
+  SumFunction.Prototype := StrMath+'Sum(Real_Value1, Real_Value2, ...)';
+  SetLength(SumFunction.InputDataTypes, 1);
+  SumFunction.InputDataTypes[0] := rdtDouble;
+  SumFunction.OptionalArguments := -1;
+  SumFunction.CanConvertToConstant := True;
+  SumFunction.RFunctionAddr := @_Sum;
+  Add(SumFunction);
 
   TanFunction.ResultType := rdtDouble;
   TanFunction.Name := 'Tan';

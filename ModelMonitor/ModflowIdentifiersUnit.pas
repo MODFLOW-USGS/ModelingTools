@@ -163,7 +163,7 @@ begin
   PackageIdentifiers.Add('TVK -- TIME-VARYING K PACKAGE');
   PackageIdentifiers.Add('TVS -- TIME-VARYING S PACKAGE');
   PackageIdentifiers.Add('READING SIMULATION MODEL');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+  PackageIdentifiers.Add('HFB -- HORIZONTAL FLOW BARRIER PACKAGE');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -576,7 +576,7 @@ begin
   BoundaryIdentifiers.Add('PROCESSING');
   BoundaryIdentifiers.Add('SETTING');
   BoundaryIdentifiers.Add('ATS PERIOD DATA');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('READING HFB DATA');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');

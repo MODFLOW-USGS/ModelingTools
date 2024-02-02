@@ -435,6 +435,9 @@
         <topicref type="topic" id="393234547398469" build="ALL" modified="2022-01-24T16:29:11.796Z" icon="0" href="Sqrt">
           <caption translate="true">Sqrt</caption>
         </topicref>
+        <topicref type="topic" id="453245154402509" build="ALL" modified="2024-02-02T07:21:54.397Z" icon="0" href="Sum">
+          <caption translate="true">Sum</caption>
+        </topicref>
         <topicref type="topic" id="393235019597348" build="ALL" modified="2022-01-24T16:29:11.800Z" icon="0" href="Trunc">
           <caption translate="true">Trunc</caption>
         </topicref>
@@ -2364,8 +2367,8 @@
         <topicref type="topic" id="444267960719969" build="ALL" modified="2021-10-11T09:21:38.426Z" icon="0" href="Pest_Properties_Singular_Value">
           <caption translate="true">Singular Value Decomposition Pane</caption>
         </topicref>
-        <topicref type="topic" id="444268605520503" build="ALL" modified="2021-10-11T09:21:45.804Z" icon="0" href="Pest_Properties_LQSR_Pane">
-          <caption translate="true">LQSR Pane</caption>
+        <topicref type="topic" id="444268605520503" build="ALL" modified="2024-02-02T10:51:28.921Z" icon="0" href="Pest_Properties_LQSR_Pane">
+          <caption translate="true">LSQR Pane</caption>
         </topicref>
         <topicref type="topic" id="444268753434801" build="ALL" modified="2021-10-11T09:22:05.183Z" icon="0">
           <caption translate="true">Observation Groups</caption>

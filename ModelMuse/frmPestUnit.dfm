@@ -4,8 +4,8 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 484
   ClientWidth = 760
-  ExplicitWidth = 776
-  ExplicitHeight = 523
+  ExplicitWidth = 772
+  ExplicitHeight = 522
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -30,16 +30,19 @@ inherited frmPEST: TfrmPEST
     TabOrder = 0
     OnMouseDown = tvPESTMouseDown
     Items.Links = {00000000}
+    ExplicitHeight = 441
   end
   object plMain: TJvPageList
     Left = 198
     Top = 0
     Width = 562
     Height = 442
-    ActivePage = jvspPilotPoints
+    ActivePage = jvspLsqr
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
+    ExplicitWidth = 558
+    ExplicitHeight = 441
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
@@ -137,7 +140,7 @@ inherited frmPEST: TfrmPEST
       object diredPest: TJvDirectoryEdit
         Left = 17
         Top = 312
-        Width = 524
+        Width = 520
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 2
@@ -959,14 +962,14 @@ inherited frmPEST: TfrmPEST
           'singular values and eigenvectors (1)')
       end
     end
-    object jvspLqsr: TJvStandardPage
+    object jvspLsqr: TJvStandardPage
       Left = 0
       Top = 0
       Width = 562
       Height = 442
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_LQSR_Pane'
-      Caption = 'jvspLqsr'
+      Caption = 'jvspLsqr'
       object lblMatrixTolerance: TLabel
         Left = 157
         Top = 29
@@ -988,7 +991,7 @@ inherited frmPEST: TfrmPEST
         Height = 18
         Caption = 'Upper limit on condition number (LSQR_CONLIM)'
       end
-      object lblMaxLqsrIterations: TLabel
+      object lblMaxLsqrIterations: TLabel
         Left = 157
         Top = 106
         Width = 322
@@ -997,14 +1000,14 @@ inherited frmPEST: TfrmPEST
           'Maximum number of iterations (LSQR_ITNLIM)'#13#10'(Use zero to set aut' +
           'omatically)'
       end
-      object cbUseLqsr: TCheckBox
+      object cbUseLsqr: TCheckBox
         Left = 6
         Top = 3
         Width = 299
         Height = 17
-        Caption = 'Use LQSR (LSQRMODE)'
+        Caption = 'Use LSQR (LSQRMODE)'
         TabOrder = 0
-        OnClick = cbUseLqsrClick
+        OnClick = cbUseLsqrClick
       end
       object rdeMatrixTolerance: TRbwDataEntry
         Left = 6
@@ -1042,7 +1045,7 @@ inherited frmPEST: TfrmPEST
         CheckMin = True
         ChangeDisabledColor = True
       end
-      object rdeMaxLqsrIterations: TRbwDataEntry
+      object rdeMaxLsqrIterations: TRbwDataEntry
         Left = 6
         Top = 113
         Width = 145
@@ -1096,16 +1099,16 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 454
+            Left = 451
             ExplicitLeft = 419
           end
           inherited sbInsert: TSpeedButton
-            Left = 486
+            Left = 482
             OnClick = frameObservationGroupssbInsertClick
             ExplicitLeft = 448
           end
           inherited sbDelete: TSpeedButton
-            Left = 516
+            Left = 512
             OnClick = frameObservationGroupssbDeleteClick
             ExplicitLeft = 477
           end
@@ -1283,6 +1286,8 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Pilot_Points_P'
       Caption = 'jvspPilotPoints'
+      ExplicitWidth = 558
+      ExplicitHeight = 441
       object Panel2: TPanel
         Left = 0
         Top = 140
@@ -1290,6 +1295,8 @@ inherited frmPEST: TfrmPEST
         Height = 302
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 558
+        ExplicitHeight = 301
         object Splitter1: TSplitter
           Left = 242
           Top = 1
@@ -1305,6 +1312,7 @@ inherited frmPEST: TfrmPEST
           Align = alLeft
           Caption = 'Individually specified pilot points'
           TabOrder = 0
+          ExplicitHeight = 299
           inline framePilotPoints: TframeGrid
             Left = 2
             Top = 89
@@ -1315,12 +1323,12 @@ inherited frmPEST: TfrmPEST
             ExplicitLeft = 2
             ExplicitTop = 89
             ExplicitWidth = 237
-            ExplicitHeight = 209
+            ExplicitHeight = 208
             inherited Panel: TPanel
               Top = 143
               Width = 237
               Height = 66
-              ExplicitTop = 143
+              ExplicitTop = 142
               ExplicitWidth = 237
               ExplicitHeight = 66
               inherited lbNumber: TLabel
@@ -1415,7 +1423,7 @@ inherited frmPEST: TfrmPEST
                   AutoAdjustColWidths = True
                 end>
               ExplicitWidth = 237
-              ExplicitHeight = 143
+              ExplicitHeight = 142
             end
           end
           object Panel1: TPanel
@@ -1453,6 +1461,8 @@ inherited frmPEST: TfrmPEST
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
+          ExplicitWidth = 310
+          ExplicitHeight = 299
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 169
@@ -1521,6 +1531,8 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 306
+            ExplicitHeight = 128
             ColWidths = (
               64
               64)
@@ -1532,6 +1544,7 @@ inherited frmPEST: TfrmPEST
             Height = 149
             Align = alTop
             TabOrder = 1
+            ExplicitWidth = 306
             object lblMinSeparation: TLabel
               Left = 4
               Top = 45
@@ -1580,6 +1593,7 @@ inherited frmPEST: TfrmPEST
         Height = 140
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 558
         object lblPilotPointBuffer: TLabel
           Left = 6
           Top = 39
@@ -1603,6 +1617,7 @@ inherited frmPEST: TfrmPEST
           Align = alRight
           Caption = 'Regularly spaced pilot points'
           TabOrder = 1
+          ExplicitLeft = 294
           object lblArrayPattern: TLabel
             Left = 16
             Top = 27
@@ -2035,15 +2050,15 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 339
+            Left = 337
             ExplicitLeft = 338
           end
           inherited sbInsert: TSpeedButton
-            Left = 367
+            Left = 364
             ExplicitLeft = 367
           end
           inherited sbDelete: TSpeedButton
-            Left = 396
+            Left = 393
             ExplicitLeft = 477
           end
           inherited seNumber: TJvSpinEdit
@@ -3352,6 +3367,8 @@ inherited frmPEST: TfrmPEST
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 441
+    ExplicitWidth = 756
     object btnHelp: TBitBtn
       Left = 446
       Top = 6

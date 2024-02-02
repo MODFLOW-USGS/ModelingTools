@@ -438,6 +438,9 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrHeadObservationsError);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, Format(StrTheObservationTime,
+    ['HOB']));
+
     frmProgressMM.AddMessage(StrWritingHOBPackage);
     frmProgressMM.AddMessage(StrEvaluatingData);
     Evaluate(Purpose);
@@ -587,6 +590,12 @@ begin
         NewLine;
 
         FPestInstructionFile.Add(Format('l1 !%s!', [OBSNAM]));
+
+        if (IREFSP = 1) and (TOFFSET = 0) then
+        begin
+          frmErrorsAndWarnings.AddError(Model, Format(StrTheObservationTime, ['HOB']), OBSNAM)
+        end;
+
       end;
     end;
   end;
@@ -954,6 +963,10 @@ begin
     WriteString(' Comment = ' + Item.Comment);
   end;
   NewLine;
+  if (IREFSP = 1) and (TOFFSET = 0) then
+  begin
+    frmErrorsAndWarnings.AddError(Model, Format(StrTheObservationTime, ['HOB']), OBSNAM)
+  end;
 end;
 
 { THobDisplayTimeList }

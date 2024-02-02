@@ -4713,6 +4713,10 @@ var
   ExternalFileName: string;
   ExternalScaleFileName: string;
   UnitConversionScaleFactor: string;
+  IntValue: Integer;
+  BoolValue: Boolean;
+  RealValue: Double;
+  UniformValue: Boolean;
 begin
   GetScaleFactorsAndExternalFile(RequiredValues, UnitConversionScaleFactor,
     ExternalFileName, ExternalScaleFileName);
@@ -4761,11 +4765,24 @@ begin
       DataArray := Model.DataArrayManager.GetDataSetByName(RequiredValues.StaticDataName);
       Assert(DataArray <> nil);
     end;
+
+    UniformValue := False;
     if (DataArray <> nil) then
     begin
       DataArray.Initialize;
+      if DataArray.IsUniform = iuTrue then
+      begin
+        UniformValue := True;
+      end
+      else
+      begin
+        IntValue := 0;
+        BoolValue := False;
+        RealValue := 0;
+        UniformValue := CheckArrayUniform(DataArray, IntValue, BoolValue, RealValue);
+      end;
     end;
-    if (DataArray <> nil) and (DataArray.IsUniform = iuTrue)
+    if (DataArray <> nil) and UniformValue
        and not DataArray.PestParametersUsed then
     begin
       WriteString('STATIC CONSTANT ');

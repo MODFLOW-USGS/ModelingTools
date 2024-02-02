@@ -8,7 +8,7 @@ inherited frameFarm: TframeFarm
     Top = 0
     Width = 585
     Height = 392
-    ActivePage = tabWaterSupplyConcentration
+    ActivePage = tabName
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1517,10 +1517,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited rdeY: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeRow: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1542,6 +1538,10 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited rdeX: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeY: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -1670,10 +1670,6 @@ inherited frameFarm: TframeFarm
             Height = 16
             ExplicitHeight = 16
           end
-          inherited rdeY: TRbwDataEntry
-            Height = 24
-            ExplicitHeight = 24
-          end
           inherited rdeRow: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
@@ -1695,6 +1691,10 @@ inherited frameFarm: TframeFarm
             ExplicitHeight = 24
           end
           inherited rdeX: TRbwDataEntry
+            Height = 24
+            ExplicitHeight = 24
+          end
+          inherited rdeY: TRbwDataEntry
             Height = 24
             ExplicitHeight = 24
           end
@@ -1872,10 +1872,6 @@ inherited frameFarm: TframeFarm
                 Height = 16
                 ExplicitHeight = 16
               end
-              inherited rdeY: TRbwDataEntry
-                Height = 24
-                ExplicitHeight = 24
-              end
               inherited rdeRow: TRbwDataEntry
                 Height = 24
                 ExplicitHeight = 24
@@ -1897,6 +1893,10 @@ inherited frameFarm: TframeFarm
                 ExplicitHeight = 24
               end
               inherited rdeX: TRbwDataEntry
+                Height = 24
+                ExplicitHeight = 24
+              end
+              inherited rdeY: TRbwDataEntry
                 Height = 24
                 ExplicitHeight = 24
               end
@@ -2242,10 +2242,6 @@ inherited frameFarm: TframeFarm
                 Height = 16
                 ExplicitHeight = 16
               end
-              inherited rdeY: TRbwDataEntry
-                Height = 24
-                ExplicitHeight = 24
-              end
               inherited rdeRow: TRbwDataEntry
                 Height = 24
                 ExplicitHeight = 24
@@ -2267,6 +2263,10 @@ inherited frameFarm: TframeFarm
                 ExplicitHeight = 24
               end
               inherited rdeX: TRbwDataEntry
+                Height = 24
+                ExplicitHeight = 24
+              end
+              inherited rdeY: TRbwDataEntry
                 Height = 24
                 ExplicitHeight = 24
               end

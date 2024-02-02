@@ -38,6 +38,7 @@ type
     procedure rdgLandUseSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure comboLandUsePerCellChange(Sender: TObject);
+    procedure rdgLandUseBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
   private
     procedure InitializeGrid;
     { Private declarations }
@@ -240,6 +241,30 @@ begin
   cpnlPrint.Collapse;
   cpnlOptions.Collapse;
   InitializeGrid;
+end;
+
+procedure TframePackageFmp4LandUse.rdgLandUseBeforeDrawCell(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  if ACol = Ord(socTransient) then
+  begin
+    if (ARow = Ord(sorSoilLocation)) and (comboLandUsePerCell.ItemIndex = 0) then
+    begin
+      if rdgLandUse.Cells[ACol, ARow] = StrDontUse then
+      begin
+        rdgLandUse.Canvas.Brush.Color := clRed
+      end;
+    end;
+
+    if (ARow = Ord(sorLandUseFraction)) and (comboLandUsePerCell.ItemIndex = 1) then
+    begin
+      if rdgLandUse.Cells[ACol, ARow] = StrDontUse then
+      begin
+        rdgLandUse.Canvas.Brush.Color := clRed
+      end;
+    end;
+  end;
 end;
 
 procedure TframePackageFmp4LandUse.rdgLandUseSelectCell(Sender: TObject; ACol,

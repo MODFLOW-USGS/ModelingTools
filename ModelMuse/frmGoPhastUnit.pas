@@ -562,6 +562,7 @@ type
     miMultipleSurferGridFiles: TMenuItem;
     acImportModflow6Model: TAction;
     miImportMODFLOW6Model: TMenuItem;
+    RunMODFLOWOWHMV21: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -4510,8 +4511,10 @@ begin
   acExportModpath.Enabled :=
     PhastModel.ModelSelection in ModflowSelection;
   miImportDistributedDatabyZone.Enabled := PhastModel.ModelSelection = msPhast;
+  // Scott Boyce says LGR is experimental in MODFLOW-OWHM version 2.3.
+  // 2/1/2024
   miChildModels.Enabled := PhastModel.ModelSelection in [msModflowLGR,
-    msModflowLGR2, msModflowFmp, msModflowOwhm2];
+    msModflowLGR2, msModflowFmp {, msModflowOwhm2}];
 
   acExportPhastInputFile.Enabled := PhastModel.ModelSelection = msPhast;
   acRunModflow.Enabled := PhastModel.ModelSelection = msModflow;
@@ -14836,7 +14839,9 @@ begin
       end
       else
       begin
-        Assert(ModelSelection in [msModflowLGR2, msModflowFmp, msModflowOwhm2]);
+        // Scott Boyce says LGR is experimental in MODFLOW-OWHM version 2.3.
+        // 2/1/2024.
+        Assert(ModelSelection in [msModflowLGR2, msModflowFmp {, msModflowOwhm2}]);
         ModelFileExists := False;
         case ModelSelection of
           msModflowLGR2:
@@ -14847,10 +14852,14 @@ begin
             begin
               ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
             end;
+            {
+              // Scott Boyce says LGR is experimental in MODFLOW-OWHM version 2.
+              // 2/1/3024
           msModflowOwhm2:
             begin
               ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmV2Location);
             end;
+            }
           else
             Assert(False);
         end;
@@ -14876,10 +14885,14 @@ begin
               begin
                 ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
               end;
+              {
+              // Scott Boyce says LGR is experimental in MODFLOW-OWHM version 2.
+              // 2/1/3024
             msModflowOwhm2:
               begin
                 ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmV2Location);
               end;
+              }
             else
               Assert(False);
           end;
@@ -14908,6 +14921,9 @@ begin
                 Exit;
               end;
             end;
+            {
+              // Scott Boyce says LGR is experimental in MODFLOW-OWHM version 2.
+              // 2/1/3024
           msModflowOwhm2:
             begin
               if not MfOwhmV2UpToDate then
@@ -14915,6 +14931,7 @@ begin
                 Exit;
               end;
             end;
+            }
           else
             Assert(False);
           end;
@@ -14930,7 +14947,9 @@ begin
       end
       else
       begin
-        Assert(ModelSelection in [msModflowLGR2, msModflowFmp, msModflowOwhm2]);
+              // Scott Boyce says LGR is experimental in MODFLOW-OWHM version 2.
+              // 2/1/3024
+        Assert(ModelSelection in [msModflowLGR2, msModflowFmp {, msModflowOwhm2}]);
         case ModelSelection of
           msModflowLGR2:
             begin
@@ -14940,10 +14959,14 @@ begin
             begin
               ModelFile := PhastModel.ProgramLocations.ModflowOwhmLocation;
             end;
+            {
+              // Scott Boyce says LGR is experimental in MODFLOW-OWHM version 2.
+              // 2/1/3024
           msModflowOwhm2:
             begin
               ModelFile := PhastModel.ProgramLocations.ModflowOwhmV2Location;
             end
+            }
           else
             Assert(False);
         end;
@@ -15984,7 +16007,7 @@ initialization
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
   PestDate := EncodeDate(2023,7,14);
-  MfOwhmV2Date := EncodeDate(2023,4,23);
+  MfOwhmV2Date := EncodeDate(2024,1,15);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

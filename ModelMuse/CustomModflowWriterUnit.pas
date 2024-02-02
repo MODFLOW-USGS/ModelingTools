@@ -258,6 +258,8 @@ end;
       const DataArray: TDataArray);
   protected
     FArrayWritingFormat: TArrayWritingFormat;
+    function CheckArrayUniform(const DataArray: TDataArray; var IntValue: Integer;
+      var BoolValue: Boolean; var RealValue: Double): boolean; overload;
     // @name generates a comment line for a MODFLOW input file indentifying
     // the package.
     function PackageID_Comment(APackage: TModflowPackageSelection): string; virtual;
@@ -885,6 +887,7 @@ end;
     function GetFluxType(ObservationGroup: TFluxObservationGroup): string;
     procedure RemoveWarningGroups(ObservationGroup: TFluxObservationGroup);
   protected
+    FPackageAbbreviation: string;
     // @name must be set to the name of the input file for the package.
 //    FFileName: string;
     function ObservationPackage: TModflowPackageSelection; virtual; abstract;
@@ -1212,6 +1215,10 @@ resourcestring
   StrOneOrMoreSParam = 'One or more %s parameters have been eliminated becau' +
   'se there are no cells associated with them.';
   StrRunModelBat = 'RunModel.Bat';
+  StrTheObservationTime = 'The observation times for the following observati' +
+  'ons in the %s package are at the beginning of the simulation. This is an ' +
+  'error because no simulated values have been calculated at the beginning o' +
+  'f the simulation.';
 
 const
   // @name is the comment assigned to locations in a @link(TDataArray) where
@@ -2855,6 +2862,36 @@ begin
     end;
   end;
   Model.DataArrayManager.AddDataSetToCache(DataArray);
+end;
+
+function TCustomModflowWriter.CheckArrayUniform(const DataArray: TDataArray;
+  var IntValue: Integer; var BoolValue: Boolean;
+  var RealValue: Double): boolean;
+var
+  SaveIntValue: Integer;
+  SaveBoolValue: Boolean;
+  SaveRealValue: Double;
+  LayerIndex: Integer;
+begin
+  result := CheckArrayUniform(0, DataArray, IntValue, BoolValue, RealValue);
+  if result then
+  begin
+    SaveIntValue := IntValue;
+    SaveBoolValue := BoolValue;
+    SaveRealValue := RealValue;
+    for LayerIndex := 1 to DataArray.LayerCount - 1 do
+    begin
+      result := CheckArrayUniform(LayerIndex, DataArray, IntValue, BoolValue, RealValue)
+        and (SaveIntValue = IntValue)
+        and (SaveBoolValue = BoolValue)
+        and (SaveRealValue = RealValue);
+      if not Result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+
 end;
 
 function TCustomModflowWriter.CheckArrayUniform(const LayerIndex: Integer;
@@ -8183,6 +8220,13 @@ begin
         + FreeFormattedReal(FLWOBS)
         + ' # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS'
         + Comment);
+
+        if (ReferenceStressPeriodIndex = 0) and (TOFFSET = 0) then
+        begin
+          frmErrorsAndWarnings.AddError(Model, Format(StrTheObservationTime,
+            [FPackageAbbreviation]), OBSNAM)
+        end;
+
       if Model.PestUsed then
       begin
         FPestInstructionFile.Add(Format('l1 !%s!', [OBSNAM]));
@@ -8263,6 +8307,11 @@ begin
   begin
     Exit;
   end;
+
+  FPackageAbbreviation := PackageAbbreviation;
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, Format(StrTheObservationTime,
+    [FPackageAbbreviation]));
+
 
   frmErrorsAndWarnings.BeginUpdate;
   try

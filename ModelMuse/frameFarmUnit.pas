@@ -510,14 +510,22 @@ var
   FirstFarm: TFarm;
   FarmProcess: TFarmProcess;
   Packages: TModflowPackages;
-//  SfrPackage: TSfrPackageSelection;
   FarmProcess4: TFarmProcess4;
   SalinityFlush: TFarmProcess4SalinityFlush;
   FarmSurfaceWater4: TFarmProcess4SurfaceWater;
+  MnwPumpSpread: TOwhmV2PumpSpreadChoice;
+  PumpSpreadUsed: Boolean;
+  ModflowPackages: TModflowPackages;
 begin
   Changing := True;
   FrameLoaded := False;
   try
+    ModflowPackages  := frmGoPhast.PhastModel.ModflowPackages;
+    MnwPumpSpread := ModflowPackages.FarmWells4.MnwPumpSpread;
+    PumpSpreadUsed := (MnwPumpSpread = pscByWbs)
+      and ModflowPackages.Mnw2Package.IsSelected;
+    comboPumpSpread.Enabled := PumpSpreadUsed;
+
     if FarmList.count = 0 then
     begin
       seFarmId.AsInteger := 0;
