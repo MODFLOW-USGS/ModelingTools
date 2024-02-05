@@ -10130,6 +10130,11 @@ const
 //               A "Sum" function has been added to the functions supported
 //                in the Formula Editor.
 
+//               Enhancement. Added a check that the MAW radius is the cell
+//                effective radius.
+//               bug fix: Fixed error messageissued  when all downstream
+//                MODFLOW 6 SFR segments are inactive.
+
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for Transient Hydraulic Conductivity package for MODFLOW 6.

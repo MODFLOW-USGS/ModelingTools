@@ -18285,7 +18285,7 @@ begin
   Relax := 1;
   LayerTemperature := 25;
   PipesUsed := False;
-  ConduitLayersUsed := True;
+  ConduitLayersUsed := False;
   CfpElevationChoice := cecIndividual;
   CfpExchange := ceNodeConductance;
   MaxIterations := 1000;

@@ -163,6 +163,10 @@ resourcestring
   StrIn0sThereWasA = 'In %0:s, there was a gap in time from %1:g to %2:g. An' +
   ' inactive period has been inserted to fill that time.';
   StrMawhead = '.maw_head';
+  StrMAWWellRadiusIsG = 'MAW well radius is greater than effective cell radi' +
+  'us';
+  StrIn0sTheWellRa = 'In %0:s, the well radius is %1:g but the effective cel' +
+  'l radius is %2:g ';
 
 { TModflowMAW_Writer }
 
@@ -269,6 +273,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFlowingWellReducti);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellRadiusToo);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellSkinRadius);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellRadiusIsG);
 
   FFlowingWells := False;
 
@@ -1723,9 +1728,10 @@ var
   FormulaItem: TStringConcValueItem;
   PropertyName: string;
   IsGwtObs: Boolean;
-//  index: Integer;
   IsMf6Obs: Boolean;
   MwtObs: TMwtObservation;
+  CellArea: Double;
+  EffectiveCellRadius: Double;
   procedure CompileFormula(Formula: string; const FormulaName: string;
     var OutFormula: string; out PestParamName: string;
     out Column, Row, Layer: Integer; SpecifiedLayer: Integer = 0);
@@ -1735,9 +1741,6 @@ var
     VarPosition: Integer;
     Variable: TCustomValue;
     AnotherDataSet: TDataArray;
-//    Column: Integer;
-//    Row: Integer;
-//    Layer: Integer;
     ASegment: TCellElementSegment;
     Param: TModflowSteadyParameter;
     DataArray: TDataArray;
@@ -1907,6 +1910,23 @@ begin
         AWellRecord.Column := Column;
         AWellRecord.Row := Row;
         AWellRecord.Layer := 0;
+
+        if Model.DisvUsed then
+        begin
+          CellArea := TCustomModel(Model).DisvGrid.CellArea(Column);
+        end
+        else
+        begin
+          CellArea := GetColumnWidth(Column) * GetRowWidth(Row);
+        end;
+        EffectiveCellRadius := Sqrt(CellArea/8/Pi);
+        if EffectiveCellRadius < AWellRecord.Radius then
+        begin
+          frmErrorsAndWarnings.AddError(Model, StrMAWWellRadiusIsG,
+            Format(StrIn0sTheWellRa,
+            [AScreenObject.Name, AWellRecord.Radius, EffectiveCellRadius]),
+            AScreenObject)
+        end;
 
         CompileFormula(Boundary.Bottom, StrMAWBottom, Formula, PestParamName,
           Column, Row, Layer);

@@ -48,6 +48,7 @@ type
     rdeAts: TRbwDataEntry;
     tabGWT: TTabSheet;
     rdgGWT: TRbwDataGrid4;
+    btnEditGeoRef: TButton;
     procedure FormCreate(Sender: TObject); override;
     procedure dgTimeSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -89,6 +90,7 @@ type
       const Value: string);
     procedure dgTimeExit(Sender: TObject);
     procedure rdgGWTBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
+    procedure btnEditGeoRefClick(Sender: TObject);
   private
     FModflowStressPeriods: TModflowStressPeriods;
     FDeleting: Boolean;
@@ -353,6 +355,12 @@ begin
     seNumPeriods.AsInteger := seNumPeriods.AsInteger - 1;
   end;
   SetDeleteButtonEnabled;
+end;
+
+procedure TfrmModflowTime.btnEditGeoRefClick(Sender: TObject);
+begin
+  inherited;
+  frmGoPhast.miEditGeoRefClick(nil);
 end;
 
 procedure TfrmModflowTime.btnInsertClick(Sender: TObject);

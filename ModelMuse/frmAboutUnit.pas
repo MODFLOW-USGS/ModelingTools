@@ -117,6 +117,7 @@ begin
   memoDisclaimer.WordWrap := True;
   memoDisclaimer.Lines.Clear;
   memoDisclaimer.Lines.Add(DisclaimerString);
+  memoDisclaimer.Lines.Add('https://water.usgs.gov/software/help/notice/');
 
   lblVersion.Caption := frmGoPhast.PhastModel.Version;
   lblFileVersion.Caption := frmGoPhast.PhastModel.FileVersion;

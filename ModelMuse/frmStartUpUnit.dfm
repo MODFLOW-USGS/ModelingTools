@@ -26,7 +26,7 @@ inherited frmStartUp: TfrmStartUp
       739
       47)
     object btnNext: TBitBtn
-      Left = 603
+      Left = 599
       Top = 6
       Width = 86
       Height = 33
@@ -49,10 +49,10 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
-      ExplicitLeft = 599
+      ExplicitLeft = 595
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 416
+      Left = 412
       Top = 6
       Width = 100
       Height = 33
@@ -63,10 +63,10 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
-      ExplicitLeft = 412
+      ExplicitLeft = 408
     end
     object btnHelp: TBitBtn
-      Left = 522
+      Left = 518
       Top = 6
       Width = 75
       Height = 33
@@ -76,7 +76,7 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 518
+      ExplicitLeft = 514
     end
   end
   object pcStartup: TPageControl
@@ -86,7 +86,7 @@ inherited frmStartUp: TfrmStartUp
     Height = 356
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
-    ActivePage = tabModelChoice
+    ActivePage = tabInitialModflowGrid
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
@@ -115,7 +115,8 @@ inherited frmStartUp: TfrmStartUp
           'Import MODFLOW-2005 or MODFLOW-NWT model'
           'Import MODFLOW 6 model')
         TabOrder = 0
-        ExplicitTop = 4
+        ExplicitWidth = 727
+        ExplicitHeight = 322
       end
     end
     object tabGeoRef: TTabSheet
@@ -546,9 +547,9 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 495
+          Left = 499
           Top = 20
-          Width = 234
+          Width = 230
           Height = 260
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
@@ -655,6 +656,7 @@ inherited frmStartUp: TfrmStartUp
             'MODFLOW-2005'
             'MODFLOW-NWT'
             'MODFLOW-OWHM'
+            'MODFLOW-CFP'
             'MODFLOW-LGR')
         end
       end
@@ -705,7 +707,7 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 256
+        Width = 252
         Height = 291
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
@@ -713,12 +715,12 @@ inherited frmStartUp: TfrmStartUp
         ExplicitLeft = 464
         ExplicitTop = 29
         ExplicitWidth = 252
-        ExplicitHeight = 290
+        ExplicitHeight = 291
         inherited Panel: TPanel
           Top = 226
-          Width = 256
+          Width = 252
           Height = 65
-          ExplicitTop = 225
+          ExplicitTop = 226
           ExplicitWidth = 252
           ExplicitHeight = 65
           inherited lbNumber: TLabel
@@ -736,14 +738,14 @@ inherited frmStartUp: TfrmStartUp
             ExplicitTop = 38
           end
           inherited sbInsert: TSpeedButton
-            Left = 31
+            Left = 30
             Top = 38
             OnClick = frameModelLayerssbInsertClick
             ExplicitLeft = 37
             ExplicitTop = 38
           end
           inherited sbDelete: TSpeedButton
-            Left = 55
+            Left = 54
             Top = 38
             OnClick = frameModelLayerssbDeleteClick
             ExplicitLeft = 66
@@ -757,7 +759,7 @@ inherited frmStartUp: TfrmStartUp
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 256
+          Width = 252
           Height = 226
           ColCount = 2
           RowCount = 5
@@ -813,7 +815,7 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 252
-          ExplicitHeight = 225
+          ExplicitHeight = 226
           ColWidths = (
             64
             64)
@@ -958,7 +960,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 178
+        Width = 174
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -968,7 +970,6 @@ inherited frmStartUp: TfrmStartUp
           'Saturated'
           'Unsaturated')
         TabOrder = 3
-        ExplicitWidth = 174
       end
     end
     object tabInitialGridFootprint: TTabSheet

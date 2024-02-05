@@ -215,6 +215,9 @@ resourcestring
   StrUndefinedTimeUnit = 'Undefined time unit';
   StrWhenTheSFRPackageTime = 'When the SFR package is used, you must specify' +
   ' the time unit so that TIME_CONVERSION can be specified correctly';
+  StrNoActiveSFRDownst = 'No active SFR downstream reaches';
+  StrTheDownstreamReach = 'The downstream reaches of %s are all inactive in ' +
+  'stress period %d.';
 
 { TModflowSFR_MF6_Writer }
 
@@ -884,6 +887,8 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorAssigningDive);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheStreambedMinusThe);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidMinimumCros);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoActiveSFRDownst);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrSFRUpstreamValues);
 
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
@@ -2712,6 +2717,9 @@ var
   ConnectedStreams: TStringList;
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
+  StatusArray: array of TStreamStatus;
+  DownReachIndex: Integer;
+  DownstreamReachesDefined: Boolean;
 begin
   if MvrWriter <> nil then
   begin
@@ -2724,6 +2732,7 @@ begin
   MvrReceiver.ReceiverKey.ReceiverPackage := rpcSfr;
   SetLength(UpstreamFractions, FReachCount);
   SetLength(AssociatedScreenObjects, FReachCount);
+  SetLength(StatusArray, FReachCount);
   for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count -1 do
   begin
     frmProgressMM.AddMessage(Format(
@@ -2739,6 +2748,7 @@ begin
     begin
       UpstreamFractions[ReachIndex] := 0;
       AssociatedScreenObjects[ReachIndex] := nil;
+      StatusArray[ReachIndex] := ssInactive;
     end;
 
     MvrSource.StressPeriod := StressPeriodIndex;
@@ -2775,6 +2785,7 @@ begin
         begin
           UpstreamFractions[ReachNumber-1] := ACell.Values.UpstreamFraction;
         end;
+        StatusArray[ReachNumber-1] := ACell.Values.Status;
 
         WriteInteger(ReachNumber);
         WriteString(' STATUS');
@@ -2913,6 +2924,7 @@ begin
           end;
 
           HasDownstreamReaches := False;
+          DownstreamReachesDefined := False;
           ConnectedStreams.Clear;
           SumUpstreamFractions := 0;
           if Length(AReach.ConnectedReaches) > 0 then
@@ -2921,13 +2933,25 @@ begin
             begin
               if AReach.ConnectedReaches[ConnectIndex] < 0 then
               begin
-                HasDownstreamReaches := True;
-                SumUpstreamFractions := SumUpstreamFractions
-                  + UpstreamFractions[-AReach.ConnectedReaches[ConnectIndex]-1];
-                ConnectedStreams.Add(AssociatedScreenObjects[
-                  -AReach.ConnectedReaches[ConnectIndex]-1].Name);
+                DownstreamReachesDefined := True;
+                DownReachIndex := -AReach.ConnectedReaches[ConnectIndex] -1;
+                if StatusArray[DownReachIndex] <> ssInactive then
+                begin
+                  HasDownstreamReaches := True;
+                  SumUpstreamFractions := SumUpstreamFractions
+                    + UpstreamFractions[-AReach.ConnectedReaches[ConnectIndex]-1];
+                  ConnectedStreams.Add(AssociatedScreenObjects[
+                    -AReach.ConnectedReaches[ConnectIndex]-1].Name);
+                end;
               end;
             end;
+          end;
+          if DownstreamReachesDefined and not HasDownstreamReaches then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrNoActiveSFRDownst,
+              Format(StrTheDownstreamReach,
+              [AssociatedScreenObjects[AReach.ReachNumber-1].Name, StressPeriodIndex+1]),
+              AssociatedScreenObjects[AReach.ReachNumber-1]);
           end;
           if HasDownstreamReaches and (Abs(SumUpstreamFractions -1) > Epsilon) then
           begin

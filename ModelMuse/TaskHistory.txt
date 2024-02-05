@@ -32500,5 +32500,18 @@ object TTaskHistory
         'Components'
         'Dialog boxes'
         'FMP')
+    end
+    item
+      Date = 45325.000000000000000000
+    end
+    item
+      Date = 45326.000000000000000000
+    end
+    item
+      Date = 45327.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'FMP'
+        'CFP')
     end>
 end

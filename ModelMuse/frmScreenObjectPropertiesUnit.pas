@@ -853,6 +853,8 @@ type
         ACol, ARow: Integer; const Value: string);
     procedure frameScreenObjectTvsrdgModflowBoundarySetEditText(Sender: TObject;
         ACol, ARow: Integer; const Value: string);
+    procedure frameScreenObjectSFRdgFlowTimesSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -27109,6 +27111,14 @@ end;
 //    btnHelp.HelpKeyword := HelpKeyword;
 //  end;
 //end;
+
+procedure TfrmScreenObjectProperties.frameScreenObjectSFRdgFlowTimesSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  frameScreenObjectSFR.dgFlowTimesSetEditText(Sender, ACol, ARow, Value);
+
+end;
 
 procedure TfrmScreenObjectProperties.frameScreenObjectSFRjceButtonClick(
   Sender: TObject);

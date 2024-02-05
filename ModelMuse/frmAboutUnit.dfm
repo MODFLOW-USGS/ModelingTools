@@ -5,8 +5,8 @@ inherited frmAbout: TfrmAbout
   ClientHeight = 527
   ClientWidth = 732
   FormStyle = fsStayOnTop
-  ExplicitWidth = 748
-  ExplicitHeight = 566
+  ExplicitWidth = 744
+  ExplicitHeight = 565
   TextHeight = 18
   object pnlTop: TPanel
     Left = 0
@@ -16,6 +16,7 @@ inherited frmAbout: TfrmAbout
     Align = alTop
     ParentColor = True
     TabOrder = 0
+    ExplicitWidth = 728
     DesignSize = (
       732
       305)
@@ -3097,7 +3098,7 @@ inherited frmAbout: TfrmAbout
     object ctgrypnlgrp1: TCategoryPanelGroup
       Left = 328
       Top = 6
-      Width = 397
+      Width = 393
       Height = 293
       VertScrollBar.Tracking = True
       Align = alNone
@@ -3113,10 +3114,11 @@ inherited frmAbout: TfrmAbout
         Height = 250
         Caption = 'References'
         TabOrder = 1
+        ExplicitWidth = 385
         object reReference: TRichEdit
           Left = 0
           Top = 0
-          Width = 391
+          Width = 387
           Height = 224
           Align = alClient
           Lines.Strings = (
@@ -3145,18 +3147,20 @@ inherited frmAbout: TfrmAbout
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
+          ExplicitWidth = 383
         end
       end
       object ctgrypnl1: TCategoryPanel
         Top = 0
         Height = 30
-        Caption = 'Disclaimer'
+        Caption = 'Disclaimer/License'
         Collapsed = True
         TabOrder = 0
+        ExplicitWidth = 372
         object memoDisclaimer: TMemo
           Left = 0
           Top = 0
-          Width = 391
+          Width = 383
           Height = 0
           Align = alClient
           Lines.Strings = (
@@ -3187,6 +3191,8 @@ inherited frmAbout: TfrmAbout
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 477
+    ExplicitWidth = 728
     DesignSize = (
       732
       49)
@@ -3205,7 +3211,7 @@ inherited frmAbout: TfrmAbout
       Caption = '0.0.3.0'
     end
     object btnClose: TBitBtn
-      Left = 636
+      Left = 632
       Top = 6
       Width = 89
       Height = 33
@@ -3213,9 +3219,10 @@ inherited frmAbout: TfrmAbout
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
+      ExplicitLeft = 628
     end
     object btnGoToWeb: TBitBtn
-      Left = 475
+      Left = 471
       Top = 6
       Width = 155
       Height = 33
@@ -3283,6 +3290,7 @@ inherited frmAbout: TfrmAbout
         0800000000000000000000000000000000000000080808080800}
       TabOrder = 0
       OnClick = btnGoToWebClick
+      ExplicitLeft = 467
     end
   end
   object dgCredit: TRbwDataGrid4
@@ -3379,5 +3387,7 @@ inherited frmAbout: TfrmAbout
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
+    ExplicitWidth = 728
+    ExplicitHeight = 172
   end
 end

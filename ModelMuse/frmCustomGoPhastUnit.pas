@@ -53,6 +53,7 @@ type
 {$IFEND}
     procedure FormDestroy(Sender: TObject); virtual;
     procedure FormHide(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     FCallingHelp: Boolean;
     FCreateNewDataSet: Boolean;
@@ -391,6 +392,14 @@ begin
   FLeft := Monitor.Left;
   FTop  := Monitor.Top;
   FMonitorNumber := Monitor.MonitorNum;
+end;
+
+procedure TfrmCustomGoPhast.FormResize(Sender: TObject);
+begin
+  if (Self <> frmGoPhast) and (WindowState = wsMinimized) then
+  begin
+    frmGoPhast.WindowState := wsMinimized;
+  end;
 end;
 
 procedure TfrmCustomGoPhast.btnHelpClick(Sender: TObject);

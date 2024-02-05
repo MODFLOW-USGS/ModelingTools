@@ -113,6 +113,7 @@ var
   PipesUsed: Boolean;
 begin
   inherited;
+  cbLayers.Enabled := (frmGoPhast.ModelSelection = msModflowCfp);
   pgcConduits.ActivePageIndex := 0;
 
   CfpPackage := Package as TConduitFlowProcess;

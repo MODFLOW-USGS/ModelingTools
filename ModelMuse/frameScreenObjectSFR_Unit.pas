@@ -741,6 +741,10 @@ begin
   begin
     Exit;
   end;
+  if (ARow > 0) and (ACol = Ord(spicIcalc)) then
+  begin
+    zbChannel.InvalidateImage32;
+  end;
   Edited;
   EnableTabs;
   UpdateSpinEditValue(rdgParameters, seParametersCount);
@@ -3954,7 +3958,16 @@ var
   PointIndex: integer;
   FormulaX, FormulaZ: string;
   Parser: TRbwParser;
+  ICalc: TByteSet;
+  CanSelect: Boolean;
 begin
+  ICalc := IcalcRowSet(dgSfrRough.SelectedRow);
+  CanSelect := (2 in ICalc);
+
+  if not CanSelect then
+  begin
+    Exit;
+  end;
   if Assigned(GetParser) then
   begin
     Frame := frameCrossSection1;
