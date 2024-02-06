@@ -30,6 +30,9 @@ resourcestring
   StrTheSOfYourModel = 'The %s of your model is undefined. You can define it' +
   ' in "Model|Edit Geo Ref."';
   StrMissingGeoReferenc = 'Missing Geo Reference data';
+  StrForHypotheticalMo = ' For hypothetical models or other models for which' +
+  ' a projection is not appropriate, you can specify "NA" (not applicable) a' +
+  's the projection.';
 
 { TGeoRefWriter }
 
@@ -162,7 +165,7 @@ begin
     if FGeoRef.Projection = '' then
     begin
       frmErrorsAndWarnings.AddWarning(Model, StrMissingGeoReferenc,
-        Format(StrTheSOfYourModel, ['projection']));
+        Format(StrTheSOfYourModel, ['projection']) + StrForHypotheticalMo);
     end;
     WriteString(FGeoRef.Projection);
     NewLine;

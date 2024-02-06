@@ -599,6 +599,14 @@ resourcestring
   'ipped.';
   StrAtLeastOneSoilMu = 'At least one soil must be defined if land uses are ' +
   'used.';
+  StrSoilCoefficientNot = 'Soil Coefficient not defined.';
+  StrWhenTheRootPressu = 'When the Root pressure option is used in the Land ' +
+  'Use section of the Farm Process, the Farm process requires that the soil ' +
+  'coefficient be defined in the Soil section. You do that by first enabling' +
+  ' the Soil Coefficient in the "Model|MODFLOW Packages and Programs" dialog ' +
+  'box and then specifying a value in the "Model|Farm Process|Farm Soils" ' +
+  'dialog box.';
+  StrSoilTypeUndefined = 'Soil type undefined.';
 
 { TModflowFmp4Writer }
 
@@ -7576,7 +7584,7 @@ begin
   EvaluateEfficiency;
 
   RequiredValues.WriteLocation := wlEfficiency;
-  RequiredValues.DefaultValue := 0;
+  RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtDouble;
   RequiredValues.DataTypeIndex := 0;
   RequiredValues.MaxDataTypeIndex := 0;
@@ -7870,7 +7878,7 @@ var
   StartTime: Double;
   ACrop: TCropItem;
   IrregationItem: TCropIrrigationItem;
-  Formula: string;
+//  Formula: string;
   IrrigationTypes: TIrrigationCollection;
   EvapFracItem: TEvapFractionItem;
   IrrigationType: TIrrigationItem;
@@ -8828,7 +8836,7 @@ begin
   EvaluateTranspirationFraction;
 
   RequiredValues.WriteLocation := wlTranspirationFraction;
-  RequiredValues.DefaultValue := 0;
+  RequiredValues.DefaultValue := 1;
   RequiredValues.DataType := rdtDouble;
   RequiredValues.DataTypeIndex := 0;
   RequiredValues.MaxDataTypeIndex := 0;
@@ -8923,6 +8931,9 @@ end;
 procedure TModflowFmp4Writer.WriteFile(const AFileName: string);
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidFarmProcess);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrSoilTypeUndefined);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrSoilCoefficientNot);
+
   if (not FFarmProcess4.IsSelected)
     or (Model.ModelSelection <> msModflowOwhm2) then
   begin
@@ -10857,30 +10868,16 @@ var
             end;
           stOther:
             begin
-//              Formula := ASoil.ACoeff;
               WriteItem(ASoil.ACoeff, 'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
-//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-//                'Invalid formula for soil coefficient A in soil ' + ASoil.SoilName);
-
-//              Formula := ASoil.BCoeff;
-//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-//                'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
               WriteItem(ASoil.BCoeff, 'Invalid formula for soil coefficient B in soil ' + ASoil.SoilName);
-
-//              Formula := ASoil.CCoeff;
-//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-//                'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
               WriteItem(ASoil.CCoeff, 'Invalid formula for soil coefficient C in soil ' + ASoil.SoilName);
-
-//              Formula := ASoil.DCoeff;
-//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-//                'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
               WriteItem(ASoil.DCoeff, 'Invalid formula for soil coefficient D in soil ' + ASoil.SoilName);
-
-//              Formula := ASoil.ECoeff;
-//              WriteFloatValueFromGlobalFormula(Formula, ASoil,
-//                'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
               WriteItem(ASoil.ECoeff, 'Invalid formula for soil coefficient E in soil ' + ASoil.SoilName);
+            end;
+          stUndefined:
+            begin
+              frmErrorsAndWarnings.AddError(Model, StrSoilTypeUndefined,
+                Format('The soil type has not been defined for %s', [ASoil.SoilName]))
             end;
           else
             Assert(False)
@@ -10892,6 +10889,14 @@ var
     end
   end;
 begin
+  if FLandUse.IsSelected and (FLandUse.RootPressure.FarmOption <> foNotUsed) then
+  begin
+    if FSoil4.Coefficient.FarmOption = foNotUsed then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrSoilCoefficientNot, StrWhenTheRootPressu)
+    end;
+  end;
+
   if FSoil4.Coefficient.FarmOption = foNotUsed then
   begin
     Exit;

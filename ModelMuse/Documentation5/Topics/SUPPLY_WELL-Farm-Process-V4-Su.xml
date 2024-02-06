@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-09-06T10:28:03.299-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-02-06T15:51:30.229-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SUPPLY_WELL: Farm Process V4 Supply Well Options</title>
   <body>
     <header>
@@ -15,12 +15,11 @@
     <para styleclass="Strong"><text styleclass="Strong" translate="true">PRINT SMOOTHING</text><text styleclass="Normal" translate="true">: If smoothing is enabled, then output smooth effect to file</text></para>
     <para styleclass="Strong"><text styleclass="Strong" translate="true">PRINT BYWBS_BYLAYER</text><text styleclass="Normal" translate="true">: Summarize by WBS the pumping in and out of each model layer from FMP, MNW2, and WEL Packages</text></para>
     <para styleclass="Strong"><text styleclass="Strong" translate="true">MNW_PUMP_SPREAD</text><text styleclass="Normal" translate="true">: MNW_PUMP_SPREAD applies to only FMP-MNW2 linked wells. It determines to which MNW nodes the desired (demanded) pumpage should be assigned. It should have no effect on the final/converged solution, but it may improve convergence speed and thus reduce simulation time. </text><br/><text styleclass="Normal" translate="true">The following are the methods by which the pumpage can initially be spread:</text></para>
-    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="margin-left:13px; font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="margin-left:13px; font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Strong" style="margin-left:13px;"><text styleclass="Strong" translate="true">0 BY_COND</text><text styleclass="Normal" translate="true">: spreads pumpage based on each nodes conductance (Default when not specified)</text></li>
       <li styleclass="Strong" style="margin-left:13px;"><text styleclass="Strong" translate="true">1 BY_COUNT</text><text styleclass="Normal" translate="true">: spreads pumpage based on the node count (average rate per node)</text></li>
       <li styleclass="Strong" style="margin-left:13px;"><text styleclass="Strong" translate="true">2 BY_TOP</text><text styleclass="Normal" translate="true">:- assigns the total pumpage to the upper most node (original FMP3 method)</text></li>
       <li styleclass="Strong" style="margin-left:13px;"><text styleclass="Strong" translate="true">Assign separately in each WBS</text><text styleclass="Normal" translate="true">: assigns one of the previous values to each water balance subregion as specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></li>
     </list>
-    <para styleclass="Strong"><text styleclass="Strong" translate="true">INPUT_OPTION XY</text><text styleclass="Normal" translate="true">: FMP well locations can be specified either by row and column or by X and Y coordinates. The choice should have no effect on the model results.</text></para>
   </body>
 </topic>

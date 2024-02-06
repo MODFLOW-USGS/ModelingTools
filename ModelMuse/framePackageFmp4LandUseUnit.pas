@@ -47,6 +47,7 @@ type
   public
     procedure GetData(Package: TModflowPackageSelection); override;
     procedure SetData(Package: TModflowPackageSelection); override;
+    function ReadFarmOption(Row: TSoilOptionRows): TFarmOption;
     { Public declarations }
   end;
 
@@ -356,6 +357,19 @@ begin
   begin
     CanSelect := False;
   end;
+end;
+
+function TframePackageFmp4LandUse.ReadFarmOption(
+  Row: TSoilOptionRows): TFarmOption;
+var
+  Index: Integer;
+begin
+  Index := DontUseStaticTransient.IndexOf(rdgLandUse.Cells[Ord(socTransient), Ord(Row)]);
+  if Index < 0 then
+  begin
+    Index := 0
+  end;
+  Result := TFarmOption(Index);
 end;
 
 procedure TframePackageFmp4LandUse.SetData(Package: TModflowPackageSelection);

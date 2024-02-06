@@ -27,7 +27,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       Height = 318
       Caption = 'Surface Water'
       TabOrder = 0
-      ExplicitWidth = 185
       object rdgSurfaceWater: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -37,7 +36,7 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
         ColCount = 6
         Enabled = False
         FixedCols = 1
-        RowCount = 9
+        RowCount = 8
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
         OnSelectCell = rdgSurfaceWaterSelectCell
@@ -202,7 +201,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 395
       end
     end
     object cpnlOptions: TCategoryPanel
@@ -212,7 +210,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       Collapsed = True
       Enabled = False
       TabOrder = 1
-      ExplicitWidth = 418
       ExpandedHeight = 91
       object lblSEMI_ROUTED_DELIVERY_CLOSURE_TOLERANCE: TLabel
         Left = 173
@@ -251,7 +248,6 @@ inherited framePackageFmp4SurfaceWater: TframePackageFmp4SurfaceWater
       Caption = 'Print'
       Collapsed = True
       TabOrder = 2
-      ExplicitWidth = 185
       ExpandedHeight = 153
       object clbPrint: TCheckListBox
         Left = 0

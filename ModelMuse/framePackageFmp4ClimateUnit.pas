@@ -26,6 +26,7 @@ type
   protected
     procedure Loaded; override;
   public
+    function ReadFarmOption(Row: TClimateRows): TFarmOption;
     procedure GetData(Package: TModflowPackageSelection); override;
     procedure SetData(Package: TModflowPackageSelection); override;
     { Public declarations }
@@ -178,6 +179,12 @@ begin
       end;
     end;
   end;
+end;
+
+function TframePackageFmp4Climate.ReadFarmOption(
+  Row: TClimateRows): TFarmOption;
+begin
+  result := TFarmOption(rdgClimate.ItemIndex[Ord(ccFrequency), Ord(Row)]);
 end;
 
 procedure TframePackageFmp4Climate.SetData(Package: TModflowPackageSelection);

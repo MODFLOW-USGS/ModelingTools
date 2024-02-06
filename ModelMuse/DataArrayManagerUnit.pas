@@ -1732,7 +1732,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := StrUzfLandSurface;
   FDataArrayCreationRecords[Index].DisplayName := StrUzfLandSurfaceDisplayName;
-  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Formula := 'LayerBoundaryPosition(HighestActiveLayer)';
   FDataArrayCreationRecords[Index].Classification := StrUzfFmpClassifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.GroundSurfaceUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
@@ -4075,7 +4075,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KEfficiency;
   FDataArrayCreationRecords[Index].DisplayName := StrEfficiency;
-  FDataArrayCreationRecords[Index].Formula := '0.';
+  FDataArrayCreationRecords[Index].Formula := '1.';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.FarmProcess4SteadArrayEfficiencyUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
@@ -4320,7 +4320,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := KTranspirationFraction;
   FDataArrayCreationRecords[Index].DisplayName := StrTranspirationFraction;
-  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Formula := '1';
   FDataArrayCreationRecords[Index].Classification := StrFmp2Classifiation;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.TranspirationFractionUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;

@@ -27,7 +27,6 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     Align = alBottom
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 491
     DesignSize = (
       581
       49)
@@ -40,7 +39,6 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 344
     end
     object btnOK: TBitBtn
       Left = 341
@@ -52,7 +50,6 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 255
     end
     object btnHelp: TBitBtn
       Left = 252
@@ -64,7 +61,6 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 166
     end
   end
   object jvpltvMain: TJvPageListTreeView
@@ -91,26 +87,26 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
     ActivePage = jvspEvapFraction
     PropagateEnable = False
     Align = alClient
-    ExplicitWidth = 376
     object jvspIrrigationTypes: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 474
-      Height = 383
+      Width = 466
+      Height = 382
       Caption = 'jvspIrrigationTypes'
       ExplicitWidth = 380
+      ExplicitHeight = 383
       inline frameIrrigationTypes: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 474
-        Height = 383
+        Width = 466
+        Height = 382
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 380
         ExplicitHeight = 383
         inherited Panel: TPanel
-          Top = 342
-          Width = 474
+          Top = 341
+          Width = 466
           ExplicitTop = 342
           ExplicitWidth = 380
           inherited lbNumber: TLabel
@@ -139,8 +135,8 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 474
-          Height = 285
+          Width = 466
+          Height = 284
           ColCount = 2
           DefaultColWidth = 65
           FixedCols = 1
@@ -198,7 +194,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           ExplicitHeight = 285
         end
         inherited pnlTop: TPanel
-          Width = 474
+          Width = 466
           ExplicitWidth = 509
           inherited edFormula: TLabeledEdit
             Height = 26
@@ -222,22 +218,20 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Width = 466
       Height = 382
       Caption = 'jvspEvapFraction'
-      ExplicitWidth = 509
-      ExplicitHeight = 392
       inline frameEvaporationFractions: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 474
-        Height = 383
+        Width = 466
+        Height = 382
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 509
-        ExplicitHeight = 392
+        ExplicitWidth = 466
+        ExplicitHeight = 382
         inherited Panel: TPanel
-          Top = 342
-          Width = 474
+          Top = 341
+          Width = 466
           ExplicitTop = 341
-          ExplicitWidth = 376
+          ExplicitWidth = 466
           inherited lbNumber: TLabel
             Width = 55
             Height = 18
@@ -262,19 +256,18 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 474
-          Height = 285
+          Width = 466
+          Height = 284
           OnSelectCell = frameEvaporationFractionsGridSelectCell
           OnSetEditText = GridSetEditText
           OnButtonClick = GridButtonClick
           OnEndUpdate = frameEvaporationFractionsGridEndUpdate
-          ExplicitLeft = 6
-          ExplicitWidth = 380
-          ExplicitHeight = 285
+          ExplicitWidth = 466
+          ExplicitHeight = 284
         end
         inherited pnlTop: TPanel
-          Width = 474
-          ExplicitWidth = 509
+          Width = 466
+          ExplicitWidth = 466
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57

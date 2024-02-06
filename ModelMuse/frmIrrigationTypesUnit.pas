@@ -381,7 +381,7 @@ end;
 
 procedure TfrmIrrigationTypes.InitializeGrid;
 begin
-  frameIrrigationTypes.Grid.Cells[Ord(icName), 0] := 'Irrigation Type';
+  frameIrrigationTypes.Grid.Cells[Ord(icName), 0] := 'Irrigation Type Name';
 //  frameIrrigationTypes.Grid.Cells[Ord(icEfficiency), 0] := 'Efficiency';
   frameIrrigationTypes.Grid.Cells[Ord(icNumber), 1] := '1';
 end;

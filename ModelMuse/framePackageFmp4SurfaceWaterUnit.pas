@@ -11,7 +11,7 @@ uses
 type
   TSurfaceWaterColumns = (sfcName, sfcFrequency, sfcOption, sfcSfac, sfcFile,
     sfcSfacFile);
-  TSurfaceWaterRows = (sfrName, sfrNonRoutDel, sfrNrdInfil, sfrSrd,
+  TSurfaceWaterRows = (sfrName, sfrNonRoutDel, {sfrNrdInfil,} sfrSrd,
     sfrSemiLower, sfrSemiUpper, sfrNoReturn, sfrSemiReturn, sfrFullReturn);
 
   TframePackageFmp4SurfaceWater = class(TframePackage)
@@ -108,7 +108,7 @@ begin
     GetFarmProperty(SurfWatPackage.Non_Routed_Delivery, Ord(sfrNonRoutDel));
     rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrNonRoutDel)] :=
       RateVolume[Ord(SurfWatPackage.NRDOption)];
-    GetFarmProperty(SurfWatPackage.Nrd_Infiltration_Location, Ord(sfrNrdInfil));
+//    GetFarmProperty(SurfWatPackage.Nrd_Infiltration_Location, Ord(sfrNrdInfil));
     GetFarmProperty(SurfWatPackage.Semi_Routed_Delivery, Ord(sfrSrd));
     GetFarmProperty(SurfWatPackage.SemiRoutedDeliveryLowerLimit, Ord(sfrSemiLower));
     GetFarmProperty(SurfWatPackage.SemiRoutedDeliveryUpperLimit, Ord(sfrSemiUpper));
@@ -142,7 +142,7 @@ begin
     rdgSurfaceWater.Cells[Ord(sfcSfacFile), Ord(sfrName)] := StrExternallyGeneratedSfac;
 
     rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrNonRoutDel)] := 'Non-routed delivery';
-    rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrNrdInfil)] := 'NRD  infiltration location';
+//    rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrNrdInfil)] := 'NRD  infiltration location';
     rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrSrd)] := 'Semi-routed deliveries';
     rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrSemiLower)] := 'SRD lower-limit';
     rdgSurfaceWater.Cells[Ord(sfcName), Ord(sfrSemiUpper)] := 'SRD upper-limit';
@@ -186,25 +186,25 @@ begin
     end;
   end;
 
-  if ARow = Ord(sfrNrdInfil) then
-  begin
-    CanSelect := False;
-    // The option to specify infiltration locations is not included
-    // as of MODFLOW-OWHM version 4.3. If it is included, uncomment
-    // the following lines. A change would also need to be makde in
-    // the initialization section of frameDeliveryGridUnit
-
-    {
-    if ACol in [Ord(sfcSfac), Ord(sfcSfacFile)] then
-    begin
-      CanSelect := False;
-    end;
-    if ACol = Ord(sfcFile) then
-    begin
-      CanSelect := rdgSurfaceWater.ItemIndex[Ord(sfcFrequency), ARow] > 0;
-    end;
-    }
-  end;
+//  if ARow = Ord(sfrNrdInfil) then
+//  begin
+//    CanSelect := False;
+//    // The option to specify infiltration locations is not included
+//    // as of MODFLOW-OWHM version 2.3. If it is included, uncomment
+//    // the following lines. A change would also need to be makde in
+//    // the initialization section of frameDeliveryGridUnit
+//
+//    {
+//    if ACol in [Ord(sfcSfac), Ord(sfcSfacFile)] then
+//    begin
+//      CanSelect := False;
+//    end;
+//    if ACol = Ord(sfcFile) then
+//    begin
+//      CanSelect := rdgSurfaceWater.ItemIndex[Ord(sfcFrequency), ARow] > 0;
+//    end;
+//    }
+//  end;
 
   if (ACol = Ord(sfcFrequency)) then
   begin
@@ -305,7 +305,7 @@ begin
   SurfWatPackage.NRDOption := TNRDOption(RateVolume.IndexOf(
     rdgSurfaceWater.Cells[Ord(sfcOption), Ord(sfrNonRoutDel)]));
 
-  SetFarmProperty(SurfWatPackage.Nrd_Infiltration_Location, sfrNrdInfil);
+//  SetFarmProperty(SurfWatPackage.Nrd_Infiltration_Location, sfrNrdInfil);
   SetFarmProperty(SurfWatPackage.Semi_Routed_Delivery, sfrSrd);
   SetFarmProperty(SurfWatPackage.SemiRoutedDeliveryLowerLimit, sfrSemiLower);
   SetFarmProperty(SurfWatPackage.SemiRoutedDeliveryUpperLimit, sfrSemiUpper);
@@ -325,7 +325,7 @@ end;
 initialization
   RateVolume := TStringList.Create;
   RateVolume.Add('Rate');
-  RateVolume.Add('Volume');
+  RateVolume.Add('Volume (per stress period)');
 
   ReturnOptions := TStringList.Create;
   ReturnOptions.Add('Non-Diversions');

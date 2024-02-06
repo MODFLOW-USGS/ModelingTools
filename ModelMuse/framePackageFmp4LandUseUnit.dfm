@@ -27,6 +27,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Height = 547
       Caption = 'Land Use Data Sets'
       TabOrder = 0
+      ExplicitWidth = 185
       object rdgLandUse: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -240,6 +241,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Height = 113
       Caption = 'Land Use Options'
       TabOrder = 1
+      ExplicitWidth = 185
       object lblLandUsePerCell: TLabel
         Left = 168
         Top = 11
@@ -309,6 +311,7 @@ inherited framePackageFmp4LandUse: TframePackageFmp4LandUse
       Height = 227
       Caption = 'Print'
       TabOrder = 2
+      ExplicitWidth = 185
       object clbPrint: TCheckListBox
         Left = 0
         Top = 0

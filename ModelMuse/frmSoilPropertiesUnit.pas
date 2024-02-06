@@ -232,11 +232,15 @@ end;
 
 procedure TfrmSoilProperties.frameSoilsGridBeforeDrawCell(Sender: TObject;
     ACol, ARow: Integer);
+var
+  CanSelect: Boolean;
 begin
   inherited;
   if (ARow > 0) and (ACol in [Ord(scName), Ord(scSoiltype)]) then
   begin
-    if frameSoils.Grid.Cells[ACol, ARow] = '' then
+    CanSelect := True;
+    frameSoilsGridSelectCell(Sender, ACol, ARow, CanSelect);
+    if CanSelect and (frameSoils.Grid.Cells[ACol, ARow] = '') then
     begin
       frameSoils.Grid.Canvas.Brush.Color := clRed;
     end;
@@ -479,13 +483,20 @@ begin
       Grid.Cells[ord(scName), ItemIndex+1] := ASoil.SoilName;
       Grid.Cells[ord(scCapFringe), ItemIndex+1] := ASoil.CapillaryFringe;
       Grid.Cells[ord(scSurfKv), ItemIndex+1] := ASoil.SurfVK;
-      if frmGoPhast.ModelSelection = msModflowFmp then
+      if ASoil.SoilType = stUndefined then
       begin
-        Grid.ItemIndex[Ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType)-1;
+        Grid.ItemIndex[Ord(scSoiltype), ItemIndex+1] := -1;
       end
       else
       begin
-        Grid.ItemIndex[Ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType);
+        if frmGoPhast.ModelSelection = msModflowFmp then
+        begin
+          Grid.ItemIndex[Ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType)-1;
+        end
+        else
+        begin
+          Grid.ItemIndex[Ord(scSoiltype), ItemIndex+1] := Ord(ASoil.SoilType);
+        end;
       end;
       Grid.Cells[ord(scACoeff), ItemIndex+1] := ASoil.ACoeff;
       Grid.Cells[ord(scBCoeff), ItemIndex+1] := ASoil.BCoeff;
@@ -601,7 +612,7 @@ begin
   for RowIndex := 1 to frameSoils.seNumber.AsInteger do
   begin
     if (Grid.Cells[ord(scName), RowIndex] <> '')
-      and (Grid.ItemIndex[ord(scSoiltype), RowIndex] >= 0) then
+      {and (Grid.ItemIndex[ord(scSoiltype), RowIndex] >= 0)} then
     begin
       if Count >= FSoils.Count then
       begin
@@ -622,6 +633,10 @@ begin
         begin
           ASoil.SoilType := TSoilType(ItemIndex);
         end;
+      end
+      else
+      begin
+        ASoil.SoilType := stUndefined;
       end;
       ASoil.ACoeff := Grid.Cells[ord(scACoeff), RowIndex];
       ASoil.BCoeff := Grid.Cells[ord(scBCoeff), RowIndex];

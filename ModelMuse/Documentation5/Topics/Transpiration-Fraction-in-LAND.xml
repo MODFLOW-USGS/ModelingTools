@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-10-02T11:28:16.799-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-02-06T14:32:50.805-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Transpiration Fraction in LAND_USE: Farm Process V4 Land Use Options Pane</title>
   <body>
     <header>
@@ -11,6 +11,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Formally defined as FTR = Kcb/Kc = Basal Crop Coefficient / Crop Coefficient</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">It can be viewed as the fraction of a unit cropped area covered by leaf matter, i.e. crop cover.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If it is set to zero, then the crop is assumed to be fallowed or its area is bare soil.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If no value is specified, a value of 1 will be used.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

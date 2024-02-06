@@ -7,7 +7,7 @@ uses
   ModflowFmpBaseClasses, GoPhastTypes, FormulaManagerInterfaceUnit;
 
 type
-  TSoilType = (stSand, stSandyLoam, stSilt, stSiltyClay, stOther);
+  TSoilType = (stSand, stSandyLoam, stSilt, stSiltyClay, stOther, stUndefined);
   TSoilMethod = (smConstant, smInterpolate, smStep, smNearest);
 
   TLookupItem = class(TCustomZeroFarmItem)

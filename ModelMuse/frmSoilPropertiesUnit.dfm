@@ -4,7 +4,6 @@ inherited frmSoilProperties: TfrmSoilProperties
   Caption = 'Farm Soil Properties'
   ClientHeight = 561
   ClientWidth = 784
-  OnResize = FormResize
   ExplicitWidth = 800
   ExplicitHeight = 600
   TextHeight = 18
@@ -67,7 +66,7 @@ inherited frmSoilProperties: TfrmSoilProperties
     ExplicitHeight = 256
     inherited Panel: TPanel
       Top = 215
-      Width = 792
+      Width = 784
       ExplicitTop = 215
       ExplicitWidth = 784
       inherited lbNumber: TLabel
@@ -96,7 +95,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 792
+      Width = 784
       Height = 158
       ColCount = 10
       FixedCols = 1
@@ -359,7 +358,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       ExplicitHeight = 158
     end
     inherited pnlTop: TPanel
-      Width = 792
+      Width = 784
       ExplicitWidth = 784
       inherited edFormula: TLabeledEdit
         Height = 26
@@ -398,8 +397,8 @@ inherited frmSoilProperties: TfrmSoilProperties
     ExplicitWidth = 784
     ExplicitHeight = 256
     inherited Panel: TPanel
-      Top = 216
-      Width = 792
+      Top = 215
+      Width = 784
       ExplicitTop = 215
       ExplicitWidth = 784
       DesignSize = (

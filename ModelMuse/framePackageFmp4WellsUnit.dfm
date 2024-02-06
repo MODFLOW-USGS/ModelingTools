@@ -34,6 +34,7 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
     Caption = 
       'Method for specifying well horizontal locations (INPUT_OPTION XY' +
       ')'
+    Visible = False
     WordWrap = True
   end
   object lblSmoothing: TLabel [5]
@@ -115,6 +116,7 @@ inherited framePackageFmp4Wells: TframePackageFmp4Wells
     ItemIndex = 0
     TabOrder = 4
     Text = 'By row and column'
+    Visible = False
     Items.Strings = (
       'By row and column'
       'By X and Y coordinates')

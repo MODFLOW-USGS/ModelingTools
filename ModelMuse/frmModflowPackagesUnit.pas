@@ -483,6 +483,7 @@ type
     procedure UpdateSpeciesNames;
     function ValidModpathChoice: Boolean;
     function ValidMT3D: Boolean;
+    function Fmp4Warnings: string;
     property CurrentPackages: TModflowPackages read FCurrentPackages
       write SetCurrentPackages;
     procedure StorePackageDataInFrames(Packages: TModflowPackages);
@@ -679,6 +680,17 @@ resourcestring
   't requires that the flow and transport models be in the same simulation.';
   StrTheViscosityPackag = 'The Viscosity package has been deactived because ' +
   'it requires that the flow and transport models be in the same simulation.';
+  StrInTheFarmProcess = 'In the Farm process, land use fraction must be spec' +
+  'ified if more than one land use per cell is used.';
+  StrInTheLandUseSect = 'In the land use section of the Farm process, either' +
+  ' the crop coefficient or consumptive use must be specified.';
+  StrRootDepthIsUsuall = 'Root depth is usually required in the land use sec' +
+  'tion of the Farm process if groundwater root interation is used. If not u' +
+  'sed, fallowed or bare soil is assumed.';
+  StrTranspirationFracti = 'Transpiration fraction is usually required in th' +
+  'e land use section of the Farm process.';
+  StrIfCropCoefficient = 'If crop coefficient is used in the Farm Process, R' +
+  'eference ET must be defined too.';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -1254,6 +1266,74 @@ begin
   end;
 end;
 
+function TfrmModflowPackages.Fmp4Warnings: string;
+var
+  Warnings: TStringList;
+begin
+  result := '';
+  if (frmGoPhast.ModelSelection <> msModflowOwhm2) or not framePkgFMP4.Selected then
+  begin
+    Exit;
+  end;
+  Warnings := TSTringList.Create;
+  try
+    if framePkgFmp4LandUse.Selected then
+    begin
+      if (framePkgFmp4LandUse.comboLandUsePerCell.ItemIndex = 1)
+        and (framePkgFmp4LandUse.ReadFarmOption(sorLandUseFraction) = foNotUsed) then
+      begin
+        Warnings.Add(StrInTheFarmProcess);
+      end;
+
+      if (framePkgFmp4LandUse.ReadFarmOption(sorCropCoeff) = foNotUsed)
+        and (framePkgFmp4LandUse.ReadFarmOption(sorConsumptiveUse) = foNotUsed) then
+      begin
+        Warnings.Add(StrInTheLandUseSect);
+      end;
+
+      if (framePkgFmp4LandUse.ReadFarmOption(sorGroundwaterRootInteraction) <> foNotUsed)
+        and (framePkgFmp4LandUse.ReadFarmOption(sorRootDepth) = foNotUsed) then
+      begin
+        Warnings.Add(StrRootDepthIsUsuall);
+      end;
+
+      if (framePkgFmp4LandUse.ReadFarmOption(sorTranspirationFraction) = foNotUsed) then
+      begin
+        Warnings.Add(StrTranspirationFracti);
+      end;
+
+      if (framePkgFmp4LandUse.ReadFarmOption(sorCropCoeff) <> foNotUsed) then
+      begin
+        if framePkgFmp4Climate.Selected then
+        begin
+          if (framePkgFmp4Climate.ReadFarmOption(crRefEt) = foNotUsed) then
+          begin
+            Warnings.Add(StrIfCropCoefficient);
+          end;
+        end
+        else
+        begin
+          Warnings.Add(StrIfCropCoefficient);
+        end;
+      end;
+
+      if Warnings.Count = 1 then
+      begin
+        Warnings.Add('');
+        Warnings.Add('Do you want to fix this?');
+      end
+      else if Warnings.Count > 1 then
+      begin
+        Warnings.Add('');
+        Warnings.Add('Do you want to fix these?');
+      end;
+    end;
+    result := Warnings.Text;
+  finally
+    Warnings.Free;
+  end;
+end;
+
 procedure TfrmModflowPackages.btnOKClick(Sender: TObject);
 var
   NeedToDefineFluxObservations: Boolean;
@@ -1261,6 +1341,7 @@ var
   SubPackage: TSubPackageSelection;
   SwtPackage: TSwtPackageSelection;
   FarmProcess: TFarmProcess;
+  Fmp4Warning: string;
 begin
   // calling Handle here MIGHT keep the form from being unresponsive when it is
   // left open for a long time.
@@ -1310,6 +1391,15 @@ begin
     Exit;
   end;
 
+  Fmp4Warning := Fmp4Warnings;
+  if Fmp4Warning <> '' then
+  begin
+    if not (MessageDlg(Fmp4Warning, mtWarning, [mbYes, mbNo], 0) in [mrNo, mrNone]) then
+    begin
+      ModalResult := mrNone;
+      Exit;
+    end;
+  end;
 
   ModflowPackages := frmGoPhast.PhastModel.ModflowPackages;
   NeedToDefineFluxObservations := False;
