@@ -75,11 +75,13 @@
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.LakConvergence.CSV</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.lst</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.maw_bud</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.maw_bud.csv</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.maw_head</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.mvr_budget</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.mvr_budget.csv</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.OuterSolution.CSV</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.sfr_budget</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.sfr_budget.csv</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.SfrConvergence.CSV</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.stage</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.uzf_budget</FileName>

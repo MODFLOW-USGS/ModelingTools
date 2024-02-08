@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="FmpDialogs" FileType="bin">
-    <FileName Model_Name="FmpDialogs" FileType="bin">..\..\..\WRDAPP\mf-owhm-release\bin\mf-owhm.exe</FileName>
+    <FileName Model_Name="FmpDialogs" FileType="bin">..\..\..\WRDAPP\mf-owhm-2.3.0\bin\mf-owhm.exe</FileName>
   </bin>
   <ancillary Model_Name="FmpDialogs" FileType="ancillary">
     <FileName Model_Name="FmpDialogs" FileType="ancillary">FmpDialogs.gpt</FileName>

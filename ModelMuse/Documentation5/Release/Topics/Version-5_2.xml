@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-10-02T12:17:08.538-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-02-08T12:52:31.216-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.2</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 5.2</text></para>
     </header>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.2 October 3, 2023]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.2 February 8, 2024]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -41,6 +41,27 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for SFR cross sections in MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;Edit Feature Formula&quot; dialog box has been modified to allow the user to specify a different formula for each edited object.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The Import Points dialog box has been changed to allow more more flexibility in import model features.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Mesh|Specify Mesh dialog box has been modified to allow the user to specify a 3D mesh.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Import Points dialog box has been changed to allow allow importing GWT concentrations and UZF boundaries for MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import data from binary output files created by the MAW, MWT, SFR, SFT, UZF, and UZT packages in HODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW 6 models, the BICGSTAB solver option will be used automatically for models that use the XT3D option in the NPF package or DISV models in which the GNC package is used and the EXPLICIT option is not used in the GNC package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for exporting CSV budget files in MODFLOW 6 models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for the wel-reduction observation type in the MODFLOW 6 Observation Utility.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When the MVR package receiver is a group of UZF cells. there is now an option to distribute the MVR flow equally to the UZF receiver cells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for BUDGETCSV, FLOWCORRECTION, and MAW_FLOW_REDUCE_CSV options in MAW.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added an error message for calibration observations with observation times equal to the start of the simulation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">A &quot;Sum&quot; function has been added to the functions supported in the Formula Editor.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a check that the MAW radius is the cell effective radius.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When editing layer group names, potentially duplicate layer group names are handled without displaying a warning message.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When any dialog box is minimized, the main form of ModelMuse is minimized too.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse does not draw a image of an SFR 8-point cross section in the Object Properties dialog box unless the 8-point cross section is in use.Bug fix: Fixed export of PEST input files on computers in which a character other than the period is used as a decimal separator.</text></para>
               </td>
             </tr>
           </table></para>
@@ -87,6 +108,15 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in Mf2005ObsExtractor that caused simulated from the HOB package to be incorrectly read as zero.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Switching from a MODFLOW-NWT to a MODFLOW-OWHM model no longer results in the NWT and UPW packages being deactivated.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failure when exporting the MVR package input file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of shapefiles of contours for MODFLOW DISV models in which the active area varies among layers.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in importing Shapefiles that contain null shapes.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error when assigning data with objects that have a large number of cells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that would cause an error when attempting to read an empty .Values file from PEST.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed drawing contours on the side view for DISV meshes.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of flow observations in the CHD, DRN, &#160;GHB, and RIV, packages in MODFLOW 6 models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of to-mvr observation types for the for WEL, DRN, RIV, and GHB packages.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in editing the format of text in the rulers that could cause a bug report to be issued if the text for the sample number was not a number.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed error message issued &#160;when all downstream MODFLOW 6 SFR segments are inactive.</text></para>
               </td>
             </tr>
           </table></para>

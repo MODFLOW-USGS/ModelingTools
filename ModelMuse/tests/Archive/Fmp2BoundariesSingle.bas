@@ -1,6 +1,12 @@
-# Basic Package file created on 6/7/2023 by ModelMuse version 5.1.1.29.
+# Basic Package file created on 2/8/2024 by ModelMuse version 5.1.1.53.
 # Number of active cells = 300.
-FREE CHTOCH PRINTTIME  # OPTIONS
+BEGIN OPTIONS
+  FREE 
+  CHTOCH 
+  PRINTTIME 
+  MAX_RELATIVE_VOLUME_ERROR 2.0
+  NO_SHOWPROGRESS
+END OPTIONS
 CONSTANT        1 # IBOUND Upper Aquifer
 CONSTANT        1 # IBOUND Middle Aquifer
 CONSTANT        1 # IBOUND Lower Aquifer

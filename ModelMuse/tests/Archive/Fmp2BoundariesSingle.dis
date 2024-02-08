@@ -1,4 +1,4 @@
-# Discretization File created on 6/7/2023 by ModelMuse version 5.1.1.29.
+# Discretization File created on 2/8/2024 by ModelMuse version 5.1.1.53.
 # Upper left corner: (0, 0)
 # Lower left corner: (0, -1000)
 # Upper right corner: (1000, 0)
@@ -8,6 +8,8 @@
      0     0     0 # LAYCB
 CONSTANT     1.000000000000E+002  # DELR
 CONSTANT     1.000000000000E+002  # DELC
+  SURFACE
+CONSTANT     0.000000000000E+000  # SURFACE
 CONSTANT     0.000000000000E+000  # TOP
 CONSTANT    -1.000000000000E+001  # BOTM, Upper Aquifer
 CONSTANT    -2.000000000000E+001  # BOTM, Middle Aquifer

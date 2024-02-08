@@ -16,10 +16,8 @@ inherited frmGoPhast: TfrmGoPhast
   OnKeyUp = FormKeyUp
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
-  ExplicitLeft = 3
-  ExplicitTop = 3
   ExplicitWidth = 784
-  ExplicitHeight = 618
+  ExplicitHeight = 613
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
@@ -46,7 +44,6 @@ inherited frmGoPhast: TfrmGoPhast
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitHeight = 193
     object splitVertTop: TJvNetscapeSplitter
       Left = 533
       Top = 0
@@ -71,7 +68,7 @@ inherited frmGoPhast: TfrmGoPhast
       TabOrder = 0
       TabStop = True
       ExplicitWidth = 533
-      ExplicitHeight = 193
+      ExplicitHeight = 188
       inherited rulVertical: TRbwRuler
         Height = 134
         ExplicitTop = 39
@@ -99,7 +96,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitWidth = 482
         Image32.ExplicitHeight = 132
         ExplicitWidth = 480
-        ExplicitHeight = 138
+        ExplicitHeight = 133
       end
       inherited OrderMenu: TPopupMenu
         Left = 80
@@ -116,7 +113,7 @@ inherited frmGoPhast: TfrmGoPhast
       TabStop = True
       ExplicitLeft = 543
       ExplicitWidth = 229
-      ExplicitHeight = 193
+      ExplicitHeight = 188
       inherited rulVertical: TRbwRuler
         Left = 180
         Height = 134
@@ -166,7 +163,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitHeight = 132
         ExplicitLeft = 0
         ExplicitWidth = 180
-        ExplicitHeight = 138
+        ExplicitHeight = 133
       end
       inherited OrderMenu: TPopupMenu
         Left = 48
@@ -187,7 +184,6 @@ inherited frmGoPhast: TfrmGoPhast
     ParentDoubleBuffered = False
     TabOrder = 2
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitTop = 399
     object splitVertBottom: TJvNetscapeSplitter
       Left = 533
       Top = 0
@@ -308,7 +304,7 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = sbMainMouseMove
     OnMouseUp = sbMainMouseUp
     OnDrawPanel = sbMainDrawPanel
-    ExplicitTop = 531
+    ExplicitTop = 526
     ExplicitWidth = 768
   end
   object cbControlBar: TControlBar
@@ -675,7 +671,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 208
+      Left = 465
       Top = 130
       Width = 212
       Height = 28
@@ -777,7 +773,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 433
+      Left = 208
       Top = 130
       Width = 244
       Height = 28

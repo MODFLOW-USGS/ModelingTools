@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4513</config-value>
+      <config-value name="autohelpstart">4514</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1622,6 +1622,7 @@ document.write('</frameset>');
       <helpcontext-number href="Properties_Tab#Z_Coordinate" value="3539"/>
       <helpcontext-number href="Properties_TabHUF" value="3516"/>
       <helpcontext-number href="Properties_TabHUF#HGUVANI" value="4301"/>
+      <helpcontext-number href="Pumping-Rate-Interpretation" value="4514"/>
       <helpcontext-number href="Quick_Start_Guide" value="3386"/>
       <helpcontext-number href="RadToDeg" value="1400"/>
       <helpcontext-number href="Rain_in_SWR_Surface_Water_Rout" value="3860"/>
@@ -2123,6 +2124,7 @@ document.write('</frameset>');
       <file-mod href="CROP_LEACHING_REQUIREMENT-and-.xml"/>
       <file-mod href="Predefined-Variables-Salinity-.xml"/>
       <file-mod href="Time-Series-Properties.xml"/>
+      <file-mod href="Pumping-Rate-Interpretation.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>

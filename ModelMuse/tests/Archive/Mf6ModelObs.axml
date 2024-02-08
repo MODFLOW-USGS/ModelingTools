@@ -138,6 +138,7 @@
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.LakConvergence.CSV</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.lst</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.maw_bud</FileName>
+    <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.maw_bud.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.maw_cell_conductance_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.maw_cell_flow_rate_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.maw_conductance_ob.csv</FileName>
@@ -163,6 +164,7 @@
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.rej-inf-to-mvr_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.rvob_out_riv.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_budget</FileName>
+    <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_budget.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_downstream-flow_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_evaporation_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_ext-inflow_ob.csv</FileName>

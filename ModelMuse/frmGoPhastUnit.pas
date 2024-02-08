@@ -15989,7 +15989,7 @@ begin
 end;
 
 initialization
-  // see also StrModflowDefaultPath etc in DataSetNames.pas
+  // see also StrModflowDefaultPath etc in DataSetNamesUnit.pas
   Mf2005DateVersion1_12 := EncodeDate(2017,2,2);
   Mf2005Date := EncodeDate(2017,2,2);
   MfNwtDateVersion1_0_9 := EncodeDate(2014,6,23);
@@ -16001,7 +16001,7 @@ initialization
   MfOwhmDate := EncodeDate(2016, 6, 15);
   MfCfpDate := EncodeDate(2011, 2, 23);
   ModelMateDate := EncodeDate(2013, 11, 19);
-  Mf6Date := EncodeDate(2023, 6, 28);
+  Mf6Date := EncodeDate(2024, 2, 7);
 //  Mf6WithGwtDate := EncodeDate(2022, 10, 26);
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;

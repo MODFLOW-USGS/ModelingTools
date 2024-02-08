@@ -107,6 +107,7 @@ type
     procedure rdgConduitLayersStateChange(Sender: TObject; ACol, ARow: Integer;
       const Value: TCheckBoxState);
     procedure frameDiscretizationrdeVDiscretizationExit(Sender: TObject);
+    procedure edNameExit(Sender: TObject);
   private
     FLayerStructure: TLayerStructure;
     FSettingUnit: boolean;
@@ -421,8 +422,8 @@ begin
       LayerGroup.Simulated := True;
     end;
 
-    NodeItem := tvLayerGroups.Items.Add(nil, LayerGroup.AquiferName);
-    NodeItem.Data := LayerGroup;
+    NodeItem := tvLayerGroups.Items.AddObject(nil, LayerGroup.AquiferName, LayerGroup);
+//    NodeItem.Data := LayerGroup;
 
     NodeItem.StateIndex := FindImageIndex(LayerGroup);
 
@@ -787,16 +788,19 @@ begin
         if UsedNames.IndexOf(TestName) >= 0 then
         begin
           Beep;
-          MessageDlg(StrThisNameIsTooSim, mtWarning, [mbOK], 0);
-          Exit;
-        end;
-        TestName := TestName + '_Bottom';
-        if TestName <> GenerateNewName(TestName) then
+          edName.Color := clRed;
+        end
+        else
         begin
-          Beep;
-          MessageDlg(
-            Format(StrThisNameAlreadyExists, [TestName]), mtWarning, [mbOK], 0);
-          Exit;
+          edName.Color := clWindow;
+          TestName := TestName + '_Bottom';
+          if TestName <> GenerateNewName(TestName) then
+          begin
+            Beep;
+            MessageDlg(
+              Format(StrThisNameAlreadyExists, [TestName]), mtWarning, [mbOK], 0);
+            Exit;
+          end;
         end;
 
         SelectedUnit.AquiferName := edName.Text;
@@ -806,6 +810,54 @@ begin
     finally
       UsedNames.Free;
     end;
+  end;
+end;
+
+procedure TfrmLayers.edNameExit(Sender: TObject);
+var
+  UsedNames: TStringList;
+  Index: Integer;
+  ALayerGroup: TLayerGroup;
+  ExtraIndex: Integer;
+  NewName: string;
+  ANode: TTreeNode;
+begin
+  inherited;
+  UsedNames := TStringList.Create;
+  try
+    UsedNames.CaseSensitive := False;
+    for Index := 1 to FLayerStructure.Count - 1 do
+    begin
+      ALayerGroup := FLayerStructure[Index];
+      if UsedNames.IndexOf(ALayerGroup.AquiferName) < 0 then
+      begin
+        UsedNames.Add(ALayerGroup.AquiferName);
+      end
+      else
+      begin
+        ExtraIndex := 1;
+        NewName := ALayerGroup.AquiferName + '_' + IntToStr(ExtraIndex);
+        while UsedNames.IndexOf(NewName) >= 0 do
+        begin
+          Inc(ExtraIndex);
+          NewName := ALayerGroup.AquiferName + '_' + IntToStr(ExtraIndex);
+        end;
+        ALayerGroup.AquiferName := NewName;
+        ANode := tvLayerGroups.Items.GetFirstNode;
+        while ANode <> nil do
+        begin
+          if ANode.Data = ALayerGroup then
+          begin
+            ANode.Text := ALayerGroup.AquiferName;
+            edName.Text := ALayerGroup.AquiferName;
+            Exit;
+          end;
+          ANode := ANode.GetNext;
+        end;
+      end;
+    end;
+  finally
+    UsedNames.Free;
   end;
 end;
 
@@ -964,9 +1016,9 @@ begin
     Sibling := nil;
   end;
 
-  result := tvLayerGroups.Items.Insert(Sibling,
-    LayerGroup.AquiferName);
-  result.Data := LayerGroup;
+  result := tvLayerGroups.Items.InsertObject(Sibling,
+    LayerGroup.AquiferName, LayerGroup);
+//  result.Data := LayerGroup;
   result.Selected := True;
   result.StateIndex := 1;
 

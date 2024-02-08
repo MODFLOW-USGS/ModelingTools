@@ -10127,13 +10127,20 @@ const
 //                for the sample number was not a number.
 //    '5.1.1.53' Enhancement: Added an error message for calibration observations
 //                with observation times equal to the start of the simulation.
-//               A "Sum" function has been added to the functions supported
-//                in the Formula Editor.
-
-//               Enhancement. Added a check that the MAW radius is the cell
+//               Enhancement: A "Sum" function has been added to the functions
+//                supported in the Formula Editor.
+//    '5.1.1.54' Enhancement: Added a check that the MAW radius is the cell
 //                effective radius.
-//               bug fix: Fixed error messageissued  when all downstream
+//               Bug fix: Fixed error message issued  when all downstream
 //                MODFLOW 6 SFR segments are inactive.
+//               Enhancement: When editing layer group names, potentially
+//                duplicate layer group names are handled without displaying
+//                a warning message.
+//               Change: When any dialog box is minimized, the main form of
+//                ModelMuse is minimized too.
+//               Change: ModelMuse does not draw a image of an SFR 8-point
+//                cross section in the Object Properties dialog box unless
+//                the 8-point cross section is in use.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10148,7 +10155,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.53';
+  IIModelVersion = '5.1.1.54';
 
 function IModelVersion: string;
 begin

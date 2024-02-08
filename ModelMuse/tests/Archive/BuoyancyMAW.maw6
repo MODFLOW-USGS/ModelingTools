@@ -1,4 +1,4 @@
-# MAW: Multi-Aquifer Well package file created on 7/28/2023 by ModelMuse version 5.1.1.34.
+# MAW: Multi-Aquifer Well package file created on 2/8/2024 by ModelMuse version 5.1.1.53.
 BEGIN OPTIONS
   AUXILIARY Salinity Temperature Density
     BOUNDNAMES
@@ -7,6 +7,7 @@ BEGIN OPTIONS
   HEAD FILEOUT BuoyancyMAW.maw_head
     SAVE_FLOWS
   BUDGET FILEOUT BuoyancyMAW.maw_bud
+  BUDGET FILEOUT BuoyancyMAW.maw_bud.csv
   SHUTDOWN_THETA  7.000000000000E-001 
   SHUTDOWN_KAPPA  1.000000000000E-004 
 END OPTIONS

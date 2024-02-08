@@ -1406,8 +1406,8 @@ begin
   begin
     FEOF := False;
   end;
-  EndPos1 := Pos(sLineBreak, TempLine);
-  EndPos2 := Pos(#$A, TempLine);
+  EndPos1 := Pos(sLineBreak, string(TempLine));
+  EndPos2 := Pos(#$A, string(TempLine));
   if EndPos1 > 0 then
   begin
     FEOF := False;

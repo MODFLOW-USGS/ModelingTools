@@ -55,6 +55,7 @@
     <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.InnerSolution.CSV</FileName>
     <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.lst</FileName>
     <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.maw_bud</FileName>
+    <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.maw_bud.csv</FileName>
     <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.maw_head</FileName>
     <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.mvr_budget</FileName>
     <FileName Model_Name="MwtTimeSeries" FileType="Model Output">MwtTimeSeries.mvr_budget.csv</FileName>

@@ -52,6 +52,7 @@
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.InnerSolution.CSV</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.lst</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.maw_bud</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.maw_bud.csv</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.maw_head</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.OuterSolution.CSV</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Salinity.cbc</FileName>

@@ -60,6 +60,7 @@
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.sft_budget.csv</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Salinity.sft_conc</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.sfr_budget</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.sfr_budget.csv</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.SfrConvergence.CSV</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.stage</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.cbc</FileName>
