@@ -612,7 +612,14 @@ procedure TMfFmpWelTimeListLink.CreateTimeLists;
 begin
   inherited;
   FMaxPumpingRateData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-  FMaxPumpingRateData.NonParamDescription := StrMaxPumpingRate;
+  if Model.ModelSelection = msModflowOwhm2 then
+  begin
+    FMaxPumpingRateData.NonParamDescription := StrMaxPumpingRateOwhm2;
+  end
+  else
+  begin
+    FMaxPumpingRateData.NonParamDescription := StrMaxPumpingRate;
+  end;
   FMaxPumpingRateData.ParamDescription := StrMaxPumpingRateMu;
   if Model <> nil then
   begin

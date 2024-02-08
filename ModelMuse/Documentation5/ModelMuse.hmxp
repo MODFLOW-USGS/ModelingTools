@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4512</config-value>
+      <config-value name="autohelpstart">4513</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1536,6 +1536,7 @@ document.write('</frameset>');
       <helpcontext-number href="Options_Tab#STOPERROR" value="3663"/>
       <helpcontext-number href="Other_Limitations" value="4290"/>
       <helpcontext-number href="Output" value="3581"/>
+      <helpcontext-number href="OWHM-Options" value="4513"/>
       <helpcontext-number href="Parameter_Names_and_Values" value="3320"/>
       <helpcontext-number href="Parameters_Tab" value="3517"/>
       <helpcontext-number href="ParentColumn" value="3608"/>

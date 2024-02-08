@@ -39701,6 +39701,13 @@ resourcestring
     + 'before the beginning of the first stress period.';
   StrAllotmentTooLate = 'The specified times for allotments include times '
     + 'after the end of the last stress period.';
+  StrWhenUsingZonebudge = 'When using ZoneBudget with MODFLOW-OWHM version 2' +
+  ', be sure to use the modified version that comes with MODFLOW-OWHM versio' +
+  'n 2';
+  StrTheVersionOfZoneB = 'The version of ZoneBudget for MODFLOW-OWHM is typic' +
+  'ally in <root>\postprocessors\zonebudget where <root> is the base directo' +
+  'ry for MODFLOW-OWHM. Set the location of ZoneBudget in the "Model|MODFLOW' +
+  ' Program Locations" dialog box.';
 
 procedure TCustomModel.UpdateAllotmentFullStressPeriods(TimeList: TRealList);
 var
@@ -45004,6 +45011,11 @@ var
   GeoRefWriter: TGeoRefWriter;
   ZbNameFileWriter: TZoneBudgetNameFileWriter;
 begin
+  if ModelSelection = msModflowOwhm2 then
+  begin
+    frmErrorsAndWarnings.AddWarning(self, StrWhenUsingZonebudge,
+      StrTheVersionOfZoneB)
+  end;
 //  if ModelSelection = msModflow2015 then
 //  begin
 //    Exit;

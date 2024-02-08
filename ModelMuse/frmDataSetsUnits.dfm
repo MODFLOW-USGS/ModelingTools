@@ -9,6 +9,8 @@ inherited frmDataSets: TfrmDataSets
   Font.Height = 19
   OnActivate = FormActivate
   OnClose = FormClose
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 632
   ExplicitHeight = 496
   TextHeight = 19
@@ -35,7 +37,7 @@ inherited frmDataSets: TfrmDataSets
       620
       41)
     object btnOK: TBitBtn
-      Left = 385
+      Left = 381
       Top = 2
       Width = 91
       Height = 33
@@ -63,9 +65,10 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOKClick
+      ExplicitLeft = 377
     end
     object btnCancel: TBitBtn
-      Left = 482
+      Left = 478
       Top = 2
       Width = 91
       Height = 33
@@ -74,6 +77,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnCancelClick
+      ExplicitLeft = 474
     end
     object btnAdd: TButton
       Left = 8
@@ -94,7 +98,7 @@ inherited frmDataSets: TfrmDataSets
       OnClick = btnDeleteClick
     end
     object btnHelp: TBitBtn
-      Left = 288
+      Left = 284
       Top = 2
       Width = 91
       Height = 33
@@ -103,6 +107,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
+      ExplicitLeft = 280
     end
   end
   object sbStatusBar: TStatusBar
@@ -565,7 +570,6 @@ inherited frmDataSets: TfrmDataSets
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitHeight = 163
         object lblComment: TLabel
           AlignWithMargins = True
           Left = 3
@@ -588,7 +592,6 @@ inherited frmDataSets: TfrmDataSets
           WordWrap = False
           OnEnter = reCommentEnter
           OnExit = reCommentExit
-          ExplicitHeight = 132
         end
       end
       object pnlDescription: TPanel

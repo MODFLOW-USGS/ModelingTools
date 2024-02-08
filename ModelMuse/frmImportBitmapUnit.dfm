@@ -5,29 +5,27 @@ inherited frmImportBitmap: TfrmImportBitmap
   HelpKeyword = 'ImportEdit_Bitmap_Dialog_Box'
   ActiveControl = btnSelectImage
   Caption = 'Import Image'
-  ClientHeight = 549
-  ClientWidth = 782
+  ClientHeight = 548
+  ClientWidth = 778
   ExplicitWidth = 794
   ExplicitHeight = 587
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 369
     Top = 0
-    Height = 421
+    Height = 420
     ExplicitHeight = 465
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 421
-    Width = 782
+    Top = 420
+    Width = 778
     Height = 128
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 420
-    ExplicitWidth = 778
     DesignSize = (
-      782
+      778
       128)
     object lblName: TLabel
       Left = 279
@@ -67,7 +65,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       OnClick = rgViewDirectionClick
     end
     object btnOK: TBitBtn
-      Left = 579
+      Left = 571
       Top = 87
       Width = 91
       Height = 33
@@ -99,7 +97,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       ExplicitLeft = 575
     end
     object btnCancel: TBitBtn
-      Left = 676
+      Left = 668
       Top = 87
       Width = 91
       Height = 33
@@ -118,7 +116,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       TabOrder = 4
     end
     object btnHelp: TBitBtn
-      Left = 484
+      Left = 476
       Top = 87
       Width = 91
       Height = 33
@@ -288,7 +286,7 @@ inherited frmImportBitmap: TfrmImportBitmap
     Left = 0
     Top = 0
     Width = 369
-    Height = 421
+    Height = 420
     Align = alLeft
     ColCount = 6
     FixedColor = 14803425
@@ -453,7 +451,6 @@ inherited frmImportBitmap: TfrmImportBitmap
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitHeight = 420
     ColWidths = (
       64
       64
@@ -468,12 +465,10 @@ inherited frmImportBitmap: TfrmImportBitmap
   object ScrollBox1: TScrollBox
     Left = 372
     Top = 0
-    Width = 410
-    Height = 421
+    Width = 406
+    Height = 420
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 406
-    ExplicitHeight = 420
     object ZoomBox: TQRbwZoomBox2
       Left = 0
       Top = 0
@@ -499,6 +494,10 @@ inherited frmImportBitmap: TfrmImportBitmap
       Image32.ScaleMode = smNormal
       Image32.TabOrder = 0
       Image32.OnMouseUp = ZoomBoxImage32MouseUp
+      Image32.ExplicitLeft = 0
+      Image32.ExplicitTop = 0
+      Image32.ExplicitWidth = 575
+      Image32.ExplicitHeight = 427
       ImmediateResize = True
       Magnification = 1.000000000000000000
       VerticalDirection = vdUp

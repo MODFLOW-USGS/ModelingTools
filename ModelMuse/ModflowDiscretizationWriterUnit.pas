@@ -12,6 +12,7 @@ type
     procedure WriteDataSet1;
     procedure WriteIDomain;
     procedure CheckConnectivity;
+    procedure WriteLayerSurface;
   public
     class function Extension: string; override;
     procedure WriteFile(const AFileName: string);
@@ -375,6 +376,8 @@ begin
     begin
       Exit;
     end;
+
+    WriteLayerSurface;
 
     frmProgressMM.AddMessage(StrCheckingColumnWi);
     Model.ModflowGrid.CheckColumnWidths;
@@ -1236,6 +1239,21 @@ begin
 
   CheckElevations;
   CheckConnectivity;
+end;
+
+procedure TModflowDiscretizationWriter.WriteLayerSurface;
+var
+  DataArray: TDataArray;
+begin
+  if Model.ModelSelection = msModflowOwhm2 then
+  begin
+    WriteString('  SURFACE');
+    NewLine;
+    DataArray := Model.DataArrayManager.GetDataSetByName(StrUzfLandSurface);
+    Assert(DataArray <> nil);
+    WriteArray(DataArray, 0, 'SURFACE', StrNoValueAssigned, 'SURFACE');
+
+  end;
 end;
 
 procedure TMf6DisvWriter.WriteOptions;

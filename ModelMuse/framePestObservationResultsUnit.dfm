@@ -737,7 +737,7 @@ object framePestObservationResults: TframePestObservationResults
           Top = 48
           Width = 194
           Height = 40
-          ItemHeight = 15
+          ItemHeight = 17
           Items.Strings = (
             'Observations'
             'Prior Information')

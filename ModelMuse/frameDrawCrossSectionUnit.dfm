@@ -181,7 +181,7 @@ object frameDrawCrossSection: TframeDrawCrossSection
         Margins.Bottom = 30
         Align = alClient
         DoubleBuffered = False
-        ItemHeight = 15
+        ItemHeight = 17
         ParentDoubleBuffered = False
         TabOrder = 0
       end

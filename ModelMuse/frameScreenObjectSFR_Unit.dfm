@@ -1147,7 +1147,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 63
       end
       object pnlFlowTop: TPanel
         Left = 0
@@ -1868,8 +1867,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             OnSelectCell = frameCrossSection1dg8PointSelectCell
             OnSetEditText = frameCrossSection1dg8PointSetEditText
             OnButtonClick = frameCrossSection1dg8PointButtonClick
-            ExplicitLeft = -2
-            ExplicitTop = 6
             ExplicitWidth = 166
             ExplicitHeight = 308
           end
@@ -1886,7 +1883,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Exaggeration = 1.000000000000000000
         HorizontalDirection = hdRight
         Image32.Left = 0
-        Image32.Top = 0
+        Image32.Top = 68
         Image32.Width = 553
         Image32.Height = 109
         Image32.Anchors = [akLeft, akBottom]
@@ -1897,6 +1894,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Image32.Scale = 1.000000000000000000
         Image32.ScaleMode = smNormal
         Image32.TabOrder = 0
+        Image32.ExplicitTop = 0
         ImmediateResize = True
         Magnification = 1.000000000000000000
         VerticalDirection = vdUp
@@ -2247,7 +2245,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 0
+          Image32.Top = 108
           Image32.Width = 269
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2258,6 +2256,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
+          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp
@@ -2277,7 +2276,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 0
+          Image32.Top = 108
           Image32.Width = 270
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2288,6 +2287,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
+          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp

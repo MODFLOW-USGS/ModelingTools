@@ -625,10 +625,10 @@ begin
               if ModelSelection = msModflowOwhm2 then
               begin
                 DelivRetItem.Frac := Grid.Cells[Ord(dlFraction) + 2, ARow];
-                if DelivRetItem.Frac = '' then
-                begin
-                  DelivRetItem.Frac := '1';
-                end;
+//                if DelivRetItem.FracOption = '' then
+//                begin
+//                  DelivRetItem.FracOption := '1';
+//                end;
                 if DiversionType = dtDiversion then
                 begin
                   DelivRetItem.LowerLimit := Grid.Cells[Ord(dlLowerLimit) + PropertyColOffset, ARow];
@@ -645,10 +645,10 @@ begin
               if ModelSelection = msModflowOwhm2 then
               begin
                 Fraction := Grid.Cells[Ord(dccFraction) + PropertyColOffset, ARow];
-                if Fraction = '' then
-                begin
-                  Fraction := '1';
-                end;
+//                if Fraction = '' then
+//                begin
+//                  Fraction := '1';
+//                end;
                 DelivRetItem.Frac := Fraction;
                 if DiversionType = dtDiversion then
                 begin

@@ -169,8 +169,8 @@ object frameCustomColor: TframeCustomColor
         Height = 23
         Tree.Left = 0
         Tree.Top = 0
-        Tree.Width = 624
-        Tree.Height = 441
+        Tree.Width = 628
+        Tree.Height = 442
         Tree.Align = alClient
         Tree.Colors.BorderColor = 15987699
         Tree.Colors.DisabledColor = clGray
@@ -199,6 +199,8 @@ object frameCustomColor: TframeCustomColor
         Tree.OnMouseDown = virttreecomboDataSetsTreeMouseDown
         Tree.Touch.InteractiveGestures = [igPan, igPressAndTap]
         Tree.Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+        Tree.ExplicitWidth = 624
+        Tree.ExplicitHeight = 441
         Tree.Columns = <>
         DropDownHeight = 207
         Enabled = True

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2024-02-07T12:05:24.783-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">OWHM Options</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">OWHM Options</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM version 2 has a large number of additional options that the user can specify in the Basic package. These are listed in the file &quot;BAS_Options_All.bas&quot; which can be found among the MODFLOW-OWHM documentation files. These options can be specified by entering them in the field on the OWHM Options tab. They will be included in the Basic package exactly as you specify them. </text></para>
+  </body>
+</topic>

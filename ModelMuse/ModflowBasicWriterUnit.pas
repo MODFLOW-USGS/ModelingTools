@@ -377,6 +377,7 @@ var
   ModflowOptions: TModflowOptions;
   StopError: Boolean;
   StopErrorCriterion: Double;
+  LineIndex: Integer;
 //  SHOWPROGRESS: boolean;
 begin
   ModflowOptions := Model.ModflowOptions;
@@ -385,33 +386,81 @@ begin
   StopError := ModflowOptions.StopError;
   StopErrorCriterion := ModflowOptions.StopErrorCriterion;
 //  SHOWPROGRESS := PhastModel.ModflowOptions.ShowProgress;
-  if FREE then
+  if Model.ModelSelection = msModflowOwhm2 then
   begin
-    WriteString('FREE ');
-  end;
-  if XSECTION then
+    WriteString('BEGIN OPTIONS');
+    NewLine;
+
+    if FREE then
+    begin
+      WriteString('  FREE ');
+      NewLine;
+    end;
+
+    if XSECTION then
+    begin
+      WriteString('  XSECTION ');
+      NewLine;
+    end;
+
+    if CHTOCH then
+    begin
+      WriteString('  CHTOCH ');
+      NewLine;
+    end;
+
+    if PRINTTIME then
+    begin
+      WriteString('  PRINTTIME ');
+      NewLine;
+    end;
+
+    if StopError then
+    begin
+      WriteString('  STOPERROR ');
+      WriteFloat(StopErrorCriterion);
+      NewLine;
+    end;
+
+    for LineIndex := 0 to ModflowOptions.OwhmBasicOptions.Count - 1 do
+    begin
+      WriteString(ModflowOptions.OwhmBasicOptions[LineIndex]);
+      NewLine;
+    end;
+
+    WriteString('END OPTIONS');
+    NewLine;
+  end
+  else
   begin
-    WriteString('XSECTION ');
+    if FREE then
+    begin
+      WriteString('FREE ');
+    end;
+    if XSECTION then
+    begin
+      WriteString('XSECTION ');
+    end;
+    if CHTOCH then
+    begin
+      WriteString('CHTOCH ');
+    end;
+    if PRINTTIME then
+    begin
+      WriteString('PRINTTIME ');
+    end;
+    if StopError then
+    begin
+      WriteString('STOPERROR ');
+      WriteFloat(StopErrorCriterion);
+    end;
+  //  if SHOWPROGRESS then
+  //  begin
+  //    WriteString('SHOWPROGRESS ');
+  //  end;
+    WriteString(' # OPTIONS');
+    NewLine;
   end;
-  if CHTOCH then
-  begin
-    WriteString('CHTOCH ');
-  end;
-  if PRINTTIME then
-  begin
-    WriteString('PRINTTIME ');
-  end;
-  if StopError then
-  begin
-    WriteString('STOPERROR ');
-    WriteFloat(StopErrorCriterion);
-  end;
-//  if SHOWPROGRESS then
-//  begin
-//    WriteString('SHOWPROGRESS ');
-//  end;
-  WriteString(' # OPTIONS');
-  NewLine;
 end;
 
 procedure TModflowBasicWriter.WriteDataSet2;

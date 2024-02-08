@@ -14,7 +14,9 @@ type
   TModelOptions = class(TCollectionItem)
   private
     FDescription: TStrings;
+    FOwhmBasicOptions: TStrings;
     procedure SetDescription(const Value: TStrings);
+    procedure SetOwhmBasicOptions(const Value: TStrings);
   public
     Model: TCustomModel;
     CalculateFlow: boolean;
@@ -37,6 +39,7 @@ type
     NewtonMF6: Boolean;
     UnderRelaxationMF6: Boolean;
     WriteBinaryGridFile: Boolean;
+    property OwhmBasicOptions: TStrings read FOwhmBasicOptions write SetOwhmBasicOptions;
     property Description: TStrings read FDescription write SetDescription;
     procedure AssignOptionsToModel;
     procedure AssignModel(AModel: TCustomModel);
@@ -106,6 +109,9 @@ type
     cbNewton: TCheckBox;
     cbUnderRelaxation: TCheckBox;
     cbUseGsflowFormat: TCheckBox;
+    tabOwhmOptions: TTabSheet;
+    memoBasicOptions: TMemo;
+    lblBasicOptions: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure rdeHNOFLOExit(Sender: TObject);
@@ -234,6 +240,8 @@ begin
   rdeStopErrorCriterion.Text := FloatToStr(ModflowOptions.StopErrorCriterion);
   cbStopErrorClick(nil);
 
+  memoBasicOptions.Lines := ModflowOptions.OwhmBasicOptions;
+
   if not frmGoPhast.PhastModel.LgrUsed then
   begin
     NewHeight := Height - pnlModel.Height;
@@ -250,6 +258,8 @@ begin
   begin
     tabWetting.TabVisible := True;
   end;
+
+  tabOwhmOptions.TabVisible := frmGoPhast.PhastModel.ModelSelection = msModflowOwhm2;
 end;
 
 procedure TfrmModflowOptions.cbNewtonClick(Sender: TObject);
@@ -461,6 +471,7 @@ begin
       FCurrentOptions.NewtonMF6 := cbNewton.Checked;
       FCurrentOptions.UnderRelaxationMF6 := cbUnderRelaxation.Checked;
       FCurrentOptions.WriteBinaryGridFile := cbWriteBinaryGridFile.Checked;
+      FCurrentOptions.OwhmBasicOptions := memoBasicOptions.Lines;
 //      FCurrentOptions.
     end;
     FCurrentOptions := Value;
@@ -489,6 +500,7 @@ begin
       cbUnderRelaxation.Checked := FCurrentOptions.UnderRelaxationMF6;
       cbNewtonClick(nil);
       cbWriteBinaryGridFile.Checked := FCurrentOptions.WriteBinaryGridFile;
+      memoBasicOptions.Lines := FCurrentOptions.OwhmBasicOptions;
     end;
   end;
 end;
@@ -600,6 +612,7 @@ begin
   NewtonMF6 := Options.NewtonMF6;
   UnderRelaxationMF6 := Options.UnderRelaxationMF6;
   WriteBinaryGridFile := Options.WriteBinaryGridFile;
+  OwhmBasicOptions := Options.OwhmBasicOptions;
 end;
 
 procedure TModelOptions.AssignOptionsToModel;
@@ -629,6 +642,7 @@ begin
   Options.NewtonMF6 := NewtonMF6;
   Options.UnderRelaxationMF6 := UnderRelaxationMF6;
   Options.WriteBinaryGridFile := WriteBinaryGridFile;
+  Options.OwhmBasicOptions := OwhmBasicOptions;
 
 end;
 
@@ -636,10 +650,12 @@ constructor TModelOptions.Create(Collection: TCollection);
 begin
   inherited;
   FDescription := TStringList.Create;
+  FOwhmBasicOptions := TStringList.Create;
 end;
 
 destructor TModelOptions.Destroy;
 begin
+  FOwhmBasicOptions.Free;
   FDescription.Free;
   inherited;
 end;
@@ -647,6 +663,11 @@ end;
 procedure TModelOptions.SetDescription(const Value: TStrings);
 begin
   FDescription.Assign(Value);
+end;
+
+procedure TModelOptions.SetOwhmBasicOptions(const Value: TStrings);
+begin
+  FOwhmBasicOptions.Assign(Value);
 end;
 
 { TModelOptionsCollection }

@@ -3496,28 +3496,35 @@ var
       WriteInteger(SegmentReach.Reach);
 
 
-      PestValues.Formula := ADelivery.Frac;
-
-      PestValues.PestName := '';
-      PestValues.PestSeriesName := SrdCollection.PestSeriesParameter;
-      PestValues.PestSeriesMethod := SrdCollection.PestParamMethod;
-      PestValues.FormulaErrorMessage := 'Invalid semi-routed delivery fraction';
-      PestValues.ErrorObjectName := AFarm.FarmName;
-
-      AdjustFormulaForPest(PestValues);
-
-      if WritingTemplate and PestValues.ParameterUsed then
+      if ADelivery.Frac <> '' then
       begin
-        Value := GetFormulaValue(PestValues);
+        PestValues.Formula := ADelivery.Frac;
 
-        WritePestTemplateFormula(Value, PestValues.PestName,
-          PestValues.PestSeriesName, PestValues.PestSeriesMethod,
-          nil);
+        PestValues.PestName := '';
+        PestValues.PestSeriesName := SrdCollection.PestSeriesParameter;
+        PestValues.PestSeriesMethod := SrdCollection.PestParamMethod;
+        PestValues.FormulaErrorMessage := 'Invalid semi-routed delivery fraction';
+        PestValues.ErrorObjectName := AFarm.FarmName;
+
+        AdjustFormulaForPest(PestValues);
+
+        if WritingTemplate and PestValues.ParameterUsed then
+        begin
+          Value := GetFormulaValue(PestValues);
+
+          WritePestTemplateFormula(Value, PestValues.PestName,
+            PestValues.PestSeriesName, PestValues.PestSeriesMethod,
+            nil);
+        end
+        else
+        begin
+          WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
+            PestValues.FormulaErrorMessage);
+        end;
       end
       else
       begin
-        WriteFloatValueFromGlobalFormula(PestValues.Formula, AFarm,
-          PestValues.FormulaErrorMessage);
+        WriteInteger(-1);
       end;
     end;
   end;

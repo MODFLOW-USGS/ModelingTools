@@ -25,6 +25,7 @@ Type
     FWriteBinaryGridFile: Boolean;
     FStoredHDry: TRealStorage;
     FStoredHNoFlow: TRealStorage;
+    FOwhmBasicOptions: TStrings;
     procedure InvalidateModel;
     procedure SetComputeFluxesBetweenConstantHeadCells(const Value: boolean);
     procedure SetDescription(const Value: TStrings);
@@ -50,6 +51,7 @@ Type
     procedure SetStoredHNoFlow(const Value: TRealStorage);
     function GetHDry: real;
     function GetHNoFlow: real;
+    procedure SetOwhmBasicOptions(const Value: TStrings);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -102,6 +104,8 @@ Type
     // Inverse of NOGRB option in MF6 DIS file
     property WriteBinaryGridFile: Boolean read FWriteBinaryGridFile
       write SetWriteBinaryGridFile stored StoreMf6Properties;
+    property OwhmBasicOptions: TStrings read FOwhmBasicOptions
+      write SetOwhmBasicOptions;
   end;
 
   TWettingOptions = class(TPersistent)
@@ -168,6 +172,7 @@ begin
     InitialHeadFileName := SourceModel.InitialHeadFileName;
     StopError := SourceModel.StopError;
     StopErrorCriterion := SourceModel.StopErrorCriterion;
+    OwhmBasicOptions := SourceModel.OwhmBasicOptions;
   end
   else
   begin
@@ -182,6 +187,7 @@ begin
   FStoredStopErrorCriterion := TRealStorage.Create;
   FStoredHDry := TRealStorage.Create;
   FStoredHNoFlow := TRealStorage.Create;
+  FOwhmBasicOptions := TStringList.Create;
   Clear;
   FOnInvalidateModel := InvalidateModelEvent;
   FStoredStopErrorCriterion.OnChange := FOnInvalidateModel;
@@ -192,6 +198,7 @@ end;
 
 destructor TModflowOptions.Destroy;
 begin
+  FOwhmBasicOptions.Free;
   FStoredHDry.Free;
   FStoredHNoFlow.Free;
   FStoredStopErrorCriterion.Free;
@@ -251,6 +258,10 @@ begin
   FNewtonMF6 := False;
   FUnderRelaxationMF6 := False;
   FWriteBinaryGridFile := True;
+  OwhmBasicOptions.Clear;
+  OwhmBasicOptions.Add('  MAX_RELATIVE_VOLUME_ERROR 2.0');
+ 	OwhmBasicOptions.Add('  NO_SHOWPROGRESS');
+
 end;
 
 procedure TModflowOptions.InvalidateModel;
@@ -340,6 +351,11 @@ begin
     FOpenInTextEditor := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowOptions.SetOwhmBasicOptions(const Value: TStrings);
+begin
+  FOwhmBasicOptions.Assign(Value);
 end;
 
 procedure TModflowOptions.SetPrintTime(const Value: boolean);

@@ -4,6 +4,8 @@ inherited frmModflowOptions: TfrmModflowOptions
   Caption = 'MODFLOW Options'
   ClientHeight = 550
   ClientWidth = 543
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 555
   ExplicitHeight = 588
   TextHeight = 18
@@ -12,12 +14,10 @@ inherited frmModflowOptions: TfrmModflowOptions
     Top = 0
     Width = 543
     Height = 468
-    ActivePage = TabSheet2
+    ActivePage = tabOwhmOptions
     Align = alClient
     TabOrder = 0
     OnChange = pcOptionsChange
-    ExplicitWidth = 539
-    ExplicitHeight = 467
     object TabSheet1: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Description_Tab'
@@ -56,12 +56,11 @@ inherited frmModflowOptions: TfrmModflowOptions
       object edProjectName: TEdit
         Left = 8
         Top = 24
-        Width = 516
+        Width = 512
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         OnExit = edProjectNameExit
-        ExplicitWidth = 520
       end
       object edDate: TEdit
         Left = 8
@@ -82,13 +81,12 @@ inherited frmModflowOptions: TfrmModflowOptions
       object memoComments: TMemo
         Left = 12
         Top = 130
-        Width = 516
+        Width = 512
         Height = 296
         Anchors = [akLeft, akTop, akRight, akBottom]
         ScrollBars = ssBoth
         TabOrder = 3
         WordWrap = False
-        ExplicitWidth = 520
       end
     end
     object TabSheet2: TTabSheet
@@ -289,14 +287,14 @@ inherited frmModflowOptions: TfrmModflowOptions
       object feInitialHeads: TJvFilenameEdit
         Left = 3
         Top = 341
-        Width = 480
+        Width = 476
         Height = 26
         Filter = 'Binary head files (*.bhd)|*.bhd'
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 8
         Text = ''
         OnChange = feInitialHeadsChange
-        ExplicitWidth = 476
+        ExplicitWidth = 472
       end
       object edMasUnit: TLabeledEdit
         Left = 3
@@ -466,6 +464,30 @@ inherited frmModflowOptions: TfrmModflowOptions
         TabOrder = 5
       end
     end
+    object tabOwhmOptions: TTabSheet
+      Caption = 'OWHM Options'
+      ImageIndex = 3
+      DesignSize = (
+        535
+        435)
+      object lblBasicOptions: TLabel
+        Left = 3
+        Top = 3
+        Width = 160
+        Height = 18
+        Caption = 'Basic package options'
+      end
+      object memoBasicOptions: TMemo
+        Left = 3
+        Top = 24
+        Width = 529
+        Height = 408
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ScrollBars = ssBoth
+        TabOrder = 0
+        WordWrap = False
+      end
+    end
   end
   object pnlBottom: TPanel
     Left = 0
@@ -480,7 +502,7 @@ inherited frmModflowOptions: TfrmModflowOptions
       543
       41)
     object btnHelp: TBitBtn
-      Left = 245
+      Left = 241
       Top = 4
       Width = 89
       Height = 33
@@ -489,11 +511,11 @@ inherited frmModflowOptions: TfrmModflowOptions
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 241
+      ExplicitLeft = 237
     end
     object btnOK: TBitBtn
-      Left = 342
-      Top = 4
+      Left = 338
+      Top = 6
       Width = 89
       Height = 33
       Anchors = [akTop, akRight]
@@ -520,10 +542,9 @@ inherited frmModflowOptions: TfrmModflowOptions
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 338
     end
     object btnCancel: TBitBtn
-      Left = 437
+      Left = 433
       Top = 4
       Width = 91
       Height = 33
@@ -531,7 +552,7 @@ inherited frmModflowOptions: TfrmModflowOptions
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 433
+      ExplicitLeft = 429
     end
   end
   object pnlModel: TPanel
@@ -547,7 +568,7 @@ inherited frmModflowOptions: TfrmModflowOptions
       543
       41)
     object lblModel: TLabel
-      Left = 485
+      Left = 481
       Top = 11
       Width = 43
       Height = 18
@@ -558,13 +579,13 @@ inherited frmModflowOptions: TfrmModflowOptions
     object comboModel: TComboBox
       Left = 8
       Top = 8
-      Width = 471
+      Width = 467
       Height = 26
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       OnChange = comboModelChange
-      ExplicitWidth = 467
+      ExplicitWidth = 463
     end
   end
   object rconWet: TRbwController

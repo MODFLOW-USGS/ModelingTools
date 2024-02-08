@@ -1048,7 +1048,8 @@ resourcestring
   StrStartingHead = 'Starting head';
   StrEndingHead = 'Ending head';
   StrElevation = 'Elevation';
-  StrMaxPumpingRate = 'Max pumping rate (QMAX)';
+  StrMaxPumpingRate = 'Max well capacity (QMAX)';
+  StrMaxPumpingRateOwhm2 = 'Max well capacity (QCap)';
   StrPumpOnlyIfCropRequiresWater = 'Pump only if irrigation required in cell';
   StrFarmID =  'FarmID';
   StrStressOffset = 'Stress offset';

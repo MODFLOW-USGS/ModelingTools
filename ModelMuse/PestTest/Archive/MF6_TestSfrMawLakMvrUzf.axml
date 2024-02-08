@@ -85,6 +85,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lk_stg</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lst</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.maw_bud</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.maw_bud.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.maw_cell_conductance_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.maw_cell_flow_rate_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.maw_flow_rate_ob.csv</FileName>
@@ -107,7 +108,9 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.rej-inf_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.rej-inf-to-mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.rvob_out_riv.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr.sfr_budget.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_budget</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_budget.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_downstream-flow_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_evaporation_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_ext-inflow_ob.csv</FileName>
