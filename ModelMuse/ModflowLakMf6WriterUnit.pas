@@ -490,7 +490,8 @@ begin
       end;
       if ACell.BedThickness = 0 then
       begin
-        WriteString(' NONE');
+        // "NONE" was used previously but that is deprecated.
+        WriteString(' 3E30');
       end
       else
       begin

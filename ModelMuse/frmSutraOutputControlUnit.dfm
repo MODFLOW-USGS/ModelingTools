@@ -31,8 +31,6 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Width = 581
       Height = 388
       Caption = 'jvspListing'
-      ExplicitWidth = 577
-      ExplicitHeight = 387
       DesignSize = (
         581
         388)
@@ -54,7 +52,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       object chklstOptions: TCheckListBox
         Left = 6
         Top = 48
-        Width = 564
+        Width = 560
         Height = 206
         Anchors = [akLeft, akTop, akRight]
         ItemHeight = 18
@@ -113,7 +111,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       object clbNcol: TCheckListBox
         Left = 6
         Top = 69
-        Width = 564
+        Width = 560
         Height = 260
         Anchors = [akLeft, akTop, akRight]
         DoubleBuffered = False
@@ -125,14 +123,14 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
           'Pressure (P)'
           'Concentration or temperature (U)'
           'Saturation (S)'
-          'X, Y, and Z-components of fluid velocity (VX, VY, VZ)'
           'Liquid saturation (L)'
           'Ice Saturation (I)'
+          'X, Y, and Z-components of fluid velocity (VX, VY, VZ)'
           'Darcy velocities (qX, qY, qZ)')
         ParentDoubleBuffered = False
         ScrollWidth = 332
         TabOrder = 1
-        ExplicitWidth = 560
+        ExplicitWidth = 556
       end
     end
     object jvspObsBound: TJvStandardPage
@@ -314,7 +312,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       722
       50)
     object btnCancel: TBitBtn
-      Left = 604
+      Left = 600
       Top = 7
       Width = 91
       Height = 33
@@ -322,10 +320,10 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 600
+      ExplicitLeft = 596
     end
     object btnOK: TBitBtn
-      Left = 507
+      Left = 503
       Top = 7
       Width = 91
       Height = 33
@@ -334,10 +332,10 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 503
+      ExplicitLeft = 499
     end
     object btnHelp: TBitBtn
-      Left = 410
+      Left = 406
       Top = 7
       Width = 91
       Height = 33
@@ -346,7 +344,7 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 406
+      ExplicitLeft = 402
     end
   end
 end

@@ -258,6 +258,7 @@ resourcestring
   StrNumericalControls = 'Numerical Controls';
   StrSolverControls = 'Solver Controls';
   StrFluidProperties = 'Fluid Properties';
+  StrWaterProperties = 'Liquid Water and Ice Properties';
   StrSolidMatrixAdsorp = 'Solid Matrix, Adsorption';
   StrProduction = 'Production';
   StrChangeSUTRAOptions = 'change SUTRA options';
@@ -548,7 +549,14 @@ begin
   Node.PageIndex := jvspNumericalControls.PageIndex;
   Node := jvpltvNavigation.Items.Add(nil, StrSolverControls) as TJvPageIndexNode;
   Node.PageIndex := jvspSolverControls.PageIndex;
-  Node := jvpltvNavigation.Items.Add(nil, StrFluidProperties) as TJvPageIndexNode;
+  if frmGoPhast.ModelSelection = msSutra40 then
+  begin
+    Node := jvpltvNavigation.Items.Add(nil, StrWaterProperties) as TJvPageIndexNode;
+  end
+  else
+  begin
+    Node := jvpltvNavigation.Items.Add(nil, StrFluidProperties) as TJvPageIndexNode;
+  end;
   Node.PageIndex := jvspFluidProperties.PageIndex;
 
   if frmGoPhast.ModelSelection = msSutra40 then
@@ -820,18 +828,11 @@ begin
 
   if ANode = FRegionNode then
   begin
-//    if FRegionNode.Expanded then
-//    begin
-//      FRegionNode.Expanded := False;
-//    end
-//    else
-//    begin
-      FirstRegionNode := FRegionNode.getFirstChild;
-      if FirstRegionNode <> nil then
-      begin
-        FirstRegionNode.Selected := True;
-      end;
-//    end;
+    FirstRegionNode := FRegionNode.getFirstChild;
+    if FirstRegionNode <> nil then
+    begin
+      FirstRegionNode.Selected := True;
+    end;
   end;
 //
 end;

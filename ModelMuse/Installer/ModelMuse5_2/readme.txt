@@ -76,6 +76,8 @@ be created in the installation directory:
    |  |                 EnhancedTemplateProcessor.exe, Mf6ObsExtractor,
    |  |                 Mf2005ObsExtractor, SutraObsExtractor, and
    |  |                 SwiObsExtractor executables.
+   |  |--bin
+          |--Help     : Contains help system for ModelMuse.   
    |  |--doc          : Documentation files
 
 ModelMuse will also create a subdirectory of the "Public Documents" directory named 
@@ -94,7 +96,8 @@ The Acrobat Reader is freely available from the following World Wide Web
 site:
       http://www.adobe.com/
 
-The zip files contain the same files in the same directory structure. 
+The zip files contain the same files in the same directory structure except
+that the top level directory is ModelMuse5_2. 
 To install it, unzip the file retaining the directory structure of the zip
 file. Unlike the installer, unzipping the files from a zip file will not 
 associate ModelMuse project files with extensions .gpt, .gpb, or .mmZLib 
@@ -108,15 +111,19 @@ The help file for ModelMuse, ModelMuse.chm, may be blocked if ModelMuse is
 installed by extracting from the zip file instead of using the installer.
 To unblock it, copy ModelMuse.chm to a flash drive and then back onto your 
 computer.
+ModelMuse.chm is located in the bin|Help directory.
 
 C. EXECUTING THE SOFTWARE
 
 There are several ways to execute the software.
-1. Double click on it in Windows Explorer.
+1. Double click on ModelMuse.exe in Windows Explorer.
 2. Double-click on the desktop short cut for ModelMuse that is optionally
    created by the installer.
 3. Double click on a file with one of the extensions associated with 
-   ModelMuse (.gpt, gpb, mmZlib).
+   ModelMuse (.gpt, .gpb, .mmZlib). The ModelMuse installer creates the 
+   associations between the file name extensions and ModelMuse.exe.
+   Associations between programs and extensions can be made manually
+   if ModelMuse was installed by unzipping it from a zip file.
 
 D. EXAMPLES
 
@@ -230,7 +237,7 @@ is only being installed in Delphi. If asked whether to add the
 Graphics 32 to the project, select yes.
 
 To compile the design-time package, you may need to edit the search path for 
-the design time Project 
+the design-time Project 
 (Project|Options|Delphi compiler|Search path) 
 so that it includes the dcp and/or bpl
 output directories. For example:
@@ -245,7 +252,7 @@ Projects window and select reference. Then navigate to the DCP directory
 and a the .dcp file for the Graphics32 design-time package.
 However, the package requirement may be added automatically when building the packages.
 
-Build the runtime package first. Then install the design time package.  
+Build the runtime package first. Then install the design-time package.  
 Only GLScene_RT.dproj and GLScene_DT.dproj are needed for ModelMuse.
 
 Installing Graphics32

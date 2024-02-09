@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">Fluid Properties Pane</title>
+<topic template="Default" modified="2024-02-09T14:23:57.853-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Liquid Water and Ice Properties Pane</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Fluid Properties Pane</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Liquid Water and Ice Properties Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Fluid Properties</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box. It is used to set properties of the fluid.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Liquid Water and Ice Properties</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box. It is used to set properties of the liquid water and ice.</text><br/><text styleclass="Normal" translate="true">(Note: For SUTRA 2 and SUTRA 3 models, this pane is labeled the </text><text styleclass="Strong" translate="true">Fluid Properties</text><text styleclass="Normal" translate="true"> pane.)</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">COMPFL</text><text styleclass="Normal" translate="true"> is the Fluid compressibility which is related to storativity.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">CW</text><text styleclass="Normal" translate="true">, the fluid specific heat, is not used on for solute transport.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">SIGMAW</text><text styleclass="Normal" translate="true"> is fluid diffusivity for solute transport and fluid thermal conductivity for heat transport.</text></para>

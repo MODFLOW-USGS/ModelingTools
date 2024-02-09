@@ -32536,5 +32536,8 @@ object TTaskHistory
     end
     item
       Date = 45331.000000000000000000
+      Categories.Strings = (
+        'SUTRA Model'
+        'Documentation')
     end>
 end

@@ -11,9 +11,10 @@ MODFLOW-LGR models.
 In ModelMuse, the spatial data for the model are independent of the grid or mesh, 
 and the temporal data are independent of the stress periods. Being able to input 
 these data independently allows the user to redefine the spatial and temporal 
-discretization at will. This report describes the basic concepts required to work 
-with ModelMuse. These basic concepts include the model grid, data sets, formulas, 
-objects, the method used to assign values to data sets, and model features.
+discretization at will. The associated model reports and the ModelMuse help 
+describe the basic concepts required to work with ModelMuse. These basic concepts 
+include the model grid, data sets, formulas, objects, the method used to assign 
+values to data sets, and model features.
 
 The ModelMuse main window has a top, front, and side view of the model that can 
 be used for editing the model, and a 3–D view of the model that can be used to 
@@ -26,7 +27,7 @@ It also has a variety of interpolation methods and geographic
 functions that can be used to help define the spatial variability of the model. 
 ModelMuse can be used to execute the models and can also display the results of 
 all the models except PHAST and ZONEBUDGET. Examples of using ModelMuse with  
-MODFLOW, SUTRA, WellFootprint, and PEST are included in the reports. on various 
+MODFLOW, SUTRA, WellFootprint, and PEST are included in the reports on various 
 ModelMuse releases. Additional examples are described in the help system for 
 ModelMuse, which can be accessed from the Help menu.
 
@@ -39,16 +40,18 @@ and unstructured grids. ModelMuse supports options in MODFLOW 6 that designate i
 cells as confined or convertible and remove inactive cells associated with discontinuous 
 layers, thereby reducing the computational burden. ModelMuse can specify fully 
 three-dimensional (3D), spatially variable anisotropy in hydraulic conductivity. Although 
-MODFLOW 6 does not support the parameters supported by MODFLOW–2005, ModelMuse provides 
-backward compatibility by allowing ModelMuse parameters to specify scale-factor variables 
+MODFLOW 6 does not support the parameters supported by MODFLOW–2005, ModelMuse emulates 
+that capabililty by allowing ModelMuse parameters to specify scale-factor variables 
 in MODFLOW 6 time-series files within packages that support time-series files. ModelMuse 
 can automatically convert the data for many of the packages from other MODFLOW models to 
 the new data for these packages in MODFLOW 6. Some packages, such as the Streamflow 
 Routing (SFR) package, changed significantly enough that only a partial conversion is 
-possible. Head and flow observations in older models are also converted to observation 
+possible. The user is responsible for ensuring that the converted model is a good 
+representation of the modeled region. 
+Head and flow observations in older models are also converted to observation 
 locations in the MODFLOW 6 Observation Utility. ModelMuse accommodates the ability of 
 MODFLOW 6 to store specific discharge components by allowing the user to visualize the 
-components of a specific discharge on the model grid. ModelMuse supports the versions 
+components of specific discharge on the model grid. ModelMuse supports the versions 
 of MODPATH and ZONEBUDGET compatible with MODFLOW 6.
 
 ModelMuse can generate the input files for PEST when used with MODFLOW 
@@ -60,7 +63,7 @@ model data set. Pilot points can be used to assign spatially variable distributi
 model inputs. Parameters can be applied to temporally varying features such as boundary 
 conditions either by applying them to all the values in a series in one step or by 
 applying separate parameters to individual members of a series. ModelMuse allows the 
-definitions of many different sorts of observations from a variety of model output files. 
+definition of many different sorts of observations from a variety of model output files. 
 For MODFLOW 6 and SUTRA models, new options were added to ModelMuse to allow it to display 
 the changed input after parameter estimation is complete. For MODFLOW-2005 and MODFLOW-NWT 
 models, ModelMuse can import an entire model to allow it to be visualized. 

@@ -12843,8 +12843,8 @@ begin
         and ((FMVR_Node = nil) or not (FMVR_Node.StateIndex in [2,3])) then
       begin
         Beep;
-        if (MessageDlg(Format(StrNoOutletLakeIsSp + ' Do you want to fix this now?', [ProblemOutlet]),
-          mtWarning, [mbYes, mbNo], 0) = mrYes) then
+        if (MessageDlg(Format(StrNoOutletLakeIsSp + ' Do you want to change this now?', [ProblemOutlet]),
+          mtWarning, [mbYes, mbNo], 0, mbNo) = mrYes) then
         begin
           Result := False;
         end;

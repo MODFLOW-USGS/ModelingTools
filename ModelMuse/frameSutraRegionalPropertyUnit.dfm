@@ -9,7 +9,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
     Top = 0
     Width = 679
     Height = 480
-    ActivePage = tsAdsorption
+    ActivePage = tsPermeability
     Align = alClient
     OwnerDraw = True
     TabHeight = 75
@@ -58,7 +58,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Left = 6
           Top = 132
           Width = 121
-          Height = 28
+          Height = 23
           Enabled = True
           NumGlyphs = 1
           TabOrder = 1
@@ -70,7 +70,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Left = 6
           Top = 165
           Width = 121
-          Height = 28
+          Height = 23
           Enabled = True
           NumGlyphs = 1
           TabOrder = 2
@@ -123,9 +123,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         object jplTotalSaturation: TJvPageList
           AlignWithMargins = True
           Left = 2
-          Top = 152
+          Top = 147
           Width = 667
-          Height = 241
+          Height = 246
           Margins.Left = 0
           Margins.Top = 130
           Margins.Right = 0
@@ -137,7 +137,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Left = 0
             Top = 0
             Width = 667
-            Height = 241
+            Height = 246
             Caption = 'jvspTotSatControls'
             object lblResidWatSat: TLabel
               Left = 164
@@ -188,7 +188,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 36
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 0
@@ -200,7 +200,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 67
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 1
@@ -212,7 +212,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 7
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 2
@@ -224,7 +224,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 96
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 3
@@ -236,7 +236,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 125
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 4
@@ -248,7 +248,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 154
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 5
@@ -261,21 +261,21 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Left = 0
             Top = 0
             Width = 667
-            Height = 241
+            Height = 246
             Caption = 'jvspTotSatUserDefined'
             inline frameTotSatUserDefined: TframeGrid
               Left = 0
               Top = 0
               Width = 667
-              Height = 241
+              Height = 246
               Align = alClient
               TabOrder = 0
               ExplicitWidth = 667
-              ExplicitHeight = 241
+              ExplicitHeight = 246
               inherited Panel: TPanel
-                Top = 200
+                Top = 205
                 Width = 667
-                ExplicitTop = 200
+                ExplicitTop = 205
                 ExplicitWidth = 667
                 inherited lbNumber: TLabel
                   Width = 120
@@ -297,14 +297,12 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                   ExplicitLeft = 479
                 end
                 inherited seNumber: TJvSpinEdit
-                  Height = 28
                   MaxValue = 10.000000000000000000
-                  ExplicitHeight = 28
                 end
               end
               inherited Grid: TRbwDataGrid4
                 Width = 667
-                Height = 200
+                Height = 205
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -331,7 +329,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                     AutoAdjustColWidths = True
                   end>
                 ExplicitWidth = 667
-                ExplicitHeight = 200
+                ExplicitHeight = 205
               end
             end
           end
@@ -368,9 +366,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         object jplRelativePerm: TJvPageList
           AlignWithMargins = True
           Left = 2
-          Top = 152
+          Top = 147
           Width = 667
-          Height = 241
+          Height = 246
           Margins.Left = 0
           Margins.Top = 130
           Margins.Right = 0
@@ -382,7 +380,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Left = 0
             Top = 0
             Width = 667
-            Height = 241
+            Height = 246
             Caption = 'jvspRelativePermControls'
             object lblMinRelPerm: TLabel
               Left = 164
@@ -419,7 +417,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 8
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 0
@@ -431,11 +429,11 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 42
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 1
-              Text = '0'
+              Text = '2'
               OnButtonClick = DoFormulaButtonClick
               OnExit = btnedExit
             end
@@ -443,7 +441,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 76
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 2
@@ -455,7 +453,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 110
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 3
@@ -468,21 +466,21 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Left = 0
             Top = 0
             Width = 667
-            Height = 241
+            Height = 246
             Caption = 'jvspTotSatUserDefined'
             inline frameRelPermParam: TframeGrid
               Left = 0
               Top = 0
               Width = 667
-              Height = 241
+              Height = 246
               Align = alClient
               TabOrder = 0
               ExplicitWidth = 667
-              ExplicitHeight = 241
+              ExplicitHeight = 246
               inherited Panel: TPanel
-                Top = 200
+                Top = 205
                 Width = 667
-                ExplicitTop = 200
+                ExplicitTop = 205
                 ExplicitWidth = 667
                 inherited lbNumber: TLabel
                   Width = 120
@@ -502,14 +500,12 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                   ExplicitLeft = 479
                 end
                 inherited seNumber: TJvSpinEdit
-                  Height = 28
                   MaxValue = 10.000000000000000000
-                  ExplicitHeight = 28
                 end
               end
               inherited Grid: TRbwDataGrid4
                 Width = 667
-                Height = 200
+                Height = 205
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -536,7 +532,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                     AutoAdjustColWidths = True
                   end>
                 ExplicitWidth = 667
-                ExplicitHeight = 200
+                ExplicitHeight = 205
               end
             end
           end
@@ -573,9 +569,9 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
         object jplLiqWatSat: TJvPageList
           AlignWithMargins = True
           Left = 2
-          Top = 152
+          Top = 147
           Width = 667
-          Height = 241
+          Height = 246
           Margins.Left = 0
           Margins.Top = 130
           Margins.Right = 0
@@ -587,7 +583,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Left = 0
             Top = 0
             Width = 667
-            Height = 241
+            Height = 246
             Caption = 'jvspRelativePermControls'
             object lblResidLiqWatSat: TLabel
               Left = 164
@@ -631,7 +627,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 6
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 0
@@ -643,7 +639,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 37
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 1
@@ -655,7 +651,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 66
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 2
@@ -667,7 +663,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 95
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 3
@@ -679,7 +675,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
               Left = 13
               Top = 124
               Width = 145
-              Height = 28
+              Height = 23
               Enabled = True
               NumGlyphs = 1
               TabOrder = 4
@@ -692,21 +688,21 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
             Left = 0
             Top = 0
             Width = 667
-            Height = 241
+            Height = 246
             Caption = 'jvspTotSatUserDefined'
             inline frameLiquidWaterSatUserDefined: TframeGrid
               Left = 0
               Top = 0
               Width = 667
-              Height = 241
+              Height = 246
               Align = alClient
               TabOrder = 0
               ExplicitWidth = 667
-              ExplicitHeight = 241
+              ExplicitHeight = 246
               inherited Panel: TPanel
-                Top = 200
+                Top = 205
                 Width = 667
-                ExplicitTop = 200
+                ExplicitTop = 205
                 ExplicitWidth = 667
                 inherited lbNumber: TLabel
                   Width = 120
@@ -726,14 +722,12 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                   ExplicitLeft = 479
                 end
                 inherited seNumber: TJvSpinEdit
-                  Height = 28
                   MaxValue = 10.000000000000000000
-                  ExplicitHeight = 28
                 end
               end
               inherited Grid: TRbwDataGrid4
                 Width = 667
-                Height = 200
+                Height = 205
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
@@ -760,7 +754,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
                     AutoAdjustColWidths = True
                   end>
                 ExplicitWidth = 667
-                ExplicitHeight = 200
+                ExplicitHeight = 205
               end
             end
           end
@@ -796,7 +790,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Left = 13
           Top = 24
           Width = 145
-          Height = 28
+          Height = 23
           Enabled = True
           NumGlyphs = 1
           TabOrder = 0
@@ -808,7 +802,7 @@ object frameSutraRegionalProperty: TframeSutraRegionalProperty
           Left = 13
           Top = 58
           Width = 145
-          Height = 28
+          Height = 23
           Enabled = True
           NumGlyphs = 1
           TabOrder = 1

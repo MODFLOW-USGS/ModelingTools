@@ -2851,7 +2851,7 @@ end;
 procedure TRelativePermeabilityParameters.SetInitialValues;
 begin
   RelativePermeabilityChoice := rpcNone;
-  RelativePermParam := '0';
+  RelativePermParam := '2';
   MinRelativePerm := '1E-3';
   PoreSizeDistributionIndex := '0';
   WaterSaturationAtMinPermeability := '1E-2';

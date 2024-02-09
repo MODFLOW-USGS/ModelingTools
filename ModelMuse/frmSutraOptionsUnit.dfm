@@ -44,7 +44,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       Caption = 'Number of regions'
     end
     object btnCancel: TBitBtn
-      Left = 658
+      Left = 654
       Top = 7
       Width = 91
       Height = 33
@@ -52,10 +52,10 @@ inherited frmSutraOptions: TfrmSutraOptions
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 654
+      ExplicitLeft = 650
     end
     object btnOK: TBitBtn
-      Left = 561
+      Left = 557
       Top = 6
       Width = 91
       Height = 33
@@ -64,10 +64,10 @@ inherited frmSutraOptions: TfrmSutraOptions
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 557
+      ExplicitLeft = 553
     end
     object btnHelp: TBitBtn
-      Left = 464
+      Left = 460
       Top = 7
       Width = 91
       Height = 33
@@ -76,7 +76,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 460
+      ExplicitLeft = 456
     end
     object seRegionCount: TJvSpinEdit
       Left = 14
@@ -125,7 +125,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 591
     Height = 511
-    ActivePage = jvspConfiguration
+    ActivePage = jvspFluidProperties
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -182,7 +182,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgSaturation: TRadioGroup
         Left = 263
         Top = 147
-        Width = 303
+        Width = 299
         Height = 96
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -192,7 +192,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           'Unsaturated')
         TabOrder = 5
         OnClick = rgSaturationClick
-        ExplicitWidth = 299
+        ExplicitWidth = 295
       end
       object rgTransport: TRadioGroup
         Left = 6
@@ -212,7 +212,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgSimulationType: TRadioGroup
         Left = 6
         Top = 249
-        Width = 560
+        Width = 556
         Height = 105
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Simulation type (CSSFLO, CSSTRA)'
@@ -222,7 +222,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           'Steady-state flow, transient transport'
           'Transient flow, transient transport')
         TabOrder = 6
-        ExplicitWidth = 556
+        ExplicitWidth = 552
       end
       object rdeGravX: TRbwDataEntry
         Left = 6
@@ -347,7 +347,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgStartType: TRadioGroup
         Left = 6
         Top = 3
-        Width = 562
+        Width = 558
         Height = 78
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Starting type (CREAD)'
@@ -361,7 +361,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object fedRestartFile: TJvFilenameEdit
         Left = 6
         Top = 143
-        Width = 562
+        Width = 558
         Height = 26
         DefaultExt = '.rst'
         Filter = 'Restart Files (*.rst)|*.rst|All files (*.*)|*.*'
@@ -403,7 +403,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object fedRestartInitialConditions: TJvFilenameEdit
         Left = 6
         Top = 358
-        Width = 562
+        Width = 558
         Height = 26
         DefaultExt = '.rst'
         Filter = 'Restart Files (*.rst)|*.rst|All files (*.*)|*.*'
@@ -601,7 +601,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgPressureSolution: TRadioGroup
         Left = 6
         Top = 3
-        Width = 570
+        Width = 566
         Height = 105
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Pressure solution solver (CSOLVP)'
@@ -635,7 +635,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       object rgUSolutionMethod: TRadioGroup
         Left = 6
         Top = 207
-        Width = 570
+        Width = 566
         Height = 90
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Transport solution solver (CSOLVU)'
@@ -774,9 +774,9 @@ inherited frmSutraOptions: TfrmSutraOptions
       object lblIceDensity: TLabel
         Left = 106
         Top = 415
-        Width = 137
+        Width = 128
         Height = 18
-        Caption = 'Ice density  (RHOI0)'
+        Caption = 'Ice density  (RHOI)'
       end
       object lblIceCompress: TLabel
         Left = 106
