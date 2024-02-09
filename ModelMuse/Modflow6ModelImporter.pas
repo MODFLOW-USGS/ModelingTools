@@ -7349,6 +7349,46 @@ begin
       OnUpdateStatusBar(self, 'importing SFR package');
     end;
 
+    // Find singlely connected reaches.
+    //  => 0 or 1 upstream reaches,
+    //     0 or 1 downstream reaches.
+    //     if diversions > 0 end of connected reaches.
+    //     cross sections the same.
+    //     if Observations, then ID1 is the same
+    //     if diversions > 0, end of connected reaches.
+    //     if number of downstream reaches = 0, end of connected reaches.
+
+    // NEW CLASSES
+    // descenent of TSfrPackageItemList with key properties:
+    //    cross section
+    //    observations the same
+    //    terminated.
+    // TObjectList<TSfrPackageItemList>
+    // TDictionary<Integer, TObjectList>
+
+    // STRATEGY
+    // 1. sort reaches in order from upstream to downstream
+    //    Put all reaches with now upstream reaches at the beginning of the list.
+    //    Then add downstream reaches from those until there are no more.
+    //    For reaches with more than one upstream reach, don't add until all their upstream reaches have been added.
+    //
+    // 2. for each TSfrPackageItem, get a TSfrPackageItemList for it.
+    //   If the upstream reach for the TSfrPackageItem is 0,
+    //     make a new list,
+    //     add the item to the list,
+    //     assign cross section to the list,
+    //     and add observations to the list.
+    //     Terminate list if needed.
+    //   If the upstream reach  is not zero, find upstream list.
+    //     if not found Error
+    //     if found
+    //       is upstream terminated
+    //         Yes: start new list
+    //       else is upsteam reach a match
+    //         Yes: add to list, terminate list if needed.
+    //       else
+    //         start new list
+
 
   finally
     Map.Free;

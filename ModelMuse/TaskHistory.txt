@@ -32539,6 +32539,8 @@ object TTaskHistory
       Categories.Strings = (
         'SUTRA Model'
         'Documentation'
-        'Testing')
+        'Testing'
+        'MF-2015'
+        'Import')
     end>
 end

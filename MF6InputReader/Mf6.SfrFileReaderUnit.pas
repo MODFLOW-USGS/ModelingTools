@@ -95,18 +95,23 @@ type
 
   end;
 
-  TSfrPackageItemList= TObjectList<TSfrPackageItem>;
+  TSfrPackageItemList= TList<TSfrPackageItem>;
+  TSfrPackageItemObjectList= TObjectList<TSfrPackageItem>;
 
   TSfrPackageData = class(TCustomMf6Persistent)
   private
-    FItems: TSfrPackageItemList;
+    FItems: TSfrPackageItemObjectList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
       BOUNDNAMES: Boolean; Dimensions: TDimensions);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TSfrPackageItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TSfrPackageItem read GetItem; default;
   end;
 
   TCrossSectionItem = record
@@ -145,7 +150,7 @@ type
   private
     FItems: TSfrConnectionItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-      PackageItems: TSfrPackageItemList);
+      PackageItems: TSfrPackageItemObjectList);
     function GetCount: Integer;
     function GetItem(index: Integer): TSfrConnectionItem;
   protected
@@ -212,6 +217,8 @@ type
     FPeriods: TSfrPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    FCosssSectionDictionary: TDictionary<string, TPackage>;
+    FCosssSectionPackages: TPackageList;
     function GetObservation(Index: Integer): TPackage;
     function GetObservationCount: Integer;
     function GetPeriod(Index: Integer): TSfrPeriod;
@@ -231,6 +238,7 @@ type
     property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
     property ObservationCount: Integer read GetObservationCount;
     property Observations[Index: Integer]: TPackage read GetObservation;
+    function GetCrossSection(FileName: string): TPackage;
   end;
 
 
@@ -516,7 +524,7 @@ end;
 
 constructor TSfrPackageData.Create(PackageType: string);
 begin
-  FItems := TSfrPackageItemList.Create;
+  FItems := TSfrPackageItemObjectList.Create;
   inherited;
 
 end;
@@ -525,6 +533,16 @@ destructor TSfrPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TSfrPackageData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSfrPackageData.GetItem(Index: Integer): TSfrPackageItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TSfrPackageData.Initialize;
@@ -841,7 +859,7 @@ begin
 end;
 
 procedure TSfrConnections.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-  PackageItems: TSfrPackageItemList);
+  PackageItems: TSfrPackageItemObjectList);
 var
   ALine: string;
   ErrorLine: string;
@@ -1170,6 +1188,8 @@ begin
   FPeriods := TSfrPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
+  FCosssSectionDictionary := TDictionary<string, TPackage>.Create;
+  FCosssSectionPackages := TPackageList.Create;
 end;
 
 destructor TSfr.Destroy;
@@ -1183,7 +1203,17 @@ begin
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
+  FCosssSectionDictionary.Free;
+  FCosssSectionPackages.Free;
   inherited;
+end;
+
+function TSfr.GetCrossSection(FileName: string): TPackage;
+begin
+  if not FCosssSectionDictionary.TryGetValue(FileName, result) then
+  begin
+    result := nil;
+  end;
 end;
 
 function TSfr.GetObservation(Index: Integer): TPackage;
@@ -1229,6 +1259,8 @@ var
   ObsPackage: TPackage;
   CrossSectionPackage: TPackage;
   CrossSectionReader: TCrossSection;
+  CrossFileNames: TStringList;
+  AFileName: string;
 begin
   if Assigned(OnUpdataStatusBar) then
   begin
@@ -1329,17 +1361,28 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled, NPER);
   end;
-  for PackageIndex := 0 to FSfrCrossSections.FItems.Count - 1 do
-  begin
-    CrossSectionPackage := TPackage.Create;
-    FObservationsPackages.Add(CrossSectionPackage);
-    CrossSectionPackage.FileType := FPackageType;
-    CrossSectionPackage.FileName := FSfrCrossSections.FItems[PackageIndex].tab6_filename;
-    CrossSectionPackage.PackageName := '';
+  CrossFileNames := TStringList.Create;
+  try
+    for PackageIndex := 0 to FSfrCrossSections.FItems.Count - 1 do
+    begin
+      AFileName := FSfrCrossSections.FItems[PackageIndex].tab6_filename;
+      if CrossFileNames.IndexOf(AFileName) < 0 then
+      begin
+        CrossFileNames.Add(AFileName);
+        CrossSectionPackage := TPackage.Create;
+        FCosssSectionPackages.Add(CrossSectionPackage);
+        FCosssSectionDictionary.Add(AFileName, CrossSectionPackage);
+        CrossSectionPackage.FileType := FPackageType;
+        CrossSectionPackage.FileName := AFileName;
+        CrossSectionPackage.PackageName := '';
 
-    CrossSectionReader := TCrossSection.Create(FPackageType);
-    CrossSectionPackage.Package := CrossSectionReader;
-    CrossSectionPackage.ReadPackage(Unhandled, NPER);
+        CrossSectionReader := TCrossSection.Create(FPackageType);
+        CrossSectionPackage.Package := CrossSectionReader;
+        CrossSectionPackage.ReadPackage(Unhandled, NPER);
+      end;
+    end;
+  finally
+    CrossFileNames.Free;
   end;
 end;
 
