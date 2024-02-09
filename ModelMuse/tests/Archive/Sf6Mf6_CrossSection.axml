@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Sf6Mf6_CrossSection" FileType="bin">
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="bin">..\..\..\WRDAPP\mf6.4.3_win64\bin\mf6.exe</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="bin">..\..\..\WRDAPP\mf6.4.3_win64\bin\zbud6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Sf6Mf6_CrossSection" FileType="ancillary">
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="ancillary">Sf6Mf6_CrossSection.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.chd</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.dis</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.gsf</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.ic</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.ims</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.nam.archive</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.npf</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.oc</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.sfr</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.sto</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.tdis</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.xsec1</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">usgs.Sf6Mf6_CrossSection.reference</FileName>
+  </model>
+  <output Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.bhd</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.cbc</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.dis.grb</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.InnerSolution.CSV</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.lst</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.OuterSolution.CSV</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.sfr_budget</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.stage</FileName>
+  </output>
+  <Zonebudget_Input_Files Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Input">
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Input">RunZoneBudget.bat.archive</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Input">Sf6Mf6_CrossSection.zb.zbnam.archive</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Input">Sf6Mf6_CrossSection.zb_zones</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Input">usgs.Sf6Mf6_CrossSection_ZoneBudget.reference</FileName>
+  </Zonebudget_Input_Files>
+  <Zonebudget_Output_Files Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Output">
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Output">Sf6Mf6_CrossSection.2.csv</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Output">Sf6Mf6_CrossSection.csv</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Output">Sf6Mf6_CrossSection.zb.lst</FileName>
+  </Zonebudget_Output_Files>
+</Model_Archive_List>

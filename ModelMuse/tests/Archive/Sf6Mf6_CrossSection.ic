@@ -1,0 +1,11 @@
+# Initial Conditions Package file created on 2/9/2024 by ModelMuse version 5.1.1.54.
+BEGIN GRIDDATA
+  STRT LAYERED IPRN    12
+    CONSTANT   0.000000000000E+000  # STRT Upper Aquifer
+
+    CONSTANT   0.000000000000E+000  # STRT Middle Aquifer
+
+    CONSTANT   0.000000000000E+000  # STRT Lower Aquifer
+
+END GRIDDATA
+

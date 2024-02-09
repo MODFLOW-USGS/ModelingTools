@@ -1,0 +1,16 @@
+# Name File for MODFLOW created on 2/9/2024 by ModelMuse Version 5.1.1.54
+BEGIN OPTIONS
+  LIST Sf6Mf6_CrossSection.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         Sf6Mf6_CrossSection.dis  DIS
+  IC6          Sf6Mf6_CrossSection.ic  IC
+  NPF6         Sf6Mf6_CrossSection.npf  NPF
+  STO6         Sf6Mf6_CrossSection.sto  STO
+  OC6          Sf6Mf6_CrossSection.oc  OC
+  CHD6         Sf6Mf6_CrossSection.chd  CHD-1
+  SFR6         Sf6Mf6_CrossSection.sfr  SFR-1
+END PACKAGES

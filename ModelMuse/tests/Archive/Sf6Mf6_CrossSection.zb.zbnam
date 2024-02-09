@@ -1,0 +1,5 @@
+BEGIN ZONEBUDGET
+  BUD Sf6Mf6_CrossSection.cbc
+  ZON Sf6Mf6_CrossSection.zb_zones
+  GRB Sf6Mf6_CrossSection.dis.grb
+END ZONEBUDGET

@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5611
+5634
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5611,3 +5611,26 @@ Mf6ModelObs.gpt
 	Archive\Mf6ModelObs.uzf
 	Archive\Mf6ModelObs.wel
 	Archive\usgs.Mf6ModelObs.reference
+Sf6Mf6_CrossSection.gpt
+	Archive\Sf6Mf6_CrossSection.axml
+	Archive\Sf6Mf6_CrossSection.chd
+	Archive\Sf6Mf6_CrossSection.dis
+	Archive\Sf6Mf6_CrossSection.gsf
+	Archive\Sf6Mf6_CrossSection.ic
+	Archive\Sf6Mf6_CrossSection.ims
+	Archive\Sf6Mf6_CrossSection.mfsim.nam
+	Archive\Sf6Mf6_CrossSection.nam
+	Archive\Sf6Mf6_CrossSection.nam.archive
+	Archive\Sf6Mf6_CrossSection.npf
+	Archive\Sf6Mf6_CrossSection.oc
+	Archive\Sf6Mf6_CrossSection.RunModel.Bat
+	Archive\Sf6Mf6_CrossSection.RunModflow.Bat
+	Archive\Sf6Mf6_CrossSection.sfr
+	Archive\Sf6Mf6_CrossSection.sto
+	Archive\Sf6Mf6_CrossSection.tdis
+	Archive\Sf6Mf6_CrossSection.xsec1
+	Archive\Sf6Mf6_CrossSection.zb.zbnam
+	Archive\Sf6Mf6_CrossSection.zb.zbnam.archive
+	Archive\Sf6Mf6_CrossSection.zb_zones
+	Archive\usgs.Sf6Mf6_CrossSection.reference
+	Archive\usgs.Sf6Mf6_CrossSection_ZoneBudget.reference
