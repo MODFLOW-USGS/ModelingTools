@@ -2236,6 +2236,7 @@ Type
     // GWT
 
     // [BUDGETCSV FILEOUT <budgetcsvfile>]
+    // used for both SFR and SFT packages.
     property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
       stored True;
     // BUDGET FILEOUT budgetfile

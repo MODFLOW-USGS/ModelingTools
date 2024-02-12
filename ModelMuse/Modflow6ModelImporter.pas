@@ -786,64 +786,67 @@ begin
         begin
           AddCells := True;
           ACellList := CellLists[ObjectIndex];
-          FirstCell := ACellList[0];
-          if (FirstCell.Boundname <> '')
-            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+          if ACellList.Count > 0 then
           begin
-            if IfaceIndex < 0 then
+            FirstCell := ACellList[0];
+            if (FirstCell.Boundname <> '')
+              and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
             begin
-              IFACE := 0;
+              if IfaceIndex < 0 then
+              begin
+                IFACE := 0;
+              end
+              else
+              begin
+                AuxIFACE := FirstCell[IfaceIndex];
+                Assert(AuxIFACE.ValueType = vtNumeric);
+                IFACE := Round(AuxIFACE.NumericValue);
+              end;
+              BoundName := UpperCase(FirstCell.Boundname);
+              if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+              begin
+                AConnectionList := TChdConnectionObjectList.Create;
+                ConnectionObjectLists.Add(AConnectionList);
+                ConnectionDictionary.Add(BoundName, AConnectionList)
+              end;
+              ACellList.Sort;
+              AScreenObject := nil;
+              for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+              begin
+                ConnectionItem := AConnectionList[ConnectionIndex];
+                if (IFACE = ConnectionItem.IFACE)
+                  and ACellList.SameCells(ConnectionItem.List) then
+                begin
+                  AScreenObject := ConnectionItem.ScreenObject;
+                  AddCells := False;
+                  Break;
+                end;
+              end;
+              if AScreenObject = nil then
+              begin
+                AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+                ConnectionItem := TChdConnection.Create;
+                ConnectionItem.ScreenObject := AScreenObject;
+                ConnectionItem.IFACE := IFACE;
+                ConnectionItem.List := ACellList;
+                AConnectionList.Add(ConnectionItem);
+                OtherCellLists.Add(ACellList);
+  //                CellLists.OwnsObjects := False;
+  //                try
+  //                  CellLists[ObjectIndex] := nil;
+  //                finally
+  //                  CellLists.OwnsObjects := True;
+  //                end;
+              end
+              else
+              begin
+                AddItem(AScreenObject, FirstCell, APeriod.Period);
+              end;
             end
             else
-            begin
-              AuxIFACE := FirstCell[IfaceIndex];
-              Assert(AuxIFACE.ValueType = vtNumeric);
-              IFACE := Round(AuxIFACE.NumericValue);
-            end;
-            BoundName := UpperCase(FirstCell.Boundname);
-            if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
-            begin
-              AConnectionList := TChdConnectionObjectList.Create;
-              ConnectionObjectLists.Add(AConnectionList);
-              ConnectionDictionary.Add(BoundName, AConnectionList)
-            end;
-            ACellList.Sort;
-            AScreenObject := nil;
-            for ConnectionIndex := 0 to AConnectionList.Count - 1 do
-            begin
-              ConnectionItem := AConnectionList[ConnectionIndex];
-              if (IFACE = ConnectionItem.IFACE)
-                and ACellList.SameCells(ConnectionItem.List) then
-              begin
-                AScreenObject := ConnectionItem.ScreenObject;
-                AddCells := False;
-                Break;
-              end;
-            end;
-            if AScreenObject = nil then
             begin
               AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-              ConnectionItem := TChdConnection.Create;
-              ConnectionItem.ScreenObject := AScreenObject;
-              ConnectionItem.IFACE := IFACE;
-              ConnectionItem.List := ACellList;
-              AConnectionList.Add(ConnectionItem);
-              OtherCellLists.Add(ACellList);
-//                CellLists.OwnsObjects := False;
-//                try
-//                  CellLists[ObjectIndex] := nil;
-//                finally
-//                  CellLists.OwnsObjects := True;
-//                end;
-            end
-            else
-            begin
-              AddItem(AScreenObject, FirstCell, APeriod.Period);
             end;
-          end
-          else
-          begin
-            AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
           end;
 
           CellIds.Clear;
@@ -2502,69 +2505,73 @@ begin
 
       // After all the cells in the current period have been read,
       // create a TScreenObject for each cell list
+      AScreenObject := nil;
       for ObjectIndex := 0 to CellLists.Count - 1 do
       begin
         NewScreenObject := False;
         ACellList := CellLists[ObjectIndex];
-        FirstCell := ACellList[0];
-        if (FirstCell.Boundname <> '')
-          and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+        if ACellList.Count > 0 then
         begin
-          if IfaceIndex < 0 then
+          FirstCell := ACellList[0];
+          if (FirstCell.Boundname <> '')
+            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
           begin
-            IFACE := 0;
+            if IfaceIndex < 0 then
+            begin
+              IFACE := 0;
+            end
+            else
+            begin
+              AuxIFACE := FirstCell[IfaceIndex];
+              Assert(AuxIFACE.ValueType = vtNumeric);
+              IFACE := Round(AuxIFACE.NumericValue);
+            end;
+            BoundName := UpperCase(FirstCell.Boundname);
+            if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+            begin
+              AConnectionList := TDrnConnectionObjectList.Create;
+              ConnectionObjectLists.Add(AConnectionList);
+              ConnectionDictionary.Add(BoundName, AConnectionList)
+            end;
+            ACellList.Sort;
+            AScreenObject := nil;
+            for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+            begin
+              ConnectionItem := AConnectionList[ConnectionIndex];
+              if (IFACE = ConnectionItem.IFACE)
+                and ACellList.SameCells(ConnectionItem.List) then
+              begin
+                AScreenObject := ConnectionItem.ScreenObject;
+                Break;
+              end;
+            end;
+            if AScreenObject = nil then
+            begin
+              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+              ConnectionItem := TDrnConnection.Create;
+              ConnectionItem.ScreenObject := AScreenObject;
+              ConnectionItem.IFACE := IFACE;
+              ConnectionItem.List := ACellList;
+              AConnectionList.Add(ConnectionItem);
+              OtherCellLists.Add(ACellList);
+  //              CellLists.OwnsObjects := False;
+  //              try
+  //                CellLists[ObjectIndex] := nil;
+  //              finally
+  //                CellLists.OwnsObjects := True;
+  //              end;
+              NewScreenObject := True;
+            end
+            else
+            begin
+              AddItem(AScreenObject, FirstCell, APeriod.Period);
+            end;
           end
           else
-          begin
-            AuxIFACE := FirstCell[IfaceIndex];
-            Assert(AuxIFACE.ValueType = vtNumeric);
-            IFACE := Round(AuxIFACE.NumericValue);
-          end;
-          BoundName := UpperCase(FirstCell.Boundname);
-          if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
-          begin
-            AConnectionList := TDrnConnectionObjectList.Create;
-            ConnectionObjectLists.Add(AConnectionList);
-            ConnectionDictionary.Add(BoundName, AConnectionList)
-          end;
-          ACellList.Sort;
-          AScreenObject := nil;
-          for ConnectionIndex := 0 to AConnectionList.Count - 1 do
-          begin
-            ConnectionItem := AConnectionList[ConnectionIndex];
-            if (IFACE = ConnectionItem.IFACE)
-              and ACellList.SameCells(ConnectionItem.List) then
-            begin
-              AScreenObject := ConnectionItem.ScreenObject;
-              Break;
-            end;
-          end;
-          if AScreenObject = nil then
           begin
             AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-            ConnectionItem := TDrnConnection.Create;
-            ConnectionItem.ScreenObject := AScreenObject;
-            ConnectionItem.IFACE := IFACE;
-            ConnectionItem.List := ACellList;
-            AConnectionList.Add(ConnectionItem);
-            OtherCellLists.Add(ACellList);
-//              CellLists.OwnsObjects := False;
-//              try
-//                CellLists[ObjectIndex] := nil;
-//              finally
-//                CellLists.OwnsObjects := True;
-//              end;
             NewScreenObject := True;
-          end
-          else
-          begin
-            AddItem(AScreenObject, FirstCell, APeriod.Period);
           end;
-        end
-        else
-        begin
-          AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-          NewScreenObject := True;
         end;
 
         CellIds.Clear;
@@ -3165,64 +3172,67 @@ begin
             EdtFractions.Clear;
             AddCells := True;
             ACellList := CellLists[ObjectIndex];
-            FirstCell := ACellList[0];
-            if (FirstCell.Boundname <> '')
-              and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+            if ACellList.Count > 0 then
             begin
-              if IfaceIndex < 0 then
+              FirstCell := ACellList[0];
+              if (FirstCell.Boundname <> '')
+                and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
               begin
-                IFACE := 0;
+                if IfaceIndex < 0 then
+                begin
+                  IFACE := 0;
+                end
+                else
+                begin
+                  AuxIFACE := FirstCell[IfaceIndex];
+                  Assert(AuxIFACE.ValueType = vtNumeric);
+                  IFACE := Round(AuxIFACE.NumericValue);
+                end;
+                BoundName := UpperCase(FirstCell.Boundname);
+                if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+                begin
+                  AConnectionList := TEvtConnectionObjectList.Create;
+                  ConnectionObjectLists.Add(AConnectionList);
+                  ConnectionDictionary.Add(BoundName, AConnectionList)
+                end;
+                ACellList.Sort;
+                AScreenObject := nil;
+                for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+                begin
+                  ConnectionItem := AConnectionList[ConnectionIndex];
+                  if (IFACE = ConnectionItem.IFACE)
+                    and ACellList.SameCells(ConnectionItem.List) then
+                  begin
+                    AScreenObject := ConnectionItem.ScreenObject;
+                    AddCells := False;
+                    Break;
+                  end;
+                end;
+                if AScreenObject = nil then
+                begin
+                  AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+                  ConnectionItem := TEvtConnection.Create;
+                  ConnectionItem.ScreenObject := AScreenObject;
+                  ConnectionItem.IFACE := IFACE;
+                  ConnectionItem.List := ACellList;
+                  AConnectionList.Add(ConnectionItem);
+                  OtherCellLists.Add(ACellList);
+  //                CellLists.OwnsObjects := False;
+  //                try
+  //                  CellLists[ObjectIndex] := nil;
+  //                finally
+  //                  CellLists.OwnsObjects := True;
+  //                end;
+                end
+                else
+                begin
+                  AddItem(AScreenObject, FirstCell, APeriod.Period);
+                end;
               end
               else
-              begin
-                AuxIFACE := FirstCell[IfaceIndex];
-                Assert(AuxIFACE.ValueType = vtNumeric);
-                IFACE := Round(AuxIFACE.NumericValue);
-              end;
-              BoundName := UpperCase(FirstCell.Boundname);
-              if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
-              begin
-                AConnectionList := TEvtConnectionObjectList.Create;
-                ConnectionObjectLists.Add(AConnectionList);
-                ConnectionDictionary.Add(BoundName, AConnectionList)
-              end;
-              ACellList.Sort;
-              AScreenObject := nil;
-              for ConnectionIndex := 0 to AConnectionList.Count - 1 do
-              begin
-                ConnectionItem := AConnectionList[ConnectionIndex];
-                if (IFACE = ConnectionItem.IFACE)
-                  and ACellList.SameCells(ConnectionItem.List) then
-                begin
-                  AScreenObject := ConnectionItem.ScreenObject;
-                  AddCells := False;
-                  Break;
-                end;
-              end;
-              if AScreenObject = nil then
               begin
                 AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-                ConnectionItem := TEvtConnection.Create;
-                ConnectionItem.ScreenObject := AScreenObject;
-                ConnectionItem.IFACE := IFACE;
-                ConnectionItem.List := ACellList;
-                AConnectionList.Add(ConnectionItem);
-                OtherCellLists.Add(ACellList);
-//                CellLists.OwnsObjects := False;
-//                try
-//                  CellLists[ObjectIndex] := nil;
-//                finally
-//                  CellLists.OwnsObjects := True;
-//                end;
-              end
-              else
-              begin
-                AddItem(AScreenObject, FirstCell, APeriod.Period);
               end;
-            end
-            else
-            begin
-              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
             end;
 
             CellIds.Clear;
@@ -4269,69 +4279,73 @@ begin
 
         // After all the cells in the current period have been read,
         // create a TScreenObject for each cell list
+        AScreenObject := nil;
         for ObjectIndex := 0 to CellLists.Count - 1 do
         begin
           NewScreenObject := False;
           ACellList := CellLists[ObjectIndex];
-          FirstCell := ACellList[0];
-          if (FirstCell.Boundname <> '')
-            and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+          if ACellList.Count > 0 then
           begin
-            if IfaceIndex < 0 then
+            FirstCell := ACellList[0];
+            if (FirstCell.Boundname <> '')
+              and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
             begin
-              IFACE := 0;
+              if IfaceIndex < 0 then
+              begin
+                IFACE := 0;
+              end
+              else
+              begin
+                AuxIFACE := FirstCell[IfaceIndex];
+                Assert(AuxIFACE.ValueType = vtNumeric);
+                IFACE := Round(AuxIFACE.NumericValue);
+              end;
+              BoundName := UpperCase(FirstCell.Boundname);
+              if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+              begin
+                AConnectionList := TGhbConnectionObjectList.Create;
+                ConnectionObjectLists.Add(AConnectionList);
+                ConnectionDictionary.Add(BoundName, AConnectionList)
+              end;
+              ACellList.Sort;
+              AScreenObject := nil;
+              for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+              begin
+                ConnectionItem := AConnectionList[ConnectionIndex];
+                if (IFACE = ConnectionItem.IFACE)
+                  and ACellList.SameCells(ConnectionItem.List) then
+                begin
+                  AScreenObject := ConnectionItem.ScreenObject;
+                  Break;
+                end;
+              end;
+              if AScreenObject = nil then
+              begin
+                AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+                ConnectionItem := TGhbConnection.Create;
+                ConnectionItem.ScreenObject := AScreenObject;
+                ConnectionItem.IFACE := IFACE;
+                ConnectionItem.List := ACellList;
+                AConnectionList.Add(ConnectionItem);
+                OtherCellLists.Add(ACellList);
+  //              CellLists.OwnsObjects := False;
+  //              try
+  //                CellLists[ObjectIndex] := nil;
+  //              finally
+  //                CellLists.OwnsObjects := True;
+  //              end;
+                NewScreenObject := True;
+              end
+              else
+              begin
+                AddItem(AScreenObject, FirstCell, APeriod.Period);
+              end;
             end
             else
-            begin
-              AuxIFACE := FirstCell[IfaceIndex];
-              Assert(AuxIFACE.ValueType = vtNumeric);
-              IFACE := Round(AuxIFACE.NumericValue);
-            end;
-            BoundName := UpperCase(FirstCell.Boundname);
-            if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
-            begin
-              AConnectionList := TGhbConnectionObjectList.Create;
-              ConnectionObjectLists.Add(AConnectionList);
-              ConnectionDictionary.Add(BoundName, AConnectionList)
-            end;
-            ACellList.Sort;
-            AScreenObject := nil;
-            for ConnectionIndex := 0 to AConnectionList.Count - 1 do
-            begin
-              ConnectionItem := AConnectionList[ConnectionIndex];
-              if (IFACE = ConnectionItem.IFACE)
-                and ACellList.SameCells(ConnectionItem.List) then
-              begin
-                AScreenObject := ConnectionItem.ScreenObject;
-                Break;
-              end;
-            end;
-            if AScreenObject = nil then
             begin
               AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-              ConnectionItem := TGhbConnection.Create;
-              ConnectionItem.ScreenObject := AScreenObject;
-              ConnectionItem.IFACE := IFACE;
-              ConnectionItem.List := ACellList;
-              AConnectionList.Add(ConnectionItem);
-              OtherCellLists.Add(ACellList);
-//              CellLists.OwnsObjects := False;
-//              try
-//                CellLists[ObjectIndex] := nil;
-//              finally
-//                CellLists.OwnsObjects := True;
-//              end;
               NewScreenObject := True;
-            end
-            else
-            begin
-              AddItem(AScreenObject, FirstCell, APeriod.Period);
             end;
-          end
-          else
-          begin
-            AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-            NewScreenObject := True;
           end;
 
           CellIds.Clear;
@@ -5893,64 +5907,67 @@ begin
           begin
             AddCells := True;
             ACellList := CellLists[ObjectIndex];
-            FirstCell := ACellList[0];
-            if (FirstCell.Boundname <> '')
-              and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+            if ACellList.Count > 0 then
             begin
-              if IfaceIndex < 0 then
+              FirstCell := ACellList[0];
+              if (FirstCell.Boundname <> '')
+                and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
               begin
-                IFACE := 0;
+                if IfaceIndex < 0 then
+                begin
+                  IFACE := 0;
+                end
+                else
+                begin
+                  AuxIFACE := FirstCell[IfaceIndex];
+                  Assert(AuxIFACE.ValueType = vtNumeric);
+                  IFACE := Round(AuxIFACE.NumericValue);
+                end;
+                BoundName := UpperCase(FirstCell.Boundname);
+                if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+                begin
+                  AConnectionList := TRchConnectionObjectList.Create;
+                  ConnectionObjectLists.Add(AConnectionList);
+                  ConnectionDictionary.Add(BoundName, AConnectionList)
+                end;
+                ACellList.Sort;
+                AScreenObject := nil;
+                for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+                begin
+                  ConnectionItem := AConnectionList[ConnectionIndex];
+                  if (IFACE = ConnectionItem.IFACE)
+                    and ACellList.SameCells(ConnectionItem.List) then
+                  begin
+                    AScreenObject := ConnectionItem.ScreenObject;
+                    AddCells := False;
+                    Break;
+                  end;
+                end;
+                if AScreenObject = nil then
+                begin
+                  AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+                  ConnectionItem := TRchConnection.Create;
+                  ConnectionItem.ScreenObject := AScreenObject;
+                  ConnectionItem.IFACE := IFACE;
+                  ConnectionItem.List := ACellList;
+                  AConnectionList.Add(ConnectionItem);
+                  OtherCellLists.Add(ACellList);
+  //                CellLists.OwnsObjects := False;
+  //                try
+  //                  CellLists[ObjectIndex] := nil;
+  //                finally
+  //                  CellLists.OwnsObjects := True;
+  //                end;
+                end
+                else
+                begin
+                  AddItem(AScreenObject, FirstCell, APeriod.Period);
+                end;
               end
               else
-              begin
-                AuxIFACE := FirstCell[IfaceIndex];
-                Assert(AuxIFACE.ValueType = vtNumeric);
-                IFACE := Round(AuxIFACE.NumericValue);
-              end;
-              BoundName := UpperCase(FirstCell.Boundname);
-              if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
-              begin
-                AConnectionList := TRchConnectionObjectList.Create;
-                ConnectionObjectLists.Add(AConnectionList);
-                ConnectionDictionary.Add(BoundName, AConnectionList)
-              end;
-              ACellList.Sort;
-              AScreenObject := nil;
-              for ConnectionIndex := 0 to AConnectionList.Count - 1 do
-              begin
-                ConnectionItem := AConnectionList[ConnectionIndex];
-                if (IFACE = ConnectionItem.IFACE)
-                  and ACellList.SameCells(ConnectionItem.List) then
-                begin
-                  AScreenObject := ConnectionItem.ScreenObject;
-                  AddCells := False;
-                  Break;
-                end;
-              end;
-              if AScreenObject = nil then
               begin
                 AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-                ConnectionItem := TRchConnection.Create;
-                ConnectionItem.ScreenObject := AScreenObject;
-                ConnectionItem.IFACE := IFACE;
-                ConnectionItem.List := ACellList;
-                AConnectionList.Add(ConnectionItem);
-                OtherCellLists.Add(ACellList);
-//                CellLists.OwnsObjects := False;
-//                try
-//                  CellLists[ObjectIndex] := nil;
-//                finally
-//                  CellLists.OwnsObjects := True;
-//                end;
-              end
-              else
-              begin
-                AddItem(AScreenObject, FirstCell, APeriod.Period);
               end;
-            end
-            else
-            begin
-              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
             end;
 
             CellIds.Clear;
@@ -6617,69 +6634,73 @@ begin
 
           // After all the cells in the current period have been read,
           // create a TScreenObject for each cell list
+          AScreenObject := nil;
           for ObjectIndex := 0 to CellLists.Count - 1 do
           begin
             NewScreenObject := False;
             ACellList := CellLists[ObjectIndex];
-            FirstCell := ACellList[0];
-            if (FirstCell.Boundname <> '')
-              and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+            if ACellList.Count > 0 then
             begin
-              if IfaceIndex < 0 then
+              FirstCell := ACellList[0];
+              if (FirstCell.Boundname <> '')
+                and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
               begin
-                IFACE := 0;
+                if IfaceIndex < 0 then
+                begin
+                  IFACE := 0;
+                end
+                else
+                begin
+                  AuxIFACE := FirstCell[IfaceIndex];
+                  Assert(AuxIFACE.ValueType = vtNumeric);
+                  IFACE := Round(AuxIFACE.NumericValue);
+                end;
+                BoundName := UpperCase(FirstCell.Boundname);
+                if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+                begin
+                  AConnectionList := TRivConnectionObjectList.Create;
+                  ConnectionObjectLists.Add(AConnectionList);
+                  ConnectionDictionary.Add(BoundName, AConnectionList)
+                end;
+                ACellList.Sort;
+                AScreenObject := nil;
+                for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+                begin
+                  ConnectionItem := AConnectionList[ConnectionIndex];
+                  if (IFACE = ConnectionItem.IFACE)
+                    and ACellList.SameCells(ConnectionItem.List) then
+                  begin
+                    AScreenObject := ConnectionItem.ScreenObject;
+                    Break;
+                  end;
+                end;
+                if AScreenObject = nil then
+                begin
+                  AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+                  ConnectionItem := TRivConnection.Create;
+                  ConnectionItem.ScreenObject := AScreenObject;
+                  ConnectionItem.IFACE := IFACE;
+                  ConnectionItem.List := ACellList;
+                  AConnectionList.Add(ConnectionItem);
+                  OtherCellLists.Add(ACellList);
+  //                CellLists.OwnsObjects := False;
+  //                try
+  //                  CellLists[ObjectIndex] := nil;
+  //                finally
+  //                  CellLists.OwnsObjects := True;
+  //                end;
+                  NewScreenObject := True;
+                end
+                else
+                begin
+                  AddItem(AScreenObject, FirstCell, APeriod.Period);
+                end;
               end
               else
-              begin
-                AuxIFACE := FirstCell[IfaceIndex];
-                Assert(AuxIFACE.ValueType = vtNumeric);
-                IFACE := Round(AuxIFACE.NumericValue);
-              end;
-              BoundName := UpperCase(FirstCell.Boundname);
-              if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
-              begin
-                AConnectionList := TRivConnectionObjectList.Create;
-                ConnectionObjectLists.Add(AConnectionList);
-                ConnectionDictionary.Add(BoundName, AConnectionList)
-              end;
-              ACellList.Sort;
-              AScreenObject := nil;
-              for ConnectionIndex := 0 to AConnectionList.Count - 1 do
-              begin
-                ConnectionItem := AConnectionList[ConnectionIndex];
-                if (IFACE = ConnectionItem.IFACE)
-                  and ACellList.SameCells(ConnectionItem.List) then
-                begin
-                  AScreenObject := ConnectionItem.ScreenObject;
-                  Break;
-                end;
-              end;
-              if AScreenObject = nil then
               begin
                 AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-                ConnectionItem := TRivConnection.Create;
-                ConnectionItem.ScreenObject := AScreenObject;
-                ConnectionItem.IFACE := IFACE;
-                ConnectionItem.List := ACellList;
-                AConnectionList.Add(ConnectionItem);
-                OtherCellLists.Add(ACellList);
-//                CellLists.OwnsObjects := False;
-//                try
-//                  CellLists[ObjectIndex] := nil;
-//                finally
-//                  CellLists.OwnsObjects := True;
-//                end;
                 NewScreenObject := True;
-              end
-              else
-              begin
-                AddItem(AScreenObject, FirstCell, APeriod.Period);
               end;
-            end
-            else
-            begin
-              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-              NewScreenObject := True;
             end;
 
             CellIds.Clear;
@@ -7294,11 +7315,36 @@ begin
   end;
 end;
 
+type
+  TSfrReachInfo = class(TObject)
+  private
+    PackageData: TSfrPackageItem;
+    CrossSectionFile: string;
+    Connections: TSfrConnectionItem;
+    Diversions: TSfrDiversionItemList;
+    BoundNameObs: TObservationList;
+    IdObs: TObservationList;
+    IsDiversion: Boolean;
+    Added: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function UpstreamReachCount: Integer;
+    function DownstreamReachCount: Integer;
+    function Compatible(OtherInfo: TSfrReachInfo): Boolean;
+  end;
+
+  TSfrReachInfoList = class(TList<TSfrReachInfo>)
+    Terminated: Boolean;
+  end;
+  TSfrReachInfoLists = TObjectList<TSfrReachInfoList>;
+  TSfrReachInfoObjectList = TObjectList<TSfrReachInfo>;
+
 procedure TModflow6Importer.ImportSfr(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
 var
   Model: TPhastModel;
-  SfrPackage: TSfrPackageSelection;
+  SfrPackage: TSfrModflow6PackageSelection;
   Sfr: TSfr;
   CellIds: TCellIdList;
   Map: TimeSeriesMap;
@@ -7309,17 +7355,430 @@ var
   TimeSeriesPackage: TPackage;
   ObsPackageIndex: Integer;
   ObsFiles: TObs;
+  Options: TSfrOptions;
+  SfrReachInfoList: TSfrReachInfoObjectList;
+  PackageData: TSfrPackageData;
+  SfrReachInfo: TSfrReachInfo;
+  CrossSections: TSfrCrossSections;
+  Index: Integer;
+  CrossSectionItem: TCrossSectionItem;
+  Connections: TSfrConnections;
+  ConnectInfo: TSfrConnectionItem;
+  Diversions: TSfrDiversions;
+  ADiversion: TSfrDiversionItem;
+  AReachList: TSfrReachInfoList;
+  ReachListDictionary: TDictionary<Integer, TSfrReachInfoList>;
+  SfrReachInfoLists: TSfrReachInfoLists;
+//  UpstreamReachCount: integer;
+  FirstItem: TSfrReachInfo;
+  ReachesAdded: Boolean;
+  UpstreamReach: Integer;
+  UpstreamIndex: Integer;
+  ObjectIndex: Integer;
+  ReachIndex: Integer;
+  ScreenObjectDictionary: TDictionary<Integer, TScreenObject>;
+  AScreenObject: TScreenObject;
+  ObjectCount: Integer;
+  CellIndex: Integer;
+  BoundaryValues: TMf6BoundaryValueArray;
+  StringValues: TOneDStringArray;
+  DefaultFormula: string;
+  PeriodIndex: Integer;
+  APeriod: TSfrPeriod;
+  SettingIndex: Integer;
+  ASetting: TNumberedItem;
+  ASettingList: TNumberedItemLists;
+  PeriodSettings: TObjectList<TNumberedItemLists>;
+  AReachSettingsList: TNumberedItemList;
+  SplitReachLists: TObjectList<TSfrReachInfoList>;
+  AuxIndex: Integer;
+  NeedToSplit: Boolean;
+  procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
+  begin
+    AReachList := TSfrReachInfoList.Create;
+    SfrReachInfoLists.Add(AReachList);
+    AReachList.Add(SfrReachInfo);
+    SfrReachInfo.Added := True;
+    ReachListDictionary.Add(SfrReachInfo.PackageData.rno, AReachList);
+    if (SfrReachInfo.DownstreamReachCount <> 1)
+      or (SfrReachInfo.Diversions.Count > 0)
+      or (SfrReachInfo.IdObs <> nil) then
+    begin
+      AReachList.Terminated := True;
+    end;
+  end;
+  function RealValuesToFormula(Values: TOneDRealArray): string;
+  var
+    FirstValue: Double;
+    Uniform: Boolean;
+    Index: Integer;
+  begin
+    Assert(Length(Values) > 0);
+    if Length(Values) = 1 then
+    begin
+      result := FortranFloatToStr(Values[0]);
+    end
+    else
+    begin
+      Uniform := True;
+      FirstValue := Values[0];
+      for Index := 1 to Length(Values) - 1 do
+      begin
+        Uniform := Values[Index] = FirstValue;
+        if not Uniform then
+        begin
+          break;
+        end;
+      end;
+      if Uniform then
+      begin
+        result := FortranFloatToStr(Values[0]);
+      end
+      else
+      begin
+        Result := rsObjectImportedValuesR + '(';
+        for Index := 0 to Length(Values) - 1 do
+        begin
+          Result := Result + FortranFloatToStr(Values[Index]);
+          if Index < Length(Values) - 1 then
+          begin
+            Result := Result + ' ,';
+          end;
+        end;
+        Result := Result + ')';
+      end;
+    end;
+  end;
+  function BoundaryValuesToFormula(Values: TMf6BoundaryValueArray): string;
+  var
+    Index: Integer;
+    RealValues: TOneDRealArray;
+    UseRealFormula: Boolean;
+    UseTimeSeries: Boolean;
+  begin
+    result := '';
+    SetLength(RealValues, Length(Values));
+    UseRealFormula := True;
+    for Index := 0 to Length(Values) - 1 do
+    begin
+      if Values[Index].ValueType = vtNumeric then
+      begin
+        RealValues[Index] := Values[Index].NumericValue
+      end
+      else
+      begin
+        UseRealFormula := False;
+        break;
+      end;
+    end;
+    if UseRealFormula then
+    begin
+      result := RealValuesToFormula(RealValues);
+    end
+    else
+    begin
+      UseTimeSeries := True;
+      for Index := 0 to Length(Values) - 1 do
+      begin
+        if (Values[Index].ValueType <> vtString)
+          or (Values[Index].StringValue <> Values[0].StringValue) then
+        begin
+          UseTimeSeries := False;
+          break;
+        end;
+      end;
+      if UseTimeSeries then
+      begin
+        result := Values[0].StringValue
+      end;
+    end;
+  end;
+  function CreateScreenObject(AReachList: TSfrReachInfoList): TScreenObject;
+  var
+    UndoCreateScreenObject: TCustomUndo;
+    NewName: string;
+    CellIds: TCellIdList;
+    CellIndex: Integer;
+    SfrBoundary: TSfrMf6Boundary;
+    Values: TOneDRealArray;
+//    BoundaryValues: TMf6BoundaryValueArray;
+    DefaultRoughness: string;
+  begin
+    Inc(ObjectCount);
+    result := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    NewName := ValidName(Format('Imported_%s_Sfr_%d', [Package.PackageName, ObjectCount]));
+    result.Name := NewName;
+    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    Model.AddScreenObject(result);
+    result.ElevationCount := ecOne;
+    result.SetValuesOfIntersectedCells := True;
+    result.EvaluatedAt := eaBlocks;
+    result.Visible := False;
+    result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+    CellIds:= TCellIdList.Create;
+    try
+      for CellIndex := 0 to AReachList.Count - 1 do
+      begin
+        CellIds.Add(AReachList[CellIndex].PackageData.cellid);
+      end;
+      AddPointsToScreenObject(CellIds, AScreenObject);
+    finally
+      CellIds.Free;
+    end;
+
+    result.CreateSfr6Boundary;
+    SfrBoundary := result.ModflowSfr6Boundary;
+    SetLength(Values, AReachList.Count);
+    SetLength(BoundaryValues, AReachList.Count);
+
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      Values[CellIndex] := AReachList[CellIndex].PackageData.rlen;
+    end;
+    SfrBoundary.ReachLength := RealValuesToFormula(Values);
+
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      Values[CellIndex] := AReachList[CellIndex].PackageData.rwid;
+    end;
+    SfrBoundary.ReachWidth := RealValuesToFormula(Values);
+
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      Values[CellIndex] := AReachList[CellIndex].PackageData.rgrd;
+    end;
+    SfrBoundary.Gradient := RealValuesToFormula(Values);
+
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      Values[CellIndex] := AReachList[CellIndex].PackageData.rtp;
+    end;
+    SfrBoundary.StreambedTop := RealValuesToFormula(Values);
+
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      Values[CellIndex] := AReachList[CellIndex].PackageData.rbth;
+    end;
+    SfrBoundary.StreambedThickness := RealValuesToFormula(Values);
+
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      Values[CellIndex] := AReachList[CellIndex].PackageData.rhk;
+    end;
+    SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values);
+
+
+//    SfrBoundary.HydraulicConductivity := BoundaryValuesToFormula(Values);
+
+//    result.CreateRivBoundary;
+//    result.ModflowRivBoundary.FormulaInterpretation := fiDirect;
+//    if IfaceIndex >= 0 then
+//    begin
+//      AuxIFACE := ACell[IfaceIndex];
+//      Assert(AuxIFACE.ValueType = vtNumeric);
+//      IFACE := Round(AuxIFACE.NumericValue);
+//    end
+//    else
+//    begin
+//      IFACE := 0;
+//    end;
+//    result.IFACE := TIface(IFACE+2);
+//
+//    AddItem(result, ACell, Period);
+
+//    BoundName := UpperCase(ACell.Boundname);
+//    if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
+//    begin
+//      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+//      result.CreateMf6Obs;
+//      General := [];
+//      for ObsIndex := 0 to ObsList.Count - 1 do
+//      begin
+//        AnObs := ObsList[ObsIndex];
+//        if AnsiSameText(AnObs.ObsType, 'riv') then
+//        begin
+//          Include(General, ogRiv);
+//        end
+//        else if AnsiSameText(AnObs.ObsType, 'to-mvr') then
+//        begin
+//          Include(General, ogMvr);
+//        end
+//        else
+//        begin
+//          Assert(False);
+//        end;
+//      end;
+//      result.Modflow6Obs.Name := ACell.Boundname;
+//      result.Modflow6Obs.General := General;
+  end;
+  procedure SplitReachListWithBoundaryValues(var AReachList: TSfrReachInfoList;
+    BoundaryValues: TMf6BoundaryValueArray);
+  var
+    NewReachList: TSfrReachInfoList;
+    Index: Integer;
+    SplitIndex: Integer;
+    TempList: TSfrReachInfoLists;
+  begin
+    TempList := TSfrReachInfoLists.Create;
+    try
+      NewReachList := TSfrReachInfoList.Create;
+      TempList.Add(NewReachList);
+      NewReachList.Add(AReachList[0]);
+      for Index := 1 to AReachList.Count - 1 do
+      begin
+        if BoundaryValues[Index].ValueType = BoundaryValues[Index-1].ValueType then
+        begin
+          if (BoundaryValues[Index].ValueType = vtString) then
+          begin
+            if (BoundaryValues[Index].StringValue = BoundaryValues[Index-1].StringValue) then
+            begin
+              NewReachList.Add(AReachList[Index]);
+            end
+            else
+            begin
+              NewReachList := TSfrReachInfoList.Create;
+              TempList.Add(NewReachList);
+              NewReachList.Add(AReachList[Index]);
+            end;
+          end
+          else
+          begin
+            NewReachList.Add(AReachList[Index]);
+          end;
+        end
+        else
+        begin
+          NewReachList := TSfrReachInfoList.Create;
+          TempList.Add(NewReachList);
+          NewReachList.Add(AReachList[Index]);
+        end;
+      end;
+
+      SfrReachInfoLists[ObjectIndex] := SplitReachLists[0];
+      for SplitIndex := 1 to SplitReachLists.Count - 1 do
+      begin
+        SfrReachInfoLists.Add(SplitReachLists[SplitIndex]);
+      end;
+    finally
+      TempList.Free;
+    end;
+
+    AReachList := SfrReachInfoLists[ObjectIndex];
+  end;
+  procedure SplitReachListWithStrings(var AReachList: TSfrReachInfoList;
+    BoundaryValues: TOneDStringArray);
+  var
+    NewReachList: TSfrReachInfoList;
+    Index: Integer;
+    SplitIndex: Integer;
+    TempList: TSfrReachInfoLists;
+  begin
+    TempList := TSfrReachInfoLists.Create;
+    try
+      NewReachList := TSfrReachInfoList.Create;
+      TempList.Add(NewReachList);
+      NewReachList.Add(AReachList[0]);
+      for Index := 1 to AReachList.Count - 1 do
+      begin
+        if AnsiSameText(BoundaryValues[Index], BoundaryValues[Index-1]) then
+        begin
+          NewReachList.Add(AReachList[Index]);
+        end
+        else
+        begin
+          NewReachList := TSfrReachInfoList.Create;
+          TempList.Add(NewReachList);
+          NewReachList.Add(AReachList[Index]);
+        end;
+      end;
+
+      SfrReachInfoLists[ObjectIndex] := SplitReachLists[0];
+      for SplitIndex := 1 to SplitReachLists.Count - 1 do
+      begin
+        SfrReachInfoLists.Add(SplitReachLists[SplitIndex]);
+      end;
+    finally
+      TempList.Free;
+    end;
+
+    AReachList := SfrReachInfoLists[ObjectIndex];
+  end;
+  procedure UpdateReachSettings(AReachList: TSfrReachInfoList;
+    var BoundaryValues: TMf6BoundaryValueArray; const Key: string);
+  var
+    ReachIndex: Integer;
+    AReachSettingsList: TNumberedItemList;
+    SettingIndex: Integer;
+    ASetting: TNumberedItem;
+    AMf6BoundaryValue: TMf6BoundaryValue;
+  begin
+    for ReachIndex := 0 to AReachList.Count - 1 do
+    begin
+      AReachSettingsList := ASettingList[AReachList[ReachIndex].PackageData.rno-1];
+      for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+      begin
+        ASetting := AReachSettingsList[SettingIndex];
+        if AnsiSameText(ASetting.Name, Key) then
+        begin
+          AMf6BoundaryValue.StringValue := ASetting.StringValue; 
+          AMf6BoundaryValue.NumericValue := ASetting.FloatValue;
+          if AMf6BoundaryValue.StringValue <> '' then
+          begin
+            AMf6BoundaryValue.ValueType := vtString; 
+          end
+          else
+          begin
+            AMf6BoundaryValue.ValueType := vtNumeric; 
+          end;
+          BoundaryValues[ReachIndex]  := AMf6BoundaryValue;
+        end;
+      end;
+    end;
+  end;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing SFR package');
   end;
   Model := frmGoPhast.PhastModel;
-  SfrPackage := Model.ModflowPackages.SfrPackage;
+  SfrPackage := Model.ModflowPackages.SfrModflow6Package;
   SfrPackage.IsSelected := True;
-  Model.DataArrayManager.CreateInitialDataSets;
 
   Sfr := Package.Package as TSfr;
+  Options := Sfr.Options;
+
+  if Options.MAXIMUM_ITERATIONS.Used then
+  begin
+    SfrPackage.MaxIteration := Options.MAXIMUM_ITERATIONS.Value;
+  end;
+
+  if Options.MAXIMUM_PICARD_ITERATIONS.Used then
+  begin
+    SfrPackage.MaxPicardIteration := Options.MAXIMUM_PICARD_ITERATIONS.Value;
+  end;
+
+  if Options.MAXIMUM_DEPTH_CHANGE.Used then
+  begin
+    SfrPackage.MaxDepthChange := Options.MAXIMUM_DEPTH_CHANGE.Value;
+  end;
+
+  SfrPackage.SaveStageFile := Options.STAGE;
+  SfrPackage.SaveBudgetFile := Options.BUDGET;
+  SfrPackage.PrintStage := Options.PRINT_STAGE;
+  SfrPackage.PrintFlows := Options.PRINT_FLOWS;
+
+  if Options.BUDGETCSV then
+  begin
+    SfrPackage.SaveGwtBudgetCsv := True;
+  end;
+
+  SfrPackage.WriteConvergenceData := Options.PACKAGE_CONVERGENCE;
+
+  Model.DataArrayManager.CreateInitialDataSets;
+
 
   CellIds := TCellIdList.Create;
   Map := TimeSeriesMap.Create;
@@ -7349,6 +7808,317 @@ begin
       OnUpdateStatusBar(self, 'importing SFR package');
     end;
 
+    SfrReachInfoList := TSfrReachInfoObjectList.Create;
+    try
+      // read data for each reach.
+
+      PackageData := Sfr.PackageData;
+      SfrReachInfoList.Capacity := PackageData.Count;
+      for Index := 0 to PackageData.Count - 1 do
+      begin
+        SfrReachInfo := TSfrReachInfo.Create;
+        SfrReachInfoList.Add(SfrReachInfo);
+        SfrReachInfo.PackageData := PackageData[Index];
+
+        if SfrReachInfo.PackageData.Boundname <> '' then
+        begin
+          if not BoundNameObsDictionary.TryGetValue(
+            UpperCase(SfrReachInfo.PackageData.Boundname),
+            SfrReachInfo.BoundNameObs) then
+          begin
+            SfrReachInfo.BoundNameObs := nil
+          end;
+        end;
+
+        if not NumberObsDictionary.TryGetValue(SfrReachInfo.PackageData.rno,
+          SfrReachInfo.IdObs) then
+        begin
+          SfrReachInfo.IdObs := nil;
+        end;
+      end;
+
+      CrossSections := Sfr.CrossSections;
+      for Index := 0 to CrossSections.Count - 1 do
+      begin
+        CrossSectionItem := CrossSections[Index];
+        SfrReachInfo := SfrReachInfoList[CrossSectionItem.rno-1];
+        Assert(SfrReachInfo.PackageData.rno = CrossSectionItem.rno);
+        SfrReachInfo.CrossSectionFile := CrossSectionItem.tab6_filename;
+      end;
+
+      Connections := Sfr.Connections;
+      for Index := 0 to Connections.Count - 1 do
+      begin
+        ConnectInfo := Connections[Index];
+        SfrReachInfo := SfrReachInfoList[ConnectInfo.rno-1];
+        Assert(SfrReachInfo.PackageData.rno = ConnectInfo.rno);
+        SfrReachInfo.Connections := ConnectInfo;
+      end;
+
+      Diversions := Sfr.Diversions;
+      for Index := 0 to Diversions.Count - 1 do
+      begin
+        ADiversion := Diversions[Index];
+        SfrReachInfo := SfrReachInfoList[ADiversion.rno-1];
+        Assert(SfrReachInfo.PackageData.rno = ADiversion.rno);
+        SfrReachInfo.Diversions.Add(ADiversion);
+
+        SfrReachInfo := SfrReachInfoList[ADiversion.iconr-1];
+        SfrReachInfo.IsDiversion := True;
+      end;
+
+      SfrReachInfoLists := TSfrReachInfoLists.Create;
+      ReachListDictionary := TDictionary<Integer, TSfrReachInfoList>.Create;
+      try
+        for Index := 0 to SfrReachInfoList.Count - 1 do
+        begin
+          SfrReachInfo := SfrReachInfoList[Index];
+          if  (SfrReachInfo.UpstreamReachCount <> 1)
+            or SfrReachInfo.IsDiversion
+            then
+          begin
+            CreateReachList(SfrReachInfo);
+          end;
+        end;
+
+        ReachesAdded := True;
+        while ReachesAdded do
+        begin
+          ReachesAdded := False;
+          for Index := 0 to SfrReachInfoList.Count - 1 do
+          begin
+            SfrReachInfo := SfrReachInfoList[Index];
+            if SfrReachInfo.Added then
+            begin
+              Continue;
+            end;
+            UpstreamReach := 0;
+            for UpstreamIndex := 0 to Length(SfrReachInfo.Connections.ic) - 1 do
+            begin
+              if SfrReachInfo.Connections.ic[UpstreamIndex] > 0 then
+              begin
+                UpstreamReach := SfrReachInfo.Connections.ic[UpstreamIndex];
+                break;
+              end;
+            end;
+            Assert(UpstreamReach > 0);
+            if ReachListDictionary.TryGetValue(UpstreamReach, AReachList) then
+            begin
+              if AReachList.Terminated then
+              begin
+                CreateReachList(SfrReachInfo);
+                ReachesAdded := True;
+              end
+              else
+              begin
+                FirstItem := AReachList[0];
+                if FirstItem.Compatible(SfrReachInfo) then
+                begin
+                  AReachList.Add(SfrReachInfo);
+                  SfrReachInfo.Added := True;
+                  ReachListDictionary.Remove(UpstreamReach);
+                  ReachListDictionary.Add(SfrReachInfo.PackageData.rno, AReachList);
+                  ReachesAdded := True;
+
+                  if (SfrReachInfo.DownstreamReachCount <> 1)
+                    or (SfrReachInfo.Diversions.Count > 0)
+                    or (SfrReachInfo.IdObs <> nil) then
+                  begin
+                    AReachList.Terminated := True;
+                  end;
+
+                end
+                else
+                begin
+                  AReachList.Terminated := True;
+                  CreateReachList(SfrReachInfo);
+                  ReachesAdded := True;
+                end;
+              end;
+            end;
+          end;
+        end;
+
+        for Index := 0 to SfrReachInfoList.Count - 1 do
+        begin
+          SfrReachInfo := SfrReachInfoList[Index];
+          Assert(SfrReachInfo.Added);
+        end;
+
+        PeriodSettings := TObjectList<TNumberedItemLists>.Create;
+        try
+          for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+          begin
+            ASettingList := TNumberedItemLists.Create;
+            PeriodSettings.Add(ASettingList);
+
+            for ReachIndex := 0 to PackageData.Count - 1 do
+            begin
+              AReachSettingsList := TNumberedItemList.Create;
+              ASettingList.Add(AReachSettingsList);
+            end;
+
+            APeriod := Sfr.Periods[PeriodIndex];
+            for SettingIndex := 0 to APeriod.Count - 1 do
+            begin
+              ASetting := APeriod[SettingIndex];
+              AReachSettingsList := ASettingList[ASetting.IdNumber-1];
+              AReachSettingsList.Add(ASetting);
+            end;
+          end;
+
+          ObjectCount := 0;
+          ReachListDictionary.Clear;
+          ScreenObjectDictionary := TDictionary<Integer, TScreenObject>.Create;
+          try
+            ObjectIndex := 0;
+            While ObjectIndex < SfrReachInfoLists.Count do
+            begin
+              AReachList := SfrReachInfoLists[ObjectIndex];
+
+              SetLength(BoundaryValues, AReachList.Count);
+              for CellIndex := 0 to AReachList.Count - 1 do
+              begin
+                BoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.man;
+              end;
+              DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+              if DefaultFormula = '' then
+              begin
+                SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
+                SetLength(BoundaryValues, AReachList.Count);
+              end;
+
+              for CellIndex := 0 to AReachList.Count - 1 do
+              begin
+                BoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.ustrf;
+              end;
+              DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+              if DefaultFormula = '' then
+              begin
+                SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
+                SetLength(BoundaryValues, AReachList.Count);
+              end;
+
+              for AuxIndex := 0 to Options.Count - 1 do
+              begin
+                for CellIndex := 0 to AReachList.Count - 1 do
+                begin
+                  BoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.Aux[AuxIndex];
+                end;
+                DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
+                  SetLength(BoundaryValues, AReachList.Count);
+                end;
+              end;
+
+              for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+              begin
+                ASettingList := PeriodSettings[PeriodIndex];
+                SetLength(StringValues, AReachList.Count);
+                for ReachIndex := 0 to AReachList.Count - 1 do
+                begin
+                  StringValues[ReachIndex] := 'ACTIVE';
+                end;
+                NeedToSplit := False;
+                for ReachIndex := 0 to AReachList.Count - 1 do
+                begin
+                  AReachSettingsList := ASettingList[AReachList[ReachIndex].PackageData.rno-1];
+                  for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+                  begin
+                    ASetting := AReachSettingsList[SettingIndex];
+                    if AnsiSameText(ASetting.Name, 'STATUS') then
+                    begin
+                      StringValues[ReachIndex] := ASetting.StringValue;
+                      if not AnsiSameText(ASetting.StringValue , 'ACTIVE') then
+                      begin
+                        NeedToSplit := True;
+                        break;
+                      end;
+                    end;
+                  end;
+                end;
+                if NeedToSplit then
+                begin
+                  SplitReachListWithStrings(AReachList, StringValues);
+                  SetLength(BoundaryValues, AReachList.Count);
+                  SetLength(StringValues, AReachList.Count);
+                end;
+                
+                for ReachIndex := 0 to AReachList.Count - 1 do
+                begin
+                  StringValues[ReachIndex] := AReachList[ReachIndex].CrossSectionFile;
+                end;
+                NeedToSplit := False;
+                for ReachIndex := 0 to AReachList.Count - 1 do
+                begin
+                  AReachSettingsList := ASettingList[AReachList[ReachIndex].PackageData.rno-1];
+                  for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+                  begin
+                    ASetting := AReachSettingsList[SettingIndex];
+                    if AnsiSameText(ASetting.Name, 'CROSS_SECTION') then
+                    begin
+                      if not AnsiSameText(ASetting.StringValue, StringValues[ReachIndex]) then
+                      begin
+                        StringValues[ReachIndex] := ASetting.StringValue;
+                        NeedToSplit := True;
+                        break;
+                      end;
+                    end;
+                  end;
+                end;
+                if NeedToSplit then
+                begin
+                  SplitReachListWithStrings(AReachList, StringValues);
+                  SetLength(BoundaryValues, AReachList.Count);
+                  SetLength(StringValues, AReachList.Count);
+                end;
+
+                for ReachIndex := 0 to AReachList.Count - 1 do
+                begin
+                  BoundaryValues[ReachIndex] := AReachList[ReachIndex].PackageData.man;
+                end;
+                UpdateReachSettings(AReachList, BoundaryValues, 'MANNING');
+                DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
+                  SetLength(BoundaryValues, AReachList.Count);
+                end;
+                
+              end;
+
+              AScreenObject := CreateScreenObject(AReachList);
+              for ReachIndex := 0 to AReachList.Count - 1 do
+              begin
+                SfrReachInfo := AReachList[ReachIndex];
+                ReachListDictionary.Add(SfrReachInfo.PackageData.rno, AReachList);
+                ScreenObjectDictionary.Add(SfrReachInfo.PackageData.rno, AScreenObject);
+              end;
+
+
+              Inc(ObjectIndex);
+            end;
+          finally
+            ScreenObjectDictionary.Free;
+          end;
+        finally
+          PeriodSettings.Free;
+        end;
+
+
+      finally
+        ReachListDictionary.Free;
+        SfrReachInfoLists.Free;
+      end;
+      // Put all reaches into lists.
+      // Each list will be used to create a TScreenObject.
+
+    finally
+      SfrReachInfoList.Free;
+    end;
+
     // Find singlely connected reaches.
     //  => 0 or 1 upstream reaches,
     //     0 or 1 downstream reaches.
@@ -7359,7 +8129,7 @@ begin
     //     if number of downstream reaches = 0, end of connected reaches.
 
     // NEW CLASSES
-    // descenent of TSfrPackageItemList with key properties:
+    // descendent of TSfrPackageItemList with key properties:
     //    cross section
     //    observations the same
     //    terminated.
@@ -7368,9 +8138,10 @@ begin
 
     // STRATEGY
     // 1. sort reaches in order from upstream to downstream
-    //    Put all reaches with now upstream reaches at the beginning of the list.
+    //    Put all reaches with no upstream reaches at the beginning of the list.
     //    Then add downstream reaches from those until there are no more.
-    //    For reaches with more than one upstream reach, don't add until all their upstream reaches have been added.
+    //    For reaches with more than one upstream reach, don't add until all
+    //    their upstream reaches have been added.
     //
     // 2. for each TSfrPackageItem, get a TSfrPackageItemList for it.
     //   If the upstream reach for the TSfrPackageItem is 0,
@@ -7379,7 +8150,7 @@ begin
     //     assign cross section to the list,
     //     and add observations to the list.
     //     Terminate list if needed.
-    //   If the upstream reach  is not zero, find upstream list.
+    //   If the upstream reach is not zero, find upstream list.
     //     if not found Error
     //     if found
     //       is upstream terminated
@@ -8819,69 +9590,73 @@ begin
 
           // After all the cells in the current period have been read,
           // create a TScreenObject for each cell list
+          AScreenObject := nil;
           for ObjectIndex := 0 to CellLists.Count - 1 do
           begin
             NewScreenObject := False;
             ACellList := CellLists[ObjectIndex];
-            FirstCell := ACellList[0];
-            if (FirstCell.Boundname <> '')
-              and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
+            if ACellList.Count > 0 then
             begin
-              if IfaceIndex < 0 then
+              FirstCell := ACellList[0];
+              if (FirstCell.Boundname <> '')
+                and BoundNameObsDictionary.ContainsKey(UpperCase(FirstCell.Boundname)) then
               begin
-                IFACE := 0;
+                if IfaceIndex < 0 then
+                begin
+                  IFACE := 0;
+                end
+                else
+                begin
+                  AuxIFACE := FirstCell[IfaceIndex];
+                  Assert(AuxIFACE.ValueType = vtNumeric);
+                  IFACE := Round(AuxIFACE.NumericValue);
+                end;
+                BoundName := UpperCase(FirstCell.Boundname);
+                if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
+                begin
+                  AConnectionList := TWelConnectionObjectList.Create;
+                  ConnectionObjectLists.Add(AConnectionList);
+                  ConnectionDictionary.Add(BoundName, AConnectionList)
+                end;
+                ACellList.Sort;
+                AScreenObject := nil;
+                for ConnectionIndex := 0 to AConnectionList.Count - 1 do
+                begin
+                  ConnectionItem := AConnectionList[ConnectionIndex];
+                  if (IFACE = ConnectionItem.IFACE)
+                    and ACellList.SameCells(ConnectionItem.List) then
+                  begin
+                    AScreenObject := ConnectionItem.ScreenObject;
+                    Break;
+                  end;
+                end;
+                if AScreenObject = nil then
+                begin
+                  AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
+                  ConnectionItem := TWelConnection.Create;
+                  ConnectionItem.ScreenObject := AScreenObject;
+                  ConnectionItem.IFACE := IFACE;
+                  ConnectionItem.List := ACellList;
+                  AConnectionList.Add(ConnectionItem);
+                  OtherCellLists.Add(ACellList);
+  //                CellLists.OwnsObjects := False;
+  //                try
+  //                  CellLists[ObjectIndex] := nil;
+  //                finally
+  //                  CellLists.OwnsObjects := True;
+  //                end;
+                  NewScreenObject := True;
+                end
+                else
+                begin
+                  AddItem(AScreenObject, FirstCell, APeriod.Period);
+                end;
               end
               else
-              begin
-                AuxIFACE := FirstCell[IfaceIndex];
-                Assert(AuxIFACE.ValueType = vtNumeric);
-                IFACE := Round(AuxIFACE.NumericValue);
-              end;
-              BoundName := UpperCase(FirstCell.Boundname);
-              if not ConnectionDictionary.TryGetValue(BoundName, AConnectionList) then
-              begin
-                AConnectionList := TWelConnectionObjectList.Create;
-                ConnectionObjectLists.Add(AConnectionList);
-                ConnectionDictionary.Add(BoundName, AConnectionList)
-              end;
-              ACellList.Sort;
-              AScreenObject := nil;
-              for ConnectionIndex := 0 to AConnectionList.Count - 1 do
-              begin
-                ConnectionItem := AConnectionList[ConnectionIndex];
-                if (IFACE = ConnectionItem.IFACE)
-                  and ACellList.SameCells(ConnectionItem.List) then
-                begin
-                  AScreenObject := ConnectionItem.ScreenObject;
-                  Break;
-                end;
-              end;
-              if AScreenObject = nil then
               begin
                 AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-                ConnectionItem := TWelConnection.Create;
-                ConnectionItem.ScreenObject := AScreenObject;
-                ConnectionItem.IFACE := IFACE;
-                ConnectionItem.List := ACellList;
-                AConnectionList.Add(ConnectionItem);
-                OtherCellLists.Add(ACellList);
-//                CellLists.OwnsObjects := False;
-//                try
-//                  CellLists[ObjectIndex] := nil;
-//                finally
-//                  CellLists.OwnsObjects := True;
-//                end;
                 NewScreenObject := True;
-              end
-              else
-              begin
-                AddItem(AScreenObject, FirstCell, APeriod.Period);
               end;
-            end
-            else
-            begin
-              AScreenObject := CreateScreenObject(FirstCell, APeriod.Period);
-              NewScreenObject := True;
             end;
 
             CellIds.Clear;
@@ -9259,6 +10034,56 @@ destructor TEvtConnection.Destroy;
 begin
   List.Free;
   inherited;
+end;
+
+{ TSfrReachInfo }
+
+function TSfrReachInfo.Compatible(OtherInfo: TSfrReachInfo): Boolean;
+begin
+  result := (CrossSectionFile = OtherInfo.CrossSectionFile)
+    and (BoundNameObs = OtherInfo.BoundNameObs)
+    and (IdObs = nil)
+    and (OtherInfo.IdObs = nil)
+end;
+
+constructor TSfrReachInfo.Create;
+begin
+  inherited;
+  Diversions := TSfrDiversionItemList.Create;
+end;
+
+destructor TSfrReachInfo.Destroy;
+begin
+  Diversions.Free;
+  inherited;
+end;
+
+function TSfrReachInfo.DownstreamReachCount: Integer;
+var
+  Index: Integer;
+begin
+  result := 0;
+  for Index := 0 to Length(Connections.ic) - 1 do
+  begin
+    if Connections.ic[Index] < 0 then
+    begin
+      Inc(result);
+    end;
+  end;
+end;
+
+function TSfrReachInfo.UpstreamReachCount: Integer;
+var
+  Index: Integer;
+begin
+  result := 0;
+  for Index := 0 to Length(Connections.ic) - 1 do
+  begin
+    if Connections.ic[Index] > 0 then
+    begin
+      Inc(result);
+    end;
+  end;
 end;
 
 end.

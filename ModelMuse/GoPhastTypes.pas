@@ -33,7 +33,8 @@ type
   }
   TThreeDRealArray = array of TTwoDRealArray;
 
-  TTwoDStringArray = array of array of string;
+  TOneDStringArray = array of string;
+  TTwoDStringArray = array of TOneDStringArray;
 
   {@abstract(@name is a pointer to a TPoint2D.)
   }

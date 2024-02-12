@@ -29,6 +29,8 @@ type
     UNIT_CONVERSION: TRealOption;
     FMAXIMUM_DEPTH_CHANGE: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
@@ -45,6 +47,9 @@ type
     property MAXIMUM_ITERATIONS: TIntegerOption read FMAXIMUM_ITERATIONS;
     property LENGTH_CONVERSION: TRealOption read FLENGTH_CONVERSION;
     property TIME_CONVERSION: TRealOption read FTIME_CONVERSION;
+    property MAXIMUM_DEPTH_CHANGE: TRealOption read FMAXIMUM_DEPTH_CHANGE;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
   end;
 
   TSfrDimensions = class(TCustomMf6Persistent)
@@ -139,9 +144,10 @@ type
 
   TSfrConnectionItem = record
   private
+    procedure Initialize;
+  public
     rno: Integer;
     ic: array of Integer;
-    procedure Initialize;
   end;
 
   TSfrConnectionItemList = TList<TSfrConnectionItem>;
@@ -232,13 +238,15 @@ type
     property Options: TSfrOptions read FOptions;
     property Connections: TSfrConnections read FConnections;
     property PackageData: TSfrPackageData read FPackageData;
+    property CrossSections: TSfrCrossSections read FSfrCrossSections;
+    property Diversions: TSfrDiversions read FSfrDiversions;
     property PeriodCount: Integer read GetPeriodCount;
     property Periods[Index: Integer]: TSfrPeriod read GetPeriod;
     property TimeSeriesCount: Integer read GetTimeSeriesCount;
     property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
     property ObservationCount: Integer read GetObservationCount;
     property Observations[Index: Integer]: TPackage read GetObservation;
-    function GetCrossSection(FileName: string): TPackage;
+    function GetCrossSectionPackage(FileName: string): TPackage;
   end;
 
 
@@ -270,6 +278,16 @@ begin
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
+end;
+
+function TSfrOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  Result := FAUXILIARY[Index];
+end;
+
+function TSfrOptions.GetCount: Integer;
+begin
+  Result := FAUXILIARY.Count;
 end;
 
 procedure TSfrOptions.Initialize;
@@ -1208,7 +1226,7 @@ begin
   inherited;
 end;
 
-function TSfr.GetCrossSection(FileName: string): TPackage;
+function TSfr.GetCrossSectionPackage(FileName: string): TPackage;
 begin
   if not FCosssSectionDictionary.TryGetValue(FileName, result) then
   begin

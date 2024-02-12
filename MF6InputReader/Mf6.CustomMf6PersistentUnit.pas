@@ -74,6 +74,7 @@ type
   end;
 
   TBoundaryValueList = TList<TMf6BoundaryValue>;
+  TMf6BoundaryValueArray = TArray<TMf6BoundaryValue>;
 
   TDoubleList = TList<Double>;
 
@@ -258,6 +259,8 @@ type
   TNumberedItemList = class(TList<TNumberedItem>)
     procedure Sort;
   end;
+
+  TNumberedItemLists = TObjectList<TNumberedItemList>;
 
   TExtendedList = TList<Extended>;
 
