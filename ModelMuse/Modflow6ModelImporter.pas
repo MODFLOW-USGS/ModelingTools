@@ -3,7 +3,7 @@ unit Modflow6ModelImporter;
 interface
 
 uses
-  System.Classes, System.IOUtils, Vcl.Dialogs, System.SysUtils, System.UITypes,
+  Winapi.Windows, System.Classes, System.IOUtils, Vcl.Dialogs, System.SysUtils, System.UITypes,
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
   ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
   System.Generics.Defaults, Mf6.ObsFileReaderUnit;
@@ -143,7 +143,8 @@ uses
   Mf6.DrnFileReaderUnit, ModflowDrnUnit, Mf6.RivFileReaderUnit, ModflowRivUnit,
   Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
-  ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit;
+  ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit,
+  Mf6.CrossSectionFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -5304,7 +5305,14 @@ begin
     AScreenObject.AddPoint(APoint, True);
     if ThreeD then
     begin
-      AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+      if CellIds.Count > 1 then
+      begin
+        AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+      end
+      else
+      begin
+        AScreenObject.ElevationFormula := FortranFloatToStr(ElementCenter.RotatedLocation.z);
+      end;
     end;
   end;
 end;
@@ -7393,6 +7401,24 @@ var
   SplitReachLists: TObjectList<TSfrReachInfoList>;
   AuxIndex: Integer;
   NeedToSplit: Boolean;
+  ManningBoundaryValues: TMf6BoundaryValueArray;
+  UpstreamFractionBoundaryValues: TMf6BoundaryValueArray;
+  StageBoundaryValues: TMf6BoundaryValueArray;
+  InflowBoundaryValues: TMf6BoundaryValueArray;
+  RainfallBoundaryValues: TMf6BoundaryValueArray;
+  EvaporationBoundaryValues: TMf6BoundaryValueArray;
+  RunoffBoundaryValues: TMf6BoundaryValueArray;
+  LastReach: TSfrReachInfo;
+  DownstreamIndex: Integer;
+  ReachNo: Integer;
+  DownStreamSegment: TScreenObject;
+  IntItem: TIntegerItem;
+  DiversionIndex: Integer;
+  DiversionSegment: TScreenObject;
+  SfrDiversions: TDiversionCollection;
+  DiversionItem: TSDiversionItem;
+  DiversionFormula: string;
+  SfrItem: TSfrMf6Item;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -7407,11 +7433,12 @@ var
       AReachList.Terminated := True;
     end;
   end;
-  function RealValuesToFormula(Values: TOneDRealArray): string;
+  function RealValuesToFormula(Values: TOneDRealArray; Name: string; ScreenObject: TScreenObject = nil): string;
   var
     FirstValue: Double;
     Uniform: Boolean;
     Index: Integer;
+    ImportedData: TValueArrayItem;
   begin
     Assert(Length(Values) > 0);
     if Length(Values) = 1 then
@@ -7436,20 +7463,22 @@ var
       end
       else
       begin
-        Result := rsObjectImportedValuesR + '(';
-        for Index := 0 to Length(Values) - 1 do
+        if ScreenObject <> nil then
         begin
-          Result := Result + FortranFloatToStr(Values[Index]);
-          if Index < Length(Values) - 1 then
+          ImportedData := ScreenObject.ImportedValues.Add;
+          ImportedData.Name := Name;
+          ImportedData.Values.DataType := rdtDouble;
+          ImportedData.Values.Count := Length(Values);
+          for Index := 0 to Length(Values) - 1 do
           begin
-            Result := Result + ' ,';
+            ImportedData.Values.RealValues[Index] := Values[Index];
           end;
         end;
-        Result := Result + ')';
+        Result := rsObjectImportedValuesR + '("' + Name + '")';
       end;
     end;
   end;
-  function BoundaryValuesToFormula(Values: TMf6BoundaryValueArray): string;
+  function BoundaryValuesToFormula(Values: TMf6BoundaryValueArray; Name: string; ScreenObject: TScreenObject = nil): string;
   var
     Index: Integer;
     RealValues: TOneDRealArray;
@@ -7473,7 +7502,7 @@ var
     end;
     if UseRealFormula then
     begin
-      result := RealValuesToFormula(RealValues);
+      result := RealValuesToFormula(RealValues, Name, ScreenObject);
     end
     else
     begin
@@ -7493,6 +7522,39 @@ var
       end;
     end;
   end;
+  procedure UpdateReachSettings(AReachList: TSfrReachInfoList;
+    var BoundaryValues: TMf6BoundaryValueArray; const Key: string);
+  var
+    ReachIndex: Integer;
+    AReachSettingsList: TNumberedItemList;
+    SettingIndex: Integer;
+    ASetting: TNumberedItem;
+    AMf6BoundaryValue: TMf6BoundaryValue;
+  begin
+    for ReachIndex := 0 to AReachList.Count - 1 do
+    begin
+      AReachSettingsList := ASettingList[AReachList[ReachIndex].PackageData.rno-1];
+      for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+      begin
+        ASetting := AReachSettingsList[SettingIndex];
+        if AnsiSameText(ASetting.Name, Key) then
+        begin
+          AMf6BoundaryValue.StringValue := ASetting.StringValue;
+          AMf6BoundaryValue.NumericValue := ASetting.FloatValue;
+          if AMf6BoundaryValue.StringValue <> '' then
+          begin
+            AMf6BoundaryValue.ValueType := vtString;
+          end
+          else
+          begin
+            AMf6BoundaryValue.ValueType := vtNumeric;
+          end;
+          BoundaryValues[ReachIndex]  := AMf6BoundaryValue;
+          break;
+        end;
+      end;
+    end;
+  end;
   function CreateScreenObject(AReachList: TSfrReachInfoList): TScreenObject;
   var
     UndoCreateScreenObject: TCustomUndo;
@@ -7501,10 +7563,18 @@ var
     CellIndex: Integer;
     SfrBoundary: TSfrMf6Boundary;
     Values: TOneDRealArray;
-//    BoundaryValues: TMf6BoundaryValueArray;
-    DefaultRoughness: string;
+    PeriodIndex: Integer;
+    SfrItem: TSfrMf6Item;
+    SettingIndex: Integer;
+    ASetting: TNumberedItem;
+    ACrossSectionPackage: TPackage;
+    CrossSection: TCrossSection;
+    RowIndex: Integer;
+    XsecPoint: TSfr6CrossSectionPoint;
+    TableRow: TCrossSectionTableItem;
   begin
     Inc(ObjectCount);
+
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
     NewName := ValidName(Format('Imported_%s_Sfr_%d', [Package.PackageName, ObjectCount]));
@@ -7524,52 +7594,195 @@ var
       begin
         CellIds.Add(AReachList[CellIndex].PackageData.cellid);
       end;
-      AddPointsToScreenObject(CellIds, AScreenObject);
+      AddPointsToScreenObject(CellIds, result);
     finally
       CellIds.Free;
     end;
 
     result.CreateSfr6Boundary;
     SfrBoundary := result.ModflowSfr6Boundary;
+    SfrBoundary.SegmentNumber := ObjectCount;
     SetLength(Values, AReachList.Count);
-    SetLength(BoundaryValues, AReachList.Count);
 
     for CellIndex := 0 to AReachList.Count - 1 do
     begin
       Values[CellIndex] := AReachList[CellIndex].PackageData.rlen;
     end;
-    SfrBoundary.ReachLength := RealValuesToFormula(Values);
+    SfrBoundary.ReachLength := RealValuesToFormula(Values, 'ReachLength', result);
 
     for CellIndex := 0 to AReachList.Count - 1 do
     begin
       Values[CellIndex] := AReachList[CellIndex].PackageData.rwid;
     end;
-    SfrBoundary.ReachWidth := RealValuesToFormula(Values);
+    SfrBoundary.ReachWidth := RealValuesToFormula(Values, 'ReachWidth', result);
 
     for CellIndex := 0 to AReachList.Count - 1 do
     begin
       Values[CellIndex] := AReachList[CellIndex].PackageData.rgrd;
     end;
-    SfrBoundary.Gradient := RealValuesToFormula(Values);
+    SfrBoundary.Gradient := RealValuesToFormula(Values, 'ReachGradient', result);
 
     for CellIndex := 0 to AReachList.Count - 1 do
     begin
       Values[CellIndex] := AReachList[CellIndex].PackageData.rtp;
     end;
-    SfrBoundary.StreambedTop := RealValuesToFormula(Values);
+    SfrBoundary.StreambedTop := RealValuesToFormula(Values, 'Reachtop', result);
 
     for CellIndex := 0 to AReachList.Count - 1 do
     begin
       Values[CellIndex] := AReachList[CellIndex].PackageData.rbth;
     end;
-    SfrBoundary.StreambedThickness := RealValuesToFormula(Values);
+    SfrBoundary.StreambedThickness := RealValuesToFormula(Values, 'StreambedThickness', result);
 
     for CellIndex := 0 to AReachList.Count - 1 do
     begin
       Values[CellIndex] := AReachList[CellIndex].PackageData.rhk;
     end;
-    SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values);
+    SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values, 'ReachK', result);
 
+    if AReachList[0].CrossSectionFile <> '' then
+    begin
+      ACrossSectionPackage := Sfr.GetCrossSectionPackage(AReachList[0].CrossSectionFile);
+      CrossSection := ACrossSectionPackage.Package as TCrossSection;
+      SfrBoundary.CrossSection.UseCrossSection := True;
+      SfrBoundary.CrossSection.UseManningFraction := (CrossSection.Dimensions.NCOL = 3);
+
+      for RowIndex := 0 to CrossSection.Table.Count - 1 do
+      begin
+        TableRow := CrossSection.Table[RowIndex];
+        XsecPoint := SfrBoundary.CrossSection.Add;
+
+        XsecPoint.XFraction := TableRow.xfraction;
+        XsecPoint.Height := TableRow.height;
+        if SfrBoundary.CrossSection.UseManningFraction then
+        begin
+          if TableRow.manfraction.Used then
+          begin
+            XsecPoint.ManningsFraction := TableRow.manfraction.Value;
+          end
+          else
+          begin
+            XsecPoint.ManningsFraction := 0;
+          end;
+        end;
+      end;
+    end;
+
+    SetLength(ManningBoundaryValues, AReachList.Count);
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      ManningBoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.man;
+    end;
+
+    SetLength(UpstreamFractionBoundaryValues, AReachList.Count);
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      UpstreamFractionBoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.ustrf;
+    end;
+
+    SetLength(StageBoundaryValues, AReachList.Count);
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      StageBoundaryValues[CellIndex].ValueType := vtNumeric;
+      StageBoundaryValues[CellIndex].NumericValue := AReachList[CellIndex].PackageData.rtp;
+    end;
+
+    SetLength(InflowBoundaryValues, AReachList.Count);
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      InflowBoundaryValues[CellIndex].ValueType := vtNumeric;
+      InflowBoundaryValues[CellIndex].NumericValue := 0;
+    end;
+
+    SetLength(RainfallBoundaryValues, AReachList.Count);
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      RainfallBoundaryValues[CellIndex].ValueType := vtNumeric;
+      RainfallBoundaryValues[CellIndex].NumericValue := 0;
+    end;
+
+    SetLength(EvaporationBoundaryValues, AReachList.Count);
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      EvaporationBoundaryValues[CellIndex].ValueType := vtNumeric;
+      EvaporationBoundaryValues[CellIndex].NumericValue := 0;
+    end;
+
+    SetLength(RunoffBoundaryValues, AReachList.Count);
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      RunoffBoundaryValues[CellIndex].ValueType := vtNumeric;
+      RunoffBoundaryValues[CellIndex].NumericValue := 0;
+    end;
+
+    for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+    begin
+      APeriod := Sfr.Periods[PeriodIndex];
+      ASettingList := PeriodSettings[PeriodIndex];
+
+      SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
+
+      SfrItem.StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+      if PeriodIndex < Sfr.PeriodCount - 1 then
+      begin
+        SfrItem.EndTime := Model.ModflowStressPeriods[APeriod.Period].StartTime;
+      end
+      else
+      begin
+        SfrItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
+      end;
+
+      SfrItem.StreamStatus := ssActive;
+      AReachSettingsList := ASettingList[AReachList[0].PackageData.rno-1];
+      for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+      begin
+        ASetting := AReachSettingsList[SettingIndex];
+        if AnsiSameText(ASetting.Name, 'STATUS') then
+        begin
+          if AnsiSameText(ASetting.StringValue, 'INACTIVE') then
+          begin
+            SfrItem.StreamStatus := ssInactive;
+          end
+          else if AnsiSameText(ASetting.StringValue, 'SIMPLE') then
+          begin
+            SfrItem.StreamStatus := ssSimple;
+          end
+          else
+          begin
+            Assert(AnsiSameText(ASetting.StringValue, 'ACTIVE'));
+          end;
+          Break;
+        end;
+      end;
+
+      UpdateReachSettings(AReachList, ManningBoundaryValues, 'MANNING');
+      SfrItem.Roughness := BoundaryValuesToFormula(ManningBoundaryValues,
+        Format('Roughness_%d', [APeriod.Period]), result);
+
+      UpdateReachSettings(AReachList, UpstreamFractionBoundaryValues, 'UPSTREAM_FRACTION');
+      SfrItem.UpstreamFraction := BoundaryValuesToFormula(UpstreamFractionBoundaryValues,
+        Format('UpstreamFraction_%d', [APeriod.Period]), result);
+
+      UpdateReachSettings(AReachList, StageBoundaryValues, 'STAGE');
+      SfrItem.Stage := BoundaryValuesToFormula(StageBoundaryValues,
+        Format('Stage_%d', [APeriod.Period]), result);
+
+      UpdateReachSettings(AReachList, InflowBoundaryValues, 'INFLOW');
+      SfrItem.Inflow := BoundaryValuesToFormula(InflowBoundaryValues,
+        Format('Inflow_%d', [APeriod.Period]), result);
+
+      UpdateReachSettings(AReachList, RainfallBoundaryValues, 'RAINFALL');
+      SfrItem.Rainfall := BoundaryValuesToFormula(RainfallBoundaryValues,
+        Format('Inflow_%d', [APeriod.Period]), result);
+
+      UpdateReachSettings(AReachList, EvaporationBoundaryValues, 'EVAPORATION');
+      SfrItem.Evaporation := BoundaryValuesToFormula(EvaporationBoundaryValues,
+        Format('Evaporation_%d', [APeriod.Period]), result);
+
+      UpdateReachSettings(AReachList, RunoffBoundaryValues, 'RUNOFF');
+      SfrItem.Runoff := BoundaryValuesToFormula(RunoffBoundaryValues,
+        Format('Runoff_%d', [APeriod.Period]), result);
+    end;
 
 //    SfrBoundary.HydraulicConductivity := BoundaryValuesToFormula(Values);
 
@@ -7669,7 +7882,7 @@ var
     AReachList := SfrReachInfoLists[ObjectIndex];
   end;
   procedure SplitReachListWithStrings(var AReachList: TSfrReachInfoList;
-    BoundaryValues: TOneDStringArray);
+    StringValues: TOneDStringArray);
   var
     NewReachList: TSfrReachInfoList;
     Index: Integer;
@@ -7683,7 +7896,7 @@ var
       NewReachList.Add(AReachList[0]);
       for Index := 1 to AReachList.Count - 1 do
       begin
-        if AnsiSameText(BoundaryValues[Index], BoundaryValues[Index-1]) then
+        if AnsiSameText(StringValues[Index], StringValues[Index-1]) then
         begin
           NewReachList.Add(AReachList[Index]);
         end
@@ -7705,38 +7918,6 @@ var
     end;
 
     AReachList := SfrReachInfoLists[ObjectIndex];
-  end;
-  procedure UpdateReachSettings(AReachList: TSfrReachInfoList;
-    var BoundaryValues: TMf6BoundaryValueArray; const Key: string);
-  var
-    ReachIndex: Integer;
-    AReachSettingsList: TNumberedItemList;
-    SettingIndex: Integer;
-    ASetting: TNumberedItem;
-    AMf6BoundaryValue: TMf6BoundaryValue;
-  begin
-    for ReachIndex := 0 to AReachList.Count - 1 do
-    begin
-      AReachSettingsList := ASettingList[AReachList[ReachIndex].PackageData.rno-1];
-      for SettingIndex := 0 to AReachSettingsList.Count - 1 do
-      begin
-        ASetting := AReachSettingsList[SettingIndex];
-        if AnsiSameText(ASetting.Name, Key) then
-        begin
-          AMf6BoundaryValue.StringValue := ASetting.StringValue; 
-          AMf6BoundaryValue.NumericValue := ASetting.FloatValue;
-          if AMf6BoundaryValue.StringValue <> '' then
-          begin
-            AMf6BoundaryValue.ValueType := vtString; 
-          end
-          else
-          begin
-            AMf6BoundaryValue.ValueType := vtNumeric; 
-          end;
-          BoundaryValues[ReachIndex]  := AMf6BoundaryValue;
-        end;
-      end;
-    end;
   end;
 begin
   if Assigned(OnUpdateStatusBar) then
@@ -7976,40 +8157,39 @@ begin
             begin
               AReachList := SfrReachInfoLists[ObjectIndex];
 
-              SetLength(BoundaryValues, AReachList.Count);
+              SetLength(ManningBoundaryValues, AReachList.Count);
               for CellIndex := 0 to AReachList.Count - 1 do
               begin
-                BoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.man;
+                ManningBoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.man;
               end;
-              DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+              DefaultFormula := BoundaryValuesToFormula(ManningBoundaryValues, 'dummyvariable');
               if DefaultFormula = '' then
               begin
-                SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
-                SetLength(BoundaryValues, AReachList.Count);
+                SplitReachListWithBoundaryValues(AReachList, ManningBoundaryValues);
               end;
 
+              SetLength(UpstreamFractionBoundaryValues, AReachList.Count);
               for CellIndex := 0 to AReachList.Count - 1 do
               begin
-                BoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.ustrf;
+                UpstreamFractionBoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.ustrf;
               end;
-              DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+              DefaultFormula := BoundaryValuesToFormula(UpstreamFractionBoundaryValues, 'dummyvariable');
               if DefaultFormula = '' then
               begin
-                SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
-                SetLength(BoundaryValues, AReachList.Count);
+                SplitReachListWithBoundaryValues(AReachList, UpstreamFractionBoundaryValues);
               end;
 
               for AuxIndex := 0 to Options.Count - 1 do
               begin
+                SetLength(BoundaryValues, AReachList.Count);
                 for CellIndex := 0 to AReachList.Count - 1 do
                 begin
                   BoundaryValues[CellIndex] := AReachList[CellIndex].PackageData.Aux[AuxIndex];
                 end;
-                DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+                DefaultFormula := BoundaryValuesToFormula(BoundaryValues, 'dummyvariable');
                 if DefaultFormula = '' then
                 begin
                   SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
-                  SetLength(BoundaryValues, AReachList.Count);
                 end;
               end;
 
@@ -8034,18 +8214,17 @@ begin
                       if not AnsiSameText(ASetting.StringValue , 'ACTIVE') then
                       begin
                         NeedToSplit := True;
-                        break;
                       end;
+                      break;
                     end;
                   end;
                 end;
                 if NeedToSplit then
                 begin
                   SplitReachListWithStrings(AReachList, StringValues);
-                  SetLength(BoundaryValues, AReachList.Count);
                   SetLength(StringValues, AReachList.Count);
                 end;
-                
+
                 for ReachIndex := 0 to AReachList.Count - 1 do
                 begin
                   StringValues[ReachIndex] := AReachList[ReachIndex].CrossSectionFile;
@@ -8063,8 +8242,8 @@ begin
                       begin
                         StringValues[ReachIndex] := ASetting.StringValue;
                         NeedToSplit := True;
-                        break;
                       end;
+                      break;
                     end;
                   end;
                 end;
@@ -8075,18 +8254,102 @@ begin
                   SetLength(StringValues, AReachList.Count);
                 end;
 
-                for ReachIndex := 0 to AReachList.Count - 1 do
-                begin
-                  BoundaryValues[ReachIndex] := AReachList[ReachIndex].PackageData.man;
-                end;
-                UpdateReachSettings(AReachList, BoundaryValues, 'MANNING');
-                DefaultFormula := BoundaryValuesToFormula(BoundaryValues);
+                SetLength(ManningBoundaryValues, AReachList.Count);
+                UpdateReachSettings(AReachList, ManningBoundaryValues, 'MANNING');
+                DefaultFormula := BoundaryValuesToFormula(ManningBoundaryValues, 'dummyvariable');
                 if DefaultFormula = '' then
                 begin
-                  SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
-                  SetLength(BoundaryValues, AReachList.Count);
+                  SplitReachListWithBoundaryValues(AReachList, ManningBoundaryValues);
                 end;
-                
+
+                SetLength(UpstreamFractionBoundaryValues, AReachList.Count);
+                UpdateReachSettings(AReachList, UpstreamFractionBoundaryValues, 'UPSTREAM_FRACTION');
+                DefaultFormula := BoundaryValuesToFormula(UpstreamFractionBoundaryValues, 'dummyvariable');
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, UpstreamFractionBoundaryValues);
+                end;
+
+                SetLength(StageBoundaryValues, AReachList.Count);
+                if PeriodIndex = 0 then
+                begin
+                  for ReachIndex := 0 to AReachList.Count - 1 do
+                  begin
+                    StageBoundaryValues[ReachIndex].ValueType := vtNumeric;
+                    StageBoundaryValues[ReachIndex].NumericValue :=
+                      AReachList[ReachIndex].PackageData.rtp;
+                  end;
+                end;
+                UpdateReachSettings(AReachList, StageBoundaryValues, 'STAGE');
+                DefaultFormula := BoundaryValuesToFormula(StageBoundaryValues, 'dummyvariable');
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, StageBoundaryValues);
+                end;
+
+                SetLength(InflowBoundaryValues, AReachList.Count);
+                if PeriodIndex = 0 then
+                begin
+                  for ReachIndex := 0 to AReachList.Count - 1 do
+                  begin
+                    InflowBoundaryValues[ReachIndex].ValueType := vtNumeric;
+                    InflowBoundaryValues[ReachIndex].NumericValue := 0;
+                  end;
+                end;
+                UpdateReachSettings(AReachList, InflowBoundaryValues, 'INFLOW');
+                DefaultFormula := BoundaryValuesToFormula(InflowBoundaryValues, 'dummyvariable');
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, InflowBoundaryValues);
+                end;
+
+                SetLength(RainfallBoundaryValues, AReachList.Count);
+                if PeriodIndex = 0 then
+                begin
+                  for ReachIndex := 0 to AReachList.Count - 1 do
+                  begin
+                    RainfallBoundaryValues[ReachIndex].ValueType := vtNumeric;
+                    RainfallBoundaryValues[ReachIndex].NumericValue := 0;
+                  end;
+                end;
+                UpdateReachSettings(AReachList, RainfallBoundaryValues, 'RAINFALL');
+                DefaultFormula := BoundaryValuesToFormula(RainfallBoundaryValues, 'dummyvariable');
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, RainfallBoundaryValues);
+                end;
+
+                SetLength(EvaporationBoundaryValues, AReachList.Count);
+                if PeriodIndex = 0 then
+                begin
+                  for ReachIndex := 0 to AReachList.Count - 1 do
+                  begin
+                    EvaporationBoundaryValues[ReachIndex].ValueType := vtNumeric;
+                    EvaporationBoundaryValues[ReachIndex].NumericValue := 0;
+                  end;
+                end;
+                UpdateReachSettings(AReachList, EvaporationBoundaryValues, 'EVAPORATION');
+                DefaultFormula := BoundaryValuesToFormula(EvaporationBoundaryValues, 'dummyvariable');
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, EvaporationBoundaryValues);
+                end;
+
+                SetLength(RunoffBoundaryValues, AReachList.Count);
+                if PeriodIndex = 0 then
+                begin
+                  for ReachIndex := 0 to AReachList.Count - 1 do
+                  begin
+                    RunoffBoundaryValues[ReachIndex].ValueType := vtNumeric;
+                    RunoffBoundaryValues[ReachIndex].NumericValue := 0;
+                  end;
+                end;
+                UpdateReachSettings(AReachList, RunoffBoundaryValues, 'RUNOFF');
+                DefaultFormula := BoundaryValuesToFormula(RunoffBoundaryValues, 'dummyvariable');
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, RunoffBoundaryValues);
+                end;
               end;
 
               AScreenObject := CreateScreenObject(AReachList);
@@ -8099,6 +8362,113 @@ begin
 
 
               Inc(ObjectIndex);
+            end;
+
+            for ObjectIndex := 0 to SfrReachInfoLists.Count - 1 do
+            begin
+              AReachList := SfrReachInfoLists[ObjectIndex];
+              LastReach := AReachList.Last;
+              if LastReach.DownstreamReachCount > 0 then
+              begin
+                AScreenObject := nil;
+                if not ScreenObjectDictionary.TryGetValue(
+                  LastReach.PackageData.rno, AScreenObject) then
+                begin
+                  Assert(False);
+                end;
+                for DownstreamIndex := 0 to Length(LastReach.Connections.ic) - 1 do
+                begin
+                  ReachNo := LastReach.Connections.ic[DownstreamIndex];
+                  if ReachNo < 0 then
+                  begin
+                    DownStreamSegment := nil;
+                    if not ScreenObjectDictionary.TryGetValue(-ReachNo, DownStreamSegment) then
+                    begin
+                      Assert(False);
+                    end;
+                    IntItem :=AScreenObject.ModflowSfr6Boundary.DownstreamSegments.Add;
+                    IntItem.Value := DownStreamSegment.ModflowSfr6Boundary.SegmentNumber;
+                  end;
+                end;
+
+
+                if LastReach.Diversions.Count > 0 then
+                begin
+                  for DiversionIndex := 0 to LastReach.Diversions.Count - 1 do
+                  begin
+                    ADiversion := LastReach.Diversions[DiversionIndex];
+                    DiversionSegment := nil;
+                    if not ScreenObjectDictionary.TryGetValue(ADiversion.iconr, DiversionSegment) then
+                    begin
+                      Assert(False);
+                    end;
+                    SfrDiversions := AScreenObject.ModflowSfr6Boundary.Diversions;
+                    DiversionItem := SfrDiversions.Add;
+                    DiversionItem.DownstreamSegment :=
+                      DiversionSegment.ModflowSfr6Boundary.SegmentNumber;
+                    if AnsiSameText(ADiversion.cprior, 'FRACTION') then
+                    begin
+                      DiversionItem.Priority := cpFraction;
+                    end
+                    else if AnsiSameText(ADiversion.cprior, 'EXCESS') then
+                    begin
+                      DiversionItem.Priority := cpExcess;
+                    end
+                    else if AnsiSameText(ADiversion.cprior, 'THRESHOLD') then
+                    begin
+                      DiversionItem.Priority := cpThreshold;
+                    end
+                    else if AnsiSameText(ADiversion.cprior, 'UPTO') then
+                    begin
+                      DiversionItem.Priority := cpUpTo;
+                    end
+                    else
+                    begin
+                      Assert(False);
+                    end;
+
+                    for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+                    begin
+                      ASettingList := PeriodSettings[PeriodIndex];
+                      AReachSettingsList := ASettingList[LastReach.PackageData.rno-1];
+                      if PeriodIndex = 0 then
+                      begin
+                        DiversionFormula := '0';
+                      end
+                      else
+                      begin
+                        SfrItem := AScreenObject.ModflowSfr6Boundary.
+                          Values[PeriodIndex-1] as TSfrMf6Item;
+                        DiversionFormula := SfrItem.DiversionFormulas[DiversionItem.Index];
+                      end;
+                      for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+                      begin
+                        ASetting := AReachSettingsList[SettingIndex];
+                        if AnsiSameText(ASetting.Name, 'DIVERSION')
+                          and (ASetting.IntValue-1 = DiversionIndex) then
+                        begin
+                          if ASetting.StringValue <> '' then
+                          begin
+                            DiversionFormula := ASetting.StringValue;
+                          end
+                          else
+                          begin
+                            DiversionFormula := FortranFloatToStr(ASetting.FloatValue);
+                          end;
+                          break;
+                        end;
+                      end;
+                      SfrItem := AScreenObject.ModflowSfr6Boundary.
+                        Values[PeriodIndex] as TSfrMf6Item;
+                      if SfrItem.DiversionCount <= DiversionItem.Index then
+                      begin
+                        SfrItem.DiversionCount := DiversionItem.Index+1
+                      end;
+                      SfrItem.DiversionFormulas[DiversionItem.Index] := DiversionFormula;
+                    end;
+                  end;
+                end;
+              end;
             end;
           finally
             ScreenObjectDictionary.Free;

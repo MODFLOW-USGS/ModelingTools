@@ -26,10 +26,9 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
     Top = 25
     Width = 547
     Height = 410
-    ActivePage = tabConfiguration
+    ActivePage = tabCrossSection
     Align = alClient
     TabOrder = 1
-    ExplicitHeight = 247
     object tabConfiguration: TTabSheet
       Caption = 'Configuration'
       ImageIndex = 3
@@ -115,7 +114,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 167
         ColWidths = (
           64
           186)
@@ -563,9 +561,9 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Height = 225
         Align = alClient
         TabOrder = 0
-        ExplicitTop = 47
+        ExplicitTop = 41
         ExplicitWidth = 539
-        ExplicitHeight = 176
+        ExplicitHeight = 225
         inherited Panel: TPanel
           Top = 184
           Width = 539
@@ -684,7 +682,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitTop = 182
         object cbSpecifyRoughnessFraction: TCheckBox
           Left = 8
           Top = 8
@@ -706,7 +703,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Exaggeration = 1.000000000000000000
         HorizontalDirection = hdRight
         Image32.Left = 0
-        Image32.Top = 68
+        Image32.Top = 0
         Image32.Width = 539
         Image32.Height = 109
         Image32.Anchors = [akLeft, akBottom]
@@ -717,11 +714,9 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Image32.Scale = 1.000000000000000000
         Image32.ScaleMode = smNormal
         Image32.TabOrder = 0
-        Image32.ExplicitTop = 0
         ImmediateResize = True
         Magnification = 1.000000000000000000
         VerticalDirection = vdUp
-        ExplicitTop = 277
         DesignSize = (
           539
           109)
@@ -750,7 +745,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Indent = 19
         TabOrder = 0
         Items.Links = {00000000}
-        ExplicitHeight = 217
       end
       object jplGwt: TJvPageList
         Left = 126

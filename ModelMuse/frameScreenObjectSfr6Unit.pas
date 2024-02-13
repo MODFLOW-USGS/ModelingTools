@@ -452,6 +452,7 @@ var
   AXsecPoint: TSfr6CrossSectionPoint;
   FirstCrossSection: TSfr6CrossSection;
 begin
+  tabCrossSection.TabVisible := False;
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
 

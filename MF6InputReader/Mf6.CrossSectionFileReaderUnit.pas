@@ -9,11 +9,14 @@ uses
 type
   TCrossSectionDimensions = class(TCustomMf6Persistent)
   private
-    NROW: Integer;
-    NCOL: Integer;
+    FNROW: Integer;
+    FNCOL: Integer;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property NROW: Integer read FNROW;
+    property NCOL: Integer read FNCOL;
   end;
 
   TCrossSectionTableItem = record
@@ -29,11 +32,15 @@ type
   private
     FItems: TCrossSectionTableItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; NCOL: Integer);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TCrossSectionTableItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TCrossSectionTableItem read GetItem; default;
   end;
 
   TCrossSection = class(TPackageReader)
@@ -43,7 +50,10 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property Dimensions: TCrossSectionDimensions read FCrossSectionDimensions;
+    property Table: TCrossSectionTable read FTable;
   end;
 
 implementation
@@ -61,8 +71,8 @@ resourcestring
 
 procedure TCrossSectionDimensions.Initialize;
 begin
-  NROW := 0;
-  NCOL := 0;
+  FNROW := 0;
+  FNCOL := 0;
 end;
 
 procedure TCrossSectionDimensions.Read(Stream: TStreamReader;
@@ -92,13 +102,13 @@ begin
       // do nothing
     end
     else if (FSplitter[0] = 'NROW') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NROW) then
+      and TryStrToInt(FSplitter[1], FNROW) then
     begin
     end
     else if (FSplitter[0] = 'NCOL') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NCOL) then
+      and TryStrToInt(FSplitter[1], FNCOL) then
     begin
-      if not (NCOL in [2,3]) then
+      if not (FNCOL in [2,3]) then
       begin
         Unhandled.WriteLine(Format(StrUnrecognizedSCros, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
@@ -134,6 +144,16 @@ destructor TCrossSectionTable.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TCrossSectionTable.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TCrossSectionTable.GetItem(Index: Integer): TCrossSectionTableItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TCrossSectionTable.Initialize;
@@ -247,7 +267,7 @@ begin
       end
       else if FSplitter[1] ='TABLE' then
       begin
-        FTable.Read(Stream, Unhandled, FCrossSectionDimensions.NCOL);
+        FTable.Read(Stream, Unhandled, FCrossSectionDimensions.FNCOL);
       end
       else
       begin

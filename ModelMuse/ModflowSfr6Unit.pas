@@ -507,6 +507,23 @@ type
     property UseManningFraction: Boolean read FUseManningFraction write SetUseManningFraction;
   end;
 
+  TimeVaryingSfr6CrossSectionItem = class(TOrderedItem)
+  private
+    FStartTime: double;
+    FCrossSection: TSfr6CrossSection;
+    FEndTime: double;
+    procedure SetCrossSection(const Value: TSfr6CrossSection);
+    procedure SetEndTime(Value: double);
+    procedure SetStartTime(Value: double);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+  published
+    property StartTime: double read FStartTime write SetStartTime;
+    property EndTime: double read FEndTime write SetEndTime;
+    property CrossSection: TSfr6CrossSection read FCrossSection write SetCrossSection;
+  end;
+
   TSfrMf6Boundary = class(TModflowBoundary)
   private
     FDiversions: TDiversionCollection;
@@ -7327,6 +7344,46 @@ begin
   if FUseManningFraction <> Value then
   begin
     FUseManningFraction := Value;
+    InvalidateModel;
+  end;
+end;
+
+{ TimeVaryingSfr6CrossSectionItem }
+
+constructor TimeVaryingSfr6CrossSectionItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FCrossSection := TSfr6CrossSection.Create(Model);
+end;
+
+destructor TimeVaryingSfr6CrossSectionItem.Destroy;
+begin
+  FCrossSection.Free;
+  inherited;
+end;
+
+procedure TimeVaryingSfr6CrossSectionItem.SetCrossSection(
+  const Value: TSfr6CrossSection);
+begin
+  FCrossSection.Assign(Value);
+end;
+
+procedure TimeVaryingSfr6CrossSectionItem.SetEndTime(Value: double);
+begin
+  Value := FortranStrToFloat(FortranFloatToStr(Value));
+  if FEndTime <> Value then
+  begin
+    FEndTime := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TimeVaryingSfr6CrossSectionItem.SetStartTime(Value: double);
+begin
+  Value := FortranStrToFloat(FortranFloatToStr(Value));
+  if FStartTime <> Value then
+  begin
+    FStartTime := Value;
     InvalidateModel;
   end;
 end;

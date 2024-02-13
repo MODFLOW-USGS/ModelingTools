@@ -1158,7 +1158,6 @@ resourcestring
   StrPhastDefaultPath = 'C:\Program Files\USGS\phast-1.5.1\bin\phast.bat';
   StrPhastDefaultPath64 = 'C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat';
   StrZoneBudgetDefaultPath = 'C:\WRDAPP\Zonbud.3_01\Bin\zonbud.exe';
-  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.3.0\bin\zbud6.exe';
   StrModelMateDefaultPath = 'C:\WRDAPP\ModelMate_1_0_3\Bin\ModelMate.exe';
   strModflowLgrDefaultPath = 'C:\WRDAPP\mflgr.1_2\bin\mflgr.exe';
   strModflowLgr2DefaultPath = 'C:\WRDAPP\mflgr.2_0\bin\mflgr.exe';
@@ -1176,7 +1175,11 @@ resourcestring
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
-  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.4.3_win64\bin\mf6.exe';
+
+  // Be sure to update zonebudget path when updating mf6 path.
+  StrDefaultModflow6Path =      'C:\WRDAPP\mf6.4.4_win64\bin\mf6.exe';
+  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.4.4_win64\bin\zbud6.exe';
+
   StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-2.3.0\bin\mf-owhm.exe';
 
   StrProgramLocations = 'Program Locations';

@@ -26132,6 +26132,9 @@ var
   StreamObject: TScreenObject;
   SquareSize: integer;
   OtherIndex: Integer;
+  SectionIndex: Integer;
+  PointIndex1: Integer;
+  PointIndex2: Integer;
 begin
   inherited;
   StreamList := TSfrStreamPlotList.Create;
@@ -26164,12 +26167,12 @@ begin
         for Index := 0 to StreamList.Count - 1 do
         begin
           StreamToPlot := StreamList[Index];
+          StreamObject := StreamToPlot.StreamObject as TScreenObject;
           if SfrMf6StreamLinkPlot.PlotUnconnected then
           begin
             if (StreamToPlot.OutflowSegments.Count = 0)
               and (StreamToPlot.DiversionSegments.Count = 0) then
             begin
-              StreamObject := StreamToPlot.StreamObject as TScreenObject;
               UpstreamPoint := StreamObject.Points[StreamObject.Count-1];
               Points[0].X := ZoomBox.XCoord(UpstreamPoint.x);
               Points[0].Y := ZoomBox.YCoord(UpstreamPoint.y);
@@ -26178,11 +26181,33 @@ begin
                 Points[0].X + SquareSize, Points[0].Y + SquareSize);
             end;
           end;
-          if SfrMf6StreamLinkPlot.PlotStreamConnections or SfrMf6StreamLinkPlot.PlotBadConnection then
+
+          if SfrMf6StreamLinkPlot.PlotStreamConnections
+            and (StreamObject.SectionCount > 1) then
+          begin
+            for SectionIndex := 1 to StreamObject.SectionCount - 1 do
+            begin
+              PointIndex1 := StreamObject.SectionEnd[SectionIndex-1];
+              PointIndex2 := StreamObject.SectionEnd[SectionIndex];
+              UpstreamPoint := StreamObject.Points[PointIndex1];
+              DownstreamPoint := StreamObject.Points[PointIndex2];
+              Points[0].X := ZoomBox.XCoord(UpstreamPoint.x);
+              Points[0].Y := ZoomBox.YCoord(UpstreamPoint.y);
+              Points[1].X := ZoomBox.XCoord(DownstreamPoint.x);
+              Points[1].Y := ZoomBox.YCoord(DownstreamPoint.y);
+              if (Points[0].X <> Points[1].X)
+                or (Points[0].Y <> Points[1].Y) then
+              begin
+                DrawBigPolyline32(BitMap, StreamColor, 2, Points, True);
+              end;
+            end;
+          end;
+
+          if SfrMf6StreamLinkPlot.PlotStreamConnections
+            or SfrMf6StreamLinkPlot.PlotBadConnection then
           begin
             for OtherIndex := 0 to StreamToPlot.OutflowSegments.Count -1 do
             begin
-
               DownstreamObject := nil;
               if StreamToPlot.OutflowSegments[OtherIndex] > 0 then
               begin
@@ -26193,16 +26218,6 @@ begin
                   DownstreamObject := OtherStream.StreamObject as TScreenObject;
                   Assert(StreamToPlot.OutflowSegments[OtherIndex] = OtherStream.Segment)
                 end;
-  //            end
-  //            else if StreamToPlot.OutflowSegment < 0 then
-  //            begin
-  //              LakeIndex := LakeNumbers.IndexOf(-StreamToPlot.OutflowSegment);
-  //              if LakeIndex >= 0 then
-  //              begin
-  //                LakeToPlot := LakeList[LakeIndex];
-  //                DownstreamObject := LakeToPlot.LakeObject as TScreenObject;
-  //                Assert(-StreamToPlot.OutflowSegment = LakeToPlot.LakeId)
-  //              end;
               end;
               if (DownstreamObject = nil) then
               begin
