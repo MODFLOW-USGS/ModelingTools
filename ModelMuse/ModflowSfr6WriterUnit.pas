@@ -73,6 +73,7 @@ type
     FCalculatedObsLines: TStrings;
     FSpeciesIndex: Integer;
     FDiversionReaches: TIntegerList;
+    FCrossSectionDictionary: TDictionary<TSfr6CrossSection, string>;
     procedure Evaluate;
     procedure EvaluateSteadyData;
     procedure AssignSteadyData(ASegment: TSfr6Segment);
@@ -814,6 +815,7 @@ var
   index: Integer;
 begin
   inherited;
+  FCrossSectionDictionary := TDictionary<TSfr6CrossSection, string>.Create;
   FValues := TObjectList.Create;
   FSegments := TSfr6SegmentList.Create;
   FObsList := TSfr6ObservationList.Create;
@@ -834,6 +836,7 @@ end;
 
 destructor TModflowSFR_MF6_Writer.Destroy;
 begin
+  FCrossSectionDictionary.Free;
   FGwtObservations.Free;
   FDiversionReaches.Free;
   FObsList.Free;
@@ -1832,14 +1835,14 @@ var
   ReachNumber: Integer;
   ReachIndex: Integer;
   CrossSectionUsed: Boolean;
-  CrossSectionDictionary: TDictionary<TSfr6CrossSection, string>;
   AFileName: string;
   FileIndex: Integer;
   ACellList: TValueCellList;
   ACell: TSfrMf6_Cell;
+  CSIndex: Integer;
+  CrossSection: TSfr6CrossSection;
 begin
   FileIndex := 1;
-  CrossSectionDictionary := TDictionary<TSfr6CrossSection, string>.Create;
   try
     CrossSectionUsed := False;
     ReachNumber := 0;
@@ -1856,7 +1859,8 @@ begin
         ScreenObject := ACell.ScreenObject as TScreenObject;
         Assert(ScreenObject <> nil);
         Sfr6Boundary := ScreenObject.ModflowSfr6Boundary;
-        if Sfr6Boundary.CrossSection.UseCrossSection then
+
+        if Sfr6Boundary.CrossSectionUsage <> csuNotUse then
         begin
           if not CrossSectionUsed then
           begin
@@ -1864,18 +1868,34 @@ begin
             WriteString('BEGIN CROSSSECTIONS');
             NewLine;
           end;
-          if not CrossSectionDictionary.TryGetValue(Sfr6Boundary.CrossSection, AFileName) then
+          CrossSection := (Sfr6Boundary.CrossSections.First as TimeVaryingSfr6CrossSectionItem).CrossSection;
+          if not FCrossSectionDictionary.TryGetValue(CrossSection, AFileName) then
           begin
             AFileName := ChangeFileExt(FInputFileName, Format('.xsec%d', [FileIndex]));
-            WriteACrossSection(Sfr6Boundary.CrossSection, AFileName, ScreenObject);
+            WriteACrossSection(CrossSection, AFileName, ScreenObject);
             Model.AddModelInputFile(AFileName);
-            CrossSectionDictionary.Add(Sfr6Boundary.CrossSection, AFileName);
+            FCrossSectionDictionary.Add(CrossSection, AFileName);
             Inc(FileIndex);
           end;
           WriteInteger(ReachNumber);
           WriteString(' TAB6 FILEIN ');
           WriteString(ExtractFileName(AFileName));
           NewLine;
+          if Sfr6Boundary.CrossSectionUsage = csuMultiple then
+          begin
+            for CSIndex := 1 to Sfr6Boundary.CrossSections.Count - 1 do
+            begin
+              CrossSection := (Sfr6Boundary.CrossSections.Items[CSIndex] as TimeVaryingSfr6CrossSectionItem).CrossSection;
+              if not FCrossSectionDictionary.TryGetValue(CrossSection, AFileName) then
+              begin
+                AFileName := ChangeFileExt(FInputFileName, Format('.xsec%d', [FileIndex]));
+                WriteACrossSection(CrossSection, AFileName, ScreenObject);
+                Model.AddModelInputFile(AFileName);
+                FCrossSectionDictionary.Add(CrossSection, AFileName);
+                Inc(FileIndex);
+              end;
+            end;
+          end;
         end;
       end;
     end;
@@ -1886,7 +1906,6 @@ begin
       NewLine;
     end;
   finally
-     CrossSectionDictionary.Free;
   end;
 end;
 
@@ -2720,6 +2739,8 @@ var
   StatusArray: array of TStreamStatus;
   DownReachIndex: Integer;
   DownstreamReachesDefined: Boolean;
+  ACrossSection: TSfr6CrossSection;
+  AFileName: string;
 begin
   if MvrWriter <> nil then
   begin
@@ -2856,7 +2877,6 @@ begin
           NewLine;
         end;
 
-
         if ACell.Values.Status <> ssInactive then
         begin
           if CellIndex = ACellList.Count - 1 then
@@ -2875,6 +2895,21 @@ begin
           end;
         end;
         NewLine;
+
+        if ACell.CrossSectionIndex > 0 then
+        begin
+          WriteInteger(ReachNumber);
+          WriteString(' CROSS_SECTION TAB6 FILEIN ');
+          ACrossSection := (AssociatedScreenObjects[ReachNumber-1].
+            ModflowSfr6Boundary.CrossSections.Items[ACell.CrossSectionIndex]
+            as TimeVaryingSfr6CrossSectionItem).CrossSection;
+          if not FCrossSectionDictionary.TryGetValue(ACrossSection, AFileName) then
+          begin
+            Assert(False);
+          end;
+          WriteString(ExtractFileName(AFileName));
+          NewLine;
+        end;
 
         if ACell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
         begin

@@ -39,6 +39,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Height = 15
         Caption = 'Segment number'
       end
+      object lblCrossSection: TLabel
+        Left = 416
+        Top = 17
+        Width = 120
+        Height = 15
+        Caption = 'Cross section'
+      end
       object rdgFormulas: TRbwDataGrid4
         AlignWithMargins = True
         Left = 0
@@ -132,14 +139,20 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         CheckMin = True
         ChangeDisabledColor = True
       end
-      object cbSpecifyCrossSection: TCheckBox
-        Left = 344
-        Top = 17
-        Width = 192
-        Height = 17
-        Caption = 'Specify cross section'
+      object comboCrossSection: TComboBox
+        Left = 256
+        Top = 14
+        Width = 145
+        Height = 23
+        Style = csDropDownList
+        ItemIndex = 0
         TabOrder = 2
-        OnClick = cbSpecifyCrossSectionClick
+        Text = 'Don'#39't use'
+        OnChange = comboCrossSectionChange
+        Items.Strings = (
+          'Don'#39't use'
+          'Static'
+          'Time-Varying')
       end
     end
     object tabRates: TTabSheet
@@ -148,10 +161,9 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Left = 0
         Top = 0
         Width = 539
-        Height = 334
+        Height = 335
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 171
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -172,7 +184,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             Left = 136
             Top = 24
             Width = 57
-            Height = 22
+            Height = 23
             Color = clBtnFace
             Enabled = False
             TabOrder = 0
@@ -186,7 +198,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Left = 1
           Top = 51
           Width = 537
-          Height = 282
+          Height = 283
           Align = alClient
           ColCount = 3
           FixedCols = 0
@@ -287,16 +299,15 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       end
       object pnlBottom: TPanel
         Left = 0
-        Top = 334
+        Top = 335
         Width = 539
-        Height = 46
+        Height = 45
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 171
         DesignSize = (
           539
-          46)
+          45)
         object lblNumTimes: TLabel
           Left = 64
           Top = 15
@@ -317,7 +328,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         object btnDelete: TBitBtn
           Left = 451
           Top = 6
-          Width = 82
+          Width = 81
           Height = 33
           Anchors = [akTop, akRight]
           Cancel = True
@@ -355,7 +366,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         object btnInsert: TBitBtn
           Left = 363
           Top = 5
-          Width = 82
+          Width = 81
           Height = 33
           Anchors = [akTop, akRight]
           Cancel = True
@@ -385,23 +396,25 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
-        ExplicitHeight = 217
+        ExplicitHeight = 380
         inherited Panel: TPanel
-          Top = 339
+          Top = 340
           Width = 539
-          ExplicitTop = 176
+          Height = 40
+          ExplicitTop = 340
           ExplicitWidth = 539
+          ExplicitHeight = 40
           inherited sbAdd: TSpeedButton
             Left = 280
-            ExplicitLeft = 195
+            ExplicitLeft = 281
           end
           inherited sbInsert: TSpeedButton
             Left = 333
-            ExplicitLeft = 232
+            ExplicitLeft = 334
           end
           inherited sbDelete: TSpeedButton
             Left = 385
-            ExplicitLeft = 269
+            ExplicitLeft = 386
           end
           inherited seNumber: TJvSpinEdit
             OnChange = frmgrdDownstreamSegmentsseNumberChange
@@ -409,7 +422,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         end
         inherited Grid: TRbwDataGrid4
           Width = 539
-          Height = 339
+          Height = 340
           OnSetEditText = frmgrdDownstreamSegmentsGridSetEditText
           Columns = <
             item
@@ -437,7 +450,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 539
-          ExplicitHeight = 339
+          ExplicitHeight = 340
         end
       end
     end
@@ -452,23 +465,25 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 539
-        ExplicitHeight = 217
+        ExplicitHeight = 380
         inherited Panel: TPanel
-          Top = 339
+          Top = 340
           Width = 539
-          ExplicitTop = 176
+          Height = 40
+          ExplicitTop = 340
           ExplicitWidth = 539
+          ExplicitHeight = 40
           inherited sbAdd: TSpeedButton
             Left = 280
-            ExplicitLeft = 195
+            ExplicitLeft = 281
           end
           inherited sbInsert: TSpeedButton
             Left = 333
-            ExplicitLeft = 232
+            ExplicitLeft = 334
           end
           inherited sbDelete: TSpeedButton
             Left = 385
-            ExplicitLeft = 269
+            ExplicitLeft = 386
           end
           inherited seNumber: TJvSpinEdit
             OnChange = frmgrdDiversionsseNumberChange
@@ -476,7 +491,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         end
         inherited Grid: TRbwDataGrid4
           Width = 539
-          Height = 339
+          Height = 340
           ColCount = 2
           OnSetEditText = frmgrdDiversionsGridSetEditText
           Columns = <
@@ -534,10 +549,10 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 539
-          ExplicitHeight = 339
+          ExplicitHeight = 340
           ColWidths = (
             64
-            79)
+            87)
         end
       end
     end
@@ -547,53 +562,60 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       TabVisible = False
       object Splitter1: TSplitter
         Left = 0
-        Top = 266
+        Top = 267
         Width = 539
         Height = 5
         Cursor = crVSplit
         Align = alBottom
-        ExplicitTop = 268
+        ExplicitTop = 269
+        ExplicitWidth = 541
       end
       inline frameCrossSection: TframeGrid
-        Left = 0
+        Left = 250
         Top = 41
-        Width = 539
-        Height = 225
+        Width = 289
+        Height = 226
         Align = alClient
         TabOrder = 0
+        ExplicitLeft = 250
         ExplicitTop = 41
-        ExplicitWidth = 539
-        ExplicitHeight = 225
+        ExplicitWidth = 289
+        ExplicitHeight = 226
         inherited Panel: TPanel
-          Top = 184
-          Width = 539
-          ExplicitTop = 184
-          ExplicitWidth = 539
+          Top = 185
+          Width = 289
+          ExplicitTop = 185
+          ExplicitWidth = 289
           inherited lbNumber: TLabel
             Width = 165
             Caption = 'Number or cross section points'
             ExplicitWidth = 165
           end
           inherited sbAdd: TSpeedButton
-            Left = 447
-            ExplicitLeft = 447
+            Left = 236
+            ExplicitLeft = 237
           end
           inherited sbInsert: TSpeedButton
-            Left = 476
-            ExplicitLeft = 476
+            Left = 251
+            Width = 22
+            ExplicitLeft = 252
+            ExplicitWidth = 22
           end
           inherited sbDelete: TSpeedButton
-            Left = 505
-            ExplicitLeft = 505
+            Left = 267
+            Width = 22
+            ExplicitLeft = 268
+            ExplicitWidth = 22
           end
           inherited seNumber: TJvSpinEdit
             MinValue = 2.000000000000000000
             Value = 2.000000000000000000
+            OnChange = frameCrossSectionseNumberChange
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 539
-          Height = 184
+          Width = 289
+          Height = 185
           ColCount = 3
           RowCount = 3
           OnSelectCell = frameCrossSectionGridSelectCell
@@ -671,8 +693,10 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 539
-          ExplicitHeight = 184
+          ExplicitLeft = 6
+          ExplicitTop = 3
+          ExplicitWidth = 289
+          ExplicitHeight = 185
         end
       end
       object Panel1: TPanel
@@ -694,9 +718,9 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
       end
       object zbChannel: TQRbwZoomBox2
         Left = 0
-        Top = 271
+        Top = 272
         Width = 539
-        Height = 109
+        Height = 108
         Align = alBottom
         Caption = 'zbChannel'
         TabOrder = 2
@@ -705,7 +729,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Image32.Left = 0
         Image32.Top = 0
         Image32.Width = 539
-        Image32.Height = 109
+        Image32.Height = 108
         Image32.Anchors = [akLeft, akBottom]
         Image32.Bitmap.ResamplerClassName = 'TNearestResampler'
         Image32.BitmapAlign = baTopLeft
@@ -719,7 +743,101 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         VerticalDirection = vdUp
         DesignSize = (
           539
-          109)
+          108)
+      end
+      inline frameCrossSectionTime: TframeGrid
+        Left = 0
+        Top = 41
+        Width = 250
+        Height = 226
+        Align = alLeft
+        AutoScroll = True
+        TabOrder = 3
+        ExplicitTop = 41
+        ExplicitWidth = 250
+        ExplicitHeight = 226
+        inherited Panel: TPanel
+          Top = 185
+          Width = 250
+          ExplicitTop = 185
+          ExplicitWidth = 250
+          inherited lbNumber: TLabel
+            Width = 90
+            Caption = 'Number of times'
+            ExplicitWidth = 90
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 159
+            ExplicitLeft = 159
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 188
+            ExplicitLeft = 188
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 213
+            ExplicitLeft = 213
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 250
+          Height = 185
+          ColCount = 2
+          OnSelectCell = frameCrossSectionTimeGridSelectCell
+          OnSetEditText = frameCrossSectionTimeGridSetEditText
+          Columns = <
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = False
+            end>
+          ExplicitLeft = 2
+          ExplicitWidth = 250
+          ExplicitHeight = 185
+        end
       end
     end
     object tabGWT: TTabSheet
@@ -730,8 +848,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Top = 0
         Width = 5
         Height = 380
-        ExplicitLeft = 8
-        ExplicitHeight = 212
+        ExplicitHeight = 382
       end
       object tvGwt: TJvPageListTreeView
         Left = 0
@@ -753,7 +870,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Height = 380
         PropagateEnable = False
         Align = alClient
-        ExplicitHeight = 217
       end
     end
   end

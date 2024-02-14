@@ -100,6 +100,7 @@ type
     Density: TGwtCellData;
     Viscosity: TGwtCellData;
 
+    CrossSectionIndex: Integer;
     procedure Assign(const Item: TSfrMF6Record);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -328,6 +329,7 @@ type
     function GetSpecifiedConcentrations: TGwtCellData;
     function GetDensity: TGwtCellData;
     function GetViscosity: TGwtCellData;
+    function GetCrossSectionIndex: Integer;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -363,6 +365,8 @@ type
     property Density: TGwtCellData read GetDensity;
     // Viscosity
     property Viscosity: TGwtCellData read GetViscosity;
+
+    property CrossSectionIndex: Integer read GetCrossSectionIndex;
   end;
 
   TDivisionPriority = (cpFraction, cpExcess, cpThreshold, cpUpTo);
@@ -515,14 +519,24 @@ type
     procedure SetCrossSection(const Value: TSfr6CrossSection);
     procedure SetEndTime(Value: double);
     procedure SetStartTime(Value: double);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
   published
     property StartTime: double read FStartTime write SetStartTime;
     property EndTime: double read FEndTime write SetEndTime;
     property CrossSection: TSfr6CrossSection read FCrossSection write SetCrossSection;
   end;
+
+  TSfr6CrossSections = class(TOrderedCollection)
+  public
+    constructor Create(Model: IModelForTOrderedCollection);
+  end;
+
+  TCrossSectionUsage = (csuNotUse, csuSingle, csuMultiple);
 
   TSfrMf6Boundary = class(TModflowBoundary)
   private
@@ -588,6 +602,8 @@ type
     FPestViscosityMethods: TGwtPestMethodCollection;
     FViscosityObserver: TObserver;
     FCrossSection: TSfr6CrossSection;
+    FCrossSections: TSfr6CrossSections;
+    FCrossSectionUsage: TCrossSectionUsage;
     procedure SetDiversions(const Value: TDiversionCollection);
     procedure SetDownstreamSegments(const Value: TIntegerCollection);
     procedure SetSegmentNumber(const Value: Integer);
@@ -694,6 +710,9 @@ type
     procedure SetPestViscosityMethods(const Value: TGwtPestMethodCollection);
     function GetViscosityObserver: TObserver;
     procedure SetCrossSection(const Value: TSfr6CrossSection);
+    procedure SetCrossSections(const Value: TSfr6CrossSections);
+    procedure SetCrossSectionUsage(const Value: TCrossSectionUsage);
+    function GetCrossSectionUsage: TCrossSectionUsage;
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -831,8 +850,13 @@ type
     property PestViscosityMethods: TGwtPestMethodCollection
       read FPestViscosityMethods write SetPestViscosityMethods;
 
+    // @name is retained for backwards compatiblity.
     property CrossSection: TSfr6CrossSection read FCrossSection
-      write SetCrossSection;
+      write SetCrossSection stored False;
+    property CrossSections: TSfr6CrossSections read FCrossSections
+      write SetCrossSections;
+    property CrossSectionUsage: TCrossSectionUsage read GetCrossSectionUsage
+      write SetCrossSectionUsage;
 end;
 
 const
@@ -1003,6 +1027,7 @@ begin
   Density.Assign(Item.Density);
   Viscosity.Assign(Item.Viscosity);
   SetLength(GwtStatus, Length(GwtStatus));
+  CrossSectionIndex := Item.CrossSectionIndex;
 end;
 
 procedure TSfrMF6Record.Cache(Comp: TCompressionStream; Strings: TStringList);
@@ -1117,6 +1142,9 @@ begin
   begin
     WriteCompInt(Comp, Ord(GwtStatus[SpeciesIndex]));
   end;
+
+  WriteCompInt(Comp, CrossSectionIndex);
+
 end;
 
 procedure TSfrMF6Record.RecordStrings(Strings: TStringList);
@@ -1181,6 +1209,7 @@ begin
   Density.RecordStrings(Strings);
   // Viscosity
   Viscosity.RecordStrings(Strings);
+
 end;
 
 procedure TSfrMF6Record.Restore(Decomp: TDecompressionStream;
@@ -1301,6 +1330,7 @@ begin
     GwtStatus[SpeciesIndex] := TGwtBoundaryStatus(ReadCompInt(Decomp));
   end;
 
+  CrossSectionIndex := ReadCompInt(Decomp);
 end;
 
 { TStrMf6Storage }
@@ -2799,6 +2829,11 @@ var
   SfrMf6Item: TSfrMf6Item;
   SpeciesCount: Integer;
   SpeciesIndex: Integer;
+//  AScreenObject: TScreenObject;
+  SfrBoundary: TSfrMf6Boundary;
+  UsedCrossSectionIndex: Integer;
+  CrossSectionIndex: Integer;
+  CSItem: TimeVaryingSfr6CrossSectionItem;
 begin
   inherited;
   // GWT
@@ -2837,6 +2872,28 @@ begin
         SfrMf6Item.GwtStatus[SpeciesIndex].GwtBoundaryStatus
     end;
   end;
+
+  UsedCrossSectionIndex := -1;
+  SfrBoundary := (SfrMf6Item.Collection as TSfrMf6Collection).FSfrMf6Boundary;
+  if SfrBoundary.CrossSectionUsage = csuMultiple then
+  begin
+    for CrossSectionIndex := 0 to SfrBoundary.CrossSections.Count - 1 do
+    begin
+      CSItem := SfrBoundary.CrossSections.Items[CrossSectionIndex] as TimeVaryingSfr6CrossSectionItem;
+      if (CSItem.StartTime <= SfrMf6Item.StartTime) and (CSItem.EndTime > SfrMf6Item.StartTime) then
+      begin
+        UsedCrossSectionIndex := CrossSectionIndex;
+        break;
+      end;
+    end;
+  end;
+
+  for index := 0 to Length(Sfr6Storage.FSfrMF6Array) - 1 do
+  begin
+    Sfr6Storage.FSfrMF6Array[index].CrossSectionIndex := UsedCrossSectionIndex;
+  end;
+
+//  AScreenObject := (SfrMf6Item.Collection as TSfrMf6Collection).FSfrMf6Boundary.ScreenObject as TScreenObject;
 end;
 
 procedure TSfrMf6Collection.AssignListCellLocation(
@@ -3589,6 +3646,8 @@ begin
     PestViscosityMethods := SourceSfr6.PestViscosityMethods;
 
     CrossSection := SourceSfr6.CrossSection;
+    CrossSections := SourceSfr6.CrossSections;
+    CrossSectionUsage := SourceSfr6.CrossSectionUsage;
   end
   else if Source is TSfrBoundary then
   begin
@@ -4171,7 +4230,8 @@ var
   Index: Integer;
 begin
   inherited Create(Model as TCustomModel, ScreenObject);
-  FCrossSection := TSfr6CrossSection.Create(Model);;
+  FCrossSection := TSfr6CrossSection.Create(Model);
+  FCrossSections := TSfr6CrossSections.Create(Model);
 
   FPestSpecifiedConcentrationObservers := TObserverList.Create;
   FPestRainfallConcentrationObservers := TObserverList.Create;
@@ -4443,6 +4503,7 @@ begin
   FPestInflowConcentrationObservers.Free;
 
   FCrossSection.Free;
+  FCrossSections.Free;
   inherited;
 end;
 
@@ -4457,6 +4518,18 @@ begin
   begin
     BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TSfrMf6Storage;
     AssignCells(BoundaryStorage, ValueTimeList, AModel);
+  end;
+end;
+
+function TSfrMf6Boundary.GetCrossSectionUsage: TCrossSectionUsage;
+begin
+  if CrossSections.Count > 0 then
+  begin
+    result := FCrossSectionUsage;
+  end
+  else
+  begin
+    result := csuNotUse;
   end;
 end;
 
@@ -5422,6 +5495,9 @@ begin
 end;
 
 procedure TSfrMf6Boundary.Loaded;
+var
+  Item: TimeVaryingSfr6CrossSectionItem;
+  LocalModel: TCustomModel;
 begin
   (Values as TSfrMf6Collection).Loaded;
 
@@ -5431,6 +5507,21 @@ begin
   LinkStreambedTop;
   LinkStreambedThickness;
   LinkHydraulicConductivity;
+  if CrossSection.UseCrossSection and (CrossSections.Count = 0) then
+  begin
+    Item := FCrossSections.Add as TimeVaryingSfr6CrossSectionItem;
+    Item.CrossSection := FCrossSection;
+    CrossSectionUsage := csuSingle;
+    if ParentModel <> nil then
+    begin
+      LocalModel := ParentModel as TCustomModel;
+      if LocalModel.ModflowStressPeriods.Count > 0 then
+      begin
+        Item.StartTime := LocalModel.ModflowStressPeriods.First.StartTime;
+        Item.EndTime := LocalModel.ModflowStressPeriods.Last.EndTime;
+      end;
+    end;
+  end;
 end;
 
 procedure TSfrMf6Boundary.RemoveFormulaObjects;
@@ -5478,8 +5569,30 @@ begin
 end;
 
 procedure TSfrMf6Boundary.SetCrossSection(const Value: TSfr6CrossSection);
+var
+  Item: TimeVaryingSfr6CrossSectionItem;
 begin
   FCrossSection.Assign(Value);
+  if FCrossSection.UseCrossSection and (FCrossSections.Count = 0) then
+  begin
+    Item := (FCrossSections.Add as TimeVaryingSfr6CrossSectionItem);
+    Item.CrossSection := FCrossSection;
+    CrossSectionUsage := csuSingle;
+  end;
+end;
+
+procedure TSfrMf6Boundary.SetCrossSections(const Value: TSfr6CrossSections);
+begin
+  FCrossSections.Assign(Value);
+end;
+
+procedure TSfrMf6Boundary.SetCrossSectionUsage(const Value: TCrossSectionUsage);
+begin
+  if FCrossSectionUsage <> Value then
+  begin
+    FCrossSectionUsage := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TSfrMf6Boundary.SetDiversions(const Value: TDiversionCollection);
@@ -5954,6 +6067,11 @@ end;
 function TSfrMf6_Cell.GetColumn: integer;
 begin
   result := FValues.Cell.Column;
+end;
+
+function TSfrMf6_Cell.GetCrossSectionIndex: Integer;
+begin
+  result := FValues.CrossSectionIndex;
 end;
 
 function TSfrMf6_Cell.GetDensity: TGwtCellData;
@@ -7350,6 +7468,20 @@ end;
 
 { TimeVaryingSfr6CrossSectionItem }
 
+procedure TimeVaryingSfr6CrossSectionItem.Assign(Source: TPersistent);
+var
+  SourceItem: TimeVaryingSfr6CrossSectionItem;
+begin
+  if Source is TimeVaryingSfr6CrossSectionItem then
+  begin
+    SourceItem := TimeVaryingSfr6CrossSectionItem(Source);
+    StartTime := SourceItem.StartTime;
+    EndTime := SourceItem.EndTime;
+    CrossSection := SourceItem.CrossSection;
+  end;
+  inherited;
+end;
+
 constructor TimeVaryingSfr6CrossSectionItem.Create(Collection: TCollection);
 begin
   inherited;
@@ -7360,6 +7492,21 @@ destructor TimeVaryingSfr6CrossSectionItem.Destroy;
 begin
   FCrossSection.Free;
   inherited;
+end;
+
+function TimeVaryingSfr6CrossSectionItem.IsSame(
+  AnotherItem: TOrderedItem): boolean;
+var
+  OtherItem: TimeVaryingSfr6CrossSectionItem;
+begin
+  result := (AnotherItem is TimeVaryingSfr6CrossSectionItem);
+  if result then
+  begin
+     OtherItem := TimeVaryingSfr6CrossSectionItem(AnotherItem);
+     result := (StartTime = OtherItem.StartTime)
+       and (EndTime = OtherItem.EndTime)
+       and (CrossSection.IsSame(OtherItem.CrossSection));
+  end;
 end;
 
 procedure TimeVaryingSfr6CrossSectionItem.SetCrossSection(
@@ -7386,6 +7533,13 @@ begin
     FStartTime := Value;
     InvalidateModel;
   end;
+end;
+
+{ TSfr6CrossSections }
+
+constructor TSfr6CrossSections.Create(Model: IModelForTOrderedCollection);
+begin
+  inherited Create(TimeVaryingSfr6CrossSectionItem, Model);
 end;
 
 initialization

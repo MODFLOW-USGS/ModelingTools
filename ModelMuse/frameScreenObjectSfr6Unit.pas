@@ -10,7 +10,7 @@ uses System.UITypes,
   RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask, JvExMask,
   JvSpin, Vcl.ExtCtrls, ModflowBoundaryUnit, Vcl.ComCtrls, frameGridUnit,
   UndoItemsScreenObjects, GrayTabs, JvExControls, JvPageList, JvExComCtrls,
-  JvPageListTreeView, frameSfrGwtConcentrationsUnit, ZoomBox2;
+  JvPageListTreeView, frameSfrGwtConcentrationsUnit, ZoomBox2, ModflowSfr6Unit;
 
 type
   TSfr6Columns = (s6cStartTime, s6cEndtime, s6cStatus, s6cStage, s6cInflow, s6cRainfall,
@@ -54,15 +54,16 @@ type
     frameCrossSection: TframeGrid;
     Panel1: TPanel;
     cbSpecifyRoughnessFraction: TCheckBox;
-    cbSpecifyCrossSection: TCheckBox;
     zbChannel: TQRbwZoomBox2;
     Splitter1: TSplitter;
+    frameCrossSectionTime: TframeGrid;
+    comboCrossSection: TComboBox;
+    lblCrossSection: TLabel;
     procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure seNumberOfTimesChange(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
-    procedure cbSpecifyCrossSectionClick(Sender: TObject);
     procedure cbSpecifyRoughnessFractionClick(Sender: TObject);
     procedure frameCrossSectionGridSelectCell(Sender: TObject; ACol, ARow: Integer;
         var CanSelect: Boolean);
@@ -91,6 +92,12 @@ type
       ARow: Integer; const Value: TCheckBoxState);
     procedure rdgModflowBoundaryEnter(Sender: TObject);
     procedure rdeSegmentNumberChange(Sender: TObject);
+    procedure comboCrossSectionChange(Sender: TObject);
+    procedure frameCrossSectionTimeGridSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
+    procedure frameCrossSectionTimeGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameCrossSectionseNumberChange(Sender: TObject);
   private
     FSelectedText: string;
     FDeleting: Boolean;
@@ -105,15 +112,23 @@ type
     FBuoyancyOffset: Integer;
     FViscosityOffset: Integer;
     FXSecSpecified: Boolean;
+    FCrossSections: TSfr6CrossSections;
+    FCrossCurrentItem: TimeVaryingSfr6CrossSectionItem;
     procedure LayoutMultiRowEditControls;
     function GetDeletedCells(ACol, ARow: integer): boolean;
     procedure SetDeletedCells(ACol, ARow: integer; const Value: boolean);
     procedure InitializeControls;
     procedure SetChanging(const Value: Boolean);
+    function GetCrossCurrentItem: TimeVaryingSfr6CrossSectionItem;
+    procedure SetCrossCurrentItem(const Value: TimeVaryingSfr6CrossSectionItem);
     property Changing: Boolean read FChanging write SetChanging;
     procedure DoChange;
     procedure PaintCrossSection(Sender: TObject; Buffer: TBitmap32);
     procedure DrawCrossSection(ABitMap: TBitmap32);
+    property CrossCurrentItem: TimeVaryingSfr6CrossSectionItem
+      read GetCrossCurrentItem write SetCrossCurrentItem;
+    procedure GetDataForFirstCrossSection(CrossSection: TSfr6CrossSections;
+      var FirstCrossSection: TSfr6CrossSections);
     { Private declarations }
   public
     property ConductanceColumn: Integer read FConductanceColumn write FConductanceColumn;
@@ -153,7 +168,7 @@ implementation
 {$R *.dfm}
 
 uses frmGoPhastUnit, GoPhastTypes, frmCustomGoPhastUnit, System.Math,
-  ScreenObjectUnit, ModflowSfr6Unit, PhastModelUnit,
+  ScreenObjectUnit, PhastModelUnit,
   Mt3dmsChemSpeciesUnit, DataSetNamesUnit, BigCanvasMethods;
 
 resourcestring
@@ -296,6 +311,17 @@ begin
   SetLength(FDeletedCells, 0, 0);
 end;
 
+procedure TframeScreenObjectSfr6.comboCrossSectionChange(Sender: TObject);
+begin
+  inherited;
+  if not Changing then
+  begin
+    tabCrossSection.TabVisible := comboCrossSection.ItemIndex <> 0;
+    frameCrossSectionTime.Visible := (comboCrossSection.ItemIndex <> 1);
+    FXSecSpecified := True;
+  end;
+end;
+
 function TframeScreenObjectSfr6.ConductanceCaption(
   DirectCaption: string): string;
 begin
@@ -313,40 +339,34 @@ begin
   TempLayer := zbChannel.Image32.Layers.Add(TPositionedLayer) as
     TPositionedLayer;
   TempLayer.OnPaint := PaintCrossSection;
+  FCrossSections := TSfr6CrossSections.Create(nil);
 end;
 
 destructor TframeScreenObjectSfr6.Destroy;
 begin
+  FCrossSections.Free;
   FGwtFrameList.Free;
   inherited;
-end;
-
-procedure TframeScreenObjectSfr6.cbSpecifyCrossSectionClick(Sender: TObject);
-begin
-  inherited;
-  if not Changing then
-  begin
-    cbSpecifyCrossSection.AllowGrayed := false;
-    tabCrossSection.TabVisible := cbSpecifyCrossSection.State <> cbUnchecked;
-  end;
 end;
 
 procedure TframeScreenObjectSfr6.cbSpecifyRoughnessFractionClick(Sender:
     TObject);
 begin
   inherited;
+  cbSpecifyRoughnessFraction.AllowGrayed := false;
+  if cbSpecifyRoughnessFraction.Checked then
+  begin
+    frameCrossSection.Grid.ColCount := 3;
+    frameCrossSection.Grid.Columns[2] := frameCrossSection.Grid.Columns[1];
+  end
+  else
+  begin
+    frameCrossSection.Grid.ColCount := 2;
+  end;
   if not Changing then
   begin
-    cbSpecifyRoughnessFraction.AllowGrayed := false;
-    if cbSpecifyRoughnessFraction.Checked then
-    begin
-      frameCrossSection.Grid.ColCount := 3;
-      frameCrossSection.Grid.Columns[2] := frameCrossSection.Grid.Columns[1];
-    end
-    else
-    begin
-      frameCrossSection.Grid.ColCount := 2;
-    end;
+    CrossCurrentItem.CrossSection.UseManningFraction :=
+      cbSpecifyRoughnessFraction.Checked;
   end;
 end;
 
@@ -359,12 +379,171 @@ end;
 
 procedure TframeScreenObjectSfr6.frameCrossSectionGridSetEditText(Sender:
     TObject; ACol, ARow: Integer; const Value: string);
+var
+  CurrentCrossSection: TSfr6CrossSection;
+  CrossSectRow: TSfr6CrossSectionPoint;
+  AValue: Double;
 begin
   inherited;
   if not Changing then
   begin
     FXSecSpecified := True;
     zbChannel.InvalidateImage32;
+
+    if (ARow > 0) and TryStrToFloat(Value, AValue) then    
+    begin
+      CurrentCrossSection  := CrossCurrentItem.CrossSection;
+      while CurrentCrossSection.Count < ARow do
+      begin
+        CurrentCrossSection.Add;
+      end;
+      CrossSectRow := CurrentCrossSection[ARow-1];
+      // TSfr6CrossSectionCol = (scsXFraction, scsHeight, scsManningFraction);
+      case TSfr6CrossSectionCol(ACol) of
+        scsXFraction:
+          begin
+            CrossSectRow.XFraction :=  AValue;
+          end;
+        scsHeight:
+          begin
+            CrossSectRow.Height :=  AValue;
+          end;
+        scsManningFraction:
+          begin
+            CrossSectRow.ManningsFraction :=  AValue;
+          end;
+      end;
+    end;      
+  end;
+end;
+
+procedure TframeScreenObjectSfr6.frameCrossSectionseNumberChange(
+  Sender: TObject);
+var
+  RowIndex: Integer;
+  CrossSection: TSfr6CrossSection;
+  ARowItem: TSfr6CrossSectionPoint;
+  Grid: TRbwDataGrid4;
+  AFloat: Double;
+begin
+  inherited;
+  frameCrossSection.seNumberChange(Sender);
+  if FCrossCurrentItem <> nil then
+  begin
+    CrossSection := FCrossCurrentItem.CrossSection;
+    CrossSection.Count := frameCrossSection.seNumber.AsInteger;
+    if not Changing then
+    begin
+      Grid := frameCrossSection.Grid;
+      for RowIndex := 1 to frameCrossSection.Grid.RowCount - 1 do
+      begin
+        ARowItem := CrossSection[RowIndex-1];
+        if TryStrToFloat(Grid.Cells[Ord(scsXFraction), RowIndex], AFloat) then
+        begin
+          ARowItem.XFraction := AFloat;
+        end;
+        if TryStrToFloat(Grid.Cells[Ord(scsHeight), RowIndex], AFloat) then
+        begin
+          ARowItem.Height := AFloat;
+        end;
+        if cbSpecifyRoughnessFraction.Checked
+          and TryStrToFloat(Grid.Cells[Ord(scsManningFraction), RowIndex], AFloat) then
+        begin
+          ARowItem.ManningsFraction := AFloat;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TframeScreenObjectSfr6.frameCrossSectionTimeGridSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  Item: TimeVaryingSfr6CrossSectionItem;
+  RowIndex: Integer;
+  PriorItem: TimeVaryingSfr6CrossSectionItem;
+begin
+  inherited;
+  if frameCrossSectionTime.Grid.Drawing then
+  begin
+    Exit;
+  end;
+  if ARow > 0 then
+  begin
+    Item := nil;
+    for RowIndex := 1 to ARow do
+    begin
+      Item := frameCrossSectionTime.Grid.Objects[Ord(s6cStartTime), RowIndex]
+        as TimeVaryingSfr6CrossSectionItem;
+      if Item = nil then
+      begin
+        if RowIndex > FCrossSections.Count then
+        begin
+          Item := FCrossSections.Add as TimeVaryingSfr6CrossSectionItem;
+        end
+        else
+        begin
+          Item := FCrossSections.Insert(RowIndex -1) as TimeVaryingSfr6CrossSectionItem;
+        end;
+        frameCrossSectionTime.Grid.Objects[Ord(s6cStartTime), RowIndex] := Item;
+        if RowIndex > 1 then
+        begin
+          PriorItem := frameCrossSectionTime.Grid.Objects[Ord(s6cStartTime), RowIndex-1]
+            as TimeVaryingSfr6CrossSectionItem;
+          Item.CrossSection := PriorItem.CrossSection;
+        end;
+        if (RowIndex > 1) and
+          (frameCrossSectionTime.Grid.Cells[Ord(s6cEndTime), RowIndex-1] <> '') then
+        begin
+          frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime), RowIndex] :=
+            frameCrossSectionTime.Grid.Cells[Ord(s6cEndTime), RowIndex-1];
+        end
+        else
+        begin
+          frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime), RowIndex] :=
+            FortranFloatToStr(frmGoPhast.PhastModel.ModflowStressPeriods.First.StartTime);
+        end;
+        frameCrossSectionTimeGridSetEditText(frameCrossSectionTime.Grid,
+          Ord(s6cStartTime), RowIndex, frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime), RowIndex]);
+
+        if (RowIndex < frameCrossSectionTime.Grid.RowCount -1)  and
+          (frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime), RowIndex+1] <> '') then
+        begin
+          frameCrossSectionTime.Grid.Cells[Ord(s6cEndTime), RowIndex] :=
+            frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime), RowIndex+1];
+        end
+        else
+        begin
+          frameCrossSectionTime.Grid.Cells[Ord(s6cEndTime), RowIndex] :=
+            FortranFloatToStr(frmGoPhast.PhastModel.ModflowStressPeriods.Last.EndTime);
+        end;
+        frameCrossSectionTimeGridSetEditText(frameCrossSectionTime.Grid,
+          Ord(s6cEndTime), RowIndex, frameCrossSectionTime.Grid.Cells[Ord(s6cEndTime), RowIndex]);
+      end;
+    end;
+    CrossCurrentItem := Item;
+  end;
+end;
+
+procedure TframeScreenObjectSfr6.frameCrossSectionTimeGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+var
+  ATime: Double;
+begin
+  inherited;
+  if ARow > 0 then
+  begin
+    if TryStrToFloat(Value, ATime) then
+    begin
+      if ACol = Ord(s6cStartTime) then
+      begin
+        CrossCurrentItem.StartTime := ATime;
+      end
+      else
+      begin
+        CrossCurrentItem.EndTime := ATime;
+      end;
+    end;
   end;
 end;
 
@@ -421,6 +600,32 @@ begin
   DoChange;
 end;
 
+function TframeScreenObjectSfr6.GetCrossCurrentItem: TimeVaryingSfr6CrossSectionItem;
+begin
+  result := FCrossCurrentItem;
+  if result = nil then
+  begin
+    if FCrossSections.Count = 0 then
+    begin
+      result := FCrossSections.Add as TimeVaryingSfr6CrossSectionItem;
+      frameCrossSectionTime.Grid.Objects[Ord(s6cStartTime), 1] := result;
+      frameCrossSectionTime.seNumber.AsInteger := 1;
+      result.StartTime := frmGoPhast.PhastModel.ModflowStressPeriods.First.StartTime;
+      result.EndTime   := frmGoPhast.PhastModel.ModflowStressPeriods.Last.EndTime;
+      if frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime), 1] = '' then
+      begin
+        frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime), 1] := FloatToStr(result.StartTime);
+        frameCrossSectionTime.Grid.Cells[Ord(s6cEndtime), 1] := FloatToStr(result.EndTime);
+      end;
+    end
+    else
+    begin
+      result := FCrossSections.First as TimeVaryingSfr6CrossSectionItem;
+    end;
+    FCrossCurrentItem := result;
+  end;
+end;
+
 procedure TframeScreenObjectSfr6.GetData(
   ScreenObjectList: TScreenObjectEditCollection);
 var
@@ -447,11 +652,12 @@ var
   IgnoredNames: TStringList;
   FrameIndex: Integer;
   ViscosityUsed: Boolean;
-  CrossSection: TSfr6CrossSection;
-  XSIndex: Integer;
-  AXsecPoint: TSfr6CrossSectionPoint;
-  FirstCrossSection: TSfr6CrossSection;
+  CrossSection: TSfr6CrossSections;
+  FirstCrossSection: TSfr6CrossSections;
 begin
+  FirstCrossSection := nil;
+  FCrossCurrentItem := nil;
+  FCrossSections.Clear;
   tabCrossSection.TabVisible := False;
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
@@ -618,36 +824,15 @@ begin
               end;
             end;
 
-            FXSecSpecified := True;
-            CrossSection := Sf6Boundary.CrossSection;
-            FirstCrossSection := CrossSection;
-            cbSpecifyCrossSection.Checked := CrossSection.UseCrossSection;
-            if CrossSection.UseCrossSection then
+
+            comboCrossSection.ItemIndex := Ord(Sf6Boundary.CrossSectionUsage);
+            tabCrossSection.TabVisible := comboCrossSection.ItemIndex <> 0;
+            if tabCrossSection.TabVisible then
             begin
-              tabCrossSection.TabVisible := True;
-              cbSpecifyRoughnessFraction.Checked := CrossSection.UseManningFraction;
-              if CrossSection.UseManningFraction then
-              begin
-                frameCrossSection.Grid.ColCount := 3;
-                frameCrossSection.Grid.Columns[2] := frameCrossSection.Grid.Columns[1]
-              end
-              else
-              begin
-                frameCrossSection.Grid.ColCount := 2;
-              end;
-              frameCrossSection.seNumber.AsInteger := CrossSection.Count;
-              frameCrossSection.seNumberChange(nil);
-              for XSIndex := 0 to CrossSection.Count - 1 do
-              begin
-                AXsecPoint := CrossSection[XSIndex];
-                frameCrossSection.Grid.RealValue[Ord(scsXFraction), XSIndex+1] :=
-                  AXsecPoint.XFraction;
-                frameCrossSection.Grid.RealValue[Ord(scsHeight), XSIndex+1] :=
-                  AXsecPoint.Height;
-                frameCrossSection.Grid.RealValue[Ord(scsManningFraction), XSIndex+1] :=
-                  AXsecPoint.ManningsFraction;
-              end;
-            end;
+              CrossSection := Sf6Boundary.CrossSections;
+              GetDataForFirstCrossSection(CrossSection, FirstCrossSection);
+             end;
+            frameCrossSectionTime.Visible := (comboCrossSection.ItemIndex <> 1);
           end
           else
           begin
@@ -780,27 +965,33 @@ begin
               rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)] := '';
             end;
 
-            CrossSection := Sf6Boundary.CrossSection;
-            if CrossSection.UseCrossSection <> FirstCrossSection.UseCrossSection then
+            if (comboCrossSection.ItemIndex <> -1) then
             begin
-              cbSpecifyCrossSection.AllowGrayed := True;
-              cbSpecifyCrossSection.State := cbGrayed;
-            end;
-            if CrossSection.UseCrossSection then
-            begin
-              tabCrossSection.TabVisible := True;
-              if CrossSection.UseManningFraction <> FirstCrossSection.UseManningFraction then
+              if comboCrossSection.ItemIndex <> Ord(Sf6Boundary.CrossSectionUsage) then
               begin
-                cbSpecifyRoughnessFraction.AllowGrayed := True;
-                cbSpecifyRoughnessFraction.State := cbGrayed;
-                frameCrossSection.Grid.ColCount := 3;
-                frameCrossSection.Grid.Columns[2] := frameCrossSection.Grid.Columns[1]
+                comboCrossSection.ItemIndex := -1;
+                tabCrossSection.TabVisible := True;
+                if Sf6Boundary.CrossSectionUsage = csuMultiple then
+                begin
+                  frameCrossSectionTime.Visible := True;
+                end;
               end;
-
-              if not CrossSection.IsSame(FirstCrossSection) then
+            end;
+            if Sf6Boundary.CrossSectionUsage <> csuNotUse then
+            begin
+              CrossSection := Sf6Boundary.CrossSections;
+              if FirstCrossSection = nil then
               begin
-                ClearGrid(frameCrossSection.Grid);
-                FXSecSpecified := False;
+                GetDataForFirstCrossSection(CrossSection, FirstCrossSection);
+              end
+              else
+              begin
+                if not CrossSection.IsSame(FirstCrossSection) then
+                begin
+                  ClearGrid(frameCrossSection.Grid);
+                  ClearGrid(frameCrossSectionTime.Grid);
+                  FXSecSpecified := False;
+                end;
               end;
             end;
           end;
@@ -886,11 +1077,13 @@ end;
 procedure TframeScreenObjectSfr6.GetEndTimes(Col: Integer);
 begin
   frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithEndTimes(rdgModflowBoundary, Col);
+  frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithEndTimes(frameCrossSectionTime.Grid, Col);
 end;
 
 procedure TframeScreenObjectSfr6.GetStartTimes(Col: integer);
 begin
   frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes(rdgModflowBoundary, Col);
+  frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes(frameCrossSectionTime.Grid, Col);
 end;
 
 procedure TframeScreenObjectSfr6.InitializeControls;
@@ -1010,6 +1203,9 @@ begin
     rdgModflowBoundary.EndUpdate;
   end;
 
+  frameCrossSectionTime.Grid.Cells[Ord(s6cStartTime),0] := StrStartingTime;
+  frameCrossSectionTime.Grid.Cells[Ord(s6cEndtime),0] := StrEndingTime;
+
   rdgModflowBoundary.BeginUpdate;
   try
     for ColIndex := Ord(s6cStage) to rdgModflowBoundary.ColCount - 1 do
@@ -1076,7 +1272,8 @@ begin
     frameCrossSection.Grid.EndUpdate;
     frameCrossSection.Grid.ColCount := 2;
   end;
-  cbSpecifyCrossSection.Checked := False;
+//  cbSpecifyCrossSection.Checked := False;
+  comboCrossSection.ItemIndex := 0;
   cbSpecifyRoughnessFraction.Checked := False;
 end;
 
@@ -1414,6 +1611,47 @@ begin
   FChanging := Value;
 end;
 
+procedure TframeScreenObjectSfr6.SetCrossCurrentItem(
+  const Value: TimeVaryingSfr6CrossSectionItem);
+var
+  CrossSection: TSfr6CrossSection;
+  ItemIndex: Integer;
+  RowIndex: Integer;
+  ItemRow: TSfr6CrossSectionPoint;
+begin
+  if FCrossCurrentItem <> Value then
+  begin  
+    FCrossCurrentItem := Value;
+    if FCrossCurrentItem <> nil then  
+    begin   
+      CrossSection := FCrossCurrentItem.CrossSection;
+      Changing := True;
+      try
+        cbSpecifyRoughnessFraction.Checked := CrossSection.UseManningFraction;
+        frameCrossSection.seNumber.AsInteger := CrossSection.Count;
+        for ItemIndex := 0 to CrossSection.Count - 1 do
+        begin
+          RowIndex := ItemIndex + 1;
+          ItemRow := CrossSection[ItemIndex];
+          frameCrossSection.Grid.Cells[Ord(scsXFraction), RowIndex]
+            := FloatToStr(ItemRow.XFraction);
+          frameCrossSection.Grid.Cells[Ord(scsHeight), RowIndex]
+            := FloatToStr(ItemRow.Height);
+          if CrossSection.UseManningFraction then        
+          begin      
+            frameCrossSection.Grid.Cells[Ord(scsManningFraction), RowIndex]
+              := FloatToStr(ItemRow.ManningsFraction);
+          end;          
+        end;
+      finally        
+        Changing := False;
+      end;
+//      FXSecSpecified := CrossSection.Count > 1;
+      zbChannel.InvalidateImage32;
+    end;        
+  end;    
+end;
+
 procedure TframeScreenObjectSfr6.SetData(List: TScreenObjectEditCollection;
   SetAll, ClearAll: boolean);
 var
@@ -1438,9 +1676,13 @@ var
   SpeciesName: string;
   ViscosityUsed: Boolean;
   XSecIndex: Integer;
-  CrossSection: TSfr6CrossSection;
+  CrossSection: TSfr6CrossSections;
   XSecItem: TSfr6CrossSectionPoint;
   MinHeight: double;
+  ACrossSection: TSfr6CrossSection;
+  CrossSectionCount: Integer;
+  CrossIndex: Integer;
+  AUsage: TCrossSectionUsage;
 begin
   DensityUsed := frmGoPhast.PhastModel.BuoyancyDensityUsed;
   ViscosityUsed := frmGoPhast.PhastModel.ViscosityPkgViscUsed;
@@ -1721,58 +1963,56 @@ begin
         end;
       end;
 
-      if cbSpecifyCrossSection.State <> cbGrayed then
+      AUsage := csuNotUse;
+      if comboCrossSection.ItemIndex <> -1 then
       begin
-        Boundary.CrossSection.UseCrossSection := cbSpecifyCrossSection.Checked;
+        AUsage := TCrossSectionUsage(comboCrossSection.ItemIndex);
       end;
 
-      if Boundary.CrossSection.UseCrossSection then
+      if (Boundary.CrossSectionUsage <> csuNotUse) or (AUsage <> csuNotUse) then
       begin
-        if cbSpecifyRoughnessFraction.State <> cbGrayed then
-        begin
-          Boundary.CrossSection.UseManningFraction := cbSpecifyRoughnessFraction.Checked;
-        end;
-
         if FXSecSpecified then
         begin
-          CrossSection := Boundary.CrossSection;
-          MinHeight := 0.;
-          for XSecIndex := 0 to frameCrossSection.seNumber.AsInteger - 1 do
+          CrossSection := Boundary.CrossSections;
+          CrossSection.Assign(FCrossSections);
+          if comboCrossSection.ItemIndex <> -1 then
           begin
-            if XSecIndex < CrossSection.Count then
+            Boundary.CrossSectionUsage := TCrossSectionUsage(comboCrossSection.ItemIndex);
+          end;
+
+          if Boundary.CrossSectionUsage = csuMultiple then
+          begin
+            CrossSectionCount := CrossSection.Count;
+          end
+          else
+          begin
+            CrossSectionCount := Min(CrossSection.Count, 1);
+          end;
+          for CrossIndex := 0 to CrossSectionCount -1 do
+          begin
+            ACrossSection := (CrossSection.Items[CrossIndex]
+              as TimeVaryingSfr6CrossSectionItem).CrossSection;
+            MinHeight := 0.0;
+            for XSecIndex := 0 to ACrossSection.Count -1 do
             begin
-              XSecItem := CrossSection[XSecIndex];
-            end
-            else
-            begin
-              XSecItem := CrossSection.Add;
-            end;
-            XSecItem.XFraction := frameCrossSection.Grid.
-              RealValueDefault[Ord(scsXFraction), XSecIndex + 1, 0];
-            XSecItem.Height := frameCrossSection.Grid.
-              RealValueDefault[Ord(scsHeight), XSecIndex + 1, 0];
-            if CrossSection.UseManningFraction  then
-            begin
-              XSecItem.ManningsFraction := frameCrossSection.Grid.
-                RealValueDefault[Ord(scsManningFraction), XSecIndex + 1, 0];
-            end;
-            if XSecIndex = 0 then
-            begin
-              MinHeight := XSecItem.Height;
-            end
-            else
-            begin
-              if XSecItem.Height < MinHeight then
+              XSecItem := ACrossSection[XSecIndex];
+              if XSecIndex = 0 then
               begin
                 MinHeight := XSecItem.Height;
+              end
+              else
+              begin
+                if XSecItem.Height < MinHeight then
+                begin
+                  MinHeight := XSecItem.Height;
+                end;
               end;
             end;
-          end;
-          CrossSection.Count := frameCrossSection.seNumber.AsInteger;
-          if MinHeight <> 0 then
-          begin
-            Beep;
-            MessageDlg(StrTheMinimumSFRCros, mtError, [mbOK], 0);
+            if MinHeight <> 0 then
+            begin
+              Beep;
+              MessageDlg(StrTheMinimumSFRCros, mtError, [mbOK], 0);
+            end;
           end;
         end;
       end;
@@ -1799,6 +2039,58 @@ begin
     finally
       IgnoredNames.Free;
     end;
+  end;
+end;
+
+procedure TframeScreenObjectSfr6.GetDataForFirstCrossSection(
+  CrossSection: TSfr6CrossSections;
+  var FirstCrossSection: TSfr6CrossSections);
+var
+  CrossSectionItem: TimeVaryingSfr6CrossSectionItem;
+  CrossSection1: TSfr6CrossSection;
+  XSIndex: Integer;
+  AXsecPoint: TSfr6CrossSectionPoint;
+  CrossGrid: TRbwDataGrid4;
+  CrossIndex: Integer;
+  CrossRowIndex: Integer;
+begin
+  FXSecSpecified := True;
+  FirstCrossSection := CrossSection;
+  FCrossSections.Assign(FirstCrossSection);
+  if CrossSection.Count > 0 then
+  begin
+    frameCrossSectionTime.seNumber.AsInteger := CrossSection.Count;
+    frameCrossSectionTime.seNumberChange(nil);
+    CrossSectionItem := CrossSection.First as TimeVaryingSfr6CrossSectionItem;
+    CrossSection1 := CrossSectionItem.CrossSection;
+    cbSpecifyRoughnessFraction.Checked := CrossSection1.UseManningFraction;
+    if CrossSection1.UseManningFraction then
+    begin
+      frameCrossSection.Grid.ColCount := 3;
+      frameCrossSection.Grid.Columns[2] := frameCrossSection.Grid.Columns[1];
+    end
+    else
+    begin
+      frameCrossSection.Grid.ColCount := 2;
+    end;
+    frameCrossSection.seNumber.AsInteger := CrossSection1.Count;
+    frameCrossSection.seNumberChange(nil);
+    for XSIndex := 0 to CrossSection1.Count - 1 do
+    begin
+      AXsecPoint := CrossSection1[XSIndex];
+      frameCrossSection.Grid.RealValue[Ord(scsXFraction), XSIndex + 1] := AXsecPoint.XFraction;
+      frameCrossSection.Grid.RealValue[Ord(scsHeight), XSIndex + 1] := AXsecPoint.Height;
+      frameCrossSection.Grid.RealValue[Ord(scsManningFraction), XSIndex + 1] := AXsecPoint.ManningsFraction;
+    end;
+  end;
+  CrossGrid := frameCrossSectionTime.Grid;
+  for CrossIndex := 0 to FCrossSections.Count - 1 do
+  begin
+    CrossSectionItem := FCrossSections.Items[CrossIndex] as TimeVaryingSfr6CrossSectionItem;
+    CrossRowIndex := CrossIndex + 1;
+    CrossGrid.Cells[Ord(s6cStartTime), CrossRowIndex] := FloatToStr(CrossSectionItem.StartTime);
+    CrossGrid.Cells[Ord(s6cEndtime), CrossRowIndex] := FloatToStr(CrossSectionItem.EndTime);
+    CrossGrid.Objects[Ord(s6cStartTime), CrossRowIndex] := CrossSectionItem;
   end;
 end;
 
