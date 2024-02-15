@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5636
+5645
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5319,6 +5319,9 @@ BuoyancyMAW.gpt
 	Archive\BuoyancyMAW.Temperature.mwt
 	Archive\BuoyancyMAW.Temperature.oc
 	Archive\BuoyancyMAW.Temperature.ssm
+	Archive\BuoyancyMAW.Viscosity.adv
+	Archive\BuoyancyMAW.Viscosity.oc
+	Archive\BuoyancyMAW.vsc
 	Archive\BuoyancyMAW.wel
 	Archive\usgs.BuoyancyMAW.reference
 BuoyancySFR.gpt
@@ -5364,6 +5367,9 @@ BuoyancySFR.gpt
 	Archive\BuoyancySFR.Temperature.oc
 	Archive\BuoyancySFR.Temperature.sft
 	Archive\BuoyancySFR.Temperature.ssm
+	Archive\BuoyancySFR.Viscosity.adv
+	Archive\BuoyancySFR.Viscosity.oc
+	Archive\BuoyancySFR.vsc
 	Archive\BuoyancySFR.wel
 	Archive\usgs.BuoyancySFR.reference
 BuoyancyLAK.gpt
@@ -5410,6 +5416,9 @@ BuoyancyLAK.gpt
 	Archive\BuoyancyLAK.Temperature.mst
 	Archive\BuoyancyLAK.Temperature.oc
 	Archive\BuoyancyLAK.Temperature.ssm
+	Archive\BuoyancyLAK.Viscosity.adv
+	Archive\BuoyancyLAK.Viscosity.oc
+	Archive\BuoyancyLAK.vsc
 	Archive\BuoyancyLAK.wel
 	Archive\usgs.BuoyancyLAK.reference
 Buoyancy.gpt

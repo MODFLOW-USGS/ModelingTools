@@ -24,7 +24,7 @@ AppSupportURL=https://www.usgs.gov/software/modelmuse-a-graphical-user-interface
 AppUpdatesURL=https://www.usgs.gov/software/modelmuse-a-graphical-user-interface-groundwater-models
 DefaultDirName={commonpf}\USGS\ModelMuse{#MMVersion}
 DefaultGroupName=ModelMuse
-InfoAfterFile=C:\ModelingTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\readme.txt
+InfoBeforeFile=C:\ModelingTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\readme.txt
 OutputDir=C:\ModelingTools\ModelMuse\Installer
 #ifdef Win64
 OutputBaseFilename=ModelMuseSetup64_{#MMCurrentVersion}
