@@ -10145,6 +10145,9 @@ const
 //    '5.1.1.55' Enhancement: Time-varying cross sections are now supported in
 //                 the MODFLOW 6 SFR package.
 
+//               Bug fix: Fixed a bug that could cause some cells to not be
+//                displayed correctly on the front view of DISV models.
+
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for Transient Hydraulic Conductivity package for MODFLOW 6.

@@ -32577,6 +32577,7 @@ object TTaskHistory
         'Testing'
         'Import'
         'MF-2015'
-        'SFR MODFLOW-6')
+        'SFR MODFLOW-6'
+        'Bug fix')
     end>
 end

@@ -851,11 +851,22 @@ var
   SideIndex: Integer;
   SegLength: TFloat;
   function PointOnLine(ASegment: TSegment2D; Point: TPoint2D): Boolean;
+  var
+    MinSegX: Double;
+    MaxSegX: Double;
+    MinSegY: Double;
+    MaxSegY: Double;
+    Epsilon: Double;
   begin
-    result := (Point.x >= Min(ASegment[1].x, ASegment[2].x))
-      and (Point.x <= Max(ASegment[1].x, ASegment[2].x))
-      and (Point.y >= Min(ASegment[1].y, ASegment[2].y))
-      and (Point.y <= Max(ASegment[1].y, ASegment[2].y))
+    Epsilon := Min(Length(Segment), Length(ASegment))/1e8;
+    MinSegX := Min(ASegment[1].x, ASegment[2].x)-Epsilon;
+    MaxSegX := Max(ASegment[1].x, ASegment[2].x)+Epsilon;
+    MinSegY := Min(ASegment[1].y, ASegment[2].y)-Epsilon;
+    MaxSegY := Max(ASegment[1].y, ASegment[2].y)+Epsilon;
+    result := (Point.x >= MinSegX)
+      and (Point.x <= MaxSegX)
+      and (Point.y >= MinSegY)
+      and (Point.y <= MaxSegY)
   end;
 begin
   if Length(Polygon) = 0 then
