@@ -39,6 +39,7 @@
     <FileName Model_Name="BuoyancyLAK" FileType="Model Input">BuoyancyLAK.Temperature.mst</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Input">BuoyancyLAK.Temperature.oc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Input">BuoyancyLAK.Temperature.ssm</FileName>
+    <FileName Model_Name="BuoyancyLAK" FileType="Model Input">BuoyancyLAK.vsc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Input">BuoyancyLAK.wel</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Input">mfsim.nam</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Input">RunModflow.Bat.archive</FileName>
@@ -68,6 +69,7 @@
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Temperature.lkt_conc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Temperature.lst</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Temperature.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Viscosity.cbc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

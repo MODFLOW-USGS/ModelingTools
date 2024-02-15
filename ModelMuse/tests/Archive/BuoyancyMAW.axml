@@ -38,6 +38,7 @@
     <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.mwt</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.oc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.Temperature.ssm</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.vsc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Input">BuoyancyMAW.wel</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Input">mfsim.nam</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Input">RunModflow.Bat.archive</FileName>
@@ -69,6 +70,7 @@
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.mwt_budget.csv</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.mwt_conc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.OuterSolution.CSV</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Viscosity.cbc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

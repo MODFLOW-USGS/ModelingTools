@@ -31,210 +31,210 @@ object PhastModel: TPhastModel
   ModflowGrid.DisplayRow = 0
   ModflowGrid.DisplayLayer = 0
   ModflowGrid.ColumnPositions = (
-    0.000000000000000000
-    10.000000000000000000
-    20.000000000000000000
-    30.000000000000000000
-    40.000000000000000000
-    50.000000000000000000
-    60.000000000000000000
-    70.000000000000000000
-    80.000000000000000000
-    90.000000000000000000
-    100.000000000000000000
-    110.000000000000000000
-    120.000000000000000000
-    130.000000000000000000
-    140.000000000000000000
-    150.000000000000000000
-    160.000000000000000000
-    170.000000000000000000
-    180.000000000000000000
-    190.000000000000000000
-    200.000000000000000000
-    210.000000000000000000
-    220.000000000000000000
-    230.000000000000000000
-    240.000000000000000000
-    250.000000000000000000
-    260.000000000000000000
-    270.000000000000000000
-    280.000000000000000000
-    290.000000000000000000
-    300.000000000000000000
-    310.000000000000000000
-    320.000000000000000000
-    330.000000000000000000
-    340.000000000000000000
-    350.000000000000000000
-    360.000000000000000000
-    370.000000000000000000
-    380.000000000000000000
-    390.000000000000000000
-    400.000000000000000000
-    410.000000000000000000
-    420.000000000000000000
-    430.000000000000000000
-    440.000000000000000000
-    450.000000000000000000
-    460.000000000000000000
-    470.000000000000000000
-    480.000000000000000000
-    490.000000000000000000
-    500.000000000000000000
-    510.000000000000000000
-    520.000000000000000000
-    530.000000000000000000
-    540.000000000000000000
-    550.000000000000000000
-    560.000000000000000000
-    570.000000000000000000
-    580.000000000000000000
-    590.000000000000000000
-    600.000000000000000000
-    610.000000000000000000
-    620.000000000000000000
-    630.000000000000000000
-    640.000000000000000000
-    650.000000000000000000
-    660.000000000000000000
-    670.000000000000000000
-    680.000000000000000000
-    690.000000000000000000
-    700.000000000000000000
-    710.000000000000000000
-    720.000000000000000000
-    730.000000000000000000
-    740.000000000000000000
-    750.000000000000000000
-    760.000000000000000000
-    770.000000000000000000
-    780.000000000000000000
-    790.000000000000000000
-    800.000000000000000000
-    810.000000000000000000
-    820.000000000000000000
-    830.000000000000000000
-    840.000000000000000000
-    850.000000000000000000
-    860.000000000000000000
-    870.000000000000000000
-    880.000000000000000000
-    890.000000000000000000
-    900.000000000000000000
-    910.000000000000000000
-    920.000000000000000000
-    930.000000000000000000
-    940.000000000000000000
-    950.000000000000000000
-    960.000000000000000000
-    970.000000000000000000
-    980.000000000000000000
-    990.000000000000000000
-    1000.000000000000000000
-    1010.000000000000000000
-    1020.000000000000000000
-    1030.000000000000000000
-    1040.000000000000000000
-    1050.000000000000000000
-    1060.000000000000000000
-    1070.000000000000000000
-    1080.000000000000000000
-    1090.000000000000000000
-    1100.000000000000000000
-    1110.000000000000000000
-    1120.000000000000000000
-    1130.000000000000000000
-    1140.000000000000000000
-    1150.000000000000000000
-    1160.000000000000000000
-    1170.000000000000000000
-    1180.000000000000000000
-    1190.000000000000000000
-    1200.000000000000000000
-    1210.000000000000000000
-    1220.000000000000000000
-    1230.000000000000000000
-    1240.000000000000000000
-    1250.000000000000000000
-    1260.000000000000000000
-    1270.000000000000000000
-    1280.000000000000000000
-    1290.000000000000000000
-    1300.000000000000000000
-    1310.000000000000000000
-    1320.000000000000000000
-    1330.000000000000000000
-    1340.000000000000000000
-    1350.000000000000000000
-    1360.000000000000000000
-    1370.000000000000000000
-    1380.000000000000000000
-    1390.000000000000000000
-    1400.000000000000000000
-    1410.000000000000000000
-    1420.000000000000000000
-    1430.000000000000000000
-    1440.000000000000000000
-    1450.000000000000000000
-    1460.000000000000000000
-    1470.000000000000000000
-    1480.000000000000000000
-    1490.000000000000000000
-    1500.000000000000000000
-    1510.000000000000000000
-    1520.000000000000000000
-    1530.000000000000000000
-    1540.000000000000000000
-    1550.000000000000000000
-    1560.000000000000000000
-    1570.000000000000000000
-    1580.000000000000000000
-    1590.000000000000000000
-    1600.000000000000000000
-    1610.000000000000000000
-    1620.000000000000000000
-    1630.000000000000000000
-    1640.000000000000000000
-    1650.000000000000000000
-    1660.000000000000000000
-    1670.000000000000000000
-    1680.000000000000000000
-    1690.000000000000000000
-    1700.000000000000000000
-    1710.000000000000000000
-    1720.000000000000000000
-    1730.000000000000000000
-    1740.000000000000000000
-    1750.000000000000000000
-    1760.000000000000000000
-    1770.000000000000000000
-    1780.000000000000000000
-    1790.000000000000000000
-    1800.000000000000000000
-    1810.000000000000000000
-    1820.000000000000000000
-    1830.000000000000000000
-    1840.000000000000000000
-    1850.000000000000000000
-    1860.000000000000000000
-    1870.000000000000000000
-    1880.000000000000000000
-    1890.000000000000000000
-    1900.000000000000000000
-    1910.000000000000000000
-    1920.000000000000000000
-    1930.000000000000000000
-    1940.000000000000000000
-    1950.000000000000000000
-    1960.000000000000000000
-    1970.000000000000000000
-    1980.000000000000000000
-    1990.000000000000000000
-    2000.000000000000000000)
+    0.00000000000000000
+    10.00000000000000000
+    20.00000000000000000
+    30.00000000000000000
+    40.00000000000000000
+    50.00000000000000000
+    60.00000000000000000
+    70.00000000000000000
+    80.00000000000000000
+    90.00000000000000000
+    100.00000000000000000
+    110.00000000000000000
+    120.00000000000000000
+    130.00000000000000000
+    140.00000000000000000
+    150.00000000000000000
+    160.00000000000000000
+    170.00000000000000000
+    180.00000000000000000
+    190.00000000000000000
+    200.00000000000000000
+    210.00000000000000000
+    220.00000000000000000
+    230.00000000000000000
+    240.00000000000000000
+    250.00000000000000000
+    260.00000000000000000
+    270.00000000000000000
+    280.00000000000000000
+    290.00000000000000000
+    300.00000000000000000
+    310.00000000000000000
+    320.00000000000000000
+    330.00000000000000000
+    340.00000000000000000
+    350.00000000000000000
+    360.00000000000000000
+    370.00000000000000000
+    380.00000000000000000
+    390.00000000000000000
+    400.00000000000000000
+    410.00000000000000000
+    420.00000000000000000
+    430.00000000000000000
+    440.00000000000000000
+    450.00000000000000000
+    460.00000000000000000
+    470.00000000000000000
+    480.00000000000000000
+    490.00000000000000000
+    500.00000000000000000
+    510.00000000000000000
+    520.00000000000000000
+    530.00000000000000000
+    540.00000000000000000
+    550.00000000000000000
+    560.00000000000000000
+    570.00000000000000000
+    580.00000000000000000
+    590.00000000000000000
+    600.00000000000000000
+    610.00000000000000000
+    620.00000000000000000
+    630.00000000000000000
+    640.00000000000000000
+    650.00000000000000000
+    660.00000000000000000
+    670.00000000000000000
+    680.00000000000000000
+    690.00000000000000000
+    700.00000000000000000
+    710.00000000000000000
+    720.00000000000000000
+    730.00000000000000000
+    740.00000000000000000
+    750.00000000000000000
+    760.00000000000000000
+    770.00000000000000000
+    780.00000000000000000
+    790.00000000000000000
+    800.00000000000000000
+    810.00000000000000000
+    820.00000000000000000
+    830.00000000000000000
+    840.00000000000000000
+    850.00000000000000000
+    860.00000000000000000
+    870.00000000000000000
+    880.00000000000000000
+    890.00000000000000000
+    900.00000000000000000
+    910.00000000000000000
+    920.00000000000000000
+    930.00000000000000000
+    940.00000000000000000
+    950.00000000000000000
+    960.00000000000000000
+    970.00000000000000000
+    980.00000000000000000
+    990.00000000000000000
+    1000.00000000000000000
+    1010.00000000000000000
+    1020.00000000000000000
+    1030.00000000000000000
+    1040.00000000000000000
+    1050.00000000000000000
+    1060.00000000000000000
+    1070.00000000000000000
+    1080.00000000000000000
+    1090.00000000000000000
+    1100.00000000000000000
+    1110.00000000000000000
+    1120.00000000000000000
+    1130.00000000000000000
+    1140.00000000000000000
+    1150.00000000000000000
+    1160.00000000000000000
+    1170.00000000000000000
+    1180.00000000000000000
+    1190.00000000000000000
+    1200.00000000000000000
+    1210.00000000000000000
+    1220.00000000000000000
+    1230.00000000000000000
+    1240.00000000000000000
+    1250.00000000000000000
+    1260.00000000000000000
+    1270.00000000000000000
+    1280.00000000000000000
+    1290.00000000000000000
+    1300.00000000000000000
+    1310.00000000000000000
+    1320.00000000000000000
+    1330.00000000000000000
+    1340.00000000000000000
+    1350.00000000000000000
+    1360.00000000000000000
+    1370.00000000000000000
+    1380.00000000000000000
+    1390.00000000000000000
+    1400.00000000000000000
+    1410.00000000000000000
+    1420.00000000000000000
+    1430.00000000000000000
+    1440.00000000000000000
+    1450.00000000000000000
+    1460.00000000000000000
+    1470.00000000000000000
+    1480.00000000000000000
+    1490.00000000000000000
+    1500.00000000000000000
+    1510.00000000000000000
+    1520.00000000000000000
+    1530.00000000000000000
+    1540.00000000000000000
+    1550.00000000000000000
+    1560.00000000000000000
+    1570.00000000000000000
+    1580.00000000000000000
+    1590.00000000000000000
+    1600.00000000000000000
+    1610.00000000000000000
+    1620.00000000000000000
+    1630.00000000000000000
+    1640.00000000000000000
+    1650.00000000000000000
+    1660.00000000000000000
+    1670.00000000000000000
+    1680.00000000000000000
+    1690.00000000000000000
+    1700.00000000000000000
+    1710.00000000000000000
+    1720.00000000000000000
+    1730.00000000000000000
+    1740.00000000000000000
+    1750.00000000000000000
+    1760.00000000000000000
+    1770.00000000000000000
+    1780.00000000000000000
+    1790.00000000000000000
+    1800.00000000000000000
+    1810.00000000000000000
+    1820.00000000000000000
+    1830.00000000000000000
+    1840.00000000000000000
+    1850.00000000000000000
+    1860.00000000000000000
+    1870.00000000000000000
+    1880.00000000000000000
+    1890.00000000000000000
+    1900.00000000000000000
+    1910.00000000000000000
+    1920.00000000000000000
+    1930.00000000000000000
+    1940.00000000000000000
+    1950.00000000000000000
+    1960.00000000000000000
+    1970.00000000000000000
+    1980.00000000000000000
+    1990.00000000000000000
+    2000.00000000000000000)
   ModflowGrid.RowPositions = (
-    0.000000000000000000
-    -1.000000000000000000)
+    0.00000000000000000
+    -1.00000000000000000)
   ModflowPackages.ChdBoundary.IsSelected = False
   ModflowPackages.GhbBoundary.IsSelected = True
   ModflowPackages.LpfPackage.IsSelected = True
@@ -244,35 +244,35 @@ object PhastModel: TPhastModel
   ModflowPackages.LpfPackage.NoParCheck = False
   ModflowPackages.PcgPackage.IsSelected = True
   ModflowPackages.PcgPackage.NPCOND = pmCholesky
-  ModflowPackages.PcgPackage.HCLOSE.Value = 0.001000000000000000
-  ModflowPackages.PcgPackage.RCLOSE.Value = 0.001000000000000000
-  ModflowPackages.PcgPackage.RELAX.Value = 1.000000000000000000
+  ModflowPackages.PcgPackage.HCLOSE.Value = 0.00100000000000000
+  ModflowPackages.PcgPackage.RCLOSE.Value = 0.00100000000000000
+  ModflowPackages.PcgPackage.RELAX.Value = 1.00000000000000000
   ModflowPackages.PcgPackage.NBPOL = peeEstimate
   ModflowPackages.PcgPackage.MUTPCG = ppsAll
-  ModflowPackages.PcgPackage.DAMPPCG.Value = 1.000000000000000000
-  ModflowPackages.PcgPackage.DAMPPCGT.Value = 1.000000000000000000
+  ModflowPackages.PcgPackage.DAMPPCG.Value = 1.00000000000000000
+  ModflowPackages.PcgPackage.DAMPPCGT.Value = 1.00000000000000000
   ModflowPackages.PcgPackage.IHCOFADD = dcoConvertWhenSurrounded
   ModflowPackages.PcgnPackage.IsSelected = False
   ModflowPackages.PcgnPackage.ITER_MO = 50
   ModflowPackages.PcgnPackage.ITER_MI = 20
-  ModflowPackages.PcgnPackage.CLOSE_R.Value = 0.001000000000000000
-  ModflowPackages.PcgnPackage.CLOSE_H.Value = 0.000010000000000000
-  ModflowPackages.PcgnPackage.RELAX.Value = 0.990000000000000000
+  ModflowPackages.PcgnPackage.CLOSE_R.Value = 0.00100000000000000
+  ModflowPackages.PcgnPackage.CLOSE_H.Value = 0.00001000000000000
+  ModflowPackages.PcgnPackage.RELAX.Value = 0.99000000000000000
   ModflowPackages.PcgnPackage.IFILL = 0
   ModflowPackages.PcgnPackage.UNIT_PC = False
   ModflowPackages.PcgnPackage.UNIT_TS = False
   ModflowPackages.PcgnPackage.ADAMP = dOrdinary
-  ModflowPackages.PcgnPackage.DAMP.Value = 0.500000000000000000
-  ModflowPackages.PcgnPackage.DAMP_LB.Value = 0.100000000000000000
-  ModflowPackages.PcgnPackage.RATE_D.Value = 0.050000000000000000
-  ModflowPackages.PcgnPackage.CHGLIMIT.Value = 0.000000000000000000
+  ModflowPackages.PcgnPackage.DAMP.Value = 0.50000000000000000
+  ModflowPackages.PcgnPackage.DAMP_LB.Value = 0.10000000000000000
+  ModflowPackages.PcgnPackage.RATE_D.Value = 0.05000000000000000
+  ModflowPackages.PcgnPackage.CHGLIMIT.Value = 0.00000000000000000
   ModflowPackages.PcgnPackage.ACNVG = cmStandard
-  ModflowPackages.PcgnPackage.CNVG_LB.Value = 0.010000000000000000
+  ModflowPackages.PcgnPackage.CNVG_LB.Value = 0.01000000000000000
   ModflowPackages.PcgnPackage.MCNVG = 2
-  ModflowPackages.PcgnPackage.RATE_C.Value = 0.100000000000000000
+  ModflowPackages.PcgnPackage.RATE_C.Value = 0.10000000000000000
   ModflowPackages.PcgnPackage.IPUNIT = prListing
   ModflowPackages.WelPackage.IsSelected = True
-  ModflowPackages.WelPackage.PublishedPhiRamp.Value = 0.000001000000000000
+  ModflowPackages.WelPackage.PublishedPhiRamp.Value = 0.00000100000000000
   ModflowPackages.WelPackage.UseTabFiles = False
   ModflowPackages.RivPackage.IsSelected = False
   ModflowPackages.DrnPackage.IsSelected = False
@@ -299,22 +299,22 @@ object PhastModel: TPhastModel
   ModflowPackages.ResPackage.MultiplierArrayNames = <>
   ModflowPackages.ResPackage.ZoneArrayNames = <>
   ModflowPackages.LakPackage.IsSelected = False
-  ModflowPackages.LakPackage.ConvergenceCriterion = 0.000010000000000000
-  ModflowPackages.LakPackage.Theta = 0.500000000000000000
-  ModflowPackages.LakPackage.SurfDepth.Value = 0.200000000000000000
+  ModflowPackages.LakPackage.ConvergenceCriterion = 0.00001000000000000
+  ModflowPackages.LakPackage.Theta = 0.50000000000000000
+  ModflowPackages.LakPackage.SurfDepth.Value = 0.20000000000000000
   ModflowPackages.LakPackage.ExternalLakeChoice = elcNone
   ModflowPackages.SfrPackage.IsSelected = False
-  ModflowPackages.SfrPackage.Dleak = 0.000100000000000000
+  ModflowPackages.SfrPackage.Dleak = 0.00010000000000000
   ModflowPackages.SfrPackage.Isfropt = 0
   ModflowPackages.SfrPackage.Nstrail = 10
   ModflowPackages.SfrPackage.Isuzn = 10
   ModflowPackages.SfrPackage.Nsfrsets = 30
   ModflowPackages.SfrPackage.KinematicRouting = False
-  ModflowPackages.SfrPackage.KinematicRoutingTolerance = 0.000100000000000000
-  ModflowPackages.SfrPackage.KinematicRoutingWeight = 1.000000000000000000
+  ModflowPackages.SfrPackage.KinematicRoutingTolerance = 0.00010000000000000
+  ModflowPackages.SfrPackage.KinematicRoutingWeight = 1.00000000000000000
   ModflowPackages.SfrPackage.GageOverallBudget = False
   ModflowPackages.SfrPackage.LossFactorOption = False
-  ModflowPackages.SfrPackage.StoredLossFactor.Value = 1.000000000000000000
+  ModflowPackages.SfrPackage.StoredLossFactor.Value = 1.00000000000000000
   ModflowPackages.UzfPackage.IsSelected = False
   ModflowPackages.UzfPackage.LayerOption = loTop
   ModflowPackages.UzfPackage.VerticalKSource = 1
@@ -323,37 +323,37 @@ object PhastModel: TPhastModel
   ModflowPackages.UzfPackage.NumberOfTrailingWaves = 15
   ModflowPackages.UzfPackage.NumberOfWaveSets = 20
   ModflowPackages.UzfPackage.PrintSummary = 0
-  ModflowPackages.UzfPackage.DepthOfUndulations = 1.000000000000000000
+  ModflowPackages.UzfPackage.DepthOfUndulations = 1.00000000000000000
   ModflowPackages.UzfPackage.AssignmentMethod = umAssign
   ModflowPackages.UzfPackage.SpecifyResidualWaterContent = False
   ModflowPackages.UzfPackage.SpecifyInitialWaterContent = False
   ModflowPackages.UzfPackage.SurfaceKUsedToCalculateRejection = False
   ModflowPackages.UzfPackage.SurfaceKUsedToCalculateSeepage = False
   ModflowPackages.UzfPackage.ETSmoothed = False
-  ModflowPackages.UzfPackage.StoredSmoothFactor.Value = 0.100000000000000000
+  ModflowPackages.UzfPackage.StoredSmoothFactor.Value = 0.10000000000000000
   ModflowPackages.UzfPackage.WriteRechargeAndDischarge = False
   ModflowPackages.GmgPackage.IsSelected = False
-  ModflowPackages.GmgPackage.RCLOSE.Value = 0.000010000000000000
+  ModflowPackages.GmgPackage.RCLOSE.Value = 0.00001000000000000
   ModflowPackages.GmgPackage.IITER = 100
-  ModflowPackages.GmgPackage.HCLOSE.Value = 0.000010000000000000
+  ModflowPackages.GmgPackage.HCLOSE.Value = 0.00001000000000000
   ModflowPackages.GmgPackage.MXITER = 100
-  ModflowPackages.GmgPackage.DAMP.Value = 1.000000000000000000
+  ModflowPackages.GmgPackage.DAMP.Value = 1.00000000000000000
   ModflowPackages.GmgPackage.IADAMP = 0
   ModflowPackages.GmgPackage.IOUTGMG = 1
   ModflowPackages.GmgPackage.IUNITMHC = False
   ModflowPackages.GmgPackage.ISM = 0
   ModflowPackages.GmgPackage.ISC = 1
-  ModflowPackages.GmgPackage.DUP.Value = 0.700000000000000000
-  ModflowPackages.GmgPackage.DLOW.Value = 0.001000000000000000
-  ModflowPackages.GmgPackage.CHGLIMIT.Value = 0.001000000000000000
-  ModflowPackages.GmgPackage.RELAX.Value = 1.000000000000000000
+  ModflowPackages.GmgPackage.DUP.Value = 0.70000000000000000
+  ModflowPackages.GmgPackage.DLOW.Value = 0.00100000000000000
+  ModflowPackages.GmgPackage.CHGLIMIT.Value = 0.00100000000000000
+  ModflowPackages.GmgPackage.RELAX.Value = 1.00000000000000000
   ModflowPackages.SipPackage.IsSelected = False
   ModflowPackages.SipPackage.MXITER = 100
   ModflowPackages.SipPackage.NPARM = 5
-  ModflowPackages.SipPackage.ACCL.Value = 1.000000000000000000
-  ModflowPackages.SipPackage.HCLOSE.Value = 0.001000000000000000
+  ModflowPackages.SipPackage.ACCL.Value = 1.00000000000000000
+  ModflowPackages.SipPackage.HCLOSE.Value = 0.00100000000000000
   ModflowPackages.SipPackage.IPCALC = 1
-  ModflowPackages.SipPackage.WSEED.Value = 9999.000000000000000000
+  ModflowPackages.SipPackage.WSEED.Value = 9999.00000000000000000
   ModflowPackages.SipPackage.IPRSIP = 999
   ModflowPackages.De4Package.IsSelected = False
   ModflowPackages.De4Package.ITMX = 5
@@ -362,11 +362,11 @@ object PhastModel: TPhastModel
   ModflowPackages.De4Package.MXBW = 0
   ModflowPackages.De4Package.IFREQ = 3
   ModflowPackages.De4Package.MUTD4 = 0
-  ModflowPackages.De4Package.ACCL.Value = 1.000000000000000000
-  ModflowPackages.De4Package.HCLOSE.Value = 0.001000000000000000
+  ModflowPackages.De4Package.ACCL.Value = 1.00000000000000000
+  ModflowPackages.De4Package.HCLOSE.Value = 0.00100000000000000
   ModflowPackages.De4Package.IPRD4 = 1
   ModflowPackages.HobPackage.IsSelected = False
-  ModflowPackages.HobPackage.DryHead = -1000000.000000000000000000
+  ModflowPackages.HobPackage.DryHead = -999999.99999999990000000
   ModflowPackages.HfbPackage.IsSelected = False
   ModflowPackages.ModPath.IsSelected = False
   ModflowPackages.ModPath.MaximumSize = 0
@@ -383,7 +383,7 @@ object PhastModel: TPhastModel
   ModflowPackages.ModPath.ComputeBudgetInAllCells = False
   ModflowPackages.ModPath.Summarize = False
   ModflowPackages.ModPath.TimeSeriesMethod = tsmUniform
-  ModflowPackages.ModPath.TimeSeriesInterval = 1.000000000000000000
+  ModflowPackages.ModPath.TimeSeriesInterval = 1.00000000000000000
   ModflowPackages.ModPath.TimeSeriesMaxCount = 0
   ModflowPackages.ModPath.MpathVersion = mp7
   ModflowPackages.ModPath.WeakSource = wsPassThrough
@@ -416,7 +416,7 @@ object PhastModel: TPhastModel
   ModflowPackages.SubPackage.PrintFormats.InelasticCompactionByInterbedSystemFormat = 0
   ModflowPackages.SubPackage.PrintChoices = <>
   ModflowPackages.SubPackage.NumberOfNodes = 10
-  ModflowPackages.SubPackage.AccelerationParameter2 = 1.000000000000000000
+  ModflowPackages.SubPackage.AccelerationParameter2 = 1.00000000000000000
   ModflowPackages.SubPackage.MinIterations = 5
   ModflowPackages.SubPackage.SaveDelayRestart = False
   ModflowPackages.SubPackage.BinaryOutputChoice = sbocSingleFile
@@ -461,43 +461,43 @@ object PhastModel: TPhastModel
   ModflowPackages.UpwPackage.HDryPrintOption = hpoPrintHdry
   ModflowPackages.UpwPackage.NoParCheck = False
   ModflowPackages.NwtPackage.IsSelected = False
-  ModflowPackages.NwtPackage.HeadTolerance.Value = 0.000100000000000000
-  ModflowPackages.NwtPackage.FluxTolerance.Value = 0.060000000000000000
+  ModflowPackages.NwtPackage.HeadTolerance.Value = 0.00010000000000000
+  ModflowPackages.NwtPackage.FluxTolerance.Value = 0.06000000000000000
   ModflowPackages.NwtPackage.MaxOuterIterations = 100
-  ModflowPackages.NwtPackage.ThicknessFactor.Value = 0.000010000000000000
+  ModflowPackages.NwtPackage.ThicknessFactor.Value = 0.00001000000000000
   ModflowPackages.NwtPackage.SolverMethod = nsmChiMD
   ModflowPackages.NwtPackage.PrintFlag = 1
   ModflowPackages.NwtPackage.CorrectForCellBottom = 0
   ModflowPackages.NwtPackage.Option = noSimple
-  ModflowPackages.NwtPackage.DBDTheta.Value = 0.900000000000000000
-  ModflowPackages.NwtPackage.DBDKappa.Value = 0.000100000000000000
-  ModflowPackages.NwtPackage.DBDGamma.Value = 0.000000000000000000
-  ModflowPackages.NwtPackage.MomementumCoefficient.Value = 0.100000000000000000
+  ModflowPackages.NwtPackage.DBDTheta.Value = 0.90000000000000000
+  ModflowPackages.NwtPackage.DBDKappa.Value = 0.00010000000000000
+  ModflowPackages.NwtPackage.DBDGamma.Value = 0.00000000000000000
+  ModflowPackages.NwtPackage.MomementumCoefficient.Value = 0.10000000000000000
   ModflowPackages.NwtPackage.BackFlag = 1
   ModflowPackages.NwtPackage.MaxBackIterations = 50
-  ModflowPackages.NwtPackage.BackTol.Value = 1.100000000000000000
-  ModflowPackages.NwtPackage.BackReduce.Value = 0.700000000000000000
+  ModflowPackages.NwtPackage.BackTol.Value = 1.10000000000000000
+  ModflowPackages.NwtPackage.BackReduce.Value = 0.70000000000000000
   ModflowPackages.NwtPackage.MaxIterInner = 50
   ModflowPackages.NwtPackage.IluMethod = nimKOrder
   ModflowPackages.NwtPackage.FillLimit = 7
   ModflowPackages.NwtPackage.FillLevel = 1
-  ModflowPackages.NwtPackage.StopTolerance.Value = 0.000000000100000000
+  ModflowPackages.NwtPackage.StopTolerance.Value = 0.00000000010000000
   ModflowPackages.NwtPackage.MaxGmresRestarts = 10
   ModflowPackages.NwtPackage.AccelMethod = namOthoMin
   ModflowPackages.NwtPackage.OrderingMethod = nomRCM
   ModflowPackages.NwtPackage.Level = 3
   ModflowPackages.NwtPackage.NumberOfOrthogonalizations = 5
   ModflowPackages.NwtPackage.ApplyReducedPrecondition = narpApply
-  ModflowPackages.NwtPackage.ResidReducConv.Value = 0.000000000000000000
+  ModflowPackages.NwtPackage.ResidReducConv.Value = 0.00000000000000000
   ModflowPackages.NwtPackage.UseDropTolerance = nudtUse
-  ModflowPackages.NwtPackage.DropTolerancePreconditioning.Value = 0.000100000000000000
-  ModflowPackages.NwtPackage.InnerHeadClosureCriterion.Value = 0.000100000000000000
+  ModflowPackages.NwtPackage.DropTolerancePreconditioning.Value = 0.00010000000000000
+  ModflowPackages.NwtPackage.InnerHeadClosureCriterion.Value = 0.00010000000000000
   ModflowPackages.NwtPackage.MaxInnerIterations = 50
   ModflowPackages.NwtPackage.ContinueNWT = False
   ModflowPackages.Mt3dBasic.IsSelected = False
   ModflowPackages.Mt3dBasic.StoredMassUnit.Value = 'g'
   ModflowPackages.Mt3dBasic.StoredInactiveConcentration.Value = -1E30
-  ModflowPackages.Mt3dBasic.StoredMinimumSaturatedFraction.Value = 0.010000000000000000
+  ModflowPackages.Mt3dBasic.StoredMinimumSaturatedFraction.Value = 0.01000000000000000
   ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS
   ModflowPackages.Mt3dBasic.InitialChoice = micSpecifyTimeStep
   ModflowPackages.Mt3dBasic.Mt3dUsgsOptions = [muoWetDryPrint, muoIncludeDryCellBudget]
@@ -506,17 +506,17 @@ object PhastModel: TPhastModel
   ModflowPackages.Mt3dmsGCGSolver.MaxInnerIterations = 200
   ModflowPackages.Mt3dmsGCGSolver.PreconditionerChoice = gpCholesky
   ModflowPackages.Mt3dmsGCGSolver.DispersionTensorChoice = dtcLump
-  ModflowPackages.Mt3dmsGCGSolver.StoredRelaxationFactor.Value = 1.000000000000000000
-  ModflowPackages.Mt3dmsGCGSolver.StoredConvergenceCriterion.Value = 0.000001000000000000
+  ModflowPackages.Mt3dmsGCGSolver.StoredRelaxationFactor.Value = 1.00000000000000000
+  ModflowPackages.Mt3dmsGCGSolver.StoredConvergenceCriterion.Value = 0.00000100000000000
   ModflowPackages.Mt3dmsGCGSolver.PrintoutInterval = 1
   ModflowPackages.Mt3dmsAdvection.IsSelected = False
   ModflowPackages.Mt3dmsAdvection.AdvectionSolution = asUltimate
-  ModflowPackages.Mt3dmsAdvection.StoredCourant.Value = 1.000000000000000000
+  ModflowPackages.Mt3dmsAdvection.StoredCourant.Value = 1.00000000000000000
   ModflowPackages.Mt3dmsAdvection.MaximumParticles = 75000
   ModflowPackages.Mt3dmsAdvection.WeightingScheme = wsUpstream
   ModflowPackages.Mt3dmsAdvection.ParticleTrackMethod = ptmHybrid
-  ModflowPackages.Mt3dmsAdvection.StoredConcWeight.Value = 0.500000000000000000
-  ModflowPackages.Mt3dmsAdvection.StoredRelCelConcGrad.Value = 0.000010000000000000
+  ModflowPackages.Mt3dmsAdvection.StoredConcWeight.Value = 0.50000000000000000
+  ModflowPackages.Mt3dmsAdvection.StoredRelCelConcGrad.Value = 0.00001000000000000
   ModflowPackages.Mt3dmsAdvection.ParticlePlacementMethod = ppmRandom
   ModflowPackages.Mt3dmsAdvection.NumberOfParticlePlanes = 1
   ModflowPackages.Mt3dmsAdvection.LowGradientParticleCount = 0
@@ -526,7 +526,7 @@ object PhastModel: TPhastModel
   ModflowPackages.Mt3dmsAdvection.SinkParticlePlacementMethod = ppmRandom
   ModflowPackages.Mt3dmsAdvection.SinkNumberOfParticlePlanes = 1
   ModflowPackages.Mt3dmsAdvection.SinkParticleCount = 10
-  ModflowPackages.Mt3dmsAdvection.StoredCriticalConcGradient.Value = 0.010000000000000000
+  ModflowPackages.Mt3dmsAdvection.StoredCriticalConcGradient.Value = 0.01000000000000000
   ModflowPackages.Mt3dmsDispersion.IsSelected = False
   ModflowPackages.Mt3dmsDispersion.MultiDifussion = False
   ModflowPackages.Mt3dmsDispersion.CrossTermsUsed = True
@@ -538,10 +538,11 @@ object PhastModel: TPhastModel
   ModflowPackages.Mt3dmsChemReact.ReactionChoice = rcNone
   ModflowPackages.Mt3dmsChemReact.YieldCoefficients.Strings = (
     ''
+    ''
     '')
   ModflowPackages.Mt3dmsChemReact.ElectronDonor = -1
   ModflowPackages.Mt3dmsChemReact.ElectronAcceptor = -1
-  ModflowPackages.Mt3dmsChemReact.StoredStochiometricRatio.Value = 1.000000000000000000
+  ModflowPackages.Mt3dmsChemReact.StoredStochiometricRatio.Value = 1.00000000000000000
   ModflowPackages.Mt3dmsChemReact.ElectronDonorCount = 0
   ModflowPackages.Mt3dmsChemReact.ElectronAcceptorCount = 0
   ModflowPackages.Mt3dmsChemReact.SolidFE = sfNo
@@ -551,11 +552,11 @@ object PhastModel: TPhastModel
   ModflowPackages.Mt3dmsChemReact.Yields = <>
   ModflowPackages.Mt3dmsTransObs.IsSelected = False
   ModflowPackages.Mt3dmsTransObs.SaveBinary = sbSave
-  ModflowPackages.Mt3dmsTransObs.StoredConcScaleFactor.Value = 1.000000000000000000
+  ModflowPackages.Mt3dmsTransObs.StoredConcScaleFactor.Value = 1.00000000000000000
   ModflowPackages.Mt3dmsTransObs.ConcObsResult = corConcResid
   ModflowPackages.Mt3dmsTransObs.TransformType = ltNoConversion
   ModflowPackages.Mt3dmsTransObs.InterpolateObs = ioBilinear
-  ModflowPackages.Mt3dmsTransObs.StoredFluxScaleFactor.Value = 1.000000000000000000
+  ModflowPackages.Mt3dmsTransObs.StoredFluxScaleFactor.Value = 1.00000000000000000
   ModflowPackages.Mt3dmsTransObs.MassFluxObsResult = mfoMassFluxResid
   ModflowPackages.Mt3dUnsatTransport.IsSelected = False
   ModflowPackages.Mt3dLkt.IsSelected = False
@@ -563,9 +564,9 @@ object PhastModel: TPhastModel
   ModflowPackages.Mt3dLkt.PrintLakeTransportBudget = True
   ModflowPackages.Mt3dSft.IsSelected = False
   ModflowPackages.Mt3dSft.EvaporateMass = False
-  ModflowPackages.Mt3dSft.StoredTimeWeightingFactor.Value = 0.500000000000000000
-  ModflowPackages.Mt3dSft.StoredSpaceWeightingFactor.Value = 1.000000000000000000
-  ModflowPackages.Mt3dSft.StoredClosureCriterion.Value = 0.000001000000000000
+  ModflowPackages.Mt3dSft.StoredTimeWeightingFactor.Value = 0.50000000000000000
+  ModflowPackages.Mt3dSft.StoredSpaceWeightingFactor.Value = 1.00000000000000000
+  ModflowPackages.Mt3dSft.StoredClosureCriterion.Value = 0.00000100000000000
   ModflowPackages.Mt3dSft.MaxSftIterations = 10
   ModflowPackages.Mt3dSft.SolverPrintChoice = sftDetailed
   ModflowPackages.Mt3dSft.SimulateTransportInStream = True
@@ -599,31 +600,33 @@ object PhastModel: TPhastModel
   ModflowPackages.FarmProcess.CropIrrigationRequirement = cirContinuously
   ModflowPackages.FarmProcess.RoutedDelivery = rdNone
   ModflowPackages.FarmProcess.RoutedReturn = rrAny
-  ModflowPackages.FarmProcess.StoredSurfaceWaterClosure.Value = 0.001000000000000000
+  ModflowPackages.FarmProcess.StoredSurfaceWaterClosure.Value = 0.00100000000000000
   ModflowPackages.FarmProcess.RecomputeOption = roNotComputed
   ModflowPackages.FarmProcess.AssignmentMethod = umAssign
   ModflowPackages.FarmProcess.ResetMnwQMax = False
   ModflowPackages.FarmProcess.MnwClose = False
-  ModflowPackages.FarmProcess.StoredMnwClosureCriterion.Value = 0.000001000000000000
-  ModflowPackages.FarmProcess.StoredHeadChangeReduction.Value = 0.100000000000000000
-  ModflowPackages.FarmProcess.StoredResidualChangeReduction.Value = 0.100000000000000000
-  ModflowPackages.FarmProcess.StoredPsiRampf.Value = 0.100000000000000000
-  ModflowPackages.FarmProcess.StoredSatThick.Value = 0.100000000000000000
+  ModflowPackages.FarmProcess.StoredMnwClosureCriterion.Value = 0.00000100000000000
+  ModflowPackages.FarmProcess.StoredHeadChangeReduction.Value = 0.10000000000000000
+  ModflowPackages.FarmProcess.StoredResidualChangeReduction.Value = 0.10000000000000000
+  ModflowPackages.FarmProcess.StoredPsiRampf.Value = 0.10000000000000000
+  ModflowPackages.FarmProcess.StoredSatThick.Value = 0.10000000000000000
   ModflowPackages.ConduitFlowProcess.IsSelected = False
   ModflowPackages.ConduitFlowProcess.PipesUsed = False
   ModflowPackages.ConduitFlowProcess.ConduitLayersUsed = True
   ModflowPackages.ConduitFlowProcess.ConduitRechargeUsed = False
-  ModflowPackages.ConduitFlowProcess.StoredConduitTemperature.Value = 25.000000000000000000
+  ModflowPackages.ConduitFlowProcess.StoredConduitTemperature.Value = 25.00000000000000000
   ModflowPackages.ConduitFlowProcess.CfpElevationChoice = cecIndividual
-  ModflowPackages.ConduitFlowProcess.StoredElevationOffset.Value = 0.000000000000000000
+  ModflowPackages.ConduitFlowProcess.StoredElevationOffset.Value = 0.00000000000000000
   ModflowPackages.ConduitFlowProcess.CfpExchange = ceNodeConductance
-  ModflowPackages.ConduitFlowProcess.StoredEpsilon.Value = 0.000000000100000000
+  ModflowPackages.ConduitFlowProcess.StoredEpsilon.Value = 0.00000000010000000
   ModflowPackages.ConduitFlowProcess.MaxIterations = 1000
-  ModflowPackages.ConduitFlowProcess.StoredRelax.Value = 1.000000000000000000
+  ModflowPackages.ConduitFlowProcess.StoredRelax.Value = 1.00000000000000000
   ModflowPackages.ConduitFlowProcess.CfpPrintIterations = cpiPrint
-  ModflowPackages.ConduitFlowProcess.StoredLayerTemperature.Value = 25.000000000000000000
+  ModflowPackages.ConduitFlowProcess.StoredLayerTemperature.Value = 25.00000000000000000
   ModflowPackages.ConduitFlowProcess.OutputInterval = 1
   ModflowPackages.ConduitFlowProcess.UseCads = False
+  ModflowPackages.ConduitFlowProcess.UseCadsRecharge = False
+  ModflowPackages.ConduitFlowProcess.RecordInputAndOutput = False
   ModflowPackages.SwiPackage.IsSelected = False
   ModflowPackages.SwiPackage.NumberOfSurfaces = 1
   ModflowPackages.SwiPackage.DensityChoice = dcLinear
@@ -634,19 +637,19 @@ object PhastModel: TPhastModel
   ModflowPackages.SwiPackage.SolverPrintoutInterval = 1
   ModflowPackages.SwiPackage.SolverPrintChoice = sspcTables
   ModflowPackages.SwiPackage.NPCOND = pmCholesky
-  ModflowPackages.SwiPackage.ZCLOSE.Value = 0.001000000000000000
-  ModflowPackages.SwiPackage.RCLOSE.Value = 0.001000000000000000
-  ModflowPackages.SwiPackage.RELAX.Value = 1.000000000000000000
+  ModflowPackages.SwiPackage.ZCLOSE.Value = 0.00100000000000000
+  ModflowPackages.SwiPackage.RCLOSE.Value = 0.00100000000000000
+  ModflowPackages.SwiPackage.RELAX.Value = 1.00000000000000000
   ModflowPackages.SwiPackage.NBPOL = peeEstimate
-  ModflowPackages.SwiPackage.DAMP.Value = 1.000000000000000000
-  ModflowPackages.SwiPackage.DAMPT.Value = 1.000000000000000000
-  ModflowPackages.SwiPackage.ToeSlope.Value = 0.040000000000000000
-  ModflowPackages.SwiPackage.TipSlope.Value = 0.040000000000000000
-  ModflowPackages.SwiPackage.Alpha.Value = 0.100000000000000000
-  ModflowPackages.SwiPackage.Beta.Value = 0.100000000000000000
+  ModflowPackages.SwiPackage.DAMP.Value = 1.00000000000000000
+  ModflowPackages.SwiPackage.DAMPT.Value = 1.00000000000000000
+  ModflowPackages.SwiPackage.ToeSlope.Value = 0.04000000000000000
+  ModflowPackages.SwiPackage.TipSlope.Value = 0.04000000000000000
+  ModflowPackages.SwiPackage.Alpha.Value = 0.10000000000000000
+  ModflowPackages.SwiPackage.Beta.Value = 0.10000000000000000
   ModflowPackages.SwiPackage.MaxAdaptiveTimeSteps = 10
   ModflowPackages.SwiPackage.MinAdaptiveTimeSteps = 1
-  ModflowPackages.SwiPackage.AdaptiveFactor.Value = 0.500000000000000000
+  ModflowPackages.SwiPackage.AdaptiveFactor.Value = 0.50000000000000000
   ModflowPackages.SwiPackage.ZoneDimensionlessDensities = <>
   ModflowPackages.SwiPackage.ModflowPrecision = mpSingle
   ModflowPackages.SwrPackage.IsSelected = False
@@ -660,17 +663,17 @@ object PhastModel: TPhastModel
   ModflowPackages.SwrPackage.Scaling = ssNone
   ModflowPackages.SwrPackage.Reordering = srNone
   ModflowPackages.SwrPackage.NewtonCorrection = sncExplicit
-  ModflowPackages.SwrPackage.StoredInitialTimeStepLength.Value = 0.010000000000000000
-  ModflowPackages.SwrPackage.StoredMinTimeStepLength.Value = 0.000100000000000000
-  ModflowPackages.SwrPackage.StoredMaxTimeStepLength.Value = 0.010000000000000000
-  ModflowPackages.SwrPackage.StoredTimeStepMultiplier.Value = 1.010000000000000000
+  ModflowPackages.SwrPackage.StoredInitialTimeStepLength.Value = 0.01000000000000000
+  ModflowPackages.SwrPackage.StoredMinTimeStepLength.Value = 0.00010000000000000
+  ModflowPackages.SwrPackage.StoredMaxTimeStepLength.Value = 0.01000000000000000
+  ModflowPackages.SwrPackage.StoredTimeStepMultiplier.Value = 1.01000000000000000
   ModflowPackages.SwrPackage.TimeStepIncreaseFrequency = 10
-  ModflowPackages.SwrPackage.StoredMinGradientForDiffusiveFlow.Value = 0.000000000001000000
+  ModflowPackages.SwrPackage.StoredMinGradientForDiffusiveFlow.Value = 0.00000000000100000
   ModflowPackages.SwrPackage.StoredMinGradientForDiffusiveFlow.StringValue = '1E-12'
-  ModflowPackages.SwrPackage.StoredMinDepthForOutflow.Value = 0.001000000000000000
-  ModflowPackages.SwrPackage.StoredMaxRainfallForStepAdjustment.Value = 0.150000000000000000
-  ModflowPackages.SwrPackage.StoredMaxStageChangePerStep.Value = 0.500000000000000000
-  ModflowPackages.SwrPackage.StoredMaxInflowChange.Value = 0.000000000000000000
+  ModflowPackages.SwrPackage.StoredMinDepthForOutflow.Value = 0.00100000000000000
+  ModflowPackages.SwrPackage.StoredMaxRainfallForStepAdjustment.Value = 0.15000000000000000
+  ModflowPackages.SwrPackage.StoredMaxStageChangePerStep.Value = 0.50000000000000000
+  ModflowPackages.SwrPackage.StoredMaxInflowChange.Value = 0.00000000000000000
   ModflowPackages.SwrPackage.RainSpecification = smArray
   ModflowPackages.SwrPackage.EvapSpecification = smArray
   ModflowPackages.SwrPackage.LateralInflowSpecification = smArray
@@ -688,25 +691,25 @@ object PhastModel: TPhastModel
   ModflowPackages.SwrPackage.SaveRiver = ssrNone
   ModflowPackages.SwrPackage.SaveObs = ssoNone
   ModflowPackages.SwrPackage.ObsFormat = swofAscii
-  ModflowPackages.SwrPackage.StoredSaveFrequency.Value = 0.000000000000000000
+  ModflowPackages.SwrPackage.StoredSaveFrequency.Value = 0.00000000000000000
   ModflowPackages.SwrPackage.Solver = ssBi_CGSTAB
   ModflowPackages.SwrPackage.MaxOuterIterations = 31
   ModflowPackages.SwrPackage.MaxInnerIterations = 100
   ModflowPackages.SwrPackage.MaxLineSearchIterations = 10
-  ModflowPackages.SwrPackage.StoredStageTolerance.Value = 0.000000001000000000
+  ModflowPackages.SwrPackage.StoredStageTolerance.Value = 0.00000000100000000
   ModflowPackages.SwrPackage.FlowToleranceOption = rtoNone
-  ModflowPackages.SwrPackage.StoredFlowTolerance.Value = 100.000000000000000000
+  ModflowPackages.SwrPackage.StoredFlowTolerance.Value = 100.00000000000000000
   ModflowPackages.SwrPackage.ExchangeToleranceOption = etNone
-  ModflowPackages.SwrPackage.StoredExchangeTolerance.Value = 0.010000000000000000
-  ModflowPackages.SwrPackage.StoredSteadyStateDampingFactor.Value = 1.000000000000000000
-  ModflowPackages.SwrPackage.StoredTransientDampingFactor.Value = 1.000000000000000000
+  ModflowPackages.SwrPackage.StoredExchangeTolerance.Value = 0.01000000000000000
+  ModflowPackages.SwrPackage.StoredSteadyStateDampingFactor.Value = 1.00000000000000000
+  ModflowPackages.SwrPackage.StoredTransientDampingFactor.Value = 1.00000000000000000
   ModflowPackages.SwrPackage.ConvergencePrintoutInterval = 1
   ModflowPackages.SwrPackage.PrintConvergence = spcPrintMaxResidual
   ModflowPackages.SwrPackage.Preconditioner = spMilu
   ModflowPackages.SwrPackage.MaxLevels = 7
-  ModflowPackages.SwrPackage.StoredDropThreshold.Value = 0.001000000000000000
+  ModflowPackages.SwrPackage.StoredDropThreshold.Value = 0.00100000000000000
   ModflowPackages.SwrPackage.PrintLineSearchInterval = 0
-  ModflowPackages.SwrPackage.StoredAlternativeFlowTolerance.Value = 100.000000000000000000
+  ModflowPackages.SwrPackage.StoredAlternativeFlowTolerance.Value = 100.00000000000000000
   ModflowPackages.SwrPackage.RainAssignmentMethod = umAssign
   ModflowPackages.SwrPackage.EvapAssignmentMethod = umAssign
   ModflowPackages.SwrPackage.LatInflowAssignmentMethod = umAssign
@@ -714,7 +717,7 @@ object PhastModel: TPhastModel
   ModflowPackages.Mnw1Package.IsSelected = False
   ModflowPackages.Mnw1Package.MaxMnwIterations = 9999
   ModflowPackages.Mnw1Package.LossType = mlt1Skin
-  ModflowPackages.Mnw1Package.StoredLossExponent.Value = 1.000000000000000000
+  ModflowPackages.Mnw1Package.StoredLossExponent.Value = 1.00000000000000000
   ModflowPackages.Mnw1Package.ByNodePrintFrequency = mpfOutputControl
   ModflowPackages.Mnw1Package.QSumPrintFrequency = mpfOutputControl
   ModflowPackages.NpfPackage.IsSelected = True
@@ -726,9 +729,9 @@ object PhastModel: TPhastModel
   ModflowPackages.NpfPackage.UseXT3D = False
   ModflowPackages.NpfPackage.Xt3dOnRightHandSide = False
   ModflowPackages.NpfPackage.SaveSpecificDischarge = True
+  ModflowPackages.NpfPackage.SaveSaturation = True
   ModflowPackages.NpfPackage.UseHorizontalAnisotropy = False
   ModflowPackages.NpfPackage.UseVerticalAnisotropy = False
-  ModflowPackages.NpfPackage.SaveSaturation = True
   ModflowPackages.StoPackage.IsSelected = True
   ModflowPackages.StoPackage.StorageChoice = scSpecificStorage
   ModflowPackages.SmsPackage.IsSelected = True
@@ -743,35 +746,35 @@ object PhastModel: TPhastModel
   ModflowPackages.SmsPackage.MaxErrors = -1
   ModflowPackages.SmsPackage.CheckInput = ciCheckAll
   ModflowPackages.SmsPackage.MemoryPrint = mpNone
-  ModflowPackages.SmsPackage.StoredOuterHclose.Value = 0.000000300000000000
+  ModflowPackages.SmsPackage.StoredOuterHclose.Value = 0.00000030000000000
   ModflowPackages.SmsPackage.MaxOuterIterations = 100
   ModflowPackages.SmsPackage.UnderRelaxation = surNone
-  ModflowPackages.SmsPackage.StoredUnderRelaxTheta.Value = 0.700000000000000000
-  ModflowPackages.SmsPackage.StoredUnderRelaxKappa.Value = 0.100000000000000000
-  ModflowPackages.SmsPackage.StoredUnderRelaxGamma.Value = 0.200000000000000000
-  ModflowPackages.SmsPackage.StoredUnderRelaxMomentum.Value = 0.001000000000000000
+  ModflowPackages.SmsPackage.StoredUnderRelaxTheta.Value = 0.70000000000000000
+  ModflowPackages.SmsPackage.StoredUnderRelaxKappa.Value = 0.10000000000000000
+  ModflowPackages.SmsPackage.StoredUnderRelaxGamma.Value = 0.20000000000000000
+  ModflowPackages.SmsPackage.StoredUnderRelaxMomentum.Value = 0.00100000000000000
   ModflowPackages.SmsPackage.BacktrackingNumber = 10
-  ModflowPackages.SmsPackage.StoredBacktrackingTolerance.Value = 10000.000000000000000000
-  ModflowPackages.SmsPackage.StoredBacktrackingReductionFactor.Value = 0.200000000000000000
-  ModflowPackages.SmsPackage.StoredBacktrackingResidualLimit.Value = 100.000000000000000000
+  ModflowPackages.SmsPackage.StoredBacktrackingTolerance.Value = 10000.00000000000000000
+  ModflowPackages.SmsPackage.StoredBacktrackingReductionFactor.Value = 0.20000000000000000
+  ModflowPackages.SmsPackage.StoredBacktrackingResidualLimit.Value = 100.00000000000000000
   ModflowPackages.SmsPackage.InnerMaxIterations = 300
-  ModflowPackages.SmsPackage.StoredInnerHclose.Value = 0.000000010000000000
-  ModflowPackages.SmsPackage.StoredInnerRclose.Value = 0.000001000000000000
+  ModflowPackages.SmsPackage.StoredInnerHclose.Value = 0.00000001000000000
+  ModflowPackages.SmsPackage.StoredInnerRclose.Value = 0.00000100000000000
   ModflowPackages.SmsPackage.LinLinearAcceleration = sllaBiCgStab
   ModflowPackages.SmsPackage.PreconditionerLevel = 0
   ModflowPackages.SmsPackage.NumberOfOrthoganalizations = 7
   ModflowPackages.SmsPackage.ReorderingMethod = srmNone
-  ModflowPackages.SmsPackage.StoredPreconditionerDropTolerance.Value = 0.000000000000000000
+  ModflowPackages.SmsPackage.StoredPreconditionerDropTolerance.Value = 0.00000000000000000
   ModflowPackages.SmsPackage.RcloseOption = sroAbsolute
-  ModflowPackages.SmsPackage.StoredRelaxationFactor.Value = 0.970000000000000000
+  ModflowPackages.SmsPackage.StoredRelaxationFactor.Value = 0.97000000000000000
   ModflowPackages.SmsPackage.ScalingMethod = ssmNone
-  ModflowPackages.SmsPackage.StoredAtsOuterMaxFraction.Value = 0.333333333333333000
+  ModflowPackages.SmsPackage.StoredAtsOuterMaxFraction.Value = 0.33333333333333300
   ModflowPackages.RipPackage.IsSelected = False
   ModflowPackages.RipPackage.WritePlantGroupET = wpgDontWrite
   ModflowPackages.SfrModflow6Package.IsSelected = True
   ModflowPackages.SfrModflow6Package.MaxIteration = 100
   ModflowPackages.SfrModflow6Package.MaxPicardIteration = 100
-  ModflowPackages.SfrModflow6Package.StoredMaxDepthChange.Value = 0.000010000000000000
+  ModflowPackages.SfrModflow6Package.StoredMaxDepthChange.Value = 0.00001000000000000
   ModflowPackages.SfrModflow6Package.SaveStageFile = True
   ModflowPackages.SfrModflow6Package.SaveBudgetFile = True
   ModflowPackages.SfrModflow6Package.PrintStage = True
@@ -782,14 +785,16 @@ object PhastModel: TPhastModel
   ModflowPackages.SfrModflow6Package.SaveGwtConcentration = True
   ModflowPackages.MawPackage.IsSelected = False
   ModflowPackages.MawPackage.PrintHead = True
-  ModflowPackages.MawPackage.SaveMnwHeads = True
-  ModflowPackages.MawPackage.SaveMnwFlows = True
+  ModflowPackages.MawPackage.SaveMawHeads = True
+  ModflowPackages.MawPackage.SaveMawFlows = True
+  ModflowPackages.MawPackage.SaveBudgetCsv = True
+  ModflowPackages.MawPackage.FlowCorrection = False
   ModflowPackages.MawPackage.IncludeWellStorage = True
-  ModflowPackages.MawPackage.StoredShutDownTheta.Value = 0.700000000000000000
-  ModflowPackages.MawPackage.StoredShutDownKappa.Value = 0.000100000000000000
+  ModflowPackages.MawPackage.FlowReduceCsv = False
+  ModflowPackages.MawPackage.StoredShutDownTheta.Value = 0.70000000000000000
+  ModflowPackages.MawPackage.StoredShutDownKappa.Value = 0.00010000000000000
   ModflowPackages.MawPackage.SaveGwtBudget = True
   ModflowPackages.MawPackage.SaveGwtConcentration = True
-  ModflowPackages.MawPackage.SaveGwtBudgetCsv = True
   ModflowPackages.GncPackage.IsSelected = True
   ModflowPackages.GncPackage.EquationFormulation = efImplicit
   ModflowPackages.Mf6ObservationUtility.IsSelected = False
@@ -799,7 +804,7 @@ object PhastModel: TPhastModel
   ModflowPackages.LakMf6Package.PrintStage = False
   ModflowPackages.LakMf6Package.SaveStage = False
   ModflowPackages.LakMf6Package.SaveBudget = False
-  ModflowPackages.LakMf6Package.StoredSurfDepDepth.Value = 0.200000000000000000
+  ModflowPackages.LakMf6Package.StoredSurfDepDepth.Value = 0.20000000000000000
   ModflowPackages.LakMf6Package.WriteConvergenceData = True
   ModflowPackages.LakMf6Package.SaveGwtBudget = True
   ModflowPackages.LakMf6Package.SaveGwtConcentration = True
@@ -814,12 +819,13 @@ object PhastModel: TPhastModel
   ModflowPackages.UzfMf6Package.SaveBudgetCsvFile = False
   ModflowPackages.UzfMf6Package.WriteConvergenceData = True
   ModflowPackages.UzfMf6Package.SaveGwtConcentration = True
+  ModflowPackages.UzfMf6Package.SaveWaterContent = True
   ModflowPackages.Mt3dCts.IsSelected = False
   ModflowPackages.Mt3dCts.ForceOption = ctsDontForce
   ModflowPackages.Mt3dCts.WellPackageChoice = cwpcMnw2
   ModflowPackages.CSubPackage.IsSelected = False
-  ModflowPackages.CSubPackage.StoredGamma.Value = 9806.650000000000000000
-  ModflowPackages.CSubPackage.StoredBeta.Value = 0.000000000465120000
+  ModflowPackages.CSubPackage.StoredGamma.Value = 9806.65000000000000000
+  ModflowPackages.CSubPackage.StoredBeta.Value = 0.00000000046512000
   ModflowPackages.CSubPackage.HeadBased = False
   ModflowPackages.CSubPackage.PreconsolidationHeadUsed = False
   ModflowPackages.CSubPackage.NumberOfDelayCells = 19
@@ -830,8 +836,8 @@ object PhastModel: TPhastModel
   ModflowPackages.CSubPackage.SpecifyInitialDelayHead = False
   ModflowPackages.CSubPackage.EffectiveStressLag = False
   ModflowPackages.CSubPackage.OutputTypes = []
-  ModflowPackages.CSubPackage.Interbeds = <>
   ModflowPackages.CSubPackage.WriteConvergenceData = True
+  ModflowPackages.CSubPackage.Interbeds = <>
   ModflowPackages.GwtProcess.IsSelected = True
   ModflowPackages.GwtProcess.SeparateGwt = False
   ModflowPackages.GwtProcess.FLOW_IMBALANCE_CORRECTION = True
@@ -860,29 +866,29 @@ object PhastModel: TPhastModel
       GwtIms.MaxErrors = -1
       GwtIms.CheckInput = ciCheckAll
       GwtIms.MemoryPrint = mpNone
-      GwtIms.StoredOuterHclose.Value = 0.000000000100000000
+      GwtIms.StoredOuterHclose.Value = 0.00000000010000000
       GwtIms.MaxOuterIterations = 100
       GwtIms.UnderRelaxation = surNone
-      GwtIms.StoredUnderRelaxTheta.Value = 0.700000000000000000
-      GwtIms.StoredUnderRelaxKappa.Value = 0.100000000000000000
-      GwtIms.StoredUnderRelaxGamma.Value = 0.200000000000000000
-      GwtIms.StoredUnderRelaxMomentum.Value = 0.001000000000000000
+      GwtIms.StoredUnderRelaxTheta.Value = 0.70000000000000000
+      GwtIms.StoredUnderRelaxKappa.Value = 0.10000000000000000
+      GwtIms.StoredUnderRelaxGamma.Value = 0.20000000000000000
+      GwtIms.StoredUnderRelaxMomentum.Value = 0.00100000000000000
       GwtIms.BacktrackingNumber = 10
-      GwtIms.StoredBacktrackingTolerance.Value = 10000.000000000000000000
-      GwtIms.StoredBacktrackingReductionFactor.Value = 0.200000000000000000
-      GwtIms.StoredBacktrackingResidualLimit.Value = 100.000000000000000000
+      GwtIms.StoredBacktrackingTolerance.Value = 10000.00000000000000000
+      GwtIms.StoredBacktrackingReductionFactor.Value = 0.20000000000000000
+      GwtIms.StoredBacktrackingResidualLimit.Value = 100.00000000000000000
       GwtIms.InnerMaxIterations = 300
-      GwtIms.StoredInnerHclose.Value = 0.000000000100000000
-      GwtIms.StoredInnerRclose.Value = 0.000001000000000000
+      GwtIms.StoredInnerHclose.Value = 0.00000000010000000
+      GwtIms.StoredInnerRclose.Value = 0.00000100000000000
       GwtIms.LinLinearAcceleration = sllaBiCgStab
       GwtIms.PreconditionerLevel = 0
       GwtIms.NumberOfOrthoganalizations = 7
       GwtIms.ReorderingMethod = srmNone
-      GwtIms.StoredPreconditionerDropTolerance.Value = 0.000000000000000000
+      GwtIms.StoredPreconditionerDropTolerance.Value = 0.00000000000000000
       GwtIms.RcloseOption = sroAbsolute
-      GwtIms.StoredRelaxationFactor.Value = 0.970000000000000000
+      GwtIms.StoredRelaxationFactor.Value = 0.97000000000000000
       GwtIms.ScalingMethod = ssmNone
-      GwtIms.StoredAtsOuterMaxFraction.Value = 0.333333333333333000
+      GwtIms.StoredAtsOuterMaxFraction.Value = 0.33333333333333300
       GwtMst.IsSelected = True
       GwtMst.ZeroOrderDecay = False
       GwtMst.FirstOrderDecay = False
@@ -917,29 +923,29 @@ object PhastModel: TPhastModel
       GwtIms.MaxErrors = -1
       GwtIms.CheckInput = ciCheckAll
       GwtIms.MemoryPrint = mpNone
-      GwtIms.StoredOuterHclose.Value = 0.000000000100000000
+      GwtIms.StoredOuterHclose.Value = 0.00000000010000000
       GwtIms.MaxOuterIterations = 100
       GwtIms.UnderRelaxation = surNone
-      GwtIms.StoredUnderRelaxTheta.Value = 0.700000000000000000
-      GwtIms.StoredUnderRelaxKappa.Value = 0.100000000000000000
-      GwtIms.StoredUnderRelaxGamma.Value = 0.200000000000000000
-      GwtIms.StoredUnderRelaxMomentum.Value = 0.001000000000000000
+      GwtIms.StoredUnderRelaxTheta.Value = 0.70000000000000000
+      GwtIms.StoredUnderRelaxKappa.Value = 0.10000000000000000
+      GwtIms.StoredUnderRelaxGamma.Value = 0.20000000000000000
+      GwtIms.StoredUnderRelaxMomentum.Value = 0.00100000000000000
       GwtIms.BacktrackingNumber = 10
-      GwtIms.StoredBacktrackingTolerance.Value = 10000.000000000000000000
-      GwtIms.StoredBacktrackingReductionFactor.Value = 0.200000000000000000
-      GwtIms.StoredBacktrackingResidualLimit.Value = 100.000000000000000000
+      GwtIms.StoredBacktrackingTolerance.Value = 10000.00000000000000000
+      GwtIms.StoredBacktrackingReductionFactor.Value = 0.20000000000000000
+      GwtIms.StoredBacktrackingResidualLimit.Value = 100.00000000000000000
       GwtIms.InnerMaxIterations = 300
-      GwtIms.StoredInnerHclose.Value = 0.000000000100000000
-      GwtIms.StoredInnerRclose.Value = 0.000001000000000000
+      GwtIms.StoredInnerHclose.Value = 0.00000000010000000
+      GwtIms.StoredInnerRclose.Value = 0.00000100000000000
       GwtIms.LinLinearAcceleration = sllaBiCgStab
       GwtIms.PreconditionerLevel = 0
       GwtIms.NumberOfOrthoganalizations = 7
       GwtIms.ReorderingMethod = srmNone
-      GwtIms.StoredPreconditionerDropTolerance.Value = 0.000000000000000000
+      GwtIms.StoredPreconditionerDropTolerance.Value = 0.00000000000000000
       GwtIms.RcloseOption = sroAbsolute
-      GwtIms.StoredRelaxationFactor.Value = 0.970000000000000000
+      GwtIms.StoredRelaxationFactor.Value = 0.97000000000000000
       GwtIms.ScalingMethod = ssmNone
-      GwtIms.StoredAtsOuterMaxFraction.Value = 0.333333333333333000
+      GwtIms.StoredAtsOuterMaxFraction.Value = 0.33333333333333300
       GwtMst.IsSelected = True
       GwtMst.ZeroOrderDecay = False
       GwtMst.FirstOrderDecay = False
@@ -974,29 +980,86 @@ object PhastModel: TPhastModel
       GwtIms.MaxErrors = -1
       GwtIms.CheckInput = ciCheckAll
       GwtIms.MemoryPrint = mpNone
-      GwtIms.StoredOuterHclose.Value = 0.000000000100000000
+      GwtIms.StoredOuterHclose.Value = 0.00000000010000000
       GwtIms.MaxOuterIterations = 100
       GwtIms.UnderRelaxation = surNone
-      GwtIms.StoredUnderRelaxTheta.Value = 0.700000000000000000
-      GwtIms.StoredUnderRelaxKappa.Value = 0.100000000000000000
-      GwtIms.StoredUnderRelaxGamma.Value = 0.200000000000000000
-      GwtIms.StoredUnderRelaxMomentum.Value = 0.001000000000000000
+      GwtIms.StoredUnderRelaxTheta.Value = 0.70000000000000000
+      GwtIms.StoredUnderRelaxKappa.Value = 0.10000000000000000
+      GwtIms.StoredUnderRelaxGamma.Value = 0.20000000000000000
+      GwtIms.StoredUnderRelaxMomentum.Value = 0.00100000000000000
       GwtIms.BacktrackingNumber = 10
-      GwtIms.StoredBacktrackingTolerance.Value = 10000.000000000000000000
-      GwtIms.StoredBacktrackingReductionFactor.Value = 0.200000000000000000
-      GwtIms.StoredBacktrackingResidualLimit.Value = 100.000000000000000000
+      GwtIms.StoredBacktrackingTolerance.Value = 10000.00000000000000000
+      GwtIms.StoredBacktrackingReductionFactor.Value = 0.20000000000000000
+      GwtIms.StoredBacktrackingResidualLimit.Value = 100.00000000000000000
       GwtIms.InnerMaxIterations = 300
-      GwtIms.StoredInnerHclose.Value = 0.000000000100000000
-      GwtIms.StoredInnerRclose.Value = 0.000001000000000000
+      GwtIms.StoredInnerHclose.Value = 0.00000000010000000
+      GwtIms.StoredInnerRclose.Value = 0.00000100000000000
       GwtIms.LinLinearAcceleration = sllaBiCgStab
       GwtIms.PreconditionerLevel = 0
       GwtIms.NumberOfOrthoganalizations = 7
       GwtIms.ReorderingMethod = srmNone
-      GwtIms.StoredPreconditionerDropTolerance.Value = 0.000000000000000000
+      GwtIms.StoredPreconditionerDropTolerance.Value = 0.00000000000000000
       GwtIms.RcloseOption = sroAbsolute
-      GwtIms.StoredRelaxationFactor.Value = 0.970000000000000000
+      GwtIms.StoredRelaxationFactor.Value = 0.97000000000000000
       GwtIms.ScalingMethod = ssmNone
-      GwtIms.StoredAtsOuterMaxFraction.Value = 0.333333333333333000
+      GwtIms.StoredAtsOuterMaxFraction.Value = 0.33333333333333300
+      GwtMst.IsSelected = True
+      GwtMst.ZeroOrderDecay = False
+      GwtMst.FirstOrderDecay = False
+      GwtMst.Sorption = gscNone
+      GwtMst.SeparatePorosity = False
+      GwtIst.IsSelected = False
+      GwtIst.IstPackageProperties = <
+        item
+          BinaryBudgetFileOut = False
+          TextBudgetFileOut = False
+          Sorption = False
+          FirstOrderDecay = False
+          ZeroOrderDecay = False
+          SaveConcentrations = False
+          SpecifyPrintFormat = False
+          Columns = 10
+          Width = 15
+          Digits = 10
+          PrintFormat = pfGeneral
+        end>
+    end
+    item
+      GwtIms.IsSelected = True
+      GwtIms.ContinueModel = False
+      GwtIms.SolutionGroupMaxIteration = 1
+      GwtIms.SmsOverrides = []
+      GwtIms.Print = spFull
+      GwtIms.Complexity = scoSimple
+      GwtIms.CsvOutput = sspAll
+      GwtIms.CsvInnerOutput = sspAll
+      GwtIms.UsePTC = upUse
+      GwtIms.MaxErrors = -1
+      GwtIms.CheckInput = ciCheckAll
+      GwtIms.MemoryPrint = mpNone
+      GwtIms.StoredOuterHclose.Value = 0.00100000000000000
+      GwtIms.MaxOuterIterations = 100
+      GwtIms.UnderRelaxation = surNone
+      GwtIms.StoredUnderRelaxTheta.Value = 0.70000000000000000
+      GwtIms.StoredUnderRelaxKappa.Value = 0.10000000000000000
+      GwtIms.StoredUnderRelaxGamma.Value = 0.20000000000000000
+      GwtIms.StoredUnderRelaxMomentum.Value = 0.00100000000000000
+      GwtIms.BacktrackingNumber = 10
+      GwtIms.StoredBacktrackingTolerance.Value = 10000.00000000000000000
+      GwtIms.StoredBacktrackingReductionFactor.Value = 0.20000000000000000
+      GwtIms.StoredBacktrackingResidualLimit.Value = 100.00000000000000000
+      GwtIms.InnerMaxIterations = 100
+      GwtIms.StoredInnerHclose.Value = 0.00010000000000000
+      GwtIms.StoredInnerRclose.Value = 0.10000000000000000
+      GwtIms.LinLinearAcceleration = sllaBiCgStab
+      GwtIms.PreconditionerLevel = 0
+      GwtIms.NumberOfOrthoganalizations = 7
+      GwtIms.ReorderingMethod = srmNone
+      GwtIms.StoredPreconditionerDropTolerance.Value = 0.00000000000000000
+      GwtIms.RcloseOption = sroAbsolute
+      GwtIms.StoredRelaxationFactor.Value = 0.00000000000000000
+      GwtIms.ScalingMethod = ssmNone
+      GwtIms.StoredAtsOuterMaxFraction.Value = 0.33333333333333300
       GwtMst.IsSelected = True
       GwtMst.ZeroOrderDecay = False
       GwtMst.FirstOrderDecay = False
@@ -1056,7 +1119,7 @@ object PhastModel: TPhastModel
   ModflowPackages.FarmSoil4.EffPrecipTable.ArrayList = alList
   ModflowPackages.FarmSoil4.EffPrecipTableOption = ppcLength
   ModflowPackages.FarmClimate4.IsSelected = False
-  ModflowPackages.FarmClimate4.StoredRefEtToBare.Value = 0.500000000000000000
+  ModflowPackages.FarmClimate4.StoredRefEtToBare.Value = 0.50000000000000000
   ModflowPackages.FarmClimate4.Precipitation.FarmOption = foNotUsed
   ModflowPackages.FarmClimate4.Precipitation.ArrayList = alArray
   ModflowPackages.FarmClimate4.ReferenceET.FarmOption = foNotUsed
@@ -1082,7 +1145,7 @@ object PhastModel: TPhastModel
   ModflowPackages.FarmSurfaceWater4.SemiRoutedDeliveryLowerLimit.ArrayList = alArray
   ModflowPackages.FarmSurfaceWater4.SemiRoutedDeliveryUpperLimit.FarmOption = foNotUsed
   ModflowPackages.FarmSurfaceWater4.SemiRoutedDeliveryUpperLimit.ArrayList = alArray
-  ModflowPackages.FarmSurfaceWater4.StoredSemi_Routed_Delivery_Closure_Tolerance.Value = 0.020000000000000000
+  ModflowPackages.FarmSurfaceWater4.StoredSemi_Routed_Delivery_Closure_Tolerance.Value = 0.02000000000000000
   ModflowPackages.FarmSurfaceWater4.NoReturnFlow.FarmOption = foNotUsed
   ModflowPackages.FarmSurfaceWater4.NoReturnFlow.ArrayList = alArray
   ModflowPackages.FarmSurfaceWater4.SemiRoutedReturn.FarmOption = foNotUsed
@@ -1141,13 +1204,13 @@ object PhastModel: TPhastModel
   ModflowPackages.FarmLandUse.AddedDemandOption = doLength
   ModflowPackages.FarmLandUse.NoCropUseMeansBareSoil.FarmOption = foNotUsed
   ModflowPackages.FarmLandUse.NoCropUseMeansBareSoil.ArrayList = alArray
-  ModflowPackages.FarmLandUse.StoredMinimumBareFraction.Value = 0.000001000000000000
+  ModflowPackages.FarmLandUse.StoredMinimumBareFraction.Value = 0.00000100000000000
   ModflowPackages.FarmLandUse.ET_IrrigFracCorrection.FarmOption = foNotUsed
   ModflowPackages.FarmLandUse.ET_IrrigFracCorrection.ArrayList = alArray
-  ModflowPackages.FarmLandUse.StoredRelaxFracHeadChange.Value = 1.000000000000000000
+  ModflowPackages.FarmLandUse.StoredRelaxFracHeadChange.Value = 1.00000000000000000
   ModflowPackages.FarmSalinityFlush.IsSelected = False
   ModflowPackages.FarmSalinityFlush.SalinityFlushPrints = []
-  ModflowPackages.FarmSalinityFlush.StoredExpressionMin.Value = 0.000000000000000000
+  ModflowPackages.FarmSalinityFlush.StoredExpressionMin.Value = 0.00000000000000000
   ModflowPackages.FarmSalinityFlush.FarmSaltConcentrationsChoice.FarmOption = foNotUsed
   ModflowPackages.FarmSalinityFlush.FarmSaltConcentrationsChoice.ArrayList = alArray
   ModflowPackages.FarmSalinityFlush.FarmIrrigationUniformityChoice.FarmOption = foNotUsed
@@ -1163,201 +1226,177 @@ object PhastModel: TPhastModel
   ModflowPackages.FarmSalinityFlush.CropExtraWaterChoice.FarmOption = foStatic
   ModflowPackages.FarmSalinityFlush.CropExtraWaterChoice.ArrayList = alArray
   ModflowPackages.BuoyancyPackage.IsSelected = True
-  ModflowPackages.BuoyancyPackage.DensityUsed = True
-  ModflowPackages.BuoyancyPackage.StoredRefDensity.Value = 1000.000000000000000000
+  ModflowPackages.BuoyancyPackage.DensitySpecified = True
+  ModflowPackages.BuoyancyPackage.StoredRefDensity.Value = 1000.00000000000000000
   ModflowPackages.BuoyancyPackage.RightHandSide = False
   ModflowPackages.BuoyancyPackage.WriteDensity = True
+  ModflowPackages.ViscosityPackage.IsSelected = True
+  ModflowPackages.ViscosityPackage.ViscositySpecified = True
+  ModflowPackages.ViscosityPackage.StoredRefViscosity.Value = 0.00089040000000000
+  ModflowPackages.ViscosityPackage.WriteViscosity = False
+  ModflowPackages.ViscosityPackage.ThermalFormulation = tfLinear
+  ModflowPackages.ViscosityPackage.StoredThermalA2.Value = 10.00000000000000000
+  ModflowPackages.ViscosityPackage.StoredThermalA3.Value = 248.37000000000000000
+  ModflowPackages.ViscosityPackage.StoredThermalA4.Value = 133.15000000000000000
+  ModflowPackages.TvkPackage.IsSelected = False
+  ModflowPackages.TvsPackage.IsSelected = False
   FilesToArchive.Strings = (
-    'C:\ModelingTools\ModelMuse\tests\BuoyancySFR.gpt')
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.gpt')
   ModelInputFiles.Strings = (
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.buy'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.dis'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.ghb'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.gsf'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.ic'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.ims'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.nam.archive'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.npf'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.oc'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.bu' +
-      'y'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.ad' +
+      'v'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.di' +
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.di' +
       's'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.gh' +
-      'b'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.ds' +
+      'p'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.ic'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.gs' +
-      'f'
-    'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.ic'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.im' +
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.im' +
       's'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.na' +
-      'm.archive'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.ms' +
+      't'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.oc'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.np' +
-      'f'
-    'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.oc'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.adv'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.dis'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.dsp'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.ic'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.ims'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.mst'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.oc'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.sft'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.ssm'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.sf' +
-      'r'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.st' +
-      'o'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.td' +
-      'is'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.adv'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.cnc'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.dis'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.dsp'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.ic'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.ims'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.mst'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.oc'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.sft'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.ssm'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.we' +
-      'l'
-    'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\mfsim.nam'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\RunModflow.Bat' +
-      '.archive'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\usgs.BuoyancyS' +
-      'FR.reference')
-  ModelOutputFiles.Strings = (
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.bh' +
-      'd'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.cb' +
-      'c'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.de' +
-      'nsity'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.De' +
-      'nsity.cbc'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.di' +
-      's.grb'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.In' +
-      'nerSolution.CSV'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.ls' +
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.sf' +
       't'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Ou' +
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.ss' +
+      'm'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.sfr'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.sto'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.tdis'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.adv'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.cnc'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.dis'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.dsp'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.ic'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.ims'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.mst'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.oc'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.sft'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.ssm'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.vsc'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.wel'
+    'C:\ModelingTools\ModelMuse\PracticeModel\mfsim.nam'
+    'C:\ModelingTools\ModelMuse\PracticeModel\RunModflow.Bat.archive'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\usgs.BuoyancySFR.refere' +
+      'nce')
+  ModelOutputFiles.Strings = (
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.bhd'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.cbc'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.density'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Density.cbc'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.dis.grb'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.InnerSoluti' +
+      'on.CSV'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.lst'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.OuterSoluti' +
+      'on.CSV'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.cb' +
+      'c'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.In' +
+      'nerSolution.CSV'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.ls' +
+      't'
+    
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.Ou' +
       'terSolution.CSV'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.cbc'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.sf' +
+      't_budget'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.InnerSolution.CSV'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.sf' +
+      't_budget.csv'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.lst'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Salinity.sf' +
+      't_conc'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.sfr_budget'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.OuterSolution.CSV'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.sfr_budget.' +
+      'csv'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.sft_budget'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.SfrConverge' +
+      'nce.CSV'
+    'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.stage'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.sft_budget.csv'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.cbc'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sa' +
-      'linity.sft_conc'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.InnerSolution.CSV'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.sf' +
-      'r_budget'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.lst'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Sf' +
-      'rConvergence.CSV'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.OuterSolution.CSV'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.st' +
-      'age'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.sft_budget'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.cbc'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.sft_budget.csv'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.InnerSolution.CSV'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Temperature' +
+      '.sft_conc'
     
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.lst'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.OuterSolution.CSV'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.sft_budget'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.sft_budget.csv'
-    
-      'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\BuoyancySFR.Te' +
-      'mperature.sft_conc'
-    'C:\ModelingTools\ModelMuse\PracticeModel\Buoyancy\mfsim.lst')
-  ModelFileName = 'C:\ModelingTools\ModelMuse\tests\BuoyancySFR.gpt'
+      'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.Viscosity.c' +
+      'bc'
+    'C:\ModelingTools\ModelMuse\PracticeModel\mfsim.lst')
+  ModelFileName = 'C:\ModelingTools\ModelMuse\PracticeModel\BuoyancySFR.gpt'
   ModflowOptions.StoredHDry.Value = -2E20
   ModflowOptions.StoredHNoFlow.Value = -1E20
   ModflowOptions.ProjectDate = '7/26/2023'
   ModflowOptions.TimeUnit = 4
   ModflowOptions.StopError = False
-  ModflowOptions.StoredStopErrorCriterion.Value = 1.000000000000000000
+  ModflowOptions.StoredStopErrorCriterion.Value = 1.00000000000000000
   ModflowOptions.NewtonMF6 = False
   ModflowOptions.UnderRelaxationMF6 = False
   ModflowOptions.WriteBinaryGridFile = True
+  ModflowOptions.OwhmBasicOptions.Strings = (
+    '  MAX_RELATIVE_VOLUME_ERROR 2.0'
+    '  NO_SHOWPROGRESS')
   ModflowWettingOptions.WettingActive = False
-  ModflowWettingOptions.WettingFactor = 1.000000000000000000
+  ModflowWettingOptions.WettingFactor = 1.00000000000000000
   ModflowWettingOptions.WettingEquation = 0
   GlobalVariables = <>
   MobileComponents = <
@@ -1401,8 +1440,10 @@ object PhastModel: TPhastModel
         'ImmobileBulkDensity_Salinity_1')
       ImmobileDistCoeficients.Strings = (
         'ImmobileDistCoeficient_Salinity_1')
-      StoredDensitySlope.Value = 0.700000000000000000
-      StoredRefConcentration.Value = 0.000000000000000000
+      StoredDensitySlope.Value = 0.70000000000000000
+      StoredRefConcentration.Value = 0.00000000000000000
+      StoredViscositySlope.Value = 0.00001000000000000
+      StoredRefViscosity.Value = 0.00000000000000000
       DiffusionCoefDataArrayName = 'Diffusion_Coefficient_Salinity'
     end
     item
@@ -1445,8 +1486,10 @@ object PhastModel: TPhastModel
         'ImmobileBulkDensity_Temperature_1')
       ImmobileDistCoeficients.Strings = (
         'ImmobileDistCoeficient_Temperature_1')
-      StoredDensitySlope.Value = -0.375000000000000000
-      StoredRefConcentration.Value = 25.000000000000000000
+      StoredDensitySlope.Value = -0.37500000000000000
+      StoredRefConcentration.Value = 25.00000000000000000
+      StoredViscositySlope.Value = 0.00001000000000000
+      StoredRefViscosity.Value = 25.00000000000000000
       DiffusionCoefDataArrayName = 'Diffusion_Coefficient_Temperature'
     end
     item
@@ -1489,36 +1532,84 @@ object PhastModel: TPhastModel
         'ImmobileBulkDensity_Density_1')
       ImmobileDistCoeficients.Strings = (
         'ImmobileDistCoeficient_Density_1')
-      StoredDensitySlope.Value = 0.000000000000000000
-      StoredRefConcentration.Value = 0.000000000000000000
+      StoredDensitySlope.Value = 0.00000000000000000
+      StoredRefConcentration.Value = 0.00000000000000000
+      StoredViscositySlope.Value = 0.00000000000000000
+      StoredRefViscosity.Value = 0.00000000000000000
       DiffusionCoefDataArrayName = 'Diffusion_Coefficient_Density'
+    end
+    item
+      Name = 'Viscosity'
+      InitialConcDataArrayName = 'Initial_Concentration_Viscosity'
+      SorbOrImmobInitialConcDataArrayName = 'Immobile_Phase_Initial_Conc_Viscosity'
+      FirstSorbParamDataArrayName = 'Sorption_Parameter1_Viscosity'
+      SecondSorbParamDataArrayName = 'Sorption_Parameter2_Viscosity'
+      ReactionRateDisolvedDataArrayName = 'Reaction_Rate_Dissolved_Phase_Viscosity'
+      ReactionRateSorbedDataArrayName = 'Reaction_Rate_Sorbed_Phase_Viscosity'
+      HalfSaturationConstantDataArrayName = 'Half_Saturation_Constant_Viscosity'
+      ImmobilePartioningCoefficientDataArrayName = 'Immobile_Partioning_Coefficient_Viscosity'
+      UztInitialConcDataArrayName = 'UZT_Unsaturated_Initial_Conc_Viscosity'
+      UseInitialConcentrationFile = False
+      PorosityDataArrayName = 'Mobile_Porosity_Viscosity'
+      MobileDecayRateDataArrayName = 'Mobile_Decay_Rate_Viscosity'
+      MobileSorbedDecayRateDataArrayName = 'Mobile_Sorbed_Decay_Rate_Viscosity'
+      MobileDistCoefDataArrayName = 'Mobile_Distribution_Coefficient_Viscosity'
+      MobileBulkDensityDataArrayName = 'Mobile_Bulk_Density_Viscosity'
+      MobileFreundlichExponentDataArrayName = 'Mobile_Freundlich_Exponent_Viscosity'
+      MobileSorptionCapacityDataArrayName = 'Mobile_Sorption_Capacity_Viscosity'
+      DiffusionCoefficientDataArrayName = 'Diffusion_Coefficient_Viscosity'
+      LongDispHDataArrayName = 'Longitudinal_Dispersivity_Horizontal_Flow_Viscosity'
+      LongDispVertDataArrayName = 'Longitudinal_Dispersivity_Vertical_Flow_Viscosity'
+      TransverseDispHDataArrayName = 'Horizontal_Transverse_Dispersivity_Horizontal_Flow_Viscosity'
+      TransverseDispVertDataArrayName = 'Vertical_Transverse_Dispersivity_Horizontal_Flow_Viscosity'
+      ImmobileInitialConcentrations.Strings = (
+        'ImmobileInitialConcentration_Viscosity_1')
+      ImmobilePorosities.Strings = (
+        'ImmobilePorosity_Viscosity_1')
+      ImmobileVolumeFractions.Strings = (
+        'ImmobileVolumeFraction_Viscosity_1')
+      ImmobileMassTransferRates.Strings = (
+        'ImmobileMassTransferRate_Viscosity_1')
+      ImmobileDecay.Strings = (
+        'ImmobileDecay_Viscosity_1')
+      ImmobileDecaySorbed.Strings = (
+        'ImmobileDecaySorbed_Viscosity_1')
+      ImmobileBulkDensities.Strings = (
+        'ImmobileBulkDensity_Viscosity_1')
+      ImmobileDistCoeficients.Strings = (
+        'ImmobileDistCoeficient_Viscosity_1')
+      StoredDensitySlope.Value = 0.00000000000000000
+      StoredRefConcentration.Value = 0.00000000000000000
+      StoredViscositySlope.Value = 0.00000000000000000
+      StoredRefViscosity.Value = 0.00000000000000000
+      DiffusionCoefDataArrayName = 'Diffusion_Coefficient_Viscosity'
     end>
   ImmobileComponents = <>
   SutraMesh.Mesh2D.Nodes = <>
   SutraMesh.Mesh2D.Elements = <>
-  SutraMesh.Mesh2D.MeshGenControls.SplittingAngle.Value = 0.520000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.Structure.Value = 0.170000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.NodePlacementError.Value = 0.000000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.LineLength.Value = 0.170000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.Symmetry.Value = 0.140000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.Concave.Value = 0.360000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.ElementGrowthRate.Value = 1.050000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.SplittingAngle.Value = 0.52000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.Structure.Value = 0.17000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.NodePlacementError.Value = 0.00000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.LineLength.Value = 0.17000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.Symmetry.Value = 0.14000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.Concave.Value = 0.36000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.ElementGrowthRate.Value = 1.05000000000000000
   SutraMesh.Mesh2D.MeshGenControls.MeshGenerationMethod = mgmUnknown
   SutraMesh.Mesh2D.MeshGenControls.RenumberingAlgorithm = raNone
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredTolerance.Value = 0.000000001000000000
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredSpacingAngle.Value = 30.000000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredToleranceAngle.Value = 20.000000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredUniformnessParameter.Value = 0.250000000000000000
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredMeshDistributionVariation.Value = 0.400000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredTolerance.Value = 0.00000000100000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredSpacingAngle.Value = 30.00000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredToleranceAngle.Value = 20.00000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredUniformnessParameter.Value = 0.25000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredMeshDistributionVariation.Value = 0.40000000000000000
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.ElementGenerationParameter = 10
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.DesiredElementCount = 0
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.AutomaticeElementCount = True
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.ShapeMeasure = gsmQuadraticMeanRatio
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredQuadSplittingValue.Value = 0.010000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredQuadSplittingValue.Value = 0.01000000000000000
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.KeepQuadsAlongEdges = True
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.MaxImprovementIterations = 3
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.MaxSmoothingIterations = 2
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredOptimizationBasedSmoothingCriterion.Value = 0.350000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredOptimizationBasedSmoothingCriterion.Value = 0.35000000000000000
   SutraMesh.ElementDrawingChoice = dcAll
   SutraMesh.NodeDrawingChoice = dcEdge
   SutraMesh.MeshType = mt3D
@@ -1531,50 +1622,50 @@ object PhastModel: TPhastModel
   SutraOptions.SimulationType = stSteadyFlowSteadyTransport
   SutraOptions.StartType = stCold
   SutraOptions.RestartFrequency = 9999
-  SutraOptions.StoredFractionalUpstreamWeight.Value = 0.000000000000000000
-  SutraOptions.StoredPressureFactor.Value = 0.100000000000000000
-  SutraOptions.StoredUFactor.Value = 1.000000000000000000
+  SutraOptions.StoredFractionalUpstreamWeight.Value = 0.00000000000000000
+  SutraOptions.StoredPressureFactor.Value = 0.10000000000000000
+  SutraOptions.StoredUFactor.Value = 1.00000000000000000
   SutraOptions.MaxIterations = 1
-  SutraOptions.StoredNonLinPressureCriterion.Value = 0.000000000000000000
-  SutraOptions.StoredUCriterion.Value = 0.000000000000000000
+  SutraOptions.StoredNonLinPressureCriterion.Value = 0.00000000000000000
+  SutraOptions.StoredUCriterion.Value = 0.00000000000000000
   SutraOptions.PresSolutionMethod = psmDirect
   SutraOptions.MaxPressureIterations = 300
-  SutraOptions.StoredPressureCriterion.Value = 0.000000010000000000
+  SutraOptions.StoredPressureCriterion.Value = 0.00000001000000000
   SutraOptions.USolutionMethod = usmDirect
   SutraOptions.MaxTransportIterations = 300
-  SutraOptions.StoredTransportCriterion.Value = 0.000000010000000000
-  SutraOptions.StoredFluidCompressibility.Value = 0.000000000447000000
-  SutraOptions.StoredFluidSpecificHeat.Value = 4182.000000000000000000
-  SutraOptions.StoredFluidDiffusivity.Value = 0.000000001000000000
-  SutraOptions.StoredFluidThermalConductivity.Value = 0.600000000000000000
-  SutraOptions.StoredBaseFluidDensity.Value = 1000.000000000000000000
-  SutraOptions.StoredBaseConcentration.Value = 0.000000000000000000
-  SutraOptions.StoredBaseTemperature.Value = 20.000000000000000000
-  SutraOptions.StoredFluidDensityCoefficientConcentration.Value = 700.000000000000000000
-  SutraOptions.StoredFluidDensityCoefficientTemperature.Value = -0.375000000000000000
-  SutraOptions.StoredViscosity.Value = 0.001000000000000000
-  SutraOptions.StoredScaleFactor.Value = 1.000000000000000000
-  SutraOptions.StoredIceCompressibility.Value = 0.000000000000000000
-  SutraOptions.StoredIceSpecificHeat.Value = 2108.000000000000000000
-  SutraOptions.StoredIceThermalConductivity.Value = 2.140000000000000000
-  SutraOptions.StoredIceDensity.Value = 920.000000000000000000
-  SutraOptions.StoredMatrixCompressibility.Value = 0.000000010000000000
-  SutraOptions.StoredSolidGrainSpecificHeat.Value = 840.000000000000000000
-  SutraOptions.StoredSolidGrainDiffusivity.Value = 3.500000000000000000
-  SutraOptions.StoredSolidGrainDensity.Value = 2600.000000000000000000
+  SutraOptions.StoredTransportCriterion.Value = 0.00000001000000000
+  SutraOptions.StoredFluidCompressibility.Value = 0.00000000044700000
+  SutraOptions.StoredFluidSpecificHeat.Value = 4182.00000000000000000
+  SutraOptions.StoredFluidDiffusivity.Value = 0.00000000100000000
+  SutraOptions.StoredFluidThermalConductivity.Value = 0.60000000000000000
+  SutraOptions.StoredBaseFluidDensity.Value = 1000.00000000000000000
+  SutraOptions.StoredBaseConcentration.Value = 0.00000000000000000
+  SutraOptions.StoredBaseTemperature.Value = 20.00000000000000000
+  SutraOptions.StoredFluidDensityCoefficientConcentration.Value = 700.00000000000000000
+  SutraOptions.StoredFluidDensityCoefficientTemperature.Value = -0.37500000000000000
+  SutraOptions.StoredViscosity.Value = 0.00100000000000000
+  SutraOptions.StoredScaleFactor.Value = 1.00000000000000000
+  SutraOptions.StoredIceCompressibility.Value = 0.00000000000000000
+  SutraOptions.StoredIceSpecificHeat.Value = 2108.00000000000000000
+  SutraOptions.StoredIceThermalConductivity.Value = 2.14000000000000000
+  SutraOptions.StoredIceDensity.Value = 920.00000000000000000
+  SutraOptions.StoredMatrixCompressibility.Value = 0.00000001000000000
+  SutraOptions.StoredSolidGrainSpecificHeat.Value = 840.00000000000000000
+  SutraOptions.StoredSolidGrainDiffusivity.Value = 3.50000000000000000
+  SutraOptions.StoredSolidGrainDensity.Value = 2600.00000000000000000
   SutraOptions.SorptionModel = smNone
-  SutraOptions.StoredFirstDistributionCoefficient.Value = 0.000000000000000000
-  SutraOptions.StoredSecondDistributionCoefficient.Value = 0.000000000000000000
-  SutraOptions.StoredZeroFluidProduction.Value = 0.000000000000000000
-  SutraOptions.StoredZeroImmobileProduction.Value = 0.000000000000000000
-  SutraOptions.StoredFirstFluidProduction.Value = 0.000000000000000000
-  SutraOptions.StoredFirstImmobileProduction.Value = 0.000000000000000000
-  SutraOptions.StoredGravityX.Value = 0.000000000000000000
-  SutraOptions.StoredGravityY.Value = 0.000000000000000000
-  SutraOptions.StoredGravityZ.Value = -9.810000000000001000
+  SutraOptions.StoredFirstDistributionCoefficient.Value = 0.00000000000000000
+  SutraOptions.StoredSecondDistributionCoefficient.Value = 0.00000000000000000
+  SutraOptions.StoredZeroFluidProduction.Value = 0.00000000000000000
+  SutraOptions.StoredZeroImmobileProduction.Value = 0.00000000000000000
+  SutraOptions.StoredFirstFluidProduction.Value = 0.00000000000000000
+  SutraOptions.StoredFirstImmobileProduction.Value = 0.00000000000000000
+  SutraOptions.StoredGravityX.Value = 0.00000000000000000
+  SutraOptions.StoredGravityY.Value = 0.00000000000000000
+  SutraOptions.StoredGravityZ.Value = -9.81000000000000000
   SutraOptions.ReadStart = rsNone
-  SutraOptions.LakeOptions.StoredRechargeFraction.Value = 0.000000000000000000
-  SutraOptions.LakeOptions.StoredDischargeFraction.Value = 0.000000000000000000
+  SutraOptions.LakeOptions.StoredRechargeFraction.Value = 0.00000000000000000
+  SutraOptions.LakeOptions.StoredDischargeFraction.Value = 0.00000000000000000
   SutraOptions.LakeOptions.StoredSubmergedOutput.Value = -9E99
   SutraOptions.LakeOptions.FluidSourceSinkLakePresent = lbiNoChange
   SutraOptions.LakeOptions.USourceSinkLakePresent = lbiNoChange
@@ -1627,9 +1718,9 @@ object PhastModel: TPhastModel
   FootPrintGrid.ColumnPositions = ()
   FootPrintGrid.RowPositions = ()
   FootprintProperties.Name = ''
-  FootprintProperties.StoredClosureCriterion.Value = 0.010000000000000000
+  FootprintProperties.StoredClosureCriterion.Value = 0.01000000000000000
   FootprintProperties.SaveResultsText = False
-  FootprintProperties.StoredMinimumDepthRateIndex.Value = 0.000001000000000000
+  FootprintProperties.StoredMinimumDepthRateIndex.Value = 0.00000100000000000
   CtsSystems = <>
   ModflowGlobalObservationComparisons = <>
   SutraGlobalObservationComparisons = <>
@@ -1667,7 +1758,7 @@ object PhastModel: TPhastModel
   PestObsCollection.MinTimeLimit.UseLimit = False
   PestObsCollection = <>
   Mf6TimesSeries = <>
-  Diffusivity = 0.000000001000000000
+  Diffusivity = 0.00000000100000000
   GridOptions.ChemicalDimensionX = True
   GridOptions.ChemicalDimensionY = True
   GridOptions.ChemicalDimensionZ = True
@@ -1686,7 +1777,7 @@ object PhastModel: TPhastModel
       HDF_VelocitiesUnits = fuEnd
       HeadsUnits = fuEnd
       ProgressStatisticsUnits = fuEnd
-      RestartFrequency.Value = 0.000000000000000000
+      RestartFrequency.Value = 0.00000000000000000
       RestartFrequencyUnits = fuDefault
       VelocitiesUnits = fuDefault
       WellsUnits = fuEnd
@@ -1717,21 +1808,21 @@ object PhastModel: TPhastModel
   PrintInitial.PrintInitialXYZ_SteadyFlowVelocities = False
   PrintInitial.PrintInitialXYZ_Wells = False
   SolutionOptions.CrossDispersion = False
-  SolutionOptions.RebalanceFraction.Value = 0.500000000000000000
+  SolutionOptions.RebalanceFraction.Value = 0.50000000000000000
   SolutionOptions.RebalanceByCell = False
-  SolutionOptions.TimeDifferencing = 1.000000000000000000
-  SolutionOptions.Tolerance = 0.000000000100000000
-  SteadyFlowOptions.FlowBalanceTolerance = 0.001000000000000000
-  SteadyFlowOptions.HeadChangeLimit = 1.000000000000000000
-  SteadyFlowOptions.HeadTolerance = 0.000010000000000000
-  SteadyFlowOptions.MaximumTimeStep = 1000.000000000000000000
-  SteadyFlowOptions.MinimumTimeStep = 1.000000000000000000
+  SolutionOptions.TimeDifferencing = 1.00000000000000000
+  SolutionOptions.Tolerance = 0.00000000010000000
+  SteadyFlowOptions.FlowBalanceTolerance = 0.00100000000000000
+  SteadyFlowOptions.HeadChangeLimit = 1.00000000000000000
+  SteadyFlowOptions.HeadTolerance = 0.00001000000000000
+  SteadyFlowOptions.MaximumTimeStep = 1000.00000000000000000
+  SteadyFlowOptions.MinimumTimeStep = 1.00000000000000000
   SteadyFlowOptions.SteadyFlow = False
-  Times.StartTime.Value = 0.000000000000000000
+  Times.StartTime.Value = 0.00000000000000000
   Times = <
     item
-      TimeStepLength = 1.000000000000000000
-      EndingTime = 1.000000000000000000
+      TimeStepLength = 1.00000000000000000
+      EndingTime = 1.00000000000000000
     end>
   Title.Strings = (
     'PHAST input generated by ModelMuse.')
@@ -1755,7 +1846,7 @@ object PhastModel: TPhastModel
   Units.DefaultWellFlowTimeUnits = tuSeconds
   Units.DefaultWellFlowVolumnUnits = vuMeters3
   Bitmaps = <>
-  Exaggeration = 0.400000000000000000
+  Exaggeration = 0.40000000000000000
   RipPlantGroups.MaxID = 0
   RipPlantGroups = <>
   ObjectList = <
@@ -1765,11 +1856,11 @@ object PhastModel: TPhastModel
       LowerElevationFormula = 'Aquifer_Bottom'
       Points = <
         item
-          X = 1994.777877299051000000
-          Y = -0.495975242619782100
+          X = 1994.77787729905100000
+          Y = -0.49597524261978210
         end>
       ScreenObject.Name = 'Object0'
-      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSize = 1.00000000000000000
       ScreenObject.CellSizeUsed = False
       ScreenObject.ColorLine = False
       ScreenObject.ElevationCount = ecTwo
@@ -1780,7 +1871,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = 'Model_Top'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = 'Aquifer_Bottom'
-      ScreenObject.Selected = False
+      ScreenObject.Selected = True
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -1788,7 +1879,7 @@ object PhastModel: TPhastModel
       ScreenObject.InterpValues = <>
       ScreenObject.ModflowGhbBoundary.Values = <
         item
-          EndTime = 200000.000000000000000000
+          EndTime = 200000.00000000000000000
           BoundaryHead = '1000'
           Conductance = '20'
           GwtConcentrations = <
@@ -1800,6 +1891,9 @@ object PhastModel: TPhastModel
             end
             item
               Value = '1032'
+            end
+            item
+              Value = '0.000895'
             end>
         end>
       ScreenObject.ModflowGhbBoundary.Parameters = <>
@@ -1808,6 +1902,8 @@ object PhastModel: TPhastModel
       ScreenObject.ModflowGhbBoundary.PestHeadMethod = ppmAdd
       ScreenObject.ModflowGhbBoundary.PestConductanceMethod = ppmMultiply
       ScreenObject.ModflowGhbBoundary.PestConcentrationFormulas = <
+        item
+        end
         item
         end
         item
@@ -1823,10 +1919,13 @@ object PhastModel: TPhastModel
         end
         item
           PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
         end>
       ScreenObject.GwtCncBoundary.Values = <
         item
-          EndTime = 200000.000000000000000000
+          EndTime = 200000.00000000000000000
           Concentration = '6'
         end>
       ScreenObject.GwtCncBoundary.PestConcentrationMethod = ppmMultiply
@@ -1902,9 +2001,9 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectVertexLabel.OffSetX = 0
       ScreenObject.ObjectVertexLabel.OffSetY = 20
       ScreenObject.ObjectVertexLabel.Visible = False
-      ScreenObject.StoredMinimumFraction.Value = 0.000000000000000000
+      ScreenObject.StoredMinimumFraction.Value = 0.00000000000000000
       ScreenObject.QuadtreeRefinementLevel = 0
-      ScreenObject.DyanmicTimesSeriesCollections = <>
+      ScreenObject.DynamicTimesSeriesCollections = <>
       SelectedVertices = <>
     end
     item
@@ -1913,11 +2012,11 @@ object PhastModel: TPhastModel
       LowerElevationFormula = 'Aquifer_Bottom'
       Points = <
         item
-          X = 5.875384730216852000
-          Y = -0.499999999999998700
+          X = 5.87538473021685200
+          Y = -0.49999999999999870
         end>
       ScreenObject.Name = 'Object1'
-      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSize = 1.00000000000000000
       ScreenObject.CellSizeUsed = False
       ScreenObject.ColorLine = False
       ScreenObject.ElevationCount = ecTwo
@@ -1936,7 +2035,7 @@ object PhastModel: TPhastModel
       ScreenObject.InterpValues = <>
       ScreenObject.ModflowWellBoundary.Values = <
         item
-          EndTime = 200000.000000000000000000
+          EndTime = 200000.00000000000000000
           PumpingRate = '0.1'
           GwtConcentrations = <
             item
@@ -1947,6 +2046,9 @@ object PhastModel: TPhastModel
             end
             item
               Value = '1000'
+            end
+            item
+              Value = '0.000895'
             end>
         end>
       ScreenObject.ModflowWellBoundary.Parameters = <>
@@ -1959,8 +2061,13 @@ object PhastModel: TPhastModel
         item
         end
         item
+        end
+        item
         end>
       ScreenObject.ModflowWellBoundary.PestConcentrationMethods = <
+        item
+          PestParamMethod = ppmMultiply
+        end
         item
           PestParamMethod = ppmMultiply
         end
@@ -2041,9 +2148,9 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectVertexLabel.OffSetX = 0
       ScreenObject.ObjectVertexLabel.OffSetY = 20
       ScreenObject.ObjectVertexLabel.Visible = False
-      ScreenObject.StoredMinimumFraction.Value = 0.000000000000000000
+      ScreenObject.StoredMinimumFraction.Value = 0.00000000000000000
       ScreenObject.QuadtreeRefinementLevel = 0
-      ScreenObject.DyanmicTimesSeriesCollections = <>
+      ScreenObject.DynamicTimesSeriesCollections = <>
       SelectedVertices = <>
     end
     item
@@ -2051,19 +2158,19 @@ object PhastModel: TPhastModel
       ElevationFormula = 'Model_Top - 0.1'
       Points = <
         item
-          X = 946.459916709475700000
-          Y = -0.675076946043369400
+          X = 946.45991670947510000
+          Y = -0.67507694604336960
         end
         item
-          X = 1017.541156803084000000
-          Y = -0.675076946043369400
+          X = 1017.54115680308400000
+          Y = -0.67507694604336960
         end
         item
-          X = 1017.541156803084000000
-          Y = -1.025230838130111000
+          X = 1017.54115680308400000
+          Y = -1.02523083813011100
         end>
       ScreenObject.Name = 'Object2'
-      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSize = 1.00000000000000000
       ScreenObject.CellSizeUsed = False
       ScreenObject.ColorLine = False
       ScreenObject.ElevationCount = ecOne
@@ -2082,7 +2189,7 @@ object PhastModel: TPhastModel
       ScreenObject.InterpValues = <>
       ScreenObject.ModflowSfr6Boundary.Values = <
         item
-          EndTime = 200000.000000000000000000
+          EndTime = 200000.00000000000000000
           Inflow = '0'
           Rainfall = '0'
           Evaporation = '0'
@@ -2100,6 +2207,9 @@ object PhastModel: TPhastModel
             end
             item
               GwtBoundaryStatus = gbsActive
+            end
+            item
+              GwtBoundaryStatus = gbsActive
             end>
           SpecifiedConcentrations = <
             item
@@ -2110,8 +2220,14 @@ object PhastModel: TPhastModel
             end
             item
               Value = '0'
+            end
+            item
+              Value = '0'
             end>
           RainfallConcentrations = <
+            item
+              Value = '0'
+            end
             item
               Value = '0'
             end
@@ -2130,8 +2246,14 @@ object PhastModel: TPhastModel
             end
             item
               Value = '0'
+            end
+            item
+              Value = '0'
             end>
           RunoffConcentrations = <
+            item
+              Value = '0'
+            end
             item
               Value = '0'
             end
@@ -2150,10 +2272,17 @@ object PhastModel: TPhastModel
             end
             item
               Value = '0'
+            end
+            item
+              Value = '0'
             end>
           Density = <
             item
               Value = '1035'
+            end>
+          Viscosity = <
+            item
+              Value = '0.000895'
             end>
         end>
       ScreenObject.ModflowSfr6Boundary.SegmentNumber = 1
@@ -2180,8 +2309,12 @@ object PhastModel: TPhastModel
           Value = '6'
         end
         item
+        end
+        item
         end>
       ScreenObject.ModflowSfr6Boundary.PestSpecifiedConcentrations = <
+        item
+        end
         item
         end
         item
@@ -2197,8 +2330,13 @@ object PhastModel: TPhastModel
         end
         item
           PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
         end>
       ScreenObject.ModflowSfr6Boundary.PestRainfallConcentrations = <
+        item
+        end
         item
         end
         item
@@ -2214,8 +2352,13 @@ object PhastModel: TPhastModel
         end
         item
           PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
         end>
       ScreenObject.ModflowSfr6Boundary.PestEvaporationConcentrations = <
+        item
+        end
         item
         end
         item
@@ -2231,8 +2374,13 @@ object PhastModel: TPhastModel
         end
         item
           PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
         end>
       ScreenObject.ModflowSfr6Boundary.PestRunoffConcentrations = <
+        item
+        end
         item
         end
         item
@@ -2248,6 +2396,9 @@ object PhastModel: TPhastModel
         end
         item
           PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
         end>
       ScreenObject.ModflowSfr6Boundary.PestInflowConcentrations = <
         item
@@ -2255,8 +2406,13 @@ object PhastModel: TPhastModel
         item
         end
         item
+        end
+        item
         end>
       ScreenObject.ModflowSfr6Boundary.PestInflowConcentrationMethods = <
+        item
+          PestParamMethod = ppmMultiply
+        end
         item
           PestParamMethod = ppmMultiply
         end
@@ -2278,7 +2434,28 @@ object PhastModel: TPhastModel
         end
         item
           PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
         end>
+      ScreenObject.ModflowSfr6Boundary.PestViscosity = <
+        item
+        end>
+      ScreenObject.ModflowSfr6Boundary.PestViscosityMethods = <
+        item
+          PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
+        end
+        item
+          PestParamMethod = ppmMultiply
+        end>
+      ScreenObject.ModflowSfr6Boundary.CrossSections = <>
+      ScreenObject.ModflowSfr6Boundary.CrossSectionUsage = csuNotUsed
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
       ScreenObject.SectionStarts.Values = (
@@ -2350,28 +2527,28 @@ object PhastModel: TPhastModel
       ScreenObject.ObjectVertexLabel.OffSetX = 0
       ScreenObject.ObjectVertexLabel.OffSetY = 20
       ScreenObject.ObjectVertexLabel.Visible = False
-      ScreenObject.StoredMinimumFraction.Value = 0.000000000000000000
+      ScreenObject.StoredMinimumFraction.Value = 0.00000000000000000
       ScreenObject.QuadtreeRefinementLevel = 0
-      ScreenObject.DyanmicTimesSeriesCollections = <>
+      ScreenObject.DynamicTimesSeriesCollections = <>
       SelectedVertices = <>
     end>
-  Version = '5.1.1.34'
+  Version = '5.1.1.55'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 600
-  GuiSettings.FrontX = -344.585091420534600000
-  GuiSettings.FrontY = -977.199718706047900000
+  GuiSettings.FrontX = -344.58509142053460000
+  GuiSettings.FrontY = -977.19971870604810000
   GuiSettings.Left = 566
-  GuiSettings.MagnificationFront = 0.177750000000000000
-  GuiSettings.MagnificationSide = 0.177750000000000000
-  GuiSettings.MagnificationTop = 0.177750000000000000
+  GuiSettings.MagnificationFront = 0.17775000000000000
+  GuiSettings.MagnificationSide = 0.17775000000000000
+  GuiSettings.MagnificationTop = 0.17775000000000000
   GuiSettings.SideWidth = 229
-  GuiSettings.SideX = -1687.466947960619000000
-  GuiSettings.SideY = -681.231364275668200000
+  GuiSettings.SideX = -1687.46694796061900000
+  GuiSettings.SideY = -681.23136427566820000
   GuiSettings.Top = 280
   GuiSettings.TopViewHeight = 302
   GuiSettings.TopViewWidth = 533
-  GuiSettings.TopX = -344.585091420534600000
-  GuiSettings.TopY = -681.231364275668200000
+  GuiSettings.TopX = -344.58509142053460000
+  GuiSettings.TopY = -681.23136427566820000
   GuiSettings.Width = 788
   GuiSettings.WindowState = wsNormal
   GuiSettings.TopHorizontalDigits = 0
@@ -2398,7 +2575,7 @@ object PhastModel: TPhastModel
   LayerStructure = <
     item
       GrowthControls.GrowthMethod = gmUniform
-      GrowthControls.GrowthRate = 1.200000000000000000
+      GrowthControls.GrowthRate = 1.20000000000000000
       GrowthControls.LayerCollection = <>
       DataArrayName = 'Model_Top'
       AquiferName = 'Model_Top'
@@ -2407,7 +2584,7 @@ object PhastModel: TPhastModel
       InterblockTransmissivityMethod = 0
       VerticalHydraulicConductivityMethod = 0
       UseStartingHeadForSaturatedThickness = False
-      HorizontalAnisotropy = 1.000000000000000000
+      HorizontalAnisotropy = 1.00000000000000000
       SubNoDelayBedLayers = <>
       SubDelayBedLayers = <>
       WaterTableLayers = <>
@@ -2418,304 +2595,304 @@ object PhastModel: TPhastModel
     end
     item
       GrowthControls.GrowthMethod = gmUniform
-      GrowthControls.GrowthRate = 1.200000000000000000
+      GrowthControls.GrowthRate = 1.20000000000000000
       GrowthControls.LayerCollection = <
         item
-          Fraction = 0.990000000000000000
+          Fraction = 0.99000000000000000
         end
         item
-          Fraction = 0.980000000000000000
+          Fraction = 0.98000000000000000
         end
         item
-          Fraction = 0.970000000000000000
+          Fraction = 0.97000000000000000
         end
         item
-          Fraction = 0.960000000000000000
+          Fraction = 0.96000000000000000
         end
         item
-          Fraction = 0.950000000000000000
+          Fraction = 0.95000000000000000
         end
         item
-          Fraction = 0.939999999999999900
+          Fraction = 0.94000000000000000
         end
         item
-          Fraction = 0.930000000000000000
+          Fraction = 0.93000000000000000
         end
         item
-          Fraction = 0.920000000000000000
+          Fraction = 0.92000000000000000
         end
         item
-          Fraction = 0.910000000000000000
+          Fraction = 0.91000000000000000
         end
         item
-          Fraction = 0.900000000000000000
+          Fraction = 0.90000000000000000
         end
         item
-          Fraction = 0.890000000000000000
+          Fraction = 0.89000000000000000
         end
         item
-          Fraction = 0.880000000000000000
+          Fraction = 0.88000000000000000
         end
         item
-          Fraction = 0.870000000000000000
+          Fraction = 0.87000000000000000
         end
         item
-          Fraction = 0.860000000000000000
+          Fraction = 0.86000000000000000
         end
         item
-          Fraction = 0.850000000000000000
+          Fraction = 0.85000000000000000
         end
         item
-          Fraction = 0.840000000000000000
+          Fraction = 0.84000000000000000
         end
         item
-          Fraction = 0.830000000000000000
+          Fraction = 0.83000000000000000
         end
         item
-          Fraction = 0.820000000000000000
+          Fraction = 0.82000000000000000
         end
         item
-          Fraction = 0.810000000000000100
+          Fraction = 0.81000000000000010
         end
         item
-          Fraction = 0.800000000000000000
+          Fraction = 0.80000000000000000
         end
         item
-          Fraction = 0.790000000000000000
+          Fraction = 0.79000000000000000
         end
         item
-          Fraction = 0.780000000000000000
+          Fraction = 0.78000000000000000
         end
         item
-          Fraction = 0.770000000000000000
+          Fraction = 0.77000000000000000
         end
         item
-          Fraction = 0.760000000000000000
+          Fraction = 0.76000000000000000
         end
         item
-          Fraction = 0.750000000000000000
+          Fraction = 0.75000000000000000
         end
         item
-          Fraction = 0.740000000000000000
+          Fraction = 0.74000000000000000
         end
         item
-          Fraction = 0.730000000000000000
+          Fraction = 0.73000000000000000
         end
         item
-          Fraction = 0.720000000000000000
+          Fraction = 0.72000000000000000
         end
         item
-          Fraction = 0.710000000000000000
+          Fraction = 0.71000000000000000
         end
         item
-          Fraction = 0.700000000000000000
+          Fraction = 0.70000000000000000
         end
         item
-          Fraction = 0.689999999999999900
+          Fraction = 0.69000000000000000
         end
         item
-          Fraction = 0.680000000000000000
+          Fraction = 0.68000000000000000
         end
         item
-          Fraction = 0.670000000000000000
+          Fraction = 0.67000000000000000
         end
         item
-          Fraction = 0.660000000000000000
+          Fraction = 0.66000000000000000
         end
         item
-          Fraction = 0.650000000000000000
+          Fraction = 0.65000000000000000
         end
         item
-          Fraction = 0.640000000000000000
+          Fraction = 0.64000000000000000
         end
         item
-          Fraction = 0.630000000000000000
+          Fraction = 0.63000000000000000
         end
         item
-          Fraction = 0.620000000000000000
+          Fraction = 0.62000000000000000
         end
         item
-          Fraction = 0.610000000000000000
+          Fraction = 0.61000000000000000
         end
         item
-          Fraction = 0.600000000000000000
+          Fraction = 0.60000000000000000
         end
         item
-          Fraction = 0.590000000000000000
+          Fraction = 0.59000000000000000
         end
         item
-          Fraction = 0.580000000000000000
+          Fraction = 0.58000000000000000
         end
         item
-          Fraction = 0.570000000000000000
+          Fraction = 0.56999999999999990
         end
         item
-          Fraction = 0.560000000000000100
+          Fraction = 0.56000000000000010
         end
         item
-          Fraction = 0.550000000000000000
+          Fraction = 0.55000000000000010
         end
         item
-          Fraction = 0.540000000000000000
+          Fraction = 0.54000000000000010
         end
         item
-          Fraction = 0.530000000000000000
+          Fraction = 0.53000000000000000
         end
         item
-          Fraction = 0.520000000000000000
+          Fraction = 0.52000000000000000
         end
         item
-          Fraction = 0.510000000000000000
+          Fraction = 0.51000000000000000
         end
         item
-          Fraction = 0.500000000000000000
+          Fraction = 0.50000000000000000
         end
         item
-          Fraction = 0.490000000000000000
+          Fraction = 0.49000000000000000
         end
         item
-          Fraction = 0.480000000000000000
+          Fraction = 0.48000000000000000
         end
         item
-          Fraction = 0.470000000000000000
+          Fraction = 0.47000000000000000
         end
         item
-          Fraction = 0.460000000000000000
+          Fraction = 0.46000000000000000
         end
         item
-          Fraction = 0.450000000000000000
+          Fraction = 0.45000000000000000
         end
         item
-          Fraction = 0.440000000000000000
+          Fraction = 0.44000000000000000
         end
         item
-          Fraction = 0.430000000000000000
+          Fraction = 0.43000000000000000
         end
         item
-          Fraction = 0.420000000000000000
+          Fraction = 0.42000000000000000
         end
         item
-          Fraction = 0.410000000000000000
+          Fraction = 0.41000000000000000
         end
         item
-          Fraction = 0.400000000000000000
+          Fraction = 0.40000000000000000
         end
         item
-          Fraction = 0.390000000000000000
+          Fraction = 0.39000000000000000
         end
         item
-          Fraction = 0.380000000000000000
+          Fraction = 0.38000000000000000
         end
         item
-          Fraction = 0.370000000000000000
+          Fraction = 0.37000000000000000
         end
         item
-          Fraction = 0.360000000000000000
+          Fraction = 0.36000000000000000
         end
         item
-          Fraction = 0.350000000000000000
+          Fraction = 0.35000000000000000
         end
         item
-          Fraction = 0.340000000000000000
+          Fraction = 0.34000000000000000
         end
         item
-          Fraction = 0.330000000000000000
+          Fraction = 0.33000000000000000
         end
         item
-          Fraction = 0.320000000000000000
+          Fraction = 0.32000000000000000
         end
         item
-          Fraction = 0.310000000000000000
+          Fraction = 0.31000000000000000
         end
         item
-          Fraction = 0.300000000000000000
+          Fraction = 0.30000000000000000
         end
         item
-          Fraction = 0.290000000000000000
+          Fraction = 0.29000000000000000
         end
         item
-          Fraction = 0.280000000000000000
+          Fraction = 0.28000000000000000
         end
         item
-          Fraction = 0.270000000000000000
+          Fraction = 0.27000000000000000
         end
         item
-          Fraction = 0.260000000000000000
+          Fraction = 0.26000000000000000
         end
         item
-          Fraction = 0.250000000000000000
+          Fraction = 0.25000000000000000
         end
         item
-          Fraction = 0.240000000000000000
+          Fraction = 0.24000000000000000
         end
         item
-          Fraction = 0.230000000000000000
+          Fraction = 0.23000000000000000
         end
         item
-          Fraction = 0.220000000000000000
+          Fraction = 0.22000000000000000
         end
         item
-          Fraction = 0.210000000000000000
+          Fraction = 0.21000000000000000
         end
         item
-          Fraction = 0.200000000000000000
+          Fraction = 0.20000000000000000
         end
         item
-          Fraction = 0.190000000000000000
+          Fraction = 0.19000000000000000
         end
         item
-          Fraction = 0.180000000000000000
+          Fraction = 0.18000000000000000
         end
         item
-          Fraction = 0.170000000000000000
+          Fraction = 0.17000000000000000
         end
         item
-          Fraction = 0.160000000000000000
+          Fraction = 0.16000000000000000
         end
         item
-          Fraction = 0.150000000000000000
+          Fraction = 0.15000000000000000
         end
         item
-          Fraction = 0.140000000000000000
+          Fraction = 0.14000000000000000
         end
         item
-          Fraction = 0.130000000000000000
+          Fraction = 0.13000000000000000
         end
         item
-          Fraction = 0.120000000000000000
+          Fraction = 0.12000000000000000
         end
         item
-          Fraction = 0.110000000000000000
+          Fraction = 0.11000000000000000
         end
         item
-          Fraction = 0.100000000000000000
+          Fraction = 0.10000000000000000
         end
         item
-          Fraction = 0.090000000000000000
+          Fraction = 0.09000000000000000
         end
         item
-          Fraction = 0.080000000000000000
+          Fraction = 0.08000000000000000
         end
         item
-          Fraction = 0.070000000000000010
+          Fraction = 0.07000000000000001
         end
         item
-          Fraction = 0.060000000000000000
+          Fraction = 0.06000000000000000
         end
         item
-          Fraction = 0.050000000000000000
+          Fraction = 0.05000000000000000
         end
         item
-          Fraction = 0.040000000000000000
+          Fraction = 0.04000000000000000
         end
         item
-          Fraction = 0.030000000000000000
+          Fraction = 0.03000000000000000
         end
         item
-          Fraction = 0.020000000000000000
+          Fraction = 0.02000000000000000
         end
         item
-          Fraction = 0.010000000000000000
+          Fraction = 0.01000000000000000
         end>
       DataArrayName = 'Aquifer_Bottom'
       AquiferName = 'Aquifer'
@@ -2724,7 +2901,7 @@ object PhastModel: TPhastModel
       InterblockTransmissivityMethod = 0
       VerticalHydraulicConductivityMethod = 0
       UseStartingHeadForSaturatedThickness = False
-      HorizontalAnisotropy = 1.000000000000000000
+      HorizontalAnisotropy = 1.00000000000000000
       SubNoDelayBedLayers = <>
       SubDelayBedLayers = <>
       WaterTableLayers = <>
@@ -2736,17 +2913,17 @@ object PhastModel: TPhastModel
   ModflowStressPeriods = <
     item
       DrawDownReference = False
-      EndTime = 200000.000000000000000000
-      MaxLengthOfFirstTimeStep = 20000.000000000000000000
-      PeriodLength = 200000.000000000000000000
+      EndTime = 200000.00000000000000000
+      MaxLengthOfFirstTimeStep = 20000.00000000000000000
+      PeriodLength = 200000.00000000000000000
       StressPeriodType = sptTransient
-      TimeStepMultiplier = 1.000000000000000000
+      TimeStepMultiplier = 1.00000000000000000
       AtsUsed = False
-      StoredAtsInitialStepSize.Value = 0.000000000000000000
-      StoredAtsMinimumStepSize.Value = 0.000010000000000000
-      StoredAtsMaximumStepSize.Value = 1.000000000000000000
-      StoredAtsAdjustmentFactor.Value = 2.000000000000000000
-      StoredAtsFailureFactor.Value = 5.000000000000000000
+      StoredAtsInitialStepSize.Value = 0.00000000000000000
+      StoredAtsMinimumStepSize.Value = 0.00001000000000000
+      StoredAtsMaximumStepSize.Value = 1.00000000000000000
+      StoredAtsAdjustmentFactor.Value = 2.00000000000000000
+      StoredAtsFailureFactor.Value = 5.00000000000000000
       GwtStressPeriods = <>
     end>
   SoluteTransport = False
@@ -2797,6 +2974,7 @@ object PhastModel: TPhastModel
   ModflowOutputControl.ConcentrationOC.PrintInListing = False
   ModflowOutputControl.ConcentrationOC.SaveInExternalFile = True
   ModflowOutputControl.ConcentrationOC.Wrapping = wStrip
+  ModflowOutputControl.SaveBudgetCSV = False
   Mt3dmsOutputControl.SaveConcentrations = True
   Mt3dmsOutputControl.OutputFreqChoice = mofEndOfSimulation
   Mt3dmsOutputControl.PeriodicOutputCount = 1
@@ -2824,7 +3002,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -2834,12 +3012,12 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
-      DataSet.Max = 1.000000000000000000
+      DataSet.Max = 1.00000000000000000
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -2862,7 +3040,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -2872,11 +3050,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -2901,7 +3079,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -2911,11 +3089,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -2940,7 +3118,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -2950,11 +3128,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -2979,7 +3157,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -2989,12 +3167,12 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
-      DataSet.Max = 1.000000000000000000
+      DataSet.Max = 1.00000000000000000
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3017,7 +3195,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3027,12 +3205,12 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
-      DataSet.Max = 1.000000000000000000
+      DataSet.Max = 1.00000000000000000
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3055,7 +3233,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3065,11 +3243,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3092,7 +3270,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3102,11 +3280,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3129,7 +3307,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3139,11 +3317,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3166,7 +3344,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3176,11 +3354,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3203,7 +3381,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3213,11 +3391,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3240,7 +3418,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3250,11 +3428,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dsoTop
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3277,7 +3455,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3287,11 +3465,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dsoTop
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3314,7 +3492,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3324,11 +3502,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3351,7 +3529,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3361,11 +3539,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3390,7 +3568,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3400,11 +3578,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3429,7 +3607,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3439,12 +3617,12 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
-      DataSet.Max = 1.000000000000000000
+      DataSet.Max = 1.00000000000000000
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3467,7 +3645,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3477,11 +3655,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3504,7 +3682,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3514,11 +3692,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3541,7 +3719,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3551,11 +3729,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3578,7 +3756,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3588,11 +3766,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3615,7 +3793,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3625,11 +3803,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3652,7 +3830,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3662,11 +3840,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3689,7 +3867,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3699,11 +3877,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3726,7 +3904,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3736,11 +3914,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3763,7 +3941,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3773,11 +3951,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3801,7 +3979,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3811,11 +3989,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3839,7 +4017,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3849,11 +4027,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3877,7 +4055,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3887,11 +4065,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3915,7 +4093,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3925,11 +4103,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3953,7 +4131,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -3963,11 +4141,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -3991,7 +4169,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -4001,11 +4179,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -4029,7 +4207,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -4039,11 +4217,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -4067,7 +4245,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -4077,11 +4255,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -4105,7 +4283,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -4115,11 +4293,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -4143,7 +4321,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -4153,11 +4331,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -4181,7 +4359,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -4191,11 +4369,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -4219,7 +4397,7 @@ object PhastModel: TPhastModel
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
       DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
       DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
       DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
@@ -4229,11 +4407,11 @@ object PhastModel: TPhastModel
       DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
       DataSet.ContourLimits.UpperLimit.UseLimit = False
       DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
       DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.PestParametersUsed = False
       DataSet.PestParametersAllowed = True
       DataSet.TemplateNeeded = False
@@ -4256,17 +4434,17 @@ object PhastModel: TPhastModel
     item
       Schedule.Name = 'TIME_STEPS'
       Schedule.ScheduleType = stTimeCycle
-      Schedule.ScaleFactorStored.Value = 1.000000000000000000
+      Schedule.ScaleFactorStored.Value = 1.00000000000000000
       Schedule.SutraTimeChoice = stcElapsed
       Schedule.Times = <>
       Schedule.MaxTimeCycle = 1
-      Schedule.InitialTimeStored.Value = 0.000000000000000000
+      Schedule.InitialTimeStored.Value = 0.00000000000000000
       Schedule.LimitingTimeStored.Value = 1E99
-      Schedule.InitialTimeIncrementStored.Value = 1.000000000000000000
+      Schedule.InitialTimeIncrementStored.Value = 1.00000000000000000
       Schedule.IncrementUpdateCount = 9999
-      Schedule.TimeMultiplierStored.Value = 1.000000000000000000
-      Schedule.MinIncrementStored.Value = 0.000000000000000000
-      Schedule.MinIncrementStored.StringValue = '9.999999999999999E-21'
+      Schedule.TimeMultiplierStored.Value = 1.00000000000000000
+      Schedule.MinIncrementStored.Value = 0.00000000000000000
+      Schedule.MinIncrementStored.StringValue = '1E-20'
       Schedule.MaxIncrementStored.Value = 1E99
       Schedule.Steps = <>
       Schedule.MaxSteps = 1
@@ -4293,32 +4471,32 @@ object PhastModel: TPhastModel
   SutraSettings.NodeDrawingChoice = dcEdge
   SutraSettings.DrawElementCenters = True
   MaxVectors.Visible = False
-  MaxVectors.StoredScale.Value = 0.000000000000000000
-  MaxVectors.StoredScale3D.Value = 0.000000000000000000
+  MaxVectors.StoredScale.Value = 0.00000000000000000
+  MaxVectors.StoredScale3D.Value = 0.00000000000000000
   MaxVectors.Color = clRed
   MaxVectors.MinimumSeparation2D = 0
-  MaxVectors.StoredMinSeparationHorizontal3D.Value = 0.000000000000000000
-  MaxVectors.StoredMinSeparationVertical3D.Value = 0.000000000000000000
+  MaxVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+  MaxVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
   MaxVectors.LogScaled = False
   MaxVectors.VectorType = pvtPermeability
   MaxVectors.VectorDirection = pvdMax
   MidVectors.Visible = False
-  MidVectors.StoredScale.Value = 0.000000000000000000
-  MidVectors.StoredScale3D.Value = 0.000000000000000000
+  MidVectors.StoredScale.Value = 0.00000000000000000
+  MidVectors.StoredScale3D.Value = 0.00000000000000000
   MidVectors.Color = clGreen
   MidVectors.MinimumSeparation2D = 0
-  MidVectors.StoredMinSeparationHorizontal3D.Value = 0.000000000000000000
-  MidVectors.StoredMinSeparationVertical3D.Value = 0.000000000000000000
+  MidVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+  MidVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
   MidVectors.LogScaled = False
   MidVectors.VectorType = pvtPermeability
   MidVectors.VectorDirection = pvdMid
   MinVectors.Visible = False
-  MinVectors.StoredScale.Value = 0.000000000000000000
-  MinVectors.StoredScale3D.Value = 0.000000000000000000
+  MinVectors.StoredScale.Value = 0.00000000000000000
+  MinVectors.StoredScale3D.Value = 0.00000000000000000
   MinVectors.Color = clBlue
   MinVectors.MinimumSeparation2D = 0
-  MinVectors.StoredMinSeparationHorizontal3D.Value = 0.000000000000000000
-  MinVectors.StoredMinSeparationVertical3D.Value = 0.000000000000000000
+  MinVectors.StoredMinSeparationHorizontal3D.Value = 0.00000000000000000
+  MinVectors.StoredMinSeparationVertical3D.Value = 0.00000000000000000
   MinVectors.LogScaled = False
   MinVectors.VectorType = pvtPermeability
   MinVectors.VectorDirection = pvdMin
@@ -4334,7 +4512,7 @@ object PhastModel: TPhastModel
   IrrigationTypes = <>
   GeoRef.OtherLengthUnits = 'Meters'
   GeoRef.OtherTimeUnits = 'Seconds'
-  GeoRef.StartDate = 36526.000000000000000000
+  GeoRef.StartDate = 36526.00000000000000000
   GeoRef.ProjectionType = ptEpsg
   UseGsflowFormat = False
   ParamGroups = <>
@@ -4343,39 +4521,39 @@ object PhastModel: TPhastModel
   PestProperties.ExtendedTemplateCharacter = '%'
   PestProperties.ArrayTemplateCharacter = '~'
   PestProperties.ShowPilotPoints = False
-  PestProperties.StoredPilotPointSpacing.Value = 0.000000000000000000
+  PestProperties.StoredPilotPointSpacing.Value = 0.00000000000000000
   PestProperties.PestControlData.PestRestart = prRestart
   PestProperties.PestControlData.PestMode = pmRegularisation
   PestProperties.PestControlData.MaxCompressionDimension = 1
-  PestProperties.PestControlData.StoredZeroLimit.Value = 0.000000000000000000
-  PestProperties.PestControlData.StoredInitalLambda.Value = 10.000000000000000000
-  PestProperties.PestControlData.StoredLambdaAdjustmentFactor.Value = 2.000000000000000000
-  PestProperties.PestControlData.StoredPhiRatioSufficient.Value = 0.300000000000000000
-  PestProperties.PestControlData.StoredPhiReductionLambda.Value = 0.010000000000000000
+  PestProperties.PestControlData.StoredZeroLimit.Value = 0.00000000000000000
+  PestProperties.PestControlData.StoredInitalLambda.Value = 10.00000000000000000
+  PestProperties.PestControlData.StoredLambdaAdjustmentFactor.Value = 2.00000000000000000
+  PestProperties.PestControlData.StoredPhiRatioSufficient.Value = 0.30000000000000000
+  PestProperties.PestControlData.StoredPhiReductionLambda.Value = 0.01000000000000000
   PestProperties.PestControlData.NumberOfLambdas = 10
   PestProperties.PestControlData.JacobianUpdate = 0
   PestProperties.PestControlData.LambdaForgive = lfForgive
   PestProperties.PestControlData.DerivedForgive = dNoForgive
-  PestProperties.PestControlData.StoredRelativeMaxParamChange.Value = 3.000000000000000000
-  PestProperties.PestControlData.StoredFactorMaxParamChange.Value = 3.000000000000000000
-  PestProperties.PestControlData.StoredFactorOriginal.Value = 0.001000000000000000
+  PestProperties.PestControlData.StoredRelativeMaxParamChange.Value = 3.00000000000000000
+  PestProperties.PestControlData.StoredFactorMaxParamChange.Value = 3.00000000000000000
+  PestProperties.PestControlData.StoredFactorOriginal.Value = 0.00100000000000000
   PestProperties.PestControlData.BoundStick = 0
   PestProperties.PestControlData.UpgradeParamVectorBending = upvbNoBending
-  PestProperties.PestControlData.StoredSwitchCriterion.Value = 0.100000000000000000
+  PestProperties.PestControlData.StoredSwitchCriterion.Value = 0.10000000000000000
   PestProperties.PestControlData.OptSwitchCount = 3
-  PestProperties.PestControlData.StoredSplitSlopeCriterion.Value = 0.000000000000000000
+  PestProperties.PestControlData.StoredSplitSlopeCriterion.Value = 0.00000000000000000
   PestProperties.PestControlData.AutomaticUserIntervation = auiInactive
   PestProperties.PestControlData.SensitivityReuse = srNoReuse
   PestProperties.PestControlData.Boundscaling = bsBoundsScaling
   PestProperties.PestControlData.MaxIterations = 50
-  PestProperties.PestControlData.StoredSlowConvergenceCriterion.Value = 0.005000000000000000
+  PestProperties.PestControlData.StoredSlowConvergenceCriterion.Value = 0.00500000000000000
   PestProperties.PestControlData.SlowConvergenceCountCriterion = 4
   PestProperties.PestControlData.ConvergenceCountCriterion = 4
-  PestProperties.PestControlData.StoredParameterChangeConvergenceCriterion.Value = 0.005000000000000000
+  PestProperties.PestControlData.StoredParameterChangeConvergenceCriterion.Value = 0.00500000000000000
   PestProperties.PestControlData.ParameterChangeConvergenceCount = 4
-  PestProperties.PestControlData.StoredObjectiveCriterion.Value = 0.000000000000000000
+  PestProperties.PestControlData.StoredObjectiveCriterion.Value = 0.00000000000000000
   PestProperties.PestControlData.MakeFinalRun = mfrRun
-  PestProperties.PestControlData.StoredPhiAbandon.Value = 0.000000000000000000
+  PestProperties.PestControlData.StoredPhiAbandon.Value = 0.00000000000000000
   PestProperties.PestControlData.WriteCovariance = wmDontWrite
   PestProperties.PestControlData.WriteCorrelations = wmDontWrite
   PestProperties.PestControlData.WriteEigenVectors = wmDontWrite
@@ -4388,12 +4566,12 @@ object PhastModel: TPhastModel
   PestProperties.PestControlData.SaveParamRun = sprDontSave
   PestProperties.SvdProperties.Mode = smNormal
   PestProperties.SvdProperties.MaxSingularValues = 1000
-  PestProperties.SvdProperties.StoredEigenThreshold.Value = 0.000000500000000000
+  PestProperties.SvdProperties.StoredEigenThreshold.Value = 0.00000050000000000
   PestProperties.SvdProperties.EigenWrite = ewReduced
   PestProperties.LsqrProperties.Mode = lmDeactivate
-  PestProperties.LsqrProperties.StoredMatrixTolerance.Value = 0.000100000000000000
-  PestProperties.LsqrProperties.StoredRightHandSideTolerance.Value = 0.000100000000000000
-  PestProperties.LsqrProperties.StoredConditionNumberLimit.Value = 1000.000000000000000000
+  PestProperties.LsqrProperties.StoredMatrixTolerance.Value = 0.00010000000000000
+  PestProperties.LsqrProperties.StoredRightHandSideTolerance.Value = 0.00010000000000000
+  PestProperties.LsqrProperties.StoredConditionNumberLimit.Value = 1000.00000000000000000
   PestProperties.LsqrProperties.MaxIteration = 0
   PestProperties.LsqrProperties.LsqrWrite = lwWrite
   PestProperties.ObservationGroups = <>
@@ -4402,61 +4580,61 @@ object PhastModel: TPhastModel
   PestProperties.BetweenObservationsPilotPoints = <>
   PestProperties.UseBetweenObservationsPilotPoints = False
   PestProperties.ArrayPilotPointSelection = appsNone
-  PestProperties.StoredPilotPointBuffer.Value = 0.000000000000000000
-  PestProperties.StoredMinimumSeparation.Value = 0.000000000000000000
-  PestProperties.Regularization.StoredPhiMLim.Value = 0.000000000100000000
-  PestProperties.Regularization.StoredPhiMAccept.Value = 0.000000000105000000
+  PestProperties.StoredPilotPointBuffer.Value = 0.00000000000000000
+  PestProperties.StoredMinimumSeparation.Value = 0.00000000000000000
+  PestProperties.Regularization.StoredPhiMLim.Value = 0.00000000010000000
+  PestProperties.Regularization.StoredPhiMAccept.Value = 0.00000000010500000
   PestProperties.Regularization.AutoPhiMAccept = True
-  PestProperties.Regularization.StoredFracPhiM.Value = 0.100000000000000000
+  PestProperties.Regularization.StoredFracPhiM.Value = 0.10000000000000000
   PestProperties.Regularization.MemSave = msNoMemSave
-  PestProperties.Regularization.StoredWFInit.Value = 1.000000000000000000
-  PestProperties.Regularization.StoredWeightFactorMinimum.Value = 0.000000000100000000
-  PestProperties.Regularization.StoredWeightFactorMaximum.Value = 10000000000.000000000000000000
-  PestProperties.Regularization.StoredWFFac.Value = 1.300000000000000000
-  PestProperties.Regularization.StoredWeightFactorTolerance.Value = 0.010000000000000000
+  PestProperties.Regularization.StoredWFInit.Value = 1.00000000000000000
+  PestProperties.Regularization.StoredWeightFactorMinimum.Value = 0.00000000010000000
+  PestProperties.Regularization.StoredWeightFactorMaximum.Value = 10000000000.00000000000000000
+  PestProperties.Regularization.StoredWFFac.Value = 1.30000000000000000
+  PestProperties.Regularization.StoredWeightFactorTolerance.Value = 0.01000000000000000
   PestProperties.Regularization.LinearRegression = lfNoLinReg
   PestProperties.Regularization.RegContinue = rcNoContinue
   PestProperties.Regularization.RegularizationOption = 1
   PestProperties.Regularization.OptimizationInterval = 1
-  PestProperties.Regularization.StoredRegWeightRatio.Value = 50.000000000000000000
-  PestProperties.Regularization.StoredRegularizationSingularValueThreshhold.Value = 0.500000000000000000
+  PestProperties.Regularization.StoredRegWeightRatio.Value = 50.00000000000000000
+  PestProperties.Regularization.StoredRegularizationSingularValueThreshhold.Value = 0.50000000000000000
   PestProperties.UseInitialValuePriorInfo = True
   PestProperties.UseHorizontalSpatialContinuityPriorInfo = True
-  PestProperties.StoredSeachDistance.Value = 0.000000000000000000
+  PestProperties.StoredSeachDistance.Value = 0.00000000000000000
   PestProperties.MaxPilotPointsInRange = 4
   PestProperties.UseVertSpatialContinuityPriorInfo = True
   PestProperties.PredictionProperties.MinOrMax = mmMaximize
   PestProperties.PredictionProperties.PredictiveNoise = pnNoNoise
-  PestProperties.PredictionProperties.StoredTargetPhi.Value = 0.000000000000000000
-  PestProperties.PredictionProperties.StoredAcceptedPhi.Value = 0.000000000000000000
-  PestProperties.PredictionProperties.StoredTestLambdaPhi.Value = 0.000000000000000000
-  PestProperties.PredictionProperties.StoredAbsoluteLamdaCriterion.Value = 0.000000000000000000
-  PestProperties.PredictionProperties.StoredRelativeLamdaCriterion.Value = 0.005000000000000000
-  PestProperties.PredictionProperties.StoredInitialLineSearchFactor.Value = 0.250000000000000000
-  PestProperties.PredictionProperties.StoredUpdateLineSearchFactor.Value = 1.500000000000000000
+  PestProperties.PredictionProperties.StoredTargetPhi.Value = 0.00000000000000000
+  PestProperties.PredictionProperties.StoredAcceptedPhi.Value = 0.00000000000000000
+  PestProperties.PredictionProperties.StoredTestLambdaPhi.Value = 0.00000000000000000
+  PestProperties.PredictionProperties.StoredAbsoluteLamdaCriterion.Value = 0.00000000000000000
+  PestProperties.PredictionProperties.StoredRelativeLamdaCriterion.Value = 0.00500000000000000
+  PestProperties.PredictionProperties.StoredInitialLineSearchFactor.Value = 0.25000000000000000
+  PestProperties.PredictionProperties.StoredUpdateLineSearchFactor.Value = 1.50000000000000000
   PestProperties.PredictionProperties.LineSearchRuns = 15
-  PestProperties.PredictionProperties.StoredAbsolutePredictionSwitch.Value = 0.000000000000000000
-  PestProperties.PredictionProperties.StoredRelativePredictionSwitch.Value = 0.500000000000000000
+  PestProperties.PredictionProperties.StoredAbsolutePredictionSwitch.Value = 0.00000000000000000
+  PestProperties.PredictionProperties.StoredRelativePredictionSwitch.Value = 0.50000000000000000
   PestProperties.PredictionProperties.MaxNoPredictionImprovmentRuns = 4
-  PestProperties.PredictionProperties.StoredAbsoluteImprovementCriterion.Value = 0.000000000000000000
-  PestProperties.PredictionProperties.StoredRelativeImprovementCriterion.Value = 0.005000000000000000
+  PestProperties.PredictionProperties.StoredAbsoluteImprovementCriterion.Value = 0.00000000000000000
+  PestProperties.PredictionProperties.StoredRelativeImprovementCriterion.Value = 0.00500000000000000
   PestProperties.PredictionProperties.NumberOfPredictionsToCompare = 4
-  PestProperties.ParetoProperties.StoredInitialParetoWeight.Value = 0.000000000000000000
-  PestProperties.ParetoProperties.StoredFinalParetoWeight.Value = 1.000000000000000000
+  PestProperties.ParetoProperties.StoredInitialParetoWeight.Value = 0.00000000000000000
+  PestProperties.ParetoProperties.StoredFinalParetoWeight.Value = 1.00000000000000000
   PestProperties.ParetoProperties.ParetoIncrements = 10
   PestProperties.ParetoProperties.InitialIterationCount = 0
   PestProperties.ParetoProperties.IntermediateIterationCount = 1
   PestProperties.ParetoProperties.FinalIterationCount = 0
   PestProperties.ParetoProperties.AltTerminationOption = atoDontUse
   PestProperties.ParetoProperties.AltDirection = adAbove
-  PestProperties.ParetoProperties.StoredAltThreshold.Value = 0.000000000000000000
+  PestProperties.ParetoProperties.StoredAltThreshold.Value = 0.00000000000000000
   PestProperties.ParetoProperties.AltIterations = 1
   SvdaPrepProperties.Method = smSvdQSqrRt
   SvdaPrepProperties.NumberOfSuperParameters = 1
   SvdaPrepProperties.RunSvdaPrep = True
   SvdaPrepProperties.RunPest = True
   SupCalcProperties.Method = scSvdQSqrRt
-  SupCalcProperties.StoredExpectedValue.Value = 0.000000000000000000
+  SupCalcProperties.StoredExpectedValue.Value = 0.00000000000000000
   SupCalcProperties.RunPest = True
   SupCalcProperties.RunSupCalc = True
 end

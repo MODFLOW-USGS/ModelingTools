@@ -1,6 +1,6 @@
-# MAW: Multi-Aquifer Well package file created on 2/8/2024 by ModelMuse version 5.1.1.53.
+# MAW: Multi-Aquifer Well package file created on 2/15/2024 by ModelMuse version 5.1.1.55.
 BEGIN OPTIONS
-  AUXILIARY Salinity Temperature Density
+  AUXILIARY Salinity Temperature Density Viscosity
     BOUNDNAMES
     PRINT_INPUT
   PRINT_HEAD
@@ -18,7 +18,7 @@ END DIMENSIONS
 
 BEGIN PACKAGEDATA
 # <wellno> <radius> <bottom> <strt> <condeqn> <ngwfnodes> [<aux(naux)>] [<boundname>]
-     1  1.000000000000E-001  -5.000000000000E+002   1.000000000000E+003  THIEM    51  0.000000000000E+000   0.000000000000E+000   0.000000000000E+000  'Object2' 
+     1  1.000000000000E-001  -5.000000000000E+002   1.000000000000E+003  THIEM    51  0.000000000000E+000   0.000000000000E+000   0.000000000000E+000   0.000000000000E+000  'Object2' 
 END PACKAGEDATA
 
 BEGIN CONNECTIONDATA
@@ -83,5 +83,6 @@ BEGIN PERIOD      1
        1  AUXILIARY  Salinity  0.000000000000E+000 
        1  AUXILIARY  Temperature  0.000000000000E+000 
        1  AUXILIARY  Density  1.035000000000E+003 
+       1  AUXILIARY  Viscosity  8.904000000000E-004 
 END PERIOD 
 

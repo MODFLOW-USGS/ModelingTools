@@ -38,6 +38,7 @@
     <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.oc</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.sft</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.Temperature.ssm</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.vsc</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Input">BuoyancySFR.wel</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Input">mfsim.nam</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Input">RunModflow.Bat.archive</FileName>
@@ -70,6 +71,7 @@
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_budget</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_budget.csv</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_conc</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Viscosity.cbc</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

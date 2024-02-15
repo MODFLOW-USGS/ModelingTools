@@ -308,7 +308,7 @@ var
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
 begin
-  if Model.GwtUsed or Model.BuoyancyDensityUsed then
+  if Model.GwtUsed or Model.BuoyancyDensityUsed or Model.ViscosityPkgViscUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -351,7 +351,7 @@ begin
     FPestParamUsed := True;
   end;
 
-  if Model.GwtUsed or Model.BuoyancyDensityUsed then
+  if Model.GwtUsed or Model.BuoyancyDensityUsed or Model.ViscosityPkgViscUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -392,7 +392,7 @@ begin
 
   WriteIface(GHB_Cell.IFace);
 
-  if Model.GwtUsed or Model.BuoyancyDensityUsed then
+  if Model.GwtUsed or Model.BuoyancyDensityUsed or Model.ViscosityPkgViscUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -482,7 +482,7 @@ var
   SpeciesIndex: Integer;
 begin
   VI := VariableIdentifiers;
-  if Model.GwtUsed or Model.BuoyancyDensityUsed then
+  if Model.GwtUsed or Model.BuoyancyDensityUsed or Model.ViscosityPkgViscUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin

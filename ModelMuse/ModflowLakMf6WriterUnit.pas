@@ -125,6 +125,7 @@ type
     Inflow: double;
     Withdrawal: double;
     Density: double;
+    Viscosity: double;
 
     StagePest: string;
     RainfallPest: string;
@@ -133,6 +134,7 @@ type
     InflowPest: string;
     WithdrawalPest: string;
     DensityPest: string;
+    ViscosityPest: string;
 
     StagePestSeries: string;
     RainfallPestSeries: string;
@@ -141,6 +143,7 @@ type
     InflowPestSeries: string;
     WithdrawalPestSeries: string;
     DensityPestSeries: string;
+    ViscosityPestSeries: string;
 
     StagePestMethod: TPestParamMethod;
     RainfallPestMethod: TPestParamMethod;
@@ -149,6 +152,7 @@ type
     InflowPestMethod: TPestParamMethod;
     WithdrawalPestMethod: TPestParamMethod;
     DensityPestMethod: TPestParamMethod;
+    ViscosityPestMethod: TPestParamMethod;
 
     StageTimeSeriesName: string;
     RainfallTimeSeriesName: string;
@@ -157,6 +161,7 @@ type
     InflowTimeSeriesName: string;
     WithdrawalTimeSeriesName: string;
     DensityTimeSeriesName: string;
+    ViscosityTimeSeriesName: string;
 
     // GWT
     GwtStatus: TGwtBoundaryStatusArray;
@@ -354,6 +359,7 @@ resourcestring
   StrInTheLakeDefinedProperties = 'In the lake defined by the object %0:s, n' +
   'o outlet properties are defined for outlet %1:d.';
   StrLakeChemSpeciesD = 'Lake Chem Species %d';
+  StrLakeViscosityAt0 = 'Lake Viscosity at %0:g';
 
 { TModflowLAKMf6Writer }
 
@@ -1684,6 +1690,10 @@ begin
       if Model.BuoyancyDensityUsed then
       begin
         AssignValue(LakeDensityPosition, StrLakeDensityAt);
+      end;
+      if Model.ViscosityPkgViscUsed then
+      begin
+        AssignValue(LakeViscosityPosition, StrLakeViscosityAt0);
       end;
 
       if Model.GwtUsed then
@@ -3025,19 +3035,38 @@ begin
             WriteLakeValueOrFormula(ALakeSetting, Lak6WithdrawalPosition);
             NewLine;
 
-            if Model.GwtUsed then
+            if Model.BuoyancyDensityUsed then
             begin
-              for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-              begin
-                WriteString('  ');
-                WriteInteger(LakeIndex+1);
-                WriteString('  AUXILIARY ');
-                ASpecies := Model.MobileComponents[SpeciesIndex];
-                WriteString(' ' + ASpecies.Name);
-                WriteFloat(0);
-                NewLine;
-              end;
+              WriteString('  ');
+              WriteInteger(LakeIndex+1);
+              WriteString(' AUXILIARY DENSITY');
+              WriteLakeValueOrFormula(ALakeSetting, LakeDensityPosition);
+              NewLine;
             end;
+
+            if Model.ViscosityPkgViscUsed then
+            begin
+              WriteString('  ');
+              WriteInteger(LakeIndex+1);
+              WriteString(' AUXILIARY VISCOSITY');
+              WriteLakeValueOrFormula(ALakeSetting, LakeViscosityPosition);
+              NewLine;
+            end;
+
+
+//            if Model.GwtUsed then
+//            begin
+//              for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//              begin
+//                WriteString('  ');
+//                WriteInteger(LakeIndex+1);
+//                WriteString('  AUXILIARY ');
+//                ASpecies := Model.MobileComponents[SpeciesIndex];
+//                WriteString(' ' + ASpecies.Name);
+//                WriteFloat(0);
+//                NewLine;
+//              end;
+//            end;
 
           end;
         end;
@@ -3219,6 +3248,10 @@ begin
       begin
         result := DensityPestMethod;
       end;
+    LakeViscosityPosition:
+      begin
+        result := ViscosityPestMethod;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3302,6 +3335,10 @@ begin
     LakeDensityPosition:
       begin
         result := DensityPest;
+      end;
+    LakeViscosityPosition:
+      begin
+        result := ViscosityPest;
       end;
     else
     begin
@@ -3387,6 +3424,10 @@ begin
       begin
         result :=  DensityPestSeries;
       end;
+    LakeViscosityPosition:
+      begin
+        result := ViscosityPestSeries;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3470,6 +3511,10 @@ begin
     LakeDensityPosition:
       begin
         result :=  DensityTimeSeriesName;
+      end;
+    LakeViscosityPosition:
+      begin
+        result := ViscosityTimeSeriesName;
       end;
     else
     begin
@@ -3555,6 +3600,10 @@ begin
       begin
         result :=  Density;
       end;
+    LakeViscosityPosition:
+      begin
+        result := Viscosity;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3639,6 +3688,10 @@ begin
     LakeDensityPosition:
       begin
         DensityPestMethod := Value;
+      end;
+    LakeViscosityPosition:
+      begin
+        ViscosityPestMethod := Value;
       end;
     else
     begin
@@ -3727,6 +3780,10 @@ begin
       begin
         DensityPest := Value;
       end;
+    LakeViscosityPosition:
+      begin
+        ViscosityPest := Value;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3813,6 +3870,10 @@ begin
     LakeDensityPosition:
       begin
         DensityPestSeries  := Value;
+      end;
+    LakeViscosityPosition:
+      begin
+        ViscosityPestSeries  := Value;
       end;
     else
     begin
@@ -3901,6 +3962,10 @@ begin
       begin
         DensityTimeSeriesName  := Value;
       end;
+    LakeViscosityPosition:
+      begin
+        ViscosityTimeSeriesName  := Value;
+      end;
     else
     begin
       if frmGoPhast.PhastModel.GwtUsed then
@@ -3987,6 +4052,10 @@ begin
     LakeDensityPosition:
       begin
         Density  := Value;
+      end;
+    LakeViscosityPosition:
+      begin
+        Viscosity := Value;
       end;
     else
     begin

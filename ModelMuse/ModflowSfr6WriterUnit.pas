@@ -2345,10 +2345,10 @@ begin
       end;
       WriteInteger(ndiv);
 
-      if Model.BuoyancyDensityUsed then
-      begin
-        WriteFloat(0);
-      end;
+//      if Model.BuoyancyDensityUsed then
+//      begin
+//        WriteFloat(0);
+//      end;
 
       if Model.GwtUsed then
       begin
@@ -2876,6 +2876,27 @@ begin
           WriteValueOrFormula(ACell, SfrMf6DensityPosition);
           NewLine;
         end;
+
+        if Model.ViscosityPkgViscUsed then
+        begin
+          WriteInteger(ReachNumber);
+          WriteString(' AUXILIARY VISCOSITY');
+          WriteValueOrFormula(ACell, SfrMf6ViscosityPosition);
+          NewLine;
+        end;
+
+//        if Model.GwtUsed then
+//        begin
+//          for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//          begin
+//            WriteInteger(ReachNumber);
+//            WriteString(' AUXILIARY ');
+//            ASpecies := Model.MobileComponents[SpeciesIndex];
+//            WriteString(' ' + ASpecies.Name);
+//            WriteFloat(0);
+//            NewLine;
+//          end;
+//        end;
 
         if ACell.Values.Status <> ssInactive then
         begin

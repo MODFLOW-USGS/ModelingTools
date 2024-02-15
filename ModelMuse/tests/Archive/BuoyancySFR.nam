@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 7/28/2023 by ModelMuse Version 5.1.1.34
+# Name File for MODFLOW created on 2/15/2024 by ModelMuse Version 5.1.1.55
 BEGIN OPTIONS
   LIST BuoyancySFR.lst
   PRINT_INPUT
@@ -15,4 +15,5 @@ BEGIN PACKAGES
   WEL6         BuoyancySFR.wel  WEL-1
   SFR6         BuoyancySFR.sfr  SFR-1
   BUY6         BuoyancySFR.buy  BUY6
+  VSC6         BuoyancySFR.vsc  VSC6
 END PACKAGES
