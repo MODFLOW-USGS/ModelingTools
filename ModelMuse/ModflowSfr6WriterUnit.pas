@@ -1860,7 +1860,7 @@ begin
         Assert(ScreenObject <> nil);
         Sfr6Boundary := ScreenObject.ModflowSfr6Boundary;
 
-        if Sfr6Boundary.CrossSectionUsage <> csuNotUse then
+        if Sfr6Boundary.CrossSectionUsage <> csuNotUsed then
         begin
           if not CrossSectionUsed then
           begin
@@ -2894,7 +2894,6 @@ begin
             end;
           end;
         end;
-        NewLine;
 
         if ACell.CrossSectionIndex > 0 then
         begin
@@ -2910,6 +2909,7 @@ begin
           WriteString(ExtractFileName(AFileName));
           NewLine;
         end;
+        NewLine;
 
         if ACell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
         begin

@@ -1277,8 +1277,10 @@ var
   ObsPackage: TPackage;
   CrossSectionPackage: TPackage;
   CrossSectionReader: TCrossSection;
-  CrossFileNames: TStringList;
   AFileName: string;
+  PeriodIndex: Integer;
+  SettingIndex: Integer;
+  ASetting: TNumberedItem;
 begin
   if Assigned(OnUpdataStatusBar) then
   begin
@@ -1379,28 +1381,47 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled, NPER);
   end;
-  CrossFileNames := TStringList.Create;
-  try
-    for PackageIndex := 0 to FSfrCrossSections.FItems.Count - 1 do
+  for PackageIndex := 0 to FSfrCrossSections.FItems.Count - 1 do
+  begin
+    AFileName := FSfrCrossSections.FItems[PackageIndex].tab6_filename;
+    if not FCosssSectionDictionary.ContainsKey(AFileName) then
     begin
-      AFileName := FSfrCrossSections.FItems[PackageIndex].tab6_filename;
-      if CrossFileNames.IndexOf(AFileName) < 0 then
-      begin
-        CrossFileNames.Add(AFileName);
-        CrossSectionPackage := TPackage.Create;
-        FCosssSectionPackages.Add(CrossSectionPackage);
-        FCosssSectionDictionary.Add(AFileName, CrossSectionPackage);
-        CrossSectionPackage.FileType := FPackageType;
-        CrossSectionPackage.FileName := AFileName;
-        CrossSectionPackage.PackageName := '';
+      CrossSectionPackage := TPackage.Create;
+      FCosssSectionPackages.Add(CrossSectionPackage);
+      FCosssSectionDictionary.Add(AFileName, CrossSectionPackage);
+      CrossSectionPackage.FileType := FPackageType;
+      CrossSectionPackage.FileName := AFileName;
+      CrossSectionPackage.PackageName := '';
 
-        CrossSectionReader := TCrossSection.Create(FPackageType);
-        CrossSectionPackage.Package := CrossSectionReader;
-        CrossSectionPackage.ReadPackage(Unhandled, NPER);
+      CrossSectionReader := TCrossSection.Create(FPackageType);
+      CrossSectionPackage.Package := CrossSectionReader;
+      CrossSectionPackage.ReadPackage(Unhandled, NPER);
+    end;
+  end;
+  for PeriodIndex := 0 to FPeriods.Count - 1 do
+  begin
+    APeriod := FPeriods[PeriodIndex];
+    for SettingIndex := 0 to APeriod.Count - 1 do
+    begin
+      ASetting := APeriod[SettingIndex];
+      if AnsiSameText(ASetting.Name, 'CROSS_SECTION') then
+      begin
+        AFileName := ASetting.StringValue;
+        if not FCosssSectionDictionary.ContainsKey(AFileName) then
+        begin
+          CrossSectionPackage := TPackage.Create;
+          FCosssSectionPackages.Add(CrossSectionPackage);
+          FCosssSectionDictionary.Add(AFileName, CrossSectionPackage);
+          CrossSectionPackage.FileType := FPackageType;
+          CrossSectionPackage.FileName := AFileName;
+          CrossSectionPackage.PackageName := '';
+
+          CrossSectionReader := TCrossSection.Create(FPackageType);
+          CrossSectionPackage.Package := CrossSectionReader;
+          CrossSectionPackage.ReadPackage(Unhandled, NPER);
+        end;
       end;
     end;
-  finally
-    CrossFileNames.Free;
   end;
 end;
 

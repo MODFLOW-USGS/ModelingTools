@@ -507,7 +507,8 @@ type
     property Items[Index: Integer]: TSfr6CrossSectionPoint read GetItem write SetItem; default;
     function Add: TSfr6CrossSectionPoint;
   published
-    property UseCrossSection: Boolean read FUseCrossSection write SetUseCrossSection;
+    // @name is retained for backwards compatibility
+    property UseCrossSection: Boolean read FUseCrossSection write SetUseCrossSection stored False;
     property UseManningFraction: Boolean read FUseManningFraction write SetUseManningFraction;
   end;
 
@@ -536,7 +537,7 @@ type
     constructor Create(Model: IModelForTOrderedCollection);
   end;
 
-  TCrossSectionUsage = (csuNotUse, csuSingle, csuMultiple);
+  TCrossSectionUsage = (csuNotUsed, csuSingle, csuMultiple);
 
   TSfrMf6Boundary = class(TModflowBoundary)
   private
@@ -3588,6 +3589,11 @@ var
   XSecWidth: Double;
   XSecIndex: Integer;
   Z: Double;
+  CSItem: TimeVaryingSfr6CrossSectionItem;
+  ACrossSection: TSfr6CrossSection;
+  SectionIndex: Integer;
+  Item1: TimeVaryingSfr6CrossSectionItem;
+  Item2: TimeVaryingSfr6CrossSectionItem;
 //  DiversionSeg: TSDiversionItem;
 begin
   if Source is TSfrMf6Boundary then
@@ -4027,12 +4033,17 @@ begin
       ChannelItem := SourceSfrMf2005.ChannelValues[ItemIndex];
       SfrMf6Item.Roughness := ChannelItem.ChannelRoughness;
 
-      if (ItemIndex = 0) and (ICALC = 2) then
+      if (ICALC = 2) then
       begin
+        CSItem := CrossSections.Add as TimeVaryingSfr6CrossSectionItem;
+        CSItem.StartTime := SfrMf6Item.StartTime;
+        CSItem.EndTime := SfrMf6Item.EndTime;
+        ACrossSection := CSItem.CrossSection;
+
         Compiler := frmGoPhast.PhastModel.GetCompiler(dso3D, eaBlocks);
         try
-          CrossSection.UseCrossSection := True;
-          CrossSection.UseManningFraction := True;
+          ACrossSection.UseCrossSection := True;
+          ACrossSection.UseManningFraction := True;
 
           Formula := ChannelItem.x[7];
           Compiler.Compile(Formula);
@@ -4047,7 +4058,14 @@ begin
           Compiler.Compile(Formula);
           BankRoughness := Compiler.CurrentExpression.DoubleResult;
 
-          BankFraction := BankRoughness/ChannelRoughness;
+          if ChannelRoughness <> 0 then
+          begin
+            BankFraction := BankRoughness/ChannelRoughness;
+          end
+          else
+          begin
+            BankFraction := BankRoughness;
+          end;
 
           MinZ := 0.;
           for XSecIndex := 0 to 7 do
@@ -4068,7 +4086,7 @@ begin
               MinZ := Z
             end;
 
-            XSecItem := CrossSection.Add;
+            XSecItem := ACrossSection.Add;
             XSecItem.XFraction := X/XSecWidth;
             XSecItem.Height := Z;
             case XSecIndex of
@@ -4084,18 +4102,44 @@ begin
           end;
           if MinZ <> 0 then
           begin
-            for XSecIndex := 0 to CrossSection.Count - 1 do
+            for XSecIndex := 0 to ACrossSection.Count - 1 do
             begin
-              XSecItem := CrossSection[XSecIndex];
+              XSecItem := ACrossSection[XSecIndex];
               XSecItem.Height := XSecItem.Height - MinZ;
             end;
           end;
         except on ERbwParserError do
           begin
-            CrossSection.UseCrossSection := False;
+            CSItem.Free;
           end;
         end
       end;
+    end;
+
+    if CrossSections.Count > 0 then
+    begin
+      for SectionIndex := CrossSections.Count - 1 downto 1 do
+      begin
+        Item1 := CrossSections.Items[SectionIndex] as TimeVaryingSfr6CrossSectionItem;
+        Item2 := CrossSections.Items[SectionIndex-1] as TimeVaryingSfr6CrossSectionItem;
+        if Item1.CrossSection.IsSame(Item2.CrossSection) then
+        begin
+          Item1.EndTime := Item2.EndTime;
+          CrossSections.Delete(SectionIndex);
+        end;
+      end;
+      if CrossSections.Count = 1 then
+      begin
+        CrossSectionUsage := csuSingle;
+      end
+      else
+      begin
+        CrossSectionUsage := csuMultiple;
+      end;
+    end
+    else
+    begin
+      CrossSectionUsage := csuNotUsed;
     end;
 
     Exit;
@@ -4529,7 +4573,7 @@ begin
   end
   else
   begin
-    result := csuNotUse;
+    result := csuNotUsed;
   end;
 end;
 

@@ -10142,7 +10142,7 @@ const
 //                cross section in the Object Properties dialog box unless
 //                the 8-point cross section is in use.
 
-//                Enhancement: Time-varying cross sections are now supported in
+//    '5.1.1.55' Enhancement: Time-varying cross sections are now supported in
 //                 the MODFLOW 6 SFR package.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
@@ -10158,7 +10158,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.54';
+  IIModelVersion = '5.1.1.55';
 
 function IModelVersion: string;
 begin

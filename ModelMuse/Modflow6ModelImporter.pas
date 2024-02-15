@@ -7569,9 +7569,38 @@ var
     ASetting: TNumberedItem;
     ACrossSectionPackage: TPackage;
     CrossSection: TCrossSection;
-    RowIndex: Integer;
-    XsecPoint: TSfr6CrossSectionPoint;
-    TableRow: TCrossSectionTableItem;
+    CSItem: TimeVaryingSfr6CrossSectionItem;
+    ACrossSection: TSfr6CrossSection;
+    CrossSectionFileName: string;
+    StartTime: Double;
+    procedure ReadCrossSection(ACrossSection: TSfr6CrossSection; CrossSection: TCrossSection);
+    var
+      RowIndex: Integer;
+      XsecPoint: TSfr6CrossSectionPoint;
+      TableRow: TCrossSectionTableItem;
+    begin
+      ACrossSection.UseManningFraction := (CrossSection.Dimensions.NCOL = 3);
+
+      for RowIndex := 0 to CrossSection.Table.Count - 1 do
+      begin
+        TableRow := CrossSection.Table[RowIndex];
+        XsecPoint := ACrossSection.Add;
+
+        XsecPoint.XFraction := TableRow.xfraction;
+        XsecPoint.Height := TableRow.height;
+        if ACrossSection.UseManningFraction then
+        begin
+          if TableRow.manfraction.Used then
+          begin
+            XsecPoint.ManningsFraction := TableRow.manfraction.Value;
+          end
+          else
+          begin
+            XsecPoint.ManningsFraction := 0;
+          end;
+        end;
+      end
+    end;
   begin
     Inc(ObjectCount);
 
@@ -7640,32 +7669,41 @@ var
     end;
     SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values, 'ReachK', result);
 
+    CrossSectionFileName := '';
     if AReachList[0].CrossSectionFile <> '' then
     begin
+      CrossSectionFileName := AReachList[0].CrossSectionFile;
       ACrossSectionPackage := Sfr.GetCrossSectionPackage(AReachList[0].CrossSectionFile);
       CrossSection := ACrossSectionPackage.Package as TCrossSection;
-      SfrBoundary.CrossSection.UseCrossSection := True;
-      SfrBoundary.CrossSection.UseManningFraction := (CrossSection.Dimensions.NCOL = 3);
 
-      for RowIndex := 0 to CrossSection.Table.Count - 1 do
-      begin
-        TableRow := CrossSection.Table[RowIndex];
-        XsecPoint := SfrBoundary.CrossSection.Add;
+      CSItem := SfrBoundary.CrossSections.Add as TimeVaryingSfr6CrossSectionItem;
+      CSItem.StartTime := frmGoPhast.PhastModel.ModflowStressPeriods.First.StartTime;
+      CSItem.EndTime := frmGoPhast.PhastModel.ModflowStressPeriods.Last.EndTime;
+      ACrossSection := CSItem.CrossSection;
 
-        XsecPoint.XFraction := TableRow.xfraction;
-        XsecPoint.Height := TableRow.height;
-        if SfrBoundary.CrossSection.UseManningFraction then
-        begin
-          if TableRow.manfraction.Used then
-          begin
-            XsecPoint.ManningsFraction := TableRow.manfraction.Value;
-          end
-          else
-          begin
-            XsecPoint.ManningsFraction := 0;
-          end;
-        end;
-      end;
+//      SfrBoundary.CrossSection.UseCrossSection := True;
+      ReadCrossSection(ACrossSection, CrossSection);
+//      ACrossSection.UseManningFraction := (CrossSection.Dimensions.NCOL = 3);
+//
+//      for RowIndex := 0 to CrossSection.Table.Count - 1 do
+//      begin
+//        TableRow := CrossSection.Table[RowIndex];
+//        XsecPoint := ACrossSection.Add;
+//
+//        XsecPoint.XFraction := TableRow.xfraction;
+//        XsecPoint.Height := TableRow.height;
+//        if ACrossSection.UseManningFraction then
+//        begin
+//          if TableRow.manfraction.Used then
+//          begin
+//            XsecPoint.ManningsFraction := TableRow.manfraction.Value;
+//          end
+//          else
+//          begin
+//            XsecPoint.ManningsFraction := 0;
+//          end;
+//        end;
+//      end;
     end;
 
     SetLength(ManningBoundaryValues, AReachList.Count);
@@ -7722,7 +7760,8 @@ var
 
       SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
 
-      SfrItem.StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+      StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+      SfrItem.StartTime := StartTime;
       if PeriodIndex < Sfr.PeriodCount - 1 then
       begin
         SfrItem.EndTime := Model.ModflowStressPeriods[APeriod.Period].StartTime;
@@ -7755,6 +7794,29 @@ var
         end;
       end;
 
+      for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+      begin
+        ASetting := AReachSettingsList[SettingIndex];
+        if AnsiSameText(ASetting.Name, 'CROSS_SECTION') then
+        begin
+          if not AnsiSameText(ASetting.StringValue, CrossSectionFileName) then
+          begin
+            CrossSectionFileName := ASetting.StringValue;
+            CrossSection := Sfr.GetCrossSectionPackage(CrossSectionFileName).Package as TCrossSection;
+            if SfrBoundary.CrossSections.Count > 0 then
+            begin
+              CsItem := SfrBoundary.CrossSections.Last as TimeVaryingSfr6CrossSectionItem;
+              CsItem.EndTime := StartTime;
+            end;
+            CsItem := SfrBoundary.CrossSections.Add as TimeVaryingSfr6CrossSectionItem;
+            CsItem.StartTime := StartTime;
+            CsItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
+
+            ReadCrossSection(CsItem.CrossSection, CrossSection);
+          end;
+        end;
+      end;
+
       UpdateReachSettings(AReachList, ManningBoundaryValues, 'MANNING');
       SfrItem.Roughness := BoundaryValuesToFormula(ManningBoundaryValues,
         Format('Roughness_%d', [APeriod.Period]), result);
@@ -7782,6 +7844,18 @@ var
       UpdateReachSettings(AReachList, RunoffBoundaryValues, 'RUNOFF');
       SfrItem.Runoff := BoundaryValuesToFormula(RunoffBoundaryValues,
         Format('Runoff_%d', [APeriod.Period]), result);
+    end;
+
+    if SfrBoundary.CrossSections.Count > 0 then
+    begin
+      if SfrBoundary.CrossSections.Count = 1 then
+      begin
+        SfrBoundary.CrossSectionUsage := csuSingle;
+      end
+      else
+      begin
+        SfrBoundary.CrossSectionUsage := csuMultiple;
+      end;
     end;
 
 //    SfrBoundary.HydraulicConductivity := BoundaryValuesToFormula(Values);
@@ -8211,12 +8285,12 @@ begin
                     if AnsiSameText(ASetting.Name, 'STATUS') then
                     begin
                       StringValues[ReachIndex] := ASetting.StringValue;
-                      if not AnsiSameText(ASetting.StringValue , 'ACTIVE') then
-                      begin
-                        NeedToSplit := True;
-                      end;
-                      break;
                     end;
+                  end;
+                  if (ReachIndex > 0) and not AnsiSameText(StringValues[ReachIndex],
+                    StringValues[ReachIndex-1]) then
+                  begin
+                    NeedToSplit := True;
                   end;
                 end;
                 if NeedToSplit then
@@ -8227,7 +8301,7 @@ begin
 
                 for ReachIndex := 0 to AReachList.Count - 1 do
                 begin
-                  StringValues[ReachIndex] := AReachList[ReachIndex].CrossSectionFile;
+                  StringValues[ReachIndex] := '';
                 end;
                 NeedToSplit := False;
                 for ReachIndex := 0 to AReachList.Count - 1 do
@@ -8238,13 +8312,13 @@ begin
                     ASetting := AReachSettingsList[SettingIndex];
                     if AnsiSameText(ASetting.Name, 'CROSS_SECTION') then
                     begin
-                      if not AnsiSameText(ASetting.StringValue, StringValues[ReachIndex]) then
-                      begin
-                        StringValues[ReachIndex] := ASetting.StringValue;
-                        NeedToSplit := True;
-                      end;
-                      break;
+                      StringValues[ReachIndex] := ASetting.StringValue;
                     end;
+                  end;
+                  if (ReachIndex > 0) and not AnsiSameText(StringValues[ReachIndex],
+                    StringValues[ReachIndex-1]) then
+                  begin
+                    NeedToSplit := True;
                   end;
                 end;
                 if NeedToSplit then

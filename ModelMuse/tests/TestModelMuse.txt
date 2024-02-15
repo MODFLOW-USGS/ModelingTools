@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5634
+5636
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5629,6 +5629,8 @@ Sf6Mf6_CrossSection.gpt
 	Archive\Sf6Mf6_CrossSection.sto
 	Archive\Sf6Mf6_CrossSection.tdis
 	Archive\Sf6Mf6_CrossSection.xsec1
+	Archive\Sf6Mf6_CrossSection.xsec2
+	Archive\Sf6Mf6_CrossSection.xsec3
 	Archive\Sf6Mf6_CrossSection.zb.zbnam
 	Archive\Sf6Mf6_CrossSection.zb.zbnam.archive
 	Archive\Sf6Mf6_CrossSection.zb_zones

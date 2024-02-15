@@ -6,6 +6,7 @@ inherited frameColorGrid: TframeColorGrid
   inherited pcChoices: TPageControl
     Width = 571
     Height = 501
+    ActivePage = tabSelection
     ExplicitWidth = 571
     ExplicitHeight = 501
     inherited tabSelection: TTabSheet

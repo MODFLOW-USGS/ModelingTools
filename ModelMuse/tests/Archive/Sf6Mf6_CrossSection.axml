@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Sf6Mf6_CrossSection" FileType="bin">
-    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="bin">..\..\..\WRDAPP\mf6.4.3_win64\bin\mf6.exe</FileName>
-    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="bin">..\..\..\WRDAPP\mf6.4.3_win64\bin\zbud6.exe</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="bin">..\..\..\WRDAPP\mf6.4.4_win64\bin\mf6.exe</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="bin">..\..\..\WRDAPP\mf6.4.4_win64\bin\zbud6.exe</FileName>
   </bin>
   <ancillary Model_Name="Sf6Mf6_CrossSection" FileType="ancillary">
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="ancillary">Sf6Mf6_CrossSection.gpt</FileName>
@@ -22,6 +22,8 @@
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.sto</FileName>
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.tdis</FileName>
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.xsec1</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.xsec2</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">Sf6Mf6_CrossSection.xsec3</FileName>
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Input">usgs.Sf6Mf6_CrossSection.reference</FileName>
   </model>
   <output Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">
