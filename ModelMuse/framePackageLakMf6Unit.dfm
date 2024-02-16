@@ -13,13 +13,13 @@ inherited framePackageLakMf6: TframePackageLakMf6
   end
   inherited memoComments: TMemo
     Top = 58
-    Height = 303
+    Height = 279
     ExplicitTop = 58
-    ExplicitHeight = 303
+    ExplicitHeight = 279
   end
   object cbPrintStage: TCheckBox [4]
     Left = 16
-    Top = 367
+    Top = 343
     Width = 145
     Height = 20
     Caption = 'Print stage'
@@ -28,21 +28,21 @@ inherited framePackageLakMf6: TframePackageLakMf6
   end
   object cbSaveBudget: TCheckBox [5]
     Left = 16
-    Top = 418
+    Top = 394
     Width = 305
     Height = 20
     Caption = 'Save binary lake budget file (.lk_bud)'
     Enabled = False
-    TabOrder = 2
+    TabOrder = 3
   end
   object cbSaveStage: TCheckBox [6]
     Left = 16
-    Top = 393
+    Top = 369
     Width = 321
     Height = 20
     Caption = 'Save binary Lake stage file (.lk_stg)'
     Enabled = False
-    TabOrder = 3
+    TabOrder = 2
   end
   object rdeSurfaceDepressionDepth: TRbwDataEntry [7]
     Left = 16
@@ -51,7 +51,7 @@ inherited framePackageLakMf6: TframePackageLakMf6
     Height = 22
     Color = clBtnFace
     Enabled = False
-    TabOrder = 4
+    TabOrder = 5
     Text = '0.2'
     DataType = dtReal
     Max = 1.000000000000000000
@@ -65,7 +65,16 @@ inherited framePackageLakMf6: TframePackageLakMf6
     Height = 18
     Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
     Enabled = False
-    TabOrder = 5
+    TabOrder = 6
+  end
+  object cbSaveBudgetCsv: TCheckBox [9]
+    Left = 16
+    Top = 420
+    Width = 403
+    Height = 20
+    Caption = 'Save comma-separated lake budget file (.lk_bud.csv)'
+    Enabled = False
+    TabOrder = 4
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -89,6 +98,9 @@ inherited framePackageLakMf6: TframePackageLakMf6
       end
       item
         Control = cbPackageConvergence
+      end
+      item
+        Control = cbSaveBudgetCsv
       end>
   end
 end

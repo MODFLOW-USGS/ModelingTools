@@ -2473,6 +2473,15 @@ resourcestring
   'Flow package can not be used with MT3D-USGS. You must fix this in the "Mo' +
   'del|MODFLOW Packages and Programs" dialog box and rerun MODFLOW before ru' +
   'nning MT3D-USGS.';
+  StrTheWayThatModelMu = 'The way that ModelMuse handles lakes in MODFLOW 6 ' +
+  'has changed from before.';
+  StrLakesWithOnlyVert = 'Lakes with only vertical connections will now have' +
+  ' vertical connections to the lowest layer containing lake rather than the' +
+  ' layer below that.';
+  StrThisMeansThatLake = 'This means that lakes can now be positioned above ' +
+  'the top layer.';
+  StrItAlsoMeansThatI = 'It also means that IDOMAIN values may change. Chang' +
+  'es in IDOMAIN can have a large effect on your model.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -12422,6 +12431,16 @@ begin
   end;
   if frmGoPhast.Visible then
   begin
+    if (ModelSelection = msModflow2015)
+      and PhastModel.LakMf6IsSelected
+      and PhastModel.FileVersionEqualOrEarlier('5.5.1.55') then
+    begin
+      Beep;
+      MessageDlg(StrTheWayThatModelMu + slineBreak +
+        StrLakesWithOnlyVert + slineBreak +
+        StrThisMeansThatLake + slineBreak +
+        StrItAlsoMeansThatI, mtWarning, [mbOK], 0);
+    end;
     frmFormulaErrors.DelayShowing := False;
     if frmErrorsAndWarnings.HasMessages then
     begin

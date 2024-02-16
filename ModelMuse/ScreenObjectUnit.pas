@@ -3343,6 +3343,7 @@ view. }
     function StrParameters: IModflowParameters;
     function FmpWellParameters: IModflowParameters;
     procedure HandleChangedHfbParameter(const ParameterName: string);
+    procedure AssignMf6LakeDataSetValue;
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -7388,31 +7389,7 @@ begin
     end;
   end;
 
-  BoundarArray :=
-    frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(KLakeMf6);
-  if (ModflowLak6 <> nil)
-    and ModflowLak6.Used
-    and not ModflowLak6.Embedded
-    and (ModflowLak6.LakeConnections <> [lctHorizontal]) then
-  begin
-    DSIndex := IndexOfDataSet(BoundarArray);
-    if DSIndex < 0 then
-    begin
-      DSIndex := AddDataSet(BoundarArray);
-    end;
-    if DSIndex >= 0 then
-    begin
-      DataSetFormulas[DSIndex] := 'True';
-    end;
-  end
-  else
-  begin
-    DSIndex := IndexOfDataSet(BoundarArray);
-    if DSIndex >= 0 then
-    begin
-      DeleteDataSet(DSIndex);
-    end;
-  end;
+  AssignMf6LakeDataSetValue;
 
 
   UpdateUzfGage1and2;
@@ -20502,6 +20479,54 @@ begin
   result := DynamicTimesSeriesCollections.GetTimeSeriesByName(Value);
 end;
 
+procedure TScreenObject.AssignMf6LakeDataSetValue;
+var
+  DSIndex: Integer;
+  BoundarArray: TDataArray;
+  FormulaValue: Integer;
+begin
+  BoundarArray := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(KMf6LakeConnectionTypes);
+  if frmGoPhast.PhastModel.LakMf6IsSelected
+    and (ModflowLak6 <> nil)
+    and ModflowLak6.Used
+    and not ModflowLak6.Embedded
+//    and not (lctHorizontal in ModflowLak6.LakeConnections)
+    then
+  begin
+    Assert(BoundarArray <> nil);
+    DSIndex := IndexOfDataSet(BoundarArray);
+    if DSIndex < 0 then
+    begin
+      DSIndex := AddDataSet(BoundarArray);
+    end;
+    if DSIndex >= 0 then
+    begin
+      FormulaValue := 0;
+      if lctHorizontal in ModflowLak6.LakeConnections then
+      begin
+        Inc(FormulaValue);
+      end;
+      if lctVertical in ModflowLak6.LakeConnections then
+      begin
+        Inc(FormulaValue, 2);
+      end;
+      DataSetFormulas[DSIndex] := IntToStr(FormulaValue);
+    end;
+  end
+  else
+  begin
+    if BoundarArray <> nil then
+    begin
+      DSIndex := IndexOfDataSet(BoundarArray);
+      if DSIndex >= 0 then
+      begin
+        DeleteDataSet(DSIndex);
+      end;
+    end;
+  end;
+end;
+
 function TScreenObject.GetCount: integer;
 begin
   Result := FCount;
@@ -20571,6 +20596,7 @@ begin
     end;
   end;
 
+  AssignMf6LakeDataSetValue;
   UpdateTalksToWithdrawals;
   UpdateTalksToActive;
   UpdateTalksToLakeMf6;

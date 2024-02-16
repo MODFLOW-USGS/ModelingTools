@@ -15,6 +15,7 @@ type
     rdeSurfaceDepressionDepth: TRbwDataEntry;
     lblSurfaceDepressionDepth: TLabel;
     cbPackageConvergence: TCheckBox;
+    cbSaveBudgetCsv: TCheckBox;
   private
     { Private declarations }
   public
@@ -44,6 +45,7 @@ begin
 //  cbPrintFlows.Checked := LakMf6.PrintFlows;
   cbSaveStage.Checked := LakMf6.SaveStage;
   cbSaveBudget.Checked := LakMf6.SaveBudget;
+  cbSaveBudgetCsv.Checked := LakMf6.SaveBudgetCsv;
   rdeSurfaceDepressionDepth.RealValue := LakMf6.SurfDepDepth;
   cbPackageConvergence.Checked := LakMf6.WriteConvergenceData;
 end;
@@ -58,6 +60,7 @@ begin
 //  LakMf6.PrintFlows := cbPrintFlows.Checked;
   LakMf6.SaveStage := cbSaveStage.Checked;
   LakMf6.SaveBudget := cbSaveBudget.Checked;
+  LakMf6.SaveBudgetCsv := cbSaveBudgetCsv.Checked;
   LakMf6.SurfDepDepth := rdeSurfaceDepressionDepth.RealValue;
   LakMf6.WriteConvergenceData := cbPackageConvergence.Checked;
 end;

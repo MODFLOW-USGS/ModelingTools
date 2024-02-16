@@ -3462,15 +3462,16 @@ begin
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;
   FDataArrayCreationRecords[Index].Orientation := dso3D;
-  FDataArrayCreationRecords[Index].DataType := rdtBoolean;
-  FDataArrayCreationRecords[Index].Name := KLakeMf6;
-  FDataArrayCreationRecords[Index].DisplayName := StrLakeMf6;
-  FDataArrayCreationRecords[Index].Formula := 'False';
+  FDataArrayCreationRecords[Index].DataType := rdtInteger;
+  FDataArrayCreationRecords[Index].Name := KMf6LakeConnectionTypes;
+  FDataArrayCreationRecords[Index].DisplayName := StrMf6LakeConnectionTypes;
+  FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := rsLakeClassificaton;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.LakMf6Selected;
   FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
-  FDataArrayCreationRecords[Index].AssociatedDataSets := '';
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    '1:Horizontal Connections; 2: Vertical Connections; 3: Both';
 //    StrMAWMODFLOW6CONNE_radius_skin;
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);

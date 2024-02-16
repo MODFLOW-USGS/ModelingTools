@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 590
     Height = 448
-    ActivePage = tabBasic
+    ActivePage = tabSFR
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -238,7 +238,11 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           'External outflow'
           'To MVR'
           'Flow from upstream'
-          'Flow to downstream')
+          'Flow to downstream'
+          'Depth'
+          'Wetted perimeter'
+          'Wetted cross-section area'
+          'Wetted top width')
         TabOrder = 0
         OnClickCheck = chklstSFRClickCheck
       end

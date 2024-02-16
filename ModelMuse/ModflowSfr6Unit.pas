@@ -13,7 +13,7 @@ uses Windows, ZLib, SysUtils, Classes, ModflowCellUnit,
 type
   TSfrOb = (soStage, soExtInflow, soInflow, soFromMvr, soRainfall, soRunoff, soSfr,
     soEvaporation, soOutflow, soExternalOutflow, soToMvr, soUpstreamFlow,
-    soDownstreamFlow);
+    soDownstreamFlow, soDepth, soWetPerimeter, soWetArea, soWetWidth);
   TSfrObs = set of TSfrOb;
 
   TSftOb = (stoConcentration, stoStorage, stoConstant, stoFromMvr, stoToMvr,
@@ -909,7 +909,8 @@ const
   SfrObName: array[TSfrOb] of string =
     ('Stage', 'Ext-Inflow', 'Inflow', 'From-Mvr', 'Rainfall', 'Runoff', 'Sfr',
     'Evaporation', 'Outflow', 'External-Outflow', 'To-Mvr', 'Upstream Flow',
-    'Downstream Flow');
+    'Downstream Flow', 'Depth', 'Wetted Perimeter', 'Wetted Area',
+    'Wetted Width');
   SftObName: array[TSftOb] of string =
     (
       'Concentration',

@@ -519,7 +519,8 @@ const
   KMAWScreenBottom = 'MAW_Screen_Bottom';
   KMAWSkinK = 'MAW_Skin_K';
   KMAWSkinRadius = 'MAW_Skin_Radius';
-  KLakeMf6 = 'LakeMf6';
+//  KLakeMf6 = 'LakeMf6';
+  KMf6LakeConnectionTypes = 'MF6_Lake_Connection_Types';
   KLake_Bed_Leakance = 'Lake_Bed_Leakance';
   KLake_Bed_Thickness = 'Lake_Bed_Thickness';
   KLake_Bottom_Elevation = 'Lake_Bottom_Elevation';
@@ -1138,7 +1139,8 @@ resourcestring
   StrMAWScreenBottom = KMAWScreenBottom;
   StrMAWSkinK = KMAWSkinK;
   StrMAWSkinRadius = KMAWSkinRadius;
-  StrLakeMf6 = KLakeMf6;
+//  StrLakeMf6 = KLakeMf6;
+  StrMf6LakeConnectionTypes = KMf6LakeConnectionTypes;
   StrLake_Bed_Leakance = KLake_Bed_Leakance;
   StrLake_Bed_Thickness = KLake_Bed_Thickness;
   StrLake_Bottom_Elevation = KLake_Bottom_Elevation;

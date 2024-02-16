@@ -2500,6 +2500,30 @@ begin
             ObservationType := 'downstream-flow';
             Prefix := 'sdf_';
           end;
+        soDepth:
+          begin
+            OutputExtension := '.sfr_depth_ob' + OutputTypeExtension;
+            ObservationType := 'depth';
+            Prefix := 'sdp_';
+          end;
+        soWetPerimeter:
+          begin
+            OutputExtension := '.sfr_wet-perimeter_ob' + OutputTypeExtension;
+            ObservationType := 'wet-perimeter';
+            Prefix := 'swp_';
+          end;
+        soWetArea:
+          begin
+            OutputExtension := '.sfr_wet-area_ob' + OutputTypeExtension;
+            ObservationType := 'wet-area';
+            Prefix := 'swa_';
+          end;
+        soWetWidth:
+          begin
+            OutputExtension := '.sfr_wet-width_ob' + OutputTypeExtension;
+            ObservationType := 'wet-width';
+            Prefix := 'sww_';
+          end;
         else
           Assert(False);
       end;
@@ -2538,11 +2562,14 @@ begin
           case AnObs.FSfrObsLocation of
             solAll:
               begin
-                // Stage is only defined at individual reaches not for multiple
+                // Stage, depth, wet-perimeter, wet-area, and wet-width are
+                // only defined at individual reaches not for multiple
                 // combined reaches.
-                // If stage is to be used in calibration it must be
+                // If stage, depth, wet-perimeter, wet-area, and wet-width
+                // are to be used in calibration they must be
                 // for the first or last reach.
-                if AnObsType = soStage then
+                if AnObsType in [soStage, soDepth, soWetPerimeter, soWetArea,
+                  soWetWidth] then
                 begin
                   ReachNumberStr := IntToStr(AnObs.FCount + AnObs.FReachStart);
                   While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do

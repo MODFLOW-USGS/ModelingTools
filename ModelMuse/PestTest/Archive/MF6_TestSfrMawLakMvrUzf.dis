@@ -36,8 +36,18 @@ BEGIN GRIDDATA
 
     CONSTANT  -3.000000000000E+001  # BOTM, Lower Aquifer
 
-  IDOMAIN LAYERED IPRN     5
-    CONSTANT      1 # IDOMAIN 1
+  IDOMAIN LAYERED
+    INTERNAL IPRN      5 # IDOMAIN 1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     0     0     0     0
+           1     1     1     1     1     1     0     0     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
     CONSTANT      1 # IDOMAIN 2
     CONSTANT      1 # IDOMAIN 3
 END GRIDDATA

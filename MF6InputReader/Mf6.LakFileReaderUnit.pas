@@ -9,13 +9,13 @@ uses
 type
   TLakOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
+    FAUXILIARY: TStringList;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
-    PRINT_STAGE: Boolean;
+    FPRINT_STAGE: Boolean;
     PRINT_FLOWS: Boolean;
     SAVE_FLOWS: Boolean;
-    STAGE: Boolean;
+    FSTAGE: Boolean;
     BUDGET: Boolean;
     BUDGETCSV: Boolean;
     PACKAGE_CONVERGENCE: Boolean;
@@ -190,8 +190,8 @@ resourcestring
 
 constructor TLakOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -200,7 +200,7 @@ end;
 
 destructor TLakOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
@@ -209,13 +209,13 @@ end;
 procedure TLakOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   BOUNDNAMES := False;
   PRINT_INPUT := False;
-  PRINT_STAGE := False;
+  FPRINT_STAGE := False;
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
-  STAGE := False;
+  FSTAGE := False;
   BUDGET := False;
   BUDGETCSV := False;
   PACKAGE_CONVERGENCE := False;
@@ -267,7 +267,7 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if FSplitter[0] = 'BOUNDNAMES' then
@@ -280,7 +280,7 @@ begin
     end
     else if FSplitter[0] = 'PRINT_STAGE' then
     begin
-      PRINT_STAGE := True;
+      FPRINT_STAGE := True;
     end
     else if FSplitter[0] = 'PRINT_FLOWS' then
     begin
@@ -294,7 +294,7 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      STAGE := True;
+      FSTAGE := True;
     end
     else if (FSplitter[0] = 'BUDGET')
       and (FSplitter.Count >= 3)
@@ -1003,7 +1003,7 @@ begin
       end
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
-        FPackageData.Read(Stream, Unhandled, FOptions.AUXILIARY.Count,
+        FPackageData.Read(Stream, Unhandled, FOptions.FAUXILIARY.Count,
           FOptions.BOUNDNAMES);
       end
       else if FSplitter[1] ='CONNECTIONDATA' then

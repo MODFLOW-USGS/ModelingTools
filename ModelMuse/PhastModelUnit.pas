@@ -71,8 +71,8 @@ const
 
 resourcestring
   StrVerticalConductanceDisplayName = StrVerticalConductance;
-  StrAllLakeCellsAreI = 'All Lake cells are inactive except for embedded lak' +
-  'es and lakes that only have vertical connections.';
+  StrAllLakeCellsAreI = 'All Lake cells are inactive except for ' +
+  'lakes that only have vertical connections.';
   StrGwtSolver = 'GWT Solver: IMS';
   StrGwtMST = 'GWT MST: Mobile Storage and Transport';
   StrGwtIST = 'GWT IST: Immobile Storage and Transport';
@@ -10147,6 +10147,11 @@ const
 
 //               Bug fix: Fixed a bug that could cause some cells to not be
 //                displayed correctly on the front view of DISV models.
+//               Change: If a Modflow 6 lake only has vertical connections,
+//                it is treated as being above the bottommost layer intersect
+//                by the object defining the lake. This means a lake can be
+//                above layer 1. A lake that has horizontal connections is
+//                treated as being in all the layers intersected by the object.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -14096,6 +14101,8 @@ var
   SpecifiedHeadArray: TDataArray;
   LakeComment: string;
   LakeMf6Array: TDataArray;
+  ConnectionTypes: Integer;
+  BottomLayer: Integer;
 begin
   if (ModelSelection in ModflowSelection)
     and ModflowPackages.ChdBoundary.IsSelected then
@@ -14177,23 +14184,40 @@ begin
   if (ModelSelection = msModflow2015)
     and ModflowPackages.LakMf6Package.IsSelected then
   begin
-    LakeMf6Array := FDataArrayManager.GetDataSetByName(KLakeMf6);
+    LakeMf6Array := FDataArrayManager.GetDataSetByName(KMf6LakeConnectionTypes);
     ActiveArray := FDataArrayManager.GetDataSetByName(rsActive);
     Assert(LakeMf6Array <> nil);
     Assert(ActiveArray <> nil);
     LakeMf6Array.Initialize;
 
+    // See TScreenObject.AssignMf6LakeDataSetValue.
+    // It assigns values to LakeMf6Array (KMf6LakeConnectionTypes).
     LakeComment := StrAllLakeCellsAreI;
     if DisvUsed then
     begin
       for ColIndex := 0 to DisvGrid.ColumnCount - 1 do
       begin
+        BottomLayer := -1;
         for LayerIndex := DisvGrid.LayerCount -1 downto 0 do
         begin
-          if LakeMf6Array.BooleanData[LayerIndex,0,ColIndex] then
+          ConnectionTypes := LakeMf6Array.IntegerData[LayerIndex,0,ColIndex];
+          if BottomLayer > -1 then
           begin
             ActiveArray.BooleanData[LayerIndex,0,ColIndex] := False;
             ActiveArray.Annotation[LayerIndex,0,ColIndex] := LakeComment;
+          end
+          else
+          begin
+            if ConnectionTypes = 2 then
+            begin
+              BottomLayer := LayerIndex - 1;
+            end
+            else if ConnectionTypes in [1,3] then
+            begin
+              BottomLayer := LayerIndex;
+              ActiveArray.BooleanData[LayerIndex,0,ColIndex] := False;
+              ActiveArray.Annotation[LayerIndex,0,ColIndex] := LakeComment;
+            end;
           end;
         end;
       end;
@@ -14204,12 +14228,27 @@ begin
       begin
         for RowIndex := 0 to ModflowGrid.RowCount - 1 do
         begin
+          BottomLayer := -1;
           for LayerIndex := ModflowGrid.LayerCount -1 downto 0 do
           begin
-            if LakeMf6Array.BooleanData[LayerIndex,RowIndex,ColIndex] then
+            ConnectionTypes := LakeMf6Array.IntegerData[LayerIndex,RowIndex,ColIndex];
+            if BottomLayer > -1 then
             begin
               ActiveArray.BooleanData[LayerIndex,RowIndex,ColIndex] := False;
               ActiveArray.Annotation[LayerIndex,RowIndex,ColIndex] := LakeComment;
+            end
+            else
+            begin
+              if ConnectionTypes = 2 then
+              begin
+                BottomLayer := LayerIndex - 1;
+              end
+              else if ConnectionTypes in [1,3] then
+              begin
+                BottomLayer := LayerIndex;
+                ActiveArray.BooleanData[LayerIndex,RowIndex,ColIndex] := False;
+                ActiveArray.Annotation[LayerIndex,RowIndex,ColIndex] := LakeComment;
+              end;
             end;
           end;
         end;
@@ -17092,7 +17131,7 @@ begin
   SwrReachGroupArray := FDataArrayManager.GetDataSetByName(KSwrReachGroup);
   SwrRoutingTypeArray := FDataArrayManager.GetDataSetByName(KSwrRoutingType);
   SwrReachLengthArray := FDataArrayManager.GetDataSetByName(KSwrReachLength);
-  LakeMf6Array := FDataArrayManager.GetDataSetByName(KLakeMf6);
+  LakeMf6Array := FDataArrayManager.GetDataSetByName(KMf6LakeConnectionTypes);
   IdomainArray := FDataArrayManager.GetDataSetByName(K_IDOMAIN);
 
   if SpecifiedHeadArray <> nil then
@@ -20048,15 +20087,23 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := ModflowPackages.LakMf6Package.IsSelected and (ModelSelection = msModflow2015);
-  if not result and frmGoPhast.PhastModel.LgrUsed then
+  result := (ModelSelection = msModflow2015);
+  if result then
   begin
-    for ChildIndex := 0 to ChildModels.Count - 1 do
+    result := ModflowPackages.LakMf6Package.IsSelected;
+    if not result and frmGoPhast.PhastModel.LgrUsed then
     begin
-      ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel <> nil then
+      for ChildIndex := 0 to ChildModels.Count - 1 do
       begin
-        result := result or ChildModel.ModflowPackages.LakMf6Package.IsSelected;
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          result := ChildModel.ModflowPackages.LakMf6Package.IsSelected;
+          if result then
+          begin
+            break;
+          end;
+        end;
       end;
     end;
   end;

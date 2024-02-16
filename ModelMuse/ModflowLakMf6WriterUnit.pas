@@ -267,6 +267,7 @@ type
 const
   StrLakeFlowPackageName = 'LAK-1';
   StrLkbud = '.lk_bud';
+  StrLkbudCsv = '.lk_bud.csv';
 
 implementation
 
@@ -1946,10 +1947,11 @@ var
   ASpecies: TMobileChemSpeciesItem;
   budgetfile: string;
   BaseFileName: string;
-  SfrMf6Package: TSfrModflow6PackageSelection;
+//  SfrMf6Package: TSfrModflow6PackageSelection;
   concentrationfile: string;
   budgetCsvFile: string;
   NameOfLktObFile: string;
+  BudgetFileName: string;
 begin
   WriteBeginOptions;
   try
@@ -1974,11 +1976,11 @@ begin
     PrintFlowsOption;
     WriteSaveFlowsOption;
 
-    SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
+//    SfrMf6Package := Model.ModflowPackages.SfrModflow6Package;
     BaseFileName := ChangeFileExt(FNameOfFile, '');
     BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
 
-    if SfrMf6Package.SaveGwtConcentration then
+    if FLakMf6Package.SaveGwtConcentration then
     begin
       WriteString('    CONCENTRATION FILEOUT ');
       concentrationfile := BaseFileName + '.lkt_conc';
@@ -1988,7 +1990,7 @@ begin
       NewLine;
     end;
 
-    if SfrMf6Package.SaveGwtBudget then
+    if FLakMf6Package.SaveGwtBudget then
     begin
       WriteString('    BUDGET FILEOUT ');
       budgetfile := BaseFileName + '.lkt_budget';
@@ -1998,7 +2000,17 @@ begin
       NewLine;
     end;
 
-    if SfrMf6Package.SaveGwtBudgetCsv then
+    if FLakMf6Package.SaveBudgetCsv then
+    begin
+      BudgetFileName := ChangeFileExt(FFileName, '.lkt_budget.csv');
+      Model.AddModelOutputFile(BudgetFileName);
+      BudgetFileName := ExtractFileName(BudgetFileName);
+      WriteString('  BUDGETCSV FILEOUT ');
+      WriteString(BudgetFileName);
+      NewLine;
+    end;
+
+    if FLakMf6Package.SaveGwtBudgetCsv then
     begin
       WriteString('    BUDGETCSV FILEOUT ');
       budgetCsvFile := BaseFileName + '.lkt_budget.csv';
@@ -2543,6 +2555,16 @@ begin
     Model.AddModelOutputFile(BudgetFileName);
     BudgetFileName := ExtractFileName(BudgetFileName);
     WriteString('  BUDGET FILEOUT ');
+    WriteString(BudgetFileName);
+    NewLine;
+  end;
+
+  if FLakMf6Package.SaveBudgetCsv then
+  begin
+    BudgetFileName := ChangeFileExt(FFileName, StrLkbudCsv);
+    Model.AddModelOutputFile(BudgetFileName);
+    BudgetFileName := ExtractFileName(BudgetFileName);
+    WriteString('  BUDGETCSV FILEOUT ');
     WriteString(BudgetFileName);
     NewLine;
   end;

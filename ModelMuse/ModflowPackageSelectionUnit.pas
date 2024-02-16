@@ -1640,6 +1640,7 @@ Type
     FSaveGwtBudget: Boolean;
     FSaveGwtConcentration: Boolean;
     FSaveGwtBudgetCsv: Boolean;
+    FSaveBudgetCsv: Boolean;
     function GetSurfDepDepth: Double;
     procedure SetPrintFlows(const Value: Boolean);
     procedure SetPrintStage(const Value: Boolean);
@@ -1651,6 +1652,7 @@ Type
     procedure SetSaveGwtBudget(const Value: Boolean);
     procedure SetSaveGwtConcentration(const Value: Boolean);
     procedure SetSaveGwtBudgetCsv(const Value: Boolean);
+    procedure SetSaveBudgetCsv(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel); override;
     destructor Destroy; override;
@@ -1669,6 +1671,9 @@ Type
       stored True;
     // [BUDGET FILEOUT <budgetfile>]
     property SaveBudget: Boolean read FSaveBudget write SetSaveBudget
+      stored True;
+    // BUDGETCSV FILEOUT <budgetcsvfile>
+    property SaveBudgetCsv: Boolean read FSaveBudgetCsv write SetSaveBudgetCsv
       stored True;
     // [SURFDEP <surfdep>]
     property StoredSurfDepDepth: TRealStorage read FStoredSurfDepDepth
@@ -23056,6 +23061,7 @@ begin
 //    PrintFlows := LakeSource.PrintFlows;
     SaveStage := LakeSource.SaveStage;
     SaveBudget := LakeSource.SaveBudget;
+    SaveBudgetCsv := LakeSource.SaveBudgetCsv;
     SurfDepDepth := LakeSource.SurfDepDepth;
     WriteConvergenceData := LakeSource.WriteConvergenceData;
     SaveGwtBudget := LakeSource.SaveGwtBudget;
@@ -23090,6 +23096,7 @@ begin
 //  PrintFlows := False;
   SaveStage := False;
   SaveBudget := False;
+  SaveBudgetCsv := False;
   SurfDepDepth := 0.2;
   FWriteConvergenceData := True;
   // GWT
@@ -23111,6 +23118,11 @@ end;
 procedure TLakeMf6PackageSelection.SetSaveBudget(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveBudget, Value);
+end;
+
+procedure TLakeMf6PackageSelection.SetSaveBudgetCsv(const Value: Boolean);
+begin
+  SetBooleanProperty(FSaveBudgetCsv, Value);
 end;
 
 procedure TLakeMf6PackageSelection.SetSaveGwtBudget(const Value: Boolean);

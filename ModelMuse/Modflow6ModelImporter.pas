@@ -112,6 +112,7 @@ type
     procedure ImportEvt(Package: TPackage; TransportModels: TModelList);
     procedure ImportMaw(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportSfr(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
+    procedure ImportLak(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -3542,10 +3543,7 @@ begin
         end
         else if APackage.FileType = 'LAK6' then
         begin
-  //        LakReader := TLak.Create(APackage.FileType);
-  //        LakReader.Dimensions := FDimensions;
-  //        APackage.Package := LakReader;
-  //        APackage.ReadPackage(Unhandled);
+          ImportLak(APackage, TransportModels, MvrPackage);
         end
         else if APackage.FileType = 'UZF6' then
         begin
@@ -4695,6 +4693,12 @@ begin
   end;
   IC := Package.Package as TIc;
   Assign3DRealDataSet(rsModflow_Initial_Head, IC.GridData.STRT);
+end;
+
+procedure TModflow6Importer.ImportLak(Package: TPackage;
+  TransportModels: TModelList; MvrPackage: TPackage);
+begin
+
 end;
 
 procedure TModflow6Importer.ImportMaw(Package: TPackage;
@@ -7433,7 +7437,8 @@ var
       AReachList.Terminated := True;
     end;
   end;
-  function RealValuesToFormula(Values: TOneDRealArray; Name: string; ScreenObject: TScreenObject = nil): string;
+  function RealValuesToFormula(Values: TOneDRealArray; Name: string;
+    ScreenObject: TScreenObject = nil): string;
   var
     FirstValue: Double;
     Uniform: Boolean;
@@ -7485,6 +7490,13 @@ var
     UseRealFormula: Boolean;
     UseTimeSeries: Boolean;
   begin
+  // If the values are all numeric, this function provides a formula for that.
+  // If the values all represent the same TimeSeries,
+  //    this function returns the name of the TimeSeries.
+  // If the values represent a mixture of real values and TimeSeries names,
+  //    or a mixture of different TimeSeries names,
+  //    this function returns an empty string indicating that the points can
+  //    not all belong to the same object.
     result := '';
     SetLength(RealValues, Length(Values));
     UseRealFormula := True;
@@ -7519,7 +7531,7 @@ var
       if UseTimeSeries then
       begin
         result := Values[0].StringValue
-      end;
+      end
     end;
   end;
   procedure UpdateReachSettings(AReachList: TSfrReachInfoList;
@@ -7573,6 +7585,10 @@ var
     ACrossSection: TSfr6CrossSection;
     CrossSectionFileName: string;
     StartTime: Double;
+    FirstReach: TSfrReachInfo;
+    BoundName: string;
+    ObsList: TObservationList;
+    SfrObs: TSfrObs;
     procedure ReadCrossSection(ACrossSection: TSfr6CrossSection; CrossSection: TCrossSection);
     var
       RowIndex: Integer;
@@ -7601,12 +7617,104 @@ var
         end;
       end
     end;
+    procedure IncludeObservations(ObsList: TObservationList);
+    var
+      ObsIndex: Integer;
+      AnObs: TObservation;
+    begin
+      for ObsIndex := 0 to ObsList.Count - 1 do
+      begin
+        AnObs := ObsList[ObsIndex];
+        if AnsiSameText(AnObs.ObsType, 'stage') then
+        begin
+          Include(SfrObs, soStage);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'ext-inflow') then
+        begin
+          Include(SfrObs, soExtInflow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'inflow') then
+        begin
+          Include(SfrObs, soInflow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'from-mvr') then
+        begin
+          Include(SfrObs, soFromMvr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'rainfall') then
+        begin
+          Include(SfrObs, soRainfall);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'runoff') then
+        begin
+          Include(SfrObs, soRunoff);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'sfr') then
+        begin
+          Include(SfrObs, soSfr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'evaporation') then
+        begin
+          Include(SfrObs, soEvaporation);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'outflow') then
+        begin
+          Include(SfrObs, soOutflow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'ext-outflow') then
+        begin
+          Include(SfrObs, soExternalOutflow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'to-mvr') then
+        begin
+          Include(SfrObs, soToMvr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'upstream-flow') then
+        begin
+          Include(SfrObs, soUpstreamFlow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'downstream-flow') then
+        begin
+          Include(SfrObs, soDownstreamFlow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'depth') then
+        begin
+          Include(SfrObs, soDepth);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'wet-perimeter') then
+        begin
+          Include(SfrObs, soWetPerimeter);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'wet-area') then
+        begin
+          Include(SfrObs, soWetArea);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'wet-width') then
+        begin
+          Include(SfrObs, soWetWidth);
+        end
+        else
+        begin
+          Assert(False);
+        end;
+
+//          TSfrOb = (soStage, soExtInflow, soInflow, soFromMvr, soRainfall, soRunoff, soSfr,
+//            soEvaporation, soOutflow, soExternalOutflow, soToMvr, soUpstreamFlow,
+//            soDownstreamFlow, soDepth, soWetPerimeter, soWetArea, soWetWidth);
+//          TSfrObs = set of TSfrOb;
+//
+//          TSftOb = (stoConcentration, stoStorage, stoConstant, stoFromMvr, stoToMvr,
+//            stoSFT, stoRainfall, stoEvaporation, stoRunoff, stoExtInflow, stoExtOutflow);
+//          TSftObs = set of TSftOb;
+      end;
+    end;
   begin
     Inc(ObjectCount);
 
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    NewName := ValidName(Format('Imported_%s_Sfr_%d', [Package.PackageName, ObjectCount]));
+    NewName := ValidName(Format('Imported_%s_Sfr_%d',
+      [Package.PackageName, ObjectCount]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -7655,7 +7763,7 @@ var
     begin
       Values[CellIndex] := AReachList[CellIndex].PackageData.rtp;
     end;
-    SfrBoundary.StreambedTop := RealValuesToFormula(Values, 'Reachtop', result);
+    SfrBoundary.StreambedTop := RealValuesToFormula(Values, 'ReachTop', result);
 
     for CellIndex := 0 to AReachList.Count - 1 do
     begin
@@ -7681,29 +7789,7 @@ var
       CSItem.EndTime := frmGoPhast.PhastModel.ModflowStressPeriods.Last.EndTime;
       ACrossSection := CSItem.CrossSection;
 
-//      SfrBoundary.CrossSection.UseCrossSection := True;
       ReadCrossSection(ACrossSection, CrossSection);
-//      ACrossSection.UseManningFraction := (CrossSection.Dimensions.NCOL = 3);
-//
-//      for RowIndex := 0 to CrossSection.Table.Count - 1 do
-//      begin
-//        TableRow := CrossSection.Table[RowIndex];
-//        XsecPoint := ACrossSection.Add;
-//
-//        XsecPoint.XFraction := TableRow.xfraction;
-//        XsecPoint.Height := TableRow.height;
-//        if ACrossSection.UseManningFraction then
-//        begin
-//          if TableRow.manfraction.Used then
-//          begin
-//            XsecPoint.ManningsFraction := TableRow.manfraction.Value;
-//          end
-//          else
-//          begin
-//            XsecPoint.ManningsFraction := 0;
-//          end;
-//        end;
-//      end;
     end;
 
     SetLength(ManningBoundaryValues, AReachList.Count);
@@ -7858,6 +7944,30 @@ var
       end;
     end;
 
+    FirstReach := AReachList.First;
+    BoundName := FirstReach.PackageData.Boundname;
+    SfrObs := [];
+    if BoundName <> '' then
+    begin
+      if BoundNameObsDictionary.TryGetValue(UpperCase(Boundname), ObsList) then
+      begin
+        Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+        result.CreateMf6Obs;
+        IncludeObservations(ObsList);
+        result.Modflow6Obs.Name := ValidName(Boundname);
+      end;
+    end;
+    if NumberObsDictionary.TryGetValue(FirstReach.PackageData.rno, ObsList) then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+      result.CreateMf6Obs;
+      IncludeObservations(ObsList);
+    end;
+    if SfrObs <> [] then
+    begin
+      result.Modflow6Obs.SfrObs := SfrObs;
+    end;
+
 //    SfrBoundary.HydraulicConductivity := BoundaryValuesToFormula(Values);
 
 //    result.CreateRivBoundary;
@@ -7876,30 +7986,6 @@ var
 //
 //    AddItem(result, ACell, Period);
 
-//    BoundName := UpperCase(ACell.Boundname);
-//    if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
-//    begin
-//      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
-//      result.CreateMf6Obs;
-//      General := [];
-//      for ObsIndex := 0 to ObsList.Count - 1 do
-//      begin
-//        AnObs := ObsList[ObsIndex];
-//        if AnsiSameText(AnObs.ObsType, 'riv') then
-//        begin
-//          Include(General, ogRiv);
-//        end
-//        else if AnsiSameText(AnObs.ObsType, 'to-mvr') then
-//        begin
-//          Include(General, ogMvr);
-//        end
-//        else
-//        begin
-//          Assert(False);
-//        end;
-//      end;
-//      result.Modflow6Obs.Name := ACell.Boundname;
-//      result.Modflow6Obs.General := General;
   end;
   procedure SplitReachListWithBoundaryValues(var AReachList: TSfrReachInfoList;
     BoundaryValues: TMf6BoundaryValueArray);
