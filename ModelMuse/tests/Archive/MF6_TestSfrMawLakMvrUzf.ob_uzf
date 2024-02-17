@@ -1,4 +1,4 @@
-# OBS: Observation Utility file created on 6/18/2020 by ModelMuse version 4.2.0.19.
+# OBS: Observation Utility file created on 2/16/2024 by ModelMuse version 5.1.1.55.
 BEGIN OPTIONS
     DIGITS      5
     PRINT_INPUT
@@ -51,28 +51,24 @@ END CONTINUOUS
 BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.water-content_ob.csv
   uw_UZF1 water-content     1  5.000000000000E+000 
   uw_UZF6 water-content     6  5.000000000000E+000 
-  uw_UZF11 water-content    11  5.000000000000E+000 
-  uw_UZF16 water-content    16  5.000000000000E+000 
-  uw_UZF21 water-content    21  5.000000000000E+000 
-  uw_UZF2 water-content     2  5.000000000000E+000 
-  uw_UZF7 water-content     7  5.000000000000E+000 
+  uw_UZF9 water-content     9  5.000000000000E+000 
   uw_UZF12 water-content    12  5.000000000000E+000 
   uw_UZF17 water-content    17  5.000000000000E+000 
-  uw_UZF22 water-content    22  5.000000000000E+000 
-  uw_UZF3 water-content     3  5.000000000000E+000 
-  uw_UZF8 water-content     8  5.000000000000E+000 
+  uw_UZF2 water-content     2  5.000000000000E+000 
+  uw_UZF7 water-content     7  5.000000000000E+000 
+  uw_UZF10 water-content    10  5.000000000000E+000 
   uw_UZF13 water-content    13  5.000000000000E+000 
   uw_UZF18 water-content    18  5.000000000000E+000 
-  uw_UZF23 water-content    23  5.000000000000E+000 
-  uw_UZF4 water-content     4  5.000000000000E+000 
-  uw_UZF9 water-content     9  5.000000000000E+000 
+  uw_UZF3 water-content     3  5.000000000000E+000 
+  uw_UZF8 water-content     8  5.000000000000E+000 
+  uw_UZF11 water-content    11  5.000000000000E+000 
   uw_UZF14 water-content    14  5.000000000000E+000 
   uw_UZF19 water-content    19  5.000000000000E+000 
-  uw_UZF24 water-content    24  5.000000000000E+000 
-  uw_UZF5 water-content     5  5.000000000000E+000 
-  uw_UZF10 water-content    10  5.000000000000E+000 
+  uw_UZF4 water-content     4  5.000000000000E+000 
   uw_UZF15 water-content    15  5.000000000000E+000 
   uw_UZF20 water-content    20  5.000000000000E+000 
-  uw_UZF25 water-content    25  5.000000000000E+000 
+  uw_UZF5 water-content     5  5.000000000000E+000 
+  uw_UZF16 water-content    16  5.000000000000E+000 
+  uw_UZF21 water-content    21  5.000000000000E+000 
 END CONTINUOUS
 

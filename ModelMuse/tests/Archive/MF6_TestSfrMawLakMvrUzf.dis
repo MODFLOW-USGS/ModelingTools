@@ -1,10 +1,10 @@
-# Discretization File created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Discretization File created on 2/16/2024 by ModelMuse version 5.1.1.55.
 # Upper left corner: (0, 0)
 # Lower left corner: (0, -1000)
 # Upper right corner: (1000, 0)
 # Lower right corner: (1000, -1000)
 # Grid angle (in degrees counterclockwise): 0
-# Number of active cells = 300.
+# Number of active cells = 294.
 BEGIN OPTIONS
   LENGTH_UNITS METERS
   XORIGIN  0.000000000000E+000 
@@ -36,8 +36,18 @@ BEGIN GRIDDATA
 
     CONSTANT  -3.000000000000E+001  # BOTM, Lower Aquifer
 
-  IDOMAIN LAYERED IPRN     5
-    CONSTANT      1 # IDOMAIN 1
+  IDOMAIN LAYERED
+    INTERNAL IPRN      5 # IDOMAIN 1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     0     0     0     0
+           1     1     1     1     1     1     0     0     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
+           1     1     1     1     1     1     1     1     1     1
     CONSTANT      1 # IDOMAIN 2
     CONSTANT      1 # IDOMAIN 3
 END GRIDDATA
