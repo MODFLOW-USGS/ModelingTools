@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
-  Vcl.StdCtrls, ArgusDataEntry, ModflowPackageSelectionUnit;
+  Vcl.StdCtrls, ArgusDataEntry, ModflowPackageSelectionUnit, Vcl.Mask, JvExMask,
+  JvSpin;
 
 type
   TframePackageLakMf6 = class(TframePackage)
@@ -16,6 +17,10 @@ type
     lblSurfaceDepressionDepth: TLabel;
     cbPackageConvergence: TCheckBox;
     cbSaveBudgetCsv: TCheckBox;
+    seMaxIterations: TJvSpinEdit;
+    lblMaxIterations: TLabel;
+    lblConvergence: TLabel;
+    rdeConvergence: TRbwDataEntry;
   private
     { Private declarations }
   public
@@ -48,6 +53,8 @@ begin
   cbSaveBudgetCsv.Checked := LakMf6.SaveBudgetCsv;
   rdeSurfaceDepressionDepth.RealValue := LakMf6.SurfDepDepth;
   cbPackageConvergence.Checked := LakMf6.WriteConvergenceData;
+  seMaxIterations.AsInteger := LakMf6.MaxIterations;
+  rdeConvergence.RealValue := LakMf6.MaxStageChange;
 end;
 
 procedure TframePackageLakMf6.SetData(Package: TModflowPackageSelection);
@@ -63,6 +70,8 @@ begin
   LakMf6.SaveBudgetCsv := cbSaveBudgetCsv.Checked;
   LakMf6.SurfDepDepth := rdeSurfaceDepressionDepth.RealValue;
   LakMf6.WriteConvergenceData := cbPackageConvergence.Checked;
+  LakMf6.MaxIterations := seMaxIterations.AsInteger;
+  LakMf6.MaxStageChange := rdeConvergence.RealValue;
 end;
 
 end.

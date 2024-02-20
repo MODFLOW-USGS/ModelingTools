@@ -50,6 +50,7 @@ type
     property MAXIMUM_DEPTH_CHANGE: TRealOption read FMAXIMUM_DEPTH_CHANGE;
     property Count: Integer read GetCount;
     property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
+    function IndexOfAUXILIARY(const AName: string): Integer;
   end;
 
   TSfrDimensions = class(TCustomMf6Persistent)
@@ -288,6 +289,11 @@ end;
 function TSfrOptions.GetCount: Integer;
 begin
   Result := FAUXILIARY.Count;
+end;
+
+function TSfrOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  Result := FAUXILIARY.IndexOf(AName)
 end;
 
 procedure TSfrOptions.Initialize;
@@ -1228,7 +1234,7 @@ end;
 
 function TSfr.GetCrossSectionPackage(FileName: string): TPackage;
 begin
-  if not FCosssSectionDictionary.TryGetValue(FileName, result) then
+  if not FCosssSectionDictionary.TryGetValue(UpperCase(FileName), result) then
   begin
     result := nil;
   end;
@@ -1384,7 +1390,7 @@ begin
   for PackageIndex := 0 to FSfrCrossSections.FItems.Count - 1 do
   begin
     AFileName := FSfrCrossSections.FItems[PackageIndex].tab6_filename;
-    if not FCosssSectionDictionary.ContainsKey(AFileName) then
+    if not FCosssSectionDictionary.ContainsKey(UpperCase(AFileName)) then
     begin
       CrossSectionPackage := TPackage.Create;
       FCosssSectionPackages.Add(CrossSectionPackage);
@@ -1407,7 +1413,7 @@ begin
       if AnsiSameText(ASetting.Name, 'CROSS_SECTION') then
       begin
         AFileName := ASetting.StringValue;
-        if not FCosssSectionDictionary.ContainsKey(AFileName) then
+        if not FCosssSectionDictionary.ContainsKey(UpperCase(AFileName)) then
         begin
           CrossSectionPackage := TPackage.Create;
           FCosssSectionPackages.Add(CrossSectionPackage);

@@ -145,7 +145,7 @@ uses
   Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
   ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit,
-  Mf6.CrossSectionFileReaderUnit;
+  Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -4697,7 +4697,39 @@ end;
 
 procedure TModflow6Importer.ImportLak(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
+var
+  Model: TPhastModel;
+  LakPackage: TLakeMf6PackageSelection;
+  Lak: TLak;
+  Options: TLakOptions;
 begin
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing LAK package');
+  end;
+  Model := frmGoPhast.PhastModel;
+  LakPackage := Model.ModflowPackages.LakMf6Package;
+  LakPackage.IsSelected := True;
+
+  Lak := Package.Package as TLak;
+  Options := Lak.Options;
+  LakPackage.PrintStage := Options.PRINT_STAGE;
+  LakPackage.SaveStage := Options.STAGE;
+  LakPackage.SaveBudget := Options.BUDGET;
+  LakPackage.SaveBudgetCsv := Options.BUDGETCSV;
+  if Options.SURFDEP.Used then
+  begin
+    LakPackage.SurfDepDepth := Options.SURFDEP.Value;
+  end;
+  LakPackage.WriteConvergenceData := Options.PACKAGE_CONVERGENCE;
+  if Options.MAXIMUM_ITERATIONS.Used then
+  begin
+    LakPackage.MaxIterations := Options.MAXIMUM_ITERATIONS.Value;
+  end;
+  if Options.MAXIMUM_STAGE_CHANGE.Used then
+  begin
+    LakPackage.MaxStageChange := Options.MAXIMUM_STAGE_CHANGE.Value;
+  end;
 
 end;
 
@@ -7381,7 +7413,6 @@ var
   AReachList: TSfrReachInfoList;
   ReachListDictionary: TDictionary<Integer, TSfrReachInfoList>;
   SfrReachInfoLists: TSfrReachInfoLists;
-//  UpstreamReachCount: integer;
   FirstItem: TSfrReachInfo;
   ReachesAdded: Boolean;
   UpstreamReach: Integer;
@@ -7423,6 +7454,10 @@ var
   DiversionItem: TSDiversionItem;
   DiversionFormula: string;
   SfrItem: TSfrMf6Item;
+  IFaceIndex: Integer;
+  AuxName: string;
+  AuxArrays: TMf6BoundaryValueArrays;
+  AReach: TSfrReachInfo;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -7535,7 +7570,7 @@ var
     end;
   end;
   procedure UpdateReachSettings(AReachList: TSfrReachInfoList;
-    var BoundaryValues: TMf6BoundaryValueArray; const Key: string);
+    var BoundaryValues: TMf6BoundaryValueArray; const Key: string; AuxName: string = '');
   var
     ReachIndex: Integer;
     AReachSettingsList: TNumberedItemList;
@@ -7551,18 +7586,21 @@ var
         ASetting := AReachSettingsList[SettingIndex];
         if AnsiSameText(ASetting.Name, Key) then
         begin
-          AMf6BoundaryValue.StringValue := ASetting.StringValue;
-          AMf6BoundaryValue.NumericValue := ASetting.FloatValue;
-          if AMf6BoundaryValue.StringValue <> '' then
+          if (AuxName = '') or AnsiSameText(ASetting.AuxName, AuxName)  then
           begin
-            AMf6BoundaryValue.ValueType := vtString;
-          end
-          else
-          begin
-            AMf6BoundaryValue.ValueType := vtNumeric;
+            AMf6BoundaryValue.StringValue := ASetting.StringValue;
+            AMf6BoundaryValue.NumericValue := ASetting.FloatValue;
+            if AMf6BoundaryValue.StringValue <> '' then
+            begin
+              AMf6BoundaryValue.ValueType := vtString;
+            end
+            else
+            begin
+              AMf6BoundaryValue.ValueType := vtNumeric;
+            end;
+            BoundaryValues[ReachIndex]  := AMf6BoundaryValue;
+            break;
           end;
-          BoundaryValues[ReachIndex]  := AMf6BoundaryValue;
-          break;
         end;
       end;
     end;
@@ -7589,6 +7627,8 @@ var
     BoundName: string;
     ObsList: TObservationList;
     SfrObs: TSfrObs;
+    AuxIFACE: TMf6BoundaryValue;
+    IFACE: Integer;
     procedure ReadCrossSection(ACrossSection: TSfr6CrossSection; CrossSection: TCrossSection);
     var
       RowIndex: Integer;
@@ -7697,11 +7737,6 @@ var
         begin
           Assert(False);
         end;
-
-//          TSfrOb = (soStage, soExtInflow, soInflow, soFromMvr, soRainfall, soRunoff, soSfr,
-//            soEvaporation, soOutflow, soExternalOutflow, soToMvr, soUpstreamFlow,
-//            soDownstreamFlow, soDepth, soWetPerimeter, soWetArea, soWetWidth);
-//          TSfrObs = set of TSfrOb;
 //
 //          TSftOb = (stoConcentration, stoStorage, stoConstant, stoFromMvr, stoToMvr,
 //            stoSFT, stoRainfall, stoEvaporation, stoRunoff, stoExtInflow, stoExtOutflow);
@@ -7968,24 +8003,17 @@ var
       result.Modflow6Obs.SfrObs := SfrObs;
     end;
 
-//    SfrBoundary.HydraulicConductivity := BoundaryValuesToFormula(Values);
-
-//    result.CreateRivBoundary;
-//    result.ModflowRivBoundary.FormulaInterpretation := fiDirect;
-//    if IfaceIndex >= 0 then
-//    begin
-//      AuxIFACE := ACell[IfaceIndex];
-//      Assert(AuxIFACE.ValueType = vtNumeric);
-//      IFACE := Round(AuxIFACE.NumericValue);
-//    end
-//    else
-//    begin
-//      IFACE := 0;
-//    end;
-//    result.IFACE := TIface(IFACE+2);
-//
-//    AddItem(result, ACell, Period);
-
+    if IfaceIndex >= 0 then
+    begin
+      AuxIFACE := FirstReach.PackageData.Aux[IfaceIndex];
+      Assert(AuxIFACE.ValueType = vtNumeric);
+      IFACE := Round(AuxIFACE.NumericValue);
+    end
+    else
+    begin
+      IFACE := 0;
+    end;
+    result.IFACE := TIface(IFACE+2);
   end;
   procedure SplitReachListWithBoundaryValues(var AReachList: TSfrReachInfoList;
     BoundaryValues: TMf6BoundaryValueArray);
@@ -8090,6 +8118,8 @@ begin
 
   Sfr := Package.Package as TSfr;
   Options := Sfr.Options;
+  IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
+  SetLength(AuxArrays, Options.Count);
 
   if Options.MAXIMUM_ITERATIONS.Used then
   begin
@@ -8267,7 +8297,6 @@ begin
                   begin
                     AReachList.Terminated := True;
                   end;
-
                 end
                 else
                 begin
@@ -8510,6 +8539,27 @@ begin
                 begin
                   SplitReachListWithBoundaryValues(AReachList, RunoffBoundaryValues);
                 end;
+
+                for AuxIndex := 0 to Options.Count - 1 do
+                begin
+                  AuxName := Options.AUXILIARY[AuxIndex];
+                  SetLength(AuxArrays[AuxIndex], AReachList.Count);
+                  if PeriodIndex = 0 then
+                  begin
+                    for ReachIndex := 0 to AReachList.Count - 1 do
+                    begin
+                      AReach := AReachList[ReachIndex];
+                      AuxArrays[AuxIndex][ReachIndex] := AReach.PackageData.Aux[AuxIndex];
+                    end;
+                  end;
+                  UpdateReachSettings(AReachList, AuxArrays[AuxIndex], 'AUXILIARY', AuxName);
+                  DefaultFormula := BoundaryValuesToFormula(AuxArrays[AuxIndex], 'dummyvariable');
+                  if DefaultFormula = '' then
+                  begin
+                    SplitReachListWithBoundaryValues(AReachList, AuxArrays[AuxIndex]);
+                  end;
+                end;
+
               end;
 
               AScreenObject := CreateScreenObject(AReachList);

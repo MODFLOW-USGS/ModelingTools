@@ -10141,11 +10141,9 @@ const
 //               Change: ModelMuse does not draw a image of an SFR 8-point
 //                cross section in the Object Properties dialog box unless
 //                the 8-point cross section is in use.
-
 //    '5.1.1.55' Enhancement: Time-varying cross sections are now supported in
 //                 the MODFLOW 6 SFR package.
-
-//               Bug fix: Fixed a bug that could cause some cells to not be
+//    '5.1.1.56' Bug fix: Fixed a bug that could cause some cells to not be
 //                displayed correctly on the front view of DISV models.
 //               Change: If a Modflow 6 lake only has vertical connections,
 //                it is treated as being above the bottommost layer intersect
@@ -10166,7 +10164,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.55';
+  IIModelVersion = '5.1.1.56';
 
 function IModelVersion: string;
 begin
@@ -17270,6 +17268,12 @@ begin
       LakeMf6Array.TalksTo(ActiveArray);
     end;
     ActiveArray.UpToDate := False;
+
+    if (IdomainArray <> nil) and (LakeMf6Array <> nil) then
+    begin
+      LakeMf6Array.TalksTo(IdomainArray);
+      IdomainArray.UpToDate := False;
+    end;
   end
   else if ModflowPackages.LakPackage.IsSelected
     and (ModelSelection in ModflowSelection) then
@@ -41149,6 +41153,10 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   LayerIndex: Integer;
+  LakeMf6Array: TDataArray;
+  LakeComment: string;
+  BottomLayer: Integer;
+  ConnectionTypes: Integer;
 begin
   IDomainArray := FDataArrayManager.GetDataSetByName(K_IDOMAIN);
   Assert(IDomainArray <>  nil);
@@ -41189,6 +41197,76 @@ begin
         end;
       end;
     end;
+  end;
+
+  if (ModelSelection = msModflow2015)
+    and ModflowPackages.LakMf6Package.IsSelected then
+  begin
+    LakeMf6Array := FDataArrayManager.GetDataSetByName(KMf6LakeConnectionTypes);
+    LakeMf6Array.Initialize;
+
+    LakeComment := StrAllLakeCellsAreI;
+    if DisvUsed then
+    begin
+      for ColIndex := 0 to DisvGrid.ColumnCount - 1 do
+      begin
+        BottomLayer := -1;
+        for LayerIndex := DisvGrid.LayerCount -1 downto 0 do
+        begin
+          ConnectionTypes := LakeMf6Array.IntegerData[LayerIndex,0,ColIndex];
+          if BottomLayer > -1 then
+          begin
+            IDomainArray.IntegerData[LayerIndex, 0, ColIndex] := 0;
+            IDomainArray.Annotation[LayerIndex,0,ColIndex] := LakeComment;
+          end
+          else
+          begin
+            if ConnectionTypes = 2 then
+            begin
+              BottomLayer := LayerIndex - 1;
+            end
+            else if ConnectionTypes in [1,3] then
+            begin
+              BottomLayer := LayerIndex;
+              IDomainArray.IntegerData[LayerIndex, 0, ColIndex] := 0;
+              IDomainArray.Annotation[LayerIndex,0,ColIndex] := LakeComment;
+            end;
+          end;
+        end;
+      end;
+    end
+    else
+    begin
+      for ColIndex := 0 to ModflowGrid.ColumnCount - 1 do
+      begin
+        for RowIndex := 0 to ModflowGrid.RowCount - 1 do
+        begin
+          BottomLayer := -1;
+          for LayerIndex := ModflowGrid.LayerCount -1 downto 0 do
+          begin
+            ConnectionTypes := LakeMf6Array.IntegerData[LayerIndex,RowIndex,ColIndex];
+            if BottomLayer > -1 then
+            begin
+              IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
+              IDomainArray.Annotation[LayerIndex,RowIndex,ColIndex] := LakeComment;
+            end
+            else
+            begin
+              if ConnectionTypes = 2 then
+              begin
+                BottomLayer := LayerIndex - 1;
+              end
+              else if ConnectionTypes in [1,3] then
+              begin
+                BottomLayer := LayerIndex;
+                IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
+                IDomainArray.Annotation[LayerIndex,RowIndex,ColIndex] := LakeComment;
+              end;
+            end;
+          end;
+        end;
+      end;
+    end
   end;
 
 end;

@@ -27,7 +27,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 583
     Height = 513
-    ActivePage = jvspFmp4Climate
+    ActivePage = jvspLakMf6
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -10547,6 +10547,18 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 245
           ExplicitHeight = 18
         end
+        inherited lblMaxIterations: TLabel
+          Width = 396
+          Height = 18
+          ExplicitWidth = 396
+          ExplicitHeight = 18
+        end
+        inherited lblConvergence: TLabel
+          Width = 459
+          Height = 18
+          ExplicitWidth = 459
+          ExplicitHeight = 18
+        end
         inherited memoComments: TMemo
           Width = 500
           ExplicitWidth = 500
@@ -10573,6 +10585,15 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePackageLakMf6.cbPackageConvergence
+            end
+            item
+              Control = framePackageLakMf6.cbSaveBudgetCsv
+            end
+            item
+              Control = framePackageLakMf6.seMaxIterations
+            end
+            item
+              Control = framePackageLakMf6.rdeConvergence
             end>
           OnEnabledChange = framePackageLakMf6rcSelectionControllerEnabledChange
         end
@@ -12299,12 +12320,9 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 583
           Height = 402
-          VertScrollBar.Position = 83
           ExplicitWidth = 583
           ExplicitHeight = 402
           inherited cpnlDataSets: TCategoryPanel
-            Top = 257
-            ExplicitTop = 257
             ExplicitWidth = 562
             inherited rdgLandUse: TRbwDataGrid4
               Width = 560
@@ -12314,8 +12332,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlOptions: TCategoryPanel
-            Top = 144
-            ExplicitTop = 144
             ExplicitWidth = 562
             inherited lblLandUsePerCell: TLabel
               Width = 118
@@ -12341,8 +12357,6 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited cpnlPrint: TCategoryPanel
-            Top = -83
-            ExplicitTop = -83
             ExplicitWidth = 562
             inherited clbPrint: TCheckListBox
               Width = 560

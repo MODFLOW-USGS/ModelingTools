@@ -244,7 +244,7 @@ type
     class function GwtObservationExtension: string; //override;
     procedure WriteLakeValueOrFormula(LakeSetting: TLakeSetting; Index: integer);
     procedure WriteFileInternal;
-    // SFT
+    // LKT
     procedure WriteGwtOptions;
     procedure WriteGwtPackageData;
     procedure WriteGwtStressPeriods;
@@ -2406,16 +2406,32 @@ begin
                 end;
               end;
             end;
-            if (lctVertical in LakeBoundary.LakeConnections) and (ACell.Layer + 1 < Model.LayerCount) then
+            if (lctVertical in LakeBoundary.LakeConnections) then
             begin
-              if IDomainArray.IntegerData[ACell.Layer + 1, ACell.Row, ACell.Column] > 0 then
+              if (lctHorizontal in LakeBoundary.LakeConnections) then
               begin
-                ALakeCell := TLakeCell.Create;
-                ALake.FLakeCellList.Add(ALakeCell);
-                ALakeCell.Cell := ACell.Cell;
-                ALakeCell.Cell.Layer := ALakeCell.Cell.Layer + 1;
-                ALakeCell.LakeType := ltVert;
-                ALakeCell.LakeCell := ACell.Cell;
+                if (ACell.Layer + 1 < Model.LayerCount)
+                  and (IDomainArray.IntegerData[ACell.Layer + 1, ACell.Row, ACell.Column] > 0) then
+                begin
+                  ALakeCell := TLakeCell.Create;
+                  ALake.FLakeCellList.Add(ALakeCell);
+                  ALakeCell.Cell := ACell.Cell;
+                  ALakeCell.Cell.Layer := ALakeCell.Cell.Layer + 1;
+                  ALakeCell.LakeType := ltVert;
+                  ALakeCell.LakeCell := ACell.Cell;
+                end;
+              end
+              else
+              begin
+                if IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+                begin
+                  ALakeCell := TLakeCell.Create;
+                  ALake.FLakeCellList.Add(ALakeCell);
+                  ALakeCell.Cell := ACell.Cell;
+                  ALakeCell.Cell.Layer := ALakeCell.Cell.Layer;
+                  ALakeCell.LakeType := ltVert;
+                  ALakeCell.LakeCell := ACell.Cell;
+                end;
               end;
             end;
           end;
@@ -2598,6 +2614,14 @@ begin
 
   WriteString('  SURFDEP ');
   WriteFloat(FLakMf6Package.SurfDepDepth);
+  NewLine;
+
+  WriteString('  MAXIMUM_ITERATIONS ');
+  WriteInteger(FLakMf6Package.MaxIterations);
+  NewLine;
+
+  WriteString('  MAXIMUM_STAGE_CHANGE ');
+  WriteFloat(FLakMf6Package.MaxStageChange);
   NewLine;
 
   ModflowOptions := Model.ModflowOptions;
@@ -2861,10 +2885,6 @@ var
   MvrUsed: Boolean;
   UsedOutlets: TGenericIntegerList;
   ReceiverItem: TReceiverItem;
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
-//  SpeciesIndex: Integer;
-//  ASpecies: TMobileChemSpeciesItem;
 begin
 
   if MvrWriter <> nil then

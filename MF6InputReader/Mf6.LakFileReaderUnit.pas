@@ -16,23 +16,36 @@ type
     PRINT_FLOWS: Boolean;
     SAVE_FLOWS: Boolean;
     FSTAGE: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
-    PACKAGE_CONVERGENCE: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
+    FPACKAGE_CONVERGENCE: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     MOVER: Boolean;
-    SURFDEP: TRealOption;
-    MAXIMUM_ITERATIONS: TIntegerOption;
-    MAXIMUM_STAGE_CHANGE: TRealOption;
+    FSURFDEP: TRealOption;
+    FMAXIMUM_ITERATIONS: TIntegerOption;
+    FMAXIMUM_STAGE_CHANGE: TRealOption;
     LENGTH_CONVERSION: TRealOption;
     TIME_CONVERSION: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
+    function IndexOfAUXILIARY(const AName: string): Integer;
+    property STAGE: Boolean read FSTAGE;
+    property PRINT_STAGE: Boolean read FPRINT_STAGE;
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
+    property PACKAGE_CONVERGENCE: Boolean read FPACKAGE_CONVERGENCE;
+    property SURFDEP: TRealOption read FSURFDEP;
+    property MAXIMUM_ITERATIONS: TIntegerOption read FMAXIMUM_ITERATIONS;
+    property MAXIMUM_STAGE_CHANGE: TRealOption read FMAXIMUM_STAGE_CHANGE;
   end;
 
   TLakDimensions = class(TCustomMf6Persistent)
@@ -47,14 +60,21 @@ type
 
   TLakPackageItem = class(TObject)
   private
-    lakeno: Integer;
-    strt: Extended;
+    Flakeno: Integer;
+    Fstrt: Extended;
     nlakeconn: Integer;
-    aux: TBoundaryValueList;
-    boundname: string;
+    Faux: TBoundaryValueList;
+    Fboundname: string;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: Integer;
   public
     constructor Create;
     destructor Destroy; override;
+    property lakeno: Integer read Flakeno;
+    property strt: Extended read Fstrt;
+    property boundname: string read Fboundname;
+    property Count: Integer read GetCount;
+    property aux[Index: Integer]: TMf6BoundaryValue read GetAux;
   end;
 
   TLakPackageItemList= TObjectList<TLakPackageItem>;
@@ -64,25 +84,39 @@ type
     FItems: TLakPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
       BOUNDNAMES: Boolean);
+    function GetItem(Index: Integer): TLakPackageItem;
+    function GetCount: integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: integer read GetCount;
+    property Items[Index: Integer]: TLakPackageItem read GetItem; default;
   end;
 
   TLakConnectionItem = record
   private
-    lakeno: Integer;
-    iconn: Integer;
-    cellid: TCellId;
-    claktype: string;
-    bedleak: string;
-    belev: Extended;
-    telev: Extended;
-    connlen: Extended;
-    connwidth: Extended;
+    Flakeno: Integer;
+    Ficonn: Integer;
+    Fcellid: TCellId;
+    Fclaktype: string;
+    Fbedleak: string;
+    Fbelev: Extended;
+    Ftelev: Extended;
+    Fconnlen: Extended;
+    Fconnwidth: Extended;
     procedure Initialize;
+  public
+    property lakeno: Integer read Flakeno;
+    property iconn: Integer read Ficonn;
+    property cellid: TCellId read Fcellid;
+    property claktype: string read Fclaktype;
+    property bedleak: string read Fbedleak;
+    property belev: Extended read Fbelev;
+    property telev: Extended read Ftelev;
+    property connlen: Extended read Fconnlen;
+    property connwidth: Extended read Fconnwidth;
   end;
 
   TLakConnectionItemList = TList<TLakConnectionItem>;
@@ -92,14 +126,19 @@ type
     FItems: TLakConnectionItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions);
+    function GetCount: integer;
+    function GetItem(Index: Integer): TLakConnectionItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: integer read GetCount;
+    property Items[Index: Integer]: TLakConnectionItem read GetItem; default;
   end;
 
   TLakeTableItem = record
+  private
     lakeno: Integer;
     tab6_filename: string;
     procedure Initialize;
@@ -119,15 +158,25 @@ type
   end;
 
   TLakOutletItem = record
-    outletno: Integer;
-    lakein: Integer;
-    lakeout: Integer;
-    couttype: string;
-    invert: TMf6BoundaryValue;
-    width: TMf6BoundaryValue;
-    rough: TMf6BoundaryValue;
-    slope: TMf6BoundaryValue;
+  private
+    Foutletno: Integer;
+    Flakein: Integer;
+    Flakeout: Integer;
+    Fcouttype: string;
+    Finvert: TMf6BoundaryValue;
+    Fwidth: TMf6BoundaryValue;
+    Frough: TMf6BoundaryValue;
+    Fslope: TMf6BoundaryValue;
     procedure Initialize;
+  public
+    property outletno: Integer read Foutletno;
+    property lakein: Integer read Flakein;
+    property lakeout: Integer read Flakeout;
+    property couttype: string read Fcouttype;
+    property invert: TMf6BoundaryValue read Finvert;
+    property width: TMf6BoundaryValue read Fwidth;
+    property rough: TMf6BoundaryValue read Frough;
+    property slope: TMf6BoundaryValue read Fslope;
   end;
 
   TLakOutletItemList = TList<TLakOutletItem>;
@@ -136,11 +185,15 @@ type
   private
     FItems: TLakOutletItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: integer;
+    function GetItem(Index: Integer): TLakOutletItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: integer read GetCount;
+    property Items[Index: Integer]: TLakOutletItem read GetItem; default;
   end;
 
   TLakPeriod = class(TCustomMf6Persistent)
@@ -148,11 +201,16 @@ type
     IPER: Integer;
     FItems: TNumberedItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: integer;
+    function GetItem(Index: Integer): TNumberedItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPER;
+    property Count: integer read GetCount;
+    property Items[Index: Integer]: TNumberedItem read GetItem; default;
   end;
 
   TSfrPeriodList = TObjectList<TLakPeriod>;
@@ -169,10 +227,29 @@ type
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
     FTabFilePackages: TPackageList;
+    FTabFileDictionary: TDictionary<string, TPackage>;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TLakPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property Options: TLakOptions read FOptions;
+    property PackageData: TLakPackageData read FPackageData;
+    property Connections: TLakConnections read FConnections;
+    property LakOutlets: TLakOutlets read FLakOutlets;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TLakPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
+    function GetTabFilePackage(FileName: string): TPackage;
   end;
 
 
@@ -206,6 +283,21 @@ begin
   inherited;
 end;
 
+function TLakOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  result := FAUXILIARY[Index];
+end;
+
+function TLakOptions.GetCount: Integer;
+begin
+  result := FAUXILIARY.Count;
+end;
+
+function TLakOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  result := FAUXILIARY.IndexOf(AName);
+end;
+
 procedure TLakOptions.Initialize;
 begin
   inherited;
@@ -216,15 +308,15 @@ begin
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
   FSTAGE := False;
-  BUDGET := False;
-  BUDGETCSV := False;
-  PACKAGE_CONVERGENCE := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
+  FPACKAGE_CONVERGENCE := False;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   MOVER := False;
-  SURFDEP.Initialize;
-  MAXIMUM_ITERATIONS.Initialize;
-  MAXIMUM_STAGE_CHANGE.Initialize;
+  FSURFDEP.Initialize;
+  FMAXIMUM_ITERATIONS.Initialize;
+  FMAXIMUM_STAGE_CHANGE.Initialize;
   LENGTH_CONVERSION.Initialize;
   TIME_CONVERSION.Initialize;
 end;
@@ -300,38 +392,38 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else if (FSplitter[0] = 'PACKAGE_CONVERGENCE')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      PACKAGE_CONVERGENCE := True;
+      FPACKAGE_CONVERGENCE := True;
     end
     else if FSplitter[0] = 'MOVER' then
     begin
       MOVER := True;
     end
     else if (FSplitter[0] = 'SURFDEP') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], SURFDEP.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FSURFDEP.Value) then
     begin
-      SURFDEP.Used := True;
+      FSURFDEP.Used := True;
     end
     else if (FSplitter[0] = 'MAXIMUM_ITERATIONS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], MAXIMUM_ITERATIONS.Value) then
+      and TryStrToInt(FSplitter[1], FMAXIMUM_ITERATIONS.Value) then
     begin
-      MAXIMUM_ITERATIONS.Used := True;
+      FMAXIMUM_ITERATIONS.Used := True;
     end
     else if (FSplitter[0] = 'MAXIMUM_STAGE_CHANGE') and (FSplitter.Count >= 2)
-      and TryFortranStrToFloat(FSplitter[1], MAXIMUM_STAGE_CHANGE.Value) then
+      and TryFortranStrToFloat(FSplitter[1], FMAXIMUM_STAGE_CHANGE.Value) then
     begin
-      MAXIMUM_STAGE_CHANGE.Used := True;
+      FMAXIMUM_STAGE_CHANGE.Used := True;
     end
 
     else if (FSplitter[0] = 'LENGTH_CONVERSION') and (FSplitter.Count >= 2)
@@ -427,17 +519,27 @@ end;
 
 constructor TLakPackageItem.Create;
 begin
-  lakeno := 0;
-  strt := 0;
+  Flakeno := 0;
+  Fstrt := 0;
   nlakeconn := 0;
-  aux := TBoundaryValueList.Create;
-  boundname := ''
+  Faux := TBoundaryValueList.Create;
+  Fboundname := ''
 end;
 
 destructor TLakPackageItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TLakPackageItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  Result := Faux[Index];
+end;
+
+function TLakPackageItem.GetCount: Integer;
+begin
+  Result := Faux.Count;
 end;
 
 { TLakPackageData }
@@ -453,6 +555,16 @@ destructor TLakPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TLakPackageData.GetCount: integer;
+begin
+  result := FItems.Count;
+end;
+
+function TLakPackageData.GetItem(Index: Integer): TLakPackageItem;
+begin
+  result := FItems[index]
 end;
 
 procedure TLakPackageData.Initialize;
@@ -492,7 +604,7 @@ begin
         TComparer<TLakPackageItem>.Construct(
           function(const Left, Right: TLakPackageItem): Integer
           begin
-            Result := Left.lakeno - Right.lakeno;
+            Result := Left.Flakeno - Right.Flakeno;
           end
         ));
       Exit;
@@ -506,8 +618,8 @@ begin
         // do nothing
       end
       else if (FSplitter.Count >= NumberOfItems)
-        and TryStrToInt(FSplitter[0],Item.lakeno)
-        and TryFortranStrToFloat(FSplitter[1],Item.strt)
+        and TryStrToInt(FSplitter[0],Item.Flakeno)
+        and TryFortranStrToFloat(FSplitter[1],Item.Fstrt)
         and TryStrToInt(FSplitter[2],Item.nlakeconn)
         then
       begin
@@ -525,12 +637,12 @@ begin
             AValue.ValueType := vtString;
             AValue.StringValue := FSplitter[ItemStart]
           end;
-          Item.aux.Add(AVAlue);
+          Item.Faux.Add(AVAlue);
           Inc(ItemStart);
         end;
         if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
         begin
-          Item.boundname := FSplitter[ItemStart];
+          Item.Fboundname := FSplitter[ItemStart];
         end;
         FItems.Add(Item);
         Item := nil;
@@ -545,6 +657,7 @@ begin
     end;
   end;
 end;
+
 
 { TTabFileItem }
 
@@ -629,15 +742,15 @@ end;
 
 procedure TLakConnectionItem.Initialize;
 begin
-  lakeno := 0;
-  iconn := 0;
-  cellid.Initialize;
-  claktype := '';
-  bedleak := '';
-  belev := 0;
-  telev := 0;
-  connlen := 0;
-  connwidth := 0;
+  Flakeno := 0;
+  Ficonn := 0;
+  Fcellid.Initialize;
+  Fclaktype := '';
+  Fbedleak := '';
+  Fbelev := 0;
+  Ftelev := 0;
+  Fconnlen := 0;
+  Fconnwidth := 0;
 end;
 
 { TLakConnections }
@@ -653,6 +766,16 @@ destructor TLakConnections.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TLakConnections.GetCount: integer;
+begin
+  result := FItems.Count
+end;
+
+function TLakConnections.GetItem(Index: Integer): TLakConnectionItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TLakConnections.Initialize;
@@ -695,17 +818,17 @@ begin
       // do nothing
     end
     else if (FSplitter.Count >= ItemCount)
-      and TryStrToInt(FSplitter[0],Item.lakeno)
-      and TryStrToInt(FSplitter[1],Item.iconn)
-      and ReadCellId(Item.cellid, 2, DimensionCount)
-      and TryFortranStrToFloat(FSplitter[4+DimensionCount], Item.belev)
-      and TryFortranStrToFloat(FSplitter[5+DimensionCount], Item.telev)
-      and TryFortranStrToFloat(FSplitter[6+DimensionCount], Item.connlen)
-      and TryFortranStrToFloat(FSplitter[7+DimensionCount], Item.connwidth)
+      and TryStrToInt(FSplitter[0],Item.Flakeno)
+      and TryStrToInt(FSplitter[1],Item.Ficonn)
+      and ReadCellId(Item.Fcellid, 2, DimensionCount)
+      and TryFortranStrToFloat(FSplitter[4+DimensionCount], Item.Fbelev)
+      and TryFortranStrToFloat(FSplitter[5+DimensionCount], Item.Ftelev)
+      and TryFortranStrToFloat(FSplitter[6+DimensionCount], Item.Fconnlen)
+      and TryFortranStrToFloat(FSplitter[7+DimensionCount], Item.Fconnwidth)
       then
     begin
-      Item.claktype := FSplitter[2+DimensionCount];
-      Item.bedleak := FSplitter[3+DimensionCount];
+      Item.Fclaktype := FSplitter[2+DimensionCount];
+      Item.Fbedleak := FSplitter[3+DimensionCount];
       FItems.Add(Item);
     end
     else
@@ -720,14 +843,14 @@ end;
 
 procedure TLakOutletItem.Initialize;
 begin
-  outletno := 0;
-  lakein := 0;
-  lakeout := 0;
-  couttype := '';
-  invert.Initialize;
-  width.Initialize;
-  rough.Initialize;
-  slope.Initialize;
+  Foutletno := 0;
+  Flakein := 0;
+  Flakeout := 0;
+  Fcouttype := '';
+  Finvert.Initialize;
+  Fwidth.Initialize;
+  Frough.Initialize;
+  Fslope.Initialize;
 end;
 
 { TLakOutlets }
@@ -743,6 +866,16 @@ destructor TLakOutlets.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TLakOutlets.GetCount: integer;
+begin
+  result := FItems.Count;
+end;
+
+function TLakOutlets.GetItem(Index: Integer): TLakOutletItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TLakOutlets.Initialize;
@@ -780,32 +913,32 @@ begin
       // do nothing
     end
     else if (FSplitter.Count >- 4)
-      and TryStrToInt(FSplitter[0],Item.outletno)
-      and TryStrToInt(FSplitter[1],Item.lakein)
-      and TryStrToInt(FSplitter[2],Item.lakeout)
+      and TryStrToInt(FSplitter[0],Item.Foutletno)
+      and TryStrToInt(FSplitter[1],Item.Flakein)
+      and TryStrToInt(FSplitter[2],Item.Flakeout)
 
       then
     begin
-      Item.couttype := FSplitter[3];
-      if not TryFortranStrToFloat(FSplitter[4],Item.invert.NumericValue) then
+      Item.Fcouttype := FSplitter[3];
+      if not TryFortranStrToFloat(FSplitter[4],Item.Finvert.NumericValue) then
       begin
-        Item.invert.StringValue := FSplitter[4];
-        Item.invert.ValueType := vtString;
+        Item.Finvert.StringValue := FSplitter[4];
+        Item.Finvert.ValueType := vtString;
       end;
-      if not TryFortranStrToFloat(FSplitter[5],Item.width.NumericValue) then
+      if not TryFortranStrToFloat(FSplitter[5],Item.Fwidth.NumericValue) then
       begin
-        Item.width.StringValue := FSplitter[5];
-        Item.width.ValueType := vtString;
+        Item.Fwidth.StringValue := FSplitter[5];
+        Item.Fwidth.ValueType := vtString;
       end;
-      if not TryFortranStrToFloat(FSplitter[6],Item.rough.NumericValue) then
+      if not TryFortranStrToFloat(FSplitter[6],Item.Frough.NumericValue) then
       begin
-        Item.rough.StringValue := FSplitter[6];
-        Item.rough.ValueType := vtString;
+        Item.Frough.StringValue := FSplitter[6];
+        Item.Frough.ValueType := vtString;
       end;
-      if not TryFortranStrToFloat(FSplitter[7],Item.slope.NumericValue) then
+      if not TryFortranStrToFloat(FSplitter[7],Item.Fslope.NumericValue) then
       begin
-        Item.slope.StringValue := FSplitter[7];
-        Item.slope.ValueType := vtString;
+        Item.Fslope.StringValue := FSplitter[7];
+        Item.Fslope.ValueType := vtString;
       end;
       FItems.Add(Item);
     end
@@ -830,6 +963,16 @@ destructor TLakPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TLakPeriod.GetCount: integer;
+begin
+  result := FItems.Count
+end;
+
+function TLakPeriod.GetItem(Index: Integer): TNumberedItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TLakPeriod.Initialize;
@@ -943,6 +1086,7 @@ begin
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
   FTabFilePackages := TPackageList.Create;
+  FTabFileDictionary := TDictionary<string, TPackage>.Create;
 
 end;
 
@@ -958,10 +1102,50 @@ begin
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   FTabFilePackages.Free;
+  FTabFileDictionary.Free;
   inherited;
 end;
 
-procedure TLak.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
+function TLak.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TLak.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TLak.GetPeriod(Index: Integer): TLakPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TLak.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TLak.GetTabFilePackage(FileName: string): TPackage;
+begin
+  if not FTabFileDictionary.TryGetValue(UpperCase(FileName), result) then
+  begin
+    result := nil;
+  end;
+end;
+
+function TLak.GetTimeSeries(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TLak.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
+end;
+
+procedure TLak.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+  const NPER: Integer);
 var
   ALine: string;
   ErrorLine: string;
@@ -974,6 +1158,7 @@ var
   ObsPackage: TPackage;
   LakeTablePackage: TPackage;
   LakeTableReader: TLakeTable;
+  AFilename: string;
 begin
   if Assigned(OnUpdataStatusBar) then
   begin
@@ -1076,15 +1261,19 @@ begin
   end;
   for PackageIndex := 0 to FLakTables.FItems.Count - 1 do
   begin
-    LakeTablePackage := TPackage.Create;
-    FObservationsPackages.Add(LakeTablePackage);
-    LakeTablePackage.FileType := FPackageType;
-    LakeTablePackage.FileName := FLakTables.FItems[PackageIndex].tab6_filename;
-    LakeTablePackage.PackageName := '';
+    AFilename := FLakTables.FItems[PackageIndex].tab6_filename;
+    if not FTabFileDictionary.ContainsKey(UpperCase(AFileName)) then
+    begin
+      LakeTablePackage := TPackage.Create;
+      FObservationsPackages.Add(LakeTablePackage);
+      LakeTablePackage.FileType := FPackageType;
+      LakeTablePackage.FileName := AFilename;
+      LakeTablePackage.PackageName := '';
 
-    LakeTableReader := TLakeTable.Create(FPackageType);
-    LakeTablePackage.Package := LakeTableReader;
-    LakeTablePackage.ReadPackage(Unhandled, NPER);
+      LakeTableReader := TLakeTable.Create(FPackageType);
+      LakeTablePackage.Package := LakeTableReader;
+      LakeTablePackage.ReadPackage(Unhandled, NPER);
+    end;
   end;
 end;
 

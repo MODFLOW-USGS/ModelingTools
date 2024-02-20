@@ -75,6 +75,7 @@ type
 
   TBoundaryValueList = TList<TMf6BoundaryValue>;
   TMf6BoundaryValueArray = TArray<TMf6BoundaryValue>;
+  TMf6BoundaryValueArrays = TArray<TMf6BoundaryValueArray>;
 
   TDoubleList = TList<Double>;
 

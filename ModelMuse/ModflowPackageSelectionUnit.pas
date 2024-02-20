@@ -1641,6 +1641,8 @@ Type
     FSaveGwtConcentration: Boolean;
     FSaveGwtBudgetCsv: Boolean;
     FSaveBudgetCsv: Boolean;
+    FMaxIterations: Integer;
+    FStoredMaxStageChange: TRealStorage;
     function GetSurfDepDepth: Double;
     procedure SetPrintFlows(const Value: Boolean);
     procedure SetPrintStage(const Value: Boolean);
@@ -1653,11 +1655,17 @@ Type
     procedure SetSaveGwtConcentration(const Value: Boolean);
     procedure SetSaveGwtBudgetCsv(const Value: Boolean);
     procedure SetSaveBudgetCsv(const Value: Boolean);
+    procedure SetMaxIterations(const Value: Integer);
+    function GetMaxStageChange: Double;
+    procedure SetMaxStageChange(const Value: Double);
+    procedure SetStoredMaxStageChange(const Value: TRealStorage);
   public
     Constructor Create(Model: TBaseModel); override;
     destructor Destroy; override;
     procedure InitializeVariables; override;
     property SurfDepDepth: Double read GetSurfDepDepth write SetSurfDepDepth;
+    // MAXIMUM_STAGE_CHANGE
+    property MaxStageChange: Double read GetMaxStageChange write SetMaxStageChange;
     procedure Assign(Source: TPersistent); override;
   published
     // [PRINT_STAGE]
@@ -1691,6 +1699,12 @@ Type
     // [BUDGETCSV FILEOUT <budgetcsvfile>]
     property SaveGwtBudgetCsv: Boolean read FSaveGwtBudgetCsv write SetSaveGwtBudgetCsv
       stored True;
+    // MAXIMUM_ITERATIONS
+    property MaxIterations: Integer read FMaxIterations
+      write SetMaxIterations stored True;
+    // [MAXIMUM_STAGE_CHANGE <maximum_stage_change>]
+    property StoredMaxStageChange: TRealStorage read FStoredMaxStageChange
+      write SetStoredMaxStageChange;
   end;
 
 
@@ -23067,6 +23081,8 @@ begin
     SaveGwtBudget := LakeSource.SaveGwtBudget;
     SaveGwtConcentration := LakeSource.SaveGwtConcentration;
     SaveGwtBudgetCsv := LakeSource.SaveGwtBudgetCsv;
+    MaxIterations := LakeSource.MaxIterations;
+    MaxStageChange := LakeSource.MaxStageChange;
   end;
 end;
 
@@ -23074,6 +23090,8 @@ constructor TLakeMf6PackageSelection.Create(Model: TBaseModel);
 begin
   FStoredSurfDepDepth := TRealStorage.Create;
   FStoredSurfDepDepth.OnChange := OnValueChanged;
+  FStoredMaxStageChange := TRealStorage.Create;
+  FStoredMaxStageChange.OnChange := OnValueChanged;
   inherited;
   InitializeVariables;
 end;
@@ -23081,7 +23099,13 @@ end;
 destructor TLakeMf6PackageSelection.Destroy;
 begin
   FStoredSurfDepDepth.Free;
+  FStoredMaxStageChange.Free;
   inherited;
+end;
+
+function TLakeMf6PackageSelection.GetMaxStageChange: Double;
+begin
+  result := FStoredMaxStageChange.Value
 end;
 
 function TLakeMf6PackageSelection.GetSurfDepDepth: Double;
@@ -23103,6 +23127,18 @@ begin
   FSaveGwtBudget := True;
   FSaveGwtConcentration := True;
   FSaveGwtBudgetCsv := True;
+  FMaxIterations := 100;
+  MaxStageChange := 1E-5;
+end;
+
+procedure TLakeMf6PackageSelection.SetMaxIterations(const Value: Integer);
+begin
+  SetIntegerProperty(FMaxIterations, Value);
+end;
+
+procedure TLakeMf6PackageSelection.SetMaxStageChange(const Value: Double);
+begin
+  FStoredMaxStageChange.Value := Value;
 end;
 
 procedure TLakeMf6PackageSelection.SetPrintFlows(const Value: Boolean);
@@ -23144,6 +23180,12 @@ end;
 procedure TLakeMf6PackageSelection.SetSaveStage(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveStage, Value);
+end;
+
+procedure TLakeMf6PackageSelection.SetStoredMaxStageChange(
+  const Value: TRealStorage);
+begin
+  FStoredMaxStageChange.Assign(Value);
 end;
 
 procedure TLakeMf6PackageSelection.SetStoredSurfDepDepth(
