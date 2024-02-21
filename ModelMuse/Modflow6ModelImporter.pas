@@ -103,7 +103,8 @@ type
       BoundNameObsDictionary: TBoundNameDictionary;
       CellIdObsDictionary: TCellIdObsDictionary; ObsLists: TObsLists;
       ObsFiles: TObs);
-    procedure AddPointsToScreenObject(CellIds: TCellIdList; AScreenObject: TScreenObject; ThreeD: Boolean = True);
+    procedure AddPointsToScreenObject(CellIds: TCellIdList;
+      AScreenObject: TScreenObject; ThreeD: Boolean = True);
     procedure ImportWel(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportDrn(Package: TPackage; MvrPackage: TPackage);
     procedure ImportRiv(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
@@ -145,7 +146,7 @@ uses
   Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
   ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit,
-  Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit;
+  Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit, ModflowLakMf6Unit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -4695,6 +4696,25 @@ begin
   Assign3DRealDataSet(rsModflow_Initial_Head, IC.GridData.STRT);
 end;
 
+type
+  TImportLake = class(TObject)
+  private
+    FConnections: TLakConnectionItemList;
+    FOutlets: TLakOutletItemList;
+    FLakPackageItem: TLakPackageItem;
+    DataSetsScreenObject: TScreenObject;
+    LakeScreenObject: TScreenObject;
+    LakeBoundary: TLakeMf6;
+    FLakeSettings: TNumberedItemList;
+    FOutletSettings: TNumberedItemList;
+  public
+    constructor Create(LakPackageItem: TLakPackageItem);
+    destructor Destroy; override;
+  end;
+  TImportLakes = TObjectList<TImportLake>;
+
+//  T
+
 procedure TModflow6Importer.ImportLak(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
 var
@@ -4702,6 +4722,465 @@ var
   LakPackage: TLakeMf6PackageSelection;
   Lak: TLak;
   Options: TLakOptions;
+  Lakes: TImportLakes;
+  LakeIndex: Integer;
+  LakPackageItem: TLakPackageItem;
+  ConnectionIndex: Integer;
+  AConnection: TLakConnectionItem;
+  ALake: TImportLake;
+  DummyConnectionItem: TLakConnectionItem;
+  OutletIndex: Integer;
+  AnOutlet: TLakOutletItem;
+  StartTime: Double;
+  EndTime: Double;
+  Map: TimeSeriesMap;
+  TimeSeriesIndex: Integer;
+  TimeSeriesPackage: TPackage;
+  PeriodIndex: Integer;
+  APeriod: TLakPeriod;
+  Period: Integer;
+  ASetting: TNumberedItem;
+  SettingIndex: Integer;
+  SettingName: string;
+  LakeNo: Integer;
+  OutletNumber: Integer;
+  procedure ApplyLakeSettings(ALake: TImportLake);
+  var
+    PriorValueItem: TLakeTimeItem;
+    NewTimeItem: TLakeTimeItem;
+    ASetting: TNumberedItem;
+    SettingIndex: Integer;
+  begin
+    if (ALake.FLakeSettings.Count > 0) or (ALake.FOutletSettings.Count > 0) then
+    begin
+      PriorValueItem := nil;
+      if ALake.LakeBoundary.Values.Count > 0 then
+      begin
+        PriorValueItem := ALake.LakeBoundary.Values.Last as TLakeTimeItem;
+      end;
+      NewTimeItem := ALake.LakeBoundary.Values.Add as TLakeTimeItem;
+      if PriorValueItem <> nil then
+      begin
+        NewTimeItem.Assign(PriorValueItem);
+        PriorValueItem.EndTime := StartTime;
+      end;
+      NewTimeItem.StartTime := StartTime;
+      for SettingIndex := 0 to ALake.FLakeSettings.Count - 1 do
+      begin
+        ASetting := ALake.FLakeSettings[SettingIndex];
+        SettingName := ASetting.Name;
+        if AnsiSameText(SettingName, 'STATUS') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'STAGE') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'RAINFALL') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'EVAPORATION') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'EVAPORATION') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'RUNOFF') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'INFLOW') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'INFLOW') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'WITHDRAWAL') then
+        begin
+        end
+        else if AnsiSameText(SettingName, 'AUXILIARY') then
+        begin
+        end
+        else
+        begin
+        end;
+      end;
+    end;
+  end;
+  procedure CreateOutlets(ALake: TImportLake);
+  var
+    OutletIndex: Integer;
+    ImportOutlet: TLakOutletItem;
+    OtherLake: TImportLake;
+    LakeOutlet: TLakeOutlet;
+    OutletTimeItem: TLakeOutletTimeItem;
+    TimeSeriesName: string;
+    ImportedTimeSeries: string;
+  begin
+    for OutletIndex := 0 to ALake.FOutlets.Count - 1 do
+    begin
+      LakeOutlet := ALake.LakeBoundary.Outlets.Add.Outlet;
+      ImportOutlet := ALake.FOutlets[OutletIndex];
+      Assert(ImportOutlet.lakein =  ALake.FLakPackageItem.lakeno);
+      if ImportOutlet.lakeout > 0 then
+      begin
+        OtherLake := Lakes[ImportOutlet.lakeout-1];
+        Assert(ImportOutlet.lakeout = OtherLake.FLakPackageItem.lakeno);
+        LakeOutlet.OutletObjectName := OtherLake.LakeScreenObject.Name;
+      end;
+
+      if AnsiSameText(ImportOutlet.couttype, 'SPECIFIED') then
+      begin
+        LakeOutlet.OutletType := lotSpecified
+      end
+      else if AnsiSameText(ImportOutlet.couttype, 'MANNING') then
+      begin
+        LakeOutlet.OutletType := lotManning;
+      end
+      else if AnsiSameText(ImportOutlet.couttype, 'WEIR') then
+      begin
+        LakeOutlet.OutletType := lotWeir;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+
+      OutletTimeItem := LakeOutlet.LakeTimes.Add;
+      OutletTimeItem.StartTime := StartTime;
+      OutletTimeItem.EndTime := EndTime;
+
+      if ImportOutlet.invert.ValueType = vtNumeric then
+      begin
+        OutletTimeItem.Invert := FortranFloatToStr(ImportOutlet.invert.NumericValue)
+      end
+      else
+      begin
+        TimeSeriesName := ImportOutlet.invert.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        OutletTimeItem.Invert := ImportedTimeSeries;
+      end;
+
+      if ImportOutlet.width.ValueType = vtNumeric then
+      begin
+        OutletTimeItem.Width := FortranFloatToStr(ImportOutlet.width.NumericValue)
+      end
+      else
+      begin
+        TimeSeriesName := ImportOutlet.width.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        OutletTimeItem.Width := ImportedTimeSeries;
+      end;
+
+      if ImportOutlet.rough.ValueType = vtNumeric then
+      begin
+        OutletTimeItem.Roughness := FortranFloatToStr(ImportOutlet.rough.NumericValue)
+      end
+      else
+      begin
+        TimeSeriesName := ImportOutlet.rough.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        OutletTimeItem.Roughness := ImportedTimeSeries;
+      end;
+
+      if ImportOutlet.slope.ValueType = vtNumeric then
+      begin
+        OutletTimeItem.Slope := FortranFloatToStr(ImportOutlet.slope.NumericValue)
+      end
+      else
+      begin
+        TimeSeriesName := ImportOutlet.slope.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        OutletTimeItem.Slope := ImportedTimeSeries;
+      end;
+    end;
+  end;
+  procedure CreateScreenObject(ALake: TImportLake);
+  const
+    KImportedLakeK = 'LakeK';
+    KImportedLakeBelev = 'Lake Bottom Elevation';
+    KImportedLakeTelev = 'Lake Top Elevation';
+  var
+    DataArrayName: string;
+    DataArray: TDataArray;
+    UndoCreateScreenObject: TCustomUndo;
+    EmbededLake: Boolean;
+    AConnection: TLakConnectionItem;
+    UniformValues: Boolean;
+    FirstValue: Extended;
+    CellIndex: Integer;
+    ImportedK: TValueArrayItem;
+    DataSetIndex: Integer;
+    CellIds: TCellIdList;
+    ACellId: TCellId;
+    procedure CreateDataSetScreenObject;
+    var
+      CellIds: TCellIdList;
+      CellIndex: Integer;
+      ACellId: TCellId;
+    begin
+      ALake.DataSetsScreenObject := TScreenObject.CreateWithViewDirection(
+        Model, vdTop, UndoCreateScreenObject, False);
+      ALake.DataSetsScreenObject.Name := Format('ImportedDataLake%d', [ALake.FLakPackageItem.lakeno]);
+      ALake.DataSetsScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+      Model.AddScreenObject(ALake.DataSetsScreenObject);
+      ALake.DataSetsScreenObject.ElevationCount := ecOne;
+      ALake.DataSetsScreenObject.SetValuesOfIntersectedCells := True;
+      ALake.DataSetsScreenObject.EvaluatedAt := eaBlocks;
+      ALake.DataSetsScreenObject.Visible := False;
+
+      CellIds := TCellIdList.Create;
+      try
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          ACellId := ALake.FConnections[CellIndex].cellid;
+          if Model.DisvUsed then
+          begin
+            ACellId.Row := 0;
+          end;
+          CellIds.Add(ACellId);
+        end;
+        AddPointsToScreenObject(CellIds, ALake.DataSetsScreenObject, True);
+      finally
+        CellIds.Free;
+      end;
+      ALake.DataSetsScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+    end;
+  begin
+    Assert(ALake <> nil);
+    EmbededLake := False;
+    if ALake.FConnections.Count = 1 then
+    begin
+      AConnection := ALake.FConnections[0];
+      EmbededLake := AnsiSameText(AConnection.claktype, 'EMBEDDEDH')
+        or AnsiSameText(AConnection.claktype, 'EMBEDDEDV')
+    end;
+
+    if EmbededLake then
+    begin
+
+    end
+    else
+    begin
+      ALake.LakeScreenObject := TScreenObject.CreateWithViewDirection(
+        Model, vdTop, UndoCreateScreenObject, False);
+      if ALake.FLakPackageItem.boundname = '' then
+      begin
+        ALake.LakeScreenObject.Name := Format('ImportedLake%d', [ALake.FLakPackageItem.lakeno]);
+      end
+      else
+      begin
+        ALake.LakeScreenObject.Name := ALake.FLakPackageItem.boundname;
+      end;
+      ALake.LakeScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+      Model.AddScreenObject(ALake.LakeScreenObject);
+      ALake.LakeScreenObject.ElevationCount := ecOne;
+      ALake.LakeScreenObject.SetValuesOfIntersectedCells := True;
+      ALake.LakeScreenObject.EvaluatedAt := eaBlocks;
+      ALake.LakeScreenObject.Visible := False;
+
+      CellIds := TCellIdList.Create;
+      try
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          AConnection := ALake.FConnections[CellIndex];
+          if AnsiSameText(AConnection.claktype, 'VERTICAL') then
+          begin
+            ACellId := AConnection.cellid;
+            if Model.DisvUsed then
+            begin
+              ACellId.Row := 0;
+            end;
+            CellIds.Add(ACellId);
+          end;
+        end;
+        if CellIds.Count > 0 then
+        begin
+          AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, True);
+        end
+        else
+        begin
+
+        end;
+      finally
+        CellIds.Free;
+      end;
+//    end;
+      ALake.LakeScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+
+
+      ALake.LakeScreenObject.CreateLakMf6Boundary;
+      ALake.LakeBoundary := ALake.LakeScreenObject.ModflowLak6;
+      ALake.LakeBoundary.BedThickness := '1';
+      ALake.LakeBoundary.StartingStage := FortranFloatToStr(ALake.FLakPackageItem.strt);
+
+
+
+      UniformValues := True;
+      FirstValue := ALake.FConnections[0].bedleak;
+      for CellIndex := 1 to ALake.FConnections.Count - 1 do
+      begin
+        UniformValues  := FirstValue = ALake.FConnections[CellIndex].bedleak;
+        if not UniformValues then
+        begin
+          break;
+        end;
+      end;
+
+      if UniformValues then
+      begin
+        ALake.LakeBoundary.BedK := FortranFloatToStr(FirstValue);
+      end
+      else
+      begin
+        if ALake.DataSetsScreenObject = nil then
+        begin
+          CreateDataSetScreenObject;
+        end;
+
+        ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
+        ImportedK.Name := KImportedLakeK;
+        ImportedK.Values.DataType := rdtDouble;
+
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          ImportedK.Values.Add(ALake.FConnections[CellIndex].bedleak);
+        end;
+
+        DataArrayName := Format('LakeK_%d', [ALake.FLakPackageItem.lakeno]);
+        DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
+          DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+
+        DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
+        ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
+          rsObjectImportedValuesR + '("' + KImportedLakeK + '")';
+
+        ALake.LakeBoundary.BedK := DataArrayName;
+      end;
+
+      UniformValues := True;
+      FirstValue := ALake.FConnections[0].belev;
+      for CellIndex := 1 to ALake.FConnections.Count - 1 do
+      begin
+        UniformValues  := FirstValue = ALake.FConnections[CellIndex].belev;
+        if not UniformValues then
+        begin
+          break;
+        end;
+      end;
+
+      if UniformValues then
+      begin
+        ALake.LakeBoundary.BottomElevation := FortranFloatToStr(FirstValue);
+      end
+      else
+      begin
+        if ALake.DataSetsScreenObject = nil then
+        begin
+          CreateDataSetScreenObject;
+        end;
+
+        ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
+        ImportedK.Name := KImportedLakeBelev;
+        ImportedK.Values.DataType := rdtDouble;
+
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          ImportedK.Values.Add(ALake.FConnections[CellIndex].belev);
+        end;
+
+        DataArrayName := Format('LakeBottomElev_%d', [ALake.FLakPackageItem.lakeno]);
+        DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
+          DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+
+        DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
+        ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
+          rsObjectImportedValuesR + '("' + KImportedLakeBelev + '")';
+
+        ALake.LakeBoundary.BottomElevation := DataArrayName;
+      end;
+
+      UniformValues := True;
+      FirstValue := ALake.FConnections[0].telev;
+      for CellIndex := 1 to ALake.FConnections.Count - 1 do
+      begin
+        UniformValues  := FirstValue = ALake.FConnections[CellIndex].telev;
+        if not UniformValues then
+        begin
+          break;
+        end;
+      end;
+
+      if UniformValues then
+      begin
+        ALake.LakeBoundary.TopElevation := FortranFloatToStr(FirstValue);
+      end
+      else
+      begin
+        if ALake.DataSetsScreenObject = nil then
+        begin
+          CreateDataSetScreenObject;
+        end;
+
+        ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
+        ImportedK.Name := KImportedLakeTelev;
+        ImportedK.Values.DataType := rdtDouble;
+
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          ImportedK.Values.Add(ALake.FConnections[CellIndex].telev);
+        end;
+
+        DataArrayName := Format('LakeTopElev_%d', [ALake.FLakPackageItem.lakeno]);
+        DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
+          DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+
+        DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
+        ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
+          rsObjectImportedValuesR + '("' + KImportedLakeTelev + '")';
+
+        ALake.LakeBoundary.TopElevation := DataArrayName;
+      end;
+    end;
+
+      // For each lake, define 3D data sets for Lake K, bottom elevation, and top elevation.
+      // Assign lake thickness a value of 1.
+      // Assign bedleak to Lake K
+
+      // rsObjectImportedValuesR
+
+      {
+          result := TScreenObject.CreateWithViewDirection(
+            Model, vdTop, UndoCreateScreenObject, False);
+          result.Name := Format('Imported_HFB_Layer_%d_Period_%d', [LayerIndex + 1, HfbPeriod.Period]);
+          result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+          Model.AddScreenObject(result);
+          result.ElevationCount := ecOne;
+          result.SetValuesOfIntersectedCells := True;
+          result.EvaluatedAt := eaBlocks;
+          result.Visible := False;
+          result.ElevationFormula := Format('LayerCenter(%d)', [LayerIndex+1]);
+          ScreenObjects[LayerIndex] := result;
+
+          Storage := result.ImportedValues.Add;
+          Storage.Name := KImportedHfbValue;
+          Storage.Values.DataType := rdtDouble;
+      }
+//    end;
+  end;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -4720,6 +5199,10 @@ begin
   if Options.SURFDEP.Used then
   begin
     LakPackage.SurfDepDepth := Options.SURFDEP.Value;
+  end
+  else
+  begin
+    LakPackage.SurfDepDepth := 0;
   end;
   LakPackage.WriteConvergenceData := Options.PACKAGE_CONVERGENCE;
   if Options.MAXIMUM_ITERATIONS.Used then
@@ -4729,6 +5212,111 @@ begin
   if Options.MAXIMUM_STAGE_CHANGE.Used then
   begin
     LakPackage.MaxStageChange := Options.MAXIMUM_STAGE_CHANGE.Value;
+  end;
+
+
+  Map := TimeSeriesMap.Create;
+  Lakes := TImportLakes.Create;
+  try
+    for TimeSeriesIndex := 0 to Lak.TimeSeriesCount - 1 do
+    begin
+      TimeSeriesPackage := Lak.TimeSeries[TimeSeriesIndex];
+      ImportTimeSeries(TimeSeriesPackage, Map);
+    end;
+
+    for LakeIndex := 0 to Lak.PackageData.Count - 1 do
+    begin
+      LakPackageItem := Lak.PackageData[LakeIndex];
+      while Lakes.Count < LakPackageItem.lakeno do
+      begin
+        Lakes.Add(nil)
+      end;
+      Assert(Lakes[LakPackageItem.lakeno - 1] = nil);
+      Lakes[LakPackageItem.lakeno - 1] := TImportLake.Create(LakPackageItem);
+    end;
+
+    DummyConnectionItem.Initialize;
+    for ConnectionIndex := 0 to Lak.Connections.Count - 1 do
+    begin
+      AConnection := Lak.Connections[ConnectionIndex];
+      ALake := Lakes[AConnection.lakeno -1];
+      while ALake.FConnections.Count < AConnection.iconn do
+      begin
+        ALake.FConnections.Add(DummyConnectionItem)
+      end;
+      Assert(ALake.FConnections[AConnection.iconn-1].lakeno = 0);
+      ALake.FConnections[AConnection.iconn-1] := AConnection;
+    end;
+
+    for OutletIndex := 0 to Lak.LakOutlets.Count - 1 do
+    begin
+      AnOutlet := Lak.LakOutlets[OutletIndex];
+      ALake := Lakes[AnOutlet.lakein-1];
+      ALake.FOutlets.Add(AnOutlet);
+    end;
+
+    StartTime := Model.ModflowStressPeriods.First.StartTime;
+    EndTime := Model.ModflowStressPeriods.Last.EndTime;
+
+    for LakeIndex := 0 to Lakes.Count - 1 do
+    begin
+      CreateScreenObject(Lakes[LakeIndex])
+    end;
+    for LakeIndex := 0 to Lakes.Count - 1 do
+    begin
+      CreateOutlets(Lakes[LakeIndex])
+    end;
+
+    for PeriodIndex := 0 to Lak.PeriodCount - 1 do
+    begin
+      APeriod := Lak.Periods[PeriodIndex];
+      Period := APeriod.Period;
+      StartTime := Model.ModflowStressPeriods[Period].StartTime;
+
+      for SettingIndex := 0 to APeriod.Count - 1 do
+      begin
+        ASetting := APeriod[SettingIndex];
+        SettingName := ASetting.Name;
+        if AnsiSameText(SettingName, 'STATUS')
+          or AnsiSameText(SettingName, 'STAGE')
+          or AnsiSameText(SettingName, 'RAINFALL')
+          or AnsiSameText(SettingName, 'EVAPORATION')
+          or AnsiSameText(SettingName, 'RUNOFF')
+          or AnsiSameText(SettingName, 'INFLOW')
+          or AnsiSameText(SettingName, 'WITHDRAWAL')
+          or AnsiSameText(SettingName, 'AUXILIARY')
+          then
+        begin
+          LakeNo := ASetting.IdNumber;
+          ALake := Lakes[LakeNo-1];
+          ALake.FLakeSettings.Add(ASetting);
+        end
+        else if AnsiSameText(SettingName, 'RATE')
+          or AnsiSameText(SettingName, 'INVERT')
+          or AnsiSameText(SettingName, 'WIDTH')
+          or AnsiSameText(SettingName, 'SLOPE')
+          or AnsiSameText(SettingName, 'ROUGH')
+          then
+        begin
+          OutletNumber := ASetting.IdNumber;
+          AnOutlet := Lak.LakOutlets[OutletNumber-1];
+          LakeNo := AnOutlet.lakein;
+          ALake := Lakes[LakeNo-1];
+          ALake.FOutletSettings.Add(ASetting);
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end;
+      for LakeIndex := 0 to Lakes.Count - 1 do
+      begin
+        ApplyLakeSettings(Lakes[LakeIndex])
+      end;
+    end;
+  finally
+    Lakes.Free;
+    Map.Free;
   end;
 
 end;
@@ -5209,7 +5797,8 @@ begin
           ListFile.LoadFromFile(OutFile);
           if ListFile.Count > 0 then
           begin
-            ErrorMessages.Add('The following errors were encountered when reading ' + NameFiles[FileIndex]);
+            ErrorMessages.Add('The following errors were encountered when reading '
+              + NameFiles[FileIndex]);
             ErrorMessages.AddStrings(ListFile);
             ErrorMessages.Add('');
           end;
@@ -5235,7 +5824,8 @@ begin
         Exchange := FSimulation.Exchanges[ExchangeIndex];
         if not AnsiSameText(Exchange.ExchangeType, 'GWF6-GWT6') then
         begin
-          ErrorMessages.Add('The following error was encountered when reading ' + NameFiles[FileIndex]);
+          ErrorMessages.Add('The following error was encountered when reading '
+            + NameFiles[FileIndex]);
           ErrorMessages.Add('ModelMuse does not currently support MODFLOW 6 exchanges');
           break;
         end;
@@ -5253,7 +5843,8 @@ begin
         end;
         if FlowModelImported and (FlowModelNames.Count > 0) then
         begin
-          ErrorMessages.Add('The following error was encountered when reading ' + NameFiles[FileIndex]);
+          ErrorMessages.Add('The following error was encountered when reading '
+            + NameFiles[FileIndex]);
           ErrorMessages.Add('Another flow model name file was already in another simulation name file');
           ErrorMessages.Add('ModelMuse can only import a single flow model.');
           Continue;
@@ -6884,7 +7475,7 @@ begin
     DataArrayName := Format('Imported_%s_%d', [DsName, LayerIndex]);
     Formula := Formula + ',' + DataArrayName;
     DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
-      DataArrayName, '0', DataArrayName, [dcType], rdtBoolean, eaBlocks, dsoTop, '');
+      DataArrayName, 'False', DataArrayName, [dcType], rdtBoolean, eaBlocks, dsoTop, '');
     DataArray.Comment := Format('Imported from %s on %s', [FModelNameFile, DateTimeToStr(Now)]);
     DataArray.UpdateDimensions(Model.LayerCount, Model.RowCount, Model.ColumnCount);
     Interpolator := TNearestPoint2DInterpolator.Create(nil);
@@ -7518,12 +8109,14 @@ var
       end;
     end;
   end;
-  function BoundaryValuesToFormula(Values: TMf6BoundaryValueArray; Name: string; ScreenObject: TScreenObject = nil): string;
+  function BoundaryValuesToFormula(Values: TMf6BoundaryValueArray; Name: string;
+    ScreenObject: TScreenObject = nil): string;
   var
     Index: Integer;
     RealValues: TOneDRealArray;
     UseRealFormula: Boolean;
     UseTimeSeries: Boolean;
+    ImportedTimeSeries: String;
   begin
   // If the values are all numeric, this function provides a formula for that.
   // If the values all represent the same TimeSeries,
@@ -7565,7 +8158,11 @@ var
       end;
       if UseTimeSeries then
       begin
-        result := Values[0].StringValue
+        if not Map.TryGetValue(UpperCase(Values[0].StringValue), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        result := ImportedTimeSeries;
       end
     end;
   end;
@@ -10664,6 +11261,29 @@ begin
       Inc(result);
     end;
   end;
+end;
+
+{ TImportLake }
+
+constructor TImportLake.Create(LakPackageItem: TLakPackageItem);
+begin
+  inherited Create;
+  FLakPackageItem := LakPackageItem;
+  FConnections := TLakConnectionItemList.Create;
+  FOutlets := TLakOutletItemList.Create;
+  DataSetsScreenObject := nil;
+  FLakeSettings := TNumberedItemList.Create;
+  FOutletSettings := TNumberedItemList.Create;
+
+end;
+
+destructor TImportLake.Destroy;
+begin
+  FLakeSettings.Free;
+  FOutletSettings.Free;
+  FOutlets.Free;
+  FConnections.Free;
+  inherited;
 end;
 
 end.

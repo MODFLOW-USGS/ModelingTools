@@ -101,18 +101,18 @@ type
     Ficonn: Integer;
     Fcellid: TCellId;
     Fclaktype: string;
-    Fbedleak: string;
+    Fbedleak: Extended;
     Fbelev: Extended;
     Ftelev: Extended;
     Fconnlen: Extended;
     Fconnwidth: Extended;
-    procedure Initialize;
   public
+    procedure Initialize;
     property lakeno: Integer read Flakeno;
     property iconn: Integer read Ficonn;
     property cellid: TCellId read Fcellid;
     property claktype: string read Fclaktype;
-    property bedleak: string read Fbedleak;
+    property bedleak: Extended read Fbedleak;
     property belev: Extended read Fbelev;
     property telev: Extended read Ftelev;
     property connlen: Extended read Fconnlen;
@@ -746,7 +746,7 @@ begin
   Ficonn := 0;
   Fcellid.Initialize;
   Fclaktype := '';
-  Fbedleak := '';
+  Fbedleak := 3.0E30;
   Fbelev := 0;
   Ftelev := 0;
   Fconnlen := 0;
@@ -828,8 +828,22 @@ begin
       then
     begin
       Item.Fclaktype := FSplitter[2+DimensionCount];
-      Item.Fbedleak := FSplitter[3+DimensionCount];
-      FItems.Add(Item);
+      if AnsiSameText(FSplitter[3+DimensionCount], 'NONE') then
+      begin
+        Item.Fbedleak := 3E30;
+        FItems.Add(Item);
+      end
+      else
+      begin
+        if TryFortranStrToFloat(FSplitter[3+DimensionCount], Item.Fbedleak) then
+        begin
+          FItems.Add(Item);
+        end;
+        begin
+          Unhandled.WriteLine(Format(StrUnrecognizedSCONN, [FPackageType]));
+          Unhandled.WriteLine(ErrorLine);
+        end;
+      end;
     end
     else
     begin
@@ -904,6 +918,13 @@ begin
 
     if ReadEndOfSection(ALine, ErrorLine, 'OUTLETS', Unhandled) then
     begin
+      FItems.Sort(
+        TComparer<TLakOutletItem>.Construct(
+          function(const Left, Right: TLakOutletItem): Integer
+          begin
+            Result := Left.Foutletno - Right.Foutletno;
+          end
+        ));
       Exit;
     end;
 
