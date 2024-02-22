@@ -137,27 +137,34 @@ type
     property Items[Index: Integer]: TLakConnectionItem read GetItem; default;
   end;
 
-  TLakeTableItem = record
+  TMf6LakeTableItem = record
   private
-    lakeno: Integer;
-    tab6_filename: string;
+    Flakeno: Integer;
+    Ftab6_filename: string;
     procedure Initialize;
+  public
+    property lakeno: Integer read Flakeno;
+    property tab6_filename: string read Ftab6_filename;
   end;
 
-  TLakeTableItemList = TList<TLakeTableItem>;
+  TLakeTableItemList = TList<TMf6LakeTableItem>;
 
   TLakTables = class(TCustomMf6Persistent)
   private
     FItems: TLakeTableItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TMf6LakeTableItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TMf6LakeTableItem read GetItem; default;
   end;
 
-  TLakOutletItem = record
+  TMf6LakOutletItem = record
   private
     Foutletno: Integer;
     Flakein: Integer;
@@ -179,21 +186,21 @@ type
     property slope: TMf6BoundaryValue read Fslope;
   end;
 
-  TLakOutletItemList = TList<TLakOutletItem>;
+  TLakOutletItemList = TList<TMf6LakOutletItem>;
 
   TLakOutlets = class(TCustomMf6Persistent)
   private
     FItems: TLakOutletItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     function GetCount: integer;
-    function GetItem(Index: Integer): TLakOutletItem;
+    function GetItem(Index: Integer): TMf6LakOutletItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     property Count: integer read GetCount;
-    property Items[Index: Integer]: TLakOutletItem read GetItem; default;
+    property Items[Index: Integer]: TMf6LakOutletItem read GetItem; default;
   end;
 
   TLakPeriod = class(TCustomMf6Persistent)
@@ -234,6 +241,8 @@ type
     function GetPeriodCount: Integer;
     function GetTimeSeries(Index: Integer): TPackage;
     function GetTimeSeriesCount: Integer;
+    function GetTableCount: Integer;
+    function GetTableItem(Index: Integer): TMf6LakeTableItem;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -249,6 +258,8 @@ type
     property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
     property ObservationCount: Integer read GetObservationCount;
     property Observations[Index: Integer]: TPackage read GetObservation;
+    property TableCount: Integer read GetTableCount;
+    property Tables[Index: Integer]: TMf6LakeTableItem read GetTableItem;
     function GetTabFilePackage(FileName: string): TPackage;
   end;
 
@@ -661,10 +672,10 @@ end;
 
 { TTabFileItem }
 
-procedure TLakeTableItem.Initialize;
+procedure TMf6LakeTableItem.Initialize;
 begin
-  lakeno := 0;
-  tab6_filename := '';
+  Flakeno := 0;
+  Ftab6_filename := '';
 end;
 
 { TLakTables }
@@ -682,6 +693,16 @@ begin
   inherited;
 end;
 
+function TLakTables.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TLakTables.GetItem(Index: Integer): TMf6LakeTableItem;
+begin
+  result := FItems[Index];
+end;
+
 procedure TLakTables.Initialize;
 begin
   inherited;
@@ -693,7 +714,7 @@ procedure TLakTables.Read(Stream: TStreamReader;
 var
   ALine: string;
   ErrorLine: string;
-  Item: TLakeTableItem;
+  Item: TMf6LakeTableItem;
   CaseSensitiveLine: string;
 begin
   Initialize;
@@ -721,13 +742,13 @@ begin
       // do nothing
     end
     else if (FSplitter.Count >= 4)
-      and TryStrToInt(FSplitter[0],Item.lakeno)
+      and TryStrToInt(FSplitter[0],Item.Flakeno)
       and (FSplitter[1] = 'TAB6')
       and (FSplitter[2] = 'FILEIN')
       then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      Item.tab6_filename := FSplitter[3];
+      Item.Ftab6_filename := FSplitter[3];
       FItems.Add(Item);
     end
     else
@@ -855,7 +876,7 @@ end;
 
 { TLakOutletItem }
 
-procedure TLakOutletItem.Initialize;
+procedure TMf6LakOutletItem.Initialize;
 begin
   Foutletno := 0;
   Flakein := 0;
@@ -887,7 +908,7 @@ begin
   result := FItems.Count;
 end;
 
-function TLakOutlets.GetItem(Index: Integer): TLakOutletItem;
+function TLakOutlets.GetItem(Index: Integer): TMf6LakOutletItem;
 begin
   result := FItems[Index];
 end;
@@ -902,7 +923,7 @@ procedure TLakOutlets.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
 var
   ALine: string;
   ErrorLine: string;
-  Item: TLakOutletItem;
+  Item: TMf6LakOutletItem;
 begin
   Initialize;
   while not Stream.EndOfStream do
@@ -919,8 +940,8 @@ begin
     if ReadEndOfSection(ALine, ErrorLine, 'OUTLETS', Unhandled) then
     begin
       FItems.Sort(
-        TComparer<TLakOutletItem>.Construct(
-          function(const Left, Right: TLakOutletItem): Integer
+        TComparer<TMf6LakOutletItem>.Construct(
+          function(const Left, Right: TMf6LakOutletItem): Integer
           begin
             Result := Left.Foutletno - Right.Foutletno;
           end
@@ -1050,8 +1071,8 @@ begin
           or (SfrItem.Name = 'RUNOFF')
           or (SfrItem.Name = 'INFLOW')
           or (SfrItem.Name = 'WITHDRAWAL')
-          or (SfrItem.Name = 'RATE')
           // Outlets
+          or (SfrItem.Name = 'RATE')
           or (SfrItem.Name = 'INVERT')
           or (SfrItem.Name = 'WIDTH')
           or (SfrItem.Name = 'SLOPE')
@@ -1153,6 +1174,16 @@ begin
   begin
     result := nil;
   end;
+end;
+
+function TLak.GetTableCount: Integer;
+begin
+  result := FLakTables.Count;
+end;
+
+function TLak.GetTableItem(Index: Integer): TMf6LakeTableItem;
+begin
+  result := FLakTables[Index];
 end;
 
 function TLak.GetTimeSeries(Index: Integer): TPackage;
@@ -1282,7 +1313,7 @@ begin
   end;
   for PackageIndex := 0 to FLakTables.FItems.Count - 1 do
   begin
-    AFilename := FLakTables.FItems[PackageIndex].tab6_filename;
+    AFilename := FLakTables.FItems[PackageIndex].Ftab6_filename;
     if not FTabFileDictionary.ContainsKey(UpperCase(AFileName)) then
     begin
       LakeTablePackage := TPackage.Create;

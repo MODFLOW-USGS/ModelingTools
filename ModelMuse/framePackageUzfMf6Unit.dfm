@@ -3,9 +3,6 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   Height = 526
   ExplicitWidth = 595
   ExplicitHeight = 526
-  DesignSize = (
-    595
-    526)
   object lblNumberOfTrailingWaves: TLabel [2]
     Left = 16
     Top = 128
@@ -62,7 +59,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbSeepage: TCheckBox [7]
     Left = 323
-    Top = 79
+    Top = 72
     Width = 257
     Height = 36
     Caption = 'Simulate groundwater seepage (SIMULATE_GWSEEP)'

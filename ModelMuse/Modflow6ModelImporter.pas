@@ -146,7 +146,8 @@ uses
   Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
   ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit,
-  Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit, ModflowLakMf6Unit;
+  Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit, ModflowLakMf6Unit,
+  Mf6.LakeTableFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -4697,6 +4698,8 @@ begin
 end;
 
 type
+  TOutletDictionary = TDictionary<Integer,TNumberedItemList>;
+
   TImportLake = class(TObject)
   private
     FConnections: TLakConnectionItemList;
@@ -4706,14 +4709,14 @@ type
     LakeScreenObject: TScreenObject;
     LakeBoundary: TLakeMf6;
     FLakeSettings: TNumberedItemList;
-    FOutletSettings: TNumberedItemList;
+    FOutletSettings: TOutletDictionary;
+    FNumberedItemLists: TNumberedItemLists;
+    HasOutletSettings: Boolean;
   public
     constructor Create(LakPackageItem: TLakPackageItem);
     destructor Destroy; override;
   end;
   TImportLakes = TObjectList<TImportLake>;
-
-//  T
 
 procedure TModflow6Importer.ImportLak(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
@@ -4730,7 +4733,7 @@ var
   ALake: TImportLake;
   DummyConnectionItem: TLakConnectionItem;
   OutletIndex: Integer;
-  AnOutlet: TLakOutletItem;
+  AnOutlet: TMf6LakOutletItem;
   StartTime: Double;
   EndTime: Double;
   Map: TimeSeriesMap;
@@ -4744,25 +4747,55 @@ var
   SettingName: string;
   LakeNo: Integer;
   OutletNumber: Integer;
+  OutletList: TNumberedItemList;
+  TableIndex: Integer;
+  TablePackage: TPackage;
+  ATable: TMf6LakeTableItem;
   procedure ApplyLakeSettings(ALake: TImportLake);
   var
     PriorValueItem: TLakeTimeItem;
     NewTimeItem: TLakeTimeItem;
     ASetting: TNumberedItem;
     SettingIndex: Integer;
-  begin
-    if (ALake.FLakeSettings.Count > 0) or (ALake.FOutletSettings.Count > 0) then
+    TimeSeriesName: string;
+    OutletIndex: Integer;
+    MfOutLet: TLakeOutlet;
+    ImportOutlet: TMf6LakOutletItem;
+    ASettingsList: TNumberedItemList;
+    PriorOutletItem: TLakeOutletTimeItem;
+    NewOutletItem: TLakeOutletTimeItem;
+    function GetFloatFormulaFromSetting(ASetting: TNumberedItem): string;
     begin
-      PriorValueItem := nil;
-      if ALake.LakeBoundary.Values.Count > 0 then
+      result := '';
+      if ASetting.StringValue <> '' then
       begin
-        PriorValueItem := ALake.LakeBoundary.Values.Last as TLakeTimeItem;
+        if Map.TryGetValue(ASetting.StringValue, TimeSeriesName) then
+        begin
+          result := TimeSeriesName;
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end
+      else
+      begin
+        result := FortranFloatToStr(ASetting.FloatValue);
       end;
-      NewTimeItem := ALake.LakeBoundary.Values.Add as TLakeTimeItem;
-      if PriorValueItem <> nil then
+    end;
+  begin
+    if (ALake.FLakeSettings.Count > 0) or (ALake.HasOutletSettings) then
+    begin
+      PriorValueItem := ALake.LakeBoundary.Values.Last as TLakeTimeItem;
+      if Period > 1 then
       begin
+        NewTimeItem := ALake.LakeBoundary.Values.Add as TLakeTimeItem;
         NewTimeItem.Assign(PriorValueItem);
         PriorValueItem.EndTime := StartTime;
+      end
+      else
+      begin
+        NewTimeItem := PriorValueItem
       end;
       NewTimeItem.StartTime := StartTime;
       for SettingIndex := 0 to ALake.FLakeSettings.Count - 1 do
@@ -4771,30 +4804,46 @@ var
         SettingName := ASetting.Name;
         if AnsiSameText(SettingName, 'STATUS') then
         begin
+          if AnsiSameText(ASetting.StringValue, 'ACTIVE') then
+          begin
+            NewTimeItem.Status := lsActive;
+          end
+          else if AnsiSameText(ASetting.StringValue, 'INACTIVE') then
+          begin
+            NewTimeItem.Status := lsInactive;
+          end
+          else if AnsiSameText(ASetting.StringValue, 'CONSTANT') then
+          begin
+            NewTimeItem.Status := lsConstant;
+          end
+          else
+          begin
+            Assert(False);
+          end;
         end
         else if AnsiSameText(SettingName, 'STAGE') then
         begin
+          NewTimeItem.Stage := GetFloatFormulaFromSetting(ASetting);
         end
         else if AnsiSameText(SettingName, 'RAINFALL') then
         begin
+          NewTimeItem.Rainfall := GetFloatFormulaFromSetting(ASetting);
         end
         else if AnsiSameText(SettingName, 'EVAPORATION') then
         begin
-        end
-        else if AnsiSameText(SettingName, 'EVAPORATION') then
-        begin
+          NewTimeItem.Evaporation := GetFloatFormulaFromSetting(ASetting);
         end
         else if AnsiSameText(SettingName, 'RUNOFF') then
         begin
+          NewTimeItem.Runoff := GetFloatFormulaFromSetting(ASetting);
         end
         else if AnsiSameText(SettingName, 'INFLOW') then
         begin
-        end
-        else if AnsiSameText(SettingName, 'INFLOW') then
-        begin
+          NewTimeItem.Inflow := GetFloatFormulaFromSetting(ASetting);
         end
         else if AnsiSameText(SettingName, 'WITHDRAWAL') then
         begin
+          NewTimeItem.Withdrawal := GetFloatFormulaFromSetting(ASetting);
         end
         else if AnsiSameText(SettingName, 'AUXILIARY') then
         begin
@@ -4803,22 +4852,103 @@ var
         begin
         end;
       end;
+      Assert(ALake.LakeBoundary.Outlets.Count = ALake.FOutlets.Count);
+      for OutletIndex := 0 to ALake.LakeBoundary.Outlets.Count - 1 do
+      begin
+        MfOutLet := ALake.LakeBoundary.Outlets[OutletIndex].Outlet;
+        ImportOutlet := ALake.FOutlets[OutletIndex];
+        if ALake.FOutletSettings.TryGetValue(ImportOutlet.outletno, ASettingsList) then
+        begin
+          PriorOutletItem := MfOutLet.LakeTimes.Last as TLakeOutletTimeItem;
+          if Period > 1 then
+          begin
+            NewOutletItem := MfOutLet.LakeTimes.Add;
+            NewOutletItem.Assign(PriorOutletItem);
+            PriorOutletItem.EndTime := StartTime;
+            NewOutletItem.StartTime := StartTime;
+          end
+          else
+          begin
+            NewOutletItem := PriorOutletItem;
+          end;
+          for SettingIndex := 0 to ASettingsList.Count - 1 do
+          begin
+            ASetting := ASettingsList[SettingIndex];
+            SettingName := ASetting.Name;
+            if AnsiSameText(SettingName, 'RATE') then
+            begin
+              NewOutletItem.Rate := GetFloatFormulaFromSetting(ASetting);
+            end
+            else if AnsiSameText(SettingName, 'INVERT') then
+            begin
+              NewOutletItem.Invert := GetFloatFormulaFromSetting(ASetting);
+            end
+            else if AnsiSameText(SettingName, 'WIDTH') then
+            begin
+              NewOutletItem.Width := GetFloatFormulaFromSetting(ASetting);
+            end
+            else if AnsiSameText(SettingName, 'SLOPE') then
+            begin
+              NewOutletItem.Slope := GetFloatFormulaFromSetting(ASetting);
+            end
+            else if AnsiSameText(SettingName, 'ROUGH') then
+            begin
+              NewOutletItem.Roughness := GetFloatFormulaFromSetting(ASetting);
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end;
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end;
+    end;
+  end;
+  procedure CreateLakeTable(ALake: TImportLake; TablePackage: TPackage);
+  var
+    LakeTableReader: TLakeTable;
+    LakeTable: TLakeTableMf6;
+    RowIndex: Integer;
+    NewItem: TLakeTableItemMf6;
+    ImportItem: TLakeTableItem;
+  begin
+    LakeTableReader := TablePackage.Package as TLakeTable;
+    LakeTable := ALake.LakeBoundary.LakeTable;
+    for RowIndex := 0 to LakeTableReader.Table.Count - 1 do
+    begin
+      NewItem := LakeTable.Add;
+      ImportItem := LakeTableReader.Table[RowIndex];
+      NewItem.Stage := FortranFloatToStr(ImportItem.stage);
+      NewItem.Volume := FortranFloatToStr(ImportItem.volume);
+      NewItem.SurfaceArea := FortranFloatToStr(ImportItem.sarea);
+      if ImportItem.barea.Used then
+      begin
+        NewItem.ExchangeArea := FortranFloatToStr(ImportItem.barea.Value);
+      end;
     end;
   end;
   procedure CreateOutlets(ALake: TImportLake);
   var
     OutletIndex: Integer;
-    ImportOutlet: TLakOutletItem;
+    ImportOutlet: TMf6LakOutletItem;
     OtherLake: TImportLake;
     LakeOutlet: TLakeOutlet;
     OutletTimeItem: TLakeOutletTimeItem;
     TimeSeriesName: string;
     ImportedTimeSeries: string;
+    OutletList: TNumberedItemList;
   begin
     for OutletIndex := 0 to ALake.FOutlets.Count - 1 do
     begin
       LakeOutlet := ALake.LakeBoundary.Outlets.Add.Outlet;
       ImportOutlet := ALake.FOutlets[OutletIndex];
+      OutletList := TNumberedItemList.Create;
+      ALake.FNumberedItemLists.Add(OutletList);
+      ALake.FOutletSettings.Add(ImportOutlet.outletno, OutletList);
       Assert(ImportOutlet.lakein =  ALake.FLakPackageItem.lakeno);
       if ImportOutlet.lakeout > 0 then
       begin
@@ -4914,7 +5044,6 @@ var
     DataArrayName: string;
     DataArray: TDataArray;
     UndoCreateScreenObject: TCustomUndo;
-    EmbededLake: Boolean;
     AConnection: TLakConnectionItem;
     UniformValues: Boolean;
     FirstValue: Extended;
@@ -4923,6 +5052,8 @@ var
     DataSetIndex: Integer;
     CellIds: TCellIdList;
     ACellId: TCellId;
+    NewTimeItem: TLakeTimeItem;
+    LakeConnectionTypes: TLakeConnectionTypes;
     procedure CreateDataSetScreenObject;
     var
       CellIds: TCellIdList;
@@ -4959,19 +5090,12 @@ var
     end;
   begin
     Assert(ALake <> nil);
-    EmbededLake := False;
-    if ALake.FConnections.Count = 1 then
-    begin
-      AConnection := ALake.FConnections[0];
-      EmbededLake := AnsiSameText(AConnection.claktype, 'EMBEDDEDH')
-        or AnsiSameText(AConnection.claktype, 'EMBEDDEDV')
-    end;
 
-    if EmbededLake then
-    begin
-
-    end
-    else
+//    if EmbededLake then
+//    begin
+//
+//    end
+//    else
     begin
       ALake.LakeScreenObject := TScreenObject.CreateWithViewDirection(
         Model, vdTop, UndoCreateScreenObject, False);
@@ -5023,6 +5147,54 @@ var
 
       ALake.LakeScreenObject.CreateLakMf6Boundary;
       ALake.LakeBoundary := ALake.LakeScreenObject.ModflowLak6;
+
+      LakeConnectionTypes := [];
+      for CellIndex := 0 to ALake.FConnections.Count - 1 do
+      begin
+        AConnection := ALake.FConnections[CellIndex];
+        if AnsiSameText(AConnection.claktype, 'EMBEDDEDH') then
+        begin
+          Include(LakeConnectionTypes, lctHorizontal);
+          ALake.LakeBoundary.Embedded := True;
+          Assert(ALake.FConnections.Count = 1);
+          break;
+        end
+        else if AnsiSameText(AConnection.claktype, 'EMBEDDEDV') then
+        begin
+          Include(LakeConnectionTypes, lctVertical);
+          ALake.LakeBoundary.Embedded := True;
+          Assert(ALake.FConnections.Count = 1);
+          Break;
+        end
+        else if AnsiSameText(AConnection.claktype, 'VERTICAL') then
+        begin
+          Include(LakeConnectionTypes, lctVertical);
+        end
+        else if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+        begin
+          Include(LakeConnectionTypes, lctHorizontal);
+        end
+        else
+        begin
+          Assert(False);
+        end;
+        if LakeConnectionTypes = [lctHorizontal, lctVertical] then
+        begin
+          break;
+        end;
+      end;
+      ALake.LakeBoundary.LakeConnections := LakeConnectionTypes;
+
+      NewTimeItem := ALake.LakeBoundary.Values.Add as TLakeTimeItem;
+      NewTimeItem.StartTime := StartTime;
+      NewTimeItem.EndTime := EndTime;
+      NewTimeItem.Stage := '0';
+      NewTimeItem.Rainfall := '0';
+      NewTimeItem.Evaporation := '0';
+      NewTimeItem.Runoff := '0';
+      NewTimeItem.Inflow := '0';
+      NewTimeItem.Withdrawal := '0';
+
       ALake.LakeBoundary.BedThickness := '1';
       ALake.LakeBoundary.StartingStage := FortranFloatToStr(ALake.FLakPackageItem.strt);
 
@@ -5214,6 +5386,7 @@ begin
     LakPackage.MaxStageChange := Options.MAXIMUM_STAGE_CHANGE.Value;
   end;
 
+  Model.DataArrayManager.CreateInitialDataSets;
 
   Map := TimeSeriesMap.Create;
   Lakes := TImportLakes.Create;
@@ -5267,11 +5440,19 @@ begin
       CreateOutlets(Lakes[LakeIndex])
     end;
 
+    for TableIndex := 0 to Lak.TableCount - 1 do
+    begin
+      ATable := Lak.Tables[TableIndex];
+      ALake := Lakes[ATable.lakeno-1];
+      TablePackage := Lak.GetTabFilePackage(ATable.tab6_filename);
+      CreateLakeTable(ALake, TablePackage);
+    end;
+
     for PeriodIndex := 0 to Lak.PeriodCount - 1 do
     begin
       APeriod := Lak.Periods[PeriodIndex];
       Period := APeriod.Period;
-      StartTime := Model.ModflowStressPeriods[Period].StartTime;
+      StartTime := Model.ModflowStressPeriods[Period-1].StartTime;
 
       for SettingIndex := 0 to APeriod.Count - 1 do
       begin
@@ -5302,7 +5483,15 @@ begin
           AnOutlet := Lak.LakOutlets[OutletNumber-1];
           LakeNo := AnOutlet.lakein;
           ALake := Lakes[LakeNo-1];
-          ALake.FOutletSettings.Add(ASetting);
+          if ALake.FOutletSettings.TryGetValue(OutletNumber, OutletList) then
+          begin
+            OutletList.Add(ASetting);
+            ALake.HasOutletSettings := True;
+          end
+          else
+          begin
+            Assert(False);
+          end;
         end
         else
         begin
@@ -8747,7 +8936,6 @@ begin
 
   Model.DataArrayManager.CreateInitialDataSets;
 
-
   CellIds := TCellIdList.Create;
   Map := TimeSeriesMap.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
@@ -11273,12 +11461,14 @@ begin
   FOutlets := TLakOutletItemList.Create;
   DataSetsScreenObject := nil;
   FLakeSettings := TNumberedItemList.Create;
-  FOutletSettings := TNumberedItemList.Create;
-
+  FOutletSettings := TOutletDictionary.Create;
+  FNumberedItemLists := TNumberedItemLists.Create;
+  HasOutletSettings := False;
 end;
 
 destructor TImportLake.Destroy;
 begin
+  FNumberedItemLists.Free;
   FLakeSettings.Free;
   FOutletSettings.Free;
   FOutlets.Free;

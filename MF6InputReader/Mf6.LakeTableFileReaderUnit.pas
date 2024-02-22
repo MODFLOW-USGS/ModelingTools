@@ -9,19 +9,27 @@ uses
 type
   TLakeTableDimensions = class(TCustomMf6Persistent)
   private
-    NROW: Integer;
-    NCOL: Integer;
+    FNROW: Integer;
+    FNCOL: Integer;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+    property NROW: Integer read FNROW;
+    property NCOL: Integer read FNCOL;
   end;
 
   TLakeTableItem = record
-    stage: Extended;
-    volume: Extended;
-    sarea: Extended;
-    barea: TRealOption;
+  private
+    Fstage: Extended;
+    Fvolume: Extended;
+    Fsarea: Extended;
+    Fbarea: TRealOption;
     procedure Initialize;
+  public
+    property stage: Extended read Fstage;
+    property volume: Extended read Fvolume;
+    property sarea: Extended read Fsarea;
+    property barea: TRealOption read Fbarea;
   end;
 
   TLakeTableItemList = TList<TLakeTableItem>;
@@ -30,11 +38,15 @@ type
   private
     FItems: TLakeTableItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; NCOL: Integer);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TLakeTableItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TLakeTableItem read GetItem; default;
   end;
 
   TLakeTable = class(TPackageReader)
@@ -44,7 +56,10 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property LakeTableDimensions: TLakeTableDimensions read FLakeTableDimensions;
+    property Table: TLakeTableValues read FTable;
   end;
 
 implementation
@@ -62,8 +77,8 @@ resourcestring
 
 procedure TLakeTableDimensions.Initialize;
 begin
-  NROW := 0;
-  NCOL := 0;
+  FNROW := 0;
+  FNCOL := 0;
 end;
 
 procedure TLakeTableDimensions.Read(Stream: TStreamReader;
@@ -93,13 +108,13 @@ begin
       // do nothing
     end
     else if (FSplitter[0] = 'NROW') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NROW) then
+      and TryStrToInt(FSplitter[1], FNROW) then
     begin
     end
     else if (FSplitter[0] = 'NCOL') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NCOL) then
+      and TryStrToInt(FSplitter[1], FNCOL) then
     begin
-      if not (NCOL in [3,4]) then
+      if not (FNCOL in [3,4]) then
       begin
         Unhandled.WriteLine(Format(StrUnrecognizedSLakeTableD, [FPackageType]));
         Unhandled.WriteLine(ErrorLine);
@@ -117,10 +132,10 @@ end;
 
 procedure TLakeTableItem.Initialize;
 begin
-  stage := 0;
-  volume := 0;
-  sarea := 0;
-  barea.Initialize
+  Fstage := 0;
+  Fvolume := 0;
+  Fsarea := 0;
+  Fbarea.Initialize
 end;
 
 { TLakeTableValues }
@@ -136,6 +151,16 @@ destructor TLakeTableValues.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TLakeTableValues.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TLakeTableValues.GetItem(Index: Integer): TLakeTableItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TLakeTableValues.Initialize;
@@ -177,16 +202,16 @@ begin
       // do nothing
     end
     else if (FSplitter.Count >= NCOL)
-      and TryFortranStrToFloat(FSplitter[0], TableItem.stage)
-      and TryFortranStrToFloat(FSplitter[1], TableItem.volume)
-      and TryFortranStrToFloat(FSplitter[1], TableItem.sarea)
+      and TryFortranStrToFloat(FSplitter[0], TableItem.Fstage)
+      and TryFortranStrToFloat(FSplitter[1], TableItem.Fvolume)
+      and TryFortranStrToFloat(FSplitter[1], TableItem.Fsarea)
       then
     begin
       if (NCOL = 4) then
       begin
-        if TryFortranStrToFloat(FSplitter[2], TableItem.barea.Value) then
+        if TryFortranStrToFloat(FSplitter[2], TableItem.Fbarea.Value) then
         begin
-          TableItem.barea.Used := True;
+          TableItem.Fbarea.Used := True;
           FItems.Add(TableItem)
         end
         else
@@ -250,7 +275,7 @@ begin
       end
       else if FSplitter[1] ='TABLE' then
       begin
-        FTable.Read(Stream, Unhandled, FLakeTableDimensions.NCOL);
+        FTable.Read(Stream, Unhandled, FLakeTableDimensions.FNCOL);
       end
       else
       begin
