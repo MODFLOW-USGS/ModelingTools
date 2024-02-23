@@ -9,57 +9,88 @@ uses
 type
   TUzfOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
+    FAUXILIARY: TStringList;
     AUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
     SAVE_FLOWS: Boolean;
-    WATER_CONTENT: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
-    PACKAGE_CONVERGENCE: Boolean;
+    FWATER_CONTENT: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
+    FPACKAGE_CONVERGENCE: Boolean;
     TS6: TStringList;
     OBS6: TStringList;
     MOVER: Boolean;
-    SIMULATE_ET: Boolean;
-    LINEAR_GWET: Boolean;
-    SQUARE_GWET: Boolean;
-    SIMULATE_GWSEEP: Boolean;
-    UNSAT_ETWC: Boolean;
-    UNSAT_ETAE: Boolean;
+    FSIMULATE_ET: Boolean;
+    FLINEAR_GWET: Boolean;
+    FSQUARE_GWET: Boolean;
+    FSIMULATE_GWSEEP: Boolean;
+    FUNSAT_ETWC: Boolean;
+    FUNSAT_ETAE: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY; default;
+    property WATER_CONTENT: Boolean read FWATER_CONTENT;
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
+    property PACKAGE_CONVERGENCE: Boolean read FPACKAGE_CONVERGENCE;
+    property SIMULATE_ET: Boolean read FSIMULATE_ET;
+    property LINEAR_GWET: Boolean read FLINEAR_GWET;
+    property SQUARE_GWET: Boolean read FSQUARE_GWET;
+    property SIMULATE_GWSEEP: Boolean read FSIMULATE_GWSEEP;
+    property UNSAT_ETWC: Boolean read FUNSAT_ETWC;
+    property UNSAT_ETAE: Boolean read FUNSAT_ETAE;
+    function IndexOfAux(AuxName: string): Integer;
   end;
 
   TUzfDimensions = class(TCustomMf6Persistent)
   private
-    NUZFCELLS: Integer;
-    NTRAILWAVES: Integer;
-    NWAVESETS: Integer;
+    FNUZFCELLS: Integer;
+    FNTRAILWAVES: Integer;
+    FNWAVESETS: Integer;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property NUZFCELLS: Integer read FNUZFCELLS;
+    property NTRAILWAVES: Integer read FNTRAILWAVES;
+    property NWAVESETS: Integer read FNWAVESETS;
   end;
 
   TUzfPackageItem = record
   private
-    iuzno: Integer;
-    cellid: TCellId;
-    landflag: Integer;
-    ivertcon: Integer;
-    surfdep: Extended;
-    vks: Extended;
-    thtr: Extended;
-    thts: Extended;
-    thti: Extended;
-    eps: Extended;
-    boundname: string;
+    Fiuzno: Integer;
+    Fcellid: TCellId;
+    Flandflag: Integer;
+    Fivertcon: Integer;
+    Fsurfdep: Extended;
+    Fvks: Extended;
+    Fthtr: Extended;
+    Fthts: Extended;
+    Fthti: Extended;
+    Feps: Extended;
+    Fboundname: string;
     procedure Initialize;
+  public
+    property iuzno: Integer read Fiuzno;
+    property cellid: TCellId read Fcellid;
+    property landflag: Integer read Flandflag;
+    property ivertcon: Integer read Fivertcon;
+    property surfdep: Extended read Fsurfdep;
+    property vks: Extended read Fvks;
+    property thtr: Extended read Fthtr;
+    property thts: Extended read Fthts;
+    property thti: Extended read Fthti;
+    property eps: Extended read Feps;
+    property boundname: string read Fboundname;
   end;
 
   TUzfPackageItemList= TList<TUzfPackageItem>;
@@ -69,29 +100,45 @@ type
     FItems: TUzfPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       BOUNDNAMES: Boolean; Dimensions: TDimensions);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TUzfPackageItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TUzfPackageItem read GetItem; default;
   end;
 
   TUzfPeriodItem = class(TCustomMf6Persistent)
   private
-    iuzno: Integer;
-    finf: TMf6BoundaryValue;
-    pet: TMf6BoundaryValue;
-    extdp: TMf6BoundaryValue;
-    extwc: TMf6BoundaryValue;
-    ha: TMf6BoundaryValue;
-    hroot: TMf6BoundaryValue;
-    rootact: TMf6BoundaryValue;
-    aux: TBoundaryValueList;
+    Fiuzno: Integer;
+    Ffinf: TMf6BoundaryValue;
+    Fpet: TMf6BoundaryValue;
+    Fextdp: TMf6BoundaryValue;
+    Fextwc: TMf6BoundaryValue;
+    Fha: TMf6BoundaryValue;
+    Fhroot: TMf6BoundaryValue;
+    Frootact: TMf6BoundaryValue;
+    Faux: TBoundaryValueList;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property iuzno: Integer read Fiuzno;
+    property finf: TMf6BoundaryValue read Ffinf;
+    property pet: TMf6BoundaryValue read Fpet;
+    property extdp: TMf6BoundaryValue read Fextdp;
+    property extwc: TMf6BoundaryValue read Fextwc;
+    property ha: TMf6BoundaryValue read Fha;
+    property hroot: TMf6BoundaryValue read Fhroot;
+    property rootact: TMf6BoundaryValue read Frootact;
+    property Count: Integer read GetCount;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
   end;
 
   TUzfPeriodItemList = TObjectList<TUzfPeriodItem>;
@@ -101,26 +148,40 @@ type
     IPER: Integer;
     FItems: TUzfPeriodItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Naux: Integer);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TUzfPeriodItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPER;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TUzfPeriodItem read GetItem; default;
   end;
 
   TUzfPeriodList = TObjectList<TUzfPeriod>;
 
   TUzf = class(TDimensionedPackageReader)
+  private
     FOptions: TUzfOptions;
-    FuzfDimensions: TUzfDimensions;
+    FUzfDimensions: TUzfDimensions;
     FPackageData: TUzfPackageData;
     FPeriods: TUzfPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GetPeriod(Index: Integer): TUzfPeriod;
+    function GetPeriodCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property Options: TUzfOptions read FOptions;
+    property UzfDimensions: TUzfDimensions read FUzfDimensions;
+    property PackageData: TUzfPackageData read FPackageData;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TUzfPeriod read GetPeriod; default;
   end;
 
 implementation
@@ -132,8 +193,8 @@ uses
 
 constructor TUzfOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6 := TStringList.Create;
   OBS6 := TStringList.Create;
   inherited;
@@ -142,33 +203,48 @@ end;
 
 destructor TUzfOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6.Free;
   OBS6.Free;
   inherited;
 end;
 
+function TUzfOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  Result := FAUXILIARY[Index];
+end;
+
+function TUzfOptions.GetCount: Integer;
+begin
+  Result := FAUXILIARY.Count;
+end;
+
+function TUzfOptions.IndexOfAux(AuxName: string): Integer;
+begin
+  Result := FAUXILIARY.IndexOf(AuxName);
+end;
+
 procedure TUzfOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   AUXMULTNAME := '';
   BOUNDNAMES := False;
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
-  WATER_CONTENT := False;
-  BUDGET := False;
-  BUDGETCSV := False;
+  FWATER_CONTENT := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
   TS6.Clear;
   OBS6.Clear;
   MOVER := False;
-  SIMULATE_ET := False;
-  LINEAR_GWET := False;
-  SQUARE_GWET := False;
-  SIMULATE_GWSEEP := False;
-  UNSAT_ETWC := False;
-  UNSAT_ETAE := False;
+  FSIMULATE_ET := False;
+  FLINEAR_GWET := False;
+  FSQUARE_GWET := False;
+  FSIMULATE_GWSEEP := False;
+  FUNSAT_ETWC := False;
+  FUNSAT_ETAE := False;
 end;
 
 procedure TUzfOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -209,7 +285,7 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if (FSplitter[0] = 'AUXMULTNAME')
@@ -238,25 +314,25 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      WATER_CONTENT := True;
+      FWATER_CONTENT := True;
     end
     else if (FSplitter[0] = 'BUDGET')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else if (FSplitter[0] = 'PACKAGE_CONVERGENCE')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      PACKAGE_CONVERGENCE := True;
+      FPACKAGE_CONVERGENCE := True;
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -280,27 +356,27 @@ begin
     end
     else if FSplitter[0] = 'SIMULATE_ET' then
     begin
-      SIMULATE_ET := True;
+      FSIMULATE_ET := True;
     end
     else if FSplitter[0] = 'LINEAR_GWET' then
     begin
-      LINEAR_GWET := True;
+      FLINEAR_GWET := True;
     end
     else if FSplitter[0] = 'SQUARE_GWET' then
     begin
-      SQUARE_GWET := True;
+      FSQUARE_GWET := True;
     end
     else if FSplitter[0] = 'SIMULATE_GWSEEP' then
     begin
-      SIMULATE_GWSEEP := True;
+      FSIMULATE_GWSEEP := True;
     end
     else if FSplitter[0] = 'UNSAT_ETWC' then
     begin
-      UNSAT_ETWC := True;
+      FUNSAT_ETWC := True;
     end
     else if FSplitter[0] = 'UNSAT_ETAE' then
     begin
-      UNSAT_ETAE := True;
+      FUNSAT_ETAE := True;
     end
     else
     begin
@@ -315,9 +391,9 @@ end;
 procedure TUzfDimensions.Initialize;
 begin
   inherited;
-  NUZFCELLS := 0;
-  NTRAILWAVES := 0;
-  NWAVESETS := 0;
+  FNUZFCELLS := 0;
+  FNTRAILWAVES := 0;
+  FNWAVESETS := 0;
 
 end;
 
@@ -347,15 +423,15 @@ begin
       // do nothing
     end
     else if (FSplitter[0] = 'NUZFCELLS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NUZFCELLS) then
+      and TryStrToInt(FSplitter[1], FNUZFCELLS) then
     begin
     end
     else if (FSplitter[0] = 'NTRAILWAVES') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NTRAILWAVES) then
+      and TryStrToInt(FSplitter[1], FNTRAILWAVES) then
     begin
     end
     else if (FSplitter[0] = 'NWAVESETS') and (FSplitter.Count >= 2)
-      and TryStrToInt(FSplitter[1], NWAVESETS) then
+      and TryStrToInt(FSplitter[1], FNWAVESETS) then
     begin
     end
     else
@@ -370,17 +446,17 @@ end;
 
 procedure TUzfPackageItem.Initialize;
 begin
-  iuzno := 0;
-  cellid.Initialize;
-  landflag := 0;
-  ivertcon := 0;
-  surfdep := 0;
-  vks := 0;
-  thtr := 0;
-  thts := 0;
-  thti := 0;
-  eps := 0;
-  boundname := '';
+  Fiuzno := 0;
+  Fcellid.Initialize;
+  Flandflag := 0;
+  Fivertcon := 0;
+  Fsurfdep := 0;
+  Fvks := 0;
+  Fthtr := 0;
+  Fthts := 0;
+  Fthti := 0;
+  Feps := 0;
+  Fboundname := '';
 end;
 
 { TUzfPackageData }
@@ -396,6 +472,16 @@ destructor TUzfPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TUzfPackageData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TUzfPackageData.GetItem(Index: Integer): TUzfPackageItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TUzfPackageData.Initialize;
@@ -435,7 +521,7 @@ begin
         TComparer<TUzfPackageItem>.Construct(
           function(const Left, Right: TUzfPackageItem): Integer
           begin
-            Result := Left.iuzno - Right.iuzno;
+            Result := Left.Fiuzno - Right.Fiuzno;
           end
         ));
       Exit;
@@ -448,23 +534,23 @@ begin
       // do nothing
     end
     else if (FSplitter.Count >= NumberOfItems)
-      and TryStrToInt(FSplitter[0],Item.iuzno)
-      and ReadCellID(Item.cellid, 1, DimensionCount)
-      and TryStrToInt(FSplitter[1+DimensionCount],Item.landflag)
-      and TryStrToInt(FSplitter[2+DimensionCount],Item.ivertcon)
-      and TryFortranStrToFloat(FSplitter[3+DimensionCount],Item.surfdep)
-      and TryFortranStrToFloat(FSplitter[4+DimensionCount],Item.vks)
-      and TryFortranStrToFloat(FSplitter[5+DimensionCount],Item.thtr)
-      and TryFortranStrToFloat(FSplitter[6+DimensionCount],Item.thts)
-      and TryFortranStrToFloat(FSplitter[7+DimensionCount],Item.thti)
-      and TryFortranStrToFloat(FSplitter[8+DimensionCount],Item.eps)
+      and TryStrToInt(FSplitter[0],Item.Fiuzno)
+      and ReadCellID(Item.Fcellid, 1, DimensionCount)
+      and TryStrToInt(FSplitter[1+DimensionCount],Item.Flandflag)
+      and TryStrToInt(FSplitter[2+DimensionCount],Item.Fivertcon)
+      and TryFortranStrToFloat(FSplitter[3+DimensionCount],Item.Fsurfdep)
+      and TryFortranStrToFloat(FSplitter[4+DimensionCount],Item.Fvks)
+      and TryFortranStrToFloat(FSplitter[5+DimensionCount],Item.Fthtr)
+      and TryFortranStrToFloat(FSplitter[6+DimensionCount],Item.Fthts)
+      and TryFortranStrToFloat(FSplitter[7+DimensionCount],Item.Fthti)
+      and TryFortranStrToFloat(FSplitter[8+DimensionCount],Item.Feps)
       then
     begin
       ItemStart := 9+DimensionCount;
       if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
       begin
         FSplitter.DelimitedText := CaseSensitiveLine;
-        Item.boundname := FSplitter[ItemStart];
+        Item.Fboundname := FSplitter[ItemStart];
       end;
       FItems.Add(Item);
     end
@@ -480,28 +566,38 @@ end;
 
 constructor TUzfPeriodItem.Create(PackageType: string);
 begin
-  aux := TBoundaryValueList.Create;
+  Faux := TBoundaryValueList.Create;
   inherited;
 end;
 
 destructor TUzfPeriodItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TUzfPeriodItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  result := Faux[Index];
+end;
+
+function TUzfPeriodItem.GetCount: Integer;
+begin
+  result := Faux.Count;
 end;
 
 procedure TUzfPeriodItem.Initialize;
 begin
   inherited;
-  iuzno := 0;
-  finf.Initialize;
-  pet.Initialize;
-  extdp.Initialize;
-  extwc.Initialize;
-  ha.Initialize;
-  hroot.Initialize;
-  rootact.Initialize;
-  aux.Clear;
+  Fiuzno := 0;
+  Ffinf.Initialize;
+  Fpet.Initialize;
+  Fextdp.Initialize;
+  Fextwc.Initialize;
+  Fha.Initialize;
+  Fhroot.Initialize;
+  Frootact.Initialize;
+  Faux.Clear;
 end;
 
 { TUzfPeriod }
@@ -517,6 +613,16 @@ destructor TUzfPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TUzfPeriod.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TUzfPeriod.GetItem(Index: Integer): TUzfPeriodItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TUzfPeriod.Initialize;
@@ -562,42 +668,42 @@ begin
     try
       if FSplitter.Count >= NumberOfItems then
       begin
-        if TryStrToInt(FSplitter[0], UzfItem.iuzno) then
+        if TryStrToInt(FSplitter[0], UzfItem.Fiuzno) then
         begin
-          if not TryFortranStrToFloat(FSplitter[1], UzfItem.finf.NumericValue) then
+          if not TryFortranStrToFloat(FSplitter[1], UzfItem.Ffinf.NumericValue) then
           begin
-            UzfItem.finf.ValueType := vtString;
-            UzfItem.finf.StringValue := FSplitter[1]
+            UzfItem.Ffinf.ValueType := vtString;
+            UzfItem.Ffinf.StringValue := FSplitter[1]
           end;
-          if not TryFortranStrToFloat(FSplitter[2], UzfItem.pet.NumericValue) then
+          if not TryFortranStrToFloat(FSplitter[2], UzfItem.Fpet.NumericValue) then
           begin
-            UzfItem.pet.ValueType := vtString;
-            UzfItem.pet.StringValue := FSplitter[2]
+            UzfItem.Fpet.ValueType := vtString;
+            UzfItem.Fpet.StringValue := FSplitter[2]
           end;
-          if not TryFortranStrToFloat(FSplitter[3], UzfItem.extdp.NumericValue) then
+          if not TryFortranStrToFloat(FSplitter[3], UzfItem.Fextdp.NumericValue) then
           begin
-            UzfItem.extdp.ValueType := vtString;
-            UzfItem.extdp.StringValue := FSplitter[3]
+            UzfItem.Fextdp.ValueType := vtString;
+            UzfItem.Fextdp.StringValue := FSplitter[3]
           end;
-          if not TryFortranStrToFloat(FSplitter[4], UzfItem.extwc.NumericValue) then
+          if not TryFortranStrToFloat(FSplitter[4], UzfItem.Fextwc.NumericValue) then
           begin
-            UzfItem.extwc.ValueType := vtString;
-            UzfItem.extwc.StringValue := FSplitter[4]
+            UzfItem.Fextwc.ValueType := vtString;
+            UzfItem.Fextwc.StringValue := FSplitter[4]
           end;
-          if not TryFortranStrToFloat(FSplitter[5], UzfItem.ha.NumericValue) then
+          if not TryFortranStrToFloat(FSplitter[5], UzfItem.Fha.NumericValue) then
           begin
-            UzfItem.ha.ValueType := vtString;
-            UzfItem.ha.StringValue := FSplitter[5]
+            UzfItem.Fha.ValueType := vtString;
+            UzfItem.Fha.StringValue := FSplitter[5]
           end;
-          if not TryFortranStrToFloat(FSplitter[6], UzfItem.hroot.NumericValue) then
+          if not TryFortranStrToFloat(FSplitter[6], UzfItem.Fhroot.NumericValue) then
           begin
-            UzfItem.hroot.ValueType := vtString;
-            UzfItem.hroot.StringValue := FSplitter[6]
+            UzfItem.Fhroot.ValueType := vtString;
+            UzfItem.Fhroot.StringValue := FSplitter[6]
           end;
-          if not TryFortranStrToFloat(FSplitter[7], UzfItem.rootact.NumericValue) then
+          if not TryFortranStrToFloat(FSplitter[7], UzfItem.Frootact.NumericValue) then
           begin
-            UzfItem.rootact.ValueType := vtString;
-            UzfItem.rootact.StringValue := FSplitter[7]
+            UzfItem.Frootact.ValueType := vtString;
+            UzfItem.Frootact.StringValue := FSplitter[7]
           end;
           StartIndex := 8;
           for AuxIndex := 0 to NAUX - 1 do
@@ -608,7 +714,7 @@ begin
               AuxValue.ValueType := vtString;
               AuxValue.StringValue := FSplitter[StartIndex]
             end;
-            UzfItem.aux.Add(AuxValue);
+            UzfItem.Faux.Add(AuxValue);
             Inc(StartIndex);
           end;
           FItems.Add(UzfItem);
@@ -655,6 +761,16 @@ begin
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   inherited;
+end;
+
+function TUzf.GetPeriod(Index: Integer): TUzfPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TUzf.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
 end;
 
 procedure TUzf.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
@@ -711,7 +827,7 @@ begin
           APeriod := TUzfPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
-          APeriod.Read(Stream, Unhandled, FOptions.AUXILIARY.Count);
+          APeriod.Read(Stream, Unhandled, FOptions.FAUXILIARY.Count);
         end
         else
         begin

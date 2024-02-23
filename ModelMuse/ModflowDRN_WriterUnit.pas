@@ -49,6 +49,7 @@ type
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
     function ObsFactors: TFluxObservationGroups; override;
+    procedure WriteAdditionalAuxVariables; override;
   public
     procedure WriteFile(const AFileName: string);
     // Write flow observation package input for MF2005 etc. but not MF 6
@@ -302,6 +303,12 @@ begin
   result := Model.ModflowPackages.DrnPackage;
 end;
 
+procedure TModflowDRN_Writer.WriteAdditionalAuxVariables;
+begin
+  inherited;
+  WriteString(' DDRN');
+end;
+
 procedure TModflowDRN_Writer.WriteCell(Cell: TValueCell;
   const DataSetIdentifier, VariableIdentifiers: string);
 var
@@ -374,6 +381,12 @@ begin
   end;
 
   WriteIface(Drn_Cell.IFace);
+
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    WriteValueOrFormula(Drn_Cell, DDRN_Position);
+  end;
+
   WriteBoundName(Drn_Cell);
   if Model.DisvUsed then
   begin
@@ -457,13 +470,17 @@ const
   DS5 = ' # Data Set 5: ITMP NP';
   DataSetIdentifier = 'Data Set 6:';
   VariableIdentifiers = 'Cond IFACE';
+  Mf6VariableIdentifiers = 'Cond IFACE DDRN boundname';
 var
   VI: string;
 begin
-  VI := VariableIdentifiers;
   if Model.modelSelection = msModflow2015 then
   begin
-    VI := VI + ' boundname';
+    VI := Mf6VariableIdentifiers
+  end
+  else
+  begin
+    VI := VariableIdentifiers;
   end;
   WriteStressPeriods(VI, DataSetIdentifier, DS5,
     D7PNameIname, D7PName);
@@ -677,6 +694,8 @@ procedure TModflowDRN_Writer.WriteListOptions(InputFileName: string);
 begin
   inherited;
   WriteMf6ParamListOption;
+  WriteString('    AUXDEPTHNAME DDRN');
+  NewLine;
 //  DrnPackage := Package as TDrnPackage;
 //  if DrnPackage.NewtonFormulation = nfOn then
 //  begin
@@ -772,9 +791,21 @@ begin
     WriteInteger(1);
     WriteFloat(0);
     WriteFloat(0);
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      WriteFloat(0);
+    end;
     WriteInteger(0);
-    WriteString(
-      ' # Data Set 4b: Layer Row Column Stage Condfact IFACE (Dummy boundary)');
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      WriteString(
+        ' # Data Set 4b: Layer Row Column Stage Condfact DDRN IFACE (Dummy boundary)');
+    end
+    else
+    begin
+      WriteString(
+        ' # Data Set 4b: Layer Row Column Stage Condfact IFACE (Dummy boundary)');
+    end;
     NewLine;
   end;
 end;

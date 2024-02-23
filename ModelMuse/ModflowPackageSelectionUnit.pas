@@ -190,10 +190,13 @@ Type
   private
     FMfDrnElevation: TModflowBoundaryDisplayTimeList;
     FMfDrnConductance: TModflowBoundaryDisplayTimeList;
+    FMfDrnDdrn: TModflowBoundaryDisplayTimeList;
     procedure InitializeDrnDisplay(Sender: TObject);
     procedure GetMfDrnConductanceUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfDrnElevationUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure GetMfDrnDdrnUseList(Sender: TObject;
       NewUseList: TStringList);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -204,6 +207,8 @@ Type
       read FMfDrnConductance;
     property MfDrnElevation: TModflowBoundaryDisplayTimeList
       read FMfDrnElevation;
+    property MfDrnDdrn: TModflowBoundaryDisplayTimeList
+      read FMfDrnDdrn;
     procedure InvalidateAllTimeLists; override;
 //  published
 //    property NewtonFormulation;
@@ -7645,6 +7650,8 @@ resourcestring
   StrHasSalinityDemandsS = 'FMP4 Crop Has Salinity Demand %s';
   StrFMP4CropHasSalini = 'FMP4 Crop_Has_Salinity_Demand';
   StrMAWFluidDensity = 'MAW Fluid Density';
+  StrDrainDDRN = 'Drain DDRN';
+  StrDRNDDRN = 'DRN DDRN';
 
 const
   KDensity = 'Density';
@@ -12708,6 +12715,13 @@ begin
     MfDrnElevation.OnTimeListUsed := PackageUsed;
     MfDrnElevation.Name := StrMODFLOWDrainElevation;
     AddTimeList(MfDrnElevation);
+
+    FMfDrnDdrn := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfDrnDdrn.OnInitialize := InitializeDrnDisplay;
+    MfDrnDdrn.OnGetUseList := GetMfDrnDdrnUseList;
+    MfDrnDdrn.OnTimeListUsed := PackageUsed;
+    MfDrnDdrn.Name := StrDRNDDRN;
+    AddTimeList(MfDrnDdrn);
   end;
   InitializeVariables;
 end;
@@ -12716,6 +12730,7 @@ destructor TDrnPackage.Destroy;
 begin
   FMfDrnConductance.Free;
   FMfDrnElevation.Free;
+  FMfDrnDdrn.Free;
   inherited;
 end;
 
@@ -12723,6 +12738,12 @@ procedure TDrnPackage.GetMfDrnConductanceUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
   UpdateDisplayUseList(NewUseList, ptDRN, 1, StrDrainConductance);
+end;
+
+procedure TDrnPackage.GetMfDrnDdrnUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptDRN, 2, StrDrainDDRN);
 end;
 
 procedure TDrnPackage.GetMfDrnElevationUseList(Sender: TObject;
@@ -12738,12 +12759,14 @@ var
 begin
   MfDrnConductance.CreateDataSets;
   MfDrnElevation.CreateDataSets;
+  MfDrnDdrn.CreateDataSets;
 
   List := TModflowBoundListOfTimeLists.Create;
   DrnWriter := TModflowDRN_Writer.Create(FModel as TCustomModel, etDisplay);
   try
     List.Add(MfDrnElevation);
     List.Add(MfDrnConductance);
+    List.Add(MfDrnDdrn);
     DrnWriter.UpdateDisplay(List, [1]);
   finally
     DrnWriter.Free;
@@ -12751,6 +12774,7 @@ begin
   end;
   MfDrnConductance.ComputeAverage;
   MfDrnElevation.ComputeAverage;
+  MfDrnDdrn.ComputeAverage;
 end;
 
 procedure TDrnPackage.InvalidateAllTimeLists;
@@ -12759,6 +12783,7 @@ begin
   begin
     MfDrnElevation.Invalidate;
     MfDrnConductance.Invalidate;
+    MfDrnDdrn.Invalidate;
   end;
 end;
 
@@ -18114,8 +18139,8 @@ begin
 end;
 
 function TConduitFlowProcess.CadsRechargeFractionUsed(Sender: TObject): boolean;
-var
-  LocalModel: TCustomModel;
+//var
+//  LocalModel: TCustomModel;
 begin
   if FModel.ModelSelection = msModflowOwhm2 then
   begin
@@ -30498,7 +30523,6 @@ procedure TTvkPackage.InitializeTvkDisplay(Sender: TObject);
 var
   TvkWriter: TModflowTvk_Writer;
   List: TModflowBoundListOfTimeLists;
-  CoverageIndex: Integer;
 begin
   TransientKx.CreateDataSets;
   TransientKy.CreateDataSets;
@@ -30605,7 +30629,6 @@ procedure TTvsPackage.InitializeTvsDisplay(Sender: TObject);
 var
   TvsWriter: TModflowTvs_Writer;
   List: TModflowBoundListOfTimeLists;
-  CoverageIndex: Integer;
 begin
   TransientSS.CreateDataSets;
   TransientSY.CreateDataSets;

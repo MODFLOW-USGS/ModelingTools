@@ -1,6 +1,6 @@
 ptf @
 etf %
-# LAK: Lake package for MODFLOW 6 file created on 2/16/2024 by ModelMuse version 5.1.1.55.
+# LAK: Lake package for MODFLOW 6 file created on 2/23/2024 by ModelMuse version 5.1.1.56.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     BOUNDNAMES
@@ -12,6 +12,8 @@ BEGIN OPTIONS
   PACKAGE_CONVERGENCE FILEOUT MF6_TestSfrMawLakMvrUzf.LakConvergence.CSV
     OBS6 FILEIN MF6_TestSfrMawLakMvrUzf.ob_lak
   SURFDEP   2.000000000000E-001 
+  MAXIMUM_ITERATIONS    100
+  MAXIMUM_STAGE_CHANGE   1.000000000000E-005 
   TIME_CONVERSION   1.000000000000E+000 
   LENGTH_CONVERSION   1.000000000000E+000 
   MOVER

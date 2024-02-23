@@ -42,6 +42,12 @@ type
     ConductancePestSeriesMethod: TPestParamMethod;
     ElevTimeSeriesName: string;
     ConductanceTimeSeriesName: string;
+    DDRN: double;
+    DDRN_Annotation: string;
+    DDRN_Pest: string;
+    DDRN_PestSeries: string;
+    DDRN_PestSeriesMethod: TPestParamMethod;
+    DDRN_TimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -71,11 +77,14 @@ type
     procedure SetConductance(const Value: string);
     function GetConductance: string;
     function GetElevation: string;
+    function GetDDRN: string;
+    procedure SetDDRN(const Value: string);
   protected
     // See @link(Elevation).
     FElevation: IFormulaObject;
     // See @link(Conductance).
     FConductance: IFormulaObject;
+    FDDRN: IFormulaObject;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -100,6 +109,7 @@ type
     // @name is the formula used to set the conductance
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
+    property DDRN: string read GetDDRN write SetDDRN;
   end;
 
   TDrnTimeListLink = class(TTimeListsModelLink)
@@ -111,6 +121,7 @@ type
     // for a series of
     // Drain Boundaries over a series of time intervals.
     FConductanceData: TModflowTimeList;
+    FDdrnData: TModflowTimeList;
   protected
     procedure CreateTimeLists; override;
   public
@@ -123,6 +134,7 @@ type
   private
     procedure InvalidateElevationData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
+    procedure InvalidateDdrnData(Sender: TObject);
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
@@ -158,26 +170,34 @@ type
   TDrn_Cell = class(TValueCell)
   private
     Values: TDrnRecord;
-//    StressPeriod: integer;
-    function GetElevation: double;
-    function GetConductance: double;
-    function GetConductanceAnnotation: string;
-    function GetElevationAnnotation: string;
-//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
     function GetConductanceParameterValue: double;
+
+    function GetConductance: double;
+    function GetConductanceAnnotation: string;
     function GetConductancePest: string;
-    function GetElevationPest: string;
-    function GetConductancePestSeries: string;
-    function GetElevationPestSeries: string;
     function GetConductancePestSeriesMethod: TPestParamMethod;
-    function GetElevationPestSeriesMethod: TPestParamMethod;
+    function GetConductancePestSeries: string;
     function GetConductanceTimeSeriesName: string;
-    function GetElevTimeSeriesName: string;
     procedure SetConductanceTimeSeriesName(const Value: string);
+
+    function GetElevation: double;
+    function GetElevationAnnotation: string;
+    function GetElevationPest: string;
+    function GetElevationPestSeries: string;
+    function GetElevationPestSeriesMethod: TPestParamMethod;
+    function GetElevTimeSeriesName: string;
     procedure SetElevTimeSeriesName(const Value: string);
+
+    function GetDDrn: double;
+    function GetDDrnAnnotation: string;
+    function GetDdrnPest: string;
+    function GetDdrnPestSeries: string;
+    function GetDdrnPestSeriesMethod: TPestParamMethod;
+    function GetDdrnTimeSeriesName: string;
+    procedure SetDdrnTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -235,6 +255,14 @@ type
       write SetElevTimeSeriesName;
     property ConductanceTimeSeriesName: string read GetConductanceTimeSeriesName
       write SetConductanceTimeSeriesName;
+      // DDRN
+    property DDRN: Double read GetDDRN;
+    property DDRNAnnotation: string read GetDDrnAnnotation;
+    property DDRNPest: string read GetDdrnPest;
+    property DDRNPestSeries: string read GetDDRNPestSeries;
+    property DDRNPestSeriesMethod: TPestParamMethod read GetDDRNPestSeriesMethod;
+    property DDRNTimeSeriesName: string read GetDDRNTimeSeriesName
+      write SetDDRNTimeSeriesName;
   end;
 
   // @name represents the MODFLOW Drain boundaries associated with
@@ -253,11 +281,14 @@ type
     FCurrentParameter: TModflowTransientListParameter;
     FPestElevFormula: IFormulaObject;
     FPestCondFormula: IFormulaObject;
+    FPestDdrnFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestElevationObserver: TObserver;
     FPestConductanceObserver: TObserver;
+    FPestDdrnObserver: TObserver;
     FPestConductanceMethod: TPestParamMethod;
     FPestElevMethod: TPestParamMethod;
+    FPestDdrnMethod: TPestParamMethod;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
@@ -271,6 +302,12 @@ type
     procedure SetPestElevMethod(const Value: TPestParamMethod);
     procedure InvalidateElevationData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
+    procedure InvalidateDdrnData(Sender: TObject);
+
+    function GetPestDdrnFormula: string;
+    procedure SetPestDdrnFormula(const Value: string);
+    procedure SetPestDdrnMethod(const Value: TPestParamMethod);
+    function GetPestDdrnObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -299,6 +336,7 @@ type
       const Value: TPestParamMethod); override;
     property PestElevationObserver: TObserver read GetPestElevationObserver;
     property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    property PestDdrnObserver: TObserver read GetPestDdrnObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
@@ -329,16 +367,24 @@ type
       write SetPestConductanceFormula;
     property PestConductanceMethod: TPestParamMethod
       read FPestConductanceMethod write SetPestConductanceMethod;
+    property PestDdrnFormula: string read GetPestDdrnFormula
+      write SetPestDdrnFormula;
+    property PestDdrnMethod: TPestParamMethod
+      read FPestDdrnMethod write SetPestDdrnMethod;
   end;
 
 const
   DrnElevationPosition = 0;
   DrnConductancePosition = 1;
+  DDRN_Position = 2;
 
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions, ModflowMvrUnit, CellLocationUnit;
+
+resourcestring
+  StrDDRN = 'Discharge Scaling Length (DDRN)';
 
 { TDrnItem }
 
@@ -352,6 +398,7 @@ begin
     Drn := TDrnItem(Source);
     Elevation := Drn.Elevation;
     Conductance := Drn.Conductance;
+    DDRN := Drn.DDRN;
   end;
   inherited;
 end;
@@ -364,18 +411,23 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FElevation,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FDDRN,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 procedure TDrnItem.CreateFormulaObjects;
 begin
   FElevation := CreateFormulaObject(dso3D);
   FConductance := CreateFormulaObject(dso3D);
+  FDDRN := CreateFormulaObject(dso3D);
 end;
 
 destructor TDrnItem.Destroy;
 begin
   Elevation := '0';
   Conductance := '0';
+  DDRN := '0';
   inherited;
 end;
 
@@ -384,12 +436,15 @@ var
   ParentCollection: TDrnCollection;
   ElevationObserver: TObserver;
   ConductanceObserver: TObserver;
+  DDRNObserver: TObserver;
 begin
   ParentCollection := Collection as TDrnCollection;
   ElevationObserver := FObserverList[DrnElevationPosition];
   ElevationObserver.OnUpToDateSet := ParentCollection.InvalidateElevationData;
   ConductanceObserver := FObserverList[DrnConductancePosition];
   ConductanceObserver.OnUpToDateSet := ParentCollection.InvalidateConductanceData;
+  DDRNObserver := FObserverList[DDRN_Position];
+  DDRNObserver.OnUpToDateSet := ParentCollection.InvalidateDdrnData;
 end;
 
 procedure TDrnItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -402,11 +457,15 @@ begin
   begin
     List.Add(FObserverList[DrnElevationPosition]);
   end;
+  if Sender = FDDRN as TObject then
+  begin
+    List.Add(FObserverList[DDRN_Position]);
+  end;
 end;
 
 function TDrnItem.BoundaryFormulaCount: integer;
 begin
-  result := 2;
+  result := 3;
 end;
 
 function TDrnItem.GetBoundaryFormula(Index: integer): string;
@@ -414,6 +473,7 @@ begin
   case Index of
     DrnElevationPosition: result := Elevation;
     DrnConductancePosition: result := Conductance;
+    DDRN_Position: result := DDRN;
     else Assert(False);
   end;
 end;
@@ -432,6 +492,21 @@ end;
 function TDrnItem.GetConductanceIndex: Integer;
 begin
   result := DrnConductancePosition;
+end;
+
+function TDrnItem.GetDDRN: string;
+begin
+  FDDRN.ScreenObject := ScreenObjectI;
+  try
+    Result := FDDRN.Formula;
+    if Result = '' then
+    begin
+      Result := '0';
+    end;
+  finally
+    FDDRN.ScreenObject := nil;
+  end;
+  ResetItemObserver(DDRN_Position);
 end;
 
 function TDrnItem.GetElevation: string;
@@ -457,6 +532,7 @@ begin
   begin
     PhastModel.InvalidateMfDrnConductance(self);
     PhastModel.InvalidateMfDrnElevation(self);
+    PhastModel.InvalidateMfDrnDDRN(self);
   end;
 end;
 
@@ -469,7 +545,8 @@ begin
   begin
     Item := TDrnItem(AnotherItem);
     result := (Item.Elevation = Elevation)
-      and (Item.Conductance = Conductance);
+      and (Item.Conductance = Conductance)
+      and (Item.DDRN = DDRN);
   end;
 end;
 
@@ -478,6 +555,7 @@ begin
   case Index of
     DrnElevationPosition: Elevation := Value;
     DrnConductancePosition: Conductance := Value;
+    DDRN_Position: DDRN := Value;
     else Assert(False);
   end;
 end;
@@ -490,6 +568,11 @@ end;
 procedure TDrnItem.SetConductance(const Value: string);
 begin
   UpdateFormulaBlocks(Value, DrnConductancePosition, FConductance);
+end;
+
+procedure TDrnItem.SetDDRN(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DDRN_Position, FDDRN);
 end;
 
 { TDrnCollection }
@@ -616,7 +699,7 @@ begin
 
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   { DONE -cPEST : Handle PestSeriesName }
-  Assert(BoundaryFunctionIndex in [DrnElevationPosition, DrnConductancePosition]);
+  Assert(BoundaryFunctionIndex in [DrnElevationPosition, DrnConductancePosition, DDRN_Position]);
   Assert(Expression <> nil);
 
   DrnStorage := BoundaryStorage as TDrnStorage;
@@ -651,6 +734,15 @@ begin
             ConductancePestSeries := PestSeriesName;
             ConductancePestSeriesMethod := PestSeriesMethod;
             ConductanceTimeSeriesName := TimeSeriesName;
+          end;
+        DDRN_Position:
+          begin
+            DDRN := Expression.DoubleResult;
+            DDRN_Annotation := ACell.Annotation;
+            DDRN_Pest := PestName;
+            DDRN_PestSeries := PestSeriesName;
+            DDRN_PestSeriesMethod := PestSeriesMethod;
+            DDRN_TimeSeriesName := TimeSeriesName;
           end;
         else
           Assert(False);
@@ -716,6 +808,34 @@ begin
       begin
         Link := TimeListLink.GetLink(ChildModel) as TDrnTimeListLink;
         Link.FConductanceData.Invalidate;
+      end;
+    end;
+  end;
+end;
+
+procedure TDrnCollection.InvalidateDdrnData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TDrnTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TDrnTimeListLink;
+    Link.FDdrnData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TDrnTimeListLink;
+        Link.FDdrnData.Invalidate;
       end;
     end;
   end;
@@ -852,6 +972,36 @@ begin
   result := Values.ConductanceTimeSeriesName;
 end;
 
+function TDrn_Cell.GetDDrn: double;
+begin
+  result := Values.DDRN;
+end;
+
+function TDrn_Cell.GetDDrnAnnotation: string;
+begin
+  result := Values.DDRN_Annotation;
+end;
+
+function TDrn_Cell.GetDdrnPest: string;
+begin
+  result := Values.Ddrn_Pest;
+end;
+
+function TDrn_Cell.GetDdrnPestSeries: string;
+begin
+  result := Values.Ddrn_PestSeries;
+end;
+
+function TDrn_Cell.GetDdrnPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.Ddrn_PestSeriesMethod;
+end;
+
+function TDrn_Cell.GetDdrnTimeSeriesName: string;
+begin
+  result := Values.Ddrn_TimeSeriesName;
+end;
+
 function TDrn_Cell.GetConductancePestSeries: string;
 begin
   result := Values.ConductancePestSeries;
@@ -867,6 +1017,7 @@ begin
   case Index of
     DrnElevationPosition: result := ElevTimeSeriesName;
     DrnConductancePosition: result := ConductanceTimeSeriesName;
+    DDRN_Position: result := DDRNTimeSeriesName;
     else
       begin
         result := Inherited;
@@ -890,6 +1041,7 @@ begin
   case Index of
     DrnElevationPosition: result := ElevationPest;
     DrnConductancePosition: result := ConductancePest;
+    DDRN_Position: result := DdrnPest;
     else
       begin
         result := Inherited;
@@ -903,6 +1055,7 @@ begin
   case Index of
     DrnElevationPosition: result := ElevationPestSeriesMethod;
     DrnConductancePosition: result := ConductancePestSeriesMethod;
+    DDRN_Position: result := DDRNPestSeriesMethod;
     else
       begin
         result := Inherited;
@@ -916,6 +1069,7 @@ begin
   case Index of
     DrnElevationPosition: result := ElevationPestSeries;
     DrnConductancePosition: result := ConductancePestSeries;
+    DDRN_Position: result := DDRNPestSeries;
     else
       begin
         result := Inherited;
@@ -930,6 +1084,7 @@ begin
   case Index of
     DrnElevationPosition: result := ElevationAnnotation;
     DrnConductancePosition: result := ConductanceAnnotation;
+    DDRN_Position: result := DDRNAnnotation;
     else Assert(False);
   end;
 end;
@@ -940,6 +1095,7 @@ begin
   case Index of
     DrnElevationPosition: result := Elevation;
     DrnConductancePosition: result := Conductance;
+    DDRN_Position: result := DDRN;
     else Assert(False);
   end;
 end;
@@ -998,6 +1154,11 @@ begin
   Values.ConductanceTimeSeriesName := Value;
 end;
 
+procedure TDrn_Cell.SetDdrnTimeSeriesName(const Value: string);
+begin
+  Values.Ddrn_TimeSeriesName := Value;
+end;
+
 procedure TDrn_Cell.SetElevTimeSeriesName(const Value: string);
 begin
   Values.ElevTimeSeriesName := Value;
@@ -1015,6 +1176,8 @@ begin
       ElevTimeSeriesName := Value;
     DrnConductancePosition:
       ConductanceTimeSeriesName := Value;
+    DDRN_Position:
+      DDRNTimeSeriesName := Value;
     else
       begin
         Inherited;
@@ -1038,8 +1201,10 @@ begin
     SourceDrn := TDrnBoundary(Source);
     PestElevFormula := SourceDrn.PestElevFormula;
     PestConductanceFormula := SourceDrn.PestConductanceFormula;
+    PestDdrnFormula := SourceDrn.PestDdrnFormula;
     PestElevMethod := SourceDrn.PestElevMethod;
     PestConductanceMethod := SourceDrn.PestConductanceMethod;
+    PestDdrnMethod := SourceDrn.PestDdrnMethod;
   end;
   inherited;
 end;
@@ -1141,14 +1306,17 @@ begin
 
   PestElevFormula := '';
   PestConductanceFormula := '';
+  PestDdrnFormula := '';
   FPestElevMethod := DefaultBoundaryMethod(DrnElevationPosition);
   FPestConductanceMethod := DefaultBoundaryMethod(DrnConductancePosition);
+  FPestDdrnMethod := DefaultBoundaryMethod(DDRN_Position);
 end;
 
 procedure TDrnBoundary.CreateFormulaObjects;
 begin
   FPestElevFormula := CreateFormulaObjectBlocks(dso3D);
   FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDdrnFormula := CreateFormulaObjectBlocks(dso3D);
 end;
 
 procedure TDrnBoundary.CreateObservers;
@@ -1157,6 +1325,7 @@ begin
   begin
     FObserverList.Add(PestElevationObserver);
     FObserverList.Add(PestConductanceObserver);
+    FObserverList.Add(PestDdrnObserver);
   end;
 end;
 
@@ -1172,6 +1341,10 @@ begin
       begin
         result := ppmMultiply;
       end;
+    DDRN_Position:
+      begin
+        result := ppmMultiply;
+      end;
     else
       begin
         result := inherited;
@@ -1184,6 +1357,7 @@ destructor TDrnBoundary.Destroy;
 begin
   PestElevFormula := '';
   PestConductanceFormula := '';
+  PestDdrnFormula := '';
 
   inherited;
 end;
@@ -1329,6 +1503,10 @@ begin
       begin
         result := PestConductanceFormula;
       end;
+    Ddrn_Position:
+      begin
+        result := PestDdrnFormula;
+      end;
     else
       Assert(False);
   end;
@@ -1345,6 +1523,10 @@ begin
     DrnConductancePosition:
       begin
         result := PestConductanceMethod;
+      end;
+    DDRN_Position:
+      begin
+        result := PestDdrnMethod;
       end;
     else
       result := PestConductanceMethod;
@@ -1369,6 +1551,25 @@ begin
     FPestConductanceObserver.OnUpToDateSet := InvalidateConductanceData;
   end;
   result := FPestConductanceObserver;
+end;
+
+function TDrnBoundary.GetPestDdrnFormula: string;
+begin
+  Result := FPestDdrnFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DDRN_Position);
+  end;
+end;
+
+function TDrnBoundary.GetPestDdrnObserver: TObserver;
+begin
+  if FPestDdrnObserver = nil then
+  begin
+    CreateObserver('PestDdrn_', FPestDdrnObserver, nil);
+    FPestDdrnObserver.OnUpToDateSet := InvalidateDdrnData;
+  end;
+  result := FPestDdrnObserver;
 end;
 
 function TDrnBoundary.GetPestElevationObserver: TObserver;
@@ -1404,6 +1605,13 @@ begin
     if DrnConductancePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[DrnConductancePosition]);
+    end;
+  end;
+  if Sender = FPestDdrnFormula as TObject then
+  begin
+    if DDrn_Position < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DDrn_Position]);
     end;
   end;
 end;
@@ -1453,6 +1661,36 @@ begin
   end;
 end;
 
+procedure TDrnBoundary.InvalidateDdrnData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfDrnDdrn(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfDrnDdrn(self);
+      end;
+    end;
+  end;
+end;
+
 procedure TDrnBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1463,6 +1701,7 @@ begin
     Model := ParentModel as TPhastModel;
     Model.InvalidateMfDrnConductance(self);
     Model.InvalidateMfDrnElevation(self);
+    Model.InvalidateMfDrnDdrn(self);
   end;
 end;
 
@@ -1518,6 +1757,10 @@ begin
       begin
         PestConductanceFormula := Value;
       end;
+    DDRN_Position:
+      begin
+        PestDdrnFormula := Value;
+      end;
     else
       Assert(False);
   end;
@@ -1535,6 +1778,10 @@ begin
       begin
         PestConductanceMethod := Value;
       end;
+    DDRN_Position:
+      begin
+        PestDdrnMethod := Value;
+      end;
     else
       Assert(False);
   end;
@@ -1548,6 +1795,16 @@ end;
 procedure TDrnBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestConductanceMethod, Value);
+end;
+
+procedure TDrnBoundary.SetPestDdrnFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DDRN_Position, FPestDdrnFormula);
+end;
+
+procedure TDrnBoundary.SetPestDdrnMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDdrnMethod, Value);
 end;
 
 procedure TDrnBoundary.SetPestElevFormula(const Value: string);
@@ -1605,6 +1862,14 @@ begin
   WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
+
+  WriteCompReal(Comp, DDRN);
+  WriteCompInt(Comp, Strings.IndexOf(DDRN_Annotation));
+  WriteCompInt(Comp, Strings.IndexOf(DDRN_Pest));
+  WriteCompInt(Comp, Strings.IndexOf(DDRN_PestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(DDRN_TimeSeriesName));
+  WriteCompInt(Comp, Ord(DDRN_PestSeriesMethod));
+
 end;
 
 procedure TDrnRecord.RecordStrings(Strings: TStringList);
@@ -1619,6 +1884,13 @@ begin
   Strings.Add(ConductancePestSeries);
   Strings.Add(ElevTimeSeriesName);
   Strings.Add(ConductanceTimeSeriesName);
+
+  Strings.Add(DDRN_Annotation);
+  Strings.Add(DDRN_Pest);
+  Strings.Add(DDRN_PestSeries);
+  Strings.Add(DDRN_TimeSeriesName);
+
+
 end;
 
 procedure TDrnRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1644,6 +1916,13 @@ begin
   ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
+
+  DDRN := ReadCompReal(Decomp);
+  DDRN_Annotation := Annotations[ReadCompInt(Decomp)];
+  DDRN_Pest := Annotations[ReadCompInt(Decomp)];
+  DDRN_PestSeries := Annotations[ReadCompInt(Decomp)];
+  DDRN_TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  DDRN_PestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TDrnStorage }
@@ -1717,22 +1996,28 @@ begin
   inherited;
   FElevationData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FConductanceData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FDdrnData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FElevationData.NonParamDescription := StrElevation;
   FElevationData.ParamDescription := ' ' + LowerCase(StrElevation);
   FConductanceData.NonParamDescription := StrConductance;
   FConductanceData.ParamDescription := StrConductanceMultipl;
+  FDdrnData.NonParamDescription := StrDDRN;
+  FDdrnData.ParamDescription := StrDDRN;
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
     FElevationData.OnInvalidate := LocalModel.InvalidateMfDrnElevation;
     FConductanceData.OnInvalidate := LocalModel.InvalidateMfDrnConductance;
+    FDdrnData.OnInvalidate := LocalModel.InvalidateMfDrnDDRN;
   end;
   AddTimeList(FElevationData);
   AddTimeList(FConductanceData);
+  AddTimeList(FDdrnData);
 end;
 
 destructor TDrnTimeListLink.Destroy;
 begin
+  FDdrnData.Free;
   FElevationData.Free;
   FConductanceData.Free;
   inherited;

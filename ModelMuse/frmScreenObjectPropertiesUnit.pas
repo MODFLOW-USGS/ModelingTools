@@ -855,6 +855,8 @@ type
         ACol, ARow: Integer; const Value: string);
     procedure frameScreenObjectSFRdgFlowTimesSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
+    procedure frameDrnParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -3081,15 +3083,18 @@ begin
       end;
     end;
   end
-  else if (Sender = frameDrnParam.rdgModflowBoundary)
-    or (Sender = frameHfbMf6.rdgModflowBoundary)
+  else if (Sender = frameDrnParam.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [2,3,4];
+  end
+  else if (Sender = frameHfbMf6.rdgModflowBoundary)
     or (Sender = frameRes.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2,3];
-    if (Sender = frameHfbMf6.rdgModflowBoundary)
-      or (Sender = frameRes.rdgModflowBoundary)
-      then
+//    if (Sender = frameHfbMf6.rdgModflowBoundary)
+//      or (Sender = frameRes.rdgModflowBoundary)
+//      then
     begin
       ParametersOnly := True;
     end;
@@ -7573,7 +7578,7 @@ begin
   frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
   frameWellParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
   frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
-  frameDrnParam.rdgModflowBoundary.ColCount := 4;
+  frameDrnParam.rdgModflowBoundary.ColCount := 5;
   frameDrtParam.rdgModflowBoundary.ColCount := 5;
   CropIrrigationRequirement :=
     frmGoPhast.PhastModel.ModflowPackages.FarmProcess.CropIrrigationRequirement;
@@ -8621,7 +8626,6 @@ var
   CfpRchIndex: Integer;
   AnEdit: TScreenObjectEditItem;
   Pipes: TCfpPipeBoundary;
-  CfpRch: TCfpRchFractionBoundary;
   CfpEdit: TScreenObjectDataEdit;
   DiameterDataArray: TDataArray;
   TortuosityDataArray: TDataArray;
@@ -9046,7 +9050,6 @@ begin
       for CfpRchIndex := 0 to FNewProperties.Count - 1 do
       begin
         AnEdit := FNewProperties[CfpRchIndex];
-//        CfpRch := AnEdit.ScreenObject.ModflowCfpRchFraction;
         Pipes := AnEdit.ScreenObject.ModflowCfpPipes;
         if (Pipes <> nil) and Pipes.Used then
         begin
@@ -22161,6 +22164,7 @@ begin
 
   Frame.rdgModflowBoundary.HideEditor;
 end;
+
 function TfrmScreenObjectProperties.GetRechargeLayers(
   Boundary: TModflowBoundary): TCustomMF_BoundColl;
 begin
@@ -30464,6 +30468,17 @@ begin
     StoreDrnBoundary;
   end;
 
+end;
+
+procedure TfrmScreenObjectProperties.frameDrnParamrdgModflowBoundarySelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  frameDrnParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
+  if (ACol = 5) and (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    CanSelect := False;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.frameDrnParamseNumberOfTimesChange(

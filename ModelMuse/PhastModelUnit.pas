@@ -2713,6 +2713,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfRivConc(Sender: TObject);
     procedure InvalidateMfDrnConductance(Sender: TObject);
     procedure InvalidateMfDrnElevation(Sender: TObject);
+    procedure InvalidateMfDrnDdrn(Sender: TObject);
     procedure InvalidateMfDrtConductance(Sender: TObject);
     procedure InvalidateMfDrtElevation(Sender: TObject);
     procedure InvalidateMfDrtReturnFraction(Sender: TObject);
@@ -10150,6 +10151,9 @@ const
 //                by the object defining the lake. This means a lake can be
 //                above layer 1. A lake that has horizontal connections is
 //                treated as being in all the layers intersected by the object.
+
+//               Enhancement: Added support for discharge scaling in the
+//                DRN package.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -26807,6 +26811,11 @@ end;
 procedure TCustomModel.InvalidateMfDrnConductance(Sender: TObject);
 begin
   ModflowPackages.DrnPackage.MfDrnConductance.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfDrnDdrn(Sender: TObject);
+begin
+  ModflowPackages.DrnPackage.MfDrnDdrn.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfDrnElevation(Sender: TObject);

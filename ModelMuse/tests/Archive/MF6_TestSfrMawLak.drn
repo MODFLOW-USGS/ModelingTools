@@ -1,10 +1,11 @@
-# DRN: Drain package file created on 8/19/2019 by ModelMuse version 4.0.0.12.
+# DRN: Drain package file created on 2/23/2024 by ModelMuse version 5.1.1.56.
 BEGIN OPTIONS
-    AUXILIARY IFACE
+    AUXILIARY IFACE DDRN
     BOUNDNAMES
     PRINT_INPUT
     SAVE_FLOWS
     OBS6 FILEIN MF6_TestSfrMawLak.ob_drob
+    AUXDEPTHNAME DDRN
 END OPTIONS
 
 BEGIN DIMENSIONS
@@ -12,6 +13,6 @@ BEGIN DIMENSIONS
 END DIMENSIONS
 
 BEGIN PERIOD      1
-     1     3     7 -1.000000000000E+000   1.000000000000E+000      0 'Drain'  # Data Set 6: Layer Row Column Elevation Cond IFACE boundname
+     1     3     7 -1.000000000000E+000   1.000000000000E+000      0  0.000000000000E+000  'Drain'  # Data Set 6: Layer Row Column Elevation Cond IFACE DDRN boundname
 END PERIOD 
 

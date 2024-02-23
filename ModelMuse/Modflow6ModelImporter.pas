@@ -49,6 +49,13 @@ type
     procedure Sort;
   end;
 
+//type
+//  TMvrDictionary = Class(TDictionary<Integer,TScreenObject>)
+//  private
+//    Period: Integer;
+//  End;
+//  TMvrDictionarys = TObjectList<TMvrDictionary>;
+
   TModflow6Importer = class(TObject)
   private
     FErrorMessages: TStringList;
@@ -114,6 +121,7 @@ type
     procedure ImportMaw(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportSfr(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportLak(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
+    procedure ImportUzf(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -147,7 +155,7 @@ uses
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
   ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit,
   Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit, ModflowLakMf6Unit,
-  Mf6.LakeTableFileReaderUnit;
+  Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -155,10 +163,29 @@ resourcestring
   'a time series.';
   StrModelMuseCanNotAp = 'ModelMuse can not apply AUXMULTNAME values to data' +
   ' specified as a time series.';
-  StrModelMuseCanNotApDepth = 'ModelMuse can not apply AUXDEPTHNAME values to dat' +
-  'a specified as a time series.';
   StrModelMuseCanNotSpPetm0 = 'ModelMuse can not specify a separate value fo' +
   'r petm0 in the EVt package.';
+
+//type
+//  TMvrLinks = class(TObject)
+//  private
+//    WellDonors: TMvrDictionarys;
+//    DrainDonors: TMvrDictionarys;
+//    GhbDonors: TMvrDictionarys;
+//    RivDonors: TMvrDictionarys;
+//    MawDonors: TMvrDictionarys;
+//    LakDonors: TMvrDictionarys;
+//    SfrDonors: TMvrDictionarys;
+//    UzfDonors: TMvrDictionarys;
+//    MawReceivers: TMvrDictionarys;
+//    LakReceivers: TMvrDictionarys;
+//    SfrReceivers: TMvrDictionarys;
+//    UzfReceivers: TMvrDictionarys;
+//  public
+//    constructor Create;
+//    destructor Destroy; override;
+//  end;
+
 
 procedure TModflow6Importer.AssignBooleanValuesToCellCenters(
   DataArray: TDataArray; ScreenObject: TScreenObject; ImportedData: TBArray2D);
@@ -2072,15 +2099,14 @@ var
   EndPeriod: Integer;
   NextMvrPeriod: TMvrPeriod;
   AuxDepthIndex: Integer;
-  AuxDepthAdjustment: Extended;
   CellListIndex: Integer;
+  Imported_Ddrn: TValueArrayItem;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TDrnTimeItem; Period: Integer);
   var
     DrnItem: TDrnItem;
     ImportedName: string;
     Aux: TMf6BoundaryValue;
     AuxMultiplier: Extended;
-    AuxDepthAdjustment: Extended;
   begin
     DrnItem := AScreenObject.ModflowDrnBoundary.Values.Add as TDrnItem;
     ItemList.Add(DrnItem);
@@ -2110,17 +2136,27 @@ var
       Aux := ACell.Aux[AuxDepthIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        AuxDepthAdjustment := Aux.NumericValue
+        ImportedName := Format('Imported_DDRNs_Period_%d', [Period]);
+        Imported_Ddrn := AScreenObject.ImportedValues.Add;
+        Imported_Ddrn.Name := ImportedName;
+        Imported_Ddrn.Values.DataType := rdtDouble;
+        DrnItem.DDRN := rsObjectImportedValuesR + '("' + Imported_Ddrn.Name + '")';
       end
       else
       begin
-        AuxDepthAdjustment := 0;
-        FErrorMessages.Add(StrModelMuseCanNotIm);
+        Imported_Ddrn := nil;
+
+        TimeSeries := Aux.StringValue;
+        if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        DrnItem.DDRN := ImportedTimeSeries;
       end;
     end
     else
     begin
-      AuxDepthAdjustment := 0;
+      Imported_Ddrn := nil;
     end;
 
     if ACell.elev.ValueType = vtNumeric then
@@ -2140,10 +2176,6 @@ var
         Assert(False);
       end;
       DrnItem.Elevation := ImportedTimeSeries;
-      if AuxDepthAdjustment <> 0 then
-      begin
-        FErrorMessages.Add(StrModelMuseCanNotApDepth);
-      end;
     end;
 
     if ACell.cond.ValueType = vtNumeric then
@@ -2558,12 +2590,6 @@ begin
               ConnectionItem.List := ACellList;
               AConnectionList.Add(ConnectionItem);
               OtherCellLists.Add(ACellList);
-  //              CellLists.OwnsObjects := False;
-  //              try
-  //                CellLists[ObjectIndex] := nil;
-  //              finally
-  //                CellLists.OwnsObjects := True;
-  //              end;
               NewScreenObject := True;
             end
             else
@@ -2584,24 +2610,15 @@ begin
           ACell := ACellList[CellIndex];
           if ACell.elev.ValueType = vtNumeric then
           begin
-            if AuxDepthIndex >= 0 then
+            Imported_Drain_Elevations.Values.Add(ACell.elev.NumericValue);// + AuxDepthAdjustment);
+          end;
+          if AuxDepthIndex >= 0 then
+          begin
+            Aux := ACell.Aux[AuxDepthIndex];
+            if Aux.ValueType = vtNumeric then
             begin
-              Aux := ACell.Aux[AuxDepthIndex];
-              if Aux.ValueType = vtNumeric then
-              begin
-                AuxDepthAdjustment := Aux.NumericValue
-              end
-              else
-              begin
-                AuxDepthAdjustment := 0;
-                FErrorMessages.Add(StrModelMuseCanNotIm);
-              end;
-            end
-            else
-            begin
-              AuxDepthAdjustment := 0;
+              Imported_Ddrn.Values.Add(Aux.NumericValue);
             end;
-            Imported_Drain_Elevations.Values.Add(ACell.elev.NumericValue + AuxDepthAdjustment);
           end;
 
           if ACell.cond.ValueType = vtNumeric then
@@ -3549,10 +3566,7 @@ begin
         end
         else if APackage.FileType = 'UZF6' then
         begin
-  //        UzfReader := TUzf.Create(APackage.FileType);
-  //        UzfReader.Dimensions := FDimensions;
-  //        APackage.Package := UzfReader;
-  //        APackage.ReadPackage(Unhandled);
+          ImportUzf(APackage, TransportModels, MvrPackage);
         end
         else if APackage.FileType = 'MVR6' then
         begin
@@ -4094,8 +4108,8 @@ begin
       SetLength(GhbMvrLinkArray, Model.ModflowStressPeriods.Count);
       for PeriodIndex := 0 to Length(GhbMvrLinkArray) - 1 do
       begin
-        GhbMvrLink.GhbPeriod := nil;
-        GhbMvrLink.MvrPeriod := nil;
+        GhbMvrLinkArray[PeriodIndex].GhbPeriod := nil;
+        GhbMvrLinkArray[PeriodIndex].MvrPeriod := nil;
       end;
 
       for PeriodIndex := 0 to Ghb.PeriodCount - 1 do
@@ -4751,6 +4765,9 @@ var
   TableIndex: Integer;
   TablePackage: TPackage;
   ATable: TMf6LakeTableItem;
+  Mvr: TMvr;
+  FoundMvr: Boolean;
+  Index: Integer;
   procedure ApplyLakeSettings(ALake: TImportLake);
   var
     PriorValueItem: TLakeTimeItem;
@@ -5090,274 +5107,271 @@ var
     end;
   begin
     Assert(ALake <> nil);
-
-//    if EmbededLake then
-//    begin
-//
-//    end
-//    else
+    ALake.LakeScreenObject := TScreenObject.CreateWithViewDirection(
+      Model, vdTop, UndoCreateScreenObject, False);
+    if ALake.FLakPackageItem.boundname = '' then
     begin
-      ALake.LakeScreenObject := TScreenObject.CreateWithViewDirection(
-        Model, vdTop, UndoCreateScreenObject, False);
-      if ALake.FLakPackageItem.boundname = '' then
-      begin
-        ALake.LakeScreenObject.Name := Format('ImportedLake%d', [ALake.FLakPackageItem.lakeno]);
-      end
-      else
-      begin
-        ALake.LakeScreenObject.Name := ALake.FLakPackageItem.boundname;
-      end;
-      ALake.LakeScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+      ALake.LakeScreenObject.Name := Format('ImportedLake%d', [ALake.FLakPackageItem.lakeno]);
+    end
+    else
+    begin
+      ALake.LakeScreenObject.Name := ALake.FLakPackageItem.boundname;
+    end;
+    ALake.LakeScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
-      Model.AddScreenObject(ALake.LakeScreenObject);
-      ALake.LakeScreenObject.ElevationCount := ecOne;
-      ALake.LakeScreenObject.SetValuesOfIntersectedCells := True;
-      ALake.LakeScreenObject.EvaluatedAt := eaBlocks;
-      ALake.LakeScreenObject.Visible := False;
+    Model.AddScreenObject(ALake.LakeScreenObject);
+    ALake.LakeScreenObject.ElevationCount := ecOne;
+    ALake.LakeScreenObject.SetValuesOfIntersectedCells := True;
+    ALake.LakeScreenObject.EvaluatedAt := eaBlocks;
+    ALake.LakeScreenObject.Visible := False;
 
-      CellIds := TCellIdList.Create;
-      try
-        for CellIndex := 0 to ALake.FConnections.Count - 1 do
-        begin
-          AConnection := ALake.FConnections[CellIndex];
-          if AnsiSameText(AConnection.claktype, 'VERTICAL') then
-          begin
-            ACellId := AConnection.cellid;
-            if Model.DisvUsed then
-            begin
-              ACellId.Row := 0;
-            end;
-            CellIds.Add(ACellId);
-          end;
-        end;
-        if CellIds.Count > 0 then
-        begin
-          AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, True);
-        end
-        else
-        begin
-
-        end;
-      finally
-        CellIds.Free;
-      end;
-//    end;
-      ALake.LakeScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
-
-
-      ALake.LakeScreenObject.CreateLakMf6Boundary;
-      ALake.LakeBoundary := ALake.LakeScreenObject.ModflowLak6;
-
-      LakeConnectionTypes := [];
+    CellIds := TCellIdList.Create;
+    try
       for CellIndex := 0 to ALake.FConnections.Count - 1 do
       begin
         AConnection := ALake.FConnections[CellIndex];
-        if AnsiSameText(AConnection.claktype, 'EMBEDDEDH') then
+        if AnsiSameText(AConnection.claktype, 'VERTICAL')
+          or SameText(AConnection.claktype, 'EMBEDDEDH')
+          or SameText(AConnection.claktype, 'EMBEDDEDV')
+          then
         begin
-          Include(LakeConnectionTypes, lctHorizontal);
-          ALake.LakeBoundary.Embedded := True;
-          Assert(ALake.FConnections.Count = 1);
-          break;
-        end
-        else if AnsiSameText(AConnection.claktype, 'EMBEDDEDV') then
-        begin
-          Include(LakeConnectionTypes, lctVertical);
-          ALake.LakeBoundary.Embedded := True;
-          Assert(ALake.FConnections.Count = 1);
-          Break;
-        end
-        else if AnsiSameText(AConnection.claktype, 'VERTICAL') then
-        begin
-          Include(LakeConnectionTypes, lctVertical);
-        end
-        else if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
-        begin
-          Include(LakeConnectionTypes, lctHorizontal);
-        end
-        else
-        begin
-          Assert(False);
-        end;
-        if LakeConnectionTypes = [lctHorizontal, lctVertical] then
-        begin
-          break;
+          ACellId := AConnection.cellid;
+          if Model.DisvUsed then
+          begin
+            ACellId.Row := 0;
+          end;
+          CellIds.Add(ACellId);
         end;
       end;
-      ALake.LakeBoundary.LakeConnections := LakeConnectionTypes;
-
-      NewTimeItem := ALake.LakeBoundary.Values.Add as TLakeTimeItem;
-      NewTimeItem.StartTime := StartTime;
-      NewTimeItem.EndTime := EndTime;
-      NewTimeItem.Stage := '0';
-      NewTimeItem.Rainfall := '0';
-      NewTimeItem.Evaporation := '0';
-      NewTimeItem.Runoff := '0';
-      NewTimeItem.Inflow := '0';
-      NewTimeItem.Withdrawal := '0';
-
-      ALake.LakeBoundary.BedThickness := '1';
-      ALake.LakeBoundary.StartingStage := FortranFloatToStr(ALake.FLakPackageItem.strt);
-
-
-
-      UniformValues := True;
-      FirstValue := ALake.FConnections[0].bedleak;
-      for CellIndex := 1 to ALake.FConnections.Count - 1 do
+      if CellIds.Count > 0 then
       begin
-        UniformValues  := FirstValue = ALake.FConnections[CellIndex].bedleak;
-        if not UniformValues then
-        begin
-          break;
-        end;
-      end;
-
-      if UniformValues then
-      begin
-        ALake.LakeBoundary.BedK := FortranFloatToStr(FirstValue);
+        AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, True);
       end
       else
       begin
-        if ALake.DataSetsScreenObject = nil then
-        begin
-          CreateDataSetScreenObject;
-        end;
 
-        ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
-        ImportedK.Name := KImportedLakeK;
-        ImportedK.Values.DataType := rdtDouble;
-
-        for CellIndex := 0 to ALake.FConnections.Count - 1 do
-        begin
-          ImportedK.Values.Add(ALake.FConnections[CellIndex].bedleak);
-        end;
-
-        DataArrayName := Format('LakeK_%d', [ALake.FLakPackageItem.lakeno]);
-        DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
-          DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
-
-        DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
-        ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
-          rsObjectImportedValuesR + '("' + KImportedLakeK + '")';
-
-        ALake.LakeBoundary.BedK := DataArrayName;
       end;
+    finally
+      CellIds.Free;
+    end;
+//    end;
+    ALake.LakeScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
 
-      UniformValues := True;
-      FirstValue := ALake.FConnections[0].belev;
-      for CellIndex := 1 to ALake.FConnections.Count - 1 do
-      begin
-        UniformValues  := FirstValue = ALake.FConnections[CellIndex].belev;
-        if not UniformValues then
-        begin
-          break;
-        end;
-      end;
 
-      if UniformValues then
+    ALake.LakeScreenObject.CreateLakMf6Boundary;
+    ALake.LakeBoundary := ALake.LakeScreenObject.ModflowLak6;
+
+    LakeConnectionTypes := [];
+    for CellIndex := 0 to ALake.FConnections.Count - 1 do
+    begin
+      AConnection := ALake.FConnections[CellIndex];
+      if AnsiSameText(AConnection.claktype, 'EMBEDDEDH') then
       begin
-        ALake.LakeBoundary.BottomElevation := FortranFloatToStr(FirstValue);
+        Include(LakeConnectionTypes, lctHorizontal);
+        ALake.LakeBoundary.Embedded := True;
+        Assert(ALake.FConnections.Count = 1);
+        break;
+      end
+      else if AnsiSameText(AConnection.claktype, 'EMBEDDEDV') then
+      begin
+        Include(LakeConnectionTypes, lctVertical);
+        ALake.LakeBoundary.Embedded := True;
+        Assert(ALake.FConnections.Count = 1);
+        Break;
+      end
+      else if AnsiSameText(AConnection.claktype, 'VERTICAL') then
+      begin
+        Include(LakeConnectionTypes, lctVertical);
+      end
+      else if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+      begin
+        Include(LakeConnectionTypes, lctHorizontal);
       end
       else
       begin
-        if ALake.DataSetsScreenObject = nil then
-        begin
-          CreateDataSetScreenObject;
-        end;
-
-        ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
-        ImportedK.Name := KImportedLakeBelev;
-        ImportedK.Values.DataType := rdtDouble;
-
-        for CellIndex := 0 to ALake.FConnections.Count - 1 do
-        begin
-          ImportedK.Values.Add(ALake.FConnections[CellIndex].belev);
-        end;
-
-        DataArrayName := Format('LakeBottomElev_%d', [ALake.FLakPackageItem.lakeno]);
-        DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
-          DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
-
-        DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
-        ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
-          rsObjectImportedValuesR + '("' + KImportedLakeBelev + '")';
-
-        ALake.LakeBoundary.BottomElevation := DataArrayName;
+        Assert(False);
       end;
-
-      UniformValues := True;
-      FirstValue := ALake.FConnections[0].telev;
-      for CellIndex := 1 to ALake.FConnections.Count - 1 do
+      if LakeConnectionTypes = [lctHorizontal, lctVertical] then
       begin
-        UniformValues  := FirstValue = ALake.FConnections[CellIndex].telev;
-        if not UniformValues then
-        begin
-          break;
-        end;
+        break;
       end;
+    end;
+    ALake.LakeBoundary.LakeConnections := LakeConnectionTypes;
 
-      if UniformValues then
+    NewTimeItem := ALake.LakeBoundary.Values.Add as TLakeTimeItem;
+    NewTimeItem.StartTime := StartTime;
+    NewTimeItem.EndTime := EndTime;
+    NewTimeItem.Stage := '0';
+    NewTimeItem.Rainfall := '0';
+    NewTimeItem.Evaporation := '0';
+    NewTimeItem.Runoff := '0';
+    NewTimeItem.Inflow := '0';
+    NewTimeItem.Withdrawal := '0';
+
+    ALake.LakeBoundary.BedThickness := '1';
+    ALake.LakeBoundary.StartingStage := FortranFloatToStr(ALake.FLakPackageItem.strt);
+
+
+
+    UniformValues := True;
+    FirstValue := ALake.FConnections[0].bedleak;
+    for CellIndex := 1 to ALake.FConnections.Count - 1 do
+    begin
+      UniformValues  := FirstValue = ALake.FConnections[CellIndex].bedleak;
+      if not UniformValues then
       begin
-        ALake.LakeBoundary.TopElevation := FortranFloatToStr(FirstValue);
-      end
-      else
-      begin
-        if ALake.DataSetsScreenObject = nil then
-        begin
-          CreateDataSetScreenObject;
-        end;
-
-        ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
-        ImportedK.Name := KImportedLakeTelev;
-        ImportedK.Values.DataType := rdtDouble;
-
-        for CellIndex := 0 to ALake.FConnections.Count - 1 do
-        begin
-          ImportedK.Values.Add(ALake.FConnections[CellIndex].telev);
-        end;
-
-        DataArrayName := Format('LakeTopElev_%d', [ALake.FLakPackageItem.lakeno]);
-        DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
-          DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
-
-        DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
-        ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
-          rsObjectImportedValuesR + '("' + KImportedLakeTelev + '")';
-
-        ALake.LakeBoundary.TopElevation := DataArrayName;
+        break;
       end;
     end;
 
-      // For each lake, define 3D data sets for Lake K, bottom elevation, and top elevation.
-      // Assign lake thickness a value of 1.
-      // Assign bedleak to Lake K
+    if UniformValues then
+    begin
+      ALake.LakeBoundary.BedK := FortranFloatToStr(FirstValue);
+    end
+    else
+    begin
+      if ALake.DataSetsScreenObject = nil then
+      begin
+        CreateDataSetScreenObject;
+      end;
 
-      // rsObjectImportedValuesR
+      ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
+      ImportedK.Name := KImportedLakeK;
+      ImportedK.Values.DataType := rdtDouble;
 
-      {
-          result := TScreenObject.CreateWithViewDirection(
-            Model, vdTop, UndoCreateScreenObject, False);
-          result.Name := Format('Imported_HFB_Layer_%d_Period_%d', [LayerIndex + 1, HfbPeriod.Period]);
-          result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+      for CellIndex := 0 to ALake.FConnections.Count - 1 do
+      begin
+        ImportedK.Values.Add(ALake.FConnections[CellIndex].bedleak);
+      end;
 
-          Model.AddScreenObject(result);
-          result.ElevationCount := ecOne;
-          result.SetValuesOfIntersectedCells := True;
-          result.EvaluatedAt := eaBlocks;
-          result.Visible := False;
-          result.ElevationFormula := Format('LayerCenter(%d)', [LayerIndex+1]);
-          ScreenObjects[LayerIndex] := result;
+      DataArrayName := Format('LakeK_%d', [ALake.FLakPackageItem.lakeno]);
+      DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
+        DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
 
-          Storage := result.ImportedValues.Add;
-          Storage.Name := KImportedHfbValue;
-          Storage.Values.DataType := rdtDouble;
-      }
-//    end;
+      DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
+      ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
+        rsObjectImportedValuesR + '("' + KImportedLakeK + '")';
+
+      ALake.LakeBoundary.BedK := DataArrayName;
+    end;
+
+    UniformValues := True;
+    FirstValue := ALake.FConnections[0].belev;
+    for CellIndex := 1 to ALake.FConnections.Count - 1 do
+    begin
+      UniformValues  := FirstValue = ALake.FConnections[CellIndex].belev;
+      if not UniformValues then
+      begin
+        break;
+      end;
+    end;
+
+    if UniformValues then
+    begin
+      ALake.LakeBoundary.BottomElevation := FortranFloatToStr(FirstValue);
+    end
+    else
+    begin
+      if ALake.DataSetsScreenObject = nil then
+      begin
+        CreateDataSetScreenObject;
+      end;
+
+      ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
+      ImportedK.Name := KImportedLakeBelev;
+      ImportedK.Values.DataType := rdtDouble;
+
+      for CellIndex := 0 to ALake.FConnections.Count - 1 do
+      begin
+        ImportedK.Values.Add(ALake.FConnections[CellIndex].belev);
+      end;
+
+      DataArrayName := Format('LakeBottomElev_%d', [ALake.FLakPackageItem.lakeno]);
+      DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
+        DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+
+      DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
+      ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
+        rsObjectImportedValuesR + '("' + KImportedLakeBelev + '")';
+
+      ALake.LakeBoundary.BottomElevation := DataArrayName;
+    end;
+
+    UniformValues := True;
+    FirstValue := ALake.FConnections[0].telev;
+    for CellIndex := 1 to ALake.FConnections.Count - 1 do
+    begin
+      UniformValues  := FirstValue = ALake.FConnections[CellIndex].telev;
+      if not UniformValues then
+      begin
+        break;
+      end;
+    end;
+
+    if UniformValues then
+    begin
+      ALake.LakeBoundary.TopElevation := FortranFloatToStr(FirstValue);
+    end
+    else
+    begin
+      if ALake.DataSetsScreenObject = nil then
+      begin
+        CreateDataSetScreenObject;
+      end;
+
+      ImportedK := ALake.DataSetsScreenObject.ImportedValues.Add;
+      ImportedK.Name := KImportedLakeTelev;
+      ImportedK.Values.DataType := rdtDouble;
+
+      for CellIndex := 0 to ALake.FConnections.Count - 1 do
+      begin
+        ImportedK.Values.Add(ALake.FConnections[CellIndex].telev);
+      end;
+
+      DataArrayName := Format('LakeTopElev_%d', [ALake.FLakPackageItem.lakeno]);
+      DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
+        DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+
+      DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
+      ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
+        rsObjectImportedValuesR + '("' + KImportedLakeTelev + '")';
+
+      ALake.LakeBoundary.TopElevation := DataArrayName;
+    end;
+
+
   end;
 begin
+  // For each lake, define 3D data sets for Lake K, bottom elevation, and top elevation.
+  // Assign lake thickness a value of 1.
+  // Assign bedleak to Lake K
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing LAK package');
   end;
+
+  if MvrPackage = nil then
+  begin
+    Mvr := nil;
+  end
+  else
+  begin
+    Mvr := MvrPackage.Package as TMvr;
+    FoundMvr := False;
+    for Index := 0 to Mvr.Packages.Count - 1 do
+    begin
+      FoundMvr := AnsiSameText(Package.PackageName, Mvr.Packages[Index].pname);
+      if FoundMvr then
+      begin
+        Break;
+      end;
+    end;
+    if not FoundMvr then
+    begin
+      Mvr := nil;
+    end;
+  end;
+
   Model := frmGoPhast.PhastModel;
   LakPackage := Model.ModflowPackages.LakMf6Package;
   LakPackage.IsSelected := True;
@@ -5555,6 +5569,9 @@ var
   DisvCell: TModflowDisVCell;
   CellTop: Double;
   CellBottom: Double;
+  Mvr: TMvr;
+  FoundMvr: Boolean;
+  Index: Integer;
   procedure AssignObservations(ObsList: TObservationList; Mf6Obs: TModflow6Obs);
   var
     MawObs: TMawObs;
@@ -5635,6 +5652,30 @@ begin
   begin
     OnUpdateStatusBar(self, 'importing MAW package');
   end;
+
+  if MvrPackage = nil then
+  begin
+    Mvr := nil;
+  end
+  else
+  begin
+    Mvr := MvrPackage.Package as TMvr;
+    FoundMvr := False;
+    for Index := 0 to Mvr.Packages.Count - 1 do
+    begin
+      FoundMvr := AnsiSameText(Package.PackageName, Mvr.Packages[Index].pname);
+      if FoundMvr then
+      begin
+        Break;
+      end;
+    end;
+    if not FoundMvr then
+    begin
+      Mvr := nil;
+    end;
+  end;
+
+
   Model := frmGoPhast.PhastModel;
   MawPackage := Model.ModflowPackages.MawPackage;
   MawPackage.IsSelected := True;
@@ -7279,8 +7320,8 @@ begin
         SetLength(RivMvrLinkArray, Model.ModflowStressPeriods.Count);
         for PeriodIndex := 0 to Length(RivMvrLinkArray) - 1 do
         begin
-          RivMvrLink.RivPeriod := nil;
-          RivMvrLink.MvrPeriod := nil;
+          RivMvrLinkArray[Index].RivPeriod := nil;
+          RivMvrLinkArray[Index].MvrPeriod := nil;
         end;
 
         for PeriodIndex := 0 to Riv.PeriodCount - 1 do
@@ -8238,6 +8279,8 @@ var
   AuxName: string;
   AuxArrays: TMf6BoundaryValueArrays;
   AReach: TSfrReachInfo;
+  Mvr: TMvr;
+  FoundMvr: Boolean;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -8898,6 +8941,29 @@ begin
   begin
     OnUpdateStatusBar(self, 'importing SFR package');
   end;
+
+  if MvrPackage = nil then
+  begin
+    Mvr := nil;
+  end
+  else
+  begin
+    Mvr := MvrPackage.Package as TMvr;
+    FoundMvr := False;
+    for Index := 0 to Mvr.Packages.Count - 1 do
+    begin
+      FoundMvr := AnsiSameText(Package.PackageName, Mvr.Packages[Index].pname);
+      if FoundMvr then
+      begin
+        Break;
+      end;
+    end;
+    if not FoundMvr then
+    begin
+      Mvr := nil;
+    end;
+  end;
+
   Model := frmGoPhast.PhastModel;
   SfrPackage := Model.ModflowPackages.SfrModflow6Package;
   SfrPackage.IsSelected := True;
@@ -10316,6 +10382,68 @@ begin
 
 end;
 
+procedure TModflow6Importer.ImportUzf(Package: TPackage;
+  TransportModels: TModelList; MvrPackage: TPackage);
+var
+  Model: TPhastModel;
+  UzfPackage: TUzfMf6PackageSelection;
+  Uzf: TUzf;
+  Options: TUzfOptions;
+  Dimensions: TUzfDimensions;
+begin
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing UZF package');
+  end;
+  Model := frmGoPhast.PhastModel;
+  UzfPackage := Model.ModflowPackages.UzfMf6Package;
+  UzfPackage.IsSelected := True;
+
+  Uzf := Package.Package as TUzf;
+  Options := Uzf.Options;
+
+  UzfPackage.SaveWaterContent := Options.WATER_CONTENT;
+  UzfPackage.SaveBudgetFile := Options.BUDGET;
+  UzfPackage.SaveBudgetCsvFile := Options.BUDGETCSV;
+  UzfPackage.WriteConvergenceData := Options.PACKAGE_CONVERGENCE;
+  UzfPackage.SimulateGroundwaterSeepage := Options.SIMULATE_GWSEEP;
+
+  if Options.SIMULATE_ET then
+  begin
+    UzfPackage.GroundwaterET := ugecSimulateUnsatOnly;
+  end;
+  if Options.LINEAR_GWET then
+  begin
+    UzfPackage.GroundwaterET := ugecLinear;
+  end;
+  if Options.SQUARE_GWET then
+  begin
+    UzfPackage.GroundwaterET := ugecSquare;
+  end;
+  if Options.UNSAT_ETWC then
+  begin
+    UzfPackage.UnsatET := uuecWaterContent;
+    if UzfPackage.GroundwaterET = ugecNoEt then
+    begin
+      UzfPackage.GroundwaterET := ugecSimulateUnsatOnly;
+    end;
+  end;
+  if Options.UNSAT_ETAE then
+  begin
+    UzfPackage.UnsatET := uuecCapillaryPressure;
+    if UzfPackage.GroundwaterET = ugecNoEt then
+    begin
+      UzfPackage.GroundwaterET := ugecSimulateUnsatOnly;
+    end;
+  end;
+
+  Dimensions := Uzf.UzfDimensions;
+
+  UzfPackage.NumberOfTrailingWaves := Dimensions.NTRAILWAVES;
+  UzfPackage.NumberOfWaveSets := Dimensions.NWAVESETS;
+
+end;
+
 procedure TModflow6Importer.ImportVsc(Package: TPackage);
 var
   Vsc: TVsc;
@@ -10339,7 +10467,7 @@ begin
 
   Vsc := Package.Package as TVsc;
   Options := Vsc.Options;
-  
+
   if Options.VISCREF.Used then
   begin
     ViscosityPackage.RefViscosity := Options.VISCREF.Value;
@@ -10776,8 +10904,8 @@ begin
         SetLength(WellMvrLinkArray, Model.ModflowStressPeriods.Count);
         for PeriodIndex := 0 to Length(WellMvrLinkArray) - 1 do
         begin
-          WellMvrLink.WelPeriod := nil;
-          WellMvrLink.MvrPeriod := nil;
+          WellMvrLinkArray[PeriodIndex].WelPeriod := nil;
+          WellMvrLinkArray[PeriodIndex].MvrPeriod := nil;
         end;
 
         for PeriodIndex := 0 to Wel.PeriodCount - 1 do
@@ -11475,5 +11603,43 @@ begin
   FConnections.Free;
   inherited;
 end;
+
+{ TMvrLinks }
+
+//constructor TMvrLinks.Create;
+//begin
+//  inherited;
+//  WellDonors := TMvrDictionarys.Create;
+//  DrainDonors := TMvrDictionarys.Create;
+//  GhbDonors := TMvrDictionarys.Create;
+//  RivDonors := TMvrDictionarys.Create;
+//  MawDonors := TMvrDictionarys.Create;
+//  LakDonors := TMvrDictionarys.Create;
+//  SfrDonors := TMvrDictionarys.Create;
+//  UzfDonors := TMvrDictionarys.Create;
+//  MawReceivers := TMvrDictionarys.Create;
+//  LakReceivers := TMvrDictionarys.Create;
+//  SfrReceivers := TMvrDictionarys.Create;
+//  UzfReceivers := TMvrDictionarys.Create;
+//
+//end;
+
+//destructor TMvrLinks.Destroy;
+//begin
+//  WellDonors.Free;
+//  DrainDonors.Free;
+//  GhbDonors.Free;
+//  RivDonors.Free;
+//  MawDonors.Free;
+//  LakDonors.Free;
+//  SfrDonors.Free;
+//  UzfDonors.Free;
+//  MawReceivers.Free;
+//  LakReceivers.Free;
+//  SfrReceivers.Free;
+//  UzfReceivers.Free;
+//
+//  inherited;
+//end;
 
 end.

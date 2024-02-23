@@ -7634,6 +7634,7 @@ begin
   end
   else if (Name = StrMODFLOWDrainElevation)
     or (Name = StrMODFLOWDrainConductance)
+    or (Name = StrDRNDDRN)
     then
   begin
     Result := btMfDrn;
