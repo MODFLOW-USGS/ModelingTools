@@ -1663,6 +1663,11 @@ begin
     begin
       ParamArray := nil;
     end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
+
 
     DataFileIndex := 0;
     for LayerIndex := 0 to DataArray.LayerCount - 1 do

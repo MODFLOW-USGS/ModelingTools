@@ -1657,6 +1657,12 @@ var
           MNW2Writer := Writer as TModflowMNW2_Writer;
         end;
         MNW2Writer.AddUsedPestDataArray(PestDataArray);
+
+        if PestDataArray.UseValuesForObservations and PestDataArray.PestParametersUsed then
+        begin
+          LocalModel.AddInputObsDataSet(PestDataArray);
+        end;
+
       end
       else
       begin

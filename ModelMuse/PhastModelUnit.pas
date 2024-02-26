@@ -1193,6 +1193,7 @@ that affects the model output should also have a comment. }
 //    FMeshFileName: string;
     FPilotPointDataArrays: TDataArrayList;
     FPestParamDictionay: TDictionary<string, TModflowSteadyParameter>;
+    FInputObservationDataSets: TStringList;
     //  @name is implemented as a @link(TMf6GwtNameWriters).
     FMf6GwtNameWriters: TObject;
     function GetGlobalVariables: TGlobalVariables; virtual; abstract;
@@ -1435,7 +1436,6 @@ that affects the model output should also have a comment. }
     function GetGlobalVariablesI: IGlobalVariables; virtual; abstract;
     property GlobalVariablesI: IGlobalVariables read GetGlobalVariablesI
       write SetGlobalVariablesI;
-
   private
     FGrid: TCustomModelGrid;
     FModflowOptions: TModflowOptions;
@@ -2164,6 +2164,7 @@ that affects the model output should also have a comment. }
     function GetCfpCadsSelected: TObjectUsedEvent;
     function GetViscosityPkgUsedUsed: Boolean;
     function GetViscosityPkgViscUsed: Boolean;
+    function GetInputObservationDataSets: TStrings;
   public
     function ChdIsSelected: Boolean; virtual;
     function TvkIsSelected: Boolean; virtual;
@@ -2175,6 +2176,7 @@ that affects the model output should also have a comment. }
     procedure ClearPval;
     procedure FinalizePvalAndTemplate(FileName: string);
     function ParamNamesDataSetUsed(Sender: TObject): boolean; virtual;
+    function ParamWeightsDataSetUsed(Sender: TObject): boolean; virtual;
     function InterpSwiObsDefined: Boolean;
     function DoSwiObsUsed(Sender: TObject): boolean;
     function GetSwiObsUsed: TObjectUsedEvent;
@@ -2270,6 +2272,12 @@ that affects the model output should also have a comment. }
     procedure UpdateDisplayUseList(NewUseList: TStringList;
       ParamType: TParameterType; DataIndex: integer; const DisplayName: string); virtual; abstract;
     procedure Assign(Source: TPersistent); override;
+    procedure ClearInputObservationDataSets;
+    // @name adds the names of input data sets to @link(FInputObservationDataSets).
+    // The data sets should have one of more input values with a known weight
+    // that will be used as an observed value in PEST.
+    procedure AddInputObsDataSet(DataArray: TDataArray);
+
     property Clearing: Boolean read GetClearing;
     property DataArrayManager: TDataArrayManager read GetDataArrayManager;
 
@@ -3313,7 +3321,15 @@ that affects the model output should also have a comment. }
       read FPilotPointData write SetPilotPointData;
     property PestObsCollection: TPestObsCollection read FPestObsCollection
       write SetPestObsCollection;
+    property InputObservationDataSets: TStrings read GetInputObservationDataSets
+    {$IFNDEF InputObservations}
+      Stored False
+    {$ENDIF}
+      ;
+
     { Any new members added to TCustomModel should be cleared in InternalClear.}
+
+
 
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
   end;
@@ -31990,6 +32006,10 @@ end;
 constructor TCustomModel.Create(AnOwner: TComponent);
 begin
   inherited;
+  FInputObservationDataSets := TStringList.Create;
+  FInputObservationDataSets.Sorted := True;
+  FInputObservationDataSets.Duplicates := dupIgnore;
+
   FCanDrawContours := True;
   FSutraPestScripts := TStringList.Create;
   FPestTemplateLines := TStringList.Create;
@@ -32993,6 +33013,7 @@ begin
   FPestTemplateLines.Free;
   FSutraPestScripts.Free;
 
+  FInputObservationDataSets.Free;
   inherited;
 end;
 
@@ -34268,11 +34289,18 @@ begin
   result := FormulaManager.Add;
 end;
 
+procedure TCustomModel.AddInputObsDataSet(DataArray: TDataArray);
+begin
+  Assert(DataArray <> nil);
+  FInputObservationDataSets.Add(DataArray.Name);
+end;
+
 procedure TCustomModel.InternalClear;
 var
   Index: Integer;
   DataSet: TDataArray;
 begin
+  InputObservationDataSets.Clear;
   ClearViewedItems;
 
   FModpathOutputFiles.Clear;
@@ -35764,16 +35792,42 @@ var
   BaseArrayName: string;
   BaseArray: TDataArray;
 begin
-// _Parameter_Names
   Assert(Sender <> nil);
   DataArray := Sender as TDataArray;
-  NamesPos := Pos('_Parameter_Names', DataArray.Name);
+  NamesPos := Pos(StrParamNameSuffix, DataArray.Name);
   Assert(NamesPos > 0);
   BaseArrayName := Copy(DataArray.Name, 1, NamesPos-1);
   BaseArray := DataArrayManager.GetDataSetByName(BaseArrayName);
   if BaseArray <> nil then
   begin
     result := BaseArray.PestParametersUsed;
+    if result and Assigned(BaseArray.OnDataSetUsed) then
+    begin
+      result := BaseArray.OnDataSetUsed(BaseArray);
+    end;
+  end
+  else
+  begin
+    result := False
+  end;
+end;
+
+function TCustomModel.ParamWeightsDataSetUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  NamesPos: Integer;
+  BaseArrayName: string;
+  BaseArray: TDataArray;
+begin
+  Assert(Sender <> nil);
+  DataArray := Sender as TDataArray;
+  NamesPos := Pos(StrWeightSuffix, DataArray.Name);
+  Assert(NamesPos > 0);
+  BaseArrayName := Copy(DataArray.Name, 1, NamesPos-1);
+  BaseArray := DataArrayManager.GetDataSetByName(BaseArrayName);
+  if BaseArray <> nil then
+  begin
+    result := BaseArray.UseValuesForObservations;
     if result and Assigned(BaseArray.OnDataSetUsed) then
     begin
       result := BaseArray.OnDataSetUsed(BaseArray);
@@ -41527,6 +41581,11 @@ begin
   end;
 end;
 
+procedure TCustomModel.ClearInputObservationDataSets;
+begin
+  FInputObservationDataSets.Clear;
+end;
+
 function TCustomModel.GetInitialHeadUsed: TObjectUsedEvent;
 begin
   result := DoInitialHeadUsed;
@@ -41540,6 +41599,11 @@ end;
 function TCustomModel.GetInitialWaterTableUsed: TObjectUsedEvent;
 begin
   result := DoInitialWaterTableUsed;
+end;
+
+function TCustomModel.GetInputObservationDataSets: TStrings;
+begin
+  result := FInputObservationDataSets;
 end;
 
 function TCustomModel.GetIrrigationUsed: TObjectUsedEvent;
@@ -43110,7 +43174,7 @@ begin
       end;
     end;
   end;
-
+  ClearInputObservationDataSets;
   PilotPointData.Clear;
 
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);

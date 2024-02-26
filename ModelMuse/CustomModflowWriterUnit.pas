@@ -1658,6 +1658,10 @@ begin
           INFLE := ExtractFileName(ChangeFileExt(FileName,
             '.' + ADataArray.Name + '.script' ));
           ParamEstBatchFile.Add(PLPROC_Location + INFLE);
+          if ADataArray.UseValuesForObservations then
+          begin
+            Model.AddInputObsDataSet(ADataArray);
+          end;
         end;
       end;
       ParamEstBatchFile.AddStrings(Model.PestTemplateLines);

@@ -648,6 +648,10 @@ begin
     begin
       FPestDataArrays.Add(ADataArray);
     end;
+    if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(ADataArray);
+    end;
   end;
 end;
 
@@ -673,6 +677,10 @@ begin
   if ADataArray.PestParametersUsed and (FPestDataArrays.IndexOf(ADataArray) < 0) then
   begin
     FPestDataArrays.Add(ADataArray);
+  end;
+  if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
+  begin
+    Model.AddInputObsDataSet(ADataArray);
   end;
 end;
 

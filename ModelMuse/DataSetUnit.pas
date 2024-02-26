@@ -477,6 +477,8 @@ type
     FSuppressCache: Boolean;
     FPestArrayFileNames: TStringList;
     FTemplateNeeded: Boolean;
+    FUseValuesForObservations: Boolean;
+    FStoredObservationDistance: TRealStorage;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -566,6 +568,13 @@ type
     function GetPestArrayFileNames: TStringList;
     procedure SetTemplateNeeded(const Value: Boolean);
     function GetDataType: TRbwDataType;
+    procedure SetStoredObservationDistance(const Value: TRealStorage);
+    procedure SetUseValuesForObservations(const Value: Boolean);
+    procedure CreatePestObservationWeightDataSet;
+    function GetWeightDataSetName: string;
+    function GetObservationDistance: double;
+    procedure SetObservationDistance(const Value: double);
+    function GetUseValuesForObservations: Boolean;
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -904,6 +913,9 @@ type
     property PestArrayFileNames: TStringList read GetPestArrayFileNames;
     procedure Loaded; override;
     procedure AssignModel(AModel: IModelMuseModel);
+    property WeightDataSetName: string read GetWeightDataSetName;
+    property ObservationDistance: double read GetObservationDistance
+      write SetObservationDistance;
   published
     // @name indicates the hierarchical position of this instance of
     // @classname when it is required by the model.
@@ -984,6 +996,18 @@ type
       write SetPestParametersAllowed stored True;
     property TemplateNeeded: Boolean read FTemplateNeeded
       write SetTemplateNeeded stored True;
+    property UseValuesForObservations: Boolean read GetUseValuesForObservations
+      write SetUseValuesForObservations
+    {$IFNDEF InputObservations}
+      stored False
+    {$ENDIF}
+      ;
+    property StoredObservationDistance: TRealStorage read FStoredObservationDistance
+      write SetStoredObservationDistance
+    {$IFNDEF InputObservations}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
   TDataArrayList = TList<TDataArray>;
@@ -1694,6 +1718,7 @@ resourcestring
 const
   MaxSmallArraySize = 1000000;
   StrParamNameSuffix = '_Parameter_Names';
+  StrWeightSuffix = '_Weight';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
 
@@ -1781,6 +1806,8 @@ resourcestring
   StrTheDefaultFormula = 'The default formula for %0:s returns a value of th' +
   'e wrong type. The formula is %1:s.';
   StrSParameterNames = '%s' + StrParamNameSuffix;
+  StrSWeight = '%s' + StrWeightSuffix;
+
   StrSMultipliedByAP = '%s multiplied by a parameter value';
   StrMODFLOW6MVR = 'MODFLOW 6 MVR';
   StrNoPESTParameterAs = 'No PEST parameter assigned';
@@ -2049,6 +2076,7 @@ begin
       GlobalDataArrayRestoreSubscription, self);
   end;
 
+  FStoredObservationDistance.Free;
   inherited;
 end;
 
@@ -2103,6 +2131,16 @@ begin
     UpdateUseList;
   end;
   result := FUseList;
+end;
+
+function TDataArray.GetUseValuesForObservations: Boolean;
+begin
+  result := FUseValuesForObservations;// and PestParametersUsed;
+end;
+
+function TDataArray.GetWeightDataSetName: string;
+begin
+  result := Format(StrSWeight, [Name]);
 end;
 
 function TDataArray.IdenticalDataArrayContents(ADataArray: TDataArray): boolean;
@@ -3751,9 +3789,23 @@ begin
   end;
 end;
 
+procedure TDataArray.SetStoredObservationDistance(const Value: TRealStorage);
+begin
+  FStoredObservationDistance.Assign(Value);
+end;
+
+procedure TDataArray.SetObservationDistance(const Value: double);
+begin
+  StoredObservationDistance.Value := Value;
+end;
+
 procedure TDataArray.SetOnShouldUseOnInitialize(const Value: TCheckUsageEvent);
 begin
-  FOnShouldUseOnInitialize := Value;
+  if Addr(FOnShouldUseOnInitialize) <> Addr(Value) then
+  begin
+    FOnShouldUseOnInitialize := Value;
+    frmGoPhast.InvalidateModel;
+  end;
 end;
 
 procedure TDataArray.SetOrientation(const Value: TDataSetOrientation);
@@ -3786,6 +3838,7 @@ begin
     FPestParametersUsed := Value;
     frmGoPhast.InvalidateModel;
     CreatePestParmNameDataSet;
+    CreatePestObservationWeightDataSet;
   end;
 end;
 
@@ -4037,6 +4090,15 @@ begin
   FUsedPestParameters.Assign(Value);
 end;
 
+procedure TDataArray.SetUseValuesForObservations(const Value: Boolean);
+begin
+  if FUseValuesForObservations <> Value then
+  begin
+    FUseValuesForObservations := Value;
+    CreatePestObservationWeightDataSet;
+  end;
+end;
+
 procedure TDataArray.UpdateDimensions(NumberOfLayers, NumberOfRows,
   NumberOfColumns: integer; ForceResize: boolean = False);
 begin
@@ -4190,6 +4252,7 @@ var
   LocalModel: TCustomModel;
 begin
   FPestParametersAllowed := True;
+  FStoredObservationDistance := TRealStorage.Create;
   FVisible := True;
   FUseLgrEdgeCells := lctUse;
   Assert(AnOwner <> nil);
@@ -4226,6 +4289,55 @@ begin
   FUsedPestParameters := TStringList.Create;
   TStringList(FUsedPestParameters).Duplicates := dupIgnore;
   TStringList(FUsedPestParameters).Sorted := True;
+end;
+
+procedure TDataArray.CreatePestObservationWeightDataSet;
+var
+  DataSetName: string;
+  LocalModel: TCustomModel;
+  WeightDataArray: TDataArray;
+begin
+  DataSetName := WeightDataSetName;
+  LocalModel := FModel as TCustomModel;
+  WeightDataArray := LocalModel.DataArrayManager.
+    GetDataSetByName(DataSetName);
+  if PestParametersUsed and UseValuesForObservations then
+  begin
+    if WeightDataArray = nil then
+    begin
+      if csLoading in LocalModel.ComponentState then
+      begin
+        Exit;
+      end;
+      WeightDataArray := LocalModel.DataArrayManager.CreateNewDataArray(
+        TDataArray, DataSetName, '""',
+        DataSetName,
+        Lock, rdtDouble, EvaluatedAt,
+        Orientation, Classification);
+      WeightDataArray.OnDataSetUsed := LocalModel.ParamWeightsDataSetUsed;
+      WeightDataArray.Lock := Lock - [dcFormula];
+      WeightDataArray.CheckMax := False;
+      WeightDataArray.CheckMin := False;
+      WeightDataArray.DisplayName := DataSetName;
+      WeightDataArray.Visible := True;
+      WeightDataArray.OnInitialize := nil;
+      WeightDataArray.OnShouldUseOnInitialize := nil;
+      WeightDataArray.SetDimensions(False);
+    end
+    else
+    begin
+      WeightDataArray.OnDataSetUsed := LocalModel.ParamWeightsDataSetUsed;
+      WeightDataArray.Classification := Classification;
+    end;
+    WeightDataArray.TalksTo(self);
+  end
+  else
+  begin
+    if WeightDataArray <> nil then
+    begin
+      WeightDataArray.StopsTalkingTo(self);
+    end;
+  end;
 end;
 
 procedure TDataArray.CreatePestParmNameDataSet;
@@ -4627,6 +4739,11 @@ begin
   result := True;
 end;
 
+function TDataArray.GetObservationDistance: double;
+begin
+  result := StoredObservationDistance.Value;
+end;
+
 function TDataArray.GetOwner: TPersistent;
 begin
   result := frmGoPhast.PhastModel;
@@ -4724,6 +4841,9 @@ var
   OldParamDataSetName: string;
   NewParamDataSetName: string;
   ParamDataSet: TDataArray;
+  OldParamWeightName: string;
+  NewParamWeightName: string;
+  WeightDataSet: TDataArray;
 begin
   NameChanged := Name <> Value;
   LocalModel := FModel as TCustomModel;
@@ -4748,6 +4868,19 @@ begin
       begin
         ParamDataSet.Name := NewParamDataSetName;
         ParamDataSet.DisplayName := NewParamDataSetName;
+      end;
+    end;
+
+    if UseValuesForObservations then
+    begin
+      OldParamWeightName := Format(StrSWeight, [Name]);
+      NewParamWeightName := Format(StrSWeight, [Value]);
+      WeightDataSet := LocalModel.DataArrayManager.
+        GetDataSetByName(OldParamWeightName);
+      if WeightDataSet <> nil then
+      begin
+        WeightDataSet.Name := NewParamWeightName;
+        WeightDataSet.DisplayName := NewParamWeightName;
       end;
     end;
 
@@ -8485,6 +8618,8 @@ begin
     SourceDataArray := TDataArray(Source);
     PestParametersUsed := SourceDataArray.PestParametersUsed;
     TemplateNeeded := SourceDataArray.TemplateNeeded;
+    ObservationDistance := SourceDataArray.ObservationDistance;
+    UseValuesForObservations := SourceDataArray.UseValuesForObservations;
     if SourceDataArray.FReadDataFromFile then
     begin
       FReadDataFromFile := True;

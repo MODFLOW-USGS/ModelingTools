@@ -10178,6 +10178,8 @@ var
   end;
 
 begin
+  PhastModel.ClearInputObservationDataSets;
+
   case ModelSelection of
     msSutra22:
       begin
@@ -10596,6 +10598,10 @@ begin
               INFLE := ExtractFileName(ChangeFileExt(FileName,
                 '.' + ADataArray.Name + '.script' ));
               ParamEstBatFile.Add(PLPROC_Location + INFLE);
+              if ADataArray.UseValuesForObservations then
+              begin
+
+              end;
             end;
           end;
 

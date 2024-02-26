@@ -32626,5 +32626,16 @@ object TTaskHistory
         'Testing'
         'DRN'
         'Documentation')
+    end
+    item
+      Date = 45346.000000000000000000
+    end
+    item
+      Date = 45347.000000000000000000
+    end
+    item
+      Date = 45348.000000000000000000
+      Categories.Strings = (
+        'PEST Observations')
     end>
 end

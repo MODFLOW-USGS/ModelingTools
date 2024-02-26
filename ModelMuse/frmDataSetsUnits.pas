@@ -67,6 +67,8 @@ Type
     FAngleType: TAngleType;
     FClassification: string;
     FPestParametersUsed: Boolean;
+    FUseValuesForObservations: Boolean;
+    FObservationDistance: double;
 //    FParameterLayersUsed: string;
     procedure SetTwoDInterpolator(const Value: TCustom2DInterpolater);
     procedure SetInterpValues(const Value: TPhastInterpolationValues);
@@ -101,6 +103,9 @@ Type
     function FullClassification: string; override;
     property AssociatedDataSets: string read GetAssociatedDataSets;
     property PestParametersUsed: Boolean read FPestParametersUsed write FPestParametersUsed;
+    property UseValuesForObservations: Boolean read FUseValuesForObservations
+      write FUseValuesForObservations;
+    property ObservationDistance: double read FObservationDistance write FObservationDistance;
 //    property ParameterLayersUsed: string read FParameterLayersUsed
 //      write FParameterLayersUsed;
   end;
@@ -207,6 +212,9 @@ Type
     comboUnits: TComboBox;
     tabParameters: TTabSheet;
     cbParametersUsed: TCheckBox;
+    cbObservations: TCheckBox;
+    rdeObservationSearchDistance: TRbwDataEntry;
+    lblObsDistance: TLabel;
     // @name adds a new @link(TDataArray) at the end of @link(tvDataSets).
     procedure btnAddClick(Sender: TObject);
     // @name closes the @classname without making any changes to the
@@ -281,6 +289,8 @@ Type
     procedure FormShow(Sender: TObject);
     procedure tvDataSetsMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure cbObservationsClick(Sender: TObject);
+    procedure rdeObservationSearchDistanceChange(Sender: TObject);
   private
     { @name is the @link(TCustom2DInterpolater) of the currently
       selected @link(TDataArray).
@@ -490,6 +500,11 @@ end;
 procedure TfrmDataSets.FormCreate(Sender: TObject);
 begin
   inherited;
+{$IFNDEF InputObservations}
+  cbObservations.Visible := False;
+  lblObsDistance.Visible := False;
+  rdeObservationSearchDistance.Visible := False;
+{$ENDIF}
   if frmGoPhast.ModelSelection = msUndefined then
   begin
     Beep;
@@ -1250,6 +1265,8 @@ begin
           DataStorage.Classification := ArrayEdit.Classification;
 
           DataStorage.PestParametersUsed := ArrayEdit.PestParametersUsed;
+          DataStorage.UseValuesForObservations := ArrayEdit.UseValuesForObservations;
+          DataStorage.ObservationDistance := ArrayEdit.ObservationDistance;
 //          DataStorage.ParameterLayersUsed := ArrayEdit.ParameterLayersUsed;
 
           if (DataStorage.Name <> DataSet.Name)
@@ -1312,6 +1329,17 @@ begin
   SetData;
   SelectedEdit := nil;
   GetData;
+end;
+
+procedure TfrmDataSets.cbObservationsClick(Sender: TObject);
+begin
+  inherited;
+  if FLoading or (SelectedEdit = nil) then
+  begin
+    Exit;
+  end;
+  SelectedEdit.UseValuesForObservations := cbObservations.Checked;
+
 end;
 
 procedure TfrmDataSets.cbParametersUsedClick(Sender: TObject);
@@ -2919,6 +2947,8 @@ begin
     else
     begin
       cbParametersUsed.Checked := FSelectedEdit.PestParametersUsed;
+      cbObservations.Checked := FSelectedEdit.UseValuesForObservations;
+      rdeObservationSearchDistance.RealValue := FSelectedEdit.ObservationDistance;
 
       reComment.Text := FSelectedEdit.Comment;
       reComment.Enabled := True;
@@ -3105,6 +3135,17 @@ begin
         Anisotropy := Anisotropy;
     end;
   end;
+end;
+
+procedure TfrmDataSets.rdeObservationSearchDistanceChange(Sender: TObject);
+begin
+  inherited;
+  if FLoading or (SelectedEdit = nil) then
+  begin
+    Exit;
+  end;
+  SelectedEdit.ObservationDistance := rdeObservationSearchDistance.RealValueDefault(0);
+
 end;
 
 procedure TfrmDataSets.reCommentEnter(Sender: TObject);
@@ -3610,6 +3651,8 @@ begin
     Comment := FDataArray.Comment;
     Classification := FDataArray.Classification;
     PestParametersUsed := FDataArray.PestParametersUsed;
+    UseValuesForObservations := FDataArray.UseValuesForObservations;
+    ObservationDistance := FDataArray.ObservationDistance;
     if ADataArray is TCustomPhastDataSet then
     begin
       FInterpValues := TPhastInterpolationValues.Create;

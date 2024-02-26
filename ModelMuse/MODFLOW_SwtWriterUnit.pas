@@ -1124,6 +1124,10 @@ begin
   begin
     FPestDataArrays.Add(DataArray);
   end;
+  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+  begin
+    Model.AddInputObsDataSet(DataArray);
+  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSet5;
@@ -1138,6 +1142,10 @@ begin
   begin
     FPestDataArrays.Add(DataArray);
   end;
+  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+  begin
+    Model.AddInputObsDataSet(DataArray);
+  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSet6;
@@ -1151,6 +1159,10 @@ begin
   if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
   begin
     FPestDataArrays.Add(DataArray);
+  end;
+  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+  begin
+    Model.AddInputObsDataSet(DataArray);
   end;
 end;
 
@@ -1168,6 +1180,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
 
     if FSwtPackage.CompressionSource = csSpecificStorage then
     begin
@@ -1178,6 +1194,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
+      end;
 
       DataArray := FSsv_List[Index];
       WriteArray(DataArray, 0, 'Data set 9: Ssv', StrNoValueAssigned, 'Ssv');
@@ -1185,6 +1205,10 @@ begin
       if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
       begin
         FPestDataArrays.Add(DataArray);
+      end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
       end;
     end;
 
@@ -1197,6 +1221,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
+      end;
 
       DataArray := FCc_List[Index];
       WriteArray(DataArray, 0, 'Data set 11: Cc', StrNoValueAssigned, 'Cc');
@@ -1204,6 +1232,10 @@ begin
       if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
       begin
         FPestDataArrays.Add(DataArray);
+      end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
       end;
     end;
 
@@ -1214,6 +1246,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
 
     DataArray := FSUB_List[Index];
     WriteArray(DataArray, 0, 'Data set 13: SUB', StrNoValueAssigned, 'SUB');
@@ -1221,6 +1257,10 @@ begin
     if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
     begin
       FPestDataArrays.Add(DataArray);
+    end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
     end;
   end;
   Model.DataArrayManager.CacheDataArrays;

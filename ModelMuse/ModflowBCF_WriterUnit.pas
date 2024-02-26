@@ -101,6 +101,10 @@ begin
         begin
           FPestDataArrays.Add(DataArray);
         end;
+        if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+        begin
+          Model.AddInputObsDataSet(DataArray);
+        end;
       end;
     1, 3:
       begin
@@ -116,6 +120,10 @@ begin
           and (FPestDataArrays.IndexOf(DataArray) < 0) then
         begin
           FPestDataArrays.Add(DataArray);
+        end;
+        if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+        begin
+          Model.AddInputObsDataSet(DataArray);
         end;
       end;
   end;
@@ -385,6 +393,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
   end;
 end;
 
@@ -405,7 +417,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
-
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
   end;
 end;
 
@@ -431,6 +446,10 @@ begin
       and (FPestDataArrays.IndexOf(DataArray) < 0) then
     begin
       FPestDataArrays.Add(DataArray);
+    end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
     end;
   end;
 end;
@@ -469,6 +488,10 @@ begin
     if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
     begin
       FPestDataArrays.Add(DataArray);
+    end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
     end;
   end;
 end;

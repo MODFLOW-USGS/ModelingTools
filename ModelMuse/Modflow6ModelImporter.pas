@@ -7320,8 +7320,8 @@ begin
         SetLength(RivMvrLinkArray, Model.ModflowStressPeriods.Count);
         for PeriodIndex := 0 to Length(RivMvrLinkArray) - 1 do
         begin
-          RivMvrLinkArray[Index].RivPeriod := nil;
-          RivMvrLinkArray[Index].MvrPeriod := nil;
+          RivMvrLinkArray[PeriodIndex].RivPeriod := nil;
+          RivMvrLinkArray[PeriodIndex].MvrPeriod := nil;
         end;
 
         for PeriodIndex := 0 to Riv.PeriodCount - 1 do

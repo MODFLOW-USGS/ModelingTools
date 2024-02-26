@@ -1502,6 +1502,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
   end;
   Model.DataArrayManager.CacheDataArrays;
 end;
@@ -1541,6 +1545,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
+      end;
       Model.DataArrayManager.AddDataSetToCache(DataArray);
 
       DataArray := FDHC_List[Index];
@@ -1548,6 +1556,10 @@ begin
       if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
       begin
         FPestDataArrays.Add(DataArray);
+      end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
       end;
       Model.DataArrayManager.AddDataSetToCache(DataArray);
     end;
@@ -1561,6 +1573,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
+      end;
     end;
 
     DataArray := FDCOM_E_List[Index];
@@ -1571,6 +1587,10 @@ begin
       if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
       begin
         FPestDataArrays.Add(DataArray);
+      end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
       end;
     end;
 
@@ -1583,6 +1603,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
+      end;
     end;
 
     DataArray := FDZ_List[Index];
@@ -1592,6 +1616,10 @@ begin
       FPestDataArrays.Add(DataArray);
     end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
 
     DataArray := FNZ_List[Index];
     WriteArray(DataArray, 0, 'NZ', StrNoValueAssigned, 'NZ');
@@ -1614,6 +1642,10 @@ begin
       FPestDataArrays.Add(DataArray);
     end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.UseValuesForObservations then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
 
     DataArray := FSfe_List[Index];
     WriteArray(DataArray, 0, 'Sfe', StrNoValueAssigned, 'Sfe');
@@ -1622,6 +1654,10 @@ begin
       FPestDataArrays.Add(DataArray);
     end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
 
     DataArray := FSfv_List[Index];
     WriteArray(DataArray, 0, 'Sfv', StrNoValueAssigned, 'Sfv');
@@ -1630,6 +1666,10 @@ begin
       FPestDataArrays.Add(DataArray);
     end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+    begin
+      Model.AddInputObsDataSet(DataArray);
+    end;
 
     DataArray := FCom_List[Index];
     if DataArray <> nil then
@@ -1639,6 +1679,10 @@ begin
       if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
       begin
         FPestDataArrays.Add(DataArray);
+      end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
       end;
     end;
     DataArray := FComE_List[Index];
@@ -1650,6 +1694,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
+      end;
     end;
     DataArray := FComV_List[Index];
     if DataArray <> nil then
@@ -1659,6 +1707,10 @@ begin
       if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
       begin
         FPestDataArrays.Add(DataArray);
+      end;
+      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+      begin
+        Model.AddInputObsDataSet(DataArray);
       end;
     end;
   end;

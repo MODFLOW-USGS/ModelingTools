@@ -9,10 +9,8 @@ inherited frmDataSets: TfrmDataSets
   Font.Height = 19
   OnActivate = FormActivate
   OnClose = FormClose
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 632
-  ExplicitHeight = 496
+  ExplicitWidth = 636
+  ExplicitHeight = 497
   TextHeight = 19
   object Splitter1: TSplitter
     Left = 295
@@ -31,8 +29,6 @@ inherited frmDataSets: TfrmDataSets
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 389
-    ExplicitWidth = 616
     DesignSize = (
       620
       41)
@@ -65,7 +61,6 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOKClick
-      ExplicitLeft = 377
     end
     object btnCancel: TBitBtn
       Left = 478
@@ -77,7 +72,6 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnCancelClick
-      ExplicitLeft = 474
     end
     object btnAdd: TButton
       Left = 8
@@ -107,7 +101,6 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
-      ExplicitLeft = 280
     end
   end
   object sbStatusBar: TStatusBar
@@ -118,8 +111,6 @@ inherited frmDataSets: TfrmDataSets
     Panels = <>
     ParentColor = True
     SimplePanel = True
-    ExplicitTop = 430
-    ExplicitWidth = 616
   end
   object tvDataSets: TTreeView
     Left = 0
@@ -136,19 +127,15 @@ inherited frmDataSets: TfrmDataSets
     OnChange = tvDataSetsChange
     OnChanging = tvDataSetsChanging
     OnMouseDown = tvDataSetsMouseDown
-    ExplicitWidth = 291
-    ExplicitHeight = 389
   end
   object pcDataSets: TJvPageControl
     Left = 300
     Top = 0
     Width = 320
     Height = 390
-    ActivePage = tabBasic
+    ActivePage = tabParameters
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 296
-    ExplicitHeight = 389
     object tabBasic: TTabSheet
       Caption = 'Basic'
       DesignSize = (
@@ -365,7 +352,6 @@ inherited frmDataSets: TfrmDataSets
         ScrollBars = ssBoth
         TabOrder = 8
         OnExit = reDefaultFormulaExit
-        ExplicitHeight = 79
       end
       object comboUnits: TComboBox
         Left = 149
@@ -540,6 +526,13 @@ inherited frmDataSets: TfrmDataSets
       Caption = 'PEST Parameters'
       ImageIndex = 3
       TabVisible = False
+      object lblObsDistance: TLabel
+        Left = 16
+        Top = 104
+        Width = 207
+        Height = 19
+        Caption = 'Observation search distance'
+      end
       object cbParametersUsed: TCheckBox
         Left = 16
         Top = 17
@@ -548,6 +541,29 @@ inherited frmDataSets: TfrmDataSets
         Caption = 'PEST parameters used'
         TabOrder = 0
         OnClick = cbParametersUsedClick
+      end
+      object cbObservations: TCheckBox
+        Left = 16
+        Top = 48
+        Width = 273
+        Height = 49
+        Caption = 'Define observations of data set values'
+        TabOrder = 1
+        WordWrap = True
+        OnClick = cbObservationsClick
+      end
+      object rdeObservationSearchDistance: TRbwDataEntry
+        Left = 16
+        Top = 127
+        Width = 145
+        Height = 22
+        TabOrder = 2
+        Text = '0'
+        OnChange = rdeObservationSearchDistanceChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
       end
     end
     object tabComment: TTabSheet
@@ -606,10 +622,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 164
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
+          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

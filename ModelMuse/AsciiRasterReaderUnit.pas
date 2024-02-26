@@ -357,7 +357,7 @@ begin
           LineIndex := 0;
         end;
         try
-        AString := Trim(Lines[LineIndex]);
+          AString := Trim(Lines[LineIndex]);
         except on EStringListError do
           raise EAsciiRasterError.Create(StrErrorReadingASCII);
         end;

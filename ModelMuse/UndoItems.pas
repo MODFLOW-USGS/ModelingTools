@@ -619,6 +619,8 @@ type
     FAngleType: TAngleType;
     FClassification: string;
     FPestParametersUsed: Boolean;
+    FUseValuesForObservations: Boolean;
+    FObservationDistance: Double;
 //    FParameterLayersUsed: string;
     // See @link(PhastInterpolationValues).
     procedure SetPhastInterpolationValues(
@@ -672,7 +674,12 @@ type
       read FPhastInterpolationValues write SetPhastInterpolationValues;
     property Comment: string read FComment write FComment;
     property Classification: string read FClassification write FClassification;
-    property PestParametersUsed: Boolean read FPestParametersUsed write FPestParametersUsed;
+    property PestParametersUsed: Boolean read FPestParametersUsed
+      write FPestParametersUsed;
+    property UseValuesForObservations: Boolean read FUseValuesForObservations
+      write FUseValuesForObservations;
+    property ObservationDistance: Double read FObservationDistance
+      write FObservationDistance;
 //    property ParameterLayersUsed: string read FParameterLayersUsed
 //      write FParameterLayersUsed;
   end;
@@ -2630,6 +2637,8 @@ begin
   Comment := DataSet.Comment;
   Classification := DataSet.Classification;
   PestParametersUsed := DataSet.PestParametersUsed;
+  UseValuesForObservations := DataSet.UseValuesForObservations;
+  ObservationDistance := DataSet.ObservationDistance;
   if DataSet is TCustomPhastDataSet then
   begin
     PhastInterpolationValues.Assign(DataSet);
@@ -2760,6 +2769,8 @@ begin
             ChildDataArray.Comment := Comment;
             ChildDataArray.Classification := Classification;
             ChildDataArray.PestParametersUsed := PestParametersUsed;
+            ChildDataArray.UseValuesForObservations := UseValuesForObservations;
+            ChildDataArray.ObservationDistance := ObservationDistance;
           end;
         end;
       end;
@@ -2803,6 +2814,8 @@ begin
   FDataSet.Comment := Comment;
   FDataSet.Classification := Classification;
   FDataSet.PestParametersUsed := PestParametersUsed;
+  FDataSet.UseValuesForObservations := UseValuesForObservations;
+  FDataSet.ObservationDistance := ObservationDistance;
   FNeedToInvalidate := False;
 end;
 
@@ -2827,7 +2840,9 @@ begin
     or (Units <> FDataSet.Units)
     or (AngleType <> FDataSet.AngleType)
     or (Comment <> FDataSet.Comment)
-    or (PestParametersUsed <> FDataSet.PestParametersUsed);
+    or (PestParametersUsed <> FDataSet.PestParametersUsed)
+    or (UseValuesForObservations <> FDataSet.UseValuesForObservations)
+    or (ObservationDistance <> FDataSet.ObservationDistance);
 //    or (Visible <> FDataSet.Visible);
   if not result then
   begin
