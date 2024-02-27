@@ -54,7 +54,8 @@ uses System.UITypes,
   LockedGlobalVariableChangersInterfaceUnit, ScreenObjectInterfaceUnit,
   ColorSchemesInterface, DataArrayInterfaceUnit, SubscriptionInterfaceUnit,
   GlobalVariablesInterfaceUnit, AbstractGridInterfaceUnit, CellLocationUnit,
-  ModelCellInterfaceUnit, ModflowParameterInterfaceUnit;
+  ModelCellInterfaceUnit, ModflowParameterInterfaceUnit,
+  InputDataObservationsUnit;
 
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
@@ -1196,6 +1197,8 @@ that affects the model output should also have a comment. }
     FInputObservationDataSets: TStringList;
     //  @name is implemented as a @link(TMf6GwtNameWriters).
     FMf6GwtNameWriters: TObject;
+    FInputObservations: TInputObservationObjectList;
+    FInputObsInstructionFileNames: TStringList;
     function GetGlobalVariables: TGlobalVariables; virtual; abstract;
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
     procedure SetSomeSegmentsUpToDate(const Value: boolean); virtual; abstract;
@@ -2272,11 +2275,16 @@ that affects the model output should also have a comment. }
     procedure UpdateDisplayUseList(NewUseList: TStringList;
       ParamType: TParameterType; DataIndex: integer; const DisplayName: string); virtual; abstract;
     procedure Assign(Source: TPersistent); override;
+    // @name clears @link(FInputObservationDataSets), @link(FInputObservations),
+    // and @link(FInputObsInstructionFileNames);
     procedure ClearInputObservationDataSets;
     // @name adds the names of input data sets to @link(FInputObservationDataSets).
     // The data sets should have one of more input values with a known weight
     // that will be used as an observed value in PEST.
     procedure AddInputObsDataSet(DataArray: TDataArray);
+    Procedure ExportInputObsDataSets(RootName: string);
+    procedure AddInputObsInstructionFileName(AFileName: string);
+    property InputObsInstructionFileNames: TStringList read FInputObsInstructionFileNames;
 
     property Clearing: Boolean read GetClearing;
     property DataArrayManager: TDataArrayManager read GetDataArrayManager;
@@ -32006,9 +32014,11 @@ end;
 constructor TCustomModel.Create(AnOwner: TComponent);
 begin
   inherited;
+  FInputObservations := TInputObservationObjectList.Create;
   FInputObservationDataSets := TStringList.Create;
   FInputObservationDataSets.Sorted := True;
   FInputObservationDataSets.Duplicates := dupIgnore;
+  FInputObsInstructionFileNames := TStringList.Create;
 
   FCanDrawContours := True;
   FSutraPestScripts := TStringList.Create;
@@ -33013,7 +33023,9 @@ begin
   FPestTemplateLines.Free;
   FSutraPestScripts.Free;
 
+  FInputObsInstructionFileNames.Free;
   FInputObservationDataSets.Free;
+  FInputObservations.Free;
   inherited;
 end;
 
@@ -34293,6 +34305,11 @@ procedure TCustomModel.AddInputObsDataSet(DataArray: TDataArray);
 begin
   Assert(DataArray <> nil);
   FInputObservationDataSets.Add(DataArray.Name);
+end;
+
+procedure TCustomModel.AddInputObsInstructionFileName(AFileName: string);
+begin
+  FInputObsInstructionFileNames.Add(AFileName);
 end;
 
 procedure TCustomModel.InternalClear;
@@ -36668,10 +36685,15 @@ begin
   ObsList := TObservationList.Create;
   try
     FillObsItemList(ObsList, IncludeComparisons);
-    List.Capacity := ObsList.Count;
+    List.Capacity := ObsList.Count + FInputObservations.Count;
     for ItemIndex := 0 to ObsList.Count - 1 do
     begin
       AnItem := ObsList[ItemIndex];
+      List.Add(AnItem);
+    end;
+    for ItemIndex := 0 to FInputObservations.Count - 1 do
+    begin
+      AnItem := FInputObservations[ItemIndex];
       List.Add(AnItem);
     end;
     if ModelSelection in Modflow2005Selection then
@@ -41584,6 +41606,8 @@ end;
 procedure TCustomModel.ClearInputObservationDataSets;
 begin
   FInputObservationDataSets.Clear;
+  FInputObservations.Clear;
+  FInputObsInstructionFileNames.Clear;
 end;
 
 function TCustomModel.GetInitialHeadUsed: TObjectUsedEvent;
@@ -42827,6 +42851,11 @@ begin
         ListFileNames.Free;
       end;
 
+      if self is TPhastModel then
+      begin
+        TPhastModel(self).ExportPestInput(FileName, pecNone);
+      end;
+
       Application.ProcessMessages;
       if not frmProgressMM.ShouldContinue then
       begin
@@ -42946,6 +42975,230 @@ begin
     Exit;
   end;
   HeadObsResults.ExportToShapeFile(FileName);
+end;
+
+procedure TCustomModel.ExportInputObsDataSets(RootName: string);
+type
+  TInputObsLocation = record
+    Index: integer;
+    Location: TPoint2D;
+    Value: double;
+    Weight: double;
+    Used: Boolean;
+  end;
+  PInputObsLocation = ^TInputObsLocation;
+var
+  DataSetName: string;
+  DataArrayIndex: Integer;
+  DataArray: TDataArray;
+  WeightDataSetName: string;
+  ObsLocations: TRbwQuadTree;
+  DisLimits: TGridLimit;
+  InputObsLocations: array of TInputObsLocation;
+  ObsCount: Integer;
+  AnInputObsLocation: TInputObsLocation;
+  Index: Integer;
+  Points: TQuadPointInRegionArray;
+  ObsDistance: Double;
+  WeightDataSet: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ObsIndex: Integer;
+  QPObsLocation: TQuadPointInRegion;
+  APointer: PInputObsLocation;
+  InnerIndex: Integer;
+  ObsLocation: TInputObsLocation;
+  InputObservation: TInputObservation;
+  IndObs: TIndividualObs;
+  InputObservationLayers: TList<TInputObservation>;
+  procedure WriteInputObs;
+  var
+    ArrayName: string;
+    InstructionFileName: string;
+    ExtractInstructions: TStreamWriter;
+    ObsIndex: Integer;
+    AnObs: TInputObservation;
+    ItemIndex: Integer;
+    obs: TIndividualObs;
+    PestInstructions: TStreamWriter;
+    Root: string;
+    OutputFileName: string;
+  begin
+    if InputObservationLayers.Count > 0 then  
+    begin    
+      Root := ExtractFileName(RootName);
+      Root := ChangeFileExt(Root, '');
+      Root := ChangeFileExt(Root, '');
+
+//      FilesToDelete
+      InstructionFileName := ChangeFileExt(RootName, Format('.%s_%d.ExtractIns',[DataArray.Name, LayerIndex+1]) );
+      AddInputObsInstructionFileName(InstructionFileName);
+      OutputFileName := ChangeFileExt(InstructionFileName, '.arrayvalues');
+      FilesToDelete.Add(OutputFileName);
+      ExtractInstructions := TFile.CreateText(InstructionFileName);
+      try
+        ArrayName := Format('arrays\%s.%s_%d.arrays', [Root,DataArray.Name, LayerIndex+1]);
+        ExtractInstructions.WriteLine(ArrayName);
+        for ObsIndex := 0 to InputObservationLayers.Count - 1 do
+        begin
+          AnObs := InputObservationLayers[ObsIndex];
+          ExtractInstructions.Write(AnObs.Name);
+          for ItemIndex := 0 to AnObs.Count - 1 do
+          begin
+            obs := AnObs[ItemIndex];
+            ExtractInstructions.Write(',');
+            ExtractInstructions.Write(obs.Index+1);
+            ExtractInstructions.Write(',');
+            ExtractInstructions.Write(obs.Weight);
+          end;
+          ExtractInstructions.WriteLine;
+        end;
+      finally
+        ExtractInstructions.Free;
+      end;
+
+      InstructionFileName := ChangeFileExt(RootName, 
+        Format('.%s_%d.ins', [DataArray.Name, LayerIndex+1]));
+      PestInstructions := TFile.CreateText(InstructionFileName);
+      try
+        for ObsIndex := 0 to InputObservationLayers.Count - 1 do
+        begin
+          AnObs := InputObservationLayers[ObsIndex];
+          PestInstructions.WriteLine(Format(KObsInstruction, [AnObs.Name]));
+        end;
+      finally
+        PestInstructions.Free;
+      end;
+    end;      
+  end;
+begin
+  DisLimits := DiscretizationLimits(vdTop);
+  ObsLocations := TRbwQuadTree.Create(nil);
+  InputObservationLayers := TList<TInputObservation>.Create;
+  try
+    ObsLocations.XMax := DisLimits.MaxX;
+    ObsLocations.XMin := DisLimits.MinX;
+    ObsLocations.YMax := DisLimits.MaxY;
+    ObsLocations.YMin := DisLimits.MinY;
+    for DataArrayIndex := 0 to FInputObservationDataSets.Count - 1 do
+    begin
+      DataSetName := FInputObservationDataSets[DataArrayIndex];
+      DataArray := DataArrayManager.GetDataSetByName(DataSetName);
+      ObsDistance := DataArray.ObservationDistance;
+      Assert(DataArray <> nil);
+      Assert(DataArray.PestParametersUsed and DataArray.UseValuesForObservations);
+      WeightDataSetName := DataArray.WeightDataSetName;
+      WeightDataSet := DataArrayManager.GetDataSetByName(WeightDataSetName);
+      Assert(WeightDataSet <> nil);
+      if ObsDistance <= 0 then
+      begin
+        for LayerIndex := 0 to WeightDataSet.LayerCount - 1 do
+        begin
+          Index := 0;  
+          InputObservationLayers.Clear;
+          for RowIndex := 0 to WeightDataSet.RowCount - 1 do
+          begin
+            for ColIndex := 0 to WeightDataSet.ColumnCount - 1 do
+            begin
+              IndObs.Weight := WeightDataSet.RealData[LayerIndex, RowIndex, ColIndex];
+              if IndObs.Weight > 0 then
+              begin
+                IndObs.Value := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+                IndObs.Index := Index;
+                InputObservation := TInputObservation.Create;
+                FInputObservations.Add(InputObservation);
+                InputObservationLayers.Add(InputObservation);
+                InputObservation.Name := Format('%d_%d_%s', 
+                  [LayerIndex+1, IndObs.Index, DataArray.Name]);
+                InputObservation.ObservationGroup := DataArray.Name;
+                InputObservation.AddIndividualObs(IndObs);
+              end;
+              Inc(Index);
+            end;
+          end;
+          WriteInputObs;
+        end;
+      end
+      else
+      begin
+        SetLength(InputObsLocations, DataArray.RowCount * DataArray.ColumnCount);
+        for LayerIndex := 0 to WeightDataSet.LayerCount - 1 do
+        begin
+          Index := 0;  
+          ObsCount := 0;
+          ObsLocations.Clear;
+          InputObservationLayers.Clear;
+
+          for RowIndex := 0 to WeightDataSet.RowCount - 1 do
+          begin
+            for ColIndex := 0 to WeightDataSet.ColumnCount - 1 do
+            begin
+              AnInputObsLocation.Weight := WeightDataSet.RealData[LayerIndex, RowIndex, ColIndex];
+              if AnInputObsLocation.Weight > 0 then
+              begin
+                AnInputObsLocation.Value := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+                AnInputObsLocation.Index := Index;
+                AnInputObsLocation.Used := False;
+                case WeightDataSet.EvaluatedAt of
+                  eaBlocks:
+                    begin
+                      AnInputObsLocation.Location := TwoDElementCenter(ColIndex, RowIndex);
+                    end;
+                  eaNodes:
+                    begin
+                      AnInputObsLocation.Location := TwoDElementCorner(ColIndex, RowIndex);
+                    end;
+                end;
+                InputObsLocations[ObsCount] := AnInputObsLocation;
+                ObsLocations.AddPoint(AnInputObsLocation.Location.x, 
+                  AnInputObsLocation.Location.y, 
+                  Addr(InputObsLocations[ObsCount]));
+                Inc(ObsCount);
+              end;
+              Inc(Index);
+            end;
+          end;
+
+          for ObsIndex := 0 to ObsCount - 1 do
+          begin
+            AnInputObsLocation := InputObsLocations[ObsIndex];
+            if not AnInputObsLocation.Used then
+            begin
+              InputObservation := TInputObservation.Create;
+              FInputObservations.Add(InputObservation);
+              InputObservationLayers.Add(InputObservation);
+              InputObservation.Name := Format('%d_%d_%s', 
+                [LayerIndex+1, AnInputObsLocation.Index, DataArray.Name]);
+              InputObservation.ObservationGroup := DataArray.Name;
+
+              ObsLocations.FindPointsInCircle(AnInputObsLocation.Location.x, 
+                AnInputObsLocation.Location.y, ObsDistance, Points);
+              for InnerIndex := 0 to Length(Points) - 1 do
+              begin
+                QPObsLocation := Points[InnerIndex];
+                Assert(Length(QPObsLocation.Data) = 1);
+                APointer := QPObsLocation.Data[0];
+                ObsLocation := APointer^;
+                if not ObsLocation.Used then
+                begin
+                  APointer^.Used := True;
+                  IndObs.Index := ObsLocation.Index;
+                  IndObs.Value := ObsLocation.Value;
+                  IndObs.Weight := ObsLocation.Weight;
+                  InputObservation.AddIndividualObs(IndObs);
+                end;
+              end;
+            end;
+          end;
+          WriteInputObs;
+        end;
+      end;
+    end;
+  finally  
+    ObsLocations.Free;
+    InputObservationLayers.Free;
+  end;  
 end;
 
 procedure TCustomModel.ExportLakePackage(const FileName: string);
@@ -44506,11 +44759,6 @@ begin
         PestObsExtractorInputWriter.WriteFile(FileName)
       finally
         PestObsExtractorInputWriter.Free;
-      end;
-
-      if self is TPhastModel then
-      begin
-        TPhastModel(self).ExportPestInput(FileName, pecNone);
       end;
 
       if GwtUsed then

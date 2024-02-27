@@ -1228,6 +1228,7 @@ const
   StrArrays = 'arrays';
   StrKrigfactorsscript = '.krig_factors_script';
   StrIfExist0sDel = 'if exist "%0:s" del "%0:s"';
+  KObsInstruction = 'l1 !%s!';
 
 implementation
 
@@ -1308,11 +1309,13 @@ resourcestring
   StrMODFLOWTimeSeries = 'MODFLOW time series Interpolated value in series %' +
   '0:s at time %1:g.';
   StrTheFormulaShouldInt = 'The formula should result in an integer';
+  StrGetValuesFromArrayFi = 'GetValuesFromArrayFiles.exe not found';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
   StrMf2005ObsExtractor = 'Mf2005ObsExtractor.exe';
   StrPlprocexe = 'plproc.exe';
+  StrArrayExtractor = 'GetValuesFromArrayFiles.exe';
 
 var
 //  NameFile: TStringList;
@@ -1494,6 +1497,52 @@ begin
   StoredPLPROC_Location := result;
 end;
 
+var
+  StoredArrayExtract: string = '';
+
+function GetArrayExtractor_Location(const FileName: string; Model: TCustomModel): string;
+var
+  TestedLocations: TStringList;
+begin
+  if (StoredArrayExtract <> '')
+    and (StoredArrayExtract <> StrArrayExtractor) then
+  begin
+    result := StoredArrayExtract;
+    Exit;
+  end;
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrGetValuesFromArrayFi);
+  TestedLocations := TStringList.Create;
+  try
+    result := IncludeTrailingPathDelimiter(
+      ExtractFileDir(Application.ExeName)) + StrArrayExtractor;
+    if not FileExists(result) then
+    begin
+      TestedLocations.Add(result);
+      result := IncludeTrailingPathDelimiter
+        (Model.ProgramLocations.PestDirectory) + StrArrayExtractor;
+      if not FileExists(result) then
+      begin
+        TestedLocations.Add(result);
+        result := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+          + StrArrayExtractor;
+        if not FileExists(result) then
+        begin
+          TestedLocations.Add(result);
+          if Model.PestUsed then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrGetValuesFromArrayFi,
+              Format(StrPLPROCWasNotFound, [TestedLocations.DelimitedText]));
+          end;
+          result := StrArrayExtractor;
+        end;
+      end;
+    end;
+  finally
+    TestedLocations.Free;
+  end;
+  StoredArrayExtract := result;
+end;
+
 procedure MoveAppToDirectory(const AppFullPath, Directory: string);
 var
   AppName: string;
@@ -1574,8 +1623,7 @@ var
   SimCount: Integer;
   ChemIndex: Integer;
   ChemExt: string;
-//  BackupMfsimName: string;
-//  CopyLine: WideString;
+  ArrayExtractor_Location: string;
 begin
 
   ADirectory:= GetCurrentDir;
@@ -1665,6 +1713,21 @@ begin
         end;
       end;
       ParamEstBatchFile.AddStrings(Model.PestTemplateLines);
+
+      Model.ExportInputObsDataSets(FileName);
+
+      if Model.InputObsInstructionFileNames.Count > 0 then
+      begin
+        ParamEstBatchFile.Add('');
+        ArrayExtractor_Location := GetArrayExtractor_Location(FileName, Model);
+        MoveAppToDirectory(ArrayExtractor_Location, ModelDirectory);
+        ArrayExtractor_Location := ExtractFileName(ArrayExtractor_Location);
+        for DSIndex := 0 to Model.InputObsInstructionFileNames.Count - 1 do
+        begin
+          ParamEstBatchFile.Add(ArrayExtractor_Location + ' ' + Model.InputObsInstructionFileNames[DSIndex])
+        end;
+      end;
+
 
       ArchiveBatchFile.Add('if not exist "..\..\output\NUL" mkdir "..\..\output"');
       ModelName := ExtractFileName(ChangeFileExt(FileName, ''));
@@ -8233,7 +8296,7 @@ begin
 
       if Model.PestUsed then
       begin
-        FPestInstructionFile.Add(Format('l1 !%s!', [OBSNAM]));
+        FPestInstructionFile.Add(Format(KObsInstruction, [OBSNAM]));
       end;
     end;
     if EarlyTimes <> '' then

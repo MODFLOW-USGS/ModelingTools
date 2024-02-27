@@ -8,15 +8,24 @@ uses
   System.SysUtils,
   ExtractValuesFromFileUnit in 'ExtractValuesFromFileUnit.pas';
 
+var
+  ArrayFileHandler: TArrayFileHandler;
+
 begin
   try
-    if ParamCount < 2 then
+    if ParamCount < 1 then
     begin
-      Writeln('Usage: two command line parameters must be supplied.');
-      Writeln('1. Array file from which values are to be extracted.');
-      Writeln('2. Input file with a list of array names followed by the index values (1-based) in the array to be averaged.');
+      Writeln('Usage: a command line parameters must be supplied.');
+      Writeln('The first line in the file is the name of the file from which values are to be extracted.');
+      Writeln('The remaining lines list observation names followed by alternating index values (1-based) ');
+      Writeln('in the array and weights associated with those values.');
     end;
-    { TODO -oUser -cConsole Main : Insert code here }
+    ArrayFileHandler := TArrayFileHandler.Create;
+    try
+      ArrayFileHandler.ConvertValues;
+    finally
+      ArrayFileHandler.Free;
+    end;
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

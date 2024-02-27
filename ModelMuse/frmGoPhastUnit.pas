@@ -10698,6 +10698,7 @@ begin
         end;
 
         PhastModel.FinalizePvalAndTemplate(FileName);
+        PhastModel.ExportInputObsDataSets(FileName);
 
         PhastModel.ExportPestInput(FileName, pecNone);
       finally

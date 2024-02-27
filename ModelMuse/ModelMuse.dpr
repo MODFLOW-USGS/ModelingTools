@@ -941,7 +941,8 @@ uses
   Mf6.VscFileReaderUnit in '..\MF6InputReader\Mf6.VscFileReaderUnit.pas',
   Mf6.WelFileReaderUnit in '..\MF6InputReader\Mf6.WelFileReaderUnit.pas',
   frmSelectFlowModelUnit in 'frmSelectFlowModelUnit.pas' {frmSelectFlowModel},
-  Modflow6ModelImporter in 'Modflow6ModelImporter.pas';
+  Modflow6ModelImporter in 'Modflow6ModelImporter.pas',
+  InputDataObservationsUnit in 'InputDataObservationsUnit.pas';
 
 {$R *.res}
 

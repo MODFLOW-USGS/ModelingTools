@@ -4310,7 +4310,7 @@ begin
         Exit;
       end;
       WeightDataArray := LocalModel.DataArrayManager.CreateNewDataArray(
-        TDataArray, DataSetName, '""',
+        TDataArray, DataSetName, '0',
         DataSetName,
         Lock, rdtDouble, EvaluatedAt,
         Orientation, Classification);
@@ -4328,14 +4328,6 @@ begin
     begin
       WeightDataArray.OnDataSetUsed := LocalModel.ParamWeightsDataSetUsed;
       WeightDataArray.Classification := Classification;
-    end;
-    WeightDataArray.TalksTo(self);
-  end
-  else
-  begin
-    if WeightDataArray <> nil then
-    begin
-      WeightDataArray.StopsTalkingTo(self);
     end;
   end;
 end;
@@ -6209,6 +6201,7 @@ end;
 procedure TDataArray.Loaded;
 begin
   CreatePestParmNameDataSet;
+  CreatePestObservationWeightDataSet;
 end;
 
 procedure TDataArray.RestoreUpToDateStatus;

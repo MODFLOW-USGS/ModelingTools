@@ -14,13 +14,9 @@ type
     FInputFileName: string;
     FOutputFileName: string;
     FValues: TDoubleList;
-    procedure SetArrayFileName(const Value: string);
-    procedure SetInputFileName(const Value: string);
   public
     constructor Create;
     destructor Destroy; override;
-    property ArrayFileName: string read FArrayFileName write SetArrayFileName;
-    property InputFileName: string read FInputFileName write SetInputFileName;
     procedure ConvertValues;
   end;
 
@@ -36,54 +32,77 @@ var
   ValueIndex: Integer;
   InputFile: TStreamReader;
   ValueName: string;
-  Sum: Extended;
+  SumProducts: Extended;
   OutputFile: TStreamWriter;
   index: Integer;
-//  ObsValues: TDoubleList;
+  SumWeights: Extended;
+  Weight: Extended;
 begin
-  Assert(TFile.Exists(FArrayFileName));
+  FInputFileName := ExpandFileName(ParamStr(1));
   Assert(TFile.Exists(FInputFileName));
   FOutputFileName := ChangeFileExt(FInputFileName, '.arrayvalues');
   FormatSettings.DecimalSeparator := '.';
   Splitter := TStringList.Create;
   try
-    ArrayFile := TFile.OpenText(FArrayFileName);
-    try
-      while not ArrayFile.EndOfStream do
-      begin
-        ALine := ArrayFile.ReadLine;
-        Splitter.DelimitedText := ALine;
-        for ValueIndex := 0 to Splitter.Count - 1 do
-        begin
-          ALine := Splitter[ValueIndex];
-          FValues.Add(StrToFloat(ALine));
-        end;
-      end;
-    finally
-      ArrayFile.Free;
-    end;
-
     OutputFile := TFile.CreateText(FOutputFileName);
     InputFile := TFile.OpenText(FInputFileName);
     try
+      FArrayFileName := ExpandFileName(InputFile.ReadLine);
+      Assert(TFile.Exists(FArrayFileName));
+      ArrayFile := TFile.OpenText(FArrayFileName);
+      try
+        while not ArrayFile.EndOfStream do
+        begin
+          ALine := ArrayFile.ReadLine;
+          Splitter.DelimitedText := ALine;
+          for ValueIndex := 0 to Splitter.Count - 1 do
+          begin
+            ALine := Splitter[ValueIndex];
+            FValues.Add(StrToFloat(ALine));
+          end;
+        end;
+      finally
+        ArrayFile.Free;
+      end;
+
+      index := -1;
+      Weight := -1;
       while not InputFile.EndOfStream do
       begin
         ALine := InputFile.ReadLine;
         Splitter.DelimitedText := ALine;
         if Splitter.Count > 1 then
         begin
-          Sum := 0.0;
+          Assert(Odd(Splitter.Count));
+          SumProducts := 0.0;
+          SumWeights := 0.0;
           ValueName := Splitter[0];
-          for ValueIndex := 0 to Splitter.Count - 1 do
+          for ValueIndex := 1 to Splitter.Count - 1 do
           begin
             ALine := Splitter[ValueIndex];
-            index := StrToInt(ALine) - 1;
-            Assert(index >= 0);
-            Assert(index < FValues.Count);
-            Sum := Sum + FValues[index];
+            if Odd(ValueIndex) then
+            begin
+              index := StrToInt(ALine) - 1;
+              Assert(index >= 0);
+              Assert(index < FValues.Count);
+            end
+            else
+            begin
+              Weight := StrToFloat(ALine);
+              Assert(Weight > 0);
+              SumProducts := SumProducts + FValues[index]*Weight;
+              SumWeights := SumWeights + Weight
+            end;
           end;
-          OutputFile.Write(Sum/(Splitter.Count-1));
-          OutputFile.Write(' ' + ValueName);
+          if SumWeights <> 0 then
+          begin
+            OutputFile.Write(SumProducts/SumWeights);
+          end
+          else
+          begin
+            OutputFile.Write(0.0);
+          end;
+          OutputFile.WriteLine(' ' + ValueName);
         end;
       end;
     finally
@@ -106,16 +125,6 @@ destructor TArrayFileHandler.Destroy;
 begin
   FValues.Free;
   inherited;
-end;
-
-procedure TArrayFileHandler.SetArrayFileName(const Value: string);
-begin
-  FArrayFileName := Value;
-end;
-
-procedure TArrayFileHandler.SetInputFileName(const Value: string);
-begin
-  FInputFileName := Value;
 end;
 
 end.

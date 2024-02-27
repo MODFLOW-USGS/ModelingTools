@@ -174,7 +174,10 @@ var
   ObsIndex: Integer;
   AnObs: TCustomObservationItem;
   IObs: IObservationItem;
+  ObservationGroups: TPestObservationGroups;
+  ObsGroup: TPestObservationGroup;
 begin
+  ObservationGroups := frmGoPhast.PhastModel.PestProperties.ObservationGroups;
   TempList := TObservationInterfaceList.Create;
   try
     frmGoPhast.PhastModel.FillObsInterfaceItemList(TempList, True);
@@ -188,11 +191,21 @@ begin
         if AnObs.Print then
         begin
           FUsedObservations.Add(IObs);
+          ObsGroup := ObservationGroups.GetObsGroupByName(IObs.ObservationGroup);
+          if ObsGroup = nil then
+          begin
+            ObservationGroups.Add.ObsGroupName := IObs.ObservationGroup;
+          end;
         end;
       end
       else
       begin
         FUsedObservations.Add(IObs);
+        ObsGroup := ObservationGroups.GetObsGroupByName(IObs.ObservationGroup);
+        if ObsGroup = nil then
+        begin
+          ObservationGroups.Add.ObsGroupName := IObs.ObservationGroup;
+        end;
       end;
     end;
     result := FUsedObservations.Count;
