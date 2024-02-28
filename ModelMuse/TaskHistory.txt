@@ -32643,6 +32643,7 @@ object TTaskHistory
       Categories.Strings = (
         'PEST Observations'
         'core code'
-        'Documentation')
+        'Documentation'
+        'Testing')
     end>
 end

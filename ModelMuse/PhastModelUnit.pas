@@ -42874,6 +42874,12 @@ begin
         ExportZoneBudgetModel(ChangeFileExt(FileName, StrZbzones), False, True);
       end;
 
+      if self is TPhastModel then
+      begin
+        TPhastModel(self).ExportPestInput(FileName, pecNone);
+      end;
+
+
       ListFileNames := TStringList.Create;
       try
         ListFileName := (NameFileWriter as TCustomNameFileWriter).ListFileName;
@@ -42887,11 +42893,6 @@ begin
           //RunZoneBudget.Bat
       finally
         ListFileNames.Free;
-      end;
-
-      if self is TPhastModel then
-      begin
-        TPhastModel(self).ExportPestInput(FileName, pecNone);
       end;
 
       Application.ProcessMessages;

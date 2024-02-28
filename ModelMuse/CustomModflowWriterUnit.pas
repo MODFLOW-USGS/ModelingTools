@@ -1626,6 +1626,8 @@ var
   ChemExt: string;
   ArrayExtractor_Location: string;
 begin
+  Model.ExportInputObsDataSets(FileName);
+
 
   ADirectory:= GetCurrentDir;
   try
@@ -1714,8 +1716,6 @@ begin
         end;
       end;
       ParamEstBatchFile.AddStrings(Model.PestTemplateLines);
-
-      Model.ExportInputObsDataSets(FileName);
 
       if Model.InputObsInstructionFileNames.Count > 0 then
       begin
