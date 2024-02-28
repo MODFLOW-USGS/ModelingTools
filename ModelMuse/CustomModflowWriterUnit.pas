@@ -1190,6 +1190,7 @@ procedure AddOpenListFileLine(ListFile: string; OpenListFile: Boolean;
   BatchFile: TStringList; ProgramLocations: TProgramLocations);
 
 function GetPLPROC_Location(const FileName: string; Model: TCustomModel): string;
+function GetArrayExtractor_Location(const FileName: string; Model: TCustomModel): string;
 
 resourcestring
   StrObservationFactor = '(Observation factor for the ' + sLineBreak + '%s)';

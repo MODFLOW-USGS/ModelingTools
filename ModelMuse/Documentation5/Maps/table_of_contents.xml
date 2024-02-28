@@ -2492,6 +2492,9 @@
     <topicref type="topic" id="4442045111894" build="ALL" modified="2021-08-27T09:26:08.268Z" icon="0" href="SutraObsExtractor">
       <caption translate="true">SutraObsExtractor</caption>
     </topicref>
+    <topicref type="topic" id="453499197946014" build="ALL" modified="2024-02-27T21:31:49.112Z" icon="0" href="GetValuesFromArrayFiles">
+      <caption translate="true">GetValuesFromArrayFiles</caption>
+    </topicref>
   </topicref>
   <topicref type="topic" id="395810558342272" build="ALL" modified="2008-05-13T06:05:34.406Z" icon="0" href="Troubleshooting_Data_Set_Value">
     <caption translate="true">Troubleshooting Data Set Values</caption>

@@ -9,8 +9,8 @@ inherited frmDataSets: TfrmDataSets
   Font.Height = 19
   OnActivate = FormActivate
   OnClose = FormClose
-  ExplicitWidth = 636
-  ExplicitHeight = 497
+  ExplicitWidth = 632
+  ExplicitHeight = 496
   TextHeight = 19
   object Splitter1: TSplitter
     Left = 295
@@ -29,11 +29,13 @@ inherited frmDataSets: TfrmDataSets
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 389
+    ExplicitWidth = 616
     DesignSize = (
       620
       41)
     object btnOK: TBitBtn
-      Left = 381
+      Left = 377
       Top = 2
       Width = 91
       Height = 33
@@ -61,9 +63,10 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOKClick
+      ExplicitLeft = 373
     end
     object btnCancel: TBitBtn
-      Left = 478
+      Left = 474
       Top = 2
       Width = 91
       Height = 33
@@ -72,6 +75,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnCancelClick
+      ExplicitLeft = 470
     end
     object btnAdd: TButton
       Left = 8
@@ -92,7 +96,7 @@ inherited frmDataSets: TfrmDataSets
       OnClick = btnDeleteClick
     end
     object btnHelp: TBitBtn
-      Left = 284
+      Left = 280
       Top = 2
       Width = 91
       Height = 33
@@ -101,6 +105,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
+      ExplicitLeft = 276
     end
   end
   object sbStatusBar: TStatusBar
@@ -111,6 +116,8 @@ inherited frmDataSets: TfrmDataSets
     Panels = <>
     ParentColor = True
     SimplePanel = True
+    ExplicitTop = 430
+    ExplicitWidth = 616
   end
   object tvDataSets: TTreeView
     Left = 0
@@ -127,6 +134,8 @@ inherited frmDataSets: TfrmDataSets
     OnChange = tvDataSetsChange
     OnChanging = tvDataSetsChanging
     OnMouseDown = tvDataSetsMouseDown
+    ExplicitWidth = 291
+    ExplicitHeight = 389
   end
   object pcDataSets: TJvPageControl
     Left = 300
@@ -136,6 +145,8 @@ inherited frmDataSets: TfrmDataSets
     ActivePage = tabParameters
     Align = alRight
     TabOrder = 1
+    ExplicitLeft = 296
+    ExplicitHeight = 389
     object tabBasic: TTabSheet
       Caption = 'Basic'
       DesignSize = (
@@ -548,6 +559,7 @@ inherited frmDataSets: TfrmDataSets
         Width = 273
         Height = 49
         Caption = 'Define observations of data set values'
+        Enabled = False
         TabOrder = 1
         WordWrap = True
         OnClick = cbObservationsClick
@@ -557,6 +569,8 @@ inherited frmDataSets: TfrmDataSets
         Top = 127
         Width = 145
         Height = 22
+        Color = clBtnFace
+        Enabled = False
         TabOrder = 2
         Text = '0'
         OnChange = rdeObservationSearchDistanceChange

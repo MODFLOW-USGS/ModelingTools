@@ -1350,6 +1350,8 @@ begin
     Exit;
   end;
   SelectedEdit.PestParametersUsed := cbParametersUsed.Checked;
+  cbObservations.Enabled := cbParametersUsed.Checked;
+  rdeObservationSearchDistance.Enabled := cbParametersUsed.Checked;
 end;
 
 procedure TfrmDataSets.comboEvaluatedAtChange(Sender: TObject);

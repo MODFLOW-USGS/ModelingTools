@@ -1022,6 +1022,7 @@ begin
     else
       Assert(False);
   end;
+  NINSFLE := NINSFLE + Model.InputObsInstructionFiles.Count;
   // PEST will always read all the simulated values from one file.
   WriteInteger(NINSFLE);
   // PRECIS
@@ -1518,6 +1519,7 @@ var
   LineIndex: Integer;
   PPIndex: Integer;
   PilotPointItem: TStoredPilotParamDataItem;
+  InsFileIndex: Integer;
 begin
   // template files
   WriteSectionHeader('model input/output');
@@ -1598,6 +1600,16 @@ begin
   else
   begin
     Assert(False);
+  end;
+
+  for InsFileIndex := 0 to Model.InputObsInstructionFiles.Count - 1 do
+  begin
+    INSFLE := ExtractFileName(Model.InputObsInstructionFiles[InsFileIndex]);
+    OUTFLE := ChangeFileExt(INSFLE, '.arrayvalues');
+    WriteString(INSFLE);
+    WriteString(' ' + OUTFLE);
+    Model.FilesToDelete.Add(OUTFLE);
+    NewLine;
   end;
 
   NewLine;

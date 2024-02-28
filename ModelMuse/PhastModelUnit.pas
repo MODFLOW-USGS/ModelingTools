@@ -1199,6 +1199,7 @@ that affects the model output should also have a comment. }
     FMf6GwtNameWriters: TObject;
     FInputObservations: TInputObservationObjectList;
     FInputObsInstructionFileNames: TStringList;
+    FInputObsInstructionFiles: TStringList;
     function GetGlobalVariables: TGlobalVariables; virtual; abstract;
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
     procedure SetSomeSegmentsUpToDate(const Value: boolean); virtual; abstract;
@@ -2168,6 +2169,8 @@ that affects the model output should also have a comment. }
     function GetViscosityPkgUsedUsed: Boolean;
     function GetViscosityPkgViscUsed: Boolean;
     function GetInputObservationDataSets: TStrings;
+    function GetnputObsInstructionFileNames: TStrings;
+    function GetInputObsInstructionFiles: TStrings;
   public
     function ChdIsSelected: Boolean; virtual;
     function TvkIsSelected: Boolean; virtual;
@@ -2276,7 +2279,7 @@ that affects the model output should also have a comment. }
       ParamType: TParameterType; DataIndex: integer; const DisplayName: string); virtual; abstract;
     procedure Assign(Source: TPersistent); override;
     // @name clears @link(FInputObservationDataSets), @link(FInputObservations),
-    // and @link(FInputObsInstructionFileNames);
+    // @link(FInputObsInstructionFileNames), and @link(FInputObsInstructionFiles).;
     procedure ClearInputObservationDataSets;
     // @name adds the names of input data sets to @link(FInputObservationDataSets).
     // The data sets should have one of more input values with a known weight
@@ -2284,7 +2287,7 @@ that affects the model output should also have a comment. }
     procedure AddInputObsDataSet(DataArray: TDataArray);
     Procedure ExportInputObsDataSets(RootName: string);
     procedure AddInputObsInstructionFileName(AFileName: string);
-    property InputObsInstructionFileNames: TStringList read FInputObsInstructionFileNames;
+    procedure AddInputObsInstructionFile(AFileName: string);
 
     property Clearing: Boolean read GetClearing;
     property DataArrayManager: TDataArrayManager read GetDataArrayManager;
@@ -3330,6 +3333,18 @@ that affects the model output should also have a comment. }
     property PestObsCollection: TPestObsCollection read FPestObsCollection
       write SetPestObsCollection;
     property InputObservationDataSets: TStrings read GetInputObservationDataSets
+    {$IFNDEF InputObservations}
+      Stored False
+    {$ENDIF}
+      ;
+    property InputObsInstructionFileNames: TStrings
+      read GetnputObsInstructionFileNames
+    {$IFNDEF InputObservations}
+      Stored False
+    {$ENDIF}
+      ;
+    property InputObsInstructionFiles: TStrings
+      read GetInputObsInstructionFiles
     {$IFNDEF InputObservations}
       Stored False
     {$ENDIF}
@@ -32019,6 +32034,7 @@ begin
   FInputObservationDataSets.Sorted := True;
   FInputObservationDataSets.Duplicates := dupIgnore;
   FInputObsInstructionFileNames := TStringList.Create;
+  FInputObsInstructionFiles := TStringList.Create;
 
   FCanDrawContours := True;
   FSutraPestScripts := TStringList.Create;
@@ -33023,6 +33039,7 @@ begin
   FPestTemplateLines.Free;
   FSutraPestScripts.Free;
 
+  FInputObsInstructionFiles.Free;
   FInputObsInstructionFileNames.Free;
   FInputObservationDataSets.Free;
   FInputObservations.Free;
@@ -34305,6 +34322,11 @@ procedure TCustomModel.AddInputObsDataSet(DataArray: TDataArray);
 begin
   Assert(DataArray <> nil);
   FInputObservationDataSets.Add(DataArray.Name);
+end;
+
+procedure TCustomModel.AddInputObsInstructionFile(AFileName: string);
+begin
+  FInputObsInstructionFiles.Add(AFileName);
 end;
 
 procedure TCustomModel.AddInputObsInstructionFileName(AFileName: string);
@@ -39872,6 +39894,11 @@ resourcestring
   'ally in <root>\postprocessors\zonebudget where <root> is the base directo' +
   'ry for MODFLOW-OWHM. Set the location of ZoneBudget in the "Model|MODFLOW' +
   ' Program Locations" dialog box.';
+  StrNoInputDataSetOb = 'No input data set observations for the following da' +
+  'ta sets because all the weights were 0.';
+  StrMoreThan200Input = 'More than 200 input data set observations for the f' +
+  'ollowing data sets. Excessive numbers of observations can cause excessive' +
+  ' memory use by PEST.';
 
 procedure TCustomModel.UpdateAllotmentFullStressPeriods(TimeList: TRealList);
 var
@@ -40819,6 +40846,11 @@ begin
   result := DoNpfUsed
 end;
 
+function TCustomModel.GetnputObsInstructionFileNames: TStrings;
+begin
+  result := FInputObsInstructionFileNames;
+end;
+
 function TCustomModel.GetNrdInfilLocationUsed: TObjectUsedEvent;
 begin
   result := DoNrdInfilLocationUsed;
@@ -41608,6 +41640,7 @@ begin
   FInputObservationDataSets.Clear;
   FInputObservations.Clear;
   FInputObsInstructionFileNames.Clear;
+  FInputObsInstructionFiles.Clear;
 end;
 
 function TCustomModel.GetInitialHeadUsed: TObjectUsedEvent;
@@ -41628,6 +41661,11 @@ end;
 function TCustomModel.GetInputObservationDataSets: TStrings;
 begin
   result := FInputObservationDataSets;
+end;
+
+function TCustomModel.GetInputObsInstructionFiles: TStrings;
+begin
+  result := FInputObsInstructionFiles;
 end;
 
 function TCustomModel.GetIrrigationUsed: TObjectUsedEvent;
@@ -43012,6 +43050,7 @@ var
   InputObservation: TInputObservation;
   IndObs: TIndividualObs;
   InputObservationLayers: TList<TInputObservation>;
+  ObservationCount: Integer;
   procedure WriteInputObs;
   var
     ArrayName: string;
@@ -43031,6 +43070,7 @@ var
       Root := ChangeFileExt(Root, '');
       Root := ChangeFileExt(Root, '');
 
+      ObservationCount := ObservationCount + InputObservationLayers.Count;
 //      FilesToDelete
       InstructionFileName := ChangeFileExt(RootName, Format('.%s_%d.ExtractIns',[DataArray.Name, LayerIndex+1]) );
       AddInputObsInstructionFileName(InstructionFileName);
@@ -43058,10 +43098,12 @@ var
         ExtractInstructions.Free;
       end;
 
-      InstructionFileName := ChangeFileExt(RootName, 
+      InstructionFileName := ChangeFileExt(RootName,
         Format('.%s_%d.ins', [DataArray.Name, LayerIndex+1]));
+      AddInputObsInstructionFile(InstructionFileName);
       PestInstructions := TFile.CreateText(InstructionFileName);
       try
+        PestInstructions.WriteLine('pif @');
         for ObsIndex := 0 to InputObservationLayers.Count - 1 do
         begin
           AnObs := InputObservationLayers[ObsIndex];
@@ -43083,6 +43125,7 @@ begin
     ObsLocations.YMin := DisLimits.MinY;
     for DataArrayIndex := 0 to FInputObservationDataSets.Count - 1 do
     begin
+      ObservationCount := 0;
       DataSetName := FInputObservationDataSets[DataArrayIndex];
       DataArray := DataArrayManager.GetDataSetByName(DataSetName);
       ObsDistance := DataArray.ObservationDistance;
@@ -43109,8 +43152,8 @@ begin
                 InputObservation := TInputObservation.Create;
                 FInputObservations.Add(InputObservation);
                 InputObservationLayers.Add(InputObservation);
-                InputObservation.Name := Format('%d_%d_%s', 
-                  [LayerIndex+1, IndObs.Index, DataArray.Name]);
+                InputObservation.Name := Format('%d_%d_%s',
+                  [LayerIndex+1, IndObs.Index+1, DataArray.Name]);
                 InputObservation.ObservationGroup := DataArray.Name;
                 InputObservation.AddIndividualObs(IndObs);
               end;
@@ -43168,8 +43211,8 @@ begin
               InputObservation := TInputObservation.Create;
               FInputObservations.Add(InputObservation);
               InputObservationLayers.Add(InputObservation);
-              InputObservation.Name := Format('%d_%d_%s', 
-                [LayerIndex+1, AnInputObsLocation.Index, DataArray.Name]);
+              InputObservation.Name := Format('%d_%d_%s',
+                [LayerIndex+1, AnInputObsLocation.Index+1, DataArray.Name]);
               InputObservation.ObservationGroup := DataArray.Name;
 
               ObsLocations.FindPointsInCircle(AnInputObsLocation.Location.x, 
@@ -43194,8 +43237,18 @@ begin
           WriteInputObs;
         end;
       end;
+      if ObservationCount = 0 then
+      begin
+        frmErrorsAndWarnings.AddWarning(self, StrNoInputDataSetOb, DataArray.Name);
+      end
+      else if ObservationCount > 200 then
+      begin
+        frmErrorsAndWarnings.AddWarning(self, StrMoreThan200Input,
+          Format('%s: %d', [DataArray.Name, ObservationCount]));
+
+      end;
     end;
-  finally  
+  finally
     ObsLocations.Free;
     InputObservationLayers.Free;
   end;  

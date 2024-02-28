@@ -32642,6 +32642,7 @@ object TTaskHistory
       Date = 45349.000000000000000000
       Categories.Strings = (
         'PEST Observations'
-        'core code')
+        'core code'
+        'Documentation')
     end>
 end

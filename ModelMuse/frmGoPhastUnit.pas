@@ -10164,6 +10164,7 @@ var
   BackupSutraFileName: string;
   CopyLine: string;
   SutraFilName: string;
+  ArrayExtractor_Location: string;
   procedure AddPestDataArraysToDictionary(InputPestDataArrays: TArray<TDataArray>);
   var
     DataArray: TDataArray;
@@ -10600,7 +10601,7 @@ begin
               ParamEstBatFile.Add(PLPROC_Location + INFLE);
               if ADataArray.UseValuesForObservations then
               begin
-
+                PhastModel.AddInputObsDataSet(ADataArray);
               end;
             end;
           end;
@@ -10617,6 +10618,20 @@ begin
               StrEnhancedTemplateProc, FileName);
             MoveAppToDirectory(EnhancedTemplateProcLoc, ModelDirectory);
 
+          end;
+
+          PhastModel.ExportInputObsDataSets(FileName);
+
+          if PhastModel.InputObsInstructionFileNames.Count > 0 then
+          begin
+            ParamEstBatFile.Add('');
+            ArrayExtractor_Location := GetArrayExtractor_Location(FileName, PhastModel);
+            MoveAppToDirectory(ArrayExtractor_Location, ModelDirectory);
+            ArrayExtractor_Location := ExtractFileName(ArrayExtractor_Location);
+            for DSIndex := 0 to PhastModel.InputObsInstructionFileNames.Count - 1 do
+            begin
+              ParamEstBatFile.Add(ArrayExtractor_Location + ' ' + PhastModel.InputObsInstructionFileNames[DSIndex])
+            end;
           end;
 
           BatchFile.Add('"' + SutraFileName + '"');
@@ -10698,7 +10713,7 @@ begin
         end;
 
         PhastModel.FinalizePvalAndTemplate(FileName);
-        PhastModel.ExportInputObsDataSets(FileName);
+
 
         PhastModel.ExportPestInput(FileName, pecNone);
       finally
