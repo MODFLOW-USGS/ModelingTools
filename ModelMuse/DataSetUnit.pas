@@ -4323,11 +4323,13 @@ begin
       WeightDataArray.OnInitialize := nil;
       WeightDataArray.OnShouldUseOnInitialize := nil;
       WeightDataArray.SetDimensions(False);
+      WeightDataArray.PestParametersAllowed := False;
     end
     else
     begin
       WeightDataArray.OnDataSetUsed := LocalModel.ParamWeightsDataSetUsed;
       WeightDataArray.Classification := Classification;
+      WeightDataArray.PestParametersAllowed := False;
     end;
   end;
 end;

@@ -76,6 +76,8 @@ type
   // @name is a 3D array of @link(T3DRealPoint)s.
   T3DRealPointArray3 = array of array of array of TPoint3D;
 
+  TPoint2DList = TList<TPoint2D>;
+
   // @name records the minimum and maximum values assigned to a data set.
   TMinMax = record
     LogRMin, LogRMax: Double;

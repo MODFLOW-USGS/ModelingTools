@@ -35,7 +35,7 @@ inherited frmDataSets: TfrmDataSets
       620
       41)
     object btnOK: TBitBtn
-      Left = 377
+      Left = 373
       Top = 2
       Width = 91
       Height = 33
@@ -63,10 +63,10 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnOKClick
-      ExplicitLeft = 373
+      ExplicitLeft = 369
     end
     object btnCancel: TBitBtn
-      Left = 474
+      Left = 470
       Top = 2
       Width = 91
       Height = 33
@@ -75,7 +75,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnCancelClick
-      ExplicitLeft = 470
+      ExplicitLeft = 466
     end
     object btnAdd: TButton
       Left = 8
@@ -96,7 +96,7 @@ inherited frmDataSets: TfrmDataSets
       OnClick = btnDeleteClick
     end
     object btnHelp: TBitBtn
-      Left = 280
+      Left = 276
       Top = 2
       Width = 91
       Height = 33
@@ -105,7 +105,7 @@ inherited frmDataSets: TfrmDataSets
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnHelpClick
-      ExplicitLeft = 276
+      ExplicitLeft = 272
     end
   end
   object sbStatusBar: TStatusBar
@@ -604,11 +604,10 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 306
+          Width = 69
           Height = 19
           Align = alTop
           Caption = 'Comment'
-          ExplicitWidth = 69
         end
         object reComment: TRichEdit
           AlignWithMargins = True
@@ -636,11 +635,10 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 306
+          Width = 164
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
-          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

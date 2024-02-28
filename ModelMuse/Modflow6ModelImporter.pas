@@ -6,7 +6,7 @@ uses
   Winapi.Windows, System.Classes, System.IOUtils, Vcl.Dialogs, System.SysUtils, System.UITypes,
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
   ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
-  System.Generics.Defaults, Mf6.ObsFileReaderUnit;
+  System.Generics.Defaults, Mf6.ObsFileReaderUnit, ModflowLakMf6Unit;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -27,6 +27,7 @@ type
 
   TMvrSource = record
     ScreenObject: TScreenObject;
+    LakeOutlet: TLakeOutlet;
     PackageName: string;
     Period: Integer;
     IDs: TArray<Integer>;
@@ -154,8 +155,9 @@ uses
   Mf6.GhbFileReaderUnit, ModflowGhbUnit, Mf6.RchFileReaderUnit, ModflowRchUnit,
   ModflowEtsUnit, Mf6.EvtFileReaderUnit, ModflowEvtUnit, Mf6.MawFileReaderUnit,
   ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit,
-  Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit, ModflowLakMf6Unit,
-  Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit;
+  Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit,
+  Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit, IntListUnit,
+  ConvexHullUnit, CellLocationUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -4732,6 +4734,15 @@ type
   end;
   TImportLakes = TObjectList<TImportLake>;
 
+Type
+  TLakMvrLink = record
+    LakPeriod: TLakPeriod;
+    MvrPeriod: TMvrPeriod;
+    function Period: Integer;
+  end;
+  TLakMvrLinkArray = TArray<TLakMvrLink>;
+  TLakMvrLinkList = TList<TLakMvrLink>;
+
 procedure TModflow6Importer.ImportLak(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
 var
@@ -4768,6 +4779,12 @@ var
   Mvr: TMvr;
   FoundMvr: Boolean;
   Index: Integer;
+  LakMvrLinkArray: TLakMvrLinkArray;
+  LakMvrLinkList: TLakMvrLinkList;
+  LakMvrLink: TLakMvrLink;
+  StressPeriodIndex: Integer;
+  MvrPeriod: TMvrPeriod;
+  LakPeriod: TLakPeriod;
   procedure ApplyLakeSettings(ALake: TImportLake);
   var
     PriorValueItem: TLakeTimeItem;
@@ -4958,6 +4975,8 @@ var
     TimeSeriesName: string;
     ImportedTimeSeries: string;
     OutletList: TNumberedItemList;
+    MvrSource: TMvrSource;
+    StressPeriodIndex: Integer;
   begin
     for OutletIndex := 0 to ALake.FOutlets.Count - 1 do
     begin
@@ -4973,6 +4992,19 @@ var
         Assert(ImportOutlet.lakeout = OtherLake.FLakPackageItem.lakeno);
         LakeOutlet.OutletObjectName := OtherLake.LakeScreenObject.Name;
       end;
+
+      MvrSource.ScreenObject := ALake.LakeScreenObject;
+      MvrSource.LakeOutlet := LakeOutlet;
+      MvrSource.PackageName := Package.PackageName;
+      SetLength(MvrSource.IDs, 1);
+      MvrSource.SourceType := mspcLak;
+      MvrSource.IDs[0] := ImportOutlet.outletno;
+      for StressPeriodIndex := 0 to LakMvrLinkList.Count - 1 do
+      begin
+        MvrSource.Period := LakMvrLinkList[StressPeriodIndex].Period;
+        FMvrSources.Add(MvrSource);
+      end;
+
 
       if AnsiSameText(ImportOutlet.couttype, 'SPECIFIED') then
       begin
@@ -5071,11 +5103,14 @@ var
     ACellId: TCellId;
     NewTimeItem: TLakeTimeItem;
     LakeConnectionTypes: TLakeConnectionTypes;
+    MvrReceiver: TMvrReceiver;
+    StressPeriodIndex: Integer;
     procedure CreateDataSetScreenObject;
     var
       CellIds: TCellIdList;
       CellIndex: Integer;
       ACellId: TCellId;
+      UndoCreateScreenObject: TCustomUndo;
     begin
       ALake.DataSetsScreenObject := TScreenObject.CreateWithViewDirection(
         Model, vdTop, UndoCreateScreenObject, False);
@@ -5103,7 +5138,87 @@ var
       finally
         CellIds.Free;
       end;
-      ALake.DataSetsScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+      ALake.DataSetsScreenObject.ElevationFormula :=
+        rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
+    end;
+    procedure GetLakeInteriorCells;
+    var
+      Points: TPoint2DList;
+      ConnectionIndex: Integer;
+      CellId: TCellId;
+      ElementCenter: TDualLocation;
+      APoint: TPoint2D;
+      InputPolyGon: TPolygon2D;
+      OutputPolyGon: TPolygon2D;
+      PointIndex: Integer;
+      Temp: TScreenObject;
+      UndoCreateScreenObject: TCustomUndo;
+      CellList: TCellAssignmentList;
+      CellIndex: Integer;
+      ACellLocation: TCellAssignment;
+      BoundaryCells: T2DBoolArray;
+    begin
+      // This method may add extra cells to the lake if the lake outline is concave.
+      Points := TPoint2DList.Create;
+      try
+        SetLength(BoundaryCells, Model.RowCount, Model.ColumnCount);
+        for ConnectionIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          CellId := ALake.FConnections[ConnectionIndex].cellid;
+          if Model.DisvUsed then
+          begin
+            CellId.Row := 1;
+          end;
+          ElementCenter := Model.ElementLocation[CellId.Layer - 1,
+            CellId.Row - 1, CellId.Column - 1];
+          BoundaryCells[CellId.Row - 1, CellId.Column - 1] := True;
+          APoint.x := ElementCenter.RotatedLocation.x;
+          APoint.y := ElementCenter.RotatedLocation.y;
+          Points.Add(APoint)
+        end;
+        SetLength(InputPolyGon, Points.Count);
+        for PointIndex := 0 to Points.Count - 1 do
+        begin
+          InputPolyGon[PointIndex] := Points[PointIndex];
+        end;
+        ConvexHull(InputPolyGon, OutputPolyGon);
+        Temp := TScreenObject.CreateWithViewDirection(
+          Model, vdTop, UndoCreateScreenObject, False);
+        try
+          Temp.ElevationCount := ecZero;
+          Temp.SetPropertiesOfEnclosedCells := True;
+          Temp.Capacity := Length(OutputPolyGon) + 1;
+          Temp.AddPoint(OutputPolyGon[Length(OutputPolyGon)-1], True);
+          for PointIndex := 0 to Length(OutputPolyGon) - 1 do
+          begin
+            Temp.AddPoint(OutputPolyGon[PointIndex], False);
+          end;
+
+          CellList := TCellAssignmentList.Create;
+          try
+            Temp.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+            ALake.LakeScreenObject.Capacity := CellList.Count;
+            for CellIndex := 0 to CellList.Count - 1 do
+            begin
+              ACellLocation := CellList[CellIndex];
+              if not BoundaryCells[ACellLocation.Row, ACellLocation.Column] then
+              begin
+                ElementCenter := Model.ElementLocation[ACellLocation.Layer,
+                  ACellLocation.Row, ACellLocation.Column];
+                APoint.x := ElementCenter.RotatedLocation.x;
+                APoint.y := ElementCenter.RotatedLocation.y;
+                ALake.LakeScreenObject.AddPoint(APoint, True);
+              end;
+            end;
+          finally
+            CellList.Free;
+          end;
+        finally
+          Temp.Free;
+        end;
+      finally
+        Points.Free;
+      end;
     end;
   begin
     Assert(ALake <> nil);
@@ -5118,6 +5233,17 @@ var
       ALake.LakeScreenObject.Name := ALake.FLakPackageItem.boundname;
     end;
     ALake.LakeScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+    MvrReceiver.ScreenObject := ALake.LakeScreenObject;
+    MvrReceiver.PackageName := Package.PackageName;
+    SetLength(MvrReceiver.IDs, 1);
+    MvrReceiver.ReceiverType := mrpcLak;
+    MvrReceiver.IDs[0] := ALake.FLakPackageItem.lakeno;
+    for StressPeriodIndex := 0 to LakMvrLinkList.Count - 1 do
+    begin
+      MvrReceiver.Period := LakMvrLinkList[StressPeriodIndex].Period;
+      FMvrReceivers.Add(MvrReceiver);
+    end;
 
     Model.AddScreenObject(ALake.LakeScreenObject);
     ALake.LakeScreenObject.ElevationCount := ecOne;
@@ -5149,7 +5275,7 @@ var
       end
       else
       begin
-
+        GetLakeInteriorCells;
       end;
     finally
       CellIds.Free;
@@ -5404,7 +5530,67 @@ begin
 
   Map := TimeSeriesMap.Create;
   Lakes := TImportLakes.Create;
+  LakMvrLinkList := TLakMvrLinkList.Create;
   try
+
+    if Mvr = nil then
+    begin
+      LakMvrLink.MvrPeriod := nil;
+      for StressPeriodIndex := 0 to Lak.PeriodCount - 1 do
+      begin
+        LakMvrLink.LakPeriod := Lak.Periods[StressPeriodIndex];
+        LakMvrLinkList.Add(LakMvrLink);
+      end;
+    end
+    else
+    begin
+      SetLength(LakMvrLinkArray, Model.ModflowStressPeriods.Count);
+      for StressPeriodIndex := 0 to Length(LakMvrLinkArray) - 1 do
+      begin
+        LakMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
+        LakMvrLinkArray[StressPeriodIndex].LakPeriod := nil;
+      end;
+      for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+      begin
+        MvrPeriod := Mvr.Periods[StressPeriodIndex];
+        LakMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+      end;
+      for StressPeriodIndex := 0 to Lak.PeriodCount - 1 do
+      begin
+        LakPeriod := Lak.Periods[StressPeriodIndex];
+        LakMvrLinkArray[LakPeriod.Period-1].LakPeriod := LakPeriod;
+      end;
+
+      for StressPeriodIndex := 1 to Length(LakMvrLinkArray) - 1 do
+      begin
+        if LakMvrLinkArray[StressPeriodIndex].MvrPeriod = nil then
+        begin
+          LakMvrLinkArray[StressPeriodIndex].MvrPeriod := LakMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
+          LakMvrLinkArray[StressPeriodIndex].LakPeriod := LakMvrLinkArray[StressPeriodIndex-1].LakPeriod;
+        end;
+      end;
+
+      for StressPeriodIndex := 0 to Length(LakMvrLinkArray) - 1 do
+      begin
+        if (LakMvrLinkArray[StressPeriodIndex].MvrPeriod = nil)
+          and (LakMvrLinkArray[StressPeriodIndex].LakPeriod = nil) then
+        begin
+          Continue;
+        end;
+
+        if StressPeriodIndex > 0 then
+        begin
+          if (LakMvrLinkArray[StressPeriodIndex].MvrPeriod = LakMvrLinkArray[StressPeriodIndex - 1].MvrPeriod)
+            and (LakMvrLinkArray[StressPeriodIndex].LakPeriod = LakMvrLinkArray[StressPeriodIndex - 1].LakPeriod) then
+          begin
+            Continue
+          end;
+        end;
+
+        LakMvrLinkList.Add(LakMvrLinkArray[StressPeriodIndex]);
+      end;
+    end;
+
     for TimeSeriesIndex := 0 to Lak.TimeSeriesCount - 1 do
     begin
       TimeSeriesPackage := Lak.TimeSeries[TimeSeriesIndex];
@@ -5520,9 +5706,18 @@ begin
   finally
     Lakes.Free;
     Map.Free;
+    LakMvrLinkList.Free;
   end;
-
 end;
+
+Type
+  TMawMvrLink = record
+    MawPeriod: TMawPeriod;
+    MvrPeriod: TMvrPeriod;
+    function Period: Integer;
+  end;
+  TMawMvrLinkArray = TArray<TMawMvrLink>;
+  TMawMvrLinkList = TList<TMawMvrLink>;
 
 procedure TModflow6Importer.ImportMaw(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
@@ -5572,6 +5767,14 @@ var
   Mvr: TMvr;
   FoundMvr: Boolean;
   Index: Integer;
+  MawMvrLinkArray: TMawMvrLinkArray;
+  MawMvrLinkList: TMawMvrLinkList;
+  StressPeriodIndex: Integer;
+  MvrPeriod: TMvrPeriod;
+  MawPeriod: TMawPeriod;
+  MawMvrLink: TMawMvrLink;
+  MvrSource: TMvrSource;
+  MvrReceiver: TMvrReceiver;
   procedure AssignObservations(ObsList: TObservationList; Mf6Obs: TModflow6Obs);
   var
     MawObs: TMawObs;
@@ -5683,12 +5886,74 @@ begin
 
   Maw := Package.Package as TMaw;
 
+  SetLength(MvrSource.IDs, 1);
+  SetLength(MvrReceiver.IDs, 1);
+
   CellIds := TCellIdList.Create;
   Map := TimeSeriesMap.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
   NumberObsDictionary := TNumberDictionary.Create;
   ObsLists := TObsLists.Create;
+  MawMvrLinkList := TMawMvrLinkList.Create;
   try
+    if Mvr = nil then
+    begin
+      MawMvrLink.MvrPeriod := nil;
+      for StressPeriodIndex := 0 to Maw.PeriodCount - 1 do
+      begin
+        MawMvrLink.MawPeriod := Maw.Periods[StressPeriodIndex];
+        MawMvrLinkList.Add(MawMvrLink);
+      end;
+    end
+    else
+    begin
+      SetLength(MawMvrLinkArray, Model.ModflowStressPeriods.Count);
+      for StressPeriodIndex := 0 to Length(MawMvrLinkArray) - 1 do
+      begin
+        MawMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
+        MawMvrLinkArray[StressPeriodIndex].MawPeriod := nil;
+      end;
+      for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+      begin
+        MvrPeriod := Mvr.Periods[StressPeriodIndex];
+        MawMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+      end;
+      for StressPeriodIndex := 0 to Maw.PeriodCount - 1 do
+      begin
+        MawPeriod := Maw.Periods[StressPeriodIndex];
+        MawMvrLinkArray[MawPeriod.Period-1].MawPeriod := MawPeriod;
+      end;
+
+      for StressPeriodIndex := 1 to Length(MawMvrLinkArray) - 1 do
+      begin
+        if MawMvrLinkArray[StressPeriodIndex].MvrPeriod = nil then
+        begin
+          MawMvrLinkArray[StressPeriodIndex].MvrPeriod := MawMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
+          MawMvrLinkArray[StressPeriodIndex].MawPeriod := MawMvrLinkArray[StressPeriodIndex-1].MawPeriod;
+        end;
+      end;
+
+      for StressPeriodIndex := 0 to Length(MawMvrLinkArray) - 1 do
+      begin
+        if (MawMvrLinkArray[StressPeriodIndex].MvrPeriod = nil)
+          and (MawMvrLinkArray[StressPeriodIndex].MawPeriod = nil) then
+        begin
+          Continue;
+        end;
+
+        if StressPeriodIndex > 0 then
+        begin
+          if (MawMvrLinkArray[StressPeriodIndex].MvrPeriod = MawMvrLinkArray[StressPeriodIndex - 1].MvrPeriod)
+            and (MawMvrLinkArray[StressPeriodIndex].MawPeriod = MawMvrLinkArray[StressPeriodIndex - 1].MawPeriod) then
+          begin
+            Continue
+          end;
+        end;
+
+        MawMvrLinkList.Add(MawMvrLinkArray[StressPeriodIndex]);
+      end;
+    end;
+
     for TimeSeriesIndex := 0 to Maw.TimeSeriesCount - 1 do
     begin
       TimeSeriesPackage := Maw.TimeSeries[TimeSeriesIndex];
@@ -5800,11 +6065,17 @@ begin
     end;
 
     LastTime := Model.ModflowStressPeriods.Last.EndTime;
-    for PeriodIndex := 0 to Maw.PeriodCount - 1 do
+    for PeriodIndex := 0 to MawMvrLinkList.Count - 1 do
     begin
 
-      APeriod := Maw.Periods[PeriodIndex];
-      StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+      MawMvrLink := MawMvrLinkList[PeriodIndex];
+      APeriod := MawMvrLink.MawPeriod;
+      if APeriod = nil then
+      begin
+        Continue;
+      end;
+
+      StartTime := Model.ModflowStressPeriods[MawMvrLink.Period-1].StartTime;
       for ObjectIndex := 1 to Length(Wells) - 1 do
       begin
         AScreenObject := Wells[ObjectIndex];
@@ -5819,6 +6090,23 @@ begin
         WellItems[ObjectIndex] := AnItem;
         AnItem.StartTime := StartTime;
         AnItem.EndTime := LastTime;
+
+        if MawMvrLink.MvrPeriod <> nil then
+        begin
+          MvrSource.ScreenObject := AScreenObject;
+          MvrSource.PackageName := Package.PackageName;
+          MvrSource.Period := MawMvrLink.Period;
+          MvrSource.IDs[0] := ObjectIndex;
+          MvrSource.SourceType := mspcMaw;
+          FMvrSources.Add(MvrSource);
+
+          MvrReceiver.ScreenObject := AScreenObject;
+          MvrReceiver.PackageName := Package.PackageName;
+          MvrReceiver.Period := MawMvrLink.Period;
+          MvrReceiver.IDs[0] := ObjectIndex;
+          MvrReceiver.ReceiverType := mrpcMaw;
+          FMvrReceivers.Add(MvrReceiver)
+        end;
       end;
       for SettingIndex := 0 to APeriod.Count - 1 do
       begin
@@ -5977,6 +6265,7 @@ begin
     ObsLists.Free;
     NumberObsDictionary.Free;
     CellIds.Free;
+    MawMvrLinkList.Free;
   end;
 
 end;
@@ -8205,6 +8494,15 @@ type
   TSfrReachInfoLists = TObjectList<TSfrReachInfoList>;
   TSfrReachInfoObjectList = TObjectList<TSfrReachInfo>;
 
+Type
+  TSfrMvrLink = record
+    SfrPeriod: TSfrPeriod;
+    MvrPeriod: TMvrPeriod;
+    function Period: Integer;
+  end;
+  TSfrMvrLinkArray = TArray<TSfrMvrLink>;
+  TSfrMvrLinkList = TList<TSfrMvrLink>;
+
 procedure TModflow6Importer.ImportSfr(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
 var
@@ -8281,6 +8579,14 @@ var
   AReach: TSfrReachInfo;
   Mvr: TMvr;
   FoundMvr: Boolean;
+  SfrMvrLinkArray: TSfrMvrLinkArray;
+  SfrMvrLinkList: TSfrMvrLinkList;
+  SfrMvrLink: TSfrMvrLink;
+  StressPeriodIndex: Integer;
+  MvrPeriod: TMvrPeriod;
+  SfrPeriod: TSfrPeriod;
+  SfrSources: TIntegerList;
+  SfrReceivers: TIntegerList;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -8458,6 +8764,11 @@ var
     SfrObs: TSfrObs;
     AuxIFACE: TMf6BoundaryValue;
     IFACE: Integer;
+    FirstReachNo: Integer;
+    LastReachNo: Integer;
+    MvrSource: TMvrSource;
+    MvrReceiver: TMvrReceiver;
+    StressPeriodIndex: Integer;
     procedure ReadCrossSection(ACrossSection: TSfr6CrossSection; CrossSection: TCrossSection);
     var
       RowIndex: Integer;
@@ -8600,6 +8911,35 @@ var
       CellIds.Free;
     end;
 
+    FirstReachNo := AReachList.First.PackageData.rno;
+    LastReachNo := AReachList.Last.PackageData.rno;
+    if SfrSources.IndexOf(LastReachNo) >= 0 then
+    begin
+      MvrSource.ScreenObject := result;
+      MvrSource.PackageName := Package.PackageName;
+      SetLength(MvrSource.IDs, 1);
+      MvrSource.IDs[0] := LastReachNo;
+      MvrSource.SourceType := mspcSfr;
+    end;
+    for StressPeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
+    begin
+      MvrSource.Period := SfrMvrLinkList[StressPeriodIndex].Period;
+      FMvrSources.Add(MvrSource);
+    end;
+    if SfrReceivers.IndexOf(FirstReachNo) >= 0 then
+    begin
+      MvrReceiver.ScreenObject := result;
+      MvrReceiver.PackageName := Package.PackageName;
+      SetLength(MvrReceiver.IDs, 1);
+      MvrReceiver.IDs[0] := FirstReachNo;
+      MvrReceiver.ReceiverType := mrpcSfr;
+    end;
+    for StressPeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
+    begin
+      MvrReceiver.Period := SfrMvrLinkList[StressPeriodIndex].Period;
+      FMvrReceivers.Add(MvrReceiver);
+    end;
+
     result.CreateSfr6Boundary;
     SfrBoundary := result.ModflowSfr6Boundary;
     SfrBoundary.SegmentNumber := ObjectCount;
@@ -8703,18 +9043,19 @@ var
       RunoffBoundaryValues[CellIndex].NumericValue := 0;
     end;
 
-    for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+    for PeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
     begin
-      APeriod := Sfr.Periods[PeriodIndex];
+      SfrMvrLink := SfrMvrLinkList[PeriodIndex];
+      APeriod := SfrMvrLink.SfrPeriod;
       ASettingList := PeriodSettings[PeriodIndex];
 
       SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
 
-      StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
+      StartTime := Model.ModflowStressPeriods[SfrMvrLink.Period-1].StartTime;
       SfrItem.StartTime := StartTime;
-      if PeriodIndex < Sfr.PeriodCount - 1 then
+      if PeriodIndex < SfrMvrLinkList.Count - 1 then
       begin
-        SfrItem.EndTime := Model.ModflowStressPeriods[APeriod.Period].StartTime;
+        SfrItem.EndTime := Model.ModflowStressPeriods[SfrMvrLink.Period].StartTime;
       end
       else
       begin
@@ -8769,31 +9110,31 @@ var
 
       UpdateReachSettings(AReachList, ManningBoundaryValues, 'MANNING');
       SfrItem.Roughness := BoundaryValuesToFormula(ManningBoundaryValues,
-        Format('Roughness_%d', [APeriod.Period]), result);
+        Format('Roughness_%d', [SfrMvrLink.Period]), result);
 
       UpdateReachSettings(AReachList, UpstreamFractionBoundaryValues, 'UPSTREAM_FRACTION');
       SfrItem.UpstreamFraction := BoundaryValuesToFormula(UpstreamFractionBoundaryValues,
-        Format('UpstreamFraction_%d', [APeriod.Period]), result);
+        Format('UpstreamFraction_%d', [SfrMvrLink.Period]), result);
 
       UpdateReachSettings(AReachList, StageBoundaryValues, 'STAGE');
       SfrItem.Stage := BoundaryValuesToFormula(StageBoundaryValues,
-        Format('Stage_%d', [APeriod.Period]), result);
+        Format('Stage_%d', [SfrMvrLink.Period]), result);
 
       UpdateReachSettings(AReachList, InflowBoundaryValues, 'INFLOW');
       SfrItem.Inflow := BoundaryValuesToFormula(InflowBoundaryValues,
-        Format('Inflow_%d', [APeriod.Period]), result);
+        Format('Inflow_%d', [SfrMvrLink.Period]), result);
 
       UpdateReachSettings(AReachList, RainfallBoundaryValues, 'RAINFALL');
       SfrItem.Rainfall := BoundaryValuesToFormula(RainfallBoundaryValues,
-        Format('Inflow_%d', [APeriod.Period]), result);
+        Format('Inflow_%d', [SfrMvrLink.Period]), result);
 
       UpdateReachSettings(AReachList, EvaporationBoundaryValues, 'EVAPORATION');
       SfrItem.Evaporation := BoundaryValuesToFormula(EvaporationBoundaryValues,
-        Format('Evaporation_%d', [APeriod.Period]), result);
+        Format('Evaporation_%d', [SfrMvrLink.Period]), result);
 
       UpdateReachSettings(AReachList, RunoffBoundaryValues, 'RUNOFF');
       SfrItem.Runoff := BoundaryValuesToFormula(RunoffBoundaryValues,
-        Format('Runoff_%d', [APeriod.Period]), result);
+        Format('Runoff_%d', [SfrMvrLink.Period]), result);
     end;
 
     if SfrBoundary.CrossSections.Count > 0 then
@@ -8936,32 +9277,30 @@ var
 
     AReachList := SfrReachInfoLists[ObjectIndex];
   end;
+  procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
+  var
+    ItemIndex: Integer;
+    PackageName: string;
+    MvrItem: TMvrPeriodItem;
+  begin
+    PackageName := Package.PackageName;
+    for ItemIndex := 0 to MvrPeriod.Count - 1 do
+    begin
+      MvrItem := MvrPeriod[ItemIndex];
+      if AnsiSameText(MvrItem.pname1, PackageName) then
+      begin
+        SfrSources.AddUnique(MvrItem.id1)
+      end;
+      if AnsiSameText(MvrItem.pname2, PackageName) then
+      begin
+        SfrReceivers.AddUnique(MvrItem.id2)
+      end;
+    end;
+  end;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing SFR package');
-  end;
-
-  if MvrPackage = nil then
-  begin
-    Mvr := nil;
-  end
-  else
-  begin
-    Mvr := MvrPackage.Package as TMvr;
-    FoundMvr := False;
-    for Index := 0 to Mvr.Packages.Count - 1 do
-    begin
-      FoundMvr := AnsiSameText(Package.PackageName, Mvr.Packages[Index].pname);
-      if FoundMvr then
-      begin
-        Break;
-      end;
-    end;
-    if not FoundMvr then
-    begin
-      Mvr := nil;
-    end;
   end;
 
   Model := frmGoPhast.PhastModel;
@@ -9002,12 +9341,97 @@ begin
 
   Model.DataArrayManager.CreateInitialDataSets;
 
+  if MvrPackage = nil then
+  begin
+    Mvr := nil;
+  end
+  else
+  begin
+    Mvr := MvrPackage.Package as TMvr;
+    FoundMvr := False;
+    for Index := 0 to Mvr.Packages.Count - 1 do
+    begin
+      FoundMvr := AnsiSameText(Package.PackageName, Mvr.Packages[Index].pname);
+      if FoundMvr then
+      begin
+        Break;
+      end;
+    end;
+    if not FoundMvr then
+    begin
+      Mvr := nil;
+    end;
+  end;
+
+  SfrMvrLinkList := TSfrMvrLinkList.Create;
   CellIds := TCellIdList.Create;
   Map := TimeSeriesMap.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
   NumberObsDictionary := TNumberDictionary.Create;
   ObsLists := TObsLists.Create;
+  SfrSources := TIntegerList.Create;
+  SfrReceivers := TIntegerList.Create;
   try
+    if Mvr = nil then
+    begin
+      SfrMvrLink.MvrPeriod := nil;
+      for StressPeriodIndex := 0 to Sfr.PeriodCount - 1 do
+      begin
+        SfrMvrLink.SfrPeriod := Sfr.Periods[StressPeriodIndex];
+        SfrMvrLinkList.Add(SfrMvrLink);
+      end;
+    end
+    else
+    begin
+      SetLength(SfrMvrLinkArray, Model.ModflowStressPeriods.Count);
+      for StressPeriodIndex := 0 to Length(SfrMvrLinkArray) - 1 do
+      begin
+        SfrMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
+        SfrMvrLinkArray[StressPeriodIndex].SfrPeriod := nil;
+      end;
+      for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+      begin
+        MvrPeriod := Mvr.Periods[StressPeriodIndex];
+        SfrMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+        IdentifySourcesAndReceivers(MvrPeriod);
+      end;
+      for StressPeriodIndex := 0 to Sfr.PeriodCount - 1 do
+      begin
+        SfrPeriod := Sfr.Periods[StressPeriodIndex];
+        SfrMvrLinkArray[SfrPeriod.Period-1].SfrPeriod := SfrPeriod;
+      end;
+
+      for StressPeriodIndex := 1 to Length(SfrMvrLinkArray) - 1 do
+      begin
+        if SfrMvrLinkArray[StressPeriodIndex].MvrPeriod = nil then
+        begin
+          SfrMvrLinkArray[StressPeriodIndex].MvrPeriod := SfrMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
+          SfrMvrLinkArray[StressPeriodIndex].SfrPeriod := SfrMvrLinkArray[StressPeriodIndex-1].SfrPeriod;
+        end;
+      end;
+
+      for StressPeriodIndex := 0 to Length(SfrMvrLinkArray) - 1 do
+      begin
+        if (SfrMvrLinkArray[StressPeriodIndex].MvrPeriod = nil)
+          and (SfrMvrLinkArray[StressPeriodIndex].SfrPeriod = nil) then
+        begin
+          Continue;
+        end;
+
+        if StressPeriodIndex > 0 then
+        begin
+          if (SfrMvrLinkArray[StressPeriodIndex].MvrPeriod = SfrMvrLinkArray[StressPeriodIndex - 1].MvrPeriod)
+            and (SfrMvrLinkArray[StressPeriodIndex].SfrPeriod = SfrMvrLinkArray[StressPeriodIndex - 1].SfrPeriod) then
+          begin
+            Continue
+          end;
+        end;
+
+        SfrMvrLinkList.Add(SfrMvrLinkArray[StressPeriodIndex]);
+      end;
+
+    end;
+
     for TimeSeriesIndex := 0 to Sfr.TimeSeriesCount - 1 do
     begin
       TimeSeriesPackage := Sfr.TimeSeries[TimeSeriesIndex];
@@ -9097,6 +9521,7 @@ begin
           SfrReachInfo := SfrReachInfoList[Index];
           if  (SfrReachInfo.UpstreamReachCount <> 1)
             or SfrReachInfo.IsDiversion
+            or (SfrReceivers.IndexOf(SfrReachInfo.PackageData.rno) >= 0)
             then
           begin
             CreateReachList(SfrReachInfo);
@@ -9144,7 +9569,9 @@ begin
 
                   if (SfrReachInfo.DownstreamReachCount <> 1)
                     or (SfrReachInfo.Diversions.Count > 0)
-                    or (SfrReachInfo.IdObs <> nil) then
+                    or (SfrReachInfo.IdObs <> nil)
+                    or (SfrSources.IndexOf(SfrReachInfo.PackageData.rno) >= 0)
+                    then
                   begin
                     AReachList.Terminated := True;
                   end;
@@ -9168,7 +9595,7 @@ begin
 
         PeriodSettings := TObjectList<TNumberedItemLists>.Create;
         try
-          for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+          for PeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
           begin
             ASettingList := TNumberedItemLists.Create;
             PeriodSettings.Add(ASettingList);
@@ -9179,7 +9606,7 @@ begin
               ASettingList.Add(AReachSettingsList);
             end;
 
-            APeriod := Sfr.Periods[PeriodIndex];
+            APeriod := SfrMvrLinkList[PeriodIndex].SfrPeriod;
             for SettingIndex := 0 to APeriod.Count - 1 do
             begin
               ASetting := APeriod[SettingIndex];
@@ -9233,7 +9660,7 @@ begin
                 end;
               end;
 
-              for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+              for PeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
               begin
                 ASettingList := PeriodSettings[PeriodIndex];
                 SetLength(StringValues, AReachList.Count);
@@ -9488,7 +9915,7 @@ begin
                       Assert(False);
                     end;
 
-                    for PeriodIndex := 0 to Sfr.PeriodCount - 1 do
+                    for PeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
                     begin
                       ASettingList := PeriodSettings[PeriodIndex];
                       AReachSettingsList := ASettingList[LastReach.PackageData.rno-1];
@@ -9598,6 +10025,10 @@ begin
     ObsLists.Free;
     NumberObsDictionary.Free;
     CellIds.Free;
+    SfrMvrLinkList.Free;
+    SfrSources.Free;
+    SfrReceivers.Free;
+
   end;
 
 end;
@@ -11641,5 +12072,47 @@ end;
 //
 //  inherited;
 //end;
+
+{ TMawMvrLink }
+
+function TMawMvrLink.Period: Integer;
+begin
+  if MvrPeriod = nil then
+  begin
+    result := MawPeriod.Period;
+  end
+  else
+  begin
+    Result := Max(MawPeriod.Period, MvrPeriod.Period);
+  end;
+end;
+
+{ TSfrMvrLink }
+
+function TSfrMvrLink.Period: Integer;
+begin
+  if MvrPeriod = nil then
+  begin
+    result := SfrPeriod.Period;
+  end
+  else
+  begin
+    Result := Max(SfrPeriod.Period, MvrPeriod.Period);
+  end;
+end;
+
+{ TLakMvrLink }
+
+function TLakMvrLink.Period: Integer;
+begin
+  if MvrPeriod = nil then
+  begin
+    result := LakPeriod.Period;
+  end
+  else
+  begin
+    Result := Max(LakPeriod.Period, MvrPeriod.Period);
+  end;
+end;
 
 end.
