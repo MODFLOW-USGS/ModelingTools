@@ -725,7 +725,7 @@ begin
       begin
         if Boundary = nil then
         begin
-          Item.ScreenObject.CreateModflowUzfMf6Boundary;
+          Item.ScreenObject.CreateUzfMf6Boundary;
           Boundary := Item.ScreenObject.ModflowUzfMf6Boundary;
         end;
 

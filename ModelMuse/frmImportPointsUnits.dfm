@@ -9,10 +9,8 @@ inherited frmImportPoints: TfrmImportPoints
   ClientWidth = 573
   KeyPreview = True
   OnKeyUp = FormKeyUp
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 585
-  ExplicitHeight = 553
+  ExplicitWidth = 589
+  ExplicitHeight = 554
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0

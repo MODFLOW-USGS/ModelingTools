@@ -710,7 +710,7 @@ begin
         end;
         if TryFortranStrToFloat(FSplitter[3], Observation.FloatNum2) then
         begin
-          Observation.IdType1 := itFloat;
+          Observation.IdType2 := itFloat;
           FObservations.Add(Observation);
         end
         else

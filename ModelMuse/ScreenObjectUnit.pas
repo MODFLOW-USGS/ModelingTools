@@ -3719,7 +3719,7 @@ view. }
     procedure CreateMf6Obs;
     procedure CreateLakMf6Boundary;
     procedure CreateModflowMvr;
-    procedure CreateModflowUzfMf6Boundary;
+    procedure CreateUzfMf6Boundary;
     procedure CreateCSubBoundary;
     procedure CreateSubObservations;
     procedure CreateSwtObservations;
@@ -15709,7 +15709,7 @@ begin
   end
   else
   begin
-    CreateModflowUzfMf6Boundary;
+    CreateUzfMf6Boundary;
     ModflowBoundaries.FModflowUzfMf6Boundary.Assign(Value);
   end;
 end;
@@ -35292,7 +35292,7 @@ begin
   if (FModel = nil)
     or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
   begin
-    CreateModflowUzfMf6Boundary;
+    CreateUzfMf6Boundary;
   end;
   if FModflowBoundaries = nil then
   begin
@@ -39724,7 +39724,7 @@ begin
   end;
 end;
 
-procedure TScreenObject.CreateModflowUzfMf6Boundary;
+procedure TScreenObject.CreateUzfMf6Boundary;
 begin
   if (ModflowBoundaries.FModflowUzfMf6Boundary = nil) then
   begin

@@ -1765,7 +1765,7 @@ begin
       end
       else if Package = Packages.UzfMf6Package then
       begin
-        AScreenObject.CreateModflowUzfMf6Boundary;
+        AScreenObject.CreateUzfMf6Boundary;
         UzfMf6Boundary := AScreenObject.ModflowUzfMf6Boundary;
         frmGophast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
         NumberOfSpecies := GwtColumns;
@@ -2482,7 +2482,7 @@ begin
       end
       else if Package = Packages.UzfMf6Package then
       begin
-        AScreenObject.CreateModflowUzfMf6Boundary;
+        AScreenObject.CreateUzfMf6Boundary;
         UzfMf6Boundary := AScreenObject.ModflowUzfMf6Boundary;
       end
       else

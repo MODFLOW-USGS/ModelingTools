@@ -141,12 +141,12 @@ type
     property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
   end;
 
-  TUzfPeriodItemList = TObjectList<TUzfPeriodItem>;
+  TUzfPeriodItemObjectList = TObjectList<TUzfPeriodItem>;
 
   TUzfPeriod = class(TCustomMf6Persistent)
   private
     IPER: Integer;
-    FItems: TUzfPeriodItemList;
+    FItems: TUzfPeriodItemObjectList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Naux: Integer);
     function GetCount: Integer;
     function GetItem(Index: Integer): TUzfPeriodItem;
@@ -172,6 +172,10 @@ type
     FObservationsPackages: TPackageList;
     function GetPeriod(Index: Integer): TUzfPeriod;
     function GetPeriodCount: Integer;
+    function GetTimeSeriesPackage(Index: Integer): TPackage;
+    function GetTimeSeriesPackageCount: Integer;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -182,6 +186,10 @@ type
     property PackageData: TUzfPackageData read FPackageData;
     property PeriodCount: Integer read GetPeriodCount;
     property Periods[Index: Integer]: TUzfPeriod read GetPeriod; default;
+    property TimeSeriesPackageCount: Integer read GetTimeSeriesPackageCount;
+    property TimeSeriesPackages[Index: Integer]: TPackage read GetTimeSeriesPackage;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 implementation
@@ -604,7 +612,7 @@ end;
 
 constructor TUzfPeriod.Create(PackageType: string);
 begin
-  FItems := TUzfPeriodItemList.Create;
+  FItems := TUzfPeriodItemObjectList.Create;
   inherited;
 
 end;
@@ -763,6 +771,16 @@ begin
   inherited;
 end;
 
+function TUzf.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TUzf.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
 function TUzf.GetPeriod(Index: Integer): TUzfPeriod;
 begin
   result := FPeriods[Index];
@@ -771,6 +789,16 @@ end;
 function TUzf.GetPeriodCount: Integer;
 begin
   result := FPeriods.Count;
+end;
+
+function TUzf.GetTimeSeriesPackage(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TUzf.GetTimeSeriesPackageCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
 end;
 
 procedure TUzf.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);

@@ -5371,7 +5371,7 @@ begin
   for ObjectIndex := 0 to FScreenObjectList.Count - 1 do
   begin
     AScreenObject := FScreenObjectList[ObjectIndex];
-    AScreenObject.CreateModflowUzfMf6Boundary;
+    AScreenObject.CreateUzfMf6Boundary;
     AScreenObject.ModflowUzfMf6Boundary.Assign(AScreenObject.ModflowUzfBoundary);
   end;
   UpdateDisplay;
