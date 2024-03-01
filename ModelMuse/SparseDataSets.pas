@@ -150,6 +150,30 @@ type
       write SetItems; default;
   end;
 
+  T2DSparseIntegerArray = class(T2DSparsePointerArray)
+  private
+    // @name is the number of real numbers stored in @classname.
+    FCount: NativeInt;
+    // @name is an array of real-numbers stored in @classname
+    FValues: array of Integer;
+    // See @link(Items).
+    function GetItems(const Index1, Index2: NativeInt): Integer;
+    // See @link(Items).
+    procedure SetItems(const Index1, Index2: NativeInt;
+      const Value: Integer);
+  public
+    // @name removes all the members of @classname.
+    procedure Clear; override;
+    // @name creates an instance of @classname.
+    constructor Create(Quantum1, Quantum2: TSPAQuantum);
+    // @name provides access to the real number stored at location
+    // Index1, Index2. Before reading @name, read
+    // @link(T2DSparsePointerArray.IsValue) to
+    // be sure that a number is stored at Index1, Index2.
+    property Items[const Index1, Index2: NativeInt]: Integer read GetItems
+      write SetItems; default;
+  end;
+
   T2DSparseBooleanArray = class(T2DSparsePointerArray)
     // The address of @name is stored to indicate a value that is @False.
     FFalse: boolean;
@@ -824,6 +848,53 @@ begin
     DataPtr := @FFalse;
   end;
   inherited Items[Row, Col] := DataPtr;
+end;
+
+{ T2DSparseIntegerrray }
+
+procedure T2DSparseIntegerArray.Clear;
+begin
+  inherited;
+  FCount := 0;
+end;
+
+constructor T2DSparseIntegerArray.Create(Quantum1, Quantum2: TSPAQuantum);
+begin
+  inherited;
+  SetLength(FValues, 4);
+end;
+
+function T2DSparseIntegerArray.GetItems(const Index1,
+  Index2: NativeInt): Integer;
+var
+  resultPtr: Pointer;
+begin
+  resultPtr := inherited Items[Index1, Index2];
+  Assert(resultPtr <> nil);
+  result := FValues[Pred(longint(resultPtr))];
+end;
+
+procedure T2DSparseIntegerArray.SetItems(const Index1, Index2: NativeInt;
+  const Value: Integer);
+var
+  DataPtr: Pointer;
+begin
+  DataPtr := inherited Items[Index1, Index2];
+  if DataPtr = nil then
+  begin
+    if Length(FValues) = FCount then
+    begin
+      SetLength(FValues, FCount + FCount div 4);
+    end;
+    FValues[FCount] := Value;
+    Inc(FCount);
+    DataPtr := Pointer(FCount);
+    inherited Items[Index1, Index2] := DataPtr;
+  end
+  else
+  begin
+    FValues[Pred(longint(DataPtr))] := Value
+  end;
 end;
 
 initialization

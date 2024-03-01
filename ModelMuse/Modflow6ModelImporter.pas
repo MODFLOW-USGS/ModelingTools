@@ -26,13 +26,25 @@ type
   TNumberDictionary = TDictionary<Integer, TObservationList>;
   TObsLists = TObjectList<TObservationList>;
 
+  TMvrKey = record
+    ID: Integer;
+    PackageName: string;
+    Period: Integer;
+  end;
+
+  TTMvrKeyyComparer = class(TEqualityComparer<TMvrKey>)
+    function Equals(const Left, Right: TMvrKey): Boolean; override;
+    function GetHashCode(const Value: TMvrKey): Integer; override;
+  end;
+
   TMvrSource = record
     ScreenObject: TScreenObject;
-    LakeOutlet: TLakeOutlet;
+    LakeOutlet: TLakeOutletItem;
     PackageName: string;
     Period: Integer;
     IDs: TArray<Integer>;
     SourceType: TMvrSourcePackageChoice;
+    function Key(Index: Integer): TMvrKey;
   end;
 
   TMvrSourceList = class(TList<TMvrSource>)
@@ -45,11 +57,16 @@ type
     Period: Integer;
     IDs: TArray<Integer>;
     ReceiverType: TMvrReceiverPackageChoice;
+    function Key(Index: Integer): TMvrKey;
   end;
 
   TMvrReceiverList = class(TList<TMvrReceiver>)
     procedure Sort;
   end;
+
+  TMvrSourceDictionary = TDictionary<TMvrKey, TMvrSource>;
+  TMvrReceiverDictionary = TDictionary<TMvrKey, TMvrReceiver>;
+
 
 //type
 //  TMvrDictionary = Class(TDictionary<Integer,TScreenObject>)
@@ -129,6 +146,7 @@ type
     procedure ImportLak(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportUzf(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     function GetMvr(MvrPackage, Package: TPackage): TMvr;
+    procedure ImportMvr(Package: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -163,7 +181,8 @@ uses
   ModflowMawUnit, ModflowGridUnit, ModflowSfr6Unit, Mf6.SfrFileReaderUnit,
   Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit,
   Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit, IntListUnit,
-  ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit;
+  ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit, System.Hash,
+  ModflowMvrUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -1021,6 +1040,7 @@ var
   ImportedName: string;
   sig0: TValueArrayItem;
   ObsListIndex: Integer;
+  ObsNameIndex: Integer;
   function CreateScreenObject(BoundName: String; Period: Integer): TScreenObject;
   var
     UndoCreateScreenObject: TCustomUndo;
@@ -1121,15 +1141,29 @@ var
       // do nothing
     end;
   end;
-  procedure IncludeObservations(ObsList: TObservationList; AScreenObject: TScreenObject);
+  procedure IncludeObservations(ObsList: TObservationList;
+    AScreenObject: TScreenObject; Name: string = '');
   var
     Modflow6Obs: TModflow6Obs;
     CSubObsSet: TSubObsSet;
     ObsIndex: Integer;
     CSubDelayCells: TIntegerCollection;
   begin
+    Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
     AScreenObject.CreateMf6Obs;
     Modflow6Obs := AScreenObject.Modflow6Obs;
+    if Modflow6Obs.Name = '' then
+    begin
+      if Name = '' then
+      begin
+        Inc(ObsNameIndex);
+        Modflow6Obs.Name := 'CSUB_Obs_' + IntToStr(ObsNameIndex);
+      end
+      else
+      begin
+        Modflow6Obs.Name := Name;
+      end;
+    end;
     CSubObsSet := Modflow6Obs.CSubObs.CSubObsSet;
     CSubDelayCells := Modflow6Obs.CSubDelayCells;
     for ObsIndex := 0 to ObsList.Count - 1 do
@@ -1364,7 +1398,7 @@ var
             begin
               Assert(False);
             end;
-            IncludeObservations(ObsList, AScreenObject);
+            IncludeObservations(ObsList, AScreenObject, BoundName);
           end;
 
           if AnInterBed.InterbedType = itDelay then
@@ -1446,6 +1480,7 @@ var
     end
   end;
 begin
+  ObsNameIndex := 0;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing CSUB package');
@@ -3578,9 +3613,7 @@ begin
         end
         else if APackage.FileType = 'MVR6' then
         begin
-  //        MovReader := TMvr.Create(APackage.FileType);
-  //        APackage.Package := MovReader;
-  //        APackage.ReadPackage(Unhandled);
+          Continue;
         end
         else if APackage.FileType = 'GNC6' then
         begin
@@ -3600,6 +3633,14 @@ begin
 
       end;
 
+      for PackageIndex := 0 to Packages.Count - 1 do
+      begin
+        APackage := Packages[PackageIndex];
+        if APackage.FileType = 'MVR6' then
+        begin
+          ImportMvr(APackage);
+        end
+      end;
     end;
   finally
     TransportModels.Free;
@@ -4519,6 +4560,7 @@ begin
         ScreenObject.AddPoint(APoint, True);
         ScreenObject.ElevationFormula := Format('LayerCenter(%d)', [CellId.Layer]);
 
+        Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
         ScreenObject.CreateMf6Obs;
         Modflow6Obs := ScreenObject.Modflow6Obs;
         Modflow6Obs.Name := Observation.ObsName;
@@ -4776,6 +4818,7 @@ var
   NumberObsDictionary: TNumberDictionary;
   BoundNameObsDictionary: TBoundNameDictionary;
   ObsLists: TObsLists;
+  ObsNameIndex: Integer;
   procedure ApplyLakeSettings(ALake: TImportLake);
   var
     PriorValueItem: TLakeTimeItem;
@@ -4968,10 +5011,12 @@ var
     OutletList: TNumberedItemList;
     MvrSource: TMvrSource;
     StressPeriodIndex: Integer;
+    LakeOutletItem: TLakeOutletItem;
   begin
     for OutletIndex := 0 to ALake.FOutlets.Count - 1 do
     begin
-      LakeOutlet := ALake.LakeBoundary.Outlets.Add.Outlet;
+      LakeOutletItem := ALake.LakeBoundary.Outlets.Add;
+      LakeOutlet := LakeOutletItem.Outlet;
       ImportOutlet := ALake.FOutlets[OutletIndex];
       OutletList := TNumberedItemList.Create;
       ALake.FNumberedItemLists.Add(OutletList);
@@ -4985,7 +5030,7 @@ var
       end;
 
       MvrSource.ScreenObject := ALake.LakeScreenObject;
-      MvrSource.LakeOutlet := LakeOutlet;
+      MvrSource.LakeOutlet := LakeOutletItem;
       MvrSource.PackageName := Package.PackageName;
       SetLength(MvrSource.IDs, 1);
       MvrSource.SourceType := mspcLak;
@@ -5075,7 +5120,7 @@ var
       end;
     end;
   end;
-  procedure GetLakObservations(ALake: TImportLake);
+  procedure GetLakObservations(ALake: TImportLake; Name: string = '');
   var
     BoundName: string;
     Obs: TObservationList;
@@ -5258,8 +5303,21 @@ var
     end;
     if LakeObs <> [] then
     begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
       ALake.LakeScreenObject.CreateMf6Obs;
       ALake.LakeScreenObject.Modflow6Obs.LakObs := LakeObs;
+      if ALake.LakeScreenObject.Modflow6Obs.Name = '' then
+      begin
+        if Name = '' then
+        begin
+          Inc(ObsNameIndex);
+          ALake.LakeScreenObject.Modflow6Obs.Name := 'LAK_Obs_' + IntToStr(ObsNameIndex);
+        end
+        else
+        begin
+          ALake.LakeScreenObject.Modflow6Obs.Name := Name;
+        end;
+      end;
     end;
   end;
   procedure CreateScreenObject(ALake: TImportLake);
@@ -5399,6 +5457,7 @@ var
       end;
     end;
   begin
+    ObsNameIndex := 0;
     Assert(ALake <> nil);
     ALake.LakeScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
@@ -5956,6 +6015,7 @@ var
   MawMvrLink: TMawMvrLink;
   MvrSource: TMvrSource;
   MvrReceiver: TMvrReceiver;
+  ObsNameIndex: Integer;
   procedure AssignObservations(ObsList: TObservationList; Mf6Obs: TModflow6Obs);
   var
     MawObs: TMawObs;
@@ -6032,6 +6092,7 @@ var
     Mf6Obs.MawObs := MawObs;
   end;
 begin
+  ObsNameIndex := 0;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing MAW package');
@@ -6213,12 +6274,20 @@ begin
       BoundName := UpperCase(PackageItem.Boundname);
       if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
       begin
+        Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
         AScreenObject.CreateMf6Obs;
+        AScreenObject.Modflow6Obs.Name := BoundName;
         AssignObservations(ObsList, AScreenObject.Modflow6Obs);
       end;
       if NumberObsDictionary.TryGetValue(PackageItem.wellno, ObsList) then
       begin
+        Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
         AScreenObject.CreateMf6Obs;
+        if AScreenObject.Modflow6Obs.Name = '' then
+        begin
+          Inc(ObsNameIndex);
+          AScreenObject.Modflow6Obs.Name := 'MAW_Obs_' + IntToStr(ObsNameIndex);
+        end;
         AssignObservations(ObsList, AScreenObject.Modflow6Obs);
       end;
 
@@ -6584,6 +6653,274 @@ begin
   end;
   PhastModel.Exaggeration := frmGoPhast.DefaultVE;
   frmGoPhast.RestoreDefault2DView1Click(nil);
+end;
+
+procedure TModflow6Importer.ImportMvr(Package: TPackage);
+var
+  SourceDictionary: TMvrSourceDictionary;
+  ReceiverDictionary: TMvrReceiverDictionary;
+  Index: Integer;
+  ASource: TMvrSource;
+  KeyIndex: Integer;
+  AReceiver: TMvrReceiver;
+  Mvr: TMvr;
+  PeriodIndex: Integer;
+  MvrPeriod: TMvrPeriod;
+  SourceKey: TMvrKey;
+  ReceiverKey: TMvrKey;
+  MvrIndex: Integer;
+  MvrPeriodItem: TMvrPeriodItem;
+  Source: TMvrSource;
+  Receiver: TMvrReceiver;
+  EndTime: double;
+  Model: TPhastModel;
+  AScreenObject: TScreenObject;
+  MvrItem: TMvrItem;
+  StartTime: Double;
+  IndividualMvrItem: TIndividualMvrItem;
+  ModflowMvr: TMvrBoundary;
+  ReceiverIndex: Integer;
+  ReceiverItem: TReceiverItem;
+  AReceiverItem: TReceiverItem;
+  TimeIndex: Integer;
+  PriorMvrItem: TMvrItem;
+  MvrType: TMvrType;
+  RIndex: Integer;
+  LakeBoundary: TLakeMf6;
+  AnOutlet: TLakeOutletItem;
+//  AnOutlet: TLakeOutlet;
+begin
+  Model := frmGoPhast.PhastModel;
+  EndTime := Model.ModflowStressPeriods.Last.EndTime;
+  SourceDictionary := TMvrSourceDictionary.Create(TTMvrKeyyComparer.Create);
+  ReceiverDictionary := TMvrReceiverDictionary.Create(TTMvrKeyyComparer.Create);
+  try
+    for Index := 0 to FMvrSources.Count - 1 do
+    begin
+      ASource := FMvrSources[Index];
+      Assert(Length(ASource.IDs) > 0);
+      for KeyIndex := 0 to Length(ASource.IDs) - 1 do
+      begin
+        SourceDictionary.Add(ASource.Key(KeyIndex), ASource);
+      end;
+    end;
+    for Index := 0 to FMvrReceivers.Count - 1 do
+    begin
+      AReceiver := FMvrReceivers[Index];
+      Assert(Length(AReceiver.IDs) > 0);
+      for KeyIndex := 0 to Length(AReceiver.IDs) - 1 do
+      begin
+        ReceiverDictionary.Add(AReceiver.Key(KeyIndex), AReceiver);
+      end;
+    end;
+    Mvr := Package.Package as TMvr;
+    for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
+    begin
+      MvrPeriod := Mvr.Periods[PeriodIndex];
+      StartTime := Model.ModflowStressPeriods[MvrPeriod.Period-1].StartTime;
+      SourceKey.Period := MvrPeriod.Period;
+      ReceiverKey.Period := MvrPeriod.Period;
+      for MvrIndex := 0 to MvrPeriod.Count - 1 do
+      begin
+        MvrPeriodItem := MvrPeriod[MvrIndex];
+        SourceKey.ID := MvrPeriodItem.id1;
+        SourceKey.PackageName := MvrPeriodItem.pname1;
+
+        ReceiverKey.ID := MvrPeriodItem.id2;
+        ReceiverKey.PackageName := MvrPeriodItem.pname2;
+
+        if not SourceDictionary.TryGetValue(SourceKey, Source) then
+        begin
+          Assert(False);
+        end;
+        if not ReceiverDictionary.TryGetValue(ReceiverKey, Receiver) then
+        begin
+          Assert(False);
+        end;
+
+        AScreenObject := Source.ScreenObject;
+        AScreenObject. CreateModflowMvr;
+        ModflowMvr := AScreenObject.ModflowMvr;
+        case Source.SourceType of
+          mspcWel:
+            begin
+              ModflowMvr.SourcePackageChoice := spcWel;
+            end;
+          mspcDrn:
+            begin
+              ModflowMvr.SourcePackageChoice := spcDrn;
+            end;
+          mspcRiv:
+            begin
+              ModflowMvr.SourcePackageChoice := spcRiv;
+            end;
+          mspcGhb:
+            begin
+              ModflowMvr.SourcePackageChoice := spcGhb;
+            end;
+          mspcLak:
+            begin
+              ModflowMvr.SourcePackageChoice := spcLak;
+            end;
+          mspcMaw:
+            begin
+              ModflowMvr.SourcePackageChoice := spcMaw;
+            end;
+          mspcSfr:
+            begin
+              ModflowMvr.SourcePackageChoice := spcSfr;
+            end;
+          mspcUzf:
+            begin
+              ModflowMvr.SourcePackageChoice := spcUzf;
+            end;
+          else
+            begin
+              Assert(false);
+            end
+        end;
+        ReceiverItem := nil;
+        for ReceiverIndex := 0 to ModflowMvr.Receivers.Count - 1 do
+        begin
+          AReceiverItem := ModflowMvr.Receivers[ReceiverIndex];
+          if (AReceiverItem.ReceiverObject = Receiver.ScreenObject) then
+          begin
+            if AReceiver.ReceiverType = mrpcLak then
+            begin
+              LakeBoundary := Receiver.ScreenObject.ModflowLak6;
+              for RIndex := 0 to LakeBoundary.Outlets.Count - 1 do
+              begin
+                AnOutlet := LakeBoundary.Outlets[RIndex];
+                if AnOutlet = Source.LakeOutlet then
+                begin
+                  ReceiverItem := AReceiverItem;
+                  break;
+                end;
+              end;
+            end
+            else
+            begin
+              ReceiverItem := AReceiverItem;
+              break;
+            end;
+          end;
+        end;
+
+        if AnsiSameText(MvrPeriodItem.mvrtype, 'FACTOR') then
+        begin
+          MvrType := mtFactor;
+        end
+        else if AnsiSameText(MvrPeriodItem.mvrtype, 'EXCESS') then
+        begin
+          MvrType := mtExcess;
+        end
+        else if AnsiSameText(MvrPeriodItem.mvrtype, 'THRESHOLD') then
+        begin
+          MvrType := mtThreshold;
+        end
+        else if AnsiSameText(MvrPeriodItem.mvrtype, 'UPTO') then
+        begin
+           MvrType := mtUpTo;
+        end
+        else
+        begin
+          Assert(False);
+        end;
+
+        if ReceiverItem = nil then
+        begin
+          ReceiverItem := ModflowMvr.Receivers.Add;
+          case Receiver.ReceiverType of
+            mrpcLak:
+              begin
+                ReceiverItem.ReceiverPackage := rpcLak;
+                Assert(Source.LakeOutlet <> nil);
+                ReceiverItem.LakeOutlet := Source.LakeOutlet.Index + 1;
+              end;
+            mrpcMaw:
+              begin
+                ReceiverItem.ReceiverPackage := rpcMaw;
+              end;
+            mrpcSfr:
+              begin
+                ReceiverItem.ReceiverPackage := rpcSfr;
+                ReceiverItem.SfrReceiverChoice := srcFirst
+              end;
+            mrpcUzf:
+              begin
+                ReceiverItem.ReceiverPackage := rpcUzf;
+              end;
+            else
+              begin
+              end;
+          end;
+          ReceiverItem.ReceiverObject := Receiver.ScreenObject;
+          ReceiverItem.DivisionChoice := dcDoNotDivide;
+          for TimeIndex := 0 to ModflowMvr.Values.Count - 1 do
+          begin
+            PriorMvrItem := ModflowMvr.Values[TimeIndex] as TMvrItem;
+            IndividualMvrItem := PriorMvrItem.Items.Add;
+            IndividualMvrItem.MvrType := MvrType;
+            IndividualMvrItem.Value := '0';
+          end;
+        end;
+
+        if ModflowMvr.Values.Count > 0 then
+        begin
+          PriorMvrItem := ModflowMvr.Values.Last as TMvrItem;
+          if PriorMvrItem.EndTime <> StartTime then
+          begin
+            PriorMvrItem.EndTime := StartTime;
+            MvrItem := ModflowMvr.Values.Add as TMvrItem;
+            MvrItem.Assign(MvrItem);
+          end
+          else
+          begin
+            MvrItem := PriorMvrItem;
+          end;
+        end
+        else
+        begin
+          MvrItem := ModflowMvr.Values.Add as TMvrItem;
+          for ReceiverIndex := 0 to ModflowMvr.Receivers.Count do
+          begin
+            IndividualMvrItem := MvrItem.Items.Add;
+            IndividualMvrItem.MvrType := MvrType;
+            IndividualMvrItem.Value := '0';
+          end;
+        end;
+        MvrItem.StartTime := StartTime;
+        MvrItem.EndTime := EndTime;
+
+        if ReceiverItem.Index >= MvrItem.Items.Count then
+        begin
+          MvrItem.Items.Add;
+        end;
+        IndividualMvrItem := MvrItem.Items[ReceiverItem.Index];
+        IndividualMvrItem.MvrType := MvrType;
+        IndividualMvrItem.Value := FortranFloatToStr(MvrPeriodItem.value);
+
+
+//        IndividualMvrItem := MvrItem.Items.Add;
+
+        {
+    property mname1: string read Fmname1;
+    property pname1: string read Fpname1;
+    property id1: Integer read Fid1;
+    property mname2: string read Fmname2;
+    property pname2: string read Fpname2;
+    property id2: Integer read Fid2;
+    property mvrtype: string read Fmvrtype;
+    property value: Extended read Fvalue;
+    function SourceMatch(PackageName: string; ID: Integer): Boolean;
+    function ReceiverMatch(PackageName: string; ID: Integer): Boolean;
+        }
+      end;
+    end;
+  finally
+    ReceiverDictionary.Free;
+    SourceDictionary.Free;
+  end;
 end;
 
 function TModflow6Importer.GetMvr(MvrPackage, Package: TPackage): TMvr;
@@ -8859,6 +9196,7 @@ var
   SfrPeriod: TSfrPeriod;
   SfrSources: TIntegerList;
   SfrReceivers: TIntegerList;
+  ObsNameIndex: Integer;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -9089,11 +9427,11 @@ var
       SetLength(MvrSource.IDs, 1);
       MvrSource.IDs[0] := LastReachNo;
       MvrSource.SourceType := mspcSfr;
-    end;
-    for StressPeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
-    begin
-      MvrSource.Period := SfrMvrLinkList[StressPeriodIndex].Period;
-      FMvrSources.Add(MvrSource);
+      for StressPeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
+      begin
+        MvrSource.Period := SfrMvrLinkList[StressPeriodIndex].Period;
+        FMvrSources.Add(MvrSource);
+      end;
     end;
     if SfrReceivers.IndexOf(FirstReachNo) >= 0 then
     begin
@@ -9102,11 +9440,11 @@ var
       SetLength(MvrReceiver.IDs, 1);
       MvrReceiver.IDs[0] := FirstReachNo;
       MvrReceiver.ReceiverType := mrpcSfr;
-    end;
-    for StressPeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
-    begin
-      MvrReceiver.Period := SfrMvrLinkList[StressPeriodIndex].Period;
-      FMvrReceivers.Add(MvrReceiver);
+      for StressPeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
+      begin
+        MvrReceiver.Period := SfrMvrLinkList[StressPeriodIndex].Period;
+        FMvrReceivers.Add(MvrReceiver);
+      end;
     end;
 
     result.CreateSfr6Boundary;
@@ -9336,6 +9674,11 @@ var
       Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
       result.CreateMf6Obs;
       IncludeObservations(ObsList);
+      if result.Modflow6Obs.Name = '' then
+      begin
+        Inc(ObsNameIndex);
+        result.Modflow6Obs.Name := 'SFR_' + IntToStr(ObsNameIndex);
+      end;
     end;
     if SfrObs <> [] then
     begin
@@ -9467,6 +9810,7 @@ var
     end;
   end;
 begin
+  ObsNameIndex := 0;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing SFR package');
@@ -9756,11 +10100,14 @@ begin
             end;
 
             APeriod := SfrMvrLinkList[PeriodIndex].SfrPeriod;
-            for SettingIndex := 0 to APeriod.Count - 1 do
+            if APeriod <> nil then
             begin
-              ASetting := APeriod[SettingIndex];
-              AReachSettingsList := ASettingList[ASetting.IdNumber-1];
-              AReachSettingsList.Add(ASetting);
+              for SettingIndex := 0 to APeriod.Count - 1 do
+              begin
+                ASetting := APeriod[SettingIndex];
+                AReachSettingsList := ASettingList[ASetting.IdNumber-1];
+                AReachSettingsList.Add(ASetting);
+              end;
             end;
           end;
 
@@ -11049,6 +11396,12 @@ var
   ImportedUzfPeriodItem: TImportUzfPeriodItem;
   PData: TUzfPeriodItem;
   BoundaryValueArray: TMf6BoundaryValueArray;
+  ADataArray: TDataArray;
+  FormulaPosition: Integer;
+  MvrSource: TMvrSource;
+  MvrReceiver: TMvrReceiver;
+  ObsIndex: Integer;
+  ObsNameIndex: Integer;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
     ItemIndex: Integer;
@@ -11080,7 +11433,98 @@ var
       result := Value.StringValue;
     end;
   end;
+  procedure AssignObservations(Obs: TObservationList; AScreenObject: TScreenObject;
+    Name: string = '');
+  var
+    ObsIndex: Integer;
+    AnObs: TObservation;
+    UzfObs: TUzfObs;
+  begin
+    if Obs <> nil then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+      AScreenObject.CreateMf6Obs;
+      if AScreenObject.Modflow6Obs.Name = '' then
+      begin
+        if Name = '' then
+        begin
+          Inc(ObsNameIndex);
+          AScreenObject.Modflow6Obs.Name := 'UzfObs_' + IntToStr(ObsNameIndex);
+        end
+        else
+        begin
+          AScreenObject.Modflow6Obs.Name := Name;
+        end;
+      end;
+      UzfObs := AScreenObject.Modflow6Obs.UzfObs;
+      for ObsIndex := 0 to Obs.Count - 1 do
+      begin
+        AnObs := Obs[ObsIndex];
+        if AnsiSameText(AnObs.ObsType, 'uzf-gwrch') then
+        begin
+          Include(UzfObs, uoGW_Recharge);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'uzf-gwd') then
+        begin
+          Include(UzfObs, uoGW_Discharge);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'uzf-gwd-to-mvr') then
+        begin
+          Include(UzfObs, uoDischargeToMvr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'uzf-gwet') then
+        begin
+          Include(UzfObs, uoSatZoneEvapotranspiration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'infiltration') then
+        begin
+          Include(UzfObs, uoInfiltration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'from-mvr') then
+        begin
+          Include(UzfObs, uoMvrInflow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'rej-inf') then
+        begin
+          Include(UzfObs, uoRejectInfiltration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'rej-inf-to-mvr') then
+        begin
+          Include(UzfObs, uoRejectInfiltrationToMvr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'uzet') then
+        begin
+          Include(UzfObs, uoUnsatZoneEvapotranspiration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'storage') then
+        begin
+          Include(UzfObs, uoStorage);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'net-infiltration') then
+        begin
+          Include(UzfObs, uoNetInfiltration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'water-content') then
+        begin
+          Include(UzfObs, uoWaterContent);
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end;
+      AScreenObject.Modflow6Obs.UzfObs := UzfObs;
+
+//  TUzfOb = (uoGW_Recharge, uoGW_Discharge, uoDischargeToMvr,
+//    uoSatZoneEvapotranspiration, uoInfiltration, uoMvrInflow,
+//    uoRejectInfiltration, uoRejectInfiltrationToMvr,
+//    uoUnsatZoneEvapotranspiration, uoStorage, uoNetInfiltration, uoWaterContent);
+//  TUzfObs = set of TUzfOb;
+
+    end;
+  end;
 begin
+  ObsNameIndex := 0;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing UZF package');
@@ -11535,6 +11979,72 @@ begin
 
       end;
 
+      ADataArray := Model.DataArrayManager.GetDataSetByName(
+        StrUzfMf6BrooksCoreyEpsilon);
+      FormulaPosition := AScreenObject.AddDataSet(ADataArray);
+      AScreenObject.DataSetFormulas[FormulaPosition] :=
+        ModflowUzfMf6Boundary.BrooksCoreyEpsilon;
+
+      ADataArray := Model.DataArrayManager.GetDataSetByName(
+        StrUzfMf6InitialUnsaturatedWaterContent);
+      FormulaPosition := AScreenObject.AddDataSet(ADataArray);
+      AScreenObject.DataSetFormulas[FormulaPosition] :=
+        ModflowUzfMf6Boundary.InitialWaterContent;
+
+      ADataArray := Model.DataArrayManager.GetDataSetByName(
+        StrUzfMf6ReisidualWaterContent);
+      FormulaPosition := AScreenObject.AddDataSet(ADataArray);
+      AScreenObject.DataSetFormulas[FormulaPosition] :=
+        ModflowUzfMf6Boundary.ResidualWaterContent;
+
+      ADataArray := Model.DataArrayManager.GetDataSetByName(
+        StrUzfMf6SaturatedWaterContent);
+      FormulaPosition := AScreenObject.AddDataSet(ADataArray);
+      AScreenObject.DataSetFormulas[FormulaPosition] :=
+        ModflowUzfMf6Boundary.SaturatedWaterContent;
+
+      ADataArray := Model.DataArrayManager.GetDataSetByName(
+        StrUzfMf6SurfaceDepressionDepth);
+      FormulaPosition := AScreenObject.AddDataSet(ADataArray);
+      AScreenObject.DataSetFormulas[FormulaPosition] :=
+        ModflowUzfMf6Boundary.SurfaceDepressionDepth;
+
+      ADataArray := Model.DataArrayManager.GetDataSetByName(
+        StrUzfMf6VerticalSaturatedK);
+      FormulaPosition := AScreenObject.AddDataSet(ADataArray);
+      AScreenObject.DataSetFormulas[FormulaPosition] :=
+        ModflowUzfMf6Boundary.VerticalSaturatedK;
+
+      UzfDataItem := MergedList.First;
+      if UzfDataItem.MvrSource then
+      begin
+        MvrSource.ScreenObject := AScreenObject;
+        MvrSource.PackageName := Package.PackageName;
+        SetLength(MvrSource.IDs, 1);
+        MvrSource.SourceType := mspcUzf;
+        MvrSource.IDs[0] := UzfDataItem.PackageData.iuzno;
+        for StressPeriodIndex := 0 to UzfMvrLinkList.Count - 1 do
+        begin
+          MvrSource.Period := UzfMvrLinkList[StressPeriodIndex].Period;
+          FMvrSources.Add(MvrSource);
+        end;
+      end;
+
+      if UzfDataItem.MvrReceiver then
+      begin
+        MvrReceiver.ScreenObject := AScreenObject;
+        MvrReceiver.PackageName := Package.PackageName;
+        SetLength(MvrReceiver.IDs, 1);
+        MvrReceiver.ReceiverType := mrpcLak;
+        MvrReceiver.IDs[0] := UzfDataItem.PackageData.iuzno;
+        for StressPeriodIndex := 0 to UzfMvrLinkList.Count - 1 do
+        begin
+          MvrReceiver.Period := UzfMvrLinkList[StressPeriodIndex].Period;
+          FMvrReceivers.Add(MvrReceiver);
+        end;
+      end;
+      AssignObservations(UzfDataItem.BoundNameObs, AScreenObject, UzfDataItem.PackageData.boundname);
+      AssignObservations(UzfDataItem.NumberObs, AScreenObject);
     end;
   finally
     UzfReceivers.Free;
@@ -12360,6 +12870,10 @@ begin
   begin
     result := WelPeriod.Period;
   end
+  else if WelPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
+  end
   else
   begin
     Result := Max(WelPeriod.Period, MvrPeriod.Period);
@@ -12486,6 +13000,10 @@ begin
   begin
     result := DrnPeriod.Period;
   end
+  else if DrnPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
+  end
   else
   begin
     Result := Max(DrnPeriod.Period, MvrPeriod.Period);
@@ -12507,6 +13025,10 @@ begin
   if MvrPeriod = nil then
   begin
     result := RivPeriod.Period;
+  end
+  else if RivPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
   end
   else
   begin
@@ -12560,6 +13082,10 @@ begin
   if MvrPeriod = nil then
   begin
     result := GhbPeriod.Period;
+  end
+  else if GhbPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
   end
   else
   begin
@@ -12736,6 +13262,10 @@ begin
   begin
     result := MawPeriod.Period;
   end
+  else if MawPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
+  end
   else
   begin
     Result := Max(MawPeriod.Period, MvrPeriod.Period);
@@ -12749,6 +13279,10 @@ begin
   if MvrPeriod = nil then
   begin
     result := SfrPeriod.Period;
+  end
+  else if SfrPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
   end
   else
   begin
@@ -12764,6 +13298,10 @@ begin
   begin
     result := LakPeriod.Period;
   end
+  else if LakPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
+  end
   else
   begin
     Result := Max(LakPeriod.Period, MvrPeriod.Period);
@@ -12777,6 +13315,10 @@ begin
   if MvrPeriod = nil then
   begin
     result := UzfPeriod.Period;
+  end
+  else if UzfPeriod = nil then
+  begin
+    result := MvrPeriod.Period;
   end
   else
   begin
@@ -12854,6 +13396,40 @@ begin
       end;
     end;
   end;
+end;
+
+{ TTMvrKeyyComparer }
+
+function TTMvrKeyyComparer.Equals(const Left, Right: TMvrKey): Boolean;
+begin
+  Result := (Left.ID = Right.ID)
+    and (Left.Period = Right.Period)
+    and (Left.PackageName = Right.PackageName)
+end;
+
+function TTMvrKeyyComparer.GetHashCode(const Value: TMvrKey): Integer;
+begin
+  Result := THashBobJenkins.GetHashValue(Value.PackageName);
+  Result := THashBobJenkins.GetHashValue(Value.ID, SizeOf(Value.ID), Result);
+  Result := THashBobJenkins.GetHashValue(Value.Period, SizeOf(Value.Period), result);
+end;
+
+{ TMvrSource }
+
+function TMvrSource.Key(Index: Integer): TMvrKey;
+begin
+  result.ID := IDs[Index];
+  result.PackageName := PackageName;
+  result.Period := Period;
+end;
+
+{ TMvrReceiver }
+
+function TMvrReceiver.Key(Index: Integer): TMvrKey;
+begin
+  result.ID := IDs[Index];
+  result.PackageName := PackageName;
+  result.Period := Period;
 end;
 
 end.

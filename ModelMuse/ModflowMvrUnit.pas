@@ -84,6 +84,7 @@ type
       write SetReceiverPackage;
     property SfrReceiverChoice: TSfrReceiverChoice read FSfrReceiverChoice
       write SetSfrReceiverChoice;
+    // LakeOutlet starts at 1.
     property LakeOutlet: Integer read FLakeOutlet write SetLakeOutlet;
     property ReceiverObjectName: string read GetReceiverObjectName
       write SetReceiverObjectName;

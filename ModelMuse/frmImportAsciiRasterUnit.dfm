@@ -1,12 +1,10 @@
 inherited frmImportAsciiRaster: TfrmImportAsciiRaster
   HelpKeyword = 'Import_ASCII_Raster_File'
   Caption = 'Import ASCII Raster File'
-  ClientHeight = 333
+  ClientHeight = 351
   ClientWidth = 628
-  ExplicitLeft = 3
-  ExplicitTop = 3
   ExplicitWidth = 640
-  ExplicitHeight = 371
+  ExplicitHeight = 389
   TextHeight = 18
   inherited lblDataSet: TLabel
     Top = 13
@@ -47,11 +45,11 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
   end
   inherited comboDataSets: TComboBox
     Top = 37
-    Width = 517
+    Width = 513
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 2
     ExplicitTop = 37
-    ExplicitWidth = 513
+    ExplicitWidth = 509
   end
   inherited comboInterpolators: TComboBox
     Top = 91
@@ -106,7 +104,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
   object rgFilterMethod: TRadioGroup [14]
     Left = 360
     Top = 91
-    Width = 240
+    Width = 236
     Height = 140
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Filter method'
@@ -118,12 +116,12 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
       'Point closest to cell center'
       'None')
     TabOrder = 3
-    ExplicitWidth = 236
+    ExplicitWidth = 232
   end
   object rdgFilesAndDataSets: TRbwDataGrid4 [15]
     Left = 8
     Top = 8
-    Width = 592
+    Width = 588
     Height = 53
     Anchors = [akLeft, akTop, akRight]
     ColCount = 3
@@ -218,7 +216,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 588
+    ExplicitWidth = 584
     ColWidths = (
       20
       20

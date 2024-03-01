@@ -584,7 +584,7 @@ end;
     procedure AssignTransient2DArray(
       DisplayArray: TModflowBoundaryDisplayDataArray; DataTypeIndex: Integer;
       List: TList; DefaultValue: double; DataType: TRbwDataType;
-      UpdateMethod: TUpdateMethod);
+      UpdateMethod: TUpdateMethod; UseTopCell: Boolean = False);
     // @name counts the maximum number of cells used in any stress period. This
     // value is returned in MaximumNumberOfCells.
     procedure CountCells(var MaximumNumberOfCells: integer); virtual;
@@ -7984,11 +7984,12 @@ end;
 procedure TCustomTransientWriter.AssignTransient2DArray(
       DisplayArray: TModflowBoundaryDisplayDataArray; DataTypeIndex: Integer;
       List: TList; DefaultValue: double; DataType: TRbwDataType;
-      UpdateMethod: TUpdateMethod);
+      UpdateMethod: TUpdateMethod; UseTopCell: Boolean = False);
 var
   CellList: TValueCellList;
   AnObject: TObject;
   ListIndex: integer;
+  Layers: T2DSparseIntegerArray;
   procedure AssignCellValues(CellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -8000,42 +8001,145 @@ var
       case UpdateMethod of
         umAssign:
           begin
-            case DataType of
-              rdtDouble:
-                begin
-                  DisplayArray.RealData[0, Cell.Row, Cell.Column]
-                    := Cell.RealValue[DataTypeIndex, Model];
-                  DisplayArray.Annotation[0, Cell.Row, Cell.Column]
-                    := Cell.RealAnnotation[DataTypeIndex, Model];
-                  DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+            if UseTopCell then
+            begin
+              if not Layers.IsValue[Cell.Row, Cell.Column] then
+              begin
+                case DataType of
+                  rdtDouble:
+                    begin
+                      DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                        := Cell.RealValue[DataTypeIndex, Model];
+                      DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                        := Cell.RealAnnotation[DataTypeIndex, Model];
+                      DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                    end;
+                  rdtInteger:
+                    begin
+                      DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                        := Cell.IntegerValue[DataTypeIndex, Model];
+                      DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                        := Cell.IntegerAnnotation[DataTypeIndex, Model];
+                      DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                    end;
+                else
+                  Assert(False);
                 end;
-              rdtInteger:
-                begin
-                  DisplayArray.RealData[0, Cell.Row, Cell.Column]
-                    := Cell.IntegerValue[DataTypeIndex, Model];
-                  DisplayArray.Annotation[0, Cell.Row, Cell.Column]
-                    := Cell.IntegerAnnotation[DataTypeIndex, Model];
-                  DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                Layers[Cell.Row, Cell.Column] := Cell.Layer;
+              end
+              else if Layers[Cell.Row, Cell.Column] > Cell.Layer then
+              begin
+                Layers[Cell.Row, Cell.Column] := Cell.Layer;
+                case DataType of
+                  rdtDouble:
+                    begin
+                      DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                        := Cell.RealValue[DataTypeIndex, Model];
+                      DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                        := Cell.RealAnnotation[DataTypeIndex, Model];
+                      DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                    end;
+                  rdtInteger:
+                    begin
+                      DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                        := Cell.IntegerValue[DataTypeIndex, Model];
+                      DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                        := Cell.IntegerAnnotation[DataTypeIndex, Model];
+                      DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                    end;
+                else
+                  Assert(False);
                 end;
+              end;
+            end
             else
-              Assert(False);
+            begin
+              case DataType of
+                rdtDouble:
+                  begin
+                    DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                      := Cell.RealValue[DataTypeIndex, Model];
+                    DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                      := Cell.RealAnnotation[DataTypeIndex, Model];
+                    DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                  end;
+                rdtInteger:
+                  begin
+                    DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                      := Cell.IntegerValue[DataTypeIndex, Model];
+                    DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                      := Cell.IntegerAnnotation[DataTypeIndex, Model];
+                    DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                  end;
+              else
+                Assert(False);
+              end;
             end;
           end;
         umAdd:
           begin
-            case DataType of
-              rdtDouble:
-                begin
-                  DisplayArray.AddDataValue(Cell.RealAnnotation[DataTypeIndex, Model],
-                    Cell.RealValue[DataTypeIndex, Model], Cell.Column, Cell.Row, 0);
+            if UseTopCell then
+            begin
+              if (not Layers.IsValue[Cell.Row, Cell.Column])
+                or (Layers[Cell.Row, Cell.Column] = Cell.Layer) then
+              begin
+                Layers[Cell.Row, Cell.Column] := Cell.Layer;
+                case DataType of
+                  rdtDouble:
+                    begin
+                      DisplayArray.AddDataValue(Cell.RealAnnotation[DataTypeIndex, Model],
+                        Cell.RealValue[DataTypeIndex, Model], Cell.Column, Cell.Row, 0);
+                    end;
+                  rdtInteger:
+                    begin
+                      DisplayArray.AddDataValue(Cell.IntegerAnnotation[DataTypeIndex, Model],
+                        Cell.IntegerValue[DataTypeIndex, Model], Cell.Column, Cell.Row, 0);
+                    end;
+                else
+                  Assert(False);
                 end;
-              rdtInteger:
-                begin
-                  DisplayArray.AddDataValue(Cell.IntegerAnnotation[DataTypeIndex, Model],
-                    Cell.IntegerValue[DataTypeIndex, Model], Cell.Column, Cell.Row, 0);
+              end
+              else if Layers[Cell.Row, Cell.Column] > Cell.Layer then
+              begin
+                Layers[Cell.Row, Cell.Column] := Cell.Layer;
+                case DataType of
+                  rdtDouble:
+                    begin
+                      DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                        := Cell.RealValue[DataTypeIndex, Model];
+                      DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                        := Cell.RealAnnotation[DataTypeIndex, Model];
+                      DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                    end;
+                  rdtInteger:
+                    begin
+                      DisplayArray.RealData[0, Cell.Row, Cell.Column]
+                        := Cell.IntegerValue[DataTypeIndex, Model];
+                      DisplayArray.Annotation[0, Cell.Row, Cell.Column]
+                        := Cell.IntegerAnnotation[DataTypeIndex, Model];
+                      DisplayArray.CellCount[0, Cell.Row, Cell.Column] := 1;
+                    end;
+                else
+                  Assert(False);
                 end;
+              end;
+            end
             else
-              Assert(False);
+            begin
+              case DataType of
+                rdtDouble:
+                  begin
+                    DisplayArray.AddDataValue(Cell.RealAnnotation[DataTypeIndex, Model],
+                      Cell.RealValue[DataTypeIndex, Model], Cell.Column, Cell.Row, 0);
+                  end;
+                rdtInteger:
+                  begin
+                    DisplayArray.AddDataValue(Cell.IntegerAnnotation[DataTypeIndex, Model],
+                      Cell.IntegerValue[DataTypeIndex, Model], Cell.Column, Cell.Row, 0);
+                  end;
+              else
+                Assert(False);
+              end;
             end;
           end;
         else Assert(False);
@@ -8044,29 +8148,39 @@ var
   end;
 begin
   InitializeDisplayArray(DisplayArray, DefaultValue);
-  if (List.Count > 0)
-    or ((List is TValueCellList) and (TValueCellList(List).Count > 0)) then
+  Layers := nil;
+  if UseTopCell then
   begin
-    if (List is TValueCellList) then
+    Layers := T2DSparseIntegerArray.Create(GetQuantum(Model.RowCount),
+      GetQuantum(Model.ColumnCount));
+  end;
+  try
+    if (List.Count > 0)
+      or ((List is TValueCellList) and (TValueCellList(List).Count > 0)) then
     begin
-      AnObject := TValueCellList(List).Items[0];
-    end
-    else
-    begin
-      AnObject := List[0];
-    end;
-    if AnObject is TList then
-    begin
-      for ListIndex := 0 to List.Count - 1 do
+      if (List is TValueCellList) then
       begin
-        CellList := List[ListIndex];
-        AssignCellValues(CellList);
+        AnObject := TValueCellList(List).Items[0];
+      end
+      else
+      begin
+        AnObject := List[0];
       end;
-    end
-    else
-    begin
-      AssignCellValues(List as TValueCellList);
+      if AnObject is TList then
+      begin
+        for ListIndex := 0 to List.Count - 1 do
+        begin
+          CellList := List[ListIndex];
+          AssignCellValues(CellList);
+        end;
+      end
+      else
+      begin
+        AssignCellValues(List as TValueCellList);
+      end;
     end;
+  finally
+    Layers.Free;
   end;
   DisplayArray.UpToDate := True;
 end;

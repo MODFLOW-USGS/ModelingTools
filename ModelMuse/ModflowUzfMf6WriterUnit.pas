@@ -572,7 +572,7 @@ begin
           as TModflowBoundaryDisplayDataArray;
         CellList := Values[TimeIndex];
         AssignTransient2DArray(InfiltrationArray, 0, CellList, 0,
-          rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
         Model.AdjustDataArray(InfiltrationArray);
         CellList.Cache;
       end;
@@ -586,7 +586,7 @@ begin
             as TModflowBoundaryDisplayDataArray;
           CellList := Values[TimeIndex];
           AssignTransient2DArray(PotentialEtArray, 1, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+          rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
           Model.AdjustDataArray(PotentialEtArray);
           CellList.Cache;
         end;
@@ -601,7 +601,7 @@ begin
             as TModflowBoundaryDisplayDataArray;
           CellList := Values[TimeIndex];
           AssignTransient2DArray(ExtinctionDepthArray, 2, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
           Model.AdjustDataArray(ExtinctionDepthArray);
           CellList.Cache;
         end;
@@ -616,7 +616,7 @@ begin
             as TModflowBoundaryDisplayDataArray;
           CellList := Values[TimeIndex];
           AssignTransient2DArray(ExtinctionWaterContentArray, 3, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
           Model.AdjustDataArray(ExtinctionWaterContentArray);
           CellList.Cache;
         end;
@@ -631,7 +631,7 @@ begin
             as TModflowBoundaryDisplayDataArray;
           CellList := Values[TimeIndex];
           AssignTransient2DArray(AirEntryPotentialArray, 4, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
           Model.AdjustDataArray(AirEntryPotentialArray);
           CellList.Cache;
         end;
@@ -646,7 +646,7 @@ begin
             as TModflowBoundaryDisplayDataArray;
           CellList := Values[TimeIndex];
           AssignTransient2DArray(RootPotentialArray, 5, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
           Model.AdjustDataArray(RootPotentialArray);
           CellList.Cache;
         end;
@@ -661,7 +661,7 @@ begin
             as TModflowBoundaryDisplayDataArray;
           CellList := Values[TimeIndex];
           AssignTransient2DArray(RootActivityArray, 6, CellList, 0,
-            rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+            rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
           Model.AdjustDataArray(RootActivityArray);
           CellList.Cache;
         end;
@@ -695,7 +695,7 @@ begin
               as TModflowBoundaryDisplayDataArray;
             CellList := Values[TimeIndex];
             AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
-              rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+              rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
             Model.AdjustDataArray(AnArray);
             CellList.Cache;
           end;
@@ -710,7 +710,7 @@ begin
               as TModflowBoundaryDisplayDataArray;
             CellList := Values[TimeIndex];
             AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
-              rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+              rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
             Model.AdjustDataArray(AnArray);
             CellList.Cache;
           end;
@@ -725,7 +725,7 @@ begin
               as TModflowBoundaryDisplayDataArray;
             CellList := Values[TimeIndex];
             AssignTransient2DArray(AnArray, GWT_Start, CellList, 0,
-              rdtDouble, Model.ModflowPackages.UzfPackage.AssignmentMethod);
+              rdtDouble,umAssign, {Model.ModflowPackages.FUzfPackage.AssignmentMethod,} True);
             Model.AdjustDataArray(AnArray);
             CellList.Cache;
           end;
