@@ -3844,7 +3844,6 @@ var
   CellIds: TCellIdList;
   Mvr: TMvr;
   Index: Integer;
-  FoundMvr: Boolean;
   GhbMvrLink: TGhbMvrLink;
   GhbMvrLinkList: TGhbMvrLinkList;
   MvrPeriod: TMvrPeriod;
@@ -4805,8 +4804,6 @@ var
   TablePackage: TPackage;
   ATable: TMf6LakeTableItem;
   Mvr: TMvr;
-  FoundMvr: Boolean;
-  Index: Integer;
   LakMvrLinkArray: TLakMvrLinkArray;
   LakMvrLinkList: TLakMvrLinkList;
   LakMvrLink: TLakMvrLink;
@@ -6824,6 +6821,7 @@ begin
         end
         else
         begin
+          MvrType := mtFactor;
           Assert(False);
         end;
 
@@ -7797,7 +7795,6 @@ var
   CellIds: TCellIdList;
   Mvr: TMvr;
   Index: Integer;
-  FoundMvr: Boolean;
   RivMvrLink: TRivMvrLink;
   RivMvrLinkList: TRivMvrLinkList;
   MvrPeriod: TMvrPeriod;
@@ -9187,7 +9184,6 @@ var
   AuxArrays: TMf6BoundaryValueArrays;
   AReach: TSfrReachInfo;
   Mvr: TMvr;
-  FoundMvr: Boolean;
   SfrMvrLinkArray: TSfrMvrLinkArray;
   SfrMvrLinkList: TSfrMvrLinkList;
   SfrMvrLink: TSfrMvrLink;
@@ -11400,7 +11396,6 @@ var
   FormulaPosition: Integer;
   MvrSource: TMvrSource;
   MvrReceiver: TMvrReceiver;
-  ObsIndex: Integer;
   ObsNameIndex: Integer;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
@@ -12225,7 +12220,6 @@ var
   CellIds: TCellIdList;
   Mvr: TMvr;
   Index: Integer;
-  FoundMvr: Boolean;
   WellMvrLink: TWellMvrLink;
   WellMvrLinkList: TWellMvrLinkList;
   MvrPeriod: TMvrPeriod;

@@ -32664,5 +32664,19 @@ object TTaskHistory
         'core code'
         'MF-2015'
         'Import')
+    end
+    item
+      Date = 45353.000000000000000000
+    end
+    item
+      Date = 45354.000000000000000000
+    end
+    item
+      Date = 45355.000000000000000000
+    end
+    item
+      Date = 45356.000000000000000000
+      Categories.Strings = (
+        'GwMounding')
     end>
 end

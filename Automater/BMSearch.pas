@@ -9,7 +9,7 @@
        to use this unit in your own applications, however I retain all
        copyright to the code. JMB}
 {$IFNDEF Win32}
-!! Error: Sorry this unit will only compile in Delphi 2, 3, or 4
+//!! Error: Sorry this unit will only compile in Delphi 2, 3, or 4
 {$ENDIF}
 
 // Modified by Richard B. Winston

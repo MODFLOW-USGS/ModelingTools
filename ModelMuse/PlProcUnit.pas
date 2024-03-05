@@ -1141,6 +1141,7 @@ begin
       begin
         AParam := FUsedParamList.Objects[ParameterIndex]
           as TModflowSteadyParameter;
+        AParam.UsedDirectly := True;
         if ScriptChoice = scWriteTemplate then
         begin
           WriteString(Format('%0:s = %1:s                        %0:s%1:s',
