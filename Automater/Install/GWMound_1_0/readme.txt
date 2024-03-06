@@ -27,11 +27,17 @@ The distribution file contains:
           An example data set.
  |
  |--GWMound_1_0
-    |--bin32            ; GWMound executables for Windows computers using 32 or 64-bit operating systems
-    |--bin64            ; GWMound executables for Windows computers using 64-bit operating systems
-    |--doc            ; Documentation file
-    |--example        ; An example GWMound file.
-    |--Source         ; GWMound source code
+    |--bin32               ; GWMound executables for Windows computers using 32 or 64-bit operating systems
+    |--bin64               ; GWMound executables for Windows computers using 64-bit operating systems
+    |--doc                 ; Documentation file
+    |--example             ; An example GWMound file.
+    |--Source              ; GWMound source code
+        |--Components      ; Source code for components used in GWMound
+        |--Dmath           ; Source code for dll used by GWMound
+        |--GenerateSTable  ; Source code for program to generate S* table used by GWMound
+        |--GwMound         ; Source code for GWMound.exe
+        |--HelpSource      ; Source code for web pages used by GWMound.
+
 
 B. INSTALLING
 
@@ -44,5 +50,7 @@ D. COMPILING
 GWMound can be compiled with Delphi version 11.3 or later. A license for Delphi can be obtained from Embarcadero (https://www.embarcadero.com/).
 
 GWMound uses several components that are not included with Delphi. These include the JEDI Code Library and JEDI Visual Component Library. Both of these may be obtained from the Project JEDI (https://wiki.delphi-jedi.org/wiki/Main_Page). Additional components are included in the Components subdirectory of the Source directory of the distribution file. 
-After installing the components, the two projects in the Dmath and GwMound subdirectories of the Source directory can be compiled with Delphi. 
-The help for GWMound is in the HelpSource directory. It can be compiled with Help and Manual version 8 from https://www.helpandmanual.com/.
+After installing the components, the two projects in the Dmath and GWMound subdirectories of the Source directory can be compiled with Delphi. 
+One of the source code files for GWMound is a table of S* values. It was created by a separate program the source code for which is in the GenerateSTable subdirectory.
+
+The help for GWMound is in the HelpSource directory. It can be compiled with Help and Manual version 8 from https://www.helpandmanual.com/. After compilation, it should be placed in a subdirectory named Help and that subdirectory should be a subdirectory of the directory containing GwMound.exe.

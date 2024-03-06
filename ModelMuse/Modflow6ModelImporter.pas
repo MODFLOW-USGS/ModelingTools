@@ -147,6 +147,7 @@ type
     procedure ImportUzf(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     function GetMvr(MvrPackage, Package: TPackage): TMvr;
     procedure ImportMvr(Package: TPackage);
+    procedure ImportGnc(Package: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -182,7 +183,7 @@ uses
   Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit,
   Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit, IntListUnit,
   ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit, System.Hash,
-  ModflowMvrUnit;
+  ModflowMvrUnit, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -2352,6 +2353,7 @@ var
     end;
   end;
 begin
+  MvrSource.LakeOutlet := nil;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing DRN package');
@@ -2564,7 +2566,7 @@ begin
         begin
           if DrnMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
           begin
-            KeyString := KeyString + ' MVR';
+            KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
             MvrUsed := True;
           end;
         end;
@@ -2578,7 +2580,10 @@ begin
         ACellList.Add(ACell);
         if MvrUsed then
         begin
-          ACellList.FIds.Add(ACell.Id)
+          if ACellList.FIds.IndexOf(ACell.Id) < 0 then
+          begin
+            ACellList.FIds.Add(ACell.Id);
+          end;
         end;
       end;
 
@@ -3617,6 +3622,7 @@ begin
         end
         else if APackage.FileType = 'GNC6' then
         begin
+          ImportGnc(APackage);
   //        GncReader := TGnc.Create(APackage.FileType);
   //        GncReader.Dimensions := FDimensions;
   //        APackage.Package := GncReader;
@@ -3782,6 +3788,11 @@ type
     destructor Destroy; override;
     procedure Sort;
   end;
+
+procedure TModflow6Importer.ImportGnc(Package: TPackage);
+begin
+
+end;
 
 procedure TModflow6Importer.ImportGhb(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
@@ -4083,6 +4094,7 @@ var
     end;
   end;
 begin
+  MvrSource.LakeOutlet := nil;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing GHB package');
@@ -4302,7 +4314,7 @@ begin
           begin
             if GhbMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
             begin
-              KeyString := KeyString + ' MVR';
+              KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
               MvrUsed := True;
             end;
           end;
@@ -4316,7 +4328,10 @@ begin
           ACellList.Add(ACell);
           if MvrUsed then
           begin
-            ACellList.FIds.Add(ACell.Id)
+            if ACellList.FIds.IndexOf(ACell.Id) < 0 then
+            begin
+              ACellList.FIds.Add(ACell.Id);
+            end;
           end;
         end;
 
@@ -6089,6 +6104,7 @@ var
     Mf6Obs.MawObs := MawObs;
   end;
 begin
+  MvrSource.LakeOutlet := nil;
   ObsNameIndex := 0;
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -6322,6 +6338,7 @@ begin
           MvrSource.ScreenObject := AScreenObject;
           MvrSource.PackageName := Package.PackageName;
           MvrSource.Period := MawMvrLink.Period;
+          SetLength(MvrSource.IDs, 1);
           MvrSource.IDs[0] := ObjectIndex;
           MvrSource.SourceType := mspcMaw;
           FMvrSources.Add(MvrSource);
@@ -6329,6 +6346,7 @@ begin
           MvrReceiver.ScreenObject := AScreenObject;
           MvrReceiver.PackageName := Package.PackageName;
           MvrReceiver.Period := MawMvrLink.Period;
+          SetLength(MvrReceiver.IDs, 1);
           MvrReceiver.IDs[0] := ObjectIndex;
           MvrReceiver.ReceiverType := mrpcMaw;
           FMvrReceivers.Add(MvrReceiver)
@@ -6510,6 +6528,7 @@ var
   ExchangeIndex: Integer;
   Exchange: TExchange;
 begin
+  frmErrorsAndWarnings.Clear;
   FErrorMessages := ErrorMessages;
   for FileIndex := 0 to NameFiles.Count - 1 do
   begin
@@ -6685,9 +6704,13 @@ var
   RIndex: Integer;
   LakeBoundary: TLakeMf6;
   AnOutlet: TLakeOutletItem;
-//  AnOutlet: TLakeOutlet;
 begin
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing MVR package');
+  end;
   Model := frmGoPhast.PhastModel;
+  Model.ModflowPackages.MvrPackage.IsSelected := True;
   EndTime := Model.ModflowStressPeriods.Last.EndTime;
   SourceDictionary := TMvrSourceDictionary.Create(TTMvrKeyyComparer.Create);
   ReceiverDictionary := TMvrReceiverDictionary.Create(TTMvrKeyyComparer.Create);
@@ -6832,8 +6855,6 @@ begin
             mrpcLak:
               begin
                 ReceiverItem.ReceiverPackage := rpcLak;
-                Assert(Source.LakeOutlet <> nil);
-                ReceiverItem.LakeOutlet := Source.LakeOutlet.Index + 1;
               end;
             mrpcMaw:
               begin
@@ -6862,19 +6883,24 @@ begin
             IndividualMvrItem.Value := '0';
           end;
         end;
+        if Source.LakeOutlet <> nil then
+        begin
+          ReceiverItem.LakeOutlet := Source.LakeOutlet.Index + 1;
+        end;
 
         if ModflowMvr.Values.Count > 0 then
         begin
           PriorMvrItem := ModflowMvr.Values.Last as TMvrItem;
-          if PriorMvrItem.EndTime <> StartTime then
+          if (PriorMvrItem.StartTime = StartTime)
+            and (PriorMvrItem.EndTime = EndTime) then
+          begin
+            MvrItem := PriorMvrItem;
+          end
+          else
           begin
             PriorMvrItem.EndTime := StartTime;
             MvrItem := ModflowMvr.Values.Add as TMvrItem;
             MvrItem.Assign(MvrItem);
-          end
-          else
-          begin
-            MvrItem := PriorMvrItem;
           end;
         end
         else
@@ -8058,6 +8084,7 @@ var
     end;
   end;
 begin
+  MvrSource.LakeOutlet := nil;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing RIV package');
@@ -8270,7 +8297,7 @@ begin
             begin
               if RivMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
               begin
-                KeyString := KeyString + ' MVR';
+                KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
                 MvrUsed := True;
               end;
             end;
@@ -8284,7 +8311,10 @@ begin
             ACellList.Add(ACell);
             if MvrUsed then
             begin
-              ACellList.FIds.Add(ACell.Id)
+              if ACellList.FIds.IndexOf(ACell.Id) < 0 then
+              begin
+                ACellList.FIds.Add(ACell.Id);
+              end;
             end;
           end;
 
@@ -9387,6 +9417,7 @@ var
       end;
     end;
   begin
+    MvrSource.LakeOutlet := nil;
     Inc(ObjectCount);
 
     result := TScreenObject.CreateWithViewDirection(
@@ -10386,6 +10417,17 @@ begin
                     DiversionItem := SfrDiversions.Add;
                     DiversionItem.DownstreamSegment :=
                       DiversionSegment.ModflowSfr6Boundary.SegmentNumber;
+
+                    for DownstreamIndex := 0 to AScreenObject.ModflowSfr6Boundary.DownstreamSegments.Count - 1 do
+                    begin
+                      IntItem := AScreenObject.ModflowSfr6Boundary.DownstreamSegments[DownstreamIndex];
+                      if IntItem.Value = DiversionItem.DownstreamSegment then
+                      begin
+                        IntItem.Free;
+                        Break;
+                      end;
+                    end;
+
                     if AnsiSameText(ADiversion.cprior, 'FRACTION') then
                     begin
                       DiversionItem.Priority := cpFraction;
@@ -11519,6 +11561,7 @@ var
     end;
   end;
 begin
+  MvrSource.LakeOutlet := nil;
   ObsNameIndex := 0;
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -12441,6 +12484,7 @@ var
     end;
   end;
 begin
+  MvrSource.LakeOutlet := nil;
   if Assigned(OnUpdateStatusBar) then
   begin
     OnUpdateStatusBar(self, 'importing WEL package');
@@ -12653,7 +12697,7 @@ begin
             begin
               if WellMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
               begin
-                KeyString := KeyString + ' MVR';
+                KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
                 MvrUsed := True;
               end;
             end;
@@ -12667,7 +12711,10 @@ begin
             ACellList.Add(ACell);
             if MvrUsed then
             begin
-              ACellList.FIds.Add(ACell.Id)
+              if ACellList.FIds.IndexOf(ACell.Id) < 0 then
+              begin
+                ACellList.FIds.Add(ACell.Id);
+              end;
             end;
           end;
 

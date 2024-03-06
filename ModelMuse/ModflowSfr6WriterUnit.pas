@@ -362,7 +362,7 @@ begin
         if ASegment.FSfr6Boundary.DownstreamSegments.IndexOf(DivSeg) >= 0 then
         begin
           frmErrorsAndWarnings.AddError(Model, 'Diversion segment also listed as downstream segment',
-            Format('In %0:s, $1:d is listed as both a downstream segment and diversion segment.',
+            Format('In %0:s, %1:d is listed as both a downstream segment and diversion segment.',
             [ASegment.FScreenObject.Name, DivSeg]),  ASegment.FScreenObject);
         end;
       end;
@@ -2071,8 +2071,6 @@ var
   NameOfFile: string;
   CsvFile: string;
   BaseFileName: string;
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
   budgetCsvFile: string;
 begin
   WriteBeginOptions;
