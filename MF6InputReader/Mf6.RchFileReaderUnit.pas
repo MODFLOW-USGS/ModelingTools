@@ -45,7 +45,7 @@ type
 
   TRchTimeItem = class(TObject)
   private
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Frecharge: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
     Fboundname: string;
@@ -55,7 +55,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
-    property CellId: TCellId read Fcellid;
+    property CellId: TMfCellId read Fcellid;
     property Recharge: TMf6BoundaryValue read Frecharge;
     property Count: integer read GetCount;
     property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;

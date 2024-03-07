@@ -64,7 +64,7 @@ type
   TSfrPackageItem = class(TObject)
   private
     Frno: Integer;
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Frlen: Extended;
     Frwid: Extended;
     Frgrd: Extended;
@@ -83,7 +83,7 @@ type
     constructor Create;
     destructor Destroy; override;
     property rno: Integer read Frno;
-    property cellid: TCellId read Fcellid;
+    property cellid: TMfCellId read Fcellid;
     property rlen: Extended read Frlen;
     property rwid: Extended read Frwid;
     property rgrd: Extended read Frgrd;

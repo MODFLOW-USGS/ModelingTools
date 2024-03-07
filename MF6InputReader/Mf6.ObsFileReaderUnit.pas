@@ -25,8 +25,8 @@ type
     ObsType: string;
     IdType1: TIdType;
     IdType2: TIdType;
-    CellId1: TCellId;
-    CellId2: TCellId;
+    CellId1: TMfCellId;
+    CellId2: TMfCellId;
     Num1: Integer;
     Num2: Integer;
     FloatNum1: Extended;

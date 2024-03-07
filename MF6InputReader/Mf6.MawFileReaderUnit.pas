@@ -108,7 +108,7 @@ type
   private
     Fwellno: Integer;
     Ficon: Integer;
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Fscrn_top: Extended;
     Fscrn_bot: Extended;
     Fhk_skin: Extended;
@@ -117,7 +117,7 @@ type
   public
     property wellno: Integer read Fwellno;
     property icon: Integer read Ficon;
-    property CellID: TCellId read Fcellid;
+    property CellID: TMfCellId read Fcellid;
     property scrn_top: Extended read Fscrn_top;
     property scrn_bot: Extended read Fscrn_bot;
     property hk_skin: Extended read Fhk_skin;

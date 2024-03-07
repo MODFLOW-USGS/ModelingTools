@@ -50,7 +50,7 @@ type
 
   TEvtTimeItem = class(TObject)
   private
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Fsurf: TMf6BoundaryValue;
     Frate: TMf6BoundaryValue;
     Fdepth: TMf6BoundaryValue;
@@ -67,7 +67,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
-    property CellId: TCellId read Fcellid;
+    property CellId: TMfCellId read Fcellid;
     property Surf: TMf6BoundaryValue read Fsurf;
     property Rate: TMf6BoundaryValue read Frate;
     property Depth: TMf6BoundaryValue read Fdepth;

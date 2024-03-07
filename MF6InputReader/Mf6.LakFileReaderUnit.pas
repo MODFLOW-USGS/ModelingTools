@@ -99,7 +99,7 @@ type
   private
     Flakeno: Integer;
     Ficonn: Integer;
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Fclaktype: string;
     Fbedleak: Extended;
     Fbelev: Extended;
@@ -110,7 +110,7 @@ type
     procedure Initialize;
     property lakeno: Integer read Flakeno;
     property iconn: Integer read Ficonn;
-    property cellid: TCellId read Fcellid;
+    property cellid: TMfCellId read Fcellid;
     property claktype: string read Fclaktype;
     property bedleak: Extended read Fbedleak;
     property belev: Extended read Fbelev;

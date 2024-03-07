@@ -1402,7 +1402,8 @@ Type
     property RedBlackOrder: boolean read FRedBlackOrder write SetRedBlackOrder
       stored False;
     // ATS_OUTER_MAXIMUM_FRACTION
-    property StoredAtsOuterMaxFraction: TRealStorage read FStoredAtsOuterMaxFraction write SetStoredAtsOuterMaxFraction;
+    property StoredAtsOuterMaxFraction: TRealStorage
+      read FStoredAtsOuterMaxFraction write SetStoredAtsOuterMaxFraction;
   end;
 
   // loWaterTable is only available for UZF in MODFLOW-NWT

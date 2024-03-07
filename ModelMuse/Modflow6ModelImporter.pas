@@ -7,7 +7,7 @@ uses
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
   ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
   System.Generics.Defaults, Mf6.ObsFileReaderUnit, ModflowLakMf6Unit,
-  Mf6.MvrFileReaderUnit, GoPhastTypes;
+  Mf6.MvrFileReaderUnit, GoPhastTypes, ModflowPackageSelectionUnit;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -22,7 +22,7 @@ type
 
   TimeSeriesMap = TDictionary<string, string>;
   TBoundNameDictionary = TDictionary<string, TObservationList>;
-  TCellIdObsDictionary = TDictionary<TCellId, TObservationList>;
+  TCellIdObsDictionary = TDictionary<TMfCellId, TObservationList>;
   TNumberDictionary = TDictionary<Integer, TObservationList>;
   TObsLists = TObjectList<TObservationList>;
 
@@ -66,14 +66,6 @@ type
 
   TMvrSourceDictionary = TDictionary<TMvrKey, TMvrSource>;
   TMvrReceiverDictionary = TDictionary<TMvrKey, TMvrReceiver>;
-
-
-//type
-//  TMvrDictionary = Class(TDictionary<Integer,TScreenObject>)
-//  private
-//    Period: Integer;
-//  End;
-//  TMvrDictionarys = TObjectList<TMvrDictionary>;
 
   TModflow6Importer = class(TObject)
   private
@@ -148,6 +140,8 @@ type
     function GetMvr(MvrPackage, Package: TPackage): TMvr;
     procedure ImportMvr(Package: TPackage);
     procedure ImportGnc(Package: TPackage);
+    function GetIms(ModelName: string): TSmsPackageSelection;
+    procedure ImportIMS;
   public
     Constructor Create;
     destructor Destroy; override;
@@ -161,7 +155,7 @@ implementation
 uses
   PhastModelUnit, frmGoPhastUnit, frmSelectFlowModelUnit,
   Mf6.TDisFileReaderUnit, ModflowTimeUnit, ModflowOptionsUnit,
-  Mf6.AtsFileReaderUnit, ModflowPackageSelectionUnit, ModflowOutputControlUnit,
+  Mf6.AtsFileReaderUnit, ModflowOutputControlUnit,
   Mf6.NameFileReaderUnit, Mf6.DisFileReaderUnit, LayerStructureUnit,
   UndoItems, FastGEO, AbstractGridUnit, ValueArrayStorageUnit,
   InterpolationUnit, GIS_Functions, RbwParser, DataSetNamesUnit,
@@ -183,7 +177,8 @@ uses
   Mf6.CrossSectionFileReaderUnit, Mf6.LakFileReaderUnit,
   Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit, IntListUnit,
   ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit, System.Hash,
-  ModflowMvrUnit, frmErrorsAndWarningsUnit;
+  ModflowMvrUnit, frmErrorsAndWarningsUnit, Mf6.GncFileReaderUnit,
+  ModflowGncUnit, Mf6.ImsFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -424,6 +419,53 @@ begin
   result := FAllTopCellsScreenObject;
 end;
 
+function TModflow6Importer.GetIms(ModelName: string): TSmsPackageSelection;
+var
+  SimIndex: Integer;
+  Simulation: TMf6Simulation;
+  ChemIndex: Integer;
+  ModelIndex: Integer;
+  AModel: TModel;
+  Model: TPhastModel;
+begin
+  Model := frmGoPhast.PhastModel;
+  ChemIndex := 0;
+  result := nil;
+  for SimIndex := 0 to FSimulations.Count - 1 do
+  begin
+    Simulation := FSimulations[SimIndex];
+    for ModelIndex := 0 to Simulation.Models.Count - 1 do
+    begin
+      AModel := Simulation.Models[ModelIndex];
+      if AnsiSameText(AModel.ModelName, ModelName) then
+      begin
+        if AnsiSameText(AModel.ModelType, 'GWF6') then
+        begin
+          result := Model.ModflowPackages.SmsPackage;
+          Exit;
+        end
+        else if AnsiSameText(AModel.ModelType, 'GWT6') then
+        begin
+          While Model.ModflowPackages.GwtPackages.Count <= ChemIndex do
+          begin
+            Model.ModflowPackages.GwtPackages.Add;
+          end;
+          result := Model.ModflowPackages.GwtPackages[ChemIndex].GwtIms;
+          Exit;
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end;
+      if AnsiSameText(AModel.ModelType, 'GWT6') then
+      begin
+        Inc(ChemIndex);
+      end;
+    end;
+  end;
+end;
+
 procedure TModflow6Importer.ImportBuy(Package: TPackage);
 var
   Buy: TBuy;
@@ -625,7 +667,7 @@ var
   var
     UndoCreateScreenObject: TCustomUndo;
     NewName: string;
-    CellId: TCellId;
+    CellId: TMfCellId;
     ElementCenter: TDualLocation;
     APoint: TPoint2D;
     AScreenObject: TScreenObject;
@@ -1021,7 +1063,7 @@ var
   theta: TValueArrayItem;
   kv: TValueArrayItem;
   h0: TValueArrayItem;
-  CellId: TCellId;
+  CellId: TMfCellId;
   ElementCenter: TDualLocation;
   APoint: TPoint2D;
   BName: TStringOption;
@@ -2249,7 +2291,7 @@ var
   var
     UndoCreateScreenObject: TCustomUndo;
     NewName: string;
-    CellId: TCellId;
+    CellId: TMfCellId;
     ElementCenter: TDualLocation;
     APoint: TPoint2D;
     AScreenObject: TScreenObject;
@@ -2990,7 +3032,7 @@ var
   var
     UndoCreateScreenObject: TCustomUndo;
     NewName: string;
-    CellId: TCellId;
+    CellId: TMfCellId;
     ElementCenter: TDualLocation;
     APoint: TPoint2D;
     AScreenObject: TScreenObject;
@@ -3623,10 +3665,6 @@ begin
         else if APackage.FileType = 'GNC6' then
         begin
           ImportGnc(APackage);
-  //        GncReader := TGnc.Create(APackage.FileType);
-  //        GncReader.Dimensions := FDimensions;
-  //        APackage.Package := GncReader;
-  //        APackage.ReadPackage(Unhandled);
         end
         else if APackage.FileType = 'GWF6-GWF6' then
         begin
@@ -3790,8 +3828,91 @@ type
   end;
 
 procedure TModflow6Importer.ImportGnc(Package: TPackage);
+var
+  Model: TPhastModel;
+  Gnc: TGnc;
+  GhostNodes: TGhostNodes;
+  ImportedGnc: TGncData;
+  Index: Integer;
+  ImportedGncItem: TGncDataItem;
+  GhostNode: TGhostNode;
+  ConnectionIndex: Integer;
+  ConnectedCellID: TMfCellId;
+  ConnectedCell: TWeightedCellId;
+  ExistingGhostNodes: TGhostNodeArray;
+  ContainingCell: TWeightedCellId;
+  SumWeights: double;
 begin
+  Model := frmGoPhast.PhastModel;
+  if not Model.DisvUsed then
+  begin
+    FErrorMessages.Add('ModelMuse only support the GNC package for DISV models.');
+    Exit;
+  end;
+  Model.ModflowPackages.GncPackage.IsSelected := True;
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing GNC package');
+  end;
 
+  Gnc := Package.Package as TGnc;
+  if Gnc.Options.EXPLICIT then
+  begin
+    Model.ModflowPackages.GncPackage.EquationFormulation := efExplicit;
+  end;
+
+  SetLength(ExistingGhostNodes, Model.DisvGrid.TwoDGrid.ElementCount);
+  GhostNodes := Model.DisvGrid.TwoDGrid.GhostNodes;
+  ImportedGnc := Gnc.Data;
+  for Index := 0 to ImportedGnc.Count - 1 do
+  begin
+    ImportedGncItem := ImportedGnc[Index];
+
+    GhostNode := ExistingGhostNodes[ImportedGncItem.cellidn.Column-1];
+    if GhostNode = nil then
+    begin
+      GhostNode := GhostNodes.Add;
+      ExistingGhostNodes[ImportedGncItem.cellidn.Column-1] := GhostNode;
+    end;
+//    GhostNode := GhostNodes[ImportedGncItem.cellidn.Column-1];
+    GhostNode.ContainingCell.Cell := ImportedGncItem.cellidn.Column-1;
+    GhostNode.LinkedCell.Cell := ImportedGncItem.cellidm.Column-1;
+
+    ContainingCell := GhostNode.CellWeights.GetCellByID(GhostNode.ContainingCell.Cell);
+    if ContainingCell = nil then
+    begin
+      ContainingCell := GhostNode.CellWeights.Add;
+      ContainingCell.Cell := GhostNode.ContainingCell.Cell;
+      ContainingCell.Weight := 0;
+    end;
+
+    for ConnectionIndex := 0 to ImportedGncItem.Count - 1 do
+    begin
+      ConnectedCellID := ImportedGncItem[ConnectionIndex];
+      if ConnectedCellID.Column > 0 then
+      begin
+        ConnectedCell := GhostNode.CellWeights.GetCellByID(ConnectedCellID.Column-1);
+        if ConnectedCell = nil then
+        begin
+          ConnectedCell := GhostNode.CellWeights.Add;
+          ConnectedCell.Cell := ConnectedCellID.Column-1;
+          ConnectedCell.Weight := ImportedGncItem.Alpha[ConnectionIndex];
+        end;
+      end;
+    end;
+
+    if ContainingCell.Weight = 0 then
+    begin
+      SumWeights := 0;
+      for ConnectionIndex := 0 to GhostNode.CellWeights.Count - 1 do
+      begin
+        ConnectedCell := GhostNode.CellWeights[ConnectionIndex];
+        SumWeights :=SumWeights + ConnectedCell.Weight
+      end;
+      ContainingCell.Weight := 1-SumWeights;
+    end;
+
+  end;
 end;
 
 procedure TModflow6Importer.ImportGhb(Package: TPackage;
@@ -3990,7 +4111,7 @@ var
   var
     UndoCreateScreenObject: TCustomUndo;
     NewName: string;
-    CellId: TCellId;
+    CellId: TMfCellId;
     ElementCenter: TDualLocation;
     APoint: TPoint2D;
     AScreenObject: TScreenObject;
@@ -4516,7 +4637,7 @@ var
   UndoCreateScreenObject: TCustomUndo;
   Modflow6Obs: TModflow6Obs;
   APoint: TPoint2D;
-  CellId: TCellId;
+  CellId: TMfCellId;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -4753,6 +4874,355 @@ begin
   end;
   IC := Package.Package as TIc;
   Assign3DRealDataSet(rsModflow_Initial_Head, IC.GridData.STRT);
+end;
+
+procedure TModflow6Importer.ImportIMS;
+var
+  SimIndex: Integer;
+  ASimulation: TMf6Simulation;
+  SolutionGroupIndex: Integer;
+  ASolutionGroup: TSolutionGroup;
+  SolutionIndex: Integer;
+  ASolution: TSolution;
+//  APackage: TPackage;
+  Ims: TIms;
+  ImsPackage: TSmsPackageSelection;
+  Options: TImsOptions;
+  NonLinear: TImsNonLinear;
+  SmsOverrides: TSmsOverrides;
+  Linear: TImsLinear;
+  ModelIndex: Integer;
+  ModelIms: TSmsPackageSelection;
+begin
+  for SimIndex := 0 to FSimulations.Count - 1 do
+  begin
+    ASimulation := FSimulations[SimIndex];
+    for SolutionGroupIndex := 0 to ASimulation.SolutionGroupCount - 1 do
+    begin
+      ASolutionGroup := ASimulation.SolutionGroups[SolutionGroupIndex];
+      for SolutionIndex := 0 to ASolutionGroup.Count - 1 do
+      begin
+        ASolution := ASolutionGroup[SolutionIndex];
+//        if AnsiSameText(ASolution.SolutionType, 'IMS6') then
+        begin
+//          APackage := TPackage.Create;
+          try
+//            APackage.FileType := 'IMS6';
+//            APackage.FileName := ASolution.SolutionFileName;
+//            APackage.PackageName := '';
+
+            Ims := ASolution.Ims;
+//            APackage.Package := Ims;
+//            APackage.ReadPackage(ASimulation.OutFile, 0);
+
+            ImsPackage := TSmsPackageSelection.Create(nil);
+            try
+              {$REGION 'Options'}
+              Options := Ims.Options;
+              if Options.PRINT_OPTION <> '' then
+              begin
+                if AnsiSameText(Options.PRINT_OPTION, 'NONE') then
+                begin
+                  ImsPackage.Print := spPrintNone;
+                end
+                else if AnsiSameText(Options.PRINT_OPTION, 'SUMMARY') then
+                begin
+                  ImsPackage.Print := spSummary;
+                end
+                else if AnsiSameText(Options.PRINT_OPTION, 'ALL') then
+                begin
+                  ImsPackage.Print := spFull;
+                end
+                else
+                begin
+                  Assert(False);
+                end;
+              end;
+
+              if Options.COMPLEXITY <> '' then
+              begin
+                if AnsiSameText(Options.COMPLEXITY, 'SIMPLE') then
+                begin
+                  ImsPackage.Complexity := scoSimple;
+                end
+                else if AnsiSameText(Options.COMPLEXITY, 'MODERATE') then
+                begin
+                  ImsPackage.Complexity := scoModerate;
+                end
+                else if AnsiSameText(Options.COMPLEXITY, 'COMPLEX') then
+                begin
+                  ImsPackage.Complexity := scoComplex;
+                end
+                else
+                begin
+                  Assert(False);
+                end;
+              end;
+
+              if Options.CSV_OUTER_OUTPUT <> '' then
+              begin
+                ImsPackage.CsvOutput := sspAll;
+              end;
+
+              if Options.CSV_INNER_OUTPUT <> '' then
+              begin
+                ImsPackage.CsvInnerOutput := sspAll;
+              end;
+
+              if Options.NO_PTC <> '' then
+              begin
+                if AnsiSameText(Options.NO_PTC, 'NO_PTC') then
+                begin
+                  ImsPackage.UsePTC := upDontUseForAll
+                end;
+
+                if AnsiSameText(Options.no_ptc_option, 'FIRST') then
+                begin
+                  ImsPackage.UsePTC := upDontUseForFirst
+                end;
+              end;
+
+              if Options.ATS_OUTER_MAXIMUM_FRACTION >= 0 then
+              begin
+                ImsPackage.AtsOuterMaxFraction :=
+                  Options.ATS_OUTER_MAXIMUM_FRACTION
+              end;
+              {$ENDREGION}
+
+              SmsOverrides := [];
+              {$REGION 'NonLinear'}
+              NonLinear := Ims.NonLinear;
+
+              if NonLinear.OUTER_DVCLOSE >= 0 then
+              begin
+                Include(SmsOverrides, soOuterHclose);
+                ImsPackage.OuterHclose := NonLinear.OUTER_DVCLOSE;
+              end;
+
+              if NonLinear.OUTER_MAXIMUM >= 0 then
+              begin
+                Include(SmsOverrides, soOuterMaxIt);
+                ImsPackage.MaxOuterIterations := NonLinear.OUTER_MAXIMUM;
+              end;
+
+              if NonLinear.UNDER_RELAXATION <> '' then
+              begin
+                Include(SmsOverrides, soUnderRelax);
+                if AnsiSameText(NonLinear.UNDER_RELAXATION, 'NONE') then
+                begin
+                  ImsPackage.UnderRelaxation := surNone;
+                end
+                else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'SIMPLE') then
+                begin
+                  ImsPackage.UnderRelaxation := surSimple;
+                end
+                else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'COOLEY') then
+                begin
+                  ImsPackage.UnderRelaxation := surCooley;
+                end
+                else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'DBD') then
+                begin
+                  ImsPackage.UnderRelaxation := surDbd;
+                end
+                else
+                begin
+                  Assert(False);
+                end
+              end;
+
+              if NonLinear.UNDER_RELAXATION_GAMMA >= 0 then
+              begin
+                Include(SmsOverrides, soUnderRelaxGamma);
+                ImsPackage.UnderRelaxGamma := NonLinear.UNDER_RELAXATION_GAMMA;
+              end;
+
+              if NonLinear.UNDER_RELAXATION_THETA >= 0 then
+              begin
+                Include(SmsOverrides, soUnderRelaxTheta);
+                ImsPackage.UnderRelaxTheta := NonLinear.UNDER_RELAXATION_THETA;
+              end;
+
+              if NonLinear.UNDER_RELAXATION_KAPPA >= 0 then
+              begin
+                Include(SmsOverrides, soUnderRelaxKappa);
+                ImsPackage.UnderRelaxKappa := NonLinear.UNDER_RELAXATION_KAPPA;
+              end;
+
+              if NonLinear.UNDER_RELAXATION_MOMENTUM >= 0 then
+              begin
+                Include(SmsOverrides, soUnderRelaxMomentum);
+                ImsPackage.UnderRelaxMomentum := NonLinear.UNDER_RELAXATION_MOMENTUM;
+              end;
+
+              if NonLinear.BACKTRACKING_NUMBER >= 0 then
+              begin
+                Include(SmsOverrides, soBacktrackingNumber);
+                ImsPackage.BacktrackingNumber := NonLinear.BACKTRACKING_NUMBER;
+              end;
+
+              if NonLinear.BACKTRACKING_TOLERANCE >= 0 then
+              begin
+                Include(SmsOverrides, soBacktrackingTolerance);
+                ImsPackage.BacktrackingTolerance := NonLinear.BACKTRACKING_TOLERANCE;
+              end;
+
+              if NonLinear.BACKTRACKING_REDUCTION_FACTOR >= 0 then
+              begin
+                Include(SmsOverrides, soBacktrackingReductionFactor);
+                ImsPackage.BacktrackingReductionFactor := NonLinear.BACKTRACKING_REDUCTION_FACTOR;
+              end;
+
+
+              if NonLinear.BACKTRACKING_RESIDUAL_LIMIT >= 0 then
+              begin
+                Include(SmsOverrides, soBacktrackingResidualLimit);
+                ImsPackage.BacktrackingResidualLimit := NonLinear.BACKTRACKING_RESIDUAL_LIMIT;
+              end;
+
+              {$ENDREGION}
+
+            {$REGION 'Linear'}
+              Linear := Ims.Linear;
+
+              if Linear.INNER_MAXIMUM >= 0  then
+              begin
+                Include(SmsOverrides, soInnerMaxIterations);
+                ImsPackage.InnerMaxIterations := Linear.INNER_MAXIMUM;
+              end;
+
+              if Linear.INNER_DVCLOSE >= 0  then
+              begin
+                Include(SmsOverrides, soInnerHclose);
+                ImsPackage.InnerHclose := Linear.INNER_DVCLOSE;
+              end;
+
+              if Linear.INNER_RCLOSE >= 0  then
+              begin
+                Include(SmsOverrides, soInnerRclose);
+                ImsPackage.InnerRclose := Linear.INNER_RCLOSE;
+              end;
+
+              if Linear.rclose_option <> ''  then
+              begin
+                Include(SmsOverrides, soRcloseOption);
+                if AnsiSameText(Linear.rclose_option, 'STRICT') then
+                begin
+                  ImsPackage.RcloseOption := sroStrict;
+                end
+                else if AnsiSameText(Linear.rclose_option, 'L2NORM_RCLOSE') then
+                begin
+                  ImsPackage.RcloseOption := sroL2Norm;
+                end
+                else if AnsiSameText(Linear.rclose_option, 'RELATIVE_RCLOSE') then
+                begin
+                  ImsPackage.RcloseOption := sroRelative;
+                end
+                else
+                begin
+                  Assert(False);
+                end;
+              end;
+
+              if Linear.LINEAR_ACCELERATION <> ''  then
+              begin
+                Include(SmsOverrides, soLinLinearAcceleration);
+                if AnsiSameText(Linear.LINEAR_ACCELERATION, 'CG') then
+                begin
+                  ImsPackage.LinLinearAcceleration := sllaCg;
+                end
+                else if AnsiSameText(Linear.LINEAR_ACCELERATION, 'BICGSTAB') then
+                begin
+                  ImsPackage.LinLinearAcceleration := sllaBiCgStab;
+                end
+                else
+                begin
+                  Assert(False);
+                end;
+              end;
+
+              if Linear.RELAXATION_FACTOR >= 0  then
+              begin
+                Include(SmsOverrides, soRelaxationFactor);
+                ImsPackage.RelaxationFactor := Linear.RELAXATION_FACTOR;
+              end;
+
+              if Linear.PRECONDITIONER_LEVELS >= 0  then
+              begin
+                Include(SmsOverrides, soPreconditionerLevel);
+                ImsPackage.PreconditionerLevel := Linear.PRECONDITIONER_LEVELS;
+              end;
+
+              if Linear.PRECONDITIONER_DROP_TOLERANCE >= 0  then
+              begin
+                Include(SmsOverrides, soPreconditionerDropTolerance);
+                ImsPackage.PreconditionerDropTolerance := Linear.PRECONDITIONER_DROP_TOLERANCE;
+              end;
+
+              if Linear.NUMBER_ORTHOGONALIZATIONS >= 0  then
+              begin
+                Include(SmsOverrides, soNumberOfOrthoganalizations);
+                ImsPackage.NumberOfOrthoganalizations := Linear.NUMBER_ORTHOGONALIZATIONS;
+              end;
+
+              if Linear.SCALING_METHOD <> ''  then
+              begin
+                Include(SmsOverrides, soScalingMethod);
+                if AnsiSameText(Linear.SCALING_METHOD, 'DIAGONAL') then
+                begin
+                  ImsPackage.ScalingMethod := ssmDiagonal;
+                end
+                else if AnsiSameText(Linear.SCALING_METHOD, 'L2NORM') then
+                begin
+                  ImsPackage.ScalingMethod := ssmL2Norm;
+                end
+                else
+                begin
+                  Assert(False);
+                end;
+              end;
+
+              if Linear.REORDERING_METHOD <> ''  then
+              begin
+                Include(SmsOverrides, soReorderingMethod);
+                if AnsiSameText(Linear.REORDERING_METHOD, 'RCM') then
+                begin
+                  ImsPackage.ReorderingMethod := srmReverseCuthillMcKee;
+                end
+                else if AnsiSameText(Linear.REORDERING_METHOD, 'MD') then
+                begin
+                  ImsPackage.ReorderingMethod := srmMinimumDegreeOrdering;
+                end
+                else
+                begin
+                  Assert(False);
+                end;
+              end;
+            {$ENDREGION}
+
+            ImsPackage.SmsOverrides := SmsOverrides;
+
+
+            for ModelIndex := 0 to ASolution.FSolutionModelNames.Count - 1 do
+            begin
+              ModelIms := GetIms(ASolution.FSolutionModelNames[ModelIndex]);
+              ModelIms.Assign(ImsPackage);
+            end;
+
+            finally
+              ImsPackage.Free;
+            end;
+
+          finally
+//            APackage.Free;
+          end;
+//        end
+//        else
+//        begin
+//          Assert(False);
+        end;
+      end;
+    end;
+  end;
 end;
 
 type
@@ -5348,7 +5818,7 @@ var
     ImportedK: TValueArrayItem;
     DataSetIndex: Integer;
     CellIds: TCellIdList;
-    ACellId: TCellId;
+    ACellId: TMfCellId;
     NewTimeItem: TLakeTimeItem;
     LakeConnectionTypes: TLakeConnectionTypes;
     MvrReceiver: TMvrReceiver;
@@ -5357,7 +5827,7 @@ var
     var
       CellIds: TCellIdList;
       CellIndex: Integer;
-      ACellId: TCellId;
+      ACellId: TMfCellId;
       UndoCreateScreenObject: TCustomUndo;
     begin
       ALake.DataSetsScreenObject := TScreenObject.CreateWithViewDirection(
@@ -5393,7 +5863,7 @@ var
     var
       Points: TPoint2DList;
       ConnectionIndex: Integer;
-      CellId: TCellId;
+      CellId: TMfCellId;
       ElementCenter: TDualLocation;
       APoint: TPoint2D;
       InputPolyGon: TPolygon2D;
@@ -6012,7 +6482,7 @@ var
   ObsList: TObservationList;
   NumberObsDictionary: TNumberDictionary;
   CellIds: TCellIdList;
-  CellId: TCellId;
+  CellId: TMfCellId;
   DisvGrid: TModflowDisvGrid;
   Grid: TModflowGrid;
   DisvCell: TModflowDisVCell;
@@ -6553,27 +7023,8 @@ begin
       FSimulation.OnUpdataStatusBar := OnUpdateStatusBar;
       FSimulations.Add(FSimulation);
       FSimulation.ReadSimulation(NameFiles[FileIndex]);
-      OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
-      if TFile.Exists(OutFile) then
-      begin
-        ListFile := TStringList.Create;
-        try
-          ListFile.LoadFromFile(OutFile);
-          if ListFile.Count > 0 then
-          begin
-            ErrorMessages.Add('The following errors were encountered when reading '
-              + NameFiles[FileIndex]);
-            ErrorMessages.AddStrings(ListFile);
-            ErrorMessages.Add('');
-          end;
-        finally
-          ListFile.Free;
-        end;
-      end
-      else
-      begin
-        ErrorMessages.Add(OutFile + ' does not exist.')
-      end;
+//      ErrorMessages.
+//      FSimulation.OutFile.BaseStream
     finally
       FSimulation := nil;
     end;
@@ -6659,6 +7110,10 @@ begin
           Exit;
         end;
 
+        ImportIMS;
+
+
+
       finally
         FlowModelNames.Free
       end;
@@ -6667,6 +7122,38 @@ begin
       FSimulation := nil;
     end;
   end;
+  for FileIndex := 0 to FSimulations.Count - 1 do
+  begin
+    FSimulation := FSimulations[FileIndex];
+    FSimulation.OutFile.close
+  end;
+
+
+  for FileIndex := 0 to NameFiles.Count - 1 do
+  begin
+    OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
+    if TFile.Exists(OutFile) then
+    begin
+      ListFile := TStringList.Create;
+      try
+        ListFile.LoadFromFile(OutFile);
+        if ListFile.Count > 0 then
+        begin
+          ErrorMessages.Add('The following errors were encountered when reading '
+            + NameFiles[FileIndex]);
+          ErrorMessages.AddStrings(ListFile);
+          ErrorMessages.Add('');
+        end;
+      finally
+        ListFile.Free;
+      end;
+    end
+    else
+    begin
+      ErrorMessages.Add(OutFile + ' does not exist.')
+    end;
+  end;
+
   PhastModel.Exaggeration := frmGoPhast.DefaultVE;
   frmGoPhast.RestoreDefault2DView1Click(nil);
 end;
@@ -6982,7 +7469,7 @@ var
   APoint: TPoint2D;
   CellIndex: Integer;
   Model: TPhastModel;
-  CellId: TCellId;
+  CellId: TMfCellId;
   DisvUsed: Boolean;
 begin
   Model := frmGoPhast.PhastModel;
@@ -7379,7 +7866,7 @@ var
   var
     UndoCreateScreenObject: TCustomUndo;
     NewName: string;
-    CellId: TCellId;
+    CellId: TMfCellId;
     ElementCenter: TDualLocation;
     APoint: TPoint2D;
     AScreenObject: TScreenObject;
@@ -7980,7 +8467,7 @@ var
   var
     UndoCreateScreenObject: TCustomUndo;
     NewName: string;
-    CellId: TCellId;
+    CellId: TMfCellId;
     ElementCenter: TDualLocation;
     APoint: TPoint2D;
     AScreenObject: TScreenObject;
@@ -10854,7 +11341,7 @@ var
   TvkBound: TTimeVariableCell;
   KScreenObject: TScreenObject;
   Item: TTvkItem;
-  CellId: TCellId;
+  CellId: TMfCellId;
   KDictionary: TDictionary<string, TScreenObject>;
   AScreenObject: TScreenObject;
   UndoCreateScreenObject: TCustomUndo;
@@ -11134,7 +11621,7 @@ var
   TvsBound: TTimeVariableCell;
   SsScreenObject: TScreenObject;
   Item: TTvsItem;
-  CellId: TCellId;
+  CellId: TMfCellId;
   SsDictionary: TDictionary<string, TScreenObject>;
   AScreenObject: TScreenObject;
   UndoCreateScreenObject: TCustomUndo;
@@ -11420,7 +11907,7 @@ var
   AScreenObject: TScreenObject;
   UndoCreateScreenObject: TCustomUndo;
   CellIds: TCellIdList;
-  CellId: TCellId;
+  CellId: TMfCellId;
   ModflowUzfMf6Boundary: TUzfMf6Boundary;
   SurfDepthItem: TValueArrayItem;
   vksItem: TValueArrayItem;
@@ -12376,7 +12863,7 @@ var
   var
     UndoCreateScreenObject: TCustomUndo;
     NewName: string;
-    CellId: TCellId;
+    CellId: TMfCellId;
     ElementCenter: TDualLocation;
     APoint: TPoint2D;
     AScreenObject: TScreenObject;

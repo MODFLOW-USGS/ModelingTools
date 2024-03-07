@@ -34,7 +34,7 @@ type
   end;
 
   TCncTimeItem = class(TObject)
-    cellid: TCellId;
+    cellid: TMfCellId;
     conc: TMf6BoundaryValue;
     aux: TList<TMf6BoundaryValue>;
     boundname: string;

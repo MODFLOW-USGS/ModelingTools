@@ -34,7 +34,7 @@ type
   end;
 
   TSrcTimeItem = class(TObject)
-    cellid: TCellId;
+    cellid: TMfCellId;
     smassrate: TMf6BoundaryValue;
     aux: TList<TMf6BoundaryValue>;
     boundname: string;

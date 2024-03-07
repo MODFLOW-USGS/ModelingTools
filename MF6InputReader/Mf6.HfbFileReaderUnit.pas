@@ -24,8 +24,8 @@ private
   end;
 
   THfbCellPair = record
-    CellId1: TCellId;
-    CellId2: TCellId;
+    CellId1: TMfCellId;
+    CellId2: TMfCellId;
     hydchr: Extended;
     procedure Initialize;
   end;

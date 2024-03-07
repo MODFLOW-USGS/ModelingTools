@@ -68,7 +68,7 @@ type
   TUzfPackageItem = record
   private
     Fiuzno: Integer;
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Flandflag: Integer;
     Fivertcon: Integer;
     Fsurfdep: Extended;
@@ -81,7 +81,7 @@ type
     procedure Initialize;
   public
     property iuzno: Integer read Fiuzno;
-    property cellid: TCellId read Fcellid;
+    property cellid: TMfCellId read Fcellid;
     property landflag: Integer read Flandflag;
     property ivertcon: Integer read Fivertcon;
     property surfdep: Extended read Fsurfdep;

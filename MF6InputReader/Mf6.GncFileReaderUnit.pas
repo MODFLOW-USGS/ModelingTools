@@ -11,10 +11,12 @@ type
   private
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
-    EXPLICIT: Boolean;
+    FEXPLICIT: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property EXPLICIT: Boolean read FEXPLICIT;
   end;
 
   TGncDimensions = class(TCustomMf6Persistent)
@@ -28,13 +30,21 @@ type
 
   TGncDataItem = class(TObject)
   private
-    cellidn: TCellId;
-    cellidm: TCellId;
-    cellidsj: TCellIdList;
-    alphasj: TDoubleList;
+    Fcellidn: TMfCellId;
+    Fcellidm: TMfCellId;
+    Fcellidsj: TCellIdList;
+    Falphasj: TDoubleList;
+    function GetAlpha(Index: Integer): Double;
+    function GetCell(Index: Integer): TMfCellId;
+    function GetCount: Integer;
   public
     Constructor Create;
     Destructor Destroy; override;
+    property cellidn: TMfCellId read Fcellidn;
+    property cellidm: TMfCellId read Fcellidm;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TMfCellId read GetCell; default;
+    property Alpha[Index: Integer]: Double read GetAlpha;
   end;
 
   TGncDataItemList = TObjectList<TGncDataItem>;
@@ -44,11 +54,15 @@ type
     FItems: TGncDataItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       NUMALPHAJ: Integer; Dimensions: TDimensions);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TGncDataItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TGncDataItem read GetItem; default;
   end;
 
   TGnc = class(TDimensionedPackageReader)
@@ -59,7 +73,10 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property Options: TGncOptions read FOptions;
+    property Data: TGncData read FData;
   end;
 
 implementation
@@ -74,7 +91,7 @@ begin
   inherited;
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
-  EXPLICIT := False;
+  FEXPLICIT := False;
 end;
 
 procedure TGncOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -112,7 +129,7 @@ begin
     end
     else if FSplitter[0] = 'EXPLICIT' then
     begin
-      EXPLICIT := True;
+      FEXPLICIT := True;
     end
     else
     begin
@@ -176,17 +193,33 @@ end;
 
 constructor TGncDataItem.Create;
 begin
-  cellidsj := TCellIdList.Create;
-  alphasj := TDoubleList.Create;
+  Fcellidsj := TCellIdList.Create;
+  Falphasj := TDoubleList.Create;
 
 end;
 
 destructor TGncDataItem.Destroy;
 begin
-  cellidsj.Free;
-  alphasj.Free;
+  Fcellidsj.Free;
+  Falphasj.Free;
 
   inherited;
+end;
+
+function TGncDataItem.GetAlpha(Index: Integer): Double;
+begin
+  result := Falphasj[Index];
+end;
+
+function TGncDataItem.GetCell(Index: Integer): TMfCellId;
+begin
+  result := Fcellidsj[Index];
+end;
+
+function TGncDataItem.GetCount: Integer;
+begin
+  result := Fcellidsj.Count;
+  Assert(result = Falphasj.Count);
 end;
 
 { TGncData }
@@ -202,6 +235,16 @@ destructor TGncData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TGncData.GetCount: Integer;
+begin
+  result := FItems.Count
+end;
+
+function TGncData.GetItem(Index: Integer): TGncDataItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TGncData.Initialize;
@@ -220,7 +263,7 @@ var
   NumberOfItems: Integer;
   DimensionCount: Integer;
   StartIndex: Integer;
-  CellId: TCellId;
+  CellId: TMfCellId;
   ErrorFound: Boolean;
   AValue: Extended;
   CellIndex: Integer;
@@ -252,18 +295,18 @@ begin
     end
     else if (FSplitter.Count >= NumberOfItems) then
     begin
-      if ReadCellID(Item.cellidn, 0, DimensionCount)
-        and ReadCellID(Item.cellidm, DimensionCount, DimensionCount) then
+      if ReadCellID(Item.Fcellidn, 0, DimensionCount)
+        and ReadCellID(Item.Fcellidm, DimensionCount, DimensionCount) then
       begin
         ErrorFound := False;
         StartIndex := DimensionCount*2;
-        Item.cellidsj.Capacity := NUMALPHAJ;
+        Item.Fcellidsj.Capacity := NUMALPHAJ;
         for CellIndex := 0 to NUMALPHAJ - 1 do
         begin
           CellId.Initialize;
           if ReadCellID(CellId, StartIndex, DimensionCount) then
           begin
-            Item.cellidsj.Add(CellId);
+            Item.Fcellidsj.Add(CellId);
           end
           else
           begin
@@ -275,12 +318,12 @@ begin
         end;
         if not ErrorFound then
         begin
-          Item.alphasj.Capacity := NUMALPHAJ;
+          Item.Falphasj.Capacity := NUMALPHAJ;
           for CellIndex := 0 to NUMALPHAJ - 1 do
           begin
             if TryFortranStrToFloat(FSplitter[StartIndex], AValue) then
             begin
-              Item.alphasj.Add(AValue);
+              Item.Falphasj.Add(AValue);
             end
             else
             begin

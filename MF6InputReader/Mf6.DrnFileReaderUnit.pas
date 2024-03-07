@@ -44,7 +44,7 @@ type
 
   TDrnTimeItem = class(TObject)
   private
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Felev: TMf6BoundaryValue;
     Fcond: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
@@ -56,7 +56,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
-    property cellid: TCellId read Fcellid;
+    property cellid: TMfCellId read Fcellid;
     property elev: TMf6BoundaryValue read Felev;
     property cond: TMf6BoundaryValue read Fcond;
     property BoundName: string read Fboundname;

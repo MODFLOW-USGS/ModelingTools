@@ -42,7 +42,7 @@ type
 
   TGhbTimeItem = class(TObject)
   private
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Fbhead: TMf6BoundaryValue;
     Fcond: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
@@ -54,7 +54,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
-    property CellId: TCellId read Fcellid;
+    property CellId: TMfCellId read Fcellid;
     property BHead: TMf6BoundaryValue read Fbhead;
     property Cond: TMf6BoundaryValue read Fcond;
     property Count: integer read GetCount;

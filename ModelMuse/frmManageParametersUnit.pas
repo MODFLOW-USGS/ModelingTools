@@ -148,7 +148,7 @@ resourcestring
   StrZoneArray = 'Zone Array';
   StrThereAreTwoOrMo = 'There are two (or more) parameters named %s. Duplica' +
   'te parameter names are not allowed.';
-  StrPilotPoints = 'Pilot Points';
+  StrPilotPoints = 'Use Pilot Points';
   StrGroupNamePARGPNME = 'Group Name (PARGPNME)';
   StrIncrementTypeINCT = 'Increment Type (INCTYP)';
   StrParameterIncrement = 'Parameter Increment (DERINC)';

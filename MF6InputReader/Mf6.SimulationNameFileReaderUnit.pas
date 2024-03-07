@@ -120,6 +120,7 @@ type
     procedure ReadInput(Unhandled: TStreamWriter);
     property OnUpdataStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
       write SetOnUpdataStatusBar;
+    property Ims: TIms read FIms;
   end;
 
   TSolutionList = TObjectList<TSolution>;
@@ -140,7 +141,7 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     procedure ReadInput(Unhandled: TStreamWriter);
     property Count: Integer read GetCount;
-    property Solutions[Index: Integer]: TSolution read GetSolutions write SetSolutions;
+    property Solutions[Index: Integer]: TSolution read GetSolutions write SetSolutions; default;
     property Mxiter: Integer read FMxiter;
   end;
 
@@ -155,6 +156,7 @@ type
     FSimulationFile: TStreamReader;
     FSolutionGroups: TSolutionGroups;
     FExchangePackages: TPackageList;
+    FOutFile: TStreamWriter;
     function GetExchanges: TExchanges;
     function GetSolutionGroup(Index: Integer): TSolutionGroup;
     function GetSolutionGroupCount: Integer;
@@ -170,6 +172,7 @@ type
     property Options: TSimulationOptions read FSimulationOptions;
     property SolutionGroupCount: Integer read GetSolutionGroupCount;
     property SolutionGroups[Index: Integer]: TSolutionGroup read GetSolutionGroup;
+    property OutFile: TStreamWriter read FOutFile;
   end;
 
 implementation
@@ -200,6 +203,11 @@ begin
   FModels.Free;
   FTiming.Free;
   FSimulationOptions.Free;
+  if FOutFile <> nil then
+  begin
+    FOutFile.Close;
+  end;
+  FOutFile.Free;
   inherited;
 end;
 
@@ -220,7 +228,6 @@ end;
 
 procedure TMf6Simulation.ReadSimulation(NameFile: string);
 var
-  FOutFile: TStreamWriter;
   ALine: string;
   GroupNumber: Integer;
   SolutionGroup: TSolutionGroup;
@@ -386,10 +393,10 @@ begin
       end;
 
       FSimulationFile.Close;
-      FOutFile.Close;
+//      FOutFile.Close;
     finally
       FSimulationFile.Free;
-      FOutFile.Free;
+//      FOutFile.Free;
     end;
 
     except on E: Exception do
@@ -998,6 +1005,7 @@ begin
         ASolution := TSolution.Create;
         FSolutions.Add(ASolution);
         ASolution.SolutionType := UpperCase(FSplitter[0]);
+        FSplitter.DelimitedText := ErrorLine;
         ASolution.SolutionFileName := FSplitter[1];
         ASolution.FSolutionModelNames.Capacity := FSplitter.Count-2;
         for ModelIndex := 2 to FSplitter.Count - 1 do

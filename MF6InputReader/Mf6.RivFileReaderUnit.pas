@@ -42,7 +42,7 @@ type
 
   TRivTimeItem = class(TObject)
   private
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Fstage: TMf6BoundaryValue;
     Fcond: TMf6BoundaryValue;
     Frbot: TMf6BoundaryValue;
@@ -55,7 +55,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
-    property CellId: TCellId read Fcellid;
+    property CellId: TMfCellId read Fcellid;
     property Stage: TMf6BoundaryValue read Fstage;
     property Cond: TMf6BoundaryValue read Fcond;
     property RBot: TMf6BoundaryValue read Frbot;

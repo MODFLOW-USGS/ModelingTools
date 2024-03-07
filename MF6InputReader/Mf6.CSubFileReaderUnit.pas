@@ -99,7 +99,7 @@ type
 
   TMf6CSubItem = record
     icsubno: Integer;
-    cellid: TCellId;
+    cellid: TMfCellId;
     cdelay: string;
     pcs0: Extended;
     thick_frac: Extended;
@@ -137,7 +137,7 @@ type
 
 
   TCSubTimeItem = record
-    cellid: TCellId;
+    cellid: TMfCellId;
     ValueType: TValueType;
     sig0: Extended;
     StringValue: string;

@@ -213,8 +213,8 @@ end;
 
 constructor TModflowCfpWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
-var
-  Grid: TModflowGrid;
+//var
+//  Grid: TModflowGrid;
 begin
   inherited;
   FScreenObjects := T3DSparsePointerArray.Create(GetQuantum(Model.LayerCount),
@@ -223,10 +223,10 @@ begin
   FConduitFlowProcess := Model.ModflowPackages.ConduitFlowProcess;
   FPipes := TObjectList<TCfpPipe>.Create;
   FNodes := TObjectList<TCfpNode>.Create;
-  Grid := Model.ModflowGrid;
-  FLayerCount := Grid.LayerCount;
-  FRowCount := Grid.RowCount;
-  FColumnCount := Grid.ColumnCount;
+//  Grid := Model.ModflowGrid;
+  FLayerCount := Model.LayerCount;
+  FRowCount := Model.RowCount;
+  FColumnCount := Model.ColumnCount;
   SetLength(FNodeGrid, FLayerCount, FRowCount, FColumnCount);
   FValues := TObjectList.Create;
 end;
@@ -247,7 +247,7 @@ var
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
   PipeBoundary: TCfpPipeBoundary;
-  CrchRch: TCfpRchFractionBoundary;
+//  CrchRch: TCfpRchFractionBoundary;
   Diameter: TDataArray;
   PipeDiameter: double;
   Node1: TCfpNode;

@@ -40,7 +40,7 @@ type
 
   TChdTimeItem = class(TObject)
   private
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Fhead: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
     Fboundname: string;
@@ -50,7 +50,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
-    property CellId: TCellId read Fcellid;
+    property CellId: TMfCellId read Fcellid;
     property Head: TMf6BoundaryValue read Fhead;
     property Count: Integer read GetCount;
     property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;

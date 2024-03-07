@@ -13,6 +13,7 @@ type
   public
     procedure Assign(Source: TPersistent); override;
   published
+    // @name starts at 0.
     property Cell: Integer read FCell write SetCell;
   end;
 
@@ -38,7 +39,9 @@ type
   public
     constructor Create;
     function Add: TWeightedCellId;
-    property Items[Index: Integer]: TWeightedCellId read GetItems write SetItems; default;
+    property Items[Index: Integer]: TWeightedCellId read GetItems
+      write SetItems; default;
+    function GetCellByID(ID: integer): TWeightedCellId;
   end;
 
   TGhostNode = class(TCollectionItem)
@@ -110,6 +113,22 @@ end;
 constructor TCellIdCollection.Create;
 begin
   inherited Create(TWeightedCellId);
+end;
+
+function TCellIdCollection.GetCellByID(ID: integer): TWeightedCellId;
+var
+  CellIndex: Integer;
+begin
+  Assert(ID >= 0);
+  result := nil;
+  for CellIndex := 0 to Count - 1 do
+  begin
+    if Items[CellIndex].Cell = ID then
+    begin
+      result := Items[CellIndex];
+      break;
+    end;
+  end;
 end;
 
 function TCellIdCollection.GetItems(Index: Integer): TWeightedCellId;

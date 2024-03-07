@@ -46,7 +46,7 @@ type
 
   TWelTimeItem = class(TObject)
   private
-    Fcellid: TCellId;
+    Fcellid: TMfCellId;
     Fq: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
     Fboundname: string;
@@ -58,7 +58,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Keystring: string;
-    property CellId: TCellId read Fcellid;
+    property CellId: TMfCellId read Fcellid;
     property Q: TMf6BoundaryValue read Fq;
     property Count: integer read GetCount;
     property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;

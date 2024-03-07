@@ -43,21 +43,21 @@ type
     procedure Initialize;
   end;
 
-  TCellId = record
+  TMfCellId = record
     Layer: Integer;
     Row: Integer;
     Column: Integer;
     procedure Initialize;
-    function SameLocation(OtherCellID: TCellId): Boolean;
+    function SameLocation(OtherCellID: TMfCellId): Boolean;
   end;
 
-  TCellIdList = TList<TCellId>;
+  TCellIdList = TList<TMfCellId>;
 
   TValueType = (vtNumeric, vtString);
 
   TTimeVariableCell = record
     ValueType: TValueType;
-    CellId: TCellId;
+    CellId: TMfCellId;
     VariableName: string;
     StringValue: string;
     NumericValue: Extended;
@@ -93,7 +93,7 @@ type
       const SectionName: string; Unhandled: TStreamWriter): Boolean;
     procedure ReadPrintFormat(ErrorLine: string; Unhandled: TStreamWriter;
       PackageName: string; var PrintFormat: TPrintFormat);
-    function ReadCellID(var Cell: TCellId;
+    function ReadCellID(var Cell: TMfCellId;
       StartIndex, DimensionCount: Integer): Boolean;
     function SwitchToAnotherFile(var Stream: TStreamReader; ErrorLine: string;
       Unhandled: TStreamWriter; var ALine: string; Block: string): Boolean;
@@ -996,14 +996,14 @@ end;
 
 { TCellId }
 
-procedure TCellId.Initialize;
+procedure TMfCellId.Initialize;
 begin
   Layer := 0;
   Row := 0;
   Column := 0;
 end;
 
-function TCellId.SameLocation(OtherCellID: TCellId): Boolean;
+function TMfCellId.SameLocation(OtherCellID: TMfCellId): Boolean;
 begin
   result := (Layer = OtherCellID.Layer)
     and (Row = OtherCellID.Row)
@@ -1610,7 +1610,7 @@ begin
   Name := '';
 end;
 
-function TCustomMf6Persistent.ReadCellID(var Cell: TCellId;
+function TCustomMf6Persistent.ReadCellID(var Cell: TMfCellId;
   StartIndex, DimensionCount: Integer): Boolean;
 begin
   result := FSplitter.Count >= StartIndex + DimensionCount;

@@ -65,8 +65,8 @@ type
   end;
 
   ExcItem = class(TObject)
-    cellidm1: TCellId;
-    cellidm2: TCellId;
+    cellidm1: TMfCellId;
+    cellidm2: TMfCellId;
     ihc: integer;
     cl1: Extended;
     cl2: Extended;
