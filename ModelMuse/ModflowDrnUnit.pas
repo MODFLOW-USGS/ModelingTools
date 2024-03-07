@@ -6,7 +6,7 @@ uses ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes, ModflowTransientListParameterUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TDrnRecord = record
@@ -1250,7 +1250,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.DrnArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.DrnArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.DrnArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.DrnArray) - 1 do

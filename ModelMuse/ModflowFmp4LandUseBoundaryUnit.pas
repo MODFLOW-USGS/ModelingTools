@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
   SubscriptionUnit, GoPhastTypes, System.Generics.Collections,
-  RbwParser, ScreenObjectInterfaceUnit;
+  RbwParser, ScreenObjectInterfaceUnit, System.Math;
 
 type
   {
@@ -1030,7 +1030,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.Fmp4LandUseArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.Fmp4LandUseArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.Fmp4LandUseArray), Cells.Count div 4);
       end;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.Fmp4LandUseArray) - 1 do
       begin

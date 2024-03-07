@@ -7,7 +7,7 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes,
   ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
-  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
+  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit, System.Math;
 
 type
   {
@@ -1529,7 +1529,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.RchArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.RchArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.RchArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.RchArray) - 1 do

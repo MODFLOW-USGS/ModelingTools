@@ -8,7 +8,7 @@ uses Windows, ZLib, SysUtils, Classes, ModflowCellUnit,
   OrderedCollectionUnit, GoPhastTypes,
   System.Generics.Collections, SubscriptionUnit, RbwParser, Mt3dmsChemUnit,
   GwtStatusUnit, OrderedCollectionInterfaceUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TSfrOb = (soStage, soExtInflow, soInflow, soFromMvr, soRainfall, soRunoff, soSfr,
@@ -4224,7 +4224,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.SfrMF6Array) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.SfrMF6Array)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.SfrMF6Array), Cells.Count div 4);
       end;
       LastIndex := Length(LocalBoundaryStorage.SfrMF6Array) - 1;
 //      Cells.CheckRestore;

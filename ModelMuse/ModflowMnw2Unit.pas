@@ -7,7 +7,7 @@ uses Classes, ModflowBoundaryUnit,
   OrderedCollectionUnit,
   RbwParser, ModflowCellUnit, ZLib, GoPhastTypes, RealListUnit,
   SubscriptionUnit, SysUtils, DataSetUnit, PestObsUnit,
-  OrderedCollectionInterfaceUnit;
+  OrderedCollectionInterfaceUnit, System.Math;
 
 const
   PumpingRatePosition = 0;
@@ -741,7 +741,7 @@ implementation
 
 uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit,
-  ModflowGridUnit, frmFormulaErrorsUnit, Math, SparseDataSets, SparseArrayUnit,
+  ModflowGridUnit, frmFormulaErrorsUnit, SparseDataSets, SparseArrayUnit,
   frmErrorsAndWarningsUnit, AbstractGridUnit, ModflowParameterUnit,
   CustomModflowWriterUnit, ModflowMNW2_WriterUnit, CellLocationUnit;
 
@@ -2360,7 +2360,7 @@ begin
   // of the LocalBoundaryStorage;
   if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.Mnw2Array) then
   begin
-    Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.Mnw2Array)
+    Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.Mnw2Array), Cells.Count div 4);
   end;
 //  Cells.CheckRestore;
   for BoundaryIndex := 0 to Length(LocalBoundaryStorage.Mnw2Array) - 1 do

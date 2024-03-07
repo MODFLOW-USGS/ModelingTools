@@ -16,7 +16,8 @@ inherited frmProgressMM: TfrmProgressMM
     Align = alClient
     ScrollBars = ssBoth
     TabOrder = 0
-    ExplicitWidth = 414
+    OnChange = memoMessagesChange
+    ExplicitWidth = 650
     ExplicitHeight = 173
   end
   object pnlTop: TPanel
@@ -41,15 +42,15 @@ inherited frmProgressMM: TfrmProgressMM
     object pbProgress: TProgressBar
       Left = 8
       Top = 8
-      Width = 621
+      Width = 613
       Height = 18
       Anchors = [akLeft, akTop, akRight]
       Step = 1
       TabOrder = 0
-      ExplicitWidth = 385
+      ExplicitWidth = 609
     end
     object btnAbort: TBitBtn
-      Left = 554
+      Left = 546
       Top = 30
       Width = 75
       Height = 25
@@ -76,7 +77,7 @@ inherited frmProgressMM: TfrmProgressMM
       TabOrder = 1
       Visible = False
       OnClick = btnAbortClick
-      ExplicitLeft = 318
+      ExplicitLeft = 542
     end
   end
 end

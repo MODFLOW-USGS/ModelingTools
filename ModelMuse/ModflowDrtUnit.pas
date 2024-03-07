@@ -7,7 +7,7 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   ModflowDrnUnit, ModflowGridUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit,
-  RbwParser, Modflow6DynamicTimeSeriesInterfaceUnit;
+  RbwParser, Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TReturnChoice = (rtNone, rtObject, rtLocation, rtCell);
@@ -1098,7 +1098,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.DrtArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.DrtArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.DrtArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.DrtArray) - 1 do

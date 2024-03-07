@@ -6,7 +6,7 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, DataSetUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes, OrderedCollectionInterfaceUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TStrRecord = record
@@ -2239,7 +2239,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.StrArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.StrArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.StrArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.StrArray) - 1 do

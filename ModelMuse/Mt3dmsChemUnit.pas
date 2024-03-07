@@ -7,7 +7,7 @@ uses System.Types, Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionU
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes, IntListUnit,
   ModflowMnw2Unit, OrderedCollectionInterfaceUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 const
   // Mass loading source
@@ -1475,7 +1475,7 @@ begin
           + Length(LocalBoundaryStorage.Mt3dmsConcArray) then
         begin
           Cells.Capacity := Cells.Count
-            + Length(LocalBoundaryStorage.Mt3dmsConcArray)
+            + Max(Length(LocalBoundaryStorage.Mt3dmsConcArray), Cells.Count div 4);
         end;
   //      Cells.CheckRestore;
         for BoundaryIndex := 0 to

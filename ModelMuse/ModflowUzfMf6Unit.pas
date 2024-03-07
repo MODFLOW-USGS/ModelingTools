@@ -8,7 +8,7 @@ uses Windows, ZLib, SysUtils, ModflowCellUnit, System.Classes,
   OrderedCollectionUnit, GoPhastTypes,
   SubscriptionUnit, Mt3dmsChemUnit, GwtStatusUnit,
   ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
-  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
+  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit, System.Math;
 
 type
   TUzfOb = (uoGW_Recharge, uoGW_Discharge, uoDischargeToMvr,
@@ -4047,7 +4047,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.UzfMf6Array) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.UzfMf6Array)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.UzfMf6Array), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       BIndex := 0;

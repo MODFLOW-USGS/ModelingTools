@@ -6,7 +6,7 @@ uses
   Windows, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
-  Mt3dmsChemUnit;
+  Mt3dmsChemUnit, System.Math;
 
 type
   // @name represents an MT3DMS concentration point source for one time interval.
@@ -254,7 +254,7 @@ begin
         + Length(LocalBoundaryStorage.Mt3dmsConcArray) then
       begin
         Cells.Capacity := Cells.Count
-          + Length(LocalBoundaryStorage.Mt3dmsConcArray)
+          + Max(Length(LocalBoundaryStorage.Mt3dmsConcArray), Cells.Count div 4);
       end;
       // Cells.CheckRestore;
       for BoundaryIndex := 0 to

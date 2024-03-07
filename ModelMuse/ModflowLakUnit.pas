@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  SubscriptionUnit, GoPhastTypes, PestObsUnit;
+  SubscriptionUnit, GoPhastTypes, PestObsUnit, System.Math;
 
 type
   TLakRecord = record
@@ -1873,7 +1873,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.LakArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.LakArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.LakArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.LakArray) - 1 do

@@ -6,7 +6,7 @@ uses
   System.Classes, System.ZLib, ModflowCellUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   System.Generics.Collections, OrderedCollectionUnit,
-  GoPhastTypes, RbwParser, Modflow6DynamicTimeSeriesInterfaceUnit;
+  GoPhastTypes, RbwParser, Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TRipRecord = record
@@ -1228,9 +1228,9 @@ begin
       and (StressPeriod.EndTime - LocalModel.SP_Epsilon
       <= LocalBoundaryStorage.EndingTime) then
     begin
-      if Cells.Capacity < Length(LocalBoundaryStorage.RipArray) then
+      if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.RipArray) then
       begin
-        Cells.Capacity := Length(LocalBoundaryStorage.RipArray);
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.RipArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.RipArray) - 1 do

@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  SubscriptionUnit, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes, System.Math;
 
 type
   TCfpRchFractionRecord = record
@@ -903,7 +903,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.CfpRchFractionArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.CfpRchFractionArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.CfpRchFractionArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.CfpRchFractionArray) - 1 do

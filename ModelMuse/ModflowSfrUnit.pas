@@ -7,7 +7,7 @@ uses Classes, RealListUnit, OrderedCollectionUnit, ModflowCellUnit,
   ModflowSfrSegment, ModflowSfrUnsatSegment, ModflowSfrTable, ModflowSfrFlows,
   ModflowSfrEquationUnit, ModflowSfrParamIcalcUnit, PestObsUnit,
   SubscriptionUnit,
-  FormulaManagerUnit, FormulaManagerInterfaceUnit;
+  FormulaManagerUnit, FormulaManagerInterfaceUnit, System.Math;
 
 type
   TGageLocation = (glNone, glFirst, glLast, glAll);
@@ -644,7 +644,7 @@ begin
 
   if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.SfrArray) then
   begin
-    Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.SfrArray)
+    Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.SfrArray), Cells.Count div 4);
   end;
 //  Cells.CheckRestore;
   for BoundaryIndex := 0 to Length(LocalBoundaryStorage.SfrArray) - 1 do

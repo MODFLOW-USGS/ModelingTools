@@ -19,7 +19,7 @@ uses
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   OrderedCollectionUnit,
   RbwParser, GoPhastTypes, ModflowCellUnit, SysUtils, SubscriptionUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TFhbRecord = record
@@ -1063,7 +1063,7 @@ begin
     Assert(Cells <> nil);
     if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.FhbArray) then
     begin
-      Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.FhbArray)
+      Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.FhbArray), Cells.Count div 4);
     end;
     for BoundaryIndex := 0 to Length(LocalBoundaryStorage.FhbArray) - 1 do
     begin

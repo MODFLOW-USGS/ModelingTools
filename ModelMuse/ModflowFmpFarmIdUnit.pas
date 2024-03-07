@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, DataSetUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  SubscriptionUnit, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes, System.Math;
 
 type
   {
@@ -636,7 +636,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.FarmIDArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.FarmIDArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.FarmIDArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.FarmIDArray) - 1 do

@@ -8,7 +8,7 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   ModflowTransientListParameterUnit, RealListUnit, System.Generics.Collections,
   Modflow6DynamicTimeSeriesInterfaceUnit, Modflow6TimeSeriesInterfaceUnit,
-  CellLocationUnit;
+  CellLocationUnit, System.Math;
 
 type
   {
@@ -1250,7 +1250,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.WellArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.WellArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.WellArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.WellArray) - 1 do

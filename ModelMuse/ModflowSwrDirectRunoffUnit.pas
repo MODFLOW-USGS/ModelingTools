@@ -5,7 +5,7 @@ interface
 uses
   ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  OrderedCollectionUnit, GoPhastTypes, SysUtils, SubscriptionUnit;
+  OrderedCollectionUnit, GoPhastTypes, SysUtils, SubscriptionUnit, System.Math;
 
 type
   TSwrDirectRunoffRecord = record
@@ -882,7 +882,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.DirectRunoffArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.DirectRunoffArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.DirectRunoffArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.DirectRunoffArray) - 1 do

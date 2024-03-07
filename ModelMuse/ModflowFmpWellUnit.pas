@@ -7,7 +7,7 @@ uses
   ModflowBoundaryUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TFmpWellRecord = record
@@ -1321,7 +1321,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.FmpWellArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.FmpWellArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.FmpWellArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.FmpWellArray) - 1 do

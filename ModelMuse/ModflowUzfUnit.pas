@@ -7,7 +7,7 @@ uses Windows, ZLib, SysUtils, Classes, RealListUnit,
   ModflowRchUnit, ModflowEvtUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit,
-  GoPhastTypes;
+  GoPhastTypes, System.Math;
 
 type
 
@@ -541,7 +541,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.RchArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.RchArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.RchArray), Cells.Count div 4);
       end;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.RchArray) - 1 do
       begin

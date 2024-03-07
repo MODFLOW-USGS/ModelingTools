@@ -6,7 +6,8 @@ uses
   ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit, OrderedCollectionUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   GoPhastTypes, RbwParser, SubscriptionUnit, Mt3dmsChemUnit,
-  System.SysUtils, GwtStatusUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
+  System.SysUtils, GwtStatusUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
+  System.Math;
 
 type
   TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate,
@@ -2053,7 +2054,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.MawTransientArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.MawTransientArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.MawTransientArray), Cells.Count div 4);
       end;
       LastIndex := Length(LocalBoundaryStorage.MawTransientArray) - 1;
 //      Cells.CheckRestore;

@@ -6,7 +6,8 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
-  ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
+  ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
+  System.Math;
 
 type
   TGhbRecord = record
@@ -1505,7 +1506,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.GhbArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.GhbArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.GhbArray), Cells.Count div 4);
       end;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.GhbArray) - 1 do
       begin

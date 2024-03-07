@@ -7,7 +7,7 @@ uses
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   GoPhastTypes, SubscriptionUnit, RbwParser,
   ModflowCellUnit, System.ZLib, OrderedCollectionInterfaceUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TMvrType = (mtFactor, mtExcess, mtThreshold, mtUpTo);
@@ -612,7 +612,7 @@ begin
           + Length(LocalBoundaryStorage.MvrRecordArray) then
         begin
           Cells.Capacity := Cells.Count
-            + Length(LocalBoundaryStorage.MvrRecordArray)
+            + Max(Length(LocalBoundaryStorage.MvrRecordArray), Cells.Count div 4);
         end;
         for BoundaryIndex := 0 to
           Length(LocalBoundaryStorage.MvrRecordArray) - 1 do

@@ -6,7 +6,7 @@ uses
   SysUtils, Classes, ModflowBoundaryUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   OrderedCollectionUnit, GoPhastTypes, RbwParser, ModflowCellUnit, ZLib,
-  SubscriptionUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
+  SubscriptionUnit, Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TSwrRecord = record
@@ -1207,7 +1207,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.SwrArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.SwrArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.SwrArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.SwrArray) - 1 do

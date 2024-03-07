@@ -8,7 +8,7 @@ uses
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   ModflowSwrReachGeometryUnit, ZLib, RbwParser,
   SysUtils, SubscriptionUnit, ModflowSwrObsUnit, OrderedCollectionInterfaceUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   TSwrRouteType = (rtLevelPool, rtTiltedPool, rtDiffusiveWave, rtKinematicWave);
@@ -1217,7 +1217,7 @@ begin
       end;
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.Transient) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.Transient)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.Transient), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.Transient) - 1 do

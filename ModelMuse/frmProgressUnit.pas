@@ -7,7 +7,8 @@ unit frmProgressUnit;
 interface
 
 uses
-  SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
+  SysUtils, Types, Winapi.Windows, Winapi.Messages, Classes, Variants,
+  Graphics, Controls, Forms,
   Dialogs, StdCtrls, frmCustomGoPhastUnit, ComCtrls,
   ExtCtrls, Buttons;
 
@@ -33,6 +34,7 @@ type
     // @name initializes @classname.
     procedure FormShow(Sender: TObject);
     procedure btnAbortClick(Sender: TObject);
+    procedure memoMessagesChange(Sender: TObject);
   private
     // @name: string;
     // See @link(Prefix).
@@ -47,6 +49,8 @@ type
     function GetShouldContinue: Boolean;
     { Private declarations }
   public
+    procedure BeginUpdate;
+    procedure EndUpdate;
     property ShouldContinue: Boolean read GetShouldContinue write FShouldContinue;
     property ProgressLabelCaption: string read GetProgressLabelCaption
       write SetProgressLabelCaption;
@@ -103,11 +107,21 @@ begin
   end;
 end;
 
+procedure TfrmProgressMM.BeginUpdate;
+begin
+  memoMessages.Lines.BeginUpdate;
+end;
+
 procedure TfrmProgressMM.btnAbortClick(Sender: TObject);
 begin
   inherited;
   FShouldContinue := False;
   memoMessages.Lines.Add(StrAttemptingToAbort);
+end;
+
+procedure TfrmProgressMM.EndUpdate;
+begin
+  memoMessages.Lines.EndUpdate;
 end;
 
 procedure TfrmProgressMM.FormShow(Sender: TObject);
@@ -135,6 +149,12 @@ begin
   //
 //  Application.ProcessMessages;
   Result := FShouldContinue;
+end;
+
+procedure TfrmProgressMM.memoMessagesChange(Sender: TObject);
+begin
+  inherited;
+  SendMessage(memoMessages.Handle, EM_LINESCROLL, 0,memoMessages.Lines.Count);
 end;
 
 procedure TfrmProgressMM.SetPrefix(const Value: string);

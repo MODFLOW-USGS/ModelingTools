@@ -6,7 +6,7 @@ uses
   Windows, ZLib, SysUtils, Classes, ModflowBoundaryUnit, OrderedCollectionUnit,
   ModflowCellUnit, RbwParser, GoPhastTypes,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  SubscriptionUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
+  SubscriptionUnit, Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   // Rw  > 0, Rw  = 0, Rw  < 0
@@ -2318,7 +2318,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.Mnw1Array) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.Mnw1Array)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.Mnw1Array), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.Mnw1Array) - 1 do

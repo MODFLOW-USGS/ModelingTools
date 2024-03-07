@@ -6,7 +6,8 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, ModflowCellUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
-  ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit;
+  ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
+  System.Math;
 
 type
   TRivRecord = record
@@ -1654,9 +1655,9 @@ begin
     if (StressPeriod.StartTime + LocalModel.SP_Epsilon >= LocalBoundaryStorage.StartingTime)
       and (StressPeriod.EndTime - LocalModel.SP_Epsilon <= LocalBoundaryStorage.EndingTime) then
     begin
-      if Cells.Capacity < Length(LocalBoundaryStorage.RivArray) then
+      if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.RivArray) then
       begin
-        Cells.Capacity := Length(LocalBoundaryStorage.RivArray);
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.RivArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.RivArray) - 1 do

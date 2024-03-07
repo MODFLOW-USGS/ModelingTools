@@ -5,7 +5,7 @@ interface
 uses
   Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, GoPhastTypes, ModflowCellUnit,
-  FormulaManagerInterfaceUnit, SubscriptionUnit;
+  FormulaManagerInterfaceUnit, SubscriptionUnit, System.Math;
 
 const
   KPosition = 0;
@@ -1031,9 +1031,9 @@ begin
     if (StressPeriod.StartTime + LocalModel.SP_Epsilon >= LocalBoundaryStorage.StartingTime)
       and (StressPeriod.EndTime - LocalModel.SP_Epsilon <= LocalBoundaryStorage.EndingTime) then
     begin
-      if Cells.Capacity < Length(LocalBoundaryStorage.TvkArray) then
+      if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.TvkArray) then
       begin
-        Cells.Capacity := Length(LocalBoundaryStorage.TvkArray);
+        Cells.Capacity := Cells.Count +Max(Length(LocalBoundaryStorage.TvkArray), Cells.Count div 4);
       end;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.TvkArray) - 1 do
       begin

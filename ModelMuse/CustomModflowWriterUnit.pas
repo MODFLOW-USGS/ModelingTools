@@ -5015,6 +5015,8 @@ begin
 end;
 
 procedure TCustomParameterTransientWriter.Evaluate;
+const
+  OneSecond = 1/24/3600;
 var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
@@ -5030,6 +5032,7 @@ var
   AValueCell: TValueCell;
   ParamBoundary: TModflowParamBoundary;
   AParam: TModflowTransientListParameter;
+  CurrentTime: TDateTime;
   procedure AssignMf6ObsNames(ValueCellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -5067,6 +5070,8 @@ begin
       Exit;
     end;
 
+    CurrentTime := Now;
+    frmProgressMM.BeginUpdate;
     for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
     begin
       if not frmProgressMM.ShouldContinue then
@@ -5106,6 +5111,13 @@ begin
         end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS,
           [ScreenObject.Name]));
+        if Now - CurrentTime >  OneSecond then
+        begin
+          frmProgressMM.EndUpdate;
+          Application.ProcessMessages;
+          frmProgressMM.BeginUpdate;
+          CurrentTime := Now;
+        end;
 
         Boundary.GetCellValues(FValues, FParamValues, Model, self);
         FTimeSeriesNames.AddStrings(Boundary.Mf6TimeSeriesNames);
@@ -5174,6 +5186,7 @@ begin
         end;
       end;
     end;
+    frmProgressMM.EndUpdate;
 
     if Mf6ObservationsUsed then
     begin

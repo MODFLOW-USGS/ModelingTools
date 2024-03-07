@@ -6,7 +6,7 @@ uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit, FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, RbwParser, GoPhastTypes,
   System.Generics.Collections, Mt3dmsChemSpeciesUnit,
-  Modflow6DynamicTimeSeriesInterfaceUnit;
+  Modflow6DynamicTimeSeriesInterfaceUnit, System.Math;
 
 type
   {
@@ -1084,7 +1084,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.CncArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.CncArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.CncArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.CncArray) - 1 do

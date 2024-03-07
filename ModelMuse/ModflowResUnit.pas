@@ -5,7 +5,7 @@ interface
 uses Windows, ZLib, SysUtils, Classes, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
-  SubscriptionUnit, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes, System.Math;
 
 type
   TResRecord = record
@@ -539,7 +539,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.ResArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.ResArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.ResArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.ResArray) - 1 do

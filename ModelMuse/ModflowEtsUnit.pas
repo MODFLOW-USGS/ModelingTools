@@ -7,7 +7,7 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   FormulaManagerUnit, FormulaManagerInterfaceUnit,
   SubscriptionUnit, GoPhastTypes,
   ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
-  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit;
+  ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit, System.Math;
 type
 
   TEtsSurfDepthRecord = record
@@ -638,7 +638,7 @@ begin
     begin
       if Cells.Capacity < Cells.Count + Length(LocalBoundaryStorage.EvtArray) then
       begin
-        Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.EvtArray)
+        Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.EvtArray), Cells.Count div 4);
       end;
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.EvtArray) - 1 do
