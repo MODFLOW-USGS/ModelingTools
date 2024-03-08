@@ -274,8 +274,8 @@ var
             + Abs(AReach.Cell.Row - OtherReach.Cell.Row);
           frmErrorsAndWarnings.AddWarning(Model,
             StrDownstreamSFRSegme, Format(StrTheDownstreamEndGrid,
-            [ASegment.FScreenObject.Name, AReach.Cell.Row+1, AReach.Cell.Column+1,
-            OtherSegment.FScreenObject.Name, OtherReach.Cell.Row+1, OtherReach.Cell.Column+1,
+            [ASegment.FScreenObject.Name, AReach.WarningCell.Row+1, AReach.WarningCell.Column+1,
+            OtherSegment.FScreenObject.Name, OtherReach.WarningCell.Row+1, OtherReach.WarningCell.Column+1,
             CellDistance]),
             OtherSegment.FScreenObject)
         end;
@@ -337,15 +337,15 @@ begin
             begin
               frmErrorsAndWarnings.AddWarning(Model, StrStreambedTopElevat,
                 Format(StrIn0sAtLayerCell,
-                [ASegment.FScreenObject.name, AReach.Cell.Layer+1,
-                AReach.Cell.Column+1]), ASegment.FScreenObject);
+                [ASegment.FScreenObject.name, AReach.WarningCell.Layer+1,
+                AReach.WarningCell.Column+1]), ASegment.FScreenObject);
             end
             else
             begin
               frmErrorsAndWarnings.AddWarning(Model, StrStreambedTopElevat,
                 Format(StrIn0sAtLayer,
-                [ASegment.FScreenObject.name, AReach.Cell.Layer+1, AReach.Cell.Row+1,
-                AReach.Cell.Column+1]), ASegment.FScreenObject);
+                [ASegment.FScreenObject.name, AReach.WarningCell.Layer+1, AReach.WarningCell.Row+1,
+                AReach.WarningCell.Column+1]), ASegment.FScreenObject);
             end;
           end;
         end;
@@ -385,15 +385,15 @@ begin
               begin
                 frmErrorsAndWarnings.AddWarning(Model, StrStreambedTopElevat,
                   Format(StrIn0sAtLayerCell,
-                  [ASegment.FScreenObject.name, AReach.Cell.Layer+1,
-                  AReach.Cell.Column+1]), ASegment.FScreenObject);
+                  [ASegment.FScreenObject.name, AReach.WarningCell.Layer+1,
+                  AReach.WarningCell.Column+1]), ASegment.FScreenObject);
               end
               else
               begin
                 frmErrorsAndWarnings.AddWarning(Model, StrStreambedTopElevat,
                   Format(StrIn0sAtLayer,
-                  [ASegment.FScreenObject.name, AReach.Cell.Layer+1, AReach.Cell.Row+1,
-                  AReach.Cell.Column+1]), ASegment.FScreenObject);
+                  [ASegment.FScreenObject.name, AReach.WarningCell.Layer+1, AReach.WarningCell.Row+1,
+                  AReach.WarningCell.Column+1]), ASegment.FScreenObject);
               end;
             end;
 
@@ -472,15 +472,15 @@ begin
               begin
                 frmErrorsAndWarnings.AddWarning(Model, StrStreambedTopElevat,
                   Format(StrIn0sAtLayerCell,
-                  [ASegment.FScreenObject.name, AReach.Cell.Layer+1,
-                  AReach.Cell.Column+1]), ASegment.FScreenObject);
+                  [ASegment.FScreenObject.name, AReach.WarningCell.Layer+1,
+                  AReach.WarningCell.Column+1]), ASegment.FScreenObject);
               end
               else
               begin
                 frmErrorsAndWarnings.AddWarning(Model, StrStreambedTopElevat,
                   Format(StrIn0sAtLayer,
-                  [ASegment.FScreenObject.name, AReach.Cell.Layer+1, AReach.Cell.Row+1,
-                  AReach.Cell.Column+1]), ASegment.FScreenObject);
+                  [ASegment.FScreenObject.name, AReach.WarningCell.Layer+1, AReach.WarningCell.Row+1,
+                  AReach.WarningCell.Column+1]), ASegment.FScreenObject);
               end;
             end;
 
@@ -550,7 +550,9 @@ var
   SpeciesIndex: Integer;
   Species: TMobileChemSpeciesItem;
   SpeciesCount: Integer;
+  OutsideGridCell: Boolean;
 begin
+  OutsideGridCell := False;
   CellList := TCellAssignmentList.Create;
   UseList := TStringList.Create;
   PropertyNames := TStringList.Create;
@@ -592,6 +594,12 @@ begin
 
     ASegment.FScreenObject.GetCellsToAssign('0', nil, nil, CellList,
       alAll, Model);
+    if CellList.Count = 0 then
+    begin
+      CellList.Add(TCellAssignment.Create(1,1,1, nil, 0,
+        'dummy assignment outside of model area', amIntersect));
+      OutsideGridCell := True;
+    end;
     ASegment.ReachCount := CellList.Count;
 
     for FormulaIndex := 0 to PropertyFormulas.Count - 1 do
@@ -612,6 +620,11 @@ begin
       else
       begin
         DataArray := Model.DataArrayManager.GetDataSetByName(Formula);
+        if OutsideGridCell and (DataArray <> nil) then
+        begin
+          frmErrorsAndWarnings.AddError(Model, 'Invalid data array in formula for an SFR object outside the grid.',
+            Format('%s', [ASegment.FScreenObject.Name]), ASegment.FScreenObject);
+        end;
         if (DataArray <> nil) and DataArray.PestParametersUsed then
         begin
           PestParamName := DataArray.Name;
@@ -651,6 +664,11 @@ begin
         begin
           ADataSet.Initialize;
           Model.DataArrayManager.AddDataSetToCache(ADataSet);
+          if OutsideGridCell then
+          begin
+            frmErrorsAndWarnings.AddError(Model, 'Invalid data array in formula for an SFR object outside the grid.',
+              Format('%s', [ASegment.FScreenObject.Name]), ASegment.FScreenObject);
+          end;
         end;
       end;
 
@@ -681,6 +699,7 @@ begin
           ASegment.FSteadyValues[CellIndex].Cell.Layer := ACell.Layer;
           ASegment.FSteadyValues[CellIndex].Cell.Row := ACell.Row;
           ASegment.FSteadyValues[CellIndex].Cell.Column := ACell.Column;
+          ASegment.FSteadyValues[CellIndex].OutsideGridCell := OutsideGridCell;
           ASegment.FSteadyValues[CellIndex].StartingConcentrations.SpeciesCount := SpeciesCount;
         end;
 
@@ -701,6 +720,11 @@ begin
             begin
               ADataSet :=
                 Model.DataArrayManager.DataSets[DataSetIndex];
+              if OutsideGridCell then
+              begin
+                frmErrorsAndWarnings.AddError(Model, 'Invalid data array in formula for an SFR object outside the grid.',
+                  Format('%s', [ASegment.FScreenObject.Name]), ASegment.FScreenObject);
+              end;
               Assert(Model = (ADataSet.Model as TCustomModel));
               Assert(ADataSet.DataType = Variable.ResultType);
               if ADataSet.Orientation = dsoTop then
@@ -793,8 +817,8 @@ begin
       if CellValues.StreambedTop - CellValues.StreambedThickness < CellBottom then
       begin
         frmErrorsAndWarnings.AddError(Model, StrTheStreambedMinusThe,
-          Format(StrLayerRowColumnNameStreambed, [CellValues.Cell.Layer+1,
-          CellValues.Cell.Row+1, CellValues.Cell.Column+1, ASegment.ScreenObject.Name,
+          Format(StrLayerRowColumnNameStreambed, [CellValues.WarningCell.Layer+1,
+          CellValues.WarningCell.Row+1, CellValues.WarningCell.Column+1, ASegment.ScreenObject.Name,
           CellValues.StreambedTop, CellValues.StreambedThickness, CellBottom]),
           ASegment.ScreenObject);
       end;
@@ -919,6 +943,8 @@ begin
     begin
       Continue;
     end;
+    (Boundary.Values as TSfrMf6Collection).OutsideGridCell := False;
+
     frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
 
     SfrMf6Item := Boundary.Values.First as TSfrMf6Item;
@@ -995,22 +1021,23 @@ begin
               if ACell.Values.Stage > CellTop then
               begin
                 frmErrorsAndWarnings.AddWarning(Model, StrAboveTop,
-                  Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
-                  ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
+                  Format('%0:d, %1:d, %2:d, %3:s', [ACell.WarningCell.Layer+1,
+                  ACell.WarningCell.Row+1, ACell.WarningCell.Column+1, ScreenObject.Name]), ScreenObject);
               end;
               if ACell.Values.Stage < CellBottom then
               begin
                 frmErrorsAndWarnings.AddWarning(Model, StrBelowBottom,
-                  Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
-                  ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
+                  Format('%0:d, %1:d, %2:d, %3:s', [ACell.WarningCell.Layer+1,
+                  ACell.WarningCell.Row+1, ACell.WarningCell.Column+1, ScreenObject.Name]), ScreenObject);
               end;
             end;
 
             if ACell.Values.Roughness <= 0 then
             begin
+
               frmErrorsAndWarnings.AddError(Model, StrTheRoughnessIsLes,
-                Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
-                ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
+                Format('%0:d, %1:d, %2:d, %3:s', [ACell.WarningCell.Layer+1,
+                ACell.WarningCell.Row+1, ACell.WarningCell.Column+1, ScreenObject.Name]), ScreenObject);
             end;
 
           end;
@@ -2289,12 +2316,24 @@ begin
       ReachProp := ASegment.SteadyValues[ReachIndex];
       ACell := ACellList[ReachIndex] as TSfrMF6_Cell;
 
-      WriteInteger(ReachProp.Cell.Layer+1);
-      if not Model.DisvUsed then
+      if not ReachProp.OutsideGridCell then
       begin
-        WriteInteger(ReachProp.Cell.Row+1);
+        WriteInteger(ReachProp.Cell.Layer+1);
+        if not Model.DisvUsed then
+        begin
+          WriteInteger(ReachProp.Cell.Row+1);
+        end;
+        WriteInteger(ReachProp.Cell.Column+1);
+      end
+      else
+      begin
+        WriteInteger(0);
+        if not Model.DisvUsed then
+        begin
+          WriteInteger(0);
+        end;
+        WriteInteger(0);
       end;
-      WriteInteger(ReachProp.Cell.Column+1);
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestReachLength,
         ReachProp.ReachLength, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);

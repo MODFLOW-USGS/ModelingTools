@@ -942,7 +942,8 @@ uses
   Mf6.WelFileReaderUnit in '..\MF6InputReader\Mf6.WelFileReaderUnit.pas',
   frmSelectFlowModelUnit in 'frmSelectFlowModelUnit.pas' {frmSelectFlowModel},
   Modflow6ModelImporter in 'Modflow6ModelImporter.pas',
-  InputDataObservationsUnit in 'InputDataObservationsUnit.pas';
+  InputDataObservationsUnit in 'InputDataObservationsUnit.pas',
+  frmImportWarningsUnit in 'frmImportWarningsUnit.pas' {frmImportWarnings};
 
 {$R *.res}
 

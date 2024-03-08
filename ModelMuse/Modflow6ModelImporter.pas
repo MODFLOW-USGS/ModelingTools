@@ -7,7 +7,7 @@ uses
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
   ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
   System.Generics.Defaults, Mf6.ObsFileReaderUnit, ModflowLakMf6Unit,
-  Mf6.MvrFileReaderUnit, GoPhastTypes, ModflowPackageSelectionUnit;
+  Mf6.MvrFileReaderUnit, GoPhastTypes, ModflowPackageSelectionUnit, FastGEO;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -79,6 +79,8 @@ type
     FMvrSources: TMvrSourceList;
     FMvrReceivers: TMvrReceiverList;
     FOnUpdataStatusBar: TOnUpdataStatusBar;
+    FMinPoint: TPoint2D;
+    FMinPointAssigned: Boolean;
     procedure ImportFlowModelTiming;
     procedure ImportSimulationOptions;
     procedure ImportSolutionGroups;
@@ -157,7 +159,7 @@ uses
   Mf6.TDisFileReaderUnit, ModflowTimeUnit, ModflowOptionsUnit,
   Mf6.AtsFileReaderUnit, ModflowOutputControlUnit,
   Mf6.NameFileReaderUnit, Mf6.DisFileReaderUnit, LayerStructureUnit,
-  UndoItems, FastGEO, AbstractGridUnit, ValueArrayStorageUnit,
+  UndoItems, AbstractGridUnit, ValueArrayStorageUnit,
   InterpolationUnit, GIS_Functions, RbwParser, DataSetNamesUnit,
   Mf6.DisvFileReaderUnit, ModflowIrregularMeshUnit, Mf6.IcFileReaderUnit,
   Mf6.OcFileReaderUnit, Modflow6ObsUnit,
@@ -178,7 +180,7 @@ uses
   Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit, IntListUnit,
   ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit, System.Hash,
   ModflowMvrUnit, frmErrorsAndWarningsUnit, Mf6.GncFileReaderUnit,
-  ModflowGncUnit, Mf6.ImsFileReaderUnit;
+  ModflowGncUnit, Mf6.ImsFileReaderUnit, frmImportWarningsUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -621,7 +623,7 @@ var
     begin
       Imported_Heads := nil;
       TimeSeries := ACell.Head.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -654,7 +656,7 @@ var
         begin
           TransportAuxNames.Objects[AuxIndex] := nil;
           TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
           begin
             Assert(False);
           end;
@@ -1804,7 +1806,7 @@ begin
                   end;
                 vtString:
                   begin
-                    if not Map.TryGetValue(TimeSeries, ImportedTimeSeriesName) then
+                    if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeriesName) then
                     begin
                       Assert(False);
                     end;
@@ -2233,7 +2235,7 @@ var
         Imported_Ddrn := nil;
 
         TimeSeries := Aux.StringValue;
-        if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
         begin
           Assert(False);
         end;
@@ -2257,7 +2259,7 @@ var
     begin
       Imported_Drain_Elevations := nil;
       TimeSeries := ACell.elev.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -2276,7 +2278,7 @@ var
     begin
       Imported_Drain_Conductance := nil;
       TimeSeries := ACell.cond.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -2900,7 +2902,7 @@ var
     begin
       Imported_Et := nil;
       TimeSeries := ACell.Rate.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -2923,7 +2925,7 @@ var
     begin
       Imported_Et_surf := nil;
       TimeSeries := ACell.Surf.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -2942,7 +2944,7 @@ var
     begin
       Imported_Et_Depth := nil;
       TimeSeries := ACell.Depth.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -2964,7 +2966,7 @@ var
       begin
         ImportedPxdp := nil;
         TimeSeries := ACell.Pxdp[IntermediateIndex].StringValue;
-        if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
         begin
           Assert(False);
         end;
@@ -2985,7 +2987,7 @@ var
       begin
         ImportedPetm := nil;
         TimeSeries := ACell.Petm[IntermediateIndex].StringValue;
-        if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
         begin
           Assert(False);
         end;
@@ -3019,7 +3021,7 @@ var
         begin
           TransportAuxNames.Objects[AuxIndex] := nil;
           TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
           begin
             Assert(False);
           end;
@@ -3169,6 +3171,11 @@ begin
       for TimeSeriesIndex := 0 to Evt.TimeSeriesCount - 1 do
       begin
         TimeSeriesPackage := Evt.TimeSeries[TimeSeriesIndex];
+        ImportTimeSeries(TimeSeriesPackage, Map);
+      end;
+      for TimeSeriesIndex := 0 to Evt.TimeSeriesArrayCount - 1 do
+      begin
+        TimeSeriesPackage := Evt.TimeSeriesArray[TimeSeriesIndex];
         ImportTimeSeries(TimeSeriesPackage, Map);
       end;
 
@@ -4039,7 +4046,7 @@ var
     begin
       Imported_Ghb_Conductance := nil;
       TimeSeries := ACell.Cond.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -4062,7 +4069,7 @@ var
     begin
       Imported_Ghb_Stage := nil;
       TimeSeries := ACell.BHead.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -4098,7 +4105,7 @@ var
         begin
           TransportAuxNames.Objects[AuxIndex] := nil;
           TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
           begin
             Assert(False);
           end;
@@ -5175,6 +5182,10 @@ begin
                 begin
                   ImsPackage.ScalingMethod := ssmL2Norm;
                 end
+                else if AnsiSameText(Linear.SCALING_METHOD, 'NONE') then
+                begin
+                  ImsPackage.ScalingMethod := ssmNone;
+                end
                 else
                 begin
                   Assert(False);
@@ -5191,6 +5202,10 @@ begin
                 else if AnsiSameText(Linear.REORDERING_METHOD, 'MD') then
                 begin
                   ImsPackage.ReorderingMethod := srmMinimumDegreeOrdering;
+                end
+                else if AnsiSameText(Linear.REORDERING_METHOD, 'NONE') then
+                begin
+                  ImsPackage.ReorderingMethod := srmNone;
                 end
                 else
                 begin
@@ -5319,7 +5334,7 @@ var
       result := '';
       if ASetting.StringValue <> '' then
       begin
-        if Map.TryGetValue(ASetting.StringValue, TimeSeriesName) then
+        if Map.TryGetValue(UpperCase(ASetting.StringValue), TimeSeriesName) then
         begin
           result := TimeSeriesName;
         end
@@ -7156,6 +7171,18 @@ begin
 
   PhastModel.Exaggeration := frmGoPhast.DefaultVE;
   frmGoPhast.RestoreDefault2DView1Click(nil);
+
+  if ErrorMessages.Count > 0 then
+  begin
+    frmImportWarnings := TfrmImportWarnings.Create(nil);
+    try
+      frmImportWarnings.memoWarnings.Lines := ErrorMessages;
+      Beep;
+      frmImportWarnings.ShowModal;
+    finally
+      frmImportWarnings.Free;
+    end;
+  end;
 end;
 
 procedure TModflow6Importer.ImportMvr(Package: TPackage);
@@ -7471,29 +7498,60 @@ var
   Model: TPhastModel;
   CellId: TMfCellId;
   DisvUsed: Boolean;
+  Limits: TGridLimit;
 begin
   Model := frmGoPhast.PhastModel;
   DisvUsed := Model.DisvUsed;
   for CellIndex := 0 to CellIds.Count - 1 do
   begin
     CellId := CellIds[CellIndex];
-    if DisvUsed then
+    if (CellId.Layer = 0) and  (CellId.Row = 0) and (CellId.column = 0) then
     begin
-      CellId.Row := 1;
-    end;
-    ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
-    APoint.x := ElementCenter.RotatedLocation.x;
-    APoint.y := ElementCenter.RotatedLocation.y;
-    AScreenObject.AddPoint(APoint, True);
-    if ThreeD then
-    begin
-      if CellIds.Count > 1 then
+      if not FMinPointAssigned then
       begin
-        AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+        Limits := Model.DiscretizationLimits(vdTop);
+        APoint.x := Limits.MinX -1;
+        APoint.y := Limits.MaxY;
+        FMinPoint := APoint;
+        FMinPointAssigned := True;
       end
       else
       begin
-        AScreenObject.ElevationFormula := FortranFloatToStr(ElementCenter.RotatedLocation.z);
+        APoint := FMinPoint;
+      end;
+      AScreenObject.AddPoint(APoint, True);
+      if ThreeD then
+      begin
+        if CellIds.Count > 1 then
+        begin
+          AScreenObject.ImportedSectionElevations.Add(0.0);
+        end
+        else
+        begin
+          AScreenObject.ElevationFormula := FortranFloatToStr(0.0);
+        end;
+      end;
+    end
+    else
+    begin
+      if DisvUsed then
+      begin
+        CellId.Row := 1;
+      end;
+      ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
+      APoint.x := ElementCenter.RotatedLocation.x;
+      APoint.y := ElementCenter.RotatedLocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      if ThreeD then
+      begin
+        if CellIds.Count > 1 then
+        begin
+          AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+        end
+        else
+        begin
+          AScreenObject.ElevationFormula := FortranFloatToStr(ElementCenter.RotatedLocation.z);
+        end;
       end;
     end;
   end;
@@ -7821,7 +7879,7 @@ var
     begin
       Imported_Recharge := nil;
       TimeSeries := ACell.Recharge.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -7853,7 +7911,7 @@ var
         begin
           TransportAuxNames.Objects[AuxIndex] := nil;
           TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
           begin
             Assert(False);
           end;
@@ -7993,6 +8051,11 @@ begin
       for TimeSeriesIndex := 0 to Rch.TimeSeriesCount - 1 do
       begin
         TimeSeriesPackage := Rch.TimeSeries[TimeSeriesIndex];
+        ImportTimeSeries(TimeSeriesPackage, Map);
+      end;
+      for TimeSeriesIndex := 0 to Rch.TimeSeriesArrayCount - 1 do
+      begin
+        TimeSeriesPackage := Rch.TimeSeriesArray[TimeSeriesIndex];
         ImportTimeSeries(TimeSeriesPackage, Map);
       end;
 
@@ -8371,7 +8434,7 @@ var
     begin
       Imported_River_Conductance := nil;
       TimeSeries := ACell.Cond.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -8394,7 +8457,7 @@ var
     begin
       Imported_River_Stage := nil;
       TimeSeries := ACell.Stage.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -8417,7 +8480,7 @@ var
     begin
       Imported_River_RBot := nil;
       TimeSeries := ACell.RBot.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -8454,7 +8517,7 @@ var
         begin
           TransportAuxNames.Objects[AuxIndex] := nil;
           TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
           begin
             Assert(False);
           end;
@@ -9357,6 +9420,10 @@ begin
           break;
         end;
       end;
+      if not Uniform then
+      begin
+        break;
+      end;
     end;
     DataArrayName := Format('Imported_IDOMAIN_%d', [LayerIndex]);
     IDomainFormula := IDomainFormula + ',' + DataArrayName;
@@ -10254,11 +10321,13 @@ var
         end;
       end;
 
+      {
       SfrReachInfoLists[ObjectIndex] := SplitReachLists[0];
       for SplitIndex := 1 to SplitReachLists.Count - 1 do
       begin
         SfrReachInfoLists.Add(SplitReachLists[SplitIndex]);
       end;
+      }
     finally
       TempList.Free;
     end;
@@ -10292,11 +10361,13 @@ var
         end;
       end;
 
+      {
       SfrReachInfoLists[ObjectIndex] := SplitReachLists[0];
       for SplitIndex := 1 to SplitReachLists.Count - 1 do
       begin
         SfrReachInfoLists.Add(SplitReachLists[SplitIndex]);
       end;
+      }
     finally
       TempList.Free;
     end;
@@ -10324,6 +10395,7 @@ var
     end;
   end;
 begin
+  SplitReachLists := nil;
   ObsNameIndex := 0;
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -11272,7 +11344,7 @@ begin
   begin
     TSName := Attributes.Names[Index];
 
-    if Mf6TimesSeries.GetTimeSeriesByName(TSName) = nil then
+    if Mf6TimesSeries.GetTimeSeriesByName(UpperCase(TSName)) = nil then
     begin
       NewName := TSName;
     end
@@ -11287,7 +11359,7 @@ begin
       end;
     end;
 
-    Map.Add(TSName, NewName);
+    Map.Add(UpperCase(TSName), NewName);
 
     TimeSeries := NewGroup.Add.TimeSeries;
     TimeSeries.SeriesName := AnsiString(NewName);
@@ -11487,7 +11559,7 @@ begin
           begin
             Assert(TvkBound.ValueType = vtString);
             TimeSeriesName := TvkBound.StringValue;
-            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeriesName) then
             begin
               Assert(False);
             end;
@@ -11526,7 +11598,7 @@ begin
           begin
             Assert(TvkBound.ValueType = vtString);
             TimeSeriesName := TvkBound.StringValue;
-            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeriesName) then
             begin
               Assert(False);
             end;
@@ -11564,7 +11636,7 @@ begin
           begin
             Assert(TvkBound.ValueType = vtString);
             TimeSeriesName := TvkBound.StringValue;
-            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeriesName) then
             begin
               Assert(False);
             end;
@@ -11751,7 +11823,7 @@ begin
           begin
             Assert(TvsBound.ValueType = vtString);
             TimeSeriesName := TvsBound.StringValue;
-            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeriesName) then
             begin
               Assert(False);
             end;
@@ -11790,7 +11862,7 @@ begin
           begin
             Assert(TvsBound.ValueType = vtString);
             TimeSeriesName := TvsBound.StringValue;
-            if not Map.TryGetValue(TimeSeriesName, ImportedTimeSeriesName) then
+            if not Map.TryGetValue(UpperCase(TimeSeriesName), ImportedTimeSeriesName) then
             begin
               Assert(False);
             end;
@@ -12814,7 +12886,7 @@ var
     begin
       Imported_Heads := nil;
       TimeSeries := ACell.Q.StringValue;
-      if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+      if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
@@ -12850,7 +12922,7 @@ var
         begin
           TransportAuxNames.Objects[AuxIndex] := nil;
           TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(TimeSeries, ImportedTimeSeries) then
+          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
           begin
             Assert(False);
           end;

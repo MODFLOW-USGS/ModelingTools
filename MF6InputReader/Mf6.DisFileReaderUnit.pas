@@ -308,6 +308,7 @@ var
 begin
   FDimensions := Dimensions;
   Initialize;
+  SectionName := 'GRIDDATA';
   while not Stream.EndOfStream do
   begin
     ALine := Stream.ReadLine;
@@ -319,7 +320,6 @@ begin
       Continue;
     end;
 
-    SectionName := 'GRIDDATA';
     if ReadEndOfSection(ALine, ErrorLine, SectionName, Unhandled) then
     begin
       Exit;

@@ -634,9 +634,9 @@ begin
           and TryStrToInt(FSplitter[11],Item.Fndv)
           then
         begin
-          Item.Fcellid.Layer := -1;
-          Item.Fcellid.Row := -1;
-          Item.Fcellid.Column := -1;
+          Item.Fcellid.Layer := 0;
+          Item.Fcellid.Row := 0;
+          Item.Fcellid.Column := 0;
           if TryFortranStrToFloat(FSplitter[8],Item.Fman.NumericValue) then
           begin
             Item.Fman.ValueType := vtNumeric;

@@ -10193,6 +10193,8 @@ const
 
 //               Enhancement: Added support for discharge scaling in the
 //                DRN package.
+//               Change: SFR in MODFLOW 6 reaches are now allowed outside of
+//                the grid.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.

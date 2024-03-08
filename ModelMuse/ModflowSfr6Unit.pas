@@ -101,6 +101,7 @@ type
     Viscosity: TGwtCellData;
 
     CrossSectionIndex: Integer;
+    OutsideGridCell: Boolean;
     procedure Assign(const Item: TSfrMF6Record);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -277,6 +278,7 @@ type
   TSfrMf6Collection = class(TCustomMF_ListBoundColl)
   private
     FSfrMf6Boundary: TSfrMf6Boundary;
+    FOutsideGridCell: Boolean;
     procedure InvalidateInflowData(Sender: TObject);
     procedure InvalidateRainfallData(Sender: TObject);
     procedure InvalidateEvaporationData(Sender: TObject);
@@ -310,9 +312,11 @@ type
     procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
+    procedure AssignOutsideGridCell(CellAssignmentList: TObject); override;
   public
     constructor Create(Boundary: TModflowScreenObjectProperty;
       Model: IModelForTOrderedCollection; ScreenObject: TObject); override;
+    property OutsideGridCell: Boolean read FOutsideGridCell write FOutsideGridCell;
   end;
 
   TSfrMf6_Cell = class(TValueCell)
@@ -367,6 +371,8 @@ type
     property Viscosity: TGwtCellData read GetViscosity;
 
     property CrossSectionIndex: Integer read GetCrossSectionIndex;
+    property OutsideGridCell: Boolean read FValues.OutsideGridCell;
+    function WarningCell: TCellLocation;
   end;
 
   TDivisionPriority = (cpFraction, cpExcess, cpThreshold, cpUpTo);
@@ -418,6 +424,7 @@ type
 
     // GWT
     StartingConcentrations: TGwtCellData;
+    OutSideGridCell: Boolean;
 
     procedure Assign(const Item: TSfrMF6ConstantRecord);
     property ReachNumber: integer read FReachNumber write SetReachNumber;
@@ -431,6 +438,7 @@ type
     property PestParamName[Index: Integer]: string read GetPestParamName
       write SetPestParamName;
     function IsConnected(Value: Integer): boolean;
+    function WarningCell: TCellLocation;
   end;
 
   TSfrMF6ConstArray = array of TSfrMF6ConstantRecord;
@@ -1147,6 +1155,8 @@ begin
 
   WriteCompInt(Comp, CrossSectionIndex);
 
+  WriteCompBoolean(Comp, OutsideGridCell);
+
 end;
 
 procedure TSfrMF6Record.RecordStrings(Strings: TStringList);
@@ -1333,6 +1343,8 @@ begin
   end;
 
   CrossSectionIndex := ReadCompInt(Decomp);
+  OutsideGridCell := ReadCompBoolean(Decomp);
+
 end;
 
 { TStrMf6Storage }
@@ -2925,6 +2937,16 @@ begin
   end;
 end;
 
+procedure TSfrMf6Collection.AssignOutsideGridCell(CellAssignmentList: TObject);
+var
+  CellList: TCellAssignmentList;
+begin
+  CellList := CellAssignmentList as TCellAssignmentList;
+  CellList.Add(TCellAssignment.Create(0,0,0, nil, 0,
+    'dummy assignment outside of model area', amIntersect));
+  FOutsideGridCell := True;
+end;
+
 constructor TSfrMf6Collection.Create(Boundary: TModflowScreenObjectProperty;
   Model: IModelForTOrderedCollection; ScreenObject: TObject);
 begin
@@ -4195,7 +4217,9 @@ var
   LastIndex: Integer;
   LocalScreenObject: TScreenObject;
   InflowAnnotation: string;
+  OutsideGridCell: Boolean;
 begin
+  OutsideGridCell := (Values as TSfrMf6Collection).OutsideGridCell;
   LocalModel := AModel as TCustomModel;
   LocalBoundaryStorage := BoundaryStorage as TSfrMF6Storage;
   Assert(ScreenObject <> nil);
@@ -4247,6 +4271,7 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.FValues.Assign(BoundaryValues);
+        Cell.FValues.OutsideGridCell := OutsideGridCell;
 //        SetLength(Cell.FValues.Diversions, Length(Cell.FValues.Diversions));
 //        SetLength(Cell.FValues.DiversionAnnotations, Length(Cell.FValues.DiversionAnnotations));
         Cell.ScreenObject := ScreenObjectI;
@@ -6716,6 +6741,20 @@ begin
   FValues.Cell.Row := Value;
 end;
 
+function TSfrMf6_Cell.WarningCell: TCellLocation;
+begin
+  if OutsideGridCell then
+  begin
+    result.Layer := -1;
+    result.Row := -1;
+    result.Column := -1;
+  end
+  else
+  begin
+    result := FValues.Cell
+  end;
+end;
+
 { TStrMF6ConstantRecord }
 
 procedure TSfrMF6ConstantRecord.Assign(const Item: TSfrMF6ConstantRecord);
@@ -6770,6 +6809,7 @@ begin
   begin
     WriteCompInt(Comp, Strings.IndexOf(ConnectedReacheAnnotations[index]));
   end;
+  WriteCompBoolean(Comp, OutsideGridCell);
 
   StartingConcentrations.Cache(Comp, Strings);
 end;
@@ -6989,6 +7029,7 @@ begin
     ConnectedReacheAnnotations[index] := Annotations[ReadCompInt(Decomp)];
   end;
 
+  OutsideGridCell := ReadCompBoolean(Decomp);
   StartingConcentrations.Restore(Decomp, Annotations);
 
 end;
@@ -7123,6 +7164,20 @@ end;
 procedure TSfrMF6ConstantRecord.SetReachNumber(const Value: integer);
 begin
   FReachNumber := Value;
+end;
+
+function TSfrMF6ConstantRecord.WarningCell: TCellLocation;
+begin
+  if OutsideGridCell then
+  begin
+    result.Layer := -1;
+    result.Row := -1;
+    result.Layer := -1;
+  end
+  else
+  begin
+    result := Cell;
+  end;
 end;
 
 { TSfrMf6TimeListLink }

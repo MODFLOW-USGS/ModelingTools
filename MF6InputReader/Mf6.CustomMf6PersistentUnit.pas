@@ -171,6 +171,7 @@ type
     value: TDArray2D;
     TimeArraySeries: string;
     procedure Initialize;
+    procedure Assign(Source: TArrayItem);
   end;
 
   TArrayItemList = TList<TArrayItem>;
@@ -1743,6 +1744,16 @@ begin
 end;
 
 { TArrayItem }
+
+procedure TArrayItem.Assign(Source: TArrayItem);
+begin
+  Value := Source.value;
+  TimeArraySeries := Source.TimeArraySeries;
+  if Value <> nil then
+  begin
+    SetLength(Value, Length(Value), Length(Value[0]));
+  end;
+end;
 
 procedure TArrayItem.Initialize;
 begin

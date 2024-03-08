@@ -859,7 +859,8 @@ begin
         if TryFortranStrToFloat(FSplitter[3+DimensionCount], Item.Fbedleak) then
         begin
           FItems.Add(Item);
-        end;
+        end
+        else
         begin
           Unhandled.WriteLine(Format(StrUnrecognizedSCONN, [FPackageType]));
           Unhandled.WriteLine(ErrorLine);
@@ -1317,7 +1318,7 @@ begin
     if not FTabFileDictionary.ContainsKey(UpperCase(AFileName)) then
     begin
       LakeTablePackage := TPackage.Create;
-      FObservationsPackages.Add(LakeTablePackage);
+      FTabFilePackages.Add(LakeTablePackage);
       LakeTablePackage.FileType := FPackageType;
       LakeTablePackage.FileName := AFilename;
       LakeTablePackage.PackageName := '';
@@ -1325,6 +1326,8 @@ begin
       LakeTableReader := TLakeTable.Create(FPackageType);
       LakeTablePackage.Package := LakeTableReader;
       LakeTablePackage.ReadPackage(Unhandled, NPER);
+
+      FTabFileDictionary.Add(UpperCase(AFileName), LakeTablePackage)
     end;
   end;
 end;

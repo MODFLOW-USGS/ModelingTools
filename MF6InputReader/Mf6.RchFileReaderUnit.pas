@@ -71,8 +71,12 @@ type
   private
     IPer: Integer;
     FCells: TRchTimeItemList;
+    IRCH: TIArray3D;
+    RECHARGE: TArrayItem;
+    AuxList: TArrayItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-      Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean; READASARRAYS: Boolean);
+      Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
+      READASARRAYS: Boolean; PriorPeriod: TRchPeriod);
     function GetCell(Index: Integer): TRchTimeItem;
     function GetCount: Integer;
   protected
@@ -101,6 +105,8 @@ type
     function GetPeriodCount: Integer;
     function GetTimeSeries(Index: Integer): TPackage;
     function GetTimeSeriesCount: Integer;
+    function GetTimeSeriesArray(Index: Integer): TPackage;
+    function GetTimeSeriesArrayCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -112,6 +118,8 @@ type
     property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
     property ObservationCount: Integer read GetObservationCount;
     property Observations[Index: Integer]: TPackage read GetObservation;
+    property TimeSeriesArrayCount: Integer read GetTimeSeriesArrayCount;
+    property TimeSeriesArray[Index: Integer]: TPackage read GetTimeSeriesArray;
   end;
 
 
@@ -382,11 +390,13 @@ end;
 constructor TRchPeriod.Create(PackageType: string);
 begin
   FCells := TRchTimeItemList.Create;
+  AuxList := TArrayItemList.Create;
   inherited;
 end;
 
 destructor TRchPeriod.Destroy;
 begin
+  AuxList.Free;
   FCells.Free;
   inherited;
 end;
@@ -408,7 +418,8 @@ begin
 end;
 
 procedure TRchPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-  Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean; READASARRAYS: Boolean);
+  Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
+  READASARRAYS: Boolean; PriorPeriod: TRchPeriod);
 var
   DimensionCount: Integer;
   Cell: TRchTimeItem;
@@ -421,11 +432,8 @@ var
   LocalDim: TDimensions;
   Layered: Boolean;
   IntThreeDReader: TInteger3DArrayReader;
-  IRCH: TIArray3D;
   Double2DDReader: TDouble2DArrayReader;
-  RECHARGE: TArrayItem;
   AuxArray: TArrayItem;
-  AuxList: TArrayItemList;
   RowIndex: Integer;
   ColIndex: Integer;
   NumberOfColumns: Integer;
@@ -437,9 +445,28 @@ begin
   begin
     LocalDim := Dimensions;
     LocalDim.NLay := 1;
-    RECHARGE.Initialize;
-    AuxList := TArrayItemList.Create;
+    if PriorPeriod = nil then
+    begin
+      IRCH := nil;
+      RECHARGE.Initialize;
+    end
+    else
+    begin
+      IRCH := PriorPeriod.IRCH;
+      if IRCH <> nil then
+      begin
+        SetLength(IRCH, Length(IRCH), Length(IRCH[0]), Length(IRCH[0,0]));
+        RECHARGE.Assign(PriorPeriod.RECHARGE);
+        for AuxIndex := 0 to PriorPeriod.AuxList.Count - 1 do
+        begin
+          AuxArray.Assign(PriorPeriod.AuxList[AuxIndex]);
+          AuxList.Add(AuxArray);
+        end;
+      end;
+    end;
+//    AuxList := TArrayItemList.Create;
     try
+      AuxIndex := 0;
       while not Stream.EndOfStream do
       begin
         ALine := Stream.ReadLine;
@@ -456,7 +483,6 @@ begin
           Exit;
         end;
 
-        IRCH := nil;
         CaseSensitiveLine := ALine;
         if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
         begin
@@ -510,7 +536,15 @@ begin
               Double2DDReader.Free;
             end;
           end;
-          AuxList.Add(AuxArray)
+          if PriorPeriod = nil then
+          begin
+            AuxList.Add(AuxArray)
+          end
+          else
+          begin
+            AuxList[AuxIndex].Assign(AuxArray);
+            Inc(AuxIndex);
+          end;
         end
       end;
     finally
@@ -560,7 +594,7 @@ begin
         end;
       end;
 
-      AuxList.Free;
+//      AuxList.Free;
     end;
   end
   else
@@ -696,6 +730,16 @@ begin
   Result := FTimeSeriesPackages[Index];
 end;
 
+function TRch.GetTimeSeriesArray(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesArrayPackages[Index];
+end;
+
+function TRch.GetTimeSeriesArrayCount: Integer;
+begin
+  result := FTimeSeriesArrayPackages.Count;
+end;
+
 function TRch.GetTimeSeriesCount: Integer;
 begin
   Result := FTimeSeriesPackages.Count;
@@ -714,6 +758,7 @@ var
   ObsPackage: TPackage;
   TasPackage: TPackage;
   TasReader: TTimeArraySeries;
+  PriorPeriod: TRchPeriod;
 begin
   if Assigned(OnUpdataStatusBar) then
   begin
@@ -749,11 +794,19 @@ begin
           begin
             break;
           end;
+          if FPeriods.Count > 0 then
+          begin
+            PriorPeriod := FPeriods.Last;
+          end
+          else
+          begin
+            PriorPeriod := nil;
+          end;
           APeriod := TRchPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
-            FOptions.BOUNDNAMES, FOptions.READASARRAYS);
+            FOptions.BOUNDNAMES, FOptions.READASARRAYS, PriorPeriod);
         end
         else
         begin

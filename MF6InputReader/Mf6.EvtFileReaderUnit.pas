@@ -88,9 +88,15 @@ type
   private
     IPer: Integer;
     FCells: TEvtTimeItemList;
+    SURFACE: TArrayItem;
+    RATE: TArrayItem;
+    DEPTH: TArrayItem;
+    IEVT: TIArray3D;
+    AuxList: TArrayItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
-      READASARRAYS: Boolean; NSEG: Integer; SURF_RATE_SPECIFIED: Boolean);
+      READASARRAYS: Boolean; NSEG: Integer; SURF_RATE_SPECIFIED: Boolean;
+      PriorPeriod: TEvtPeriod);
     function GetCell(Index: Integer): TEvtTimeItem;
     function GetCount: Integer;
   protected
@@ -119,6 +125,8 @@ type
     function GetPeriodCount: Integer;
     function GetTimeSeries(Index: Integer): TPackage;
     function GetTimeSeriesCount: Integer;
+    function GetTimeSeriesArray(Index: Integer): TPackage;
+    function GetTimeSeriesArrayCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
@@ -129,6 +137,8 @@ type
     property Periods[Index: Integer]: TEvtPeriod read GetPeriod;
     property TimeSeriesCount: Integer read GetTimeSeriesCount;
     property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property TimeSeriesArrayCount: Integer read GetTimeSeriesArrayCount;
+    property TimeSeriesArray[Index: Integer]: TPackage read GetTimeSeriesArray;
     property ObservationCount: Integer read GetObservationCount;
     property Observations[Index: Integer]: TPackage read GetObservation;
   end;
@@ -483,12 +493,14 @@ end;
 constructor TEvtPeriod.Create(PackageType: string);
 begin
   FCells := TEvtTimeItemList.Create;
+  AuxList := TArrayItemList.Create;
   inherited;
 end;
 
 destructor TEvtPeriod.Destroy;
 begin
   FCells.Free;
+  AuxList.Free;
   inherited;
 end;
 
@@ -510,7 +522,8 @@ end;
 
 procedure TEvtPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
-  READASARRAYS: Boolean; NSEG: Integer; SURF_RATE_SPECIFIED: Boolean);
+  READASARRAYS: Boolean; NSEG: Integer; SURF_RATE_SPECIFIED: Boolean;
+  PriorPeriod: TEvtPeriod);
 var
   DimensionCount: Integer;
   Cell: TEvtTimeItem;
@@ -523,13 +536,12 @@ var
   LocalDim: TDimensions;
   Layered: Boolean;
   IntThreeDReader: TInteger3DArrayReader;
-  IEVT: TIArray3D;
   Double2DDReader: TDouble2DArrayReader;
-  SURFACE: TArrayItem;
-  RATE: TArrayItem;
-  DEPTH: TArrayItem;
+//  SURFACE: TArrayItem;
+//  RATE: TArrayItem;
+//  DEPTH: TArrayItem;
   AuxArray: TArrayItem;
-  AuxList: TArrayItemList;
+//  AuxList: TArrayItemList;
   RowIndex: Integer;
   ColIndex: Integer;
   SegIndex: Integer;
@@ -547,11 +559,32 @@ begin
   begin
     LocalDim := Dimensions;
     LocalDim.NLay := 1;
-    SURFACE.Initialize;
-    RATE.Initialize;
-    DEPTH.Initialize;
-    AuxList := TArrayItemList.Create;
+    if PriorPeriod = nil then
+    begin
+      SURFACE.Initialize;
+      RATE.Initialize;
+      DEPTH.Initialize;
+      IEVT := nil;
+    end
+    else
+    begin
+      SURFACE.Assign(PriorPeriod.SURFACE);
+      RATE.Assign(PriorPeriod.RATE);
+      DEPTH.Assign(PriorPeriod.DEPTH);
+      for AuxIndex := 0 to PriorPeriod.AuxList.Count - 1 do
+      begin
+        AuxArray.Assign(PriorPeriod.AuxList[AuxIndex]);
+        AuxList.Add(AuxArray);
+      end;
+      IEVT := PriorPeriod.IEVT;
+      if IEVT <> nil then
+      begin
+        SetLength(IEVT, Length(IEVT), Length(IEVT[0]), Length(IEVT[0,0]));
+      end;
+    end;
+//    AuxList := TArrayItemList.Create;
     try
+      AuxIndex := 0;
       while not Stream.EndOfStream do
       begin
         ALine := Stream.ReadLine;
@@ -568,7 +601,7 @@ begin
           Exit;
         end;
 
-        IEVT := nil;
+//        IEVT := nil;
         CaseSensitiveLine := ALine;
         if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
         begin
@@ -590,7 +623,8 @@ begin
           if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
-            SURFACE.TimeArraySeries := FSplitter[2]
+            SURFACE.TimeArraySeries := FSplitter[2];
+            SURFACE.value := nil;
           end
           else
           begin
@@ -598,6 +632,7 @@ begin
             try
               Double2DDReader.Read(Stream, Unhandled);
               SURFACE.value := Double2DDReader.FData;
+              SURFACE.TimeArraySeries := '';
             finally
               Double2DDReader.Free;
             end;
@@ -608,7 +643,8 @@ begin
           if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
-            RATE.TimeArraySeries := FSplitter[2]
+            RATE.TimeArraySeries := FSplitter[2];
+            RATE.value := nil;
           end
           else
           begin
@@ -616,6 +652,7 @@ begin
             try
               Double2DDReader.Read(Stream, Unhandled);
               RATE.value := Double2DDReader.FData;
+              RATE.TimeArraySeries :='';
             finally
               Double2DDReader.Free;
             end;
@@ -626,7 +663,8 @@ begin
           if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
-            DEPTH.TimeArraySeries := FSplitter[2]
+            DEPTH.TimeArraySeries := FSplitter[2];
+            DEPTH.value := nil;
           end
           else
           begin
@@ -634,6 +672,7 @@ begin
             try
               Double2DDReader.Read(Stream, Unhandled);
               DEPTH.value := Double2DDReader.FData;
+              DEPTH.TimeArraySeries := '';
             finally
               Double2DDReader.Free;
             end;
@@ -645,7 +684,8 @@ begin
           if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
-            AuxArray.TimeArraySeries := FSplitter[2]
+            AuxArray.TimeArraySeries := FSplitter[2];
+            AuxArray.value := nil;
           end
           else
           begin
@@ -654,11 +694,20 @@ begin
               Double2DDReader.Read(Stream, Unhandled);
               AuxArray.Value := Double2DDReader.FData;
               SetLength(AuxArray.Value, Length(AuxArray.Value), Length(AuxArray.Value[0]));
+              AuxArray.TimeArraySeries := '';
             finally
               Double2DDReader.Free;
             end;
           end;
-          AuxList.Add(AuxArray)
+          if PriorPeriod = nil then
+          begin
+            AuxList.Add(AuxArray)
+          end
+          else
+          begin
+            AuxList[AuxIndex].Assign(AuxArray);
+            Inc(AuxIndex);
+          end;
         end
         else
         begin
@@ -735,7 +784,7 @@ begin
         end;
       end;
 
-      AuxList.Free;
+//      AuxList.Free;
     end;
   end
   else
@@ -941,6 +990,16 @@ begin
   Result := FTimeSeriesPackages[Index];
 end;
 
+function TEvt.GetTimeSeriesArray(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesArrayPackages[Index];
+end;
+
+function TEvt.GetTimeSeriesArrayCount: Integer;
+begin
+  result := FTimeSeriesArrayPackages.Count
+end;
+
 function TEvt.GetTimeSeriesCount: Integer;
 begin
   Result := FTimeSeriesPackages.Count;
@@ -959,6 +1018,7 @@ var
   ObsPackage: TPackage;
   TasPackage: TPackage;
   TasReader: TTimeArraySeries;
+  PriorPeriod: TEvtPeriod;
 begin
   if Assigned(OnUpdataStatusBar) then
   begin
@@ -994,12 +1054,20 @@ begin
           begin
             break;
           end;
+          if FPeriods.Count > 0 then
+          begin
+            PriorPeriod := FPeriods.Last;
+          end
+          else
+          begin
+            PriorPeriod := nil;
+          end;
           APeriod := TEvtPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
             FOptions.FBOUNDNAMES, FOptions.READASARRAYS, FEvtDimensions.FNSEG,
-            FOptions.FSURF_RATE_SPECIFIED);
+            FOptions.FSURF_RATE_SPECIFIED, PriorPeriod);
         end
         else
         begin

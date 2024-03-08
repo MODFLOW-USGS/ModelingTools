@@ -590,6 +590,7 @@ type
     FWriter: TObject;
     procedure AssignDynamicTimeSeries(var TimeSeriesName: string;
       DynamicTimeSeries: IDynamicTimeSeries; ACell: TCellAssignment);
+    procedure AssignOutsideGridCell(CellAssignmentList: TObject); virtual;
   end;
 
   // @name is used for boundary conditions in which the boundary conditions
@@ -3788,6 +3789,11 @@ begin
 
     if CellList.Count = 0 then
     begin
+      AssignOutsideGridCell(CellList)
+    end;
+
+    if CellList.Count = 0 then
+    begin
       frmErrorsAndWarnings.AddWarning(Model as TCustomModel, StrTheFollowingObjectNoCells,
         AScreenObject.Name, AScreenObject)
     end;
@@ -5334,6 +5340,13 @@ begin
     BoundaryGroup.Mf6TimeSeriesNames.Add(string(TimeSeries.SeriesName));
     TimeSeriesName := string(TimeSeries.SeriesName);
   end;
+end;
+
+procedure TCustomListArrayBoundColl.AssignOutsideGridCell(
+  CellAssignmentList: TObject);
+begin
+  // do nothing
+  // CellAssignmentList must be a TCellAssignmentList
 end;
 
 procedure EliminateDuplicateCells(AScreenObjectI: IScreenObject;

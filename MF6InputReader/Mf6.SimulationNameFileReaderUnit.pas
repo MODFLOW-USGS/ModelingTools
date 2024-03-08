@@ -393,10 +393,8 @@ begin
       end;
 
       FSimulationFile.Close;
-//      FOutFile.Close;
     finally
       FSimulationFile.Free;
-//      FOutFile.Free;
     end;
 
     except on E: Exception do
@@ -751,8 +749,7 @@ begin
       AModel.ModelType := UpperCase(FSplitter[0]);
       AModel.NameFile := FSplitter[1];
       AModel.ModelName := FSplitter[2];
-      ALine := UpperCase(FSplitter[0]);
-      if (ALine <> 'GWF6') and (ALine <> 'GWT6') then
+      if (AModel.ModelType <> 'GWF6') and (AModel.ModelType <> 'GWT6') then
       begin
         Unhandled.WriteLine('Error reading the model type in the following line.');
         Unhandled.WriteLine(ErrorLine);
