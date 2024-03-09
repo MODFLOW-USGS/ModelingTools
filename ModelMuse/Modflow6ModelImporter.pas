@@ -7,7 +7,8 @@ uses
   Mf6.SimulationNameFileReaderUnit, System.Math, Mf6.CustomMf6PersistentUnit,
   ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
   System.Generics.Defaults, Mf6.ObsFileReaderUnit, ModflowLakMf6Unit,
-  Mf6.MvrFileReaderUnit, GoPhastTypes, ModflowPackageSelectionUnit, FastGEO;
+  Mf6.MvrFileReaderUnit, GoPhastTypes, ModflowPackageSelectionUnit, FastGEO,
+  Vcl.Forms;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -7171,17 +7172,19 @@ begin
 
   PhastModel.Exaggeration := frmGoPhast.DefaultVE;
   frmGoPhast.RestoreDefault2DView1Click(nil);
+  Application.ProcessMessages;
 
   if ErrorMessages.Count > 0 then
   begin
-    frmImportWarnings := TfrmImportWarnings.Create(nil);
-    try
-      frmImportWarnings.memoWarnings.Lines := ErrorMessages;
-      Beep;
-      frmImportWarnings.ShowModal;
-    finally
-      frmImportWarnings.Free;
+    if frmImportWarnings = nil then
+    begin
+      frmImportWarnings := TfrmImportWarnings.Create(frmGoPhast)
     end;
+    frmImportWarnings.memoWarnings.Lines := ErrorMessages;
+  end
+  else
+  begin
+    FreeAndNil(frmImportWarnings)
   end;
 end;
 
@@ -11352,7 +11355,7 @@ begin
     begin
       Inc(TSIndex);
       NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);
-      while Mf6TimesSeries.GetTimeSeriesByName(TSName) <> nil do
+      while Mf6TimesSeries.GetTimeSeriesByName(NewName) <> nil do
       begin
         Inc(TSIndex);
         NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);

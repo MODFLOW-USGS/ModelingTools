@@ -131,6 +131,7 @@ type
     Constructor Create(Model: IModelForTOrderedCollection);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    procedure Clear;
     property Items[Index: Integer]: TTimeSeriesCollectionItem read GetItem
       write SetItem; default;
     function Add: TTimeSeriesCollectionItem;
@@ -815,6 +816,19 @@ begin
   inherited;
   FTimeSeriesGroupsDictionary.Clear;
   FTimeSeriesDictionary.Clear;
+end;
+
+procedure TTimesSeriesCollections.Clear;
+begin
+  inherited;
+  FTimeSeriesGroupsDictionary.Clear;
+  FTimeSeriesDictionary.Clear;
+  if FTimeSeriesNames <> nil then
+  begin
+    FTimeSeriesNames.Clear;
+  end;
+  FDefaultGroupNameCount := 0;
+  FDefaultTimeSeriesNameCount := 0;
 end;
 
 constructor TTimesSeriesCollections.Create(Model: IModelForTOrderedCollection);

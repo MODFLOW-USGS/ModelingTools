@@ -12,6 +12,9 @@ type
     pnlBottom: TPanel;
     btnClose: TBitBtn;
     memoWarnings: TMemo;
+    tmr1: TTimer;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure tmr1Timer(Sender: TObject);
   private
     { Private declarations }
   public
@@ -19,10 +22,24 @@ type
   end;
 
 var
-  frmImportWarnings: TfrmImportWarnings;
+  frmImportWarnings: TfrmImportWarnings = nil;
 
 implementation
 
 {$R *.dfm}
+
+procedure TfrmImportWarnings.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+//  Release;
+end;
+
+procedure TfrmImportWarnings.tmr1Timer(Sender: TObject);
+begin
+  inherited;
+  tmr1.Enabled := False;
+  BringToFront;
+end;
 
 end.

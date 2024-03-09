@@ -2189,7 +2189,7 @@ uses
   {$IFDEF ImportMF6}
   frmImportModflow6Unit,
   {$ENDIF}
-  frmImportSurferGridFilesUnit;
+  frmImportSurferGridFilesUnit, frmImportWarningsUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -14243,6 +14243,11 @@ begin
   inherited;
 {$IFDEF ImportMF6}
   ShowAForm(TfrmImportModflow6);
+  if frmImportWarnings <> nil then
+  begin
+    frmImportWarnings.Show;
+    frmImportWarnings.tmr1.Enabled := True;
+  end;
 {$ENDIF}
 end;
 

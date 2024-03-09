@@ -46,6 +46,7 @@ type
   private
     FTimesSeries: TTimesSeriesCollections;
     FPestNames: TStringList;
+    FPageCount: integer;
     procedure edGroupNameChange(Sender: TObject);
     function AddNewFrame(NewName: string): TframeModflow6TimeSeries;
     procedure AssignProperties;
@@ -194,6 +195,7 @@ var
   SteadyParams: TModflowSteadyParameters;
   AParam: TModflowSteadyParameter;
 begin
+  FPageCount := 0;
   SteadyParams := frmGoPhast.PhastModel.ModflowSteadyParameters;
   for ParamIndex := 0 to SteadyParams.Count - 1 do
   begin
@@ -420,11 +422,14 @@ var
   NewPage: TJvCustomPage;
   NewNode: TJvPageIndexNode;
 begin
-  NewPage := TJvStandardPage.Create(plTimeSeries);
+  Inc(FPageCount);
+  NewPage := TJvStandardPage.Create(self);
+  NewPage.Name := 'APage_' + FPageCount.ToString;
   NewPage.PageList := plTimeSeries;
   NewNode := tvTimeSeries.Items.AddChild(nil, NewName) as TJvPageIndexNode;
   NewNode.PageIndex := NewPage.PageIndex;
-  result := TframeModflow6TimeSeries.Create(NewPage);
+  result := TframeModflow6TimeSeries.Create(self);
+  result.Name := 'AFrame_' + FPageCount.ToString;
   result.Parent := NewPage;
   result.Align := AlClient;
   result.edGroupName.Tag := plTimeSeries.PageCount - 1;

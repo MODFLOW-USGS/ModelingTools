@@ -10195,6 +10195,8 @@ const
 //                DRN package.
 //               Change: SFR in MODFLOW 6 reaches are now allowed outside of
 //                the grid.
+//               Bug fix: Canceling the Time Series dialog box no longer causes
+//                an access violation.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -12471,7 +12473,7 @@ begin
   try
     SelectedModel := Self;
 
-    FTimesSeries.Clear;
+//    FTimesSeries.Clear;
     FCtsSystems.Clear;
 
     FColorLegend.ValueAssignmentMethod := vamAutomatic;
@@ -12517,6 +12519,7 @@ begin
     // Clear screen objects before clearing child models because
     // the screen objects access the child models while being destroyed.
     FScreenObjectList.Clear;
+    FTimesSeries.Clear;
 
     FmpCrops.Clear;
     FmpSoils.Clear;

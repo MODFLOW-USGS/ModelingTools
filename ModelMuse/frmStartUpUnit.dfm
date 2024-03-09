@@ -26,7 +26,7 @@ inherited frmStartUp: TfrmStartUp
       739
       47)
     object btnNext: TBitBtn
-      Left = 599
+      Left = 595
       Top = 6
       Width = 86
       Height = 33
@@ -49,10 +49,10 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
-      ExplicitLeft = 595
+      ExplicitLeft = 591
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 412
+      Left = 408
       Top = 6
       Width = 100
       Height = 33
@@ -63,10 +63,10 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
-      ExplicitLeft = 408
+      ExplicitLeft = 404
     end
     object btnHelp: TBitBtn
-      Left = 518
+      Left = 514
       Top = 6
       Width = 75
       Height = 33
@@ -76,7 +76,7 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 514
+      ExplicitLeft = 510
     end
   end
   object pcStartup: TPageControl
@@ -115,8 +115,6 @@ inherited frmStartUp: TfrmStartUp
           'Import MODFLOW-2005 or MODFLOW-NWT model'
           'Import MODFLOW 6 model')
         TabOrder = 0
-        ExplicitWidth = 727
-        ExplicitHeight = 322
       end
     end
     object tabGeoRef: TTabSheet
@@ -442,6 +440,8 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 727
+        ExplicitHeight = 281
         object Label8: TLabel
           Left = 344
           Top = 68
@@ -547,9 +547,9 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 499
+          Left = 503
           Top = 20
-          Width = 230
+          Width = 226
           Height = 260
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
@@ -617,6 +617,8 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitWidth = 222
+          ExplicitHeight = 259
           ColWidths = (
             64
             64)
@@ -635,6 +637,7 @@ inherited frmStartUp: TfrmStartUp
         Height = 41
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 727
         object lblModflowSelection: TLabel
           Left = 195
           Top = 10
@@ -707,21 +710,21 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 252
+        Width = 248
         Height = 291
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
         ExplicitLeft = 464
         ExplicitTop = 29
-        ExplicitWidth = 252
+        ExplicitWidth = 248
         ExplicitHeight = 291
         inherited Panel: TPanel
           Top = 226
-          Width = 252
+          Width = 248
           Height = 65
           ExplicitTop = 226
-          ExplicitWidth = 252
+          ExplicitWidth = 248
           ExplicitHeight = 65
           inherited lbNumber: TLabel
             Width = 161
@@ -738,14 +741,14 @@ inherited frmStartUp: TfrmStartUp
             ExplicitTop = 38
           end
           inherited sbInsert: TSpeedButton
-            Left = 30
+            Left = 29
             Top = 38
             OnClick = frameModelLayerssbInsertClick
             ExplicitLeft = 37
             ExplicitTop = 38
           end
           inherited sbDelete: TSpeedButton
-            Left = 54
+            Left = 53
             Top = 38
             OnClick = frameModelLayerssbDeleteClick
             ExplicitLeft = 66
@@ -759,7 +762,7 @@ inherited frmStartUp: TfrmStartUp
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 252
+          Width = 248
           Height = 226
           ColCount = 2
           RowCount = 5
@@ -814,7 +817,7 @@ inherited frmStartUp: TfrmStartUp
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 252
+          ExplicitWidth = 248
           ExplicitHeight = 226
           ColWidths = (
             64
@@ -960,7 +963,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 174
+        Width = 170
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
