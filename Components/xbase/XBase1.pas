@@ -398,6 +398,8 @@ Type
 (*:อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ *)
 Implementation
 
+{#BACKUP *.ICO}
+
 resourcestring
   StrSizeOfRecordsToo = 'Size of records too large in %s. Try using fewer or' +
   ' smaller fields.';

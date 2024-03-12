@@ -92,6 +92,7 @@ procedure Register;
 implementation
 
 {$R *.res}
+{#BACKUP *.ICO}
 
 uses
   Types, Graphics;

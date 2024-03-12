@@ -167,6 +167,8 @@ procedure Register;
 
 implementation
 
+{#BACKUP *.ICO}
+
 { TvRbwMostRecentlyUsed }
 
 procedure TvRbwMostRecentlyUsed.AddFileName(FileName: string);

@@ -482,6 +482,8 @@ type
   // @name registers @link(TRbwOctTree).
 procedure Register;
 
+{#BACKUP *.ICO}
+
 implementation
 
 resourcestring

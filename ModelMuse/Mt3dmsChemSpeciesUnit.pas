@@ -203,7 +203,7 @@ type
     //MST package, SP2
     property MobileFreundlichExponentDataArrayName: string read FMobileFreundlichExponentDataArrayName
       write SetMobileFreundlichExponentDataArrayName;
-    //MST package, SP2
+    //MST package, SP2  for Langmuir
     property MobileSorptionCapacityDataArrayName: string read FMobileSorptionCapacityDataArrayName
       write SetMobileSorptionCapacityDataArrayName;
     // GWT DSP package, diffc

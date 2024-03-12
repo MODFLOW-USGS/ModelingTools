@@ -323,6 +323,7 @@ begin
 end;
 
 { TQRbwZoomBox2 }
+{#BACKUP *.ICO}
 
 procedure TQRbwZoomBox2.AbortZoom;
 begin

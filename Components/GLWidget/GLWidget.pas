@@ -160,6 +160,8 @@ procedure Register;
 
 implementation
 
+{#BACKUP *.ICO}
+
 var
   max_texture_max_anistropic: Single = 2.0;
 

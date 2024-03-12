@@ -352,6 +352,8 @@ procedure Register;
 
 implementation
 
+{#BACKUP *.ICO}
+
 uses Math;
 
 const

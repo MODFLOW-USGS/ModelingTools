@@ -25,6 +25,8 @@ Procedure Register;
 
 implementation
 
+{#BACKUP *.ICO}
+
 uses XBase1;
 
 {******************************************************************************}

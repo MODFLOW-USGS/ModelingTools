@@ -1053,6 +1053,8 @@ procedure Register;
 
 implementation
 
+{#BACKUP *.ICO}
+
 uses
   Math, Themes, {System.}StrUtils;
 

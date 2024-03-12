@@ -48,6 +48,8 @@ procedure Register;
 
 implementation
 
+{#BACKUP *.ICO}
+
 procedure Register;
 begin
   RegisterComponents('RBW', [TRbwRollupPanel]);

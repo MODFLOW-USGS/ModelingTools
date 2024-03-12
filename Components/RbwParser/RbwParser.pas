@@ -2032,6 +2032,8 @@ var
 
 implementation
 
+{#BACKUP *.ICO}
+
 uses
 {$IFDEF Delphi_XE_UP}
   Character,

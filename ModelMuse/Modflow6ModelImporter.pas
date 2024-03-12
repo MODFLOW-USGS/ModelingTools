@@ -150,6 +150,7 @@ type
     procedure ImportTransportIC(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportAdv(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportDsp(NameFile: TTransportNameFile; Package: TPackage);
+    procedure ImportMst(NameFile: TTransportNameFile; Package: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -187,7 +188,7 @@ uses
   ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit, System.Hash,
   ModflowMvrUnit, frmErrorsAndWarningsUnit, Mf6.GncFileReaderUnit,
   ModflowGncUnit, Mf6.ImsFileReaderUnit, frmImportWarningsUnit,
-  Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit;
+  Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit, Mf6.MstFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -2865,7 +2866,7 @@ begin
   Assert(SpeciesIndex >= 0);
   ChemSpecies := Model.MobileComponents[SpeciesIndex];
   ChemSpecies.Name := NameFile.SpeciesName;
-  
+
   DataSetName := KDiffusionCoefficien + '_' + NameFile.SpeciesName;
   GridData := Dsp.GridData;
   if (GridData.DIFFC <> nil) then
@@ -7422,6 +7423,107 @@ begin
   end;
 end;
 
+procedure TModflow6Importer.ImportMst(NameFile: TTransportNameFile;
+  Package: TPackage);
+var
+  Model: TPhastModel;
+  MstPackage: TGwtMstPackage;
+  Mst: TMst;
+  Options: TMstOptions;
+  SpeciesIndex: Integer;
+  ChemSpecies: TMobileChemSpeciesItem;
+  GridData: TMstGridData;
+  DataArrayName: string;
+begin
+  Model := frmGoPhast.PhastModel;
+  MstPackage := (Model.ModflowPackages.GwtPackages.Last as TGwtPackagesItem).GwtMst;
+  MstPackage.IsSelected := True;
+
+  Mst := Package.Package as TMst;
+  Options := Mst.Options;
+  MstPackage.SeparatePorosity := True;
+  MstPackage.ZeroOrderDecay := Options.ZERO_ORDER_DECAY;
+  MstPackage.FirstOrderDecay := Options.FIRST_ORDER_DECAY;
+  if Options.SORPTION.Used then
+  begin
+    if AnsiSameText(Options.SORPTION.Value, 'LINEAR') then
+    begin
+      MstPackage.Sorption := gscLinear;
+    end
+    else if AnsiSameText(Options.SORPTION.Value, 'FREUNDLICH') then
+    begin
+      MstPackage.Sorption := gscFreundlich;
+    end
+    else if AnsiSameText(Options.SORPTION.Value, 'LANGMUIR') then
+    begin
+      MstPackage.Sorption := gscLangmuir;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+
+  Model.DataArrayManager.CreateInitialDataSets;
+
+  SpeciesIndex := Model.MobileComponents.IndexOfName(NameFile.SpeciesName);
+  Assert(SpeciesIndex >= 0);
+  ChemSpecies := Model.MobileComponents[SpeciesIndex];
+  ChemSpecies.Name := NameFile.SpeciesName;
+
+  GridData := Mst.GridData;
+
+  if GridData.POROSITY <> nil then
+  begin
+    DataArrayName := ChemSpecies.PorosityDataArrayName;
+    Assign3DRealDataSet(DataArrayName, GridData.POROSITY);
+  end;
+
+  if (GridData.DECAY <> nil)
+    and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay) then
+  begin
+    DataArrayName := ChemSpecies.MobileDecayRateDataArrayName;
+    Assign3DRealDataSet(DataArrayName, GridData.DECAY);
+  end;
+
+  if (GridData.DECAY_SORBED <> nil)
+    and (MstPackage.ZeroOrderDecay or MstPackage.FirstOrderDecay)
+    and (MstPackage.Sorption <> gscNone) then
+  begin
+    DataArrayName := ChemSpecies.MobileSorbedDecayRateDataArrayName;
+    Assign3DRealDataSet(DataArrayName, GridData.DECAY_SORBED);
+  end;
+
+  if (GridData.BULK_DENSITY <> nil)
+    and (MstPackage.Sorption <> gscNone) then
+  begin
+    DataArrayName := ChemSpecies.MobileBulkDensityDataArrayName;
+    Assign3DRealDataSet(DataArrayName, GridData.BULK_DENSITY);
+  end;
+
+  if (GridData.DISTCOEF <> nil)
+    and (MstPackage.Sorption <> gscNone) then
+  begin
+    DataArrayName := ChemSpecies.MobileDistCoefDataArrayName;
+    Assign3DRealDataSet(DataArrayName, GridData.DISTCOEF);
+  end;
+
+  if (GridData.SP2 <> nil)
+    and (MstPackage.Sorption = gscFreundlich) then
+  begin
+    DataArrayName := ChemSpecies.MobileFreundlichExponentDataArrayName;
+    Assign3DRealDataSet(DataArrayName, GridData.SP2);
+  end;
+
+  if (GridData.SP2 <> nil)
+    and (MstPackage.Sorption = gscLangmuir) then
+  begin
+    DataArrayName := ChemSpecies.MobileSorptionCapacityDataArrayName;
+    Assign3DRealDataSet(DataArrayName, GridData.SP2);
+  end;
+
+end;
+
 procedure TModflow6Importer.ImportMvr(Package: TPackage);
 var
   SourceDictionary: TMvrSourceDictionary;
@@ -11741,8 +11843,7 @@ begin
     end
     else if APackage.FileType = 'MST6' then
     begin
-      // import MST6
-      Continue;
+      ImportMst(NameFile, APackage);
     end
     else if APackage.FileType = 'IST6' then
     begin

@@ -76,6 +76,9 @@ end;
 procedure Register;
 
 implementation
+
+{#BACKUP *.ICO}
+
 procedure TRadioButton95.createparams(var Params: TCreateParams);
 begin
   Inherited createparams(Params);

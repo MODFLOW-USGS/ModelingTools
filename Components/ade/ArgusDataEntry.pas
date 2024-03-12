@@ -317,6 +317,8 @@ procedure Register;
 
 implementation
 
+{#BACKUP *.ICO}
+
 var
   MaxDouble : double;
   DummyInteger : integer;
