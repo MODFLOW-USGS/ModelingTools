@@ -11,8 +11,8 @@ object frameSubBeds: TframeSubBeds
   object lblCount: TLabel
     Left = 63
     Top = 324
-    Width = 54
-    Height = 20
+    Width = 44
+    Height = 15
     Anchors = [akLeft, akBottom]
     Caption = 'Number'
   end

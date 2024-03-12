@@ -8,7 +8,7 @@ uses
   ScreenObjectUnit, DataSetUnit, System.Generics.Collections,
   System.Generics.Defaults, Mf6.ObsFileReaderUnit, ModflowLakMf6Unit,
   Mf6.MvrFileReaderUnit, GoPhastTypes, ModflowPackageSelectionUnit, FastGEO,
-  Vcl.Forms;
+  Vcl.Forms, Mf6.NameFileReaderUnit;
 
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
@@ -82,10 +82,12 @@ type
     FOnUpdataStatusBar: TOnUpdataStatusBar;
     FMinPoint: TPoint2D;
     FMinPointAssigned: Boolean;
+    FFLowTransportLinks: TDictionary<string,string>;
     procedure ImportFlowModelTiming;
     procedure ImportSimulationOptions;
     procedure ImportSolutionGroups;
     function ImportFlowModel: Boolean;
+    procedure ImportTransportModel(ATransportModel: TModel; SpeciesIndex: Integer);
     procedure ImportDis(Package: TPackage);
     procedure ImportDisV(Package: TPackage);
     procedure UpdateLayerStructure(NumberOfLayers: Integer);
@@ -145,6 +147,9 @@ type
     procedure ImportGnc(Package: TPackage);
     function GetIms(ModelName: string): TSmsPackageSelection;
     procedure ImportIMS;
+    procedure ImportTransportIC(NameFile: TTransportNameFile; Package: TPackage);
+    procedure ImportAdv(NameFile: TTransportNameFile; Package: TPackage);
+    procedure ImportDsp(NameFile: TTransportNameFile; Package: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -159,7 +164,7 @@ uses
   PhastModelUnit, frmGoPhastUnit, frmSelectFlowModelUnit,
   Mf6.TDisFileReaderUnit, ModflowTimeUnit, ModflowOptionsUnit,
   Mf6.AtsFileReaderUnit, ModflowOutputControlUnit,
-  Mf6.NameFileReaderUnit, Mf6.DisFileReaderUnit, LayerStructureUnit,
+  Mf6.DisFileReaderUnit, LayerStructureUnit,
   UndoItems, AbstractGridUnit, ValueArrayStorageUnit,
   InterpolationUnit, GIS_Functions, RbwParser, DataSetNamesUnit,
   Mf6.DisvFileReaderUnit, ModflowIrregularMeshUnit, Mf6.IcFileReaderUnit,
@@ -181,7 +186,8 @@ uses
   Mf6.LakeTableFileReaderUnit, Mf6.UzfFileReaderUnit, IntListUnit,
   ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit, System.Hash,
   ModflowMvrUnit, frmErrorsAndWarningsUnit, Mf6.GncFileReaderUnit,
-  ModflowGncUnit, Mf6.ImsFileReaderUnit, frmImportWarningsUnit;
+  ModflowGncUnit, Mf6.ImsFileReaderUnit, frmImportWarningsUnit,
+  Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -363,7 +369,7 @@ begin
   FSimulations := TObjectList<TMf6Simulation>.Create;
   FMvrSources := TMvrSourceList.Create;
   FMvrReceivers := TMvrReceiverList.Create;
-
+  FFLowTransportLinks := TDictionary<string,string>.Create;
 end;
 
 procedure TModflow6Importer.CreateAllTopCellsScreenObject;
@@ -407,6 +413,7 @@ end;
 
 destructor TModflow6Importer.Destroy;
 begin
+  FFLowTransportLinks.Free;
   FMvrSources.Free;
   FMvrReceivers.Free;
   FSimulations.Free;
@@ -467,6 +474,39 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TModflow6Importer.ImportAdv(NameFile: TTransportNameFile;
+  Package: TPackage);
+var
+  Model: TPhastModel;
+  AdvectionPackage: TGwtAdvectionPackage;
+  Adv: TAdv;
+  Scheme: string;
+begin
+  Model := frmGoPhast.PhastModel;
+  AdvectionPackage := Model.ModflowPackages.GwtAdvectionPackage;
+  AdvectionPackage.IsSelected := True;
+
+  Adv := Package.Package as TAdv;
+  Scheme := Adv.Options.SCHEME;
+  if AnsiSameText(Scheme, 'upstream') then
+  begin
+    AdvectionPackage.Scheme := gsUpstream
+  end
+  else if AnsiSameText(Scheme, 'central') then
+  begin
+    AdvectionPackage.Scheme := gsCentral
+  end
+  else if AnsiSameText(Scheme, 'TVD') then
+  begin
+    AdvectionPackage.Scheme := gsTVD
+  end
+  else
+  begin
+    Assert(False);
+  end;
+
 end;
 
 procedure TModflow6Importer.ImportBuy(Package: TPackage);
@@ -2786,6 +2826,113 @@ begin
   end;
 end;
 
+procedure TModflow6Importer.ImportDsp(NameFile: TTransportNameFile;
+  Package: TPackage);
+var
+  Model: TPhastModel;
+  DispersionPackage: TGwtDispersionPackage;
+  Dsp: TDsp;
+  Options: TDspOptions;
+  GridData: TDspGridData;
+  SpeciesIndex: Integer;
+  ChemSpecies: TMobileChemSpeciesItem;
+  Alv: TDataArray;
+  DataSetName: string;
+  AlhDataSetName: string;
+  Alh: TDataArray;
+  Ath1DataSetName: string;
+  ATH1: TDataArray;
+  ATH2: TDataArray;
+  Ath2DataSetName: string;
+  ATV: TDataArray;
+begin
+  Model := frmGoPhast.PhastModel;
+  DispersionPackage := Model.ModflowPackages.GwtDispersionPackage;
+  DispersionPackage.IsSelected := True;
+  DispersionPackage.SeparateDataSetsForEachSpecies := dtSeparate;
+  DispersionPackage.LongitudinalDispTreatement := dtSeparate;
+  DispersionPackage.TransverseDispTreatement := dtSeparate;
+  DispersionPackage.UseTransverseDispForVertFlow := True;
+
+  Dsp := Package.Package as TDsp;
+  Options := Dsp.Options;
+  DispersionPackage.UseXt3d := not Options.XT3D_OFF; 
+  DispersionPackage.Xt3dRightHandSide := Options.XT3D_RHS;
+
+  Model.DataArrayManager.CreateInitialDataSets;
+
+  SpeciesIndex := Model.MobileComponents.IndexOfName(NameFile.SpeciesName);
+  Assert(SpeciesIndex >= 0);
+  ChemSpecies := Model.MobileComponents[SpeciesIndex];
+  ChemSpecies.Name := NameFile.SpeciesName;
+  
+  DataSetName := KDiffusionCoefficien + '_' + NameFile.SpeciesName;
+  GridData := Dsp.GridData;
+  if (GridData.DIFFC <> nil) then
+  begin
+    Assign3DRealDataSet(DataSetName, GridData.DIFFC);
+  end;
+
+  DataSetName := KLongitudinalDispersH + '_' + NameFile.SpeciesName;
+  AlhDataSetName := DataSetName;
+  if GridData.ALH = nil then
+  begin
+    Alh := Model.DataArrayManager.GetDataSetByName(DataSetName);
+    Alh.Formula := '0';
+  end
+  else
+  begin
+    Assign3DRealDataSet(DataSetName, GridData.ALH);
+  end;
+
+  DataSetName := KLongitudinalDispersV + '_' + NameFile.SpeciesName;
+  if GridData.ALV = nil then
+  begin
+    Alv := Model.DataArrayManager.GetDataSetByName(DataSetName);
+    Alv.Formula := AlhDataSetName;
+  end
+  else
+  begin
+    Assign3DRealDataSet(DataSetName, GridData.ALV);
+  end;
+  
+  DataSetName := KHorizontalTransvers + '_' + NameFile.SpeciesName;
+  Ath1DataSetName := DataSetName;
+  if GridData.ATH1 = nil then
+  begin
+    ATH1 := Model.DataArrayManager.GetDataSetByName(DataSetName);
+    ATH1.Formula := '0';
+  end
+  else
+  begin
+    Assign3DRealDataSet(DataSetName, GridData.ATH1);
+  end;
+
+  DataSetName := KVerticalTransverse + '_' + NameFile.SpeciesName;
+  Ath2DataSetName := DataSetName;
+  if GridData.ATH2 = nil then
+  begin
+    ATH2 := Model.DataArrayManager.GetDataSetByName(DataSetName);
+    ATH2.Formula := Ath1DataSetName;
+  end
+  else
+  begin
+    Assign3DRealDataSet(DataSetName, GridData.ATH2);
+  end;
+  
+  DataSetName := rsVertical_Transv_Dispersivity + '_' + NameFile.SpeciesName;
+  if GridData.ATV = nil then
+  begin
+    ATV := Model.DataArrayManager.GetDataSetByName(DataSetName);
+    ATV.Formula := Ath2DataSetName;
+  end
+  else
+  begin
+    Assign3DRealDataSet(DataSetName, GridData.ATV);
+  end;
+  
+end;
+
 type
   TEvtConnection = class(TObject)
     ScreenObject: TScreenObject;
@@ -3224,6 +3371,10 @@ begin
             end;
           end;
         end;
+        if TransportModels.Count > 0 then
+        begin
+          Model.ModflowPackages.GwtProcess.IsSelected := True;
+        end;
 
         LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
@@ -3462,6 +3613,9 @@ var
   AuxName: string;
   ChemSpeciesItem: TMobileChemSpeciesItem;
   MvrPackage: TPackage;
+  FlowModelName: string;
+  InnerModelIndex: Integer;
+  InnerTransportModel: TTransportNameFile;
 begin
   result := True;
   TransportModels := TModelList.Create;
@@ -3480,10 +3634,15 @@ begin
         for ModelIndex := 0 to ASimulation.Models.Count - 1 do
         begin
           ATransportModel := ASimulation.Models[ModelIndex];
-          if (ATransportModel.ModelType = 'GWT6')
-            and (ATransportModel.FullBudgetFileName = FlowBudgetFileName) then
+          if (ATransportModel.ModelType = 'GWT6') then
           begin
-            TransportModels.Add(ATransportModel);
+            if FFLowTransportLinks.TryGetValue(UpperCase(ATransportModel.ModelName), FlowModelName) then
+            begin
+              if AnsiSameText(FlowModelName, FFlowModel.ModelName) then
+              begin
+                TransportModels.Add(ATransportModel);
+              end;
+            end;
           end;
         end;
       end;
@@ -3497,8 +3656,11 @@ begin
 
           for ModelIndex := 0 to TransportModels.Count - 1 do
           begin
+            Model.ModflowPackages.GwtPackages.Add;
+
             AModel := TransportModels[ModelIndex];
             TransportModel := AModel.FName as TTransportNameFile;
+            Ssm := nil;
             for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
             begin
               APackage := TransportModel.NfPackages[PackageIndex];
@@ -3508,6 +3670,7 @@ begin
                 for SourceIndex := 0 to Ssm.Sources.Count - 1 do
                 begin
                   AuxName := Ssm.Sources[SourceIndex].auxname;
+                  TransportModel.SpeciesName := AuxName;
                   if SoluteNames.IndexOf(AuxName) < 0 then
                   begin
                     SoluteNames.Add(AuxName);
@@ -3517,6 +3680,63 @@ begin
                   end;
                 end;
                 break;
+              end;
+            end;
+            if Ssm = nil then
+            begin
+              AuxName := 'Chem_' + IntToStr(ModelIndex+1);
+              Assert(SoluteNames.IndexOf(AuxName) < 0);
+              SoluteNames.Add(AuxName);
+              ChemSpeciesItem := Model.MobileComponents.Add;
+              ChemSpeciesItem.Name := AuxName;
+              TransportModel.SpeciesName := AuxName;
+            end
+            else if Ssm.Count = 0 then
+            begin
+              for SimulationIndex := 0 to FSimulations.Count - 1 do
+              begin
+                ASimulation := FSimulations[SimulationIndex];
+                for InnerModelIndex := 0 to ASimulation.Models.Count - 1 do
+                begin
+                  ATransportModel := ASimulation.Models[InnerModelIndex];
+                  if (ATransportModel.ModelType = 'GWT6') then
+                  begin
+                    InnerTransportModel := ATransportModel.FName as TTransportNameFile;
+                    for PackageIndex := 0 to InnerTransportModel.NfPackages.Count  - 1 do
+                    begin
+                      APackage := InnerTransportModel.NfPackages[PackageIndex];
+                      if APackage.FileType = 'SSM6' then
+                      begin
+                        Ssm := APackage.Package as TSsm;
+                        for SourceIndex := 0 to Ssm.Sources.Count - 1 do
+                        begin
+                          AuxName := Ssm.Sources[SourceIndex].auxname;
+                          TransportModel.SpeciesName := AuxName;
+                          if SoluteNames.IndexOf(AuxName) < 0 then
+                          begin
+                            SoluteNames.Add(AuxName);
+                            ChemSpeciesItem := Model.MobileComponents.Add;
+                            ChemSpeciesItem.Name := AuxName;
+                            break;
+                          end;
+                        end;
+                      end;
+                      if TransportModel.SpeciesName <> '' then
+                      begin
+                        break;
+                      end;
+                    end;
+                    if TransportModel.SpeciesName <> '' then
+                    begin
+                      break;
+                    end;
+                  end;
+
+                end;
+                if TransportModel.SpeciesName <> '' then
+                begin
+                  break;
+                end;
               end;
             end;
           end;
@@ -3676,13 +3896,12 @@ begin
         end
         else if APackage.FileType = 'GWF6-GWF6' then
         begin
-  //        GwfGwfReader := TGwfGwf.Create(APackage.FileType);
-  //        GwfGwfReader.Dimensions := FDimensions;
-  //        GwfGwfReader.FDimensions2 := FDimensions;
-  //        APackage.Package := GwfGwfReader;
-  //        APackage.ReadPackage(Unhandled);
+          // ModelMuse can not import exchanges.
         end
-
+        else
+        begin
+          FErrorMessages.Add('Unrecognized file type: ' + APackage.FileType);
+        end;
       end;
 
       for PackageIndex := 0 to Packages.Count - 1 do
@@ -3693,6 +3912,13 @@ begin
           ImportMvr(APackage);
         end
       end;
+
+      for ModelIndex := 0 to TransportModels.Count - 1 do
+      begin
+        ATransportModel := TransportModels[ModelIndex];
+        ImportTransportModel(ATransportModel, ModelIndex);
+      end;
+
     end;
   finally
     TransportModels.Free;
@@ -7013,6 +7239,8 @@ var
   frmSelectFlowModel: TfrmSelectFlowModel;
   ExchangeIndex: Integer;
   Exchange: TExchange;
+  FlowModelName: string;
+  TransportModelName: string;
 begin
   frmErrorsAndWarnings.Clear;
   FErrorMessages := ErrorMessages;
@@ -7053,12 +7281,18 @@ begin
       for ExchangeIndex := 0 to FSimulation.Exchanges.Count - 1 do
       begin
         Exchange := FSimulation.Exchanges[ExchangeIndex];
-        if not AnsiSameText(Exchange.ExchangeType, 'GWF6-GWT6') then
+        if AnsiSameText(Exchange.ExchangeType, 'GWF6-GWT6') then
+        begin
+          FlowModelName := Exchange.ExchangeModelNameA;
+          TransportModelName := Exchange.ExchangeModelNameB;
+          FFLowTransportLinks.Add(UpperCase(TransportModelName), FlowModelName);
+        end
+        else
         begin
           ErrorMessages.Add('The following error was encountered when reading '
             + NameFiles[FileIndex]);
           ErrorMessages.Add('ModelMuse does not currently support MODFLOW 6 exchanges');
-          break;
+//          break;
         end;
       end;
 
@@ -7679,6 +7913,8 @@ begin
   NpfPackage.SaveSaturation := Options.SAVE_SATURATION;
   NpfPackage.UseHorizontalAnisotropy := Options.K22OVERK;
   NpfPackage.UseVerticalAnisotropy := Options.K33OVERK;
+
+  Model.DataArrayManager.CreateInitialDataSets;
 
   GridData := Npf.GridData;
   Assign3DIntegerDataSet(KCellType, GridData.ICELLTYPE);
@@ -9075,6 +9311,10 @@ begin
           break;
         end;
       end;
+      if not Uniform then
+      begin
+        break;
+      end;
     end;
     DataArrayName := Format('Imported_%s_%d', [DsName, LayerIndex]);
     Formula := Formula + ',' + DataArrayName;
@@ -9151,6 +9391,10 @@ begin
           break;
         end;
       end;
+      if not Uniform then
+      begin
+        break;
+      end;
     end;
     DataArrayName := Format('Imported_%s_%d', [DsName, LayerIndex]);
     Formula := Formula + ',' + DataArrayName;
@@ -9219,6 +9463,10 @@ begin
           break;
         end;
       end;
+      if not Uniform then
+      begin
+        break;
+      end;
     end;
     DataArrayName := Format('Imported_%s_%d', [DsName, LayerIndex]);
     Formula := Formula + ',' + DataArrayName;
@@ -9259,8 +9507,8 @@ end;
 
 procedure TModflow6Importer.AssignTOP(TOP: TDArray2D);
 var
-  Model: TPhastModel; 
-  ColIndex: Integer; 
+  Model: TPhastModel;
+  ColIndex: Integer;
   RowIndex: Integer;
   Uniform: Boolean;
   FirstValue: Double;
@@ -9280,6 +9528,10 @@ begin
       begin
         break;
       end;
+    end;
+    if not Uniform then
+    begin
+      break;
     end;
   end;
   DataArrayName := Model.LayerStructure[0].DataArrayName;
@@ -9342,12 +9594,12 @@ end;
 
 procedure TModflow6Importer.AssignBOTM(BOTM: TDArray3D);
 var
-  Model: TPhastModel; 
+  Model: TPhastModel;
   LayerIndex: Integer;
-  Uniform: Boolean; 
-  FirstValue: Double; 
-  DataArrayName: string; 
-  DataArray: TDataArray; 
+  Uniform: Boolean;
+  FirstValue: Double;
+  DataArrayName: string;
+  DataArray: TDataArray;
   ScreenObject: TScreenObject;
   RowIndex: Integer;
   ColIndex: Integer;
@@ -9367,6 +9619,10 @@ begin
           break;
         end;
       end;
+      if not Uniform then
+      begin
+        break;
+      end;
     end;
     DataArrayName := Model.LayerStructure[LayerIndex].DataArrayName;
     DataArray := Model.DataArrayManager.GetDataSetByName(DataArrayName);
@@ -9384,13 +9640,13 @@ end;
 
 procedure TModflow6Importer.AssignIDomain(IDOMAIN: TIArray3D; NumberOfLayers: Integer);
 var
-  Uniform: Boolean; 
-  DataArrayName: string; 
-  DataArray: TDataArray; 
+  Uniform: Boolean;
+  DataArrayName: string;
+  DataArray: TDataArray;
   ScreenObject: TScreenObject;
-  Model: TPhastModel; 
-  ColIndex: Integer; 
-  RowIndex: Integer; 
+  Model: TPhastModel;
+  ColIndex: Integer;
+  RowIndex: Integer;
   LayerIndex: Integer;
   IDomainFormula: string;
   FirstIntValue: Integer;
@@ -11400,6 +11656,147 @@ begin
     for TimeIndex := 0 to ImportedValues.Count - 1 do
     begin
       TimeSeries.Add.Value := ImportedValues[TimeIndex];
+    end;
+  end;
+end;
+
+procedure TModflow6Importer.ImportTransportIC(NameFile: TTransportNameFile;
+  Package: TPackage);
+var
+  Model: TPhastModel;
+  SpeciesIndex: Integer;
+  IC: TIc;
+  DataArrayName: string;
+begin
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing IC package');
+  end;
+  IC := Package.Package as TIc;
+
+  Model := frmGoPhast.PhastModel;
+  SpeciesIndex := Model.MobileComponents.IndexOfName(NameFile.SpeciesName);
+  Assert(SpeciesIndex >= 0);
+  DataArrayName := Model.MobileComponents[SpeciesIndex].InitialConcDataArrayName;
+
+  Assign3DRealDataSet(DataArrayName, IC.GridData.STRT);
+end;
+
+procedure TModflow6Importer.ImportTransportModel(ATransportModel: TModel;
+  SpeciesIndex: Integer);
+var
+  NameFile: TTransportNameFile;
+  Packages: TTransportPackages;
+  APackage: TPackage;
+  PackageIndex: Integer;
+begin
+  NameFile := ATransportModel.FName as TTransportNameFile;
+  Packages := NameFile.NfPackages;
+  for PackageIndex := 0 to Packages.Count - 1 do
+  begin
+    APackage := Packages[PackageIndex];
+    if APackage.FileType = 'DIS6' then
+    begin
+      Continue;
+//      ImportDis(APackage);
+//      break
+    end
+    else if APackage.FileType = 'DISV6' then
+    begin
+      Continue;
+//      ImportDisV(APackage);
+//      break;
+    end
+    else if APackage.FileType = 'DISU6' then
+    begin
+      Continue;
+//      MessageDlg('ModelMuse can not import DISU models.', mtError, [mbOK], 0);
+//      result := False;
+//      Exit
+    end
+    else if APackage.FileType = 'FMI6' then
+    begin
+      Continue;
+    end
+    else if APackage.FileType = 'IC6' then
+    begin
+      ImportTransportIC(NameFile, APackage);
+    end
+    else if APackage.FileType = 'OC6' then
+    begin
+      ImportOc(APackage);
+    end
+    else if APackage.FileType = 'ADV6' then
+    begin
+      ImportAdv(NameFile, APackage);
+    end
+    else if APackage.FileType = 'DSP6' then
+    begin
+      ImportDsp(NameFile, APackage);
+    end
+    else if APackage.FileType = 'SSM6' then
+    begin
+      // import SSM6
+      Continue;
+    end
+    else if APackage.FileType = 'MST6' then
+    begin
+      // import MST6
+      Continue;
+    end
+    else if APackage.FileType = 'IST6' then
+    begin
+      // import IST6
+      Continue;
+    end
+    else if APackage.FileType = 'CNC6' then
+    begin
+      // import CNC6
+      Continue;
+    end
+    else if APackage.FileType = 'CNC6' then
+    begin
+      // import CNC6
+      Continue;
+    end
+    else if APackage.FileType = 'SRC6' then
+    begin
+      // import SRC6
+      Continue;
+    end
+    else if APackage.FileType = 'LKT6' then
+    begin
+      // import LKT6
+      Continue;
+    end
+    else if APackage.FileType = 'SFT6' then
+    begin
+      // import SFT6
+      Continue;
+    end
+    else if APackage.FileType = 'MWT6' then
+    begin
+      // import MWT6
+      Continue;
+    end
+    else if APackage.FileType = 'UZT6' then
+    begin
+      // import UZT6
+      Continue;
+    end
+    else if APackage.FileType = 'MVT6' then
+    begin
+      // import MVT6
+      Continue;
+    end
+    else if APackage.FileType = 'OBS6' then
+    begin
+      // import OBS6
+      Continue;
+    end
+    else
+    begin
+      FErrorMessages.Add('Unrecognized file type: ' + APackage.FileType);
     end;
   end;
 end;

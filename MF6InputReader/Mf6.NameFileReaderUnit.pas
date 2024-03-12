@@ -93,7 +93,12 @@ type
   end;
 
   TFlowNameFile = TNameFile<TFlowNameFileOptions, TFlowPackages>;
-  TTransportNameFile = TNameFile<TTransportNameFileOptions, TTransportPackages>;
+  TTransportNameFile = class(TNameFile<TTransportNameFileOptions, TTransportPackages>)
+  private
+    FSpeciesName: string;
+  public
+    property SpeciesName: string read FSpeciesName write FSpeciesName;
+  end;
 
 implementation
 

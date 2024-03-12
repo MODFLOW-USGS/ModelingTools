@@ -80,7 +80,7 @@ inherited frmLayers: TfrmLayers
       object comboAquiferType: TJvImageComboBox
         Left = 3
         Top = 133
-        Width = 403
+        Width = 399
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -112,12 +112,12 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Convertible'
           end>
-        ExplicitWidth = 399
+        ExplicitWidth = 395
       end
       object comboInterblockMethod: TJvImageComboBox
         Left = 3
         Top = 237
-        Width = 403
+        Width = 399
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -145,12 +145,12 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Arithmetic and logarithmic (2)'
           end>
-        ExplicitWidth = 399
+        ExplicitWidth = 395
       end
       object comboVertKMethod: TJvImageComboBox
         Left = 3
         Top = 319
-        Width = 403
+        Width = 399
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -173,23 +173,23 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Ratio of horizontal to vertical hydraulic conductivity (1)'
           end>
-        ExplicitWidth = 399
+        ExplicitWidth = 395
       end
       object edName: TRbwEdit
         Left = 3
         Top = 26
-        Width = 403
+        Width = 399
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         OnChange = edNameChange
         OnExit = edNameExit
-        ExplicitWidth = 399
+        ExplicitWidth = 395
       end
       object cbComputeSaturatedThickness: TJvCheckBox
         Left = 3
         Top = 167
-        Width = 403
+        Width = 399
         Height = 40
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Compute saturated thickness using starting head (LAYTYP)'
@@ -204,7 +204,7 @@ inherited frmLayers: TfrmLayers
         HotTrackFont.Name = 'Arial'
         HotTrackFont.Pitch = fpVariable
         HotTrackFont.Style = []
-        ExplicitWidth = 399
+        ExplicitWidth = 395
       end
       object rdeAnisotropy: TRbwDataEntry
         Left = 3
@@ -247,20 +247,20 @@ inherited frmLayers: TfrmLayers
           ExplicitHeight = 18
         end
         inherited pnlDiscritization: TPanel
-          Width = 169
+          Width = 165
           Height = 405
-          ExplicitWidth = 169
+          ExplicitWidth = 165
           ExplicitHeight = 405
           inherited spl1: TSplitter
-            Left = 81
+            Left = 77
             Height = 364
             ExplicitLeft = 89
             ExplicitHeight = 363
           end
           inherited rdgSubLayerBoundaries: TRbwDataGrid4
-            Width = 81
+            Width = 77
             Height = 364
-            ExplicitWidth = 81
+            ExplicitWidth = 77
             ExplicitHeight = 364
             ColWidths = (
               64)
@@ -269,19 +269,19 @@ inherited frmLayers: TfrmLayers
               24)
           end
           inherited pnl1: TPanel
-            Width = 169
-            ExplicitWidth = 169
+            Width = 165
+            ExplicitWidth = 165
             inherited lbl3: TLabel
-              Width = 169
+              Width = 165
               Height = 41
-              ExplicitWidth = 179
+              ExplicitWidth = 142
               ExplicitHeight = 36
             end
           end
           inherited pnlPaintboxParent: TPanel
-            Left = 84
+            Left = 80
             Height = 364
-            ExplicitLeft = 84
+            ExplicitLeft = 80
             ExplicitHeight = 364
             inherited pbSubLayers: TPaintBox
               Height = 332
@@ -867,7 +867,7 @@ inherited frmLayers: TfrmLayers
       579
       41)
     object btnHelp: TBitBtn
-      Left = 218
+      Left = 214
       Top = 4
       Width = 108
       Height = 33
@@ -876,11 +876,11 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 214
+      ExplicitLeft = 210
     end
     object btnOK: TBitBtn
-      Left = 332
-      Top = 2
+      Left = 328
+      Top = 4
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -890,7 +890,7 @@ inherited frmLayers: TfrmLayers
       OnClick = btnOKClick
     end
     object btnCancel: TBitBtn
-      Left = 446
+      Left = 442
       Top = 4
       Width = 108
       Height = 33
@@ -898,7 +898,7 @@ inherited frmLayers: TfrmLayers
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 442
+      ExplicitLeft = 438
     end
   end
   object Panel3: TPanel

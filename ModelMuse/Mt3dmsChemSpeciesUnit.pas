@@ -70,6 +70,8 @@ type
     FTransverseDispVertDataArrayDisplayName: string;
     FStoredRefViscosity: TRealStorage;
     FStoredViscositySlope: TRealStorage;
+    FTransverseVertDispDataArrayName: string;
+    FTransverseVertDispDisplayName: string;
     function GetName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -123,6 +125,7 @@ type
     function GetViscositySlope: double;
     procedure SetStoredViscositySlope(const Value: TRealStorage);
     procedure SetViscositySlope(const Value: double);
+    procedure SetTransverseVertDispArrayNameDataArrayName(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -203,26 +206,30 @@ type
     //MST package, SP2
     property MobileSorptionCapacityDataArrayName: string read FMobileSorptionCapacityDataArrayName
       write SetMobileSorptionCapacityDataArrayName;
-    // DSP package, diffc
+    // GWT DSP package, diffc
     property DiffusionCoefficientDataArrayName: string
       read FDiffusionCoefficientDataArrayName
       write SetDiffusionCoefficientDataArrayName;
-    // DSP package, alh
+    // GWT DSP package, alh
     property LongDispHDataArrayName: string
       read FLongDispHDataArrayName
       write SetLongDispHArrayNameDataArrayName;
-    // DSP package, alv
+    // GWT DSP package, alv
     property LongDispVertDataArrayName: string
       read FLongDispVertDataArrayName
       write SetLongDispVertArrayNameDataArrayName;
-    // DSP package, ath1
+    // GWT DSP package, ath1
     property TransverseDispHDataArrayName: string
       read FTransverseDispHDataArrayName
       write SetTransverseDispHArrayNameDataArrayName;
-    // DSP package, ath2
+    // GWT DSP package, ath2
     property TransverseDispVertDataArrayName: string
       read FTransverseDispVertDataArrayName
       write SetTransverseDispVertArrayNameDataArrayName;
+    // GWT DSP package, atv
+    property TransverseVertDispDataArrayName: string
+      read FTransverseVertDispDataArrayName
+      write SetTransverseVertDispArrayNameDataArrayName;
 
     //IST package, CIM
     property ImmobileInitialConcentrations: TStringList
@@ -460,20 +467,23 @@ begin
     MobileSorptionCapacityDataArrayName := '';
     MobileSorptionCapacityDataArrayName := SourceChem.MobileSorptionCapacityDataArrayName;
 
-    DiffusionCoefficientDataArrayName := '';
+    FDiffusionCoefficientDataArrayName := '';
     DiffusionCoefficientDataArrayName := SourceChem.DiffusionCoefficientDataArrayName;
 
-    LongDispHDataArrayName := '';
+    FLongDispHDataArrayName := '';
     LongDispHDataArrayName := SourceChem.LongDispHDataArrayName;
 
-    LongDispVertDataArrayName := '';
+    FLongDispVertDataArrayName := '';
     LongDispVertDataArrayName := SourceChem.LongDispVertDataArrayName;
 
-    TransverseDispHDataArrayName := '';
+    FTransverseDispHDataArrayName := '';
     TransverseDispHDataArrayName := SourceChem.TransverseDispHDataArrayName;
 
-    TransverseDispVertDataArrayName := '';
+    FTransverseDispVertDataArrayName := '';
     TransverseDispVertDataArrayName := SourceChem.TransverseDispVertDataArrayName;
+
+    FTransverseVertDispDataArrayName := '';
+    TransverseVertDispDataArrayName := SourceChem.TransverseVertDispDataArrayName;
 
 //    ImmobileInitialConcentrations.Clear;
     ImmobileInitialConcentrations := SourceChem.ImmobileInitialConcentrations;
@@ -532,6 +542,7 @@ begin
     LongDispVertDataArrayName := LongDispVertDataArrayName;
     TransverseDispHDataArrayName := TransverseDispHDataArrayName;
     TransverseDispVertDataArrayName := TransverseDispVertDataArrayName;
+    TransverseVertDispDataArrayName := TransverseVertDispDataArrayName;
 
     TempNames := TStringList.Create;
     try
@@ -956,6 +967,7 @@ begin
       and (LongDispVertDataArrayName = ChemItem.LongDispVertDataArrayName)
       and (TransverseDispHDataArrayName = ChemItem.TransverseDispHDataArrayName)
       and (TransverseDispVertDataArrayName = ChemItem.TransverseDispVertDataArrayName)
+      and (TransverseVertDispDataArrayName = ChemItem.TransverseVertDispDataArrayName)
 
       and SameStrings(ImmobileInitialConcentrations,  ChemItem.ImmobileInitialConcentrations)
       and SameStrings(ImmobilePorosities,  ChemItem.ImmobilePorosities)
@@ -2170,6 +2182,13 @@ begin
         TransverseDispVertDataArrayName,
         OldRoot,NewRoot, []);
 
+      FTransverseVertDispDisplayName := StringReplace(
+        FTransverseVertDispDisplayName,
+        OldRoot,NewRoot, []);
+      TransverseVertDispDataArrayName := StringReplace(
+        TransverseVertDispDataArrayName,
+        OldRoot,NewRoot, []);
+
       NewImobileDataSetNames.Assign(ImmobileInitialConcentrations);
       for DomainIndex := 0 to ImmobileInitialConcentrations.Count - 1 do
       begin
@@ -2360,6 +2379,11 @@ begin
         GenerateNewRoot(StrVerticalTransverse + '_' + Value);
       TransverseDispVertDataArrayName :=
         GenerateNewRoot(KVerticalTransverse + '_' + Value);
+
+      FTransverseVertDispDisplayName :=
+        GenerateNewRoot(rsVertical_Transv_Dispersivity + '_' + Value);
+      TransverseVertDispDataArrayName :=
+        GenerateNewRoot(rsVertical_Transv_DispersivityDisplayName + '_' + Value);
 
       if Index < LocalModel.ModflowPackages.GwtPackages.Count then
       begin
@@ -2609,6 +2633,22 @@ begin
   end;
 
   SetCaseSensitiveStringProperty(FTransverseDispVertDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetTransverseVertDispArrayNameDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    UpdateDataArray(LocalModel.Mf6VTransDispUsed,
+      FTransverseVertDispDataArrayName, NewName,
+      FTransverseVertDispDisplayName, '0.', 'MODFLOW 6 DSP package, atv',
+      LocalModel.AnyVTransDispUsed, StrGwtClassification);
+  end;
+  SetCaseSensitiveStringProperty(FTransverseVertDispDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetUseInitialConcentrationFile(const Value: boolean);

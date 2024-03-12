@@ -4538,6 +4538,8 @@ that affects the model output should also have a comment. }
     function GwtImmobileBulkDensityUsed(Sender: TObject): boolean;
     function GwtImmobileDistCoefUsed(Sender: TObject): boolean;
     property Mt3d_LktIsSelected;
+    function Mf6VTransDispUsed(Sender: TObject): boolean;
+    function AnyVTransDispUsed: Boolean;
   published
     property Mf6TimesSeries;
 
@@ -10197,6 +10199,7 @@ const
 //                the grid.
 //               Bug fix: Canceling the Time Series dialog box no longer causes
 //                an access violation.
+//               bug fix: Fixed bug in exporting Dispersion package in MODFLOW 6.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10825,6 +10828,33 @@ begin
       begin
         result := ChildModel.ModflowPackages.UzfMf6Package.IsSelected
           and ChildModel.GWTUsed;
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.AnyVTransDispUsed: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := (ModelSelection = msModflow2015)
+    and ModflowPackages.GwtDispersionPackage.IsSelected and GWTUsed
+    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow;
+  if not Result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.ModflowPackages.GwtDispersionPackage.IsSelected
+          and ChildModel.GWTUsed
+          and ChildModel.ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow;
         if result then
         begin
           Exit;
@@ -19666,6 +19696,37 @@ begin
   end;
 end;
 
+function TPhastModel.Mf6VTransDispUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.TransverseVertDispDataArrayName = DataArray.Name;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := (ModelSelection = msModflow2015)
+    and GwtUsed
+    and ModflowPackages.GwtDispersionPackage.IsSelected
+    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
 function TPhastModel.Mnw2IsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -25083,7 +25144,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
-  result := inherited DoVerticalTransverseDispersionUsedPerSpecies(Sender);
+  result := inherited DoHorizontalTransverseDispersionUsedPerSpecies(Sender);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -25092,7 +25153,7 @@ begin
       if ChildModel <> nil then
       begin
         result := result or
-          ChildModel.DoVerticalTransverseDispersionUsedPerSpecies(Sender);
+          ChildModel.DoHorizontalTransverseDispersionUsedPerSpecies(Sender);
       end;
     end;
   end;

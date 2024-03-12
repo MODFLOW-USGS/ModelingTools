@@ -9,10 +9,12 @@ uses
 type
   TAdvOptions = class(TCustomMf6Persistent)
   private
-    SCHEME: string;
+    FSCHEME: string;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property SCHEME: string read FSCHEME;
   end;
 
   TAdv = class(TPackageReader)
@@ -22,6 +24,7 @@ type
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    property Options: TAdvOptions read FOptions;
   end;
 
 
@@ -32,7 +35,7 @@ implementation
 procedure TAdvOptions.Initialize;
 begin
   inherited;
-  SCHEME := '';
+  FSCHEME := '';
 end;
 
 procedure TAdvOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -62,7 +65,7 @@ begin
     end
     else if FSplitter[0] = 'SCHEME' then
     begin
-      SCHEME := FSplitter[1];
+      FSCHEME := FSplitter[1];
     end
     else
     begin

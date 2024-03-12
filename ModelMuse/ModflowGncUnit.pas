@@ -71,6 +71,7 @@ type
     procedure SetItems(Index: Integer; const Value: TGhostNode);
     function GetGhostNodesByCell(CellID: Integer): TGhostNodeArray;
   public
+    procedure Clear;
     constructor Create;
     function Add: TGhostNode;
     property Items[Index: Integer]: TGhostNode read GetItems write SetItems; default;
@@ -235,6 +236,12 @@ end;
 function TGhostNodes.Add: TGhostNode;
 begin
   result := inherited Add as TGhostNode;
+end;
+
+procedure TGhostNodes.Clear;
+begin
+  inherited;
+  SetLength(FGhostNodeByCell, 0);
 end;
 
 constructor TGhostNodes.Create;
