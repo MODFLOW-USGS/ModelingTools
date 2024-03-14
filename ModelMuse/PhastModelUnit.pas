@@ -3332,23 +3332,10 @@ that affects the model output should also have a comment. }
       read FPilotPointData write SetPilotPointData;
     property PestObsCollection: TPestObsCollection read FPestObsCollection
       write SetPestObsCollection;
-    property InputObservationDataSets: TStrings read GetInputObservationDataSets
-    {$IFNDEF InputObservations}
-      Stored False
-    {$ENDIF}
-      ;
-    property InputObsInstructionFileNames: TStrings
-      read GetnputObsInstructionFileNames
-    {$IFNDEF InputObservations}
-      Stored False
-    {$ENDIF}
-      ;
+    property InputObservationDataSets: TStrings read GetInputObservationDataSets;
+    property InputObsInstructionFileNames: TStrings;
     property InputObsInstructionFiles: TStrings
-      read GetInputObsInstructionFiles
-    {$IFNDEF InputObservations}
-      Stored False
-    {$ENDIF}
-      ;
+      read GetInputObsInstructionFiles;
 
     { Any new members added to TCustomModel should be cleared in InternalClear.}
 
@@ -10193,13 +10180,16 @@ const
 //                above layer 1. A lake that has horizontal connections is
 //                treated as being in all the layers intersected by the object.
 
-//               Enhancement: Added support for discharge scaling in the
+//    '5.1.1.57' Enhancement: Added support for discharge scaling in the
 //                DRN package.
+
 //               Change: SFR in MODFLOW 6 reaches are now allowed outside of
 //                the grid.
 //               Bug fix: Canceling the Time Series dialog box no longer causes
 //                an access violation.
 //               bug fix: Fixed bug in exporting Dispersion package in MODFLOW 6.
+//               Enhancement: Added support for defining observations of input
+//                data in arrays.
 
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
@@ -10214,7 +10204,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.56';
+  IIModelVersion = '5.1.1.57';
 
 function IModelVersion: string;
 begin

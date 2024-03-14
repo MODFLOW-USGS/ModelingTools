@@ -2,11 +2,26 @@ unit ExtractValuesFromFileUnit;
 
 interface
 
+{$IFDEF FPC}
+  {$MODE DELPHI}
+{$ENDIF}
+
 uses
-  System.IOUtils, System.SysUtils, System.Generics.Collections, System.Classes;
+{$IFDEF FPC}
+  fgl,
+  SimpleTextWriter,
+{$ELSE}
+  System.IOUtils,
+  System.Generics.Collections,
+{$ENDIF}
+  SysUtils, Classes;
 
 type
-  TDoubleList = TList<Double>;
+{$IFDEF FPC}
+TDoubleList = TFPGList<Double>;
+{$ELSE}
+   TDoubleList = TList<Double>;
+{$ENDIF}
 
   TArrayFileHandler = class(TObject)
   private
@@ -26,30 +41,47 @@ implementation
 
 procedure TArrayFileHandler.ConvertValues;
 var
-  ArrayFile: TStreamReader;
   Splitter: TStringList;
   ALine: string;
   ValueIndex: Integer;
-  InputFile: TStreamReader;
   ValueName: string;
   SumProducts: Extended;
-  OutputFile: TStreamWriter;
   index: Integer;
   SumWeights: Extended;
   Weight: Extended;
+  Value: double;
+{$IFDEF FPC}
+  InputFile: TSimpleStreamReader;
+  OutputFile: TSimpleTextWriter;
+  ArrayFile: TSimpleStreamReader;
+{$ELSE}
+  InputFile: TStreamReader;
+  OutputFile: TStreamWriter;
+  ArrayFile: TStreamReader;
+{$ENDIF}
 begin
   FInputFileName := ExpandFileName(ParamStr(1));
-  Assert(TFile.Exists(FInputFileName));
+  Assert(FileExists(FInputFileName));
   FOutputFileName := ChangeFileExt(FInputFileName, '.arrayvalues');
   FormatSettings.DecimalSeparator := '.';
   Splitter := TStringList.Create;
   try
+    Splitter.StrictDelimiter := False;
+    {$IFDEF FPC}
+    OutputFile := TSimpleTextWriter.Create(FOutputFileName);
+    InputFile := TSimpleStreamReader.Create(FInputFileName);
+    {$ELSE}
     OutputFile := TFile.CreateText(FOutputFileName);
     InputFile := TFile.OpenText(FInputFileName);
+    {$ENDIF}
     try
       FArrayFileName := ExpandFileName(InputFile.ReadLine);
-      Assert(TFile.Exists(FArrayFileName));
+      Assert(FileExists(FArrayFileName));
+      {$IFDEF FPC}
+      ArrayFile := TSimpleStreamReader.Create(FArrayFileName);
+      {$ELSE}
       ArrayFile := TFile.OpenText(FArrayFileName);
+      {$ENDIF}
       try
         while not ArrayFile.EndOfStream do
         begin
@@ -66,7 +98,6 @@ begin
       end;
 
       index := -1;
-      Weight := -1;
       while not InputFile.EndOfStream do
       begin
         ALine := InputFile.ReadLine;
@@ -96,12 +127,13 @@ begin
           end;
           if SumWeights <> 0 then
           begin
-            OutputFile.Write(SumProducts/SumWeights);
+            Value := SumProducts/SumWeights;
           end
           else
           begin
-            OutputFile.Write(0.0);
+            Value := 0;
           end;
+          OutputFile.Write(Value);
           OutputFile.WriteLine(' ' + ValueName);
         end;
       end;

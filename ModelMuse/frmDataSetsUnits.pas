@@ -500,11 +500,6 @@ end;
 procedure TfrmDataSets.FormCreate(Sender: TObject);
 begin
   inherited;
-{$IFNDEF InputObservations}
-  cbObservations.Visible := False;
-  lblObsDistance.Visible := False;
-  rdeObservationSearchDistance.Visible := False;
-{$ENDIF}
   if frmGoPhast.ModelSelection = msUndefined then
   begin
     Beep;

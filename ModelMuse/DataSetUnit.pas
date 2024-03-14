@@ -997,17 +997,9 @@ type
     property TemplateNeeded: Boolean read FTemplateNeeded
       write SetTemplateNeeded stored True;
     property UseValuesForObservations: Boolean read GetUseValuesForObservations
-      write SetUseValuesForObservations
-    {$IFNDEF InputObservations}
-      stored False
-    {$ENDIF}
-      ;
+      write SetUseValuesForObservations;
     property StoredObservationDistance: TRealStorage read FStoredObservationDistance
-      write SetStoredObservationDistance
-    {$IFNDEF InputObservations}
-      stored False
-    {$ENDIF}
-      ;
+      write SetStoredObservationDistance;
   end;
 
   TDataArrayList = TList<TDataArray>;

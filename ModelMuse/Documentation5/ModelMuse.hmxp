@@ -148,12 +148,13 @@
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
       <config-value name="imageshortcuts"></config-value>
       <config-group name="custombuilds">
+        <config-value name="CLASS2022">CLASS2022</config-value>
         <config-value name="DEMO">Demo Build</config-value>
         <config-value name="TIMESERIES">TIMESERIES</config-value>
         <config-value name="USER1">Class Exercise</config-value>
         <config-value name="USER2">User defined 2</config-value>
         <config-value name="USER3">User defined 3</config-value>
-        <config-value name="CLASS2022">CLASS2022</config-value>
+        <config-value name="ARRAYINPUTOBS">ARRAYINPUTOBS</config-value>
       </config-group>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
       <config-value name="make0include">CHM,ALLMODELS</config-value>
