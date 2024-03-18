@@ -2,26 +2,24 @@ inherited frmManageParameters: TfrmManageParameters
   HelpType = htKeyword
   HelpKeyword = 'Manage_Parameters_Dialog_Box'
   Caption = 'Manage Parameters'
-  ClientHeight = 558
-  ClientWidth = 772
+  ClientHeight = 557
+  ClientWidth = 768
   ExplicitWidth = 784
   ExplicitHeight = 596
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 514
-    Width = 772
+    Top = 513
+    Width = 768
     Height = 44
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 513
-    ExplicitWidth = 768
     DesignSize = (
-      772
+      768
       44)
     object btnOK: TBitBtn
-      Left = 578
+      Left = 570
       Top = 6
       Width = 82
       Height = 33
@@ -34,7 +32,7 @@ inherited frmManageParameters: TfrmManageParameters
       ExplicitLeft = 574
     end
     object btnCancel: TBitBtn
-      Left = 666
+      Left = 658
       Top = 6
       Width = 82
       Height = 33
@@ -46,7 +44,7 @@ inherited frmManageParameters: TfrmManageParameters
       ExplicitLeft = 662
     end
     object btnHelp: TBitBtn
-      Left = 490
+      Left = 482
       Top = 6
       Width = 82
       Height = 33
@@ -70,13 +68,11 @@ inherited frmManageParameters: TfrmManageParameters
   object pcParameters: TPageControl
     Left = 0
     Top = 0
-    Width = 772
-    Height = 514
+    Width = 768
+    Height = 513
     ActivePage = tabParameterGroups
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 768
-    ExplicitHeight = 513
     object tabParameters: TTabSheet
       Caption = 'Parameters'
       object pnlParameters: TPanel
@@ -89,7 +85,7 @@ inherited frmManageParameters: TfrmManageParameters
         TabOrder = 0
         ExplicitWidth = 764
         DesignSize = (
-          764
+          760
           41)
         object lblNumParameters: TLabel
           Left = 63
@@ -99,7 +95,7 @@ inherited frmManageParameters: TfrmManageParameters
           Caption = 'Number of parameters'
         end
         object btnDelete: TBitBtn
-          Left = 662
+          Left = 654
           Top = 6
           Width = 82
           Height = 33
@@ -151,8 +147,8 @@ inherited frmManageParameters: TfrmManageParameters
       object rdgParameters: TRbwDataGrid4
         Left = 0
         Top = 0
-        Width = 764
-        Height = 440
+        Width = 760
+        Height = 439
         Align = alClient
         ColCount = 16
         FixedCols = 0
@@ -567,6 +563,8 @@ inherited frmManageParameters: TfrmManageParameters
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 764
+        ExplicitHeight = 440
       end
     end
     object tabParameterGroups: TTabSheet
@@ -575,7 +573,7 @@ inherited frmManageParameters: TfrmManageParameters
       inline frameParameterGroups: TframeGrid
         Left = 0
         Top = 0
-        Width = 764
+        Width = 768
         Height = 481
         Align = alClient
         TabOrder = 0
@@ -583,7 +581,7 @@ inherited frmManageParameters: TfrmManageParameters
         ExplicitHeight = 480
         inherited Panel: TPanel
           Top = 440
-          Width = 764
+          Width = 768
           ExplicitTop = 439
           ExplicitWidth = 760
           inherited lbNumber: TLabel
@@ -614,7 +612,7 @@ inherited frmManageParameters: TfrmManageParameters
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 764
+          Width = 768
           Height = 440
           ColCount = 12
           OnSelectCell = frameParameterGroupsGridSelectCell
@@ -941,17 +939,17 @@ inherited frmManageParameters: TfrmManageParameters
       inline frameParGroupAssignments: TframeParentChild
         Left = 0
         Top = 0
-        Width = 760
-        Height = 480
+        Width = 768
+        Height = 481
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 760
-        ExplicitHeight = 480
+        ExplicitWidth = 616
+        ExplicitHeight = 364
         inherited tvTree: TTreeView
-          Width = 760
-          Height = 480
-          ExplicitWidth = 764
-          ExplicitHeight = 481
+          Width = 768
+          Height = 481
+          ExplicitWidth = 760
+          ExplicitHeight = 480
         end
       end
     end

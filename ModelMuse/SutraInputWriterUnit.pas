@@ -958,10 +958,10 @@ var
           ParameterZoneWriter.Free;
         end;
       end;
-      if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
-      begin
-        Model.AddInputObsDataSet(ADataArray);
-      end;
+//      if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
+//      begin
+//        Model.AddInputObsDataSet(ADataArray);
+//      end;
     end;
   end;
   procedure Write14BInternal(Layer: Integer);
@@ -1548,10 +1548,10 @@ var
       begin
         PestParametersUsed := True;
       end;
-      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-      begin
-        Model.AddInputObsDataSet(DataArray);
-      end;
+//      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//      begin
+//        Model.AddInputObsDataSet(DataArray);
+//      end;
     end;
   end;
   procedure InternalWrite15B(Layer: Integer);

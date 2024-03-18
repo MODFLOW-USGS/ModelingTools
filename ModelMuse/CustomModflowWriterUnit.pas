@@ -1626,7 +1626,7 @@ var
   ChemExt: string;
   ArrayExtractor_Location: string;
 begin
-  Model.ExportInputObsDataSets(FileName);
+//  Model.ExportInputObsDataSets(FileName);
 
 
   ADirectory:= GetCurrentDir;
@@ -1709,10 +1709,10 @@ begin
           INFLE := ExtractFileName(ChangeFileExt(FileName,
             '.' + ADataArray.Name + '.script' ));
           ParamEstBatchFile.Add(PLPROC_Location + INFLE);
-          if ADataArray.UseValuesForObservations then
-          begin
-            Model.AddInputObsDataSet(ADataArray);
-          end;
+//          if ADataArray.UseValuesForObservations then
+//          begin
+//            Model.AddInputObsDataSet(ADataArray);
+//          end;
         end;
       end;
       ParamEstBatchFile.AddStrings(Model.PestTemplateLines);

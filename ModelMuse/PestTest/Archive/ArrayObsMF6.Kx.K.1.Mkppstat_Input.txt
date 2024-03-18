@@ -1,0 +1,4 @@
+ArrayObsMF6.Kx.K.1.pp
+4
+1
+ArrayObsMF6.Kx.K.1.Variogram.txt

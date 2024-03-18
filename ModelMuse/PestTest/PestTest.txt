@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1965
+2060
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1965,3 +1965,98 @@ TvsTest.gpt
 	Archive\TvsTest.tvs.SSValues.ts
 	Archive\TvsTest.tvs.tpl
 	Archive\usgs.TvsTest.reference
+SutraArrayObsTest1.gpt
+	Archive\SutraArrayObsTest1.Angle_Horizontal
+	Archive\SutraArrayObsTest1.axml
+	Archive\SutraArrayObsTest1.c_ele
+	Archive\SutraArrayObsTest1.c_nod
+	Archive\SutraArrayObsTest1.c_nod3D
+	Archive\SutraArrayObsTest1.FluxBcs
+	Archive\SutraArrayObsTest1.FluxBcs.tpl
+	Archive\SutraArrayObsTest1.ics
+	Archive\SutraArrayObsTest1.InitialConcentration
+	Archive\SutraArrayObsTest1.InitialConcentration.script
+	Archive\SutraArrayObsTest1.InitialConcentration.script.tpl
+	Archive\SutraArrayObsTest1.InitialConcentration_1.ExtractIns
+	Archive\SutraArrayObsTest1.InitialConcentration_1.ins
+	Archive\SutraArrayObsTest1.inp
+	Archive\SutraArrayObsTest1.inp.tpl
+	Archive\SutraArrayObsTest1.jtf
+	Archive\SutraArrayObsTest1.Longitudinal_Dispersivity_Max_Dir
+	Archive\SutraArrayObsTest1.Longitudinal_Dispersivity_Min_Dir
+	Archive\SutraArrayObsTest1.Maximum_Permeability
+	Archive\SutraArrayObsTest1.Minimum_Permeability
+	Archive\SutraArrayObsTest1.Nodal_Porosity
+	Archive\SutraArrayObsTest1.Nodal_Thickness
+	Archive\SutraArrayObsTest1.pst
+	Archive\SutraArrayObsTest1.ptf
+	Archive\SutraArrayObsTest1.pval
+	Archive\SutraArrayObsTest1.Region_Elements
+	Archive\SutraArrayObsTest1.RunModel.Bat
+	Archive\SutraArrayObsTest1.RunSutra.bat
+	Archive\SutraArrayObsTest1.soe_ev
+	Archive\SutraArrayObsTest1.soe_i
+	Archive\SutraArrayObsTest1.SPecPBcs
+	Archive\SutraArrayObsTest1.SPecPBcs.tpl
+	Archive\SutraArrayObsTest1.SPecUBcs
+	Archive\SutraArrayObsTest1.SUTRA.FIL
+	Archive\SutraArrayObsTest1.Transverse_Dispersivity_Max_Dir
+	Archive\SutraArrayObsTest1.Transverse_Dispersivity_Min_Dir
+	Archive\SutraArrayObsTest1.UFluxBcs
+	Archive\SutraArrayObsTest1.UVEC
+	Archive\usgs.SutraArrayObsTest1.reference
+ArrayObsMF6.gpt
+	Archive\ArrayObsMF6.axml
+	Archive\ArrayObsMF6.chd
+	Archive\ArrayObsMF6.chd.tpl
+	Archive\ArrayObsMF6.dis
+	Archive\ArrayObsMF6.gsf
+	Archive\ArrayObsMF6.ic
+	Archive\ArrayObsMF6.ims
+	Archive\ArrayObsMF6.jtf
+	Archive\ArrayObsMF6.Kx.K.1.Cov.txt
+	Archive\ArrayObsMF6.Kx.K.1.CreateCov.Bat
+	Archive\ArrayObsMF6.Kx.K.1.Mkppstat_Input.txt
+	Archive\ArrayObsMF6.Kx.K.1.pp
+	Archive\ArrayObsMF6.Kx.K.1.pp.tpl
+	Archive\ArrayObsMF6.Kx.K.1.Ppcov_SVA_Input.txt
+	Archive\ArrayObsMF6.Kx.K.1.Variogram.txt
+	Archive\ArrayObsMF6.Kx.K.2.Cov.txt
+	Archive\ArrayObsMF6.Kx.K.2.CreateCov.Bat
+	Archive\ArrayObsMF6.Kx.K.2.Mkppstat_Input.txt
+	Archive\ArrayObsMF6.Kx.K.2.pp
+	Archive\ArrayObsMF6.Kx.K.2.pp.tpl
+	Archive\ArrayObsMF6.Kx.K.2.Ppcov_SVA_Input.txt
+	Archive\ArrayObsMF6.Kx.K.2.Variogram.txt
+	Archive\ArrayObsMF6.Kx.K.3.Cov.txt
+	Archive\ArrayObsMF6.Kx.K.3.CreateCov.Bat
+	Archive\ArrayObsMF6.Kx.K.3.Mkppstat_Input.txt
+	Archive\ArrayObsMF6.Kx.K.3.pp
+	Archive\ArrayObsMF6.Kx.K.3.pp.tpl
+	Archive\ArrayObsMF6.Kx.K.3.Ppcov_SVA_Input.txt
+	Archive\ArrayObsMF6.Kx.K.3.Variogram.txt
+	Archive\ArrayObsMF6.Kx.krig_factors_script
+	Archive\ArrayObsMF6.Kx.PstValues
+	Archive\ArrayObsMF6.Kx.script
+	Archive\ArrayObsMF6.Kx_1.ExtractIns
+	Archive\ArrayObsMF6.Kx_1.ins
+	Archive\ArrayObsMF6.Kx_2.ExtractIns
+	Archive\ArrayObsMF6.Kx_2.ins
+	Archive\ArrayObsMF6.Kx_3.ExtractIns
+	Archive\ArrayObsMF6.Kx_3.ins
+	Archive\ArrayObsMF6.Mf6ExtractValues
+	Archive\ArrayObsMF6.Mf6WriteIns
+	Archive\ArrayObsMF6.mfsim.nam
+	Archive\ArrayObsMF6.nam
+	Archive\ArrayObsMF6.nam.archive
+	Archive\ArrayObsMF6.npf
+	Archive\ArrayObsMF6.ob_gw
+	Archive\ArrayObsMF6.oc
+	Archive\ArrayObsMF6.pestobs
+	Archive\ArrayObsMF6.pst
+	Archive\ArrayObsMF6.ptf
+	Archive\ArrayObsMF6.pval
+	Archive\ArrayObsMF6.RunModel.Bat
+	Archive\ArrayObsMF6.RunModflow.Bat
+	Archive\ArrayObsMF6.tdis
+	Archive\usgs.ArrayObsMF6.reference

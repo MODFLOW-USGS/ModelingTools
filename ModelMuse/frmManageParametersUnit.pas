@@ -514,7 +514,7 @@ begin
       case dlgOpenPval.FilterIndex of
         1:
           begin
-            if SameText(ExtractFileExt(dlgOpenPval.FileName), '.pval') then
+            if SameText(ExtractFileExt(dlgOpenPval.FileName), StrPvalExt) then
             begin
               Success := ReadPvalFile(dlgOpenPval.FileName, PvalList);
             end

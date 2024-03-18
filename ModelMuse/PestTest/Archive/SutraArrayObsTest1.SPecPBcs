@@ -1,0 +1,15 @@
+# Specified Pressure Boundary Condition File file created on 3/18/2024 by ModelMuse version 5.1.1.57.
+# Data set 1
+'STEP_0' # BCSSCH
+# Data set 2; Time = 1
+'Specified Pressure'     0     0     2     0 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1
+# Data set 5; Time = 1
+     3  1.000000000000E+000   1.100000000000E+000  # Data Set 5: IPBC1, PBC1, UBC1
+   -77 # Data Set 5: IPBC1
+     0
+# Data set 2; Time = 3
+'Specified Pressure'     0     0     2     0 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1
+# Data set 5; Time = 3
+     3  0.000000000000E+000   3.000000000000E-001  # Data Set 5: IPBC1, PBC1, UBC1
+    77  1.000000000000E+000   1.000000000000E+000  # Data Set 5: IPBC1, PBC1, UBC1
+     0

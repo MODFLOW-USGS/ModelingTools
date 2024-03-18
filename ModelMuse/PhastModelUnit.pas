@@ -2169,7 +2169,7 @@ that affects the model output should also have a comment. }
     function GetViscosityPkgUsedUsed: Boolean;
     function GetViscosityPkgViscUsed: Boolean;
     function GetInputObservationDataSets: TStrings;
-    function GetnputObsInstructionFileNames: TStrings;
+    function GetInputObsInstructionFileNames: TStrings;
     function GetInputObsInstructionFiles: TStrings;
   public
     function ChdIsSelected: Boolean; virtual;
@@ -3333,7 +3333,7 @@ that affects the model output should also have a comment. }
     property PestObsCollection: TPestObsCollection read FPestObsCollection
       write SetPestObsCollection;
     property InputObservationDataSets: TStrings read GetInputObservationDataSets;
-    property InputObsInstructionFileNames: TStrings;
+    property InputObsInstructionFileNames: TStrings read GetInputObsInstructionFileNames;
     property InputObsInstructionFiles: TStrings
       read GetInputObsInstructionFiles;
 
@@ -34487,6 +34487,7 @@ begin
   VelocityVectors.Clear;
   FPilotPointData.Clear;
   FPestObsCollection.Clear;
+  ClearInputObservationDataSets;
 end;
 
 procedure TCustomModel.GenerateIrregularMesh(var ErrorMessage: string);
@@ -40902,7 +40903,7 @@ begin
   result := DoNpfUsed
 end;
 
-function TCustomModel.GetnputObsInstructionFileNames: TStrings;
+function TCustomModel.GetInputObsInstructionFileNames: TStrings;
 begin
   result := FInputObsInstructionFileNames;
 end;
@@ -42930,11 +42931,12 @@ begin
         ExportZoneBudgetModel(ChangeFileExt(FileName, StrZbzones), False, True);
       end;
 
+      ExportInputObsDataSets(FileName);
+
       if self is TPhastModel then
       begin
         TPhastModel(self).ExportPestInput(FileName, pecNone);
       end;
-
 
       ListFileNames := TStringList.Create;
       try
@@ -43108,6 +43110,8 @@ var
   IndObs: TIndividualObs;
   InputObservationLayers: TList<TInputObservation>;
   ObservationCount: Integer;
+  DSIndex: Integer;
+  ADataArray: TDataArray;
   procedure WriteInputObs;
   var
     ArrayName: string;
@@ -43172,6 +43176,15 @@ var
     end;      
   end;
 begin
+  for DSIndex := 0 to DataArrayManager.DataSetCount - 1 do
+  begin
+    ADataArray := DataArrayManager[DSIndex];
+    if ADataArray.PestParametersUsed and ADataArray.UseValuesForObservations then
+    begin
+      AddInputObsDataSet(ADataArray);
+    end;
+  end;
+
   DisLimits := DiscretizationLimits(vdTop);
   ObsLocations := TRbwQuadTree.Create(nil);
   InputObservationLayers := TList<TInputObservation>.Create;

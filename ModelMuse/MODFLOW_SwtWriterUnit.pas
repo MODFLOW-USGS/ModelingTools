@@ -1124,10 +1124,10 @@ begin
   begin
     FPestDataArrays.Add(DataArray);
   end;
-  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-  begin
-    Model.AddInputObsDataSet(DataArray);
-  end;
+//  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//  begin
+//    Model.AddInputObsDataSet(DataArray);
+//  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSet5;
@@ -1142,10 +1142,10 @@ begin
   begin
     FPestDataArrays.Add(DataArray);
   end;
-  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-  begin
-    Model.AddInputObsDataSet(DataArray);
-  end;
+//  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//  begin
+//    Model.AddInputObsDataSet(DataArray);
+//  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSet6;
@@ -1160,10 +1160,10 @@ begin
   begin
     FPestDataArrays.Add(DataArray);
   end;
-  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-  begin
-    Model.AddInputObsDataSet(DataArray);
-  end;
+//  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//  begin
+//    Model.AddInputObsDataSet(DataArray);
+//  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSets7to13;
@@ -1180,10 +1180,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
-    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-    begin
-      Model.AddInputObsDataSet(DataArray);
-    end;
+//    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//    begin
+//      Model.AddInputObsDataSet(DataArray);
+//    end;
 
     if FSwtPackage.CompressionSource = csSpecificStorage then
     begin
@@ -1194,10 +1194,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
-      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-      begin
-        Model.AddInputObsDataSet(DataArray);
-      end;
+//      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//      begin
+//        Model.AddInputObsDataSet(DataArray);
+//      end;
 
       DataArray := FSsv_List[Index];
       WriteArray(DataArray, 0, 'Data set 9: Ssv', StrNoValueAssigned, 'Ssv');
@@ -1206,10 +1206,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
-      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-      begin
-        Model.AddInputObsDataSet(DataArray);
-      end;
+//      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//      begin
+//        Model.AddInputObsDataSet(DataArray);
+//      end;
     end;
 
     if FSwtPackage.CompressionSource = csCompressionReComp then
@@ -1221,10 +1221,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
-      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-      begin
-        Model.AddInputObsDataSet(DataArray);
-      end;
+//      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//      begin
+//        Model.AddInputObsDataSet(DataArray);
+//      end;
 
       DataArray := FCc_List[Index];
       WriteArray(DataArray, 0, 'Data set 11: Cc', StrNoValueAssigned, 'Cc');
@@ -1233,10 +1233,10 @@ begin
       begin
         FPestDataArrays.Add(DataArray);
       end;
-      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-      begin
-        Model.AddInputObsDataSet(DataArray);
-      end;
+//      if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//      begin
+//        Model.AddInputObsDataSet(DataArray);
+//      end;
     end;
 
     DataArray := FVOID_List[Index];
@@ -1246,10 +1246,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
-    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-    begin
-      Model.AddInputObsDataSet(DataArray);
-    end;
+//    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//    begin
+//      Model.AddInputObsDataSet(DataArray);
+//    end;
 
     DataArray := FSUB_List[Index];
     WriteArray(DataArray, 0, 'Data set 13: SUB', StrNoValueAssigned, 'SUB');
@@ -1258,10 +1258,10 @@ begin
     begin
       FPestDataArrays.Add(DataArray);
     end;
-    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-    begin
-      Model.AddInputObsDataSet(DataArray);
-    end;
+//    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//    begin
+//      Model.AddInputObsDataSet(DataArray);
+//    end;
   end;
   Model.DataArrayManager.CacheDataArrays;
 end;

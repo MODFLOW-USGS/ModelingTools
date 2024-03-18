@@ -1,0 +1,45 @@
+#Script for PLPROC for saving kriging factors
+
+#Read pilot point data
+KPilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
+  plist='K_1';column=5, &
+  id_type='character',file='ArrayObsMF6.Kx.K.1.pp')
+KPilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
+  plist='K_2';column=5, &
+  id_type='character',file='ArrayObsMF6.Kx.K.2.pp')
+KPilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
+  plist='K_3';column=5, &
+  id_type='character',file='ArrayObsMF6.Kx.K.3.pp')
+
+#Read MODFLOW 6 grid information file
+cl_Discretization1 = read_mf6_grid_specs(file='ArrayObsMF6.dis.grb', &
+  dimensions=2, &
+  slist_layer_idomain=id1; layer=1, &
+  plist_layer_bottom =bot1; layer=1, &
+  plist_top = top)
+cl_Discretization2 = read_mf6_grid_specs(file='ArrayObsMF6.dis.grb', &
+  dimensions=2, &
+  slist_layer_idomain=id2; layer=2, &
+  plist_layer_bottom =bot2; layer=2, &
+  )
+cl_Discretization3 = read_mf6_grid_specs(file='ArrayObsMF6.dis.grb', &
+  dimensions=2, &
+  slist_layer_idomain=id3; layer=3, &
+  plist_layer_bottom =bot3; layer=3, &
+  )
+
+
+#Save Kriging factors
+calc_kriging_factors_auto_2d( &
+  target_clist=cl_Discretization1, &
+  source_clist=KPilotPoints1, &
+  file=ArrayObsMF6.Kx.Factors1;format=formatted)
+calc_kriging_factors_auto_2d( &
+  target_clist=cl_Discretization2, &
+  source_clist=KPilotPoints2, &
+  file=ArrayObsMF6.Kx.Factors2;format=formatted)
+calc_kriging_factors_auto_2d( &
+  target_clist=cl_Discretization3, &
+  source_clist=KPilotPoints3, &
+  file=ArrayObsMF6.Kx.Factors3;format=formatted)
+

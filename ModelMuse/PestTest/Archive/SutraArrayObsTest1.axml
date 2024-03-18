@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SutraArrayObsTest1" FileType="bin">
+    <FileName Model_Name="SutraArrayObsTest1" FileType="bin">..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SutraArrayObsTest1" FileType="ancillary">
+    <FileName Model_Name="SutraArrayObsTest1" FileType="ancillary">SutraArrayObsTest1.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SutraArrayObsTest1" FileType="Model Input">
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">RunSutra.bat.archive</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">SutraArrayObsTest1.FluxBcs</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">SutraArrayObsTest1.ics</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">SutraArrayObsTest1.inp</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">SutraArrayObsTest1.SPecPBcs</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">SutraArrayObsTest1.SPecUBcs</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">SutraArrayObsTest1.UFluxBcs</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Input">usgs.SutraArrayObsTest1.reference</FileName>
+  </model>
+  <output Model_Name="SutraArrayObsTest1" FileType="Model Output">
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.bcof</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.bcop</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.bcos</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.bcou</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.ele</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.lst</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.nod</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.rst</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1.smy</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1_FluidFlux1.OBC</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1_Observatio.OBC</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1_ObsSched1.OBS</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1_ObsSched2.OBS</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1_SCHED_1.OBC</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1_TIME_STEPS.OBC</FileName>
+    <FileName Model_Name="SutraArrayObsTest1" FileType="Model Output">SutraArrayObsTest1_TIME_STEPS.OBS</FileName>
+  </output>
+</Model_Archive_List>

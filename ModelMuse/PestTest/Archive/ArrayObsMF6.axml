@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ArrayObsMF6" FileType="bin">
+    <FileName Model_Name="ArrayObsMF6" FileType="bin">..\..\..\WRDAPP\mf6.4.4_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ArrayObsMF6" FileType="ancillary">
+    <FileName Model_Name="ArrayObsMF6" FileType="ancillary">ArrayObsMF6.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ArrayObsMF6" FileType="Model Input">
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.chd</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.dis</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.gsf</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.ic</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.ims</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.jtf</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.nam.archive</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.npf</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.ob_gw</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.oc</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.ptf</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.pval</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">ArrayObsMF6.tdis</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">arrays\ArrayObsMF6.Kx_1.arrays</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">arrays\ArrayObsMF6.Kx_2.arrays</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">arrays\ArrayObsMF6.Kx_3.arrays</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Input">usgs.ArrayObsMF6.reference</FileName>
+  </model>
+  <output Model_Name="ArrayObsMF6" FileType="Model Output">
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">ArrayObsMF6.bhd</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">ArrayObsMF6.cbc</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">ArrayObsMF6.dis.grb</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">ArrayObsMF6.InnerSolution.CSV</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">ArrayObsMF6.lst</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">ArrayObsMF6.ob_gw_out_head.csv</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">ArrayObsMF6.OuterSolution.CSV</FileName>
+    <FileName Model_Name="ArrayObsMF6" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

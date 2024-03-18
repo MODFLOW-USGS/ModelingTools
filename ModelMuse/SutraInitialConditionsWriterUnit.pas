@@ -75,10 +75,10 @@ var
   DataFileWriter: TSutraNodeDataWriter;
 //  Mesh: TSutraMesh3D;
 begin
-  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-  begin
-    Model.AddInputObsDataSet(DataArray);
-  end;
+//  if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//  begin
+//    Model.AddInputObsDataSet(DataArray);
+//  end;
   Assert(DataArray.EvaluatedAt = eaNodes);
   ParamUsed := Model.PestUsed and DataArray.PestParametersUsed;
   DataArray.Initialize;

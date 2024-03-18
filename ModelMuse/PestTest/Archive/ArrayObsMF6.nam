@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 3/18/2024 by ModelMuse Version 5.1.1.57
+BEGIN OPTIONS
+  LIST ArrayObsMF6.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ArrayObsMF6.dis  DIS
+  IC6          ArrayObsMF6.ic  IC
+  NPF6         ArrayObsMF6.npf  NPF
+  OBS6         ArrayObsMF6.ob_gw
+  OC6          ArrayObsMF6.oc  OC
+  CHD6         ArrayObsMF6.chd  CHD-1
+END PACKAGES

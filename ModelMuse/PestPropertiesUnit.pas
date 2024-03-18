@@ -1033,6 +1033,10 @@ type
       write SetParetoProperties;
   end;
 
+resourcestring
+  StrNoObservationsDefi = 'No calibration observations defined';
+  StrNoObservationsHave = 'No direct calibration output observations have been defined for PEST.';
+
 implementation
 
 uses

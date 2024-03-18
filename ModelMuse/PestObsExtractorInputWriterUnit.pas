@@ -173,9 +173,10 @@ var
   LinePosition: Integer;
   PestUsed: Boolean;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(FModel, StrNoObservationsDefi);
   PestUsed := (FModel.PestStatus in [psObservations, psActive]);
   if FModel.ModelSelection = msModflow2015 then
-  begin                              
+  begin
     PestUsed := PestUsed and (FModel.DirectObservationLines.Count > 0)
   end
   else if FModel.ModelSelection in Modflow2005Selection then
@@ -185,6 +186,12 @@ begin
   else
   begin
     PestUsed := False;
+    Exit;
+  end;
+  if (FModel.PestStatus = psActive) and not PestUsed then
+  begin
+    frmErrorsAndWarnings.AddError(FModel, StrNoObservationsDefi,
+      StrNoObservationsHave);
   end;
 
   if PestUsed then

@@ -1,0 +1,13 @@
+# OBS: Observation Utility file created on 3/18/2024 by ModelMuse version 5.1.1.57.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT ArrayObsMF6.ob_gw_out_head.csv
+  'hd_Obs_H1' head     1     3     6
+  'hd_Obs_H2' head     1     3     7
+  'hd_Obs_H3' head     1     4     7
+  'hd_Obs_H4' head     1     4     6
+END CONTINUOUS
+

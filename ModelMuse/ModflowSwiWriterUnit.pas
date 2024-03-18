@@ -648,10 +648,10 @@ begin
     begin
       FPestDataArrays.Add(ADataArray);
     end;
-    if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
-    begin
-      Model.AddInputObsDataSet(ADataArray);
-    end;
+//    if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
+//    begin
+//      Model.AddInputObsDataSet(ADataArray);
+//    end;
   end;
 end;
 
@@ -678,10 +678,10 @@ begin
   begin
     FPestDataArrays.Add(ADataArray);
   end;
-  if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
-  begin
-    Model.AddInputObsDataSet(ADataArray);
-  end;
+//  if ADataArray.UseValuesForObservations and ADataArray.PestParametersUsed then
+//  begin
+//    Model.AddInputObsDataSet(ADataArray);
+//  end;
 end;
 
 procedure TSwiWriter.WriteDataSet7;

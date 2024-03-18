@@ -1141,9 +1141,9 @@ begin
       begin
         AParam := FUsedParamList.Objects[ParameterIndex]
           as TModflowSteadyParameter;
-        AParam.UsedDirectly := True;
         if ScriptChoice = scWriteTemplate then
         begin
+          AParam.UsedDirectly := True;
           WriteString(Format('%0:s = %1:s                        %0:s%1:s',
             [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
           NewLine;
@@ -1664,10 +1664,10 @@ begin
     begin
       ParamArray := nil;
     end;
-    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
-    begin
-      Model.AddInputObsDataSet(DataArray);
-    end;
+//    if DataArray.UseValuesForObservations and DataArray.PestParametersUsed then
+//    begin
+//      Model.AddInputObsDataSet(DataArray);
+//    end;
 
 
     DataFileIndex := 0;
@@ -4508,11 +4508,11 @@ begin
           end
           else
           begin
-  //          WriteString('    # Substituting parameter values in zones');
-  //          NewLine;
-  //          WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
-  //            [LayerIndex, AParam.ParameterName, ParameterIndex+1, 'Data']));
-  //          NewLine;
+            WriteString('    # Substituting parameter values in zones');
+            NewLine;
+            WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+              [LayerIndex, AParam.ParameterName, ParameterIndex+1, 'Data']));
+            NewLine;
           end;
 
   //      end;
@@ -4535,11 +4535,12 @@ begin
             WriteString(Format('  =  p_Data%0:d.assign_by_relation(relate=slist;source=s_NN2D;target=s_NN2D_3D)', [LayerIndex]));
             NewLine;
           end;
+
+          WriteString(Format('p_Data%0:d.remove()', [LayerIndex]));
+          NewLine;
+          NewLine;
         end;
 
-        WriteString(Format('p_Data%0:d.remove()', [LayerIndex]));
-        NewLine;
-        NewLine;
       end;
 
 

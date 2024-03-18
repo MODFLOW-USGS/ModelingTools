@@ -1,0 +1,362 @@
+pcf
+* control data
+restart regularisation # RSTFLE PESTMODE
+    76    13     2   126    13     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     4     4 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+  1.000000000000E+001   2.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
+  3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
+  1.000000000000E-001      3  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
+    50  5.000000000000E-003      4     4  5.000000000000E-003      4  0.000000000000E+000      1  0.000000000000E+000  # NOPTMAX, PHIREDSTP, NPHISTP, NPHINORED, RELPARSTP, NRELPAR, PHISTOPTHRESH, LASTRUN, PHIABANDON
+     0     0     0     0 jcosave nojcosaveitn verboserec reisaveitn parsaveitn noparsaverun # ICOV, ICOR, IEIG, IRES, JCOSAVE, JCOSAVEITN, VERBOSEREC, RESSAVEITN, PARSAVEITN, PARSAVERUN
+
+* singular value decomposition
+     1 # SVDMODE
+  1000  5.000000000000E-007  # MAXSING, EIGTHRESH
+     0 # EIGWRITE
+
+* lsqr
+     0 # LSQRMODE
+  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003    304 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
+     1 # LSQRWRITE
+
+* parameter groups
+chd relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000E+000  parabolic
+KGrp relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000E+000  parabolic
+
+* parameter data
+# Parameters in the K1_ family are pilot point parameters related to K in layer      1 in data set Kx
+K1_1 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_2 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_3 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_4 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_5 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_6 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_7 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_8 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_9 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_10 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_11 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_12 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_13 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_14 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_15 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_16 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_17 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_18 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_19 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_20 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_21 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_22 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_23 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_24 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K1_25 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+# Parameters in the K2_ family are pilot point parameters related to K in layer      2 in data set Kx
+K2_1 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_2 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_3 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_4 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_5 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_6 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_7 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_8 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_9 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_10 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_11 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_12 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_13 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_14 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_15 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_16 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_17 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_18 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_19 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_20 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_21 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_22 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_23 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_24 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K2_25 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+# Parameters in the K3_ family are pilot point parameters related to K in layer      3 in data set Kx
+K3_1 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_2 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_3 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_4 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_5 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_6 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_7 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_8 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_9 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_10 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_11 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_12 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_13 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_14 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_15 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_16 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_17 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_18 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_19 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_20 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_21 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_22 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_23 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_24 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+K3_25 log factor  1.000000000000E+002   1.000000000000E-001   1.000000000000E+004  KGrp  1.000000000000E+000   0.000000000000E+000 
+CHD_Par1 none relative  3.000000000000E+001   0.000000000000E+000   2.000000000000E+002  chd  1.000000000000E+000   0.000000000000E+000 
+
+* observation groups
+CHOB_flows
+GHB_flows
+DRN_flows
+RIV_flows
+STR_flows
+Heads
+Head_Changes
+Kx
+regul_Grp1 ArrayObsMF6.Kx.K.1.Cov.txt
+regul_Grp2 ArrayObsMF6.Kx.K.2.Cov.txt
+regul_Grp3 ArrayObsMF6.Kx.K.3.Cov.txt
+regul_Grp4
+regul_Grp5
+
+* observation data
+MyObs  1.000000000000E+000   1.000000000000E+000  Heads
+1_1_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+1_7_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+1_52_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+1_58_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+2_1_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+2_7_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+2_52_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+2_58_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+3_1_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+3_7_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+3_52_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+3_58_Kx  1.000000000000E+002   1.000000000000E+000  Kx
+
+* model command line
+RunModel.Bat
+
+* model input/output
+ArrayObsMF6.ptf ArrayObsMF6.pval
+ArrayObsMF6.Kx.K.1.pp.tpl ArrayObsMF6.Kx.K.1.pp
+ArrayObsMF6.Kx.K.2.pp.tpl ArrayObsMF6.Kx.K.2.pp
+ArrayObsMF6.Kx.K.3.pp.tpl ArrayObsMF6.Kx.K.3.pp
+ArrayObsMF6.PestIns ArrayObsMF6.Mf6Values
+ArrayObsMF6.Kx_1.ins ArrayObsMF6.Kx_1.arrayvalues
+ArrayObsMF6.Kx_2.ins ArrayObsMF6.Kx_2.arrayvalues
+ArrayObsMF6.Kx_3.ins ArrayObsMF6.Kx_3.arrayvalues
+
+* prior information
+# Equation for initial value for parameter K1_1.
+ eq_1          1.0 * log(K1_1) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_2.
+ eq_2          1.0 * log(K1_2) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_3.
+ eq_3          1.0 * log(K1_3) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_4.
+ eq_4          1.0 * log(K1_4) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_5.
+ eq_5          1.0 * log(K1_5) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_6.
+ eq_6          1.0 * log(K1_6) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_7.
+ eq_7          1.0 * log(K1_7) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_8.
+ eq_8          1.0 * log(K1_8) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_9.
+ eq_9          1.0 * log(K1_9) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_10.
+ eq_10          1.0 * log(K1_10) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_11.
+ eq_11          1.0 * log(K1_11) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_12.
+ eq_12          1.0 * log(K1_12) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_13.
+ eq_13          1.0 * log(K1_13) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_14.
+ eq_14          1.0 * log(K1_14) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_15.
+ eq_15          1.0 * log(K1_15) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_16.
+ eq_16          1.0 * log(K1_16) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_17.
+ eq_17          1.0 * log(K1_17) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_18.
+ eq_18          1.0 * log(K1_18) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_19.
+ eq_19          1.0 * log(K1_19) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_20.
+ eq_20          1.0 * log(K1_20) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_21.
+ eq_21          1.0 * log(K1_21) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_22.
+ eq_22          1.0 * log(K1_22) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_23.
+ eq_23          1.0 * log(K1_23) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_24.
+ eq_24          1.0 * log(K1_24) = 2       1     regul_Grp1
+# Equation for initial value for parameter K1_25.
+ eq_25          1.0 * log(K1_25) = 2       1     regul_Grp1
+# Equations for horizontal continuity in layers 1 for parameter K.
+# Equation for initial value for parameter K2_1.
+ eq_26          1.0 * log(K2_1) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_2.
+ eq_27          1.0 * log(K2_2) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_3.
+ eq_28          1.0 * log(K2_3) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_4.
+ eq_29          1.0 * log(K2_4) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_5.
+ eq_30          1.0 * log(K2_5) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_6.
+ eq_31          1.0 * log(K2_6) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_7.
+ eq_32          1.0 * log(K2_7) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_8.
+ eq_33          1.0 * log(K2_8) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_9.
+ eq_34          1.0 * log(K2_9) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_10.
+ eq_35          1.0 * log(K2_10) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_11.
+ eq_36          1.0 * log(K2_11) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_12.
+ eq_37          1.0 * log(K2_12) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_13.
+ eq_38          1.0 * log(K2_13) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_14.
+ eq_39          1.0 * log(K2_14) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_15.
+ eq_40          1.0 * log(K2_15) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_16.
+ eq_41          1.0 * log(K2_16) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_17.
+ eq_42          1.0 * log(K2_17) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_18.
+ eq_43          1.0 * log(K2_18) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_19.
+ eq_44          1.0 * log(K2_19) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_20.
+ eq_45          1.0 * log(K2_20) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_21.
+ eq_46          1.0 * log(K2_21) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_22.
+ eq_47          1.0 * log(K2_22) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_23.
+ eq_48          1.0 * log(K2_23) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_24.
+ eq_49          1.0 * log(K2_24) = 2       1     regul_Grp2
+# Equation for initial value for parameter K2_25.
+ eq_50          1.0 * log(K2_25) = 2       1     regul_Grp2
+# Equations for horizontal continuity in layers 2 for parameter K.
+# Equation for initial value for parameter K3_1.
+ eq_51          1.0 * log(K3_1) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_2.
+ eq_52          1.0 * log(K3_2) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_3.
+ eq_53          1.0 * log(K3_3) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_4.
+ eq_54          1.0 * log(K3_4) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_5.
+ eq_55          1.0 * log(K3_5) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_6.
+ eq_56          1.0 * log(K3_6) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_7.
+ eq_57          1.0 * log(K3_7) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_8.
+ eq_58          1.0 * log(K3_8) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_9.
+ eq_59          1.0 * log(K3_9) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_10.
+ eq_60          1.0 * log(K3_10) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_11.
+ eq_61          1.0 * log(K3_11) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_12.
+ eq_62          1.0 * log(K3_12) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_13.
+ eq_63          1.0 * log(K3_13) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_14.
+ eq_64          1.0 * log(K3_14) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_15.
+ eq_65          1.0 * log(K3_15) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_16.
+ eq_66          1.0 * log(K3_16) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_17.
+ eq_67          1.0 * log(K3_17) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_18.
+ eq_68          1.0 * log(K3_18) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_19.
+ eq_69          1.0 * log(K3_19) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_20.
+ eq_70          1.0 * log(K3_20) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_21.
+ eq_71          1.0 * log(K3_21) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_22.
+ eq_72          1.0 * log(K3_22) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_23.
+ eq_73          1.0 * log(K3_23) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_24.
+ eq_74          1.0 * log(K3_24) = 2       1     regul_Grp3
+# Equation for initial value for parameter K3_25.
+ eq_75          1.0 * log(K3_25) = 2       1     regul_Grp3
+# Equations for horizontal continuity in layers 3 for parameter K.
+# Equations for vertical continuity between layers 1 and 2 for parameter K in data set Kx.
+ eq_76          1.0 * log(K1_1) - 1.0 * log(K2_1) = 0.0       1     regul_Grp4
+ eq_77          1.0 * log(K1_2) - 1.0 * log(K2_2) = 0.0       1     regul_Grp4
+ eq_78          1.0 * log(K1_3) - 1.0 * log(K2_3) = 0.0       1     regul_Grp4
+ eq_79          1.0 * log(K1_4) - 1.0 * log(K2_4) = 0.0       1     regul_Grp4
+ eq_80          1.0 * log(K1_5) - 1.0 * log(K2_5) = 0.0       1     regul_Grp4
+ eq_81          1.0 * log(K1_6) - 1.0 * log(K2_6) = 0.0       1     regul_Grp4
+ eq_82          1.0 * log(K1_7) - 1.0 * log(K2_7) = 0.0       1     regul_Grp4
+ eq_83          1.0 * log(K1_8) - 1.0 * log(K2_8) = 0.0       1     regul_Grp4
+ eq_84          1.0 * log(K1_9) - 1.0 * log(K2_9) = 0.0       1     regul_Grp4
+ eq_85          1.0 * log(K1_10) - 1.0 * log(K2_10) = 0.0       1     regul_Grp4
+ eq_86          1.0 * log(K1_11) - 1.0 * log(K2_11) = 0.0       1     regul_Grp4
+ eq_87          1.0 * log(K1_12) - 1.0 * log(K2_12) = 0.0       1     regul_Grp4
+ eq_88          1.0 * log(K1_13) - 1.0 * log(K2_13) = 0.0       1     regul_Grp4
+ eq_89          1.0 * log(K1_14) - 1.0 * log(K2_14) = 0.0       1     regul_Grp4
+ eq_90          1.0 * log(K1_15) - 1.0 * log(K2_15) = 0.0       1     regul_Grp4
+ eq_91          1.0 * log(K1_16) - 1.0 * log(K2_16) = 0.0       1     regul_Grp4
+ eq_92          1.0 * log(K1_17) - 1.0 * log(K2_17) = 0.0       1     regul_Grp4
+ eq_93          1.0 * log(K1_18) - 1.0 * log(K2_18) = 0.0       1     regul_Grp4
+ eq_94          1.0 * log(K1_19) - 1.0 * log(K2_19) = 0.0       1     regul_Grp4
+ eq_95          1.0 * log(K1_20) - 1.0 * log(K2_20) = 0.0       1     regul_Grp4
+ eq_96          1.0 * log(K1_21) - 1.0 * log(K2_21) = 0.0       1     regul_Grp4
+ eq_97          1.0 * log(K1_22) - 1.0 * log(K2_22) = 0.0       1     regul_Grp4
+ eq_98          1.0 * log(K1_23) - 1.0 * log(K2_23) = 0.0       1     regul_Grp4
+ eq_99          1.0 * log(K1_24) - 1.0 * log(K2_24) = 0.0       1     regul_Grp4
+ eq_100          1.0 * log(K1_25) - 1.0 * log(K2_25) = 0.0       1     regul_Grp4
+# Equations for vertical continuity between layers 2 and 3 for parameter K in data set Kx.
+ eq_101          1.0 * log(K2_1) - 1.0 * log(K3_1) = 0.0       1     regul_Grp4
+ eq_102          1.0 * log(K2_2) - 1.0 * log(K3_2) = 0.0       1     regul_Grp4
+ eq_103          1.0 * log(K2_3) - 1.0 * log(K3_3) = 0.0       1     regul_Grp4
+ eq_104          1.0 * log(K2_4) - 1.0 * log(K3_4) = 0.0       1     regul_Grp4
+ eq_105          1.0 * log(K2_5) - 1.0 * log(K3_5) = 0.0       1     regul_Grp4
+ eq_106          1.0 * log(K2_6) - 1.0 * log(K3_6) = 0.0       1     regul_Grp4
+ eq_107          1.0 * log(K2_7) - 1.0 * log(K3_7) = 0.0       1     regul_Grp4
+ eq_108          1.0 * log(K2_8) - 1.0 * log(K3_8) = 0.0       1     regul_Grp4
+ eq_109          1.0 * log(K2_9) - 1.0 * log(K3_9) = 0.0       1     regul_Grp4
+ eq_110          1.0 * log(K2_10) - 1.0 * log(K3_10) = 0.0       1     regul_Grp4
+ eq_111          1.0 * log(K2_11) - 1.0 * log(K3_11) = 0.0       1     regul_Grp4
+ eq_112          1.0 * log(K2_12) - 1.0 * log(K3_12) = 0.0       1     regul_Grp4
+ eq_113          1.0 * log(K2_13) - 1.0 * log(K3_13) = 0.0       1     regul_Grp4
+ eq_114          1.0 * log(K2_14) - 1.0 * log(K3_14) = 0.0       1     regul_Grp4
+ eq_115          1.0 * log(K2_15) - 1.0 * log(K3_15) = 0.0       1     regul_Grp4
+ eq_116          1.0 * log(K2_16) - 1.0 * log(K3_16) = 0.0       1     regul_Grp4
+ eq_117          1.0 * log(K2_17) - 1.0 * log(K3_17) = 0.0       1     regul_Grp4
+ eq_118          1.0 * log(K2_18) - 1.0 * log(K3_18) = 0.0       1     regul_Grp4
+ eq_119          1.0 * log(K2_19) - 1.0 * log(K3_19) = 0.0       1     regul_Grp4
+ eq_120          1.0 * log(K2_20) - 1.0 * log(K3_20) = 0.0       1     regul_Grp4
+ eq_121          1.0 * log(K2_21) - 1.0 * log(K3_21) = 0.0       1     regul_Grp4
+ eq_122          1.0 * log(K2_22) - 1.0 * log(K3_22) = 0.0       1     regul_Grp4
+ eq_123          1.0 * log(K2_23) - 1.0 * log(K3_23) = 0.0       1     regul_Grp4
+ eq_124          1.0 * log(K2_24) - 1.0 * log(K3_24) = 0.0       1     regul_Grp4
+ eq_125          1.0 * log(K2_25) - 1.0 * log(K3_25) = 0.0       1     regul_Grp4
+# Equation for initial value for parameter CHD_Par1.
+ eq_126          1.0 * CHD_Par1 = 30       1     regul_Grp5
+
+* regularisation
+  1.000000000000E-010   1.050000000000E-010   1.000000000000E-001  nomemsave
+  1.000000000000E+000   1.000000000000E-010   1.000000000000E+010  nonlinreg nocontinue # WFINIT WFMIN WFMAX LINREG REGCONTINUE
+  1.300000000000E+000   1.000000000000E-002      1 # WFFAC WFTOL IREGADJ

@@ -78,8 +78,6 @@ resourcestring
   StrNoPestParameters = 'No parameters have been defined for use with PEST.';
   StrNoParameterGroups = 'No parameter groups defined';
   StrNoPESTParameterGr = 'No PEST parameter groups have been defined. Define them in "Model|Manage Parameters".';
-  StrNoObservationsDefi = 'No calibration observations defined';
-  StrNoObservationsHave = 'No observations have been defined for PEST.';
   StrNoObservationGroup = 'No observation groups defined';
   StrNoPESTObservation = 'No PEST observation groups have been defined. "Define them in "Model|Pest Properties".';
   StrParameterGroupName = 'Parameter group name not assigned';
@@ -1378,7 +1376,6 @@ var
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParametersHaveB);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationGroup);
-  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationsDefi);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParameterGroups);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterGroupName);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupNo);
