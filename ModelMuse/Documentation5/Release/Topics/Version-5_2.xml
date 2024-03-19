@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2024-02-08T12:52:31.216-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-03-19T15:24:33.996-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.2</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Version 5.2</text></para>
     </header>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.2 February 8, 2024]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 5.2 March 21, 2024]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -21,6 +21,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for Transient Hydraulic Conductivity package for MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for Transient Storage package for MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for SUTRA version 4.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for SFR cross sections in MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now import FHB boundaries from Shapefiles.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The Show and Hide Objects dialog &#160;box now has &quot;Calibration Data Sets&quot; as a new category.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now export FHB data to shapefiles in the &quot;File|Export|Shapefile|Objects to Shapefile&quot; dialog box.</text></para>
@@ -53,15 +54,20 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">A &quot;Sum&quot; function has been added to the functions supported in the Formula Editor.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a check that the MAW radius is the cell effective radius.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When editing layer group names, potentially duplicate layer group names are handled without displaying a warning message.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Time-varying cross sections are now supported in &#160;the MODFLOW 6 SFR package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for discharge scaling in the DRN package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for defining observations of input.</text></para>
               </td>
             </tr>
           </table></para>
-          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
           <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When any dialog box is minimized, the main form of ModelMuse is minimized too.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse does not draw a image of an SFR 8-point cross section in the Object Properties dialog box unless the 8-point cross section is in use.Bug fix: Fixed export of PEST input files on computers in which a character other than the period is used as a decimal separator.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If a MODFLOW 6 lake only has vertical connections, it is treated as being above the bottommost layer intersect by the object defining the lake. This means a lake can be above layer 1. A lake that has horizontal connections is treated as being in all the layers intersected by the object.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SFR in MODFLOW 6 reaches are now allowed outside of the grid.</text></para>
               </td>
             </tr>
           </table></para>
@@ -117,6 +123,9 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of to-mvr observation types for the for WEL, DRN, RIV, and GHB packages.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in editing the format of text in the rulers that could cause a bug report to be issued if the text for the sample number was not a number.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed error message issued &#160;when all downstream MODFLOW 6 SFR segments are inactive.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause some cells to not be displayed correctly on the front view of DISV models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Canceling the Time Series dialog box no longer causes an access violation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting Dispersion package in MODFLOW 6.</text></para>
               </td>
             </tr>
           </table></para>

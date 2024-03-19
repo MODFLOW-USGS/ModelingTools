@@ -1,4 +1,3 @@
-0. When needed, remove the IF ARRAYINPUTOBS from the help for the Data Sets dialog in the help.
 1a. Check release dates of all supported programs (MODFLOW, MT3DMS, MT3D-USGS, SUTRA, PHAST, GMSH, GeomPack++, PEST etc) and see if dates in ModelMuse match the release dates.
 1b. Check that all toolbar buttons are visible.
 1c. Make sure ModelMuse model program locations are all current.
@@ -29,6 +28,7 @@
 15. Update ModflowImporter source in folder for source code.
 16. Create zip file for source.
 16a. Update IPDS biblio data
+16a1. Update distribution files in IPDS.
 16b. Update credentials in Network Identity Monitor.
 16c. Transfer files to \\AFS\.usgs.gov\www_RW\water\htdocs\water-resources\software\ModelMuse
 17. Update draft web page.

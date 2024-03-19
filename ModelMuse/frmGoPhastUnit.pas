@@ -16036,11 +16036,12 @@ end;
 
 initialization
   // see also StrModflowDefaultPath etc in DataSetNamesUnit.pas
+  // See also procedure frmMeshGenerationControlVariablesUnit
   Mf2005DateVersion1_12 := EncodeDate(2017,2,2);
   Mf2005Date := EncodeDate(2017,2,2);
   MfNwtDateVersion1_0_9 := EncodeDate(2014,6,23);
   MfNwtDateVersion1_1_0 := EncodeDate(2016,7,21);
-  MfNwtDate := EncodeDate(2020,3,3);
+  MfNwtDate := EncodeDate(2022,6,30);
   Modpath6Date := EncodeDate(2012,8,28);
   Modpath7Date := EncodeDate(2017,12,22);
   MfLgr2Date := EncodeDate(2013, 9, 19);
@@ -16052,7 +16053,7 @@ initialization
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
-  PestDate := EncodeDate(2023,7,14);
+  PestDate := EncodeDate(2024,1,18);
   MfOwhmV2Date := EncodeDate(2024,1,15);
 
   {$IFDEF Win64}

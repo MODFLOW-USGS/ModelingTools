@@ -1175,7 +1175,7 @@ resourcestring
   StrPestDefaultDir = 'C:\Pest17\';
 
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
-  StrDefaultGmshPath = 'C:\gmsh-4.11.1-Windows64\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.12.2-Windows64\gmsh.exe';
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';

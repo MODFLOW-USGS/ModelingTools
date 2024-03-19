@@ -154,7 +154,6 @@
         <config-value name="USER1">Class Exercise</config-value>
         <config-value name="USER2">User defined 2</config-value>
         <config-value name="USER3">User defined 3</config-value>
-        <config-value name="ARRAYINPUTOBS">ARRAYINPUTOBS</config-value>
       </config-group>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
       <config-value name="make0include">CHM,ALLMODELS</config-value>
@@ -642,7 +641,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">0</config-value>
+          <config-value name="lastexport">3</config-value>
         </config-group>
       </config-group>
       <config-group name="richard">

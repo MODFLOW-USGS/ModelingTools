@@ -31,8 +31,8 @@ type
     { Public declarations }
   end;
 
-var
-  framePackageUzfMf6: TframePackageUzfMf6;
+//var
+//  framePackageUzfMf6: TframePackageUzfMf6;
 
 implementation
 

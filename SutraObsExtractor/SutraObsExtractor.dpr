@@ -4,6 +4,9 @@ program SutraObsExtractor;
 
 {$R *.res}
 
+{#BACKUP SutraObsExtractor.lpr}
+{#BACKUP SutraObsExtractor.lpi}
+
 uses
   Classes,
   System.SysUtils,

@@ -185,11 +185,6 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
-    <RequiredPackages Count="1">
-      <Item1>
-        <PackageName Value="sparta_generics"/>
-      </Item1>
-    </RequiredPackages>
     <Units Count="10">
       <Unit0>
         <Filename Value="SutraObsExtractor.lpr"/>

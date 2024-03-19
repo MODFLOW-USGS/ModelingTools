@@ -46,8 +46,7 @@ uses System.UITypes,
   framePackageFrmUnit, frameRadioGridUnit, framePackageCFPUnit,
   framePackageSwiUnit, framePackageSwrUnit, framePackageMnw1Unit,
   framePackageNpfUnit, framePkgStoUnit, framePkgSmsUnit, framePackageRipUnit,
-  framePackageSfrMF6Unit,
-  System.ImageList,
+  framePackageSfrMF6Unit, System.ImageList,
   framePackageMawUnit,
   framePackageGNC_Unit, framePackageMf6ObsUnit, framePackageLakMf6Unit,
   framePackageMvrUnit, framePackageUzfMf6Unit, frameMt3dLktPkgUnit,
@@ -260,7 +259,6 @@ type
     jvspMVR: TJvStandardPage;
     framePkgMVR: TframePackageMvr;
     jvspUzfMf6: TJvStandardPage;
-    framePackageUzfMf6: TframePackageUzfMf6;
     jvspMt3dLkt: TJvStandardPage;
     frameMt3dLktPkg: TframeMt3dLktPkg;
     jvspMt3dSft: TJvStandardPage;
@@ -309,6 +307,7 @@ type
     framePkgTvk: TframePackage;
     jvspTVS: TJvStandardPage;
     framePkgTvs: TframePackageTvs;
+    framePackageUzfMf6: TframePackageUzfMf6;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;

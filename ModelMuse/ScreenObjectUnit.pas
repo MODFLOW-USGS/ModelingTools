@@ -44955,6 +44955,9 @@ begin
 end;
 
 procedure TModflowBoundaries.ReplaceATime(OldTime, NewTime: Double);
+var
+  OutletIndex: Integer;
+  Outlet: TLakeOutlet;
 begin
   if FModflowChdBoundary <> nil then
   begin
@@ -45192,6 +45195,11 @@ begin
   if FModflowLak6 <> nil then
   begin
     FModflowLak6.Values.ReplaceATime(OldTime, NewTime);
+    for OutletIndex := 0 to FModflowLak6.Outlets.Count - 1 do
+    begin
+      Outlet := FModflowLak6.Outlets[OutletIndex].Outlet;
+      Outlet.LakeTimes.ReplaceATime(OldTime, NewTime)
+    end;
   end;
 
   if FModflowMvr <> nil then

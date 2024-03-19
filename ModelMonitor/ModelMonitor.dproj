@@ -8,7 +8,7 @@
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.5</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -146,7 +146,6 @@
         <Debugger_RunParams>-m C:\WRDAPP\mf6.3.0\bin\mf6.exe -n mfsim.nam -mv 6</Debugger_RunParams>
         <Debugger_CWD>C:\ModelingTools\ModelMuse\PracticeModels</Debugger_CWD>
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
-        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">

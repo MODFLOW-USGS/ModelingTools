@@ -4,6 +4,10 @@ program GetValuesFromArrayFiles;
 
 {$R *.res}
 
+{#BACKUP GetValuesFromArrayFiles.lpr}
+{#BACKUP GetValuesFromArrayFiles.lpi}
+
+
 uses
   System.SysUtils,
   System.IOUtils,

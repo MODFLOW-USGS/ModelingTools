@@ -3,6 +3,9 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   Height = 526
   ExplicitWidth = 595
   ExplicitHeight = 526
+  DesignSize = (
+    595
+    526)
   object lblNumberOfTrailingWaves: TLabel [2]
     Left = 16
     Top = 128

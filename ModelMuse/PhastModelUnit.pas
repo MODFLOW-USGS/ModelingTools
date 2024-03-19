@@ -10174,23 +10174,13 @@ const
 //                 the MODFLOW 6 SFR package.
 //    '5.1.1.56' Bug fix: Fixed a bug that could cause some cells to not be
 //                displayed correctly on the front view of DISV models.
-//               Change: If a Modflow 6 lake only has vertical connections,
+//               Change: If a MODFLOW 6 lake only has vertical connections,
 //                it is treated as being above the bottommost layer intersect
 //                by the object defining the lake. This means a lake can be
 //                above layer 1. A lake that has horizontal connections is
 //                treated as being in all the layers intersected by the object.
-
 //    '5.1.1.57' Enhancement: Added support for discharge scaling in the
 //                DRN package.
-
-//               Change: SFR in MODFLOW 6 reaches are now allowed outside of
-//                the grid.
-//               Bug fix: Canceling the Time Series dialog box no longer causes
-//                an access violation.
-//               bug fix: Fixed bug in exporting Dispersion package in MODFLOW 6.
-//               Enhancement: Added support for defining observations of input
-//                data in arrays.
-
 //    '5.2.0.0'  Enhancement: Added support for Buoyancy package for MODFLOW 6.
 //               Enhancement: Added support for Viscosity package for MODFLOW 6.
 //               Enhancement: Added support for Transient Hydraulic Conductivity package for MODFLOW 6.
@@ -10199,12 +10189,19 @@ const
 //               Enhancement: Added support for CFP2 package MODFLOW-OWHM version 2.
 //               Enhancement: Added support for SUTRA version 4.
 //               Enhancement: Added support for SFR cross sections in MODFLOW 6.
+//               Change: SFR in MODFLOW 6 reaches are now allowed outside of
+//                the grid.
+//               Bug fix: Canceling the Time Series dialog box no longer causes
+//                an access violation.
+//               bug fix: Fixed bug in exporting Dispersion package in MODFLOW 6.
+//               Enhancement: Added support for defining observations of input
+//                data in arrays.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.1.1.57';
+  IIModelVersion = '5.2.0.0';
 
 function IModelVersion: string;
 begin

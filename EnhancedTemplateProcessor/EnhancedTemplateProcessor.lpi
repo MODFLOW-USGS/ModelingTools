@@ -186,11 +186,6 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
-    <RequiredPackages Count="1">
-      <Item1>
-        <PackageName Value="sparta_generics"/>
-      </Item1>
-    </RequiredPackages>
     <Units Count="5">
       <Unit0>
         <Filename Value="EnhancedTemplateProcessor.lpr"/>
