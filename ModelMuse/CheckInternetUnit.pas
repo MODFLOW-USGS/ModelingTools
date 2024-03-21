@@ -77,8 +77,11 @@ resourcestring
 
 
 const
-  UpdateURL =      'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseInternetUpdate.txt';
-  VideoUpdateURL = 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/Videos.xml';
+  UpdateURL =      'https://water.usgs.gov/water-resources/software/ModelMuse/ModelMuseInternetUpdate.txt';
+  VideoUpdateURL = 'https://water.usgs.gov/water-resources/software/ModelMuse/Videos.xml';
+
+// Old versions of the software are here.
+// https://water.usgs.gov/nrp/gwsoftware/ModelMuse/
   StrTopic = 'Topic';
 
 { TCheckInternetThread }
