@@ -557,6 +557,7 @@ type
     FUpdateCount: integer;
     FOnIsCaptionEvent: TOnIsCaptionEvent;
     FOnEndUpdate: TNotifyEvent;
+    FTabsOnly: Boolean;
     function CollectionItem(const ACol, ARow: Longint):
       TCustomRowOrColumn; virtual; abstract;
     function GetCellVisible(ACol, ARow: Integer): boolean;
@@ -752,6 +753,7 @@ type
     property AutoMultiEdit: boolean read FAutoMultiEdit write FAutoMultiEdit;
     property AutoDistributeText: boolean read FAutoDistributeText
       write FAutoDistributeText;
+    property TabsOnly: Boolean read FTabsOnly write FTabsOnly default True;
     property AutoIncreaseColCount: boolean read FAutoIncreaseColCount
       write SetAutoIncreaseColCount;
     property AutoIncreaseRowCount: boolean read FAutoIncreaseRowCount
@@ -3474,6 +3476,7 @@ begin
   {$ENDIF}
   FAppEvents := TApplicationEvents.Create(self);
   FAppEvents.OnSettingChange := SettingsChanged;
+  FTabsOnly := True;
 end;
 
 procedure TCustomRBWDataGrid.SetdgRow(const Value: integer);
@@ -4386,8 +4389,16 @@ var
     TempString: string;
   begin
     TabPos := Pos(#9, AString);
-    CommaPosition := Pos(',', AString);
-    QuotePosition := Pos('"', AString);
+    if TabsOnly then
+    begin
+      CommaPosition := -1;
+      QuotePosition := -1;
+    end
+    else
+    begin
+      CommaPosition := Pos(',', AString);
+      QuotePosition := Pos('"', AString);
+    end;
 
     SplitPosition := 0;
     if TabPos > 0 then

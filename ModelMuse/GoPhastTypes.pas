@@ -1050,6 +1050,7 @@ resourcestring
   StrDrainElevation = 'Drain elevation';
   StrStartingHead = 'Starting head';
   StrEndingHead = 'Ending head';
+  StrActiveSpecifiedHea = 'Active Specified Head';
   StrElevation = 'Elevation';
   StrMaxPumpingRate = 'Max well capacity (QMAX)';
   StrMaxPumpingRateOwhm2 = 'Max well capacity (QCap)';

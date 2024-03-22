@@ -2720,6 +2720,7 @@ that affects the model output should also have a comment. }
       write SetSomeSegmentsUpToDate;
     procedure InvalidateMfChdStartingHead(Sender: TObject);
     procedure InvalidateMfChdEndingHead(Sender: TObject);
+    procedure InvalidateMfChdActive(Sender: TObject);
     procedure InvalidateMfChdConc(Sender: TObject);
     procedure InvalidateMfGhbConductance(Sender: TObject);
     procedure InvalidateMfGhbBoundaryHead(Sender: TObject);
@@ -10196,6 +10197,10 @@ const
 //               bug fix: Fixed bug in exporting Dispersion package in MODFLOW 6.
 //               Enhancement: Added support for defining observations of input
 //                data in arrays.
+
+
+//               Enhancement: Added a new "Active Specified Head" field that
+//                allows the user to make some cells intersectd or enclosed
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
@@ -27192,6 +27197,11 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TCustomModel.InvalidateMfChdActive(Sender: TObject);
+begin
+  ModflowPackages.ChdBoundary.MfChdActive.Invalidate;;
 end;
 
 procedure TCustomModel.InvalidateMfChdConc(Sender: TObject);

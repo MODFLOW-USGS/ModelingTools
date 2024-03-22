@@ -52,6 +52,9 @@ type
     function ObsFactors: TFluxObservationGroups; override;
     procedure DoBeforeWriteCells; override;
     procedure WriteAdditionalAuxVariables; override;
+    procedure GetITMP(var ITMP: integer; TimeIndex: integer;
+      var List: TValueCellList); override;
+    function GetActiveCellCount(CellList: TValueCellList): Integer; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -111,8 +114,12 @@ var
   LayerBottom: double;
   ScreenObject: TScreenObject;
 begin
-  inherited;
   CHD_Cell := ValueCell as TCHD_Cell;
+  if not CHD_Cell.Active then
+  begin
+    Exit;
+  end;
+  inherited;
   if Model.DisvUsed then
   begin
     LayerBottom := Model.DisvGrid.ElementArrayI[
@@ -244,6 +251,11 @@ begin
     // handle pest parameter
     // handle multiply or add
   CHD_Cell := Cell as TCHD_Cell;
+  if not CHD_Cell.Active then
+  begin
+    Exit;
+  end;
+
   if (Model.ModelSelection = msModflow2015) then
   begin
     if Length(FChdCells) = 0 then
@@ -644,6 +656,7 @@ procedure TModflowCHD_Writer.WriteParameterCells(CellList: TValueCellList;
 var
   Cell: TCHD_Cell;
   CellIndex: Integer;
+  ACell: TCHD_Cell;
 begin
   Cell := nil;
   for CellIndex := 0 to CellList.Count - 1 do
@@ -652,11 +665,23 @@ begin
     WriteCell(Cell, DataSetIdentifier, VariableIdentifiers);
     CheckCell(Cell, 'CHD');
   end;
+
+  Cell := nil;
+  for CellIndex := 0 to CellList.Count - 1 do
+  begin
+    ACell := CellList[CellIndex] as TCHD_Cell;
+    if ACell.Active then
+    begin
+      Cell := ACell;
+      break;
+    end;
+  end;
+
   // Dummy inactive cells to fill out data set 4b.
   // Each instance of a parameter is required to have the same
   // number of cells.  This introduces dummy boundaries to fill
   // out the list.  because Shdfact Ehdfact are set equal to zero,
-  // and because the cell location is at an exsiting boundary,
+  // and because the cell location is at an existing boundary,
   // dummy boundaries have no effect. (Zero will be added to the
   // specified head at the location of an existing specified head
   // boundary.)
@@ -677,10 +702,37 @@ begin
   end;
 end;
 
+function TModflowCHD_Writer.GetActiveCellCount(
+  CellList: TValueCellList): Integer;
+var
+  CellIndex: Integer;
+  ChdCell: TCHD_Cell;
+begin
+  result := 0;
+  for CellIndex := 0 to CellList.Count - 1 do
+  begin
+    ChdCell := CellList[CellIndex] as TCHD_Cell;
+    if ChdCell.Active then
+    begin
+      Inc(result);
+    end;
+  end;
+end;
+
 function TModflowCHD_Writer.GetBoundary(
   ScreenObject: TScreenObject): TModflowBoundary;
 begin
   result := ScreenObject.ModflowChdBoundary;
+end;
+
+procedure TModflowCHD_Writer.GetITMP(var ITMP: integer; TimeIndex: integer;
+  var List: TValueCellList);
+begin
+  inherited;
+  if ITMP <> -1 then
+  begin
+    ITMP := GetActiveCellCount(List);
+  end;
 end;
 
 function TModflowCHD_Writer.IsMf6Observation(

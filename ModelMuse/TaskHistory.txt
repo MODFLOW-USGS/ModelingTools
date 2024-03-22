@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = False
+      Display = True
     end
     item
       Name = 'core code'
@@ -32761,5 +32761,11 @@ object TTaskHistory
       Date = 45372.000000000000000000
       Categories.Strings = (
         'Installer')
+    end
+    item
+      Date = 45373.000000000000000000
+      Categories.Strings = (
+        'CHD'
+        'Testing')
     end>
 end

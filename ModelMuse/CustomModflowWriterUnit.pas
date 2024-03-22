@@ -654,6 +654,9 @@ end;
     function CellType: TValueCellType; virtual; abstract;
     // @name returns the number of cells defined by parameters and the number
     // of parameters instances for the parameter.
+//    procedure GetNumCellsAndNumInstances(ParamValues: TList;
+//      var NUMINST, NLST: Integer);
+    function GetActiveCellCount(CellList: TValueCellList): Integer; virtual;
     procedure GetNumCellsAndNumInstances(ParamValues: TList;
       var NUMINST, NLST: Integer);
     // @name is an abstract function used to return the proper
@@ -5268,6 +5271,12 @@ begin
   InstanceRoot := InstanceRoot + TerminalString;
 end;
 
+function TCustomParameterTransientWriter.GetActiveCellCount(
+  CellList: TValueCellList): Integer;
+begin
+  result := CellList.Count;
+end;
+
 procedure TCustomParameterTransientWriter.GetInstanceName(
   var InstanceName: string;
   TimeIndex: Integer; InstanceRoot: string);
@@ -5294,6 +5303,8 @@ var
   ACell: TValueCell;
   CellCount: Integer;
   FirstCellList: TValueCellList;
+  ActiveCellCount: Integer;
+//  FirstCellCount: Integer;
 begin
   NLST := 0;
   NUMINST := 0;
@@ -5302,21 +5313,22 @@ begin
   for TimeIndex := 0 to ParamValues.Count - 1 do
   begin
     CellList := ParamValues[TimeIndex];
-    if CellList.Count > NLST then
+    ActiveCellCount := GetActiveCellCount(CellList);
+    if ActiveCellCount > NLST then
     begin
-      NLST := CellList.Count;
+      NLST := ActiveCellCount;
     end;
-    if CellList.Count > 0 then
+    if ActiveCellCount > 0 then
     begin
       Inc(NUMINST);
     end;
     if TimeIndex = 0 then
     begin
-      CellCount := CellList.Count;
+      CellCount := ActiveCellCount;
     end
     else
     begin
-      if CellCount <> CellList.Count then
+      if CellCount <> ActiveCellCount then
       begin
         AllSame := False;
       end;
@@ -5944,6 +5956,7 @@ var
   FirstIndex: Boolean;
   List: TValueCellList;
   CellIndex: Integer;
+  ActiveCellCount: Integer;
 begin
   case ParameterType of
     ptUndefined..ptLPF_VKCB: Assert(False);
@@ -6031,7 +6044,8 @@ begin
         end;
         CellList := ParamValues[TimeIndex];
 //        CellList.CheckRestore;
-        if CellList.Count > 0 then
+        ActiveCellCount := GetActiveCellCount(CellList);
+        if ActiveCellCount > 0 then
         begin
           if (Model.ModelSelection  = msModflow2015) or (FEvaluationType = etExportCsv) then
           begin
@@ -7167,7 +7181,7 @@ begin
       GetInstanceRoot(PARNAM, PValues, InstanceRoot);
 //      GetNumCellsAndNumInstances(PValues, NUMINST, NLST);
       List := PValues[TimeIndex];
-      if (List.Count > 0) then
+      if (GetActiveCellCount(List) > 0) then
       begin
         NUMINST := FNumInstList[ParamIndex];
         if NUMINST > 1 then

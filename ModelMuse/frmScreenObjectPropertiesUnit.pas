@@ -2387,6 +2387,7 @@ type
       ACol: Integer): Boolean;
     function GwtColumnCount: integer;
     function IsChdEndHeadColumn(ACol: Integer): Boolean;
+    function IsChdActiveColumn(ACol: Integer): Boolean;
     procedure UpdateUzfScrollWidth;
     procedure CreateFmp4EfficiencyNode;
     procedure Fmp4EfficiencyChanged(Sender: TObject);
@@ -3062,7 +3063,7 @@ begin
 
   if (Sender = frameChdParam.rdgModflowBoundary) then
   begin
-    PestParameterColumns := [2,3];
+    PestParameterColumns := [3,4];
     if frmGoPhast.PhastModel.GwtUsed then
     begin
       for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
@@ -7574,7 +7575,7 @@ var
   MobileSpeciesCount: Integer;
 begin
   MobileSpeciesCount := GwtColumnCount;
-  frameChdParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
+  frameChdParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
   frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
   frameWellParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
   frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
@@ -7737,28 +7738,6 @@ begin
     and ((LocalModel.SutraMesh.MeshType in [mt2D, mtProfile])
     or (rgElevationCount.ItemIndex in [1, 2]));
 end;
-
-//function TfrmScreenObjectProperties.CanSelectMt3dms: Boolean;
-//begin
-//  if ((FCHD_Node <> nil) and (FCHD_Node.StateIndex <> 1))
-//    or ((FWEL_Node <> nil) and (FWEL_Node.StateIndex <> 1))
-//    or ((FDRN_Node <> nil) and (FDRN_Node.StateIndex <> 1))
-//    or ((FRIV_Node <> nil) and (FRIV_Node.StateIndex <> 1))
-//    or ((FGHB_Node <> nil) and (FGHB_Node.StateIndex <> 1))
-//    or ((FRCH_Node <> nil) and (FRCH_Node.StateIndex <> 1))
-//    or ((FEVT_Node <> nil) and (FEVT_Node.StateIndex <> 1))
-//    or ((FRES_Node <> nil) and (FRES_Node.StateIndex <> 1))
-//    or ((FLAK_Node <> nil) and (FLAK_Node.StateIndex <> 1))
-//    or ((FDRT_Node <> nil) and (FDRT_Node.StateIndex <> 1))
-//    or ((FETS_Node <> nil) and (FETS_Node.StateIndex <> 1)) then
-//  begin
-//    result := True;
-//  end
-//  else
-//  begin
-//    result := False;
-//  end;
-//end;
 
 procedure TfrmScreenObjectProperties.GetCanSelectNode(Node: TTreeNode; var AllowChange: Boolean);
 var
@@ -20181,7 +20160,7 @@ var
 begin
   result := (frmGoPhast.ModelSelection = msModflow2015)
     and ((DataGrid = frameRchParam.rdgModflowBoundary)
-    or (DataGrid = frameChdParam.rdgModflowBoundary)
+    or ((DataGrid = frameChdParam.rdgModflowBoundary) and (ACol in [3,4]))
     or (DataGrid = frameCSUB.rdgModflowBoundary)
     or (DataGrid = frameDrnParam.rdgModflowBoundary)
     or (DataGrid = frameEtsParam.rdgModflowBoundary)
@@ -20566,7 +20545,7 @@ begin
       end;
       StoreModflowBoundaryParameters(Boundary, Times, Frame);
     end
-    else if  Node.StateIndex = 1 then
+    else if Node.StateIndex = 1 then
     begin
       Boundary.Clear;
     end;
@@ -23834,7 +23813,12 @@ begin
   else if (DataGrid.Owner is TframeScreenObjectNoParam) then
   begin
     ResultType := rdtDouble;
-    if (DataGrid = frameRchParam.rdgModflowBoundary)
+    if (DataGrid = frameChdParam.rdgModflowBoundary)
+      and IsChdActiveColumn(ACol) then
+    begin
+      ResultType := rdtBoolean;
+    end
+    else if (DataGrid = frameRchParam.rdgModflowBoundary)
       and frmGoPhast.PhastModel.RchTimeVaryingLayers
       and (ACol = 3 + GwtColumnCount) then
     begin
@@ -30049,7 +30033,7 @@ begin
     or (DataGrid = frameRivParam.rdgModflowBoundary)
     or (DataGrid = frameDrtParam.rdgModflowBoundary)
     or (DataGrid = frameScreenObjectStr.rdgModflowBoundary)
-    or (DataGrid = frameChdParam.rdgModflowBoundary)
+    or ((DataGrid = frameChdParam.rdgModflowBoundary) and (ACol in [3,4]))
     or ((DataGrid = frameFarmWell.rdgModflowBoundary) and (ACol = 2))
     or (DataGrid = frameFhbHead.rdgModflowBoundary)
     or (DataGrid = frameFhbFlow.rdgModflowBoundary)
@@ -30353,21 +30337,49 @@ begin
   end;
 end;
 
-function TfrmScreenObjectProperties.IsChdEndHeadColumn(ACol: Integer): Boolean;
+function TfrmScreenObjectProperties.IsChdActiveColumn(ACol: Integer): Boolean;
+const
+  ActivePosition = 0;
+  FirstActiveCol = 2;
+  NonGWTProperties = 3;
+  FirstDataColumn = 2;
 var
   DataColumnCount: Integer;
   DC: Integer;
 begin
-  result := (ACol >= 3);
+  result := (ACol >= FirstActiveCol);
   if result then
   begin
-    DataColumnCount := 2;
+    DataColumnCount := NonGWTProperties;
     if frmGoPhast.PhastModel.GwtUsed then
     begin
       Inc(DataColumnCount, frmGoPhast.PhastModel.MobileComponents.Count);
     end;
-    DC := ACol-2;
-    result := ((DC mod DataColumnCount) = 1);
+    DC := ACol-FirstDataColumn;
+    result := ((DC mod DataColumnCount) = ActivePosition);
+  end;
+end;
+
+function TfrmScreenObjectProperties.IsChdEndHeadColumn(ACol: Integer): Boolean;
+const
+  EndHeadPosition = 2;
+  FirstEndHeadCol = 4;
+  NonGWTProperties = 3;
+  FirstDataColumn = 2;
+var
+  DataColumnCount: Integer;
+  DC: Integer;
+begin
+  result := (ACol >= FirstEndHeadCol);
+  if result then
+  begin
+    DataColumnCount := NonGWTProperties;
+    if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      Inc(DataColumnCount, frmGoPhast.PhastModel.MobileComponents.Count);
+    end;
+    DC := ACol-FirstDataColumn;
+    result := ((DC mod DataColumnCount) = EndHeadPosition);
   end;
 end;
 

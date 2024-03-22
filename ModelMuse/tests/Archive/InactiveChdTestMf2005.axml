@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="InactiveChdTestMf2005" FileType="bin">
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="InactiveChdTestMf2005" FileType="ancillary">
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="ancillary">InactiveChdTestMf2005.gpt</FileName>
+  </ancillary>
+  <model Model_Name="InactiveChdTestMf2005" FileType="Model Input">
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.bas</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.chd</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.dis</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.gsf</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.jtf</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.lpf</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.nam.archive</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.oc</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.pcg</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">InactiveChdTestMf2005.pval</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Input">usgs.InactiveChdTestMf2005.reference</FileName>
+  </model>
+  <output Model_Name="InactiveChdTestMf2005" FileType="Model Output">
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Output">InactiveChdTestMf2005.cbc</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Output">InactiveChdTestMf2005.fdn</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Output">InactiveChdTestMf2005.fhd</FileName>
+    <FileName Model_Name="InactiveChdTestMf2005" FileType="Model Output">InactiveChdTestMf2005.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -318,6 +318,7 @@ const
   StrMODFLOWRiverBottom = 'RIV Bottom';
   StrMODFLOWCHDStartingHead = 'CHD Starting Head';
   StrMODFLOWCHDEndingHead = 'CHD Ending Head';
+  StrModflowChdActive = 'CHD Active';
   StrMODFLOWEtsRateFraction = 'ETS Evapotranspiration Rate Fraction';
   StrMODFLOWEtsDepthFraction = 'ETS Evapotranspiration Depth Fraction';
   StrMODFLOWEtsRate = 'ETS Evapotranspiration Rate';

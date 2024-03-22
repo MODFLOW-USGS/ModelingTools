@@ -270,9 +270,12 @@ Type
   TChdPackage = class(TModflowPackageSelection)
   private
     FGwtConcentrationList: TMfBoundDispObjectList;
+    FMfChdActive: TModflowBoundaryDisplayTimeList;
     FMfChdStartingHead: TModflowBoundaryDisplayTimeList;
     FMfChdEndingHead: TModflowBoundaryDisplayTimeList;
     procedure InitializeChdDisplay(Sender: TObject);
+    procedure GetMfChdActiveUseList(Sender: TObject;
+      NewUseList: TStringList);
     procedure GetMfChdStartingHeadUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfChdEndingHeadUseList(Sender: TObject;
@@ -283,6 +286,8 @@ Type
     //
     Constructor Create(Model: TBaseModel); override;
     Destructor Destroy; override;
+    property MfChdActive: TModflowBoundaryDisplayTimeList
+      read FMfChdActive;
     property MfChdStartingHead: TModflowBoundaryDisplayTimeList
       read FMfChdStartingHead;
     property MfChdEndingHead: TModflowBoundaryDisplayTimeList
@@ -7523,6 +7528,7 @@ resourcestring
   StrRiverConductance = 'River Conductance';
   StrCHDEndingHead = 'CHD Ending Head';
   StrCHDStartingHead = 'CHD Starting Head';
+  StrChdActive = 'CHD Active';
   StrRechargeLayer = 'Recharge layer';
   StrEvapotranspirationS = 'Evapotranspiration Segments layer';
   StrEvapotranspirationL = 'Evapotranspiration layer';
@@ -13042,6 +13048,14 @@ begin
   inherited;
   if Model <> nil then
   begin
+
+    FMfChdActive := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfChdActive.OnInitialize := InitializeChdDisplay;
+    MfChdActive.OnGetUseList := GetMfChdActiveUseList;
+    MfChdActive.OnTimeListUsed := PackageUsed;
+    MfChdActive.Name := StrModflowChdActive;
+    AddTimeList(MfChdActive);
+
     FMfChdStartingHead := TModflowBoundaryDisplayTimeList.Create(Model);
     MfChdStartingHead.OnInitialize := InitializeChdDisplay;
     MfChdStartingHead.OnGetUseList := GetMfChdStartingHeadUseList;
@@ -13062,6 +13076,7 @@ end;
 
 destructor TChdPackage.Destroy;
 begin
+  FMfChdActive.Free;
   FGwtConcentrationList.Free;
   FMfChdStartingHead.Free;
   FMfChdEndingHead.Free;
@@ -13081,6 +13096,12 @@ begin
   UpdatePkgUseList(NewUseList, ptCHD, Index, DataSetName);
 end;
 
+procedure TChdPackage.GetMfChdActiveUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptCHD, 0, StrChdActive);
+end;
+
 procedure TChdPackage.GetMfChdEndingHeadUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
@@ -13090,7 +13111,7 @@ end;
 procedure TChdPackage.GetMfChdStartingHeadUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptCHD, 0, StrCHDStartingHead);
+  UpdateDisplayUseList(NewUseList, ptCHD, 1, StrCHDStartingHead);
 end;
 
 procedure TChdPackage.InitializeChdDisplay(Sender: TObject);
@@ -13100,12 +13121,14 @@ var
   Index: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
 begin
+  MfChdActive.CreateDataSets;
   MfChdStartingHead.CreateDataSets;
   MfChdEndingHead.CreateDataSets;
 
   List := TModflowBoundListOfTimeLists.Create;
   ChdWriter := TModflowCHD_Writer.Create(FModel as TCustomModel, etDisplay);
   try
+    List.Add(MfChdActive);
     List.Add(MfChdStartingHead);
     List.Add(MfChdEndingHead);
 
@@ -13116,11 +13139,12 @@ begin
       List.Add(TimeList);
     end;
 
-    ChdWriter.UpdateDisplay(List, [0,1]);
+    ChdWriter.UpdateDisplay(List, [1,2]);
   finally
     ChdWriter.Free;
     List.Free;
   end;
+  MfChdActive.ComputeAverage;
   MfChdStartingHead.LabelAsSum;
   MfChdEndingHead.LabelAsSum;
   for Index := 0 to FGwtConcentrationList.Count - 1 do
@@ -13135,6 +13159,7 @@ begin
   inherited;
 //  if PackageUsed(FModel) then
   begin
+    FMfChdActive.Invalidate;
     FMfChdStartingHead.Invalidate;
     FMfChdEndingHead.Invalidate;
     InvalidateConcentrations;
