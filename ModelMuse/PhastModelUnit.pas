@@ -10197,16 +10197,14 @@ const
 //               bug fix: Fixed bug in exporting Dispersion package in MODFLOW 6.
 //               Enhancement: Added support for defining observations of input
 //                data in arrays.
-
-
-//               Enhancement: Added a new "Active Specified Head" field that
+//    '5.2.0.1'  Enhancement: Added a new "Active Specified Head" field that
 //                allows the user to make some cells intersectd or enclosed
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.0';
+  IIModelVersion = '5.2.0.1';
 
 function IModelVersion: string;
 begin
@@ -45614,20 +45612,24 @@ var
   BatchFileLocation: string;
   GeoRefWriter: TGeoRefWriter;
   ZbNameFileWriter: TZoneBudgetNameFileWriter;
+  Root: string;
+  Extension: string;
+  GWTUsed:  Boolean;
+  ChemIndex: Integer;
+  TempFileName: string;
 begin
   if ModelSelection = msModflowOwhm2 then
   begin
     frmErrorsAndWarnings.AddWarning(self, StrWhenUsingZonebudge,
       StrTheVersionOfZoneB)
   end;
-//  if ModelSelection = msModflow2015 then
-//  begin
-//    Exit;
-//  end;
   // Note: ZONEBUDGET can not read Unicode text files.
 
   SetCurrentDir(ExtractFileDir(FileName));
   FileName := FixFileName(FileName);
+  Root := ChangeFileExt(FileName, '');
+  Extension := ExtractFileExt(FileName);
+  GWTUsed := (ModelSelection = msModflow2015) and ModflowPackages.GwtProcess.IsSelected;
   if frmProgressMM = nil then
   begin
     frmProgressMM := TfrmProgressMM.Create(nil);
@@ -45643,9 +45645,6 @@ begin
       frmProgressMM.ShouldContinue := True;
       frmProgressMM.Show;
 
-      // Export ZoneFile;
-      // Export Response File;
-      // Export Batch File;
       NumberOfSteps := 3;
 
       frmProgressMM.pbProgress.Max := NumberOfSteps;
@@ -45657,13 +45656,40 @@ begin
       finally
         GeoRefWriter.Free;
       end;
+      if GWTUsed then
+      begin
+        for ChemIndex := 0 to MobileComponents.Count - 1 do
+        begin
+          GeoRefWriter := TGeoRefWriter.Create(self, etExport);
+          try
+            GeoRefWriter.WriteFile(FileName, smtZoneBudget2, MobileComponents[ChemIndex].Name);
+          finally
+            GeoRefWriter.Free;
+          end;
+        end;
+      end;
 
+      // Export ZoneFile;
       ZoneFileWriter := TZoneBudgetZoneFileWriter.Create(self, etExport);
       try
         ZoneFileWriter.WriteFile(FileName);
       finally
         ZoneFileWriter.Free;
       end;
+      if GWTUsed then
+      begin
+        for ChemIndex := 0 to MobileComponents.Count - 1 do
+        begin
+          ZoneFileWriter := TZoneBudgetZoneFileWriter.Create(self, etExport);
+          try
+            ZoneFileWriter.WriteFile(FileName, MobileComponents[ChemIndex].Name);
+          finally
+            ZoneFileWriter.Free;
+          end;
+        end;
+      end;
+
+
       FDataArrayManager.CacheDataArrays;
       Application.ProcessMessages;
       if not frmProgressMM.ShouldContinue then
@@ -45672,6 +45698,7 @@ begin
       end;
       frmProgressMM.StepIt;
 
+      // Export Response File;
       if ModelSelection = msModflow2015 then
       begin
         ZbNameFileWriter := TZoneBudgetNameFileWriter.Create(self, etExport, EmbeddedExport);
@@ -45679,6 +45706,18 @@ begin
           ZbNameFileWriter.WriteFile(FileName);
         finally
           ZbNameFileWriter.Free;
+        end;
+        if GWTUsed then
+        begin
+          for ChemIndex := 0 to MobileComponents.Count - 1 do
+          begin
+            ZbNameFileWriter := TZoneBudgetNameFileWriter.Create(self, etExport, EmbeddedExport);
+            try
+              ZbNameFileWriter.WriteFile(FileName, MobileComponents[ChemIndex].Name);
+            finally
+              ZbNameFileWriter.Free;
+            end;
+          end;
         end;
       end
       else
@@ -45698,6 +45737,7 @@ begin
       end;
       frmProgressMM.StepIt;
 
+      // Export Batch File;
       BatchFileLocation := WriteZoneBudgetBatchFile(self, FileName, RunModel,
         EmbeddedExport);
 //      AddZoneBudgetInputFile(BatchFileLocation);

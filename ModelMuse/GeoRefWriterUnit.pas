@@ -16,7 +16,7 @@ type
   protected
     class function Extension: string; override;
   public
-    procedure WriteFile(AFileName: string; SubModelType: TSubModelType);
+    procedure WriteFile(AFileName: string; SubModelType: TSubModelType; ChemName: string = '');
   end;
 
 
@@ -51,7 +51,7 @@ begin
   WriteString(' ' + Format('%0:d/%1:d/%2:d', [Month, Day, Year]));
 end;
 
-procedure TGeoRefWriter.WriteFile(AFileName: string; SubModelType: TSubModelType);
+procedure TGeoRefWriter.WriteFile(AFileName: string; SubModelType: TSubModelType; ChemName: string = '');
 var
   Directory: string;
   FGeoRef: TGeoRef;
@@ -78,6 +78,11 @@ begin
       end
   else
     Assert(False);
+  end;
+
+  if ChemName <> '' then
+  begin
+    FFileName := FFileName + '.' + ChemName + '.';
   end;
 
   FFileName := FileName(FFileName);

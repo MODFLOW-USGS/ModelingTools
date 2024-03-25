@@ -26,7 +26,7 @@ type
     destructor Destroy; override;
     Procedure WriteU2DINTHeader(const Comment: string;
       ArrayType: TModflowArrayType; const MF6_ArrayName: string); override;
-    procedure WriteFile(const AFileName: string);
+    procedure WriteFile(AFileName: string; ChemName: string = '');
   end;
 
   TZoneBudgetResponseFileWriter = class(TCustomModflowWriter)
@@ -56,6 +56,7 @@ type
     FZoneBudget: TZoneBudgetSelect;
 //    FNameOfFile: string;
     FEmbeddedExport: Boolean;
+    FChemName: string;
     procedure WriteBeginZonebudget;
     procedure WriteEndZonebudget;
     procedure WriteBudgetFile(ArchiveFile: Boolean);
@@ -65,7 +66,7 @@ type
     class function Extension: string; override;
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
       EmbeddedExport: boolean); reintroduce;
-    procedure WriteFile(const AFileName: string);
+    procedure WriteFile(AFileName: string; ChemName: string = '');
   end;
 
 
@@ -238,13 +239,17 @@ begin
   WriteEndDimensions;
 end;
 
-procedure TZoneBudgetZoneFileWriter.WriteFile(const AFileName: string);
+procedure TZoneBudgetZoneFileWriter.WriteFile(AFileName: string; ChemName: string = '');
 var
   NameOfFile: string;
 begin
   if not FZoneBudget.IsSelected then
   begin
     Exit
+  end;
+  if ChemName <> '' then
+  begin
+    AFileName := ChangeFileExt(AFileName, '.' + ChemName + '.' )
   end;
   NameOfFile := FileName(AFileName);
   Model.AddZoneBudgetInputFile(NameOfFile);
@@ -622,6 +627,10 @@ begin
 
   AFileName := FNameOfFile;
   AFileName := ChangeFileExt(AFileName, '');
+  if FChemName <> '' then
+  begin
+    AFileName := StringReplace(AFileName, '.' + FChemName + '.', '.', []);
+  end;
   if ArchiveFile then
   begin
     AFileName := ExtractFileName(AFileName);
@@ -698,13 +707,20 @@ begin
   NewLine;
 end;
 
-procedure TZoneBudgetNameFileWriter.WriteFile(const AFileName: string);
+procedure TZoneBudgetNameFileWriter.WriteFile(AFileName: string; ChemName: string = '');
 var
   NameOfArchiveFile: string;
 begin
   if not FZoneBudget.IsSelected then
   begin
     Exit
+  end;
+
+  FChemName := ChemName;
+
+  if ChemName <> '' then
+  begin
+    AFileName := ChangeFileExt(AFileName, '.' + ChemName + '.') ;
   end;
   FNameOfFile := FileName(AFileName);
 

@@ -222,7 +222,7 @@ object TTaskHistory
     end
     item
       Name = 'ZONEBUDGET'
-      Display = False
+      Display = True
     end
     item
       Name = 'Export Image'
@@ -32767,5 +32767,18 @@ object TTaskHistory
       Categories.Strings = (
         'CHD'
         'Testing')
+    end
+    item
+      Date = 45374.000000000000000000
+    end
+    item
+      Date = 45375.000000000000000000
+    end
+    item
+      Date = 45376.000000000000000000
+      Categories.Strings = (
+        'Testing'
+        'CHD'
+        'ZONEBUDGET')
     end>
 end

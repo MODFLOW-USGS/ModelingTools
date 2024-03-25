@@ -2448,7 +2448,12 @@ var
   ZBName: string;
   NetworkDrive: Boolean;
   ModelDirectory: string;
+  GWTUsed: Boolean;
+  Extension: string;
+  Root: string;
+  ChemIndex: Integer;
 begin
+  GWTUsed := (Model.ModelSelection = msModflow2015) and Model.ModflowPackages.GwtProcess.IsSelected;
   NetworkDrive := IsNetworkDrive(FileName);
   ModelDirectory := ExtractFileDir(FileName);
   ZoneBudget := Model.ModflowPackages.ZoneBudget;
@@ -2522,6 +2527,18 @@ begin
     if Model.ModelSelection = msModflow2015 then
     begin
       BatchFile.Add(AFileName + ' ' + InputFileName);
+      if GWTUsed then
+      begin
+        Extension := ExtractFileExt(InputFileName);
+        Root := ChangeFileExt(InputFileName, '');
+        Extension := ExtractFileExt(Root) + Extension;
+        Root := ChangeFileExt(Root, '');
+        for ChemIndex := 0 to Model.MobileComponents.Count - 1 do
+        begin
+          BatchFile.Add(AFileName + ' ' +
+            Root + '.' + Model.MobileComponents[ChemIndex].Name + Extension);
+        end;
+      end;
     end
     else
     begin
@@ -6043,38 +6060,43 @@ begin
           Exit;
         end;
         CellList := ParamValues[TimeIndex];
-//        CellList.CheckRestore;
         ActiveCellCount := GetActiveCellCount(CellList);
-        if ActiveCellCount > 0 then
+        if CellList.Count > 0 then
         begin
           if (Model.ModelSelection  = msModflow2015) or (FEvaluationType = etExportCsv) then
           begin
             List := FValues[TimeIndex];
-            for CellIndex := 0 to CellList.Count - 1 do
+            if ActiveCellCount > 0 then
             begin
-              List.Add(CellList[CellIndex]);
+              for CellIndex := 0 to CellList.Count - 1 do
+              begin
+                List.Add(CellList[CellIndex]);
+              end;
+              CellList.OwnsObjects := False;
             end;
-            CellList.OwnsObjects := False;
             CellList.Clear;
             List.Cache;
           end
           else
           begin
             // Data set 4a.
-            if NUMINST > 1 then
+            if ActiveCellCount > 0 then
             begin
-              GetInstanceName(InstanceName, TimeIndex, InstanceRoot);
-              WriteString(InstanceName);
-              WriteString(DS4A + ' (Parameter instance for stress period '
-                + IntToStr(TimeIndex+1) + ')');
-              NewLine;
-            end;
-            // Data set 4b.
-            if (FirstIndex) or (NUMINST > 1 ) then
-            begin
-              FirstIndex := False;
-              WriteParameterCells(CellList, NLST, VariableIdentifiers,
-                DataSetIdentifier, umAssign, MultiplierArrayNames, ZoneArrayNames);
+              if NUMINST > 1 then
+              begin
+                GetInstanceName(InstanceName, TimeIndex, InstanceRoot);
+                WriteString(InstanceName);
+                WriteString(DS4A + ' (Parameter instance for stress period '
+                  + IntToStr(TimeIndex+1) + ')');
+                NewLine;
+              end;
+              // Data set 4b.
+              if (FirstIndex) or (NUMINST > 1 ) then
+              begin
+                FirstIndex := False;
+                WriteParameterCells(CellList, NLST, VariableIdentifiers,
+                  DataSetIdentifier, umAssign, MultiplierArrayNames, ZoneArrayNames);
+              end;
             end;
           end;
         end;
@@ -6087,7 +6109,6 @@ end;
 destructor TCustomListWriter.Destroy;
 begin
   FObjectNames.Free;
-//  FBoundNames.Free;
   inherited;
 end;
 
@@ -7750,7 +7771,7 @@ begin
         Annotation := Format(StrMODFLOWTimeSeries,
           [TimeSeriesName, Model.ThreeDDisplayTime]);
       end
-      else if (Model.ModelSelection = msModflow2015) or
+      else if //(Model.ModelSelection = msModflow2015) or
         ((Param = nil) or not (DataArrayIndex in ParameterIndicies)) then
       begin
         Value := Cell.RealValue[DataArrayIndex, Model];
