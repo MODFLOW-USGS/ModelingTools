@@ -32790,6 +32790,8 @@ object TTaskHistory
       Date = 45378.000000000000000000
       Categories.Strings = (
         'Documentation'
-        'OC')
+        'OC'
+        'Error checking'
+        'Import')
     end>
 end
