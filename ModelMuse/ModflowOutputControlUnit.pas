@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, GoPhastTypes, Mt3dmsTimesUnit;
 
 type
-  TCellSaveFormat = (csfNone, csfBinary, csfListing);
+  TCellSaveFormat = (csfNone, csfBinary, csfListing, csfBoth);
   TFrequencyChoice = (fcTimeSteps, fcStressPeriods);
   TOutputFileType = (oftText, oftBinary);
   TWrapping = (wStrip, wWrap);

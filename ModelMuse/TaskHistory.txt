@@ -46,7 +46,7 @@ object TTaskHistory
     end
     item
       Name = 'DIS'
-      Display = True
+      Display = False
     end
     item
       Name = 'Error checking'
@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = True
+      Display = False
     end
     item
       Name = 'core code'
@@ -94,7 +94,7 @@ object TTaskHistory
     end
     item
       Name = 'DRN'
-      Display = True
+      Display = False
     end
     item
       Name = 'DRT'
@@ -110,7 +110,7 @@ object TTaskHistory
     end
     item
       Name = 'ETS'
-      Display = True
+      Display = False
     end
     item
       Name = 'RES'
@@ -126,7 +126,7 @@ object TTaskHistory
     end
     item
       Name = 'OC'
-      Display = False
+      Display = True
     end
     item
       Name = 'SFR'
@@ -32785,5 +32785,11 @@ object TTaskHistory
       Date = 45377.000000000000000000
       Categories.Strings = (
         'Model Viewer SUTRA 4')
+    end
+    item
+      Date = 45378.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'OC')
     end>
 end

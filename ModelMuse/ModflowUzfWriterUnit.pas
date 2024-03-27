@@ -185,7 +185,7 @@ begin
       begin
         UnitNumber := 0;
       end;
-    csfBinary:
+    csfBinary, csfBoth:
       begin
         UnitNumber := -Model.UnitNumbers.UnitNumber(StrCBC);
       end;

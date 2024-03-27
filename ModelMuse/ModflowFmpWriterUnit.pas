@@ -2448,7 +2448,7 @@ begin
       begin
         case Model.ModflowOutputControl.SaveCellFlows of
           csfNone: ISDPFL := 0;
-          csfBinary: ISDPFL := Model.UnitNumbers.UnitNumber(StrFmpSupplyDemand);
+          csfBinary, csfBoth: ISDPFL := Model.UnitNumbers.UnitNumber(StrFmpSupplyDemand);
           csfListing: ISDPFL := -1;
         end;
       end;

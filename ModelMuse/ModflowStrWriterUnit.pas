@@ -1684,7 +1684,7 @@ begin
       begin
         ISTCB2 := 0;
       end;
-    csfBinary:
+    csfBinary, csfBoth:
       begin
         ISTCB2 := Model.UnitNumbers.UnitNumber(StrSTR_OUT);
         if not WritingTemplate then

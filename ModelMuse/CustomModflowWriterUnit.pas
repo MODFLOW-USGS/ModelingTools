@@ -4856,7 +4856,7 @@ begin
       begin
         // do nothing
       end;
-    csfBinary:
+    csfBinary, csfBoth:
       begin
         CellFlowsName := ChangeFileExt(FileName, StrCbcExt);
         WriteToNameFile(StrDATABINARY,
@@ -4920,7 +4920,7 @@ begin
       begin
         UnitNumber := 0;
       end;
-    csfBinary:
+    csfBinary, csfBoth:
       begin
         UnitNumber := Model.UnitNumbers.UnitNumber(StrCBC);
       end;
@@ -9775,6 +9775,13 @@ begin
           ALine := '  PRINT_FLOWS';
           NameFile.Add(ALine);
         end;
+      csfBoth:
+        begin
+          ALine := '  SAVE_FLOWS';
+          NameFile.Add(ALine);
+          ALine := '  PRINT_FLOWS';
+          NameFile.Add(ALine);
+        end
       else
         Assert(False);
     end;
@@ -9885,7 +9892,7 @@ end;
 procedure TCustomModflowWriter.WriteSaveFlowsOption;
 begin
   { TODO -cMODFLOW-6 : Need to modify for MODFLOW-6 to allow printing and saving in the same model }
-  if Model.ModflowOutputControl.SaveCellFlows = csfBinary then
+  if Model.ModflowOutputControl.SaveCellFlows in [csfBinary, csfBoth] then
   begin
     WriteString('    SAVE_FLOWS');
     NewLine;
@@ -10585,7 +10592,7 @@ var
   OutputControl: TModflowOutputControl;
 begin
   OutputControl := Model.ModflowOutputControl;
-  if OutputControl.SaveCellFlows = csfListing then
+  if OutputControl.SaveCellFlows in [csfListing, csfBoth] then
   begin
     WriteString('  PRINT_FLOWS');
     NewLine;

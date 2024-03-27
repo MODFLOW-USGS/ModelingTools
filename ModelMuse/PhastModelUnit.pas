@@ -40476,7 +40476,7 @@ begin
       Assert(False);
     end;
   end
-  else if ModflowOutputControl.SaveCellFlows = csfBinary then
+  else if ModflowOutputControl.SaveCellFlows in [csfBinary, csfBoth] then
   begin
     Extension := StrCbcExt;
   end

@@ -32,7 +32,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       600
       41)
     object btnHelp: TBitBtn
-      Left = 324
+      Left = 320
       Top = 6
       Width = 82
       Height = 27
@@ -41,10 +41,10 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 320
+      ExplicitLeft = 316
     end
     object btnOK: TBitBtn
-      Left = 412
+      Left = 408
       Top = 6
       Width = 82
       Height = 27
@@ -53,10 +53,10 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 408
+      ExplicitLeft = 404
     end
     object btnCancel: TBitBtn
-      Left = 500
+      Left = 496
       Top = 6
       Width = 83
       Height = 27
@@ -64,7 +64,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 496
+      ExplicitLeft = 492
     end
   end
   object pltrPageNavigator: TJvPageListTreeView
@@ -166,7 +166,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       object memoComments: TMemo
         Left = 6
         Top = 168
-        Width = 448
+        Width = 444
         Height = 187
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 4
@@ -260,7 +260,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         end
         inherited comboFrequency: TJvImageComboBox
           Left = 22
-          Width = 432
+          Width = 428
           Anchors = [akLeft, akTop, akRight]
           DroppedWidth = 448
           Items = <
@@ -275,7 +275,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
               Text = 'Last time step of each N'#39'th stress period'
             end>
           ExplicitLeft = 22
-          ExplicitWidth = 432
+          ExplicitWidth = 428
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -353,7 +353,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
           ExplicitWidth = 193
         end
         inherited comboFrequency: TJvImageComboBox
-          Width = 432
+          Width = 428
           Anchors = [akLeft, akTop, akRight]
           DroppedWidth = 448
           Items = <
@@ -367,7 +367,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
               Indent = 0
               Text = 'Last time step of each N'#39'th stress period'
             end>
-          ExplicitWidth = 432
+          ExplicitWidth = 428
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -409,6 +409,8 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       HelpType = htKeyword
       HelpKeyword = 'Budget_Pane'
       Caption = 'jvspBudget'
+      ExplicitWidth = 465
+      ExplicitHeight = 360
       DesignSize = (
         469
         361)
@@ -453,20 +455,21 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       object rgSaveCellFlows: TJvRadioGroup
         Left = 16
         Top = 145
-        Width = 385
+        Width = 441
         Height = 48
         Caption = 'Save cell flows'
-        Columns = 3
+        Columns = 4
         Items.Strings = (
           'None'
           'Binary'
-          'Listing')
+          'Listing'
+          'Both (MF6)')
         TabOrder = 3
       end
       object comboFrequency: TJvImageComboBox
         Left = 16
         Top = 77
-        Width = 432
+        Width = 428
         Height = 28
         Style = csOwnerDrawVariable
         Anchors = [akLeft, akTop, akRight]
@@ -488,6 +491,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
             Indent = 0
             Text = 'Last time step of each N'#39'th stress period'
           end>
+        ExplicitWidth = 424
       end
       object spN: TJvSpinEdit
         Left = 44

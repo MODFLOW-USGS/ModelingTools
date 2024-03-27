@@ -549,6 +549,8 @@ type
     comboVertical: TComboBox;
     lblVertical: TLabel;
     comboFieldTypes: TComboBox;
+    rdeIgnoreValue: TRbwDataEntry;
+    lblIgnoreValue: TLabel;
     // @name edits the formula in @link(edImportCriterion).
     procedure btnImportCriterionClick(Sender: TObject);
     // @name sets all the checkboxes to checked
@@ -3491,6 +3493,7 @@ var
   ObsValue: double;
   ObsWeight: double;
   ShouldIgnore: Boolean;
+  ValueToIgnore: double;
 begin
   if FHeadObsNames = nil then
   begin
@@ -3575,6 +3578,7 @@ begin
 
   AScreenObject.Modflow6Obs.General := GeneralObs;
 
+  ValueToIgnore := StrToFloatDef(rdeIgnoreValue.Text, 3E30);
   CalibrationObservations := AScreenObject.Modflow6Obs.CalibrationObservations;
   if frmGoPhast.PhastModel.PestStatus in [psObservations, psActive] then
   begin
@@ -3606,6 +3610,10 @@ begin
         raise EImportShapeFileError.Create(
           Format(StrNoObservationTime, [RowIndex]));
       end;
+      if ObsTime = ValueToIgnore then
+      begin
+        Continue;
+      end;
       ObsValue := GetRealValueFromText(rdgBoundaryConditions.Cells[
         Ord(mpocValue), RowIndex], ShouldIgnore);
       if ShouldIgnore then
@@ -3613,12 +3621,20 @@ begin
         raise EImportShapeFileError.Create(
           Format(StrNoObservationValue, [RowIndex]));
       end;
+      if ObsValue = ValueToIgnore then
+      begin
+        Continue;
+      end;
       ObsWeight := GetRealValueFromText(rdgBoundaryConditions.Cells[
         Ord(mpocWeight), RowIndex], ShouldIgnore);
       if ShouldIgnore then
       begin
         raise EImportShapeFileError.Create(
           Format(StrNoObservationWeigh,[RowIndex]));
+      end;
+      if ObsWeight = ValueToIgnore then
+      begin
+        Continue;
       end;
 
       CalibObs := CalibrationObservations.Add;
@@ -4974,6 +4990,9 @@ var
 begin
   plBoundary.ActivePage := jvspModflow6Obs;
   comboModflow6ObsName.Items := FStringFieldNames;
+  rdeIgnoreValue.Visible := frmGoPhast.PhastModel.PestStatus in [psObservations, psActive];
+  lblIgnoreValue.Visible := rdeIgnoreValue.Visible;
+
   if frmGoPhast.PhastModel.PestStatus in [psObservations, psActive] then
   begin
     rdgBoundaryConditions.ColCount := 5;

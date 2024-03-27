@@ -2092,6 +2092,7 @@ type
     procedure EnablePilotPointItems;
     procedure UpdateControlsEnabledOrVisible;
     property ContourDataSet: TDataArray read GetContourDataSet;
+    function ZoneBudgetWarning: string;
     { Public declarations }
   end;
 
@@ -2482,6 +2483,9 @@ resourcestring
   'the top layer.';
   StrItAlsoMeansThatI = 'It also means that IDOMAIN values may change. Chang' +
   'es in IDOMAIN can have a large effect on your model.';
+  StrZoneBudgetRequires = 'ZoneBudget requires that the cell budgets be save' +
+  'd to the cell-by-cell binary file. This is selected in the "Model|MODFLOW' +
+  ' Output Control" dialog box.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -3361,6 +3365,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
   ChildFileName: string;
+  WarningMessage: string;
 begin
   inherited;
   if not PhastModel.ZoneBudgetIsSelected then
@@ -3368,6 +3373,16 @@ begin
     Beep;
     MessageDlg(StrYouMustActivateZO, mtWarning, [mbOK], 0);
     Exit;
+  end;
+
+  WarningMessage := ZoneBudgetWarning;
+  if WarningMessage <> '' then
+  begin
+    WarningMessage := WarningMessage + ' Do you want to fix this?';
+    if not (MessageDlg(WarningMessage, mtError, [mbYes, mbNo], 0) = mrNo) then
+    begin
+      Exit;
+    end;
   end;
 
   if (sdZonebudgetInput.FileName = '') and (sdModflowInput.FileName <> '') then
@@ -3453,6 +3468,16 @@ begin
     WarningMessage := Format(StrTheCurrentVersion, [StrZONEBUDGET]);
     result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
   end;
+  end;
+end;
+
+function TfrmGoPhast.ZoneBudgetWarning: string;
+begin
+  result := '';
+  if PhastModel.ModflowPackages.ZoneBudget.IsSelected
+    and not (PhastModel.ModflowOutputControl.SaveCellFlows in [csfBinary, csfBoth]) then
+  begin
+    result := StrZoneBudgetRequires;
   end;
 end;
 
@@ -13479,6 +13504,7 @@ var
   AParam: TModflowSteadyParameter;
   PilotPointsUsed: Boolean;
   PestDirectory: string;
+  WarningMessage: string;
 begin
   inherited;
   if FExporting then
@@ -13487,6 +13513,16 @@ begin
   end;
   try
     FExporting := True;
+    WarningMessage := ZoneBudgetWarning;
+    if WarningMessage <> '' then
+    begin
+      WarningMessage := WarningMessage + ' Do you want to fix this?';
+      if not (MessageDlg(WarningMessage, mtError, [mbYes, mbNo], 0) = mrNo) then
+      begin
+        Exit;
+      end;
+    end;
+
     if PhastModel.DisvUsed then
     begin
       DisvGrid := PhastModel.DisvGrid;
@@ -15784,12 +15820,21 @@ begin
 end;
 
 procedure TfrmGoPhast.miOutputControlClick(Sender: TObject);
+var
+  WarningMessage: string;
 begin
   inherited;
   ShowAForm(TfrmModflowOutputControl);
+  WarningMessage := ZoneBudgetWarning;
+  if WarningMessage <> '' then
+  begin
+    MessageDlg(WarningMessage, mtWarning, [mbOK], 0);
+  end;
 end;
 
 procedure TfrmGoPhast.miPackagesClick(Sender: TObject);
+var
+  WarningMessage: string;
 begin
   inherited;
   if frmModflowPackages = nil then
@@ -15798,6 +15843,11 @@ begin
   end;
   frmModflowPackages.GetData;
   frmModflowPackages.ShowModal;
+  WarningMessage := ZoneBudgetWarning;
+  if WarningMessage <> '' then
+  begin
+    MessageDlg(WarningMessage, mtWarning, [mbOK], 0);
+  end;
 end;
 
 procedure TfrmGoPhast.miPathlinestoShapefileClick(Sender: TObject);

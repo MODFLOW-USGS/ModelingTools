@@ -31,7 +31,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       Caption = 'Number of shapes ='
     end
     object btnCancel: TBitBtn
-      Left = 579
+      Left = 575
       Top = 2
       Width = 115
       Height = 33
@@ -39,10 +39,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 575
+      ExplicitLeft = 571
     end
     object btnOK: TBitBtn
-      Left = 458
+      Left = 454
       Top = 2
       Width = 115
       Height = 33
@@ -69,10 +69,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 454
+      ExplicitLeft = 450
     end
     object btnHelp: TBitBtn
-      Left = 337
+      Left = 333
       Top = 2
       Width = 115
       Height = 33
@@ -81,7 +81,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 333
+      ExplicitLeft = 329
     end
   end
   object pcImportShape: TPageControl
@@ -196,7 +196,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edImportCriterion: TEdit
         Left = 152
         Top = 151
-        Width = 427
+        Width = 423
         Height = 26
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -274,7 +274,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         OnClick = rgEvaluatedAtClick
       end
       object btnImportCriterion: TButton
-        Left = 585
+        Left = 581
         Top = 148
         Width = 90
         Height = 33
@@ -301,7 +301,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edZ: TRbwEdit
         Left = 206
         Top = 351
-        Width = 378
+        Width = 374
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         Color = clBtnFace
@@ -313,7 +313,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edHighZ: TRbwEdit
         Left = 206
         Top = 384
-        Width = 378
+        Width = 374
         Height = 26
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -326,7 +326,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object edLowZ: TRbwEdit
         Left = 206
         Top = 417
-        Width = 378
+        Width = 374
         Height = 26
         Cursor = crIBeam
         Anchors = [akLeft, akTop, akRight]
@@ -337,7 +337,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         OnExit = edLowZExit
       end
       object btnZ: TButton
-        Left = 590
+        Left = 586
         Top = 349
         Width = 90
         Height = 30
@@ -348,7 +348,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         OnClick = btnElevFormulaEdit
       end
       object btnHighZ: TButton
-        Left = 590
+        Left = 586
         Top = 382
         Width = 90
         Height = 30
@@ -359,7 +359,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         OnClick = btnElevFormulaEdit
       end
       object btnLowZ: TButton
-        Left = 590
+        Left = 586
         Top = 415
         Width = 90
         Height = 30
@@ -372,7 +372,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       object memoMultipleParts: TMemo
         Left = 432
         Top = 181
-        Width = 243
+        Width = 239
         Height = 114
         Anchors = [akLeft, akTop, akRight]
         ScrollBars = ssVertical
@@ -1025,7 +1025,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Top = 251
           Width = 745
           Height = 265
-          ActivePage = jvspModflowHOB
+          ActivePage = jvspModflow6Obs
           PropagateEnable = False
           Align = alBottom
           ExplicitTop = 250
@@ -2726,21 +2726,21 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                       ExplicitHeight = 18
                     end
                     inherited sbAdd: TSpeedButton
-                      Left = 402
+                      Left = 400
                       Hint = 
                         'Add space for CSV file|Add space for CSV file after the last CSV' +
                         ' file.'
                       ExplicitLeft = 408
                     end
                     inherited sbInsert: TSpeedButton
-                      Left = 460
+                      Left = 457
                       Hint = 
                         'Insert space for CSV file|Insert a space for a CSV file above th' +
                         'e selected CSV file.'
                       ExplicitLeft = 482
                     end
                     inherited sbDelete: TSpeedButton
-                      Left = 533
+                      Left = 530
                       Hint = 'Delete CSV file|Delete the selected CSV file.'
                       ExplicitLeft = 565
                     end
@@ -3182,6 +3182,13 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               Height = 18
               Caption = 'Multilayer'
             end
+            object lblIgnoreValue: TLabel
+              Left = 367
+              Top = 19
+              Width = 104
+              Height = 18
+              Caption = 'Value to ignore'
+            end
             object cbHeadObservation: TCheckBox
               Left = 13
               Top = 46
@@ -3253,6 +3260,17 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               Items.Strings = (
                 'False'
                 'True')
+            end
+            object rdeIgnoreValue: TRbwDataEntry
+              Left = 490
+              Top = 16
+              Width = 145
+              Height = 22
+              TabOrder = 7
+              Text = '3E30'
+              DataType = dtReal
+              Max = 1.000000000000000000
+              ChangeDisabledColor = True
             end
           end
           object jvspLakMf6: TJvStandardPage

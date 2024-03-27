@@ -383,7 +383,7 @@ begin
 
   if Model.ModelSelection = msModflow2015 then
   begin
-    if FOutputControl.SaveCellFlows = csfBinary then
+    if FOutputControl.SaveCellFlows in [csfBinary, csfBoth] then
     begin
       CellFlowsName := BaseNameOfFile + StrCbcExt;
       Model.AddModelOutputFile(CellFlowsName);
@@ -641,7 +641,7 @@ begin
         WriteOC_MF6('BUDGET', BudgetFrequency, BudgetFrequencyChoice, psPrint);
       end;
 
-      if FOutputControl.SaveCellFlows = csfBinary then
+      if FOutputControl.SaveCellFlows in [csfBinary, csfBoth] then
       begin
         WriteOC_MF6('BUDGET', BudgetFrequency, BudgetFrequencyChoice, psSave);
       end;
