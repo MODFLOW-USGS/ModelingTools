@@ -287,7 +287,10 @@ begin
   FormPosition.Left := Left;
   FormPosition.Width := Width;
   FormPosition.Height := Height;
-  frmGoPhast.ObjectsPosition := FormPosition;
+  if frmGoPhast <> nil then
+  begin
+    frmGoPhast.ObjectsPosition := FormPosition;
+  end;
 
   inherited;
 
@@ -360,6 +363,10 @@ var
   ANode: PVirtualNode;
   Key: string;
 begin
+  if frmGoPhast = nil then
+  begin
+    Exit;
+  end;
   if frmGoPhast.FObjectsExpanded = nil then
   begin
     Exit;

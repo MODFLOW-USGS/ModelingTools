@@ -1176,6 +1176,10 @@ procedure TFormulaManager.Remove(FormulaObject: IFormulaObject;
   OnRemoveSubscription, OnRestoreSubscription: TChangeSubscription;
   Subject: TObject);
 begin
+  if not Assigned(FormulaObject) then
+  begin
+    Exit;
+  end;
   Remove(FormulaObject as TFormulaObject,
     OnRemoveSubscription, OnRestoreSubscription, Subject);
 end;

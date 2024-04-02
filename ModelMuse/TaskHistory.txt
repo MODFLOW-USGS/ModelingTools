@@ -32793,5 +32793,25 @@ object TTaskHistory
         'OC'
         'Error checking'
         'Import')
+    end
+    item
+      Date = 45379.000000000000000000
+    end
+    item
+      Date = 45380.000000000000000000
+    end
+    item
+      Date = 45381.000000000000000000
+    end
+    item
+      Date = 45382.000000000000000000
+    end
+    item
+      Date = 45383.000000000000000000
+    end
+    item
+      Date = 45384.000000000000000000
+      Categories.Strings = (
+        'Bug fix')
     end>
 end

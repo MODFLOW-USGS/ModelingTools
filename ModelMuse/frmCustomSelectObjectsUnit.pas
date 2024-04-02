@@ -1283,10 +1283,7 @@ begin
     begin
       Data.Caption := Packages.TvsPackage.PackageIdentifier;
       Node.CheckType := ctTriStateCheckBox;
-    end
-
-    ;
-
+    end;
 
     If (ParentNode = nil) then
     begin
@@ -1525,6 +1522,7 @@ var
     Data: PMyRec;
   begin
     Data := vstObjects.GetNodeData(Node);
+    Assert(Data <> nil);
     Assert(Data.ScreenObjects <> nil);
     Data.ScreenObjects.Add(AScreenObject);
     PutInOtherObjects := False;
@@ -2406,6 +2404,8 @@ var
   ParentNode: PVirtualNode;
   NodeDeleted: Boolean;
   ChildCount: integer;
+  var
+    Data: PMyRec;
   procedure UpdateChildCount(var Node : PVirtualNode);
   var
     Data: PMyRec;
@@ -2413,7 +2413,14 @@ var
     Data := vstObjects.GetNodeData(Node);
     If (Data <> nil) and (Data.ScreenObjects <> nil) then
     begin
-      vstObjects.ChildCount[Node] := Data.ScreenObjects.Count;
+      try
+        vstObjects.ChildCount[Node] := Data.ScreenObjects.Count;
+      except
+        begin
+          ShowMessage('Error updating child count for ' + Data.Caption);
+          raise;
+        end;
+      end;
     end;
   end;
   procedure vstCheckDeleteNode(var Node : PVirtualNode);
@@ -2578,6 +2585,15 @@ begin
       begin
         vstDataSetNode := PVirtualNode(DataSetList.Objects[DataSetIndex]);
         ParentNode := vstObjects.NodeParent[vstDataSetNode];
+
+        Data := vstObjects.GetNodeData(vstDataSetNode);
+        If (Data <> nil) and (Data.ScreenObjects <> nil) then
+        begin
+          Assert((FDataSetLists.IndexOf(Data.ScreenObjects) >= 0)
+            or (FCalibrationDataSetsList.IndexOf(Data.ScreenObjects) >= 0),
+            DataSetIndex.ToString);
+        end;
+
         UpdateChildCount(vstDataSetNode);
         if vstObjects.ChildCount[vstDataSetNode] = 0 then
         begin
@@ -2587,6 +2603,8 @@ begin
           end;
           vstObjects.DeleteNode(vstDataSetNode);
           DataSetList.Delete(DataSetIndex);
+          Assert(DataSetList.Count = FDataSetLists.Count + FCalibrationDataSetsList.Count,
+            DataSetIndex.ToString);
         end;
       end;
 
@@ -3090,7 +3108,12 @@ begin
     FDataSetLists.Clear;
     FCalibrationDataSetsList.Clear;
 
+    // This needs to be done here becauses if it is done later,
+    // members of FDataSetLists and FCalibrationDataSetsLists might
+    // be deleted when they are still needed.
     vstObjects.ChildCount[FvstDataSetRootNode] := 0;
+    vstObjects.ChildCount[FvstCalibrationDataSetsNode] := 0;
+
     DataSetClassifications := TStringList.Create;
     try
       DataSetClassifications.AddObject('Data Sets', TObject(FvstDataSetRootNode));
@@ -3144,6 +3167,7 @@ begin
 
                 Data := vstObjects.GetNodeData(vstDataSetNode);
                 Data.Caption := DataSet.Name;
+                Data.Classification := Classification + '|' + DataSet.Name;
 
                 ListOfObjects := TList.Create;
                 FDataSetLists.Add(ListOfObjects);
@@ -3151,9 +3175,9 @@ begin
                 InitializeNodeData(vstDataSetNode, ListOfObjects);
 
                 Data.IsDataSetNode := True;
-                Data.Classification := Classification + '|' + DataSet.Name;
 
                 DataSetList.AddObject(Data.Classification, TObject(vstDataSetNode));
+                Assert(DataSetList.Count = FDataSetLists.Count + FCalibrationDataSetsList.Count);
               end;
             end;
           finally
@@ -3172,7 +3196,7 @@ begin
       DataSetClassifications.Free;
     end;
 
-    vstObjects.ChildCount[FvstCalibrationDataSetsNode] := 0;
+//    vstObjects.ChildCount[FvstCalibrationDataSetsNode] := 0;
     DataSetClassifications := TStringList.Create;
     try
       DataSetClassifications.AddObject(StrCalibrationDataSets, TObject(FvstCalibrationDataSetsNode));
@@ -3232,6 +3256,7 @@ begin
 
                 Data := vstObjects.GetNodeData(vstDataSetNode);
                 Data.Caption := DataSet.Name;
+                Data.Classification := Classification + '|' + DataSet.Name;
 
                 ListOfObjects := TList.Create;
                 FCalibrationDataSetsList.Add(ListOfObjects);
@@ -3239,9 +3264,11 @@ begin
                 InitializeNodeData(vstDataSetNode, ListOfObjects);
 
                 Data.IsDataSetNode := True;
-                Data.Classification := Classification + '|' + DataSet.Name;
 
                 DataSetList.AddObject(Data.Classification, TObject(vstDataSetNode));
+                Assert(DataSetList.Count =
+                  FDataSetLists.Count + FCalibrationDataSetsList.Count,
+                  DataSetIndex.ToString);
               end;
             end;
           finally
@@ -4479,10 +4506,12 @@ begin
     DataSetList := TStringList.Create;
     SortedDataSetList := TStringList.Create;
     try
+      DataSetList.Duplicates := dupError;
       vstObjects.BeginUpdate;
       try
         CreateBaseNodes(DataSetList);
         SortedDataSetList.Assign(DataSetList);
+        SortedDataSetList.Duplicates := dupError;
         SortedDataSetList.Sorted := True;
 
         for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do

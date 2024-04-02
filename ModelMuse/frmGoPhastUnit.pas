@@ -4144,6 +4144,7 @@ begin
   FPhastModel := nil;
 //  FPhastModel := nil;
   inherited;
+  frmGoPhast := nil;
 //  OutputDebugString('SAMPLING OFF');
 end;
 
