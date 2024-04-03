@@ -4528,8 +4528,8 @@ begin
   try
 //    Splitter.StrictDelimiter := False;
     AStringList.Text := CellContents;
-    result := (AStringList.Count > 1) or (Pos(#9, CellContents) > 0)
-      or (Pos(',', CellContents) > 0);
+    result := (AStringList.Count > 1) or (Pos(#9, CellContents) > 0);
+//      or (Pos(',', CellContents) > 0);
 //      or (Pos(' ', CellContents) > 0);
     if result then
     begin

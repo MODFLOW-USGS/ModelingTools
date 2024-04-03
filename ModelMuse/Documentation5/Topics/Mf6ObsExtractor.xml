@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-01-24T16:05:07.192-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-04-03T14:09:57.147-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Mf6ObsExtractor</title>
   <body>
     <header>
@@ -8,8 +8,8 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Mf6ObsExtractor is a program for extracting simulated values from MODFLOW 6 output files at particular locations and times and printing them in a simple format. It also can create an instruction file for either PEST or UCODE. Together, these two functions can simplify the usage of PEST or UCODE with MODFLOW 6 models.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Observation Utility in MODFLOW 6 is used to create output binary or text files containing simulated values for particular cells. When those cells contain model features, some simulated values for those model features can be included in the output files. The output files contain values for the selected observation types at every time step along with the simulation time. These simulated values may require further manipulation before being compared to observed values. For example, simulated head values will be saved at cell centers, but the observed value may not be at the center of a cell. The observation time also may not correspond to a simulation time. Thus, interpolation in space and time may be necessary to generate a value suitable for comparison with an observed value. Observations of flow through boundaries are often helpful in calibrating models but may require combining simulated flows from several cells to obtain a value suitable for comparison with the observed flows. Mf6ObsExtractor can be used to perform the required manipulations to obtain simulated values suitable for comparison with observed values.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The data for Mf6ObsExtractor is specified in four blocks. Each block begins with the keyword BEGIN followed by the name of the block and ends with the keyword END followed by the name of the block. The names of the blocks are OPTIONS, OBSERVATION_FILES, IDENTIFIERS, and DERIVED_OBSERVATIONS. The DERIVED_OBSERVATIONS block is optional but is almost always used. The four blocks must be specified in order. </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Any line containing only whitespace will be ignored. Any line whose first non-whitespace character is &quot;#&quot; will be treated as a comment. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The data for Mf6ObsExtractor are specified in four blocks. Each block begins with the keyword BEGIN followed by the name of the block and ends with the keyword END followed by the name of the block. The names of the blocks are OPTIONS, OBSERVATION_FILES, IDENTIFIERS, and DERIVED_OBSERVATIONS. The DERIVED_OBSERVATIONS block is optional but is almost always used. The four blocks must be specified in order. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Any line containing only whitespace is ignored. Any line whose first non-whitespace character is &quot;#&quot; will be treated as a comment. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Each block is described below using the following conventions:</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Keywords are written in ALL CAPITAL LETTERS;</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Optional instructions are enclosed in [square brackets];</text></para>
@@ -34,12 +34,12 @@
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example;</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN OPTIONS</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The file name for the listing file contains white space so it must be enclosed in double quotes</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LISTING &quot;MyListing file.txt&quot;</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LISTING &quot;MyListing file.txt&quot;</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The VALUES file contains the values extracted from the observation file. </text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">VALUES Example.der_obs</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">VALUES Example.der_obs</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The INSTRUCTION file contains instructions for PEST to extract the values from the </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># VALUES file.  </text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INSTRUCTION Example.ins</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># VALUES file. &#160;</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INSTRUCTION Example.ins</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END OPTIONS</text></para>
     <para styleclass="Heading2_atoc_" style="margin-top:6px;"><text styleclass="Heading2_atoc_" translate="true">OBSERVATION_FILES Block</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Purpose:</text></para>
@@ -58,8 +58,8 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;file type&gt; is a keyword indicating the type of MODFLOW 6 output file that will be read. &lt;file type&gt; must be either BINARY or TEXT</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example:</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN OBSERVATION_FILES</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.ob_gw_out_head.csv TEXT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.rvob_out_riv.bin BINARY</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.ob_gw_out_head.csv TEXT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FILENAME Mf6_ObsExample.rvob_out_riv.bin BINARY</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END OBSERVATION_FILES</text></para>
     <para styleclass="Heading2_atoc_" style="margin-top:6px; margin-left:6px;"><text styleclass="Heading2_atoc_" translate="true">IDENTIFIERS Block</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Purpose:</text></para>
@@ -71,7 +71,7 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &lt;observation_time&gt; [PRINT]</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">[OBSNAME &lt;Observation_name&gt; &lt;observation_time&gt; [PRINT]]</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">[OBSNAME &lt;Observation_name&gt; &lt;observation_time&gt; [PRINT]]</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true"> </text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&#32;</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">...</text></para>
     <para styleclass="IndentedExplanation"></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID &lt;identifier&gt;</text></para>
@@ -81,79 +81,79 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">[OBSNAME &lt;Observation_name&gt; &lt;observation_time&gt; [PRINT]]</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">END IDENTIFIERS</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Explanations:</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID is a keyword used to indicated that the following values on the line will be used to identify a particular time series from which values are to be extracted. </text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID is a keyword used to indicate that the following values on the line will be used to identify a particular time series from which values are to be extracted. </text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;identifier&gt; is the name assigned to the time series from which values are to be extracted. </text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">LOCATION is an optional keyword indicating that the x and y coordinates that follow are the coordinates of the cell center of the observation time series.</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;x&gt; is the x coordinate of the cell center of the time series associated with &lt;identifier&gt;.</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;y&gt; is the y coordinate of the cell center of the time series associated with &lt;identifier&gt;.</text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">LOCATION is an optional keyword indicating that the x- and y-coordinates that follow are the coordinates of the cell center of the observation time series.</text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;x&gt; is the x-coordinate of the cell center of the time series associated with &lt;identifier&gt;.</text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;y&gt; is the y-coordinate of the cell center of the time series associated with &lt;identifier&gt;.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME is a keyword indicating that the line will specify an observation name and time.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;Observation_name&gt; is the name of the observation. &lt;Observation_name&gt; must start with a letter or the underscore character. The remaining characters in &lt;Observation_name&gt; must be letters, digits, or the underscore character. All observation names must be unique. Mf6ObsExtractor does not limit the length of observation names.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;observation_time&gt; is a real number that indicates the time at which the simulated value is desired. If the specified time is not included in the output file, Mf6ObsExtractor will interpolate to the time in question from the values recorded for the preceding and following times. If the observation time is before the first recorded time, the value for the first recorded time will be used. If the observation time is after the last recorded observation time, Mf6ObsExtractor will ignore it.</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">PRINT in an optional keyword. If included, the &lt;Observation_name&gt; and simulated value will be printed to the extracted values file or instructions for reading the &lt;Observation_name&gt; and simulated value will be written to the instruction file. Printing the name and value implies that they will be used directly by PEST or UCODE. If the values are not printed, they may still be used in the DERIVED_OBSERVATIONS section. Regardless of whether PRINT is present or not, the name and simulated value will be written to the listing file. Mf6ObsExtractor does not limit the length of observation names, but to be used by PEST or UCODE, the observation name must conform to the requirements of those programs.</text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">PRINT is an optional keyword. If included, the &lt;Observation_name&gt; and simulated value will be printed to the extracted values file or instructions for reading the &lt;Observation_name&gt; and simulated values will be written to the instruction file. Printing the name and value implies that they will be used directly by PEST or UCODE. If the values are not printed, they may still be used in the DERIVED_OBSERVATIONS section. Regardless of whether PRINT is present or not, the name and simulated value will be written to the listing file. Mf6ObsExtractor does not limit the length of observation names, but to be used by PEST or UCODE, the observation name must conform to the requirements of those programs.</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example:</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN IDENTIFIERS</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># heads in layer 1</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># heads will be interpolated in time to times 3.5 and 6.5.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Locations are provided for spatial interpolation.</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD1</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H1_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H1_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD2</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H2_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H2_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD3</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H3_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H3_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD4</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H4_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H4_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD1</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H1_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H1_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD2</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H2_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H2_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD3</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H3_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H3_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD4</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H4_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H4_2 6.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">#heads in layer 2</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H5_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H5_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD6</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H6_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H6_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD7</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H7_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H7_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD8</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H8_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H8_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -550</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H5_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H5_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD6</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 550 -650</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H6_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H6_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD7</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -650</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H7_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H7_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD8</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">LOCATION 650 -550</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H8_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H8_2 6.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># These heads (H9_1 and H9_2) will be printed to the Example.der_obs file. </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The rest won’t be printed.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># No locations are required for H9_1 and H9_2 because they will not </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># be used for spatial interpolation.</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID HEAD9</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H9_1 3.5 PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H9_2 6.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID HEAD9</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H9_1 3.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H9_2 6.5 PRINT</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># River observations</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Rivers will be interpolated in time to times 3.5 and 6.5</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Only the rivers associated RIVER1 will be printed to the Example.der_obs file. </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The rest won’t be printed.</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER1</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV1_1 3.5 PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV1_2 6.5 PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER2</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV2_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV2_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER3</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV3_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV3_2 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">ID RIVER4</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV4_1 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME RIV4_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER1</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV1_1 3.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV1_2 6.5 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER2</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV2_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV2_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER3</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV3_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV3_2 6.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">ID RIVER4</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV4_1 3.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME RIV4_2 6.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END IDENTIFIERS</text></para>
     <para styleclass="Heading2_atoc_" style="margin-top:6px;"><text styleclass="Heading2_atoc_" translate="true">DERIVED_OBSERVATIONS Block</text></para>
@@ -166,12 +166,12 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">FORMULA &lt;formula&gt;</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">...</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; [PRINT]</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">INTERPOLATE &lt;x&gt; &lt;y&gt; &lt;obs&gt; [&lt;obs&gt; &lt;obs&gt;  &lt;obs&gt;] </text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">INTERPOLATE &lt;x&gt; &lt;y&gt; &lt;obs&gt; [&lt;obs&gt; &lt;obs&gt; &#160;&lt;obs&gt;] </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">END DERIVED_OBSERVATIONS</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Explanations:</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME is a keyword indicating that the line will specify an observation name.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;Observation_name&gt; is the name of the observation. &lt;Observation_name&gt; must start with a letter or the underscore character. The remaining characters in &lt;Observation_name&gt; must be letters, digits, or the underscore character. All observation names must be unique. Mf6ObsExtractor does not limit the length of observation names. An OBSNAME line must be followed by either a single FORMULA line or a single INTERPOLATE line.</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">PRINT in an optional keyword. If included, the &lt;Observation_name&gt; and simulated value will be printed to the extracted values file or instructions for reading the &lt;Observation_name&gt; and simulated value will be written to the instruction file. Printing the name and value implies that they will be used directly by PEST or UCODE. If the values are not printed, they may still be used in the DERIVED_OBSERVATIONS section. Regardless of whether PRINT is present or not, the name and simulated value will be written to the listing file. SutraObsExtractor does not limit the length of observation names but to be used by PEST or UCODE, the observation name must conform to the requirements of those programs.</text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">PRINT is an optional keyword. If included, the &lt;Observation_name&gt; and simulated value will be printed to the extracted values file or instructions for reading the &lt;Observation_name&gt; and simulated value will be written to the instruction file. Printing the name and value implies that they will be used directly by PEST or UCODE. If the values are not printed, they may still be used in the DERIVED_OBSERVATIONS section. Regardless of whether PRINT is present or not, the name and simulated value will be written to the listing file. Mf6ObsExtractor does not limit the length of observation names but to be used by PEST or UCODE, the observation name must conform to the requirements of those programs.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">FORMULA is a keyword indicating that the remainder of the line is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to &lt;Observation_name&gt;. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any observation name defined previously in the DERIVED_OBSERVATIONS section.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;formula&gt; is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to &lt;Observation_name&gt;. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any observation name defined previously in the DERIVED_OBSERVATIONS section. The operators and functions available for use in formulas are the same as in EnhancedTemplateProcessor.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">INTERPOLATE is a keyword indicating that the remainder of the line consists of an x coordinate, a y coordinate, and the names of one to four previously defined &lt;Observation_name&gt;s, each of which has a location associated with it. </text></para>
@@ -181,44 +181,44 @@
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">#(Optional)</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN DERIVED_OBSERVATIONS</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 1 at (575, -575) at time 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time1</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_1 H2_1 H3_1 H4_1  </text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time1</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_1 H2_1 H3_1 H4_1 &#160;</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 1 at (575, -575) at time 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time2</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_2 H2_2 H3_2 H4_2 </text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer1_Time2</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H1_2 H2_2 H3_2 H4_2 </text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 2 at (575, -575) at time 3.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time1</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_1 H6_1 H7_1 H7_1  </text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time1</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_1 H6_1 H7_1 H7_1 &#160;</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Spatially Interpolate the head in layer 2 at (575, -575) at time 6.5</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time2</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_2 H6_2 H7_2 H8_2 </text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Layer2_Time2</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">INTERPOLATE 575 -575 H5_2 H6_2 H7_2 H8_2 </text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Calculate multilayer head observations at times 3.5 and 6.5 weighted by transmissivity</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Transmissivity of layer 1 = 3</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Transmissivity of layer 2 = 6</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Print the multilayer head observations</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Time1 PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA              (H_Layer1_Time1 * 3 + H_Layer2_Time1 * 6) / (3 + 6)</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Time1 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; &#160; &#160; &#160; &#160;(H_Layer1_Time1 * 3 + H_Layer2_Time1 * 6) / (3 + 6)</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME H_Time2 PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA              (H_Layer1_Time2 * 3 + H_Layer2_Time2 * 6) / (3 + 6)</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME H_Time2 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; &#160; &#160; &#160; &#160;(H_Layer1_Time2 * 3 + H_Layer2_Time2 * 6) / (3 + 6)</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Calculate a drawdown observation too.</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME Drawdown PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA           H_Time1 - H_Time2</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME Drawdown PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; &#160; &#160; H_Time1 - H_Time2</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Calculate a river observation by combining several separate river observations.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Only half of rivers 2 and 4 will be used.</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME MyRiver_1 PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA       RIV2_1*0.5 + RIV3_1 + RIV4_1*0.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME MyRiver_1 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; RIV2_1*0.5 + RIV3_1 + RIV4_1*0.5</text></para>
     <para styleclass="Code Example"></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">OBSNAME MyRiver_2 PRINT</text></para>
-    <para styleclass="Code Example"><tab/><text styleclass="Code Example" translate="true">FORMULA       RIV2_2*0.5 + RIV3_2 + RIV4_2*0.5</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">OBSNAME MyRiver_2 PRINT</text></para>
+    <para styleclass="Code Example"><tab /><text styleclass="Code Example" translate="true">FORMULA &#160; &#160; &#160; RIV2_2*0.5 + RIV3_2 + RIV4_2*0.5</text></para>
     <para styleclass="Code Example"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END DERIVED_OBSERVATIONS</text></para>
   </body>

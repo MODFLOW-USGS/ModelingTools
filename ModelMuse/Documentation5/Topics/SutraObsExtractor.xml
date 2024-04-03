@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-01-24T16:05:07.246-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-04-03T14:21:01.176-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SutraObsExtractor</title>
   <body>
     <header>
@@ -40,15 +40,15 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;instruction_file_type&gt; must be either &quot;UCODE&quot; or &quot;PEST&quot;. It indicates whether the instruction file is designed to be used with the UCODE or PEST parameter estimation programs. If &lt;instruction_file_type&gt; is not specified, it defaults to PEST.</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Examples:</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN OPTIONS</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     LISTING C:\ModelingTools\SutraObsExtractor\tests\SutraLake2.soeOut</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     INSTRUCTION C:\ModelingTools\SutraObsExtractor\tests\SutraLake2.soeIns.txt</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; LISTING C:\ModelingTools\SutraObsExtractor\tests\SutraLake2.soeOut</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; INSTRUCTION C:\ModelingTools\SutraObsExtractor\tests\SutraLake2.soeIns.txt</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END OPTIONS</text></para>
     <para styleclass="Normal"></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN OPTIONS</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     LISTING SutraLake2.soeList</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     VALUES SutraLake2.soeValues</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; LISTING SutraLake2.soeList</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; VALUES SutraLake2.soeValues</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END OPTIONS</text></para>
-    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">OBSERVATION_FILES Block:</text><text styleclass="Normal" translate="true"> </text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">OBSERVATION_FILES Block:</text><text styleclass="Normal" translate="true">&#32;</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Purpose:</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The OBSERVATION_FILES section is to identify the files from which simulated values will be extracted.</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Structure:</text></para>
@@ -65,20 +65,20 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;file type&gt; is a keyword indicating the type of SUTRA output file that will be read. &lt;file type&gt; must be one of the following OBC, LKST, BCOP, BCOF, BCOU, BCOPG, or BCOUG. For more information about these file types, see the documentation for SUTRA version 2.2.</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example:</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN OBSERVATION_FILES</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2_Object9.obc OBC</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2_Object16.obc OBC</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     # this is a comment.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     # Note that there is more than one OBC file is included in the OBSERVATION_FILES </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     # section. </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     # This is the only file type supported by SutraObsExtractor for which SUTRA will create </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     # more </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     # than one file for the same model.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2.lkst LKST</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2.bcop BCOP</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2.bcof BCOF</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2.bcou BCOU</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2.bcopg BCOPG</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     FILENAME SutraLake2.bcoug BCOUG</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2_Object9.obc OBC</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2_Object16.obc OBC</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; # this is a comment.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; # Note that there is more than one OBC file is included in the OBSERVATION_FILES </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; # section. </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; # This is the only file type supported by SutraObsExtractor for which SUTRA will create </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; # more </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; # than one file for the same model.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2.lkst LKST</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2.bcop BCOP</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2.bcof BCOF</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2.bcou BCOU</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2.bcopg BCOPG</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; FILENAME SutraLake2.bcoug BCOUG</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END OBSERVATION_FILES</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">IDENTIFIERS Block:</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Purpose:</text></para>
@@ -86,18 +86,18 @@
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Structure:</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">BEGIN IDENTIFIERS</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID &lt;identifier&gt; &lt;observation_type&gt; [&lt;secondary_identifier&gt;]</text></para>
-    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt;  &lt;observation_time&gt;  [PRINT]</text></para>
-    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt;  &lt;observation_time&gt;  [PRINT]</text></para>
+    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &#160;&lt;observation_time&gt; &#160;[PRINT]</text></para>
+    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &#160;&lt;observation_time&gt; &#160;[PRINT]</text></para>
     <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">...</text></para>
-    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt;  &lt;observation_time&gt;  [PRINT]</text></para>
+    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &#160;&lt;observation_time&gt; &#160;[PRINT]</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID &lt;identifier&gt; &lt;observation_type&gt; [&lt;secondary_identifier&gt;]</text></para>
-    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt;  &lt;observation_time&gt;  [PRINT]</text></para>
-    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt;  &lt;observation_time&gt;  [PRINT]</text></para>
+    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &#160;&lt;observation_time&gt; &#160;[PRINT]</text></para>
+    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &#160;&lt;observation_time&gt; &#160;[PRINT]</text></para>
     <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">...</text></para>
-    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt;  &lt;observation_time&gt;  [PRINT]</text></para>
+    <para styleclass="DoubleIndentedExplanation"><text styleclass="DoubleIndentedExplanation" translate="true">OBSNAME &lt;Observation_name&gt; &#160;&lt;observation_time&gt; &#160;[PRINT]</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">END IDENTIFIERS</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Explanations:</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID is a keyword used to indicated that the following values on the line will be used to identify a particular time series from which values are to be extracted. </text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">ID is a keyword used to indicate that the following values on the line will be used to identify a particular time series from which values are to be extracted. </text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;identifier&gt; is a value in the output file that identifies a particular time series. The nature of &lt;identifier&gt; varies depending on the type of file from which the simulated value is to be extracted.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">For OBC files, &lt;identifier&gt; is the &quot;Name&quot; listed in the OBC file.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">For LKST files, &lt;identifier&gt; is the node number listed in the LKST file.</text></para>
@@ -127,93 +127,93 @@
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">PRINT is an optional keyword. If included, the &lt;Observation_name&gt; and simulated value will be printed to the extracted values file or instructions for reading the &lt;Observation_name&gt; and simulated value will be written to the instruction file. Printing the name and value implies that they will be used directly by PEST or UCODE. If the values are not printed, they may still be used in the DERIVED_OBSERVATIONS section. Regardless of whether PRINT is present or not, the name and simulated value will be written to the listing file. SutraObsExtractor does not limit the length of observation names, but to be used by PEST or UCODE, the observation name must conform to the requirements of those programs.</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example:</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN IDENTIFIERS</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID Object9 P</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME Test1_P  1.000000000000E+006  PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID Object9 P</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME Test2_P  2.000000000000E+006  PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID Object16 U</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME ConcOb1_U  1.000000000000E+006  PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID Object16 U</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME ConcOb2_U  2.000000000000E+006  PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 5435 LKST</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME lakeobs  1.600000000000E+008  PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID Object9 P</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME Test1_P &#160;1.000000000000E+006 &#160;PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID Object9 P</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME Test2_P &#160;2.000000000000E+006 &#160;PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID Object16 U</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME ConcOb1_U &#160;1.000000000000E+006 &#160;PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID Object16 U</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME ConcOb2_U &#160;2.000000000000E+006 &#160;PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 5435 LKST</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME lakeobs &#160;1.600000000000E+008 &#160;PRINT</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># This is an example of a comment because it starts with &quot;#&quot;.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Note that the simulated values for most of these observations are not printed to</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># the values output file but instead are used in calculations in the</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># DERIVED_OBSERVATIONS section.    </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 367 PF  4027</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PF367_4027_0  6.048000000000E+005 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PF367_4027_1  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 367 PR  4027</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PR367_4027_0  6.048000000000E+005 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PR367_4027_1  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 387 PF  4247</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PF387_4247_0  6.048000000000E+005 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PF387_4247_1  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 387 PR  4247</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PR387_4247_0  6.048000000000E+005 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PR387_4247_1  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 388 PF  4258</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PF388_4258_0  6.048000000000E+005 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PF388_4258_1  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 388 PR  4258</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PR388_4258_0  6.048000000000E+005 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PR388_4258_1  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 1 FF  4731</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME FF1_4731_0  1.191500000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 1 FR  4731</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME FR1_4731_0  1.191500000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 1 UR  4552</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UR1_4552_0  1.191500000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UR1_4552_1  2.395000000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 2 UR  4553</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UR2_4553_0  1.191500000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UR2_4553_1  2.395000000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 3 UR  4554</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UR3_4554_0  1.191500000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UR3_4554_1  2.395000000000E+008 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 1 PGF  5688</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF1_0_5688  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF1_1_5688  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 1 PGR  5688</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR1_1_5688  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR1_2_5688  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 2 PGF  5689</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF2_0_5689  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF2_1_5689  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 2 PGR  5689</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR2_1_5689  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR2_2_5689  5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># DERIVED_OBSERVATIONS section. &#160; &#160;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 367 PF &#160;4027</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PF367_4027_0 &#160;6.048000000000E+005 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PF367_4027_1 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 367 PR &#160;4027</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PR367_4027_0 &#160;6.048000000000E+005 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PR367_4027_1 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 387 PF &#160;4247</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PF387_4247_0 &#160;6.048000000000E+005 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PF387_4247_1 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 387 PR &#160;4247</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PR387_4247_0 &#160;6.048000000000E+005 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PR387_4247_1 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 388 PF &#160;4258</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PF388_4258_0 &#160;6.048000000000E+005 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PF388_4258_1 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 388 PR &#160;4258</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PR388_4258_0 &#160;6.048000000000E+005 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PR388_4258_1 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 1 FF &#160;4731</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME FF1_4731_0 &#160;1.191500000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 1 FR &#160;4731</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME FR1_4731_0 &#160;1.191500000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 1 UR &#160;4552</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UR1_4552_0 &#160;1.191500000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UR1_4552_1 &#160;2.395000000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 2 UR &#160;4553</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UR2_4553_0 &#160;1.191500000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UR2_4553_1 &#160;2.395000000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 3 UR &#160;4554</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UR3_4554_0 &#160;1.191500000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UR3_4554_1 &#160;2.395000000000E+008 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 1 PGF &#160;5688</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF1_0_5688 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF1_1_5688 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 1 PGR &#160;5688</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR1_1_5688 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR1_2_5688 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 2 PGF &#160;5689</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF2_0_5689 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF2_1_5689 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 2 PGR &#160;5689</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR2_1_5689 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR2_2_5689 &#160;5.866600000000E+007 </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Note that nodes 6161 and 6162 are each identified in two separate lines.</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># This is because two generalized flow boundaries were defined for those nodes.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 3 PGF  6161</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF3_0_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF3_1_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 3 PGR  6161</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR3_1_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR3_2_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 4 PGF  6162</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF4_0_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF4_1_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 4 PGR  6162</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR4_1_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR4_2_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 5 PGF  6161</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF5_0_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF5_1_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 5 PGR  6161</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR5_1_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR5_2_6161  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 6 PGF  6162</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF6_0_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGF6_1_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 6 PGR  6162</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR6_1_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME PGR6_2_6162  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 1 UGR  3125</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UGR1_0_3125  5.866600000000E+007 </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     ID 2 UGR  3126</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          OBSNAME UGR2_0_3126  5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 3 PGF &#160;6161</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF3_0_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF3_1_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 3 PGR &#160;6161</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR3_1_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR3_2_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 4 PGF &#160;6162</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF4_0_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF4_1_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 4 PGR &#160;6162</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR4_1_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR4_2_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 5 PGF &#160;6161</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF5_0_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF5_1_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 5 PGR &#160;6161</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR5_1_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR5_2_6161 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 6 PGF &#160;6162</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF6_0_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGF6_1_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 6 PGR &#160;6162</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR6_1_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME PGR6_2_6162 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 1 UGR &#160;3125</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UGR1_0_3125 &#160;5.866600000000E+007 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; ID 2 UGR &#160;3126</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;OBSNAME UGR2_0_3126 &#160;5.866600000000E+007 </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END IDENTIFIERS</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">DERIVED_OBSERVATIONS Block:</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Purpose:</text></para>
@@ -231,7 +231,7 @@
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Explanations:</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">OBSNAME is a keyword indicating that the line will specify an observation name.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;Observation_name&gt; is the name of the observation. See the description under IDENTIFIERS.</text></para>
-    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">PRINT in an optional keyword. If included, the &lt;Observation_name&gt; and simulated value will be printed to the extracted values file or instructions for reading the &lt;Observation_name&gt; and simulated value will be written to the instruction file. See the description under IDENTIFIERS.</text></para>
+    <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">PRINT is an optional keyword. If included, the &lt;Observation_name&gt; and simulated value will be printed to the extracted values file or instructions for reading the &lt;Observation_name&gt; and simulated value will be written to the instruction file. See the description under IDENTIFIERS.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">FORMULA is a keyword indicating that the remainder of the line is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to &lt;Observation_name&gt;. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any observation names defined previously in the DERIVED_OBSERVATIONS section.</text></para>
     <para styleclass="IndentedExplanation"><text styleclass="IndentedExplanation" translate="true">&lt;formula&gt; is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to &lt;Observation_name&gt;. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any &lt;Observation_name&gt;defined previously in the DERIVED_OBSERVATIONS section. The functions and operators available for use in formulas are the same as in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="EnhancedTemplateProcessor" anchor="Formulas" styleclass="IndentedExplanation" translate="true">EnhancedTemplateProcessor</link><text styleclass="IndentedExplanation" translate="true">.</text></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example:</text></para>
@@ -239,70 +239,70 @@
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BEGIN DERIVED_OBSERVATIONS</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The observation named &quot;a&quot; is assigned the sum of the flow rates </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># at three specified pressure nodes.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME a PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA PF367_4027_0 + PF387_4247_0 + PF388_4258_0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME a PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA PF367_4027_0 + PF387_4247_0 + PF388_4258_0</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The observation named &quot;b&quot; is assigned the resultant source/sink(+/-) of mass in three </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># specified pressure nodes divided by the sum of the flow rates at those nodes. Assuming fluid </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># leaves the system through all these specified pressure nodes, the result is the concentration </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># of the combined flow through those nodes.   </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME b PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA (PR367_4027_1 + PR387_4247_1 + PR388_4258_1)/(PF367_4027_1 + PF387_4247_1 + PF388_4258_1)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># of the combined flow through those nodes. &#160; </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME b PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA (PR367_4027_1 + PR387_4247_1 + PR388_4258_1)/(PF367_4027_1 + PF387_4247_1 + PF388_4258_1)</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The formula used for the observation named &quot;Well&quot; gives the concentration of solute leaving </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># through the well (assuming the specified flow rate is negative.) Because only one node is </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># involved, an alternative would be to use a concentration (FU) observation in the </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># IDENTIFIERS section.  </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME Wel1 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">       FORMULA (FR1_4731_0)/(FF1_4731_0)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># IDENTIFIERS section. &#160;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME Wel1 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; FORMULA (FR1_4731_0)/(FF1_4731_0)</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The formula for &quot;Wel2&quot; simply retrieves the value from an observation defined in the </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># IDENTIFIERS section.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME Wel2 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA FR1_4731_0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME Wel2 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA FR1_4731_0</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The formulas for &quot;SpecConc1&quot; and &quot;SpecConc2&quot; sum the resultant solute mass flux at three </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># specified concentration nodes.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME SpecConc1 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA UR1_4552_0 + UR2_4553_0 + UR3_4554_0</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME SpecConc2 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA UR1_4552_1 + UR2_4553_1 + UR3_4554_1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME SpecConc1 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA UR1_4552_0 + UR2_4553_0 + UR3_4554_0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME SpecConc2 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA UR1_4552_1 + UR2_4553_1 + UR3_4554_1</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># The formula for &quot;GenFlow1&quot; sums the flow rates at several generalized-flow boundaries. </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># However, two of the flow rates are multiplied by 0.6. If these generalized-flow boundaries </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># represent a river but the observed value represents only 60% of the flow into or out of the river </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># at these nodes, the 0.6 factor could be used to ensure that the simulated value more closely </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># represented what was observed.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME GenFlow1 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA PGF1_0_5688 + PGF2_0_5689 + PGF3_0_6161 + PGF4_0_6162 + 0.6*PGF5_0_6161 + 0.6*PGF6_0_6162</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME GenFlow1 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA PGF1_0_5688 + PGF2_0_5689 + PGF3_0_6161 + PGF4_0_6162 + 0.6*PGF5_0_6161 + 0.6*PGF6_0_6162</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># For &quot;GenFlow2&quot;, the formula calculates a concentration by dividing the weighted sum of the </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># resultant mass flows by the weighted sum of the fluid flows.  </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME GenFlow2 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA (PGR1_1_5688 + PGR2_1_5689 + PGR3_1_6161 + PGR4_1_6162 + 0.6*PGR5_1_6161 + 0.6*PGR6_1_6162)/(PGF1_1_5688 + PGF2_1_5689 + PGF3_1_6161 + PGF4_1_6162 + 0.6*PGF5_1_6161 + 0.6*PGF6_1_6162)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># resultant mass flows by the weighted sum of the fluid flows. &#160;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME GenFlow2 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA (PGR1_1_5688 + PGR2_1_5689 + PGR3_1_6161 + PGR4_1_6162 + 0.6*PGR5_1_6161 + 0.6*PGR6_1_6162)/(PGF1_1_5688 + PGF2_1_5689 + PGF3_1_6161 + PGF4_1_6162 + 0.6*PGF5_1_6161 + 0.6*PGF6_1_6162)</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># &quot;GenFlow3&quot; represents the sum of the resultant flow through several generalized-flow </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># boundaries.    </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME GenFlow3 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA PGR1_2_5688 + PGR2_2_5689 + PGR3_2_6161 + PGR4_2_6162 + 0.6*PGR5_2_6161 + 0.6*PGR6_2_6162</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># boundaries. &#160; &#160;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME GenFlow3 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA PGR1_2_5688 + PGR2_2_5689 + PGR3_2_6161 + PGR4_2_6162 + 0.6*PGR5_2_6161 + 0.6*PGR6_2_6162</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># &quot;GenTrans1&quot; represents the sum of the resultant mass flows through two generalized-transport </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># boundaries.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME GenTrans1 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA UGR1_0_3125 + UGR2_0_3126</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># &quot;test3&quot; represents the difference in pressure between two pressure observations.     </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME test3 PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA Test1_P - Test2_P</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME GenTrans1 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA UGR1_0_3125 + UGR2_0_3126</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># &quot;test3&quot; represents the difference in pressure between two pressure observations. &#160; &#160; </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME test3 PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA Test1_P - Test2_P</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># &quot;c&quot; represents a difference between two previously defined derived observations. &quot;a&quot; is a </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># pressure observation and a concentration observation. That doesn&apos;t make any sense for a real </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># model. The modeler is responsible for ensuring that the formulas result in meaningful values.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME c PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA a - b</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># This is another case where the values being compared have different units.     </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME WelComp PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA Wel1 - Wel2</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME c PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA a - b</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># This is another case where the values being compared have different units. &#160; &#160; </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME WelComp PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA Wel1 - Wel2</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># &quot;DeltaSpecConc&quot; represents the change in resultant mass flux at a specified concentration </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># boundary at two different times.</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME DeltaSpecConc PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA SpecConc1 - SpecConc2</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME DeltaSpecConc PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA SpecConc1 - SpecConc2</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># &quot;Comp&quot; computes the difference between a stage observation and the pressure at an </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># observation location. Assuming that SUTRA is set up so that head rather than pressure is </text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># calculated, this value could be compared with an observed head gradient multiplied by the </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># distance between the lake and the observation location.    </text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">     OBSNAME Comp PRINT</text></para>
-    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">          FORMULA lakeobs - Test1_P</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># distance between the lake and the observation location. &#160; &#160;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; OBSNAME Comp PRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160;FORMULA lakeobs - Test1_P</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" translate="true">END DERIVED_OBSERVATIONS</text></para>
     <para styleclass="" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.00; background-color:transparent; white-space:normal; page-break-inside:auto; page-break-after:auto; border:none; tabstops:none;"></para>
   </body>

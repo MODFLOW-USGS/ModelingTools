@@ -10199,12 +10199,18 @@ const
 //                data in arrays.
 //    '5.2.0.1'  Enhancement: Added a new "Active Specified Head" field that
 //                allows the user to make some cells intersectd or enclosed
+//    '5.2.0.2'  bug fix: Fixed a bug that could cause an access violation
+//                when shutting down ModelMuse while the Show or Hide Objects
+//                dialog box is displayed.
+//               bug fix: Fixed a bug that could cause access violations when
+//                editing objects while the Show or Hide Objects dialog box
+//                is displayed and Calibration data sets have been defined.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.1';
+  IIModelVersion = '5.2.0.2';
 
 function IModelVersion: string;
 begin

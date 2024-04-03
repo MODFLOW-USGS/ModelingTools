@@ -437,32 +437,18 @@ begin
           begin
             CellList.Clear;
             CellNumbers.Clear;
-//            DepthFractions.Clear;
-//            DepthFraction := UztObs.FScreenObject.Modflow6Obs.UzfObsDepthFraction;
             for CellIndex := 0 to Length(UztObs.FCells) - 1 do
             begin
               ACellLocation := UztObs.FCells[CellIndex];
               if (FUzfCellNumbers[ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column] > 0) then
               begin
                 CellNumbers.Add(FUzfCellNumbers[ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column]);
-//                if Assigned(DisvGrid) then
-//                begin
-//                  DepthFractions.Add(DepthFraction
-//                    * DisvGrid.CellThickness(ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column));
-//                end
-//                else
-//                begin
-//                  DepthFractions.Add(DepthFraction
-//                    * Grid.LayerThickness(ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column));
-//                end;
               end;
             end;
             SetLength(UztObs.FUzfBoundNumber, CellNumbers.Count);
-//            SetLength(UztObs.FDepthFractions, CellNumbers.Count);
             for CellIndex := 0 to CellNumbers.Count - 1 do
             begin
               UztObs.FUzfBoundNumber[CellIndex] := CellNumbers[CellIndex];
-//              UztObs.FDepthFractions[CellIndex] := DepthFractions[CellIndex];
             end;
             GwtObsList[ObsIndex] := UztObs;
           end;

@@ -15,8 +15,8 @@ inherited frmSpecifyContours: TfrmSpecifyContours
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 176
-    ExplicitWidth = 312
+    ExplicitTop = 168
+    ExplicitWidth = 310
     object lblRowCount: TLabel
       Left = 95
       Top = 9
@@ -191,8 +191,8 @@ inherited frmSpecifyContours: TfrmSpecifyContours
     object cbAutomaticColors: TJvCheckBox
       Left = 12
       Top = 49
-      Width = 137
-      Height = 18
+      Width = 140
+      Height = 20
       Caption = 'Automatic colors'
       TabOrder = 2
       OnClick = cbAutomaticColorsClick
@@ -330,8 +330,8 @@ inherited frmSpecifyContours: TfrmSpecifyContours
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 312
-    ExplicitHeight = 143
+    ExplicitWidth = 310
+    ExplicitHeight = 135
   end
   object Panel1: TPanel
     Left = 0
@@ -340,7 +340,7 @@ inherited frmSpecifyContours: TfrmSpecifyContours
     Height = 33
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 312
+    ExplicitWidth = 310
     object rdeLineThickness: TRbwDataEntry
       Left = 60
       Top = 5

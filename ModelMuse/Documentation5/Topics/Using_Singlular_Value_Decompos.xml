@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-01-13T12:58:47.486-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-04-03T14:29:44.622-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Using SVD Assist</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Using SVD Assist</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">SVD-Assist is described in chapter 10 of the PEST user manual and in Doherty and Hunt (2010). SVD-Assist appreciably reduces the computational burden of calibration. Using SVD Asist requires the use of the PSTCLEAN utility program. (If the &quot;i64&quot; version of PEST is being used, it may be necessary to install the PSTCLEAN utility program from one of the other distributions in the PEST directory because at the time of this writing, it was not included in 64-bit distribution file.)</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">If SVD Assist is used with Singular Value Decomposition in PEST, &quot;super-parameters&quot; can be used to reduce the PEST execution time. The general sequence of actions to use SVD Assist is as follow.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">SVD-Assist is described in chapter 10 of the PEST user manual and in Doherty and Hunt (2010). SVD-Assist appreciably reduces the computational burden of calibration. Using SVD Assist requires the use of the PSTCLEAN utility program. (If the &quot;i64&quot; version of PEST is being used, it may be necessary to install the PSTCLEAN utility program from one of the other distributions in the PEST directory because at the time of this writing, it was not included in 64-bit distribution file.)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If SVD Assist is used with Singular Value Decomposition in PEST, &quot;super-parameters&quot; can be used to reduce the PEST execution time. The general sequence of actions to use SVD-Assist is as follow.</text></para>
     <list id="0" type="ol" listtype="decimal" formatstring="&#37;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Generate the Jacobian matrix by running PEST with the maximum number of PEST iterations (NOPTMAX) generally set to -2. </text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Choose the number of supper-parameters to use. The PEST utility program SUPCALC can be used to assist with this and the previous step.</text></li>
