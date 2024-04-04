@@ -1370,15 +1370,8 @@ var
   GridBottom: double;
   Param: TModflowSteadyParameter;
   ParamName: string;
+  Epsilon: double;
   procedure WriteOptionalData;
-//  var
-//    Rw: Double;
-//    Rskin: Double;
-//    Kskin: Double;
-//    B: Double;
-//    C: Double;
-//    P: Double;
-//    CWC: Double;
   begin
     if not ConstantWellLossParameters then
     begin
@@ -1453,8 +1446,14 @@ begin
             Format(StrTheTopOfTheMulti,
             [Ztop, Well.ScreenObject.Name, GridBottom]), Well.ScreenObject)
         end;
-        WriteFloat(Ztop);
-        WriteFloat(Zbotm);
+      // MODFLOW stores ZTOP and ZBOTM as double precision variables
+      // but compares them to single precision discretization variables.
+      // This can result in MNW2 wells being connected incorrectly
+      // to layers above the top or below the bottom of the correct cells.
+        Epsilon := Abs(Ztop/1e7);
+        WriteFloat(Ztop-Epsilon);
+        Epsilon := Abs(Zbotm/1e7);
+        WriteFloat(Zbotm+Epsilon);
         WriteInteger(ROW);
         WriteInteger(COL);
         Comment := ' # Data Set 2D; Ztop, Zbotm, ROW, COL';
@@ -1685,9 +1684,15 @@ begin
     end
     else
     begin
+      // MODFLOW stores ZTOP and ZBOTM as double precision variables
+      // but compares them to single precision discretization variables.
+      // This can result in MNW2 wells being connected incorrectly
+      // to layers above the top or below the bottom of the correct cells.
       Well.GetVerticalWellElevations(Ztop, Zbotm);
-      WriteFloat(Ztop);
-      WriteFloat(Zbotm);
+      Epsilon := Abs(Ztop/1e7);
+      WriteFloat(Ztop-Epsilon);
+      Epsilon := Abs(Zbotm/1e7);
+      WriteFloat(Zbotm+Epsilon);
       WriteInteger(ROW);
       WriteInteger(COL);
       Comment := ' # Data Set 2D; Ztop, Zbotm, ROW, COL';

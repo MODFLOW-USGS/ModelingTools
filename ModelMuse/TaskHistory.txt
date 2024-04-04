@@ -138,7 +138,7 @@ object TTaskHistory
     end
     item
       Name = 'UZF'
-      Display = False
+      Display = True
     end
     item
       Name = 'Solvers'
@@ -32818,5 +32818,10 @@ object TTaskHistory
       Date = 45385.000000000000000000
       Categories.Strings = (
         'Documentation')
+    end
+    item
+      Date = 45386.000000000000000000
+      Categories.Strings = (
+        'UZF')
     end>
 end

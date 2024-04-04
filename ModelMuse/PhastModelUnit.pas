@@ -10205,12 +10205,16 @@ const
 //               bug fix: Fixed a bug that could cause access violations when
 //                editing objects while the Show or Hide Objects dialog box
 //                is displayed and Calibration data sets have been defined.
+//    '5.2.0.3'  Change: In the MNW2 package, ZTOP and ZBOTM are now exported
+//                with slightly different values to ensure that MNW2 wells are
+//                not connected to the wrong layers. This change compensates
+//                for a bug in MODFLOW-2005.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.2';
+  IIModelVersion = '5.2.0.3';
 
 function IModelVersion: string;
 begin
