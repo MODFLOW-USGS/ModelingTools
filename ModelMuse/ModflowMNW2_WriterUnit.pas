@@ -1431,7 +1431,7 @@ begin
     Cell := Well.Cells[0] as TMnw2_Cell;
     ROW := Cell.Row+1;
     COL := Cell.Column+1;
-    GridBottom := LocalGrid.CellElevation[Cell.Column, Cell.Row, LocalGrid.LayerCount];
+    GridBottom := LocalGrid.CellElevation[ZeroBasedID(LocalGrid.LayerCount, Cell.Row, Cell.Column)];
     if WellBoundary.VerticalScreens.Count > 0 then
     begin
       for ScreenIndex := 0 to WellBoundary.VerticalScreens.Count - 1 do

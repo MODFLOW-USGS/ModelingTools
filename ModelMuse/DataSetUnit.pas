@@ -5099,11 +5099,11 @@ begin
               begin
                 if Grid <> nil then
                 begin
-                  OkLocation := Grid.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                  OkLocation := Grid.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                 end
                 else if Mesh <> nil then
                 begin
-                  OkLocation := Mesh.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                  OkLocation := Mesh.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                 end
                 else
                 begin
@@ -5175,11 +5175,11 @@ begin
               begin
                 if Grid <> nil then
                 begin
-                  OkLocation := Grid.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                  OkLocation := Grid.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                 end
                 else if Mesh <> nil then
                 begin
-                  OkLocation := Mesh.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                  OkLocation := Mesh.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                 end
                 else
                 begin
@@ -5240,11 +5240,11 @@ begin
               begin
                 if Grid <> nil then
                 begin
-                  OkLocation := Grid.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                  OkLocation := Grid.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                 end
                 else if Mesh <> nil then
                 begin
-                  OkLocation := Mesh.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                  OkLocation := Mesh.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                 end
                 else
                 begin
@@ -5320,11 +5320,11 @@ begin
                 begin
                   if Grid <> nil then
                   begin
-                    OkLocation := Grid.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                    OkLocation := Grid.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                   end
                   else if Mesh <> nil then
                   begin
-                    OkLocation := Mesh.OkLocation(self, LayerIndex, RowIndex, ColIndex);
+                    OkLocation := Mesh.OkLocation(self, ZeroBasedID(LayerIndex, RowIndex, ColIndex));
                   end
                   else
                   begin

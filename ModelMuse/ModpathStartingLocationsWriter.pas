@@ -267,7 +267,8 @@ begin
         LocalY := 1 - ((FModflowGrid.RowPosition[Cell.Row] - APoint.y) / FModflowGrid.RowWidth[Cell.Row]);
         WriteFloat(LocalY);
         GlobalZ := ScreenObject.Higher3DElevations[Model][Cell.Layer, Cell.Row, Cell.Column];
-        LocalZ := (GlobalZ - FModflowGrid.CellElevation[Cell.Column, Cell.Row, Cell.Layer + 1]) / FModflowGrid.CellThickness[Cell.Column, Cell.Row, Cell.Layer];
+        LocalZ := (GlobalZ - FModflowGrid.CellElevation[ZeroBasedID(Cell.Layer + 1, Cell.Row, Cell.Column)])
+           / FModflowGrid.CellThickness[Cell.Column, Cell.Row, Cell.Layer];
         if not Model.IsLayerSimulated(Cell.Layer) then
         begin
           LocalZ := LocalZ - 1;

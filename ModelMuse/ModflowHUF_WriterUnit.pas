@@ -143,7 +143,7 @@ begin
               if ActiveDataArray.BooleanData[LayerIndex, RowIndex, ColIndex] then
               begin
                 CellUsed := True;
-                Gridtop := Model.ModflowGrid.CellElevation[ColIndex,RowIndex,LayerIndex];
+                Gridtop := Model.ModflowGrid.CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColIndex)];
                 Break;
               end;
             end;
@@ -158,7 +158,7 @@ begin
                 if ActiveDataArray.BooleanData[LayerIndex, RowIndex, ColIndex] then
                 begin
                   GridBottom := Model.ModflowGrid.
-                    CellElevation[ColIndex,RowIndex,LayerIndex+1];
+                    CellElevation[ZeroBasedID(LayerIndex+1,RowIndex,ColIndex)];
                   Break;
                 end;
               end;

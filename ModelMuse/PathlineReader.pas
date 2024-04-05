@@ -3935,7 +3935,7 @@ begin
   if (Column < Grid.ColumnCount) and (Row < Grid.RowCount)
     and (Layer < Grid.LayerCount) then
   begin
-    Z1 := Grid.CellElevation[Column, Row, Layer+1];
+    Z1 := Grid.CellElevation[ZeroBasedID(Layer+1, Row, Column)];
   end
   else
   begin
@@ -3944,12 +3944,12 @@ begin
   end;
   if LocalZ < 0 then
   begin
-    Z2 := Grid.CellElevation[Column, Row, Layer+2];
+    Z2 := Grid.CellElevation[ZeroBasedID(Layer+2, Row, Column)];
     Thickness := Z1-Z2;
   end
   else
   begin
-    Z2 := Grid.CellElevation[Column, Row, Layer];
+    Z2 := Grid.CellElevation[ZeroBasedID(Layer, Row, Column)];
     Thickness := Z2-Z1;
   end;
   Z := Z1 + Thickness*LocalZ;

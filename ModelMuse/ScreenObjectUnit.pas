@@ -12953,7 +12953,7 @@ begin
               end;
             eaNodes:
               begin
-                CellCoord := Grid.CellCoordinates[TestSeg.Col, TestSeg.Row, TestSeg.Layer];
+                CellCoord := Grid.CellCoordinates[ZeroBasedID(TestSeg.Layer, TestSeg.Row, TestSeg.Col)];
                 result := Sqrt(Sqr(CellCoord.Col1_Row1_Lay1.x - CellCoord.Col2_Row2_Lay2.x)
                   + Sqr(CellCoord.Col1_Row1_Lay1.y - CellCoord.Col2_Row2_Lay2.y));
               end;
@@ -12971,7 +12971,7 @@ begin
               end;
             eaNodes:
               begin
-                CellCoord := Grid.CellCoordinates[TestSeg.Col, TestSeg.Row, TestSeg.Layer];
+                CellCoord := Grid.CellCoordinates[ZeroBasedID(TestSeg.Layer, TestSeg.Row, TestSeg.Col)];
                 result := Sqrt(Sqr(CellCoord.Col1_Row1_Lay1.x - CellCoord.Col2_Row2_Lay2.x)
                   + Sqr(CellCoord.Col1_Row1_Lay1.z - CellCoord.Col2_Row2_Lay2.z));
               end;
@@ -12988,7 +12988,7 @@ begin
               end;
             eaNodes:
               begin
-                CellCoord := Grid.CellCoordinates[TestSeg.Col, TestSeg.Row, TestSeg.Layer];
+                CellCoord := Grid.CellCoordinates[ZeroBasedID(TestSeg.Layer, TestSeg.Row, TestSeg.Col)];
                 result := Sqrt(Sqr(CellCoord.Col1_Row1_Lay1.y - CellCoord.Col2_Row2_Lay2.y)
                   + Sqr(CellCoord.Col1_Row1_Lay1.z - CellCoord.Col2_Row2_Lay2.z));
               end;
@@ -29192,10 +29192,10 @@ var
     case FScreenObject.ViewDirection of
       vdTop:
         begin
-          UpperLimit := Grid.CellElevation[ParallelIndex1,
-            ParallelIndex2, PerpendicularIndex];
-          LowerLimit := Grid.CellElevation[ParallelIndex1,
-            ParallelIndex2, PerpendicularIndex+1];
+          UpperLimit := Grid.CellElevation[ZeroBasedID(PerpendicularIndex,
+            ParallelIndex2, ParallelIndex1)];
+          LowerLimit := Grid.CellElevation[ZeroBasedID(PerpendicularIndex+1,
+            ParallelIndex2, ParallelIndex1)];
         end;
       vdFront:
         begin

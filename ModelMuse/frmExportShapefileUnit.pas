@@ -831,7 +831,7 @@ begin
                 SetLength(Shape.FZArray, Shape.FNumPoints);
                 SetLength(Shape.FMArray, Shape.FNumPoints);
                 Element := FLocalGrid.ElementCoordinates[
-                  Edge.Col1, Edge.Row1, Edge.Layer];
+                  ZeroBasedID(Edge.Layer, Edge.Row1, Edge.Col1)];
 //                StartingIndex := -1;
                 if Edge.Col1 = Edge.Col2 then
                 begin
@@ -1180,7 +1180,7 @@ begin
                 Shape.FPartTypes[2] := ptTriangleStrip;
 
                 Element := FLocalGrid.ElementCoordinates[
-                  ColIndex, RowIndex, LayerIndex];
+                  ZeroBasedID(LayerIndex, RowIndex, ColIndex)];
 
                 Shape.FPoints[0] := ConvertPoint(Element.TopCenter);
                 Shape.FZArray[0] := Element.TopCenter.Z;
@@ -1234,7 +1234,7 @@ begin
                 Shape.FParts[0] := 0;
                 Shape.FPartTypes[0] := ptTriangleStrip;
 
-                Cell := FLocalGrid.CellCoordinates[ColIndex, RowIndex, LayerIndex];
+                Cell := FLocalGrid.CellCoordinates[ZeroBasedID(LayerIndex, RowIndex, ColIndex)];
 
                 Shape.FPoints[0] := ConvertPoint(Cell.Col1_Row1_Lay1);
                 Shape.FZArray[0] := Cell.Col1_Row1_Lay1.Z;

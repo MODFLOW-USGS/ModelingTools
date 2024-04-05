@@ -586,14 +586,14 @@ begin
           ANode.FElevation := PipeElevation.RealData[
             ANode.FLayer, ANode.FRow, ANode.FColumn];
           if ANode.FElevation >
-            LocalGrid.CellElevation[ANode.FColumn, ANode.FRow, ANode.FLayer] then
+            LocalGrid.CellElevation[ZeroBasedID(ANode.FLayer, ANode.FRow, ANode.FColumn)] then
           begin
             frmErrorsAndWarnings.AddError(Model, StrCFPNodeElevationHigh,
               Format(StrNodeNumber0d,
               [ANode.FNumber, ANode.FLayer+1, ANode.FRow+1, ANode.FColumn+1]));
           end;
           if ANode.FElevation <
-            LocalGrid.CellElevation[ANode.FColumn, ANode.FRow, ANode.FLayer+1] then
+            LocalGrid.CellElevation[ZeroBasedID(ANode.FLayer+1, ANode.FRow, ANode.FColumn)] then
           begin
             frmErrorsAndWarnings.AddError(Model, StrCFPNodeElevationLow,
               Format(StrNodeNumber0d,

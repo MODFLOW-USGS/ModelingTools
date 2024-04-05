@@ -528,7 +528,7 @@ Type
     function GetActiveElementI2D(Index: integer): IElement2D;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
-    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
+    function GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double; override;
   public
     procedure Assign(Source: TPersistent); override;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
@@ -980,7 +980,7 @@ Type
     function FrontOutline: TOutline;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
-    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
+    function GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double; override;
   public
     procedure UpdateNodeArray;
     procedure AssignNodeElevations;
@@ -994,7 +994,7 @@ Type
     procedure SimpleRenumber;
     function Bandwidth: Integer;
     function OkLocation(const DataSet: TDataArray;
-      const Layer, Row, Col: integer): boolean; override;
+      const CellID: TZeroBasedID): boolean; override;
     procedure ColorDataSetChange(Sender: TObject);
     function TopMeshOutline(Layer: integer): TMeshOutline;
     function FrontMeshOutline: TMeshOutline;
@@ -4386,8 +4386,7 @@ begin
   end;
 end;
 
-function TSutraMesh2D.GetShortestHorizontalBlockEdge(Layer, Row,
-  Column: Integer): double;
+function TSutraMesh2D.GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double;
 var
   Element: TSutraElement2D;
   Node1: TPoint2D;
@@ -4395,7 +4394,7 @@ var
   TestDistance: double;
   Node2: TPoint2D;
 begin
-  Element := Elements[Column];
+  Element := Elements[CellID.Column];
   Node1 := Element.Nodes[0].Node.Location;
   Node2 := Element.Nodes[1].Node.Location;
   result := Distance(Node1,Node2);
@@ -8528,10 +8527,10 @@ begin
   result := Mesh2D.SelectedLayer;
 end;
 
-function TSutraMesh3D.GetShortestHorizontalBlockEdge(Layer, Row,
-  Column: Integer): double;
+function TSutraMesh3D.GetShortestHorizontalBlockEdge(
+  const CellID: TZeroBasedID): double;
 begin
-  result := Mesh2D.ShortestHorizontalBlockEdge[Layer, Row, Column]
+  result := Mesh2D.ShortestHorizontalBlockEdge[CellID]
 end;
 
 function TSutraMesh3D.GetThreeDContourDataSet: TDataArray;
@@ -8651,8 +8650,8 @@ begin
   end;
 end;
 
-function TSutraMesh3D.OkLocation(const DataSet: TDataArray; const Layer, Row,
-  Col: integer): boolean;
+function TSutraMesh3D.OkLocation(const DataSet: TDataArray;
+  const CellID: TZeroBasedID): boolean;
 var
   Element: TSutraElement3D;
   Node: TSutraNode3D;
@@ -8668,12 +8667,12 @@ begin
     case DataSet.EvaluatedAt of
       eaBlocks:
         begin
-          Element := ElementArray[Layer, Col];
+          Element := ElementArray[CellID.Layer, CellID.Column];
           result := (Element <> nil) and Element.Active;
         end;
       eaNodes:
         begin
-          Node := NodeArray[Layer, Col];
+          Node := NodeArray[CellID.Layer, CellID.Column];
           result := (Node <> nil) and Node.Active;
         end;
       else Assert(False);

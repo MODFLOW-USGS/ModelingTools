@@ -5113,7 +5113,7 @@ begin
           end
           else
           begin
-            Result := LocalGrid.CellElevation[Col, Row, Lay];
+            Result := LocalGrid.CellElevation[ZeroBasedID(Lay, Row, Col)];
           end;
         end;
       end;
@@ -5440,8 +5440,8 @@ begin
     Grid := LocalModel.Grid;
     if LocalModel.ModelSelection in ModflowSelection then
     begin
-      TopElevation := Min(Grid.CellElevation[Column, Row, Layer], TopElevation);
-      BottomElevation := Max(Grid.CellElevation[Column, Row, Layer+1], BottomElevation);
+      TopElevation := Min(Grid.CellElevation[ZeroBasedID(Layer, Row, Column)], TopElevation);
+      BottomElevation := Max(Grid.CellElevation[ZeroBasedID(Layer+1, Row, Column)], BottomElevation);
     end
     else
     begin
@@ -5449,8 +5449,8 @@ begin
       case GlobalCurrentScreenObject.EvaluatedAt of
         eaBlocks:
           begin
-            TopElevation := Min(Grid.CellElevation[Column, Row, Layer+1], TopElevation);
-            BottomElevation := Max(Grid.CellElevation[Column, Row, Layer], BottomElevation);
+            TopElevation := Min(Grid.CellElevation[ZeroBasedID(Layer+1, Row, Column)], TopElevation);
+            BottomElevation := Max(Grid.CellElevation[ZeroBasedID(Layer, Row, Column)], BottomElevation);
           end;
         eaNodes:
           begin
@@ -5535,14 +5535,14 @@ begin
     Grid := LocalModel.Grid;
     if LocalModel.ModelSelection in ModflowSelection then
     begin
-      TopElevation := Min(Grid.CellElevation[Column, Row, 0], TopElevation);
-      BottomElevation := Max(Grid.CellElevation[Column, Row, Grid.LayerCount], BottomElevation);
+      TopElevation := Min(Grid.CellElevation[ZeroBasedID(0, Row, Column)], TopElevation);
+      BottomElevation := Max(Grid.CellElevation[ZeroBasedID(Grid.LayerCount, Row, Column)], BottomElevation);
     end
     else
     begin
       Assert(LocalModel.ModelSelection = msPhast);
-      TopElevation := Min(Grid.CellElevation[Column, Row, Grid.LayerCount], TopElevation);
-      BottomElevation := Max(Grid.CellElevation[Column, Row, 0], BottomElevation);
+      TopElevation := Min(Grid.CellElevation[ZeroBasedID(Grid.LayerCount, Row, Column)], TopElevation);
+      BottomElevation := Max(Grid.CellElevation[ZeroBasedID(0, Row, Column)], BottomElevation);
     end;
     result := Max(TopElevation - BottomElevation, 0);
   end;

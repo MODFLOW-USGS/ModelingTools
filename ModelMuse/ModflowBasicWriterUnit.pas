@@ -301,7 +301,7 @@ begin
           if Active then
           begin
             Head := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            Bottom := Model.ModflowGrid.CellElevation[ColIndex, RowIndex, LayerIndex+1];
+            Bottom := Model.ModflowGrid.CellElevation[ZeroBasedID(LayerIndex+1, RowIndex, ColIndex)];
             if Bottom >= Head then
             begin
               frmErrorsAndWarnings.AddWarning(Model, ErrorString,

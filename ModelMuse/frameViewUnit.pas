@@ -3027,8 +3027,8 @@ begin
 
         if Grid.LayerDirection = ldBottomToTop then
         begin
-          if APoint.Y > Grid.CellElevation[Col,
-            frmGoPhast.PhastModel.SelectedModel.SelectedRow, Layer] then
+          if APoint.Y > Grid.CellElevation[ZeroBasedID(Layer,
+            frmGoPhast.PhastModel.SelectedModel.SelectedRow, Col)] then
           begin
             NeighborLayer := Layer + 1;
           end
@@ -3039,8 +3039,8 @@ begin
         end
         else
         begin
-          if APoint.Y > Grid.CellElevation[Col,
-            frmGoPhast.PhastModel.SelectedModel.SelectedRow, Layer] then
+          if APoint.Y > Grid.CellElevation[ZeroBasedID(Layer,
+            frmGoPhast.PhastModel.SelectedModel.SelectedRow, Col)] then
           begin
             NeighborLayer := Layer - 1;
           end
@@ -3200,8 +3200,8 @@ begin
         end;
         if Grid.LayerDirection = ldBottomToTop then
         begin
-          if APoint.X > Grid.CellElevation[
-            frmGoPhast.PhastModel.SelectedModel.SelectedColumn, Row, Layer] then
+          if APoint.X > Grid.CellElevation[ZeroBasedID(Layer,
+            Row, frmGoPhast.PhastModel.SelectedModel.SelectedColumn)] then
           begin
             NeighborLayer := Layer + 1;
           end
@@ -3212,8 +3212,8 @@ begin
         end
         else
         begin
-          if APoint.X > Grid.CellElevation[
-            frmGoPhast.PhastModel.SelectedModel.SelectedColumn, Row, Layer] then
+          if APoint.X > Grid.CellElevation[ZeroBasedID(Layer,
+            Row, frmGoPhast.PhastModel.SelectedModel.SelectedColumn)] then
           begin
             NeighborLayer := Layer - 1;
           end

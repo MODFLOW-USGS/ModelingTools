@@ -7188,8 +7188,8 @@ begin
           end
           else
           begin
-            CellTop := Grid.CellElevation[CellId.Column-1, CellId.Row-1, CellId.Layer-1];
-            CellBottom := Grid.CellElevation[CellId.Column-1, CellId.Row-1, CellId.Layer];
+            CellTop :=    Grid.CellElevation[ZeroBasedID(CellId.Layer-1, CellId.Row-1, CellId.Column-1)];
+            CellBottom := Grid.CellElevation[ZeroBasedID(CellId.Layer, CellId.Row-1, CellId.Column-1)];
           end;
           if ConnectionItem.scrn_top < CellTop then
           begin

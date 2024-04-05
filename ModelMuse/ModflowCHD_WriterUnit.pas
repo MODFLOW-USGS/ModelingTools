@@ -127,8 +127,8 @@ begin
   end
   else
   begin
-    LayerBottom := Model.Grid.CellElevation[
-      CHD_Cell.Column, CHD_Cell.Row, CHD_Cell.Layer+1];
+    LayerBottom := Model.Grid.CellElevation[ZeroBasedID(
+      CHD_Cell.Layer+1, CHD_Cell.Row, CHD_Cell.Column)];
   end;
   ScreenObject := nil;
   if CHD_Cell.StartingHead < LayerBottom then

@@ -1765,8 +1765,8 @@ begin
   ShouldCheck := Isfropt in [1, 2, 3];
   if ShouldCheck  then
   begin
-    CellBottom := Grid.CellElevation[
-      SfrReach.Column, SfrReach.Row, SfrReach.Layer + 1];
+    CellBottom := Grid.CellElevation[ZeroBasedID(
+      SfrReach.Layer + 1, SfrReach.Row, SfrReach.Column)];
     if SfrReach.StreambedElevation - SfrReach.StreamBedThickness < CellBottom then
     begin
       frmErrorsAndWarnings.AddWarning(Model, StrTheBottomOfTheSt,

@@ -1498,8 +1498,8 @@ begin
             for ScreenIndex := 0 to Mnw2Boundary.VerticalScreens.Count - 1 do
             begin
               AScreen := Mnw2Boundary.VerticalScreens[ScreenIndex];
-              ModelTop := Grid.CellElevation[Cell.Column, Cell.Row,0];
-              ModelBottom := Grid.CellElevation[Cell.Column, Cell.Row,Grid.LayerCount];
+              ModelTop := Grid.CellElevation[ZeroBasedID(0, Cell.Row,Cell.Column)];
+              ModelBottom := Grid.CellElevation[ZeroBasedID(Grid.LayerCount, Cell.Row, Cell.Column)];
               if AScreen.ZTop >= ModelTop then
               begin
                 TopLayer := 0;

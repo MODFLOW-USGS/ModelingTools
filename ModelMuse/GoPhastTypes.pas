@@ -358,6 +358,20 @@ type
     property PropertyCount: Integer read GetPropertyCount write SetPropertyCount;
   end;
 
+  TZeroBasedID = record
+    Layer: Integer;
+    Row: Integer;
+    Column: Integer;
+    function ColumnPlus1: TZeroBasedID;
+    function RowPlus1: TZeroBasedID;
+    function LayerPlus1: TZeroBasedID;
+    function ColumnMinus1: TZeroBasedID;
+    function RowMinus1: TZeroBasedID;
+    function LayerMinus1: TZeroBasedID;
+  end;
+
+function ZeroBasedID(ALayer, ARow, AColumn: Integer): TZeroBasedID;
+
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
     msModflowFmp, msModflowCfp, msModflow2015, msModflowOwhm2];
@@ -2820,6 +2834,51 @@ end;
 procedure TCellDataArray.SetPropertyCount(const Value: Integer);
 begin
   SetLength(Values, Value)
+end;
+
+function ZeroBasedID(ALayer, ARow, AColumn: Integer): TZeroBasedID;
+begin
+    Result.Layer := ALayer;
+    Result.Row := ARow;
+    Result.Column := AColumn;
+end;
+
+{ TZeroBasedID }
+
+function TZeroBasedID.ColumnMinus1: TZeroBasedID;
+begin
+  result := self;
+  result.Column := result.Column - 1;
+end;
+
+function TZeroBasedID.ColumnPlus1: TZeroBasedID;
+begin
+  result := self;
+  result.Column := result.Column + 1;
+end;
+
+function TZeroBasedID.LayerMinus1: TZeroBasedID;
+begin
+  result := self;
+  result.Layer := result.Layer - 1;
+end;
+
+function TZeroBasedID.LayerPlus1: TZeroBasedID;
+begin
+  result := self;
+  result.Layer := result.Layer + 1;
+end;
+
+function TZeroBasedID.RowMinus1: TZeroBasedID;
+begin
+  result := self;
+  result.Row := result.Row + 1;
+end;
+
+function TZeroBasedID.RowPlus1: TZeroBasedID;
+begin
+  result := self;
+  result.Row := result.Row + 1;
 end;
 
 initialization

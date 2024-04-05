@@ -16,13 +16,13 @@ type
       const ZoomBox: TQRbwZoomBox2); override;
     procedure GetCellCornerElevations(const EvalAt: TEvaluatedAt;
       out Elevations: TThreeDRealArray); override;
-    function GetCellElevation(const Column, Row, Layer: integer): real;
+    function GetCellElevation(const CellID: TZeroBasedID): real;
       override;
     function GetCellThickness(const Column, Row, Layer: integer): real;
       override;
     function GetTwoDCellElevations(const Col, Row: integer): TOneDRealArray;
       override;
-    procedure SetCellElevation(const Column, Row, Layer: integer;
+    procedure SetCellElevation(const CellID: TZeroBasedID;
       const Value: real); override;
     // See @link(CellThickness).
     procedure SetCellThickness(const Column, Row, Layer: integer;
@@ -92,8 +92,7 @@ begin
 
 end;
 
-function TFootprintGrid.GetCellElevation(const Column, Row,
-  Layer: integer): real;
+function TFootprintGrid.GetCellElevation(const CellID: TZeroBasedID): real;
 begin
   result := 0;
 end;
@@ -126,7 +125,7 @@ begin
   Result := 0.;
 end;
 
-procedure TFootprintGrid.SetCellElevation(const Column, Row, Layer: integer;
+procedure TFootprintGrid.SetCellElevation(const CellID: TZeroBasedID;
   const Value: real);
 begin
   // do nothing

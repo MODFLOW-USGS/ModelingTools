@@ -371,7 +371,7 @@ type
       const EvaluatedAt: TEvaluatedAt): T2DTopCell;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
-    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
+    function GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double; override;
   public
     procedure Assign(Source: TPersistent); override;
     procedure Clear;
@@ -408,7 +408,7 @@ type
     function CellArea(CellIndex: Integer): double;
     function GetElementOutline(Column: Integer): TElementOutline;
     function OkLocation(const DataSet: TDataArray;
-      const Layer, Row, Col: integer): boolean; override;
+      const CellID: TZeroBasedID): boolean; override;
   published
     procedure Loaded;
     property Cells: TModflowIrregularCell2DCollection read FCells write SetCells;
@@ -641,7 +641,7 @@ type
     function FrontOutline: TOutline;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
-    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
+    function GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double; override;
   public
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
@@ -740,7 +740,7 @@ type
     property GridLineDrawingChoice: TGridLineDrawingChoice
       read FGridLineDrawingChoice write SetGridLineDrawingChoice;
     function OkLocation(const DataSet: TDataArray;
-      const Layer, Row, Col: integer): boolean; override;
+      const CellID: TZeroBasedID): boolean; override;
     // Layer, Row, Col are the indicies of an element.
     // CellList will be filled with the horizontal neighbors of that element.
     procedure GetHorizontalNeighbors(const Layer, Row, Col: integer;
@@ -3048,8 +3048,8 @@ begin
   Result := FMesh.SelectedLayer;
 end;
 
-function TModflowIrregularGrid2D.GetShortestHorizontalBlockEdge(Layer, Row,
-  Column: Integer): double;
+function TModflowIrregularGrid2D.GetShortestHorizontalBlockEdge(
+  const CellID: TZeroBasedID): double;
 var
   ACell: TModflowIrregularCell2D;
   Node1: TPoint2D;
@@ -3060,7 +3060,7 @@ begin
   // nodes in a cell may be colinear.
   // Find the diagonal length and use it to determine the length of a side
   // assuming that the cells are square.
-  ACell := Cells[Column];
+  ACell := Cells[CellID.Column];
   Assert(ACell.ElementCorners.Count >= 2);
   Node1 := ACell.ElementCorners[0].Location;
   Node2 := ACell.ElementCorners[1].Location;
@@ -3695,7 +3695,7 @@ begin
 end;
 
 function TModflowIrregularGrid2D.OkLocation(const DataSet: TDataArray;
-  const Layer, Row, Col: integer): boolean;
+  const CellID: TZeroBasedID): boolean;
 var
   IDomain: TDataArray;
 begin
@@ -3704,7 +3704,7 @@ begin
   begin
     IDomain := (Model as TCustomModel).
       DataArrayManager.GetDataSetByName(K_IDOMAIN);
-    result := IDomain.IntegerData[Layer, Row, Col] > 0;
+    result := IDomain.IntegerData[CellID.Layer, CellID.Row, CellID.Column] > 0;
   end;
 end;
 
@@ -4986,8 +4986,8 @@ begin
             ACell3D := ALayer.Add;
             ACell3D.FActiveElements := FActiveElements;
             ACell3D.Cell2D := ACell2D;
-            ACell3D.Top := LocalGrid.CellElevation[ColIndex, RowIndex, LayerIndex];
-            ACell3D.Bottom := LocalGrid.CellElevation[ColIndex, RowIndex, LayerIndex+1];
+            ACell3D.Top := LocalGrid.CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColIndex)];
+            ACell3D.Bottom := LocalGrid.CellElevation[ZeroBasedID(LayerIndex+1, RowIndex, ColIndex)];
             ACell3D.Active := ActiveDataArray.BooleanData[LayerIndex, RowIndex, ColIndex];
             Inc(CellIndex2D);
           end;
@@ -7207,10 +7207,9 @@ begin
   result := FSelectedLayer;
 end;
 
-function TModflowDisvGrid.GetShortestHorizontalBlockEdge(Layer, Row,
-  Column: Integer): double;
+function TModflowDisvGrid.GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double;
 begin
-  result := TwoDGrid.ShortestHorizontalBlockEdge[Layer, Row, Column];
+  result := TwoDGrid.ShortestHorizontalBlockEdge[CellID];
 end;
 
 function TModflowDisvGrid.GetThreeDContourDataSet: TDataArray;
@@ -7449,8 +7448,8 @@ begin
   ElevationsNeedUpdating := True;
 end;
 
-function TModflowDisvGrid.OkLocation(const DataSet: TDataArray; const Layer,
-  Row, Col: integer): boolean;
+function TModflowDisvGrid.OkLocation(const DataSet: TDataArray;
+  const CellID: TZeroBasedID): boolean;
 var
   ActiveArray: TDataArray;
 begin
@@ -7459,7 +7458,7 @@ begin
   begin
     ActiveArray := (Model as TCustomModel).
       DataArrayManager.GetDataSetByName(rsActive);
-    result := ActiveArray.BooleanData[Layer, Row, Col];
+    result := ActiveArray.BooleanData[CellID.Layer, CellID.Row, CellID.Column];
   end;
 end;
 

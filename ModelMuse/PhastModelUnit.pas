@@ -36160,11 +36160,11 @@ function TCustomModel.GetShortestHorizontalBlockEdge(Layer, Row,
 begin
   if DisvUsed then
   begin
-    result := DisvGrid.ShortestHorizontalBlockEdge[Layer, Row, Column];
+    result := DisvGrid.ShortestHorizontalBlockEdge[ZeroBasedID(Layer, Row, Column)];
   end
   else
   begin
-    result := Grid.ShortestHorizontalBlockEdge[Layer, Row, Column];
+    result := Grid.ShortestHorizontalBlockEdge[ZeroBasedID(Layer, Row, Column)];
   end;
 end;
 
@@ -41584,7 +41584,7 @@ var
 begin
   if Grid <> nil then
   begin
-    result := Grid.CellElevation[Column, Row, Layer];
+    result := Grid.CellElevation[ZeroBasedID(Layer, Row, Column)];
   end
   else if DisvGrid <> nil then
   begin

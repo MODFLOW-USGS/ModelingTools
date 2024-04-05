@@ -87,13 +87,13 @@ type
     procedure GetCellCornerElevations(const EvalAt: TEvaluatedAt;
       out Elevations: TThreeDRealArray); override;
     // See @link(CellElevation).
-    function GetCellElevation(const Column, Row, Layer: integer): real;
+    function GetCellElevation(const CellID: TZeroBasedID): real;
       override;
     // See @link(CellThickness).
     function GetCellThickness(const Column, Row, Layer: integer): real;
       override;
     // See @link(CellElevation).
-    procedure SetCellElevation(const Column, Row, Layer: integer;
+    procedure SetCellElevation(const CellID: TZeroBasedID;
       const Value: real); override;
     // See @link(CellThickness).
     procedure SetCellThickness(const Column, Row, Layer: integer;
@@ -174,7 +174,7 @@ type
     Procedure CheckElevations;
     property ElevationsNeedUpdating: Boolean read GetElevationsNeedUpdating;
     function OkLocation(const DataSet: TDataArray;
-      const Layer, Row, Col: integer): boolean; override;
+      const CellID: TZeroBasedID): boolean; override;
     property UpdatingElevations: Boolean read FUpdatingElevations;
   end;
 
@@ -448,7 +448,7 @@ begin
         begin
           for RowIndex := 0 to RowCount - 1 do
           begin
-            CellElevation[ColIndex,RowIndex,UnitBottomIndex] :=
+            CellElevation[ZeroBasedID(UnitBottomIndex,RowIndex,ColIndex)] :=
               DataArray.RealData[0, RowIndex, ColIndex];
           end;
         end;
@@ -464,11 +464,11 @@ begin
             begin
               for RowIndex := 0 to RowCount - 1 do
               begin
-                UnitTop := CellElevation[ColIndex,RowIndex,UnitTopIndex];
-                UnitBottom := CellElevation[ColIndex,RowIndex,UnitBottomIndex];
+                UnitTop :=    CellElevation[ZeroBasedID(UnitTopIndex,RowIndex,ColIndex)];
+                UnitBottom := CellElevation[ZeroBasedID(UnitBottomIndex,RowIndex,ColIndex)];
                 UnitHeight := UnitTop - UnitBottom;
 
-                CellElevation[ColIndex,RowIndex,LayerIndex] :=
+                CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColIndex)] :=
                   UnitBottom + UnitHeight*Fraction;
               end;
             end;
@@ -488,8 +488,8 @@ begin
               begin
                 for RowIndex := 0 to RowCount - 1 do
                 begin
-                  UnitTop := CellElevation[ColIndex,RowIndex,UnitTopIndex];
-                  UnitBottom := CellElevation[ColIndex,RowIndex,UnitBottomIndex];
+                  UnitTop := CellElevation[ZeroBasedID(UnitTopIndex,RowIndex,ColIndex)];
+                  UnitBottom := CellElevation[ZeroBasedID(UnitBottomIndex,RowIndex,ColIndex)];
                   UnitThickness := UnitTop - UnitBottom;
                   LayerTop := UnitTop - UnitThickness/LayerGroup.LayerCount
                     * Discretization.BottomLayerInUnit;
@@ -498,12 +498,12 @@ begin
 
                   if (Model.ModelSelection = msModflowLGR) then
                   begin
-                    CellElevation[ColIndex,RowIndex,UnitBottomIndex] :=
+                    CellElevation[ZeroBasedID(UnitBottomIndex,RowIndex,ColIndex)] :=
                       (LayerTop + LayerBottom)/2;
                   end
                   else
                   begin
-                    CellElevation[ColIndex,RowIndex,UnitBottomIndex] :=
+                    CellElevation[ZeroBasedID(UnitBottomIndex,RowIndex,ColIndex)] :=
                       LayerBottom;
                   end;
                 end;
@@ -630,14 +630,14 @@ begin
             CellPoints[ColIndex*2+1,RowIndex*2+1,LayerIndex].X := ColCenter;
             CellPoints[ColIndex*2+1,RowIndex*2+1,LayerIndex].Y := RCenter;
             CellPoints[ColIndex*2+1,RowIndex*2+1,LayerIndex].Z :=
-              CellElevation[ColIndex,RowIndex,LayerIndex];
+              CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColIndex)];
           end;
           // column center
           CellPoints[ColIndex*2+1,RowIndex*2,LayerIndex].X := ColCenter;
           CellPoints[ColIndex*2+1,RowIndex*2,LayerIndex].Y := RowEdge;
           CellPoints[ColIndex*2+1,RowIndex*2,LayerIndex].Z :=
-            ((CellElevation[ColIndex,RIndex1,LayerIndex]*RowWeight1)
-            + (CellElevation[ColIndex,RIndex2,LayerIndex]*RowWeight2))
+            ((CellElevation[ZeroBasedID(LayerIndex,RIndex1,ColIndex)]*RowWeight1)
+            + (CellElevation[ZeroBasedID(LayerIndex,RIndex2,ColIndex)]*RowWeight2))
             /(RowWeight1+RowWeight2);
         end;
         if RowIndex < RowCount then
@@ -646,20 +646,20 @@ begin
           CellPoints[ColIndex*2,RowIndex*2+1,LayerIndex].X := ColEdge;
           CellPoints[ColIndex*2,RowIndex*2+1,LayerIndex].Y := RCenter;
           CellPoints[ColIndex*2,RowIndex*2+1,LayerIndex].Z :=
-            ((CellElevation[CIndex1,RowIndex,LayerIndex]*ColWeight1)
-            + (CellElevation[CIndex2,RowIndex,LayerIndex]*ColWeight2))
+            ((CellElevation[ZeroBasedID(LayerIndex,RowIndex,CIndex1)]*ColWeight1)
+            + (CellElevation[ZeroBasedID(LayerIndex,RowIndex,CIndex2)]*ColWeight2))
             /(ColWeight1+ColWeight2);
         end;
         // cell corner
         CellPoints[ColIndex*2,RowIndex*2,LayerIndex].X :=ColEdge;
         CellPoints[ColIndex*2,RowIndex*2,LayerIndex].Y :=RowEdge;
         CellPoints[ColIndex*2,RowIndex*2,LayerIndex].Z :=
-          (((CellElevation[CIndex1,RIndex1,LayerIndex]*ColWeight1
-          +CellElevation[CIndex2,RIndex1,LayerIndex]*ColWeight2)
+          (((CellElevation[ZeroBasedID(LayerIndex,RIndex1,CIndex1)]*ColWeight1
+          +CellElevation[ZeroBasedID(LayerIndex,RIndex1,CIndex2)]*ColWeight2)
           /(ColWeight1+ColWeight2))*RowWeight1
           +
-          ((CellElevation[CIndex1,RIndex2,LayerIndex]*ColWeight1
-          +CellElevation[CIndex2,RIndex2,LayerIndex]*ColWeight2)
+          ((CellElevation[ZeroBasedID(LayerIndex,RIndex2,CIndex1)]*ColWeight1
+          +CellElevation[ZeroBasedID(LayerIndex,RIndex2,CIndex2)]*ColWeight2)
           /(ColWeight1+ColWeight2))*RowWeight2)
           /(RowWeight1+RowWeight2);
       end;
@@ -918,8 +918,8 @@ begin
   frmGoPhast.InvalidateAllViews;
 end;
 
-function TModflowGrid.OkLocation(const DataSet: TDataArray; const Layer, Row,
-  Col: integer): boolean;
+function TModflowGrid.OkLocation(const DataSet: TDataArray;
+  const CellID: TZeroBasedID): boolean;
 var
   IDomain: TDataArray;
 begin
@@ -929,7 +929,7 @@ begin
   begin
     IDomain := (Model as TCustomModel).
       DataArrayManager.GetDataSetByName(K_IDOMAIN);
-    result := IDomain.IntegerData[Layer, Row, Col] > 0;
+    result := IDomain.IntegerData[CellID.Layer, CellID.Row, CellID.Column] > 0;
   end;
 end;
 
@@ -2061,12 +2061,12 @@ begin
             end;
             for LayerIndex := 0 to LCount - 1 do
             begin
-              Elev1 := CellElevation[CIndex, RIndex, LayerIndex];
+              Elev1 := CellElevation[ZeroBasedID(LayerIndex, RIndex, CIndex)];
               Weight1 := ColumnWidth[CIndex];
               Weight3 := RowWidth[RIndex];
               if ColIndex > 0 then
               begin
-                Elev2 := CellElevation[ColIndex-1, RIndex, LayerIndex];
+                Elev2 := CellElevation[ZeroBasedID(LayerIndex, RIndex, ColIndex-1)];
                 Weight2 := ColumnWidth[ColIndex-1];
               end
               else
@@ -2076,7 +2076,7 @@ begin
               end;
               if RowIndex > 0 then
               begin
-                Elev3 := CellElevation[CIndex, RowIndex-1, LayerIndex];
+                Elev3 := CellElevation[ZeroBasedID(LayerIndex, RowIndex-1, CIndex)];
                 Weight4 := RowWidth[RowIndex-1];
               end
               else
@@ -2086,7 +2086,7 @@ begin
               end;
               if (ColIndex > 0) and (RowIndex > 0) then
               begin
-                Elev4 := CellElevation[ColIndex-1, RowIndex-1, LayerIndex];
+                Elev4 := CellElevation[ZeroBasedID(LayerIndex, RowIndex-1, ColIndex-1)];
               end
               else
               begin
@@ -2115,7 +2115,7 @@ begin
             for LayerIndex := 0 to LCount - 1 do
             begin
               Elevations[ColIndex, RowIndex, LayerIndex] :=
-                CellElevation[ColIndex-1, RowIndex-1, LayerIndex];
+                CellElevation[ZeroBasedID(LayerIndex, RowIndex-1, ColIndex-1)];
             end;
           end;
         end;
@@ -2127,12 +2127,12 @@ begin
           for LayerIndex := 0 to LCount - 1 do
           begin
             Elevations[ColIndex, 0, LayerIndex] :=
-              (CellElevation[ColIndex, 0, LayerIndex]*Weight1
-              + CellElevation[ColIndex-1, 0, LayerIndex]*Weight2)
+              (CellElevation[ZeroBasedID(LayerIndex, 0, ColIndex)]*Weight1
+              + CellElevation[ZeroBasedID(LayerIndex, 0, ColIndex-1)]*Weight2)
               /(Weight1+Weight2);
             Elevations[ColIndex, RowCount + 1, LayerIndex] :=
-              (CellElevation[ColIndex, RowCount-1, LayerIndex]*Weight1
-              + CellElevation[ColIndex-1, RowCount-1, LayerIndex]*Weight2)
+              (CellElevation[ZeroBasedID(LayerIndex, RowCount-1, ColIndex)]*Weight1
+              + CellElevation[ZeroBasedID(LayerIndex, RowCount-1, ColIndex-1)]*Weight2)
               /(Weight1+Weight2);
           end;
         end;
@@ -2143,25 +2143,25 @@ begin
           for LayerIndex := 0 to LCount - 1 do
           begin
             Elevations[0, RowIndex, LayerIndex] :=
-              (CellElevation[0, RowIndex, LayerIndex]*Weight1
-              + CellElevation[0, RowIndex-1, LayerIndex]*Weight2)
+              (CellElevation[ZeroBasedID(LayerIndex, RowIndex, 0)]*Weight1
+              + CellElevation[ZeroBasedID(LayerIndex, RowIndex-1, 0)]*Weight2)
               /(Weight1+Weight2);
             Elevations[ColumnCount+1, RowIndex, LayerIndex] :=
-              (CellElevation[ColumnCount-1, RowIndex, LayerIndex]*Weight1
-              + CellElevation[ColumnCount-1, RowIndex-1, LayerIndex]*Weight2)
+              (CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnCount-1)]*Weight1
+              + CellElevation[ZeroBasedID(LayerIndex, RowIndex-1, ColumnCount-1)]*Weight2)
               /(Weight1+Weight2);
           end;
         end;
         // corners of mesh elevations are the elevations of the nearest cells.
         for LayerIndex := 0 to LCount - 1 do
         begin
-          Elevations[0, 0, LayerIndex] := CellElevation[0, 0, LayerIndex];
+          Elevations[0, 0, LayerIndex] := CellElevation[ZeroBasedID(LayerIndex, 0, 0)];
           Elevations[ColumnCount, 0, LayerIndex] :=
-            CellElevation[ColumnCount-1, 0, LayerIndex];
+            CellElevation[ZeroBasedID(LayerIndex, 0, ColumnCount-1)];
           Elevations[0, RowCount, LayerIndex] :=
-            CellElevation[0, RowCount-1, LayerIndex];
+            CellElevation[ZeroBasedID(LayerIndex, RowCount-1, 0)];
           Elevations[ColumnCount, RowCount, LayerIndex] :=
-            CellElevation[ColumnCount-1, RowCount-1, LayerIndex];
+            CellElevation[ZeroBasedID(LayerIndex, RowCount-1, ColumnCount-1)];
         end;
       end;
   else
@@ -2169,7 +2169,7 @@ begin
   end;
 end;
 
-function TModflowGrid.GetCellElevation(const Column, Row, Layer: integer): real;
+function TModflowGrid.GetCellElevation(const CellID: TZeroBasedID): real;
 begin
   if (ColumnCount > 0) and (RowCount > 0) and (LayerCount > 0)  then
   begin
@@ -2188,10 +2188,10 @@ begin
     result := 0;
     Exit;
   end;
-  Assert((Column >= 0) and (Row >= 0) and (Layer >= 0));
-  Assert((Column < ColumnCount) and (Row < RowCount) and (Layer < LayerCount+1));
+  Assert((CellID.Column >= 0) and (CellID.Row >= 0) and (CellID.Layer >= 0));
+  Assert((CellID.Column < ColumnCount) and (CellID.Row < RowCount) and (CellID.Layer < LayerCount+1));
 
-  result := FLayerElevations[Column, Row, Layer];
+  result := FLayerElevations[CellID.Column, CellID.Row, CellID.Layer];
 end;
 
 function TModflowGrid.GetCellThickness(const Column, Row, Layer: integer): real;
@@ -2231,14 +2231,14 @@ begin
   UpdateCellElevations;
   if (ColumnCount > 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
-    result := CellElevation[0,0,0];
+    result := CellElevation[ZeroBasedID(0,0,0)];
     for ColIndex := 0 to ColumnCount - 1 do
     begin
       for RowIndex := 0 to RowCount - 1 do
       begin
-        if result < CellElevation[ColIndex,RowIndex,0] then
+        if result < CellElevation[ZeroBasedID(0,RowIndex,ColIndex)] then
         begin
-          result := CellElevation[ColIndex,RowIndex,0]
+          result := CellElevation[ZeroBasedID(0,RowIndex,ColIndex)]
         end;
       end;
     end;
@@ -3143,10 +3143,10 @@ begin
   end;
 end;
 
-procedure TModflowGrid.SetCellElevation(const Column, Row, Layer: integer;
+procedure TModflowGrid.SetCellElevation(const CellID: TZeroBasedID;
   const Value: real);
 begin
-  FLayerElevations[Column, Row, Layer] := Value;
+  FLayerElevations[CellID.Column, CellID.Row, CellID.Layer] := Value;
   LayersChanged;
 end;
 
@@ -3286,22 +3286,22 @@ begin
   begin
     if Row = RowCount then
     begin
-      result.Z := CellElevation[Column-1, Row-1, Layer];
+      result.Z := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
       Exit;
     end
     else
     begin
-      Z1 := CellElevation[Column-1, Row, Layer];
+      Z1 := CellElevation[ZeroBasedID(Layer, Row, Column-1)];
     end;
   end
   else
   begin
     if Row = RowCount then
     begin
-      Z1 := CellElevation[Column, Row-1, Layer];
+      Z1 := CellElevation[ZeroBasedID(Layer, Row-1, Column)];
       if Column > 0 then
       begin
-        Z2 := CellElevation[Column-1, Row-1, Layer];
+        Z2 := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
         Distance1 := ColumnWidth[Column];
         Distance2 := ColumnWidth[Column-1];
         TotalDistance := Distance1 + Distance2;
@@ -3319,10 +3319,10 @@ begin
     end
     else
     begin
-      Z1 := CellElevation[Column, Row, Layer];
+      Z1 := CellElevation[ZeroBasedID(Layer, Row, Column)];
       if Column > 0 then
       begin
-        Z2 := CellElevation[Column-1, Row, Layer];
+        Z2 := CellElevation[ZeroBasedID(Layer, Row, Column-1)];
         Distance1 := ColumnWidth[Column];
         Distance2 := ColumnWidth[Column-1];
         TotalDistance := Distance1 + Distance2;
@@ -3342,14 +3342,14 @@ begin
   begin
     if Column = ColumnCount then
     begin
-      Z3 := CellElevation[Column-1, Row-1, Layer];
+      Z3 := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
     end
     else
     begin
-      Z3 := CellElevation[Column, Row-1, Layer];
+      Z3 := CellElevation[ZeroBasedID(Layer, Row-1, Column)];
       if Column > 0 then
       begin
-        Z4 := CellElevation[Column-1, Row-1, Layer];
+        Z4 := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
         Distance1 := ColumnWidth[Column];
         Distance2 := ColumnWidth[Column-1];
         TotalDistance := Distance1 + Distance2;
@@ -3662,14 +3662,14 @@ begin
   UpdateCellElevations;
   if (ColumnCount > 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
-    result := CellElevation[0,0,LayerCount];
+    result := CellElevation[ZeroBasedID(LayerCount,0,0)];
     for ColIndex := 0 to ColumnCount - 1 do
     begin
       for RowIndex := 0 to RowCount - 1 do
       begin
-        if result > CellElevation[ColIndex,RowIndex,LayerCount] then
+        if result > CellElevation[ZeroBasedID(LayerCount,RowIndex,ColIndex)] then
         begin
-          result := CellElevation[ColIndex,RowIndex,LayerCount]
+          result := CellElevation[ZeroBasedID(LayerCount,RowIndex,ColIndex)]
         end;
       end;
     end;

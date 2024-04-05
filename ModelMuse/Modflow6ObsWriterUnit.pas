@@ -664,8 +664,8 @@ begin
                 end
                 else
                 begin
-                  CellTop := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer];
-                  CellBottom := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer+1];
+                  CellTop := Model.Grid.CellElevation[ZeroBasedID(ACell.Layer, ACell.Row, ACell.Column)];
+                  CellBottom := Model.Grid.CellElevation[ZeroBasedID(ACell.Layer+1, ACell.Row, ACell.Column)];
                 end;
                 if AScreenObject.ElevationCount = ecTwo then
                 begin

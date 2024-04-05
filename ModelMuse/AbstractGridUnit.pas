@@ -71,12 +71,11 @@ type
     FTopContourPlotList: TPlotList;
     FFrontContourPlotList: TPlotList;
     FSideContourPlotList: TPlotList;
-    function ValueOK(DataSet: TDataArray;
-      const Layer, Row, Col: integer): boolean;
-    procedure InitializeMinMax(const Layer, Row, Col: integer;
+    function ValueOK(DataSet: TDataArray; const CellID: TZeroBasedID): boolean;
+    procedure InitializeMinMax(const CellID: TZeroBasedID;
       DataSet: TDataArray; var MinMaxInitialized: boolean; var MinMax: TMinMax;
       StringValues: TStringList);
-    procedure UpdateMinMax(const Layer, Row, Col: integer; DataSet: TDataArray;
+    procedure UpdateMinMax(const CellID: TZeroBasedID; DataSet: TDataArray;
       var MinMaxInitialized: boolean; var MinMax: TMinMax;
       StringValues: TStringList); virtual;
     procedure SetMinMax(DataSet: TDataArray; var MinMaxInitialized: boolean;
@@ -88,7 +87,7 @@ type
     procedure InvalidateContours;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; virtual; abstract;
-    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double;
+    function GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double;
       virtual; abstract;
   public
     // notify the views that the need to redraw;
@@ -98,7 +97,7 @@ type
     property Model: TBaseModel read FModel;
     property CanDraw: boolean read GetCanDraw write SetCanDraw;
     function OkLocation(const DataSet: TDataArray;
-      const Layer, Row, Col: integer): boolean; virtual;
+      const CellID: TZeroBasedID): boolean; virtual;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
       StringValues: TStringList; out MinMaxInitialized: Boolean); virtual; abstract;
    { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
@@ -109,7 +108,7 @@ type
       Limits: TColoringLimits);
     property ItemTopLocation[const EvalAt: TEvaluatedAt; const Column,
       Row: integer]: TPoint2D read GetItemTopLocation;
-    property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
+    property ShortestHorizontalBlockEdge[const CellID: TZeroBasedID]: double
       read GetShortestHorizontalBlockEdge;
   end;
   { TODO : ThreeDDataSet, TPhastModel.ThreeDTimeList, and
@@ -323,22 +322,22 @@ side views of the model.}
     // See @link(DisplayRow).
     procedure SetDisplayRow(Value: integer);
     procedure RecordColoredGridEdges;
-    procedure DrawLeftCellSide3D(ColIndex, RowIndex, LayerIndex: integer;
+    procedure DrawLeftCellSide3D(const CellID: TZeroBasedID;
       const XPositions, YPositions: TOneDRealArray;
       const ZPositions: TThreeDRealArray);
-    procedure DrawRightCellSide3D(ColIndex, RowIndex, LayerIndex: integer;
+    procedure DrawRightCellSide3D(const CellID: TZeroBasedID;
       const XPositions, YPositions: TOneDRealArray;
       const ZPositions: TThreeDRealArray);
-    procedure DrawBackCellSide3D(ColIndex, RowIndex, LayerIndex: integer;
+    procedure DrawBackCellSide3D(const CellID: TZeroBasedID;
       const XPositions, YPositions: TOneDRealArray;
       const ZPositions: TThreeDRealArray);
-    procedure DrawFrontCellSide3D(ColIndex, RowIndex, LayerIndex: integer;
+    procedure DrawFrontCellSide3D(const CellID: TZeroBasedID;
       const XPositions, YPositions: TOneDRealArray;
       const ZPositions: TThreeDRealArray);
-    procedure DrawBottomCellSide3D(ColIndex, RowIndex, LayerIndex: integer;
+    procedure DrawBottomCellSide3D(const CellID: TZeroBasedID;
       const XPositions, YPositions: TOneDRealArray;
       const ZPositions: TThreeDRealArray);
-    procedure DrawTopCellSide3D(ColIndex, RowIndex, LayerIndex: integer;
+    procedure DrawTopCellSide3D(const CellID: TZeroBasedID;
       const XPositions, YPositions: TOneDRealArray;
       const ZPositions: TThreeDRealArray);
     // @name creates @link(FBlockGlGrid) which can be used for
@@ -374,16 +373,15 @@ side views of the model.}
     procedure RestoreGlGrid(var AGlGrid: TGrid; GridCacheStream: TMemoryStream);
     procedure CacheNodeGlGrid;
     procedure RestoreNodeGlGrid;
-    function IsActiveOk(const DataSet: TDataArray; const Layer, Row,
-      Col: integer): boolean;
+    function IsActiveOk(const DataSet: TDataArray; const CellID: TZeroBasedID): boolean;
     procedure DrawOrdinaryTopRows(const BitMap: TPersistent;
       const ZoomBox: TQRbwZoomBox2);
     procedure DrawOrdinaryTopColumns(const BitMap: TPersistent;
       const ZoomBox: TQRbwZoomBox2);
     procedure GetCounts(DataSet: TDataArray; var LayerCount, RowCount,
       ColCount: integer);
-    function GetCellCoordinates(Col, Row, Layer: integer): T3DCellCoordinates;
-    function GetElementCoordinates(Col, Row, Layer: integer): T3DElementCoordinates;
+    function GetCellCoordinates(const CellID: TZeroBasedID): T3DCellCoordinates;
+    function GetElementCoordinates(const CellID: TZeroBasedID): T3DElementCoordinates;
     procedure InvalidateScreenObjects;
     procedure SetOnSelectedColumnChange(const Value: TNotifyEvent);
     procedure SetOnSelectedRowChange(const Value: TNotifyEvent);
@@ -394,7 +392,7 @@ side views of the model.}
     function GetGridAngleDegrees: double;
     function GetTopElementOutline(Row, Column: Integer): TElementOutline;
   protected
-    procedure UpdateMinMax(const Layer, Row, Col: integer; DataSet: TDataArray;
+    procedure UpdateMinMax(const CellID: TZeroBasedID; DataSet: TDataArray;
       var MinMaxInitialized: boolean;  var MinMax: TMinMax;
       StringValues: TStringList); override;
     procedure SetMinMax(DataSet: TDataArray; var MinMaxInitialized: boolean;
@@ -461,7 +459,7 @@ side views of the model.}
     procedure GetCellCornerElevations(const EvalAt: TEvaluatedAt;
       out Elevations: TThreeDRealArray); virtual; abstract;
     // See @link(CellElevation).
-    function GetCellElevation(const Column, Row, Layer: integer): real;
+    function GetCellElevation(const CellID: TZeroBasedID): real;
       virtual; abstract;
     // See @link(CellThickness).
     function GetCellThickness(const Column, Row, Layer: integer): real;
@@ -535,7 +533,7 @@ side views of the model.}
     // depends on @link(TopGridObserver).
     procedure RowsChanged;
     // See @link(CellElevation).
-    procedure SetCellElevation(const Column, Row, Layer: integer;
+    procedure SetCellElevation(const CellID: TZeroBasedID;
       const Value: real); virtual; abstract;
     // See @link(CellThickness).
     procedure SetCellThickness(const Column, Row, Layer: integer;
@@ -624,10 +622,10 @@ side views of the model.}
       ChildModel: TBaseModel): TDataArray;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
-    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
+    function GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double; override;
   public
     function OkLocation(const DataSet: TDataArray;
-      const Layer, Row, Col: integer): boolean; override;
+      const CellID: TZeroBasedID): boolean; override;
     procedure GetRealMinMax(DataSet: TDataArray; var MinMax: TMinMax);
     procedure GetIntegerMinMax(DataSet: TDataArray; var MinMax: TMinMax);
     procedure GetBooleanMinMax(DataSet: TDataArray; var MinMax: TMinMax);
@@ -662,7 +660,7 @@ side views of the model.}
     { @name is an abstract property that represents the elevation of
       the boundary between the cell at Row, Column between Layer and Layer-1.
       There are LayerCount + 1 layers of elevations in the grid.  }
-    property CellElevation[const Column, Row, Layer: integer]: real
+    property CellElevation[const CellID: TZeroBasedID]: real
       read GetCellElevation write SetCellElevation;
     { @name is an abstract property that represents the thickness of
       a cell.  Thicknesses must be greater than or equal to 0.}
@@ -1025,9 +1023,9 @@ side views of the model.}
     property DrawColoredGridLines: boolean read FDrawColoredGridLines
       write FDrawColoredGridLines;
     // @name returns the coordinates of a cell surrounding a node
-    property CellCoordinates[Col, Row, Layer: integer]: T3DCellCoordinates
+    property CellCoordinates[const CellID: TZeroBasedID]: T3DCellCoordinates
       read GetCellCoordinates;
-    property ElementCoordinates[Col, Row, Layer: integer]: T3DElementCoordinates
+    property ElementCoordinates[const CellID: TZeroBasedID]: T3DElementCoordinates
       read GetElementCoordinates;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
       StringValues: TStringList; out MinMaxInitialized: Boolean); override;
@@ -1798,7 +1796,7 @@ begin
   RowsChanged;
 end;
 
-function TCustomModelGrid.GetCellCoordinates(Col, Row, Layer: integer): T3DCellCoordinates;
+function TCustomModelGrid.GetCellCoordinates(const CellID: TZeroBasedID): T3DCellCoordinates;
 var
   X1: Real;
   X2: Real;
@@ -1808,55 +1806,55 @@ var
   Z2: Real;
   TempPoint: TPoint2D;
 begin
-  if Col = 0 then
+  if CellID.Column = 0 then
   begin
     X1 := ColumnPosition[0];
   end
   else
   begin
-    X1 := (ColumnPosition[Col] + ColumnPosition[Col-1])/2;
+    X1 := (ColumnPosition[CellID.Column] + ColumnPosition[CellID.Column-1])/2;
   end;
-  if Col = ColumnCount then
+  if CellID.Column = ColumnCount then
   begin
-    X2 := ColumnPosition[Col];
+    X2 := ColumnPosition[CellID.Column];
   end
   else
   begin
-    X2 := (ColumnPosition[Col] + ColumnPosition[Col+1])/2;
+    X2 := (ColumnPosition[CellID.Column] + ColumnPosition[CellID.Column+1])/2;
   end;
 
-  if Row = 0 then
+  if CellID.Row = 0 then
   begin
     Y1 := RowPosition[0];
   end
   else
   begin
-    Y1 := (RowPosition[Row] + RowPosition[Row-1])/2;
+    Y1 := (RowPosition[CellID.Row] + RowPosition[CellID.Row-1])/2;
   end;
-  if Row = RowCount then
+  if CellID.Row = RowCount then
   begin
-    Y2 := RowPosition[Row];
+    Y2 := RowPosition[CellID.Row];
   end
   else
   begin
-    Y2 := (RowPosition[Row] + RowPosition[Row+1])/2;
+    Y2 := (RowPosition[CellID.Row] + RowPosition[CellID.Row+1])/2;
   end;
 
-  if Layer = 0 then
+  if CellID.Layer = 0 then
   begin
-    Z1 := CellElevation[Col, Row, 0];
+    Z1 := CellElevation[CellID];
   end
   else
   begin
-    Z1 := (CellElevation[Col, Row, Layer] + CellElevation[Col, Row, Layer-1])/2;
+    Z1 := (CellElevation[CellID] + CellElevation[CellID.LayerMinus1])/2;
   end;
-  if Layer = LayerCount then
+  if CellID.Layer = LayerCount then
   begin
-    Z2 := CellElevation[Col, Row, Layer];
+    Z2 := CellElevation[CellID];
   end
   else
   begin
-    Z2 := (CellElevation[Col, Row, Layer] + CellElevation[Col, Row, Layer+1])/2;
+    Z2 := (CellElevation[CellID] + CellElevation[CellID.LayerPlus1])/2;
   end;
 
   TempPoint.x := X1;
@@ -2005,12 +2003,12 @@ begin
   APoint2D := TwoDElementCorner (0, 0);
   FBlockGlGrid[0,0,0].P.X := APoint2D.X;
   FBlockGlGrid[0,0,0].P.Y := APoint2D.Y;
-  FBlockGlGrid[0,0,0].P.Z := CellElevation[0,0,0];
+  FBlockGlGrid[0,0,0].P.Z := CellElevation[ZeroBasedID(0,0,0)];
 
   FBlockGlGrid[0,0,LayerCount+1].P.X := APoint2D.X;
   FBlockGlGrid[0,0,LayerCount+1].P.Y := APoint2D.Y;
   try
-    FBlockGlGrid[0,0,LayerCount+1].P.Z := CellElevation[0,0,LayerCount];
+    FBlockGlGrid[0,0,LayerCount+1].P.Z := CellElevation[ZeroBasedID(LayerCount,0,0)];
   except on EOverflow do
     FBlockGlGrid[0,0,LayerCount+1].P.Z := 0;
   end;
@@ -2020,7 +2018,7 @@ begin
   FBlockGlGrid[ColumnCount + 1,0,0].P.X := APoint2D.X;
   FBlockGlGrid[ColumnCount + 1,0,0].P.Y := APoint2D.Y;
   try
-    FBlockGlGrid[ColumnCount + 1,0,0].P.Z := CellElevation[ColumnCount-1,0,0];
+    FBlockGlGrid[ColumnCount + 1,0,0].P.Z := CellElevation[ZeroBasedID(0,0,ColumnCount-1)];
   except on EOverflow do
     FBlockGlGrid[ColumnCount + 1,0,0].P.Z := 0;
   end;
@@ -2029,7 +2027,7 @@ begin
   FBlockGlGrid[ColumnCount + 1,0,LayerCount+1].P.Y := APoint2D.Y;
   try
     FBlockGlGrid[ColumnCount + 1,0,LayerCount+1].P.Z :=
-      CellElevation[ColumnCount-1,0,LayerCount];
+      CellElevation[ZeroBasedID(LayerCount,0,ColumnCount-1)];
   except on EOverflow do
     FBlockGlGrid[ColumnCount + 1,0,LayerCount+1].P.Z := 0;
   end;
@@ -2039,7 +2037,7 @@ begin
   FBlockGlGrid[0,RowCount + 1,0].P.X := APoint2D.X;
   FBlockGlGrid[0,RowCount + 1,0].P.Y := APoint2D.Y;
   try
-    FBlockGlGrid[0,RowCount + 1,0].P.Z := CellElevation[0,RowCount-1,0];
+    FBlockGlGrid[0,RowCount + 1,0].P.Z := CellElevation[ZeroBasedID(0,RowCount-1,0)];
   except on EOverflow do
     FBlockGlGrid[0,RowCount + 1,0].P.Z := 0;
   end;
@@ -2049,7 +2047,7 @@ begin
   FBlockGlGrid[0,RowCount + 1,LayerCount+1].P.Y := APoint2D.Y;
   try
     FBlockGlGrid[0,RowCount + 1,LayerCount+1].P.Z :=
-      CellElevation[0,RowCount-1,LayerCount];
+      CellElevation[ZeroBasedID(LayerCount,RowCount-1,0)];
   except on EOverflow do
     FBlockGlGrid[0,RowCount + 1,LayerCount+1].P.Z := 0;
   end;
@@ -2060,7 +2058,7 @@ begin
   FBlockGlGrid[ColumnCount + 1,RowCount + 1,0].P.Y := APoint2D.Y;
   try
     FBlockGlGrid[ColumnCount + 1,RowCount + 1,0].P.Z :=
-      CellElevation[ColumnCount-1,RowCount-1,0];
+      CellElevation[ZeroBasedID(0,RowCount-1,ColumnCount-1)];
   except on EOverflow do
     FBlockGlGrid[ColumnCount + 1,RowCount + 1,0].P.Z := 0;
   end;
@@ -2069,7 +2067,7 @@ begin
   FBlockGlGrid[ColumnCount + 1,RowCount + 1,LayerCount+1].P.Y := APoint2D.Y;
   try
     FBlockGlGrid[ColumnCount + 1,RowCount + 1,LayerCount+1].P.Z :=
-      CellElevation[ColumnCount-1,RowCount-1,LayerCount];
+      CellElevation[ZeroBasedID(LayerCount,RowCount-1,ColumnCount-1)];
   except on EOverflow do
     FBlockGlGrid[ColumnCount + 1,RowCount + 1,LayerCount+1].P.Z := 0;
   end;
@@ -2085,8 +2083,8 @@ begin
         APoint3D.X := APoint2D.x;
         APoint3D.Y := APoint2D.y;
         try
-          APoint3D.Z := (CellElevation[ColumnIndex,RowIndex,LayerIndex]
-            + CellElevation[ColumnIndex,RowIndex,LayerIndex+1])/2;
+          APoint3D.Z := (CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColumnIndex)]
+            + CellElevation[ZeroBasedID(LayerIndex+1,RowIndex,ColumnIndex)])/2;
         except on EOverflow do
           APoint3D.Z := 0;
         end;
@@ -2105,7 +2103,7 @@ begin
           FBlockGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex].P.Y := APoint3D.Y;
           try
             FBlockGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex];
+              CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex].P.Z := 0;
           end;
@@ -2116,7 +2114,7 @@ begin
           FBlockGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex+2].P.Y := APoint3D.Y;
           try
             FBlockGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex+2].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex+1];
+              CellElevation[ZeroBasedID(LayerIndex+1,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex+2].P.Z := 0;
           end;
@@ -2220,7 +2218,7 @@ begin
           FBlockGlGrid[ColumnIndex,RowIndex+1,LayerIndex].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex,RowIndex+1,LayerIndex].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex];
+              CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex,RowIndex+1,LayerIndex].P.Z := 0;
           end;
@@ -2232,7 +2230,7 @@ begin
           FBlockGlGrid[ColumnIndex+2,RowIndex+1,LayerIndex].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex+2,RowIndex+1,LayerIndex].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex];
+              CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+2,RowIndex+1,LayerIndex].P.Z := 0;
           end;
@@ -2244,7 +2242,7 @@ begin
           FBlockGlGrid[ColumnIndex,RowIndex+1,LayerIndex+2].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex,RowIndex+1,LayerIndex+2].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex+1];
+              CellElevation[ZeroBasedID(LayerIndex+1,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex,RowIndex+1,LayerIndex+2].P.Z := 0;
           end;
@@ -2257,7 +2255,7 @@ begin
           FBlockGlGrid[ColumnIndex+2,RowIndex+1,LayerIndex+2].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex+2,RowIndex+1,LayerIndex+2].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex+1];
+              CellElevation[ZeroBasedID(LayerIndex+1,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+2,RowIndex+1,LayerIndex+2].P.Z := 0;
           end;
@@ -2270,7 +2268,7 @@ begin
           FBlockGlGrid[ColumnIndex+1,RowIndex,LayerIndex].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex+1,RowIndex,LayerIndex].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex];
+              CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+1,RowIndex,LayerIndex].P.Z := 0;
           end;
@@ -2282,7 +2280,7 @@ begin
           FBlockGlGrid[ColumnIndex+1,RowIndex+2,LayerIndex].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex+1,RowIndex+2,LayerIndex].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex];
+              CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+1,RowIndex+2,LayerIndex].P.Z := 0;
           end;
@@ -2294,7 +2292,7 @@ begin
           FBlockGlGrid[ColumnIndex+1,RowIndex,LayerIndex+2].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex+1,RowIndex,LayerIndex+2].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex+1];
+              CellElevation[ZeroBasedID(LayerIndex+1,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+1,RowIndex,LayerIndex+2].P.Z := 0;
           end;
@@ -2306,7 +2304,7 @@ begin
           FBlockGlGrid[ColumnIndex+1,RowIndex+2,LayerIndex+2].P.Y := APoint2D.Y;
           try
             FBlockGlGrid[ColumnIndex+1,RowIndex+2,LayerIndex+2].P.Z :=
-              CellElevation[ColumnIndex,RowIndex,LayerIndex+1];
+              CellElevation[ZeroBasedID(LayerIndex+1,RowIndex,ColumnIndex)];
           except on EOverflow do
             FBlockGlGrid[ColumnIndex+1,RowIndex+2,LayerIndex+2].P.Z := 0;
           end;
@@ -2342,10 +2340,10 @@ begin
   end;
   SetLength(FNodeGlGrid, ColumnCount + 3, RowCount + 3, LayerCount + 3);
 
-  ElevAbove := CellElevation[0,0,0]
-    + (CellElevation[0,0,0] - CellElevation[0,0,1])/2;
-  ElevBelow := CellElevation[0,0,LayerCount]
-    + (CellElevation[0,0,LayerCount] - CellElevation[0,0,LayerCount-1])/2;
+  ElevAbove := CellElevation[ZeroBasedID(0,0,0)]
+    + (CellElevation[ZeroBasedID(0,0,0)] - CellElevation[ZeroBasedID(1,0,0)])/2;
+  ElevBelow := CellElevation[ZeroBasedID(LayerCount,0,0)]
+    + (CellElevation[ZeroBasedID(LayerCount,0,0)] - CellElevation[ZeroBasedID(LayerCount-1,0,0)])/2;
 
   APoint2D.x := ColumnPosition[0] + (ColumnPosition[0] - ColumnPosition[1])/2;
   APoint2D.y := RowPosition[0] + (RowPosition[0] - RowPosition[1])/2;
@@ -2423,7 +2421,7 @@ begin
         APoint2D := TwoDElementCorner(ColumnIndex, RowIndex);
         APoint3D.X := APoint2D.x;
         APoint3D.Y := APoint2D.y;
-        APoint3D.Z := CellElevation[ColumnIndex,RowIndex,LayerIndex];
+        APoint3D.Z := CellElevation[ZeroBasedID(LayerIndex,RowIndex,ColumnIndex)];
 
         FNodeGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex+1].P.X := APoint3D.X;
         FNodeGlGrid[ColumnIndex+1,RowIndex+1,LayerIndex+1].P.Y := APoint3D.Y;
@@ -3777,8 +3775,8 @@ function TCustomModelGrid.ThreeDElementCenter(const Column, Row,
 begin
   result.X := (ColumnPosition[Column] + ColumnPosition[Column + 1]) / 2;
   result.Y := (RowPosition[Row] + RowPosition[Row + 1]) / 2;
-  result.Z := (CellElevation[Column, Row, Layer]
-    + CellElevation[Column, Row, Layer + 1]) / 2;
+  result.Z := (CellElevation[ZeroBasedID(Layer, Row, Column)]
+    + CellElevation[ZeroBasedID(Layer + 1, Row, Column)]) / 2;
 end;
 
 function TCustomModelGrid.ThreeDElementCorner(const Column, Row,
@@ -3786,7 +3784,7 @@ function TCustomModelGrid.ThreeDElementCorner(const Column, Row,
 begin
   result.X := ColumnPosition[Column];
   result.Y := RowPosition[Row];
-  result.Z := CellElevation[Column, Row, Layer];
+  result.Z := CellElevation[ZeroBasedID(Layer, Row, Column)];
 end;
 
 function TCustomModelGrid.UnconstrainedTopContainingCell(APoint: TPoint2D;
@@ -4675,10 +4673,10 @@ begin
 end;
 
 function TCustomModelGrid.OkLocation(const DataSet: TDataArray;
-  const Layer, Row, Col: Integer): Boolean;
+  const CellID: TZeroBasedID): Boolean;
 begin
   result := inherited;
-  if result and not IsActiveOK(DataSet, Layer, Row, Col) then
+  if result and not IsActiveOK(DataSet, CellID) then
   begin
     result := False;
   end;
@@ -5372,10 +5370,9 @@ begin
   end;
 end;
 
-function TCustomModelGrid.GetShortestHorizontalBlockEdge(Layer, Row,
-  Column: Integer): double;
+function TCustomModelGrid.GetShortestHorizontalBlockEdge(const CellID: TZeroBasedID): double;
 begin
-  result := Min(ColumnWidth[Column], RowWidth[Row]);
+  result := Min(ColumnWidth[CellID.Column], RowWidth[CellID.Row]);
 end;
 
 function TCustomModelGrid.GetSideCellColors(const Row, Layer: integer): TColor;
@@ -5543,129 +5540,13 @@ begin
   end;
 end;
 
-//procedure TCustomModelGrid.InitializeMinMax(const Layer, Row, Col: integer;
-//  DataSet: TDataArray; var MinMaxInitialized: boolean; var MinMax: TMinMax;
-//  StringValues: TStringList);
-//var
-//  UseString: Boolean;
-//  TempString: string;
-//begin
-//  if not OkLocation(DataSet, Layer, Row, Col) then
-//  begin
-//    Exit;
-//  end;
-//  MinMaxInitialized := True;
-//  case DataSet.Datatype of
-//    rdtDouble:
-//      begin
-//        MinMax.RMin := DataSet.RealData[Layer, Row, Col];
-//        MinMax.RMax := MinMax.RMin;
-//        if DataSet.Limits.LowerLimit.UseLimit then
-//        begin
-//          MinMax.RMin := DataSet.Limits.LowerLimit.RealLimitValue;
-//        end;
-//        if DataSet.Limits.UpperLimit.UseLimit then
-//        begin
-//          MinMax.RMax := DataSet.Limits.UpperLimit.RealLimitValue;
-//        end;
-//        if MinMax.RMin > 0 then
-//        begin
-//          MinMax.RMinPositive := MinMax.RMin;
-//        end;
-//      end;
-//    rdtInteger:
-//      begin
-//        if DataSet.DisplayRealValue then
-//        begin
-//          MinMax.RMin := DataSet.RealData[Layer, Row, Col];
-//          MinMax.RMax := MinMax.RMin;
-//          if DataSet.Limits.LowerLimit.UseLimit then
-//          begin
-//            MinMax.RMin := DataSet.Limits.LowerLimit.IntegerLimitValue;
-//          end;
-//          if DataSet.Limits.UpperLimit.UseLimit then
-//          begin
-//            MinMax.RMax := DataSet.Limits.UpperLimit.IntegerLimitValue;
-//          end;
-//        end
-//        else
-//        begin
-//          MinMax.IMin := DataSet.IntegerData[Layer, Row, Col];
-//          MinMax.IMax := MinMax.IMin;
-//          if DataSet.Limits.LowerLimit.UseLimit then
-//          begin
-//            MinMax.IMin := DataSet.Limits.LowerLimit.IntegerLimitValue;
-//          end;
-//          if DataSet.Limits.UpperLimit.UseLimit then
-//          begin
-//            MinMax.IMax := DataSet.Limits.UpperLimit.IntegerLimitValue;
-//          end;
-//        end;
-//      end;
-//    rdtBoolean:
-//      begin
-//        MinMax.BMin := False;
-//        MinMax.BMax := True;
-//        if DataSet.Limits.LowerLimit.UseLimit then
-//        begin
-//          MinMax.BMin := DataSet.Limits.LowerLimit.BooleanLimitValue;
-//        end;
-//        if DataSet.Limits.UpperLimit.UseLimit then
-//        begin
-//          MinMax.BMax := DataSet.Limits.UpperLimit.BooleanLimitValue;
-//        end;
-//      end;
-//    rdtString:
-//      begin
-//        UseString := True;
-//        TempString := DataSet.StringData[Layer, Row, Col];
-//        if DataSet.Limits.UpperLimit.UseLimit then
-//        begin
-//          if TempString > DataSet.Limits.UpperLimit.StringLimitValue then
-//          begin
-//            UseString := False;
-//          end;
-//        end;
-//        if DataSet.Limits.LowerLimit.UseLimit then
-//        begin
-//          if TempString < DataSet.Limits.LowerLimit.StringLimitValue then
-//          begin
-//            UseString := False;
-//          end;
-//        end;
-//        if UseString then
-//        begin
-//          StringValues.Add(TempString);
-//        end;
-//        if DataSet.Limits.LowerLimit.UseLimit then
-//        begin
-//          MinMax.SMin := DataSet.Limits.LowerLimit.StringLimitValue;
-//        end
-//        else
-//        begin
-//          MinMax.SMin := TempString;
-//        end;
-//        if DataSet.Limits.UpperLimit.UseLimit then
-//        begin
-//          MinMax.SMax := DataSet.Limits.UpperLimit.StringLimitValue;
-//        end
-//        else
-//        begin
-//          MinMax.SMax := TempString;
-//        end;
-//      end;
-//  else
-//    Assert(False);
-//  end;
-//end;
-
-procedure TCustomModelGrid.UpdateMinMax(const Layer, Row, Col: integer;
+procedure TCustomModelGrid.UpdateMinMax(const CellID: TZeroBasedID;
   DataSet: TDataArray; var MinMaxInitialized: boolean; var MinMax: TMinMax;
   StringValues: TStringList);
 begin
-  Assert(Layer <= LayerCount);
-  Assert(Row <= RowCount);
-  Assert(Col <= ColumnCount);
+  Assert(CellID.Layer <= LayerCount);
+  Assert(CellID.Row <= RowCount);
+  Assert(CellID.Column <= ColumnCount);
   inherited;
 end;
 
@@ -5830,8 +5711,8 @@ begin
 end;
 
 
-function TCustomModelGrid.GetElementCoordinates(Col, Row,
-  Layer: integer): T3DElementCoordinates;
+function TCustomModelGrid.GetElementCoordinates(
+  const CellID: TZeroBasedID): T3DElementCoordinates;
 var
   Z1: Real;
   Z2: Real;
@@ -5842,9 +5723,9 @@ var
     result.y := (Point1.y + Point2.y)/2;
   end;
 begin
-  Z1 := CellElevation[Col, Row, Layer];
-  Z2 := CellElevation[Col, Row, Layer+1];
-  TempPoint := TwoDElementCenter(Col, Row);
+  Z1 := CellElevation[CellID];
+  Z2 := CellElevation[CellID.LayerPlus1];
+  TempPoint := TwoDElementCenter(CellID.Column, CellID.Row);
   result.TopCenter.x := TempPoint.x;
   result.TopCenter.y := TempPoint.y;
   result.TopCenter.z := Z1;
@@ -5853,95 +5734,95 @@ begin
   result.BottomCenter.y := TempPoint.y;
   result.BottomCenter.z := Z2;
 
-  result.TopEdge[0] := RotatedThreeDElementCorner(Col, Row, Layer);
-  result.TopEdge[2] := RotatedThreeDElementCorner(Col+1, Row, Layer);
-  result.TopEdge[4] := RotatedThreeDElementCorner(Col+1, Row+1, Layer);
-  result.TopEdge[6] := RotatedThreeDElementCorner(Col, Row+1, Layer);
+  result.TopEdge[0] := RotatedThreeDElementCorner(CellID.Column, CellID.Row, CellID.Layer);
+  result.TopEdge[2] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row, CellID.Layer);
+  result.TopEdge[4] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row+1, CellID.Layer);
+  result.TopEdge[6] := RotatedThreeDElementCorner(CellID.Column, CellID.Row+1, CellID.Layer);
 
   result.TopEdge[1] := AveragePoint(result.TopEdge[0], result.TopEdge[2]);
-  if Row = 0 then
+  if CellID.Row = 0 then
   begin
     result.TopEdge[1].Z := Z1;
   end
   else
   begin
-    result.TopEdge[1].Z := (Z1 + CellElevation[Col, Row-1, Layer])/2;
+    result.TopEdge[1].Z := (Z1 + CellElevation[CellID])/2;
   end;
 
   result.TopEdge[3] := AveragePoint(result.TopEdge[2], result.TopEdge[4]);
-  if Col = ColumnCount -1 then
+  if CellID.Column = ColumnCount -1 then
   begin
     result.TopEdge[3].Z := Z1;
   end
   else
   begin
-    result.TopEdge[3].Z := (Z1 + CellElevation[Col+1, Row, Layer])/2;
+    result.TopEdge[3].Z := (Z1 + CellElevation[CellID.ColumnPlus1])/2;
   end;
 
 
   result.TopEdge[5] := AveragePoint(result.TopEdge[4], result.TopEdge[6]);
-  if Row = RowCount -1 then
+  if CellID.Row = RowCount -1 then
   begin
     result.TopEdge[5].Z := Z1;
   end
   else
   begin
-    result.TopEdge[5].Z := (Z1 + CellElevation[Col, Row+1, Layer])/2;
+    result.TopEdge[5].Z := (Z1 + CellElevation[CellID.RowPlus1])/2;
   end;
 
   result.TopEdge[7] := AveragePoint(result.TopEdge[6], result.TopEdge[0]);
-  if Col = 0 then
+  if CellID.Column = 0 then
   begin
     result.TopEdge[7].Z := Z1;
   end
   else
   begin
-    result.TopEdge[7].Z := (Z1 + CellElevation[Col-1, Row, Layer])/2;
+    result.TopEdge[7].Z := (Z1 + CellElevation[CellID.ColumnMinus1])/2;
   end;
 
-  result.BottomEdge[0] := RotatedThreeDElementCorner(Col, Row, Layer+1);
-  result.BottomEdge[2] := RotatedThreeDElementCorner(Col+1, Row, Layer+1);
-  result.BottomEdge[4] := RotatedThreeDElementCorner(Col+1, Row+1, Layer+1);
-  result.BottomEdge[6] := RotatedThreeDElementCorner(Col, Row+1, Layer+1);
+  result.BottomEdge[0] := RotatedThreeDElementCorner(CellID.Column, CellID.Row, CellID.Layer+1);
+  result.BottomEdge[2] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row, CellID.Layer+1);
+  result.BottomEdge[4] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row+1, CellID.Layer+1);
+  result.BottomEdge[6] := RotatedThreeDElementCorner(CellID.Column, CellID.Row+1, CellID.Layer+1);
 
   result.BottomEdge[1] := AveragePoint(result.BottomEdge[0], result.BottomEdge[2]);
-  if Row = 0 then
+  if CellID.Row = 0 then
   begin
     result.BottomEdge[1].Z := Z2;
   end
   else
   begin
-    result.BottomEdge[1].Z := (Z2 + CellElevation[Col, Row-1, Layer+1])/2;
+    result.BottomEdge[1].Z := (Z2 + CellElevation[CellID.RowMinus1.LayerPlus1])/2;
   end;
 
   result.BottomEdge[3] := AveragePoint(result.BottomEdge[2], result.BottomEdge[4]);
-  if Col = ColumnCount -1 then
+  if CellID.Column = ColumnCount -1 then
   begin
     result.BottomEdge[3].Z := Z2;
   end
   else
   begin
-    result.BottomEdge[3].Z := (Z2 + CellElevation[Col+1, Row, Layer+1])/2;
+    result.BottomEdge[3].Z := (Z2 + CellElevation[CellID.ColumnPlus1.LayerPlus1])/2;
   end;
 
   result.BottomEdge[5] := AveragePoint(result.BottomEdge[4], result.BottomEdge[6]);
-  if Row = RowCount -1 then
+  if CellID.Row = RowCount -1 then
   begin
     result.BottomEdge[5].Z := Z2;
   end
   else
   begin
-    result.BottomEdge[5].Z := (Z2 + CellElevation[Col, Row+1, Layer+1])/2;
+    result.BottomEdge[5].Z := (Z2 + CellElevation[CellID.RowPlus1.LayerPlus1])/2;
   end;
 
   result.BottomEdge[7] := AveragePoint(result.BottomEdge[6], result.BottomEdge[0]);
-  if Col = 0 then
+  if CellID.Column = 0 then
   begin
     result.BottomEdge[7].Z := Z2;
   end
   else
   begin
-    result.BottomEdge[7].Z := (Z2 + CellElevation[Col-1, Row, Layer+1])/2;
+    result.BottomEdge[7].Z := (Z2 + CellElevation[CellID.ColumnMinus1.LayerPlus1])/2;
   end;
 
 end;
@@ -6013,12 +5894,12 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       TopCellColors[ColIndex, RowIndex] := InactiveGridColor;
                     end
                     else if not OkLocation(DataSet,
-                      LayerIndex, RowIndex, ColIndex) then
+                      ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       TopCellColors[ColIndex, RowIndex] := clWhite;
                     end
@@ -6077,12 +5958,12 @@ begin
                     begin
                       if DataSet.Limits.ActiveOnly
                         and DataSet.Limits.ShadeInactiveArea
-                        and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                        and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         TopCellColors[ColIndex, RowIndex] := InactiveGridColor;
                       end
                       else if not OkLocation(DataSet,
-                        LayerIndex, RowIndex, ColIndex) then
+                        ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         TopCellColors[ColIndex, RowIndex] := clWhite;
                       end
@@ -6111,11 +5992,11 @@ begin
                     begin
                       if DataSet.Limits.ActiveOnly
                         and DataSet.Limits.ShadeInactiveArea
-                        and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                        and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         TopCellColors[ColIndex, RowIndex] := InactiveGridColor;
                       end
-                      else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         TopCellColors[ColIndex, RowIndex] := clWhite;
                       end
@@ -6145,11 +6026,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       TopCellColors[ColIndex, RowIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       TopCellColors[ColIndex, RowIndex] := clWhite;
                     end
@@ -6182,11 +6063,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       TopCellColors[ColIndex, RowIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex)
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex))
                       or (StringValues.Count = 0) then
                     begin
                       TopCellColors[ColIndex, RowIndex] := clWhite;
@@ -6239,11 +6120,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       FrontCellColors[ColIndex, LayerIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       FrontCellColors[ColIndex, LayerIndex] := clWhite;
                     end
@@ -6300,11 +6181,11 @@ begin
                     begin
                       if DataSet.Limits.ActiveOnly
                         and DataSet.Limits.ShadeInactiveArea
-                        and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                        and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         FrontCellColors[ColIndex, LayerIndex] := InactiveGridColor;
                       end
-                      else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         FrontCellColors[ColIndex, LayerIndex] := clWhite;
                       end
@@ -6333,11 +6214,11 @@ begin
                     begin
                       if DataSet.Limits.ActiveOnly
                         and DataSet.Limits.ShadeInactiveArea
-                        and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                        and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         FrontCellColors[ColIndex, LayerIndex] := InactiveGridColor;
                       end
-                      else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         FrontCellColors[ColIndex, LayerIndex] := clWhite;
                       end
@@ -6367,11 +6248,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       FrontCellColors[ColIndex, LayerIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       FrontCellColors[ColIndex, LayerIndex] := clWhite;
                     end
@@ -6404,11 +6285,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       FrontCellColors[ColIndex, LayerIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex)
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex))
                       or (StringValues.Count = 0) then
                     begin
                       FrontCellColors[ColIndex, LayerIndex] := clWhite;
@@ -6461,11 +6342,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       SideCellColors[RowIndex, LayerIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       SideCellColors[RowIndex, LayerIndex] := clWhite;
                     end
@@ -6522,11 +6403,11 @@ begin
                     begin
                       if DataSet.Limits.ActiveOnly
                         and DataSet.Limits.ShadeInactiveArea
-                        and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                        and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         SideCellColors[RowIndex, LayerIndex] := InactiveGridColor;
                       end
-                      else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         SideCellColors[RowIndex, LayerIndex] := clWhite;
                       end
@@ -6555,11 +6436,11 @@ begin
                     begin
                       if DataSet.Limits.ActiveOnly
                         and DataSet.Limits.ShadeInactiveArea
-                        and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                        and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         SideCellColors[RowIndex, LayerIndex] := InactiveGridColor;
                       end
-                      else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                       begin
                         SideCellColors[RowIndex, LayerIndex] := clWhite;
                       end
@@ -6589,11 +6470,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       SideCellColors[RowIndex, LayerIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       SideCellColors[RowIndex, LayerIndex] := clWhite;
                     end
@@ -6626,11 +6507,11 @@ begin
                   begin
                     if DataSet.Limits.ActiveOnly
                       and DataSet.Limits.ShadeInactiveArea
-                      and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                      and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                     begin
                       SideCellColors[RowIndex, LayerIndex] := InactiveGridColor;
                     end
-                    else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex)
+                    else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex))
                       or (StringValues.Count = 0) then
                     begin
                       SideCellColors[RowIndex, LayerIndex] := clWhite;
@@ -6715,7 +6596,7 @@ begin
 end;
 
 function TCustomModelGrid.IsActiveOk(const DataSet: TDataArray;
-  const Layer, Row, Col: integer): boolean;
+  const CellID: TZeroBasedID): boolean;
 var
   ActiveDataSet: TDataArray;
   LayerIndicies: TIntegerList;
@@ -6753,9 +6634,9 @@ begin
         case DataSet.EvaluatedAt of
           eaBlocks:
             begin
-              LayerIndicies.Add(Layer);
-              RowIndicies.Add(Row);
-              ColumnIndicies.Add(Col);
+              LayerIndicies.Add(CellID.Layer);
+              RowIndicies.Add(CellID.Row);
+              ColumnIndicies.Add(CellID.Column);
               case DataSet.Orientation of
                 dsoTop:
                   begin
@@ -6781,29 +6662,29 @@ begin
             end;
           eaNodes:
             begin
-              if Layer < LayerCount then
+              if CellID.Layer < LayerCount then
               begin
-                LayerIndicies.Add(Layer);
+                LayerIndicies.Add(CellID.Layer);
               end;
-              if Layer > 0 then
+              if CellID.Layer > 0 then
               begin
-                LayerIndicies.Add(Layer-1);
+                LayerIndicies.Add(CellID.Layer-1);
               end;
-              if Row < RowCount then
+              if CellID.Row < RowCount then
               begin
-                RowIndicies.Add(Row);
+                RowIndicies.Add(CellID.Row);
               end;
-              if Row > 0 then
+              if CellID.Row > 0 then
               begin
-                RowIndicies.Add(Row-1);
+                RowIndicies.Add(CellID.Row-1);
               end;
-              if Col < ColumnCount then
+              if CellID.Column < ColumnCount then
               begin
-                ColumnIndicies.Add(Col);
+                ColumnIndicies.Add(CellID.Column);
               end;
-              if Col > 0 then
+              if CellID.Column > 0 then
               begin
-                ColumnIndicies.Add(Col-1);
+                ColumnIndicies.Add(CellID.Column-1);
               end;
               case DataSet.Orientation of
                 dsoTop:
@@ -6918,11 +6799,11 @@ begin
               begin
                 if DataSet.Limits.ActiveOnly
                   and DataSet.Limits.ShadeInactiveArea
-                  and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                  and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                 begin
                   CellColors[LayerIndex, RowIndex, ColIndex] := InactiveGridColor;
                 end
-                else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                 begin
                   CellColors[LayerIndex, RowIndex, ColIndex] := clWhite;
                 end
@@ -6987,11 +6868,11 @@ begin
                 begin
                   if DataSet.Limits.ActiveOnly
                     and DataSet.Limits.ShadeInactiveArea
-                    and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                    and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                   begin
                     CellColors[LayerIndex, RowIndex, ColIndex] := InactiveGridColor;
                   end
-                  else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                  else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                   begin
                     CellColors[LayerIndex, RowIndex, ColIndex] := clWhite;
                   end
@@ -7028,11 +6909,11 @@ begin
                 begin
                   if DataSet.Limits.ActiveOnly
                     and DataSet.Limits.ShadeInactiveArea
-                    and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                    and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                   begin
                     CellColors[LayerIndex, RowIndex, ColIndex] := InactiveGridColor;
                   end
-                  else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                  else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                   begin
                     CellColors[LayerIndex, RowIndex, ColIndex] := clWhite;
                   end
@@ -7070,11 +6951,11 @@ begin
               begin
                 if DataSet.Limits.ActiveOnly
                   and DataSet.Limits.ShadeInactiveArea
-                  and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                  and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                 begin
                   CellColors[LayerIndex, RowIndex, ColIndex] := InactiveGridColor;
                 end
-                else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex) then
+                else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                 begin
                   CellColors[LayerIndex, RowIndex, ColIndex] := clWhite;
                 end
@@ -7110,11 +6991,11 @@ begin
               begin
                 if DataSet.Limits.ActiveOnly
                   and DataSet.Limits.ShadeInactiveArea
-                  and not IsActiveOk(DataSet, LayerIndex, RowIndex, ColIndex) then
+                  and not IsActiveOk(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex)) then
                 begin
                   CellColors[LayerIndex, RowIndex, ColIndex] := InactiveGridColor;
                 end
-                else if not OkLocation(DataSet, LayerIndex, RowIndex, ColIndex)
+                else if not OkLocation(DataSet, ZeroBasedID(LayerIndex, RowIndex, ColIndex))
                   or (StringValues.Count = 0) then
                 begin
                   CellColors[LayerIndex, RowIndex, ColIndex] := clWhite;
@@ -7435,16 +7316,16 @@ begin
   end;
   if (Layer = 0) then
   begin
-    result.Z := CellElevation[Column, Row, Layer];
+    result.Z := CellElevation[ZeroBasedID(Layer, Row, Column)];
   end
   else if (Layer = LayerCount+1) then
   begin
-    result.Z := CellElevation[Column, Row, Layer-1];
+    result.Z := CellElevation[ZeroBasedID(Layer-1, Row, Column)];
   end
   else
   begin
-    result.Z := (CellElevation[Column, Row, Layer]
-      + CellElevation[Column, Row, Layer-1])/ 2;
+    result.Z := (CellElevation[ZeroBasedID(Layer, Row, Column)]
+      + CellElevation[ZeroBasedID(Layer-1, Row, Column)])/ 2;
   end;
 end;
 
@@ -7501,14 +7382,14 @@ begin
     for RowIndex := 0 to RowCount do
     begin
       Y := RowPosition[RowIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     LayerIndex := LayerCount;
     for RowIndex := RowCount downto 0 do
     begin
       Y := RowPosition[RowIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     glEnd;
@@ -7521,14 +7402,14 @@ begin
     for RowIndex := 0 to RowCount do
     begin
       Y := RowPosition[RowIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     LayerIndex := LayerCount;
     for RowIndex := RowCount downto 0 do
     begin
       Y := RowPosition[RowIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     glEnd;
@@ -7541,14 +7422,14 @@ begin
     for ColumnIndex := 0 to ColumnCount do
     begin
       X := ColumnPosition[ColumnIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     LayerIndex := LayerCount;
     for ColumnIndex := ColumnCount downto 0 do
     begin
       X := ColumnPosition[ColumnIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     glEnd;
@@ -7561,14 +7442,14 @@ begin
     for ColumnIndex := 0 to ColumnCount do
     begin
       X := ColumnPosition[ColumnIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     LayerIndex := LayerCount;
     for ColumnIndex := ColumnCount downto 0 do
     begin
       X := ColumnPosition[ColumnIndex];
-      Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+      Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
       glVertex3f(X, Y, Z);
     end;
     glEnd;
@@ -7605,10 +7486,10 @@ begin
 
         LayerIndex := 0;
         Y := RowPosition[RowIndex];
-        Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+        Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
         glVertex3f(X, Y, Z);
         LayerIndex := LayerCount;
-        Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+        Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
         glVertex3f(X, Y, Z);
         glEnd;
       end;
@@ -7626,7 +7507,7 @@ begin
         for RowIndex := 0 to RowCount do
         begin
           Y := RowPosition[RowIndex];
-          Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+          Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
           glVertex3f(X, Y, Z);
         end;
         glEnd;
@@ -7664,10 +7545,10 @@ begin
         glBegin(GL_LINES);
         LayerIndex := 0;
         X := ColumnPosition[ColumnIndex];
-        Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+        Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
         glVertex3f(X, Y, Z);
         LayerIndex := LayerCount;
-        Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+        Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
         glVertex3f(X, Y, Z);
         glEnd;
       end;
@@ -7686,7 +7567,7 @@ begin
         for ColumnIndex := 0 to ColumnCount do
         begin
           X := ColumnPosition[ColumnIndex];
-          Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+          Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
           glVertex3f(X, Y, Z);
         end;
         glEnd;
@@ -7725,7 +7606,7 @@ begin
         begin
           X := ColumnPosition[ColumnIndex];
           Y := RowPosition[RowIndex];
-          Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+          Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
           glVertex3f(X, Y, Z);
         end;
         glEnd;
@@ -7746,7 +7627,7 @@ begin
         begin
           X := ColumnPosition[ColumnIndex];
           Y := RowPosition[RowIndex];
-          Z := CellElevation[ColumnIndex, RowIndex, LayerIndex];
+          Z := CellElevation[ZeroBasedID(LayerIndex, RowIndex, ColumnIndex)];
           glVertex3f(X, Y, Z);
         end;
         glEnd;
@@ -8125,12 +8006,12 @@ begin
       begin
         if Edge.Col2 > Edge.Col1 then
         begin
-          DrawRightCellSide3D(Edge.Col1, Edge.Row1, Edge.Layer, XPositions,
+          DrawRightCellSide3D(ZeroBasedID(Edge.Layer, Edge.Row1, Edge.Col1), XPositions,
             YPositions, ZPositions);
         end
         else
         begin
-          DrawLeftCellSide3D(Edge.Col1, Edge.Row1, Edge.Layer, XPositions,
+          DrawLeftCellSide3D(ZeroBasedID(Edge.Layer, Edge.Row1, Edge.Col1), XPositions,
             YPositions, ZPositions);
         end;
       end
@@ -8139,12 +8020,12 @@ begin
         Assert(Edge.Row1 <> Edge.Row2);
         if Edge.Row2 > Edge.Row1 then
         begin
-          DrawBackCellSide3D(Edge.Col1, Edge.Row1, Edge.Layer, XPositions,
+          DrawBackCellSide3D(ZeroBasedID(Edge.Layer, Edge.Row1, Edge.Col1), XPositions,
             YPositions, ZPositions);
         end
         else
         begin
-          DrawFrontCellSide3D(Edge.Col1, Edge.Row1, Edge.Layer, XPositions,
+          DrawFrontCellSide3D(ZeroBasedID(Edge.Layer, Edge.Row1, Edge.Col1), XPositions,
             YPositions, ZPositions);
         end;
       end;
@@ -8156,62 +8037,60 @@ begin
   end;
 end;
 
-procedure TCustomModelGrid.DrawLeftCellSide3D(ColIndex, RowIndex,
-  LayerIndex: integer; const XPositions,
-  YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
+procedure TCustomModelGrid.DrawLeftCellSide3D(const CellID: TZeroBasedID;
+  const XPositions, YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
 var
   X, Y, Z: single;
 begin
-  X := XPositions[ColIndex];
+  X := XPositions[CellID.Column];
   glBegin(GL_POLYGON);
   // back bottom point
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex, RowIndex + 1, LayerIndex];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column, CellID.Row + 1, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // front bottom point
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex, RowIndex, LayerIndex];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column, CellID.Row, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // front top point
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex, RowIndex, LayerIndex + 1];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column, CellID.Row, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // back top point
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex, RowIndex + 1, LayerIndex + 1];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column, CellID.Row + 1, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
   glEnd;
 end;
 
-procedure TCustomModelGrid.DrawRightCellSide3D(ColIndex, RowIndex,
-  LayerIndex: integer; const XPositions,
-  YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
+procedure TCustomModelGrid.DrawRightCellSide3D(const CellID: TZeroBasedID;
+  const XPositions, YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
 var
   X, Y, Z: single;
 begin
-  X := XPositions[ColIndex + 1];
+  X := XPositions[CellID.Column + 1];
   glBegin(GL_POLYGON);
   // back top point
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex + 1, RowIndex + 1, LayerIndex + 1];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column + 1, CellID.Row + 1, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // front top point
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex + 1, RowIndex, LayerIndex + 1];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column + 1, CellID.Row, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // front bottom point
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex + 1, RowIndex, LayerIndex];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column + 1, CellID.Row, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // back bottom point
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex + 1, RowIndex + 1, LayerIndex];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column + 1, CellID.Row + 1, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   glEnd;
@@ -8255,138 +8134,134 @@ begin
   end;
 end;
 
-procedure TCustomModelGrid.DrawBackCellSide3D(ColIndex, RowIndex,
-  LayerIndex: integer; const XPositions,
-  YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
+procedure TCustomModelGrid.DrawBackCellSide3D(const CellID: TZeroBasedID;
+  const XPositions, YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
 var
   X, Y, Z: single;
 begin
   glBegin(GL_POLYGON);
   // right bottom point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex + 1, RowIndex + 1, LayerIndex];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column + 1, CellID.Row + 1, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // left bottom point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex, RowIndex + 1, LayerIndex];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column, CellID.Row + 1, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // left top point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex, RowIndex + 1, LayerIndex + 1];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column, CellID.Row + 1, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // right top point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex + 1, RowIndex + 1, LayerIndex + 1];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column + 1, CellID.Row + 1, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   glEnd;
 end;
 
-procedure TCustomModelGrid.DrawFrontCellSide3D(ColIndex, RowIndex,
-  LayerIndex: integer; const XPositions,
-  YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
+procedure TCustomModelGrid.DrawFrontCellSide3D(const CellID: TZeroBasedID;
+  const XPositions, YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
 var
   X, Y, Z: single;
 begin
   glBegin(GL_POLYGON);
   // right top point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex + 1, RowIndex, LayerIndex + 1];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column + 1, CellID.Row, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // left top point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex, RowIndex, LayerIndex + 1];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column, CellID.Row, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // left bottom point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex, RowIndex, LayerIndex];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column, CellID.Row, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // right bottom point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex + 1, RowIndex, LayerIndex];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column + 1, CellID.Row, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   glEnd;
 end;
 
-procedure TCustomModelGrid.DrawTopCellSide3D(ColIndex, RowIndex,
-  LayerIndex: integer; const XPositions,
-  YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
+procedure TCustomModelGrid.DrawTopCellSide3D(const CellID: TZeroBasedID;
+  const XPositions, YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
 var
   X, Y, Z: single;
 begin
   glBegin(GL_POLYGON);
 
   // north east point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex, RowIndex + 1, LayerIndex + 1];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column, CellID.Row + 1, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // south east point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex, RowIndex, LayerIndex + 1];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column, CellID.Row, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // south west point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex + 1, RowIndex, LayerIndex + 1];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column + 1, CellID.Row, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   // north west point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex + 1, RowIndex + 1, LayerIndex + 1];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column + 1, CellID.Row + 1, CellID.Layer + 1];
   glVertex3f(X, Y, Z);
 
   glEnd;
 end;
 
-procedure TCustomModelGrid.DrawBottomCellSide3D(ColIndex, RowIndex,
-  LayerIndex: integer; const XPositions,
-  YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
+procedure TCustomModelGrid.DrawBottomCellSide3D(const CellID: TZeroBasedID;
+  const XPositions, YPositions: TOneDRealArray; const ZPositions: TThreeDRealArray);
 var
   X, Y, Z: single;
 begin
   glBegin(GL_POLYGON);
   // north west point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex + 1, RowIndex + 1, LayerIndex];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column + 1, CellID.Row + 1, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // south west point
-  X := XPositions[ColIndex + 1];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex + 1, RowIndex, LayerIndex];
+  X := XPositions[CellID.Column + 1];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column + 1, CellID.Row, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // south east point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex];
-  Z := ZPositions[ColIndex, RowIndex, LayerIndex];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row];
+  Z := ZPositions[CellID.Column, CellID.Row, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   // north east point
-  X := XPositions[ColIndex];
-  Y := YPositions[RowIndex + 1];
-  Z := ZPositions[ColIndex, RowIndex + 1, LayerIndex];
+  X := XPositions[CellID.Column];
+  Y := YPositions[CellID.Row + 1];
+  Z := ZPositions[CellID.Column, CellID.Row + 1, CellID.Layer];
   glVertex3f(X, Y, Z);
 
   glEnd;
@@ -8401,6 +8276,7 @@ var
   XPositions, YPositions: TOneDRealArray;
   ZPositions: TThreeDRealArray;
   Index: integer;
+  CellIndex: TZeroBasedID;
 var
   SelectedLayer, SelectedRow, SelectedColumn: integer;
 begin
@@ -8578,10 +8454,13 @@ begin
 
     for LayerIndex := 0 to LayerLength - 1 do
     begin
+      CellIndex.Layer := LayerIndex;
       for RowIndex := 0 to RowLength - 1 do
       begin
+        CellIndex.Row := RowIndex;
         for ColIndex := 0 to ColLength - 1 do
         begin
+          CellIndex.Column := ColIndex;
           if CellColors[LayerIndex, RowIndex, ColIndex] = clWhite then
             Continue;
 
@@ -8593,37 +8472,37 @@ begin
           if (ColIndex = ColLength - 1) or
             (CellColors[LayerIndex, RowIndex, ColIndex + 1] = clWhite) then
           begin
-            DrawRightCellSide3D(ColIndex, RowIndex, LayerIndex, XPositions,
+            DrawRightCellSide3D(CellIndex, XPositions,
               YPositions, ZPositions);
           end;
           if (ColIndex = 0) or
             (CellColors[LayerIndex, RowIndex, ColIndex - 1] = clWhite) then
           begin
-            DrawLeftCellSide3D(ColIndex, RowIndex, LayerIndex, XPositions,
+            DrawLeftCellSide3D(CellIndex, XPositions,
               YPositions, ZPositions);
           end;
           if (RowIndex = RowLength - 1) or
             (CellColors[LayerIndex, RowIndex + 1, ColIndex] = clWhite) then
           begin
-            DrawBackCellSide3D(ColIndex, RowIndex, LayerIndex, XPositions,
+            DrawBackCellSide3D(CellIndex, XPositions,
               YPositions, ZPositions);
           end;
           if (RowIndex = 0) or
             (CellColors[LayerIndex, RowIndex - 1, ColIndex] = clWhite) then
           begin
-            DrawFrontCellSide3D(ColIndex, RowIndex, LayerIndex, XPositions,
+            DrawFrontCellSide3D(CellIndex, XPositions,
               YPositions, ZPositions);
           end;
           if (LayerIndex = LayerLength - 1) or
             (CellColors[LayerIndex + 1, RowIndex, ColIndex] = clWhite) then
-          begin
-            DrawTopCellSide3D(ColIndex, RowIndex, LayerIndex, XPositions,
+          begin                                         
+            DrawTopCellSide3D(CellIndex, XPositions,
               YPositions, ZPositions);
           end;
           if (LayerIndex = 0) or
             (CellColors[LayerIndex - 1, RowIndex, ColIndex] = clWhite) then
-          begin
-            DrawBottomCellSide3D(ColIndex, RowIndex, LayerIndex, XPositions,
+          begin                                         
+            DrawBottomCellSide3D(CellIndex, XPositions,
               YPositions, ZPositions);
           end;
         end;
@@ -8703,14 +8582,14 @@ end;
 
 function TCustomModelGrid.LayerCenter(Column, Row, Layer: integer): real;
 begin
-  result := (CellElevation[Column, Row, Layer]
-    + CellElevation[Column, Row, Layer+1])/2;
+  result := (CellElevation[ZeroBasedID(Layer, Row, Column)]
+    + CellElevation[ZeroBasedID(Layer+1, Row, Column)])/2;
 end;
 
 function TCustomModelGrid.NearLayerTop(Column, Row, Layer: integer): real;
 begin
-  result := ((CellElevation[Column, Row, Layer] * 19)
-    + CellElevation[Column, Row, Layer+1])/20;
+  result := ((CellElevation[ZeroBasedID(Layer, Row, Column)] * 19)
+    + CellElevation[ZeroBasedID(Layer+1, Row, Column)])/20;
 end;
 
 procedure TCustomModelGrid.DrawTopContours(const ZoomBox: TQRbwZoomBox2;
@@ -9058,23 +8937,23 @@ begin
 end;
 
 function TCustomDiscretization.OkLocation(const DataSet: TDataArray;
-  const Layer, Row, Col: integer): boolean;
+  const CellID: TZeroBasedID): boolean;
 begin
   result := True;
-  if not DataSet.IsValue[Layer, Row, Col] then
+  if not DataSet.IsValue[CellID.Layer, CellID.Row, CellID.Column] then
   begin
     result := False;
   end
-  else if not ValueOK(DataSet, Layer, Row, Col) then
+  else if not ValueOK(DataSet, CellID) then
   begin
     result := False;
   end
 end;
 
 function TCustomDiscretization.ValueOK(DataSet: TDataArray;
-  const Layer, Row, Col: integer): boolean;
+  const CellID: TZeroBasedID): boolean;
 begin
-  result := DataSet.ColorGridValueOK(Layer, Row, Col);
+  result := DataSet.ColorGridValueOK(CellID.Layer, CellID.Row, CellID.Column);
 end;
 
 constructor TCustomDiscretization.Create(Model: TBaseModel);
@@ -9096,14 +8975,14 @@ begin
 
 end;
 
-procedure TCustomDiscretization.InitializeMinMax(const Layer, Row, Col: integer;
+procedure TCustomDiscretization.InitializeMinMax(const CellID: TZeroBasedID;
   DataSet: TDataArray; var MinMaxInitialized: boolean; var MinMax: TMinMax;
   StringValues: TStringList);
 var
   UseString: boolean;
   TempString: string;
 begin
-  if not OkLocation(DataSet, Layer, Row, Col) then
+  if not OkLocation(DataSet, CellID) then
   begin
     Exit;
   end;
@@ -9111,7 +8990,7 @@ begin
   case DataSet.Datatype of
     rdtDouble:
       begin
-        MinMax.RMin := DataSet.RealData[Layer, Row, Col];
+        MinMax.RMin := DataSet.RealData[CellID.Layer, CellID.Row, CellID.Column];
         MinMax.RMax := MinMax.RMin;
         if MinMax.RMin > 0 then
         begin
@@ -9132,11 +9011,11 @@ begin
       end;
     rdtInteger:
       begin
-        MinMax.IMin := DataSet.IntegerData[Layer, Row, Col];
+        MinMax.IMin := DataSet.IntegerData[CellID.Layer, CellID.Row, CellID.Column];
         MinMax.IMax := MinMax.IMin;
         if DataSet.DisplayRealValue then
         begin
-          MinMax.RMin := DataSet.RealData[Layer, Row, Col];
+          MinMax.RMin := DataSet.RealData[CellID.Layer, CellID.Row, CellID.Column];
           MinMax.RMax := MinMax.RMin;
           if DataSet.Limits.LowerLimit.UseLimit then
           begin
@@ -9175,7 +9054,7 @@ begin
     rdtString:
       begin
         UseString := True;
-        TempString := DataSet.StringData[Layer, Row, Col];
+        TempString := DataSet.StringData[CellID.Layer, CellID.Row, CellID.Column];
         if DataSet.Limits.UpperLimit.UseLimit then
         begin
           if TempString > DataSet.Limits.UpperLimit.StringLimitValue then
@@ -9224,7 +9103,7 @@ begin
   end;
 end;
 
-procedure TCustomDiscretization.UpdateMinMax(const Layer, Row, Col: integer;
+procedure TCustomDiscretization.UpdateMinMax(const CellID: TZeroBasedID;
   DataSet: TDataArray; var MinMaxInitialized: boolean;
   var MinMax: TMinMax; StringValues: TStringList);
 var
@@ -9233,16 +9112,16 @@ var
   UseString: boolean;
   TempString: string;
 begin
-  Assert(Layer <= DataSet.LayerCount);
-  Assert(Row <= DataSet.RowCount);
-  Assert(Col <= DataSet.ColumnCount);
-  if not OkLocation(DataSet, Layer, Row, Col) then
+  Assert(CellID.Layer <= DataSet.LayerCount);
+  Assert(CellID.Row <= DataSet.RowCount);
+  Assert(CellID.Column <= DataSet.ColumnCount);
+  if not OkLocation(DataSet, CellID) then
     Exit;
   // if not IsActiveOK(DataSet, Layer, Row, Col) then
   // Exit;
   if not MinMaxInitialized then
   begin
-    InitializeMinMax(Layer, Row, Col, DataSet, MinMaxInitialized, MinMax,
+    InitializeMinMax(CellID, DataSet, MinMaxInitialized, MinMax,
       StringValues);
   end
   else
@@ -9250,7 +9129,7 @@ begin
     case DataSet.Datatype of
       rdtDouble:
         begin
-          RTemp := DataSet.RealData[Layer, Row, Col];
+          RTemp := DataSet.RealData[CellID.Layer, CellID.Row, CellID.Column];
           if (RTemp > MinMax.RMax) and
             not DataSet.Limits.UpperLimit.UseLimit then
           begin
@@ -9273,7 +9152,7 @@ begin
         begin
           if DataSet.DisplayRealValue then
           begin
-            RTemp := DataSet.RealData[Layer, Row, Col];
+            RTemp := DataSet.RealData[CellID.Layer, CellID.Row, CellID.Column];
             if (RTemp > MinMax.RMax) and
               not DataSet.Limits.UpperLimit.UseLimit then
             begin
@@ -9286,7 +9165,7 @@ begin
             end;
           end;
 
-          ITemp := DataSet.IntegerData[Layer, Row, Col];
+          ITemp := DataSet.IntegerData[CellID.Layer, CellID.Row, CellID.Column];
           if (ITemp > MinMax.IMax) and
             not DataSet.Limits.UpperLimit.UseLimit then
           begin
@@ -9305,7 +9184,7 @@ begin
       rdtString:
         begin
           UseString := True;
-          TempString := DataSet.StringData[Layer, Row, Col];
+          TempString := DataSet.StringData[CellID.Layer, CellID.Row, CellID.Column];
           if DataSet.Limits.UpperLimit.UseLimit then
           begin
             if TempString > DataSet.Limits.UpperLimit.StringLimitValue then
@@ -9346,7 +9225,7 @@ begin
     begin
       for ColIndex := 0 to ColCount - 1 do
       begin
-        UpdateMinMax(LayerIndex, RowIndex, ColIndex, DataSet, MinMaxInitialized,
+        UpdateMinMax(ZeroBasedID(LayerIndex, RowIndex, ColIndex), DataSet, MinMaxInitialized,
           MinMax, StringValues);
       end;
     end;

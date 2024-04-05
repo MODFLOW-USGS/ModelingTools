@@ -1856,7 +1856,7 @@ var
   begin
     if Grid <> nil then
     begin
-      result := Grid.CellElevation[Column, Row, Layer];
+      result := Grid.CellElevation[ZeroBasedID(Layer, Row, Column)];
     end
     else
     begin
@@ -1868,7 +1868,7 @@ var
   begin
     if Grid <> nil then
     begin
-      result := Grid.CellElevation[Column, Row, Layer+1];
+      result := Grid.CellElevation[ZeroBasedID(Layer+1, Row, Column)];
     end
     else
     begin

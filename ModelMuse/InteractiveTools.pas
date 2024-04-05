@@ -1689,18 +1689,18 @@ begin
         begin
           Column := frmGoPhast.Grid.ColumnCount-1
         end;
-        Top := frmGoPhast.Grid.CellElevation[
-          Column,frmGoPhast.PhastModel.SelectedRow ,0];
-        Bottom := frmGoPhast.Grid.CellElevation[
-          Column,frmGoPhast.PhastModel.SelectedRow,frmGoPhast.Grid.LayerCount];
+        Top := frmGoPhast.Grid.CellElevation[ZeroBasedID(
+          0,frmGoPhast.PhastModel.SelectedRow, Column)];
+        Bottom := frmGoPhast.Grid.CellElevation[ZeroBasedID(
+          frmGoPhast.Grid.LayerCount,frmGoPhast.PhastModel.SelectedRow,Column)];
         if Column < frmGoPhast.Grid.ColumnCount-1 then
         begin
           Top :=
-            Max(Top,frmGoPhast.Grid.CellElevation[
-            Column+1,frmGoPhast.PhastModel.SelectedRow,0]);
+            Max(Top,frmGoPhast.Grid.CellElevation[ZeroBasedID(
+            0,frmGoPhast.PhastModel.SelectedRow,Column+1)]);
           Bottom :=
-            Min(Bottom,frmGoPhast.Grid.CellElevation[Column+1,
-            frmGoPhast.PhastModel.SelectedRow,frmGoPhast.Grid.LayerCount]);
+            Min(Bottom,frmGoPhast.Grid.CellElevation[ZeroBasedID(frmGoPhast.Grid.LayerCount,
+            frmGoPhast.PhastModel.SelectedRow,Column+1)]);
         end;
 
         result := (APoint.Y >= Bottom) and (APoint.Y <= Top);
@@ -1805,18 +1805,18 @@ begin
         begin
           Row := frmGoPhast.Grid.RowCount-1;
         end;
-        Top := frmGoPhast.Grid.CellElevation[frmGoPhast.PhastModel.SelectedColumn,
-          Row, 0];
-        Bottom := frmGoPhast.Grid.CellElevation[frmGoPhast.PhastModel.SelectedColumn,
-          Row,frmGoPhast.Grid.LayerCount];
+        Top := frmGoPhast.Grid.CellElevation[ZeroBasedID(0,
+          Row, frmGoPhast.PhastModel.SelectedColumn)];
+        Bottom := frmGoPhast.Grid.CellElevation[ZeroBasedID(frmGoPhast.Grid.LayerCount,
+          Row,frmGoPhast.PhastModel.SelectedColumn)];
         if Row < frmGoPhast.Grid.RowCount-1 then
         begin
           Top :=
-            Max(Top,frmGoPhast.Grid.CellElevation[frmGoPhast.PhastModel.SelectedColumn,
-          Row+1, 0]);
+            Max(Top,frmGoPhast.Grid.CellElevation[ZeroBasedID(0,
+          Row+1, frmGoPhast.PhastModel.SelectedColumn)]);
           Bottom :=
-            Min(Bottom,frmGoPhast.Grid.CellElevation[frmGoPhast.PhastModel.SelectedColumn,
-            Row+1,frmGoPhast.Grid.LayerCount]);
+            Min(Bottom,frmGoPhast.Grid.CellElevation[ZeroBasedID(frmGoPhast.Grid.LayerCount,
+            Row+1,frmGoPhast.PhastModel.SelectedColumn)]);
         end;
 
         result := (APoint.X >= Bottom) and (APoint.X <= Top);
@@ -1845,12 +1845,12 @@ begin
       begin
         P1.X := CursorPoint.X;
         Column := frmGoPhast.Grid.NearestColumnCenter(P1.X);
-        P1.Y := frmGoPhast.Grid.CellElevation[Column,
-          frmGoPhast.PhastModel.SelectedRow,0];
+        P1.Y := frmGoPhast.Grid.CellElevation[ZeroBasedID(0,
+          frmGoPhast.PhastModel.SelectedRow,Column)];
 
         P2.X := CursorPoint.X;
-        P2.Y := frmGoPhast.Grid.CellElevation[Column,frmGoPhast.
-          PhastModel.SelectedRow,frmGoPhast.Grid.LayerCount];
+        P2.Y := frmGoPhast.Grid.CellElevation[ZeroBasedID(frmGoPhast.Grid.LayerCount,
+          frmGoPhast.PhastModel.SelectedRow,Column)];
 
         DrawBigPolyline32(BitMap, clBlack32, 1,
           [Point(ZoomBox.XCoord(P1.X),
@@ -1976,12 +1976,12 @@ begin
       begin
         P1.Y := CursorPoint.Y;
         Row := frmGoPhast.Grid.NearestRowCenter(P1.X);
-        P1.X := frmGoPhast.Grid.CellElevation[frmGoPhast.PhastModel.SelectedColumn,
-          Row,0];
+        P1.X := frmGoPhast.Grid.CellElevation[ZeroBasedID(0,
+          Row,frmGoPhast.PhastModel.SelectedColumn)];
 
         P2.Y := CursorPoint.Y;
-        P2.X := frmGoPhast.Grid.CellElevation[frmGoPhast.PhastModel.SelectedColumn,
-          Row,frmGoPhast.Grid.LayerCount];
+        P2.X := frmGoPhast.Grid.CellElevation[ZeroBasedID(frmGoPhast.Grid.LayerCount,
+          Row,frmGoPhast.PhastModel.SelectedColumn)];
 
         DrawBigPolyline32(BitMap, clBlack32, 1,
           [Point(ZoomBox.XCoord(P1.X),

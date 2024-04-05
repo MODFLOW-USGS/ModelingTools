@@ -45,7 +45,7 @@ type
     procedure GetCellCornerElevations(const EvalAt: TEvaluatedAt;
       out Elevations: TThreeDRealArray); override;
     // @name gets the elevation of a cell boundary.
-    function GetCellElevation(const Column, Row, Layer: integer): real;
+    function GetCellElevation(const CellID: TZeroBasedID): real;
       override;
     // @name gets the vertical thickness of a cells.
     function GetCellThickness(const Column, Row, Layer: integer): real;
@@ -53,7 +53,7 @@ type
     // @name gets the elevation of a layer boundary.
     function GetLayerElevation(const Layer: integer): real;
     // @name sets the elevation of a cell boundary.
-    procedure SetCellElevation(const Column, Row, Layer: integer;
+    procedure SetCellElevation(const CellID: TZeroBasedID;
       const Value: real); override;
     // @name gets the thickness of a layer.
     function GetLayerThickness(const Layer: integer): real;
@@ -199,10 +199,9 @@ begin
   LayersChanged;
 end;
 
-function TPhastGrid.GetCellElevation(const Column, Row,
-  Layer: integer): real;
+function TPhastGrid.GetCellElevation(const CellID: TZeroBasedID): real;
 begin
-  result := GetLayerElevation(Layer);
+  result := GetLayerElevation(CellID.Layer);
 end;
 
 function TPhastGrid.GetCellThickness(const Column, Row,
@@ -246,12 +245,12 @@ begin
   result := NearestColumnOrRow(FLayerElevations, APosition, First, Last);
 end;
 
-procedure TPhastGrid.SetCellElevation(const Column, Row, Layer: integer;
+procedure TPhastGrid.SetCellElevation(const CellID: TZeroBasedID;
   const Value: real);
 begin
-  if LayerElevation[Layer] <> Value then
+  if LayerElevation[CellID.Layer] <> Value then
   begin
-    LayerElevation[Layer] := Value;
+    LayerElevation[CellID.Layer] := Value;
     FNeedToRecalculateFrontCellColors := True;
     FNeedToRecalculateSideCellColors := True;
     NeedToRecalculate3DCellColors := True;

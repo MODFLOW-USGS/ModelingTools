@@ -222,10 +222,10 @@ begin
     + Grid.ColumnPosition[Grid.ColumnCount]) / 2;
   YMove := -(Grid.RowPosition[0]
     + Grid.RowPosition[Grid.RowCount]) / 2;
-  ZMove := -(Grid.CellElevation[Grid.ColumnCount div 2,
-    Grid.RowCount div 2, 0]
-    + Grid.CellElevation[Grid.ColumnCount div 2,
-    Grid.RowCount div 2, Grid.LayerCount]) / 2;
+  ZMove := -(Grid.CellElevation[ZeroBasedID(0,
+    Grid.RowCount div 2, Grid.ColumnCount div 2)]
+    + Grid.CellElevation[ZeroBasedID(Grid.LayerCount,
+    Grid.RowCount div 2, Grid.ColumnCount div 2)]) / 2;
 
   // The descriptions below are written as if they apply to the model
   // when they actually affect the coordinate system.  Because they

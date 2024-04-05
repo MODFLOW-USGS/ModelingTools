@@ -16525,8 +16525,8 @@ begin
   Point1 := Grid.TwoDElementCorner(Column, Row);
   if Location.Column = Location.Col2 then
   begin
-    HigherZ := Grid.CellElevation[Column, Row-1, Layer];
-    LowerZ := Grid.CellElevation[Column, Row-1, Layer+1];
+    HigherZ := Grid.CellElevation[ZeroBasedID(Layer, Row-1, Column)];
+    LowerZ := Grid.CellElevation[ZeroBasedID(Layer+1, Row-1, Column)];
     Row2 := Row-1;
     Point1A := Grid.TwoDElementCorner(Column, Row2);
     Inc(Column);
@@ -16534,8 +16534,8 @@ begin
   end
   else
   begin
-    HigherZ := Grid.CellElevation[Column-1, Row, Layer];
-    LowerZ := Grid.CellElevation[Column-1, Row, Layer+1];
+    HigherZ := Grid.CellElevation[ZeroBasedID(Layer, Row, Column-1)];
+    LowerZ := Grid.CellElevation[ZeroBasedID(Layer+1, Row, Column-1)];
     Column2 := Column-1;
     Point1A := Grid.TwoDElementCorner(Column2, Row);
     Inc(Row);
@@ -16821,7 +16821,7 @@ begin
           FLakeOutline[RowIndex, ColIndex] :=
             FConstantLkarr[LayerIndex].IntegerValue;
           FLakeBottom[RowIndex, ColIndex] :=
-            FModel.ModflowGrid.CellElevation[ColIndex,RowIndex,Layer+1];
+            FModel.ModflowGrid.CellElevation[ZeroBasedID(Layer+1,RowIndex,ColIndex)];
         end;
       end;
 
@@ -16848,7 +16848,7 @@ begin
             FLakeOutline[RowIndex, ColIndex] :=
               LKARR[LayerIndex, RowIndex, ColIndex];
             FLakeBottom[RowIndex, ColIndex] :=
-              FModel.ModflowGrid.CellElevation[ColIndex,RowIndex,Layer+1];
+              FModel.ModflowGrid.CellElevation[ZeroBasedID(Layer+1,RowIndex,ColIndex)];
           end;
         end;
       end;
