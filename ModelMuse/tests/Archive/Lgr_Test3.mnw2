@@ -1,9 +1,9 @@
-# MNW2: Multi-Node Well package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# MNW2: Multi-Node Well package file created on 4/10/2024 by ModelMuse version 5.2.0.4.
      1     9     2 AUXILIARY IFACE # DataSet 1: MNWMAX, IWL2CB, MNWPRNT, OPTION
 Well-A     -1 # Data Set 2A: WELLID, NNODES
 SKIN      0     1     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
   1.333000000000E-001   1.794716280000E+000   1.250000000000E+001  # Data Set 2C; Rw, Rskin, Kskin
- -5.000000000000E+000  -6.500000000000E+001     30    41 # Data Set 2D; Ztop, Zbotm, ROW, COL
+ -5.000000500000E+000  -6.499999350000E+001     30    41 # Data Set 2D; Ztop, Zbotm, ROW, COL
  -7.500000000000E+000     -1  1.000000000000E-001   1.500000000000E-001  # Data Set 2F: Hlim, QCut, Qfrcmn, Qfrcmx
      1 # Data Set 3, Stress Period 1: ITMP
 Well-A   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
