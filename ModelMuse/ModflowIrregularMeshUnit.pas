@@ -741,11 +741,10 @@ type
       read FGridLineDrawingChoice write SetGridLineDrawingChoice;
     function OkLocation(const DataSet: TDataArray;
       const CellID: TZeroBasedID): boolean; override;
-    // Layer, Row, Col are the indicies of an element.
     // CellList will be filled with the horizontal neighbors of that element.
-    procedure GetHorizontalNeighbors(const Layer, Row, Col: integer;
+    procedure GetHorizontalNeighbors(const CellID: TZeroBasedID;
       CellList: TCellLocationList);
-    function CellThickness(const Layer, Row, Col: integer): double;
+    function CellThickness(const CellID: TZeroBasedID): double;
     property DrawCellNumbers: Boolean read FDrawCellNumbers write SetDrawCellNumbers;
     Property NumberFont: TFont read FNumberFont write SetNumberFont;
     procedure GetElementsIntfOnCrossSection(ElementList: TIElement2DList);
@@ -5114,13 +5113,13 @@ begin
   result := TwoDGrid.CellArea(CellIndex);
 end;
 
-function TModflowDisvGrid.CellThickness(const Layer, Row, Col: integer): double;
+function TModflowDisvGrid.CellThickness(const CellID: TZeroBasedID): double;
 var
   ALayer: TModflowIrregularLayer;
   ACell: TModflowDisVCell;
 begin
-  ALayer := Layers[Layer].Layer;
-  ACell := ALayer[Col];
+  ALayer := Layers[CellID.Layer].Layer;
+  ACell := ALayer[CellID.Column];
   result := ACell.Thickness;
 end;
 
@@ -5790,8 +5789,7 @@ begin
   result := FFrontDataSet
 end;
 
-procedure TModflowDisvGrid.GetHorizontalNeighbors(const Layer, Row,
-  Col: integer; CellList: TCellLocationList);
+procedure TModflowDisvGrid.GetHorizontalNeighbors(const CellID: TZeroBasedID; CellList: TCellLocationList);
 var
   NeighborList: TMFIrregularCell2D_List;
   NeighborIndex: Integer;
@@ -5800,9 +5798,9 @@ var
 begin
   NeighborList := TMFIrregularCell2D_List.Create;
   try
-    ACell.Layer := Layer;
+    ACell.Layer := CellID.Layer;
     ACell.Row := 0;
-    TwoDGrid.Cells[Col].GetNeighbors(NeighborList);
+    TwoDGrid.Cells[CellID.Column].GetNeighbors(NeighborList);
     for NeighborIndex := 0 to NeighborList.Count - 1 do
     begin
       ANeighbor := NeighborList[NeighborIndex];

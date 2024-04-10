@@ -462,7 +462,7 @@ side views of the model.}
     function GetCellElevation(const CellID: TZeroBasedID): real;
       virtual; abstract;
     // See @link(CellThickness).
-    function GetCellThickness(const Column, Row, Layer: integer): real;
+    function GetCellThickness(const CellID: TZeroBasedID): real;
       virtual; abstract;
     // See @link(ColumnPosition).
     function GetColumnPosition(const Column: integer): real; virtual;
@@ -536,7 +536,7 @@ side views of the model.}
     procedure SetCellElevation(const CellID: TZeroBasedID;
       const Value: real); virtual; abstract;
     // See @link(CellThickness).
-    procedure SetCellThickness(const Column, Row, Layer: integer;
+    procedure SetCellThickness(const CellID: TZeroBasedID;
       const Value: real); virtual; abstract;
     // See @link(ColumnCount).
     procedure SetColumnCount(const Value: integer); virtual;
@@ -603,7 +603,7 @@ side views of the model.}
       const BitMap: TPersistent);
     procedure DrawSideContours(const ZoomBox: TQRbwZoomBox2;
       const BitMap: TPersistent);
-    function IsElementActive(const Layer, Row, Col: integer): boolean;
+    function IsElementActive(const CellID: TZeroBasedID): boolean;
     procedure SetFrontContourDataSet(const Value: TDataArray); virtual;
     procedure SetSideContourDataSet(const Value: TDataArray); virtual;
     procedure SetThreeDContourDataSet(const Value: TDataArray); virtual;
@@ -664,7 +664,7 @@ side views of the model.}
       read GetCellElevation write SetCellElevation;
     { @name is an abstract property that represents the thickness of
       a cell.  Thicknesses must be greater than or equal to 0.}
-    property CellThickness[const Column, Row, Layer: integer]: real
+    property CellThickness[const CellID: TZeroBasedID]: real
       read GetCellThickness write SetCellThickness;
     {@name returns the position of the center of a column}
     function ColumnCenter(const Column: integer): real;
@@ -890,7 +890,7 @@ side views of the model.}
     { @name returns the X, Y, and Z coordinates of the
       center of a column boundary in the coordinate system of the grid.
       @SeeAlso(ThreeDRowEdgeCenter) @SeeAlso(ThreeDLayerEdgeCenter)}
-    function ThreeDColumnEdgeCenter(const Column, Row, Layer: integer):
+    function ThreeDColumnEdgeCenter(const CellID: TZeroBasedID):
       TPoint3D;
     {@name is the @link(TDataArray) whose values are used
      to determine the colors
@@ -903,17 +903,17 @@ side views of the model.}
       write SetThreeDContourDataSet;
     { @name returns the X, Y, and Z coordinates of the center of
       a grid element in the coordinate system of the grid.}
-    function ThreeDElementCenter(const Column, Row, Layer: integer):
+    function ThreeDElementCenter(const CellID: TZeroBasedID):
       TPoint3D; virtual;
-    function RotatedThreeDElementCenter(const Column, Row, Layer: integer):
+    function RotatedThreeDElementCenter(const CellID: TZeroBasedID):
       TPoint3D;
     { @name returns the X, Y, and Z coordinates of a corner of
       a grid element in the coordinate system of the grid.}
-    function ThreeDElementCorner(const Column, Row, Layer: integer):
+    function ThreeDElementCorner(const CellID: TZeroBasedID):
       TPoint3D; virtual;
-    function RotatedThreeDElementCorner(const Column, Row, Layer: integer):
+    function RotatedThreeDElementCorner(const CellID: TZeroBasedID):
       TPoint3D;
-    function ThreeDCellCorner(Column, Row, Layer: integer):
+    function ThreeDCellCorner(const CellID: TZeroBasedID):
       TPoint3D; virtual;
     // @name is used to notify @link(TScreenObject)s and @link(TDataArray)s
     // That they need to redraw themselves due to a change in the columns,
@@ -923,12 +923,12 @@ side views of the model.}
     { @name returns the X, Y, and Z coordinates of the
       center of a layer boundary in the coordinate system of the grid.
       @SeeAlso(ThreeDColumnEdgeCenter) @SeeAlso(ThreeDRowEdgeCenter)}
-    function ThreeDLayerEdgeCenter(const Column, Row, Layer: integer):
+    function ThreeDLayerEdgeCenter(const CellID: TZeroBasedID):
       TPoint3D;
     { @name returns the X, Y, and Z coordinates of the
       center of a row boundary in the coordinate system of the grid.
       @SeeAlso(ThreeDColumnEdgeCenter) @SeeAlso(ThreeDLayerEdgeCenter)}
-    function ThreeDRowEdgeCenter(const Column, Row, Layer: integer):
+    function ThreeDRowEdgeCenter(const CellID: TZeroBasedID):
       TPoint3D;
     {@name is used to retrieve or set the color of a element or
      node in a top view of the grid.  Whether the color is the color of a cell
@@ -1016,7 +1016,7 @@ side views of the model.}
     function LayerCenter(Column, Row, Layer: integer): real;
     // @name returns and elevation 5% of the layer thickness below the layer
     // top.
-    function NearLayerTop(Column, Row, Layer: integer): real;
+    function NearLayerTop(const CellID: TZeroBasedID): real;
     // @name returns the extent of the grid in grid coordinates;
     function GridLimits(ViewDirection: TViewDirection): TGridLimit;
     function GridOutline(ViewDirection: TViewDirection): TPolygon2D;
@@ -1037,7 +1037,7 @@ side views of the model.}
     procedure RotateAroundGridOrigin(NewAngle: Double);
     // Layer, Row, Col are the indicies of an element.
     // CellList will be filled with the horizontal neighbors of that element.
-    procedure GetHorizontalNeighbors(const Layer, Row, Col: integer;
+    procedure GetHorizontalNeighbors(const CellID: TZeroBasedID;
       CellList: TCellLocationList);
     function UniformColumns(out MaxWidth, MinWidth: Double): boolean;
     function UniformRows(out MaxWidth, MinWidth: Double): boolean;
@@ -3029,12 +3029,11 @@ begin
   end;
 end;
 
-function TCustomModelGrid.RotatedThreeDElementCenter(const Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.RotatedThreeDElementCenter(const CellID: TZeroBasedID): TPoint3D;
 var
   APoint: TPoint2D;
 begin
-  result := ThreeDElementCenter(Column, Row, Layer);
+  result := ThreeDElementCenter(CellID);
   APoint.X := Result.X;
   APoint.Y := Result.Y;
   APoint:= RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
@@ -3042,12 +3041,11 @@ begin
   Result.Y := APoint.Y;
 end;
 
-function TCustomModelGrid.RotatedThreeDElementCorner(const Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.RotatedThreeDElementCorner(const CellID: TZeroBasedID): TPoint3D;
 var
   APoint: TPoint2D;
 begin
-  result := ThreeDElementCorner(Column, Row, Layer);
+  result := ThreeDElementCorner(CellID);
   APoint.X := Result.X;
   APoint.Y := Result.Y;
   RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
@@ -3770,21 +3768,19 @@ begin
   end;
 end;
 
-function TCustomModelGrid.ThreeDElementCenter(const Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.ThreeDElementCenter(const CellID: TZeroBasedID): TPoint3D;
 begin
-  result.X := (ColumnPosition[Column] + ColumnPosition[Column + 1]) / 2;
-  result.Y := (RowPosition[Row] + RowPosition[Row + 1]) / 2;
-  result.Z := (CellElevation[ZeroBasedID(Layer, Row, Column)]
-    + CellElevation[ZeroBasedID(Layer + 1, Row, Column)]) / 2;
+  result.X := (ColumnPosition[CellID.Column] + ColumnPosition[CellID.Column + 1]) / 2;
+  result.Y := (RowPosition[CellID.Row] + RowPosition[CellID.Row + 1]) / 2;
+  result.Z := (CellElevation[CellID]
+    + CellElevation[CellID.LayerPlus1]) / 2;
 end;
 
-function TCustomModelGrid.ThreeDElementCorner(const Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.ThreeDElementCorner(const CellID: TZeroBasedID): TPoint3D;
 begin
-  result.X := ColumnPosition[Column];
-  result.Y := RowPosition[Row];
-  result.Z := CellElevation[ZeroBasedID(Layer, Row, Column)];
+  result.X := ColumnPosition[CellID.Column];
+  result.Y := RowPosition[CellID.Row];
+  result.Z := CellElevation[CellID];
 end;
 
 function TCustomModelGrid.UnconstrainedTopContainingCell(APoint: TPoint2D;
@@ -4636,38 +4632,38 @@ begin
   CalculateMinMax(DataSet, MinMaxInitialized, MinMax, StringValues);
 end;
 
-procedure TCustomModelGrid.GetHorizontalNeighbors(const Layer, Row, Col: integer;
+procedure TCustomModelGrid.GetHorizontalNeighbors(const CellID: TZeroBasedID;
   CellList: TCellLocationList);
 var
   ACell: TCellLocation;
 begin
   CellList.Clear;
-  if Row > 0 then
+  if CellID.Row > 0 then
   begin
-    ACell.Layer := Layer;
-    ACell.Row := Row-1;
-    ACell.Column := Col;
+    ACell.Layer := CellID.Layer;
+    ACell.Row := CellID.Row-1;
+    ACell.Column := CellID.Column;
     CellList.Add(ACell);
   end;
-  if Col > 0 then
+  if CellID.Column > 0 then
   begin
-    ACell.Layer := Layer;
-    ACell.Row := Row;
-    ACell.Column := Col-1;
+    ACell.Layer := CellID.Layer;
+    ACell.Row := CellID.Row;
+    ACell.Column := CellID.Column-1;
     CellList.Add(ACell);
   end;
-  if Row < RowCount-1 then
+  if CellID.Row < RowCount-1 then
   begin
-    ACell.Layer := Layer;
-    ACell.Row := Row+1;
-    ACell.Column := Col;
+    ACell.Layer := CellID.Layer;
+    ACell.Row := CellID.Row+1;
+    ACell.Column := CellID.Column;
     CellList.Add(ACell);
   end;
-  if Col < ColumnCount-1 then
+  if CellID.Column < ColumnCount-1 then
   begin
-    ACell.Layer := Layer;
-    ACell.Row := Row;
-    ACell.Column := Col+1;
+    ACell.Layer := CellID.Layer;
+    ACell.Row := CellID.Row;
+    ACell.Column := CellID.Column+1;
     CellList.Add(ACell);
   end;
 end;
@@ -4811,16 +4807,16 @@ var
   function IsActive: boolean;
   begin
     result := ((ColumnIndex < ColumnCount) and
-      IsElementActive(Layer,RowIndex, ColumnIndex))
+      IsElementActive(ZeroBasedID(Layer,RowIndex, ColumnIndex)))
       or ((ColumnIndex > 0)
-      and IsElementActive(Layer,RowIndex, ColumnIndex-1))
+      and IsElementActive(ZeroBasedID(Layer,RowIndex, ColumnIndex-1)))
   end;
   function IsEdge: boolean;
   begin
     result := ((ColumnIndex < ColumnCount) and
-      IsElementActive(Layer,RowIndex, ColumnIndex))
+      IsElementActive(ZeroBasedID(Layer,RowIndex, ColumnIndex)))
       <> ((ColumnIndex > 0)
-      and IsElementActive(Layer,RowIndex, ColumnIndex-1));
+      and IsElementActive(ZeroBasedID(Layer,RowIndex, ColumnIndex-1)));
   end;
 begin
   SetLocalEvalAt(vdTop, EvalAt);
@@ -4933,16 +4929,16 @@ var
   function IsActive: boolean;
   begin
     result := ((RowIndex < RowCount) and
-      IsElementActive(Layer,RowIndex, ColumnIndex))
+      IsElementActive(ZeroBasedID(Layer,RowIndex, ColumnIndex)))
       or ((RowIndex > 0)
-      and IsElementActive(Layer,RowIndex-1, ColumnIndex))
+      and IsElementActive(ZeroBasedID(Layer,RowIndex-1, ColumnIndex)))
   end;
   function IsEdge: boolean;
   begin
     result := ((RowIndex < RowCount) and
-      IsElementActive(Layer,RowIndex, ColumnIndex))
+      IsElementActive(ZeroBasedID(Layer,RowIndex, ColumnIndex)))
       <> ((RowIndex > 0)
-      and IsElementActive(Layer,RowIndex-1, ColumnIndex));
+      and IsElementActive(ZeroBasedID(Layer,RowIndex-1, ColumnIndex)));
   end;
 begin
   SetLocalEvalAt(vdTop, LocalEvalAt);
@@ -5734,10 +5730,10 @@ begin
   result.BottomCenter.y := TempPoint.y;
   result.BottomCenter.z := Z2;
 
-  result.TopEdge[0] := RotatedThreeDElementCorner(CellID.Column, CellID.Row, CellID.Layer);
-  result.TopEdge[2] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row, CellID.Layer);
-  result.TopEdge[4] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row+1, CellID.Layer);
-  result.TopEdge[6] := RotatedThreeDElementCorner(CellID.Column, CellID.Row+1, CellID.Layer);
+  result.TopEdge[0] := RotatedThreeDElementCorner(CellID);
+  result.TopEdge[2] := RotatedThreeDElementCorner(CellID.ColumnPlus1);
+  result.TopEdge[4] := RotatedThreeDElementCorner(CellID.ColumnPlus1.RowPlus1);
+  result.TopEdge[6] := RotatedThreeDElementCorner(CellID.RowPlus1);
 
   result.TopEdge[1] := AveragePoint(result.TopEdge[0], result.TopEdge[2]);
   if CellID.Row = 0 then
@@ -5780,10 +5776,10 @@ begin
     result.TopEdge[7].Z := (Z1 + CellElevation[CellID.ColumnMinus1])/2;
   end;
 
-  result.BottomEdge[0] := RotatedThreeDElementCorner(CellID.Column, CellID.Row, CellID.Layer+1);
-  result.BottomEdge[2] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row, CellID.Layer+1);
-  result.BottomEdge[4] := RotatedThreeDElementCorner(CellID.Column+1, CellID.Row+1, CellID.Layer+1);
-  result.BottomEdge[6] := RotatedThreeDElementCorner(CellID.Column, CellID.Row+1, CellID.Layer+1);
+  result.BottomEdge[0] := RotatedThreeDElementCorner(CellID.LayerPlus1);
+  result.BottomEdge[2] := RotatedThreeDElementCorner(CellID.LayerPlus1.ColumnPlus1);
+  result.BottomEdge[4] := RotatedThreeDElementCorner(CellID.LayerPlus1.ColumnPlus1.RowPlus1);
+  result.BottomEdge[6] := RotatedThreeDElementCorner(CellID.LayerPlus1.RowPlus1);
 
   result.BottomEdge[1] := AveragePoint(result.BottomEdge[0], result.BottomEdge[2]);
   if CellID.Row = 0 then
@@ -6568,7 +6564,7 @@ begin
   end;
 end;
 
-function TCustomModelGrid.IsElementActive(const Layer, Row, Col: integer): boolean;
+function TCustomModelGrid.IsElementActive(const CellID: TZeroBasedID): boolean;
 var
   ActiveDataSet: TDataArray;
   LocalModel: TCustomModel;
@@ -6581,7 +6577,7 @@ begin
     if ActiveDataSet <> nil then
     begin
       ActiveDataSet.Initialize;
-      result := ActiveDataSet.IntegerData[Layer, Row, Col] >= 1;
+      result := ActiveDataSet.IntegerData[CellID.Layer, CellID.Row, CellID.Column] >= 1;
     end;
   end
   else
@@ -6590,7 +6586,7 @@ begin
     if ActiveDataSet <> nil then
     begin
       ActiveDataSet.Initialize;
-      result := ActiveDataSet.BooleanData[Layer, Row, Col];
+      result := ActiveDataSet.BooleanData[CellID.Layer, CellID.Row, CellID.Column];
     end;
   end;
 end;
@@ -7275,91 +7271,75 @@ begin
   result.Y := (Point1.Y + Point2.Y) / 2;
 end;
 
-function TCustomModelGrid.ThreeDCellCorner(Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.ThreeDCellCorner(const CellID: TZeroBasedID): TPoint3D;
 begin
-//  if Column > ColumnCount then
-//  begin
-//    Column := ColumnCount
-//  end;
-//  if Row > RowCount then
-//  begin
-//    Row := RowCount
-//  end;
-//  if Layer > LayerCount then
-//  begin
-//    Layer := LayerCount
-//  end;
-  if (Column = 0) then
+  if (CellID.Column = 0) then
   begin
-    result.X := ColumnPosition[Column];
+    result.X := ColumnPosition[CellID.Column];
   end
-  else if (Column = ColumnCount+1) then
+  else if (CellID.Column = ColumnCount+1) then
   begin
-    result.X := ColumnPosition[Column-1];
+    result.X := ColumnPosition[CellID.Column-1];
   end
   else
   begin
-    result.X := (ColumnPosition[Column] + ColumnPosition[Column-1])/2;
+    result.X := (ColumnPosition[CellID.Column] + ColumnPosition[CellID.Column-1])/2;
   end;
-  if (Row = 0)  then
+  if (CellID.Row = 0)  then
   begin
-    result.Y := RowPosition[Row];
+    result.Y := RowPosition[CellID.Row];
   end
-  else if (Row = RowCount+1) then
+  else if (CellID.Row = RowCount+1) then
   begin
-    result.Y := RowPosition[Row-1];
+    result.Y := RowPosition[CellID.Row-1];
   end
   else
   begin
-    result.Y := (RowPosition[Row] + RowPosition[Row-1])/2;
+    result.Y := (RowPosition[CellID.Row] + RowPosition[CellID.Row-1])/2;
   end;
-  if (Layer = 0) then
+  if (CellID.Layer = 0) then
   begin
-    result.Z := CellElevation[ZeroBasedID(Layer, Row, Column)];
+    result.Z := CellElevation[CellID];
   end
-  else if (Layer = LayerCount+1) then
+  else if (CellID.Layer = LayerCount+1) then
   begin
-    result.Z := CellElevation[ZeroBasedID(Layer-1, Row, Column)];
+    result.Z := CellElevation[CellID.LayerMinus1];
   end
   else
   begin
-    result.Z := (CellElevation[ZeroBasedID(Layer, Row, Column)]
-      + CellElevation[ZeroBasedID(Layer-1, Row, Column)])/ 2;
+    result.Z := (CellElevation[CellID]
+      + CellElevation[CellID.LayerMinus1])/ 2;
   end;
 end;
 
-function TCustomModelGrid.ThreeDColumnEdgeCenter(const Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.ThreeDColumnEdgeCenter(const CellID: TZeroBasedID): TPoint3D;
 var
   Point1, Point2: TPoint3D;
 begin
-  Point1 := ThreeDElementCorner(Column, Row, Layer);
-  Point2 := ThreeDElementCorner(Column, Row + 1, Layer);
+  Point1 := ThreeDElementCorner(CellID);
+  Point2 := ThreeDElementCorner(CellID.RowPlus1);
   result.X := (Point1.X + Point2.X) / 2;
   result.Y := (Point1.Y + Point2.Y) / 2;
   result.Z := (Point1.Z + Point2.Z) / 2;
 end;
 
-function TCustomModelGrid.ThreeDLayerEdgeCenter(const Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.ThreeDLayerEdgeCenter(const CellID: TZeroBasedID): TPoint3D;
 var
   Point1, Point2: TPoint3D;
 begin
-  Point1 := ThreeDElementCorner(Column, Row, Layer);
-  Point2 := ThreeDElementCorner(Column, Row, Layer + 1);
+  Point1 := ThreeDElementCorner(CellID);
+  Point2 := ThreeDElementCorner(CellID.LayerPlus1);
   result.X := (Point1.X + Point2.X) / 2;
   result.Y := (Point1.Y + Point2.Y) / 2;
   result.Z := (Point1.Z + Point2.Z) / 2;
 end;
 
-function TCustomModelGrid.ThreeDRowEdgeCenter(const Column, Row,
-  Layer: integer): TPoint3D;
+function TCustomModelGrid.ThreeDRowEdgeCenter(const CellID: TZeroBasedID): TPoint3D;
 var
   Point1, Point2: TPoint3D;
 begin
-  Point1 := ThreeDElementCorner(Column, Row, Layer);
-  Point2 := ThreeDElementCorner(Column + 1, Row, Layer);
+  Point1 := ThreeDElementCorner(CellID);
+  Point2 := ThreeDElementCorner(CellID.ColumnPlus1);
   result.X := (Point1.X + Point2.X) / 2;
   result.Y := (Point1.Y + Point2.Y) / 2;
   result.Z := (Point1.Z + Point2.Z) / 2;
@@ -8586,10 +8566,10 @@ begin
     + CellElevation[ZeroBasedID(Layer+1, Row, Column)])/2;
 end;
 
-function TCustomModelGrid.NearLayerTop(Column, Row, Layer: integer): real;
+function TCustomModelGrid.NearLayerTop(const CellID: TZeroBasedID): real;
 begin
-  result := ((CellElevation[ZeroBasedID(Layer, Row, Column)] * 19)
-    + CellElevation[ZeroBasedID(Layer+1, Row, Column)])/20;
+  result := ((CellElevation[CellID] * 19)
+    + CellElevation[CellID.LayerPlus1])/20;
 end;
 
 procedure TCustomModelGrid.DrawTopContours(const ZoomBox: TQRbwZoomBox2;

@@ -7510,13 +7510,13 @@ begin
               case EvaluatedAt of
                 eaBlocks:
                   begin
-                    CellLocation3D := Grid.ThreeDElementCenter(
-                      ColIndex, RowIndex, LayerIndex);
+                    CellLocation3D := Grid.ThreeDElementCenter(ZeroBasedID(
+                      LayerIndex, RowIndex, ColIndex));
                   end;
                 eaNodes:
                   begin
-                    CellLocation3D := Grid.ThreeDElementCorner(
-                      ColIndex, RowIndex, LayerIndex);
+                    CellLocation3D := Grid.ThreeDElementCorner(ZeroBasedID(
+                      LayerIndex, RowIndex, ColIndex));
                   end;
               else
                 Assert(False);
@@ -7727,13 +7727,13 @@ begin
               case EvaluatedAt of
                 eaBlocks:
                   begin
-                    CellLocation3D := Grid.ThreeDElementCenter(
-                      ColIndex, RowIndex, LayerIndex);
+                    CellLocation3D := Grid.ThreeDElementCenter(ZeroBasedID(
+                      LayerIndex, RowIndex, ColIndex));
                   end;
                 eaNodes:
                   begin
-                    CellLocation3D := Grid.ThreeDElementCorner(
-                      ColIndex, RowIndex, LayerIndex);
+                    CellLocation3D := Grid.ThreeDElementCorner(ZeroBasedID(
+                      LayerIndex, RowIndex, ColIndex));
                   end;
               else
                 Assert(False);
@@ -12967,7 +12967,7 @@ begin
             eaBlocks:
               begin
                 result := Sqrt(Sqr(Grid.ColumnWidth[TestSeg.Col])
-                  + Sqr(Grid.CellThickness[TestSeg.Col, TestSeg.Row, TestSeg.Layer]));
+                  + Sqr(Grid.CellThickness[ZeroBasedID(TestSeg.Layer, TestSeg.Row, TestSeg.Col)]));
               end;
             eaNodes:
               begin
@@ -12984,7 +12984,7 @@ begin
             eaBlocks:
               begin
                 result := Sqrt(Sqr(Grid.RowWidth[TestSeg.Row])
-                  + Sqr(Grid.CellThickness[TestSeg.Col, TestSeg.Row, TestSeg.Layer]));
+                  + Sqr(Grid.CellThickness[ZeroBasedID(TestSeg.Layer, TestSeg.Row, TestSeg.Col)]));
               end;
             eaNodes:
               begin
@@ -16787,13 +16787,13 @@ begin
             case EvaluatedAt of
               eaBlocks:
                 begin
-                  CellLocation3D := Grid.ThreeDElementCenter(
-                    ColIndex, RowIndex, LayerIndex);
+                  CellLocation3D := Grid.ThreeDElementCenter(ZeroBasedID(
+                    LayerIndex, RowIndex, ColIndex));
                 end;
               eaNodes:
                 begin
-                  CellLocation3D := Grid.ThreeDElementCorner(
-                    ColIndex, RowIndex, LayerIndex);
+                  CellLocation3D := Grid.ThreeDElementCorner(ZeroBasedID(
+                      LayerIndex, RowIndex, ColIndex));
                 end;
             else
               Assert(False);
@@ -26248,13 +26248,13 @@ begin
           case FScreenObject.EvaluatedAt of
             eaBlocks:
               begin
-                CellLocation3D := LocalGrid.ThreeDElementCenter(
-                  ColIndex, 0, LayerIndex);
+                CellLocation3D := LocalGrid.ThreeDElementCenter(ZeroBasedID(
+                  LayerIndex, 0, ColIndex));
               end;
             eaNodes:
               begin
-                CellLocation3D := LocalGrid.ThreeDElementCorner(
-                   ColIndex, 0, LayerIndex);
+                CellLocation3D := LocalGrid.ThreeDElementCorner(ZeroBasedID(
+                  LayerIndex, 0, ColIndex));
               end;
           else
             Assert(False);
@@ -26272,13 +26272,13 @@ begin
                 case FScreenObject.EvaluatedAt of
                   eaBlocks:
                     begin
-                      CellLocation3D := LocalGrid.ThreeDElementCenter(
-                        ColIndex, ElevationIndex, LayerIndex);
+                      CellLocation3D := LocalGrid.ThreeDElementCenter(ZeroBasedID(
+                        LayerIndex, ElevationIndex, ColIndex));
                     end;
                   eaNodes:
                     begin
-                      CellLocation3D := LocalGrid.ThreeDElementCorner(
-                         ColIndex, ElevationIndex, LayerIndex);
+                      CellLocation3D := LocalGrid.ThreeDElementCorner(ZeroBasedID(
+                        LayerIndex, ElevationIndex, ColIndex));
                     end;
                 else
                   Assert(False);
@@ -26690,13 +26690,13 @@ begin
           case FScreenObject.EvaluatedAt of
             eaBlocks:
               begin
-                CellLocation3D := LocalGrid.ThreeDElementCenter(
-                  0, RowIndex, LayerIndex);
+                CellLocation3D := LocalGrid.ThreeDElementCenter(ZeroBasedID(
+                  LayerIndex, RowIndex, 0));
               end;
             eaNodes:
               begin
-                CellLocation3D := LocalGrid.ThreeDElementCorner(
-                  0, RowIndex, LayerIndex);
+                CellLocation3D := LocalGrid.ThreeDElementCorner(ZeroBasedID(
+                  LayerIndex, RowIndex, 0));
               end;
           else
             Assert(False);
@@ -26714,13 +26714,13 @@ begin
                 case FScreenObject.EvaluatedAt of
                   eaBlocks:
                     begin
-                      CellLocation3D := LocalGrid.ThreeDElementCenter(
-                        ElevationIndex, RowIndex, LayerIndex);
+                      CellLocation3D := LocalGrid.ThreeDElementCenter(ZeroBasedID(
+                        LayerIndex, RowIndex, ElevationIndex));
                     end;
                   eaNodes:
                     begin
-                      CellLocation3D := LocalGrid.ThreeDElementCorner(
-                        ElevationIndex, RowIndex, LayerIndex);
+                      CellLocation3D := LocalGrid.ThreeDElementCorner(ZeroBasedID(
+                        LayerIndex, RowIndex, ElevationIndex));
                     end;
                 else
                   Assert(False);
@@ -27128,13 +27128,13 @@ begin
           case FScreenObject.EvaluatedAt of
             eaBlocks:
               begin
-                CellLocation3D := LocalGrid.ThreeDElementCenter(
-                  ColIndex, RowIndex, 0);
+                CellLocation3D := LocalGrid.ThreeDElementCenter(ZeroBasedID(
+                  0, RowIndex, ColIndex));
               end;
             eaNodes:
               begin
-                CellLocation3D := LocalGrid.ThreeDElementCorner(
-                   ColIndex, RowIndex, 0);
+                CellLocation3D := LocalGrid.ThreeDElementCorner(ZeroBasedID(
+                  0, RowIndex, ColIndex));
               end;
           else
             Assert(False);
@@ -27156,13 +27156,13 @@ begin
                 case FScreenObject.EvaluatedAt of
                   eaBlocks:
                     begin
-                      CellLocation3D := LocalGrid.ThreeDElementCenter(
-                        ColIndex, RowIndex, ElevationIndex);
+                      CellLocation3D := LocalGrid.ThreeDElementCenter(ZeroBasedID(
+                        ElevationIndex, RowIndex, ColIndex));
                     end;
                   eaNodes:
                     begin
-                      CellLocation3D := LocalGrid.ThreeDElementCorner(
-                         ColIndex, RowIndex, ElevationIndex);
+                      CellLocation3D := LocalGrid.ThreeDElementCorner(ZeroBasedID(
+                        ElevationIndex, RowIndex, ColIndex));
                     end;
                 else
                   Assert(False);
@@ -29259,14 +29259,14 @@ begin
             case FScreenObject.EvaluatedAt of
               eaBlocks:
                 begin
-                  CellLocation3D := Grid.ThreeDElementCenter(
-                    ColIndex, RowIndex, LayerIndex);
+                  CellLocation3D := Grid.ThreeDElementCenter(ZeroBasedID(
+                    LayerIndex, RowIndex, ColIndex));
                 end;
               eaNodes:
                 begin
                   Assert(False);
-                  CellLocation3D := Grid.ThreeDElementCorner(
-                    ColIndex, RowIndex, LayerIndex);
+                  CellLocation3D := Grid.ThreeDElementCorner(ZeroBasedID(
+                    LayerIndex, RowIndex, ColIndex));
                 end;
             else
               Assert(False);
@@ -36581,9 +36581,9 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex - 1, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex - 1)));
                         Segment.Point2 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                       end;
 
                       ShouldDraw := (LayerIndex > 0) and LocalDelegate.
@@ -36611,9 +36611,9 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex - 1));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex - 1, RowIndex, ColIndex)));
                       end;
 
                       ShouldDraw := not LineDrawn and (ColIndex > 0)
@@ -36646,10 +36646,10 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex - 1, RowIndex,
-                          LayerIndex-1));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex - 1, RowIndex,
+                          ColIndex-1)));
                       end;
 
                       ShouldDraw := not LineDrawn
@@ -36683,10 +36683,10 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex + 1, RowIndex,
-                          LayerIndex - 1));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex - 1, RowIndex,
+                          ColIndex + 1)));
                       end;
 
                       if not LineDrawn then
@@ -36880,9 +36880,9 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex - 1, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex - 1, ColIndex)));
                         Segment.Point2 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                       end;
 
                       ShouldDraw := (LayerIndex > 0) and LocalDelegate.
@@ -36910,9 +36910,9 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex - 1));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex - 1, RowIndex, ColIndex)));
                       end;
 
                       ShouldDraw := not LineDrawn and (RowIndex > 0)
@@ -36945,10 +36945,10 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex - 1,
-                            LayerIndex-1));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex-1, RowIndex - 1,
+                            ColIndex)));
                       end;
 
                       ShouldDraw := not LineDrawn
@@ -36982,10 +36982,10 @@ begin
                         Segment := TLineSegment.Create;
                         SegmentList.Add(Segment);
                         Segment.Point1 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex, LayerIndex));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ColIndex, RowIndex + 1,
-                          LayerIndex - 1));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex - 1, RowIndex + 1,
+                          ColIndex)));
                       end;
 
                       if not LineDrawn then

@@ -626,11 +626,11 @@ begin
                             for ColumnIndex := 0 to Grid.ColumnCount - 1 do
                             begin
                               Location := Grid.
-                                RotatedThreeDElementCenter(
-                                ColumnIndex, RowIndex, 0);
+                                RotatedThreeDElementCenter(ZeroBasedID(
+                                0, RowIndex, ColumnIndex));
                               NonRotatedLocation :=
-                                Grid.ThreeDElementCenter(
-                                ColumnIndex, RowIndex, 0);
+                                Grid.ThreeDElementCenter(ZeroBasedID(
+                                0, RowIndex, ColumnIndex));
                               WriteAGridLine;
                             end;
                           end;
@@ -644,11 +644,11 @@ begin
                               for ColumnIndex := 0 to Grid.ColumnCount - 1 do
                               begin
                                 Location := Grid.
-                                  RotatedThreeDElementCenter(
-                                  ColumnIndex, RowIndex, LayerIndex);
+                                  RotatedThreeDElementCenter(ZeroBasedID(
+                                  LayerIndex, RowIndex, ColumnIndex));
                                 NonRotatedLocation :=
-                                  Grid.ThreeDElementCenter(
-                                  ColumnIndex, RowIndex, LayerIndex);
+                                  Grid.ThreeDElementCenter(ZeroBasedID(
+                                  LayerIndex, RowIndex, ColumnIndex));
                                 WriteAGridLine;
                               end;
                             end;
@@ -668,8 +668,8 @@ begin
                           for ColumnIndex := 0 to Grid.ColumnCount do
                           begin
                             Location := Grid.
-                              RotatedThreeDElementCorner(
-                              ColumnIndex, RowIndex, 0);
+                              RotatedThreeDElementCorner(ZeroBasedID(
+                              0,RowIndex, ColumnIndex));
                             WriteAGridLine;
                           end;
                         end;
@@ -683,8 +683,8 @@ begin
                             for ColumnIndex := 0 to Grid.ColumnCount do
                             begin
                               Location := Grid.
-                                RotatedThreeDElementCorner(
-                                ColumnIndex, RowIndex, LayerIndex);
+                                RotatedThreeDElementCorner(ZeroBasedID(
+                                LayerIndex, RowIndex, ColumnIndex));
                               WriteAGridLine;
                             end;
                           end;

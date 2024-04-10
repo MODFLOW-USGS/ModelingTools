@@ -1129,10 +1129,10 @@ begin
         if FLocalGrid <> nil then
         begin
           case EvaluatedAt of
-            eaBlocks: APoint := FLocalGrid.RotatedThreeDElementCenter(
-              ColIndex, RowIndex, LayerIndex);
-            eaNodes: APoint := FLocalGrid.RotatedThreeDElementCorner(
-              ColIndex, RowIndex, LayerIndex);
+            eaBlocks: APoint := FLocalGrid.RotatedThreeDElementCenter(ZeroBasedID(
+              LayerIndex, RowIndex, ColIndex));
+            eaNodes: APoint := FLocalGrid.RotatedThreeDElementCorner(ZeroBasedID(
+              LayerIndex, RowIndex, ColIndex));
             else Assert(False);
           end;
         end

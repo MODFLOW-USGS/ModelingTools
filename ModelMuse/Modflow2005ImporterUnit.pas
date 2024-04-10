@@ -16188,17 +16188,17 @@ begin
       ScreenObject.ElevationCount := ecTwo;
 
       Layer := FModel.ModflowLayerToDataSetLayer(HighLayer);
-      Elevation := FModel.Grid.ThreeDElementCenter(Column, Row, Layer).Z;
+      Elevation := FModel.Grid.ThreeDElementCenter(ZeroBasedID(Layer, Row, Column)).Z;
       ScreenObject.HigherElevationFormula := FortranFloatToStr(Elevation);
 
       Layer := FModel.ModflowLayerToDataSetLayer(LowLayer);
-      Elevation := FModel.Grid.ThreeDElementCenter(Column, Row, Layer).Z;
+      Elevation := FModel.Grid.ThreeDElementCenter(ZeroBasedID(Layer, Row, Column)).Z;
       ScreenObject.LowerElevationFormula := FortranFloatToStr(Elevation);
     end
     else
     begin
       Layer := FModel.ModflowLayerToDataSetLayer(Obs.Layer);
-      Elevation := FModel.Grid.ThreeDElementCenter(Column, Row, Layer).Z;
+      Elevation := FModel.Grid.ThreeDElementCenter(ZeroBasedID(Layer, Row, Column)).Z;
       ScreenObject.ElevationCount := ecOne;
       ScreenObject.ElevationFormula := FortranFloatToStr(Elevation);
     end;
@@ -18294,8 +18294,8 @@ begin
   begin
     Layer := FModel.ModflowLayerToDataSetLayer
       (DrtBoundary.LayR);
-    ReturnLocation := FModel.ModflowGrid.ThreeDElementCenter(DrtBoundary.ColR-1,
-      DrtBoundary.RowR-1, Layer);
+    ReturnLocation := FModel.ModflowGrid.ThreeDElementCenter(ZeroBasedID(Layer,
+      DrtBoundary.RowR-1, DrtBoundary.ColR-1));
     APoint := FModel.ModflowGrid.TwoDElementCenter(DrtBoundary.ColR-1,
       DrtBoundary.RowR-1);
 
@@ -20718,8 +20718,8 @@ begin
             begin
               Layer := FModel.ModflowLayerToDataSetLayer(
                 Reach.Layer);
-              Point3D := FGrid.ThreeDElementCenter(
-                Reach.Column-1, Reach.Row-1, Layer);
+              Point3D := FGrid.ThreeDElementCenter(ZeroBasedID(
+                Layer, Reach.Row-1, Reach.Column-1));
               Point2D := FGrid.TwoDElementCenter(Reach.Column-1, Reach.Row-1);
               Inc(SfrGageNumber);
               ScreenObject := CreateScreenObject('Imported_SFR_Gage_'
@@ -22737,8 +22737,8 @@ begin
   AScreenObject.LowerElevationFormula := FortranFloatToStr(FirstScreen.Zbotm);
   APoint := FGrid.TwoDElementCenter(FirstScreen.IC - 1, FirstScreen.IR - 1);
   AScreenObject.AddPoint(APoint, True);
-  APoint3D := FGrid.ThreeDElementCenter(FirstScreen.IC - 1,
-    FirstScreen.IR - 1, 0);
+  APoint3D := FGrid.ThreeDElementCenter(ZeroBasedID(0,
+    FirstScreen.IR - 1, FirstScreen.IC - 1));
 
   SpatialItem := nil;
   if AWell.LossType in [mltThiem, mltSkin, mltEquation] then
@@ -22853,8 +22853,8 @@ begin
     APoint := FGrid.TwoDElementCenter(ACell.IC - 1, ACell.IR - 1);
     AScreenObject.AddPoint(APoint, True);
     Layer := FModel.ModflowLayerToDataSetLayer(ACell.IL);
-    APoint3D := FGrid.ThreeDElementCenter(ACell.IC - 1,
-      ACell.IR - 1, Layer);
+    APoint3D := FGrid.ThreeDElementCenter(ZeroBasedID(Layer,
+      ACell.IR - 1, ACell.IC - 1));
     if AWell.FCells.ArrayLength > 1 then
     begin
       ImportedElevations.RealValues[CellIndex] := APoint3D.Z;
@@ -23535,8 +23535,8 @@ begin
     begin
       APoint := FGrid.TwoDElementCenter(AWell.PUMPCOL-1, AWell.PUMPROW-1);
       Layer := FModel.ModflowLayerToDataSetLayer(AWell.PUMPLAY);
-      APoint3D := FGrid.ThreeDElementCenter(AWell.PUMPCOL-1,
-        AWell.PUMPROW-1, Layer);
+      APoint3D := FGrid.ThreeDElementCenter(ZeroBasedID(Layer,
+        AWell.PUMPROW-1, AWell.PUMPCOL-1));
 
       AScreenObject.ModflowMnw2Boundary.PumpCellTarget.TargetType:= ttLocation;
 
@@ -31255,13 +31255,13 @@ begin
       if Boundary.Layer >= 1 then
       begin
         ImportedElevations.RealValues[Index] :=
-          FGrid.NearLayerTop(Boundary.Column - 1, Boundary.Row - 1,
-          FModel.ModflowLayerToDataSetLayer(Boundary.Layer));
+          FGrid.NearLayerTop(ZeroBasedID(FModel.ModflowLayerToDataSetLayer(Boundary.Layer),
+          Boundary.Row - 1, Boundary.Column - 1));
       end
       else
       begin
         ImportedElevations.RealValues[Index] :=
-          FGrid.NearLayerTop(Boundary.Column - 1, Boundary.Row - 1, 0);
+          FGrid.NearLayerTop(ZeroBasedID(0, Boundary.Row - 1, Boundary.Column - 1));
       end;
     end;
   end;
@@ -35340,7 +35340,7 @@ begin
         ALocation := AWell[0][CellIndex];
         Layer := FModel.ModflowLayerToDataSetLayer(ALocation.Layer);
         ImportedElevations.RealValues[CellIndex] :=
-          Grid.ThreeDElementCenter(ALocation.Column-1, ALocation.Row-1, Layer).z;
+          Grid.ThreeDElementCenter(ZeroBasedID(Layer, ALocation.Row-1, ALocation.Column-1)).z;
         AList.Add(ALocation);
       end;
       for CellIndex := 0 to AList.Count - 1 do

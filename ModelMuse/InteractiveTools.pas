@@ -3370,37 +3370,37 @@ begin
         SetLength(Polygon, 4);
         if GetEvalAt = eaBlocks then
         begin
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(C1, 0, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L1, 0, C1));
           Polygon[0].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[0].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(C2, 0, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L1, 0, C2));
           Polygon[1].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[1].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(C2, 0, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L2, 0, C2));
           Polygon[2].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[2].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(C1, 0, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L2, 0, C1));
           Polygon[3].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[3].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
         end
         else
         begin
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(C1, 0, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L1, 0, C1));
           Polygon[0].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[0].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(C2, 0, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L1, 0, C2));
           Polygon[1].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[1].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(C2, 0, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L2, 0, C2));
           Polygon[2].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[2].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(C1, 0, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L2, 0, C1));
           Polygon[3].X := View(Direction).ZoomBox.XCoord(APoint.X);
           Polygon[3].Y := View(Direction).ZoomBox.YCoord(APoint.Z);
         end;
@@ -3516,37 +3516,37 @@ begin
         SetLength(Polygon, 4);
         if GetEvalAt = eaBlocks then
         begin
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(0, R1, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L1, R1, 0));
           Polygon[0].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[0].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(0, R2, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L1, R2, 0));
           Polygon[1].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[1].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(0, R2, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L2, R2, 0));
           Polygon[2].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[2].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(0, R1, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDElementCorner(ZeroBasedID(L2, R1, 0));
           Polygon[3].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[3].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
         end
         else
         begin
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(0, R1, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L1, R1, 0));
           Polygon[0].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[0].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(0, R2, L1);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L1, R2, 0));
           Polygon[1].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[1].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(0, R2, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L2, R2, 0));
           Polygon[2].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[2].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
 
-          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(0, R1, L2);
+          APoint := frmGoPhast.PhastGrid.ThreeDCellCorner(ZeroBasedID(L2, R1, 0));
           Polygon[3].X := View(Direction).ZoomBox.XCoord(APoint.Z);
           Polygon[3].Y := View(Direction).ZoomBox.YCoord(APoint.Y);
         end;

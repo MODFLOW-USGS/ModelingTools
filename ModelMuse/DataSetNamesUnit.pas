@@ -308,8 +308,8 @@ const
   StrMODFLOWGhbHead = 'GHB Boundary Head';
   StrMODFLOWDrainConductance = 'DRN Conductance';
   StrMODFLOWDrainElevation = 'DRN Elevation';
-  StrDrainDDRN = 'Drain DDRN';
-  StrDRNDDRN = 'DRN DDRN';
+  StrDrainDDRN = 'Drain Discharge Scaling';
+  StrDRNDDRN = 'DRN Discharge Scaling';
   StrMODFLOWDrainReturnConductance = 'DRT Return Conductance';
   StrMODFLOWDrainReturnElevation = 'DRT Return Elevation';
   StrMODFLOWDrainReturnFraction = 'DRT Return Fraction';

@@ -335,8 +335,8 @@ var
   XCoordinate, ZCoordinate: double;
   FrontPoint: TPoint3D;
 begin
-  FrontPoint := Grid.ThreeDElementCenter(Column,
-    Grid.SelectedRow, Layer);
+  FrontPoint := Grid.ThreeDElementCenter(ZeroBasedID(Layer,
+    Grid.SelectedRow, Column));
   XCoordinate := FrontPoint.X;
   ZCoordinate := FrontPoint.Z;
   SetFrontPosition(XCoordinate, ZCoordinate);
@@ -347,8 +347,8 @@ var
   YCoordinate, ZCoordinate: double;
   SidePoint: TPoint3D;
 begin
-  SidePoint := Grid.ThreeDElementCenter(
-    Grid.SelectedColumn, Row, Layer);
+  SidePoint := Grid.ThreeDElementCenter(ZeroBasedID(
+    Layer, Row, Grid.SelectedColumn));
   YCoordinate := SidePoint.Y;
   ZCoordinate := SidePoint.Z;
   SetSidePosition(YCoordinate, ZCoordinate);

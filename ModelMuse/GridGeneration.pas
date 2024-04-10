@@ -439,16 +439,17 @@ begin
   YCoordinate := TopPoint.Y;
   SetTopPosition(XCoordinate, YCoordinate);
 
-  FrontPoint := LocalGrid.RotatedThreeDElementCenter(
-    LocalGrid.ColumnCount div 2, 0,
-    LocalGrid.LayerCount div 2);
+  FrontPoint := LocalGrid.RotatedThreeDElementCenter(ZeroBasedID(
+    LocalGrid.LayerCount div 2, 0,
+    LocalGrid.ColumnCount div 2));
   XCoordinate := FrontPoint.X;
   ZCoordinate := FrontPoint.Z;
   SetFrontPosition(XCoordinate, ZCoordinate);
 
-  SidePoint := LocalGrid.RotatedThreeDElementCenter(0,
+  SidePoint := LocalGrid.RotatedThreeDElementCenter(ZeroBasedID(
+    LocalGrid.LayerCount div 2,
     LocalGrid.RowCount div 2,
-    LocalGrid.LayerCount div 2);
+    0));
   YCoordinate := SidePoint.Y;
   ZCoordinate := SidePoint.Z;
   SetSidePosition(YCoordinate, ZCoordinate);

@@ -1481,7 +1481,7 @@ begin
         if (Grid <> nil) and (Grid.LayerCount >= 1)
           and (Grid.RowCount >= 1)  and (Grid.ColumnCount >= 1)  then
         begin
-          Grid.ThreeDElementCenter(0,0,0);
+          Grid.ThreeDElementCenter(ZeroBasedID(0,0,0));
         end;
 
         if not RecalculateCellColors then
@@ -3317,6 +3317,10 @@ procedure TframeView.AdjustScales;
 begin
     // @name adjusts the scales on @link(rulHorizontal) and @link(rulVertical)
     // to match the coordinates in @link(ZoomBox).
+  if csDestroying in ComponentState then
+  begin
+    Exit;
+  end;
   AdjustHorizontalScale(0);
   AdjustVerticalScale(0);
   if (frmGoPhast.PhastModel <> nil)
@@ -3664,7 +3668,7 @@ begin
   if (Grid <> nil) and (Grid.LayerCount > 0)
     and (Grid.RowCount > 0) and (Grid.ColumnCount > 0) then
   begin
-    Grid.ThreeDElementCenter(0,0,0);
+    Grid.ThreeDElementCenter(ZeroBasedID(0,0,0));
   end;
 
   Column := frmGoPhast.PhastModel.SelectedColumn;
@@ -3734,7 +3738,7 @@ begin
   if (Grid <> nil) and (Grid.LayerCount > 0)
     and (Grid.RowCount > 0) and (Grid.ColumnCount > 0) then
   begin
-    Grid.ThreeDElementCenter(0,0,0);
+    Grid.ThreeDElementCenter(ZeroBasedID(0,0,0));
   end;
 
   // Display the value of the current data set (if any).
@@ -3805,7 +3809,7 @@ begin
   if (Grid <> nil) and (Grid.LayerCount > 0)
     and (Grid.RowCount > 0) and (Grid.ColumnCount > 0) then
   begin
-    Grid.ThreeDElementCenter(0,0,0);
+    Grid.ThreeDElementCenter(ZeroBasedID(0,0,0));
   end;
 
   // Display the value of the current data set (if any).
@@ -3927,7 +3931,7 @@ begin
   if (Grid <> nil) and (Grid.LayerCount > 0)
     and (Grid.RowCount > 0) and (Grid.ColumnCount > 0) then
   begin
-    Grid.ThreeDElementCenter(0,0,0);
+    Grid.ThreeDElementCenter(ZeroBasedID(0,0,0));
   end;
   // Display the value of the current data set (if any).
   Mesh := frmGoPhast.PhastModel.Mesh3D;
@@ -4048,7 +4052,7 @@ begin
   if (Grid <> nil) and (Grid.LayerCount > 0)
     and (Grid.RowCount > 0) and (Grid.ColumnCount > 0) then
   begin
-    Grid.ThreeDElementCenter(0,0,0);
+    Grid.ThreeDElementCenter(ZeroBasedID(0,0,0));
   end;
 
   // Display the value of the current data set (if any).
@@ -4145,7 +4149,7 @@ begin
   if (Grid <> nil) and (Grid.LayerCount > 0)
     and (Grid.RowCount > 0) and (Grid.ColumnCount > 0) then
   begin
-    Grid.ThreeDElementCenter(0,0,0);
+    Grid.ThreeDElementCenter(ZeroBasedID(0,0,0));
   end;
 
   Layer := frmGoPhast.PhastModel.SelectedModel.SelectedLayer;

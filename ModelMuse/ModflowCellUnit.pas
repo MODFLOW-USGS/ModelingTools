@@ -27,6 +27,7 @@ type
     Section: integer;
     class operator Equal(ACell: TCellLocation; BCell: TCellLocation): boolean;
     class operator NotEqual(ACell: TCellLocation; BCell: TCellLocation): boolean;
+    function ZeroBasedID: TZeroBasedID;
   end;
 
   PCellLocation = ^TCellLocation;
@@ -704,6 +705,13 @@ end;
 class operator TCellLocation.NotEqual(ACell, BCell: TCellLocation): boolean;
 begin
   result := not (ACell = BCell);
+end;
+
+function TCellLocation.ZeroBasedID: TZeroBasedID;
+begin
+  result.Column := Column;
+  result.Row := Row;
+  result.Layer := Layer;
 end;
 
 end.

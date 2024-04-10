@@ -375,12 +375,12 @@ begin
                 if Assigned(DisvGrid) then
                 begin
                   DepthFractions.Add(DepthFraction
-                    * DisvGrid.CellThickness(ACell.Layer, ACell.Row, ACell.Column));
+                    * DisvGrid.CellThickness(ACell.ZeroBasedID));
                 end
                 else
                 begin
                   DepthFractions.Add(DepthFraction
-                    * Grid.LayerThickness(ACell.Layer, ACell.Row, ACell.Column));
+                    * Grid.LayerThickness(ACell.ZeroBasedID));
                 end;
               end;
             end;
@@ -409,12 +409,12 @@ begin
               if Assigned(DisvGrid) then
               begin
                 DepthFractions.Add(DepthFraction
-                  * DisvGrid.CellThickness(ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column));
+                  * DisvGrid.CellThickness(ACellLocation.ZeroBasedID));
               end
               else
               begin
                 DepthFractions.Add(DepthFraction
-                  * Grid.LayerThickness(ACellLocation.Layer, ACellLocation.Row, ACellLocation.Column));
+                  * Grid.LayerThickness(ACellLocation.ZeroBasedID));
               end;
             end;
           end;

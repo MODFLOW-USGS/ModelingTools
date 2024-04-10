@@ -10209,12 +10209,14 @@ const
 //                with slightly different values to ensure that MNW2 wells are
 //                not connected to the wrong layers. This change compensates
 //                for a bug in MODFLOW-2005.
+//    '5.2.0.4'  Fixed bug that can cause an access violation when shutting
+//                down ModelMuse.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.3';
+  IIModelVersion = '5.2.0.4';
 
 function IModelVersion: string;
 begin
@@ -35660,9 +35662,9 @@ begin
     else
     begin
       result.RotatedLocation := Grid.RotatedThreeDElementCenter
-        (Column,Row,Layer);
+        (ZeroBasedID(Layer,Row,Column));
       result.UnRotatedLocation := Grid.ThreeDElementCenter
-        (Column,Row,Layer);
+        (ZeroBasedID(Layer,Row,Column));
     end;
   end
   else

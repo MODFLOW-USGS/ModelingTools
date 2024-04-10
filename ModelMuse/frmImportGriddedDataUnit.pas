@@ -1229,11 +1229,11 @@ begin
       case DataSet.EvaluatedAt of
         eaBlocks:
           begin
-            APoint := AModel.Grid.ThreeDElementCenter(Column, Row, Layer);
+            APoint := AModel.Grid.ThreeDElementCenter(ZeroBasedID(Layer, Row, Column));
           end;
         eaNodes:
           begin
-            APoint := AModel.Grid.ThreeDElementCorner(Column, Row, Layer);
+            APoint := AModel.Grid.ThreeDElementCorner(ZeroBasedID(Layer, Row, Column));
           end;
       else
         begin

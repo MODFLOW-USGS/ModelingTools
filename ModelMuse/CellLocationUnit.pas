@@ -164,6 +164,7 @@ type
     property SutraZ: Double read FSutraZ write FSutraZ;
     // If any new properties are added, be sure to update Assign too.
     property ScreenObject: IScreenObject read FScreenObject;
+    function ZeroBasedID: TZeroBasedID;
   end;
 
 implementation
@@ -430,5 +431,12 @@ begin
 end;
 
 
+
+function TCellAssignment.ZeroBasedID: TZeroBasedID;
+begin
+  result.Column := Column;
+  result.Row := Row;
+  result.Layer := Layer;
+end;
 
 end.

@@ -7657,8 +7657,8 @@ resourcestring
   StrHasSalinityDemandsS = 'FMP4 Crop Has Salinity Demand %s';
   StrFMP4CropHasSalini = 'FMP4 Crop_Has_Salinity_Demand';
   StrMAWFluidDensity = 'MAW Fluid Density';
-  StrDrainDDRN = 'Drain DDRN';
-  StrDRNDDRN = 'DRN DDRN';
+//  StrDrainDDRN = 'Drain Discharge Scaling';
+//  StrDRNDDRN = 'DRN Discharge Scaling';
 
 const
   KDensity = 'Density';

@@ -574,7 +574,7 @@ begin
               begin
                 for ColIndex := 0 to Grid.ColumnCount - 1 do
                 begin
-                  APoint3D := Grid.ThreeDElementCenter(ColIndex, 0, LayerIndex);
+                  APoint3D := Grid.ThreeDElementCenter(ZeroBasedID(LayerIndex, 0, ColIndex));
                   Points[PointIndex].x := APoint3D.x;
                   Points[PointIndex].y := APoint3D.z;
                   Inc(PointIndex);
@@ -588,7 +588,7 @@ begin
               begin
                 for RowIndex := 0 to Grid.RowCount - 1 do
                 begin
-                  APoint3D := Grid.ThreeDElementCenter(0, RowIndex, LayerIndex);
+                  APoint3D := Grid.ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, 0));
                   Points[PointIndex].x := APoint3D.y;
                   Points[PointIndex].y := APoint3D.z;
                   Inc(PointIndex);
@@ -622,7 +622,7 @@ begin
               begin
                 for ColIndex := 0 to Grid.ColumnCount do
                 begin
-                  APoint3D := Grid.ThreeDElementCorner(ColIndex, 0, LayerIndex);
+                  APoint3D := Grid.ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColIndex));
                   Points[PointIndex].x := APoint3D.x;
                   Points[PointIndex].y := APoint3D.z;
                   Inc(PointIndex);
@@ -636,7 +636,7 @@ begin
               begin
                 for RowIndex := 0 to Grid.RowCount do
                 begin
-                  APoint3D := Grid.ThreeDElementCorner(0, RowIndex, LayerIndex);
+                  APoint3D := Grid.ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex, 0));
                   Points[PointIndex].x := APoint3D.y;
                   Points[PointIndex].y := APoint3D.z;
                   Inc(PointIndex);

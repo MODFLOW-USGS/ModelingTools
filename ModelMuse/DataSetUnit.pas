@@ -2841,7 +2841,7 @@ begin
                               for ColIndex := 0 to ColLimit do
                               begin
                                 CellCenter3D := LocalModel.Grid.ThreeDElementCenter(
-                                  ColIndex, 0, LayerIndex);
+                                  ZeroBasedID(LayerIndex, 0, ColIndex));
 
                                 UpdateGlobalLocations(ColIndex, 0,
                                   LayerIndex, EvaluatedAt, FModel as TCustomModel);
@@ -2908,7 +2908,7 @@ begin
                               for ColIndex := 0 to ColLimit do
                               begin
                                 CellCorner3D := LocalModel.Grid.ThreeDElementCorner(
-                                  ColIndex, 0, LayerIndex);
+                                  ZeroBasedID(LayerIndex, 0, ColIndex));
 
                                 UpdateGlobalLocations(ColIndex, 0,
                                   LayerIndex, EvaluatedAt, FModel as TCustomModel);
@@ -2985,7 +2985,7 @@ begin
                               for RowIndex := 0 to RowLimit do
                               begin
                                 CellCenter3D := LocalModel.Grid.ThreeDElementCenter(
-                                  0, RowIndex, LayerIndex);
+                                  ZeroBasedID(LayerIndex, RowIndex, 0));
 
                                 UpdateGlobalLocations(0,
                                   RowIndex, LayerIndex, EvaluatedAt, FModel as TCustomModel);
@@ -3053,7 +3053,7 @@ begin
                               begin
                                 CellCorner3D :=
                                   LocalModel.Grid.ThreeDElementCorner(
-                                  0, RowIndex, LayerIndex);
+                                  ZeroBasedID(LayerIndex, RowIndex, 0));
 
                                 UpdateGlobalLocations(0,
                                   RowIndex, LayerIndex, EvaluatedAt, FModel as TCustomModel);

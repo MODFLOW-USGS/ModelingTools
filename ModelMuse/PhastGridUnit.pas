@@ -48,7 +48,7 @@ type
     function GetCellElevation(const CellID: TZeroBasedID): real;
       override;
     // @name gets the vertical thickness of a cells.
-    function GetCellThickness(const Column, Row, Layer: integer): real;
+    function GetCellThickness(const CellID: TZeroBasedID): real;
       override;
     // @name gets the elevation of a layer boundary.
     function GetLayerElevation(const Layer: integer): real;
@@ -58,7 +58,7 @@ type
     // @name gets the thickness of a layer.
     function GetLayerThickness(const Layer: integer): real;
     // @name sets the thickness of a cell.
-    procedure SetCellThickness(const Column, Row, Layer: integer;
+    procedure SetCellThickness(const CellID: TZeroBasedID;
       const Value: real); override;
     // @name sets the number of layers in the grid.  There are
     // @link(AbstractGridUnit.TCustomModelGrid.LayerCount) + 1 layer boundaries
@@ -204,10 +204,9 @@ begin
   result := GetLayerElevation(CellID.Layer);
 end;
 
-function TPhastGrid.GetCellThickness(const Column, Row,
-  Layer: integer): real;
+function TPhastGrid.GetCellThickness(const CellID: TZeroBasedID): real;
 begin
-  result := GetLayerThickness(Layer);
+  result := GetLayerThickness(CellID.Layer);
 end;
 
 function TPhastGrid.GetLayerElevation(const Layer: integer): real;
@@ -262,12 +261,12 @@ begin
   end;
 end;
 
-procedure TPhastGrid.SetCellThickness(const Column, Row, Layer: integer;
+procedure TPhastGrid.SetCellThickness(const CellID: TZeroBasedID;
   const Value: real);
 begin
-  if LayerThickness[Layer] <> Value then
+  if LayerThickness[CellID.Layer] <> Value then
   begin
-    LayerThickness[Layer] := Value;
+    LayerThickness[CellID.Layer] := Value;
     FNeedToRecalculateFrontCellColors := True;
     FNeedToRecalculateSideCellColors := True;
     NeedToRecalculate3DCellColors := True;
@@ -600,11 +599,11 @@ var
         begin
           Dec(Lay);
         end;
-        result := ThreeDElementCorner(Col, Row, Lay);
+        result := ThreeDElementCorner(ZeroBasedID(Lay, Row, Col));
       end
       else
       begin
-        result := ThreeDLayerEdgeCenter(Col, Row - 1, Lay - 1);
+        result := ThreeDLayerEdgeCenter(ZeroBasedID(Lay - 1, Row - 1, Col));
       end;
     end
     else
@@ -615,11 +614,11 @@ var
         begin
           Dec(Lay);
         end;
-        result := ThreeDRowEdgeCenter(Col - 1, Row - 1, Lay);
+        result := ThreeDRowEdgeCenter(ZeroBasedID(Lay, Row - 1, Col - 1));
       end
       else
       begin
-        result := ThreeDElementCenter(Col - 1, Row - 1, Lay - 1);
+        result := ThreeDElementCenter(ZeroBasedID(Lay - 1, Row - 1, Col - 1));
       end;
     end;
   end;
@@ -707,12 +706,12 @@ begin
                   case FrontDataSet.EvaluatedAt of
                     eaBlocks:
                       begin
-                        Point1 := ThreeDElementCorner(ColumnIndex, 0, PriorLayer);
-                        Point2 := ThreeDElementCorner(ColumnIndex + 1, 0,
-                          PriorLayer);
-                        Point3 := ThreeDElementCorner(ColumnIndex + 1, 0,
-                          LayerIndex);
-                        Point4 := ThreeDElementCorner(ColumnIndex, 0, LayerIndex);
+                        Point1 := ThreeDElementCorner(ZeroBasedID(PriorLayer, 0, ColumnIndex));
+                        Point2 := ThreeDElementCorner(ZeroBasedID(PriorLayer, 0,
+                          ColumnIndex + 1));
+                        Point3 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0,
+                          ColumnIndex + 1));
+                        Point4 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColumnIndex));
                       end;
                     eaNodes:
                       begin
@@ -753,10 +752,10 @@ begin
               case FrontDataSet.EvaluatedAt of
                 eaBlocks:
                   begin
-                    Point1 := ThreeDElementCorner(ColumnIndex, 0, PriorLayer);
-                    Point2 := ThreeDElementCorner(ColumnIndex + 1, 0, PriorLayer);
-                    Point3 := ThreeDElementCorner(ColumnIndex + 1, 0, LayerCount);
-                    Point4 := ThreeDElementCorner(ColumnIndex, 0, LayerCount);
+                    Point1 := ThreeDElementCorner(ZeroBasedID(PriorLayer, 0, ColumnIndex));
+                    Point2 := ThreeDElementCorner(ZeroBasedID(PriorLayer, 0, ColumnIndex + 1));
+                    Point3 := ThreeDElementCorner(ZeroBasedID(LayerCount, 0, ColumnIndex + 1));
+                    Point4 := ThreeDElementCorner(ZeroBasedID(LayerCount, 0, ColumnIndex));
                   end;
                 eaNodes:
                   begin
@@ -819,11 +818,11 @@ var
         begin
           Dec(Lay);
         end;
-        result := ThreeDElementCorner(Col, Row, Lay);
+        result := ThreeDElementCorner(ZeroBasedID(Lay, Row, Col));
       end
       else
       begin
-        result := ThreeDLayerEdgeCenter(Col, Row, Lay - 1);
+        result := ThreeDLayerEdgeCenter(ZeroBasedID(Lay - 1, Row, Col));
       end;
     end
     else
@@ -834,11 +833,11 @@ var
         begin
           Dec(Lay);
         end;
-        result := ThreeDColumnEdgeCenter(Col, Row - 1, Lay);
+        result := ThreeDColumnEdgeCenter(ZeroBasedID(Lay, Row - 1, Col));
       end
       else
       begin
-        result := ThreeDElementCenter(Col, Row - 1, Lay - 1);
+        result := ThreeDElementCenter(ZeroBasedID(Lay - 1, Row - 1, Col));
       end;
     end;
   end;
@@ -915,10 +914,10 @@ begin
                   case SideDataSet.EvaluatedAt of
                     eaBlocks:
                       begin
-                        Point1 := ThreeDElementCorner(0, RowIndex, PriorLayer);
-                        Point2 := ThreeDElementCorner(0, RowIndex + 1, PriorLayer);
-                        Point3 := ThreeDElementCorner(0, RowIndex + 1, LayerIndex);
-                        Point4 := ThreeDElementCorner(0, RowIndex, LayerIndex);
+                        Point1 := ThreeDElementCorner(ZeroBasedID(PriorLayer, RowIndex, 0));
+                        Point2 := ThreeDElementCorner(ZeroBasedID(PriorLayer, RowIndex + 1, 0));
+                        Point3 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex + 1, 0));
+                        Point4 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex, 0));
                       end;
                     eaNodes:
                       begin
@@ -956,10 +955,10 @@ begin
               case SideDataSet.EvaluatedAt of
                 eaBlocks:
                   begin
-                    Point1 := ThreeDElementCorner(0, RowIndex, PriorLayer);
-                    Point2 := ThreeDElementCorner(0, RowIndex + 1, PriorLayer);
-                    Point3 := ThreeDElementCorner(0, RowIndex + 1, LayerCount);
-                    Point4 := ThreeDElementCorner(0, RowIndex, LayerCount);
+                    Point1 := ThreeDElementCorner(ZeroBasedID(PriorLayer, RowIndex, 0));
+                    Point2 := ThreeDElementCorner(ZeroBasedID(PriorLayer, RowIndex + 1, 0));
+                    Point3 := ThreeDElementCorner(ZeroBasedID(LayerCount, RowIndex + 1, 0));
+                    Point4 := ThreeDElementCorner(ZeroBasedID(LayerCount, RowIndex, 0));
                   end;
                 eaNodes:
                   begin
@@ -1274,16 +1273,16 @@ var
   function IsActive: boolean;
   begin
     result := ((RowIndex < RowCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       or ((RowIndex > 0)
-      and IsElementActive(LayerIndex,RowIndex-1, Column))
+      and IsElementActive(ZeroBasedID(LayerIndex,RowIndex-1, Column)))
   end;
   function IsEdge: boolean;
   begin
     result := ((RowIndex < RowCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       <> ((RowIndex > 0)
-      and IsElementActive(LayerIndex,RowIndex-1, Column));
+      and IsElementActive(ZeroBasedID(LayerIndex,RowIndex-1, Column)));
   end;
 begin
   SetLocalEvalAt(vdSide, LocalEvalAt);
@@ -1301,8 +1300,8 @@ begin
     case GridLineDrawingChoice of
       gldcAll: 
         begin
-          Point1 := ThreeDElementCorner(0, RowIndex, 0);
-          Point2 := ThreeDElementCorner(0, RowIndex, LayerCount);
+          Point1 := ThreeDElementCorner(ZeroBasedID(0, RowIndex, 0));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerCount, RowIndex, 0));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
             Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1314,8 +1313,8 @@ begin
           begin
             Continue;
           end;
-          Point1 := ThreeDElementCorner(0, RowIndex, 0);
-          Point2 := ThreeDElementCorner(0, RowIndex, LayerCount);
+          Point1 := ThreeDElementCorner(ZeroBasedID(0, RowIndex, 0));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerCount, RowIndex, 0));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
             Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1339,8 +1338,8 @@ begin
               begin
                 LocalLineWidth := LineWidth;
               end;
-              Point1 := ThreeDElementCorner(Column, RowIndex, LayerIndex);
-              Point2 := ThreeDElementCorner(Column, RowIndex, LayerIndex+1);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex, Column));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex+1, RowIndex, Column));
               DrawBigPolyline32(BitMap, LineColor, LocalLineWidth,
                 [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
                 Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1367,8 +1366,8 @@ begin
             if ((LineColor <> clBlack32) and IsActive)
               or IsEdge then
             begin
-              Point1 := ThreeDElementCorner(Column, RowIndex, LayerIndex);
-              Point2 := ThreeDElementCorner(Column, RowIndex, LayerIndex+1);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex, Column));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex+1, RowIndex, Column));
               DrawBigPolyline32(BitMap, LineColor, LineWidth,
                 [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
                 Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1395,16 +1394,16 @@ var
   function IsActive: boolean;
   begin
     result := ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       or ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,RowIndex, Column))
+      and IsElementActive(ZeroBasedID(LayerIndex-1,RowIndex, Column)))
   end;
   function IsEdge: boolean;
   begin
     result :=  ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       <> ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,RowIndex, Column));
+      and IsElementActive(ZeroBasedID(LayerIndex-1,RowIndex, Column)));
   end;
 begin
   SetLocalEvalAt(vdSide, LocalEvalAt);
@@ -1422,8 +1421,8 @@ begin
     case GridLineDrawingChoice of
       gldcAll: 
         begin
-          Point1 := ThreeDElementCorner(0, 0, LayerIndex);
-          Point2 := ThreeDElementCorner(0, RowCount, LayerIndex);
+          Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, 0));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowCount, 0));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
             Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1435,8 +1434,8 @@ begin
           begin
             Continue;
           end;
-          Point1 := ThreeDElementCorner(0, 0, LayerIndex);
-          Point2 := ThreeDElementCorner(0, RowCount, LayerIndex);
+          Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, 0));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowCount, 0));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
             Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1460,8 +1459,8 @@ begin
               begin
                 LocalLineWidth := LineWidth;
               end;
-              Point1 := ThreeDElementCorner(Column, RowIndex, LayerIndex);
-              Point2 := ThreeDElementCorner(Column, RowIndex+1, LayerIndex);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex, Column));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex+1, Column));
               DrawBigPolyline32(BitMap, LineColor, LocalLineWidth,
                 [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
                 Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1488,8 +1487,8 @@ begin
             if ((LineColor <> clBlack32) and IsActive)
               or IsEdge then
             begin
-              Point1 := ThreeDElementCorner(Column, RowIndex, LayerIndex);
-              Point2 := ThreeDElementCorner(Column, RowIndex+1, LayerIndex);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex, Column));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, RowIndex+1, Column));
               DrawBigPolyline32(BitMap, LineColor, LineWidth,
                 [Point(ZoomBox.XCoord(Point1.Z), ZoomBox.YCoord(Point1.Y)),
                 Point(ZoomBox.XCoord(Point2.Z), ZoomBox.YCoord(Point2.Y))], True);
@@ -1516,16 +1515,16 @@ var
   function IsActive: boolean;
   begin
     result := ((ColumnIndex < ColumnCount) and
-      IsElementActive(LayerIndex,Row, ColumnIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColumnIndex)))
       or ((ColumnIndex > 0)
-      and IsElementActive(LayerIndex,Row, ColumnIndex-1))
+      and IsElementActive(ZeroBasedID(LayerIndex,Row, ColumnIndex-1)))
   end;
   function IsEdge: boolean;
   begin
     result := ((ColumnIndex < ColumnCount) and
-      IsElementActive(LayerIndex,Row, ColumnIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColumnIndex)))
       <> ((ColumnIndex > 0)
-      and IsElementActive(LayerIndex,Row, ColumnIndex-1));
+      and IsElementActive(ZeroBasedID(LayerIndex,Row, ColumnIndex-1)));
   end;
 begin
   SetLocalEvalAt(vdFront, LocalEvalAt);
@@ -1543,8 +1542,8 @@ begin
     case GridLineDrawingChoice of
       gldcAll: 
         begin
-          Point1 := ThreeDElementCorner(ColumnIndex, 0, 0);
-          Point2 := ThreeDElementCorner(ColumnIndex, 0, LayerCount);
+          Point1 := ThreeDElementCorner(ZeroBasedID(0, 0, ColumnIndex));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerCount, 0, ColumnIndex));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
             Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);
@@ -1557,8 +1556,8 @@ begin
           begin
             Continue;
           end;
-          Point1 := ThreeDElementCorner(ColumnIndex, 0, 0);
-          Point2 := ThreeDElementCorner(ColumnIndex, 0, LayerCount);
+          Point1 := ThreeDElementCorner(ZeroBasedID(0, 0, ColumnIndex));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerCount, 0, ColumnIndex));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
             Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);
@@ -1582,8 +1581,8 @@ begin
               begin
                 LocalLineWidth := LineWidth;
               end;
-              Point1 := ThreeDElementCorner(ColumnIndex, 0, LayerIndex);
-              Point2 := ThreeDElementCorner(ColumnIndex, 0, LayerIndex+1);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColumnIndex));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex+1, 0, ColumnIndex));
               DrawBigPolyline32(BitMap, LineColor, LocalLineWidth,
                 [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
                 Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);
@@ -1610,8 +1609,8 @@ begin
             if ((LineColor <> clBlack32) and IsActive)
               or IsEdge then
             begin
-              Point1 := ThreeDElementCorner(ColumnIndex, 0, LayerIndex);
-              Point2 := ThreeDElementCorner(ColumnIndex, 0, LayerIndex+1);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColumnIndex));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex+1, 0, ColumnIndex));
               DrawBigPolyline32(BitMap, LineColor, LineWidth,
                 [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
                 Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);
@@ -1638,16 +1637,16 @@ var
   function IsActive: boolean;
   begin
     result := ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,Row, ColIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex)))
       or ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,Row, ColIndex))
+      and IsElementActive(ZeroBasedID(LayerIndex-1,Row, ColIndex)))
   end;
   function IsEdge: boolean;
   begin
     result := ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,Row, ColIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex)))
       <> ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,Row, ColIndex))
+      and IsElementActive(ZeroBasedID(LayerIndex-1,Row, ColIndex)))
   end;
 begin
   SetLocalEvalAt(vdFront, LocalEvalAt);
@@ -1665,8 +1664,8 @@ begin
     case GridLineDrawingChoice of
       gldcAll:
         begin
-          Point1 := ThreeDElementCorner(0, 0, LayerIndex);
-          Point2 := ThreeDElementCorner(ColumnCount, 0, LayerIndex);
+          Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, 0));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColumnCount));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
             Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);
@@ -1678,8 +1677,8 @@ begin
           begin
             Continue;
           end;
-          Point1 := ThreeDElementCorner(0, 0, LayerIndex);
-          Point2 := ThreeDElementCorner(ColumnCount, 0, LayerIndex);
+          Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, 0));
+          Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColumnCount));
           DrawBigPolyline32(BitMap, LineColor, LineWidth,
             [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
             Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);
@@ -1703,8 +1702,8 @@ begin
               begin
                 LocalLineWidth := LineWidth;
               end;
-              Point1 := ThreeDElementCorner(ColIndex, 0, LayerIndex);
-              Point2 := ThreeDElementCorner(ColIndex+1, 0, LayerIndex);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColIndex));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColIndex+1));
               DrawBigPolyline32(BitMap, LineColor, LocalLineWidth,
                 [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
                 Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);
@@ -1731,8 +1730,8 @@ begin
             if ((LineColor <> clBlack32) and IsActive)
               or IsEdge then
             begin
-              Point1 := ThreeDElementCorner(ColIndex, 0, LayerIndex);
-              Point2 := ThreeDElementCorner(ColIndex+1, 0, LayerIndex);
+              Point1 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColIndex));
+              Point2 := ThreeDElementCorner(ZeroBasedID(LayerIndex, 0, ColIndex+1));
               DrawBigPolyline32(BitMap, LineColor, LineWidth,
                 [Point(ZoomBox.XCoord(Point1.X), ZoomBox.YCoord(Point1.Z)),
                 Point(ZoomBox.XCoord(Point2.X), ZoomBox.YCoord(Point2.Z))], True);

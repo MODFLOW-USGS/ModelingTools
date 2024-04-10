@@ -2387,11 +2387,11 @@ begin
               CellList.Clear;
               if Grid = nil then
               begin
-                DisvGrid.GetHorizontalNeighbors(ACell.Layer, ACell.Row, ACell.Column, CellList);
+                DisvGrid.GetHorizontalNeighbors(ACell.ZeroBasedID, CellList);
               end
               else
               begin
-                Grid.GetHorizontalNeighbors(ACell.Layer, ACell.Row, ACell.Column, CellList);
+                Grid.GetHorizontalNeighbors(ACell.ZeroBasedID, CellList);
               end;
               for NeighborIndex := 0 to CellList.Count - 1 do
               begin

@@ -18,14 +18,14 @@ type
       out Elevations: TThreeDRealArray); override;
     function GetCellElevation(const CellID: TZeroBasedID): real;
       override;
-    function GetCellThickness(const Column, Row, Layer: integer): real;
+    function GetCellThickness(const CellID: TZeroBasedID): real;
       override;
     function GetTwoDCellElevations(const Col, Row: integer): TOneDRealArray;
       override;
     procedure SetCellElevation(const CellID: TZeroBasedID;
       const Value: real); override;
     // See @link(CellThickness).
-    procedure SetCellThickness(const Column, Row, Layer: integer;
+    procedure SetCellThickness(const CellID: TZeroBasedID;
       const Value: real); override;
     procedure SetLayerCount(const Value: integer); override;
   public
@@ -97,8 +97,7 @@ begin
   result := 0;
 end;
 
-function TFootprintGrid.GetCellThickness(const Column, Row,
-  Layer: integer): real;
+function TFootprintGrid.GetCellThickness(const CellID: TZeroBasedID): real;
 begin
   result := 0;
 end;
@@ -132,7 +131,7 @@ begin
 
 end;
 
-procedure TFootprintGrid.SetCellThickness(const Column, Row, Layer: integer;
+procedure TFootprintGrid.SetCellThickness(const CellID: TZeroBasedID;
   const Value: real);
 begin
   // do nothing

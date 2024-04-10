@@ -5568,7 +5568,7 @@ begin
           Assert(DataArray <> nil);
           DataArray.Initialize;
           Value := DataArray.RealData[Layer, Row, Column];
-          result := Value / Model.ModflowGrid.LayerThickness(Layer, Row, Column);
+          result := Value / Model.ModflowGrid.LayerThickness(ZeroBasedID(Layer, Row, Column));
         end;
       1, 3:
         begin

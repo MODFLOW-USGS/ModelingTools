@@ -807,14 +807,14 @@ begin
   begin
     SetLength(Locations, 5);
     SetLength(Elevations, 5);
-    Point3D :=  Grid.RotatedThreeDElementCenter(Column, Row, Layer);
+    Point3D :=  Grid.RotatedThreeDElementCenter(ZeroBasedID(Layer, Row, Column));
     Locations[0].X := Point3D.X;
     Locations[0].Y := Point3D.Y;
     Elevations[0] := Point3D.Z;
     Count := 1;
     if (Column > 0) and IsActive(Column-1, Row, Layer) then
     begin
-      Point3D :=  Grid.RotatedThreeDElementCenter(Column-1, Row, Layer);
+      Point3D :=  Grid.RotatedThreeDElementCenter(ZeroBasedID(Layer, Row, Column-1));
       Locations[Count].X := Point3D.X;
       Locations[Count].Y := Point3D.Y;
       Elevations[Count] := Point3D.Z;
@@ -822,7 +822,7 @@ begin
     end;
     if (Row > 0) and IsActive(Column, Row-1, Layer) then
     begin
-      Point3D :=  Grid.RotatedThreeDElementCenter(Column, Row-1, Layer);
+      Point3D :=  Grid.RotatedThreeDElementCenter(ZeroBasedID(Layer, Row-1, Column));
       Locations[Count].X := Point3D.X;
       Locations[Count].Y := Point3D.Y;
       Elevations[Count] := Point3D.Z;
@@ -830,7 +830,7 @@ begin
     end;
     if (Column < Grid.ColumnCount -1) and IsActive(Column+1, Row, Layer) then
     begin
-      Point3D :=  Grid.RotatedThreeDElementCenter(Column+1, Row, Layer);
+      Point3D :=  Grid.RotatedThreeDElementCenter(ZeroBasedID(Layer, Row, Column+1));
       Locations[Count].X := Point3D.X;
       Locations[Count].Y := Point3D.Y;
       Elevations[Count] := Point3D.Z;
@@ -838,7 +838,7 @@ begin
     end;
     if (Row < Grid.RowCount -1) and IsActive(Column, Row+1, Layer) then
     begin
-      Point3D :=  Grid.RotatedThreeDElementCenter(Column, Row+1, Layer);
+      Point3D :=  Grid.RotatedThreeDElementCenter(ZeroBasedID(Layer, Row+1, Column));
       Locations[Count].X := Point3D.X;
       Locations[Count].Y := Point3D.Y;
       Elevations[Count] := Point3D.Z;
@@ -1070,7 +1070,7 @@ begin
             end
             else
             begin
-              CC3D := LocalModel.Grid.ThreeDElementCenter(Col, Row, Layer);
+              CC3D := LocalModel.Grid.ThreeDElementCenter(ZeroBasedID(Layer, Row, Col));
               GlobalZ := CC3D.Z;
               GlobalXPrime := CC3D.X;
               GlobalYPrime := CC3D.Y;
@@ -1103,7 +1103,7 @@ begin
             GlobalX := CC2D.X;
             GlobalY := CC2D.Y;
 
-            CC3D := LocalModel.Grid.ThreeDElementCorner(Col, Row, Layer);
+            CC3D := LocalModel.Grid.ThreeDElementCorner(ZeroBasedID(Layer, Row, Col));
             GlobalZ := CC3D.Z;
             GlobalXPrime := CC3D.X;
             GlobalYPrime := CC3D.Y;
@@ -4549,7 +4549,7 @@ begin
         end
         else
         begin
-          Result := LocalModel.ModflowGrid.CellThickness[Col, Row, Lay];
+          Result := LocalModel.ModflowGrid.CellThickness[ZeroBasedID(Lay, Row, Col)];
         end;
       end;
     msModflow2015:
@@ -4580,7 +4580,7 @@ begin
           end
           else
           begin
-            Result := LocalModel.ModflowGrid.CellThickness[Col, Row, Lay];
+            Result := LocalModel.ModflowGrid.CellThickness[ZeroBasedID(Lay, Row, Col)];
           end;
         end;
       end;
@@ -5454,8 +5454,8 @@ begin
           end;
         eaNodes:
           begin
-            TopElevation := Min(Grid.ThreeDCellCorner(Column, Row, Layer+1).Z, TopElevation);
-            BottomElevation := Max(Grid.ThreeDCellCorner(Column, Row, Layer).Z, BottomElevation);
+            TopElevation := Min(Grid.ThreeDCellCorner(ZeroBasedID(Layer+1, Row, Column)).Z, TopElevation);
+            BottomElevation := Max(Grid.ThreeDCellCorner(ZeroBasedID(Layer, Row, Column)).Z, BottomElevation);
           end;
       end;
 

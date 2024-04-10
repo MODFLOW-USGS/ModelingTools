@@ -90,13 +90,13 @@ type
     function GetCellElevation(const CellID: TZeroBasedID): real;
       override;
     // See @link(CellThickness).
-    function GetCellThickness(const Column, Row, Layer: integer): real;
+    function GetCellThickness(const CellID: TZeroBasedID): real;
       override;
     // See @link(CellElevation).
     procedure SetCellElevation(const CellID: TZeroBasedID;
       const Value: real); override;
     // See @link(CellThickness).
-    procedure SetCellThickness(const Column, Row, Layer: integer;
+    procedure SetCellThickness(const CellID: TZeroBasedID;
       const Value: real); override;
     function GetTwoDCellElevations(const Col, Row: integer): TOneDRealArray; override;
     procedure SetFrontContourDataSet(const Value: TDataArray); override;
@@ -123,13 +123,13 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     constructor Create(Model: TBaseModel);
-    function ThreeDElementCorner(const Column, Row, Layer: integer):
+    function ThreeDElementCorner(const CellID: TZeroBasedID):
       TPoint3D; override;
     // @name is the elevations of the top and bottom of the model layers
     // @name is accessed as @name[Col, Row, Layer].
     property LayerElevations: TThreeDRealArray read GetLayerElevations
       write SetLayerElevations;
-    function LayerThickness(Layer, Row, Column: Integer): double;
+    function LayerThickness(const CellID: TZeroBasedID): double;
     // @name has the cell outlines for the MODFLOW cells as
     // viewed from the front.  The dimensions of the result will be
     // @link(ColumnCount)*2+1, @link(LayerCount)+1
@@ -1098,16 +1098,16 @@ var
   function IsActive: boolean;
   begin
     result := ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       or ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,RowIndex, Column))
+      and IsElementActive(ZeroBasedID(LayerIndex-1,RowIndex, Column)))
   end;
   function IsEdge: boolean;
   begin
     result := ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       <> ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,RowIndex, Column))
+      and IsElementActive(ZeroBasedID(LayerIndex-1,RowIndex, Column)))
   end;
 begin
   if GridLineDrawingChoice in [gldcActive, gldcActiveEdge] then
@@ -1230,16 +1230,16 @@ var
   function IsActive: boolean;
   begin
     result := ((RowIndex < RowCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       or ((RowIndex > 0)
-      and IsElementActive(LayerIndex,RowIndex-1, Column))
+      and IsElementActive(ZeroBasedID(LayerIndex,RowIndex-1, Column)))
   end;
   function IsEdge: boolean;
   begin
     result := ((RowIndex < RowCount) and
-      IsElementActive(LayerIndex,RowIndex, Column))
+      IsElementActive(ZeroBasedID(LayerIndex,RowIndex, Column)))
       <> ((RowIndex > 0)
-      and IsElementActive(LayerIndex,RowIndex-1, Column));
+      and IsElementActive(ZeroBasedID(LayerIndex,RowIndex-1, Column)));
   end;
 begin
   if GridLineDrawingChoice in [gldcActive, gldcActiveEdge] then
@@ -1365,16 +1365,16 @@ var
   function IsActive: boolean;
   begin
     result := ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,Row, ColIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex)))
       or ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,Row, ColIndex))
+      and IsElementActive(ZeroBasedID(LayerIndex-1,Row, ColIndex)))
   end;
   function IsEdge: boolean;
   begin
     result := ((LayerIndex < LayerCount) and
-      IsElementActive(LayerIndex,Row, ColIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex)))
       <> ((LayerIndex > 0)
-      and IsElementActive(LayerIndex-1,Row, ColIndex));
+      and IsElementActive(ZeroBasedID(LayerIndex-1,Row, ColIndex)));
   end;
 begin
   if GridLineDrawingChoice in [gldcActive, gldcActiveEdge] then
@@ -1496,16 +1496,16 @@ var
   function IsActive: boolean;
   begin
     result := ((ColIndex < ColumnCount) and
-      IsElementActive(LayerIndex,Row, ColIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex)))
       or ((ColIndex > 0)
-      and IsElementActive(LayerIndex,Row, ColIndex-1))
+      and IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex-1)))
   end;
   function IsEdge: boolean;
   begin
     result := ((ColIndex < ColumnCount) and
-      IsElementActive(LayerIndex,Row, ColIndex))
+      IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex)))
       <> ((ColIndex > 0)
-      and IsElementActive(LayerIndex,Row, ColIndex-1));
+      and IsElementActive(ZeroBasedID(LayerIndex,Row, ColIndex-1)));
   end;
 begin
   SetLocalEvalAt(vdFront, LocalEvalAt);
@@ -2194,11 +2194,11 @@ begin
   result := FLayerElevations[CellID.Column, CellID.Row, CellID.Layer];
 end;
 
-function TModflowGrid.GetCellThickness(const Column, Row, Layer: integer): real;
+function TModflowGrid.GetCellThickness(const CellID: TZeroBasedID): real;
 begin
   UpdateCellElevations;
-  result := FLayerElevations[Column, Row, Layer]
-    - FLayerElevations[Column, Row, Layer+1];
+  result := FLayerElevations[CellID.Column, CellID.Row, CellID.Layer]
+    - FLayerElevations[CellID.Column, CellID.Row, CellID.Layer+1];
 end;
 
 function TModflowGrid.GetContainingLayer(ACol, ARow: integer;
@@ -3150,15 +3150,16 @@ begin
   LayersChanged;
 end;
 
-procedure TModflowGrid.SetCellThickness(const Column, Row, Layer: integer;
+procedure TModflowGrid.SetCellThickness(const CellID: TZeroBasedID;
   const Value: real);
 var
   Delta: double;
 begin
-  Delta := Value - CellThickness[Column, Row, Layer];
+  Delta := Value - CellThickness[CellID];
   if Delta <> 0 then
   begin
-    LayerElevations[Column, Row, Layer+1] := LayerElevations[Column, Row, Layer+1] + Delta;
+    LayerElevations[CellID.Column, CellID.Row, CellID.Layer+1] :=
+      LayerElevations[CellID.Column, CellID.Row, CellID.Layer+1] + Delta;
     LayersChanged;
   end;
 end;
@@ -3268,8 +3269,7 @@ begin
   LayersChanged;
 end;
 
-function TModflowGrid.ThreeDElementCorner(const Column, Row,
-  Layer: integer): T3DRealPoint;
+function TModflowGrid.ThreeDElementCorner(const CellID: TZeroBasedID): T3DRealPoint;
 var
   Z1: Real;
   Z2: Real;
@@ -3279,31 +3279,31 @@ var
   Z3: Real;
   Z4: Real;
 begin
-  result.X := ColumnPosition[Column];
-  result.Y := RowPosition[Row];
+  result.X := ColumnPosition[CellID.Column];
+  result.Y := RowPosition[CellID.Row];
 
-  if Column = ColumnCount then
+  if CellID.Column = ColumnCount then
   begin
-    if Row = RowCount then
+    if CellID.Row = RowCount then
     begin
-      result.Z := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
+      result.Z := CellElevation[CellID.RowMinus1.ColumnMinus1];
       Exit;
     end
     else
     begin
-      Z1 := CellElevation[ZeroBasedID(Layer, Row, Column-1)];
+      Z1 := CellElevation[CellID.ColumnMinus1];
     end;
   end
   else
   begin
-    if Row = RowCount then
+    if CellID.Row = RowCount then
     begin
-      Z1 := CellElevation[ZeroBasedID(Layer, Row-1, Column)];
-      if Column > 0 then
+      Z1 := CellElevation[CellID.RowMinus1];
+      if CellID.Column > 0 then
       begin
-        Z2 := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
-        Distance1 := ColumnWidth[Column];
-        Distance2 := ColumnWidth[Column-1];
+        Z2 := CellElevation[CellID.RowMinus1.ColumnMinus1];
+        Distance1 := ColumnWidth[CellID.Column];
+        Distance2 := ColumnWidth[CellID.Column-1];
         TotalDistance := Distance1 + Distance2;
         if TotalDistance = 0 then
         begin
@@ -3319,12 +3319,12 @@ begin
     end
     else
     begin
-      Z1 := CellElevation[ZeroBasedID(Layer, Row, Column)];
-      if Column > 0 then
+      Z1 := CellElevation[CellID];
+      if CellID.Column > 0 then
       begin
-        Z2 := CellElevation[ZeroBasedID(Layer, Row, Column-1)];
-        Distance1 := ColumnWidth[Column];
-        Distance2 := ColumnWidth[Column-1];
+        Z2 := CellElevation[CellID.ColumnMinus1];
+        Distance1 := ColumnWidth[CellID.Column];
+        Distance2 := ColumnWidth[CellID.Column-1];
         TotalDistance := Distance1 + Distance2;
         if TotalDistance = 0 then
         begin
@@ -3338,20 +3338,20 @@ begin
     end;
   end;
 
-  if Row > 0 then
+  if CellID.Row > 0 then
   begin
-    if Column = ColumnCount then
+    if CellID.Column = ColumnCount then
     begin
-      Z3 := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
+      Z3 := CellElevation[CellID.ColumnMinus1];
     end
     else
     begin
-      Z3 := CellElevation[ZeroBasedID(Layer, Row-1, Column)];
-      if Column > 0 then
+      Z3 := CellElevation[CellID.RowMinus1];
+      if CellID.Column > 0 then
       begin
-        Z4 := CellElevation[ZeroBasedID(Layer, Row-1, Column-1)];
-        Distance1 := ColumnWidth[Column];
-        Distance2 := ColumnWidth[Column-1];
+        Z4 := CellElevation[CellID.RowMinus1.ColumnMinus1];
+        Distance1 := ColumnWidth[CellID.Column];
+        Distance2 := ColumnWidth[CellID.Column-1];
         TotalDistance := Distance1 + Distance2;
         if TotalDistance = 0 then
         begin
@@ -3363,8 +3363,8 @@ begin
         end;
       end;
     end;
-    Distance1 := RowWidth[Row];
-    Distance2 := RowWidth[Row-1];
+    Distance1 := RowWidth[CellID.Row];
+    Distance2 := RowWidth[CellID.Row-1];
     TotalDistance := Distance1 + Distance2;
     if TotalDistance = 0 then
     begin
@@ -3649,10 +3649,10 @@ begin
   end;
 end;
 
-function TModflowGrid.LayerThickness(Layer, Row, Column: Integer): double;
+function TModflowGrid.LayerThickness(const CellID: TZeroBasedID): double;
 begin
-  Result := LayerElevations[Column, Row, Layer]
-    - LayerElevations[Column, Row, Layer+1];
+  Result := LayerElevations[CellID.Column, CellID.Row, CellID.Layer]
+    - LayerElevations[CellID.Column, CellID.Row, CellID.Layer+1];
 end;
 
 function TModflowGrid.LowestElevation: real;
