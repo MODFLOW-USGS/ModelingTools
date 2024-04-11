@@ -6267,7 +6267,7 @@ var
           else
           begin
             Model.ModflowGrid.GetHorizontalNeighbors(
-              ZeroBasedID(ACellId.Layer, ACellId.Row, ACellId.Column), CellList);
+              ZeroBasedID(ACellId.Layer-1, ACellId.Row-1, ACellId.Column-1), CellList);
           end;
           for HorizontalCellIndex := 0 to CellList.Count - 1 do
           begin
