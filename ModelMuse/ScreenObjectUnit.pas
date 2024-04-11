@@ -36617,12 +36617,10 @@ begin
                       end;
 
                       ShouldDraw := not LineDrawn and (ColIndex > 0)
-                        and (LayerIndex > 0) and LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex, ColIndex - 1]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex, RowIndex, ColIndex - 1];
+                        and (LayerIndex > 0)
+                        and LocalDelegate. SelectedCells[LayerIndex - 1, RowIndex, ColIndex - 1]
+                        and not LocalDelegate.SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
+                        and not LocalDelegate.SelectedCells[LayerIndex, RowIndex, ColIndex - 1];
                       if ShouldDraw then
                       begin
                         // ---------
@@ -36653,20 +36651,19 @@ begin
                       end;
 
                       ShouldDraw := not LineDrawn
-                        and (ColIndex < ModflowGrid.ColumnCount-1)
-                        and (LayerIndex > 0) and LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex, ColIndex + 1]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex, RowIndex, ColIndex + 1];
+                        and (ColIndex > 0)
+                        and (LayerIndex < ModflowGrid.LayerCount-1)
+                        and LocalDelegate.SelectedCells[LayerIndex + 1, RowIndex, ColIndex - 1]
+                        and not LocalDelegate.SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
+                        and not LocalDelegate.SelectedCells[LayerIndex, RowIndex, ColIndex - 1]
+                        and not LocalDelegate. SelectedCells[LayerIndex - 1, RowIndex, ColIndex - 1];
                       if ShouldDraw then
                       begin
                         //          ---------
                         //          |       |
                         //          |       |
                         //          |       |
-                        //          |   /   |
+                        //          |   +   |
                         //          |  /    |
                         //          | /     |
                         //          |/      |
@@ -36674,7 +36671,7 @@ begin
                         //  |      /|
                         //  |     / |
                         //  |    /  |
-                        //  |   +   |
+                        //  |   /   |
                         //  |       |
                         //  |       |
                         //  |       |
@@ -36685,35 +36682,31 @@ begin
                         Segment.Point1 := FrontPoint(ModflowGrid.
                           ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := FrontPoint(ModflowGrid.
-                          ThreeDElementCenter(ZeroBasedID(LayerIndex - 1, RowIndex,
-                          ColIndex + 1)));
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex + 1, RowIndex,
+                          ColIndex - 1)));
                       end;
 
                       if not LineDrawn then
                       begin
                         LineDrawn := (ColIndex < ModflowGrid.ColumnCount -1)
-                          and LocalDelegate.
-                          SelectedCells[LayerIndex, RowIndex, ColIndex + 1];
+                          and LocalDelegate.SelectedCells[LayerIndex, RowIndex, ColIndex + 1];
                       end;
                       if not LineDrawn then
                       begin
                         LineDrawn := (LayerIndex <  ModflowGrid.LayerCount -1)
-                          and LocalDelegate.
-                          SelectedCells[LayerIndex + 1, RowIndex, ColIndex];
+                          and LocalDelegate.SelectedCells[LayerIndex + 1, RowIndex, ColIndex];
                       end;
                       if not LineDrawn then
                       begin
                         LineDrawn := (ColIndex < ModflowGrid.ColumnCount -1)
                           and (LayerIndex < ModflowGrid.LayerCount -1)
-                          and LocalDelegate.
-                          SelectedCells[LayerIndex + 1, RowIndex, ColIndex + 1];
+                          and LocalDelegate. SelectedCells[LayerIndex + 1, RowIndex, ColIndex + 1];
                       end;
                       if not LineDrawn then
                       begin
                         LineDrawn := (ColIndex > 0)
                           and (LayerIndex < ModflowGrid.LayerCount -1)
-                          and LocalDelegate.
-                          SelectedCells[LayerIndex + 1, RowIndex, ColIndex - 1];
+                          and LocalDelegate.SelectedCells[LayerIndex + 1, RowIndex, ColIndex - 1];
                       end;
                       if not LineDrawn then
                       begin
@@ -36916,12 +36909,10 @@ begin
                       end;
 
                       ShouldDraw := not LineDrawn and (RowIndex > 0)
-                        and (LayerIndex > 0) and LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex - 1, ColIndex]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex, RowIndex - 1, ColIndex];
+                        and (LayerIndex > 0)
+                        and LocalDelegate.SelectedCells[LayerIndex - 1, RowIndex - 1, ColIndex]
+                        and not LocalDelegate.SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
+                        and not LocalDelegate.SelectedCells[LayerIndex, RowIndex - 1, ColIndex];
                       if ShouldDraw then
                       begin
                         // ---------
@@ -36952,20 +36943,19 @@ begin
                       end;
 
                       ShouldDraw := not LineDrawn
-                        and (RowIndex < ModflowGrid.RowCount-1)
-                        and (LayerIndex > 0) and LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex + 1, ColIndex]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
-                        and not LocalDelegate.
-                        SelectedCells[LayerIndex, RowIndex + 1, ColIndex];
+                        and (RowIndex > 0)
+                        and (LayerIndex < ModflowGrid.LayerCount-1)
+                        and LocalDelegate.SelectedCells[LayerIndex + 1, RowIndex - 1, ColIndex]
+                        and not LocalDelegate.SelectedCells[LayerIndex - 1, RowIndex, ColIndex]
+                        and not LocalDelegate.SelectedCells[LayerIndex, RowIndex + 1, ColIndex]
+                        and not LocalDelegate.SelectedCells[LayerIndex - 1, RowIndex - 1, ColIndex];
                       if ShouldDraw then
                       begin
                         //          ---------
                         //          |       |
                         //          |       |
                         //          |       |
-                        //          |   /   |
+                        //          |   +   |
                         //          |  /    |
                         //          | /     |
                         //          |/      |
@@ -36973,7 +36963,7 @@ begin
                         //  |      /|
                         //  |     / |
                         //  |    /  |
-                        //  |   +   |
+                        //  |   /   |
                         //  |       |
                         //  |       |
                         //  |       |
@@ -36984,7 +36974,7 @@ begin
                         Segment.Point1 := SidePoint(ModflowGrid.
                           ThreeDElementCenter(ZeroBasedID(LayerIndex, RowIndex, ColIndex)));
                         Segment.Point2 := SidePoint(ModflowGrid.
-                          ThreeDElementCenter(ZeroBasedID(LayerIndex - 1, RowIndex + 1,
+                          ThreeDElementCenter(ZeroBasedID(LayerIndex + 1, RowIndex - 1,
                           ColIndex)));
                       end;
 

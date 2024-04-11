@@ -188,7 +188,8 @@ uses
   ConvexHullUnit, CellLocationUnit, ModflowUzfMf6Unit, System.Hash,
   ModflowMvrUnit, frmErrorsAndWarningsUnit, Mf6.GncFileReaderUnit,
   ModflowGncUnit, Mf6.ImsFileReaderUnit, frmImportWarningsUnit,
-  Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit, Mf6.MstFileReaderUnit;
+  Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit, Mf6.MstFileReaderUnit,
+  OctTreeClass, ModflowCellUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -6066,6 +6067,16 @@ var
     LakeConnectionTypes: TLakeConnectionTypes;
     MvrReceiver: TMvrReceiver;
     StressPeriodIndex: Integer;
+    UsedCells: TRbwOctTree;
+    CellList: TCellLocationList;
+    HorizontalCellIndex: Integer;
+    ANeighborCell: TCellLocation;
+    IDomain: TDataArray;
+    X: double;
+    Y: double;
+    Z: double;
+    Data: TPointerArray;
+    UseNeigbor: Boolean;
     procedure CreateDataSetScreenObject;
     var
       CellIds: TCellIdList;
@@ -6102,85 +6113,85 @@ var
       ALake.DataSetsScreenObject.ElevationFormula :=
         rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
     end;
-    procedure GetLakeInteriorCells;
-    var
-      Points: TPoint2DList;
-      ConnectionIndex: Integer;
-      CellId: TMfCellId;
-      ElementCenter: TDualLocation;
-      APoint: TPoint2D;
-      InputPolyGon: TPolygon2D;
-      OutputPolyGon: TPolygon2D;
-      PointIndex: Integer;
-      Temp: TScreenObject;
-      UndoCreateScreenObject: TCustomUndo;
-      CellList: TCellAssignmentList;
-      CellIndex: Integer;
-      ACellLocation: TCellAssignment;
-      BoundaryCells: T2DBoolArray;
-    begin
-      // This method may add extra cells to the lake if the lake outline is concave.
-      Points := TPoint2DList.Create;
-      try
-        SetLength(BoundaryCells, Model.RowCount, Model.ColumnCount);
-        for ConnectionIndex := 0 to ALake.FConnections.Count - 1 do
-        begin
-          CellId := ALake.FConnections[ConnectionIndex].cellid;
-          if Model.DisvUsed then
-          begin
-            CellId.Row := 1;
-          end;
-          ElementCenter := Model.ElementLocation[CellId.Layer - 1,
-            CellId.Row - 1, CellId.Column - 1];
-          BoundaryCells[CellId.Row - 1, CellId.Column - 1] := True;
-          APoint.x := ElementCenter.RotatedLocation.x;
-          APoint.y := ElementCenter.RotatedLocation.y;
-          Points.Add(APoint)
-        end;
-        SetLength(InputPolyGon, Points.Count);
-        for PointIndex := 0 to Points.Count - 1 do
-        begin
-          InputPolyGon[PointIndex] := Points[PointIndex];
-        end;
-        ConvexHull(InputPolyGon, OutputPolyGon);
-        Temp := TScreenObject.CreateWithViewDirection(
-          Model, vdTop, UndoCreateScreenObject, False);
-        try
-          Temp.ElevationCount := ecZero;
-          Temp.SetPropertiesOfEnclosedCells := True;
-          Temp.Capacity := Length(OutputPolyGon) + 1;
-          Temp.AddPoint(OutputPolyGon[Length(OutputPolyGon)-1], True);
-          for PointIndex := 0 to Length(OutputPolyGon) - 1 do
-          begin
-            Temp.AddPoint(OutputPolyGon[PointIndex], False);
-          end;
-
-          CellList := TCellAssignmentList.Create;
-          try
-            Temp.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-            ALake.LakeScreenObject.Capacity := CellList.Count;
-            for CellIndex := 0 to CellList.Count - 1 do
-            begin
-              ACellLocation := CellList[CellIndex];
-              if not BoundaryCells[ACellLocation.Row, ACellLocation.Column] then
-              begin
-                ElementCenter := Model.ElementLocation[ACellLocation.Layer,
-                  ACellLocation.Row, ACellLocation.Column];
-                APoint.x := ElementCenter.RotatedLocation.x;
-                APoint.y := ElementCenter.RotatedLocation.y;
-                ALake.LakeScreenObject.AddPoint(APoint, True);
-              end;
-            end;
-          finally
-            CellList.Free;
-          end;
-        finally
-          Temp.Free;
-        end;
-      finally
-        Points.Free;
-      end;
-    end;
+//    procedure GetLakeInteriorCells;
+//    var
+//      Points: TPoint2DList;
+//      ConnectionIndex: Integer;
+//      CellId: TMfCellId;
+//      ElementCenter: TDualLocation;
+//      APoint: TPoint2D;
+//      InputPolyGon: TPolygon2D;
+//      OutputPolyGon: TPolygon2D;
+//      PointIndex: Integer;
+//      Temp: TScreenObject;
+//      UndoCreateScreenObject: TCustomUndo;
+//      CellList: TCellAssignmentList;
+//      CellIndex: Integer;
+//      ACellLocation: TCellAssignment;
+//      BoundaryCells: T2DBoolArray;
+//    begin
+//      // This method may add extra cells to the lake if the lake outline is concave.
+//      Points := TPoint2DList.Create;
+//      try
+//        SetLength(BoundaryCells, Model.RowCount, Model.ColumnCount);
+//        for ConnectionIndex := 0 to ALake.FConnections.Count - 1 do
+//        begin
+//          CellId := ALake.FConnections[ConnectionIndex].cellid;
+//          if Model.DisvUsed then
+//          begin
+//            CellId.Row := 1;
+//          end;
+//          ElementCenter := Model.ElementLocation[CellId.Layer - 1,
+//            CellId.Row - 1, CellId.Column - 1];
+//          BoundaryCells[CellId.Row - 1, CellId.Column - 1] := True;
+//          APoint.x := ElementCenter.RotatedLocation.x;
+//          APoint.y := ElementCenter.RotatedLocation.y;
+//          Points.Add(APoint)
+//        end;
+//        SetLength(InputPolyGon, Points.Count);
+//        for PointIndex := 0 to Points.Count - 1 do
+//        begin
+//          InputPolyGon[PointIndex] := Points[PointIndex];
+//        end;
+//        ConvexHull(InputPolyGon, OutputPolyGon);
+//        Temp := TScreenObject.CreateWithViewDirection(
+//          Model, vdTop, UndoCreateScreenObject, False);
+//        try
+//          Temp.ElevationCount := ecZero;
+//          Temp.SetPropertiesOfEnclosedCells := True;
+//          Temp.Capacity := Length(OutputPolyGon) + 1;
+//          Temp.AddPoint(OutputPolyGon[Length(OutputPolyGon)-1], True);
+//          for PointIndex := 0 to Length(OutputPolyGon) - 1 do
+//          begin
+//            Temp.AddPoint(OutputPolyGon[PointIndex], False);
+//          end;
+//
+//          CellList := TCellAssignmentList.Create;
+//          try
+//            Temp.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+//            ALake.LakeScreenObject.Capacity := CellList.Count;
+//            for CellIndex := 0 to CellList.Count - 1 do
+//            begin
+//              ACellLocation := CellList[CellIndex];
+//              if not BoundaryCells[ACellLocation.Row, ACellLocation.Column] then
+//              begin
+//                ElementCenter := Model.ElementLocation[ACellLocation.Layer,
+//                  ACellLocation.Row, ACellLocation.Column];
+//                APoint.x := ElementCenter.RotatedLocation.x;
+//                APoint.y := ElementCenter.RotatedLocation.y;
+//                ALake.LakeScreenObject.AddPoint(APoint, True);
+//              end;
+//            end;
+//          finally
+//            CellList.Free;
+//          end;
+//        finally
+//          Temp.Free;
+//        end;
+//      finally
+//        Points.Free;
+//      end;
+//    end;
   begin
     ObsNameIndex := 0;
     Assert(ALake <> nil);
@@ -6214,7 +6225,15 @@ var
     ALake.LakeScreenObject.Visible := False;
 
     CellIds := TCellIdList.Create;
+    UsedCells := TRbwOctTree.Create(nil);
+    CellList := TCellLocationList.Create;
     try
+      UsedCells.XMin := 0;
+      UsedCells.YMin := 0;
+      UsedCells.ZMin := 0;
+      UsedCells.XMax := Model.ColumnCount;
+      UsedCells.YMax := Model.RowCount;
+      UsedCells.ZMax := Model.LayerCount;
       for CellIndex := 0 to ALake.FConnections.Count - 1 do
       begin
         AConnection := ALake.FConnections[CellIndex];
@@ -6229,18 +6248,76 @@ var
             ACellId.Row := 0;
           end;
           CellIds.Add(ACellId);
+          UsedCells.AddPoint(ACellId.Column, ACellId.Row, ACellId.Layer, nil);
+        end;
+      end;
+      IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+      for CellIndex := 0 to ALake.FConnections.Count - 1 do
+      begin
+        AConnection := ALake.FConnections[CellIndex];
+        if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+        begin
+          ACellId := AConnection.cellid;
+          CellList.Clear;
+          if Model.DisvUsed then
+          begin
+            Model.DisvGrid.GetHorizontalNeighbors(
+              ZeroBasedID(ACellId.Layer-1, ACellId.Row-1, ACellId.Column-1), CellList);
+          end
+          else
+          begin
+            Model.ModflowGrid.GetHorizontalNeighbors(
+              ZeroBasedID(ACellId.Layer, ACellId.Row, ACellId.Column), CellList);
+          end;
+          for HorizontalCellIndex := 0 to CellList.Count - 1 do
+          begin
+            ANeighborCell := CellList[HorizontalCellIndex];
+            if IDomain.IntegerData[ANeighborCell.Layer, ANeighborCell.Row,
+              ANeighborCell.Column] = 0 then
+            begin
+              UseNeigbor := False;
+              if UsedCells.Count > 0 then
+              begin
+                X := ANeighborCell.Column;
+                Y := ANeighborCell.Row;
+                Z := ANeighborCell.Layer;
+                UsedCells.FindClosestPointsData(X, Y, Z, Data);
+                if (X <> ANeighborCell.Column)
+                  or (Y <> ANeighborCell.Row)
+                  or (Z <> ANeighborCell.Layer)
+                  then
+                begin
+                  UseNeigbor := True;
+                end;
+              end
+              else
+              begin
+                UseNeigbor := True;
+              end;
+              if UseNeigbor then
+              begin
+                ACellId.Column := ANeighborCell.Column+1;
+                ACellId.Row := ANeighborCell.Row+1;
+                ACellId.Layer := ANeighborCell.Layer+1;
+                CellIds.Add(ACellId);
+                UsedCells.AddPoint(ACellId.Column, ACellId.Row, ACellId.Layer, nil);
+              end;
+            end;
+          end;
         end;
       end;
       if CellIds.Count > 0 then
       begin
         AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, True);
-      end
-      else
-      begin
-        GetLakeInteriorCells;
+//      end
+//      else
+//      begin
+//        GetLakeInteriorCells;
       end;
     finally
       CellIds.Free;
+      UsedCells.Free;
+      CellList.Free;
     end;
 //    end;
     ALake.LakeScreenObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
@@ -10644,7 +10721,7 @@ var
   var
     NewReachList: TSfrReachInfoList;
     Index: Integer;
-    SplitIndex: Integer;
+//    SplitIndex: Integer;
     TempList: TSfrReachInfoLists;
   begin
     TempList := TSfrReachInfoLists.Create;
@@ -10700,7 +10777,7 @@ var
   var
     NewReachList: TSfrReachInfoList;
     Index: Integer;
-    SplitIndex: Integer;
+//    SplitIndex: Integer;
     TempList: TSfrReachInfoLists;
   begin
     TempList := TSfrReachInfoLists.Create;

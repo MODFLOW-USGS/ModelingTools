@@ -10198,7 +10198,10 @@ const
 //               Enhancement: Added support for defining observations of input
 //                data in arrays.
 //    '5.2.0.1'  Enhancement: Added a new "Active Specified Head" field that
-//                allows the user to make some cells intersectd or enclosed
+//                allows the user to make some cells active or inactive based
+//                on a formula.
+//               bug fix: Fixed a bug editing formulas that could cause
+//                the formula to be specified incorrectly.
 //    '5.2.0.2'  bug fix: Fixed a bug that could cause an access violation
 //                when shutting down ModelMuse while the Show or Hide Objects
 //                dialog box is displayed.
@@ -10209,8 +10212,12 @@ const
 //                with slightly different values to ensure that MNW2 wells are
 //                not connected to the wrong layers. This change compensates
 //                for a bug in MODFLOW-2005.
-//    '5.2.0.4'  Fixed bug that can cause an access violation when shutting
-//                down ModelMuse.
+//    '5.2.0.4'  bug fix: Fixed bug that can cause an access violation when
+//                shutting down ModelMuse.
+
+//               bug fix: fixed a bug in the display of objects with one
+//                elevation formula in the front and side views.
+//               bug fix: Fixed bug opening MODFLOW 6 model with ETS package.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 

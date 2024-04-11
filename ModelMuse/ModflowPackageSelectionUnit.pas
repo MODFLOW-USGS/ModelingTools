@@ -8745,8 +8745,8 @@ var
 begin
   if IsSelected then
   begin
-    while FEtsRateFractionLists.Count >
-      SegmentCount -1 do
+    while (FEtsRateFractionLists.Count > SegmentCount -1)
+      and (FEtsRateFractionLists.Count > 0) do
     begin
       TimeList := FEtsRateFractionLists[FEtsRateFractionLists.Count-1];
       RemoveTimeList(TimeList);
@@ -8756,8 +8756,7 @@ begin
       RemoveTimeList(TimeList);
       FEtsDepthFractionLists.Delete(FEtsDepthFractionLists.Count-1);
     end;
-    while FEtsRateFractionLists.Count <
-      SegmentCount -1 do
+    while FEtsRateFractionLists.Count < SegmentCount -1 do
     begin
       TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
       AddTimeList(TimeList);
