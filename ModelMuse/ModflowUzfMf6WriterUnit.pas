@@ -41,6 +41,7 @@ type
     FUzfPackage: TUzfMf6PackageSelection;
     FUzfCellNumbers: TThreeDIntegerArray;
     FMvrIndicies: TThreeDIntegerArray;
+    FSectionIndicies: TThreeDIntegerArray;
   	FUzflandflagLayers:  TTwoDIntegerArray;
     FUzfObjectArray: T3DSparsePointerArray;
     FObsList: TUzfObservationList;
@@ -183,6 +184,9 @@ var
 begin
   SetLength(FMvrIndicies, Model.LayerCount,
     Model.RowCount, Model.ColumnCount);
+  SetLength(FSectionIndicies, Model.LayerCount,
+    Model.RowCount, Model.ColumnCount);
+
   FUzfPackage := Package as TUzfMf6PackageSelection;
   inherited;
   CellList := TCellAssignmentList.Create;
@@ -248,6 +252,7 @@ begin
           ACell := CellList[CellIndex];
           FUzfObjectArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObject;
           FMvrIndicies[ACell.Layer, ACell.Row, ACell.Column] := CellIndex;
+          FSectionIndicies[ACell.Layer, ACell.Row, ACell.Column] := ACell.Section;
         end;
       end
       else if ObservationsUsed and not WritingTemplate then
@@ -1301,8 +1306,6 @@ begin
   CellNumber := 0;
   SetLength(FUzfCellNumbers, IDOMAINDataArray.LayerCount,
     IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
-//  SetLength(FMvrIndicies, IDOMAINDataArray.LayerCount,
-//    IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
   SetLength(FUzflandflagLayers, IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
   for LayerIndex := 0 to IDOMAINDataArray.LayerCount - 1 do
   begin
@@ -1498,7 +1501,6 @@ var
   RowIndex: Integer;
   ColumnIndex: Integer;
   MvrKey: TMvrRegisterKey;
-//  BoundaryIndex: Integer;
   MvrReceiver: TMvrReceiver;
   MoverWriter: TModflowMvrWriter;
   AUzfCellList: TUzfCellList;
@@ -1533,9 +1535,9 @@ begin
         Exit;
       end;
       ListOfUzfCellLists.Clear;
-      // In each stress period create lists of cells for each screen object
-      // and add their numbers to TMvrReceiverValues.UzfCells
-//      BoundaryIndex := 0;
+      // In each stress period create lists of cells for each screen object,
+      // add their numbers to TMvrReceiverValues.UzfCells
+      // and add their section indicies to TMvrReceiverValues.SectionIndices
       SetLength(UsedUzfCells, IDOMAINDataArray.LayerCount,
         IDOMAINDataArray.RowCount, IDOMAINDataArray.ColumnCount);
       for LayerIndex := 0 to IDOMAINDataArray.LayerCount - 1 do
@@ -1567,7 +1569,6 @@ begin
         if IDOMAINDataArray.IntegerData[UzfCell.Layer, UzfCell.Row, UzfCell.Column] > 0 then
         begin
           Assert(FUzfCellNumbers[UzfCell.Layer, UzfCell.Row, UzfCell.Column] > 0);
-//          Assert(UsedUzfCells[UzfCell.Layer, UzfCell.Row, UzfCell.Column] = nil);
           UsedUzfCells[UzfCell.Layer, UzfCell.Row, UzfCell.Column] := UzfCell;
         end;
       end;
@@ -1629,6 +1630,7 @@ begin
 //                Inc(BoundaryIndex);
 //                MvrReceiver.ReceiverValues.Index := BoundaryIndex;
                 MvrReceiver.ReceiverValues.Index := FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex];
+                MvrReceiver.ReceiverValues.Section := FSectionIndicies[LayerIndex, RowIndex, ColumnIndex];
 
                 if UzfCell.MvrUsed and (MoverWriter <> nil)
                   and not WritingTemplate then
@@ -1665,10 +1667,13 @@ begin
           Assert(AUzfCellList.Count >= 1);
           MvrReceiver := AUzfCellList[0];
           SetLength(MvrReceiver.ReceiverValues.UzfCells, AUzfCellList.Count);
+          SetLength(MvrReceiver.ReceiverValues.SectionIndices, AUzfCellList.Count);
           for CellIndex := 0 to AUzfCellList.Count - 1 do
           begin
             MvrReceiver.ReceiverValues.UzfCells[CellIndex]
               := AUzfCellList[CellIndex].ReceiverValues.Index;
+            MvrReceiver.ReceiverValues.SectionIndices[CellIndex]
+              := AUzfCellList[CellIndex].ReceiverValues.Section;
           end;
           if (MoverWriter <> nil) and not WritingTemplate then
           begin

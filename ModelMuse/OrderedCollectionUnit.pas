@@ -687,7 +687,6 @@ var
   AnotherOrderedCollection: TOrderedCollection;
   AnItem: TOrderedItem;
   ForeignItem: TOrderedItem;
-//  TempList: TList;
   ID_Array: array of integer;
   ItemIndex: Integer;
   ItemList: TList<TOrderedItem>;

@@ -2771,8 +2771,6 @@ var
   ConnectIndex: Integer;
   HasDownstreamReaches: Boolean;
   ConnectedStreams: TStringList;
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
   StatusArray: array of TStreamStatus;
   DownReachIndex: Integer;
   DownstreamReachesDefined: Boolean;
@@ -2827,6 +2825,7 @@ begin
       ACellList := ASegment.FReaches[StressPeriodIndex];
       SetLength(MvrReceiver.ReceiverValues.StreamCells, ACellList.Count);
       SetLength(MvrReceiver.ReceiverValues.StreamReachNumbers, ACellList.Count);
+      SetLength(MvrReceiver.ReceiverValues.SectionIndices, ACellList.Count);
 
       MvrReceiver.ReceiverValues.Index := ReachCount+1;
       for CellIndex := 0 to ACellList.Count - 1 do
@@ -2837,6 +2836,7 @@ begin
         MvrReceiver.ReceiverValues.StreamCells[CellIndex] := ACell.Values.Cell;
         Inc(ReachNumber);
         MvrReceiver.ReceiverValues.StreamReachNumbers[CellIndex] := ReachNumber;
+        MvrReceiver.ReceiverValues.SectionIndices[CellIndex] := ACell.Values.Cell.Section;
 
         AssociatedScreenObjects[ReachNumber-1] := ASegment.ScreenObject;
         if ACell.Values.Status <> ssInactive then

@@ -14,7 +14,7 @@ type
   TMvrTypeArray = array of TMvrType;
 
   TSfrReceiverChoice = (srcFirst, srcNearest, srcNearestEnclosed,
-    srcNearestAnySegment);
+    srcNearestAnySegment, srcMap);
 
   TSourcePackageChoice = (spcWel, spcDrn, spcRiv, spcGhb, spcLak, spcMaw,
     spcSfr, spcUzf);
@@ -33,6 +33,7 @@ type
     ValuePests: array of string;
     ValuePestSeriesNames: array of string;
     ValuePestSeriesMethods: array of TPestParamMethod;
+    MvrMapNames: array of string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -110,12 +111,14 @@ type
     FMvrType: TMvrType;
     FValue: IFormulaObject;
     FObserver: TObserver;
+    FMapName: string;
     function GetValue: string;
     procedure SetMvrType(const Value: TMvrType);
     procedure SetValue(const Value: string);
     function ItemCollection: TIndividualMvrItems;
     procedure RemoveSubscription(Sender: TObject; const AName: string);
     procedure RestoreSubscription(Sender: TObject; const AName: string);
+    procedure SetMapName(const Value: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function GetObserver(Index: Integer): TObserver; override;
@@ -127,6 +130,7 @@ type
   published
     property MvrType: TMvrType read FMvrType write SetMvrType;
     property Value: string read GetValue write SetValue;
+    property MapName: string read FMapName write SetMapName;
   end;
 
   TIndividualMvrItems = class(TCustomObjectOrderedCollection)
@@ -141,6 +145,70 @@ type
     property Items[Index:Integer]: TIndividualMvrItem read GetItem write SetItem; default;
     function IndexOfFormulaObject(AFormulaObject: IFormulaObject): integer;
     function Add: TIndividualMvrItem;
+  end;
+
+  // @name is used to map a particular section of a source to a particular
+  // section of a receiver. For example, suppose there is a drain boundary
+  // defined by a @link(TScreenObject) with three sections that sends
+  // discharge to a UZF boundary defined by a TScreenObject with two
+  // sections. @Link(TSectionMapItemCollection) would be used to match
+  // each section of the drain boundary to a section of the UZF boundary.
+  // Sources can be well, drain river, GHB, SFR, and UZF.
+  // Receivers can be SFR and UZF.
+  TSectionMapItem = class(TOrderedItem)
+  private
+    FReceiverSection: Integer;
+    FSourceSection: Integer;
+    procedure SetReceiverSection(const Value: Integer);
+    procedure SetSourceSection(const Value: Integer);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    // @name must be great than or equal to 1 and less than or equal to the
+    // number of sections in the source boundary.
+    // Each SourceSection in @link(TSectionMapItemCollection) must be unique.
+    property SourceSection: Integer read FSourceSection write SetSourceSection;
+    // @name must be great than or equal to 1 and less than or equal to the
+    // number of sections in the receiver boundary.
+    property ReceiverSection: Integer read FReceiverSection write SetReceiverSection;
+  end;
+
+  TSectionMapItemCollection = class(TOrderedCollection)
+  private
+    FMapName: string;
+    procedure SetMapName(const Value: string);
+    function GetItem(Index: Integer): TSectionMapItem;
+    procedure SetItem(Index: Integer; const Value: TSectionMapItem);
+  public
+    constructor Create(Model: IModelForTOrderedCollection);
+    property Items[Index: Integer]: TSectionMapItem read GetItem write SetItem; default;
+  published
+    property MapName: string read FMapName write SetMapName;
+  end;
+
+  TSectionMap = class(TOrderedItem)
+  private
+    FMvrMap: TSectionMapItemCollection;
+    procedure SetMvrMap(const Value: TSectionMapItemCollection);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    property MvrMap: TSectionMapItemCollection read FMvrMap write SetMvrMap;
+  end;
+
+  TSectionMaps = class(TOrderedCollection)
+  private
+    function GetItem(Index: Integer): TSectionMap;
+    procedure SetItem(Index: Integer; const Value: TSectionMap);
+  public
+    constructor Create(Model: IModelForTOrderedCollection);
+    property Items[Index: Integer]: TSectionMap read GetItem write SetItem; default;
   end;
 
   TMvrItem = class(TCustomModflowBoundaryItem)
@@ -252,8 +320,10 @@ type
   private
     FSourcePackageChoice: TSourcePackageChoice;
     FReceivers: TReceiverCollection;
+    FMvrMaps: TSectionMaps;
     procedure SetSourcePackageChoice(const Value: TSourcePackageChoice);
     procedure SetReceivers(const Value: TReceiverCollection);
+    procedure SetMvrMaps(const Value: TSectionMaps);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -272,6 +342,7 @@ type
     property SourcePackageChoice: TSourcePackageChoice read FSourcePackageChoice
       write SetSourcePackageChoice;
     property Receivers: TReceiverCollection read FReceivers write SetReceivers;
+    property MvrMaps: TSectionMaps read FMvrMaps write SetMvrMaps;
   end;
 
 procedure MvrStringValueRemoveSubscription(Sender: TObject; Subject: TObject;
@@ -301,6 +372,7 @@ begin
     SourceItem := TIndividualMvrItem(Source);
     MvrType := SourceItem.MvrType;
     Value := SourceItem.Value;
+    MapName := SourceItem.MapName;
   end;
   inherited;
 end;
@@ -380,7 +452,8 @@ begin
   begin
     SourceItem := TIndividualMvrItem(AnotherItem);
     result := (MvrType = SourceItem.MvrType)
-      and (Value = SourceItem.Value);
+      and (Value = SourceItem.Value)
+      and (MapName = SourceItem.MapName);
   end;
 end;
 
@@ -406,6 +479,11 @@ begin
   DS := frmGoPhast.PhastModel.GetObserverByName(AName);
   DS.TalksTo(FObserver);
   FObserver.UpToDate := False;
+end;
+
+procedure TIndividualMvrItem.SetMapName(const Value: string);
+begin
+  SetCaseSensitiveStringProperty(FMapName, Value);
 end;
 
 procedure TIndividualMvrItem.SetMvrType(const Value: TMvrType);
@@ -571,6 +649,7 @@ begin
     MvrSource := TMvrBoundary(Source);
     SourcePackageChoice := MvrSource.SourcePackageChoice;
     Receivers := MvrSource.Receivers;
+    MvrMaps := MvrSource.MvrMaps;
   end;
   inherited;
 end;
@@ -587,49 +666,49 @@ var
   Cell: TMvrSourceCell;
   BoundaryValues: TMvrRecord;
 begin
-    LocalModel := AModel as TCustomModel;
+  LocalModel := AModel as TCustomModel;
 
-    LocalBoundaryStorage := BoundaryStorage as TMvrSourceStorage;
-    for TimeIndex := 0 to
-      LocalModel.ModflowFullStressPeriods.Count - 1 do
+  LocalBoundaryStorage := BoundaryStorage as TMvrSourceStorage;
+  for TimeIndex := 0 to
+    LocalModel.ModflowFullStressPeriods.Count - 1 do
+  begin
+    if TimeIndex < ValueTimeList.Count then
     begin
-      if TimeIndex < ValueTimeList.Count then
-      begin
-        Cells := ValueTimeList[TimeIndex];
-      end
-      else
-      begin
-        Cells := TValueCellList.Create(TMvrSourceCell);
-        ValueTimeList.Add(Cells);
-      end;
-      StressPeriod := LocalModel.ModflowFullStressPeriods[TimeIndex];
-      // Check if the stress period is completely enclosed within the times
-      // of the LocalBoundaryStorage;
-      if (StressPeriod.StartTime + LocalModel.SP_Epsilon >= LocalBoundaryStorage.StartingTime)
-        and (StressPeriod.EndTime - LocalModel.SP_Epsilon <= LocalBoundaryStorage.EndingTime) then
-      begin
-        if Cells.Capacity < Cells.Count
-          + Length(LocalBoundaryStorage.MvrRecordArray) then
-        begin
-          Cells.Capacity := Cells.Count
-            + Max(Length(LocalBoundaryStorage.MvrRecordArray), Cells.Count div 4);
-        end;
-        for BoundaryIndex := 0 to
-          Length(LocalBoundaryStorage.MvrRecordArray) - 1 do
-        begin
-          BoundaryValues := LocalBoundaryStorage.MvrRecordArray[BoundaryIndex];
-          BoundaryValues.MvrIndex := BoundaryIndex;
-          Cell := TMvrSourceCell.Create;
-          Cells.Add(Cell);
-          LocalModel.AdjustCellPosition(Cell);
-          Cell.StressPeriod := TimeIndex;
-          Cell.Values := BoundaryValues;
-          Cell.ScreenObject := ScreenObjectI;
-          Cell.SetValueLength(Length(Cell.Values.Values));
-        end;
-        Cells.Cache;
-      end;
+      Cells := ValueTimeList[TimeIndex];
     end
+    else
+    begin
+      Cells := TValueCellList.Create(TMvrSourceCell);
+      ValueTimeList.Add(Cells);
+    end;
+    StressPeriod := LocalModel.ModflowFullStressPeriods[TimeIndex];
+    // Check if the stress period is completely enclosed within the times
+    // of the LocalBoundaryStorage;
+    if (StressPeriod.StartTime + LocalModel.SP_Epsilon >= LocalBoundaryStorage.StartingTime)
+      and (StressPeriod.EndTime - LocalModel.SP_Epsilon <= LocalBoundaryStorage.EndingTime) then
+    begin
+      if Cells.Capacity < Cells.Count
+        + Length(LocalBoundaryStorage.MvrRecordArray) then
+      begin
+        Cells.Capacity := Cells.Count
+          + Max(Length(LocalBoundaryStorage.MvrRecordArray), Cells.Count div 4);
+      end;
+      for BoundaryIndex := 0 to
+        Length(LocalBoundaryStorage.MvrRecordArray) - 1 do
+      begin
+        BoundaryValues := LocalBoundaryStorage.MvrRecordArray[BoundaryIndex];
+        BoundaryValues.MvrIndex := BoundaryIndex;
+        Cell := TMvrSourceCell.Create;
+        Cells.Add(Cell);
+        LocalModel.AdjustCellPosition(Cell);
+        Cell.StressPeriod := TimeIndex;
+        Cell.Values := BoundaryValues;
+        Cell.ScreenObject := ScreenObjectI;
+        Cell.SetValueLength(Length(Cell.Values.Values));
+      end;
+      Cells.Cache;
+    end;
+  end
 end;
 
 class function TMvrBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
@@ -638,13 +717,25 @@ begin
 end;
 
 constructor TMvrBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+var
+  LocalModel: TCustomModel;
 begin
   inherited;
-  FReceivers := TReceiverCollection.Create(Model as TCustomModel);
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel
+  end
+  else
+  begin
+    LocalModel := nil;
+  end;
+  FReceivers := TReceiverCollection.Create(LocalModel);
+  FMvrMaps := TSectionMaps.Create(LocalModel);
 end;
 
 destructor TMvrBoundary.Destroy;
 begin
+  FMvrMaps.Free;
   FReceivers.Free;
   inherited;
 end;
@@ -678,6 +769,11 @@ end;
 procedure TMvrBoundary.Loaded;
 begin
   Receivers.Loaded(ParentModel as TCustomModel);
+end;
+
+procedure TMvrBoundary.SetMvrMaps(const Value: TSectionMaps);
+begin
+  FMvrMaps.Assign(Value);
 end;
 
 procedure TMvrBoundary.SetReceivers(const Value: TReceiverCollection);
@@ -854,12 +950,18 @@ begin
     for CellIndex := 0 to MvrStorage.Count - 1 do
     begin
       AMvrRecord := MvrStorage.MvrRecordArray[CellIndex];
-      if Length(AMvrRecord.MvrTypes) < MvrItem.Items.Count then
+      if Length(AMvrRecord.MvrTypes) <> MvrItem.Items.Count then
       begin
         SetLength(AMvrRecord.MvrTypes, MvrItem.Items.Count);
       end;
       AMvrRecord.MvrTypes[IndIndex]
         := IndItem.MvrType;
+      if Length(AMvrRecord.MvrMapNames) <> MvrItem.Items.Count then
+      begin
+        SetLength(AMvrRecord.MvrMapNames, MvrItem.Items.Count);
+      end;
+      AMvrRecord.MvrMapNames[IndIndex] := IndItem.MapName;
+
       MvrStorage.MvrRecordArray[CellIndex] := AMvrRecord;
     end;
   end;
@@ -1261,6 +1363,10 @@ begin
   begin
     WriteCompInt(Comp, Ord(ValuePestSeriesMethods[Index]));
   end;
+  for Index := 0 to Length(MvrMapNames) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(MvrMapNames[Index]));
+  end;
   WriteCompInt(Comp, MvrIndex);
 end;
 
@@ -1280,6 +1386,10 @@ begin
   begin
     Strings.Add(ValuePestSeriesNames[Index]);
   end;
+  for Index := 0 to Length(MvrMapNames) - 1 do
+  begin
+    Strings.Add(MvrMapNames[Index]);
+  end;
 end;
 
 procedure TMvrRecord.Restore(Decomp: TDecompressionStream;
@@ -1298,6 +1408,7 @@ begin
   SetLength(ValuePests, Count);
   SetLength(ValuePestSeriesNames, Count);
   SetLength(ValuePestSeriesMethods, Count);
+  SetLength(MvrMapNames, Count);
   for Index := 0 to Count - 1 do
   begin
     Values[Index] := ReadCompReal(Decomp);
@@ -1322,6 +1433,11 @@ begin
   begin
     ValuePestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
+  for Index := 0 to Count - 1 do
+  begin
+    MvrMapNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+
   MvrIndex := ReadCompInt(Decomp)
 end;
 
@@ -1546,6 +1662,127 @@ begin
   SetLength(FValues.ValuePests, ALength);
   SetLength(FValues.ValuePestSeriesNames, ALength);
   SetLength(FValues.ValuePestSeriesMethods, ALength);
+  SetLength(FValues.MvrMapNames, ALength);
+end;
+
+{ TSectionMapItem }
+
+procedure TSectionMapItem.Assign(Source: TPersistent);
+var
+  SourceItem: TSectionMapItem;
+begin
+  if Source is TSectionMapItem then
+  begin
+    SourceItem := Source as TSectionMapItem;
+    SourceSection := SourceItem.SourceSection;
+    ReceiverSection := SourceItem.ReceiverSection;
+  end;
+  inherited;
+end;
+
+function TSectionMapItem.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  SourceItem: TSectionMapItem;
+begin
+  result := AnotherItem is TSectionMapItem;
+  if result then
+  begin
+    SourceItem := AnotherItem as TSectionMapItem;
+    result := (SourceSection = SourceItem.SourceSection)
+      and (ReceiverSection = SourceItem.ReceiverSection)
+  end;
+end;
+
+procedure TSectionMapItem.SetReceiverSection(const Value: Integer);
+begin
+  SetIntegerProperty(FReceiverSection, Value);
+end;
+
+procedure TSectionMapItem.SetSourceSection(const Value: Integer);
+begin
+  SetIntegerProperty(FSourceSection, Value);
+end;
+
+{ TSectionMapItemCollection }
+
+constructor TSectionMapItemCollection.Create(
+  Model: IModelForTOrderedCollection);
+begin
+  inherited Create(TSectionMapItem, Model);
+end;
+
+function TSectionMapItemCollection.GetItem(Index: Integer): TSectionMapItem;
+begin
+  result := inherited Items[Index] as TSectionMapItem
+end;
+
+procedure TSectionMapItemCollection.SetItem(Index: Integer;
+  const Value: TSectionMapItem);
+begin
+  inherited Items[Index] := Value;
+end;
+
+procedure TSectionMapItemCollection.SetMapName(const Value: string);
+begin
+  if FMapName <> Value then
+  begin
+    FMapName := Value;
+    InvalidateModel;
+  end;
+end;
+
+{ TSectionMap }
+
+procedure TSectionMap.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TSectionMap then
+  begin
+    MvrMap := TSectionMap(Source).MvrMap;
+  end;
+end;
+
+constructor TSectionMap.Create(Collection: TCollection);
+begin
+  inherited;
+  FMvrMap := TSectionMapItemCollection.Create(Model);
+end;
+
+destructor TSectionMap.Destroy;
+begin
+  FMvrMap.Free;
+  inherited;
+end;
+
+function TSectionMap.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  result := AnotherItem is TSectionMap;
+  if result then
+  begin
+    result := MvrMap.IsSame(TSectionMap(AnotherItem).MvrMap);
+  end;
+end;
+
+procedure TSectionMap.SetMvrMap(const Value: TSectionMapItemCollection);
+begin
+  FMvrMap.Assign(Value)
+end;
+
+{ TSectionMaps }
+
+constructor TSectionMaps.Create(Model: IModelForTOrderedCollection);
+begin
+  inherited Create(TSectionMap, Model);
+end;
+
+function TSectionMaps.GetItem(Index: Integer): TSectionMap;
+begin
+  result := inherited Items[Index] as TSectionMap;
+end;
+
+procedure TSectionMaps.SetItem(Index: Integer; const Value: TSectionMap);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

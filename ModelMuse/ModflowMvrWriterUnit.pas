@@ -44,6 +44,9 @@ type
     StreamReachNumbers: TOneDIntegerArray;
     // @name is only used for UZF boundaries.
     UzfCells: TOneDIntegerArray;
+    // @name is used with SFR and UZF boundaries.
+    SectionIndices: TOneDIntegerArray;
+    Section: Integer;
   end;
 
   TMvrReceiver = record
@@ -75,10 +78,8 @@ type
     FSourceLists: TObjectList<TMvrSources>;
     FSourceCellDictionaries: TObjectList<TMvrSourceCellDictionary>;
     FSfrReceivers: TMvrReceiverLists;
-//    FNameOfFile: String;
     FUsedPackages: TSourcePackageChoices;
     FSpeciesIndex: Integer;
-//    FUzfCellNumbers: TThreeDIntegerArray;
     function ShouldEvaluate: Boolean;
     procedure WriteOptions;
     procedure WriteDimensions;
@@ -150,7 +151,8 @@ resourcestring
   StrThe0sPackageCanRec = 'The %0:s package can not be used as a receiver pa' +
   'ckage in %1:s for MVR because the %0:s package is not seleccted';
 
-
+type
+  TSourceReceiverMap = TDictionary<Integer, Integer>;
 
 { TModflowMvrWriter }
 
@@ -904,7 +906,7 @@ var
   ReceiverItem: TReceiverItem;
   ReceiverValues: TMvrReceiverValues;
   MvrSourceDictionary: TMvrSourceCellDictionary;
-  MrvCell: TMvrSourceCell;
+  MvrCell: TMvrSourceCell;
   ReceiverIndex: Integer;
   AColumn: Integer;
   ARow: Integer;
@@ -929,6 +931,19 @@ var
   GridLimit: TGridLimit;
   PriorSourceObject: TObject;
   PriorReceiverObject: TObject;
+  MapDictionary: TSourceReceiverMap;
+  MapName: string;
+  ModflowMvr: TMvrBoundary;
+  MapIndex: Integer;
+  AMap: TSectionMapItemCollection;
+  MapItemIndex: Integer;
+  MapItem: TSectionMapItem;
+//  UsedMap: TSectionMapItemCollection;
+  Divisor: Integer;
+  DivisorIndex: Integer;
+  ReceiverSection: Integer;
+  SectionMaps: TDictionary<string,TSourceReceiverMap>;
+  SectionMapsList: TObjectList<TSourceReceiverMap>;
   function GetLocation(ACol, ARow: Integer): TPoint2D;
   begin
     if Grid <> nil then
@@ -960,6 +975,8 @@ begin
     DisvGrid := nil;
   end;
 
+  SectionMaps := TDictionary<string,TSourceReceiverMap>.Create;
+  SectionMapsList := TObjectList<TSourceReceiverMap>.Create;
   AllStreamReaches := TRbwQuadTree.Create(nil);
   EnclosedReaches := TRbwQuadTree.Create(nil);
   CurrentObjectReaches := TRbwQuadTree.Create(nil);
@@ -995,26 +1012,51 @@ begin
 
         for SourceIndex := 0 to SourceList.Count - 1 do
         begin
+          // ASource.Key.SourceKey.ScreenObject has the maps.
+          // ASource.SourcePackage indicates the source package
           ASource := SourceList[SourceIndex];
           if PriorSourceObject <> ASource.Key.SourceKey.ScreenObject then
           begin
             PriorSourceObject := ASource.Key.SourceKey.ScreenObject;
             EnclosedReaches.Clear;
             CurrentObjectReaches.Clear;
+            SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
+            SectionMaps.Clear;
+            SectionMapsList.Clear;
+
+            ModflowMvr := SourceScreenObject.ModflowMvr;
+            Assert(ModflowMvr <> nil);
+            for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
+            begin
+              AMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
+
+              MapDictionary := TSourceReceiverMap.Create;
+              SectionMapsList.Add(MapDictionary);
+              SectionMaps.Add(UpperCase(AMap.MapName), MapDictionary);
+              for MapItemIndex := 0 to AMap.Count - 1 do
+              begin
+                MapItem := AMap[MapItemIndex];
+                MapDictionary.Add(MapItem.SourceSection-1, MapItem.ReceiverSection-1);
+              end;
+            end;
+
           end;
-          MrvCell := MvrSourceDictionary[ASource.Key.SourceKey];
+          // MrvCell.FValues.MvrMapNames has the map name
+          // MrvCell.Values.Cell.Section is the object section
+          MvrCell := MvrSourceDictionary[ASource.Key.SourceKey];
 
           for ReceiverIndex := 0 to ASource.Receivers.Count - 1 do
           begin
             ReceiverItem := ASource.Receivers[ReceiverIndex];
             ReceiverKey.ReceiverPackage := ReceiverItem.ReceiverPackage;
-            ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject as TScreenObject;
+            ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject;
 
             UseSfrNearestMultipleSegment :=
               (ReceiverItem.ReceiverPackage = rpcSfr)
               and (ReceiverItem.SfrReceiverChoice in
               [srcNearestEnclosed, srcNearestAnySegment]);
             ReceiverCount := 1;
+            Divisor := 1;
 
             if not UseSfrNearestMultipleSegment then
             begin
@@ -1026,21 +1068,54 @@ begin
               begin
                 SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
                 frmErrorsAndWarnings.AddError(Model, StrReceiverNotFound,
-                 Format(StrSourceObject0s, [SourceScreenObject.Name]),
-                 SourceScreenObject);
+                  Format(StrSourceObject0s, [SourceScreenObject.Name]),
+                  SourceScreenObject);
                 Continue;
               end;
             end;
 
+            ReceiverSection := -1;
+            MapDictionary := nil;
             if ReceiverItem.ReceiverPackage = rpcUzf then
             begin
               ReceiverCount := Length(ReceiverValues.UzfCells);
+              Divisor := ReceiverCount;
+              if ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf] then
+              begin
+                MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
+                // If a map is used, ReceiverCount can not be used as the divisor.
+                if MapName <> '' then
+                begin
+                  if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
+                  begin
+                    Assert(False);
+                  end;
+
+                  if not MapDictionary.TryGetValue(MvrCell.Section, ReceiverSection) then
+                  begin
+                    Continue
+                  end;
+                  Divisor := 0;
+                  for DivisorIndex := 0 to Length(ReceiverValues.SectionIndices) - 1 do
+                  begin
+                    if ReceiverSection = ReceiverValues.SectionIndices[DivisorIndex] then
+                    begin
+                      Inc(Divisor)
+                    end;
+                  end;
+
+                  break;
+                end;
+              end;
             end;
 
             if (ReceiverKey.ScreenObject <> PriorReceiverObject)
               and (ReceiverItem.ReceiverPackage = rpcSfr) then
             begin
               case ReceiverItem.SfrReceiverChoice of
+                srcFirst:
+                  begin
+                  end;
                 srcNearest:
                   begin
                     for SfrCellIndex := 1 to Length(ReceiverValues.StreamCells) - 1 do
@@ -1059,6 +1134,11 @@ begin
                 srcNearestAnySegment:
                   begin
                   end;
+                srcMap:
+                  begin
+                  end;
+                else
+                  Assert(False);
               end;
               PriorReceiverObject := ReceiverKey.ScreenObject;
             end;
@@ -1111,8 +1191,48 @@ begin
               end
             end;
 
+            if (ReceiverItem.ReceiverPackage = rpcSfr)
+              and (ReceiverItem.SfrReceiverChoice = srcMap) then
+            begin
+              if ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf] then
+              begin
+                MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
+                // If a map is used, ReceiverCount can not be used as the divisor.
+                if MapName <> '' then
+                begin
+                  if ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf] then
+                  begin
+                    MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
+                    // If a map is used, ReceiverCount can not be used as the divisor.
+                    if MapName <> '' then
+                    begin
+                      if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
+                      begin
+                        Assert(False);
+                      end;
+
+                      if not MapDictionary.TryGetValue(MvrCell.Section, ReceiverSection) then
+                      begin
+                        Continue
+                      end;
+                    end;
+                  end;
+
+                end;
+              end;
+            end;
+
             for InnerReceiverIndex := 0 to ReceiverCount-1 do
             begin
+              if MapDictionary <> nil then
+              begin
+                if (ReceiverItem.ReceiverPackage = rpcUzf)
+                  and (ReceiverSection <> ReceiverValues.SectionIndices[InnerReceiverIndex]) then
+                begin
+                  Continue;
+                end;
+              end;
+
               case ASource.SourcePackage of
                 spcWel:
                   begin
@@ -1173,8 +1293,8 @@ begin
               if (ReceiverItem.ReceiverPackage = rpcSfr)
                 and (ReceiverItem.SfrReceiverChoice = srcNearest) then
               begin
-                AColumn := MrvCell.Column;
-                ARow := MrvCell.Row;
+                AColumn := MvrCell.Column;
+                ARow := MvrCell.Row;
                 SourceLocation := GetLocation(AColumn, ARow);
 
                 Assert(Length(ReceiverValues.StreamCells) > 0);
@@ -1194,8 +1314,8 @@ begin
               end
               else if (ReceiverItem.SfrReceiverChoice = srcNearestAnySegment) then
               begin
-                AColumn := MrvCell.Column;
-                ARow := MrvCell.Row;
+                AColumn := MvrCell.Column;
+                ARow := MvrCell.Row;
                 SourceLocation := GetLocation(AColumn, ARow);
 
                 if AllStreamReaches.Count = 0 then
@@ -1211,8 +1331,8 @@ begin
               end
               else if (ReceiverItem.SfrReceiverChoice = srcNearestEnclosed) then
               begin
-                AColumn := MrvCell.Column;
-                ARow := MrvCell.Row;
+                AColumn := MvrCell.Column;
+                ARow := MvrCell.Row;
                 SourceLocation := GetLocation(AColumn, ARow);
 
                 if EnclosedReaches.Count = 0 then
@@ -1235,7 +1355,7 @@ begin
                 WriteInteger(ReceiverValues.Index);
               end;
 
-              case MrvCell.MvrTypes[ReceiverIndex] of
+              case MvrCell.MvrTypes[ReceiverIndex] of
                 mtFactor:
                   begin
                     WriteString(' FACTOR   ');
@@ -1255,7 +1375,7 @@ begin
                 else Assert(False);
               end;
 
-              WriteFloat(MrvCell.MvrValues[ReceiverIndex]/ReceiverCount);
+              WriteFloat(MvrCell.MvrValues[ReceiverIndex]/Divisor);
 
               NewLine;
             end;
@@ -1269,6 +1389,9 @@ begin
     AllStreamReaches.Free;
     EnclosedReaches.Free;
     CurrentObjectReaches.Free;
+
+    SectionMaps.Free;
+    SectionMapsList.Free;
   end;
 end;
 
