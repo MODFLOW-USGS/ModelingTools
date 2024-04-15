@@ -14,7 +14,7 @@ type
   TMvrTypeArray = array of TMvrType;
 
   TSfrReceiverChoice = (srcFirst, srcNearest, srcNearestEnclosed,
-    srcNearestAnySegment, srcMap);
+    srcNearestAnySegment);
 
   TSourcePackageChoice = (spcWel, spcDrn, spcRiv, spcGhb, spcLak, spcMaw,
     spcSfr, spcUzf);
@@ -183,7 +183,9 @@ type
     procedure SetItem(Index: Integer; const Value: TSectionMapItem);
   public
     constructor Create(Model: IModelForTOrderedCollection);
+    procedure Assign(Source: TPersistent); override;
     property Items[Index: Integer]: TSectionMapItem read GetItem write SetItem; default;
+    function Add: TSectionMapItem;
   published
     property MapName: string read FMapName write SetMapName;
   end;
@@ -209,6 +211,7 @@ type
   public
     constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TSectionMap read GetItem write SetItem; default;
+    function Add: TSectionMap;
   end;
 
   TMvrItem = class(TCustomModflowBoundaryItem)
@@ -1705,6 +1708,21 @@ end;
 
 { TSectionMapItemCollection }
 
+function TSectionMapItemCollection.Add: TSectionMapItem;
+begin
+ result := inherited Add as TSectionMapItem;
+end;
+
+procedure TSectionMapItemCollection.Assign(Source: TPersistent);
+begin
+  if Source is TSectionMapItemCollection then
+  begin
+    MapName := TSectionMapItemCollection(Source).MapName;
+  end;
+  inherited;
+
+end;
+
 constructor TSectionMapItemCollection.Create(
   Model: IModelForTOrderedCollection);
 begin
@@ -1769,6 +1787,11 @@ begin
 end;
 
 { TSectionMaps }
+
+function TSectionMaps.Add: TSectionMap;
+begin
+  result := inherited Add as TSectionMap;
+end;
 
 constructor TSectionMaps.Create(Model: IModelForTOrderedCollection);
 begin

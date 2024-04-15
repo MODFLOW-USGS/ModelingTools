@@ -389,6 +389,160 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     object tabTime: TTabSheet
       Caption = 'Time'
     end
+    object tabMvrMap: TTabSheet
+      Caption = 'MVR Map (Optional)'
+      ImageIndex = 2
+      object JvNetscapeSplitter1: TJvNetscapeSplitter
+        Left = 100
+        Top = 0
+        Height = 209
+        Align = alLeft
+        Maximized = False
+        Minimized = False
+        ButtonCursor = crDefault
+        ExplicitLeft = 264
+        ExplicitTop = 112
+        ExplicitHeight = 100
+      end
+      object rdgMap: TRbwDataGrid4
+        Left = 110
+        Top = 0
+        Width = 294
+        Height = 209
+        Align = alClient
+        ColCount = 2
+        FixedCols = 1
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 0
+        OnExit = rdgMapExit
+        OnSelectCell = rdgMapSelectCell
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -12
+            ButtonFont.Name = 'Segoe UI'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = True
+            ComboUsed = False
+            Format = rcf4Integer
+            LimitToList = False
+            Max = 100000000.000000000000000000
+            MaxLength = 0
+            Min = 1.000000000000000000
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end>
+        WordWrapRowCaptions = False
+        ExplicitLeft = 99
+        ExplicitWidth = 305
+      end
+      inline frameMapNames: TframeGrid
+        Left = 0
+        Top = 0
+        Width = 100
+        Height = 209
+        Align = alLeft
+        TabOrder = 1
+        ExplicitLeft = 89
+        ExplicitWidth = 100
+        ExplicitHeight = 209
+        inherited Panel: TPanel
+          Top = 120
+          Width = 100
+          Height = 89
+          ExplicitTop = 88
+          ExplicitWidth = 100
+          ExplicitHeight = 89
+          inherited lbNumber: TLabel
+            Left = 10
+            Top = 5
+            ExplicitLeft = 10
+            ExplicitTop = 5
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 2
+            Top = 55
+            OnClick = frameMapNamessbAddClick
+            ExplicitLeft = 2
+            ExplicitTop = 55
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 31
+            Top = 55
+            OnClick = frameMapNamessbInsertClick
+            ExplicitLeft = 31
+            ExplicitTop = 55
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 60
+            Top = 55
+            OnClick = frameMapNamessbDeleteClick
+            ExplicitLeft = 60
+            ExplicitTop = 55
+          end
+          inherited seNumber: TJvSpinEdit
+            Left = 5
+            Top = 26
+            OnChange = frameMapNamesseNumberChange
+            ExplicitLeft = 5
+            ExplicitTop = 26
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 100
+          Height = 120
+          OnSelectCell = frameMapNamesGridSelectCell
+          OnSetEditText = frameMapNamesGridSetEditText
+          ExplicitLeft = 4
+          ExplicitTop = 3
+          ExplicitWidth = 100
+          ExplicitHeight = 168
+        end
+      end
+    end
   end
   inherited pnlBottom: TPanel [3]
     Top = 264

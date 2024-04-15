@@ -7,10 +7,12 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectNoParamUnit, Vcl.Grids,
   RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask, JvExMask,
   JvSpin, Vcl.ExtCtrls, UndoItemsScreenObjects, Vcl.ComCtrls, frameGridUnit,
-  ModflowMvrUnit;
+  ModflowMvrUnit, JvExExtCtrls, JvNetscapeSplitter;
 
 type
   TReceiverColumn = (rcPackage, rcDivide, rcSfrChoice, rcLakeOutlet, rcObject);
+  TMapColumn = (mcSource, mcReceiver);
+  TReceiverItemColumn = (ricValue, ricType, ricMapName);
 
   TGetSourcesEvent = procedure (Sender: TObject;
       var PotentialSources: TSourcePackageChoices) of object;
@@ -24,6 +26,10 @@ type
     frameReceivers: TframeGrid;
     lblMvrType: TLabel;
     comboMvrType: TComboBox;
+    tabMvrMap: TTabSheet;
+    JvNetscapeSplitter1: TJvNetscapeSplitter;
+    rdgMap: TRbwDataGrid4;
+    frameMapNames: TframeGrid;
     procedure comboSourcePackageChange(Sender: TObject);
     procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -44,6 +50,17 @@ type
     procedure comboSourcePackageDropDown(Sender: TObject);
     procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
+    procedure frameMapNamesseNumberChange(Sender: TObject);
+    procedure frameMapNamesGridSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
+    procedure frameMapNamessbAddClick(Sender: TObject);
+    procedure frameMapNamessbInsertClick(Sender: TObject);
+    procedure frameMapNamessbDeleteClick(Sender: TObject);
+    procedure frameMapNamesGridSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure rdgMapExit(Sender: TObject);
+    procedure rdgMapSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     FLakObjects: TStringList;
     FMawObjects: TStringList;
@@ -52,7 +69,8 @@ type
     FChanging: Boolean;
     FOnGetSources: TGetSourcesEvent;
     FUzfObjects: TStringList;
-//    FMoverChoices: TStringList;
+    FMvrMaps: TSectionMaps;
+    FMapItem: TSectionMap;
     procedure Changed;
     procedure SetOnChange(const Value: TNotifyEvent);
     procedure SetChanging(const Value: Boolean);
@@ -61,12 +79,14 @@ type
     function GetMawObjects: TStringList;
     function GetSfrObjects: TStringList;
     function GetUzfObjects: TStringList;
+    procedure SetMapItem(const Value: TSectionMap);
+    property MapItem: TSectionMap read FMapItem write SetMapItem;
     { Private declarations }
   protected
     procedure LayoutMultiRowEditControls; override;
   public
-//    constructor Create(AOwner: TComponent); override;
-//    destructor Destroy; override;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     property LakObjects: TStringList read GetLakObjects;
     property MawObjects: TStringList read GetMawObjects;
     property SfrObjects: TStringList read GetSfrObjects;
@@ -91,7 +111,11 @@ implementation
 
 uses frmGoPhastUnit, ScreenObjectUnit, GoPhastTypes,
   System.Math, frmCustomGoPhastUnit, frmErrorsAndWarningsUnit,
-  ModflowLakMf6Unit;
+  ModflowLakMf6Unit, System.Generics.Collections;
+
+const
+  NumberOfColumnsPerReciever = 3;
+  NumberOfTimeColumns = 2;
 
 resourcestring
   StrValue = ' Value';
@@ -109,6 +133,7 @@ resourcestring
   StrInvalidLakeOutletExplanation = 'The object "%s" defines a Lake MVR sour' +
   'ce but the lake outlet number is invalid.';
   StrDivideFlowEqually = 'Divide flow equally among UZF receiver cells';
+  StrMapNameDOptiona = 'Map name %d (optional)';
 
 { TframeScreenObjectMvr }
 
@@ -209,21 +234,166 @@ begin
   comboSourcePackage.Color := clWindow
 end;
 
-//constructor TframeScreenObjectMvr.Create(AOwner: TComponent);
-//begin
-//  inherited;
-//  FMoverChoices := TStringList.Create;
-//  FMoverChoices.Add('Factor');
-//  FMoverChoices.Add('Excess');
-//  FMoverChoices.Add('Threshold');
-//  FMoverChoices.Add('Up To');
-//end;
+constructor TframeScreenObjectMvr.Create(AOwner: TComponent);
+begin
+  inherited;
+  FMvrMaps := TSectionMaps.Create(nil);
+end;
 
-//destructor TframeScreenObjectMvr.Destroy;
-//begin
-//  FMoverChoices.Free;
-//  inherited;
-//end;
+destructor TframeScreenObjectMvr.Destroy;
+begin
+  FMvrMaps.Free;
+  inherited;
+end;
+
+procedure TframeScreenObjectMvr.frameMapNamesGridSelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  AMapItem: TSectionMap;
+  RowIndex: Integer;
+  ItemIndex: Integer;
+  AnItem: TSectionMapItem;
+begin
+  inherited;
+  if Changing then
+  begin
+    Exit;
+  end;
+  if ARow >= 1 then
+  begin
+    if frameMapNames.Grid.Objects[ACol, ARow] <> nil then
+    begin
+      AMapItem := frameMapNames.Grid.Objects[ACol, ARow] as TSectionMap;
+      MapItem := AMapItem;
+      for RowIndex := 1 to rdgMap.RowCount - 1 do
+      begin
+        rdgMap.Cells[Ord(mcReceiver), RowIndex] := '';
+      end;
+      for ItemIndex := 0 to AMapItem.MvrMap.Count - 1 do
+      begin
+        AnItem := AMapItem.MvrMap[ItemIndex];
+        if (AnItem.SourceSection >= 1)
+          and (AnItem.SourceSection < rdgMap.RowCount) then
+        begin
+          rdgMap.Cells[Ord(mcReceiver), ItemIndex+1] := IntToStr(AnItem.ReceiverSection)
+        end;
+      end;
+    end
+    else
+    begin
+      MapItem := nil;
+    end;
+  end
+  else
+  begin
+    MapItem := nil;
+  end;
+end;
+
+procedure TframeScreenObjectMvr.frameMapNamesGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+var
+  Dummy: Boolean;
+  AMapItem: TSectionMap;
+begin
+  inherited;
+  if Changing then
+  begin
+    Exit;
+  end;
+  if ARow >= 1 then
+  begin
+    if Value <> '' then
+    begin
+      if frameMapNames.Grid.Objects[ACol, ARow] = nil then
+      begin
+        AMapItem := FMvrMaps.Add;
+        frameMapNames.Grid.Objects[ACol, ARow] := AMapItem;
+      end
+      else
+      begin
+        AMapItem := frameMapNames.Grid.Objects[ACol, ARow] as TSectionMap;
+      end;
+      AMapItem.MvrMap.MapName := Value;
+    end;
+    Dummy := True;
+    frameMapNamesGridSelectCell(self, ACol, ARow, Dummy)
+  end;
+end;
+
+procedure TframeScreenObjectMvr.frameMapNamessbAddClick(Sender: TObject);
+begin
+  inherited;
+  frameMapNames.sbAddClick(Sender);
+
+end;
+
+procedure TframeScreenObjectMvr.frameMapNamessbDeleteClick(Sender: TObject);
+var
+  FirstValidRow: Integer;
+  SelectedRow: Integer;
+begin
+  inherited;
+  FirstValidRow := frameMapNames.Grid.FixedRows;
+  SelectedRow := frameMapNames.Grid.SelectedRow;
+  frameMapNames.sbDeleteClick(Sender);
+  if SelectedRow >= FirstValidRow then
+  begin
+    frameMapNames.Grid.Objects[0, SelectedRow].Free;
+  end;
+
+end;
+
+procedure TframeScreenObjectMvr.frameMapNamessbInsertClick(Sender: TObject);
+var
+  FirstValidRow: Integer;
+  SelectedRow: Integer;
+begin
+  inherited;
+  FirstValidRow := frameMapNames.Grid.FixedRows;
+  SelectedRow := frameMapNames.Grid.SelectedRow;
+  frameMapNames.sbInsertClick(Sender);
+  if SelectedRow >= FirstValidRow then
+  begin
+    frameMapNames.Grid.Objects[0, SelectedRow] := FMvrMaps.Insert(SelectedRow-1);
+  end;
+end;
+
+procedure TframeScreenObjectMvr.frameMapNamesseNumberChange(Sender: TObject);
+var
+  OldRowCount: Integer;
+  NewRowCount: Integer;
+  RowIndex: Integer;
+begin
+  inherited;
+  OldRowCount := frameMapNames.Grid.RowCount +1;
+  NewRowCount := frameMapNames.seNumber.AsInteger+1;
+  frameMapNames.Grid.BeginUpdate;
+  try
+    if (NewRowCount < frameMapNames.Grid.RowCount) then
+    begin
+      for RowIndex := NewRowCount to frameMapNames.Grid.RowCount - 1 do
+      begin
+        frameMapNames.Grid.Objects[0, RowIndex].Free;
+        frameMapNames.Grid.Objects[0, RowIndex] := nil;
+      end;
+    end;
+
+    frameMapNames.seNumberChange(Sender);
+
+    if NewRowCount > OldRowCount then
+    begin
+      for RowIndex := OldRowCount to NewRowCount - 1 do
+      begin
+        frameMapNames.Grid.Objects[0, RowIndex] := FMvrMaps.Add;
+      end;
+    end;
+
+  finally
+    frameMapNames.Grid.EndUpdate;
+  end;
+
+end;
 
 procedure TframeScreenObjectMvr.frameReceiversGridBeforeDrawCell(
   Sender: TObject; ACol, ARow: Integer);
@@ -405,28 +575,41 @@ begin
       frameReceivers.seNumber.AsInteger:= 1;
     end;
     frameReceivers.seNumberChange(Sender);
-    rdgModflowBoundary.ColCount := 2 * (frameReceivers.seNumber.AsInteger) + 2;
+    rdgModflowBoundary.ColCount := NumberOfColumnsPerReciever
+      * (frameReceivers.seNumber.AsInteger) + NumberOfTimeColumns;
 
-    for ReceiverIndex := 1 to frameReceivers.seNumber.AsInteger do
+    for ReceiverIndex := 0 to frameReceivers.seNumber.AsInteger -1 do
     begin
-      ColIndex := ReceiverIndex* 2;
+      ColIndex := NumberOfTimeColumns + ReceiverIndex* NumberOfColumnsPerReciever
+        + Ord(ricValue);
       rdgModflowBoundary.Cells[ColIndex, 0] :=
-        StrReceiver + ReceiverIndex.ToString + StrValue;
+        StrReceiver + (ReceiverIndex+1).ToString + StrValue;
       rdgModflowBoundary.Columns[ColIndex].WordWrapCaptions := True;
       rdgModflowBoundary.Columns[ColIndex].AutoAdjustRowHeights := True;
       rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := True;
       rdgModflowBoundary.Columns[ColIndex].ButtonUsed := True;
       rdgModflowBoundary.Columns[ColIndex].ButtonWidth := 35;
       rdgModflowBoundary.Columns[ColIndex].ButtonCaption := 'F()';
-      Inc(ColIndex);
+
+      ColIndex := NumberOfTimeColumns + ReceiverIndex* NumberOfColumnsPerReciever
+        + Ord(ricType);
+
       rdgModflowBoundary.Cells[ColIndex, 0] :=
-        StrReceiver + ReceiverIndex.ToString + StrMoverType;
+        StrReceiver + (ReceiverIndex+1).ToString + StrMoverType;
       rdgModflowBoundary.Columns[ColIndex].WordWrapCaptions := True;
       rdgModflowBoundary.Columns[ColIndex].AutoAdjustRowHeights := True;
       rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := True;
       rdgModflowBoundary.Columns[ColIndex].PickList.Assign(comboMvrType.Items);
       rdgModflowBoundary.Columns[ColIndex].ComboUsed := True;
       rdgModflowBoundary.Columns[ColIndex].LimitToList := True;
+
+      ColIndex := NumberOfTimeColumns + ReceiverIndex* NumberOfColumnsPerReciever
+        + Ord(ricMapName);
+
+      rdgModflowBoundary.Cells[ColIndex, 0] := Format(StrMapNameDOptiona, [ReceiverIndex+1]) ;
+      rdgModflowBoundary.Columns[ColIndex].WordWrapCaptions := True;
+      rdgModflowBoundary.Columns[ColIndex].AutoAdjustRowHeights := True;
+      rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := True;
     end;
   finally
     rdgModflowBoundary.EndUpdate;
@@ -449,17 +632,17 @@ var
   FirstReceivers: TReceiverCollection;
   AReceiverItem: TIndividualMvrItem;
   ColIndex: Integer;
+  RowIndex: Integer;
+  MapIndex: Integer;
+  AMap: TSectionMap;
+  TimeRowIndex: Integer;
 begin
   rdgModflowBoundary.Handle;
   seNumberOfTimes.Handle;
   pcMain.ActivePageIndex := 0;
   InitializeGrids;
-//  FMoverChoices.Assign(rdgModflowBoundary.Columns[3].PickList);
 
   MoveGridToTabSheet(tabTime);
-//  pnlGrid.Parent := tabTime;
-//  pnlBottom.Parent := tabTime;
-//  pnlGrid.Align := alClient;
 
   FLakObjects := nil;
   FMawObjects := nil;
@@ -470,6 +653,22 @@ begin
   Changing := True;
   try
     comboSourcePackage.ItemIndex := -1;
+    tabMvrMap.Visible := False;
+  {$IFDEF ImportMF6}
+    if ScreenObjectList.Count = 1 then
+    begin
+      AScreenObject := ScreenObjectList[0].ScreenObject;
+      if AScreenObject.SectionCount > 1 then
+      begin
+        tabMvrMap.Visible := True;
+        rdgMap.RowCount := AScreenObject.SectionCount + 1;
+        for RowIndex := 1 to rdgMap.RowCount - 1 do
+        begin
+          rdgMap.Cells[Ord(mcSource), RowIndex] := IntToStr(RowIndex);
+        end;
+      end;
+    end;
+  {$ENDIF}
 
     FoundFirst := False;
     FirstModflowMvr := nil;
@@ -523,11 +722,35 @@ begin
             for ReceiverIndex := 0 to MvrItem.Items.Count - 1 do
             begin
               AReceiverItem := MvrItem.Items[ReceiverIndex];
-              ColIndex := ReceiverIndex*2+2;
-              rdgModflowBoundary.Cells[ColIndex, TimeIndex+1+PestRowOffset] :=
+              TimeRowIndex := TimeIndex+1+PestRowOffset;
+              ColIndex := ReceiverIndex*NumberOfColumnsPerReciever
+                + NumberOfTimeColumns + Ord(ricValue);
+              rdgModflowBoundary.Cells[ColIndex, TimeRowIndex] :=
                 AReceiverItem.Value;
-              rdgModflowBoundary.ItemIndex[ColIndex+1, TimeIndex+1+PestRowOffset] :=
+
+              ColIndex := ReceiverIndex*NumberOfColumnsPerReciever
+                + NumberOfTimeColumns + Ord(ricType);
+              rdgModflowBoundary.ItemIndex[ColIndex, TimeRowIndex] :=
                 Ord(AReceiverItem.MvrType);
+
+              ColIndex := ReceiverIndex*NumberOfColumnsPerReciever
+                + NumberOfTimeColumns + Ord(ricMapName);
+              rdgModflowBoundary.Cells[ColIndex, TimeRowIndex] :=
+                AReceiverItem.MapName;
+            end;
+          end;
+
+          if tabMvrMap.Visible then
+          begin
+            FMvrMaps.Assign(ModflowMvr.MvrMaps);
+            rdgMap.RowCount := AScreenObject.SectionCount + 1;
+            frameMapNames.Grid.RowCount := Max(FMvrMaps.Count, 1)+1;
+            frameMapNames.Grid.Cells[0,1] := '';
+            for MapIndex := 0 to FMvrMaps.Count - 1 do
+            begin
+              AMap := FMvrMaps[MapIndex];
+              frameMapNames.Grid.Cells[0, MapIndex+1] := AMap.MvrMap.MapName;
+              frameMapNames.Grid.Objects[0, MapIndex+1] := AMap;
             end;
           end;
         end
@@ -600,6 +823,23 @@ end;
 procedure TframeScreenObjectMvr.InitializeGrids;
 begin
   Changing := True;
+
+  frameMapNames.Grid.BeginUpdate;
+  try
+    ClearGrid(frameMapNames.Grid);
+    frameMapNames.Grid.Cells[0,0] := 'Map name';
+  finally
+    frameMapNames.Grid.EndUpdate;
+  end;
+
+  rdgMap.BeginUpdate;
+  try
+    ClearGrid(rdgMap);
+    rdgMap.Cells[Ord(mcSource),0] := 'Source section';
+    rdgMap.Cells[Ord(mcReceiver),0] := 'Receiver section';
+  finally
+    rdgMap.EndUpdate;
+  end;
 
   frameReceivers.Grid.BeginUpdate;
   try
@@ -705,6 +945,62 @@ begin
   end;
 end;
 
+procedure TframeScreenObjectMvr.rdgMapExit(Sender: TObject);
+var
+  Value: Integer;
+  Map: TSectionMapItemCollection;
+  RowIndex: Integer;
+  ItemIndex: Integer;
+  AnItem: TSectionMapItem;
+begin
+  inherited;
+  if MapItem <> nil then
+  begin
+    Map := MapItem.MvrMap;
+    for RowIndex := 1 to rdgMap.RowCount - 1 do
+    begin
+      rdgMap.Objects[Ord(mcReceiver), RowIndex] := nil;
+    end;
+    for ItemIndex := Map.Count - 1 downto 0 do
+    begin
+      AnItem := Map[ItemIndex];
+      if (AnItem.SourceSection >= 1)
+        and (AnItem.SourceSection <= rdgMap.RowCount-1) then
+      begin
+        rdgMap.Objects[Ord(mcReceiver), ItemIndex+1] := AnItem;
+      end
+      else
+      begin
+        AnItem.Free;
+      end;
+    end;
+    for RowIndex := 1 to rdgMap.RowCount - 1  do
+    begin
+      if TryStrToInt(rdgMap.Cells[Ord(mcReceiver), RowIndex], Value) then
+      begin
+        AnItem := rdgMap.Objects[Ord(mcReceiver), RowIndex] as TSectionMapItem;
+        if AnItem = nil then
+        begin
+          AnItem := Map.Add;
+          AnItem.SourceSection := RowIndex;
+        end;
+        AnItem.ReceiverSection := Value;
+      end
+      else
+      begin
+        rdgMap.Objects[Ord(mcReceiver), RowIndex].Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TframeScreenObjectMvr.rdgMapSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  CanSelect := MapItem <> nil;
+end;
+
 procedure TframeScreenObjectMvr.rdgModflowBoundaryMouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
@@ -760,6 +1056,7 @@ var
   Receivers: TReceiverCollection;
   ReceiverItem: TReceiverItem;
   ModflowLak6: TLakeMf6;
+  ColumnType: TReceiverItemColumn;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel, StrInvalidLakeSource);
   frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel, StrInvalidLakeOutlet);
@@ -775,6 +1072,14 @@ begin
 
         for ColumnIndex := 0 to rdgModflowBoundary.ColCount - 1 do
         begin
+          if ColumnIndex >= NumberOfTimeColumns then
+          begin
+            if (ColumnIndex - NumberOfTimeColumns) mod NumberOfColumnsPerReciever
+              = Ord(ricMapName) then
+            begin
+              Continue;
+            end;
+          end;
           if (rdgModflowBoundary.Cells[ColumnIndex,RowIndex] = '') then
           begin
             RowOk := False;
@@ -787,19 +1092,31 @@ begin
           MvrItem.StartTime := rdgModflowBoundary.RealValue[Ord(mtcStartTime),RowIndex];
           MvrItem.EndTime := rdgModflowBoundary.RealValue[Ord(mtcEndTime),RowIndex];
           MvrItem.Items.Count := ItemCount;
-          for ColumnIndex := 2 to rdgModflowBoundary.ColCount - 1 do
+          for ColumnIndex := NumberOfTimeColumns to rdgModflowBoundary.ColCount - 1 do
           begin
-            ItemIndex := ColumnIndex div 2 - 1;
+            ItemIndex := (ColumnIndex - NumberOfTimeColumns) div NumberOfColumnsPerReciever;
             IndvidualItem := MvrItem.Items[ItemIndex];
-            if Odd(ColumnIndex) then
-            begin
-              IndvidualItem.MvrType :=
-                TMvrType(rdgModflowBoundary.ItemIndex[ColumnIndex,RowIndex]);
-            end
-            else
-            begin
-              IndvidualItem.Value :=
-                rdgModflowBoundary.Cells[ColumnIndex,RowIndex]
+            ColumnType := TReceiverItemColumn((ColumnIndex - NumberOfTimeColumns)
+              mod NumberOfColumnsPerReciever);
+            case ColumnType of
+              ricValue:
+                begin
+                  IndvidualItem.Value :=
+                    rdgModflowBoundary.Cells[ColumnIndex,RowIndex]
+                end;
+              ricType:
+                begin
+                  IndvidualItem.MvrType :=
+                    TMvrType(rdgModflowBoundary.ItemIndex[ColumnIndex,RowIndex]);
+                end;
+              ricMapName:
+                begin
+                  IndvidualItem.MapName := rdgModflowBoundary.Cells[ColumnIndex,RowIndex];
+                end;
+              else
+                begin
+                  Assert(False);
+                end;
             end;
           end;
         end;
@@ -863,7 +1180,6 @@ begin
       for Index := 0 to List.Count - 1 do
       begin
         Item := List.Items[Index];
-    //    ScreenObject := Item.ScreenObject;
         Boundary := Item.ScreenObject.ModflowMvr;
         BoundaryUsed := (Boundary <> nil) and Boundary.Used;
         if ClearAll then
@@ -926,6 +1242,11 @@ begin
             end;
           end;
         end;
+
+        if tabMvrMap.Visible then
+        begin
+          Boundary.MvrMaps := FMvrMaps;
+        end;
       end;
     finally
       Receivers.Free;
@@ -934,6 +1255,33 @@ begin
     TimeValues.Free;
   end;
 
+end;
+
+procedure TframeScreenObjectMvr.SetMapItem(const Value: TSectionMap);
+var
+  RowIndex: Integer;
+  Map: TSectionMapItemCollection;
+  ItemIndex: Integer;
+  MapItem: TSectionMapItem;
+begin
+  FMapItem := Value;
+  rdgMap.BeginUpdate;
+  try
+    for RowIndex := 1 to rdgMap.RowCount - 1 do
+    begin
+      rdgMap.Cells[Ord(mcReceiver), RowIndex] := ''
+    end;
+    if FMapItem <> nil then
+    begin
+      Map := Value.MvrMap;
+      for ItemIndex := 0 to Map.Count - 1 do
+      begin
+        MapItem := Map[ItemIndex];
+      end;
+    end;
+  finally
+    rdgMap.EndUpdate;
+  end;
 end;
 
 procedure TframeScreenObjectMvr.SetOnChange(const Value: TNotifyEvent);

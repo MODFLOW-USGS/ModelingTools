@@ -1045,8 +1045,27 @@ begin
           // MrvCell.Values.Cell.Section is the object section
           MvrCell := MvrSourceDictionary[ASource.Key.SourceKey];
 
+
           for ReceiverIndex := 0 to ASource.Receivers.Count - 1 do
           begin
+
+            MapDictionary := nil;
+            if ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf] then
+            begin
+              MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
+              if MapName <> '' then
+              begin
+                if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
+                begin
+                  MapDictionary := nil;
+                  frmErrorsAndWarnings.AddError(Model, 'Invalid MVR Map name',
+                    Format('%s:0 in stress period %1:d is not a MVR Map defined in %s:s.',
+                    [MapName, StressPeriodIndex+1, MvrCell.ScreenObject.Name]),
+                    MvrCell.ScreenObject as TObject);
+                end;
+              end;
+            end;
+
             ReceiverItem := ASource.Receivers[ReceiverIndex];
             ReceiverKey.ReceiverPackage := ReceiverItem.ReceiverPackage;
             ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject;
@@ -1075,7 +1094,7 @@ begin
             end;
 
             ReceiverSection := -1;
-            MapDictionary := nil;
+//            MapDictionary := nil;
             if ReceiverItem.ReceiverPackage = rpcUzf then
             begin
               ReceiverCount := Length(ReceiverValues.UzfCells);
@@ -1084,12 +1103,12 @@ begin
               begin
                 MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
                 // If a map is used, ReceiverCount can not be used as the divisor.
-                if MapName <> '' then
+                if (MapName <> '') and (MapDictionary <> nil) then
                 begin
-                  if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
-                  begin
-                    Assert(False);
-                  end;
+//                  if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
+//                  begin
+//                    Assert(False);
+//                  end;
 
                   if not MapDictionary.TryGetValue(MvrCell.Section, ReceiverSection) then
                   begin
@@ -1118,8 +1137,19 @@ begin
                   end;
                 srcNearest:
                   begin
-                    for SfrCellIndex := 1 to Length(ReceiverValues.StreamCells) - 1 do
+                    for SfrCellIndex := 0 to Length(ReceiverValues.StreamCells) - 1 do
                     begin
+                      if MapDictionary <> nil then
+                      begin
+                        if not MapDictionary.TryGetValue(MvrCell.Section, ReceiverSection) then
+                        begin
+                          Continue;
+                        end;
+                        if ReceiverSection <> ReceiverValues.SectionIndices[SfrCellIndex] then
+                        begin
+                          Continue;
+                        end;
+                      end;
                       ReceiverLocation := GetLocation(
                         ReceiverValues.StreamCells[SfrCellIndex].Column,
                         ReceiverValues.StreamCells[SfrCellIndex].Row);
@@ -1132,9 +1162,6 @@ begin
                   begin
                   end;
                 srcNearestAnySegment:
-                  begin
-                  end;
-                srcMap:
                   begin
                   end;
                 else
@@ -1191,8 +1218,9 @@ begin
               end
             end;
 
+            {
             if (ReceiverItem.ReceiverPackage = rpcSfr)
-              and (ReceiverItem.SfrReceiverChoice = srcMap) then
+              and (ReceiverItem.MapName <> '') then
             begin
               if ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf] then
               begin
@@ -1221,6 +1249,7 @@ begin
                 end;
               end;
             end;
+            }
 
             for InnerReceiverIndex := 0 to ReceiverCount-1 do
             begin
