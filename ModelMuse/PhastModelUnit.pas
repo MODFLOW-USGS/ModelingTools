@@ -10218,6 +10218,12 @@ const
 //               bug fix: fixed a bug in the display of objects with one
 //                elevation formula in the front and side views.
 //               bug fix: Fixed bug opening MODFLOW 6 model with ETS package.
+//               bug fix: Fixed a bug in the MVR package, in which the FACTOR
+//                was divided among UZF reciver cells even that option was not
+//                selected.
+//               bug fix: Fixed bug in MVR package in which the flow could be
+//                directed to the wrong SFR receiver if more than one SFR
+//                receiver was used with the same MVR source.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 

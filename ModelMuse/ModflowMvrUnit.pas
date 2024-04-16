@@ -77,6 +77,7 @@ type
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
+    constructor Create(Collection: TCollection); override;
     procedure Assign(Source: TPersistent); override;
     property ReceiverObject: TObject read GetReceiverObject write SetReceiverObject;
     procedure Loaded(AModel: TBaseModel);
@@ -90,7 +91,7 @@ type
     property ReceiverObjectName: string read GetReceiverObjectName
       write SetReceiverObjectName;
     property DivisionChoice: TDivisionChoice read FDivisionChoice
-      write SetDivisionChoice;
+      write SetDivisionChoice default dcDivide;
    end;
 
   TReceiverCollection = class(TOrderedCollection)
@@ -1119,6 +1120,12 @@ begin
   begin
     inherited;
   end;
+end;
+
+constructor TReceiverItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FDivisionChoice := dcDivide;
 end;
 
 function TReceiverItem.GetReceiverObject: TObject;

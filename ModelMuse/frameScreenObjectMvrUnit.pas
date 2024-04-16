@@ -366,7 +366,7 @@ var
   RowIndex: Integer;
 begin
   inherited;
-  OldRowCount := frameMapNames.Grid.RowCount +1;
+  OldRowCount := frameMapNames.Grid.RowCount;
   NewRowCount := frameMapNames.seNumber.AsInteger+1;
   frameMapNames.Grid.BeginUpdate;
   try
@@ -566,6 +566,7 @@ procedure TframeScreenObjectMvr.frameReceiversseNumberChange(Sender: TObject);
 var
   ReceiverIndex: Integer;
   ColIndex: Integer;
+  RowIndex: Integer;
 begin
   inherited;
   rdgModflowBoundary.BeginUpdate;
@@ -577,6 +578,14 @@ begin
     frameReceivers.seNumberChange(Sender);
     rdgModflowBoundary.ColCount := NumberOfColumnsPerReciever
       * (frameReceivers.seNumber.AsInteger) + NumberOfTimeColumns;
+
+    for RowIndex := 1 to frameReceivers.Grid.RowCount - 1 do
+    begin
+      if frameReceivers.Grid.Cells[Ord(rcPackage), RowIndex] = '' then
+      begin
+        frameReceivers.Grid.Checked[Ord(rcDivide), RowIndex] := True;
+      end;
+    end;
 
     for ReceiverIndex := 0 to frameReceivers.seNumber.AsInteger -1 do
     begin
@@ -821,6 +830,8 @@ begin
 end;
 
 procedure TframeScreenObjectMvr.InitializeGrids;
+var
+  RowIndex: Integer;
 begin
   Changing := True;
 
@@ -853,6 +864,11 @@ begin
     frameReceivers.Grid.Cells[Ord(rcObject), 0] := StrReceiverObject;
     rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
     rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+
+    for RowIndex := 1 to frameReceivers.Grid.RowCount - 1 do
+    begin
+      frameReceivers.Grid.Checked[Ord(rcDivide), RowIndex] := True;
+    end;
   finally
     frameReceivers.Grid.EndUpdate;
   end;

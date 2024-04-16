@@ -166,7 +166,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     Top = 25
     Width = 412
     Height = 239
-    ActivePage = tabConnections
+    ActivePage = tabMvrMap
     Align = alClient
     TabOrder = 2
     object tabConnections: TTabSheet
@@ -476,8 +476,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = 99
-        ExplicitWidth = 305
       end
       inline frameMapNames: TframeGrid
         Left = 0
@@ -486,14 +484,13 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         Height = 209
         Align = alLeft
         TabOrder = 1
-        ExplicitLeft = 89
         ExplicitWidth = 100
         ExplicitHeight = 209
         inherited Panel: TPanel
           Top = 120
           Width = 100
           Height = 89
-          ExplicitTop = 88
+          ExplicitTop = 120
           ExplicitWidth = 100
           ExplicitHeight = 89
           inherited lbNumber: TLabel
@@ -536,10 +533,8 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           Height = 120
           OnSelectCell = frameMapNamesGridSelectCell
           OnSetEditText = frameMapNamesGridSetEditText
-          ExplicitLeft = 4
-          ExplicitTop = 3
           ExplicitWidth = 100
-          ExplicitHeight = 168
+          ExplicitHeight = 120
         end
       end
     end

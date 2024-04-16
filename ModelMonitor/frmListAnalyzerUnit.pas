@@ -1779,6 +1779,7 @@ var
   Lines: TStringList;
   ActiveLineNo: integer;
   ScrollBarActive: Boolean;
+  DisV: Boolean;
 begin
   try
     result := False;
@@ -1858,6 +1859,8 @@ begin
           end;
           DataRow := nil;
 
+          DisV := Labels.Count = 0;
+
           EndFound := False;
           StartLine := ArrayStart + frameListing.ListFile.CurrentStartLine;
           Lines := TStringList.Create;
@@ -1915,7 +1918,7 @@ begin
                   TableRows.Add(DataRow);
                 end;
                 DataRow.AddStrings(Splitter);
-                if DataRow.Count >= Labels.Count + 1 then
+                if (not DisV) and (DataRow.Count >= Labels.Count + 1) then
                 begin
                   DataRow := nil;
                 end;
@@ -1961,6 +1964,17 @@ begin
                 for ColIndex := 0 to DataRow.Count - 1 do
                 begin
                   rdgTable.Cells[ColIndex, RowIndex+1] := DataRow[ColIndex];
+                end;
+              end;
+              if DisV then
+              begin
+                for ColIndex := 1 to rdgTable.ColCount - 1 do
+                begin
+                  rdgTable.Columns[ColIndex].AutoAdjustColWidths := True;
+                  if rdgTable.Cells[ColIndex,0] = '' then
+                  begin
+                    rdgTable.Cells[ColIndex,0] := IntToStr(ColIndex);
+                  end;
                 end;
               end;
             finally

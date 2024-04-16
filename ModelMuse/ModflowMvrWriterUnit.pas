@@ -153,6 +153,7 @@ resourcestring
 
 type
   TSourceReceiverMap = TDictionary<Integer, Integer>;
+  TSfrQuadTreeDictionary = TDictionary<TObject, TRbwQuadTree>;
 
 { TModflowMvrWriter }
 
@@ -931,7 +932,7 @@ var
   GridLimit: TGridLimit;
   PriorSourceObject: TObject;
   PriorReceiverObject: TObject;
-  MapDictionary: TSourceReceiverMap;
+  SourceReceiverIndexMap: TSourceReceiverMap;
   MapName: string;
   ModflowMvr: TMvrBoundary;
   MapIndex: Integer;
@@ -944,6 +945,8 @@ var
   ReceiverSection: Integer;
   SectionMaps: TDictionary<string,TSourceReceiverMap>;
   SectionMapsList: TObjectList<TSourceReceiverMap>;
+  QuadTreeList: TObjectList<TRbwQuadTree>;
+  SfrQuadTreeDictionary: TSfrQuadTreeDictionary;
   function GetLocation(ACol, ARow: Integer): TPoint2D;
   begin
     if Grid <> nil then
@@ -979,17 +982,19 @@ begin
   SectionMapsList := TObjectList<TSourceReceiverMap>.Create;
   AllStreamReaches := TRbwQuadTree.Create(nil);
   EnclosedReaches := TRbwQuadTree.Create(nil);
-  CurrentObjectReaches := TRbwQuadTree.Create(nil);
+//  CurrentObjectReaches := TRbwQuadTree.Create(nil);
+  QuadTreeList := TObjectList<TRbwQuadTree>.Create;
+  SfrQuadTreeDictionary := TSfrQuadTreeDictionary.Create;
   try
     if Model.ModflowPackages.SfrModflow6Package.IsSelected then
     begin
       AllStreamReaches.MaxPoints := 5;
       EnclosedReaches.MaxPoints := 5;
-      CurrentObjectReaches.MaxPoints := 5;
+//      CurrentObjectReaches.MaxPoints := 5;
       GridLimit := Model.DiscretizationLimits(vdTop);
       AssignGridLimits(AllStreamReaches);
       AssignGridLimits(EnclosedReaches);
-      AssignGridLimits(CurrentObjectReaches);
+//      AssignGridLimits(CurrentObjectReaches);
     end;
     for StressPeriodIndex := 0 to FSourceLists.Count - 1 do
     begin
@@ -1019,7 +1024,7 @@ begin
           begin
             PriorSourceObject := ASource.Key.SourceKey.ScreenObject;
             EnclosedReaches.Clear;
-            CurrentObjectReaches.Clear;
+//            CurrentObjectReaches.Clear;
             SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
             SectionMaps.Clear;
             SectionMapsList.Clear;
@@ -1030,13 +1035,13 @@ begin
             begin
               AMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
 
-              MapDictionary := TSourceReceiverMap.Create;
-              SectionMapsList.Add(MapDictionary);
-              SectionMaps.Add(UpperCase(AMap.MapName), MapDictionary);
+              SourceReceiverIndexMap := TSourceReceiverMap.Create;
+              SectionMapsList.Add(SourceReceiverIndexMap);
+              SectionMaps.Add(UpperCase(AMap.MapName), SourceReceiverIndexMap);
               for MapItemIndex := 0 to AMap.Count - 1 do
               begin
                 MapItem := AMap[MapItemIndex];
-                MapDictionary.Add(MapItem.SourceSection-1, MapItem.ReceiverSection-1);
+                SourceReceiverIndexMap.Add(MapItem.SourceSection-1, MapItem.ReceiverSection-1);
               end;
             end;
 
@@ -1048,16 +1053,17 @@ begin
 
           for ReceiverIndex := 0 to ASource.Receivers.Count - 1 do
           begin
-
-            MapDictionary := nil;
-            if ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf] then
+            SourceReceiverIndexMap := nil;
+            ReceiverItem := ASource.Receivers[ReceiverIndex];
+            if (ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf])
+              and (ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf]) then
             begin
               MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
               if MapName <> '' then
               begin
-                if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
+                if not SectionMaps.TryGetValue(UpperCase(MapName), SourceReceiverIndexMap) then
                 begin
-                  MapDictionary := nil;
+                  SourceReceiverIndexMap := nil;
                   frmErrorsAndWarnings.AddError(Model, 'Invalid MVR Map name',
                     Format('%s:0 in stress period %1:d is not a MVR Map defined in %s:s.',
                     [MapName, StressPeriodIndex+1, MvrCell.ScreenObject.Name]),
@@ -1066,7 +1072,6 @@ begin
               end;
             end;
 
-            ReceiverItem := ASource.Receivers[ReceiverIndex];
             ReceiverKey.ReceiverPackage := ReceiverItem.ReceiverPackage;
             ReceiverKey.ScreenObject := ReceiverItem.ReceiverObject;
 
@@ -1094,36 +1099,35 @@ begin
             end;
 
             ReceiverSection := -1;
-//            MapDictionary := nil;
             if ReceiverItem.ReceiverPackage = rpcUzf then
             begin
               ReceiverCount := Length(ReceiverValues.UzfCells);
               Divisor := ReceiverCount;
-              if ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf] then
+              if (ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf])
+                and (ReceiverItem.DivisionChoice = dcDivide) then
               begin
                 MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
                 // If a map is used, ReceiverCount can not be used as the divisor.
-                if (MapName <> '') and (MapDictionary <> nil) then
+                if (MapName <> '') and (SourceReceiverIndexMap <> nil) then
                 begin
-//                  if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
-//                  begin
-//                    Assert(False);
-//                  end;
-
-                  if not MapDictionary.TryGetValue(MvrCell.Section, ReceiverSection) then
+                  if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
                   begin
                     Continue
                   end;
                   Divisor := 0;
                   for DivisorIndex := 0 to Length(ReceiverValues.SectionIndices) - 1 do
                   begin
-                    if ReceiverSection = ReceiverValues.SectionIndices[DivisorIndex] then
+                    if SourceReceiverIndexMap.ContainsValue(
+                      ReceiverValues.SectionIndices[DivisorIndex]) then
                     begin
                       Inc(Divisor)
                     end;
                   end;
 
-                  break;
+                  if Divisor = 0 then
+                  begin
+                    break;
+                  end;
                 end;
               end;
             end;
@@ -1137,25 +1141,34 @@ begin
                   end;
                 srcNearest:
                   begin
-                    for SfrCellIndex := 0 to Length(ReceiverValues.StreamCells) - 1 do
+                    if not SfrQuadTreeDictionary.TryGetValue(ReceiverKey.ScreenObject,
+                      CurrentObjectReaches) then
                     begin
-                      if MapDictionary <> nil then
+                      CurrentObjectReaches := TRbwQuadTree.Create(nil);
+                      QuadTreeList.Add(CurrentObjectReaches);
+                      CurrentObjectReaches.MaxPoints := 5;
+                      AssignGridLimits(CurrentObjectReaches);
+                      SfrQuadTreeDictionary.Add(ReceiverKey.ScreenObject, CurrentObjectReaches);
+                      for SfrCellIndex := 0 to Length(ReceiverValues.StreamCells) - 1 do
                       begin
-                        if not MapDictionary.TryGetValue(MvrCell.Section, ReceiverSection) then
+                        if SourceReceiverIndexMap <> nil then
                         begin
-                          Continue;
+                          if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
+                          begin
+                            Continue;
+                          end;
+                          if ReceiverSection <> ReceiverValues.SectionIndices[SfrCellIndex] then
+                          begin
+                            Continue;
+                          end;
                         end;
-                        if ReceiverSection <> ReceiverValues.SectionIndices[SfrCellIndex] then
-                        begin
-                          Continue;
-                        end;
+                        ReceiverLocation := GetLocation(
+                          ReceiverValues.StreamCells[SfrCellIndex].Column,
+                          ReceiverValues.StreamCells[SfrCellIndex].Row);
+                        CurrentObjectReaches.AddPoint(ReceiverLocation.x,
+                          ReceiverLocation.y,
+                          Addr(ReceiverValues.StreamReachNumbers[SfrCellIndex]))
                       end;
-                      ReceiverLocation := GetLocation(
-                        ReceiverValues.StreamCells[SfrCellIndex].Column,
-                        ReceiverValues.StreamCells[SfrCellIndex].Row);
-                      CurrentObjectReaches.AddPoint(ReceiverLocation.x,
-                        ReceiverLocation.y,
-                        Addr(ReceiverValues.StreamReachNumbers[SfrCellIndex]))
                     end;
                   end;
                 srcNearestEnclosed:
@@ -1181,6 +1194,18 @@ begin
                 for SfrCellIndex := 0 to Length(
                   AReceiver.ReceiverValues.StreamCells) - 1 do
                 begin
+                  if SourceReceiverIndexMap <> nil then
+                  begin
+                    if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
+                    begin
+                      Continue;
+                    end;
+                    if ReceiverSection <> ReceiverValues.SectionIndices[SfrCellIndex] then
+                    begin
+                      Continue;
+                    end;
+                  end;
+
                   AStreamCell := AReceiver.ReceiverValues.
                     StreamCells[SfrCellIndex];
                   ReceiverLocation := GetLocation( AStreamCell.Column,
@@ -1204,6 +1229,17 @@ begin
                 for SfrCellIndex := 0 to Length(
                   AReceiver.ReceiverValues.StreamCells) - 1 do
                 begin
+                  if SourceReceiverIndexMap <> nil then
+                  begin
+                    if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
+                    begin
+                      Continue;
+                    end;
+                    if ReceiverSection <> AReceiver.ReceiverValues.SectionIndices[SfrCellIndex] then
+                    begin
+                      Continue;
+                    end;
+                  end;
                   AStreamCell := AReceiver.ReceiverValues.
                     StreamCells[SfrCellIndex];
                   ReceiverLocation := GetLocation( AStreamCell.Column,
@@ -1218,42 +1254,9 @@ begin
               end
             end;
 
-            {
-            if (ReceiverItem.ReceiverPackage = rpcSfr)
-              and (ReceiverItem.MapName <> '') then
-            begin
-              if ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf] then
-              begin
-                MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
-                // If a map is used, ReceiverCount can not be used as the divisor.
-                if MapName <> '' then
-                begin
-                  if ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf] then
-                  begin
-                    MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
-                    // If a map is used, ReceiverCount can not be used as the divisor.
-                    if MapName <> '' then
-                    begin
-                      if not SectionMaps.TryGetValue(UpperCase(MapName), MapDictionary) then
-                      begin
-                        Assert(False);
-                      end;
-
-                      if not MapDictionary.TryGetValue(MvrCell.Section, ReceiverSection) then
-                      begin
-                        Continue
-                      end;
-                    end;
-                  end;
-
-                end;
-              end;
-            end;
-            }
-
             for InnerReceiverIndex := 0 to ReceiverCount-1 do
             begin
-              if MapDictionary <> nil then
+              if SourceReceiverIndexMap <> nil then
               begin
                 if (ReceiverItem.ReceiverPackage = rpcUzf)
                   and (ReceiverSection <> ReceiverValues.SectionIndices[InnerReceiverIndex]) then
@@ -1417,10 +1420,12 @@ begin
   finally
     AllStreamReaches.Free;
     EnclosedReaches.Free;
-    CurrentObjectReaches.Free;
+//    CurrentObjectReaches.Free;
 
     SectionMaps.Free;
     SectionMapsList.Free;
+    SfrQuadTreeDictionary.Free;
+    QuadTreeList.Free;
   end;
 end;
 

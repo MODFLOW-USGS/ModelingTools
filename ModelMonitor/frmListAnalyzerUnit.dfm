@@ -39,8 +39,6 @@ object frmMain: TfrmMain
     Images = ilTabFaces
     MultiLine = True
     TabOrder = 1
-    ExplicitTop = 79
-    ExplicitHeight = 421
     object tabIndex: TTabSheet
       Caption = 'Contents'
       ImageIndex = -1
@@ -52,14 +50,14 @@ object frmMain: TfrmMain
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 385
+        ExplicitHeight = 335
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 335
           DefaultNodeHeight = 19
           OnNodeDblClick = frameListingvstIndexLinesNodeDblClick
           ExplicitWidth = 265
-          ExplicitHeight = 385
+          ExplicitHeight = 335
         end
       end
     end
@@ -74,14 +72,14 @@ object frmMain: TfrmMain
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 385
+        ExplicitHeight = 335
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 335
           DefaultNodeHeight = 19
           OnCompareNodes = frameSortedvstIndexLinesCompareNodes
           ExplicitWidth = 265
-          ExplicitHeight = 385
+          ExplicitHeight = 335
         end
       end
     end
@@ -97,14 +95,13 @@ object frmMain: TfrmMain
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 384
+        ExplicitHeight = 335
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 335
           DefaultNodeHeight = 19
-          ExplicitLeft = -2
           ExplicitWidth = 265
-          ExplicitHeight = 385
+          ExplicitHeight = 335
         end
       end
     end
@@ -120,14 +117,14 @@ object frmMain: TfrmMain
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 385
+        ExplicitHeight = 335
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 335
           DefaultNodeHeight = 19
           TreeOptions.SelectionOptions = [toSimpleDrawSelection]
           ExplicitWidth = 265
-          ExplicitHeight = 385
+          ExplicitHeight = 335
         end
       end
     end
@@ -306,9 +303,6 @@ object frmMain: TfrmMain
     ActivePage = tabTable
     Align = alClient
     TabOrder = 2
-    ExplicitTop = 79
-    ExplicitWidth = 510
-    ExplicitHeight = 421
     object tabLines: TTabSheet
       Caption = 'Lines'
       TabVisible = False
@@ -324,8 +318,6 @@ object frmMain: TfrmMain
         PageSize = 0
         TabOrder = 2
         OnScroll = sbLinesScroll
-        ExplicitLeft = 480
-        ExplicitHeight = 411
       end
       object jvrchdtLines: TJvRichEdit
         Left = 89
@@ -347,8 +339,6 @@ object frmMain: TfrmMain
         OnClick = memoLinesClick
         OnSelectionChange = redtLines1SelectionChange
         OnVerticalScroll = jvrchdtLinesVerticalScroll
-        ExplicitWidth = 391
-        ExplicitHeight = 411
       end
       object jreLineNumbers: TJvRichEdit
         Left = 0
@@ -367,7 +357,6 @@ object frmMain: TfrmMain
         SelText = ''
         TabOrder = 0
         WordWrap = False
-        ExplicitHeight = 411
       end
     end
     object tabTable: TTabSheet
@@ -491,7 +480,6 @@ object frmMain: TfrmMain
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 380
         ColWidths = (
           64
           64
@@ -515,7 +503,6 @@ object frmMain: TfrmMain
         Margins.Bottom = 2
         Align = alBottom
         TabOrder = 1
-        ExplicitTop = 380
         object btnCopy: TButton
           Left = 2
           Top = 6
@@ -539,8 +526,6 @@ object frmMain: TfrmMain
     Height = 23
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 500
-    ExplicitWidth = 793
     object lblFileCount: TLabel
       Left = 4
       Top = 2
@@ -557,7 +542,6 @@ object frmMain: TfrmMain
       Max = 1000
       Step = 1
       TabOrder = 0
-      ExplicitWidth = 656
     end
   end
   object OpenDialog1: TOpenDialog
