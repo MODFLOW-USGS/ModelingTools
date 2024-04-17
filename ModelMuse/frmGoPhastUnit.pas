@@ -10205,6 +10205,7 @@ var
   end;
 
 begin
+  frmErrorsAndWarnings.RemoveWarningGroup(PhastModel, StrFileNotFound);
   PhastModel.ClearInputObservationDataSets;
 
   case ModelSelection of
@@ -10613,7 +10614,7 @@ begin
           PLPROC_Location := GetPLPROC_Location(FileName, PhastModel);
           if PhastModel.PestUsed then
           begin
-            MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+            MoveAppToDirectory(PhastModel,PLPROC_Location, ModelDirectory);
             PLPROC_Location := ExtractFileName(PLPROC_Location);
           end;
           PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
@@ -10637,12 +10638,12 @@ begin
 
           if PhastModel.PestUsed then
           begin
-            MoveAppToDirectory(SutraFileName, ModelDirectory);
+            MoveAppToDirectory(PhastModel,SutraFileName, ModelDirectory);
             SutraFileName := ExtractFileName(SutraFileName);
 
             EnhancedTemplateProcLoc := TCustomFileWriter.PestUtilityProgramPath(
               StrEnhancedTemplateProc, FileName);
-            MoveAppToDirectory(EnhancedTemplateProcLoc, ModelDirectory);
+            MoveAppToDirectory(PhastModel,EnhancedTemplateProcLoc, ModelDirectory);
 
           end;
 
@@ -10652,7 +10653,7 @@ begin
           begin
             ParamEstBatFile.Add('');
             ArrayExtractor_Location := GetArrayExtractor_Location(FileName, PhastModel);
-            MoveAppToDirectory(ArrayExtractor_Location, ModelDirectory);
+            MoveAppToDirectory(PhastModel,ArrayExtractor_Location, ModelDirectory);
             ArrayExtractor_Location := ExtractFileName(ArrayExtractor_Location);
             for DSIndex := 0 to PhastModel.InputObsInstructionFileNames.Count - 1 do
             begin

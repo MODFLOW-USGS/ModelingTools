@@ -2,8 +2,8 @@ object frmCustomGoPhast: TfrmCustomGoPhast
   Left = 550
   Top = 496
   Caption = 'frmCustomGoPhast'
-  ClientHeight = 211
-  ClientWidth = 394
+  ClientHeight = 202
+  ClientWidth = 388
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack

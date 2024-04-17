@@ -1,0 +1,82 @@
+object frmConvertBinary: TfrmConvertBinary
+  Left = 0
+  Top = 0
+  Caption = 'Binary File Converter'
+  ClientHeight = 168
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object edtInput: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 1
+    TextSettings.Font.Size = 16.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 521.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+    OnExit = edtInputExit
+  end
+  object lblInputBinaryFile: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    TextSettings.Font.Size = 16.000000000000000000
+    Text = 'Input Binary File'
+    TabOrder = 3
+  end
+  object lblOutputCsvFile: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 8.000000000000000000
+    Position.Y = 64.000000000000000000
+    TextSettings.Font.Size = 16.000000000000000000
+    Text = 'Output CSV File'
+    TabOrder = 2
+  end
+  object edtOutputFile: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 0
+    TextSettings.Font.Size = 16.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 89.000000000000000000
+    Size.Width = 521.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+  end
+  object btnBrowseInput: TButton
+    Position.X = 537.000000000000000000
+    Position.Y = 32.000000000000000000
+    TabOrder = 5
+    Text = 'Browse'
+    OnClick = btnBrowseInputClick
+  end
+  object btnBrowseOutput: TButton
+    Position.X = 537.000000000000000000
+    Position.Y = 88.000000000000000000
+    TabOrder = 4
+    Text = 'Browse'
+    OnClick = btnBrowseOutputClick
+  end
+  object btnConvert: TButton
+    Position.X = 536.000000000000000000
+    Position.Y = 136.000000000000000000
+    TabOrder = 8
+    Text = 'Convert'
+    OnClick = btnConvertClick
+  end
+  object dlgOpen: TOpenDialog
+    Left = 408
+    Top = 8
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.csv'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Left = 408
+    Top = 64
+  end
+end

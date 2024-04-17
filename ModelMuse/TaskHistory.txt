@@ -42,7 +42,7 @@ object TTaskHistory
     end
     item
       Name = 'Modflow options'
-      Display = True
+      Display = False
     end
     item
       Name = 'DIS'
@@ -126,7 +126,7 @@ object TTaskHistory
     end
     item
       Name = 'OC'
-      Display = True
+      Display = False
     end
     item
       Name = 'SFR'
@@ -138,7 +138,7 @@ object TTaskHistory
     end
     item
       Name = 'UZF'
-      Display = True
+      Display = False
     end
     item
       Name = 'Solvers'
@@ -166,7 +166,7 @@ object TTaskHistory
     end
     item
       Name = 'HFB'
-      Display = True
+      Display = False
     end
     item
       Name = 'Export Shapefile'
@@ -178,7 +178,7 @@ object TTaskHistory
     end
     item
       Name = 'Flow Observations'
-      Display = True
+      Display = False
     end
     item
       Name = 'ModelMate Interaction'
@@ -222,7 +222,7 @@ object TTaskHistory
     end
     item
       Name = 'ZONEBUDGET'
-      Display = True
+      Display = False
     end
     item
       Name = 'Export Image'
@@ -274,7 +274,7 @@ object TTaskHistory
     end
     item
       Name = 'SUTRA Model'
-      Display = True
+      Display = False
     end
     item
       Name = '64 bit'
@@ -286,7 +286,7 @@ object TTaskHistory
     end
     item
       Name = 'Export data set'
-      Display = False
+      Display = True
     end
     item
       Name = 'STR'
@@ -302,11 +302,11 @@ object TTaskHistory
     end
     item
       Name = 'FMP'
-      Display = True
+      Display = False
     end
     item
       Name = 'CFP'
-      Display = True
+      Display = False
     end
     item
       Name = 'SWI'
@@ -342,7 +342,7 @@ object TTaskHistory
     end
     item
       Name = 'NPF'
-      Display = True
+      Display = False
     end
     item
       Name = 'STO'
@@ -374,7 +374,7 @@ object TTaskHistory
     end
     item
       Name = 'Metadata Editor'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS UZT'
@@ -386,11 +386,11 @@ object TTaskHistory
     end
     item
       Name = 'SFR MODFLOW-6'
-      Display = True
+      Display = False
     end
     item
       Name = 'MAW'
-      Display = True
+      Display = False
     end
     item
       Name = 'DISV'
@@ -402,7 +402,7 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Observation Utility'
-      Display = True
+      Display = False
     end
     item
       Name = 'MVR'
@@ -426,7 +426,7 @@ object TTaskHistory
     end
     item
       Name = 'GW_Chart'
-      Display = True
+      Display = False
     end
     item
       Name = 'Head obs for MF6'
@@ -438,7 +438,7 @@ object TTaskHistory
     end
     item
       Name = 'CSUB'
-      Display = True
+      Display = False
     end
     item
       Name = 'GwMounding'
@@ -446,7 +446,7 @@ object TTaskHistory
     end
     item
       Name = 'PEST Observations'
-      Display = True
+      Display = False
     end
     item
       Name = 'Anonymize Objects'
@@ -454,7 +454,7 @@ object TTaskHistory
     end
     item
       Name = 'Pest parameter substitution'
-      Display = True
+      Display = False
     end
     item
       Name = 'Model Viewer SUTRA 4'
@@ -478,11 +478,11 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Time Series'
-      Display = True
+      Display = False
     end
     item
       Name = 'MF6 GWT'
-      Display = True
+      Display = False
     end
     item
       Name = 'SUTRA 4'
@@ -490,11 +490,11 @@ object TTaskHistory
     end
     item
       Name = 'Buoyancy'
-      Display = True
+      Display = False
     end
     item
       Name = 'Viscosity'
-      Display = True
+      Display = False
     end>
   History = <
     item
@@ -32882,5 +32882,13 @@ object TTaskHistory
         'MVR'
         'Documentation'
         'Testing')
+    end
+    item
+      Date = 45399.000000000000000000
+      Categories.Strings = (
+        'Export data set'
+        'Error checking'
+        'Documentation'
+        'Bug fix')
     end>
 end

@@ -1156,7 +1156,7 @@ end;
     property SimFileNames[Index: Integer]: string read GetSimFileName;
   end;
 
-procedure MoveAppToDirectory(const AppFullPath, Directory: string);
+procedure MoveAppToDirectory(Model: TBaseModel; const AppFullPath, Directory: string);
 
 // name writes a batch-file used to run MODFLOW.
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
@@ -1314,6 +1314,8 @@ resourcestring
   '0:s at time %1:g.';
   StrTheFormulaShouldInt = 'The formula should result in an integer';
   StrGetValuesFromArrayFi = 'GetValuesFromArrayFiles.exe not found';
+  StrItWasNotPossible = 'It was not possible to move "%:0s" into "%:1s" beca' +
+  'use the file does not exist.';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
@@ -1547,7 +1549,7 @@ begin
   StoredArrayExtract := result;
 end;
 
-procedure MoveAppToDirectory(const AppFullPath, Directory: string);
+procedure MoveAppToDirectory(Model: TBaseModel; const AppFullPath, Directory: string);
 var
   AppName: string;
   NewFileName: string;
@@ -1559,6 +1561,8 @@ begin
 
   if not TFile.Exists(AppFullPath) then
   begin
+    frmErrorsAndWarnings.AddError(Model, StrFileNotFound,
+      Format(StrItWasNotPossible, [AppFullPath, Directory]));
     Exit;
   end;
   AppName := ExtractFileName(AppFullPath);
@@ -1700,7 +1704,7 @@ begin
       PLPROC_Location := GetPLPROC_Location(FileName, Model);
       if Model.PestUsed then
       begin
-        MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+        MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
         PLPROC_Location := ExtractFileName(PLPROC_Location);
       end;
       PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
@@ -1724,7 +1728,7 @@ begin
       begin
         ParamEstBatchFile.Add('');
         ArrayExtractor_Location := GetArrayExtractor_Location(FileName, Model);
-        MoveAppToDirectory(ArrayExtractor_Location, ModelDirectory);
+        MoveAppToDirectory(Model, ArrayExtractor_Location, ModelDirectory);
         ArrayExtractor_Location := ExtractFileName(ArrayExtractor_Location);
         for DSIndex := 0 to Model.InputObsInstructionFileNames.Count - 1 do
         begin
@@ -1880,7 +1884,7 @@ begin
       AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
       if Model.PestUsed then
       begin
-        MoveAppToDirectory(ExpandFileName(ModflowLocation), ModelDirectory);
+        MoveAppToDirectory(Model, ExpandFileName(ModflowLocation), ModelDirectory);
         AFileName := ExtractFileName(ModflowLocation);
       end;
 
@@ -2061,7 +2065,7 @@ begin
         PLPROC_Location := GetPLPROC_Location(FileName, Model);
         if Model.PestUsed then
         begin
-          MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+          MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
           PLPROC_Location := ExtractFileName(PLPROC_Location);
         end;
         PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
@@ -11244,7 +11248,7 @@ begin
   finally
     if frmGoPhast.PhastModel.PestUsed then
     begin
-      MoveAppToDirectory(ExpandFileName(result), ExtractFileDir(AFileName));
+      MoveAppToDirectory(frmGoPhast.PhastModel, ExpandFileName(result), ExtractFileDir(AFileName));
       result := UtilityProgramName;
     end;
     result := '"' + result + '"';

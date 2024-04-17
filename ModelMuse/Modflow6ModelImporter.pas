@@ -33,7 +33,7 @@ type
     Period: Integer;
   end;
 
-  TTMvrKeyyComparer = class(TEqualityComparer<TMvrKey>)
+  TTMvrKeyComparer = class(TEqualityComparer<TMvrKey>)
     function Equals(const Left, Right: TMvrKey): Boolean; override;
     function GetHashCode(const Value: TMvrKey): Integer; override;
   end;
@@ -7642,8 +7642,8 @@ begin
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.MvrPackage.IsSelected := True;
   EndTime := Model.ModflowStressPeriods.Last.EndTime;
-  SourceDictionary := TMvrSourceDictionary.Create(TTMvrKeyyComparer.Create);
-  ReceiverDictionary := TMvrReceiverDictionary.Create(TTMvrKeyyComparer.Create);
+  SourceDictionary := TMvrSourceDictionary.Create(TTMvrKeyComparer.Create);
+  ReceiverDictionary := TMvrReceiverDictionary.Create(TTMvrKeyComparer.Create);
   try
     for Index := 0 to FMvrSources.Count - 1 do
     begin
@@ -14578,14 +14578,14 @@ end;
 
 { TTMvrKeyyComparer }
 
-function TTMvrKeyyComparer.Equals(const Left, Right: TMvrKey): Boolean;
+function TTMvrKeyComparer.Equals(const Left, Right: TMvrKey): Boolean;
 begin
   Result := (Left.ID = Right.ID)
     and (Left.Period = Right.Period)
     and (Left.PackageName = Right.PackageName)
 end;
 
-function TTMvrKeyyComparer.GetHashCode(const Value: TMvrKey): Integer;
+function TTMvrKeyComparer.GetHashCode(const Value: TMvrKey): Integer;
 begin
   Result := THashBobJenkins.GetHashValue(Value.PackageName);
   Result := THashBobJenkins.GetHashValue(Value.ID, SizeOf(Value.ID), Result);

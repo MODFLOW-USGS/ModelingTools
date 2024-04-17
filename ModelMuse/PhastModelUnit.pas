@@ -129,6 +129,7 @@ resourcestring
   + 'saved in a binary format instead of a text format. You can change the '
   + 'format in the Output Control dialog box.';
   Str0sMultipliedByT = '%0:s multiplied by the parameter value for "%1:s."';
+  StrFileNotFound = 'File not found.';
 
 type
   // etExportCSV results in exporting data to a .csv file rather than to
@@ -10214,8 +10215,7 @@ const
 //                for a bug in MODFLOW-2005.
 //    '5.2.0.4'  bug fix: Fixed bug that can cause an access violation when
 //                shutting down ModelMuse.
-
-//               bug fix: fixed a bug in the display of objects with one
+//    '5.2.0.5'  bug fix: fixed a bug in the display of objects with one
 //                elevation formula in the front and side views.
 //               bug fix: Fixed bug opening MODFLOW 6 model with ETS package.
 //               bug fix: Fixed a bug in the MVR package, in which the FACTOR
@@ -10224,12 +10224,15 @@ const
 //               bug fix: Fixed bug in MVR package in which the flow could be
 //                directed to the wrong SFR receiver if more than one SFR
 //                receiver was used with the same MVR source.
+//               bug fix: Fixed bug that causes an assertion failure when using
+//                pilot points with data sets that do not have values at every
+//                cell.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.4';
+  IIModelVersion = '5.2.0.5';
 
 function IModelVersion: string;
 begin
@@ -43584,6 +43587,8 @@ begin
   PilotPointData.Clear;
 
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);
+  frmErrorsAndWarnings.RemoveWarningGroup(self, StrFileNotFound);
+
   // Note: MODFLOW can not read Unicode text files.
 
   for ParameterIndex := 0 to ModflowTransientParameters.Count -1 do

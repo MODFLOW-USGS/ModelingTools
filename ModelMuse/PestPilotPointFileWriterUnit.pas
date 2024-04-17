@@ -232,7 +232,8 @@ begin
         begin
           for ColIndex := 0 to DataArray.ColumnCount - 1 do
           begin
-            if IsActive(LayerIndex, RowIndex, ColIndex) then
+            if IsActive(LayerIndex, RowIndex, ColIndex)
+              and DataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
             begin
               ParamName := UpperCase(
                 ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);

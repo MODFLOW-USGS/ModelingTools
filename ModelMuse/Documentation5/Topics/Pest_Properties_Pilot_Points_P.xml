@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-08-22T11:04:00.882-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-04-17T10:44:28.955-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Pilot Points Pane</title>
   <body>
     <header>
@@ -8,6 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Pilot Points tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties dialog box</link><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is used to define the locations of pilot points and to specify whether or not pilot point locations will be displayed.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For an in-depth discussion of pilot points, see </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://gmdsi.org/blog/pilot-points/</link><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><snippet src="Pilot_Point_Explanation" inline="false"/></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Pilot points are typically used with regularization where constraints are applied to the pilot point values so that </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Within_Layer_C" styleclass="Normal" translate="true">pilot points that are close to one another will be assigned similar values</link><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If desired, pilot points can be combined with zones. In such cases, a set of pilot points will be selected from all the pilot points that have been defined. A pilot point will be included in the set used for a particular zone if it falls within the zone or if it is no farther away then the </text><text styleclass="Strong" translate="true">Pilot point buffer</text><text styleclass="Normal" translate="true"> from a cell center (MODFLOW) or node location or element center (SUTRA) that is part of the zone. If you wish to use pilot points, the </text><text styleclass="Strong" translate="true">Pilot point buffer</text><text styleclass="Normal" translate="true"> must be greater than zero.</text></para>

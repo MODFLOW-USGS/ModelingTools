@@ -769,7 +769,7 @@ begin
   PLPROC_Location := GetPLPROC_Location(FParamValuesFileName, Model);
   if Model.PestUsed then
   begin
-    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
   Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
@@ -2722,7 +2722,7 @@ begin
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
   if Model.PestUsed then
   begin
-    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
   Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]));
@@ -2878,7 +2878,7 @@ begin
       ModelDirectory := ExtractFileDir(FFileName);
       if Model.PestUsed then
       begin
-        MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+        MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
         PLPROC_Location := ExtractFileName(PLPROC_Location);
       end;
       Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
@@ -3925,7 +3925,7 @@ begin
   ModelDirectory := ExtractFileDir(FFileName);
   if Model.PestUsed then
   begin
-    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
   ScriptLine := Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]);
@@ -4592,7 +4592,7 @@ begin
   ModelDirectory := ExtractFileDir(FFileName);
   if Model.PestUsed then
   begin
-    MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+    MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
     PLPROC_Location := ExtractFileName(PLPROC_Location);
   end;
   Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''',
@@ -4746,7 +4746,7 @@ begin
       ModelDirectory := ExtractFileDir(FFileName);
       if Model.PestUsed then
       begin
-        MoveAppToDirectory(PLPROC_Location, ModelDirectory);
+        MoveAppToDirectory(Model, PLPROC_Location, ModelDirectory);
         PLPROC_Location := ExtractFileName(PLPROC_Location);
       end;
       Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
