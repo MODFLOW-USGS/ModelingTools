@@ -621,6 +621,8 @@ type
     procedure SetInitialValue(const Value: integer);
     function GetFirst: TIntegerItem;
     function GetLast: TIntegerItem;
+    function GetCommaSeparatedText: string;
+    procedure SetCommaSeparatedText(const Value: string);
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent);
     function IsSame(IntegerCollection: TIntegerCollection): Boolean;
@@ -632,6 +634,8 @@ type
     function IndexOf(AValue: Integer): integer;
     property First: TIntegerItem read GetFirst;
     property Last: TIntegerItem read GetLast;
+    property CommaSeparatedText: string read GetCommaSeparatedText
+      write SetCommaSeparatedText;
   end;
 
   TRealItem = class(TPhastCollectionItem)
@@ -2143,6 +2147,23 @@ begin
   inherited Create(TIntegerItem, InvalidateModelEvent);
 end;
 
+function TIntegerCollection.GetCommaSeparatedText: string;
+var
+  StringList: TStringList;
+  Index: Integer;
+begin
+  StringList := TStringList.Create;
+  try
+    for Index := 0 to Count - 1 do
+    begin
+      StringList.Add(Items[Index].Value.ToString)
+    end;
+    result := StringList.CommaText;
+  finally
+    StringList.Free;
+  end;
+end;
+
 function TIntegerCollection.GetFirst: TIntegerItem;
 begin
   result := inherited First as TIntegerItem;
@@ -2190,6 +2211,38 @@ begin
         Exit;
       end;
     end;
+  end;
+end;
+
+procedure TIntegerCollection.SetCommaSeparatedText(const Value: string);
+var
+  StringList: TStringList;
+  Index: Integer;
+  AValue: Integer;
+  ValidCount: Integer;
+begin
+  StringList := TStringList.Create;
+  try
+    StringList.CommaText := Value;
+    ValidCount := 0;
+    for Index := 0 to StringList.Count - 1 do
+    begin
+      if TryStrToInt(StringList[Index], AValue) then
+      begin
+        if ValidCount < Count then
+        begin
+          Items[ValidCount].Value := AValue
+        end
+        else
+        begin
+          Add.Value := AValue;
+        end;
+        Inc(ValidCount);
+      end;
+    end;
+    Count := ValidCount;
+  finally
+    StringList.Free;
   end;
 end;
 

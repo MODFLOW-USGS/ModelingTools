@@ -204,12 +204,12 @@ begin
     else if (FSplitter.Count >= NCOL)
       and TryFortranStrToFloat(FSplitter[0], TableItem.Fstage)
       and TryFortranStrToFloat(FSplitter[1], TableItem.Fvolume)
-      and TryFortranStrToFloat(FSplitter[1], TableItem.Fsarea)
+      and TryFortranStrToFloat(FSplitter[2], TableItem.Fsarea)
       then
     begin
       if (NCOL = 4) then
       begin
-        if TryFortranStrToFloat(FSplitter[2], TableItem.Fbarea.Value) then
+        if TryFortranStrToFloat(FSplitter[3], TableItem.Fbarea.Value) then
         begin
           TableItem.Fbarea.Used := True;
           FItems.Add(TableItem)

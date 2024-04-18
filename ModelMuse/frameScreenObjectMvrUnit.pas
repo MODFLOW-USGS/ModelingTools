@@ -275,7 +275,7 @@ begin
         if (AnItem.SourceSection >= 1)
           and (AnItem.SourceSection < rdgMap.RowCount) then
         begin
-          rdgMap.Cells[Ord(mcReceiver), ItemIndex+1] := IntToStr(AnItem.ReceiverSection)
+          rdgMap.Cells[Ord(mcReceiver), ItemIndex+1] := AnItem.ReceiverSections.CommaSeparatedText;
         end;
       end;
     end
@@ -847,7 +847,8 @@ begin
   try
     ClearGrid(rdgMap);
     rdgMap.Cells[Ord(mcSource),0] := 'Source section';
-    rdgMap.Cells[Ord(mcReceiver),0] := 'Receiver section';
+    rdgMap.Cells[Ord(mcReceiver),0] := 'Receiver sections';
+    rdgMap.RowCount := 2;
   finally
     rdgMap.EndUpdate;
   end;
@@ -963,7 +964,6 @@ end;
 
 procedure TframeScreenObjectMvr.rdgMapExit(Sender: TObject);
 var
-  Value: Integer;
   Map: TSectionMapItemCollection;
   RowIndex: Integer;
   ItemIndex: Integer;
@@ -992,7 +992,7 @@ begin
     end;
     for RowIndex := 1 to rdgMap.RowCount - 1  do
     begin
-      if TryStrToInt(rdgMap.Cells[Ord(mcReceiver), RowIndex], Value) then
+      if rdgMap.Cells[Ord(mcReceiver), RowIndex] <> '' then
       begin
         AnItem := rdgMap.Objects[Ord(mcReceiver), RowIndex] as TSectionMapItem;
         if AnItem = nil then
@@ -1000,11 +1000,17 @@ begin
           AnItem := Map.Add;
           AnItem.SourceSection := RowIndex;
         end;
-        AnItem.ReceiverSection := Value;
+        AnItem.ReceiverSections.CommaSeparatedText := rdgMap.Cells[Ord(mcReceiver), RowIndex];
+        if AnItem.ReceiverSections.Count = 0 then
+        begin
+          AnItem.Free;
+          rdgMap.Objects[Ord(mcReceiver), RowIndex] := nil;
+        end;
       end
       else
       begin
         rdgMap.Objects[Ord(mcReceiver), RowIndex].Free;
+        rdgMap.Objects[Ord(mcReceiver), RowIndex] := nil;
       end;
     end;
   end;
@@ -1276,9 +1282,6 @@ end;
 procedure TframeScreenObjectMvr.SetMapItem(const Value: TSectionMap);
 var
   RowIndex: Integer;
-  Map: TSectionMapItemCollection;
-  ItemIndex: Integer;
-  MapItem: TSectionMapItem;
 begin
   FMapItem := Value;
   rdgMap.BeginUpdate;
@@ -1286,14 +1289,6 @@ begin
     for RowIndex := 1 to rdgMap.RowCount - 1 do
     begin
       rdgMap.Cells[Ord(mcReceiver), RowIndex] := ''
-    end;
-    if FMapItem <> nil then
-    begin
-      Map := Value.MvrMap;
-      for ItemIndex := 0 to Map.Count - 1 do
-      begin
-        MapItem := Map[ItemIndex];
-      end;
     end;
   finally
     rdgMap.EndUpdate;

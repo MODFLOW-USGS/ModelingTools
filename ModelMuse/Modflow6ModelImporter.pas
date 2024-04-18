@@ -2215,7 +2215,6 @@ var
   CellIds: TCellIdList;
   Mvr: TMvr;
   Index: Integer;
-  FoundMvr: Boolean;
   DrnMvrLink: TDrnMvrLink;
   DrnlMvrLinkList: TDrnMvrLinkList;
   MvrPeriod: TMvrPeriod;
@@ -2446,27 +2445,7 @@ begin
     OnUpdateStatusBar(self, 'importing DRN package');
   end;
   // Get the MVR package.
-  if MvrPackage = nil then
-  begin
-    Mvr := nil;
-  end
-  else
-  begin
-    Mvr := MvrPackage.Package as TMvr;
-    FoundMvr := False;
-    for Index := 0 to Mvr.Packages.Count - 1 do
-    begin
-      FoundMvr := AnsiSameText(Package.PackageName, Mvr.Packages[Index].pname);
-      if FoundMvr then
-      begin
-        Break;
-      end;
-    end;
-    if not FoundMvr then
-    begin
-      Mvr := nil;
-    end;
-  end;
+  Mvr := GetMvr(MvrPackage, Package);
 
   Model := frmGoPhast.PhastModel;
   Model.ModflowPackages.DrnPackage.IsSelected := True;
@@ -2653,7 +2632,7 @@ begin
         begin
           if DrnMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
           begin
-            KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
+            KeyString := KeyString + ' MVR';// + InttoStr(ACell.Id);
             MvrUsed := True;
           end;
         end;
@@ -7634,6 +7613,9 @@ var
   RIndex: Integer;
   LakeBoundary: TLakeMf6;
   AnOutlet: TLakeOutletItem;
+  MvrMap: TSectionMapItemCollection;
+  MapIndex: Integer;
+  AMvrMap: TSectionMapItemCollection;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -7689,7 +7671,7 @@ begin
         end;
 
         AScreenObject := Source.ScreenObject;
-        AScreenObject. CreateModflowMvr;
+        AScreenObject.CreateModflowMvr;
         ModflowMvr := AScreenObject.ModflowMvr;
         case Source.SourceType of
           mspcWel:
@@ -7805,6 +7787,16 @@ begin
           end;
           ReceiverItem.ReceiverObject := Receiver.ScreenObject;
           ReceiverItem.DivisionChoice := dcDoNotDivide;
+
+          if (AScreenObject.SectionCount > 1)
+            and (Receiver.ScreenObject.SectionCount > 1)
+            and (ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf]) then
+          begin
+            // map needed
+            AMvrMap := ModflowMvr.MvrMaps.Add.MvrMap;
+            AMvrMap.MapName := Receiver.ScreenObject.Name;
+          end;
+
           for TimeIndex := 0 to ModflowMvr.Values.Count - 1 do
           begin
             PriorMvrItem := ModflowMvr.Values[TimeIndex] as TMvrItem;
@@ -7816,6 +7808,24 @@ begin
         if Source.LakeOutlet <> nil then
         begin
           ReceiverItem.LakeOutlet := Source.LakeOutlet.Index + 1;
+        end;
+
+        MvrMap := nil;
+        if (AScreenObject.SectionCount > 1)
+          and (Receiver.ScreenObject.SectionCount > 1)
+          and (ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf]) then
+        begin
+          // map needed
+          for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
+          begin
+            AMvrMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
+            if AMvrMap.MapName = Receiver.ScreenObject.Name then
+            begin
+              MvrMap := AMvrMap;
+              break;
+            end;
+          end;
+          Assert(MvrMap <> nil);
         end;
 
         if ModflowMvr.Values.Count > 0 then
@@ -7836,7 +7846,7 @@ begin
         else
         begin
           MvrItem := ModflowMvr.Values.Add as TMvrItem;
-          for ReceiverIndex := 0 to ModflowMvr.Receivers.Count do
+          for ReceiverIndex := 0 to ModflowMvr.Receivers.Count-1 do
           begin
             IndividualMvrItem := MvrItem.Items.Add;
             IndividualMvrItem.MvrType := MvrType;
@@ -12576,6 +12586,7 @@ var
   MvrSource: TMvrSource;
   MvrReceiver: TMvrReceiver;
   ObsNameIndex: Integer;
+  Index: Integer;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
     ItemIndex: Integer;
@@ -13195,9 +13206,13 @@ begin
       begin
         MvrSource.ScreenObject := AScreenObject;
         MvrSource.PackageName := Package.PackageName;
-        SetLength(MvrSource.IDs, 1);
+        SetLength(MvrSource.IDs, MergedList.Count);
         MvrSource.SourceType := mspcUzf;
-        MvrSource.IDs[0] := UzfDataItem.PackageData.iuzno;
+        for Index := 0 to MergedList.Count - 1 do
+        begin
+          MvrSource.IDs[Index] := MergedList[Index].PackageData.iuzno;
+        end;
+//        MvrSource.IDs[0] := UzfDataItem.PackageData.iuzno;
         for StressPeriodIndex := 0 to UzfMvrLinkList.Count - 1 do
         begin
           MvrSource.Period := UzfMvrLinkList[StressPeriodIndex].Period;
@@ -13209,9 +13224,13 @@ begin
       begin
         MvrReceiver.ScreenObject := AScreenObject;
         MvrReceiver.PackageName := Package.PackageName;
-        SetLength(MvrReceiver.IDs, 1);
-        MvrReceiver.ReceiverType := mrpcLak;
-        MvrReceiver.IDs[0] := UzfDataItem.PackageData.iuzno;
+        SetLength(MvrReceiver.IDs, MergedList.Count);
+        MvrReceiver.ReceiverType := mrpcUzf;
+        for Index := 0 to MergedList.Count - 1 do
+        begin
+          MvrReceiver.IDs[Index] := MergedList[Index].PackageData.iuzno;
+        end;
+//        MvrReceiver.IDs[0] := UzfDataItem.PackageData.iuzno;
         for StressPeriodIndex := 0 to UzfMvrLinkList.Count - 1 do
         begin
           MvrReceiver.Period := UzfMvrLinkList[StressPeriodIndex].Period;
@@ -14510,8 +14529,10 @@ function TUzfData.Compatible(UzfData: TUzfData): Boolean;
 var
   Index: Integer;
 begin
-  result := not MvrSource and not MvrReceiver
-    and not UzfData.MvrSource and not UzfData.MvrReceiver
+  result := (MvrSource = UzfData.MvrSource)
+    and (MvrReceiver = UzfData.MvrReceiver)
+  {not MvrSource and not MvrReceiver
+    and not UzfData.MvrSource and not UzfData.MvrReceiver}
     and (PeriodData.Count = UzfData.PeriodData.Count)
     and (PackageData.boundname = UzfData.PackageData.boundname)
     and (NumberObs = nil) and (UzfData.NumberObs = nil);

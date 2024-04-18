@@ -160,20 +160,27 @@ type
   private
     FReceiverSection: Integer;
     FSourceSection: Integer;
+    FReceiverSections: TIntegerCollection;
     procedure SetReceiverSection(const Value: Integer);
     procedure SetSourceSection(const Value: Integer);
+    procedure SetReceiverSections(const Value: TIntegerCollection);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
   published
-    // @name must be great than or equal to 1 and less than or equal to the
+    // @name must be greater than or equal to 1 and less than or equal to the
     // number of sections in the source boundary.
     // Each SourceSection in @link(TSectionMapItemCollection) must be unique.
     property SourceSection: Integer read FSourceSection write SetSourceSection;
     // @name must be great than or equal to 1 and less than or equal to the
     // number of sections in the receiver boundary.
-    property ReceiverSection: Integer read FReceiverSection write SetReceiverSection;
+    property ReceiverSection: Integer read FReceiverSection write SetReceiverSection stored False;
+    // @name must contain values greater than or equal to 1 and less than or equal to the
+    // or equal to the number of sections in the receiver boundary.
+    property ReceiverSections: TIntegerCollection read FReceiverSections write SetReceiverSections;
   end;
 
   TSectionMapItemCollection = class(TOrderedCollection)
@@ -1685,8 +1692,20 @@ begin
   begin
     SourceItem := Source as TSectionMapItem;
     SourceSection := SourceItem.SourceSection;
-    ReceiverSection := SourceItem.ReceiverSection;
+    ReceiverSections := SourceItem.ReceiverSections;
   end;
+  inherited;
+end;
+
+constructor TSectionMapItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FReceiverSections := TIntegerCollection.Create(OnInvalidateModelEvent);
+end;
+
+destructor TSectionMapItem.Destroy;
+begin
+  FReceiverSections.Free;
   inherited;
 end;
 
@@ -1699,13 +1718,19 @@ begin
   begin
     SourceItem := AnotherItem as TSectionMapItem;
     result := (SourceSection = SourceItem.SourceSection)
-      and (ReceiverSection = SourceItem.ReceiverSection)
+      and ReceiverSections.IsSame(SourceItem.ReceiverSections);
   end;
 end;
 
 procedure TSectionMapItem.SetReceiverSection(const Value: Integer);
 begin
+  FReceiverSections.Add.Value := Value;
   SetIntegerProperty(FReceiverSection, Value);
+end;
+
+procedure TSectionMapItem.SetReceiverSections(const Value: TIntegerCollection);
+begin
+  FReceiverSections.Assign(Value);
 end;
 
 procedure TSectionMapItem.SetSourceSection(const Value: Integer);

@@ -57,6 +57,8 @@ type
       write SetVertexValueKey;
   end;
 
+  TSectionLabel = class(TCustomObjectLabel);
+
 implementation
 
 { TCustomObjectLabel }

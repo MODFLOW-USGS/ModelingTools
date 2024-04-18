@@ -168,7 +168,6 @@ begin
       RealRange := MaxReal - MinReal;
       for Index := 0 to Values.Count - 1 do
       begin
-        AFraction := 0.5;
         if RealRange = 0 then
         begin
           AFraction := 0.5
@@ -180,6 +179,10 @@ begin
           except on EOverflow do
             begin
               AFraction := 0.5;
+            end;
+          else
+            begin
+              raise;
             end;
           end;
         end;
@@ -289,7 +292,6 @@ begin
               RealRange := MaxReal - MinReal;
               for Index := 0 to Values.Count - 1 do
               begin
-                AFraction := 0.5;
                 if RealRange = 0 then
                 begin
                   AFraction := 0.5
@@ -301,6 +303,10 @@ begin
                   except on EOverflow do
                     begin
                       AFraction := 0.5;
+                    end;
+                  else
+                    begin
+                      raise;
                     end;
                   end;
                 end;

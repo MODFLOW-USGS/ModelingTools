@@ -939,7 +939,6 @@ var
   AMap: TSectionMapItemCollection;
   MapItemIndex: Integer;
   MapItem: TSectionMapItem;
-//  UsedMap: TSectionMapItemCollection;
   Divisor: Integer;
   DivisorIndex: Integer;
   ReceiverSection: Integer;
@@ -1041,7 +1040,10 @@ begin
               for MapItemIndex := 0 to AMap.Count - 1 do
               begin
                 MapItem := AMap[MapItemIndex];
-                SourceReceiverIndexMap.Add(MapItem.SourceSection-1, MapItem.ReceiverSection-1);
+                for ReceiverIndex := 0 to MapItem.ReceiverSections.Count - 1 do
+                begin
+                  SourceReceiverIndexMap.Add(MapItem.SourceSection-1, MapItem.ReceiverSections[ReceiverIndex].Value-1);
+                end;
               end;
             end;
 

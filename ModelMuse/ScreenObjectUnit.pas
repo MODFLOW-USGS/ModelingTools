@@ -2075,6 +2075,7 @@ view. }
     FQuadtreeRefinementLevel: Integer;
     FSutraScheduleName: string;
     FDynamicTimesSeriesCollections: TDynamicTimesSeriesCollections;
+    FSectionLabel: TSectionLabel;
     procedure CreateLastSubPolygon;
     procedure DestroyLastSubPolygon;
     function GetSubPolygonCount: integer;
@@ -2844,6 +2845,9 @@ view. }
     procedure DrawVertexLabels(const Bitmap32: TBitmap32); overload;
     procedure DrawVertexLabels(const ACanvas: TCanvas); overload;
     procedure DrawVertexLabels(const Graphic: TPersistent); overload;
+    procedure DrawSectionLabels(const Bitmap32: TBitmap32); overload;
+    procedure DrawSectionLabels(const ACanvas: TCanvas); overload;
+    procedure DrawSectionLabels(const Graphic: TPersistent); overload;
     procedure SetStoredMinimumFraction(const Value: TRealStorage);
     function GetMinimumFraction: double;
     procedure SetMinimumFraction(const Value: double);
@@ -3101,6 +3105,7 @@ view. }
     function GetModflowTvsBoundary: TTvsBoundary;
     procedure SetModflowTvsBoundary(const Value: TTvsBoundary);
     function StoreModflowTvsBoundary: Boolean;
+    procedure SetSectionLabel(const Value: TSectionLabel);
 
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -4654,6 +4659,7 @@ SectionStarts.}
     property ObjectLabel: TObjectLabel read FObjectLabel write SetObjectLabel;
     property ObjectVertexLabel: TObjectVertexLabel read FObjectVertexLabel
       write SetObjectVertexLabel;
+    property SectionLabel: TSectionLabel read FSectionLabel write SetSectionLabel;
     property FootprintWell: TFootprintWell read GetFootprintWell
       write SetFootprintWell stored StoreFootprintWell;
     // @name stores the mininum ratio of the intersect length with a cell or
@@ -7021,6 +7027,7 @@ begin
 
   ObjectLabel := AScreenObject.ObjectLabel;
   ObjectVertexLabel := AScreenObject.ObjectVertexLabel;
+  SectionLabel := AScreenObject.SectionLabel;
   // copy the data of the other screen object.
   ChildModelName := AScreenObject.ChildModelName;
 //  ChildModelDiscretization := AScreenObject.ChildModelDiscretization;
@@ -8771,6 +8778,7 @@ begin
     end;
   end;
   DrawVertexLabels(Bitmap32);
+  DrawSectionLabels(Bitmap32);
   DrawLabel(Bitmap32);
 end;
 
@@ -9300,36 +9308,6 @@ var
   ExistingFont: TFont;
   SectionIndex: Integer;
   VertexLabel: string;
-//  ValueLabel: string;
-//  ValueLabel1: string;
-//  ValueLabel2: string;
-//  function GetValueLabel(Vertex: Integer): String;
-//  var
-//    ItemIndex: Integer;
-//    Item: TPointValuesItem;
-//    NameIndex: Integer;
-//    ValueItem: TPointValue;
-//  begin
-//    result := '';
-//    for ItemIndex := 0 to PointPositionValues.Count - 1 do
-//    begin
-//      Item := PointPositionValues.Items[ItemIndex]
-//        as TPointValuesItem;
-//      if Item.Position = Vertex then
-//      begin
-//        for NameIndex := 0 to Item.Values.Count - 1 do
-//        begin
-//          ValueItem := Item.Values.Items[NameIndex] as TPointValue;
-//          if SameText(ObjectVertexLabel.VertexValueKey, ValueItem.Name) then
-//          begin
-//            result := FloatToStr(ValueItem.Value);
-//            Exit;
-//          end;
-//        end;
-//        break;
-//      end;
-//    end;
-//  end;
 begin
   if ObjectVertexLabel.Visible or (ObjectVertexLabel.VertexValueKey <> '') then
   begin
@@ -9349,68 +9327,6 @@ begin
           StartPoint.X := StartPoint.X + ObjectVertexLabel.OffSet.X;
           StartPoint.Y := StartPoint.Y - ObjectVertexLabel.OffSet.Y;
           VertexLabel := GetVertexLabel(CoordIndex, SectionIndex);
-//          if (SectionStart[SectionIndex] = CoordIndex) and SectionClosed[SectionIndex] then
-//          begin
-//            // do nothing
-//            VertexLabel := '';
-//            ValueLabel := '';
-//          end
-//          else if (SectionEnd[SectionIndex] = CoordIndex) and SectionClosed[SectionIndex] then
-//          begin
-//            if ObjectVertexLabel.Visible then
-//            begin
-//              VertexLabel := IntToStr(SectionStart[SectionIndex]+1)
-//                + ', ' + IntToStr(CoordIndex+1);
-//            end
-//            else
-//            begin
-//              VertexLabel := '';
-//            end;
-//            if (ObjectVertexLabel.VertexValueKey <> '') then
-//            begin
-//              ValueLabel1 := GetValueLabel(SectionStart[SectionIndex]);
-//              ValueLabel2 := GetValueLabel(CoordIndex);
-//              if (ValueLabel1 <> '') and (ValueLabel2 <> '') then
-//              begin
-//                ValueLabel := ValueLabel1 + ', ' + ValueLabel2;
-//              end
-//              else
-//              begin
-//                ValueLabel := ValueLabel1 + ValueLabel2;
-//              end;
-//            end
-//            else
-//            begin
-//              ValueLabel := '';
-//            end;
-//          end
-//          else
-//          begin
-//            if ObjectVertexLabel.Visible then
-//            begin
-//              VertexLabel := IntToStr(CoordIndex+1);
-//            end
-//            else
-//            begin
-//              VertexLabel := '';
-//            end;
-//            if (ObjectVertexLabel.VertexValueKey <> '') then
-//            begin
-//              ValueLabel := GetValueLabel(CoordIndex)
-//            end
-//            else
-//            begin
-//              ValueLabel := '';
-//            end;
-//          end;
-//          if (VertexLabel <> '') and (ValueLabel <> '') then
-//          begin
-//            VertexLabel := VertexLabel + ', ' + ValueLabel;
-//          end
-//          else
-//          begin
-//            VertexLabel := VertexLabel + ValueLabel;
-//          end;
           if VertexLabel <> '' then
           begin
             Bitmap32.Textout(StartPoint.X, StartPoint.Y, VertexLabel);
@@ -9485,21 +9401,6 @@ begin
         begin
           StartPoint.X := StartPoint.X + ObjectVertexLabel.OffSet.X;
           StartPoint.Y := StartPoint.Y - ObjectVertexLabel.OffSet.Y;
-//          VertexLabel := GetVertexLabel(CoordIndex, SectionIndex);
-//          if (SectionStart[SectionIndex] = CoordIndex) and SectionClosed[SectionIndex] then
-//          begin
-//            // do nothing
-//          end
-//          else if (SectionEnd[SectionIndex] = CoordIndex) and SectionClosed[SectionIndex] then
-//          begin
-//            VertexLabel := IntToStr(SectionStart[SectionIndex]+1)
-//              + ', ' + IntToStr(CoordIndex+1);
-//            ACanvas.Textout(StartPoint.X, StartPoint.Y, VertexLabel);
-//          end
-//          else
-//          begin
-//            ACanvas.Textout(StartPoint.X, StartPoint.Y, IntToStr(CoordIndex+1));
-//          end;
           if VertexLabel <> '' then
           begin
             ACanvas.Textout(StartPoint.X, StartPoint.Y, VertexLabel);
@@ -11907,6 +11808,8 @@ begin
   FObjectLabel.OnChange := RefreshGui;
   FObjectVertexLabel := TObjectVertexLabel.Create;
   FObjectVertexLabel.OnChange := RefreshGui;
+  FSectionLabel := TSectionLabel.Create;
+  FSectionLabel.OnChange := RefreshGui;
   FDuplicatesAllowed := True;
   FPriorObjectIntersectLengthCol := -1;
   FPriorObjectIntersectLengthRow := -1;
@@ -20320,6 +20223,7 @@ begin
   FCachedCells.Free;
   FObjectLabel.Free;
   FObjectVertexLabel.Free;
+  FSectionLabel.Free;
 end;
 
 procedure TScreenObject.DestroyLastSubPolygon;
@@ -20648,6 +20552,11 @@ begin
     end;
     FSelectedVertices[index] := Value;
   end;
+end;
+
+procedure TScreenObject.SetSectionLabel(const Value: TSectionLabel);
+begin
+  FSectionLabel.Assign(Value);
 end;
 
 procedure TScreenObject.SetSectionStarts(const Value: TValueArrayStorage);
@@ -21306,6 +21215,112 @@ begin
   else
   begin
     FCurrentValues := nil;
+  end;
+end;
+
+procedure TScreenObject.DrawSectionLabels(const Bitmap32: TBitmap32);
+var
+  StartPoint: TPoint;
+  AZoomBox: TQRbwZoomBox2;
+  ExistingFont: TFont;
+  SectionIndex: Integer;
+  VertexIndex: Integer;
+  SectLabel: string;
+  procedure DrawLabel;
+  begin
+    if Length(CanvasCoordinates) > VertexIndex then
+    begin
+      StartPoint := CanvasCoordinates[VertexIndex];
+      AZoomBox := ZoomBox(ViewDirection);
+      if (StartPoint.X >= 0) and (StartPoint.Y >= 0)
+        and (StartPoint.X < AZoomBox.Image32.Width)
+        and (StartPoint.Y < AZoomBox.Image32.Height) then
+      begin
+        StartPoint.X := StartPoint.X + SectionLabel.OffSet.X;
+        StartPoint.Y := StartPoint.Y - SectionLabel.OffSet.Y;
+        SectLabel := InttoStr(VertexIndex+1);
+        Bitmap32.Textout(StartPoint.X, StartPoint.Y, SectLabel);
+      end;
+    end;
+
+  end;
+begin
+  if SectionLabel.Visible then
+  begin
+    ExistingFont := TFont.Create;
+    try
+      ExistingFont.Assign(Bitmap32.Font);
+      Bitmap32.Font := SectionLabel.Font;
+      VertexIndex := 0;
+      DrawLabel;
+
+      for SectionIndex := 0 to SectionStarts.Count - 1 do
+      begin
+        VertexIndex := SectionStarts.IntValues[SectionIndex];
+        DrawLabel;
+      end;
+
+    finally
+      Bitmap32.Font := ExistingFont;
+      ExistingFont.Free;
+    end;
+  end;
+end;
+
+procedure TScreenObject.DrawSectionLabels(const ACanvas: TCanvas);
+var
+  StartPoint: TPoint;
+  AZoomBox: TQRbwZoomBox2;
+  ExistingFont: TFont;
+  SectionIndex: Integer;
+  SectLabel: string;
+  VertexIndex: Integer;
+  procedure DrawLabel;
+  begin
+    StartPoint := CanvasCoordinates[VertexIndex];
+    AZoomBox := ZoomBox(ViewDirection);
+    if (StartPoint.X >= 0) and (StartPoint.Y >= 0)
+      and (StartPoint.X < AZoomBox.Image32.Width)
+      and (StartPoint.Y < AZoomBox.Image32.Height) then
+    begin
+      StartPoint.X := StartPoint.X + SectionLabel.OffSet.X;
+      StartPoint.Y := StartPoint.Y - SectionLabel.OffSet.Y;
+      SectLabel := IntToStr(VertexIndex+1);
+      ACanvas.Textout(StartPoint.X, StartPoint.Y, SectLabel);
+    end;
+  end;
+begin
+  if SectionLabel.Visible then
+  begin
+    ExistingFont := TFont.Create;
+    try
+      ExistingFont.Assign(ACanvas.Font);
+      ACanvas.Font := SectionLabel.Font;
+      VertexIndex := 0;
+      DrawLabel;
+
+      for SectionIndex := 0 to SectionStarts.Count - 1 do
+      begin
+        VertexIndex := SectionStarts.IntValues[SectionIndex];
+        DrawLabel;
+      end;
+
+    finally
+      ACanvas.Font := ExistingFont;
+      ExistingFont.Free;
+    end;
+  end;
+end;
+
+procedure TScreenObject.DrawSectionLabels(const Graphic: TPersistent);
+begin
+  if Graphic is TBitmap32 then
+  begin
+    DrawSectionLabels(TBitmap32(Graphic));
+  end
+  else
+  begin
+   DrawSectionLabels(Graphic as TCanvas);
   end;
 end;
 

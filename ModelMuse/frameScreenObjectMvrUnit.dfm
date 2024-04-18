@@ -463,7 +463,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             CheckMax = False
             CheckMin = True
             ComboUsed = False
-            Format = rcf4Integer
+            Format = rcf4String
             LimitToList = False
             Max = 100000000.000000000000000000
             MaxLength = 0

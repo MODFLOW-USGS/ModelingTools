@@ -19,7 +19,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 748
     Height = 518
-    ActivePage = tabDataSets
+    ActivePage = tabModflowBoundaryConditions
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -2460,7 +2460,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 545
         Height = 480
-        ActivePage = jvspCHD
+        ActivePage = jvspLakMf6
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -12350,13 +12350,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited frameCrossSection: TframeGrid
                   Height = 222
-                  ExplicitLeft = 200
-                  ExplicitWidth = 339
                   ExplicitHeight = 222
                   inherited Panel: TPanel
                     Top = 181
                     ExplicitTop = 181
-                    ExplicitWidth = 339
                     inherited lbNumber: TLabel
                       Width = 76
                       Height = 19
@@ -12373,13 +12370,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited Grid: TRbwDataGrid4
                     Height = 181
-                    ExplicitWidth = 339
                     ExplicitHeight = 181
                   end
                 end
                 inherited zbChannel: TQRbwZoomBox2
                   Top = 268
-                  Image32.Top = 0
                   ExplicitTop = 268
                 end
                 inherited frameCrossSectionTime: TframeGrid
@@ -12388,7 +12383,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited Panel: TPanel
                     Top = 181
                     ExplicitTop = 181
-                    ExplicitWidth = 200
                     inherited lbNumber: TLabel
                       Width = 39
                       Height = 19
@@ -12402,7 +12396,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited Grid: TRbwDataGrid4
                     Height = 181
-                    ExplicitWidth = 200
                     ExplicitHeight = 181
                   end
                 end
@@ -13151,7 +13144,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pcLake: TPageControl
               Width = 545
               Height = 263
-              ActivePage = frameLakMf6.tabLakeTransientProperties
               ExplicitWidth = 545
               ExplicitHeight = 263
               inherited tabLakeProperties: TTabSheet
@@ -13265,13 +13257,18 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabLakeTable: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 301
+                ExplicitWidth = 537
+                ExplicitHeight = 229
                 inherited frameLakeTable: TframeFormulaGrid
-                  Height = 301
+                  Width = 537
+                  Height = 229
                   ExplicitHeight = 301
                   inherited Panel: TPanel
-                    Top = 260
-                    ExplicitTop = 260
+                    Top = 188
+                    Width = 537
+                    ExplicitLeft = 2
+                    ExplicitTop = 187
+                    ExplicitWidth = 537
                     inherited lbNumber: TLabel
                       Width = 206
                       Height = 19
@@ -13279,16 +13276,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       ExplicitHeight = 19
                     end
                     inherited sbAdd: TSpeedButton
-                      Left = 463
-                      ExplicitLeft = 387
+                      ExplicitLeft = 388
                     end
                     inherited sbInsert: TSpeedButton
-                      Left = 493
                       ExplicitLeft = 417
                     end
                     inherited sbDelete: TSpeedButton
-                      Left = 523
-                      ExplicitLeft = 447
+                      ExplicitLeft = 448
                     end
                     inherited seNumber: TJvSpinEdit
                       Height = 27
@@ -13296,11 +13290,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                   end
                   inherited Grid: TRbwDataGrid4
-                    Height = 203
+                    Width = 537
+                    Height = 131
                     OnButtonClick = frameResdgModflowBoundaryButtonClick
                     ExplicitHeight = 203
                   end
                   inherited pnlTop: TPanel
+                    Width = 537
                     inherited edFormula: TLabeledEdit
                       Height = 27
                       EditLabel.Width = 59
@@ -13460,6 +13456,40 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitTop = 30
                 ExplicitWidth = 537
                 ExplicitHeight = 246
+              end
+              inherited tabMvrMap: TTabSheet
+                ExplicitTop = 30
+                ExplicitHeight = 205
+                inherited JvNetscapeSplitter1: TJvNetscapeSplitter
+                  Height = 205
+                  ExplicitHeight = 205
+                end
+                inherited rdgMap: TRbwDataGrid4
+                  Height = 205
+                  ExplicitHeight = 205
+                end
+                inherited frameMapNames: TframeGrid
+                  Height = 205
+                  ExplicitHeight = 205
+                  inherited Panel: TPanel
+                    Top = 116
+                    ExplicitTop = 116
+                    inherited lbNumber: TLabel
+                      Width = 57
+                      Height = 19
+                      ExplicitWidth = 57
+                      ExplicitHeight = 19
+                    end
+                    inherited seNumber: TJvSpinEdit
+                      Height = 27
+                      ExplicitHeight = 27
+                    end
+                  end
+                  inherited Grid: TRbwDataGrid4
+                    Height = 116
+                    ExplicitHeight = 116
+                  end
+                end
               end
             end
             inherited pnlBottom: TPanel
@@ -19121,84 +19151,155 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             OnClick = cbCaptionVisibleClick
           end
         end
-        object grpLabelVertices: TGroupBox
+        object Panel6: TPanel
           Left = 0
           Top = 137
           Width = 740
-          Height = 120
-          Align = alTop
-          Caption = 'Vertex labels'
+          Height = 136
+          Align = alClient
           TabOrder = 1
-          object lblVertexXOffset: TLabel
-            Left = 344
-            Top = 26
-            Width = 56
-            Height = 19
-            Caption = 'X offset'
-          end
-          object lblVertexYOffset: TLabel
-            Left = 536
-            Top = 26
-            Width = 56
-            Height = 19
-            Caption = 'Y offset'
-          end
-          object lblVertexValueLabels: TLabel
-            Left = 16
-            Top = 56
-            Width = 133
-            Height = 19
-            Caption = 'Vertex value labels'
-          end
-          object btnVertexFont: TButton
-            Left = 304
-            Top = 76
-            Width = 75
-            Height = 27
-            Caption = 'Font'
-            TabOrder = 4
-            OnClick = btnVertexFontClick
-          end
-          object rdeVertexXOffset: TRbwDataEntry
-            Left = 406
-            Top = 23
-            Width = 83
-            Height = 22
+          object grpLabelVertices: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 360
+            Height = 134
+            Align = alLeft
+            Caption = 'Vertex labels'
             TabOrder = 0
-            Text = '0'
-            DataType = dtInteger
-            Max = 1.000000000000000000
-            ChangeDisabledColor = True
+            object lblVertexXOffset: TLabel
+              Left = 207
+              Top = 26
+              Width = 56
+              Height = 19
+              Caption = 'X offset'
+            end
+            object lblVertexYOffset: TLabel
+              Left = 207
+              Top = 51
+              Width = 56
+              Height = 19
+              Caption = 'Y offset'
+            end
+            object lblVertexValueLabels: TLabel
+              Left = 3
+              Top = 64
+              Width = 133
+              Height = 19
+              Caption = 'Vertex value labels'
+            end
+            object btnVertexFont: TButton
+              Left = 277
+              Top = 84
+              Width = 75
+              Height = 27
+              Caption = 'Font'
+              TabOrder = 4
+              OnClick = btnVertexFontClick
+            end
+            object rdeVertexXOffset: TRbwDataEntry
+              Left = 269
+              Top = 23
+              Width = 83
+              Height = 22
+              TabOrder = 0
+              Text = '0'
+              DataType = dtInteger
+              Max = 1.000000000000000000
+              ChangeDisabledColor = True
+            end
+            object rdeVertexYOffset: TRbwDataEntry
+              Left = 269
+              Top = 48
+              Width = 83
+              Height = 22
+              TabOrder = 1
+              Text = '0'
+              DataType = dtInteger
+              Max = 1.000000000000000000
+              ChangeDisabledColor = True
+            end
+            object cbVertexLabelVisible: TCheckBox
+              Left = 3
+              Top = 28
+              Width = 190
+              Height = 17
+              Caption = 'Vertex numbers visible'
+              TabOrder = 2
+              OnClick = cbVertexLabelVisibleClick
+            end
+            object comboVertexValueLabels: TComboBox
+              Left = 3
+              Top = 84
+              Width = 268
+              Height = 27
+              Style = csDropDownList
+              TabOrder = 3
+              Items.Strings = (
+                'None')
+            end
           end
-          object rdeVertexYOffset: TRbwDataEntry
-            Left = 598
-            Top = 23
-            Width = 83
-            Height = 22
+          object gbSectionLabels: TGroupBox
+            Left = 361
+            Top = 1
+            Width = 378
+            Height = 134
+            Align = alClient
+            Caption = 'Section labels'
             TabOrder = 1
-            Text = '0'
-            DataType = dtInteger
-            Max = 1.000000000000000000
-            ChangeDisabledColor = True
-          end
-          object cbVertexLabelVisible: TCheckBox
-            Left = 16
-            Top = 28
-            Width = 281
-            Height = 17
-            Caption = 'Vertex numbers visible'
-            TabOrder = 2
-            OnClick = cbVertexLabelVisibleClick
-          end
-          object comboVertexValueLabels: TComboBox
-            Left = 16
-            Top = 76
-            Width = 268
-            Height = 27
-            Style = csDropDownList
-            TabOrder = 3
-            Items.Strings = (
-              'None')
+            object lblSectionXOffset: TLabel
+              Left = 221
+              Top = 26
+              Width = 56
+              Height = 19
+              Caption = 'X offset'
+            end
+            object lblSectionYOffset: TLabel
+              Left = 221
+              Top = 51
+              Width = 56
+              Height = 19
+              Caption = 'Y offset'
+            end
+            object btnSectionFont: TButton
+              Left = 6
+              Top = 84
+              Width = 75
+              Height = 27
+              Caption = 'Font'
+              TabOrder = 3
+              OnClick = btnSectionFontClick
+            end
+            object rdeSectionXOffset: TRbwDataEntry
+              Left = 283
+              Top = 23
+              Width = 83
+              Height = 22
+              TabOrder = 0
+              Text = '0'
+              DataType = dtInteger
+              Max = 1.000000000000000000
+              ChangeDisabledColor = True
+            end
+            object rdeSectionYOffset: TRbwDataEntry
+              Left = 283
+              Top = 48
+              Width = 83
+              Height = 22
+              TabOrder = 1
+              Text = '0'
+              DataType = dtInteger
+              Max = 1.000000000000000000
+              ChangeDisabledColor = True
+            end
+            object cbSectionLabelVisible: TCheckBox
+              Left = 3
+              Top = 28
+              Width = 190
+              Height = 17
+              Caption = 'Section numbers visible'
+              TabOrder = 2
+              OnClick = cbVertexLabelVisibleClick
+            end
           end
         end
       end

@@ -508,6 +508,14 @@ type
     frameScreenObjectTvk: TframeScreenObjectTransientK;
     jvspTvs: TJvStandardPage;
     frameScreenObjectTvs: TframeScreenObjectTransientS;
+    Panel6: TPanel;
+    gbSectionLabels: TGroupBox;
+    lblSectionXOffset: TLabel;
+    lblSectionYOffset: TLabel;
+    btnSectionFont: TButton;
+    rdeSectionXOffset: TRbwDataEntry;
+    rdeSectionYOffset: TRbwDataEntry;
+    cbSectionLabelVisible: TCheckBox;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -857,6 +865,7 @@ type
       ARow: Integer; const Value: string);
     procedure frameDrnParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure btnSectionFontClick(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -1828,6 +1837,8 @@ type
     FCaptionFont: TFont;
     FVertexCaptionFontChanged: Boolean;
     FVertexCaptionFont: TFont;
+    FSectionCaptionFontChanged: Boolean;
+    FSectionCaptionFont: TFont;
     FSWiObs_Node: TJvPageIndexNode;
     FRipNode: TJvPageIndexNode;
     FSutraGeneralizedTransportNode: TJvPageIndexNode;
@@ -4768,7 +4779,6 @@ var
   AnItem: TPointValuesItem;
   NameIndex: integer;
   ObjectVertexLabel: TObjectVertexLabel;
-//  ItemIndex: integer;
 begin
   StringList := TStringList.Create;
   try
@@ -4823,6 +4833,7 @@ var
   SelectCell: TGridRect;
   ObjectLabel: TObjectLabel;
   ObjectVertexLabel: TObjectVertexLabel;
+  SectionLabel:TSectionLabel;
   TempList: TList;
   SutraStateObs: TSutraStateObservations;
   DataArrayManager: TDataArrayManager;
@@ -4963,6 +4974,7 @@ begin
 
   FCaptionFontChanged := False;
   FVertexCaptionFontChanged := False;
+  FSectionCaptionFontChanged := False;
   ObjectLabel := AScreenObject.ObjectLabel;
   cbCaptionVisible.AllowGrayed := False;
   cbCaptionVisible.Checked := ObjectLabel.Visible;
@@ -4976,6 +4988,12 @@ begin
   cbVertexLabelVisible.Checked := ObjectVertexLabel.Visible;
   rdeVertexXOffset.IntegerValue := ObjectVertexLabel.OffSet.X;
   rdeVertexYOffset.IntegerValue := ObjectVertexLabel.OffSet.Y;
+
+  SectionLabel := AScreenObject.SectionLabel;
+  cbSectionLabelVisible.AllowGrayed := False;
+  cbSectionLabelVisible.Checked := SectionLabel.Visible;
+  rdeSectionXOffset.IntegerValue := SectionLabel.OffSet.X;
+  rdeSectionYOffset.IntegerValue := SectionLabel.OffSet.Y;
 
   SetCheckBoxCaptions;
   frameModpathParticles.InitializeFrame;
@@ -5662,6 +5680,28 @@ begin
     frmGoPhast.frameTopView.ZoomBox.InvalidateImage32;
     frmGoPhast.frameFrontView.ZoomBox.InvalidateImage32;
     frmGoPhast.frameSideView.ZoomBox.InvalidateImage32;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.btnSectionFontClick(Sender: TObject);
+var
+  AScreenObject: TScreenObject;
+begin
+  if FScreenObject <> nil then
+  begin
+    dlgFontCaption.Font := FScreenObject.SectionLabel.Font;
+  end
+  else
+  begin
+    AScreenObject := FScreenObjectList[0];
+    dlgFontCaption.Font := AScreenObject.SectionLabel.Font;
+  end;
+  if dlgFontCaption.Execute then
+  begin
+    FSectionCaptionFont.Free;
+    FSectionCaptionFont := TFont.Create;
+    FSectionCaptionFont.Assign(dlgFontCaption.Font);
+    FSectionCaptionFontChanged := True;
   end;
 end;
 
@@ -7415,6 +7455,7 @@ var
   AScreenObject: TScreenObject;
   ObjectLabel: TObjectLabel;
   ObjectVertexLabel: TObjectVertexLabel;
+  SectionLabel: TSectionLabel;
   index: Integer;
 begin
   for index := 0 to List.Count - 1 do
@@ -7450,7 +7491,22 @@ begin
     end;
     if FVertexCaptionFontChanged then
     begin
-      ObjectVertexLabel.Font :=   FVertexCaptionFont
+      ObjectVertexLabel.Font := FVertexCaptionFont;
+    end;
+
+    SectionLabel := AScreenObject.SectionLabel;
+    if cbVertexLabelVisible.State <> cbGrayed then
+    begin
+      SectionLabel.Visible := cbSectionLabelVisible.Checked;
+    end;
+    if (rdeSectionXOffset.Text <> '') and (rdeSectionYOffset.Text <> '') then
+    begin
+      SectionLabel.OffSet := Point(rdeSectionXOffset.IntegerValue,
+        rdeSectionYOffset.IntegerValue);
+    end;
+    if FSectionCaptionFontChanged then
+    begin
+      SectionLabel.Font := FSectionCaptionFont;
     end;
 
     if comboVertexValueLabels.ItemIndex >= 0 then
@@ -7507,6 +7563,7 @@ procedure TfrmScreenObjectProperties.GetObjectLabelForAdditionalScreenObject(
 var
   ObjectLabel: TObjectLabel;
   ObjectVertexLabel: TObjectVertexLabel;
+  SectionLabel: TSectionLabel;
   ItemIndex: Integer;
 begin
   ObjectLabel := AScreenObject.ObjectLabel;
@@ -7558,6 +7615,25 @@ begin
   begin
     comboVertexValueLabels.ItemIndex := -1;
   end;
+
+  SectionLabel := AScreenObject.SectionLabel;
+  if cbSectionLabelVisible.Checked <> SectionLabel.Visible then
+  begin
+    cbSectionLabelVisible.AllowGrayed := True;
+    cbSectionLabelVisible.State := cbGrayed;
+  end;
+  if (rdeSectionXOffset.Text <> '')
+    and (rdeSectionXOffset.IntegerValue <> SectionLabel.OffSet.X) then
+  begin
+    rdeSectionXOffset.Text := '';
+  end;
+  if (rdeSectionYOffset.Text <> '')
+    and (rdeSectionYOffset.IntegerValue <> SectionLabel.OffSet.Y) then
+  begin
+    rdeSectionYOffset.Text := '';
+  end;
+
+
 end;
 
 function TfrmScreenObjectProperties.GwtColumnCount: integer;
@@ -21185,6 +21261,7 @@ begin
 //  frameModpathParticles.GLSceneViewer1.Free;
 
   FVertexCaptionFont.Free;
+  FSectionCaptionFont.Free;
   FCaptionFont.Free;
   FCurrentEdit := nil;
 
