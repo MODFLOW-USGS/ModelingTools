@@ -32897,6 +32897,7 @@ object TTaskHistory
         'Dialog boxes'
         'Import'
         'MVR'
-        'Documentation')
+        'Documentation'
+        'Graphics')
     end>
 end
