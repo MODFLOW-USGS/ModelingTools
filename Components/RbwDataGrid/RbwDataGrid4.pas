@@ -5314,9 +5314,9 @@ begin
   if (CaptionCell and CollectionItem(ACol, ARow).WordWrapCaptions)
     or ((not CaptionCell) and CollectionItem(ACol, ARow).WordWrapCells) then
   begin
+    CellCaption := Cells[ACol, ARow];
     CellList := TStringList.Create;
     try
-      CellCaption := Cells[ACol, ARow];
       AvailableWidth := ColWidths[ACol] - 4;
       if (ARow >= FixedRows)
         and (GetCellFormat(ACol, ARow) = rcf4Boolean) then
@@ -5350,19 +5350,52 @@ var
   PickIndex: Integer;
   TestWidth: Integer;
   ColOrRow: TCustomRowOrColumn;
+  Content: string;
+  CellList: TStringList;
+  AvailableWidth: Integer;
+  CaptionIndex: Integer;
 begin
   result := 0;
   ColOrRow := CollectionItem(ACol, ARow);
+
+
+  CellList := TStringList.Create;
+  try
+    AvailableWidth := ColWidths[ACol] - 4;
+
+    result := 0;
+    for PickIndex := 0 to ColOrRow.PickList.Count - 1 do
+    begin
+      CellList.Clear;
+      Content := ColOrRow.PickList[PickIndex];
+      FillCaptionList(Content, CellList, AvailableWidth);
+      for CaptionIndex := 0 to CellList.Count - 1 do
+      begin
+        TestWidth := Canvas.TextWidth(CellList[CaptionIndex]);
+        if TestWidth > result then
+        begin
+          result := TestWidth;
+        end;
+      end;
+    end;
+  finally
+    CellList.Free;
+  end;
+
+
+  {
   for PickIndex := 0 to ColOrRow.PickList.Count - 1 do
   begin
-    TestWidth := Canvas.TextWidth(ColOrRow.PickList[PickIndex]);
+    Content := ColOrRow.PickList[PickIndex];
+    TestWidth := Canvas.TextWidth(Content);
     if TestWidth > result then
     begin
       result := TestWidth
     end;
   end;
-  Inc(result, ComboAdustSize);
+  }
 
+  Inc(result, ComboAdustSize);
 end;
 
 function TCustomRBWDataGrid.RequiredCellWidth(
@@ -5385,16 +5418,10 @@ begin
       else if CollectionItem(ACol, ARow).ComboUsed then
       begin
         TestWidth := PickListRequiredWidth(ACol, ARow);
-//        for PickIndex := 0 to CollectionItem(ACol, ARow).PickList.Count - 1 do
-//        begin
-//          TestWidth := Canvas.TextWidth(
-//            CollectionItem(ACol, ARow).PickList[PickIndex]);
-          if TestWidth > result then
-          begin
-            result := TestWidth
-          end;
-//        end;
-//        Inc(result, ComboAdustSize);
+        if TestWidth > result then
+        begin
+          result := TestWidth
+        end;
       end;
     end;
   end;

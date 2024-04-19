@@ -2632,7 +2632,7 @@ begin
         begin
           if DrnMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
           begin
-            KeyString := KeyString + ' MVR';// + InttoStr(ACell.Id);
+            KeyString := KeyString + ' MVR';
             MvrUsed := True;
           end;
         end;
@@ -4650,7 +4650,7 @@ begin
           begin
             if GhbMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
             begin
-              KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
+              KeyString := KeyString + ' MVR';
               MvrUsed := True;
             end;
           end;
@@ -7616,6 +7616,14 @@ var
   MvrMap: TSectionMapItemCollection;
   MapIndex: Integer;
   AMvrMap: TSectionMapItemCollection;
+  SectionIndex: Integer;
+  SearchIndex: Integer;
+  ReceiverSectionsValues: TReceiverSectionValues;
+  ReceiverSectionsValue: TReceiverSectionValue;
+  function GetMapName(AScreenObject: TScreenObject): string;
+  begin
+    result := AScreenObject.Name + ' Per ' + IntToStr(PeriodIndex+1);
+  end;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -7794,7 +7802,11 @@ begin
           begin
             // map needed
             AMvrMap := ModflowMvr.MvrMaps.Add.MvrMap;
-            AMvrMap.MapName := Receiver.ScreenObject.Name;
+            AMvrMap.MapName := GetMapName(Receiver.ScreenObject);
+            for SectionIndex := 1 to AScreenObject.SectionCount do
+            begin
+              AMvrMap.Add.SourceSection := SectionIndex;
+            end;
           end;
 
           for TimeIndex := 0 to ModflowMvr.Values.Count - 1 do
@@ -7819,7 +7831,7 @@ begin
           for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
           begin
             AMvrMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
-            if AMvrMap.MapName = Receiver.ScreenObject.Name then
+            if AMvrMap.MapName = GetMapName(Receiver.ScreenObject) then
             begin
               MvrMap := AMvrMap;
               break;
@@ -7863,6 +7875,21 @@ begin
         IndividualMvrItem := MvrItem.Items[ReceiverItem.Index];
         IndividualMvrItem.MvrType := MvrType;
         IndividualMvrItem.Value := FortranFloatToStr(MvrPeriodItem.value);
+        if MvrMap <> nil then
+        begin
+          IndividualMvrItem.MapName := MvrMap.MapName;
+          for SearchIndex := 0 to Length(Receiver.IDs) - 1 do
+          begin
+            if ReceiverKey.ID = Receiver.IDs[SearchIndex] then
+            begin
+              ReceiverSectionsValues := MvrMap[SourceKey.ID-1].ReceiverSectionsValues;
+              ReceiverSectionsValue := ReceiverSectionsValues.Add;
+              ReceiverSectionsValue.SectionNumber := SearchIndex + 1;
+              ReceiverSectionsValue.Value := MvrPeriodItem.value;
+              break;
+            end;
+          end;
+        end;
 
 
 //        IndividualMvrItem := MvrItem.Items.Add;
@@ -9275,7 +9302,7 @@ begin
             begin
               if RivMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
               begin
-                KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
+                KeyString := KeyString + ' MVR';
                 MvrUsed := True;
               end;
             end;
@@ -12507,6 +12534,7 @@ type
     PeriodData: TImportUzfPeriodItemList;
     MvrSource: Boolean;
     MvrReceiver: Boolean;
+    mvrtype: string;
     BoundNameObs: TObservationList;
     NumberObs: TObservationList;
     constructor Create;
@@ -12537,6 +12565,7 @@ var
   Mvr: TMvr;
   UzfSources: TIntegerList;
   UzfReceivers: TIntegerList;
+  UzfMvrTypes: TStringList;
   UzfMvrLink: TUzfMvrLink;
   UzfMvrLinkArray: TUzfMvrLinkArray;
   UzfMvrLinkList:  TUzfMvrLinkList;
@@ -12587,6 +12616,7 @@ var
   MvrReceiver: TMvrReceiver;
   ObsNameIndex: Integer;
   Index: Integer;
+  RIndex: Integer;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
     ItemIndex: Integer;
@@ -12603,7 +12633,8 @@ var
       end;
       if AnsiSameText(MvrItem.pname2, PackageName) then
       begin
-        UzfReceivers.AddUnique(MvrItem.id2)
+        UzfReceivers.Add(MvrItem.id2);
+        UzfMvrTypes.Add(MvrItem.mvrtype);
       end;
     end;
   end;
@@ -12769,6 +12800,7 @@ begin
   UzfMvrLinkList := TUzfMvrLinkList.Create;
   UzfSources := TIntegerList.Create;
   UzfReceivers := TIntegerList.Create;
+  UzfMvrTypes := TStringList.Create;
   UzfData := TUzfDataObjectList.Create;
   MergedUzfData := TUzfDataObjectLists.Create;
   Map := TimeSeriesMap.Create;
@@ -12858,7 +12890,16 @@ begin
       PackageItem := Uzf.PackageData[CellIndex];
       UzfDataItem := TUzfData.Create;
       UzfDataItem.MvrSource := UzfSources.IndexOf(PackageItem.iuzno) >= 0;
-      UzfDataItem.MvrReceiver := UzfReceivers.IndexOf(PackageItem.iuzno) >= 0;
+      RIndex := UzfReceivers.IndexOf(PackageItem.iuzno);
+      UzfDataItem.MvrReceiver := RIndex >= 0;
+      if RIndex >= 0 then
+      begin
+        UzfDataItem.mvrtype := UzfMvrTypes[RIndex];
+      end
+      else
+      begin
+        UzfDataItem.mvrtype := '';
+      end;
       UzfData.Add(UzfDataItem);
       UzfDataItem.PackageData := PackageItem;
       if PackageItem.boundname <> '' then
@@ -13242,6 +13283,7 @@ begin
     end;
   finally
     UzfReceivers.Free;
+    UzfMvrTypes.Free;
     UzfSources.Free;
     UzfMvrLinkList.Free;
     UzfData.Free;
@@ -13853,7 +13895,7 @@ begin
             begin
               if WellMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
               begin
-                KeyString := KeyString + ' MVR ' + InttoStr(ACell.Id);
+                KeyString := KeyString + ' MVR';
                 MvrUsed := True;
               end;
             end;
@@ -14531,11 +14573,10 @@ var
 begin
   result := (MvrSource = UzfData.MvrSource)
     and (MvrReceiver = UzfData.MvrReceiver)
-  {not MvrSource and not MvrReceiver
-    and not UzfData.MvrSource and not UzfData.MvrReceiver}
     and (PeriodData.Count = UzfData.PeriodData.Count)
     and (PackageData.boundname = UzfData.PackageData.boundname)
-    and (NumberObs = nil) and (UzfData.NumberObs = nil);
+    and (NumberObs = nil) and (UzfData.NumberObs = nil)
+    and AnsiSameText(mvrtype, UzfData.mvrtype);
   if result then
   begin
     for Index := 0 to PeriodData.Count - 1 do

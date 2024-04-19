@@ -152,7 +152,7 @@ resourcestring
   'ckage in %1:s for MVR because the %0:s package is not seleccted';
 
 type
-  TSourceReceiverMap = TDictionary<Integer, Integer>;
+  TSourceReceiverMap = TDictionary<Integer, TReceiverSectionValue>;
   TSfrQuadTreeDictionary = TDictionary<TObject, TRbwQuadTree>;
 
 { TModflowMvrWriter }
@@ -946,6 +946,7 @@ var
   SectionMapsList: TObjectList<TSourceReceiverMap>;
   QuadTreeList: TObjectList<TRbwQuadTree>;
   SfrQuadTreeDictionary: TSfrQuadTreeDictionary;
+  ReceiverSectionValue: TReceiverSectionValue;
   function GetLocation(ACol, ARow: Integer): TPoint2D;
   begin
     if Grid <> nil then
@@ -1040,9 +1041,9 @@ begin
               for MapItemIndex := 0 to AMap.Count - 1 do
               begin
                 MapItem := AMap[MapItemIndex];
-                for ReceiverIndex := 0 to MapItem.ReceiverSections.Count - 1 do
+                for ReceiverIndex := 0 to MapItem.ReceiverSectionsValues.Count - 1 do
                 begin
-                  SourceReceiverIndexMap.Add(MapItem.SourceSection-1, MapItem.ReceiverSections[ReceiverIndex].Value-1);
+                  SourceReceiverIndexMap.Add(MapItem.SourceSection-1, MapItem.ReceiverSectionsValues[ReceiverIndex]);
                 end;
               end;
             end;
@@ -1100,6 +1101,7 @@ begin
               end;
             end;
 
+            ReceiverSectionValue := nil;
             ReceiverSection := -1;
             if ReceiverItem.ReceiverPackage = rpcUzf then
             begin
@@ -1112,10 +1114,12 @@ begin
                 // If a map is used, ReceiverCount can not be used as the divisor.
                 if (MapName <> '') and (SourceReceiverIndexMap <> nil) then
                 begin
-                  if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
+                  if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSectionValue) then
                   begin
                     Continue
                   end;
+                  ReceiverSection := ReceiverSectionValue.SectionNumber-1;
+                  {
                   Divisor := 0;
                   for DivisorIndex := 0 to Length(ReceiverValues.SectionIndices) - 1 do
                   begin
@@ -1130,6 +1134,8 @@ begin
                   begin
                     break;
                   end;
+                  }
+                  Divisor := 1;
                 end;
               end;
             end;
@@ -1155,10 +1161,11 @@ begin
                       begin
                         if SourceReceiverIndexMap <> nil then
                         begin
-                          if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
+                          if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSectionValue) then
                           begin
                             Continue;
                           end;
+                          ReceiverSection := ReceiverSectionValue.SectionNumber -1;
                           if ReceiverSection <> ReceiverValues.SectionIndices[SfrCellIndex] then
                           begin
                             Continue;
@@ -1198,10 +1205,11 @@ begin
                 begin
                   if SourceReceiverIndexMap <> nil then
                   begin
-                    if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
+                    if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSectionValue) then
                     begin
                       Continue;
                     end;
+                    ReceiverSection := ReceiverSectionValue.SectionNumber -1;
                     if ReceiverSection <> ReceiverValues.SectionIndices[SfrCellIndex] then
                     begin
                       Continue;
@@ -1233,10 +1241,11 @@ begin
                 begin
                   if SourceReceiverIndexMap <> nil then
                   begin
-                    if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSection) then
+                    if not SourceReceiverIndexMap.TryGetValue(MvrCell.Section, ReceiverSectionValue) then
                     begin
                       Continue;
                     end;
+                    ReceiverSection := ReceiverSectionValue.SectionNumber - 1;
                     if ReceiverSection <> AReceiver.ReceiverValues.SectionIndices[SfrCellIndex] then
                     begin
                       Continue;
@@ -1409,7 +1418,14 @@ begin
                 else Assert(False);
               end;
 
-              WriteFloat(MvrCell.MvrValues[ReceiverIndex]/Divisor);
+              if ReceiverSectionValue = nil then
+              begin
+                WriteFloat(MvrCell.MvrValues[ReceiverIndex]/Divisor);
+              end
+              else
+              begin
+                WriteFloat(ReceiverSectionValue.Value);
+              end;
 
               NewLine;
             end;

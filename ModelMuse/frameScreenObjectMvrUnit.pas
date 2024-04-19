@@ -11,7 +11,7 @@ uses
 
 type
   TReceiverColumn = (rcPackage, rcDivide, rcSfrChoice, rcLakeOutlet, rcObject);
-  TMapColumn = (mcSource, mcReceiver);
+  TMapColumn = (mcSource, mcReceiver, mcValue);
   TReceiverItemColumn = (ricValue, ricType, ricMapName);
 
   TGetSourcesEvent = procedure (Sender: TObject;
@@ -30,6 +30,10 @@ type
     JvNetscapeSplitter1: TJvNetscapeSplitter;
     rdgMap: TRbwDataGrid4;
     frameMapNames: TframeGrid;
+    pnl1: TPanel;
+    pnl2: TPanel;
+    seReceiverNumber: TJvSpinEdit;
+    lblReceiverNumber: TLabel;
     procedure comboSourcePackageChange(Sender: TObject);
     procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
@@ -61,6 +65,7 @@ type
     procedure rdgMapExit(Sender: TObject);
     procedure rdgMapSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
+    procedure seReceiverNumberChange(Sender: TObject);
   private
     FLakObjects: TStringList;
     FMawObjects: TStringList;
@@ -134,6 +139,10 @@ resourcestring
   'ce but the lake outlet number is invalid.';
   StrDivideFlowEqually = 'Divide flow equally among UZF receiver cells';
   StrMapNameDOptiona = 'Map name %d (optional)';
+  StrMapName = 'Map name';
+  StrSourceSection = 'Source section';
+  StrReceiverSections = 'Receiver sections';
+  StrReceiverValue = 'Value';
 
 { TframeScreenObjectMvr }
 
@@ -253,6 +262,10 @@ var
   RowIndex: Integer;
   ItemIndex: Integer;
   AnItem: TSectionMapItem;
+  ColIndex: Integer;
+  MaxReceivers: Integer;
+  ReceiverIndex: Integer;
+  ReceiverItem: TReceiverSectionValue;
 begin
   inherited;
   if Changing then
@@ -267,17 +280,44 @@ begin
       MapItem := AMapItem;
       for RowIndex := 1 to rdgMap.RowCount - 1 do
       begin
-        rdgMap.Cells[Ord(mcReceiver), RowIndex] := '';
+        for ColIndex := Ord(mcReceiver) to rdgMap.ColCount - 1 do
+        begin
+          rdgMap.Cells[ColIndex, RowIndex] := '';
+        end;
       end;
+      MaxReceivers := 1;
       for ItemIndex := 0 to AMapItem.MvrMap.Count - 1 do
       begin
         AnItem := AMapItem.MvrMap[ItemIndex];
         if (AnItem.SourceSection >= 1)
           and (AnItem.SourceSection < rdgMap.RowCount) then
         begin
-          rdgMap.Cells[Ord(mcReceiver), ItemIndex+1] := AnItem.ReceiverSections.CommaSeparatedText;
+          if AnItem.ReceiverSectionsValues.Count > MaxReceivers then
+          begin
+            MaxReceivers := AnItem.ReceiverSectionsValues.Count;
+          end;
+//          rdgMap.Cells[Ord(mcReceiver), ItemIndex+1] := AnItem.ReceiverSections.CommaSeparatedText;
         end;
       end;
+      seReceiverNumber.AsInteger := MaxReceivers;
+      seReceiverNumberChange(nil);
+      for ItemIndex := 0 to AMapItem.MvrMap.Count - 1 do
+      begin
+        AnItem := AMapItem.MvrMap[ItemIndex];
+        if (AnItem.SourceSection >= 1)
+          and (AnItem.SourceSection < rdgMap.RowCount) then
+        begin
+          for ReceiverIndex := 0 to AnItem.ReceiverSectionsValues.Count - 1 do
+          begin
+            ReceiverItem := AnItem.ReceiverSectionsValues[ReceiverIndex];
+            ColIndex := ReceiverIndex*2 + 1;
+            rdgMap.IntegerValue[ColIndex, ItemIndex+1] := ReceiverItem.SectionNumber;
+            Inc(ColIndex);
+            rdgMap.RealValue[ColIndex, ItemIndex+1] := ReceiverItem.Value;
+          end;
+        end;
+      end;
+
     end
     else
     begin
@@ -753,13 +793,19 @@ begin
           begin
             FMvrMaps.Assign(ModflowMvr.MvrMaps);
             rdgMap.RowCount := AScreenObject.SectionCount + 1;
-            frameMapNames.Grid.RowCount := Max(FMvrMaps.Count, 1)+1;
-            frameMapNames.Grid.Cells[0,1] := '';
-            for MapIndex := 0 to FMvrMaps.Count - 1 do
-            begin
-              AMap := FMvrMaps[MapIndex];
-              frameMapNames.Grid.Cells[0, MapIndex+1] := AMap.MvrMap.MapName;
-              frameMapNames.Grid.Objects[0, MapIndex+1] := AMap;
+            frameMapNames.Grid.BeginUpdate;
+            try
+              frameMapNames.Grid.RowCount := Max(FMvrMaps.Count, 1)+1;
+              frameMapNames.Grid.Cells[0,1] := '';
+              for MapIndex := 0 to FMvrMaps.Count - 1 do
+              begin
+                AMap := FMvrMaps[MapIndex];
+                frameMapNames.Grid.Cells[0, MapIndex+1] := AMap.MvrMap.MapName;
+                frameMapNames.Grid.Objects[0, MapIndex+1] := AMap;
+              end;
+            finally
+              frameMapNames.Grid.EndUpdate;
+              frameMapNames.Width := Max(110, frameMapNames.Grid.ColWidths[0] + 16);
             end;
           end;
         end
@@ -791,6 +837,7 @@ begin
     Changing := False;
   end;
   frameReceivers.Grid.HideEditor;
+  frameMapNames.Grid.HideEditor;
 end;
 
 function TframeScreenObjectMvr.GetLakObjects: TStringList;
@@ -838,7 +885,7 @@ begin
   frameMapNames.Grid.BeginUpdate;
   try
     ClearGrid(frameMapNames.Grid);
-    frameMapNames.Grid.Cells[0,0] := 'Map name';
+    frameMapNames.Grid.Cells[0,0] := StrMapName;
   finally
     frameMapNames.Grid.EndUpdate;
   end;
@@ -846,8 +893,9 @@ begin
   rdgMap.BeginUpdate;
   try
     ClearGrid(rdgMap);
-    rdgMap.Cells[Ord(mcSource),0] := 'Source section';
-    rdgMap.Cells[Ord(mcReceiver),0] := 'Receiver sections';
+    rdgMap.Cells[Ord(mcSource),0] := StrSourceSection;
+    rdgMap.Cells[Ord(mcReceiver),0] := StrReceiverSections;
+    rdgMap.Cells[Ord(mcValue),0] := StrReceiverValue;
     rdgMap.RowCount := 2;
   finally
     rdgMap.EndUpdate;
@@ -968,6 +1016,13 @@ var
   RowIndex: Integer;
   ItemIndex: Integer;
   AnItem: TSectionMapItem;
+  MaxReceivers: Int64;
+  ReceiverIndex: Integer;
+  ReceiverCount: Integer;
+  ColIndex: Integer;
+  SectionNumber: Integer;
+  AValue: double;
+  ReceiverItem: TReceiverSectionValue;
 begin
   inherited;
   if MapItem <> nil then
@@ -990,6 +1045,7 @@ begin
         AnItem.Free;
       end;
     end;
+    MaxReceivers := seReceiverNumber.AsInteger;
     for RowIndex := 1 to rdgMap.RowCount - 1  do
     begin
       if rdgMap.Cells[Ord(mcReceiver), RowIndex] <> '' then
@@ -1000,8 +1056,29 @@ begin
           AnItem := Map.Add;
           AnItem.SourceSection := RowIndex;
         end;
-        AnItem.ReceiverSections.CommaSeparatedText := rdgMap.Cells[Ord(mcReceiver), RowIndex];
-        if AnItem.ReceiverSections.Count = 0 then
+
+        ReceiverCount := 0;
+        for ReceiverIndex := 0 to MaxReceivers - 1 do
+        begin
+          ColIndex := ReceiverIndex*2 + 1;
+          if TryStrToInt(rdgMap.Cells[ColIndex, RowIndex], SectionNumber)
+            and TryStrToFloat(rdgMap.Cells[ColIndex+1, RowIndex], AValue) then
+          begin
+            if ReceiverCount < AnItem.ReceiverSectionsValues.Count then
+            begin
+              ReceiverItem := AnItem.ReceiverSectionsValues[ReceiverCount];
+            end
+            else
+            begin
+              ReceiverItem := AnItem.ReceiverSectionsValues.Add;
+            end;
+            ReceiverItem.SectionNumber := SectionNumber;
+            ReceiverItem.Value := AValue;
+            Inc(ReceiverCount);
+          end;
+        end;
+        AnItem.ReceiverSectionsValues.Count := ReceiverCount;
+        if AnItem.ReceiverSectionsValues.Count = 0 then
         begin
           AnItem.Free;
           rdgMap.Objects[Ord(mcReceiver), RowIndex] := nil;
@@ -1053,6 +1130,38 @@ begin
   inherited;
   Changed;
 
+end;
+
+procedure TframeScreenObjectMvr.seReceiverNumberChange(Sender: TObject);
+var
+  ColIndex: Integer;
+  AColumn: TRbwColumn4;
+begin
+  inherited;
+  rdgMap.BeginUpdate;
+  try
+    rdgMap.ColCount := seReceiverNumber.AsInteger * 2 + 1;
+    for ColIndex := Ord(mcReceiver) to rdgMap.ColCount - 1 do
+    begin
+      AColumn := rdgMap.Columns[ColIndex];
+      if Odd(ColIndex) then
+      begin
+        rdgMap.Cells[ColIndex,0] := StrReceiverSections;
+        AColumn.Format := rcf4Integer;
+      end
+      else
+      begin
+        rdgMap.Cells[ColIndex,0] := StrReceiverValue;
+        AColumn.Format := rcf4Real;
+      end;
+      AColumn.AutoAdjustColWidths := True;
+      AColumn.AutoAdjustCaptionRowHeights := True;
+      AColumn.AutoAdjustRowHeights := True;
+      AColumn.WordWrapCaptions := True;
+    end;
+  finally
+    rdgMap.EndUpdate;
+  end;
 end;
 
 procedure TframeScreenObjectMvr.SetChanging(const Value: Boolean);

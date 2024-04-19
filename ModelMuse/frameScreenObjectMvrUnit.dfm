@@ -101,7 +101,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         end
         item
           AutoAdjustRowHeights = True
-          AutoAdjustCaptionRowHeights = False
+          AutoAdjustCaptionRowHeights = True
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -154,11 +154,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         end>
       ExplicitWidth = 410
       ExplicitHeight = 83
-      ColWidths = (
-        64
-        64
-        64
-        64)
     end
   end
   object pcMain: TPageControl [2]
@@ -166,7 +161,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     Top = 25
     Width = 412
     Height = 239
-    ActivePage = tabMvrMap
+    ActivePage = tabConnections
     Align = alClient
     TabOrder = 2
     object tabConnections: TTabSheet
@@ -304,7 +299,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             end
             item
               AutoAdjustRowHeights = True
-              AutoAdjustCaptionRowHeights = False
+              AutoAdjustCaptionRowHeights = True
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -326,7 +321,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
                 'Nearest enclosed reach of any segment'
                 'Nearest reach of any segment')
               WordWrapCaptions = True
-              WordWrapCells = False
+              WordWrapCells = True
               CaseSensitivePicklist = False
               CheckStyle = csCheck
               AutoAdjustColWidths = True
@@ -383,6 +378,12 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             end>
           ExplicitWidth = 404
           ExplicitHeight = 104
+          ColWidths = (
+            64
+            64
+            172
+            64
+            64)
         end
       end
     end
@@ -393,7 +394,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       Caption = 'MVR Map (Optional)'
       ImageIndex = 2
       object JvNetscapeSplitter1: TJvNetscapeSplitter
-        Left = 100
+        Left = 110
         Top = 0
         Height = 209
         Align = alLeft
@@ -404,91 +405,18 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         ExplicitTop = 112
         ExplicitHeight = 100
       end
-      object rdgMap: TRbwDataGrid4
-        Left = 110
-        Top = 0
-        Width = 294
-        Height = 209
-        Align = alClient
-        ColCount = 2
-        FixedCols = 1
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
-        TabOrder = 0
-        OnExit = rdgMapExit
-        OnSelectCell = rdgMapSelectCell
-        ExtendedAutoDistributeText = False
-        AutoMultiEdit = False
-        AutoDistributeText = False
-        AutoIncreaseColCount = False
-        AutoIncreaseRowCount = False
-        SelectedRowOrColumnColor = clAqua
-        UnselectableColor = clBtnFace
-        ColorRangeSelection = False
-        Columns = <
-          item
-            AutoAdjustRowHeights = True
-            AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -12
-            ButtonFont.Name = 'Segoe UI'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = False
-            ComboUsed = False
-            Format = rcf4String
-            LimitToList = False
-            MaxLength = 0
-            ParentButtonFont = False
-            WordWrapCaptions = True
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = True
-          end
-          item
-            AutoAdjustRowHeights = True
-            AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -12
-            ButtonFont.Name = 'Segoe UI'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = True
-            ComboUsed = False
-            Format = rcf4String
-            LimitToList = False
-            Max = 100000000.000000000000000000
-            MaxLength = 0
-            Min = 1.000000000000000000
-            ParentButtonFont = False
-            WordWrapCaptions = True
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = True
-          end>
-        WordWrapRowCaptions = False
-      end
       inline frameMapNames: TframeGrid
         Left = 0
         Top = 0
-        Width = 100
+        Width = 110
         Height = 209
         Align = alLeft
-        TabOrder = 1
-        ExplicitWidth = 100
+        TabOrder = 0
+        ExplicitWidth = 110
         ExplicitHeight = 209
         inherited Panel: TPanel
           Top = 120
-          Width = 100
+          Width = 110
           Height = 89
           ExplicitTop = 120
           ExplicitWidth = 100
@@ -500,21 +428,21 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             ExplicitTop = 5
           end
           inherited sbAdd: TSpeedButton
-            Left = 2
+            Left = 3
             Top = 55
             OnClick = frameMapNamessbAddClick
             ExplicitLeft = 2
             ExplicitTop = 55
           end
           inherited sbInsert: TSpeedButton
-            Left = 31
+            Left = 35
             Top = 55
             OnClick = frameMapNamessbInsertClick
             ExplicitLeft = 31
             ExplicitTop = 55
           end
           inherited sbDelete: TSpeedButton
-            Left = 60
+            Left = 67
             Top = 55
             OnClick = frameMapNamessbDeleteClick
             ExplicitLeft = 60
@@ -529,12 +457,179 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 100
+          Width = 110
           Height = 120
           OnSelectCell = frameMapNamesGridSelectCell
           OnSetEditText = frameMapNamesGridSetEditText
-          ExplicitWidth = 100
+          Columns = <
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
+          ExplicitLeft = 4
+          ExplicitTop = -1
+          ExplicitWidth = 110
           ExplicitHeight = 120
+        end
+      end
+      object pnl1: TPanel
+        Left = 120
+        Top = 0
+        Width = 284
+        Height = 209
+        Align = alClient
+        Caption = 'pnl1'
+        TabOrder = 1
+        ExplicitLeft = 110
+        ExplicitWidth = 294
+        object rdgMap: TRbwDataGrid4
+          Left = 1
+          Top = 1
+          Width = 282
+          Height = 166
+          Align = alClient
+          ColCount = 3
+          FixedCols = 1
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+          TabOrder = 0
+          OnExit = rdgMapExit
+          OnSelectCell = rdgMapSelectCell
+          ExtendedAutoDistributeText = False
+          AutoMultiEdit = False
+          AutoDistributeText = False
+          AutoIncreaseColCount = False
+          AutoIncreaseRowCount = False
+          SelectedRowOrColumnColor = clAqua
+          UnselectableColor = clBtnFace
+          ColorRangeSelection = False
+          Columns = <
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = True
+              ComboUsed = False
+              Format = rcf4Integer
+              LimitToList = False
+              Max = 100000000.000000000000000000
+              MaxLength = 0
+              Min = 1.000000000000000000
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -12
+              ButtonFont.Name = 'Segoe UI'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4Real
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = False
+            end>
+          WordWrapRowCaptions = False
+          ExplicitWidth = 292
+          RowHeights = (
+            24
+            24
+            24
+            24
+            24)
+        end
+        object pnl2: TPanel
+          Left = 1
+          Top = 167
+          Width = 282
+          Height = 41
+          Align = alBottom
+          TabOrder = 1
+          ExplicitWidth = 292
+          object lblReceiverNumber: TLabel
+            Left = 76
+            Top = 11
+            Width = 165
+            Height = 15
+            Caption = 'Maximum receivers per section'
+          end
+          object seReceiverNumber: TJvSpinEdit
+            Left = 5
+            Top = 6
+            Width = 65
+            Height = 23
+            MaxValue = 1000000.000000000000000000
+            TabOrder = 0
+            OnChange = seReceiverNumberChange
+          end
         end
       end
     end

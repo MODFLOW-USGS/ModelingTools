@@ -148,22 +148,49 @@ type
     function Add: TIndividualMvrItem;
   end;
 
-  // @name is used to map a particular section of a source to a particular
-  // section of a receiver. For example, suppose there is a drain boundary
+  TReceiverSectionValue = class(TOrderedItem)
+  private
+    FSectionNumber: Integer;
+    FValue: Double;
+    procedure SetSectionNumber(const Value: Integer);
+    procedure SetValue(const Value: Double);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property SectionNumber: Integer read FSectionNumber write SetSectionNumber;
+    property Value: Double read FValue write SetValue;
+  end;
+
+  TReceiverSectionValues = class(TOrderedCollection)
+  private
+    function GetItem(Index: Integer): TReceiverSectionValue;
+    procedure SetItem(Index: Integer; const Value: TReceiverSectionValue);
+  public
+    constructor Create(Model: IModelForTOrderedCollection);
+    property Items[Index: Integer]: TReceiverSectionValue read GetItem write SetItem; default;
+    function Add: TReceiverSectionValue;
+  end;
+
+  // @name is used to map a particular section of a source to one or more
+  // sections of a receiver. For example, suppose there is a drain boundary
   // defined by a @link(TScreenObject) with three sections that sends
   // discharge to a UZF boundary defined by a TScreenObject with two
   // sections. @Link(TSectionMapItemCollection) would be used to match
   // each section of the drain boundary to a section of the UZF boundary.
   // Sources can be well, drain river, GHB, SFR, and UZF.
   // Receivers can be SFR and UZF.
+  // Each receiver would have a value for it specified in
+  // @link(TReceiverSectionValue.Value)
   TSectionMapItem = class(TOrderedItem)
   private
     FReceiverSection: Integer;
     FSourceSection: Integer;
-    FReceiverSections: TIntegerCollection;
+    FReceiverSectionsValues: TReceiverSectionValues;
     procedure SetReceiverSection(const Value: Integer);
     procedure SetSourceSection(const Value: Integer);
-    procedure SetReceiverSections(const Value: TIntegerCollection);
+    procedure SetReceiverSectionsValues(const Value: TReceiverSectionValues);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -180,7 +207,8 @@ type
     property ReceiverSection: Integer read FReceiverSection write SetReceiverSection stored False;
     // @name must contain values greater than or equal to 1 and less than or equal to the
     // or equal to the number of sections in the receiver boundary.
-    property ReceiverSections: TIntegerCollection read FReceiverSections write SetReceiverSections;
+    property ReceiverSectionsValues: TReceiverSectionValues
+      read FReceiverSectionsValues write SetReceiverSectionsValues;
   end;
 
   TSectionMapItemCollection = class(TOrderedCollection)
@@ -881,8 +909,6 @@ procedure TMvrItems.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
   PestItemNames, TimeSeriesNames: TStringListObjectList);
 begin
   Assert(False);
-//  inherited;
-
 end;
 
 procedure TMvrItems.AssignCellList(CellAssignmentData: TCellAssignmentData);
@@ -1066,14 +1092,12 @@ end;
 procedure TMvrItems.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
 var
-//  LocalModel: TCustomModel;
   ReceiverCount: integer;
   BoundaryIndex: integer;
   MvrRecordArray: TMvrRecordArray;
 begin
   SetLength((Boundaries[ItemIndex, AModel]
     as TMvrSourceStorage).FMvrRecordArray, BoundaryCount);
-//  LocalModel := Model as TCustomModel;
   ReceiverCount := (BoundaryGroup as TMvrBoundary).Receivers.count;
   MvrRecordArray := (Boundaries[ItemIndex, AModel]
     as TMvrSourceStorage).FMvrRecordArray;
@@ -1175,7 +1199,6 @@ begin
       and (LakeOutlet = ReceiveSource.LakeOutlet)
       and (ReceiverObjectName = ReceiveSource.ReceiverObjectName)
       and (DivisionChoice = ReceiveSource.DivisionChoice)
-
   end;
 end;
 
@@ -1330,11 +1353,6 @@ begin
     MvrData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
     MvrData.NonParamDescription := Format('Receiver_%d', [Index+1]);
     MvrData.ParamDescription := MvrData.NonParamDescription;
-    if Model <> nil then
-    begin
-//      MvrData.OnInvalidate :=
-//        (Model as TCustomModel).InvalidateMt3dmsChemSources;
-    end;
     AddTimeList(MvrData);
     FListOfTimeLists.Add(MvrData);
   end;
@@ -1626,7 +1644,6 @@ begin
   if result then
   begin
     MvrCell := TMvrSourceCell(AnotherCell);
-//    result := IFace = MvrCell.IFace;
     if result then
     begin
       for Index := 0 to Length(FValues.Values) - 1 do
@@ -1692,7 +1709,7 @@ begin
   begin
     SourceItem := Source as TSectionMapItem;
     SourceSection := SourceItem.SourceSection;
-    ReceiverSections := SourceItem.ReceiverSections;
+    ReceiverSectionsValues := SourceItem.ReceiverSectionsValues;
   end;
   inherited;
 end;
@@ -1700,12 +1717,12 @@ end;
 constructor TSectionMapItem.Create(Collection: TCollection);
 begin
   inherited;
-  FReceiverSections := TIntegerCollection.Create(OnInvalidateModelEvent);
+  FReceiverSectionsValues := TReceiverSectionValues.Create(Model);
 end;
 
 destructor TSectionMapItem.Destroy;
 begin
-  FReceiverSections.Free;
+  FReceiverSectionsValues.Free;
   inherited;
 end;
 
@@ -1718,19 +1735,20 @@ begin
   begin
     SourceItem := AnotherItem as TSectionMapItem;
     result := (SourceSection = SourceItem.SourceSection)
-      and ReceiverSections.IsSame(SourceItem.ReceiverSections);
+      and ReceiverSectionsValues.IsSame(SourceItem.ReceiverSectionsValues);
   end;
 end;
 
 procedure TSectionMapItem.SetReceiverSection(const Value: Integer);
 begin
-  FReceiverSections.Add.Value := Value;
   SetIntegerProperty(FReceiverSection, Value);
+  FReceiverSectionsValues.Add.SectionNumber := Value;
 end;
 
-procedure TSectionMapItem.SetReceiverSections(const Value: TIntegerCollection);
+procedure TSectionMapItem.SetReceiverSectionsValues(
+  const Value: TReceiverSectionValues);
 begin
-  FReceiverSections.Assign(Value);
+  FReceiverSectionsValues.Assign(Value);
 end;
 
 procedure TSectionMapItem.SetSourceSection(const Value: Integer);
@@ -1752,7 +1770,6 @@ begin
     MapName := TSectionMapItemCollection(Source).MapName;
   end;
   inherited;
-
 end;
 
 constructor TSectionMapItemCollection.Create(
@@ -1838,6 +1855,68 @@ end;
 procedure TSectionMaps.SetItem(Index: Integer; const Value: TSectionMap);
 begin
   inherited Items[Index] := Value;
+end;
+
+{ TReceiverSectionValue }
+
+procedure TReceiverSectionValue.Assign(Source: TPersistent);
+var
+  RecSource: TReceiverSectionValue;
+begin
+  if Source is TReceiverSectionValue then
+  begin
+    RecSource := TReceiverSectionValue(Source);
+    SectionNumber := RecSource.SectionNumber;
+    Value := RecSource.Value;
+  end;
+  inherited;
+end;
+
+function TReceiverSectionValue.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  RecSource: TReceiverSectionValue;
+begin
+  result := (AnotherItem is TReceiverSectionValue);
+  if result then
+  begin
+    RecSource := TReceiverSectionValue(AnotherItem);
+    result :=
+      (SectionNumber = RecSource.SectionNumber)
+      and (Value = RecSource.Value);
+  end;
+end;
+
+procedure TReceiverSectionValue.SetSectionNumber(const Value: Integer);
+begin
+  SetIntegerProperty(FSectionNumber, Value);
+end;
+
+procedure TReceiverSectionValue.SetValue(const Value: Double);
+begin
+  SetRealProperty(FValue, Value);
+end;
+
+{ TReceiverSectionValues }
+
+function TReceiverSectionValues.Add: TReceiverSectionValue;
+begin
+  result := inherited Add as TReceiverSectionValue;
+end;
+
+constructor TReceiverSectionValues.Create(Model: IModelForTOrderedCollection);
+begin
+  inherited Create(TReceiverSectionValue, Model);
+end;
+
+function TReceiverSectionValues.GetItem(Index: Integer): TReceiverSectionValue;
+begin
+  result := inherited Items[index] as TReceiverSectionValue
+end;
+
+procedure TReceiverSectionValues.SetItem(Index: Integer;
+  const Value: TReceiverSectionValue);
+begin
+  inherited Items[index] := Value;
 end;
 
 end.
