@@ -110,6 +110,7 @@ var
   SSArray: TModflowBoundaryDisplayDataArray;
   SYArray: TModflowBoundaryDisplayDataArray;
   CellList: TValueCellList;
+  TempList: TList;
 begin
   if not Package.IsSelected then
   begin
@@ -129,35 +130,41 @@ begin
 
   SSLists := TModflowBoundListOfTimeLists.Create;
   SYLists := TModflowBoundListOfTimeLists.Create;
+  TempList := TList.Create;
   try
     try
       SSList := TimeLists[0];
+      SYList := TimeLists[1];
       for TimeIndex := 0 to Values.Count - 1 do
       begin
+        TempList.Clear;
         SSArray := SSList[TimeIndex]
           as TModflowBoundaryDisplayDataArray;
-        CellList := Values[TimeIndex];
-        AssignTransient2DArray(SSArray, 0, CellList, 0,
-          rdtDouble, umAssign);
-        Model.AdjustDataArray(SSArray);
-        CellList.Cache;
-      end;
-
-      SYList := TimeLists[1];
-      if SYList <> nil then
-      begin
-        for TimeIndex := 0 to Values.Count - 1 do
+        TempList.Add(SSArray);
+        SSArray.AddMethod := vamReplace;
+        if SYList <> nil then
         begin
           SYArray := SYList[TimeIndex]
             as TModflowBoundaryDisplayDataArray;
-          CellList := Values[TimeIndex];
-          AssignTransient2DArray(SYArray, 1, CellList, 0,
-            rdtDouble, umAssign);
-          Model.AdjustDataArray(SYArray);
+          TempList.Add(SYArray);
+          SYArray.AddMethod := vamReplace;
+        end
+        else
+        begin
+          SYArray := nil;
+        end;
+        CellList := Values[TimeIndex];
+        try
+          UpdateCellDisplay(CellList, TempList, []);
+        finally
           CellList.Cache;
+          SSArray.UpToDate := True;
+          if SYArray <> nil then
+          begin
+            SYArray.UpToDate;
+          end;
         end;
       end;
-
     except on E: EInvalidTime do
       begin
         Beep;
@@ -167,6 +174,7 @@ begin
   finally
     SSLists.Free;
     SYLists.Free;
+    TempList.Free;
     Model.InvalidateAllDynamicLists;
   end
 end;

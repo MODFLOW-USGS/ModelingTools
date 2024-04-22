@@ -32,6 +32,9 @@ var
 
 implementation
 
+uses
+  System.Math;
+
 {$R *.dfm}
 
 { TframePackageIst }
@@ -41,10 +44,19 @@ var
   ColIndex: Integer;
 begin
   inherited;
-  frameIst.seNumberChange(Sender);
-  for ColIndex := 1 to frameIst.Grid.ColCount - 1 do
-  begin
-    frameIst.Grid.Cells[ColIndex, Ord(IrName)] := IntToStr(ColIndex);
+  frameIst.Grid.BeginUpdate;
+  try
+    frameIst.seNumberChange(Sender);
+    for ColIndex := 1 to frameIst.Grid.ColCount - 1 do
+    begin
+      frameIst.Grid.Cells[ColIndex, Ord(IrName)] := IntToStr(ColIndex);
+      if ColIndex >= 2 then
+      begin
+        frameIst.Grid.Columns[ColIndex] := frameIst.Grid.Columns[1];
+      end;
+    end;
+  finally
+    frameIst.Grid.EndUpdate;
   end;
 end;
 
@@ -119,6 +131,7 @@ var
   PropIndex: Integer;
   PackageProp: TIstPackageItem;
   ColIndex: Integer;
+  PrintItemIndex: Integer;
 begin
   inherited;
   IstPackage := Package as TGwtIstPackage;
@@ -146,13 +159,26 @@ begin
           PackageProp.ZeroOrderDecay := False;
           PackageProp.FirstOrderDecay := True;
         end;
+      else
+        begin
+          PackageProp.ZeroOrderDecay := False;
+          PackageProp.FirstOrderDecay := False;
+        end;
     end;
     PackageProp.SaveConcentrations := frameIst.Grid.Checked[ColIndex, Ord(irSaveConc)];
     PackageProp.SpecifyPrintFormat := frameIst.Grid.Checked[ColIndex, Ord(irPrintConc)];
     PackageProp.Columns := frameIst.Grid.IntegerValueDefault[ColIndex, Ord(IrPrintCols), 10];
     PackageProp.Width := frameIst.Grid.IntegerValueDefault[ColIndex, Ord(irWidth), 15];
     PackageProp.Digits := frameIst.Grid.IntegerValueDefault[ColIndex, Ord(IrDigits), 20];
-    PackageProp.PrintFormat := TPrintFormat(frameIst.Grid.ItemIndex[ColIndex, Ord(irFormat)]);
+    PrintItemIndex := frameIst.Grid.ItemIndex[ColIndex, Ord(irFormat)];
+    if PrintItemIndex >= 0 then
+    begin
+      PackageProp.PrintFormat := TPrintFormat(PrintItemIndex);
+    end
+    else
+    begin
+      PackageProp.PrintFormat := pfGeneral;
+    end;
   end;
 end;
 

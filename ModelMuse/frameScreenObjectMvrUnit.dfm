@@ -152,6 +152,8 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
+      ExplicitLeft = 4
+      ExplicitTop = 53
       ExplicitWidth = 410
       ExplicitHeight = 83
     end
@@ -161,7 +163,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     Top = 25
     Width = 412
     Height = 239
-    ActivePage = tabConnections
+    ActivePage = tabMvrMap
     Align = alClient
     TabOrder = 2
     object tabConnections: TTabSheet
@@ -391,7 +393,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       Caption = 'Time'
     end
     object tabMvrMap: TTabSheet
-      Caption = 'MVR Map (Optional)'
+      Caption = 'UZF Receiver Maps (Optional)'
       ImageIndex = 2
       object JvNetscapeSplitter1: TJvNetscapeSplitter
         Left = 110
@@ -419,7 +421,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           Width = 110
           Height = 89
           ExplicitTop = 120
-          ExplicitWidth = 100
+          ExplicitWidth = 110
           ExplicitHeight = 89
           inherited lbNumber: TLabel
             Left = 10
@@ -486,8 +488,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 4
-          ExplicitTop = -1
           ExplicitWidth = 110
           ExplicitHeight = 120
         end
@@ -500,8 +500,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         Align = alClient
         Caption = 'pnl1'
         TabOrder = 1
-        ExplicitLeft = 110
-        ExplicitWidth = 294
         object rdgMap: TRbwDataGrid4
           Left = 1
           Top = 1
@@ -598,7 +596,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               AutoAdjustColWidths = False
             end>
           WordWrapRowCaptions = False
-          ExplicitWidth = 292
           RowHeights = (
             24
             24
@@ -613,7 +610,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           Height = 41
           Align = alBottom
           TabOrder = 1
-          ExplicitWidth = 292
           object lblReceiverNumber: TLabel
             Left = 76
             Top = 11
@@ -627,6 +623,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
             Width = 65
             Height = 23
             MaxValue = 1000000.000000000000000000
+            Value = 1.000000000000000000
             TabOrder = 0
             OnChange = seReceiverNumberChange
           end

@@ -434,6 +434,7 @@ end;
     // affected by MODFLOW parameters.)
     // @param(Param is a MODFLOW parameter that might affect the value of
     // some cells.)
+    //
     // @Seealso(TCustomTransientWriter.UpdateTransient2DArray)
     procedure UpdateCellDisplay(CellList: TValueCellList; DataArrayList: TList;
       ParameterIndicies: TByteSet; Param: TModflowTransientListParameter = nil;
@@ -580,7 +581,9 @@ end;
      @param(DataTypeIndex indicates which @link(TValueCell.IntegerValue)
      or @link(TValueCell.RealValue) should be accessed.)
      @param(UpdateMethod indicates whether successive values from @link(TValueCell)
-     should replace or be added to existing values.)}
+     should replace or be added to existing values.)
+
+     @seealso(UpdateCellDisplay)}
     procedure AssignTransient2DArray(
       DisplayArray: TModflowBoundaryDisplayDataArray; DataTypeIndex: Integer;
       List: TList; DefaultValue: double; DataType: TRbwDataType;
@@ -7775,7 +7778,7 @@ begin
         Annotation := Format(StrMODFLOWTimeSeries,
           [TimeSeriesName, Model.ThreeDDisplayTime]);
       end
-      else if //(Model.ModelSelection = msModflow2015) or
+      else if
         ((Param = nil) or not (DataArrayIndex in ParameterIndicies)) then
       begin
         Value := Cell.RealValue[DataArrayIndex, Model];
@@ -7787,9 +7790,6 @@ begin
         Annotation := Format(Str0sMultipliedByParam,
           [Cell.RealAnnotation[DataArrayIndex, Model],
           Param.ParameterName, Param.Value]);
-//        Annotation := Cell.RealAnnotation[DataArrayIndex, Model]
-//          + ' (multiplied by parameter '
-//          + Param.ParameterName + ' = ' + FloatToStr(Param.Value) + ')';
       end;
 
       // Reduce the storage of duplicate strings.

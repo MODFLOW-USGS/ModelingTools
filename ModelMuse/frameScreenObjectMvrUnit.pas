@@ -86,6 +86,8 @@ type
     function GetUzfObjects: TStringList;
     procedure SetMapItem(const Value: TSectionMap);
     property MapItem: TSectionMap read FMapItem write SetMapItem;
+    procedure ColumnToColumnType(ColumnIndex: Integer; var ReceiverIndex: Integer;
+      var ColumnType: TReceiverItemColumn);
     { Private declarations }
   protected
     procedure LayoutMultiRowEditControls; override;
@@ -123,12 +125,12 @@ const
   NumberOfTimeColumns = 2;
 
 resourcestring
-  StrValue = ' Value';
-  StrMoverType = ' Mover Type';
-  StrSourceLakeOutlet = 'Source Lake Outlet';
-  StrReceiverPackage = 'Receiver Package';
-  StrSFRReceiverReach = 'SFR Receiver Reach';
-  StrReceiverObject = 'Receiver Object';
+  StrValue = ' value';
+  StrMoverType = ' mover type';
+  StrSourceLakeOutlet = 'Source lake outlet';
+  StrReceiverPackage = 'Receiver package';
+  StrSFRReceiverReach = 'SFR receiver reach';
+  StrReceiverObject = 'Receiver object';
   StrReceiver1 = 'Receiver 1';
   StrReceiver = 'Receiver ';
   StrInvalidLakeSource = 'Invalid Lake source in MVR Package';
@@ -138,10 +140,10 @@ resourcestring
   StrInvalidLakeOutletExplanation = 'The object "%s" defines a Lake MVR sour' +
   'ce but the lake outlet number is invalid.';
   StrDivideFlowEqually = 'Divide flow equally among UZF receiver cells';
-  StrMapNameDOptiona = 'Map name %d (optional)';
-  StrMapName = 'Map name';
+  StrMapNameDOptiona = 'UZF recevier map name %d (optional)';
+  StrMapName = 'UZF receiver map names';
   StrSourceSection = 'Source section';
-  StrReceiverSections = 'Receiver sections';
+  StrReceiverSections = 'Receiver section %d';
   StrReceiverValue = 'Value';
 
 { TframeScreenObjectMvr }
@@ -688,10 +690,10 @@ var
 begin
   rdgModflowBoundary.Handle;
   seNumberOfTimes.Handle;
-  pcMain.ActivePageIndex := 0;
   InitializeGrids;
 
   MoveGridToTabSheet(tabTime);
+  pcMain.ActivePageIndex := 0;
 
   FLakObjects := nil;
   FMawObjects := nil;
@@ -702,7 +704,6 @@ begin
   Changing := True;
   try
     comboSourcePackage.ItemIndex := -1;
-    tabMvrMap.Visible := False;
   {$IFDEF ImportMF6}
     if ScreenObjectList.Count = 1 then
     begin
@@ -717,6 +718,8 @@ begin
         end;
       end;
     end;
+  {$ELSE}
+    tabMvrMap.Visible := False;
   {$ENDIF}
 
     FoundFirst := False;
@@ -881,6 +884,7 @@ var
   RowIndex: Integer;
 begin
   Changing := True;
+  rdgMap.FixedCols := 1;
 
   frameMapNames.Grid.BeginUpdate;
   try
@@ -894,7 +898,7 @@ begin
   try
     ClearGrid(rdgMap);
     rdgMap.Cells[Ord(mcSource),0] := StrSourceSection;
-    rdgMap.Cells[Ord(mcReceiver),0] := StrReceiverSections;
+    rdgMap.Cells[Ord(mcReceiver),0] := Format(StrReceiverSections, [1]);
     rdgMap.Cells[Ord(mcValue),0] := StrReceiverValue;
     rdgMap.RowCount := 2;
   finally
@@ -1109,11 +1113,28 @@ end;
 
 procedure TframeScreenObjectMvr.rdgModflowBoundarySelectCell(Sender: TObject;
   ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  ItemIndex: Integer;
+  ColumnType: TReceiverItemColumn;
+  ReceiverIndex: Integer;
 begin
   inherited;
   if ARow <= PestRowOffset then
   begin
     CanSelect := False;
+  end;
+  if (ACol >= NumberOfTimeColumns)
+    and (ARow >= rdgModflowBoundary.FixedRows + PestRowOffset) then
+  begin
+    ColumnToColumnType(ACol, ItemIndex, ColumnType);
+    if ColumnType = ricMapName then
+    begin
+      ReceiverIndex := frameReceivers.Grid.ItemIndex[Ord(rcPackage), ItemIndex+1];
+      if ReceiverIndex >= 0 then
+      begin
+        CanSelect := TReceiverPackageChoice(ReceiverIndex) = rpcUzf;
+      end;
+    end;
   end;
 end;
 
@@ -1146,7 +1167,7 @@ begin
       AColumn := rdgMap.Columns[ColIndex];
       if Odd(ColIndex) then
       begin
-        rdgMap.Cells[ColIndex,0] := StrReceiverSections;
+        rdgMap.Cells[ColIndex,0] := Format(StrReceiverSections, [(ColIndex + 1) div 2]);
         AColumn.Format := rcf4Integer;
       end
       else
@@ -1225,10 +1246,8 @@ begin
           MvrItem.Items.Count := ItemCount;
           for ColumnIndex := NumberOfTimeColumns to rdgModflowBoundary.ColCount - 1 do
           begin
-            ItemIndex := (ColumnIndex - NumberOfTimeColumns) div NumberOfColumnsPerReciever;
+            ColumnToColumnType(ColumnIndex, ItemIndex, ColumnType);
             IndvidualItem := MvrItem.Items[ItemIndex];
-            ColumnType := TReceiverItemColumn((ColumnIndex - NumberOfTimeColumns)
-              mod NumberOfColumnsPerReciever);
             case ColumnType of
               ricValue:
                 begin
@@ -1386,6 +1405,15 @@ begin
     TimeValues.Free;
   end;
 
+end;
+
+procedure TframeScreenObjectMvr.ColumnToColumnType(ColumnIndex: Integer;
+  var ReceiverIndex: Integer; var ColumnType: TReceiverItemColumn);
+begin
+  Assert(ColumnIndex >= NumberOfTimeColumns);
+  ColumnIndex := ColumnIndex - NumberOfTimeColumns;
+  ReceiverIndex := ColumnIndex div NumberOfColumnsPerReciever;
+  ColumnType := TReceiverItemColumn(ColumnIndex mod NumberOfColumnsPerReciever);
 end;
 
 procedure TframeScreenObjectMvr.SetMapItem(const Value: TSectionMap);

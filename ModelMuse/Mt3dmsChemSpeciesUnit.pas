@@ -319,6 +319,7 @@ type
     procedure UpdateDataArrays; override;
     procedure UpdateAllDataArrays;
     function GetItemByName(AName: string): TMobileChemSpeciesItem;
+    function Last: TMobileChemSpeciesItem;
   end;
 
 implementation
@@ -2844,6 +2845,11 @@ begin
       Break;
     end;
   end;
+end;
+
+function TMobileChemSpeciesCollection.Last: TMobileChemSpeciesItem;
+begin
+  result := inherited Last as TMobileChemSpeciesItem;
 end;
 
 procedure TMobileChemSpeciesCollection.SetItem(Index: Integer;

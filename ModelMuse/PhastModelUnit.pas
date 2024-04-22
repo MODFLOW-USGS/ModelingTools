@@ -10227,12 +10227,15 @@ const
 //               bug fix: Fixed bug that causes an assertion failure when using
 //                pilot points with data sets that do not have values at every
 //                cell.
+//    '5.2.0.6'  bug fix: Fixed bug in the display of data from the TVK and TVS
+//                packages so that the data is now displayed on the correct
+//                layer.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.5';
+  IIModelVersion = '5.2.0.6';
 
 function IModelVersion: string;
 begin

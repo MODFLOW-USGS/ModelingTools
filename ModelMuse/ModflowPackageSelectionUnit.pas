@@ -7249,6 +7249,7 @@ Type
     FDigits: Integer;
     FSorption: Boolean;
     FPrintFormat: TPrintFormat;
+    FSaveFlows: Boolean;
     procedure SetBinaryBudgetFileOut(const Value: Boolean);
     procedure SetColumns(const Value: Integer);
     procedure SetDigits(const Value: Integer);
@@ -7266,16 +7267,27 @@ Type
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
   published
+    // BUDGET FILEOUT <budgetfile>
     property BinaryBudgetFileOut: Boolean read FBinaryBudgetFileOut write SetBinaryBudgetFileOut;
+    // BUDGETCSV FILEOUT <budgetcsvfile>
     property TextBudgetFileOut: Boolean read FTextBudgetFileOut write SetTextBudgetFileOut;
+    // SORPTION
     property Sorption: Boolean read FSorption write SetSorption;
+    // FIRST_ORDER_DECAY
     property FirstOrderDecay: Boolean read FFirstOrderDecay write SetFirstOrderDecay;
+    // ZERO_ORDER_DECAY
     property ZeroOrderDecay: Boolean read FZeroOrderDecay write SetZeroOrderDecay;
+    // CIM FILEOUT
     property SaveConcentrations: Boolean read FSaveConcentrations write SetSaveConcentrations;
+    // CIM PRINT_FORMAT
     property SpecifyPrintFormat: Boolean read FSpecifyPrintFormat write SetSpecifyPrintFormat;
+    // CIM PRINT_FORMAT
     property Columns: Integer read FColumns write SetColumns;
+    // CIM PRINT_FORMAT
     property Width: Integer read FWidth write SetWidth;
+    // CIM PRINT_FORMAT
     property Digits: Integer read FDigits write SetDigits;
+    // CIM PRINT_FORMAT
     property PrintFormat: TPrintFormat read FPrintFormat write SetPrintFormat;
   end;
 

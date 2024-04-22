@@ -9,35 +9,52 @@ uses
 type
   TIstOptions = class(TCustomMf6Persistent)
   private
-    SAVE_FLOWS: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
-    SORPTION: Boolean;
-    FIRST_ORDER_DECAY: Boolean;
-    ZERO_ORDER_DECAY: Boolean;
-    CIM: Boolean;
-    CIM_PRINT_FORMAT: TPrintFormat;
+    FSAVE_FLOWS: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
+    FSORPTION: Boolean;
+    FFIRST_ORDER_DECAY: Boolean;
+    FZERO_ORDER_DECAY: Boolean;
+    FCIM: Boolean;
+    FCIM_PRINT_FORMAT: TPrintFormat;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property SAVE_FLOWS: Boolean read FSAVE_FLOWS;
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
+    property SORPTION: Boolean read FSORPTION;
+    property FIRST_ORDER_DECAY: Boolean read FFIRST_ORDER_DECAY;
+    property ZERO_ORDER_DECAY: Boolean read FZERO_ORDER_DECAY;
+    property CIM: Boolean read FCIM;
+    property CIM_PRINT_FORMAT: TPrintFormat read FCIM_PRINT_FORMAT;
   end;
 
   TIstGridData = class(TCustomMf6Persistent)
   private
-    POROSITY: TDArray3D;
-    VOLFRAC: TDArray3D;
-    ZETAIM: TDArray3D;
-    CIM: TDArray3D;
-    DECAY: TDArray3D;
-    DECAY_SORBED: TDArray3D;
-    BULK_DENSITY: TDArray3D;
-    DISTCOEF: TDArray3D;
+    FPOROSITY: TDArray3D;
+    FVOLFRAC: TDArray3D;
+    FZETAIM: TDArray3D;
+    FCIM: TDArray3D;
+    FDECAY: TDArray3D;
+    FDECAY_SORBED: TDArray3D;
+    FBULK_DENSITY: TDArray3D;
+    FDISTCOEF: TDArray3D;
     FDimensions: TDimensions;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
+    property POROSITY: TDArray3D read FPOROSITY;
+    property VOLFRAC: TDArray3D read FVOLFRAC;
+    property ZETAIM: TDArray3D read FZETAIM;
+    property CIM: TDArray3D read FCIM;
+    property DECAY: TDArray3D read FDECAY;
+    property DECAY_SORBED: TDArray3D read FDECAY_SORBED;
+    property BULK_DENSITY: TDArray3D read FBULK_DENSITY;
+    property DISTCOEF: TDArray3D read FDISTCOEF;
   end;
 
   TIst = class(TDimensionedPackageReader)
@@ -47,7 +64,10 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property Options: TIstOptions read FOptions;
+    property GridData: TIstGridData read FGridData;
   end;
 
 implementation
@@ -57,14 +77,14 @@ implementation
 procedure TIstOptions.Initialize;
 begin
   inherited;
-  SAVE_FLOWS := False;
-  BUDGET := False;
-  BUDGETCSV := False;
-  SORPTION := False;
-  FIRST_ORDER_DECAY := False;
-  ZERO_ORDER_DECAY := False;
-  CIM := False;
-  CIM_PRINT_FORMAT.Initialize;
+  FSAVE_FLOWS := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
+  FSORPTION := False;
+  FFIRST_ORDER_DECAY := False;
+  FZERO_ORDER_DECAY := False;
+  FCIM := False;
+  FCIM_PRINT_FORMAT.Initialize;
 end;
 
 procedure TIstOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -94,43 +114,43 @@ begin
     end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
-      SAVE_FLOWS := True;
+      FSAVE_FLOWS := True;
     end
     else if (FSplitter[0] = 'BUDGET')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else if (FSplitter[0] = 'SORPTION') then
     begin
-      SORPTION := True;
+      FSORPTION := True;
     end
     else if FSplitter[0] = 'FIRST_ORDER_DECAY' then
     begin
-      FIRST_ORDER_DECAY := True;
+      FFIRST_ORDER_DECAY := True;
     end
     else if FSplitter[0] = 'ZERO_ORDER_DECAY' then
     begin
-      ZERO_ORDER_DECAY := True;
+      FZERO_ORDER_DECAY := True;
     end
     else if (FSplitter[0] = 'CIM')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      CIM := True;
+      FCIM := True;
     end
     else if (FSplitter[0] = 'CIM')
       and (FSplitter.Count >= 8)
       and (FSplitter[1] = 'PRINT_FORMAT') then
     begin
-      ReadPrintFormat(ErrorLine, Unhandled, FPackageType, CIM_PRINT_FORMAT);
+      ReadPrintFormat(ErrorLine, Unhandled, FPackageType, FCIM_PRINT_FORMAT);
     end
     else
     begin
@@ -151,14 +171,14 @@ end;
 procedure TIstGridData.Initialize;
 begin
   inherited;
-  SetLength(POROSITY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(VOLFRAC, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(ZETAIM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
-  SetLength(CIM, 0);
-  SetLength(DECAY, 0);
-  SetLength(DECAY_SORBED, 0);
-  SetLength(BULK_DENSITY, 0);
-  SetLength(DISTCOEF, 0);
+  SetLength(FPOROSITY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FVOLFRAC, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FZETAIM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+  SetLength(FCIM, 0);
+  SetLength(FDECAY, 0);
+  SetLength(FDECAY_SORBED, 0);
+  SetLength(FBULK_DENSITY, 0);
+  SetLength(FDISTCOEF, 0);
 end;
 
 procedure TIstGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
@@ -198,7 +218,7 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        POROSITY := DoubleThreeDReader.FData;
+        FPOROSITY := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -210,7 +230,7 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        VOLFRAC := DoubleThreeDReader.FData;
+        FVOLFRAC := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
@@ -222,67 +242,67 @@ begin
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        ZETAIM := DoubleThreeDReader.FData;
+        FZETAIM := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'CIM' then
     begin
-      SetLength(CIM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FCIM, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        CIM := DoubleThreeDReader.FData;
+        FCIM := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'DECAY' then
     begin
-      SetLength(DECAY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FDECAY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        DECAY := DoubleThreeDReader.FData;
+        FDECAY := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'DECAY_SORBED' then
     begin
-      SetLength(DECAY_SORBED, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FDECAY_SORBED, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        DECAY_SORBED := DoubleThreeDReader.FData;
+        FDECAY_SORBED := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'BULK_DENSITY' then
     begin
-      SetLength(BULK_DENSITY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FBULK_DENSITY, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        BULK_DENSITY := DoubleThreeDReader.FData;
+        FBULK_DENSITY := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;
     end
     else if FSplitter[0] = 'DISTCOEF' then
     begin
-      SetLength(DISTCOEF, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      SetLength(FDISTCOEF, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
       Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
       DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
-        DISTCOEF := DoubleThreeDReader.FData;
+        FDISTCOEF := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;

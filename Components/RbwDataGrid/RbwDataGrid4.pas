@@ -802,12 +802,10 @@ type
   TRbwDataGrid4 = class(TCustomRBWDataGrid)
   private
     FColumns: TRbwDataGridColumns4;
-//    FWordWrapColTitles: boolean;
     FWordWrapRowCaptions: Boolean;
     FRequiredWidthCol: Integer;
     FRequiredWidth: integer;
     procedure SetColumns(const Value: TRbwDataGridColumns4);
-//    procedure SetWordWrapColTitles(const Value: boolean);
     procedure SetWordWrapRowCaptions(const Value: Boolean);
     procedure ReadNothing(Reader: TReader);
     procedure WriteNothing(Writer: TWriter);
@@ -824,7 +822,6 @@ type
     procedure ColumnMoved(FromIndex, ToIndex: Longint); override;
     procedure Loaded; override;
     procedure RowMoved(FromIndex, ToIndex: Longint); override;
-    //    procedure SetCells(ACol, ARow: Integer; const Value: string); override;
     procedure SizeChanged(OldColCount, OldRowCount: Longint); override;
     function GetCheckStyle(const ACol, ARow: integer): TCheckStyle; override;
     procedure SetCheckState(const ACol, ARow: integer;
@@ -855,9 +852,6 @@ type
     property Columns : TRbwDataGridColumns4 read FColumns write SetColumns;
     property WordWrapRowCaptions: Boolean read FWordWrapRowCaptions
       write SetWordWrapRowCaptions;
-    // @name is only for backwards compatibility.
-//    property WordWrapColTitles : boolean read FWordWrapColTitles
-//      write SetWordWrapColTitles Stored False;
     { Published declarations }
   end;
 
@@ -937,14 +931,12 @@ type
     FFixedRows: integer;
     // See @link(Rows).
     FRows: TRbwDataGridRows;
-//    FUpdateCount: Integer;
     FRequiredWidthRow: Integer;
     FRequiredWidth: Integer;
     // See @link(Columns).
     procedure SetColumns(const Value: TAutoAdjustColumns);
     // See @link(Rows).
     procedure SetRows(const Value: TRbwDataGridRows);
-//    function GetUpdating: boolean;
   protected
     function ShouldAdjustColWidths(ACol: integer): boolean; override;
     // @name returns Rows[ARow].
@@ -995,7 +987,6 @@ type
     procedure InsertColumn(ACol: Integer); override;
     // Use @name to insert a row at position ARow.
     procedure InsertRow(ARow: Integer); override;
-//    Property Updating: boolean read GetUpdating;
     Property SelectedCol : integer read FSelectedCol;
   published
     Property ColorSelectedColumn : boolean read FColorSelectedColumnOrRow
@@ -1058,7 +1049,7 @@ implementation
 {#BACKUP *.ICO}
 
 uses
-  Math, Themes, {System.}StrUtils;
+  Math, Themes, StrUtils;
 
 resourcestring
   StrThereWasAnErrorA = 'There was an error adjusting the column width.';
@@ -1470,18 +1461,6 @@ begin
   FixedCols := TempFixedCols;
 end;
 
-//procedure TRbwDataGrid4.SetWordWrapColTitles(const Value: boolean);
-//var
-//  Index: integer;
-//begin
-//  FWordWrapColTitles := Value;
-//  for Index := 0 to Columns.Count -1 do
-//  begin
-//    Columns[Index].WordWrapCaptions := Value;
-//  end;
-//  Invalidate;
-//end;
-
 procedure TRbwDataGrid4.SetWordWrapRowCaptions(const Value: Boolean);
 begin
   if FWordWrapRowCaptions <> Value then
@@ -1503,7 +1482,7 @@ begin
     and not (csReading in ComponentState)
     and not (csReadingState in ControlState)
     and not (csCreating in ControlState)
-    and not FUpdating{and (FLayoutFlag = 0)} then
+    and not FUpdating then
   begin
     FUpdating := True;
     while Columns.Count > ColCount do Columns[Columns.Count-1].Free;
@@ -1990,10 +1969,6 @@ begin
   if FFormat <> Value then
   begin
     FFormat := Value;
-//    if FFormat = rcf4Boolean then
-//    begin
-//      ComboUsed := False;
-//    end;
     Changed(False);
   end;
 end;
@@ -2563,7 +2538,7 @@ end;
 
 procedure TCustomRBWDataGrid.InvalidateCachedWidth;
 begin
-
+  // this could be made abstract
 end;
 
 function TCustomRBWDataGrid.IsSelectedCell(ACol, ARow: Integer): boolean;
@@ -3323,11 +3298,6 @@ begin
   result := inherited FixedRows;
 end;
 
-//function TRbwRowDataGrid.GetUpdating: boolean;
-//begin
-//  result := FUpdateCount > 0;
-//end;
-
 procedure TRbwRowDataGrid.InsertColumn(ACol: Integer);
 begin
   inherited;
@@ -3790,8 +3760,6 @@ begin
     if (GetCellFormat(ACol, ARow) = rcf4Boolean)
       and (ACol >= FixedCols) and (ARow >= FixedRows) then
     begin
-//      EditorMode := False;
-//      HideEditor;
       if inherited SelectCell(ACol, ARow) then
       begin
         ARect :=CellRect(ACol, ARow);
@@ -4019,7 +3987,7 @@ end;
 
 procedure TCustomRBWDataGrid.EndUpdate;
 begin
-
+  // could this be made abstract?
 end;
 
 procedure TCustomRBWDataGrid.DrawCheckBoxCell(ACol, ARow: Integer;
@@ -4255,7 +4223,6 @@ var
 begin
   FDrawing := True;
   inherited;
-//  Exit;
   BrushColor := Canvas.Brush.Color;
   FontColor := Canvas.Font.Color;
   try
@@ -4268,12 +4235,12 @@ begin
     begin
       DrawCaptionCell(ACol, ARow, ARect, AState);
     end
-    else //if (ACol >= FixedCols) and (ARow >= FixedRows) then
+    else
     begin
       CanSelect := True;
       Canvas.Brush.Color := Color;
       Canvas.Font.Color := Font.Color;
-      if {(goEditing in Options) and} Assigned(OnSelectCell) then
+      if Assigned(OnSelectCell) then
       begin
         OnSelectCell(self, ACol, ARow, CanSelect);
       end;
@@ -4303,7 +4270,6 @@ begin
       end
       else if (ARow >= FixedRows) and (ACol >= FixedCols) then
       begin
-//        inherited;
         DrawOrdinaryCell(ACol, ARow, ARect, AState);
       end;
     end;
@@ -4376,8 +4342,6 @@ var
   CharIndex: Integer;
   CellFormat: TRbwColumnFormat4;
   NewCol: Integer;
-//  Splitter: TStringList;
-//  ColOffset: Integer;
   QuoteCount: Integer;
   function ExtractWord(var AString: string): string;
   var
@@ -4476,10 +4440,6 @@ var
       if SelectCell(NewCol, NewRow) then
       begin
         CellFormat := GetCellFormat(NewCol,NewRow);
-//        if UseSpecialFormat[NewCol,NewRow] then
-//        begin
-//          CellFormat := SpecialFormat[NewCol,NewRow];
-//        end;
         if CellFormat = rcf4Boolean then
         begin
           NewString := Trim(NewString);
@@ -4524,13 +4484,10 @@ var
 begin
   BeginUpdate;
   AStringList := TStringList.Create;
-//  Splitter := TStringList.Create;
   try
-//    Splitter.StrictDelimiter := False;
     AStringList.Text := CellContents;
+    // do not split on commas or spaces.
     result := (AStringList.Count > 1) or (Pos(#9, CellContents) > 0);
-//      or (Pos(',', CellContents) > 0);
-//      or (Pos(' ', CellContents) > 0);
     if result then
     begin
       if FDistributingText then
@@ -4548,22 +4505,6 @@ begin
           While LineIndex < AStringList.Count do
           begin
             AString := AStringList[LineIndex];
-//            Splitter.DelimitedText := AString;
-//            for WordIndex := 0 to Splitter.Count - 1 do
-//            begin
-//              NewString := Splitter[WordIndex];
-//              AssignTextToCell;
-//              Inc(NewCol);
-//              if NewCol >= ColCount then
-//              begin
-//                NewCol := ACol;
-//                Inc(NewRow);
-//                if AutoIncreaseRowCount and (NewRow >= RowCount) then
-//                begin
-//                  RowCount := RowCount + 1;
-//                end;
-//              end;
-//            end;
             while Length(AString) > 0 do
             begin
               NewString := ExtractWord(AString);
@@ -4603,8 +4544,6 @@ begin
             begin
               TabCount := 0;
               AString := AStringList[LineIndex];
-//              Splitter.DelimitedText := AString;
-//              TabCount := Splitter.Count;
               QuoteCount := 0;
               for CharIndex := 1 to Length(AString) do
               begin
@@ -4635,7 +4574,6 @@ begin
           begin
             AString := AStringList[LineIndex];
             NewRow := ARow + LineIndex;
-//            Splitter.DelimitedText := AString;
             WordIndex := 0;
             if AString = '' then
             begin
@@ -4647,24 +4585,6 @@ begin
             end
             else
             begin
-//              ColOffset := 0;
-//              for CharIndex := 1 to Length(AString) do
-//              begin
-//                if AString[CharIndex] = #9 then
-//                begin
-//                  Inc(ColOffset);
-//                end
-//                else
-//                begin
-//                  Break;
-//                end;
-//              end;
-//              for WordIndex := 0 to Splitter.Count - 1 do
-//              begin
-//                NewString := Splitter[WordIndex];
-//                NewCol := ACol + WordIndex + ColOffset;
-//                AssignTextToCell;
-//              end;
               while Length(AString) > 0 do
               begin
                 NewString := ExtractWord(AString);
@@ -4689,7 +4609,6 @@ begin
   finally
     FdgRow := ARow;
     fdgColumn := ACol;
-//    Splitter.Free;
     AStringList.Free;
     EndUpdate;
   end;
@@ -4759,7 +4678,6 @@ begin
     begin
       ColumnOrRow := CollectionItem(dgColumn,dgRow);
       result := (ColumnOrRow <> nil)
-//        and (GetCellFormat(dgColumn,dgRow) <> rcf4Boolean);
     end;
   end;
 end;
@@ -4788,7 +4706,6 @@ procedure TCustomRBWDataGrid.SetEditorUpdateToEnd;
 begin
   (InplaceEditor as TRbwInplaceEdit4).UpdateContents;
   (InplaceEditor as TRbwInplaceEdit4).SelStart := MaxInt;
-//                ColumnOrRow.MaxLength;
 end;
 
 procedure TCustomRBWDataGrid.SetEditText(ACol, ARow: Longint;
@@ -5358,42 +5275,43 @@ begin
   result := 0;
   ColOrRow := CollectionItem(ACol, ARow);
 
+  if ColOrRow.WordWrapCells then
+  begin
+    CellList := TStringList.Create;
+    try
+      AvailableWidth := ColWidths[ACol] - 4 - ComboAdustSize;
 
-  CellList := TStringList.Create;
-  try
-    AvailableWidth := ColWidths[ACol] - 4;
-
-    result := 0;
-    for PickIndex := 0 to ColOrRow.PickList.Count - 1 do
-    begin
-      CellList.Clear;
-      Content := ColOrRow.PickList[PickIndex];
-      FillCaptionList(Content, CellList, AvailableWidth);
-      for CaptionIndex := 0 to CellList.Count - 1 do
+      result := 0;
+      for PickIndex := 0 to ColOrRow.PickList.Count - 1 do
       begin
-        TestWidth := Canvas.TextWidth(CellList[CaptionIndex]);
-        if TestWidth > result then
+        CellList.Clear;
+        Content := ColOrRow.PickList[PickIndex];
+        FillCaptionList(Content, CellList, AvailableWidth);
+        for CaptionIndex := 0 to CellList.Count - 1 do
         begin
-          result := TestWidth;
+          TestWidth := Canvas.TextWidth(CellList[CaptionIndex]);
+          if TestWidth > result then
+          begin
+            result := TestWidth;
+          end;
         end;
       end;
+    finally
+      CellList.Free;
     end;
-  finally
-    CellList.Free;
-  end;
-
-
-  {
-  for PickIndex := 0 to ColOrRow.PickList.Count - 1 do
+  end
+  else
   begin
-    Content := ColOrRow.PickList[PickIndex];
-    TestWidth := Canvas.TextWidth(Content);
-    if TestWidth > result then
+    for PickIndex := 0 to ColOrRow.PickList.Count - 1 do
     begin
-      result := TestWidth
+      Content := ColOrRow.PickList[PickIndex];
+      TestWidth := Canvas.TextWidth(Content);
+      if TestWidth > result then
+      begin
+        result := TestWidth
+      end;
     end;
   end;
-  }
 
   Inc(result, ComboAdustSize);
 end;
@@ -5513,8 +5431,34 @@ end;
 
 procedure TCustomRBWDataGrid.GetPickListItems(ACol, ARow: Integer;
   Items: TStrings);
+var
+  ColOrRow: TCustomRowOrColumn;
+  RequiredWidth: Integer;
+  PickIndex: Integer;
+  Content: string;
+  TestWidth: Integer;
 begin
-  Items.Assign(CollectionItem(ACol, ARow).PickList);
+  ColOrRow := CollectionItem(ACol, ARow);
+  if ColOrRow.WordWrapCells then
+  begin
+    RequiredWidth := 0;
+    for PickIndex := 0 to ColOrRow.PickList.Count - 1 do
+    begin
+      Content := ColOrRow.PickList[PickIndex];
+      TestWidth := Canvas.TextWidth(Content);
+      if TestWidth > RequiredWidth then
+      begin
+        RequiredWidth := TestWidth
+      end;
+    end;
+    RequiredWidth := RequiredWidth + ComboAdustSize;
+    if InplaceEditor.Width < RequiredWidth then
+    begin
+      InplaceEditor.Width := RequiredWidth;
+      (InplaceEditor as TRbwInplaceEdit4).PickList.Width := RequiredWidth;
+    end;
+  end;
+  Items.Assign(ColOrRow.PickList);
 end;
 
 function TCustomRBWDataGrid.GetUseSpecialFormat(ACol, ARow: Integer): boolean;
@@ -5531,10 +5475,7 @@ end;
 
 procedure TCustomRBWDataGrid.HideEditor;
 begin
-//  if EditorMode then
-  begin
-    inherited;
-  end;
+  inherited;
 end;
 
 procedure TCustomRBWDataGrid.WMHScroll(var Msg: TWMHScroll);
@@ -5670,7 +5611,6 @@ begin
         Dec(R.Right, PushButtonWidth)
       else
         Inc(R.Left, PushButtonWidth - 2);
-//    SendMessage(Handle, EM_SETRECTNP, 0, longint(@R));
     SendMessage(Handle, EM_SETRECTNP, 0, System.IntPtr(@R));
     SendMessage(Handle, EM_SCROLLCARET, 0, 0);
     if SysLocale.FarEast then
@@ -5921,12 +5861,10 @@ var
   { $IFDEF VER150}
   Details : TThemedElementDetails;
   { $ENDIF}
-//  BgOld : TColor;
   ChkBmp : TBitmap;
   ThemeOK : boolean;
-  x, {x2,} y : integer;
+  x, y : integer;
 begin
-//  Result := nil;
   try
     Result := TBitmap.Create;
     ChkBmp := TBitmap.Create;
@@ -6098,44 +6036,7 @@ begin
   end;
 
   FBmpRadioUnChecked := GetRadioButtonBitmap(cbUnChecked, False, clWhite);
-{
-  FBmpRadioUnChecked := TBitMap.Create;
-  with FBmpRadioUnChecked do
-  begin
-    Width := CheckBoxSize;
-    Height := CheckBoxSize;
-    PixelFormat := pf8bit;
-    Canvas.Brush.Color := clWhite;
-    ARect.Top := 1;
-    ARect.Left := 1;
-    ARect.Right := Succ(CheckBoxSize);
-    ARect.Bottom := Succ(CheckBoxSize);
-    Canvas.FillRect(ARect);
-
-    Canvas.Pen.Color := clBlack;
-    Canvas.Ellipse(1, 1, Pred(CheckBoxSize), Pred(CheckBoxSize));
-  end;
-}
-
   FBmpRadioChecked := GetRadioButtonBitmap(cbChecked, False, clWhite);
-
-(*  FBmpRadioChecked := TBitMap.Create;
-  with FBmpRadioChecked do
-  begin
-{
-    Assign(FBmpRadioUnChecked);
-    Canvas.Brush.Color := clBlack;
-    Canvas.Ellipse(3, 3, CheckBoxSize-3, CheckBoxSize-3);
-}
-    Canvas.Pen.Color := clBlack;
-    Canvas.Brush.Color := clBlack;
-    if not DrawFrameControl(Canvas.Handle, ARect, DFC_BUTTON,
-      DFCS_BUTTONRADIO or DFCS_CHECKED)  then
-    begin
-      Beep;
-    end;
-  end;
-  *)
 
   FBmpRadioGrayed := TBitMap.Create;
   with FBmpRadioGrayed  do
@@ -6187,12 +6088,9 @@ begin
 end;
 
 initialization
-
-CreateBitmaps;
+  CreateBitmaps;
 
 finalization
-
-
   FbmpUnchecked.Free;
   FbmpChecked.Free;
   FBmpGrayed.Free;
@@ -6206,6 +6104,5 @@ finalization
   FBmpDisabledRadioUnChecked.Free;
   FBmpDisabledRadioChecked.Free;
   FBmpDisabledRadioGrayed.Free;
-
 end.
 

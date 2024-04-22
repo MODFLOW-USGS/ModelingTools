@@ -151,6 +151,7 @@ type
     procedure ImportAdv(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportDsp(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportMst(NameFile: TTransportNameFile; Package: TPackage);
+    procedure ImportIst(NameFile: TTransportNameFile; Package: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -189,7 +190,7 @@ uses
   ModflowMvrUnit, frmErrorsAndWarningsUnit, Mf6.GncFileReaderUnit,
   ModflowGncUnit, Mf6.ImsFileReaderUnit, frmImportWarningsUnit,
   Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit, Mf6.MstFileReaderUnit,
-  OctTreeClass, ModflowCellUnit;
+  OctTreeClass, ModflowCellUnit, Mf6.IstFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -4089,7 +4090,6 @@ begin
       GhostNode := GhostNodes.Add;
       ExistingGhostNodes[ImportedGncItem.cellidn.Column-1] := GhostNode;
     end;
-//    GhostNode := GhostNodes[ImportedGncItem.cellidn.Column-1];
     GhostNode.ContainingCell.Cell := ImportedGncItem.cellidn.Column-1;
     GhostNode.LinkedCell.Cell := ImportedGncItem.cellidm.Column-1;
 
@@ -5446,6 +5446,129 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TModflow6Importer.ImportIst(NameFile: TTransportNameFile;
+  Package: TPackage);
+var
+  Model: TPhastModel;
+  IstPackage: TGwtIstPackage;
+  IstPackageItem: TIstPackageItem;
+  Ist: TIst;
+  Options: TIstOptions;
+  DomainIndex: Integer;
+  ChemSpecies: TMobileChemSpeciesItem;
+  SpeciesIndex: Integer;
+  GridData: TIstGridData;
+  DataArrayName: string;
+begin
+  Model := frmGoPhast.PhastModel;
+  IstPackage := (Model.ModflowPackages.GwtPackages.Last as TGwtPackagesItem).GwtIst;
+  if not IstPackage.IsSelected then
+  begin
+    IstPackage.IsSelected := True;
+  end
+  else
+  begin
+    IstPackage.IstPackageProperties.Add;
+  end;
+  IstPackageItem := IstPackage.IstPackageProperties.Last as TIstPackageItem;
+
+  Ist := Package.Package as TIst;
+  Options := Ist.Options;
+
+  IstPackageItem.BinaryBudgetFileOut := Options.BUDGET;
+  IstPackageItem.TextBudgetFileOut := Options.BUDGETCSV;
+  IstPackageItem.Sorption := Options.SORPTION;
+  IstPackageItem.FirstOrderDecay := Options.FIRST_ORDER_DECAY;
+  IstPackageItem.ZeroOrderDecay := Options.ZERO_ORDER_DECAY;
+  IstPackageItem.SaveConcentrations := Options.CIM;
+  IstPackageItem.SpecifyPrintFormat := Options.CIM_PRINT_FORMAT.Used;
+  if IstPackageItem.SpecifyPrintFormat then
+  begin
+    IstPackageItem.Columns := Options.CIM_PRINT_FORMAT.Columns;
+    IstPackageItem.Width := Options.CIM_PRINT_FORMAT.Width;
+    IstPackageItem.Digits := Options.CIM_PRINT_FORMAT.Digits;
+    if AnsiSameText(Options.CIM_PRINT_FORMAT.Format, 'EXPONENTIAL') then
+    begin
+      IstPackageItem.PrintFormat := pfExponential;
+    end
+    else if AnsiSameText(Options.CIM_PRINT_FORMAT.Format, 'FIXED') then
+    begin
+      IstPackageItem.PrintFormat := pfFixed;
+    end
+    else if AnsiSameText(Options.CIM_PRINT_FORMAT.Format, 'GENERAL') then
+    begin
+      IstPackageItem.PrintFormat := pfGeneral;
+    end
+    else if AnsiSameText(Options.CIM_PRINT_FORMAT.Format, 'SCIENTIFIC') then
+    begin
+      IstPackageItem.PrintFormat := pfScientific;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+
+  Model.DataArrayManager.CreateInitialDataSets;
+
+  SpeciesIndex := Model.MobileComponents.IndexOfName(NameFile.SpeciesName);
+  Assert(SpeciesIndex >= 0);
+  ChemSpecies := Model.MobileComponents[SpeciesIndex];
+
+  DomainIndex := IstPackage.IstPackageProperties.Count -1;
+
+  GridData := Ist.GridData;
+
+  if GridData.POROSITY <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobilePorosities[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.POROSITY);
+  end;
+
+  if GridData.VOLFRAC <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobileVolumeFractions[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.VOLFRAC);
+  end;
+
+  if GridData.ZETAIM <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobileMassTransferRates[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.ZETAIM);
+  end;
+
+  if GridData.CIM <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobileInitialConcentrations[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.CIM);
+  end;
+
+  if GridData.DECAY <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobileDecay[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.DECAY);
+  end;
+
+  if GridData.DECAY_SORBED <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobileDecaySorbed[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.DECAY_SORBED);
+  end;
+
+  if GridData.BULK_DENSITY <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobileBulkDensities[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.BULK_DENSITY);
+  end;
+
+  if GridData.DISTCOEF <> nil then
+  begin
+    DataArrayName := ChemSpecies.ImmobileDistCoeficients[DomainIndex];
+    Assign3DRealDataSet(DataArrayName, GridData.DISTCOEF);
+  end;
+
 end;
 
 type
@@ -7798,7 +7921,7 @@ begin
 
           if (AScreenObject.SectionCount > 1)
             and (Receiver.ScreenObject.SectionCount > 1)
-            and (ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf]) then
+            and (ReceiverItem.ReceiverPackage = rpcUzf) then
           begin
             // map needed
             AMvrMap := ModflowMvr.MvrMaps.Add.MvrMap;
@@ -7825,7 +7948,7 @@ begin
         MvrMap := nil;
         if (AScreenObject.SectionCount > 1)
           and (Receiver.ScreenObject.SectionCount > 1)
-          and (ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf]) then
+          and (ReceiverItem.ReceiverPackage = rpcUzf) then
         begin
           // map needed
           for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
@@ -7890,22 +8013,6 @@ begin
             end;
           end;
         end;
-
-
-//        IndividualMvrItem := MvrItem.Items.Add;
-
-        {
-    property mname1: string read Fmname1;
-    property pname1: string read Fpname1;
-    property id1: Integer read Fid1;
-    property mname2: string read Fmname2;
-    property pname2: string read Fpname2;
-    property id2: Integer read Fid2;
-    property mvrtype: string read Fmvrtype;
-    property value: Extended read Fvalue;
-    function SourceMatch(PackageName: string; ID: Integer): Boolean;
-    function ReceiverMatch(PackageName: string; ID: Integer): Boolean;
-        }
       end;
     end;
   finally
@@ -10439,10 +10546,6 @@ var
         begin
           Assert(False);
         end;
-//
-//          TSftOb = (stoConcentration, stoStorage, stoConstant, stoFromMvr, stoToMvr,
-//            stoSFT, stoRainfall, stoEvaporation, stoRunoff, stoExtInflow, stoExtOutflow);
-//          TSftObs = set of TSftOb;
       end;
     end;
   begin
@@ -10758,7 +10861,6 @@ var
   var
     NewReachList: TSfrReachInfoList;
     Index: Integer;
-//    SplitIndex: Integer;
     TempList: TSfrReachInfoLists;
   begin
     TempList := TSfrReachInfoLists.Create;
@@ -10814,7 +10916,6 @@ var
   var
     NewReachList: TSfrReachInfoList;
     Index: Integer;
-//    SplitIndex: Integer;
     TempList: TSfrReachInfoLists;
   begin
     TempList := TSfrReachInfoLists.Create;
@@ -10835,14 +10936,6 @@ var
           NewReachList.Add(AReachList[Index]);
         end;
       end;
-
-      {
-      SfrReachInfoLists[ObjectIndex] := SplitReachLists[0];
-      for SplitIndex := 1 to SplitReachLists.Count - 1 do
-      begin
-        SfrReachInfoLists.Add(SplitReachLists[SplitIndex]);
-      end;
-      }
     finally
       TempList.Free;
     end;
@@ -11962,7 +12055,7 @@ begin
     else if APackage.FileType = 'IST6' then
     begin
       // import IST6
-      Continue;
+      ImportIst(NameFile, APackage);
     end
     else if APackage.FileType = 'CNC6' then
     begin

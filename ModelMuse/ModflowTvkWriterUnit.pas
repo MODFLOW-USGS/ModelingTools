@@ -113,6 +113,7 @@ var
   KyArray: TModflowBoundaryDisplayDataArray;
   KzArray: TModflowBoundaryDisplayDataArray;
   CellList: TValueCellList;
+  TempList: TList;
 begin
   if not Package.IsSelected then
   begin
@@ -133,42 +134,42 @@ begin
   KxLists := TModflowBoundListOfTimeLists.Create;
   KyLists := TModflowBoundListOfTimeLists.Create;
   KzLists := TModflowBoundListOfTimeLists.Create;
+  TempList:= TList.Create;
   try
     try
       KxList := TimeLists[0];
+      KyList := TimeLists[1];
+      KzList := TimeLists[2];
       for TimeIndex := 0 to Values.Count - 1 do
       begin
         KxArray := KxList[TimeIndex]
           as TModflowBoundaryDisplayDataArray;
-        CellList := Values[TimeIndex];
-        AssignTransient2DArray(KxArray, 0, CellList, 0,
-          rdtDouble, umAssign);
-        Model.AdjustDataArray(KxArray);
-        CellList.Cache;
-      end;
-
-      KyList := TimeLists[1];
-      for TimeIndex := 0 to Values.Count - 1 do
-      begin
         KyArray := KyList[TimeIndex]
           as TModflowBoundaryDisplayDataArray;
-        CellList := Values[TimeIndex];
-        AssignTransient2DArray(KyArray, 1, CellList, 0,
-          rdtDouble, umAssign);
-        Model.AdjustDataArray(KyArray);
-        CellList.Cache;
-      end;
-
-      KzList := TimeLists[2];
-      for TimeIndex := 0 to Values.Count - 1 do
-      begin
         KzArray := KzList[TimeIndex]
           as TModflowBoundaryDisplayDataArray;
         CellList := Values[TimeIndex];
-        AssignTransient2DArray(KzArray, 2, CellList, 0,
-          rdtDouble, umAssign);
-        Model.AdjustDataArray(KzArray);
-        CellList.Cache;
+
+        KxArray.AddMethod := vamReplace;
+        KyArray.AddMethod := vamReplace;
+        KzArray.AddMethod := vamReplace;
+
+        TempList.Clear;
+        TempList.Add(KxArray);
+        TempList.Add(KyArray);
+        TempList.Add(KzArray);
+        try
+          UpdateCellDisplay(CellList, TempList, []);
+
+//          KxArray.ComputeAverage;
+//          KyArray.ComputeAverage;
+//          KzArray.ComputeAverage;
+        finally
+          CellList.Cache;
+          KxArray.UpToDate := True;
+          KyArray.UpToDate := True;
+          KzArray.UpToDate := True;
+        end;
       end;
 
     except on E: EInvalidTime do
@@ -181,6 +182,7 @@ begin
     KxLists.Free;
     KyLists.Free;
     KzLists.Free;
+    TempList.Free;
     Model.InvalidateAllDynamicLists;
   end
 end;
