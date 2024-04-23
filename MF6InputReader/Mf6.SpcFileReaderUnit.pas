@@ -35,6 +35,8 @@ type
   end;
 
   TSpcTimeItemList = TList<TSpcTimeItem>;
+  TSpcDictionary = TDictionary<Integer, TSpcTimeItem>;
+  TSpcDictionaries = TObjectList<TSpcDictionary>;
 
   TSpcPeriod = class(TCustomMf6Persistent)
   private
@@ -42,14 +44,20 @@ type
     FItems: TSpcTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; READASARRAYS: Boolean);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TSpcTimeItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read iper;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TSpcTimeItem read GetItem; default;
   end;
 
   TSpcPeriodList = TObjectList<TSpcPeriod>;
+  TSpcPeriodArray = TArray<TSpcPeriod>;
 
   TSpc = class(TDimensionedPackageReader)
   private
@@ -57,11 +65,22 @@ type
     FSpcDimensions: TSpcDimensions;
     FPeriods: TSpcPeriodList;
     FTimeSeriesPackages: TPackageList;
+    function GetPeriod(Index: Integer): TSpcPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TSpcPeriod read GetPeriod; default;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
   end;
+
+  TSpcList = TList<TSpc>;
 
 implementation
 
@@ -209,6 +228,16 @@ destructor TSpcPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TSpcPeriod.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TSpcPeriod.GetItem(Index: Integer): TSpcTimeItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TSpcPeriod.Initialize;
@@ -380,6 +409,26 @@ begin
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   inherited;
+end;
+
+function TSpc.GetPeriod(Index: Integer): TSpcPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TSpc.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TSpc.GetTimeSeries(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TSpc.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
 end;
 
 procedure TSpc.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);

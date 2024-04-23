@@ -79,6 +79,7 @@ type
     property Sources: TSsmSources read FSources;
     property FileInput: TSsmFileInput read FFileInput;
     property Count: Integer read GetCount;
+    // @name contains SPC packages
     property Items[Index: Integer]: TPackage read GetItem; default;
   end;
 
@@ -410,8 +411,8 @@ begin
     SpcPackage := TPackage.Create;
     FSpcPackages.Add(SpcPackage);
     SpcPackage.FileType := FPackageType;
-    SpcPackage.FileName := FFileInput.FItems[PackageIndex].pname;
-    SpcPackage.PackageName := '';
+    SpcPackage.FileName := FFileInput.FItems[PackageIndex].spc6_filename;
+    SpcPackage.PackageName := FFileInput.FItems[PackageIndex].pname;
 
     SpcReader := TSpc.Create(FPackageType);
     SpcReader.Dimensions := FDimensions;

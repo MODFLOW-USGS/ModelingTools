@@ -186,6 +186,7 @@ begin
         edValue2.Text := ABoundary.Value2;
         edValue3.Text := ABoundary.Value3;
         rgBoundaryType.ItemIndex := Ord(ABoundary.BoundaryType);
+        rgBoundaryTypeClick(nil);
         cbTimeDependent.Checked := ABoundary.TimeDependent;
         FirstTimeDependentBoundary := ABoundary;
         if ABoundary.TimeDependent then
@@ -231,6 +232,7 @@ begin
         if rgBoundaryType.ItemIndex <> Ord(ABoundary.BoundaryType) then
         begin
           rgBoundaryType.ItemIndex := -1;
+          rgBoundaryTypeClick(nil);
         end;
         if cbTimeDependent.State <> cbGrayed then
         begin

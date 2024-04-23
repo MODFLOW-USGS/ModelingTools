@@ -10230,12 +10230,14 @@ const
 //    '5.2.0.6'  bug fix: Fixed bug in the display of data from the TVK and TVS
 //                packages so that the data is now displayed on the correct
 //                layer.
+//    '5.2.0.7'  bug fix: Fixed bug in exporting the DIS input file for
+//                MODFLOW-OWHM version 2 when the Farm package is not selected.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.6';
+  IIModelVersion = '5.2.0.7';
 
 function IModelVersion: string;
 begin

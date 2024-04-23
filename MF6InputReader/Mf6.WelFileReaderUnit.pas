@@ -63,7 +63,7 @@ type
     property Count: integer read GetCount;
     property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
     property BoundName: string read Fboundname;
-    // Id is used in the MVR package;
+    // Id is used in the MVR and SPC packages.
     property Id: Integer read FId;
   end;
 

@@ -167,6 +167,31 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
           Height = 359
           OnSetEditText = frameTimeDependentGridSetEditText
           OnEndUpdate = frameTimeDependentGridEndUpdate
+          Columns = <
+            item
+              AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
           ExplicitWidth = 555
           ExplicitHeight = 359
         end

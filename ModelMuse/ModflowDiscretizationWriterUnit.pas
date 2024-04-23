@@ -1247,12 +1247,13 @@ var
 begin
   if Model.ModelSelection = msModflowOwhm2 then
   begin
-    WriteString('  SURFACE');
-    NewLine;
     DataArray := Model.DataArrayManager.GetDataSetByName(StrUzfLandSurface);
-    Assert(DataArray <> nil);
-    WriteArray(DataArray, 0, 'SURFACE', StrNoValueAssigned, 'SURFACE');
-
+    if DataArray <> nil then
+    begin
+      WriteString('  SURFACE');
+      NewLine;
+      WriteArray(DataArray, 0, 'SURFACE', StrNoValueAssigned, 'SURFACE');
+    end;
   end;
 end;
 
